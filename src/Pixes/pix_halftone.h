@@ -13,8 +13,9 @@ LOG
 
 #include "Base/GemPixObj.h"
 
-//typedef unsigned long U32; 
-//typedef unsigned short U16;
+#ifdef __APPLE__
+#include "macosx_math.h"
+#endif
 	
 enum {
     eRoundStyle,
@@ -75,11 +76,8 @@ class GEM_EXTERN pix_halftone : public GemPixObj
 	int 	m_Smoothing;
 	int	init;
 
-	//struct SPete_HalfTone_Data {
 	int nWidth;
 	int nHeight;
-	//};
-	//SPete_HalfTone_Data*	pInstanceData;
 	U32*				pSource;
 	U32*				pOutput;
 	
