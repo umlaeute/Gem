@@ -65,17 +65,32 @@ gemhead :: ~gemhead()
 /////////////////////////////////////////////////////////
 void gemhead :: renderGL(GemState *state)
 {
+  static const GLfloat a_color[]={0.2,0.2,0.2,1};
+  static const GLfloat d_color[]={0.8,0.8,0.8,1};
+  static const GLfloat e_color[]={0.0,0.0,0.0,1};
+  static const GLfloat s_color[]={0.0,0.0,0.0,1};
+  static const GLfloat shininess[]={0.0};
+
     if (!m_cache || !m_renderOn) return;
 
     // set the default color and transformation matrix
     glColor4f(1.f, 1.f, 1.f, 1.f);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  a_color);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  d_color);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, e_color);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, s_color);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
     glPushMatrix();
+    if(state)
+      {
+	// set the state dirty flag
+	state->dirty = m_cache->dirty;
 
-    // set the state dirty flag
-    state->dirty = m_cache->dirty;
-
-    // clear the state->image (might be still there from previous [gemhead]s)
-    state->image = 0;
+	// clear the state->image (might be still there from previous [gemhead]s)
+	state->image = 0;
+      }
 
     // are we profiling and need to send new images?
     if (GemMan::m_profile >= 2)
@@ -86,7 +101,7 @@ void gemhead :: renderGL(GemState *state)
     ap->a_w.w_gpointer=(t_gpointer *)m_cache;  // the cache ?
     (ap+1)->a_type=A_POINTER;
     (ap+1)->a_w.w_gpointer=(t_gpointer *)state;
-    outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
+   outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
 
     m_cache->dirty = 0;
 
