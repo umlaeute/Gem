@@ -16,7 +16,12 @@ LOG
 #define INCLUDE_GEMSTATE_H_
 
 #include "Base/GemExportDef.h"
-#include "OpenGL/gl.h"
+#ifdef __APPLE__
+# include "OpenGL/gl.h"
+#else
+# include "GL/gl.h"
+#endif
+
 struct pixBlock;
 class TexCoord;
 
