@@ -15,13 +15,7 @@
 #include "newWave.h"
 #include "Base/GemState.h"
 #include "Base/GemFuncUtil.h"
-#include "Base/GemPixUtil.h"
 #include <string.h>
-#include <math.h>
-
-#ifndef M_PI
-#define M_PI 3.1415926535898
-#endif
 
 /* Grid */
 enum {WIREFRAME, HIDDENLINE, FLATSHADED, SMOOTHSHADED, TEXTURED};
@@ -39,14 +33,6 @@ bool waving = false, editing = false,
      envMap = false;
 
 #define SQRTOFTWOINV 1.0 / 1.414213562
-
-static inline int powerOfTwo(int value)
-{
-    int x = 1;
-    while(x < value) x <<= 1;
-
-    return(x);
-}
 
 
 CPPEXTERN_NEW_WITH_ONE_ARG(newWave, t_floatarg, A_DEFFLOAT)
