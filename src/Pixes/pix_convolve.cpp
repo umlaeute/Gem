@@ -75,8 +75,6 @@ pix_convolve :: ~pix_convolve()
 // processImage
 //
 /////////////////////////////////////////////////////////
-
-
 void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
 {
   int i;
@@ -139,7 +137,7 @@ void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
   
 }
 
-void pix_convolve :: processImage(imageStruct &image)
+void pix_convolve :: processRGBAImage(imageStruct &image)
 {
     image.copy2Image(&tempImg);
     int initX = m_rows / 2;
@@ -148,10 +146,9 @@ void pix_convolve :: processImage(imageStruct &image)
     int maxY = tempImg.ysize - initY;
     int xTimesc = tempImg.xsize * tempImg.csize;
     int initOffset = initY * xTimesc + initX * tempImg.csize;
+    const int csize = tempImg.csize;
 
-
-
-    if (m_rows == 3 && m_cols == 3 && tempImg.csize == 4) {
+    if (m_rows == 3 && m_cols == 3) {
       calculateRGBA3x3(image,tempImg);
       return;
     }
@@ -163,12 +160,10 @@ void pix_convolve :: processImage(imageStruct &image)
 
     	for (int x = initX; x < maxX; x++)
     	{
-	    int csize = tempImg.csize;
     	    int realPos = x * csize + realY;
             int offsetXY = x * csize + offsetY;
 
     	    // skip the alpha value
-
 	    for (int c = 1; c < csize; c++)
     	    {
     		    int new_val = 0;
@@ -193,11 +188,45 @@ void pix_convolve :: processImage(imageStruct &image)
 
 }
 
+void pix_convolve :: processGrayImage(imageStruct &image)
+{
+  const int csize=image.csize;
+    image.copy2Image(&tempImg);
+    int initX = m_rows / 2;
+    int initY = m_cols / 2;
+    int maxX = tempImg.xsize - initX;
+    int maxY = tempImg.ysize - initY;
+    int xTimesc = tempImg.xsize * csize;
+    int initOffset = initY * xTimesc + initX * csize;
+
+    for (int y = initY; y < maxY; y++)    {
+      int realY = y * xTimesc;
+      int offsetY = realY - initOffset;
+
+      for (int x = initX; x < maxX; x++)    	{
+	int offsetXY = x + offsetY;
+
+	int new_val = 0;
+	int offsetXYC = offsetXY;
+	for (int matY = 0; matY < m_cols; matY++)   {
+	  int offsetXYCMat = matY * xTimesc + offsetXYC;
+	  int realMatY = matY * m_rows;
+	  for (int matX = 0; matX < m_rows; matX++)     {
+	    new_val += (tempImg.data[offsetXYCMat + matX] *
+			m_imatrix[realMatY + matX])>>8;
+	  }
+	}
+	image.data[x+realY] = CLAMP(new_val);  
+	//removes insult from injury ??
+	// we do not use the m_irange anymore ...  remove it ??
+      }
+    }
+}
 
 void pix_convolve :: processYUVImage(imageStruct &image)
 {
-     image.copy2Image(&tempImg);
-     //float range = 1;
+  image.copy2Image(&tempImg);
+  //float range = 1;
     int initX = m_rows / 2;
     int initY = m_cols / 2;
     int maxX = tempImg.xsize - initX;
@@ -211,9 +240,7 @@ void pix_convolve :: processYUVImage(imageStruct &image)
       return;
     }
     if (m_chroma) {
-    
-    for (int y = initY; y < maxY; y++)
-    {
+    for (int y = initY; y < maxY; y++)   {
         int realY = y * xTimesc;
         int offsetY = realY - initOffset;
 
