@@ -54,6 +54,7 @@ void vertex_offset :: paramMess(int argc, t_atom*argv){
     error("vertex_offset: offset must be 3 or 4 values!");
     break;
   }
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

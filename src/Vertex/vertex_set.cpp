@@ -54,6 +54,7 @@ void vertex_set :: paramMess(int argc, t_atom*argv){
     error("vertex_set: set must be 3 or 4 values!");
     break;
   }
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
