@@ -55,18 +55,12 @@ void pix_refraction :: processRGBAImage(imageStruct &image)
 	init = 1;
     }
     pSource = (U32*)image.data;
-    
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
+  
     pOutput = (U32*)myImage.data;
 	
     const int nHalfWidth=(nWidth/2);
@@ -147,19 +141,11 @@ void pix_refraction :: processYUVImage(imageStruct &image)
 	init = 1;
     }
     pSource = (U32*)image.data;
-    
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-	//myImage.setBlack();
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
     pOutput = (U32*)myImage.data;
 	
     const int nHalfWidth=(nWidth/2);

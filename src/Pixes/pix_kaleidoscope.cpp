@@ -101,17 +101,11 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
     init = 1;
   }
   pSource = (U32*)image.data;
-  if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-    int dataSize = image.xsize * image.ysize * image.csize;
-    myImage.clear();
-
-    myImage.allocate(dataSize);
-  }
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
   pOutput = (U32*)myImage.data;
 
   if (m_Divisions<1.0f) {
@@ -531,18 +525,11 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
     Pete_Kaleidoscope_Init();
     init = 1;
   }
-  pSource = (U32*)image.data;
-  if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-    int dataSize = image.xsize * image.ysize * image.csize;
-    myImage.clear();
-
-    myImage.allocate(dataSize);
-  }
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
   pOutput = (U32*)myImage.data;
 
   if (m_Divisions<1.0f) {
@@ -989,17 +976,11 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
     init = 1;
   }
   unsigned char* pSource = image.data;
-  if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-    int dataSize = image.xsize * image.ysize * image.csize;
-    myImage.clear();
-
-    myImage.allocate(dataSize);
-  }
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
   unsigned char* pOutput = myImage.data;
 
   if (m_Divisions<1.0f) {
