@@ -1,0 +1,6 @@
+. make "configure" work
+. multi-screen
+. particle systems for everything
+. openGL-wrapper (glu-wrapper)
+. SDL-parachute
+
