@@ -95,7 +95,6 @@ void pix_blur :: processRGBAImage(imageStruct &image)
 }
 void pix_blur :: processGrayImage(imageStruct &image)
 {
-  int h,w,hlength;
   long src;
   int Grey;
   int rightGain,imageGain;

@@ -271,14 +271,14 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 void pix_dot :: processYUVImage(imageStruct &image)
 {
     post("pix_dot:  YUV under construction");
-    unsigned int *src = (unsigned int*)image.data;
     unsigned int *dest;
-
+#if 0
+    unsigned int *src = (unsigned int*)image.data;
     int x, y, sx, sx2, sy;
     int luma = 0;
     int luma2 = 0;
     int avgluma = 0;
-  
+#endif
     if (m_xsize != image.xsize)
         alreadyInit = 0;
     

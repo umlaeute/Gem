@@ -74,7 +74,7 @@ void pix_backlight :: processRGBAImage(imageStruct &image)
     pOutput = (U32*)myImage.data;
 
     const int nFixedShift=8;
-    const int nFixedMult=(1<<nFixedShift);
+//    const int nFixedMult=(1<<nFixedShift);
 
     const int nHalfWidth=(nWidth/2);
     const int nHalfHeight=(nHeight/2);
@@ -84,7 +84,7 @@ void pix_backlight :: processRGBAImage(imageStruct &image)
     U32* pCurrentSource=pSource;
     U32* pCurrentOutput=pOutput;
     const U32* pSourceEnd=(pSource+nNumPixels);
-    const U32* pOutputEnd=(pOutput+nNumPixels);
+//    const U32* pOutputEnd=(pOutput+nNumPixels);
 
     Pete_ZeroMemory(pOutput,sizeof(U32)*nNumPixels);
 
@@ -95,7 +95,7 @@ void pix_backlight :: processRGBAImage(imageStruct &image)
     int nY=0;
     while (pCurrentSource!=pSourceEnd) {
 		
-	const U32* pSourceLineStart=pCurrentSource;
+//	const U32* pSourceLineStart=pCurrentSource;
 	const U32* pSourceLineEnd=pCurrentSource+nWidth;
 
 	int nX=0;
