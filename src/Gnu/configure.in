@@ -1,7 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(../Base/CPPExtern.h)
 AC_CONFIG_HEADER(../Base/config.h)
-dnl AC_CONFIG_HEADER(config.h)
 gemsrc="./.."
 
 VERSION=0.87-cvs
@@ -24,6 +23,7 @@ AC_ARG_ENABLE(x, [                          [DIR=../../../GemLibs:/usr/local:/us
 AC_ARG_ENABLE(x, [  --includedir=DIR{:DIRS} where to search for non-standard headers])
 AC_ARG_ENABLE(x, [                          [DIR=/usr/include:/usr/local/include:../../../GemLibs]])
 AC_ARG_ENABLE(x, [])
+AC_ARG_ENABLE(mmx, [  --enable-mmx            enable MMX-support])
 AC_ARG_ENABLE(static, [  --enable-static         static linking (default is: dynamic) ])
 AC_ARG_WITH(glut, [  --with-glut             enable GLUT (mainly the teapot)])
 AC_ARG_WITH(gltt, [  --with-gltt             enable GL-TrueType rendering (fonts)])
@@ -34,8 +34,6 @@ AC_ARG_WITH(avi,     [  --with-avi              enable AVI-support (might provid
 AC_ARG_WITH(avcodec, [  --with-avcodec=<lib>    location of libavcodec.a])
 AC_ARG_WITH(avformat,[  --with-avformat=<lib>   location of libavformat.a])
 AC_ARG_WITH(ieee1394,     [  --with-ieee1394              enable IEEE1394-support (aka. firewire or DV)])
-
-
 
 dnl of course we need X, so don't let the user disable it
 if test "$with_x" = "no"
@@ -91,7 +89,6 @@ dnl Check for make version
 
 AC_SUBST_FILE(build_rules)
 
-
 echo $ac_n "checking for gnu make""... $ac_c"  1>&6
 
 ac_make_gnu=`make -v | sed /GNU/p`
@@ -108,6 +105,7 @@ fi
 dnl Checks for programs.
 dnl ***********************************************************************
 
+dnl how should we check for intels compiler icc ? AC_PROG_CXX (icc,g++) doesnt seem to work
 AC_PROG_CXX
 #case $target in 
 #pd_irix*)
@@ -131,6 +129,28 @@ AC_CHECK_PROGS(shell_prog,sh)
 
 AC_PATH_XTRA
 
+dnl Checks for MMX
+if test "$enable_mmx" != "no"; then
+dnl right now, i only know how to do this for gcc
+
+cat > conftest.c++ << EOF
+#include <mmintrin.h>
+int main(){
+  __m64 m;
+  return 0;
+}
+EOF
+MMXFLAGS=""
+$CXX $CXXFLAGS $CPPFLAGS $MMXFLAGS -mmmx -o conftest.o conftest.c++ && MMXFLAGS="-mmmx"
+dnl $CXX $CXXFLAGS $CPPFLAGS $MMXFLAGS -mfpmath=sse -o conftest.o conftest.c++ && MMXFLAGS="-mmmx"
+fi
+if test "$MMXFLAGS" != ""; then
+  MMXFLAGS="$MMXFLAGS -DHAVE_MMX"
+else
+  if test "$enable_mmx" == "yes"; then
+    AC_MSG_ERROR([you enforced the use of MMX although the compiler ($CXX) doesn't support it])
+  fi
+fi
 
 dnl Checks for libraries.
 dnl ***********************************************************************
@@ -362,7 +382,7 @@ AC_SUBST(INCLUDES)
 RANLIB=gcc 
 AC_SUBST(RANLIB)
 
-CXXFLAGS="-fPIC"
+CXXFLAGS="-fPIC $MMXFLAGS"
 AC_SUBST(CXXFLAGS)
 
 dnl 
