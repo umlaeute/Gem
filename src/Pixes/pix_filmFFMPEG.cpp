@@ -140,6 +140,13 @@ void pix_filmFFMPEG :: realOpen(char *filename)
 // render
 //
 /////////////////////////////////////////////////////////
+#if LIBAVCODEC_VERSION_INT == 0x000406
+static void AV_frame2picture(AVFrame f, AVPicture *p){ // jmz
+  p->data = f.data;
+  p->linesize = f.linesize;
+}
+#endif
+
 void pix_filmFFMPEG :: getFrame()
 {
   UINT8* ptr;
@@ -164,7 +171,16 @@ void pix_filmFFMPEG :: getFrame()
 		 len = m_Pkt.size;
 	    }
 	    POST("decode");
-	    ret = avcodec_decode_video(&m_Format->streams[m_track]->codec,&m_Picture,&gotit,ptr,len);
+#if LIBAVCODEC_VERSION_INT == 0x000406
+	    ret = avcodec_decode_video(&m_Format->streams[m_track]->codec,
+				       &m_avFrame, // was m_Picture; jmz
+				       &gotit,
+				       ptr,
+				       len);
+	    AV_frame2picture(m_avFrame, &m_Picture); // jmz
+#else
+	    ret = avcodec_decode_video(&m_Format->streams[m_track]->codec, &m_Picture, &gotit, ptr, len);
+#endif
 	    if (ret < 0 ) { // TODO recover gracefully 
 		 post("error while decoding");
 		 break;

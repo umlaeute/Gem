@@ -14,7 +14,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 
 #ifndef INCLUDE_PIX_FILMFFMPEG_H_
-#define INCLUDE_PIX_FILMGGMPEG_H_
+#define INCLUDE_PIX_FILMFFMPEG_H_
 
 #include "Pixes/pix_film.h"
 extern "C" {
@@ -62,6 +62,13 @@ class GEM_EXTERN pix_filmFFMPEG : public pix_film
   //-----------------------------------
 
    AVFormatContext* m_Format;
+#if LIBAVCODEC_VERSION_INT == 0x000406
+   /* jmz: i don't know which version of ffmpeg Günter uses.
+    * i don't know either, whether it is more recent or older than mine
+    * at least with 0.4.6 avcodec_decode_video wants AVFrame instead of AVPicture
+    */
+   AVFrame   m_avFrame;
+#endif
    AVPicture m_Picture;
    AVPacket  m_Pkt;
    int       m_PacketLen;
