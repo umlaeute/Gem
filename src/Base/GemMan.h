@@ -198,6 +198,7 @@ class GEM_EXTERN GemMan
     	friend class gemwin;
     	
         static GLfloat	    m_clear_color[4];	// the frame buffer clear
+		static GLbitfield	m_clear_mask;		// the clear bitmask
         static GLfloat	    m_mat_ambient[4];	// default ambient material
         static GLfloat	    m_mat_specular[4];	// default specular material
         static GLfloat	    m_mat_shininess;	// default shininess material

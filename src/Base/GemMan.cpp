@@ -65,6 +65,7 @@ int GemMan::m_buffer = 2;
 int GemMan::m_profile = 0;
 int GemMan::m_rendering = 0;
 GLfloat GemMan::m_clear_color[4];
+GLbitfield GemMan::m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 GLfloat GemMan::m_mat_ambient[4];
 GLfloat GemMan::m_mat_specular[4];
 GLfloat GemMan::m_mat_shininess;
@@ -550,6 +551,7 @@ void GemMan :: resetState()
 #else
   glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
 #endif //MACOSX
+  m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
   m_mat_ambient[0] = 0.1f;
   m_mat_ambient[1] = 0.1f;
   m_mat_ambient[2] = 0.1f;
@@ -761,8 +763,8 @@ void GemMan :: render(void *)
       int left_color=0;  // RED
       int right_color=1; // GREEN
 
-      glClear(GL_COLOR_BUFFER_BIT);
-      glClear(GL_DEPTH_BUFFER_BIT);
+      glClear(GL_COLOR_BUFFER_BIT & m_clear_mask);
+      glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
 
       // setup the left viewpoint
       switch (left_color){
@@ -799,7 +801,7 @@ void GemMan :: render(void *)
       renderChain(s_linkHead_2, &currentState);
 
       // setup the right viewpoint
-  glClear(GL_DEPTH_BUFFER_BIT);
+  glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
       switch (right_color){
       case 0:
 	glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
@@ -1181,7 +1183,7 @@ void GemMan :: swapBuffers()
 #endif
   else glFlush();
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(m_clear_mask);
   glColor3f(1.0, 1.0, 1.0);
   glLoadIdentity();
 

@@ -236,6 +236,15 @@ void gemwin :: colorMess(float red, float green, float blue)
 }
 
 /////////////////////////////////////////////////////////
+// clearmaskMess
+//
+/////////////////////////////////////////////////////////
+void gemwin :: clearmaskMess(float bitmask)
+{
+  GemMan::m_clear_mask = (GLbitfield) bitmask;
+}
+
+/////////////////////////////////////////////////////////
 // ambientMess
 //
 /////////////////////////////////////////////////////////
@@ -396,6 +405,8 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::colorMessCallback,
 		  gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemwin::clearmaskMessCallback,
+		  gensym("clearmask"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::perspectiveMessCallback,
 		  gensym("perspec"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::viewMessCallback,
@@ -643,6 +654,10 @@ void gemwin :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
 void gemwin :: colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue)
 {
   GetMyClass(data)->colorMess((float)red, (float)green, (float)blue);
+}
+void gemwin :: clearmaskMessCallback(void *data, t_floatarg bitmask)
+{
+  GetMyClass(data)->clearmaskMess((float)bitmask);
 }
 void gemwin :: ambientMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue)
 {
