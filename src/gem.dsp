@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /MTd /W3 /Zi /Od /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /D "HAVE_DIRECTSHOW" /D "DEBUG" /FD /c
+# ADD CPP /nologo /MTd /W3 /Zi /Od /I "C:\Programme\pd\src" /I "C:\DXSDK\include" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /D "__NEW__" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /D "HAVE_DIRECTSHOW" /D "DEBUG" /FD /c
 # SUBTRACT CPP /X /Fr /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../gem.dll" /libpath:"..\..\bin\\" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug"
+# ADD LINK32 ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../gem.dll" /libpath:"C:\Programme\pd\bin\\" /libpath:"..\..\bin\\" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug"
 
 !ENDIF 
 
@@ -486,6 +486,14 @@ SOURCE=.\Geos\text3d.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Geos\textextruded.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\textextruded.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Geos\textoutline.cpp
 # End Source File
 # Begin Source File
@@ -559,6 +567,14 @@ SOURCE=.\Manips\ambientRGB.cpp
 # Begin Source File
 
 SOURCE=.\Manips\ambientRGB.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\camera.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\camera.h
 # End Source File
 # Begin Source File
 
@@ -845,6 +861,14 @@ SOURCE=.\Pixes\pix_alpha.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_backlight.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_backlight.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_bitmask.cpp
 # End Source File
 # Begin Source File
@@ -874,6 +898,14 @@ SOURCE=.\Pixes\pix_colormatrix.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_colormatrix.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_colorreduce.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_colorreduce.h
 # End Source File
 # Begin Source File
 
@@ -909,6 +941,22 @@ SOURCE=.\Pixes\pix_dot.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_duotone.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_duotone.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_emboss.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_emboss.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_flip.cpp
 # End Source File
 # Begin Source File
@@ -933,6 +981,14 @@ SOURCE=.\Pixes\pix_grey.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_halftone.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_halftone.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_hsv2rgb.cpp
 # End Source File
 # Begin Source File
@@ -946,6 +1002,38 @@ SOURCE=.\Pixes\pix_invert.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_invert.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_kaleidoscope.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_kaleidoscope.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_levels.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_levels.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_lumaoffset.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_lumaoffset.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_metaimage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_metaimage.h
 # End Source File
 # Begin Source File
 
@@ -973,11 +1061,35 @@ SOURCE=.\Pixes\pix_offset.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_posterize.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_posterize.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_puzzle.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Pixes\pix_puzzle.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_rds.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_rds.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_refraction.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_refraction.h
 # End Source File
 # Begin Source File
 
@@ -994,6 +1106,22 @@ SOURCE=.\Pixes\pix_rgb2hsv.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_rgb2hsv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_roll.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_roll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_scanline.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_scanline.h
 # End Source File
 # Begin Source File
 
@@ -1046,6 +1174,14 @@ SOURCE=.\Pixes\pix_chroma_key.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_chroma_key.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_compare.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_compare.h
 # End Source File
 # Begin Source File
 
@@ -1117,11 +1253,35 @@ SOURCE=.\Pixes\pix_buf.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_buffer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_buffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_buffer_read.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_buffer_write.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_clearblock.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Pixes\pix_clearblock.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_convert.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_convert.h
 # End Source File
 # Begin Source File
 
@@ -1265,6 +1425,14 @@ SOURCE=.\Pixes\pix_snap.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_snap2tex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_snap2tex.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_texture.cpp
 # End Source File
 # Begin Source File
@@ -1357,6 +1525,22 @@ SOURCE=.\Pixes\filmMPEG3.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\filmQT.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmQT.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmQT4L.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmQT4L.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_dv.cpp
 # End Source File
 # Begin Source File
@@ -1389,11 +1573,35 @@ SOURCE=.\Pixes\pix_filmNT.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_filmQT.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_filmQT.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_movie.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Pixes\pix_movie.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_movieNEW.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_movieNEW.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_movieYUV.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_movieYUV.h
 # End Source File
 # Begin Source File
 
@@ -1425,6 +1633,14 @@ SOURCE=.\Pixes\pix_videoNT.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\Pixes\pix_background.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_background.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_biquad.cpp
 # End Source File
 # Begin Source File
@@ -1446,6 +1662,14 @@ SOURCE=.\Pixes\pix_delay.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_delay.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_motionblur.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_motionblur.h
 # End Source File
 # Begin Source File
 
@@ -1480,6 +1704,38 @@ SOURCE=.\Pixes\setup.h
 # Begin Group "Particles"
 
 # PROP Default_Filter ""
+# Begin Group "partlib"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Particles\papi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\partlib_actionapi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\partlib_actions.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\partlib_general.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\partlib_opengl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\partlib_system.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\partlib_vector.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\Particles\part_color.cpp
@@ -1530,6 +1786,14 @@ SOURCE=.\Particles\part_head.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Particles\part_info.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\part_info.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Particles\part_killold.cpp
 # End Source File
 # Begin Source File
@@ -1551,6 +1815,14 @@ SOURCE=.\Particles\part_orbitpoint.cpp
 # Begin Source File
 
 SOURCE=.\Particles\part_orbitpoint.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\part_render.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\part_render.h
 # End Source File
 # Begin Source File
 
@@ -1598,11 +1870,27 @@ SOURCE=.\Particles\part_velcone.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Particles\part_velocity.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\part_velocity.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Particles\part_velsphere.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Particles\part_velsphere.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\part_vertex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\part_vertex.h
 # End Source File
 # Begin Source File
 
@@ -1659,286 +1947,6 @@ SOURCE=.\MarkEx\tripleLine.cpp
 # Begin Source File
 
 SOURCE=.\MarkEx\vector.cpp
-# End Source File
-# End Group
-# Begin Group "Yuv"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\yuv\setup.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_add.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_add.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_adjust.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_adjust.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_average.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_average.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_bandw.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_bandw.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_bitshift.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_bitshift.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_bitwise.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_bitwise.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_blank.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_blank.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_blur.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_blur.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_chroma_key.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_chroma_key.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_clamp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_clamp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_compare.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_compare.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_difference.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_difference.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_dual.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_dual.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_emboss.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_emboss.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_film.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_film.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_filmDarwin.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_filmDarwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_gain.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_gain.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_invert.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_invert.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_luma_key.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_luma_key.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_mask.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_mask.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_mix.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_mix.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_movie.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_movie.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_mult.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_mult.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_pixel_average.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_pixel_average.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_pixel_data.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_pixel_data.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_pixel_isolate.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_pixel_isolate.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_pixel_replace.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_pixel_replace.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_posterize.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_posterize.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_set.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_set.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_split.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_split.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_subtract.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_subtract.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_swap.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_swap.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_video.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_video.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_videoDarwin.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\yuv\yuv_videoDarwin.h
 # End Source File
 # End Group
 # Begin Group "OpenGL"
