@@ -50,6 +50,7 @@ pix_rgba :: ~pix_rgba()
 /////////////////////////////////////////////////////////
 void pix_rgba :: processImage(imageStruct &image)
 {
+//  post("RGBA processing");
   if (image.format==GL_RGBA)return;
   unsigned char *old_pix, *new_pix;
   int count = image.xsize*image.ysize;
@@ -172,7 +173,7 @@ void pix_rgba :: processImage(imageStruct &image)
   }
 
   image.data   = m_data;
-  image.notowned = 1;
+  image.notowned = 0;
   image.format = GL_RGBA;
   image.csize  = 4;
 }
