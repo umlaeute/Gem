@@ -71,22 +71,24 @@ void pix_filmNT :: closeMess(void)
 /////////////////////////////////////////////////////////
 void pix_filmNT :: realOpen(char *filename)
 {
-  // Opens the AVI stream
-  if (AVIStreamOpenFromFile(&m_streamVid, filename, streamtypeVIDEO, 0, OF_READ, NULL)) {
-    error("GEM: pix_film: Unable to open file: %s", filename);
-    return;
-  }
 
-  // Create the PGETFRAME
-  m_getFrame = AVIStreamGetFrameOpen(m_streamVid,NULL);
-  m_haveMovie = GEM_MOVIE_AVI;
+	// Opens the AVI stream
+	if (AVIStreamOpenFromFile(&m_streamVid, filename, streamtypeVIDEO, 0, OF_READ, NULL)) {
+		error("GEM: pix_film: Unable to open file: %s", filename);
+		return;
+	}
+
   m_reqFrame = 0;
   m_curFrame = -1;
 
+  // Create the PGETFRAME
+  if (!(m_getFrame = AVIStreamGetFrameOpen(m_streamVid,NULL)))return;
+
   // get all of the information about the stream
   AVISTREAMINFO psi;
-  AVIStreamInfo(m_streamVid, &psi, sizeof(AVISTREAMINFO));
+  if (AVIStreamInfo(m_streamVid, &psi, sizeof(AVISTREAMINFO)))return;
 
+  m_haveMovie = GEM_MOVIE_AVI;
   // Get the length of the movie
   m_numFrames = psi.dwLength - 1;
 

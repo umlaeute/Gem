@@ -18,7 +18,6 @@
 #include "GemPixDualObj.h"
 
 #include "GemCache.h"
-#include "GemDag.h"
 
 #include <string.h>
 
@@ -43,8 +42,6 @@ GemPixDualObj :: GemPixDualObj()
 /////////////////////////////////////////////////////////
 GemPixDualObj :: ~GemPixDualObj()
 {
-    if (m_cacheRight)
-        m_cacheRight->breakDAG();
     inlet_free(m_inlet);
 }
 
@@ -54,8 +51,7 @@ GemPixDualObj :: ~GemPixDualObj()
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: processImage(imageStruct &image)
 {
-    if (!m_pixRightValid) return;
-    
+   if (!m_pixRightValid || !m_cacheRight) return;
     if (image.xsize != m_pixRight->image.xsize ||
     	image.ysize != m_pixRight->image.ysize)
     {
@@ -107,13 +103,28 @@ void GemPixDualObj :: processRightGray(imageStruct &, imageStruct &)
 	error("GEM: GemPixDualObj: cannot handle gray image");
 }
 
+
+/////////////////////////////////////////////////////////
+// postrender
+//
+/////////////////////////////////////////////////////////
+void GemPixDualObj :: postrender(GemState *state)
+{
+  if (org_pixRightValid != m_pixRightValid)setPixModified();
+
+
+  org_pixRightValid = m_pixRightValid;
+
+  m_pixRightValid = 0;
+}
+
 /////////////////////////////////////////////////////////
 // stopRendering
 //
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: stopRendering()
 {
-  //    m_pixRightValid = 0;
+  m_pixRightValid = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -122,66 +133,36 @@ void GemPixDualObj :: stopRendering()
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: rightRender(GemState *statePtr)
 {
-     if (!statePtr->image) 
- 	{
- 		m_pixRightValid = 0;
- 		return;
- 	}
-     if (statePtr->image->newimage)
- 	{
-	  // 	    m_pixRight = *statePtr->image;
-	  m_pixRight = statePtr->image;
-
-	    m_pixRightValid = 1;
-	    setPixModified(); // force the left arm to create a new image
- 	}
+  if (!statePtr || !statePtr->image) {
+    m_pixRightValid = 0;
+    return;
+  }
+  
+  m_pixRightValid = 1;
+  
+  if (statePtr->image->newimage) {
+    // 	    m_pixRight = *statePtr->image;
+    m_pixRight = statePtr->image;
+    //  m_pixRightValid = 1;
+       
+    setPixModified(); // force the left arm to create a new image
+  }
 }
 
-/////////////////////////////////////////////////////////
-// rightDagCacheMess
-//
-/////////////////////////////////////////////////////////
-void GemPixDualObj :: rightDagCacheMess(GemDag *dagPtr, GemCache *cachePtr)
-{
-  dagPtr->addChild(this, &GemPixDualObj::rightRenderCallback, &GemPixDualObj::rightPostrenderCallback, &GemPixDualObj::rightStoprenderCallback);
-    
-    m_cacheRight = cachePtr;
-
-    // do not send the message any farther
-}
-
-/////////////////////////////////////////////////////////
-// rightrealStopRendering
-//
-/////////////////////////////////////////////////////////
-void GemPixDualObj :: rightrealStopRendering()
-{
-  rightstopRendering();
-  m_pixRightValid = 0;
-  m_cacheRight = NULL;
-}
-/////////////////////////////////////////////////////////
+/////////////////////////^////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&GemPixDualObj::rightDagCacheMessCallback,
-    	    gensym("gem_right"), A_POINTER, A_POINTER, A_NULL);
+    class_addmethod(classPtr, (t_method)&GemPixDualObj::gem_rightMessCallback,
+    	    gensym("gem_right"), A_GIMME, A_NULL);
 }
-void GemPixDualObj :: rightDagCacheMessCallback(void *data, void *gem_dag, void *gem_cache)
+void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
-    GetMyClass(data)->rightDagCacheMess((GemDag *)gem_dag, (GemCache *)gem_cache);
-}
-void GemPixDualObj :: rightRenderCallback(GemBase *data, GemState *state)
-{
-    ((GemPixDualObj *)data)->rightRender(state);
-}
-void GemPixDualObj :: rightPostrenderCallback(GemBase *data, GemState *state)
-{
-    ((GemPixDualObj *)data)->rightPostrender(state);
-}
-void GemPixDualObj :: rightStoprenderCallback(GemBase *data)
-{
-    ((GemPixDualObj *)data)->rightStoprender();
+  if (argc==1 && argv->a_type==A_FLOAT){
+  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
+    GetMyClass(data)->m_cacheRight = (GemCache*)argv->a_w.w_gpointer;
+    GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
+  } else error("GEM: wrong righthand arguments....");
 }

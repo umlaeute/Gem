@@ -1,21 +1,20 @@
-#N canvas 286 42 602 599 12;
-#X msg 470 229 1;
-#X msg 470 261 0;
+#N canvas 314 61 654 599 12;
+#X msg 489 227 1;
+#X msg 489 259 0;
 #X obj 36 301 gemwin;
 #X msg 46 112 create;
-#X obj 318 250 gemhead;
+#X obj 375 254 gemhead;
 #X msg 52 143 destroy;
 #X msg 54 220 1;
 #X msg 54 252 0;
 #X text 93 224 turn rendering on and off;
 #X text 26 89 create and destroy the graphics window;
-#X msg 469 192 2;
+#X msg 488 190 2;
 #X text 254 156 select one of the three images to display;
-#X obj 318 304 pix_imageInPlace;
-#X msg 167 253 preload temp*.jpg 2;
-#X msg 157 286 download;
-#X msg 158 318 purge;
-#X obj 318 363 square;
+#X obj 375 308 pix_imageInPlace;
+#X msg 121 288 download;
+#X msg 124 318 purge;
+#X obj 375 367 square;
 #X text 206 20 display images use pix_imageInPlace;
 #X text 64 389 pix_imageInPlace is slightly different than pix_multiimage.
 When you select an image to display with pix_multiimage \, it copies
@@ -28,6 +27,14 @@ between a lot of images \, but it doesn't use a lot of texture ram.
 RAM when the preload message is received. This means that you cannot
 process any of the pixel data \, but it is extremely quick to change
 between the various images.;
+#X msg 119 255 preload ../data/temp*.JPG 2;
+#N canvas 87 154 247 179 Gem.init 0;
+#X obj 118 46 loadbang;
+#X msg 118 81 reset;
+#X obj 118 113 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X restore 10 344 pd Gem.init;
 #X connect 0 0 12 1;
 #X connect 1 0 12 1;
 #X connect 3 0 2 0;
@@ -36,7 +43,8 @@ between the various images.;
 #X connect 6 0 2 0;
 #X connect 7 0 2 0;
 #X connect 10 0 12 1;
-#X connect 12 0 16 0;
+#X connect 12 0 15 0;
 #X connect 13 0 12 0;
 #X connect 14 0 12 0;
-#X connect 15 0 12 0;
+#X connect 20 0 12 0;
+#X connect 21 0 2 0;

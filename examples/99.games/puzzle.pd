@@ -1,4 +1,4 @@
-#N canvas 14 494 584 223 12;
+#N canvas 277 250 584 223 12;
 #X obj 171 14 cnv 15 200 130 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 258 30 bng 30 250 50 0 up y up 8 -8 192 12 -261681 -1 -1;
@@ -8,7 +8,7 @@
 -1;
 #X obj 228 60 bng 30 250 50 0 left y left -53 15 192 12 -261681 -1
 -1;
-#N canvas 53 27 754 533 code 0;
+#N canvas 57 47 754 533 code 0;
 #X obj 128 45 gemkeyname;
 #X obj 128 77 select 1;
 #X obj 128 104 symbol;
@@ -19,9 +19,9 @@
 #X msg 221 274 6;
 #X msg 182 247 8;
 #X msg 183 301 2;
-#X msg 129 132 \$1 0;
+#X msg 128 131 \$1 0;
 #X obj 275 254 loadbang;
-#N canvas 93 41 600 498 code 0;
+#N canvas 97 61 600 498 code 0;
 #X obj 120 110 gemhead;
 #X obj 120 342 pix_texture2;
 #X obj 120 415 square 4;

@@ -1,8 +1,11 @@
-This is GEM 0.87
+This is GEM 0.88-1
 ===================
-You can get the current distribution from:
+You can get the current release (0.87) from:
 http://iem.kug.ac.at/GEM
 ftp://iem.kug.ac.at/pd/Externals/GEM
+
+You can get a current unstable version via cvs from cvs.gem.iem.at:
+"cvs -z3 -d:pserver:anonymous@cvs.gem.iem.at:/cvsroot/pd-gem co Gem"
 
 assumption:
 throughout this document, references of DOS actually means the OS from Redmont (known as Windoze)
@@ -36,7 +39,7 @@ You can get the newest GemLib from the place mentioned above
 DEPENDENCIES:
 =============
 current version: GEM-0.87
-GemLibs	>= 1
+GemLibs	= 1
 PD 	>= 0.34
 
 

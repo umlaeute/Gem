@@ -99,6 +99,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   void		fogRangeMess(float start, float end);
   void 	    	fogColorMess(float red, float green, float blue);
   void          cursorMess(float setting);
+  void          blurMess(float setting);
 
  private:
     
@@ -136,6 +137,8 @@ class GEM_EXTERN gemwin : public CPPExtern
   static void 	stereoSepMessCallback(void *, t_floatarg state);
   static void 	stereoLineMessCallback(void *, t_floatarg state);
   static void 	cursorMessCallback(void *data, t_floatarg val);	
+  static void 	blurMessCallback(void *data, t_floatarg val);	
+
 };
 
 #endif	// for header file

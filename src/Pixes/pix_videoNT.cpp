@@ -62,11 +62,22 @@ pix_videoNT :: pix_videoNT(t_floatarg num)
     error("GEM: pix_videoNT: Unable to create capture window");
     return;
   } 
-
+#if 1
+int index=0;
+boolean result=false;
+while(!result && index<10){
+	post("driver %d", index);
+	capDriverConnect(m_hWndC, index);
+	index++;
+}
+if (!result){
+#else
   if (!capDriverConnect(m_hWndC, 0)) {
-    error("GEM: pix_videoNT: Unable to connect to video driver");
+#endif
+	  error("GEM: pix_videoNT: Unable to connect to video driver");
     return;
   }
+
 
   CAPTUREPARMS params;
   if (!capCaptureGetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS))) {

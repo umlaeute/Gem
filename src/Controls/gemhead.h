@@ -19,7 +19,6 @@ LOG
 
 class GemState;
 class GemCache;
-class GemDag;
 class gemBaseLink;
 
 /*-----------------------------------------------------------------
@@ -49,17 +48,18 @@ class GEM_EXTERN gemhead : public CPPExtern
     	void	    	renderGL(GemState *state);
     	    	
     	//////////
-    	// Set up the modifying flags and the DAG
+    	// Set up the modifying flags
     	void	    	startRendering();
 
     	//////////
-    	// Clean up the modifying flags and abort the DAG
+    	// Clean up the modifying flags
     	void	    	stopRendering();
 
+
     	//////////
-    	// The DAG is incorrect and the rendering in the 
-    	//  	chain should stop.
-    	void	    	breakDAG();
+    	// change the priority
+    	void	    	setMess(int priority);
+
 
     protected:
     	
@@ -69,22 +69,24 @@ class GEM_EXTERN gemhead : public CPPExtern
     	
 	private:
 
-	    t_outlet    	*m_out1;
+	t_outlet    	*m_out1;
 
     	GemCache    	*m_cache;   	    	    // The cache information
-    	GemDag    		*m_dag;     	    	    // The dag information
+
+	void            outputRenderOnOff(int state);
     	
     	void	    	renderOnOff(int state);     // Turn rendering on and off
     	int 	    	m_renderOn;
-    	
-    	void	    	stopBaseRendering(gemBaseLink *link);
-    	void	    	renderBase(gemBaseLink *link, GemState *state);
+
+	int             m_priority;
+
     	void	    	bangMess();
     	
     	//////////
     	// static member functions
     	static void 	bangMessCallback(void *data);
     	static void 	intMessCallback(void *data, t_floatarg n);
+    	static void 	setMessCallback(void *data, t_floatarg n);
 };
 
 #endif	// for header file

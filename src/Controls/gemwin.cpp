@@ -28,7 +28,6 @@
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemwin, t_floatarg, A_DEFFLOAT)
 
-
 static bool StillHaveGemWin(bool up) {
   static int ref_counter = 0;
 
@@ -314,6 +313,17 @@ void gemwin :: cursorMess(float setting)
   GemMan :: cursorOnOff(setting);
 }
 
+
+/////////////////////////////////////////////////////////
+// cursorMess
+//
+/////////////////////////////////////////////////////////
+void gemwin :: blurMess(float setting)
+{
+  if (setting>=0.f && setting <= 1.f)
+    GemMan :: m_motionBlur = setting;
+}
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -360,6 +370,9 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("shininess"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::cursorMessCallback,
 		  gensym("cursor"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemwin::blurMessCallback,
+		  gensym("blur"), A_FLOAT, A_NULL);
+
   // just call GemMan directly
   class_addmethod(classPtr, (t_method)&gemwin::resetMessCallback,
 		  gensym("reset"), A_NULL);
@@ -591,4 +604,8 @@ void gemwin :: shininessMessCallback(void *data, t_floatarg val)
 void gemwin :: cursorMessCallback(void *data, t_floatarg val)
 {
   GetMyClass(data)->cursorMess((float)val);
+}
+void gemwin :: blurMessCallback(void *data, t_floatarg val)
+{
+  GetMyClass(data)->blurMess((float)val);
 }

@@ -129,7 +129,7 @@ void pix_image :: render(GemState *state)
 {
     // if we don't have an image, just return
     if (!m_loadedImage) return;
-    
+
     // do we need to reload the image?    
     if (m_cache->resendImage)
     {

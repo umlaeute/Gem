@@ -1,4 +1,4 @@
-#N canvas 426 119 824 640 8;
+#N canvas 172 20 824 640 10;
 #X text 745 116 on;
 #X text 782 114 off;
 #X text 557 122 on;
@@ -16,7 +16,7 @@
 #X obj 483 231 int 0;
 #X obj 532 231 + 2;
 #X obj 634 118 gemhead;
-#X floatatom 673 252;
+#X floatatom 673 252 0 0 0;
 #X obj 634 416 sphere;
 #X obj 21 482 gemwin;
 #X msg 70 216 create;
@@ -26,7 +26,7 @@
 #X msg 82 330 0;
 #X msg 21 171 dimen 300 300;
 #X msg 111 432 lighting 1;
-#X floatatom 483 264;
+#X floatatom 483 264 0 0 0;
 #X obj 194 573 world_light;
 #X obj 194 534 gemhead 1;
 #X msg 110 404 lighting 0;
@@ -40,7 +40,8 @@
 #X text 122 505 on;
 #X text 152 506 off;
 #X text 13 133 set the window size to 300 x 300;
-#X text 75 378 you can turn lighting on and off while it is running;
+#X text 75 378 you can turn lighting on and off while it is running
+;
 #X text 127 315 turn rendering on and off;
 #X text 142 227 create and destroy the graphics window;
 #X obj 483 197 metro 50;
@@ -59,6 +60,13 @@
 #X text 446 69 Purple sphere;
 #X text 636 74 Green sphere;
 #X obj 49 65 loadbang;
+#N canvas 87 154 247 179 Gem.init 0;
+#X obj 118 46 loadbang;
+#X msg 118 81 reset;
+#X obj 118 113 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X restore 59 463 pd Gem.init;
 #X connect 4 0 34 0;
 #X connect 5 0 47 0;
 #X connect 6 0 47 0;
@@ -99,3 +107,4 @@
 #X connect 55 0 18 0;
 #X connect 56 0 55 0;
 #X connect 59 0 49 0;
+#X connect 60 0 19 0;

@@ -78,6 +78,10 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
   // The default behavior is to output an error.
   virtual void 	processLeftGray(imageStruct &image, imageStruct &right);
     	
+
+  //////////
+  virtual void	postrender(GemState *);
+
   //////////
   virtual void	stopRendering();
 
@@ -86,13 +90,13 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
   virtual void	rightstopRendering()            { ; }
 
   //////////
-  virtual void   	rightRender(GemState *state);
+  virtual void  rightRender(GemState *state);
 
   //////////
   virtual void   	rightPostrender(GemState *)    	{ ; }
  		
   // Called when rendering stops on the right input
-  virtual void   	rightStoprender()    			{ rightrealStopRendering();}
+  virtual void   	rightStoprender()    			{ ; }
 
   //////////
   GemCache    	*m_cacheRight;
@@ -101,9 +105,7 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
   pixBlock    	*m_pixRight;
 
   int		m_pixRightValid;
-
-  //////////
-  void	    	rightDagCacheMess(GemDag *dagPtr, GemCache *cachePtr);
+  int           org_pixRightValid;
 
   //////////
   t_inlet         *m_inlet;
@@ -117,15 +119,10 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
     
   static inline GemPixDualObj *GetMyClass(void *data) {return((GemPixDualObj *)((Obj_header *)data)->data);}
 	
-  void	    	rightrealStopRendering();
-
-
   //////////
   // Static member functions
   static void 	obj_setupCallback(t_class *classPtr);
-  static void 	rightDagCacheMessCallback(void *x, void *gem_dag, void *gem_cache);
-  static void 	rightRenderCallback(GemBase *data, GemState *state);
-  static void 	rightPostrenderCallback(GemBase *data, GemState *state);
-  static void	rightStoprenderCallback(GemBase *data);	//DH};
+  static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
+
 };
 #endif	// for header file

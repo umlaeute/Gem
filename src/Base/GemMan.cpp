@@ -68,6 +68,9 @@ float GemMan::m_fog;
 GLfloat GemMan::m_fogColor[4];
 float GemMan::m_fogStart;
 float GemMan::m_fogEnd;
+float GemMan::m_motionBlur=0.f;
+
+void *GemMan::m_renderSymbol=(void*)gensym("render");
 
 // static data
 static const int NUM_LIGHTS = 8;   	// the maximum number of lights
@@ -80,6 +83,8 @@ static int s_hit = 0;
 static int s_rendering = 0;
 
 static gemheadLink *s_linkHead = NULL;
+static gemheadLink *s_linkHead_2 = NULL;
+
 
 class gemheadLink
 {
@@ -280,13 +285,13 @@ void GemMan :: initGem()
   m_perspect[5] = 20.f;	// back
 
   // setup the lookat values
-  m_lookat[0] = 0.f;	// eye:	x
+  m_lookat[0] = 0.f;	// eye:		x
   m_lookat[1] = 0.f;	//		y
   m_lookat[2] = 4.f;	//		z
   m_lookat[3] = 0.f;	// center :	x
-  m_lookat[4] = 0.f;	//			y
-  m_lookat[5] = 0.f;	//			z
-  m_lookat[6] = 0.f;	// up::	x
+  m_lookat[4] = 0.f;	//		y
+  m_lookat[5] = 0.f;	//		z
+  m_lookat[6] = 0.f;	// up::		x
   m_lookat[7] = 1.f;	//		y
   m_lookat[8] = 0.f;	//		z
 
@@ -296,6 +301,8 @@ void GemMan :: initGem()
   m_fogEnd	= 20.f;
   m_fog		= 0.5f;
   m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
+
+  m_motionBlur = 0.f;
 }
 
 /////////////////////////////////////////////////////////
@@ -304,23 +311,34 @@ void GemMan :: initGem()
 /////////////////////////////////////////////////////////
 void GemMan :: addObj(gemhead *obj, int priority)
 {
-  // find the place where the priority is a higher number
   gemheadLink *linkPtr = s_linkHead;
-    
-  // unique case if there is no s_linkHead
-  if (!linkPtr)
-    {
-      s_linkHead = new gemheadLink(obj, priority);
+  if (priority<0){
+    priority*=-1;
+    linkPtr = s_linkHead_2;
+    if (!linkPtr) {
+      s_linkHead_2 = new gemheadLink(obj, priority);
       return;
     }
     
-  // unique case if the s_linkHead has a worse priority number
-  if (linkPtr->priority > priority)
-    {
+    // unique case if the s_linkHead has a worse priority number
+    if (linkPtr->priority > priority) {
+      s_linkHead_2 = new gemheadLink(obj, priority);
+      s_linkHead_2->next = linkPtr;
+      return;
+    }
+  } else {
+    if (!linkPtr) {
+      s_linkHead = new gemheadLink(obj, priority);
+      return;
+    }
+    // unique case if the s_linkHead has a worse priority number
+    if (linkPtr->priority > priority)  {
       s_linkHead = new gemheadLink(obj, priority);
       s_linkHead->next = linkPtr;
       return;
     }
+  }
+
   while (linkPtr->next && linkPtr->next->priority <= priority)
     linkPtr = linkPtr->next;
        
@@ -331,17 +349,23 @@ void GemMan :: addObj(gemhead *obj, int priority)
 // removeObj
 //
 /////////////////////////////////////////////////////////
-void GemMan :: removeObj(gemhead *obj)
+void GemMan :: removeObj(gemhead *obj, int priority=50)
 {
   gemheadLink *linkPtr = s_linkHead;
+  if (priority<0)linkPtr = s_linkHead_2;
   if (!linkPtr) return;
     
   // unique case if the object is the s_linkHead
   if (linkPtr->base == obj)
     {
       gemheadLink *nextPtr = linkPtr->next;
-      delete s_linkHead;
-      s_linkHead = nextPtr;
+      if (priority<0){
+	delete s_linkHead_2;
+	s_linkHead_2 = nextPtr;
+      } else {
+	delete s_linkHead;
+	s_linkHead = nextPtr;
+      }
       return;
     }
     
@@ -544,6 +568,7 @@ void GemMan :: render(void *)
   resetValues();
 
   GemState currentState;
+
   // fill in the elapsed time
   if (m_buffer == 1)
     currentState.tickTime = 50.f;
@@ -673,7 +698,7 @@ void GemMan :: render(void *)
       currentState.stereo = 1;
       gemheadLink *head = s_linkHead;
     
-     while (head) {
+      while (head) {
 	head->base->renderGL(&currentState);
 	head = head->next;
       }
@@ -727,6 +752,18 @@ void GemMan :: render(void *)
 	  head->base->renderGL(&currentState);
 	  head = head->next;
 	}
+
+	// setup the matrices
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
+       
+	head = s_linkHead_2;
+    	while (head) {
+	  head->base->renderGL(&currentState);
+	  head = head->next;
+	}
+
     }
   }
 
@@ -782,7 +819,12 @@ void GemMan :: startRendering()
   post("GEM: Start rendering");
     
   // set up all of the gemheads
-  gemheadLink *head = s_linkHead;
+  gemheadLink *head = s_linkHead_2;
+  while(head) {
+    head->base->startRendering();
+    head = head->next;
+  }
+  head = s_linkHead;
   while(head)
     {
       head->base->startRendering();
@@ -852,8 +894,6 @@ void GemMan :: windowCleanup()
 /////////////////////////////////////////////////////////
 int GemMan :: createWindow(char* disp)
 {
-  post("MAN: create window");
-
   if ( m_windowState ) return(0);
 
   WindowHints myHints;
@@ -922,13 +962,17 @@ void GemMan :: destroyWindow()
 
   // reestablish the const glxContext
 #ifdef unix                 // for Unix
+  //post("dpy=%x\twin=%x\tcontext=%x", constInfo.dpy, constInfo.win, constInfo.context);
+  if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
   glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
 #elif _WINDOWS              // for Windows
+  if (!constInfo.dc && !constInfo.context)return; // do not crash ??
   wglMakeCurrent(constInfo.dc, constInfo.context);
   s_windowRun = 0;
 #else
 #error Define OS specific OpenGL context make current
 #endif
+  post("end of destruction");
 }
 
 /////////////////////////////////////////////////////////
@@ -963,6 +1007,7 @@ int createConstWindow(char* disp)
       error("GEM: Error creating const context");
       return(0);
     }
+
   return(1);
 }
 

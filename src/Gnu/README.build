@@ -21,6 +21,10 @@ try to find a developer-package for your distribution.
 On a Debian system (most of) these library are already in your distribution.
 Some packages, that are not in the official Debian-release (esp. libmpeg3(-dev)), can be found at
 http://marillat.free.fr
+you might have to put a line like
+deb http://marillat.free.fr/ stable main
+into your /etc/apt/sources.list
+
 For other distributions you may have a look which ones are there
 and download and install the other ones.
 

@@ -103,15 +103,11 @@ class GEM_EXTERN pix_videoLinux : public pix_video
 	   video input. */
     	void	    	dimenMess(int x, int y, int leftmargin, int rightmargin,
     	    	    	    int topmargin, int bottommargin);
-    	void	    	channelMess(t_floatarg f);
+    	void	    	channelMess(int f);
+    	void	    	freqMess(t_floatarg f);
+    	void	    	modeMess(int argc, t_atom *argv);
+    	void	    	deviceMess(int d);
 
-
-    	void	    	modeMess(t_symbol* norm,t_floatarg f);
-
-    	//////////
-    	// Set the video offset
-    	void	    	offsetMess(int x, int y);
-    
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
@@ -121,11 +117,6 @@ class GEM_EXTERN pix_videoLinux : public pix_video
     	// Stop the video device
     	// [out] int - returns 0 if bad
     	int	   	stopTransfer();
-    
-    	////////// 
-    	// Stop the video device
-    	// [out] int - returns 0 if bad
-    	void	    	swapMess(int state);
     
 	//-----------------------------------
 	// GROUP:	Linux specific video data
@@ -151,13 +142,17 @@ class GEM_EXTERN pix_videoLinux : public pix_video
 	int m_channel;
 	int m_norm;
 
+	int m_devicenum;
+
     private:
     	
     	//////////
     	// static member functions
 
+    	static void freqMessCallback(void *data, t_floatarg f);
     	static void channelMessCallback(void *data, t_floatarg f);
-    	static void modeMessCallback(void *data, t_symbol* norm, t_floatarg f);
+    	static void deviceMessCallback(void *data, t_floatarg f);
+     	static void modeMessCallback(void *data, t_symbol* norm, int argc, t_atom *argv);
 };
 
 #endif	// for header file

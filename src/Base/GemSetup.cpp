@@ -25,7 +25,7 @@
 void MarkEx_setup();
 
 extern "C" {
-  
+
   void gemwin_setup();
   void gemhead_setup();
   void gemkeyname_setup();
@@ -179,7 +179,7 @@ extern "C" {
   {
     // startup GEM
     GemMan::initGem();
-    
+
     MarkEx_setup();
     
     // Controls

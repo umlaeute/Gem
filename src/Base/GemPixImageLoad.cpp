@@ -34,8 +34,9 @@ extern "C"
 {
 #include "tiffio.h"
 
-#ifdef _WINDOWS
 #undef EXTERN
+
+#ifdef _WINDOWS
 #undef FAR
 #endif
 
@@ -88,10 +89,6 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 
 		sprintf(newName, "%s/%s", realName, realResult);
 	}
-
-	// try to load in a TIFF file
-	if ( (image_block = tiffImage2mem(newName)) )
-			return(image_block);
 	
 	// try to load in a JPEG file
 	if ( (image_block = jpegImage2mem(newName)) )
@@ -99,6 +96,10 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 
 	// try to load in an SGI file
 	if ( (image_block = sgiImage2mem(newName)) )
+			return(image_block);
+
+	// try to load in a TIFF file
+	if ( (image_block = tiffImage2mem(newName)) )
 			return(image_block);
 
 	// unable to load image

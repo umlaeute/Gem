@@ -17,7 +17,6 @@
 
 #include "GemBase.h"
 #include "GemCache.h"
-#include "GemDag.h"
 
 /////////////////////////////////////////////////////////
 //
@@ -28,9 +27,9 @@
 //
 /////////////////////////////////////////////////////////
 GemBase :: GemBase()
-    	 : m_cache(NULL)
+  : m_cache(NULL), gem_amRendering(false)
 {
-    m_out1 = outlet_new(this->x_obj, 0);
+  m_out1 = outlet_new(this->x_obj, 0);
 }
 
 /////////////////////////////////////////////////////////
@@ -39,8 +38,11 @@ GemBase :: GemBase()
 /////////////////////////////////////////////////////////
 GemBase :: ~GemBase()
 {
-    if (m_cache)
-        m_cache->breakDAG();
+  if (gem_amRendering){
+    stopRendering();
+    gem_amRendering=false;
+  }
+
     if (m_out1)
         outlet_free(m_out1);
 }
@@ -49,25 +51,42 @@ GemBase :: ~GemBase()
 // gem_cacheMess
 //
 /////////////////////////////////////////////////////////
-void GemBase :: gem_dagCacheMess(GemDag *dagPtr, GemCache *cachePtr)
+void GemBase :: gem_startstopMess(int state)
 {
-    dagPtr->addChild(this, &GemBase::renderCallback, &GemBase::postrenderCallback, &GemBase::stoprenderCallback);
-   
-    m_cache = cachePtr;
-    if (m_cache) startRendering();
-    else return;
+  if (state && !gem_amRendering)startRendering();
+  else if (!state && gem_amRendering) stopRendering();
 
-    // continue sending out the cache message
-    t_atom cacheArray[2];
-    cacheArray[0].a_type = A_POINTER;
-    cacheArray[0].a_w.w_gpointer = (t_gpointer *)dagPtr;
-    cacheArray[1].a_type = A_POINTER;
-    cacheArray[1].a_w.w_gpointer = (t_gpointer *)m_cache;
-    outlet_anything(this->m_out1, gensym("gem_state"), 2, cacheArray);
-
-    // tell the dag that the child is done with its part of the chain
-    dagPtr->childDone(this);
+  gem_amRendering=(bool)state;
+  // continue sending out the cache message
+  t_atom ap[1];
+  SETFLOAT(ap, state);
+  outlet_anything(this->m_out1, gensym("gem_state"), 1, ap);
 }
+
+/////////////////////////////////////////////////////////
+// renderMess
+//
+/////////////////////////////////////////////////////////
+void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
+{
+  m_cache=cache;
+
+  if (!gem_amRendering){ // init Rendering if not done yet
+    startRendering();
+    gem_amRendering=true;
+  }
+
+  if(state)render(state);
+  t_atom ap[2];
+  ap->a_type=A_POINTER;
+  ap->a_w.w_gpointer=(t_gpointer *)cache;  // the cache ?
+  (ap+1)->a_type=A_POINTER;
+  (ap+1)->a_w.w_gpointer=(t_gpointer *)state;
+  outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
+
+  if(state)postrender(state);
+}
+
 
 /////////////////////////////////////////////////////////
 // setModified
@@ -94,22 +113,17 @@ void GemBase :: realStopRendering()
 /////////////////////////////////////////////////////////
 void GemBase :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&GemBase::gem_dagCacheMessCallback,
-    	    gensym("gem_state"), A_POINTER, A_POINTER, A_NULL);
+    class_addmethod(classPtr, (t_method)&GemBase::gem_MessCallback,
+    	    gensym("gem_state"), A_GIMME, A_NULL);
 }
-void GemBase :: gem_dagCacheMessCallback(void *data, void *gem_dag, void *gem_cache)
+void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
-    GetMyClass(data)->gem_dagCacheMess((GemDag *)gem_dag, (GemCache *)gem_cache);
-}
-void GemBase :: renderCallback(GemBase *data, GemState *state)
-{
-    data->render(state);
-}
-void GemBase :: postrenderCallback(GemBase *data, GemState *state)
-{
-    data->postrender(state);
-}
-void GemBase :: stoprenderCallback(GemBase *data)
-{
-    data->stoprender();
+  if (argc==1 && argv->a_type==A_FLOAT){
+    GetMyClass(data)->gem_startstopMess(atom_getint(argv));  // start rendering (forget this !?)
+  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
+
+    GetMyClass(data)->gem_renderMess((GemCache *)argv->a_w.w_gpointer, (GemState *)(argv+1)->a_w.w_gpointer);
+  } else {
+    error("GEM: wrong arguments....");
+  }
 }

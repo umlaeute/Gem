@@ -107,7 +107,8 @@ void pix_imageInPlace :: stopRendering()
 void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage, int topImage, int skipRate)
 {
   openMess(filename, baseImage, topImage, skipRate);
-  mInPreload = 1;
+  if (m_loadedCache)mInPreload = 1;
+  else mInPreload = 0;
 }
 
 /////////////////////////////////////////////////////////

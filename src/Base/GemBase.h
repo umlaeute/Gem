@@ -28,7 +28,6 @@ LOG
 #include "Base/GemState.h"
 
 class GemCache;
-class GemDag;
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -71,6 +70,11 @@ class GEM_EXTERN GemBase : public CPPExtern
     	//////////
     	// If you care about the stop of rendering
     	virtual void	stopRendering()    	                { ; }
+
+
+	//////////
+	// has rendering started ?
+	bool            gem_amRendering;
     	
     	//////////
     	// If anything in the object has changed
@@ -92,14 +96,15 @@ class GEM_EXTERN GemBase : public CPPExtern
     private:
     
     	void	    	realStopRendering();
-        void            gem_dagCacheMess(GemDag *dagPtr, GemCache *cachePtr);
-    	    	
+        void            gem_startstopMess(int state);
+	void            gem_renderMess(GemCache* state, GemState* state2);
+  	    	
     	static inline GemBase *GetMyClass(void *data) {return((GemBase *)((Obj_header *)data)->data);}
 
     	friend class    gemhead;
     	static void 	obj_setupCallback(t_class *classPtr);
-    	static void 	gem_dagCacheMessCallback(void *x, void *gem_dag, void *gem_cache);
-    	static void 	renderCallback(GemBase *data, GemState *state);
+     	static void 	gem_MessCallback(void *, t_symbol *,int, t_atom*);
+   	static void 	renderCallback(GemBase *data, GemState *state);
     	static void 	postrenderCallback(GemBase *data, GemState *state);
 	static void	stoprenderCallback(GemBase *data);	//DH
 };
