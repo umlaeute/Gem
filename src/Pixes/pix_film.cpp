@@ -162,12 +162,16 @@ void pix_film :: render(GemState *state)
   // do we actually need to get a new frame from the movie ?
   if (m_reqFrame != m_curFrame) {
     newImage = 1;
-    m_curFrame = m_reqFrame;
     getFrame();
+    m_curFrame = m_reqFrame;
     if (m_film)m_pixBlock.image.data = m_frame; // this is mainly for windows
   }
   m_pixBlock.newimage = newImage;
   state->image = &m_pixBlock;
+#ifdef MACOSX
+  if (m_reqFrame == m_curFrame)
+        ::MoviesTask(NULL, 0);
+#endif
   /* texture it, if needed */
   texFrame(state, newImage);
 
