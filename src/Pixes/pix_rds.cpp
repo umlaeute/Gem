@@ -256,7 +256,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
     unsigned char *target, *dest;
     unsigned short *src = (unsigned short*)image.data;
     unsigned char v;
-    unsigned short R, G, B;
+    unsigned short R, B;
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
