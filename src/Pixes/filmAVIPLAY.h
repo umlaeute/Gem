@@ -25,6 +25,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifdef HAVE_LIBAVIPLAY
 #include <avifile/avifile.h>
 #include <avifile/StreamInfo.h>
+
+   // some version checking...
 #ifndef IMG_FMT_RGB24
 #undef HAVE_LIBAVIPLAY
 #endif // IMG_FMT_RGB24
@@ -54,6 +56,7 @@ class GEM_EXTERN filmAVIPLAY : public film {
   // Destructor
   ~filmAVIPLAY();
 
+#ifdef HAVE_LIBAVIPLAY
   //////////
   // open a movie up
   virtual bool open(char *filename, int format=0);
@@ -70,12 +73,12 @@ class GEM_EXTERN filmAVIPLAY : public film {
   virtual int changeImage(int imgNum, int trackNum=-1);
 
  protected:
-#ifdef HAVE_LIBAVIPLAY
   IAviReadFile *m_avifile;
   IAviReadStream  *m_avistream;
   CImage *m_aviimage;
 #endif //AVIPLAY
-
+  unsigned char *m_rawdata;
+  long           m_rawlength;
 };
 
 #endif	// for header file
