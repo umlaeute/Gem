@@ -105,7 +105,7 @@ void pix_depot :: allocateMessCallback(void *data, t_floatarg x, t_floatarg y, t
     return;
   }
   if (c==0)c=4;
-  GetMyClass(data)->allocateMess(x, y, c);
+  GetMyClass(data)->allocateMess((int)x, (int)y, (int)c);
 }
 void pix_depot :: bangMessCallback(void *data)
 {
@@ -183,7 +183,7 @@ void pix_put :: setMessCallback(void *data, t_symbol*s)
 }
 void pix_put :: frameMessCallback(void *data, t_floatarg f)
 {
-  GetMyClass(data)->frameMess(f);
+  GetMyClass(data)->frameMess((int)f);
 }
 
 
@@ -268,5 +268,5 @@ void pix_get :: setMessCallback(void *data, t_symbol*s)
 }
 void pix_get :: frameMessCallback(void *data, t_floatarg f)
 {
-  GetMyClass(data)->frameMess(f);
+  GetMyClass(data)->frameMess((int)f);
 }
