@@ -15,6 +15,11 @@
 #define HAVE_QUICKTIME
 
 
+/*
+ * if we use nvidia's headers, we will most likely want to include GL/gl.h
+ */
+#define INCLUDE_GLEXT
+
 
 /*
  * here comes some generic configuration based on the information above.
