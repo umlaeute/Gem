@@ -13,6 +13,12 @@ LOG
 
 #include "Base/GemPixObj.h"
 
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#endif
+
 extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,const void* pElem2);
 
 /*-----------------------------------------------------------------
