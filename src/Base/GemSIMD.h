@@ -13,6 +13,17 @@ LOG
 
 -----------------------------------------------------------------*/
 
+/* 
+ * compiler-issues:
+ *
+ * gcc: when gcc is invoked with "-mmmx" (or "-msse2" or "-maltivec") 
+ *      the defines __MMX__ (or corresponding) will be defined automatically
+ *
+ * vc6: you will have to install the microsoft processor-pack to use MMX/SSE2
+ *      you have to have the sp5 for vc6 installed (note: do not install sp6!!)
+ * vc6/vc7: (i think) you need to define __MMX__ (and friends) by hand
+ */
+
 #ifndef INCLUDE_GEMSIMD_H_
 #define INCLUDE_GEMSIMD_H_
 
