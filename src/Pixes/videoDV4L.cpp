@@ -212,7 +212,7 @@ int videoDV4L :: resetDevice(void){
 /////////////////////////////////////////////////////////
 void videoDV4L :: closeDevice(void){
   if(m_mmapbuf!=NULL)munmap(m_mmapbuf, N_BUF*m_framesize);
-  if(dvfd>0)close(dvfd);
+  if(dvfd>=0)close(dvfd);
   m_haveVideo=false;
 }
 
