@@ -179,15 +179,11 @@ void gemwin :: stereoMess(int mode)
 /////////////////////////////////////////////////////////
 void gemwin :: fullscreenMess(int on)
 {
-#ifndef __APPLE__
-  GemMan::m_fullscreen = !(!on);
-#else
     GemMan::m_fullscreen = on;
-#endif
 }
 
 /////////////////////////////////////////////////////////
-// fullscreenMess
+// secondScreen
 //
 /////////////////////////////////////////////////////////
 void gemwin :: secondscreenMess(int on)
