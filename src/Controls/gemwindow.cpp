@@ -61,7 +61,7 @@ static void makeContextCurrent(WindowInfo wi){
   if (!wi.dc && !wi.context)return; // do not crash ??
 
   wglMakeCurrent(wi.dc, wi.context);
-  m_windowRun = 0;
+//  m_windowRun = 0;
 #elif __APPLE__		// for PPC Macintosh
     ::aglSetDrawable( wi.context, GetWindowPort(wi.pWind) );
     ::aglSetCurrentContext(wi.context);
@@ -125,10 +125,9 @@ gemwindow :: ~gemwindow()
 //
 /////////////////////////////////////////////////////////
 #ifdef _WINDOWS
-void dispatchGemWindowMessages()
+void gemwindow::dispatchGemWindowMessages()
 {
-  if (!s_windowRun)
-    return;
+  if (!m_windowRun)return;
 
   MSG msg;
   while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE)
@@ -175,8 +174,9 @@ void gemwindow::dispatchGemWindowMessages()
 	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
 	  break;
 	case ResizeRequest:
-	  resize(res->width, res->height);
 	  XResizeWindow(win.dpy, win.win, res->width, res->height);
+  	  resize(res->width, res->height);
+
 	  break;
 	default:
 	  break; 
@@ -205,8 +205,7 @@ pascal OSStatus dispatchGemWindowMessages()
 void gemwindow::resize(int xSize, int ySize)
 {
   if (ySize==0)ySize=1;
-
-
+post("%X resize %d %d", this, xSize, ySize);
   float xDivy = (float)xSize / (float)ySize;
   m_height = ySize;
   m_width = xSize;
@@ -259,7 +258,7 @@ void gemwindow :: createContext(char* disp)
     } else 
       m_outputContext = true;
 
-    setResizeCallback(resizeCallback, this->x_obj);
+    //setResizeCallback(resizeCallback, this->x_obj);
 }
 
 int gemwindow :: createConstWindow(char* disp) {
@@ -267,7 +266,7 @@ int gemwindow :: createConstWindow(char* disp) {
   if (s_singleContext) {
     return(createWindow(disp));
   }
-  if(constInfo.context!=NULL){ // JMZ
+  if(false&&constInfo.context!=NULL){ // JMZ
     m_constInfo=constInfo;
 
     m_constInfo.have_constContext=1;
@@ -310,7 +309,7 @@ int gemwindow :: createConstWindow(char* disp) {
 int gemwindow :: createWindow(char* disp) {
   if ( m_outputState ) return(0);
 #ifdef DEBUG
-  post("gemwindow: create window");
+  post("gemwindow: create window %X", this);
 #endif
 
   WindowHints myHints;
@@ -437,6 +436,7 @@ void gemwindow :: createMess(t_symbol* s)
   }
   swapBuffers();
   swapBuffers();
+  setResizeCallback(resizeCallback, this->x_obj);
 }
 /////////////////////////////////////////////////////////
 // destroyMess
@@ -452,6 +452,8 @@ void gemwindow :: destroyMess()
 
   clock_unset(m_windowClock);
   m_windowClock = NULL;
+
+  removeResizeCallback(resizeCallback, this->x_obj);
 
   glFlush();
   glFinish();
@@ -481,6 +483,7 @@ void gemwindow :: dimensionsMess(int width, int height)
     error ("GEM: gemwindow: height must be greater than 0");
     return;
   }
+  post("dimenMess");
   m_width  = width;
   m_height = height;
 }
@@ -537,6 +540,7 @@ void gemwindow :: topmostMess(bool on)
 {
   if (m_outputState)
     topmostGemWindow(m_gfxInfo, (int)on);
+  m_topmost=on;
 }
 
 
@@ -636,7 +640,7 @@ void gemwindow :: fullscreenMessCallback(void *data, t_floatarg on)
 }
 void gemwindow :: borderMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->borderMess((int)on);
+  GetMyClass(data)->borderMess(on>0.f);
 }
 void gemwindow :: titleMessCallback(void *data, t_symbol* disp)
 {
@@ -645,11 +649,11 @@ void gemwindow :: titleMessCallback(void *data, t_symbol* disp)
 
 void gemwindow :: cursorMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->cursorMess((int)val);
+  GetMyClass(data)->cursorMess(val>0.f);
 }
 void gemwindow :: topmostMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->topmostMess((int)val);
+  GetMyClass(data)->topmostMess(val>0.f);
 }
 void gemwindow :: bangMessCallback(void *data)
 {

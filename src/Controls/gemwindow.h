@@ -82,10 +82,9 @@ class GEM_EXTERN gemwindow : public GemOutput
 
   char*        m_title;
   int          m_fullscreen;
-  bool         m_border, m_cursor;
+  bool         m_border, m_cursor, m_topmost;
   int          m_xoffset, m_yoffset;
   int          m_fsaa;
-  int          m_topmost;
 
   bool m_windowRun;
 
