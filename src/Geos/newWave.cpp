@@ -35,7 +35,7 @@ static int random2(void)
     return (foo & 0x7fffffff);
 }
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(newWave, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME(newWave)
 
 /////////////////////////////////////////////////////////
 //
@@ -45,10 +45,27 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(newWave, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 // Constructor
 //
 /////////////////////////////////////////////////////////
-newWave :: newWave( t_floatarg widthX, t_floatarg widthY )
+newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY )
   : GemShape(MEDIUM), alreadyInit(0), m_textureMode(0)
 {
-    m_height = 1.f;
+  int widthX=10;
+  int widthY=10;
+  m_height = 1.f;
+
+  switch(argc){
+  default:
+    post("newWave: ignoring some arguments");
+  case 3:
+    m_height=atom_getfloat(argv+2);
+  case 2:
+    widthY=atom_getint(argv+1);
+  case 1:
+    widthX=atom_getint(argv);
+    if(argc==1)widthY=widthX;
+    break;
+  case 0: break;
+  }
+
 
     gridX = MIN((int)widthX, MAXGRID );
     gridX = MAX ( 3, gridX);

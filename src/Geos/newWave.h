@@ -47,7 +47,7 @@ class GEM_EXTERN newWave : public GemShape
 
   //////////
   // Constructor
-  newWave( t_floatarg widthX, t_floatarg widthY );
+  newWave( int, t_atom* );
     	
  protected:
     	
