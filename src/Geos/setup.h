@@ -34,6 +34,9 @@ extern "C" {
    void textoutline_setup();
    void triangle_setup();
    void newWave_setup();		//tigital
+   void slideSquares_setup();		//tigital
+   void rubber_setup();			//tigital
+   void ripple_setup();			//tigital
 //  void terrain_setup();
 
    void Geos_setup() {
@@ -63,7 +66,11 @@ extern "C" {
 #endif
       triangle_setup();
       newWave_setup();		//tigital
+      slideSquares_setup();	//tigital
+      rubber_setup();		//tigital
+      ripple_setup();		//tigital
 //      terrain_setup();
+
 
    }
 } // for extern "C"
