@@ -206,7 +206,7 @@ m_haveModel = 0;
   post("vertex_model: src4 %d",src4);
 
   m_haveModel = 1;
-  this->setModified();
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -217,8 +217,7 @@ void vertex_model :: render(GemState *state)
 {
 
     int size,i,src,length;
-   
-    
+
     if (!m_haveModel) return;  
     //this will get the appropriate maximum texcoord size for use with the model
     src = 0;
