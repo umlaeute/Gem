@@ -357,10 +357,10 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
-      *pixels++=((-43*rgbadata[0]-85 *rgbadata[1]+128*rgbadata[2])>>8)+128; // U
-      *pixels++=(77 *rgbadata[0]+150*rgbadata[1]+29 *rgbadata[2])>>8;     // Y
-      *pixels++=((128*rgbadata[0]-107*rgbadata[1]-21 *rgbadata[2])>>8)+128; // V
-      *pixels++=(77 *rgbadata[4]+150*rgbadata[5]+29 *rgbadata[6])>>8;     // Y
+      *pixels++=((-43*rgbadata[chRed]-85 *rgbadata[chGreen]+128*rgbadata[chBlue])>>8)+128; // U
+      *pixels++=(77 *rgbadata[chRed]+150*rgbadata[chGreen]+29 *rgbadata[chBlue])>>8;     // Y
+      *pixels++=((128*rgbadata[chRed]-107*rgbadata[chGreen]-21 *rgbadata[chBlue])>>8)+128; // V
+      *pixels++=(77 *rgbadata[4+chRed]+150*rgbadata[4+chGreen]+29 *rgbadata[4+chBlue])>>8;     // Y
       rgbadata+=8;
     }
     break;
@@ -466,10 +466,10 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
-      *pixels++=((-43*bgradata[2]-85 *bgradata[1]+128*bgradata[0])>>8)+128; // U
-      *pixels++=(77 *bgradata[2]+150*bgradata[1]+29 *bgradata[0])>>8;     // Y
-      *pixels++=((128*bgradata[2]-107*bgradata[1]-21 *bgradata[0])>>8)+128; // V
-      *pixels++=(77 *bgradata[6]+150*bgradata[5]+29 *bgradata[4])>>8;     // Y
+      *pixels++=((-43*bgradata[chRed]-85 *bgradata[chGreen]+128*bgradata[chBlue])>>8)+128; // U
+      *pixels++=(77 *bgradata[chRed]+150*bgradata[chGreen]+29 *bgradata[chBlue])>>8;     // Y
+      *pixels++=((128*bgradata[chRed]-107*bgradata[chGreen]-21 *bgradata[chBlue])>>8)+128; // V
+      *pixels++=(77 *bgradata[4+chRed]+150*bgradata[4+chGreen]+29 *bgradata[4+chBlue])>>8;     // Y
       bgradata+=8;
     }
     break;
@@ -497,10 +497,11 @@ GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
   case GL_BGRA_EXT:
     while(pixelnum--){
       grey=*greydata++;
-      *pixels++=grey;
-      *pixels++=grey;
-      *pixels++=grey;
-      *pixels++=255;
+      pixels[chRed]=grey;
+      pixels[chGreen]=grey;
+      pixels[chBlue]=grey;
+      pixels[chAlpha]=255;
+      pixels+=4;
     }
     break;
   case GL_LUMINANCE:
