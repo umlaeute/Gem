@@ -1,0 +1,154 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// zmoelnig@iem.kug.ac.at
+//
+// Implementation file
+//
+//    Copyright (c) 1997-2000 Mark Danks.
+//    Copyright (c) Günther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
+//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+//
+/////////////////////////////////////////////////////////
+
+#include "cube.h"
+#include "Base/GemState.h"
+
+CPPEXTERN_NEW_WITH_ONE_ARG(cube, t_floatarg, A_DEFFLOAT)
+
+/////////////////////////////////////////////////////////
+//
+// cube
+//
+/////////////////////////////////////////////////////////
+// Constructor
+//
+/////////////////////////////////////////////////////////
+cube :: cube(t_floatarg size)
+      : GemShape(size)
+{
+    m_drawType = GL_QUADS;
+    m_blend = 0;
+}
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+cube :: ~cube()
+{ }
+
+/////////////////////////////////////////////////////////
+// render
+//
+/////////////////////////////////////////////////////////
+void cube :: render(GemState *state)
+{
+    static GLfloat n[6][3] =
+    {
+	{ 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f,  0.0f, -1.0f},
+	{-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, -1.0f,  0.0f}
+    };
+    static GLfloat v[8][3] =
+    {
+	{-1.0f, -1.0f,  1.0f}, { 1.0f, -1.0f,  1.0f}, { 1.0f, 1.0f,  1.0f}, {-1.0f, 1.0f,  1.0f},
+	{ 1.0f, -1.0f, -1.0f}, {-1.0f, -1.0f, -1.0f}, {-1.0f, 1.0f, -1.0f}, { 1.0f, 1.0f, -1.0f}
+    };
+    static GLint faces[6][4] =
+    {
+	{ 0, 1, 2, 3 }, { 1, 4, 7, 2 }, { 4, 5, 6, 7 },
+	{ 5, 0, 3, 6 }, { 3, 2, 7, 6 }, { 1, 0, 5, 4 }
+    };
+    if (m_blend) {
+        glEnable(GL_POLYGON_SMOOTH);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
+    }
+    if (m_drawType == GL_LINE_LOOP)
+    {
+	    glLineWidth(m_linewidth);
+	        for (int i = 0; i < 6; i++)
+	        {
+	            glBegin(m_drawType);
+		        glNormal3f(0.0f, 0.0f, 1.0f);
+		        glVertex3d(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_size, v[faces[i][0]][2] * m_size);
+		        glVertex3d(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_size, v[faces[i][1]][2] * m_size);
+		        glVertex3d(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_size, v[faces[i][2]][2] * m_size);
+		        glVertex3d(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_size, v[faces[i][3]][2] * m_size);
+	            glEnd();
+	        }
+	    glLineWidth(1.0);
+    }
+	else if (state->texture && state->numTexCoords)
+    {
+	    glBegin(m_drawType);
+	        for (int i = 0; i < 6; i++)
+	        {
+				int curCoord = 0;
+	            glNormal3fv(&n[i][0]);
+				glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+//    	        glTexCoord2f(0.0, 0.0);
+		        glVertex3f(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_size, v[faces[i][0]][2] * m_size);
+				
+				if (state->numTexCoords > 1)
+					curCoord = 1;
+	    		glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+//    	        glTexCoord2f(1.0, 0.0);
+		        glVertex3f(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_size, v[faces[i][1]][2] * m_size);
+				
+				if (state->numTexCoords > 2)
+					curCoord = 2;
+	    		glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+//    	        glTexCoord2f(1.0, 1.0);
+		        glVertex3f(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_size, v[faces[i][2]][2] * m_size);
+				
+				if (state->numTexCoords > 3)
+					curCoord = 3;
+				glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+//    	        glTexCoord2f(0.0, 1.0);
+		        glVertex3f(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_size, v[faces[i][3]][2] * m_size);
+	        }
+	    glEnd();
+	}
+    else
+    {
+	    glBegin(m_drawType);
+	        for (int i = 0; i < 6; i++)
+	        {
+	            glNormal3fv(&n[i][0]);
+    	        glTexCoord2f(0.0, 0.0);
+		        glVertex3f(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_size, v[faces[i][0]][2] * m_size);
+    	        glTexCoord2f(1.0, 0.0);
+		        glVertex3f(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_size, v[faces[i][1]][2] * m_size);
+    	        glTexCoord2f(1.0, 1.0);
+		        glVertex3f(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_size, v[faces[i][2]][2] * m_size);
+    	        glTexCoord2f(0.0, 1.0);
+		        glVertex3f(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_size, v[faces[i][3]][2] * m_size);
+	        }
+	    glEnd();
+    }
+    if (m_blend) {
+        glDisable(GL_POLYGON_SMOOTH);
+        glDisable(GL_BLEND);
+    }
+}
+
+/////////////////////////////////////////////////////////
+// static member function
+//
+/////////////////////////////////////////////////////////
+void cube :: obj_setupCallback(t_class *classPtr)
+{ 
+    class_addmethod(classPtr, (t_method)&cube::blendMessCallback,
+    	    gensym("blend"), A_FLOAT, A_NULL);
+}
+
+void cube :: blendMessCallback(void *data, t_floatarg size)
+{
+    GetMyClass(data)->m_blend=((int)size);
+}
+

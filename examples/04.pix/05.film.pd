@@ -1,0 +1,89 @@
+#N canvas 61 68 827 638 12;
+#X obj 23 151 gemwin;
+#X msg 20 89 create;
+#X msg 27 114 destroy;
+#X obj 88 105 tgl 30 0 empty empty empty 20 8 0 8 -262144 -1 -1 0 1
+;
+#X obj 90 186 gemhead;
+#X floatatom 220 105 5 0 0 0 - - -;
+#X msg 150 106 auto \$1;
+#X obj 150 87 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0 1
+;
+#X floatatom 175 257 5 0 0 0 - - -;
+#X msg 197 392 -1 -2 -1 -2 8 -2 1 -2 1;
+#X obj 90 467 pix_convolve 3 3;
+#X text 472 233 load and play-back a movie;
+#X text 368 28 win32:;
+#X text 358 91 linux:;
+#X text 212 84 frame;
+#N canvas 243 65 604 505 README 0;
+#X text 79 38 the pix_film is the same as pix_movie but does not texture
+the movie immediately onto a Geo.;
+#X text 80 77 therefore it is possible to manipulate the frames;
+#X text 78 106 the pix_film object will return the movie in it's (more
+or less) native color-space. most of the times \, this will probably
+be not RGBA but RGB or BGR (on windows machines).;
+#X text 78 153 do not worry about this. however \, most of the pix-manips
+will only work correctly on RGBA-pixes. if this is the case and you
+send it a non-RGBA pixture it will say something like "pix_object cannon
+handle gray image".;
+#X text 79 226 to avoid this \, you can convert your pix-buff to RGBA
+using "pix_rgba". this will be a no-cost operation if the pix_buf already
+is in RGBA.;
+#X text 66 334 you might notice a significant performance-enhancement
+by just turning the [pix_rgba] off (via the toggle). however \, not
+[pix_rgba] is expensive but the [pix_convolve] (which appears to do
+nothing when initialized with "0 0 0 0 1 0 0 0 0". When [pix_rgba]
+is "off" \, the [pix_convolve] will be bypassed \, and therefore be
+very fast.;
+#X restore 635 187 pd README;
+#X obj 90 573 square 4;
+#X obj 90 233 pix_film;
+#X floatatom 149 547 5 0 0 0 - - -;
+#X msg 393 48 open ../data/homer.avi;
+#X msg 390 108 open ../data/anim-1.mov;
+#X msg 391 136 open ../data/alea.mpg;
+#X text 247 502 you have to texture the movie by hand;
+#X text 256 466 manipulate the movie (expensive!);
+#X text 26 10 load \, play and manipulate digital videos;
+#X text 423 397 edge detection;
+#X msg 230 424 0.125 0.125 0.125 0.125 0.125 0.125 0.125 0.125 0.125
+;
+#X text 715 422 smoothing;
+#N canvas 87 154 247 179 Gem.init 0;
+#X obj 118 46 loadbang;
+#X msg 118 81 reset;
+#X obj 118 113 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X restore 87 152 pd Gem.init;
+#X obj 289 252 t f;
+#X obj 197 368 loadbang;
+#X text 178 299 transform the movie into RGBA-space (if turned off
+\, [pix_convolve] will be by-passed and therefore much speed will be
+"gained");
+#X obj 110 439 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0
+1;
+#X obj 90 500 pix_texture;
+#X connect 1 0 0 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 17 0;
+#X connect 5 0 17 1;
+#X connect 6 0 17 0;
+#X connect 7 0 6 0;
+#X connect 9 0 10 2;
+#X connect 10 0 33 0;
+#X connect 17 0 10 0;
+#X connect 17 1 8 0;
+#X connect 17 2 29 0;
+#X connect 18 0 16 1;
+#X connect 19 0 17 0;
+#X connect 20 0 17 0;
+#X connect 21 0 17 0;
+#X connect 26 0 10 2;
+#X connect 28 0 0 0;
+#X connect 29 0 17 1;
+#X connect 30 0 9 0;
+#X connect 32 0 10 0;
+#X connect 33 0 16 0;

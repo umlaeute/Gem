@@ -1,0 +1,40 @@
+#!/bin/sh
+
+SETUP_FILE=setup.h
+
+echo "////////////////////////////////////////////////////////" > $SETUP_FILE
+echo "//" >> $SETUP_FILE
+echo "// GEM - Graphics Environment for Multimedia" >> $SETUP_FILE
+echo "//" >> $SETUP_FILE
+echo "// Copyleft (c) IOhannes m zmölnig . zmoelnig@iem.kug.ac.at . forum::für::umläute . IEM" >> $SETUP_FILE
+echo "//" >> $SETUP_FILE
+echo "//    For information on usage and redistribution, and for a DISCLAIMER OF ALL" >> $SETUP_FILE
+echo "//    WARRANTIES, see the file, \"GEM.LICENSE.TERMS\" in this distribution." >> $SETUP_FILE
+echo "//" >> $SETUP_FILE
+echo "/////////////////////////////////////////////////////////" >> $SETUP_FILE
+
+echo "/* -------------------------- setup function ------------------------------ */" >> $SETUP_FILE
+
+echo >> $SETUP_FILE
+echo "extern \"C\" {" >> $SETUP_FILE
+
+echo >> $SETUP_FILE
+
+for f in *.cpp
+do
+  echo "   void ${f%.cpp}_setup();" >> $SETUP_FILE
+done
+
+echo >> $SETUP_FILE
+echo >> $SETUP_FILE
+
+echo "   void openGL_setup() {" >> $SETUP_FILE
+for f in *.cpp
+do
+  echo "      ${f%.cpp}_setup();" >> $SETUP_FILE
+done
+
+echo "   }" >> $SETUP_FILE
+echo "} // for extern \"C\"" >> $SETUP_FILE
+echo >> $SETUP_FILE
+

@@ -1,0 +1,4 @@
+<comment>
+none i know of
+objects that are still missing, are either deprecated (like [pix_put]) , still non-functional (like [pix_emboss]) or will probably never be (like [pix_dv])
+
