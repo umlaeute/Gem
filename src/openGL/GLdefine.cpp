@@ -4,7 +4,7 @@
 //
 // Implementation file
 //
-// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+// Copyright (c) 2002-2004 IOhannes m zmoelnig. forum::für::umläute. IEM
 //	zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
@@ -18,7 +18,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GLdefine , t_symbol*, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
 //
-// GEMglViewport
+// GLdefine
 //
 /////////////////////////////////////////////////////////
 // Constructor

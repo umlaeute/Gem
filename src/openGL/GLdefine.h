@@ -27,8 +27,7 @@
  KEYWORDS
 	openGL	0
  DESCRIPTION
-	wrapper for the openGL-function
-	"glBegin( GLenum mode)"
+	wrapper for the openGL defines
  */
 
 class GEM_EXTERN GLdefine : public CPPExtern
