@@ -24,6 +24,22 @@ typedef unsigned short U16;
 #define SHIFT_GREEN	(8)
 #define SHIFT_BLUE	(0)
 
+/* is this only on my system ?
+   i thought Gem's YUV is UYVY and not YVYU
+   seems weird... (jmz)
+*/
+#ifdef __APPLE__
+# define SHIFT_U  (24)
+# define SHIFT_Y1 (16)
+# define SHIFT_V  (8)
+# define SHIFT_Y2 (0)
+#else
+# define SHIFT_U  (0)
+# define SHIFT_Y1 (8)
+# define SHIFT_V  (16)
+# define SHIFT_Y2 (24)
+#endif
+
 const float Pete_Pi=3.141582f;
 const float Pete_TwoPi=(2.0f*Pete_Pi);
 const float Pete_HalfPi=(0.5f*Pete_Pi);
