@@ -215,6 +215,63 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     break;
   }
 }
+GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
+  //   B B B B B G G G   G G G R R R R R
+  if(!rgb16data)return;
+  unsigned short*rgbdata=(unsigned short*)rgb16data;
+  int pixelnum=xsize*ysize;
+    reallocate();
+  unsigned char *pixels=data;
+  unsigned short rgb;
+  switch (format){
+  case GL_RGBA:
+    csize=4;
+    while(pixelnum--){
+      rgb=*rgbdata++;
+      // abcdefghABCDEFGH
+      // XXXXXXXXXXXabcde
+
+      // abcdefghABCDEFGH
+      // 00000000abcdeXXX
+      // 00000000abcde000
+      pixels[0]=((rgb>>8)&0xF8);
+      pixels[1]=((rgb>>3)&0xFC);
+      pixels[2]=((rgb<<3)&0xF8);
+      pixels[3]=255;
+      pixels+=4;
+    }
+    break;
+  case GL_LUMINANCE:
+    csize=1;
+    while(pixelnum--){
+      rgb=*rgbdata++;
+      unsigned char r=((rgb>>8)&0xF8);
+      unsigned char g=((rgb>>3)&0xFC);
+      unsigned char b=((rgb<<3)&0xF8);
+      *pixels++=(r*79+g*156+b*21)>>8;
+    }
+    break;
+  case GL_YUV422_GEM:
+    csize=2;
+    pixelnum>>=1;
+    while(pixelnum--){
+      rgb=*rgbdata++;
+      unsigned char r=((rgb>>8)&0xF8);
+      unsigned char g=((rgb>>3)&0xFC);
+      unsigned char b=((rgb<<3)&0xF8);
+
+      *pixels++=((-43*r-85 *g+128*b)>>8)+128; // U
+      *pixels++=(77 *r+150*g+29 *b)>>8;     // Y
+      *pixels++=((128*r-107*g-21 *b)>>8)+128; // V
+      rgb=*rgbdata++;
+      r=((rgb>>8)&0xF8);
+      g=((rgb>>3)&0xFC);
+      b=((rgb<<3)&0xF8);
+      *pixels++=(77 *r+150*g+29 *b)>>8;     // Y
+    }
+    break;
+  }
+}
 GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
   if(!rgbadata)return;
   int pixelnum=xsize*ysize;
@@ -438,16 +495,23 @@ GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
     break;
   }
 }
-GEM_EXTERN void imageStruct::fromYV12(unsigned char *yuvdata) {
-  // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
+GEM_EXTERN void imageStruct::fromYV12(unsigned char*yuvdata) {
   if(!yuvdata)return;
+  int pixelnum=xsize*ysize;
+  fromYV12(yuvdata, yuvdata+(pixelnum+pixelnum>>2), yuvdata+(pixelnum));  
+}
+GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned char*V) {
+  // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
+  if(!U && !V)fromGray(Y);
+  if(!Y || !U || !V)return;
+
   int pixelnum=xsize*ysize;
   reallocate();
   unsigned char *pixels=data;
   switch (format){
   case GL_LUMINANCE:
     csize=1;
-    memcpy(pdata, yuvdata, pixelnum);
+    memcpy(pdata, Y, pixelnum);
     break;
   case GL_RGB:  case GL_BGR_EXT: // of course this is stupid, RGB isn't BGR
     csize=3;
@@ -455,10 +519,15 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char *yuvdata) {
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
 
-      unsigned char*py1=yuvdata;
-      unsigned char*py2=yuvdata+xsize; // plane_1 is luminance (csize==1)
+      unsigned char*py1=Y;
+      unsigned char*py2=Y+xsize; // plane_1 is luminance (csize==1)
+#if 0
       unsigned char*pv=yuvdata+pixelnum+((format==GL_BGR_EXT)?(pixelnum>>2):0);
       unsigned char*pu=yuvdata+pixelnum+((format==GL_RGB)?(pixelnum>>2):0);
+#else
+      unsigned char*pv=(format==GL_BGR_EXT)?U:V;
+      unsigned char*pu=(format==GL_RGB)?U:V;
+#endif
       int y, u, v, yy, vr, ug, vg, ub;
       int row=ysize>>1;
       int cols=xsize>>1;
@@ -512,10 +581,15 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char *yuvdata) {
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
 
-      unsigned char*py1=yuvdata;
-      unsigned char*py2=yuvdata+xsize; // plane_1 is luminance (csize==1)
+      unsigned char*py1=Y;//yuvdata;
+      unsigned char*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
+      /*
       unsigned char*pv=yuvdata+pixelnum+((format==GL_BGRA_EXT)?(pixelnum>>2):0);
       unsigned char*pu=yuvdata+pixelnum+((format==GL_RGBA)?(pixelnum>>2):0);
+      */
+      unsigned char*pv=(format==GL_BGRA_EXT)?V:U;
+      unsigned char*pu=(format==GL_RGBA)?V:U;
+ 
       int y, u, v, yy, vr, ug, vg, ub;
       int row=ysize>>1;
       int cols=xsize>>1;
@@ -571,10 +645,10 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char *yuvdata) {
     {
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
-      unsigned char*py1=yuvdata;
-      unsigned char*py2=yuvdata+xsize; // plane_1 is luminance (csize==1)
-      unsigned char*pu=yuvdata+pixelnum;
-      unsigned char*pv=yuvdata+pixelnum+(pixelnum>>2);
+      unsigned char*py1=Y;
+      unsigned char*py2=Y+xsize; // plane_1 is luminance (csize==1)
+      unsigned char*pu=U;
+      unsigned char*pv=V;
       int row=ysize>>1;
       int cols=xsize>>1;
       unsigned char u, v;

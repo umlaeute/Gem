@@ -221,14 +221,20 @@ struct GEM_EXTERN imageStruct
   void fromRGBA   (unsigned char* orgdata);
   void fromBGR    (unsigned char* orgdata);
   void fromBGRA   (unsigned char* orgdata);
+  void fromRGB16  (unsigned char* orgdata);
   void fromGray   (unsigned char* orgdata);
   void fromUYVY   (unsigned char* orgdata);
   void fromYUY2   (unsigned char* orgdata); // YUYV
   void fromYVYU   (unsigned char* orgdata);
+  /* planar YUV420: this is rather generic and not really YV12 only */
+  void fromYV12   (unsigned char* Y, unsigned char*U, unsigned char*V);
+  /* assume that the planes are near each other: YVU */
   void fromYV12   (unsigned char* orgdata);
 
+  /* aliases */
   void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
   void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
+  void fromYUV420P(unsigned char*Y,unsigned char*U,unsigned char*V){fromYV12(Y,U,V);}
 
   unsigned char   *data;
   private:
