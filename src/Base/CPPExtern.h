@@ -187,19 +187,42 @@ static void obj_setupCallback(t_class *classPtr);
 
 ///////////////////////////////////////////////////////////////////////////////
 // auto registering a class
-// this creates a dummy class, whose constructor calls the setup-function (registering the class with pd)
+// this creates a dummy class, whose constructor calls the setup-function 
+// (registering the class with pd)
 // a static copy of this class is created at runtime, to actually do the setup-call
+///////////////////////////////////////////////////////////////////////////////
 #ifdef NO_AUTO_REGISTER_CLASS
 // if NO_AUTO_REGISTER_CLASS is defined, we will not register the class
 # define AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION)
 #else
-# define AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION)       \
-  class NEW_CLASS ## _cppclass {		              \
-    public:						      \
-    NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
-  };							      \
+// for debugging we can show the which classes are auto-registering
+# if 0
+#  define POST_AUTOREGISTER(NEW_CLASS) post("auto-registering: "#NEW_CLASS);
+# else
+#  define POST_AUTOREGISTER(NEW_CLASS)
+# endif
+# define AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION)			\
+  class NEW_CLASS ## _cppclass {					\
+  public:								\
+  NEW_CLASS ## _cppclass() {POST_AUTOREGISTER(NEW_CLASS); NEW_CLASS ## SETUP_FUNCTION(); } \
+};									\
   static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
 #endif
+
+///////////////////////////////////////////////////////////////////////////////
+// setting the help-symbol
+///////////////////////////////////////////////////////////////////////////////
+#ifndef HELPSYMBOL_BASE
+# define HELPSYMBOL_BASE ""
+#endif
+
+#ifdef HELPSYMBOL
+# define SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME)				\
+  class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym(HELPSYMBOL_BASE HELPSYMBOL));
+#else 
+# define SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME)			\
+  class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym(HELPSYMBOL_BASE#NEW_CLASS));
+#endif /* HELPSYMBOL */
 
 ///////////////////////////////////////////////////////////////////////////////
 // no args
@@ -223,10 +246,10 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
     	     	sizeof(Obj_header), 0,                          \
     	     	A_NULL);                                        \
-    class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
-}   	    	    	    	    	    	    	    	\
-}\
+    SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
+    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME);	\
+ }									\
+}									\
   AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 
@@ -253,10 +276,10 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	sizeof(Obj_header), 0,                          \
     	     	PD_TYPE,                                        \
     	     	A_NULL);      	    	    	    	    	\
-    class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
-}   	    	    	    	    	    	    	    	\
-}\
+    SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
+    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME);	\
+ }									\
+}									\
   AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -282,10 +305,10 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	sizeof(Obj_header), 0,                          \
     	     	A_GIMME,                                        \
     	     	A_NULL);      	    	    	    	    	\
-    class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
-}   	    	    	    	    	    	    	    	\
-}\
+    SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
+    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME);	\
+ }									\
+}									\
   AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -311,10 +334,10 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	sizeof(Obj_header), 0,                          \
     	     	ONE_PD_TYPE, TWO_PD_TYPE,                       \
     	     	A_NULL);      	    	    	    	    	\
-    class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
-}   	    	    	    	    	    	    	    	\
-}\
+    SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
+    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME);	\
+ }									\
+}									\
   AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -340,10 +363,10 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	sizeof(Obj_header), 0,                          \
     	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE,        \
     	     	A_NULL);      	    	    	    	    	\
-    class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
-}   	    	    	    	    	    	    	    	\
-}\
+    SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
+    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME);	\
+ }									\
+}									\
   AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -367,12 +390,12 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
     	     	sizeof(Obj_header), 0,                          \
-    	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE, FOUR_PD_TYPE, \
-    	     	A_NULL);      	    	    	    	    	\
-    class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
-}   	    	    	    	    	    	    	    	\
-}\
+    	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE, FOUR_PD_TYPE,	\
+    	     	A_NULL);						\
+    SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
+    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME);	\
+ }									\
+}									\
   AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
     
 #endif	// for header file
