@@ -103,7 +103,7 @@ void pix_movement :: clear_buffer()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_movement :: processImage(imageStruct &image)
+void pix_movement :: processRGBAImage(imageStruct &image)
 {
   // assume that the pix_size does not change !
   if (image.xsize != buffer.xsize || image.ysize != buffer.ysize) {
@@ -125,10 +125,11 @@ void pix_movement :: processImage(imageStruct &image)
   unsigned char *wp=buffer.data;			// write pointer
 
   while(pixsize--) {
-    unsigned char grey = (unsigned char)(rp[chRed] * 0.3086f + rp[chGreen] * 0.6094f + rp[chBlue] * 0.0820f);
-	
-    rp[chAlpha] = 255*(fabs((unsigned char)grey-*wp)>treshold);
-    *wp++=(unsigned char)grey;
+    //    unsigned char grey = (unsigned char)(rp[chRed] * 0.3086f + rp[chGreen] * 0.6094f + rp[chBlue] * 0.0820f);
+    //   rp[chAlpha] = 255*(fabs((unsigned char)grey-*wp)>treshold);
+    unsigned char grey = (rp[chRed]*79+rp[chGreen]*156+rp[chBlue]*21)>>8;
+    rp[chAlpha] = 255*(abs(grey-*wp)>treshold);
+   *wp++=(unsigned char)grey;
     rp+=4;
   } 
 }

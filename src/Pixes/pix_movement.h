@@ -74,7 +74,7 @@ protected:
 	
 	//////////
 	// Do the processing
-	virtual void 	processImage(imageStruct &image);
+	virtual void 	processRGBAImage(imageStruct &image);
 	
 	//////////
 	// the huge double buffer and other tx-formation
