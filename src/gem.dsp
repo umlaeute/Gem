@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib qtmlclient.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../gem.dll" /libpath:"C:\Programme\pd\bin\\" /libpath:"..\..\bin\\" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug"
+# ADD LINK32 ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\liborb\liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib qtmlclient.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"C:\Programme\pd\bin\\" /libpath:"..\..\bin\\" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug"
 
 !ENDIF 
 
@@ -1903,10 +1903,6 @@ SOURCE=.\Particles\part_vertex.cpp
 # Begin Source File
 
 SOURCE=.\Particles\part_vertex.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Particles\setup.h
 # End Source File
 # End Group
 # Begin Group "MarkEx"
