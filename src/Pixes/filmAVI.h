@@ -62,7 +62,22 @@ class GEM_EXTERN filmAVI : public film {
   // set the next frame to read;
   virtual int changeImage(int imgNum, int trackNum=-1);
 
+
+  // the raw buffer for decoding...
+  int			m_nRawBuffSize;
+  unsigned char*	m_RawBuffer;
+  GLint                 m_format;
+
+  int 	    	m_reqFrame;
+
+  unsigned char*  m_frame;  /* this points to a buffer for decompression */
+
  protected:
+  BITMAPINFOHEADER* m_pbmihRaw;
+  BITMAPINFOHEADER* m_pbmihDst;
+
+  HIC m_hic;
+
   PGETFRAME	m_getFrame;		// the frame information
   PAVISTREAM	m_streamVid;		// the stream itself
 #endif //AVI
