@@ -189,7 +189,7 @@ short rightGain,imageGain;
         //unsigned int	i;
         unsigned long	elements[8];
         //vector signed char v;
-        vector	unsigned long v;
+        vector	unsigned int v;
     }bitBuffer;
     
         union
@@ -208,7 +208,7 @@ short rightGain,imageGain;
     vector signed int UVhi,UVlo,Yhi,Ylo;
     vector signed int UVhiR,UVloR,YhiR,YloR;
     vector signed short gainSub,gain,gainR,d;
-    vector unsigned long bitshift;
+    vector unsigned int bitshift;
     vector unsigned char *inData = (vector unsigned char*) image.data;
     vector unsigned char *rightData = (vector unsigned char*) saved;
     vector unsigned char tempImage,tempRight;
