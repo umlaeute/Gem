@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute
+//    Copyright (c) 2002-2003 james tittle/tigital
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -19,13 +20,13 @@
 
 #include "m_pd.h"
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <Carbon/carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #include <string.h>
-#endif // MACOSX
+#endif // __APPLE__
 
 #ifdef _WINDOWS
 #include <io.h>
@@ -38,7 +39,7 @@
 
 #include <string.h>
 
-#ifndef MACOSX
+#ifndef __APPLE__
 extern "C"
 {
 #include "tiffio.h"
@@ -54,11 +55,11 @@ extern "C"
 
 
 #include "sgiimage.h"
-#endif // MACOSX
+#endif // __APPLE__
 
 #include "GemPixUtil.h"
 
-#ifdef MACOSX
+#ifdef __APPLE__
 imageStruct *QTImage2mem(GraphicsImportComponent inImporter);
 OSStatus FSPathMakeFSSpec(
 	const UInt8 *path,
@@ -86,14 +87,14 @@ unsigned char* img_allocate(int size)
 
   return data; 
 }
-#endif // MACOSX
+#endif // __APPLE__
 
 /***************************************************************************
  *
  * image2mem - Read in an image in various file formats
  *
  ***************************************************************************/
-#ifdef MACOSX
+#ifdef __APPLE__
 GEM_EXTERN imageStruct *image2mem(const char *filename)
 {
 	OSErr				err;
@@ -104,7 +105,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 	if (filename[0] != '\0') {
 		FSSpec	spec;
 
-		err = ::FSPathMakeFSSpec( (Str255)filename, &spec, NULL);
+		err = ::FSPathMakeFSSpec( (UInt8*)filename, &spec, NULL);
 		if (err) {
 			error("GEM: Unable to find file: %#s", spec.name);
                         error("GEM: Unable to find filename:%s", filename);
@@ -243,9 +244,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 #endif
         GWorldPtr	gw = NULL;
 
-//#ifdef __QTNEWGWORLDFROMPTR__
-	OSErr err = QTNewGWorldFromPtr(&gw,  
-                                    //k32RGBAPixelFormat,
+	OSErr err = QTNewGWorldFromPtr(&gw, 
                                     k32ARGBPixelFormat,
                                     &r, NULL, NULL, 0,
                                    // keepLocal,	
@@ -263,51 +262,8 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	::GraphicsImportDraw(inImporter);
         ::DisposeGWorld(gw);			//dispose the offscreen
 	gw = NULL;
-        
-/*#else	//don't "USE_QTNEWGWORLDFROMPTR"
-	::NewGWorld(&gw, k32ARGBPixelFormat, &r, NULL, NULL, keepLocal);	//make an offscreen
-	::PixMapHandle pixmapH = GetGWorldPixMap(gw);
-        //image_block->pixelFormat = k32ARGBPixelFormat;
-	::LockPixels(pixmapH);						//lock a pixmap
 
-	::GraphicsImportSetGWorld(inImporter, gw, NULL);		//set graphics port to draw an image
-	::GraphicsImportDraw(inImporter);				//draw an image to offscreen
-
-	unsigned char *baseP = (unsigned char *)::GetPixBaseAddr(pixmapH);	//get base address of pixels
-	unsigned long rowbytes = (unsigned long)::GetPixRowBytes(pixmapH);	//get the number of bytes per line
-
-	if (image_block->csize == 4) {
-		for (int i=0, y=image_block->ysize-1; y>=0; y--) {
-			unsigned char *tmpP = baseP + y * rowbytes;
-			for (int x=image_block->xsize-1; x>=0; x--) {
-				//image_block->data[i++] = *(tmpP + 1);
-				//image_block->data[i++] = *(tmpP + 2);
-				//image_block->data[i++] = *(tmpP + 3);
-				//image_block->data[i++] = *(tmpP);
-                                image_block->data[i++] = *(tmpP + 3);
-				image_block->data[i++] = *(tmpP + 2);
-				image_block->data[i++] = *(tmpP + 1);
-				image_block->data[i++] = *(tmpP);
-				tmpP += 4;
-			}
-		}
-	} else if (image_block->csize == 1) {
-		for (int i=0, y=image_block->ysize-1; y>=0; y--) {
-			unsigned char *tmpP = baseP + y * rowbytes;
-			for (int x=image_block->xsize-1; x>=0; x--) {
-				image_block->data[i++] = 255 - *(tmpP);
-			}
-			tmpP += 1;
-		}
-	} else {
-	}
-
-	::UnlockPixels(pixmapH);		//unlock the pixmap
-	pixmapH = NULL;				//
-	::DisposeGWorld(gw);			//dispose the offscreen
-	gw = NULL;*/
 	return image_block;
-//#endif	//__QTNEWGWORLDFROMPTR__
 }
 #else
 /***************************************************************************
