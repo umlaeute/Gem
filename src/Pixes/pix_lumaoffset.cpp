@@ -115,7 +115,6 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 	if (ppPreviousLineHeights==NULL)return;
 
 	Pete_ZeroMemory(ppPreviousLineHeights,(nWidth*sizeof(U32*)));
-
 	//int nCurrentY=0;
 	while (pCurrentSource<pSourceEnd) {
 	    const U32* pSourceLineEnd=pCurrentSource+nWidth;
@@ -131,7 +130,10 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 
 		    int nLuma=GetLuminance(SourceColour);
 		    nLuma-=(128*255);
-		    const int nOffset=(nLuma*nOffsetScale)>>16;
+                    const int currentLineNumber=pCurrentOutput-pOutput;
+		    const int nOffset0=(nLuma*nOffsetScale)>>16;
+                    const int nOffset = (nOffset0>(nHeight-1))?(nHeight-1):
+                                        (nOffset0>(currentLineNumber))?(currentLineNumber):nOffset0;
 
 		    U32* pOffsetOutputStart=
 			    pCurrentOutput+(nOffset*nWidth);
@@ -148,7 +150,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 			nDestRed=0;
 			nDestGreen=0;
 			nDestBlue=0;
-			nDestAlpha=0;
+			nDestAlpha=255;
 			nDestDistance=10000;
 		    } else {
 			const U32 DestColour=*pPreviousOffsetOutput;
@@ -324,7 +326,12 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
 
 		    int nLuma=(SourceColour<<8);
 		    nLuma-=(128*255);
-		    const int nOffset=(nLuma*nOffsetScale)>>16;
+                    const int currentLineNumber=pCurrentOutput-pOutput;
+		    const int nOffset0=(nLuma*nOffsetScale)>>16;
+                    const int nOffset = (nOffset0>(nHeight-1))?(nHeight-1):
+                                        (nOffset0>(currentLineNumber))?(currentLineNumber):nOffset0;
+		    //const int nOffset=(nLuma*nOffsetScale)>>16;
+                    
 		    U8* pOffsetOutputStart=
 			    pCurrentOutput+(nOffset*nWidth);
 
@@ -529,8 +536,12 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
                                 nSourceV = ((SourceColour&(0xff<<8))>>8);
                                 nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
                                 nSourceY2 -= 32640;
+                                const int currentLineNumber=pCurrentOutput-pOutput;
+                                const int nOffset0=(nSourceY1*nOffsetScale)>>16;
+                                const int nOffset1 = (nOffset0>(nHeight-1))?(nHeight-1):
+                                        (nOffset0>(currentLineNumber))?(currentLineNumber):nOffset0;
+//                                const int nOffset1=(nSourceY1*nOffsetScale)>>16;
 
-                                const int nOffset1=(nSourceY1*nOffsetScale)>>16;
                               //  const int nOffset2=(nSourceY2*nOffsetScale)>>16;
                                 
                                 //this doesn't fit with the rest of the Y handling but it works
