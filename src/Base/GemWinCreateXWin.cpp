@@ -122,7 +122,11 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     return(0);
   }
   // create the rendering context
-  info.context = glXCreateContext(info.dpy, vi, hints.shared, GL_TRUE);
+  try {
+    info.context = glXCreateContext(info.dpy, vi, hints.shared, GL_TRUE);
+  } catch(void*e){
+    info.context=NULL;
+  }
   if (info.context == NULL) {
     error("GEM: Could not create rendering context");
     destroyGemWindow(info);
@@ -194,7 +198,13 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   XSetStandardProperties(info.dpy, info.win,
 			 hints.title, "gem", 
 			 None, 0, 0, NULL);
-  glXMakeCurrent(info.dpy, info.win, info.context);   
+  try{
+    glXMakeCurrent(info.dpy, info.win, info.context);   
+  }catch(void*e){
+    error("GEM: Could not make glX-context current");
+    destroyGemWindow(info);
+    return(0);
+  }
 
   if (!hints.actuallyDisplay) return(1);
   XMapRaised(info.dpy, info.win);
