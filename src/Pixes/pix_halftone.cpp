@@ -257,6 +257,223 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
     }
     image.data = myImage.data;
 }
+
+/////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_halftone :: processYUVImage(imageStruct &image)
+{
+    nWidth = image.xsize/2;
+    nHeight = image.ysize;
+    
+    if (!init) {
+	Init(nWidth, nHeight);
+	init = 1;
+    }
+    pSource = (U32*)image.data;
+
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.csize = image.csize;
+    myImage.type  = image.type;
+    myImage.format= image.format;
+    myImage.reallocate();
+    pOutput = (U32*)myImage.data;
+    
+    int nCellSize=GateInt(m_CellSize,1,nMaxCellSize);
+    int nStyle=GateInt(m_Style,0,4);
+    int nSmoothingThreshold=GateInt(m_Smoothing,0,255);
+
+    const float AngleRadians=m_Angle;
+    const int nCellSizeFP=(nCellSize<<nFPShift);
+
+    const int nHalfWidth=(nWidth/2);
+    const int nHalfHeight=(nHeight/2);
+
+    unsigned char* pDotFuncTableStart=&g_pDotFuncTable[0];
+
+    Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle);
+
+    unsigned char* pGreyScaleTableStart=&g_pGreyScaleTable[0];
+
+    Pete_HalfTone_MakeGreyScaleTable(pGreyScaleTableStart,nSmoothingThreshold);
+
+    SPete_HalfTone_Point Left;
+    SPete_HalfTone_Point Right;
+    SPete_HalfTone_Point Top;
+    SPete_HalfTone_Point Bottom;
+    Pete_HalfTone_CalcCorners(nWidth,nHeight,AngleRadians,nCellSize,&Left,&Right,&Top,&Bottom);
+
+    //U32 TestColour=0x00ffffff;
+
+    int nCurrentV;
+    for (nCurrentV=Bottom.nY; nCurrentV<Top.nY; nCurrentV+=nCellSizeFP) {
+      int nSnappedV=((nCurrentV+(nCellSizeFP*1024))/nCellSize);
+      nSnappedV>>=nFPShift;
+      nSnappedV<<=nFPShift;
+      nSnappedV*=nCellSize;
+      nSnappedV-=(nCellSizeFP*1024);
+
+      int nLeftU;
+      int nRightU;
+      Pete_HalfTone_CalcSpanEnds(&Left,&Right,&Top,&Bottom,nSnappedV,&nLeftU,&nRightU);
+
+      int nCurrentU;
+      for (nCurrentU=nLeftU; nCurrentU<nRightU; nCurrentU+=nCellSizeFP) {
+	int nSnappedU=(((nCurrentU+(nCellSizeFP*1024))/nCellSize));
+	nSnappedU>>=nFPShift;
+	nSnappedU<<=nFPShift;
+	nSnappedU*=nCellSize;
+	nSnappedU-=(nCellSizeFP*1024);
+			
+	SPete_HalfTone_Vertex RotatedPoints[4]={
+	  {{nSnappedU,nSnappedV},				{0,0}},
+	  {{(nSnappedU+nCellSizeFP),nSnappedV},			{nCellSizeFP-nFPMult,0}},
+	  {{(nSnappedU+nCellSizeFP),(nSnappedV+nCellSizeFP)},	{nCellSizeFP-nFPMult,nCellSizeFP-nFPMult}},
+	  {{nSnappedU,(nSnappedV+nCellSizeFP)},			{0,nCellSizeFP-nFPMult}}
+	};
+
+	SPete_HalfTone_Vertex ScreenSpacePoints[4];
+	Pete_HalfTone_RotateMultipleVertices(
+				&RotatedPoints[0],
+				&ScreenSpacePoints[0],
+				4,
+				AngleRadians);
+
+	int nCount;
+	for (nCount=0; nCount<4; nCount+=1) {
+	  ScreenSpacePoints[nCount].Pos.nX+=(nHalfWidth<<nFPShift);
+	  ScreenSpacePoints[nCount].Pos.nY+=(nHalfHeight<<nFPShift);
+	  ScreenSpacePoints[nCount].Pos.nX&=0xffff0000;
+	  ScreenSpacePoints[nCount].Pos.nY&=0xffff0000;
+	}
+
+	SPete_HalfTone_Vertex CellLeft;
+	SPete_HalfTone_Vertex CellRight;
+	SPete_HalfTone_Vertex CellTop;
+	SPete_HalfTone_Vertex CellBottom;
+	Pete_HalfTone_GetRasterizationVertices(
+				&ScreenSpacePoints[0],
+				&CellLeft,&CellRight,&CellTop,&CellBottom);
+
+	const int nSampleTopY=(ScreenSpacePoints[0].Pos.nY>>nFPShift);
+	//const int nSampleBottomY=(nSampleTopY+nCellSize);
+	//const int nSampleCenterY=(nSampleTopY+nHalfCellSize);
+	const int nSampleLeftX=(ScreenSpacePoints[0].Pos.nX>>nFPShift);
+	//const int nSampleRightX=(nSampleLeftX+nCellSize);
+	//const int nSampleCenterX=(nSampleLeftX+nHalfCellSize);
+
+	const U32 AverageColour=
+	  Pete_GetImageAreaAverage(
+				   nSampleLeftX,nSampleTopY,
+				   nCellSize,nCellSize,
+				   pSource,nWidth,nHeight);
+
+	int nLuminance=GetLuminance(AverageColour)/256;
+	nLuminance+=256;
+
+	int nCurrentYFP;
+	for (nCurrentYFP=CellBottom.Pos.nY; nCurrentYFP<=CellTop.Pos.nY; nCurrentYFP+=nFPMult) {
+	  if (nCurrentYFP<0)  continue;
+
+	  if (nCurrentYFP>=(nHeight<<nFPShift))	break;
+
+	  SPete_HalfTone_Vertex SpanStart;
+	  SPete_HalfTone_Vertex SpanEnd;
+	  Pete_HalfTone_CalcSpanEnds_Vertex(
+					&CellLeft,&CellRight,&CellTop,&CellBottom,nCurrentYFP,
+					&SpanStart,&SpanEnd);
+
+	  const int nCellLeftX=(SpanStart.Pos.nX>>nFPShift);
+	  const int nCellRightX=(SpanEnd.Pos.nX>>nFPShift);
+	  const int nCurrentY=(nCurrentYFP>>nFPShift);
+
+	  int nLengthX=(nCellRightX-nCellLeftX);
+	  if (nLengthX<1) nLengthX=1;
+
+	  const int nGradientU=
+	    (SpanEnd.TexCoords.nX-SpanStart.TexCoords.nX)/nLengthX;
+	  const int nGradientV=
+	    (SpanEnd.TexCoords.nY-SpanStart.TexCoords.nY)/nLengthX;
+
+	  int nTexU=SpanStart.TexCoords.nX;
+	  int nTexV=SpanStart.TexCoords.nY;
+
+	  int nCurrentX;
+	  for (nCurrentX=nCellLeftX; nCurrentX<nCellRightX;
+	       nCurrentX+=1,nTexU+=nGradientU,nTexV+=nGradientV) {
+
+	    if (nCurrentX<0)continue;
+	    if (nCurrentX>=nWidth)break;
+
+	    const int nTexUInt=(nTexU>>nFPShift);
+	    const int nTexVInt=(nTexV>>nFPShift);
+
+	    unsigned char* pCurrentDotFunc=
+	      pDotFuncTableStart+
+	      (nTexVInt*nCellSize)+
+	      nTexUInt;
+
+	    const int nDotFuncResult=*pCurrentDotFunc;
+	    const int nDiff=nLuminance-nDotFuncResult;
+	    const int nGreyValue=pGreyScaleTableStart[nDiff];
+
+//					if (nDotFuncResult>=nLuminance) {
+//
+//						nGreyValue=0;
+//
+//					} else {
+//
+//						const int nDiff=(nLuminance-nDotFuncResult);
+//						
+//						if (nDiff>nSmoothingThreshold) {
+//							nGreyValue=255;
+//						} else {
+//							nGreyValue=(nDiff*255)/nSmoothingThreshold;
+//						}
+//						
+//					}
+
+//					if ((nTexUInt>=nCellSize)||
+//						(nTexVInt>=nCellSize)) {
+//						nGreyValue=0x0000ff00;
+//					} else if ((nTexUInt<0)||
+//						(nTexVInt<0)) {
+//						nGreyValue=0x000000ff;
+//					} else {
+//						nGreyValue=0x00ffffff;
+//					}
+
+//					nDotFuncResult=((nTexUInt^nTexVInt)&0x4)*63;
+
+	    const U32 OutputColour=
+	      (nGreyValue<<SHIFT_RED)|
+	      (nGreyValue<<SHIFT_GREEN)|
+	      (nGreyValue<<SHIFT_BLUE);
+//						(nDotFuncResult<<SHIFT_RED)|
+//						(nDotFuncResult<<SHIFT_GREEN)|
+//						(nDotFuncResult<<SHIFT_BLUE);
+
+	    U32* pCurrentOutput=
+	      pOutput+(nCurrentY*nWidth)+nCurrentX;
+	    *pCurrentOutput=OutputColour;
+
+//					*pCurrentOutput=TestColour;
+	  }
+	}
+
+//			TestColour^=0x00ff00ff;
+		
+      }
+    }
+    image.data = myImage.data;
+}
+
+/////////////////////////////////////////////////////////
+// processGrayImage
+//
+/////////////////////////////////////////////////////////
 void pix_halftone :: processGrayImage(imageStruct &image)
 {
     nWidth = image.xsize;

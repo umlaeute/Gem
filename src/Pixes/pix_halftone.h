@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-    Copyright (c) 2003 James Tittle
+	2003-2004 ported by tigital@mac.com from "Pete's_Plugins"
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -64,7 +64,8 @@ class GEM_EXTERN pix_halftone : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-  	virtual void 	processGrayImage(imageStruct &image);
+		virtual void    processYUVImage(imageStruct &image);
+  	    virtual void 	processGrayImage(imageStruct &image);
 
     	//////////
 	//

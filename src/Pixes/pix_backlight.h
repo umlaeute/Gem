@@ -49,6 +49,8 @@ class GEM_EXTERN pix_backlight : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
+		virtual void	processYUVImage(imageStruct &image);
+		virtual void	processGrayImage(imageStruct &image);
 
 	imageStruct	myImage;
 	int		nHeight;

@@ -97,6 +97,34 @@ void pix_levels :: processRGBAImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_levels :: processYUVImage(imageStruct &image)
+{
+    nWidth = image.xsize/2;
+    nHeight = image.ysize;
+    
+    pSource = (U32*)image.data;
+
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.csize = image.csize;
+    myImage.type  = image.type;
+    myImage.format=image.format;
+    myImage.reallocate();
+    pOutput = (U32*)myImage.data;
+    
+    //SPete_ChannelFunction_Settings CFSettings;
+
+    Pete_Levels_CalculateAutoLevels();
+    Pete_Levels_SetupCFSettings();
+    Pete_ChannelFunction_Render();
+
+    image.data = myImage.data;
+}
+
+/////////////////////////////////////////////////////////
 // various processing here
 //
 /////////////////////////////////////////////////////////

@@ -103,6 +103,64 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_metaimage :: processYUVImage(imageStruct &image)
+{
+    nWidth = image.xsize/2;
+    nHeight = image.ysize;
+    if (!init) {
+	Pete_MetaImage_Init();
+	init = 1;
+    }
+    pSource = (U32*)image.data;
+    
+    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
+	int dataSize = image.xsize * image.ysize * image.csize;
+	myImage.clear();
+
+	myImage.allocate(dataSize);
+    }
+
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.csize = image.csize;
+    myImage.type  = image.type;
+	//myImage.setBlack();
+    pOutput = (U32*)myImage.data;
+
+    float SubWidth;
+    float SubHeight;
+    
+    m_Size = GateFlt(m_Size,0.0f,1.0f);
+
+    if (m_DoDistanceBased>0.0f) {
+
+		const float Distance=1.0f+(m_Size*(nHeight-1.0f));
+
+		SubWidth=nWidth/Distance;
+		SubHeight=nHeight/Distance;
+
+    } else {
+
+		SubWidth=1+(m_Size*(nWidth-1));
+		SubHeight=1+(m_Size*(nHeight-1));
+    }
+
+    U32* pSubImageData=(U32*)Pete_LockHandle(hSubImage);
+    if (pSubImageData==NULL) {
+		return;
+    } 
+
+    U32 AverageColour=Pete_MetaImage_CreateSubImage(pSource,pSubImageData,SubWidth,SubHeight);
+
+    Pete_MetaImage_DrawSubImages(pSubImageData,AverageColour,SubWidth,SubHeight);
+
+    image.data = myImage.data;
+}
+
+/////////////////////////////////////////////////////////
 // do the other processing here
 //
 /////////////////////////////////////////////////////////
