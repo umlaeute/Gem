@@ -97,13 +97,21 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) {
 
 GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
   switch(setformat){
-  case GL_LUMINANCE:  format=GL_LUMINANCE;  csize=1; break;
-  case GL_YUV422_GEM: format=GL_YUV422_GEM; csize=2; break;
+  case GL_LUMINANCE:  format=GL_LUMINANCE;  csize=1; type=GL_UNSIGNED_BYTE; break;
+  case GL_YUV422_GEM:
+#ifdef __APPLE__
   default:
-#ifndef __APPLE__
-  case GL_RGBA:       format=GL_RGBA;
+    type=GL_UNSIGNED_SHORT_8_8_REV_APPLE;
 #else
-  case GL_BGRA_EXT:   format=GL_BGRA_EXT;
+    type=GL_UNSIGNED_BYTE;
+#endif
+    format=GL_YUV422_GEM; csize=2;
+    break;
+#ifndef __APPLE__
+  default:
+  case GL_RGBA:       format=GL_RGBA;     type=GL_UNSIGNED_BYTE;
+#else
+  case GL_BGRA_EXT:   format=GL_BGRA_EXT; type = GL_UNSIGNED_INT_8_8_8_8_REV;
 #endif
     csize=4; break;
   }
