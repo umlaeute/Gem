@@ -85,13 +85,13 @@ void pix_texture :: setUpTextureState() {
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
   if (GemMan::client_storage_supported && m_clientStorage){
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-    post("pix_texture: using client storage");
+    debug("pix_texture: using client storage");
   }
 
   else {
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
-    post("pix_texture: not using client storage");
+    debug("pix_texture: not using client storage");
   }
 
 #else
@@ -513,6 +513,8 @@ void pix_texture :: repeatMessCallback(void *data, t_floatarg quality)
 void pix_texture :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_mode=((int)quality);
+  GetMyClass(data)->m_rebuildList=1;
+
 }
 
 void pix_texture :: clientStorageCallback(void *data, t_floatarg quality)
