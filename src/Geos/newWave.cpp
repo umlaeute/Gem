@@ -25,7 +25,7 @@ enum {SMALL, MEDIUM, LARGE, XLARGE};
 enum {CURRENT, FLAT, SPIKE, DIAGONALWALL, SIDEWALL, HOLE,
       MIDDLEBLOCK, DIAGONALBLOCK, CORNERBLOCK, HILL, HILLFOUR};
 int displayMode = WIREFRAME;
-int resetMode = DIAGONALBLOCK;
+int resetMode = HILLFOUR;
 int grid = 50;
 
 #define SQRTOFTWOINV 1.0 / 1.414213562
@@ -127,6 +127,7 @@ void newWave :: render(GemState *state)
         glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
     }
     glNormal3f( 0.0f, 0.0f, 1.0f);
+
     if (state->texture && state->numTexCoords)
     {
       if ((xsize0!= state->texCoords[0].s) ||
@@ -136,10 +137,9 @@ void newWave :: render(GemState *state)
 	alreadyInit = 0;
 
       /*
-      post("S\t%f==%f", xsize, state->texCoords[tex_index].s);
-      post("T\t%f==%f\n", ysize, state->texCoords[tex_index].t);
+      post("S\t%f=%f\t%f=%f", xsize0,state->texCoords[0].s,   xsize,state->texCoords[1].s-xsize0);
+      post("T\t%f=%f\t%f=%f", ysize0,state->texCoords[1].t,   ysize,state->texCoords[2].t-ysize0);
       */
-
 
       // for (int II=0; II<4; II++)post("%d: %fx%f", II, state->texCoords[II].s, state->texCoords[II].t);
 
@@ -153,7 +153,7 @@ void newWave :: render(GemState *state)
 
             setSize( grid );
             setOther(m_textureMode);
-            reset( HILLFOUR );
+            reset( resetMode );
             alreadyInit = 1;
         }
 
@@ -185,7 +185,7 @@ void newWave :: render(GemState *state)
 	    xsize0= 0;
             setSize( grid );
             setOther(m_textureMode );
-            reset( HILLFOUR );
+            reset( resetMode );
             alreadyInit = 1;
         }
  
@@ -436,8 +436,8 @@ void newWave :: getTexCoords(void)
     {
         for ( int j = 0; j < grid; ++j)
         {
-            texCoords[i][j][0] = ((xsize*(float)i/(float)(grid-1)) + xsize0 );
-	    texCoords[i][j][1] = ((ysize*(float)j/(float)(grid-1)) + ysize0 );
+            texCoords[i][j][1] = ((xsize*(float)i/(float)(grid-1)) + xsize0 );
+	    texCoords[i][j][0] = ((ysize*(float)j/(float)(grid-1)) + ysize0 );
             //post("texCoords[%d][%d] = %f\t%f",i,j,texCoords[i][j][0],texCoords[i][j][1]);
         }
     }
