@@ -14,7 +14,7 @@
 
 #include "part_source.h"
 
-#include "papi.h"
+#include <string.h>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(part_source, t_floatarg, A_DEFFLOAT)
 
@@ -27,7 +27,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(part_source, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 part_source :: part_source(t_floatarg num)
-  : m_numberToAdd(150)
+  : m_numberToAdd(150), m_domain(PDSphere)
 {
   if (num > 0)
     m_numberToAdd = (int)num;
@@ -40,6 +40,27 @@ part_source :: part_source(t_floatarg num)
 /////////////////////////////////////////////////////////
 part_source :: ~part_source()
 { }
+/////////////////////////////////////////////////////////
+// vel.domain
+//
+/////////////////////////////////////////////////////////
+void part_source :: domainMess(t_symbol*s)
+{
+  char *str=s->s_name;
+
+       if (!strcmp(str,"point"    ))m_domain=PDPoint;
+  else if (!strcmp(str,"line"     ))m_domain=PDLine;
+  else if (!strcmp(str,"triangle" ))m_domain=PDTriangle;
+  else if (!strcmp(str,"plane"    ))m_domain=PDPlane;
+  else if (!strcmp(str,"box"      ))m_domain=PDBox;
+  else if (!strcmp(str,"sphere"   ))m_domain=PDSphere;
+  else if (!strcmp(str,"cylinder" ))m_domain=PDCylinder;
+  else if (!strcmp(str,"cone"     ))m_domain=PDCone;
+  else if (!strcmp(str,"blob"     ))m_domain=PDBlob;
+  else if (!strcmp(str,"disc"     ))m_domain=PDDisc;
+  else if (!strcmp(str,"rectangle"))m_domain=PDRectangle;
+  else error("GEM: part_source: unknown domain");
+}
 
 /////////////////////////////////////////////////////////
 // render
@@ -49,7 +70,7 @@ void part_source :: render(GemState *state)
 {
   if (state->stereo == 0 ||
       state->stereo == 1) {
-    pSource((float)m_numberToAdd, PDSphere, 0.f, 0.f, 0.f, .02f);
+    pSource((float)m_numberToAdd, m_domain, 0.f, 0.f, 0.f, .02f);
   }
 }
 
@@ -61,9 +82,15 @@ void part_source :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&part_source::numberMessCallback,
 		  gensym("numToAdd"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&part_source::domainMessCallback,
+		  gensym("domain"), A_SYMBOL, A_NULL);
 }
 void part_source :: numberMessCallback(void *data, t_floatarg num)
 {
   GetMyClass(data)->numberMess((int)num);
+}
+void part_source :: domainMessCallback(void *data, t_symbol*s)
+{
+  GetMyClass(data)->domainMess(s);
 }
 
