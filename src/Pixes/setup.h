@@ -32,6 +32,7 @@ extern "C" {
    void pix_curve_setup();
    void pix_data_setup();
    void pix_diff_setup();
+   //void pix_dot_setup();
    void pix_draw_setup();
    void pix_dump_setup();
    void pix_dvLinux_setup();
@@ -111,6 +112,7 @@ extern "C" {
       pix_curve_setup();
       pix_data_setup();
       pix_diff_setup();
+      //pix_dot_setup();
       pix_draw_setup();
       pix_dump_setup();
 #if defined(HAVE_DV) &&  defined(__linux__)
@@ -177,6 +179,7 @@ extern "C" {
     pix_filmDarwin_setup();
     pix_videoDarwin_setup();
 #endif
+    pix_biquad_setup();
     pix_blur_setup();
     pix_tIIR_setup();
     pix_delay_setup();
