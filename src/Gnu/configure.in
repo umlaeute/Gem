@@ -1,32 +1,76 @@
 dnl Process this file with autoconf to produce a configure script.
-
-twice_lib=`dirname $(find $2 -name "lib$1.a" | sed 1q)
-
 AC_INIT(../Base/CPPExtern.h)
+AC_CONFIG_HEADER(../Base/config.h)
+dnl AC_CONFIG_HEADER(config.h)
+gemsrc="./.."
 
 VERSION=0.87-cvs
 PACKAGE=gem
-GEMLIBS="../../../GemLibs"
 
-AC_SUBST(GEMLIBS)
 AC_SUBST(VERSION)
 AC_SUBST(PACKAGE)
 
-HAVING_LIBS=""
-HAVING_HEADERS=""
+dnl we should rather search for the GemLibs
+GEMLIBS="../../../GemLibs/"
+default_search_libs="$GEMLIBS /usr/local /usr/lib"
+default_search_heads="/usr/include /usr/local/include $GEMLIBS"
 
 
-. makeauxlibs
-dnl 
-dnl We will use the same Makefiles for any subdir .. so build the Makefile.in
-dnl 
+dnl
+dnl first comes the user-config stuff
+dnl
+AC_ARG_ENABLE(x, [  --libdir=DIR{:DIRS}     where to search for non-standard libs (aka GemLibs)])
+AC_ARG_ENABLE(x, [                          [DIR=../../../GemLibs:/usr/local:/usr/lib ]])
+AC_ARG_ENABLE(x, [  --includedir=DIR{:DIRS} where to search for non-standard headers])
+AC_ARG_ENABLE(x, [                          [DIR=/usr/include:/usr/local/include:../../../GemLibs]])
+AC_ARG_ENABLE(x, [])
+AC_ARG_ENABLE(static, [  --enable-static         static linking (default is: dynamic) ])
+AC_ARG_WITH(glut, [  --with-glut             enable GLUT (mainly the teapot)])
+AC_ARG_WITH(mpeg, [  --with-mpeg             enable MPEG-filmIN support])
+AC_ARG_WITH(mpeg3, [  --with-mpeg3            enable MPEG3-filmIN support (overrides MPEG-support)])
+AC_ARG_WITH(quicktime, [  --with-quicktime        enable quicktime-filmIN support])
 
-. makesource
+dnl of course we need X, so don't let the user disable it
+if test "$with_x" = "no"
+then
+  echo "Gem will not run without X"
+  exit 1
+fi
+
+dnl there should be a flag for which paths to search the libs in
+dnl maybe ab-use "--libdir"
+if test "$libdir" != "\${exec_prefix}/lib"
+then
+  search_libs=`echo $libdir | sed -e 's/:/ /g'`
+else
+  search_libs=$default_search_libs
+fi
+
+dnl there should be a flag for which paths to search the headers in
+dnl maybe ab-use "--includedir"
+if test "$includedir" != "\${prefix}/include"
+then
+  search_heads=`echo $includedir | sed -e 's/:/ /g'`
+else
+  search_heads="$default_search_heads"
+fi
+
+echo HEAD: $search_heads
+echo LIBS: $search_libs
+
+dnl
+dnl now comes the path-stuff
+dnl
+PDBASE=/lib/pd
+DOCBASE=/share/doc
+AC_SUBST(PDBASE)
+AC_SUBST(DOCBASE)
+dnl ac_prefix is /usr/local by default
+AC_SUBST(prefix)
 
 
 dnl check for architecture
 dnl ***********************************************************************
-
 
 AC_CANONICAL_HOST
 
@@ -54,8 +98,6 @@ else
   echo $ac_t "no";
 fi
 
-
-
 dnl Checks for programs.
 dnl ***********************************************************************
 
@@ -73,7 +115,6 @@ AC_PROG_CXX
 #    fi;;
 #esac
 
-
 AC_PROG_CC
 AC_SUBST(CC)
 AC_SUBST(CXX)
@@ -87,6 +128,15 @@ AC_PATH_XTRA
 dnl Checks for libraries.
 dnl ***********************************************************************
 
+dnl 
+dnl make the auxiliary libraries GemLibs
+dnl 
+
+
+if test -d $GEMLIBS
+then
+  . makeauxlibs
+fi
 
 source_dirs="$SOURCEDIRS"
 AC_SUBST(source_dirs)
@@ -106,110 +156,10 @@ AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
 dnl add -shared to the libraries, so X will be shared
 LIBS="-Wl,-shared -Wl,-export-dynamic $LIBS"
 
-AC_ARG_WITH(static,"  ",LIBS="/usr/lib/gcc-lib/i486-linux/egcs-2.91.57/libstdc++.a $LIBS")
+dnl AC_ARG_ENABLE(static, "   " ,LIBS="/usr/lib/gcc-lib/i486-linux/egcs-2.91.57/libstdc++.a $LIBS")
 
 AC_CHECK_LIB(m,sin)
-dnl AC_CHECK_LIB(glib,main)
-
-dnl Check for OpenGL (Original or Mesa)
-
-AC_CHECK_LIB(GL,
-	     glInitNames,
-             ,
-             AC_CHECK_LIB(MesaGL,glInitNames,,
-                          echo "OpenGL is mandatory";exit 1)
-            )
-                            
-dnl Check for OpenGLU (Original or Mesa)
-
-AC_CHECK_LIB(GLU,
-             gluLookAt,
-             ,
-             AC_CHECK_LIB(MesaGLU,gluLookAt,,
-                          echo "incomplete OpenGL (no GLU)";exit 1)
-             )                                                 
-
-dnl
-dnl Check for OpenGLlut
-dnl
-     AC_CHECK_LIB_TWICE(glut,glutSolidTeapot, "/usr/local")
-
-dnl
-dnl Check for MUFTI (fake)
-dnl
-     AC_CHECK_LIB(mufti,muftiMain)
-     AC_ADD_HAVELIB
-
-dnl
-dnl Check for PNG and GLIB
-dnl
-        AC_CHECK_LIB(png, png_set_compression_level)
-        AC_CHECK_LIB(glib, main)
-
-
-dnl
-dnl Check for quicktime
-dnl
-	AC_CHECK_LIB(quicktime, quicktime_open)
-	AC_ADD_HAVELIB
-
-dnl
-dnl Check for mpeg
-dnl
-
-      AC_CHECK_LIB(mpeg, OpenMPEG)
-      AC_ADD_HAVELIB
-
-dnl
-dnl Check for mpeg3
-dnl
-
-      AC_CHECK_LIB(mpeg3, mpeg3_open)
-      AC_ADD_HAVELIB
-
-
-dnl 
-dnl  The following libraries are not that common, so they are looked for
-dnl  in two different places
-dnl  1) in the system
-dnl  2) in the gem distribution
-dnl
-
-search_libs="/usr/local ../../../"
-
-dnl
-dnl Check for tiff
-dnl
-
-      AC_CHECK_LIB_TWICE(tiff,$search_libs)
-
-dnl
-dnl Check for Jpeg
-dnl
-
-     AC_CHECK_LIB_TWICE(jpeg,$search_libs)
-
-dnl
-dnl Check for ttf
-dnl
-
-     AC_CHECK_LIB_TWICE(ttf,$search_libs)
-
-dnl
-dnl Check for gltt
-dnl
-
-     AC_CHECK_LIB_TWICE(gltt,$search_libs)
-
-dnl Check for sgi vl library
-AC_CHECK_LIB(vl,main,
-             SGI_SPECIFIC="pix_videoSGI.o pix_indycam.o")
-
 AC_CHECK_LIB(z,main)
-
-AC_SUBST(SGI_SPECIFIC)
-
-dnl check for dl , stdc++ 
 
 if test "${GXX+set}" != set; then
 AC_CHECK_LIB(dl,dlopen)
@@ -217,67 +167,114 @@ AC_CHECK_LIB(stdc++,main)
 fi
 
 ggstatic="-Wl,-Bstatic"
-AC_ARG_WITH(static,"  ",LIBS="$ggstatic $LIBS")
-
-LDFLAGS="$LDFLAGS -L$GEMLIBS/glm  -L$GEMLIBS/particle  -L$GEMLIBS/liborb"
-LIBS="$LIBS -lglm -lparticle -lorb"
-
-
-
-dnl Checks and searches(!) for header files.
-dnl ***********************************************************************
-
-
-dnl look for pd
-
-INCLUDES="-I..  $INCLUDES -I$GEMLIBS/glm -I$GEMLIBS/liborb -I$GEMLIBS/particle"
-
-pdsearchlibs="/usr/local/include /usr/local/src /usr/include $HOME"
-AC_PATH_INCLUDE(m_pd.h,$pdsearchlibs)
-
-dnl look for the locals...
-AC_PATH_INCLUDE(GLTTFont.h,/usr/include /usr/local/include $search_libs)
-
-dnl check the rest
-
-dnl MPEG3 is still problematic (wait for the Debian-libmpeg3
-dnl AC_PATH_INCLUDE(libmpeg3.h, /usr/include /usr/local/include $searchlibs)
-
-AC_CONFIG_HEADER(../Base/config.h)
-
-AC_CHECK_HEADERS(mpeg.h quicktime/quicktime.h)
-AC_CHECK_HEADERS(libmpeg3.h)
-
-
-if [test "`echo $HAVING_LIBS | grep QUICKTIME`" = ""]
+dnl AC_ARG_WITH(static,"   " ,LIBS="$ggstatic $LIBS")
+echo Static:: $enable_static
+if test "$enable_static" = "yes"
 then
-  :
-else
-  :
-dnl	  AC_PATH_INCLUDE(libdv.h, /usr/include/quicktime/)
-dnl AC_CHECK_HEADERS(quicktime/libdv.h)
-dnl as with debian and quicktime4linux-dev_1.3-5 the libdv is sorted out now....see:
-dnl http://lists.debian.org/debian-devel-changes/2002/debian-devel-changes-200202/msg00437.html
+  LIBS="$ggstatic $LIBS"
 fi
 
-dnl we need GLIB if we want firewire/DV support
-if [test "`echo $LIBS | grep glib`" = ""]
+
+dnl Check for OpenGL (Original or Mesa)
+
+	AC_CHECK_LIB(GL, glInitNames,,
+		AC_CHECK_LIB(MesaGL,glInitNames,,
+        	echo "OpenGL is mandatory";exit 1)
+		)
+
+dnl Check for GLU (Original or Mesa)
+	AC_CHECK_LIB(GLU, gluLookAt, ,
+		AC_CHECK_LIB(MesaGLU,gluLookAt,,
+		echo "incomplete OpenGL (no GLU)";exit 1)
+		)
+dnl Check for GLUT (not necessary)
+
+if test "$with_glut" != "no"
 then
-  :
-else
-  INCLUDES="`glib-config --cflags` $INCLUDES"
-  LIBS="`glib-config --libs` $LIBS"
-fi  
+  AC_FIND_LIB(glut,glutSolidTeapot, $search_libs, $with_glut)
+fi
+
+dnl Checking image-libraries
+dnl Check for PNG
+	AC_FIND_LIB(png, png_set_compression_level, $search_libs, fail)
+dnl Check for TIFF
+	AC_FIND_LIB(tiff, TIFFOpen, $search_libs, fail)
+dnl Check for Jpeg
+	AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, fail)
+
+dnl Checking font-libraries
+dnl Check for TTF
+dnl     AC_FIN_LIB(ttf,$search_libs)
+dnl Check for gltt
+	AC_FIND_LIB(gltt, open, $search_libs, fail)
+
+dnl Checking for video-libraries
+dnl Check for sgi vl library
+AC_CHECK_LIB(vl,main,
+             SGI_SPECIFIC="pix_videoSGI.o pix_indycam.o")
 
 
+dnl Check glib (do we need this for png ?)
+	AC_CHECK_LIB(glib, main)
+
+dnl Checking the rest
+dnl Check model-lib
+	AC_FIND_LIB(glm, glmReadOBJ, $search_libs, fail)
+dnl Check particles
+	AC_FIND_LIB(particle, pEndActionList, $search_libs, fail)
+dnl Check for space-orb
+	AC_FIND_LIB(orb, orb_init, $search_libs, fail)
 
 
-dnl AC_ADD_HAVEHEAD
+dnl video formats (selectable by command-line args)
+if test "$with_mpeg3" != "no"
+then
+  AC_FIND_LIB(mpeg3, mpeg3_check_sig, search_libs, $with_mpeg3)
+fi
+if test "$with_mpeg" != "no"
+then
+  if test "$ac_tr_lib" != "HAVE_LIBMPEG3"
+  then
+    AC_FIND_LIB(mpeg, OpenMPEG, search_libs)
+  else
+    echo skipping check for mpeg because mpeg3 is used
+  fi
+fi
+
+if test "$with_quicktime" != "no"
+then
+  AC_FIND_LIB(quicktime, quicktime_check_sig, search_libs)
+fi
+
+dnl Checking for Headers !
+dnl there should be a flag for which paths to search
+dnl maybe ab-use "--includedir"
+
+dnl look for PD
+AC_FIND_HEADER(m_pd.h, $search_heads , fail)
+
+dnl OpenGL
+AC_CHECK_HEADERS(GL/gl.h GL/glu.h,,
+        	echo "OpenGL is mandatory";exit 1)
 
 
-AC_SUBST(INCLUDES)
+dnl glut (if wanted)
+AC_CHECK_HEADER(GL/glut.h)
+dnl truetype
+AC_FIND_HEADER(GLTTFont.h, $search_heads, fail)
 
-AC_HEADER_STDC
+dnl model
+AC_FIND_HEADER(glm.h, $search_heads, fail)
+dnl particles
+AC_FIND_HEADER(papi.h, $search_heads, fail)
+dnl space-orb
+AC_FIND_HEADER(orb.h, $search_heads, fail)
+
+dnl video formats
+AC_FIND_HEADER(mpeg.h, /usr/include)
+AC_FIND_HEADER(libmpeg3.h, /usr/include)
+AC_FIND_HEADER(quicktime/quicktime.h, /usr/include)
+
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -288,8 +285,12 @@ dnl Checks for library functions.
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(strdup strstr)
 
+
+AC_SUBST(SGI_SPECIFIC)
+
 AC_SUBST(arch_ld_flags)
 AC_SUBST(LIBS)
+AC_SUBST(INCLUDES)
 
 RANLIB=gcc 
 AC_SUBST(RANLIB)
@@ -297,11 +298,10 @@ AC_SUBST(RANLIB)
 CXXFLAGS="-fPIC"
 AC_SUBST(CXXFLAGS)
 
-AC_SUBST(HAVING_LIBS)
-AC_SUBST(HAVING_HEADERS)
-
-dnl gemsrc=/slink/home/geiger/PD/gem-0.79/src
-gemsrc=./..
+dnl 
+dnl We will use the same Makefiles for any subdir .. so build the Makefile.in
+dnl 
+. makesource
 
 AC_OUTPUT(Makefile  
 $gemsrc/Manips/Makefile

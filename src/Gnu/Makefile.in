@@ -1,17 +1,15 @@
-
+#use "configure" to generate a Makefile out of this
 
 CXXLINK = $(CXX) $(CXXFLAGS) -o $@
 LDFLAGS = @LDFLAGS@ 
 LDADD = @arch_ld_flags@
 LIBS = @LIBS@
 INCLUDES = @INCLUDES@
-GEMLIBS = @GEMLIBS@
 
-PREFIX = /usr/local
-PDLIBDIR = $(PREFIX)/lib/pd
-DOCBASE = /share/doc
+PDLIBDIR = @prefix@@PDBASE@
+DOCBASE = @DOCBASE@
 
-SYSTEMDOCS = $(DESTDIR)/$(PREFIX)/$(DOCBASE)/gem
+SYSTEMDOCS = $(DESTDIR)@prefix@@DOCBASE@/gem
 
 TARG_DIR = ../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../TV ../openGL ../yuv
 
@@ -77,7 +75,8 @@ installdocs:
 	cp -r ../../examples $(SYSTEMDOCS)
 	cp -r ../../manual $(SYSTEMDOCS)
 
-	ln -fs ../../../$(DOCBASE)/gem $(DESTDIR)/$(PDLIBDIR)/doc/
+	ln -fs $SYSTEMDOCS $(DESTDIR)/$(PDLIBDIR)/doc/
+#	ln -fs ../../../$(DOCBASE)/gem $(DESTDIR)/$(PDLIBDIR)/doc/
 
 uncvsdocs:
 	touch $(SYSTEMDOCS)/CVS
@@ -91,5 +90,3 @@ distclean: clean
 	-rm config.cache config.log config.status Makefile
 	./makeauxlibs clean
 	cp Makefile.clean Makefile
-
-
