@@ -1,13 +1,13 @@
-#N canvas 0 0 654 413 10;
+#N canvas 265 114 654 413 10;
 #X text 452 8 GEM object;
-#X obj 8 255 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 295 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 39 258 Inlets:;
-#X text 38 305 Outlets:;
-#X obj 8 216 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X text 39 298 Inlets:;
+#X text 38 345 Outlets:;
+#X obj 8 256 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 215 Arguments:;
-#X obj 7 76 cnv 15 430 125 empty empty empty 20 12 0 14 -233017 -66577
+#X text 17 255 Arguments:;
+#X obj 7 76 cnv 15 430 175 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -38,9 +38,8 @@
 #X obj 450 158 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
-#X text 63 226 <none>;
-#X text 56 318 Outlet 1: gemlist;
-#X text 63 272 Inlet 1: gemlist;
+#X text 56 358 Outlet 1: gemlist;
+#X text 63 312 Inlet 1: gemlist;
 #X obj 451 233 pix_draw;
 #X obj 451 196 pix_image;
 #X obj 467 116 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
@@ -58,20 +57,24 @@
 #X connect 4 1 1 0;
 #X restore 467 137 pd openpanel;
 #X msg 467 165 open somefile.jpg;
-#X text 63 285 Inlet 1: open <filename>;
+#X text 63 325 Inlet 1: open <filename>;
 #X text 29 76 Description: loads in an image file;
 #X text 50 12 Synopsis: [pix_image];
 #X text 71 31 Class: pix source;
-#X text 21 143 pix_image only loads in TIFF files. This is because
-gem uses Sam Leffler's libtiff library \, a great \, portable image
-file reading and processing package (Thanks Sam!).;
-#X text 22 94 pix_image loads in an image to be used a texture \, bitblit
-\, or something else. If you don't give it a default image file \,
-you can send the open message with a filename.;
+#X text 16 93 [pix_image] loads in an image to be used a texture \,
+bitblit \, or something else. If you don't give it a default image
+file \, you can send the open message with a filename.;
+#X text 16 136 [pix_image] loads in TIFFs \, JPEGs and PNGs.;
+#X text 17 155 TIFF-files are loaded using Sam Leffler's libtiff library
+\, a great \, portable image file reading and processing package (Thanks
+Sam!).;
+#X text 63 266 <filename>;
+#X text 15 201 The image can be either drawn directly using [pix_draw]
+(VERY slow) or applied as a texture onto a Geo ([pix_texture]);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
-#X connect 14 0 19 0;
-#X connect 19 0 18 0;
+#X connect 14 0 18 0;
+#X connect 18 0 17 0;
+#X connect 19 0 20 0;
 #X connect 20 0 21 0;
-#X connect 21 0 22 0;
-#X connect 22 0 19 0;
+#X connect 21 0 18 0;
