@@ -1,0 +1,14 @@
+#N canvas 681 459 510 304 10;
+#X text 27 18 pix_roll give an effect similar to vertical and horizontal
+hold on a television. the offset is user defined and can be incremented
+using a counter object for a looping roll effect.;
+#X obj 36 266 pix_roll;
+#X msg 36 147 axis \$1;
+#X text 108 146 x/y axis of the roll 0 = Y \, 1 = X;
+#X msg 36 189 roll \$1;
+#X floatatom 87 234 5 0 0 0 - - -;
+#X text 108 189 roll offset - same as the 2nd inlet;
+#X text 133 233 roll offset in pixels;
+#X connect 2 0 1 0;
+#X connect 4 0 1 0;
+#X connect 5 0 1 1;
