@@ -81,6 +81,7 @@ void pix_depot :: bangMess()
 bool pix_depot :: putMess(imageStruct*img,int pos){
   if (pos<0 || pos>=m_numframes)return false;
   img->copy2Image(m_buffer+pos);
+  return true;
 }
 imageStruct*pix_depot :: getMess(int pos){
   if (pos<0 || pos>=m_numframes)return 0;
