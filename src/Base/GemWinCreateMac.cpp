@@ -7,7 +7,7 @@
 // Implementation file
 //
 //    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) 2002 Jamie Tittle
+//    Copyright (c) 2000-2004 Jamie Tittle
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -171,17 +171,8 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 #ifdef DEBUG
     post("MAC: createGemWindow()");
 #endif
-    EventTypeSpec	list[] = {  //{ kEventClassApplication, kEventAppActivated },
-                                    //{ kEventClassWindow, kEventWindowCursorChange },
-                                    //{ kEventClassWindow,  kEventWindowCollapsing },
-                                    //{ kEventClassWindow, kEventWindowCollapsed },
-                                    //{ kEventClassWindow, kEventWindowShown },
-                                    { kEventClassWindow, kEventWindowActivated },
-                                    //{ kEventClassWindow, kEventWindowDeactivated },
+    EventTypeSpec	list[] = {		{ kEventClassWindow, kEventWindowActivated },
                                     { kEventClassWindow, kEventWindowClose },
-                                    //{ kEventClassWindow, kEventWindowDrawContent },
-                                    //{ kEventClassWindow, kEventWindowBoundsChanged },
-                                    //{ kEventClassWindow, kEventWindowZoomed },
                                     { kEventClassMouse, kEventMouseDown },
                                     { kEventClassMouse, kEventMouseUp },
                                     { kEventClassMouse, kEventMouseMoved },
@@ -189,6 +180,16 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
                                     { kEventClassMouse, kEventMouseWheelMoved },
                                     { kEventClassKeyboard, kEventRawKeyDown },
                                     { kEventClassKeyboard, kEventRawKeyUp } };
+	int windowType=0, windowFlags=0;
+	// If m_border != 0, then make a window with a titlebar
+	//   otherwise, don't draw a titlebar
+	if (hints.border){
+		windowType = kDocumentWindowClass;
+		windowFlags = kWindowStandardHandlerAttribute | kWindowCloseBoxAttribute | kWindowCollapseBoxAttribute;
+	}else{
+		windowType = kPlainWindowClass;
+		windowFlags = kWindowStandardHandlerAttribute;
+	}
 
     short i =0;
 	
@@ -201,8 +202,6 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     hGD = DMGetFirstScreenDevice (true); // check number of screens
     hTargetDevice = hGD; // default to first device
 
-    
-    
     //////////////////////////////////////////////////////////////////
     //check for a fullscreen request and then do the 10.3 workaround
     //
@@ -325,10 +324,8 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
                 (short)(hints.width + hints.x_offset),
                 (short)(hints.height + hints.y_offset));
 
-        err = CreateNewWindow ( kDocumentWindowClass,
-                                //kMovableModalWindowClass,
-                                //kFloatingWindowClass,
-                                kWindowStandardHandlerAttribute | kWindowCloseBoxAttribute | kWindowCollapseBoxAttribute,
+        err = CreateNewWindow ( windowType,
+								windowFlags,
                                 &info.r,
                                 &info.pWind );
         if (err)
@@ -337,8 +334,10 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
             return 0;
         }
 
-        //this should take whatever input the user sets with the gemwin 'title' message?
-        SetWindowTitleWithCFString ( info.pWind, CFSTR("GEM") );
+        //this takes whatever input the user sets with the gemwin hints 'title' message
+		CFStringRef tempTitle = CFStringCreateWithCString(NULL, hints.title, kCFStringEncodingASCII);		
+		SetWindowTitleWithCFString ( info.pWind, tempTitle );
+		CFRelease( tempTitle );
 
         gaglDraw = GetWindowPort( info.pWind );
         
@@ -348,8 +347,6 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         InstallEventHandler( GetApplicationEventTarget(), gEvtHandler,
                                         GetEventTypeCount( list ), list,
                                         info.pWind, &ref );
-        //InstallWindowEventHandler ( info.pWind, gEvtHandler, GetEventTypeCount (list),
-        //                            list, info.pWind, &ref );
 
         glWInfo.fAcceleratedMust = true; 		// must renderer be accelerated?
         glWInfo.VRAM = 0 * 1048576;			// minimum VRAM (if not zero this is always required)
@@ -1379,8 +1376,8 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
     UInt32 evtClass = GetEventClass (event);
     UInt32 kind = GetEventKind (event);
     WindowRef	winRef;
-    UInt32	keyCode;
-    char	macKeyCode;
+    UInt32	keyCode=0;
+    char	macKeyCode[2];
 
     if (eventNotHandledErr == result)
     {
@@ -1413,14 +1410,16 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                 {
                     case kEventRawKeyDown:
                         GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
-                        GetEventParameter( event, kEventParamKeyMacCharCodes, typeUInt32, NULL, sizeof(char), NULL, &macKeyCode);
-                        triggerKeyboardEvent( &macKeyCode, keyCode, 1);
+                        GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode[0]);
+						macKeyCode[1]='\0';
+                        triggerKeyboardEvent( (char *)&macKeyCode, keyCode, 1);
                         result = noErr;
                         break;
                     case kEventRawKeyUp:
                         GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
-                        GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode);
-                        triggerKeyboardEvent( &macKeyCode, keyCode, 0);
+                        GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode[0]);
+						macKeyCode[1]='\0';
+                        triggerKeyboardEvent( (char *)&macKeyCode, keyCode, 0);
                         result = noErr;
                         break;
                 }
