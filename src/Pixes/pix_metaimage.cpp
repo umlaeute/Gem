@@ -32,6 +32,8 @@ pix_metaimage :: pix_metaimage()
     hSubImage = NULL;
 
     init =0;
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
+
 }
 
 /////////////////////////////////////////////////////////
@@ -121,362 +123,303 @@ int pix_metaimage :: Pete_MetaImage_Init() {
 }
 
 void pix_metaimage :: Pete_MetaImage_DeInit() {
-
-	if (hSubImage!=NULL) {
-		Pete_FreeHandle(hSubImage);
-		hSubImage=NULL;
-	}
-
+  if (hSubImage!=NULL) {
+    Pete_FreeHandle(hSubImage);
+    hSubImage=NULL;
+  }
 }
 
 U32 pix_metaimage :: Pete_MetaImage_CreateSubImage(U32* pInput,U32* pSubImage,float SubWidth,float SubHeight) {
+  U32 AverageColour;
 
-	U32 AverageColour;
-
-	if (m_DoCheapAndNasty>0.0f) {
-		AverageColour=
-			Pete_MetaImage_ShrinkSourceImageFast(pInput,pSubImage,SubWidth,SubHeight);
-	} else {
-		AverageColour=
-			Pete_MetaImage_ShrinkSourceImage(pInput,pSubImage,SubWidth,SubHeight);
-	}
-
-	return AverageColour;
-
+  if (m_DoCheapAndNasty>0.0f) {
+    AverageColour=
+      Pete_MetaImage_ShrinkSourceImageFast(pInput,pSubImage,SubWidth,SubHeight);
+  } else {
+    AverageColour=
+      Pete_MetaImage_ShrinkSourceImage(pInput,pSubImage,SubWidth,SubHeight);
+  }
+  return AverageColour;
 }
 
 void pix_metaimage :: Pete_MetaImage_DrawSubImages(U32* pSubImage,U32 AverageColour,float SubWidth,float SubHeight) {
-	
-	const int nHalfWidth=nWidth/2;
-	const int nHalfHeight=nHeight/2;
+  const int nHalfWidth=nWidth/2;
+  const int nHalfHeight=nHeight/2;
 
-	float CentreX=nHalfWidth+(SubWidth/2);
-	float CentreY=nHalfHeight+(SubHeight/2);
+  float CentreX=nHalfWidth+(SubWidth/2);
+  float CentreY=nHalfHeight+(SubHeight/2);
 
-	int nSubImageCountX=static_cast<int>(CentreX/SubWidth);
-	int nSubImageCountY=static_cast<int>(CentreY/SubHeight);
+  int nSubImageCountX=static_cast<int>(CentreX/SubWidth);
+  int nSubImageCountY=static_cast<int>(CentreY/SubHeight);
 
-	const float StartX=(nHalfWidth-(SubWidth/2))-(nSubImageCountX*SubWidth);
-	const float EndX=(nHalfWidth+(SubWidth/2))+(nSubImageCountX*SubWidth);
+  const float StartX=(nHalfWidth-(SubWidth/2))-(nSubImageCountX*SubWidth);
+  const float EndX=(nHalfWidth+(SubWidth/2))+(nSubImageCountX*SubWidth);
+  const float StartY=(nHalfHeight-(SubHeight/2))-(nSubImageCountY*SubHeight);
+  const float EndY=(nHalfHeight+(SubHeight/2))+(nSubImageCountY*SubHeight);
 
-	const float StartY=(nHalfHeight-(SubHeight/2))-(nSubImageCountY*SubHeight);
-	const float EndY=(nHalfHeight+(SubHeight/2))+(nSubImageCountY*SubHeight);
+  float CurrentY;
+  for (CurrentY=StartY; CurrentY<EndY; CurrentY+=SubHeight) {
+    float CurrentX;
+    for (CurrentX=StartX; CurrentX<EndX; CurrentX+=SubWidth) {
+      const int nLeftX=static_cast<int>(CurrentX);
+      const int nTopY=static_cast<int>(CurrentY);
+      const int nRightX=static_cast<int>(CurrentX+SubWidth);
+      const int nBottomY=static_cast<int>(CurrentY+SubHeight);
+      const int nClippedLeftX=GateInt(nLeftX,0,(nWidth-1));
+      const int nClippedTopY=GateInt(nTopY,0,(nHeight-1));
+      const int nClippedRightX=GateInt(nRightX,0,(nWidth-1));
+      const int nClippedBottomY=GateInt(nBottomY,0,(nHeight-1));
 
-	float CurrentY;
-	for (CurrentY=StartY; CurrentY<EndY; CurrentY+=SubHeight) {
+      U32 SubImageAverage=Pete_MetaImage_GetAreaAverage(
+							pSource,
+							nClippedLeftX,
+							nClippedTopY,
+							nClippedRightX,
+							nClippedBottomY,
+							4);
 
-		float CurrentX;
-		for (CurrentX=StartX; CurrentX<EndX; CurrentX+=SubWidth) {
-
-			const int nLeftX=static_cast<int>(CurrentX);
-			const int nTopY=static_cast<int>(CurrentY);
-			const int nRightX=static_cast<int>(CurrentX+SubWidth);
-			const int nBottomY=static_cast<int>(CurrentY+SubHeight);
-
-			const int nClippedLeftX=GateInt(nLeftX,0,(nWidth-1));
-			const int nClippedTopY=GateInt(nTopY,0,(nHeight-1));
-			const int nClippedRightX=GateInt(nRightX,0,(nWidth-1));
-			const int nClippedBottomY=GateInt(nBottomY,0,(nHeight-1));
-
-			U32 SubImageAverage=Pete_MetaImage_GetAreaAverage(
-				pSource,
-				nClippedLeftX,
-				nClippedTopY,
-				nClippedRightX,
-				nClippedBottomY,
-				4);
-
-			Pete_MetaImage_DrawSubImage(
-				pSource,
-				pSubImage,
-				pOutput,
-				nLeftX,
-				nTopY,
-				nRightX,
-				nBottomY,
-				AverageColour,
-				nClippedLeftX,
-				nClippedTopY,
-				nClippedRightX,
-				nClippedBottomY,
-				SubImageAverage);
-
-		}
-
-	}
-
+      Pete_MetaImage_DrawSubImage(
+				  pSource,
+				  pSubImage,
+				  pOutput,
+				  nLeftX,
+				  nTopY,
+				  nRightX,
+				  nBottomY,
+				  AverageColour,
+				  nClippedLeftX,
+				  nClippedTopY,
+				  nClippedRightX,
+				  nClippedBottomY,
+				  SubImageAverage);
+    }
+  }
 }
 
 void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOutput,int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,U32 SubImageAverage) {
+  //const int nWidth=pInstanceData->nWidth;
+  //const int nHeight=pInstanceData->nHeight;
+  const int nSubRed=(SubImageAverage>>SHIFT_RED)&0xff;
+  const int nSubGreen=(SubImageAverage>>SHIFT_GREEN)&0xff;
+  const int nSubBlue=(SubImageAverage>>SHIFT_BLUE)&0xff;
+  const int nWholeRed=(WholeImageAverage>>SHIFT_RED)&0xff;
+  const int nWholeGreen=(WholeImageAverage>>SHIFT_GREEN)&0xff;
+  const int nWholeBlue=(WholeImageAverage>>SHIFT_BLUE)&0xff;
+  
+  const int nRedDelta=(nSubRed-nWholeRed);
+  const int nGreenDelta=(nSubGreen-nWholeGreen);
+  const int nBlueDelta=(nSubBlue-nWholeBlue);
 
-	//const int nWidth=pInstanceData->nWidth;
-	//const int nHeight=pInstanceData->nHeight;
+  const int nXDelta=nClippedRightX-nClippedLeftX;
+  const int nYDelta=nClippedBottomY-nClippedTopY;
 
-	const int nSubRed=(SubImageAverage>>SHIFT_RED)&0xff;
-	const int nSubGreen=(SubImageAverage>>SHIFT_GREEN)&0xff;
-	const int nSubBlue=(SubImageAverage>>SHIFT_BLUE)&0xff;
+  if ((nXDelta<=0)||(nYDelta<=0))return;
+  
+  U32* pCurrentSource=pShrunkBuffer;
 
-	const int nWholeRed=(WholeImageAverage>>SHIFT_RED)&0xff;
-	const int nWholeGreen=(WholeImageAverage>>SHIFT_GREEN)&0xff;
-	const int nWholeBlue=(WholeImageAverage>>SHIFT_BLUE)&0xff;
+  pCurrentSource+=((nClippedTopY-nTopY)*nWidth);
+  pCurrentSource+=(nClippedLeftX-nLeftX);
 
-	const int nRedDelta=(nSubRed-nWholeRed);
-	const int nGreenDelta=(nSubGreen-nWholeGreen);
-	const int nBlueDelta=(nSubBlue-nWholeBlue);
+  U32* pCurrentOutput=pOutput+(nClippedTopY*nWidth)+nClippedLeftX;
+  U32*const pOutputEnd=(pCurrentOutput+(nYDelta*nWidth)+nXDelta);
 
-	const int nXDelta=nClippedRightX-nClippedLeftX;
-	const int nYDelta=nClippedBottomY-nClippedTopY;
+  while (pCurrentOutput<pOutputEnd) {		
+    U32*const pOutputLineStart=pCurrentOutput;
+    U32*const pOutputLineEnd=pCurrentOutput+nXDelta;
+    U32* pSourceLineStart=pCurrentSource;
 
-	if ((nXDelta<=0)||
-		(nYDelta<=0)) {
-		return;
-	}
+    while (pCurrentOutput<pOutputLineEnd) {
+      const U32 SourceColour=*pCurrentSource;
+      const U32 nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
+      const U32 nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
+      const U32 nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
 
+      const U32 nOutputRed=GateInt(nSourceRed+nRedDelta,0,255);
+      const U32 nOutputGreen=GateInt(nSourceGreen+nGreenDelta,0,255);
+      const U32 nOutputBlue=GateInt(nSourceBlue+nBlueDelta,0,255);
 
-	U32* pCurrentSource=pShrunkBuffer;
+      const U32 OutputColour=
+	((nOutputRed&0xff)<<SHIFT_RED)|
+	((nOutputGreen&0xff)<<SHIFT_GREEN)|
+	((nOutputBlue&0xff)<<SHIFT_BLUE);
 
-	pCurrentSource+=((nClippedTopY-nTopY)*nWidth);
-	pCurrentSource+=(nClippedLeftX-nLeftX);
+      *pCurrentOutput=OutputColour;
 
-	U32* pCurrentOutput=pOutput+(nClippedTopY*nWidth)+nClippedLeftX;
-	U32*const pOutputEnd=(pCurrentOutput+(nYDelta*nWidth)+nXDelta);
+      pCurrentOutput+=1;
+      pCurrentSource+=1;
+    }
 
-	while (pCurrentOutput<pOutputEnd) {
-		
-		U32*const pOutputLineStart=pCurrentOutput;
-		U32*const pOutputLineEnd=pCurrentOutput+nXDelta;
-
-		U32* pSourceLineStart=pCurrentSource;
-
-		while (pCurrentOutput<pOutputLineEnd) {
-
-			const U32 SourceColour=*pCurrentSource;
-
-			const U32 nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
-			const U32 nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
-			const U32 nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
-
-			const U32 nOutputRed=GateInt(nSourceRed+nRedDelta,0,255);
-			const U32 nOutputGreen=GateInt(nSourceGreen+nGreenDelta,0,255);
-			const U32 nOutputBlue=GateInt(nSourceBlue+nBlueDelta,0,255);
-
-			const U32 OutputColour=
-				((nOutputRed&0xff)<<SHIFT_RED)|
-				((nOutputGreen&0xff)<<SHIFT_GREEN)|
-				((nOutputBlue&0xff)<<SHIFT_BLUE);
-
-			*pCurrentOutput=OutputColour;
-
-			pCurrentOutput+=1;
-			pCurrentSource+=1;
-
-		}
-
-		pCurrentOutput=pOutputLineStart+nWidth;
-		pCurrentSource=pSourceLineStart+nWidth;
-
-	}
-
+    pCurrentOutput=pOutputLineStart+nWidth;
+    pCurrentSource=pSourceLineStart+nWidth;
+  }
 }
 
 U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride) {
 
-	//const int nWidth=pInstanceData->nWidth;
-	//const int nHeight=pInstanceData->nHeight;
+  //const int nWidth=pInstanceData->nWidth;
+  //const int nHeight=pInstanceData->nHeight;
 
-	const int nXDelta=nRightX-nLeftX;
-	const int nYDelta=nBottomY-nTopY;
+  const int nXDelta=nRightX-nLeftX;
+  const int nYDelta=nBottomY-nTopY;
 
-	if ((nXDelta<=0)||
-		(nYDelta<=0)) {
-		return 0x00000000;
-	}
+  if ((nXDelta<=0)||(nYDelta<=0))return 0x00000000;
 	
-	U32* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
-	U32*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
+  U32* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
+  U32*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
+  
+  int nRedTotal=0;
+  int nGreenTotal=0;
+  int nBlueTotal=0;
+  int nSampleCount=0;
 
-	int nRedTotal=0;
-	int nGreenTotal=0;
-	int nBlueTotal=0;
-	int nSampleCount=0;
+  while (pCurrentImage<pImageEnd) {		
+    U32*const pImageLineStart=pCurrentImage;
+    U32*const pImageLineEnd=pCurrentImage+nXDelta;
 
-	while (pCurrentImage<pImageEnd) {
-		
-		U32*const pImageLineStart=pCurrentImage;
-		U32*const pImageLineEnd=pCurrentImage+nXDelta;
+    while (pCurrentImage<pImageLineEnd) {
+      const U32 ImageColour=*pCurrentImage;
 
-		while (pCurrentImage<pImageLineEnd) {
+      const U32 nImageRed=(ImageColour>>SHIFT_RED)&0xff;
+      const U32 nImageGreen=(ImageColour>>SHIFT_GREEN)&0xff;
+      const U32 nImageBlue=(ImageColour>>SHIFT_BLUE)&0xff;
 
-			const U32 ImageColour=*pCurrentImage;
+      nRedTotal+=nImageRed;
+      nGreenTotal+=nImageGreen;
+      nBlueTotal+=nImageBlue;
+      
+      nSampleCount+=1;
+      
+      pCurrentImage+=nStride;
+    }
 
-			const U32 nImageRed=(ImageColour>>SHIFT_RED)&0xff;
-			const U32 nImageGreen=(ImageColour>>SHIFT_GREEN)&0xff;
-			const U32 nImageBlue=(ImageColour>>SHIFT_BLUE)&0xff;
+    pCurrentImage=pImageLineStart+(nStride*nWidth);
+  }
 
-			nRedTotal+=nImageRed;
-			nGreenTotal+=nImageGreen;
-			nBlueTotal+=nImageBlue;
+  const int nAverageRed=(nRedTotal/nSampleCount);
+  const int nAverageGreen=(nGreenTotal/nSampleCount);
+  const int nAverageBlue=(nBlueTotal/nSampleCount);
 
-			nSampleCount+=1;
-			
-			pCurrentImage+=nStride;
+  U32 Average=
+    (nAverageRed<<SHIFT_RED)|
+    (nAverageGreen<<SHIFT_GREEN)|
+    (nAverageBlue<<SHIFT_BLUE);
 
-		}
-
-		pCurrentImage=pImageLineStart+(nStride*nWidth);
-
-	}
-
-	const int nAverageRed=(nRedTotal/nSampleCount);
-	const int nAverageGreen=(nGreenTotal/nSampleCount);
-	const int nAverageBlue=(nBlueTotal/nSampleCount);
-
-	U32 Average=
-		(nAverageRed<<SHIFT_RED)|
-		(nAverageGreen<<SHIFT_GREEN)|
-		(nAverageBlue<<SHIFT_BLUE);
-
-	return Average;
-	
+  return Average;
 }
 
 U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
+  
+  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
+  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
 
-	if (SubWidth>(float)(nWidth)) {
-		SubWidth=(float)(nWidth);
-	}
+  const float SourceYInc=(nHeight/SubHeight);
+  const float SourceXInc=(nWidth/SubWidth);
 
-	if (SubHeight>(float)(nHeight)) {
-		SubHeight=(float)(nHeight);
-	}
+  int nRedTotal=0;
+  int nGreenTotal=0;
+  int nBlueTotal=0;
+  int nSampleCount=0;
 
-	const float SourceYInc=(nHeight/SubHeight);
-	const float SourceXInc=(nWidth/SubWidth);
-
-	int nRedTotal=0;
-	int nGreenTotal=0;
-	int nBlueTotal=0;
-	int nSampleCount=0;
-
-	U32* pCurrentOutput=pOutput;
+  U32* pCurrentOutput=pOutput;
 	
-	float SourceY;
-	for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
+  float SourceY;
+  for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
 
-		U32* pOutputLineStart=pCurrentOutput;
-		const int nTopY=static_cast<int>(SourceY);
-		int nBottomY=static_cast<int>(SourceY+SourceYInc);
-		nBottomY=GateInt(nBottomY,0,(nHeight-1));
+    U32* pOutputLineStart=pCurrentOutput;
+    const int nTopY=static_cast<int>(SourceY);
+    int nBottomY=static_cast<int>(SourceY+SourceYInc);
+    nBottomY=GateInt(nBottomY,0,(nHeight-1));
 
-		float SourceX;
-		for (SourceX=0.0f; SourceX<nWidth; SourceX+=SourceXInc) {
+    float SourceX;
+    for (SourceX=0.0f; SourceX<nWidth; SourceX+=SourceXInc) {
 
-			const int nLeftX=static_cast<int>(SourceX);
-			int nRightX=static_cast<int>(SourceX+SourceXInc);
-			nRightX=GateInt(nRightX,0,(nWidth-1));
+      const int nLeftX=static_cast<int>(SourceX);
+      int nRightX=static_cast<int>(SourceX+SourceXInc);
+      nRightX=GateInt(nRightX,0,(nWidth-1));
 
-			const U32 OutputColour=
-				Pete_MetaImage_GetAreaAverage(pSource,nLeftX,nTopY,nRightX,nBottomY,1);
+      const U32 OutputColour=
+	Pete_MetaImage_GetAreaAverage(pSource,nLeftX,nTopY,nRightX,nBottomY,1);
 
-			const U32 nOutputRed=(OutputColour>>SHIFT_RED)&0xff;
-			const U32 nOutputGreen=(OutputColour>>SHIFT_GREEN)&0xff;
-			const U32 nOutputBlue=(OutputColour>>SHIFT_BLUE)&0xff;
+      const U32 nOutputRed=(OutputColour>>SHIFT_RED)&0xff;
+      const U32 nOutputGreen=(OutputColour>>SHIFT_GREEN)&0xff;
+      const U32 nOutputBlue=(OutputColour>>SHIFT_BLUE)&0xff;
 
-			nRedTotal+=nOutputRed;
-			nGreenTotal+=nOutputGreen;
-			nBlueTotal+=nOutputBlue;
+      nRedTotal+=nOutputRed;
+      nGreenTotal+=nOutputGreen;
+      nBlueTotal+=nOutputBlue;
 
-			nSampleCount+=1;
+      nSampleCount+=1;
 
-			*pCurrentOutput=OutputColour;
+      *pCurrentOutput=OutputColour;
 
-			pCurrentOutput+=1;
+      pCurrentOutput+=1;
+    }
 
-		}
+    pCurrentOutput=pOutputLineStart+nWidth;
+  }
 
-		pCurrentOutput=pOutputLineStart+nWidth;
+  const int nAverageRed=(nRedTotal/nSampleCount);
+  const int nAverageGreen=(nGreenTotal/nSampleCount);
+  const int nAverageBlue=(nBlueTotal/nSampleCount);
 
-	}
+  U32 Average=
+    (nAverageRed<<SHIFT_RED)|
+    (nAverageGreen<<SHIFT_GREEN)|
+    (nAverageBlue<<SHIFT_BLUE);
 
-	const int nAverageRed=(nRedTotal/nSampleCount);
-	const int nAverageGreen=(nGreenTotal/nSampleCount);
-	const int nAverageBlue=(nBlueTotal/nSampleCount);
-
-	U32 Average=
-		(nAverageRed<<SHIFT_RED)|
-		(nAverageGreen<<SHIFT_GREEN)|
-		(nAverageBlue<<SHIFT_BLUE);
-
-	return Average;
-
+  return Average;
 }
 
 U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
+  
+  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
+  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
 
-	if (SubWidth>(float)(nWidth)) {
-		SubWidth=(float)(nWidth);
-	}
+  const float SourceYInc=(nHeight/SubHeight);
+  const float SourceXInc=(nWidth/SubWidth);
 
-	if (SubHeight>(float)(nHeight)) {
-		SubHeight=(float)(nHeight);
-	}
+  int nRedTotal=0;
+  int nGreenTotal=0;
+  int nBlueTotal=0;
+  int nSampleCount=0;
 
-	const float SourceYInc=(nHeight/SubHeight);
-	const float SourceXInc=(nWidth/SubWidth);
-
-	int nRedTotal=0;
-	int nGreenTotal=0;
-	int nBlueTotal=0;
-	int nSampleCount=0;
-
-	U32* pCurrentOutput=pOutput;
+  U32* pCurrentOutput=pOutput;
 	
-	float SourceY;
-	for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
+  float SourceY;
+  for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
+    U32* pOutputLineStart=pCurrentOutput;
+    const int nTopY=static_cast<int>(SourceY);
+    U32* pSourceLineStart=pSource+(nTopY*nWidth);
 
-		U32* pOutputLineStart=pCurrentOutput;
-		const int nTopY=static_cast<int>(SourceY);
+    float SourceX;
+    for (SourceX=0.0f; SourceX<nWidth; SourceX+=SourceXInc) {
+      const int nLeftX=static_cast<int>(SourceX);
+      const U32 OutputColour=*(pSourceLineStart+nLeftX);
+      const U32 nOutputRed=(OutputColour>>SHIFT_RED)&0xff;
+      const U32 nOutputGreen=(OutputColour>>SHIFT_GREEN)&0xff;
+      const U32 nOutputBlue=(OutputColour>>SHIFT_BLUE)&0xff;
 
-		U32* pSourceLineStart=pSource+(nTopY*nWidth);
+      nRedTotal+=nOutputRed;
+      nGreenTotal+=nOutputGreen;
+      nBlueTotal+=nOutputBlue;
 
-		float SourceX;
-		for (SourceX=0.0f; SourceX<nWidth; SourceX+=SourceXInc) {
+      nSampleCount+=1;
+      *pCurrentOutput=OutputColour;
+      pCurrentOutput+=1;
+    }
+    pCurrentOutput=pOutputLineStart+nWidth;
+  }
 
-			const int nLeftX=static_cast<int>(SourceX);
+  const int nAverageRed=(nRedTotal/nSampleCount);
+  const int nAverageGreen=(nGreenTotal/nSampleCount);
+  const int nAverageBlue=(nBlueTotal/nSampleCount);
 
-			const U32 OutputColour=*(pSourceLineStart+nLeftX);
+  U32 Average=
+    (nAverageRed<<SHIFT_RED)|
+    (nAverageGreen<<SHIFT_GREEN)|
+    (nAverageBlue<<SHIFT_BLUE);
 
-			const U32 nOutputRed=(OutputColour>>SHIFT_RED)&0xff;
-			const U32 nOutputGreen=(OutputColour>>SHIFT_GREEN)&0xff;
-			const U32 nOutputBlue=(OutputColour>>SHIFT_BLUE)&0xff;
-
-			nRedTotal+=nOutputRed;
-			nGreenTotal+=nOutputGreen;
-			nBlueTotal+=nOutputBlue;
-
-			nSampleCount+=1;
-
-			*pCurrentOutput=OutputColour;
-
-			pCurrentOutput+=1;
-
-		}
-
-		pCurrentOutput=pOutputLineStart+nWidth;
-
-	}
-
-	const int nAverageRed=(nRedTotal/nSampleCount);
-	const int nAverageGreen=(nGreenTotal/nSampleCount);
-	const int nAverageBlue=(nBlueTotal/nSampleCount);
-
-	U32 Average=
-		(nAverageRed<<SHIFT_RED)|
-		(nAverageGreen<<SHIFT_GREEN)|
-		(nAverageBlue<<SHIFT_BLUE);
-
-	return Average;
-
+  return Average;
 }
 
 /////////////////////////////////////////////////////////
