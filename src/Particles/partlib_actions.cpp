@@ -1336,7 +1336,13 @@ void PASource::Execute(ParticleGroup *group)
 			velocity.Generate(vel);
 			color.Generate(col);
 			float ag = age + NRand(age_sigma);
-			
+
+			/* GG take the velocity into account if there are more
+			   particles generated in one go */
+			pos.x = pos.x + vel.x*i*dt/(float)rate;
+			pos.y = pos.y + vel.y*i*dt/(float)rate;
+			pos.z = pos.z + vel.z*i*dt/(float)rate;
+
 			group->Add(pos, pos, siz, vel, col, alpha, ag);
 		}
 	}
