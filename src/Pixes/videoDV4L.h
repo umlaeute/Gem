@@ -122,8 +122,6 @@ class GEM_EXTERN videoDV4L : public video {
 #else
   pixBlock    *getFrame(){return NULL;}
 #endif /* HAVE_DV */
-
->>>>>>> 1.3
 };
 
 #endif	// for header file

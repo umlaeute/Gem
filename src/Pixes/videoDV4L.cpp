@@ -48,19 +48,12 @@ videoDV4L :: videoDV4L(int format) : video(format)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-<<<<<<< videoDV4L.cpp
-videoDV4L :: ~videoDV4L(){
-  if(m_haveVideo)stopTransfer();
-  if(decodedbuf)delete[]decodedbuf;
-  if(m_decoder!=NULL)dv_decoder_free(m_decoder);
-=======
 videoDV4L :: ~videoDV4L(){
 #ifdef HAVE_DV
   if(m_haveVideo)stopTransfer();
   if(decodedbuf)delete[]decodedbuf;
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);
 #endif
->>>>>>> 1.3
 }
 #ifdef HAVE_DV
 /////////////////////////////////////////////////////////
@@ -132,45 +125,11 @@ void *videoDV4L :: capturing(void*you)
 }
 
 pixBlock *videoDV4L :: getFrame(){
-<<<<<<< videoDV4L.cpp
-  post("getting frame");
-=======
   if (!m_decoder)return NULL;
->>>>>>> 1.3
   if (!m_frame_ready) m_image.newimage = 0;
   else {
-<<<<<<< videoDV4L.cpp
-    post("parsing %x", m_decoder);
     dv_parse_header(m_decoder, videobuf);
-    dv_parse_packs (m_decoder, videobuf);
-    post("noe...");
-    if(dv_frame_changed(m_decoder)) {
-      int pitches[3] = {0,0,0};
-            //      pitches[0]=m_decoder->width*3; // rgb
-      pitches[0]=m_decoder->width*((m_reqFormat==GL_RGBA)?3:2);
-      post("huhu");
-      m_image.image.ysize=m_decoder->height;
-      m_image.image.xsize=m_decoder->width;
-      m_image.image.setCsizeByFormat(m_reqFormat);
-      
-      /* decode the DV-data to something we can handle and that is similar to the wanted format */
-      post("aloa");
-      //      dv_report_video_error(m_decoder, videobuf);  // do we need this ?
-      dv_decode_full_frame(m_decoder, videobuf, ((m_reqFormat==GL_RGBA)?e_dv_color_rgb:e_dv_color_yuv), &decodedbuf, pitches); // gosh, this(e_dv_color_rgb) is expansive:: the decoding is done in software only...
-      //     post("sampling %d", m_decoder->sampling);
-
-      /* convert the colour-space to the one we want */
-      // btw. shouldn't this be done in [pix_video] rather than here ?
-      post("...%X", decodedbuf);
-      if (m_reqFormat==GL_RGBA)m_image.image.fromRGB(decodedbuf);
-      else m_image.image.fromYVYU(decodedbuf);
-      post(".");
-    }
-
-    m_image.newimage=1;
-=======
-    dv_parse_header(m_decoder, videobuf);
-    dv_parse_packs (m_decoder, videobuf);
+    //dv_parse_packs (m_decoder, videobuf);
     if(dv_frame_changed(m_decoder)) {
       int pitches[3] = {0,0,0};
             //      pitches[0]=m_decoder->width*3; // rgb
@@ -191,10 +150,8 @@ pixBlock *videoDV4L :: getFrame(){
     }
 
     m_image.newimage=1;
->>>>>>> 1.3
     m_frame_ready = false;
   }
-  post("got frame");
   return &m_image;
 }
 
@@ -223,48 +180,9 @@ int videoDV4L :: openDevice(int devnum, int format){
 
   if (ioctl(fd, DV1394_INIT, &init) < 0)    {
     perror("initializing");
-<<<<<<< videoDV4L.cpp
     close(fd);
     return -1;
   }
-  
-  m_mmapbuf = (unsigned char *) mmap( NULL, N_BUF*m_framesize,
-				       PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-  if(m_mmapbuf == MAP_FAILED) {
-    perror("mmap frame buffers");
-    close(fd);
-    return -1;
-=======
-    close(fd);
-    return -1;
->>>>>>> 1.3
-  }
-<<<<<<< videoDV4L.cpp
-  
-  if(ioctl(fd, DV1394_START_RECEIVE, NULL)) {
-    perror("dv1394 START_RECEIVE ioctl");
-    close(fd);
-    return -1;
-  }
-  return(fd);
-}
-/////////////////////////////////////////////////////////
-// resetDevice
-//
-/////////////////////////////////////////////////////////
-int videoDV4L :: resetDevice(void){
-
-}
-/////////////////////////////////////////////////////////
-// closeDevice
-//
-/////////////////////////////////////////////////////////
-void videoDV4L :: closeDevice(void){
-  if(m_mmapbuf!=NULL)munmap(m_mmapbuf, N_BUF*m_framesize);
-  if(dvfd>0)close(dvfd);
-  m_haveVideo=false;
-}
-=======
   
   m_mmapbuf = (unsigned char *) mmap( NULL, N_BUF*m_framesize,
 				       PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
@@ -297,7 +215,6 @@ void videoDV4L :: closeDevice(void){
   if(dvfd>=0)close(dvfd);
   m_haveVideo=false;
 }
->>>>>>> 1.3
 
 /////////////////////////////////////////////////////////
 // startTransfer
