@@ -33,6 +33,9 @@ LOG
 #endif // NT
 #endif // MACOSX
 
+#include <string.h>
+#include <stdlib.h>
+
 // packed pixel defines for textures
 #ifndef GL_EXT_packed_pixels
 #define GL_UNSIGNED_BYTE_3_3_2_EXT          0x8032
