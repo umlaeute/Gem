@@ -46,6 +46,7 @@ void pix_flip :: processImage(imageStruct &image)
 {
     // eventually should do this inline, but in the interest of getting it done...
     imageStruct tempImg;
+    if (image.data==0)return;
     image.copy2Image(&tempImg);
 
     int ySrcStride = image.xsize * image.csize;
