@@ -134,11 +134,9 @@ pixBlock* filmQT4L :: getFrame(){
   while(i--)rows[i]=m_qtimage.data+m_qtimage.xsize*m_qtimage.csize*(m_qtimage.ysize-i-1);
 
   m_lastFrame=m_curFrame;
-post("now decoding video");
   if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
     post("GEM: pix_film:: couldn't decode video !");
   }else {
-	  post("manually decoding from RGB");
     m_image.image.fromRGB(m_qtimage.data);
     m_image.newimage=1; m_image.image.upsidedown=false;
     pimage = &m_image;
