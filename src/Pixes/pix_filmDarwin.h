@@ -87,11 +87,12 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   int			m_play;
   float			m_rate;
   Fixed			playRate;
-  int prevTime;
-    int curTime;
-    int newImage;
+  TimeValue 		prevTime;
+  TimeValue		curTime;
+  int 			newImage;
+
 private:
-Movie			m_movie;
+  Movie			m_movie;
 
   //-----------------------------------
   // GROUP:	Texturing
