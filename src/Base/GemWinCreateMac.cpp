@@ -217,6 +217,14 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     if (hints.buffer == 2){
         glWInfo.aglAttributes [i++] = AGL_DOUBLEBUFFER;
     }
+    //going to try for some FSAA here
+    if (hints.fsaa){
+        glWInfo.aglAttributes [i++] = AGL_SAMPLE_BUFFERS_ARB;
+        glWInfo.aglAttributes [i++] = 1;
+        glWInfo.aglAttributes [i++] = AGL_SAMPLES_ARB;
+        glWInfo.aglAttributes [i++] = hints.fsaa;
+    }
+    
     glWInfo.aglAttributes [i++] = AGL_ACCELERATED;
     glWInfo.aglAttributes [i++] = AGL_NO_RECOVERY; 	// should be used whenever packed pixels is used to 
                                                         //	disable software back up textures
@@ -252,6 +260,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     post("hints: display = %s",hints.display);
     post("hints: title = %s",hints.title);
     post("hints: shared = %d",hints.shared);
+    post("hints: fsaa = %d",hints.fsaa);
 #endif
     hGD = NULL;
     return(1);

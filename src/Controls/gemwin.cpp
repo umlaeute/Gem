@@ -386,6 +386,20 @@ void gemwin :: fpsMess()
     outlet_float(m_FrameRate,GemMan :: fps);
 }
 
+/////////////////////////////////////////////////////////
+// fsaaMess
+//
+/////////////////////////////////////////////////////////
+void gemwin :: fsaaMess(int value)
+{
+    if (value == 2 || value == 4 || value == 8){
+        GemMan :: fsaa = value;
+    }
+    else{
+        GemMan :: fsaa = value;
+    }
+}
+
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -475,6 +489,8 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("fps"), A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::topmostMessCallback,
 		  gensym("topmost"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemwin::fsaaMessCallback,
+		  gensym("FSAA"), A_FLOAT, A_NULL);
 }
 void gemwin :: printMessCallback(void *)
 {
@@ -701,4 +717,9 @@ void gemwin :: blurMessCallback(void *data, t_floatarg val)
 void gemwin :: fpsMessCallback(void *data)
 {
   GetMyClass(data)->fpsMess();
+}
+
+void gemwin :: fsaaMessCallback(void *data, t_floatarg val)
+{
+  GetMyClass(data)->fsaaMess((int) val);
 }

@@ -177,7 +177,7 @@ class GEM_EXTERN GemMan
 	static int	   client_storage_supported;
 	static int	   texture_range_supported;
         static float	   fps;
-        
+        static int	   fsaa;
 	
         //////////
         // Changing these variables is likely to crash GEM

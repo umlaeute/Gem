@@ -107,7 +107,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   void			topmostMess(float settting);
   void          blurMess(float setting);
   void          fpsMess();
-  
+  void          fsaaMess(int value);
   t_outlet	*m_FrameRate;
   
 
@@ -153,6 +153,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   static void 	topmostMessCallback(void *data, t_floatarg val);	
   static void 	blurMessCallback(void *data, t_floatarg val);	
   static void 	fpsMessCallback(void *data);
+  static void 	fsaaMessCallback(void *data,t_floatarg val);
 
 };
 

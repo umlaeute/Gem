@@ -91,7 +91,7 @@ int GemMan::texture_rectangle_supported = 0;	//tigital
 int GemMan::client_storage_supported = 0;
 int GemMan::texture_range_supported = 0;
 float GemMan::fps;
-
+int GemMan::fsaa = 0;
 
 // static data
 static const int NUM_LIGHTS = 8;   	// the maximum number of lights
@@ -988,6 +988,9 @@ void GemMan :: windowInit()
   #ifdef __APPLE__
   GLint swapInt = 1;
   aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
+  glEnable (GL_MULTISAMPLE_ARB);
+  glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+
   #endif
  
   resetValues();
@@ -1024,6 +1027,7 @@ int GemMan :: createWindow(char* disp)
   myHints.actuallyDisplay = 1;
   myHints.display = disp;
   myHints.title = m_title;
+  myHints.fsaa = fsaa;
   
   if (disp) post("Creating on display %s",disp);
 
