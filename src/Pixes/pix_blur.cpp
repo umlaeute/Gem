@@ -64,13 +64,12 @@ src = 0;
 
 if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
 
-m_blurH = image.ysize;
-m_blurW = image.xsize;
-m_blurBpp = image.csize;
-m_blurSize = m_blurH * m_blurW * m_blurBpp;
-delete saved;
-saved = new unsigned char [m_blurSize];
-post("pix_blur: new saved buffer %d %d %d",m_blurH,m_blurW,m_blurBpp );
+    m_blurH = image.ysize;
+    m_blurW = image.xsize;
+    m_blurBpp = image.csize;
+    m_blurSize = m_blurH * m_blurW * m_blurBpp;
+    delete saved;
+    saved = new unsigned char [m_blurSize];
 }
 
 rightGain = m_blur;
@@ -78,9 +77,7 @@ imageGain = 255 - m_blur;
    Rgain = 255/rightGain;
    Igain = 255/imageGain;
    hlength = image.xsize;
-//size = image.xsize * image.ysize * image.csize;
-//saved = new unsigned char [size];
-//format is U Y V Y
+
 
 for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
@@ -99,8 +96,6 @@ for (h=0; h<image.ysize; h++){
         saved[src+chBlue] = (unsigned char)clamp(B);
         pixels[src+chBlue] = saved[src+chBlue];
 
-        //pixels+=4;
-        //saved+=4;
         src += 4;
 
      
@@ -139,19 +134,14 @@ imageGain = 255 - m_blur;
    Rgain = 255/rightGain;
    Igain = 255/imageGain;
    hlength = image.xsize/2;
-//size = image.xsize * image.ysize * image.csize;
-//saved = new unsigned char [size];
-//format is U Y V Y
+
 
 for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
-    
-
-      
+          
         y1 = ((image.data[src+1] * imageGain)>>8) + ((saved[src+1] * rightGain)>>8);
         saved[src+1] = (unsigned char)clamp(y1);
         image.data[src+1] = saved[src+1];
- 
  
         
         y2 = ((image.data[src+3] * imageGain)>>8) + ((saved[src+3] * rightGain)>>8);;
@@ -163,8 +153,6 @@ for (h=0; h<image.ysize; h++){
      
     }
 }
-
-
 
 }
 
