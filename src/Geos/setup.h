@@ -32,6 +32,7 @@ extern "C" {
    void text2d_setup();
    void text3d_setup();
    void textoutline_setup();
+   void textextruded_setup();
    void triangle_setup();
    void newWave_setup();		//tigital
    void slideSquares_setup();		//tigital
@@ -63,6 +64,7 @@ extern "C" {
       text2d_setup();
       text3d_setup();
       textoutline_setup();
+      textextruded_setup();
 #endif
       triangle_setup();
       newWave_setup();		//tigital
