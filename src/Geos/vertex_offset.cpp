@@ -123,18 +123,34 @@ void vertex_offset :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_offset :: obj_setupCallback(t_class *classPtr)
 {     class_addmethod(classPtr, (t_method)&vertex_offset::offsetMessCallback,
-    	    gensym("offset"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+    	    gensym("offset"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&vertex_offset::vertexMessCallback,
     	    gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
 }
 
-void vertex_offset :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z, t_floatarg w)
+void vertex_offset :: offsetMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
-    GetMyClass(data)->m_x=((float)x);
-    GetMyClass(data)->m_y=((float)y);
-    GetMyClass(data)->m_z=((float)z);
-    GetMyClass(data)->m_w=((float)w);
+  float x, y, z, w;
+  w=0;
+  z=0;
 
+  switch (argc){
+  case 4:
+    w = atom_getfloat(argv+3);
+  case 3:
+    z = atom_getfloat(argv+2);
+  case 2:
+    y = atom_getfloat(argv+1);
+    x = atom_getfloat(argv);
+    break;
+  default:
+    error("vertex_offset: color must be 2, 3 or 4 values!");
+    return;
+  }
+  GetMyClass(data)->m_x=((float)x);
+  GetMyClass(data)->m_y=((float)y);
+  GetMyClass(data)->m_z=((float)z);
+  GetMyClass(data)->m_w=((float)w);
 }
 
 void vertex_offset :: vertexMessCallback(void *data,  t_floatarg num, t_floatarg counter)
