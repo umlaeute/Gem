@@ -1037,6 +1037,12 @@
 					RelativePath=".\Pixes\pix_snap.h">
 				</File>
 				<File
+					RelativePath="Pixes\pix_snap2tex.cpp">
+				</File>
+				<File
+					RelativePath="Pixes\pix_snap2tex.h">
+				</File>
+				<File
 					RelativePath=".\Pixes\pix_texture.cpp">
 				</File>
 				<File

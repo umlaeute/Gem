@@ -80,6 +80,7 @@ extern "C" {
    void pix_set_setup();
    void pix_sig2pix_setup();
    void pix_snap_setup();
+   void pix_snap2tex_setup();
    void pix_subtract_setup();
    void pix_takealpha_setup();
    void pix_test_setup();
@@ -185,6 +186,7 @@ extern "C" {
       pix_set_setup();
       pix_sig2pix_setup();
       pix_snap_setup();
+      pix_snap2tex_setup();
       pix_subtract_setup();
       pix_takealpha_setup();
       pix_test_setup();
