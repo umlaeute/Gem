@@ -1,0 +1,11 @@
+#N canvas 86 296 510 304 10;
+#X text 28 11 pix_compare compares two images pixle by pixel and outputs
+a composite image. pix_compare can do a greater than comparison where
+a brighter pixel in the right stream will replace the corresponding
+pixel in the left stream or the comparison can be reversed and the
+dimmer pixel can be replaced. this operation works best using YUV but
+can also be effective in RGB.;
+#X obj 29 259 pix_compare;
+#X msg 29 192 direction \$1;
+#X text 134 193 the direction of the comparison > = 0 < = 1;
+#X connect 2 0 1 0;
