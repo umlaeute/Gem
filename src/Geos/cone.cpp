@@ -16,7 +16,7 @@
 
 #include "cone.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(cone, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(cone, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -26,8 +26,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(cone, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-cone :: cone(t_floatarg size)
-      : GemGluObj(size)
+cone :: cone(t_floatarg size, t_floatarg slices)
+  : cylinder(size, slices)
 { }
 
 /////////////////////////////////////////////////////////
@@ -41,22 +41,13 @@ cone :: ~cone()
 // render
 //
 /////////////////////////////////////////////////////////
-void cone :: render(GemState *state)
+void cone :: setupParameters(void)
 {
-    // lighting
-    if (state->lighting)
-    {
-    	// normals
-    	if (state->smooth) gluQuadricNormals(m_thing, (GLenum)GLU_SMOOTH);
-    	else gluQuadricNormals(m_thing, (GLenum)GLU_FLAT);
-    }
-    
-    // texture mapping
-    if (state->texture) gluQuadricTexture(m_thing, GL_TRUE);
-    else gluQuadricTexture(m_thing, GL_FALSE);
-    
-    gluQuadricDrawStyle(m_thing, m_drawType);
-    gluCylinder(m_thing, m_size, 0, m_size * 2, m_numSlices, m_numSlices);
+  baseRadius=m_size;
+  topRadius=0.0;
+  height=m_size*2;
+  slices=m_numSlices;
+  stacks=m_numSlices;
 }
 
 /////////////////////////////////////////////////////////

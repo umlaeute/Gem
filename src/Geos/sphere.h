@@ -38,7 +38,7 @@ class GEM_EXTERN sphere : public GemGluObj
 
         //////////
         // Constructor
-    	sphere(t_floatarg size);
+  sphere(t_floatarg size, t_floatarg slice=10.0);
     	
     protected:
     	

@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_CONE_H_
 #define INCLUDE_CONE_H_
 
-#include "Base/GemGluObj.h"
+#include "cylinder.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -30,15 +30,15 @@ KEYWORD
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN cone : public GemGluObj
+class GEM_EXTERN cone : public cylinder
 {
-    CPPEXTERN_HEADER(cone, GemGluObj)
+    CPPEXTERN_HEADER(cone, cylinder)
 
     public:
 
 	    //////////
 	    // Constructor
-    	cone(t_floatarg size);
+  cone(t_floatarg size,t_floatarg slice);
     	
     protected:
     	
@@ -48,7 +48,7 @@ class GEM_EXTERN cone : public GemGluObj
 
     	//////////
     	// Do the rendering
-    	virtual void 	render(GemState *state);
+	virtual void setupParameters(void);
 };
 
 #endif	// for header file

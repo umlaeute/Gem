@@ -20,13 +20,18 @@ LOG
 #include <windows.h>
 #endif
 
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif // __APPLE__
-
 #include <string.h>
+
+
+#include <math.h>
+#ifndef M_PI
+#  define M_PI (3.1415926)
+#endif
+
+#ifndef GLU_SILHOUETTE
+# define GLU_SILHOUETTE 0
+#endif
+
 #include "Base/GemShape.h"
 
 /*-----------------------------------------------------------------
@@ -49,7 +54,7 @@ class GEM_EXTERN GemGluObj : public GemShape
     
 	    //////////
 	    // Constructor
-    	GemGluObj(t_floatarg size);
+  GemGluObj(t_floatarg size, t_floatarg slices=10);
     	
     protected:
     	
@@ -57,14 +62,6 @@ class GEM_EXTERN GemGluObj : public GemShape
     	// Destructor
     	virtual ~GemGluObj();
 
-    	//////////
-    	// Create the quadric
-    	virtual void	startRendering();
-    	
-    	//////////
-    	// Clean it up
-    	virtual void	stopRendering();
-    	
     	//////////
     	// How the object should be drawn
     	virtual void	typeMess(t_symbol *type);
@@ -76,9 +73,6 @@ class GEM_EXTERN GemGluObj : public GemShape
     	//////////
     	// The number of slices
     	int 	    	m_numSlices;
-
-    	//////////
-    	GLUquadricObj 	*m_thing;
     	
         //////////
         t_inlet         *m_sliceInlet;

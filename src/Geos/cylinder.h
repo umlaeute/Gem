@@ -38,7 +38,7 @@ class GEM_EXTERN cylinder : public GemGluObj
 
 	    //////////
 	    // Constructor
-    	cylinder(t_floatarg size);
+  cylinder(t_floatarg size,t_floatarg slize);
     	
     protected:
     	
@@ -49,6 +49,15 @@ class GEM_EXTERN cylinder : public GemGluObj
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
+
+
+	virtual void setupParameters(void);
+	GLdouble baseRadius;
+	GLdouble topRadius;
+	GLdouble height;
+	GLint    slices;
+	GLint    stacks;
+
 };
 
 #endif	// for header file
