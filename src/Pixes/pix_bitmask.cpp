@@ -90,6 +90,54 @@ void pix_bitmask :: processGrayImage(imageStruct &image)
   }
 }
 
+#ifdef __MMX__
+void pix_bitmask :: processRGBAMMX(imageStruct &image){
+  int i = image.xsize * image.ysize/2;
+
+  __m64 mask = _mm_set_pi32(*(int*)m_mask, *(int*)m_mask);
+  __m64 *input = (__m64*)image.data;
+
+  while(i--){
+    input[0]= _mm_and_si64(input[0], mask);
+    input++;
+  }
+  _mm_empty();
+
+}
+void pix_bitmask :: processYUVMMX(imageStruct &image){
+  int i = image.xsize * image.ysize/4;
+
+  const __m64 mask = _mm_set_pi8(m_mask[chRed],
+				 m_mask[chBlue],
+				 m_mask[chRed],
+				 m_mask[chGreen],
+				 m_mask[chRed],
+				 m_mask[chBlue],
+				 m_mask[chRed],
+				 m_mask[chGreen]);
+  __m64 *input = (__m64*)image.data;
+
+  while(i--){
+    input[0]= _mm_and_si64(input[0], mask);
+    input++;
+  }
+  _mm_empty();
+}
+void pix_bitmask :: processGrayMMX(imageStruct &image){
+  int i = image.xsize * image.ysize/8;
+  const char grey=m_mask[chRed];
+
+  const __m64 mask = _mm_set_pi8(grey, grey, grey, grey, grey, grey, grey, grey);
+  __m64 *input = (__m64*)image.data;
+
+  while(i--){
+    input[0]= _mm_and_si64(input[0], mask);
+    input++;
+  }
+  _mm_empty();
+}
+#endif
+
 /////////////////////////////////////////////////////////
 // vecMaskMess
 //
