@@ -35,8 +35,6 @@ pix_background :: pix_background()
     m_savedImage.setCsizeByFormat(GL_RGBA);
     m_savedImage.reallocate();
     m_savedImage.setBlack();
-
-
 }
 
 /////////////////////////////////////////////////////////
@@ -120,11 +118,12 @@ void pix_background :: processGrayImage(imageStruct &image)
 
   npixes=image.data;
   opixes=m_savedImage.data;
+  const unsigned char thresh=m_Urange;
   i=pixsize;
   while(i--){
     newpix=*npixes++;
     oldpix=*opixes++;
-    if((newpix>oldpix-m_Urange)&&(newpix<oldpix+m_Urange))npixes[-1]=0;
+    if((newpix>oldpix-thresh)&&(newpix<oldpix+thresh))npixes[-1]=0;
   }
   m_reset = 0; 
 }
@@ -183,8 +182,56 @@ void pix_background :: processYUVImage(imageStruct &image)
 // the killer go fast stuff goes in here
 //
 /////////////////////////////////////////////////////////
+
+#ifdef __MMX__
+void pix_background :: processGrayMMX(imageStruct &image){
+  int i;// h,w,hlength;
+  long src,pixsize;
+
+  src = 0;
+  pixsize = image.xsize * image.ysize * image.csize;
+  if(m_savedImage.xsize!=image.xsize ||
+     m_savedImage.ysize!=image.ysize ||
+     m_savedImage.format!=image.format)m_reset=1;
+
+  m_savedImage.xsize=image.xsize;
+  m_savedImage.ysize=image.ysize;
+  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.reallocate();
+
+  if (m_reset){
+    memcpy(m_savedImage.data,image.data,pixsize);
+  }
+  m_reset=0;
+  if(m_Yrange==0)return;  
+
+  __m64*npixes=(__m64*)image.data;
+  __m64*opixes=(__m64*)m_savedImage.data;
+  __m64 newpix, oldpix, m1;
+
+  unsigned char thresh=m_Yrange-1;
+  __m64 tresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
+			  thresh,thresh,thresh,thresh);
+
+  
+  i=pixsize/sizeof(__m64)+(pixsize%sizeof(__m64)!=0);
+  while(i--){
+    newpix=npixes[i];
+    oldpix=opixes[i];
+    
+    m1    = _mm_subs_pu8 (newpix, oldpix);
+    oldpix= _mm_subs_pu8 (oldpix, newpix);
+    m1    = _mm_or_si64  (m1, oldpix); // |oldpix-newpix|
+    m1    = _mm_subs_pu8 (m1, tresh);
+    m1    = _mm_cmpgt_pi8(m1, _mm_setzero_si64()); // |oldpix-newpix|>tresh
+    npixes[i] = _mm_and_si64(m1, newpix);
+  }
+  _mm_empty();
+}
+#endif /* __MMX__ */
+
 #ifdef __VEC__
-void pix_background :: processYUVImageAltivec(imageStruct &image)
+void pix_background :: processYUVAltivec(imageStruct &image)
 {
 register int h,w,i,j,width;
 int pixsize = image.xsize * image.ysize * image.csize;
