@@ -98,9 +98,13 @@ void pix_gain :: processGrayImage(imageStruct &image)
 void pix_gain :: processYUVImage(imageStruct &image)
 {
 #ifdef __VEC__
+  /*
+   * as processYUVAltivec() should be called directly this is not really needed here
+   * however, i keep it here for documentation 
+   */
   //post("using altivec");  
-  processYUVAltivec(image);
-  return;
+  //  processYUVAltivec(image);
+  //return;
 #else
   int h,w,width;
     long src;
@@ -178,9 +182,10 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
 }
 #endif /* __MMX__ */
 
+#ifdef __VEC__
 void pix_gain :: processYUVAltivec(imageStruct &image)
 {
- #ifdef __VEC__
+  post("indeed using altivec");
  int h,w,width,height;
     /*altivec code starts */
     width = image.xsize/8;
@@ -293,8 +298,9 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
         vec_dss( 0 );
         #endif
     }  /* end of working altivec function */
-#endif
 }
+#endif
+
 
 /////////////////////////////////////////////////////////
 // vecGainMess
