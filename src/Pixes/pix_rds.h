@@ -55,10 +55,11 @@ class GEM_EXTERN pix_rds : public GemPixObj
   //////////
   // Do the processing
   virtual void processRGBAImage(imageStruct &image);
+  virtual void processGrayImage(imageStruct &image);
   virtual void processYUVImage(imageStruct &image);
 
   imageStruct    myImage;
-  int 	stat;
+  int 	doDots;
   int 	stride;
   int	method;
   int	fastrand_val;
@@ -67,8 +68,8 @@ class GEM_EXTERN pix_rds : public GemPixObj
   
   //////////
   // static member functions
-  static void bangMessCallback(void *data);
   static void methMessCallback(void *data, t_floatarg state);
+  static void strideMessCallback(void *data, t_floatarg state);
 };
 
 #endif	// for header file
