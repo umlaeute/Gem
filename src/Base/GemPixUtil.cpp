@@ -37,6 +37,7 @@ GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
     to->data    = data;
     to->pdata   = pdata;
     to->datasize= datasize;
+    to->upsidedown=upsidedown;
     to->notowned= true;
 }
 GEM_EXTERN void imageStruct::info() {

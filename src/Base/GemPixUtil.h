@@ -86,11 +86,16 @@ struct GEM_EXTERN imageStruct
   imageStruct() : xsize (0),ysize(0),csize(0),
 #ifdef GL_UNSIGNED_SHORT_8_8_REV_APPLE
     // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
-    type(GL_UNSIGNED_SHORT_8_8_REV_APPLE), format(GL_YCBCR_422_GEM),
+       type(GL_UNSIGNED_SHORT_8_8_REV_APPLE), format(GL_YCBCR_422_GEM),
 #else
-    type(GL_UNSIGNED_BYTE), format(GL_RGBA),
+       type(GL_UNSIGNED_BYTE), format(GL_RGBA),
 #endif
-    notowned(0),data(0),pdata(0),datasize(0)
+       notowned(0),data(0),pdata(0),datasize(0),
+#ifdef __APPLE__
+       upsidedown(1)
+#else
+       upsidedown(0)
+#endif
 {}
 
   ~imageStruct() { clear(); }
@@ -128,15 +133,15 @@ struct GEM_EXTERN imageStruct
     xsize = ysize = csize = 0;
     datasize=0;
   }
-  
-  GLint             xsize;
+
 
   //////////
-  // rows
+  // dimensions of the image
+  GLint             xsize;
   GLint   	    ysize;
 
   //////////
-  // color (LUMINANCE = 1, RGBA = 4)
+  // (average) width of 1 pixel (LUMINANCE = 1, RGBA = 4, YUV = 2)
   GLint   	    csize;
 
   //////////
@@ -144,15 +149,17 @@ struct GEM_EXTERN imageStruct
   GLenum          type;
 
   //////////
-  // the format - either GL_RGBA, GL_BGRA_EXT, or GL_LUMINANCE
+  // the format - either GL_RGBA, GL_LUMINANCE
   // or GL_YCBCR_422_GEM (which is on mac-computers GL_YCBCR_422_APPLE)
   GLenum          format;
+
+  //////////
+  // true if the image is flipped horizontally
+  GLboolean       upsidedown;
   
   //////////
-  // is this owned by us (?)
+  // is this owned by us (? what about underscores ?)
   int notowned;
-  //////////
-  // the actual image data
   
   //////////
   // gets a pixel
