@@ -61,6 +61,26 @@ void pix_threshold :: processRGBAImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_threshold :: processYUVImage(imageStruct &image)
+{
+    int datasize = (image.xsize/2) * image.ysize;
+
+    unsigned char *base = image.data;
+
+    while(datasize--)
+    {
+		//if (base[0] < m_thresh[1]) base[0] = 0; //u
+		if (base[1] < m_Y) base[1] = 0;//y1
+		//if (base[2] < m_thresh[2]) base[2] = 0;//v
+		if (base[3] < m_Y) base[3] = 0;//y2
+		base += 4;
+    }    
+}
+
+/////////////////////////////////////////////////////////
 // processGrayImage
 //
 /////////////////////////////////////////////////////////
@@ -97,7 +117,7 @@ void pix_threshold :: vecThreshMess(int argc, t_atom *argv)
     m_thresh[chRed] = CLAMP(atom_getfloat(&argv[0]) * 255);
     m_thresh[chGreen] = CLAMP(atom_getfloat(&argv[1]) * 255);
     m_thresh[chBlue] = CLAMP(atom_getfloat(&argv[2]) * 255);
-
+    m_Y = CLAMP(atom_getfloat(&argv[0]) * 255);
     setPixModified();
 }
 
@@ -107,7 +127,7 @@ void pix_threshold :: vecThreshMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_threshold :: floatThreshMess(float thresh)
 {
-    m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = CLAMP(thresh * 255);
+    m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = m_Y = CLAMP(thresh * 255);
     // assumption that the alpha threshold should be zero
     m_thresh[chAlpha] = 0;
     setPixModified();
