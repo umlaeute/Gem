@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="gem" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
 CFG=gem - Win32 Release
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "gem.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "gem.mak" CFG="gem - Win32 Release"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "gem - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gem - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gem - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gem - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G5 /W3 /O2 /Ob2 /I "../../src" /I "../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/td" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# ADD CPP /nologo /G5 /W3 /O2 /Ob2 /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
 # SUBTRACT CPP /Fr /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib opengl32.lib glu32.lib vfw32.lib ..\..\bin\pd.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\td\td.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib /nologo /subsystem:windows /dll /profile /machine:I386 /out:"../gem.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib opengl32.lib glu32.lib vfw32.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib ../../bin/pd.lib /nologo /subsystem:windows /dll /profile /machine:I386 /out:"../gem.dll"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ELSEIF  "$(CFG)" == "gem - Win32 Debug"
@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /ML /W3 /Zi /Od /Ob2 /I "../../pd/src" /I "../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# ADD CPP /nologo /ML /W3 /Zi /Od /Ob2 /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
 # SUBTRACT CPP /X /Fr /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib opengl32.lib glu32.lib vfw32.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib D:\pd\bin\pd.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../gem.dll"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib opengl32.lib glu32.lib vfw32.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib ../../bin/pd.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../gem.dll"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ENDIF 
@@ -94,6 +94,10 @@ LINK32=link.exe
 # Begin Group "Base"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Base\config.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\Base\CPPExtern.cpp
@@ -145,6 +149,14 @@ SOURCE=.\Base\GemGluObj.cpp
 # Begin Source File
 
 SOURCE=.\Base\GemGluObj.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Base\GemGLUtil.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Base\GemGLUtil.h
 # End Source File
 # Begin Source File
 
@@ -320,6 +332,14 @@ SOURCE=.\Geos\cube.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Geos\cuboid.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\cuboid.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Geos\curve.cpp
 # End Source File
 # Begin Source File
@@ -368,6 +388,14 @@ SOURCE=.\Geos\multimodel.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Geos\newWave.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\newWave.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Geos\polygon.cpp
 # End Source File
 # Begin Source File
@@ -389,6 +417,34 @@ SOURCE=.\Geos\rectangle.cpp
 # Begin Source File
 
 SOURCE=.\Geos\rectangle.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\ripple.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\ripple.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\rubber.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\rubber.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\setup.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\slideSquares.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\slideSquares.h
 # End Source File
 # Begin Source File
 
@@ -457,6 +513,10 @@ SOURCE=.\Nongeos\light.cpp
 # Begin Source File
 
 SOURCE=.\Nongeos\light.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Nongeos\setup.h
 # End Source File
 # Begin Source File
 
@@ -576,6 +636,14 @@ SOURCE=.\Manips\ortho.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Manips\polygon_smooth.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\polygon_smooth.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Manips\rotate.cpp
 # End Source File
 # Begin Source File
@@ -613,6 +681,10 @@ SOURCE=.\Manips\separator.cpp
 # Begin Source File
 
 SOURCE=.\Manips\separator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\setup.h
 # End Source File
 # Begin Source File
 
@@ -730,6 +802,10 @@ SOURCE=.\Controls\render_trigger.cpp
 
 SOURCE=.\Controls\render_trigger.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\Controls\setup.h
+# End Source File
 # End Group
 # Begin Group "Pixes"
 
@@ -835,19 +911,19 @@ SOURCE=.\Pixes\pix_flip.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Pixes\pix_fx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Pixes\pix_fx.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Pixes\pix_gain.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Pixes\pix_gain.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_grey.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_grey.h
 # End Source File
 # Begin Source File
 
@@ -859,11 +935,27 @@ SOURCE=.\Pixes\pix_hsv2rgb.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_info.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_info.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_invert.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Pixes\pix_invert.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_mix.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_mix.h
 # End Source File
 # Begin Source File
 
@@ -920,6 +1012,14 @@ SOURCE=.\Pixes\pix_threshold.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_threshold.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_yuv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_yuv.h
 # End Source File
 # Begin Source File
 
@@ -1215,37 +1315,57 @@ SOURCE=.\Pixes\pix_videoNT.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\TV\tv_biquad.cpp
+SOURCE=.\Pixes\pix_biquad.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TV\tv_biquad.h
+SOURCE=.\Pixes\pix_biquad.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\TV\tv_movement.cpp
+SOURCE=.\Pixes\pix_blur.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TV\tv_movement.h
+SOURCE=.\Pixes\pix_blur.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\TV\tv_rtx.cpp
+SOURCE=.\Pixes\pix_delay.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TV\tv_rtx.h
+SOURCE=.\Pixes\pix_delay.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\TV\tv_test.cpp
+SOURCE=.\Pixes\pix_movement.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TV\tv_test.h
+SOURCE=.\Pixes\pix_movement.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_rtx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_rtx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_tIIR.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_tIIR.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=.\Pixes\setup.h
+# End Source File
 # End Group
 # Begin Group "Particles"
 
@@ -1421,6 +1541,2446 @@ SOURCE=.\MarkEx\tripleLine.cpp
 # Begin Source File
 
 SOURCE=.\MarkEx\vector.cpp
+# End Source File
+# End Group
+# Begin Group "Yuv"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\yuv\setup.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_add.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_add.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_adjust.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_adjust.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_average.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_average.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_bandw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_bandw.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_bitshift.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_bitshift.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_bitwise.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_bitwise.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_blank.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_blank.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_blur.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_blur.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_chroma_key.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_chroma_key.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_clamp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_clamp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_compare.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_compare.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_difference.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_difference.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_dual.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_dual.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_emboss.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_emboss.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_film.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_film.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_filmDarwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_filmDarwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_gain.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_gain.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_invert.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_invert.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_luma_key.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_luma_key.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_mask.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_mask.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_mix.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_mix.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_movie.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_movie.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_mult.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_mult.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_pixel_average.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_pixel_average.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_pixel_data.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_pixel_data.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_pixel_isolate.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_pixel_isolate.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_pixel_replace.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_pixel_replace.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_posterize.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_posterize.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_set.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_set.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_split.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_split.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_subtract.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_subtract.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_swap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_swap.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_video.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_video.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_videoDarwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\yuv\yuv_videoDarwin.h
+# End Source File
+# End Group
+# Begin Group "OpenGL"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\openGL\GEMglAccum.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglAccum.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglAlphaFunc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglAlphaFunc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglAreTexturesResident.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglAreTexturesResident.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglArrayElement.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglArrayElement.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBegin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBegin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBindTexture.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBindTexture.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBitmap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBitmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBlendFunc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBlendFunc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClear.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClear.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearAccum.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearAccum.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearColor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearColor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearDepth.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearDepth.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearIndex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearIndex.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearStencil.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClearStencil.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3b.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3b.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3bv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3bv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3ub.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3ub.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3ubv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3ubv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3ui.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3ui.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3uiv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3uiv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3us.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3us.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3usv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor3usv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4b.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4b.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4bv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4bv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4ub.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4ub.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4ubv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4ubv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4ui.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4ui.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4uiv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4uiv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4us.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4us.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4usv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColor4usv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColorMask.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColorMask.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColorMaterial.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglColorMaterial.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyPixels.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyPixels.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyTexImage1D.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyTexImage1D.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyTexImage2D.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyTexImage2D.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyTexSubImage1D.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyTexSubImage1D.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyTexSubImage2D.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCopyTexSubImage2D.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCullFace.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCullFace.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDeleteTextures.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDeleteTextures.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDepthFunc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDepthFunc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDepthMask.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDepthMask.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDepthRange.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDepthRange.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDisable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDisable.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDisableClientState.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDisableClientState.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDrawArrays.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDrawArrays.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDrawBuffer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDrawBuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDrawElements.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglDrawElements.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEdgeFlag.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEdgeFlag.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEnable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEnable.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEnableClientState.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEnableClientState.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEnd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEnd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord1d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord1d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord1dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord1dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord1f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord1f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord1fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord1fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord2d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord2dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord2dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord2f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord2f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord2fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalCoord2fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalMesh1.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalMesh1.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalMesh2.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalMesh2.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalPoint1.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalPoint1.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalPoint2.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEvalPoint2.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFeedbackBuffer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFeedbackBuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFinish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFinish.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFlush.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFlush.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFogf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFogf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFogfv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFogfv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFogi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFogi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFogiv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFogiv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFrontFace.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFrontFace.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFrustum.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglFrustum.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGenLists.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGenLists.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGenTextures.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGenTextures.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetError.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetError.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetMapdv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetMapdv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetMapfv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetMapfv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetMapiv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetMapiv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetPointerv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetPointerv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetString.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetString.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglHint.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglHint.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexdv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexdv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexfv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexfv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexiv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexiv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexMask.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexMask.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexs.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexs.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexsv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexsv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexub.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexub.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexubv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIndexubv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglInitNames.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglInitNames.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIsEnabled.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIsEnabled.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIsList.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIsList.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIsTexture.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglIsTexture.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLightf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLightf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLighti.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLighti.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLightModelf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLightModelf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLightModeli.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLightModeli.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLineStipple.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLineStipple.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLineWidth.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLineWidth.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadIdentity.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadIdentity.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadName.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadName.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLogicOp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLogicOp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMap1d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMap1d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMap1f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMap1f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMap2d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMap2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMap2f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMap2f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMapGrid1d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMapGrid1d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMapGrid1f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMapGrid1f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMapGrid2d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMapGrid2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMapGrid2f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMapGrid2f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMaterialf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMaterialf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMateriali.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMateriali.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMatrixMode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMatrixMode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3b.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3b.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3bv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3bv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNormal3sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglOrtho.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglOrtho.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPassThrough.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPassThrough.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelStoref.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelStoref.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelStorei.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelStorei.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelTransferf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelTransferf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelTransferi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelTransferi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelZoom.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPixelZoom.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPointSize.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPointSize.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPolygonMode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPolygonMode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPolygonOffset.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPolygonOffset.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPopAttrib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPopAttrib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPopClientAttrib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPopClientAttrib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPopMatrix.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPopMatrix.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPopName.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPopName.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPrioritizeTextures.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPrioritizeTextures.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPushAttrib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPushAttrib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPushClientAttrib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPushClientAttrib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPushMatrix.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPushMatrix.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPushName.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglPushName.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos2sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos3sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRasterPos4sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRectd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRectd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRectf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRectf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRecti.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRecti.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRects.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRects.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRenderMode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRenderMode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRotated.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRotated.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRotatef.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglRotatef.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglScaled.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglScaled.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglScalef.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglScalef.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglScissor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglScissor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglSelectBuffer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglSelectBuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglShadeModel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglShadeModel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglStencilFunc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglStencilFunc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglStencilMask.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglStencilMask.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglStencilOp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglStencilOp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord1sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord2sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord3sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexCoord4sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexEnvf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexEnvf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexEnvi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexEnvi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexGend.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexGend.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexGenf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexGenf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexGeni.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexGeni.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexParameterf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexParameterf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexParameteri.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexParameteri.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexSubImage1D.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexSubImage1D.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexSubImage2D.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTexSubImage2D.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTranslated.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTranslated.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTranslatef.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglTranslatef.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex2sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex3sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4dv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4dv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4f.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4f.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4fv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4fv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4i.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4i.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4iv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4iv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4s.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4s.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4sv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglVertex4sv.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglViewport.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglViewport.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GLdefine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GLdefine.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\setup.h
 # End Source File
 # End Group
 # End Target
