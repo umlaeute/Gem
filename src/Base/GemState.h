@@ -16,6 +16,16 @@ LOG
 #define INCLUDE_GEMSTATE_H_
 
 #include "Base/GemExportDef.h"
+#ifdef __APPLE__
+# include "OpenGL/gl.h"
+#else
+// I hate Microsoft...I shouldn't have to do this!
+# ifdef _WINDOWS
+#  include <windows.h>
+# endif
+
+# include "GL/gl.h"
+#endif
 
 struct pixBlock;
 class TexCoord;
@@ -111,6 +121,22 @@ class GEM_EXTERN GemState
 	//		and right renderings
 	float				tickTime;
 
+        //vertex array data
+        GLfloat				*VertexArray;
+        int				VertexArraySize;
+        int				VertexArrayStride;
+
+        GLfloat				*ColorArray;
+        int				HaveColorArray;
+
+        GLfloat				*NormalArray;
+        int				HaveNormalArray;
+
+        GLfloat				*TexCoordArray;
+        int				HaveTexCoordArray;
+
+        GLenum				drawType;
+        
         //////////
         // Constructor
     	GemState();
