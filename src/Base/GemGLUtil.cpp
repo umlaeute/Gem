@@ -19,7 +19,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#define _GL_UNDEFINED -10
+#define _GL_UNDEFINED -1
 
 GEM_EXTERN int getGLbitfield(int argc, t_atom *argv){
   int accum=0;  
