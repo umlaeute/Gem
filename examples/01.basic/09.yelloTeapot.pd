@@ -1,4 +1,4 @@
-#N canvas 52 158 635 502 12;
+#N canvas 56 158 635 502 12;
 #X obj 27 337 gemwin;
 #X msg 59 120 create;
 #X obj 350 226 gemhead;
@@ -30,6 +30,8 @@
 #X connect 2 0 4 0;
 #X connect 3 0 4 0;
 #X restore 76 306 pd Gem.init;
+#X msg 456 365 draw line;
+#X msg 453 395 draw fill;
 #X connect 1 0 0 0;
 #X connect 2 0 7 0;
 #X connect 3 0 0 0;
@@ -43,3 +45,5 @@
 #X connect 14 0 15 0;
 #X connect 16 0 7 1;
 #X connect 19 0 0 0;
+#X connect 20 0 12 0;
+#X connect 21 0 12 0;
