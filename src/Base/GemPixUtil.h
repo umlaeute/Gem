@@ -173,10 +173,10 @@ GEM_EXTERN extern void refreshImage(imageStruct *to, imageStruct *from);
 // These should be used to reference the various color channels
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef MACOSX				//tigital
-const int chRed		= 2;
-const int chGreen	= 1;
-const int chBlue	= 0;
-const int chAlpha	= 3;
+const int chRed		= 1;
+const int chGreen	= 2;
+const int chBlue	= 3;
+const int chAlpha	= 0;
 #else
 const int chRed		= 0;
 const int chGreen	= 1;
