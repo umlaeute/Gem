@@ -64,8 +64,14 @@ protected:
 	// Do the processing
 	virtual void 	processRGBAImage(imageStruct &image);
 	virtual void 	processYUVImage(imageStruct &image);
-        virtual void 	processYUVAltivec(imageStruct &image);
 	virtual void 	processGrayImage(imageStruct &image);
+#ifdef __MMX__
+        virtual void 	processGrayMMX(imageStruct &image);
+#endif
+
+#ifdef __VEC__
+        virtual void 	processYUVAltivec(imageStruct &image);
+#endif
 	
 	//////////
 	// the last image (grey-scale)
