@@ -42,7 +42,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_sig2pix :: pix_sig2pix(t_floatarg width=0, t_floatarg height=0)
+pix_sig2pix :: pix_sig2pix(t_floatarg width=0, t_floatarg height=0) : m_reqFormat(GL_RGBA)
 {
 
   m_pixBlock.image = m_imageStruct;
@@ -76,15 +76,11 @@ void pix_sig2pix :: dimenMess(int width, int height) {
   if (width  == 0) width = 8;
   if (height == 0) height = 8;
 
-
-
   cleanImage();
   
   m_pixBlock.image.xsize =(GLint) width;
   m_pixBlock.image.ysize = (GLint) height;
-  m_pixBlock.image.csize = 4;
-  m_pixBlock.image.format = GL_RGBA;
-  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
+  m_pixBlock.image.setCsizeByFormat(m_reqFormat);
 
   m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
   m_pixBlock.image.reallocate();

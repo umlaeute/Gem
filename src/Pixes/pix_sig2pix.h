@@ -96,6 +96,10 @@ class GEM_EXTERN pix_sig2pix : public GemBase
 
   int           m_width, m_height;
 
+  //////////////
+  // which colorspace do we want ? currently only GL_RGBA
+  GLint         m_reqFormat;
+
  private:
     	
   //////////
