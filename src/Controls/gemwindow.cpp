@@ -114,6 +114,12 @@ gemwindow :: ~gemwindow()
   destroyMess();
 }
 
+
+void gemwindow :: infoMess()
+{
+  GemOutput::infoMess();
+}
+
 /////////////////////////////////////////////////////////
 // createMess
 //
@@ -137,7 +143,8 @@ void gemwindow::dispatchGemWindowMessages()
     }
   clock_delay(m_windowClock, m_windowDelTime);
 }
-#elif unix 
+#elif unix
+// i don't like that there is so much OS-specific code in here! (jmz)
 void gemwindow::dispatchGemWindowMessages()
 {
   WindowInfo win = m_gfxInfo;
@@ -146,37 +153,66 @@ void gemwindow::dispatchGemWindowMessages()
   XButtonEvent* eb = (XButtonEvent*)&event; 
   XKeyEvent* kb  = (XKeyEvent*)&event; 
   XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
+  XConfigureEvent *cfg=(XConfigureEvent*)&event;
 
+  // how do we get focus changes ?
   while (XCheckWindowEvent(win.dpy,win.win,
-			   ResizeRedirectMask | 
-			   KeyPressMask | KeyReleaseMask |
-			   PointerMotionMask | 
-			   ButtonMotionMask |
-			   ButtonPressMask | 
-			   ButtonReleaseMask,
+			   EnterWindowMask | LeaveWindowMask |
+			   StructureNotifyMask | // gets the offset
+			   ResizeRedirectMask |  // gets resizing events
+			   KeyPressMask | KeyReleaseMask | // gets keyboard
+			   PointerMotionMask | // gets the mouse-pointer
+			   ButtonMotionMask | // gets drag-events
+			   ButtonPressMask | ButtonReleaseMask, // gets the mouse-button
 			   &event))
     {
+      t_atom ap[3];
+      int state=0;
       switch (event.type)
 	{
 	case ButtonPress: 
-	  triggerButtonEvent(eb->button-1, 1, eb->x, eb->y); 
-	  break; 
-	case ButtonRelease: 
-	  triggerButtonEvent(eb->button-1, 0, eb->x, eb->y); 
-	  break; 
-	case MotionNotify: 
-	  triggerMotionEvent(eb->x, eb->y, m_width, m_height); 
-	  break; 
-	case KeyPress:
-	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
+	  state=1;
+	case ButtonRelease:
+	  SETSYMBOL(ap, gensym("btn"));
+	  SETFLOAT(ap+1, eb->button-1);
+	  SETFLOAT(ap+2, state);
+	  outlet_anything(m_outlet, gensym("mouse"), 3, ap);
 	  break;
-	case KeyRelease:
-	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
-	  break;
-	case ResizeRequest:
-	  XResizeWindow(win.dpy, win.win, res->width, res->height);
-  	  resize(res->width, res->height);
 
+	case MotionNotify:
+	  SETSYMBOL(ap, gensym("pos"));
+	  SETFLOAT(ap+1, eb->x);
+	  SETFLOAT(ap+2, eb->y);
+	  outlet_anything(m_outlet, gensym("mouse"), 3, ap);
+	  break;
+
+	case EnterNotify: 
+	  state=1;
+	case LeaveNotify:
+	  SETFLOAT(ap, state);
+	  outlet_anything(m_outlet, gensym("focus"), 1, ap);
+	  break;
+
+	case KeyPress:
+	  state=1;
+	case KeyRelease:
+	  SETSYMBOL(ap, gensym(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0))));
+	  SETFLOAT(ap+1, kb->keycode);
+	  SETFLOAT(ap+2, state);
+	  outlet_anything(m_outlet, gensym("keyboard"), 3, ap);
+	  break;
+
+	case ResizeRequest:
+	  //XResizeWindow(win.dpy, win.win, res->width, res->height); /* this might loop! */
+  	  resize(res->width, res->height);
+	  SETFLOAT(ap, res->width);
+	  SETFLOAT(ap+1, res->height);
+	  outlet_anything(m_outlet, gensym("dimen"), 2, ap);
+	  break;
+	case ConfigureNotify:
+	  SETFLOAT(ap+0, cfg->x);
+	  SETFLOAT(ap+1, cfg->y);
+	  outlet_anything(m_outlet, gensym("offset"), 2, ap);
 	  break;
 	default:
 	  break; 
@@ -205,7 +241,6 @@ pascal OSStatus dispatchGemWindowMessages()
 void gemwindow::resize(int xSize, int ySize)
 {
   if (ySize==0)ySize=1;
-post("%X resize %d %d", this, xSize, ySize);
   float xDivy = (float)xSize / (float)ySize;
   m_height = ySize;
   m_width = xSize;
@@ -448,7 +483,6 @@ void gemwindow :: destroyMess()
 
   clock_unset(m_windowClock);
   m_windowClock = NULL;
-
   removeResizeCallback(resizeCallback, this->x_obj);
 
   glFlush();
