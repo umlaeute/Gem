@@ -59,7 +59,7 @@ class GEM_EXTERN video {
   //////////
   // Start up the video device (called on startRendering)
   // [out] int - returns 0 if bad
-  virtual int	    	startTransfer();
+  virtual int	    	startTransfer(int format = 0);
   //////////
   // Stop the video device (called on stopRendering)
   // [out] int - returns 0 if bad
@@ -72,11 +72,12 @@ class GEM_EXTERN video {
   //////////
   // Set the video dimensions
   virtual int	    	setDimen(int x, int y, int leftmargin=0, int rightmargin=0,
-				   int topmargin=0, int bottommargin=0){}
-  virtual int	    	setChannel(int c){}
-  virtual int	    	setNorm(char*n){}
-  virtual int	    	setDevice(int d){}
-  virtual int	    	setFrequency(float f){}
+				 int topmargin=0, int bottommargin=0);
+  virtual int	    	setOffset(int x, int y);
+  virtual int	    	setSwap(int state);
+  virtual int	    	setChannel(int c, float f=0);
+  virtual int	    	setNorm(char*n);
+  virtual int	    	setDevice(int d);
   
  protected:
   bool m_capturing;
