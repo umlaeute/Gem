@@ -66,17 +66,19 @@ void part_draw :: render(GemState *state)
 // typeMess
 //
 /////////////////////////////////////////////////////////
-void part_draw :: typeMess(t_symbol *type)
+void part_draw :: typeMess(int ac,t_atom* av)
 {
-    if (!strcmp(type->s_name, "line")) 
-	    m_drawType = GL_LINES;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else
+
+  m_drawType = (int)atom_getfloatarg(0,ac,av);
+
+  post("type set to %d",m_drawType);
+
+  if (0)
     {
 	    error("GEM: part_draw: draw style");
     }
 }
+
 
 /////////////////////////////////////////////////////////
 // static member functions
@@ -85,10 +87,11 @@ void part_draw :: typeMess(t_symbol *type)
 void part_draw :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&part_draw::typeMessCallback,
-    	    gensym("draw"), A_SYMBOL, A_NULL);
+    	    gensym("draw"), A_GIMME, A_NULL);
 }
-void part_draw :: typeMessCallback(void *data, t_symbol *type)
+void part_draw :: typeMessCallback(void *data,  t_symbol *s, int ac,t_atom* av)
 {
-    GetMyClass(data)->typeMess(type);
+    GetMyClass(data)->typeMess(ac,av);
 }
+
 

@@ -49,7 +49,7 @@ class GEM_EXTERN part_draw : public GemBase
 
     	//////////
     	// How the object should be drawn
-		void			typeMess(t_symbol *type);
+		void			typeMess(int,t_atom*);
     	
 		//////////
 		int				m_drawType;
@@ -58,7 +58,7 @@ class GEM_EXTERN part_draw : public GemBase
 
 		//////////
 		// static member functions
-		static void 	typeMessCallback(void *data, t_symbol *type);
+		static void 	typeMessCallback(void *data,  t_symbol *s,int,t_atom *);
 };
 
 #endif	// for header file
