@@ -52,7 +52,7 @@ pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
 /////////////////////////////////////////////////////////
 pix_buffer :: ~pix_buffer()
 {
-  delete [] m_buffer;
+  if(m_buffer)delete [] m_buffer;
   pd_unbind(&this->x_obj->ob_pd, m_bindname);
 }
 /////////////////////////////////////////////////////////

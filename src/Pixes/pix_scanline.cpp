@@ -25,6 +25,7 @@ inletScanline = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("in
 
 m_interlace = 0;
 m_mode = 0;
+ saved=NULL;
 
 }
 
@@ -34,7 +35,7 @@ m_mode = 0;
 /////////////////////////////////////////////////////////
 pix_scanline :: ~pix_scanline()
 {
-delete saved;
+if(saved)delete saved;
 }
 
 /////////////////////////////////////////////////////////

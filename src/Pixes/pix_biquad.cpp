@@ -77,29 +77,14 @@ void pix_biquad :: create_buffer(imageStruct image)
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
   prev.csize = image.csize;
+  prev.reallocate();
+  prev.setBlack();
   last.xsize = image.xsize;
   last.ysize = image.ysize;
   last.csize = image.csize;
-  dataSize = prev.xsize * prev.ysize * prev.csize * sizeof(unsigned char);
- 
-  prev.data = new unsigned char[dataSize];
-  memset(prev.data, 0, dataSize);
-  last.data = new unsigned char[dataSize];
-  memset(last.data, 0, dataSize);
+  last.reallocate();
+  last.setBlack();
 }
-
-/////////////////////////////////////////////////////////
-// DeleteBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_biquad :: delete_buffer()
-{
-  delete [] prev.data;
-  delete [] last.data;
-  prev.data = NULL;
-  last.data = NULL;
-}
-
 
 /////////////////////////////////////////////////////////
 // ClearBuffer
@@ -107,8 +92,8 @@ void pix_biquad :: delete_buffer()
 /////////////////////////////////////////////////////////
 void pix_biquad :: clear_buffer()
 {
-  memset(last.data, 0, last.xsize * last.ysize * last.csize * sizeof(unsigned char));
-  memset(prev.data, 0, prev.xsize * prev.ysize * prev.csize * sizeof(unsigned char));
+  last.setBlack();
+  prev.setBlack();
 }
 
 /////////////////////////////////////////////////////////
@@ -118,30 +103,25 @@ void pix_biquad :: clear_buffer()
 void pix_biquad :: processImage(imageStruct &image)
 {
   // assume that the pix_size does not change !
-  if (prev.xsize != image.xsize || prev.ysize != image.ysize) {
-    long dataSize;
-    delete [] prev.data;
-    delete [] last.data;
-
-    prev.xsize = image.xsize;
-    prev.ysize = image.ysize;
-    prev.csize = image.csize;
-    last.xsize = image.xsize;
-    last.ysize = image.ysize;
-    last.csize = image.csize;
-
-    dataSize = prev.xsize * prev.ysize * prev.csize * sizeof(unsigned char);
-    prev.data = new unsigned char[dataSize];
-    memset(prev.data, 0, dataSize);
-    last.data = new unsigned char[dataSize];
-    memset(last.data, 0, dataSize);
-  }
+  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=last.ysize);
+  prev.xsize = image.xsize;
+  prev.ysize = image.ysize;
+  prev.csize = image.csize;
+  prev.reallocate();
+  prev.setBlack();
+  last.xsize = image.xsize;
+  last.ysize = image.ysize;
+  last.csize = image.csize;
+  last.reallocate();
 
   if (set) { 
     memcpy(prev.data, image.data, image.ysize * image.xsize * image.csize);
     memcpy(last.data, image.data, image.ysize * image.xsize * image.csize);
     set = false;
-  } 
+  } else if (do_blank){
+    prev.setBlack();
+    last.setBlack();
+  }
 
   int pixsize = image.ysize * image.xsize * image.csize;
 

@@ -210,7 +210,7 @@ void pix_aging :: scratchMess(int scratchlines)
   if (scratchlines>0){
     m_scratching=1;
     m_scratchlines=scratchlines;
-    delete [] m_scratch;
+    if(m_scratch)delete [] m_scratch;
     m_scratch = new t_scratch[m_scratchlines];
   } else m_scratching=0;
 }

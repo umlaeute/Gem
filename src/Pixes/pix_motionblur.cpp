@@ -44,7 +44,7 @@ src += 2;
 /////////////////////////////////////////////////////////
 pix_motionblur :: ~pix_motionblur()
 {
-delete saved;
+if(saved)delete saved;
 }
 
 /////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ if (m_motionblurH != image.ysize || m_motionblurW != image.xsize || m_motionblur
     m_motionblurW = image.xsize;
     m_motionblurBpp = image.csize;
     m_motionblurSize = m_motionblurH * m_motionblurW * m_motionblurBpp;
-    delete saved;
+    if(saved)delete saved;
     saved = new int [m_motionblurSize];
 }
 
@@ -139,7 +139,7 @@ m_motionblurH = image.ysize;
 m_motionblurW = image.xsize;
 m_motionblurBpp = image.csize;
 m_motionblurSize = m_motionblurH * m_motionblurW * m_motionblurBpp;
-delete saved;
+if(saved)delete saved;
 saved = new signed int [m_motionblurSize];
 
 }

@@ -41,7 +41,7 @@ pix_coordinate :: pix_coordinate()
 /////////////////////////////////////////////////////////
 pix_coordinate :: ~pix_coordinate()
 {
-    delete [] m_coords;
+    if(m_coords)delete [] m_coords;
 }
 
 /////////////////////////////////////////////////////////
@@ -80,14 +80,13 @@ void pix_coordinate :: coordsMess(int argc, t_atom *argv)
     
     if (numVals != m_numCoords)
     {
-    	delete [] m_coords;
-    	m_numCoords = numVals;
-    	if (m_numCoords == 0)
-    	{
-    	    m_coords = NULL;
-    	    return;
-    	}
-    	m_coords = new TexCoord[m_numCoords];
+      if(m_coords)delete [] m_coords;
+      m_numCoords = numVals;
+      if (m_numCoords == 0)    	{
+	m_coords = NULL;
+	return;
+      }
+      m_coords = new TexCoord[m_numCoords];
     }
     
     for (int i = 0; i < numVals; i++)

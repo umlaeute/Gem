@@ -120,7 +120,7 @@ void pix_rtx :: processImage(imageStruct &image)
 #ifdef IMAGE_CLASS		//tigital
     buffer.reallocate( dataSize );
 #else
-    delete [] buffer.data;
+    if (buffer.data)delete [] buffer.data;
     buffer.data = new unsigned char[dataSize];
 #endif
     buffer.xsize = image.xsize;

@@ -50,7 +50,7 @@ src += 2;
 /////////////////////////////////////////////////////////
 pix_background :: ~pix_background()
 {
-delete saved;
+if(saved)delete saved;
 }
 
 /////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ m_blurH = image.ysize;
 m_blurW = image.xsize;
 m_blurBpp = image.csize;
 m_blurSize = m_blurH * m_blurW * m_blurBpp;
-delete saved;
+if(saved)delete saved;
 saved = new unsigned char [m_blurSize];
 
 }
@@ -126,7 +126,7 @@ m_blurH = image.ysize;
 m_blurW = image.xsize;
 m_blurBpp = image.csize;
 m_blurSize = m_blurH * m_blurW * m_blurBpp;
-delete saved;
+if(saved)delete saved;
 saved = new unsigned char [m_blurSize];
 
 }
@@ -191,7 +191,7 @@ int pixsize = image.xsize * image.ysize * image.csize;
         m_blurW = image.xsize;
         m_blurBpp = image.csize;
         m_blurSize = m_blurH * m_blurW * m_blurBpp;
-        delete saved;
+        if(saved)delete saved;
         saved = new unsigned char [m_blurSize];
 
     }

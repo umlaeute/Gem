@@ -91,7 +91,7 @@ void pix_dump :: processImage(imageStruct &image)
 
   if ( (m_xsize != x) || (m_ysize != y) || (m_csize != c) ) {
     // resize the image buffer
-    delete [] m_buffer;
+    if(m_buffer)delete [] m_buffer;
     m_bufsize = m_xsize * m_ysize * m_csize;
     m_buffer = new t_atom[m_bufsize];
 
@@ -123,7 +123,7 @@ void pix_dump :: processYUVImage(imageStruct &image)
 
   if ( (m_xsize != x) || (m_ysize != y) || (m_csize != c) ) {
     // resize the image buffer
-    delete [] m_buffer;
+    if(m_buffer)delete [] m_buffer;
     m_bufsize = m_xsize * m_ysize * m_csize;
     m_buffer = new t_atom[m_bufsize];
 

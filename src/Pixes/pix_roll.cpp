@@ -43,7 +43,7 @@ m_axis = 0;
 /////////////////////////////////////////////////////////
 pix_roll :: ~pix_roll()
 {
-delete saved;
+  if(saved)delete saved;
 }
 
 /////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize
     m_blurW = image.xsize;
     m_blurBpp = image.csize;
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
-    delete saved;
+    if(saved)delete saved;
     saved = new unsigned char [m_blurSize];
 }    
 pixsize = image.ysize * image.xsize * image.csize;
@@ -149,7 +149,7 @@ if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize
     m_blurW = image.xsize;
     m_blurBpp = image.csize;
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
-    delete saved;
+    if(saved)delete saved;
     saved = new unsigned char [m_blurSize];
 }    
 pixsize = image.ysize * image.xsize * image.csize;

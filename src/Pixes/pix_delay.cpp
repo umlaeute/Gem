@@ -47,7 +47,7 @@ pix_delay :: ~pix_delay()
 #ifdef IMAGE_CLASS
   myImage.clear();
 #else
-  delete [] myImage.data;
+  if(myImage.data)delete [] myImage.data;
   myImage.data = NULL;
 #endif
 }
@@ -79,7 +79,7 @@ void pix_delay :: processImage(imageStruct &image)
     myImage.clear();
     myImage.allocate(dataSize*m_maxframes);
 #else
-    delete [] myImage.data;
+    if(myImage.data)delete [] myImage.data;
     myImage.data = new unsigned char[m_maxframes * dataSize];
 #endif
 

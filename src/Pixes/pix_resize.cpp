@@ -72,7 +72,7 @@ void pix_resize :: processImage(imageStruct &image)
 	{
 	  post("gluError: %d", gluError);
 	  post("unable to resize image");
-	  delete [] resizedData;
+	  if(resizedData)delete [] resizedData;resizedData=NULL;
 	  return;
 	}
       image.clear();
