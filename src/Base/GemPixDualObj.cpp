@@ -66,7 +66,7 @@ void GemPixDualObj :: processImage(imageStruct &image)
 	if (image.csize == 1)
 	{
 		if (m_pixRight->image.csize == 1)
-			processBothGray(image, m_pixRight->image);
+			processDualGray(image, m_pixRight->image);
 		else
 			processLeftGray(image, m_pixRight->image);
 	}
@@ -80,7 +80,7 @@ void GemPixDualObj :: processImage(imageStruct &image)
 	if (image.csize == 2)
 	{
 		if (m_pixRight->image.csize == 2)
-			processBothYUV(image, m_pixRight->image);
+			processDualYUV(image, m_pixRight->image);
 		else
 			processLeftYUV(image, m_pixRight->image);
 	}
@@ -94,7 +94,7 @@ void GemPixDualObj :: processImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
-// processBothGray
+// processDualGray
 //
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: processDualGray(imageStruct &, imageStruct &)
@@ -121,7 +121,7 @@ void GemPixDualObj :: processRightGray(imageStruct &, imageStruct &)
 }
 
 /////////////////////////////////////////////////////////
-// processBothYUV
+// processDualYUV
 //
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: processDualYUV(imageStruct &, imageStruct &)
