@@ -48,9 +48,11 @@ LOG
 
 #ifdef GL_YCBCR_422_APPLE
 #define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
-#endif
-#ifdef GL_CRYCBY_422_NVX
+#elifdef GL_CRYCBY_422_NVX
 #define GL_YCBCR_422_GEM GL_CRYCBY_422_NVX
+//#define GL_YCBCR_422_GEM GL_YCRYCB_422_NVX
+#elifdef GL_YCRCB_422_SGIX
+#define GL_YCBCR_422_GEM GL_YCRCB_422_SGIX
 #endif
 
 #ifndef GL_YCBCR_422_GEM
@@ -96,7 +98,8 @@ struct GEM_EXTERN imageStruct
   //////////
   // columns
   unsigned char* allocate(int size) {
-    if (pdata) delete [] pdata;
+    if (pdata&&!notowned)
+      delete [] pdata;
 #if 1
     pdata = new unsigned char[size+31];
     data = (unsigned char*) ((((unsigned int)pdata)+31)& (~31));
@@ -153,11 +156,19 @@ struct GEM_EXTERN imageStruct
   
   //////////
   // gets a pixel
+  /* X,Y are the coordinates
+   * C is the offset in the interleaved data (like chRed==0 for red)
+   * you should use chRed instead of 0 (because it might not be 0)
+   */
   inline unsigned char GetPixel(int Y, int X, int C)
   { return(data[Y * xsize * csize + X * csize + C]); }
   
   //////////
   // sets a pixel
+  /* while X and Y should be clear (coordinates), 
+   * C is the offset (like chRed==0 for red).
+   * VAL is the value to set.
+   */
   inline void SetPixel(int Y, int X, int C, unsigned char VAL)
   { data[Y * xsize * csize + X * csize + C] = VAL; }
 
@@ -168,10 +179,29 @@ struct GEM_EXTERN imageStruct
    */
   void setBlack();
   void setWhite();
+
+  /* certain formats are bound to certain csizes,
+   * it's quite annoying to have to think again and again (ok, not much thinking)
+   * so we just give the format (like GL_LUMINANCE) 
+   * and it will set the image format to this format
+   * and set and return the correct csize (like 1)
+   * if no format is given the current format is used
+   */
+  int setCsizeByFormat(int format);
+  int setCsizeByFormat();
+
   
+  /* various copy functions
+   * sometimes we want to copy the whole image (including pixel-data),
+   * but often it is enough to just copy the meta-data (without pixel-data)
+   * into a new imageStruct
+   */
   void copy2Image(imageStruct *to);
-  void refreshImage(imageStruct *to);
   void copy2ImageStruct(imageStruct *to); // copy the imageStruct (but not the actual data)
+  /* this is a sort of better copy2Image, 
+   * which only copies the imageStruct-data if it is needed
+   */
+  void refreshImage(imageStruct *to);
 
   ///////////////////////////////////////////////////////////////////////////////
   // acquiring data including colour-transformations
@@ -193,7 +223,7 @@ struct GEM_EXTERN imageStruct
   void fromBGRA   (unsigned char* orgdata);
   void fromGray   (unsigned char* orgdata);
   void fromYUV420P(unsigned char* orgdata);
-
+  void fromYUV422 (unsigned char* orgdata);
 
   unsigned char   *data;
   private:
@@ -234,12 +264,15 @@ GEM_EXTERN extern void copy2Image(imageStruct *to, imageStruct *from);
 // assumes that it only has to refresh the data
 GEM_EXTERN extern void refreshImage(imageStruct *to, imageStruct *from);
 
+GEM_EXTERN extern int getPixFormat(char*);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Color component defines
 //
 // These should be used to reference the various color channels
 ///////////////////////////////////////////////////////////////////////////////
+
+/* RGBA */
 #ifdef MACOSX				//tigital
 const int chAlpha	= 0;
 const int chRed		= 1;
@@ -252,7 +285,14 @@ const int chBlue	= 2;
 const int chAlpha	= 3;
 #endif
 
+/* Gray */
 const int chGray	= 0;
+
+/* YUV422 */
+const int chU           = 0;
+const int chY0          = 1;
+const int chV           = 2;
+const int chY1          = 3;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel access functions
