@@ -32,6 +32,12 @@
 #include "macosx_math.h"
 #endif
 
+#ifdef __linux__
+// jmz: ? i don't understand my compiler ...
+#ifndef sqrtf
+#define sqrtf sqrt
+#endif
+#endif
 class pVector
 {
 public:
