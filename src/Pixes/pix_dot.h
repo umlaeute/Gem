@@ -50,11 +50,13 @@ class GEM_EXTERN pix_dot : public GemPixObj
   // Do the processing
   virtual void 	processRGBAImage(imageStruct &image);
   virtual void 	processYUVImage( imageStruct &image );
-  virtual void	drawDot( int xx, int yy, unsigned char c, unsigned int *dest );
+  virtual void 	processGrayImage( imageStruct &image );
+  virtual void	drawDot( int xx, int yy, unsigned char c, U32 *dest );
+  virtual void	drawDotYUV( int xx, int yy, unsigned char c, U16 *dest );
+  virtual void	drawDotGray( int xx, int yy, unsigned char c, unsigned char *dest );
   virtual void  sampxy_table_init();
   virtual void  yuv_init();
-  virtual void  makePattern();
-  virtual void  makePatternYUV();
+  virtual void  makePattern(int format=GL_RGBA);
   virtual void  sizeMess(int width, int height);
   virtual void 	scaleMess( float state );
   int	sharedbuffer_init();
@@ -67,7 +69,7 @@ class GEM_EXTERN pix_dot : public GemPixObj
   //////////
   // Make dots
     
-    int m_xsize, m_ysize;
+  int m_xsize, m_ysize, m_csize;
     unsigned char *sharedbuffer;
     int sharedbuffer_length;
 
@@ -79,8 +81,8 @@ class GEM_EXTERN pix_dot : public GemPixObj
     int *sampx, *sampy;
     int state;
     t_float m_scale;
-    unsigned int *pattern;
-    unsigned int *heart_pattern;
+    U32 *pattern;
+    U32 *heart_pattern;
     int mode;
     int R2Y[256];
     int G2Y[256];
