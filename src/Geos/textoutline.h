@@ -47,19 +47,18 @@ class GEM_EXTERN textoutline : public TextBase
     	// Destructor
     	virtual ~textoutline();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-
-	//-----------------------------------
-	// GROUP:	Member variables
-	//-----------------------------------
-#ifdef GLTT
+#ifdef FTGL
+	virtual FTFont*makeFont(const char*fontname);
+#elif defined GLTT
+	virtual void    destroyFont();
 	virtual int     makeFontFromFace();
-
 	//////////
     	// The font structure
     	GLTTOutlineFont		*m_font;
+
+    	//////////
+    	// Do the rendering
+    	virtual void 	render(GemState *state);
 #endif
 };
 

@@ -16,8 +16,6 @@
 
 #include "TextBase.h"
 
-
-
 #include <stdio.h>
 #include <string.h>
 
@@ -31,70 +29,51 @@ char *TextBase::DEFAULT_FONT = "arial.ttf";
 // Constructor
 //
 /////////////////////////////////////////////////////////
+#ifdef FTGL
 TextBase :: TextBase(int argc, t_atom *argv)
   : m_valid(0), m_theString(NULL), m_theMaxStringSize(0),
-    m_fontSize(20), m_fontDepth(20), m_precision(1.f),
-  //  m_precision= 72;
-#ifdef FTGL
-    m_font(NULL),
-#endif
-#if defined GLTT || defined FTGL
-    m_face(NULL),
-#endif    
+    m_fontSize(20), m_fontDepth(20), m_precision(1.f), m_font(NULL),
     m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY)
 {
   static bool first_time=true;
   if (first_time){
-#ifdef GLTT
-    post("Gem has been compiled with GLTT !");
-#elif defined FTGL
     post("Gem has been compiled with FTGL !");
-#else
-    post("Gem has been compiled without FONT-support !");
-#endif
     first_time=false;
   }
-
   // at least allocate something
   m_theString = new char[16];
   m_theMaxStringSize = 16;
-  strcpy(m_theString, "gem");
-#ifndef MACOSX
-  // do we have a text message?
-  if (argc)
-    textMess(argc, argv);
-#endif
+  strcpy(m_theString, "gem");   
+  if(argc)textMess(argc, argv);
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
-
 /////////////////////////////////////////////////////////
-// Destructor
+// render
 //
 /////////////////////////////////////////////////////////
-TextBase :: ~TextBase()
+void TextBase :: render(GemState *)
 {
-  inlet_free(m_inlet);
-  delete [] m_theString;
+  if (m_theString && m_font) {
+    // compute the offset due to the justification
+    float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
+    m_font->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
+    glPushMatrix();
+    justifyFont(x1, y1, z1, x2, y2, z2);
+    m_font->Render(m_theString);
+    glPopMatrix();
+  }
 }
-
 
 /////////////////////////////////////////////////////////
 // setFontSize
 //
 /////////////////////////////////////////////////////////
-void TextBase :: setFontSize(int size)
-{
+void TextBase :: setFontSize(t_float size){
   m_fontSize = size;
-#ifdef FTGL
   if (!m_font)return;
-  if( ! m_font->FaceSize(m_fontSize) ) {
-    error("GEMtext: unable to create font!");
-    m_valid=0;
-  } else m_valid=1;
-  m_font->Depth(m_fontDepth);
-#elif defined GLTT
-  m_valid = makeFontFromFace();
-#endif
+  if (! m_font->FaceSize((int)m_fontSize) ) {
+    error("GEMtext: unable set fontsize !");
+  }
   setModified();
 }
 /////////////////////////////////////////////////////////
@@ -104,10 +83,73 @@ void TextBase :: setFontSize(int size)
 void TextBase :: setPrecision(float prec)
 {
   m_precision = prec;
-#ifdef FTGL
+  error("GEMtext: no settable precision for FTGL !");
+}
+
+/////////////////////////////////////////////////////////
+// fontNameMess
+//
+/////////////////////////////////////////////////////////
+void TextBase :: fontNameMess(const char *filename){
+  m_valid = 0;
+  char buf[MAXPDSTRING];
+  canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
+
+  if (makeFont(buf)==NULL){
+    error("GEMtext: unable to open font %s", buf);
+    return;
+  }
+  setFontSize(m_fontSize);
+  m_font->Depth(m_fontDepth);
+  
+  setModified();
+}
+
+
 #elif defined GLTT
-  m_valid = makeFontFromFace();
+TextBase :: TextBase(int argc, t_atom *argv)
+  : m_valid(0), m_theString(NULL), m_theMaxStringSize(0),
+    m_fontSize(20), m_fontDepth(20), m_precision(1.f),
+    m_face(NULL),
+    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY)
+{
+  static bool first_time=true;
+  if (first_time){
+    post("Gem has been compiled with GLTT !");
+    first_time=false;
+  }
+
+  // at least allocate something
+  m_theString = new char[16];
+  m_theMaxStringSize = 16;
+  strcpy(m_theString, "gem");
+#ifndef __APPLE__
+  // do we have a text message?
+  /* why is this commented out for macOS ??? (jmz) */
+  if (argc)textMess(argc, argv);
 #endif
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
+  m_face = new FTFace;
+}
+
+/////////////////////////////////////////////////////////
+// setFontSize
+//
+/////////////////////////////////////////////////////////
+void TextBase :: setFontSize(t_float size)
+{
+  m_fontSize = size;
+  m_valid = makeFontFromFace();
+  setModified();
+}
+/////////////////////////////////////////////////////////
+// setPrecision
+//
+/////////////////////////////////////////////////////////
+void TextBase :: setPrecision(float prec)
+{
+  m_precision = prec;
+  m_valid = makeFontFromFace();
   setModified();
 }
 
@@ -120,17 +162,9 @@ void TextBase :: fontNameMess(const char *filename)
   m_valid = 0;
   char buf[MAXPDSTRING];
   canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
-#ifdef FTGL
-  if (!m_font)return;
-  if( ! m_font->Open(buf, false) ) {
-    error("GEMtext: unable to open font: %s", buf);
-    return;
-  }
-  m_valid = 1;
 
-  setFontSize(m_fontSize);
-#elif defined GLTT
-  delete m_face;
+  destroyFont();
+  if(m_face)delete m_face;m_face=NULL;
   m_face = new FTFace;
 
   if( ! m_face->open(buf) ) {
@@ -138,15 +172,71 @@ void TextBase :: fontNameMess(const char *filename)
     return;
   }
   m_valid = makeFontFromFace();
-#endif
   setModified();
 }
+
+#else /* !FTGL && !GLTT */
+
+TextBase :: TextBase(int argc, t_atom *argv){
+  static bool first_time=true;
+  if (first_time){
+    post("Gem has been compiled without FONT-support !");
+    first_time=false;
+  }
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
+}
+
+/////////////////////////////////////////////////////////
+// setFontSize
+//
+/////////////////////////////////////////////////////////
+void TextBase :: setFontSize(t_float size)
+{}
+/////////////////////////////////////////////////////////
+// setPrecision
+//
+/////////////////////////////////////////////////////////
+void TextBase :: setPrecision(float prec)
+{}
+
+/////////////////////////////////////////////////////////
+// fontNameMess
+//
+/////////////////////////////////////////////////////////
+void TextBase :: fontNameMess(const char *filename)
+{}
+
+/////////////////////////////////////////////////////////
+// render
+//
+/////////////////////////////////////////////////////////
+void TextBase :: render(GemState*)
+{}
+
+#endif /* FTGL/GLTT/none */
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+TextBase :: ~TextBase(){
+  /* textbase deletion */
+  inlet_free(m_inlet);
+  delete [] m_theString;
+}
+
 /////////////////////////////////////////////////////////
 // setJustification
 //
 /////////////////////////////////////////////////////////
-void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType)
-{
+void TextBase :: setFontSize(){
+  setFontSize(m_fontSize);
+}
+
+/////////////////////////////////////////////////////////
+// setJustification
+//
+/////////////////////////////////////////////////////////
+void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType){
   m_widthJus = wType;
   m_heightJus = hType;
   m_depthJus = dType;
@@ -189,53 +279,48 @@ void TextBase :: justifyFont(float x1, float y1, float z1, float x2, float y2, f
 /////////////////////////////////////////////////////////
 void TextBase :: textMess(int argc, t_atom *argv)
 {
-  if (argv[0].a_type != A_SYMBOL)
-    {
-      error("GEM: TextBase: wrong type");
-      return;
-    }
-    
-  if ( argc < 1 )
-    {
-      // we are guarenteed to have some memory here...
-      m_theString[0] = 0;
-      return;
-    }
-    
+  if ( argc < 1 ) {
+    // we are guarenteed to have some memory here...
+    m_theString[0] = 0;
+    return;
+  }
+
+  if (argv[0].a_type != A_SYMBOL)    {
+    error("GEM: TextBase: wrong type");
+    return;
+  }
+
   // do we actually need to reallocate memory?
   int charCount = 0;
   char newtext[MAXPDSTRING];
     	
   int i;
-  for (i = 0; i < argc; ++i)
-    {
-      atom_string(&argv[i], newtext, MAXPDSTRING);
-      charCount += strlen(newtext);
-      // we need a space between each item
-      charCount++;
-    }
+  for (i = 0; i < argc; ++i)   {
+    atom_string(&argv[i], newtext, MAXPDSTRING);
+    charCount += strlen(newtext);
+    // we need a space between each item
+    charCount++;
+  }
 	
   // yep, need to allocate
-  if (m_theMaxStringSize < charCount + 1)
-    {
-      delete [] m_theString;
-      // allocate plus the terminator
-      m_theMaxStringSize = charCount + 1;
-      m_theString = new char[m_theMaxStringSize];
-    }
+  if (m_theMaxStringSize < charCount + 1)    {
+    delete [] m_theString;
+    // allocate plus the terminator
+    m_theMaxStringSize = charCount + 1;
+    m_theString = new char[m_theMaxStringSize];
+  }
 
   // okay, go through the arguments for real and
   //		strcat them together
   int curCount = 0;
-  for (i = 0; i < argc; i++)
-    {
-      atom_string(&argv[i], &m_theString[curCount], m_theMaxStringSize - curCount);
-      // add a space
-      strcat(m_theString, " ");
-
-      // where is the end of the string?
-      curCount = strlen(m_theString);
-    }
+  for (i = 0; i < argc; i++)    {
+    atom_string(&argv[i], &m_theString[curCount], m_theMaxStringSize - curCount);
+    // add a space
+    strcat(m_theString, " ");
+    
+    // where is the end of the string?
+    curCount = strlen(m_theString);
+  }
   setModified();
 }
 
@@ -271,7 +356,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
   JustifyHeight hType;
   JustifyDepth  dType;
   char c;
-
+  
   switch(argc){
   case 3:
     c=atom_getsymbol(argv+2)->s_name[2];
@@ -308,7 +393,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     error("GEM: TextBase: justification most be \"width [height [depth]]\"");
     return;
   }
-
+  
   switch(argc){
   case 1: GetMyClass(data)->setJustification(wType); break;
   case 2: GetMyClass(data)->setJustification(wType, hType); break;
@@ -317,9 +402,9 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
 }
 void TextBase :: fontSizeMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->setFontSize((int)size);
+  GetMyClass(data)->setFontSize(size);
 }
 void TextBase :: precisionMessCallback(void *data, t_floatarg prec)
 {
-  GetMyClass(data)->setPrecision((float)prec);
+  GetMyClass(data)->setPrecision(prec);
 }

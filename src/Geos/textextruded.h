@@ -17,10 +17,6 @@ LOG
 
 #include "Base/TextBase.h"
 
-#ifdef GLTT
-#include "GLTTFont.h"
-#endif
-
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -37,35 +33,29 @@ class GEM_EXTERN textextruded : public TextBase
 
     public:
 
-		//////////
-		// Constructor
-    	textextruded(int argc, t_atom *argv);
+    //////////
+    // Constructor
+    textextruded(int argc, t_atom *argv);
     	
     protected:
     	
-    	//////////
-    	// Destructor
-    	virtual ~textextruded();
+    //////////
+    // Destructor
+    virtual ~textextruded();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-
-	//-----------------------------------
-	// GROUP:	Member variables
-	//-----------------------------------
-#ifdef GLTT
-	virtual int     makeFontFromFace();
-
-	//////////
-    	// The font structure
-    	GLTTFont		*m_font;
+#ifdef FTGL
+    virtual FTFont*makeFont(const char*fontname);
+#else
+    virtual void    destroyFont(){}
+    virtual int     makeFontFromFace(){return 0;}
+    virtual void    render(GemState*){}
 #endif
-	//////////
-	// Set the precision for rendering
-	virtual void	setDepth(float depth);
+
+    //////////
+    // Set the precision for rendering
+    virtual void	setDepth(float depth);
  private:
-	static void 	depthMessCallback(void *data, t_floatarg depth);
+    static void 	depthMessCallback(void *data, t_floatarg depth);
 
 };
 

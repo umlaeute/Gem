@@ -17,10 +17,7 @@ LOG
 
 #include "Base/TextBase.h"
 
-#ifdef FTGL
-# include "FTGLBitmapFont.h"
-# include "FTGLPixmapFont.h"
-#elif defined GLTT
+#ifdef GLTT
 #include "GLTTBitmapFont.h"
 # if defined __linux__ || defined __APPLE__
 # include "GLTTPixmapFont.h"
@@ -53,42 +50,32 @@ class GEM_EXTERN text2d : public TextBase
     	// Destructor
     	virtual ~text2d();
 
-    	//////////
+   	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
-	//////////
-	// Set the font size
-	virtual void	setFontSize(int size);
-
-	//////////
-	// The font to use
-	virtual void  fontNameMess(const char *filename);
-
-	//-----------------------------------
-	// GROUP:	Member variables
-	//-----------------------------------
-#ifdef FTGL
-    	FTGLPixmapFont	*m_pfont;
-    	FTGLBitmapFont	*m_bfont;
-#elif defined GLTT
-	////////
-	// make the actual fonts
-	virtual int     makeFontFromFace();
-
-	//////////
-    	// The font structure
-#if defined __linux__ || defined __APPLE__
-    	GLTTPixmapFont		*m_pfont;
-#endif
-    	GLTTBitmapFont		*m_bfont;
-#endif
 	//////
 	// anti aliasing (aka: pixmap instead of bitmap)
-	int 		m_antialias;
-	void            aliasMess(float size);
+	int m_antialias;
+	void            aliasMess(int aa);
+
+#ifdef FTGL
+	void            setFontSize(t_float size);
+
+	virtual FTFont*makeFont(const char*fontname);
+	FTFont                  *m_afont;
+#elif defined GLTT
+	virtual void    destroyFont();
+	virtual int     makeFontFromFace();
+	//////////
+    	// The font structure
+    	GLTTBitmapFont		*m_font;
+    	GLTTPixmapFont		*m_afont;
+#endif
+
  private:
-	static void     aliasMessCallback(void *data, t_floatarg tog);
+	static void     aliasMessCallback(void *data, t_floatarg aa);
+
 };
 
 #endif	// for header file

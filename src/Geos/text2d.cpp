@@ -17,14 +17,8 @@
 #include "text2d.h"
 
 #ifdef FTGL
-#include "FTGLPolygonFont.h"
-#elif defined GLTT
-#include "GLTTFont.h"
-#endif
-
-#ifdef MACOSX
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
+#include "FTGLPixmapFont.h"
+#include "FTGLBitmapFont.h"
 #endif
 
 CPPEXTERN_NEW_WITH_GIMME(text2d)
@@ -37,22 +31,121 @@ CPPEXTERN_NEW_WITH_GIMME(text2d)
 // Constructor
 //
 /////////////////////////////////////////////////////////
+#ifdef FTGL
 text2d :: text2d(int argc, t_atom *argv)
-  : TextBase(argc, argv),
-#if defined GLTT || defined FTGL
-    m_bfont(NULL),
-#endif
-#if defined __linux__ || defined __APPLE__ || defined FTGL
-    m_pfont(NULL), m_antialias(1)
-#else
-    m_antialias(0)
+  : TextBase(argc, argv), m_antialias(1), m_afont(NULL) {
+  fontNameMess(DEFAULT_FONT);
+} 
+text2d :: ~text2d() {
+  if(m_font) delete m_font; m_font=NULL;
+  if(m_afont)delete m_afont;m_afont=NULL;
+}
+FTFont *text2d :: makeFont(const char*fontfile){
+  if(m_font) delete m_font;  m_font=NULL;
+  if(m_afont)delete m_afont; m_afont=NULL;
+
+  m_font =  new FTGLBitmapFont(fontfile);
+  if (m_font->Error()){
+    delete m_font;
+    m_font = NULL;
+  }
+  m_afont =  new FTGLPixmapFont(fontfile);
+  if (m_afont->Error()){
+    delete m_afont;
+    m_afont = NULL;
+  }
+  
+  return m_font;
+}
+/////////////////////////////////////////////////////////
+// setFontSize
+//
+/////////////////////////////////////////////////////////
+void text2d :: setFontSize(t_float size){
+  m_fontSize = size;
+  if (m_font)if (! m_font->FaceSize((int)m_fontSize) ) {
+    error("GEMtext: unable set fontsize !");
+  }
+  if (m_afont)if (! m_afont->FaceSize((int)m_fontSize) ) {
+    error("GEMtext: unable set fontsize !");
+  }
+  setModified();
+}
+
+/////////////////////////////////////////////////////////
+// render
+//
+/////////////////////////////////////////////////////////
+void text2d :: render(GemState *)
+{
+  if (!m_theString || !(m_afont || m_font))return;
+  if (m_antialias && !m_afont)m_antialias=0;
+  if (!m_antialias && !m_font)m_antialias=1;
+  float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
+  // compute the offset due to the justification
+  if(m_antialias && m_afont){
+    m_afont->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
+    float width  = 0.f;
+    float height = 0.f;
+    float depth  = 0.f;
+
+    if (m_widthJus == LEFT)       width = x1;
+    else if (m_widthJus == RIGHT) width = x2-x1;
+    else if (m_widthJus == CENTER)width = x2 / 2.f;
+
+    if (m_heightJus == BOTTOM)     height = y1;
+    else if (m_heightJus == TOP)   height = y2-y1;
+    else if (m_heightJus == MIDDLE)height = y2 / 2.f;
+    
+    if (m_depthJus == FRONT)       depth = z1;
+    else if (m_depthJus == BACK)   depth = z2-z1;
+    else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
+
+    glPushMatrix();
+
+    glRasterPos2i(0,0);
+    glBitmap(0,0,0.0,0.0,-width,-height, NULL);
+    justifyFont(x1, y1, z1, x2, y2, z2);
+    m_afont->Render(m_theString);
+    glPopMatrix();
+  } else if (m_font) {
+    m_font->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
+    float width  = 0.f;
+    float height = 0.f;
+    float depth  = 0.f;
+
+    if (m_widthJus == LEFT)       width = x1;
+    else if (m_widthJus == RIGHT) width = x2-x1;
+    else if (m_widthJus == CENTER)width = x2 / 2.f;
+
+    if (m_heightJus == BOTTOM)     height = y1;
+    else if (m_heightJus == TOP)   height = y2-y1;
+    else if (m_heightJus == MIDDLE)height = y2 / 2.f;
+    
+    if (m_depthJus == FRONT)       depth = z1;
+    else if (m_depthJus == BACK)   depth = z2-z1;
+    else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
+
+    glPushMatrix();
+
+    glRasterPos2i(0,0);
+    glBitmap(0,0,0.0,0.0,-width,-height, NULL);
+    m_font->Render(m_theString);
+    glPopMatrix();
+  }
+  post("done");
+}
+
+#elif defined GLTT
+text2d :: text2d(int argc, t_atom *argv)
+  : TextBase(argc, argv)
+  , m_font(NULL)
+#if defined __linux__ || defined __APPLE__
+  , m_afont(NULL)
 #endif
 {
-#ifdef FTGL
-  m_bfont = new FTGLBitmapFont;
-  m_pfont = new FTGLPixmapFont;
-#elif defined MACOSX && defined GLTT
-  if (!HaveValidContext ()) {post("GEM: text2d - need window to load font");return;}
+#ifdef MACOSX
+  if (!HaveValidContext ()) {post("GEM: geo: text2d - need window to load font");return;}
 #endif
   fontNameMess(DEFAULT_FONT);
 }
@@ -63,106 +156,54 @@ text2d :: text2d(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 text2d :: ~text2d()
 {
-#ifdef FTGL
-  if(m_font)delete m_font;
+  if(m_font)delete m_font;m_font=NULL;
+#if defined __linux__ || defined __APPLE__
+  if(m_afont)delete m_afont;m_afont=NULL;
 #endif
-#if defined GLTT || defined FTGL
-  if(m_pfont)delete m_pfont;
-# if defined __linux__ || defined __APPLE__ || defined FTGL
-  if(m_bfont)delete m_bfont;
-# endif
-  if(m_face)delete m_face;
-#endif
+  if(m_face)delete m_face;m_face=NULL;
 }
 
-#ifdef GLTT
 /////////////////////////////////////////////////////////
 // makeFontFromFace
 //
 /////////////////////////////////////////////////////////
+void text2d :: destroyFont() { // fonts have to be destroyed before face
+  if(m_font)delete m_font; m_font=NULL;
+  if(m_afont)delete m_afont; m_afont=NULL;
+}
 int text2d :: makeFontFromFace()
 {
+  if(m_font)delete m_font;m_font=NULL;
+#if defined __linux__ || defined __APPLE__
+  if(m_afont)delete m_afont;m_afont=NULL;
+#endif
+
   if (!m_face)    {
-      error("GEM: text2d: True type font doesn't exist");
-      return(0);
-    }
-  if(m_bfont)delete m_bfont;m_bfont=NULL;
-# if defined __linux__ || defined __APPLE__
-  if(m_pfont)delete m_pfont;m_pfont=NULL;
-# endif
-  m_bfont = new GLTTBitmapFont(m_face);
-  if( ! m_bfont->create(m_fontSize) )    {
+    error("GEM: text2d: True type font doesn't exist");
+    return(0);
+  }
+  m_font = new GLTTBitmapFont(m_face);
+  //m_font->setPrecision((double)m_precision);
+  if( ! m_font->create((int)m_fontSize) ) {
     error("GEM: text2d: unable to create bitmap'ed font");
-    delete m_bfont; m_bfont=NULL;
-    return(0);
+    delete m_font; m_font = NULL;
+    //    return(0);
   }
-# if defined __linux__ || defined __APPLE__
-  m_pfont = new GLTTPixmapFont(m_face);
-  if( ! m_pfont->create(m_fontSize) )    {
-    delete m_pfont; m_pfont=NULL;
+#if defined __linux__ || defined __APPLE__
+  m_afont = new GLTTPixmapFont(m_face);
+  //  m_afont->setPrecision((double)m_precision);
+  if( ! m_afont->create((int)m_fontSize) ) {
     error("GEM: text2d: unable to create pixmap'ed font");
-    return(0);
+    delete m_afont; m_afont = NULL;
+    //    return(0);
   }
-# endif
-  return (1);
-}
+  if (!m_font && !m_afont)return 0;
+#else
+  if (!m_font)return 0;
 #endif
-
-/////////////////////////////////////////////////////////
-// setFontSize
-//
-/////////////////////////////////////////////////////////
-void text2d :: setFontSize(int size)
-{
-  m_fontSize = size;
-  m_valid=0;
-#ifdef FTGL
-  if (!m_pfont || !m_bfont)return;
-  if( m_bfont->FaceSize(m_fontSize) &&  m_pfont->FaceSize(m_fontSize)) m_valid=1;
-  else error("GEM: text2d: unable to set font-size!");
-#elif defined GLTT
-  m_valid = makeFontFromFace();
-#endif
-  setModified();
+  return(1);
 }
-/////////////////////////////////////////////////////////
-// fontNameMess
-//
-/////////////////////////////////////////////////////////
-void text2d :: fontNameMess(const char *filename)
-{
-  m_valid = 0;
-  char buf[MAXPDSTRING];
-  canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
-#ifdef FTGL
-  if(!m_bfont && !m_pfont)return;
-  if(!m_bfont->Open(buf, false) ) {
-    error("GEM: text2d: unable to open bitmap'ed font: %s", buf);
-    return;
-  }
-  if( ! m_pfont->Open(buf, false) ) {
-    error("GEM: text2d: unable to open pixmap'ed font: %s", buf);
-    return;
-  }
-  m_valid = 1;
 
-  setFontSize(m_fontSize);
-#elif defined GLTT
-  if(m_bfont)delete m_bfont; m_bfont=NULL;
-# if defined __linux__ || defined __APPLE__
-  if(m_pfont)delete m_pfont; m_pfont=NULL;
-# endif
-  if(m_face)delete m_face;m_face = NULL;
-  m_face = new FTFace;
-
-  if( ! m_face->open(buf) ) {
-    error("text2d: unable to open font: %s", buf);
-    return;
-  }
-  m_valid = makeFontFromFace();
-#endif
-  setModified();
-}
 /////////////////////////////////////////////////////////
 // render
 //
@@ -175,15 +216,15 @@ void text2d :: render(GemState *)
     // compute the offset due to the justification
     float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
 
-#if defined FTGL || defined __linux__ || defined __APPLE__
+#if defined __linux__ || defined __APPLE__
+    if (m_antialias && !m_afont)m_antialias=0;
+    if (!m_antialias && !m_font)m_antialias=1;
     // pixmap'ed fonts are not supported under GLTT/NT
     if (m_antialias){
-# if defined FTGL
-      m_pfont->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
-# elif defined GLTT
-      x2=m_pfont->getWidth (m_theString);
-      y2=m_pfont->getHeight();
-# endif
+      if(!m_afont)return;
+      x2=m_afont->getWidth (m_theString);
+      y2=m_afont->getHeight();
+
       float width  = 0.f;
       float height = 0.f;
       float depth  = 0.f;
@@ -200,23 +241,15 @@ void text2d :: render(GemState *)
       else if (m_depthJus == BACK)   depth = z2-z1;
       else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
 
-# ifdef FTGL
-      glRasterPos2i(0,0);
-      glBitmap(0,0,0.0,0.0,-width,-height, NULL);
-      m_pfont->render(m_theString);
-# elif defined GLTT
-      m_pfont->output((int)-width, (int)-height, m_theString);
-# endif
+      m_afont->output((int)-width, (int)-height, m_theString);
     }else
 #endif
-#if defined GLTT || defined FTGL
       {
-# if defined FTGL
-	m_bfont->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
-# elif defined GLTT
-	x2=m_bfont->getWidth (m_theString);
-	y2=m_bfont->getHeight();
-# endif
+	if(!m_font)return;
+
+	x2=m_font->getWidth (m_theString);
+	y2=m_font->getHeight();
+
 	float width  = 0.f;
 	float height = 0.f;
 	float depth  = 0.f;
@@ -232,18 +265,30 @@ void text2d :: render(GemState *)
 	if (m_depthJus == FRONT)       depth = z1;
 	else if (m_depthJus == BACK)   depth = z2-z1;
 	else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
-# ifdef FTGL
-	glRasterPos2i(0,0);
-	glBitmap(0,0,0.0,0.0,-width,-height, NULL);
-	m_bfont->render(m_theString);
-# elif defined GLTT
-	m_bfont->output((int)-width, (int)-height, m_theString);
-# endif
+
+	m_font->output((int)-width, (int)-height, m_theString);
       }
-#endif
     glPopMatrix();
   }
 }
+
+
+#else /* !FTGL && !GLTT */
+
+text2d :: text2d(int argc, t_atom *argv)
+  : TextBase(argc, argv)
+{ }
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+text2d :: ~text2d()
+{}
+
+void text2d :: render(GemState*){}
+
+#endif /* !GLTT && !FTGL */
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -255,11 +300,11 @@ void text2d :: obj_setupCallback(t_class *classPtr )
 		  gensym("alias"), A_FLOAT, A_NULL);
 }
 
-void text2d :: aliasMess(float size)
+void text2d :: aliasMess(int size)
 {
   m_antialias = (int)size;
 }
 void text2d :: aliasMessCallback(void *data, t_floatarg tog)
 {
-  GetMyClass(data)->aliasMess((float)tog);
+  GetMyClass(data)->aliasMess((int)tog);
 }

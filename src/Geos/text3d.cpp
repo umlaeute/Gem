@@ -22,11 +22,6 @@
 #include "GLTTFont.h"
 #endif
 
-#ifdef MACOSX
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
-
 CPPEXTERN_NEW_WITH_GIMME(text3d)
 
 /////////////////////////////////////////////////////////
@@ -37,20 +32,35 @@ CPPEXTERN_NEW_WITH_GIMME(text3d)
 // Constructor
 //
 /////////////////////////////////////////////////////////
+#ifdef FTGL
+text3d :: text3d(int argc, t_atom *argv)
+  : TextBase(argc, argv) {
+  fontNameMess(DEFAULT_FONT);
+} 
+text3d :: ~text3d() {
+  if(m_font)delete m_font;m_font=NULL;
+}
+FTFont *text3d :: makeFont(const char*fontfile){
+  if(m_font)delete m_font; m_font=NULL;
+  m_font =  new FTGLPolygonFont(fontfile);
+  if (m_font->Error()){
+    delete m_font;
+    m_font = NULL;
+  }
+  return m_font;
+}
+
+#elif defined GLTT
+
 text3d :: text3d(int argc, t_atom *argv)
   : TextBase(argc, argv)
-#ifdef GLTT
     , m_font(NULL)
-#endif
 {
-#ifdef MACOSX
+#ifdef __APPLE__
   if (!HaveValidContext ()) {post("GEM: geo: text3d - need window to load font");return;}
 #endif
-#ifdef FTGL
-  m_font = new FTGLPolygonFont;
-#endif
-  fontNameMess(DEFAULT_FONT);
-}
+   fontNameMess(DEFAULT_FONT);
+ }
 
 /////////////////////////////////////////////////////////
 // Destructor
@@ -58,34 +68,33 @@ text3d :: text3d(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 text3d :: ~text3d()
 {
-#if defined GLTT || defined FTGL
   if(m_font)delete m_font;m_font=NULL;
   if(m_face)delete m_face;m_face=NULL;
-#endif
 }
 
-#ifdef GLTT
 /////////////////////////////////////////////////////////
 // makeFontFromFace
 //
 /////////////////////////////////////////////////////////
+void text3d :: destroyFont() {
+  if(m_font)delete m_font; m_font=NULL;
+}
 int text3d :: makeFontFromFace()
 {
-  if(m_font)delete m_font;m_font=NULL;
   if (!m_face)    {
-      error("GEM: text3d: True type font doesn't exist");
-      return(0);
-    }
+    error("GEM: text3d: True type font doesn't exist");
+    return(0);
+  }
+  if(m_font)delete m_font;m_font=NULL;
   m_font = new GLTTFont(m_face);
   m_font->setPrecision((double)m_precision);
-  if( ! m_font->create(m_fontSize) ) {
-      error("GEM: text3d: unable to create polygonal font");
-      delete m_font; m_font = NULL;
-      return(0);
-    }
+  if( ! m_font->create((int)m_fontSize) ) {
+    error("GEM: text3d: unable to create polygonal font");
+    delete m_font; m_font = NULL;
+    return(0);
+  }
   return(1);
 }
-#endif
 
 /////////////////////////////////////////////////////////
 // render
@@ -95,25 +104,33 @@ void text3d :: render(GemState *)
 {
   if (m_valid && m_theString) {
     // compute the offset due to the justification
-    float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
+    float x=0, y=0;
 
-#if defined FTGL
-    m_font->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
-#elif defined GLTT
-    x2=m_font->getWidth (m_theString);
-    y2=m_font->getHeight();
-#endif
+    x=m_font->getWidth (m_theString);
+    y=m_font->getHeight();
     glPushMatrix();
-    justifyFont(x1, y1, z1, x2, y2, z2);
-#ifdef FTGL
-    m_font->render(m_theString);
-#elif defined GLTT
+    justifyFont(0, 0, 0, x, y, 0);
     m_font->output(m_theString);
-#endif
     
     glPopMatrix();
   }
 }
+
+
+#else /* !FTGL && !GLTT */
+
+text3d :: text3d(int argc, t_atom *argv)
+  : TextBase(argc, argv)
+{ }
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+text3d :: ~text3d()
+{}
+
+#endif /* !GLTT && !FTGL */
 
 /////////////////////////////////////////////////////////
 // static member function

@@ -42,6 +42,12 @@
 #define FONT_SCALE 1.0
 #endif
 
+#ifdef __APPLE__
+#include <AGL/agl.h>
+extern bool HaveValidContext (void);
+#endif
+
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -73,6 +79,15 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // Set the text string
+#ifdef GLTT
+  // when we are in GLTT, we have to define the rendering function again and again...
+  virtual void	render(GemState*)=0;
+#else
+  virtual void	render(GemState*);
+#endif
+
+  //////////
+  // Set the text string
   void	    	textMess(int argc, t_atom *argv);
 
   //////////
@@ -81,7 +96,8 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // Set the font size
-  virtual void	setFontSize(int size);
+  virtual void	setFontSize(float size);
+  void          setFontSize();
 
   //////////
   // Set the precision for rendering
@@ -104,12 +120,6 @@ class GEM_EXTERN TextBase : public GemBase
   // x1,...,z2 just defines the bounding box of the rendered string.
   void justifyFont(float x1, float y1, float z1, float x2, float y2, float z2);
 
-#ifdef GLTT
-  //////////
-  // make the actual font (for GLTT)
-  // return values: 1==success; 0==failure
-  virtual int makeFontFromFace(void) = 0;
-#endif
 
   //-----------------------------------
   // GROUP:	Member variables
@@ -130,7 +140,7 @@ class GEM_EXTERN TextBase : public GemBase
     	
   //////////
   // The font fize
-  int		m_fontSize;
+  float		m_fontSize;
 
   //////////
   // The font depth (only for extruded fonts)
@@ -157,23 +167,38 @@ class GEM_EXTERN TextBase : public GemBase
   // The inlet
   t_inlet         *m_inlet;
 
+
   //////////
   // The default font name
   static char *DEFAULT_FONT;
-
+ 
   //////////
   // The font structure
 #ifdef FTGL
   FTFont		*m_font;
-#endif
-#if defined GLTT || defined FTGL
+  /* this should delete (m_font) if it is notnull and recreate it.
+   * a pointer to the new structure is returned (and is set to m_font).
+   * if creation fails, the font is cleaned-up and NULL is returned
+   */
+  virtual FTFont* makeFont(const char*fontname)=0;
+#elif defined GLTT
   FTFace 		*m_face;
-#endif
 
-  //-----------------------------------
-  // GROUP:	Setup functions
-  //-----------------------------------
-    
+  //////////
+  // make the actual font
+  /* return values: 1==success; 0==failure
+   * the actual fonts (members are declared in child-classes) are created
+   * if creation fails, the fonts should be cleaned-up and
+   * 0 is returned (for historic reasons)
+   */
+  virtual int makeFontFromFace() = 0;
+
+  ////////
+  // destroy the current font.
+  /* this has to be done before(!) destroying the face */
+  virtual void destroyFont() = 0;
+#endif
+  
  private:
     	    
   //////////

@@ -47,19 +47,18 @@ class GEM_EXTERN text3d : public TextBase
     	// Destructor
     	virtual ~text3d();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-
-	//-----------------------------------
-	// GROUP:	Member variables
-	//-----------------------------------
-#ifdef GLTT
+#ifdef FTGL
+	virtual FTFont*makeFont(const char*fontname);
+#elif defined GLTT
 	virtual int     makeFontFromFace();
-
+	virtual void    destroyFont();
 	//////////
     	// The font structure
     	GLTTFont		*m_font;
+
+    	//////////
+    	// Do the rendering
+    	virtual void 	render(GemState *state);
 #endif
 };
 

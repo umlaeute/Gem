@@ -20,11 +20,6 @@
 #include "FTGLExtrdFont.h"
 #endif
 
-#ifdef MACOSX
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
-
 CPPEXTERN_NEW_WITH_GIMME(textextruded)
 
 /////////////////////////////////////////////////////////
@@ -35,66 +30,22 @@ CPPEXTERN_NEW_WITH_GIMME(textextruded)
 // Constructor
 //
 /////////////////////////////////////////////////////////
+#ifdef FTGL
 textextruded :: textextruded(int argc, t_atom *argv)
-  : TextBase(argc, argv)
-#ifdef GLTT
-    , m_font(NULL)
-#endif
-{
-#ifdef MACOSX
-  if (!HaveValidContext ()) {post("GEM: geo: textextruded - need window to load font");return;}
-#endif
-#ifdef FTGL
-  m_font = new FTGLExtrdFont;
-#endif
+  : TextBase(argc, argv) {
   fontNameMess(DEFAULT_FONT);
+} 
+textextruded :: ~textextruded() {
+  if(m_font)delete m_font;m_font=NULL;
 }
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-textextruded :: ~textextruded()
-{
-#ifdef FTGL
-  if(m_font)delete m_font;
-  if(m_face)delete m_face;
-#endif
-}
-
-#ifdef GLTT
-/////////////////////////////////////////////////////////
-// makeFontFromFace
-//
-/////////////////////////////////////////////////////////
-int textextruded :: makeFontFromFace()
-{
-  error("GEM: textextruded: FTGL support is needed for this object");
-  return 0;
-}
-#endif
-
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void textextruded :: render(GemState *)
-{
-  if (m_valid && m_theString) {
-    // compute the offset due to the justification
-    float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-
-#if defined FTGL
-    m_font->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
-#endif
-    glPushMatrix();
-    justifyFont(x1, y1, z1, x2, y2, z2);
-#ifdef FTGL
-    m_font->render(m_theString);
-#endif
-    
-    glPopMatrix();
+FTFont *textextruded :: makeFont(const char*fontfile){
+  if(m_font)delete m_font; m_font=NULL;
+  m_font =  new FTGLExtrdFont(fontfile);
+  if (m_font->Error()){
+    delete m_font;
+    m_font = NULL;
   }
+  return m_font;
 }
 
 /////////////////////////////////////////////////////////
@@ -104,12 +55,34 @@ void textextruded :: render(GemState *)
 void textextruded :: setDepth(float prec)
 {
   m_fontDepth = prec;
-#ifdef FTGL
-  m_font->Depth(m_fontDepth);
-  setFontSize(m_fontSize);
-#endif
+  if(!m_font)return;
+  m_font->Depth((int)m_fontDepth);
+  setFontSize();
   setModified();
 }
+#else
+
+textextruded :: textextruded(int argc, t_atom *argv)
+  : TextBase(argc, argv)
+{
+  error("FTGL-support is needed for extruded fonts!");
+}
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+textextruded :: ~textextruded()
+{}
+
+/////////////////////////////////////////////////////////
+// setPrecision
+//
+/////////////////////////////////////////////////////////
+void textextruded :: setDepth(float prec)
+{}
+#endif /* !GLTT && !FTGL */
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -123,4 +96,3 @@ void textextruded :: depthMessCallback(void *data, t_floatarg depth)
 {
   GetMyClass(data)->setDepth((float)depth);
 }
-
