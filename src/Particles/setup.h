@@ -27,6 +27,8 @@ extern "C" {
    void part_targetsize_setup();
    void part_velcone_setup();
    void part_velsphere_setup();
+  void part_render_setup();
+  void part_info_setup();
 
 
    void Particles_setup() {
@@ -45,6 +47,8 @@ extern "C" {
       part_targetsize_setup();
       part_velcone_setup();
       part_velsphere_setup();
+      part_render_setup();
+      part_info_setup();
    }
 } // for extern "C"
 
