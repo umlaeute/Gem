@@ -27,7 +27,11 @@
 /////////////////////////////////////////////////////////
 GemGlutObj :: GemGlutObj(t_floatarg size)
     	   : GemShape(size)
-{}
+{
+#ifndef HAVE_LIBGLUT
+  error("GemGlutObj: compiled without GLUT-support - no rendering of GLUT-objects");
+#endif
+}
 
 /////////////////////////////////////////////////////////
 // Destructor
