@@ -210,13 +210,10 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 		
     i = 0;
     glWInfo.aglAttributes [i++] = AGL_RGBA;
-    //glWInfo.aglAttributes [i++] = AGL_RGB;
     glWInfo.aglAttributes [i++] = AGL_PIXEL_SIZE;
     glWInfo.aglAttributes [i++] = 32;
-    //glWInfo.aglAttributes [i++] = 24;
     glWInfo.aglAttributes [i++] = AGL_DEPTH_SIZE;
     glWInfo.aglAttributes [i++] = 16;
-//    glWInfo.aglAttributes [i++] = AGL_OFFSCREEN;
     if (hints.buffer == 2){
         glWInfo.aglAttributes [i++] = AGL_DOUBLEBUFFER;
     }
