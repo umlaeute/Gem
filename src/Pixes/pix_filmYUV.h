@@ -23,13 +23,10 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include <string.h>
 #include <stdio.h>
 
+#include "Base/config.h"
+
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
-
-#ifdef __linux__
-#include "Base/config.h"
-#endif /* __linux__ */
-
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
