@@ -15,6 +15,23 @@ LOG
 #ifndef INCLUDE_GEMVERTEX_H_
 #define INCLUDE_GEMVERTEX_H_
 
-#include "Base/GemShape.h"
+#include "Base/GemBase.h"
+
+class GEM_EXTERN GemVertex : public GemBase {
+ protected:
+
+    	
+  //////////
+  // Constructor
+  GemVertex();
+
+  ~GemVertex();
+
+  //////////
+  // If anything in the object has changed
+  // especially, if the vertex-array has changed
+  virtual void  	setModified();
+};
+
 
 #endif /* INCLUDE_GEMVERTEX_H_ */
