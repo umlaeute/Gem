@@ -69,7 +69,7 @@ class GEM_EXTERN GemBase : public CPPExtern
 
      	//////////
      	// Called when rendering stops
-#if 0/*(jmz)*/
+#if 1/*(jmz) this seems to be for gem2pdp*/
 	virtual void 	stoprender()			{ realStopRendering(); }
 #endif
 
@@ -119,7 +119,7 @@ class GEM_EXTERN GemBase : public CPPExtern
      	static void 	gem_MessCallback(void *, t_symbol *,int, t_atom*);
    	static void 	renderCallback(GemBase *data, GemState *state);
     	static void 	postrenderCallback(GemBase *data, GemState *state);
-#if 0 /*jmz*/
+#if 1 /*jmz this seems to be for gem2pdp*/
 	static void	stoprenderCallback(GemBase *data);	//DH
 #endif
 };

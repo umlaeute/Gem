@@ -75,9 +75,7 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
     startRendering();
     gem_amRendering=true;
   }
-
   if(state)render(state);
-
   t_atom ap[2];
   ap->a_type=A_POINTER;
   ap->a_w.w_gpointer=(t_gpointer *)cache;  // the cache ?
