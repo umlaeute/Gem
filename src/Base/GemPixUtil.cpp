@@ -28,19 +28,15 @@
 
 GEM_EXTERN unsigned char* imageStruct::allocate(int size) 
 {
-    if (pdata&&!notowned){
-		delete [] pdata;
-	}
-#if 0
-    /* aligned memory */
-    pdata = new unsigned char[size+31];
-    data = (unsigned char*) ((((unsigned int)pdata)+31)& (~31));
-#else
-    data = pdata =  new unsigned char [size];
-#endif
-    datasize=size;
-    notowned=0;
-    return data; 
+  if (pdata){
+    delete [] pdata;
+    pdata=NULL;
+  }
+  data = pdata =  new unsigned char [size];
+
+  datasize=size;
+  notowned=0;
+  return data; 
 }
 
 GEM_EXTERN unsigned char* imageStruct::allocate() 
@@ -62,12 +58,11 @@ GEM_EXTERN unsigned char* imageStruct::reallocate()
  
 GEM_EXTERN void imageStruct::clear() 
 {
-    if (!notowned && pdata) {
-      delete [] pdata;
-      data = pdata = 0;      
-    }
-    xsize = ysize = csize = 0;
-    datasize=0;
+  if (pdata) { // pdata is always owned by imageStruct
+    delete [] pdata;
+  }
+  data = pdata = NULL;      
+  datasize=0;
 }
 
 
@@ -219,15 +214,14 @@ GEM_EXTERN void imageStruct::setWhite() {
 GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
   if(!rgbdata)return;
   int pixelnum=xsize*ysize;
+  setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
   switch (format){
   case GL_RGB:
-    csize=3;
     memcpy(data, rgbdata, pixelnum*csize);
     break;
   case GL_BGR_EXT:
-    csize=3;
     while(pixelnum--){
       pixels[0]=rgbdata[2];
       pixels[1]=rgbdata[1];
@@ -236,7 +230,6 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     }
     break;
   case GL_RGBA:
-    csize=4;
     while(pixelnum--){
       *pixels++=*rgbdata++;
       *pixels++=*rgbdata++;
@@ -245,7 +238,6 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     }
     break;
   case GL_BGRA_EXT:
-    csize=4;
     while(pixelnum--){
       pixels[0]=rgbdata[2];
       pixels[1]=rgbdata[1];
@@ -255,7 +247,6 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     }
     break;
   case GL_LUMINANCE:
-    csize=1;
     while(pixelnum--){
       //      *pixels++=(unsigned char)(rgbdata[0] * 0.3086f + rgbdata[1] * 0.06094f + rgbdata[2] * 0.0820f);
       *pixels++=(rgbdata[0]*79+rgbdata[1]*156+rgbdata[2]*21)>>8;
@@ -263,7 +254,6 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     }
     break;
   case GL_YUV422_GEM:
-    csize=2;
     pixelnum>>=1;
     while(pixelnum--){
       *pixels++=((-43*rgbdata[0]-85 *rgbdata[1]+128*rgbdata[2])>>8)+128; // U
@@ -281,12 +271,12 @@ GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
   if(!rgb16data)return;
   unsigned short*rgbdata=(unsigned short*)rgb16data;
   int pixelnum=xsize*ysize;
-    reallocate();
+  setCsizeByFormat();
+  reallocate();
   unsigned char *pixels=data;
   unsigned short rgb;
   switch (format){
   case GL_RGBA:
-    csize=4;
     while(pixelnum--){
       rgb=*rgbdata++;
       pixels[0]=((rgb>>8)&0xF8);
@@ -297,14 +287,12 @@ GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
     }
     break;
   case GL_LUMINANCE:
-    csize=1;
     while(pixelnum--){
       rgb=*rgbdata++;
       *pixels++=(((rgb>>8)&0xF8)*79+((rgb>>3)&0xFC)*156+((rgb<<3)&0xF8)*21)>>8;
     }
     break;
   case GL_YUV422_GEM:
-    csize=2;
     pixelnum>>=1;
     while(pixelnum--){
       rgb=*rgbdata++;
@@ -327,11 +315,11 @@ GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
 GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
   if(!rgbadata)return;
   int pixelnum=xsize*ysize;
+  setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
   switch (format){
   case GL_RGB:
-    csize=3;
     while(pixelnum--){
       *pixels++=*rgbadata++;
       *pixels++=*rgbadata++;
@@ -340,7 +328,6 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     }
     break;
   case GL_BGR_EXT:
-    csize=3;
     while(pixelnum--){
       pixels[0]=rgbadata[2];
       pixels[1]=rgbadata[1];
@@ -349,11 +336,9 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     }
     break;
   case GL_RGBA:
-    csize=4;
     memcpy(data, rgbadata, pixelnum*csize);
     break;
   case GL_BGRA_EXT:
-    csize=4;
     while(pixelnum--){
       pixels[0]=rgbadata[2];
       pixels[1]=rgbadata[1];
@@ -363,7 +348,6 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     }
     break;
   case GL_LUMINANCE:
-    csize=1;
     while(pixelnum--){
       //      *pixels++=(unsigned char)(rgbadata[0] * 0.3086f + rgbadata[1] * 0.06094f + rgbadata[2] * 0.0820f);
       *pixels++=(rgbadata[0]*79+rgbadata[1]*156+rgbadata[2]*21)>>8;
@@ -371,7 +355,6 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     }
     break;
   case GL_YUV422_GEM:
-    csize=2;
     pixelnum>>=1;
     while(pixelnum--){
       *pixels++=((-43*rgbadata[0]-85 *rgbadata[1]+128*rgbadata[2])>>8)+128; // U
@@ -386,15 +369,14 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
 GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
   if(!bgrdata)return;
   int pixelnum=xsize*ysize;
+  setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
   switch (format){
   case GL_BGR_EXT:
-    csize=3;
     memcpy(data, bgrdata, pixelnum*csize);
     break;
   case GL_RGB:
-    csize=3;
     while(pixelnum--){
       pixels[0]=bgrdata[2];
       pixels[1]=bgrdata[1];
@@ -403,7 +385,6 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
     }
     break;
   case GL_BGRA_EXT:
-    csize=4;
     while(pixelnum--){
       *pixels++=*bgrdata++;
       *pixels++=*bgrdata++;
@@ -412,7 +393,6 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
     }
     break;
   case GL_RGBA:
-    csize=4;
     while(pixelnum--){
       pixels[0]=bgrdata[2];
       pixels[1]=bgrdata[1];
@@ -422,7 +402,6 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
     }
     break;
   case GL_LUMINANCE:
-    csize=1;
     while(pixelnum--){
       //      *pixels++=(unsigned char)(bgrdata[2] * 0.3086f + bgrdata[1] * 0.06094f + bgrdata[0] * 0.0820f);
       *pixels++=(bgrdata[2]*79+bgrdata[1]*156+bgrdata[0]*21)>>8;
@@ -430,7 +409,6 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
     }
     break;
   case GL_YUV422_GEM:
-    csize=2;
     pixelnum>>=1;
     while(pixelnum--){
       *pixels++=((-43*bgrdata[2]-85 *bgrdata[1]+128*bgrdata[0])>>8)+128; // U
@@ -445,11 +423,11 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
 GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   if(!bgradata)return;
   int pixelnum=xsize*ysize;
+  setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
   switch (format){
   case GL_BGR_EXT:
-    csize=3;
     while(pixelnum--){
       *pixels++=*bgradata++;
       *pixels++=*bgradata++;
@@ -458,7 +436,6 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     }
     break;
   case GL_RGB:
-    csize=3;
     while(pixelnum--){
       pixels[0]=bgradata[2];
       pixels[1]=bgradata[1];
@@ -467,11 +444,9 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     }
     break;
   case GL_BGRA_EXT:
-    csize=4;
     memcpy(data, bgradata, pixelnum*csize);
     break;
   case GL_RGBA:
-    csize=4;
     while(pixelnum--){
       pixels[0]=bgradata[2];
       pixels[1]=bgradata[1];
@@ -481,7 +456,6 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     }
     break;
   case GL_LUMINANCE:
-    csize=1;
     while(pixelnum--){
       //      *pixels++=(unsigned char)(bgradata[2] * 0.3086f + bgradata[1] * 0.06094f + bgradata[0] * 0.0820f);
       *pixels++=(bgradata[2]*79+bgradata[1]*156+bgradata[0]*21)>>8;
@@ -490,7 +464,6 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     }
     break;
   case GL_YUV422_GEM:
-    csize=2;
     pixelnum>>=1;
     while(pixelnum--){
       *pixels++=((-43*bgradata[2]-85 *bgradata[1]+128*bgradata[0])>>8)+128; // U
@@ -505,13 +478,13 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
 GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
   if(!greydata)return;
   int pixelnum=xsize*ysize;
+  setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
   register unsigned char grey=0;
   switch (format){
   case GL_RGB:
   case GL_BGR_EXT:
-    csize=3;
     while(pixelnum--){
       grey=*greydata++;
       *pixels++=grey;
@@ -522,7 +495,6 @@ GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
     break;
   case GL_RGBA:
   case GL_BGRA_EXT:
-    csize=4;
     while(pixelnum--){
       grey=*greydata++;
       *pixels++=grey;
@@ -532,11 +504,9 @@ GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
     }
     break;
   case GL_LUMINANCE:
-    csize=1;
     memcpy(pdata, greydata, pixelnum);
     break;
   case GL_YUV422_GEM:
-    csize=2;
     pixelnum>>=1;
     while(pixelnum--){
       pixels[chY0]=*greydata++;
@@ -558,14 +528,13 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
   if(!Y || !U || !V)return;
 
   int pixelnum=xsize*ysize;
+  setCsizeByFormat();
   reallocate();
   switch (format){
   case GL_LUMINANCE:
-    csize=1;
     memcpy(pdata, Y, pixelnum);
     break;
   case GL_RGB:  case GL_BGR_EXT: // of course this is stupid, RGB isn't BGR
-    csize=3;
     {
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
@@ -627,7 +596,6 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
     break;
   case GL_RGBA:
   case GL_BGRA_EXT:
-    csize=4;
     {
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
@@ -692,7 +660,6 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
     }
     break;
   case GL_YUV422_GEM:
-    csize=2;
     {
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
@@ -722,7 +689,6 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
 	py1+=xsize*1;	py2+=xsize*1;
       }
     }
-    csize=2;
     break;
   }
 }

@@ -138,7 +138,7 @@ struct GEM_EXTERN imageStruct
 #else
        type(GL_UNSIGNED_BYTE), format(GL_RGBA),
 #endif
-       notowned(0),data(0),pdata(0),datasize(0),
+       notowned(0),data(NULL),pdata(NULL),datasize(0),
 #ifdef __APPLE__
        upsidedown(1)
 #else
