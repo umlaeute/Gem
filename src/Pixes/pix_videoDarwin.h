@@ -91,6 +91,8 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         void destroySeqGrabber();
         void DoVideoSettings();
         static pascal Boolean SeqGrabberModalFilterProc (DialogPtr theDialog, const EventRecord *theEvent, short *itemHit, long refCon); 
+        void	    	dimenMess(int x, int y, int leftmargin, int rightmargin,
+    	    	    	    int topmargin, int bottommargin);
 
         //-----------------------------------
         // GROUP:	Video data
@@ -117,7 +119,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         static void qualityCallback(void *data, t_floatarg X);
         static void resetCallback(void *data);
         static void dialogCallback(void *data);
-        static void colorspaceCallback(void *data, t_floatarg cs);
+        static void colorspaceCallback(void *data, t_symbol *cs);
         
 };
 

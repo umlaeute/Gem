@@ -6,7 +6,7 @@
  *  Copyright (c) 2002 James Tittle & Chris Clepper
  *
  */
-#ifdef MACOSX
+#ifdef __APPLE__
 
 #include "pix_videoDarwin.h"
 #include "GemCache.h"
@@ -387,7 +387,29 @@ void pix_videoDarwin :: resetSeqGrabber()
     
 }
 
-
+/////////////////////////////////////////////////////////
+// dimenMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
+    int topmargin, int bottommargin)
+{
+    if (x > 0 ){
+        m_vidXSize = (int)x;
+    }else{
+        m_vidXSize = 320;
+    }
+    if (y > 0){
+        m_vidYSize = (int)y;
+    }else{
+        m_vidYSize = 240;
+    }
+    
+  post("pix_videoDarwin: height %d width %d",m_vidXSize,m_vidYSize);  
+//  m_pixBlock.image.xsize = m_vidXSize;
+//  m_pixBlock.image.ysize = m_vidYSize;
+    
+}
 
 void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
@@ -400,7 +422,7 @@ pix_video::real_obj_setupCallback(classPtr);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
 		  gensym("dialog"), A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::colorspaceCallback,
-		  gensym("colorspace"), A_DEFFLOAT, A_NULL);
+		  gensym("colorspace"), A_SYMBOL, A_NULL);
 }
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
@@ -421,10 +443,20 @@ void pix_videoDarwin ::dialogCallback(void *data)
   
 }
 
-void pix_videoDarwin ::colorspaceCallback(void *data, t_floatarg cs)
+void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
 {
-GetMyClass(data)->m_colorspace=(int)cs;
-  
+   char c=toupper(*state->s_name);
+   if (c == 'Y'){
+   post("pix_film: yuv");
+   GetMyClass(data)->m_colorspace = 0;
+   }else
+   if (c == 'R')
+   {
+   post("pix_film: rgb");
+   GetMyClass(data)->m_colorspace = 1;
+   }
+   
+
 }
 
-#endif // MACOSX
+#endif // __APPLE__
