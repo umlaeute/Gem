@@ -141,7 +141,6 @@ void model :: openMess(t_symbol *filename)
     
   char buf[MAXPDSTRING];
   canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
-
   // read the object in
   m_model = glmReadOBJ(buf);
 

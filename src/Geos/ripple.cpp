@@ -405,8 +405,8 @@ void ripple :: ripple_grab()
     
     if (index < RIPPLE_COUNT)
     {
-      cx[index] = 1.0*ctrX/xsize*GRID_SIZE_X;
-      cy[index] = 1.0*ctrY/ysize*GRID_SIZE_Y;
+      cx[index] = (int)(1.0*ctrX/xsize*GRID_SIZE_X);
+      cy[index] = (int)(1.0*ctrY/ysize*GRID_SIZE_Y);
       t[index] = 4*RIPPLE_STEP;
       max[index] = ripple_max_distance(cx[index], cy[index]);
       

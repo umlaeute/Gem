@@ -16,6 +16,7 @@ LOG
 #define INCLUDE_TEXT2D_H_
 
 #include "Base/TextBase.h"
+#ifdef USE_FONTS
 
 #ifndef FTGL
 class GLTTBitmapFont;
@@ -26,6 +27,7 @@ class FTGLBitmapFont;
 class FTGLPixmapFont;
 class FTFace;
 #endif
+#endif // USE_FONTS
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -77,7 +79,8 @@ class GEM_EXTERN text2d : public TextBase
 	    //-----------------------------------
 	    // GROUP:	Member variables
 	    //-----------------------------------
-    
+#ifdef USE_FONTS
+
 	   	//////////
     	// The font structure
 #ifndef FTGL
@@ -89,12 +92,12 @@ class GEM_EXTERN text2d : public TextBase
 #endif
     	//////////
     	// The font structure
-
-	int 		m_antialias;
     	FTFace 		*m_face;
+#endif // USE_FONTS
+	int 		m_antialias;
 
-	void text2d :: aliasMess(float size);
-	static void text2d :: aliasMessCallback(void *data, t_floatarg tog);
+	void            aliasMess(float size);
+	static void     aliasMessCallback(void *data, t_floatarg tog);
 };
 
 #endif	// for header file

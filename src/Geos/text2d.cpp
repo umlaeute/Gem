@@ -16,6 +16,7 @@
 
 #include "text2d.h"
 
+#ifdef USE_FONTS
 #include "FTFace.h"
 #ifndef FTGL
 #include "GLTTBitmapFont.h"
@@ -28,6 +29,8 @@
 #include "FTGLPixmapFont.h"
 #endif
 #endif
+
+#endif // USE_FONTS
 
 #ifdef MACOSX
 #include <AGL/agl.h>
@@ -45,11 +48,15 @@ CPPEXTERN_NEW_WITH_GIMME(text2d)
 //
 /////////////////////////////////////////////////////////
 text2d :: text2d(int argc, t_atom *argv)
+  : TextBase(argc, argv),
+#ifdef USE_FONTS
+    m_pfont(NULL),
 #if defined __linux__ || defined __APPLE__
-  : TextBase(argc, argv), m_pfont(NULL), m_bfont(NULL), m_face(NULL), m_antialias(0)
-#else
-    : TextBase(argc, argv), m_pfont(NULL), m_face(NULL)
+    m_bfont(NULL),
 #endif
+    m_face(NULL),
+#endif // USE_FONTS
+    m_antialias(0)
 {
 #ifdef MACOSX
   if (!HaveValidContext ()) {
@@ -66,11 +73,13 @@ text2d :: text2d(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 text2d :: ~text2d()
 {
+#ifdef USE_FONTS
 #if defined __linux__ || defined __APPLE__
   delete m_pfont;
 #endif
   delete m_bfont;
   delete m_face;
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -84,13 +93,13 @@ void text2d :: setFontSize(int size)
   m_valid = makeFontFromFace();
   setModified();
 }
-
 /////////////////////////////////////////////////////////
 // fontNameMess
 //
 /////////////////////////////////////////////////////////
 void text2d :: fontNameMess(const char *filename)
 {
+#ifdef USE_FONTS
   m_valid = 0;
 #if defined __linux__ || defined __APPLE__
   delete m_pfont;
@@ -116,6 +125,7 @@ void text2d :: fontNameMess(const char *filename)
     }
   m_valid = makeFontFromFace();
   setModified();
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -124,6 +134,7 @@ void text2d :: fontNameMess(const char *filename)
 /////////////////////////////////////////////////////////
 int text2d :: makeFontFromFace()
 {
+#ifdef USE_FONTS
   if (!m_face)
     {
       error("GEM: text2d: True type font doesn't exist");
@@ -156,6 +167,7 @@ int text2d :: makeFontFromFace()
     }
 #endif
   return(1);
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -164,6 +176,7 @@ int text2d :: makeFontFromFace()
 /////////////////////////////////////////////////////////
 void text2d :: render(GemState *)
 {
+#ifdef USE_FONTS
   if (m_valid)
     if (m_antialias)
       {
@@ -209,6 +222,7 @@ void text2d :: render(GemState *)
 	  height = m_bfont->getHeight() / 2;
 	m_bfont->output(-width, -height,m_theString);
       }
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////

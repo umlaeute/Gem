@@ -17,12 +17,15 @@ LOG
 
 #include "Base/TextBase.h"
 
+#ifdef USE_FONTS
+
 #ifndef FTGL
 class GLTTFont;
 #else
 class FTGLFont;
 #endif
 class FTFace;
+#endif // USE_FONTS
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -73,7 +76,7 @@ class GEM_EXTERN text3d : public TextBase
 	    //-----------------------------------
 	    // GROUP:	Member variables
 	    //-----------------------------------
-    
+#ifdef USE_FONTS
 	   	//////////
     	// The font structure
 #ifndef FTGL
@@ -84,6 +87,7 @@ class GEM_EXTERN text3d : public TextBase
     	//////////
     	// The font structure
     	FTFace 			*m_face;
+#endif // USE_FONTS
 };
 
 #endif	// for header file

@@ -16,12 +16,14 @@
 
 #include "textoutline.h"
 
+#ifdef USE_FONTS
 #include "FTFace.h"
 #ifndef FTGL
 #include "GLTTOutlineFont.h"
 #else
 #include "FTGLOutlineFont.h"
 #endif
+#endif // USE_FONTS
 
 #ifdef MACOSX
 #include <AGL/agl.h>
@@ -39,7 +41,10 @@ CPPEXTERN_NEW_WITH_GIMME(textoutline)
 //
 /////////////////////////////////////////////////////////
 textoutline :: textoutline(int argc, t_atom *argv)
-            : TextBase(argc, argv), m_font(NULL), m_face(NULL)
+            : TextBase(argc, argv)
+#ifdef USE_FONTS
+	    , m_font(NULL), m_face(NULL)
+#endif // USE_FONTS
 {
     m_fontSize = 20;
 #ifdef MACOSX
@@ -57,8 +62,10 @@ textoutline :: textoutline(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 textoutline :: ~textoutline()
 {
-    delete m_font;
-	delete m_face;
+#ifdef USE_FONTS
+  delete m_font;
+  delete m_face;
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -89,21 +96,22 @@ void textoutline :: setFontSize(int size)
 /////////////////////////////////////////////////////////
 void textoutline :: fontNameMess(const char *filename)
 {
-	m_valid = 0;
-	delete m_font;
-	m_font = NULL;
-	delete m_face;
-	m_face = new FTFace;
-    char buf[MAXPDSTRING];
-    canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
+#ifdef USE_FONTS
+  m_valid = 0;
+  delete m_font;
+  m_font = NULL;
+  delete m_face;
+  m_face = new FTFace;
+  char buf[MAXPDSTRING];
+  canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
 
-	if( ! m_face->open(buf) )
-	{
-		error("GEM: textoutline: unable to open font: %s", buf);
-		return;
-	}
-	m_valid = makeFontFromFace();
-    setModified();
+  if( ! m_face->open(buf) )    {
+    error("GEM: textoutline: unable to open font: %s", buf);
+    return;
+  }
+  m_valid = makeFontFromFace();
+  setModified();
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -112,25 +120,25 @@ void textoutline :: fontNameMess(const char *filename)
 /////////////////////////////////////////////////////////
 int textoutline :: makeFontFromFace()
 {
-	if (!m_face)
-	{
-		error("GEM: text2d: True type font doesn't exist");
-		return(0);
-	}
+#ifdef USE_FONTS
+  if (!m_face)	{
+    error("GEM: text2d: True type font doesn't exist");
+    return(0);
+  }
 
-	delete m_font;
+  delete m_font;
 #ifndef FTGL
-	m_font = new GLTTOutlineFont(m_face);
+  m_font = new GLTTOutlineFont(m_face);
 #else
-	m_font = new FTGLOutlineFont(m_face);
+  m_font = new FTGLOutlineFont(m_face);
 #endif
-	m_font->setPrecision((double)m_precision);
-	if( ! m_font->create(m_fontSize) )
-	{
-		error("GEM: textoutline: unable to create vectored font");
-		return(0);
-	}
-	return(1);
+  //	m_font->setPrecision((double)m_precision);
+  if( ! m_font->create(m_fontSize) )    {
+    error("GEM: textoutline: unable to create vectored font");
+    return(0);
+  }
+  return(1);
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -139,33 +147,34 @@ int textoutline :: makeFontFromFace()
 /////////////////////////////////////////////////////////
 void textoutline :: render(GemState *)
 {
-	if (m_valid)
-	{
-	    glPushMatrix();
-
-		// compute the offset due to the justification
-		float width = 0.f;
-		if (m_widthJus == LEFT)
-			width = 0.f;
-		else if (m_widthJus == RIGHT)
-			width = (float)(m_font->getWidth(m_theString));
-		else if (m_widthJus == CENTER)
-			width = (float)(m_font->getWidth(m_theString) / 2.f);
-
-		float height = 0.f;
-		if (m_heightJus == BOTTOM)
-			height = 0.f;
-		else if (m_heightJus == TOP)
-			height = (float)(m_font->getHeight());
-		else if (m_heightJus == MIDDLE)
-			height = (float)(m_font->getHeight() / 2.f);
-
-		glScalef(.05f, .05f, .05f);
-		glTranslatef(-width, -height, 0.f);
-		m_font->output(m_theString);
-
-		glPopMatrix();
-	}
+#ifdef USE_FONTS
+  if (m_valid)	{
+    glPushMatrix();
+    
+    // compute the offset due to the justification
+    float width = 0.f;
+    if (m_widthJus == LEFT)
+      width = 0.f;
+    else if (m_widthJus == RIGHT)
+      width = (float)(m_font->getWidth(m_theString));
+    else if (m_widthJus == CENTER)
+      width = (float)(m_font->getWidth(m_theString) / 2.f);
+    
+    float height = 0.f;
+    if (m_heightJus == BOTTOM)
+      height = 0.f;
+    else if (m_heightJus == TOP)
+      height = (float)(m_font->getHeight());
+    else if (m_heightJus == MIDDLE)
+      height = (float)(m_font->getHeight() / 2.f);
+    
+    glScalef(.05f, .05f, .05f);
+    glTranslatef(-width, -height, 0.f);
+    m_font->output(m_theString);
+    
+    glPopMatrix();
+  }
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////

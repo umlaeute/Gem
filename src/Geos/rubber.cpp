@@ -385,7 +385,7 @@ int rubber :: rubber_grab()
     }
   }
 
-  return min_i;
+  return (int)min_i;
 }
 
 /////////////////////////////////////////////////////////
@@ -468,3 +468,4 @@ void rubber :: blendMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->m_blend=((int)size);
 }
+

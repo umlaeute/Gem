@@ -16,12 +16,14 @@
 
 #include "text3d.h"
 
+#ifdef USE_FONTS
 #include "FTFace.h"
 #ifndef FTGL
 #include "GLTTFont.h"
 #else
 #include "FTGLFont.h"
 #endif
+#endif // USE_FONTS
 
 #ifdef MACOSX
 #include <AGL/agl.h>
@@ -39,7 +41,10 @@ CPPEXTERN_NEW_WITH_GIMME(text3d)
 //
 /////////////////////////////////////////////////////////
 text3d :: text3d(int argc, t_atom *argv)
-  : TextBase(argc, argv), m_font(NULL), m_face(NULL)
+  : TextBase(argc, argv)
+#ifdef USE_FONTS
+  , m_font(NULL), m_face(NULL)
+#endif // USE_FONTS
 {
   m_fontSize = 20;
 #ifdef MACOSX
@@ -57,8 +62,10 @@ text3d :: text3d(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 text3d :: ~text3d()
 {
+#ifdef USE_FONTS
   delete m_font;
   delete m_face;
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -89,6 +96,7 @@ void text3d :: setFontSize(int size)
 /////////////////////////////////////////////////////////
 void text3d :: fontNameMess(const char *filename)
 {
+#ifdef USE_FONTS
   m_valid = 0;
   delete m_font;
   m_font = NULL;
@@ -104,6 +112,7 @@ void text3d :: fontNameMess(const char *filename)
   }
   m_valid = makeFontFromFace();
   setModified();
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -112,6 +121,7 @@ void text3d :: fontNameMess(const char *filename)
 /////////////////////////////////////////////////////////
 int text3d :: makeFontFromFace()
 {
+#ifdef USE_FONTS
   if (!m_face)
     {
       error("GEM: text3d: True type font doesn't exist");
@@ -124,13 +134,14 @@ int text3d :: makeFontFromFace()
 #else
   m_font = new FTGLFont(m_face);
 #endif
-  m_font->setPrecision((double)m_precision);
+  //m_font->setPrecision((double)m_precision);
   if( ! m_font->create(m_fontSize) )
     {
       error("GEM: text3d: unable to create polygonal font");
       return(0);
     }
   return(1);
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
@@ -139,6 +150,7 @@ int text3d :: makeFontFromFace()
 /////////////////////////////////////////////////////////
 void text3d :: render(GemState *)
 {
+#ifdef USE_FONTS
   if (m_valid && m_theString)
     {
       glPushMatrix();
@@ -166,6 +178,7 @@ void text3d :: render(GemState *)
 
       glPopMatrix();
     }
+#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////
