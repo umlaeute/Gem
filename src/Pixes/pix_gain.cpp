@@ -97,6 +97,11 @@ void pix_gain :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_gain :: processYUVImage(imageStruct &image)
 {
+#ifdef __VEC__
+  //post("using altivec");  
+  processYUVAltivec(image);
+  return;
+#else
   int h,w,width;
     long src;
     int y1,y2,u,v;
@@ -124,6 +129,7 @@ void pix_gain :: processYUVImage(imageStruct &image)
         src+=4;
         }
     }
+#endif
 }
 
 #ifdef __MMX__
@@ -172,11 +178,9 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
 }
 #endif /* __MMX__ */
 
-
-
-#ifdef __VEC__
-void pix_gain :: processYUV_Altivec(imageStruct &image)
+void pix_gain :: processYUVAltivec(imageStruct &image)
 {
+ #ifdef __VEC__
  int h,w,width,height;
     /*altivec code starts */
     width = image.xsize/8;
@@ -289,8 +293,8 @@ void pix_gain :: processYUV_Altivec(imageStruct &image)
         vec_dss( 0 );
         #endif
     }  /* end of working altivec function */
+#endif
 }
-#endif /* __VEC__ */
 
 /////////////////////////////////////////////////////////
 // vecGainMess
