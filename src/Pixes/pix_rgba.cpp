@@ -54,7 +54,11 @@ pix_rgba :: ~pix_rgba()
 /////////////////////////////////////////////////////////
 void pix_rgba :: processImage(imageStruct &image)
 {
-  if (image.format==m_image.format)return;
+  // note: [pix_yuv] and [pix_grey] inherit this function from [pix_rgba]
+  // thus you shoudldn't undefine anything below for performance reasons
+
+  if (image.format==m_image.format)return; // we don't need to convert as we are already there
+
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
  
