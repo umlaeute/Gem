@@ -180,7 +180,7 @@ void vertex_draw :: render(GemState *state)
     if (rebuild || !m_nVBOColor ){
       if(!m_nVBOColor)glGenBuffersARB( 1, &m_nVBOColor );
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
-      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*4*sizeof(float),
+      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*4*sizeof(int),
 		       state->ColorArray, GL_DYNAMIC_DRAW_ARB );
       glColorPointer(4,GL_FLOAT,0,(char*) NULL);
     }else{
