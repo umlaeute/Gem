@@ -61,22 +61,18 @@ void vertex_draw :: render(GemState *state)
     GLuint vao;
     GLuint fences[2];
     
-
     if (state->VertexArray == NULL || state->VertexArraySize <= 0){
       //  post("vertex_draw: no vertex array!");
         return;
     }
-    
     if (state->ColorArray == NULL || state->HaveColorArray == 0){
      //   post("vertex_draw: no Color array!");
        // m_color = 0;
     }
-    
     if (state->TexCoordArray == NULL || state->HaveTexCoordArray == 0){
         post("vertex_draw: no Texture Coordinate array!");
         m_texcoord = 0;
     }
-    
     
     if (state->drawType  && m_defaultDraw){
         m_drawType = state->drawType;
@@ -106,8 +102,6 @@ void vertex_draw :: render(GemState *state)
         post("vertex draw: not using VAO");
     }*/
     
- 
-    
   //  glGenVertexArraysAPPLE(2, fences);
     
     vao = fences[0];
@@ -127,44 +121,41 @@ void vertex_draw :: render(GemState *state)
         glDisableClientState(GL_COLOR_ARRAY);
         }
      
-   // if(m_texcoord){
+   //if(m_texcoord){
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glTexCoordPointer(2,GL_FLOAT,0,state->TexCoordArray);
     //   }else{
     //   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     //   }
     
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glNormalPointer(GL_FLOAT,0,state->NormalArray);    
-        
+
+    if(state->HaveNormalArray || state->NormalArray!=NULL){
+      glEnableClientState(GL_NORMAL_ARRAY);
+      glNormalPointer(GL_FLOAT,0,state->NormalArray);    
+    }
+
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(4,GL_FLOAT,0,(GLfloat *)state->VertexArray);
-    #ifdef __APPLE__
+
+#ifdef  GL_VERTEX_ARRAY_RANGE_APPLE
     glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
     glVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
-#ifdef  GL_VERTEX_ARRAY_RANGE_APPLE
     glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
     glFlushVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
 #endif
-    #endif //__APPLE__
   
-  
- 
     glDrawArrays(m_drawType,0,size);
-    
     glDisableClientState(GL_VERTEX_ARRAY);
 
 #ifdef  GL_VERTEX_ARRAY_RANGE_APPLE   
     glDisableClientState(GL_VERTEX_ARRAY_RANGE_APPLE);
         glVertexArrayRangeAPPLE(0,0);
 #endif
-
     if(m_color)glDisableClientState(GL_COLOR_ARRAY);
     
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
    // if(m_texcoord)glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    
     glDisable(GL_BLEND);
   //  glDeleteVertexArraysAPPLE(2, fences);   
 }
