@@ -8,6 +8,8 @@
  */
 
 #include "pix_background.h"
+#include <string.h>
+
 #define clamp(x) ((x < 16) ? 16 : (x > 235) ? 235 : x)
 CPPEXTERN_NEW(pix_background)
 
