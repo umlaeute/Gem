@@ -58,14 +58,13 @@ class GEM_EXTERN Blob {
   void ymax(double y);
 
   int area;
+  double m_xaccum, m_yaccum, m_xyaccum;
 
   bool valid; // 0=invalid; 1=ok;
   bool rightPosition;
  private :
-  double m_xmin;
-  double m_xmax;
-  double m_ymin;
-  double m_ymax;
+  double m_xmin, m_xmax;
+  double m_ymin, m_ymax;
   int position;
 };
 
@@ -100,8 +99,14 @@ class GEM_EXTERN pix_multiblob : public GemPixObj
   // the minimum size of a blob (relative to the image)
   void blobSizeMess(t_float blobSize);
   t_float m_blobsize;
+
+  // the minimum value of a pixel to be within a blob
+  void treshMess(t_float tresh);
+  unsigned char m_treshold;
+
  private: 
   static void blobSizeMessCallback(void *data, t_floatarg blobSize);
+  static void treshMessCallback(void *data, t_floatarg tresh);
 };
 
 

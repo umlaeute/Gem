@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////
 //
 //  pix_multiblob
-// (c) 2004
+// based on (c) 2004, Jakob Leiner & Theresa Rienmüller
 //
 /////////////////////////////////////////////////////////
 
@@ -28,10 +28,8 @@
 Blob::Blob(){
   m_xmin = 0; m_xmax = 0.0;
   m_ymin = 0; m_ymax = 0.0;
+  m_xaccum=0; m_yaccum=0; m_xyaccum=0;
   area = 0;
-  position = 0;
-  valid = false;
-  rightPosition = false;
 }
 
 double Blob:: xmin(){
@@ -47,10 +45,10 @@ double Blob:: ymax(){
   return m_ymax;
 }
 double Blob:: xmid(){
-  return (m_xmin+m_xmax)*0.5;
+  return m_xaccum/m_xyaccum;
 }
 double Blob:: ymid(){
-  return (m_ymin+m_ymax)*0.5;
+  return m_yaccum/m_xyaccum;
 }
 double Blob:: diameter2(){
   return (m_xmax-m_xmin)*(m_xmax-m_xmin)+(m_ymax-m_ymin)*(m_ymax-m_ymin);}
@@ -89,12 +87,12 @@ Constructor
 initializes the pixBlocks and pixBlobs
 
 ------------------------------------------------------------*/
-pix_multiblob :: pix_multiblob(t_floatarg f){
+  pix_multiblob :: pix_multiblob(t_floatarg f) : m_blobsize(0.001), m_treshold(10)
+{
   m_blobNumber = (int)f;
   if(m_blobNumber < 1)m_blobNumber = 6;
 
   // initialize blob-structures
-  m_blobsize = 0.001;
   currentBlobs = new Blob[m_blobNumber];
 
   // initialize image
@@ -128,6 +126,12 @@ void pix_multiblob :: makeBlob(Blob *pb, int x, int y){
   if(x>m_image.xsize || y>m_image.xsize)return;
 
   pb->area++;
+  t_float grey=((t_float)m_image.GetPixel(y, x, chGray))/255;
+  pb->m_xaccum +=grey*(t_float)x;
+  pb->m_yaccum +=grey*(t_float)y;
+  pb->m_xyaccum+=grey;
+
+
   if(x<pb->xmin())pb->xmin(x);
   if(x>pb->xmax())pb->xmax(x);
   if(y<pb->ymin())pb->ymin(y);
@@ -138,7 +142,7 @@ void pix_multiblob :: makeBlob(Blob *pb, int x, int y){
   if(pb->area > 10000){return;}
   for(int i = -1; i<= 1; i++){
     for(int j = -1; j <= 1; j++){
-      if (m_image.GetPixel(y+i, x+j, chGray) > 0)
+      if (m_image.GetPixel(y+i, x+j, chGray) > m_treshold)
 	{
 	  makeBlob(pb, x+j, y+i);
 	}
@@ -178,8 +182,6 @@ void pix_multiblob :: doProcessing() {
 
   // reset the currentblobs array
   int i=m_blobNumber;
-  while(i--)currentBlobs[i].valid=false;
-
 
   // detect blobs and add them to the currentBlobs-array
   for(int y = 0; y < m_image.ysize; y++){
@@ -192,7 +194,6 @@ void pix_multiblob :: doProcessing() {
 
 	  makeBlob(blob, x, y);
 	  if(blob->area > blobsize){
-	    blob->valid = true;
 	    addToBlobArray(blob, blobNumber);
 	    blobNumber++;
 	  }
@@ -201,7 +202,7 @@ void pix_multiblob :: doProcessing() {
     }
   }
 
-  // ok, we have found blobNumber blobs
+  // ok, we have found some blobs
 
   // since we can only handle m_blobNumber blobs, we might want to clip
   if(blobNumber > m_blobNumber)blobNumber = m_blobNumber;
@@ -212,18 +213,27 @@ void pix_multiblob :: doProcessing() {
 
   // no create a matrix of [blobNumber*3] elements
   // each row holds all information on our blob
-  t_atom*ap = new t_atom[2+blobNumber*3];
+  t_atom*ap = new t_atom[2+blobNumber*8];
   SETFLOAT(ap, (t_float)blobNumber);
-  SETFLOAT(ap+1, 3.0);
+  SETFLOAT(ap+1, 8.0);
 
   int bn=blobNumber;
   for(bn=0; bn<blobNumber; bn++){
-    SETFLOAT(ap+bn*3+2, currentBlobs[bn].xmid()*scaleX);
-    SETFLOAT(ap+bn*3+3, currentBlobs[bn].ymid()*scaleY);
-    SETFLOAT(ap+bn*3+4, currentBlobs[bn].area*scaleXY);
+    SETFLOAT(ap+bn*8+2, currentBlobs[bn].xmid()*scaleX); // weighted X
+    SETFLOAT(ap+bn*8+3, currentBlobs[bn].ymid()*scaleY); // weighted Y
+    SETFLOAT(ap+bn*8+4, currentBlobs[bn].m_xyaccum*scaleXY); // weighted Area
+
+    SETFLOAT(ap+bn*8+5, currentBlobs[bn].xmin()*scaleX); // minX
+    SETFLOAT(ap+bn*8+6, currentBlobs[bn].ymin()*scaleY); // minY
+    SETFLOAT(ap+bn*8+7, currentBlobs[bn].xmax()*scaleX); // maxX
+    SETFLOAT(ap+bn*8+8, currentBlobs[bn].ymax()*scaleY); // maxY
+
+    SETFLOAT(ap+bn*8+9, currentBlobs[bn].area*scaleXY);  // unweighted Area
   }
 
-  outlet_anything(m_infoOut, gensym("matrix"), 2+3*blobNumber, ap);
+  // i admit that it is naughty to use "matrix" from zexy/iemmatrix
+  // but it is the best thing i can think of for 2-dimensional arrays
+  outlet_anything(m_infoOut, gensym("matrix"), 2+8*blobNumber, ap);
 }
 
 void pix_multiblob :: processImage(imageStruct &image){
@@ -265,10 +275,21 @@ blobSizeMess
 void pix_multiblob :: blobSizeMess(t_float blobSize){
   if((blobSize < 0.0)||(blobSize > 1.0))
     {
-      post("pix_multiblob: blobsize %d out of range (0..1)!", blobSize);
+      post("pix_multiblob: blobsize %f out of range (0..1)!", blobSize);
       return;
     }
   m_blobsize = blobSize/100.0;
+}
+
+/*------------------------------------------------------------
+treshMess
+------------------------------------------------------------*/
+void pix_multiblob :: treshMess(t_float tresh){
+  if((tresh < 0.0)||(tresh > 1.0))
+    {
+      post("pix_multiblob: treshold %f out of range (0..1)!", tresh);
+    }
+  m_treshold = CLAMP(tresh*255);
 }
 
 
@@ -280,6 +301,10 @@ void pix_multiblob :: blobSizeMess(t_float blobSize){
 void pix_multiblob :: obj_setupCallback(t_class *classPtr){
   class_addmethod(classPtr, (t_method)&pix_multiblob :: blobSizeMessCallback,
 		  gensym("blobSize"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_multiblob :: treshMessCallback,
+		  gensym("tresh"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_multiblob :: treshMessCallback,
+		  gensym("treshold"), A_FLOAT, A_NULL);
 }
 
 /*------------------------------------------------------------
@@ -287,4 +312,11 @@ blobSizeMessCallback
 ------------------------------------------------------------*/
 void pix_multiblob :: blobSizeMessCallback(void *data, t_floatarg blobSize){
   GetMyClass(data)->blobSizeMess((t_float) blobSize);
+}
+
+/*------------------------------------------------------------
+treshMessCallback
+------------------------------------------------------------*/
+void pix_multiblob :: treshMessCallback(void *data, t_floatarg tresh){
+  GetMyClass(data)->treshMess((t_float) tresh);
 }
