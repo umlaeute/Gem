@@ -40,12 +40,16 @@ GemOutput :: ~GemOutput()
 // renderMess
 //
 /////////////////////////////////////////////////////////
+void GemOutput :: doRender(gem_control cb){
+  if(cb!=NULL)(&cb);
+}
+
 void GemOutput :: renderMess(gem_control cb)
 {
   if(!m_outputState)return;
   post("GemOutput: rendering: %x", cb);
   preRender(cb);
-  if(cb!=NULL)(&cb);
+  doRender(cb);
   postRender(cb);
 }
 /////////////////////////////////////////////////////////

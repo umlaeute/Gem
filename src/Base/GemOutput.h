@@ -38,7 +38,7 @@
     on "destroy" the output-device (e.g.: window) is closed
     on "render" the following happens:
       1. preRender() is called, where the output-objects sets the display-context
-      2. callback the rendering-function
+      2. callback the rendering-function: doRender()
       3. postRender() for objects that want to grab the pixel-data and send it e.g. to a video-out
 
 
@@ -64,6 +64,7 @@ class GEM_EXTERN GemOutput : public CPPExtern
   virtual     	~GemOutput();
     	
   void		renderMess(gem_control gc);
+  void          doRender  (gem_control gc);
   virtual void  preRender (gem_control gc)=0;
   virtual void  postRender(gem_control gc){};
   
