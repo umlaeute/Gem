@@ -50,6 +50,7 @@ extern "C" {
    void pix_duotone_setup();
    void pix_emboss_setup();
    void pix_filmNEW_setup();
+   void pix_movieNEW_setup();
    void pix_videoNEW_setup();
 #ifdef __APPLE__ 
    void pix_filmDarwin_setup();
@@ -124,10 +125,12 @@ extern "C" {
   void Pixes_setup() {
    // setting up [pix_film]
 #ifdef __NEW__
+    pix_movieNEW_setup();
     pix_filmNEW_setup();
 #endif // __NEW__
 
 #ifdef __linux__
+    pix_movieNEW_setup();
     pix_filmNEW_setup();
 #  if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
     pix_filmFFMPEG_setup();
@@ -213,7 +216,9 @@ extern "C" {
     pix_mix_setup();
     pix_motionblur_setup();
     pix_movement_setup();
+#ifndef __linux__
     pix_movie_setup();
+#endif
     pix_movieYUV_setup();
     pix_multiimage_setup();
     pix_multiply_setup();
