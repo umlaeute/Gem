@@ -24,7 +24,7 @@
 
 #include "Pixes/video.h"
 #ifdef HAVE_DV
-#include <libdv/dv1394.h>
+#include "dv1394.h"
 #include <libdv/dv.h>
 
 
