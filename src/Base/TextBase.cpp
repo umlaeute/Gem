@@ -18,7 +18,12 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
+
+#ifdef NT
+# include <io.h>
+#else
+# include <unistd.h>
+#endif
 
 char *TextBase::DEFAULT_FONT = "arial.ttf";
 
