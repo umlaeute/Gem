@@ -232,13 +232,13 @@ dnl Checking the rest
 dnl video formats (selectable by command-line args)
 if test "$with_mpeg3" != "no"
 then
-  AC_FIND_LIB(mpeg3, mpeg3_check_sig, search_libs, $with_mpeg3)
+  AC_FIND_LIB(mpeg3, mpeg3_check_sig, $search_libs, $with_mpeg3)
 fi
 if test "$with_mpeg" != "no"
 then
   if test "$ac_tr_lib" != "HAVE_LIBMPEG3"
   then
-    AC_FIND_LIB(mpeg, OpenMPEG, search_libs, $with_mpeg)
+    AC_FIND_LIB(mpeg, OpenMPEG, $search_libs, $with_mpeg)
   else
     echo skipping check for mpeg because mpeg3 is used
   fi
@@ -246,12 +246,12 @@ fi
 
 if test "$with_quicktime" != "no"
 then
-  AC_FIND_LIB(quicktime, quicktime_check_sig, search_libs, $with_quicktime)
+  AC_FIND_LIB(quicktime, quicktime_check_sig, $search_libs, $with_quicktime)
 fi
 
 if test "$with_avi" != "no"
 then
-  AC_FIND_LIB(aviplay, CreateIAviReadFile, search_libs, $with_avi)
+  AC_FIND_LIB(aviplay, CreateIAviReadFile, $search_libs, $with_avi)
 fi
 
 #
@@ -270,7 +270,7 @@ fi
 
 if test "$with_ieee1394" != "no"
 then
-  AC_FIND_LIB(libdv, dv_init, search_libs, $with_ieee1394)
+  AC_FIND_LIB(libdv, dv_init, $search_libs, $with_ieee1394)
 fi
 
 
