@@ -367,9 +367,9 @@ void pix_colorreduce :: Pete_ColorReduce_SortColors(int* pHistogram,int** ppSort
 
 void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColors,int nColors,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,int* pHistogram) {
 
-	int nSortedRed[cnGridCellCount];
-	int nSortedGreen[cnGridCellCount];
-	int nSortedBlue[cnGridCellCount];
+	int *nSortedRed  = new int[cnGridCellCount];
+	int *nSortedGreen= new int[cnGridCellCount];
+	int *nSortedBlue = new int[cnGridCellCount];
 
 	int nCount;
 	for (nCount=0; nCount<nColors; nCount+=1) {
@@ -464,6 +464,9 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
 	}
     }
 post("bye pete");
+	if(nSortedRed  )delete[]nSortedRed;
+	if(nSortedGreen)delete[]nSortedGreen;
+	if(nSortedBlue )delete[]nSortedBlue;
 }
 /////////////////////////////////////////////////////////
 // static member function
