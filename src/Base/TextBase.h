@@ -22,7 +22,7 @@
 
 #ifdef _WINDOWS
 # define GLTT
-#elif defined MACOSX
+#elif defined __APPLE__
 # define FTGL
 #elif defined __linux__
 # ifdef HAVE_LIBFTGL
