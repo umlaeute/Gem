@@ -30,6 +30,11 @@ pix_backlight :: pix_backlight()
     m_SpikeFloor = 0.0f;	// 0 to 255
     m_SpikeCeiling = 255.0f;	// 0 to 255
     init =0;
+
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("scale"));
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("floor"));
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ceiling"));
+
 }
 
 /////////////////////////////////////////////////////////
@@ -273,15 +278,21 @@ void pix_backlight :: obj_setupCallback(t_class *classPtr)
 }
 void pix_backlight :: scaleCallback(void *data, t_floatarg m_SpikeScale)
 {
+  m_SpikeScale*=255.0;
+  //  if(m_SpikeScale<0.f)m_SpikeScale=0.f;else if(m_SpikeScale>255.f)m_SpikeScale=255.f;
   GetMyClass(data)->m_SpikeScale=(m_SpikeScale);
 }
 
 void pix_backlight :: floorCallback(void *data, t_floatarg m_SpikeFloor)
 {
+  m_SpikeFloor*=255.0;
+  if(m_SpikeFloor<0.f)m_SpikeFloor=0.f;else if(m_SpikeFloor>255.f)m_SpikeFloor=255.f;
   GetMyClass(data)->m_SpikeFloor=(m_SpikeFloor);
 }
 
 void pix_backlight :: ceilingCallback(void *data, t_floatarg m_SpikeCeiling)
 {
+  m_SpikeCeiling*=255.0;
+  if(m_SpikeCeiling<0.f)m_SpikeCeiling=0.f;else if(m_SpikeCeiling>255.f)m_SpikeCeiling=255.f;
   GetMyClass(data)->m_SpikeCeiling=(m_SpikeCeiling);  
 }
