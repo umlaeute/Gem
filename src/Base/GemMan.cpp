@@ -1068,7 +1068,8 @@ void GemMan :: destroyWindow()
   if (!m_windowState) return;
 
   stopRendering();
-  clock_unset(s_windowClock); 
+  clock_unset(s_windowClock);
+  s_windowClock = NULL;
 
   glFlush();
   glFinish();
