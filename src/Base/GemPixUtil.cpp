@@ -217,6 +217,7 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
 }
 GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
   //   B B B B B G G G   G G G R R R R R
+  //   R R R R R G G G   G G G B B B B B
   if(!rgb16data)return;
   unsigned short*rgbdata=(unsigned short*)rgb16data;
   int pixelnum=xsize*ysize;
@@ -228,12 +229,6 @@ GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
     csize=4;
     while(pixelnum--){
       rgb=*rgbdata++;
-      // abcdefghABCDEFGH
-      // XXXXXXXXXXXabcde
-
-      // abcdefghABCDEFGH
-      // 00000000abcdeXXX
-      // 00000000abcde000
       pixels[0]=((rgb>>8)&0xF8);
       pixels[1]=((rgb>>3)&0xFC);
       pixels[2]=((rgb<<3)&0xF8);
@@ -245,10 +240,7 @@ GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
     csize=1;
     while(pixelnum--){
       rgb=*rgbdata++;
-      unsigned char r=((rgb>>8)&0xF8);
-      unsigned char g=((rgb>>3)&0xFC);
-      unsigned char b=((rgb<<3)&0xF8);
-      *pixels++=(r*79+g*156+b*21)>>8;
+      *pixels++=(((rgb>>8)&0xF8)*79+((rgb>>3)&0xFC)*156+((rgb<<3)&0xF8)*21)>>8;
     }
     break;
   case GL_YUV422_GEM:
