@@ -156,7 +156,7 @@ class GEM_EXTERN pix_halftone : public GemPixObj
 	void Pete_HalfTone_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,int nSmoothingThreshold);
 	U32	Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight);
 	U16	GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U16* pImageData,int nImageWidth,int nImageHeight);
-	U32	Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,int nImageHeight);
+	unsigned char	Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,int nImageHeight);
 
     private:
     	//////////

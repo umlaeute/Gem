@@ -332,8 +332,6 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 				   nSampleLeftX,nSampleTopY,
 				   nCellSize,nCellSize,
 				   pSource,nWidth,nHeight);
-				  //pSource,nWidth,nHeight)>>9;
-		//nLuminance/=256;
 		nLuminance+=256;
 
 		int nCurrentYFP;
@@ -484,13 +482,11 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 
 	const int nSampleTopY=(ScreenSpacePoints[0].Pos.nY>>nFPShift);
 	const int nSampleLeftX=(ScreenSpacePoints[0].Pos.nX>>nFPShift);
-	const U32 AverageColour=
-	  Pete_GetImageAreaAverage(
+	int nLuminance =
+	  Pete_GetImageAreaAverageGray(
 				   nSampleLeftX,nSampleTopY,
 				   nCellSize,nCellSize,
 				   pSource,nWidth,nHeight);
-
-	int nLuminance=GetLuminance(AverageColour)/256;
 	nLuminance+=256;
 
 	int nCurrentYFP;
@@ -1043,6 +1039,7 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
   int nRedTotal=0;
   int nGreenTotal=0;
   int nBlueTotal=0;
+  int nAlphaTotal=0;
 
   while (pCurrentSource<pSourceEnd) {
     U32* pSourceLineStart=pCurrentSource;
@@ -1053,22 +1050,25 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
       const int nCurrentRed=(CurrentColour>>SHIFT_RED)&0xff;
       const int nCurrentGreen=(CurrentColour>>SHIFT_GREEN)&0xff;
       const int nCurrentBlue=(CurrentColour>>SHIFT_BLUE)&0xff;
+      const int nCurrentAlpha=(CurrentColour>>SHIFT_ALPHA)&0xff;
+
 
       nRedTotal+=nCurrentRed;
       nGreenTotal+=nCurrentGreen;
       nBlueTotal+=nCurrentBlue;
+      nAlphaTotal+=nCurrentAlpha;
 
       pCurrentSource+=1;
     }
     pCurrentSource=pSourceLineStart+nImageWidth;
   }
-
   const int nTotalSamples=(nDeltaX*nDeltaY);
   const int nRedAverage=(nRedTotal/nTotalSamples);
   const int nGreenAverage=(nGreenTotal/nTotalSamples);
   const int nBlueAverage=(nBlueTotal/nTotalSamples);
- 
-  return (nRedAverage<<SHIFT_RED)|(nGreenAverage<<SHIFT_GREEN)|(nBlueAverage<<SHIFT_BLUE);
+  const int nAlphaAverage=(nAlphaTotal/nTotalSamples);
+
+  return (nRedAverage<<SHIFT_RED)|(nGreenAverage<<SHIFT_GREEN)|(nBlueAverage<<SHIFT_BLUE)|(nBlueAverage<<SHIFT_ALPHA);
 }
 
 U16 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U16* pImageData,int nImageWidth,int nImageHeight) {
@@ -1110,7 +1110,7 @@ U16 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int
   return (nLumaAverage);
 }
 
-U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,int nImageHeight) {
+unsigned char pix_halftone :: Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,int nImageHeight) {
   /* grey-scale images: jmz */
   if (nLeftX<0) {
     nDeltaX-=(0-nLeftX);   nLeftX=0;
@@ -1136,11 +1136,7 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
     unsigned char* pSourceLineStart=pCurrentSource;
     unsigned char* pSourceLineEnd=pCurrentSource+nDeltaX;
 
-    while (pCurrentSource<pSourceLineEnd) {
-      const unsigned char CurrentColour=*pCurrentSource;
-      nGreyTotal+=CurrentColour;
-      pCurrentSource+=1;
-    }
+    while (pCurrentSource<pSourceLineEnd) nGreyTotal+=*pCurrentSource++;
 
     pCurrentSource=pSourceLineStart+nImageWidth;
 
@@ -1148,7 +1144,7 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
 
   const int nTotalSamples=(nDeltaX*nDeltaY);
   const int nGreyAverage=(int)(nGreyTotal/nTotalSamples);
-  return (nGreyAverage<<SHIFT_RED)|(nGreyAverage<<SHIFT_GREEN)|(nGreyAverage<<SHIFT_BLUE);
+  return nGreyAverage;
 }
 
 /////////////////////////////////////////////////////////
