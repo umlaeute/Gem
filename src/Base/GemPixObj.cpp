@@ -40,10 +40,19 @@ void GemPixObj :: setPixModified()
 void GemPixObj :: render(GemState *state)
 {
     if (!state->image || !state->image->newimage || !m_processOnOff) return;
-	if (state->image->image.format == GL_RGBA)
+
+#ifdef MACOSX
+    if (state->image->image.format == GL_BGRA_EXT || state->image->image.format == GL_RGBA )
+            //|| state->image->image.format == GL_YCBCR_422_APPLE )
+#else
+    if (state->image->image.format == GL_RGBA)
+#endif
 		processImage(state->image->image);
 	else
 		processGrayImage(state->image->image);
+                
+    if (state->image->image.format == GL_YCBCR_422_APPLE)
+        processYUVImage(state->image->image);
 }
 
 /////////////////////////////////////////////////////////
@@ -53,6 +62,15 @@ void GemPixObj :: render(GemState *state)
 void GemPixObj :: processGrayImage(imageStruct &)
 {
 	error("Gem: pix object cannot handle gray image");
+}
+
+/////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void GemPixObj :: processYUVImage(imageStruct &)
+{
+	error("Gem: pix object cannot handle YUV image");
 }
 
 /////////////////////////////////////////////////////////

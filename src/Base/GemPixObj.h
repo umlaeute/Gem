@@ -34,7 +34,11 @@ class GEM_EXTERN GemPixObj : public GemBase
 
         //////////
         // Constructor
+#ifdef MACOSX
+        GemPixObj() : m_processOnOff(1)		{ }
+#else
     	GemPixObj() : m_processOnOff(1)		{ m_mmx = detect_mmx();}
+#endif
     	
     protected:
     	
@@ -52,6 +56,12 @@ class GEM_EXTERN GemPixObj : public GemBase
     	// This is called whenever a new gray8 image comes through.
 	// The default is to output an error.
     	virtual void 	processGrayImage(imageStruct &image);
+        
+        //////////
+    	// The derived class should override this.
+    	// This is called whenever a new YUV image comes through.
+	// The default is to output an error.
+    	virtual void 	processYUVImage(imageStruct &image);
     	
     	//////////
     	// If the derived class needs the image resent.
@@ -64,9 +74,9 @@ class GEM_EXTERN GemPixObj : public GemBase
 
         //////////
         int             m_processOnOff;
-
+#ifndef MACOSX
 	int             m_mmx;
-
+#endif MACOSX
     	//////////
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr) { GemBase::real_obj_setupCallback(classPtr);
