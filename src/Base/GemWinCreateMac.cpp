@@ -195,7 +195,11 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     }
     // look for connected graphics devices
     hGD = DMGetFirstScreenDevice (true); // check number of screens
-    hTargetDevice = hGD; // default to first device							
+    hTargetDevice = hGD; // default to first device
+
+    
+    //this should be whichDevice = fullscreen -1
+    //whichDevice = hints.fullscreen - 1;
     do
     {
         if (numDevices == whichDevice)
@@ -205,29 +209,34 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     }
     while (hGD);
     post("GemwinMac: width - %d height - %d",hints.width,hints.height);
+
+    //change this to use the fullscreen message
+    //the device number will be (fullscreen -1) so 'fullscreen 1' is main, 'fullscreen 2' is second, etc 
+    //
+    //if (( numDevices > 1 ) && (hints.fullscreen))
     if (( numDevices > 1 ) && (hints.secondscreen)) // Try AGL full screen on 2nd device if more than one device found
     {
         short width = 640, height = 480; 
         
         if ((hints.width < 640) || (hints.height < 480)){
-        width = 640; height = 480;
-        }else{
-        height = hints.height;
-        width = hints.width;
+            width = 640; height = 480;
+        }
+        else{
+            height = hints.height;
+            width = hints.width;
         }
         info.context = SetupAGLFullScreen (hTargetDevice, &width, &height); // Setup the OpenGL context
         ::SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset, 
                                 (short)(hints.width + hints.x_offset), (short)(hints.height + hints.y_offset)); // l, t, r, b
         post( "AGL Full Screen: %d x %d", width, height);
+        
     }else{	// end of fullscreen creation on 2nd/external device
 
     // show and update main window
-     /*   SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset+50, 
-                (short)(hints.width + hints.x_offset), 
-                (short)(hints.height + hints.y_offset)); */
-        
-        hints.y_offset+=50; //should put the title bar below the menu bar??
-        
+
+        if (hints.y_offset < 50){
+            hints.y_offset+=50; //should put the title bar below the menu bar??
+        }
         SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset,
                 (short)(hints.width + hints.x_offset),
                 (short)(hints.height + hints.y_offset));
@@ -406,6 +415,7 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight
 		post ("Could not create context");
 		return NULL;
 	}
+        
         ::aglEnable( ctx, AGL_FS_CAPTURE_SINGLE );
 
 	//if (!aglSetFullScreen (ctx, *pWidth, *pHeight, 60, 0))
