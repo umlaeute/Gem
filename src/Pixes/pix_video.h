@@ -10,12 +10,16 @@ Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
-Linux version by Millier Puckette. msp@ucsd.edu
+Linux version by Miller Puckette. msp@ucsd.edu
 
 -----------------------------------------------------------------*/
 
 #ifndef INCLUDE_PIX_VIDEO_H_
 #define INCLUDE_PIX_VIDEO_H_
+
+#ifdef __NEW__
+# define NO_AUTO_REGISTER_CLASS
+#endif
 
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
