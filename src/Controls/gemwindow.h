@@ -62,6 +62,8 @@ class GEM_EXTERN gemwindow : public GemOutput
   // Destructor
   virtual     	~gemwindow();
 
+  virtual void infoMess();
+
   // do pure virtual functions
   virtual void  makeCurrent();
   virtual void  postRender (GemState);
