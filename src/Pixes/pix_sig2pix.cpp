@@ -60,9 +60,7 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width=0, t_floatarg height=0) : m_reqForma
 //
 /////////////////////////////////////////////////////////
 pix_sig2pix :: ~pix_sig2pix()
-{
-  cleanImage();
-}
+{}
 
 void pix_sig2pix :: dimenMess(int width, int height) {
   if (width>32000)width=8;
@@ -76,12 +74,18 @@ void pix_sig2pix :: dimenMess(int width, int height) {
   if (width  == 0) width = 8;
   if (height == 0) height = 8;
 
-  cleanImage();
-  
   m_pixBlock.image.xsize =(GLint) width;
   m_pixBlock.image.ysize = (GLint) height;
   m_pixBlock.image.setCsizeByFormat(m_reqFormat);
 
+  m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
+  m_pixBlock.image.reallocate();
+  m_pixBlock.image.setBlack();
+}
+
+void pix_sig2pix :: csMess(int cs) {
+  m_reqFormat=cs;
+  m_pixBlock.image.setCsizeByFormat(m_reqFormat);
   m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
@@ -114,32 +118,6 @@ void pix_sig2pix :: startRendering()
 }
 
 /////////////////////////////////////////////////////////
-// cleanImage
-//
-/////////////////////////////////////////////////////////
-void pix_sig2pix :: cleanImage()
-{
-  if (!m_pixBlock.image.data) return;
-
-  // release previous data
-  m_pixBlock.image.clear();
-  m_pixBlock.image.data = NULL;
-}
-
-/////////////////////////////////////////////////////////
-// clearImage
-//
-/////////////////////////////////////////////////////////
-void pix_sig2pix :: clearImage()
-{
-  long int dataSize = m_pixsize * m_pixBlock.image.csize;
-  if (!m_pixBlock.image.data) return;
-
-  // set data to 0
-  memset(m_pixBlock.image.data, 0, dataSize);
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -154,15 +132,37 @@ t_int* pix_sig2pix :: perform(t_int* w)
   t_int n = (t_int)(w[6]);
 
   unsigned char* data = x->m_pixBlock.image.data;
-
   if (n > x->m_pixsize) n = x->m_pixsize;
-  while(n--){
-    *data++ = (unsigned char) (*in_red++  *255.0);
-    *data++ = (unsigned char) (*in_green++*255.0);
-    *data++ = (unsigned char) (*in_blue++ *255.0);
-    *data++ = (unsigned char) (*in_alpha++*255.0);
-  }
 
+  switch(x->m_pixBlock.image.format){
+  case GL_RGBA:  default:
+    while(n--){
+      data[chRed]   = (unsigned char) (*in_red++  *255.0);
+      data[chGreen] = (unsigned char) (*in_green++*255.0);
+      data[chBlue]  = (unsigned char) (*in_blue++ *255.0);
+      data[chAlpha] = (unsigned char) (*in_alpha++*255.0);
+      data+=4;
+    }
+    break;
+  case GL_YUV422_GEM:
+    n/=2;
+    while(n--){
+      data[chY0] = (unsigned char) (*in_red++  *255.0);
+      data[chU ] = (unsigned char) (*in_green++  *255.0);
+      in_green++;
+      data[chY1] = (unsigned char) (*in_red++  *255.0);
+      data[chV ] = (unsigned char) (*in_blue++  *255.0);
+      in_blue++;
+
+      data+=4;
+    }
+    break;
+  case GL_LUMINANCE:
+    while(n--){
+      *data++ = (unsigned char) (*in_red++  *255.0);
+    }
+    break;
+  }
   x->m_pixBlock.newimage = 1;
   return (w+7);
 }
@@ -176,7 +176,7 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
     m_width = 0;
     m_height= 0;
   }
-  clearImage();
+  m_pixBlock.image.setBlack();
   dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[0]->s_n);
 }
 
@@ -194,6 +194,8 @@ void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
 		  gensym("dsp"), A_NULL);
   class_addmethod(classPtr, (t_method)pix_sig2pix::dimenMessCallback, 
 		  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)pix_sig2pix::csMessCallback, 
+		  gensym("colorspace"), A_DEFSYMBOL, A_NULL);
 }
 
 
@@ -205,4 +207,10 @@ void pix_sig2pix :: dspMessCallback(void *data,t_signal** sp)
 void pix_sig2pix ::dimenMessCallback(void *data, t_float w, t_float h)
 {
   GetMyClass(data)->dimenMess((int)w, (int)h);
+}
+void pix_sig2pix ::csMessCallback(void *data, t_symbol*s)
+{
+  int cs = getPixFormat(s->s_name);
+  if(cs>0)GetMyClass(data)->csMess(cs);
+  else post("pix_sig2pix: colorspace must be Grey, YUV or RGBA");
 }

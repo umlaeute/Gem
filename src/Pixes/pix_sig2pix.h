@@ -70,15 +70,9 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   virtual void	startRendering();
 
   //////////
-  // Clean up the image and the pixBlock
-  void	    	cleanImage();
-
-  //////////
-  // Clear the image-data
-  void	    	clearImage();
-            
-  //////////
+  // setting dimension and colourspace
   virtual void  dimenMess(int w, int h);
+  virtual void  csMess(GLint cs);
 
   //////////
   // DSP-Message
@@ -106,6 +100,7 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   // static member functions
   static void   dspMessCallback(void* data,t_signal** sp);
   static void   dimenMessCallback(void *data, t_float w, t_float h);
+  static void   csMessCallback(void *data, t_symbol*s);
 };
 
 #endif	// for header file
