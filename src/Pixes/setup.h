@@ -58,6 +58,7 @@ extern "C" {
    void pix_dv_setup();
    void pix_filmLinux_setup();
    void pix_filmNT_setup();
+   void pix_filmQT_setup();
    void pix_filmFFMPEG_setup();
 #endif
    void pix_filmNEW_setup();
@@ -181,6 +182,9 @@ extern "C" {
 #endif
 #ifdef _WINDOWS
     pix_filmNT_setup();
+#	ifdef HAVE_QUICKTIME
+    pix_filmQT_setup();
+#	endif
 #endif
     pix_flip_setup();
     pix_gain_setup();
