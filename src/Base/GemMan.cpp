@@ -164,9 +164,11 @@ static void dispatchGemWindowMessages()
   XEvent event; 
   XButtonEvent* eb = (XButtonEvent*)&event; 
   XKeyEvent* kb  = (XKeyEvent*)&event; 
+  XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
   win = GemMan::getWindowInfo(); 
 
   while (XCheckWindowEvent(win.dpy,win.win,
+			   ResizeRedirectMask | 
 			   KeyPressMask | KeyReleaseMask |
 			   PointerMotionMask | 
 			   ButtonMotionMask |
@@ -191,6 +193,10 @@ static void dispatchGemWindowMessages()
 	case KeyRelease:
 	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
 	  break;
+	case ResizeRequest:
+	  triggerResizeEvent(res->width, res->height);
+	  XResizeWindow(win.dpy, win.win, res->width, res->height);
+	  break;
 	default:
 	  break; 
 	}
@@ -207,9 +213,13 @@ static void dispatchGemWindowMessages(void *)
 
 static void resizeCallback(int xSize, int ySize, void *)
 {
+  if (ySize==0)ySize=1;
+
   float xDivy = (float)xSize / (float)ySize;
   GemMan::m_h = ySize;
   GemMan::m_w = xSize;
+  GemMan::m_height = ySize;
+  GemMan::m_width = xSize;
 
   // setup the viewpoint
   glViewport(0, 0, xSize, ySize);
@@ -219,7 +229,7 @@ static void resizeCallback(int xSize, int ySize, void *)
   glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
 	    GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
 	    GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
+
   glMatrixMode(GL_MODELVIEW);
 }
 /*
@@ -558,10 +568,9 @@ void GemMan :: resetState()
   m_clear_color[3] = 0.0;
 #ifdef __APPLE__
   if (HaveValidContext ())
+#endif
     glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
-#else
-  glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
-#endif //__APPLE__
+
   m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
   m_mat_ambient[0] = 0.1f;
   m_mat_ambient[1] = 0.1f;
@@ -1104,7 +1113,6 @@ int GemMan :: createWindow(char* disp)
   windowInit();
     
   clock_delay(s_windowClock, s_windowDelTime);
-
 #ifdef _WINDOWS
   s_windowRun = 1;
 #endif

@@ -21,7 +21,7 @@
 
 #define EVENT_MASK  \
  ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
- ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask
+ ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | ResizeRedirectMask
 
 
 // window creation variables
@@ -139,10 +139,10 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     swa.override_redirect = True;
     flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
     x=y=0;
-  } else {
+  } else { // !fullscren
     if (hints.border){
       swa.override_redirect = False;
-      flags=CWBorderPixel|CWColormap|CWEventMask;
+      flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
     } else {
       swa.override_redirect = True;
       flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
@@ -162,6 +162,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     }
 
   XSelectInput(info.dpy, info.win, EVENT_MASK);
+
   XSetStandardProperties(info.dpy, info.win,
 			 hints.title, "gem", 
 			 None, 0, 0, NULL);
@@ -169,9 +170,12 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   if (!hints.actuallyDisplay) return(1);
 
-  XMapWindow(info.dpy, info.win);
+  XMapRaised(info.dpy, info.win);
+  //  XMapWindow(info.dpy, info.win);
   XEvent report;
   XIfEvent(info.dpy, &report, WaitForNotify, (char*)info.win);
+
+  if (glXIsDirect(info.dpy, info.context))post("Direct Rendering enabled!");
 
   return(1);
 }
