@@ -123,6 +123,7 @@ class GEM_EXTERN gemwindow : public GemOutput
   static void 	fullscreenMessCallback(void *data, t_floatarg on);
   static void 	borderMessCallback(void *, t_floatarg state);
   static void 	titleMessCallback(void *data, t_symbol* s);
+  static void 	fsaaMessCallback(void *, t_floatarg state);
 
   static void 	cursorMessCallback(void *data, t_floatarg val);	
   static void 	topmostMessCallback(void *data, t_floatarg val);

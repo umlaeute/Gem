@@ -81,7 +81,7 @@ CPPEXTERN_NEW(gemwindow)
 gemwindow :: gemwindow() : GemOutput(), 
 			   m_width(500), m_height(500),
 			   m_fullscreen(0), m_xoffset(0), m_yoffset(0), m_border(1),
-			   m_cursor(1), m_topmost(0),
+			   m_cursor(1), m_topmost(0), m_fsaa(0), 
 			   m_windowClock(NULL), m_windowDelTime(10)
 {
 
@@ -581,6 +581,8 @@ void gemwindow :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&gemwindow::destroyMessCallback,
 		  gensym("destroy"), A_NULL);
 
+  class_addbang  (classPtr, (t_method)&gemwindow::bangMessCallback);
+
   class_addmethod(classPtr, (t_method)&gemwindow::fullscreenMessCallback,
 		  gensym("fullscreen"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwindow::dimensionsMessCallback,
@@ -596,6 +598,9 @@ void gemwindow :: obj_setupCallback(t_class *classPtr)
 		  gensym("cursor"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwindow::topmostMessCallback,
 		  gensym("topmost"), A_FLOAT, A_NULL);
+
+  class_addmethod(classPtr, (t_method)&gemwindow::fsaaMessCallback,
+		  gensym("fsaa"), A_FLOAT, A_NULL);
 }
 
 void gemwindow :: createMessCallback(void *data, t_symbol* disp)
@@ -642,6 +647,10 @@ void gemwindow :: bangMessCallback(void *data)
   GetMyClass(data)->swapBuffers();
 }
 
+void gemwindow :: fsaaMessCallback(void *data, t_floatarg val)
+{
+  GetMyClass(data)->m_fsaa = (int)val;
+}
 
 void gemwindow :: resizeCallback(int x, int y, void*data){
   GetMyClass(data)->resize(x, y);
