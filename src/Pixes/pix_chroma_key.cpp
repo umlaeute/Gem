@@ -69,8 +69,8 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   } else { //this needs help
     while(datasize--){
       if (!((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
-            (leftPix[chRed]  < Ghi)&&(leftPix[chRed]  > Glo)&&
-            (leftPix[chGreen]< Rhi)&&(leftPix[chGreen]> Rlo)))
+            (leftPix[chRed]  < Rhi)&&(leftPix[chRed]  > Rlo)&&
+            (leftPix[chGreen]< Ghi)&&(leftPix[chGreen]> Glo)))
 	{
 	  leftPix[chRed]   = rightPix[chRed];
 	  leftPix[chGreen] = rightPix[chGreen];
@@ -283,19 +283,88 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
       l=leftPix [datasize];
       r=rightPix[datasize];
 
-      b0=_mm_subs_pu8(lo, l);
-      b1=_mm_subs_pu8(l, hi);
-      b0=_mm_cmpeq_pi32(b0, nil);
-      b1=_mm_cmpeq_pi32(b1, nil);
+      b0=_mm_subs_pu8   (lo, l);
+      b1=_mm_subs_pu8   (l, hi);
+      b0=_mm_cmpeq_pi32 (b0, nil);
+      b1=_mm_cmpeq_pi32 (b1, nil);
 
-      b0=_mm_and_si64 (b0, b1);
+      b0=_mm_and_si64   (b0, b1);
 
       b1=_mm_and_si64   (b0, r);
       b0=_mm_andnot_si64(b0, l);
 
       leftPix[datasize]=_mm_or_si64(b0, b1);
     }
-  } else { //this needs help
+  } else {
+    while(datasize--){
+      l=leftPix [datasize];
+      r=rightPix[datasize];
+
+      b0=_mm_subs_pu8   (lo, l);
+      b1=_mm_subs_pu8   (l, hi);
+      b0=_mm_cmpeq_pi32 (b0, nil);
+      b1=_mm_cmpeq_pi32 (b1, nil);
+
+      b0=_mm_and_si64   (b0, b1);
+
+      b1=_mm_and_si64   (b0, l);
+      b0=_mm_andnot_si64(b0, r);
+
+      leftPix[datasize]=_mm_or_si64(b0, b1);
+    }
+  }
+  _mm_empty();
+}
+
+void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
+{
+  int datasize = image.xsize * image.ysize * image.csize;
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+
+  __m64 *leftPix =  (__m64*)image.data;
+  __m64 *rightPix = (__m64*)right.data;
+
+  // no m_mode yet (does it make any sense at all ?)
+
+  const __m64 hi=_mm_setr_pi8(CLAMP(m_Uvalue + m_Urange), 
+			      CLAMP(m_Yvalue + m_Yrange),
+			      CLAMP(m_Vvalue + m_Vrange),
+			      CLAMP(m_Yvalue + m_Yrange),
+			      CLAMP(m_Uvalue + m_Urange), 
+			      CLAMP(m_Yvalue + m_Yrange),
+			      CLAMP(m_Vvalue + m_Vrange),
+			      CLAMP(m_Yvalue + m_Yrange));
+  const __m64 lo=_mm_setr_pi8(CLAMP(m_Uvalue - m_Urange), 
+			      CLAMP(m_Yvalue - m_Yrange),
+			      CLAMP(m_Vvalue - m_Vrange),
+			      CLAMP(m_Yvalue - m_Yrange),
+			      CLAMP(m_Uvalue - m_Urange), 
+			      CLAMP(m_Yvalue - m_Yrange),
+			      CLAMP(m_Vvalue - m_Vrange),
+			      CLAMP(m_Yvalue - m_Yrange));
+
+  const __m64 nil=_mm_setzero_si64();
+
+  __m64 r, l, b0, b1;
+
+  if (m_direction) {    
+    while(datasize--){
+      l=leftPix [datasize];
+      r=rightPix[datasize];
+
+      b0=_mm_subs_pu8   (lo, l);
+      b1=_mm_subs_pu8   (l, hi);
+      b0=_mm_cmpeq_pi32 (b0, nil);
+      b1=_mm_cmpeq_pi32 (b1, nil);
+
+      b0=_mm_and_si64   (b0, b1);
+
+      b1=_mm_and_si64   (b0, r);
+      b0=_mm_andnot_si64(b0, l);
+
+      leftPix[datasize]=_mm_or_si64(b0, b1);
+    }
+  } else {
     while(datasize--){
       l=leftPix [datasize];
       r=rightPix[datasize];
@@ -315,6 +384,76 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
   }
   _mm_empty();
 }
+
+void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
+{
+  int datasize = image.xsize * image.ysize * image.csize;
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+
+  __m64 *leftPix =  (__m64*)image.data;
+  __m64 *rightPix = (__m64*)right.data;
+
+  // no m_mode yet (does it make any sense at all ?)
+
+  const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange), 
+			      CLAMP(m_Yvalue + m_Yrange),
+			      CLAMP(m_Yvalue + m_Yrange),
+			      CLAMP(m_Yvalue + m_Yrange),
+			      CLAMP(m_Yvalue + m_Yrange), 
+			      CLAMP(m_Yvalue + m_Yrange),
+			      CLAMP(m_Yvalue + m_Yrange),
+			      CLAMP(m_Yvalue + m_Yrange));
+  const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange), 
+			      CLAMP(m_Yvalue - m_Yrange),
+			      CLAMP(m_Yvalue - m_Yrange),
+			      CLAMP(m_Yvalue - m_Yrange),
+			      CLAMP(m_Yvalue - m_Yrange), 
+			      CLAMP(m_Yvalue - m_Yrange),
+			      CLAMP(m_Yvalue - m_Yrange),
+			      CLAMP(m_Yvalue - m_Yrange));
+
+  const __m64 nil=_mm_setzero_si64();
+
+  __m64 r, l, b0, b1;
+
+  if (m_direction) {    
+    while(datasize--){
+      l=leftPix [datasize];
+      r=rightPix[datasize];
+
+      b0=_mm_subs_pu8   (lo, l);
+      b1=_mm_subs_pu8   (l, hi);
+      b0=_mm_cmpeq_pi32 (b0, nil);
+      b1=_mm_cmpeq_pi32 (b1, nil);
+
+      b0=_mm_and_si64   (b0, b1);
+
+      b1=_mm_and_si64   (b0, r);
+      b0=_mm_andnot_si64(b0, l);
+
+      leftPix[datasize]=_mm_or_si64(b0, b1);
+    }
+  } else {
+    while(datasize--){
+      l=leftPix [datasize];
+      r=rightPix[datasize];
+
+      b0=_mm_subs_pu8(lo, l);
+      b1=_mm_subs_pu8(l, hi);
+      b0=_mm_cmpeq_pi32(b0, nil);
+      b1=_mm_cmpeq_pi32(b1, nil);
+
+      b0=_mm_and_si64 (b0, b1);
+
+      b1=_mm_and_si64   (b0, l);
+      b0=_mm_andnot_si64(b0, r);
+
+      leftPix[datasize]=_mm_or_si64(b0, b1);
+    }
+  }
+  _mm_empty();
+}
+
 #endif
 
 /////////////////////////////////////////////////////////

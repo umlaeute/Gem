@@ -57,6 +57,8 @@ CPPEXTERN_HEADER(pix_chroma_key, GemPixDualObj)
    
 #ifdef __MMX__
     	virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
+      	virtual void 	processYUV_MMX(imageStruct &image, imageStruct &right);
+  	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
 #endif
      
 #ifdef __VEC__
