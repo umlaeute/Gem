@@ -26,6 +26,91 @@
 #include <string.h>
 #include <ctype.h>
 
+
+// use formulae from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
+/*
+ * [Y]    1    [  65.738 129.075  25.064 ]   [R] [ 16]
+ * [U] = --- * [ -37.945 -74.494 112.439 ] * [G]+[128]
+ * [V] = 256   [ 112.439 -94.154 -18.285 ]   [B] [ 16]
+ *
+ * [R]    1    [ 298.082    0.0    408.583 ]    [Y] [ 16]
+ * [G] = --- * [ 298.082 -100.291 -208.120 ] * ([U]-[128])
+ * [B] = 256   [ 298.082  516.411    0.0   ]    [V] [ 16]
+ */
+
+#define YUV_POYNTON
+
+
+// here comes something to be afraid of:
+// (probably it would be better to define the matrices as real constant-value matrices)
+// (instead of element-wise)
+
+#ifdef YUV_POYNTON
+# define Y_OFFSET   16
+# define UV_OFFSET 128
+
+// RGB2YUV
+// poynton-values rounded
+# define RGB2YUV_11  66
+# define RGB2YUV_12 129
+# define RGB2YUV_13  25
+# define RGB2YUV_21 -38
+# define RGB2YUV_22 -74
+# define RGB2YUV_23 112
+# define RGB2YUV_31 112
+# define RGB2YUV_32 -94
+# define RGB2YUV_33 -18
+
+// YUV2RGB
+// (we skip _21 and _31 as they are equal to _11)
+#if 0
+// poynton-values rounded
+# define YUV2RGB_11 298
+# define YUV2RGB_12   0
+# define YUV2RGB_13 409 
+# define YUV2RGB_22 -100
+# define YUV2RGB_23 -208
+# define YUV2RGB_32 516
+# define YUV2RGB_33   0
+#else
+
+// this is round(256*inv(rgb2yuv/256))
+// so the general error should be smaller
+# define YUV2RGB_11  298
+# define YUV2RGB_12   -1
+# define YUV2RGB_13  409
+# define YUV2RGB_22 -100
+# define YUV2RGB_23 -210
+# define YUV2RGB_32  519
+# define YUV2RGB_33    0
+#endif
+
+#else
+/* the old ones: */
+# define Y_OFFSET   0
+# define UV_OFFSET 128
+// RGB2YUV
+# define RGB2YUV_11 77
+# define RGB2YUV_12 150
+# define RGB2YUV_13 29
+# define RGB2YUV_21 -43
+# define RGB2YUV_22 -85
+# define RGB2YUV_23 128
+# define RGB2YUV_31 128
+# define RGB2YUV_32 -107
+# define RGB2YUV_33 -21
+// YUV2RGB
+# define YUV2RGB_11 256
+# define YUV2RGB_12 0
+# define YUV2RGB_13 359
+# define YUV2RGB_22 -88
+# define YUV2RGB_23 -183
+# define YUV2RGB_32 454
+# define YUV2RGB_33 0
+
+#endif /* POYNTON */
+
+
 GEM_EXTERN unsigned char* imageStruct::allocate(int size) 
 {
   if (pdata){
@@ -264,18 +349,10 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
 #else
     pixelnum>>=1;
     while(pixelnum--){
-#if 0
-      *pixels++=((-43*rgbdata[0]-85 *rgbdata[1]+128*rgbdata[2])>>8)+128; // U
-      *pixels++=(77 *rgbdata[0]+150*rgbdata[1]+29 *rgbdata[2])>>8;     // Y
-      *pixels++=((128*rgbdata[0]-107*rgbdata[1]-21 *rgbdata[2])>>8)+128; // V
-      *pixels++=(77 *rgbdata[3]+150*rgbdata[4]+29 *rgbdata[5])>>8;     // Y
-#else
-      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
-      *pixels++=((-38*rgbdata[0]- 74*rgbdata[1]+112*rgbdata[2])>>8)+128; // U
-      *pixels++=(( 66*rgbdata[0]+129*rgbdata[1]+ 25*rgbdata[2])>>8)+ 16; // Y
-      *pixels++=((112*rgbdata[0]- 94*rgbdata[1]- 18*rgbdata[2])>>8)+128; // V
-      *pixels++=(( 66*rgbdata[3]+129*rgbdata[4]+ 25*rgbdata[5])>>8)+ 16; // Y
-#endif
+      *pixels++=((RGB2YUV_21*rgbdata[0]+RGB2YUV_22*rgbdata[1]+RGB2YUV_23*rgbdata[2])>>8)+UV_OFFSET; // U
+      *pixels++=((RGB2YUV_11*rgbdata[0]+RGB2YUV_12*rgbdata[1]+RGB2YUV_13*rgbdata[2])>>8)+ Y_OFFSET; // Y
+      *pixels++=((RGB2YUV_31*rgbdata[0]+RGB2YUV_32*rgbdata[1]+RGB2YUV_33*rgbdata[2])>>8)+UV_OFFSET; // V
+      *pixels++=((RGB2YUV_11*rgbdata[3]+RGB2YUV_12*rgbdata[4]+RGB2YUV_13*rgbdata[5])>>8)+ Y_OFFSET; // Y
       rgbdata+=6;
     }
 #endif
@@ -429,25 +506,15 @@ GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
       unsigned char r=((rgb>>8)&0xF8);
       unsigned char g=((rgb>>3)&0xFC);
       unsigned char b=((rgb<<3)&0xF8);
-#if 0
-      *pixels++=((-43*r- 85*g+128*b)>>8)+128; // U
-      *pixels++=(  77*r+150*g+ 29*b)>>8;     // Y
-      *pixels++=((128*r-107*g- 21*b)>>8)+128; // V
-#else
-      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
-      *pixels++=((-38*r- 74*g+112*b)>>8)+128; // U
-      *pixels++=(( 66*r+129*g+ 25*b)>>8)+16;  // Y
-      *pixels++=((112*r- 94*g- 18*b)>>8)+128; // V
-#endif
+      *pixels++=((RGB2YUV_21*r+RGB2YUV_22*g+RGB2YUV_23*b)>>8)+UV_OFFSET; // U
+      *pixels++=((RGB2YUV_11*r+RGB2YUV_12*g+RGB2YUV_13*b)>>8)+ Y_OFFSET;  // Y
+      *pixels++=((RGB2YUV_31*r+RGB2YUV_32*g+RGB2YUV_33*b)>>8)+UV_OFFSET; // V
+
       rgb=*rgbdata++;
       r=((rgb>>8)&0xF8);
       g=((rgb>>3)&0xFC);
       b=((rgb<<3)&0xF8);
-#if 0
-      *pixels++=(77 *r+150*g+29 *b)>>8;     // Y
-#else
-      *pixels++=(( 66*r+129*g+ 25*b)>>8)+16;     // Y
-#endif
+      *pixels++=((RGB2YUV_11*r+RGB2YUV_12*g+RGB2YUV_13*b)>>8)+ Y_OFFSET;     // Y
     }
     break;
   }
@@ -497,18 +564,18 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
-#if 0
-      *pixels++=((-43*rgbadata[chRed]-85 *rgbadata[chGreen]+128*rgbadata[chBlue])>>8)+128; // U
-      *pixels++=(77 *rgbadata[chRed]+150*rgbadata[chGreen]+29 *rgbadata[chBlue])>>8;     // Y
-      *pixels++=((128*rgbadata[chRed]-107*rgbadata[chGreen]-21 *rgbadata[chBlue])>>8)+128; // V
-      *pixels++=(77 *rgbadata[4+chRed]+150*rgbadata[4+chGreen]+29 *rgbadata[4+chBlue])>>8;     // Y
-#else
-      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
-      *pixels++=((-38*rgbadata[chRed]- 74*rgbadata[chGreen]+112*rgbadata[chBlue])>>8)+128; // U
-      *pixels++=(( 66*rgbadata[chRed]+129*rgbadata[chGreen]+ 25*rgbadata[chBlue])>>8)+ 16; // Y
-      *pixels++=((112*rgbadata[chRed]- 94*rgbadata[chGreen]- 18*rgbadata[chBlue])>>8)+128; // V
-      *pixels++=(( 66*rgbadata[4+chRed]+129*rgbadata[4+chGreen]+ 25*rgbadata[4+chBlue])>>8)+ 16; // Y
-#endif
+      *pixels++=((RGB2YUV_21*rgbadata[chRed]+
+		  RGB2YUV_22*rgbadata[chGreen]+
+		  RGB2YUV_23*rgbadata[chBlue])>>8)+UV_OFFSET; // U
+      *pixels++=((RGB2YUV_11*rgbadata[chRed]+
+		  RGB2YUV_12*rgbadata[chGreen]+
+		  RGB2YUV_13*rgbadata[chBlue])>>8)+ Y_OFFSET; // Y
+      *pixels++=((RGB2YUV_31*rgbadata[chRed]+
+		  RGB2YUV_32*rgbadata[chGreen]+
+		  RGB2YUV_33*rgbadata[chBlue])>>8)+UV_OFFSET; // V
+      *pixels++=((RGB2YUV_11*rgbadata[4+chRed]+
+		  RGB2YUV_12*rgbadata[4+chGreen]+
+		  RGB2YUV_13*rgbadata[4+chBlue])>>8)+ Y_OFFSET; // Y
       rgbadata+=8;
     }
     break;
@@ -559,18 +626,10 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
-#if 0
-      *pixels++=((-43*bgrdata[2]-85 *bgrdata[1]+128*bgrdata[0])>>8)+128; // U
-      *pixels++=(77 *bgrdata[2]+150*bgrdata[1]+29 *bgrdata[0])>>8;     // Y
-      *pixels++=((128*bgrdata[2]-107*bgrdata[1]-21 *bgrdata[0])>>8)+128; // V
-      *pixels++=(77 *bgrdata[5]+150*bgrdata[4]+29 *bgrdata[3])>>8;     // Y
-#else
-      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
-      *pixels++=((-38*bgrdata[2]- 74*bgrdata[1]+112*bgrdata[0])>>8)+128; // U
-      *pixels++=(( 66*bgrdata[2]+129*bgrdata[1]+ 25*bgrdata[0])>>8)+ 16; // Y
-      *pixels++=((112*bgrdata[2]- 94*bgrdata[1]- 18*bgrdata[0])>>8)+128; // V
-      *pixels++=(( 66*bgrdata[5]+129*bgrdata[4]+ 25*bgrdata[3])>>8)+ 16; // Y
-#endif
+      *pixels++=((RGB2YUV_21*bgrdata[2]+RGB2YUV_22*bgrdata[1]+RGB2YUV_23*bgrdata[0])>>8)+UV_OFFSET; // U
+      *pixels++=((RGB2YUV_11*bgrdata[2]+RGB2YUV_12*bgrdata[1]+RGB2YUV_13*bgrdata[0])>>8)+ Y_OFFSET; // Y
+      *pixels++=((RGB2YUV_31*bgrdata[2]+RGB2YUV_32*bgrdata[1]+RGB2YUV_33*bgrdata[0])>>8)+UV_OFFSET; // V
+      *pixels++=((RGB2YUV_11*bgrdata[5]+RGB2YUV_12*bgrdata[4]+RGB2YUV_13*bgrdata[3])>>8)+ Y_OFFSET; // Y
       bgrdata+=6;
     }
     break;
@@ -622,18 +681,18 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
-#if 0
-      *pixels++=((-43*bgradata[chRed]-85 *bgradata[chGreen]+128*bgradata[chBlue])>>8)+128; // U
-      *pixels++=(77 *bgradata[chRed]+150*bgradata[chGreen]+29 *bgradata[chBlue])>>8;     // Y
-      *pixels++=((128*bgradata[chRed]-107*bgradata[chGreen]-21 *bgradata[chBlue])>>8)+128; // V
-      *pixels++=(77 *bgradata[4+chRed]+150*bgradata[4+chGreen]+29 *bgradata[4+chBlue])>>8;     // Y
-#else
-      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
-      *pixels++=((-38*bgradata[chRed]- 74*bgradata[chGreen]+112*bgradata[chBlue])>>8)+128; // U
-      *pixels++=(( 66*bgradata[chRed]+129*bgradata[chGreen]+ 25*bgradata[chBlue])>>8)+ 16; // Y
-      *pixels++=((112*bgradata[chRed]- 94*bgradata[chGreen]- 18*bgradata[chBlue])>>8)+128; // V
-      *pixels++=(( 66*bgradata[4+chRed]+129*bgradata[4+chGreen]+ 25*bgradata[4+chBlue])>>8)+ 16; // Y
-#endif
+      *pixels++=((RGB2YUV_21*bgradata[chRed]+
+		  RGB2YUV_22*bgradata[chGreen]+
+		  RGB2YUV_23*bgradata[chBlue])>>8)+UV_OFFSET; // U
+      *pixels++=((RGB2YUV_11*bgradata[chRed]+
+		  RGB2YUV_12*bgradata[chGreen]+
+		  RGB2YUV_13*bgradata[chBlue])>>8)+ Y_OFFSET; // Y
+      *pixels++=((RGB2YUV_31*bgradata[chRed]+
+		  RGB2YUV_32*bgradata[chGreen]+
+		  RGB2YUV_33*bgradata[chBlue])>>8)+UV_OFFSET; // V
+      *pixels++=((RGB2YUV_11*bgradata[4+chRed]+
+		  RGB2YUV_12*bgradata[4+chGreen]+
+		  RGB2YUV_13*bgradata[4+chBlue])>>8)+ Y_OFFSET; // Y
       bgradata+=8;
     }
     break;
@@ -714,45 +773,42 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
       unsigned char*pu=(format==GL_RGB)?U:V;
 #endif
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
       yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
-	  u=*pu++-128;
-	  v=*pv++-128;
-	  ug=88*u;
-	  ub=454*u;
-	  vg =  183 * v;
-	  vr =  359 * v;
+	  u=*pu++ -UV_OFFSET;
+	  v=*pv++ -UV_OFFSET;
+	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
 	  // 1st row - 1st pixel
-	  y=*py1++;
- 	  yy=y<<8;
-	  *pixels1++ = CLAMP((yy + ub     ) >> 8); // b
-	  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
-	  *pixels1++ = CLAMP((yy +      vr) >> 8); // r
+	  y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+	  *pixels1++ = CLAMP((y + uv_b) >> 8); // b
+	  *pixels1++ = CLAMP((y + uv_g) >> 8); // g
+	  *pixels1++ = CLAMP((y + uv_r) >> 8); // r
+
 	  // 1st row - 2nd pixel
-	  y=*py1++;
-	  yy=y<<8;
-	  *pixels1++ = CLAMP((yy + ub     ) >> 8);
-	  *pixels1++ = CLAMP((yy - ug - vg) >> 8);
-	  *pixels1++ = CLAMP((yy +      vr) >> 8);
+	  y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+	  *pixels1++ = CLAMP((y + uv_b) >> 8); // b
+	  *pixels1++ = CLAMP((y + uv_g) >> 8); // g
+	  *pixels1++ = CLAMP((y + uv_r) >> 8); // r
 
 	  // 2nd row - 1st pixel
-	  y=*py2++;
-	  yy=y<<8;
-	  *pixels2++ = CLAMP((yy + ub     ) >> 8); // b
-	  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
-	  *pixels2++ = CLAMP((yy +      vr) >> 8); // r
+	  y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+	  *pixels2++ = CLAMP((y + uv_b) >> 8); // b
+	  *pixels2++ = CLAMP((y + uv_g) >> 8); // g
+	  *pixels2++ = CLAMP((y + uv_r) >> 8); // r
 
 	  // 2nd row - 2nd pixel
-	  y=*py2++;
-	  yy=y<<8;
-	  *pixels2++ = CLAMP((yy + ub     ) >> 8);
-	  *pixels2++ = CLAMP((yy - ug - vg) >> 8);
-	  *pixels2++ = CLAMP((yy +      vr) >> 8);
+	  y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+	  *pixels2++ = CLAMP((y + uv_b) >> 8); // b
+	  *pixels2++ = CLAMP((y + uv_g) >> 8); // g
+	  *pixels2++ = CLAMP((y + uv_r) >> 8); // r
 	}
 	pixels1+=xsize*csize;	pixels2+=xsize*csize;
 	py1+=xsize*1;	py2+=xsize*1;
@@ -775,48 +831,45 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
       unsigned char*pu=(format==GL_RGBA)?V:U;
  
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
       yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
-	  u=*pu++-128;
-	  ug=88*u;
-	  ub=454*u;
-	  v=*pv++-128;
-	  vg =  183 * v;
-	  vr =  359 * v;
+	  u=*pu++-UV_OFFSET;
+	  v=*pv++-UV_OFFSET;
+	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
 	  // 1st row - 1st pixel
-	  y=*py1++;
-	  yy=y<<8;
-	  *pixels1++ = CLAMP((yy + ub     ) >> 8); // r
-	  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
-	  *pixels1++ = CLAMP((yy +      vr) >> 8); // b
+	  y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+	  *pixels1++ = CLAMP((y + uv_b) >> 8); // b
+	  *pixels1++ = CLAMP((y + uv_g) >> 8); // g
+	  *pixels1++ = CLAMP((y + uv_r) >> 8); // r
 	  *pixels1++ = 255; // a
+
 	  // 1st row - 2nd pixel
-	  y=*py1++;
-	  yy=y<<8;
-	  *pixels1++ = CLAMP((yy + ub     ) >> 8); // r
-	  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
-	  *pixels1++ = CLAMP((yy +      vr) >> 8); // b
+	  y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+	  *pixels1++ = CLAMP((y + uv_b) >> 8); // b
+	  *pixels1++ = CLAMP((y + uv_g) >> 8); // g
+	  *pixels1++ = CLAMP((y + uv_r) >> 8); // r
 	  *pixels1++ = 255; // a
 
 	  // 2nd row - 1st pixel
-	  y=*py2++;
-	  yy=y<<8;
-	  *pixels2++ = CLAMP((yy + ub     ) >> 8); // r
-	  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
-	  *pixels2++ = CLAMP((yy +      vr) >> 8); // b
+	  y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+	  *pixels2++ = CLAMP((y + uv_b) >> 8); // b
+	  *pixels2++ = CLAMP((y + uv_g) >> 8); // g
+	  *pixels2++ = CLAMP((y + uv_r) >> 8); // r
 	  *pixels2++ = 255; // a
 
 	  // 2nd row - 2nd pixel
-	  y=*py2++;
-	  yy=y<<8;
-	  *pixels2++ = CLAMP((yy + ub     ) >> 8); // r
-	  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
-	  *pixels2++ = CLAMP((yy +      vr) >> 8); // b
+	  y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+	  *pixels2++ = CLAMP((y + uv_b) >> 8); // b
+	  *pixels2++ = CLAMP((y + uv_g) >> 8); // g
+	  *pixels2++ = CLAMP((y + uv_r) >> 8); // r
 	  *pixels2++ = 255; // a
 	}
 	pixels1+=xsize*csize;	pixels2+=xsize*csize;
@@ -882,52 +935,54 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 
       short*py1=Y;
       short*py2=Y+xsize; // plane_1 is luminance (csize==1)
-      short*pv=(format==GL_BGR_EXT)?V:U;
-      short*pu=(format==GL_RGB)?V:U;
+      short*pv=V;//(format==GL_BGR_EXT)?V:U;
+      short*pu=U;//(format==GL_RGB)?V:U;
 
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
       yy=128;
       while(row--){
-		int col=cols;
-		while(col--){
-		  u=((*pu++)>>8);
-		  v=((*pv++)>>8);
-		  ug=88*u;
-		  ub=454*u;
-		  vg =  183 * v;
-		  vr =  358 * v;
+	int col=cols;
+	while(col--){
+	  // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
+	  u=(*pu++)>>8;
+	  v=(*pv++)>>8;
+	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-		  // 1st row - 1st pixel
-		  y=(*py1++)>>7;
-		  yy=y<<8;
-		  *pixels1++ = CLAMP((yy + ub     ) >> 8); // b
-		  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
-		  *pixels1++ = CLAMP((yy +      vr) >> 8); // r
-		  // 1st row - 2nd pixel
-		  y=(*py1++)>>7;
-		  yy=y<<8;
-		  *pixels1++ = CLAMP((yy + ub     ) >> 8);
-		  *pixels1++ = CLAMP((yy - ug - vg) >> 8);
-		  *pixels1++ = CLAMP((yy +      vr) >> 8);
+	  // 1st row - 1st pixel
+	  y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
+	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels1+=3;
 
-		  // 2nd row - 1st pixel
-		  y=(*py2++)>>7;
-		  yy=y<<8;
-		  *pixels2++ = CLAMP((yy + ub     ) >> 8); // b
-		  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
-		  *pixels2++ = CLAMP((yy +      vr) >> 8); // r
+	  // 1st row - 2nd pixel
+	  y=YUV2RGB_11*((*py1++)>>7);
+	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels1+=3;
 
-		  // 2nd row - 2nd pixel
-		  y=(*py2++)>>7;
-		  yy=y<<8;
-		  *pixels2++ = CLAMP((yy + ub     ) >> 8);
-		  *pixels2++ = CLAMP((yy - ug - vg) >> 8);
-		  *pixels2++ = CLAMP((yy +      vr) >> 8);
-		}
-		pixels1+=xsize*csize;	pixels2+=xsize*csize;
-		py1+=xsize*1;	py2+=xsize*1;
+	  // 2nd row - 1st pixel
+	  y=YUV2RGB_11*((*py2++)>>7);
+	  pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels2+=3;
+
+	  // 2nd row - 2nd pixel
+	  y=YUV2RGB_11*((*py2++)>>7);
+	  pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels2+=3;
+	}
+	pixels1+=xsize*csize;	pixels2+=xsize*csize;
+	py1+=xsize*1;	py2+=xsize*1;
       }
     }
     break;
@@ -939,60 +994,57 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 
       short*py1=Y;//yuvdata;
       short*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
-	  short*pv=(format==GL_BGRA_EXT)?U:V;
+      short*pv=(format==GL_BGRA_EXT)?U:V;
       short*pu=(format==GL_RGBA)?U:V;
 
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
       yy=128;
       while(row--){
-		int col=cols;
-		while(col--){
-		  u=(*pu++)>>8;
-		  ug=88*u;
-		  ub=454*u;
-		  v=(*pv++)>>8;
-		  vg =  183 * v;
-		  vr =  358 * v;
+	int col=cols;
+	while(col--){
+	  u=(*pu++)>>8;
+	  v=(*pv++)>>8;
+	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-		  // 1st row - 1st pixel
-		  y=(*py1++)>>7;
-		  yy=y<<8;
-		  *pixels1++ = 0; // a
-		  *pixels1++ = CLAMP((yy + ub     ) >> 8); // r
-		  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
-		  *pixels1++ = CLAMP((yy +      vr) >> 8); // b
-		  //*pixels1++ = 0; // a
-		  // 1st row - 2nd pixel
-		  y=(*py1++)>>7;
-		  yy=y<<8;
-		  *pixels1++ = 0; // a
-		  *pixels1++ = CLAMP((yy + ub     ) >> 8); // r
-		  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
-		  *pixels1++ = CLAMP((yy +      vr) >> 8); // b
-		  //*pixels1++ = 0; // a
+	  // 1st row - 1st pixel
+	  y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
+	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels1[chAlpha] = 255; // a
+	  pixels1+=4;
 
-		  // 2nd row - 1st pixel
-		  y=(*py2++)>>7;
-		  yy=y<<8;
-		  *pixels2++ = 0; // a
-		  *pixels2++ = CLAMP((yy + ub     ) >> 8); // r
-		  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
-		  *pixels2++ = CLAMP((yy +      vr) >> 8); // b
-		  //*pixels2++ = 0; // a
+	  // 1st row - 2nd pixel
+	  y=YUV2RGB_11*((*py1++)>>7);
+	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels1[chAlpha] = 255; // a
+	  pixels1+=4;
 
-		  // 2nd row - 2nd pixel
-		  y=(*py2++)>>7;
-		  yy=y<<8;
-		  *pixels2++ = 0; // a
-		  *pixels2++ = CLAMP((yy + ub     ) >> 8); // r
-		  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
-		  *pixels2++ = CLAMP((yy +      vr) >> 8); // b
-		  //*pixels2++ = 0; // a
-		}
-		pixels1+=xsize*csize;	pixels2+=xsize*csize;
-		py1+=xsize*1;	py2+=xsize*1;
+	  // 2nd row - 1st pixel
+	  y=YUV2RGB_11*((*py2++)>>7);
+	  pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels2[chAlpha] = 255; // a
+	  pixels2+=4;
+
+	  // 2nd row - 2nd pixel
+	  y=YUV2RGB_11*((*py2++)>>7);
+	  pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels2[chAlpha] = 255; // a
+	  pixels2+=4;
+	}
+	pixels1+=xsize*csize;	pixels2+=xsize*csize;
+	py1+=xsize*1;	py2+=xsize*1;
       }
     }
 
@@ -1056,30 +1108,27 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
     {
       unsigned char *pixels=data;
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
       while(pixelnum--){
-	u=yuvdata[0]-128;
-	ug=88*u;
-	ub=454*u;
-	v=yuvdata[2]-128;
-	vg =  183 * v;
-	vr =  359 * v;
-	
-	// 1st pixel
-	y=yuvdata[1];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
-	pixels+=3;
+	u=yuvdata[0]-UV_OFFSET;
+	v=yuvdata[2]-UV_OFFSET;
+	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
+	// 1st pixel
+	y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+	pixels+=3;
 	// 2nd pixel
-	y=yuvdata[3];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels+=3;
 
 	yuvdata+=4;
@@ -1091,29 +1140,27 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
     {
       unsigned char *pixels=data;
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
-	u=yuvdata[0]-128;
-	ug=88*u;
-	ub=454*u;
-	v=yuvdata[2]-128;
-	vg =  183 * v;
-	vr =  359 * v;
-	
+	u=yuvdata[0]-UV_OFFSET;
+	v=yuvdata[2]-UV_OFFSET;
+	uv_r=YUV2RGB_12*v+YUV2RGB_13*v;
+	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+
 	// 1st pixel
-	y=yuvdata[1];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 	// 2nd pixel
-	y=yuvdata[3];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 
@@ -1156,30 +1203,27 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
     {
       unsigned char *pixels=data;
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
       while(pixelnum--){
-	u=yuvdata[1]-128;
-	ug=88*u;
-	ub=454*u;
-	v=yuvdata[3]-128;
-	vg =  183 * v;
-	vr =  359 * v;
-	
-	// 1st pixel
-	y=yuvdata[0];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
-	pixels+=3;
+	u=yuvdata[1]-UV_OFFSET;
+	v=yuvdata[3]-UV_OFFSET;
+	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
+	// 1st pixel
+	y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+	pixels+=3;
 	// 2nd pixel
-	y=yuvdata[2];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels+=3;
 
 	yuvdata+=4;
@@ -1191,29 +1235,27 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
     {
       unsigned char *pixels=data;
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
-	u=yuvdata[1]-128;
-	ug=88*u;
-	ub=454*u;
-	v=yuvdata[2]-128;
-	vg =  183 * v;
-	vr =  359 * v;
-	
+	u=yuvdata[1]-UV_OFFSET;
+	v=yuvdata[3]-UV_OFFSET;
+	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+
 	// 1st pixel
-	y=yuvdata[0];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 	// 2nd pixel
-	y=yuvdata[2];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 
@@ -1256,30 +1298,27 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
     {
       unsigned char *pixels=data;
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
       while(pixelnum--){
-	u=yuvdata[3]-128;
-	ug=88*u;
-	ub=454*u;
-	v=yuvdata[1]-128;
-	vg =  183 * v;
-	vr =  359 * v;
-	
-	// 1st pixel
-	y=yuvdata[0];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
-	pixels+=3;
+	u=yuvdata[3]-UV_OFFSET;
+	v=yuvdata[1]-UV_OFFSET;
+	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
+	// 1st pixel
+	y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+	pixels+=3;
 	// 2nd pixel
-	y=yuvdata[2];
-	yy=y<<8;
-	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels+=3;
 
 	yuvdata+=4;
@@ -1291,30 +1330,27 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
     {
       unsigned char *pixels=data;
       int y, u, v, yy, vr, ug, vg, ub;
+      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
-	u=yuvdata[3]-128;
-	ug=88*u;
-	ub=454*u;
-	v=yuvdata[1]-128;
-	vg =  183 * v;
-	vr =  359 * v;
-	
+	u=yuvdata[3]-UV_OFFSET;
+	v=yuvdata[1]-UV_OFFSET;
+	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+
 	// 1st pixel
-	y=yuvdata[0];
-	yy=y<<8;
-	// somehow i have colours swapped with my dv-cam...
-	pixels[chBlue  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chRed ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 	// 2nd pixel
-	y=yuvdata[2];
-	yy=y<<8;
-	pixels[chBlue  ] = CLAMP((yy +      vr) >> 8); // r
-	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
-	pixels[chRed ] = CLAMP((yy + ub     ) >> 8); // b
+	y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
+	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 
