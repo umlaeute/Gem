@@ -17,17 +17,6 @@
 
 #include "GemState.h"
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
-#include <windows.h>
-#endif
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-
 /////////////////////////////////////////////////////////
 //
 // GemState
@@ -37,13 +26,12 @@
 //
 /////////////////////////////////////////////////////////
 GemState :: GemState()
-		  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
-    		image(0), texCoords(0), numTexCoords(0),
-		    numVertexColors(0), stereo(0), tickTime(50.f)
+  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
+    image(0), texCoords(0), numTexCoords(0),
+    stereo(0), tickTime(50.f),
+    VertexArray(0), VertexArraySize(0), VertexArrayStride(0),
+    ColorArray(0), HaveColorArray(0),
+    NormalArray(0), HaveNormalArray(0),
+    TexCoordArray(0), HaveTexCoordArray(0),
+    drawType(0)
 { }
-
-void GemState::setColor(int num)
-{
-  if (numVertexColors > num)
-    glColor3fv(vertexColors[num]); 
-}

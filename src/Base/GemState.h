@@ -96,9 +96,6 @@ class GEM_EXTERN GemState
     	// The number of TexCoords
     	int 	    	    numTexCoords;
     	
-	float**             vertexColors;
-	int 	    	    numVertexColors;
-
     	//////////
     	// Stereoscopic rendering?
 	// 0 - no
@@ -112,7 +109,11 @@ class GEM_EXTERN GemState
 	//		and right renderings
 	float				tickTime;
 
-        //vertex array data
+	////////////
+        //vertex-array data
+
+	int                             VertexDirty; // the vertex-arrays has changed
+
         GLfloat				*VertexArray;
         int				VertexArraySize;
         int				VertexArrayStride;
@@ -126,6 +127,8 @@ class GEM_EXTERN GemState
         GLfloat				*TexCoordArray;
         int				HaveTexCoordArray;
 
+	//////////////////
+	// the default draw-type (might be overriden within a Geo)
         GLenum				drawType;
         
         //////////

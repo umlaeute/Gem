@@ -34,6 +34,14 @@ class GEM_EXTERN GemCache
 {
     public:
 
+	//////////
+        // Constructor
+    	GemCache(gemhead *parent);
+    	
+        //////////
+        // Destructor
+        ~GemCache();
+
     	//////////
     	// Was a modification made which will void a display list?
     	int 	    	    dirty;
@@ -42,13 +50,10 @@ class GEM_EXTERN GemCache
     	// Should the image be resent?
     	int 	    	    resendImage;
 
-	//////////
-        // Constructor
-    	GemCache(gemhead *parent);
-    	
-        //////////
-        // Destructor
-        ~GemCache();
+
+    	//////////
+    	// has the Vertex-Array changed?
+    	int 	    	    vertexDirty;
 
 	//////////
 	// re-set (like creation, but without instantiating

@@ -26,16 +26,18 @@
 // Constructor
 //
 /////////////////////////////////////////////////////////
-GemCache :: GemCache(gemhead *parent)
-  : dirty(1), resendImage(0), m_parent(parent), m_magic(GEMCACHE_MAGIC)
+GemCache :: GemCache(gemhead *parent) : 
+  dirty(1), resendImage(0), vertexDirty(0),
+  m_parent(parent), m_magic(GEMCACHE_MAGIC)
 {
 }
 void GemCache :: reset(gemhead *parent)
 {
-  dirty      =1;
-  resendImage=0;
-  m_parent   =parent;
-  m_magic    =GEMCACHE_MAGIC;
+  dirty=1; 
+  resendImage=0; 
+  vertexDirty=0; 
+  m_parent=parent; 
+  m_magic=GEMCACHE_MAGIC;
 }
 /////////////////////////////////////////////////////////
 // Destructor
