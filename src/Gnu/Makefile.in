@@ -73,16 +73,34 @@ distclean: clean
 	./makeauxlibs clean
 	cp Makefile.clean Makefile
 
+
 install: installdocs
 	install -m644 -D ../../Gem.pd_linux $(DESTDIR)/$(PDLIBDIR)/extra/Gem.pd_linux
 
-
 installdocs:
+	install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
+	install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem/examples
+	for d in ../../examples/*.*; do \
+	  dudu=$${d#../../examples/}; \
+	  install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem/examples/$$dudu; \
+	  install -m644 $$d/*.* $(DESTDIR)/$(PDLIBDIR)/doc/gem/examples/$$dudu; \
+	done
+
+	install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem/manual
+	install -m644 ../../manual/*.* $(DESTDIR)/$(PDLIBDIR)/doc/gem/manual
+
+	install -m644 ../../doc/*.* $(DESTDIR)/$(PDLIBDIR)/doc/gem/
+
+	install -d $(DESTDIR)/$(PDLIBDIR)/extra/help-Gem
+	install -m644 ../../help/*.* $(DESTDIR)/$(PDLIBDIR)/extra/help-Gem
+
+## don't use this, just a remembrance
+installdocs_sys:
 #	install -d $(DESTDIR)/$(SYSTEMDOCS)
 #	install -m644 ../../doc/*.* $(DESTDIR)/$(SYSTEMDOCS)
 	install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
 	install -m644 ../../examples/*.* $(DESTDIR)/$(PDLIBDIR)/doc/gem
-       
+
 	install -d $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/Gem
 	install -m644 ../../help/*.* $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/Gem
 
