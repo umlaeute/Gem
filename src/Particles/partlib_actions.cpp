@@ -17,10 +17,7 @@
 #define ONEOVERSQRT2PI (1. / SQRT2PI)
 
 #ifdef __APPLE__
-#define logf(x)		((float)log( (double)(x) ))
-#define expf(x)		((float)exp( (double)(x) ))
-#define sinf(x)		((float)sin( (double)(x) ))
-#define cosf(x)		((float)cos( (double)(x) ))
+#include <macosx_math.h>
 #endif
 
 // To offset [0 .. 1] vectors to [-.5 .. .5]
@@ -386,6 +383,8 @@ void PAAvoid::Execute(ParticleGroup *group)
 			}
 		}
 		break;
+	default:
+		break;
 	}
 }
 
@@ -703,6 +702,8 @@ void PABounce::Execute(ParticleGroup *group)
 				}
 			}
 		}
+	default:
+		break;
 	}
 }
 
