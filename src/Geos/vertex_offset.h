@@ -1,0 +1,63 @@
+/*-----------------------------------------------------------------
+LOG
+    GEM - Graphics Environment for Multimedia
+
+    A vertex_offset
+
+    Copyright (c) 1997-2000 Mark Danks. mark@danks.org
+    Copyright (c) G¸nther Geiger. geiger@epy.co.at
+    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::f¸r::uml‰ute. IEM. zmoelnig@iem.kug.ac.at
+    For information on usage and redistribution, and for a DISCLAIMER OF ALL
+    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+
+-----------------------------------------------------------------*/
+
+#ifndef INCLUDE_vertex_offset_H_
+#define INCLUDE_vertex_offset_H_
+
+#include "Base/GemShape.h"
+
+/*-----------------------------------------------------------------
+-------------------------------------------------------------------
+CLASS
+    vertex_offset
+    
+    Creates a vertex_offset
+
+KEYWORDS
+    geo
+    
+DESCRIPTION
+    
+-----------------------------------------------------------------*/
+class GEM_EXTERN vertex_offset : public GemShape
+{
+    CPPEXTERN_HEADER(vertex_offset, GemShape)
+
+    public:
+
+        //////////
+        // Constructor
+    	vertex_offset(t_floatarg size);
+    	
+    protected:
+    	
+    	//////////
+    	// Destructor
+    	virtual ~vertex_offset();
+        
+        float	m_x,m_y,m_z,m_w;
+        int 	m_previousSize;
+        int	m_vertNum,m_vertCount;
+
+    	//////////
+    	// Do the rendering
+    	virtual void 	render(GemState *state);
+        virtual void 	postrender(GemState *state);
+        
+        static void 	offsetMessCallback(void *data, t_floatarg y, t_floatarg y, t_floatarg z, t_floatarg w);
+        static void 	vertexMessCallback(void *data, t_floatarg num, t_floatarg counter);
+
+};
+
+#endif	// for header file
