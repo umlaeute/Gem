@@ -78,16 +78,16 @@ class GEM_EXTERN cuboid : public GemShape
         //////////
         // The height inlet
         t_inlet         *m_inletZ;
+		
+		int		m_blend;
 
 		private:
 
        	//////////
        	// Static member functions
     	static void 	heightMessCallback(void *data, t_floatarg sizey);
-
-	//////////
-       	// Static member functions
     	static void 	widthMessCallback(void *data, t_floatarg sizez);
+		static void 	blendMessCallback(void *data, t_floatarg size);
 
 };
 
