@@ -112,7 +112,7 @@ void tube :: render(GemState *state){
 
   int n;
 
-  if(m_drawType==-1)m_drawType=GL_TRIANGLE_STRIP;
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
 
    
   for (n = 0; n < order ; n++)    {

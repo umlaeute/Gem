@@ -85,7 +85,7 @@ void disk :: innerRadius(float radius)
 /////////////////////////////////////////////////////////
 void disk :: render(GemState *state)
 {
-  if(m_drawType==-1)m_drawType=GL_FILL;
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_FILL;
 
   GLfloat da, dr;
 

@@ -59,7 +59,7 @@ colorSquare :: ~colorSquare()
 /////////////////////////////////////////////////////////
 void colorSquare :: render(GemState *state)
 {
-  if(m_drawType==-1)m_drawType=GL_QUADS;
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
 
     if (!state->lighting) glShadeModel(GL_SMOOTH);
 

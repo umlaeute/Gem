@@ -64,7 +64,7 @@ cuboid :: ~cuboid()
 /////////////////////////////////////////////////////////
 void cuboid :: render(GemState *state)
 {
-  if(m_drawType==-1)m_drawType=GL_QUADS;
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
 
     static GLfloat n[6][3] =
     {
@@ -173,27 +173,6 @@ void cuboid :: widthMess(float sizez)
     m_sizez = sizez;
     setModified();
 }
-#if 0
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void cuboid :: typeMess(t_symbol *type)
-{
-    if (!strcmp(type->s_name, "line")) 
-	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill")) 
-	    m_drawType = GL_QUADS;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else
-    {
-	    error ("GEM: cuboid draw style");
-	    return;
-    }
-    setModified();
-}
-#endif
 
 /////////////////////////////////////////////////////////
 // static member function

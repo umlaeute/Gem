@@ -135,7 +135,7 @@ void newWave :: textureMess(int mode)
 void newWave :: render(GemState *state)
 {
     int i, j;
-    if(m_drawType==-1)m_drawType=GL_TRIANGLE_STRIP;
+    if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
 
     //    post("m_size=%f", m_size);
 

@@ -150,7 +150,7 @@ void curve3d :: typeMess(t_symbol *type){
 //
 /////////////////////////////////////////////////////////
 void curve3d :: render(GemState *state){
-  if(m_drawType==-1)m_drawType=1;
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=1;
   float norm[3];
 
   glNormal3f(0.0f, 0.0f, 1.0f);
