@@ -102,8 +102,13 @@ void pix_snap :: snapMess()
 		m_originalImage->xsize = m_width;
 		m_originalImage->ysize = m_height;
 		m_originalImage->csize = 4;
+                #ifndef MACOSX
 		m_originalImage->type  = GL_UNSIGNED_BYTE;
 		m_originalImage->format = GL_RGBA;
+                #else
+                m_originalImage->type  = GL_UNSIGNED_INT_8_8_8_8_REV;
+		m_originalImage->format = GL_BGRA_EXT;
+                #endif
 		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
 	}
 
