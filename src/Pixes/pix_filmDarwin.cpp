@@ -278,7 +278,6 @@ if (m_auto) {
         }*/
         }
 
-       post("pix_film: m_movieTIme: %d",m_movieTime);
     // set the time for the frame and give time to the movie toolbox	
     SetMovieTimeValue(m_movie, m_movieTime); 
     MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
