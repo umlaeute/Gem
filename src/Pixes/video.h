@@ -78,7 +78,8 @@ class GEM_EXTERN video {
   virtual int	    	setChannel(int c, float f=0);
   virtual int	    	setNorm(char*n);
   virtual int	    	setDevice(int d);
-  
+  virtual int	    	setColor(int);
+
  protected:
   bool m_capturing;
   bool m_haveVideo;
