@@ -6,7 +6,7 @@ Prerequisites for compiling GEM (version >=0.87):
 Mesa       http://mesa3d.sourceforge.net
 GLUT       ftp://ftp.sgi.com/sgi/opengl/glut/
 tiff       ftp://ftp.sgi.com/graphics/tiff/tiff-v3.4beta037-tar.gz
-freetype   ftp://ftp.physiol.med.tu-muenchen.de/pub/freetype/
+freetype   http://freetype.sourceforge.net/index2.html
 gltt       http://gltt.sourceforge.net/
 jpeg       ftp://ftp.uu.net/graphics/jpeg/
 
