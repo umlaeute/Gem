@@ -16,6 +16,8 @@
 //
 /////////////////////////////////////////////////////////
 
+#define HELPSYMBOL "pix_movie"
+
 #include "pix_movieNEW.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieNEW, t_symbol *, A_DEFSYM)
