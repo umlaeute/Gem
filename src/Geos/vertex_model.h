@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_vertex_model_H_
 #define INCLUDE_vertex_model_H_
 
-#include "Base/GemShape.h"
+#include "Base/GemVertex.h"
 #include "model_loader.h"
 
 /*-----------------------------------------------------------------

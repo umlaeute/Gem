@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_vertex_combine_H_
 #define INCLUDE_vertex_combine_H_
 
-#include "Base/GemShape.h"
+#include "Base/GemVertex.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
