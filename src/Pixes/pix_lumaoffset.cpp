@@ -373,135 +373,101 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 		while (pCurrentSource<pSourceEnd) {
 			const U32* pSourceLineEnd=pCurrentSource+nWidth;
 			U32** ppCurrentLineHeight=ppPreviousLineHeights;
-			U32** ppCurrentLineHeight2 = ppPreviousLineHeights2;
+			//U32** ppCurrentLineHeight2 = ppPreviousLineHeights2;
 
-			if (m_DoSmoothFill) {
-				while (pCurrentSource!=pSourceLineEnd) {
-					const U32 SourceColour=*pCurrentSource;
-					nSourceU = ((SourceColour&(0xff<<24))>>24)-128;
-					nSourceY1 = ((SourceColour&(0xff<<16))>>16)<<8;
-					nSourceY1 -= 32640;
-					nSourceV = ((SourceColour&(0xff<<8))>>8)-128;
-					nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
-					nSourceY2 -= 32640;
-				
-					const int nOffset1=(nSourceY1*nOffsetScale)>>16;
-					const int nOffset2=(nSourceY2*nOffsetScale)>>16;
-					nSourceY1 = ((SourceColour&(0xff<<16))>>16);
-					nSourceY2 = ((SourceColour&(0xff<<0))>>0);
 
-					U32* pOffsetOutputStart1 = pCurrentOutput+(nOffset1*nWidth);
-					U32* pOffsetOutputStart2 = pCurrentOutput+(nOffset2*nWidth);
+                        if (m_DoSmoothFill) {
+                            while (pCurrentSource!=pSourceLineEnd) {
+                                const U32 SourceColour=*pCurrentSource;
+                                nSourceU = ((SourceColour&(0xff<<24))>>24);
+                                nSourceY1 = ((SourceColour&(0xff<<16))>>16)<<8;
+                                nSourceY1 -= 32640; 
+                                nSourceV = ((SourceColour&(0xff<<8))>>8);
+                                nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
+                                nSourceY2 -= 32640;
 
-					U32* pOffsetOutput1 = pOffsetOutputStart1;
-					U32* pPreviousOffsetOutput1 = *ppCurrentLineHeight;
-					U32* pOffsetOutput2 = pOffsetOutputStart2;
-					U32* pPreviousOffsetOutput2= *ppCurrentLineHeight2;
+                                const int nOffset1=(nSourceY1*nOffsetScale)>>16;
+                              //  const int nOffset2=(nSourceY2*nOffsetScale)>>16;
+                                
+                                //this doesn't fit with the rest of the Y handling but it works
+                                nSourceY1 = ((SourceColour&(0xff<<16))>>16);
+                                nSourceY2 = ((SourceColour&(0xff<<0))>>0);
+                                
 
-					int nDestU, nDestU2;
-					int nDestY1;
-					int nDestV, nDestV2;
-					int nDestY2;
-					int nDestDistance, nDestDistance2;
-					if (pPreviousOffsetOutput1==NULL) {
-						nDestU = 128;
-						nDestY1 = 0;
-						nDestV = 128;
-						nDestDistance = 10000;
-					} else {
-						const U32 DestColour=*pPreviousOffsetOutput1;
-						nDestU = (DestColour&(0xff<<24)>>24)-128;
-						nDestY1=(DestColour&(0xff<<16))>>16;
-						nDestV = (DestColour&(0xff<<8)>>8)-128;
-						nDestDistance=(pOffsetOutput1 - pPreviousOffsetOutput1)/nWidth;
-						if (nDestDistance==0)nDestDistance=1;
-					}
-					
-					if (pPreviousOffsetOutput2==NULL) {
-						nDestU2 = 128;
-						nDestV2 = 128;
-						nDestY2 = 0;
-						nDestDistance = 10000;
-					} else {
-						const U32 DestColour=*pPreviousOffsetOutput2;
-						nDestU2 = ((DestColour>>SHIFT_RED)&0xff)-128;
-						nDestV2 = ((DestColour>>SHIFT_BLUE)&0xff)-128;
-						nDestY2=(DestColour>>SHIFT_ALPHA)&0xff;
-						nDestDistance2 = (pOffsetOutput2 - pPreviousOffsetOutput2)/nWidth;
-						if (nDestDistance2 == 0) nDestDistance2 = 1;
-					}
+                                U32* pOffsetOutputStart1 = pCurrentOutput+(nOffset1*nWidth);
 
-					const int nDeltaU=(nDestU-nSourceU);
-					const int nDeltaY1=(nDestY1-nSourceY1);
-					const int nDeltaV=(nDestV-nSourceV);
-					const int nDeltaY2=(nDestY2-nSourceY2);
-					const int nDeltaU2=(nDestU2-nSourceU);
-					const int nDeltaV2=(nDestV2-nSourceV);
-		    
-					const int nIncU = (nDeltaU/nDestDistance)+128;
-					const int nIncY1=CLAMP_Y(nDeltaY1/nDestDistance);
-					const int nIncV = (nDeltaV/nDestDistance)+128;
-					const int nIncY2=CLAMP_Y(nDeltaY2/nDestDistance2);
-					const int nIncU2= (nDeltaU2/nDestDistance2)+128;
-					const int nIncV2= (nDeltaV2/nDestDistance2)+128;
+                                U32* pOffsetOutput1 = pOffsetOutputStart1;
+                                U32* pPreviousOffsetOutput1 = *ppCurrentLineHeight;
 
-					int nCurrentU = nSourceU;
-					int nCurrentU2 = nSourceU;
-					int nCurrentY1 = nSourceY1;
-					int nCurrentV = nSourceV;
-					int nCurrentV2 = nSourceV;
-					int nCurrentY2 = nSourceY2;
 
-					while ((pOffsetOutput1 < pOutputEnd)&&(pOffsetOutput1 >=pOutput)&&
-										(pOffsetOutput1 > pPreviousOffsetOutput1)) {
-						U32 CurrentColour1=
-							(nCurrentU<<SHIFT_RED)|
-							(nCurrentY1<<SHIFT_GREEN)|
-							(nCurrentV<<SHIFT_BLUE);
+                                int nDestU;
+                                int nDestY1;
+                                int nDestV;
+                                int nDestY2;
+                                int nDestDistance;
+                                if (pPreviousOffsetOutput1==NULL) {
+                                    nDestU = 128;
+                                    nDestY1 = 0;
+                                    nDestV = 128;
+                                    nDestY2 = 0;
+                                    nDestDistance = 10000;
+                                } else {
+                                    const U32 DestColour=*pPreviousOffsetOutput1;
 
-						*pOffsetOutput1=CurrentColour1;
-						if (!(abs(nOffset1)>>1)){
-							*pOffsetOutput1  = *pOffsetOutput1 & 0xffff00ff;
-							*pOffsetOutput1 |= CurrentColour1 & 0x0000ff00;
-						}else{
-							*pOffsetOutput1  = *pOffsetOutput1 & 0xffffff00;
-							*pOffsetOutput1 |= CurrentColour1 & 0x000000ff;
-						}
-						U32 CurrentColour2=
-							(nCurrentU2<<SHIFT_RED)|
-							(nCurrentV2<<SHIFT_BLUE)|
-							(nCurrentY2);
-						
-						*pOffsetOutput2 = CurrentColour2;
-						if (!(abs(nOffset2)>>1)){
-							*pOffsetOutput2  = *pOffsetOutput2 & 0xffffff00;
-							*pOffsetOutput2 |= CurrentColour2 & 0x000000ff;
-						}else{
-							*pOffsetOutput2  = *pOffsetOutput2 & 0xffff00ff;
-							*pOffsetOutput2 |= CurrentColour2 & 0x0000ff00;
-						}
+                                    nDestU = ((DestColour&(0xff<<24))>>24);
+                                    nDestY1 = ((DestColour&(0xff<<16))>>16);
+                                    nDestV = ((DestColour&(0xff<<8))>>8);
+                                    nDestY2 = ((DestColour&(0xff<<0))>>0);
 
-						nCurrentU+=nIncU;
-						nCurrentU2+=nIncU2;
-						nCurrentY1+=nIncY1;
-						nCurrentV+=nIncV;
-						nCurrentV2+=nIncV2;
-						nCurrentY2+=nIncY2;
-					
-						pOffsetOutput1-=nWidth;
-						pOffsetOutput2-=nWidth;
-					}
+                                    nDestDistance=(pOffsetOutput1 - pPreviousOffsetOutput1)/nWidth;
+                                    if (nDestDistance==0)nDestDistance=1;
+                                }
+                                
 
-				*ppCurrentLineHeight = pOffsetOutputStart1;
-				*ppCurrentLineHeight2 = pOffsetOutputStart2;
-				
+                                const int nDeltaU= (nDestU-nSourceU);
+                                const int nDeltaY1=(nDestY1-nSourceY1);
+                                const int nDeltaV=(nDestV-nSourceV);
+                                const int nDeltaY2=(nDestY2-nSourceY2);
 
-				pCurrentSource+=1;
-				pCurrentOutput+=1;
-				ppCurrentLineHeight+=1;
-				ppCurrentLineHeight2 += 1;
-				}
-			} else {
+                                const int nIncU =(nDeltaU/nDestDistance);
+                                const int nIncY1=(nDeltaY1/nDestDistance);
+                                const int nIncV = (nDeltaV/nDestDistance);
+                                const int nIncY2= (nDeltaY2/nDestDistance);
+
+                                int nCurrentU = nSourceU;
+                                int nCurrentY1 = nSourceY1;
+                                int nCurrentV = nSourceV;
+                                int nCurrentY2 = nSourceY2;
+
+                                while ((pOffsetOutput1 < pOutputEnd)&&(pOffsetOutput1 >=pOutput)&&
+                                       (pOffsetOutput1 > pPreviousOffsetOutput1)) {
+
+                                    //the & seems needed to assure no stry values
+                                    U32 CurrentColour1=
+                                    ((nCurrentU<<24)&0xff000000)|
+                                    ((nCurrentY1<<16)&0x00ff0000)|
+                                    ((nCurrentV<<8)&0x0000ff00)|
+                                    ((nCurrentY2)&0x000000ff);
+
+                                    *pOffsetOutput1=CurrentColour1;
+
+                                    nCurrentU+=nIncU;
+                                    nCurrentY1+=nIncY1;
+                                    nCurrentV+=nIncV;
+                                    nCurrentY2+=+nIncY2;
+
+                                    pOffsetOutput1-=nWidth;
+                                }
+
+                                *ppCurrentLineHeight = pOffsetOutputStart1;
+
+
+                                pCurrentSource+=1;
+                                pCurrentOutput+=1;
+                                ppCurrentLineHeight+=1;
+                            }
+                        }
+                        else {
 				while (pCurrentSource!=pSourceLineEnd) {
 					const U32 SourceColour=*pCurrentSource;
 					nSourceY1 = ((SourceColour&(0xff<<16))>>16)<<8;
@@ -510,7 +476,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 					nSourceY2 -= 32640;
 				
 					const int nOffset1=(nSourceY1*nOffsetScale)>>16;
-					const int nOffset2=(nSourceY2*nOffsetScale)>>16;
+					//const int nOffset2=(nSourceY2*nOffsetScale)>>16;
 					
 					U32* pOffsetOutputStart=pCurrentOutput+(nOffset1*nWidth);
 					U32* pOffsetOutput=pOffsetOutputStart;
