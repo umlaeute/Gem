@@ -17,18 +17,25 @@ LOG
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WINDOWS
-#include <windows.h>
+# include <windows.h>
 #endif
 
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
+# include <OpenGL/gl.h>
+# include <OpenGL/glext.h>
 #else
-#include "config.h"
-#include <GL/gl.h>
-# ifdef INCLUDE_GLEXT
-# include <GL/glext.h>
-# endif
+# include "config.h"
+# define GL_GLEXT_LEGACY
+# include <GL/gl.h>
+# if defined INCLUDE_GLEXT || defined __linux__
+
+// stupid hack, as nvidia has erroneous glext-headers!
+#  define boolean GLboolean
+
+#  define GL_GLEXT_PROTOTYPES   1
+#  include <GL/glext.h>
+
+# endif /* GLEXT */
 #endif // __APPLE__
 
 
