@@ -15,6 +15,10 @@
 #ifndef INCLUDE_GEMWIN_H_
 #define INCLUDE_GEMWIN_H_
 
+#ifndef HELPSYMBOL_BASE
+# define HELPSYMBOL_BASE "Gem/"
+#endif
+
 #include "Base/CPPExtern.h"
 
 /*-----------------------------------------------------------------

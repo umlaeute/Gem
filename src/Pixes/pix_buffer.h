@@ -15,6 +15,10 @@ LOG
 #ifndef INCLUDE_PIX_BUFFER_H_
 #define INCLUDE_PIX_BUFFER_H_
 
+#ifndef HELPSYMBOL_BASE
+# define HELPSYMBOL_BASE "Gem/"
+#endif
+
 #include "Base/CPPExtern.h"
 #include "Base/GemPixUtil.h"
 

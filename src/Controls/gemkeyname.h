@@ -14,6 +14,10 @@ LOG
 #ifndef INCLUDE_GEMKEYNAME_H_
 #define INCLUDE_GEMKEYNAME_H_
 
+#ifndef HELPSYMBOL_BASE
+# define HELPSYMBOL_BASE "Gem/"
+#endif
+
 #include "Base/CPPExtern.h"
 
 /*-----------------------------------------------------------------

@@ -15,6 +15,10 @@ LOG
 #ifndef INCLUDE_GEMHEAD_H_
 #define INCLUDE_GEMHEAD_H_
 
+#ifndef HELPSYMBOL_BASE
+# define HELPSYMBOL_BASE "Gem/"
+#endif
+
 #include "Base/CPPExtern.h"
 
 class GemState;

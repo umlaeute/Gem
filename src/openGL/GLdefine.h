@@ -13,6 +13,10 @@
 #ifndef INCLUDE_GEM_GLBEGIN_H_
 #define INCLUDE_GEM_GLBEGIN_H_
 
+#ifndef HELPSYMBOL_BASE
+# define HELPSYMBOL_BASE "Gem/"
+#endif
+
 #include "Base/CPPExtern.h"
 #include "Base/GemGLUtil.h"
 
