@@ -15,9 +15,13 @@ LOG
 #ifndef INCLUDE_WORLD_LIGHT_H_
 #define INCLUDE_WORLD_LIGHT_H_
 
-#include "Base/GemBase.h"
-
+#ifdef MACOSX
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif MACOSX
+
+#include "Base/GemBase.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

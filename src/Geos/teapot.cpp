@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include  "Base/config.h"
-#if HAVE_LIBGLUT
+#if HAVE_LIBGLUT || MACOSX
 #include "teapot.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(teapot, t_floatarg, A_DEFFLOAT)

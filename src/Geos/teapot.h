@@ -16,7 +16,7 @@ LOG
 #define INCLUDE_TEAPOT_H_
 
 
-#if HAVE_LIBGLUT
+#if HAVE_LIBGLUT || MACOSX
 
 #include "Base/GemGlutObj.h"
 
