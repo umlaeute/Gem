@@ -52,3 +52,9 @@ void MarkEx_setup()
     reson_setup();
     abs_setup();
 }
+
+class markex_cppclass {
+public:
+	markex_cppclass(){MarkEx_setup();}
+};
+static markex_cppclass markex_instance;
