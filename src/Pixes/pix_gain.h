@@ -58,7 +58,9 @@ class GEM_EXTERN pix_gain : public GemPixObj
     	virtual void 	processRGBAImage(imageStruct &image);
     	virtual void 	processGrayImage(imageStruct &image);
     	virtual void 	processYUVImage(imageStruct &image);
-    	    	
+    	 //////////
+    	// altivec
+    	virtual void 	processYUV_Altivec(imageStruct &image);   	
     	//////////
     	// Set the new gain
     	void	    	vecGainMess(int argc, t_atom *argv);
@@ -66,7 +68,7 @@ class GEM_EXTERN pix_gain : public GemPixObj
     	//////////
     	// Set the new gain
     	void	    	floatGainMess(float gain);
-    	
+    	 
     	//////////
     	// The new gain
     	float		  	m_gain[4];

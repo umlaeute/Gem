@@ -97,14 +97,19 @@ void pix_gain :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_gain :: processYUVImage(imageStruct &image)
 {
-    int h,w,width;
+  
+#ifdef ALTIVEC
+//post("using altivec");  
+processYUV_Altivec(image);
+return;
+#else
+  int h,w,width;
     long src;
     int y1,y2,u,v;
 
     short Y=(short)(m_gain[1] * 255);
     short U=(short)(m_gain[2] * 255);
     short V=(short)(m_gain[3] * 255);
-
     src = 0;
     width = image.xsize/2;
     for (h=0; h<image.ysize; h++){
@@ -125,6 +130,134 @@ void pix_gain :: processYUVImage(imageStruct &image)
         src+=4;
         }
         }
+#endif
+}
+
+void pix_gain :: processYUV_Altivec(imageStruct &image)
+{
+ #ifdef ALTIVEC
+ int h,w,width;
+    /*altivec code starts */
+    width = image.xsize/8;
+    union
+    {
+        //unsigned int	i;
+        short	elements[8];
+        //vector signed char v;
+        vector	signed short v;
+    }shortBuffer;
+    
+        union
+    {
+        //unsigned int	i;
+        unsigned long	elements[8];
+        //vector signed char v;
+        vector	unsigned long v;
+    }bitBuffer;
+    
+        union
+    {
+        //unsigned int	i;
+        unsigned char	elements[16];
+        //vector signed char v;
+        vector	unsigned char v;
+    }charBuffer;
+    
+    //vector unsigned char c;
+    vector signed short d, hiImage, loImage, YImage, UVImage, UVTemp, YTemp;
+    vector unsigned char zero = vec_splat_u8(0);
+    vector signed short szero = vec_splat_s16(0);
+    //vector unsigned char c,gain,one;
+    vector signed int UVhi,UVlo,Yhi,Ylo;
+    vector signed short c,gain,one;
+    vector unsigned long bitshift;
+    vector unsigned char *inData = (vector unsigned char*) image.data;
+
+    
+    shortBuffer.elements[0] = 128;
+    shortBuffer.elements[1] = 0;
+    shortBuffer.elements[2] = 128;
+    shortBuffer.elements[3] = 0;
+    shortBuffer.elements[4] = 128;
+    shortBuffer.elements[5] = 0;
+    shortBuffer.elements[6] = 128;
+    shortBuffer.elements[7] = 0;
+    
+        c = shortBuffer.v;
+    
+    shortBuffer.elements[0] =(short) (m_gain[1]*255);
+    gain = shortBuffer.v; 
+    gain =  vec_splat(gain, 0 );  
+
+
+    bitBuffer.elements[0] = 8;
+
+    //Load it into the vector unit
+    bitshift = bitBuffer.v;
+    bitshift = vec_splat(bitshift,0); 
+     
+    shortBuffer.elements[0] = 128;
+   
+    //Load it into the vector unit
+    d = shortBuffer.v;
+    d = (vector signed short)vec_splat((vector signed short)d,0);
+
+   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+	vec_dst( inData, prefetchSize, 0 );
+        
+    for ( h=0; h<image.ysize; h++){
+        for (w=0; w<width; w++)
+        {
+        
+	vec_dst( inData, prefetchSize, 0 );
+        
+            //interleaved U Y V Y chars
+            
+            //expand the UInt8's to short's
+            hiImage = (vector signed short) vec_mergeh( zero, inData[0] );
+            loImage = (vector signed short) vec_mergel( zero, inData[0] );
+            
+            //vec_subs -128
+            hiImage = (vector signed short) vec_sub( hiImage, c );
+            loImage = (vector signed short) vec_sub( loImage, c );   
+            
+            //now vec_mule the UV into two vector ints
+            UVhi = vec_mule(gain,hiImage);
+            UVlo = vec_mule(gain,loImage);
+            
+            //now vec_mulo the Y into two vector ints
+            Yhi = vec_mulo(gain,hiImage);
+            Ylo = vec_mulo(gain,loImage);
+            
+            //this is where to do the bitshift/divide due to the resolution
+            UVhi = vec_sra(UVhi,bitshift);
+            UVlo = vec_sra(UVlo,bitshift);
+            Yhi = vec_sra(Yhi,bitshift);
+            Ylo = vec_sra(Ylo,bitshift);
+            
+            //pack the UV into a single short vector
+            UVImage = vec_packs(UVhi,UVlo);
+            
+            //pack the Y into a single short vector
+            YImage = vec_packs(Yhi,Ylo);
+                                            
+            
+            //vec_adds +128 to U V U V short
+            UVImage = vec_adds(UVImage,d);
+            
+            //vec_mergel + vec_mergeh Y and UV
+            hiImage =  vec_mergeh(UVImage,YImage);
+            loImage =  vec_mergel(UVImage,YImage);
+            
+            //pack back to 16 chars
+            inData[0] = vec_packsu(hiImage, loImage);
+            
+        
+            inData++;
+        }
+        vec_dss( 0 );
+}  /* end of working altivec function */
+#endif
 }
 
 /////////////////////////////////////////////////////////

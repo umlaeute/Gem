@@ -52,6 +52,7 @@ CPPEXTERN_HEADER(pix_blur, GemPixObj)
         //////////
     	// Do the YUV processing
     	virtual void 	processYUVImage(imageStruct &image);
+        virtual void 	processYUVAltivec(imageStruct &image);
         
         unsigned char  *saved;
         int		m_blur;

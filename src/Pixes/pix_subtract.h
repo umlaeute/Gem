@@ -54,6 +54,7 @@ class GEM_EXTERN pix_subtract : public GemPixDualObj
     	//////////
     	// Do the processing
     	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
+        virtual void	processYUVAltivec(imageStruct &image, imageStruct &right);
 };
 
 #endif	// for header file
