@@ -40,7 +40,7 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
 {
   // make sure that there are some characters
   if (filename->s_name[0]) openMess(filename);
-  m_colorspace = 0;
+  m_colorspace = GL_YCBCR_422_GEM;
 }
 
 /////////////////////////////////////////////////////////
@@ -149,8 +149,8 @@ void pix_filmDarwin :: realOpen(char *filename)
         post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
 	post("movie size x:%d y:%d", m_xsize, m_ysize);
         post("pix_filmDarwin: color space %d",m_colorspace);
-        if (m_colorspace == 1){
-            m_csize = 4;
+        if (m_colorspace == GL_BGRA_EXT){
+			m_csize = 4;
             m_format = GL_BGRA_EXT;
             m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
             
