@@ -87,7 +87,8 @@ void pix_rgba :: processImage(imageStruct &image)
       new_pix+=4;
     }
     break;
-  case GL_BGRA_EXT: 
+  case GL_BGRA_EXT:
+  #ifndef MACOSX  //bypassed on OSX since this is the correct format
     while(count--){
       new_pix[chRed]  =old_pix[2];
       new_pix[chGreen]=old_pix[1];
@@ -96,6 +97,7 @@ void pix_rgba :: processImage(imageStruct &image)
       old_pix+=4;
       new_pix+=4;
     }
+    #endif //MACOSX
     break;
     
   case GL_LUMINANCE:
