@@ -46,7 +46,6 @@ class GEM_EXTERN vertex_info : public GemBase
     	// Destructor
     	virtual ~vertex_info();
         
-        float		m_x,m_y,m_z,m_w;
         int 		m_previousSize;
         int		m_vertNum,m_vertCount;
         t_outlet	*m_Vsize;
@@ -54,9 +53,8 @@ class GEM_EXTERN vertex_info : public GemBase
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
-        virtual void 	postrender(GemState *state);
-        
-        static void 	offsetMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z, t_floatarg w);
+
+ private:
         static void 	vertexMessCallback(void *data, t_floatarg num, t_floatarg counter);
 
 };
