@@ -151,3 +151,4 @@ void cube :: blendMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->m_blend=((int)size);
 }
+
