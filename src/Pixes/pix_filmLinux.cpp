@@ -55,6 +55,7 @@ pix_filmLinux :: pix_filmLinux(t_symbol *filename) :
   m_avistream=0;
   m_aviimage=0;
 #endif
+
   if (filename->s_name[0]) openMess(filename);
 }
 
@@ -140,7 +141,7 @@ void pix_filmLinux :: realOpen(char *filename)
       quicktime_close(quick_file);
       m_haveMovie = GEM_MOVIE_NONE;
       return;
-    }	
+    }
     m_format=(quicktime_reads_cmodel(quick_file, BC_RGBA8888, 0))?GL_RGBA:GL_RGB;
     m_csize =(m_format==GL_RGBA)?4:(m_format==GL_RGB)?3:1;
   }
@@ -258,7 +259,7 @@ void pix_filmLinux :: getFrame()
 				  &m_frame, 0)) {
 	post("GEM: pix_film:: couldn't decode video !");
       }
-    } else {
+    } else { // RGB
       if (quicktime_decode_video(quick_file, rows, 0)) {
 	post("GEM: pix_film:: couldn't decode video !");
       }
@@ -308,11 +309,11 @@ void pix_filmLinux :: getFrame()
 	format = GL_YCBCR_422_GEM;
 	break;
       default:
-	post("format conversion...");
+	//	post("format conversion...");
 	CImage buf(m_frame, m_xsize, m_ysize);
-	post("...");
+	//post("...");
 	buf.Convert(m_aviimage);
-	post("0x%X to format 0x%X", (*m_aviimage).Format(), buf.Format());
+	//post("0x%X to format 0x%X", (*m_aviimage).Format(), buf.Format());
 	format = GL_RGB;
 	//post("unknown format 0x%X", format);
 	//format = 0;
