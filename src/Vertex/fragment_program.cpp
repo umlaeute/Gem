@@ -39,6 +39,9 @@ fragment_program :: fragment_program(t_symbol *filename) :
 {
  // make sure that there are some characters
  x_filename=gensym("");
+#ifndef GL_FRAGMENT_PROGRAM_ARB
+ post("GEM has been compiled without 'fragment_program' support");
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -47,14 +50,17 @@ fragment_program :: fragment_program(t_symbol *filename) :
 /////////////////////////////////////////////////////////
 fragment_program :: ~fragment_program()
 {
-#ifdef GL_FRAGMENT_PROGRAM_NV
+#ifdef GL_FRAGMENT_PROGRAM_ARB
+
+# ifdef GL_FRAGMENT_PROGRAM_NV
 	if(m_programTarget == GL_FRAGMENT_PROGRAM_NV) glDeleteProgramsNV(1,&m_programID);
 	else 
-#endif
+# endif
 	if(m_programID)
 		glDeleteProgramsARB(1,&m_programID);
 	m_programID=0;
 	m_programTarget=0;
+#endif
 }
 
 
@@ -65,6 +71,7 @@ fragment_program :: ~fragment_program()
 
 void fragment_program :: openMess(t_symbol *filename)
 {
+#ifdef GL_FRAGMENT_PROGRAM_ARB
 #ifdef __APPLE__
   if (!HaveValidContext ()) {
     post("GEM: geo: model - need window to load model");
@@ -80,7 +87,7 @@ void fragment_program :: openMess(t_symbol *filename)
   // Clean up any open files
   closeMess();
 
-	//char *data;
+  //char *data;
 	FILE *file = fopen(buf,"r");
 	if(file) {
 		fseek(file,0,SEEK_END);
@@ -110,11 +117,11 @@ void fragment_program :: openMess(t_symbol *filename)
 		glProgramStringARB(m_programTarget, GL_PROGRAM_FORMAT_ASCII_ARB, strlen(m_programString), m_programString);
 		glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &error);
 #ifdef GL_FRAGMENT_PROGRAM_NV
-	} else if(!strncmp(data,"!!FP1.0",7)) {
+	} else if(!strncmp(m_programString,"!!FP1.0",7)) {
 		m_programTarget = GL_FRAGMENT_PROGRAM_NV;
 		glGenProgramsNV(1, &m_programID);
 		glBindProgramNV(m_programTarget, m_programID);
-		glLoadProgramNV(m_programTarget, m_programID, strlen(data), (GLubyte*)data);
+		glLoadProgramNV(m_programTarget, m_programID, strlen(m_programString), (GLubyte*)m_programString);
 		glGetIntegerv(GL_PROGRAM_ERROR_POSITION_NV, &error);
 #endif
 	} else {
@@ -143,10 +150,13 @@ void fragment_program :: openMess(t_symbol *filename)
 
 	delete m_programString;
 	post("GEM: fragment_program: Loaded file: %s\n", buf);
-	GLint bitnum;
+	GLint bitnum = 0;
+#ifdef GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &bitnum);
+#endif
 	if (!bitnum)
 		post("GEM: fragment_program not within native limits!!!");
+#endif /* GL_FRAGMENT_PROGRAM_ARB */
 }
 
 /////////////////////////////////////////////////////////
@@ -159,6 +169,7 @@ void fragment_program :: startRendering()
 
 void fragment_program :: render(GemState *state)
 {
+#ifdef GL_FRAGMENT_PROGRAM_ARB
 	if (m_programString == NULL)
 	{
 		post("need to load a fragment program");
@@ -174,6 +185,7 @@ void fragment_program :: render(GemState *state)
 
 	glEnable( GL_FRAGMENT_PROGRAM_ARB);
 	glBindProgramARB( GL_FRAGMENT_PROGRAM_ARB, m_programID);
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -182,7 +194,9 @@ void fragment_program :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void fragment_program :: postrender(GemState *state)
 {
+#ifdef GL_FRAGMENT_PROGRAM_ARB
 	glDisable( GL_FRAGMENT_PROGRAM_ARB );
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -201,98 +215,173 @@ void fragment_program :: printInfo()
 	post("fragment_Program Hardware Info");
 	post("============================");
 	
+#ifdef GL_MAX_PROGRAM_MATRICES_ARB
 	glGetIntegerv( GL_MAX_PROGRAM_MATRICES_ARB, &bitnum );
 	post("MAX_PROGRAM_MATRICES: %d", bitnum);
+#endif
+#ifdef GL_MAX_PROGRAM_MATRIX_STACK_DEPTH_ARB
 	glGetIntegerv( GL_MAX_PROGRAM_MATRIX_STACK_DEPTH_ARB, &bitnum );
 	post("MAX_PROGRAM_MATRIX_STACK_DEPTH: %d", bitnum);
+#endif
+#ifdef GL_MAX_TEXTURE_COORDS_ARB
 	glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
 	post("MAX_TEXTURE_COORDS: %d", bitnum);
+#endif 
+#ifdef GL_MAX_TEXTURE_IMAGE_UNITS_ARB
 	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
 	post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
-	
+#endif
+#ifdef GL_FRAGMENT_PROGRAM_ARB
+# ifdef GL_MAX_PROGRAM_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_NATIVE_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_NATIVE_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_TEMPORARIES_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_TEMPORARIES_ARB, &bitnum);
 	post("MAX_PROGRAM_TEMPORARIES: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_NATIVE_TEMPORARIES_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
 	post("MAX_PROGRAM_NATIVE_TEMPORARIES: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_PARAMETERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_PARAMETERS_ARB, &bitnum);
 	post("MAX_PROGRAM_PARAMETERS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_NATIVE_PARAMETERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
 	post("MAX_PROGRAM_NATIVE_PARAMETERS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_ATTRIBS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ATTRIBS_ARB, &bitnum);
 	post("MAX_PROGRAM_ATTRIBS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_NATIVE_ATTRIBS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
 	post("MAX_PROGRAM_NATIVE_ATTRIBS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_ADDRESS_REGISTERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
 	post("MAX_PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
 	post("MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_LOCAL_PARAMETERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_LOCAL_PARAMETERS_ARB, &bitnum);
 	post("MAX_PROGRAM_LOCAL_PARAMETERS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_ENV_PARAMETERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ENV_PARAMETERS_ARB, &bitnum);
 	post("MAX_PROGRAM_ENV_PARAMETERS: %d", bitnum);
 	post("");
-	
+# endif
+# ifdef GL_PROGRAM_LENGTH_ARB	
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_LENGTH_ARB, &bitnum);
 	post("PROGRAM_LENGTH: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_FORMAT_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ARB, &bitnum);
 	post("PROGRAM_FORMAT: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_BINDING_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_BINDING_ARB, &bitnum);
 	post("PROGRAM_BINDING: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
 	post("PROGRAM_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_TEMPORARIES_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_TEMPORARIES_ARB, &bitnum);
 	post("PROGRAM_TEMPORARIES: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_NATIVE_TEMPORARIES_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
 	post("PROGRAM_NATIVE_TEMPORARIES: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_PARAMETERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_PARAMETERS_ARB, &bitnum);
 	post("PROGRAM_PARAMETERS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_NATIVE_PARAMETERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_PARAMETERS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_ATTRIBS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_ATTRIBS_ARB, &bitnum);
 	post("PROGRAM_ATTRIBS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_NATIVE_ATTRIBS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_ATTRIBS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_ADDRESS_REGISTERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
 	post("PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_ADDRESS_REGISTERS: %d", bitnum);
 	post("");
-	
+# endif
+# ifdef GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB	
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_ALU_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_TEX_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_TEX_INDIRECTIONS: %d", bitnum);
-	
+# endif
+# ifdef GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB, &bitnum);
-	post("MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS: %d", bitnum);
-	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS: %d", bitnum);
 	post("");
-	
+# endif
+# ifdef GL_PROGRAM_ALU_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &bitnum);
 	post("PROGRAM_ALU_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_TEX_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_TEX_INSTRUCTIONS_ARB, &bitnum);
 	post("PROGRAM_TEX_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_TEX_INDIRECTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_TEX_INDIRECTIONS_ARB, &bitnum);
 	post("PROGRAM_TEX_INDIRECTIONS: %d", bitnum);
-	
+# endif
+# ifdef GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_ALU_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_TEX_INSTRUCTIONS: %d", bitnum);
+# endif
+# ifdef GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_TEX_INDIRECTIONS: %d", bitnum);
+# endif
+#endif /* GL_FRAGMENT_PROGRAM_ARB */
 	post("");
+
 }
 
 /////////////////////////////////////////////////////////
