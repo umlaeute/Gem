@@ -17,6 +17,8 @@ LOG
 #ifndef INCLUDE_GEMGLUTOBJ_H_
 #define INCLUDE_GEMGLUTOBJ_H_
 
+#if HAVE_LIBGLUT
+
 #include "Base/GemShape.h"
 
 #include <GL/glut.h>
@@ -90,4 +92,5 @@ class GEM_EXTERN GemGlutObj : public GemShape
     	static void 	numSlicesMessCallback(void *data, t_floatarg numSlices);
 };
 
+#endif
 #endif	// for header file

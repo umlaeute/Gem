@@ -62,8 +62,14 @@ class GEM_EXTERN GemShape : public GemBase
 
     	//////////
     	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type) = 0;
+    	virtual void	typeMess(t_symbol *type);
     	
+	    //-----------------------------------
+	    // GROUP:	Utility functions
+	    //-----------------------------------
+	
+	int SetVertix(GemState* state,float x, float y, float z, float tx, float ty,int curCoord);
+
 	    //-----------------------------------
 	    // GROUP:	Member variables
 	    //-----------------------------------

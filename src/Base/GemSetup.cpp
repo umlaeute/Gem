@@ -124,6 +124,7 @@ extern "C" {
   void pix_bitmask_setup();
   void pix_clearblock_setup();
   void pix_coloralpha_setup();
+  void pix_color_setup();
   void pix_colormatrix_setup();
   void pix_composite_setup();
   void pix_convolve_setup();
@@ -181,7 +182,7 @@ extern "C" {
     GemMan::initGem();
 
     MarkEx_setup();
-    
+
     // Controls
     gemwin_setup();
     gemhead_setup();
@@ -228,7 +229,9 @@ extern "C" {
     disk_setup();
     model_setup();
     multimodel_setup();
+#if HAVE_LIBGLUT
     teapot_setup();
+#endif
     polygon_setup();
     primTri_setup();
     rectangle_setup();
@@ -268,7 +271,6 @@ extern "C" {
     pix_draw_setup();
     pix_imageInPlace_setup();
     pix_texture_setup();
-    pix_texture2_setup();
     pix_snap_setup();
 
     // Pix-controls
@@ -287,6 +289,7 @@ extern "C" {
     pix_bitmask_setup();
     pix_clearblock_setup();
     pix_coloralpha_setup();
+    pix_color_setup();
     pix_colormatrix_setup();
     pix_convolve_setup();
     pix_composite_setup();

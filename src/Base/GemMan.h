@@ -168,7 +168,6 @@ class GEM_EXTERN GemMan
 	
         //////////
     	static void 	    fillGemState(GemState &);
-	static void*     m_renderSymbol;
  private:
 	
     	// gemwin is allowed to modifying "global" window attributes

@@ -70,8 +70,6 @@ float GemMan::m_fogStart;
 float GemMan::m_fogEnd;
 float GemMan::m_motionBlur=0.f;
 
-void *GemMan::m_renderSymbol=(void*)gensym("render");
-
 // static data
 static const int NUM_LIGHTS = 8;   	// the maximum number of lights
 static int s_lightState = 0;        // is lighting on or off
@@ -895,6 +893,7 @@ void GemMan :: windowCleanup()
 int GemMan :: createWindow(char* disp)
 {
   if ( m_windowState ) return(0);
+  post("GemMan: create window");
 
   WindowHints myHints;
   myHints.border = m_border;
@@ -972,7 +971,6 @@ void GemMan :: destroyWindow()
 #else
 #error Define OS specific OpenGL context make current
 #endif
-  post("end of destruction");
 }
 
 /////////////////////////////////////////////////////////
