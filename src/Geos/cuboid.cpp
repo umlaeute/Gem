@@ -19,6 +19,9 @@
 ////////////////////////////////////////////////////////
 
 #include "cuboid.h"
+#ifdef MACOSX
+#include "string.h"
+#endif
 
 CPPEXTERN_NEW_WITH_THREE_ARGS(cuboid, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT )
 

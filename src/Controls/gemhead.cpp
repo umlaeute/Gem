@@ -16,6 +16,10 @@
 
 #include "gemhead.h"
 
+#ifdef MACOSX
+#import <Carbon/Carbon.h>
+#endif
+
 #include "Base/GemMan.h"
 #include "Base/GemState.h"
 #include "Base/GemCache.h"

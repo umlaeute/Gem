@@ -69,7 +69,7 @@ class GEM_EXTERN gemhead : public CPPExtern
     	
 	private:
 
-	t_outlet    	*m_out1;
+        t_outlet    	*m_out1;
 
     	GemCache    	*m_cache;   	    	    // The cache information
 
