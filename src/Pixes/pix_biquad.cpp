@@ -123,8 +123,8 @@ void pix_biquad :: processImage(imageStruct &image)
     iff3 = (int)(256. * ff3);
     
     while(pixsize--) {
-      ioutput = ((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p)>>8);
-      *this_p++    = (unsigned char)CLAMP((iff1 * ioutput) + (iff2 * *last_p) + (iff3 * *prev_p)>>8);
+      ioutput = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
+      *this_p++    = (unsigned char)CLAMP(((iff1 * ioutput) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
       *prev_p++	 = *last_p;
       *last_p++	 = (unsigned char)CLAMP(ioutput);
     }
