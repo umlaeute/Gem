@@ -46,12 +46,11 @@ filmMPEG3 :: ~filmMPEG3()
 {
   close();
 }
-
+#ifdef HAVE_LIBMPEG3
 void filmMPEG3 :: close(void)
 {
-#ifdef HAVE_LIBMPEG3
   if(mpeg_file)mpeg3_close(mpeg_file);
-#endif
+  mpeg_file=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -60,7 +59,6 @@ void filmMPEG3 :: close(void)
 /////////////////////////////////////////////////////////
 bool filmMPEG3 :: open(char *filename, int format)
 {
-#ifdef HAVE_LIBMPEG3    
   if (mpeg3_check_sig(filename)){/* ok, this is mpeg(3) */
     mpeg_file= mpeg3_open(filename);
     if (!mpeg3_has_video(mpeg_file)){
@@ -88,7 +86,6 @@ bool filmMPEG3 :: open(char *filename, int format)
     post("MPEG3 opened");
     return true; 
   }
-#endif
   goto unsupported;
  unsupported:
   post("MPEG3: unsupported!");
@@ -108,8 +105,6 @@ pixBlock* filmMPEG3 :: getFrame(){
   m_readNext = false;
 
   int i;
-
-#ifdef HAVE_LIBMPEG3
   int mpegFormat=0;
   int wantedFormat=m_wantedFormat;
   switch(wantedFormat){
@@ -144,8 +139,6 @@ pixBlock* filmMPEG3 :: getFrame(){
   }
   m_image.newimage=1;
   return &m_image;
-#endif
-  return 0;
 }
 
 int filmMPEG3 :: changeImage(int imgNum, int trackNum){
@@ -153,14 +146,13 @@ int filmMPEG3 :: changeImage(int imgNum, int trackNum){
   if (imgNum  ==-1)  imgNum=m_curFrame;
   if (m_numFrames>1 && imgNum>=m_numFrames)return FILM_ERROR_FAILURE;
   if (trackNum==-1||trackNum>m_numTracks)trackNum=m_curTrack;
-#ifdef HAVE_LIBMPEG3
   int test;
   if ((test=mpeg3_set_frame(mpeg_file, imgNum, trackNum))) {
   }
     m_curFrame=imgNum;
     m_curTrack=trackNum;
     return FILM_ERROR_SUCCESS;
-#endif
   m_readNext=false;
   return FILM_ERROR_FAILURE;
 }
+#endif

@@ -46,6 +46,7 @@ class GEM_EXTERN filmMPEG3 : public film {
   // Destructor
   virtual ~filmMPEG3();
 
+#ifdef HAVE_LIBMPEG3
   //////////
   // open a movie up
   virtual bool open(char *filename, int format = 0);
@@ -66,7 +67,6 @@ class GEM_EXTERN filmMPEG3 : public film {
   //-----------------------------------
  protected:
 
-#ifdef HAVE_LIBMPEG3
   mpeg3_t      *mpeg_file;
 #endif
 };
