@@ -25,6 +25,12 @@
 #include "Pixes/filmMPEG1.h"
 #include "Pixes/filmMPEG3.h"
 
+#if 0
+# define DEBUG post
+#else
+# define DEBUG
+#endif
+
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmNEW, t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
@@ -38,8 +44,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmNEW, t_symbol *, A_DEFSYM)
 pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   m_auto(0), 
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
-  m_numTracks(0), m_track(0), m_film(true)
+  m_numTracks(0), m_track(0), 
+  m_format(GL_RGBA)
 {
+  DEBUG("pix_filmNEW");
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
   // create an outlet to send out how many frames are in the movie + bang when we reached the end
@@ -51,12 +59,12 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   while(i--)m_handles[i]=0;
   m_numHandles=0;
 
-  m_handles[m_numHandles]=new filmQT4L();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmAVI();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmAVIPLAY();  post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmFFMPEG();   post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmMPEG3();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmMPEG1();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmQT4L();    DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmMPEG3();    DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmAVI();    DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmAVIPLAY();  DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmFFMPEG();   DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmMPEG1();    DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
 
   //openMess(filename);
 }
@@ -78,10 +86,14 @@ pix_filmNEW :: ~pix_filmNEW()
 void pix_filmNEW :: closeMess(void){
   // Clean up any open files
   int i=MAX_FILM_HANDLES;
+  DEBUG("closing %d handles", i);
   while(i--){
+    DEBUG("close %d", i);
     if(m_handles[i])m_handles[i]->close();
   }
-  if (m_handle!=0) m_handle->close();
+  m_handle==NULL;
+  //if(m_handle!=0)m_handle->close();
+  DEBUG("closed");
 }
 
 /////////////////////////////////////////////////////////
@@ -91,21 +103,23 @@ void pix_filmNEW :: closeMess(void){
 
 void pix_filmNEW :: openMess(t_symbol *filename, int format)
 {
+  DEBUG("openMess");
   //  if (filename==x_filename)return;
   closeMess();
 
   char buf[MAXPDSTRING];
   canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
-
+  if (format==0)format=m_format;
   int i=-1;
   post("opening %s with format %X", buf, format);
   while(i++<m_numHandles){
+    DEBUG("trying handle %d: %X", i, m_handles[i]);
     if (m_handles[i] && m_handles[i]->open(buf, format ))      {
       m_handle = m_handles[i];
       break;
     }
   }
-
+  DEBUG("got handle = %X", m_handle);
   if (!m_handle)return;
 
   t_atom ap[3];
@@ -173,19 +187,39 @@ void pix_filmNEW :: changeImage(int imgNum, int trackNum)
     }
   m_reqFrame=imgNum;
 }
-
+/////////////////////////////////////////////////////////
+// colorSpace
+//
+/////////////////////////////////////////////////////////
+void pix_filmNEW :: csMess(t_symbol *s, bool immediately)
+{
+  int format=0;
+  char c =*s->s_name;
+  switch (c){
+  case 'g': case 'G': m_format=GL_LUMINANCE; break;
+  case 'y': case 'Y': m_format=GL_YCBCR_422_GEM; break;
+  case 'r': case 'R': m_format=GL_RGBA; break;
+  default:
+    post("pix_film: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+  }
+  if(immediately && m_handle)m_handle->requestColor(m_format);
+}
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void pix_filmNEW :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classpix_filmNEW, gensym("pix_film"), A_DEFSYM, A_NULL);
+
   class_addmethod(classPtr, (t_method)&pix_filmNEW::openMessCallback,
 		  gensym("open"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmNEW::changeImageCallback,
 		  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmNEW::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_filmNEW::csCallback,
+		  gensym("colorspace"), A_DEFSYM, A_NULL);
 }
 void pix_filmNEW :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
@@ -194,28 +228,9 @@ void pix_filmNEW :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*arg
   if (argv[0].a_type != A_SYMBOL)goto illegal_openmess;
   if (argc==2){
     if (argv[1].a_type != A_SYMBOL)goto illegal_openmess;
-    else {
-      char c =tolower(*atom_getsymbol(argv+1)->s_name);
-      char c2=tolower(atom_getsymbol(argv+1)->s_name[3]);
-
-      switch (c){
-      case 'g': format=GL_LUMINANCE; break;
-      case 'y': format=GL_YCBCR_422_GEM; break;
-      case 'r':
-	if (c2=='a')format=GL_RGBA;
-	else format=GL_RGB;
-	break;
-#if defined (GL_BGRA) & defined (GL_BGR)
-      case 'b':
-	if (c2=='a')format=GL_BGRA;	else 
-		format=GL_BGR;
-	break;
-#endif
-      default: format=GL_RGBA;
-      }
-    }
+    else GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
   }
-  GetMyClass(data)->openMess(atom_getsymbol(argv), format);
+  GetMyClass(data)->openMess(atom_getsymbol(argv), 0);
 
   return;
  illegal_openmess:
@@ -231,4 +246,8 @@ void pix_filmNEW :: changeImageCallback(void *data, t_symbol *, int argc, t_atom
 void pix_filmNEW :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=state;
+}
+void pix_filmNEW :: csCallback(void *data, t_symbol*s)
+{
+  GetMyClass(data)->csMess(s);
 }
