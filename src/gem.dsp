@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /MTd /W3 /Zi /Od /I "C:\Programme\pd\src" /I "C:\dev\QTDevWin\CIncludes" /I "C:\DXSDK\include" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /D "HAVE_DIRECTSHOW" /D "HAVE_QUICKTIME" /D "DEBUG" /FD /c
+# ADD CPP /nologo /MTd /W3 /Zi /Od /I "C:\Programme\pd\src" /I "C:\dev\QTDevWin\CIncludes" /I "C:\DXSDK\include" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /I "../src" /I "../../GemLibs/glut" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /D "HAVE_DIRECTSHOW" /D "HAVE_QUICKTIME" /D "DEBUG" /FD /c
 # SUBTRACT CPP /X /Fr /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -350,6 +350,14 @@ SOURCE=.\Geos\curve.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Geos\curve3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\curve3d.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Geos\cylinder.cpp
 # End Source File
 # Begin Source File
@@ -379,6 +387,10 @@ SOURCE=.\Geos\model.cpp
 # Begin Source File
 
 SOURCE=.\Geos\model.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\model_loader.cpp
 # End Source File
 # Begin Source File
 
@@ -515,6 +527,14 @@ SOURCE=.\Geos\triangle.cpp
 # Begin Source File
 
 SOURCE=.\Geos\triangle.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\tube.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\tube.h
 # End Source File
 # End Group
 # Begin Group "Nongeos"
@@ -1446,14 +1466,6 @@ SOURCE=.\Pixes\pix_texture.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_texture.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Pixes\pix_texture2.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Pixes\pix_texture2.h
 # End Source File
 # Begin Source File
 
