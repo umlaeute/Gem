@@ -65,6 +65,9 @@ pix_colorreduce :: ~pix_colorreduce()
 //
 /////////////////////////////////////////////////////////
 void pix_colorreduce :: processYUVImage(imageStruct &image){
+
+//this code is not working on OSX
+#ifndef __APPLE__
   tempImage.xsize=image.xsize;
   tempImage.ysize=image.ysize;
   tempImage.fromUYVY(image.data);
@@ -72,6 +75,7 @@ void pix_colorreduce :: processYUVImage(imageStruct &image){
   processRGBAImage(tempImage);
 
   image.fromRGBA(tempImage.data);
+#endif
 }
 
 void pix_colorreduce :: processGrayImage(imageStruct &image){
