@@ -10,8 +10,6 @@ echo Cleaning up Auxilliary Libraries
 echo =============================
 echo
 
-echo CLEANING LIBORB
-(cd $AUXPATH/liborb;make clean )
 
 echo
 echo Finished cleaning Auxilliary Libraries
@@ -24,8 +22,6 @@ echo Building Auxilliary Libraries
 echo =============================
 echo
 
-echo BUILDING LIBORB
-(cd $AUXPATH/liborb;make )
 
 echo
 echo Finished building Auxilliary Libraries
