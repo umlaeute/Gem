@@ -24,7 +24,7 @@ static inline int powerOfTwo( int value )
     return( x );
 }
 
-
+ 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmDarwinYUV, t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
@@ -100,6 +100,10 @@ void pix_filmDarwinYUV :: realOpen(char *filename)
     Rect		m_srcRect;
     long		m_rowBytes;
 
+//timer start
+UnsignedWide startTime;
+    ::Microseconds(&startTime);
+
     if (!filename[0]) {
         post("pix_filmdarwinYUV:  no filename passed");
     } else {            
@@ -157,13 +161,20 @@ void pix_filmDarwinYUV :: realOpen(char *filename)
 /*
 	m_numFrames = -1;
 	while (theTime >= 0) {
-            m_numFrames++;
-            //GetMovieNextInterestingTime( m_movie, flags, 1, &whichMediaType,
-            //                                theTime, 0, &theTime, &duration);
-            //GetTrackNextInterestingTime(m_movieTrack, flags, theTime, fixed1, &theTime, NULL);
-            // after the first interesting time, don't include the time we
-            //  are currently at.
-            flags = nextTimeStep;
+		m_numFrames++;
+		::GetMovieNextInterestingTime(m_movie,
+                                            flags,
+                                            1,
+                                            &whichMediaType,
+                                            theTime,
+                                            0,
+                                            &theTime,
+                                            &duration);
+                                          // NULL);
+		// after the first interesting time, don't include the time we
+		//  are currently at.
+		flags = nextTimeMediaSample;
+
 	}
 */        
 	// Get the bounds for the movie
@@ -199,9 +210,28 @@ void pix_filmDarwinYUV :: realOpen(char *filename)
 	}
         
         m_movieTime = 0;
+      //  TimeValue timeNow;
+ Fixed playRate;
+// timeNow = GetMovieTime(theMovie, NIL);
+ playRate = GetMoviePreferredRate(m_movie);
+ post("playRate: %d",playRate);
+//playRate = 0;  //test to see if only first 10 frames will be fast
+// PrePrerollMovie(m_movie, m_movieTime, playRate, NULL, NULL);
+// PrerollMovie(m_movie, m_movieTime, playRate);
+
+ 
+// SetMovieRate(m_movie, 2);
+
 	// *** set the graphics world for displaying the movie ***
 	::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
 	::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+      // StartMovie(m_movie);
+        //end timer
+         UnsignedWide endTime;
+        ::Microseconds(&endTime);
+        float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+        post("GEM: time to open movie: %f", seconds);
+        
 }
 
 /////////////////////////////////////////////////////////
@@ -212,31 +242,39 @@ void pix_filmDarwinYUV :: getFrame()
 {
     if (!m_haveMovie) return;
     
-    CGrafPtr	 	savedPort;
+ /*   CGrafPtr	 	savedPort;
     GDHandle     	savedDevice;
     Rect		m_srcRect;
     PixMapHandle	m_pixMap;
     Ptr			m_baseAddr;
+    
+    
     
     ::GetGWorld(&savedPort, &savedDevice);
     ::SetGWorld(m_srcGWorld, NULL);
     ::GetMovieBox(m_movie, &m_srcRect);
     
     m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
-    m_baseAddr = ::GetPixBaseAddr(m_pixMap);
+    m_baseAddr = ::GetPixBaseAddr(m_pixMap); */
+
+//timer start
+    UnsignedWide startTime;
+    ::Microseconds(&startTime);
 
     int num;
 
     // get the next frame of the source movie
+
     short 	flags = nextTimeStep;
     OSType	whichMediaType = VisualMediaCharacteristic;
+    
     if (m_reqFrame > m_curFrame) {
         num = m_reqFrame - m_curFrame;
     } else {
         num = m_reqFrame;
         if (!m_auto) m_movieTime = 0;
     }
-    
+
     //check for last frame to loop the clip
     if (m_curFrame >= m_numFrames){
     m_curFrame = 0;
@@ -287,10 +325,33 @@ if (m_auto) {
         }
        
     // set the time for the frame and give time to the movie toolbox	
+
     SetMovieTimeValue(m_movie, m_movieTime); 
     MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
     
-    m_frame = (unsigned char *)m_baseAddr;
+    //end timer
+         UnsignedWide endTime;
+        ::Microseconds(&endTime);
+        float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+        m_fps = 1 / (seconds * 1000.f) * 1000;
+      //  post("GEM: time to render frame: %f", seconds);
+}
+
+void pix_filmDarwinYUV :: LoadRam()
+{
+      TimeValue	length;
+      OSErr err;
+if (m_haveMovie){      
+m_movieTime = 0;
+ length = GetMovieDuration(m_movie);
+ err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
+ if (err)
+ {
+ post("pix_filmYUV: LoadMovieIntoRam failed miserably");
+ }
+ }else{
+ post("pix_filmYUV: no movie to load into RAM!");
+ }
 }
 
 /////////////////////////////////////////////////////////
@@ -308,6 +369,8 @@ void pix_filmDarwinYUV :: obj_setupCallback(t_class *classPtr)
 		  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmDarwinYUV::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_filmDarwinYUV::ramCallback,
+		  gensym("ram"), A_NULL);
 }
 
 void pix_filmDarwinYUV :: openMessCallback(void *data, t_symbol *filename)
@@ -324,4 +387,10 @@ void pix_filmDarwinYUV :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
+
+void pix_filmDarwinYUV :: ramCallback(void *data)
+{
+  GetMyClass(data)->LoadRam();
+}
+
 #endif // MACOSX
