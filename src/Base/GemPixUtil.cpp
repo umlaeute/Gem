@@ -359,10 +359,10 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     break;
   }
 }
+#ifdef __VEC__
 GEM_EXTERN void imageStruct :: RGB_to_YCbCr_altivec(unsigned char *rgbdata, int RGB_size, 
                   unsigned char *pixels)
 {
-#ifdef __VEC__
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
   vector unsigned char z0, tc0, tc1, tc2, tc3;
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
@@ -470,8 +470,8 @@ GEM_EXTERN void imageStruct :: RGB_to_YCbCr_altivec(unsigned char *rgbdata, int 
     YCC_ptr[i+2] = vec_packsu( t2, t5 );  /* Cr0 .. Cr15 */
 
     }
-#endif
 }
+#endif /* __vec__ */
 
 GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
   //   B B B B B G G G   G G G R R R R R
@@ -582,11 +582,10 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     break;
   }
 }
-
+#ifdef __VEC__
 GEM_EXTERN void imageStruct :: RGBA_to_YCbCr_altivec(unsigned char *rgbadata, int RGBA_size, 
                   unsigned char *pixels)
 {
-#ifdef __VEC__
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
   vector unsigned char z0, tc0, tc1, tc2, tc3;
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
@@ -694,8 +693,8 @@ GEM_EXTERN void imageStruct :: RGBA_to_YCbCr_altivec(unsigned char *rgbadata, in
     YCC_ptr[i+2] = vec_packsu( t2, t5 );  /* Cr0 .. Cr15 */
 
     }
-#endif
 }
+#endif
 
 GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
   if(!bgrdata)return;
@@ -752,10 +751,10 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
   }
 }
 
+#ifdef __VEC__
 GEM_EXTERN void imageStruct :: BGR_to_YCbCr_altivec(unsigned char *bgrdata, int BGR_size, 
                   unsigned char *pixels)
 {
-#ifdef __VEC__
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
   vector unsigned char z0, tc0, tc1, tc2, tc3;
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
@@ -863,8 +862,8 @@ GEM_EXTERN void imageStruct :: BGR_to_YCbCr_altivec(unsigned char *bgrdata, int 
     YCC_ptr[i+2] = vec_packsu( t2, t5 );  /* Cr0 .. Cr15 */
 
     }
-#endif
 }
+#endif
 
 GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   if(!bgradata)return;
@@ -934,10 +933,10 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   }
 }
 
+#ifdef __VEC__
 GEM_EXTERN void imageStruct :: BGRA_to_YCbCr_altivec(unsigned char *bgradata, unsigned int BGRA_size, 
                   unsigned char *pixels)
 {
-#ifdef __VEC__
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
   vector unsigned char z0, tc0, tc1, tc2, tc3;
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
@@ -1071,8 +1070,8 @@ GEM_EXTERN void imageStruct :: BGRA_to_YCbCr_altivec(unsigned char *bgradata, un
 	*UYVY_ptr = vec_packsu( out3, out4 );
 	UYVY_ptr++;
   }
-#endif
 }
+#endif
 
 GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
   if(!greydata)return;
@@ -1141,13 +1140,9 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
 
       unsigned char*py1=Y;
       unsigned char*py2=Y+xsize; // plane_1 is luminance (csize==1)
-#if 0
-      unsigned char*pv=yuvdata+pixelnum+((format==GL_BGR_EXT)?(pixelnum>>2):0);
-      unsigned char*pu=yuvdata+pixelnum+((format==GL_RGB)?(pixelnum>>2):0);
-#else
       unsigned char*pv=(format==GL_BGR_EXT)?U:V;
       unsigned char*pu=(format==GL_RGB)?U:V;
-#endif
+
       int y, u, v, yy, vr, ug, vg, ub;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
@@ -1199,10 +1194,6 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
 
       unsigned char*py1=Y;//yuvdata;
       unsigned char*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
-      /*
-      unsigned char*pv=yuvdata+pixelnum+((format==GL_BGRA_EXT)?(pixelnum>>2):0);
-      unsigned char*pu=yuvdata+pixelnum+((format==GL_RGBA)?(pixelnum>>2):0);
-      */
       unsigned char*pv=(format==GL_BGRA_EXT)?V:U;
       unsigned char*pu=(format==GL_RGBA)?V:U;
  
@@ -1463,9 +1454,9 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
   }
 }
 
+#ifdef __VEC__
 GEM_EXTERN void imageStruct :: YV12_to_YUV422_altivec(short*Y, short*U, short*V, int pixelnum)
 {
-#ifdef __VEC__
   vector unsigned char *pixels1=(vector unsigned char *)data;
   vector unsigned char *pixels2=(vector unsigned char *)(data+((xsize*csize)));
   vector unsigned short *py1 = (vector unsigned short *)Y;
@@ -1487,21 +1478,21 @@ GEM_EXTERN void imageStruct :: YV12_to_YUV422_altivec(short*Y, short*U, short*V,
   int row=ysize>>1;
   int cols=xsize>>4;
 #if 0
-#ifndef PPC970
+# ifndef PPC970
   UInt32	prefetchSize = GetPrefetchConstant( 16, 1, 256 );
   vec_dst( pu, prefetchSize, 0 );
   vec_dst( pv, prefetchSize, 0 );
   vec_dst( py1, prefetchSize, 0 );
   vec_dst( py2, prefetchSize, 0 );
-#endif
+# endif
 #endif
   while(row--){
     int col=cols;
 	while(col--){
 #if 0
-#ifndef PPC970
+# ifndef PPC970
       vec_dst( );
-#endif
+# endif
 #endif
 	  tempU = vec_sra( (*pu++), uvShift );
 	  tempV = vec_sra( (*pv++), uvShift );
@@ -1538,8 +1529,8 @@ GEM_EXTERN void imageStruct :: YV12_to_YUV422_altivec(short*Y, short*U, short*V,
     pixels1+=(xsize*2)>>4; pixels2+=(xsize*2)>>4;
 	py1+=xsize>>3; py2+=xsize>>3;
   }
-#endif
 }
+#endif
 
 GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
   // this is the yuv-format with Gem
@@ -1633,12 +1624,12 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
   }
 }
 
+#ifdef __VEC__
 GEM_EXTERN void imageStruct :: YUV422_to_BGRA_altivec( unsigned char *yuvdata, 
 					unsigned int pixelnum, unsigned char *data)
 {
-#ifdef __VEC__
-#endif
 }
+#endif
 
 GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
   if(!yuvdata)return;
