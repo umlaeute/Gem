@@ -131,7 +131,29 @@ void pix_diff :: processRGBA_MMX(imageStruct &image, imageStruct &right){
   _mm_empty();
 }
 void pix_diff :: processYUV_MMX (imageStruct &image, imageStruct &right){
-  processRGBA_MMX(image, right);
+  int datasize =   image.xsize * image.ysize * image.csize;
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+  __m64 mask = _mm_setr_pi8(0x40, 0x00, 0x40, 0x00,
+			    0x40, 0x00, 0x40, 0x00);
+  __m64 l, r, b;
+  while (datasize--) {
+    l=leftPix[datasize];
+    r=rightPix[datasize];
+
+    l=_mm_adds_pu8(l, mask);
+    r=_mm_subs_pu8(r, mask);
+
+    b  = l;
+    b  = _mm_subs_pu8     (b, r);
+    r  = _mm_subs_pu8     (r, l);
+    b  = _mm_or_si64      (b, r);
+
+    leftPix[datasize]=b;
+  }
+  _mm_empty();
 }
 void pix_diff :: processGray_MMX(imageStruct &image, imageStruct &right){
   processRGBA_MMX(image, right);

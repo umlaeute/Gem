@@ -54,6 +54,8 @@ class GEM_EXTERN pix_takealpha : public GemPixDualObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
+
+	// MMX isn't really faster here
 };
 
 #endif	// for header file

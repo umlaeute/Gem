@@ -116,6 +116,87 @@ void pix_multiply :: processYUV_YUV(imageStruct &image, imageStruct &right)
    }
 }
 
+#ifdef __MMX__
+void pix_multiply :: processRGBA_MMX(imageStruct &image, imageStruct &right)
+{
+  int datasize =   image.xsize * image.ysize * image.csize;
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+
+  __m64 l0, r0, l1, r1;
+  __m64 nil = _mm_setzero_si64();
+  while(datasize--)    {
+    l1=leftPix [datasize];
+    r1=rightPix[datasize];
+
+    l0=_mm_unpacklo_pi8(l1, nil);
+    r0=_mm_unpacklo_pi8(r1, nil);
+    l1=_mm_unpackhi_pi8(l1, nil);
+    r1=_mm_unpackhi_pi8(r1, nil);
+
+    l0=_mm_mullo_pi16  (l0, r0);
+    l1=_mm_mullo_pi16  (l1, r1);
+
+    l0=_mm_srli_pi16(l0, 8);
+    l1=_mm_srli_pi16(l1, 8);
+
+    leftPix[datasize]=_mm_packs_pu16(l0, l1);
+  }
+  _mm_empty();
+}
+void pix_multiply :: processYUV_MMX(imageStruct &image, imageStruct &right)
+{
+  int datasize =   image.xsize * image.ysize * image.csize;
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+
+  __m64 l0, r0, l1, r1;
+  __m64 mask= _mm_setr_pi8(0xFF, 0x00, 0xFF, 0x00,
+			   0xFF, 0x00, 0xFF, 0x00);
+  __m64 yuvclamp0 = _mm_setr_pi8(0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10);
+  __m64 yuvclamp1 = _mm_setr_pi8(0x00, 0x24, 0x00, 0x24, 0x00, 0x24, 0x00, 0x24);
+  __m64 yuvclamp2 = _mm_setr_pi8(0x00, 0x14, 0x00, 0x14, 0x00, 0x14, 0x00, 0x14);
+
+  __m64 nil = _mm_setzero_si64();
+  while(datasize--)    {
+    r1=rightPix[datasize];
+    l1=leftPix [datasize];
+
+    r1=_mm_or_si64(r1, mask);
+
+    l0=_mm_unpacklo_pi8(l1, nil);
+    r0=_mm_unpacklo_pi8(r1, nil);
+    l1=_mm_unpackhi_pi8(l1, nil);
+    r1=_mm_unpackhi_pi8(r1, nil);
+
+    l0=_mm_mullo_pi16  (l0, r0);
+    l1=_mm_mullo_pi16  (l1, r1);
+
+    l0=_mm_srli_pi16(l0, 8);
+    l1=_mm_srli_pi16(l1, 8);
+
+    l0=_mm_packs_pu16(l0, l1);
+
+    l0=_mm_subs_pu8(l0, yuvclamp0);
+    l0=_mm_adds_pu8(l0, yuvclamp1);
+    l0=_mm_subs_pu8(l0, yuvclamp2);
+
+
+    leftPix[datasize]=l0;
+  }
+  _mm_empty();
+}
+
+void pix_multiply :: processGray_MMX(imageStruct &image, imageStruct &right)
+{
+  processRGBA_MMX(image, right);
+}
+#endif
+
 /////////////////////////////////////////////////////////
 // static member function
 //
