@@ -1,4 +1,4 @@
-#N canvas 182 237 586 418 12;
+#N canvas 184 88 600 509 12;
 #X msg 120 148 gemList;
 #X msg 120 240 gemList;
 #X text 169 16 part of GEM;
@@ -7,12 +7,16 @@
 #X text 151 73 convert the colorspace of an image to RGBA;
 #X text 32 307 Images can be stored in various formats/color-spaces.
 ;
-#X text 35 328 However \, most [pix_]-manipulators can only process
-RGBA-images. You can use [pix_rgba] to convert images of "any" format
+#X floatatom 223 128 1 0 0 0 - - -;
+#X text 246 129 on/off;
+#X text 35 328 While YUV is a format with less memory-usage and thus
+faster processing \, RGBA is handy if you want alpha-blending on a
+per-pixel basis. You can use [pix_rgba] to convert images of any format
 into RGBA-space. If your image already is in RGBA-space \, this will
 do nothing.;
-#X floatatom 223 128 1 0 0;
-#X text 246 129 on/off;
+#X text 9 460 see also:;
+#X obj 102 459 pix_yuv;
+#X obj 205 461 pix_grey;
 #X connect 0 0 3 0;
 #X connect 3 0 1 0;
-#X connect 8 0 3 0;
+#X connect 7 0 3 0;
