@@ -2,9 +2,9 @@
 #X msg 152 126 gemList;
 #X msg 152 270 gemList;
 #X text 169 16 part of GEM;
-#X obj 152 185 tv_biquad;
-#X text 176 43 [tv_biquad];
-#X text 56 329 [tv_biquad] operates on a sequence of images.;
+#X obj 152 185 pix_biquad;
+#X text 176 43 [pix_biquad];
+#X text 56 329 [pix_biquad] operates on a sequence of images.;
 #X text 53 359 basically it works like the pd-object [biquad~] (except
 \, that applies to images instead of samples);
 #X text 69 427 y(n) = ff1 * w(n) + ff2 * w(n-1) + ff3 * w(n-2);
