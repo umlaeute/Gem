@@ -42,8 +42,8 @@ static inline int powerOfTwo(int value){
 /////////////////////////////////////////////////////////
 pix_texture :: pix_texture()
   : m_textureOnOff(1), 
-    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT), m_textureType( GL_TEXTURE_2D ),
-    m_rebuildList(0), m_textureObj(0)
+    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT), m_rebuildList(0), m_textureObj(0),m_textureType( GL_TEXTURE_2D )
+     
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
@@ -62,13 +62,17 @@ pix_texture :: ~pix_texture()
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState() {
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+//#ifdef GL_TEXTURE_RECTANGLE_EXT
+if (m_mode && GemMan::texture_rectangle_supported){
   if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)				//tigital
-    glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0);
-#endif
+    glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
+    post("pix_texture: using rectangle texture");
+    }
+//#endif
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
-  if (GemMan::client_storage_supported)
-    glPixelStoref(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
+  if (GemMan::client_storage_supported){
+    glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
+    post("pix_texture: using client storage");}
   else
 #endif // CLIENT_STORAGE
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
@@ -79,9 +83,10 @@ void pix_texture :: setUpTextureState() {
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
 
 
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+//#ifdef GL_TEXTURE_RECTANGLE_EXT
+if (m_mode)
   if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
-#endif
+//#endif
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
   // note:  On MacOS X, pix_texture is used for power of two/normalised textures, so 
@@ -131,14 +136,20 @@ void pix_texture :: render(GemState *state) {
 
 #ifdef GL_VERSION_1_1
   int texType = m_textureType;
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+
+//#ifdef GL_TEXTURE_RECTANGLE_EXT
+if (m_mode){
   if (!normalized && GemMan::texture_rectangle_supported ){
-    //post("rectangle");
     m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-  }  else
-#endif
+    normalized = 0;
+  } 
+  } else {
+//#endif
     m_textureType = GL_TEXTURE_2D;
+    normalized = 0;
+    }
   if (m_textureType!=texType){
+  post("texType != m_textureType");
     stopRendering();startRendering();
   }
   glEnable(m_textureType);
@@ -158,7 +169,7 @@ void pix_texture :: render(GemState *state) {
 
   if (m_rebuildList) {
     if (normalized) {
-      //post("normalized");
+     // post("normalized");
       m_buffer.xsize = state->image->image.xsize;
       m_buffer.ysize = state->image->image.ysize;
       m_buffer.csize  = state->image->image.csize;
@@ -195,10 +206,11 @@ void pix_texture :: render(GemState *state) {
 		      state->image->image.data);
       
     } else { // !normalized
-      //post("!normalized");
+     // post("!normalized");
       float m_xRatio = (float)state->image->image.xsize;
       float m_yRatio = (float)state->image->image.ysize;
-      if ( !GemMan::texture_rectangle_supported ) {
+      if ( !GemMan::texture_rectangle_supported || !m_mode ) {
+     
 	m_xRatio /= (float)x_2;
 	m_yRatio /= (float)y_2;
 	m_buffer.xsize = x_2;
@@ -211,20 +223,7 @@ void pix_texture :: render(GemState *state) {
       m_buffer.format = state->image->image.format;
       m_buffer.type   = state->image->image.type;
       m_buffer.reallocate();
-#if 0
-      if (m_buffer.format == YUV){
-	int src=0;
-	int datasize=m_buffer.xsize*m_buffer.ysize*m_buffer.csize/4;
-	unsigned char* dummy=m_buffer.data;
-	while(datasize--){
-	  *dummy++ = 128;
-	  *dummy++ = 0;
-	  *dummy++ = 128;
-	  *dummy++ = 0;
-	}
-      }else
-	memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
-#endif
+	//memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
       setTexCoords(m_coords, m_xRatio, m_yRatio);
       state->texCoords = m_coords;
       state->numTexCoords = 4;
@@ -232,10 +231,22 @@ void pix_texture :: render(GemState *state) {
       if (m_buffer.csize != m_dataSize[0] ||
 	  m_buffer.xsize != m_dataSize[1] ||
 	  m_buffer.ysize != m_dataSize[2]){
-	m_dataSize[0] = m_buffer.csize;
-	m_dataSize[1] = m_buffer.xsize;
-	m_dataSize[2] = m_buffer.ysize;
-	  
+            m_dataSize[0] = m_buffer.csize;
+            m_dataSize[1] = m_buffer.xsize;
+            m_dataSize[2] = m_buffer.ysize;
+            
+            if (m_buffer.csize == 2 && !m_mode){
+                int datasize=m_buffer.xsize*m_buffer.ysize*m_buffer.csize/4;
+                unsigned char* dummy=m_buffer.data;
+                while(datasize--){
+                *dummy++ = 128;
+                *dummy++ = 0;
+                *dummy++ = 128;
+                *dummy++ = 0;
+                }
+                post("pix_texture: zeroing YUV buffer");
+            }
+
 	glTexImage2D(m_textureType, 0,
 		     m_buffer.csize,
 		     m_buffer.xsize,
@@ -243,6 +254,7 @@ void pix_texture :: render(GemState *state) {
 		     m_buffer.format,
 		     m_buffer.type,
 		     m_buffer.data);
+        post("pix_texture: TexImage2D");
       }
       // okay, load in the actual pixel data
       
@@ -254,6 +266,7 @@ void pix_texture :: render(GemState *state) {
 		      state->image->image.type,
 		      state->image->image.data);
     }
+    
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
 #else
@@ -395,6 +408,8 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("quality"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::repeatMessCallback,
 		  gensym("repeat"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_texture::modeCallback,
+		  gensym("mode"), A_FLOAT, A_NULL);
   class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
 }
 void pix_texture :: floatMessCallback(void *data, float n)
@@ -409,3 +424,9 @@ void pix_texture :: repeatMessCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->repeatMess((int)quality);
 }
+
+void pix_texture :: modeCallback(void *data, t_floatarg quality)
+{
+  GetMyClass(data)->m_mode=((int)quality);
+}
+
