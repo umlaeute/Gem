@@ -26,7 +26,9 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include <Carbon/Carbon.h>
+#ifdef __APPLE__
+# include <Carbon/Carbon.h>
+#endif
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT)
 
@@ -146,6 +148,7 @@ void pix_movement :: processYUVImage(imageStruct &image)
 #endif  
 }
 
+#ifdef __VEC__
 void pix_movement :: processYUVAltivec(imageStruct &image)
 {
     // assume that the pix_size does not change !
@@ -299,7 +302,7 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
     */
 }
 
-
+#endif /* __VEC__ */
 
 void pix_movement :: processGrayImage(imageStruct &image)
 {
