@@ -464,7 +464,12 @@ GEM_EXTERN void destroyGemWindow(WindowInfo &info)
 }
 int cursorGemWindow(WindowInfo &info, int state)
 {
-    return(0); 
+  if (state)
+    ShowCursor();
+  else
+	HideCursor();
+
+  return state;
 }
 //-----------------------------------------------------------------------------------------------------------------------
 // SetupAGLFullScreen, for 2nd monitor
