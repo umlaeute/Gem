@@ -54,8 +54,8 @@ CPPEXTERN_HEADER(pix_posterize, GemPixObj)
     	
         t_inlet         *inletF;
         t_inlet         *inletL;
-        int		factor;
-        int		limit;
+        int		factor; // 0..1 (was 0..255) /* jmz */
+        int		limit; // 0,1,2,3,4
         
     private:
     
