@@ -229,4 +229,7 @@ void pix_2grey :: processYUVAltivec(imageStruct &image)
 //
 /////////////////////////////////////////////////////////
 void pix_2grey :: obj_setupCallback(t_class *)
-{ }
+{
+  class_addcreator((t_newmethod)_classpix_2grey, 
+		   gensym("pix_2gray"), A_NULL);
+}

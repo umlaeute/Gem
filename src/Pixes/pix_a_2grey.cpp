@@ -127,7 +127,9 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_a_2grey :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_a_2grey::alphaMessCallback,
+   class_addcreator((t_newmethod)_classpix_a_2grey, 
+		   gensym("pix_a_2gray"), A_NULL);
+   class_addmethod(classPtr, (t_method)&pix_a_2grey::alphaMessCallback,
     	    gensym("ft1"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_a_2grey::alphaMessCallback,
     	    gensym("alpha"), A_FLOAT, A_NULL);
