@@ -16,8 +16,11 @@ LOG
 #include "Base/GemBase.h"
 #include <stdlib.h>
 #include <math.h>
-#include <OpenGL/gl.h>
+#ifdef __APPLE__
 #include <OpenGL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
 #define PI	3.1415926535897932384626433832795
 
 using namespace std;
