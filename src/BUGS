@@ -20,3 +20,5 @@ Gem doesn't load if the no font-support AND "-Wl,-rpath,/usr/lib -laviplay" is s
 
 
 pix_filmDS produces BGR-output -- FIXED (now it produces RGBA, YUV and Grey on demand)
+
+pix_filmNT produces RGB-output -- FIXED (even with colorspace!)
