@@ -16,11 +16,11 @@
 
 #include "model.h"
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <AGL/agl.h>
 extern bool HaveValidContext (void);
 #endif
-
+ 
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM)
 
   /////////////////////////////////////////////////////////
@@ -35,6 +35,7 @@ model :: model(t_symbol *filename)
   : m_model(0), m_dispList(0), m_rescaleModel(1), m_smooth(90), m_flags(GLM_SMOOTH | GLM_TEXTURE)
 {
   // make sure that there are some characters
+  m_model = 0;
   if (filename->s_name[0]) openMess(filename);
 }
 
@@ -131,7 +132,7 @@ void model :: rescaleMess(int state)
 /////////////////////////////////////////////////////////
 void model :: openMess(t_symbol *filename)
 {
-#ifdef MACOSX
+#ifdef __APPLE__
   if (!HaveValidContext ()) {
     post("GEM: geo: model - need window to load model");
     return;
