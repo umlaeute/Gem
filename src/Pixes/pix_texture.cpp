@@ -66,6 +66,7 @@ void pix_texture :: setUpTextureState() {
   if (m_mode && GemMan::texture_rectangle_supported){
     if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)				//tigital
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
+      m_repeat = GL_CLAMP_TO_EDGE;
     post("pix_texture: using rectangle texture");
   }
 #endif // GL_TEXTURE_RECTANGLE_EXT
@@ -180,6 +181,7 @@ if (m_mode){
      * (skip Alpha since it isnt used)
      */
     if (m_imagebuf.format == GL_YUV422_GEM){
+    post("pix_texture: this should never be posted on OSX");
       m_imagebuf.format=GL_RGB;
       m_imagebuf.csize=3;
       m_imagebuf.reallocate();
