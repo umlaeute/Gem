@@ -47,11 +47,8 @@ CPPEXTERN_HEADER(pix_scanline, GemPixObj)
 
     	//////////
     	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-    	
-        //////////
-    	// Do the YUV processing
-    	virtual void 	processYUVImage(imageStruct &image);
+    	virtual void 	processImage(imageStruct &image);
+   	virtual void 	processYUVImage(imageStruct &image);
     //    virtual void 	processYUVAltivec(imageStruct &image);
         
         unsigned char  *saved;
