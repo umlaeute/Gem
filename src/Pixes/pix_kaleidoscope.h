@@ -16,8 +16,6 @@ LOG
 #include "Base/GemPixObj.h"
 #define PETE_KALEIDOSCOPE_HALFLINE_BIT		(1<<0)
 
-typedef unsigned long U32; 
-typedef unsigned short U16;
 typedef struct SPete_Kaleidoscope_Line {
 		float X;
 		float Y;
@@ -62,23 +60,6 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
     	virtual void 	processYUVImage(imageStruct &image);
 
 	imageStruct    myImage;
-	typedef void* SPete_MemHandle;
-
-	inline SPete_MemHandle Pete_NewHandle(int nBytesToAlloc) {
-	    return malloc(nBytesToAlloc);
-	}
-	
-	inline void Pete_FreeHandle(SPete_MemHandle InHandle) {
-	    free(InHandle);
-	}
-
-	inline void* Pete_LockHandle(SPete_MemHandle InHandle) {
-	    return InHandle;	
-	}
-
-	inline void Pete_UnLockHandle(SPete_MemHandle InHandle) {
-	    // do nothing
-	}
 
 	struct SPete_AngleTable_Entry {
 		int nAngleFA;
@@ -105,9 +86,6 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	float m_ReflectionLineProportion;
 	float m_SourceAngleProportion;
 			
-	float Pete_Pi;//=3.141582f;
-	float Pete_TwoPi;//=(2.0f*Pete_Pi);
-	int cnBiggestSignedInt;//=0x7fffffff;
 	int nCosTableSizeShift;// = 10;
 	int nCosTableSize;// = (1<<nCosTableSizeShift);
 
@@ -181,25 +159,7 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	    poutResult->x=(pinA->x-pinB->x);
 	    poutResult->y=(pinA->y-pinB->y);
 	}
-/*	
-	inline int GetTiled(int inValue,const int nMax) {
-	    int nOutValue=(inValue%nMax);
-	    if (nOutValue<0) {
-		nOutValue=((nMax-1)+nOutValue);
-	    }
-	    return nOutValue;
-	}
 	
-	inline int GateInt(int nValue,int nMin,int nMax) {
-	    if (nValue<nMin) {
-		return nMin;
-	    } else if (nValue>nMax) {
-		return nMax;
-	    } else {
-		return nValue;
-	    }
-	}
-*/	
 	void Pete_2dMatrix_SetToIdentity(SPete_2dMatrix* pMatrix);
 	void Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatrix* poutResult);
 	void Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult);
