@@ -89,7 +89,7 @@ static float teapot_cpdata[][3] =
 };
 
 
-CPPEXTERN_NEW_WITH_ONE_ARG(teapot, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(teapot, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -99,12 +99,13 @@ CPPEXTERN_NEW_WITH_ONE_ARG(teapot, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-teapot :: teapot(t_floatarg size)
+teapot :: teapot(t_floatarg size, t_floatarg slice)
       : GemGluObj(size)
 {
   m_drawType=GL_FILL;
-  m_numSlices=14;
-  
+  m_numSlices=(int)slice;
+  if(m_numSlices<=0)m_numSlices=14;
+
   m_texCoords[0][0]=0;m_texCoords[0][1]=0;
   m_texCoords[1][0]=1;m_texCoords[1][1]=0;
   m_texCoords[2][0]=0;m_texCoords[2][1]=1;
@@ -124,7 +125,7 @@ teapot :: ~teapot()
 /////////////////////////////////////////////////////////
 void teapot :: render(GemState *state)
 {
-  GLenum type = GL_FILL;
+  GLenum type = m_drawType;
   switch(m_drawType){
   case GL_LINE_LOOP: type=GL_LINE;  break;    
   case GL_POINTS   : type=GL_POINT; break;

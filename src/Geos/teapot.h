@@ -39,7 +39,7 @@ class GEM_EXTERN teapot : public GemGluObj
 
 	    //////////
 	    // Constructor
-    	teapot(t_floatarg size);
+  teapot(t_floatarg size, t_floatarg slice);
     	
     protected:
     	
