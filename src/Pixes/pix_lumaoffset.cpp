@@ -75,9 +75,6 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
     myImage.type  = image.type;
     pOutput = (U32*)myImage.data;
 
-    const int cnFixedShift=8;
-    //const int cnFixedPrec=(1<<cnFixedShift);
-
     const int nNumPixels=nWidth*nHeight;
 
     const int nOffsetScale=static_cast<int>(m_OffsetScale);
