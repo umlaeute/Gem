@@ -19,16 +19,17 @@ AC_DEFUN(AC_FIND_LIB,
      fi
 
 dnl next 2 lines have been dnl'ed. why?
-dnl     gem_system_lib=no
-dnl     AC_CHECK_LIB($1,main,gem_system_lib=yes)
-
      ac_save_LIBS=$LIBS
-     AC_CHECK_LIB($1,$testfun)
+     gem_system_lib=no
+     AC_CHECK_LIB($1,$testfun,gem_system_lib=yes)
 
-     if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = no" && \
-              test "${gem_system_lib-no}" != "yes"; then
-       AC_CHECK_LIB($1,$testfun,gem_system_lib=yes)
-     fi
+dnl     ac_save_LIBS=$LIBS
+dnl     AC_CHECK_LIB($1,$testfun)
+
+dnl     if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = no" && \
+dnl              test "${gem_system_lib-no}" != "yes"; then
+dnl       AC_CHECK_LIB($1,$testfun,gem_system_lib=yes)
+dnl     fi
      if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = no" && \
               test "${gem_system_lib-no}" != "yes"; then
 
@@ -56,7 +57,7 @@ dnl	    twice_lib=`dirname $twice_lib`
             LDFLAGS=$save_LDFLAGS
           fi
         )
-         echo ${gem_cv_lib_$1}
+dnl         echo ${gem_cv_lib_$1}
 
          if eval "test \"`echo '$''{'gem_cv_lib_$1'+set}'`\" = set"; then
           AC_MSG_WARN("Trying to use $1 library in ${gem_cv_lib_$1}");
@@ -75,12 +76,14 @@ dnl this might not be very portable, but at least it works for now
 	  fi
          fi
      else
-	:
+dnl i thought this would be handled by AC_CHECK_LIB
+	ac_tr_lib=`echo "HAVE_LIB$1" | sed -e 's/^a-zA-Z0-9_/_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+	AC_DEFINE_UNQUOTED($ac_tr_lib)
      fi
 )
 
 AC_DEFUN(AC_FIND_HEADER,
-     AC_MSG_CHECKING(for $1 in $2 :: )
+dnl     AC_MSG_CHECKING(for $1 in $2 :: )
      dummy=""
 dnl     tmp_path=`find $dirs -name "$1" | sed 1q`
      tmp_path="$2"
@@ -99,7 +102,7 @@ dnl     tmp_path=`find $dirs -name "$1" | sed 1q`
      	if test -z "$found_path"; then
        	  AC_MSG_WARN("$2 is no path to $1")
      	else
-       	 AC_MSG_RESULT($found_path)
+dnl       	 AC_MSG_RESULT($found_path)
 	 dummy=`echo  $INCLUDES | grep -w -- "-I$found_path"`
 	 if test -z "$dummy"
 	 then
@@ -117,7 +120,7 @@ dnl     tmp_path=`find $dirs -name "$1" | sed 1q`
           AC_MSG_ERROR("can\'t find path to $1"); else
           AC_MSG_WARN("can\'t find path to $1"); fi
      else
-	dummy=`echo "HAVE_$1" | sed -e 's/^a-zA-Z0-9_./_/g' -e 's/\./_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+	dummy=`echo "HAVE_$1" | sed -e 's/^a-zA-Z0-9_./_/g' -e 's/\./_/g' -e 's/\//_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
 	AC_DEFINE_UNQUOTED($dummy)
      fi
 )
