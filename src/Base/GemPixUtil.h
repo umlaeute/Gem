@@ -103,6 +103,7 @@ struct GEM_EXTERN imageStruct
     data = pdata =  new unsigned char [size];
 #endif
     datasize=size;
+    notowned=0;
     return data; 
   }
   unsigned char* allocate() {  return allocate(xsize*ysize*csize);  }
@@ -124,7 +125,7 @@ struct GEM_EXTERN imageStruct
     datasize=0;
   }
   
-  GLint           xsize;
+  GLint             xsize;
 
   //////////
   // rows
@@ -158,16 +159,46 @@ struct GEM_EXTERN imageStruct
   // sets a pixel
   inline void SetPixel(int Y, int X, int C, unsigned char VAL)
   { data[Y * xsize * csize + X * csize + C] = VAL; }
+
+  /* following will set the whole image-data to either black or white
+   * the size of the image-data is NOT xsize*ysize*csize but datasize
+   * this is mostly slower
+   * i have put the datasize into private (like pdata) (bad idea?)
+   */
+  void setBlack();
+  void setWhite();
   
   void copy2Image(imageStruct *to);
   void refreshImage(imageStruct *to);
   void copy2ImageStruct(imageStruct *to); // copy the imageStruct (but not the actual data)
-  
-  
+
+  ///////////////////////////////////////////////////////////////////////////////
+  // acquiring data including colour-transformations
+  // should be accelerated if possible
+  /* i wonder whether this is the right place to put these routines
+   * they should be stored somewhere centrally
+   * (because maybe a lot of objects would like them) (like [pix_rgba]...)
+   * but it might be better to put them (the actual conversion routines) into
+   * separate files (a separate library?)
+   * orgdata points to the actual data in the given format
+   * the datasize will be read from image.xsize, image.ysize
+   * the dest-format will be given by image.format
+   *   this is maybe not really clean (the meta-data is stored in the destination, 
+   *   while the source has no meta-data of its own)
+   */
+  void fromRGB    (unsigned char* orgdata);
+  void fromRGBA   (unsigned char* orgdata);
+  void fromBGR    (unsigned char* orgdata);
+  void fromBGRA   (unsigned char* orgdata);
+  void fromGray   (unsigned char* orgdata);
+  void fromYUV420P(unsigned char* orgdata);
+
+
   unsigned char   *data;
-  int             datasize;
   private:
   unsigned char   *pdata;
+  /* datasize should be private */
+  int             datasize;
 };
 
 /*-----------------------------------------------------------------
@@ -209,10 +240,10 @@ GEM_EXTERN extern void refreshImage(imageStruct *to, imageStruct *from);
 // These should be used to reference the various color channels
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef MACOSX				//tigital
+const int chAlpha	= 0;
 const int chRed		= 1;
 const int chGreen	= 2;
 const int chBlue	= 3;
-const int chAlpha	= 0;
 #else
 const int chRed		= 0;
 const int chGreen	= 1;
@@ -226,15 +257,13 @@ const int chGray	= 0;
 // Pixel access functions
 //
 ///////////////////////////////////////////////////////////////////////////////
-
-
 //
 // Accelerated Pixel Manipulations 
 // This is sort on a vector operation on 8 chars at the same time .... could be
 // implemented in MMX
 // Alpha channel is not added !! (would be nr 3 and 7)
 
-#define ADD8(a,b) \
+#define ADD8_NOALPHA(a,b) \
  ((unsigned char*)(a))[0] = CLAMP_HIGH((int)((unsigned char*)(a))[0] + ((unsigned char*)(b))[0]);\
  ((unsigned char*)(a))[1] = CLAMP_HIGH((int)((unsigned char*)(a))[1] + ((unsigned char*)(b))[1]);\
  ((unsigned char*)(a))[2] = CLAMP_HIGH((int)((unsigned char*)(a))[2] + ((unsigned char*)(b))[2]);\
@@ -242,7 +271,7 @@ const int chGray	= 0;
  ((unsigned char*)(a))[5] = CLAMP_HIGH((int)((unsigned char*)(a))[5] + ((unsigned char*)(b))[5]);\
  ((unsigned char*)(a))[6] = CLAMP_HIGH((int)((unsigned char*)(a))[6] + ((unsigned char*)(b))[6]);\
 
-#define SUB8(a,b) \
+#define SUB8_NOALPHA(a,b) \
  ((unsigned char*)(a))[0] = CLAMP_LOW((int)((unsigned char*)(a))[0] - ((unsigned char*)(b))[0]);\
  ((unsigned char*)(a))[1] = CLAMP_LOW((int)((unsigned char*)(a))[1] - ((unsigned char*)(b))[1]);\
  ((unsigned char*)(a))[2] = CLAMP_LOW((int)((unsigned char*)(a))[2] - ((unsigned char*)(b))[2]);\
@@ -250,5 +279,24 @@ const int chGray	= 0;
  ((unsigned char*)(a))[5] = CLAMP_LOW((int)((unsigned char*)(a))[5] - ((unsigned char*)(b))[5]);\
  ((unsigned char*)(a))[6] = CLAMP_LOW((int)((unsigned char*)(a))[6] - ((unsigned char*)(b))[6]);\
 
+#define ADD8(a,b) \
+ ((unsigned char*)(a))[0] = CLAMP_HIGH((int)((unsigned char*)(a))[0] + ((unsigned char*)(b))[0]);\
+ ((unsigned char*)(a))[1] = CLAMP_HIGH((int)((unsigned char*)(a))[1] + ((unsigned char*)(b))[1]);\
+ ((unsigned char*)(a))[2] = CLAMP_HIGH((int)((unsigned char*)(a))[2] + ((unsigned char*)(b))[2]);\
+ ((unsigned char*)(a))[3] = CLAMP_HIGH((int)((unsigned char*)(a))[3] + ((unsigned char*)(b))[3]);\
+ ((unsigned char*)(a))[4] = CLAMP_HIGH((int)((unsigned char*)(a))[4] + ((unsigned char*)(b))[4]);\
+ ((unsigned char*)(a))[5] = CLAMP_HIGH((int)((unsigned char*)(a))[5] + ((unsigned char*)(b))[5]);\
+ ((unsigned char*)(a))[6] = CLAMP_HIGH((int)((unsigned char*)(a))[6] + ((unsigned char*)(b))[6]);\
+ ((unsigned char*)(a))[7] = CLAMP_HIGH((int)((unsigned char*)(a))[7] + ((unsigned char*)(b))[7]);\
 
-#endif
+#define SUB8(a,b) \
+ ((unsigned char*)(a))[0] = CLAMP_LOW((int)((unsigned char*)(a))[0] - ((unsigned char*)(b))[0]);\
+ ((unsigned char*)(a))[1] = CLAMP_LOW((int)((unsigned char*)(a))[1] - ((unsigned char*)(b))[1]);\
+ ((unsigned char*)(a))[2] = CLAMP_LOW((int)((unsigned char*)(a))[2] - ((unsigned char*)(b))[2]);\
+ ((unsigned char*)(a))[3] = CLAMP_LOW((int)((unsigned char*)(a))[3] - ((unsigned char*)(b))[3]);\
+ ((unsigned char*)(a))[4] = CLAMP_LOW((int)((unsigned char*)(a))[4] - ((unsigned char*)(b))[4]);\
+ ((unsigned char*)(a))[5] = CLAMP_LOW((int)((unsigned char*)(a))[5] - ((unsigned char*)(b))[5]);\
+ ((unsigned char*)(a))[6] = CLAMP_LOW((int)((unsigned char*)(a))[6] - ((unsigned char*)(b))[6]);\
+ ((unsigned char*)(a))[7] = CLAMP_LOW((int)((unsigned char*)(a))[7] - ((unsigned char*)(b))[7]);\
+
+#endif // GEMPIXUTIL_H_
