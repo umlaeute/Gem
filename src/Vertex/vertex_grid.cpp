@@ -69,8 +69,8 @@ void vertex_grid :: render(GemState *state)
   // m_spacex = 0.5f;
   // m_spacey = 0.5f;
    
-   if(m_x < 1)m_x = 1;
-   if(m_y < 1)m_y = 1;
+   if(m_x < 0)m_x = 1;
+   if(m_y < 0)m_y = 1;
   
     //texcoords s,t 0..state->texCoordX,texCoordY
     //ratios on OSX are on texcoord[1].s,t
@@ -105,15 +105,14 @@ void vertex_grid :: render(GemState *state)
         m_oldx = m_x;
         m_oldy = m_y;
         post("vertex_grid : resizing arrays done");
+	setModified();
    }
     
     //this has to do two rows at once for TRIANGLE_STRIPS to draw correctly
     src=0;
     y = 0;
     t = 0;
-    
-    
-    
+
     //this could be put in a separate function and only done when the size changes
     //use memcpy() for render passes that don't change the size
     for (h=0;h<m_y;h++){
@@ -145,10 +144,9 @@ void vertex_grid :: render(GemState *state)
             
             t+=4;
         }
-        
     }
     //post("");
-   //post("vertex_grid: m_TexCoordArray[t] %f",m_TexCoordArray[t]);
+    //post("vertex_grid: m_TexCoordArray[t] %f",m_TexCoordArray[t]);
     state->VertexArray = m_VertexArray;
     state->ColorArray = m_ColorArray;
     state->TexCoordArray = m_TexCoordArray;
