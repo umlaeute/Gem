@@ -48,7 +48,6 @@ inline unsigned char CLAMP(float x)
 inline float FLOAT_CLAMP(float x)
     { return((x > 1.f) ? 1.f : ( (x < 0.f) ? 0.f : x)); }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // Multiply and interpolation
 //
