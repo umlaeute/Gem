@@ -1,6 +1,5 @@
-. make "configure" work
-. multi-screen
-. particle systems for everything
-. openGL-wrapper (glu-wrapper)
-. SDL-parachute
+TODO for gem-0.888 release:
+
+pix_write for macOS
+pix_video with ieee1394 under linux
 
