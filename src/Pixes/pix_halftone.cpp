@@ -412,11 +412,13 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 				const int nDotFuncResult=*pCurrentDotFunc;
 				const int nDiff=nLuminance-nDotFuncResult;
 				const int nGreyValue=pGreyScaleTableStart[nDiff];
+
+				/* the defines for the SHIFT-amount are in Base/GemPixPete.h */
 				
-				const U32 OutputColour =    ((chroma<<24)&0xff000000)|
-											((nGreyValue<<16)&0x00ff0000)|
-											((chroma<<8)&0x0000ff00) |
-											((nGreyValue)&0x000000ff);
+				const U32 OutputColour = (chroma<<SHIFT_U) |
+				  (nGreyValue<<SHIFT_Y1) |
+				  (chroma<<SHIFT_V) |
+				  (nGreyValue<<SHIFT_Y2);
 
 				U32* pCurrentOutput = pOutput+(nCurrentY*nWidth)+nCurrentX;
 				*pCurrentOutput=OutputColour;
