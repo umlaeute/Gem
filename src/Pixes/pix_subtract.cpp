@@ -111,9 +111,9 @@ return;
 
 void pix_subtract :: processYUVAltivec(imageStruct &image, imageStruct &right)
 {
-long h,w,width;
-
 #ifdef ALTIVEC
+  long h,w,width;
+
    width = image.xsize/8;
    //format is U Y V Y
     union

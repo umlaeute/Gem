@@ -291,7 +291,6 @@ return;
   int k;
   int xsize =  tempImg.xsize -1;
   int ysize =  tempImg.ysize -1;
- // int check = xsize-1;
   int size = xsize*ysize - xsize-1;
   int length;
 

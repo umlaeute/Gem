@@ -72,9 +72,8 @@ void pix_duotone :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_duotone :: processGrayImage(imageStruct &image)
 {
-    int datasize =  image.xsize * image.ysize*image.csize;
-    unsigned char *pixels = image.data;
-
+  int datasize =  image.xsize * image.ysize*image.csize;
+  unsigned char *pixels = image.data;
 }
 
 /////////////////////////////////////////////////////////
@@ -142,3 +141,4 @@ void pix_duotone :: threshMessCallback(void *data, t_floatarg value1, t_floatarg
     GetMyClass(data)->m_thresh[1]=(unsigned char)value2;
     GetMyClass(data)->m_thresh[2]=(unsigned char)value3;
 }
+
