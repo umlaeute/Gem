@@ -88,6 +88,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   void 	    	bufferMess(int buf);
   void 	    	dimensionsMess(int width, int height);
   void 	    	fullscreenMess(int on);
+  void 	    	secondscreenMess(int on);
   void 	    	offsetMess(int x, int y);
   void 	    	colorMess(float red, float green, float blue);
   void 	    	ambientMess(float red, float green, float blue);
@@ -100,6 +101,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   void 	    	fogColorMess(float red, float green, float blue);
   void          cursorMess(float setting);
   void          blurMess(float setting);
+  
 
  private:
     
@@ -114,6 +116,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   static void 	dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
   static void 	offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
   static void 	fullscreenMessCallback(void *data, t_floatarg on);
+  static void 	secondscreenMessCallback(void *data, t_floatarg on);
   static void 	colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);
   static void 	ambientMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);
   static void 	specularMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);

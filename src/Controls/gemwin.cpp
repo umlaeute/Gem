@@ -171,6 +171,15 @@ void gemwin :: fullscreenMess(int on)
 }
 
 /////////////////////////////////////////////////////////
+// fullscreenMess
+//
+/////////////////////////////////////////////////////////
+void gemwin :: secondscreenMess(int on)
+{
+  GemMan::m_secondscreen = on;
+}
+
+/////////////////////////////////////////////////////////
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
@@ -357,6 +366,8 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("buffer"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::fullscreenMessCallback,
 		  gensym("fullscreen"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemwin::secondscreenMessCallback,
+		  gensym("secondscreen"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::dimensionsMessCallback,
 		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::offsetMessCallback,
@@ -588,6 +599,10 @@ void gemwin :: bufferMessCallback(void *data, t_floatarg buf)
 void gemwin :: fullscreenMessCallback(void *data, t_floatarg on)
 {
   GetMyClass(data)->fullscreenMess((int)on);
+}
+void gemwin :: secondscreenMessCallback(void *data, t_floatarg on)
+{
+  GetMyClass(data)->secondscreenMess((int)on);
 }
 void gemwin :: dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
