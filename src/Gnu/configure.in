@@ -26,9 +26,11 @@ AC_ARG_ENABLE(x, [                          [DIR=/usr/include:/usr/local/include
 AC_ARG_ENABLE(x, [])
 AC_ARG_ENABLE(static, [  --enable-static         static linking (default is: dynamic) ])
 AC_ARG_WITH(glut, [  --with-glut             enable GLUT (mainly the teapot)])
+AC_ARG_WITH(gltt, [  --with-gltt             enable GL-TrueType rendering (fonts)])
 AC_ARG_WITH(mpeg, [  --with-mpeg             enable MPEG-filmIN support])
 AC_ARG_WITH(mpeg3, [  --with-mpeg3            enable MPEG3-filmIN support (overrides MPEG-support)])
 AC_ARG_WITH(quicktime, [  --with-quicktime        enable quicktime-filmIN support])
+AC_ARG_WITH(avi, [  --with-avi        enable AVI-support (might provide MPEG and quicktime)])
 
 dnl of course we need X, so don't let the user disable it
 if test "$with_x" = "no"
@@ -203,10 +205,13 @@ dnl Check for Jpeg
 	AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, fail)
 
 dnl Checking font-libraries
+if test "$with_gltt" != "no"
+then
 dnl Check for TTF
-dnl     AC_FIN_LIB(ttf,$search_libs)
+	AC_FIND_LIB(ttf, TT_FreeType_Version, $search_libs, $with_gltt)
 dnl Check for gltt
 	AC_FIND_LIB(gltt, open, $search_libs, fail)
+fi
 
 dnl Checking for video-libraries
 dnl Check for sgi vl library
@@ -235,7 +240,7 @@ if test "$with_mpeg" != "no"
 then
   if test "$ac_tr_lib" != "HAVE_LIBMPEG3"
   then
-    AC_FIND_LIB(mpeg, OpenMPEG, search_libs)
+    AC_FIND_LIB(mpeg, OpenMPEG, search_libs, $with_mpeg)
   else
     echo skipping check for mpeg because mpeg3 is used
   fi
@@ -243,8 +248,14 @@ fi
 
 if test "$with_quicktime" != "no"
 then
-  AC_FIND_LIB(quicktime, quicktime_check_sig, search_libs)
+  AC_FIND_LIB(quicktime, quicktime_check_sig, search_libs, $with_quicktime)
 fi
+
+if test "$with_avi" != "no"
+then
+  AC_FIND_LIB(aviplay, CreateIAviReadFile, search_libs, $with_avi)
+fi
+
 
 dnl Checking for Headers !
 dnl there should be a flag for which paths to search
@@ -260,8 +271,12 @@ AC_CHECK_HEADERS(GL/gl.h GL/glu.h,,
 
 dnl glut (if wanted)
 AC_CHECK_HEADER(GL/glut.h)
+
 dnl truetype
-AC_FIND_HEADER(GLTTFont.h, $search_heads, fail)
+if test "$with_gltt" != "no"
+then 
+AC_FIND_HEADER(GLTTFont.h, $search_heads, $with_gltt)
+fi
 
 dnl model
 AC_FIND_HEADER(glm.h, $search_heads, fail)
@@ -271,9 +286,11 @@ dnl space-orb
 AC_FIND_HEADER(orb.h, $search_heads, fail)
 
 dnl video formats
-AC_FIND_HEADER(mpeg.h, /usr/include)
-AC_FIND_HEADER(libmpeg3.h, /usr/include)
-AC_FIND_HEADER(quicktime/quicktime.h, /usr/include)
+AC_FIND_HEADER(mpeg.h, $search_heads)
+AC_FIND_HEADER(libmpeg3.h, $search_heads)
+AC_FIND_HEADER(quicktime/quicktime.h, $search_heads)
+AC_FIND_HEADER(avifile/avifile.h, $search_heads)
+
 
 
 dnl Checks for typedefs, structures, and compiler characteristics.
