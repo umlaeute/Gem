@@ -75,10 +75,9 @@ imageStruct *sgiImage2mem(const char *filename);
 
 unsigned char* img_allocate(int size)
 {
-  unsigned char* pad;
   unsigned char* data;
-
 #if 0
+  unsigned char* pad;
   pad = new unsigned char[size];
   data = (unsigned char*) ((((unsigned int)pad)+31)& (~31));
 #else

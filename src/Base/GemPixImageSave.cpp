@@ -89,7 +89,7 @@ int mem2tiffImage(imageStruct *image, const char *filename)
   uint32 width=image->xsize, height = image->ysize;
   short bits=8, samps=image->csize;
   int npixels = width * height;
-  int planar_conf = PLANARCONFIG_CONTIG;
+  //int planar_conf = PLANARCONFIG_CONTIG;
   char *gemstring = "PD/GEM";
 
 
