@@ -162,14 +162,6 @@ SOURCE=.\Base\GemGLUtil.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Base\GemGlutObj.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Base\GemGlutObj.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Base\GemLoadObj.cpp
 # End Source File
 # Begin Source File
@@ -1321,14 +1313,6 @@ SOURCE=.\Pixes\pix_data.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Pixes\pix_depot.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Pixes\pix_depot.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Pixes\pix_dump.cpp
 # End Source File
 # Begin Source File
@@ -2011,6 +1995,14 @@ SOURCE=.\openGL\GEMglBlendFunc.cpp
 # Begin Source File
 
 SOURCE=.\openGL\GEMglBlendFunc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCallList.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglCallList.h
 # End Source File
 # Begin Source File
 
