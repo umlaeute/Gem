@@ -69,10 +69,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   Movie			m_movie; 
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
-
-
   Track			m_movieTrack;
-  Media			m_movieMedia;
   TimeValue		m_timeScale;
   TimeValue		duration;
   
