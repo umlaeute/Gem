@@ -28,7 +28,7 @@
 #include "../Particles/setup.h"
 #include "../Pixes/setup.h"
 #include "../TV/setup.h"
-//#include "../openGL/setup.h"
+#include "../openGL/setup.h"
 #include "../yuv/setup.h"
 
 // notice that this is not inside of the extern "C"
@@ -50,7 +50,7 @@ extern "C" {
     Particles_setup();
     Pixes_setup();
     TV_setup();
-//    openGL_setup();
+    openGL_setup();
     yuv_setup();
   }
 
