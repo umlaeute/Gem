@@ -23,6 +23,9 @@ typedef struct SPete_Kaleidoscope_Line {
 };
 extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void* pElem2);
 
+#ifdef _WINDOWS
+# define NO_HACK
+#endif
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -167,7 +170,12 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	void Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector,SPete_2dMatrix* pinMatrix,SPete_2dVector* poutResult);
 	void Pete_2dMatrix_SetToTranslation(float TranslationX,float TranslationY,SPete_2dMatrix* poutResult);
 	void Pete_SimpleMirror_Render();
+
+#ifdef NO_HACK
+	int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections 
+#else
 	static int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections 
+#endif
     
     private:
     
