@@ -266,7 +266,7 @@ int gemwindow :: createConstWindow(char* disp) {
   if (s_singleContext) {
     return(createWindow(disp));
   }
-  if(false&&constInfo.context!=NULL){ // JMZ
+  if(constInfo.context!=NULL){ // JMZ
     m_constInfo=constInfo;
 
     m_constInfo.have_constContext=1;
