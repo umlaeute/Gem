@@ -51,7 +51,8 @@ pix_texture :: pix_texture()
   
   m_mode = 0;
   
-  #ifdef GL_TEXTURE_RECTANGLE_EXT
+  #if defined(GL_TEXTURE_RECTANGLE_EXT) 
+  //|| defined(GL_NV_TEXTURE_RECTANGLE)
   m_mode = 1;  //default to the fastest mode for systems that support it
   #endif
   
@@ -71,17 +72,19 @@ pix_texture :: ~pix_texture()
 void pix_texture :: setUpTextureState() {
 #ifdef GL_TEXTURE_RECTANGLE_EXT
   if (m_mode && GemMan::texture_rectangle_supported){
-    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)				//tigital
+    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
       m_repeat = GL_CLAMP_TO_EDGE;
       //    post("pix_texture: using rectangle texture");
   }
 #endif // GL_TEXTURE_RECTANGLE_EXT
+
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
   if (GemMan::client_storage_supported){
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
     //    post("pix_texture: using client storage");
-    }
+  }
+
   else
 #endif // CLIENT_STORAGE
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
@@ -149,26 +152,46 @@ void pix_texture :: render(GemState *state) {
   bool normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
 
 #ifdef GL_VERSION_1_1
-  int texType = m_textureType;
+    int texType = m_textureType;
 
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-if (m_mode){
-  if (!normalized && GemMan::texture_rectangle_supported ){
-    m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-    normalized = 0;
-  } 
-  } else 
+    if (m_mode){
+	if (/*!normalized &&*/ GemMan::texture_rectangle_supported ){
+	    m_textureType = GL_TEXTURE_RECTANGLE_EXT;
+	    //post("pix_texture:  using GL_TEXTURE_RECTANGLE_EXT");
+	    normalized = 0;
+	} 
+    } else 
 #endif // GL_TEXTURE_RECTANGLE_EXT
- {
-    m_textureType = GL_TEXTURE_2D;
-    normalized = 0;
+    {
+	m_textureType = GL_TEXTURE_2D;
+	//post("pix_texture:  using GL_TEXTURE_2D");
+	normalized = 0;
     }
-  if (m_textureType!=texType){
-    //  post("texType != m_textureType");
-    stopRendering();startRendering();
-  }
-  glEnable(m_textureType);
-  glBindTexture(m_textureType, m_textureObj);
+    if (m_textureType!=texType){
+	//post("pix_texture:  texType != m_textureType");
+	stopRendering();startRendering();
+    }
+    
+    glEnable(m_textureType);
+    glBindTexture(m_textureType, m_textureObj);
+#ifdef GL_APPLE_texture_range
+    if (state->image->newfilm ){
+	if ( GemMan::texture_range_supported && GemMan::texture_rectangle_supported && m_mode){
+	    glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_EXT, 
+			    m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 
+			    m_imagebuf.data );
+	    post("pix_texture:  using glTextureRangeAPPLE()");
+	}else{
+	    glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_EXT, 0, NULL );
+	}
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+	// GL_STORAGE_SHARED_APPLE -  AGP texture path
+	// GL_STORAGE_CACHED_APPLE - VRAM texture path
+	// GL_STORAGE_PRIVATE_APPLE - normal texture path
+    }
+#endif // GL_APPLE_texture_range
+
 #elif GL_EXT_texture_object
   glEnable(m_textureType);
   glBindTextureEXT(m_textureType, m_textureObj);
@@ -182,38 +205,38 @@ if (m_mode){
   setUpTextureState();
 #endif //GL_VERSION_1_1
 
-  if (m_rebuildList) {
+    if (m_rebuildList) {
 #ifndef GL_YCBCR_422_APPLE
-    // if YUV is not supported on this platform, we have to convert it to RGB
-    //(skip Alpha since it isnt used)
-    //
-    if (m_imagebuf.format == GL_YUV422_GEM){
-      m_imagebuf.format=GL_RGB;
-      m_imagebuf.csize=3;
-      m_imagebuf.reallocate();
-      m_imagebuf.fromYUV422(state->image->image.data);
-    }
+	// if YUV is not supported on this platform, we have to convert it to RGB
+	//(skip Alpha since it isnt used)
+	//
+	if (m_imagebuf.format == GL_YUV422_GEM){
+	    m_imagebuf.format=GL_RGB;
+	    m_imagebuf.csize=3;
+	    m_imagebuf.reallocate();
+	    m_imagebuf.fromYUV422(state->image->image.data);
+	}
 #endif // GL_YCBCR_422_APPLE 
-    if (normalized) {
-      m_buffer.xsize = m_imagebuf.xsize;
-      m_buffer.ysize = m_imagebuf.ysize;
-      m_buffer.csize  = m_imagebuf.csize;
-      m_buffer.format = m_imagebuf.format;
-      m_buffer.type   = m_imagebuf.type;
-      m_buffer.reallocate();
-      setTexCoords(m_coords, 1.0, 1.0);
-      state->texCoords = m_coords;
-      state->numTexCoords = 4;
-      if (m_buffer.csize != m_dataSize[0] ||
-	  m_buffer.xsize != m_dataSize[1] ||
-	  m_buffer.ysize != m_dataSize[2]){
-	m_dataSize[0] = m_buffer.csize;
-	m_dataSize[1] = m_buffer.xsize;
-	m_dataSize[2] = m_buffer.ysize;
+	if (normalized) {
+	    m_buffer.xsize = m_imagebuf.xsize;
+	    m_buffer.ysize = m_imagebuf.ysize;
+	    m_buffer.csize  = m_imagebuf.csize;
+	    m_buffer.format = m_imagebuf.format;
+	    m_buffer.type   = m_imagebuf.type;
+	    m_buffer.reallocate();
+	    setTexCoords(m_coords, 1.0, 1.0);
+	    state->texCoords = m_coords;
+	    state->numTexCoords = 4;
+	    if (m_buffer.csize != m_dataSize[0] ||
+		m_buffer.xsize != m_dataSize[1] ||
+		m_buffer.ysize != m_dataSize[2]){
+		m_dataSize[0] = m_buffer.csize;
+		m_dataSize[1] = m_buffer.xsize;
+		m_dataSize[2] = m_buffer.ysize;
 
-    }
-    //if the texture is a power of two in size then there is no need to subtexture
-    glTexImage2D(m_textureType, 0, 
+	    }
+	    //if the texture is a power of two in size then there is no need to subtexture
+	    glTexImage2D(m_textureType, 0, 
 		     m_imagebuf.csize,
 		     m_imagebuf.xsize,
 		     m_imagebuf.ysize, 0,
@@ -221,34 +244,32 @@ if (m_mode){
 		     m_imagebuf.type,
 		     m_imagebuf.data);
                      
+	} else { // !normalized
+	    float m_xRatio = (float)m_imagebuf.xsize;
+	    float m_yRatio = (float)m_imagebuf.ysize;
+	    if ( !GemMan::texture_rectangle_supported || !m_mode ) {
+		m_xRatio /= (float)x_2;
+		m_yRatio /= (float)y_2;
+		m_buffer.xsize = x_2;
+		m_buffer.ysize = y_2;
+	    } else {
+		m_buffer.xsize = m_imagebuf.xsize;
+		m_buffer.ysize = m_imagebuf.ysize;
+	    }
+	    m_buffer.csize  = m_imagebuf.csize;
+	    m_buffer.format = m_imagebuf.format;
+	    m_buffer.type   = m_imagebuf.type;
+	    m_buffer.reallocate();
+	    setTexCoords(m_coords, m_xRatio, m_yRatio);
+	    state->texCoords = m_coords;
+	    state->numTexCoords = 4;
 
-      
-    } else { // !normalized
-      float m_xRatio = (float)m_imagebuf.xsize;
-      float m_yRatio = (float)m_imagebuf.ysize;
-      if ( !GemMan::texture_rectangle_supported || !m_mode ) {
-	m_xRatio /= (float)x_2;
-	m_yRatio /= (float)y_2;
-	m_buffer.xsize = x_2;
-	m_buffer.ysize = y_2;
-      } else {
-	m_buffer.xsize = m_imagebuf.xsize;
-	m_buffer.ysize = m_imagebuf.ysize;
-      }
-      m_buffer.csize  = m_imagebuf.csize;
-      m_buffer.format = m_imagebuf.format;
-      m_buffer.type   = m_imagebuf.type;
-      m_buffer.reallocate();
-      setTexCoords(m_coords, m_xRatio, m_yRatio);
-      state->texCoords = m_coords;
-      state->numTexCoords = 4;
-
-      if (m_buffer.csize != m_dataSize[0] ||
-	  m_buffer.xsize != m_dataSize[1] ||
-	  m_buffer.ysize != m_dataSize[2]){
-            m_dataSize[0] = m_buffer.csize;
-            m_dataSize[1] = m_buffer.xsize;
-            m_dataSize[2] = m_buffer.ysize; 
+	    if (m_buffer.csize != m_dataSize[0] ||
+		m_buffer.xsize != m_dataSize[1] ||
+		m_buffer.ysize != m_dataSize[2]){
+		m_dataSize[0] = m_buffer.csize;
+		m_dataSize[1] = m_buffer.xsize;
+		m_dataSize[2] = m_buffer.ysize; 
      
             
             if (m_buffer.csize == 2 && !m_mode){
@@ -263,18 +284,17 @@ if (m_mode){
 		//                post("pix_texture: zeroing YUV buffer");
             }
 
-        //this is for dealing with power of 2 textures which need a buffer that's 2^n
-        if ( !GemMan::texture_rectangle_supported || !m_mode ) {            
-        glTexImage2D(m_textureType, 0,
-		   //  m_buffer.csize,
-                   GL_RGB8,
-		     m_buffer.xsize,
-		     m_buffer.ysize, 0,
-		     m_buffer.format,
-		     m_buffer.type,
-		     m_buffer.data);
+	    //this is for dealing with power of 2 textures which need a buffer that's 2^n
+	    if ( !GemMan::texture_rectangle_supported || !m_mode ) {            
+		glTexImage2D(	m_textureType, 0,
+				//m_buffer.csize,
+				GL_RGB8,
+				m_buffer.xsize,
+				m_buffer.ysize, 0,
+				m_buffer.format,
+				m_buffer.type,
+				m_buffer.data);
      
-        
 	//        post("pix_texture: TexImage2D non rectangle");
         }
         else //this deals with rectangle textures that are h*w
