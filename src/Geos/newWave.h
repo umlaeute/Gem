@@ -102,6 +102,7 @@ class GEM_EXTERN newWave : public GemShape
   
   int 		m_size;
   int		m_speed;
+  int		m_blend;
   float		xsize, ysize;
   
   float force[MAXGRID][MAXGRID],
@@ -120,7 +121,7 @@ class GEM_EXTERN newWave : public GemShape
   static void 	heightMessCallback(void *data, t_floatarg size);
   static void 	modeMessCallback(void *data, t_floatarg mode);
   static void 	speedMessCallback(void *data, t_floatarg speed);
-  //static void 	otherMessCallback(void *data, t_floatarg other);
+  static void 	blendMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file

@@ -18,7 +18,7 @@
 
 /* Grid */
 enum {WIREFRAME, HIDDENLINE, FLATSHADED, SMOOTHSHADED, TEXTURED};
-enum {FACENORMALS, ANTIALIAS, ENVMAP};
+enum {FACENORMALS, ENVMAP};
 enum {VWEAK, WEAK, NORMAL, STRONG};
 enum {SMALL, MEDIUM, LARGE, XLARGE};
 enum {CURRENT, FLAT, SPIKE, DIAGONALWALL, SIDEWALL, HOLE, 
@@ -64,8 +64,8 @@ newWave :: newWave( t_floatarg width, t_floatarg height )
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
     inletM = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("M"));
     inletSp = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Sp"));
-    //inletOt = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ot"));
-    //m_drawType = GL_QUADS;
+
+    m_blend = 0;
     m_drawType = GL_TRIANGLE_STRIP;
     alreadyInit = 0;
 }
@@ -79,7 +79,6 @@ newWave :: ~newWave()
 	 inlet_free(m_inletH);
          inlet_free(inletM);
          inlet_free(inletSp);
-         //inlet_free(inletOt);
          alreadyInit = 0;
 }
 
@@ -93,67 +92,110 @@ void newWave :: speedMess(float speed)
     setSpeed((int)speed);
     setModified();
 }
-//void newWave :: otherMess(float other)
-//{
-//    setOther((int)other);
-//    setModified();
-//}
+
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
 void newWave :: render(GemState *state)
 {
-#ifdef __APPLE__
-    if (xsize != state->texCoords[1].s)
-#else
-    if (xsize != state->texCoords[2].s)
-#endif
-        alreadyInit = 0;
+    int i, j, x, y;
+    
+    if (m_drawType == GL_LINE_LOOP)
+        glLineWidth(m_linewidth);
         
-    if (!alreadyInit)
+    if (m_blend) {
+        glEnable(GL_POLYGON_SMOOTH);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
+    }
+    glNormal3f( 0.0f, 0.0f, 1.0f);
+    if (state->texture && state->numTexCoords)
     {
 #ifdef __APPLE__
-        xsize = state->texCoords[1].s;
-        ysize = state->texCoords[1].t;
+        if (xsize != state->texCoords[1].s)
 #else
-        xsize = state->texCoords[2].s;
-        ysize = state->texCoords[2].t;
+        if (xsize != state->texCoords[2].s)
 #endif
-        //win_size_x = GemMan::m_width;
-        //win_size_y = GemMan::m_height;
-        glPolygonOffset( 1.0, 1.0 );
-        setSize( SMALL );
-        setSpeed( NORMAL);
-        setOther( ENVMAP );
-        reset( HILLFOUR );
-        alreadyInit = 1;
-    }
-    
-    getFaceNorms();
-    getVertNorms();
-    
-    getforce();
-    getvelocity();
-    getposition();
-    
-    glNormal3f( 0.0f, 0.0f, 1.0f);
-    
-    for (int i=0; i<grid -1; ++i)
-    {
-        glBegin(GL_TRIANGLE_STRIP);
-        for (int j = 0; j < grid; ++j)
+            alreadyInit = 0;
+        
+        if (!alreadyInit)
         {
-            //j = j/grid;
-            glNormal3fv( vertNorms[i][j] );
-            glTexCoord2fv( texCoords[i][j] );
-            glVertex3f( i, j, posit[i][j] );
-            
-            glNormal3fv( vertNorms[i+1][j] );
-            glTexCoord2fv( texCoords[i+1][j] );
-            glVertex3f( i+1, j, posit[i+1][j] );
+#ifdef __APPLE__
+            xsize = state->texCoords[1].s;
+            ysize = state->texCoords[1].t;
+#else
+            xsize = state->texCoords[2].s;
+            ysize = state->texCoords[2].t;
+#endif
+            setSize( SMALL );
+            setSpeed( NORMAL);
+            setOther( ENVMAP );
+            reset( HILLFOUR );
+            alreadyInit = 1;
         }
-        glEnd();
+    
+        getFaceNorms();
+        getVertNorms();
+    
+        getforce();
+        getvelocity();
+        getposition();
+        for (int i=0; i<grid -1; ++i)
+        {
+            glBegin(GL_TRIANGLE_STRIP);
+            for (int j = 0; j < grid; ++j)
+            {
+                glNormal3fv( vertNorms[i][j] );
+                glTexCoord2fv( texCoords[i][j] );
+                glVertex3f( i, j, posit[i][j] );
+            
+                glNormal3fv( vertNorms[i+1][j] );
+                glTexCoord2fv( texCoords[i+1][j] );
+                glVertex3f( i+1, j, posit[i+1][j] );
+            }
+            glEnd();
+        }
+    }else
+    {
+        if (!alreadyInit)
+        {
+            xsize = 1;
+            ysize = 1;
+            setSize( SMALL );
+            setSpeed( NORMAL);
+            setOther( ENVMAP );
+            reset( HILLFOUR );
+            alreadyInit = 1;
+        }
+    
+        getFaceNorms();
+        getVertNorms();
+    
+        getforce();
+        getvelocity();
+        getposition();
+        
+        for ( i=0; i<grid -1; ++i)
+        {
+            glBegin(m_drawType);
+            for ( j = 0; j < grid; ++j)
+            {
+                glNormal3fv( vertNorms[i][j] );
+                glTexCoord2fv( texCoords[i][j] );
+                glVertex3f( i, j, posit[i][j] );
+            
+                glNormal3fv( vertNorms[i+1][j] );
+                glTexCoord2fv( texCoords[i+1][j] );
+                glVertex3f( i+1, j, posit[i+1][j] );
+            }
+            glEnd();
+        }
+    }
+    if (m_blend) {
+        glDisable(GL_POLYGON_SMOOTH);
+        glDisable(GL_BLEND);
     }
 }
 
@@ -181,7 +223,7 @@ void newWave :: typeMess(t_symbol *type)
 	    m_drawType = GL_POINTS;
     else
     {
-	    error ("GEM: square draw style");
+	    error ("GEM: newWave draw style");
 	    return;
     }
     setModified();
@@ -543,25 +585,6 @@ void newWave :: setOther(int value)
         case FACENORMALS: 
             drawFaceNorms = !drawFaceNorms;
             break;
-        case ANTIALIAS: 
-            antialias = !antialias;
-            if (antialias)
-            {
-                post("GEM: newWave: antialias on");
-                //glEnable(GL_BLEND);
-                //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                //glBlendFunc(GL_SRC_ALPHA_SATURATE, GL_ONE);
-                //glEnable(GL_LINE_SMOOTH);
-                //glLineWidth(1.5);
-            }
-            else
-            {
-                post("GEM: newWave: antialias off");
-                //glDisable(GL_BLEND);
-                //glDisable(GL_LINE_SMOOTH);
-                //glLineWidth(1.0);
-            }
-            break;
         case ENVMAP: 
             envMap = !envMap;
             if (envMap)
@@ -593,8 +616,8 @@ void newWave :: obj_setupCallback(t_class *classPtr)
     	    gensym("M"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&newWave::speedMessCallback,
     	    gensym("Sp"), A_FLOAT, A_NULL);
-    //class_addmethod(classPtr, (t_method)&newWave::otherMessCallback,
-    //	    gensym("Ot"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&newWave::blendMessCallback,
+    	    gensym("blend"), A_FLOAT, A_NULL);
 }
 
 void newWave :: heightMessCallback(void *data, t_floatarg size)
@@ -609,7 +632,7 @@ void newWave :: speedMessCallback(void *data, t_floatarg speed)
 {
     GetMyClass(data)->speedMess((float)speed);
 }
-//void newWave :: otherMessCallback(void *data, t_floatarg other)
-//{
-//    GetMyClass(data)->otherMess((float)other);
-//}
+void newWave :: blendMessCallback(void *data, t_floatarg size)
+{
+    GetMyClass(data)->m_blend=((int)size);
+}
