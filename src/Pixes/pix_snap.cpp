@@ -111,6 +111,13 @@ void pix_snap :: snapMess()
                 #endif
 		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
 	}
+#ifdef __APPLE__
+    glFinish();
+    glPixelStorei(GL_PACK_ALIGNMENT, 4);
+    glPixelStorei(GL_PACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_PACK_SKIP_ROWS, 0);
+    glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
+#endif
 
     glReadPixels(m_x, m_y, m_width, m_height,
     	    	 m_originalImage->format, m_originalImage->type, m_originalImage->data);    
