@@ -23,8 +23,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultTransposeMatrixf , t_floatarg, A_DEFFLOAT 
 //
 GEMglMultTransposeMatrixf :: GEMglMultTransposeMatrixf	(t_floatarg arg0=0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglMultTransposeMatrixf: GEM was compiled without GL_VERSION_1_1");
+#ifndef GL_VERSION_1_3
+        error("GEMglMultTransposeMatrixf: GEM was compiled without GL_VERSION_1_3");
         error("GEMglMultTransposeMatrixf: therefore this object will do nothing");
 #endif
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("matrix"));
@@ -40,9 +40,9 @@ GEMglMultTransposeMatrixf :: ~GEMglMultTransposeMatrixf () {
 // Render
 //
 void GEMglMultTransposeMatrixf :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
+#ifdef GL_VERSION_1_3
 	glMultTransposeMatrixf (m_matrix);
-#endif // GL_VERSION_1_1
+#endif // GL_VERSION_1_3
 }
 
 /////////////////////////////////////////////////////////

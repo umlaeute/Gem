@@ -47,7 +47,7 @@ inlet_free(m_inlet[2]);
 // Render
 //
 void GEMglProgramEnvParameter4fvARB :: render(GemState *state) {
-#ifndef GL_ARB_vertex_program
+#ifdef GL_ARB_vertex_program
 	glProgramEnvParameter4fvARB (target, index, params);
 #endif
 }

@@ -52,7 +52,7 @@ GEMglProgramStringARB :: ~GEMglProgramStringARB ()
 //
 void GEMglProgramStringARB :: render(GemState *state) 
 {
-#ifndef GL_ARB_vertex_program
+#ifdef GL_ARB_vertex_program
 	glProgramStringARB (target, format, len, string);
 #endif
 }

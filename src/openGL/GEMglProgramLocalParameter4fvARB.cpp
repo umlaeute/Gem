@@ -47,7 +47,7 @@ GEMglProgramLocalParameter4fvARB :: ~GEMglProgramLocalParameter4fvARB () {
 // Render
 //
 void GEMglProgramLocalParameter4fvARB :: render(GemState *state) {
-#ifndef GL_ARB_vertex_program
+#ifdef GL_ARB_vertex_program
 	glProgramLocalParameter4fvARB (target, index, params);
 #endif
 }

@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglLoadTransposeMatrixf , t_floatarg, A_DEFFLOAT 
 GEMglLoadTransposeMatrixf :: GEMglLoadTransposeMatrixf	(t_floatarg arg0=0)
 {
 #ifndef GL_VERSION_1_1
-        error("GEMglLoadTransposeMatrixf: GEM was compiled without GL_VERSION_1_1");
+        error("GEMglLoadTransposeMatrixf: GEM was compiled without GL_VERSION_1_3");
         error("GEMglLoadTransposeMatrixf: therefore this object will do nothing");
 #endif
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("list"));
@@ -40,7 +40,7 @@ inlet_free(m_inlet);
 // Render
 //
 void GEMglLoadTransposeMatrixf :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
+#ifdef GL_VERSION_1_3
 	glLoadTransposeMatrixf (m_matrix);
 #endif // GL_VERSION_1_1
 }
