@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------
+/////////////////////////////////////////////////////////////////
 LOG
     GEM - Graphics Environment for Multimedia
 
@@ -11,7 +11,7 @@ LOG
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
------------------------------------------------------------------*/
+//////////////////////////////////////////////////////////////
 
 #ifndef INCLUDE_PIX_ADD_H_
 #define INCLUDE_PIX_ADD_H_
@@ -36,7 +36,7 @@ class GEM_EXTERN pix_add : public GemPixDualObj
     CPPEXTERN_HEADER(pix_add, GemPixDualObj)
 
     public:
-
+      
 	    //////////
     	// Constructor
     	pix_add();
@@ -56,6 +56,7 @@ class GEM_EXTERN pix_add : public GemPixDualObj
 	//////////
     	// altivec
     	virtual void 	processYUV_Altivec(imageStruct &image, imageStruct &right);
+        virtual void 	processRGB_Altivec(imageStruct &image, imageStruct &right);
 
 	virtual void    processDualImage(imageStruct &image, imageStruct &right);
 };
