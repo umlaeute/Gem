@@ -128,15 +128,14 @@ class GEM_EXTERN GemOutput : public CPPExtern
 
 
   virtual void resetState();
-  void resetValues();
-
-
+  virtual void resetValues();
 
  private:
     
   //////////
   // Static member functions
   static void 	renderMessCallback (void *data);
+  static void	resetMessCallback(void *);
 
   //////////
   // change the rendering somehow
@@ -154,8 +153,6 @@ class GEM_EXTERN GemOutput : public CPPExtern
   static void	fogMessCallback(void *, t_symbol *, int argc, t_atom *argv);
   static void 	fogColorMessCallback(void *, t_symbol*, int, t_atom*);
   static void	fogModeMessCallback(void *, t_floatarg val);
-
-
 };
 
 #endif	// for header file

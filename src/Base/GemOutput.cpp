@@ -377,6 +377,8 @@ void GemOutput :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&GemOutput::renderMessCallback,
 		  gensym("gem_render"), A_NULL);
+  class_addmethod(classPtr, (t_method)&GemOutput::resetMessCallback,
+		  gensym("reset"), A_NULL);
 
   class_addmethod(classPtr, (t_method)&GemOutput::perspectiveMessCallback,
 		  gensym("perspec"), A_GIMME, A_NULL);
@@ -406,6 +408,10 @@ void GemOutput :: obj_setupCallback(t_class *classPtr)
 void GemOutput :: renderMessCallback(void *data)
 {
   GetMyClass(data)->renderMess();
+}
+void GemOutput :: resetMessCallback(void *data)
+{
+  GetMyClass(data)->resetValues();
 }
 
 void GemOutput :: colorMessCallback(void *data, t_symbol*, int argc, t_atom*argv){
@@ -574,5 +580,3 @@ void GemOutput :: viewMessCallback(void *data, t_symbol *, int argc, t_atom *arg
     // note :: LATER set the StereoView ...
   }
 }
-
-
