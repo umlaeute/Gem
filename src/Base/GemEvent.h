@@ -23,7 +23,7 @@ LOG
 // Mouse motion callback
 //
 //////////////////////////////////////////////////////////////////
-typedef void (*MOTION_CB)(int, int, void *);
+typedef void (*MOTION_CB)(int, int, int, int, void *);
 //////////
 // Set a mouse motion callback
 GEM_EXTERN extern void setMotionCallback(MOTION_CB callback, void *data);
@@ -143,7 +143,7 @@ GEM_EXTERN extern void removeResizeCallback(RESIZE_CB callback, void *data);
 
 //////////
 // Trigger an event
-GEM_EXTERN extern void triggerMotionEvent(int x, int y);
+GEM_EXTERN extern void triggerMotionEvent(int x, int y, int w, int h);
 GEM_EXTERN extern void triggerButtonEvent(int which, int state, int x, int y);
 GEM_EXTERN extern void triggerWheelEvent(int axis, int value);
 GEM_EXTERN extern void triggerTabletMotionEvent(int x, int y, float pressure);

@@ -50,7 +50,7 @@ class GEM_EXTERN gemmouse : public CPPExtern
 
         //////////
         // mouse motion
-        void            mouseMotion(int x, int y);
+        void            mouseMotion(int x, int y, int width, int height);
 
         //////////
         // mouse button
@@ -94,7 +94,7 @@ class GEM_EXTERN gemmouse : public CPPExtern
 
         //////////
         // Static member functions
-        static void     mouseMotionCallback(int x, int y, void *data);
+        static void     mouseMotionCallback(int x, int y, int w, int h, void *data);
         static void     mouseButtonCallback(int which, int state, int x, int y, void *data);
         static void	mouseWheelCallback(int axis, int value, void *data);
 };

@@ -81,10 +81,10 @@ gemmouse :: ~gemmouse()
 // mouseMotion
 //
 /////////////////////////////////////////////////////////
-void gemmouse :: mouseMotion(int x, int y)
+void gemmouse :: mouseMotion(int x, int y, int width, int height)
 {
-  t_float scalex = (m_scaleX==0.f)?1:m_scaleX/GemMan::m_w;
-  t_float scaley = (m_doY)?((m_scaleY==0.f)?1:m_scaleY/GemMan::m_h):scalex;
+  t_float scalex = (m_scaleX==0.f)?1.f:m_scaleX/width;
+  t_float scaley = (m_doY)?((m_scaleY==0.f)?1.f:m_scaleY/height):scalex;
 
   outlet_float(m_outYPos, (t_float)(y*scaley));
   outlet_float(m_outXPos, (t_float)(x*scalex));
@@ -117,9 +117,9 @@ void gemmouse :: mouseWheel(int axis, int value)
 /////////////////////////////////////////////////////////
 void gemmouse :: obj_setupCallback(t_class *)
 { }
-void gemmouse :: mouseMotionCallback(int x, int y, void *data)
+void gemmouse :: mouseMotionCallback(int x, int y, int w, int h, void *data)
 {
-    ((gemmouse *)data)->mouseMotion(x, y);
+  ((gemmouse *)data)->mouseMotion(x, y, w, h);
 }
 void gemmouse :: mouseButtonCallback(int which, int state, int x, int y, void *data)
 {

@@ -422,13 +422,13 @@ GEM_EXTERN void removeResizeCallback(RESIZE_CB callback, void *data)
 // Trigger events
 //
 /////////////////////////////////////////////////////////
-GEM_EXTERN void triggerMotionEvent(int x, int y)
+GEM_EXTERN void triggerMotionEvent(int x, int y, int w, int h)
 {
     CallbackList *theList = s_motionList;
     while(theList)
     {
         MOTION_CB callback = (MOTION_CB)theList->func;
-        (*callback)(x, y, theList->data);
+        (*callback)(x, y, w, h, theList->data);
         theList = theList->next;
     }
 }
