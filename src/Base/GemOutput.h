@@ -85,37 +85,37 @@ class GEM_EXTERN GemOutput : public CPPExtern
 
 
   int m_buffer; // buffer mode (single or double)
-  void bufferMess(int buffer);
+  virtual void bufferMess(int buffer);
 
 
   /* the viewpoint */
   float	m_perspect[6]; // values for the perspective matrix
-  void	perspectiveMess(t_float, t_float, t_float, t_float, t_float, t_float);
+  virtual void	perspectiveMess(t_float, t_float, t_float, t_float, t_float, t_float);
 
   float	m_lookat[9];	  // values for the lookat matrix
-  void	viewMess(t_float, t_float, t_float, t_float, t_float, t_float, t_float, t_float, t_float);
+  virtual void	viewMess(t_float, t_float, t_float, t_float, t_float, t_float, t_float, t_float, t_float);
 
   /* the overall material */
   GLfloat m_clear_color[4];	// the frame buffer clear
-  void 	  colorMess(t_float red, t_float green, t_float blue, t_float alpha);
+  virtual void 	  colorMess(t_float red, t_float green, t_float blue, t_float alpha);
 
   GLbitfield m_clear_mask;	// the clear bitmask
-  void 	     clearmaskMess(t_float bitmask);
+  virtual void 	     clearmaskMess(t_float bitmask);
 
   GLfloat m_mat_ambient[4];	// default ambient material
-  void 	  ambientMess(t_float red, t_float green, t_float blue, t_float alpha);
+  virtual void 	  ambientMess(t_float red, t_float green, t_float blue, t_float alpha);
 
   GLfloat m_mat_specular[4];	// default specular material
-  void 	  specularMess(t_float red, t_float green, t_float blue, t_float alpha);
+  virtual void 	  specularMess(t_float red, t_float green, t_float blue, t_float alpha);
 
   GLfloat m_mat_shininess;	// default shininess material
-  void 	  shininessMess(t_float val);
+  virtual void 	  shininessMess(t_float val);
 
   /* fog */ 
-  void  fogDensityMess(t_float density);
-  void  fogRangeMess(t_float start, t_float stop);
-  void 	fogColorMess(t_float red, t_float green, t_float blue, t_float alpha);
-  void	fogModeMess(int val);
+  virtual void  fogDensityMess(t_float density);
+  virtual void  fogRangeMess(t_float start, t_float stop);
+  virtual void 	fogColorMess(t_float red, t_float green, t_float blue, t_float alpha);
+  virtual void	fogModeMess(int val);
 
   float	   m_fog;		// fog density
   enum FOG_TYPE { FOG_OFF = 0, FOG_LINEAR, FOG_EXP, FOG_EXP2 };
@@ -124,7 +124,7 @@ class GEM_EXTERN GemOutput : public CPPExtern
   float	   m_fogStart;		// start of the linear fog
   float	   m_fogEnd;		// start of the linear fog
 
-  void	   lightMess(int val);
+  virtual  void	   lightMess(int val);
   bool     m_lightState;
 
 
