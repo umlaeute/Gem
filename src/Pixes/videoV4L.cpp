@@ -126,9 +126,6 @@ pixBlock *videoV4L :: getFrame(){
   //  post("getting frame %d", m_frame_ready);
   if (!m_frame_ready) m_image.newimage = 0;
   else {
-#if 0
-    m_image.image.data=videobuf + vmbuf.offsets[last_frame];
-#else
     if (m_colorConvert){
       switch(m_gotFormat){
       case VIDEO_PALETTE_YUV420P: m_image.image.fromYUV420P(videobuf + vmbuf.offsets[last_frame]); break;
@@ -145,8 +142,8 @@ pixBlock *videoV4L :: getFrame(){
       m_image.image.data=videobuf + vmbuf.offsets[last_frame];
       m_image.image.notowned = true;
     }
-#endif
     m_image.newimage = 1;
+    m_image.image.upsidedown=true;
     m_frame_ready = false;
   }
   return &m_image;
