@@ -65,6 +65,9 @@ class GEM_EXTERN pix_filmDarwinYUV : public pix_filmYUV
   Movie			m_movie;
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
+  Track			m_movieTrack;
+  Media			m_movieMedia;
+  int			m_timeScale;
 
   //-----------------------------------
   // GROUP:	Texturing

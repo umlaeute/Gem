@@ -62,14 +62,12 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
-  Movie			m_movie;
-  //TimeValue		m_movieTime;
-  //Rect			m_srcRect;  
+  Movie			m_movie; 
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
-  //PixMapHandle		m_pixMap;
-  //Ptr			m_baseAddr;
-  //long			m_rowBytes;
+  Track			m_movieTrack;
+  Media			m_movieMedia;
+  int			m_timeScale;
 
   //-----------------------------------
   // GROUP:	Texturing

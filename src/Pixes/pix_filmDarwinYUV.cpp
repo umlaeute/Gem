@@ -127,32 +127,47 @@ void pix_filmDarwinYUV :: realOpen(char *filename)
 	m_reqFrame = 0;
 	m_curFrame = -1;
         m_numTracks = (int)GetMovieTrackCount(m_movie);
+        //GetMovieTrack(m_movie, trackID);
+        //m_media = GetTrackMedia( trackID );
         post("GEM: pix_filmdarwinYUV:  m_numTracks = %d",m_numTracks);
 
 	// Get the length of the movie
-        post("duration = %d timescale = %d timebase = %d\n",(long)GetMovieDuration(m_movie),
-                                            (long)GetMovieTimeScale(m_movie),
+        long	movieDur, movieScale, mediaDur, mediaScale;
+        movieDur = (long)GetMovieDuration(m_movie);
+        movieScale = (long)GetMovieTimeScale(m_movie);
+        
+        post("Movie duration = %d timescale = %d timebase = %d",movieDur,
+                                            movieScale,
                                             (long)GetMovieTimeBase(m_movie));
                                             
-	OSType		whichMediaType = VIDEO_TYPE;
+	OSType		whichMediaType = VisualMediaCharacteristic;
+        // we want to begin with the first frame (sample) in the track
 	short		flags = nextTimeMediaSample + nextTimeEdgeOK;
 	TimeValue	duration;
 	TimeValue	theTime = 0;
-	
+        
+	m_movieTrack = GetMovieIndTrack( m_movie, 1);
+        m_movieMedia = GetTrackMedia( m_movieTrack );
+        mediaDur = (long)GetMediaDuration(m_movieMedia);
+        mediaScale = (long)GetMediaTimeScale(m_movieMedia);
+        post("Media duration = %d timescale = %d", mediaDur, mediaScale);
+        m_timeScale = mediaScale/movieScale;
+        
 	m_numFrames = -1;
 	while (theTime >= 0) {
 		m_numFrames++;
-		::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                            1,
-                                            &whichMediaType,
-                                            theTime,
-                                            0,
-                                            &theTime,
-                                            &duration);
+                GetMovieNextInterestingTime( m_movie,
+                                                flags,
+                                                1,
+                                                &whichMediaType,
+                                                theTime,
+                                                0,
+                                                &theTime,
+                                                &duration);
+                //GetTrackNextInterestingTime(m_movieTrack, flags, theTime, fixed1, &theTime, NULL);
 		// after the first interesting time, don't include the time we
 		//  are currently at.
-		flags = nextTimeMediaSample;
+		flags = nextTimeStep;
 	}
 
 	// Get the bounds for the movie
@@ -204,9 +219,9 @@ void pix_filmDarwinYUV :: getFrame()
     CGrafPtr	 	savedPort;
     GDHandle     	savedDevice;
     Rect		m_srcRect;
-//    TimeValue		m_movieTime;
     PixMapHandle	m_pixMap;
-    Ptr		m_baseAddr;
+    Ptr			m_baseAddr;
+    TimeValue		mFrame;
     
     ::GetGWorld(&savedPort, &savedDevice);
     ::SetGWorld(m_srcGWorld, NULL);
@@ -218,9 +233,9 @@ void pix_filmDarwinYUV :: getFrame()
     int num;
 
     // get the next frame of the source movie
-    short 	flags = nextTimeMediaSample;
-    OSType	whichMediaType = VIDEO_TYPE;
-     TimeValue duration;
+    short 	flags = nextTimeStep; //nextTimeMediaSample;
+    OSType	whichMediaType = VisualMediaCharacteristic;
+    TimeValue	duration;
     if (m_reqFrame > m_curFrame) {
         num = m_reqFrame - m_curFrame;
     } else {
@@ -241,22 +256,24 @@ void pix_filmDarwinYUV :: getFrame()
     if (m_curFrame == 0) flags |= nextTimeEdgeOK;
 
 if (m_auto) {
-        ::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                                1,
-                                &whichMediaType,
-                                    m_movieTime,
-                                                0,
-                                    &m_movieTime,
-                                           // NULL);
-                                           &duration);
-                                            
+        ::GetMovieNextInterestingTime(	m_movie,
+                                        flags,
+                                        1,
+                                    &whichMediaType,
+                                        m_movieTime,
+                                        0,
+                                        &m_movieTime,
+                                        // NULL);
+                                        &duration);
+        flags = 0;
+        flags = nextTimeStep;
                                             
         }else{
-        
-        for (int i=0; i<num; i++) {
-    // skip to the next interesting time and get the duration for that frame
-        ::GetMovieNextInterestingTime(m_movie,
+            SampleNumToMediaTime( m_movieMedia, m_reqFrame, &mFrame, NULL);
+            m_movieTime = mFrame/m_timeScale;
+            /*for (int i=0; i<num; i++) {
+                // skip to the next interesting time and get the duration for that frame
+                ::GetMovieNextInterestingTime(m_movie,
                                             flags,
                                                 1,
                                 &whichMediaType,
@@ -265,11 +282,10 @@ if (m_auto) {
                                     &m_movieTime,
                                            // NULL);
                                            &duration);
-                                            
-                                            
+                flags = NULL;
+                flags = nextTimeStep;                             
+            } */
         }
-        }
-
        
     // set the time for the frame and give time to the movie toolbox	
     ::SetMovieTimeValue(m_movie, m_movieTime); 
