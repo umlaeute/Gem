@@ -380,6 +380,8 @@ void _pCallActionList(ParticleAction *apa, int num_actions,
 		case PAVortexID:
 			((PAVortex *)pa)->Execute(pg);
 			break;
+		default:
+			break;
 		}
 	}
 }
