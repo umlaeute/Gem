@@ -4,20 +4,21 @@ Build instructions for GEM Linux
 Prerequisites for compiling GEM (version >=0.87):
 
 Mesa       http://mesa3d.sourceforge.net
-GLUT       http://reality.sgi.com/mjk_asd/glut3/glut-3.6.tar.gz
+GLUT       ftp://ftp.sgi.com/sgi/opengl/glut/
 tiff       ftp://ftp.sgi.com/graphics/tiff/tiff-v3.4beta037-tar.gz
 freetype   ftp://ftp.physiol.med.tu-muenchen.de/pub/freetype/
-gltt       http://home.worldnet.fr/~rehel/gltt/gltt.html
-jpeg       ftp://ftp.uu.net:graphics/jpeg/
+gltt       http://gltt.sourceforge.net/
+jpeg       ftp://ftp.uu.net/graphics/jpeg/
 
 To enable movie-loading you might want to install one (or all) of the following:
-quicktime4linux	http://heroine.linuxave.net/quicktime.html
+quicktime4linux	http://heroinewarrior.com/quicktime.php3
 MPEG		ftp://ftp.bic.mni.mcgill.ca/pub/mpeg/mpeg_lib-1.3.1.tar.gz
-mpeg3		http://heroines.sourceforge.net/libmpeg3-1.3.tar.gz
+mpeg3		http://heroinewarrior.com/libmpeg3.php3
 
 note: sorry to say, but heroine doesn't seem to support neither quicktime4linux nor mpeg3 any more.
 try to find a developer-package for your distribution.
 
+Debian-users:
 On a Debian system (most of) these library are already in your distribution.
 Some packages, that are not in the official Debian-release (esp. libmpeg3(-dev)), can be found at
 http://marillat.free.fr
@@ -25,17 +26,23 @@ you might have to put a line like
 deb http://marillat.free.fr/ stable main
 into your /etc/apt/sources.list
 
-For other distributions you may have a look which ones are there
-and download and install the other ones.
+RedHat-users:
+at least Mesa and Glut should come with your distribution (either they are already installed, or you have to install the RPM's from the CD/DVD/whatever.
+
+For other distributions you may have a look which ones are there and download and install the other ones.
 
 Try using http://rpmfind.net for rpm-packages.
 
+================================
 Some libraries which are not that common are distributed with this
 package. You have to build them first with the 
 
 #> ./makeauxlibs
 
 command in the src/Gnu directory. 
+
+Be sure that your GemLibs source-directory is /where/your/sources/GemLibs
+while the Gem source-directory is /where/your/sources/Gem (or /where/your/sources/gem-X.YY)
 
 If this suceeds, the next step is 
 
@@ -45,24 +52,44 @@ followed by a
 
 #> make
 
-This should build Gem.pd_linux in the gem root directory.
+This should build Gem.pd_linux in the Gem root directory.
 
 The configure script tries to figure out several things. An important one is 
 the location of the pd header file "m_pd.h".
 
-You can put m_pd.h into any place within gem (suggested is the src/Base 
-directory), or have your pd source tree reside beside the gem source tree. 
-Take care that there is only one m_pd.h there, otherwise it is possible that 
-the script finds the wrong one.
-(having two different pd versions in the same directory may cause this problem).
+"m_pd.h" (and other not-so-often-found files) are searched by the configure-process. If there are multiple files (eg: because you have multiple pd-sources installed in your home-dir), the newest one should be taken (i hope so)
+
+------------------------------
+CONFIGURE
+~~~~~~~~~
+!! you really should remove any existing config.cache from the src/Gnu directory when running ./configure for the "first" time !!
+you can give various options to configure, try "./configure --help" to see them.
+
+important options:
+
+--libdir: 	which directories are searched for libraries needed to compile Gem. 
+		defaults to "../../../GemLibs:/usr/local:/usr/lib"
+		(yes: you can give multiple dirs by using ":" as separator
+
+--includedir: 	which directories are searched for header-files needed to compile Gem.
+		defaults to "/usr/include:/usr/local/include:../../../GemLibs"
+
+if you use the options above, be sure to include all directories
+
+--with-mpeg (--without-mpeg)	: force the (not-)usage of the mpeg-lib.
+--with-mpeg3 (--without-mpeg3)	: force the (not-)usage of the mpeg3-lib.
+--with-quickitme (--without-quicktime): force the (not-)usage of the quicktime4linux-lib.
 
 
+if neither --with-* nor --without-* is given, configure tries to autodetect, whether these libraries are installed.
+
+-------------------------------
 To test Gem (you need to have pd installed) 
 
-#> cd ../..
 #> pd -lib Gem
 
 
+==================================1
 Other:
 
 "make distclean" removes all traces from a build.
@@ -70,7 +97,6 @@ Other:
 "make depend" creates a dependency file
 
 "makeauxlibs clean" cleans up the auxilliary libraries
-
 
 -----------------------------------------------------------------
 Advanced:
@@ -94,7 +120,3 @@ of Gem without adding the additional objects).
 Report any failures to <zmoelnig@iem.kug.ac.at>
 
 IOhannes
-
-
-
-
