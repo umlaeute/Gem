@@ -19,12 +19,17 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Pixes/film.h"
 
 #if defined (_WINDOWS) & defined (HAVE_LIBAVIPLAY)
+   // un windows there are other ways...
 #undef HAVE_LIBAVIPLAY
 #endif
 
 #ifdef HAVE_LIBAVIPLAY
-#include <avifile/avifile.h>
-#include <avifile/StreamInfo.h>
+   /* this used to be <avifile/avifile.h> 
+    * but on my system it changed to <avifile-0.7/avifile.h>
+    * so we now find the correct path via "configure"
+    */
+#include "avifile.h"
+#include "StreamInfo.h"
 
    // some version checking...
 #ifndef IMG_FMT_RGB24

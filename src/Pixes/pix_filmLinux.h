@@ -29,8 +29,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #endif // MPEG
 #endif // MPEG3
 #ifdef HAVE_LIBAVIPLAY
-#include <avifile/avifile.h>
-#include <avifile/StreamInfo.h>
+#include <avifile.h>
+#include <StreamInfo.h>
 #ifndef IMG_FMT_RGB24
 #undef HAVE_LIBAVIPLAY
 #endif // IMG_FMT_RGB24
