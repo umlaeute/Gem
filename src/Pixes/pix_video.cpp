@@ -39,7 +39,10 @@
     channel to 255.
 
 */
-    
+#if !defined(__APPLE__) && !defined(__linux__) && !defined(NT)
+# define NO_AUTO_REGISTER_CLASS
+#endif
+
 #include "pix_video.h"
 #include "Base/GemCache.h"
 
