@@ -30,29 +30,19 @@ m_direction = 1;
 //
 /////////////////////////////////////////////////////////
 yuv_chroma_key :: ~yuv_chroma_key()
-{
-
-}
-
-/////////////////////////////////////////////////////////
-// processImage
-//
-/////////////////////////////////////////////////////////
-void yuv_chroma_key :: processDualImage(imageStruct &image, imageStruct &right)
-{
-    post("yuv_chroma_key: no RGB support :-P");
-}
-
+{}
 
 /////////////////////////////////////////////////////////
 // do the YUV processing here
 //
 /////////////////////////////////////////////////////////
-void yuv_chroma_key :: processDualYUV(imageStruct &image, imageStruct &right)
+void yuv_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
    long src,h,w;
    unsigned char Uhi,Ulo,Vhi,Vlo,Yhi,Ylo;
    src =0;
+
+   post("yuv_chroma_key: %x %x \t %x %x", image, right, image.data, right.data);
 
    Yhi = clamp(m_Yvalue + m_Yrange); 
    Ylo = clamp(m_Yvalue - m_Yrange);
@@ -100,17 +90,6 @@ void yuv_chroma_key :: processDualYUV(imageStruct &image, imageStruct &right)
         
     }
 }
-
-void yuv_chroma_key ::	processRightYUV(imageStruct &image, imageStruct &right)
-{
-post("yuv_chroma_key: processRightYUV");
-}
-        
-void yuv_chroma_key ::	processLeftYUV(imageStruct &image, imageStruct &right)
-{
-post("yuv_chroma_key: processLeftYUV");
-}
-
 
 /////////////////////////////////////////////////////////
 // static member function

@@ -11,7 +11,8 @@
 #ifndef INCLUDE_YUV_CHROMA_KEY_H_ 
 #define INCLUDE_YUV_CHROMA_KEY_H_ 
 
-#include "yuv_dual.h"
+//#include "yuv_dual.h"
+#include "Base/GemPixDualObj.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -30,9 +31,9 @@ DESCRIPTION
    
 -----------------------------------------------------------------*/
 
-class GEM_EXTERN yuv_chroma_key : public yuv_dual
+class GEM_EXTERN yuv_chroma_key : public GemPixDualObj //yuv_dual
 {
-CPPEXTERN_HEADER(yuv_chroma_key, yuv_dual)
+  CPPEXTERN_HEADER(yuv_chroma_key, GemPixDualObj)//yuv_dual)
 
     public:
 
@@ -46,19 +47,9 @@ CPPEXTERN_HEADER(yuv_chroma_key, yuv_dual)
     	// Destructor
     	virtual ~yuv_chroma_key();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processDualImage(imageStruct &image, imageStruct &right);
-    	
         //////////
     	// Do the YUV processing
-    	virtual void 	processDualYUV(imageStruct &image, imageStruct &right);
-        
-        virtual void 	processRightYUV(imageStruct &image, imageStruct &right);
-        
-        virtual void 	processLeftYUV(imageStruct &image, imageStruct &right);
-        
-
+    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
         
         int m_direction;
         unsigned char m_Yrange,m_Urange,m_Vrange,m_Yvalue,m_Uvalue,m_Vvalue;

@@ -45,10 +45,6 @@ CPPEXTERN_HEADER(yuv_emboss, GemPixObj)
     	// Destructor
     	virtual ~yuv_emboss();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
-    	
         //////////
     	// Do the YUV processing
     	virtual void 	processYUVImage(imageStruct &image);

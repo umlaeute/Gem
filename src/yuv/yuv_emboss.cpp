@@ -21,7 +21,6 @@ CPPEXTERN_NEW(yuv_emboss)
 /////////////////////////////////////////////////////////
 yuv_emboss :: yuv_emboss()
 {
-m_processOnOff=0;
 }
 
 /////////////////////////////////////////////////////////
@@ -29,19 +28,7 @@ m_processOnOff=0;
 //
 /////////////////////////////////////////////////////////
 yuv_emboss :: ~yuv_emboss()
-{
-
-}
-
-/////////////////////////////////////////////////////////
-// processImage
-//
-/////////////////////////////////////////////////////////
-void yuv_emboss :: processImage(imageStruct &image)
-{
-
-}
-
+{}
 
 /////////////////////////////////////////////////////////
 // do the YUV processing here
@@ -87,9 +74,9 @@ void yuv_emboss :: processYUVImage(imageStruct &image)
                                       src+=2;
 		}
 	}*/
-//post("yuv_emboss: chars:%d",src);
-//post("yuv_emboss: r:%d",r);
-//post("yuv_emboss: c:%d",c);
+   //post("yuv_emboss: chars:%d",src);
+   //post("yuv_emboss: r:%d",r);
+   //post("yuv_emboss: c:%d",c);
 }
 
 /////////////////////////////////////////////////////////

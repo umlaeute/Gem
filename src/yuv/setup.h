@@ -39,6 +39,9 @@ extern "C" {
 
 
    void yuv_setup() {
+     yuv_emboss_setup();
+     yuv_chroma_key_setup();
+     yuv_invert_setup();
 #ifdef YUV
       yuv_add_setup();
       yuv_adjust_setup();
