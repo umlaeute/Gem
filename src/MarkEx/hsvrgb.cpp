@@ -118,6 +118,8 @@ void rgb2hsv_setup()
 {
 	rgb2hsv_class = class_new(gensym("rgb2hsv"), (t_newmethod)rgb2hsv_new, 0,
     	    	    	sizeof(t_rgb2hsv), CLASS_DEFAULT, A_NULL);
+	class_sethelpsymbol(rgb2hsv_class, gensym("Gem/hsv2rgb"));
+
 //    class_addmethod(rgb2hsv_class, (t_method)rgb2hsv_float, &s_list, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 	class_addlist(rgb2hsv_class, (t_method)rgb2hsv_list);
 }
@@ -224,6 +226,7 @@ void hsv2rgb_setup()
 {
 	hsv2rgb_class = class_new(gensym("hsv2rgb"), (t_newmethod)hsv2rgb_new, 0,
     	    	    	sizeof(t_hsv2rgb), CLASS_DEFAULT, A_NULL);
+	class_sethelpsymbol(hsv2rgb_class, gensym("Gem/hsv2rgb"));
 //    class_addmethod(hsv2rgb_class, (t_method)hsv2rgb_float, &s_list, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 	class_addlist(hsv2rgb_class, (t_method)hsv2rgb_list);
 }
