@@ -26,6 +26,50 @@
 #include <string.h>
 #include <ctype.h>
 
+GEM_EXTERN unsigned char* imageStruct::allocate(int size) 
+{
+    if (pdata&&!notowned){
+		delete [] pdata;
+	}
+#if 1
+    pdata = new unsigned char[size+31];
+    data = (unsigned char*) ((((unsigned int)pdata)+31)& (~31));
+#else
+    data = pdata =  new unsigned char [size];
+#endif
+    datasize=size;
+    notowned=0;
+    return data; 
+}
+
+GEM_EXTERN unsigned char* imageStruct::allocate() 
+{
+	return allocate(xsize*ysize*csize);  
+}
+
+GEM_EXTERN unsigned char* imageStruct::reallocate(int size)
+{
+  if (size>datasize){
+      return allocate(size);
+  }
+    return data;
+}
+GEM_EXTERN unsigned char* imageStruct::reallocate() 
+{  
+	return reallocate(xsize*ysize*csize);  
+}
+ 
+GEM_EXTERN void imageStruct::clear() 
+{
+    if (!notowned && pdata) {
+      delete [] pdata;
+      data = pdata = 0;      
+    }
+    xsize = ysize = csize = 0;
+    datasize=0;
+}
+
+
 GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
     if (!to || !this || !this->data) {
       error("GEM: Someone sent a bogus pointer to copy2Image");

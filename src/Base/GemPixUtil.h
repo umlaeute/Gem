@@ -116,37 +116,15 @@ struct GEM_EXTERN imageStruct
   void info();
   //////////
   // columns
-  unsigned char* allocate(int size) {
-    if (pdata&&!notowned)
-      delete [] pdata;
-#if 1
-    pdata = new unsigned char[size+31];
-    data = (unsigned char*) ((((unsigned int)pdata)+31)& (~31));
-#else
-    data = pdata =  new unsigned char [size];
-#endif
-    datasize=size;
-    notowned=0;
-    return data; 
-  }
-  unsigned char* allocate() {  return allocate(xsize*ysize*csize);  }
+  unsigned char* allocate(int size);
+  unsigned char* allocate();
 
   // if we have allocated some space already, only re-allocate when needed.
-  unsigned char* reallocate(int size) {
-    if (size>datasize)
-      return allocate(size);
-    return data;
-  }
-  unsigned char* reallocate() {  return reallocate(xsize*ysize*csize);  }
+  unsigned char* reallocate(int size);
+  unsigned char* reallocate();
  
-  void clear() {
-    if (!notowned && pdata) {
-      delete [] pdata;
-      data = pdata = 0;      
-    }
-    xsize = ysize = csize = 0;
-    datasize=0;
-  }
+  // delete the buffer (if it is ours)
+  void clear();
 
 
   //////////
