@@ -75,7 +75,7 @@ void pix_2grey :: processRGBAltivec(imageStruct &image)
   }shortBuffer;
   
   vector unsigned char 	factors;
-  vector unsigned short	oddS, evenS, one,lo,hi,lo1,hi1,mask;
+  vector unsigned short	oddS, evenS, one,lo,hi,lo1,hi1;
   vector unsigned int	R, G, B, A,shift,grey;
   vector unsigned char *pixels = (vector unsigned char *)image.data;
   int count = image.ysize * image.xsize / 4;
