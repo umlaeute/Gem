@@ -1,0 +1,12 @@
+#N canvas 82 352 510 304 10;
+#X text 25 13 pix_motionblur this object applies a very simple and
+fast motion blur to an image stream. the method used involves blending
+the current image with a 'history' image and saving the result back
+to the 'history'. the blending is the same as pix_mix output = (stream
+* gain) + (history * 1 - gain) applying a higher blur factor will mix
+in more of the history image and thus more of the history will be saved
+resulting in heavier blurring.;
+#X obj 39 262 pix_motionblur;
+#X floatatom 132 221 5 0 0 0 - - -;
+#X text 178 221 blur amount range is from 0 to 1;
+#X connect 2 0 1 1;
