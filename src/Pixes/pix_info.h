@@ -64,7 +64,11 @@ class GEM_EXTERN pix_info : public GemBase
 
         //////////
         // The color outlet
-        t_outlet    	*m_x, *m_y, *m_c, *m_data, *m_format;
+        t_outlet    	*m_x, *m_y, *m_c; // xsize; ysize; csize
+	t_outlet        *m_format;        // format
+	t_outlet        *m_misc;          // type, upsidedown, notowned
+	t_outlet        *m_pixblock;      // newimage, newfilm
+	t_outlet        *m_data;          // data
 };
 
 #endif	// for header file
