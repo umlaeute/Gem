@@ -80,15 +80,15 @@ class GEM_EXTERN model : public GemBase
     	//////////
     	virtual void	startRendering();
 
+    	//////////
+	GLMmodel       *m_model;
+    	GLint	    	m_dispList;
+        
 	//////////
 	// Should we rescale the model when loaded
 	// Default is yes
 	int		m_rescaleModel;
-
-    	//////////
-    	GLint	    	m_dispList;
-	GLMmodel       *m_model;
-
+        
 	GLfloat         m_smooth;
 	int             m_material;
 
