@@ -163,7 +163,6 @@ void pix_biquad :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_biquad :: obj_setupCallback(t_class *classPtr)
 {
-  //class_addcreator((t_newmethod)_classtv_biquad, gensym("pix_biquad"), A_NULL);
 
   class_addmethod(classPtr, (t_method)&pix_biquad::setMessCallback,
 		  gensym("set"), A_NULL);

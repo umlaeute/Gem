@@ -10,7 +10,7 @@ GEM - Graphics Environment for Multimedia
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
-tv_rtx
+pix_rtx
 
   rtx-transform a series of pictures (especially movies, videos,...)
   you have to use pix_film instead of pix_movie to make this work with prerecorded videos

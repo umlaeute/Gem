@@ -139,7 +139,6 @@ void pix_movement :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_movement :: obj_setupCallback(t_class *classPtr)
 {
-  //class_addcreator((t_newmethod)_classtv_movement, gensym("pix_movement"), A_NULL);
 
   class_addmethod(classPtr, (t_method)&pix_movement::treshMessCallback,
 		  gensym("tresh"), A_FLOAT, A_NULL);

@@ -192,16 +192,12 @@ void pix_rtx :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rtx :: obj_setupCallback(t_class *classPtr)
 {
-  //class_addcreator((t_newmethod)_classpix_rtx, gensym("pix_rtx"), A_NULL);
-
-
 	class_addmethod(classPtr, (t_method)&pix_rtx::modeMessCallback,
  					  gensym("mode"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, (t_method)&pix_rtx::clearMessCallback,
  					  gensym("clear"), A_NULL);
 	class_addmethod(classPtr, (t_method)&pix_rtx::setMessCallback,
  					  gensym("set"), A_NULL);
-
 }
 void pix_rtx :: modeMessCallback(void *data, t_floatarg newmode)
 {
