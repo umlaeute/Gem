@@ -26,7 +26,7 @@
 //
 /////////////////////////////////////////////////////////
 GemShape :: GemShape(t_floatarg size)
-  : m_linewidth(1.0f), m_size((float)size), m_inlet(NULL), m_drawType(-1)
+  : m_linewidth(1.0f), m_size((float)size), m_inlet(NULL), m_drawType(GL_DEFAULT_GEM)
 {
   if (m_size == 0.f)m_size = 1.f;
 
@@ -89,7 +89,7 @@ void GemShape :: typeMess(t_symbol *type)
   char c=toupper(*type->s_name);
   switch (c){
   case 'D': // default
-    m_drawType = -1;
+    m_drawType = GL_DEFAULT_GEM;
     break;
   case 'L': // line
     m_drawType = GL_LINE_LOOP;
