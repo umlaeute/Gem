@@ -63,9 +63,6 @@ protected:
 	virtual void 	processImage(imageStruct &image);
 	
 	//////////
-	virtual void 	processGrayImage(imageStruct &image)	{}
-        
-	//////////
 	virtual void 	processYUVImage(imageStruct &image);
 	
 	//////////

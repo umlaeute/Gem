@@ -148,59 +148,68 @@ void pix_dump :: trigger()
   unsigned char *data, *line;
 
   data = line = m_data;
- if (m_csize == 4){
-  while (n < m_ysize) {
-    while (m < m_xsize) {
-      float r, g, b, a;
-      r = (float)data[chRed] / 255.f;
-      SETFLOAT(&m_buffer[i], r);
-      i++;
-      g = (float)data[chGreen] / 255.f;
-      SETFLOAT(&m_buffer[i], g);
-      i++;
-      b = (float)data[chBlue] / 255.f;
-      SETFLOAT(&m_buffer[i], b);
-      i++;
-      a = (float)data[chAlpha] / 255.f;
-      SETFLOAT(&m_buffer[i], a);
-      i++;
-      m++;
-      data = line + (int)(m_xstep * (float)m);
+  switch(m_csize){
+  case 4:
+    while (n < m_ysize) {
+      while (m < m_xsize) {
+	float r, g, b, a;
+	r = (float)data[chRed] / 255.f;
+	SETFLOAT(&m_buffer[i], r);
+	i++;
+	g = (float)data[chGreen] / 255.f;
+	SETFLOAT(&m_buffer[i], g);
+	i++;
+	b = (float)data[chBlue] / 255.f;
+	SETFLOAT(&m_buffer[i], b);
+	i++;
+	a = (float)data[chAlpha] / 255.f;
+	SETFLOAT(&m_buffer[i], a);
+	i++;
+	m++;
+	data = line + (int)(m_xstep * (float)m);
+      }
+      m = 0;
+      n++;
+      line = m_data + (int)(m_ystep*n);
+      data = line;
     }
-    m = 0;
-    n++;
-    line = m_data + (int)(m_ystep*n);
-    data = line;
-  }
-  }else{
-  if (m_csize == 2){
-  while (n < m_ysize) {
-    while (m < m_xsize/2) {
-      float y,u,y1,v;
-      u = (float)data[0] / 255.f;
-      SETFLOAT(&m_buffer[i], u);
-      i++;
-      y = (float)data[1] / 255.f;
-      SETFLOAT(&m_buffer[i], y);
-      i++;
-      v = (float)data[2] / 255.f;
-      SETFLOAT(&m_buffer[i], v);
-      i++;
-      y1 = (float)data[3] / 255.f;
-      SETFLOAT(&m_buffer[i], y1);
-      i++;
-      m++;
-      data = line + (int)(m_xstep * (float)m);
+    break;
+  case 2:
+    while (n < m_ysize) {
+      while (m < m_xsize/2) {
+	float y,u,y1,v;
+	u = (float)data[0] / 255.f;
+	SETFLOAT(&m_buffer[i], u);
+	i++;
+	y = (float)data[1] / 255.f;
+	SETFLOAT(&m_buffer[i], y);
+	i++;
+	v = (float)data[2] / 255.f;
+	SETFLOAT(&m_buffer[i], v);
+	i++;
+	y1 = (float)data[3] / 255.f;
+	SETFLOAT(&m_buffer[i], y1);
+	i++;
+	m++;
+	data = line + (int)(m_xstep * (float)m);
+      }
+      m = 0;
+      n++;
+      line = m_data + (int)(m_ystep*n);
+      data = line;
     }
-    m = 0;
-    n++;
-    line = m_data + (int)(m_ystep*n);
-    data = line;
+  case 1:  default:
+    int datasize=m_xsize*m_ysize*m_csize/4;
+      while (datasize--) {
+	float v;
+	v = (float)(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
+	v = (float)(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+1], v);
+	v = (float)(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+2], v);
+	v = (float)(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+3], v);
+	i+=4;
+      }
   }
-}  
-}
   outlet_list(m_dataOut, gensym("list"), i, m_buffer);
-
 }
 
 /////////////////////////////////////////////////////////

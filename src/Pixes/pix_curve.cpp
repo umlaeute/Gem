@@ -189,6 +189,25 @@ void pix_curve :: processRGBAImage(imageStruct &image)
 
 
 }
+/////////////////////////////////////////////////////////
+// processImage
+void pix_curve :: processGrayImage(imageStruct &image)
+{
+  int i=image.xsize*image.ysize;
+  unsigned char *base = image.data;
+  
+  int n;
+  t_float *tab;
+  int val;
+
+  if (!(tab=checkarray(name_R, &n))) return;
+  while (i--) {
+    val = (int)*(tab+(int)((n*base[chGray])>>8));
+    *base++   = CLAMP(val);
+  }
+}
+
+
 
 /////////////////////////////////////////////////////////
 // static member function
