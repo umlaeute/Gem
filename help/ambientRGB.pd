@@ -60,7 +60,7 @@ see any effects.;
 #X floatatom 504 122 3 0 1 0 - - -;
 #X floatatom 531 122 3 0 1 0 - - -;
 #X floatatom 558 122 3 0 1 0 - - -;
-#X floatatom 548 193 5 0 0 0 - - -;
+#X floatatom 548 192 5 0 0 0 - - -;
 #X obj 500 211 rotate 70 1 0 0;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
