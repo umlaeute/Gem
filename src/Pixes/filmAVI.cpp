@@ -91,8 +91,8 @@ bool filmAVI :: open(char *filename, int format)
   m_image.image.format=GL_BGR_EXT;
   m_image.image.reallocate();
   return true;
-#endif
  unsupported:
+#endif
   post("AVI: unsupported!");
   close();
   return false;

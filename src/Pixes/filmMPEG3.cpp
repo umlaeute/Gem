@@ -129,7 +129,9 @@ pixBlock* filmMPEG3 :: getFrame(){
   m_image.image.reallocate(datasize);
 
   i=m_image.image.ysize;
-  unsigned char *rows[m_image.image.ysize];
+  //  unsigned char *rows[m_image.image.ysize];
+  unsigned char **rows = new unsigned char* [m_image.image.ysize];
+
   unsigned char **dummy=rows;
   while(i--)*dummy++=(unsigned char *)(m_image.image.data+i*m_image.image.xsize*m_image.image.csize);
   if (mpeg3_read_frame(mpeg_file, rows,
@@ -153,7 +155,7 @@ int filmMPEG3 :: changeImage(int imgNum, int trackNum){
   if (trackNum==-1||trackNum>m_numTracks)trackNum=m_curTrack;
 #ifdef HAVE_LIBMPEG3
   int test;
-  if (test=mpeg3_set_frame(mpeg_file, imgNum, trackNum)) {
+  if ((test=mpeg3_set_frame(mpeg_file, imgNum, trackNum))) {
   }
     m_curFrame=imgNum;
     m_curTrack=trackNum;

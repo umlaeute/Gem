@@ -59,9 +59,9 @@ void filmMPEG1 :: close(void)
 bool filmMPEG1 :: open(char *filename, int format)
 {
   if (format>0)m_wantedFormat=format;
-  int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   if (!(m_streamfile = fopen (filename, "rb")))return false;
 #ifdef HAVE_LIBMPEG
+  int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   switch (wantedFormat){
   case GL_LUMINANCE:
       SetMPEGOption (MPEG_DITHER, GRAY_DITHER);
