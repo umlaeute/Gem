@@ -1451,7 +1451,9 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                                                 NULL, sizeof(EventMouseButton), NULL, &button);                        
                         GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
                                                 NULL, sizeof(HIPoint), NULL, &location);
-                        triggerButtonEvent( button-1, 1, (int)location.x, (int)location.y );
+			// mac-button: 1-Left; 2-Right; 3-Middle
+			// gem-button: 0-Left; 2-Right; 1-Middle
+                        triggerButtonEvent((button==1)?0:((button==2)?2:1), 1, (int)location.x, (int)location.y );
                         GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, 
                                                 NULL, sizeof(UInt32), NULL, &modifiers);
                         result = noErr;
@@ -1462,8 +1464,8 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                                                 NULL, sizeof(EventMouseButton), NULL, &button);
                         GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
                                                 NULL, sizeof(HIPoint), NULL, &location);
-                        triggerButtonEvent( button-1, 0, (int)location.x, (int)location.y );
-                        result = noErr;
+			triggerButtonEvent((button==1)?0:((button==2)?2:1), 1, (int)location.x, (int)location.y );
+                       result = noErr;
                         break;
                         
                     case kEventMouseWheelMoved:
