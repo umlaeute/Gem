@@ -525,11 +525,25 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
     Pete_Kaleidoscope_Init();
     init = 1;
   }
+  pSource = (U32*)image.data;
+  /*  works
+  if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
+    int dataSize = image.xsize * image.ysize * image.csize;
+    myImage.clear();
+
+    myImage.allocate(dataSize);
+  }
+*/
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+
+  myImage.csize = image.csize;
+  myImage.type  = image.type; 
+  //this is perhaps buggy
+  //myImage.setCsizeByFormat(image.format);
   myImage.reallocate();
+
   pOutput = (U32*)myImage.data;
 
   if (m_Divisions<1.0f) {
