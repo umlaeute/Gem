@@ -83,7 +83,7 @@ class GEM_EXTERN GemMan
     	//////////
     	// Just send out one frame (if double buffered, will swap buffers)
     	static void 	    render(void *);
-        
+        static void	    renderChain(gemheadLink *head, GemState *state);
 
     	    	
     	//////////
