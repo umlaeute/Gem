@@ -10,7 +10,6 @@
 
 #include "pix_videoDarwin.h"
 #include "GemCache.h"
-#include <OpenGL/glext.h>
 #include <Carbon/Carbon.h>
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
@@ -388,8 +387,10 @@ void pix_videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
     }else{
         m_vidYSize = 240;
     }
-    
-  post("pix_videoDarwin: height %d width %d",m_vidXSize,m_vidYSize);  
+	stopTransfer();
+    resetSeqGrabber();
+	startTransfer();
+	post("pix_videoDarwin: height %d width %d",m_vidXSize,m_vidYSize);  
 //  m_pixBlock.image.xsize = m_vidXSize;
 //  m_pixBlock.image.ysize = m_vidYSize;
     
@@ -408,6 +409,10 @@ void pix_videoDarwin :: csMess(int format)
     else
         if (format == GL_YCBCR_422_GEM) post("pix_videoDarwin: colorspace is YUV %d",m_colorspace);
     else post("pix_videoDarwin: colorspace is unknown %d",m_colorspace);
+	
+	stopTransfer();
+	resetSeqGrabber();
+	startTransfer();
 }
 
 /////////////////////////////////////////////////////////
@@ -415,7 +420,7 @@ void pix_videoDarwin :: csMess(int format)
 //
 /////////////////////////////////////////////////////////
 //void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
-void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
+void pix_videoDarwin :: dialogMess()
 {
     DoVideoSettings();
 }
@@ -476,7 +481,6 @@ void pix_videoDarwin :: csMessCallback(void *data, t_symbol*s)
         format=GL_YCBCR_422_GEM;
     }
     if(format)GetMyClass(data)->csMess(format);
-    if(format)GetMyClass(data)->m_colorspace = format;
 }
 
 
@@ -496,7 +500,13 @@ void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
     post("pix_video: 'Gray' not yet supported...using YUV");
     format=GL_YCBCR_422_GEM;
   }
-  if(format)GetMyClass(data)->m_colorspace = format;
+  if(format)
+  {
+	GetMyClass(data)->m_colorspace = format;
+  	GetMyClass(data)->stopTransfer();
+	GetMyClass(data)->resetSeqGrabber();
+	GetMyClass(data)->startTransfer();
+  }
 }
 
 #endif // __APPLE__
