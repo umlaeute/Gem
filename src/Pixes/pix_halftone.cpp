@@ -14,6 +14,9 @@
 
 #include "pix_halftone.h"
 
+#define NDEBUG
+#include <assert.h>
+
 CPPEXTERN_NEW(pix_halftone)
 
 /////////////////////////////////////////////////////////
@@ -290,26 +293,6 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
-// processGrayImage
-//
-/////////////////////////////////////////////////////////
-void pix_halftone :: processGrayImage(imageStruct &image)
-{
-}
-
-/////////////////////////////////////////////////////////
-// do the YUV processing here
-//
-/////////////////////////////////////////////////////////
-void pix_halftone :: processYUVImage(imageStruct &image)
-{
-}
-
-void pix_halftone :: processYUV_Altivec(imageStruct &image)
-{
-}
-
-/////////////////////////////////////////////////////////
 // various processing here
 //
 /////////////////////////////////////////////////////////
@@ -463,7 +446,7 @@ void pix_halftone :: Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTable
 
 				default: {
 					assert(false);
-					nDotFuncResult=255;
+	 				nDotFuncResult=255;
 				}break;
 
 			}
