@@ -56,7 +56,7 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
 
   //////////
   // processImage
-  virtual void  processRGBAImage(imageStruct &image);
+  virtual void  processImage(imageStruct &image);
 
   //////////
   // DSP-Message
@@ -71,6 +71,7 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   //  pixBlock    	m_pixBlock;
   unsigned char *m_data;
   long int       m_size;
+  int            m_csize;
 
   //////////
   // the outlets~

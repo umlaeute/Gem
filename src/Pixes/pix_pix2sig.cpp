@@ -53,10 +53,11 @@ pix_pix2sig :: ~pix_pix2sig()
 /////////////////////////////////////////////////////////
 // processImage
 /////////////////////////////////////////////////////////
-void pix_pix2sig :: processRGBAImage(imageStruct &image)
+void pix_pix2sig :: processImage(imageStruct &image)
 {
   m_data = image.data;
   m_size = image.xsize * image.ysize;
+  m_csize = image.csize;
 }
 
 /////////////////////////////////////////////////////////
@@ -76,14 +77,27 @@ t_int* pix_pix2sig :: perform(t_int* w)
   int n = (N<pix_size)?N:pix_size;
 
   if (x->m_data){
-    t_float scale = 1./255.;
-
+    t_float scale0, scale1, scale2, scale3;
+    scale0 = scale1 = scale2 = scale3 = 1./255.;
+    int csize=x->m_csize;
+    switch (csize){
+    default:
+      scale3=1./255.;
+    case 3:
+      scale2=1./255.;
+    case 2:
+      scale1=1./255.;
+    case 1:
+      scale0=1./255.;
+    case 0:
+      break;
+    }
     while(n--){
-      *(out_red  ++) = data[0]*scale;
-      *(out_green++) = data[1]*scale;
-      *(out_blue ++) = data[2]*scale;
-      *(out_alpha++) = data[3]*scale;
-      data+=4;
+      *(out_red  ++) = data[0]*scale0;
+      *(out_green++) = data[1]*scale1;
+      *(out_blue ++) = data[2]*scale2;
+      *(out_alpha++) = data[3]*scale3;
+      data+=csize;
     }
   } else {
     n=N;
