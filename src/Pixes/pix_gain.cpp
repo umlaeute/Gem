@@ -98,7 +98,7 @@ void pix_gain :: processGrayImage(imageStruct &image)
 void pix_gain :: processYUVImage(imageStruct &image)
 {
   
-#ifdef ALTIVEC
+#ifdef __VEC__
 //post("using altivec");  
 processYUV_Altivec(image);
 return;
@@ -135,7 +135,7 @@ return;
 
 void pix_gain :: processYUV_Altivec(imageStruct &image)
 {
- #ifdef ALTIVEC
+ #ifdef __VEC__
  int h,w,width;
     /*altivec code starts */
     width = image.xsize/8;

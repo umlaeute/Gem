@@ -1,11 +1,14 @@
-/*
- *  pix_motionblur.cpp
- *  gem_darwin
- *
- *  Created by chris clepper on Mon Oct 07 2002.
- *  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
- *
- */
+/////////////////////////////////////////////////////////
+//  pix_motionblur.cpp
+//  gem_darwin
+//
+//  Created by chris clepper on Mon Oct 07 2002.
+//  Copyright (c) 2002.  All rights reserved.
+//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
+//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+//
+/////////////////////////////////////////////////////////
+
 
 #include "pix_motionblur.h"
 CPPEXTERN_NEW(pix_motionblur)
@@ -173,7 +176,7 @@ void pix_motionblur :: processYUVImage(imageStruct &image)
     saved = new signed int [m_motionblurSize];
   }
 
-#ifdef ALTIVEC
+#ifdef __VEC__
   processYUVAltivec(image);
   return;
 #else
@@ -273,7 +276,7 @@ void pix_motionblur :: processYUVImage(imageStruct &image)
 
 void pix_motionblur :: processYUVAltivec(imageStruct &image)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 int h,w,width;
 signed short rightGain,imageGain;
 /*altivec code starts */

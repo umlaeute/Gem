@@ -133,7 +133,7 @@ void pix_subtract :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 
 void pix_subtract :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 post("altivec");
 processYUVAltivec(image, right);
 return;
@@ -165,7 +165,7 @@ return;
 
 void pix_subtract :: processYUVAltivec(imageStruct &image, imageStruct &right)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
   long h,w,width;
 
    width = image.xsize/8;

@@ -85,7 +85,7 @@ void pix_offset :: processGrayImage(imageStruct &image)
 void pix_offset :: processYUVImage(imageStruct &image)
 {
  
-#ifdef ALTIVEC
+#ifdef __VEC__
 //post("altivec");
 processYUV_Altivec(image);
 return;
@@ -113,7 +113,7 @@ for (h=0; h<image.ysize; h++){
 
 void pix_offset :: processYUV_Altivec(imageStruct &image)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
     int h,w,width;
 width = image.xsize/8; //for altivec
 //width = image.xsize/2; //for scalar
@@ -124,7 +124,7 @@ width = image.xsize/8; //for altivec
         //unsigned int	i;
         short	elements[8];
         //vector signed char v;
-        vector	short v;
+        vector	signed short v;
     }transferBuffer;
     
     //vector unsigned char c;
