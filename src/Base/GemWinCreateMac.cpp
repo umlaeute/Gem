@@ -1370,7 +1370,6 @@ bool HaveValidContext (void)
 
 static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event, void* userData)
 {
-//#pragma unused (userData)
     OSStatus err = 0;
     OSStatus result = eventNotHandledErr;
     UInt32 evtClass = GetEventClass (event);
@@ -1378,7 +1377,7 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
     WindowRef			winRef;
     UInt32				keyCode=0;
     char				macKeyCode[2];
-	HIPoint				location;
+	Point				location;
 	EventMouseButton	button = 0;
 	//MouseWheelAxis	axis = 0;
 	UInt32				modifiers = 0;
@@ -1430,29 +1429,34 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                 }
                 break;
             case kEventClassMouse:
+				winRef = (WindowRef)userData;
                 switch (kind)
                 {
                     case kEventMouseMoved:
-						GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, NULL, sizeof(HIPoint), NULL, &location);
-                        triggerMotionEvent( (int)location.x, (int)location.y );
+						GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
+													NULL, sizeof(Point), NULL, &location);
+						QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
+                        triggerMotionEvent( (int)location.h, (int)location.v );
                         result = noErr;
                         break;
                         
                     case kEventMouseDragged:
-                        GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
-                                                NULL, sizeof(HIPoint), NULL, &location);
-                        triggerMotionEvent( (int)location.x, (int)location.y );
+						GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
+													NULL, sizeof(Point), NULL, &location);
+						QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
+						triggerMotionEvent( (int)location.h, (int)location.v );
                         result = noErr;
                         break;
                         
                     case kEventMouseDown:
                         GetEventParameter(event, kEventParamMouseButton, typeMouseButton, 
-                                                NULL, sizeof(EventMouseButton), NULL, &button);                        
-                        GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
-                                                NULL, sizeof(HIPoint), NULL, &location);
+                                                NULL, sizeof(EventMouseButton), NULL, &button);
+						GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
+                                                NULL, sizeof(Point), NULL, &location);
 			// mac-button: 1-Left; 2-Right; 3-Middle
 			// gem-button: 0-Left; 2-Right; 1-Middle
-                        triggerButtonEvent((button==1)?0:((button==2)?2:1), 1, (int)location.x, (int)location.y );
+						QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
+						triggerButtonEvent((button==1)?0:((button==2)?2:1), 1, (int)location.h, (int)location.v );
                         GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, 
                                                 NULL, sizeof(UInt32), NULL, &modifiers);
                         result = noErr;
@@ -1461,9 +1465,10 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                     case kEventMouseUp:
                         GetEventParameter(event, kEventParamMouseButton, typeMouseButton, 
                                                 NULL, sizeof(EventMouseButton), NULL, &button);
-                        GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
-                                                NULL, sizeof(HIPoint), NULL, &location);
-						triggerButtonEvent((button==1)?0:((button==2)?2:1), 0, (int)location.x, (int)location.y );
+						GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
+                                                NULL, sizeof(Point), NULL, &location);
+						QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
+						triggerButtonEvent((button==1)?0:((button==2)?2:1), 0, (int)location.h, (int)location.v );
                        result = noErr;
                         break;
                         
