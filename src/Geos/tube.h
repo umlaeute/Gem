@@ -5,9 +5,9 @@
   A tube.
   object by cyrille.henry@la-kitchen.fr
   This primitive create a kind of cilender with paramettre :
-  Diametter of the 1st circle (1st base of the object)
-  Diametter of the 2nd circle
-  X, Y, Z displacement between the 2 circle 
+  Diameter of the 1st circle (1st base of the object)
+  Diameter of the 2nd circle
+  X, Y, Z displacement between the 2 circles
   X, Y rotation of the 1st circle
   X, Y rotation of the 2nd circle
 
@@ -23,6 +23,7 @@
 #define INCLUDE_TUBE_H_
 
 #include "Base/GemShape.h"
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -45,7 +46,7 @@ class GEM_EXTERN tube : public GemShape
 
   //////////
   // Constructor
-  tube(t_floatarg size, t_floatarg size2);
+  tube(t_floatarg size, t_floatarg size2, t_floatarg high, t_floatarg order);
   //////////
 		
  protected:
@@ -79,6 +80,9 @@ class GEM_EXTERN tube : public GemShape
   // The rotY2 of the object
   void	    	rotY2Mess(float rotY2);
 
+  // The #slices of the object
+  void	    	slicesMess(int slices);
+
 
   //////////
   // Do the rendering
@@ -98,11 +102,11 @@ class GEM_EXTERN tube : public GemShape
 
   //////////
   // cos lookup table
-  static GLfloat *m_cos;
+  GLfloat		*m_cos;
 
   //////////
   // sin lookup table
-  static GLfloat *m_sin;
+  GLfloat		*m_sin;
 
   //////////
   // The size2 of the object
@@ -169,6 +173,10 @@ class GEM_EXTERN tube : public GemShape
   float	    	sin_rotY2;
 
   //////////
+  // The order of the object
+  int			order;
+
+  //////////
   // The rotY2 inlet
   t_inlet         *m_inletrotY2;
 
@@ -183,6 +191,7 @@ class GEM_EXTERN tube : public GemShape
   static void 	rotY1MessCallback(void *data, t_floatarg rotY1);
   static void 	rotX2MessCallback(void *data, t_floatarg rotX2);
   static void 	rotY2MessCallback(void *data, t_floatarg rotY2);
+  static void 	slicesMessCallback(void *data, t_floatarg slice);
 
 };
 
