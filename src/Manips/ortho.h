@@ -62,12 +62,19 @@ class GEM_EXTERN ortho : public GemBase
     	//////////
     	// Ortho changed
     	void	    	orthoMess(int state);
+
+    	//////////
+    	// Compatibility
+    	int	    		m_compat;
+    	void	    	compatMess(int state);
+
     	
     private:
     	
     	//////////
     	// static member functions
-    	static void 	orthoMessCallback(void *data, t_floatarg state);
+     	static void 	orthoMessCallback(void *data, t_floatarg state);
+   	static void 	compatMessCallback(void *data, t_floatarg state);
 };
 
 #endif	// for header file

@@ -39,7 +39,7 @@ CPPEXTERN_NEW(ortho)
 //
 /////////////////////////////////////////////////////////
 ortho :: ortho()
-       : m_state(1)
+  : m_state(1), m_compat(1)
 { }
 
 /////////////////////////////////////////////////////////
@@ -57,12 +57,14 @@ void ortho :: render(GemState *)
 {
     if (m_state)
 	{
+	  GLfloat aspect = (m_compat)?1.f:(GLfloat)GemMan::m_width / (GLfloat)GemMan::m_height;
 		glPushAttrib(GL_VIEWPORT_BIT);
 		glViewport(0, 0, GemMan::m_width, GemMan::m_height);
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		glOrtho(-4.f, 4.f, -4.f, 4.f, .1f, 100.f);
+		//glOrtho(-4.f, 4.f, -4.f, 4.f, .1f, 100.f);
+		glOrtho(-4.f*aspect, 4.f*aspect, -4.f, 4.f, .1f, 100.f);
 		glMatrixMode(GL_MODELVIEW);
 	}
 }
@@ -93,14 +95,28 @@ void ortho :: orthoMess(int state)
 }
 
 /////////////////////////////////////////////////////////
+// compatMess
+//
+/////////////////////////////////////////////////////////
+void ortho :: compatMess(int state)
+{
+    m_compat = state;
+    setModified();
+}
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void ortho :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, (t_method)&ortho::orthoMessCallback);
-}
+    class_addfloat (classPtr, (t_method)&ortho::orthoMessCallback);
+    class_addmethod(classPtr, (t_method)&ortho::compatMessCallback,
+		  gensym("compat"), A_FLOAT, A_NULL);}
 void ortho :: orthoMessCallback(void *data, t_floatarg state)
 {
     GetMyClass(data)->orthoMess((int)state);
+}
+void ortho :: compatMessCallback(void *data, t_floatarg state)
+{
+    GetMyClass(data)->compatMess((int)state);
 }
