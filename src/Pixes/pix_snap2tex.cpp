@@ -95,8 +95,8 @@ void pix_snap2tex :: snapMess()
 {
   if ( !GemMan::windowExists() ) return;
 
-  int width =(m_width <0)?GemMan::m_width :m_width;
-  int height=(m_height<0)?GemMan::m_height:m_height;
+  int width =(m_width <0)?m_w:m_width;
+  int height=(m_height<0)?m_h:m_height;
 
   if (width <= 0 || height <= 0)
     {
@@ -186,6 +186,9 @@ void pix_snap2tex :: render(GemState *state)
   state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
+
+  m_w = state->screenWidth;
+  m_h = state->screenHeight;
 
   glEnable(GL_TEXTURE_2D);
 

@@ -129,6 +129,11 @@ class GEM_EXTERN pix_write : public GemBase
     	//////////
     	// The height
     	int     	m_height;
+
+
+	//////////
+	// screen dimensions
+	int m_w, m_h;
     	
     private:
     	

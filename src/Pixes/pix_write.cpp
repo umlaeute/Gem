@@ -83,8 +83,8 @@ void pix_write :: doWrite()
   if ( !GemMan::windowExists() )
     return;
   
-  int width  = (m_width > 0)?m_width :GemMan::m_width;
-  int height = (m_height> 0)?m_height:GemMan::m_height;
+  int width  = (m_width > 0)?m_width :m_w;
+  int height = (m_height> 0)?m_height:m_h;
 
   // do we need to remake the data?
   int makeNew = 0;
@@ -158,6 +158,9 @@ void pix_write :: doWrite()
 /////////////////////////////////////////////////////////
 void pix_write :: render(GemState *state)
 {
+  m_w = state->screenWidth;
+  m_h = state->screenHeight;
+
   if (m_automatic || m_banged) {
     char *extension;
     if (m_filetype<0)m_filetype=0;

@@ -123,6 +123,10 @@ class pix_snap2tex : public GemBase
     	// The height
     	int     	m_height;
 
+	//////////
+	// screen width/height
+	int m_w, m_h;
+
 		//////////
     	// The texture width
     	int     	m_texWidth;
