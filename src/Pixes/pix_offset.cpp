@@ -14,11 +14,11 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+ 
 #include "pix_offset.h"
 
 CPPEXTERN_NEW(pix_offset)
-
+ 
 /////////////////////////////////////////////////////////
 //
 // pix_offset
@@ -111,26 +111,27 @@ for (h=0; h<image.ysize; h++){
 #endif
 }
 
+
+/* more optimized version - unrolled and load-hoisted */
 void pix_offset :: processYUV_Altivec(imageStruct &image)
 {
 #ifdef __VEC__
-    int h,w,width;
-width = image.xsize/8; //for altivec
-//width = image.xsize/2; //for scalar
+    register int h,w,width,height;
+width = image.xsize/16; //for altivec
+height = image.ysize;
 //format is U Y V Y
-/* start of working altivec function */
+// start of working altivec function 
     union
     {
-        //unsigned int	i;
         short	elements[8];
-        //vector signed char v;
         vector	signed short v;
     }transferBuffer;
     
-    //vector unsigned char c;
-    vector signed short c, hi, lo;
-    vector unsigned char zero = vec_splat_u8(0);
-    vector unsigned char *inData = (vector unsigned char*) image.data;
+    register vector signed short c, hi, lo;
+    register vector signed short hi1, lo1;
+    register vector signed short loadhi, loadhi1, loadlo, loadlo1;
+    register vector unsigned char zero = vec_splat_u8(0);
+    register vector unsigned char *inData = (vector unsigned char*) image.data;
 
     //Write the pixel (pair) to the transfer buffer
     //transferBuffer.i = (U << 24) | (Y << 16) | (V << 8 ) | Y;
@@ -146,49 +147,91 @@ width = image.xsize/8; //for altivec
     //Load it into the vector unit
     c = transferBuffer.v;
 
-    //Splat the pixel (pair) across the entire vector
-    //c =  vec_splat( c, 0 );
-    //c = (vector unsigned char) vec_splat( (vector unsigned int) c, 0 );
-    //c = vec_mergeh( vec_splat_u8(0), (vector unsigned char) c );
-
-    //Do saturated addition between c and the pixel buffer
-    //for (h=0; h<image.ysize; h++){
-    //    for(w=0; w<image.xsize/8; w++)
-    //    {
-    //        inData[0] = vec_adds( inData[0], c );
-    //        inData++;
-    //    }
-   // }
-   #ifndef PPC970
+    
+    #ifndef PPC970
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData+16, prefetchSize, 1 );
+        vec_dst( inData+32, prefetchSize, 2 );
+        vec_dst( inData+64, prefetchSize, 3 );
       #endif  
-    for ( h=0; h<image.ysize; h++){
-        for (w=0; w<width; w++)
-        {
+     
+    //expand the UInt8's to short's
+    loadhi = (vector signed short) vec_mergeh( zero, inData[0] );
+    loadlo = (vector signed short) vec_mergel( zero, inData[0] );
+           
+    loadhi1 = (vector signed short) vec_mergeh( zero, inData[1] );
+    loadlo1 = (vector signed short) vec_mergel( zero, inData[1] );  \
+           
+        
+    for ( h=0; h<height; h++){
+        for (w=0; w<width; w++){
+        
         #ifndef PPC970
 	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData+16, prefetchSize, 1 );
+        vec_dst( inData+32, prefetchSize, 2 );
+        vec_dst( inData+64, prefetchSize, 3 );
         #endif
-            //expand the UInt8's to short's
-            hi = (vector signed short) vec_mergeh( zero, inData[0] );
-            lo = (vector signed short) vec_mergel( zero, inData[0] );
-            
+                    
             //add the constant to it
-            hi = vec_add( hi, c );
-            lo = vec_add( lo, c );
+            hi = vec_add( loadhi, c );
+            lo = vec_add( loadlo, c );
+            
+            hi1 = vec_add( loadhi1, c );
+            lo1 = vec_add( loadlo1, c );
+            
+            
+            //expand the UInt8's to short's
+            loadhi = (vector signed short) vec_mergeh( zero, inData[2] );
+            loadlo = (vector signed short) vec_mergel( zero, inData[2] );
+           
+            
+            loadhi1 = (vector signed short) vec_mergeh( zero, inData[3] );
+            loadlo1 = (vector signed short) vec_mergel( zero, inData[3] );
             
             //pack the result back down, with saturation
             inData[0] = vec_packsu( hi, lo );
-            
             inData++;
+            
+            
+            inData[0] = vec_packsu( hi1, lo1 );
+            inData++;
+              
+
         }
+        
        
-}
-#ifndef PPC970
-vec_dss( 0 );  /*end of working altivec function */
+       
+    }
+    
+        //
+        // finish the last iteration after the loop
+        //
+        hi = vec_add( loadhi, c );
+        lo = vec_add( loadlo, c );
+            
+        hi1 = vec_add( loadhi1, c );
+        lo1 = vec_add( loadlo1, c );
+            
+        //pack the result back down, with saturation
+        inData[0] = vec_packsu( hi, lo );
+            
+        inData++;
+            
+        inData[0] = vec_packsu( hi1, lo1 );
+            
+        inData++;
+    
+    #ifndef PPC970
+    vec_dss( 0 );
+    vec_dss( 1 );
+    vec_dss( 2 );
+    vec_dss( 3 );  //end of working altivec function 
+    #endif
 #endif
-#endif
 }
+
 
 /////////////////////////////////////////////////////////
 // vecOffsetMess
