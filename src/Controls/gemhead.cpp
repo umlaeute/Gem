@@ -100,15 +100,18 @@ void gemhead :: renderGL(GemState *state)
 /////////////////////////////////////////////////////////
 void gemhead :: bangMess()
 {
+    int renderon = m_renderOn;
     // make sure that the window and the cache exist
     if ( !GemMan::windowExists() || !m_cache )
 		return;
     
     // make a dummy GemState
     GemState tempState;
-	GemMan::fillGemState(tempState);
+    GemMan::fillGemState(tempState);
 
+    m_renderOn = 1;
     renderGL(&tempState);
+    m_renderOn = renderon;
     glFlush();
 }
 
