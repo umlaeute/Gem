@@ -68,7 +68,7 @@ void pix_takealpha :: processRGBA_Gray(imageStruct &image, imageStruct &right)
     {
       leftPix[chAlpha] = rightPix[chGray];
       leftPix += 4;
-      rightPix+=4;
+      rightPix+= 1;
     }
 }
 

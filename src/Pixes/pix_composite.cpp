@@ -74,7 +74,39 @@ void pix_composite :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
     dst += 4;
   }
 }
+void pix_composite :: processRGBA_Gray(imageStruct &image, imageStruct &right)
+{
+  int datasize = image.xsize * image.ysize;
+  //  unsigned int alpha;
 
+  // The src1, src2, dst is a little bit backwards.  This
+  //	is because we want the image on the left inlet to be
+  //	on top of the image on the right inlet.
+  unsigned char *dst = image.data;
+  unsigned char *src1 = right.data;
+  unsigned char *src2 = image.data;
+  
+  while(datasize--)    {
+    int rightPix = *src1++;
+    if ( unsigned int alpha = src2[chAlpha] )      {
+      if (alpha == 255)	{
+	dst[chRed]   = src2[chRed];
+	dst[chGreen] = src2[chGreen];
+	dst[chBlue]  = src2[chBlue];
+      }	else {
+	dst[chRed]   = INT_LERP(src1[chRed], rightPix, alpha);
+	dst[chGreen] = INT_LERP(src1[chGreen], rightPix, alpha);
+	dst[chBlue]  = INT_LERP(src1[chBlue], rightPix, alpha);
+      }
+    } else {
+      dst[chRed]	 = rightPix;
+      dst[chGreen]	 = rightPix;
+      dst[chBlue]	 = rightPix;
+    }
+    src2 += 4;
+    dst += 4;
+  }
+}
 /////////////////////////////////////////////////////////
 // static member function
 //

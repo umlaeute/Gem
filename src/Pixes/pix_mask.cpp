@@ -68,9 +68,8 @@ void pix_mask :: processRGBA_Gray(imageStruct &image, imageStruct &right)
   unsigned char *mask = right.data;
 
   while(datasize--)	{
-    pixels[chAlpha] = *mask;
+    pixels[chAlpha] = *mask++;
     pixels += 4;
-    mask++;
   }
 }
 

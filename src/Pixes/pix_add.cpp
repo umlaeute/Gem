@@ -47,9 +47,7 @@ void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
-
-    while(datasize--)
-    {
+    while(datasize--) {
     	leftPix[chRed] =
 			CLAMP_HIGH((int)leftPix[chRed] + (int)rightPix[chRed]);
     	leftPix[chGreen] =
@@ -120,12 +118,11 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
   unsigned char *rightPix = right.data;
   
   while(datasize--)    {
-    int alpha = rightPix[chGray];
+    register int alpha = *rightPix++;
     leftPix[chRed]   = CLAMP_HIGH((int)leftPix[chRed]   + alpha);
     leftPix[chGreen] = CLAMP_HIGH((int)leftPix[chGreen] + alpha);
     leftPix[chBlue]  = CLAMP_HIGH((int)leftPix[chBlue]  + alpha);
     leftPix += 4;
-    rightPix++;
     }
 }
  
