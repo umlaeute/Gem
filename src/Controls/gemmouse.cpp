@@ -96,21 +96,11 @@ void gemmouse :: mouseMotion(int x, int y)
 /////////////////////////////////////////////////////////
 void gemmouse :: mouseButton(int which, int state, int x, int y)
 {
-#ifndef __APPLE__
-    if (which == 0)
-        outlet_float(m_outLBut, (t_float)state);
-    else if (which == 1)
-        outlet_float(m_outMBut, (t_float)state);
-    else if (which == 2)
-        outlet_float(m_outRBut, (t_float)state);
-#else
-    if (which == 1)
-        outlet_float(m_outLBut, (t_float)state);
-    else if (which == 2)
-        outlet_float(m_outRBut, (t_float)state);
-    else if (which == 3)
-        outlet_float(m_outMBut, (t_float)state);
-#endif
+  switch (which){
+  case 0: outlet_float(m_outLBut, (t_float)state); break;
+  case 1: outlet_float(m_outMBut, (t_float)state); break;
+  case 2: outlet_float(m_outRBut, (t_float)state); break;
+  }
 }
 
 /////////////////////////////////////////////////////////
