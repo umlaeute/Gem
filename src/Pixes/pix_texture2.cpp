@@ -117,7 +117,7 @@ void pix_texture2 :: render(GemState *state)
     glEnable(GL_TEXTURE_RECTANGLE_EXT);
     glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
   } else
-#endif
+#endif //  GL_TEXTURE_RECTANGLE_EXT
     {
       glEnable(GL_TEXTURE_2D);
       glBindTexture(GL_TEXTURE_2D, m_textureObj);
@@ -125,7 +125,7 @@ void pix_texture2 :: render(GemState *state)
 #elif GL_EXT_texture_object
   glEnable(GL_TEXTURE_2D);
   glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);
-#else
+#else // GL_VERSION_1_1 || GL_EXT_texture_object
   // can we build a display list?
   int creatingDispList = 0;
   if (state->image->newimage) m_rebuildList = 1;
@@ -135,7 +135,6 @@ void pix_texture2 :: render(GemState *state)
   }
   setUpTextureState();
 #endif    
-
 #ifdef GL_VERSION_1_1
   if (state->image->newimage)
 #elif GL_EXT_texture_object
@@ -226,7 +225,6 @@ void pix_texture2 :: render(GemState *state)
 #endif
 	}
       }
-
 
       if (m_buffer.csize != m_dataSize[0] ||
 	  m_buffer.xsize != m_dataSize[1] ||
@@ -327,7 +325,7 @@ void pix_texture2 :: startRendering()
         glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
 	setUpTextureState();
     }else
-#endif
+#endif // GL_TEXTURE_RECTANGLE_EXT
       {
     glBindTexture(GL_TEXTURE_2D, m_textureObj);
     setUpTextureState();
@@ -336,7 +334,7 @@ void pix_texture2 :: startRendering()
     glGenTexturesEXT(1, &m_textureObj);
     glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);    
 	setUpTextureState();
-#else
+#else // GL_VERSION_1_1 || GL_EXT_texture_object
     m_textureObj = glGenLists(1);
     m_rebuildList = 1;
 #endif
