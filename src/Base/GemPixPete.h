@@ -21,21 +21,29 @@ typedef unsigned short U16;
 typedef unsigned char U8;
 
 
-#define SHIFT_ALPHA	(24)
-#define SHIFT_RED	(16)
-#define SHIFT_GREEN	(8)
-#define SHIFT_BLUE	(0)
-
 /* is this only on my system ?
    i thought Gem's YUV is UYVY and not YVYU
    seems weird... (jmz)
 */
 #ifdef __APPLE__
+
+# define SHIFT_ALPHA	(24)
+# define SHIFT_RED	(16)
+# define SHIFT_GREEN	(8)
+# define SHIFT_BLUE	(0)
+
 # define SHIFT_U  (24)
 # define SHIFT_Y1 (16)
 # define SHIFT_V  (8)
 # define SHIFT_Y2 (0)
+
 #else
+
+# define SHIFT_ALPHA	(24)
+# define SHIFT_RED	(16)
+# define SHIFT_GREEN	(8)
+# define SHIFT_BLUE	(0)
+
 # define SHIFT_U  (0)
 # define SHIFT_Y1 (8)
 # define SHIFT_V  (16)
