@@ -1,0 +1,20 @@
+#N canvas 100 288 510 304 10;
+#X obj 21 270 pix_chroma_key;
+#X msg 21 207 range \$1 \$2 \$3;
+#X msg 20 155 value \$1 \$2 \$3;
+#X msg 21 239 direction \$1;
+#X text 124 240 0 = left stream as key source. 1 = right stream;
+#X text 140 207 range +/- each pixel value to use in the key;
+#X text 20 1 pix_chroma_key does compositing using pixel by pixel comparisons
+on two video streams. the comparison is based on user a user supplied
+RGB or YUV pixel value and +/- range. if the pixel in the key source
+lies within the range \, then it is replaced by the corresponding pixel
+im the other stream. typically this is most effective on a static background
+like a green/blue screen \, but can be effective when used with other
+GEM objects like pix_background for live video processing.;
+#X text 135 154 the value of the pixel to key out \$1 = Red \, \$2
+= Green \, \$3 = Blue in RGB \$1 = Y/luma \, \$2 = U/Cb \, \$3 = V/Cr
+in YUV;
+#X connect 1 0 0 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
