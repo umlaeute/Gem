@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_film.h"
+#include <ctype.h>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM)
 
