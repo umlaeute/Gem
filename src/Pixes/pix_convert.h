@@ -18,7 +18,7 @@ LOG
 #ifndef INCLUDE_PIX_CONVERT_H_
 #define INCLUDE_PIX_CONVERT_H_
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #endif
