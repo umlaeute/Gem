@@ -18,12 +18,7 @@ LOG
 #ifndef INCLUDE_PIX_YUV_H_
 #define INCLUDE_PIX_YUV_H_
 
-#ifdef MACOSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#endif
-
-#include "Base/GemPixObj.h"
+#include "Pixes/pix_rgba.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -39,7 +34,7 @@ DESCRIPTION
    
 -----------------------------------------------------------------*/
 
-class GEM_EXTERN pix_yuv : public GemPixObj
+class GEM_EXTERN pix_yuv : public pix_rgba
 {
     CPPEXTERN_HEADER(pix_yuv, GemPixObj)
 
@@ -50,22 +45,6 @@ class GEM_EXTERN pix_yuv : public GemPixObj
     	pix_yuv();
     	
     protected:
-    	
-    	//////////
-    	// Destructor
-    	virtual ~pix_yuv();
-
-    	//////////
-    	// Do the processing
-    	void 	processImage(imageStruct &image);
-
-	void render(GemState *);
-	void postrender(GemState *);
-
-	unsigned char *m_data;
-	int            m_size;
-
- private:
 };
 
 #endif	// for header file

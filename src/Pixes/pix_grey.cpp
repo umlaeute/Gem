@@ -31,78 +31,10 @@ CPPEXTERN_NEW(pix_grey)
 /////////////////////////////////////////////////////////
 pix_grey :: pix_grey()
 {
-  m_data = NULL;
-  m_size = 0;
-}
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-pix_grey :: ~pix_grey()
-{
-  if (m_data) delete [] m_data;
-}
-
-/////////////////////////////////////////////////////////
-// processImage
-//
-/////////////////////////////////////////////////////////
-void pix_grey :: processImage(imageStruct &image)
-{
-  if (image.format==GL_LUMINANCE)return;
-  unsigned char *old_pix, *new_pix;
-  int count = image.xsize*image.ysize;
-  int format = image.format;
-  int csize = image.csize;
-
-  if (image.xsize*image.ysize != m_size){
-    delete [] m_data;
-    m_size = image.xsize*image.ysize;
-    m_data = new unsigned char[m_size];
-  }
-
-  old_pix = image.data;
-  new_pix = m_data;
-
-  switch (format){
-  case GL_LUMINANCE:
-    break;
-  case GL_RGBA:
-  case GL_RGB:  
-    while(count--){
-      *new_pix++ =(unsigned char)(old_pix[chRed]*0.3086f + 
-				  old_pix[chGreen]*0.6094f + 
-				  old_pix[chBlue]*0.0820f);
-      old_pix+=csize;
-    }
-    break;
-  case GL_BGR_EXT:
-  case GL_BGRA_EXT:
-    while(count--){
-      *new_pix++ =(unsigned char)(old_pix[chRed]*0.3086f + 
-				  old_pix[chGreen]*0.6094f + 
-				  old_pix[chBlue]*0.0820f);
-      old_pix+=csize;
-    }
-    break;
-  case GL_YCBCR_422_GEM: // YUV just take luminance
-    old_pix++;
-    while (count--){
-      *new_pix++ = *(old_pix+=2);
-    }
-    break;
-  default:
-    post("no method for this format !!!");
-    post("if you know how to convert this format (%X) to GREY,\n"
-	 "please contact the authors of this software", format);
-    return;
-  }
-
-  image.data   = m_data;
-  image.notowned = 1;
-  image.format = GL_LUMINANCE;
-  image.csize  = 1;
+  m_image.xsize=64;
+  m_image.ysize=64;
+  m_image.setCsizeByFormat(GL_LUMINANCE);
+  m_image.reallocate();
 }
 
 /////////////////////////////////////////////////////////

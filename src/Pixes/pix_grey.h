@@ -18,19 +18,14 @@ LOG
 #ifndef INCLUDE_PIX_GREY_H_
 #define INCLUDE_PIX_GREY_H_
 
-#ifdef MACOSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#endif
-
-#include "Base/GemPixObj.h"
+#include "Pixes/pix_rgba.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
     pix_grey
     
-    Change pix from "any" color-space to GL_RGBA
+    Change pix from "any" color-space to GL_LUMINANCE
 
 KEYWORDS
     pix
@@ -39,30 +34,17 @@ DESCRIPTION
    
 -----------------------------------------------------------------*/
 
-class GEM_EXTERN pix_grey : public GemPixObj
+class GEM_EXTERN pix_grey : public pix_rgba
 {
     CPPEXTERN_HEADER(pix_grey, GemPixObj)
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_grey();
-    	
-    protected:
-    	
-    	//////////
-    	// Destructor
-    	virtual ~pix_grey();
+    //////////
+    // Constructor
+    pix_grey();
 
-    	//////////
-    	// Do the processing
-    	void 	processImage(imageStruct &image);
-
-	unsigned char *m_data;
-	int            m_size;
-
- private:
+   protected:
 };
 
 #endif	// for header file

@@ -45,23 +45,21 @@ class GEM_EXTERN pix_rgba : public GemPixObj
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_rgba();
+    //////////
+    // Constructor
+    pix_rgba();
     	
-    protected:
+ protected:
     	
-    	//////////
-    	// Destructor
-    	virtual ~pix_rgba();
+    //////////
+    // Destructor
+    virtual ~pix_rgba();
 
-    	//////////
-    	// Do the processing
-    	void 	processImage(imageStruct &image);
+    //////////
+    // Do the processing
+    void 	processImage(imageStruct &image);
 
-	unsigned char *m_data;
-	int            m_size;
-
+    imageStruct m_image;
  private:
 };
 
