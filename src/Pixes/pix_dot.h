@@ -2,11 +2,11 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-    play puzzle with a sequence of pixBufs
+    change pixBuf into dots
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
-    Copyleft (l) 2002 James Tittle & Chris Clepper
+    Copyleft (l) 2003 James Tittle
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -49,22 +49,37 @@ class GEM_EXTERN pix_dot : public GemPixObj
   //////////
   // Do the processing
   virtual void 	processImage(imageStruct &image);
+  virtual void 	processYUVImage( imageStruct &image );
+  virtual void	drawDot( int xx, int yy, unsigned char c, unsigned int *dest );
+  virtual void  dot_init();
+  virtual void  sampxy_table_init();
+  virtual void  yuv_init();
+  virtual void  makePattern();
+  virtual void  sizeMess(int width, int height);
+  int	sharedbuffer_init();
+  void	sharedbuffer_reset();
+  unsigned char *sharedbuffer_alloc(int size);
 
   imageStruct    myImage;
 
   //////////
-  // Make a puzzle
-  //virtual void 	makePuzzleBlocks(int xsize, int ysize, int csize);
-  virtual void  makePattern();
-  virtual void  sizeMess(int width, int height);
- 
-  int blocksize, blockxsize,blockysize,  blocknum, spacepos;
-  int blockw, blockh;
-  int *blockpos;
-  int *blockoffset;
-  int marginw, marginh;
+  // Make dots
+    
+    int m_xsize, m_ysize;
+    unsigned char *sharedbuffer;
+    int sharedbuffer_length;
 
-  int m_force;
+    int tail;
+    int alreadyInit;
+    int dotw, doth;
+    int DOTDEPTH, DOTMAX;
+    int dots_width, dots_height;
+    int dot_size, dot_hsize;
+    int *sampx, *sampy;
+    int state;
+    unsigned int *pattern;
+    unsigned int *heart_pattern;
+    int mode;
 
  private:
   
