@@ -13,7 +13,6 @@
 
 #include "rubber.h"
 #include "Base/GemState.h"
-#include "Base/GemMan.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -193,7 +192,6 @@ void rubber :: render(GemState *state)
     glTranslatef(-1.0, -1.0, 0.0);
 
     glOrtho(-0.5, 0.5, -0.5, 0.5, CLIP_NEAR, CLIP_FAR);
-    //glOrtho(0.5, GemMan::m_width - 0.5, 0.5, GemMan::m_height - 0.5, CLIP_NEAR, CLIP_FAR);
     
     if (m_blend) {
         glEnable(GL_POLYGON_SMOOTH);

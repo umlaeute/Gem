@@ -15,7 +15,6 @@
 #include "Base/GemState.h"
 #include <string.h>
 #include <math.h>
-#include <Base/GemMan.h>
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(ripple, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
