@@ -104,7 +104,7 @@ void newWave :: speedMess(float speed)
 /////////////////////////////////////////////////////////
 void newWave :: render(GemState *state)
 {
-    int i, j, x, y;
+    int i, j;
     
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(m_linewidth);
