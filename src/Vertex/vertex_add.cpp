@@ -17,6 +17,7 @@
 #include "vertex_add.h"
 
 #include "Base/GemState.h"
+#include "Base/GemCache.h"
 
 CPPEXTERN_NEW_WITH_GIMME(vertex_add)
  
@@ -81,6 +82,7 @@ void vertex_add::typeMess(int argc, t_atom*argv){
     if(argc==1)m_rightType=m_leftType;
     break;
   }
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -160,7 +162,7 @@ void vertex_add :: postrender(GemState *state)
 // render
 //
 /////////////////////////////////////////////////////////
-void vertex_add :: rightRender(GemState *state)
+void vertex_add :: rightRender(GemState *state, GemCache *cache)
 {
   m_rightSize          = state->VertexArraySize;
 
@@ -168,9 +170,12 @@ void vertex_add :: rightRender(GemState *state)
   m_rightColorArray    = state->ColorArray;
   m_rightTexCoordArray = state->TexCoordArray;
   m_rightNormalArray   = state->NormalArray;
+
+  if((state->VertexDirty) || (cache && cache->m_magic == GEMCACHE_MAGIC && cache->vertexDirty))
+    setModified();
 } 
- 
- 
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -186,7 +191,8 @@ void vertex_add :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_at
 {
   if (argc==1 && argv->a_type==A_FLOAT){
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
+    GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer,
+				  (GemCache *)(argv+0)->a_w.w_gpointer);
   } else error("GEM: wrong righthand arguments....");
 }
 void vertex_add :: typeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)

@@ -30,9 +30,9 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN vertex_add : public GemBase
+class GEM_EXTERN vertex_add : public GemVertex
 {
-    CPPEXTERN_HEADER(vertex_add, GemBase)
+    CPPEXTERN_HEADER(vertex_add, GemVertex)
 
     public:
 
@@ -70,7 +70,7 @@ class GEM_EXTERN vertex_add : public GemBase
 	virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);
     	virtual void 	render(GemState *state);
         virtual void 	postrender(GemState *state);
-        virtual void 	rightRender(GemState *state);
+        virtual void 	rightRender(GemState *state, GemCache *cache);
         
         //private:
         static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
