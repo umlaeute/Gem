@@ -266,6 +266,8 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_lumaoffset :: processYUVImage(imageStruct &image)
 {
+	int nLuma1, nLuma2;
+	
     nWidth = image.xsize/2;
     nHeight = image.ysize;
     if (!init) {
@@ -305,18 +307,29 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 
 			while (pCurrentSource!=pSourceLineEnd) {
 				const U32 SourceColour=*pCurrentSource;
-				int nLuma=GetLuminance(SourceColour);
-				//int nLuma = (SourceColour&(0xff << 0))>>0;
-				nLuma-=(128*255);
+				nLuma1 = ((SourceColour&(0xff<<16))>>16)<<8;
+				nLuma1 -= 32640;								// 128*255
+				nLuma2 = ((SourceColour&(0xff<<0))>>0)<<8;
+				nLuma2 -= 32640;
 				
-				const int nOffset=(nLuma*nOffsetScale)>>16;
+				const int nOffset1=(nLuma1*nOffsetScale)>>16;
+				const int nOffset2=(nLuma2*nOffsetScale)>>16;
 
-				U32*const pOffsetOutput=pCurrentOutput+(nOffset*nWidth);
+				U32*const pOffsetOutput1=pCurrentOutput+(nOffset1*nWidth);
 
-				if ((pOffsetOutput<pOutputEnd)&& (pOffsetOutput>=pOutput)) {
-					*pOffsetOutput=SourceColour;
+				if ((pOffsetOutput1<pOutputEnd) && (pOffsetOutput1>=pOutput)) {
+					*pOffsetOutput1=( (SourceColour&(0xff<<24)) |
+									 (SourceColour&(0xff<<16)) |
+									 (SourceColour&(0xff<<8)) );
 				}
+				U32*const pOffsetOutput2=(pCurrentOutput)+(nOffset2*nWidth);
 
+				if ((pOffsetOutput2<pOutputEnd) && (pOffsetOutput2>=pOutput)) {
+					*pOffsetOutput2=( (SourceColour&(0xff<<24)) |
+									 (SourceColour&(0xff<<8)) |
+									 (SourceColour&(0xff<<0)) );
+				}
+				
 				pCurrentSource+=1;
 				pCurrentOutput+=1;
 			}
@@ -347,9 +360,10 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 					const int nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
 					const int nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
 
-					int nLuma=GetLuminance(SourceColour);
+					//int nLuma=GetLuminance(SourceColour);
+					int nLuma=pCurrentSource[1];
 					//int nLuma = (SourceColour&(0xff << 0))>>0;
-					nLuma-=(128*255);
+					//nLuma-=(128*255);
 					const int nOffset=(nLuma*nOffsetScale)>>16;
 
 					U32* pOffsetOutputStart=pCurrentOutput+(nOffset*nWidth);
