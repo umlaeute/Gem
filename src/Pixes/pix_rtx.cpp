@@ -85,12 +85,8 @@ void pix_rtx :: create_buffer(imageStruct image)
    buffer.xsize = image.xsize;
    buffer.ysize = image.ysize;
    buffer.csize = image.csize;
-#ifdef IMAGE_CLASS
    buffer.reallocate( dataSize );
-#else
-   buffer.data = new unsigned char[dataSize];
    memset(buffer.data, 0, dataSize);
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -99,12 +95,7 @@ void pix_rtx :: create_buffer(imageStruct image)
 /////////////////////////////////////////////////////////
 void pix_rtx :: delete_buffer()
 {
-#ifdef IMAGE_CLASS
-    buffer.clear();
-#else
-    delete [] buffer.data;
-    buffer.data = NULL;
-#endif
+  buffer.clear();
 }
 
 
@@ -150,34 +141,68 @@ void pix_rtx :: processImage(imageStruct &image)
    if (!set_buffer) {
      wp = buffer.data + pixsize * buffer.csize * bufcount;
      memcpy(wp, pixels, pixsize * buffer.csize * sizeof(unsigned char));
-   } else { // fill the buffer with the current frame
+   } else { 
+     // fill the buffer with the current frame
      // this might be useful to prevent the black screen in the beginning.
      // "set" message
      c=cols;
+     int imagesize=pixsize * buffer.csize * sizeof(unsigned char);
      while (c--) {
-       wp = buffer.data + pixsize * buffer.csize * c;
-       memcpy(wp, pixels, pixsize * buffer.csize * sizeof(unsigned char));
-       set_buffer=false;
+       wp = buffer.data + imagesize * c;
+       memcpy(wp, pixels, imagesize);
      }
+     set_buffer=false;
    }
 
    // then copy the buffer rtx-transformed back to the pixels
-   while (c < cols) {
-     c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
-
-     while (r < rows) {
-       rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
-       pixels = image.data + image.csize * (image.xsize * r + cols - c1);
-       
-       pixels[chRed]   = rp[chRed];
-       pixels[chBlue]  = rp[chBlue];
-       pixels[chGreen] = rp[chGreen];
-       pixels[chAlpha] = rp[chAlpha];
-
-       r++;
+   switch(image.csize){
+   case 1: // Grey
+     while (c < cols) {
+       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
+       while (r < rows) {
+	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+	 
+	 *pixels   = *rp;
+	 r++;
+       }
+       r=0;
+       c++;
      }
-     r=0;
-     c++;
+     break;
+   case 2: // YUV
+     while (c < cols) {
+       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
+       while (r < rows) {
+	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+	 
+	 pixels[0]  = rp[0];
+	 pixels[1]  = rp[1];
+	 r++;
+       }
+       r=0;
+       c++;
+     }
+     break;
+   case 4: // RGBA
+     while (c < cols) {
+       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
+       while (r < rows) {
+	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+	 
+	 pixels[chRed]   = rp[chRed];
+	 pixels[chBlue]  = rp[chBlue];
+	 pixels[chGreen] = rp[chGreen];
+	 pixels[chAlpha] = rp[chAlpha];
+	 
+	 r++;
+       }
+       r=0;
+       c++;
+     }
+     break;
    }
 
    bufcount++;
