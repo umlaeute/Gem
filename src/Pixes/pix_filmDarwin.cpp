@@ -228,7 +228,7 @@ void pix_filmDarwin :: getFrame()
     // get the next frame of the source movie
     short 	flags = nextTimeStep;
     OSType	whichMediaType = VisualMediaCharacteristic;
-    TimeValue	duration;
+    
     if (m_reqFrame > m_curFrame) {
         num = m_reqFrame - m_curFrame;
     } else {
