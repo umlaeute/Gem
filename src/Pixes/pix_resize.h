@@ -36,7 +36,7 @@ class GEM_EXTERN pix_resize : public GemPixObj
 
 	    //////////
 	    // Constructor
-    	pix_resize();
+  pix_resize(t_floatarg w, t_floatarg h);
     	
     protected:
     	
@@ -46,7 +46,19 @@ class GEM_EXTERN pix_resize : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
+	void 	processImage(imageStruct &image);
+	
+	//////////
+	// setting dimension and colourspace
+	void  dimenMess(int w, int h);
+	int           m_width, m_height;
+	imageStruct   m_image;
+
+ private:
+    	
+	//////////
+	// static member functions
+	static void   dimenMessCallback(void *data, t_float w, t_float h);	
 };
 
 #endif	// for header file
