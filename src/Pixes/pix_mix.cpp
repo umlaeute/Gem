@@ -96,20 +96,28 @@ return;
         for(w=0; w<width; w++){
         
         
-         u = (((image.data[src] - 128) * imageGain)>>8)+128;
+       /*  u = (((image.data[src] - 128) * imageGain)>>8)+128;
          u1 = (((right.data[src] - 128) * rightGain)>>8)+128;
-         u = u + ((2*u1) -255);
+         u = u + ((2*u1) -255); */
+        u = (image.data[src] - 128) * imageGain;
+        u1 = (right.data[src] - 128) * rightGain;
+        u = ((u + u1)>>8) + 128;
         image.data[src] = (unsigned char)CLAMP(u);
         
-        y1 = ((image.data[src+1] * imageGain)>>8) + ((right.data[src+1] * rightGain)>>8);
+        y1 = ((image.data[src+1] * imageGain) + (right.data[src+1] * rightGain))>>8;
         image.data[src+1] = (unsigned char)CLAMP(y1);
         
-       v = (((image.data[src+2] - 128) * imageGain)>>8)+128;
-       v1 = (((right.data[src+2] - 128) * rightGain)>>8)+128;
-       v = v + (2*v1) - 255;
+        /*v = (((image.data[src+2] - 128) * imageGain)>>8)+128;
+        v1 = (((right.data[src+2] - 128) * rightGain)>>8)+128;
+        v = v + (2*v1) - 255;*/
+        v = (image.data[src+2] - 128) * imageGain;
+     
+        v1 = (right.data[src+2] - 128) * rightGain;
+        v = ((v + v1)>>8) + 128;
+        
         image.data[src+2] = (unsigned char)CLAMP(v);
 
-        y2 = ((image.data[src+3] * imageGain)>>8) + ((right.data[src+3] * rightGain)>>8);;
+        y2 = ((image.data[src+3] * imageGain) + (right.data[src+3] * rightGain))>>8;
         image.data[src+3] = (unsigned char)CLAMP(y2);
 
         src += 4;
@@ -119,6 +127,7 @@ return;
 #endif
 }
 
+//needs fixing for better IQ
 void pix_mix :: processYUVAltivec (imageStruct &image, imageStruct &right)
 {
 #ifdef ALTIVEC

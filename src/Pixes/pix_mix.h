@@ -23,12 +23,14 @@ LOG
 CLASS
     pix_mix
     
-    Add two images together.
+    Blends two images together.
 
 KEYWORDS
     pix
     
 DESCRIPTION
+
+    gain $1 $2 - sets the gain for the left and right images.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_mix : public GemPixDualObj
