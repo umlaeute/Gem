@@ -173,10 +173,10 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   short *s_fb = new short[fb_count+1];
 
   i=ff_count+1;while(i--){
-    s_ff[i]=(short)round(m_ff[i]*256.);
+    s_ff[i]=(short)(m_ff[i]*256.+0.5);
   }
   i=fb_count+1;while(i--){
-    s_fb[i]=(short)round(m_fb[i]*256.);
+    s_fb[i]=(short)(m_fb[i]*256.+0.5);
   }
 
 
