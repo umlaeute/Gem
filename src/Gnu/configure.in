@@ -26,7 +26,8 @@ AC_ARG_ENABLE(x, [])
 AC_ARG_ENABLE(mmx, [  --enable-mmx            enable MMX-support])
 AC_ARG_ENABLE(static, [  --enable-static         static linking (default is: dynamic) ])
 AC_ARG_WITH(glut, [  --with-glut             enable GLUT (mainly the teapot)])
-AC_ARG_WITH(gltt, [  --with-gltt             enable GL-TrueType rendering (fonts)])
+AC_ARG_WITH(gltt, [  --with-gltt             enable GLTT (for font rendering (old))])
+AC_ARG_WITH(ftgl, [  --with-ftgl             enable FTGL (for font rendering)])
 AC_ARG_WITH(mpeg, [  --with-mpeg             enable MPEG-filmIN support])
 AC_ARG_WITH(mpeg3, [  --with-mpeg3            enable MPEG3-filmIN support (overrides MPEG-support)])
 AC_ARG_WITH(quicktime, [  --with-quicktime        enable quicktime-filmIN support])
@@ -130,9 +131,9 @@ AC_CHECK_PROGS(shell_prog,sh)
 AC_PATH_XTRA
 
 dnl Checks for MMX
+AC_MSG_CHECKING("for MMX")
 if test "$enable_mmx" != "no"; then
 dnl right now, i only know how to do this for gcc
-
 cat > conftest.c++ << EOF
 #include <mmintrin.h>
 int main(){
@@ -146,7 +147,9 @@ dnl $CXX $CXXFLAGS $CPPFLAGS $MMXFLAGS -mfpmath=sse -o conftest.o conftest.c++ &
 fi
 if test "$MMXFLAGS" != ""; then
   MMXFLAGS="$MMXFLAGS -DHAVE_MMX"
+  AC_MSG_CHECKING("MMX found")
 else
+  AC_MSG_CHECKING("MMX not found")
   if test "$enable_mmx" == "yes"; then
     AC_MSG_ERROR([you enforced the use of MMX although the compiler ($CXX) doesn't support it])
   fi
@@ -195,7 +198,6 @@ fi
 
 ggstatic="-Wl,-Bstatic"
 dnl AC_ARG_WITH(static,"   " ,LIBS="$ggstatic $LIBS")
-echo Static:: $enable_static
 if test "$enable_static" = "yes"
 then
   LIBS="$ggstatic $LIBS"
@@ -230,12 +232,39 @@ dnl Check for Jpeg
 	AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, fail)
 
 dnl Checking font-libraries
+if test "$with_gltt" == "yes"; then
+  if test "$with_ftgl" != "yes"; then
+    with_ftgl="no"
+  fi
+fi
+
+dnl Check for ftgl
+if test "$with_gltt" == "yes"; then
+ if test "$with_ftgl" != "yes"; then
+  with_ftgl="no"
+ fi
+fi
+
+if test "$with_ftgl" != "no"; then
+AC_FIND_LIB(ftgl, FTGLPixmapFont,$search_libs, $with_ftgl)
+if test "$ac_tr_lib" == "HAVE_LIBFTGL"; then
+  dnl Check for freetype (ftgl depends on freetype)
+  AC_FIND_LIB(freetype, New_Face,$search_libs, fail)
+  with_ftgl="yes"
+  with_gltt="no"
+else
+  with_ftgl="no"
+  with_gltt="yes"
+fi  fi
+
 if test "$with_gltt" != "no"
 then
-dnl Check for TTF
-	AC_FIND_LIB(ttf, TT_FreeType_Version, $search_libs, $with_gltt)
 dnl Check for gltt
-	AC_FIND_LIB(gltt, open, $search_libs, fail)
+  AC_FIND_LIB(gltt, open, $search_libs, $with_gltt)
+dnl Check for TTF (gltt depends on ttf)
+  if test "$ac_tr_lib" == "HAVE_LIBGLTT"; then
+    AC_FIND_LIB(ttf, TT_FreeType_Version, $search_libs, fail)
+  fi
 fi
 
 dnl Checking for video-libraries
@@ -331,6 +360,11 @@ dnl glut (if wanted)
 AC_CHECK_HEADER(GL/glut.h)
 
 dnl truetype
+if test "$with_ftgl" != "no"
+then 
+  AC_FIND_HEADER(freetype/config/ftheader.h, $search_heads, $with_ftgl)
+  AC_FIND_HEADER(FTGLPixmapFont.h, $search_heads, $with_ftgl)
+fi
 if test "$with_gltt" != "no"
 then 
   AC_FIND_HEADER(GLTTFont.h, $search_heads, $with_gltt)
