@@ -195,9 +195,9 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
     SPete_Kaleidoscope_Line* pLinesGroupEnd=pLinesGroupStart+nLinesGroupCount;
     SPete_Kaleidoscope_Line* pCurrentLine=pLinesGroupStart;
 
-    float PreviousIntersectionX=0.0f;
-    float PreviousRowU;
-    float PreviousRowV;
+    float PreviousIntersectionX = 0.0f;
+    float PreviousRowU = 0.0f;
+    float PreviousRowV = 0.0f;
 
     U32* pOutputLineStart=pOutput+(nScanLine*nWidth);
 
@@ -624,9 +624,9 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 
     SPete_Kaleidoscope_Line* pCurrentLine=pLinesGroupStart;
 
-    float PreviousIntersectionX=0.0f;
-    float PreviousRowU;
-    float PreviousRowV;
+    float PreviousIntersectionX = 0.0f;
+    float PreviousRowU = 0.0f;
+    float PreviousRowV = 0.0f;
 
     U32* pOutputLineStart=pOutput+(nScanLine*nWidth);
     while ((pCurrentLine<=pLinesGroupEnd)&&(PreviousIntersectionX<RightX)) {
@@ -1085,9 +1085,9 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 
     SPete_Kaleidoscope_Line* pCurrentLine=pLinesGroupStart;
 
-    float PreviousIntersectionX=0.0f;
-    float PreviousRowU;
-    float PreviousRowV;
+    float PreviousIntersectionX = 0.0f;
+    float PreviousRowU = 0.0f;
+    float PreviousRowV = 0.0f;
 
     unsigned char* pOutputLineStart=pOutput+(nScanLine*nWidth);
     while ((pCurrentLine<=pLinesGroupEnd)&&(PreviousIntersectionX<RightX)) {

@@ -404,8 +404,8 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
 			
 				int nClosestDistance=cnBiggestSignedInt;
 				int nNextClosestDistance=cnBiggestSignedInt;
-				U32 ResultColor;
-				U32 NextClosestColor;
+				U32 ResultColor = 0;
+				U32 NextClosestColor = 0;
 
 				int nCount;
 				for (nCount=0; nCount<nColors; nCount+=1) {
