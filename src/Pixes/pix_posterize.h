@@ -45,8 +45,6 @@ CPPEXTERN_HEADER(pix_posterize, GemPixObj)
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
-    	
     	virtual void 	processYUVImage(imageStruct &image);
         
         void	    	factorMess(float f);
