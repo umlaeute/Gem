@@ -73,12 +73,14 @@ class GEM_EXTERN pix_filmNT : public pix_film
 
 	unsigned char*	m_RawBuffer;
 
+	imageStruct m_decodedFrame; // the decoded frame, in a "AVI-native" colorspace
+	imageStruct m_gemFrame;     // the decoded frame, in a "GEM-native" colorspace
+
 
  protected:
 	
   //////////
   // static member functions
-  static void openMessCallback   (void *data, t_symbol *filename);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback       (void *data, t_floatarg state);
 };

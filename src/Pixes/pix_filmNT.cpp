@@ -102,13 +102,13 @@ void pix_filmNT :: closeMess(void)
   }
 }
 
-
 /////////////////////////////////////////////////////////
 // openMess
 //
 /////////////////////////////////////////////////////////
 void pix_filmNT :: realOpen(char *filename)
 {
+	m_format = m_colorspace;
   // Opens the AVI stream
   if (AVIStreamOpenFromFile(&m_streamVid, filename, streamtypeVIDEO, 0, OF_READ, NULL)) {
     error("GEM: pix_film: Unable to open file: %s", filename);
@@ -141,8 +141,7 @@ void pix_filmNT :: realOpen(char *filename)
 			*m_pbmihDst = *m_pbmihRaw;
 			m_pbmihDst->biSize = sizeof(BITMAPINFOHEADER);
 
-			m_csize = 1;
-			m_format = GL_LUMINANCE;
+			m_decodedFrame.setCsizeByFormat(GL_LUMINANCE);
 			
 			m_pbmihDst->biBitCount			= 8;
 			m_pbmihDst->biClrUsed			= 256;
@@ -161,8 +160,7 @@ void pix_filmNT :: realOpen(char *filename)
 
 			*m_pbmihDst = *m_pbmihRaw;
 
-			m_csize = 3;
-			m_format = GL_BGR_EXT;
+			m_decodedFrame.setCsizeByFormat(GL_BGR_EXT);
 			
 			m_pbmihDst->biBitCount			= 24;
 			m_pbmihDst->biClrUsed			= 0;
@@ -178,6 +176,15 @@ void pix_filmNT :: realOpen(char *filename)
 		m_xsize = streaminfo.rcFrame.right - streaminfo.rcFrame.left;
 		m_ysize = streaminfo.rcFrame.bottom - streaminfo.rcFrame.top;
 
+		m_decodedFrame.xsize=m_xsize;
+		m_decodedFrame.ysize=m_ysize;
+		m_decodedFrame.reallocate();
+
+		m_gemFrame.xsize=m_xsize;
+		m_gemFrame.ysize=m_ysize;
+		m_csize=m_gemFrame.setCsizeByFormat(m_format);
+		m_gemFrame.reallocate();
+		
 		if (!(m_hic = ICLocate(ICTYPE_VIDEO, 0, m_pbmihRaw, m_pbmihDst, ICMODE_DECOMPRESS)))
 		{
 			error("GEM: pix_film: Could not find decompressor: %s", filename);
@@ -268,9 +275,15 @@ void pix_filmNT :: getFrame()
 	if (!AVIStreamRead(m_streamVid, m_reqFrame, 1, m_RawBuffer, m_nRawBuffSize, &lBytesWritten, 0))
 	{
 		m_pbmihRaw->biSize = lBytesWritten;
-		ICDecompress(m_hic, 0, m_pbmihRaw, m_RawBuffer, m_pbmihDst, m_frame);
+		ICDecompress(m_hic, 0, m_pbmihRaw, m_RawBuffer, m_pbmihDst, m_decodedFrame.data);
 //		if (ICERR_OK == ICDecompress(m_hic, 0, m_pbmihRaw, m_RawBuffer, m_pbmihDst, m_frame))
 //			m_frame = m_DstBuffer;
+		switch (m_decodedFrame.format){
+		case GL_LUMINANCE: m_gemFrame.fromGray(m_decodedFrame.data); break;
+		default:
+		case GL_BGR_EXT:   m_gemFrame.fromBGR(m_decodedFrame.data);
+		}
+		m_frame=m_gemFrame.data;
 	}
     break;
   case GEM_MOVIE_NONE:
@@ -289,17 +302,10 @@ void pix_filmNT :: obj_setupCallback(t_class *classPtr)
   class_addcreator((t_newmethod)_classpix_filmNT, gensym("pix_film"), A_DEFSYM, A_NULL);
   pix_film::real_obj_setupCallback(classPtr);
 
-  class_addmethod(classPtr, (t_method)&pix_filmNT::openMessCallback,
-		  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmNT::changeImageCallback,
 		  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmNT::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
-
-}
-void pix_filmNT :: openMessCallback(void *data, t_symbol *filename)
-{
-  GetMyClass(data)->openMess(filename);
 }
 void pix_filmNT :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
@@ -310,5 +316,4 @@ void pix_filmNT :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
-
 #endif // _WINDOWS
