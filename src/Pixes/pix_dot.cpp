@@ -178,7 +178,7 @@ void pix_dot :: sizeMess(int width, int height)
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_dot :: processFX(imageStruct &image)
+void pix_dot :: processImage(imageStruct &image)
 {
   unsigned char *src = image.data;
   unsigned char *dest;

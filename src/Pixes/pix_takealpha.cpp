@@ -41,34 +41,24 @@ pix_takealpha :: ~pix_takealpha()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_takealpha :: processDualImage(imageStruct &image, imageStruct &right)
+void pix_takealpha :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
 
-    while(datasize--)
-    {
-    	leftPix[chAlpha] =rightPix[chAlpha];
-        leftPix += 4;
-	rightPix += 4;
+    while(datasize--)    {
+      leftPix[chAlpha] =rightPix[chAlpha];
+      leftPix += 4;
+      rightPix += 4;
     }
-}
-
-/////////////////////////////////////////////////////////
-// processDualGray
-//
-/////////////////////////////////////////////////////////
-void pix_takealpha :: processDualGray(imageStruct &image, imageStruct &right)
-{
-
 }
 
 /////////////////////////////////////////////////////////
 // processRightGray
 //
 /////////////////////////////////////////////////////////
-void pix_takealpha :: processRightGray(imageStruct &image, imageStruct &right)
+void pix_takealpha :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 {
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
@@ -80,24 +70,6 @@ void pix_takealpha :: processRightGray(imageStruct &image, imageStruct &right)
       leftPix += 4;
       rightPix+=4;
     }
-}
-
-/////////////////////////////////////////////////////////
-// processDualYUV
-//
-/////////////////////////////////////////////////////////
-void pix_takealpha :: processDualYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_takealpha: YUV not yet implemented :-(");
-}
-
-/////////////////////////////////////////////////////////
-// processRightYUV
-//
-/////////////////////////////////////////////////////////
-void pix_takealpha :: processRightYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_takealpha: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

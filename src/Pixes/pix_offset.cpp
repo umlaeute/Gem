@@ -9,7 +9,6 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -45,7 +44,7 @@ pix_offset :: ~pix_offset()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_offset :: processImage(imageStruct &image)
+void pix_offset :: processRGBAImage(imageStruct &image)
 {
   int datasize =  image.xsize * image.ysize;
   unsigned char *pixels = image.data;
@@ -76,15 +75,6 @@ void pix_offset :: processGrayImage(imageStruct &image)
     unsigned char m_grey=m_offset[chRed];
 
     while(datasize--)*pixels++ += m_grey;
-}
-
-/////////////////////////////////////////////////////////
-// processYUVImage
-//
-/////////////////////////////////////////////////////////
-void pix_offset :: processYUVImage(imageStruct &image)
-{
-    post("pix_offset: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

@@ -9,7 +9,6 @@
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -58,7 +57,7 @@ pix_rectangle :: ~pix_rectangle()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_rectangle :: processImage(imageStruct &image)
+void pix_rectangle :: processRGBAImage(imageStruct &image)
 {
 	int bytesize = 4 * sizeof(unsigned char); // 4 for RGBA
 	int rowsize  = image.xsize * bytesize;
@@ -136,15 +135,6 @@ void pix_rectangle :: processGrayImage(imageStruct &image)
             pixels++;
         }
     }
-}
-
-/////////////////////////////////////////////////////////
-// processYUVImage
-//
-/////////////////////////////////////////////////////////
-void pix_rectangle :: processYUVImage(imageStruct &image)
-{
-    post("pix_rectangle: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

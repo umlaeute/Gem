@@ -9,7 +9,6 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -157,7 +156,7 @@ void pix_histo :: update_graphs(void)
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_histo :: processImage(imageStruct &image)
+void pix_histo :: processRGBAImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
@@ -250,15 +249,6 @@ void pix_histo :: processImage(imageStruct &image)
   }
 
   update_graphs();
-}
-
-/////////////////////////////////////////////////////////
-// processYUVImage
-//
-/////////////////////////////////////////////////////////
-void pix_histo :: processYUVImage(imageStruct &image)
-{
-    post("pix_histo: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

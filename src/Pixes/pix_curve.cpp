@@ -130,7 +130,7 @@ t_float* pix_curve :: checkarray(t_symbol *s, int *length)
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_curve :: processImage(imageStruct &image)
+void pix_curve :: processRGBAImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
@@ -190,10 +190,6 @@ void pix_curve :: processImage(imageStruct &image)
 
 }
 
-void pix_curve :: processYUVImage(imageStruct &image)
-{
-    post("pix_curve: YUV not yet implemented :-(");
-}
 /////////////////////////////////////////////////////////
 // static member function
 //

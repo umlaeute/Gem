@@ -23,7 +23,7 @@ LOG
 #include <OpenGL/glext.h>
 #endif
 
-#include "Pixes/pix_fx.h"
+#include "Base/GemPixObj.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -39,7 +39,7 @@ DESCRIPTION
    
 -----------------------------------------------------------------*/
 
-class GEM_EXTERN pix_rgba : public pix_fx
+class GEM_EXTERN pix_rgba : public GemPixObj
 {
     CPPEXTERN_HEADER(pix_rgba, GemPixObj)
 
@@ -57,8 +57,7 @@ class GEM_EXTERN pix_rgba : public pix_fx
 
     	//////////
     	// Do the processing
-    	void 	processFX(imageStruct &image);
-        void	processYUVfx(imageStruct &image);
+    	void 	processImage(imageStruct &image);
 
 	unsigned char *m_data;
 	int            m_size;

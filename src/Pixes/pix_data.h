@@ -63,21 +63,6 @@ class GEM_EXTERN pix_data : public GemPixDualObj
     	//////////
     	virtual void 	processDualImage(imageStruct &, imageStruct &)	{}
 
-    	//////////
-    	virtual void 	processDualGray(imageStruct &, imageStruct &)	{}
-
-    	//////////
-    	virtual void 	processRightGray(imageStruct &, imageStruct &)	{}
-        
-        //////////
-        virtual void 	processYUVImage(imageStruct &)		{}
-        
-    	//////////
-    	virtual void 	processDualYUV(imageStruct &, imageStruct &)	{}
-
-    	//////////
-    	virtual void 	processRightYUV(imageStruct &, imageStruct &)	{}
-
         //////////
         void			trigger();
 
@@ -102,9 +87,9 @@ class GEM_EXTERN pix_data : public GemPixDualObj
 
         //////////
         // Static member callbacks
-		static void		triggerMessCallback(void *data);
-		static void		xPosCallback(void *data, t_floatarg pos);
-		static void		yPosCallback(void *data, t_floatarg pos);
+	static void		triggerMessCallback(void *data);
+	static void		xPosCallback(void *data, t_floatarg pos);
+	static void		yPosCallback(void *data, t_floatarg pos);
 };
 
 #endif	// for header file

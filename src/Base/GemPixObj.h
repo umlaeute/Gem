@@ -47,20 +47,27 @@ class GEM_EXTERN GemPixObj : public GemBase
     	virtual ~GemPixObj()				{ }
 
     	//////////
-    	// The derived class HAS TO override this.
+    	// The derived class should override this.
     	// This is called whenever a new image comes through.
-    	virtual void 	processImage(imageStruct &image) = 0;
+	// The default is to output an error
+    	virtual void 	processImage(imageStruct &image);
     	
     	//////////
     	// The derived class should override this.
+    	// This is called whenever a new RGBA image comes through.
+	// The default is to call processImage().
+    	virtual void 	processRGBAImage(imageStruct &image);
+
+    	//////////
+    	// The derived class should override this.
     	// This is called whenever a new gray8 image comes through.
-	// The default is to output an error.
+	// The default is to call processImage().
     	virtual void 	processGrayImage(imageStruct &image);
         
         //////////
     	// The derived class should override this.
     	// This is called whenever a new YUV image comes through.
-	// The default is to output an error.
+	// The default is to call processImage().
     	virtual void 	processYUVImage(imageStruct &image);
     	
     	//////////
@@ -84,11 +91,26 @@ class GEM_EXTERN GemPixObj : public GemBase
 
     	//////////
     	// The derived class should NOT override this unless they have some
-		//		very special behavior.
-    	// Do the rendering, which calls processImage or processGrayImage
+	//		very special behavior.
+    	// Do the rendering, which calls processImage or processGrayImage, etc...
+	// save the image-information
     	virtual void 	render(GemState *state);
+	// turn the pointer back to the old data after rendering
+	virtual void postrender(GemState *state);
 
-	void startRendering(void) {post("start rendering");setPixModified();}
+	void startRendering(void) {
+	  //post("start rendering");
+	  setPixModified();
+	}
+
+	//////////
+	// the original image
+	imageStruct  *oldImage;
+	int           old_xsize;
+	int           old_ysize;
+	int           old_csize;
+	int           old_format;    
+	unsigned char*old_data;
 
     private:
 

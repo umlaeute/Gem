@@ -40,7 +40,7 @@ class GEM_EXTERN GEMglAlphaFunc : public GemBase
 
         //////////
         // Constructor
-        GEMglAlphaFunc (t_symbol*, t_floatarg);         // CON
+        GEMglAlphaFunc (int, t_atom*);         // CON
 
     protected:
 
@@ -56,7 +56,7 @@ class GEM_EXTERN GEMglAlphaFunc : public GemBase
        // define and set the variables
 
 	 GLenum func;		// VAR
-	virtual void	funcMess 	(int);		// FUN glAlphaFunc GLenum
+	virtual void	funcMess 	(int, t_atom*);		// FUN glAlphaFunc GLenum
 
 	GLclampf ref;		// VAR
 	virtual void	refMess 	(t_float);		// FUN glAlphaFunc GLclampf
@@ -67,7 +67,7 @@ class GEM_EXTERN GEMglAlphaFunc : public GemBase
         //////////
         // Static member functions
 
-	static void	funcMessCallback	(void*, t_symbol*);		// CALLBACK glAlphaFunc
+	static void	funcMessCallback	(void*, t_symbol*,int,t_atom*);		// CALLBACK glAlphaFunc
 	static void	refMessCallback	(void*, t_floatarg);		// CALLBACK glAlphaFunc
 
 	// we need some inlets

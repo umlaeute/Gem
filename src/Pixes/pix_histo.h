@@ -57,8 +57,7 @@ class GEM_EXTERN pix_histo : public GemPixObj
 	
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
-  virtual void 	processYUVImage(imageStruct &image);	
+  virtual void 	processRGBAImage(imageStruct &image);
 	
   //////////
   // tables to hold the curves

@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    this file has been generated automatically
+// checked
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -16,7 +17,7 @@
 
 #include "GEMglAlphaFunc.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS (GEMglAlphaFunc , t_symbol*, A_DEFSYMBOL, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME (GEMglAlphaFunc)
 
 /////////////////////////////////////////////////////////
 //
@@ -26,12 +27,12 @@ CPPEXTERN_NEW_WITH_TWO_ARGS (GEMglAlphaFunc , t_symbol*, A_DEFSYMBOL, t_floatarg
 // Constructor
 //
 /////////////////////////////////////////////////////////
-GEMglAlphaFunc :: GEMglAlphaFunc(t_symbol* arg1=0, t_floatarg arg2=0) :
-             		func((GLenum)arg1),
-		ref((GLclampf)arg2)
+GEMglAlphaFunc :: GEMglAlphaFunc(int argc, t_atom*argv)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("func"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ref"));
+	funcMess(argc, argv);
+	if (argc>1)refMess(atom_getfloat(argv+1));
 }
 
 /////////////////////////////////////////////////////////
@@ -54,9 +55,11 @@ void GEMglAlphaFunc :: render(GemState *state)
 // set my variables
 /////////////////////////////////////////////////////////
 
-void GEMglAlphaFunc :: funcMess (int arg1) {
-	func = (GLenum)arg1;
-	setModified();
+void GEMglAlphaFunc :: funcMess (int argc, t_atom *argv) {
+  if (argc>0 && argv!= 0){
+    func = (GLenum)(argv->a_type == A_SYMBOL)?getGLdefine(argv->a_w.w_symbol->s_name):atom_getint(argv);
+    setModified();
+  }
 }
 
 
@@ -73,16 +76,16 @@ void GEMglAlphaFunc :: refMess (t_float arg1) {
 /////////////////////////////////////////////////////////
 
 void GEMglAlphaFunc :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglAlphaFunc,gensym("glAlphaFunc"),A_NULL);
+        class_addcreator((t_newmethod)_classGEMglAlphaFunc,gensym("glAlphaFunc"),A_GIMME,A_NULL);
 
-	class_addmethod(classPtr, (t_method)&GEMglAlphaFunc::funcMessCallback, gensym("func"), A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglAlphaFunc::refMessCallback, gensym("ref"), A_NULL);
+	class_addmethod(classPtr, (t_method)&GEMglAlphaFunc::funcMessCallback, gensym("func"), A_GIMME, A_NULL);
+	class_addmethod(classPtr, (t_method)&GEMglAlphaFunc::refMessCallback, gensym("ref"), A_DEFFLOAT, A_NULL);
 }
 
 
-void GEMglAlphaFunc :: funcMessCallback (   void* data, t_symbol*    arg0) {
-	GetMyClass(data)->funcMess (getGLdefine(arg0->s_name));
+void GEMglAlphaFunc :: funcMessCallback (   void* data, t_symbol* s, int argc, t_atom *argv) {
+	GetMyClass(data)->funcMess (argc, argv);
 }
 void GEMglAlphaFunc :: refMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->refMess ( (t_int)    arg0);
+	GetMyClass(data)->refMess (arg0);
 }

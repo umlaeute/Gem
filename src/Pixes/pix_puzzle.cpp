@@ -172,7 +172,7 @@ void pix_puzzle :: moveMess(int direction)
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_puzzle :: processFX(imageStruct &image)
+void pix_puzzle :: processImage(imageStruct &image)
 {
   unsigned char *src = image.data;
   unsigned char *dest;
@@ -255,7 +255,6 @@ void pix_puzzle :: obj_setupCallback(t_class *classPtr)
 
   class_addmethod(classPtr, (t_method)&pix_puzzle::sizeMessCallback,
   		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addfloat(classPtr, (t_method)&pix_puzzle::stateMessCallback);
   class_addmethod(classPtr, (t_method)&pix_puzzle::moveMessCallback,
   		  gensym("move"), A_FLOAT, A_NULL);
 }
@@ -270,10 +269,6 @@ void pix_puzzle :: sizeMessCallback(void *data, t_floatarg width, t_floatarg hei
   GetMyClass(data)->sizeMess((int)width, (int)height);  
 }
 
-void pix_puzzle :: stateMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->activate((int)state);
-}
 void pix_puzzle :: moveMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->moveMess((int)state);

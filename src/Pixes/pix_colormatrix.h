@@ -53,11 +53,8 @@ class GEM_EXTERN pix_colormatrix : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
+    	virtual void 	processRGBAImage(imageStruct &image);
         
-	//////////
-	virtual void 	processYUVImage(imageStruct &image);
-    	
     	//////////
     	// Set the matrix
     	void	    	matrixMess(int argc, t_atom *argv);

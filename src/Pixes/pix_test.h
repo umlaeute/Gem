@@ -54,15 +54,19 @@ class GEM_EXTERN pix_test : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
+    	virtual void 	processRGBAImage(imageStruct &image);
 
     	//////////
     	// Do the processing - this is a no-op
     	virtual void 	processGrayImage(imageStruct &image) { }
         
         //////////
-    	// Do the processing - this is a no-op
+    	// Do the processing : this is not yet implemented
     	virtual void 	processYUVImage(imageStruct &image);
+	
+	/////////
+	// Do the processing : all the other formats (this is a no-op)
+	virtual void processImage(imageStruct &image) { }
 
 	void pix_test :: postrender(GemState *state);
 

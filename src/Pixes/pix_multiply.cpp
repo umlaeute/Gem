@@ -41,78 +41,57 @@ pix_multiply :: ~pix_multiply()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_multiply :: processDualImage(imageStruct &image, imageStruct &right)
+void pix_multiply :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
-
-    while(datasize--)
-    {
-    	leftPix[chRed] = INT_MULT(leftPix[chRed], rightPix[chRed]);
-    	leftPix[chGreen] = INT_MULT(leftPix[chGreen], rightPix[chGreen]);
-    	leftPix[chBlue] = INT_MULT(leftPix[chBlue], rightPix[chBlue]);
-        leftPix += 4;
-		rightPix += 4;
-    }
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
+  
+  while(datasize--)    {
+    leftPix[chRed] = INT_MULT(leftPix[chRed], rightPix[chRed]);
+    leftPix[chGreen] = INT_MULT(leftPix[chGreen], rightPix[chGreen]);
+    leftPix[chBlue] = INT_MULT(leftPix[chBlue], rightPix[chBlue]);
+    leftPix += 4;
+    rightPix += 4;
+  }
 }
 
 /////////////////////////////////////////////////////////
 // processRightGray
 //
 /////////////////////////////////////////////////////////
-void pix_multiply :: processRightGray(imageStruct &image, imageStruct &right)
+void pix_multiply :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
 
-    while(datasize--)
-	{
-		unsigned int alpha = rightPix[chGray];
-    	leftPix[chRed] = INT_MULT(leftPix[chRed], alpha);
-    	leftPix[chGreen] = INT_MULT(leftPix[chGreen], alpha);
-    	leftPix[chBlue] = INT_MULT(leftPix[chBlue], alpha);
-        leftPix += 4;
-		rightPix++;
-	}
+  while(datasize--)	{
+    unsigned int alpha = rightPix[chGray];
+    leftPix[chRed] = INT_MULT(leftPix[chRed], alpha);
+    leftPix[chGreen] = INT_MULT(leftPix[chGreen], alpha);
+    leftPix[chBlue] = INT_MULT(leftPix[chBlue], alpha);
+    leftPix += 4;
+    rightPix++;
+  }
 }
 
 /////////////////////////////////////////////////////////
 // processDualGray
 //
 /////////////////////////////////////////////////////////
-void pix_multiply :: processDualGray(imageStruct &image, imageStruct &right)
+void pix_multiply :: processGray_Gray(imageStruct &image, imageStruct &right)
 {
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
 
-    while(datasize--)
-	{
-		unsigned int alpha = rightPix[chGray];
-    	leftPix[chGray] = INT_MULT(leftPix[chGray], alpha);
-        leftPix++;
-		rightPix++;
-	}
-}
-
-/////////////////////////////////////////////////////////
-// processDualYUV
-//
-/////////////////////////////////////////////////////////
-void pix_multiply :: processDualYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_multiply: YUV not yet implemented :-(");
-}
-
-/////////////////////////////////////////////////////////
-// processRightYUV
-//
-/////////////////////////////////////////////////////////
-void pix_multiply :: processRightYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_multiply: YUV not yet implemented :-(");
+    while(datasize--)	{
+      unsigned int alpha = rightPix[chGray];
+      leftPix[chGray] = INT_MULT(leftPix[chGray], alpha);
+      leftPix++;
+      rightPix++;
+    }
 }
 
 /////////////////////////////////////////////////////////

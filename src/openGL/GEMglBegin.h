@@ -40,7 +40,7 @@ class GEM_EXTERN GEMglBegin : public GemBase
 
         //////////
         // Constructor
-        GEMglBegin (t_symbol*);         // CON
+        GEMglBegin (int, t_atom*);         // CON
 
     protected:
 
@@ -56,7 +56,7 @@ class GEM_EXTERN GEMglBegin : public GemBase
        // define and set the variables
 
 	 GLenum mode;		// VAR
-	virtual void	modeMess 	(int);		// FUN glBegin GLenum
+	 virtual void	modeMess 	(int, t_atom *);//int);		// FUN glBegin GLenum
 
 
     private:
@@ -64,7 +64,7 @@ class GEM_EXTERN GEMglBegin : public GemBase
         //////////
         // Static member functions
 
-	static void	modeMessCallback	(void*, t_symbol*);		// CALLBACK glBegin
+	static void	modeMessCallback	(void*, t_symbol*,int,t_atom*);		// CALLBACK glBegin
 
 	// we need some inlets
 	t_inlet	*m_inlet[ 1 ];

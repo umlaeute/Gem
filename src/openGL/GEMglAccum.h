@@ -40,7 +40,7 @@ class GEM_EXTERN GEMglAccum : public GemBase
 
         //////////
         // Constructor
-        GEMglAccum (t_symbol*, t_floatarg);         // CON
+        GEMglAccum (int, t_atom*);         // CON
 
     protected:
 
@@ -56,7 +56,7 @@ class GEM_EXTERN GEMglAccum : public GemBase
        // define and set the variables
 
 	 GLenum op;		// VAR
-	virtual void	opMess 	(int);		// FUN glAccum GLenum
+	virtual void	opMess 	(int, t_atom*);		// FUN glAccum GLenum
 
 	GLfloat value;		// VAR
 	virtual void	valueMess 	(t_float);		// FUN glAccum GLfloat
@@ -67,7 +67,7 @@ class GEM_EXTERN GEMglAccum : public GemBase
         //////////
         // Static member functions
 
-	static void	opMessCallback	(void*, t_symbol*);		// CALLBACK glAccum
+	static void	opMessCallback	(void*, t_symbol*, int, t_atom*);		// CALLBACK glAccum
 	static void	valueMessCallback	(void*, t_floatarg);		// CALLBACK glAccum
 
 	// we need some inlets

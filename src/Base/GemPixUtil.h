@@ -40,6 +40,13 @@ LOG
 #define GL_UNSIGNED_INT_10_10_10_2_EXT      0x8036
 #endif
 
+#ifdef GL_YCBCR_422_APPLE
+#define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
+#else
+// maybe, GL_YCBCR_422_APPLE is 0x85B9 (i really don't know exactly...)
+#define GL_YCBCR_422_GEM 0x85B9
+#endif
+
 #include "Base/GemFuncUtil.h"
 
 /*-----------------------------------------------------------------
@@ -50,6 +57,11 @@ CLASS
     The basic image structure
 
 -----------------------------------------------------------------*/
+// we now have a class "imageStruct";
+// since i need to compile some of the sources with an older version of Gem
+// there is a  new define here:
+#define IMAGE_CLASS
+
 struct GEM_EXTERN imageStruct
 {
 
@@ -89,6 +101,7 @@ struct GEM_EXTERN imageStruct
 
     //////////
     // the format - either GL_RGBA, GL_BGRA_EXT, or GL_LUMINANCE
+    // or GL_YCBCR_422_GEM (which is on mac-computers GL_YCBCR_422_APPLE)
     GLenum          format;
 
     //////////

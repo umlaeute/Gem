@@ -116,6 +116,8 @@ private:
 	static void RGBMessCallback(void *data); 
 	static void GREYMessCallback(void *data);
 	static void SETMessCallback(void *data, t_float x, t_float y);
+	static void YUVMessCallback(void *data); 
+	
 
 	static void DATAMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
 };

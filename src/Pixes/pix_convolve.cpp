@@ -223,6 +223,7 @@ void pix_convolve :: processImage(imageStruct &image)
 void pix_convolve :: processYUVImage(imageStruct &image)
 {
     post("pix_convolve: YUV not yet implemented :-(");
+    post("\tbut really :: why ?");
 }
 /////////////////////////////////////////////////////////
 // rangeMess

@@ -53,11 +53,8 @@ class pix_color : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
-        
-	//////////
-	virtual void 	processYUVImage(imageStruct &image);
-    	
+    	virtual void 	processRGBAImage(imageStruct &image);
+  	
     	//////////
     	// Set the new color
     	void	    	vecGainMess(float red, float green, float blue);

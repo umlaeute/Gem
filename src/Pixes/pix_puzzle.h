@@ -14,7 +14,7 @@ LOG
 #ifndef INCLUDE_PIX_PUZZLE_H_
 #define INCLUDE_PIX_PUZZLE_H_
 
-#include "Pixes/pix_fx.h"
+#include "Base/GemPixObj.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -29,7 +29,7 @@ LOG
   DESCRIPTION
    
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_puzzle : public pix_fx
+class GEM_EXTERN pix_puzzle : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_puzzle, GemPixObj)
 
@@ -47,7 +47,7 @@ class GEM_EXTERN pix_puzzle : public pix_fx
 
   //////////
   // Do the processing
-  virtual void 	processFX(imageStruct &image);
+  virtual void 	processImage(imageStruct &image);
 
   imageStruct    myImage;
 
@@ -76,7 +76,6 @@ class GEM_EXTERN pix_puzzle : public pix_fx
   // static member functions
   static void bangMessCallback(void *data);
   static void sizeMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void stateMessCallback(void *data, t_floatarg state);
   static void moveMessCallback(void *data, t_floatarg state);
 };
 

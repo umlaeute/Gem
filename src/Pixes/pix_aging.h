@@ -19,7 +19,7 @@ LOG
 #ifndef INCLUDE_PIX_AGING_H_
 #define INCLUDE_PIX_AGING_H_
 
-#include "Pixes/pix_fx.h"
+#include "Base/GemPixObj.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -42,7 +42,7 @@ typedef struct _scratch
 	int init;
 } t_scratch;
 
-class GEM_EXTERN pix_aging : public pix_fx
+class GEM_EXTERN pix_aging : public GemPixObj
 {
     CPPEXTERN_HEADER(pix_aging, GemPixObj)
 
@@ -60,19 +60,8 @@ class GEM_EXTERN pix_aging : public pix_fx
 
     	//////////
     	// Do the processing
-    	virtual void 	processFX(imageStruct &image);
+    	virtual void 	processImage(imageStruct &image);
         
-    	//////////
-    	// Do the processing
-    	virtual void 	processYUVfx(imageStruct &image);
-#if 1
-    	//////////
-    	// Do the processing - this is a no-op
-    	virtual void 	processGrayFX(imageStruct &image){
-	  processFX(image);
-	}
-#endif
-
 	void scratchMess(int scratchlines);
 
 	////////

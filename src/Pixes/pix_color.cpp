@@ -44,7 +44,7 @@ pix_color :: ~pix_color()
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_color :: processImage(imageStruct &image)
+void pix_color :: processRGBAImage(imageStruct &image)
 {
     int i = image.xsize * image.ysize;
     
@@ -58,10 +58,6 @@ void pix_color :: processImage(imageStruct &image)
     }
 }
 
-void pix_color :: processYUVImage(imageStruct &image)
-{
-    post("pix_color: YUV not yet implemented :-(");
-}
 /////////////////////////////////////////////////////////
 // vecGainMess
 //

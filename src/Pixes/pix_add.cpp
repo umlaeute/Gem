@@ -41,7 +41,7 @@ pix_add :: ~pix_add()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_add :: processDualImage(imageStruct &image, imageStruct &right)
+void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
 #ifndef MMX
     int datasize = image.xsize * image.ysize;
@@ -85,19 +85,17 @@ void pix_add :: processDualImage(imageStruct &image, imageStruct &right)
 // processDualGray
 //
 /////////////////////////////////////////////////////////
-void pix_add :: processDualGray(imageStruct &image, imageStruct &right)
+void pix_add :: processGray_Gray(imageStruct &image, imageStruct &right)
 {
 #ifndef MMX
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
 
-    while(datasize--)
-    {
-    	leftPix[chGray] =
-			CLAMP_HIGH((int)leftPix[chGray] + (int)rightPix[chGray]);
-        leftPix++;
-		rightPix++;
+    while(datasize--) {
+      leftPix[chGray] = CLAMP_HIGH((int)leftPix[chGray] + (int)rightPix[chGray]);
+      leftPix++;
+      rightPix++;
     }
 #else
     int datasize = (image.xsize * image.ysize)>>2;
@@ -117,41 +115,20 @@ void pix_add :: processDualGray(imageStruct &image, imageStruct &right)
 // processRightGray
 //
 /////////////////////////////////////////////////////////
-void pix_add :: processRightGray(imageStruct &image, imageStruct &right)
+void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
-
-    while(datasize--)
-    {
-		int alpha = rightPix[chGray];
-    	leftPix[chRed] =
-			CLAMP_HIGH((int)leftPix[chRed] + alpha);
-    	leftPix[chGreen] =
-			CLAMP_HIGH((int)leftPix[chGreen] + alpha);
-    	leftPix[chBlue] =
-			CLAMP_HIGH((int)leftPix[chBlue] + alpha);
-        leftPix += 4;
-		rightPix++;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
+  
+  while(datasize--)    {
+    int alpha = rightPix[chGray];
+    leftPix[chRed]   = CLAMP_HIGH((int)leftPix[chRed]   + alpha);
+    leftPix[chGreen] = CLAMP_HIGH((int)leftPix[chGreen] + alpha);
+    leftPix[chBlue]  = CLAMP_HIGH((int)leftPix[chBlue]  + alpha);
+    leftPix += 4;
+    rightPix++;
     }
-}
-
-/////////////////////////////////////////////////////////
-// processDualYUV
-//
-/////////////////////////////////////////////////////////
-void pix_add :: processDualYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_add:  YUV not yet implemented");
-}
-/////////////////////////////////////////////////////////
-// processRightYUV
-//
-/////////////////////////////////////////////////////////
-void pix_add :: processRightYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_add:  YUV not yet implemented");
 }
 
 /////////////////////////////////////////////////////////

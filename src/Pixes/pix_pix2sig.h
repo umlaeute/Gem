@@ -56,14 +56,7 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
 
   //////////
   // processImage
-  virtual void  processImage(imageStruct &image);
-  
-  //////////
-  virtual void 	processGrayImage(imageStruct &image)	{}
-  
-  //////////
-  // processImage
-  virtual void  processYUVImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
 
   //////////
   // DSP-Message

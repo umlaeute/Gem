@@ -49,23 +49,11 @@ class GEM_EXTERN pix_takealpha : public GemPixDualObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processDualImage(imageStruct &image, imageStruct &right);
+    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
 
     	//////////
     	// Do the processing
-    	virtual void 	processDualGray(imageStruct &image, imageStruct &right);
-
-    	//////////
-    	// Do the processing
-    	virtual void 	processRightGray(imageStruct &image, imageStruct &right);
-        
-        //////////
-    	// Do the processing
-    	virtual void 	processDualYUV(imageStruct &image, imageStruct &right);
-
-    	//////////
-    	// Do the processing
-    	virtual void 	processRightYUV(imageStruct &image, imageStruct &right);
+    	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
 };
 
 #endif	// for header file

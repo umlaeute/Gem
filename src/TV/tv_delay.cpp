@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(tv_delay, t_float,A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 tv_delay :: tv_delay(t_float &f)
 {
-  m_maxframes=(f>0)?(int)f:MAX_FRAMES;
+  m_maxframes=(f>0)?(int)f:DEFAULT_MAX_FRAMES;
   myImage.xsize=myImage.ysize=myImage.csize=1;
 #ifdef IMAGE_CLASS
   myImage.allocate(1*m_maxframes);
@@ -66,7 +66,7 @@ void tv_delay :: delayMess(int frame)
 // processImage
 //
 /////////////////////////////////////////////////////////
-void tv_delay :: processFX(imageStruct &image)
+void tv_delay :: processImage(imageStruct &image)
 {
   unsigned char *src = image.data;
   unsigned char *dest;

@@ -56,13 +56,13 @@ void GemPixDualObj :: processImage(imageStruct &image)
   //if (!m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
 
     if (image.xsize != m_pixRight->image.xsize ||
-    	image.ysize != m_pixRight->image.ysize)
-    {
-    	error("GEM: GemPixDualObj: two images do not have equal dimensions");
-     	m_pixRightValid = 0;
-
+    	image.ysize != m_pixRight->image.ysize)    {
+      error("GEM: GemPixDualObj: two images do not have equal dimensions");
+      m_pixRightValid = 0;
+      
     	return;
     }
+#ifndef NEW_DUAL_PIX
 	if (image.csize == 1)
 	{
 		if (m_pixRight->image.csize == 1)
@@ -91,61 +91,144 @@ void GemPixDualObj :: processImage(imageStruct &image)
 		else
 			processDualImage(image, m_pixRight->image);
 	}
+
+#else
+	bool found = false;
+	switch (image.format) {
+	case GL_RGBA:
+	case GL_BGRA_EXT:
+	  switch (m_pixRight->image.format) {
+	  case GL_RGBA:
+	  case GL_BGRA_EXT:
+	    found=true; processRGBA_RGBA(image, m_pixRight->image);
+	    break;
+	  case GL_LUMINANCE:
+	    found=true; processRGBA_Gray(image, m_pixRight->image);
+	    break;
+	  case GL_YCBCR_422_GEM:
+	    found=true; processRGBA_YUV(image, m_pixRight->image);
+	    break;
+	  default:
+	    found=true; processRGBA_Any(image, m_pixRight->image);
+	  }
+	  break;
+	case GL_LUMINANCE:
+	  switch (m_pixRight->image.format) {
+	  case GL_RGBA:
+	  case GL_BGRA_EXT:
+	    found=true; processGray_RGBA(image, m_pixRight->image);
+	    break;
+	  case GL_LUMINANCE:
+	    found=true; processGray_Gray(image, m_pixRight->image);
+	    break;
+	  case GL_YCBCR_422_GEM:
+	    found=true; processGray_YUV(image, m_pixRight->image);
+	    break;
+	  default:
+	    found=true; processGray_Any(image, m_pixRight->image);
+	  }
+	  break;
+	case GL_YCBCR_422_GEM:
+	  switch (m_pixRight->image.format) {
+	  case GL_RGBA:
+	  case GL_BGRA_EXT:
+	    found=true; processYUV_RGBA(image, m_pixRight->image);
+	    break;
+	  case GL_LUMINANCE:
+	    found=true; processYUV_Gray(image, m_pixRight->image);
+	    break;
+	  case GL_YCBCR_422_GEM:
+	    found=true; processYUV_YUV(image, m_pixRight->image);
+	    break;
+	  default:
+	    found=true; processYUV_Any(image, m_pixRight->image);
+	  }
+	  break;
+	default:
+	  switch (m_pixRight->image.format) {
+	  case GL_RGBA:
+	  case GL_BGRA_EXT:
+	    found=true; processAny_RGBA(image, m_pixRight->image);
+	    break;
+	  case GL_LUMINANCE:
+	    found=true; processAny_Gray(image, m_pixRight->image);
+	    break;
+	  case GL_YCBCR_422_GEM:
+	    found=true; processAny_YUV(image, m_pixRight->image);
+	    break;
+	  default:break;
+	  }
+	}
+	if (!found)processDualImage(image, m_pixRight->image);
+#endif
+
 }
 
 /////////////////////////////////////////////////////////
-// processDualGray
+// process
 //
 /////////////////////////////////////////////////////////
+
+#ifndef NEW_DUAL_PIX
 void GemPixDualObj :: processDualGray(imageStruct &, imageStruct &)
-{
-	error("GEM: GemPixDualObj: cannot handle gray image");
-}
-
-/////////////////////////////////////////////////////////
-// processLeftGray
-//
-/////////////////////////////////////////////////////////
+{error("GEM: GemPixDualObj: cannot handle gray image");}
 void GemPixDualObj :: processLeftGray(imageStruct &, imageStruct &)
-{
-	error("GEM: GemPixDualObj: cannot handle gray image");
-}
-
-/////////////////////////////////////////////////////////
-// processRightGray
-//
-/////////////////////////////////////////////////////////
+{error("GEM: GemPixDualObj: cannot handle gray image");}
 void GemPixDualObj :: processRightGray(imageStruct &, imageStruct &)
-{
-	error("GEM: GemPixDualObj: cannot handle gray image");
-}
-
-/////////////////////////////////////////////////////////
-// processDualYUV
-//
-/////////////////////////////////////////////////////////
+{error("GEM: GemPixDualObj: cannot handle gray image");}
 void GemPixDualObj :: processDualYUV(imageStruct &, imageStruct &)
-{
-	error("GEM: GemPixDualObj: cannot handle both YUV images");
-}
-
-/////////////////////////////////////////////////////////
-// processLeftYUV
-//
-/////////////////////////////////////////////////////////
+{error("GEM: GemPixDualObj: cannot handle both YUV images");}
 void GemPixDualObj :: processLeftYUV(imageStruct &, imageStruct &)
-{
-	error("GEM: GemPixDualObj: cannot handle left YUV image");
-}
-
-/////////////////////////////////////////////////////////
-// processRightYUV
-//
-/////////////////////////////////////////////////////////
+{error("GEM: GemPixDualObj: cannot handle left YUV image");}
 void GemPixDualObj :: processRightYUV(imageStruct &, imageStruct &)
-{
-	error("GEM: GemPixDualObj: cannot handle right YUV image");
+{error("GEM: GemPixDualObj: cannot handle right YUV image");}
+#else
+#if 0
+void GemPixDualObj :: processRGBA_RGBA(imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processRGBA_Gray(imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processRGBA_YUV (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processRGBA_Any (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processGray_RGBA(imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processGray_Gray(imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processGray_YUV (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processGray_Any (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processYUV_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processYUV_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processYUV_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processYUV_Any  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processAny_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processAny_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+void GemPixDualObj :: processAny_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+#endif
+void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
+  startpost("processDualImage: no method to combine images of formats (");
+  switch (left.format) {
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    startpost("RGBA");break;
+  case GL_LUMINANCE:
+    startpost("Gray");break;
+  case GL_YCBCR_422_GEM:
+    startpost("YUV");break;
+  default:
+    startpost("%X", left.format);
+  }
+  startpost(") and (");
+  switch (right.format) {
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    startpost("RGBA");break;
+  case GL_LUMINANCE:
+    startpost("Gray");break;
+  case GL_YCBCR_422_GEM:
+    startpost("YUV");break;
+  default:
+    startpost("%X", left.format);
+  }
+  post(")");
+
 }
+#endif
 
 /////////////////////////////////////////////////////////
 // postrender

@@ -56,15 +56,7 @@ class GEM_EXTERN pix_normalize : public GemPixObj
     
     //////////
     // Do the processing
-    virtual void 	processImage(imageStruct &image);
-    	    	
-    //////////
-    // Do the processing
-    void	processGrayImage(imageStruct &image) {processImage(image);}
-
-    //////////
-    // Do the processing
-    virtual void 	processYUVImage(imageStruct &image);
+    virtual void 	processRGBAImage(imageStruct &image);
     
  private:
     

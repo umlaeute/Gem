@@ -41,19 +41,18 @@ pix_invert :: ~pix_invert()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_invert :: processImage(imageStruct &image)
+void pix_invert :: processRGBAImage(imageStruct &image)
 {
-    int i = image.xsize * image.ysize;
+  int i = image.xsize * image.ysize;
     
-    unsigned char *base = image.data;
-	while (i)
-    {
-		i--;
-        unsigned char alpha = base[chAlpha];
-		*((unsigned long *)base) = ~*((unsigned long *)base);
-        base[chAlpha] = alpha;
-        base += 4;
-    }
+  unsigned char *base = image.data;
+  while (i) {
+    i--;
+    unsigned char alpha = base[chAlpha];
+    *((unsigned long *)base) = ~*((unsigned long *)base);
+    base[chAlpha] = alpha;
+    base += 4;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -62,14 +61,13 @@ void pix_invert :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_invert :: processGrayImage(imageStruct &image)
 {
-    int i = image.xsize * image.ysize;
+  int i = image.xsize * image.ysize;
     
-    unsigned char *base = image.data;
-	while (i--)
-    {
-        base[chGray] = 255 - base[chGray];
-        base++;
-    }    
+  unsigned char *base = image.data;
+  while (i--) {
+    base[chGray] = 255 - base[chGray];
+    base++;
+  }    
 }
 
 /////////////////////////////////////////////////////////
@@ -78,7 +76,22 @@ void pix_invert :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_invert :: processYUVImage(imageStruct &image)
 {
-    post("pix_invert: YUV not yet implemented :-(");
+  int h,w;
+  long src;
+
+  src = 0;
+
+  //format is U Y V Y
+
+  for (h=0; h<image.ysize; h++){
+    for(w=0; w<image.xsize/2; w++){
+      image.data[src] = 255 - image.data[src];
+      image.data[src+1] = 255 - image.data[src+1];
+      image.data[src+2] = 255 - image.data[src+2];
+      image.data[src+3] = 255 - image.data[src+3];
+      src+=4;
+    }
+  }
 }
 
 /////////////////////////////////////////////////////////

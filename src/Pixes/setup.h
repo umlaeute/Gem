@@ -40,7 +40,6 @@ extern "C" {
    void pix_filmDarwin_setup();
  
    void pix_flip_setup();
-   void pix_fx_setup();
    void pix_gain_setup();
    void pix_histo_setup();
    void pix_hsv2rgb_setup();
@@ -115,7 +114,6 @@ extern "C" {
       pix_filmNT_setup();
 #endif
       pix_flip_setup();
-      pix_fx_setup();
       pix_gain_setup();
       pix_histo_setup();
       pix_hsv2rgb_setup();

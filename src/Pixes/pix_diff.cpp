@@ -41,32 +41,22 @@ pix_diff :: ~pix_diff()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_diff :: processDualImage(imageStruct &image, imageStruct &right)
+void pix_diff :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
 
-    while(datasize--)
-    {
-    	leftPix[chRed] =
-			abs(leftPix[chRed] - (int)rightPix[chRed]);
-    	leftPix[chGreen] =
-			abs(leftPix[chGreen] - (int)rightPix[chGreen]);
-    	leftPix[chBlue] =
-			abs((int)leftPix[chBlue] - (int)rightPix[chBlue]);
-        leftPix += 4;
-		rightPix += 4;
+    while(datasize--)    {
+      leftPix[chRed] =
+	abs(leftPix[chRed] - (int)rightPix[chRed]);
+      leftPix[chGreen] =
+	abs(leftPix[chGreen] - (int)rightPix[chGreen]);
+      leftPix[chBlue] =
+	abs((int)leftPix[chBlue] - (int)rightPix[chBlue]);
+      leftPix += 4;
+      rightPix += 4;
     }
-}
-
-/////////////////////////////////////////////////////////
-// processDualYUV
-//
-/////////////////////////////////////////////////////////
-void pix_diff :: processDualYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_diff:  YUV not yet implemented :^P");
 }
 
 /////////////////////////////////////////////////////////

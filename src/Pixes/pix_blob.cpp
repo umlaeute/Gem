@@ -67,7 +67,7 @@ pix_blob :: ~pix_blob()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_blob :: processImage(imageStruct &image)
+void pix_blob :: processRGBAImage(imageStruct &image)
 {
   unsigned char *pixels = image.data;
   int rows  = image.ysize;
@@ -175,15 +175,6 @@ void pix_blob :: GainMess(int argc, t_atom *argv)
   }
 
   m_method = -1;
-}
-
-/////////////////////////////////////////////////////////
-// processYUVImage
-//
-/////////////////////////////////////////////////////////
-void pix_blob :: processYUVImage(imageStruct &image)
-{
-    post("pix_blob:  YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

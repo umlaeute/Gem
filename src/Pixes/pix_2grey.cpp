@@ -41,26 +41,16 @@ pix_2grey :: ~pix_2grey()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_2grey :: processImage(imageStruct &image)
+void pix_2grey :: processRGBAImage(imageStruct &image)
 {
-    unsigned char *pixels = image.data;
-	int count = image.ysize * image.xsize;
-    while (count--)
-	{
-    	float grey = pixels[chRed] * 0.3086f + pixels[chGreen] * 0.6094f
-						+ pixels[chBlue] * 0.0820f;
-    	pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
-        pixels += 4;
+  unsigned char *pixels = image.data;
+  int count = image.ysize * image.xsize;
+  while (count--)    {
+    float grey = pixels[chRed] * 0.3086f + pixels[chGreen] * 0.6094f
+      + pixels[chBlue] * 0.0820f;
+    pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
+    pixels += 4;
     }
-}
-
-/////////////////////////////////////////////////////////
-// processYUVImage
-//
-/////////////////////////////////////////////////////////
-void pix_2grey :: processYUVImage(imageStruct &image)
-{
-    post("pix_2grey: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

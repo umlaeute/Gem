@@ -55,16 +55,9 @@ class GEM_EXTERN pix_offset : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
-    	    	
-    	//////////
-    	// Do the processing
+    	virtual void 	processRGBAImage(imageStruct &image);
     	virtual void 	processGrayImage(imageStruct &image);
-        
-        //////////
-    	// Do the processing
-    	virtual void 	processYUVImage(imageStruct &image);
-    	    	
+
     	//////////
     	// Set the new offset
     	void	    	vecOffsetMess(int argc, t_atom *argv);

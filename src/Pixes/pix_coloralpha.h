@@ -49,10 +49,7 @@ class GEM_EXTERN pix_coloralpha : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
-        
-	//////////
-	virtual void 	processYUVImage(imageStruct &image);
+    	virtual void 	processRGBAImage(imageStruct &image);
 };
 
 #endif	// for header file

@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_PIX_DOT_H_
 #define INCLUDE_PIX_DOT_H_
 
-#include "Pixes/pix_fx.h"
+#include "Base/GemPixObj.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -30,7 +30,7 @@ LOG
   DESCRIPTION
    
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_dot : public pix_fx
+class GEM_EXTERN pix_dot : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_dot, GemPixObj)
 
@@ -48,8 +48,7 @@ class GEM_EXTERN pix_dot : public pix_fx
 
   //////////
   // Do the processing
-  virtual void 	processFX(imageStruct &image);
-  virtual void 	processYUVfx(imageStruct &image);
+  virtual void 	processImage(imageStruct &image);
 
   imageStruct    myImage;
 

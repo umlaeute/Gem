@@ -57,7 +57,7 @@ static inline unsigned char TRI_MIN(unsigned char v1, unsigned char v2, unsigned
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_rgb2hsv :: processImage(imageStruct &image)
+void pix_rgb2hsv :: processRGBAImage(imageStruct &image)
 {
   unsigned char *pixels = image.data;
   int count = image.ysize * image.xsize;

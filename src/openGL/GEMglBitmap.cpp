@@ -34,7 +34,6 @@ GEMglBitmap :: GEMglBitmap (int argc, t_atom *argv)
 	m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("yorig"));
 	m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xmove"));
 	m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ymove"));
-	m_inlet[6] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bitmap"));
 }
 
 /////////////////////////////////////////////////////////

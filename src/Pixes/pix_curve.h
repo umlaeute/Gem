@@ -57,11 +57,8 @@ class GEM_EXTERN pix_curve : public GemPixObj
 	
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
-  
-  //////////
-  virtual void 	processYUVImage(imageStruct &image);
-	
+  virtual void 	processRGBAImage(imageStruct &image);
+  	
   //////////
   // tables to hold the curves
   t_symbol *name_R, *name_G, *name_B, *name_A;

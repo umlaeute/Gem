@@ -49,10 +49,7 @@ class GEM_EXTERN pix_diff : public GemPixDualObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processDualImage(imageStruct &image, imageStruct &right);
-        
-    	//////////
-    	virtual void 	processDualYUV(imageStruct &, imageStruct &);
+    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
 };
 
 #endif	// for header file

@@ -41,7 +41,7 @@ pix_subtract :: ~pix_subtract()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right)
+void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
 #ifndef MMX
     int datasize = image.xsize * image.ysize;
@@ -70,15 +70,6 @@ void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right)
     }
     MMXDONE;
 #endif
-}
-
-/////////////////////////////////////////////////////////
-// processDualImage
-//
-/////////////////////////////////////////////////////////
-void pix_subtract :: processDualYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_subtract: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

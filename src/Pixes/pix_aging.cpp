@@ -65,7 +65,7 @@ pix_aging :: ~pix_aging()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_aging :: processFX(imageStruct &image)
+void pix_aging :: processImage(imageStruct &image)
 {
   unsigned char *pixes = image.data;
   unsigned char *p;
@@ -206,15 +206,6 @@ void pix_aging :: processFX(imageStruct &image)
 
  BREAK:
   ;
-}
-
-/////////////////////////////////////////////////////////
-// processImage
-//
-/////////////////////////////////////////////////////////
-void pix_aging :: processYUVfx(imageStruct &image)
-{
-    post("pix_aging:  YUV not yet implemented :-(");
 }
 
 void pix_aging :: scratchMess(int scratchlines)

@@ -51,18 +51,10 @@ pix_pix2sig :: ~pix_pix2sig()
 /////////////////////////////////////////////////////////
 // processImage
 /////////////////////////////////////////////////////////
-void pix_pix2sig :: processImage(imageStruct &image)
+void pix_pix2sig :: processRGBAImage(imageStruct &image)
 {
   m_data = image.data;
   m_size = image.xsize * image.ysize;
-}
-
-/////////////////////////////////////////////////////////
-// processImage
-/////////////////////////////////////////////////////////
-void pix_pix2sig :: processYUVImage(imageStruct &image)
-{
-    post("pix_pix2sig: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////
@@ -70,6 +62,7 @@ void pix_pix2sig :: processYUVImage(imageStruct &image)
 t_int* pix_pix2sig :: perform(t_int* w)
 {
   pix_pix2sig *x = GetMyClass((void*)w[1]);
+  // hey this is RGBA only !!!
   t_float* out_red =   (t_float*)(w[2]);
   t_float* out_green = (t_float*)(w[3]);
   t_float* out_blue =  (t_float*)(w[4]);
@@ -80,19 +73,18 @@ t_int* pix_pix2sig :: perform(t_int* w)
   long int pix_size   = x->m_size;
   int n = (N<pix_size)?N:pix_size;
 
-  t_float scale = 1./255.;
+  if (x->m_data){
+    t_float scale = 1./255.;
 
-  while(n--){
-    *(out_red  ++) = data[0]*scale;
-    *(out_green++) = data[1]*scale;
-    *(out_blue ++) = data[2]*scale;
-    *(out_alpha++) = data[3]*scale;
-    data+=4;
-  }
+    while(n--){
+      *(out_red  ++) = data[0]*scale;
+      *(out_green++) = data[1]*scale;
+      *(out_blue ++) = data[2]*scale;
+      *(out_alpha++) = data[3]*scale;
+      data+=4;
+    }
+  } else while (n--) *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
 
-  if (N>pix_size){
-    //post("achtung!");
-  }
 
   return (w+7);
 }

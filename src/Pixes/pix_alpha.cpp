@@ -52,37 +52,27 @@ pix_alpha :: ~pix_alpha()
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_alpha :: processImage(imageStruct &image)
+void pix_alpha :: processRGBAImage(imageStruct &image)
 {
     // process the image
     int count = image.xsize * image.ysize;
     
-	unsigned char *pixels = image.data;
+    unsigned char *pixels = image.data;
 
-    while(count--)
-    {
-    	if ( (pixels[chRed] >= m_lowThresh[0] &&
-    	      pixels[chRed] <= m_highThresh[0] ) 
-    	      &&
-    	     (pixels[chGreen] >= m_lowThresh[1] &&
-    	      pixels[chGreen] <= m_highThresh[1] )
-    	      &&
-    	     (pixels[chBlue] >= m_lowThresh[2] &&
-    	      pixels[chBlue] <= m_highThresh[2] ) )
-    	{
-    	    pixels[chAlpha] = m_alpha;
-    	}
-    	else pixels[chAlpha] = m_otheralpha;
-		pixels += 4;
-	}    
-}
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void pix_alpha :: processYUVImage(imageStruct &image)
-{
-    post("pix_alpha: YUV processing not yet implemented :-(");
+    while(count--) {
+      if ( (pixels[chRed] >= m_lowThresh[0] &&
+	    pixels[chRed] <= m_highThresh[0] ) 
+	   &&
+	   (pixels[chGreen] >= m_lowThresh[1] &&
+	    pixels[chGreen] <= m_highThresh[1] )
+	   &&
+	   (pixels[chBlue] >= m_lowThresh[2] &&
+	    pixels[chBlue] <= m_highThresh[2] ) ) {
+	pixels[chAlpha] = m_alpha;
+      }
+      else pixels[chAlpha] = m_otheralpha;
+      pixels += 4;
+    }    
 }
 
 /////////////////////////////////////////////////////////

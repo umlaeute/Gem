@@ -41,57 +41,37 @@ pix_mask :: ~pix_mask()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_mask :: processDualImage(imageStruct &image, imageStruct &right)
+void pix_mask :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-	unsigned char *pixels = image.data;
-	unsigned char *mask = right.data;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *pixels = image.data;
+  unsigned char *mask = right.data;
 
-	while (datasize--)
-	{
-    	// do we use the alpha value
-    	pixels[chAlpha] = (	(int)mask[chRed] +
-                                (int)mask[chGreen] +
-                                (int)mask[chBlue] ) / 3;
-		pixels += 4;
-		mask += 4;
-	}
+  while (datasize--)	{
+    // do we use the alpha value
+    pixels[chAlpha] = (	(int)mask[chRed] +
+			(int)mask[chGreen] +
+			(int)mask[chBlue] ) / 3;
+    pixels += 4;
+    mask += 4;
+  }
 }
 
 /////////////////////////////////////////////////////////
 // processRightGray
 //
 /////////////////////////////////////////////////////////
-void pix_mask :: processRightGray(imageStruct &image, imageStruct &right)
+void pix_mask :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-	unsigned char *pixels = image.data;
-	unsigned char *mask = right.data;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *pixels = image.data;
+  unsigned char *mask = right.data;
 
-	while(datasize--)
-	{
-   		pixels[chAlpha] = *mask;
-		pixels += 4;
-		mask++;
-	}
-}
-
-/////////////////////////////////////////////////////////
-// processDualYUV
-//
-/////////////////////////////////////////////////////////
-void pix_mask :: processDualYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_mask:  YUV not yet implemented :-P");
-}
-
-/////////////////////////////////////////////////////////
-// processRightYUV
-//
-/////////////////////////////////////////////////////////
-void pix_mask :: processRightYUV(imageStruct &image, imageStruct &right)
-{
-    post("pix_mask:  YUV not yet implemented :-P");
+  while(datasize--)	{
+    pixels[chAlpha] = *mask;
+    pixels += 4;
+    mask++;
+  }
 }
 
 /////////////////////////////////////////////////////////

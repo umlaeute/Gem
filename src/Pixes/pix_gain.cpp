@@ -45,7 +45,7 @@ pix_gain :: ~pix_gain()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_gain :: processImage(imageStruct &image)
+void pix_gain :: processRGBAImage(imageStruct &image)
 {
     int datasize =  image.xsize * image.ysize;
     unsigned char *pixels = image.data;
@@ -80,14 +80,54 @@ void pix_gain :: processGrayImage(imageStruct &image)
 		pixels++;
 	}
 }
-
 /////////////////////////////////////////////////////////
-// processYUVImage
+// do the YUV processing here
 //
 /////////////////////////////////////////////////////////
 void pix_gain :: processYUVImage(imageStruct &image)
 {
-    post("pix_gain: YUV not yet implemented :-(");
+    int h,w,width;
+    long src;
+    float y1,y2,u,v;
+
+    float Y=m_gain[0];
+    float U=m_gain[1];
+    float V=m_gain[2];
+    
+    width = image.xsize/2;
+    for (h=0; h<image.ysize; h++){
+      for(w=0; w<width; w++){
+    
+        //U
+        if (image.data[src] > 128) {
+	  u = (image.data[src] - ((image.data[src] - 128) * (1 - U)));
+	}
+        if (image.data[src] < 128) {
+	  u = ((128 - image.data[src]) * (1 - U)) + image.data[src];
+	}
+        image.data[src] = (unsigned char)CLAMP(u);
+	
+        //Y1
+        y1 = image.data[src+1] * Y;
+        image.data[src+1] = (unsigned char)CLAMP(y1);
+	
+	//V
+	//v = image.data[src+2] * G;
+	if (image.data[src+2] > 128) {
+	  v = ((float)image.data[src+2] - ((image.data[src+2] - 128) * (1 - V)));
+	}
+	if (image.data[src+2] < 128) {
+	  v = (((128 - image.data[src+2]) * (1 - V)) + image.data[src+2]);
+	}
+        image.data[src+2] = (unsigned char)CLAMP(v);
+	
+        //Y2
+        y2 = image.data[src+3] * Y;
+	image.data[src+3] = (unsigned char)CLAMP(y2);
+        src+=4;
+	
+      }
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -98,10 +138,10 @@ void pix_gain :: vecGainMess(int argc, t_atom *argv)
 {
     if (argc >= 4) m_gain[chAlpha] = atom_getfloat(&argv[3]);
     else if (argc == 3) m_gain[chAlpha] = 1.0;
-    else
-    {
-    	error("GEM: pix_gain: not enough gain values");
-    	return;
+    else if (argc == 1) m_gain[chRed] = m_gain[chGreen] = m_gain[chBlue] = m_gain[chAlpha] = atom_getfloat(argv);
+    else {
+      error("GEM: pix_gain: not enough gain values");
+      return;
     }
     m_gain[chRed] = atom_getfloat(&argv[0]);
     m_gain[chGreen] = atom_getfloat(&argv[1]);

@@ -48,9 +48,9 @@ class GEM_EXTERN pix_a_2grey : public GemPixObj
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_a_2grey(t_floatarg alpha);
+    //////////
+    // Constructor
+    pix_a_2grey(t_floatarg alpha);
     	
     protected:
     	
@@ -60,22 +60,18 @@ class GEM_EXTERN pix_a_2grey : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
+    	virtual void 	processRGBAImage(imageStruct &image);
         
-    	//////////
-    	// Do the processing
-    	virtual void 	processYUVImage(imageStruct &image);
-
-    	//////////
+	//////////
     	// Do the processing - this is a no-op
     	virtual void 	processGrayImage(imageStruct &image) { }
 
-		//////////
-		// alpha influences process
-		// == 0 no influence
-		// <  0 change pixes with alpha < -mode
-		// >  0 change pixes with alpha >  mode
-		int				m_mode;
+	//////////
+	// alpha influences process
+	// == 0 no influence
+	// <  0 change pixes with alpha < -mode
+	// >  0 change pixes with alpha >  mode
+	int				m_mode;
 
     	//////////
     	// alpha setting

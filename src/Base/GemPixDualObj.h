@@ -16,6 +16,8 @@ LOG
 #ifndef INCLUDE_GEMPIXDUALOBJ_H_
 #define INCLUDE_GEMPIXDUALOBJ_H_
 
+#define NEW_DUAL_PIX
+
 #include "Base/GemPixObj.h"
 
 /*-----------------------------------------------------------------
@@ -52,10 +54,11 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
     	// This calls the other process functions based on the input images.
     	virtual void 	processImage(imageStruct &image);
 
+#ifndef NEW_DUAL_PIX
     	//////////
-    	// The derived class HAS TO override this.
+    	// The derived class HAS override this.
     	// This is called whenever a new image comes through and
-		//		both of the image structs are RGBA
+	//		both of the image structs are RGBA
     	virtual void 	processDualImage(imageStruct &image, imageStruct &right) = 0;
     	
     	//////////
@@ -99,6 +102,28 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
 		//		the left image is a YUV, the right is an RGBA
 		// The default behavior is to output an error.
     	virtual void 	processLeftYUV(imageStruct &image, imageStruct &right);
+#else
+    	//////////
+    	// The derived class SHOULD override this, if it provides a method for "all" formats
+	virtual void processDualImage(imageStruct &left, imageStruct &right);
+	// Here come the more specific dual-processors
+    	// The derived class SHOULD override these as needed
+	virtual void processRGBA_RGBA(imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processRGBA_Gray(imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processRGBA_YUV (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processRGBA_Any (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processGray_RGBA(imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processGray_Gray(imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processGray_YUV (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processGray_Any (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processYUV_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processYUV_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processYUV_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processYUV_Any  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processAny_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processAny_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	virtual void processAny_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+#endif
                 
         //////////
         virtual void	postrender(GemState *);

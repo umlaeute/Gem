@@ -49,15 +49,7 @@ class GEM_EXTERN pix_rgb2hsv : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
-
-  //////////
-  // Do the processing - this is a no-op
-  virtual void 	processGrayImage(imageStruct &image) { }
-  
-  //////////
-  // Do the processing - this is a no-op
-  virtual void 	processYUVImage(imageStruct &image) { }
+  virtual void 	processRGBAImage(imageStruct &image);
 };
 
 #endif	// for header file

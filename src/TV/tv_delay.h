@@ -15,9 +15,9 @@ LOG
 #ifndef INCLUDE_TV_DELAY_H_
 #define INCLUDE_TV_DELAY_H_
 
-#include "Pixes/pix_fx.h"
+#include "Base/GemPixObj.h"
 
-#define MAX_FRAMES 256
+#define DEFAULT_MAX_FRAMES 256
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -31,7 +31,7 @@ LOG
   DESCRIPTION
    
   -----------------------------------------------------------------*/
-class GEM_EXTERN tv_delay : public pix_fx
+class GEM_EXTERN tv_delay : public GemPixObj
 {
   CPPEXTERN_HEADER(tv_delay, GemPixObj)
 
@@ -49,7 +49,7 @@ class GEM_EXTERN tv_delay : public pix_fx
 
   //////////
   // Do the processing
-  virtual void 	processFX(imageStruct &image);
+  virtual void 	processImage(imageStruct &image);
 
   imageStruct    myImage;
 

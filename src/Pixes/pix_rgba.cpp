@@ -48,7 +48,7 @@ pix_rgba :: ~pix_rgba()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_rgba :: processFX(imageStruct &image)
+void pix_rgba :: processImage(imageStruct &image)
 {
   if (image.format==GL_RGBA)return;
   unsigned char *old_pix, *new_pix;
@@ -111,6 +111,8 @@ void pix_rgba :: processFX(imageStruct &image)
     break;
   default:
     post("no method for this format !!!");
+    post("if you know how to convert this format (%X) to RGBA,\n"
+	 "please contact the authors of this software", format);
     return;
   }
 
@@ -122,14 +124,6 @@ void pix_rgba :: processFX(imageStruct &image)
 
 }
 
-/////////////////////////////////////////////////////////
-// processImage
-//
-/////////////////////////////////////////////////////////
-void pix_rgba :: processYUVfx(imageStruct &image)
-{
-    post("pix_rgba: YUV not yet implemented :-(");
-}
 /////////////////////////////////////////////////////////
 // static member function
 //

@@ -28,12 +28,7 @@ CPPEXTERN_NEW(pix_normalize)
 //
 /////////////////////////////////////////////////////////
 pix_normalize :: pix_normalize()
-{
-  //    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-  //    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_mask"));
-
-  //    m_mask[chRed] = m_mask[chGreen] = m_mask[chBlue] = m_mask[chAlpha] = 255;
-}
+{ }
 
 /////////////////////////////////////////////////////////
 // Destructor
@@ -46,7 +41,7 @@ pix_normalize :: ~pix_normalize()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_normalize :: processImage(imageStruct &image)
+void pix_normalize :: processRGBAImage(imageStruct &image)
 {
   unsigned char min=255, max=0;
   int datasize = image.xsize * image.ysize;// *image.csize;
@@ -99,28 +94,9 @@ void pix_normalize :: processImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
-// processYUVImage
-//
-/////////////////////////////////////////////////////////
-void pix_normalize :: processYUVImage(imageStruct &image)
-{
-    post("pix_normalize: YUV not yet implemented :-(");
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void pix_normalize :: obj_setupCallback(t_class *classPtr)
-{
-    class_addmethod(classPtr, (t_method)&pix_normalize::vecMaskMessCallback,
-    	    gensym("vec_mask"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_normalize::floatMaskMessCallback,
-    	    gensym("ft1"), A_FLOAT, A_NULL);
-}
-void pix_normalize :: vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-}
-void pix_normalize :: floatMaskMessCallback(void *data, t_floatarg mask)
 {
 }

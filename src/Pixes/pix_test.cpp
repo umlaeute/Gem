@@ -43,7 +43,7 @@ pix_test :: ~pix_test()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_test :: processImage(imageStruct &image)
+void pix_test :: processRGBAImage(imageStruct &image)
 {
     unsigned char *pixels = image.data;
     int count = image.ysize * image.xsize;
