@@ -54,6 +54,7 @@ class GEM_EXTERN pix_subtract : public GemPixDualObj
     	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
     	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
         virtual void	processYUVAltivec(imageStruct &image, imageStruct &right);
+        virtual void	processRGB_Altivec(imageStruct &image, imageStruct &right);
 	virtual void    processDualImage(imageStruct &image, imageStruct &right);
 };
 

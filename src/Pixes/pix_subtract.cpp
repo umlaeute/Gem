@@ -43,6 +43,10 @@ pix_subtract :: ~pix_subtract()
 /////////////////////////////////////////////////////////
 void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
+#ifdef __VEC__
+processRGB_Altivec(image,right);
+return;
+#else
 #if 0
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
@@ -76,7 +80,46 @@ void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
     }
 
 #endif
+#endif
 }
+
+void pix_subtract :: processRGB_Altivec(imageStruct &image, imageStruct &right)
+{
+ #ifdef __VEC__
+ int h,w,width;
+   width = image.xsize/4;
+
+
+    vector unsigned char *inData = (vector unsigned char*) image.data;
+    vector unsigned char *rightData = (vector unsigned char*) right.data;
+   
+        #ifndef PPC970
+   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( rightData, prefetchSize, 1 );
+        #endif
+    for ( h=0; h<image.ysize; h++){
+        for (w=0; w<width; w++)
+        {
+        #ifndef PPC970
+	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( rightData, prefetchSize, 1 );
+        #endif
+            
+            inData[0] = vec_subs(inData[0], rightData[0]);
+        
+            inData++;
+            rightData++;
+        }
+        #ifndef PPC970
+        vec_dss( 0 );
+        vec_dss( 1 );
+        #endif
+}  /*end of working altivec function */
+#endif
+}
+
+
 #if 0
 /////////////////////////////////////////////////////////
 // processDualGray
@@ -134,7 +177,6 @@ void pix_subtract :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 void pix_subtract :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
 #ifdef __VEC__
-post("altivec");
 processYUVAltivec(image, right);
 return;
 #else
