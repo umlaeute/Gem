@@ -115,6 +115,8 @@ class GEM_EXTERN GemPixObj : public GemBase
   // the pixBlock-cache
   pixBlock    cachedPixBlock;
   pixBlock    *orgPixBlock;
+
+
  private:
 
   static inline GemPixObj *GetMyClass(void *data) {return((GemPixObj *)((Obj_header *)data)->data);}
@@ -143,79 +145,48 @@ typedef unsigned short U16;
 #define SHIFT_BLUE	(0)
 
 inline int GateInt(int nValue,int nMin,int nMax) {
-
-	if (nValue<nMin) {
-		return nMin;
-	} else if (nValue>nMax) {
-		return nMax;
-	} else {
-		return nValue;
-	}
+  if (nValue<nMin) 	return nMin;
+  else if (nValue>nMax)   return nMax;
+  else                    return nValue;
 }
 
-    inline float GateFlt(float nValue,float nMin,float nMax) {
-	if (nValue<nMin) {
-	    return nMin;
-	} else if (nValue>nMax) {
-	    return nMax;
-	} else {
-	    return nValue;
-	}
-    }
+inline float GateFlt(float nValue,float nMin,float nMax) {
+  if (nValue<nMin)          return nMin;
+  else if (nValue>nMax)	    return nMax;
+  else                      return nValue;
+}
 
 inline void* GatePtr(void* pValue,void* pMin,void* pMax) {
-
-	if (pValue<pMin) {
-		return pMin;
-	} else if (pValue>pMax) {
-		return pMax;
-	} else {
-		return pValue;
-	}
+  if (pValue<pMin)     return pMin;
+  else if (pValue>pMax)return pMax;
+  else 	             return pValue;
 }
 
 inline int AbsInt(int inValue) {
-	if (inValue>0) {
-		return inValue;
-	} else {
-		return -inValue;
-	}
+  if (inValue>0)return inValue;
+  else return -inValue;
 }
 
 inline int GetTiled(int inValue,const int nMax) {
-	int nOutValue=(inValue%nMax);
-
-	if (nOutValue<0) {
-		nOutValue=((nMax-1)+nOutValue);
-	}
-
-	return nOutValue;
+  int nOutValue=(inValue%nMax);
+  if (nOutValue<0)nOutValue=((nMax-1)+nOutValue);
+  return nOutValue;
 }
 
 inline int GetMirrored(int inValue,const int nMax) {
-
-	const int nTwoMax=(nMax*2);
-
-	int nOutValue=GetTiled(inValue,nTwoMax);
-
-	if (nOutValue>=nMax) {
-		nOutValue=((nTwoMax-1)-nOutValue);
-	}
-
-	return nOutValue;
+  const int nTwoMax=(nMax*2);
+  int nOutValue=GetTiled(inValue,nTwoMax);
+  if (nOutValue>=nMax)nOutValue=((nTwoMax-1)-nOutValue);
+  return nOutValue;
 }
 
 inline float GetRandomFloat(void) {
-	return rand()/static_cast<float>(RAND_MAX);
+  return rand()/static_cast<float>(RAND_MAX);
 }
 
 static inline int GetSign(int inValue) {
-
-	if (inValue<0) {
-		return -1;
-	} else {
-		return 1;
-	}
+  if (inValue<0)return -1;
+  else	return 1;
 }
 
 static inline void Get2dTangent(float inX,float inY,float* poutX,float* poutY) {
@@ -246,13 +217,12 @@ const float Pete_TwoPi=(2.0f*Pete_Pi);
 const float Pete_HalfPi=(0.5f*Pete_Pi);
 
 static inline void Pete_ZeroMemory(void* pMemory,int nCount) {
-
 	char* pCurrent=(char*)pMemory;
 	char* pEnd=(pCurrent+nCount);
-	while (pCurrent<pEnd) {
-		*pCurrent=0;
-		pCurrent+=1;
-	}
+	//	while (pCurrent<pEnd)	*pCurrent=0;
+	//		pCurrent+=1;
+	//	}
+	while(pCurrent<pEnd)*pCurrent++=0;
 //	memset(pMemory,0,nCount);
 }
 
@@ -272,15 +242,12 @@ static inline void Pete_CopyAndConvert24BitTo32Bit(PETE_PIXELDATA24* pSource,PET
 	char* pCurrentOutput=((char*)pOutput);
 
 	while (pCurrentSource<pSourceEnd) {
-
 		*((PETE_PIXELDATA32*)pCurrentOutput)=
 		*((PETE_PIXELDATA24*)pCurrentSource);
 
 		pCurrentSource+=SIZEOF_PETE_PIXELDATA24;
 		pCurrentOutput+=SIZEOF_PETE_PIXELDATA32;
-
 	}
-
 }
 
 static inline void Pete_CopyAndConvert32BitTo24Bit(PETE_PIXELDATA32* pSource,PETE_PIXELDATA24* pOutput,int nPixelCount) {
@@ -290,19 +257,15 @@ static inline void Pete_CopyAndConvert32BitTo24Bit(PETE_PIXELDATA32* pSource,PET
 	char* pCurrentOutput=((char*)pOutput);
 
 	while (pCurrentSource<pSourceEnd) {
-
 		*((PETE_PIXELDATA24*)pCurrentOutput)=
 		*((PETE_PIXELDATA32*)pCurrentSource);
 
 		pCurrentSource+=SIZEOF_PETE_PIXELDATA32;
 		pCurrentOutput+=SIZEOF_PETE_PIXELDATA24;
-
 	}
-
 }
 
 static inline void Pete_InPlaceConvert24BitTo32Bit(PETE_PIXELDATA24* pBuffer,int nPixelCount) {
-
 	char* pBufferStart=(char*)pBuffer;
 	
 	char* pBuffer32Current=(pBufferStart+((nPixelCount-1)*SIZEOF_PETE_PIXELDATA32));
@@ -315,9 +278,7 @@ static inline void Pete_InPlaceConvert24BitTo32Bit(PETE_PIXELDATA24* pBuffer,int
 
 		pBuffer32Current-=SIZEOF_PETE_PIXELDATA32;
 		pBuffer24Current-=SIZEOF_PETE_PIXELDATA24;
-
 	}
-
 }
 
 static inline void Pete_CopyAndConvert16Bit565To32Bit(PETE_PIXELDATA16* pSource,PETE_PIXELDATA32* pOutput,int nPixelCount) {
@@ -381,9 +342,7 @@ static inline void Pete_CopyAndConvert32BitTo16Bit565(PETE_PIXELDATA32* pSource,
 
 		pCurrentSource+=SIZEOF_PETE_PIXELDATA32;
 		pCurrentOutput+=SIZEOF_PETE_PIXELDATA16;
-
 	}
-
 }
 
 inline int GetLuminance(const U32 inColour) {
@@ -401,27 +360,19 @@ inline int GetLuminance(const U32 inColour) {
 typedef void* SPete_MemHandle;
 
 inline SPete_MemHandle Pete_NewHandle(int nBytesToAlloc) {
-	
 	return malloc(nBytesToAlloc);
-
 }
 	
 inline void Pete_FreeHandle(SPete_MemHandle InHandle) {
-
 	free(InHandle);
-	
 }
 
 inline void* Pete_LockHandle(SPete_MemHandle InHandle) {
-
 	return InHandle;
-	
 }
 
 inline void Pete_UnLockHandle(SPete_MemHandle InHandle) {
-
 	// do nothing
-
 }
 // end of PeteHelpers.h stuff
 
