@@ -13,7 +13,11 @@
 #include <windows.h>
 #endif
 
+#ifndef __APPLE__
 #include <GL/gl.h>
+#else
+#include <OpenGL/gl.h>
+#endif
 // XXX #include <iostream.h>
 
 // Emit OpenGL calls to draw the particles. These are drawn with
