@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIsList , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglIsList :: GEMglIsList	(t_floatarg arg0=0) : list((GLuint)arg0) {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("list"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gllist"));
   m_outlet=outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ void GEMglIsList :: listMess (t_float arg1) {	// FUN
 //
 
 void GEMglIsList :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglIsList::listMessCallback,  	gensym("list"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglIsList::listMessCallback,  	gensym("gllist"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglIsList :: listMessCallback (void* data, t_floatarg arg0){
