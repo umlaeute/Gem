@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(alpha, t_floatarg, A_DEFFLOAT)
 alpha :: alpha(t_floatarg fun=0)
        : m_alphaState(1), 
 	 m_alphaTest(1),
-	 m_depthtest(0)
+	 m_depthtest(1)
 {
   funMess((int)fun);
   m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("function"));
