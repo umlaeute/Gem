@@ -61,7 +61,7 @@ static void makeContextCurrent(WindowInfo wi){
   if (!wi.dc && !wi.context)return; // do not crash ??
 
   wglMakeCurrent(wi.dc, wi.context);
-//  m_windowRun = 0;
+//  m_outputState = 0;
 #elif __APPLE__		// for PPC Macintosh
     ::aglSetDrawable( wi.context, GetWindowPort(wi.pWind) );
     ::aglSetCurrentContext(wi.context);
@@ -127,8 +127,8 @@ gemwindow :: ~gemwindow()
 #ifdef _WINDOWS
 void gemwindow::dispatchGemWindowMessages()
 {
-  if (!m_windowRun)return;
-
+  if (!m_outputState)return;
+  // do we get some information about resizing in here ??
   MSG msg;
   while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE)
     {
@@ -307,7 +307,7 @@ int gemwindow :: createConstWindow(char* disp) {
 
 
 int gemwindow :: createWindow(char* disp) {
-  if ( m_outputState ) return(0);
+  if ( m_outputState ) return(0); // we have already a window
 #ifdef DEBUG
   post("gemwindow: create window %X", this);
 #endif
@@ -343,7 +343,6 @@ int gemwindow :: createWindow(char* disp) {
   m_windowClock = clock_new(this->x_obj, (t_method)dispatchCallback);
   clock_delay(m_windowClock, m_windowDelTime);
 
-  m_windowRun = 1;
   return(1);
 }
 

@@ -86,10 +86,6 @@ class GEM_EXTERN gemwindow : public GemOutput
   int          m_xoffset, m_yoffset;
   int          m_fsaa;
 
-  bool m_windowRun;
-
-  // what is necessary ???
-  int m_windowNumber;
   int m_width, m_height;
 
   WindowInfo m_gfxInfo;
