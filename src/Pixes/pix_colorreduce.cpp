@@ -463,7 +463,6 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
 	    }
 	}
     }
-post("bye pete");
 	if(nSortedRed  )delete[]nSortedRed;
 	if(nSortedGreen)delete[]nSortedGreen;
 	if(nSortedBlue )delete[]nSortedBlue;
