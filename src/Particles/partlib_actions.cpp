@@ -11,7 +11,13 @@
 
 #include "partlib_general.h"
 #include <float.h>
+#ifdef _WINDOWS
+/* jmz: at least my vc6 doesn't like linking against the "new" io-libraries
+ * with <iostream.h> it links against the old libs */
+#include <iostream.h>
+#else
 #include <iostream>
+#endif
 
 #define SQRT2PI 2.506628274631000502415765284811045253006
 #define ONEOVERSQRT2PI (1. / SQRT2PI)
@@ -765,7 +771,7 @@ void PAExplosion::Execute(ParticleGroup *group)
 	float magdt = magnitude * dt;
 	float oneOverSigma = 1.0f / stdev;
 	float inexp = -0.5f*fsqr(oneOverSigma);
-	float outexp = ONEOVERSQRT2PI * oneOverSigma;
+	float outexp = (float)(ONEOVERSQRT2PI * oneOverSigma);
 	
 	for(int i = 0; i < group->p_count; i++)
 	{
@@ -777,7 +783,7 @@ void PAExplosion::Execute(ParticleGroup *group)
 		float dist = sqrtf(distSqr);
 		float DistFromWaveSqr = fsqr(radius - dist);
 		
-		float Gd = exp(DistFromWaveSqr * inexp) * outexp;
+		float Gd = (float)(exp(DistFromWaveSqr * inexp) * outexp);
 		
 		m.vel += dir * (Gd * magdt / (dist * (distSqr + epsilon)));
 	}
@@ -1667,9 +1673,9 @@ pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
 		{
 			p1 = pVector(a0, a1, a2);
 			radius1 = a3;
-			float tmp = 1./radius1;
+			float tmp = (float)(1./radius1);
 			radius2Sqr = -0.5f*fsqr(tmp);
-			radius2 = ONEOVERSQRT2PI * tmp;
+			radius2 = (float)(ONEOVERSQRT2PI * tmp);
 		}
 		break;
 	case PDDisc:
