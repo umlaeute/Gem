@@ -27,6 +27,8 @@ inletU = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Uvalue"))
 inletV = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Vvalue"));
 }
 
+//check some cvs stuff
+
 /////////////////////////////////////////////////////////
 // Destructor
 //
