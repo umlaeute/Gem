@@ -68,30 +68,6 @@ void pix_alpha :: processRGBAImage(imageStruct &image)
     }    
 }
 
-/////////////////////////////////////////////////////////
-// processGrayImage
-//
-/////////////////////////////////////////////////////////
-void pix_alpha :: processGrayImage(imageStruct & image)
-{
-  /* BUG: this looks rather like RGB than gray ... */
-     unsigned char *in = image.data + image.ysize*image.xsize*3-1;
-     unsigned char *out = image.data + image.ysize*image.xsize*4-1;
-     int i;
-     for (i = 0 ; i < image.ysize*image.xsize; i++) {
-    	    *out-- = 255; 	/* opaque */
-    	    *out-- = *in--;
-    	    *out-- = *in--;
-    	    *out-- = *in--;
-    }
-     
-     image.format = GL_RGBA;
-     image.csize = 4;
-     processImage(image);	  
-}
-
-
-
 
 /////////////////////////////////////////////////////////
 // lowThreshMess

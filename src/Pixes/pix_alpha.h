@@ -60,7 +60,6 @@ class GEM_EXTERN pix_alpha : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-	virtual void 	processGrayImage(imageStruct & image);
 
     	//////////
     	// Set the high threshold vector
