@@ -9,7 +9,7 @@ INCLUDES = @INCLUDES@
 PDLIBDIR = @prefix@@PDBASE@
 DOCBASE = @DOCBASE@
 
-SYSTEMDOCS = $(DESTDIR)@prefix@@DOCBASE@/gem
+#SYSTEMDOCS = @prefix@@DOCBASE@/gem
 
 TARG_DIR = ../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../openGL
 
@@ -35,12 +35,17 @@ Gem.pd_linux: cleangem $(Gem_pd_DEPENDENCIES)
 	strip --strip-unneeded Gem.pd_linux
 	cp Gem.pd_linux ../../
 
+tmp: /tmp/Gem.pd_linux
+	strip --strip-unneeded /tmp/Gem.pd_linux
+
+/tmp/Gem.pd_linux: subdirs
+	$(CXXLINK) $(LDFLAGS) $(OBJECTS) $(LDADD) $(LIBS)
 
 subdirs:
 	for d in ${TARG_DIR}; do \
 	    echo ""\
 	    echo "----------$$d----------"; \
-	    cd $$d && ${MAKE} || exit -1; \
+	    cd $$d && ${MAKE} -j4|| exit -1; \
 	done
 
 
@@ -59,26 +64,26 @@ clean:
 	-rm Gem.pd_linux ../../Gem.pd_linux *~
 
 
-install: installdocs uncvsdocs
+install: installdocs
 	install -m644 -D ../../Gem.pd_linux $(DESTDIR)/$(PDLIBDIR)/extra/Gem.pd_linux
 
 
 installdocs:
-	install -d $(SYSTEMDOCS)
-	install -m644 ../../doc/*.* $(SYSTEMDOCS)
-
+#	install -d $(DESTDIR)/$(SYSTEMDOCS)
+#	install -m644 ../../doc/*.* $(DESTDIR)/$(SYSTEMDOCS)
+	install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
+	install -m644 ../../examples/*.* $(DESTDIR)/$(PDLIBDIR)/doc/gem
+       
 	install -d $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/Gem
 	install -m644 ../../help/*.* $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/Gem
 
-	cp -r ../../examples $(SYSTEMDOCS)
-	cp -r ../../manual $(SYSTEMDOCS)
+#	cp -r ../../examples $(DESTDIR)/$(SYSTEMDOCS)
+#	cp -r ../../manual $(DESTDIR)/$(SYSTEMDOCS)
 
-	ln -fs $(SYSTEMDOCS) $(DESTDIR)/$(PDLIBDIR)/doc/
-#	ln -fs ../../../$(DOCBASE)/gem $(DESTDIR)/$(PDLIBDIR)/doc/
+#	ln -fs $(SYSTEMDOCS) $(DESTDIR)/$(PDLIBDIR)/doc/
 
-uncvsdocs:
-	touch $(SYSTEMDOCS)/CVS
-	rm -rf `find $(SYSTEMDOCS) -name *CVS*`
+#	touch $(DESTDIR)/$(SYSTEMDOCS)/CVS
+#	rm -rf `find $(DESTDIR)/$(SYSTEMDOCS) -name *CVS*`
 
 distclean: clean
 	@for d in ${TARG_DIR}; do \

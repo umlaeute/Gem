@@ -11,7 +11,7 @@ AC_SUBST(VERSION)
 AC_SUBST(PACKAGE)
 
 dnl we should rather search for the GemLibs
-GEMLIBS="../../../GemLibs/"
+dnl GEMLIBS="../../../GemLibs/"
 default_search_libs="$GEMLIBS /usr/local /usr/lib"
 default_search_heads="/usr/include /usr/local/include $GEMLIBS"
 
@@ -33,6 +33,8 @@ AC_ARG_WITH(quicktime, [  --with-quicktime        enable quicktime-filmIN suppor
 AC_ARG_WITH(avi,     [  --with-avi              enable AVI-support (might provide MPEG and quicktime)])
 AC_ARG_WITH(avcodec, [  --with-avcodec=<lib>    location of libavcodec.a])
 AC_ARG_WITH(avformat,[  --with-avformat=<lib>   location of libavformat.a])
+AC_ARG_WITH(ieee1394,     [  --with-ieee1394              enable IEEE1394-support (aka. firewire or DV)])
+
 
 
 dnl of course we need X, so don't let the user disable it
@@ -266,6 +268,11 @@ fi
 
 # end FFMPEG
 
+if test "$with_ieee1394" != "no"
+then
+  AC_FIND_LIB(libdv, dv_init, search_libs, $with_ieee1394)
+fi
+
 
 dnl Checking for Headers !
 dnl there should be a flag for which paths to search
@@ -293,6 +300,7 @@ AC_FIND_HEADER(mpeg.h, $search_heads)
 AC_FIND_HEADER(libmpeg3.h, $search_heads)
 AC_FIND_HEADER(quicktime/quicktime.h, $search_heads)
 AC_FIND_HEADER(avifile/avifile.h, $search_heads)
+AC_FIND_HEADER(libdv/dv.h, $search_heads)
 
 
 
