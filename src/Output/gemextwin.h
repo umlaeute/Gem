@@ -20,7 +20,13 @@
 #endif
 
 #include "Base/GemOutput.h"
-#include "GemExtContext.h"
+#include "Base/GemWinCreate.h"
+
+
+#ifdef unix
+#include <GL/glx.h>
+#endif
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -52,13 +58,24 @@ class GEM_EXTERN gemextwin : public GemOutput
   virtual void  makeCurrent();
   virtual void  postRender (GemState);
 
+  //////////
+  // set the current-window
+  void	windowMess(char*);
+#ifdef _WINDOWS
+  bool  windowMess(HWND);
+#endif
 
-  void	contextMess(GemExtContext*);
-  GemExtContext *m_context;
+  //////////
+  // destroy the window(context)
+  void closeWindow();
+
+  WindowInfo m_info;
 
  private:
-  static void	contextMessCallback(void *, t_gpointer*);
-
+  static void	windowMessCallback(void *, t_symbol*);
+#ifdef _WINDOWS
+  static BOOL windowMessCallback(HWND, LPARAM);
+#endif
 
 };
 
