@@ -60,7 +60,7 @@ clean:
 
 
 install: installdocs uncvsdocs
-	install -m644 -D ../../Gem.pd_linux $(DESTDIR)/$(PDLIBDIR)/externs/Gem.pd_linux
+	install -m644 -D ../../Gem.pd_linux $(DESTDIR)/$(PDLIBDIR)/extra/Gem.pd_linux
 
 
 installdocs:
@@ -73,7 +73,7 @@ installdocs:
 	cp -r ../../examples $(SYSTEMDOCS)
 	cp -r ../../manual $(SYSTEMDOCS)
 
-	ln -fs $SYSTEMDOCS $(DESTDIR)/$(PDLIBDIR)/doc/
+	ln -fs $(SYSTEMDOCS) $(DESTDIR)/$(PDLIBDIR)/doc/
 #	ln -fs ../../../$(DOCBASE)/gem $(DESTDIR)/$(PDLIBDIR)/doc/
 
 uncvsdocs:
