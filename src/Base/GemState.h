@@ -53,6 +53,10 @@ class GEM_EXTERN GemState
 {
     public:
 
+  ////////////////////////////
+  // width and height of the screen (window)
+  int screenWidth, screenHeight;
+
         //////////
         // Has something changed since the last time?
         int                 dirty;
@@ -94,6 +98,10 @@ class GEM_EXTERN GemState
 	// 0 - no
 	// 1 - left
 	// 2 - right
+	/* JMZ notes: this should go away and be replaced
+	 * by doUpdate (for particles and video-players to update)
+	 * this is only set to true for the 1st render-pass (stereo, multiwin)
+	 */
     	int					stereo;
     	
 	//////////
