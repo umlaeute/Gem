@@ -1,23 +1,8 @@
-/* Define if you have the <libmpeg3.h> header file.  */
+#undef HAVE_LIBGLUT
 
-#undef HAVE_LIBMPEG3_H 
-#undef HAVE_MPEG3 
+#undef HAVE_LIBMPEG
+#undef HAVE_LIBMPEG3
+#undef HAVE_LIBQUICKTIME
 
-/* Define if you have the <quicktime/quicktime.h> header file.  */
 
-#undef HAVE_QUICKTIME_H 
-#undef HAVE_QUICKTIME
-
-/* Define if you have the <quicktime/libdv/libdv.h> header file. */
-
-#undef HAVE_LIBDV_H 
-#undef HAVE_LIBDV
-
-/* Define if libglut is present */
-
-#undef HAVE_LIBGLUT 
-
-/* Define if the system has mmx support */
-
-#undef HAVE_MMX 
-
+#undef HAVE_MMX
