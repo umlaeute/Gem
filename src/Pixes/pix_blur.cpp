@@ -8,7 +8,6 @@
  */
 
 #include "pix_blur.h"
-#define clamp(x) ((x < 16) ? 16 : (x > 235) ? 235 : x)
 CPPEXTERN_NEW(pix_blur)
 
 /////////////////////////////////////////////////////////
@@ -29,7 +28,7 @@ m_blurH = 240;
 m_blurW = 240;
 m_blurBpp = 2;
 size = 320 * 240 * 4;
-saved = new unsigned char [size];
+saved = new unsigned int [size];
 src=0;
 for (i=0;i<size/2;i++)
 {
@@ -57,7 +56,7 @@ void pix_blur :: processRGBAImage(imageStruct &image)
        int h,w,hlength;
     long src;
     int R,G,B;
-    int rightGain,imageGain, Rgain,Igain;
+    int rightGain,imageGain;
     unsigned char *pixels=image.data;
 
 src = 0;
@@ -69,14 +68,12 @@ if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize
     m_blurBpp = image.csize;
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
     delete saved;
-    saved = new unsigned char [m_blurSize];
+    saved = new unsigned int [m_blurSize];
 }
 
-rightGain = m_blur;
-imageGain = 255 - m_blur;
-   Rgain = 255/rightGain;
-   Igain = 255/imageGain;
-   hlength = image.xsize;
+rightGain = (int)(m_blurf * 255.);
+imageGain = (int)(255. - (m_blurf * 255.));
+hlength = image.xsize;
 
 
 for (h=0; h<image.ysize; h++){
@@ -84,16 +81,16 @@ for (h=0; h<image.ysize; h++){
     
 
       
-        R = ((pixels[src+chRed] * imageGain)>>8) + ((saved[src+chRed] * rightGain)>>8);
-        saved[src+chRed] = (unsigned char)clamp(R);
+        R = ((pixels[src+chRed] * imageGain)) + ((saved[src+chRed] * rightGain));
+        saved[src+chRed] = (unsigned char)CLAMP(R>>8);
         pixels[src+chRed] = saved[src+chRed];
         
-         G = ((pixels[src+chGreen] * imageGain)>>8) + ((saved[src+chGreen] * rightGain)>>8);;
-        saved[src+chGreen] = (unsigned char)clamp(G);
+         G = ((pixels[src+chGreen] * imageGain)) + ((saved[src+chGreen] * rightGain));
+        saved[src+chGreen] = (unsigned char)CLAMP(G>>8);
         pixels[src+chGreen] = saved[src+chGreen];
  
-         B = ((pixels[src+chBlue] * imageGain)>>8) + ((saved[src+chBlue] * rightGain)>>8);;
-        saved[src+chBlue] = (unsigned char)clamp(B);
+         B = ((pixels[src+chBlue] * imageGain)) + ((saved[src+chBlue] * rightGain));
+        saved[src+chBlue] = (unsigned char)CLAMP(B>>8);
         pixels[src+chBlue] = saved[src+chBlue];
 
         src += 4;
@@ -113,13 +110,6 @@ void pix_blur :: processYUVImage(imageStruct &image)
 {
 
 
-       int h,w,hlength;
-    long src;
-
-    int rightGain,imageGain, Rgain,Igain,y1,y2;
-
-
-
 if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
 
 m_blurH = image.ysize;
@@ -127,7 +117,7 @@ m_blurW = image.xsize;
 m_blurBpp = image.csize;
 m_blurSize = m_blurH * m_blurW * m_blurBpp;
 delete saved;
-saved = new unsigned char [m_blurSize];
+saved = new unsigned int [m_blurSize];
 
 }
 
@@ -135,28 +125,39 @@ saved = new unsigned char [m_blurSize];
 processYUVAltivec(image);
 return;
 #else
+     int h,w,hlength;
+    long src;
+
+    register int rightGain,imageGain;
+    register int y1res,y2res,out1,out2,temp1,temp2;
 src = 0;
-rightGain = m_blur;
-imageGain = 255 - m_blur;
-   Rgain = 255/rightGain;
-   Igain = 255/imageGain;
-   hlength = image.xsize/2;
+rightGain = (int)(m_blurf * 255.);
+imageGain = (int)(255. - (m_blurf * 255.));
+hlength = image.xsize/2;
 
-
-for (h=0; h<image.ysize; h++){
+//unroll this, add register temps and schedule the ops better to remove the data depedencies
+for (h=0; h<image.ysize-1; h++){
     for(w=0; w<hlength; w++){
-          
-        y1 = ((image.data[src+1] * imageGain)>>8) + ((saved[src+1] * rightGain)>>8);
-        saved[src+1] = (unsigned char)clamp(y1);
-        image.data[src+1] = saved[src+1];
+                    //8bit  * 8bit = 16bit
+        y1res = (((image.data[src+1] )  * imageGain) + ((saved[src+1] * rightGain)>>8));
+       y2res = (((image.data[src+3]  ) * imageGain) + ((saved[src+3]  * rightGain)>>8) );
+    
+      
+      saved[src+1] = y1res;
+      y1res = y1res >> 8; //shift to 16bit to store? 
         
-        y2 = ((image.data[src+3] * imageGain)>>8) + ((saved[src+3] * rightGain)>>8);;
-        saved[src+3] = (unsigned char)clamp(y2);
-        image.data[src+3] = saved[src+3];
-  
-        src += 4;
-
+       
+         
+        image.data[src+1] =(unsigned char)CLAMP(y1res);
      
+     
+     saved[src+3] = y2res;
+     y2res = y2res >> 8;
+        
+       
+        image.data[src+3] = (unsigned char)CLAMP(y2res);
+        src+=4; 
+   
     }
 }
 #endif
@@ -171,27 +172,27 @@ void pix_blur :: processYUVAltivec(imageStruct &image)
 {
 #ifdef ALTIVEC
 int h,w,width;
-short rightGain,imageGain;
+unsigned short rightGain,imageGain;
 /*altivec code starts */
     width = image.xsize/8;
-    rightGain = m_blur;
-    imageGain = 255 - m_blur;
+    rightGain = (unsigned short)(255. * m_blurf);
+    imageGain = (unsigned short) (255. - (255. * m_blurf));
     union
     {
         //unsigned int	i;
-        short	elements[8];
+        unsigned short	elements[8];
         //vector signed char v;
-        vector	signed short v;
+        vector	unsigned short v;
     }shortBuffer;
     
         union
     {
         //unsigned int	i;
-        unsigned long	elements[8];
+        unsigned int	elements[4];
         //vector signed char v;
         vector	unsigned int v;
     }bitBuffer;
-    
+     
         union
     {
         //unsigned int	i;
@@ -200,19 +201,18 @@ short rightGain,imageGain;
         vector	unsigned char v;
     }charBuffer;
     
-    //vector unsigned char c;
-    vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage,YRight, UVRight, UVTemp, YTemp;
+    register vector unsigned short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage;     
     vector unsigned char zero = vec_splat_u8(0);
-    vector signed short sone = vec_splat_s16(1);
-    vector unsigned char c,one;
-    vector signed int UVhi,UVlo,Yhi,Ylo;
-    vector signed int UVhiR,UVloR,YhiR,YloR;
-    vector signed short gainSub,gain,gainR,d;
-    vector unsigned int bitshift;
+    vector unsigned short sone = vec_splat_u16(1);
+    register vector unsigned char c,one;
+    register vector unsigned int UVhi,UVlo,Yhi,Ylo;
+    register vector unsigned int UVhiR,UVloR,YhiR,YloR;
+    register vector unsigned short gainSub,gain,gainR,d;
+    register vector unsigned int bitshift;
+
     vector unsigned char *inData = (vector unsigned char*) image.data;
     vector unsigned char *rightData = (vector unsigned char*) saved;
-    vector unsigned char tempImage,tempRight;
-    
+     
     //Write the pixel (pair) to the transfer buffer
     charBuffer.elements[0] = 2;
     charBuffer.elements[1] = 1;
@@ -241,7 +241,7 @@ short rightGain,imageGain;
    
     //Load it into the vector unit
     d = shortBuffer.v;
-    d = (vector signed short)vec_splat((vector signed short)d,0);
+    d = (vector unsigned short)vec_splat((vector unsigned short)d,0);
     
     shortBuffer.elements[0] = 128;
     shortBuffer.elements[1] = 0;
@@ -272,7 +272,7 @@ short rightGain,imageGain;
    
     //Load it into the vector unit
     gainAdd = shortBuffer.v;
-    gainAdd = (vector signed short)vec_splat((vector signed short)gainAdd,0);
+    gainAdd = (vector unsigned short)vec_splat((vector unsigned short)gainAdd,0);
 
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
@@ -288,18 +288,11 @@ short rightGain,imageGain;
             //interleaved U Y V Y chars
             
             //expand the UInt8's to short's
-            hiImage = (vector signed short) vec_mergeh( zero, inData[0] );
-            loImage = (vector signed short) vec_mergel( zero, inData[0] );
+            hiImage = (vector unsigned short) vec_mergeh( zero, inData[0] );
+            loImage = (vector unsigned short) vec_mergel( zero, inData[0] );
             
-            hiRight = (vector signed short) vec_mergeh( zero, rightData[0] );
-            loRight = (vector signed short) vec_mergel( zero, rightData[0] );
-            
-            //vec_subs -128
-          //  hiImage = (vector signed short) vec_sub( hiImage, gainSub );
-           // loImage = (vector signed short) vec_sub( loImage, gainSub );   
-            
-          //  hiRight = (vector signed short) vec_sub( hiRight, gainSub );
-          //  loRight = (vector signed short) vec_sub( loRight, gainSub );   
+            hiRight = (vector unsigned short) vec_mergeh( zero, rightData[0] );
+            loRight = (vector unsigned short) vec_mergel( zero, rightData[0] );
             
             
             //now vec_mule the UV into two vector ints
@@ -317,65 +310,26 @@ short rightGain,imageGain;
             YloR = vec_mulo(gainR,loRight);
             
             
-            //this is where to do the bitshift/divide due to the resolution
-           // UVhi = vec_sra(UVhi,bitshift);
-          //  UVlo = vec_sra(UVlo,bitshift);
+            Yhi = vec_adds(Yhi,YhiR);
+            Ylo = vec_adds(Ylo,YloR);
+    
             Yhi = vec_sra(Yhi,bitshift);
             Ylo = vec_sra(Ylo,bitshift);
-            
-          //  UVhiR = vec_sra(UVhiR,bitshift);
-          //  UVloR = vec_sra(UVloR,bitshift);
-            YhiR = vec_sra(YhiR,bitshift);
-            YloR = vec_sra(YloR,bitshift);
-            
             //pack the UV into a single short vector
-            UVImage = vec_packs(UVhi,UVlo);
-            UVRight = vec_packs(UVhiR,UVloR);
+            UVImage =  vec_packsu(UVhi,UVlo);
 
             //pack the Y into a single short vector
-            YImage = vec_packs(Yhi,Ylo);
-            YRight = vec_packs(YhiR,YloR);
-                                        
-            
-            //vec_adds +128 to U V U V short
-           // UVImage = vec_adds(UVImage,gainAdd);
-          //  UVRight = vec_adds(UVRight,gainAdd);
-            
+            YImage =  vec_packsu(Yhi,Ylo);
+                   
             //vec_mergel + vec_mergeh Y and UV
             hiImage =  vec_mergeh(UVImage,YImage);
             loImage =  vec_mergel(UVImage,YImage);
-            hiRight =  vec_mergeh(UVRight,YRight);
-            loRight =  vec_mergel(UVRight,YRight);
-            
-            //pack back to 16 chars and prepare for add
-            tempImage = vec_packsu(hiImage, loImage);
-            tempRight = vec_packsu(hiRight, loRight);
-        
-            //vec_mule UV * 2 to short vector U V U V shorts
-            UVImage = (vector signed short)vec_mule(one,tempImage);
-            UVRight = (vector signed short)vec_mule(zero,tempRight);
-            
-            //vec_mulo Y * 1 to short vector Y Y Y Y shorts
-            YImage = (vector signed short)vec_mulo(c,tempImage);
-            YRight = (vector signed short)vec_mulo(c,tempRight);
-
-            
-            //vel_subs UV - 255
-           // UVRight = (vector signed short)vec_subs(UVRight, d);
-            
-            //vec_adds UV
-            UVTemp = vec_adds(UVImage,UVRight);
-            
-            //vec_adds Y
-            YTemp = vec_adds(YImage,YRight);
-            
-            hiImage = vec_mergeh(UVTemp,YTemp);
-            loImage = vec_mergel(UVTemp,YTemp);
+          
             
             //vec_mergel + vec_mergeh Y and UV
             rightData[0] = vec_packsu(hiImage, loImage);
             inData[0] = vec_packsu(hiImage, loImage);        
-        
+         
             inData++;
             rightData++;
         }
@@ -401,7 +355,8 @@ void pix_blur :: obj_setupCallback(t_class *classPtr)
 
 void pix_blur :: blurCallback(void *data, t_floatarg value)
 {
-  GetMyClass(data)->m_blur=((long)value);
+//  GetMyClass(data)->m_blur=((long)value);
+GetMyClass(data)->m_blurf=(value);
 
 }
 

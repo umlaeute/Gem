@@ -25,7 +25,7 @@ KEYWORDS
     
 DESCRIPTION
 
-   template for yuv_ objects
+  old motion blur object.  soon to be an abstraction for pix_convolve ??
    
 -----------------------------------------------------------------*/
 
@@ -54,8 +54,9 @@ CPPEXTERN_HEADER(pix_blur, GemPixObj)
     	virtual void 	processYUVImage(imageStruct &image);
         virtual void 	processYUVAltivec(imageStruct &image);
         
-        unsigned char  *saved;
+        unsigned int  *saved;
         int		m_blur;
+         float		m_blurf;
         int		m_blurH,m_blurW,m_blurSize,m_blurBpp;
         t_inlet         *inletBlur;
 
