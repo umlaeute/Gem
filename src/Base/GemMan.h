@@ -175,6 +175,7 @@ class GEM_EXTERN GemMan
 	static float       m_motionBlur;        // motion-blur factor in double-buffer mode
 	static int	   texture_rectangle_supported;
 	static int	   client_storage_supported;
+	static int	   texture_range_supported;
         static float	   fps;
         
 	
