@@ -51,6 +51,9 @@ class GEM_EXTERN pix_composite : public GemPixDualObj
     // Do the processing
     virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
     virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
+#ifdef __MMX__
+    virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
+#endif
 };
 
 #endif	// for header file
