@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="gem" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** DO NOT EDIT **
+# ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
 CFG=gem - Win32 Release
-!MESSAGE This is not a valid makefile. To build this project using NMAKE,
-!MESSAGE use the Export Makefile command and run
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "gem.mak".
 !MESSAGE 
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "gem.mak" CFG="gem - Win32 Release"
 !MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE 
-!MESSAGE "gem - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gem - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gem - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gem - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /MTd /W3 /Zi /Od /Ob0 /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /D "HAVE_DIRECTSHOW" /D "DEBUG" /FD /c
+# ADD CPP /nologo /MTd /W3 /Zi /Od /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /D "HAVE_DIRECTSHOW" /D "DEBUG" /FD /c
 # SUBTRACT CPP /X /Fr /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -371,6 +371,10 @@ SOURCE=.\Geos\model.cpp
 # Begin Source File
 
 SOURCE=.\Geos\model.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\model_loader.h
 # End Source File
 # Begin Source File
 
@@ -881,6 +885,14 @@ SOURCE=.\Pixes\pix_convolve.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_crop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_crop.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_curve.cpp
 # End Source File
 # Begin Source File
@@ -926,14 +938,6 @@ SOURCE=.\Pixes\pix_hsv2rgb.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_hsv2rgb.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Pixes\pix_info.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Pixes\pix_info.h
 # End Source File
 # Begin Source File
 
@@ -1137,11 +1141,23 @@ SOURCE=.\Pixes\pix_data.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_depot.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_depot.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_dump.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Pixes\pix_dump.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_get.h
 # End Source File
 # Begin Source File
 
@@ -1169,6 +1185,14 @@ SOURCE=.\Pixes\pix_imageInPlace.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_info.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_info.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_multiimage.cpp
 # End Source File
 # Begin Source File
@@ -1182,6 +1206,10 @@ SOURCE=.\Pixes\pix_pix2sig.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_pix2sig.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_put.h
 # End Source File
 # Begin Source File
 
@@ -1273,6 +1301,62 @@ SOURCE=.\Pixes\DSgrabber.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\film.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\film.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmAVI.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmAVI.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmAVIPLAY.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmAVIPLAY.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmDarwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmDarwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmFFMPEG.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmFFMPEG.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmMPEG1.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmMPEG1.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmMPEG3.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\filmMPEG3.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_dv.cpp
 # End Source File
 # Begin Source File
@@ -1286,6 +1370,14 @@ SOURCE=.\Pixes\pix_film.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_film.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_filmNEW.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_filmNEW.h
 # End Source File
 # Begin Source File
 
@@ -1494,6 +1586,10 @@ SOURCE=.\Particles\part_targetsize.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Particles\part_vector.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Particles\part_velcone.cpp
 # End Source File
 # Begin Source File
@@ -1507,6 +1603,10 @@ SOURCE=.\Particles\part_velsphere.cpp
 # Begin Source File
 
 SOURCE=.\Particles\part_velsphere.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\setup.h
 # End Source File
 # End Group
 # Begin Group "MarkEx"

@@ -29,6 +29,7 @@ pix_test :: pix_test()
 {
   myImage.xsize=myImage.ysize=myImage.csize=1;
   myImage.data = new unsigned char[1];
+  csize=2;
 }
 
 /////////////////////////////////////////////////////////
@@ -44,51 +45,60 @@ pix_test :: ~pix_test()
 /////////////////////////////////////////////////////////
 void pix_test :: processImage(imageStruct &image)
 {
-  unsigned char *pixels = image.data;
-  int count = image.ysize * image.xsize;
-  unsigned char *newPix;
-
-  orgImage = &image;
-  orgdata  = image.data;
-
-  if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
-    int dataSize = image.xsize * image.ysize * image.csize;
-    delete [] myImage.data;
-    myImage.data = new unsigned char[dataSize];
+  image.xsize=myImage.xsize=64;
+  image.ysize=myImage.ysize=64;
+  image.csize=myImage.csize=csize;
+  image.format=myImage.format=GL_YUV422_GEM;
+  myImage.reallocate();
+  int rows=image.xsize;
+  int cols=image.xsize;
+  unsigned char* data=myImage.data;
+  switch (myImage.format){
+  case GL_RGBA:
+    while(rows--){
+      int col=cols/2;
+      while(col--){
+	data[0]=data[2]=255;
+	data[1]=0;  data[3]=255;
+	data+=4;
+	data[0]=data[1]=data[2]=0;data[3]=255;
+	data+=4;
+      }
+    }
+    break;
+  case GL_YUV422_GEM:
+    post("hallo yuv");
+    //    rows/=2;
+    int datasize=image.xsize*image.xsize*image.csize;
+    while(datasize--)*data++=off;
+    break;
+    while(rows--){
+      int col=cols;
+      while(col--){
+	*data++=off;
+	*data++=128;	
+      }
+    }
+    break;
   }
-  myImage.xsize = image.xsize;
-  myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
-
-
-  newPix = myImage.data+count*image.csize;
-   
-  while (count--) {
-    newPix[chRed]  =pixels[chRed];
-    newPix[chGreen]=pixels[chGreen];
-    newPix[chBlue] =pixels[chBlue];
-    newPix[chAlpha]=pixels[chAlpha];
-
-    pixels+=4;
-    newPix-=4;
-  }
-
   image.data=myImage.data;
-}
-
-/////////////////////////////////////////////////////////
-// postrender
-//
-/////////////////////////////////////////////////////////
-void pix_test :: postrender(GemState *state)
-{
-  orgImage->data = orgdata;
 }
 
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
-void pix_test :: obj_setupCallback(t_class *)
-{ }
+void pix_test :: obj_setupCallback(t_class *classPtr)
+{
+   class_addfloat(classPtr, (t_method)&pix_test::floatMessCallback);    
+   class_addmethod(classPtr, (t_method)&pix_test::csizeMessCallback,
+		  gensym("csize"), A_FLOAT, A_NULL);
+}
+void pix_test :: csizeMessCallback(void *data, float n)
+{
+  GetMyClass(data)->csize=(unsigned char)n;
+}
+void pix_test :: floatMessCallback(void *data, float n)
+{
+  GetMyClass(data)->off=(unsigned char)n;
+}

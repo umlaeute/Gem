@@ -8,5 +8,6 @@
 #undef HAVE_LIBAVFORMAT
 #undef HAVE_LIBAVCODEC
 
+#undef HAVE_LIBDV
 
 #undef HAVE_MMX

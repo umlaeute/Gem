@@ -59,13 +59,15 @@ class GEM_EXTERN pix_test : public GemPixObj
   // Do the processing - this is a no-op
   virtual void 	processGrayImage(imageStruct &image) { }
 
-  //////////
-  // turn the pointer back to the org data after rendering
-  virtual void postrender(GemState *state);
-
   imageStruct    myImage;
   imageStruct  *orgImage;
   unsigned char*orgdata;
+
+  unsigned char off;
+  unsigned char csize;
+
+  static void floatMessCallback(void *data, float n);
+  static void csizeMessCallback(void *data, float n);
 };
 
 #endif	// for header file
