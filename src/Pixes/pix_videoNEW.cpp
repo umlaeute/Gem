@@ -13,7 +13,10 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-    
+
+// we set the help-symbol ourselfs
+#define HELPSYMBOL "pix_video"
+
 #include "pix_videoNEW.h"
 #include "Pixes/videoV4L.h"
 #include "Pixes/videoDV4L.h"
