@@ -62,6 +62,7 @@ class GEM_EXTERN newWave : public GemShape
   void		modeMess(float mode);
   void		forceMess(float posX, float posY, float valforce);
   void		positionMess(float posX, float posY, float posZ);
+  void		textureMess(int mode);
   void		bangMess();        
   //////////
   // Do the rendering
@@ -110,8 +111,11 @@ class GEM_EXTERN newWave : public GemShape
   void getFaceNormSegs( void );
 
   int		m_blend;
-  float		xsize, ysize, ysize0;
+  float		xsize, xsize0, ysize, ysize0;
   float		K1, D1, K2, D2, K3, D3;
+
+  int m_textureMode; // how to texture...
+
   
   float force[MAXGRID][MAXGRID],
       veloc[MAXGRID][MAXGRID],
@@ -140,7 +144,8 @@ class GEM_EXTERN newWave : public GemShape
   static void 	setD3MessCallback(void *data, t_floatarg D);
   static void 	forceMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce );
   static void 	positionMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg posZ );
-  static void 	bangMessCallback(void *data );
+  static void 	textureMessCallback(void *data, t_floatarg mode);
+  static void 	bangMessCallback(void *data);
 
 };
 

@@ -28,10 +28,6 @@ int displayMode = WIREFRAME;
 int resetMode = DIAGONALBLOCK;
 int grid = 50;
 
-bool waving = false, editing = false,
-     drawFaceNorms = false, antialias = false,
-     envMap = false;
-
 #define SQRTOFTWOINV 1.0 / 1.414213562
 
 
@@ -46,7 +42,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(newWave, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 newWave :: newWave( t_floatarg width)
-    	     : GemShape(MEDIUM), alreadyInit(0)
+  : GemShape(MEDIUM), alreadyInit(0), m_textureMode(0)
 {
     m_height = 1.f;
 
@@ -97,6 +93,18 @@ void newWave :: forceMess(float posX, float posY, float valforce)
     
 }
 
+void newWave :: textureMess(int mode)
+{
+  if(mode<0){
+    error("newWave: textureMode must be >= 0");
+    return;
+  }
+  m_textureMode = mode;
+  setModified();
+  alreadyInit=0;
+  
+}
+
 /////////////////////////////////////////////////////////
 // render
 //
@@ -121,9 +129,10 @@ void newWave :: render(GemState *state)
     glNormal3f( 0.0f, 0.0f, 1.0f);
     if (state->texture && state->numTexCoords)
     {
-      if ((xsize  != state->texCoords[1].s) ||
-	  (ysize  != state->texCoords[1].t) ||
-	  (ysize0 != state->texCoords[2].t))
+      if ((xsize0!= state->texCoords[0].s) ||
+	  (xsize != state->texCoords[1].s-xsize0) ||
+	  (ysize0!= state->texCoords[1].t) ||
+	  (ysize != state->texCoords[2].t-ysize0))
 	alreadyInit = 0;
 
       /*
@@ -137,19 +146,20 @@ void newWave :: render(GemState *state)
 
         if (!alreadyInit)
         {
-	    xsize  = state->texCoords[1].s;
-	    ysize0 = state->texCoords[2].t;
-	    ysize  = state->texCoords[1].t;
+	    xsize0 = state->texCoords[0].s;
+	    xsize  = state->texCoords[1].s-xsize0;
+	    ysize0 = state->texCoords[1].t;
+	    ysize  = state->texCoords[2].t-ysize0;
 
             setSize( grid );
-            setOther( ENVMAP );
+            setOther(m_textureMode);
             reset( HILLFOUR );
             alreadyInit = 1;
         }
 
         for (int i=0; i<grid -1; ++i)
         {
-            glBegin(GL_TRIANGLE_STRIP);
+            glBegin(m_drawType);
             for (int j = 0; j < grid; ++j)
             {
                 glNormal3fv( vertNorms[i][j] );
@@ -172,8 +182,9 @@ void newWave :: render(GemState *state)
             xsize = 1;
             ysize = 1;
 	    ysize0= 0;
+	    xsize0= 0;
             setSize( grid );
-            setOther( ENVMAP );
+            setOther(m_textureMode );
             reset( HILLFOUR );
             alreadyInit = 1;
         }
@@ -425,12 +436,9 @@ void newWave :: getTexCoords(void)
     {
         for ( int j = 0; j < grid; ++j)
         {
-            texCoords[i][j][0] = ( (xsize*(float)i/(float)(grid-1)) );
-	    texCoords[i][j][1] = (ysize0-ysize)*(float)j/(float)(grid-1) + ysize;
-	    /*
-            post("texCoords[%d][%d][0] = %f",i,j,texCoords[i][j][0]);
-            post("texCoords[%d][%d][1] = %f",i,j,texCoords[i][j][1]);
-	    */
+            texCoords[i][j][0] = ((xsize*(float)i/(float)(grid-1)) + xsize0 );
+	    texCoords[i][j][1] = ((ysize*(float)j/(float)(grid-1)) + ysize0 );
+            //post("texCoords[%d][%d] = %f\t%f",i,j,texCoords[i][j][0],texCoords[i][j][1]);
         }
     }
 }
@@ -695,29 +703,19 @@ void newWave :: reset(int value)
 
 void newWave :: setOther(int value)
 {
-    switch (value)
-    {
-        case FACENORMALS: 
-            drawFaceNorms = !drawFaceNorms;
-            break;
-        case ENVMAP: 
-            envMap = !envMap;
-            if (envMap)
-            {
-                glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-                glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-                glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-                glEnable(GL_TEXTURE_GEN_S);
-                glEnable(GL_TEXTURE_GEN_T);
-            }
-            else
-            {
-                glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-                glDisable(GL_TEXTURE_GEN_S);
-                glDisable(GL_TEXTURE_GEN_T);
-            }
-            break;
-    }
+  switch(value){
+  case 1:
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+    glEnable(GL_TEXTURE_GEN_S);
+    glEnable(GL_TEXTURE_GEN_T);
+    break;
+  default:
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glDisable(GL_TEXTURE_GEN_S);
+    glDisable(GL_TEXTURE_GEN_T);
+  }
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -731,6 +729,8 @@ void newWave :: obj_setupCallback(t_class *classPtr)
     	    gensym("mode"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&newWave::blendMessCallback,
     	    gensym("blend"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&newWave::textureMessCallback,
+    	    gensym("texture"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, (t_method)&newWave::setK1MessCallback,
 	   	    gensym("K1"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, (t_method)&newWave::setD1MessCallback,
@@ -803,5 +803,11 @@ void newWave :: setD3MessCallback(void *data, t_floatarg D)
 {
     GetMyClass(data)->D3=((float)D);
 }
+
+void newWave :: textureMessCallback(void *data, t_floatarg D)
+{
+    GetMyClass(data)->textureMess((int)D);
+}
+
 
 
