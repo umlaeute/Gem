@@ -49,17 +49,19 @@ extern "C" {
    void pix_dump_setup();
    void pix_duotone_setup();
    void pix_crop_setup();
-   void pix_dvLinux_setup();
-   void pix_dv_setup();
    void pix_film_setup();
-   void pix_filmLinux_setup();
-   void pix_filmNT_setup();
+#ifdef __APPLE__ 
    void pix_filmDarwin_setup();
    void pix_filmDarwinYUV_setup();
+#else   
+   void pix_dvLinux_setup();
+   void pix_dv_setup();
+   void pix_filmLinux_setup();
+   void pix_filmNT_setup();
    void pix_filmFFMPEG_setup();
-
-  void pix_filmNEW_setup();
-  void pix_videoNEW_setup();
+#endif
+   void pix_filmNEW_setup();
+   void pix_videoNEW_setup();
 
    void pix_flip_setup();
    void pix_gain_setup();
@@ -78,6 +80,7 @@ extern "C" {
    void pix_offset_setup();
    void pix_pix2sig_setup();
    void pix_puzzle_setup();
+   void pix_rds_setup();
    void pix_rectangle_setup();
    void pix_resize_setup();
    void pix_rgb2hsv_setup();
@@ -96,10 +99,12 @@ extern "C" {
    void pix_texture2_setup();
    void pix_threshold_setup();
    void pix_video_setup();
+#ifndef __APPLE__
    void pix_videoLinux_setup();
    void pix_videoNT_setup();
    void pix_videoDS_setup();
    void pix_videoSGI_setup();
+#endif
    void pix_videoDarwin_setup();
 
    void pix_write_setup();
@@ -162,8 +167,10 @@ extern "C" {
     pix_dv_setup();
 #endif
 #endif
-    //      pix_film_setup();
-    pix_filmNEW_setup();
+      pix_film_setup();
+#ifndef __NEW__
+      pix_filmNEW_setup();
+#endif // __NEW__
 #ifdef __linux
     pix_videoNEW_setup();
     pix_filmLinux_setup();
@@ -196,6 +203,7 @@ extern "C" {
       pix_puzzle_setup();
       pix_rectangle_setup();
       pix_resize_setup();
+      pix_rds_setup();
       pix_rgb2hsv_setup();
       pix_rgba_setup();
       pix_roll_setup();
