@@ -19,6 +19,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef __FILM__NEW
 # define NO_AUTO_REGISTER_CLASS
+#else
+# define DO_AUTO_REGISTER_CLASS
 #endif
 
 #define MAX_FILM_HANDLES 8

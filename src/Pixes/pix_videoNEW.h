@@ -20,8 +20,8 @@ Linux version by Millier Puckette. msp@ucsd.edu
 
 #define MAX_VIDEO_HANDLES 4
 
-#ifndef __VIDEO__NEW
-# define NO_AUTO_REGISTER_CLASS
+#ifdef __VIDEO__NEW
+# define DO_AUTO_REGISTER_CLASS
 #endif
 
 #include "Base/GemBase.h"
