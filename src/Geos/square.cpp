@@ -31,6 +31,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(square, t_floatarg, A_DEFFLOAT)
 square :: square(t_floatarg size)
         : GemShape(size)
 {
+    m_linewidth=1.0;
     m_drawType = GL_QUADS;
     m_blend=0;
 }
@@ -70,8 +71,6 @@ void square :: render(GemState *state)
         glDisable(GL_POLYGON_SMOOTH);
         glDisable(GL_BLEND);
     }
-    if (m_drawType == GL_LINE_LOOP)
-        glLineWidth(1.0);
 }
  
 /////////////////////////////////////////////////////////
