@@ -5,8 +5,81 @@
 	};
 	objectVersion = 38;
 	objects = {
+		3A276ED0056B63C500A80785 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = tube.cpp;
+			refType = 4;
+		};
+		3A276ED1056B63C500A80785 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = tube.h;
+			refType = 4;
+		};
+		3A276ED2056B63C500A80785 = {
+			fileRef = 3A276ED0056B63C500A80785;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3A276ED3056B63C500A80785 = {
+			fileRef = 3A276ED1056B63C500A80785;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3A276ED4056B63EE00A80785 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = curve3d.cpp;
+			refType = 4;
+		};
+		3A276ED5056B63EE00A80785 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = curve3d.h;
+			refType = 4;
+		};
+		3A276ED6056B63EE00A80785 = {
+			fileRef = 3A276ED4056B63EE00A80785;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3A276ED7056B63EE00A80785 = {
+			fileRef = 3A276ED5056B63EE00A80785;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		3A276ED8056B643500A80785 = {
+			children = (
+				CAB79E5005577CB200A80164,
+				CAB79E5A05577CB200A80164,
+				CAB79E5B05577CB200A80164,
+				CAB79E5C05577CB200A80164,
+				CAB79E5D05577CB200A80164,
+				CAB79E5E05577CB200A80164,
+				CAB79E5F05577CB200A80164,
+			);
+			isa = PBXGroup;
+			name = libparticle;
+			refType = 4;
+		};
+//3A0
+//3A1
+//3A2
+//3A3
+//3A4
+//CA0
+//CA1
+//CA2
+//CA3
+//CA4
 		CA6D35CC0558D47300A80164 = {
 			children = (
+				CAB20E620558C6DC00A80164,
 				CA6D35CD0558D47300A80164,
 				CA6D35CE0558D47300A80164,
 				CA6D35CF0558D47300A80164,
@@ -23,9 +96,8 @@
 				CA6D367E0558D47300A80164,
 			);
 			isa = PBXGroup;
-			name = FTGL;
-			path = /Users/cgc/CVS_Temp/Gem_versions/current/GemLibs/FTGL;
-			refType = 0;
+			path = FTGL;
+			refType = 4;
 		};
 		CA6D35CD0558D47300A80164 = {
 			fileEncoding = 30;
@@ -1659,11 +1731,13 @@
 		};
 		CA6D36F00558D4F200A80164 = {
 			children = (
+				CAB20E680558D39800A80164,
 				CA6D36F10558D4F200A80164,
 				CA6D373C0558D4F200A80164,
 			);
 			isa = PBXGroup;
-			path = freetype2;
+			name = freetype2;
+			path = "freetype-2.1.4/include";
 			refType = 4;
 		};
 		CA6D36F10558D4F200A80164 = {
@@ -9813,18 +9887,6 @@
 			settings = {
 			};
 		};
-		CA8E447D03F7494E00A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_feedback.cpp;
-			refType = 4;
-		};
-		CA8E447E03F7494E00A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_feedback.h;
-			refType = 4;
-		};
 		CAB02BFF040B21AB00A80164 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -9912,8 +9974,8 @@
 		CAB20E620558C6DC00A80164 = {
 			isa = PBXFileReference;
 			name = libftgl.a;
-			path = ../GemLibs/FTGL/mac/build/libftgl.a;
-			refType = 2;
+			path = mac/build/libftgl.a;
+			refType = 4;
 		};
 		CAB20E630558C6DC00A80164 = {
 			fileRef = CAB20E620558C6DC00A80164;
@@ -9936,8 +9998,8 @@
 		CAB20E680558D39800A80164 = {
 			isa = PBXFileReference;
 			name = libfreetype.a;
-			path = /Users/cgc/CVS_Temp/Gem_versions/current/GemLibs/libfreetype.a;
-			refType = 0;
+			path = ../build/libfreetype.a;
+			refType = 4;
 		};
 		CAB20E690558D39800A80164 = {
 			fileRef = CAB20E680558D39800A80164;
@@ -10032,8 +10094,9 @@
 		CAB79E5005577CB200A80164 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = papi.h;
-			refType = 4;
+			name = papi.h;
+			path = src/Particles/papi.h;
+			refType = 2;
 		};
 		CAB79E5105577CB200A80164 = {
 			fileEncoding = 30;
@@ -10057,12 +10120,6 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = part_render.h;
-			refType = 4;
-		};
-		CAB79E5505577CB200A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = part_vector.h;
 			refType = 4;
 		};
 		CAB79E5605577CB200A80164 = {
@@ -10151,12 +10208,6 @@
 		};
 		CAB79E6405577CB200A80164 = {
 			fileRef = CAB79E5405577CB200A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CAB79E6505577CB200A80164 = {
-			fileRef = CAB79E5505577CB200A80164;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -11169,18 +11220,6 @@
 			settings = {
 			};
 		};
-		CACE9BC003FDF99200A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_interleave.cpp;
-			refType = 4;
-		};
-		CACE9BC103FDF99200A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_interleave.h;
-			refType = 4;
-		};
 		CAD1CCA603F37FD400A80164 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -11240,120 +11279,6 @@
 //F52
 //F53
 //F54
-		F51054CD03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = setup.h;
-			refType = 4;
-		};
-		F51054CE03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_bitwise.cpp;
-			refType = 4;
-		};
-		F51054CF03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_bitwise.h;
-			refType = 4;
-		};
-		F51054D003E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_blur.cpp;
-			refType = 4;
-		};
-		F51054D103E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_blur.h;
-			refType = 4;
-		};
-		F51054D203E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_mask.cpp;
-			refType = 4;
-		};
-		F51054D303E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_mask.h;
-			refType = 4;
-		};
-		F51054D403E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_mix.cpp;
-			refType = 4;
-		};
-		F51054D503E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_mix.h;
-			refType = 4;
-		};
-		F51054D603E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_pixel_average.cpp;
-			refType = 4;
-		};
-		F51054D703E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_pixel_average.h;
-			refType = 4;
-		};
-		F51054D803E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_split.cpp;
-			refType = 4;
-		};
-		F51054D903E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_split.h;
-			refType = 4;
-		};
-		F51054DA03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_swap.cpp;
-			refType = 4;
-		};
-		F51054DB03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_swap.h;
-			refType = 4;
-		};
-		F51054DC03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_video.cpp;
-			refType = 4;
-		};
-		F51054DD03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_video.h;
-			refType = 4;
-		};
-		F51054DE03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_videoDarwin.cpp;
-			refType = 4;
-		};
-		F51054DF03E32F5E01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_videoDarwin.h;
-			refType = 4;
-		};
 		F521B3F503898A4A019165F0 = {
 			children = (
 				F521B40103898BAC019165F0,
@@ -11542,7 +11467,6 @@
 				F521B6EA03898BE3019165F0,
 				F521B6EC03898BE3019165F0,
 				F521B6EE03898BE3019165F0,
-				F521B6F003898BE3019165F0,
 				F521B6F203898BE3019165F0,
 				F521B6F403898BE3019165F0,
 				F521B6F603898BE3019165F0,
@@ -11551,11 +11475,6 @@
 				F5D2CF750389DD3B01AC9AE7,
 				F5D2CF770389DD7201AC9AE7,
 				F5675F1B03E336E101A80164,
-				F5675F1E03E3373B01A80164,
-				F5675F2003E3375101A80164,
-				F5675F2203E3377101A80164,
-				F5675F2403E3379401A80164,
-				F5675F2603E337AB01A80164,
 				F5675F2A03E3386E01A80164,
 				CA71244803ECF98E00A80164,
 				CAD1CCA903F37FD400A80164,
@@ -11842,7 +11761,6 @@
 				CAB79E6005577CB200A80164,
 				CAB79E6205577CB200A80164,
 				CAB79E6405577CB200A80164,
-				CAB79E6505577CB200A80164,
 				CAB79E6705577CB200A80164,
 				CAB79E6905577CB200A80164,
 				CAB79E6C05577CB200A80164,
@@ -11988,6 +11906,8 @@
 				CA6D37BD055F103700A80164,
 				CA6D37BF055F103900A80164,
 				CA6D37C1055F11DF00A80164,
+				3A276ED3056B63C500A80785,
+				3A276ED7056B63EE00A80785,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -12149,7 +12069,6 @@
 				F521B6E903898BE3019165F0,
 				F521B6EB03898BE3019165F0,
 				F521B6ED03898BE3019165F0,
-				F521B6EF03898BE3019165F0,
 				F521B6F103898BE3019165F0,
 				F521B6F503898BE3019165F0,
 				F521B6F303898BE3019165F0,
@@ -12477,6 +12396,8 @@
 				CA6D37BC055F103700A80164,
 				CA6D37BE055F103800A80164,
 				CA6D37C0055F11DF00A80164,
+				3A276ED2056B63C500A80785,
+				3A276ED6056B63EE00A80785,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -12535,8 +12456,8 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				HEADER_SEARCH_PATHS = "src /Users/cgc/CVS_Temp/Gem_versions/current/GemLibs/FTGL/include /Users/cgc/CVS_Temp/Gem_versions/current/GemLibs/freetype2";
-				LIBRARY_SEARCH_PATHS = "/Users/cgc/CVS_Temp/Gem_versions/current/GemLibs /Users/cgc/CVS_Temp/Gem_versions/current/GemLibs/FTGL/mac/build";
+				HEADER_SEARCH_PATHS = "src ../GemLibs/FTGL/include ../GemLibs/freetype-2.1.4/include";
+				LIBRARY_SEARCH_PATHS = "../GemLibs/freetype-2.1.4/build ../GemLibs/FTGL/mac/build";
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "\U0001-O3";
 				OTHER_CFLAGS = "-DMACOSX  -DYUV -DDEBUG  -faltivec";
@@ -12579,8 +12500,6 @@
 				F521B4BE03898BE2019165F0,
 				F521B4C403898BE2019165F0,
 				F521B4E403898BE2019165F0,
-				F521B56C03898BE2019165F0,
-				F521B57603898BE2019165F0,
 				CA8E403403F7486100A80164,
 				CAEEC1300419223E00D7D234,
 			);
@@ -12592,15 +12511,14 @@
 		F521B40203898BB7019165F0 = {
 			children = (
 				F5D2CF760389DD7201AC9AE7,
-				F5D2CF380389DBE701AC9AE7,
 				F5D2CF710389DD3B01AC9AE7,
 				CA6D35CC0558D47300A80164,
 				CA6D36F00558D4F200A80164,
 			);
 			isa = PBXGroup;
 			name = GemLibs;
-			path = /Users/cgc/CVS_Temp/Gem_versions/current/GemLibs;
-			refType = 0;
+			path = ../GemLibs;
+			refType = 2;
 		};
 		F521B40303898BE2019165F0 = {
 			children = (
@@ -12993,17 +12911,16 @@
 				F521B44403898BE2019165F0,
 				F521B44503898BE2019165F0,
 				F521B44603898BE2019165F0,
+				CAB79E3B05577B0B00A80164,
+				CAB79E3C05577B0B00A80164,
+				CAB79E3D05577B0B00A80164,
+				CAB79E3E05577B0B00A80164,
 				F521B44703898BE2019165F0,
 				F521B44803898BE2019165F0,
 				F521B44903898BE2019165F0,
 				F521B44A03898BE2019165F0,
 				F521B44C03898BE2019165F0,
 				F521B44D03898BE2019165F0,
-				F5675F2503E337AB01A80164,
-				CAB79E3B05577B0B00A80164,
-				CAB79E3C05577B0B00A80164,
-				CAB79E3D05577B0B00A80164,
-				CAB79E3E05577B0B00A80164,
 			);
 			isa = PBXGroup;
 			name = Controls;
@@ -13108,6 +13025,7 @@
 		};
 		F521B44E03898BE2019165F0 = {
 			children = (
+				F521B47503898BE2019165F0,
 				F521B44F03898BE2019165F0,
 				F521B45003898BE2019165F0,
 				F521B45103898BE2019165F0,
@@ -13120,6 +13038,8 @@
 				F521B45803898BE2019165F0,
 				F521B45903898BE2019165F0,
 				F521B45A03898BE2019165F0,
+				3A276ED4056B63EE00A80785,
+				3A276ED5056B63EE00A80785,
 				F521B45B03898BE2019165F0,
 				F521B45C03898BE2019165F0,
 				F521B45D03898BE2019165F0,
@@ -13128,6 +13048,8 @@
 				F521B46003898BE2019165F0,
 				F521B46203898BE2019165F0,
 				F521B46403898BE2019165F0,
+				CAB79E4405577C3A00A80164,
+				CAB79E4505577C3A00A80164,
 				F521B46503898BE2019165F0,
 				F521B46603898BE2019165F0,
 				F521B46703898BE2019165F0,
@@ -13138,32 +13060,30 @@
 				F521B46C03898BE2019165F0,
 				F521B46D03898BE2019165F0,
 				F521B46E03898BE2019165F0,
-				F521B46F03898BE2019165F0,
-				F521B47003898BE2019165F0,
-				F521B47203898BE2019165F0,
-				F521B47103898BE2019165F0,
-				F521B47303898BE2019165F0,
-				F521B47403898BE2019165F0,
-				F521B47503898BE2019165F0,
-				F521B47603898BE2019165F0,
-				F521B47703898BE2019165F0,
-				F521B47803898BE2019165F0,
-				F521B47903898BE2019165F0,
-				F521B47A03898BE2019165F0,
-				F521B47B03898BE2019165F0,
-				F521B47C03898BE2019165F0,
-				F521B47D03898BE2019165F0,
-				F5675F2303E3379401A80164,
 				CAD1CCA603F37FD400A80164,
 				CAD1CCA703F37FD400A80164,
 				CA8E446B03F7489000A80164,
 				CA8E446C03F7489000A80164,
 				CA8E446D03F7489000A80164,
 				CA8E446E03F7489000A80164,
-				CAB79E4405577C3A00A80164,
-				CAB79E4505577C3A00A80164,
+				F521B46F03898BE2019165F0,
+				F521B47003898BE2019165F0,
+				F521B47103898BE2019165F0,
+				F521B47203898BE2019165F0,
+				F521B47303898BE2019165F0,
+				F521B47403898BE2019165F0,
+				F521B47603898BE2019165F0,
+				F521B47703898BE2019165F0,
+				F521B47803898BE2019165F0,
+				F521B47903898BE2019165F0,
 				CAB79E4605577C3A00A80164,
 				CAB79E4705577C3A00A80164,
+				F521B47A03898BE2019165F0,
+				F521B47B03898BE2019165F0,
+				F521B47C03898BE2019165F0,
+				F521B47D03898BE2019165F0,
+				3A276ED0056B63C500A80785,
+				3A276ED1056B63C500A80785,
 			);
 			isa = PBXGroup;
 			name = Geos;
@@ -13490,7 +13410,6 @@
 				F521B4AD03898BE2019165F0,
 				F521B4AE03898BE2019165F0,
 				F521B4AF03898BE2019165F0,
-				F5675F2103E3377101A80164,
 				CAB02BFF040B21AB00A80164,
 				CAB02C00040B21AB00A80164,
 				CAB79E4C05577C6000A80164,
@@ -13887,7 +13806,6 @@
 				F521B4C003898BE2019165F0,
 				F521B4C203898BE2019165F0,
 				F521B4C303898BE2019165F0,
-				F5675F1F03E3375101A80164,
 			);
 			isa = PBXGroup;
 			name = Nongeos;
@@ -13920,6 +13838,7 @@
 		};
 		F521B4C403898BE2019165F0 = {
 			children = (
+				3A276ED8056B643500A80785,
 				F521B4C603898BE2019165F0,
 				F521B4C703898BE2019165F0,
 				F521B4C803898BE2019165F0,
@@ -13950,23 +13869,14 @@
 				F521B4E103898BE2019165F0,
 				F521B4E203898BE2019165F0,
 				F521B4E303898BE2019165F0,
-				F5675F1D03E3373B01A80164,
-				CAB79E5005577CB200A80164,
 				CAB79E5105577CB200A80164,
 				CAB79E5205577CB200A80164,
 				CAB79E5305577CB200A80164,
 				CAB79E5405577CB200A80164,
-				CAB79E5505577CB200A80164,
 				CAB79E5605577CB200A80164,
 				CAB79E5705577CB200A80164,
 				CAB79E5805577CB200A80164,
 				CAB79E5905577CB200A80164,
-				CAB79E5A05577CB200A80164,
-				CAB79E5B05577CB200A80164,
-				CAB79E5C05577CB200A80164,
-				CAB79E5D05577CB200A80164,
-				CAB79E5E05577CB200A80164,
-				CAB79E5F05577CB200A80164,
 			);
 			isa = PBXGroup;
 			name = Particles;
@@ -14365,8 +14275,6 @@
 				F521B55703898BE2019165F0,
 				F521B55803898BE2019165F0,
 				F521B55903898BE2019165F0,
-				F521B55A03898BE2019165F0,
-				F521B55B03898BE2019165F0,
 				F521B55C03898BE2019165F0,
 				F521B55D03898BE2019165F0,
 				F521B55E03898BE2019165F0,
@@ -15086,18 +14994,6 @@
 			path = pix_texture.h;
 			refType = 4;
 		};
-		F521B55A03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = pix_texture2.cpp;
-			refType = 4;
-		};
-		F521B55B03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = pix_texture2.h;
-			refType = 4;
-		};
 		F521B55C03898BE2019165F0 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -15192,395 +15088,6 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = pix_zoom.h;
-			refType = 4;
-		};
-		F521B56C03898BE2019165F0 = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = TV;
-			path = src/TV;
-			refType = 2;
-		};
-		F521B57603898BE2019165F0 = {
-			children = (
-				F51054CD03E32F5E01A80164,
-				F521B57803898BE2019165F0,
-				F521B57903898BE2019165F0,
-				F521B57A03898BE2019165F0,
-				F521B57B03898BE2019165F0,
-				F521B57C03898BE2019165F0,
-				F521B57D03898BE2019165F0,
-				F521B57E03898BE2019165F0,
-				F521B57F03898BE2019165F0,
-				F521B58003898BE2019165F0,
-				F521B58103898BE2019165F0,
-				F521B58203898BE2019165F0,
-				F521B58303898BE2019165F0,
-				F521B58403898BE2019165F0,
-				F521B58503898BE2019165F0,
-				F521B58603898BE2019165F0,
-				F521B58703898BE2019165F0,
-				F521B58803898BE2019165F0,
-				F521B58903898BE2019165F0,
-				F521B58A03898BE2019165F0,
-				F521B58B03898BE2019165F0,
-				F521B58C03898BE2019165F0,
-				F521B58D03898BE2019165F0,
-				F521B58E03898BE2019165F0,
-				F521B58F03898BE2019165F0,
-				F521B59003898BE2019165F0,
-				F521B59103898BE2019165F0,
-				F521B59203898BE2019165F0,
-				F521B59303898BE2019165F0,
-				F521B59403898BE2019165F0,
-				F521B59503898BE2019165F0,
-				F521B59603898BE2019165F0,
-				F521B59703898BE2019165F0,
-				F521B59803898BE2019165F0,
-				F521B59903898BE2019165F0,
-				F521B59A03898BE2019165F0,
-				F521B59B03898BE3019165F0,
-				F521B59C03898BE3019165F0,
-				F521B59D03898BE3019165F0,
-				F521B59E03898BE3019165F0,
-				F521B59F03898BE3019165F0,
-				F521B5A003898BE3019165F0,
-				F521B5A103898BE3019165F0,
-				F521B5A203898BE3019165F0,
-				F521B5A303898BE3019165F0,
-				F521B5A403898BE3019165F0,
-				F521B5A503898BE3019165F0,
-				F521B5A603898BE3019165F0,
-				F521B5A703898BE3019165F0,
-				F521B5A803898BE3019165F0,
-				F521B5A903898BE3019165F0,
-				F51054CE03E32F5E01A80164,
-				F51054CF03E32F5E01A80164,
-				F51054D003E32F5E01A80164,
-				F51054D103E32F5E01A80164,
-				F51054D203E32F5E01A80164,
-				F51054D303E32F5E01A80164,
-				F51054D403E32F5E01A80164,
-				F51054D503E32F5E01A80164,
-				F51054D603E32F5E01A80164,
-				F51054D703E32F5E01A80164,
-				F51054D803E32F5E01A80164,
-				F51054D903E32F5E01A80164,
-				F51054DA03E32F5E01A80164,
-				F51054DB03E32F5E01A80164,
-				F51054DC03E32F5E01A80164,
-				F51054DD03E32F5E01A80164,
-				F51054DE03E32F5E01A80164,
-				F51054DF03E32F5E01A80164,
-				CA8E447D03F7494E00A80164,
-				CA8E447E03F7494E00A80164,
-				CACE9BC003FDF99200A80164,
-				CACE9BC103FDF99200A80164,
-			);
-			isa = PBXGroup;
-			name = yuv;
-			path = src/yuv;
-			refType = 2;
-		};
-		F521B57803898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_add.cpp;
-			refType = 4;
-		};
-		F521B57903898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_add.h;
-			refType = 4;
-		};
-		F521B57A03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_adjust.cpp;
-			refType = 4;
-		};
-		F521B57B03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_adjust.h;
-			refType = 4;
-		};
-		F521B57C03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_average.cpp;
-			refType = 4;
-		};
-		F521B57D03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_average.h;
-			refType = 4;
-		};
-		F521B57E03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_bandw.cpp;
-			refType = 4;
-		};
-		F521B57F03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_bandw.h;
-			refType = 4;
-		};
-		F521B58003898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_bitshift.cpp;
-			refType = 4;
-		};
-		F521B58103898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_bitshift.h;
-			refType = 4;
-		};
-		F521B58203898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_blank.cpp;
-			refType = 4;
-		};
-		F521B58303898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_blank.h;
-			refType = 4;
-		};
-		F521B58403898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_chroma_key.cpp;
-			refType = 4;
-		};
-		F521B58503898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_chroma_key.h;
-			refType = 4;
-		};
-		F521B58603898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_clamp.cpp;
-			refType = 4;
-		};
-		F521B58703898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_clamp.h;
-			refType = 4;
-		};
-		F521B58803898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_compare.cpp;
-			refType = 4;
-		};
-		F521B58903898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_compare.h;
-			refType = 4;
-		};
-		F521B58A03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_difference.cpp;
-			refType = 4;
-		};
-		F521B58B03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_difference.h;
-			refType = 4;
-		};
-		F521B58C03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_dual.cpp;
-			refType = 4;
-		};
-		F521B58D03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_dual.h;
-			refType = 4;
-		};
-		F521B58E03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_emboss.cpp;
-			refType = 4;
-		};
-		F521B58F03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_emboss.h;
-			refType = 4;
-		};
-		F521B59003898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_film.cpp;
-			refType = 4;
-		};
-		F521B59103898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_film.h;
-			refType = 4;
-		};
-		F521B59203898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_filmDarwin.cpp;
-			refType = 4;
-		};
-		F521B59303898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_filmDarwin.h;
-			refType = 4;
-		};
-		F521B59403898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_gain.cpp;
-			refType = 4;
-		};
-		F521B59503898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_gain.h;
-			refType = 4;
-		};
-		F521B59603898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_invert.cpp;
-			refType = 4;
-		};
-		F521B59703898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_invert.h;
-			refType = 4;
-		};
-		F521B59803898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_luma_key.cpp;
-			refType = 4;
-		};
-		F521B59903898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_luma_key.h;
-			refType = 4;
-		};
-		F521B59A03898BE2019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_movie.cpp;
-			refType = 4;
-		};
-		F521B59B03898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_movie.h;
-			refType = 4;
-		};
-		F521B59C03898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_mult.cpp;
-			refType = 4;
-		};
-		F521B59D03898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_mult.h;
-			refType = 4;
-		};
-		F521B59E03898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_pixel_data.cpp;
-			refType = 4;
-		};
-		F521B59F03898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_pixel_data.h;
-			refType = 4;
-		};
-		F521B5A003898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_pixel_isolate.cpp;
-			refType = 4;
-		};
-		F521B5A103898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_pixel_isolate.h;
-			refType = 4;
-		};
-		F521B5A203898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_pixel_replace.cpp;
-			refType = 4;
-		};
-		F521B5A303898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_pixel_replace.h;
-			refType = 4;
-		};
-		F521B5A403898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_posterize.cpp;
-			refType = 4;
-		};
-		F521B5A503898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_posterize.h;
-			refType = 4;
-		};
-		F521B5A603898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_set.cpp;
-			refType = 4;
-		};
-		F521B5A703898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_set.h;
-			refType = 4;
-		};
-		F521B5A803898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_subtract.cpp;
-			refType = 4;
-		};
-		F521B5A903898BE3019165F0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = yuv_subtract.h;
 			refType = 4;
 		};
 		F521B5AB03898BE3019165F0 = {
@@ -17341,18 +16848,6 @@
 			settings = {
 			};
 		};
-		F521B6EF03898BE3019165F0 = {
-			fileRef = F521B55A03898BE2019165F0;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F521B6F003898BE3019165F0 = {
-			fileRef = F521B55B03898BE2019165F0;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F521B6F103898BE3019165F0 = {
 			fileRef = F521B55C03898BE2019165F0;
 			isa = PBXBuildFile;
@@ -17443,66 +16938,6 @@
 			settings = {
 			};
 		};
-		F5675F1D03E3373B01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = setup.h;
-			refType = 4;
-		};
-		F5675F1E03E3373B01A80164 = {
-			fileRef = F5675F1D03E3373B01A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5675F1F03E3375101A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = setup.h;
-			refType = 4;
-		};
-		F5675F2003E3375101A80164 = {
-			fileRef = F5675F1F03E3375101A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5675F2103E3377101A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = setup.h;
-			refType = 4;
-		};
-		F5675F2203E3377101A80164 = {
-			fileRef = F5675F2103E3377101A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5675F2303E3379401A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = setup.h;
-			refType = 4;
-		};
-		F5675F2403E3379401A80164 = {
-			fileRef = F5675F2303E3379401A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5675F2503E337AB01A80164 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = setup.h;
-			refType = 4;
-		};
-		F5675F2603E337AB01A80164 = {
-			fileRef = F5675F2503E337AB01A80164;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5675F2703E3386E01A80164 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -17534,8 +16969,6 @@
 				F5BDD20D0389F11F0175848A,
 				F5BDD20E0389F11F0175848A,
 				F5BDD20F0389F11F0175848A,
-				CAB20E620558C6DC00A80164,
-				CAB20E680558D39800A80164,
 			);
 			isa = PBXGroup;
 			name = frameworks;
@@ -17601,44 +17034,14 @@
 			settings = {
 			};
 		};
-		F5D2CF380389DBE701AC9AE7 = {
-			children = (
-				F5D2CF3C0389DBE701AC9AE7,
-				F5D2CF3D0389DBE701AC9AE7,
-				F5D2CF3E0389DBE701AC9AE7,
-			);
-			isa = PBXGroup;
-			name = glm;
-			path = /Users/cgc/CVS_Temp/GemLibs/glm;
-			refType = 0;
-		};
-		F5D2CF3C0389DBE701AC9AE7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = glm.c;
-			refType = 4;
-		};
-		F5D2CF3D0389DBE701AC9AE7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = glm.h;
-			refType = 4;
-		};
-		F5D2CF3E0389DBE701AC9AE7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = Makefile;
-			refType = 4;
-		};
 		F5D2CF710389DD3B01AC9AE7 = {
 			children = (
 				F5D2CF720389DD3B01AC9AE7,
 				F5D2CF730389DD3B01AC9AE7,
 			);
 			isa = PBXGroup;
-			name = darwinStuff;
-			path = /Users/cgc/CVS_Temp/GemLibs/darwinStuff;
-			refType = 0;
+			path = darwinStuff;
+			refType = 4;
 		};
 		F5D2CF720389DD3B01AC9AE7 = {
 			fileEncoding = 30;
@@ -17668,7 +17071,7 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = m_pd.h;
-			path = /Users/cgc/CVS_Temp/pd/src/m_pd.h;
+			path = /usr/local/include/m_pd.h;
 			refType = 0;
 		};
 		F5D2CF770389DD7201AC9AE7 = {
