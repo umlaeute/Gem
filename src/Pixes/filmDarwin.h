@@ -45,7 +45,7 @@ class GEM_EXTERN filmDarwin : public film {
 
   //////////
   // Destructor
-  ~filmDarwin();
+  virtual ~filmDarwin();
 
   //////////
   // open a movie up

@@ -53,7 +53,7 @@ class GEM_EXTERN filmFFMPEG : public film {
 
   //////////
   // Destructor
-  ~filmFFMPEG();
+  virtual ~filmFFMPEG();
 
   //////////
   // open a movie up

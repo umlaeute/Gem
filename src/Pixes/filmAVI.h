@@ -44,7 +44,7 @@ class GEM_EXTERN filmAVI : public film {
 
   //////////
   // Destructor
-  ~filmAVI();
+  virtual ~filmAVI();
 
   //////////
   // open a movie up

@@ -41,7 +41,7 @@ class GEM_EXTERN film
   //////////
   // Constructor
   film(int format=0);
-  ~film();
+  virtual ~film();
 
   //////////
   // set the wanted color-space
