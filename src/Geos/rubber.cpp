@@ -369,8 +369,8 @@ int rubber :: rubber_grab()
 {
   float dx[2];
   float d;
-  float min_d;
-  float min_i;
+  float min_d=0;
+  float min_i=0;
   int i;
 
   for (i = 0; i < GRID_SIZE_X*GRID_SIZE_Y; i++)

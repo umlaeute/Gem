@@ -174,8 +174,6 @@ void ripple :: render(GemState *state)
 void ripple :: ripple_init()
 {
   int i, j;
-  float x, y;
-
   glDisable(GL_DEPTH_TEST);
 
   //ripple_max = (int)sqrt(win_size_x*win_size_y+win_size_x*win_size_x);
