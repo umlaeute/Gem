@@ -48,6 +48,13 @@ pix_texture :: pix_texture()
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
   m_buffer.data = NULL;
+  
+  m_mode = 0;
+  
+  #ifdef GL_TEXTURE_RECTANGLE_EXT
+  m_mode = 1;  //default to the fastest mode for systems that support it
+  #endif
+  
 }
 
 /////////////////////////////////////////////////////////
@@ -120,7 +127,6 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
 // render
 //
 /////////////////////////////////////////////////////////
-#if 1
 void pix_texture :: render(GemState *state) {
   if (!state->image        || !m_textureOnOff          )return;
   if(!&state->image->image || !state->image->image.data)return;
@@ -173,23 +179,21 @@ if (m_mode){
     creatingDispList = 1;
   }
   setUpTextureState();
-#endif
+#endif //GL_VERSION_1_1
 
   if (m_rebuildList) {
 #ifndef GL_YCBCR_422_APPLE
-    /* if YUV is not supported on this platform, we have to convert it to RGB
-     * (skip Alpha since it isnt used)
-     */
+    // if YUV is not supported on this platform, we have to convert it to RGB
+    //(skip Alpha since it isnt used)
+    //
     if (m_imagebuf.format == GL_YUV422_GEM){
-    post("pix_texture: this should never be posted on OSX");
       m_imagebuf.format=GL_RGB;
       m_imagebuf.csize=3;
       m_imagebuf.reallocate();
       m_imagebuf.fromYUV422(state->image->image.data);
     }
-#endif /* GL_YCBCR_422_APPLE */
+#endif // GL_YCBCR_422_APPLE 
     if (normalized) {
-      //post("normalized");
       m_buffer.xsize = m_imagebuf.xsize;
       m_buffer.ysize = m_imagebuf.ysize;
       m_buffer.csize  = m_imagebuf.csize;
@@ -205,27 +209,9 @@ if (m_mode){
 	m_dataSize[0] = m_buffer.csize;
 	m_dataSize[1] = m_buffer.xsize;
 	m_dataSize[2] = m_buffer.ysize;
-#if 0
-	// following could be done directly with m_imagebuf...
-	glTexImage2D(m_textureType, 0, 
-		     m_buffer.csize,
-		     m_buffer.xsize,
-		     m_buffer.ysize, 0,
-		     m_buffer.format,
-		     m_buffer.type,
-		     m_buffer.data);
-      }
-      // okay, load in the actual pixel data
-      
-      glTexSubImage2D(m_textureType, 0,
-		      0, 0,				// position
-		      m_imagebuf.xsize,
-		      m_imagebuf.ysize,
-		      m_imagebuf.format,
-		      m_imagebuf.type,
-		      m_imagebuf.data);
-#else
+
     }
+    //if the texture is a power of two in size then there is no need to subtexture
     glTexImage2D(m_textureType, 0, 
 		     m_imagebuf.csize,
 		     m_imagebuf.xsize,
@@ -233,10 +219,10 @@ if (m_mode){
 		     m_imagebuf.format,
 		     m_imagebuf.type,
 		     m_imagebuf.data);
-#endif
+                     
+
       
     } else { // !normalized
-      //post("!normalized");
       float m_xRatio = (float)m_imagebuf.xsize;
       float m_yRatio = (float)m_imagebuf.ysize;
       if ( !GemMan::texture_rectangle_supported || !m_mode ) {
@@ -261,7 +247,8 @@ if (m_mode){
 	  m_buffer.ysize != m_dataSize[2]){
             m_dataSize[0] = m_buffer.csize;
             m_dataSize[1] = m_buffer.xsize;
-            m_dataSize[2] = m_buffer.ysize;
+            m_dataSize[2] = m_buffer.ysize; 
+     
             
             if (m_buffer.csize == 2 && !m_mode){
                 int datasize=m_buffer.xsize*m_buffer.ysize*m_buffer.csize/4;
@@ -275,17 +262,51 @@ if (m_mode){
                 post("pix_texture: zeroing YUV buffer");
             }
 
-	glTexImage2D(m_textureType, 0,
-		     m_buffer.csize,
+        //this is for dealing with power of 2 textures which need a buffer that's 2^n
+        if ( !GemMan::texture_rectangle_supported || !m_mode ) {            
+        glTexImage2D(m_textureType, 0,
+		   //  m_buffer.csize,
+                   GL_RGB8,
 		     m_buffer.xsize,
 		     m_buffer.ysize, 0,
 		     m_buffer.format,
 		     m_buffer.type,
 		     m_buffer.data);
-        post("pix_texture: TexImage2D");
-      }
+     
+        
+        post("pix_texture: TexImage2D non rectangle");
+        }
+        else //this deals with rectangle textures that are h*w
+        { 
+            glTexImage2D(m_textureType, 0,
+		   //  m_buffer.csize,
+                   GL_RGB,
+		     m_imagebuf.xsize,
+		     m_imagebuf.ysize, 0,
+		     m_imagebuf.format,
+		     m_imagebuf.type,
+		     m_imagebuf.data); 
+            post("pix_texture: TexImage2D  rectangle");
+        }
+        
+      } //end of loop if size has changed
+      
       // okay, load in the actual pixel data
       
+      //when doing rectangle textures the buffer changes after every film is loaded this call makes sure the 
+      //texturing is updated as well to prevent crashes
+      if (state->image->newfilm ){
+            glTexImage2D(m_textureType, 0,
+		   //  m_buffer.csize,  //this is completely wrong btw
+                   GL_RGB, 		//this is the correct internal format for YUV
+		     m_imagebuf.xsize,
+		     m_imagebuf.ysize, 0,
+		     m_imagebuf.format,
+		     m_imagebuf.type,
+		     m_imagebuf.data);
+            post("pix_texture: new film");
+            state->image->newfilm = 0; //just to be sure
+      } 
       glTexSubImage2D(m_textureType, 0,
 		      0, 0,				// position
 		      m_imagebuf.xsize,
@@ -309,7 +330,7 @@ if (m_mode){
 #endif
   m_rebuildList = 0;
 }
-#endif
+
 
 
 /////////////////////////////////////////////////////////

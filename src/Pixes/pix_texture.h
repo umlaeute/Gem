@@ -120,6 +120,7 @@ class GEM_EXTERN pix_texture : public GemBase
 	int             m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 	bool            m_normalized;  // whether the image is power of 2
         int		m_mode; //rectangle or power of 2
+        GLenum		m_internalFormat;
         
 	
 
