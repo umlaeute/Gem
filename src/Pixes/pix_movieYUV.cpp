@@ -293,9 +293,11 @@ void pix_movieYUV :: setUpTextureState()
     if ( !GemMan::texture_rectangle_supported )				//tigital
 {
         glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
+#ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
         if (GemMan::client_storage_supported)
             glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
         else
+#endif
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
