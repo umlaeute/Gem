@@ -46,29 +46,29 @@ class GEM_EXTERN part_color : public GemBase
     	//////////
     	// Destructor
     	virtual ~part_color();
+	
+	//////////
+	// One end of the range
+	float			m_color1[4];
 
-		//////////
-		// One end of the range
-		float			m_color1[3];
-
-		//////////
-		// Other end of the range
-		float			m_color2[3];
+	//////////
+	// Other end of the range
+	float			m_color2[4];
 
     	//////////
     	// Color changed
-    	void	    	color1Mess(float red, float green, float blue);
+    	void	    	color1Mess(float red, float green, float blue, float alpha);
     	
     	//////////
     	// Color changed
-    	void	    	color2Mess(float red, float green, float blue);
+    	void	    	color2Mess(float red, float green, float blue, float alpha);
     	
     private:
     	
     	//////////
     	// static member functions
-    	static void 	color1MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b);
-    	static void 	color2MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b);
+    	static void 	color1MessCallback(void *data, t_symbol*,int,t_atom*);
+    	static void 	color2MessCallback(void *data, t_symbol*,int,t_atom*);
 };
 
 #endif	// for header file

@@ -52,11 +52,12 @@ class GEM_EXTERN part_info : public GemBase
   float        *m_colors;
   float        *m_sizes;
   float        *m_velo;
+  float        *m_ages;
 
   int           m_number;
 
-  t_outlet *out_num, *out_pos, *out_col, *out_vel, *out_siz;
-  t_atom m_alist[10];
+  t_outlet *out_num, *out_pos, *out_col, *out_vel, *out_siz, *out_age;
+  t_atom m_alist[13];
 };
 
 #endif	// for header file

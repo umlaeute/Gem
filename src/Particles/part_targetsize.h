@@ -49,26 +49,26 @@ class GEM_EXTERN part_targetsize : public GemBase
 
     	//////////
     	// The scale factor angle
-    	float	    	m_scale;
+    	float	    	m_scale[3];
 
-		//////////
-		// The target size
-		float			m_size;
+	//////////
+	// The target size
+	float		m_size[3];
 
     	//////////
     	// Scale changed
-    	void	    	scaleMess(float scale);
+    	void	    	scaleMess(float x, float y, float y);
     	
     	//////////
     	// Size changed
-    	void	    	sizeMess(float size);
+    	void	    	sizeMess(float sizex, float sizey, float sizez);
     	
     private:
     	
     	//////////
     	// static member functions
-    	static void 	scaleMessCallback(void *data, t_floatarg scale);
-    	static void 	sizeMessCallback(void *data, t_floatarg size);
+    	static void 	scaleMessCallback(void *data, t_symbol*, int, t_atom*);
+    	static void 	sizeMessCallback (void *data, t_symbol*, int, t_atom*);
 };
 
 #endif	// for header file

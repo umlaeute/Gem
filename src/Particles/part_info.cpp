@@ -6,7 +6,7 @@
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2001-2003 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -35,13 +35,15 @@ part_info :: part_info()
   m_pos    = new float[m_number*3];
   m_colors = new float[m_number*4];
   m_velo   = new float[m_number*3];
-  m_sizes  = new float[m_number];
+  m_sizes  = new float[m_number*3];
+  m_ages   = new float[m_number];
 
   out_num = outlet_new(this->x_obj, 0);
   out_pos = outlet_new(this->x_obj, 0);
   out_col = outlet_new(this->x_obj, 0);
   out_vel = outlet_new(this->x_obj, 0);
   out_siz = outlet_new(this->x_obj, 0);
+  out_age = outlet_new(this->x_obj, 0);
 }
 
 /////////////////////////////////////////////////////////
@@ -55,11 +57,12 @@ part_info :: ~part_info()
   outlet_free(out_col);
   outlet_free(out_vel);
   outlet_free(out_siz);
+  outlet_free(out_age);
   if(m_pos)delete[]m_pos;
   if(m_colors)delete[]m_colors;
   if(m_velo)delete[]m_velo;
   if(m_sizes)delete[]m_sizes;
-
+  if(m_ages)delete[]m_ages;
 }
 
 /////////////////////////////////////////////////////////
@@ -80,17 +83,20 @@ void part_info :: render(GemState *state)
     if(m_sizes )delete[]m_sizes;
     if(m_pos   )delete[]m_pos;
     if(m_velo  )delete[]m_velo;
+    if(m_ages  )delete[]m_ages;
     m_number = cnt;
     m_pos    = new float[m_number * 3];
     m_colors = new float[m_number * 4];
     m_velo   = new float[m_number * 3];
-    m_sizes  = new float[m_number];
+    m_sizes  = new float[m_number * 3];
+    m_ages   = new float[m_number];
   }
   float *position = m_pos;
   float *color    = m_colors;
   float *velo     = m_velo;
   float *size     = m_sizes;
-  pGetParticles(0, cnt, position, color, velo, size);
+  float *age      = m_ages;
+  pGetParticles(0, cnt, position, color, velo, size, age);
   for(int i = 0; i < cnt; i++)	{
     SETFLOAT(m_alist+0, position[0]);
     SETFLOAT(m_alist+1, position[1]);
@@ -105,8 +111,13 @@ void part_info :: render(GemState *state)
     SETFLOAT(m_alist+8, velo[1]);
     SETFLOAT(m_alist+9, velo[2]);
     velo+=3;
+    SETFLOAT(m_alist+10, size[0]);
+    SETFLOAT(m_alist+11, size[1]);
+    SETFLOAT(m_alist+12, size[2]);
+    size+=3;
 
-    outlet_float(out_siz, size[i]);
+    outlet_float(out_age, age[i]);
+    outlet_list (out_siz, &s_list, 3, m_alist+10);
     outlet_list (out_vel, &s_list, 3, m_alist+7);
     outlet_list (out_col, &s_list, 4, m_alist+3);
     outlet_list (out_pos, &s_list, 3, m_alist+0);

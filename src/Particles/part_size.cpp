@@ -16,7 +16,7 @@
 
 #include "papi.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(part_size, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME(part_size)
 
 /////////////////////////////////////////////////////////
 //
@@ -26,12 +26,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(part_size, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_size :: part_size(t_floatarg num)
-		   : m_size(1.f)
+part_size :: part_size(int argc, t_atom*argv)
 {
-	if (num > 0)
-		m_size = num;
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
+  m_size[0]=m_size[1]=m_size[2]=1.0f;
+  sizeMess(argc,argv);
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
 }
 
 /////////////////////////////////////////////////////////
@@ -42,16 +41,32 @@ part_size :: ~part_size()
 { }
 
 /////////////////////////////////////////////////////////
+// sizeMess
+//
+/////////////////////////////////////////////////////////
+void part_size :: sizeMess(int argc, t_atom*argv)
+{ 
+  switch(argc){
+  case 1:
+    m_size[0]=m_size[1]=m_size[2]=atom_getfloat(argv);
+    break;
+  case 3:
+    m_size[0]=atom_getfloat(argv++);
+    m_size[1]=atom_getfloat(argv++);
+    m_size[2]=atom_getfloat(argv++);
+  default:;
+  }
+}
+/////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
 void part_size :: render(GemState *state)
 {
-	if (state->stereo == 0 ||
-		state->stereo == 1)
-	{
-		pSize(m_size);
-	}
+  if (state->stereo == 0 ||
+      state->stereo == 1)    {
+      pSize(m_size[0], m_size[1], m_size[2]);
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -60,11 +75,11 @@ void part_size :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_size :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_size::numberMessCallback,
-    	    gensym("size"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&part_size::sizeMessCallback,
+		  gensym("size"), A_GIMME, A_NULL);
 }
-void part_size :: numberMessCallback(void *data, t_floatarg num)
+void part_size :: sizeMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-    GetMyClass(data)->numberMess(num);
+  GetMyClass(data)->sizeMess(argc, argv);
 }
 

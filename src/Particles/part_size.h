@@ -34,7 +34,7 @@ class GEM_EXTERN part_size : public GemBase
 
 	    //////////
 	    // Constructor
-    	part_size(t_floatarg num);
+    	part_size(int,t_atom*);
     	
     	//////////
     	virtual void 	render(GemState *state);
@@ -45,17 +45,17 @@ class GEM_EXTERN part_size : public GemBase
     	// Destructor
     	virtual ~part_size();
 		
-		//////////
-		void			numberMess(float num)		{ m_size = num; }
+	//////////
+	void		sizeMess(int,t_atom*);
 
-		//////////
-		float			m_size;
+	//////////
+	float		m_size[3];
 	
-	private:
+ private:
 
-		//////////
-		// static member functions
-		static void		numberMessCallback(void *data, t_floatarg num);
+	//////////
+	// static member functions
+	static void	sizeMessCallback(void *data, t_symbol*,int,t_atom*);
 };
 
 #endif	// for header file

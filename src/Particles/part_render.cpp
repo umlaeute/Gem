@@ -33,7 +33,7 @@ part_render :: part_render()
 {
   m_colorize=true;
   m_sizing  =true;
-  m_number=100;
+  m_number=1000;
   m_colors = new float[m_number * 4];
   m_sizes  = new float[m_number];
   m_pos    = new float[m_number*3];
@@ -60,12 +60,12 @@ void part_render :: render(GemState *state)
   int cnt = pGetGroupCount();
   if(cnt < 1)return;
   if (cnt>m_number){
-    delete[]m_colors;
-    delete[]m_sizes;
-    delete[]m_pos;
+    if(m_colors)delete[]m_colors;
+    if(m_sizes)delete[]m_sizes;
+    if(m_pos)delete[]m_pos;
     m_number = cnt;
     m_colors = new float[m_number * 4];
-    m_sizes  = new float[m_number];
+    m_sizes  = new float[m_number * 3];
     m_pos    = new float[m_number * 3];
   }
   float *position = m_pos;
@@ -77,8 +77,15 @@ void part_render :: render(GemState *state)
     glPushMatrix();
     glTranslatef(position[0], position[1], position[2]);
     position+=3;
-    if(color!=NULL) glColor4fv((GLfloat *)&color[i*4]);
-    if(size!=NULL)glScalef(size[i], size[i], size[i]);
+    if(color!=NULL){
+      glColor4fv((GLfloat *)&color[i*4]);
+      //post("%d color: %f %f %f", i, color[0], color[1], color[2], color[3]);
+    }
+    if(size!=NULL){
+      glScalef(size[0], size[1], size[2]);
+      //      post("%d size: %f %f %f", i, size[0], size[1], size[2]);
+      size+=3;
+    }
     continueRender(state);
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
