@@ -285,7 +285,7 @@ fi
 
 if test "$with_ieee1394" != "no"
 then
-  AC_FIND_LIB(libdv, dv_init, $search_libs, $with_ieee1394)
+  AC_FIND_LIB(dv, dv_init, $search_libs, $with_ieee1394)
 fi
 if  test "$ac_tr_lib" != "HAVE_LIBDV"
 then
