@@ -17,7 +17,9 @@ LOG
 #ifndef INCLUDE_GEMGLUTOBJ_H_
 #define INCLUDE_GEMGLUTOBJ_H_
 
+#ifdef __linux__
 #include "Base/config.h"
+#endif /* __linux__ */
 #include "Base/GemShape.h"
 
 #ifdef MACOSX
