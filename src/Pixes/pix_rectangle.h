@@ -66,7 +66,8 @@ class GEM_EXTERN pix_rectangle : public GemPixObj
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
     	virtual void 	processGrayImage(imageStruct &image);
-        
+	virtual void 	processYUVImage (imageStruct &image);
+   
     	//////////
     	// Set the new color
     	void	    	vecColorMess(int argc, t_atom *argv);
@@ -77,16 +78,15 @@ class GEM_EXTERN pix_rectangle : public GemPixObj
     	
     	//////////
     	// The new color
-		unsigned char	m_color[4];
+	unsigned char	m_color[4];
 
-		//////////
+	//////////
     	// The two corners
-		int				m_lower_left[2];
-		//////////
-		int				m_upper_right[2];
+	int				m_lower_left[2];
+	//////////
+	int				m_upper_right[2];
 
-    private:
-    
+    private:    
     	//////////
     	// Static member functions
     	static void 	vecColorMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

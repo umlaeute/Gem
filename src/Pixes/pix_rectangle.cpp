@@ -43,7 +43,7 @@ pix_rectangle :: pix_rectangle()
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
 
     m_color[chRed] = m_color[chGreen] = m_color[chBlue] = m_color[chAlpha] = 255;
-	m_lower_left[0] = m_lower_left[1] = m_upper_right[0] = m_upper_right[1] = 0;
+    m_lower_left[0] = m_lower_left[1] = m_upper_right[0] = m_upper_right[1] = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -59,82 +59,94 @@ pix_rectangle :: ~pix_rectangle()
 /////////////////////////////////////////////////////////
 void pix_rectangle :: processRGBAImage(imageStruct &image)
 {
-	int bytesize = 4 * sizeof(unsigned char); // 4 for RGBA
-	int rowsize  = image.xsize * bytesize;
-    unsigned char *pixels = image.data;
-	int col, row;
+  int pixelsize = image.csize;
+  int rowsize  = image.xsize * pixelsize;
+  unsigned char *pixels = image.data;
+  int col, row;
 
-	if (m_upper_right[0] > image.xsize)
-	{
-		m_upper_right[0] = image.xsize;
-		if (m_lower_left[0] > image.xsize) 
-			m_lower_left[0] = image.xsize;
-	}
+  unsigned char r=m_color[chRed];
+  unsigned char g=m_color[chGreen];
+  unsigned char b=m_color[chBlue];
+  unsigned char a=m_color[chAlpha];
 
-	if (m_upper_right[1] > image.ysize)
-	{
-		m_upper_right[1] = image.ysize;
-		if (m_lower_left[1] > image.ysize) 
-			m_lower_left[1] = image.ysize;
-	}
+  if (m_upper_right[0] > image.xsize) m_upper_right[0] = image.xsize;
+  if (m_lower_left[0] > image.xsize)  m_lower_left[0] = image.xsize;
+ 
+  if (m_upper_right[1] > image.ysize) m_upper_right[1] = image.ysize;
+  if (m_lower_left[1] > image.ysize)  m_lower_left[1] = image.ysize;
 
-	row = (m_upper_right[1] - m_lower_left[1]);
-
-	while (row--)
-	{
-		pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * bytesize;
-		col = (m_upper_right[0] - m_lower_left[0]);
-		
-		while (col--)
-		{
-			pixels[chRed]   = m_color[chRed];
-			pixels[chGreen] = m_color[chGreen];
-			pixels[chBlue]  = m_color[chBlue];
-			pixels[chAlpha] = m_color[chAlpha];
-
-			pixels += 4;
-		}
-	}
+  row = (m_upper_right[1] - m_lower_left[1]);
+  while (row--)	{
+    pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * pixelsize;
+    col = (m_upper_right[0] - m_lower_left[0]);
+    while (col--)		{
+      pixels[chRed]   = r;
+      pixels[chGreen] = g;
+      pixels[chBlue]  = b;
+      pixels[chAlpha] = a;
+      pixels += 4;
+    }
+  }
 }
+void pix_rectangle :: processYUVImage(imageStruct &image)
+{
+  int pixelsize = image.csize;
+  int rowsize  = image.xsize * pixelsize;
+  unsigned char *pixels = image.data;
+  int col, row;
 
-/////////////////////////////////////////////////////////
-// processGrayImage
-//
-/////////////////////////////////////////////////////////
+  unsigned char u =((-43*m_color[chRed]- 85*m_color[chGreen]+128*m_color[chBlue])>>8)+128;
+  unsigned char y =(  77*m_color[chRed]+150*m_color[chGreen]+ 29*m_color[chBlue])>>8;
+  unsigned char v =((128*m_color[chRed]-107*m_color[chGreen]- 21*m_color[chBlue])>>8)+128;
+
+  if (m_upper_right[0] > image.xsize)  m_upper_right[0] = image.xsize;
+  if (m_lower_left[0]  > image.xsize)   m_lower_left[0] = image.xsize;
+  if (m_upper_right[1] > image.ysize)  m_upper_right[1] = image.ysize;
+  if (m_lower_left[1] > image.ysize)    m_lower_left[1] = image.ysize;
+
+  row = (m_upper_right[1] - m_lower_left[1]);
+  
+  while (row--)	{
+    int offset=rowsize*(m_lower_left[1]+row) + m_lower_left[0] * pixelsize;
+    offset-=(offset%4);
+    pixels = image.data+offset;
+
+    col = (m_upper_right[0] - m_lower_left[0])/2;
+    
+    while (col--)	{
+      pixels[chY0]= y;
+      pixels[chU] = u;
+      pixels[chY1]= y;
+      pixels[chV] = v;
+      pixels += 4;
+    }
+  }
+}
 void pix_rectangle :: processGrayImage(imageStruct &image)
 {
-    int bytesize = 1 * sizeof(unsigned char); // 1 for grayscale
-    int rowsize  = image.xsize * bytesize;
-    unsigned char *pixels = image.data;
-    int col, row;
+  int pixelsize = image.csize;
+  int rowsize  = image.xsize * pixelsize;
+  unsigned char *pixels = image.data;
+  int col, row;
 	
-    if (m_upper_right[0] > image.xsize)
-    {
-        m_upper_right[0] = image.xsize;
-        if (m_lower_left[0] > image.xsize) 
-                m_lower_left[0] = image.xsize;
-    }
+  if (m_upper_right[0] > image.xsize)m_upper_right[0] = image.xsize;
+  if (m_lower_left[0]  > image.xsize)m_lower_left [0] = image.xsize;
 
-    if (m_upper_right[1] > image.ysize)
-    {
-        m_upper_right[1] = image.ysize;
-        if (m_lower_left[1] > image.ysize) 
-                m_lower_left[1] = image.ysize;
-    }
+  if (m_upper_right[1] > image.ysize)m_upper_right[1] = image.ysize;
+  if (m_lower_left[1]  > image.ysize)m_lower_left [1] = image.ysize;
 
-    row = (m_upper_right[1] - m_lower_left[1]);
+  unsigned char g=(m_color[chRed]*79+m_color[chGreen]*156+m_color[chBlue]*21)>>8;
 
-    while (row--)
-    {
-        pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * bytesize;
-        col = (m_upper_right[0] - m_lower_left[0]);
-		
-        while (col--)
-        {
-            pixels[chGray] = m_color[chGray];
-            pixels++;
-        }
+  row = (m_upper_right[1] - m_lower_left[1]);
+
+  while (row--)    {
+    pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * pixelsize;
+    col = (m_upper_right[0] - m_lower_left[0]);
+    while (col--)        {
+      pixels[chGray] = g;
+      pixels++;
     }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -143,27 +155,24 @@ void pix_rectangle :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rectangle :: vecColorMess(int argc, t_atom *argv)
 {
-	float alpha, red, green, blue;
+  float alpha, red, green, blue;
 
-    if (argc >= 4)
-		alpha = atom_getfloat(&argv[3]);
-    else if (argc == 3)
-		alpha = 1.f;
-    else
-    {
-    	error("GEM: pix_rectangle: not enough color values");
-    	return;
-    }
-    red = atom_getfloat(&argv[0]);
-    green = atom_getfloat(&argv[1]);
-    blue = atom_getfloat(&argv[2]);
+  if (argc >= 4)alpha = atom_getfloat(&argv[3]);
+  else if (argc == 3)	alpha = 1.f;
+  else    {
+    error("GEM: pix_rectangle: not enough color values");
+    return;
+  }
+  red   = atom_getfloat(&argv[0]);
+  green = atom_getfloat(&argv[1]);
+  blue  = atom_getfloat(&argv[2]);
 
-	m_color[chRed]   = (unsigned char)(255.*red);
-	m_color[chGreen] = (unsigned char)(255.*green);
-	m_color[chBlue]  = (unsigned char)(255.*blue);
-	m_color[chAlpha] = (unsigned char)(255.*alpha);
+  m_color[chRed]   = (unsigned char)(255.*red);
+  m_color[chGreen] = (unsigned char)(255.*green);
+  m_color[chBlue]  = (unsigned char)(255.*blue);
+  m_color[chAlpha] = (unsigned char)(255.*alpha);
 
-    setPixModified();
+  setPixModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -172,35 +181,30 @@ void pix_rectangle :: vecColorMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
 {
-	int X1, Y1, X2, Y2;
+  int X1, Y1, X2, Y2;
 
-    if (argc < 4)
-	{
-    	error("GEM: pix_rectangle: not enough coordinates");
-    	return;
-    }
-    X1 = (int)atom_getfloat(&argv[0]);
-    Y1 = (int)atom_getfloat(&argv[1]);
-    X2 = (int)atom_getfloat(&argv[2]);
-	Y2 = (int)atom_getfloat(&argv[3]);
+  if (argc < 4)    {
+    error("GEM: pix_rectangle: not enough coordinates");
+    return;
+  }
+  X1 = (int)atom_getfloat(&argv[0]);
+  Y1 = (int)atom_getfloat(&argv[1]);
+  X2 = (int)atom_getfloat(&argv[2]);
+  Y2 = (int)atom_getfloat(&argv[3]);
+  
+  // check if within range
+  if (X1 < 0)X1 = 0;
+  if (X2 < 0)X2 = 0;
+  if (Y1 < 0)Y1 = 0;
+  if (Y2 < 0)Y2 = 0;
 
-	// check if within range
-	if (X1 < 0)
-		X1 = 0;
-	if (X2 < 0)
-		X2 = 0;
-	if (Y1 < 0)
-		Y1 = 0;
-	if (Y2 < 0)
-		Y2 = 0;
+  // set
+  m_lower_left [0] = (X1<X2)?X1:X2;
+  m_lower_left [1] = (Y1<Y2)?Y1:Y2;
+  m_upper_right[0] = (X1>X2)?X1:X2;
+  m_upper_right[1] = (Y1>Y2)?Y1:Y2;
 
-	// set
-	m_lower_left [0] = (X1<X2)?X1:X2;
-	m_lower_left [1] = (Y1<Y2)?Y1:Y2;
-	m_upper_right[0] = (X1>X2)?X1:X2;
-	m_upper_right[1] = (Y1>Y2)?Y1:Y2;
-
-    setPixModified();
+  setPixModified();
 }
 
 

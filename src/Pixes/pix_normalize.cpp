@@ -51,35 +51,12 @@ void pix_normalize :: processRGBAImage(imageStruct &image)
   while(n--){
     // think about this more carefully, to allow normalization for single channels...
     unsigned char red=pixels[chRed], green=pixels[chGreen], blue=pixels[chBlue];
-#if 0
-    unsigned char val;
-    // shell sort the TriColor
-    if (red>green){
-      val=red;
-      red=green;
-      green=val;
-    }
-    if (green>blue){
-      val=green;
-      green=blue;
-      blue=val;
-    }
-    if (red>green){
-      val=red;
-      red=green;
-      green=val;
-    }      
-
-    if (min>red) min=red;
-    if (max<blue)max=blue;
-#else
     if (min>red)  min=red;
     if (min>green)min=green;
     if (min>blue) min=blue;
     if (max<red)  max=red;
     if (max<green)max=green;
     if (max<blue) max=blue;    
-#endif
     pixels+=4;
   }
 
@@ -117,6 +94,35 @@ void pix_normalize :: processGrayImage(imageStruct &image)
     }
   }
 }
+void pix_normalize :: processYUVImage(imageStruct &image)
+{
+  unsigned char min=255, max=0;
+  int datasize = image.xsize * image.ysize;// *image.csize;
+  unsigned char *pixels = image.data;
+  int n = datasize / 2;
+
+  while(n--){
+    // think about this more carefully, to allow normalization for single channels...
+    unsigned char y0=pixels[chY0], y1=pixels[chY1];
+    if (min>y0)  min=y0;
+    if (min>y1)  min=y1;
+    if (max<y0)  max=y0;
+    if (max<y1)  max=y1;
+    pixels+=4;
+  }
+
+  t_float scale=(max-min)?255./(max-min):0;
+ 
+  n = datasize/2;
+  pixels=image.data;
+  while(n--){
+    pixels[chY0] = (unsigned char)((pixels[chY0]-min)*scale);
+    pixels[chY1] = (unsigned char)((pixels[chY1]-min)*scale);
+    pixels+=4;
+  }
+}
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
