@@ -33,7 +33,9 @@ filmQT4L :: filmQT4L(int format) : film(format) {
 #endif
     first_time = false;
   }
+#ifdef HAVE_LIBQUICKTIME
   m_quickfile=0;
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -50,8 +52,8 @@ void filmQT4L :: close(void)
   post("qt4l: closing");
 #ifdef HAVE_LIBQUICKTIME
   if(m_quickfile)quicktime_close(m_quickfile);
-#endif
   m_quickfile=0;
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -126,7 +128,7 @@ bool filmQT4L :: open(char *filename, int format)
 /////////////////////////////////////////////////////////
 pixBlock* filmQT4L :: getFrame(){
   int i=m_image.image.ysize;
-  unsigned char *rows[m_image.image.ysize];
+  unsigned char **rows = new unsigned char*[m_image.image.ysize];
   if (m_lastFrame==m_curFrame){m_image.newimage=0; return &m_image;}
 #ifdef HAVE_LIBQUICKTIME
   m_lastFrame=m_curFrame;
@@ -145,6 +147,7 @@ pixBlock* filmQT4L :: getFrame(){
     }else {m_image.newimage=1;return &m_image;}
   }
 #endif
+  delete[] rows;
   return 0;
 }
 
