@@ -49,6 +49,10 @@ class GEM_EXTERN GemCache
         // Destructor
         ~GemCache();
 
+	//////////
+	// re-set (like creation, but without instantiating
+	void reset(gemhead*parent);
+
         //////////
     	gemhead     	    *m_parent;
 };

@@ -30,7 +30,12 @@ GemCache :: GemCache(gemhead *parent)
   : dirty(1), resendImage(0), m_parent(parent)
 {
 }
-
+void GemCache :: reset(gemhead *parent)
+{
+  dirty      =1;
+  resendImage=0;
+  m_parent   =parent;
+}
 /////////////////////////////////////////////////////////
 // Destructor
 //
