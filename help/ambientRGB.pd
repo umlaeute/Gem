@@ -1,4 +1,4 @@
-#N canvas 61 18 639 342 10;
+#N canvas 128 161 639 342 10;
 #X text 452 8 GEM object;
 #X obj 8 196 cnv 15 430 130 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -35,7 +35,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 519 293 pd gemwin;
-#X msg 519 274 create;
+#X msg 519 274 destroy;
 #X text 515 253 Create window:;
 #X text 71 31 Class: manipulation object;
 #X obj 450 118 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
@@ -45,7 +45,6 @@
 #X obj 451 193 cube;
 #X obj 500 192 gemhead;
 #X obj 500 230 world_light;
-#X obj 500 211 rotate 180 1 0 0;
 #X text 50 12 Synopsis: [ambientRGB];
 #X text 22 91 [ambientRGB] accepts a gemList and sets the ambient-color
 for all subsequent vertex-operations. You have to enable lighting to
@@ -61,13 +60,16 @@ see any effects.;
 #X floatatom 504 122 3 0 1 0 - - -;
 #X floatatom 531 122 3 0 1 0 - - -;
 #X floatatom 558 122 3 0 1 0 - - -;
+#X floatatom 548 193 5 0 0 0 - - -;
+#X obj 500 211 rotate 70 1 0 0;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
-#X connect 17 0 31 0;
-#X connect 20 0 22 0;
-#X connect 22 0 21 0;
-#X connect 31 0 19 0;
-#X connect 32 0 31 1;
-#X connect 33 0 31 2;
-#X connect 34 0 31 3;
-#X connect 35 0 31 4;
+#X connect 17 0 30 0;
+#X connect 20 0 36 0;
+#X connect 30 0 19 0;
+#X connect 31 0 30 1;
+#X connect 32 0 30 2;
+#X connect 33 0 30 3;
+#X connect 34 0 30 4;
+#X connect 35 0 36 1;
+#X connect 36 0 21 0;
