@@ -78,8 +78,7 @@ class GEM_EXTERN newWave : public GemShape
         //////////
         // The height inlet
         t_inlet         *m_inletH;
-        t_inlet		*inletM;
-        t_inlet		*inletSp;
+        t_inlet		*m_inletM;
   
   //////////
   // getStuff

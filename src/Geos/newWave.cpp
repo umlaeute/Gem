@@ -18,7 +18,7 @@
 #include <string.h>
 #include <math.h>
 
-#ifndef M_PI	
+#ifndef M_PI
 #define M_PI 3.1415926535898
 #endif
 
@@ -27,13 +27,13 @@ enum {WIREFRAME, HIDDENLINE, FLATSHADED, SMOOTHSHADED, TEXTURED};
 enum {FACENORMALS, ENVMAP};
 enum {VWEAK, WEAK, NORMAL, STRONG};
 enum {SMALL, MEDIUM, LARGE, XLARGE};
-enum {CURRENT, FLAT, SPIKE, DIAGONALWALL, SIDEWALL, HOLE, 
+enum {CURRENT, FLAT, SPIKE, DIAGONALWALL, SIDEWALL, HOLE,
       MIDDLEBLOCK, DIAGONALBLOCK, CORNERBLOCK, HILL, HILLFOUR};
 int displayMode = WIREFRAME;
 int resetMode = DIAGONALBLOCK;
 int grid = 50;
 
-bool waving = false, editing = false, 
+bool waving = false, editing = false,
      drawFaceNorms = false, antialias = false,
      envMap = false;
 
@@ -70,7 +70,13 @@ newWave :: newWave( t_floatarg width)
     m_drawType = GL_TRIANGLE_STRIP;
     alreadyInit = 0;
 
+    // the height inlet
+    m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("height"));
+    m_inletM = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+
     K1=K2=K3=D1=D2=D3=0;
+    K1=0.05;
+    D1=0.1;
 
 }
 
@@ -81,6 +87,8 @@ newWave :: newWave( t_floatarg width)
 newWave :: ~newWave()
 {
     alreadyInit = 0;
+    if(m_inletH)inlet_free(m_inletH);
+    if(m_inletM)inlet_free(m_inletM);
 }
 
 void newWave :: modeMess(float mode)
@@ -93,7 +101,7 @@ void newWave :: positionMess(float posX, float posY, float posZ)
 {
     position((float) posX, (float) posY, (float) posZ);
     setModified();
-    
+
 }
 void newWave :: forceMess(float posX, float posY, float valforce)
 {
@@ -109,6 +117,9 @@ void newWave :: forceMess(float posX, float posY, float valforce)
 void newWave :: render(GemState *state)
 {
     int i, j;
+
+    glScalef(1./(grid*0.5), 1./(grid*0.5),1);
+    glTranslatef(-m_size*grid*0.5, -m_size*grid*0.5, 0);    
     
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(m_linewidth);
@@ -152,7 +163,7 @@ void newWave :: render(GemState *state)
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
                 glVertex3f( i*m_size, j*m_size, posit[i][j]*m_height);
-            
+
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
                 glVertex3f( (i+1)*m_size, j*m_size, posit[i+1][j]*m_height);
@@ -193,6 +204,8 @@ void newWave :: render(GemState *state)
         glDisable(GL_POLYGON_SMOOTH);
         glDisable(GL_BLEND);
     }
+    glTranslatef(m_size*grid*0.5, m_size*grid*0.5, 0);
+    glScalef(grid*0.5, grid*0.5,1);
 }
 
 /////////////////////////////////////////////////////////
@@ -673,7 +686,7 @@ void newWave :: reset(int value)
                 posit[i][j]= 
                     (sin(M_PI * ((float)i/(float)grid)) +
                      sin(M_PI * ((float)j/(float)grid)))* grid/6.0;
-				break;        
+				break;
             case HILLFOUR:
                 posit[i][j]= 
                     (sin(M_PI*2 * ((float)i/(float)grid)) +
@@ -714,7 +727,7 @@ void newWave :: setOther(int value)
 // static member function
 //
 /////////////////////////////////////////////////////////
-void newWave :: obj_setupCallback(t_class *classPtr) 
+void newWave :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&newWave::heightMessCallback,
     	    gensym("height"), A_FLOAT, A_NULL);
