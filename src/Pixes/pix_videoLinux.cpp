@@ -40,7 +40,9 @@
 
 */
 #ifdef __linux__
-    
+
+#define NO_AUTO_REGISTER_CLASS /* jmz: we use pix_videoNEW rather */
+
 #include "pix_videoLinux.h"
 #include "Base/GemCache.h"
 
