@@ -127,6 +127,7 @@ pixBlock *videoV4L :: getFrame(){
   if (!m_frame_ready) m_image.newimage = 0;
   else {
     if (m_colorConvert){
+      m_image.image.notowned = false;
       switch(m_gotFormat){
       case VIDEO_PALETTE_YUV420P: m_image.image.fromYUV420P(videobuf + vmbuf.offsets[last_frame]); break;
       case VIDEO_PALETTE_RGB24:   m_image.image.fromBGR    (videobuf + vmbuf.offsets[last_frame]); break;
