@@ -26,6 +26,8 @@ LOG
 # pragma warning( disable : 4091 )
 #endif
 
+# include "config.h"
+
 #ifdef __APPLE__
 # include <OpenGL/gl.h>
 # include <OpenGL/glu.h>
@@ -33,8 +35,8 @@ LOG
 # include <QuickTime/QuickTime.h>
 #else
 # include <GL/gl.h>
-# include "config.h"
-# ifdef INCLUDE_GLEXT
+# ifndef DONT_INCLUDE_GLEXT
+/* yhä: in glext.h some GL_YCBCR_* definitions might be hidden */
 #  include <GL/glext.h>
 # endif
 #endif // __APPLE__
@@ -105,21 +107,24 @@ const int chY1          = 3;
 # define GL_BGR_EXT 0x80E0
 #endif
 
+#ifndef GL_YUV422_GEM
 
-#ifdef GL_YCBCR_422_APPLE
-#define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
-#elif defined GL_CRYCBY_422_NVX
-#define GL_YCBCR_422_GEM GL_CRYCBY_422_NVX
-//#define GL_YCBCR_422_GEM GL_YCRYCB_422_NVX
-#elif defined GL_YCRCB_422_SGIX
-#define GL_YCBCR_422_GEM GL_YCRCB_422_SGIX
-#endif
+# ifdef GL_YCBCR_422_APPLE
+#  define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
+# elif defined GL_CRYCBY_422_NVX
+#  define GL_YCBCR_422_GEM GL_CRYCBY_422_NVX
+//#  define GL_YCBCR_422_GEM GL_YCRYCB_422_NVX
+# elif defined GL_YCRCB_422_SGIX
+#  define GL_YCBCR_422_GEM GL_YCRCB_422_SGIX
+# endif
 
-#ifndef GL_YCBCR_422_GEM
-#define GL_YCBCR_422_GEM 0x85B9
-#endif
+# ifndef GL_YCBCR_422_GEM
+#  define GL_YCBCR_422_GEM 0x85B9
+# endif
 
-#define GL_YUV422_GEM GL_YCBCR_422_GEM
+# define GL_YUV422_GEM GL_YCBCR_422_GEM
+
+#endif /* GL_YUV422_GEM */
 
 #if !defined(GL_TEXTURE_RECTANGLE_EXT) && defined(GL_TEXTURE_RECTANGLE_NV)
 #define GL_TEXTURE_RECTANGLE_EXT GL_TEXTURE_RECTANGLE_NV
