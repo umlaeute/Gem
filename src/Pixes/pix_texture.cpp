@@ -495,7 +495,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("mode"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::clientStorageCallback,
 		  gensym("client_storage"), A_FLOAT, A_NULL);
-//  class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
+  class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
 }
 void pix_texture :: floatMessCallback(void *data, float n)
 {
