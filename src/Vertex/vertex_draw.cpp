@@ -19,7 +19,7 @@
 #include "Base/GemState.h"
 #include "Base/GemCache.h"
 
-//#define __VBO
+#define __VBO
 
 #ifdef __VBO
 # include "glVBO_ext.h"
