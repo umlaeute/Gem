@@ -96,7 +96,7 @@ void pix_texture :: setUpTextureState()
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: render(GemState *state)
-{
+{	int i,bufsize,h,w,src =0;
     if ( !state->image || !m_textureOnOff) return;
 
     state->texture = 1;
@@ -174,7 +174,21 @@ void pix_texture :: render(GemState *state)
 	  m_buffer.type = state->image->image.type;
 	  
 	  m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
-	  memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+          if (m_buffer.csize == 2){
+          //memset(m_buffer.data, 128, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+          for (h=0; h<m_buffer.ysize; h++){
+            for(w=0; w<m_buffer.xsize/2; w++){
+        m_buffer.data[src] = 128;
+        m_buffer.data[src+1] = 0;
+        m_buffer.data[src+2] = 128;
+        m_buffer.data[src+3] = 0;
+
+        src+=4;
+    }
+} 
+
+          }else{
+	  memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));}
 	  
 	  float m_xRatio = (float)state->image->image.xsize / (float)x_2;
 	  float m_yRatio = (float)state->image->image.ysize / (float)y_2;
