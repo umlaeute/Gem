@@ -13,13 +13,6 @@
 #include <OpenGL/glext.h>
 #include <Carbon/Carbon.h>
 
-static inline int powerOfTwo( int value )
-{
-    int x = 1;
-    while ( x<value ) x<<= 1;
-    return( x );
-}
-
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
  
 #define DEFAULT_WIDTH		320
