@@ -41,7 +41,7 @@ class GEM_EXTERN pix_mix : public GemPixDualObj
 
 	    //////////
     	// Constructor
-    	pix_mix();
+    	pix_mix(int,t_atom*);
     	
     protected:
     	
@@ -69,8 +69,9 @@ class GEM_EXTERN pix_mix : public GemPixDualObj
     	//////////
     	// Static member functions
     	
-        static void gainCallback       (void *data, t_floatarg X, t_floatarg Y);
-         
+        //static void gainCallback       (void *data, t_floatarg X, t_floatarg Y);
+	static void gainCallback       (void *data, t_symbol*,int,t_atom*);
+    
          
 
 };
