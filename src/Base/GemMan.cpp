@@ -23,13 +23,10 @@
 # include <GL/glx.h>
 # include <X11/Xlib.h>
 #elif __APPLE__
-# include <stdlib.h>
-# include <string.h>
-# include <OpenGL/gl.h>
-# include <OpenGL/glext.h>
-# include <Carbon/Carbon.h>
-# include <Quicktime/Quicktime.h>
-# include <time.h>
+#include <stdlib.h>
+#include <string.h>
+#include <Quicktime/Quicktime.h>
+#include <time.h>
 #elif _WINDOWS
 # include <stdlib.h>
 // I hate Microsoft...I shouldn't have to do this!
