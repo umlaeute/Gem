@@ -59,7 +59,10 @@ class GEM_EXTERN pix_mix : public GemPixDualObj
         
         virtual void 	processYUVAltivec (imageStruct &image, imageStruct &right);
         
+        virtual void 	gainMess (float X, float Y);
+        
         long imageGain,rightGain;
+        
          
          private:
     
