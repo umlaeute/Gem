@@ -98,6 +98,41 @@ void pix_dot :: makePattern()
   }
 }
 
+void pix_dot :: makePatternYUV()
+{
+  int i, x, y, c;
+  int u, v;
+  double p, q, r;
+  unsigned int *pat;
+  
+  for (i=0; i<DOTMAX; i++)
+  {
+/* Generated pattern is a quadrant of a disk. */
+    pat = pattern + (i+1) * dot_hsize * dot_hsize - 1;
+    r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+    r = r*r;
+    for(y=0; y<dot_hsize; y++) {
+        for(x=0; x<dot_hsize; x++) {
+            c = 0;
+            for(u=0; u<4; u++) {
+                p = (double)u/4.0 + y;
+                p = p*p;
+                for(v=0; v<4; v++) {
+                    q = (double)v/4.0 + x;
+                    if(p+q*q<r) {
+                        c++;
+                    }
+                }
+            }
+            c = (c>15)?15:c;
+            *pat-- = c<<20 | c<<12 | c<<4;
+/* The upper left part of a disk is needed, but generated pattern is a bottom
+ * right part. So I spin the pattern. */
+        }
+    }
+  }
+}
+
 void pix_dot :: drawDot(int xx, int yy, unsigned char c, unsigned int *dest)
 {
   int x, y;
@@ -239,8 +274,10 @@ void pix_dot :: processYUVImage(imageStruct &image)
     unsigned int *src = (unsigned int*)image.data;
     unsigned int *dest;
 
-    int x, y, sx, sy;
+    int x, y, sx, sx2, sy;
     int luma = 0;
+    int luma2 = 0;
+    int avgluma = 0;
   
     if (m_xsize != image.xsize)
         alreadyInit = 0;
@@ -268,7 +305,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
         if (sampx == NULL || sampy == NULL ){
             return;
         }
-        makePattern();
+        makePatternYUV();
         sampxy_table_init();
 
         alreadyInit = 1;
@@ -288,16 +325,20 @@ void pix_dot :: processYUVImage(imageStruct &image)
     myImage.type  = image.type;
 
     dest = (unsigned int*)myImage.data;
-  
+/*  
     for ( y=0; y<dots_height; y++) {
         sy = sampy[y];
-        for ( x=0; x<dots_width; x++){
+        for ( x=0; x<dots_width/2; x++){
             sx = sampx[x];
-            luma = src[sy*image.xsize+sx+1];
-            //drawDot(x, y, (unsigned char *)luma[1], dest);
+            //sx2 = sampx[x+1];
+            luma = src[sy*image.xsize+sx+1]&0xff;
+            luma2 = (src[sy*image.xsize+sx+1]>>8)&0xff;
+            avgluma = (luma + luma2)/2;
+            //drawDot(x, y, avgluma, dest);
+            //drawDot(x+1, y, luma2, dest);
         }
     }
-
+*/
     image.data = myImage.data;
 }
 
@@ -334,17 +375,17 @@ void pix_dot :: sampxy_table_init()
 
 void pix_dot :: yuv_init()
 {
-	static int initialized = 0;
-	int i;
+    static int initialized = 0;
+    int i;
 
-	if(!initialized) {
-		for(i=0; i<256; i++) {
-			R2Y[i] =  (int)(0.257*i);
-			G2Y[i] =  (int)(0.504*i);
-			B2Y[i] =  (int)(0.098*i);
-		}
-		initialized = 1;
-	}
+    if(!initialized) {
+        for(i=0; i<256; i++) {
+            R2Y[i] =  (int)(0.257*i);
+            G2Y[i] =  (int)(0.504*i);
+            B2Y[i] =  (int)(0.098*i);
+        }
+        initialized = 1;
+    }
 }
 
 /////////////////////////////////////////////////////////

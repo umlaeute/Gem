@@ -54,6 +54,7 @@ class GEM_EXTERN pix_dot : public GemPixObj
   virtual void  sampxy_table_init();
   virtual void  yuv_init();
   virtual void  makePattern();
+  virtual void  makePatternYUV();
   virtual void  sizeMess(int width, int height);
   virtual void 	scaleMess( float state );
   int	sharedbuffer_init();
