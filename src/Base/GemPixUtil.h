@@ -33,9 +33,10 @@ LOG
 # include <QuickTime/QuickTime.h>
 #else
 # include <GL/gl.h>
-# ifndef NT
-#  include "config.h"
-# endif // NT
+# include "config.h"
+# ifdef INCLUDE_GLEXT
+#  include <GL/glext.h>
+# endif
 #endif // __APPLE__
 
 #include <string.h>
@@ -82,11 +83,26 @@ const int chY1          = 3;
 
 
 // windows has this oh so old openGL installed...
-#ifndef GL_BGRA
-#define GL_BGRA GL_BGRA_EXT
+#if !defined GL_BGRA && defined GL_BGRA_EXT
+# define GL_BGRA GL_BGRA_EXT
 #endif
-#ifndef GL_BGR
-#define GL_BGR GL_BGR_EXT
+#if !defined GL_BGRA_EXT && defined GL_BGRA
+# define GL_BGRA_EXT GL_BGRA
+#endif
+#if !defined GL_BGRA && !defined GL_BGRA_EXT
+# define GL_BGRA 0x80E1
+# define GL_BGRA_EXT 0x80E1
+#endif
+
+#if !defined GL_BGR && defined GL_BGR_EXT
+# define GL_BGR GL_BGR_EXT
+#endif
+#if !defined GL_BGR_EXT && defined GL_BGR
+# define GL_BGR_EXT GL_BGR
+#endif
+#if !defined GL_BGR && !defined GL_BGR_EXT
+# define GL_BGR 0x80E0
+# define GL_BGR_EXT 0x80E0
 #endif
 
 
