@@ -12,8 +12,10 @@ when I thought of things.
 GENERAL
 -------
 only connect to tablet if gem_tablet exists
-new particle objects
 
+PARTICLE
+--------
+make everything that is rendered below the particle-system particle-objects (pE: cubes, teapots,...)
 
 OBJECTS
 -------
@@ -21,16 +23,16 @@ triangle_fan
 stereoscopic display with hardware glasses
 NURBS/bezier patches
 3DstudioMax file loader
-CAL3d (character animation library): to come with gem0.88
+CAL3d (character animation library): to come with gem0.88 (not sure anymore. maybe quake2-files would be better ?)
 Alias|Wavefront file data
     - articulation hierarchies in Wavefront's Kinemation
     - read Preview's .mov files (an ascii list of x, y, and/or z values)
-	- write my own A/W parser
 morphing between alias|wavefront models
     - assume same number of points in each model
 
 PIXES
 -----
+add yuv-support somehow (the macOS-X people want this) - but how to get this into openGL ?
 pix_dv
 motion and image analysis
 crop for all pix objects
@@ -53,11 +55,13 @@ test pix_video - espec offset message
 
 OPENGL
 ------
+make Gem a wrapper for openGL: so full control over all openGL-commands would be given...(see DIPS)
 be able to switch between single and double buffering on the fly
 have multiple graphics windows
 increased control of view port, etc.
 be able to use multiple pipes (MCO)
 try out glMatrixMode(GL_TEXTURE) to deal with nonstandard texture mapping
 render to a pixblock (use pbuffers or offscreen renderer)
+on systems that run in console mode only (like linux with(out) XFree86), render to the console with beautiful ASCII-art
 multipass rendering
 multitexturing
