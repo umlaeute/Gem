@@ -1,0 +1,102 @@
+/*
+ *  yuv_emboss.cpp
+ *  gem_darwin
+ *
+ *  Created by chris clepper on Mon Oct 07 2002.
+ *  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#include "yuv_emboss.h"
+
+CPPEXTERN_NEW(yuv_emboss)
+
+/////////////////////////////////////////////////////////
+//
+// yuv_emboss
+//
+/////////////////////////////////////////////////////////
+// Constructor
+//
+/////////////////////////////////////////////////////////
+yuv_emboss :: yuv_emboss()
+{
+m_processOnOff=0;
+}
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+yuv_emboss :: ~yuv_emboss()
+{
+
+}
+
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void yuv_emboss :: processImage(imageStruct &image)
+{
+
+}
+
+
+/////////////////////////////////////////////////////////
+// do the YUV processing here
+//
+/////////////////////////////////////////////////////////
+void yuv_emboss :: processYUVImage(imageStruct &image)
+{
+   long r,c,width, height,src,h,w;
+	
+   width = image.xsize-1;
+   height = image.ysize-1;  
+   w = image.xsize*2;
+   h = image.ysize*2;
+   src =1;   
+   for (r=0; r < height; r++) {
+	for (c=0; c < width; c++) {
+            image.data[src] = ( image.data[ src-w-2 ] -
+                                image.data[ src-w ] -
+                                image.data[ src-w+2 ] +
+                                image.data[ src -2 ] -
+                                image.data[src] -
+                                image.data[src + 2] -
+                                image.data[src+w-2] - 
+                                image.data[src+w] - 
+                                image.data[src+w+2] )/4;
+            src+=2;
+        }
+    }
+        /*
+	for (r=0; r < (width*height); r+= width) {
+		for (c=0; c < width; c++) {
+                
+			image.data[src+1] =(image.data[ r-1 + c-2 ] -	
+				      image.data[ r-1 + c ] -	
+				      image.data[ r-1 + c+2 ]+ 	
+				      image.data[ r+c -2 ] +	
+				      image.data[r+c] -		
+				      image.data[r+c+2] -		
+				      image.data[r+1+c-2] -   	
+				      image.data[r+1+c] -    	
+				      image.data[r+1+c+2]
+				      )/9;
+                                      src+=2;
+		}
+	}*/
+//post("yuv_emboss: chars:%d",src);
+//post("yuv_emboss: r:%d",r);
+//post("yuv_emboss: c:%d",c);
+}
+
+/////////////////////////////////////////////////////////
+// static member function
+//
+/////////////////////////////////////////////////////////
+void yuv_emboss :: obj_setupCallback(t_class *classPtr)
+{
+
+}
