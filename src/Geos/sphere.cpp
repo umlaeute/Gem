@@ -72,6 +72,9 @@ void sphere :: createSphere(GemState *state)
 
     GLfloat xsize = 1.0, xsize0 = 0.0;
     GLfloat ysize = 1.0, ysize0 = 0.0;
+
+  if(m_drawType==-1)m_drawType=GL_FILL;
+
     if(state->texture){
         xsize0 = state->texCoords[0].s;
         xsize  = state->texCoords[1].s-xsize0;

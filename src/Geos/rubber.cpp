@@ -392,6 +392,7 @@ void rubber :: typeMess(t_symbol *type)
   char c=*type->s_name;
   switch(c){
   case 'l': case 'L':   m_drawType = GL_LINE_LOOP; break;
+  case 'd': case 'D': // default
   case 'f': case 'F':   m_drawType = GL_POLYGON; break;
   case 'p': case 'P':   m_drawType = GL_POINTS; break;
   default:

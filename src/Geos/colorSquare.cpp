@@ -59,6 +59,8 @@ colorSquare :: ~colorSquare()
 /////////////////////////////////////////////////////////
 void colorSquare :: render(GemState *state)
 {
+  if(m_drawType==-1)m_drawType=GL_QUADS;
+
     if (!state->lighting) glShadeModel(GL_SMOOTH);
 
     glNormal3f(0.0f, 0.0f, 1.0f);

@@ -40,10 +40,12 @@ cuboid :: cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez)
     m_sizey = 1.f;
   if (m_sizez == 0.f)
     m_sizez = 0.f;
+
   m_inletY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
   m_inletZ = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft3"));
-    m_drawType = GL_QUADS;
-	m_blend = 0;
+
+  m_drawType = GL_QUADS;
+  m_blend = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -62,6 +64,8 @@ cuboid :: ~cuboid()
 /////////////////////////////////////////////////////////
 void cuboid :: render(GemState *state)
 {
+  if(m_drawType==-1)m_drawType=GL_QUADS;
+
     static GLfloat n[6][3] =
     {
 	{ 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f,  0.0f, -1.0f},

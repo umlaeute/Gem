@@ -47,6 +47,7 @@ cube :: ~cube()
 /////////////////////////////////////////////////////////
 void cube :: render(GemState *state)
 {
+  if(m_drawType==-1)m_drawType=GL_QUADS;
     static GLfloat n[6][3] =
     {
 	{ 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f,  0.0f, -1.0f},

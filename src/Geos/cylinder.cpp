@@ -53,6 +53,7 @@ void cylinder :: setupParameters(void){
 void cylinder :: render(GemState *state)
 {
   setupParameters();
+  if(m_drawType==-1)m_drawType=GL_FILL;
 
   GLdouble da, r, dr, dz;
   GLfloat x, y, z, nz;

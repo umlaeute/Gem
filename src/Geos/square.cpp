@@ -49,6 +49,7 @@ square :: ~square()
 /////////////////////////////////////////////////////////
 void square :: render(GemState *state)
 {
+  if(m_drawType==-1)m_drawType=GL_QUADS;
     glNormal3f(0.0f, 0.0f, 1.0f);
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(m_linewidth);

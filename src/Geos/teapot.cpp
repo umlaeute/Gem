@@ -129,6 +129,7 @@ void teapot :: render(GemState *state)
   switch(m_drawType){
   case GL_LINE_LOOP: type=GL_LINE;  break;    
   case GL_POINTS   : type=GL_POINT; break;
+  case -1: // default
   case GL_POLYGON  : type=GL_FILL;  break;
   }
 #ifdef GLU_TRUE

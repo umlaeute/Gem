@@ -85,6 +85,8 @@ void disk :: innerRadius(float radius)
 /////////////////////////////////////////////////////////
 void disk :: render(GemState *state)
 {
+  if(m_drawType==-1)m_drawType=GL_FILL;
+
   GLfloat da, dr;
 
   GLenum orientation = true; /* GLU_INSIDE; */

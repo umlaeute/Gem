@@ -111,6 +111,9 @@ void tube :: render(GemState *state){
   float normal[3];
 
   int n;
+
+  if(m_drawType==-1)m_drawType=GL_TRIANGLE_STRIP;
+
    
   for (n = 0; n < order ; n++)    {
     // definition des vecteurs de base des cercles
@@ -329,6 +332,7 @@ void tube :: typeMess(t_symbol *type){
 
   switch (c) {
   case 'l': case 'L': m_drawType = GL_LINE_LOOP; break;
+  case 'd': case 'D': // default
   case 'f': case 'F': m_drawType = GL_TRIANGLE_STRIP; break;
   case 'p': case 'P': m_drawType = GL_POINTS; break;
   default:

@@ -80,6 +80,7 @@ slideSquares :: ~slideSquares()
 void slideSquares :: render(GemState *state)
 {
     int i;
+  if(m_drawType==-1)m_drawType=GL_QUADS;
 
     glDisable(GL_DEPTH_TEST);
     //glTranslatef( 0.0f, 0.0f, 0.1f );

@@ -436,6 +436,8 @@ void ripple :: typeMess(t_symbol *type)
 	    m_drawType = GL_POLYGON;
     else if (!strcmp(type->s_name, "point"))
 	    m_drawType = GL_POINTS;
+    else if (!strcmp(type->s_name, "default"))
+	    m_drawType = GL_POLYGON;
     else
     {
 	    error ("GEM: no ripple draw style?");

@@ -51,6 +51,7 @@ curve :: ~curve()
 /////////////////////////////////////////////////////////
 void curve :: render(GemState *state)
 {
+  if(m_drawType==-1)m_drawType=GL_LINE_STRIP;
     glNormal3f(0.0f, 0.0f, 1.0f);
     glLineWidth(m_linewidth);
     if(state->texture){

@@ -210,6 +210,7 @@ struct GEM_EXTERN imageStruct
    * C is the offset in the interleaved data (like chRed==0 for red)
    * you should use chRed instead of 0 (because it might not be 0)
    */
+  // heck, why are X&Y swapped ?? (JMZ)
   inline unsigned char GetPixel(int Y, int X, int C)
   { return(data[Y * xsize * csize + X * csize + C]); }
   
