@@ -82,10 +82,13 @@ class GEM_EXTERN pix_biquad : public GemPixObj
   //////////
   // the biquad-factors
   t_float ff1, ff2, ff3, fb1, fb2, fb0;
+  
+  int m_mode;
 	
   //////////
   // the methods
   static void setMessCallback(void *data);
+  static void modeMessCallback(void *data,float value);
   static void faktorMessCallback(void *data, t_symbol *s, int argc, t_atom* argv);
 
 };
