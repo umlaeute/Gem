@@ -35,10 +35,10 @@ extern "C" {
    void pix_curve_setup();
    void pix_data_setup();
    void pix_diff_setup();
-   //void pix_dot_setup();
+   void pix_dot_setup();
    void pix_draw_setup();
    void pix_dump_setup();
-  void pix_crop_setup();
+   void pix_crop_setup();
    void pix_dvLinux_setup();
    void pix_dv_setup();
    void pix_film_setup();
@@ -124,7 +124,7 @@ extern "C" {
       pix_curve_setup();
       pix_data_setup();
       pix_diff_setup();
-      //pix_dot_setup();
+      pix_dot_setup();
       pix_draw_setup();
       pix_dump_setup();
       pix_crop_setup();
