@@ -32,6 +32,10 @@ filmMPEG3 :: filmMPEG3(int format) : film(format) {
 #endif
     first_time = false;
   }
+
+#ifdef HAVE_LIBMPEG3
+  mpeg_file=0;
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -46,7 +50,7 @@ filmMPEG3 :: ~filmMPEG3()
 void filmMPEG3 :: close(void)
 {
 #ifdef HAVE_LIBMPEG3
-  mpeg3_close(mpeg_file);
+  if(mpeg_file)mpeg3_close(mpeg_file);
 #endif
 }
 
