@@ -12,7 +12,7 @@
 #include <memory.h>
 
 // XXX
-#include <iostream.h>
+#include <iostream>
 // using namespace std;
 /*
 // For Windows DLL.
