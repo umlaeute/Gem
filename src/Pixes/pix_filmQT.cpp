@@ -14,6 +14,8 @@
 /////////////////////////////////////////////////////////
 #if defined(MACOSX) || defined(HAVE_QUICKTIME)
 
+#define DO_AUTO_REGISTER_CLASS
+
 #include "pix_filmQT.h"
 #ifdef MACOSX
 #	include "OpenGL/glext.h"
@@ -288,6 +290,7 @@ void pix_filmQT :: render(GemState *state)
     newImage = 1;
     getFrame();
     m_curFrame = m_reqFrame;
+	m_pixBlock.image.upsidedown=1;
     if (m_film)m_pixBlock.image.data = m_frame; // this is mainly for windows
   }
   m_pixBlock.newimage = newImage;
