@@ -59,7 +59,7 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
   else if (argc == 0)
     {
       m_x = m_y = 0;
-      m_width = m_height = 128;
+      m_width = m_height = -1;
     }
   else
     {
@@ -100,10 +100,12 @@ void pix_snap2tex :: setUpTextureState()
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: snapMess()
 {
-  if ( !GemMan::windowExists() )
-    return;
-        
-  if (m_width <= 0 || m_height <= 0)
+  if ( !GemMan::windowExists() ) return;
+
+  int width =(m_width <0)?GemMan::m_width :m_width;
+  int height=(m_height<0)?GemMan::m_height:m_height;
+
+  if (width <= 0 || height <= 0)
     {
       error("GEM: pix_snap2tex: Illegal size");
       return;
@@ -124,16 +126,16 @@ void pix_snap2tex :: snapMess()
 #endif    
 
   // if the size changed, then reset the texture
-  int x_2 = powerOfTwo(m_width);
-  int y_2 = powerOfTwo(m_height);
+  int x_2 = powerOfTwo(width);
+  int y_2 = powerOfTwo(height);
 
-  if (m_width != m_oldWidth || m_height != m_oldHeight) 
+  if (width != m_oldWidth || height != m_oldHeight) 
     {
-      m_oldWidth = m_width;
-      m_oldHeight = m_height;
+      m_oldWidth = width;
+      m_oldHeight = height;
 
-      float m_xRatio = (float)m_width / (float)x_2;
-      float m_yRatio = (float)m_height / (float)y_2;
+      float m_xRatio = (float)width / (float)x_2;
+      float m_yRatio = (float)height / (float)y_2;
 		
       m_coords[0].s = 0.f;
       m_coords[0].t = 0.f;
