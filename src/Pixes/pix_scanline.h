@@ -25,7 +25,7 @@ KEYWORDS
     
 DESCRIPTION
 
-   template for yuv_ objects
+   does manipulations of the rows of pixels by copying, deleteing or moving them
    
 -----------------------------------------------------------------*/
 
