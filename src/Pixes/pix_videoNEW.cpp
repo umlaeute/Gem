@@ -191,6 +191,8 @@ void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
     	    gensym("mode"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::colorMessCallback,
     	    gensym("color"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::colorMessCallback,
+    	    gensym("colorspace"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::deviceMessCallback,
     	    gensym("device"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::driverMessCallback,
