@@ -18,6 +18,7 @@
 #include <Carbon/Carbon.h>
 #include "GemWinCreate.h"
 #include "GemMan.h"
+#include "GemEvent.h"
 #include "m_pd.h"
 
 #define PIXEL_SIZE	32		// 16 or 32
@@ -75,6 +76,11 @@ AGLContext 		gaglContext = 0;
 GLuint 			gFontList = 0;
 char 			gInfoString [512] = "";
 static bool 		haveContext = false;
+
+EventHandlerUPP		gEvtHandler;
+EventHandlerRef		ref;
+ProcessSerialNumber	psn = {0, kCurrentProcess };
+static pascal OSStatus evtHandler(EventHandlerCallRef myHandler, EventRef event, void* userData);
 
 void SetContextValid (bool val);
 bool HaveValidContext (void);
@@ -147,18 +153,39 @@ short FindGDHandleFromWindow (WindowPtr pWindow, GDHandle * phgdOnThisDevice);
 
 GEM_EXTERN void gemAbortRendering();
 
+#pragma mark -----functions-----
 /////////////////////////////////////////////////////////
 // createGemWindow
 //
 /////////////////////////////////////////////////////////
 GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 {
+    OSStatus	err;
     GDHandle hGD, hTargetDevice = NULL;
     short numDevices = 0;
     short whichDevice = 1; // number of device to try (0 = 1st device, 1 = 2nd/external device)
 #ifdef DEBUG
     post("MAC: createGemWindow()");
 #endif
+    EventTypeSpec	list[] = {  //{ kEventClassApplication, kEventAppActivated },
+                                    //{ kEventClassWindow, kEventWindowCursorChange },
+                                    //{ kEventClassWindow,  kEventWindowCollapsing },
+                                    //{ kEventClassWindow, kEventWindowCollapsed },
+                                    //{ kEventClassWindow, kEventWindowShown },
+                                    { kEventClassWindow, kEventWindowActivated },
+                                    //{ kEventClassWindow, kEventWindowDeactivated },
+                                    { kEventClassWindow, kEventWindowClose },
+                                    //{ kEventClassWindow, kEventWindowDrawContent },
+                                    //{ kEventClassWindow, kEventWindowBoundsChanged },
+                                    //{ kEventClassWindow, kEventWindowZoomed },
+                                    { kEventClassMouse, kEventMouseDown },
+                                    { kEventClassMouse, kEventMouseUp },
+                                    { kEventClassMouse, kEventMouseMoved },
+                                    { kEventClassMouse, kEventMouseDragged },
+                                    { kEventClassMouse, kEventMouseWheelMoved },
+                                    { kEventClassKeyboard, kEventRawKeyDown },
+                                    { kEventClassKeyboard, kEventRawKeyUp } };
+
     short i =0;
 	
     // Build GL context and window or fullscreen
@@ -195,43 +222,64 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     }else{	// end of fullscreen creation on 2nd/external device
 
     // show and update main window
-    ::SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset, 
-                                (short)(hints.width + hints.x_offset), (short)(hints.height + hints.y_offset));
-    gaglDraw = ::GetWindowPort (NewCWindow (NULL, &info.r, "\pGEM", false, 
-                                            kWindowAlertProc,//kWindowFullZoomGrowDocumentProc, 
-                                            (WindowPtr)-1, true, 0));
-    ::ShowWindow (GetWindowFromPort (gaglDraw));
+        SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset+50, 
+                (short)(hints.width + hints.x_offset), 
+                (short)(hints.height + hints.y_offset));
 
-    glWInfo.fAcceleratedMust = true; 		// must renderer be accelerated?
-    glWInfo.VRAM = 0 * 1048576;			// minimum VRAM (if not zero this is always required)
-    glWInfo.textureRAM = 0 * 1048576;		// minimum texture RAM (if not zero this is always required)
-    glWInfo.fDraggable = false; 		// desired vertical refresh frquency in Hz (0 = any)
-    glWInfo.fmt = 0;				// output pixel format
+        err = CreateNewWindow ( kDocumentWindowClass,
+                                //kMovableModalWindowClass,
+                                //kFloatingWindowClass,
+                                kWindowStandardHandlerAttribute | kWindowCloseBoxAttribute | kWindowCollapseBoxAttribute,
+                                &info.r,
+                                &info.pWind );
+        if (err)
+        {
+            post("err = %d",err);
+            return 0;
+        }
+        SetWindowTitleWithCFString ( info.pWind, CFSTR("GEM") );
+
+        gaglDraw = GetWindowPort( info.pWind );
+
+        gEvtHandler = NewEventHandlerUPP( evtHandler );
+        InstallEventHandler( GetApplicationEventTarget(), gEvtHandler,
+                                        GetEventTypeCount( list ), list,
+                                        info.pWind, &ref );
+        //InstallWindowEventHandler ( info.pWind, gEvtHandler, GetEventTypeCount (list),
+        //                            list, info.pWind, &ref );
+
+        glWInfo.fAcceleratedMust = true; 		// must renderer be accelerated?
+        glWInfo.VRAM = 0 * 1048576;			// minimum VRAM (if not zero this is always required)
+        glWInfo.textureRAM = 0 * 1048576;		// minimum texture RAM (if not zero this is always required)
+        glWInfo.fDraggable = false; 		// desired vertical refresh frquency in Hz (0 = any)
+        glWInfo.fmt = 0;				// output pixel format
 		
-    i = 0;
-    glWInfo.aglAttributes [i++] = AGL_RGBA;
-    glWInfo.aglAttributes [i++] = AGL_PIXEL_SIZE;
-    glWInfo.aglAttributes [i++] = 32;
-    glWInfo.aglAttributes [i++] = AGL_DEPTH_SIZE;
-    glWInfo.aglAttributes [i++] = 16;
-    if (hints.buffer == 2){
-        glWInfo.aglAttributes [i++] = AGL_DOUBLEBUFFER;
-    }
-    //going to try for some FSAA here
-    if (hints.fsaa){
-        glWInfo.aglAttributes [i++] = AGL_SAMPLE_BUFFERS_ARB;
-        glWInfo.aglAttributes [i++] = 1;
-        glWInfo.aglAttributes [i++] = AGL_SAMPLES_ARB;
-        glWInfo.aglAttributes [i++] = hints.fsaa;
-    }
+        i = 0;
+        glWInfo.aglAttributes [i++] = AGL_RGBA;
+        glWInfo.aglAttributes [i++] = AGL_PIXEL_SIZE;
+        glWInfo.aglAttributes [i++] = 32;
+        glWInfo.aglAttributes [i++] = AGL_DEPTH_SIZE;
+        glWInfo.aglAttributes [i++] = 16;
+        if (hints.buffer == 2){
+            glWInfo.aglAttributes [i++] = AGL_DOUBLEBUFFER;
+        }
+        //going to try for some FSAA here
+        if (hints.fsaa){
+            glWInfo.aglAttributes [i++] = AGL_SAMPLE_BUFFERS_ARB;
+            glWInfo.aglAttributes [i++] = 1;
+            glWInfo.aglAttributes [i++] = AGL_SAMPLES_ARB;
+            glWInfo.aglAttributes [i++] = hints.fsaa;
+        }
     
-    glWInfo.aglAttributes [i++] = AGL_ACCELERATED;
-    glWInfo.aglAttributes [i++] = AGL_NO_RECOVERY; 	// should be used whenever packed pixels is used to 
+        glWInfo.aglAttributes [i++] = AGL_ACCELERATED;
+        glWInfo.aglAttributes [i++] = AGL_NO_RECOVERY; 	// should be used whenever packed pixels is used to 
                                                         //	disable software back up textures
-    glWInfo.aglAttributes [i++] = AGL_NONE;
-    info.pWind = ::GetWindowFromPort(gaglDraw);
-
-    ::BuildGLFromWindow (GetWindowFromPort(gaglDraw), &info.context, &glWInfo, hints.shared);
+        glWInfo.aglAttributes [i++] = AGL_NONE;
+/*        
+        info.pWind = ::GetWindowFromPort(gaglDraw);
+        BuildGLFromWindow (GetWindowFromPort(gaglDraw), &info.context, &glWInfo, hints.shared);
+*/        
+        BuildGLFromWindow ( info.pWind, &info.context, &glWInfo, hints.shared);
     }// end of window creation on main device
     
     if (!info.context){
@@ -243,8 +291,14 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     hints.real_h = hints.height;
     info.fs = 0;//hints.fullscreen;
     
-    if ( gaglDraw )
-        SetPort ((GrafPtr)gaglDraw);
+    SetFrontProcess( &psn );
+    
+    ShowWindow ( info.pWind );
+    // um, this may be overkill?
+    SelectWindow( info.pWind );
+    err = ActivateWindow( info.pWind, true );
+    post("GemWindow Activate err = %d", err );
+
 #ifdef DEBUG
     post("createGemWindow() finished");
     post("hints: actuallyDisplay = %d",hints.actuallyDisplay);
@@ -282,6 +336,7 @@ GEM_EXTERN void destroyGemWindow(WindowInfo &info)
             ::aglDestroyContext(info.context);
             info.context  = NULL;
         }
+        RemoveEventHandler( ref );
         ::UnlockPixels(info.pixMap);
         ::DisposeGWorld(info.offscreen);
         info.offscreen = NULL;
@@ -1209,4 +1264,113 @@ bool HaveValidContext (void)
 		return false;
 }
 
+static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event, void* userData)
+{
+//#pragma unused (userData)
+    OSStatus err = 0;
+    OSStatus result = eventNotHandledErr;
+    UInt32 evtClass = GetEventClass (event);
+    UInt32 kind = GetEventKind (event);
+    WindowRef	winRef;
+    UInt32	keyCode;
+    char	macKeyCode;
+
+    if (eventNotHandledErr == result)
+    {
+        switch (evtClass) {
+            case kEventClassApplication:
+                switch (kind)
+                {
+                    case kEventAppActivated:
+                        GetEventParameter( event, kEventParamWindowRef, typeWindowRef, NULL, sizeof(WindowRef), NULL, &winRef);
+                        SelectWindow(winRef);
+                        result = noErr;
+                        break;
+                }
+                break;
+            case kEventClassWindow:
+                switch (kind)
+                {
+                    case kEventWindowActivated:
+                        GetEventParameter( event, kEventParamDirectObject, typeWindowRef, NULL, sizeof(WindowRef), NULL, &winRef);
+                        SelectWindow(winRef);
+                        result = noErr;
+                        break;
+                    case kEventWindowClosed:
+                        //destroyGemWindow(
+                        break;
+                }
+                break;
+            case kEventClassKeyboard:
+                switch (kind)
+                {
+                    case kEventRawKeyDown:
+                        GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
+                        GetEventParameter( event, kEventParamKeyMacCharCodes, typeUInt32, NULL, sizeof(char), NULL, &macKeyCode);
+                        triggerKeyboardEvent( &macKeyCode, keyCode, 1);
+                        result = noErr;
+                        break;
+                    case kEventRawKeyUp:
+                        GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
+                        GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode);
+                        triggerKeyboardEvent( &macKeyCode, keyCode, 0);
+                        result = noErr;
+                        break;
+                }
+                break;
+            case kEventClassMouse:
+                HIPoint			location = {0.0f, 0.0f};
+                EventMouseButton	button = 0;
+                //MouseWheelAxis		axis = 0;
+                UInt32		modifiers = 0;
+                long		wheelDelta = 0;
+                switch (kind)
+                {
+                    case kEventMouseMoved:
+                        GetEventParameter(event, kEventParamMouseLocation, typeHIPoint, NULL, sizeof(HIPoint), NULL, &location);
+                        triggerMotionEvent( (int)location.x, (int)location.y );
+                        result = noErr;
+                        break;
+                        
+                    case kEventMouseDragged:
+                        GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
+                                                NULL, sizeof(HIPoint), NULL, &location);
+                        triggerMotionEvent( (int)location.x, (int)location.y );
+                        result = noErr;
+                        break;
+                        
+                    case kEventMouseDown:
+                        GetEventParameter(event, kEventParamMouseButton, typeMouseButton, 
+                                                NULL, sizeof(EventMouseButton), NULL, &button);                        
+                        GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
+                                                NULL, sizeof(HIPoint), NULL, &location);
+                        triggerButtonEvent( button, 1, (int)location.x, (int)location.y );
+                        GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, 
+                                                NULL, sizeof(UInt32), NULL, &modifiers);
+                        result = noErr;
+                        break;
+                        
+                    case kEventMouseUp:
+                        GetEventParameter(event, kEventParamMouseButton, typeMouseButton, 
+                                                NULL, sizeof(EventMouseButton), NULL, &button);
+                        GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
+                                                NULL, sizeof(HIPoint), NULL, &location);
+                        triggerButtonEvent( button, 0, (int)location.x, (int)location.y );
+                        result = noErr;
+                        break;
+                        
+                    case kEventMouseWheelMoved:
+                        GetEventParameter(event, kEventParamMouseWheelDelta, typeLongInteger, 
+                                                NULL, sizeof(long), NULL, &wheelDelta);
+                        //GetEventParameter(event, kEventParamMouseWheelAxis, typeMouseWheelAxis, 
+                        //                        NULL, sizeof(long), NULL, &axis);
+                        //triggerWheelEvent( axis, wheelDelta );
+                        result = noErr;
+                        break;
+                }
+                break;
+        }
+    }
+    return result;
+}
 #endif
