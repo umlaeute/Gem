@@ -208,7 +208,7 @@ extern "C" {
       pix_rgba_setup();
       pix_roll_setup();
       pix_yuv_setup();
-   //   pix_grey_setup();
+      pix_grey_setup();
       pix_set_setup();
       pix_sig2pix_setup();
       pix_snap_setup();
