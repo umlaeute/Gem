@@ -10,7 +10,7 @@ release critical: [filmQT4L] produces RGB output if RGBA is not supported by the
 
 RC: the linker flags for libavifile could be obtained via `avifile-config`. these are more correct than just adding `-lavifile` (aka: i had big problems without these..) -- FIXED
 
-sending the gemwin to another machine makes Gem crash (at least on my configuration)
+sending the gemwin to another machine makes Gem crash (at least on my configuration) -- FIXED_FOR_NOW (it works on other machines...)
 
 pix_buffer_read/write sometimes crashes -- FIXED
 
