@@ -39,6 +39,10 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_texture : public GemBase
 {
+  //////////
+  // texturing in [pix_movie] is done as a friend
+  friend class pix_movieNEW;
+
     CPPEXTERN_HEADER(pix_texture, GemBase)
 
     public:
