@@ -17,7 +17,11 @@
 extern "C" {
 #endif
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 	
 #ifndef M_PI
 #define M_PI 3.14159265f
