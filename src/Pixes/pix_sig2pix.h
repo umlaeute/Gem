@@ -45,7 +45,7 @@ class GEM_EXTERN pix_sig2pix : public GemBase
 
   //////////
   // Constructor
-  pix_sig2pix(t_float& width, t_float& height);
+  pix_sig2pix(t_floatarg width, t_floatarg height);
     	
  protected:
     	
@@ -93,6 +93,8 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   pixBlock    	m_pixBlock;
   imageStruct   m_imageStruct;
   int           m_pixsize;
+
+  int           m_width, m_height;
 
  private:
     	

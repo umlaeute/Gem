@@ -44,7 +44,7 @@ class GEM_EXTERN pix_buf : public GemBase
 
 	    //////////
 	    // Constructor
-    	pix_buf();
+    	pix_buf(t_floatarg);
     	
     protected:
     	
@@ -70,14 +70,26 @@ class GEM_EXTERN pix_buf : public GemBase
     	// Clean everything up
     	void	    	cleanImage();
     	   	
-    	//////////
-    	// The buffered block
-    	pixBlock    	m_pixBlock;
-	imageStruct     m_imageStruct;
-    	
-    	//////////
-    	// The old cache
-    	GemCache    	*m_oldcache;
+	//////////
+	// the pixBlock-cache
+	pixBlock    cachedPixBlock;
+	pixBlock    *orgPixBlock;
+
+	//////////
+	// force output of the buffer:
+	void            bangMess();
+	bool            m_banged;
+	
+	void            autoMess(int);
+	bool            m_auto;
+
+
+private:
+	
+	//////////
+	// Static member callbacks
+	static void bangMessCallback(void *);
+	static void autoMessCallback(void *, t_floatarg);
 };
 
 #endif	// for header file

@@ -109,6 +109,7 @@ void pix_rgba :: processImage(imageStruct &image)
     }
     break;
   case GL_YCBCR_422_GEM: // YUV
+    // i was amazed, this really works (but is - of course - very slow)
     int Y, U, V, R, G, B;
     R=255; G=0; B=0;
 

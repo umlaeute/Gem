@@ -21,6 +21,8 @@
 #include <strings.h>
 #endif
 
+#include <math.h>
+
 #include "Base/GemCache.h"
 
 static inline int powerOfTwo(int value)
@@ -40,15 +42,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_sig2pix :: pix_sig2pix(t_float& width, t_float& height)
+pix_sig2pix :: pix_sig2pix(t_floatarg width=0, t_floatarg height=0)
 {
-  int i;
 
   m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data=NULL;
 
   dimenMess((int)width, (int)height);	//tigital
 
+  int i;
   for (i=0; i<3; i++)
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal, &s_signal); /* channels inlet */
 }
@@ -63,11 +65,18 @@ pix_sig2pix :: ~pix_sig2pix()
 }
 
 void pix_sig2pix :: dimenMess(int width, int height) {
-  if (width == 0) width = 256;
-  if (height == 0) height = 256;
+  if (width>32000)width=8;
+  if (height>32000)height=8;
+  if (width  < 0) width  = 0;
+  if (height < 0) height = 0;
 
-  if (width>32000)width=256;
-  if (height>32000)width=256;
+  m_width =width;
+  m_height=height;
+
+  if (width  == 0) width = 8;
+  if (height == 0) height = 8;
+
+
 
   cleanImage();
   
@@ -165,6 +174,13 @@ t_int* pix_sig2pix :: perform(t_int* w)
 
 void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 {
+  if (m_width==0 && m_height==0){
+    int w = powerOfTwo((int)sqrt(sp[0]->s_n));
+    int h = (sp[0]->s_n / w);
+    dimenMess(w, h);
+    m_width = 0;
+    m_height= 0;
+  }
   clearImage();
   dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[0]->s_n);
 }

@@ -74,7 +74,6 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
 
   //////////
   // the outlets~
-  //  t_outlet     *o_red, *o_green, *o_blue, *o_alpha;
   t_outlet *o_col[4];
 
  private:

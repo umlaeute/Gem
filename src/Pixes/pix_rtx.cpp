@@ -86,7 +86,7 @@ void pix_rtx :: create_buffer(imageStruct image)
    buffer.ysize = image.ysize;
    buffer.csize = image.csize;
 #ifdef IMAGE_CLASS
-   buffer.allocate( dataSize );
+   buffer.reallocate( dataSize );
 #else
    buffer.data = new unsigned char[dataSize];
    memset(buffer.data, 0, dataSize);
@@ -114,7 +114,7 @@ void pix_rtx :: delete_buffer()
 /////////////////////////////////////////////////////////
 void pix_rtx :: clear_buffer()
 {
-		memset(buffer.data, 0, buffer.xsize * buffer.xsize * buffer.ysize * buffer.csize * sizeof(unsigned char));
+  memset(buffer.data, 0, buffer.xsize * buffer.xsize * buffer.ysize * buffer.csize * sizeof(unsigned char));
 }
 
 /////////////////////////////////////////////////////////
@@ -127,8 +127,7 @@ void pix_rtx :: processImage(imageStruct &image)
   if (image.xsize != buffer.xsize || image.ysize != buffer.ysize || image.csize != buffer.csize) {
     long dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char);
 #ifdef IMAGE_CLASS		//tigital
-    buffer.clear();
-    buffer.allocate( dataSize );
+    buffer.reallocate( dataSize );
 #else
     delete [] buffer.data;
     buffer.data = new unsigned char[dataSize];
@@ -140,10 +139,9 @@ void pix_rtx :: processImage(imageStruct &image)
   }
 
    int pixsize = image.ysize * image.xsize;
-
    int cols=image.xsize, c=0, c1=0;
    int rows=image.ysize, r=0;
-
+   
    unsigned char *pixels = image.data;
    unsigned char *wp;			// write pointer
    unsigned char *rp;			// read pointer
@@ -165,21 +163,21 @@ void pix_rtx :: processImage(imageStruct &image)
 
    // then copy the buffer rtx-transformed back to the pixels
    while (c < cols) {
-	   c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
+     c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
 
-	   while (r < rows) {
-		   rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
-		   pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+     while (r < rows) {
+       rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+       pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+       
+       pixels[chRed]   = rp[chRed];
+       pixels[chBlue]  = rp[chBlue];
+       pixels[chGreen] = rp[chGreen];
+       pixels[chAlpha] = rp[chAlpha];
 
-		   pixels[chRed]   = rp[chRed];
-		   pixels[chBlue]  = rp[chBlue];
-		   pixels[chGreen] = rp[chGreen];
-		   pixels[chAlpha] = rp[chAlpha];
-
-		   r++;
-	   }
-	   r=0;
-	   c++;
+       r++;
+     }
+     r=0;
+     c++;
    }
 
    bufcount++;
@@ -192,12 +190,12 @@ void pix_rtx :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rtx :: obj_setupCallback(t_class *classPtr)
 {
-	class_addmethod(classPtr, (t_method)&pix_rtx::modeMessCallback,
- 					  gensym("mode"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_rtx::clearMessCallback,
- 					  gensym("clear"), A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_rtx::setMessCallback,
- 					  gensym("set"), A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_rtx::modeMessCallback,
+		  gensym("mode"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_rtx::clearMessCallback,
+		  gensym("clear"), A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_rtx::setMessCallback,
+		  gensym("set"), A_NULL);
 }
 void pix_rtx :: modeMessCallback(void *data, t_floatarg newmode)
 {

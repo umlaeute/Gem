@@ -26,7 +26,7 @@ CPPEXTERN_NEW(pix_pix2sig)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_pix2sig :: pix_pix2sig()
+pix_pix2sig :: pix_pix2sig() : m_data(NULL), m_size(0)
 {
   int i=4;
   while(i--)
@@ -41,6 +41,8 @@ pix_pix2sig :: ~pix_pix2sig()
 {
   int i=4;
   while(i--)outlet_free(o_col[i]);
+  m_data = NULL;
+  m_size = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -83,7 +85,10 @@ t_int* pix_pix2sig :: perform(t_int* w)
       *(out_alpha++) = data[3]*scale;
       data+=4;
     }
-  } else while (n--) *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
+  } else {
+    n=N;
+    while (n--) *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
+  }
 
 
   return (w+7);
@@ -93,8 +98,6 @@ void pix_pix2sig :: dspMess(void *data, t_signal** sp)
 {
   dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[0]->s_n);
 }
-
-
 
 /////////////////////////////////////////////////////////
 // Callback functions

@@ -29,10 +29,10 @@ pix_crop :: pix_crop(t_floatarg x=0, t_floatarg y=0, t_floatarg w=64, t_floatarg
   m_data = NULL;
   m_size = 0;
 
-  offsetMess(x,y);
+  offsetMess((int)x,(int)y);
   if (w < 1.f)w=64.f;
   if (h < 1.f)h=64.f;
-  dimenMess(w,h);
+  dimenMess((int)w,(int)h);
 }
 
 /////////////////////////////////////////////////////////

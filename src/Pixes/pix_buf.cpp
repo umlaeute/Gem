@@ -18,7 +18,7 @@
 
 #include "Base/GemCache.h"
 
-CPPEXTERN_NEW(pix_buf)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_buf, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -28,11 +28,9 @@ CPPEXTERN_NEW(pix_buf)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_buf :: pix_buf()
-    	 : m_oldcache(NULL)
+pix_buf :: pix_buf(t_floatarg a=0) :
+ m_banged(false), m_auto(a!=0.0)
 {
-  m_pixBlock.image = m_imageStruct;
-  m_pixBlock.image.data = NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -40,10 +38,7 @@ pix_buf :: pix_buf()
 //
 /////////////////////////////////////////////////////////
 pix_buf :: ~pix_buf()
-{
-    if (m_oldcache) stopRendering();
-    cleanImage();
-}
+{}
 
 /////////////////////////////////////////////////////////
 // render
@@ -51,24 +46,16 @@ pix_buf :: ~pix_buf()
 /////////////////////////////////////////////////////////
 void pix_buf :: render(GemState *state)
 {
-    // the cache and image should have been set
-    if (!m_oldcache || !state->image ) return;
-    
-    // if it is a new image or a dirty image, reprocess
-    if ( state->image->newimage || m_cache->resendImage )
-    {
-      if (!m_pixBlock.image.data) {
-	  imageStruct i = m_pixBlock.image;
-	  //	  state->image->image->copy2Image(&(m_pixBlock->image));
-	  state->image->image.copy2Image(&m_pixBlock.image);
-
-      }	else
-    	    state->image->image.refreshImage(&m_pixBlock.image);
-    	m_pixBlock.newimage = 1;
-    	m_cache->resendImage = 0;
-    }
-
-    state->image = &m_pixBlock;
+  m_banged|=m_auto;
+  cachedPixBlock.newimage = 0;
+  if (!state || !state->image || !&state->image->image) return;
+  if (state->image->newimage || m_banged){
+    orgPixBlock = state->image;
+    state->image->image.copy2Image(&cachedPixBlock.image);
+    cachedPixBlock.newimage = 1;
+  }
+  state->image = &cachedPixBlock;
+  m_banged = false;
 }
 
 /////////////////////////////////////////////////////////
@@ -77,8 +64,7 @@ void pix_buf :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_buf :: postrender(GemState *state)
 {
-    m_pixBlock.newimage = 0;
-    state->image = NULL;
+  state->image = orgPixBlock;
 }
 
 /////////////////////////////////////////////////////////
@@ -87,9 +73,7 @@ void pix_buf :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_buf :: startRendering()
 {
-    m_oldcache = m_cache;
-    m_cache = new GemCache(m_oldcache->m_parent);
-    cleanImage();
+  //  m_banged = true;
 }
 
 /////////////////////////////////////////////////////////
@@ -98,8 +82,6 @@ void pix_buf :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_buf :: stopRendering()
 {
-    if (m_cache) delete m_cache;
-    cleanImage();
 }
 
 /////////////////////////////////////////////////////////
@@ -108,15 +90,40 @@ void pix_buf :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_buf :: cleanImage()
 {
-    if (m_pixBlock.image.data)
-    {
-     	m_pixBlock.image.clear();
-    }
 }
 
+
+/////////////////////////////////////////////////////////
+// bangMess
+//
+/////////////////////////////////////////////////////////
+void pix_buf :: bangMess()
+{
+  m_banged = true;
+}
+/////////////////////////////////////////////////////////
+// autoMess
+//
+/////////////////////////////////////////////////////////
+void pix_buf :: autoMess(int a)
+{
+  m_auto = a;
+}
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
-void pix_buf :: obj_setupCallback(t_class *)
-{ }
+void pix_buf :: obj_setupCallback(t_class *classPtr)
+{ 
+  class_addbang(classPtr, &pix_buf::bangMessCallback);
+  class_addmethod(classPtr, (t_method)&pix_buf::autoMessCallback,
+		  gensym("auto"), A_FLOAT, A_NULL);
+
+}
+
+void pix_buf :: bangMessCallback(void *data){
+  GetMyClass(data)->bangMess();
+}
+void pix_buf :: autoMessCallback(void *data, t_floatarg f){
+  GetMyClass(data)->autoMess((int)f);
+}
