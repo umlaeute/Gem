@@ -125,7 +125,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_write, t_symbol*,A_DEFSYM)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer_write :: pix_buffer_write(t_symbol *s) : m_frame(0), m_lastframe(-1) {
+pix_buffer_write :: pix_buffer_write(t_symbol *s) : m_frame(-2), m_lastframe(-1) {
   setMess(s);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
 }
