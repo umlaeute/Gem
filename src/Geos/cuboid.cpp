@@ -159,6 +159,7 @@ void cuboid :: widthMess(float sizez)
     m_sizez = sizez;
     setModified();
 }
+#if 0
 /////////////////////////////////////////////////////////
 // typeMess
 //
@@ -178,6 +179,7 @@ void cuboid :: typeMess(t_symbol *type)
     }
     setModified();
 }
+#endif
 
 /////////////////////////////////////////////////////////
 // static member function

@@ -18,7 +18,9 @@
 
 #include "pix_movie.h"
 #include "Base/GemMan.h"
+#ifdef MACOSX
 #include <OpenGL/glu.h>
+#endif // MACOSX
 
 static inline int powerOfTwo(int value)
 {
@@ -163,6 +165,7 @@ void pix_movie :: texFrame(GemState *state, int doit)
   state->texCoords = m_coords;
   state->numTexCoords = 4;
   // enable to texture binding
+#ifdef GL_TEXTURE_RECTANGLE_EXT
   if (!GemMan::texture_rectangle_supported)	//tigital
   {
     glEnable(GL_TEXTURE_2D);
@@ -171,6 +174,10 @@ void pix_movie :: texFrame(GemState *state, int doit)
     glEnable(GL_TEXTURE_RECTANGLE_EXT);
     glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
   }
+#else
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_textureObj);
+#endif
   
   if (doit) {
     // if the size changed, then reset the texture
@@ -180,7 +187,7 @@ void pix_movie :: texFrame(GemState *state, int doit)
       m_dataSize[0] = m_pixBlock.image.csize;
       m_dataSize[1] = m_pixBlock.image.xsize;
       m_dataSize[2] = m_pixBlock.image.ysize;
-      
+#ifdef GL_TEXTURE_RECTANGLE_EXT
         if (!GemMan::texture_rectangle_supported)	//tigital
         {
             glTexImage2D(GL_TEXTURE_2D, 0,
@@ -199,9 +206,19 @@ void pix_movie :: texFrame(GemState *state, int doit)
 		   m_pixBlock.image.type,
 		   m_pixBlock.image.data);
         }
+#else
+	glTexImage2D(GL_TEXTURE_2D, 0,
+		     m_pixBlock.image.csize,
+		     m_pixBlock.image.xsize,
+		     m_pixBlock.image.ysize, 0,
+		     m_pixBlock.image.format,
+		     m_pixBlock.image.type,
+		     m_pixBlock.image.data);
+#endif // MACOSX
     }
    // okay, load in the actual pixel data
-    if ( !GemMan::texture_rectangle_supported)
+#ifdef GL_TEXTURE_RECTANGLE_EXT
+    if ( !GemMan::texture_rectangle_supported) // tigital
     {
         glTexSubImage2D(GL_TEXTURE_2D, 0,
 		    0, 0,			// position
@@ -219,6 +236,15 @@ void pix_movie :: texFrame(GemState *state, int doit)
 		    m_pixBlock.image.type,	// the type
 		    m_frame);		// the data + header offset
     }
+#else
+        glTexSubImage2D(GL_TEXTURE_2D, 0,
+		    0, 0,			// position
+		    m_xsize,			// the x size of the data
+		    m_ysize,			// the y size of the data
+		    m_pixBlock.image.format,	// the format
+		    m_pixBlock.image.type,	// the type
+		    m_frame);		// the data + header offset
+#endif // MACOSX
   }
 }
 
@@ -235,10 +261,14 @@ void pix_movie :: postrender(GemState *state)
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
   }
+#ifdef GL_TEXTURE_RECTANGLE_EXT
   if ( !GemMan::texture_rectangle_supported)
     glDisable(GL_TEXTURE_2D);
   else
     glDisable(GL_TEXTURE_RECTANGLE_EXT);
+#else
+    glDisable(GL_TEXTURE_2D);
+#endif
 }
 
 
@@ -249,10 +279,14 @@ void pix_movie :: postrender(GemState *state)
 void pix_movie :: startRendering()
 {
     glGenTextures(1, &m_textureObj);
+#ifdef GL_TEXTURE_RECTANGLE_EXT
     if ( ! GemMan::texture_rectangle_supported )
         glBindTexture(GL_TEXTURE_2D, m_textureObj);
     else
         glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+#else
+    glBindTexture(GL_TEXTURE_2D, m_textureObj);
+#endif
   
     setUpTextureState();
     
@@ -277,6 +311,7 @@ void pix_movie :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_movie :: setUpTextureState()
 {
+#ifdef GL_TEXTURE_RECTANGLE_EXT
     if ( !GemMan::texture_rectangle_supported )				//tigital
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -296,6 +331,14 @@ void pix_movie :: setUpTextureState()
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
+#else
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+#endif // MACOSX
 }
 
 /////////////////////////////////////////////////////////

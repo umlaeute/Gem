@@ -313,5 +313,6 @@ $gemsrc/Controls/Makefile
 $gemsrc/Nongeos/Makefile 
 $gemsrc/Geos/Makefile
 $gemsrc/TV/Makefile
+$gemsrc/openGL/Makefile
 )
 

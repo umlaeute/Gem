@@ -22,7 +22,7 @@
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
-#endif MACOSX
+#endif // MACOSX
 
 CPPEXTERN_NEW(pix_resize)
 

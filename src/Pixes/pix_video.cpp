@@ -173,19 +173,19 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
-    GetMyClass(data)->dimenMess(atom_getfloatarg(0, ac, av),
-    	atom_getfloatarg(1, ac, av),
-    	atom_getfloatarg(2, ac, av),
-    	atom_getfloatarg(3, ac, av),
-    	atom_getfloatarg(4, ac, av),
-    	atom_getfloatarg(5, ac, av) );
+    GetMyClass(data)->dimenMess((int)atom_getfloatarg(0, ac, av),
+    	(int)atom_getfloatarg(1, ac, av),
+    	(int)atom_getfloatarg(2, ac, av),
+    	(int)atom_getfloatarg(3, ac, av),
+    	(int)atom_getfloatarg(4, ac, av),
+    	(int)atom_getfloatarg(5, ac, av) );
 }
 void pix_video :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-    GetMyClass(data)->offsetMess(x, y);
+    GetMyClass(data)->offsetMess((int)x, (int)y);
 }
 void pix_video :: swapMessCallback(void *data, t_floatarg state)
 {
-    GetMyClass(data)->swapMess(state);
+    GetMyClass(data)->swapMess((int)state);
 }
 

@@ -272,7 +272,7 @@ void pix_puzzle :: sizeMessCallback(void *data, t_floatarg width, t_floatarg hei
 
 void pix_puzzle :: stateMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->activate(state);
+  GetMyClass(data)->activate((int)state);
 }
 void pix_puzzle :: moveMessCallback(void *data, t_floatarg state)
 {

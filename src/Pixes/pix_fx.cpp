@@ -120,5 +120,5 @@ void pix_fx :: obj_setupCallback(t_class *classPtr)
 
 void pix_fx :: stateMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->activate(state);
+  GetMyClass(data)->activate((int)state);
 }

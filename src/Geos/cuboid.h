@@ -57,9 +57,11 @@ class GEM_EXTERN cuboid : public GemShape
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
+#if 0
     	//////////
     	// How the object should be drawn
     	virtual void	typeMess(t_symbol *type);
+#endif
 
 	//////////
     	// The height of the object

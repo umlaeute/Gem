@@ -44,6 +44,8 @@
 #include "pix_videoLinux.h"
 #include "Base/GemCache.h"
 
+#include "Base/GemGLUtil.h"
+
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoLinux,t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 #define BYTESIN 3
@@ -404,6 +406,8 @@ void pix_videoLinux :: obj_setupCallback(t_class *classPtr)
 
 void pix_videoLinux :: modeMess(int argc, t_atom *argv)
 {
+    post("glBitField:: %d", getGLbitfield(argc, argv));
+    //return;
   int mode=m_channel;
   char c=0;
   if (argc==1){
@@ -473,7 +477,9 @@ void pix_videoLinux :: freqMess(t_floatarg c)
 
 void pix_videoLinux :: modeMessCallback(void *data, t_symbol* norm, int argc, t_atom *argv)
 {
-  if (argc==1 || argc==2)GetMyClass(data)->modeMess(argc, argv);
+
+  //if (argc==1 || argc==2)
+    GetMyClass(data)->modeMess(argc, argv);
 }
 
 

@@ -218,4 +218,4 @@ void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
 }
 
-#endif MACOSX
+#endif // MACOSX

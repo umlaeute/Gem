@@ -15,21 +15,23 @@
 //
 /////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////
-//
-//  pix_texture
-//
-//  2001:forum::für::umläute:2001
-//  IOhannes m zmoelnig
-//  mailto:zmoelnig@iem.kug.ac.at
-//
-/////////////////////////////////////////////////////////
-
 #include "pix_texture.h"
+
 #include "Base/GemMan.h"
 #include "Base/GemPixUtil.h"
 
+#include <string.h>
+
 CPPEXTERN_NEW(pix_texture)
+
+static inline int powerOfTwo(int value)
+{
+	int x = 1;
+	while(x <= value) x <<= 1;
+	while(x < value) x <<= 1;
+	return(x);  
+}
+
 
 /////////////////////////////////////////////////////////
 //
@@ -43,10 +45,7 @@ pix_texture :: pix_texture()
     	     : m_textureOnOff(1), m_textureQuality(GL_LINEAR),
                m_rebuildList(0), m_textureObj(0)
 {
-  m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
-
-  m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
-  m_buffer.data = NULL;
+	m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 }
 
 /////////////////////////////////////////////////////////
@@ -54,8 +53,7 @@ pix_texture :: pix_texture()
 //
 /////////////////////////////////////////////////////////
 pix_texture :: ~pix_texture()
-{
-}
+{ }
 
 /////////////////////////////////////////////////////////
 // setUpTextureState
@@ -63,10 +61,14 @@ pix_texture :: ~pix_texture()
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState()
 {
+#ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
     if ( !GemMan::client_storage_supported )	//tigital
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     else
         glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
+#else
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+#endif
     
 //    if ( !GemMan::texture_rectangle_supported )
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -90,15 +92,6 @@ void pix_texture :: setUpTextureState()
 */
 }
 
-
-static inline int powerOfTwo(int value)                                         {
-	int x = 1;
-	while(x <= value) x <<= 1;
-	while(x < value) x <<= 1;
-	return(x);  
-}       
-	                  
-
 /////////////////////////////////////////////////////////
 // render
 //
@@ -108,12 +101,16 @@ void pix_texture :: render(GemState *state)
     if ( !state->image || !m_textureOnOff) return;
 
     state->texture = 1;
+    //<<<<<<< pix_texture.cpp
+    
+    //=======
     
 //#ifdef /*GL_VERSION_1_1 && !GemMan::texture_rectangle_supported	//tigital
 //    glEnable(GL_TEXTURE_RECTANGLE_EXT);
 //    glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
 //#elif*/ 
 #ifdef GL_VERSION_1_1
+    //>>>>>>> 1.3
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_textureObj);
 #elif GL_EXT_texture_object
@@ -139,6 +136,36 @@ void pix_texture :: render(GemState *state)
     if (m_rebuildList)
 #endif
     {
+      //<<<<<<< pix_texture.cpp
+		// if the size changed, then reset the texture
+		if (state->image->image.csize != m_dataSize[0] ||
+			state->image->image.xsize != m_dataSize[1] ||
+			state->image->image.ysize != m_dataSize[2])
+		{
+			m_dataSize[0] = state->image->image.csize;
+			m_dataSize[1] = state->image->image.xsize;
+			m_dataSize[2] = state->image->image.ysize;
+
+			glTexImage2D(GL_TEXTURE_2D, 0,
+	    		state->image->image.csize,
+	    		state->image->image.xsize,
+	    		state->image->image.ysize, 0,
+	    		state->image->image.format,
+    			state->image->image.type,
+    			state->image->image.data);
+		}
+		// the size is the same, so just use subimage
+		else
+		{
+  			glTexSubImage2D(GL_TEXTURE_2D, 0,
+	    		0, 0,							// position
+	    		state->image->image.xsize,
+	    		state->image->image.ysize,
+	    		state->image->image.format,
+    			state->image->image.type,
+    			state->image->image.data);		
+		}
+		//=======
     // if the size changed, then reset the texture
 	int x_2 = powerOfTwo(state->image->image.xsize);
 	int y_2 = powerOfTwo(state->image->image.ysize);
@@ -209,6 +236,7 @@ void pix_texture :: render(GemState *state)
 			  state->image->image.format,
 			  state->image->image.type,
 			  state->image->image.data);
+	  //>>>>>>> 1.3
 
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
@@ -216,22 +244,16 @@ void pix_texture :: render(GemState *state)
         if (creatingDispList)
         {
             glEndList();
+//            m_rebuildList = 0;
         }
 #endif
     }
 #ifdef GL_VERSION_1_1
-
 #elif GL_EXT_texture_object
-
 #else
     else glCallList(m_textureObj);
 #endif
 	m_rebuildList = 0;
-
-	if (!state->texCoords) {
-	  state->texCoords = m_coords;
-	  state->numTexCoords = 4;
-	}
 }
 
 /////////////////////////////////////////////////////////
@@ -268,6 +290,7 @@ void pix_texture :: startRendering()
     m_rebuildList = 1;
 #endif
 	m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
+
 	if (!m_textureObj)
 	{
 		error("GEM: pix_texture: Unable to allocate texture object");
@@ -327,10 +350,8 @@ void pix_texture :: textureQuality(int type)
 #else
 #endif
     }
-    setModified();
+	setModified();
 }
-
-
 
 /////////////////////////////////////////////////////////
 // static member functions
@@ -345,9 +366,9 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 }
 void pix_texture :: floatMessCallback(void *data, float n)
 {
-  GetMyClass(data)->textureOnOff((int)n);
+    GetMyClass(data)->textureOnOff((int)n);
 }
 void pix_texture :: textureMessCallback(void *data, t_floatarg quality)
 {
-  GetMyClass(data)->textureQuality((int)quality);
+    GetMyClass(data)->textureQuality((int)quality);
 }

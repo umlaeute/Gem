@@ -19,7 +19,7 @@ LOG
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
-#endif MACOSX
+#endif // MACOSX
 
 #include "Base/GemBase.h"
 

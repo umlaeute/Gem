@@ -250,7 +250,7 @@ void pix_aging :: colorMessCallback(void *data, t_floatarg state)
 }
 void pix_aging :: scratchMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->scratchMess(state);  
+  GetMyClass(data)->scratchMess((int)state);  
 }
 void pix_aging :: dustMessCallback(void *data, t_floatarg state)
 {

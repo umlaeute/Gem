@@ -72,6 +72,7 @@ static inline int powerOfTwo(int value)
 
 void pix_texture2 :: setUpTextureState()
 {
+#ifdef GL_TEXTURE_RECTANGLE_EXT
     if ( !GemMan::texture_rectangle_supported )				//tigital
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -91,6 +92,14 @@ void pix_texture2 :: setUpTextureState()
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
+#else
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -106,11 +115,14 @@ void pix_texture2 :: render(GemState *state)
 	state->numTexCoords = 4;
 
 #ifdef GL_VERSION_1_1		//tigital
+#ifdef GL_TEXTURE_RECTANGLE_EXT
     if ( GemMan::texture_rectangle_supported )
     {
         glEnable(GL_TEXTURE_RECTANGLE_EXT);
         glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
-    } else {
+    } else
+#endif
+      {
         glEnable(GL_TEXTURE_2D);
     	glBindTexture(GL_TEXTURE_2D, m_textureObj);
     }
@@ -234,25 +246,39 @@ void pix_texture2 :: render(GemState *state)
 	  m_dataSize[0] = m_buffer.csize;
 	  m_dataSize[1] = m_buffer.xsize;
 	  m_dataSize[2] = m_buffer.ysize;
-          if (!GemMan::texture_rectangle_supported)
-                glTexImage2D(GL_TEXTURE_2D, 0,
-		       m_buffer.csize,
-		       m_buffer.xsize,
-		       m_buffer.ysize, 0,
-		       m_buffer.format,
-		       m_buffer.type,
-		       m_buffer.data);
-          else
-                glTexImage2D( GL_TEXTURE_RECTANGLE_EXT, 0,
-                                m_buffer.csize,
-                                m_buffer.xsize,
-                                m_buffer.ysize, 0,
-                                m_buffer.format,
-                                m_buffer.type,
-                                m_buffer.data);
+
+#ifdef GL_TEXTURE_RECTANGLE_EXT
+	  if (GemMan::texture_rectangle_supported)
+	    glTexImage2D( GL_TEXTURE_RECTANGLE_EXT, 0,
+			  m_buffer.csize,
+			  m_buffer.xsize,
+			  m_buffer.ysize, 0,
+			  m_buffer.format,
+			  m_buffer.type,
+			  m_buffer.data);
+	  else
+#endif
+	    glTexImage2D(GL_TEXTURE_2D, 0,
+			 m_buffer.csize,
+			 m_buffer.xsize,
+			 m_buffer.ysize, 0,
+			 m_buffer.format,
+			 m_buffer.type,
+			 m_buffer.data);
+
         }
         // okay, load in the actual pixel data
-        if ( !GemMan::texture_rectangle_supported)
+#ifdef GL_TEXTURE_RECTANGLE_EXT
+        if (GemMan::texture_rectangle_supported)
+           glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+			  0, 0,				// position
+			  state->image->image.xsize,
+			  state->image->image.ysize,
+			  state->image->image.format,
+			  state->image->image.type,
+			  state->image->image.data);
+#endif
+	else
             glTexSubImage2D(GL_TEXTURE_2D, 0,
                         0, 0,				// position
                         state->image->image.xsize,
@@ -260,14 +286,6 @@ void pix_texture2 :: render(GemState *state)
                         state->image->image.format,
                         state->image->image.type,
                         state->image->image.data);
-        else
-            glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
-			  0, 0,				// position
-			  state->image->image.xsize,
-			  state->image->image.ysize,
-			  state->image->image.format,
-			  state->image->image.type,
-			  state->image->image.data);
 
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
@@ -298,10 +316,14 @@ void pix_texture2 :: postrender(GemState *state)
     if (!m_textureOnOff) return;
 
     state->texture = 0;
+#ifdef GL_TEXTURE_RECTANGLE_EXT
     if (!GemMan::texture_rectangle_supported )
         glDisable(GL_TEXTURE_2D);
     else
         glDisable(GL_TEXTURE_RECTANGLE_EXT);
+#else
+        glDisable(GL_TEXTURE_2D);
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -312,11 +334,14 @@ void pix_texture2 :: startRendering()
 {
 #ifdef GL_VERSION_1_1
     glGenTextures(1, &m_textureObj);
+#ifdef GL_TEXTURE_RECTANGLE_EXT
     if (GemMan::texture_rectangle_supported)
     {
         glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
 	setUpTextureState();
-    }else{
+    }else
+#endif
+      {
     glBindTexture(GL_TEXTURE_2D, m_textureObj);
     setUpTextureState();
     }
@@ -376,12 +401,15 @@ void pix_texture2 :: textureQuality(int type)
     if (m_textureObj)
     {
 #ifdef GL_VERSION_1_1		//tigital
+#ifdef GL_TEXTURE_RECTANGLE_EXT
         if (GemMan::texture_rectangle_supported)
         {
             glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
             glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, m_textureQuality);
             glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-        }else{
+        }else
+#endif
+	  {
             glBindTexture(GL_TEXTURE_2D, m_textureObj);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);

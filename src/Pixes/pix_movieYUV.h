@@ -38,13 +38,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 #ifdef _WINDOWS
-class GEM_EXTERN pix_movie : public pix_filmNT
+class GEM_EXTERN pix_movieYUV : public pix_filmNT
 {
-  CPPEXTERN_HEADER(pix_movie, pix_filmNT)
+  CPPEXTERN_HEADER(pix_movieYUV, pix_filmNT)
 #elif __linux__
-class GEM_EXTERN pix_movie : public pix_filmLinux
+class GEM_EXTERN pix_movieYUV : public pix_filmLinux
 {
-  CPPEXTERN_HEADER(pix_movie, pix_filmLinux)
+  CPPEXTERN_HEADER(pix_movieYUV, pix_filmLinux)
 #elif MACOSX
 class GEM_EXTERN pix_movieYUV : public pix_filmDarwinYUV
 {

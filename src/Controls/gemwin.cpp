@@ -28,7 +28,7 @@
 #else
 #include <GL/gl.h>
 #include <math.h>
-#endif MACOSX
+#endif // MACOSX
 
 #include "Base/GemMan.h"
 
@@ -322,7 +322,7 @@ void gemwin :: fogModeMess(int mode)
 /////////////////////////////////////////////////////////
 void gemwin :: cursorMess(float setting)
 {
-  GemMan :: cursorOnOff(setting);
+  GemMan :: cursorOnOff((int)setting);
 }
 
 

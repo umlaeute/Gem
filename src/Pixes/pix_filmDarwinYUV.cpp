@@ -280,4 +280,4 @@ void pix_filmDarwinYUV :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
-#endif MACOSX
+#endif // MACOSX

@@ -4320,6 +4320,7 @@ $gemsrc/Controls/Makefile
 $gemsrc/Nongeos/Makefile 
 $gemsrc/Geos/Makefile
 $gemsrc/TV/Makefile
+$gemsrc/openGL/Makefile
  ../Base/config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -4434,6 +4435,7 @@ $gemsrc/Controls/Makefile
 $gemsrc/Nongeos/Makefile 
 $gemsrc/Geos/Makefile
 $gemsrc/TV/Makefile
+$gemsrc/openGL/Makefile
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

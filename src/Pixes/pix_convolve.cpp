@@ -173,8 +173,8 @@ void pix_convolve :: processImage(imageStruct &image)
     		        int realMatY = matY * m_rows;
     	    	    for (int matX = 0; matX < m_rows; matX++)
     	    	    {
-                        new_val += tempImg.data[offsetXYCMat + matX * tempImg.csize] *
-                                        m_matrix[realMatY + matX];
+                        new_val += (int)(tempImg.data[offsetXYCMat + matX * tempImg.csize] *
+                                        m_matrix[realMatY + matX]);
     	    	    }
     		    }
     		    image.data[realPos + c] = CLAMP(new_val/m_range);

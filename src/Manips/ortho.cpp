@@ -18,7 +18,7 @@
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
-#endif MACOSX
+#endif // MACOSX
 
 #include "ortho.h"
 #include "Base/GemMan.h"
