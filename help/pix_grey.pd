@@ -1,0 +1,24 @@
+#N canvas 184 88 600 509 12;
+#X msg 120 148 gemList;
+#X msg 120 240 gemList;
+#X text 169 16 part of GEM;
+#X text 32 307 Images can be stored in various formats/color-spaces.
+;
+#X floatatom 223 128 1 0 0 0 - - -;
+#X text 246 129 on/off;
+#X text 9 460 see also:;
+#X obj 102 459 pix_yuv;
+#X obj 205 461 pix_rgba;
+#X text 35 328 While YUV gives you coloured-images and RGBA even adds
+an alpha-channel \, GREY is very handy if you don't care for colour
+and need to save have memory/CPU-power.;
+#X text 38 379 You can use [pix_grey] to convert images of any format
+into GREY-space. If your image already is in GREY-space \, this will
+do nothing.;
+#X obj 120 187 pix_grey;
+#X text 176 43 [pix_grey];
+#X text 55 75 convert the colorspace of an image to GREY (luminance)
+;
+#X connect 0 0 11 0;
+#X connect 4 0 11 0;
+#X connect 11 0 1 0;

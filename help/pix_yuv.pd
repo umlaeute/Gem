@@ -1,0 +1,22 @@
+#N canvas 200 158 590 497 12;
+#X msg 120 148 gemList;
+#X msg 120 240 gemList;
+#X text 169 16 part of GEM;
+#X text 32 307 Images can be stored in various formats/color-spaces.
+;
+#X floatatom 223 128 1 0 0 0 - - -;
+#X text 246 129 on/off;
+#X obj 120 187 pix_yuv;
+#X text 176 43 [pix_yuv];
+#X text 152 71 convert the colorspace of an image to YUV;
+#X text 35 328 While the RGBA-format offers you the possibility to
+add alpha-blending on a per-pixel-basis \, the YUV-format needs far
+less memory and can be processed faster. You can use [pix_yuv] to convert
+images of any format into YUV-space. If your image already is in YUV-space
+\, this will do nothing.;
+#X text 9 460 see also:;
+#X obj 205 461 pix_grey;
+#X obj 102 459 pix_rgba;
+#X connect 0 0 6 0;
+#X connect 4 0 6 0;
+#X connect 6 0 1 0;
