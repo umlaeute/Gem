@@ -44,7 +44,7 @@ pix_film :: pix_film(t_symbol *filename) :
  m_pixBlock.image.xsize = 0;
  m_pixBlock.image.ysize = 0;
  m_newFilm = 0;
-#ifndef MACOSX
+#ifndef __APPLE__
  m_pixBlock.image.csize = 3;
  m_pixBlock.image.format = GL_RGB;
  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
@@ -96,7 +96,7 @@ void pix_film :: createBuffer()
   m_pixBlock.image.ysize = neededYSize;
   m_pixBlock.image.csize = m_csize;
   m_pixBlock.image.format= m_format;
-#ifdef MACOSX
+#ifdef __APPLE__
   int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize;
 #else
   int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize+4; /* +4 from MPEG */
@@ -133,7 +133,7 @@ void pix_film :: openMess(t_symbol *filename)
   realOpen(buf);
   if (m_haveMovie == GEM_MOVIE_NONE)return;
   
-#ifndef MACOSX
+#ifndef __APPLE__
   createBuffer();
   prepareTexture();
 #endif
@@ -178,7 +178,7 @@ void pix_film :: render(GemState *state)
   }
   state->image = &m_pixBlock;
   
-#ifdef MACOSX
+#ifdef __APPLE__
   if (m_reqFrame == m_curFrame)
         ::MoviesTask(NULL, 0);
 #endif
@@ -257,6 +257,10 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
 		  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_film::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
+ // class_addmethod(classPtr, (t_method)&pix_film::colorspaceCallback,
+//		  gensym("colorspace"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_film::colorspaceCallback,
+		  gensym("colorspace"), A_SYMBOL, A_NULL);
 }
 void pix_film :: openMessCallback(void *data, t_symbol *filename)
 {
@@ -271,4 +275,20 @@ void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *a
 void pix_film :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
+}
+
+void pix_film :: colorspaceCallback(void *data, t_symbol *state)
+{
+   char c=toupper(*state->s_name);
+   if (c == 'Y'){
+   post("pix_film: yuv");
+   GetMyClass(data)->m_colorspace = 0;
+   }else
+   if (c == 'R')
+   {
+   post("pix_film: rgb");
+   GetMyClass(data)->m_colorspace = 1;
+   }
+   
+
 }

@@ -147,6 +147,7 @@ class GEM_EXTERN pix_film : public GemBase
 
   bool          m_film; // are we in film- or in movie-mode
   int		m_newFilm;
+  int			m_colorspace;
 
   //////////
   // a outlet for information like #frames and "reached end"
@@ -160,6 +161,8 @@ class GEM_EXTERN pix_film : public GemBase
   static void openMessCallback   (void *data, t_symbol *filename);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback       (void *data, t_floatarg state);
+   // static void colorspaceCallback(void *data, t_floatarg state);
+    static void colorspaceCallback(void *data, t_symbol *state);
 };
 
 #endif	// for header file
