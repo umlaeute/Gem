@@ -58,11 +58,13 @@ class GEM_EXTERN curve : public polygon
     	// The rendering resolution
     	int 	    	m_resolution;
 
+	GLfloat m_texCoords[4][2];
+
     private:
     	
     	//////////
     	// Static member functions
-    	static void 	resolutionMessCallback(void *data, t_floatarg res);
+     	static void 	resolutionMessCallback(void *data, t_floatarg res);
 };
 
 #endif	// for header file
