@@ -17,14 +17,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_PIX_FILMLINUX_H_
 
 #include "Pixes/pix_film.h"
-#ifdef HAVE_QUICKTIME
+#ifdef HAVE_LIBQUICKTIME
 #include <quicktime/quicktime.h>
 #include <quicktime/colormodels.h>
 #endif
-#ifdef HAVE_MPEG3
+#ifdef HAVE_LIBMPEG3
 #include <libmpeg3.h>
 #else
-#ifdef HAVE_MPEG
+#ifdef HAVE_LIBMPEG
 #include <mpeg.h>
 #endif
 #endif
@@ -74,13 +74,13 @@ class GEM_EXTERN pix_filmLinux : public pix_film
 
   FILE         *m_streamfile;
 
-#ifdef HAVE_QUICKTIME
+#ifdef HAVE_LIBQUICKTIME
   quicktime_t  *quick_file;
 #endif
-#ifdef HAVE_MPEG3
+#ifdef HAVE_LIBMPEG3
   mpeg3_t      *mpeg_file;
 #else
-#ifdef HAVE_MPEG
+#ifdef HAVE_LIBMPEG
   ImageDesc     m_streamVid;
 #endif
 #endif

@@ -31,13 +31,13 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmLinux, t_symbol *, A_DEFSYM)
 pix_filmLinux :: pix_filmLinux(t_symbol *filename) :
   pix_film(filename)
 {
-#ifdef HAVE_QUICKTIME
+#ifdef HAVE_LIBQUICKTIME
   post("pix_film:: quicktime4linux support");
 #endif
-#ifdef HAVE_MPEG3
+#ifdef HAVE_LIBMPEG3
   post("pix_film:: libmpeg3 support");
 #else 
-#ifdef HAVE_MPEG
+#ifdef HAVE_LIBMPEG
   post("pix_film:: libmpeg support");
 #endif 
 #endif
@@ -60,17 +60,17 @@ pix_filmLinux :: ~pix_filmLinux()
 void pix_filmLinux :: closeMess(void)
 {
   switch (m_haveMovie) {
-#ifdef HAVE_QUICKTIME
+#ifdef HAVE_LIBQUICKTIME
   case GEM_MOVIE_MOV:
     quicktime_close(quick_file);
     m_haveMovie = GEM_MOVIE_NONE;
     break;
 #endif
   case GEM_MOVIE_MPG:
-#ifdef HAVE_MPEG3
+#ifdef HAVE_LIBMPEG3
     mpeg3_close(mpeg_file);
 #else
-#ifdef HAVE_MPEG
+#ifdef HAVE_LIBMPEG
     if (m_streamfile)fclose(m_streamfile);
 #endif
 #endif
@@ -91,7 +91,7 @@ void pix_filmLinux :: realOpen(char *filename)
     post("GEM: pix_film:: unable to open file %s", filename);
     return;
   } 
-#ifdef HAVE_QUICKTIME
+#ifdef HAVE_LIBQUICKTIME
   else if (quicktime_check_sig(filename)){ /* ok, this is quicktime */
     fclose(m_streamfile);
     if (!(quick_file = quicktime_open(filename, 1, 0))){
@@ -125,7 +125,7 @@ void pix_filmLinux :: realOpen(char *filename)
     m_csize =(m_format==GL_RGBA)?4:(m_format==GL_RGB)?3:1;
   }
 #endif /* QUICKTIME */
-#ifdef HAVE_MPEG3
+#ifdef HAVE_LIBMPEG3
   else if (mpeg3_check_sig(filename)){/* ok, this is mpeg */
     fclose(m_streamfile);
     mpeg_file= mpeg3_open(filename);
@@ -151,7 +151,7 @@ void pix_filmLinux :: realOpen(char *filename)
     if (!(m_xsize*m_ysize))goto unsupported;
   }
 #else
-#ifdef HAVE_MPEG
+#ifdef HAVE_LIBMPEG
   else if (OpenMPEG (m_streamfile, &m_streamVid)) { /* let's hope it's MPEG */
     SetMPEGOption (MPEG_DITHER, 
 		   (1) ? (int) FULL_COLOR_DITHER : 
@@ -194,7 +194,7 @@ void pix_filmLinux :: getFrame()
 
   switch (m_haveMovie) {
   case GEM_MOVIE_MOV:
-#ifdef HAVE_QUICKTIME
+#ifdef HAVE_LIBQUICKTIME
     i=m_ysize;
     if (quicktime_set_video_position(quick_file, m_reqFrame, 0)){ } // couldn't set to position
     while(i--)rows[i]=m_frame+m_xsize*m_csize*(m_ysize-i-1);
@@ -214,7 +214,7 @@ void pix_filmLinux :: getFrame()
 #endif /* QUICKTIME */
     break;
   case GEM_MOVIE_MPG:
-#ifdef HAVE_MPEG3
+#ifdef HAVE_LIBMPEG3
     if (mpeg3_set_frame(mpeg_file, m_curFrame, 0)){ } // couldn't set to position
 
     i=m_ysize;
@@ -225,7 +225,7 @@ void pix_filmLinux :: getFrame()
       //      post("GEM: pix_film:: could not read frame !");
     }
 #else
-#ifdef HAVE_MPEG
+#ifdef HAVE_LIBMPEG
     if (m_curFrame<=0)RewindMPEG(m_streamfile,&m_streamVid);
     if (!GetMPEGFrame ((char*)m_frame)){
       RewindMPEG(m_streamfile,&m_streamVid);

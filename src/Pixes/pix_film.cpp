@@ -201,9 +201,9 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 
   switch (m_haveMovie){
   case GEM_MOVIE_MPG:
-#ifdef HAVE_MPEG3
+#ifdef HAVE_LIBMPEG3
 #else
-#ifdef HAVE_MPEG
+#ifdef HAVE_LIBMPEG
     m_reqFrame=(imgNum)?(m_curFrame==1)?2:1:0;
     break;
 #endif
