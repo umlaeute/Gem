@@ -140,7 +140,7 @@ long h,w, width;
         //unsigned int	i;
         unsigned long	elements[8];
         //vector signed char v;
-        vector	unsigned long v;
+        vector	unsigned int v;
     }bitBuffer;
     
         union
@@ -154,12 +154,12 @@ long h,w, width;
     //vector unsigned char c;
     vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage,YRight, UVRight, UVTemp, YTemp;
     vector unsigned char zero = vec_splat_u8(0);
-    vector signed short szero = vec_splat_s16(0);
+    //vector signed short szero = vec_splat_s16(0);
     vector unsigned char c,one;
     vector signed int UVhi,UVlo,Yhi,Ylo;
     vector signed int UVhiR,UVloR,YhiR,YloR;
     vector signed short gainSub,gain,gainR,d;
-    vector unsigned long bitshift;
+    vector unsigned int bitshift;
     vector unsigned char *inData = (vector unsigned char*) image.data;
     vector unsigned char *rightData = (vector unsigned char*) right.data;
     vector unsigned char tempImage,tempRight;
