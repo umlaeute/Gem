@@ -23,7 +23,8 @@
 
 #define EVENT_MASK  \
  ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
- ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | ResizeRedirectMask
+ ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | ResizeRedirectMask | \
+ EnterWindowMask | LeaveWindowMask
 
 
 // window creation variables
@@ -234,24 +235,33 @@ int topmostGemWindow(WindowInfo &info, int state){
 
 void destroyGemWindow(WindowInfo &info)
 {
+  post("destroy A");
   if (info.dpy)
     {
+  post("destroy B");
       int error=0;
       if (info.win)
 	error=XDestroyWindow(info.dpy, info.win);
+  post("destroy C");
       if (info.have_constContext && info.context)
 	glXDestroyContext(info.dpy, info.context); // this crashes sometimes on my laptop
+  post("destroy D");
       if (info.cmap)
 	error=XFreeColormap(info.dpy, info.cmap);
+  post("destroy E");
       if (info.fs){
 	XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
+  post("destroy E2");
 	XF86VidModeSetViewPort(info.dpy, info.screen, 0, 0);
 	info.fs=0;
       }
+  post("destroy F");
       XCloseDisplay(info.dpy);
     }
   info.dpy = NULL;
   info.win = 0;
   info.cmap = 0;
   info.context = NULL;
+  post("destroy F");
+
 }
