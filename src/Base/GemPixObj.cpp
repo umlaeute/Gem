@@ -25,6 +25,8 @@
 /////////////////////////////////////////////////////////
 GemPixObj :: GemPixObj() : 
   m_processOnOff(1), orgPixBlock(NULL) {
+    cachedPixBlock.newimage=0;
+    cachedPixBlock.newfilm =0;
 }
 
 
@@ -71,7 +73,7 @@ void GemPixObj :: render(GemState *state){
 	break;
       case GL_YCBCR_422_GEM: //GL_YCBCR_422_APPLE
 	processYUVImage(state->image->image);
-	break;
+      	break;
       default:
 	processImage(state->image->image);
       }
@@ -112,7 +114,7 @@ void GemPixObj :: processImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
-// processRGBAImage
+// processImage (typed)
 //
 /////////////////////////////////////////////////////////
 void GemPixObj :: processRGBAImage(imageStruct &image)
