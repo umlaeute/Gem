@@ -4,7 +4,7 @@
  *
  *  Copyright 1997 John E. Stone (j.stone@acm.org)
  *
- *  $Id: orb.cpp,v 1.1 2003-04-04 14:56:01 ggeiger Exp $
+ *  $Id: orb.cpp,v 1.2 2003-04-28 17:10:39 zmoelnig Exp $
  *
  */
 

@@ -4,7 +4,7 @@
  *  Copyright 1997 (unix code)  John E. Stone (j.stone@acm.org)
  *                 (Win32 code) Mike Connell  (M.Connell@swansea.ac.uk)  
  *
- *  $Id: orbserial.cpp,v 1.1 2003-04-04 14:56:01 ggeiger Exp $
+ *  $Id: orbserial.cpp,v 1.2 2003-04-28 17:10:40 zmoelnig Exp $
  *
  */
 
