@@ -80,10 +80,9 @@ GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
     to->format 	= format;
     to->type 	= type;
     to->data    = data;
-    to->pdata   = pdata;
     to->datasize= datasize;
     to->upsidedown=upsidedown;
-    to->notowned= true;
+    to->notowned= true; /* but pdata is always owned by us */
 }
 GEM_EXTERN void imageStruct::info() {
   post("imageStruct\t:%dx%dx%d\n\t\t%X\t(%x) %d\n\t\t%x\t%x\t%d",
