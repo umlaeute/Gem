@@ -23,18 +23,34 @@ AC_ARG_ENABLE(x, [                          [DIR=../../../GemLibs:/usr/local:/us
 AC_ARG_ENABLE(x, [  --includedir=DIR{:DIRS} where to search for non-standard headers])
 AC_ARG_ENABLE(x, [                          [DIR=/usr/include:/usr/local/include:../../../GemLibs]])
 AC_ARG_ENABLE(x, [])
-AC_ARG_ENABLE(mmx, [  --enable-mmx            enable MMX-support])
+AC_ARG_ENABLE(mmx,    [  --enable-mmx            enable MMX-support])
 AC_ARG_ENABLE(static, [  --enable-static         static linking (default is: dynamic) ])
-AC_ARG_WITH(glut, [  --with-glut             enable GLUT (mainly the teapot)])
-AC_ARG_WITH(gltt, [  --with-gltt             enable GLTT (for font rendering (old))])
-AC_ARG_WITH(ftgl, [  --with-ftgl             enable FTGL (for font rendering)])
-AC_ARG_WITH(mpeg, [  --with-mpeg             enable MPEG-filmIN support])
-AC_ARG_WITH(mpeg3, [  --with-mpeg3            enable MPEG3-filmIN support (overrides MPEG-support)])
+AC_ARG_WITH(glut,      [  --with-glut             enable GLUT (mainly the teapot)])
+AC_ARG_WITH(gltt,      [  --with-gltt             enable GLTT (for font rendering (old))])
+AC_ARG_WITH(ftgl,      [  --with-ftgl             enable FTGL (for font rendering)])
+AC_ARG_WITH(mpeg,      [  --with-mpeg             enable MPEG(1)-filmIN support])
+AC_ARG_WITH(mpeg3,     [  --with-mpeg3            enable MPEG3-filmIN support (overrides MPEG(1)-support)])
 AC_ARG_WITH(quicktime, [  --with-quicktime        enable quicktime-filmIN support])
-AC_ARG_WITH(avi,     [  --with-avi              enable AVI-support (might provide MPEG and quicktime)])
-AC_ARG_WITH(avcodec, [  --with-avcodec=<lib>    location of libavcodec.a])
-AC_ARG_WITH(avformat,[  --with-avformat=<lib>   location of libavformat.a])
-AC_ARG_WITH(ieee1394,     [  --with-ieee1394              enable IEEE1394-support (aka. firewire or DV)])
+AC_ARG_WITH(avi,       [  --with-avi              enable AVI-support (might provide MPEG)])
+AC_ARG_WITH(aviplay,   [  --with-aviplay          alias for \"--with-avi\"])
+AC_ARG_WITH(avcodec,   [  --with-avcodec=<lib>    location of libavcodec.a])
+AC_ARG_WITH(avformat,  [  --with-avformat=<lib>   location of libavformat.a])
+AC_ARG_WITH(ieee1394,  [  --with-ieee1394         enable IEEE1394-support (aka. firewire or DV)])
+
+if test "$with_aviplay"
+then
+  if test -z "$with_avi"
+  then
+    with_avi="$with_aviplay"
+  else
+    if test "$with_avi" != "$with_aviplay"
+    then
+      echo "--libaviplay is an alias for --libavi."
+      echo "they shouldn't be set to contradictory values..."
+      exit 1
+    fi
+  fi
+fi
 
 dnl of course we need X, so don't let the user disable it
 if test "$with_x" = "no"
