@@ -1375,7 +1375,6 @@ bool HaveValidContext (void)
 
 static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event, void* userData)
 {
-    OSStatus err = 0;
     OSStatus result = eventNotHandledErr;
     UInt32 evtClass = GetEventClass (event);
     UInt32 kind = GetEventKind (event);
