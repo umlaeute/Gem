@@ -12,7 +12,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifdef MACOSX
+#ifdef __APPLE__
 
 #include "pix_filmDarwin.h"
 #include "OpenGL/glext.h"
@@ -40,7 +40,7 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
 {
   // make sure that there are some characters
   if (filename->s_name[0]) openMess(filename);
-  m_colorspace = 1;
+  m_colorspace = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -148,8 +148,8 @@ void pix_filmDarwin :: realOpen(char *filename)
         post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
         post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
 	post("movie size x:%d y:%d", m_xsize, m_ysize);
-        
-        if (m_colorspace){
+        post("pix_filmDarwin: color space %d",m_colorspace);
+        if (m_colorspace == 1){
             m_csize = 4;
             m_format = GL_BGRA_EXT;
             m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
@@ -166,6 +166,7 @@ void pix_filmDarwin :: realOpen(char *filename)
                                             0, 
                                             m_pixBlock.image.data, 
                                             m_rowBytes);
+            post("pix_filmDarwin: using RGB");
                                         
         }else{
             m_csize = 2;
@@ -184,6 +185,7 @@ void pix_filmDarwin :: realOpen(char *filename)
                                             0, 
                                             m_pixBlock.image.data, 
                                             m_rowBytes);
+            post("pix_filmDarwin: using YUV");
         }
 	if (err) {
 		error("GEM: pix_filmDarwin: Couldn't make QTNewGWorldFromPtr %d", err);
@@ -217,7 +219,7 @@ void pix_filmDarwin :: getFrame()
     m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
     m_baseAddr = ::GetPixBaseAddr(m_pixMap);
  
-    int num;
+    //int num;
 
     // get the next frame of the source movie
     short 	flags = nextTimeStep;
@@ -313,8 +315,8 @@ void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmDarwin::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmDarwin::colorspaceCallback,
-		  gensym("colorspace"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_filmDarwin::ramCallback,
+		  gensym("ram"),  A_NULL);
 }
 
 void pix_filmDarwin :: openMessCallback(void *data, t_symbol *filename)
@@ -332,8 +334,8 @@ void pix_filmDarwin :: autoCallback(void *data, t_floatarg state)
   GetMyClass(data)->m_auto=!(!(int)state);
 }
 
-void pix_filmDarwin :: colorspaceCallback(void *data, t_floatarg state)
+void pix_filmDarwin :: ramCallback(void *data)
 {
-  GetMyClass(data)->m_colorspace=(int)state;
+  GetMyClass(data)->LoadRam();
 }
-#endif // MACOSX
+#endif // __APPLE__
