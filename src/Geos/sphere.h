@@ -49,6 +49,15 @@ class GEM_EXTERN sphere : public GemGluObj
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
+
+        virtual void  	createSphere(GemState *state);
+
+        float		*m_x;
+        float		*m_y;
+        float		*m_z;
+        int 		oldStacks, oldSlices;
+        GLenum		oldDrawType;
+        
 };
 
 #endif	// for header file
