@@ -76,7 +76,6 @@ dnl this might not be very portable, but at least it works for now
          fi
      else
 	:
-dnl	LIBS="-l$1 $LIBS" 
      fi
 )
 
@@ -104,7 +103,10 @@ dnl     tmp_path=`find $dirs -name "$1" | sed 1q`
 	 dummy=`echo  $INCLUDES | grep -w -- "-I$found_path"`
 	 if test -z "$dummy"
 	 then
-	   INCLUDES="-I$found_path $INCLUDES"
+	   if test "$found_path" != "/usr/include/"
+	   then
+	     INCLUDES="-I$found_path $INCLUDES"
+	   fi
 	 fi
 	 dummy="found"
 	 break
