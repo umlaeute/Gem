@@ -55,6 +55,7 @@ class GEM_EXTERN filmFFMPEG : public film {
   // Destructor
   virtual ~filmFFMPEG();
 
+#ifdef HAVE_LIBFFMPEG
   //////////
   // open a movie up
   virtual bool open(char *filename, int format=0);
@@ -71,21 +72,14 @@ class GEM_EXTERN filmFFMPEG : public film {
   virtual int changeImage(int imgNum, int trackNum=-1);
 
  protected:
-  bool m_readNext;
-#ifdef HAVE_LIBFFMPEG
    AVFormatContext* m_Format;
-#if LIBAVCODEC_VERSION_INT == 0x000406
-   /* jmz: i don't know which version of ffmpeg Günter uses.
-    * i don't know either, whether it is more recent or older than mine
-    * at least with 0.4.6 avcodec_decode_video wants AVFrame instead of AVPicture
-    */
    AVFrame   m_avFrame;
-#endif // CODEC_VERSION 0.4.6
    AVPicture m_Picture;
    AVPacket  m_Pkt;
    int       m_PacketLen;
-   UINT8*    m_PacketPtr;
+   uint8_t*    m_PacketPtr;
 #endif //FFMPEG
+  bool m_readNext;
 
 };
 

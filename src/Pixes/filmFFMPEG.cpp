@@ -45,16 +45,14 @@ filmFFMPEG :: ~filmFFMPEG()
 {
   close();
 }
-
+#ifdef HAVE_LIBFFMPEG
 void filmFFMPEG :: close(void)
 {
-#ifdef HAVE_LIBFFMPEG
   if (m_Format){
     avcodec_close(&m_Format->streams[m_curTrack]->codec);
     av_close_input_file(m_Format);
     m_Format=0;
   }
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -64,14 +62,11 @@ void filmFFMPEG :: close(void)
 bool filmFFMPEG :: open(char *filename, int format)
 {
   if (format>0)m_wantedFormat=format;
-#ifdef HAVE_LIBFFMPEG
-  int err;
+  int err, i;
   AVCodec* codec;
-  int i;
-  
   err = av_open_input_file(&m_Format,filename,NULL,0,NULL);
   if (err < 0) {
-    error("GEM: pix_film: Unable to open file: %s", filename);
+    error("GEM: pix_film (ffmpeg): Unable to open file: %s %d", filename, err);
     goto unsupported;
   }
 
@@ -82,7 +77,6 @@ bool filmFFMPEG :: open(char *filename, int format)
   }
 
   m_numTracks = m_Format->nb_streams;
-
   for (i=0;i<m_Format->nb_streams;i++) { 
     codec = avcodec_find_decoder(m_Format->streams[i]->codec.codec_id);
     if (!codec) continue;
@@ -127,8 +121,6 @@ bool filmFFMPEG :: open(char *filename, int format)
   m_Pkt.data = NULL;
   post("FFMPEG opened");
   return true;
-#endif
-  goto unsupported;
  unsupported:
   post("FFMPEG: unsupported!");
   close();
@@ -139,16 +131,8 @@ bool filmFFMPEG :: open(char *filename, int format)
 // render
 //
 /////////////////////////////////////////////////////////
-#if LIBAVCODEC_VERSION_INT == 0x000406
-// on my version of ffmpeg (0.4.6)
-static void AV_frame2picture(AVFrame f, AVPicture *p){ // jmz
-  p->data = f.data;
-  p->linesize = f.linesize;
-}
-#endif
 pixBlock* filmFFMPEG :: getFrame(){
-#ifdef HAVE_LIBFFMPEG
-  UINT8* ptr;
+  uint8_t* ptr;
   int len;
   int i;
   int gotit = 0;
@@ -167,13 +151,16 @@ pixBlock* filmFFMPEG :: getFrame(){
 	ptr = m_Pkt.data;
 	len = m_Pkt.size;
       }
-#if LIBAVCODEC_VERSION_INT == 0x000406
+#if LIBAVCODEC_VERSION_INT >= 0x000406
       ret = avcodec_decode_video(&m_Format->streams[m_curTrack]->codec,
 				 &m_avFrame,
 				 &gotit,
 				 ptr,
 				 len);
-      AV_frame2picture(m_avFrame, &m_Picture);
+      for(int i=0;i<4;i++){
+	m_Picture.data[i]=m_avFrame.data[i];
+	m_Picture.linesize[i]=m_avFrame.linesize[i];
+      }
 #else
       ret = avcodec_decode_video(&m_Format->streams[m_curTrack]->codec,
 				 &m_Picture,
@@ -194,13 +181,12 @@ pixBlock* filmFFMPEG :: getFrame(){
 	int dstfmt=0; 
 	m_image.image.format=m_wantedFormat;
 	switch(m_wantedFormat){
-	  //	case GL_LUMINCANE:	  dstfmt = PIX_FMT_???;m_image.image.csize=1;	  break;
-	case GL_YCBCR_422_GEM: dstfmt = PIX_FMT_YUV422;m_image.image.csize=2; break;
-	case GL_BGR:	       dstfmt = PIX_FMT_BGR24;m_image.image.csize=3; break;
-	case GL_BGRA:          dstfmt = PIX_FMT_BGRA32;m_image.image.csize=4; break;
-	case GL_RGB:default:   dstfmt = PIX_FMT_RGB24;m_image.image.csize=3; m_image.image.format=GL_RGB; break;
-	case GL_RGBA:          dstfmt = PIX_FMT_RGBA32;m_image.image.csize=4;m_image.image.format=GL_RGBA;
+	case GL_LUMINANCE:     dstfmt = PIX_FMT_GRAY8;  break;
+	case GL_YCBCR_422_GEM: dstfmt = PIX_FMT_YUV422; break;
+	default:
+	case GL_RGBA:          dstfmt = PIX_FMT_RGBA32; break;
 	}
+	m_image.image.setCsizeByFormat(m_wantedFormat);
 	m_image.image.reallocate();
 	int width = m_Format->streams[m_curTrack]->codec.width;
 	int height = m_Format->streams[m_curTrack]->codec.height;
@@ -218,7 +204,6 @@ pixBlock* filmFFMPEG :: getFrame(){
     m_readNext = false;
     return &m_image;
   }
-#endif
   return 0;
 }
 
@@ -226,3 +211,4 @@ int filmFFMPEG :: changeImage(int imgNum, int trackNum){
   m_readNext = true;
   return FILM_ERROR_DONTKNOW;
 }
+#endif
