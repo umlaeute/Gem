@@ -16,8 +16,9 @@ Linux version by Miller Puckette. msp@ucsd.edu
 
 #ifndef INCLUDE_PIX_VIDEO_H_
 #define INCLUDE_PIX_VIDEO_H_
+#include "Base/config.h"
 
-#if defined __NEW__  || defined HAVE_DIRECTSHOW
+#if defined __VIDEO__NEW  || defined HAVE_DIRECTSHOW
 # ifndef DO_AUTO_REGISTER_CLASS
 #  define NO_AUTO_REGISTER_CLASS
 # endif
@@ -101,10 +102,19 @@ class GEM_EXTERN pix_video : public GemBase
   virtual int	stopTransfer();
     
   ////////// 
-  // Stop the video device
-  // [out] int - returns 0 if bad
+  // swap the image (upside down ?)
   virtual void	swapMess(int state);
-    
+
+  ////////// 
+  // enumerate the devices
+  virtual void	enumerateMess();
+  ////////// 
+  // colorspace-message
+  virtual void	csMess(int format);
+  ////////// 
+  // property-dialog
+  virtual void	dialogMess(int,t_atom*);
+
   //-----------------------------------
   // GROUP:	Video data
   //-----------------------------------
@@ -134,6 +144,11 @@ class GEM_EXTERN pix_video : public GemBase
   static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
   static void offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
   static void swapMessCallback(void *data, t_floatarg state);
+
+  /* dummy callbacks; won't do anything, but are here for future compatibility */
+  static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void enumerateMessCallback(void *data);
+  static void csMessCallback(void *data, t_symbol*colorspace);
 };
 
 #endif	// for header file

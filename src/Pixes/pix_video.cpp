@@ -40,6 +40,11 @@
 
 */
 
+#if defined NT && defined __APPLE__ && defined __linux__
+// on this OSs we surely have child-classes for the real function
+# define NO_AUTO_REGISTER_CLASS
+#endif
+
 #include "pix_video.h"
 #include "Base/GemCache.h"
 
@@ -158,6 +163,33 @@ void pix_video :: swapMess(int state)
 {
   error("swap not supported on this OS");
 }
+/////////////////////////////////////////////////////////
+// colorspaceMess
+//
+/////////////////////////////////////////////////////////
+void pix_video :: csMess(int format)
+{
+  error("colorspace not supported on this OS");
+}
+/////////////////////////////////////////////////////////
+// enumerate devices
+//
+/////////////////////////////////////////////////////////
+void pix_video :: enumerateMess()
+{
+  error("enumerate not supported on this OS");
+}
+/////////////////////////////////////////////////////////
+// dialog
+//
+/////////////////////////////////////////////////////////
+void pix_video :: dialogMess(int argc, t_atom*argv)
+{
+  error("dialog not supported on this OS");
+}
+
+
+
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -171,6 +203,12 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_video::swapMessCallback,
     	    gensym("swap"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::enumerateMessCallback,
+    	    gensym("enumerate"), A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::csMessCallback,
+    	    gensym("colorspace"), A_DEFSYMBOL, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::dialogMessCallback,
+    	    gensym("dialog"), A_GIMME, A_NULL);
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -189,4 +227,15 @@ void pix_video :: swapMessCallback(void *data, t_floatarg state)
 {
     GetMyClass(data)->swapMess((int)state);
 }
-
+void pix_video :: csMessCallback(void *data, t_symbol*s)
+{
+  GetMyClass(data)->csMess(getPixFormat(s->s_name));
+}
+void pix_video :: enumerateMessCallback(void *data)
+{
+  GetMyClass(data)->enumerateMess();
+}
+void pix_video :: dialogMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
+  GetMyClass(data)->dialogMess(argc, argv);
+}
