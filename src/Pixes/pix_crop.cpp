@@ -59,9 +59,14 @@ void pix_crop :: processImage(imageStruct &image)
     m_data = new unsigned char [m_size];
   }
 
-  int offX=((offsetX%x)+x)%x;
-  int offY=((offsetY%y)+y)%y;
-
+  //  int offX=((offsetX%x)+x)%x;
+  //  int offY=((offsetY%y)+y)%y;
+  int offX=offsetX;
+  int offY=offsetY;
+  if (offX>(image.xsize-x)) offX=image.xsize-x;
+  if (offX<0)offX=0;
+  if (offY>(image.ysize-y)) offY=image.ysize-y;
+  if (offY<0)offY=0;
 
   int i=0;
   while(i<y){
