@@ -133,7 +133,6 @@ void text2d :: render(GemState *)
     m_font->Render(m_theString);
     glPopMatrix();
   }
-  post("done");
 }
 
 #elif defined GLTT
