@@ -19,7 +19,11 @@
 #include "Base/GemState.h"
 #include <string.h>
 #include "math.h"
+#ifdef MACOSX
 #include <Carbon/Carbon.h>
+#else
+#include <stdlib.h>
+#endif
 
 typedef struct {
             GLfloat	X;
