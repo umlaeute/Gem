@@ -55,6 +55,75 @@ void pix_invert :: processRGBAImage(imageStruct &image)
   }
 }
 
+#ifdef __MMX__
+void pix_invert :: processRGBAMMX(imageStruct &image)
+{
+  int i = image.xsize * image.ysize/2;
+  vector64i offset;
+  vector64i *input = (vector64i*)image.data;
+
+  offset.c[0]=255;
+  offset.c[1]=255;
+  offset.c[2]=255;
+  offset.c[3]=0;
+  offset.c[4]=255;
+  offset.c[5]=255;
+  offset.c[6]=255;
+  offset.c[7]=0;
+
+  while (i--) {
+    //*((unsigned long *)base) = ~*((unsigned long *)base);
+    input[0].v= _mm_xor_si64(input[0].v, offset.v);
+    input++;
+  }
+  _mm_empty();
+}
+void pix_invert :: processGrayMMX(imageStruct &image)
+{
+  int i = image.xsize * image.ysize/4;
+  vector64i offset;
+  vector64i *input = (vector64i*)image.data;
+
+  offset.c[0]=255;
+  offset.c[1]=255;
+  offset.c[2]=255;
+  offset.c[3]=255;
+  offset.c[4]=255;
+  offset.c[5]=255;
+  offset.c[6]=255;
+  offset.c[7]=255;
+
+  while (i--) {
+    //*((unsigned long *)base) = ~*((unsigned long *)base);
+    input[0].v= _mm_xor_si64(input[0].v, offset.v);
+    input++;
+  }
+  _mm_empty();
+}
+void pix_invert :: processYUVMMX(imageStruct &image)
+{
+  int i = image.xsize * image.ysize/8;
+  vector64i offset;
+  vector64i *input = (vector64i*)image.data;
+
+  offset.c[0]=255;
+  offset.c[1]=255;
+  offset.c[2]=255;
+  offset.c[3]=255;
+  offset.c[4]=255;
+  offset.c[5]=255;
+  offset.c[6]=255;
+  offset.c[7]=255;
+
+  while (i--) {
+    //*((unsigned long *)base) = ~*((unsigned long *)base);
+    input[0].v= _mm_xor_si64(input[0].v, offset.v);
+    input++;
+  }
+  _mm_empty();
+}
+#endif
+
 /////////////////////////////////////////////////////////
 // processGrayImage
 //
@@ -105,9 +174,9 @@ void pix_invert :: processYUVImage(imageStruct &image)
 // processYUVAltivec  -- good stuff apply liberally
 //
 /////////////////////////////////////////////////////////
+#ifdef __VEC__
 void pix_invert :: processYUVAltivec(imageStruct &image)
 {
-#ifdef __VEC__
 int h,w,width;
 //post("pix_invert: Altivec");
    width = image.xsize/8;
@@ -135,20 +204,19 @@ int h,w,width;
         #endif
         inData[0]=vec_subs(offset,inData[0]);
         inData++;
-        
+
          }
          #ifndef PPC970
         vec_dss( 0 );
         #endif
     }  /*end of working altivec function */
-    
-#endif // ALTIVEC
 }
+#endif // ALTIVEC
 
 
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
-void pix_invert :: obj_setupCallback(t_class *)
-{ }
+void pix_invert :: obj_setupCallback(t_class *classPtr)
+{}
