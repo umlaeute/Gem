@@ -52,85 +52,118 @@ pix_roll :: ~pix_roll()
 /////////////////////////////////////////////////////////
 void pix_roll :: processRGBAImage(imageStruct &image)
 {
+  int h,w;
+  long rollstart;
 
-    int h,w,length;
-    long src,dst;
-    long rollstart,pixsize;
+  unsigned char *srcdata;
+  unsigned char *dstdata;
 
-    
-if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
-
-    m_blurH = image.ysize;
-    m_blurW = image.xsize;
-    m_blurBpp = image.csize;
+  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+    m_blurH    = image.ysize;
+    m_blurW    = image.xsize;
+    m_blurBpp  = image.csize;
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
     if(saved)delete saved;
     saved = new unsigned char [m_blurSize];
-}    
-pixsize = image.ysize * image.xsize * image.csize;
-if (!m_axis) {
-//start at the breakpoint
-dst = 0;
-if (m_vroll < 0 ){m_vroll = 0;}
-if (m_vroll > image.ysize ){m_vroll = m_vroll % image.ysize;}
-rollstart = m_vroll * image.xsize * image.csize;
-
-for (src = rollstart; src < pixsize;src++){
-    saved[dst] = image.data[src];
-    dst++;
+  }    
+  if (!m_axis) {
+    m_vroll%=image.ysize;
+    m_vroll+=image.ysize;
+    m_vroll%=image.ysize;
+    long linelength=image.xsize*image.csize;
+    memcpy(saved, image.data+linelength*m_vroll, linelength*(image.ysize-m_vroll));
+    memcpy(saved+linelength*(image.ysize-m_vroll), image.data, linelength*m_vroll);
+  }else{
+    m_vroll%=image.xsize;
+    m_vroll+=image.xsize;
+    m_vroll%=image.xsize;
+    rollstart = m_vroll * image.csize;
+    //moved the rolled part of the data
+    srcdata=image.data+rollstart;
+    dstdata=saved;
+    for (h=0; h<image.ysize; h++){ //fixed...we have to do every row
+      //      for(w=m_vroll; w<image.xsize; w++){//from rollstart to the last column
+      w=((image.xsize-m_vroll)*image.csize)/4;
+      while(w--){
+        *dstdata++=*srcdata++;
+	*dstdata++=*srcdata++;
+        *dstdata++=*srcdata++;
+        *dstdata++=*srcdata++;
+      }
+      srcdata+=rollstart;
+      dstdata+=rollstart;
     }
-//finish the rest
-for(src = 0;src<rollstart-1;src++){
-    saved[dst] = image.data[src];
-    dst++;
+    //finish up
+    srcdata=image.data;
+    dstdata=saved+(image.xsize-m_vroll)*image.csize;
+    for (h=0; h<image.ysize; h++){ //fixed...we have to do every row
+      //      for(w=image.xsize-m_vroll; w<image.xsize; w++){//from rollstart to the last column
+      w=(m_vroll*image.csize)/4;
+      while(w--){
+        *dstdata++=*srcdata++;
+	*dstdata++=*srcdata++;
+        *dstdata++=*srcdata++;
+        *dstdata++=*srcdata++;
+      }
+      srcdata+=(image.xsize*image.csize-rollstart);
+      dstdata+=(image.xsize*image.csize-rollstart);
     }
-}else{
-
-if (m_vroll < 0 ){m_vroll = 0;}
-if (m_vroll % 2 ){m_vroll += 1;}//check for odd in YUV
-if (m_vroll > image.xsize ){m_vroll = m_vroll % image.xsize;}
-rollstart = m_vroll * image.csize;
-dst = 0;
-src=rollstart;
-length = (image.xsize-m_vroll)*4;
-//moved the rolled part of the data
-src = rollstart;//offset source to start of roll
-dst = 0; 
-
-   for (h=0; h<image.ysize; h++){ //fixed...we have to do every row
-   
-    for(w=m_vroll; w<image.xsize; w++){//from rollstart to the last column
-        
-        saved[dst+1] = image.data[src+1];
-        saved[dst+2] = image.data[src+2];
-        saved[dst+3] = image.data[src+3];
-        src+=4;dst+=4;
-    }
-    src+= rollstart;
-    dst+= rollstart;
-    }
-//finish up
-src=0;
-dst=(image.xsize-m_vroll)*4;
-for (h=0; h<image.ysize; h++){ //fixed...we have to do every row
-   
-    for(w=image.xsize-m_vroll; w<image.xsize; w++){//from rollstart to the last column
-        
-        saved[dst+chRed] = image.data[src+chRed];
-        saved[dst+chGreen] = image.data[src+chGreen];
-        saved[dst+chBlue] = image.data[src+chBlue];
-       
-        src+=4;dst+=4;
-    }
-    src+= image.xsize*4-rollstart;
-    dst+= image.xsize*4-rollstart;
-    }
+  }
+  //  memcpy(image.data,saved,pixsize);     
+  image.data=saved;
 }
-memcpy(image.data,saved,pixsize);     
+void pix_roll :: processImage(imageStruct &image)
+{
+  int h,w;
+  long rollstart;
 
+  unsigned char *srcdata;
+  unsigned char *dstdata;
+
+  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+    m_blurH    = image.ysize;
+    m_blurW    = image.xsize;
+    m_blurBpp  = image.csize;
+    m_blurSize = m_blurH * m_blurW * m_blurBpp;
+    if(saved)delete saved;
+    saved = new unsigned char [m_blurSize];
+  }    
+  if (!m_axis) {
+    m_vroll%=image.ysize;
+    m_vroll+=image.ysize;
+    m_vroll%=image.ysize;
+    long linelength=image.xsize*image.csize;
+    memcpy(saved, image.data+linelength*m_vroll, linelength*(image.ysize-m_vroll));
+    memcpy(saved+linelength*(image.ysize-m_vroll), image.data, linelength*m_vroll);
+  }else{
+    m_vroll%=image.xsize;
+    m_vroll+=image.xsize;
+    m_vroll%=image.xsize;
+    rollstart = m_vroll * image.csize;
+    //moved the rolled part of the data
+    srcdata=image.data+rollstart;
+    dstdata=saved;
+    for (h=0; h<image.ysize; h++){ //fixed...we have to do every row
+      //      for(w=m_vroll; w<image.xsize; w++){//from rollstart to the last column
+      w=((image.xsize-m_vroll)*image.csize);
+      while(w--)*dstdata++=*srcdata++;
+      srcdata+=rollstart;
+      dstdata+=rollstart;
+    }
+    //finish up
+    srcdata=image.data;
+    dstdata=saved+(image.xsize-m_vroll)*image.csize;
+    for (h=0; h<image.ysize; h++){ //fixed...we have to do every row
+      //      for(w=image.xsize-m_vroll; w<image.xsize; w++){//from rollstart to the last column
+      w=(m_vroll*image.csize);
+      while(w--)*dstdata++=*srcdata++;
+      srcdata+=(image.xsize*image.csize-rollstart);
+      dstdata+=(image.xsize*image.csize-rollstart);
+    }
+  }
+  //  memcpy(image.data,saved,pixsize);     
+  image.data=saved;
 }
-
-
 /////////////////////////////////////////////////////////
 // do the YUV processing here
 //
@@ -142,7 +175,6 @@ void pix_roll :: processYUVImage(imageStruct &image)
     long src,dst;
     long rollstart,pixsize;
 
-    
 if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
 
     m_blurH = image.ysize;
@@ -156,8 +188,9 @@ pixsize = image.ysize * image.xsize * image.csize;
 if (!m_axis) {
 //start at the breakpoint
 dst = 0;
-if (m_vroll < 0 ){m_vroll = 0;}
-if (m_vroll > image.ysize ){m_vroll = m_vroll % image.ysize;}
+ m_vroll%=image.ysize;
+ m_vroll+=image.ysize;
+ m_vroll%=image.ysize;
 rollstart = m_vroll * image.xsize * image.csize;
 
 for (src = rollstart; src < pixsize;src++){
@@ -170,10 +203,11 @@ for(src = 0;src<rollstart-1;src++){
     dst++;
     }
 }else{
+  if (m_vroll % 2 ){m_vroll += 1;}//check for odd in YUV
+ m_vroll%=image.ysize;
+ m_vroll+=image.ysize;
+ m_vroll%=image.ysize;
 
-if (m_vroll < 0 ){m_vroll = 0;}
-if (m_vroll % 2 ){m_vroll += 1;}//check for odd in YUV
-if (m_vroll > image.xsize ){m_vroll = m_vroll % image.xsize;}
 rollstart = m_vroll * image.csize;
 dst = 0;
 src=rollstart;

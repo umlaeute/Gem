@@ -31,44 +31,41 @@ DESCRIPTION
 
 class GEM_EXTERN pix_roll : public GemPixObj
 {
-CPPEXTERN_HEADER(pix_roll, GemPixObj)
+  CPPEXTERN_HEADER(pix_roll, GemPixObj)
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_roll();
+  //////////
+  // Constructor
+  pix_roll();
     	
-    protected:
+ protected:
     	
-    	//////////
-    	// Destructor
-    	virtual ~pix_roll();
+  //////////
+  // Destructor
+  virtual ~pix_roll();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-    	
-        //////////
-    	// Do the YUV processing
-    	virtual void 	processYUVImage(imageStruct &image);
-    //    virtual void 	processYUVAltivec(imageStruct &image);
-        
-        unsigned char  *saved;
-        int		m_vroll,m_axis;
-        int		m_blurH,m_blurW,m_blurSize,m_blurBpp;
-        t_inlet         *inletBlur;
+  //////////
+  // Do the processing
+  virtual void 	processImage(imageStruct &image);
+  virtual void 	processRGBAImage(imageStruct &image);
 
+  //////////
+  // Do the YUV processing
+  virtual void 	processYUVImage(imageStruct &image);
         
-    private:
+  unsigned char  *saved;
+  int		m_vroll,m_axis;
+  int		m_blurH,m_blurW,m_blurSize,m_blurBpp;
+  t_inlet         *inletBlur;
+        
+ private:
     
-    	//////////
-    	// Static member functions
+  //////////
+  // Static member functions
     	
-        static void rollCallback       (void *data, t_floatarg value);
-        static void axisCallback       (void *data, t_floatarg value);
-
-
+  static void rollCallback       (void *data, t_floatarg value);
+  static void axisCallback       (void *data, t_floatarg value);
 };
 
 #endif
