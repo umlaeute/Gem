@@ -52,52 +52,17 @@
 extern bool HaveValidContext (void);
 #endif // __APPLE__
 
-static WindowInfo gfxInfo;
-static WindowInfo constInfo;
-
 // static member data
-char* GemMan::m_title = "GEM";
-int GemMan::m_xoffset = 0;
-int GemMan::m_yoffset = 0;
-int GemMan::m_fullscreen = 0;
-int GemMan::m_secondscreen = 0;
-int GemMan::m_height = 500;
-int GemMan::m_width = 500;
-int GemMan::m_h = 500;
-int GemMan::m_w = 500;
-int GemMan::m_border = 1;
-int GemMan::m_stereo = 0;
-int GemMan::m_buffer = 2;
 int GemMan::m_profile = 0;
 int GemMan::m_rendering = 0;
-GLfloat GemMan::m_clear_color[4];
-GLbitfield GemMan::m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-GLfloat GemMan::m_mat_ambient[4];
-GLfloat GemMan::m_mat_specular[4];
-GLfloat GemMan::m_mat_shininess;
-GLfloat GemMan::m_stereoSep = -15.f;
-GLfloat GemMan::m_stereoFocal = 0.f;
-bool GemMan::m_stereoLine = true;
-int GemMan::m_windowState = 0;
 int GemMan::m_windowNumber = 0;
 int GemMan::m_windowContext = 0;
-int GemMan::m_cursor = 1;
-int GemMan::m_topmost = 0;
-float GemMan::m_perspect[6];
 double GemMan::m_lastRenderTime = 0.;
-float GemMan::m_lookat[9];
-GemMan::FOG_TYPE GemMan::m_fogMode = GemMan::FOG_OFF;
-float GemMan::m_fog;
-GLfloat GemMan::m_fogColor[4];
-float GemMan::m_fogStart;
-float GemMan::m_fogEnd;
-float GemMan::m_motionBlur=0.f;
 int GemMan::texture_rectangle_supported = 0;	//tigital
 int GemMan::client_storage_supported = 0;
 int GemMan::texture_range_supported = 0;
 int GemMan::texture_yuv_supported = 0;
 float GemMan::fps;
-int GemMan::fsaa = 0;
 
 // static data
 static const int NUM_LIGHTS = 8;   	// the maximum number of lights
@@ -145,109 +110,8 @@ static int s_windowDelTime = 10;
 #ifdef _WINDOWS
 static int s_windowRun = 0;
 static int s_singleContext = 0;
+#endif
 
-/////////////////////////////////////////////////////////
-// dispatchGemWindowMessages
-//
-/////////////////////////////////////////////////////////
-static void dispatchGemWindowMessages()
-{
-  if (!s_windowRun)
-    return;
-
-  MSG msg;
-  while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE)
-    {
-      TranslateMessage(&msg);
-      DispatchMessage(&msg);
-    }
-  clock_delay(s_windowClock, s_windowDelTime);
-}
-#elif unix 
-static void dispatchGemWindowMessages()
-{
-  WindowInfo win; 
-  XEvent event; 
-  XButtonEvent* eb = (XButtonEvent*)&event; 
-  XKeyEvent* kb  = (XKeyEvent*)&event; 
-  XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
-  win = GemMan::getWindowInfo(); 
-
-  while (XCheckWindowEvent(win.dpy,win.win,
-			   ResizeRedirectMask | 
-			   KeyPressMask | KeyReleaseMask |
-			   PointerMotionMask | 
-			   ButtonMotionMask |
-			   ButtonPressMask | 
-			   ButtonReleaseMask,
-			   &event))
-    {
-      switch (event.type)
-	{
-	case ButtonPress: 
-	  triggerButtonEvent(eb->button-1, 1, eb->x, eb->y); 
-	  break; 
-	case ButtonRelease: 
-	  triggerButtonEvent(eb->button-1, 0, eb->x, eb->y); 
-	  break; 
-	case MotionNotify: 
-	  triggerMotionEvent(eb->x, eb->y); 
-	  break; 
-	case KeyPress:
-	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
-	  break;
-	case KeyRelease:
-	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
-	  break;
-	case ResizeRequest:
-	  triggerResizeEvent(res->width, res->height);
-	  XResizeWindow(win.dpy, win.win, res->width, res->height);
-	  break;
-	default:
-	  break; 
-	}
-    }
-  clock_delay(s_windowClock, s_windowDelTime);  
-} 
-#elif __APPLE__
-static pascal OSStatus dispatchGemWindowMessages()
-{
-    EventRef	theEvent;
-    EventTargetRef theTarget;
-    
-    theTarget = GetEventDispatcherTarget();
-    ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true,
-                                &theEvent );
-    {
-        SendEventToEventTarget( theEvent, theTarget);
-        ReleaseEvent( theEvent );
-    }
-    clock_delay(s_windowClock, s_windowDelTime);
-    return noErr;
-}
-#endif // for Unix
-
-static void resizeCallback(int xSize, int ySize, void *)
-{
-  if (ySize==0)ySize=1;
-
-  float xDivy = (float)xSize / (float)ySize;
-  GemMan::m_h = ySize;
-  GemMan::m_w = xSize;
-  GemMan::m_height = ySize;
-  GemMan::m_width = xSize;
-
-  // setup the viewpoint
-  glViewport(0, 0, xSize, ySize);
-  // setup the matrices
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-	    GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-	    GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
-
-  glMatrixMode(GL_MODELVIEW);
-}
 /*
  This is SGI sample code taken directly from OpenGL.org:
  http://www.opengl.org/developers/code/features/OGLextensions/OGLextensions.html
@@ -281,32 +145,8 @@ int OpenGLExtensionIsSupported(const char* extension) {
 
 void GemMan :: createContext(char* disp)
 {
-#ifdef unix
-  Display *dummyDpy;
-  if ( (dummyDpy = XOpenDisplay(disp)) == NULL)
-    { 
-      error("GEM: could not open X display %s",disp);
-      return;
-    }
-    
-  int dummy, dummy2;
-  if ( !glXQueryExtension(dummyDpy, &dummy, &dummy2) )
-    {
-      error("GEM: X server has no OpenGL GLX extension");
-      XCloseDisplay(dummyDpy);
-      return;
-    }
-#elif _WINDOWS
-  // can we only have one context?
-  if (getenv("GEM_SINGLE_CONTEXT") &&
-      !strcmp("1", getenv("GEM_SINGLE_CONTEXT")))
-    {
-      post("GEM: using GEM_SINGLE_CONTEXT");
-      s_singleContext = 1;
-      m_width = 640;
-      m_height = 480;
-    }
-#elif __APPLE__
+
+#ifdef __APPLE__
     // Check QuickTime installed
     long	QDfeature;
     if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
@@ -324,16 +164,7 @@ void GemMan :: createContext(char* disp)
             return;
     }
 #endif
-  s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
-
-  if (!createConstWindow(disp))
-    {
-      error("GEM: A serious error occured creating const Context");
-      error("GEM: Continue at your own risk!");
-      m_windowContext = 0;
-    } else 
-      m_windowContext = 1;
-  setResizeCallback(resizeCallback, NULL);
+    //  s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
 }
 
 
@@ -356,20 +187,6 @@ void GemMan :: initGem()
   for (int i = 0; i < NUM_LIGHTS; i++)
     s_lights[i] = 0;
     
-  m_clear_color[0] = 0.0;
-  m_clear_color[1] = 0.0;
-  m_clear_color[2] = 0.0;
-  m_clear_color[3] = 0.0;
-  m_mat_ambient[0] = 0.0f;
-  m_mat_ambient[1] = 0.0f;
-  m_mat_ambient[2] = 0.0f;
-  m_mat_ambient[3] = 1.0f;
-  m_mat_specular[0] = 1.0;
-  m_mat_specular[1] = 1.0;
-  m_mat_specular[2] = 1.0;
-  m_mat_specular[3] = 1.0;
-  m_mat_shininess = 100.0;
-
   s_clock = clock_new(NULL, (t_method)&GemMan::render);
 
   post("GEM: Graphics Environment for Multimedia");
@@ -384,38 +201,6 @@ void GemMan :: initGem()
   post("GEM: \t\tDaniel Heckenberg (windows)");
   post("GEM: \t\tJames Tittle (macOS-X)");
   post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
-
-  //#ifdef __APPLE__
-  //	post("GEM: Mac OS X port by James Tittle & Chris Clepper");
-  //#endif
-
-  // setup the perspective values
-  m_perspect[0] = -1.f;	// left
-  m_perspect[1] =  1.f;	// right
-  m_perspect[2] = -1.f;	// bottom
-  m_perspect[3] =  1.f;	// top
-  m_perspect[4] =  1.f;	// front
-  m_perspect[5] = 20.f;	// back
-
-  // setup the lookat values
-  m_lookat[0] = 0.f;	// eye:		x
-  m_lookat[1] = 0.f;	//		y
-  m_lookat[2] = 4.f;	//		z
-  m_lookat[3] = 0.f;	// center :	x
-  m_lookat[4] = 0.f;	//		y
-  m_lookat[5] = 0.f;	//		z
-  m_lookat[6] = 0.f;	// up::		x
-  m_lookat[7] = 1.f;	//		y
-  m_lookat[8] = 0.f;	//		z
-
-  // setup the fog
-  m_fogMode	= FOG_OFF;
-  m_fogStart	= 1.f;
-  m_fogEnd	= 20.f;
-  m_fog		= 0.5f;
-  m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
-
-  m_motionBlur = 0.f;
 }
 
 /////////////////////////////////////////////////////////
@@ -493,72 +278,13 @@ void GemMan :: removeObj(gemhead *obj, int priority=50)
   delete [] removePtr;
 }
 
-/////////////////////////////////////////////////////////
-// resetValues
-//
-/////////////////////////////////////////////////////////
-void GemMan :: resetValues()
-{
-  if (s_lightState)
-    {
-      glEnable(GL_LIGHTING);
-      glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-      glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-      glEnable(GL_COLOR_MATERIAL);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, GemMan::m_mat_ambient);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, GemMan::m_mat_specular);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &GemMan::m_mat_shininess);
-      glEnable(GL_AUTO_NORMAL);
-      glEnable(GL_NORMALIZE);
-      glShadeModel(GL_SMOOTH);
-    }
-  else
-    {
-      glDisable(GL_LIGHTING);
-      glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
-      glDisable(GL_COLOR_MATERIAL);
-      glDisable(GL_AUTO_NORMAL);
-      glDisable(GL_NORMALIZE);
-      glShadeModel(GL_FLAT);
-    }
-
-  // setup the transformation matrices
-  float xDivy = (float)m_w / (float)m_h;
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
-	    m_perspect[2], m_perspect[3],				// bottom, top
-	    m_perspect[4], m_perspect[5]);				// front, back
-    
-  glMatrixMode(GL_MODELVIEW);
-  gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-	    m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
-
-  if (m_fogMode == FOG_OFF) {
-    glDisable(GL_FOG);
-  } else {
-    glEnable(GL_FOG);
-    switch (m_fogMode)  {
-    case (FOG_LINEAR):
-      glFogf(GL_FOG_MODE, GL_LINEAR);
-      break;
-    case (FOG_EXP):
-      glFogf(GL_FOG_MODE, GL_EXP);
-      break;
-    case (FOG_EXP2):
-      glFogf(GL_FOG_MODE, GL_EXP2);
-      break;
-    case (FOG_OFF):
-        glDisable(GL_FOG);
-        break;
-    }
-    glFogf(GL_FOG_DENSITY, GemMan::m_fog);
-    glFogf(GL_FOG_START, GemMan::m_fogStart);
-    glFogf(GL_FOG_END, GemMan::m_fogEnd);
-    glFogfv(GL_FOG_COLOR, GemMan::m_fogColor);
-  }
+void GemMan :: render1(GemState currentState){
+  renderChain(s_linkHead, &currentState);
 }
+void GemMan :: render2(GemState currentState){
+  renderChain(s_linkHead_2, &currentState);
+}
+
 
 /////////////////////////////////////////////////////////
 // fillGemState
@@ -570,87 +296,6 @@ void GemMan :: fillGemState(GemState &state)
     state.lighting = 1;
     state.smooth = 1;
   }
-}
-
-/////////////////////////////////////////////////////////
-// resetState
-//
-/////////////////////////////////////////////////////////
-void GemMan :: resetState()
-{
-#ifdef DEBUG
-  post("MAN::resetState entered");
-#endif
-  m_clear_color[0] = 0.0;
-  m_clear_color[1] = 0.0;
-  m_clear_color[2] = 0.0;
-  m_clear_color[3] = 0.0;
-#ifdef __APPLE__
-  if (HaveValidContext ())
-#endif
-    glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
-
-  m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-  m_mat_ambient[0] = 0.1f;
-  m_mat_ambient[1] = 0.1f;
-  m_mat_ambient[2] = 0.1f;
-  m_mat_ambient[3] = 1.0f;
-  m_mat_specular[0] = 1.0;
-  m_mat_specular[1] = 1.0;
-  m_mat_specular[2] = 1.0;
-  m_mat_specular[3] = 1.0;
-  m_mat_shininess = 100.0;
-
-  s_lightState = 0;
-
-  // window hints
-  m_height = 500;
-  m_width = 500;
-  m_w=m_width;
-  m_h=m_height;
-  m_xoffset = 0;
-  m_yoffset = 0;
-  m_fullscreen = 0;
-  m_title = "GEM";
-
-  m_buffer = 2;
-
-  m_stereo=0;
-  m_stereoSep = -15.f;
-  m_stereoFocal = 0.f;
-  m_stereoLine = true; 
-
-  // setup the perspective values
-  m_perspect[0] = -1.f;	// left
-  m_perspect[1] =  1.f;	// right
-  m_perspect[2] = -1.f;	// bottom
-  m_perspect[3] =  1.f;	// top
-  m_perspect[4] =  1.f;	// front
-  m_perspect[5] = 20.f;	// back
-
-  // setup the lookat values
-  m_lookat[0] = 0.f;	// eye:	x
-  m_lookat[1] = 0.f;	//		y
-  m_lookat[2] = 4.f;	//		z
-  m_lookat[3] = 0.f;	// center :	x
-  m_lookat[4] = 0.f;	//		y
-  m_lookat[5] = 0.f;	//		z
-  m_lookat[6] = 0.f;	// up::	        x
-  m_lookat[7] = 1.f;	//		y
-  m_lookat[8] = 0.f;	//		z
-
-  // setup the fog
-  m_fogMode	= FOG_OFF;
-  m_fogStart	= 1.f;
-  m_fogEnd	= 20.f;
-  m_fog		= 0.5f;
-  m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
-
-  // turn on the cursor
-  m_cursor = 1;
-  fps = 0;
-  m_topmost = 0;
-
 }
 
 /////////////////////////////////////////////////////////
@@ -666,13 +311,11 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
 
 void GemMan :: render(void *)
 {
+  post("renderChain: %x", &renderChain);
 #ifdef _WINDOWS
   static int firstTime = 1;
   static float countFreq = 0;
 #endif
-
-  if (!m_windowState)
-    return;
 
   // are we profiling?
 #ifdef _WINDOWS
@@ -702,201 +345,17 @@ void GemMan :: render(void *)
 #endif
     
   s_hit = 0;
-  resetValues();
 
   GemState currentState;
 
   // fill in the elapsed time
+  /*
   if (m_buffer == 1)
     currentState.tickTime = 50.f;
   else
+  */
     currentState.tickTime = (float)(clock_gettimesince(m_lastRenderTime));
   m_lastRenderTime = clock_getsystime();
-
-  // if stereoscopic rendering
-  switch (m_stereo) {
-  case 1: // 2-screen stereo
-    {
-      int xSize = m_w / 2;
-      int ySize = m_h;
-      float xDivy = (float)xSize / (float)ySize;
-
-      // setup the left viewpoint
-      glViewport(0, 0, xSize, ySize);
-      // setup the matrices
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-		GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-		GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
-
-      // render left view
-      fillGemState(currentState);
-      currentState.stereo = 1;
-
-      renderChain(s_linkHead, &currentState);
-
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
-
-      // setup the right viewpoint
-      glViewport(xSize, 0, xSize, ySize);
-      // setup the matrices
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-		GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-		GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
-
-      // render right view
-      fillGemState(currentState);
-      currentState.stereo = 2;
-      renderChain(s_linkHead, &currentState);
-
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
-
-
-      if (GemMan::m_stereoLine){
-	// draw a line between the views
-	glDisable(GL_LIGHTING);
-
-	glViewport(0, 0, m_w, m_h);
-	xDivy = (float)m_w / (float)ySize;
-	// setup the matrices
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glFrustum(-1, 1, -1, 1, 1, 20);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
-
-	glLineWidth(2.f);
-	glColor3f(1.f, 1.f, 1.f);
-	glBegin(GL_LINES);
-	glVertex2f(0.f, -6.f);
-	glVertex2f(0.f, 6.f);
-	glEnd();
-	glLineWidth(1.0f);
-      }
-    }
-    break;
-  case 2: // color-stereo
-    {
-      int xSize = m_w;
-      int ySize = m_h;
-      float xDivy = (float)xSize / (float)ySize;
-
-      int left_color=0;  // RED
-      int right_color=1; // GREEN
-
-      glClear(GL_COLOR_BUFFER_BIT & m_clear_mask);
-      glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
-
-      // setup the left viewpoint
-      switch (left_color){
-      case 1:
-	glColorMask(GL_FALSE,GL_TRUE,GL_FALSE,GL_TRUE);
-	break;
-      case 2:
-	glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
-	break;
-      case 0:
-      default:
-	glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
-      }
-
-      // setup the matrices
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-		GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-		GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
-
-      // render left view
-      fillGemState(currentState);
-      currentState.stereo = 1;
-      renderChain(s_linkHead, &currentState);
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
-
-      // setup the right viewpoint
-  glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
-      switch (right_color){
-      case 0:
-	glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
-	break;
-      case 1:
-      default:
-	glColorMask(GL_FALSE,GL_TRUE,GL_FALSE, GL_TRUE);
-	break;
-      case 2:
-	glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
-      }
-
-      // setup the matrices
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-		GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-		GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
-
-      // render right view
-      fillGemState(currentState);
-      currentState.stereo = 2;
-      renderChain(s_linkHead, &currentState);
-
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
-    
-      glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-    }
-    break;
-  default: // normal rendering
-    {
-      fillGemState(currentState);
-      renderChain(s_linkHead, &currentState);
-
-      // setup the matrices
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-      gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
-    }
-  }
-
-  // only want to swap if we are in double buffer mode
-  if (GemMan::m_buffer == 2)
-    swapBuffers();
-
   // are we profiling?
   if (m_profile == 1 || m_profile == 2)
 #ifdef _WINDOWS
@@ -942,12 +401,6 @@ void GemMan :: render(void *)
 /////////////////////////////////////////////////////////
 void GemMan :: startRendering()
 {
-  if (!m_windowState)
-    {
-      error("GEM: Create window first!");
-      return;
-    }
-    
   if (m_rendering)
     return;
     
@@ -969,8 +422,7 @@ void GemMan :: startRendering()
   m_rendering = 1;
     
   // if only single buffering then just return
-  if (GemMan::m_buffer == 1)
-    return;
+  //  if (GemMan::m_buffer == 1)    return;
 
   m_lastRenderTime = clock_getsystime();
   render(NULL);
@@ -999,87 +451,17 @@ void GemMan :: stopRendering()
   post("GEM: Stop rendering");
 }
 
-/////////////////////////////////////////////////////////
-// windowInit
-//
-/////////////////////////////////////////////////////////
-void GemMan :: windowInit()
-{
-  glDisable(GL_ALPHA_TEST);
-  glDisable(GL_BLEND);
-
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-  glClearDepth(1.0);    
-  glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
- 
-  #ifdef __APPLE__
-  GLint swapInt = 1;
-  aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
-  #endif
-
-  /* i am not really sure whether it is a good idea to enable FSAA by default
-   * this might slow down everything a lot
+void GemMan :: checkExtensions() {
+  /*
+   *    Check for the presence of a couple of useful OpenGL extensions
+   *    we can use to speed up the movie rendering.
+   *
+   *    GL_EXT_texture_rectangle allows for non-power-of-two sized
+   *    textures.  Texture coordinates for these textures run from
+   *    0..width, 0..height instead of 0..1, 0..1 as for normal
+   *    power-of-two textures.  GL_EXT_texture_rectangle is available
+   *    on the NVidia GeForce2MX and above, or the ATI Radeon and above.
    */
-
-#if defined GL_MULTISAMPLE_ARB && defined GL_MULTISAMPLE_FILTER_HINT_NV
-  glEnable (GL_MULTISAMPLE_ARB);
-  glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
-#endif
-
- 
-  resetValues();
-}
-
-/////////////////////////////////////////////////////////
-// windowCleanup
-//
-/////////////////////////////////////////////////////////
-void GemMan :: windowCleanup()
-{ }
-
-/////////////////////////////////////////////////////////
-// createWindow
-//
-/////////////////////////////////////////////////////////
-int GemMan :: createWindow(char* disp)
-{
-  if ( m_windowState ) return(0);
-#ifdef DEBUG
-  post("GemMan: create window");
-#endif
-
-  WindowHints myHints;
-  myHints.border = m_border;
-  myHints.buffer = m_buffer;
-  myHints.width = m_width;
-  myHints.height = m_height;
-  myHints.fullscreen = m_fullscreen;
-  myHints.secondscreen = m_secondscreen;
-  myHints.x_offset = m_xoffset;
-  myHints.y_offset = m_yoffset;
-  myHints.shared = constInfo.context;
-  myHints.actuallyDisplay = 1;
-  myHints.display = disp;
-  myHints.title = m_title;
-  myHints.fsaa = fsaa;
-  
-  if (disp) post("GEM: creating gem-window on display %s",disp);
-  if (!createGemWindow(gfxInfo, myHints) )
-    {
-      error("GEM: Unable to create window");
-      return(0);
-    }
-    /*
-        Check for the presence of a couple of useful OpenGL extensions
-        we can use to speed up the movie rendering.
-   
-        GL_EXT_texture_rectangle allows for non-power-of-two sized
-        textures.  Texture coordinates for these textures run from
-        0..width, 0..height instead of 0..1, 0..1 as for normal
-        power-of-two textures.  GL_EXT_texture_rectangle is available
-        on the NVidia GeForce2MX and above, or the ATI Radeon and above.
-    */
   
   /* of course, nvidia choose their own extension... (jmz) */
   /* i have ifdef'ed these, because some code in [pix_texture]
@@ -1103,16 +485,15 @@ int GemMan :: createWindow(char* disp)
       texture_rectangle_supported = 0;
 
     /*
-        GL_APPLE_client_storage allows better performance when modifying
-        a texture image extensively:  under normal circumstances, a
-        texture image is passed from the application to the driver and
-        then to the graphics card.  GL_APPLE_client_storage allows you
-        to avoid the application -> driver copy as long as you agree to
-        keep your copy of the texture image around for when the driver
-        needs it.  GL_APPLE_client_storage is supported on all video
-        cards under __APPLE__ 10.1 and above.
-    */
-
+     *  GL_APPLE_client_storage allows better performance when modifying
+     *  a texture image extensively:  under normal circumstances, a
+     *  texture image is passed from the application to the driver and
+     *  then to the graphics card.  GL_APPLE_client_storage allows you
+     *  to avoid the application -> driver copy as long as you agree to
+     *  keep your copy of the texture image around for when the driver
+     *  needs it.  GL_APPLE_client_storage is supported on all video
+     *  cards under __APPLE__ 10.1 and above.
+     */
   client_storage_supported
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
     = OpenGLExtensionIsSupported("GL_APPLE_client_storage");
@@ -1129,185 +510,20 @@ int GemMan :: createWindow(char* disp)
 
 
     /*
-        GL_APPLE_ycbcr_422 allows for direct texturing of YUV-textures
-	we want to check this at runtime, since modern implementations 
-	of Mesa support this feature while nvidia's drivers still don't.
-	checks at pre-processer-stage will eventually lead to no texturing
-	as the header files support YUV while the drivers don't
-    */
-
+     * GL_APPLE_ycbcr_422 allows for direct texturing of YUV-textures
+     * we want to check this at runtime, since modern implementations 
+     * of Mesa support this feature while nvidia's drivers still don't.
+     * checks at pre-processer-stage will eventually lead to no texturing
+     * as the header files support YUV while the drivers don't
+     */
   texture_yuv_supported
 #ifdef GL_YCBCR_422_APPLE
     = OpenGLExtensionIsSupported("GL_APPLE_ycbcr_422");
 #else
   = 0;
 #endif
-
-  m_w=myHints.real_w;
-  m_h=myHints.real_h;
-
-  m_windowState = 1;
-  cursorOnOff(m_cursor);
-  topmostOnOff(m_topmost);
-  m_windowNumber++;
-  windowInit();
-  clock_delay(s_windowClock, s_windowDelTime);
-#ifdef _WINDOWS
-  s_windowRun = 1;
-#endif
-
-  return(1);
 }
 
-/////////////////////////////////////////////////////////
-// destroyWindow
-//
-/////////////////////////////////////////////////////////
-void GemMan :: destroyWindow()
-{
-#ifdef _WINDOWS
-  // don't want to get rid of this
-  if (s_singleContext)
-    return;
-#endif
-
-  if (!m_windowState) return;
-
-  stopRendering();
-  clock_unset(s_windowClock);
-  s_windowClock = NULL;
-
-  glFlush();
-  glFinish();
-
-  destroyGemWindow(gfxInfo);
-
-  m_windowState = 0;
-    
-  windowCleanup();
-
-  // reestablish the const glxContext
-#ifdef unix                 // for Unix
-  //post("dpy=%x\twin=%x\tcontext=%x", constInfo.dpy, constInfo.win, constInfo.context);
-
-  if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
-
-  glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
-#elif _WINDOWS              // for Windows
-
-  if (!constInfo.dc && !constInfo.context)return; // do not crash ??
-
-  wglMakeCurrent(constInfo.dc, constInfo.context);
-  s_windowRun = 0;
-#elif __APPLE__		// for PPC Macintosh
-    ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
-    ::aglSetCurrentContext(constInfo.context);
-#else
-#error Define OS specific OpenGL context make current
-#endif
-}
-
-/////////////////////////////////////////////////////////
-// createConstWindow
-//
-/////////////////////////////////////////////////////////
-int createConstWindow(char* disp)
-{
-#ifdef _WINDOWS
-  // can we only have one context?
-  if (s_singleContext)
-    {
-      return(GemMan::createWindow(disp));		
-    }
-#endif
-
-  WindowHints myHints;
-  myHints.title = GemMan::m_title;
-  myHints.border = 1;
-  myHints.buffer = 1;
-  myHints.x_offset = 0;
-  myHints.y_offset = 0;
-  myHints.width = GemMan::m_width;
-  myHints.height = GemMan::m_height;
-#ifndef __APPLE__
-  myHints.shared = NULL;
-#else
-  myHints.shared = constInfo.context;
-#endif
-  myHints.actuallyDisplay = 0;
-  myHints.fullscreen = 0;
-  myHints.display = disp;
-  myHints.fsaa = GemMan::fsaa;
-
-  if (!createGemWindow(constInfo, myHints) )
-    {
-      error("GEM: Error creating const context");
-      constInfo.have_constContext=0;
-        gfxInfo.have_constContext=0;
-      return(0);
-    } else{
-      constInfo.have_constContext=1;
-        gfxInfo.have_constContext=1;
-    }
-
-  return(1);
-}
-
-/////////////////////////////////////////////////////////
-// destroyConstWindow
-//
-/////////////////////////////////////////////////////////
-void destroyConstWindow()
-{
-#ifdef _WINDOWS
-  if (s_singleContext)
-    {
-    }
-  else
-#endif
-    destroyGemWindow(constInfo);
-}
-
-/////////////////////////////////////////////////////////
-// swapBuffers
-//
-/////////////////////////////////////////////////////////
-void GemMan :: swapBuffers()
-{
-  if (!m_windowState) return;
-  if (GemMan::m_buffer == 2)
-#ifdef unix             // for Unix
-    glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
-#elif _WINDOWS          // for WinNT
-  SwapBuffers(gfxInfo.dc);
-#elif __APPLE__		// for Macintosh
-  ::aglSwapBuffers(gfxInfo.context);
-#else                   // everyone else
-#error Define OS specific swap buffer
-#endif
-  else glFlush();
-
-  glClear(m_clear_mask);
-  glColor3f(1.0, 1.0, 1.0);
-  glLoadIdentity();
-
-  if (GemMan::m_buffer == 1)
-    {
-      glFlush();
-      // setup the transformation matrices
-      float xDivy = (float)m_w / (float)m_h;
-
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
-		m_perspect[2], m_perspect[3],			// bottom, top
-		m_perspect[4], m_perspect[5]);			// front, back
-    
-      glMatrixMode(GL_MODELVIEW);
-      gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
-    }
-}
 
 /////////////////////////////////////////////////////////
 // lightingOnOff
@@ -1317,35 +533,6 @@ void GemMan :: lightingOnOff(int state)
 {
   if (state) s_lightState = 1;
   else s_lightState = 0;
-}
-
-/////////////////////////////////////////////////////////
-// cursorOnOff
-//
-/////////////////////////////////////////////////////////
-void GemMan :: cursorOnOff(int state)
-{
-  if (m_windowState)
-    cursorGemWindow(gfxInfo,state);
-  m_cursor = state;
-}
-
-/////////////////////////////////////////////////////////
-// topmostOnOff
-//
-/////////////////////////////////////////////////////////
-void GemMan :: topmostOnOff(int state)
-{
-#ifdef _WINDOWS
-  if (m_windowState)
-    topmostGemWindow(gfxInfo,state);
-#else
-  /* we don't care for this warning, since only windows has problems with
-   * the Gem-window being not automatically on top (?) (jmz)
-   */
-  //  post("gemwin: \"topmost\" message not supported on this platform");
-#endif
-  m_topmost = state;
 }
 
 /////////////////////////////////////////////////////////
@@ -1476,6 +663,7 @@ void GemMan :: freeLight(GLenum lightNum)
 /////////////////////////////////////////////////////////
 void GemMan :: printInfo()
 {
+  /*
   post("GEM information");
   post("---------------");
   post("OpenGL info");
@@ -1495,14 +683,7 @@ void GemMan :: printInfo()
   }
 
   post("---------------");
-  post("window state: %d", m_windowState);
-  post("topmost: %d", m_topmost);
   post("profile: %d", m_profile);
-  post("buffer: %d", m_buffer);
-  post("stereo: %d", m_stereo);
-  post("full screen: %d", m_fullscreen);
-  post("width: %d, height %d", m_width, m_height);
-  post("offset: %d+%d", m_xoffset, m_yoffset);
   post("frame rate: %f", (0.0 != s_deltime) ? 1000. / s_deltime : 0.0);
 
   GLint bitnum = 0;
@@ -1525,22 +706,5 @@ void GemMan :: printInfo()
   post("direct yuv texturing: %d", texture_yuv_supported);
 
   post("");
-}
-
-/////////////////////////////////////////////////////////
-// getWindowInfo
-//
-/////////////////////////////////////////////////////////
-WindowInfo &GemMan :: getWindowInfo()
-{
-  return(gfxInfo);
-}
-
-/////////////////////////////////////////////////////////
-// getConstWindowInfo
-//
-/////////////////////////////////////////////////////////
-WindowInfo &GemMan :: getConstWindowInfo()
-{
-  return(constInfo);
+  */
 }
