@@ -48,6 +48,7 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
   //////////
   // Do the processing
   virtual void 	processImage(imageStruct &image);
+  virtual void processYUVImage(imageStruct &image);
 
   imageStruct    myImage;
 
