@@ -7,6 +7,7 @@
   Copyright (c) 1997-1999 Mark Danks. mark@danks.org
   Copyright (c) Günther Geiger. geiger@epy.co.at
   Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+  Copyright (c) 2002 James Tittle & Chris Clepper
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -27,7 +28,11 @@ pix_texture2
 
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
+#ifndef MACOSX
 #include <GL/glu.h>
+#else
+#include <OpenGL/glu.h>
+#endif
 
 
 /*-----------------------------------------------------------------
@@ -83,7 +88,7 @@ class GEM_EXTERN pix_texture2 : public GemBase
 
   //////////
   // Set up the texture state
-  void			setUpTextureState();
+  void		setUpTextureState();
 
   //////////
   int           m_textureOnOff;
@@ -110,7 +115,7 @@ class GEM_EXTERN pix_texture2 : public GemBase
 
   //////////
   // The resizing buffer
-  imageStruct   buffer;
+  imageStruct   m_buffer;
 
   //////////
   // The texture coordinates

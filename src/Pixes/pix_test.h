@@ -12,6 +12,7 @@ LOG
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
+    Copyleft (l) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -58,6 +59,10 @@ class GEM_EXTERN pix_test : public GemPixObj
     	//////////
     	// Do the processing - this is a no-op
     	virtual void 	processGrayImage(imageStruct &image) { }
+        
+        //////////
+    	// Do the processing - this is a no-op
+    	virtual void 	processYUVImage(imageStruct &image);
 
 	void pix_test :: postrender(GemState *state);
 
