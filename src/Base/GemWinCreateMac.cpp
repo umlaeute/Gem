@@ -13,6 +13,8 @@
 //
 /////////////////////////////////////////////////////////
 
+#ifdef MACOSX
+
 #include <Carbon/Carbon.h>
 #include "GemWinCreate.h"
 #include "GemMan.h"
@@ -1190,3 +1192,5 @@ bool HaveValidContext (void)
 	else
 		return false;
 }
+
+#endif

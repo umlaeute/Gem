@@ -26,7 +26,7 @@
 #include <QuickTime/Movies.h>
 #include <QuickTime/QuickTimeComponents.h>
 #include <string.h>
-#endif MACOSX
+#endif // MACOSX
 
 #ifdef _WINDOWS
 #include <io.h>
@@ -55,7 +55,7 @@ extern "C"
 
 
 #include "sgiimage.h"
-#endif MACOSX
+#endif // MACOSX
 
 #include "GemPixUtil.h"
 
@@ -88,7 +88,7 @@ unsigned char* img_allocate(int size)
 
   return data; 
 }
-#endif MACOSX
+#endif // MACOSX
 
 /***************************************************************************
  *
@@ -205,7 +205,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 	error("GEM: Unable to load image: %s", newName);
 	return(NULL);
 }
-#endif MACOSX
+#endif // MACOSX
 /***************************************************************************
  *
  * Read in a image utilizing QuickTime GraphicsImporterComponent
@@ -763,4 +763,5 @@ imageStruct *sgiImage2mem(const char *filename)
 	
 	return(image_block);
 }
-#endif MACOSX
+#endif //MACOSX
+

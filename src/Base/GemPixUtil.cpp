@@ -265,7 +265,7 @@ int pix_addmean(unsigned char Dest, unsigned char *Src, int length)
   return 1;
 }
 #endif
-#endif MACOSX
+#endif // MACOSX
 
 
 int pix_addsat(unsigned char *leftPix, unsigned char *rightPix, int datasize)

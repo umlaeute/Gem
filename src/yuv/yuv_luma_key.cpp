@@ -149,3 +149,4 @@ void yuv_luma_key :: valueCallback(void *data, t_floatarg Yval, t_floatarg Uval,
   GetMyClass(data)->m_Uvalue=((unsigned char)Uval);
   GetMyClass(data)->m_Vvalue=((unsigned char)Vval);
 }
+

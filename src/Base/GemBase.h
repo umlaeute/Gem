@@ -24,11 +24,11 @@ LOG
 #import <OpenGL/gl.h>
 #else
 #include <GL/gl.h>
-#endif MACOSX
+#endif // MACOSX
 
 #ifndef INCLUDE_CPPEXTERN_H_
 #include "Base/CPPExtern.h"
-#endif INCLUDE_CPPEXTERN_H_
+#endif 
 #include "Base/GemState.h"
 
 class GemCache;

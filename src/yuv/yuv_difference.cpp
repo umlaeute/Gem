@@ -6,7 +6,7 @@
  *  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
  *
  */
-
+#include <stdlib.h>
 #include "yuv_difference.h"
 #define clamp(x) ((x < 16) ? 16 : (x > 235) ? 235 : x)
 CPPEXTERN_NEW(yuv_difference)

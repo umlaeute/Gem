@@ -19,7 +19,8 @@
 
 #include "yuv_dual.h"
 
-#include "GemCache.h"
+#include "../Base/GemCache.h"
+#include <string.h>
 
 /////////////////////////////////////////////////////////
 //

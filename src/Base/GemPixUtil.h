@@ -29,7 +29,7 @@ LOG
 #else
 #include <GL/gl.h>
 #include "config.h"
-#endif MACOSX
+#endif // MACOSX
 
 // packed pixel defines for textures
 #ifndef GL_EXT_packed_pixels

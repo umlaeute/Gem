@@ -76,7 +76,7 @@ class GEM_EXTERN GemPixObj : public GemBase
         int             m_processOnOff;
 #ifndef MACOSX
 	int             m_mmx;
-#endif MACOSX
+#endif // MACOSX
     	//////////
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr) { GemBase::real_obj_setupCallback(classPtr);

@@ -44,7 +44,7 @@
 
 #ifdef MACOSX
 extern bool HaveValidContext (void);
-#endif MACOSX
+#endif // MACOSX
 
 static WindowInfo gfxInfo;
 static WindowInfo constInfo;
@@ -1358,7 +1358,7 @@ void GemMan :: printInfo()
     delete [] text;
 #else
   post("Extensions: %s", glGetString(GL_EXTENSIONS));
-#endif MACOSX
+#endif // MACOSX
   post("---------------");
   post("window state: %d", m_windowState);
   post("profile: %d", m_profile);

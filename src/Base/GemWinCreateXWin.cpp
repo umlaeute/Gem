@@ -204,7 +204,7 @@ void destroyGemWindow(WindowInfo &info)
       if (info.win)
 	XDestroyWindow(info.dpy, info.win);
       if (info.context)
-	glXDestroyContext(info.dpy, info.context);
+	glXDestroyContext(info.dpy, info.context); // this crashes sometimes on my laptop
       if (info.cmap)
 	XFreeColormap(info.dpy, info.cmap);
       if (info.fs){
@@ -213,10 +213,8 @@ void destroyGemWindow(WindowInfo &info)
 	info.fs=0;
       }
 
-
       XCloseDisplay(info.dpy);
     }
-
   info.dpy = NULL;
   info.win = 0;
   info.cmap = 0;

@@ -3,7 +3,7 @@
 #include "sgiimage.h"
 #else
 #include "Base/sgiimage.h"
-#endif MACOSX
+#endif // MACOSX
 /*
  *    	fastimg -
  *		Faster reading and writing of image files.

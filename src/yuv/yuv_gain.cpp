@@ -109,3 +109,4 @@ void yuv_gain :: gainMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->gainMess((float)size);
 }
+
