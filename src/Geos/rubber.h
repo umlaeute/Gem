@@ -86,6 +86,7 @@ class GEM_EXTERN rubber : public GemShape
   
     int 	m_size;
     int		m_speed;
+    int		m_blend;
     int		alreadyInit;
     float	xsize, ysize;
     int		win_size_x, win_size_y;
@@ -98,7 +99,7 @@ class GEM_EXTERN rubber : public GemShape
   static void 	heightMessCallback(void *data, t_floatarg height);
   static void 	ctrXMessCallback(void *data, t_floatarg center);
   static void 	ctrYMessCallback(void *data, t_floatarg center);
-  //static void 	otherMessCallback(void *data, t_floatarg other);
+  static void 	blendMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file

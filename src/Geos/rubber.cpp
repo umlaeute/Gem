@@ -72,6 +72,7 @@ rubber :: rubber( t_floatarg width, t_floatarg height )
     //m_drawType = GL_LINE_LOOP;
     m_drawType = GL_POLYGON;
     alreadyInit = 0;
+    m_blend = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -190,62 +191,100 @@ void rubber :: rubber_init()
 void rubber :: render(GemState *state)
 {
     int k, i, j;
-#ifdef __APPLE__
-    if (xsize != state->texCoords[1].s)
-#else
-    if (xsize != state->texCoords[2].s)
-#endif
-        alreadyInit = 0;
-    
-    if (!alreadyInit)
-    {
-#ifdef __APPLE__
-        xsize = state->texCoords[1].s;
-        ysize = state->texCoords[1].t;
-#else
-        xsize = state->texCoords[2].s;
-        ysize = state->texCoords[2].t;
-#endif
-        rubber_init();
-        alreadyInit = 1;
-    }
     if (m_drawType == GL_LINE_LOOP)
-        glLineWidth(1/*m_linewidth*/);
+        glLineWidth(m_linewidth);
     
     glOrtho(-0.5, win_size_x - 0.5, -0.5, win_size_y - 0.5, CLIP_NEAR, CLIP_FAR);
     //glOrtho(0.5, GemMan::m_width - 0.5, 0.5, GemMan::m_height - 0.5, CLIP_NEAR, CLIP_FAR);
-
-#define _WIREFRAME
-#ifdef WIREFRAME
-    for (k = 0; k < spring_count; k++)
-    {
-        glBegin(GL_LINES);
-        glVertex3fv(mass[spring[k].i].x);
-        glVertex3fv(mass[spring[k].j].x);
-        glEnd();
+    
+    if (m_blend) {
+        glEnable(GL_POLYGON_SMOOTH);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
     }
-#else
-    k = 0;
-    for (i = 0; i < GRID_SIZE_X - 1; i++)
+    
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    
+    if (state->texture && state->numTexCoords)
     {
-        for (j = 0; j < GRID_SIZE_Y - 1; j++)
+#ifdef __APPLE__
+        if (xsize != state->texCoords[1].s)
+#else
+        if (xsize != state->texCoords[2].s)
+#endif
+            alreadyInit = 0;
+    
+        if (!alreadyInit)
         {
-            glBegin(GL_POLYGON);
-            glTexCoord2fv(mass[k].t);
-            glVertex3fv(mass[k].x);
-            glTexCoord2fv(mass[k + 1].t);
-            glVertex3fv(mass[k + 1].x);
-            glTexCoord2fv(mass[k + GRID_SIZE_Y + 1].t);
-            glVertex3fv(mass[k + GRID_SIZE_Y + 1].x);
-            glTexCoord2fv(mass[k + GRID_SIZE_Y].t);
-            glVertex3fv(mass[k + GRID_SIZE_Y].x);
-            glEnd();
+#ifdef __APPLE__
+            xsize = state->texCoords[1].s;
+            ysize = state->texCoords[1].t;
+#else
+            xsize = state->texCoords[2].s;
+            ysize = state->texCoords[2].t;
+#endif
+            rubber_init();
+            alreadyInit = 1;
+        }
+
+        k = 0;
+        for (i = 0; i < GRID_SIZE_X - 1; i++)
+        {
+            for (j = 0; j < GRID_SIZE_Y - 1; j++)
+            {
+                glBegin(GL_POLYGON);
+                    glTexCoord2fv(mass[k].t);
+                glVertex3fv(mass[k].x);
+                    glTexCoord2fv(mass[k + 1].t);
+                glVertex3fv(mass[k + 1].x);
+                    glTexCoord2fv(mass[k + GRID_SIZE_Y + 1].t);
+                glVertex3fv(mass[k + GRID_SIZE_Y + 1].x);
+                    glTexCoord2fv(mass[k + GRID_SIZE_Y].t);
+                glVertex3fv(mass[k + GRID_SIZE_Y].x);
+                glEnd();
+                k++;
+            }
             k++;
         }
-        k++;
+        rubber_dynamics();
     }
-#endif
-    rubber_dynamics();
+    else
+    {
+        if (!alreadyInit)
+        {
+            rubber_init();
+            alreadyInit = 1;
+        }
+
+        k = 0;
+        for (i = 0; i < GRID_SIZE_X - 1; i++)
+        {
+            for (j = 0; j < GRID_SIZE_Y - 1; j++)
+            {
+                glBegin(m_drawType);
+                    glTexCoord2fv(mass[k].t);
+                glVertex3fv(mass[k].x);
+                    glTexCoord2fv(mass[k + 1].t);
+                glVertex3fv(mass[k + 1].x);
+                    glTexCoord2fv(mass[k + GRID_SIZE_Y + 1].t);
+                glVertex3fv(mass[k + GRID_SIZE_Y + 1].x);
+                    glTexCoord2fv(mass[k + GRID_SIZE_Y].t);
+                glVertex3fv(mass[k + GRID_SIZE_Y].x);
+                glEnd();
+                k++;
+            }
+            k++;
+        }
+        rubber_dynamics();
+        /*for (k = 0; k < spring_count; k++)
+        {
+            glBegin(GL_LINES);
+            glVertex3fv(mass[spring[k].i].x);
+            glVertex3fv(mass[spring[k].j].x);
+            glEnd();
+        }*/
+    }
 }
 
 /*
@@ -406,8 +445,8 @@ void rubber :: obj_setupCallback(t_class *classPtr)
     	    gensym("cX"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&rubber::ctrYMessCallback,
     	    gensym("cY"), A_FLOAT, A_NULL);
-    //class_addmethod(classPtr, (t_method)&rubber::otherMessCallback,
-    //	    gensym("Ot"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&rubber::blendMessCallback,
+    	    gensym("blend"), A_FLOAT, A_NULL);
 }
 void rubber :: bangMessCallback(void *data)
 {
@@ -425,7 +464,7 @@ void rubber :: ctrYMessCallback(void *data, t_floatarg center)
 {
     GetMyClass(data)->ctrYMess((float)center);
 }
-//void rubber :: otherMessCallback(void *data, t_floatarg other)
-//{
-//    GetMyClass(data)->otherMess((float)other);
-//}
+void rubber :: blendMessCallback(void *data, t_floatarg size)
+{
+    GetMyClass(data)->m_blend=((int)size);
+}

@@ -39,11 +39,14 @@ ripple :: ripple( t_floatarg width, t_floatarg height )
     inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cX"));
     inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
     inletfov = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("fov"));
-    //m_drawType = GL_QUADS;
-    m_drawType = GL_TRIANGLE_STRIP;
+
+    m_drawType = GL_POLYGON;
+    m_blend = 0;
     alreadyInit = 0;
     xsize = 0.f;
     ysize = 0.f;
+    ctrX = 0;
+    ctrY = 0;
     grab = -1;
     precalc_ripple_amp();
 }
@@ -67,56 +70,97 @@ ripple :: ~ripple()
 void ripple :: render(GemState *state)
 {
     int i, j;
-#ifdef __APPLE__
-    if (xsize != state->texCoords[1].s)
-#else
-    if (xsize != state->texCoords[2].s)
-#endif
-        alreadyInit = 0;
+
+    if (m_drawType == GL_LINE_LOOP)
+        glLineWidth(m_linewidth);
+        
+    if (m_blend) {
+        glEnable(GL_POLYGON_SMOOTH);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
+    }
     
-    if (!alreadyInit)
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    
+    if (state->texture && state->numTexCoords)
     {
 #ifdef __APPLE__
-        xsize = state->texCoords[1].s;
-        ysize = state->texCoords[1].t;
+        if (xsize != state->texCoords[1].s)
 #else
-        xsize = state->texCoords[2].s;
-        ysize = state->texCoords[2].t;
+        if (xsize != state->texCoords[2].s)
 #endif
-        win_size_x = GemMan::m_width;
-        win_size_y = GemMan::m_height;
-        xyratio = win_size_x/win_size_y;
-        ripple_init();
-        precalc_ripple_vector();
-        alreadyInit = 1;
-    }
-    //glOrtho(-0.5, win_size_x - 0.5, -0.5, win_size_y - 0.5, CLIP_NEAR, CLIP_FAR);
-    //glOrtho( 0, win_size_x, 0, win_size_y, CLIP_NEAR, CLIP_FAR);
-    //glMatrixMode( GL_PROJECTION );
-    //glLoadIdentity();
-    //gluPerspective( fov, xyratio, 0.001, 1000000.0 );
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    for (i = 0; i < GRID_SIZE_X - 1; i++)
-    {
-        for (j = 0; j < GRID_SIZE_Y - 1; j++)
+            alreadyInit = 0;
+    
+        if (!alreadyInit)
         {
-            glBegin(GL_POLYGON);
-            glTexCoord2fv(ripple_vertex[i][j].t);
-            glVertex2fv(ripple_vertex[i][j].x);
-            glTexCoord2fv(ripple_vertex[i][j + 1].t);
-            glVertex2fv(ripple_vertex[i][j + 1].x);
-            glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
-            glVertex2fv(ripple_vertex[i + 1][j + 1].x);
-            glTexCoord2fv(ripple_vertex[i + 1][j].t);
-            glVertex2fv(ripple_vertex[i + 1][j].x);
-            glEnd();     
+#ifdef __APPLE__
+            xsize = state->texCoords[1].s;
+            ysize = state->texCoords[1].t;
+#else
+            xsize = state->texCoords[2].s;
+            ysize = state->texCoords[2].t;
+#endif
+            win_size_x = GemMan::m_width;
+            win_size_y = GemMan::m_height;
+            xyratio = win_size_x/win_size_y;
+            ripple_init();
+            precalc_ripple_vector();
+            alreadyInit = 1;
         }
-            /*post("ripple_vertex[%d][%d].x[0] = %f",i,j,ripple_vertex[i][j].x[0]);
-            post("ripple_vertex[%d][%d].x[1] = %f",i,j,ripple_vertex[i][j].x[1]);
-            post("ripple_vertex[%d][%d].dt[0] = %f",i,j,ripple_vertex[i][j].dt[0]);
-            post("ripple_vertex[%d][%d].dt[1] = %f",i,j,ripple_vertex[i][j].dt[1]);*/
+        for (i = 0; i < GRID_SIZE_X - 1; i++)
+        {
+            for (j = 0; j < GRID_SIZE_Y - 1; j++)
+            {
+                glBegin(GL_POLYGON);
+                glTexCoord2fv(ripple_vertex[i][j].t);
+                glVertex2fv(ripple_vertex[i][j].x);
+                glTexCoord2fv(ripple_vertex[i][j + 1].t);
+                glVertex2fv(ripple_vertex[i][j + 1].x);
+                glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
+                glVertex2fv(ripple_vertex[i + 1][j + 1].x);
+                glTexCoord2fv(ripple_vertex[i + 1][j].t);
+                glVertex2fv(ripple_vertex[i + 1][j].x);
+                glEnd();
+            }
+        }
+        ripple_dynamics();
     }
-    ripple_dynamics();
+    else
+    {
+        if (!alreadyInit)
+        {
+            xsize = 1;
+            ysize = 1;
+            win_size_x = 1;
+            win_size_y = 1;
+
+            ripple_init();
+            precalc_ripple_vector();
+            alreadyInit = 1;
+        }
+        for (i = 0; i < GRID_SIZE_X - 1; i++)
+        {
+            for (j = 0; j < GRID_SIZE_Y - 1; j++)
+            {
+                glBegin(m_drawType);
+                    glTexCoord2fv(ripple_vertex[i][j].t);
+                    glVertex2fv(ripple_vertex[i][j].t);
+                    glTexCoord2fv(ripple_vertex[i][j + 1].t);
+                    glVertex2fv(ripple_vertex[i][j + 1].t);
+                    glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
+                    glVertex2fv(ripple_vertex[i + 1][j + 1].t);
+                    glTexCoord2fv(ripple_vertex[i + 1][j].t);
+                    glVertex2fv(ripple_vertex[i + 1][j].t);
+                glEnd();
+            }
+        }
+        ripple_dynamics();
+    }
+    if (m_blend) {
+        glDisable(GL_POLYGON_SMOOTH);
+        glDisable(GL_BLEND);
+    }
 }
 /////////////////////////////////////////////////////////
 //
@@ -426,12 +470,12 @@ void ripple :: typeMess(t_symbol *type)
     if (!strcmp(type->s_name, "line")) 
 	    m_drawType = GL_LINE_LOOP;
     else if (!strcmp(type->s_name, "fill")) 
-	    m_drawType = GL_TRIANGLE_STRIP;
+	    m_drawType = GL_POLYGON;
     else if (!strcmp(type->s_name, "point"))
 	    m_drawType = GL_POINTS;
     else
     {
-	    error ("GEM: square draw style");
+	    error ("GEM: no ripple draw style?");
 	    return;
     }
     setModified();
@@ -451,6 +495,8 @@ void ripple :: obj_setupCallback(t_class *classPtr)
     	    gensym("cY"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&ripple::fovMessCallback,
     	    gensym("fov"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&ripple::blendMessCallback,
+    	    gensym("blend"), A_FLOAT, A_NULL);
 }
 
 void ripple :: bangMessCallback(void *data)
@@ -472,4 +518,8 @@ void ripple :: ctrYMessCallback(void *data, t_floatarg center)
 void ripple :: fovMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->fov=((float)size);
+}
+void ripple :: blendMessCallback(void *data, t_floatarg size)
+{
+    GetMyClass(data)->m_blend=((int)size);
 }

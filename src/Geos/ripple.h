@@ -120,6 +120,7 @@ class GEM_EXTERN ripple : public GemShape
   int		win_size_x;
   int		win_size_y;
   int		xyratio;
+  int		m_blend;
   float		xsize, ysize;
   float		fov;
   RIPPLE_VECTOR ripple_vector[GRID_SIZE_X][GRID_SIZE_Y];
@@ -143,6 +144,7 @@ class GEM_EXTERN ripple : public GemShape
   static void 	ctrXMessCallback(void *data, t_floatarg center);
   static void 	ctrYMessCallback(void *data, t_floatarg center);
   static void 	fovMessCallback(void *data, t_floatarg size);
+  static void 	blendMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file
