@@ -371,6 +371,9 @@ void GemMan :: initGem()
   post("GEM: maintained by IOhannes m zmoelnig");
   post("GEM: Authors :\tMark Danks (original version on irix/windows)");
   post("GEM: \t\tChris Clepper (macOS-X)");
+#ifdef INCLUDE_GEIGER
+  post("GEM: \t\tGuenter Geiger (linux)");
+#endif
   post("GEM: \t\tDaniel Heckenberg (windows)");
   post("GEM: \t\tJames Tittle (macOS-X)");
   post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
@@ -1048,7 +1051,6 @@ int GemMan :: createWindow(char* disp)
   myHints.fsaa = fsaa;
   
   if (disp) post("Creating on display %s",disp);
-
   if (!createGemWindow(gfxInfo, myHints) )
     {
       error("GEM: Unable to create window");
@@ -1085,7 +1087,7 @@ int GemMan :: createWindow(char* disp)
     else
 #endif
       texture_rectangle_supported = 0;
-  
+
     /*
         GL_APPLE_client_storage allows better performance when modifying
         a texture image extensively:  under normal circumstances, a
@@ -1118,13 +1120,12 @@ int GemMan :: createWindow(char* disp)
   cursorOnOff(m_cursor);
   topmostOnOff(m_topmost);
   m_windowNumber++;
-
   windowInit();
-    
   clock_delay(s_windowClock, s_windowDelTime);
 #ifdef _WINDOWS
   s_windowRun = 1;
 #endif
+
   return(1);
 }
 
@@ -1206,7 +1207,7 @@ int createConstWindow(char* disp)
   myHints.actuallyDisplay = 0;
   myHints.fullscreen = 0;
   myHints.display = disp;
-
+  
   if (!createGemWindow(constInfo, myHints) )
     {
       error("GEM: Error creating const context");
