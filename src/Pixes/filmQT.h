@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block (Linux)
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block (Windus/Apple)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) 2002 James Tittle.  tigital@mac.com
@@ -80,7 +80,9 @@ class GEM_EXTERN filmQT : public film
   TimeValue		m_movieTime;
   Track			m_movieTrack;
   TimeValue		m_timeScale;
-  TimeValue		duration; 
+  TimeValue		duration;
+
+  // managed to initialize our Quicktime-Decoder
   bool			m_bInit;
 #endif // HAVE_QT
 };

@@ -92,12 +92,14 @@ filmQT :: ~filmQT()
 #ifdef HAVE_QUICKTIME
 void filmQT :: close(void)
 {
-  ::DisposeMovie(m_movie);
   if(m_srcGWorld)::DisposeGWorld(m_srcGWorld);
   m_srcGWorld = NULL;
+
+ ::DisposeMovie(m_movie);
 }
 
 bool filmQT :: open(char*filename, int format) {
+  if (filename==NULL)return false;
   if (!m_bInit){
     error("filmQT: object not correctly initialized\n");
     return false;
@@ -112,15 +114,14 @@ bool filmQT :: open(char*filename, int format) {
   Rect		m_srcRect;
   long		m_rowBytes;
 
-  {  
-    Str255	pstrFilename;
-    CopyCStringToPascal(filename, pstrFilename);           // Convert to Pascal string
-    err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
-    if (err) {
-      error("GEM: pix_film: Unable to find file: %s", filename);
-      return false;
-    }
+  Str255	pstrFilename;
+  CopyCStringToPascal(filename, pstrFilename);           // Convert to Pascal string
+  err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
+  if (err) {
+    error("GEM: pix_film: Unable to find file: %s", filename);
+    return false;
   }
+  
   short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
@@ -130,7 +131,7 @@ bool filmQT :: open(char*filename, int format) {
   }
   //startpost("new movie might crash... ");
   ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
-  //post("...survived");
+  //postpost("...survived");
   if (refnum) ::CloseMovieFile(refnum);
   m_curFrame = -1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
