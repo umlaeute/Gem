@@ -100,7 +100,7 @@ void gemhead :: renderGL(GemState *state)
         state->HaveColorArray = 0;
         state->HaveNormalArray = 0;
         state->HaveTexCoordArray = 0;
-        state->drawType = NULL;
+        state->drawType = 0;
       }
 
     // are we profiling and need to send new images?
