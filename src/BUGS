@@ -6,4 +6,4 @@ rubber/ripple: shouldn't the coordinates ctrX/ctrY be normalized between 0..1 ?
 ripple: what is the height for ?
 rubber/ripple: sizeMess obsolete ?
 
-release critical: [filmQT4L] produces RGB output if RGBA is not supported by the codec.
+release critical: [filmQT4L] produces RGB output if RGBA is not supported by the codec -- FIXED
