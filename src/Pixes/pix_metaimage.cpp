@@ -126,7 +126,7 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
     myImage.ysize = image.ysize;
     myImage.csize = image.csize;
     myImage.type  = image.type;
-	myImage.setBlack();
+    myImage.setBlack();
     pOutput = (U32*)myImage.data;
 
     float SubWidth;
@@ -579,24 +579,24 @@ void pix_metaimage :: YUV_DrawSubImages(U32* pSubImage,U32 AverageColour,float S
 }
 
 void pix_metaimage :: YUV_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOutput,
-							int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,
-							int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,
-							U32 SubImageAverage)
+				       int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,
+				       int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,
+				       U32 SubImageAverage)
 {
-  const int nSubU=(SubImageAverage>>SHIFT_RED)&0xff;
-  const int nSubY1=(SubImageAverage>>SHIFT_GREEN)&0xff;
-  const int nSubV=(SubImageAverage>>SHIFT_BLUE)&0xff;
-  const int nSubY2=(SubImageAverage>>SHIFT_ALPHA)&0xff;
+  const int nSubU =(SubImageAverage>>SHIFT_U)&0xff;
+  const int nSubY1=(SubImageAverage>>SHIFT_Y1)&0xff;
+  const int nSubV =(SubImageAverage>>SHIFT_V)&0xff;
+  const int nSubY2=(SubImageAverage>>SHIFT_Y2)&0xff;
 
-  const int nWholeU=(WholeImageAverage>>SHIFT_RED)&0xff;
-  const int nWholeY1=(WholeImageAverage>>SHIFT_GREEN)&0xff;
-  const int nWholeV=(WholeImageAverage>>SHIFT_BLUE)&0xff;
-  const int nWholeY2=(WholeImageAverage>>SHIFT_ALPHA)&0xff;
+  const int nWholeU =(WholeImageAverage>>SHIFT_U)&0xff;
+  const int nWholeY1=(WholeImageAverage>>SHIFT_Y1)&0xff;
+  const int nWholeV =(WholeImageAverage>>SHIFT_V)&0xff;
+  const int nWholeY2=(WholeImageAverage>>SHIFT_Y2)&0xff;
 
-  const int nRedDelta = (nSubU - nWholeU);
-  const int nGreenDelta = (nSubY1 - nWholeY1);
-  const int nBlueDelta = (nSubV - nWholeV);
-  const int nAlphaDelta = (nSubY2 - nWholeY2);
+  const int nUDelta  = (nSubU  - nWholeU);
+  const int nY1Delta = (nSubY1 - nWholeY1);
+  const int nVDelta  = (nSubV  - nWholeV);
+  const int nY2Delta = (nSubY2 - nWholeY2);
 
 
   const int nXDelta=nClippedRightX-nClippedLeftX;
@@ -619,21 +619,21 @@ void pix_metaimage :: YUV_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOu
 
     while (pCurrentOutput<pOutputLineEnd) {
       const U32 SourceColour=*pCurrentSource;
-      const U32 nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
-      const U32 nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
-      const U32 nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
-      const U32 nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
+      const U32 nSourceU =(SourceColour>>SHIFT_U )&0xff;
+      const U32 nSourceY1=(SourceColour>>SHIFT_Y1)&0xff;
+      const U32 nSourceV =(SourceColour>>SHIFT_V )&0xff;
+      const U32 nSourceY2=(SourceColour>>SHIFT_Y2)&0xff;
 
-      const U32 nOutputRed=clampFunc(nSourceRed+nRedDelta,0,255);
-      const U32 nOutputGreen=clampFunc(nSourceGreen+nGreenDelta,0,255);
-      const U32 nOutputBlue=clampFunc(nSourceBlue+nBlueDelta,0,255);
-      const U32 nOutputAlpha=clampFunc(nSourceAlpha+nAlphaDelta,0,255);//0xff;
+      const U32 nOutputU =clampFunc(nSourceU +nUDelta ,0,255);
+      const U32 nOutputY1=clampFunc(nSourceY1+nY1Delta,0,255);
+      const U32 nOutputV =clampFunc(nSourceV +nVDelta ,0,255);
+      const U32 nOutputY2=clampFunc(nSourceY2+nY2Delta,0,255);//0xff;
 
       const U32 OutputColour=
-	((nOutputRed&0xff)<<SHIFT_RED)|
-	((nOutputGreen&0xff)<<SHIFT_GREEN)|
-	((nOutputBlue&0xff)<<SHIFT_BLUE)|
-	((nOutputAlpha&0xff)<<SHIFT_ALPHA);
+	((nOutputU &0xff)<<SHIFT_U)|
+	((nOutputY1&0xff)<<SHIFT_Y1)|
+	((nOutputV &0xff)<<SHIFT_V)|
+	((nOutputY2&0xff)<<SHIFT_Y2);
 
       *pCurrentOutput=OutputColour;
 
@@ -669,10 +669,10 @@ U32 pix_metaimage :: YUV_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRi
     while (pCurrentImage<pImageLineEnd) {
       const U32 ImageColour=*pCurrentImage;
 
-      const U32 nImageU=(ImageColour>>SHIFT_RED)&0xff;
-      const U32 nImageY1=(ImageColour>>SHIFT_GREEN)&0xff;
-      const U32 nImageV=(ImageColour>>SHIFT_BLUE)&0xff;
-      const U32 nImageY2=(ImageColour>>SHIFT_ALPHA)&0xff;
+      const U32 nImageU =(ImageColour>>SHIFT_U )&0xff;
+      const U32 nImageY1=(ImageColour>>SHIFT_Y1)&0xff;
+      const U32 nImageV =(ImageColour>>SHIFT_V )&0xff;
+      const U32 nImageY2=(ImageColour>>SHIFT_Y2)&0xff;
 
       nUTotal+=nImageU;
       nYTotal+=nImageY1;
@@ -686,22 +686,21 @@ U32 pix_metaimage :: YUV_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRi
 
     pCurrentImage=pImageLineStart+(nStride*nWidth);
   }
-
-  const char nAverageU=(nUTotal/nSampleCount);
-  const char nAverageV=(nVTotal/nSampleCount);
-  const char nAverageY=(nYTotal/(nSampleCount<<1));
+  const unsigned char nAverageU=(nUTotal/nSampleCount);
+  const unsigned char nAverageV=(nVTotal/nSampleCount);
+  const unsigned char nAverageY=(nYTotal/(nSampleCount<<1));
 
   U32 Average=
-    (nAverageU<<SHIFT_RED)|
-    (nAverageY<<SHIFT_GREEN)|
-    (nAverageV<<SHIFT_BLUE)|
-    (nAverageY<<SHIFT_ALPHA);
+    (nAverageU<<SHIFT_U)|
+    (nAverageY<<SHIFT_Y1)|
+    (nAverageV<<SHIFT_V)|
+    (nAverageY<<SHIFT_Y2);
 
   return Average;
 }
 
 U32 pix_metaimage :: YUV_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
-  
+ 
   if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
   if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
 
@@ -711,7 +710,6 @@ U32 pix_metaimage :: YUV_ShrinkSourceImage(U32* pSource, U32* pOutput, float Sub
   int nUTotal=0;
   int nYTotal=0;
   int nVTotal=0;
-  //int nAlphaTotal=0;
 
   int nSampleCount=0;
 
@@ -734,10 +732,10 @@ U32 pix_metaimage :: YUV_ShrinkSourceImage(U32* pSource, U32* pOutput, float Sub
 
       const U32 OutputColour = YUV_GetAreaAverage(pSource,nLeftX,nTopY,nRightX,nBottomY,1);
 
-      const U32 nOutputU = (OutputColour>>SHIFT_RED)&0xff;
-      const U32 nOutputY1 = (OutputColour>>SHIFT_GREEN)&0xff;
-      const U32 nOutputV = (OutputColour>>SHIFT_BLUE)&0xff;
-      const U32 nOutputY2 = (OutputColour>>SHIFT_ALPHA)&0xff;
+      const U32 nOutputU  = (OutputColour>>SHIFT_U )&0xff;
+      const U32 nOutputY1 = (OutputColour>>SHIFT_Y1)&0xff;
+      const U32 nOutputV  = (OutputColour>>SHIFT_V )&0xff;
+      const U32 nOutputY2 = (OutputColour>>SHIFT_Y2)&0xff;
 
       nUTotal+=nOutputU;
       nYTotal+=nOutputY1;
@@ -757,13 +755,13 @@ U32 pix_metaimage :: YUV_ShrinkSourceImage(U32* pSource, U32* pOutput, float Sub
   const int nAverageU=(nUTotal/nSampleCount);
   const int nAverageY=(nYTotal/(nSampleCount<<1));
   const int nAverageV=(nVTotal/nSampleCount);
-  //const int nAverageAlpha=(nAlphaTotal/nSampleCount);
+  //const int nAverageY2=(nY2Total/nSampleCount);
 
   U32 Average=
-    (nAverageU<<SHIFT_RED)|
-    (nAverageY<<SHIFT_GREEN)|
-    (nAverageV<<SHIFT_BLUE)|
-    (nAverageY<<SHIFT_ALPHA);
+    (nAverageU<<SHIFT_U)|
+    (nAverageY<<SHIFT_Y1)|
+    (nAverageV<<SHIFT_V)|
+    (nAverageY<<SHIFT_Y2);
 
   return Average;
 }
@@ -779,7 +777,6 @@ U32 pix_metaimage :: YUV_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float
   int nUTotal=0;
   int nYTotal=0;
   int nVTotal=0;
-  //int nAlphaTotal=0;
 
   int nSampleCount=0;
 
@@ -795,10 +792,10 @@ U32 pix_metaimage :: YUV_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float
     for (SourceX=0.0f; SourceX<nWidth; SourceX+=SourceXInc) {
       const int nLeftX=static_cast<int>(SourceX);
       const U32 OutputColour=*(pSourceLineStart+nLeftX);
-      const U32 nOutputU=(OutputColour>>SHIFT_RED)&0xff;
-      const U32 nOutputY1=(OutputColour>>SHIFT_GREEN)&0xff;
-      const U32 nOutputV=(OutputColour>>SHIFT_BLUE)&0xff;
-      const U32 nOutputY2=(OutputColour>>SHIFT_ALPHA)&0xff;
+      const U32 nOutputU =(OutputColour>>SHIFT_U )&0xff;
+      const U32 nOutputY1=(OutputColour>>SHIFT_Y1)&0xff;
+      const U32 nOutputV =(OutputColour>>SHIFT_V )&0xff;
+      const U32 nOutputY2=(OutputColour>>SHIFT_Y2)&0xff;
 
       nUTotal+=nOutputU;
       nYTotal+=nOutputY1;
@@ -812,16 +809,15 @@ U32 pix_metaimage :: YUV_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float
     pCurrentOutput=pOutputLineStart+nWidth;
   }
 
-  const int nAverageU=(nUTotal/nSampleCount);
-  const int nAverageY=(nYTotal/nSampleCount);
-  const int nAverageV=(nVTotal/(nSampleCount<<1));
-  //const int nAverageAlpha=(nAlphaTotal/nSampleCount);
+  const unsigned char nAverageU=(nUTotal/nSampleCount);
+  const unsigned char nAverageY=(nYTotal/nSampleCount);
+  const unsigned char nAverageV=(nVTotal/(nSampleCount<<1));
 
   U32 Average=
-    (nAverageU<<SHIFT_RED)|
-    (nAverageY<<SHIFT_GREEN)|
-    (nAverageV<<SHIFT_BLUE)|
-    (nAverageY<<SHIFT_ALPHA);
+    (nAverageU<<SHIFT_U )|
+    (nAverageY<<SHIFT_Y1)|
+    (nAverageV<<SHIFT_V )|
+    (nAverageY<<SHIFT_Y2);
 
   return Average;
 }
