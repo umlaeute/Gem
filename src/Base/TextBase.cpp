@@ -285,11 +285,6 @@ void TextBase :: textMess(int argc, t_atom *argv)
     return;
   }
 
-  if (argv[0].a_type != A_SYMBOL)    {
-    error("GEM: TextBase: wrong type");
-    return;
-  }
-
   // do we actually need to reallocate memory?
   int charCount = 0;
   char newtext[MAXPDSTRING];
