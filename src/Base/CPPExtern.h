@@ -179,12 +179,27 @@ static void obj_setupCallback(t_class *classPtr);
     REAL_NEW_WITH_ARG_ARG_ARG_ARG(NEW_CLASS, _setup, _class, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR)
 
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // These should never be called or used directly!!!
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////////////////////////
+// auto registering a class
+// this creates a dummy class, whose constructor calls the setup-function (registering the class with pd)
+// a static copy of this class is created at runtime, to actually do the setup-call
+#ifdef NO_AUTO_REGISTER_CLASS
+// if NO_AUTO_REGISTER_CLASS is defined, we will not register the class
+# define AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION)
+#else
+# define AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION)       \
+  class NEW_CLASS ## _cppclass {		              \
+    public:						      \
+    NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
+  };							      \
+  static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // no args
@@ -212,11 +227,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
 }\
-class NEW_CLASS ## _cppclass { \
-public: \
-  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
-}; \
-static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
+  AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -246,11 +257,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
 }\
-class NEW_CLASS ## _cppclass { \
-public: \
-  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
-}; \
-static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
+  AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 ///////////////////////////////////////////////////////////////////////////////
 // gimme arg
@@ -279,11 +286,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
 }\
-class NEW_CLASS ## _cppclass { \
-public: \
-  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
-}; \
-static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
+  AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 ///////////////////////////////////////////////////////////////////////////////
 // two args
@@ -312,11 +315,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
 }\
-class NEW_CLASS ## _cppclass { \
-public: \
-  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
-}; \
-static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
+  AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 ///////////////////////////////////////////////////////////////////////////////
 // three args
@@ -345,11 +344,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
 }\
-class NEW_CLASS ## _cppclass { \
-public: \
-  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
-}; \
-static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
+  AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
 
 ///////////////////////////////////////////////////////////////////////////////
 // four args
@@ -378,11 +373,6 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
 }\
-class NEW_CLASS ## _cppclass { \
-public: \
-  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
-}; \
-static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
-
+  AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
     
 #endif	// for header file
