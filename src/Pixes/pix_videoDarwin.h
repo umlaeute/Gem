@@ -72,19 +72,9 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         void			setupVideoChannel();
         void			disposeOffscreen();
         void			disposeVideoChannel();
-        OSErr	videoFrame(SGChannel c, short bufferNum, Boolean *done);
-        
-        typedef struct {
-	GWorldPtr 		pGWorld;
-	Rect			boundsRect;
-	WindowRef	  	pWindow;
-	ImageSequence 	decomSeq;	// unique identifier for our decompression sequence
-	ImageSequence 	drawSeq;	// unique identifier for our draw sequence
-        } tMungDataRecord, *MungDataPtr;
-    
-        MungDataPtr gpMungData;
+        //OSErr	videoFrame(SGChannel c, short bufferNum, Boolean *done);
+
         void InitSeqGrabber();
-        pascal OSErr mySGDataProc(SGChannel c, Ptr p, long len, long *offset, long chRefCon, TimeValue time, short writeType, long refCon);
 
         //-----------------------------------
         // GROUP:	Video data
@@ -109,7 +99,6 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         SeqGrabComponent	m_sg;		// Sequence Grabber Component
         SGChannel		m_vc;			// Video Channel
         short			m_pixelDepth;	//
-        ImageSequence		m_decomSeq;	// decompression sequence
         int			m_vidXSize;		//
         int			m_vidYSize;		//
         Rect			m_srcRect;		// Capture Rectangle
@@ -117,10 +106,6 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         PixMapHandle		m_pixMap;	// PixMap Handle for capture image
         Ptr			m_baseAddr;		// Base address of pixel Data
         long			m_rowBytes;		// Row bytes in a row
-        void			*m_clock;		// Clock Object
-        int			m_interval;		// Clock Interval
-        Ptr			p;
-
     private:
     	
     	//////////

@@ -29,15 +29,12 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg,
 #define DEFAULT_INTERVAL	5		// 5 milliseconds for calling SGIdle()
 
 pix_videoDarwin :: pix_videoDarwin( t_floatarg w=320, t_floatarg h=240 )
-
 {
-gpMungData = NULL;
 
 m_vidXSize = 320;
 m_vidYSize = 240;
 m_pixBlock.image.xsize = m_vidXSize;
 	m_pixBlock.image.ysize = m_vidYSize;
-//#ifndef YUV
 	m_pixBlock.image.csize = 4;
 	m_pixBlock.image.format = GL_BGRA_EXT;
 	m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
@@ -72,7 +69,7 @@ pix_videoDarwin :: ~pix_videoDarwin()
 		m_srcGWorld = NULL;
 		m_baseAddr = NULL;
 	}
-        }
+    }
 }
 /////////////////////////////////////////////////////////
 // startrender
@@ -80,7 +77,7 @@ pix_videoDarwin :: ~pix_videoDarwin()
 /////////////////////////////////////////////////////////
 void pix_videoDarwin :: startRendering()
 {
-     
+     m_haveVideo = 1;
      m_pixBlock.newimage = 1;
 }
 /////////////////////////////////////////////////////////
@@ -93,7 +90,7 @@ void pix_videoDarwin :: render(GemState *state)
  
     err = SGIdle(m_sg);
     if (err != noErr){
-            post("SGIdle failed\n");
+            post("pix_videoDarwin: SGIdle failed\n");
             m_haveVideo = 0;
         } else {
         m_haveVideo = 1;
@@ -123,13 +120,9 @@ state->image = NULL;
 void pix_videoDarwin :: InitSeqGrabber()
 {
     OSErr anErr;
-    Rect rectNewMovie;
-    PixMapHandle ghPixMap;
-    unsigned long rowStride;
-    unsigned char * gpBaseAddr = NULL;
-    Rect tempRect = {0,0,240,320} ;
+    Rect m_srcRect = {0,0, m_vidYSize, m_vidXSize};
     
-    SetRect (&rectNewMovie, 0, 0, 240, 320); // l,t, r, b
+    //SetRect (&m_srcRect, 0, 0, m_vidYSize, m_vidXSize); // l,t, r, b
     m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
     if(m_sg==NULL){
         post("pix_videoDarwin: could not open defalut component");
@@ -158,7 +151,7 @@ void pix_videoDarwin :: InitSeqGrabber()
     }else{
             post("pix_videoDarwin: made new SG channnel");
         }
-    anErr = SGSetChannelBounds(m_vc, &tempRect);
+    anErr = SGSetChannelBounds(m_vc, &m_srcRect);
     if(anErr!=noErr){
         post("pix_videoDarwin: could not set SG ChannelBounds ");
     }else{
@@ -170,10 +163,10 @@ void pix_videoDarwin :: InitSeqGrabber()
     }else{
             post("pix_videoDarwin: set SG ChannelUsage");
         }
-    m_rowBytes = 320*4;
+    m_rowBytes = m_vidXSize*4;
     anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                                  k32ARGBPixelFormat,
-                                 &tempRect, 
+                                 &m_srcRect, 
                                  NULL, 
                                  NULL, 
                                  0, 
@@ -181,7 +174,7 @@ void pix_videoDarwin :: InitSeqGrabber()
                                  m_rowBytes);
 	if (anErr!= noErr)
   	{
-		post ("error at QTNewGWorldFromPtr");
+		post ("pix_videoDarwin: %d error at QTNewGWorldFromPtr", anErr);
 		return;
 	}  
     if (NULL == m_srcGWorld)
@@ -190,28 +183,7 @@ void pix_videoDarwin :: InitSeqGrabber()
 		return;
 	}
     SGSetGWorld(m_sg,(CGrafPtr)m_srcGWorld, NULL);
-	ghPixMap = GetGWorldPixMap (m_srcGWorld);
-        
-    if (ghPixMap)
-	{
-		if (LockPixels (ghPixMap)){
-			gpBaseAddr = (unsigned char *) GetPixBaseAddr (ghPixMap);
-            rowStride = (unsigned long) GetPixRowBytes (ghPixMap);
-            UnlockPixels (ghPixMap);
-        }
-		else
-		{
-			post ("Could not lock PixMap\n");
-			return;
-		}
-	}
-	else
-	{
-            post ("Could not GetGWorldPixMap\n");
-            return;
-        }
-
-SGStartPreview(m_sg);
+    SGStartPreview(m_sg);
 }
 
 void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
