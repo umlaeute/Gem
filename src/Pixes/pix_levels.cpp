@@ -49,7 +49,12 @@ pix_levels :: pix_levels()
     m_BlueInputCeiling = 255.0f;	// 0 to 255
     m_BlueOutputFloor = 0.0f;		// 0 to 255
     m_BlueOutputCeiling = 255.0f;	// 0 to 255
-    
+ 
+    m_AlphaInputFloor = 0.0f;		// 0 to 255
+    m_AlphaInputCeiling = 255.0f;	// 0 to 255
+    m_AlphaOutputFloor = 0.0f;		// 0 to 255
+    m_AlphaOutputCeiling = 255.0f;	// 0 to 255  
+
     m_LowPercentile = 5.0f;		// 0 to 100
     m_HighPercentile = 95.0f;		// 0 to 100
 
@@ -72,9 +77,9 @@ pix_levels :: ~pix_levels()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_levels :: processRGBAImage(imageStruct &image)
+void pix_levels :: processImage(imageStruct &image)
 {
-    nWidth = image.xsize;
+    nWidth = image.xsize*image.csize/4;
     nHeight = image.ysize;
     
     pSource = (U32*)image.data;
@@ -86,38 +91,8 @@ void pix_levels :: processRGBAImage(imageStruct &image)
     myImage.format=image.format;
     myImage.reallocate();
     pOutput = (U32*)myImage.data;
-    
-    //SPete_ChannelFunction_Settings CFSettings;
 
-    Pete_Levels_CalculateAutoLevels();
-    Pete_Levels_SetupCFSettings();
-    Pete_ChannelFunction_Render();
-
-    image.data = myImage.data;
-}
-
-/////////////////////////////////////////////////////////
-// processYUVImage
-//
-/////////////////////////////////////////////////////////
-void pix_levels :: processYUVImage(imageStruct &image)
-{
-    nWidth = image.xsize/2;
-    nHeight = image.ysize;
-    
-    pSource = (U32*)image.data;
-
-    myImage.xsize = image.xsize;
-    myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format=image.format;
-    myImage.reallocate();
-    pOutput = (U32*)myImage.data;
-    
-    //SPete_ChannelFunction_Settings CFSettings;
-
-    Pete_Levels_CalculateAutoLevels();
+    if(m_DoAuto)Pete_Levels_CalculateAutoLevels(GL_RGBA);
     Pete_Levels_SetupCFSettings();
     Pete_ChannelFunction_Render();
 
@@ -128,7 +103,7 @@ void pix_levels :: processYUVImage(imageStruct &image)
 // various processing here
 //
 /////////////////////////////////////////////////////////
-void pix_levels :: Pete_Levels_SetupCFSettings()
+void pix_levels :: Pete_Levels_SetupCFSettings(int colour)
 {
     const int cnFixedShift=16;
     const int cnFixedMult=(1<<cnFixedShift);
@@ -155,28 +130,34 @@ void pix_levels :: Pete_Levels_SetupCFSettings()
       int*const pRedTable=&(m_nRedTable[0]);
       int*const pGreenTable=&(m_nGreenTable[0]);
       int*const pBlueTable=&(m_nBlueTable[0]);
+      int*const pAlphaTable=&(m_nAlphaTable[0]);
 
       int nCount;
       for (nCount=0; nCount<256; nCount+=1) {
-	const int nSourceRed=nCount;
+	const int nSourceRed  =nCount;
 	const int nSourceGreen=nCount;
-	const int nSourceBlue=nCount;
+	const int nSourceBlue =nCount;
+	const int nSourceAlpha=nCount;
 
-	const int nTempRed=(((nSourceRed-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+	const int nTempRed=  (((nSourceRed  -nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
 	const int nTempGreen=(((nSourceGreen-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-	const int nTempBlue=(((nSourceBlue-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+	const int nTempBlue= (((nSourceBlue -nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+	const int nTempAlpha=(((nSourceAlpha-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
 
-	int nOutputRed=((nTempRed*nOutputDelta)/256)+nOutputLow;
+	int nOutputRed  =((nTempRed  *nOutputDelta)/256)+nOutputLow;
 	int nOutputGreen=((nTempGreen*nOutputDelta)/256)+nOutputLow;
-	int nOutputBlue=((nTempBlue*nOutputDelta)/256)+nOutputLow;
+	int nOutputBlue =((nTempBlue *nOutputDelta)/256)+nOutputLow;
+	int nOutputAlpha=((nTempAlpha*nOutputDelta)/256)+nOutputLow;
 
-	nOutputRed=clampFunc(nOutputRed,0,255);
+	nOutputRed  =clampFunc(nOutputRed  ,0,255);
 	nOutputGreen=clampFunc(nOutputGreen,0,255);
-	nOutputBlue=clampFunc(nOutputBlue,0,255);
+	nOutputBlue =clampFunc(nOutputBlue ,0,255);
+	nOutputAlpha=clampFunc(nOutputAlpha,0,255);
 
-	pRedTable[nCount]=(nOutputRed<<SHIFT_RED);
-	pGreenTable[nCount]=(nOutputGreen<<SHIFT_GREEN);
-	pBlueTable[nCount]=(nOutputBlue<<SHIFT_BLUE);
+	pRedTable  [nCount]=(nOutputRed);
+	pGreenTable[nCount]=(nOutputGreen);
+	pBlueTable [nCount]=(nOutputBlue);
+	pAlphaTable[nCount]=(nOutputAlpha);
       }
     } else { // !m_doUniform
 	  const int nRedInputLow=static_cast<int>(m_RedInputFloor);
@@ -194,14 +175,21 @@ void pix_levels :: Pete_Levels_SetupCFSettings()
 	  const int nBlueOutputLow=static_cast<int>(m_BlueOutputFloor);
 	  int nBlueOutputDelta=static_cast<int>(m_BlueOutputCeiling-m_BlueOutputFloor);
 
+	  const int nAlphaInputLow=static_cast<int>(m_AlphaInputFloor);
+	  int nAlphaInputDelta=static_cast<int>(m_AlphaInputCeiling-m_AlphaInputFloor);
+	  const int nAlphaOutputLow=static_cast<int>(m_AlphaOutputFloor);
+	  int nAlphaOutputDelta=static_cast<int>(m_AlphaOutputCeiling-m_AlphaOutputFloor);
+
 	  // avoid the possibility of divide-by-zeros
 	  if (m_DoAllowInversion) {
 	    if (nRedInputDelta==0)   nRedInputDelta=1;
 	    if (nRedOutputDelta==0)	 nRedOutputDelta=1;
 	    if (nGreenInputDelta==0) nGreenInputDelta=1;
 	    if (nGreenOutputDelta==0)nGreenOutputDelta=1;
-	    if (nRedInputDelta==0)	 nRedInputDelta=1;
-	    if (nRedOutputDelta==0)  nRedOutputDelta=1;
+	    if (nBlueInputDelta==0)	 nBlueInputDelta=1;
+	    if (nBlueOutputDelta==0)  nBlueOutputDelta=1;
+	    if (nAlphaInputDelta==0)	 nAlphaInputDelta=1;
+	    if (nAlphaOutputDelta==0)  nAlphaOutputDelta=1;
 
 	    nRedInputDelta=clampFunc(nRedInputDelta,-255,255);
 	    nRedOutputDelta=clampFunc(nRedOutputDelta,-255,255);
@@ -211,6 +199,9 @@ void pix_levels :: Pete_Levels_SetupCFSettings()
 
 	    nBlueInputDelta=clampFunc(nBlueInputDelta,-255,255);
 	    nBlueOutputDelta=clampFunc(nBlueOutputDelta,-255,255);
+
+	    nAlphaInputDelta=clampFunc(nAlphaInputDelta,-255,255);
+	    nAlphaOutputDelta=clampFunc(nAlphaOutputDelta,-255,255);
 	  } else {
 	    nRedInputDelta=clampFunc(nRedInputDelta,1,255);
 	    nRedOutputDelta=clampFunc(nRedOutputDelta,1,255);
@@ -220,51 +211,61 @@ void pix_levels :: Pete_Levels_SetupCFSettings()
 
 	    nBlueInputDelta=clampFunc(nBlueInputDelta,1,255);
 	    nBlueOutputDelta=clampFunc(nBlueOutputDelta,1,255);
+
+	    nAlphaInputDelta=clampFunc(nAlphaInputDelta,1,255);
+	    nAlphaOutputDelta=clampFunc(nAlphaOutputDelta,1,255);
 	  }
 
 	  const int nRedRecipInputDelta=cnFixedOne/nRedInputDelta;
 	  const int nGreenRecipInputDelta=cnFixedOne/nGreenInputDelta;
 	  const int nBlueRecipInputDelta=cnFixedOne/nBlueInputDelta;
+	  const int nAlphaRecipInputDelta=cnFixedOne/nAlphaInputDelta;
 
 	  int*const pRedTable=&(m_nRedTable[0]);
 	  int*const pGreenTable=&(m_nGreenTable[0]);
 	  int*const pBlueTable=&(m_nBlueTable[0]);
+	  int*const pAlphaTable=&(m_nAlphaTable[0]);
 
 	  int nCount;
 	  for (nCount=0; nCount<256; nCount+=1) {
-	    const int nSourceRed=nCount;
+	    const int nSourceRed  =nCount;
 	    const int nSourceGreen=nCount;
-	    const int nSourceBlue=nCount;
+	    const int nSourceBlue =nCount;
+	    const int nSourceAlpha=nCount;
 	    
-	    const int nTempRed=(((nSourceRed-nRedInputLow)*256)*nRedRecipInputDelta)>>cnFixedShift;
+	    const int nTempRed=  (((nSourceRed  -nRedInputLow  )*256)*nRedRecipInputDelta  )>>cnFixedShift;
 	    const int nTempGreen=(((nSourceGreen-nGreenInputLow)*256)*nGreenRecipInputDelta)>>cnFixedShift;
-	    const int nTempBlue=(((nSourceBlue-nBlueInputLow)*256)*nBlueRecipInputDelta)>>cnFixedShift;
+	    const int nTempBlue= (((nSourceBlue -nBlueInputLow )*256)*nBlueRecipInputDelta )>>cnFixedShift;
+	    const int nTempAlpha=(((nSourceAlpha-nAlphaInputLow)*256)*nAlphaRecipInputDelta)>>cnFixedShift;
 	    
-	    int nOutputRed=((nTempRed*nRedOutputDelta)/256)+nRedOutputLow;
+	    int nOutputRed  =((nTempRed  *nRedOutputDelta  )/256)+nRedOutputLow;
 	    int nOutputGreen=((nTempGreen*nGreenOutputDelta)/256)+nGreenOutputLow;
-	    int nOutputBlue=((nTempBlue*nBlueOutputDelta)/256)+nBlueOutputLow;
+	    int nOutputBlue =((nTempBlue *nBlueOutputDelta )/256)+nBlueOutputLow;
+	    int nOutputAlpha=((nTempAlpha*nAlphaOutputDelta)/256)+nAlphaOutputLow;
 	    
-	    nOutputRed=clampFunc(nOutputRed,0,255);
+	    nOutputRed  =clampFunc(nOutputRed  ,0,255);
 	    nOutputGreen=clampFunc(nOutputGreen,0,255);
-	    nOutputBlue=clampFunc(nOutputBlue,0,255);
+	    nOutputBlue =clampFunc(nOutputBlue ,0,255);
+	    nOutputAlpha=clampFunc(nOutputAlpha,0,255);
 	    
-	    pRedTable[nCount]=(nOutputRed<<SHIFT_RED);
-	    pGreenTable[nCount]=(nOutputGreen<<SHIFT_GREEN);
-	    pBlueTable[nCount]=(nOutputBlue<<SHIFT_BLUE);
+	    pRedTable  [nCount]=(nOutputRed);
+	    pGreenTable[nCount]=(nOutputGreen);
+	    pBlueTable [nCount]=(nOutputBlue);
+	    pAlphaTable[nCount]=(nOutputAlpha);
 	  }
     }
 }
 
-void pix_levels :: Pete_Levels_CalculateAutoLevels() {
-	if (!m_DoAuto)return;
-
+void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour) {
 	int	nRedHistogram[256];
 	int	nGreenHistogram[256];
 	int	nBlueHistogram[256];
+	int	nAlphaHistogram[256];
 
 	Pete_ZeroMemory(&nRedHistogram[0],256*sizeof(int));
 	Pete_ZeroMemory(&nGreenHistogram[0],256*sizeof(int));
 	Pete_ZeroMemory(&nBlueHistogram[0],256*sizeof(int));
+	Pete_ZeroMemory(&nAlphaHistogram[0],256*sizeof(int));
 
 	const int nNumPixels = nWidth*nHeight;
 	
@@ -274,21 +275,45 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels() {
 	const int nSampleSpacing=8;
 
 	while (pCurrentSource<pSourceEnd) {
-		
 		U32* pSourceLineStart=pCurrentSource;
 		const U32* pSourceLineEnd=pCurrentSource+nWidth;
-			
+
 		while (pCurrentSource<pSourceLineEnd) {
 
 			U32 SourceColour=*pCurrentSource;
-			
+
 			const int nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
 			const int nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
 			const int nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
+			const int nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
 
-			nRedHistogram[nSourceRed]+=1;
-			nGreenHistogram[nSourceGreen]+=1;
-			nBlueHistogram[nSourceBlue]+=1;
+			switch(colour){
+			default:
+			  nRedHistogram[nSourceRed]+=1;
+			  nGreenHistogram[nSourceGreen]+=1;
+			  nBlueHistogram[nSourceBlue]+=1;
+			  nAlphaHistogram[nSourceAlpha]+=1;
+			  break;
+			case (GL_LUMINANCE):
+			  nRedHistogram  [nSourceRed] +=1;nRedHistogram  [nSourceGreen]+=1;
+			  nRedHistogram  [nSourceBlue]+=1;nRedHistogram  [nSourceAlpha]+=1;
+			  nGreenHistogram[nSourceRed] +=1;nGreenHistogram[nSourceGreen]+=1;
+			  nGreenHistogram[nSourceBlue]+=1;nGreenHistogram[nSourceAlpha]+=1;
+			  nBlueHistogram [nSourceRed] +=1;nBlueHistogram [nSourceGreen]+=1;
+			  nBlueHistogram [nSourceBlue]+=1;nBlueHistogram [nSourceAlpha]+=1;
+			  nAlphaHistogram[nSourceRed] +=1;nAlphaHistogram[nSourceGreen]+=1;
+			  nAlphaHistogram[nSourceBlue]+=1;nAlphaHistogram[nSourceAlpha]+=1;
+			  break;
+			case (GL_YUV422_GEM):
+			  nRedHistogram[nSourceRed]+=1; // U
+			  nGreenHistogram[nSourceGreen]+=1; // Y0
+			  nAlphaHistogram[nSourceGreen]+=1; // Y0
+ 			  nBlueHistogram[nSourceBlue]+=1; // V
+			  nGreenHistogram[nSourceAlpha]+=1; // Y1
+			  nAlphaHistogram[nSourceAlpha]+=1; // Y1
+			  break;
+			}
+
 
 			pCurrentSource+=nSampleSpacing;
 		}
@@ -303,6 +328,8 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels() {
 	int nCurrentRedTotal;
 	int nCurrentGreenTotal;
 	int nCurrentBlueTotal;
+	int nCurrentAlphaTotal;
+
 	int nCurrentSlot;
 
 	nCurrentRedTotal=0;
@@ -359,6 +386,24 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels() {
 
 	const int nBlueHigh=(nCurrentSlot+1);
 
+	nCurrentAlphaTotal=0;
+	nCurrentSlot=0;
+	while ((nCurrentAlphaTotal<nStartThreshold)&&(nCurrentSlot<256)) {
+		nCurrentAlphaTotal+=nAlphaHistogram[nCurrentSlot];
+		nCurrentSlot+=1;
+	}
+
+	const int nAlphaLow=(nCurrentSlot-1);
+
+	nCurrentAlphaTotal=nSampleCount;
+	nCurrentSlot=255;
+	while ((nCurrentAlphaTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
+		nCurrentAlphaTotal-=nAlphaHistogram[nCurrentSlot];
+		nCurrentSlot-=1;
+	}
+
+	const int nAlphaHigh=(nCurrentSlot+1);
+
 	m_RedInputFloor=(float)(nRedLow);
 	if (nRedLow!=nRedHigh){
 		m_RedInputCeiling=(float)(nRedHigh);
@@ -386,6 +431,15 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels() {
 		m_BlueInputCeiling=(float)(nBlueHigh-1);
 	}
 
+	m_AlphaInputFloor=(float)(nAlphaLow);
+	if (nAlphaLow!=nAlphaHigh){
+		m_AlphaInputCeiling=(float)(nAlphaHigh);
+	} else if (nAlphaHigh<255) {
+		m_AlphaInputCeiling=(float)(nAlphaHigh+1);
+	} else {
+		m_AlphaInputCeiling=(float)(nAlphaHigh-1);
+	}
+
 	int nLowLuminance = 
 		((90 * nRedLow)+
 		(115 * nGreenLow)+
@@ -410,32 +464,39 @@ void pix_levels :: Pete_ChannelFunction_Render() {
 	const int*const pRedTable=m_nRedTable;
 	const int*const pGreenTable=m_nGreenTable;
 	const int*const pBlueTable=m_nBlueTable;
+	const int*const pAlphaTable=m_nAlphaTable;
 
 	const int nNumPixels = nWidth*nHeight;
 
 	U32* pCurrentSource=pSource;
 	U32* pCurrentOutput=pOutput;
 	const U32* pSourceEnd=(pSource+nNumPixels);
-
 	while (pCurrentSource!=pSourceEnd) {
 		const U32 SourceColour=*pCurrentSource;
 		const unsigned int nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
 		const unsigned int nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
 		const unsigned int nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
-		const unsigned int nSourceAlpha=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
+		//		const unsigned int nSourceAlpha=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
+		const unsigned int nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
+		//const unsigned int nSourceAlpha0=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
+
 
 		const int nOutputRed=pRedTable[nSourceRed];
 		const int nOutputGreen=pGreenTable[nSourceGreen];
 		const int nOutputBlue=pBlueTable[nSourceBlue];
+		const int nOutputAlpha=pAlphaTable[nSourceAlpha];
+		/*
+		post("IN  %d %d %d %d", (nSourceRed&0xff), (nSourceGreen&0xff), (nSourceBlue&0xff), (nSourceAlpha&0xff));
 
+		post("OUT %d %d %d %d", (nOutputRed&0xff), (nOutputGreen&0xff), (nOutputBlue&0xff), (nOutputAlpha&0xff));
+		*/
 		const U32 OutputColour=
-			(nOutputRed)|
-			(nOutputGreen)|
-			(nOutputBlue)|
-			(nSourceAlpha);
+		  ((nOutputRed&0xff)<<SHIFT_RED)|
+		  ((nOutputGreen&0xff)<<SHIFT_GREEN)|
+		  ((nOutputBlue&0xff)<<SHIFT_BLUE)|
+		  ((nOutputAlpha&0xff)<<SHIFT_ALPHA);
 
 		*pCurrentOutput=OutputColour;
-
 		pCurrentSource+=1;
 		pCurrentOutput+=1;
 	}
