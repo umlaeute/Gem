@@ -86,8 +86,14 @@ void pix_film :: createBuffer()
 {
   const int neededXSize = m_xsize;
   const int neededYSize = m_ysize;
+  int	oldx, oldy;
+  
+oldx = 0;
+oldy = 0;
 
-  deleteBuffer();
+    if (neededXSize != oldx || neededYSize != oldy)
+    {
+deleteBuffer();
 
   m_pixBlock.image.xsize = neededXSize;
   m_pixBlock.image.ysize = neededYSize;
@@ -99,7 +105,7 @@ void pix_film :: createBuffer()
   int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize+4; /* +4 from MPEG */
 #endif
   m_data = new unsigned char[dataSize];
-  memset(m_data, 0, dataSize);
+ // memset(m_data, 0, dataSize);
 
   m_pixBlock.image.data = m_data;
   m_frame =  m_data;
@@ -107,6 +113,9 @@ void pix_film :: createBuffer()
   m_pixBlock.image.csize = m_csize;
   m_pixBlock.image.format= m_format;
 
+    oldx = m_pixBlock.image.xsize;
+    oldy = m_pixBlock.image.ysize;
+}
   //post("created buffer @ %x", m_data);
 }
 
@@ -155,34 +164,42 @@ void pix_film :: startRendering()
 {
   m_pixBlock.newimage = 1;
   m_pixBlock.newfilm = 0;
+  
 }
 void pix_film :: render(GemState *state)
 {
   /* get the current frame from the file */
-  int newImage = 0;
+  
+  newImage = 0;
   if (!m_haveMovie || !m_pixBlock.image.data)return;
   // do we actually need to get a new frame from the movie ?
+  
   if (m_reqFrame != m_curFrame) {
-    newImage = 1;
+    //newImage = 1;
     getFrame();
     m_curFrame = m_reqFrame;
     if (m_film)m_pixBlock.image.data = m_frame; // this is mainly for windows
   }
-  m_pixBlock.newimage = newImage;
+  else
+  {
+  newImage = 0;
+  }
+   
   if (m_newFilm){
     m_pixBlock.newfilm = 1;
     m_newFilm = 0;
-    post("pix_film: new film set");
+   // post("pix_film: new film set");
   }
   state->image = &m_pixBlock;
   
 #ifdef __APPLE__
   if (m_reqFrame == m_curFrame)
-        ::MoviesTask(NULL, 0);
+        
+      //  ::MoviesTask(NULL, 0);
 #endif
   /* texture it, if needed */
   texFrame(state, newImage);
-
+  m_pixBlock.newimage = newImage;
   // automatic proceeding
   if (m_auto)m_reqFrame++;
 }
@@ -193,7 +210,8 @@ void pix_film :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_film :: postrender(GemState *state)
 {
-  m_pixBlock.newimage = 0;
+    
+    m_pixBlock.newimage = 0;
   if (m_numFrames>0 && m_reqFrame>m_numFrames){
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);

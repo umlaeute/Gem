@@ -59,6 +59,8 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   // Do the rendering
   virtual void getFrame();
   
+  virtual void postrender(GemState *state);
+  
   //////////
   // load film into RAM
   virtual void LoadRam();
@@ -90,6 +92,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   TimeValue 		prevTime;
   TimeValue		curTime;
  // int 			newImage;
+  int			m_Task;
 
 private:
   Movie			m_movie;

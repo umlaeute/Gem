@@ -146,11 +146,12 @@ class GEM_EXTERN pix_film : public GemBase
 
   int		m_xsize;
   int		m_ysize;
-  int       m_csize;
+  int       	m_csize;
 
 
-  bool      m_film; // are we in film- or in movie-mode
+  bool      	m_film; // are we in film- or in movie-mode
   int		m_newFilm;
+  int 		newImage;
   int		m_colorspace;
   int		m_format;
 
