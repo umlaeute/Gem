@@ -18,6 +18,8 @@ LOG
 // utility functions from PeteHelpers.h
 typedef unsigned long U32; 
 typedef unsigned short U16;
+typedef unsigned char U8;
+
 
 #define SHIFT_ALPHA	(24)
 #define SHIFT_RED	(16)
