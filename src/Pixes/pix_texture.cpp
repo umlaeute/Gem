@@ -27,7 +27,6 @@ CPPEXTERN_NEW(pix_texture)
 static inline int powerOfTwo(int value)
 {
 	int x = 1;
-	//	while(x <= value) x <<= 1;
 	while(x < value) x <<= 1;
 	return(x);  
 }
@@ -101,13 +100,14 @@ void pix_texture :: render(GemState *state)
     if ( !state->image || !m_textureOnOff) return;
 
     state->texture = 1;
+    state->texCoords = m_coords;
+    state->numTexCoords = 4;
     
 //#ifdef /*GL_VERSION_1_1 && !GemMan::texture_rectangle_supported	//tigital
 //    glEnable(GL_TEXTURE_RECTANGLE_EXT);
 //    glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
 //#elif*/ 
 #ifdef GL_VERSION_1_1
-    //>>>>>>> 1.3
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_textureObj);
 #elif GL_EXT_texture_object
@@ -133,9 +133,8 @@ void pix_texture :: render(GemState *state)
     if (m_rebuildList)
 #endif
       {
-	//<<<<<<< pix_texture.cpp
 	// if the size changed, then reset the texture
-	if (state->image->image.csize != m_dataSize[0] ||
+/*	if (state->image->image.csize != m_dataSize[0] ||
 	    state->image->image.xsize != m_dataSize[1] ||
 	    state->image->image.ysize != m_dataSize[2])	{
 	  m_dataSize[0] = state->image->image.csize;
@@ -159,8 +158,8 @@ void pix_texture :: render(GemState *state)
 			  state->image->image.format,
 			  state->image->image.type,
 			  state->image->image.data);		
-	}
-#if 0
+	}*/
+#if 1
 	//=======
 	// if the size changed, then reset the texture
 	int x_2 = powerOfTwo(state->image->image.xsize);
@@ -205,7 +204,8 @@ void pix_texture :: render(GemState *state)
 	  m_coords[0].t = m_yRatio;
 #endif
 	}
-
+        state->texCoords = m_coords;
+        state->numTexCoords = 4;
 
 	if (m_buffer.csize != m_dataSize[0] ||
 	    m_buffer.xsize != m_dataSize[1] ||
@@ -231,7 +231,6 @@ void pix_texture :: render(GemState *state)
 			state->image->image.format,
 			state->image->image.type,
 			state->image->image.data);
-	  //>>>>>>> 1.3
 #endif
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
