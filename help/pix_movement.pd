@@ -1,11 +1,12 @@
-#N canvas 537 64 584 490 10;
+#N canvas 299 95 580 486 10;
 #X msg 152 134 gemList;
 #X msg 152 224 gemList;
 #X text 169 16 part of GEM;
-#X text 176 43 [tv_biquad];
+#X text 176 43 [pix_biquad];
+#X obj 152 185 pix_movement;
 #X text 64 83 set the alpha-channel depending on the difference between
 this and the last frame.;
-#X text 56 329 [tv_movement] detects movement between two subsequent
+#X text 56 329 [pix_movement] detects movement between two subsequent
 frames and stores it into the alpha-channel.;
 #X msg 256 121 tresh <threshold>;
 #X text 57 368 since image-noise can disturb this processing \, changes
@@ -13,7 +14,6 @@ between two corresponding pixels that are smaller than <threshold>
 are ignored.;
 #X text 60 424 For a movement follower you might get the center-of-movement
 with a [pix_blob] that listens to the Alpha-channel afterwards.;
-#X obj 152 185 pix_movement;
-#X connect 0 0 9 0;
-#X connect 6 0 9 0;
-#X connect 9 0 1 0;
+#X connect 0 0 4 0;
+#X connect 4 0 1 0;
+#X connect 7 0 4 0;
