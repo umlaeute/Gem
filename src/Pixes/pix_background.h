@@ -53,8 +53,12 @@ CPPEXTERN_HEADER(pix_background, GemPixObj)
     	// Do the YUV processing
     	virtual void 	processYUVImage(imageStruct &image);
         
+        //////////
+    	// Do the YUV Altivec processing
+    	virtual void 	processYUVImageAltivec(imageStruct &image);
+        
         unsigned char  *saved;
-        int		Yrange,Urange,Vrange;
+        int		m_Yrange,m_Urange,m_Vrange;
         int		m_blur,m_blurH,m_blurW,m_blurSize,m_blurBpp;
         t_inlet         *inletBlur;
         int		m_reset;
