@@ -49,6 +49,7 @@ class GEM_EXTERN pix_refraction : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
+        virtual void	processYUVImage(imageStruct &image);
 
 	imageStruct	myImage;
 	int		nHeight;

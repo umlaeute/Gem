@@ -136,6 +136,99 @@ void pix_refraction :: processRGBAImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_refraction :: processYUVImage(imageStruct &image)
+{
+    nWidth = image.xsize/2;
+    nHeight = image.ysize;
+    if (!init) {
+	init = 1;
+    }
+    pSource = (U32*)image.data;
+    
+    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
+	int dataSize = image.xsize * image.ysize * image.csize;
+	myImage.clear();
+
+	myImage.allocate(dataSize);
+    }
+
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.csize = image.csize;
+    myImage.type  = image.type;
+	//myImage.setBlack();
+    pOutput = (U32*)myImage.data;
+	
+    const int nHalfWidth=(nWidth/2);
+    const int nHalfHeight=(nHeight/2);
+
+    const int nNumPixels = nWidth*nHeight;
+
+    float GatedRefraction=m_Refraction;
+    if ((m_DoAllowMagnification==0.0f)&&(m_Refraction<1.0f)) {
+		GatedRefraction=1.0f;
+    }
+
+    const int nRefraction=static_cast<int>(GatedRefraction*256.0f);
+
+    int nCellWidth=static_cast<int>(m_CellWidth);
+    if (nCellWidth<=0) {
+		nCellWidth=1;
+    }
+    int nCellHeight=static_cast<int>(m_CellHeight);
+    if (nCellHeight<=0) {
+		nCellHeight=1;
+    }
+
+    const int nHalfCellWidth=(nCellWidth/2);
+    const int nHalfCellHeight=(nCellHeight/2);	
+
+    //const int nYStartOffset=(nHalfCellHeight*(256))/nRefraction;
+    //const int nXStartOffset=(nHalfCellWidth*(256))/nRefraction;
+
+    U32* pCurrentOutput=pOutput;
+    const U32* pOutputEnd=(pOutput+nNumPixels);
+
+    int nY=-nHalfHeight+nHalfCellHeight;
+    while (pCurrentOutput!=pOutputEnd) {
+
+	//const U32* pOutputLineStart=pCurrentOutput;
+	const U32* pOutputLineEnd=pCurrentOutput+nWidth;
+
+	const int nYCentre=(((nY+(GetSign(nY)*nHalfCellHeight))/nCellHeight)*nCellHeight)+nHalfCellHeight;
+	const int nYDist=(nY-nYCentre);
+	int nSourceY=((nYDist*nRefraction)>>8)+nYCentre+nHalfHeight;
+	nSourceY=GateInt(nSourceY,0,(nHeight-1));
+
+	const U32* pSourceLineStart=(pSource+(nSourceY*nWidth));
+
+	int nX=-nHalfWidth+nHalfCellWidth;
+	while (pCurrentOutput!=pOutputLineEnd) {
+
+	    const int nXCentre=(((nX+(GetSign(nX)*nHalfCellWidth))/nCellWidth)*nCellWidth)+nHalfCellWidth;
+	    const int nXDist=(nX-nXCentre);
+	    int nSourceX=((nXDist*nRefraction)>>8)+nXCentre+nHalfWidth;
+	    nSourceX=GateInt(nSourceX,0,(nWidth-1));
+
+	    const U32* pCurrentSource=pSourceLineStart+nSourceX;
+
+	    *pCurrentOutput=*pCurrentSource;
+
+	    pCurrentOutput+=1;
+	    nX+=1;
+
+	}
+
+	nY+=1;
+
+    }
+    image.data = myImage.data;
+}
+
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
