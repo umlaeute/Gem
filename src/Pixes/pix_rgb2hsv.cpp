@@ -64,7 +64,7 @@ void pix_rgb2hsv :: processRGBAImage(imageStruct &image)
   while (count--)
     {
       unsigned char s, v;
-      int h;
+      int h=0;
       unsigned char r=pixels[chRed], g=pixels[chGreen], b=pixels[chBlue];
       unsigned char max = TRI_MAX(r, g, b);
       unsigned char min = TRI_MIN(r, g, b);

@@ -135,15 +135,15 @@ void pix_histo :: update_graphs(void)
 
   switch (m_mode) {
   case 4:
-    if (a = (t_garray *)pd_findbyclass(name_A, garray_class))
+    if ((a = (t_garray *)pd_findbyclass(name_A, garray_class)))
       garray_redraw(a);
   case 3:
-    if (a = (t_garray *)pd_findbyclass(name_G, garray_class))
+    if ((a = (t_garray *)pd_findbyclass(name_G, garray_class)))
       garray_redraw(a);
-    if (a = (t_garray *)pd_findbyclass(name_B, garray_class))
+    if ((a = (t_garray *)pd_findbyclass(name_B, garray_class)))
       garray_redraw(a);
   case 1:
-    if (a = (t_garray *)pd_findbyclass(name_R, garray_class))
+    if ((a = (t_garray *)pd_findbyclass(name_R, garray_class)))
       garray_redraw(a);
   default:
     break;
@@ -162,8 +162,8 @@ void pix_histo :: processRGBAImage(imageStruct &image)
   unsigned char *base = image.data;
   
   int n_R, n_G, n_B, n_A;
-  t_float *tab_R, *tab_G, *tab_B, *tab_A;
-  t_float scale_R, scale_G, scale_B, scale_A;
+  t_float *tab_R=NULL, *tab_G=NULL, *tab_B=NULL, *tab_A=NULL;
+  t_float scale_R=0, scale_G=0, scale_B=0, scale_A=0;
 
   t_float f;
 

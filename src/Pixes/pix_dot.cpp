@@ -158,7 +158,7 @@ void pix_dot :: processRGBAImage(imageStruct &image)
   unsigned int *src = (unsigned int*)image.data;
   unsigned int *dest;
 
-  int x, y, i, sx, sy;
+  int x, y, sx, sy;
   int scale =1;
   
   

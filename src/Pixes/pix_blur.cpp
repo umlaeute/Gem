@@ -56,7 +56,7 @@ void pix_blur :: processRGBAImage(imageStruct &image)
 {
        int h,w,hlength;
     long src;
-    int R,G,B,A;
+    int R,G,B;
     int rightGain,imageGain, Rgain,Igain;
     unsigned char *pixels=image.data;
 
