@@ -17,6 +17,7 @@
 #include "world_light.h"
 
 #include "Base/GemMan.h"
+
 #ifdef __APPLE__
 extern bool HaveValidContext (void);
 #endif
@@ -127,6 +128,12 @@ void world_light :: startRendering()
 /////////////////////////////////////////////////////////
 void world_light :: stopRendering()
 {
+#ifdef __APPLE__
+  if (!HaveValidContext ()) {
+    post("GEM: world_light: need context to call glDisable");
+    return;
+  }
+#endif
     if (m_thing)
 		gluDeleteQuadric(m_thing);
     m_thing = NULL;
