@@ -42,6 +42,7 @@ extern "C" {
    void pix_filmNT_setup();
    void pix_filmDarwin_setup();
    void pix_filmDarwinYUV_setup();
+   void pix_filmFFMPEG_setup();
    void pix_flip_setup();
    void pix_gain_setup();
    void pix_histo_setup();
@@ -125,6 +126,10 @@ extern "C" {
       //      pix_film_setup();
 #ifdef __linux
       pix_filmLinux_setup();
+#if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
+      pix_filmFFMPEG_setup();
+#endif
+
 #endif
 #ifdef _WINDOWS
       pix_filmNT_setup();
