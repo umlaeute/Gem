@@ -74,6 +74,7 @@ GEM_EXTERN int getGLdefine(char *name)
     if (!(name[0]=='G' && name[1]=='L' && name[2]=='_'))return _GL_UNDEFINED;
     name+=3;
     switch (count){
+#pragma mark *** 4 ***
 	case 4:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_Q
@@ -158,6 +159,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "XOR")) return GL_XOR;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 7 ***
 	case 7:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_AUX0
@@ -248,6 +250,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "ZERO")) return GL_ZERO;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 8 ***
 	case 8:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ACCUM
@@ -335,6 +338,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "SHORT")) return GL_SHORT;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 9 ***
 	case 9:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ALPHA4
@@ -440,6 +444,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "ZOOM_Y")) return GL_ZOOM_Y;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 10 ***
 	case 10:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_2_BYTES
@@ -524,6 +529,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VERSION")) return GL_VERSION;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 11 ***
 	case 11:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_3D_COLOR
@@ -632,6 +638,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VIEWPORT")) return GL_VIEWPORT;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 12 ***
 	case 12:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_1PASS_EXT
@@ -764,6 +771,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "TRIANGLES")) return GL_TRIANGLES;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 13 ***
 	case 13:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_1PASS_SGIS
@@ -920,6 +928,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "YCRCB_SGIX")) return GL_YCRCB_SGIX;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 14 ***
 	case 14:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_2PASS_0_EXT
@@ -1066,6 +1075,36 @@ GEM_EXTERN int getGLdefine(char *name)
 #ifdef GL_MATRIX_MODE
 		else if (!strcmp(name, "MATRIX_MODE")) return GL_MATRIX_MODE;
 #endif
+#ifdef GL_MATRIX0_ARB
+		else if (!strcmp(name, "MATRIX0_ARB")) return GL_MATRIX0_ARB;
+#endif
+#ifdef GL_MATRIX1_ARB
+		else if (!strcmp(name, "MATRIX1_ARB")) return GL_MATRIX1_ARB;
+#endif
+#ifdef GL_MATRIX2_ARB
+		else if (!strcmp(name, "MATRIX2_ARB")) return GL_MATRIX2_ARB;
+#endif
+#ifdef GL_MATRIX3_ARB
+		else if (!strcmp(name, "MATRIX3_ARB")) return GL_MATRIX3_ARB;
+#endif
+#ifdef GL_MATRIX4_ARB
+		else if (!strcmp(name, "MATRIX4_ARB")) return GL_MATRIX4_ARB;
+#endif
+#ifdef GL_MATRIX5_ARB
+		else if (!strcmp(name, "MATRIX5_ARB")) return GL_MATRIX5_ARB;
+#endif
+#ifdef GL_MATRIX6_ARB
+		else if (!strcmp(name, "MATRIX6_ARB")) return GL_MATRIX6_ARB;
+#endif
+#ifdef GL_MATRIX7_ARB
+		else if (!strcmp(name, "MATRIX7_ARB")) return GL_MATRIX7_ARB;
+#endif
+#ifdef GL_MATRIX8_ARB
+		else if (!strcmp(name, "MATRIX8_ARB")) return GL_MATRIX8_ARB;
+#endif
+#ifdef GL_MATRIX9_ARB
+		else if (!strcmp(name, "MATRIX9_ARB")) return GL_MATRIX9_ARB;
+#endif
 #ifdef GL_MINMAX_SINK
 		else if (!strcmp(name, "MINMAX_SINK")) return GL_MINMAX_SINK;
 #endif
@@ -1151,6 +1190,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "YCRCBA_SGIX")) return GL_YCRCBA_SGIX;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 15 ***
 	case 15:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_2PASS_0_SGIS
@@ -1243,6 +1283,72 @@ GEM_EXTERN int getGLdefine(char *name)
 #ifdef GL_MAP2_COLOR_4
 		else if (!strcmp(name, "MAP2_COLOR_4")) return GL_MAP2_COLOR_4;
 #endif
+#ifdef GL_MATRIX10_ARB
+		else if (!strcmp(name, "MATRIX10_ARB")) return GL_MATRIX10_ARB;
+#endif
+#ifdef GL_MATRIX11_ARB
+		else if (!strcmp(name, "MATRIX11_ARB")) return GL_MATRIX11_ARB;
+#endif
+#ifdef GL_MATRIX12_ARB
+		else if (!strcmp(name, "MATRIX12_ARB")) return GL_MATRIX12_ARB;
+#endif
+#ifdef GL_MATRIX13_ARB
+		else if (!strcmp(name, "MATRIX13_ARB")) return GL_MATRIX13_ARB;
+#endif
+#ifdef GL_MATRIX14_ARB
+		else if (!strcmp(name, "MATRIX14_ARB")) return GL_MATRIX14_ARB;
+#endif
+#ifdef GL_MATRIX15_ARB
+		else if (!strcmp(name, "MATRIX15_ARB")) return GL_MATRIX15_ARB;
+#endif
+#ifdef GL_MATRIX16_ARB
+		else if (!strcmp(name, "MATRIX16_ARB")) return GL_MATRIX16_ARB;
+#endif
+#ifdef GL_MATRIX17_ARB
+		else if (!strcmp(name, "MATRIX17_ARB")) return GL_MATRIX17_ARB;
+#endif
+#ifdef GL_MATRIX18_ARB
+		else if (!strcmp(name, "MATRIX18_ARB")) return GL_MATRIX18_ARB;
+#endif
+#ifdef GL_MATRIX19_ARB
+		else if (!strcmp(name, "MATRIX19_ARB")) return GL_MATRIX19_ARB;
+#endif
+#ifdef GL_MATRIX20_ARB
+		else if (!strcmp(name, "MATRIX20_ARB")) return GL_MATRIX20_ARB;
+#endif
+#ifdef GL_MATRIX21_ARB
+		else if (!strcmp(name, "MATRIX21_ARB")) return GL_MATRIX21_ARB;
+#endif
+#ifdef GL_MATRIX22_ARB
+		else if (!strcmp(name, "MATRIX22_ARB")) return GL_MATRIX22_ARB;
+#endif
+#ifdef GL_MATRIX23_ARB
+		else if (!strcmp(name, "MATRIX23_ARB")) return GL_MATRIX23_ARB;
+#endif
+#ifdef GL_MATRIX24_ARB
+		else if (!strcmp(name, "MATRIX24_ARB")) return GL_MATRIX24_ARB;
+#endif
+#ifdef GL_MATRIX25_ARB
+		else if (!strcmp(name, "MATRIX25_ARB")) return GL_MATRIX25_ARB;
+#endif
+#ifdef GL_MATRIX26_ARB
+		else if (!strcmp(name, "MATRIX26_ARB")) return GL_MATRIX26_ARB;
+#endif
+#ifdef GL_MATRIX27_ARB
+		else if (!strcmp(name, "MATRIX27_ARB")) return GL_MATRIX27_ARB;
+#endif
+#ifdef GL_MATRIX28_ARB
+		else if (!strcmp(name, "MATRIX28_ARB")) return GL_MATRIX28_ARB;
+#endif
+#ifdef GL_MATRIX29_ARB
+		else if (!strcmp(name, "MATRIX29_ARB")) return GL_MATRIX29_ARB;
+#endif
+#ifdef GL_MATRIX30_ARB
+		else if (!strcmp(name, "MATRIX30_ARB")) return GL_MATRIX30_ARB;
+#endif
+#ifdef GL_MATRIX31_ARB
+		else if (!strcmp(name, "MATRIX31_ARB")) return GL_MATRIX31_ARB;
+#endif
 #ifdef GL_NORMAL_ARRAY
 		else if (!strcmp(name, "NORMAL_ARRAY")) return GL_NORMAL_ARRAY;
 #endif
@@ -1327,6 +1433,72 @@ GEM_EXTERN int getGLdefine(char *name)
 #ifdef GL_TEXTURE9_ARB
 		else if (!strcmp(name, "TEXTURE9_ARB")) return GL_TEXTURE9_ARB;
 #endif
+#ifdef GL_TEXTURE10_ARB
+		else if (!strcmp(name, "TEXTURE10_ARB")) return GL_TEXTURE10_ARB;
+#endif
+#ifdef GL_TEXTURE11_ARB
+		else if (!strcmp(name, "TEXTURE11_ARB")) return GL_TEXTURE11_ARB;
+#endif
+#ifdef GL_TEXTURE12_ARB
+		else if (!strcmp(name, "TEXTURE12_ARB")) return GL_TEXTURE12_ARB;
+#endif
+#ifdef GL_TEXTURE13_ARB
+		else if (!strcmp(name, "TEXTURE13_ARB")) return GL_TEXTURE13_ARB;
+#endif
+#ifdef GL_TEXTURE14_ARB
+		else if (!strcmp(name, "TEXTURE14_ARB")) return GL_TEXTURE14_ARB;
+#endif
+#ifdef GL_TEXTURE15_ARB
+		else if (!strcmp(name, "TEXTURE15_ARB")) return GL_TEXTURE15_ARB;
+#endif
+#ifdef GL_TEXTURE16_ARB
+		else if (!strcmp(name, "TEXTURE16_ARB")) return GL_TEXTURE16_ARB;
+#endif
+#ifdef GL_TEXTURE17_ARB
+		else if (!strcmp(name, "TEXTURE17_ARB")) return GL_TEXTURE17_ARB;
+#endif
+#ifdef GL_TEXTURE18_ARB
+		else if (!strcmp(name, "TEXTURE18_ARB")) return GL_TEXTURE18_ARB;
+#endif
+#ifdef GL_TEXTURE19_ARB
+		else if (!strcmp(name, "TEXTURE19_ARB")) return GL_TEXTURE19_ARB;
+#endif
+#ifdef GL_TEXTURE20_ARB
+		else if (!strcmp(name, "TEXTURE20_ARB")) return GL_TEXTURE20_ARB;
+#endif
+#ifdef GL_TEXTURE21_ARB
+		else if (!strcmp(name, "TEXTURE21_ARB")) return GL_TEXTURE21_ARB;
+#endif
+#ifdef GL_TEXTURE22_ARB
+		else if (!strcmp(name, "TEXTURE22_ARB")) return GL_TEXTURE22_ARB;
+#endif
+#ifdef GL_TEXTURE23_ARB
+		else if (!strcmp(name, "TEXTURE23_ARB")) return GL_TEXTURE23_ARB;
+#endif
+#ifdef GL_TEXTURE24_ARB
+		else if (!strcmp(name, "TEXTURE24_ARB")) return GL_TEXTURE24_ARB;
+#endif
+#ifdef GL_TEXTURE25_ARB
+		else if (!strcmp(name, "TEXTURE25_ARB")) return GL_TEXTURE25_ARB;
+#endif
+#ifdef GL_TEXTURE26_ARB
+		else if (!strcmp(name, "TEXTURE26_ARB")) return GL_TEXTURE26_ARB;
+#endif
+#ifdef GL_TEXTURE27_ARB
+		else if (!strcmp(name, "TEXTURE27_ARB")) return GL_TEXTURE27_ARB;
+#endif
+#ifdef GL_TEXTURE28_ARB
+		else if (!strcmp(name, "TEXTURE28_ARB")) return GL_TEXTURE28_ARB;
+#endif
+#ifdef GL_TEXTURE29_ARB
+		else if (!strcmp(name, "TEXTURE29_ARB")) return GL_TEXTURE29_ARB;
+#endif
+#ifdef GL_TEXTURE30_ARB
+		else if (!strcmp(name, "TEXTURE30_ARB")) return GL_TEXTURE30_ARB;
+#endif
+#ifdef GL_TEXTURE31_ARB
+		else if (!strcmp(name, "TEXTURE31_ARB")) return GL_TEXTURE31_ARB;
+#endif
 #ifdef GL_TRIANGLE_FAN
 		else if (!strcmp(name, "TRIANGLE_FAN")) return GL_TRIANGLE_FAN;
 #endif
@@ -1340,6 +1512,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VIEWPORT_BIT")) return GL_VIEWPORT_BIT;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 16 ***
 	case 16:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_CLAMP_TO_EDGE
@@ -1347,6 +1520,9 @@ GEM_EXTERN int getGLdefine(char *name)
 #endif
 #ifdef GL_COLOR_INDEXES
 		else if (!strcmp(name, "COLOR_INDEXES")) return GL_COLOR_INDEXES;
+#endif
+#ifdef GL_COLOR_SUM_ARB
+		else if (!strcmp(name, "COLOR_SUM_ARB")) return GL_COLOR_SUM_ARB;
 #endif
 #ifdef GL_COLOR_SUM_EXT
 		else if (!strcmp(name, "COLOR_SUM_EXT")) return GL_COLOR_SUM_EXT;
@@ -1568,6 +1744,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WIN_SWAP_HINT")) return GL_WIN_swap_hint;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 17 ***
 	case 17:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ACCUM_RED_BITS
@@ -1793,6 +1970,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "YCRCB_444_SGIX")) return GL_YCRCB_444_SGIX;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 18 ***
 	case 18:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_422_AVERAGE_EXT
@@ -2072,6 +2250,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WRAP_BORDER_SUN")) return GL_WRAP_BORDER_SUN;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 19 ***
 	case 19:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_3DFX_multisample
@@ -2417,6 +2596,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WIN32_LEAN_AND_MEAN")) return WIN32_LEAN_AND_MEAN;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 20 ***
 	case 20:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ACCUM_CLEAR_VALUE
@@ -2633,6 +2813,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WIN_PHONG_SHADING")) return GL_WIN_phong_shading;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 21 ***
 	case 21:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ACTIVE_TEXTURE_ARB
@@ -2926,7 +3107,11 @@ GEM_EXTERN int getGLdefine(char *name)
 #ifdef GL_WIDE_LINE_HINT_PGI
 		else if (!strcmp(name, "WIDE_LINE_HINT_PGI")) return GL_WIDE_LINE_HINT_PGI;
 #endif
+#ifdef GL_VERTEX_PROGRAM_ARB
+		else if (!strcmp(name, "VERTEX_PROGRAM_ARB")) return GL_VERTEX_PROGRAM_ARB;
+#endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 22 ***
 	case 22:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_422_REV_AVERAGE_EXT
@@ -3167,6 +3352,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VERTEX_PRECLIP_SGIX")) return GL_VERTEX_PRECLIP_SGIX;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 23 ***
 	case 23:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ALPHA_MAX_CLAMP_INGR
@@ -3300,6 +3486,9 @@ GEM_EXTERN int getGLdefine(char *name)
 #endif
 #ifdef GL_FRAGMENT_LIGHT7_SGIX
 		else if (!strcmp(name, "FRAGMENT_LIGHT7_SGIX")) return GL_FRAGMENT_LIGHT7_SGIX;
+#endif
+#ifdef GL_FRAGMENT_PROGRAM_ARB
+		else if (!strcmp(name, "FRAGMENT_PROGRAM_ARB")) return GL_FRAGMENT_PROGRAM_ARB;
 #endif
 #ifdef GL_GENERATE_MIPMAP_SGIS
 		else if (!strcmp(name, "GENERATE_MIPMAP_SGIS")) return GL_GENERATE_MIPMAP_SGIS;
@@ -3527,6 +3716,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WEIGHT_SUM_UNITY_ARB")) return GL_WEIGHT_SUM_UNITY_ARB;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 24 ***
 	case 24:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_APPLE_specular_vector
@@ -3761,6 +3951,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WEIGHT_ARRAY_TYPE_ARB")) return GL_WEIGHT_ARRAY_TYPE_ARB;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 25 ***
 	case 25:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ALL_CLIENT_ATTRIB_BITS
@@ -3953,6 +4144,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VERTEX_ARRAY_COUNT_EXT")) return GL_VERTEX_ARRAY_COUNT_EXT;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 26 ***
 	case 26:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ACTIVE_VERTEX_UNITS_ARB
@@ -4166,6 +4358,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WIN_DRAW_RANGE_ELEMENTS")) return GL_WIN_draw_range_elements;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 27 ***
 	case 27:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ALIASED_LINE_WIDTH_RANGE
@@ -4291,6 +4484,9 @@ GEM_EXTERN int getGLdefine(char *name)
 #ifdef GL_PACK_SUBSAMPLE_RATE_SGIX
 		else if (!strcmp(name, "PACK_SUBSAMPLE_RATE_SGIX")) return GL_PACK_SUBSAMPLE_RATE_SGIX;
 #endif
+#ifdef GL_PROGRAM_FORMAT_ASCII_ARB
+		else if (!strcmp(name, "PROGRAM_FORMAT_ASCII_ARB")) return GL_PROGRAM_FORMAT_ASCII_ARB;
+#endif
 #ifdef GL_QUAD_TEXTURE_SELECT_SGIS
 		else if (!strcmp(name, "QUAD_TEXTURE_SELECT_SGIS")) return GL_QUAD_TEXTURE_SELECT_SGIS;
 #endif
@@ -4349,6 +4545,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WEIGHT_ARRAY_POINTER_ARB")) return GL_WEIGHT_ARRAY_POINTER_ARB;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 28 ***
 	case 28:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_BINORMAL_ARRAY_STRIDE_EXT
@@ -4478,6 +4675,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "UNPACK_CONSTANT_DATA_SUNX")) return GL_UNPACK_CONSTANT_DATA_SUNX;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 29 ***
 	case 29:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_BINORMAL_ARRAY_POINTER_EXT
@@ -4652,6 +4850,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VERTEX_CONSISTENT_HINT_PGI")) return GL_VERTEX_CONSISTENT_HINT_PGI;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 30 ***
 	case 30:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_COLOR_ARRAY_LIST_STRIDE_IBM
@@ -4732,7 +4931,11 @@ GEM_EXTERN int getGLdefine(char *name)
 #ifdef GL_VERTEX_ARRAY_RANGE_VALID_NV
 		else if (!strcmp(name, "VERTEX_ARRAY_RANGE_VALID_NV")) return GL_VERTEX_ARRAY_RANGE_VALID_NV;
 #endif
+#ifdef GL_VERTEX_PROGRAM_TWO_SIDE_ARB
+		else if (!strcmp(name, "VERTEX_PROGRAM_TWO_SIDE_ARB")) return GL_VERTEX_PROGRAM_TWO_SIDE_ARB;
+#endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 31 ***
 	case 31:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_ARRAY_ELEMENT_LOCK_COUNT_EXT
@@ -4859,6 +5062,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VERTEX_WEIGHT_ARRAY_TYPE_EXT")) return GL_VERTEX_WEIGHT_ARRAY_TYPE_EXT;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 32 ***
 	case 32:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_3DFX_texture_compression_FXT1
@@ -4951,7 +5155,11 @@ GEM_EXTERN int getGLdefine(char *name)
 #ifdef GL_VERTEX_ARRAY_RANGE_POINTER_NV
 		else if (!strcmp(name, "VERTEX_ARRAY_RANGE_POINTER_NV")) return GL_VERTEX_ARRAY_RANGE_POINTER_NV;
 #endif
+#ifdef GL_VERTEX_PROGRAM_POINT_SIZE_ARB
+		else if (!strcmp(name, "VERTEX_PROGRAM_POINT_SIZE_ARB")) return GL_VERTEX_PROGRAM_POINT_SIZE_ARB;
+#endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 33 ***
 	case 33:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_COLOR_TABLE_INTENSITY_SIZE_EXT
@@ -5042,6 +5250,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VERTEX_WEIGHT_ARRAY_STRIDE_EXT")) return GL_VERTEX_WEIGHT_ARRAY_STRIDE_EXT;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 34 ***
 	case 34:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_CULL_VERTEX_OBJECT_POSITION_EXT
@@ -5132,6 +5341,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VERTEX_WEIGHT_ARRAY_POINTER_EXT")) return GL_VERTEX_WEIGHT_ARRAY_POINTER_EXT;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 35 ***
 	case 35:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_FOG_COORDINATE_ARRAY_POINTER_EXT
@@ -5168,6 +5378,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "SHARPEN_TEXTURE_FUNC_POINTS_SGIS")) return GL_SHARPEN_TEXTURE_FUNC_POINTS_SGIS;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 36 ***
 	case 36:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_FRAGMENT_COLOR_MATERIAL_FACE_SGIX
@@ -5201,6 +5412,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "TEXTURE_COMPRESSED_IMAGE_SIZE_ARB")) return GL_TEXTURE_COMPRESSED_IMAGE_SIZE_ARB;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 37 ***
 	case 37:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_FRAGMENT_LIGHT_MODEL_TWO_SIDE_SGIX
@@ -5222,6 +5434,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "TEXTURE_CLIPMAP_VIRTUAL_DEPTH_SGIX")) return GL_TEXTURE_CLIPMAP_VIRTUAL_DEPTH_SGIX;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 38 ***
 	case 38:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_COLOR_ARRAY_PARALLEL_POINTERS_INTEL
@@ -5243,6 +5456,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "TEXTURE_COORD_ARRAY_LIST_STRIDE_IBM")) return GL_TEXTURE_COORD_ARRAY_LIST_STRIDE_IBM;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 39 ***
 	case 39:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_FOG_COORDINATE_ARRAY_LIST_STRIDE_IBM
@@ -5258,12 +5472,14 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "VERTEX_ARRAY_PARALLEL_POINTERS_INTEL")) return GL_VERTEX_ARRAY_PARALLEL_POINTERS_INTEL;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 40 ***
 	case 40:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_SECONDARY_COLOR_ARRAY_LIST_STRIDE_IBM
 		else if (!strcmp(name, "SECONDARY_COLOR_ARRAY_LIST_STRIDE_IBM")) return GL_SECONDARY_COLOR_ARRAY_LIST_STRIDE_IBM;
 #endif
 		else return _GL_UNDEFINED;
+#pragma mark *** 41 ***
 	case 41:
 		if (0)  return _GL_UNDEFINED;
 #ifdef GL_FRAGMENT_COLOR_MATERIAL_PARAMETER_SGIX
