@@ -88,6 +88,7 @@ float GemMan::m_fogEnd;
 float GemMan::m_motionBlur=0.f;
 int GemMan::texture_rectangle_supported = 0;	//tigital
 int GemMan::client_storage_supported = 0;
+float GemMan::fps;
 
 
 // static data
@@ -609,7 +610,9 @@ void GemMan :: resetState()
 
   // turn on the cursor
   m_cursor = 1;
+  fps = 0;
   m_topmost = 0;
+
 }
 
 /////////////////////////////////////////////////////////
@@ -881,7 +884,9 @@ void GemMan :: render(void *)
         UnsignedWide endTime;
         ::Microseconds(&endTime);
         float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
-        post("GEM: time: %f", seconds);
+        GemMan::fps = (1 / (seconds * 1000)) * 1000;
+    //   m_fps = (1 / (seconds * 1000)) * 1000;
+      //  post("GEM: time: %f", seconds);
     }
 #else
 #error Define OS specific profiling

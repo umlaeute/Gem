@@ -173,9 +173,9 @@ class GEM_EXTERN GemMan
 	static float	   m_fogEnd;		// start of the linear fog
 
 	static float       m_motionBlur;        // motion-blur factor in double-buffer mode
-	static int			texture_rectangle_supported;
-	static int			client_storage_supported;
-
+	static int	   texture_rectangle_supported;
+	static int	   client_storage_supported;
+        static float	   fps;
 	
         //////////
         // Changing these variables is likely to crash GEM
