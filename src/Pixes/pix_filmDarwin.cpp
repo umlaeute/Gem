@@ -123,7 +123,7 @@ void pix_filmDarwin :: realOpen(char *filename)
         post("GEM: pix_filmDarwin:  m_numTracks = %d",m_numTracks);
 
 	// Get the length of the movie
-        long	movieDur, movieScale, mediaDur, mediaScale;
+        long	movieDur, movieScale;
         movieDur = (long)GetMovieDuration(m_movie);
         movieScale = (long)GetMovieTimeScale(m_movie);
         
