@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
 #include <Carbon/Carbon.h>
 #include <Quicktime/Quicktime.h>
 #include <time.h>
@@ -1050,7 +1051,7 @@ int GemMan :: createWindow(char* disp)
    * however, when it was run with nvidia-drivers, the openGL-extension was present
    * resulting in doing a lot of stupid things (like texturing black!)
    */
-#ifdef GL_EXT_TEXTURE_RECTANGLE
+#ifdef GL_EXT_texture_rectangle
   if (texture_rectangle_supported
       = OpenGLExtensionIsSupported("GL_EXT_texture_rectangle")){}
   else
