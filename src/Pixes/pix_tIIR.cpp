@@ -115,7 +115,7 @@ void pix_tIIR :: processImage(imageStruct &image)
 
   // set!(if needed)
   if (set){
-    if (set_zero)memset(m_buffer.data, 0, m_buffer.datasize);
+    if (set_zero)m_buffer.setBlack();
     else{
       j=m_bufnum;
       while(j--){
