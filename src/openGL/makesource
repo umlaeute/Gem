@@ -1,8 +1,0 @@
-#! /bin/sh
-
-echo "SOURCES= \\" > Make.source
-for i in *.cpp
-do
-  echo "$i \\" >> Make.source
-done
-echo >> Make.source
