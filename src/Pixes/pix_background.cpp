@@ -99,7 +99,7 @@ void pix_background :: processRGBAImage(imageStruct &image)
 
 void pix_background :: processGrayImage(imageStruct &image)
 {
-  int i, h,w,hlength;
+    int i;// h,w,hlength;
   long src,pixsize;
   unsigned char newpix, oldpix, *npixes, *opixes;
 
@@ -273,10 +273,11 @@ int pixsize = image.xsize * image.ysize * image.csize;
     
     //setup the cache prefetch -- A MUST!!!
     UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-    #ifndef PPC970 // yeah you read that right
+    #ifndef PPC970 
     vec_dst( inData, prefetchSize, 0 );
     vec_dst( rightData, prefetchSize, 1 );
-    //post("pix_background: G4 not G5");
+    vec_dst( inData+32, prefetchSize, 2 );
+    vec_dst( rightData+32, prefetchSize, 3 );
     #endif //PPC970
     
     for ( i=0; i<h; i++){
@@ -284,8 +285,10 @@ int pixsize = image.xsize * image.ysize * image.csize;
         {
         #ifndef PPC970
         //this function is probably memory bound on most G4's -- what else is new?
-        vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
+            vec_dst( inData, prefetchSize, 0 );
+            vec_dst( rightData, prefetchSize, 1 );
+            vec_dst( inData+32, prefetchSize, 2 );
+            vec_dst( rightData+32, prefetchSize, 3 );
         #endif
         //separate the U and V from Y
         UVres1 = (vector unsigned short)vec_mule(one,inData[0]);
@@ -356,8 +359,10 @@ int pixsize = image.xsize * image.ysize * image.csize;
         
         }
         #ifndef PPC970
-        vec_dss(1);
         vec_dss(0);
+        vec_dss(1);
+        vec_dss(2);
+        vec_dss(3);
         #endif
     }
     
