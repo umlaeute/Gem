@@ -124,14 +124,32 @@ void pix_sub(unsigned char *leftPix, unsigned char *rightPix, int datasize)
 }
 
 GEM_EXTERN void imageStruct::setBlack() {
+  long i = datasize;
+  unsigned char* dummy=pdata;
   switch (format){
+  case GL_YCBCR_422_GEM:
+    i/=4;
+    while(i--){
+      *dummy++=128;*dummy++=0;
+      *dummy++=128;*dummy++=0;
+    }
+    break;
   default:
     memset(pdata, 0, datasize);
     break;
   }
 }
 GEM_EXTERN void imageStruct::setWhite() {
+  long i = datasize;
+  unsigned char* dummy=pdata;
   switch (format){
+  case GL_YCBCR_422_GEM:
+    i/=4;
+    while(i--){
+      *dummy++=128;*dummy++=255;
+      *dummy++=128;*dummy++=255;
+    }
+    break;
   default:
     memset(pdata, 1, datasize);
     break;
