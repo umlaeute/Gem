@@ -44,6 +44,7 @@ gemhead :: gemhead(t_floatarg priority)
     m_priority=(int)priority;
     GemMan::addObj(this, m_priority);
 
+    m_cache = new GemCache(this);
     m_out1 = outlet_new(this->x_obj, 0);
 }
 
