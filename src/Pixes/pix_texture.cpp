@@ -513,6 +513,8 @@ void pix_texture :: repeatMessCallback(void *data, t_floatarg quality)
 void pix_texture :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_mode=((int)quality);
+  GetMyClass(data)->m_rebuildList=1;
+
 }
 
 void pix_texture :: clientStorageCallback(void *data, t_floatarg quality)
