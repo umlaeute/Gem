@@ -31,6 +31,18 @@ static int snglBuf8[] = {GLX_RGBA, GLX_RED_SIZE, 3, GLX_GREEN_SIZE, 3, GLX_BLUE_
 static int dblBuf8[] = {GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 2, GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 
 
+int ErrorHandler (Display *dpy, XErrorEvent *event)
+{
+  // we don't really care about the error
+  // let's hope for the best
+  if ( event->error_code != BadWindow ) {
+    char buf[256];
+    XGetErrorText (dpy, event->error_code, buf, sizeof(buf));
+    error("GEM-Xwin: %s", buf);
+  }
+  return (0);
+}
+
 Bool WaitForNotify(Display *, XEvent *e, char *arg)
 {
   return (e->type == MapNotify) && (e->xmap.window == (Window)arg);
@@ -41,6 +53,9 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   XF86VidModeModeInfo **modes;
   int modeNum=4;
   int bestMode=0;
+  int fullscreen=hints.fullscreen;
+
+  XSetErrorHandler (ErrorHandler);
 
   if ( (info.dpy = XOpenDisplay(hints.display)) == NULL)
     { 
@@ -50,8 +65,15 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   info.screen  = DefaultScreen(info.dpy);
 
-  XF86VidModeGetAllModeLines(info.dpy, info.screen, &modeNum, &modes);
-  info.deskMode = *modes[0];
+  if (fullscreen){
+    if (hints.display){
+      error("GEM: fullscreen not available on remote display");
+      fullscreen=0;
+    } else {
+      XF86VidModeGetAllModeLines(info.dpy, info.screen, &modeNum, &modes);
+      info.deskMode = *modes[0];
+    }
+  }
 
   XVisualInfo *vi;
   // the user wants double buffer
@@ -87,11 +109,10 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   }
 
   if (vi->c_class != TrueColor) {
-    error("GEM: TrueColor visual required for this program");
+    error("GEM: TrueColor visual required for this program (got %d)", vi->c_class);
     destroyGemWindow(info);
     return(0);
   }
-    
   // create the rendering context
   info.context = glXCreateContext(info.dpy, vi, hints.shared, GL_TRUE);
   if (info.context == NULL) {
@@ -121,8 +142,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   int flags;
   int x = hints.x_offset;
   int y = hints.y_offset;
-
-  if (hints.fullscreen){
+  if (fullscreen){
     /* look for mode with requested resolution */
     for (int i = 0; i < modeNum; i++) {
       if ((modes[i]->hdisplay == hints.width) && (modes[i]->vdisplay == hints.height)) {
@@ -149,7 +169,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     }
   }
 
-  info.fs = hints.fullscreen;
+  info.fs = fullscreen;
   info.win = XCreateWindow(info.dpy, RootWindow(info.dpy, vi->screen),
 			   x, y, hints.real_w, hints.real_h,
 			   0, vi->depth, InputOutput, 
@@ -169,14 +189,11 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   glXMakeCurrent(info.dpy, info.win, info.context);   
 
   if (!hints.actuallyDisplay) return(1);
-
   XMapRaised(info.dpy, info.win);
   //  XMapWindow(info.dpy, info.win);
   XEvent report;
   XIfEvent(info.dpy, &report, WaitForNotify, (char*)info.win);
-
   if (glXIsDirect(info.dpy, info.context))post("Direct Rendering enabled!");
-
   return(1);
 }
 
@@ -211,18 +228,18 @@ void destroyGemWindow(WindowInfo &info)
 {
   if (info.dpy)
     {
+      int error=0;
       if (info.win)
-	XDestroyWindow(info.dpy, info.win);
+	error=XDestroyWindow(info.dpy, info.win);
       if (info.have_constContext && info.context)
 	glXDestroyContext(info.dpy, info.context); // this crashes sometimes on my laptop
       if (info.cmap)
-	XFreeColormap(info.dpy, info.cmap);
+	error=XFreeColormap(info.dpy, info.cmap);
       if (info.fs){
 	XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
 	XF86VidModeSetViewPort(info.dpy, info.screen, 0, 0);
 	info.fs=0;
       }
-
       XCloseDisplay(info.dpy);
     }
   info.dpy = NULL;
