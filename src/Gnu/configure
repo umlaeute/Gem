@@ -4698,7 +4698,7 @@ fi
 #  Test for FFMPEG libraries
 #
 
-if test "$with_avcodec" != "no" -a "$with_avformat" != "no"
+if test "$with_avcodec" != "" -a "$with_avformat" != ""
 then
   echo "building pix_filmFFMPEG"
   LIBS="$with_avcodec $with_avformat $LIBS $with_avcodec $with_avformat"
