@@ -2,3 +2,7 @@ several pix-fx crash (like [pix_rtx]
 [pix_takealpha] crashes when a grey image is send to the right inlet (is this still true ?)
 under windows gem eats all of the cpu after switching rendering on/off sometimes
 if a image-stream created by [pix_video] is processed by some fx, sometimes the fx seems to "not work" (framewise: some frames are processed others are not), i think this is a problem with thread-syncing and in-place manipulation. -- maybe all threaded pix-sources should copy the new data to a save place (where the thread has no access)
+
+rubber/ripple: shouldn't the coordinates ctrX/ctrY be normalized between 0..1 ?
+ripple: what is the height for ?
+rubber/ripple: sizeMess obsolete ?
