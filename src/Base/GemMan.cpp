@@ -171,6 +171,8 @@ static void dispatchGemWindowMessages()
   XButtonEvent* eb = (XButtonEvent*)&event; 
   XKeyEvent* kb  = (XKeyEvent*)&event; 
   XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
+  char keystring[2];
+  KeySym keysym_return;
   win = GemMan::getWindowInfo(); 
 
   while (XCheckWindowEvent(win.dpy,win.win,
@@ -194,10 +196,31 @@ static void dispatchGemWindowMessages()
 	  triggerMotionEvent(eb->x, eb->y); 
 	  break; 
 	case KeyPress:
-	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
+	  if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
+	    //modifier key:use keysym
+	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+	  }
+	  if ( (keysym_return & 0xff00)== 0xff00 ) {
+	    //non alphanumeric key: use keysym
+	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+	  } else {
+	    triggerKeyboardEvent(keystring, kb->keycode, 1);
+	  }
+	  //triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
 	  break;
 	case KeyRelease:
-	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
+	  if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
+	    //modifier key:use keysym
+	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
+	  }
+
+	  if ( (keysym_return & 0xff00)== 0xff00 ) {
+	    //non alphanumeric key: use keysym
+	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
+	  } else {
+	    triggerKeyboardEvent(keystring, kb->keycode, 0);
+	  }
+	  //	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
 	  break;
 	case ResizeRequest:
 	  triggerResizeEvent(res->width, res->height);
