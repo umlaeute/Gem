@@ -54,6 +54,7 @@ GEM_EXTERN void imageStruct::copy2Image(imageStruct *to) {
     }
 
     /* copy without new allocation if possible (speedup in convolve ..) */
+#if 0
     if (to->xsize*to->ysize*to->csize < xsize*ysize*csize || !to->data) {
       to->clear();
       to->allocate(xsize * ysize * csize);
@@ -69,6 +70,16 @@ GEM_EXTERN void imageStruct::copy2Image(imageStruct *to) {
     
     // copy the data over
     memcpy(to->data, data, to->datasize);
+#else
+    to->xsize 	= xsize;
+    to->ysize 	= ysize;
+    to->csize 	= csize;
+    to->format 	= format;
+    to->type 	= type;
+    to->reallocate();
+
+    memcpy(to->data, data, xsize*ysize*csize);
+#endif
 }
 
 GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) {

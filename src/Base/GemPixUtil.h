@@ -45,7 +45,6 @@ LOG
 #ifdef GL_YCBCR_422_APPLE
 #define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
 #else
-// maybe, GL_YCBCR_422_APPLE is 0x85B9 (i really don't know exactly...)
 #define GL_YCBCR_422_GEM 0x85B9
 #endif
 
@@ -66,7 +65,14 @@ CLASS
 
 struct GEM_EXTERN imageStruct
 {
-  imageStruct() : xsize (0), ysize(0),csize(0),notowned(0),data(0),datasize(0),pdata(0) {}
+  imageStruct() : xsize (0),ysize(0),csize(0),notowned(0),data(0),datasize(0),pdata(0),
+#ifdef GL_UNSIGNED_SHORT_8_8_REV_APPLE
+       // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
+       type(GL_UNSIGNED_SHORT_8_8_REV_APPLE), format(GL_YCBCR_422_GEM)
+#else
+       type(GL_UNSIGNED_BYTE), format(GL_RGBA)
+#endif
+{}
 
   ~imageStruct() { clear(); }
   void info();
@@ -83,12 +89,16 @@ struct GEM_EXTERN imageStruct
     datasize=size;
     return data; 
   }
+  unsigned char* allocate() {  return allocate(xsize*ysize*csize);  }
+
   // if we have allocated some space already, only re-allocate when needed.
   unsigned char* reallocate(int size) {
     if (size>datasize)
       return allocate(size);
     return data;
   }
+  unsigned char* reallocate() {  return reallocate(xsize*ysize*csize);  }
+ 
   void clear() {
     if (!notowned && pdata) {
       delete [] pdata;
@@ -114,10 +124,11 @@ struct GEM_EXTERN imageStruct
   GLenum          format;
 
   //////////
-  // data type - always UNSIGNED_BYTE (except for OS X)
+  // data type - always GL_UNSIGNED_BYTE (except for OS X)
   GLenum          type;
   
-  
+  //////////
+  // is this owned by us (?)
   int notowned;
   //////////
   // the actual image data
