@@ -14,6 +14,7 @@
 //
 /////////////////////////////////////////////////////////
 #include "Pixes/filmAVIPLAY.h"
+#include <unistd.h>
 
 /////////////////////////////////////////////////////////
 //
@@ -66,7 +67,7 @@ bool filmAVIPLAY :: open(char *filename, int format)
   if (format>0)m_wantedFormat=format;
   // how do we close the avifile ??? automagically ?
   if (!(m_avifile = CreateIAviReadFile(filename)))goto unsupported;
-  while(!(*m_avifile).IsOpened());
+  while(!(*m_avifile).IsOpened())usleep(500);
   if (!(*m_avifile).IsValid())goto unsupported;
   m_numTracks = (*m_avifile).VideoStreamCount();
   if (m_numTracks<1)return false;
@@ -106,7 +107,10 @@ pixBlock* filmAVIPLAY :: getFrame(){
   if (!m_avistream)return 0;
   if (!m_readNext)return &m_image;
   if(m_aviimage)(*m_aviimage).Release();
-  m_aviimage = (*m_avistream).GetFrame(true);
+  /* for MPEGs ReadFrame() will return 0 only when errors occur
+   * other formats return 0 all the time (and -1 on file end)
+   */
+  m_aviimage = (*m_avistream).GetFrame(true); // this might crash sometimes...
   if (m_aviimage){
     int format = (*m_aviimage).Format();
     int i = (*m_aviimage).Pixels();
@@ -121,6 +125,9 @@ pixBlock* filmAVIPLAY :: getFrame(){
     case IMG_FMT_Y800 : 
     case IMG_FMT_Y8   : m_image.image.fromGray(m_rawdata); break;
     case IMG_FMT_UYVY : m_image.image.fromUYVY(m_rawdata); break;
+    case IMG_FMT_YUY2 : m_image.image.fromYUY2(m_rawdata); break;
+    case IMG_FMT_YVYU : m_image.image.fromYVYU(m_rawdata); break;
+    case IMG_FMT_YV12 : m_image.image.fromYV12(m_rawdata); break;
     case IMG_FMT_BGR16: // it seems like this was RGB16
     default:
       m_image.image.fromRGB16(m_rawdata); break;
