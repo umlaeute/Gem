@@ -434,7 +434,7 @@ void newWave :: getposition()
 /////////////////////////////////////////////////////////
 void newWave :: getTexCoords(void)
 {
-  post("getTexCoords: x=%f\ty=%f %f", xsize, ysize0, ysize);
+  //  post("getTexCoords: x=%f\ty=%f %f", xsize, ysize0, ysize);
     for ( int i = 0; i < grid; ++i)
     {
         for ( int j = 0; j < grid; ++j)
