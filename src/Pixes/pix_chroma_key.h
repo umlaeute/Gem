@@ -55,9 +55,12 @@ CPPEXTERN_HEADER(pix_chroma_key, GemPixDualObj)
     	// Do the YUV processing
     	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
         
+        //////////
+    	// Do the YUV Altivec processing
+    	virtual void 	processYUV_YUVAltivec(imageStruct &image, imageStruct &right);
 
         
-        int m_direction;
+        int m_direction,m_mode;
         unsigned char m_Yrange,m_Urange,m_Vrange,m_Yvalue,m_Uvalue,m_Vvalue;
         
     private:
@@ -65,6 +68,7 @@ CPPEXTERN_HEADER(pix_chroma_key, GemPixDualObj)
     	//////////
     	// Static member functions
     	static void directionCallback       (void *data, t_floatarg state);
+        static void modeCallback       (void *data, t_floatarg state);
         static void rangeCallback       (void *data, t_floatarg Yval, t_floatarg Uval,t_floatarg Vval);
         static void valueCallback       (void *data, t_floatarg Yval, t_floatarg Uval,t_floatarg Vval);
 
