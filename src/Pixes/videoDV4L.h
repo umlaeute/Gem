@@ -93,7 +93,7 @@ class GEM_EXTERN videoDV4L : public video {
 	virtual int	    	setNorm(char*);
 	virtual int	    	setDevice(int);
 	virtual int	    	setColor(int);
-
+	virtual int		setQuality(int);
     
  protected:
 

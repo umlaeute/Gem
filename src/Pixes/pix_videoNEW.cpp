@@ -158,11 +158,15 @@ void pix_videoNEW :: colorMess(t_atom*a)
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: driverMess(int dev)
 {
+//  post("driver: %d", dev);
   if(dev>=m_numVideoHandles){
     post("driverID (%d) must not exceed %d", dev, m_numVideoHandles);
     return;
   }
+  if(m_videoHandle==m_videoHandles[dev])return;
+  //  if(m_videoHandle)m_videoHandle->stopTransfer();
   m_videoHandle=m_videoHandles[dev];
+  //  if(m_videoHandle)m_videoHandle->startTransfer();
 }
 /////////////////////////////////////////////////////////
 // deviceMess
@@ -187,6 +191,14 @@ void pix_videoNEW :: enumerateMess()
 void pix_videoNEW :: dialogMess(int argc, t_atom*argv)
 {
   error("dialog not supported on this OS");
+}
+
+/////////////////////////////////////////////////////////
+// qualityMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: qualityMess(int dev) {
+  if (m_videoHandle)m_videoHandle->setQuality(dev);
 }
 
 /////////////////////////////////////////////////////////
@@ -223,6 +235,8 @@ void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
     	    gensym("enumerate"), A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::dialogMessCallback,
     	    gensym("dialog"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::qualityMessCallback,
+	    gensym("quality"), A_FLOAT, A_NULL);
 }
 void pix_videoNEW :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -291,4 +305,8 @@ void pix_videoNEW :: enumerateMessCallback(void *data)
 void pix_videoNEW :: dialogMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
   GetMyClass(data)->dialogMess(argc, argv);
+}
+void pix_videoNEW :: qualityMessCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->qualityMess((int)state);
 }

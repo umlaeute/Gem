@@ -100,8 +100,10 @@ class GEM_EXTERN pix_videoNEW : public GemBase
 
   // fire the format dialogs
   virtual void	dialogMess(int,t_atom*);
-        
 
+  // Set the quality for DV decoding
+  virtual void	qualityMess(int dev);
+        
   //-----------------------------------
   // GROUP:	Video data
   //-----------------------------------
@@ -126,7 +128,7 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   static void driverMessCallback(void *data, t_floatarg dev);
   static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
   static void enumerateMessCallback(void *data);
-
+  static void qualityMessCallback(void *data, t_floatarg dev);
 
 };
 

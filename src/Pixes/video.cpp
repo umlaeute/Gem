@@ -132,3 +132,9 @@ int video :: setColor(int d){
   post("setting the color-space is not supported by this OS/device");
   return -1;
 }
+/////////////////////////////////////////////////////////
+// set the quality for DV decoding
+int video :: setQuality(int d){
+  post("setting the quality is not supported by this OS/device");
+  return -1;
+}

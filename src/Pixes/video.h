@@ -82,6 +82,7 @@ class GEM_EXTERN video {
   virtual int	    	setNorm(char*n);
   virtual int	    	setDevice(int d);
   virtual int	    	setColor(int);
+  virtual int	    	setQuality(int);
 
  protected:
   bool m_capturing;
@@ -95,6 +96,7 @@ class GEM_EXTERN video {
   int m_reqFormat;
   
   int m_devicenum;
+  int m_quality;
 };
 
 #endif	// for header file

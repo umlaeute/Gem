@@ -39,7 +39,8 @@ videoDV4L :: videoDV4L(int format) : video(format)
   m_norm = PAL;
   m_decoder=NULL;
   m_frame_ready=false;
-  decodedbuf = new unsigned char[725*576*3];
+  m_quality = DV_QUALITY_BEST;
+  decodedbuf = new unsigned char[720*576*3];
 #endif
   m_haveVideo=false;
 }
@@ -63,7 +64,6 @@ videoDV4L :: ~videoDV4L(){
 void *videoDV4L :: capturing(void*you)
 {
   videoDV4L *me=(videoDV4L *)you;
-  dv_decoder_t *decoder = me->m_decoder;
   int fd=me->dvfd;
   int framesize = me->m_framesize;
   struct dv1394_status dvst;
@@ -148,7 +148,14 @@ pixBlock *videoDV4L :: getFrame(){
       //     post("sampling %d", m_decoder->sampling);
 
       /* convert the colour-space to the one we want */
-      // btw. shouldn't this be done in [pix_video] rather than here ?
+      /*
+       * btw. shouldn't this be done in [pix_video] rather than here ?
+       * no because [pix_video] knows nothing about the possible colourspaces in here
+       */
+
+      // letting the library do the conversion to RGB and then doing the conversion to RGBA
+      // is really stupid.
+      // let's do it all ourselfes:
       //      if (m_reqFormat==GL_RGBA)m_image.image.fromRGB(decodedbuf); else
       m_image.image.fromYVYU(decodedbuf);
     }
@@ -241,15 +248,17 @@ int videoDV4L :: startTransfer(int format)
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
   videobuf=NULL;
-  
+
+  m_frame_ready = false; 
 
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);
   if (!(m_decoder=dv_decoder_new(true, true, true))){
     post("unable to create DV-decoder...closing");
     closeDevice();
     return(0);
-  }  
-  m_decoder->quality=DV_QUALITY_COLOR|DV_QUALITY_AC_1;
+  }
+  m_decoder->quality=m_quality;
+  post("DV decoding quality %d ", m_decoder->quality);
 
   m_continue_thread = true;
   pthread_create(&m_thread_id, 0, capturing, this);
@@ -276,7 +285,7 @@ int videoDV4L :: stopTransfer()
 }
 
 /////////////////////////////////////////////////////////
-// dimenMess
+// normMess
 //
 /////////////////////////////////////////////////////////
 int videoDV4L :: setNorm(char*norm){
@@ -291,29 +300,40 @@ int videoDV4L :: setNorm(char*norm){
   }
   if (inorm==m_norm)return 0;
   m_norm=inorm;
-  if(m_haveVideo){
-    stopTransfer();
-    startTransfer();
-  }
   return 0;
 }
 
 int videoDV4L :: setDevice(int d){
   if (d==m_devicenum)return 0;
   m_devicenum=d;
-#if 0
   // need this commented out for testing
   if(m_haveVideo){
     stopTransfer();
     startTransfer();
   }
-#endif
   return 0;
 }
 
 int videoDV4L :: setColor(int format){
   if (format<=0)return -1;
   m_reqFormat=format;
+  return 0;
+}
+
+/////////////////////////////////////////
+//
+// Set the quality for DV decoding
+//
+/////////////////////////////////////////
+int videoDV4L :: setQuality(int quality){
+  if (quality<0)return -1;
+  if (quality>5)return -1;
+  m_quality=quality;
+
+  if(m_haveVideo){
+    stopTransfer();
+    startTransfer();
+  }  
   return 0;
 }
 
