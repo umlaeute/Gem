@@ -50,7 +50,9 @@ class GEM_EXTERN pix_2grey : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
+        virtual void 	processRGBAltivec(imageStruct &image);
 	virtual void 	processYUVImage(imageStruct &image);
+        virtual void 	processYUVAltivec(imageStruct &image);
      	    	  
     	//////////
     	// Do the processing - this is a no-op
