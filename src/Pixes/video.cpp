@@ -93,42 +93,42 @@ int video :: stopTransfer()
 /////////////////////////////////////////////////////////
 // set dimension
 int video :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
-  post("setting the dimension for video is not supported under this OS");
+  post("setting the dimension for video is not supported by this OS/device");
   return -1;
 }
 /////////////////////////////////////////////////////////
 // set the displacment
 int video :: setOffset(int x, int y){
-  post("setting the channel is not supported under this OS");
+  post("setting the channel is not supported by this OS/device");
   return -1;
 }
 /////////////////////////////////////////////////////////
 // should the image be swapped ?
 int video :: setSwap(int state){
-  post("swapping the image is not supported under this OS");
+  post("swapping the image is not supported by this OS/device");
   return -1;
 }
 /////////////////////////////////////////////////////////
 // set the tv-norm
 int video :: setNorm(char *n){
-  post("setting the video-norm is not supported under this OS");
+  post("setting the video-norm is not supported by this OS/device");
   return -1;
 }
 /////////////////////////////////////////////////////////
 // set the channel of the current device
 int video :: setChannel(int chan, t_float freq){
-  post("setting the channel is not supported under this OS");
+  post("setting the channel is not supported by this OS/device");
   return -1;
 }
 /////////////////////////////////////////////////////////
 // set the device
 int video :: setDevice(int d){
-  post("setting the video-device is not supported under this OS");
+  post("setting the video-device is not supported by this OS/device");
   return -1;
 }
 /////////////////////////////////////////////////////////
 // set the color-space
 int video :: setColor(int d){
-  post("setting the color-space is not supported under this OS");
+  post("setting the color-space is not supported by this OS/device");
   return -1;
 }
