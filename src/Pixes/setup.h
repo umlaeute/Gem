@@ -20,7 +20,6 @@ extern "C" {
    void pix_alpha_setup();
    void pix_bitmask_setup();
    void pix_blob_setup();
-   void pix_blur_setup();
    void pix_buf_setup();
    void pix_clearblock_setup();
    void pix_color_setup();
@@ -82,8 +81,13 @@ extern "C" {
    void pix_write_setup();
    void pix_zoom_setup();
 
+  void pix_biquad_setup();
   void pix_blur_setup();
   void pix_tIIR_setup();
+
+  void pix_delay_setup();
+  void pix_movement_setup();
+  void pix_rtx_setup();
   
 
    void Pixes_setup() {
@@ -95,7 +99,6 @@ extern "C" {
       pix_alpha_setup();
       pix_bitmask_setup();
       pix_blob_setup();   
-      pix_blur_setup();
       pix_buf_setup();
       pix_clearblock_setup();
       pix_color_setup();
@@ -176,6 +179,9 @@ extern "C" {
 #endif
     pix_blur_setup();
     pix_tIIR_setup();
+    pix_delay_setup();
+    pix_movement_setup();
+    pix_rtx_setup();
    }
 } // for extern "C"
 

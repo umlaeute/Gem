@@ -12,67 +12,60 @@ LOG
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
-    Copyleft (l) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_TEST_H_
-#define INCLUDE_PIX_TEST_H_
+#ifndef INCLUDE_TV_TEST_H_
+#define INCLUDE_TV_TEST_H_
 
 #include "Base/GemPixObj.h"
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    pix_test
+  -------------------------------------------------------------------
+  CLASS
+  pix_test
     
-    Change pix to greyscale
+  Change pix to greyscale
 
-KEYWORDS
-    pix
+  KEYWORDS
+  pix
     
-DESCRIPTION
+  DESCRIPTION
    
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 class GEM_EXTERN pix_test : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_test, GemPixObj)
+  CPPEXTERN_HEADER(pix_test, GemPixObj)
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_test();
+  //////////
+  // Constructor
+  pix_test();
     	
-    protected:
+ protected:
     	
-    	//////////
-    	// Destructor
-    	virtual ~pix_test();
+  //////////
+  // Destructor
+  virtual ~pix_test();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void 	processImage(imageStruct &image);
 
-    	//////////
-    	// Do the processing - this is a no-op
-    	virtual void 	processGrayImage(imageStruct &image) { }
-        
-        //////////
-    	// Do the processing : this is not yet implemented
-    	virtual void 	processYUVImage(imageStruct &image);
-	
-	/////////
-	// Do the processing : all the other formats (this is a no-op)
-	virtual void processImage(imageStruct &image) { }
+  //////////
+  // Do the processing - this is a no-op
+  virtual void 	processGrayImage(imageStruct &image) { }
 
-	void pix_test :: postrender(GemState *state);
+  //////////
+  // turn the pointer back to the org data after rendering
+  virtual void postrender(GemState *state);
 
-	imageStruct    myImage;
-	imageStruct  *orgImage;
-	unsigned char*orgdata;
+  imageStruct    myImage;
+  imageStruct  *orgImage;
+  unsigned char*orgdata;
 };
 
 #endif	// for header file

@@ -27,7 +27,7 @@
 #include "../Manips/setup.h"
 #include "../Particles/setup.h"
 #include "../Pixes/setup.h"
-#include "../TV/setup.h"
+//#include "../TV/setup.h"
 #include "../openGL/setup.h"
 #include "../yuv/setup.h"
 
@@ -49,7 +49,7 @@ extern "C" {
     Manips_setup();
     Particles_setup();
     Pixes_setup();
-    TV_setup();
+    //    TV_setup();
     openGL_setup();
     yuv_setup();
   }
