@@ -222,13 +222,13 @@ void pix_filmDarwin :: getFrame()
     
     m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
     m_baseAddr = ::GetPixBaseAddr(m_pixMap);
-
+ 
     int num;
 
     // get the next frame of the source movie
     short 	flags = nextTimeStep;
     OSType	whichMediaType = VisualMediaCharacteristic;
-    
+
     if (m_reqFrame > m_curFrame) {
         num = m_reqFrame - m_curFrame;
     } else {
@@ -278,12 +278,29 @@ if (m_auto) {
         }*/
         }
 
-       
+       post("pix_film: m_movieTIme: %d",m_movieTime);
     // set the time for the frame and give time to the movie toolbox	
     SetMovieTimeValue(m_movie, m_movieTime); 
     MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
     
     m_frame = (unsigned char *)m_baseAddr;
+}
+
+void pix_filmDarwin :: LoadRam()
+{
+      TimeValue	length;
+      OSErr err;
+if (m_haveMovie){      
+m_movieTime = 0;
+ length = GetMovieDuration(m_movie);
+ err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
+ if (err)
+ {
+ post("pix_film: LoadMovieIntoRam failed miserably");
+ }
+ }else{
+ post("pix_film: no movie to load into RAM!");
+ }
 }
 
 /////////////////////////////////////////////////////////

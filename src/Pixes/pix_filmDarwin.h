@@ -58,6 +58,10 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   //////////
   // Do the rendering
   virtual void getFrame();
+  
+  //////////
+  // load film into RAM
+  virtual void LoadRam();
 	
   //-----------------------------------
   // GROUP:	Movie data
@@ -65,11 +69,14 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   Movie			m_movie; 
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
+
+
   Track			m_movieTrack;
   Media			m_movieMedia;
   TimeValue		m_timeScale;
   TimeValue		duration;
   
+
 
   //-----------------------------------
   // GROUP:	Texturing
@@ -82,6 +89,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   static void openMessCallback   (void *data, t_symbol *filename);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback(void *data, t_floatarg state);
+  static void ramCallback(void *data);
 
 };
 
