@@ -48,7 +48,8 @@ pix_texture :: pix_texture()
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
     m_rebuildList(0), m_textureObj(0),m_textureType( GL_TEXTURE_2D ),
     m_mode(0),
-    m_clientStorage(0) //have to do this due to texture corruption issues
+    m_clientStorage(0), //have to do this due to texture corruption issues
+    m_yuv(1)
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
@@ -222,8 +223,8 @@ void pix_texture :: render(GemState *state) {
     if (m_rebuildList) {
 	// if YUV is not supported on this platform, we have to convert it to RGB
 	//(skip Alpha since it isnt used)
-	//
-	if (!GemMan::texture_yuv_supported && m_imagebuf.format == GL_YUV422_GEM){
+	const bool do_yuv = m_yuv && GemMan::texture_yuv_supported;
+	if (!do_yuv && m_imagebuf.format == GL_YUV422_GEM){
 	    m_imagebuf.format=GL_RGB;
 	    m_imagebuf.csize=3;
 	    m_imagebuf.reallocate();
@@ -492,6 +493,8 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("mode"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::clientStorageCallback,
 		  gensym("client_storage"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_texture::yuvCallback,
+		  gensym("yuv"), A_FLOAT, A_NULL);
   class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
 }
 void pix_texture :: floatMessCallback(void *data, float n)
@@ -516,3 +519,9 @@ void pix_texture :: clientStorageCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_clientStorage=((int)quality);
 }
+
+void pix_texture :: yuvCallback(void *data, t_floatarg quality)
+{
+  GetMyClass(data)->m_yuv=((int)quality);
+}
+

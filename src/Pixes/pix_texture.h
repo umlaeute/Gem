@@ -126,6 +126,7 @@ class GEM_EXTERN pix_texture : public GemBase
         int		m_mode; //rectangle or power of 2
         int		m_clientStorage; //for Apple's client storage extension
         GLenum		m_internalFormat;
+        int		m_yuv; // try to texture YUV-images directly when gxf-card says it is possible to do so
         
 	
 
@@ -138,6 +139,7 @@ class GEM_EXTERN pix_texture : public GemBase
         static void 	modeCallback(void *data, t_floatarg n);
 	static void 	repeatMessCallback(void *data, t_floatarg n);
         static void 	clientStorageCallback(void *data, t_floatarg n);
+        static void 	yuvCallback(void *data, t_floatarg n);
 };
 
 #endif	// for header file
