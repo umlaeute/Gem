@@ -56,19 +56,21 @@ class GEM_EXTERN GemOutput : public CPPExtern
   //////////
   // Constructor
   GemOutput();
-    	
- private:
+
+ protected:
 
   //////////
   // Destructor
   virtual     	~GemOutput();
-
+    	
   void		renderMess(gem_control gc);
   virtual void  preRender (gem_control gc)=0;
   virtual void  postRender(gem_control gc){};
-
+  
   virtual void 	createMess();
   virtual void  destroyMess();
+
+  bool m_outputState; // whether we can output (and thus want to render) or not
 
  private:
     

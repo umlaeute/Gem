@@ -24,7 +24,7 @@
 // Constructor
 //
 /////////////////////////////////////////////////////////
-GemOutput :: GemOutput()
+GemOutput :: GemOutput() : m_outputState(0)
 {}
 
 /////////////////////////////////////////////////////////
@@ -42,8 +42,10 @@ GemOutput :: ~GemOutput()
 /////////////////////////////////////////////////////////
 void GemOutput :: renderMess(gem_control cb)
 {
+  if(!m_outputState)return;
+  post("GemOutput: rendering: %x", cb);
   preRender(cb);
-  if(cb!=NULL)(cb);
+  if(cb!=NULL)(&cb);
   postRender(cb);
 }
 /////////////////////////////////////////////////////////
@@ -52,6 +54,7 @@ void GemOutput :: renderMess(gem_control cb)
 /////////////////////////////////////////////////////////
 void GemOutput :: createMess()
 {
+  post("gemoutput: create");
 }
 /////////////////////////////////////////////////////////
 // destroyMess
@@ -69,10 +72,12 @@ void GemOutput :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&GemOutput::renderMessCallback,
 		  gensym("gem_render"), A_POINTER, A_NULL);
+  /*
   class_addmethod(classPtr, (t_method)&GemOutput::createMessCallback,
 		  gensym("create"), A_NULL);
   class_addmethod(classPtr, (t_method)&GemOutput::destroyMessCallback,
 		  gensym("destroy"), A_NULL);
+  */
 }
 void GemOutput :: renderMessCallback(void *data, t_gpointer*cb)
 {
