@@ -345,7 +345,7 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     break;
   case GL_YUV422_GEM:
 #if 0
-	RGB_to_YCbCr(rgbdata, pixelnum, pixels);
+	RGB_to_YCbCr_altivec(rgbdata, pixelnum, pixels);
 #else
     pixelnum>>=1;
     while(pixelnum--){
@@ -359,7 +359,7 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     break;
   }
 }
-void RGB_to_YCbCr(unsigned char *rgbdata, int RGB_size, 
+GEM_EXTERN void imageStruct :: RGB_to_YCbCr_altivec(unsigned char *rgbdata, int RGB_size, 
                   unsigned char *pixels)
 {
 #ifdef __VEC__
@@ -367,7 +367,7 @@ void RGB_to_YCbCr(unsigned char *rgbdata, int RGB_size,
   vector unsigned char z0, tc0, tc1, tc2, tc3;
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
   vector signed short t0, t1, t2, t3, t4, t5;
-  int i;
+  unsigned int i;
   
   vector unsigned char	*RGB_ptr = (vector unsigned char*) rgbdata;
   vector unsigned char	*YCC_ptr = (vector unsigned char*) pixels;
@@ -472,6 +472,7 @@ void RGB_to_YCbCr(unsigned char *rgbdata, int RGB_size,
     }
 #endif
 }
+
 GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
   //   B B B B B G G G   G G G R R R R R
   //   R R R R R G G G   G G G B B B B B
@@ -581,6 +582,121 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     break;
   }
 }
+
+GEM_EXTERN void imageStruct :: RGBA_to_YCbCr_altivec(unsigned char *rgbadata, int RGBA_size, 
+                  unsigned char *pixels)
+{
+#ifdef __VEC__
+  vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
+  vector unsigned char z0, tc0, tc1, tc2, tc3;
+  vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
+  vector signed short t0, t1, t2, t3, t4, t5;
+  unsigned int i;
+  
+  vector unsigned char	*RGBA_ptr = (vector unsigned char*) rgbadata;
+  vector unsigned char	*YCC_ptr = (vector unsigned char*) pixels;
+
+  /* Permutation vector is used to extract the interleaved RGBA. */
+  vector unsigned char vPerm1 =
+    (vector unsigned char)( 0,  4,  8, 12, 16, 20, 24, 28, /* R0..R7    */
+                            1,  5,  9, 13, 17, 21, 25, 29  /* G0..G7    */);
+  vector unsigned char vPerm2 =
+    (vector unsigned char)( 2,  6, 10, 14, 18, 22, 26, 30, /* B0..B7    */
+                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+  vector unsigned char vPerm3 =
+    (vector unsigned char)( 8, 12, 16, 20, 24, 28, 32, 36, /* R8..R15   */
+                            9, 13, 17, 21, 25, 29, 33, 37  /* G8..G15   */);
+  vector unsigned char vPerm4 =
+    (vector unsigned char)(10, 14, 18, 22, 26, 30, 34, 38, /* B8..B15   */
+                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+
+  /* Load the equation constants. */
+  vector signed short vConst1 =
+    (vector signed short)( 8432,  16425,  3176,
+                          -4818,  -9527, 14345,
+                              0,      0 );
+
+  vector signed short vConst2 =
+    (vector signed short)( 14345, -12045, -2300,
+                              16, 128, 0, 0, 0 );
+
+  r0 = vec_splat( vConst1, 0 ); /*  8432 */
+  g0 = vec_splat( vConst1, 1 ); /* 16425 */
+  b0 = vec_splat( vConst1, 2 ); /*  3176 */
+  r1 = vec_splat( vConst1, 3 ); /* -4818 */
+  g1 = vec_splat( vConst1, 4 ); /* -9527 */
+  b1 = vec_splat( vConst1, 5 ); /* 14345 */
+  r2 = vec_splat( vConst2, 0 ); /* 14345 */
+  g2 = vec_splat( vConst2, 1 ); /*-12045 */
+  b2 = vec_splat( vConst2, 2 ); /* -2300 */
+  c16  = vec_splat( vConst2, 3 ); /*  16 */
+  c128 = vec_splat( vConst2, 4 ); /* 128 */
+  c0 = (vector signed short) (0); /*   0 */
+  z0 = (vector unsigned char) (0); /*  0 */
+
+  for ( i = 0; i < (RGBA_size/sizeof(vector unsigned char)); i+=3 ) {
+
+    /* Load the 3 RGB input vectors and seperate into red,
+       green and blue from the interleaved format. */
+    tc0 = vec_perm( RGBA_ptr[i], RGBA_ptr[i+1], vPerm1 );   /* R0..R7  G0..G7  */
+    tc1 = vec_perm( RGBA_ptr[i], RGBA_ptr[i+1], vPerm2 );   /* B0..B7          */
+    tc2 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2], vPerm3 ); /* R8..R15 G8..G15 */
+    tc3 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2], vPerm4 ); /* B8..B15         */
+
+    /* Unpack to 16 bit arithmatic for converstion. */
+    tr0 = vec_unpack2sh( z0, tc0 );  /* tr0 = R0 .. R7  */
+    tg0 = vec_unpack2sl( z0, tc0 );  /* tg0 = G0 .. G7  */
+    tb0 = vec_unpack2sh( z0, tc1 );  /* tb0 = B0 .. B7  */
+    tr1 = vec_unpack2sh( z0, tc2 );  /* tr0 = R8 .. R15 */
+    tg1 = vec_unpack2sl( z0, tc2 );  /* tg0 = G8 .. G15 */
+    tb1 = vec_unpack2sh( z0, tc3 );  /* tb0 = B8 .. B15 */
+
+    /* Convert the first three input vectors.  Note that
+       only the top 17 bits of the 32 bit product are
+       stored.  This is the same as doing the divide by 32768. */
+
+    t0 = vec_mradds( tr0, r0, c0 ); /* (R0 .. R7) *  8432 */
+    t1 = vec_mradds( tr0, r1, c0 ); /* (R0 .. R7) * -4818 */
+    t2 = vec_mradds( tr0, r2, c0 ); /* (R0 .. R7) * 14345 */
+
+    t0 = vec_mradds( tg0, g0, t0 ); /* += (G0 .. G7) *  16425 */
+    t1 = vec_mradds( tg0, g1, t1 ); /* += (G0 .. G7) *  -9527 */
+    t2 = vec_mradds( tg0, g2, t2 ); /* += (G0 .. G7) * -12045 */
+
+    t0 = vec_mradds( tb0, b0, t0 ); /* += (B0 .. B7) *  3176 */
+    t1 = vec_mradds( tb0, b1, t1 ); /* += (B0 .. B7) * 14345 */
+    t2 = vec_mradds( tb0, b2, t2 ); /* += (B0 .. B7) * -2300 */
+
+    /* Convert the next three input vectors. */
+    t3 = vec_mradds( tr1, r0, c0 ); /* (R8 .. R15) *  8432 */
+    t4 = vec_mradds( tr1, r1, c0 ); /* (R8 .. R15) * -4818 */
+    t5 = vec_mradds( tr1, r2, c0 ); /* (R8 .. R15) * 14345 */
+
+    t3 = vec_mradds( tg1, g0, t3 ); /* += (G8 .. G15) *  16425 */
+    t4 = vec_mradds( tg1, g1, t4 ); /* += (G8 .. G15) *  -9527 */
+    t5 = vec_mradds( tg1, g2, t5 ); /* += (G8 .. G15) * -12045 */
+
+    t3 = vec_mradds( tb1, b0, t3 ); /* += (B8 .. B15) *  3176 */
+    t4 = vec_mradds( tb1, b1, t4 ); /* += (B8 .. B15) * 14345 */
+    t5 = vec_mradds( tb1, b2, t5 ); /* += (B8 .. B15) * -2300 */
+
+    /* Add the constants. */
+    t0 = vec_adds( t0, c16 );
+    t3 = vec_adds( t3, c16 );
+    t1 = vec_adds( t1, c128 );
+    t4 = vec_adds( t4, c128 );
+    t2 = vec_adds( t2, c128 );
+    t5 = vec_adds( t5, c128 );
+
+    /* Pack the results, and store them. */
+    YCC_ptr[i]   = vec_packsu( t0, t3 );  /*  Y0 .. Y15  */
+    YCC_ptr[i+1] = vec_packsu( t1, t4 );  /* Cb0 .. Cb15 */
+    YCC_ptr[i+2] = vec_packsu( t2, t5 );  /* Cr0 .. Cr15 */
+
+    }
+#endif
+}
+
 GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
   if(!bgrdata)return;
   int pixelnum=xsize*ysize;
@@ -635,9 +751,124 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
     break;
   }
 }
+
+GEM_EXTERN void imageStruct :: BGR_to_YCbCr_altivec(unsigned char *bgrdata, int BGR_size, 
+                  unsigned char *pixels)
+{
+#ifdef __VEC__
+  vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
+  vector unsigned char z0, tc0, tc1, tc2, tc3;
+  vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
+  vector signed short t0, t1, t2, t3, t4, t5;
+  unsigned int i;
+  
+  vector unsigned char	*BGR_ptr = (vector unsigned char*) bgrdata;
+  vector unsigned char	*YCC_ptr = (vector unsigned char*) pixels;
+
+  /* Permutation vector is used to extract the interleaved RGB. */
+  vector unsigned char vPerm1 =
+    (vector unsigned char)( 0,  3,  6,  9, 12, 15, 18, 21, /* R0..R7    */
+                            1,  4,  7, 10, 13, 16, 19, 22  /* G0..G7    */);
+  vector unsigned char vPerm2 =
+    (vector unsigned char)( 2,  5,  8, 11, 14, 17, 20, 23, /* B0..B7    */
+                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+  vector unsigned char vPerm3 =
+    (vector unsigned char)( 8, 11, 14, 17, 20, 23, 26, 29, /* R8..R15   */
+                            9, 12, 15, 18, 21, 24, 27, 30  /* G8..G15   */);
+  vector unsigned char vPerm4 =
+    (vector unsigned char)(10, 13, 16, 19, 22, 25, 28, 31, /* B8..B15   */
+                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+
+  /* Load the equation constants. */
+  vector signed short vConst1 =
+    (vector signed short)( 8432,  16425,  3176,
+                          -4818,  -9527, 14345,
+                              0,      0 );
+
+  vector signed short vConst2 =
+    (vector signed short)( 14345, -12045, -2300,
+                              16, 128, 0, 0, 0 );
+
+  r0 = vec_splat( vConst1, 0 ); /*  8432 */
+  g0 = vec_splat( vConst1, 1 ); /* 16425 */
+  b0 = vec_splat( vConst1, 2 ); /*  3176 */
+  r1 = vec_splat( vConst1, 3 ); /* -4818 */
+  g1 = vec_splat( vConst1, 4 ); /* -9527 */
+  b1 = vec_splat( vConst1, 5 ); /* 14345 */
+  r2 = vec_splat( vConst2, 0 ); /* 14345 */
+  g2 = vec_splat( vConst2, 1 ); /*-12045 */
+  b2 = vec_splat( vConst2, 2 ); /* -2300 */
+  c16  = vec_splat( vConst2, 3 ); /*  16 */
+  c128 = vec_splat( vConst2, 4 ); /* 128 */
+  c0 = (vector signed short) (0); /*   0 */
+  z0 = (vector unsigned char) (0); /*  0 */
+
+  for ( i = 0; i < (BGR_size/sizeof(vector unsigned char)); i+=3 ) {
+
+    /* Load the 3 RGB input vectors and seperate into red,
+       green and blue from the interleaved format. */
+    tc0 = vec_perm( BGR_ptr[i], BGR_ptr[i+1], vPerm1 );   /* R0..R7  G0..G7  */
+    tc1 = vec_perm( BGR_ptr[i], BGR_ptr[i+1], vPerm2 );   /* B0..B7          */
+    tc2 = vec_perm( BGR_ptr[i+1], BGR_ptr[i+2], vPerm3 ); /* R8..R15 G8..G15 */
+    tc3 = vec_perm( BGR_ptr[i+1], BGR_ptr[i+2], vPerm4 ); /* B8..B15         */
+
+    /* Unpack to 16 bit arithmatic for converstion. */
+    tr0 = vec_unpack2sh( z0, tc0 );  /* tr0 = R0 .. R7  */
+    tg0 = vec_unpack2sl( z0, tc0 );  /* tg0 = G0 .. G7  */
+    tb0 = vec_unpack2sh( z0, tc1 );  /* tb0 = B0 .. B7  */
+    tr1 = vec_unpack2sh( z0, tc2 );  /* tr0 = R8 .. R15 */
+    tg1 = vec_unpack2sl( z0, tc2 );  /* tg0 = G8 .. G15 */
+    tb1 = vec_unpack2sh( z0, tc3 );  /* tb0 = B8 .. B15 */
+
+    /* Convert the first three input vectors.  Note that
+       only the top 17 bits of the 32 bit product are
+       stored.  This is the same as doing the divide by 32768. */
+
+    t0 = vec_mradds( tr0, r0, c0 ); /* (R0 .. R7) *  8432 */
+    t1 = vec_mradds( tr0, r1, c0 ); /* (R0 .. R7) * -4818 */
+    t2 = vec_mradds( tr0, r2, c0 ); /* (R0 .. R7) * 14345 */
+
+    t0 = vec_mradds( tg0, g0, t0 ); /* += (G0 .. G7) *  16425 */
+    t1 = vec_mradds( tg0, g1, t1 ); /* += (G0 .. G7) *  -9527 */
+    t2 = vec_mradds( tg0, g2, t2 ); /* += (G0 .. G7) * -12045 */
+
+    t0 = vec_mradds( tb0, b0, t0 ); /* += (B0 .. B7) *  3176 */
+    t1 = vec_mradds( tb0, b1, t1 ); /* += (B0 .. B7) * 14345 */
+    t2 = vec_mradds( tb0, b2, t2 ); /* += (B0 .. B7) * -2300 */
+
+    /* Convert the next three input vectors. */
+    t3 = vec_mradds( tr1, r0, c0 ); /* (R8 .. R15) *  8432 */
+    t4 = vec_mradds( tr1, r1, c0 ); /* (R8 .. R15) * -4818 */
+    t5 = vec_mradds( tr1, r2, c0 ); /* (R8 .. R15) * 14345 */
+
+    t3 = vec_mradds( tg1, g0, t3 ); /* += (G8 .. G15) *  16425 */
+    t4 = vec_mradds( tg1, g1, t4 ); /* += (G8 .. G15) *  -9527 */
+    t5 = vec_mradds( tg1, g2, t5 ); /* += (G8 .. G15) * -12045 */
+
+    t3 = vec_mradds( tb1, b0, t3 ); /* += (B8 .. B15) *  3176 */
+    t4 = vec_mradds( tb1, b1, t4 ); /* += (B8 .. B15) * 14345 */
+    t5 = vec_mradds( tb1, b2, t5 ); /* += (B8 .. B15) * -2300 */
+
+    /* Add the constants. */
+    t0 = vec_adds( t0, c16 );
+    t3 = vec_adds( t3, c16 );
+    t1 = vec_adds( t1, c128 );
+    t4 = vec_adds( t4, c128 );
+    t2 = vec_adds( t2, c128 );
+    t5 = vec_adds( t5, c128 );
+
+    /* Pack the results, and store them. */
+    YCC_ptr[i]   = vec_packsu( t0, t3 );  /*  Y0 .. Y15  */
+    YCC_ptr[i+1] = vec_packsu( t1, t4 );  /* Cb0 .. Cb15 */
+    YCC_ptr[i+2] = vec_packsu( t2, t5 );  /* Cr0 .. Cr15 */
+
+    }
+#endif
+}
+
 GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   if(!bgradata)return;
-  int pixelnum=xsize*ysize;
+  unsigned int pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
@@ -679,6 +910,9 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     }
     break;
   case GL_YUV422_GEM:
+#ifdef __VEC__
+	BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
+#else
     pixelnum>>=1;
     while(pixelnum--){
       *pixels++=((RGB2YUV_21*bgradata[chRed]+
@@ -695,9 +929,151 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
 		  RGB2YUV_13*bgradata[4+chBlue])>>8)+ Y_OFFSET; // Y
       bgradata+=8;
     }
+#endif
     break;
   }
 }
+
+GEM_EXTERN void imageStruct :: BGRA_to_YCbCr_altivec(unsigned char *bgradata, unsigned int BGRA_size, 
+                  unsigned char *pixels)
+{
+#ifdef __VEC__
+  vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
+  vector unsigned char z0, tc0, tc1, tc2, tc3;
+  vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
+  vector signed short t0, t1, t2, t3, t4, t5;
+  vector signed short u1, u2, uAvg, v1, v2, vAvg, out1, out2, out3, out4;
+  vector signed short temp1, temp2, temp3, temp4, uv1, uv2;
+  int i;
+  
+  vector unsigned char	*BGRA_ptr = (vector unsigned char*) bgradata;
+  vector unsigned char	*UYVY_ptr = (vector unsigned char*) pixels;
+
+  /* Permutation vector is used to extract the interleaved BGRA. */
+  vector unsigned char vPerm1 =
+    (vector unsigned char)( 3,  7, 11, 15, 19, 23, 27, 31, // B0..B7    
+                            2,  6, 10, 14, 18, 22, 26, 30  /* G0..G7    */);
+  vector unsigned char vPerm2 =
+    (vector unsigned char)( 1,  5,  9, 13, 17, 21, 25, 29, /* R0..R7    */
+                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+
+  /* Load the equation constants. */
+  vector signed short vConst1 =
+    (vector signed short)( 8432,  16425,  3176,
+                          -4818,  -9527, 14345,
+                              0,      0 );
+  vector signed short vConst2 =
+    (vector signed short)( 14345, -12045, -2300,
+                              16, 128, 0, 0, 0 );
+							  
+  vector unsigned char avgPerm1 =
+    (vector unsigned char)(  0,  1,  4,  5,  8,  9, 12, 13,
+	                        16, 17, 20, 21, 24, 25, 28, 29 );
+  vector unsigned char avgPerm2 =
+    (vector unsigned char)(  2,  3,  6,  7, 10, 11, 14, 15,
+	                        18, 19, 22, 23, 26, 27, 30, 31 );
+  vector unsigned char Perm1 = 
+         (vector unsigned char)( 0, 1, 16, 17, 2, 3, 18, 19,
+						         4, 5, 20, 21, 6, 7, 22, 23 );
+  vector unsigned char Perm2 = 
+         (vector unsigned char)(  8,  9, 24, 25, 10, 11, 26, 27,
+						         12, 13, 28, 29, 14, 15, 30, 31 );
+								 							
+  r0 = vec_splat( vConst1, 2 ); /*  8432 */
+  g0 = vec_splat( vConst1, 1 ); /* 16425 */
+  b0 = vec_splat( vConst1, 0 ); /*  3176 */
+  r1 = vec_splat( vConst1, 5 ); /* -4818 */
+  g1 = vec_splat( vConst1, 4 ); /* -9527 */
+  b1 = vec_splat( vConst1, 3 ); /* 14345 */
+  r2 = vec_splat( vConst2, 2 ); /* 14345 */
+  g2 = vec_splat( vConst2, 1 ); /*-12045 */
+  b2 = vec_splat( vConst2, 0 ); /* -2300 */
+  c16  = vec_splat( vConst2, 3 ); /*  16 */
+  c128 = vec_splat( vConst2, 4 ); /* 128 */
+  c0 = (vector signed short) (0); /*   0 */
+  z0 = (vector unsigned char) (0); /*  0 */
+
+  for ( i = 0; i < (BGRA_size/sizeof(vector unsigned char)); i++ ) {
+
+    /* Load the 4 BGRA input vectors and seperate into red,
+       green and blue from the interleaved format. */
+	vector unsigned char *vec1 = BGRA_ptr++;
+	vector unsigned char *vec2 = BGRA_ptr++;
+	vector unsigned char *vec3 = BGRA_ptr++;
+	vector unsigned char *vec4 = BGRA_ptr++;
+	
+	tc0 = vec_perm( *vec1, *vec2, vPerm1 ); // B0..B7  G0..G7
+	tc1 = vec_perm( *vec1, *vec2, vPerm2 ); // R0..R7
+	tc2 = vec_perm( *vec3, *vec4, vPerm1 ); // B8..B15 G8..G15
+	tc3 = vec_perm( *vec3, *vec4, vPerm2 ); // R8..R15
+
+    /* Unpack to 16 bit arithmatic for conversion. */
+    tr0 = vec_unpack2sh( z0, tc0 );  /* tr0 = R0 .. R7  */
+    tg0 = vec_unpack2sl( z0, tc0 );  /* tg0 = G0 .. G7  */
+    tb0 = vec_unpack2sh( z0, tc1 );  /* tb0 = B0 .. B7  */
+    tr1 = vec_unpack2sh( z0, tc2 );  /* tr0 = R8 .. R15 */
+    tg1 = vec_unpack2sl( z0, tc2 );  /* tg0 = G8 .. G15 */
+    tb1 = vec_unpack2sh( z0, tc3 );  /* tb0 = B8 .. B15 */
+
+    /* Convert the first three input vectors.  Note that
+       only the top 17 bits of the 32 bit product are
+       stored.  This is the same as doing the divide by 32768. */
+
+    t0 = vec_mradds( tr0, r0, c0 ); /* (R0 .. R7) *  8432 */
+    t1 = vec_mradds( tr0, r1, c0 ); /* (R0 .. R7) * -4818 */
+    t2 = vec_mradds( tr0, r2, c0 ); /* (R0 .. R7) * 14345 */
+
+    t0 = vec_mradds( tg0, g0, t0 ); /* += (G0 .. G7) *  16425 */
+    t1 = vec_mradds( tg0, g1, t1 ); /* += (G0 .. G7) *  -9527 */
+    t2 = vec_mradds( tg0, g2, t2 ); /* += (G0 .. G7) * -12045 */
+
+    t0 = vec_mradds( tb0, b0, t0 ); /* += (B0 .. B7) *  3176 */
+    t1 = vec_mradds( tb0, b1, t1 ); /* += (B0 .. B7) * 14345 */
+    t2 = vec_mradds( tb0, b2, t2 ); /* += (B0 .. B7) * -2300 */
+
+    /* Convert the next three input vectors. */
+    t3 = vec_mradds( tr1, r0, c0 ); /* (R8 .. R15) *  8432 */
+    t4 = vec_mradds( tr1, r1, c0 ); /* (R8 .. R15) * -4818 */
+    t5 = vec_mradds( tr1, r2, c0 ); /* (R8 .. R15) * 14345 */
+
+    t3 = vec_mradds( tg1, g0, t3 ); /* += (G8 .. G15) *  16425 */
+    t4 = vec_mradds( tg1, g1, t4 ); /* += (G8 .. G15) *  -9527 */
+    t5 = vec_mradds( tg1, g2, t5 ); /* += (G8 .. G15) * -12045 */
+
+    t3 = vec_mradds( tb1, b0, t3 ); /* += (B8 .. B15) *  3176 */
+    t4 = vec_mradds( tb1, b1, t4 ); /* += (B8 .. B15) * 14345 */
+    t5 = vec_mradds( tb1, b2, t5 ); /* += (B8 .. B15) * -2300 */
+
+    /* Add the constants. */
+    t0 = vec_adds( t0, c16 );
+    t3 = vec_adds( t3, c16 );
+    t1 = vec_adds( t1, c128 );
+    t4 = vec_adds( t4, c128 );
+    t2 = vec_adds( t2, c128 );
+    t5 = vec_adds( t5, c128 );
+	
+	u1 = vec_perm( t1, t4, avgPerm1 ); // rearrange U's for averaging
+	u2 = vec_perm( t1, t4, avgPerm2 );
+	uAvg = vec_avg( u1, u2 );
+	v1 = vec_perm( t2, t5, avgPerm1 ); // rearrange V's for averaging
+	v2 = vec_perm( t2, t5, avgPerm2 );
+	vAvg = vec_avg( v1, v2 );
+	
+	uv1 = vec_perm( uAvg, vAvg, Perm1 );
+	uv2 = vec_perm( uAvg, vAvg, Perm2 );
+	out1 = vec_perm( uv1, t0, Perm1 );
+	out2 = vec_perm( uv1, t0, Perm2 );
+	out3 = vec_perm( uv2, t3, Perm1 );
+	out4 = vec_perm( uv2, t3, Perm2 );
+
+    *UYVY_ptr = vec_packsu( out1, out2 );	// pack down to char's
+	UYVY_ptr++;
+	*UYVY_ptr = vec_packsu( out3, out4 );
+	UYVY_ptr++;
+  }
+#endif
+}
+
 GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
   if(!greydata)return;
   int pixelnum=xsize*ysize;
@@ -1051,6 +1427,9 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
     break;
   case GL_YUV422_GEM:
     {
+#ifdef __VEC__
+	YV12_to_YUV422_altivec(Y, U, V, pixelnum);
+#else
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
       short*py1=Y;
@@ -1078,9 +1457,88 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 		pixels1+=xsize*csize;	pixels2+=xsize*csize;
 		py1+=xsize*1;	py2+=xsize*1;
       }
+#endif
     }
     break;
   }
+}
+
+GEM_EXTERN void imageStruct :: YV12_to_YUV422_altivec(short*Y, short*U, short*V, int pixelnum)
+{
+#ifdef __VEC__
+  vector unsigned char *pixels1=(vector unsigned char *)data;
+  vector unsigned char *pixels2=(vector unsigned char *)(data+((xsize*csize)));
+  vector unsigned short *py1 = (vector unsigned short *)Y;
+  vector unsigned short *py2 = (vector unsigned short *)(Y + ((xsize)));
+  vector unsigned short *pu = (vector unsigned short *)U;
+  vector unsigned short *pv = (vector unsigned short *)V;
+  vector unsigned short uvAdd = (vector unsigned short)( 128, 128, 128, 128,
+                                                         128, 128, 128, 128 );
+  vector unsigned short yShift = (vector unsigned short)( 7, 7, 7, 7, 7, 7, 7, 7 );
+  vector unsigned short uvShift = (vector unsigned short)( 8, 8, 8, 8, 8, 8, 8, 8 );
+  vector unsigned short tempU, tempV, doneU, doneV, tempY1, tempY2, tempY3, tempY4,
+		uv1, uv2, Y1, Y2, out1, out2, out3, out4, out5, out6, out7, out8;
+  vector unsigned char Perm1 = 
+         (vector unsigned char)( 0, 1, 16, 17, 2, 3, 18, 19,
+						         4, 5, 20, 21, 6, 7, 22, 23 );
+  vector unsigned char Perm2 = 
+         (vector unsigned char)(  8,  9, 24, 25, 10, 11, 26, 27,
+						         12, 13, 28, 29, 14, 15, 30, 31 );
+  int row=ysize>>1;
+  int cols=xsize>>4;
+#if 0
+#ifndef PPC970
+  UInt32	prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  vec_dst( pu, prefetchSize, 0 );
+  vec_dst( pv, prefetchSize, 0 );
+  vec_dst( py1, prefetchSize, 0 );
+  vec_dst( py2, prefetchSize, 0 );
+#endif
+#endif
+  while(row--){
+    int col=cols;
+	while(col--){
+#if 0
+#ifndef PPC970
+      vec_dst( );
+#endif
+#endif
+	  tempU = vec_sra( (*pu++), uvShift );
+	  tempV = vec_sra( (*pv++), uvShift );
+	  doneU = vec_add( tempU, uvAdd );
+	  doneV = vec_add( tempV, uvAdd );
+	  
+	  uv1 = vec_perm( doneU, doneV, Perm1 ); // uvuvuvuv uvuvuvuv
+	  uv2 = vec_perm( doneU, doneV, Perm2 );
+	  
+	  tempY1 = vec_sra( (*py1++), yShift );
+	  tempY2 = vec_sra( (*py2++), yShift );
+	  
+	  out1 = vec_perm( uv1, tempY1, Perm1 ); //fill Y's, U's & V's
+	  out2 = vec_perm( uv1, tempY1, Perm2 );
+	  out3 = vec_perm( uv1, tempY2, Perm1 ); //fill 2nd Y's, U's & V's
+	  out4 = vec_perm( uv1, tempY2, Perm2 );
+	  
+	  *pixels1 = vec_packsu( out1, out2 );
+	  *pixels2 = vec_packsu( out3, out4 );
+	  pixels1++; pixels2++; 
+	  
+	  tempY3 = vec_sra( (*py1++), yShift ); // load second set of Y's
+	  tempY4 = vec_sra( (*py2++), yShift );
+	  
+	  out5 = vec_perm( uv2, tempY3, Perm1 );
+	  out6 = vec_perm( uv2, tempY3, Perm2 );
+	  out7 = vec_perm( uv2, tempY4, Perm1 );
+	  out8 = vec_perm( uv2, tempY4, Perm2 );
+	  
+	  *pixels1 = vec_packsu( out5, out6 );
+      *pixels2 = vec_packsu( out7, out8 );
+	  pixels1++; pixels2++;
+	}
+    pixels1+=(xsize*2)>>4; pixels2+=(xsize*2)>>4;
+	py1+=xsize>>3; py2+=xsize>>3;
+  }
+#endif
 }
 
 GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
@@ -1138,6 +1596,9 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
   case GL_RGBA:
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
+#if 0
+	  YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
+#else
       unsigned char *pixels=data;
       int y, u, v, yy, vr, ug, vg, ub;
       int uv_r, uv_g, uv_b;
@@ -1166,9 +1627,17 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 
 	yuvdata+=4;
       }
+#endif
     }
     break;
   }
+}
+
+GEM_EXTERN void imageStruct :: YUV422_to_BGRA_altivec( unsigned char *yuvdata, 
+					unsigned int pixelnum, unsigned char *data)
+{
+#ifdef __VEC__
+#endif
 }
 
 GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
@@ -1375,4 +1844,3 @@ GEM_EXTERN extern int getPixFormat(char*cformat){
   }
   return 0;
 }
-

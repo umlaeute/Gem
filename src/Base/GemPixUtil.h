@@ -269,10 +269,6 @@ struct GEM_EXTERN imageStruct
    *   while the source has no meta-data of its own)
    */
   void fromRGB    (unsigned char* orgdata);
-#ifdef __VEC__
-  void RGB_to_YCbCr(unsigned char *rgbdata, int RGB_size, 
-                    unsigned char *pixels);
-#endif
   void fromRGBA   (unsigned char* orgdata);
   void fromBGR    (unsigned char* orgdata);
   void fromBGRA   (unsigned char* orgdata);
@@ -288,6 +284,23 @@ struct GEM_EXTERN imageStruct
   /* overloading the above two in order to accept pdp YV12 packets */
   void fromYV12   (short* Y, short*U, short*V);
   void fromYV12   (short* orgdata);
+  
+  /* altivec functions */
+#ifdef __VEC__
+  void RGB_to_YCbCr_altivec(unsigned char *rgbdata, int RGB_size, 
+							unsigned char *pixels);
+  void RGBA_to_YCbCr_altivec(unsigned char *rgbadata, int RGBA_size, 
+							 unsigned char *pixels);
+  void BGR_to_YCbCr_altivec(unsigned char *bgrdata, int BGR_size, 
+							unsigned char *pixels);
+  void BGRA_to_YCbCr_altivec(unsigned char *bgradata, unsigned int BGRA_size, 
+							 unsigned char *pixels);
+  void YUV422_to_BGRA_altivec(unsigned char *yuvdata, unsigned int pixelnum,
+                             unsigned char *pixels);
+  void YV12_to_RGB_altivec(short*Y, short*U, short*V, int pixelnum);
+  void YV12_to_RGBA_altivec(short*Y, short*U, short*V, int pixelnum);
+  void YV12_to_YUV422_altivec(short*Y, short*U, short*V, int pixelnum);
+#endif
   
   /* aliases */
   void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
@@ -351,5 +364,4 @@ GEM_EXTERN extern void copy2Image(imageStruct *to, imageStruct *from);
 GEM_EXTERN extern void refreshImage(imageStruct *to, imageStruct *from);
 
 GEM_EXTERN extern int getPixFormat(char*);
-
 #endif // GEMPIXUTIL_H_
