@@ -21,7 +21,6 @@ LOG
 #include "Base/GemShape.h"
 
 #ifdef MACOSX
-#define HAVE_LIBGLUT
 #include <GLUT/glut.h>
 #else
 #ifdef HAVE_LIBGLUT
