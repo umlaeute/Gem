@@ -21,9 +21,9 @@
 <br><a href="#1.1">1.1) What is GEM?</a>
 <br><a href="#1.2">1.2) What is Pd?</a>
 <br><a href="#1.3">1.3) What platforms do GEM and Pd run on?</a>
-<br><a href="#1.4">1.4) How do I install GEM and Pd on IRIX?</a>
-<br><a href="#1.5">1.5) How do I install GEM and Pd on linux?</a>
-<br><a href="#1.6">1.6) How do I install GEM and Pd on WinNT?</a>
+<br><a href="#1.4.0">1.4.0) How do I install GEM and Pd on IRIX?</a>
+<br><a href="#1.4.1">1.4.1) How do I install GEM and Pd on linux?</a>
+<br><a href="#1.4.2">1.4.2) How do I install GEM and Pd on WinNT?</a>
 <br><a href="#1.7">1.7) What is a good intro to OpenGL?</a>
 <br><a href="#1.8">1.8) Are there any web sites for Pd or GEM?</a>
 <br><a href="#1.9">1.9) What libraries does GEM use? (aka: Who does Mark
@@ -34,7 +34,7 @@ want to thank?)</a>
 <br><a href="#2.1">2.1) How do I (???)</a>
 <br><a href="#2.2">2.2) How do I make GEM run?</a>
 <br><a href="#2.3">2.3) Why doesn't GEM run?</a>
-<br><a href="#2.4">2.4) I've got it running.&nbsp; Now what?</a>
+<br><a href="#2.4">2.4) I've got it running.  Now what?</a>
 <br><a href="#2.5">2.5) On IRIX 5.3, why does GEM dump with an rld error?</a>
 <br><a href="#2.6">2.6) Why can't I compile GEM on IRIX 5.3?</a>
 <br><a href="#2.7">2.7) Why is GEM slow in general?</a>
@@ -50,8 +50,8 @@ want to thank?)</a>
 <br><a href="#3.1">3.1) Why does everything seem dim?</a>
 <br><a href="#3.2">3.2) Why does everything seem dark?</a>
 <p><i><a href="#TextureMapping">TEXTURE MAPPING</a></i>
-<br><a href="#4.1">4.1) My image doesn't appear.&nbsp; What is going on?</a>
-<br><a href="#4.2">4.2) My image looks strange.&nbsp; What is going on?</a>
+<br><a href="#4.1">4.1) My image doesn't appear.  What is going on?</a>
+<br><a href="#4.2">4.2) My image looks strange.  What is going on?</a>
 <br><a href="#4.3">4.3) Why does GEM say that it can't handle a gray image?</a>
 <br><a href="#4.4">4.4) What image formats can GEM handle?</a>
 <br><a href="#4.5">4.5) What movie formats can GEM handle?</a>
@@ -67,7 +67,7 @@ want to thank?)</a>
 <p><i><a href="#ObjectSpecific">OBJECT SPECIFIC</a></i>
 <br><a href="#7.1">7.1) Why doesn't &lt;object> exist on &lt;platform>?</a>
 <br><a href="#7.2">7.2) Why doesn't gemtablet work?</a>
-<br><a href="#7.3">7.3) I don't want GEM to take over my tablet.&nbsp;
+<br><a href="#7.3">7.3) I don't want GEM to take over my tablet. 
 How do I stop it?</a>
 <br><a href="#7.4">7.4) Why doesn't gemmouse work in IRIX/Linux?</a>
 <br><a href="#7.5">7.5) Why doesn't gemorb work?</a>
@@ -75,184 +75,225 @@ How do I stop it?</a>
 <p><img SRC="tribar.gif" height=13 width=561>
 <h2>
 <u>ANSWERS</u></h2>
-<a NAME="General"></a><i>GENERAL</i>
+<a NAME="General"></a><h3>GENERAL</h3>
 <br><a NAME="1.1"></a>1.1) What is GEM?
-<p>&nbsp;&nbsp;&nbsp; GEM is the Graphics Environment for Multimedia.&nbsp;
+<p>GEM is the Graphics Environment for Multimedia. 
 It was originally written by <a href="mailto:mark@danks.org">Mark Danks</a> to generate real-time computer
 graphics, especially for audio-visual compositions. It originally ran under
 FTS/Max (which is why you might see some papers reference it), but all
 new development is under Pd.
-<p>You can get GEM at <a href="http://www.iem.at/GEM">http://www.iem.at/GEM</a>
+<p>You can get GEM at <a href="http://www.iem.at/GEM">http://gem.iem.at/</a>
 <p>GEM was sponsored by a grant from Intel (<a href="http://www.intel.com">http://www.intel.com</a>)
 <p>GEM was ported to <a href="http://www.linux.org">linux</a> by <a href="mailto:geiger@xdv.org">G&uuml;nter Geiger</a>
-<p>GEM is now maintained by <a href="mailto:zmoelnig@iem.kug.ac.at">IOhannes m zm&ouml;lnig</a>.
+<p>GEM is now maintained by <a href="mailto:zmoelnig@iem.at">IOhannes m zm&ouml;lnig</a>.
+<p>the core-development team consists of<ul>
+<li>chris clepper</li>
+<li>günter geiger</li>
+<li>daniel heckenberg</li>
+<li>james tittle</li>
+<li>IOhannes m zmölnig</li></ul>
+lots of contributions are made by various people (thanks to all of them)
 <p>----
 <br><a NAME="1.2"></a>1.2) What is Pd?
-<p>&nbsp;&nbsp;&nbsp; Pd is a real-time environment for audio and MIDI.&nbsp;
+<p>Pd is a real-time environment for audio and MIDI. 
 It was written by <a href="mailto:msp@ucsd.edu">Miller Puckette</a>, who created FTS/Max when
-he was at IRCAM.&nbsp; Basically, Pd can be seen as the next generation
-of real-time visual programming languages.&nbsp; GEM runs inside of the
+he was at IRCAM.  Basically, Pd can be seen as the next generation
+of real-time visual programming languages.  GEM runs inside of the
 Pd environment.
-<p>&nbsp;&nbsp;&nbsp; You can get Pd at <a href="http://www.crca.ucsd.edu/~msp/software.html">http://www.crca.ucsd.edu/~msp/software.html</a>
-<p>&nbsp;&nbsp;&nbsp; Pd is sponsored by a grant from Intel (<a href="http://www.intel.com">http://www.intel.com</a>)
+<p>You can get Pd at <a href="http://www.crca.ucsd.edu/~msp/software.html">http://www.crca.ucsd.edu/~msp/software.html</a>
+<p>Pd is sponsored by a grant from Intel (<a href="http://www.intel.com">http://www.intel.com</a>)
 <p>----
 <br><a NAME="1.3"></a>1.3) What platforms do GEM and Pd run on?
-<p>&nbsp;&nbsp;&nbsp; GEM and Pd run on SGI Irix 6.2 or greater and Windows
-NT 4.0.&nbsp; Miller and Mark have reports that GEM and Pd also run on Windows
-95, but we have no way to test or support this.
+<p>GEM and Pd run on Windows (95, 98, ME, NT 4.0, 2000, XP), linux and macOS-X (&gt;10.2).
+SGI-Irix (&gt; 6.2) used to be supported but i don't have any prove that it still works).
 <a href="mailto:geiger@xdv.org">G&uuml;nter Geiger</a>
 has done an initial port of GEM and Pd to Linux <a href="http://gige.epy.co.at/">http://gige.epy.co.at</a>).
-<a href="possenbruggen@2bridge.com">Paul Ossenbruggen</a> is currently working on a
-Macintosh port.
-<p>GEM is now developed by <a href="mailto:zmoelnig@iem.kug.ac.at">me</a> both under Linux and Windoze.
+<p>GEM is now maintained by <a href="mailto:zmoelnig@iem.at">me</a> and
+developed by a team of several independent programmers (see <a href="1.1">section 1.1</a>)
 <p>----
-<br><a NAME="1.4"></a>1.4) How do I install GEM and Pd on IRIX?
+<br><a NAME="1.4"></a>1.4) How do I install GEM ?
+<p>----
+<br><a NAME="1.4.0"></a>1.4.0) How do I install GEM and Pd on IRIX?
 <p>See the readme for installing Pd.
 <p>GEM should be at
 <p>pd/gem
 <p>If you run GEM.INSTALL.sh, then all of the example files and documention
 should be put in the correct locations.
 <p>----
-<br><a NAME="1.5"></a>1.5) How do I install GEM and Pd on linux?
+<br><a NAME="1.4.1"></a>1.4.1) How do I install GEM and Pd on linux?
 <p>See the readme for installing Pd.
 <p>GEM should be at
-<p>chmod to &lt;gem&gt;/src/Gnu and build Gem following the instructions in the README.build
+<p>chdir to &lt;gem&gt;/src/Gnu and build Gem following the instructions in the README.build
+(<tt>./configure; make</tt>)
 <p>If you then <tt>make install</tt>, then all of the example files and documention
 should be put in the correct locations.
+<p>if you are using debian, Gem should be available via apt</p>
+<p>if you are using an rpm-based distribution, check out the builds at planetCCRMA</p>
 <p>----
-<br><a NAME="1.6"></a>1.6) How do I install GEM and Pd on WinNT?
+<br><a NAME="1.4.2"></a>1.4.2) How do I install GEM and Pd on WinNT?
 <p>See the readme for installing Pd.
 <p>unzip GEM so that it is at
 <p>pd\gem
 <p>If you run GEM.INSTALL.bat, then all of the example files and documentation
 should be put in the correct locations.
+<p>there is also an installer for windows.
+<p>----
+<br><a NAME="1.4.3"></a>1.4.3) How do I install GEM and Pd on macOS?
+<p>See the readme for installing Pd.
+<p>there is also an installer for macOS.
 <p>----
 <br><a NAME="1.7"></a>1.7) What is a good intro to OpenGL?
-<p>&nbsp;&nbsp;&nbsp; The best book is the <u>OpenGL Programming Manual</u>
-by Mason and Woo. This is also called the "Red Book".&nbsp; If you search
-the web, there are many sites on OpenGL.&nbsp; A good starting point is
-<a href="http://www.opengl.org">http://www.opengl.org</a>.&nbsp;&nbsp;&nbsp;
+<p>The best book is the <u>OpenGL Programming Manual</u>
+by Mason and Woo. This is also called the "Red Book".  If you search
+the web, there are many sites on OpenGL.  A good starting point is
+<a href="http://www.opengl.org">http://www.opengl.org</a>.
 Also, Mark Kilgard (who used to work for SGI) has a wonderful site with
 lots of links (<a href="http://reality.sgi.com/mjk">http://reality.sgi.com/mjk</a>)
-Also, Normal Lin has written a great book on <u>3D-graphics under linux</u>
+Also, Normal Lin has written another great book on <u>3D-graphics under linux</u>
 <p>----
 <br><a NAME="1.8"></a>1.8) Are there any web sites for Pd or GEM?
-<p>&nbsp;&nbsp;&nbsp; Except for the ones noted above, there is the Japanese
+<p>Except for the ones noted above, there is the Japanese
 installation page at
 <br><a href="http://www.rinc.or.jp/~kotobuki/gem/index.htm">http://www.rinc.or.jp/~kotobuki/gem/index.htm</a>
-<p>&nbsp;&nbsp;&nbsp; There is a Pd mailing list.&nbsp; Subscription info
+<p>There is a Pd mailing list.  Subscription info
 is on IEM's site <a href="http://www.iem.at/mailinglists/pd-list">http://www.iem.at/mailinglists/pd-list</a>
-<p>&nbsp;&nbsp;&nbsp; One of pd's unofficial home-pages is at <a href="http://www.iem.at/pd">http://www.iem.at/pd</a>
-<p>&nbsp;&nbsp;&nbsp; Anotherone is <a href="http://www.pure-data.org">http://www.pure-data.org</a>
+<p>One of pd's unofficial home-pages is at <a href="http://pd.iem.at">http://pd.iem.at</a> hosted by the 
+<a href="http://iem.at">Institute of Electronic Music and Acoustics, Graz, Austria</a>
+<p>Also hosted by the <a href="http://iem.at">iem</a> is the site of the pd-community
+<a href="http://www.pure-data.org">http://www.pure-data.org</a>
 <p>An interesting place might also be G&uuml;nter Geiger's size <a href="http://gige.epy.co.at/">http://gige.epy.co.at/</a>
 <p>there are lot's of other cool pages (search the net...)
 <p>----
-<br><a NAME="1.9"></a>1.9) What libraries does GEM use? (aka: Who does
-Mark want to thank?)
-<p>&nbsp;&nbsp;&nbsp; All copyrights and license info can be found in
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GEM.LICENSE.TERMS
-<br>&nbsp;&nbsp;&nbsp; Thanks to Sam Leffner for libTiff, the TIFF image
+<br><a NAME="1.9"></a>1.9) What libraries does GEM use? 
+(aka: Who does Mark want to thank?)
+<p>All copyrights and license info can be found in
+<br>  GEM.LICENSE.TERMS
+<br> Thanks to Sam Leffner for libTiff, the TIFF image
 loader.
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 sam@engr.sgi.com
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="ftp://ftp.sgi.com/graphics/tiff/">ftp://ftp.sgi.com/graphics/tiff/</a>
-<br>&nbsp;&nbsp;&nbsp; Thanks to Masayuki Matsumoto for fstimage for OpenGL,
+<br>  <a href="ftp://ftp.sgi.com/graphics/tiff/">ftp://ftp.sgi.com/graphics/tiff/</a>
+<br> Thanks to Masayuki Matsumoto for fstimage for OpenGL,
 the SGI
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; image loader.
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  image loader.
+<br>  
 matumot@dst.nk-exa.co.jp
-<br>&nbsp;&nbsp;&nbsp; Thanks to the Independent JPEG Group for libjpeg,
+<br> Thanks to the Independent JPEG Group for libjpeg,
 the JPEG image loader.
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 jpeg-info@uunet.uu.net
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/">ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/</a>
-<br>&nbsp;&nbsp;&nbsp; Thanks to Mark Kilgard at al. (and SGI) for glut, the openGL Utility Toolkit
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.pobox.com/~ndr">http://www.pobox.com/~ndr</a>
-<br>&nbsp;&nbsp;&nbsp; Thanks to Stephane Rehel for GLTT, the OpenGL TrueType
+<br>  <a href="ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/">ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/</a>
+<br> Thanks to Mark Kilgard at al. (and SGI) for glut, the openGL Utility Toolkit
+<br>  <a href="http://www.pobox.com/~ndr">http://www.pobox.com/~ndr</a>
+<br> Thanks to Stephane Rehel for GLTT, the OpenGL TrueType
 render.
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 rehel@worldnet.fr
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://home.worldnet.fr/~rehel/gltt/gltt.html">http://home.worldnet.fr/~rehel/gltt/gltt.html</a>
-<br>&nbsp;&nbsp;&nbsp; Thanks to David Turner, Robert Wilhelm, and Werner
+<br>  <a href="http://home.worldnet.fr/~rehel/gltt/gltt.html">http://home.worldnet.fr/~rehel/gltt/gltt.html</a>
+<br> Thanks to David Turner, Robert Wilhelm, and Werner
 Lemberg for
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Freetype, a TrueType font
+<br>  Freetype, a TrueType font
 rendering engine.
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 turner@enst.fr
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 robert@physiol.med.tu-muenchen.de
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 a7971428@unet.univie.ac.at
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.physiol.med.tu-muenchen.de/~robert/freetype.html">http://www.physiol.med.tu-muenchen.de/~robert/freetype.html</a>
-<br>&nbsp;&nbsp;&nbsp; Thanks to the MPEG Software Simulation Group, for
+<br>  <a href="http://www.physiol.med.tu-muenchen.de/~robert/freetype.html">http://www.physiol.med.tu-muenchen.de/~robert/freetype.html</a>
+<br> Thanks to the MPEG Software Simulation Group, for
 libmpeg, the
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MPEG-2 Encoder/Decoder
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>MPEG-2 Encoder/Decoder
+<br>  
 mssg@mpeg.org
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.mpeg.org/MSSG/">http://www.mpeg.org/MSSG/</a>
-<br>&nbsp;&nbsp;&nbsp; Thanks to Heroine for quicktime4linux 
+<br>  <a href="http://www.mpeg.org/MSSG/">http://www.mpeg.org/MSSG/</a>
+<br> Thanks to Heroine for quicktime4linux 
 a quickime Decoder
 and libmpeg3, another MPEG-2 Encoder/Decoder
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MPEG-2 Encoder/Decoder
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>MPEG-2 Encoder/Decoder
+<br>  
 mssg@mpeg.org
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://heroinewarrior.com/">http://heroinewarrior.com/</a>
-<br>&nbsp;&nbsp;&nbsp; Thanks to LCS/Telegraphics for Wintab, the Windows
+<br>  <a href="http://heroinewarrior.com/">http://heroinewarrior.com/</a>
+<br> Thanks to LCS/Telegraphics for Wintab, the Windows
 tablet library.
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 wintab@pointing.com
-<br>&nbsp;&nbsp;&nbsp; Thanks to David McAllister for the Particle System
+<br> Thanks to David McAllister for the Particle System
 library.
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 davemc@cs.unc.edu
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.cs.unc.edu/~davemc/Particle/">http://www.cs.unc.edu/~davemc/Particle/</a>
-<br>&nbsp;&nbsp;&nbsp; Thanks to John Stone for the Space Orb library,
+<br>  <a href="http://www.cs.unc.edu/~davemc/Particle/">http://www.cs.unc.edu/~davemc/Particle/</a>
+<br> Thanks to John Stone for the Space Orb library,
 libOrb
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>  
 j.stone@acm.org
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.umr.edu/~johns/projects/liborb/">http://www.umr.edu/~johns/projects/liborb/</a>
+<br>  <a href="http://www.umr.edu/~johns/projects/liborb/">http://www.umr.edu/~johns/projects/liborb/</a>
 <p>----
 <br><a NAME="1.10"></a>1.10) Are there any restrictions on GEM?
-<p>&nbsp;&nbsp;&nbsp; GEM is under the Gnu Public License.&nbsp; This basically
-means that it will always be free software.&nbsp;&nbsp; Check out <a href="http://www.gnu.org">http://www.gnu.org</a>
-for more information and read the full license in GnuGPL.LICENSE in the
-GEM release.
+<p>GEM is under the Gnu Public License.  This basically
+means that it will always be free software.Check out <a href="http://www.gnu.org">http://www.gnu.org</a>
+for more information and read the full license in GnuGPL.LICENSE in the GEM release.
 <p>----
 <br><a NAME="1.11"></a>1.11) How do I use GEM in a performance?
-<p>&nbsp;&nbsp;&nbsp; This is a constant problem, because there is no consistent
-way to display video on any platform.&nbsp; Also, you usually do not want
-to send the entire screen, but only the GEM window.&nbsp; It is also useful
+<p>This is a constant problem, because there is no consistent
+way to display video on any platform.  Also, you usually do not want
+to send the entire screen, but only the GEM window.  It is also useful
 to be able to edit/control the Pd patch window while the patch is actually
 running.
-<p>&nbsp;&nbsp;&nbsp; On SGIs, the best way is to get a video out option.&nbsp;
-On the SGI O2, Impact, and Onyx (I have used all of these), there is a
-simple connector or breakout box to do video.&nbsp; If you run the video
-out program, then you will get a rectangle on your screen which shows what
-is being sent out the video connector.&nbsp; Make your GEM window a little
-larger than 640x480 and center it in the rectangle.&nbsp; You can now project
-this with a standard video projector.
-<p>&nbsp;&nbsp;&nbsp; On PCs it is a bit harder.&nbsp; I have a Canopus
-Voodoo2 card which has a video and s-video output on it.&nbsp; As described
-in <a href="#2.10">question 2.10</a>, you can get a Voodoo to work with
-GEM.&nbsp; If any one else has a better solution, please let me know.&nbsp;
+<p>On SGIs, the best way is to get a video out option. 
+On the SGI O2, Impact, and Onyx (Mark has used all of these), there is a
+simple connector or breakout box to do video.
+If you run the video out program, then you will get a rectangle on your screen 
+which shows what is being sent out the video connector. 
+Make your GEM window a little larger than 640x480 and center it in the rectangle. 
+You can now project this with a standard video projector.
+<p>On PCs it is a bit harder.
+Several modern video-cards have the possibility to output several screens
+(either 2 (or more) VGA-screens or 1 VGA-screen and 1 TV (Composite or S-HVS)
+or a combination with DFTs)
+If you have a Canopus Voodoo2 card it has a video and s-video output on it.  As described
+in <a href="#2.12">question 2.12</a>, you can get a Voodoo to work with
+GEM.  If any one else has a better solution, please let me know. 
 The nVidia Riva TNTs require that you output the full screen, so this is
-not a very good option.&nbsp; You can use a video scan convertor.&nbsp;
+not a very good option.  You can use a video scan convertor. 
 Some of them only display a part of the scene, which is exactly what you
 want.
-<p>&nbsp;&nbsp;&nbsp; If you are doing audio with graphics, the only solution
-to prevent clicking (<a href="#5.1">question 5.1</a>) is to run computer
-and have them communicate with netsend/netreceive.&nbsp; We are working
+<p>With modern multi-headed cards it is more simple:
+Configure your card to display the desktop spread over your multiple screens
+(e.g.: from left-to-right). 
+On windows and macOS you can do this via the display-properties dialog.
+On linux you will have to edit your /etc/X11/XF86Config-4 file either by hand or
+(if your system supports it) via an appropriate editor (yes, nowadays there are some).
+Now create your gem-window on the second screen: 
+it should have the same dimensions as the 2nd screen (e.g: "[dimen 800 600(").
+to place it at the second screen use the offset (e.g: if your primary sreen
+(the one you want for patch-editing) has the dimension 1024x768 use "[offset 1024 0(",
+which will create the gem-window 1024 pixels right of the upper-left corner 
+of the total screen (and 0 pixels below it),
+which is exactly the upper-left corner of the 2nd screen.
+You most probably want to turn off the borders with "[border 0(".<br>
+<em>Note:</em> some grafix-card have openGL-hardware-acceleration only on the 1st screen
+(so you should create the gem-window on the 1st screen and move 
+your patches to the 2nd screen)
+<p>If you are using an XServer for displaying (under linux) you can also use another
+computer for rendering. 
+You can specify the place where the gem-window should be created with something like 
+"create &lt;<em>render.host</em>&gt;:0.0"
+
+<p>If you are doing audio with graphics, the only solution
+to prevent clicking (<a href="#5.1">question 5.1</a>) is to run 2 computers
+and have them communicate with netsend/netreceive.  We are working
 on making Pd/GEM multi-processor friendly, so if you have a multi-processor
 system, you can run everything on one machine eventually.
 <p>
-<hr WIDTH="100%"><a NAME="UsingGem"></a><i>USING GEM</i>
-<br><a NAME="2.1"></a>2.1) How do I (???)
-<p>&nbsp;&nbsp;&nbsp; Many of the general usage questions are probably
-answered in the manual or release notes.&nbsp; The pd mailing list is also
+<hr WIDTH="100%"><a NAME="UsingGem"></a><h3><i>USING GEM</i></h3>
+<br><a NAME="2.1"></a>2.1)How do I (???)
+<p>Many of the general usage questions are probably
+answered in the manual or release notes.  The pd mailing list is also
 a good place to find answers as well.
 <p><a NAME="2.2"></a>2.2) How do I make GEM run?
-<p>&nbsp;&nbsp;&nbsp; GEM is not an executable.&nbsp; It requires Pd to
-work and is loaded in at run time.&nbsp; For example, I have an alias on
+<p>GEM is not an executable.  It requires Pd to
+work and is loaded in at run time.  For example, I have an alias on
 the SGI which does
 <p>/usr/people/mdanks/pd/bin/pd -lib /usr/people/mdanks/pd/gem/Gem
 <p>and on WinNT
@@ -260,362 +301,367 @@ the SGI which does
 <p>on UNIX-systems you will probably want to use a <tt>.pdrc</tt> file,
  where you can put the command-line arguments for pd that you "always" need.
 <p>If you don't see a startup message from GEM, then something went wrong.
-<p>&nbsp;&nbsp;&nbsp; Most people use use the command shell to start Pd.&nbsp;
+<p>Most people use use the command shell to start Pd. 
 It is not very difficult to configure Pd to run from double-clicking on the icon.
 <p>----
 <br><a NAME="2.3"></a>2.3) Why doesn't GEM run?
-<p>&nbsp;&nbsp;&nbsp; <b>Notice that the -lib flag always requires Unix
-styles slashes</b>.&nbsp; This is the case even on Windows.
-<p>&nbsp;&nbsp;&nbsp; You may also want to use the -nosound flag.&nbsp;
+<p><b>Notice that the -lib flag always requires Unix
+styles slashes</b>.  This is the case even on Windows.
+<p>You may also want to use the -nosound flag. 
 For instance, my PC has problems using audio (it leaks memory), so I just
-turn off the audio part of Pd.&nbsp; However, other people can't get GEM
-to work if the -nosound is used (on Win95).&nbsp; You can also try the
+turn off the audio part of Pd.  However, other people can't get GEM
+to work if the -nosound is used (on Win95).  You can also try the
 -dac or -adc flags (for digital-analog-conversion only and analog-digital-conversion
 only).
 <p>----
-<br><a NAME="2.4"></a>2.4) I've got it running.&nbsp; Now what?
-<p>&nbsp;&nbsp;&nbsp; Try out the manual.&nbsp; It will step you through
+<br><a NAME="2.4"></a>2.4) I've got it running.  Now what?
+<p>Try out the manual.  It will step you through
 the basics.
-<br>&nbsp;&nbsp;&nbsp; You will also want to look at the example files.&nbsp;
+<br> You will also want to look at the example files. 
 Assuming that everything is installed correctly, you can get to the examples
-by going to the Help menu in Pd and selecting examples.&nbsp; A bunch of
-the patches should start with gem&lt;something>.&nbsp; The best one is
-<i>gem/01.basic/01.redSquare.pd</i>&nbsp;
+by going to the Help menu in Pd and selecting examples.  A bunch of
+the patches should start with gem&lt;something>.  The best one is
+<i>gem/01.basic/01.redSquare.pd</i> 
 It puts a red square up on the screen and allows you to rotate it. <i>gemImage.pd</i>
-shows how to load in a TIFF file.&nbsp; <i>gem/03.lighting/04.moveSpheres.pd</i>
+shows how to load in a TIFF file.  <i>gem/03.lighting/04.moveSpheres.pd</i>
 moves two spheres around the screen. Try the other ones.
-<br>&nbsp;&nbsp;&nbsp; Most of the GEM objects have test patches which
+<br> Most of the GEM objects have test patches which
 give some information about the various controls for the object.
 <p>----
 <br><a NAME="2.5"></a>2.5) On IRIX 5.3, why does GEM dump with an rld error?
-<p>&nbsp;&nbsp;&nbsp; GEM only works under IRIX 6.2+.&nbsp; The rld error
-is probably something about not having glBindTextureEXT (or something).&nbsp;
+<p>GEM only works under IRIX 6.2+.  The rld error
+is probably something about not having glBindTextureEXT (or something). 
 OpenGL 1.0 has some extensions to speed up texture mapping (which are an
-integral part of OpenGL 1.1).&nbsp; However, these don't exist on IRIX
-5.3.&nbsp; If you recompile GEM (see the next question), things should
+integral part of OpenGL 1.1).  However, these don't exist on IRIX
+5.3.  If you recompile GEM (see the next question), things should
 work fine.
-<br>&nbsp;&nbsp;&nbsp; I don't have access to an IRIX machine, so don't
-expect any builds from me.&nbsp; Upgrading to IRIX 6.2+ is worth it.
+<br> I don't have access to an IRIX machine, so don't
+expect any builds from me.  Upgrading to IRIX 6.2+ is worth it.
 <p>----
 <br><a NAME="2.6"></a>2.6) Why can't I compile GEM on IRIX 5.3?
-<p>&nbsp;&nbsp;&nbsp; There was probably an error saying that the compiler
-couldn't find the file "dmedia/vl_vino.h" in pix_videoSGI.cpp.&nbsp; IRIX
+<p>There was probably an error saying that the compiler
+couldn't find the file "dmedia/vl_vino.h" in pix_videoSGI.cpp.  IRIX
 6.2+ adds new functionality to the media libraries which makes life much
-easier. You cannot compile pix_video or pix_indycam as is under 5.3.&nbsp;
+easier. You cannot compile pix_video or pix_indycam as is under 5.3. 
 You can remove them from the Pix/Makefile and from the linker part of the
-global Makefile.&nbsp; You will also need to recompile the Td and Tiff
+global Makefile.  You will also need to recompile the Td and Tiff
 libraries.
-<p>There shouldn't be any problems doing this.&nbsp; I haven't tried any
+<p>There shouldn't be any problems doing this.  I haven't tried any
 of this, so if it works for someone, please let me know.
 <p>----
 <br><a NAME="2.7"></a>2.7) Why is GEM slow in general?
-<p>&nbsp;&nbsp;&nbsp; Examine what you are doing.&nbsp; If you are constantly
-changing textures, then this is probably your problem.&nbsp; If you have
-models with a million triangles, then this is probably the problem.&nbsp;
-Compare what you are doing with realistic specs on your system.&nbsp; Some
+<p>Examine what you are doing.  If you are constantly
+changing textures, then this is probably your problem.  If you have
+models with a million triangles, then this is probably the problem. 
+Compare what you are doing with realistic specs on your system.  Some
 systems slow down when they have to draw very large polygons (slow fill
 rate).
-<br>&nbsp;&nbsp;&nbsp; You can also turn on profiling to see how long it
-takes to render a frame.&nbsp; Send a profile message to the gemwin object.
+<br> You can also turn on profiling to see how long it
+takes to render a frame.  Send a profile message to the gemwin object.
 The number that is printed is the number of milliseconds one frame takes
-to render.&nbsp; 50 milliseconds is 20 frames per second. 'profile 2' is
+to render.  50 milliseconds is 20 frames per second. 'profile 2' is
 good if you want to see how long the image processing is taking.
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; profile 0 - turn off profiling
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; profile 1 - turn on profiling
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; profile 2 - turn on profiling
+<br>  profile 0 - turn off profiling
+<br>  profile 1 - turn on profiling
+<br>  profile 2 - turn on profiling
 and don't cache pixes
 <p>----
 <br><a NAME="2.8"></a>2.8) Why is GEM slow on IRIX?
-<p>&nbsp;&nbsp;&nbsp; If you are having major slowdowns, then please let
-me know.&nbsp; I have gotten very good performance on most machines (Indy,
+<p>If you are having major slowdowns, then please let
+me know.  I have gotten very good performance on most machines (Indy,
 O2, Impact, Onyx2).
 <p>----
 <br><a NAME="2.9"></a>2.9) Why is GEM slow on WinNT/Win95?
-<p>&nbsp;&nbsp;&nbsp; You probably don't have hardware acceleration.&nbsp;
+<p>You probably don't have hardware acceleration. 
 You can use software rendering, but it basically useless except for extremely
-basic patches.&nbsp; You can get a good graphics accelerator for really
-cheap these days.&nbsp; I recommend a card based on nVidia's chipsets,
-such as the TNT2 or GeForce256, but there are other companies such as 3dfx
-and Matrox.&nbsp; Make sure that you are running the latest drivers for
-your card.&nbsp; The basic drivers that come with the cards are usually
+basic patches.  You can get a good graphics accelerator for really
+cheap these days.  I recommend a card based on nVidia's chipsets,
+such as the TNT2 or GeForce, but there are other companies such as 3dfx
+and Matrox.  Make sure that you are running the latest drivers for
+your card.  The basic drivers that come with the cards are usually
 very bad.
-<br>&nbsp;&nbsp;&nbsp; Also, PCs don't deal with lots of texture maps very
+<br> Also, PCs don't deal with lots of texture maps very
 well (they are bus limited, at least until AGP), so if you are trying to
-use lots of constantly changing texture maps (especially with pix_multiimage),
-that will cause problems.
+use lots of constantly changing texture maps
+(especially with [pix_multiimage], [pix_video] or [pix_film]), that will cause problems.
 <p>----
 <br><a NAME="2.10"></a>2.10) Why is GEM slow on Linux?
-<p>&nbsp;&nbsp;&nbsp; It is because you have to use Mesa, which might be
+<p>It is because you have to use Mesa, which might be
 running iin software. Mesa (<a href="http://www.mesa.org">http://www.mesa.org</a>)
 is an awesome package by Brian Paul (brianp@avid.com) which "emulates"
-OpenGL.&nbsp; Basically, it is a fully compliant OpenGL package, but it
+OpenGL.  Basically, it is a fully compliant OpenGL package, but it
 isn't officially sanctioned by the OpenGL ARB, such, it is doesn't have
-the OpenGL name.&nbsp; There is an acceleration package for the many graphics
+the OpenGL name.  There is an acceleration package for the many graphics
 card, but I don't know anything about it.
-<br>&nbsp;&nbsp;&nbsp; nVidia is being very supportive of Linux.&nbsp;
-Their TNT2 and GeForce cards work under Linux with hardware-acceleration of openGL.
+<br>nVidia is being very supportive of Linux: 
+their TNT2 and GeForce cards work under Linux with hardware-acceleration of openGL.
+(but the drivers are proprietary)
+<br>radeon cards should also be supported very well under linux (even with open-source drivers)
 <p>----
 <br><a NAME="2.11"></a>2.11) If I resize the window, everything looks strange.
-<p>&nbsp;&nbsp;&nbsp; GEM doesn't trap resize events in IRIX or Linux (this
-is not a problem in WinNT).&nbsp; This means that OpenGL doesn't have the
-correct information to render properly.&nbsp; If you want to resize the
+<p>GEM doesn't trap resize events in IRIX or Linux (this
+is not a problem in WinNT).  This means that OpenGL doesn't have the
+correct information to render properly.  If you want to resize the
 window, send a 'dimen x y' message to gemwin before you create the window.
 <p>----
 <br><a NAME="2.12"></a>2.12) Can GEM run on a 3Dfx Voodoo card?
-<p>&nbsp;&nbsp;&nbsp; I have a Voodoo2 card, which runs fine under WinNT.&nbsp;
+<p>I (this is: Mark Danks) have a Voodoo2 card, which runs fine under WinNT. 
 I use the OpenGL beta driver from 3Dfx at work all the time without any
 problems and, except that the Voodoo takes over the full screen, it seems
-to work fine.&nbsp; You will need to download the OpenGL Beta driver from
+to work fine.  You will need to download the OpenGL Beta driver from
 3Dfx's web site at http://www.3dfx.com and put the OpenGL32.dll into the
-same directory as pd.exe (NOT gem.dll).&nbsp; Debugging patches is much
+same directory as pd.exe (NOT gem.dll).  Debugging patches is much
 easier if you have two monitors, one for the 3-D card and one for the 2-D
 card.
 <p>IMPORTANT: You MUST set the environment variable
 <p>GEM_SINGLE_CONTEXT = 1
-<p>to make the Voodoo card work.&nbsp; It will make a window 640x480 (which
-is the correct size for TV video out on my Canopus V2 card).&nbsp; On WinNT,
-right click "My Computer" and go to "Properties".&nbsp; On the "Environment"
+<p>to make the Voodoo card work.  It will make a window 640x480 (which
+is the correct size for TV video out on my Canopus V2 card).  On WinNT,
+right click "My Computer" and go to "Properties".  On the "Environment"
 tab, you need to add the variable "GEM_SINGLE_CONTEXT" with a value of
 1.
-<br>&nbsp;&nbsp;&nbsp; Resizing the GEM window with a Voodoo card is not
+<br>Resizing the GEM window with a Voodoo card is not
 a great idea. The Voodoo card can only display certain window sizes and
 will clip the graphics.
-<p>&nbsp;&nbsp;&nbsp; For the tech heads in the audience...I create an
-OpenGL context at startup and never actually display its associated window.&nbsp;
+<p>For the tech heads in the audience...I create an
+OpenGL context at startup and never actually display its associated window. 
 This means that GEM objects can create display lists, call OpenGL commands,
-etc. in their constructors, even if no window is actually being displayed.&nbsp;
-However, with the Voodoo card, there can only be one OpenGL context.&nbsp;
+etc. in their constructors, even if no window is actually being displayed. 
+However, with the Voodoo card, there can only be one OpenGL context. 
 So, instead of creating one context and just holding onto it in the background,
 I create the normal GEM window and associate the OpenGL context with it...and
 the user can never destroy or close that window.
 <p>----
 <br><a NAME="2.13"></a>2.13) Will GEM support hardware transform and lighting
 (T &amp; L)?
-<p>&nbsp;&nbsp;&nbsp; Absolutely!&nbsp; Unlike some other APIs, OpenGL
+<p>Absolutely!  Unlike some other APIs, OpenGL
 will automatically use hardware accelerated transform and lighting if the
-card has it.&nbsp; GEM gets great performance from cards like nVidia's
+card has it.  GEM gets great performance from cards like nVidia's
 GeForce.
 <p><a NAME="2.14"></a>2.14) I get an error "GEM needs Truecolor visual
 support".
-<p>&nbsp;&nbsp;&nbsp; This error means that your X display is running with
-paletted colors, which is the result of limited color depth.&nbsp; If you
+<p>This error means that your X display is running with
+paletted colors, which is the result of limited color depth.  If you
 start the X display with
 <p>startx -- -bpp 16
-<p>or some higher number, then it should work fine.&nbsp; 32-bit color
+<p>or some higher number, then it should work fine.  32-bit color
 is the best.
 <p>
-<hr WIDTH="100%"><a NAME="ViewingObjects"></a><i>VIEWING OBJECTS</i>
-<br><a NAME="3.1"></a>3.1) Why does everything seem dim?
-<p>&nbsp;&nbsp;&nbsp; You probably turned on lighting but don't have any
-lights in the world.&nbsp; Either add a light with <i>world_light</i> or
+<hr WIDTH="100%"><a NAME="ViewingObjects"></a><h3><i>VIEWING OBJECTS</i></h3>
+<br><a NAME="3.1"></a>3.1)Why does everything seem dim?<
+<p>You probably turned on lighting but don't have any
+lights in the world.  Either add a light with <i>world_light</i> or
 <i>light</i>
-or turn lighting off by sending a message 'lighting 0' to the <i>gemwin</i>.&nbsp;
+or turn lighting off by sending a message 'lighting 0' to the <i>gemwin</i>. 
 You can also send a reset message to <i>gemwin</i> to set it back to the
 startup state (which doesn't have any lighting).
 <p>----
 <br><a NAME="3.2"></a>3.2) Why does everything seem dark?
-<p>&nbsp;&nbsp;&nbsp; See question 3.1.
-<br>&nbsp;&nbsp;&nbsp; If you are using <tt>view</tt> in your patch to change the viewpoint,
-you may not be pointing in the correct direction.&nbsp; You also might have translated
+<p>See question 3.1.
+<br> If you are using <tt>view</tt> in your patch to change the viewpoint,
+you may not be pointing in the correct direction.  You also might have translated
 everything outside of the current viewport.
-<br>&nbsp;&nbsp;&nbsp; Also, if you have been using single buffering ('buffer
-1' message to <i>gemwin</i>), then you might still be in that mode.&nbsp;
-Either send a 'buffer 2' message or a 'reset' message to <i>gemwin</i>.&nbsp;
+<br> Also, if you have been using single buffering ('buffer
+1' message to <i>gemwin</i>), then you might still be in that mode. 
+Either send a 'buffer 2' message or a 'reset' message to <i>gemwin</i>. 
 Then, destroy and create your window.
 <p>
-<hr WIDTH="100%"><a NAME="TextureMapping"></a><i>TEXTURE MAPPING</i>
-<br><a NAME="4.1"></a>4.1) My image doesn't appear.&nbsp; What is going
+<hr WIDTH="100%"><a NAME="TextureMapping"></a><h3><i>TEXTURE MAPPING</i></h3>
+<br><a NAME="4.1"></a>4.1) My image doesn't appear.  What is going
 on?
-<p>&nbsp;&nbsp;&nbsp; There are a few requirements which OpenGL (and such
-GEM) put on images.&nbsp; For an image to be texture mapped, it must be
-a power of 2 in both height and width.&nbsp; If it isn't, then you will
-just get the polygon without any texture mapping.&nbsp; If you don't/can't
-convert the image beforehand, then the <i>pix_resize</i> object will automatically
-resize the image to the next power of two in each dimension (this is an
-expensive operation though).
-As an alternative, you can use <i>pix_texture2</i>, which doesn't care about image-sizes
-but does some tricks with the texture-coordinates. In this case, the <i>pix_coord</i> might not
-behave as expected.
-<p>&nbsp;&nbsp;&nbsp; Also, make sure that GEM can find your image (ie,
+<p>Normally images have to be texture-mapped onto Geos.
+You have to use [pix_texture] to map the current image onto a Geo.
+"Current" means that any pix-manipulation that is done after texturing will not be displayed.
+<p>Any Geo has a color (which is initially set to white).
+If you have set the color to black, your Geo (including the image) might be very dark.
+If you are using alpha-blending, make sure that the Geo is not invisible.
+<p>Normally images that want to be texture mapped with openGL should have dimensions that are a power of 2 in both height and width.
+Now [pix_texture] will make this totally transparent to you (so normally you don't have to care about the size of the image). 
+However with non-power-of-2 images <i>pix_coordinate</i> might not behave as expected,
+because these images need absolute texture-coordinates rather than normalized ones
+(as are used with power-of-2 images): so if the texture-coordinates are set to "(0,0) (1,0) (1,1) (0,1)" you might see only the first pixel of the image (which might be black).
+<p>Also, make sure that GEM can find your image (ie,
 that the path name is correct).
 <p>----
-<br><a NAME="4.2"></a>4.2) My image looks strange.&nbsp; What is going
+<br><a NAME="4.2"></a>4.2) My image looks strange.  What is going
 on?
-<p>&nbsp;&nbsp;&nbsp; GEM supports gray8, RGB, and RGBA images.&nbsp; If
+<p>GEM supports gray8, YUV, and RGBA images.  If
 it sees that the number of bits per channel and the number of channels
 is something that it should be able to handle, it tries to load the raw
-data.&nbsp; If you have compressed or stored the pixel data in some "strange"
+data.  If you have compressed or stored the pixel data in some "strange"
 format, then GEM will probably not read the information correctly.
-<br>&nbsp;&nbsp;&nbsp; Also, if it is an RGBA image, then make sure that
+<br> Also, if it is an RGBA image, then make sure that
 the alpha channel is something useful (this only matters if you are using
 the alpha channel, like in the alpha object or pix_mask).
 <p>----
 <br><a NAME="4.3"></a>4.3) Why does GEM say that it can't handle a gray
 image?
-<p>&nbsp;&nbsp;&nbsp; This error message occurs whenever a pix object receives
+<p>This error message occurs whenever a pix object receives
 a gray8 image and the implementor hasn't provided a way to deal with that
 format of image. (Implementors often only provide functions for GEM's <i>native</i>
 color-format RGBA. Any other color-format (like BGR) will try to call the function
 for gray8 images, which might not be supported.)
-&nbsp; If you do not want to change the image format with some extern image-programm
+  If you do not want to change the image format with some extern image-programm
 (like Photoshop or the Gimp) you might want to try <i>pix_rgba</a>
 or harass whoever made the object to add the functionality.
 <p>----
 <br><a NAME="4.4"></a>4.4) What image formats can GEM handle?
-<p>&nbsp;&nbsp;&nbsp; GEM can read in TIFF, JPEG, and SGI images.&nbsp;
-These can be in any color format.&nbsp; Gray scale images are loaded in
-as gray scale (ie, one byte per pixel).&nbsp; Everything else is loaded
-in or converted to an RGBA image (ie, four bytes per pixel).&nbsp; If there
-is an alpha channel, then it will be respected.&nbsp; Otherwise, the alpha
+<p>GEM can read in TIFF, JPEG, and SGI images. 
+These can be in any color format.  Gray scale images are loaded in
+as gray scale (ie, one byte per pixel).  Everything else is loaded
+in or converted to an RGBA image (ie, four bytes per pixel).  If there
+is an alpha channel, then it will be respected.  Otherwise, the alpha
 channel will be set to fully opaque (alpha == 255).
-<p>&nbsp;&nbsp;&nbsp; GEM can write TIFF and JPEG images.
+<p>GEM can write TIFF and JPEG images.
 TIFF-images will be full RGBA-images, wheras JPEG-files only support (compressed) RGB.
 <p>----
 <br><a NAME="4.5"></a>4.5) What movie formats can GEM handle?
-<p>&nbsp;&nbsp;&nbsp; The movie formats GEM can handle (still) depend on the platform
+<p>The movie formats GEM can handle (still) depend on the platform
 you are using.
-On Windoze you can read all AVI-files you have codecs for.
-On linux the readable formats depend on the libraries you had installed when you compiled GEM.
-Currently there is (optional) support for quicktime (*.MOV) and MPEG (*.MPG) files.
+<p>On Windoze you can read all AVI-files you have codecs for 
+<p>On linux the readable formats depend on the libraries you had installed when you compiled GEM.
+Currently there is (optional) support for AVI,  quicktime (*.MOV) and MPEG (*.MPG) files.
 Not all quicktime-formats are supported. This is unfortunate but is due to linux restrictions.
-I highly recommend that you install the mpeg3-library from Heroine because it is much more stable
-than mpeg1 (which comes with many linux-distributions).
-Movies (and films) are not converted automatically into RGBA-space.
-You might have to use the <i>pix_rgba</i> object (see question <a href="#4.3">4.3</a>)
-If you have serious problems, mail them <a href="mailto:zmoelnig@iem.kug.ac.at">to me</a>.
+I highly recommend that you install the mpeg3-library from Heroine because it is much more stable than mpeg1 (which comes with many linux-distributions).
+If you have compiled in support for libavifile, you will be able to open Micro$oft-AVI-files.
+If you have installed the proper codecs
+(libavifile supports a mechanism for loading codecs from windows-DLLs) you should be able to
+open almost any format.
+
+If you have serious problems, mail them <a href="mailto:zmoelnig@iem.at">to me</a>.
 (Be ready to upload the movie-file that won't work)
 <p>----
 <br><a NAME="4.6"></a>4.6) Why is <i>pix_draw</i> so slow?
-<p>&nbsp;&nbsp;&nbsp; <i>pix_draw</i> is almost never hardware accelerated
-on PCs graphics accelerator.&nbsp; This means that it runs <i>extremely</i>
-slowly.&nbsp; Always use <i>pix_texture</i>, even if you are just displaying
+<p><i>pix_draw</i> is almost never hardware accelerated
+on PCs graphics accelerator.  This means that it runs <i>extremely</i>
+slowly.  Always use <i>pix_texture</i>, even if you are just displaying
 an image.
 <p>
-<hr WIDTH="100%"><a NAME="WorkingWithPd"></a><i>WORKING WITH PD</i>
+<hr WIDTH="100%"><a NAME="WorkingWithPd"></a><h3><i>WORKING WITH PD</i></h3>
 <br><a NAME="5.1"></a>5.1) Why do I get clicks in the audio?
-<p>&nbsp;&nbsp;&nbsp; If you are getting a constant stream of clicks in
+<p>If you are getting a constant stream of clicks in
 your audio, then it is probably because you are trying to do graphics and
-audio in the same process.&nbsp; Rendering a graphics frame usually takes
+audio in the same process.  Rendering a graphics frame usually takes
 longer than the size of the audio buffer, which is why you get clicks (the
 clicks are usually at 20Hz...the typical frame rate).
-<br>&nbsp;&nbsp;&nbsp; One way around this is to use two computers, one
-for graphics and one for audio.&nbsp; If you have enough processing power
+<br> One way around this is to use two computers, one
+for graphics and one for audio.  If you have enough processing power
 (or dual processors), then you can run two versions of Pd, one for graphics
-and one for audio.&nbsp; Just use <i>netsend</i> and <i>netreceive</i>
+and one for audio.  Just use <i>netsend</i> and <i>netreceive</i>
 to have the two versions of Pd talk to each other.
 <p>----
 <br><a NAME="5.2"></a>5.2) How do I get audio data to GEM?
-<p>&nbsp;&nbsp;&nbsp; One simple way to get raw audio values right now is
-to use <i>snapshot~</i>.&nbsp; Just set up a <i>metro</i> which bangs <i>snapshot~</i>
-and use the floating point value.&nbsp; If you want "musical" information,
+<p>One simple way to get raw audio values right now is
+to use <i>snapshot~</i>.  Just set up a <i>metro</i> which bangs <i>snapshot~</i>
+and use the floating point value.  If you want "musical" information,
 then use objects such as <i>env~</i>.
 You might also have a look at the <i>pix_sig2pix~</i> which interprets audio-data as pixels
 and its counterpart <i>pix_pix2sig~</i>
 <p>----
 <br><a NAME="5.3"></a>5.3) Why can't GEM find an image/model file?
-<p>&nbsp;&nbsp;&nbsp; This means that GEM can't locate the file.&nbsp;
-If you use an absolute path (with / for instance), then GEM will look there.&nbsp;
-Otherwise, GEM will look in the directory of where the patch is.&nbsp;
+<p>This means that GEM can't locate the file. 
+If you use an absolute path (with / for instance), then GEM will look there. 
+Otherwise, GEM will look in the directory of where the patch is. 
 Then pd/GEM will search the paths you specified at startup with the <i>-path</i> flag.
-<p>&nbsp; Check the following:
-<p>&nbsp;&nbsp;&nbsp; 1) Does the file exist?
-<br>&nbsp;&nbsp;&nbsp; 2) Did you make a typo in the filename?
-<br>&nbsp;&nbsp;&nbsp; 3) Is the file in the search-path ?
+<p>Check the following:
+<p>1) Does the file exist?
+<br> 2) Did you make a typo in the filename?
+<br> 3) Is the file in the search-path ?
 <p>----
 <br><a NAME="5.4"></a>5.4) How can I optimize my patches?
-<p>&nbsp;&nbsp;&nbsp; One of the biggest performance hits is having UI
-elements in your patch which have to be updated.&nbsp; The biggest performance
-hog is the number box.&nbsp; While the number box is great for debugging,
-make sure that they are all gone from your "release" patch.&nbsp; If you
+<p>One of the biggest performance hits is having UI
+elements in your patch which have to be updated.  The biggest performance
+hog is the number box.  While the number box is great for debugging,
+make sure that they are all gone from your "release" patch.  If you
 run a performance meter, you will see that whenever Tcl/Tk has to update
-the user interface, it sucks the entire processor.&nbsp; Another examples
+the user interface, it sucks the entire processor.  Another examples
 of this is when you move a lot of objects at once, everything jerks and
-slides across the screen.&nbsp; There are probably ways to improve this...
-<br>&nbsp;&nbsp;&nbsp; Another problem is doing unneccessary calculations.&nbsp;
+slides across the screen.  There are probably ways to improve this...
+<br> Another problem is doing unneccessary calculations. 
 When you are throwing lots of numbers around, especially packing/unpacking,
-doing vector math, etc., they add up.&nbsp; If the calculations are going
+doing vector math, etc., they add up.  If the calculations are going
 unused (for instance, that part of the patch is turned off), then do not
-trigger the math objects.&nbsp; Use <i>spigot</i> or <i>gate</i> and block
-the events early.&nbsp; This is especially important with objects that
+trigger the math objects.  Use <i>spigot</i> or <i>gate</i> and block
+the events early.  This is especially important with objects that
 send a lot of numbers, like ~ objects or <i>line</i>/<i>tripleLine</i>.
 <p>
-<hr WIDTH="100%"><a NAME="NewGemObjects"></a><i>WRITING NEW GEM OBJECTS</i>
+<hr WIDTH="100%"><a NAME="NewGemObjects"></a><h3><i>WRITING NEW GEM OBJECTS</i></h3>
 <br><a NAME="6.1"></a>6.1) How do I write a new GEM object?
-<p>&nbsp;&nbsp;&nbsp; For the time being, you have to look at the code.&nbsp;
+<p>For the time being, you have to look at the code. 
 It is fairly well documented and straight forward (if you know C++ and
-OOP).&nbsp; Start with an object which is similar to what you want and
-derive a new class.&nbsp; The biggest issue right now is how to load in
-GEM as a DSO/DLL. For SGIs, you will need to setenv LD_LIBRARY_PATH.&nbsp;
+OOP).  Start with an object which is similar to what you want and
+derive a new class.  The biggest issue right now is how to load in
+GEM as a DSO/DLL. For SGIs, you will need to setenv LD_LIBRARY_PATH. 
 On NT, you will need to have your path include the directory with GEM.
 <p>----
 <br><a NAME="6.2"></a>6.2) What are the default OpenGL states?
-<p>&nbsp;&nbsp;&nbsp; GemMan (and by association, gemwin) disables alpha
-testing, alpha blending, culling, and lighting.&nbsp; Lighting defaults
-to two sided, with GL_COLOR_MATERIAL enabled.&nbsp; The viewport is set
+<p>GemMan (and by association, gemwin) disables alpha
+testing, alpha blending, culling, and lighting.  Lighting defaults
+to two sided, with GL_COLOR_MATERIAL enabled.  The viewport is set
 to
-<p>&nbsp;&nbsp;&nbsp; float xDivy = (float)m_width / (float)m_height;
-<br>&nbsp;&nbsp;&nbsp; glMatrixMode(GL_PROJECTION);
-<br>&nbsp;&nbsp;&nbsp; glLoadIdentity();
-<br>&nbsp;&nbsp;&nbsp; glFrustum(-xDivy, xDivy, -1.0, 1.0, 1.0, 20.0);
-<br>&nbsp;&nbsp;&nbsp; gluLookAt(0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+<p>float xDivy = (float)m_width / (float)m_height;
+<br> glMatrixMode(GL_PROJECTION);
+<br> glLoadIdentity();
+<br> glFrustum(-xDivy, xDivy, -1.0, 1.0, 1.0, 20.0);
+<br> gluLookAt(0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 0.0);
-<br>&nbsp;&nbsp;&nbsp; glMatrixMode(GL_MODELVIEW);
-<br>&nbsp;&nbsp;&nbsp; glViewport(0, 0, m_width, m_height);
-<p>which gives a range of about -4 to 4 in X and Y at the origin.&nbsp;
+<br> glMatrixMode(GL_MODELVIEW);
+<br> glViewport(0, 0, m_width, m_height);
+<p>which gives a range of about -4 to 4 in X and Y at the origin. 
 This is a small range, but changing it now would break a lot of patches.
-<p>&nbsp; The specific functions to look at are:
+<p>The specific functions to look at are:
 <p>GemMan::windowInit()
 <br>GemMan::resetValues()
 <br>gemhead::renderGL()
 <p>
-<hr WIDTH="100%"><a NAME="ObjectSpecific"></a><i>OBJECT SPECIFIC</i>
+<hr WIDTH="100%"><a NAME="ObjectSpecific"></a><h3><i>OBJECT SPECIFIC</i></h3>
 <br><a NAME="7.1"></a>7.1) Why doesn't &lt;object> exist on &lt;platform>?
-<p>&nbsp;&nbsp;&nbsp; Usually, this is because I don't have the resources
-to get the object running on that platform.&nbsp; If an object that you
-want doesn't exist on your platform, then ask for it!&nbsp; However, if
+<p>Usually, this is because I don't have the resources
+to get the object running on that platform.  If an object that you
+want doesn't exist on your platform, then ask for it!  However, if
 it is tied to hardware, then it is much less likely that I will be able
 to do anything about it (unless someone donates the hardware to me...)
 <p>----
 <br><a NAME="7.2"></a>7.2) Why doesn't <i>gemtablet</i> work?
-<p>&nbsp;&nbsp;&nbsp; <i>gemtablet</i> only works on WinNT.&nbsp; I don't
+<p><i>gemtablet</i> only works on WinNT.  I don't
 have drivers for IRIX or Linux (also, see question 7.4)
-<br>&nbsp;&nbsp;&nbsp; If GEM can find the tablet, then it will print a
-message at window creation time.&nbsp; If you don't see a message, then
+<br> If GEM can find the tablet, then it will print a
+message at window creation time.  If you don't see a message, then
 GEM doesn't think that you have a tablet.
-<br>&nbsp;&nbsp;&nbsp; The tablet is mapped to the size of the GEM graphics
+<br> The tablet is mapped to the size of the GEM graphics
 window.
 <p>---
-<br><a NAME="7.3"></a>7.3) I don't want GEM to take over my tablet.&nbsp;
+<br><a NAME="7.3"></a>7.3) I don't want GEM to take over my tablet. 
 How do I stop it?
-<p>&nbsp;&nbsp;&nbsp; Set the environment variable
+<p>Set the environment variable
 <p>GEM_NO_TABLET = 1
 <p>----
-<br><a NAME="7.4"></a>7.4) Why doesn't <i>gemmouse</i> work in IRIX/Linux?
-<p>&nbsp;&nbsp;&nbsp; Basically, I don't have physical access to an SGI
-or Linux machine. This makes it hard to do some of the OS specific work.&nbsp;
+<br><a NAME="7.4"></a>7.4) Why doesn't <i>gemmouse</i> work in IRIX?
+<p>Basically, I don't have physical access to an SGI machine.
+This makes it hard to do some of the OS specific work. 
 It should be straightforward to do the event handling, so if someone gets
-it working, I would love to include it (and give you credit).&nbsp; All
+it working, I would love to include it (and give you credit).  All
 you have to do is call the correct event functions from GemEvent.h and
 everything should just start to work (ie, gemmouse doesn't have any OS
 specific code in it).
 <p>----
 <br><a NAME="7.5"></a>7.5) Why doesn't gemorb work?
-<p>&nbsp;&nbsp;&nbsp; You need to make sure that your SpaceOrb is hooked
+<p>You need to make sure that your SpaceOrb is hooked
 up correctly. I am using a library which isn't supported by SpaceTec so
 there can be problems, although I have not had any.
-<br>&nbsp;&nbsp;&nbsp; &lt;RANT> When will companies wake up and actually
+<br> &lt;RANT> When will companies wake up and actually
 provide drivers and support for their products under WinNT? &lt;/RANT>
 <p>----
 <br><a NAME="7.6"></a>7.6) What is wrong with <i>pix_video</i> in WinNT?
-<p>&nbsp;&nbsp;&nbsp; I haven't completely figured out how to get access
-to the video stream in WinNT.&nbsp; I'm using Video for Windows with a
+<p>I haven't completely figured out how to get access
+to the video stream in WinNT.  I'm using Video for Windows with a
 Connectix QuickCam, as well as an Intel Video Capture Card, and it seems
-to assume that you are only writing to a file or previewing into a window.&nbsp;
+to assume that you are only writing to a file or previewing into a window. 
 Windows tries to take over the system and doesn't really provide any stable
-hooks (unlike IRIX).&nbsp; If anyone knows how to deal with this, please
+hooks (unlike IRIX).  If anyone knows how to deal with this, please
 let me know.
 <p><a href="index.html">[return]</a>
-<br>&nbsp;
-<br>&nbsp;
+<br> 
+<br> 
 </body>
 </html>

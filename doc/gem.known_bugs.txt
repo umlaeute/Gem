@@ -5,17 +5,22 @@ GEM ONLINE DOCUMENTATION CHAPTER 4: Known bugs
 
 model crashes when nothing is loaded
 ---------------
+FIXED  01/01/04
 POSTED 10/25/02
 ---------------
 BUG: if rendering is started without a model being loaded before,
 	pd crashes
+ANS: seems to be fixed sime time ago...
 
 pix_imageInPlace crashes when nothing is loaded
+
 ---------------
+FIXED  01/01/04
 POSTED 10/25/02
 ---------------
 BUG: when trying to download non-existant images (by specifying the wrong
 preload-name), pd-crashes
+ANS: seems to be fixed now...
 
 loading movies leaks memory under Win32
 --------------
@@ -23,15 +28,17 @@ POSTED 4/16/02
 --------------
 BUG: each time an AVI is loaded, the used memory increases for about 400k.
 	after some time (and opening MANY files) this will be too much...
-	i fear, this is really a mikro$oft bug!
+ANS: i fear, this is really a mikro$oft bug! (probably not;-))
 
 curve is broken under Linux
 --------------
+FIXED 01/01/04
 POSTED 4/24/99
 --------------
 BUG: if curve is used under Linux, it core dumps when
 		rendering.  It dumps on
     glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, m_numInputs, &(m_vert[0][0]));
+ANS: seems to work now
 
 some geos don't render data from pix_movie correctly
 --------------
@@ -53,6 +60,7 @@ POSTED 11/07/98
 --------------
 BUG: If you want to change the lighting when GEM is running in single
 		buffer mode, you have to destroy and then create the window.
+ANS: hopefully we will drop single-buffer mode soon (enabling double-buffer feedback instead)
 
 
 WinNT pix_video object
@@ -61,6 +69,7 @@ POSTED 6/25/98
 -------------
 BUG: The WinNT pix_video object has a lot of problems.  It is not
 		very stable, tends to lock up the machine, etc.
+ANS: don't have much problems with it. daniel's directshow-support enables support for most newer (ieee1394,usb) cameras under win, although the interface is somewhat different than on other OS's (eg: set dimensions via pop-up menu,...)
 
 
 splines are incorrect
@@ -73,10 +82,12 @@ BUG: In preventing the crasher in the spline object, I have introduced
 
 text2d is messed up
 --------------
+FIXED 01/01/04
 POSTED 2/22/98
 --------------
 BUG: text2d doesn't really work at all.  There seems to be a bug
         in the GLTT library which is messing up the rasterpos.
+FIX: use FTGL rather than GLTT
 
 
 Polygon doesn't tesselate (ie, polygons sometimes look strange)
@@ -200,7 +211,7 @@ POSTED 6/16/97
 --------------
 BUG: Sometimes pix_convolve doesn't work - seems to do with the scale factor
 ANS: I'm not sure why it wasn't working.  I have hammered it with a variey
-    	of kernals and scales and never had a problem...
+    	of kernels and scales and never had a problem...
 ANS2: I found a bug where pix_image didn't automatically refresh its image
     	at the start of rendering
 
@@ -232,9 +243,6 @@ POSTED 4/01/02
 --------------
 BUG: the example fonts for text2d/text3d do not load
 ANS: accidentally i did a dos2unix to the *.ttf files. this damaged them.
-Get new ones from ftp://iem.kug.ac.at/pd/Externals/GEM/misc
-
-	
-
+Get new ones from ftp://iem.at/pd/Externals/GEM/misc
 
 

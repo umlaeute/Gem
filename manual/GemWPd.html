@@ -17,9 +17,11 @@ of this information is taken directly from the GEM FAQ.
 <p><a href="#GEMIrix">How do I install GEM on IRIX?</a>
 <br><a href="#GEMWinNT">How do I install GEM on Win95/NT/2k?</a>
 <br><a href="#GEMlinux">How do I install GEM on linux?</a>
+<br><a href="#GEMmacos">How do I install GEM on macOS-X?</a>
 <br><a href="#runIRIX">How do I run GEM on IRIX?</a>
 <br><a href="#runWinNT">How do I run GEM on Win95/NT/2k?</a>
 <br><a href="#runlinux">How do I run GEM on linux?</a>
+<br><a href="#runmacos">How do I run GEM on linux?</a>
 <br><a href="#noRun">Why doesn't GEM run?</a>
 <p><img SRC="tribar.gif" height=13 width=561>
 <h4>
@@ -36,6 +38,7 @@ files and documention
 <h4>
 <a NAME="GEMWinNT"></a><u>How do I install GEM and Pd on WinNT?</u></h4>
 See the readme for installing Pd.
+<p>TODO: there should be a install package somewhere
 <p>Unzip the GEM file that you downloaded so that it is at
 <p>pd\gem
 <p>depending on where you have installed Pd.
@@ -50,10 +53,14 @@ See the readme for installing Pd.
 <p>depending on where you have installed Pd.
 <p>chdir into &lt;pd/gem&gt;/src/Gnu
 <p>read the README.build
-<p>run <tt>./makeauxlibs</tt> to build auxiliary libraries
 <p>run <tt>./configure</tt> and afterwards <tt>make</tt>
 <p>If you run <tt>make install</tt>, then all of the example files and documentation
 should be put in the correct locations.
+<p><img SRC="tribar.gif" height=13 width=561>
+<h4>
+<a NAME="GEMmacos"></a><u>How do I install GEM and Pd on macOS-X?</u></h4>
+See the readme for installing Pd.
+<p>TODO: there should be a install package somewhere
 <p><img SRC="tribar.gif" height=13 width=561>
 <h4>
 <a NAME="runIRIX"></a><u>How do I run GEM on IRIX?</u></h4>
@@ -95,6 +102,20 @@ variable.
 <p>/usr/people/mdanks/pd/bin/pd -lib /usr/people/mdanks/pd/gem/Gem
 <p>(where /usr/people/mdanks is the path to the pd directory). Check out
 the README for Pd to see examples of the -lib flag. If you just try to
+"run" GEM, you will get an error! Notice that last word is a capital Gem.
+If you get a "can't find gem_setup" error, then that is the problem. Look
+in the GEM FAQ
+<br>for trouble shooting suggestions.
+<p>If you don't see startup messages from GEM, then something went wrong.
+<br>Also, you might need to add pd/bin to your PATH environment variable.
+<p><img SRC="tribar.gif" height=13 width=561>
+<h4>
+<a NAME="runIRIX"></a><u>How do I run GEM on macOS-X?</u></h4>
+&nbsp;&nbsp; To use GEM type something like:
+<code>/usr/local/bin/pd -lib /Users/zmoelnig/pd/Gem</code>
+<p>(where /usr/local/bin/pd is the path to the pd directory and 
+/Users/zmoelnig/pd is the path where the <i>Gem.pd_darwin</i> resides). 
+Check out the README for Pd to see examples of the -lib flag. If you just try to
 "run" GEM, you will get an error! Notice that last word is a capital Gem.
 If you get a "can't find gem_setup" error, then that is the problem. Look
 in the GEM FAQ
