@@ -92,6 +92,7 @@ void pix_filmNT :: closeMess(void)
 	if (m_RawBuffer)
 	{
 		delete[] m_RawBuffer;
+		m_RawBuffer = NULL;
 		m_nRawBuffSize = 0;
 	}    
   break;

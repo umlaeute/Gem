@@ -63,6 +63,7 @@ int GemMan::m_border = 1;
 int GemMan::m_stereo = 0;
 int GemMan::m_buffer = 2;
 int GemMan::m_profile = 0;
+int GemMan::m_rendering = 0;
 GLfloat GemMan::m_clear_color[4];
 GLfloat GemMan::m_mat_ambient[4];
 GLfloat GemMan::m_mat_specular[4];
@@ -96,7 +97,6 @@ static int s_lights[NUM_LIGHTS];    // the lighting array
 static t_clock *s_clock = NULL;
 static double s_deltime = 50.;
 static int s_hit = 0;
-static int s_rendering = 0;
 
 static gemheadLink *s_linkHead = NULL;
 static gemheadLink *s_linkHead_2 = NULL;
@@ -887,7 +887,7 @@ void GemMan :: render(void *)
 
   // only keep going if no one set the s_hit (could be hit if scheduler gets
   //	    ahold of a stopRendering command)
-  if (!s_hit)
+  if (!s_hit && (0.0 != s_deltime))
     clock_delay(s_clock, s_deltime);
 }
 
@@ -903,7 +903,7 @@ void GemMan :: startRendering()
       return;
     }
     
-  if (s_rendering)
+  if (m_rendering)
     return;
     
   post("GEM: Start rendering");
@@ -921,7 +921,7 @@ void GemMan :: startRendering()
       head = head->next;
     }
 
-  s_rendering = 1;
+  m_rendering = 1;
     
   // if only single buffering then just return
   if (GemMan::m_buffer == 1)
@@ -937,9 +937,9 @@ void GemMan :: startRendering()
 /////////////////////////////////////////////////////////
 void GemMan :: stopRendering()
 {
-  if (!s_rendering) return;
+  if (!m_rendering) return;
 
-  s_rendering = 0;
+  m_rendering = 0;
   clock_unset(s_clock);
   s_hit = 1;
 
@@ -1245,7 +1245,12 @@ void GemMan :: topmostOnOff(int state)
 /////////////////////////////////////////////////////////
 void GemMan :: frameRate(float framespersecond)
 {
-  if (framespersecond <= 0.)
+  if (framespersecond == 0.)
+  {
+	  s_deltime = 0.;
+	  return;
+  }
+  if (framespersecond < 0.)
     {
       error("GEM: Invalid frame rate: %f", framespersecond);
       framespersecond = 20;
@@ -1380,13 +1385,14 @@ void GemMan :: printInfo()
 
   post("---------------");
   post("window state: %d", m_windowState);
+  post("topmost: %d", m_topmost);
   post("profile: %d", m_profile);
   post("buffer: %d", m_buffer);
   post("stereo: %d", m_stereo);
   post("full screen: %d", m_fullscreen);
   post("width: %d, height %d", m_width, m_height);
   post("offset: %d+%d", m_xoffset, m_yoffset);
-  post("frame rate: %f", 1000. / s_deltime);
+  post("frame rate: %f", (0.0 != s_deltime) ? 1000. / s_deltime : 0.0);
 
   GLint bitnum = 0;
   glGetIntegerv(GL_RED_BITS, &bitnum);

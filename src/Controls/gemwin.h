@@ -30,11 +30,13 @@
     
   "int"   - turn on/off the rendering (in double buffered mode)
   "bang"  - swap the buffers
+  "render" - render a frame now
   "title" - set a title for the graphics window
   "create" - create a graphics window
   "destroy" - destroy the graphics window
   "buffer" - single or double buffering
   "fullscreen" - fullscreen mode
+  "topmost" - set the window to stay on top
   "dimen" - the window dimensions
   "offset" - the window offset
   "frame" - the frame rate
@@ -82,6 +84,7 @@ class GEM_EXTERN gemwin : public CPPExtern
 
   void 	    	bangMess();
   void 	    	intMess(int state);
+  void			renderMess();
   void 	    	titleMess(t_symbol* s);
   void 	    	createMess(t_symbol* s);
   void 	    	stereoMess(int mode);
@@ -110,6 +113,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   // Static member functions
   static void 	bangMessCallback(void *data);
   static void 	floatMessCallback(void *data, t_float state);
+  static void 	renderMessCallback(void *data);
   static void 	titleMessCallback(void *data, t_symbol* s);
   static void 	createMessCallback(void *data, t_symbol* s);
   static void 	createStereoMessCallback(void *data);

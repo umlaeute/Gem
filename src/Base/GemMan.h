@@ -64,6 +64,10 @@ class GEM_EXTERN GemMan
     	// Is there a window.
     	static int  	    windowExists()  	    { return(m_windowState); }
 
+        //////////
+    	// Are we rendering.
+    	static int  	    getRenderState()  	    { return(m_rendering); }
+
 	//////////
 	// is there a context (has its meaning under X)
 	static void         createContext(char* disp);
@@ -155,6 +159,8 @@ class GEM_EXTERN GemMan
 	static int	   m_stereo;		// stereoscopic
 
         static int	   m_profile;		// off(0), on(1), w/o image caching(2)
+		static int		m_rendering;
+
 	static float	   m_perspect[6];	// values for the perspective matrix
 	
 	static float	   m_lookat[9];	// values for the lookat matrix

@@ -100,6 +100,17 @@ void gemwin :: intMess(int state)
     GemMan::stopRendering();
 }
 /////////////////////////////////////////////////////////
+// renderMess
+//
+/////////////////////////////////////////////////////////
+void gemwin :: renderMess()
+{
+	if (GemMan::getRenderState())
+		GemMan::render(NULL);
+	else
+		error("GEM: not in render mode");
+}
+/////////////////////////////////////////////////////////
 // titleMess
 //
 /////////////////////////////////////////////////////////
@@ -363,6 +374,8 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   class_addbang(classPtr, (t_method)&gemwin::bangMessCallback);
   class_addfloat(classPtr, (t_method)&gemwin::floatMessCallback);
 
+  class_addmethod(classPtr, (t_method)&gemwin::renderMessCallback,
+		  gensym("render"), A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::titleMessCallback,
 		  gensym("title"), A_DEFSYM ,A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::createMessCallback,
@@ -588,6 +601,10 @@ void gemwin :: bangMessCallback(void *data)
 void gemwin :: floatMessCallback(void *data, t_float state)
 {
   GetMyClass(data)->intMess((int)state);
+}
+void gemwin :: renderMessCallback(void *data)
+{
+  GetMyClass(data)->renderMess();
 }
 void gemwin :: titleMessCallback(void *data, t_symbol* disp)
 {
