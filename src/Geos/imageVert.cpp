@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -230,6 +231,14 @@ void imageVert :: processGrayPix(imageStruct &image, int texture)
     }
 }
 
+/////////////////////////////////////////////////////////
+// processYUVPix
+//
+/////////////////////////////////////////////////////////
+void imageVert :: processYUVPix(imageStruct &image, int texture)
+{
+    post("GEM:imageVert: YUV not yet implemented :-(");
+}
 /////////////////////////////////////////////////////////
 // render
 //
