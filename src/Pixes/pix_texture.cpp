@@ -74,13 +74,13 @@ void pix_texture :: setUpTextureState() {
     if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)				//tigital
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
       m_repeat = GL_CLAMP_TO_EDGE;
-    post("pix_texture: using rectangle texture");
+      //    post("pix_texture: using rectangle texture");
   }
 #endif // GL_TEXTURE_RECTANGLE_EXT
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
   if (GemMan::client_storage_supported){
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-    post("pix_texture: using client storage");}
+    //    post("pix_texture: using client storage");}
   else
 #endif // CLIENT_STORAGE
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
@@ -163,7 +163,7 @@ if (m_mode){
     normalized = 0;
     }
   if (m_textureType!=texType){
-  post("texType != m_textureType");
+    //  post("texType != m_textureType");
     stopRendering();startRendering();
   }
   glEnable(m_textureType);
@@ -259,7 +259,7 @@ if (m_mode){
                 *dummy++ = 128;
                 *dummy++ = 0;
                 }
-                post("pix_texture: zeroing YUV buffer");
+		//                post("pix_texture: zeroing YUV buffer");
             }
 
         //this is for dealing with power of 2 textures which need a buffer that's 2^n
@@ -274,7 +274,7 @@ if (m_mode){
 		     m_buffer.data);
      
         
-        post("pix_texture: TexImage2D non rectangle");
+	//        post("pix_texture: TexImage2D non rectangle");
         }
         else //this deals with rectangle textures that are h*w
         { 
@@ -286,7 +286,7 @@ if (m_mode){
 		     m_imagebuf.format,
 		     m_imagebuf.type,
 		     m_imagebuf.data); 
-            post("pix_texture: TexImage2D  rectangle");
+	    //            post("pix_texture: TexImage2D  rectangle");
         }
         
       } //end of loop if size has changed
@@ -304,7 +304,7 @@ if (m_mode){
 		     m_imagebuf.format,
 		     m_imagebuf.type,
 		     m_imagebuf.data);
-            post("pix_texture: new film");
+	    //            post("pix_texture: new film");
             state->image->newfilm = 0; //just to be sure
       } 
       glTexSubImage2D(m_textureType, 0,
