@@ -47,9 +47,21 @@ LOG
 
 #ifdef GL_YCBCR_422_APPLE
 #define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
-#else
+#endif
+#ifdef GL_CRYCBY_422_NVX
+#define GL_YCBCR_422_GEM GL_CRYCBY_422_NVX
+#endif
+
+#ifndef GL_YCBCR_422_GEM
 #define GL_YCBCR_422_GEM 0x85B9
 #endif
+
+#define GL_YUV422_GEM GL_YCBCR_422_GEM
+
+#if !defined(GL_TEXTURE_RECTANGLE_EXT) && defined(GL_TEXTURE_RECTANGLE_NV)
+#define GL_TEXTURE_RECTANGLE_EXT GL_TEXTURE_RECTANGLE_NV
+#endif
+
 
 #include "Base/GemFuncUtil.h"
 
