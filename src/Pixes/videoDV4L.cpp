@@ -74,11 +74,11 @@ void *videoDV4L :: capturing(void*you)
 
   /* this will hang if no ieee1394-device is present, what to do about it ??? */
   me->m_haveVideo=false;
-  if(ioctl(fd, DV1394_WAIT_FRAMES, 1)) {
+  if(ioctl(fd, DV1394_IOC_WAIT_FRAMES, 1)) {
     perror("error: ioctl WAIT_FRAMES");
     me->m_capturing=false; return NULL;
   }
-  if (ioctl(fd, DV1394_GET_STATUS, &dvst))   {
+  if (ioctl(fd, DV1394_IOC_GET_STATUS, &dvst))   {
     perror("ioctl GET_STATUS");
     me->m_capturing=false; return NULL;
   }
@@ -86,11 +86,11 @@ void *videoDV4L :: capturing(void*you)
   me->m_capturing=true;
 
   while(me->m_continue_thread){
-    if(ioctl(fd, DV1394_WAIT_FRAMES, n_frames - 1)) {
+    if(ioctl(fd, DV1394_IOC_WAIT_FRAMES, n_frames - 1)) {
       perror("error: ioctl WAIT_FRAMES");
       me->m_capturing=false; return NULL;
     }
-    if (ioctl(fd, DV1394_GET_STATUS, &dvst))   {
+    if (ioctl(fd, DV1394_IOC_GET_STATUS, &dvst))   {
       perror("ioctl GET_STATUS");
       me->m_capturing=false; return NULL;
     }
@@ -112,7 +112,7 @@ void *videoDV4L :: capturing(void*you)
     me->videobuf = mmapbuf + (dvst.first_clear_frame * framesize);
 
     //post("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
-    if (ioctl(fd, DV1394_RECEIVE_FRAMES, 1) < 0)    {
+    if (ioctl(fd, DV1394_IOC_RECEIVE_FRAMES, 1) < 0)    {
       perror("receiving...");
     }
     me->m_lastframe=me->m_frame;
@@ -193,7 +193,7 @@ int videoDV4L :: openDevice(int devnum, int format){
     }
   }
 
-  if (ioctl(fd, DV1394_INIT, &init) < 0)    {
+  if (ioctl(fd, DV1394_IOC_INIT, &init) < 0)    {
     perror("initializing");
     close(fd);
     return -1;
@@ -207,7 +207,7 @@ int videoDV4L :: openDevice(int devnum, int format){
     return -1;
   }
   
-  if(ioctl(fd, DV1394_START_RECEIVE, NULL)) {
+  if(ioctl(fd, DV1394_IOC_START_RECEIVE, NULL)) {
     perror("dv1394 START_RECEIVE ioctl");
     close(fd);
     return -1;
@@ -278,7 +278,7 @@ int videoDV4L :: stopTransfer()
   if(m_haveVideo){
     while(m_capturing){usleep(10);i++;}
     post("shutting down dv1394 after %d usec", i*10);
-    ioctl(dvfd, DV1394_SHUTDOWN);
+    ioctl(dvfd, DV1394_IOC_SHUTDOWN);
   }
   closeDevice();
   return(1);
