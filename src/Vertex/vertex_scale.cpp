@@ -28,7 +28,7 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_scale)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_scale :: vertex_scale(int argc, t_atom*argv) : GemBase(),
+vertex_scale :: vertex_scale(int argc, t_atom*argv) : GemVertex(),
 						      m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f), 
 						      m_offset(0), m_count(0),
 						      m_vertex(false), m_color(false), 
@@ -37,7 +37,7 @@ vertex_scale :: vertex_scale(int argc, t_atom*argv) : GemBase(),
   m_vertIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("vertex"));
   m_parmIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
 
-  modeMess(argc, argv);
+  typeMess(argc, argv);
   if(!argc)m_vertex=true;
 }
 
@@ -52,7 +52,7 @@ vertex_scale :: ~vertex_scale()
 }
 
 
-void vertex_scale :: modeMess(int argc, t_atom*argv){
+void vertex_scale :: typeMess(int argc, t_atom*argv){
   m_vertex =false;
   m_color  =false;
   m_normal =false;
@@ -70,11 +70,13 @@ void vertex_scale :: modeMess(int argc, t_atom*argv){
       break;
     }
   }
+  setModified();
 }
 
 void vertex_scale :: vertexMess(int offset, int count){
   m_offset = offset;
   m_count  = count;
+  setModified();
 }
 
 void vertex_scale :: paramMess(int argc, t_atom*argv){
@@ -92,6 +94,7 @@ void vertex_scale :: paramMess(int argc, t_atom*argv){
     error("vertex_scale: scale must be 3 or 4 values!");
     break;
   }
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -156,9 +159,9 @@ void vertex_scale :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 void vertex_scale :: obj_setupCallback(t_class *classPtr)
-{ 
-  class_addmethod(classPtr, (t_method)&vertex_scale::modeMessCallback,
-		  gensym("mode"), A_GIMME, A_NULL);
+{
+  class_addmethod(classPtr, (t_method)&vertex_scale::typeMessCallback,
+		  gensym("type"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&vertex_scale::vertexMessCallback,
 		  gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&vertex_scale::paramMessCallback,
@@ -177,7 +180,7 @@ void vertex_scale :: vertexMessCallback(void *data,  t_floatarg num, t_floatarg 
 {
   GetMyClass(data)->vertexMess((int)num, (int)counter);
 }
-void vertex_scale :: modeMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void vertex_scale :: typeMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
-  GetMyClass(data)->modeMess(argc, argv);
+  GetMyClass(data)->typeMess(argc, argv);
 }
