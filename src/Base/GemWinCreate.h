@@ -20,7 +20,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include <X11/extensions/xf86vmode.h>
 #elif _WINDOWS
 #include <windows.h>
-#elif MACOSX
+#elif __APPLE__
 #import <AGL/agl.h>
 #else
 #error Define OS specific window creation
@@ -50,7 +50,7 @@ class GEM_EXTERN WindowInfo
     dpy(NULL), win(0), cmap(0), context(NULL)
 #elif _WINDOWS
     win(NULL), dc(NULL), context(NULL)
-#elif MACOSX
+#elif __APPLE__
         pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
         pixMap(NULL), rowBytes(0), baseAddr(NULL)
 #endif
@@ -73,7 +73,7 @@ class GEM_EXTERN WindowInfo
   HDC         dc;                 // Device context handle
   HGLRC       context;            // OpenGL context
 
-#elif MACOSX
+#elif __APPLE__
 
     WindowPtr		pWind;		// GEM window reference for gemwin
     AGLContext		context;	// OpenGL context
@@ -156,7 +156,7 @@ class GEM_EXTERN WindowHints
     GLXContext  shared;
 #elif _WINDOWS
     HGLRC       shared;
-#elif MACOSX
+#elif __APPLE__
     AGLContext	shared;
 #else
 #error Define OS specific OpenGL context
