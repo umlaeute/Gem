@@ -299,19 +299,19 @@ _glmReadMTL(GLMmodel* model, char* name)
     /* set the default material */
     for (i = 0; i < nummaterials; i++) {
         model->materials[i].name = NULL;
-        model->materials[i].shininess = 65.0;
-        model->materials[i].diffuse[0] = 0.8;
-        model->materials[i].diffuse[1] = 0.8;
-        model->materials[i].diffuse[2] = 0.8;
-        model->materials[i].diffuse[3] = 1.0;
-        model->materials[i].ambient[0] = 0.2;
-        model->materials[i].ambient[1] = 0.2;
-        model->materials[i].ambient[2] = 0.2;
-        model->materials[i].ambient[3] = 1.0;
-        model->materials[i].specular[0] = 0.0;
-        model->materials[i].specular[1] = 0.0;
-        model->materials[i].specular[2] = 0.0;
-        model->materials[i].specular[3] = 1.0;
+        model->materials[i].shininess = 65.0f;
+        model->materials[i].diffuse[0] = 0.8f;
+        model->materials[i].diffuse[1] = 0.8f;
+        model->materials[i].diffuse[2] = 0.8f;
+        model->materials[i].diffuse[3] = 1.0f;
+        model->materials[i].ambient[0] = 0.2f;
+        model->materials[i].ambient[1] = 0.2f;
+        model->materials[i].ambient[2] = 0.2f;
+        model->materials[i].ambient[3] = 1.0f;
+        model->materials[i].specular[0] = 0.0f;
+        model->materials[i].specular[1] = 0.0f;
+        model->materials[i].specular[2] = 0.0f;
+        model->materials[i].specular[3] = 1.0f;
     }
     model->materials[0].name = strdup("default");
     
@@ -807,12 +807,12 @@ glmUnitize(GLMmodel* model)
     d = _glmAbs(maxz) + _glmAbs(minz);
     
     /* calculate center of the model */
-    cx = (maxx + minx) / 2.0;
-    cy = (maxy + miny) / 2.0;
-    cz = (maxz + minz) / 2.0;
+    cx = (maxx + minx) / 2.0f;
+    cy = (maxy + miny) / 2.0f;
+    cz = (maxz + minz) / 2.0f;
     
     /* calculate unitizing scale factor */
-    scale = 2.0 / _glmMax(_glmMax(w, h), d);
+    scale = 2.0f / _glmMax(_glmMax(w, h), d);
     
     /* translate around center then scale */
     for (i = 1; i <= model->numvertices; i++) {
@@ -1012,7 +1012,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
     assert(model->facetnorms);
     
     /* calculate the cosine of the angle (in degrees) */
-    cos_angle = cos(angle * M_PI / 180.0);
+    cos_angle = (GLfloat)cos(angle * M_PI / 180.0f);
     
     /* nuke any previous normals */
     if (model->normals)
@@ -1169,15 +1169,15 @@ glmLinearTexture(GLMmodel* model, float h, float w)
     model->texcoords=(GLfloat*)malloc(sizeof(GLfloat)*2*(model->numtexcoords+1));
     
     glmDimensions(model, dimensions);
-    scalefactor = 2.0 / 
+    scalefactor = 2.0f / 
         _glmAbs(_glmMax(_glmMax(dimensions[0], dimensions[1]), dimensions[2]));
     
     /* do the calculations */
     for(i = 1; i <= model->numvertices; i++) {
         x = model->vertices[3 * i + 0] * scalefactor;
         y = model->vertices[3 * i + 2] * scalefactor;
-        model->texcoords[2 * i + 0] = ((x + 1.0) / 2.0) * w;
-        model->texcoords[2 * i + 1] = ((y + 1.0) / 2.0) * h;
+        model->texcoords[2 * i + 0] = ((x + 1.0f) / 2.0f) * w;
+        model->texcoords[2 * i + 1] = ((y + 1.0f) / 2.0f) * h;
     }
     
     /* go through and put texture coordinate indices in all the triangles */
@@ -1227,22 +1227,22 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
         z = model->normals[3 * i + 0];  /* re-arrange for pole distortion */
         y = model->normals[3 * i + 1];
         x = model->normals[3 * i + 2];
-        r = sqrt((x * x) + (y * y));
-        rho = sqrt((r * r) + (z * z));
+        r = (GLfloat)sqrt((x * x) + (y * y));
+        rho = (GLfloat)sqrt((r * r) + (z * z));
         
         if(r == 0.0) {
-            theta = 0.0;
-            phi = 0.0;
+            theta = 0.0f;
+            phi = 0.0f;
         } else {
             if(z == 0.0)
-                phi = M_PI / 2.0;
+                phi = M_PI / 2.0f;
             else
-                phi = acos(z / rho);
+                phi = (GLfloat)acos(z / rho);
             
             if(y == 0.0)
-                theta = M_PI / 2.0;
+                theta = M_PI / 2.0f;
             else
-                theta = asin(y / r) + (M_PI / 2.0);
+                theta = (GLfloat)asin(y / r) + (M_PI / 2.0f);
         }
         
         model->texcoords[2 * i + 0] = w * theta / M_PI;
