@@ -17,7 +17,7 @@ typedef struct _abs
 
 static t_int *abs_perform(t_int *w)
 {
-    t_abs *x = (t_abs *)(w[1]);
+    //t_abs *x = (t_abs *)(w[1]);
     t_float *in = (t_float *)(w[2]);
     t_float *out = (t_float *)(w[3]);
     int n = (int)(w[4]);

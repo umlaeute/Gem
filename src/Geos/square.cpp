@@ -50,8 +50,6 @@ void square :: render(GemState *state)
     glNormal3f(0.0f, 0.0f, 1.0f);
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(m_linewidth);
-
-    int curCoord = 0;
     
     glBegin(m_drawType);
 
