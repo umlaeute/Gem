@@ -64,6 +64,7 @@ extern "C" {
   void colorSquare_setup();
   void cone_setup();
   void cube_setup();
+  void cuboid_setup();
   void curve_setup();
   void cylinder_setup();
   void disk_setup();
@@ -224,6 +225,7 @@ extern "C" {
     colorSquare_setup();
     cone_setup();
     cube_setup();
+    cuboid_setup();
     curve_setup();
     cylinder_setup();
     disk_setup();
