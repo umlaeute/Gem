@@ -108,7 +108,30 @@ void pix_dump :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_dump :: processYUVImage(imageStruct &image)
 {
-    post("pix_dump:  YUV not yet implemented :-(");
+    int x = m_xsize, y = m_ysize, c = m_csize;
+
+  if (image.xsize != oldimagex) {
+    oldimagex = image.xsize;
+    m_xsize = ((!xsize) || (xsize > oldimagex))?oldimagex:xsize;
+  }
+  if (image.ysize != oldimagey) {
+    oldimagey = image.ysize;
+    m_ysize = ((!ysize) || (ysize > oldimagey))?oldimagey:ysize;
+  }
+
+  if (image.csize != m_csize) m_csize = image.csize;
+
+  if ( (m_xsize != x) || (m_ysize != y) || (m_csize != c) ) {
+    // resize the image buffer
+    delete [] m_buffer;
+    m_bufsize = m_xsize * m_ysize * m_csize;
+    m_buffer = new t_atom[m_bufsize];
+
+    m_xstep = m_csize * ((float)image.xsize/(float)m_xsize);
+    m_ystep = m_csize * ((float)image.ysize/(float)m_ysize) * image.xsize;
+  }
+
+  m_data = image.data;
 }
 
 /////////////////////////////////////////////////////////
@@ -125,7 +148,7 @@ void pix_dump :: trigger()
   unsigned char *data, *line;
 
   data = line = m_data;
-
+ if (m_csize == 4){
   while (n < m_ysize) {
     while (m < m_xsize) {
       float r, g, b, a;
@@ -149,7 +172,33 @@ void pix_dump :: trigger()
     line = m_data + (int)(m_ystep*n);
     data = line;
   }
-
+  }else{
+  if (m_csize == 2){
+  while (n < m_ysize) {
+    while (m < m_xsize/2) {
+      float y,u,y1,v;
+      u = (float)data[0] / 255.f;
+      SETFLOAT(&m_buffer[i], u);
+      i++;
+      y = (float)data[1] / 255.f;
+      SETFLOAT(&m_buffer[i], y);
+      i++;
+      v = (float)data[2] / 255.f;
+      SETFLOAT(&m_buffer[i], v);
+      i++;
+      y1 = (float)data[3] / 255.f;
+      SETFLOAT(&m_buffer[i], y1);
+      i++;
+      m++;
+      data = line + (int)(m_xstep * (float)m);
+    }
+    m = 0;
+    n++;
+    line = m_data + (int)(m_ystep*n);
+    data = line;
+  }
+}  
+}
   outlet_list(m_dataOut, gensym("list"), i, m_buffer);
 
 }
