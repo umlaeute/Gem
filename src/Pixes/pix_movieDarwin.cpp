@@ -14,6 +14,9 @@
 //
 /////////////////////////////////////////////////////////
 
+#ifdef __APPLE__
+/* i think this is APPLE only...JMZ */
+
 #include "pix_movieDarwin.h"
 #include "Base/GemMan.h"
 #ifdef __APPLE__
@@ -968,3 +971,6 @@ void pix_movieDarwin :: rectangleCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_rectangle=(int)state;
 }
+
+
+#endif /* __APPLE__ */
