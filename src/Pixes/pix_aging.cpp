@@ -203,9 +203,6 @@ void pix_aging :: processImage(imageStruct &image)
     }
     m_dustinterval--;
   } 
-
- BREAK:
-  ;
 }
 
 void pix_aging :: scratchMess(int scratchlines)
