@@ -58,11 +58,10 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(newWave, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 //
 /////////////////////////////////////////////////////////
 newWave :: newWave( t_floatarg width, t_floatarg height )
-    	     : GemShape(width), m_height(height), m_size(MEDIUM),
+    	     : GemShape(MEDIUM), m_height(height),
                m_speed(NORMAL), alreadyInit(0)
 {
-    if (m_height == 0.f)
-		m_height = 1.f;
+    if (m_height == 0.f)m_height = 1.f;
 
     // the height inlet
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
@@ -154,11 +153,11 @@ void newWave :: render(GemState *state)
             {
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
-                glVertex3f( i, j, posit[i][j] );
+                glVertex3f( i*m_size, j*m_size, posit[i][j]*m_height);
             
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
-                glVertex3f( i+1, j, posit[i+1][j] );
+                glVertex3f( (i+1)*m_size, j*m_size, posit[i+1][j]*m_height);
             }
             glEnd();
         }
@@ -182,6 +181,7 @@ void newWave :: render(GemState *state)
         getvelocity();
         getposition();
         
+	post("m_size=%f", m_size);
         for ( i=0; i<grid -1; ++i)
         {
             glBegin(m_drawType);
@@ -189,11 +189,11 @@ void newWave :: render(GemState *state)
             {
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
-                glVertex3f( i, j, posit[i][j] );
+                glVertex3f( i*m_size, j*m_size, posit[i][j]*m_height );
             
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
-                glVertex3f( i+1, j, posit[i+1][j] );
+                glVertex3f( (i+1)*m_size, j*m_size, posit[i+1][j]*m_height );
             }
             glEnd();
         }
@@ -212,7 +212,6 @@ void newWave :: heightMess(float size)
 {
     m_height = size;
     setModified();
-    post("height changed %f",m_height);
 }
 
 /////////////////////////////////////////////////////////
@@ -362,9 +361,6 @@ void newWave :: setSpeed(float value)
         case STRONG: dt = 0.008; break;
     } */
     dt = value * 0.001;
-    post("speed changed %f",dt);
-    
-    
 }
 
 /////////////////////////////////////////////////////////

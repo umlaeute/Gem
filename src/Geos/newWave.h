@@ -105,7 +105,7 @@ class GEM_EXTERN newWave : public GemShape
   void getVertNorms( void );
   void getFaceNormSegs( void );
   
-  int 		m_size;
+  //  int 		m_size; /* jmz: this one isn't used anyhow, but overwrites the one from GemShape */
   int		m_speed;
   int		m_blend;
   float		xsize, ysize;
