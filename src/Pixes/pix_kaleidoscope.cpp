@@ -35,10 +35,7 @@ pix_kaleidoscope :: pix_kaleidoscope()
     m_OutputCentreY = 0.5f;
     m_ReflectionLineProportion = 0.5f;
     m_SourceAngleProportion = 1.0f;
-    Pete_Pi=3.141582f;
-    Pete_TwoPi=(2.0f*Pete_Pi);
     nMaxLines=128;
-    cnBiggestSignedInt=0x7fffffff;
     nCosTableSizeShift = 10;
     nCosTableSize = (1<<nCosTableSizeShift);
 
@@ -570,8 +567,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 {
     nWidth = image.xsize;
     nHeight = image.ysize;
-    //const int nWidth=pInstanceData->nWidth;
-    //const int nHeight=pInstanceData->nHeight;
+    
     if (!init) {
 	Pete_Kaleidoscope_Init();
 	init = 1;
@@ -627,11 +623,10 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 	const float Height=(float)(nHeight);
 	//const float HalfHeight=(Height/2.0f);
 
-	const float SourceStartAngle=m_SourceAnglePreIncrement;
-	float SourceHalfAngle=
-		(Pete_TwoPi/(ceilf(m_Divisions)*2.0f));
-	SourceHalfAngle*=m_SourceAngleProportion;
-	SourceHalfAngle+=SourceStartAngle;
+	const float SourceStartAngle = m_SourceAnglePreIncrement;
+	float SourceHalfAngle = (Pete_TwoPi/(ceilf(m_Divisions)*2.0f));
+	SourceHalfAngle *= m_SourceAngleProportion;
+	SourceHalfAngle += SourceStartAngle;
 
 	const float StartUOffset=(m_SourceCentreX*Width);
 	const float StartUGradient=cos(SourceStartAngle);
