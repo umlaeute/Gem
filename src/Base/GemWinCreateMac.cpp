@@ -113,7 +113,7 @@ static OSStatus BuildDrawable (AGLDrawable* paglDraw, GDHandle hGD, pstructGLInf
 static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, /*DSpContextReference* pdspContext,*/ GDHandle hGD, 
 								pstructGLInfo pcontextInfo, AGLContext aglShareContext);
 static void DumpCurrent (AGLDrawable* paglDraw, AGLContext* paglContext, /*DSpContextReference* pdspContext,*/ pstructGLInfo pcontextInfo);
-static Boolean CheckRenderer (GDHandle hGD, long *VRAM, long *textureRAM, GLint*  , Boolean fAccelMust);
+static Boolean CheckRenderer (GDHandle hGD, long *VRAM, long *textureRAM, GLint* pDepthSizeSupport, Boolean fAccelMust);
 static Boolean CheckAllDeviceRenderers (long* pVRAM, long* pTextureRAM, GLint* pDepthSizeSupport, Boolean fAccelMust);
 static Boolean CheckWindowExtents (GDHandle hGD, short width, short height);
 
@@ -249,6 +249,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     post("hints: title = %s",hints.title);
     post("hints: shared = %d",hints.shared);
 #endif
+    hGD = NULL;
     return(1);
 }
 
