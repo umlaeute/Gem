@@ -24,7 +24,8 @@ CPPEXTERN_NEW(pix_colorreduce)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_colorreduce :: pix_colorreduce()
+pix_colorreduce :: pix_colorreduce() : 
+  hRGBHistogram(NULL), hSortedColors(NULL), hInverseColorMap(NULL)
 { 
     m_TargetColorCount = 8.0f; 		// 1 to 255
     m_PalettePersistence = 0.95f;	// 0 to 1
@@ -44,6 +45,10 @@ pix_colorreduce :: pix_colorreduce()
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("count"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("persist"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("smooth"));
+
+    tempImage.xsize=0;
+    tempImage.ysize=0;
+    tempImage.setCsizeByFormat(GL_RGBA);
 }
 
 /////////////////////////////////////////////////////////
@@ -59,6 +64,29 @@ pix_colorreduce :: ~pix_colorreduce()
 // processImage
 //
 /////////////////////////////////////////////////////////
+void pix_colorreduce :: processYUVImage(imageStruct &image){
+  tempImage.xsize=image.xsize;
+  tempImage.ysize=image.ysize;
+  tempImage.fromUYVY(image.data);
+
+  processRGBAImage(tempImage);
+
+  image.fromRGBA(tempImage.data);
+}
+
+void pix_colorreduce :: processGrayImage(imageStruct &image){
+  tempImage.xsize=image.xsize;
+  tempImage.ysize=image.ysize;
+  tempImage.fromGray(image.data);
+
+  processRGBAImage(tempImage);
+
+  image.fromRGBA(tempImage.data);
+}
+
+
+
+
 void pix_colorreduce :: processRGBAImage(imageStruct &image)
 {
     nWidth = image.xsize;
@@ -68,18 +96,12 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
 	init = 1;
     }
     pSource = (U32*)image.data;
-    
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.csize = image.csize;
     myImage.type  = image.type;
+    myImage.reallocate();
     pOutput = (U32*)myImage.data;
 	
     const int nColors=(int)m_TargetColorCount;
@@ -163,7 +185,6 @@ int pix_colorreduce :: Pete_ColorReduce_Init() {
 }
 
 void pix_colorreduce :: Pete_ColorReduce_DeInit() {
-
 	if (hRGBHistogram!=NULL) {
 		Pete_FreeHandle(hRGBHistogram);
 		hRGBHistogram=NULL;

@@ -49,6 +49,9 @@ class GEM_EXTERN pix_colorreduce : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
+    	virtual void 	processGrayImage(imageStruct &image);
+    	virtual void 	processYUVImage(imageStruct &image);
+
 
 	imageStruct	myImage;
 	int		nHeight;
@@ -61,6 +64,8 @@ class GEM_EXTERN pix_colorreduce : public GemPixObj
 	float	m_TargetColorCount;
 	float	m_PalettePersistence;
 	float	m_BoundarySmoothing;
+
+	imageStruct tempImage;
 	
 	typedef void* 		SPete_MemHandle;
 	SPete_MemHandle 	hRGBHistogram;
