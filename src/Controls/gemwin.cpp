@@ -723,3 +723,4 @@ void gemwin :: fsaaMessCallback(void *data, t_floatarg val)
 {
   GetMyClass(data)->fsaaMess((int) val);
 }
+
