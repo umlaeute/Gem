@@ -44,7 +44,7 @@
   "topmost" - set the window to stay on top
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN gemwindow : public CPPExtern
+class GEM_EXTERN gemwindow : public GemOutput
 {
   CPPEXTERN_HEADER(gemwindow, GemOutput)
     
@@ -98,7 +98,6 @@ class GEM_EXTERN gemwindow : public CPPExtern
 
 
   int m_windowContext;
-  bool m_windowState;
 
   void createContext    (char* disp);
   int  createWindow     (char* disp);
