@@ -21,9 +21,10 @@ CPPEXTERN_NEW(pix_background)
 //
 /////////////////////////////////////////////////////////
 pix_background :: pix_background()
-{	long size,src,i;
+{
+  long size,src,i;
     
-inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blur"));
+  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blur"));
 
     m_Yrange = 0;
     m_Urange = 0;
@@ -59,49 +60,42 @@ if(saved)delete saved;
 /////////////////////////////////////////////////////////
 void pix_background :: processRGBAImage(imageStruct &image)
 {
-       int h,w,hlength;
-    long src,pixsize;
-    //int R,G,B,A;
-   // unsigned char *pixels=image.data;
+  int h,w,hlength;
+  long src,pixsize;
+  
+  src = 0;
+  pixsize = image.xsize * image.ysize * image.csize;
+  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+    m_blurH = image.ysize;
+    m_blurW = image.xsize;
+    m_blurBpp = image.csize;
+    m_blurSize = m_blurH * m_blurW * m_blurBpp;
+    if(saved)delete saved;
+    saved = new unsigned char [m_blurSize];
+  }
 
-src = 0;
-pixsize = image.xsize * image.ysize * image.csize;
-if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
-
-m_blurH = image.ysize;
-m_blurW = image.xsize;
-m_blurBpp = image.csize;
-m_blurSize = m_blurH * m_blurW * m_blurBpp;
-if(saved)delete saved;
-saved = new unsigned char [m_blurSize];
-
-}
-
-if (m_reset){
+  if (m_reset){
     memcpy(saved,image.data,pixsize);
     m_reset = 0; 
-}
+  }
 
-   
-   hlength = image.xsize;
+  hlength = image.xsize;
 
 
-for (h=0; h<image.ysize; h++){
+  for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
-          
-        if (((image.data[src+chRed] > saved[src+chRed] - m_Urange)&&(image.data[src+chRed] < saved[src+chRed] + m_Urange))&&
-            ((image.data[src+chGreen] > saved[src+chGreen] - m_Yrange)&&(image.data[src+chGreen] < saved[src+chGreen] + m_Yrange))&&
-            ((image.data[src+chBlue] > saved[src+chBlue] - m_Vrange)&&(image.data[src+chBlue] < saved[src+chBlue] + m_Vrange)))
-                {
-                image.data[src+chRed] = 0;
-                image.data[src+chGreen] = 0;
-                image.data[src+chBlue] = 0;
-                }
-        src+=4;
+      if (((image.data[src+chRed] > saved[src+chRed] - m_Urange)&&(image.data[src+chRed] < saved[src+chRed] + m_Urange))&&
+	  ((image.data[src+chGreen] > saved[src+chGreen] - m_Yrange)&&(image.data[src+chGreen] < saved[src+chGreen] + m_Yrange))&&
+	  ((image.data[src+chBlue] > saved[src+chBlue] - m_Vrange)&&(image.data[src+chBlue] < saved[src+chBlue] + m_Vrange)))
+	{
+	  image.data[src+chRed] = 0;
+	  image.data[src+chGreen] = 0;
+	  image.data[src+chBlue] = 0;
+	}
+      src+=4;
     }
-}
-m_reset = 0; 
-
+  }
+  m_reset = 0; 
 }
 
 
