@@ -57,6 +57,8 @@ class GEM_EXTERN pix_offset : public GemPixObj
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
     	virtual void 	processGrayImage(imageStruct &image);
+    	virtual void 	processYUVImage(imageStruct &image);
+
 
     	//////////
     	// Set the new offset
@@ -69,7 +71,8 @@ class GEM_EXTERN pix_offset : public GemPixObj
     	//////////
     	// The new offset
     	unsigned char 	m_offset[4];
-    
+        short Y,U,V;
+
     private:
     
     	//////////

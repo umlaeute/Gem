@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -78,6 +79,33 @@ void pix_offset :: processGrayImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
+// do the YUV processing here
+//
+/////////////////////////////////////////////////////////
+void pix_offset :: processYUVImage(imageStruct &image)
+{
+    int h,w;
+    long src;
+
+src = 0;
+
+
+//format is U Y V Y
+
+for (h=0; h<image.ysize; h++){
+    for(w=0; w<image.xsize/2; w++){
+        image.data[src] = CLAMP( image.data[src] + U );
+        image.data[src+1] = CLAMP( image.data[src+1] + Y );
+        image.data[src+2] = CLAMP( image.data[src+2] + V );
+        image.data[src+3] = CLAMP( image.data[src+3] + Y );
+
+        src+=4;
+    }
+}
+
+}
+
+/////////////////////////////////////////////////////////
 // vecOffsetMess
 //
 /////////////////////////////////////////////////////////
@@ -93,6 +121,9 @@ void pix_offset :: vecOffsetMess(int argc, t_atom *argv)
     m_offset[chRed]   = (int)(255*atom_getfloat(&argv[0]));
     m_offset[chGreen] = (int)(255*atom_getfloat(&argv[1]));
     m_offset[chBlue]  = (int)(255*atom_getfloat(&argv[2]));
+    Y =(short)(255*atom_getfloat(&argv[0]));
+    U = (short)(255*atom_getfloat(&argv[1]));
+    V = (short)(255*atom_getfloat(&argv[2]));
     setPixModified();
 }
 
@@ -105,6 +136,7 @@ void pix_offset :: floatOffsetMess(float foffset)
     // assumption that the alpha should be one
     m_offset[chAlpha] = 0;
     m_offset[chRed] = m_offset[chGreen] = m_offset[chBlue] = (int)(255*foffset);
+    Y = U = V = (short)(255*foffset);
     setPixModified();
 }
 
