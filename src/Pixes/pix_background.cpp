@@ -98,7 +98,38 @@ void pix_background :: processRGBAImage(imageStruct &image)
   m_reset = 0; 
 }
 
+void pix_background :: processGrayImage(imageStruct &image)
+{
+  int i, h,w,hlength;
+  long src,pixsize;
+  unsigned char newpix, oldpix, *npixes, *opixes;
 
+  src = 0;
+  pixsize = image.xsize * image.ysize * image.csize;
+  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+    m_blurH = image.ysize;
+    m_blurW = image.xsize;
+    m_blurBpp = image.csize;
+    m_blurSize = m_blurH * m_blurW * m_blurBpp;
+    if(saved)delete saved;
+    saved = new unsigned char [m_blurSize];
+  }
+
+  if (m_reset){
+    memcpy(saved,image.data,pixsize);
+    m_reset = 0; 
+  }
+
+  npixes=image.data;
+  opixes=saved;
+  i=pixsize;
+  while(i--){
+    newpix=*npixes++;
+    oldpix=*opixes++;
+    if((newpix>oldpix-m_Urange)&&(newpix<oldpix+m_Urange))npixes[-1]=0;
+  }
+  m_reset = 0; 
+}
 /////////////////////////////////////////////////////////
 // do the YUV processing here
 //
