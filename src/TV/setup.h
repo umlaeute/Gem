@@ -13,6 +13,7 @@
 extern "C" {
 
    void tv_biquad_setup();
+   void tv_delay_setup();
    void tv_movement_setup();
    void tv_rtx_setup();
    void tv_test_setup();
@@ -20,6 +21,7 @@ extern "C" {
 
    void TV_setup() {
       tv_biquad_setup();
+      tv_delay_setup();
       tv_movement_setup();
       tv_rtx_setup();
       tv_test_setup();
