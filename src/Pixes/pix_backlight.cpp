@@ -288,7 +288,7 @@ void pix_backlight :: processYUVImage(imageStruct &image)
     myImage.ysize = image.ysize;
     myImage.csize = image.csize;
     myImage.type  = image.type;
-	//myImage.setBlack();
+//	myImage.setBlack();
     pOutput = (U32*)myImage.data;
 
     const int nFixedShift=8;
@@ -304,8 +304,32 @@ void pix_backlight :: processYUVImage(imageStruct &image)
     const U32* pSourceEnd=(pSource+nNumPixels);
 //    const U32* pOutputEnd=(pOutput+nNumPixels);
 
-    Pete_ZeroMemory(pOutput,sizeof(U32)*nNumPixels);
+//Pete_ZeroMemory(pOutput,sizeof(U32)*nNumPixels);
 
+    unsigned char *zero;
+    
+    zero = (unsigned char*)pOutput;
+    int temp = nNumPixels;
+    
+    while(--temp>>1){
+        *zero++ = 128; *zero++ =0;
+        *zero++ = 128; *zero++ = 0;
+    }
+
+    union {
+        unsigned char c[4];
+        unsigned int  i;
+    }bu;
+
+    bu.c[0] = 128;
+    bu.c[1] = 0;
+    bu.c[2] = 128;
+    bu.c[3] = 0;
+
+    unsigned int black;
+
+    black = bu.i;
+    
     const int nSpikeScale=static_cast<int>(m_SpikeScale);
     const int nSpikeFloor=static_cast<int>(m_SpikeFloor);
     const int nSpikeCeiling=static_cast<int>(m_SpikeCeiling);
@@ -325,12 +349,16 @@ void pix_backlight :: processYUVImage(imageStruct &image)
 	    int nGreen=(SourceColour&(0xff<<SHIFT_GREEN))>>SHIFT_GREEN;
 	    int nBlue=(SourceColour&(0xff<<SHIFT_BLUE))>>SHIFT_BLUE;
 
+            /*
 	    int nLuminance = 
 			((90 * nRed)+
 			(115 * nGreen)+
 			(51 * nBlue));
 
 	    nLuminance>>=8;
+             */
+            int nLuminance = nRed;
+            
 //			SourceColour|=(nLuminance<<24);
 
 	    nLuminance=clampFunc(nLuminance,nSpikeFloor,nSpikeCeiling);
@@ -409,7 +437,9 @@ void pix_backlight :: processYUVImage(imageStruct &image)
 #endif // PETE_DEBUG_BACKLIGHT
 					
 		    const U32 DestColour=*pDest;
-		    if (DestColour<SourceColour) {
+
+                    
+		    if (DestColour<SourceColour || DestColour == black) {
 			*pDest=SourceColour;
 		    } else {
 			break;
@@ -449,12 +479,13 @@ void pix_backlight :: processYUVImage(imageStruct &image)
 #endif // PETE_DEBUG_BACKLIGHT
 
 		    const U32 DestColour=*pDest;
-		    if (DestColour<SourceColour) {
-			*pDest=SourceColour;
-		    } else {
-			break;
-		    }
-
+                    
+                   //  if (DestColour<SourceColour) {
+                    if (DestColour<SourceColour || DestColour == black) {
+                         *pDest=SourceColour;
+                     } else {
+                         break;
+                     }
 		    if (nCounter>=nDeltaY) {
 			nCounter-=nDeltaY;
 			nCurrentX+=nXInc;
