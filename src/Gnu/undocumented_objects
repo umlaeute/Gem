@@ -1,13 +1,4 @@
-cuboid
-newWave
-ripple
-rubber
-slideSquares
-terrain
-polygon_smooth
-smooth
-part_info
-part_render
+	terrain
 pix_background
 pix_backlight
 pix_blur
@@ -18,23 +9,22 @@ pix_chroma_key
 pix_color
 pix_colorreduce
 pix_compare
-pix_convert
+	pix_convert
 pix_crop
 pix_delay
-pix_depot
+	pix_depot
 pix_dot
 pix_duotone
-pix_dv
-pix_emboss
+	pix_dv
+	pix_emboss
 pix_film
-pix_get
-pix_grey
+	pix_get
 pix_info
 pix_levels
 pix_lumaoffset
 pix_mix
 pix_motionblur
-pix_movieYUV
+	pix_movieYUV
 pix_pix2sig
 pix_posterize
 pix_put
@@ -44,5 +34,4 @@ pix_scanline
 pix_sig2pix
 pix_snap2tex
 pix_tIIR
-pix_test
-pix_yuv
+	pix_test
