@@ -32,6 +32,7 @@ pix_offset :: pix_offset()
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_offset"));
     m_offset[chRed] = m_offset[chGreen] = m_offset[chBlue] = m_offset[chAlpha] = 0;
+    Y = U = V = 0;
 }
 
 /////////////////////////////////////////////////////////
