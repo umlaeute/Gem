@@ -17,14 +17,4 @@ LOG
 
 #include "Base/GemShape.h"
 
-#ifdef __APPLE__
-# define glGenVertexArraysGEM glGenVertexArraysAPPLE
-# define glIsVertexArrayGEM   glGenVertexArraysAPPLE
-# define glBindVertexArrayGEM glGenVertexArraysAPPLE
-#else
-# define glGenVertexArraysGEM
-# define glIsVertexArrayGEM  
-# define glBindVertexArrayGEM
-#endif
-
 #endif /* INCLUDE_GEMVERTEX_H_ */
