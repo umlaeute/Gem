@@ -53,15 +53,16 @@ pix_info :: ~pix_info()
 // trigger
 //
 /////////////////////////////////////////////////////////
-void pix_info :: processImage(imageStruct &image)
+void pix_info :: render(GemState *state)
 {
-	// send out the color information
-	outlet_float(m_x, (t_float)image.xsize);
-	outlet_float(m_y, (t_float)image.ysize);
-	outlet_float(m_c, (t_float)image.csize);
+  if (!state || !state->image|| !&state->image->image)return;
+  // send out the color information
+  outlet_float(m_x, (t_float)state->image->image.xsize);
+  outlet_float(m_y, (t_float)state->image->image.ysize);
+  outlet_float(m_c, (t_float)state->image->image.csize);
 
-	outlet_float(m_format, (t_float)image.format);
-	outlet_pointer(m_data, (t_gpointer*)image.data);
+  outlet_float(m_format, (t_float)state->image->image.format);
+  outlet_pointer(m_data, (t_gpointer*)state->image->image.data);
 }
 void pix_info :: obj_setupCallback(t_class *classPtr)
 {}

@@ -16,7 +16,8 @@ LOG
 #ifndef INCLUDE_PIX_INFO_H_
 #define INCLUDE_PIX_INFO_H_
 
-#include "Base/GemPixDualObj.h"
+#include "Base/GemBase.h"
+#include "Base/GemPixUtil.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -34,9 +35,9 @@ DESCRIPTION
  outputs xsize, ysize, csize, format, data
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_info : public GemPixObj
+class GEM_EXTERN pix_info : public GemBase
 {
-    CPPEXTERN_HEADER(pix_info, GemPixObj)
+    CPPEXTERN_HEADER(pix_info, GemBase)
 
     public:
 
@@ -55,7 +56,7 @@ class GEM_EXTERN pix_info : public GemPixObj
 	//  	virtual void 	render(GemState *state);
 
     	//////////
-        virtual void 	processImage(imageStruct &);
+        virtual void 	render(GemState*);
 
 
         //////////
