@@ -57,6 +57,6 @@ class GEM_EXTERN GEMglAreTexturesResident : public GemBase
 	  t_outlet *m_out1, *m_out2;
 
 	// static member functions
-	  static void	 texturesMessCallback (void*, int,t_atom*);
+	  static void	 texturesMessCallback (void*, t_symbol*,int,t_atom*);
 };
 #endif // for header file

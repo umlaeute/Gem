@@ -48,7 +48,6 @@ class GEM_EXTERN GEMglCallList : public GemBase
 
 	// we need some inlets
 	  t_inlet *m_inlet;
-	  t_outlet*m_outlet;
 
 	// static member functions
 	  static void	 listMessCallback (void*, t_floatarg);
