@@ -108,19 +108,24 @@ void pix_write :: doWrite()
       m_originalImage = new imageStruct;
       m_originalImage->xsize = width;
       m_originalImage->ysize = height;
+      #ifndef MACOSX
       m_originalImage->type  = GL_UNSIGNED_BYTE;
 
       m_originalImage->csize = 3;
       m_originalImage->format = GL_RGB;
+      #else
+      m_originalImage->type  = GL_UNSIGNED_INT_8_8_8_8_REV;
+
+      m_originalImage->csize = 4;
+      m_originalImage->format = GL_BGRA_EXT;
+      #endif
 
       m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
     }
   
   glReadPixels(m_xoff, m_yoff, width, height,
 	       m_originalImage->format, m_originalImage->type, m_originalImage->data); 
-#ifndef MACOSX 
   mem2image(m_originalImage, m_filename, m_filetype);
-#endif
 }
 
 /////////////////////////////////////////////////////////
