@@ -26,7 +26,6 @@
 #endif // __APPLE__
 
 #include "ortho.h"
-#include "Base/GemMan.h"
 
 CPPEXTERN_NEW(ortho)
 
@@ -53,17 +52,16 @@ ortho :: ~ortho()
 // render
 //
 /////////////////////////////////////////////////////////
-void ortho :: render(GemState *)
+void ortho :: render(GemState *state)
 {
     if (m_state)
 	{
-	  GLfloat aspect = (m_compat)?1.f:(GLfloat)GemMan::m_width / (GLfloat)GemMan::m_height;
+	  GLfloat aspect = (m_compat)?1.f:(GLfloat)state->screenWidth / (GLfloat)state->screenHeight;
 		glPushAttrib(GL_VIEWPORT_BIT);
-		glViewport(0, 0, GemMan::m_width, GemMan::m_height);
+		glViewport(0, 0, state->screenWidth, state->screenHeight);
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		//glOrtho(-4.f, 4.f, -4.f, 4.f, .1f, 100.f);
 		glOrtho(-4.f*aspect, 4.f*aspect, -4.f, 4.f, .1f, 100.f);
 		glMatrixMode(GL_MODELVIEW);
 	}
