@@ -20,6 +20,7 @@ extern "C" {
    void pix_alpha_setup();
    void pix_bitmask_setup();
    void pix_blob_setup();
+   void pix_blur_setup();
    void pix_buf_setup();
    void pix_clearblock_setup();
    void pix_color_setup();
@@ -89,7 +90,8 @@ extern "C" {
       pix_aging_setup();
       pix_alpha_setup();
       pix_bitmask_setup();
-      pix_blob_setup();
+      pix_blob_setup();   
+      pix_blur_setup();
       pix_buf_setup();
       pix_clearblock_setup();
       pix_color_setup();
