@@ -51,10 +51,10 @@ void pix_gain :: processRGBAImage(imageStruct &image)
     unsigned char *pixels = image.data;
     short R,G,B,A;
     int red,green,blue,alpha;
-    R   = int( 255 * m_gain[chRed]);
-    G = int(255 * m_gain[chGreen]);
-    B  = int(255 * m_gain[chBlue]);
-    A = int(255 * m_gain[chAlpha]);
+    R   = int( 256 * m_gain[chRed]);
+    G = int(256 * m_gain[chGreen]);
+    B  = int(256 * m_gain[chBlue]);
+    A = int(256 * m_gain[chAlpha]);
 
 	while(datasize--)
 	{
