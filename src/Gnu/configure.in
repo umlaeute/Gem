@@ -314,7 +314,7 @@ if test "$with_avi" != "no"
 then
   AC_FIND_LIB(aviplay, CreateIAviReadFile, $search_libs, $with_avi)
 fi
-if  test "$ac_tr_lib" != "HAVE_LIBAVI"
+if  test "$ac_tr_lib" != "HAVE_LIBAVIPLAY"
 then
   with_avi="no"
 fi
@@ -388,7 +388,7 @@ fi
 
 if test "$with_avi" != "no"
 then
-  AC_FIND_HEADER(avifile/avifile.h, $search_heads, $with_avi)
+  AC_FIND_HEADER(avifile.h, $search_heads, $with_avi)
 fi
 
 if test "$with_ieee1394" != "no"
