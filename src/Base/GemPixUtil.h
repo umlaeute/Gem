@@ -41,6 +41,36 @@ LOG
 #include <string.h>
 #include <stdlib.h>
 
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Color component defines
+//
+// These should be used to reference the various color channels
+///////////////////////////////////////////////////////////////////////////////
+
+/* RGBA */
+#ifdef __APPLE__				//tigital
+const int chAlpha	= 0;
+const int chRed		= 1;
+const int chGreen	= 2;
+const int chBlue	= 3;
+#else
+const int chRed		= 0;
+const int chGreen	= 1;
+const int chBlue	= 2;
+const int chAlpha	= 3;
+#endif
+
+/* Gray */
+const int chGray	= 0;
+
+/* YUV422 */
+const int chU           = 0;
+const int chY0          = 1;
+const int chV           = 2;
+const int chY1          = 3;
+
 // packed pixel defines for textures
 #ifndef GL_EXT_packed_pixels
 #define GL_UNSIGNED_BYTE_3_3_2_EXT          0x8032
@@ -80,7 +110,11 @@ LOG
 #endif
 
 
+// basic helper functions, like CLAMP and powerOfTwo
 #include "Base/GemFuncUtil.h"
+
+// utility functions from PeteHelpers.h
+#include "Base/GemPixPete.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -288,33 +322,5 @@ GEM_EXTERN extern void copy2Image(imageStruct *to, imageStruct *from);
 GEM_EXTERN extern void refreshImage(imageStruct *to, imageStruct *from);
 
 GEM_EXTERN extern int getPixFormat(char*);
-
-///////////////////////////////////////////////////////////////////////////////
-// Color component defines
-//
-// These should be used to reference the various color channels
-///////////////////////////////////////////////////////////////////////////////
-
-/* RGBA */
-#ifdef __APPLE__				//tigital
-const int chAlpha	= 0;
-const int chRed		= 1;
-const int chGreen	= 2;
-const int chBlue	= 3;
-#else
-const int chRed		= 0;
-const int chGreen	= 1;
-const int chBlue	= 2;
-const int chAlpha	= 3;
-#endif
-
-/* Gray */
-const int chGray	= 0;
-
-/* YUV422 */
-const int chU           = 0;
-const int chY0          = 1;
-const int chV           = 2;
-const int chY1          = 3;
 
 #endif // GEMPIXUTIL_H_

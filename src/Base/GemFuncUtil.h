@@ -19,6 +19,26 @@ LOG
 
 #include "Base/GemExportDef.h"
 
+#include <math.h>
+#include <stdlib.h>
+
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+// powerOfTwo
+// get the next higher 2^n-number (if value is'nt 2^n by itself)
+///////////////////////////////////////////////////////////////////////////////
+inline int powerOfTwo(int value)
+{
+    int x = 1;
+    //    while(x <= value) x <<= 1;
+    while(x < value) x <<= 1;
+    return(x);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // min/max functions
 //
@@ -27,6 +47,17 @@ inline int MIN(int x, int y) {  return (x<y)?x:y; }
 inline int MAX(int x, int y) {  return (x>y)?x:y; }
 inline float MIN(float x, float y) {  return (x<y)?x:y; }
 inline float MAX(float x, float y) {  return (x>y)?x:y; }
+
+inline unsigned char TRI_MAX(unsigned char v1, unsigned char v2, unsigned char v3){
+  if (v1 > v2 && v1 > v3) return(v1);
+  if (v2 > v3) return(v2);
+  return(v3);
+}
+inline unsigned char TRI_MIN(unsigned char v1, unsigned char v2, unsigned char v3){
+  if (v1 < v2 && v1 < v3) return(v1);
+  if (v2 < v3) return(v2);
+  return(v3);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Clamp functions
@@ -120,6 +151,77 @@ inline int clampFunc(int x, int a, int b)
     { return(x < a ? a : (x > b ? b : x)); }
 inline unsigned char clampFunc(unsigned char x, unsigned char a, unsigned char b)
     { return(x < a ? a : (x > b ? b : x)); }
+inline void* clampFunc(void* x, void* a, void* b)
+    { return(x < a ? a : (x > b ? b : x)); }
+/* 
+   inline int GateInt(int nValue,int nMin,int nMax)
+   inline float GateFlt(float nValue,float nMin,float nMax)
+   inline void* GatePtr(void* pValue,void* pMin,void* pMax)
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////
+// absolute integer
+//
+///////////////////////////////////////////////////////////////////////////////
+inline int AbsInt(int inValue)         { return (inValue>0)?inValue:-inValue; }
+static inline int GetSign(int inValue) { return (inValue<0)?-1:1;             }
+
+///////////////////////////////////////////////////////////////////////////////
+// wrapping functions for integers
+//
+///////////////////////////////////////////////////////////////////////////////
+
+inline int GetTiled(int inValue,const int nMax) {
+  int nOutValue=(inValue%nMax);
+  if (nOutValue<0)nOutValue=((nMax-1)+nOutValue);
+  return nOutValue;
+}
+
+inline int GetMirrored(int inValue,const int nMax) {
+  const int nTwoMax=(nMax*2);
+  int nOutValue=GetTiled(inValue,nTwoMax);
+  if (nOutValue>=nMax)nOutValue=((nTwoMax-1)-nOutValue);
+  return nOutValue;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// 2D-algebra
+//    
+///////////////////////////////////////////////////////////////////////////////
+static inline void Get2dTangent(float inX,float inY,float* poutX,float* poutY) {
+	*poutX=inY;
+	*poutY=-inX;
+}
+///////////////////////////////////////////////////////////////////////////////
+// 2D-dot product
+///////////////////////////////////////////////////////////////////////////////
+static inline float Dot2d(float Ax,float Ay,float Bx,float By) {
+	return ((Ax*Bx)+(Ay*By));
+}
+///////////////////////////////////////////////////////////////////////////////
+// 2D-vector normalization
+///////////////////////////////////////////////////////////////////////////////
+static inline void Normalise2d(float* pX,float* pY) {
+	const float MagSqr=Dot2d(*pX,*pY,*pX,*pY);
+	float Magnitude=(float)sqrt(MagSqr);
+	if (Magnitude<=0.0f) {
+		Magnitude=0.001f;
+	}
+	const float RecipMag=1.0f/Magnitude;
+
+	*pX*=RecipMag;
+	*pY*=RecipMag;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// higher algebra
+//
+///////////////////////////////////////////////////////////////////////////////
+inline float GetRandomFloat(void) {
+  return rand()/static_cast<float>(RAND_MAX);
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -221,6 +323,16 @@ GEM_EXTERN extern void splineFunc(float val, float *ret, int numDimen, int nknot
  ((unsigned char*)(a))[5] = CLAMP_LOW((int)((unsigned char*)(a))[5] - ((unsigned char*)(b))[5]);\
  ((unsigned char*)(a))[6] = CLAMP_LOW((int)((unsigned char*)(a))[6] - ((unsigned char*)(b))[6]);\
  ((unsigned char*)(a))[7] = CLAMP_LOW((int)((unsigned char*)(a))[7] - ((unsigned char*)(b))[7]);\
+
+
+
+#ifdef __APPLE__
+//Ian Ollman's function to determine the cache prefetch for altivec vec_dst()
+inline UInt32 GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
+{
+	return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
+} 
+#endif
 
 
 #endif  // for header file
