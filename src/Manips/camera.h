@@ -28,7 +28,7 @@ using namespace std;
 #endif
 
 // This is our basic 3D point/vector class
-class CVector3
+class GEM_EXTERN CVector3
 {
 public:
     
@@ -133,12 +133,6 @@ class GEM_EXTERN camera : public GemBase
 	void		downMess( bool val );
 	void		resetState();
 	
-	
-	CVector3 m_vPosition;                   // The camera's position
-	CVector3 m_vView;                       // The camera's View
-	CVector3 m_vUpVector;                   // The camera's UpVector
-	CVector3 m_vSlide;			// The camera's slide
-	
 	int	left, right, up, down, forward, reverse, m_mode;
 	float	lookX, lookY, lookZ, m_speed;
 	float 	hAngle, vAngle, distance;
@@ -165,6 +159,11 @@ class GEM_EXTERN camera : public GemBase
 
     	
     private:
+
+	CVector3 m_vPosition;                   // The camera's position
+	CVector3 m_vView;                       // The camera's View
+	CVector3 m_vUpVector;                   // The camera's UpVector
+	CVector3 m_vSlide;			// The camera's slide
     	
     	//////////
     	// static member functions
