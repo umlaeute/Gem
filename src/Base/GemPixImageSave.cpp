@@ -62,7 +62,7 @@ extern "C"
 
 
 #ifdef __APPLE__
-OSStatus FSPathMaketoFSSpec(const UInt8 *path,FSSpec *spec,Boolean *isDirectory);
+extern OSStatus FSPathMakeFSSpec(const UInt8 *path,FSSpec *spec,Boolean *isDirectory);
        
 void GetAppFSSpec(FSSpec *fileSpec)
 {
@@ -84,12 +84,12 @@ void* MemAlloc(unsigned long memsize)
 }
 
 
-char* CStringToPString(char *string)
+unsigned char* CStringToPString(char *string)
 {
-    char *newString = (char *)MemAlloc(strlen(string) + 1);
-    unsigned long i = 0;
+    unsigned char *newString = (unsigned char*)MemAlloc(strlen(string) + 1);
+    int i = 0;
     
-    for(i = 0; i < strlen(string); i++)
+    for(i = 0; i < (int)strlen(string); i++)
 	newString[i+1] = string[i];
     
     newString[0] = i;
@@ -242,33 +242,6 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 
     return 1;
 
-}
-
-OSStatus
-FSPathMaketoFSSpec(
-	const UInt8 *path,
-	FSSpec *spec,
-	Boolean *isDirectory)	/* can be NULL */
-{
-	OSStatus	result;
-	FSRef		ref;
-	
-	/* check parameters */
-	require_action(NULL != spec, BadParameter, result = paramErr);
-	
-	/* convert the POSIX path to an FSRef */
-	result = ::FSPathMakeRef(path, &ref, isDirectory);
-	require_noerr(result, FSPathMakeRef);
-	
-	/* and then convert the FSRef to an FSSpec */
-	result = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
-	require_noerr(result, FSGetCatalogInfo);
-	
-FSGetCatalogInfo:
-FSPathMakeRef:
-BadParameter:
-
-	return ( result );
 }
 
 #else
