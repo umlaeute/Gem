@@ -166,10 +166,6 @@ struct GEM_EXTERN imageStruct
   // the format - either GL_RGBA, GL_LUMINANCE
   // or GL_YCBCR_422_GEM (which is on mac-computers GL_YCBCR_422_APPLE)
   GLenum          format;
-
-  //////////
-  // true if the image is flipped horizontally
-  GLboolean       upsidedown;
   
   //////////
   // is this owned by us (? what about underscores ?)
@@ -257,11 +253,23 @@ struct GEM_EXTERN imageStruct
   void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
   void fromYUV420P(unsigned char*Y,unsigned char*U,unsigned char*V){fromYV12(Y,U,V);}
 
-  unsigned char   *data;
+  // "data" points to the image.
+  // the memory could(!) be reserved by this class or someone else
+  // "notowned" should be set to "1", if "data" points to foreign memory
+  // "data" is not freed directly, when the destructor is called
+  unsigned char   *data;    // the pointer to the data
   private:
+  // "pdata" is the private data, and is the memory reserved by this class
+  // this data is freed when the destructor is called
   unsigned char   *pdata;
-  /* datasize should be private */
+  // "datasize" is the size of data reserved at "pdata"    
   int             datasize;
+  
+  public:
+  //////////
+  // true if the image is flipped horizontally
+  GLboolean       upsidedown;
+
 };
 
 /*-----------------------------------------------------------------

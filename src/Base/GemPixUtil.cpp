@@ -506,7 +506,6 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
 
   int pixelnum=xsize*ysize;
   reallocate();
-  unsigned char *pixels=data;
   switch (format){
   case GL_LUMINANCE:
     csize=1;
