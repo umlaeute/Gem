@@ -136,6 +136,8 @@ pixBlock *videoV4L :: getFrame(){
       case VIDEO_PALETTE_RGB24:   m_image.image.fromBGR    (videobuf + vmbuf.offsets[last_frame]); break;
       case VIDEO_PALETTE_RGB32:   m_image.image.fromBGRA   (videobuf + vmbuf.offsets[last_frame]); break;
       case VIDEO_PALETTE_GREY:    m_image.image.fromGray   (videobuf + vmbuf.offsets[last_frame]); break;
+      case VIDEO_PALETTE_YUV422:  m_image.image.fromYUV422 (videobuf + vmbuf.offsets[last_frame]); break;
+
       default: // ? what should we do ?
 	m_image.image.data=videobuf + vmbuf.offsets[last_frame];
 	m_image.image.notowned = true;
@@ -248,7 +250,7 @@ int videoV4L :: startTransfer(int format)
 	break;
       case GL_RGBA:
       case GL_BGRA:
-    	vmmap[i].format = 15;//VIDEO_PALETTE_RGB32;
+    	vmmap[i].format = VIDEO_PALETTE_RGB32;
 	break;
       case GL_YCBCR_422_GEM:
 #if 0
@@ -257,6 +259,7 @@ int videoV4L :: startTransfer(int format)
 	VIDEO_PALETTE_RGB565	3	/* 565 16 bit RGB */
 	VIDEO_PALETTE_RGB24	4	/* 24bit RGB */
 	VIDEO_PALETTE_RGB32	5	/* 32bit RGB */	
+	  /* note: all of my devices give BGR instead of RGB (jmz) */
 	VIDEO_PALETTE_RGB555	6	/* 555 15bit RGB */
 	VIDEO_PALETTE_YUV422	7	/* YUV422 capture */
 	VIDEO_PALETTE_YUYV	8
@@ -269,7 +272,7 @@ int videoV4L :: startTransfer(int format)
 	VIDEO_PALETTE_YUV420P	15	/* YUV 4:2:0 Planar */
 	VIDEO_PALETTE_YUV410P	16	/* YUV 4:1:0 Planar */
 #endif
-	  vmmap[i].format = VIDEO_PALETTE_YUV422; //OK for philips is only 0==15
+	  vmmap[i].format = VIDEO_PALETTE_YUV420P;
 	break;
       default:
       case GL_RGB:
