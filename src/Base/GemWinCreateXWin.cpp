@@ -198,6 +198,11 @@ int cursorGemWindow(WindowInfo &info, int state)
   return 0; //?
 }
 
+int topmostGemWindow(WindowInfo &info, int state){
+  return 1;
+}
+
+
 void destroyGemWindow(WindowInfo &info)
 {
   if (info.dpy)
