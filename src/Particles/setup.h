@@ -27,7 +27,6 @@ extern "C" {
   void part_targetsize_setup();
   void part_velcone_setup();
   void part_velsphere_setup();
-  void part_veldomain_setup();
   void part_velocity_setup();
   void part_vertex_setup();
   void part_render_setup();
@@ -50,7 +49,6 @@ extern "C" {
     part_targetsize_setup();
     part_velcone_setup();
     part_velsphere_setup();
-    part_veldomain_setup();
     part_velocity_setup();
     part_vertex_setup();
     part_render_setup();
