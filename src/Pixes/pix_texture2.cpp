@@ -55,7 +55,6 @@ pix_texture2 :: pix_texture2()
 /////////////////////////////////////////////////////////
 pix_texture2 :: ~pix_texture2()
 {
-	//delete [] buffer.data;
 }
 
 /////////////////////////////////////////////////////////
@@ -65,7 +64,6 @@ pix_texture2 :: ~pix_texture2()
 static inline int powerOfTwo(int value)
 {
 	int x = 1;
-	//	while(x <= value) x <<= 1;
 	while(x < value) x <<= 1;
 	return(x);  
 }
@@ -152,7 +150,6 @@ void pix_texture2 :: render(GemState *state)
 	int y_2 = powerOfTwo(state->image->image.ysize);
 	
 	if (x_2 != m_buffer.xsize || y_2 != m_buffer.ysize) {
-	  //delete [] buffer.data;
 	  m_buffer.clear();
 	  m_buffer.xsize = x_2;
 	  m_buffer.ysize = y_2;
@@ -160,8 +157,6 @@ void pix_texture2 :: render(GemState *state)
 	  m_buffer.format = state->image->image.format;
 	  m_buffer.type = state->image->image.type;
 	  
-	  //buffer.data = new unsigned char [buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char)];
-	  //memset(buffer.data, 0, buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char));
 	  m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
 	  memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
 	
@@ -195,16 +190,13 @@ void pix_texture2 :: render(GemState *state)
 	}
       } else {				// tigital
 	if (state->image->image.xsize != m_buffer.xsize || state->image->image.ysize != m_buffer.ysize) {
-	  //delete [] buffer.data;
 	  m_buffer.clear();
 	  m_buffer.xsize = state->image->image.xsize;
 	  m_buffer.ysize = state->image->image.ysize;
 	  m_buffer.csize = state->image->image.csize;
 	  m_buffer.format = state->image->image.format;
 	  m_buffer.type = state->image->image.type;
-				
-	  //buffer.data = new unsigned char [buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char)];
-	  //memset(buffer.data, 0, buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char));
+          
 	  m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
 	  memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
 #ifndef MACOSX            
