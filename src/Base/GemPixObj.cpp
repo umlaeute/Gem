@@ -53,6 +53,7 @@ void GemPixObj :: render(GemState *state){
   } else {
     orgPixBlock = state->image;
     cachedPixBlock.newimage = state->image->newimage;
+    cachedPixBlock.newfilm = state->image->newfilm; //added for newfilm copy from cache cgc 6-21-03
     state->image->image.copy2ImageStruct(&cachedPixBlock.image);
     state->image = &cachedPixBlock;
     if (m_processOnOff){

@@ -250,6 +250,11 @@ struct GEM_EXTERN pixBlock
     // is this a newimage since last time?
     //	ie, has it been refreshed
     int     	    newimage;
+    
+    //////////
+    // keeps track of when new films are loaded
+    //	useful for rectangle_textures on OSX
+    int		    newfilm;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
