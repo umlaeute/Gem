@@ -20,12 +20,17 @@ LOG
 #include <windows.h>
 #endif
 
+#include "config.h"
+#include "Base/CPPExtern.h"
+#include "Base/GemState.h"
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
 #else
-#include "config.h"
 #include <GL/gl.h>
+#include <GL/glu.h>
 # ifdef INCLUDE_GLEXT
 # include <GL/glext.h>
 # endif
@@ -58,9 +63,6 @@ LOG
 #ifndef HELPSYMBOL_BASE
 # define HELPSYMBOL_BASE "Gem/"
 #endif
-
-#include "Base/CPPExtern.h"
-#include "Base/GemState.h"
 
 class GemCache;
 
