@@ -19,6 +19,11 @@ LOG
 #ifdef __APPLE__
 # include "OpenGL/gl.h"
 #else
+// I hate Microsoft...I shouldn't have to do this!
+# ifdef _WINDOWS
+#  include <windows.h>
+# endif
+
 # include "GL/gl.h"
 #endif
 
