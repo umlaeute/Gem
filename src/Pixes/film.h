@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
-#ifndef _WINDOWS
+#ifdef __linux__
 #include "Base/config.h"
 #endif
 /*-----------------------------------------------------------------
