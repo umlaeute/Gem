@@ -19,6 +19,15 @@
 
 #include "m_pd.h"
 
+#ifdef MACOSX
+#include <Carbon/carbon.h>
+#include <QuickTime/QuickTime.h>
+#include <QuickTime/ImageCompression.h>
+#include <QuickTime/Movies.h>
+#include <QuickTime/QuickTimeComponents.h>
+#include <string.h>
+#endif MACOSX
+
 #ifdef _WINDOWS
 #include <io.h>
 #else
@@ -30,6 +39,7 @@
 
 #include <string.h>
 
+#ifndef MACOSX
 extern "C"
 {
 #include "tiffio.h"
@@ -45,8 +55,17 @@ extern "C"
 
 
 #include "sgiimage.h"
+#endif MACOSX
+
 #include "GemPixUtil.h"
 
+#ifdef MACOSX
+imageStruct *QTImage2mem(GraphicsImportComponent inImporter);
+OSStatus FSPathMakeFSSpec(
+	const UInt8 *path,
+	FSSpec *spec,
+	Boolean *isDirectory);
+#else
 imageStruct *tiffImage2mem(const char *filename);
 imageStruct *jpegImage2mem(const char *filename);
 imageStruct *sgiImage2mem(const char *filename);
@@ -69,12 +88,72 @@ unsigned char* img_allocate(int size)
 
   return data; 
 }
+#endif MACOSX
 
 /***************************************************************************
  *
  * image2mem - Read in an image in various file formats
  *
  ***************************************************************************/
+#ifdef MACOSX
+GEM_EXTERN imageStruct *image2mem(const char *filename)
+{
+	OSErr				err;
+	imageStruct 			*image_block = NULL;
+	GraphicsImportComponent 	importer = NULL;
+
+	// does the file even exist?
+	if (filename[0] != '\0') {
+		FSSpec	spec;
+
+		err = ::FSPathMakeFSSpec( (Str255)filename, &spec, NULL);
+		if (err) {
+			error("GEM: Unable to find file: %#s", spec.name);
+                        error("GEM: Unable to find filename:%s", filename);
+			error("parID : %d", spec.parID); 
+			return NULL;
+		}
+		err = ::GetGraphicsImporterForFile(&spec, &importer);
+		if (err) {
+			error("GEM: Unable to import an image: %#s", spec.name);
+			return NULL;
+		}
+	}
+	image_block = QTImage2mem(importer);
+	::CloseComponent(importer);
+	if (image_block)	return image_block;
+	else			return NULL;
+}
+/*****************************************************************************/
+
+OSStatus
+FSPathMakeFSSpec(
+	const UInt8 *path,
+	FSSpec *spec,
+	Boolean *isDirectory)	/* can be NULL */
+{
+	OSStatus	result;
+	FSRef		ref;
+	
+	/* check parameters */
+	require_action(NULL != spec, BadParameter, result = paramErr);
+	
+	/* convert the POSIX path to an FSRef */
+	result = FSPathMakeRef(path, &ref, isDirectory);
+	require_noerr(result, FSPathMakeRef);
+	
+	/* and then convert the FSRef to an FSSpec */
+	result = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
+	require_noerr(result, FSGetCatalogInfo);
+	
+FSGetCatalogInfo:
+FSPathMakeRef:
+BadParameter:
+
+	return ( result );
+}
+
+#else
 GEM_EXTERN imageStruct *image2mem(const char *filename)
 {
 	imageStruct *image_block = NULL;
@@ -108,6 +187,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 
 		sprintf(newName, "%s/%s", realName, realResult);
 	}
+
 	
 	// try to load in a JPEG file
 	if ( (image_block = jpegImage2mem(newName)) )
@@ -125,7 +205,113 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 	error("GEM: Unable to load image: %s", newName);
 	return(NULL);
 }
+#endif MACOSX
+/***************************************************************************
+ *
+ * Read in a image utilizing QuickTime GraphicsImporterComponent
+ *
+ ***************************************************************************/
+#ifdef MACOSX
+imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
+{
+	Rect		r;
+	if (::GraphicsImportGetNaturalBounds(inImporter, &r)) return NULL;	//get an image size
+	::OffsetRect(&r, -r.left, -r.top);									
+	if (::GraphicsImportSetBoundsRect(inImporter, &r)) return NULL;		
+	ImageDescriptionHandle imageDescH = NULL;
+	if (::GraphicsImportGetImageDescription(inImporter, &imageDescH)) return NULL;
+		
+	imageStruct *image_block = new imageStruct;
+	image_block->xsize	= (*imageDescH)->width;
+	image_block->ysize	= (*imageDescH)->height;
+	//image_block->type	= GL_UNSIGNED_BYTE;
+        //image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
+        image_block->type	= GL_UNSIGNED_INT_8_8_8_8;
+	if ((*imageDescH)->depth <= 32) {
+		image_block->csize = 4;
+		//image_block->format = GL_RGBA;
+                image_block->format = GL_BGRA_EXT;
+	} else {
+		image_block->csize = 1;
+		image_block->format = GL_LUMINANCE;
+	}
+	::DisposeHandle((Handle)imageDescH);
+	imageDescH = NULL;
+	const int dataSize = image_block->ysize * image_block->xsize * image_block->csize;
 
+	image_block->data = new unsigned char[dataSize];
+#ifdef __DEBUG__
+	post("QTImage2mem() : allocate %d bytes", dataSize);
+#endif
+        GWorldPtr	gw = NULL;
+/*
+#ifdef __QTNEWGWORLDFROMPTR__
+	OSErr err = QTNewGWorldFromPtr(&gw,  
+                                    //k32RGBAPixelFormat,
+                                    k32ARGBPixelFormat,
+                                    &r, NULL, NULL, 
+                                    keepLocal,	
+                                    //useDistantHdwrMem, 
+                                    image_block->data, 
+                                    (long)(image_block->xsize * image_block->csize));
+	if (image_block->data == NULL || err) {
+		error("Can't allocate memory for an image.");
+	}
+	//image_block->pixelFormat = k32RGBAPixelFormat;
+        //image_block->pixelFormat = k32ARGBPixelFormat;
+	//image_block->pixMapH = GetGWorldPixMap(image_block->gw);
+	//::LockPixels(image_block->pixMapH);
+	::GraphicsImportSetGWorld(inImporter, gw, NULL);
+	::GraphicsImportDraw(inImporter);
+        ::DisposeGWorld(gw);			//dispose the offscreen
+	gw = NULL;
+        
+#else	//don't "USE_QTNEWGWORLDFROMPTR"
+*/	::NewGWorld(&gw, k32ARGBPixelFormat, &r, NULL, NULL, keepLocal);	//make an offscreen
+	::PixMapHandle pixmapH = GetGWorldPixMap(gw);
+        //image_block->pixelFormat = k32ARGBPixelFormat;
+	::LockPixels(pixmapH);						//lock a pixmap
+
+	::GraphicsImportSetGWorld(inImporter, gw, NULL);		//set graphics port to draw an image
+	::GraphicsImportDraw(inImporter);				//draw an image to offscreen
+
+	unsigned char *baseP = (unsigned char *)::GetPixBaseAddr(pixmapH);	//get base address of pixels
+	unsigned long rowbytes = (unsigned long)::GetPixRowBytes(pixmapH);	//get the number of bytes per line
+
+	if (image_block->csize == 4) {
+		for (int i=0, y=image_block->ysize-1; y>=0; y--) {
+			unsigned char *tmpP = baseP + y * rowbytes;
+			for (int x=image_block->xsize-1; x>=0; x--) {
+				/*image_block->data[i++] = *(tmpP + 1);
+				image_block->data[i++] = *(tmpP + 2);
+				image_block->data[i++] = *(tmpP + 3);
+				image_block->data[i++] = *(tmpP);*/
+                                image_block->data[i++] = *(tmpP + 3);
+				image_block->data[i++] = *(tmpP + 2);
+				image_block->data[i++] = *(tmpP + 1);
+				image_block->data[i++] = *(tmpP);
+				tmpP += 4;
+			}
+		}
+	} else if (image_block->csize == 1) {
+		for (int i=0, y=image_block->ysize-1; y>=0; y--) {
+			unsigned char *tmpP = baseP + y * rowbytes;
+			for (int x=image_block->xsize-1; x>=0; x--) {
+				image_block->data[i++] = 255 - *(tmpP);
+			}
+			tmpP += 1;
+		}
+	} else {
+	}
+
+	::UnlockPixels(pixmapH);		//unlock the pixmap
+	pixmapH = NULL;				//
+	::DisposeGWorld(gw);			//dispose the offscreen
+	gw = NULL;
+	return image_block;
+//#endif	//__QTNEWGWORLDFROMPTR__
+}
+#else
 /***************************************************************************
  *
  * Read in a TIFF image.
@@ -577,4 +763,4 @@ imageStruct *sgiImage2mem(const char *filename)
 	
 	return(image_block);
 }
-
+#endif MACOSX

@@ -21,8 +21,14 @@
 #include <windows.h>
 #endif
 
+#ifdef MACOSX
+#include <Carbon/carbon.h>
+#include <OpenGL/gl.h>
+#include "macosx_math.h"
+#else
 #include <GL/gl.h>
 #include <math.h>
+#endif MACOSX
 
 #include "Base/GemMan.h"
 
@@ -197,6 +203,12 @@ void gemwin :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 void gemwin :: colorMess(float red, float green, float blue)
 {
+#ifdef MACOSX
+  if ( !GemMan::windowExists() )  {
+    post("GEM: gemwin: !windowExists");
+    return;
+  }
+#endif
   glClearColor(red, green, blue, 0.);
   GemMan::m_clear_color[0] = red;
   GemMan::m_clear_color[1] = green;

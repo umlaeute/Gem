@@ -15,7 +15,6 @@
 //
 /////////////////////////////////////////////////////////
 
-
 #include "m_pd.h"
 #include "GemPixUtil.h"
 
@@ -72,9 +71,7 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to)
         memcpy(to->data, this->data, to->xsize * to->ysize * to->csize);
 }
 
-
-
-
+#ifndef MACOSX
 int detect_mmx( void )
 #if !HAVE_MMX
 {
@@ -268,7 +265,7 @@ int pix_addmean(unsigned char Dest, unsigned char *Src, int length)
   return 1;
 }
 #endif
-
+#endif MACOSX
 
 
 int pix_addsat(unsigned char *leftPix, unsigned char *rightPix, int datasize)

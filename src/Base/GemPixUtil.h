@@ -22,7 +22,14 @@ LOG
 #include <windows.h>
 #endif
 
+#ifdef MACOSX
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <QuickTime/QuickTime.h>
+#else
 #include <GL/gl.h>
+#include "config.h"
+#endif MACOSX
 
 // packed pixel defines for textures
 #ifndef GL_EXT_packed_pixels
@@ -34,7 +41,6 @@ LOG
 #endif
 
 #include "Base/GemFuncUtil.h"
-#include "config.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -47,7 +53,7 @@ CLASS
 struct GEM_EXTERN imageStruct
 {
 
-  imageStruct() : xsize (0), ysize(0),csize(0),data(0),pdata(0),notowned(0) {}
+  imageStruct() : xsize (0), ysize(0),csize(0),notowned(0),data(0),pdata(0) {}
 
   ~imageStruct() { clear(); }
     //////////
@@ -82,11 +88,11 @@ struct GEM_EXTERN imageStruct
     GLint   	    csize;
 
     //////////
-    // the format - either GL_RGBA or GL_LUMINANCE
+    // the format - either GL_RGBA, GL_BGRA_EXT, or GL_LUMINANCE
     GLenum          format;
 
     //////////
-     // data type - always UNSIGNED_BYTE
+     // data type - always UNSIGNED_BYTE (except for OS X)
     GLenum          type;
 
 
@@ -150,10 +156,17 @@ GEM_EXTERN extern void refreshImage(imageStruct *to, imageStruct *from);
 //
 // These should be used to reference the various color channels
 ///////////////////////////////////////////////////////////////////////////////
+#ifdef MACOSX				//tigital
+const int chRed		= 2;
+const int chGreen	= 1;
+const int chBlue	= 0;
+const int chAlpha	= 3;
+#else
 const int chRed		= 0;
 const int chGreen	= 1;
 const int chBlue	= 2;
 const int chAlpha	= 3;
+#endif
 
 const int chGray	= 0;
 
@@ -166,6 +179,7 @@ const int chGray	= 0;
 //
 // Accelerated Pixel Manipulations
 //
+#ifndef MACOSX
 
 int detect_mmx( void );
 
@@ -251,7 +265,7 @@ asm volatile (\
 
 #endif // MMX
 
-
+#endif //MACOSX
 
 
 
