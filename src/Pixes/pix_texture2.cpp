@@ -73,22 +73,22 @@ void pix_texture2 :: setUpTextureState()
 #ifdef GL_TEXTURE_RECTANGLE_EXT
     if ( !GemMan::texture_rectangle_supported )				//tigital
     {
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     } else {
         glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
         if (GemMan::client_storage_supported)
-            glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
+            glPixelStoref(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
         else
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
+        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
 #else
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -392,14 +392,14 @@ void pix_texture2 :: textureQuality(int type)
         if (GemMan::texture_rectangle_supported)
         {
             glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
-            glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-            glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+            glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+            glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, m_textureQuality);
         }else
 #endif
 	  {
             glBindTexture(GL_TEXTURE_2D, m_textureObj);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
         }
 #elif GL_EXT_texture_object
         glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);
