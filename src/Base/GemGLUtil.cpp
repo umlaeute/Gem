@@ -25,7 +25,7 @@ GEM_EXTERN int getGLbitfield(int argc, t_atom *argv){
   int accum=0;  
   int mode=0;
 
-  if (!argc%2)argc--;
+  if (!(argc%2))argc--;
   for (int n=0; n<argc; n++){
     if (n%2){ // && or ||
       char c=*argv->a_w.w_symbol->s_name;
