@@ -73,6 +73,11 @@ class GEM_EXTERN film
    * try to open the film in the colourspace requested by "format"
    * discussion: should the colourspace be only a hint or should we force it
    * (evt. by converting the actual cs by hand to the desired one)
+   * more discussion: i guess the cs should really be forced somehow by [pix_film]
+   * now i don't know, whether the cs-conversion should be done by [pix_film] itself or
+   * rather by the film*-classes. 
+   * but i guess film* makes more sense, because then, [pix_film] doesn't have to know
+   * anything about the internal cs of the decoder
    */
   /* returns TRUE if loading was successfull, FALSE otherwise */
   virtual bool open(char *filename, int format=0);
