@@ -310,26 +310,9 @@ int videoV4L :: startTransfer(int format)
        just used RGB, I wonder? */
     m_image.image.xsize = width;
     m_image.image.ysize = height;
-    m_image.image.type  = GL_UNSIGNED_BYTE; // true on linux
-    m_image.image.format = m_reqFormat;
-    switch(m_reqFormat){
-    case GL_LUMINANCE:
-      m_image.image.csize = 1;
-      break;
-    case GL_RGBA:
-    case GL_BGRA:
-      m_image.image.csize = 4;
-      //m_image.image.format = GL_BGRA;
-    break;
-    case GL_YCBCR_422_GEM:
-      m_image.image.csize = 2;
-      break;
-    default:
-    case GL_RGB:
-    case GL_BGR:
-      m_image.image.csize = 3;
-      //m_image.image.format = GL_BGR;
-    }
+    m_image.image.setCsizeByFormat(m_reqFormat);
+    m_image.image.reallocate();
+
     switch((m_gotFormat=vmmap[frame].format)){
     case VIDEO_PALETTE_GREY  : m_colorConvert=(m_reqFormat!=GL_LUMINANCE); break;
     case VIDEO_PALETTE_RGB24 : m_colorConvert=(m_reqFormat!=GL_BGR); break;
@@ -338,7 +321,6 @@ int videoV4L :: startTransfer(int format)
     default: m_colorConvert=true;
     }
   
-    m_image.image.reallocate();
     myleftmargin = 0;
     myrightmargin = 0;
     mytopmargin = 0;
@@ -349,9 +331,11 @@ int videoV4L :: startTransfer(int format)
     /* create thread */
     m_continue_thread = 1;
     m_frame_ready = 0;
+    pthread_create(&m_thread_id, 0, capturing, this);
+
     post("GEM: pix_video: Opened video connection %X", tvfd);
     post("vmmap %X", vmmap);
-    pthread_create(&m_thread_id, 0, capturing, this);
+
     return(1);
 
 closit:
