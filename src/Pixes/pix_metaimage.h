@@ -2,8 +2,8 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-    Copyright (c) 2003 James Tittle
-    ported from pete's_plugins (www.petewarden.com)
+    Copyright (c) 2003-2004 James Tittle
+    non-yuv portions ported from pete's_plugins (www.petewarden.com)
     
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -74,13 +74,20 @@ class GEM_EXTERN pix_metaimage : public GemPixObj
 	U32 Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight);
 	U32 Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight);
 	
+	U32 YUV_CreateSubImage(U32* pInput,U32* pSubImage,float SubWidth,float SubHeight);
+	void YUV_DrawSubImages(U32* pSubImage,U32 AverageColour,float SubWidth,float SubHeight);
+	void YUV_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOutput, int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,U32 SubImageAverage);
+	U32 YUV_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride);
+	U32 YUV_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight);
+	U32 YUV_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight);
+	
     private:
     
     	//////////
     	// Static member functions
     	static void 	sizeCallback(void *data, t_floatarg sz);
-	static void 	distanceCallback(void *data, t_floatarg m_DoDistanceBased);
-	static void 	cheapCallback(void *data, t_floatarg m_DoCheapAndNasty);
+		static void 	distanceCallback(void *data, t_floatarg m_DoDistanceBased);
+		static void 	cheapCallback(void *data, t_floatarg m_DoCheapAndNasty);
 };
 
 #endif	// for header file
