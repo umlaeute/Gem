@@ -39,7 +39,7 @@ videoDV4L :: videoDV4L(int format) : video(format)
   m_norm = PAL;
   m_decoder=NULL;
   m_frame_ready=false;
-  decodedbuf = new unsigned char[725*576*40];
+  decodedbuf = new unsigned char[725*576*3];
 #endif
   m_haveVideo=false;
 }
@@ -133,23 +133,29 @@ pixBlock *videoDV4L :: getFrame(){
     if(dv_frame_changed(m_decoder)) {
       int pitches[3] = {0,0,0};
             //      pitches[0]=m_decoder->width*3; // rgb
-      pitches[0]=m_decoder->width*((m_reqFormat==GL_RGBA)?3:2);
+      //      pitches[0]=m_decoder->width*((m_reqFormat==GL_RGBA)?3:2);
+      pitches[0]=m_decoder->width*2;
       m_image.image.ysize=m_decoder->height;
       m_image.image.xsize=m_decoder->width;
       m_image.image.setCsizeByFormat(m_reqFormat);
       
       /* decode the DV-data to something we can handle and that is similar to the wanted format */
       //      dv_report_video_error(m_decoder, videobuf);  // do we need this ?
-      dv_decode_full_frame(m_decoder, videobuf, ((m_reqFormat==GL_RGBA)?e_dv_color_rgb:e_dv_color_yuv), &decodedbuf, pitches); // gosh, this(e_dv_color_rgb) is expansive:: the decoding is done in software only...
+      // gosh, this(e_dv_color_rgb) is expansive:: the decoding is done in software only...
+      //      dv_decode_full_frame(m_decoder, videobuf, ((m_reqFormat==GL_RGBA)?e_dv_color_rgb:e_dv_color_yuv), &decodedbuf, pitches);
+      dv_decode_full_frame(m_decoder, videobuf, e_dv_color_yuv, &decodedbuf, pitches);
+
       //     post("sampling %d", m_decoder->sampling);
 
       /* convert the colour-space to the one we want */
       // btw. shouldn't this be done in [pix_video] rather than here ?
-      if (m_reqFormat==GL_RGBA)m_image.image.fromRGB(decodedbuf);
-      else m_image.image.fromYVYU(decodedbuf);
+      //      if (m_reqFormat==GL_RGBA)m_image.image.fromRGB(decodedbuf); else
+      m_image.image.fromYVYU(decodedbuf);
     }
 
     m_image.newimage=1;
+    m_image.image.upsidedown=true;
+  
     m_frame_ready = false;
   }
   return &m_image;
@@ -174,8 +180,10 @@ int videoDV4L :: openDevice(int devnum, int format){
   if (devnum<0)devnum=0;
   sprintf(buf, "/dev/ieee1394/dv/host%d/%s/in", devnum, (m_norm==NTSC)?"NTSC":"PAL");
   if ((fd = open(buf, O_RDWR)) < 0)    {
-    perror(buf);
-    return -1;
+    if ((fd=open("/dev/dv1394", O_RDWR)) < 0)    {
+      perror(buf);
+      return -1;
+    }
   }
 
   if (ioctl(fd, DV1394_INIT, &init) < 0)    {
@@ -241,7 +249,7 @@ int videoDV4L :: startTransfer(int format)
     closeDevice();
     return(0);
   }  
-  m_decoder->quality=DV_QUALITY_BEST;
+  m_decoder->quality=DV_QUALITY_COLOR|DV_QUALITY_AC_1;
 
   m_continue_thread = true;
   pthread_create(&m_thread_id, 0, capturing, this);
