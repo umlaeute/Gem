@@ -1,10 +1,10 @@
-#N canvas 58 0 688 408 10;
+#N canvas 365 309 692 412 10;
 #X text 452 8 GEM object;
 #X obj 8 296 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 37 295 Inlets:;
-#X text 40 367 Outlets:;
-#X text 60 380 Outlet 1: gemlist;
+#X text 453 355 Outlets:;
+#X text 461 366 Outlet 1: gemlist;
 #X obj 8 256 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 255 Arguments:;
@@ -15,7 +15,7 @@
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -41,22 +41,11 @@
 0;
 #X obj 579 186 color 1 0 0 0.5;
 #X text 60 319 Inlet 1: float: turn alpha blending on/off;
-#X text 22 91 [alpha] turns on and off alpha blending. [alpha] automatically
-uses the glBlendFunc(GL_SRC_ALPHA \, GL_ONE_MINUS_SRC_ALPHA) function
-from OpenGL. If you want a different blending technique \, you will
-need to make your own external. The blending that [alpha] does is the
-stereotypical blending which you will usually want. In a nutshell \,
-any pixel which has an alpha component will be blended with the pixel
-that is in the frame buffer \, producing the usual colored glass effect.
-Beaware that the rendering order matters \, so you probably want to
-set the gemhead order number high so that the object is rendered after
-all of the non-alpha blended ones.;
 #X text 63 266 blending function (defaults: GL_ONE_MINUS_SRC_ALPHA)
 ;
-#X text 61 356 Inlet 2: float: blending function;
 #X text 50 12 Synopsis: [alpha];
 #X text 29 77 Description: enable alpha blending;
-#X obj 458 229 square;
+#X obj 458 305 square;
 #X obj 458 194 alpha;
 #X obj 458 108 color 0 1 0 0.5;
 #X text 61 308 Inlet 1: gemlist;
@@ -68,13 +57,37 @@ depth detection;
 #X obj 458 137 rotate 114 0 1 0;
 #X floatatom 481 174 1 0 1 0 - - -;
 #X obj 579 162 gemhead 50;
+#X msg 459 247 auto \$1;
+#X obj 466 227 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X msg 585 101 0 1 0 \$1;
+#X floatatom 585 81 5 0 0 0 - - -;
+#X obj 508 166 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X text 22 91 [alpha] turns on and off alpha blending. [alpha] automatically
+uses the glBlendFunc(GL_SRC_ALPHA \, GL_ONE_MINUS_SRC_ALPHA) function
+from OpenGL. If you want a different blending technique \, you will
+need to make your own external. The blending that [alpha] does is the
+stereotypical blending which you will usually want. In a nutshell \,
+any pixel which has an alpha component will be blended with the pixel
+that is in the frame buffer \, producing the usual colored glass effect.
+Be aware that the rendering order matters \, so you probably want to
+set the gemhead order number high so that the object is rendered after
+all of the non-alpha blended ones.;
+#X text 61 356 Inlet 2: float: blending function: 0=GL_ONE \, 1=GL_ONE_MINUS_SOURCE_ALPHA
+;
 #X connect 11 0 12 0;
 #X connect 12 0 11 0;
-#X connect 16 0 30 0;
-#X connect 24 0 23 0;
-#X connect 25 0 31 0;
-#X connect 28 0 31 1;
-#X connect 29 0 25 0;
-#X connect 31 0 24 0;
-#X connect 32 0 24 0;
-#X connect 33 0 16 0;
+#X connect 16 0 28 0;
+#X connect 22 0 21 0;
+#X connect 23 0 29 0;
+#X connect 26 0 29 1;
+#X connect 27 0 23 0;
+#X connect 29 0 22 0;
+#X connect 30 0 22 0;
+#X connect 31 0 16 0;
+#X connect 32 0 22 0;
+#X connect 33 0 32 0;
+#X connect 34 0 23 1;
+#X connect 35 0 34 0;
+#X connect 36 0 22 1;
