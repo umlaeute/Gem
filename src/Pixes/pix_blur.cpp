@@ -112,16 +112,13 @@ for (h=0; h<image.ysize; h++){
 void pix_blur :: processYUVImage(imageStruct &image)
 {
 
-#ifdef ALTIVEC
-processYUVAltivec(image);
-return;
-#else
+
        int h,w,hlength;
     long src;
 
     int rightGain,imageGain, Rgain,Igain,y1,y2;
 
-src = 0;
+
 
 if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
 
@@ -134,6 +131,11 @@ saved = new unsigned char [m_blurSize];
 
 }
 
+#ifdef ALTIVEC
+processYUVAltivec(image);
+return;
+#else
+src = 0;
 rightGain = m_blur;
 imageGain = 255 - m_blur;
    Rgain = 255/rightGain;
