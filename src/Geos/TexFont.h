@@ -8,7 +8,11 @@
 #ifndef __TEXFONT_H__
 #define __TEXFONT_H__
 
+#ifndef __APPLE__
 #include <GL/gl.h>
+#else
+#include <OpenGL/gl.h>
+#endif
 
 #define TXF_FORMAT_BYTE		0
 #define TXF_FORMAT_BITMAP	1

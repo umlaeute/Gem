@@ -17,7 +17,11 @@ LOG
 
 #include "Base/TextBase.h"
 
+#ifndef FTGL
 class GLTTOutlineFont;
+#else
+class FTGLOutlineFont;
+#endif
 class FTFace;
 
 /*-----------------------------------------------------------------
@@ -72,7 +76,11 @@ class GEM_EXTERN textoutline : public TextBase
     
 	   	//////////
     	// The font structure
+#ifndef FTGL
     	GLTTOutlineFont	*m_font;
+#else
+    	FTGLOutlineFont	*m_font;
+#endif
 
     	//////////
     	// The font structure

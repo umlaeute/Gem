@@ -17,9 +17,15 @@ LOG
 
 #include "Base/TextBase.h"
 
+#ifndef FTGL
 class GLTTBitmapFont;
 class GLTTPixmapFont;
 class FTFace;
+#else
+class FTGLBitmapFont;
+class FTGLPixmapFont;
+class FTFace;
+#endif
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -57,7 +63,7 @@ class GEM_EXTERN text2d : public TextBase
 
 		//////////
 		// Create the actual font from the face
-		int				makeFontFromFace();
+		int		makeFontFromFace();
 
 		//////////
 		// Set the font size
@@ -74,15 +80,18 @@ class GEM_EXTERN text2d : public TextBase
     
 	   	//////////
     	// The font structure
-
+#ifndef FTGL
     	GLTTBitmapFont	*m_bfont;
     	GLTTPixmapFont	*m_pfont;
-
+#else
+    	FTGLBitmapFont	*m_bfont;
+    	FTGLPixmapFont	*m_pfont;
+#endif
     	//////////
     	// The font structure
 
-	int m_antialias;
-    	FTFace 			*m_face;
+	int 		m_antialias;
+    	FTFace 		*m_face;
 
 	void text2d :: aliasMess(float size);
 	static void text2d :: aliasMessCallback(void *data, t_floatarg tog);

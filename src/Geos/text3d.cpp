@@ -17,7 +17,16 @@
 #include "text3d.h"
 
 #include "FTFace.h"
+#ifndef FTGL
 #include "GLTTFont.h"
+#else
+#include "FTGLFont.h"
+#endif
+
+#ifdef MACOSX
+#include <AGL/agl.h>
+extern bool HaveValidContext (void);
+#endif
 
 CPPEXTERN_NEW_WITH_GIMME(text3d)
 
@@ -33,6 +42,12 @@ text3d :: text3d(int argc, t_atom *argv)
   : TextBase(argc, argv), m_font(NULL), m_face(NULL)
 {
   m_fontSize = 20;
+#ifdef MACOSX
+  if (!HaveValidContext ()) {
+    post("GEM: geo: text3d - need window to load font");
+    return;
+  }
+#endif
   fontNameMess(DEFAULT_FONT);
 }
 
@@ -104,7 +119,11 @@ int text3d :: makeFontFromFace()
     }
 
   delete m_font;
+#ifndef FTGL
   m_font = new GLTTFont(m_face);
+#else
+  m_font = new FTGLFont(m_face);
+#endif
   m_font->setPrecision((double)m_precision);
   if( ! m_font->create(m_fontSize) )
     {

@@ -17,7 +17,11 @@ LOG
 
 #include "Base/TextBase.h"
 
+#ifndef FTGL
 class GLTTFont;
+#else
+class FTGLFont;
+#endif
 class FTFace;
 
 /*-----------------------------------------------------------------
@@ -56,7 +60,7 @@ class GEM_EXTERN text3d : public TextBase
 
 		//////////
 		// Create the actual font from the face
-		int				makeFontFromFace();
+		int		makeFontFromFace();
 
 		//////////
 		// Set the font size
@@ -72,8 +76,11 @@ class GEM_EXTERN text3d : public TextBase
     
 	   	//////////
     	// The font structure
+#ifndef FTGL
     	GLTTFont		*m_font;
-
+#else
+    	FTGLFont		*m_font;
+#endif
     	//////////
     	// The font structure
     	FTFace 			*m_face;

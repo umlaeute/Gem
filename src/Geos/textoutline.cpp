@@ -17,7 +17,16 @@
 #include "textoutline.h"
 
 #include "FTFace.h"
+#ifndef FTGL
 #include "GLTTOutlineFont.h"
+#else
+#include "FTGLOutlineFont.h"
+#endif
+
+#ifdef MACOSX
+#include <AGL/agl.h>
+extern bool HaveValidContext (void);
+#endif
 
 CPPEXTERN_NEW_WITH_GIMME(textoutline)
 
@@ -30,10 +39,16 @@ CPPEXTERN_NEW_WITH_GIMME(textoutline)
 //
 /////////////////////////////////////////////////////////
 textoutline :: textoutline(int argc, t_atom *argv)
-			 : TextBase(argc, argv), m_font(NULL), m_face(NULL)
+            : TextBase(argc, argv), m_font(NULL), m_face(NULL)
 {
-	m_fontSize = 20;
-	fontNameMess(DEFAULT_FONT);
+    m_fontSize = 20;
+#ifdef MACOSX
+  if (!HaveValidContext ()) {
+    post("GEM: geo: textoutline - need window to load font");
+    return;
+  }
+#endif
+    fontNameMess(DEFAULT_FONT);
 }
 
 /////////////////////////////////////////////////////////
@@ -104,7 +119,11 @@ int textoutline :: makeFontFromFace()
 	}
 
 	delete m_font;
+#ifndef FTGL
 	m_font = new GLTTOutlineFont(m_face);
+#else
+	m_font = new FTGLOutlineFont(m_face);
+#endif
 	m_font->setPrecision((double)m_precision);
 	if( ! m_font->create(m_fontSize) )
 	{
