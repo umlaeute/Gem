@@ -83,11 +83,14 @@ class GEM_EXTERN GemBase : public CPPExtern
     	
     	//////////
     	// If anything in the object has changed
-    	void	    	setModified();
+    	virtual void  	setModified();
 
     	//////////
     	// Don't mess with this unless you know what you are doing.
     	GemCache    	*m_cache;
+	//////////
+	// check whether this object has changed
+	bool             m_modified;
 
         //////////
         // The outlet

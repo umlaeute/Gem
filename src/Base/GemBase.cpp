@@ -85,6 +85,7 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
 
   if(state)postrender(state);
+  m_modified=false;
 }
 
 
@@ -94,7 +95,8 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
 /////////////////////////////////////////////////////////
 void GemBase :: setModified()
 {
-    if (m_cache) m_cache->dirty = 1;
+  if (m_cache) m_cache->dirty = 1;
+  m_modified=true;
 }
 
 /////////////////////////////////////////////////////////
