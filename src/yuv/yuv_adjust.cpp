@@ -81,15 +81,83 @@ void yuv_adjust :: processImage(imageStruct &image)
 void yuv_adjust :: processYUVImage(imageStruct &image)
 {
     int h,w;
-    long src;
+    long src, width;
 
-//post("yuv_adjust X:%i",image.xsize);
-//post("yuv_adjust Y:%i",image.ysize);
-//post("yuv_adjust: i am processing gray image");
 src = 0;
 
+#ifdef ALTIVEC
+width = image.xsize/8; //for altivec
+//width = image.xsize/2; //for scalar
 //format is U Y V Y
+/* start of working altivec function */
+    union
+    {
+        //unsigned int	i;
+        short	elements[8];
+        //vector signed char v;
+        vector	short v;
+    }transferBuffer;
+    
+    //vector unsigned char c;
+    vector signed short c, hi, lo;
+    vector unsigned char zero = vec_splat_u8(0);
+    vector unsigned char *inData = (vector unsigned char*) image.data;
 
+    //Write the pixel (pair) to the transfer buffer
+    //transferBuffer.i = (U << 24) | (Y << 16) | (V << 8 ) | Y;
+    transferBuffer.elements[0] = U;
+    transferBuffer.elements[1] = Y;
+    transferBuffer.elements[2] = V;
+    transferBuffer.elements[3] = Y;
+    transferBuffer.elements[4] = U;
+    transferBuffer.elements[5] = Y;
+    transferBuffer.elements[6] = V;
+    transferBuffer.elements[7] = Y;
+
+    //Load it into the vector unit
+    c = transferBuffer.v;
+
+    //Splat the pixel (pair) across the entire vector
+    //c =  vec_splat( c, 0 );
+    //c = (vector unsigned char) vec_splat( (vector unsigned int) c, 0 );
+    //c = vec_mergeh( vec_splat_u8(0), (vector unsigned char) c );
+
+    //Do saturated addition between c and the pixel buffer
+    //for (h=0; h<image.ysize; h++){
+    //    for(w=0; w<image.xsize/8; w++)
+    //    {
+    //        inData[0] = vec_adds( inData[0], c );
+    //        inData++;
+    //    }
+   // }
+   
+   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+	vec_dst( inData, prefetchSize, 0 );
+        
+    for ( h=0; h<image.ysize; h++){
+        for (w=0; w<width; w++)
+        {
+        
+	vec_dst( inData, prefetchSize, 0 );
+        
+            //expand the UInt8's to short's
+            hi = (vector signed short) vec_mergeh( zero, inData[0] );
+            lo = (vector signed short) vec_mergel( zero, inData[0] );
+            
+            //add the constant to it
+            hi = vec_add( hi, c );
+            lo = vec_add( lo, c );
+            
+            //pack the result back down, with saturation
+            inData[0] = vec_packsu( hi, lo );
+            
+            inData++;
+        }
+        vec_dss( 0 );
+}  /*end of working altivec function */
+
+#else 
+/* start of scalar */
 for (h=0; h<image.ysize; h++){
     for(w=0; w<image.xsize/2; w++){
         image.data[src] = clamp( image.data[src] + U );
@@ -99,10 +167,8 @@ for (h=0; h<image.ysize; h++){
 
         src+=4;
     }
-}
-//post("h %i",h);
-//post("w %i",w);
-//post("total %i",src);
+} 
+#endif
 }
 
 /////////////////////////////////////////////////////////

@@ -9,8 +9,8 @@
 
 #include "yuv_gain.h"
 #define clamp(x) ((x < 0) ? 0 : (x > 255) ? 255 : x)
-CPPEXTERN_NEW(yuv_gain)
 
+CPPEXTERN_NEW(yuv_gain)
 /////////////////////////////////////////////////////////
 //
 // yuv_gain
@@ -21,6 +21,7 @@ CPPEXTERN_NEW(yuv_gain)
 /////////////////////////////////////////////////////////
 yuv_gain :: yuv_gain()
 {
+m_processOnOff=0;
 inletGain = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Gainvalue"));
 G = 1;
 }
@@ -33,12 +34,13 @@ yuv_gain :: ~yuv_gain()
 {
 
 }
-
+/*
 void yuv_gain :: gainMess(float gain)
 {
     G = gain;
     setModified();
 }
+*/
 
 /////////////////////////////////////////////////////////
 // processImage
@@ -49,6 +51,7 @@ void yuv_gain :: processImage(imageStruct &image)
 
 }
 
+
 /////////////////////////////////////////////////////////
 // do the YUV processing here
 //
@@ -57,42 +60,157 @@ void yuv_gain :: processYUVImage(imageStruct &image)
 {
     int h,w,width;
     long src;
-    float y1,y2,u,v;
+    int y1,y2,u,v;
     
+    src = 0;
+    #ifdef ALTIVEC
+    /*altivec code starts */
+    width = image.xsize/8;
+    union
+    {
+        //unsigned int	i;
+        short	elements[8];
+        //vector signed char v;
+        vector	signed short v;
+    }shortBuffer;
+    
+        union
+    {
+        //unsigned int	i;
+        unsigned long	elements[8];
+        //vector signed char v;
+        vector	unsigned long v;
+    }bitBuffer;
+    
+        union
+    {
+        //unsigned int	i;
+        unsigned char	elements[16];
+        //vector signed char v;
+        vector	unsigned char v;
+    }charBuffer;
+    
+    //vector unsigned char c;
+    vector signed short d, hiImage, loImage, YImage, UVImage, UVTemp, YTemp;
+    vector unsigned char zero = vec_splat_u8(0);
+    vector signed short szero = vec_splat_s16(0);
+    //vector unsigned char c,gain,one;
+    vector signed int UVhi,UVlo,Yhi,Ylo;
+    vector signed short c,gain,one;
+    vector unsigned long bitshift;
+    vector unsigned char *inData = (vector unsigned char*) image.data;
+
+    
+    shortBuffer.elements[0] = 128;
+    shortBuffer.elements[1] = 0;
+    shortBuffer.elements[2] = 128;
+    shortBuffer.elements[3] = 0;
+    shortBuffer.elements[4] = 128;
+    shortBuffer.elements[5] = 0;
+    shortBuffer.elements[6] = 128;
+    shortBuffer.elements[7] = 0;
+    
+        c = shortBuffer.v;
+    
+    shortBuffer.elements[0] = G;
+    gain = shortBuffer.v; 
+    gain =  vec_splat(gain, 0 );  
+
+
+    bitBuffer.elements[0] = 8;
+
+    //Load it into the vector unit
+    bitshift = bitBuffer.v;
+    bitshift = vec_splat(bitshift,0); 
+     
+    shortBuffer.elements[0] = 128;
+   
+    //Load it into the vector unit
+    d = shortBuffer.v;
+    d = (vector signed short)vec_splat((vector signed short)d,0);
+
+   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+	vec_dst( inData, prefetchSize, 0 );
+        
+    for ( h=0; h<image.ysize; h++){
+        for (w=0; w<width; w++)
+        {
+        
+	vec_dst( inData, prefetchSize, 0 );
+        
+            //interleaved U Y V Y chars
+            
+            //expand the UInt8's to short's
+            hiImage = (vector signed short) vec_mergeh( zero, inData[0] );
+            loImage = (vector signed short) vec_mergel( zero, inData[0] );
+            
+            //vec_subs -128
+            hiImage = (vector signed short) vec_sub( hiImage, c );
+            loImage = (vector signed short) vec_sub( loImage, c );   
+            
+            //now vec_mule the UV into two vector ints
+            UVhi = vec_mule(gain,hiImage);
+            UVlo = vec_mule(gain,loImage);
+            
+            //now vec_mulo the Y into two vector ints
+            Yhi = vec_mulo(gain,hiImage);
+            Ylo = vec_mulo(gain,loImage);
+            
+            //this is where to do the bitshift/divide due to the resolution
+            UVhi = vec_sra(UVhi,bitshift);
+            UVlo = vec_sra(UVlo,bitshift);
+            Yhi = vec_sra(Yhi,bitshift);
+            Ylo = vec_sra(Ylo,bitshift);
+            
+            //pack the UV into a single short vector
+            UVImage = vec_packs(UVhi,UVlo);
+            
+            //pack the Y into a single short vector
+            YImage = vec_packs(Yhi,Ylo);
+                                            
+            
+            //vec_adds +128 to U V U V short
+            UVImage = vec_adds(UVImage,d);
+            
+            //vec_mergel + vec_mergeh Y and UV
+            hiImage =  vec_mergeh(UVImage,YImage);
+            loImage =  vec_mergel(UVImage,YImage);
+            
+            //pack back to 16 chars
+            inData[0] = vec_packsu(hiImage, loImage);
+            
+        
+            inData++;
+        }
+        vec_dss( 0 );
+}  /* end of working altivec function */
+   
+
+    #else
+    //new method: try casting U and V to short and -128 then do gain and add 128 and clamp??
+
+    /*   scalar */
     width = image.xsize/2;
     for (h=0; h<image.ysize; h++){
         for(w=0; w<width; w++){
-    
-        //U
-        if (image.data[src] > 128) {
-            u = (image.data[src] - ((image.data[src] - 128) * (1 - G)));
-            }
-        if (image.data[src] < 128) {
-           u = ((128 - image.data[src]) * (1 - G)) + image.data[src];
-           }
+        
+      u = (((image.data[src] - 128) * G)>>8)+128;
         image.data[src] = (unsigned char)clamp(u);
-
-        //Y1
-        y1 = image.data[src+1] * G;
+        
+        y1 = (image.data[src+1] * G)>>8;
         image.data[src+1] = (unsigned char)clamp(y1);
-
-       //V
-       //v = image.data[src+2] * G;
-       if (image.data[src+2] > 128) {
-            v = ((float)image.data[src+2] - ((image.data[src+2] - 128) * (1 - G)));
-            }
-       if (image.data[src+2] < 128) {
-            v = (((128 - image.data[src+2]) * (1 - G)) + image.data[src+2]);
-            }
+        
+       v = (((image.data[src+2] - 128) * G)>>8)+128;
         image.data[src+2] = (unsigned char)clamp(v);
 
-        //Y2
-        y2 = image.data[src+3] * G;
-       image.data[src+3] = (unsigned char)clamp(y2);
+        y2 = (image.data[src+3] * G)>>8;
+        image.data[src+3] = (unsigned char)clamp(y2);
+       
         src+=4;
     
         }
-    }
+    } /* end of scalar*/
+    #endif
 }
 
 /////////////////////////////////////////////////////////
@@ -107,6 +225,6 @@ class_addmethod(classPtr, (t_method)&yuv_gain::gainMessCallback,
 
 void yuv_gain :: gainMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->gainMess((float)size);
+    //GetMyClass(data)->gainMess((float)size);
+    GetMyClass(data)->G=((int)size);
 }
-

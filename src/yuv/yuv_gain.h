@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef INCLUDE_YUV_gain_H_ 
-#define INCLUDE_YUV_gain_H_ 
+#ifndef INCLUDE_YUV_GAIN_H_ 
+#define INCLUDE_YUV_GAIN_H_ 
 
 #include "Base/GemPixObj.h"
 
@@ -54,7 +54,7 @@ CPPEXTERN_HEADER(yuv_gain, GemPixObj)
     	virtual void 	processYUVImage(imageStruct &image);
         
         void	    	gainMess(float gain);
-        float	G;
+        int	G;
         t_inlet         *inletGain;
         
     private:
