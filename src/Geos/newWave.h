@@ -13,18 +13,15 @@
 #ifndef INCLUDE_NEWWAVE_H_
 #define INCLUDE_NEWWAVE_H_
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
-#include <windows.h>
+#include "Base/GemShape.h"
+#include "Base/GemState.h"
+#include "Base/GemFuncUtil.h"
+
+#ifdef __ppc__
+#undef sqrt
+#define sqrt fast_sqrtf
 #endif
 
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif // __APPLE__
-
-#include "Base/GemShape.h"
 #define MAXGRID 600
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -117,6 +114,7 @@ class GEM_EXTERN newWave : public GemShape
   float		xsize, xsize0, ysize, ysize0;
   float		K1, D1, K2, D2, K3, D3;
 
+  int alreadyInit;
   int m_textureMode; // how to texture...
 
   
@@ -127,7 +125,7 @@ class GEM_EXTERN newWave : public GemShape
       vertNorms[MAXGRID][MAXGRID][3],
       faceNorms[2][MAXGRID][MAXGRID][3],
       faceNormSegs[2][2][MAXGRID][MAXGRID][3];
-  int alreadyInit;
+  
   float texCoords[MAXGRID][MAXGRID][2];
 
   bool m_upsidedown;

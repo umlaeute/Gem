@@ -854,7 +854,6 @@ void PAGravitate::Execute(ParticleGroup *group)
 				{
 					// Compute force exerted between the two bodies
 					pVector acc(tohim * (magdt / (sqrtf(tohimlenSqr) * (tohimlenSqr + epsilon))));
-					
 					m.vel += acc;
 					mj.vel -= acc;
 				}

@@ -14,6 +14,14 @@ LOG
 #define INCLUDE_PIX_KALEIDOSCOPE_H_
 
 #include "Base/GemPixObj.h"
+#include <math.h>
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#endif
+
 #define PETE_KALEIDOSCOPE_HALFLINE_BIT		(1<<0)
 
 typedef struct SPete_Kaleidoscope_Line {

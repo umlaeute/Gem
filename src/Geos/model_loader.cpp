@@ -11,17 +11,9 @@
   
 */
 
-
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
 #include "model_loader.h"
 
-
 #define T(x) (model->triangles[(x)])
-
 
 /* _GLMnode: general purpose node */
 typedef struct _GLMnode {
@@ -88,7 +80,7 @@ _glmNormalize(GLfloat* v)
     GLfloat l;
     
     assert(v);
-    
+
     l = (GLfloat)sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
     v[0] /= l;
     v[1] /= l;

@@ -8,10 +8,13 @@
 #ifndef particle_vector_h
 #define particle_vector_h
 
-#ifndef __APPLE__
 #include <math.h>
-#else
-#include </usr/include/math.h>
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#define sqrtf fast_sqrtf
 #endif
 
 #ifndef M_PI

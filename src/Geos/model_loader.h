@@ -27,7 +27,19 @@ extern "C" {
 #else
 #include <GL/gl.h>
 #endif
-	
+
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#endif
+
 #ifndef M_PI
 #define M_PI 3.14159265f
 #endif

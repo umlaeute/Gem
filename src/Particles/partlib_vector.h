@@ -18,6 +18,17 @@
 #include "macosx_math.h"
 #endif
 
+#ifdef __ppc__
+#include "ppc_intrinsics.h"
+#undef sqrtf
+#define sqrtf fast_sqrtf
+inline float fast_sqrtf(float x)
+{
+	register float est = (float)__frsqrte(x);
+	return x * 0.5f * est * __fnmsubs(est * est, x, 3.0f);
+}
+#endif
+
 #ifdef WIN32
 #define drand48() (((float) rand())/((float) RAND_MAX))
 #define srand48(x) srand(x)

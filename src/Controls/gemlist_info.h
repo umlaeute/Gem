@@ -15,6 +15,15 @@
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
+
+#include "math.h"
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#endif
+
 /*
  CLASS
 	gemlist_info

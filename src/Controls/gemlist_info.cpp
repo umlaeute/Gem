@@ -13,7 +13,6 @@
 ////////////////////////////////////////////////////////
 
 #include "gemlist_info.h"
-#include "math.h"
 
 #define rad2deg -57.2957795132
 
@@ -64,9 +63,7 @@ void gemlist_info :: render(GemState *state) {
 	// normalisation
 //	for (i=0; i<16; i++) mi[i] /= mi[15];
 	// not usefull because I never saw mi[15]!=1; if this change, un-comment this normalisation procedure
-
 	ScaleX = sqrt (mi[0] * mi[0] + mi[4] * mi[4] + mi[8] * mi[8]);
-
 	mi[0] /= ScaleX; // Normalise X
 	mi[4] /= ScaleX;
 	mi[8] /= ScaleX;

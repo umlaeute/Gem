@@ -12,12 +12,6 @@
  */
 
 #include "rubber.h"
-#include "Base/GemState.h"
-#include "Base/GemMan.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
 
 #define GRID_SIZE_X  32
 #define GRID_SIZE_Y  32
@@ -297,7 +291,6 @@ void rubber :: rubber_dynamics()
     d[2] = mass[i].x[2] - mass[j].x[2];
 
     l = sqrt(d[0]*d[0] + d[1]*d[1] + d[2]*d[2]);
-
     if (l != 0.0)
     {
       d[0] /= l;

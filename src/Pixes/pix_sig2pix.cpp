@@ -16,15 +16,6 @@
 
 #include "pix_sig2pix.h"
 
-#ifdef unix
-#include <unistd.h>
-#include <strings.h>
-#endif
-
-#include <math.h>
-
-#include "Base/GemCache.h"
-
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////

@@ -14,7 +14,6 @@
 
 #include "pix_kaleidoscope.h"
 
-#include <math.h>
 static double deg2rad=atan2(1,1)/45.0;
 
 CPPEXTERN_NEW(pix_kaleidoscope)
@@ -1528,7 +1527,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable() {
 
       float Angle=atan2(YPos,XPos);
       if (Angle<0.0f) {
-	Angle+=Pete_TwoPi;
+	    Angle+=Pete_TwoPi;
       }
       float Dist=sqrt((XPos*XPos)+(YPos*YPos));
 
@@ -1911,11 +1910,7 @@ void pix_kaleidoscope :: Pete_SimpleMirror_Render() {
   const float NormalX=cos(AngleRadians);
   const float NormalY=sin(AngleRadians);
 
-  const float MaxDist=
-    sqrt(
-	 (HalfWidth*HalfWidth)+
-	 (HalfHeight*HalfHeight));
-
+  const float MaxDist = sqrt((HalfWidth*HalfWidth)+(HalfHeight*HalfHeight));
   const float PlaneD=MaxDist*m_PlaneD;
 
   const bool bSimpleMirrorEverything=(m_DoSimpleMirrorAll>0.0f);
