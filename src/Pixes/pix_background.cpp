@@ -264,8 +264,15 @@ void pix_background :: processYUVMMX(imageStruct &image)
 
   const __m64 tresh=_mm_set_pi8(m_Urange, m_Yrange, m_Vrange, m_Yrange,
 			  m_Urange, m_Yrange, m_Vrange, m_Yrange);
-  const __m64 offset=_mm_set_pi8(1, 1, 1, 0, 1, 1, 1, 0);
-  const __m64 black =_mm_set_pi8(0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80);
+  const __m64 offset=_mm_set_pi8(1, 1, 1, 1, 1, 1, 1, 1);
+  const __m64 black =_mm_set_pi8((unsigned char)0x00,
+				 (unsigned char)0x80,
+				 (unsigned char)0x00,
+				 (unsigned char)0x80,
+				 (unsigned char)0x00,
+				 (unsigned char)0x80,
+				 (unsigned char)0x00,
+				 (unsigned char)0x80);
 
   __m64 newpix, oldpix, m1;
 

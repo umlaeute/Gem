@@ -70,7 +70,14 @@ void pix_2grey :: processYUVImage(imageStruct &image)
 void pix_2grey :: processRGBAMMX(imageStruct &image){
   __m64*data      =(__m64*)image.data;
 
-  register __m64 alpha_mask=_mm_setr_pi8(0, 0, 0, 0xFF, 0, 0, 0, 0xFF);
+  register __m64 alpha_mask=_mm_setr_pi8((unsigned char)0x00,
+					 (unsigned char)0x00,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF,
+					 (unsigned char)0x00,
+					 (unsigned char)0x00,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF);
   register __m64 rgb2Y     =_mm_setr_pi16(77, 150, 29, 0);
   register __m64 pixel, y1, y2, y1_2;
   register int pixsize = (image.ysize * image.xsize)>>1;
@@ -116,8 +123,22 @@ void pix_2grey :: processRGBAMMX(imageStruct &image){
 void pix_2grey :: processYUVMMX(imageStruct &image){
  register int pixsize = (image.ysize * image.xsize)>>2;
 
- register __m64 mask_64   = _mm_setr_pi8(0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF);
- register __m64 offset_64 = _mm_setr_pi8(0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00);
+ register __m64 mask_64   = _mm_setr_pi8((unsigned char)0x00,
+					 (unsigned char)0xFF,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF);
+ register __m64 offset_64 = _mm_setr_pi8((unsigned char)0x80,
+					 (unsigned char)0x00,
+					 (unsigned char)0x80,
+					 (unsigned char)0x00,
+					 (unsigned char)0x80,
+					 (unsigned char)0x00,
+					 (unsigned char)0x80,
+					 (unsigned char)0x00);
  __m64*data_p= (__m64*)image.data;
 
  register __m64 pixel;

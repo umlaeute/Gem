@@ -155,11 +155,38 @@ void pix_multiply :: processYUV_MMX(imageStruct &image, imageStruct &right)
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
 
   __m64 l0, r0, l1, r1;
-  __m64 mask= _mm_setr_pi8(0xFF, 0x00, 0xFF, 0x00,
-			   0xFF, 0x00, 0xFF, 0x00);
-  __m64 yuvclamp0 = _mm_setr_pi8(0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10);
-  __m64 yuvclamp1 = _mm_setr_pi8(0x00, 0x24, 0x00, 0x24, 0x00, 0x24, 0x00, 0x24);
-  __m64 yuvclamp2 = _mm_setr_pi8(0x00, 0x14, 0x00, 0x14, 0x00, 0x14, 0x00, 0x14);
+  __m64 mask= _mm_setr_pi8((unsigned char)0xFF,
+			   (unsigned char)0x00,
+			   (unsigned char)0xFF,
+			   (unsigned char)0x00,
+			   (unsigned char)0xFF,
+			   (unsigned char)0x00,
+			   (unsigned char)0xFF,
+			   (unsigned char)0x00);
+  __m64 yuvclamp0 = _mm_setr_pi8((unsigned char)0x00,
+				 (unsigned char)0x10,
+				 (unsigned char)0x00,
+				 (unsigned char)0x10,
+				 (unsigned char)0x00,
+				 (unsigned char)0x10,
+				 (unsigned char)0x00,
+				 (unsigned char)0x10);
+  __m64 yuvclamp1 = _mm_setr_pi8((unsigned char)0x00,
+				 (unsigned char)0x24,
+				 (unsigned char)0x00,
+				 (unsigned char)0x24,
+				 (unsigned char)0x00,
+				 (unsigned char)0x24,
+				 (unsigned char)0x00,
+				 (unsigned char)0x24);
+  __m64 yuvclamp2 = _mm_setr_pi8((unsigned char)0x00,
+				 (unsigned char)0x14,
+				 (unsigned char)0x00,
+				 (unsigned char)0x14,
+				 (unsigned char)0x00,
+				 (unsigned char)0x14,
+				 (unsigned char)0x00,
+				 (unsigned char)0x14);
 
   __m64 nil = _mm_setzero_si64();
   while(datasize--)    {

@@ -121,10 +121,19 @@ void pix_composite :: processRGBA_MMX(imageStruct &image, imageStruct &right)
   __m64*src1 = (__m64*)right.data;
   __m64*src2 = (__m64*)image.data;
 
-  const __m64 maskA= _mm_setr_pi8(0x00, 0x00, 0x00, 0xFF,
-				  0x00, 0x00, 0x00, 0xFF);
+  const __m64 maskA= _mm_setr_pi8((unsigned char)0x00,
+				  (unsigned char)0x00,
+				  (unsigned char)0x00,
+				  (unsigned char)0xFF,
+				  (unsigned char)0x00,
+				  (unsigned char)0x00,
+				  (unsigned char)0x00,
+				  (unsigned char)0xFF);
   const __m64 nil= _mm_setzero_si64();
-  const __m64 one= _mm_set_pi16  (0xFF, 0xFF, 0xFF, 0xFF);
+  const __m64 one= _mm_set_pi16  ((short)0xFF,
+				  (short)0xFF,
+				  (short)0xFF,
+				  (short)0xFF);
 
   __m64 r0, r1, l0, l1, a, b, a0;
   

@@ -144,7 +144,7 @@ void pix_compare :: processGray_MMX(imageStruct &image, imageStruct &right){
   __m64*rightPix = (__m64*)right.data;
 
   __m64 l, r, b;
-  __m64 zeros = _mm_set1_pi8(0x00);
+  __m64 zeros = _mm_set1_pi8((unsigned char)0x00);
   //format is U Y V Y
   if (m_direction) {
     while(datasize--){
@@ -182,8 +182,15 @@ void pix_compare :: processYUV_MMX(imageStruct &image, imageStruct &right)
   __m64*rightPix = (__m64*)right.data;
 
   __m64 l, r, b;
-  __m64 mask = _mm_setr_pi8(0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF);
-  __m64 zeros = _mm_set1_pi8(0x00);
+  __m64 mask = _mm_setr_pi8((unsigned char)0x00,
+			    (unsigned char)0xFF,
+			    (unsigned char)0x00,
+			    (unsigned char)0xFF,
+			    (unsigned char)0x00,
+			    (unsigned char)0xFF,
+			    (unsigned char)0x00,
+			    (unsigned char)0xFF);
+  __m64 zeros = _mm_set1_pi8((unsigned char)0x00);
   //format is U Y V Y
   if (m_direction) {
     while(datasize--){
