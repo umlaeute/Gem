@@ -6,7 +6,7 @@ Load an digital video (like AVI, Mpeg, Quicktime) into a pix block (Linux)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+Copyright (c) 2001-2003 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -20,14 +20,18 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifdef HAVE_LIBQUICKTIME
 #include <quicktime/quicktime.h>
 #include <quicktime/colormodels.h>
-#endif
+#endif // QT
 #ifdef HAVE_LIBMPEG3
 #include <libmpeg3.h>
-#else
+#else 
 #ifdef HAVE_LIBMPEG
 #include <mpeg.h>
+#endif // MPEG
+#endif // MPEG3
+#ifdef HAVE_LIBAVIPLAY
+#include <avifile/avifile.h>
 #endif
-#endif
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -84,19 +88,17 @@ class GEM_EXTERN pix_filmLinux : public pix_film
   ImageDesc     m_streamVid;
 #endif
 #endif
+#ifdef HAVE_LIBAVIPLAY
+  IAviReadFile *m_avifile;
+  IAviReadStream  *m_avistream;
+  CImage *m_aviimage;
+#endif
 
   //-----------------------------------
   // GROUP:	Texturing
   //-----------------------------------
 
  protected:
-	
-  //////////
-  // static member functions
-  static void openMessCallback   (void *data, t_symbol *filename);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void autoCallback(void *data, t_floatarg state);
-
 };
 
 #endif	// for header file

@@ -198,6 +198,11 @@ void pix_film :: changeImage(int imgNum, int trackNum)
     error("GEM: pix_film: selection number must be > 0");
     imgNum=0;
   }
+  if (trackNum < 0){
+    error("GEM: pix_film: track number must be > 0");
+    trackNum=0;
+  }
+
 
   switch (m_haveMovie){
   case GEM_MOVIE_MPG:
@@ -209,7 +214,6 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 #endif
 #endif
   case GEM_MOVIE_MOV:
-    if (trackNum < 0)trackNum=0;
     if (trackNum > m_numTracks-1) error("GEM: pix_film: track %d number too high (max %d) ", trackNum, m_numTracks-1);
     else m_track = trackNum;
   case GEM_MOVIE_AVI:
@@ -229,8 +233,14 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 //
 /////////////////////////////////////////////////////////
 void pix_film :: obj_setupCallback(t_class *classPtr)
-{}
-
+{
+  class_addmethod(classPtr, (t_method)&pix_film::openMessCallback,
+		  gensym("open"), A_SYMBOL, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_film::changeImageCallback,
+		  gensym("img_num"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_film::autoCallback,
+		  gensym("auto"), A_DEFFLOAT, A_NULL);
+}
 void pix_film :: openMessCallback(void *data, t_symbol *filename)
 {
     GetMyClass(data)->openMess(filename);

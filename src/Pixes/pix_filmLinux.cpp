@@ -31,6 +31,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmLinux, t_symbol *, A_DEFSYM)
 pix_filmLinux :: pix_filmLinux(t_symbol *filename) :
   pix_film(filename)
 {
+  static bool first_time=true;
+  if (first_time) {
 #ifdef HAVE_LIBQUICKTIME
   post("pix_film:: quicktime4linux support");
 #endif
@@ -40,6 +42,18 @@ pix_filmLinux :: pix_filmLinux(t_symbol *filename) :
 #ifdef HAVE_LIBMPEG
   post("pix_film:: libmpeg support");
 #endif 
+#endif
+#ifdef HAVE_LIBAVIPLAY
+  post("pix_film:: libaviplay support");
+#endif
+  first_time = false;
+  }
+
+
+#ifdef HAVE_LIBAVIPLAY
+  m_avifile=0;
+  m_avistream=0;
+  m_aviimage=0;
 #endif
   if (filename->s_name[0]) openMess(filename);
 }
@@ -63,7 +77,6 @@ void pix_filmLinux :: closeMess(void)
 #ifdef HAVE_LIBQUICKTIME
   case GEM_MOVIE_MOV:
     quicktime_close(quick_file);
-    m_haveMovie = GEM_MOVIE_NONE;
     break;
 #endif
   case GEM_MOVIE_MPG:
@@ -74,12 +87,17 @@ void pix_filmLinux :: closeMess(void)
     if (m_streamfile)fclose(m_streamfile);
 #endif
 #endif
-    m_haveMovie = GEM_MOVIE_NONE;
     break;
+#ifdef HAVE_LIBAVIPLAY
+  case GEM_MOVIE_AVI:
+    if (m_avistream)(*m_avistream).StopStreaming();
+    break;
+#endif
   case GEM_MOVIE_NONE:
   default:
     break;
   }
+  m_haveMovie = GEM_MOVIE_NONE;
 }
 /////////////////////////////////////////////////////////
 // really open the file ! (OS dependent)
@@ -88,9 +106,11 @@ void pix_filmLinux :: closeMess(void)
 void pix_filmLinux :: realOpen(char *filename)
 {
   if (!(m_streamfile = fopen (filename, "rb"))) {
+#ifndef HAVE_LIBAVIPLAY
     post("GEM: pix_film:: unable to open file %s", filename);
     return;
-  } 
+#endif
+  }
 #ifdef HAVE_LIBQUICKTIME
   else if (quicktime_check_sig(filename)){ /* ok, this is quicktime */
     fclose(m_streamfile);
@@ -173,12 +193,44 @@ void pix_filmLinux :: realOpen(char *filename)
   }
 #endif
 #endif /* MPEG */
-
   else {
+#ifdef HAVE_LIBAVIPLAY
+    // how do we close the avifile ??? automagically ?
+    if (!(m_avifile = CreateIAviReadFile(filename)))goto unsupported;
+    while(!(*m_avifile).IsOpened());
+    if (!(*m_avifile).IsValid())goto unsupported;
+    m_numTracks = (*m_avifile).VideoStreamCount();
+    if (m_numTracks<1)return;
+    if (m_track>=m_numTracks)m_track = 0;   
+    try {
+      m_avistream=(*m_avifile).GetStream(m_track, avm::IStream::StreamType(1));
+    } catch (const char* string) {
+      m_avistream = 0;
+    }
+    if (!m_avistream)goto unsupported;
+    if ((*m_avistream).StartStreaming()==-1)goto unsupported;
+
+    m_numFrames = (*m_avistream).GetLength();
+    m_haveMovie = GEM_MOVIE_AVI;
+    m_reqFrame = 0;
+    m_curFrame = -1;
+    if (1){
+      StreamInfo *m_info = (*m_avistream).GetStreamInfo();
+      m_xsize = (*m_info).GetVideoWidth();
+      m_ysize = (*m_info).GetVideoHeight();
+      m_csize = (*m_avistream).GetFrameSize()/(m_xsize*m_ysize);
+      int format = (*m_avistream).GetVideoFormat();
+      post("opened format = %x", format);
+      m_format= 0;
+    }
+    if (!(m_xsize*m_ysize*m_csize))goto unsupported;
+    return;
+#endif
+    
   unsupported:
+    if(m_streamfile)fclose(m_streamfile);
     error("GEM: pix_film: '%s' does not appear to be a supported movie", filename);
     m_haveMovie = GEM_MOVIE_NONE;
-    return;
   }
 }
 
@@ -235,6 +287,43 @@ void pix_filmLinux :: getFrame()
 #endif
 #endif /* MPEG */
     break;
+  case GEM_MOVIE_AVI:
+#ifdef HAVE_LIBAVIPLAY
+    if (!m_avistream)break;
+    (*m_avistream).Seek(m_reqFrame);
+    if(m_aviimage)(*m_aviimage).Release();
+    m_aviimage = (*m_avistream).GetFrame(true);
+    if (m_aviimage){
+      int format = (*m_aviimage).Format();
+      switch (format){
+      case IMG_FMT_RGB24: format = GL_RGB; break;
+      case IMG_FMT_RGB32: format = GL_RGBA; break;
+      case IMG_FMT_BGR24: format = GL_BGR; break;
+      case IMG_FMT_BGR32: format = GL_BGRA; break;
+      case IMG_FMT_Y422:
+      case IMG_FMT_UYVY:
+      case IMG_FMT_CPLA:
+      case IMG_FMT_UYNV:
+      case 0x32315659: // this is NOT YUV422...
+	format = GL_YCBCR_422_GEM;
+	break;
+      default:
+	post("format conversion...");
+	CImage buf(m_frame, m_xsize, m_ysize);
+	post("...");
+	buf.Convert(m_aviimage);
+	post("0x%X to format 0x%X", (*m_aviimage).Format(), buf.Format());
+	format = GL_RGB;
+	//post("unknown format 0x%X", format);
+	//format = 0;
+	m_aviimage = &buf;
+      }
+      m_format = format;
+      m_pixBlock.image.format= m_format;
+      m_frame = (*m_aviimage).Data();
+    }
+#endif
+    break;
   case GEM_MOVIE_NONE:
   default:
     break;
@@ -250,27 +339,6 @@ void pix_filmLinux :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)_classpix_filmLinux, gensym("pix_film"), A_DEFSYM, A_NULL);
   pix_film::real_obj_setupCallback(classPtr);
-
-  class_addmethod(classPtr, (t_method)&pix_filmLinux::openMessCallback,
-		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmLinux::changeImageCallback,
-		  gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmLinux::autoCallback,
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
 }
 
-void pix_filmLinux :: openMessCallback(void *data, t_symbol *filename)
-{
-  GetMyClass(data)->openMess(filename);
-}
-
-void pix_filmLinux :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-    GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
-}
-
-void pix_filmLinux :: autoCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->m_auto=!(!(int)state);
-}
 #endif // __linux__

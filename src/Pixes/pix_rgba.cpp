@@ -68,7 +68,6 @@ void pix_rgba :: processImage(imageStruct &image)
   case GL_RGBA: /* nothing to do */
     break;
   case GL_RGB:  
-
     while(count--){
       new_pix[chRed]  = old_pix[0];
       new_pix[chGreen]= old_pix[1];
@@ -78,7 +77,7 @@ void pix_rgba :: processImage(imageStruct &image)
       old_pix+=3;
     }
     break;
-  case GL_BGR_EXT:
+  case GL_BGR: // == GL_BGR_EXT
     while(count--){
       new_pix[chRed]  =old_pix[2];
       new_pix[chGreen]=old_pix[1];
@@ -88,7 +87,7 @@ void pix_rgba :: processImage(imageStruct &image)
       new_pix+=4;
     }
     break;
-  case GL_BGRA_EXT:
+  case GL_BGRA: // == GL_BGRA_EXT
     while(count--){
       new_pix[chRed]  =old_pix[2];
       new_pix[chGreen]=old_pix[1];
@@ -168,7 +167,6 @@ void pix_rgba :: processImage(imageStruct &image)
 	 "please contact the authors of this software", format);
     return;
   }
-
 
   image.data   = m_data;
   image.notowned = 1;
