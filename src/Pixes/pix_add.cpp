@@ -43,25 +43,6 @@ pix_add :: ~pix_add()
 /////////////////////////////////////////////////////////
 void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-#ifdef __VEC__
-processRGBA_Altivec(image,right);
-return;
-#else
-#if 0
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
-    while(datasize--) {
-    	leftPix[chRed] =
-			CLAMP_HIGH((int)leftPix[chRed] + (int)rightPix[chRed]);
-    	leftPix[chGreen] =
-			CLAMP_HIGH((int)leftPix[chGreen] + (int)rightPix[chGreen]);
-    	leftPix[chBlue] =
-			CLAMP_HIGH((int)leftPix[chBlue] + (int)rightPix[chBlue]);
-        leftPix += 4;
-		rightPix += 4;
-    }
-#else
   register int datasize = (image.xsize * image.ysize)>>3;
   register unsigned char *leftPix = image.data;
   register unsigned char *rightPix = right.data;
@@ -76,78 +57,8 @@ return;
     ADD8_NOALPHA(leftPix,rightPix);
     leftPix+=8;rightPix+=8;
   }
-#endif
-#endif
 }
 
-
-void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
-{
- #ifdef __VEC__
- int h,w,width;
-   width = image.xsize/4;
-
-
-    vector unsigned char *inData = (vector unsigned char*) image.data;
-    vector unsigned char *rightData = (vector unsigned char*) right.data;
-   
-        #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
-        #endif
-    for ( h=0; h<image.ysize; h++){
-        for (w=0; w<width; w++)
-        {
-        #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
-        #endif
-            
-            inData[0] = vec_adds(inData[0], rightData[0]);
-        
-            inData++;
-            rightData++;
-        }
-        #ifndef PPC970
-        vec_dss( 0 );
-        vec_dss( 1 );
-        #endif
-}  /*end of working altivec function */
-#endif
-}
-
-
-#if 0
-/////////////////////////////////////////////////////////
-// processDualGray
-//
-/////////////////////////////////////////////////////////
-void pix_add :: processGray_Gray(imageStruct &image, imageStruct &right)
-{
-#if 0
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
-
-    while(datasize--) {
-      leftPix[chGray] = CLAMP_HIGH((int)leftPix[chGray] + (int)rightPix[chGray]);
-      leftPix++;
-      rightPix++;
-    }
-#else
-    int datasize = (image.xsize * image.ysize)>>3;
-    register unsigned char *leftPix  = image.data;
-    register unsigned char *rightPix = right.data;
-
-    while (datasize--) {
-      ADD8(leftPix,rightPix);
-      leftPix+=8;rightPix+=8;
-    }
-
-#endif
-}
-#endif
 /////////////////////////////////////////////////////////
 // processRightGray
 //
@@ -173,17 +84,12 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
-#ifdef __VEC__
-processYUV_Altivec(image,right);
-return;
-#else
    long src,h,w;
    int	y1,y2;
    int u,v;
    src =0;
    //format is U Y V Y
-   
-   post("pix_add : scalar");
+
    for (h=0; h<image.ysize; h++){
     for(w=0; w<image.xsize/2; w++){
         
@@ -198,13 +104,36 @@ return;
        
         src+=4;
     }
-    }
-#endif
+   }
 }
 
+#ifdef __MMX__
+void pix_add :: processRGBA_MMX(imageStruct &image, imageStruct &right){
+  int datasize =   image.xsize * image.ysize * image.csize;
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+
+  __m64 l, r;
+  while (datasize--) {
+    l=leftPix[datasize];
+    r=rightPix[datasize];
+    leftPix[datasize]=_mm_adds_pu8(l,r);
+  }
+  _mm_empty();
+}
+void pix_add :: processYUV_MMX (imageStruct &image, imageStruct &right){
+  processRGBA_MMX(image, right);
+}
+void pix_add :: processGray_MMX(imageStruct &image, imageStruct &right){
+  processRGBA_MMX(image, right);
+}
+#endif
+
+#ifdef __VEC__
 void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 {
- #ifdef __VEC__
  int h,w,width;
    width = image.xsize/8;
    //format is U Y V Y
@@ -307,9 +236,42 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
         vec_dss( 0 );
         vec_dss( 1 );
         #endif
-}  /*end of working altivec function */
-#endif
+    }  /*end of working altivec function */
 }
+void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
+{
+ int h,w,width;
+   width = image.xsize/4;
+
+
+    vector unsigned char *inData = (vector unsigned char*) image.data;
+    vector unsigned char *rightData = (vector unsigned char*) right.data;
+   
+        #ifndef PPC970
+   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( rightData, prefetchSize, 1 );
+        #endif
+    for ( h=0; h<image.ysize; h++){
+        for (w=0; w<width; w++)
+        {
+        #ifndef PPC970
+	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( rightData, prefetchSize, 1 );
+        #endif
+            
+            inData[0] = vec_adds(inData[0], rightData[0]);
+        
+            inData++;
+            rightData++;
+        }
+        #ifndef PPC970
+        vec_dss( 0 );
+        vec_dss( 1 );
+        #endif
+    }  /*end of working altivec function */
+}
+#endif
 
 void pix_add :: processDualImage(imageStruct &image, imageStruct &right){
   if (image.format!=right.format){
