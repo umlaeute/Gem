@@ -89,6 +89,7 @@ float GemMan::m_fogEnd;
 float GemMan::m_motionBlur=0.f;
 int GemMan::texture_rectangle_supported = 0;	//tigital
 int GemMan::client_storage_supported = 0;
+int GemMan::texture_range_supported = 0;
 float GemMan::fps;
 
 
@@ -1078,6 +1079,13 @@ int GemMan :: createWindow(char* disp)
   client_storage_supported
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
     = OpenGLExtensionIsSupported("GL_APPLE_client_storage");
+#else
+    = 0;
+#endif
+
+  texture_range_supported
+#ifdef GL_APPLE_texture_range
+    = OpenGLExtensionIsSupported("GL_APPLE_texture_range");
 #else
     = 0;
 #endif
