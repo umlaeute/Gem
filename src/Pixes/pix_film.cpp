@@ -43,6 +43,7 @@ pix_film :: pix_film(t_symbol *filename) :
  m_pixBlock.image.data = NULL;
  m_pixBlock.image.xsize = 0;
  m_pixBlock.image.ysize = 0;
+ m_newFilm = 0;
 #ifndef MACOSX
  m_pixBlock.image.csize = 3;
  m_pixBlock.image.format = GL_RGB;
@@ -50,9 +51,11 @@ pix_film :: pix_film(t_symbol *filename) :
  m_format = GL_RGB;
 #else
  m_pixBlock.image.csize = 4;
- m_pixBlock.image.format = GL_RGBA;
+ m_pixBlock.image.format = GL_BGRA_EXT;
+ //m_pixBlock.image.format = GL_RGBA;
  m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
- m_format = GL_RGBA;
+ m_format = GL_BGRA_EXT;
+ //m_format = GL_RGBA;
 #endif
  // make sure that there are some characters
  x_filename=gensym("");
@@ -140,7 +143,7 @@ void pix_film :: openMess(t_symbol *filename)
   SETFLOAT(ap+1, m_xsize);
   SETFLOAT(ap+2, m_ysize);
 
-
+    m_newFilm = 1;
   //outlet_float(m_outNumFrames, (float)m_numFrames);
   post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
@@ -153,6 +156,7 @@ void pix_film :: openMess(t_symbol *filename)
 void pix_film :: startRendering()
 {
   m_pixBlock.newimage = 1;
+  m_pixBlock.newfilm = 0;
 }
 void pix_film :: render(GemState *state)
 {
@@ -167,7 +171,13 @@ void pix_film :: render(GemState *state)
     if (m_film)m_pixBlock.image.data = m_frame; // this is mainly for windows
   }
   m_pixBlock.newimage = newImage;
+  if (m_newFilm){
+    m_pixBlock.newfilm = 1;
+    m_newFilm = 0;
+    post("pix_film: new film set");
+  }
   state->image = &m_pixBlock;
+  
 #ifdef MACOSX
   if (m_reqFrame == m_curFrame)
         ::MoviesTask(NULL, 0);
@@ -190,6 +200,9 @@ void pix_film :: postrender(GemState *state)
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
   }
+  
+  m_newFilm = 0;
+  m_pixBlock.newfilm = m_newFilm;
 }
 
 /////////////////////////////////////////////////////////

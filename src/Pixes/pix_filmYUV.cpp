@@ -37,7 +37,8 @@ pix_filmYUV :: pix_filmYUV(t_symbol *filename) :
  m_outNumFrames = outlet_new(this->x_obj, 0);
  m_outEnd       = outlet_new(this->x_obj, 0);
  m_FrameRate       = outlet_new(this->x_obj, 0);
-
+m_newFilm = 0;
+m_pixBlock.newfilm = 0;
  // initialize the pix block data
  m_pixBlock.image=m_imageStruct;
  m_pixBlock.image.data = NULL;
@@ -145,7 +146,7 @@ void pix_filmYUV :: openMess(t_symbol *filename)
 
 
   //outlet_float(m_outNumFrames, (float)m_numFrames);
-
+    m_newFilm = 1;
   outlet_list(m_outNumFrames, 0, 3, ap);
   post("GEM: pix_filmYUV: Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
 }
@@ -157,24 +158,31 @@ void pix_filmYUV :: openMess(t_symbol *filename)
 void pix_filmYUV :: startRendering()
 {
   m_pixBlock.newimage = 1;
+  m_pixBlock.newfilm = 0;
 }
 void pix_filmYUV :: render(GemState *state)
 {
   /* get the current frame from the file */
   int newImage = 0;
-  if (!m_haveMovie)return;
-
+ // state->image->newfilm = 0;
+ if (!m_haveMovie || !m_pixBlock.image.data)return;
   // do we actually need to get a new frame from the movie ?
 
   if (m_reqFrame != m_curFrame) {
     newImage = 1;
     getFrame();
     m_curFrame = m_reqFrame;
-
+ // m_pixBlock.newfilm = 0;
     if (m_film)m_pixBlock.image.data = m_frame; // this is mainly for windows
   }
   m_pixBlock.newimage = newImage;
+  if (m_newFilm){
+    m_pixBlock.newfilm = 1;
+   m_newFilm = 0;
+    post("pix_filmYUV: new film set");
+  }
   state->image = &m_pixBlock;
+  
 #ifdef MACOSX
   if (m_reqFrame == m_curFrame)
         ::MoviesTask(NULL, 0);
@@ -199,6 +207,10 @@ void pix_filmYUV :: postrender(GemState *state)
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
   }
+  
+  m_newFilm = 0;
+  m_pixBlock.newfilm = m_newFilm;
+  
   outlet_float(m_FrameRate,m_fps);
 }
 

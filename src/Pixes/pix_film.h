@@ -146,6 +146,7 @@ class GEM_EXTERN pix_film : public GemBase
   int           m_format;
 
   bool          m_film; // are we in film- or in movie-mode
+  int		m_newFilm;
 
   //////////
   // a outlet for information like #frames and "reached end"
