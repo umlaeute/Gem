@@ -1,0 +1,10 @@
+#N canvas 103 344 514 308 10;
+#X text 20 14 pix_mix combines two image streams together by doing
+a simple interpolation between the pixels. the formula is: dst = (srcA
+* gainA) + (srcB * gainB) crossfading can be achieved by setting gainb
+= 1 - gainA;
+#X obj 31 265 pix_mix;
+#X msg 31 182 gain \$1 \$2;
+#X text 119 176 \$1 = left gain \, \$2 = right gain full range is 0..1
+for each;
+#X connect 2 0 1 0;
