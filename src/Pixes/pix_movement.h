@@ -52,7 +52,7 @@ public:
 	
 	//////////
 	// Constructor
-	pix_movement();
+	pix_movement(t_floatarg f);
 	
 protected:
 	
@@ -61,26 +61,14 @@ protected:
 	virtual ~pix_movement();
 	
 	//////////
-	// create a buffer that fits to the current imageSize
-	virtual void   create_buffer(imageStruct image);
-	
-	//////////
-	// delete the buffer
-	virtual void   delete_buffer();
-	
-	//////////
-	// clear the buffer
-	virtual void   clear_buffer();
-	
-	//////////
 	// Do the processing
 	virtual void 	processRGBAImage(imageStruct &image);
+	virtual void 	processGrayImage(imageStruct &image);
 	
 	//////////
-	// the huge double buffer and other tx-formation
+	// the last image (grey-scale)
 	imageStruct    buffer;
-	int            bufcount;    // where to read/write
-	
+	imageStruct    buffer2; // (the difference image for greyscales)
 	//////////
 	// the movement-mode
 	unsigned char  treshold;

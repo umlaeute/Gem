@@ -26,7 +26,7 @@
 #include <string.h>
 #include <math.h>
 
-CPPEXTERN_NEW(pix_movement)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT)
 
   /////////////////////////////////////////////////////////
 //
@@ -36,18 +36,21 @@ CPPEXTERN_NEW(pix_movement)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_movement :: pix_movement()
+pix_movement :: pix_movement(t_floatarg f)
 { 
-  imageStruct image;
+  buffer.xsize  = buffer.ysize = 64;
+  buffer.format = GL_LUMINANCE;
+  buffer.csize  = 1;
+  buffer.reallocate();
+  buffer2.xsize  = buffer2.ysize = 64;
+  buffer2.format = GL_LUMINANCE;
+  buffer2.csize  = 1;
+  buffer2.reallocate();
 
-  image.xsize  = image.ysize = 64;
-  image.format = GL_RGBA;
-  image.csize  = 4;
 
-  create_buffer(image);
-
-  bufcount  = 0;
-  treshold = 127;
+  if(f<=0.)f=0.5;
+  if(f>1.f)f=1.0;
+  treshold = (unsigned char)(255*f);
 }
 
 /////////////////////////////////////////////////////////
@@ -57,47 +60,7 @@ pix_movement :: pix_movement()
 pix_movement :: ~pix_movement()
 {
   // clean my buffer
-  delete_buffer();
 }
-
-/////////////////////////////////////////////////////////
-// CreateBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_movement :: create_buffer(imageStruct image)
-{
-  long dataSize;
-
-  buffer.xsize = image.xsize;
-  buffer.ysize = image.ysize;
-  buffer.csize = 1;
-
-  dataSize = buffer.xsize * buffer.ysize * buffer.csize * sizeof(unsigned char);
-
-  buffer.data = new unsigned char[dataSize];
-  memset(buffer.data, 0, dataSize);
-}
-
-/////////////////////////////////////////////////////////
-// DeleteBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_movement :: delete_buffer()
-{
-  delete [] buffer.data;
-  buffer.data = NULL;
-}
-
-
-/////////////////////////////////////////////////////////
-// ClearBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_movement :: clear_buffer()
-{
-  memset(buffer.data, 0, buffer.xsize * buffer.ysize * buffer.csize * sizeof(unsigned char));
-}
-
 
 /////////////////////////////////////////////////////////
 // processImage
@@ -106,18 +69,11 @@ void pix_movement :: clear_buffer()
 void pix_movement :: processRGBAImage(imageStruct &image)
 {
   // assume that the pix_size does not change !
-  if (image.xsize != buffer.xsize || image.ysize != buffer.ysize) {
-    long dataSize;
-    delete [] buffer.data;
-    buffer.xsize = image.xsize;
-    buffer.ysize = image.ysize;
-    //		buffer.csize = image.csize;
-
-    dataSize = buffer.xsize * buffer.ysize * buffer.csize * sizeof(unsigned char);
-    buffer.data = new unsigned char[dataSize];
-
-    memset(buffer.data, 0, dataSize);
-  }
+  bool doclear=(image.xsize*image.ysize != buffer.xsize*buffer.ysize);
+  buffer.xsize = image.xsize;
+  buffer.ysize = image.ysize;
+  buffer.reallocate();
+  if(doclear) buffer.setWhite();
 
   int pixsize = image.ysize * image.xsize;
 
@@ -133,7 +89,32 @@ void pix_movement :: processRGBAImage(imageStruct &image)
     rp+=4;
   } 
 }
+void pix_movement :: processGrayImage(imageStruct &image)
+{
+  // assume that the pix_size does not change !
+  bool doclear=(image.xsize*image.ysize != buffer.xsize*buffer.ysize);
+  buffer.xsize = image.xsize;
+  buffer.ysize = image.ysize;
+  buffer.reallocate();
+  if(doclear) buffer.setWhite();
+  buffer2.xsize = image.xsize;
+  buffer2.ysize = image.ysize;
+  buffer2.reallocate();
 
+  int pixsize = image.ysize * image.xsize;
+
+  unsigned char *rp = image.data;			// read pointer
+  unsigned char *wp=buffer.data;			// write pointer to the copy
+  unsigned char *wp2=buffer2.data; // write pointer to the diff-image
+
+  while(pixsize--) {
+    unsigned char grey = *rp++;
+    *wp2++=255*(abs(grey-*wp)>treshold);
+    *wp++=grey;
+  }
+  image.data = buffer2.data;
+  
+}
 /////////////////////////////////////////////////////////
 // static member function
 //
