@@ -1,0 +1,16 @@
+#N canvas 243 115 627 366 12;
+#X msg 110 93 gemList;
+#X text 121 50 GEM object;
+#X msg 110 219 gemList;
+#X text 181 94 partList;
+#X text 180 222 partList;
+#X obj 110 190 part_velocity;
+#X msg 223 154 <x> <y> <z>;
+#X text 132 16 [part_velocity];
+#X text 65 253 [part_velocity] sets velocity of newly emitted particles
+within the system.;
+#X text 48 337 <x> <y> <z>: the x- \, y- \, z-component of the velocity
+;
+#X connect 0 0 5 0;
+#X connect 5 0 2 0;
+#X connect 6 0 5 1;
