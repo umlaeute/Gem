@@ -397,6 +397,17 @@ void GemOutput :: resetValues()
   fogColorMess(1.f, 1.f, 1.f, 1.f);
 }
 
+/////////////////////////////////////////////////////////
+// bufferMess
+//
+/////////////////////////////////////////////////////////
+void GemOutput :: bufferMess(int buf)
+{
+  if (buf == 1)
+    m_buffer = 1;
+  else
+    m_buffer = 2;
+}
 
 
 
