@@ -64,10 +64,10 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   m_numHandles=0;
 
   m_handles[m_numHandles]=new filmFFMPEG();   debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmAVI();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmQT();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmQT4L();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG3();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmAVI();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmAVIPLAY();  debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG1();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
 
