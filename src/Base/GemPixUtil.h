@@ -65,13 +65,14 @@ CLASS
 
 struct GEM_EXTERN imageStruct
 {
-  imageStruct() : xsize (0),ysize(0),csize(0),notowned(0),data(0),datasize(0),pdata(0),
+  imageStruct() : xsize (0),ysize(0),csize(0),
 #ifdef GL_UNSIGNED_SHORT_8_8_REV_APPLE
-       // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
-       type(GL_UNSIGNED_SHORT_8_8_REV_APPLE), format(GL_YCBCR_422_GEM)
+    // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
+    type(GL_UNSIGNED_SHORT_8_8_REV_APPLE), format(GL_YCBCR_422_GEM),
 #else
-       type(GL_UNSIGNED_BYTE), format(GL_RGBA)
+    type(GL_UNSIGNED_BYTE), format(GL_RGBA),
 #endif
+    notowned(0),data(0),datasize(0),pdata(0)
 {}
 
   ~imageStruct() { clear(); }
@@ -119,13 +120,13 @@ struct GEM_EXTERN imageStruct
   GLint   	    csize;
 
   //////////
+  // data type - always GL_UNSIGNED_BYTE (except for OS X)
+  GLenum          type;
+
+  //////////
   // the format - either GL_RGBA, GL_BGRA_EXT, or GL_LUMINANCE
   // or GL_YCBCR_422_GEM (which is on mac-computers GL_YCBCR_422_APPLE)
   GLenum          format;
-
-  //////////
-  // data type - always GL_UNSIGNED_BYTE (except for OS X)
-  GLenum          type;
   
   //////////
   // is this owned by us (?)
