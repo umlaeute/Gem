@@ -263,6 +263,10 @@ struct GEM_EXTERN imageStruct
    *   while the source has no meta-data of its own)
    */
   void fromRGB    (unsigned char* orgdata);
+#ifdef __VEC__
+  void RGB_to_YCbCr(unsigned char *rgbdata, int RGB_size, 
+                    unsigned char *pixels);
+#endif
   void fromRGBA   (unsigned char* orgdata);
   void fromBGR    (unsigned char* orgdata);
   void fromBGRA   (unsigned char* orgdata);
@@ -275,7 +279,10 @@ struct GEM_EXTERN imageStruct
   void fromYV12   (unsigned char* Y, unsigned char*U, unsigned char*V);
   /* assume that the planes are near each other: YVU */
   void fromYV12   (unsigned char* orgdata);
-
+  /* overloading the above two in order to accept pdp YV12 packets */
+  void fromYV12   (short* Y, short*U, short*V);
+  void fromYV12   (short* orgdata);
+  
   /* aliases */
   void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
   void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
