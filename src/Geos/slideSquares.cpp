@@ -19,7 +19,7 @@
 #include "Base/GemState.h"
 #include <string.h>
 #include "math.h"
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <Carbon/Carbon.h>
 #else
 #include <stdlib.h>
