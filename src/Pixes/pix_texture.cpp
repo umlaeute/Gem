@@ -63,11 +63,11 @@ pix_texture :: ~pix_texture()
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState() {
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-if (m_mode && GemMan::texture_rectangle_supported){
-  if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)				//tigital
-    glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
+  if (m_mode && GemMan::texture_rectangle_supported){
+    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)				//tigital
+      glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
     post("pix_texture: using rectangle texture");
-    }
+  }
 #endif // GL_TEXTURE_RECTANGLE_EXT
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
   if (GemMan::client_storage_supported){
@@ -81,13 +81,13 @@ if (m_mode && GemMan::texture_rectangle_supported){
   glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
-
+  
 
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-if (m_mode)
-  if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
+  if (m_mode)
+    if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
 #endif //GL_TEXTURE_RECTANGLE_EXT
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
   // note:  On MacOS X, pix_texture is used for power of two/normalised textures, so 
   //		texture_rectangle can't be used (otherwise, we'd just see one pixel!)
@@ -121,18 +121,24 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
 /////////////////////////////////////////////////////////
 #if 1
 void pix_texture :: render(GemState *state) {
-  if ( !state->image || !m_textureOnOff) return;
+  if (!state->image        || !m_textureOnOff          )return;
   if(!&state->image->image || !state->image->image.data)return;
   state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
-
   if (state->image->newimage) m_rebuildList = 1;
 
-  int x_2 = powerOfTwo(state->image->image.xsize);
-  int y_2 = powerOfTwo(state->image->image.ysize);
+  m_imagebuf.xsize =state->image->image.xsize;
+  m_imagebuf.ysize =state->image->image.ysize;
+  m_imagebuf.csize =state->image->image.csize;
+  m_imagebuf.format=state->image->image.format;
+  m_imagebuf.type  =state->image->image.type;
+  m_imagebuf.data  =state->image->image.data;
 
-  bool normalized = ((state->image->image.xsize==x_2) && (state->image->image.ysize==y_2));
+  int x_2 = powerOfTwo(m_imagebuf.xsize);
+  int y_2 = powerOfTwo(m_imagebuf.ysize);
+
+  bool normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
 
 #ifdef GL_VERSION_1_1
   int texType = m_textureType;
@@ -169,13 +175,24 @@ if (m_mode){
 #endif
 
   if (m_rebuildList) {
+#ifndef GL_YCBCR_422_APPLE
+    /* if YUV is not supported on this platform, we have to convert it to RGB
+     * (skip Alpha since it isnt used)
+     */
+    if (m_imagebuf.format == GL_YUV422_GEM){
+      m_imagebuf.format=GL_RGB;
+      m_imagebuf.csize=3;
+      m_imagebuf.reallocate();
+      m_imagebuf.fromYUV422(state->image->image.data);
+    }
+#endif /* GL_YCBCR_422_APPLE */
     if (normalized) {
-     // post("normalized");
-      m_buffer.xsize = state->image->image.xsize;
-      m_buffer.ysize = state->image->image.ysize;
-      m_buffer.csize  = state->image->image.csize;
-      m_buffer.format = state->image->image.format;
-      m_buffer.type   = state->image->image.type;
+      //post("normalized");
+      m_buffer.xsize = m_imagebuf.xsize;
+      m_buffer.ysize = m_imagebuf.ysize;
+      m_buffer.csize  = m_imagebuf.csize;
+      m_buffer.format = m_imagebuf.format;
+      m_buffer.type   = m_imagebuf.type;
       m_buffer.reallocate();
       setTexCoords(m_coords, 1.0, 1.0);
       state->texCoords = m_coords;
@@ -186,8 +203,8 @@ if (m_mode){
 	m_dataSize[0] = m_buffer.csize;
 	m_dataSize[1] = m_buffer.xsize;
 	m_dataSize[2] = m_buffer.ysize;
-
-	// following could be done directly with state->image->image...
+#if 0
+	// following could be done directly with m_imagebuf...
 	glTexImage2D(m_textureType, 0, 
 		     m_buffer.csize,
 		     m_buffer.xsize,
@@ -200,31 +217,39 @@ if (m_mode){
       
       glTexSubImage2D(m_textureType, 0,
 		      0, 0,				// position
-		      state->image->image.xsize,
-		      state->image->image.ysize,
-		      state->image->image.format,
-		      state->image->image.type,
-		      state->image->image.data);
+		      m_imagebuf.xsize,
+		      m_imagebuf.ysize,
+		      m_imagebuf.format,
+		      m_imagebuf.type,
+		      m_imagebuf.data);
+#else
+    }
+    glTexImage2D(m_textureType, 0, 
+		     m_imagebuf.csize,
+		     m_imagebuf.xsize,
+		     m_imagebuf.ysize, 0,
+		     m_imagebuf.format,
+		     m_imagebuf.type,
+		     m_imagebuf.data);
+#endif
       
     } else { // !normalized
-     // post("!normalized");
-      float m_xRatio = (float)state->image->image.xsize;
-      float m_yRatio = (float)state->image->image.ysize;
+      //post("!normalized");
+      float m_xRatio = (float)m_imagebuf.xsize;
+      float m_yRatio = (float)m_imagebuf.ysize;
       if ( !GemMan::texture_rectangle_supported || !m_mode ) {
-     
 	m_xRatio /= (float)x_2;
 	m_yRatio /= (float)y_2;
 	m_buffer.xsize = x_2;
 	m_buffer.ysize = y_2;
       } else {
-	m_buffer.xsize = state->image->image.xsize;
-	m_buffer.ysize = state->image->image.ysize;
+	m_buffer.xsize = m_imagebuf.xsize;
+	m_buffer.ysize = m_imagebuf.ysize;
       }
-      m_buffer.csize  = state->image->image.csize;
-      m_buffer.format = state->image->image.format;
-      m_buffer.type   = state->image->image.type;
+      m_buffer.csize  = m_imagebuf.csize;
+      m_buffer.format = m_imagebuf.format;
+      m_buffer.type   = m_imagebuf.type;
       m_buffer.reallocate();
-	//memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
       setTexCoords(m_coords, m_xRatio, m_yRatio);
       state->texCoords = m_coords;
       state->numTexCoords = 4;
@@ -261,11 +286,11 @@ if (m_mode){
       
       glTexSubImage2D(m_textureType, 0,
 		      0, 0,				// position
-		      state->image->image.xsize,
-		      state->image->image.ysize,
-		      state->image->image.format,
-		      state->image->image.type,
-		      state->image->image.data);
+		      m_imagebuf.xsize,
+		      m_imagebuf.ysize,
+		      m_imagebuf.format,
+		      m_imagebuf.type,
+		      m_imagebuf.data);
     }
     
 #ifdef GL_VERSION_1_1

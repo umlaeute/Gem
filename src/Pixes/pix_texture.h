@@ -109,6 +109,9 @@ class GEM_EXTERN pix_texture : public GemBase
 	//////////
 	// The resizing buffer
 	imageStruct   m_buffer;
+	//////////
+	// a buffer for colour-space conversion
+	imageStruct   m_imagebuf;
 
 	//////////
 	// The texture coordinates
