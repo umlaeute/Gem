@@ -14,7 +14,12 @@ AFLAGS = -mieee  -mcpu=ev56
 endif
 
 
-cxxflags = $(CXXFLAGS) -g  @CXXFLAGS@ $(AFLAGS) -I../ @INCLUDES@
+cxxflags = -g @CXXFLAGS@ $(AFLAGS) -I../ @INCLUDES@
+
+cxxflags += -O3 -funroll-loops -ffast-math
+
+cxxflags += $(CXXFLAGS)
+
 
 all: $(OBJECTS)
 
