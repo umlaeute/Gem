@@ -1,4 +1,4 @@
-#N canvas 50 16 600 500 10;
+#N canvas 54 36 600 500 10;
 #X obj 288 247 pix_image ../data/dancer.JPG;
 #X obj 270 153 gemhead;
 #X obj 48 297 gemwin;
@@ -7,7 +7,6 @@
 #X msg 150 200 1;
 #X msg 154 235 0;
 #X obj 270 188 pix_image ../data/fractal.JPG;
-#X obj 270 338 pix_texture;
 #X obj 270 379 square;
 #X msg 329 360 3;
 #X obj 288 214 gemhead 20;
@@ -29,15 +28,16 @@
 #X connect 3 1 1 0;
 #X connect 5 0 2 0;
 #X restore 95 271 pd Gem.init;
-#X connect 0 0 12 1;
+#X obj 270 338 pix_texture2;
+#X connect 0 0 11 1;
 #X connect 1 0 7 0;
 #X connect 3 0 2 0;
 #X connect 4 0 2 0;
 #X connect 5 0 2 0;
 #X connect 6 0 2 0;
-#X connect 7 0 12 0;
-#X connect 8 0 9 0;
-#X connect 10 0 9 1;
-#X connect 11 0 0 0;
-#X connect 12 0 8 0;
-#X connect 16 0 2 0;
+#X connect 7 0 11 0;
+#X connect 9 0 8 1;
+#X connect 10 0 0 0;
+#X connect 11 0 16 0;
+#X connect 15 0 2 0;
+#X connect 16 0 8 0;
