@@ -42,7 +42,6 @@ void GemPixObj :: setPixModified()
 //
 /////////////////////////////////////////////////////////
 void GemPixObj :: render(GemState *state){
-
   // We save all information of our image, so the pix-processors can do what they want:
   //   change formats, sizes, databuffer, whatever
   // the data is restored in the <postrender> call,
