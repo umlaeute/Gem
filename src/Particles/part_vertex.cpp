@@ -45,9 +45,7 @@ part_vertex :: ~part_vertex()
 /////////////////////////////////////////////////////////
 void part_vertex :: render(GemState *state)
 {
-  if (state->stereo == 0 ||
-      state->stereo == 1) {
-
+  if (state->doUpdate) {
     pVertex(m_x, m_y, m_z);
   }
 }

@@ -370,15 +370,24 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
   }
 }
 
+
+//////////////////
+// this is only set to true on the first rendering-pass for each cycle
+static bool s_doUpdate;
+
+
 void GemMan :: render1(GemState currentState){
+  currentState.doUpdate=s_doUpdate;
   renderChain(s_linkHead, &currentState);
 }
 void GemMan :: render2(GemState currentState){
   renderChain(s_linkHead_2, &currentState);
+  s_doUpdate=false;
 }
 
 void GemMan :: render(void *)
 {
+  s_doUpdate=true;
 #ifdef _WINDOWS
   static int firstTime = 1;
   static float countFreq = 0;

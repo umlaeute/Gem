@@ -47,8 +47,7 @@ part_follow :: ~part_follow()
 /////////////////////////////////////////////////////////
 void part_follow :: render(GemState *state)
 {
-  if (state->stereo == 0 ||
-      state->stereo == 1)
+  if (state->doUpdate)
     {
       pFollow(m_accel);
     }

@@ -47,8 +47,7 @@ part_killslow :: ~part_killslow()
 /////////////////////////////////////////////////////////
 void part_killslow :: render(GemState *state)
 {
-	if (state->stereo == 0 ||
-		state->stereo == 1)
+	if (state->doUpdate)
 	{
 		pKillSlow(m_killSpeed);
 	}

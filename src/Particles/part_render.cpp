@@ -52,8 +52,7 @@ part_render :: ~part_render()
 /////////////////////////////////////////////////////////
 void part_render :: render(GemState *state)
 {
-  if (state->stereo == 0 ||
-      state->stereo == 1)    {
+  if (state->doUpdate)    {
     pMove();
   }
   //	pDrawGroupp();

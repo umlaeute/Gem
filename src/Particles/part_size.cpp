@@ -63,8 +63,7 @@ void part_size :: sizeMess(int argc, t_atom*argv)
 /////////////////////////////////////////////////////////
 void part_size :: render(GemState *state)
 {
-  if (state->stereo == 0 ||
-      state->stereo == 1)    {
+  if (state->doUpdate)    {
       pSize(m_size[0], m_size[1], m_size[2]);
     }
 }

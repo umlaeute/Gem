@@ -51,8 +51,7 @@ part_color :: ~part_color()
 /////////////////////////////////////////////////////////
 void part_color :: render(GemState *state)
 {
-	if (state->stereo == 0 ||
-		state->stereo == 1)
+  if (state->doUpdate)
 	{
 		pColorD(1.0f, PDLine, m_color1[0], m_color1[1], m_color1[2],
 							  m_color2[0], m_color2[1], m_color2[2]);

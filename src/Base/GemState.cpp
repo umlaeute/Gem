@@ -39,7 +39,9 @@
 GemState :: GemState()
 		  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
     		image(0), texCoords(0), numTexCoords(0),
-		    numVertexColors(0), stereo(0), tickTime(50.f)
+		    numVertexColors(0), 
+		    doUpdate(true), tickTime(50.f)
+		    
 { }
 
 void GemState::setColor(int num)

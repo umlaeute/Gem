@@ -76,8 +76,7 @@ void part_source :: vectorMess(int argc, t_atom*argv){
 /////////////////////////////////////////////////////////
 void part_source :: render(GemState *state)
 {
-  if (state->stereo == 0 ||
-      state->stereo == 1) {
+  if (state->doUpdate) {
     pSource((float)m_numberToAdd, m_domain, 
 	    m_arg[0],m_arg[1],m_arg[2],m_arg[3],m_arg[4],m_arg[5],m_arg[6],m_arg[7],m_arg[8]);
   }

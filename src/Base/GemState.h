@@ -102,7 +102,8 @@ class GEM_EXTERN GemState
 	 * by doUpdate (for particles and video-players to update)
 	 * this is only set to true for the 1st render-pass (stereo, multiwin)
 	 */
-    	int					stereo;
+    	//int					stereo;
+	bool doUpdate;
     	
 	//////////
 	// Milliseconds since last frame
