@@ -194,7 +194,8 @@ int cursorGemWindow(WindowInfo &info, int state)
     XDefineCursor(info.dpy, info.win,cursor);
   }
   else
-    XUndefineCursor(info.dpy, info.win);	 
+    XUndefineCursor(info.dpy, info.win);
+  return 0; //?
 }
 
 void destroyGemWindow(WindowInfo &info)
