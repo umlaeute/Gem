@@ -147,10 +147,11 @@ void pix_rtx :: processImage(imageStruct &image)
      // "set" message
      c=cols;
      int imagesize=pixsize * buffer.csize * sizeof(unsigned char);
-     while (c--) {
+	 while (c--) {
        wp = buffer.data + imagesize * c;
        memcpy(wp, pixels, imagesize);
      }
+	 c = 0;
      set_buffer=false;
    }
 
