@@ -62,18 +62,31 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   //////////
   // load film into RAM
   virtual void LoadRam();
+
+  //////////
+  // set the playback rate
+  virtual void MovRate(float rate);
 	
+  //////////
+  // dumps debug info
+  virtual void doDebug();     
+        
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
    
   GWorldPtr		m_srcGWorld;
+  Rect			m_srcRect;
   TimeValue		m_movieTime;
   Track			m_movieTrack;
   TimeValue		m_timeScale;
   TimeValue		duration;
-  //int			m_colorspace;
+  long			movieDur, movieScale;
   int			m_hiquality;
+  int			m_play;
+  float			m_rate;
+  Fixed			playRate;
+  
 private:
 Movie			m_movie;
 
@@ -90,7 +103,8 @@ Movie			m_movie;
   static void autoCallback(void *data, t_floatarg state);
   static void ramCallback(void *data);
   static void hiqualityCallback(void *data, t_floatarg state);
-  //static void colorspaceCallback(void *data, t_floatarg state);
+  static void rateCallback(void *data, t_floatarg state);
+  static void debugCallback(void *data);
 
 };
 

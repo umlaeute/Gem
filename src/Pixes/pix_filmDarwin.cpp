@@ -42,6 +42,8 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
   if (filename->s_name[0]) openMess(filename);
   m_colorspace = GL_YCBCR_422_GEM;
   m_hiquality = 1;
+  m_play = 0;
+  m_rate = 1;
 }
 
 /////////////////////////////////////////////////////////
@@ -92,7 +94,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     FSSpec		theFSSpec;
     OSErr		err = noErr;
     FSRef		ref;
-    Rect		m_srcRect;
+    
     long		m_rowBytes;
 
     if (!filename[0]) {
@@ -122,16 +124,12 @@ void pix_filmDarwin :: realOpen(char *filename)
 	m_reqFrame = 0;
 	m_curFrame = -1;
         m_numTracks = (int)GetMovieTrackCount(m_movie);
-        post("GEM: pix_filmDarwin:  m_numTracks = %d",m_numTracks);
 
 	// Get the length of the movie
-        long	movieDur, movieScale;
+        
         movieDur = (long)GetMovieDuration(m_movie);
         movieScale = (long)GetMovieTimeScale(m_movie);
         
-        post("Movie duration = %d timescale = %d timebase = %d",movieDur,
-                                            movieScale,
-                                            (long)GetMovieTimeBase(m_movie));
                                             
 	OSType		whichMediaType = VisualMediaCharacteristic;
 	short		flags = nextTimeMediaSample + nextTimeEdgeOK;
@@ -146,10 +144,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 	SetMovieBox(m_movie, &m_srcRect);	
 	m_xsize = m_srcRect.right - m_srcRect.left;
 	m_ysize = m_srcRect.bottom - m_srcRect.top;
-        post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
-        post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
-	post("movie size x:%d y:%d", m_xsize, m_ysize);
-        post("pix_filmDarwin: color space %d",m_colorspace);
+       
         if (m_colorspace == GL_BGRA_EXT){
 			m_csize = 4;
             m_format = GL_BGRA_EXT;
@@ -167,7 +162,6 @@ void pix_filmDarwin :: realOpen(char *filename)
                                             0, 
                                             m_pixBlock.image.data, 
                                             m_rowBytes);
-            post("pix_filmDarwin: using RGB");
                                         
         }else{
             m_csize = 2;
@@ -175,7 +169,7 @@ void pix_filmDarwin :: realOpen(char *filename)
             m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
             
             createBuffer();
-            prepareTexture();
+           // prepareTexture();
             m_rowBytes = m_xsize * 2;
             if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
             err = QTNewGWorldFromPtr(	&m_srcGWorld, 
@@ -186,7 +180,6 @@ void pix_filmDarwin :: realOpen(char *filename)
                                             0, 
                                             m_pixBlock.image.data, 
                                             m_rowBytes);
-            post("pix_filmDarwin: using YUV");
         }
 	if (err) {
 		error("GEM: pix_filmDarwin: Couldn't make QTNewGWorldFromPtr %d", err);
@@ -194,13 +187,23 @@ void pix_filmDarwin :: realOpen(char *filename)
 		return;
 	}
         
+        
      
         /* movies task method */
-        m_movieTime = 0;
+        m_movieTime = GetMovieTime(m_movie,nil);
+        playRate = GetMoviePreferredRate(m_movie);
+    
 	// *** set the graphics world for displaying the movie ***
 	::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
-        //SetMovieRate(m_movie,0);
-       // StartMovie(m_movie);
+        
+        if (m_auto) { 
+            SetMovieRate(m_movie,playRate);
+            m_play = 1;
+        }
+        else {
+            SetMovieRate(m_movie,X2Fix(0.0));
+        }
+        
 	::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
         
 }
@@ -212,81 +215,42 @@ void pix_filmDarwin :: realOpen(char *filename)
 void pix_filmDarwin :: getFrame()
 {
     if (!m_haveMovie) return;
- 
-    //int num;
 
-    // get the next frame of the source movie
-    short 	flags = nextTimeStep;
-    OSType	whichMediaType = VisualMediaCharacteristic;
-/*
-    if (m_reqFrame > m_curFrame) {
-        num = m_reqFrame - m_curFrame;
-    } else {
-        num = m_reqFrame;
-        if (!m_auto) m_movieTime = 0;
-    }
-    */
-    //check for last frame to loop the clip
-    if (m_curFrame >= m_numFrames){
-    m_curFrame = 0;
-    m_movieTime = 0;
-    }
     
-    //check for -1
-    if (m_movieTime < 0) m_movieTime = 0;
-    
-    // if this is the first frame, include the frame we are currently on
-    if (m_curFrame == 0) flags |= nextTimeEdgeOK;
-
-/* current playback method */
-if (m_auto) {
-        ::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                                1,
-                                &whichMediaType,
-                                    m_movieTime,
-                                                0,
-                                    &m_movieTime,
-                                           // NULL);
-                                           &duration);
-        flags = 0;
-        flags = nextTimeStep;
-                                            
-        }else{
-            m_movieTime = m_reqFrame * duration;
-        }
+    if (m_auto){
+        //play the startmovie() way
+        if (!m_play) SetMovieRate(m_movie,X2Fix(m_rate));
+        m_play = 1;
+        
+        if (m_rate > 0) {
+            if (IsMovieDone(m_movie)) GoToBeginningOfMovie(m_movie);
+        
+            }
+            else {
+                if (GetMovieTime(m_movie,nil) <= 0) {
+                    GoToEndOfMovie(m_movie);
+                }
+            }
+            
+        MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
+        
+    }
+    else
+    {
+    //play the manual way
+        if (m_play) {
+            SetMovieRate(m_movie,X2Fix(0.0));
+            m_play = 0; //turn off play
+            return;
+            }
+        
+        m_movieTime = m_reqFrame * duration;
         
         SetMovieTimeValue(m_movie, m_movieTime);
         MoviesTask(m_movie, 0);
         
-       
-        
-/*
-    m_movieTime = m_reqFrame * duration;
-    
-    ::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                                1,
-                                &whichMediaType,
-                                    m_movieTime,
-                                                0,
-                                    &m_movieTime,
-                                           // NULL);
-                                           &duration);
-        flags = 0;
-        flags = nextTimeStep;*/
+    }
 
-    // set the time for the frame and give time to the movie toolbox	
-    //SetMovieTimeValue(m_movie, m_movieTime); 
-    /*  works ok for playing a movie forward 1X 
-    if (m_auto){
-        if (IsMovieDone(m_movie)) GoToBeginningOfMovie(m_movie);
-    
-         UpdateMovie(m_movie);
-        MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-    }*/
-    
-    
 }
 
 void pix_filmDarwin :: LoadRam()
@@ -304,6 +268,29 @@ void pix_filmDarwin :: LoadRam()
     }else{
         post("pix_film: no movie to load into RAM!");
     }
+}
+
+void pix_filmDarwin :: MovRate(float rate)
+{
+    m_rate = (float)rate;
+    if (m_auto) {
+    SetMovieRate(m_movie,X2Fix((double)m_rate));
+    }
+}
+
+void pix_filmDarwin :: doDebug()
+{
+    post("---------- pix_filmDarwin doDebug start----------");
+    post("GEM: pix_filmDarwin:  m_numTracks = %d",m_numTracks);
+    post("Movie duration = %d timescale = %d timebase = %d", movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
+    post("pix_filmDarwin: rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
+    post("pix_filmDarwin: rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
+    post("pix_filmDarwin: movie size x:%d y:%d", m_xsize, m_ysize);
+    if (m_colorspace == GL_BGRA_EXT) post("pix_filmDarwin: color space ARGB");
+        else  post("pix_filmDarwin: color space YUV");
+    post("pix_filmDarwin: Preferred rate fixed: %d int: %d float %f", playRate, Fix2Long(playRate),(float) Fix2X(playRate));    
+        
+    post("---------- pix_filmDarwin doDebug end----------");
 }
 
 /////////////////////////////////////////////////////////
@@ -325,6 +312,10 @@ void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("ram"),  A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmDarwin::hiqualityCallback,
 		  gensym("hiquality"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_filmDarwin::rateCallback,
+		  gensym("rate"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_filmDarwin::debugCallback,
+		  gensym("debug"),  A_NULL);              
 
 }
 
@@ -351,5 +342,15 @@ void pix_filmDarwin :: ramCallback(void *data)
 void pix_filmDarwin :: hiqualityCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_hiquality=(int)state;
+}
+
+void pix_filmDarwin :: rateCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->MovRate((float)state);
+}
+
+void pix_filmDarwin :: debugCallback(void *data)
+{
+  GetMyClass(data)->doDebug();
 }
 #endif // __APPLE__
