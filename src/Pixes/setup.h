@@ -104,9 +104,9 @@ extern "C" {
    void pix_videoNT_setup();
    void pix_videoDS_setup();
    void pix_videoSGI_setup();
-#endif
+#else
    void pix_videoDarwin_setup();
-
+#endif
    void pix_write_setup();
    void pix_zoom_setup();
 
@@ -167,8 +167,8 @@ extern "C" {
     pix_dv_setup();
 #endif
 #endif
-      pix_film_setup();
-#ifndef __NEW__
+      //pix_film_setup();
+#ifdef __NEW__
       pix_filmNEW_setup();
 #endif // __NEW__
 #ifdef __linux
