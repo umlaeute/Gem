@@ -51,6 +51,8 @@ class GEM_EXTERN pix_background : public GemPixObj
   virtual void 	processGrayImage(imageStruct &image);
   virtual void 	processYUVImage (imageStruct &image);
 #ifdef __MMX__
+  virtual void processRGBAMMX   (imageStruct &image);
+  virtual void processYUVMMX    (imageStruct &image);
   virtual void processGrayMMX   (imageStruct &image);
 #endif 
 #ifdef __VEC__
@@ -60,7 +62,7 @@ class GEM_EXTERN pix_background : public GemPixObj
 #endif
         
   imageStruct   m_savedImage;
-  int		m_Yrange,m_Urange,m_Vrange;
+  int		m_Yrange,m_Urange,m_Vrange, m_Arange;
   t_inlet      *inletRange;
   int		m_reset;
 

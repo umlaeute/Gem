@@ -20,21 +20,16 @@ CPPEXTERN_NEW(pix_background)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_background :: pix_background()
+pix_background :: pix_background() :
+  m_Yrange(0), m_Urange(0), m_Vrange(0), m_Arange(0), m_reset(1)
 {
   long size,src,i;
   inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
-  
-    m_Yrange = 0;
-    m_Urange = 0;
-    m_Vrange = 0;
-    m_reset = 0;
 
     m_savedImage.xsize=320;
     m_savedImage.ysize=240;
     m_savedImage.setCsizeByFormat(GL_RGBA);
     m_savedImage.reallocate();
-    m_savedImage.setBlack();
 }
 
 /////////////////////////////////////////////////////////
@@ -80,13 +75,19 @@ void pix_background :: processRGBAImage(imageStruct &image)
 
   for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
-      if (((data[src+chRed] > saved[src+chRed] - m_Urange)&&(data[src+chRed] < saved[src+chRed] + m_Urange))&&
-	  ((data[src+chGreen] > saved[src+chGreen] - m_Yrange)&&(data[src+chGreen] < saved[src+chGreen] + m_Yrange))&&
-	  ((data[src+chBlue] > saved[src+chBlue] - m_Vrange)&&(data[src+chBlue] < saved[src+chBlue] + m_Vrange)))
+      if (((data[src+chRed  ] > saved[src+chRed  ] - m_Yrange)&&
+	   (data[src+chRed  ] < saved[src+chRed  ] + m_Yrange))&&
+	  ((data[src+chGreen] > saved[src+chGreen] - m_Urange)&&
+	   (data[src+chGreen] < saved[src+chGreen] + m_Urange))&&
+	  ((data[src+chBlue ] > saved[src+chBlue ] - m_Vrange)&&
+	   (data[src+chBlue ] < saved[src+chBlue ] + m_Vrange))&&
+	  ((data[src+chAlpha] > saved[src+chAlpha] - m_Arange)&&
+	   (data[src+chAlpha] < saved[src+chAlpha] + m_Arange)))
 	{
 	  data[src+chRed] = 0;
 	  data[src+chGreen] = 0;
 	  data[src+chBlue] = 0;
+	  data[src+chAlpha] = 0;
 	}
       src+=4;
     }
@@ -184,11 +185,116 @@ void pix_background :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 
 #ifdef __MMX__
-void pix_background :: processGrayMMX(imageStruct &image){
-  int i;// h,w,hlength;
-  long src,pixsize;
+void pix_background :: processRGBAMMX(imageStruct &image)
+{
+  long i,pixsize;
+  pixsize = image.xsize * image.ysize * image.csize;
 
-  src = 0;
+  if(m_savedImage.xsize!=image.xsize ||
+     m_savedImage.ysize!=image.ysize ||
+     m_savedImage.format!=image.format)m_reset=1;
+
+  m_savedImage.xsize=image.xsize;
+  m_savedImage.ysize=image.ysize;
+  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.reallocate();
+
+  if (m_reset){
+    memcpy(m_savedImage.data,image.data,pixsize);
+  }
+  m_reset=0;
+
+  i=pixsize/sizeof(__m64)+(pixsize%sizeof(__m64)!=0);
+
+  __m64*data =(__m64*)image.data;
+  __m64*saved=(__m64*)m_savedImage.data;
+
+  const __m64 tresh=_mm_set_pi8(m_Yrange, m_Urange, m_Vrange, m_Arange,
+				m_Yrange, m_Urange, m_Vrange, m_Arange);
+  const __m64 offset=_mm_set_pi8(1, 1, 1, 1, 1, 1, 1, 1);
+  __m64 newpix, oldpix, m1;
+
+  while(i--){
+    /* 7ops, 3memops */
+    /* i have the feeling that this is not faster at all! 
+     * even if i have the 3memops + ONLY 1 _mm_subs_pu8() 
+     * i am equally slow as the generic code; 
+     * adding the other instruction does not change much
+     */
+    newpix=*data;
+    oldpix=*saved++;
+    m1    = newpix;
+    m1    = _mm_subs_pu8     (m1, oldpix);
+    oldpix= _mm_subs_pu8     (oldpix, newpix);
+    m1    = _mm_or_si64      (m1, oldpix); // |oldpix-newpix|
+    m1    = _mm_adds_pu8     (m1, offset);
+    m1    = _mm_subs_pu8     (m1, tresh);
+    m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>tresh
+    m1    = _mm_andnot_si64(m1, newpix);
+
+    *data++ = m1; 
+  }
+  _mm_empty();
+}
+void pix_background :: processYUVMMX(imageStruct &image)
+{
+  long pixsize;
+
+  pixsize = image.xsize * image.ysize * image.csize;
+
+  if(m_savedImage.xsize!=image.xsize ||
+     m_savedImage.ysize!=image.ysize ||
+     m_savedImage.format!=image.format)m_reset=1;
+
+  m_savedImage.xsize=image.xsize;
+  m_savedImage.ysize=image.ysize;
+  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.reallocate();
+  
+  if (m_reset){
+    memcpy(m_savedImage.data,image.data,pixsize);
+    // return;
+  }
+  m_reset=0;
+
+  int i=pixsize/sizeof(__m64)+(pixsize%sizeof(__m64)!=0);
+
+  __m64*data =(__m64*)image.data;
+  __m64*saved=(__m64*)m_savedImage.data;
+
+  const __m64 tresh=_mm_set_pi8(m_Urange, m_Yrange, m_Vrange, m_Yrange,
+			  m_Urange, m_Yrange, m_Vrange, m_Yrange);
+  const __m64 offset=_mm_set_pi8(1, 1, 1, 0, 1, 1, 1, 0);
+  const __m64 black =_mm_set_pi8(0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80);
+
+  __m64 newpix, oldpix, m1;
+
+  while(i--){
+    newpix=*data;
+    oldpix=*saved++;
+    m1    = newpix;
+    m1    = _mm_subs_pu8     (m1, oldpix);
+    oldpix= _mm_subs_pu8     (oldpix, newpix);
+    m1    = _mm_or_si64      (m1, oldpix); // |oldpix-newpix|
+    m1    = _mm_adds_pu8     (m1, offset); // to make tresh=0 work correctly
+    m1    = _mm_subs_pu8     (m1, tresh);  // m1>tresh -> saturation -> 0
+    m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>tresh
+
+    oldpix= black;
+    oldpix= _mm_and_si64     (oldpix, m1);
+
+    m1    = _mm_andnot_si64  (m1, newpix);
+    m1    = _mm_or_si64      (m1, oldpix);
+
+    *data++ = m1; 
+  }
+  _mm_empty();
+}
+
+void pix_background :: processGrayMMX(imageStruct &image){
+  int i;
+  long pixsize;
+
   pixsize = image.xsize * image.ysize * image.csize;
   if(m_savedImage.xsize!=image.xsize ||
      m_savedImage.ysize!=image.ysize ||
@@ -439,8 +545,11 @@ void pix_background :: resetCallback(void *data)
 void pix_background :: rangeNCallback(void *data, t_symbol*,int argc, t_atom*argv){
   /* normalized values (float)0..1 instead of (int)0..255 */
   unsigned int v=0;
+  GetMyClass(data)->m_Arange=255;
   switch(argc){
-  case 4:  case 3:
+  case 4:  
+    GetMyClass(data)->m_Arange=CLAMP((float)255.*atom_getfloat(argv+3));
+  case 3:
     GetMyClass(data)->m_Yrange=CLAMP((float)255.*atom_getfloat(argv));
     GetMyClass(data)->m_Urange=CLAMP((float)255.*atom_getfloat(argv+1));
     GetMyClass(data)->m_Vrange=CLAMP((float)255.*atom_getfloat(argv+2));
