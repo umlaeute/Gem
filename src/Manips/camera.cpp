@@ -494,27 +494,27 @@ void camera :: reverseMessCallback(void *data, t_floatarg val)
 }
 void camera :: leftMessCallback(void *data, t_floatarg val)
 {
-    GetMyClass(data)->left=(bool)val;
+    GetMyClass(data)->left=(int)val;
 }
 void camera :: rightMessCallback(void *data, t_floatarg val)
 {
-    GetMyClass(data)->right=(bool)val;
+    GetMyClass(data)->right=(int)val;
 }
 void camera :: slideLeftMessCallback(void *data, t_floatarg val)
 {
-    GetMyClass(data)->slideLeft=(bool)val;
+    GetMyClass(data)->slideLeft=(int)val;
 }
 void camera :: slideRightMessCallback(void *data, t_floatarg val)
 {
-    GetMyClass(data)->slideRight=(bool)val;
+    GetMyClass(data)->slideRight=(int)val;
 }
 void camera :: upMessCallback(void *data, t_floatarg val)
 {
-    GetMyClass(data)->up=(bool)val;
+    GetMyClass(data)->up=(int)val;
 }
 void camera :: downMessCallback(void *data, t_floatarg val)
 {
-    GetMyClass(data)->down=(bool)val;
+    GetMyClass(data)->down=(int)val;
 }
 void camera :: resetMessCallback(void *data)
 {
