@@ -35,11 +35,12 @@ GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
     to->type 	= type;
     to->data    = data;
     to->pdata   = pdata;
+    to->datasize= datasize;
 }
 GEM_EXTERN void imageStruct::info() {
-  post("imageStruct\t:%dx%dx%d\n\t\t%X\t(%x)\n\t\t%x\t%x\t%d",
+  post("imageStruct\t:%dx%dx%d\n\t\t%X\t(%x) %d\n\t\t%x\t%x\t%d",
        xsize, ysize, csize,
-       data, pdata,
+       data, pdata, datasize,
        format, type, notowned);
 }
 
@@ -67,9 +68,10 @@ GEM_EXTERN void imageStruct::copy2Image(imageStruct *to)
     to->csize 	= csize;
     to->format 	= format;
     to->type 	= type;
+    to->datasize= to->xsize * to->ysize * to->csize;
     
     // copy the data over
-    memcpy(to->data, data, to->xsize * to->ysize * to->csize);
+    memcpy(to->data, data, to->datasize);
 }
 
 GEM_EXTERN void imageStruct::refreshImage(imageStruct *to)

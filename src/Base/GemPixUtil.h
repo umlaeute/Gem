@@ -64,13 +64,12 @@ CLASS
 
 struct GEM_EXTERN imageStruct
 {
-
-  imageStruct() : xsize (0), ysize(0),csize(0),notowned(0),data(0),pdata(0) {}
+  imageStruct() : xsize (0), ysize(0),csize(0),notowned(0),data(0),pdata(0),datasize(0) {}
 
   ~imageStruct() { clear(); }
   void info();
-    //////////
-    // columns
+  //////////
+  // columns
   unsigned char* allocate(int size) {
     if (pdata) delete [] pdata;
 #if 1
@@ -79,41 +78,48 @@ struct GEM_EXTERN imageStruct
 #else
     data = pdata =  new unsigned char [size];
 #endif
+    datasize=size;
     return data; 
   }
-
+  // if we have allocated some space already, only re-allocate when needed.
+  unsigned char* reallocate(int size) {
+    if (size>datasize)
+      return allocate(size);
+    return data;
+  }
   void clear() {
     if (!notowned && pdata) {
       delete [] pdata;
       data = pdata = 0;      
     }
     xsize = ysize = csize = 0;
+    datasize=0;
   }
+  
+  GLint           xsize;
 
-    GLint           xsize;
+  //////////
+  // rows
+  GLint   	    ysize;
 
-    //////////
-    // rows
-    GLint   	    ysize;
+  //////////
+  // color (LUMINANCE = 1, RGBA = 4)
+  GLint   	    csize;
 
-    //////////
-    // color (LUMINANCE = 1, RGBA = 4)
-    GLint   	    csize;
+  //////////
+  // the format - either GL_RGBA, GL_BGRA_EXT, or GL_LUMINANCE
+  // or GL_YCBCR_422_GEM (which is on mac-computers GL_YCBCR_422_APPLE)
+  GLenum          format;
 
-    //////////
-    // the format - either GL_RGBA, GL_BGRA_EXT, or GL_LUMINANCE
-    // or GL_YCBCR_422_GEM (which is on mac-computers GL_YCBCR_422_APPLE)
-    GLenum          format;
-
-    //////////
-     // data type - always UNSIGNED_BYTE (except for OS X)
-    GLenum          type;
-
-
+  //////////
+  // data type - always UNSIGNED_BYTE (except for OS X)
+  GLenum          type;
+  
+  
   int notowned;
-    //////////
-    // the actual image data
-
+  //////////
+  // the actual image data
+  
   //////////
   // gets a pixel
   inline unsigned char GetPixel(int Y, int X, int C)
@@ -123,15 +129,16 @@ struct GEM_EXTERN imageStruct
   // sets a pixel
   inline void SetPixel(int Y, int X, int C, unsigned char VAL)
   { data[Y * xsize * csize + X * csize + C] = VAL; }
-
+  
   void copy2Image(imageStruct *to);
   void refreshImage(imageStruct *to);
   void copy2ImageStruct(imageStruct *to); // copy the imageStruct (but not the actual data)
-
-
-    unsigned char   *data;
+  
+  
+  unsigned char   *data;
+  int             datasize;
   private:
-    unsigned char   *pdata;
+  unsigned char   *pdata;
 };
 
 /*-----------------------------------------------------------------
