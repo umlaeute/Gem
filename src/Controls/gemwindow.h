@@ -46,7 +46,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemwindow : public CPPExtern
 {
-  CPPEXTERN_HEADER(gemwindow, CPPExtern)
+  CPPEXTERN_HEADER(gemwindow, GemOutput)
     
     public:
     
@@ -86,13 +86,15 @@ class GEM_EXTERN gemwindow : public CPPExtern
   int          m_fsaa;
   int          m_topmost;
 
+  bool m_windowRun;
+
   // what is necessary ???
   int m_windowNumber, m_buffer;
   int m_w, m_h;
 
  private:
 
-  WindowInfo gfxInfo;
+  WindowInfo gfxInfo, constInfo;
 
 
   int m_windowContext;
