@@ -26,6 +26,7 @@
 #include "DSgrabber.h"
 
 #define COMRELEASE(x) { if (x) x->Release(); x = NULL; }
+#define REGISTER_FILTERGRAPH 1
 
 // Utility functions
 void SetupCaptureDevice(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase);
@@ -33,6 +34,8 @@ HRESULT FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter);
 HRESULT ConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond);
 void GetBitmapInfoHdr(AM_MEDIA_TYPE* pmt, BITMAPINFOHEADER** ppbmih);
 HRESULT GetPin(IBaseFilter *, PIN_DIRECTION, IPin **);
+HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister);
+void RemoveGraphFromRot(DWORD pdwRegister);
 
 // /////////////////////////////////////////////////////////
 //
@@ -1311,4 +1314,40 @@ HRESULT GetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
     return E_FAIL;  
 }
 
+
+
+HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) 
+{
+    IMoniker * pMoniker;
+    IRunningObjectTable *pROT;
+    if (FAILED(GetRunningObjectTable(0, &pROT))) 
+    {
+        return E_FAIL;
+    }
+
+    WCHAR wsz[128];
+    wsprintfW(wsz, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph, 
+              GetCurrentProcessId());
+
+    HRESULT hr = CreateItemMoniker(L"!", wsz, &pMoniker);
+    if (SUCCEEDED(hr)) 
+    {
+        hr = pROT->Register(0, pUnkGraph, pMoniker, pdwRegister);
+        pMoniker->Release();
+    }
+
+    pROT->Release();
+    return hr;
+}
+
+void RemoveGraphFromRot(DWORD pdwRegister)
+{
+    IRunningObjectTable *pROT;
+
+    if (SUCCEEDED(GetRunningObjectTable(0, &pROT))) 
+    {
+        pROT->Revoke(pdwRegister);
+        pROT->Release();
+    }
+}
 #endif
