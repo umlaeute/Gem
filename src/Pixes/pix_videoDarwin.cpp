@@ -167,7 +167,7 @@ pascal Boolean pix_videoDarwin :: SeqGrabberModalFilterProc (DialogPtr theDialog
     return (handled);
 }
 
-void pix_videoDarwin :: DoVideoSettings(void){
+void pix_videoDarwin :: DoVideoSettings(){
     Rect	newActiveVideoRect;
     Rect	curBounds, curVideoRect, newVideoRect;
     ComponentResult	err;
