@@ -21,7 +21,8 @@ LOG
 #endif
 
 #ifdef MACOSX
-#import <OpenGL/gl.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
 #else
 #include <GL/gl.h>
 #endif // MACOSX

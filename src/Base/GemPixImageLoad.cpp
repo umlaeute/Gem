@@ -22,9 +22,8 @@
 #ifdef MACOSX
 #include <Carbon/carbon.h>
 #include <QuickTime/QuickTime.h>
-#include <QuickTime/ImageCompression.h>
-#include <QuickTime/Movies.h>
-#include <QuickTime/QuickTimeComponents.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
 #include <string.h>
 #endif // MACOSX
 
