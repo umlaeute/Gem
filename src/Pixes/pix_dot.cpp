@@ -188,7 +188,7 @@ void pix_dot :: processImage(imageStruct &image)
         //sampx = (int *)malloc(m_xsize * sizeof(int) );
         //sampy = (int *)malloc(m_ysize * sizeof(int) );
         if (sampx == NULL || sampy == NULL ){
-            return NULL;
+            return;
         }
         makePattern();
         sampxy_table_init();
