@@ -102,7 +102,7 @@ void pix_snap :: snapMess()
 		m_originalImage->xsize = m_width;
 		m_originalImage->ysize = m_height;
 		m_originalImage->csize = 4;
-                #ifndef MACOSX
+                #ifndef __APPLE__
 		m_originalImage->type  = GL_UNSIGNED_BYTE;
 		m_originalImage->format = GL_RGBA;
                 #else

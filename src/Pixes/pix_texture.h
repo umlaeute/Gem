@@ -18,7 +18,7 @@ LOG
 
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
-#ifndef MACOSX
+#ifndef __APPLE__
 #include <GL/glu.h>
 #else
 #include <OpenGL/glu.h>

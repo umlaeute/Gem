@@ -164,7 +164,7 @@ void pix_texture2 :: render(GemState *state)
 	
 	  float m_xRatio = (float)state->image->image.xsize / (float)x_2;
 	  float m_yRatio = (float)state->image->image.ysize / (float)y_2;
-#ifndef MACOSX		
+#ifndef __APPLE__		
 	  m_coords[0].s = 0.f;
 	  m_coords[0].t = 0.f;
 	  
@@ -177,7 +177,7 @@ void pix_texture2 :: render(GemState *state)
 	  m_coords[3].s = 0.f;
 	  m_coords[3].t = m_yRatio;
 #else
-	  m_coords[3].s = 0.f;		// switched the order of m_coords on MACOSX
+	  m_coords[3].s = 0.f;		// switched the order of m_coords on __APPLE__
 	  m_coords[3].t = 0.f;		// otherwise we'd be upside down!
 	  
 	  m_coords[2].s = m_xRatio;
@@ -203,7 +203,7 @@ void pix_texture2 :: render(GemState *state)
 	  m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
           post("pix_texture2: new buffer allocated ");
 	 // memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
-#ifndef MACOSX            
+#ifndef __APPLE__            
 	  m_coords[0].s = 0.f;
 	  m_coords[0].t = 0.f;
 	  
@@ -216,7 +216,7 @@ void pix_texture2 :: render(GemState *state)
 	  m_coords[3].s = 0.f;
 	  m_coords[3].t = (float)state->image->image.ysize;
 #else
-	  m_coords[3].s = 0.f;		// switched the order of m_coords on MACOSX
+	  m_coords[3].s = 0.f;		// switched the order of m_coords on __APPLE__
 	  m_coords[3].t = 0.f;		// otherwise we'd be upside down!
 		
 	  m_coords[2].s = (float)state->image->image.xsize;

@@ -9,7 +9,7 @@
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    Copyright (c) 2002 James Tittle & Chris Clepper
+//    Copyright (c) 2002-2003 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -102,7 +102,7 @@ void pix_texture :: setUpTextureState() {
 }
 
 inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
-#ifndef MACOSX
+#ifndef __APPLE__
       coords[0].s = 0.f;
       coords[0].t = 0.f;
       coords[1].s = xRatio;
@@ -111,8 +111,8 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
       coords[2].t = yRatio;
       coords[3].s = 0.f;
       coords[3].t = yRatio;
-#else // MACOSX
-      coords[3].s = 0.f;		// switched the order of coords on MACOSX
+#else // __APPLE__
+      coords[3].s = 0.f;		// switched the order of coords on __APPLE__
       coords[3].t = 0.f;		// otherwise we'd be upside down!
       coords[2].s = xRatio;
       coords[2].t = 0.f;
@@ -120,7 +120,7 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
       coords[1].t = yRatio;
       coords[0].s = 0.f;
       coords[0].t = yRatio;
-#endif // MACOSX
+#endif // __APPLE__
 }
 
 /////////////////////////////////////////////////////////

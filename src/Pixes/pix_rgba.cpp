@@ -69,7 +69,9 @@ void pix_rgba :: processImage(imageStruct &image)
     m_image.fromBGR(image.data);
     break;
   case GL_BGRA_EXT:
+    #ifndef __APPLE__
     m_image.fromBGRA(image.data);
+    #endif //__APPLE__
     break;
   case GL_LUMINANCE:
     m_image.fromGray(image.data);
