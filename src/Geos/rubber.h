@@ -92,7 +92,7 @@ class GEM_EXTERN rubber : public GemShape
   int		m_speed;
   int		m_blend;
   int		alreadyInit;
-  float 	xsize, ysize;
+  float 	xsize, ysize, ysize0;
 
   // number of grid-segments in X/Y direction (defaults: 32);
   int           m_grid_sizeX,m_grid_sizeY;

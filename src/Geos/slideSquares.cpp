@@ -98,27 +98,29 @@ void slideSquares :: render(GemState *state)
     int curCoord = 0;
     if (state->texture && state->numTexCoords)
     {
-        
-        glBegin(m_drawType);
-            for (i=0; i<= 31; i++){
-	    	glTexCoord2f(Sliders[i].U,     Sliders[i].V ); 
-                glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
+      GLfloat s = state->texCoords[curCoord].s;
+      GLfloat t = state->texCoords[curCoord].t;
 
-	        if (state->numTexCoords > 1) curCoord = 1;
-                    glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V    ); 
-                    glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
+      glBegin(m_drawType);
+      for (i=0; i<= 31; i++){
+	glTexCoord2f(state->texCoords[curCoord].s*Sliders[i].U, state->texCoords[curCoord].t*Sliders[i].V ); 
+	glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	        if (state->numTexCoords > 2) curCoord = 2;
-                    glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V+0.1 ); 
-                    glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+	if (state->numTexCoords > 1) curCoord = 1;
+	glTexCoord2f(state->texCoords[curCoord].s*(Sliders[i].U+0.1), state->texCoords[curCoord].t*Sliders[i].V ); 
+	glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	        if (state->numTexCoords > 3) curCoord = 3;
-                    glTexCoord2f(Sliders[i].U,     Sliders[i].V+0.1); 
-                    glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+	if (state->numTexCoords > 2) curCoord = 2;
+	glTexCoord2f(state->texCoords[curCoord].s*(Sliders[i].U+0.1),state->texCoords[curCoord].t*(Sliders[i].V+0.1)); 
+	glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+
+	if (state->numTexCoords > 3) curCoord = 3;
+	glTexCoord2f(state->texCoords[curCoord].s*Sliders[i].U,state->texCoords[curCoord].t*(Sliders[i].V+0.1));
+	glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
                 
-                Slide( i );
-            }
-        glEnd();
+	Slide( i );
+      }
+      glEnd();
     }
     else
     {
@@ -162,7 +164,7 @@ void slideSquares :: slide_init()
         post("sliders[%d].X = %f",i,Sliders[i].X);
         post("sliders[%d].Y = %f",i,Sliders[i].Y);
         post("sliders[%d].V = %f",i,Sliders[i].V);
-        post("sliders[%d].speed = %f",i,Sliders[i].Speed);*/
+        post("sliders[%d].speed = %f",i,Sliders[i].Speed); */
     }
 }
 GLvoid slideSquares :: Slide( int i )

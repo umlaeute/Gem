@@ -110,7 +110,7 @@ class GEM_EXTERN newWave : public GemShape
   void getFaceNormSegs( void );
 
   int		m_blend;
-  float		xsize, ysize;
+  float		xsize, ysize, ysize0;
   float		K1, D1, K2, D2, K3, D3;
   
   float force[MAXGRID][MAXGRID],
@@ -122,6 +122,8 @@ class GEM_EXTERN newWave : public GemShape
       faceNormSegs[2][2][MAXGRID][MAXGRID][3];
   int alreadyInit;
   float texCoords[MAXGRID][MAXGRID][2];
+
+  bool m_upsidedown;
 
  private:
 

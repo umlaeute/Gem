@@ -15,6 +15,7 @@
 #include "newWave.h"
 #include "Base/GemState.h"
 #include "Base/GemFuncUtil.h"
+#include "Base/GemPixUtil.h"
 #include <string.h>
 #include <math.h>
 
@@ -118,9 +119,10 @@ void newWave :: render(GemState *state)
 {
     int i, j;
 
-    glScalef(1./(grid*0.5), 1./(grid*0.5),1);
-    glTranslatef(-m_size*grid*0.5, -m_size*grid*0.5, 0);    
-    
+    //    post("m_size=%f", m_size);
+
+    GLfloat size = 2.*m_size / (GLfloat)grid;
+
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(m_linewidth);
         
@@ -133,22 +135,26 @@ void newWave :: render(GemState *state)
     glNormal3f( 0.0f, 0.0f, 1.0f);
     if (state->texture && state->numTexCoords)
     {
-#ifdef __APPLE__
-        if (xsize != state->texCoords[1].s)
-#else
-        if (xsize != state->texCoords[2].s)
-#endif
-            alreadyInit = 0;
-        
+      if ((xsize  != state->texCoords[1].s) ||
+	  (ysize  != state->texCoords[1].t) ||
+	  (ysize0 != state->texCoords[2].t))
+	alreadyInit = 0;
+
+      /*
+      post("S\t%f==%f", xsize, state->texCoords[tex_index].s);
+      post("T\t%f==%f\n", ysize, state->texCoords[tex_index].t);
+      */
+
+
+      // for (int II=0; II<4; II++)post("%d: %fx%f", II, state->texCoords[II].s, state->texCoords[II].t);
+
+
         if (!alreadyInit)
         {
-#ifdef __APPLE__
-            xsize = state->texCoords[1].s;
-            ysize = state->texCoords[1].t;
-#else
-            xsize = state->texCoords[2].s;
-            ysize = state->texCoords[2].t;
-#endif
+	    xsize  = state->texCoords[1].s;
+	    ysize0 = state->texCoords[2].t;
+	    ysize  = state->texCoords[1].t;
+
             setSize( grid );
             setOther( ENVMAP );
             reset( HILLFOUR );
@@ -162,11 +168,14 @@ void newWave :: render(GemState *state)
             {
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
-                glVertex3f( i*m_size, j*m_size, posit[i][j]*m_height);
+                glVertex3f( (i-grid/2)*size, (j-grid/2)*size, posit[i][j]*m_height);
+		/*
+		  post("(%f\t%f)\t(%f\t%f)", (i-grid/2)*size, (j-grid/2)*size, (i+1-grid/2)*size, (j-grid/2)*size);
+		*/
 
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
-                glVertex3f( (i+1)*m_size, j*m_size, posit[i+1][j]*m_height);
+                glVertex3f( (i+1-grid/2)*size, (j-grid/2)*size, posit[i+1][j]*m_height);
             }
             glEnd();
         }
@@ -176,6 +185,7 @@ void newWave :: render(GemState *state)
         {
             xsize = 1;
             ysize = 1;
+	    ysize0= 0;
             setSize( grid );
             setOther( ENVMAP );
             reset( HILLFOUR );
@@ -183,7 +193,7 @@ void newWave :: render(GemState *state)
         }
  
         
-// post("m_size=%f", m_size);
+// post("size=%f", size);
         for ( i=0; i<grid -1; ++i)
         {
             glBegin(m_drawType);
@@ -191,11 +201,11 @@ void newWave :: render(GemState *state)
             {
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
-                glVertex3f( i*m_size, j*m_size, posit[i][j]*m_height );
+                glVertex3f( (i-grid/2)*size, (j-grid/2)*size, posit[i][j]*m_height );
             
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
-                glVertex3f( (i+1)*m_size, j*m_size, posit[i+1][j]*m_height );
+                glVertex3f( (i+1-grid/2)*size, (j-grid/2)*size, posit[i+1][j]*m_height );
             }
             glEnd();
         }
@@ -204,8 +214,6 @@ void newWave :: render(GemState *state)
         glDisable(GL_POLYGON_SMOOTH);
         glDisable(GL_BLEND);
     }
-    glTranslatef(m_size*grid*0.5, m_size*grid*0.5, 0);
-    glScalef(grid*0.5, grid*0.5,1);
 }
 
 /////////////////////////////////////////////////////////
@@ -425,16 +433,19 @@ void newWave :: getposition()
 // getTexCoords
 //
 /////////////////////////////////////////////////////////
-void newWave :: getTexCoords()
+void newWave :: getTexCoords(void)
 {
+  post("getTexCoords: x=%f\ty=%f %f", xsize, ysize0, ysize);
     for ( int i = 0; i < grid; ++i)
     {
         for ( int j = 0; j < grid; ++j)
         {
-            texCoords[i][j][0] = ( ((float)j/(float)(grid-1)) );
-            texCoords[i][j][1] = ( ((float)i/(float)(grid-1)) );
-            //post("texCoords[%d][%d][0] = %f",i,j,texCoords[i][j][0]);
-            //post("texCoords[%d][%d][1] = %f",i,j,texCoords[i][j][1]);
+            texCoords[i][j][0] = ( (xsize*(float)i/(float)(grid-1)) );
+	    texCoords[i][j][1] = (ysize0-ysize)*(float)j/(float)(grid-1) + ysize;
+	    /*
+            post("texCoords[%d][%d][0] = %f",i,j,texCoords[i][j][0]);
+            post("texCoords[%d][%d][1] = %f",i,j,texCoords[i][j][1]);
+	    */
         }
     }
 }

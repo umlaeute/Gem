@@ -122,11 +122,8 @@ class GEM_EXTERN ripple : public GemShape
   int m_grid_sizeX, m_grid_sizeY;
   
   int		alreadyInit;
-  int		win_size_x;
-  int		win_size_y;
-  int		xyratio;
   int		m_blend;
-  float		xsize, ysize;
+  float		xsize, ysize, ysize0;
   RIPPLE_VECTOR ripple_vector[GRID_MAX_X][GRID_MAX_Y];
   RIPPLE_AMP ripple_amp[RIPPLE_LENGTH];
   RIPPLE_VERTEX ripple_vertex[GRID_MAX_X][GRID_MAX_Y];

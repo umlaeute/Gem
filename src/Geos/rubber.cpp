@@ -136,7 +136,7 @@ void rubber :: rubber_init()
       mass[k].v[2] = 0.0;
 
       mass[k].t[0] = xsize*( i/(m_grid_sizeX - 1.0) );
-      mass[k].t[1] = ysize*( j/(m_grid_sizeY - 1.0) );
+      mass[k].t[1] = (ysize0-ysize)*( j/(m_grid_sizeY - 1.0) )+ysize;
       /*
       post("mass[%d].t[0] = %f",k,mass[k].t[0]);
       post("mass[%d].t[1] = %f\n",k,mass[k].t[1]);
@@ -205,21 +205,17 @@ void rubber :: render(GemState *state)
     glNormal3f(0.0f, 0.0f, 1.0f);
      
     if (state->texture && state->numTexCoords) {
-#ifdef __APPLE__
-      if (xsize != state->texCoords[1].s)
-#else
-      if (xsize != state->texCoords[2].s)
-#endif
+
+      if ((xsize  != state->texCoords[1].s) ||
+	  (ysize  != state->texCoords[1].t) ||
+	  (ysize0 != state->texCoords[2].t))
 	alreadyInit = 0;
     
       if (!alreadyInit)  {
-#ifdef __APPLE__
-	xsize = state->texCoords[1].s;
-	ysize = state->texCoords[1].t;
-#else
-	xsize = state->texCoords[2].s;
-	ysize = state->texCoords[2].t;
-#endif
+	xsize  = state->texCoords[1].s;
+	ysize0 = state->texCoords[2].t;
+	ysize  = state->texCoords[1].t;
+
 	rubber_init();
 	alreadyInit = 1;
       }

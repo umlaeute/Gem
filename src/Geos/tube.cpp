@@ -167,16 +167,27 @@ void tube :: render(GemState *state){
   vectors1[NUM_PNTS+2][1] = vectors1[2][1];
   vectors1[NUM_PNTS+2][2] = vectors1[2][2];
 
+
   if (state->texture)    {
+    GLfloat xsize = 1.0;
+    GLfloat ysize0 = 0.0;
+    GLfloat ysize1 = 1.0;
+
+    if (state->image){
+      xsize =  state->texCoords[1].s;
+      ysize0 = state->texCoords[2].t;
+      ysize1 = state->texCoords[1].t;
+    }
+
     for (n = 1; n < NUM_PNTS + 2; n++)	{
       Matrix::generateNormal(vectors1[n-1], vectors2[n], vectors1[n+1], normal);
       glNormal3fv(normal);
-      glTexCoord2f( (float)(n-1)/NUM_PNTS, 0.0 );
+      glTexCoord2f( xsize*(float)(n-1)/NUM_PNTS, ysize0 );
       glVertex3fv(vectors1[n]);
 
       Matrix::generateNormal(vectors2[n+1], vectors1[n], vectors2[n-1], normal);
       glNormal3fv(normal);
-      glTexCoord2f( (float)(n-1)/NUM_PNTS, 1.0);
+      glTexCoord2f( xsize*(float)(n-1)/NUM_PNTS, ysize1);
       glVertex3fv(vectors2[n]);
     }
   }  else  {

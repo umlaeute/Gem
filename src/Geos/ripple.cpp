@@ -45,6 +45,7 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
     alreadyInit = 0;
     xsize = 0.f;
     ysize = 0.f;
+    ysize0 = 0.f;
     ctrX = 0;
     ctrY = 0;
     grab = -1;
@@ -85,25 +86,17 @@ void ripple :: render(GemState *state)
     
     if (state->texture && state->numTexCoords)
     {
-#ifdef __APPLE__
-        if (xsize != state->texCoords[1].s)
-#else
-        if (xsize != state->texCoords[2].s)
-#endif
+      if ((xsize  != state->texCoords[1].s) ||
+	  (ysize  != state->texCoords[1].t) ||
+	  (ysize0 != state->texCoords[2].t))
             alreadyInit = 0;
     
         if (!alreadyInit)
         {
-#ifdef __APPLE__
-            xsize = state->texCoords[1].s;
-            ysize = state->texCoords[1].t;
-#else
-            xsize = state->texCoords[2].s;
-            ysize = state->texCoords[2].t;
-#endif
-            win_size_x = GemMan::m_width;
-            win_size_y = GemMan::m_height;
-            xyratio = win_size_x/win_size_y;
+	    xsize  = state->texCoords[1].s;
+	    ysize0 = state->texCoords[2].t;
+	    ysize  = state->texCoords[1].t;
+
             ripple_init();
             precalc_ripple_vector();
             alreadyInit = 1;
@@ -127,8 +120,7 @@ void ripple :: render(GemState *state)
       if (!alreadyInit)   {
 	xsize = 1;
 	ysize = 1;
-	win_size_x = 1;
-	win_size_y = 1;
+	ysize0= 0;
 
 	ripple_init();
 	precalc_ripple_vector();
@@ -175,7 +167,7 @@ void ripple :: ripple_init()
   glDisable(GL_DEPTH_TEST);
 
   //ripple_max = (int)sqrt(win_size_x*win_size_y+win_size_x*win_size_x);
-  ripple_max = (int)sqrt(xsize * ysize + xsize * xsize);
+  ripple_max = (int)sqrt(xsize * (ysize+ysize0) + xsize * xsize);
 
   for (i = 0; i < RIPPLE_COUNT; i++)
   {
@@ -192,7 +184,7 @@ void ripple :: ripple_init()
       ripple_vertex[i][j].x[0] = (i/(m_grid_sizeX - 1.0 ))-0.5;
       ripple_vertex[i][j].x[1] = (j/(m_grid_sizeY - 1.0 ))-0.5;
       ripple_vertex[i][j].dt[0] = xsize*(i/(m_grid_sizeX - 1.0 ));
-      ripple_vertex[i][j].dt[1] = ysize*(j/(m_grid_sizeY - 1.0 ));
+      ripple_vertex[i][j].dt[1] = (ysize0-ysize)*(j/(m_grid_sizeY - 1.0 ))+ysize;
       
       /*post("ripple_vertex[%d][%d].x[0] = %f",i,j,ripple_vertex[i][j].x[0]);
 	post("ripple_vertex[%d][%d].x[1] = %f",i,j,ripple_vertex[i][j].x[1]);
@@ -234,7 +226,7 @@ void ripple :: precalc_ripple_vector()
       }
       z = (int)(l*xsize*2);
       ripple_vector[i][j].dx[0] = x*xsize;
-      ripple_vector[i][j].dx[1] = y*ysize;
+      ripple_vector[i][j].dx[1] = y*(ysize+ysize0);
       ripple_vector[i][j].r = z;
       
       //post("  %g, %g, %d", x, y, z);
@@ -374,7 +366,7 @@ int ripple :: ripple_max_distance(int gx, int gy)
   if (temp_d > d)
     d = temp_d;
 
-  return (int)((d/m_grid_sizeX)*win_size_x + RIPPLE_LENGTH/6);
+  return (int)((d/m_grid_sizeX)*xsize + RIPPLE_LENGTH/6);
 }
 /////////////////////////////////////////////////////////
 //	ripple_grab
@@ -391,7 +383,7 @@ void ripple :: ripple_grab()
     
     if (index < RIPPLE_COUNT)    {
       cx[index] = (int)(1.0*ctrX/xsize*m_grid_sizeX);
-      cy[index] = (int)(1.0*ctrY/ysize*m_grid_sizeY);
+      cy[index] = (int)(1.0*ctrY/(ysize+ysize0)*m_grid_sizeY);
       t[index] = 4*RIPPLE_STEP;
       max[index] = ripple_max_distance(cx[index], cy[index]);
     }

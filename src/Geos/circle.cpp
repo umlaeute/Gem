@@ -58,9 +58,12 @@ void circle :: render(GemState *state)
     glBegin(m_drawType);
 	    if (state->texture)
 	    {
+	      GLfloat xsize  = state->texCoords[1].s;
+	      GLfloat ysize0 = state->texCoords[2].t;
+	      GLfloat ysize  = state->texCoords[1].t;
 	        for (int n = 0; n < NUM_PNTS; n++)
 	        {
-		        glTexCoord2f((m_cos[n] + 1) / 2.f, (m_sin[n] + 1) / 2.f);
+		  glTexCoord2f(xsize*(m_cos[n] + 1) / 2.f, (ysize0-ysize)*(m_sin[n] + 1) / 2.f+ysize);
 		        glVertex3f(m_cos[n] * m_size,
 			           m_sin[n] * m_size,
 			           0.0);
