@@ -80,7 +80,8 @@ void pix_texture :: setUpTextureState() {
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
   if (GemMan::client_storage_supported){
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-    //    post("pix_texture: using client storage");}
+    //    post("pix_texture: using client storage");
+    }
   else
 #endif // CLIENT_STORAGE
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
