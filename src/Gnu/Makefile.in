@@ -11,7 +11,7 @@ DOCBASE = @DOCBASE@
 
 SYSTEMDOCS = $(DESTDIR)@prefix@@DOCBASE@/gem
 
-TARG_DIR = ../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../TV ../openGL ../yuv
+TARG_DIR = ../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../openGL
 
 OBJECTS = ../Manips/*.o \
          ../Particles/*.o \
@@ -20,10 +20,8 @@ OBJECTS = ../Manips/*.o \
          ../Pixes/*.o \
          ../Controls/*.o \
          ../Nongeos/*.o \
-	 ../TV/*.o \
          ../Geos/*.o \
 	 ../openGL/*.o \
-	 ../yuv/*.o
 #OBJECTS = ../Objects/*.o
 
 

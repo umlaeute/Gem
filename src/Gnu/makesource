@@ -1,6 +1,6 @@
 #!/bin/sh
 
-subdirs="../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../TV ../openGL ../yuv" 
+subdirs="../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../openGL ../yuv" 
 
 for j in $subdirs
 do
