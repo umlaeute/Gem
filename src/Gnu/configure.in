@@ -223,10 +223,6 @@ dnl Check glib (do we need this for png ?)
 	AC_CHECK_LIB(glib, main)
 
 dnl Checking the rest
-dnl Check model-lib
-	AC_FIND_LIB(glm, glmReadOBJ, $search_libs, fail)
-dnl Check particles
-	AC_FIND_LIB(particle, pEndActionList, $search_libs, fail)
 dnl Check for space-orb
 	AC_FIND_LIB(orb, orb_init, $search_libs, fail)
 
@@ -278,10 +274,6 @@ then
 AC_FIND_HEADER(GLTTFont.h, $search_heads, $with_gltt)
 fi
 
-dnl model
-AC_FIND_HEADER(glm.h, $search_heads, fail)
-dnl particles
-AC_FIND_HEADER(papi.h, $search_heads, fail)
 dnl space-orb
 AC_FIND_HEADER(orb.h, $search_heads, fail)
 
