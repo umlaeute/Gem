@@ -53,6 +53,10 @@ class GEM_EXTERN gemmouse : public CPPExtern
         void            mouseButton(int which, int state, int x, int y);
 
         //////////
+        // mouse button
+        void		mouseWheel(int axis, int value);
+        
+        //////////
         // The xpos outlet
         t_outlet    	*m_outXPos;
 
@@ -88,6 +92,7 @@ class GEM_EXTERN gemmouse : public CPPExtern
         // Static member functions
         static void     mouseMotionCallback(int x, int y, void *data);
         static void     mouseButtonCallback(int which, int state, int x, int y, void *data);
+        static void	mouseWheelCallback(int axis, int value, void *data);
 };
 
 #endif  // for header file

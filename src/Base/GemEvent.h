@@ -53,6 +53,21 @@ GEM_EXTERN extern void removeButtonCallback(BUTTON_CB callback, void *data);
 
 //////////////////////////////////////////////////////////////////
 //
+// Mouse wheel callback
+//
+//////////////////////////////////////////////////////////////////
+typedef void (*WHEEL_CB)(int, int, void *);
+//////////
+// Set a wheel callback
+GEM_EXTERN extern void setWheelCallback(WHEEL_CB callback, void *data);
+
+//////////
+// Remove a wheel callback
+GEM_EXTERN extern void removeWheelCallback(WHEEL_CB callback, void *data);
+
+
+//////////////////////////////////////////////////////////////////
+//
 // Tablet motion callback
 //
 //////////////////////////////////////////////////////////////////
@@ -130,6 +145,7 @@ GEM_EXTERN extern void removeResizeCallback(RESIZE_CB callback, void *data);
 // Trigger an event
 GEM_EXTERN extern void triggerMotionEvent(int x, int y);
 GEM_EXTERN extern void triggerButtonEvent(int which, int state, int x, int y);
+GEM_EXTERN extern void triggerWheelEvent(int axis, int value);
 GEM_EXTERN extern void triggerTabletMotionEvent(int x, int y, float pressure);
 GEM_EXTERN extern void triggerTabletRotationEvent(int az, int alt, int twist);
 GEM_EXTERN extern void triggerTabletButtonEvent(int which, int state, int x, int y);

@@ -33,6 +33,7 @@ struct CallbackList
 
 static CallbackList *s_motionList = NULL;
 static CallbackList *s_buttonList = NULL;
+static CallbackList *s_wheelList = NULL;
 static CallbackList *s_tabmotionList = NULL;
 static CallbackList *s_tabrotationList = NULL;
 static CallbackList *s_tabbuttonList = NULL;
@@ -116,6 +117,53 @@ GEM_EXTERN void removeButtonCallback(BUTTON_CB callback, void *data)
              theList->data == data)
     {
         s_buttonList = theList->next;
+        delete theList;
+    }
+    else
+    {
+        while(theList->next)
+        {
+            if (theList->next->func == (void *)callback &&
+                theList->next->data == data)
+            {
+                CallbackList *holder = theList->next;
+                theList->next = holder->next;
+                delete holder;
+                return;
+            }
+            theList = theList->next;
+        }
+    }
+}
+/////////////////////////////////////////////////////////
+// Wheel callbacks
+//
+/////////////////////////////////////////////////////////
+GEM_EXTERN void setWheelCallback(WHEEL_CB callback, void *data)
+{
+    CallbackList *newCallback = new CallbackList;
+    newCallback->data = data;
+    newCallback->func = (void *)callback;
+
+    if (!s_wheelList)
+        s_wheelList = newCallback;
+    else
+    {
+        CallbackList *theList = s_wheelList;
+        while(theList->next)
+            theList = theList->next;
+        theList->next = newCallback;
+    }
+}
+GEM_EXTERN void removeWheelCallback(WHEEL_CB callback, void *data)
+{
+    CallbackList *theList = s_wheelList;
+    if (!theList)
+        return;
+    else if (theList->func == (void *)callback &&
+             theList->data == data)
+    {
+        s_wheelList = theList->next;
         delete theList;
     }
     else
@@ -391,6 +439,16 @@ GEM_EXTERN void triggerButtonEvent(int which, int state, int x, int y)
     {
         BUTTON_CB callback = (BUTTON_CB)theList->func;
         (*callback)(which, state, x, y, theList->data);
+        theList = theList->next;
+    }
+}
+GEM_EXTERN void triggerWheelEvent(int axis, int value)
+{
+    CallbackList *theList = s_wheelList;
+    while(theList)
+    {
+        WHEEL_CB callback = (WHEEL_CB)theList->func;
+        (*callback)(axis, value, theList->data);
         theList = theList->next;
     }
 }
