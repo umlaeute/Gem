@@ -367,6 +367,7 @@ _glmReadMTL(GLMmodel* model, char* name)
                 break;
         }
     }
+    return 0;
 }
 
 /* glmWriteMTL: write a wavefront material library file
@@ -421,6 +422,7 @@ _glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
         fprintf(file, "Ns %f\n", material->shininess / 128.0 * 1000.0);
         fprintf(file, "\n");
     }
+    return 0;
 }
 
 
@@ -562,6 +564,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       group->numtriangles = 0;
       group = group->next;
   }
+  return 0;
 }
 
 /* glmSecondPass: second pass at a Wavefront OBJ file that gets all
@@ -1556,6 +1559,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
     }
     
     fclose(file);
+    return 0;//?
 }
 
 /* glmDraw: Renders the model to the current OpenGL context using the
