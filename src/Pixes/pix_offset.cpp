@@ -85,16 +85,10 @@ void pix_offset :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_offset :: processYUVImage(imageStruct &image)
 {
- 
-#ifdef __VEC__
-//post("altivec");
-processYUV_Altivec(image);
-return;
-#else 
-    int h,w;
-    long src;
+  int h,w;
+  long src;
 
-src = 0;
+  src = 0;
 
 
 //format is U Y V Y
@@ -108,15 +102,37 @@ for (h=0; h<image.ysize; h++){
 
         src+=4;
     }
+ }
+}
+#ifdef __MMX__
+void pix_offset :: processRGBAMMX(imageStruct &image)
+{
+
+  char  R = m_offset[chRed];
+  char  G = m_offset[chGreen];
+  char  B = m_offset[chBlue];
+  char  A = m_offset[chAlpha];
+
+  //post("%d %d %d %d", R, G, B, A);
+
+  register int pixsize = (image.ysize * image.xsize)>>1;
+
+  register __m64 offset_64 = _mm_setr_pi8(R, G, B, A, R, G, B, A);
+  register __m64*data_p= (__m64*)image.data;
+  _mm_empty();
+
+  while(pixsize--) {
+    data_p[0]=_mm_add_pi8(data_p[0], offset_64);
+    data_p++;      
+  }
+  _mm_empty();
 }
 #endif
-}
 
-
-/* more optimized version - unrolled and load-hoisted */
-void pix_offset :: processYUV_Altivec(imageStruct &image)
-{
 #ifdef __VEC__
+/* more optimized version - unrolled and load-hoisted */
+void pix_offset :: processYUVAltivec(imageStruct &image)
+{
     register int h,w,width,height;
 width = image.xsize/16; //for altivec
 height = image.ysize;
@@ -230,8 +246,8 @@ height = image.ysize;
     vec_dss( 2 );
     vec_dss( 3 );  //end of working altivec function 
     #endif
-#endif
 }
+#endif
 
 
 /////////////////////////////////////////////////////////
