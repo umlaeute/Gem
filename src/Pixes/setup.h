@@ -20,6 +20,7 @@ extern "C" {
    void pix_add_setup();
    void pix_aging_setup();
    void pix_alpha_setup();
+   void pix_background_setup();
    void pix_bitmask_setup();
    void pix_blob_setup();
    void pix_buf_setup();
@@ -38,6 +39,7 @@ extern "C" {
    void pix_dot_setup();
    void pix_draw_setup();
    void pix_dump_setup();
+   void pix_duotone_setup();
    void pix_crop_setup();
    void pix_dvLinux_setup();
    void pix_dv_setup();
@@ -59,6 +61,7 @@ extern "C" {
    void pix_indycam_setup();
    void pix_invert_setup();
    void pix_mask_setup();
+   void pix_mix_setup();
    void pix_movie_setup();
    void pix_multiimage_setup();
    void pix_multiply_setup();
@@ -70,6 +73,7 @@ extern "C" {
    void pix_resize_setup();
    void pix_rgb2hsv_setup();
    void pix_rgba_setup();
+   void pix_roll_setup();
    void pix_yuv_setup();
    void pix_grey_setup();
    void pix_set_setup();
@@ -110,9 +114,11 @@ extern "C" {
       pix_add_setup();
       pix_aging_setup();
       pix_alpha_setup();
+      pix_background_setup();
       pix_bitmask_setup();
       pix_blob_setup();   
       pix_buf_setup();
+      pix_chroma_key_setup();
       pix_clearblock_setup();
       pix_color_setup();
       pix_coloralpha_setup();
@@ -127,6 +133,7 @@ extern "C" {
       pix_dot_setup();
       pix_draw_setup();
       pix_dump_setup();
+      pix_duotone_setup();
       pix_crop_setup();
 #if defined(HAVE_DV) &&  defined(__linux__)
       pix_dvLinux_setup();
@@ -158,6 +165,7 @@ extern "C" {
 #endif
       pix_invert_setup();
       pix_mask_setup();
+      pix_mix_setup();
       pix_movie_setup();
       pix_multiimage_setup();
       pix_multiply_setup();
@@ -169,8 +177,9 @@ extern "C" {
       pix_resize_setup();
       pix_rgb2hsv_setup();
       pix_rgba_setup();
+      pix_roll_setup();
       pix_yuv_setup();
-      pix_grey_setup();
+   //   pix_grey_setup();
       pix_set_setup();
       pix_sig2pix_setup();
       pix_snap_setup();
