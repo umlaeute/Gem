@@ -80,6 +80,7 @@ void pix_buffer :: bangMess()
 }
 bool pix_buffer :: putMess(imageStruct*img,int pos){
   if (pos<0 || pos>=m_numframes)return false;
+  if(!img)return false;
   img->copy2Image(m_buffer+pos);
   return true;
 }
