@@ -152,25 +152,25 @@ void pix_gain :: processYUV_Altivec(imageStruct &image)
         //unsigned int	i;
         unsigned long	elements[8];
         //vector signed char v;
-        vector	unsigned long v;
+        vector	unsigned int v;
     }bitBuffer;
     
-        union
+    /*    union
     {
         //unsigned int	i;
         unsigned char	elements[16];
         //vector signed char v;
         vector	unsigned char v;
-    }charBuffer;
+    }charBuffer; */
     
-    //vector unsigned char c;
-    vector signed short d, hiImage, loImage, YImage, UVImage, UVTemp, YTemp;
+    register vector signed short d, hiImage, loImage, YImage, UVImage;
+    //vector signed short UVTemp, YTemp;
     vector unsigned char zero = vec_splat_u8(0);
-    vector signed short szero = vec_splat_s16(0);
+   // vector signed short szero = vec_splat_s16(0);
     //vector unsigned char c,gain,one;
-    vector signed int UVhi,UVlo,Yhi,Ylo;
-    vector signed short c,gain,one;
-    vector unsigned long bitshift;
+    register vector signed int UVhi,UVlo,Yhi,Ylo;
+    register vector signed short c,gain;
+    register vector unsigned int bitshift;
     vector unsigned char *inData = (vector unsigned char*) image.data;
 
     
