@@ -88,6 +88,8 @@ class GEM_EXTERN pix_convolve : public GemPixObj
     	//////////
     	// The number of columns
     	int 	    	m_cols;
+        
+        int 		m_chroma;
     	
     private:
 	imageStruct tempImg;
@@ -96,6 +98,7 @@ class GEM_EXTERN pix_convolve : public GemPixObj
     	// Static member functions
     	static void 	rangeMessCallback(void *data, t_floatarg range);
     	static void 	matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+        static void 	chromaMessCallback(void *data, t_floatarg value);
 };
 
 #endif	// for header file
