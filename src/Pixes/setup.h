@@ -114,6 +114,7 @@ extern "C" {
   void pix_rtx_setup();
   void pix_convert_setup();  
   void pix_emboss_setup();
+  void pix_posterize_setup();
 
   void Pixes_setup() {
 
@@ -239,5 +240,6 @@ extern "C" {
     pix_chroma_key_setup();
     pix_convert_setup();
     pix_emboss_setup();
+    pix_posterize_setup();
   }
 } // for extern "C"
