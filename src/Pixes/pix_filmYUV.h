@@ -144,11 +144,13 @@ class GEM_EXTERN pix_filmYUV : public GemBase
   int           m_format;
 
   bool          m_film; // are we in film- or in movie-mode
+  float		m_fps;
 
   //////////
   // a outlet for information like #frames and "reached end"
   t_outlet     *m_outNumFrames;
   t_outlet     *m_outEnd;
+  t_outlet     *m_FrameRate;
 
  protected:
 	

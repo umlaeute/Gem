@@ -36,6 +36,7 @@ pix_filmYUV :: pix_filmYUV(t_symbol *filename) :
  // create an outlet to send out how many frames are in the movie + bang when we reached the end
  m_outNumFrames = outlet_new(this->x_obj, 0);
  m_outEnd       = outlet_new(this->x_obj, 0);
+ m_FrameRate       = outlet_new(this->x_obj, 0);
 
  // initialize the pix block data
  m_pixBlock.image=m_imageStruct;
@@ -169,6 +170,7 @@ void pix_filmYUV :: render(GemState *state)
     newImage = 1;
     getFrame();
     m_curFrame = m_reqFrame;
+
     if (m_film)m_pixBlock.image.data = m_frame; // this is mainly for windows
   }
   m_pixBlock.newimage = newImage;
@@ -197,6 +199,7 @@ void pix_filmYUV :: postrender(GemState *state)
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
   }
+  outlet_float(m_FrameRate,m_fps);
 }
 
 /////////////////////////////////////////////////////////
@@ -221,7 +224,7 @@ void pix_filmYUV :: changeImage(int imgNum, int trackNum)
 #endif
   case GEM_MOVIE_MOV:
 #ifdef DEBUG
-    post("pix_filmYUV: trackNum = %d", trackNum);
+  //  post("pix_filmYUV: trackNum = %d", trackNum);
 #endif
     if (trackNum < 0)trackNum=0;
     if (trackNum > m_numTracks-1) error("GEM: pix_filmYUV: track %d number too high (max %d) ", trackNum, m_numTracks-1);
