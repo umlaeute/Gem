@@ -245,7 +245,11 @@ void imageVert :: render(GemState *state)
     if (!state->inDisplayList && m_rebuildList)
     {
         glNewList(m_dispList, GL_COMPILE_AND_EXECUTE);
+#ifdef MACOSX
+        if (state->image->image.format == GL_RGBA || state->image->image.format == GL_BGRA_EXT)	//tigital
+#else
         if (state->image->image.format == GL_RGBA)
+#endif
             processRGBAPix(state->image->image, state->texture);
         else
             processGrayPix(state->image->image, state->texture);
@@ -255,7 +259,11 @@ void imageVert :: render(GemState *state)
 	// nope, but our current one isn't valid
     else if (m_rebuildList)
     {
+#ifdef MACOSX
+        if (state->image->image.format == GL_RGBA || state->image->image.format == GL_BGRA_EXT)	//tigital
+#else
         if (state->image->image.format == GL_RGBA)
+#endif
             processRGBAPix(state->image->image, state->texture);
         else
             processGrayPix(state->image->image, state->texture);
