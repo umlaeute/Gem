@@ -19,9 +19,9 @@ LOG
 
 #ifdef GLTT
 #include "GLTTBitmapFont.h"
-# if defined __linux__ || defined __APPLE__
+//# if defined __linux__ || defined __APPLE__
 # include "GLTTPixmapFont.h"
-# endif
+//# endif
 #endif
 
 /*-----------------------------------------------------------------
