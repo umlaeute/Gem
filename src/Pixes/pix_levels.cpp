@@ -143,11 +143,11 @@ void pix_levels :: Pete_Levels_SetupCFSettings()
       if (m_DoAllowInversion) {
 	if (nInputDelta==0) nInputDelta=1;
 	if (nOutputDelta==0)nOutputDelta=1;
-	nInputDelta=GateInt(nInputDelta,-255,255);
-	nOutputDelta=GateInt(nOutputDelta,-255,255);
+	nInputDelta=clampFunc(nInputDelta,-255,255);
+	nOutputDelta=clampFunc(nOutputDelta,-255,255);
       } else {
-	nInputDelta=GateInt(nInputDelta,1,255);
-	nOutputDelta=GateInt(nOutputDelta,1,255);
+	nInputDelta=clampFunc(nInputDelta,1,255);
+	nOutputDelta=clampFunc(nOutputDelta,1,255);
       }
 
       const int nRecipInputDelta=cnFixedOne/nInputDelta;
@@ -170,9 +170,9 @@ void pix_levels :: Pete_Levels_SetupCFSettings()
 	int nOutputGreen=((nTempGreen*nOutputDelta)/256)+nOutputLow;
 	int nOutputBlue=((nTempBlue*nOutputDelta)/256)+nOutputLow;
 
-	nOutputRed=GateInt(nOutputRed,0,255);
-	nOutputGreen=GateInt(nOutputGreen,0,255);
-	nOutputBlue=GateInt(nOutputBlue,0,255);
+	nOutputRed=clampFunc(nOutputRed,0,255);
+	nOutputGreen=clampFunc(nOutputGreen,0,255);
+	nOutputBlue=clampFunc(nOutputBlue,0,255);
 
 	pRedTable[nCount]=(nOutputRed<<SHIFT_RED);
 	pGreenTable[nCount]=(nOutputGreen<<SHIFT_GREEN);
@@ -203,23 +203,23 @@ void pix_levels :: Pete_Levels_SetupCFSettings()
 	    if (nRedInputDelta==0)	 nRedInputDelta=1;
 	    if (nRedOutputDelta==0)  nRedOutputDelta=1;
 
-	    nRedInputDelta=GateInt(nRedInputDelta,-255,255);
-	    nRedOutputDelta=GateInt(nRedOutputDelta,-255,255);
+	    nRedInputDelta=clampFunc(nRedInputDelta,-255,255);
+	    nRedOutputDelta=clampFunc(nRedOutputDelta,-255,255);
 
-	    nGreenInputDelta=GateInt(nGreenInputDelta,-255,255);
-	    nGreenOutputDelta=GateInt(nGreenOutputDelta,-255,255);
+	    nGreenInputDelta=clampFunc(nGreenInputDelta,-255,255);
+	    nGreenOutputDelta=clampFunc(nGreenOutputDelta,-255,255);
 
-	    nBlueInputDelta=GateInt(nBlueInputDelta,-255,255);
-	    nBlueOutputDelta=GateInt(nBlueOutputDelta,-255,255);
+	    nBlueInputDelta=clampFunc(nBlueInputDelta,-255,255);
+	    nBlueOutputDelta=clampFunc(nBlueOutputDelta,-255,255);
 	  } else {
-	    nRedInputDelta=GateInt(nRedInputDelta,1,255);
-	    nRedOutputDelta=GateInt(nRedOutputDelta,1,255);
+	    nRedInputDelta=clampFunc(nRedInputDelta,1,255);
+	    nRedOutputDelta=clampFunc(nRedOutputDelta,1,255);
 
-	    nGreenInputDelta=GateInt(nGreenInputDelta,1,255);
-	    nGreenOutputDelta=GateInt(nGreenOutputDelta,1,255);
+	    nGreenInputDelta=clampFunc(nGreenInputDelta,1,255);
+	    nGreenOutputDelta=clampFunc(nGreenOutputDelta,1,255);
 
-	    nBlueInputDelta=GateInt(nBlueInputDelta,1,255);
-	    nBlueOutputDelta=GateInt(nBlueOutputDelta,1,255);
+	    nBlueInputDelta=clampFunc(nBlueInputDelta,1,255);
+	    nBlueOutputDelta=clampFunc(nBlueOutputDelta,1,255);
 	  }
 
 	  const int nRedRecipInputDelta=cnFixedOne/nRedInputDelta;
@@ -244,9 +244,9 @@ void pix_levels :: Pete_Levels_SetupCFSettings()
 	    int nOutputGreen=((nTempGreen*nGreenOutputDelta)/256)+nGreenOutputLow;
 	    int nOutputBlue=((nTempBlue*nBlueOutputDelta)/256)+nBlueOutputLow;
 	    
-	    nOutputRed=GateInt(nOutputRed,0,255);
-	    nOutputGreen=GateInt(nOutputGreen,0,255);
-	    nOutputBlue=GateInt(nOutputBlue,0,255);
+	    nOutputRed=clampFunc(nOutputRed,0,255);
+	    nOutputGreen=clampFunc(nOutputGreen,0,255);
+	    nOutputBlue=clampFunc(nOutputBlue,0,255);
 	    
 	    pRedTable[nCount]=(nOutputRed<<SHIFT_RED);
 	    pGreenTable[nCount]=(nOutputGreen<<SHIFT_GREEN);
@@ -398,7 +398,7 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels() {
 
 	if (nStartThreshold<nEndThreshold) {
 		if (nLowLuminance>=nHighLuminance) {
-			nLowLuminance=GateInt(nHighLuminance-1,0,255);
+			nLowLuminance=clampFunc(nHighLuminance-1,0,255);
 		}
 	}
 	m_UniformInputFloor=(float)(nLowLuminance);
@@ -470,24 +470,29 @@ void pix_levels :: obj_setupCallback(t_class *classPtr)
 void pix_levels :: autoCallback(void *data, t_floatarg m_DoAuto)
 {
   GetMyClass(data)->m_DoAuto=(m_DoAuto>0.);
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_levels :: uniCallback(void *data, t_floatarg m_DoUniform)
 {
   GetMyClass(data)->m_DoUniform=(m_DoUniform>0.);
+  GetMyClass(data)->setPixModified();
 }
 void pix_levels :: invCallback(void *data, t_floatarg m_DoAllowInversion)
 {
   GetMyClass(data)->m_DoAllowInversion=(m_DoAllowInversion>0.);
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_levels :: lowPCallback(void *data, t_floatarg m_LowPercentile)
 {
   GetMyClass(data)->m_LowPercentile=(m_LowPercentile);
+  GetMyClass(data)->setPixModified();
 }
 void pix_levels :: hiPCallback(void *data, t_floatarg m_HighPercentile)
 {
   GetMyClass(data)->m_HighPercentile=(m_HighPercentile);  
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_levels :: uniformCallback(void *data, t_floatarg m_UniformInputFloor, t_floatarg m_UniformInputCeiling, t_floatarg m_UniformOutputFloor, t_floatarg m_UniformOutputCeiling)
@@ -496,6 +501,7 @@ void pix_levels :: uniformCallback(void *data, t_floatarg m_UniformInputFloor, t
   GetMyClass(data)->m_UniformInputCeiling=(m_UniformInputCeiling*255.);
   GetMyClass(data)->m_UniformOutputFloor=(m_UniformOutputFloor*255.);
   GetMyClass(data)->m_UniformOutputCeiling=(m_UniformOutputCeiling*255.);  
+  GetMyClass(data)->setPixModified();
 }
 void pix_levels :: redCallback(void *data, t_floatarg m_RedInputFloor, t_floatarg m_RedInputCeiling, t_floatarg m_RedOutputFloor, t_floatarg m_RedOutputCeiling)
 {
@@ -503,6 +509,7 @@ void pix_levels :: redCallback(void *data, t_floatarg m_RedInputFloor, t_floatar
   GetMyClass(data)->m_RedInputCeiling=(m_RedInputCeiling*255.);
   GetMyClass(data)->m_RedOutputFloor=(m_RedOutputFloor*255.);
   GetMyClass(data)->m_RedOutputCeiling=(m_RedOutputCeiling*255.);  
+  GetMyClass(data)->setPixModified();
 }
 void pix_levels :: greenCallback(void *data, t_floatarg m_GreenInputFloor, t_floatarg m_GreenInputCeiling, t_floatarg m_GreenOutputFloor, t_floatarg m_GreenOutputCeiling)
 {
@@ -510,6 +517,7 @@ void pix_levels :: greenCallback(void *data, t_floatarg m_GreenInputFloor, t_flo
   GetMyClass(data)->m_GreenInputCeiling=(m_GreenInputCeiling*255.);
   GetMyClass(data)->m_GreenOutputFloor=(m_GreenOutputFloor*255.);
   GetMyClass(data)->m_GreenOutputCeiling=(m_GreenOutputCeiling*255.);  
+  GetMyClass(data)->setPixModified();
 }
 void pix_levels :: blueCallback(void *data, t_floatarg m_BlueInputFloor, t_floatarg m_BlueInputCeiling, t_floatarg m_BlueOutputFloor, t_floatarg m_BlueOutputCeiling)
 {
@@ -517,4 +525,5 @@ void pix_levels :: blueCallback(void *data, t_floatarg m_BlueInputFloor, t_float
   GetMyClass(data)->m_BlueInputCeiling=(m_BlueInputCeiling*255.);
   GetMyClass(data)->m_BlueOutputFloor=(m_BlueOutputFloor*255.);
   GetMyClass(data)->m_BlueOutputCeiling=(m_BlueOutputCeiling*255.);  
+  GetMyClass(data)->setPixModified();
 }

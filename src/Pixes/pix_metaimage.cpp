@@ -33,7 +33,6 @@ pix_metaimage :: pix_metaimage()
 
     init =0;
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
-
 }
 
 /////////////////////////////////////////////////////////
@@ -75,7 +74,7 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
     float SubWidth;
     float SubHeight;
     
-    m_Size = GateFlt(m_Size,0.0f,1.0f);
+    m_Size = clampFunc(m_Size,0.0f,1.0f);
 
     if (m_DoDistanceBased>0.0f) {
 
@@ -133,7 +132,7 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
     float SubWidth;
     float SubHeight;
     
-    m_Size = GateFlt(m_Size,0.0f,1.0f);
+    m_Size = clampFunc(m_Size,0.0f,1.0f);
 
     if (m_DoDistanceBased>0.0f) {
 
@@ -223,10 +222,10 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImages(U32* pSubImage,U32 AverageCol
       const int nTopY=static_cast<int>(CurrentY);
       const int nRightX=static_cast<int>(CurrentX+SubWidth);
       const int nBottomY=static_cast<int>(CurrentY+SubHeight);
-      const int nClippedLeftX=GateInt(nLeftX,0,(nWidth-1));
-      const int nClippedTopY=GateInt(nTopY,0,(nHeight-1));
-      const int nClippedRightX=GateInt(nRightX,0,(nWidth-1));
-      const int nClippedBottomY=GateInt(nBottomY,0,(nHeight-1));
+      const int nClippedLeftX=clampFunc(nLeftX,0,(nWidth-1));
+      const int nClippedTopY=clampFunc(nTopY,0,(nHeight-1));
+      const int nClippedRightX=clampFunc(nRightX,0,(nWidth-1));
+      const int nClippedBottomY=clampFunc(nBottomY,0,(nHeight-1));
 
       U32 SubImageAverage=Pete_MetaImage_GetAreaAverage(
 							pSource,
@@ -298,10 +297,10 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
       const U32 nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
       const U32 nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
 
-      const U32 nOutputRed=GateInt(nSourceRed+nRedDelta,0,255);
-      const U32 nOutputGreen=GateInt(nSourceGreen+nGreenDelta,0,255);
-      const U32 nOutputBlue=GateInt(nSourceBlue+nBlueDelta,0,255);
-      const U32 nOutputAlpha=GateInt(nSourceAlpha+nAlphaDelta,0,255);//0xff;
+      const U32 nOutputRed=clampFunc(nSourceRed+nRedDelta,0,255);
+      const U32 nOutputGreen=clampFunc(nSourceGreen+nGreenDelta,0,255);
+      const U32 nOutputBlue=clampFunc(nSourceBlue+nBlueDelta,0,255);
+      const U32 nOutputAlpha=clampFunc(nSourceAlpha+nAlphaDelta,0,255);//0xff;
 
       const U32 OutputColour=
 	((nOutputRed&0xff)<<SHIFT_RED)|
@@ -403,14 +402,14 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
     U32* pOutputLineStart=pCurrentOutput;
     const int nTopY=static_cast<int>(SourceY);
     int nBottomY=static_cast<int>(SourceY+SourceYInc);
-    nBottomY=GateInt(nBottomY,0,(nHeight-1));
+    nBottomY=clampFunc(nBottomY,0,(nHeight-1));
 
     float SourceX;
     for (SourceX=0.0f; SourceX<nWidth; SourceX+=SourceXInc) {
 
       const int nLeftX=static_cast<int>(SourceX);
       int nRightX=static_cast<int>(SourceX+SourceXInc);
-      nRightX=GateInt(nRightX,0,(nWidth-1));
+      nRightX=clampFunc(nRightX,0,(nWidth-1));
 
       const U32 OutputColour=
 	Pete_MetaImage_GetAreaAverage(pSource,nLeftX,nTopY,nRightX,nBottomY,1);
@@ -523,12 +522,15 @@ void pix_metaimage :: obj_setupCallback(t_class *classPtr)
 void pix_metaimage :: sizeCallback(void *data, t_floatarg sz)
 {
   GetMyClass(data)->m_Size=(sz);
+  GetMyClass(data)->setPixModified();
 }
 void pix_metaimage :: distanceCallback(void *data, t_floatarg m_DoDistanceBased)
 {
   GetMyClass(data)->m_DoDistanceBased=(m_DoDistanceBased);
+  GetMyClass(data)->setPixModified();
 }
 void pix_metaimage :: cheapCallback(void *data, t_floatarg m_DoCheapAndNasty)
 {
   GetMyClass(data)->m_DoCheapAndNasty=(m_DoCheapAndNasty);  
+  GetMyClass(data)->setPixModified();
 }

@@ -171,10 +171,6 @@ void pix_dot :: drawDot(int xx, int yy, unsigned char c, unsigned int *dest)
 /////////////////////////////////////////////////////////
 void pix_dot :: sizeMess(int width, int height)
 {
-#if 0
-  dot_size = (width>0)?width:8;
-  dot_hsize = (height>0)?height:8;
-#else
   if(width>0)dots_width=width;
   else  error("pix_dot: width must be > 0!");
   if(height>0)dots_height=height;
@@ -182,8 +178,7 @@ void pix_dot :: sizeMess(int width, int height)
   m_useScale=false;
   alreadyInit=0;
   myImage.setBlack();
-
-#endif
+  setPixModified();
 }
 
 unsigned char pix_dot :: inline_RGB2Y(int rgb)
@@ -355,6 +350,8 @@ void pix_dot :: scaleMess(float state)
   free(sharedbuffer); sharedbuffer=NULL;
   free(pattern); pattern=NULL;
   m_useScale=true;
+  setPixModified();
+
 }
 
 void pix_dot :: sampxy_table_init()

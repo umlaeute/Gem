@@ -387,6 +387,7 @@ void pix_mix :: gainMess (float X, float Y)
 {
   imageGain = CLAMP(255.f * X);
   rightGain = CLAMP(255.f * Y);
+  setPixModified();
 }
   
 /////////////////////////////////////////////////////////

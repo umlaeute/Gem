@@ -110,6 +110,7 @@ void pix_puzzle :: shuffle()
     blockpos[a] = blockpos[b];
     blockpos[b] = c;
   }
+  setPixModified();
 }
 /////////////////////////////////////////////////////////
 // sizeMess
@@ -122,6 +123,7 @@ void pix_puzzle :: sizeMess(int width, int height)
   blockh = (height>0)?height:8;
 
   m_force=true;
+  setPixModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -165,7 +167,7 @@ void pix_puzzle :: moveMess(int direction)
   blockpos[nextpos] = tmp;
   spacepos = nextpos;
 
-  setModified();
+  setPixModified();
 }
 
 /////////////////////////////////////////////////////////

@@ -115,7 +115,7 @@ void pix_backlight :: processRGBAImage(imageStruct &image)
 	    nLuminance>>=8;
 //			SourceColour|=(nLuminance<<24);
 
-	    nLuminance=GateInt(nLuminance,nSpikeFloor,nSpikeCeiling);
+	    nLuminance=clampFunc(nLuminance,nSpikeFloor,nSpikeCeiling);
 	    nLuminance-=nSpikeFloor;
 
 	    const int nLength=((nLuminance*nSpikeScale)>>nFixedShift);
@@ -333,7 +333,7 @@ void pix_backlight :: processYUVImage(imageStruct &image)
 	    nLuminance>>=8;
 //			SourceColour|=(nLuminance<<24);
 
-	    nLuminance=GateInt(nLuminance,nSpikeFloor,nSpikeCeiling);
+	    nLuminance=clampFunc(nLuminance,nSpikeFloor,nSpikeCeiling);
 	    nLuminance-=nSpikeFloor;
 
 	    const int nLength=((nLuminance*nSpikeScale)>>nFixedShift);
@@ -551,7 +551,7 @@ void pix_backlight :: processGrayImage(imageStruct &image)
 	    nLuminance>>=8;
 //			SourceColour|=(nLuminance<<24);
 
-	    nLuminance=GateInt(nLuminance,nSpikeFloor,nSpikeCeiling);
+	    nLuminance=clampFunc(nLuminance,nSpikeFloor,nSpikeCeiling);
 	    nLuminance-=nSpikeFloor;
 
 	    const int nLength=((nLuminance*nSpikeScale)>>nFixedShift);
@@ -719,6 +719,7 @@ void pix_backlight :: scaleCallback(void *data, t_floatarg m_SpikeScale)
   m_SpikeScale*=255.0;
   //  if(m_SpikeScale<0.f)m_SpikeScale=0.f;else if(m_SpikeScale>255.f)m_SpikeScale=255.f;
   GetMyClass(data)->m_SpikeScale=(m_SpikeScale);
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_backlight :: floorCallback(void *data, t_floatarg m_SpikeFloor)
@@ -726,6 +727,7 @@ void pix_backlight :: floorCallback(void *data, t_floatarg m_SpikeFloor)
   m_SpikeFloor*=255.0;
   if(m_SpikeFloor<0.f)m_SpikeFloor=0.f;else if(m_SpikeFloor>255.f)m_SpikeFloor=255.f;
   GetMyClass(data)->m_SpikeFloor=(m_SpikeFloor);
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_backlight :: ceilingCallback(void *data, t_floatarg m_SpikeCeiling)
@@ -733,4 +735,5 @@ void pix_backlight :: ceilingCallback(void *data, t_floatarg m_SpikeCeiling)
   m_SpikeCeiling*=255.0;
   if(m_SpikeCeiling<0.f)m_SpikeCeiling=0.f;else if(m_SpikeCeiling>255.f)m_SpikeCeiling=255.f;
   GetMyClass(data)->m_SpikeCeiling=(m_SpikeCeiling);  
+  GetMyClass(data)->setPixModified();
 }

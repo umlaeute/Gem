@@ -69,9 +69,9 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
     myImage.reallocate();
     pOutput = (U32*)myImage.data;
     
-    int nCellSize=GateInt(m_CellSize,1,nMaxCellSize);
-    int nStyle=GateInt(m_Style,0,4);
-    int nSmoothingThreshold=GateInt(m_Smoothing,0,255);
+    int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
+    int nStyle=clampFunc(m_Style,0,4);
+    int nSmoothingThreshold=clampFunc(m_Smoothing,0,255);
 
     const float AngleRadians=m_Angle;
     const int nCellSizeFP=(nCellSize<<nFPShift);
@@ -283,9 +283,9 @@ void pix_halftone :: processYUVImage(imageStruct &image)
     myImage.reallocate();
     pOutput = (U32*)myImage.data;
     
-    int nCellSize=GateInt(m_CellSize,1,nMaxCellSize);
-    int nStyle=GateInt(m_Style,0,4);
-    int nSmoothingThreshold=GateInt(m_Smoothing,0,255);
+    int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
+    int nStyle=clampFunc(m_Style,0,4);
+    int nSmoothingThreshold=clampFunc(m_Smoothing,0,255);
 
     const float AngleRadians=m_Angle;
     const int nCellSizeFP=(nCellSize<<nFPShift);
@@ -495,9 +495,9 @@ void pix_halftone :: processGrayImage(imageStruct &image)
     myImage.reallocate();
     unsigned char* pOutput = myImage.data;
     
-    int nCellSize=GateInt(m_CellSize,1,nMaxCellSize);
-    int nStyle=GateInt(m_Style,0,4);
-    int nSmoothingThreshold=GateInt(m_Smoothing,0,255);
+    int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
+    int nStyle=clampFunc(m_Style,0,4);
+    int nSmoothingThreshold=clampFunc(m_Smoothing,0,255);
 
     const float AngleRadians=m_Angle;
     const int nCellSizeFP=(nCellSize<<nFPShift);
@@ -1230,6 +1230,7 @@ void pix_halftone :: sizeCallback(void *data, t_floatarg m_CellSize)
     size=nMaxCellSize;
   }
   GetMyClass(data)->m_CellSize=size;
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_halftone :: styleCallback(void *data, t_floatarg m_Style)
@@ -1240,20 +1241,25 @@ void pix_halftone :: styleCallback(void *data, t_floatarg m_Style)
     return;
   }
   GetMyClass(data)->m_Style=style;
+  GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: smoothCallback(void *data, t_floatarg m_Smoothing)
 {
   GetMyClass(data)->m_Smoothing=CLAMP((float)m_Smoothing);  
+  GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: angleCallback(void *data, t_floatarg m_Angle)
 {
   GetMyClass(data)->m_Angle=(m_Angle);  
+  GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: smoothNCallback(void *data, t_floatarg m_Smoothing)
 {
   GetMyClass(data)->m_Smoothing=CLAMP((float)255.*m_Smoothing);  
+  GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: angleDEGCallback(void *data, t_floatarg m_Angle)
 {
   GetMyClass(data)->m_Angle=(atan2f(1,1)*m_Angle/45.0);  
+  GetMyClass(data)->setPixModified();
 }

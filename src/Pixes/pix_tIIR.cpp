@@ -179,5 +179,5 @@ void pix_tIIR :: setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv
 {
   GetMyClass(data)->set = true;
   GetMyClass(data)->set_zero = (argc>0 && atom_getint(argv)==0);
-  
+  GetMyClass(data)->setPixModified();
 }

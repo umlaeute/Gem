@@ -87,4 +87,5 @@ void pix_convert :: colorMessCallback(void *data, t_symbol*s)
 {
   int fo = getPixFormat(s->s_name);
   if(fo)GetMyClass(data)->m_image.format=fo;
+  GetMyClass(data)->setPixModified();
 }

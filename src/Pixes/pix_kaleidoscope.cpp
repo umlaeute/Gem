@@ -449,22 +449,22 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	  int nStartU=nCurrentU%nTwoWidth;
 	  if (nStartU>=nWidthFP)
 	    nStartU=(nTwoWidthMinusOne-nStartU);
-	  nStartU=GateInt(nStartU,0,nWidthFP-(1<<nFPShift));
+	  nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
 
 	  int nStartV=nCurrentV%nTwoHeight;
 	  if (nStartV>=nHeightFP)
 	    nStartV=(nTwoHeightMinusOne-nStartV);
-	  nStartV=GateInt(nStartV,0,nHeightFP-(1<<nFPShift));
+	  nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
 	  
 	  int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
 	  if (nEndU>=nWidthFP)
 	    nEndU=(nTwoWidthMinusOne-nEndU);
-	  nEndU=GateInt(nEndU,0,nWidthFP-(1<<nFPShift));
+	  nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
 
 	  int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
 	  if (nEndV>=nHeightFP)
 	    nEndV=(nTwoHeightMinusOne-nEndV);
-	  nEndV=GateInt(nEndV,0,nHeightFP-(1<<nFPShift));
+	  nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
 
 	  int nLocalDeltaU;
 	  int nLocalDeltaV;
@@ -907,25 +907,25 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 	  if (nStartU>=nWidthFP) {
 	    nStartU=(nTwoWidthMinusOne-nStartU);
 	  }
-	  nStartU=GateInt(nStartU,0,nWidthFP-(1<<nFPShift));
+	  nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
 
 	  int nStartV=nCurrentV%nTwoHeight;
 	  if (nStartV>=nHeightFP) {
 	    nStartV=(nTwoHeightMinusOne-nStartV);
 	  }
-	  nStartV=GateInt(nStartV,0,nHeightFP-(1<<nFPShift));
+	  nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
 
 	  int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
 	  if (nEndU>=nWidthFP) {
 	    nEndU=(nTwoWidthMinusOne-nEndU);
 	  }
-	  nEndU=GateInt(nEndU,0,nWidthFP-(1<<nFPShift));
+	  nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
 
 	  int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
 	  if (nEndV>=nHeightFP) {
 	    nEndV=(nTwoHeightMinusOne-nEndV);
 	  }
-	  nEndV=GateInt(nEndV,0,nHeightFP-(1<<nFPShift));
+	  nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
 
 	  int nLocalDeltaU;
 	  int nLocalDeltaV;
@@ -1368,25 +1368,25 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 	  if (nStartU>=nWidthFP) {
 	    nStartU=(nTwoWidthMinusOne-nStartU);
 	  }
-	  nStartU=GateInt(nStartU,0,nWidthFP-(1<<nFPShift));
+	  nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
 
 	  int nStartV=nCurrentV%nTwoHeight;
 	  if (nStartV>=nHeightFP) {
 	    nStartV=(nTwoHeightMinusOne-nStartV);
 	  }
-	  nStartV=GateInt(nStartV,0,nHeightFP-(1<<nFPShift));
+	  nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
 
 	  int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
 	  if (nEndU>=nWidthFP) {
 	    nEndU=(nTwoWidthMinusOne-nEndU);
 	  }
-	  nEndU=GateInt(nEndU,0,nWidthFP-(1<<nFPShift));
+	  nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
 
 	  int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
 	  if (nEndV>=nHeightFP) {
 	    nEndV=(nTwoHeightMinusOne-nEndV);
 	  }
-	  nEndV=GateInt(nEndV,0,nHeightFP-(1<<nFPShift));
+	  nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
 
 	  int nLocalDeltaU;
 	  int nLocalDeltaV;
@@ -1684,7 +1684,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Lin
 void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* pTransforms) {
 
   int nDivisionCount=(int)(m_Divisions);
-  nDivisionCount=GateInt(nDivisionCount,1,(nMaxDivisions-1));
+  nDivisionCount=clampFunc(nDivisionCount,1,(nMaxDivisions-1));
 
   const float DivisionAngle=(Pete_TwoPi/nDivisionCount);
 
@@ -2063,41 +2063,50 @@ void pix_kaleidoscope :: obj_setupCallback(t_class *classPtr)
 void pix_kaleidoscope :: divCallback(void *data, t_floatarg m_Divisions)
 {
   GetMyClass(data)->m_Divisions=(m_Divisions);
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_kaleidoscope :: outputAngCallback(void *data, t_floatarg m_OutputAnglePreIncrement)
 {
   GetMyClass(data)->m_OutputAnglePreIncrement=(m_OutputAnglePreIncrement);
+  GetMyClass(data)->setPixModified();
 }
 void pix_kaleidoscope :: sourceAngCallback(void *data, t_floatarg m_SourceAnglePreIncrement)
 {
   GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement);  
+  GetMyClass(data)->setPixModified();
 }
 void pix_kaleidoscope :: outputAngleCallback(void *data, t_floatarg m_OutputAnglePreIncrement)
 {
   GetMyClass(data)->m_OutputAnglePreIncrement=(m_OutputAnglePreIncrement*deg2rad);
+  GetMyClass(data)->setPixModified();
 }
 void pix_kaleidoscope :: sourceAngleCallback(void *data, t_floatarg m_SourceAnglePreIncrement)
 {
   GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement*deg2rad);
+  GetMyClass(data)->setPixModified();
 }
 void pix_kaleidoscope :: sourceCtrCallback(void *data, t_floatarg m_SourceCentreX, t_floatarg m_SourceCentreY)
 {
   GetMyClass(data)->m_SourceCentreX=(m_SourceCentreX);
   GetMyClass(data)->m_SourceCentreY=(m_SourceCentreY);  
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_kaleidoscope :: outputCtrCallback(void *data, t_floatarg m_OutputCentreX, t_floatarg m_OutputCentreY)
 {
   GetMyClass(data)->m_OutputCentreX=(m_OutputCentreX);
   GetMyClass(data)->m_OutputCentreY=(m_OutputCentreY);
+  GetMyClass(data)->setPixModified();
 }
 void pix_kaleidoscope :: rlpCallback(void *data, t_floatarg m_ReflectionLineProportion)
 {
   GetMyClass(data)->m_ReflectionLineProportion=(m_ReflectionLineProportion);  
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_kaleidoscope :: sapCallback(void *data, t_floatarg m_SourceAngleProportion)
 {
   GetMyClass(data)->m_SourceAngleProportion=(m_SourceAngleProportion);
+  GetMyClass(data)->setPixModified();
 }

@@ -235,16 +235,20 @@ void pix_aging :: obj_setupCallback(t_class *classPtr)
 void pix_aging :: colorMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_coloraging=((int)state!=0);
+  GetMyClass(data)->setPixModified();
 }
 void pix_aging :: scratchMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->scratchMess((int)state);  
+  GetMyClass(data)->setPixModified();
 }
 void pix_aging :: dustMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_dusts=((int)state!=0);
+  GetMyClass(data)->setPixModified();
 }
 void pix_aging :: pitsMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_pits=((int)state!=0);
+  GetMyClass(data)->setPixModified();
 }

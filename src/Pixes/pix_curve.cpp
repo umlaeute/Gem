@@ -94,6 +94,7 @@ void pix_curve :: setMess(int argc, t_atom *argv)
     name_G=atom_getsymbol(ap+1);
     name_B=atom_getsymbol(ap+2);
   }
+  setPixModified();
 }
 
 

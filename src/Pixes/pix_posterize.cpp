@@ -38,13 +38,13 @@ pix_posterize :: ~pix_posterize()
 void pix_posterize :: factorMess(float f)
 {
     factor = (int)(f*255.f);
-    setModified();
+    setPixModified();
 }
 
 void pix_posterize :: limitMess(float l)
 {
     limit = (int)l;
-    setModified();
+    setPixModified();
 }
 
 /////////////////////////////////////////////////////////

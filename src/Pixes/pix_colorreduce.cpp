@@ -486,7 +486,8 @@ void pix_colorreduce :: countCallback(void *data, t_floatarg m_TargetColorCount)
 {
   if(m_TargetColorCount>255)m_TargetColorCount=255.f;
   if(m_TargetColorCount<0)m_TargetColorCount=0.f;
- GetMyClass(data)->m_TargetColorCount=(m_TargetColorCount);
+  GetMyClass(data)->m_TargetColorCount=(m_TargetColorCount);
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_colorreduce :: persistCallback(void *data, t_floatarg m_PalettePersistence)
@@ -494,9 +495,11 @@ void pix_colorreduce :: persistCallback(void *data, t_floatarg m_PalettePersiste
   if(m_PalettePersistence>255)m_PalettePersistence=255.f;
   if(m_PalettePersistence<0)m_PalettePersistence=0.f;
   GetMyClass(data)->m_PalettePersistence=(m_PalettePersistence);
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_colorreduce :: smoothCallback(void *data, t_floatarg m_BoundarySmoothing)
 {
   GetMyClass(data)->m_BoundarySmoothing=!(!(int)m_BoundarySmoothing);  
+  GetMyClass(data)->setPixModified();
 }

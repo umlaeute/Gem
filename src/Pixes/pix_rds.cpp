@@ -364,6 +364,7 @@ void pix_rds :: obj_setupCallback(t_class *classPtr)
 void pix_rds :: methMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->method=((int)state);
+  GetMyClass(data)->setPixModified();
 }
 void pix_rds :: strideMessCallback(void *data, t_floatarg state)
 {
@@ -372,4 +373,5 @@ void pix_rds :: strideMessCallback(void *data, t_floatarg state)
     return;
   }
   GetMyClass(data)->stride=((int)state);
+  GetMyClass(data)->setPixModified();
 }

@@ -15,16 +15,6 @@
 //
 /////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////
-//
-//  pix_a_2grey
-//
-//  2002:forum::für::umläute:2000
-//  iohannes m zmoelnig
-//  mailto:zmoelnig@iem.mhsg.ac.at
-//
-/////////////////////////////////////////////////////////
-
 #include "pix_a_2grey.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_a_2grey, t_floatarg, A_DEFFLOAT)
@@ -87,16 +77,6 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
       }
       pixels += 4;
     }
-    /*
-    while (count--) {
-      if (pixels[chAlpha] < realVal){
-	const float grey = pixels[chRed] * 0.3086f + pixels[chGreen] * 0.6094f
-	  + pixels[chBlue] * 0.0820f;
-	pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
-      }
-      pixels += 4;
-    }*/
-    
   }else{
     while (count--){
       if (pixels[chAlpha] > m_mode){
@@ -105,19 +85,7 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
 	pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
       }
       pixels += 4;
-    }
-    
-    /*
-     while (count--){
-      if (pixels[chAlpha] > m_mode){
-	const float grey = pixels[chRed] * 0.3086f + pixels[chGreen] * 0.6094f
-	  + pixels[chBlue] * 0.0820f;
-	pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
-      }
-      pixels += 4;
-    }
-    */
-    
+    }    
   }
 }
 
