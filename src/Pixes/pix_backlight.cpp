@@ -59,18 +59,12 @@ void pix_backlight :: processRGBAImage(imageStruct &image)
 	init = 1;
     }
     pSource = (U32*)image.data;
-    
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
-
+ 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
+  
     pOutput = (U32*)myImage.data;
 
     const int nFixedShift=8;
@@ -277,18 +271,10 @@ void pix_backlight :: processYUVImage(imageStruct &image)
     }
     pSource = (U32*)image.data;
     
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
-
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-//	myImage.setBlack();
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
     pOutput = (U32*)myImage.data;
 
     const int nFixedShift=8;
@@ -516,9 +502,9 @@ void pix_backlight :: processYUVImage(imageStruct &image)
 // do the Gray processing here
 //
 /////////////////////////////////////////////////////////
+/*
 void pix_backlight :: processGrayImage(imageStruct &image)
 {
-/*
     nWidth = image.xsize;
     nHeight = image.ysize;
     if (!init) {
@@ -729,8 +715,8 @@ void pix_backlight :: processGrayImage(imageStruct &image)
     }
 
     image.data = myImage.data;
-*/
 }
+*/
 
 /////////////////////////////////////////////////////////
 // static member function
