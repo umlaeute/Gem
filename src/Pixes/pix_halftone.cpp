@@ -242,7 +242,10 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.setCsizeByFormat(image.format);
+    myImage.csize = image.csize;
+    myImage.format = image.format;
+    myImage.type = image.type;
+  //  myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     U16*pOutput = (U16*)myImage.data;
     
@@ -370,8 +373,13 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 				/* the defines for the SHIFT-amount are in Base/GemPixPete.h */
 
 				U16* pCurrentOutput = pOutput+(nCurrentY*nWidth)+nCurrentX;
+#ifdef __APPLE__
+                                *pCurrentOutput=(chroma<<SHIFT_V)|
+                        (pGreyScaleTableStart[nLuminance-*pCurrentDotFunc]<<SHIFT_Y2);
+#else
 				*pCurrentOutput=(chroma<<SHIFT_U)|
 				  (pGreyScaleTableStart[nLuminance-*pCurrentDotFunc]<<SHIFT_Y1);
+#endif
 				}
 			}
 		}
