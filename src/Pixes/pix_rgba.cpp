@@ -176,8 +176,8 @@ void pix_rgba :: processImage(imageStruct &image)
 #ifndef MACOSX  //keeps this object from messing up display on OSX
   image.format = GL_RGBA;
 #else
-  // guess this is not true, but who knows ? (jmz)
-  image.format = GL_ABGR_EXT;
+  //this is the correct Mac format
+  image.format = GL_BGRA_EXT;
 #endif
   image.csize  = 4;
 }
