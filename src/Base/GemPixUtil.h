@@ -73,7 +73,7 @@ struct GEM_EXTERN imageStruct
   unsigned char* allocate(int size) {
     if (pdata) delete [] pdata;
 #if 1
-    pdata = new unsigned char[size];
+    pdata = new unsigned char[size+31];
     data = (unsigned char*) ((((unsigned int)pdata)+31)& (~31));
 #else
     data = pdata =  new unsigned char [size];
