@@ -41,6 +41,7 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
   // make sure that there are some characters
   if (filename->s_name[0]) openMess(filename);
   m_colorspace = GL_YCBCR_422_GEM;
+  m_hiquality = 1;
 }
 
 /////////////////////////////////////////////////////////
@@ -157,7 +158,7 @@ void pix_filmDarwin :: realOpen(char *filename)
             createBuffer();
             prepareTexture();
             m_rowBytes = m_xsize * 4;
-            SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+            if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
             err = QTNewGWorldFromPtr(	&m_srcGWorld, 
                                             k32ARGBPixelFormat,	// gives noErr
                                             &m_srcRect, 
@@ -176,7 +177,7 @@ void pix_filmDarwin :: realOpen(char *filename)
             createBuffer();
             prepareTexture();
             m_rowBytes = m_xsize * 2;
-            SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+            if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
             err = QTNewGWorldFromPtr(	&m_srcGWorld, 
                                             k422YpCbCr8CodecType,	// gives noErr
                                             &m_srcRect, 
@@ -192,10 +193,16 @@ void pix_filmDarwin :: realOpen(char *filename)
 		m_haveMovie = 0;
 		return;
 	}
+        
+     
+        /* movies task method */
         m_movieTime = 0;
 	// *** set the graphics world for displaying the movie ***
 	::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
+        //SetMovieRate(m_movie,0);
+       // StartMovie(m_movie);
 	::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+        
 }
 
 /////////////////////////////////////////////////////////
@@ -205,19 +212,6 @@ void pix_filmDarwin :: realOpen(char *filename)
 void pix_filmDarwin :: getFrame()
 {
     if (!m_haveMovie) return;
-    
-    CGrafPtr	 	savedPort;
-    GDHandle     	savedDevice;
-    Rect		m_srcRect;
-    PixMapHandle	m_pixMap;
-    Ptr			m_baseAddr;
-    
-    ::GetGWorld(&savedPort, &savedDevice);
-    ::SetGWorld(m_srcGWorld, NULL);
-    ::GetMovieBox(m_movie, &m_srcRect);
-    
-    m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
-    m_baseAddr = ::GetPixBaseAddr(m_pixMap);
  
     //int num;
 
@@ -244,7 +238,7 @@ void pix_filmDarwin :: getFrame()
     // if this is the first frame, include the frame we are currently on
     if (m_curFrame == 0) flags |= nextTimeEdgeOK;
 
-
+/* current playback method */
 if (m_auto) {
         ::GetMovieNextInterestingTime(m_movie,
                                             flags,
@@ -261,6 +255,12 @@ if (m_auto) {
         }else{
             m_movieTime = m_reqFrame * duration;
         }
+        
+        SetMovieTimeValue(m_movie, m_movieTime);
+        MoviesTask(m_movie, 0);
+        
+       
+        
 /*
     m_movieTime = m_reqFrame * duration;
     
@@ -277,10 +277,16 @@ if (m_auto) {
         flags = nextTimeStep;*/
 
     // set the time for the frame and give time to the movie toolbox	
-    SetMovieTimeValue(m_movie, m_movieTime); 
-    MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+    //SetMovieTimeValue(m_movie, m_movieTime); 
+    /*  works ok for playing a movie forward 1X 
+    if (m_auto){
+        if (IsMovieDone(m_movie)) GoToBeginningOfMovie(m_movie);
     
-    m_frame = (unsigned char *)m_baseAddr;
+         UpdateMovie(m_movie);
+        MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+    }*/
+    
+    
 }
 
 void pix_filmDarwin :: LoadRam()
@@ -317,6 +323,9 @@ void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmDarwin::ramCallback,
 		  gensym("ram"),  A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_filmDarwin::hiqualityCallback,
+		  gensym("hiquality"), A_DEFFLOAT, A_NULL);
+
 }
 
 void pix_filmDarwin :: openMessCallback(void *data, t_symbol *filename)
@@ -337,5 +346,10 @@ void pix_filmDarwin :: autoCallback(void *data, t_floatarg state)
 void pix_filmDarwin :: ramCallback(void *data)
 {
   GetMyClass(data)->LoadRam();
+}
+
+void pix_filmDarwin :: hiqualityCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->m_hiquality=(int)state;
 }
 #endif // __APPLE__

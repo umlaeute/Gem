@@ -66,14 +66,16 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
-  Movie			m_movie; 
+   
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
   Track			m_movieTrack;
   TimeValue		m_timeScale;
   TimeValue		duration;
   //int			m_colorspace;
-
+  int			m_hiquality;
+private:
+Movie			m_movie;
 
   //-----------------------------------
   // GROUP:	Texturing
@@ -87,6 +89,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback(void *data, t_floatarg state);
   static void ramCallback(void *data);
+  static void hiqualityCallback(void *data, t_floatarg state);
   //static void colorspaceCallback(void *data, t_floatarg state);
 
 };
