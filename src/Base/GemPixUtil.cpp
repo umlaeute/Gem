@@ -47,13 +47,13 @@ GEM_EXTERN unsigned char* imageStruct::allocate()
 GEM_EXTERN unsigned char* imageStruct::reallocate(int size)
 {
   if (size>datasize){
-      return allocate(size);
+    return allocate(size);
   }
-    return data;
+  return data;
 }
 GEM_EXTERN unsigned char* imageStruct::reallocate() 
 {  
-	return reallocate(xsize*ysize*csize);  
+	return reallocate(xsize*ysize*csize);
 }
  
 GEM_EXTERN void imageStruct::clear() 
@@ -80,7 +80,7 @@ GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
     to->format 	= format;
     to->type 	= type;
     to->data    = data;
-    to->datasize= datasize;
+    //to->datasize= datasize; /* this referes to pdata */
     to->upsidedown=upsidedown;
     to->notowned= true; /* but pdata is always owned by us */
 }
@@ -178,6 +178,7 @@ void pix_sub(unsigned char *leftPix, unsigned char *rightPix, int datasize)
 }
 
 GEM_EXTERN void imageStruct::setBlack() {
+  // LATER: think about pdata!=data
   long i = datasize;
   unsigned char* dummy=pdata;
   switch (format){
@@ -194,6 +195,7 @@ GEM_EXTERN void imageStruct::setBlack() {
   }
 }
 GEM_EXTERN void imageStruct::setWhite() {
+  // LATER: think about pdata!=data
   long i = datasize;
   unsigned char* dummy=pdata;
   switch (format){
