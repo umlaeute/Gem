@@ -34,7 +34,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 scopeXYZ :: scopeXYZ(t_floatarg len)
   : GemShape(), 
-    m_drawType(GL_POLYGON),
+    m_drawType(GL_LINE_STRIP),
     m_vert(NULL), m_vertarray(NULL),
     m_length(0), m_position(0)
 {
@@ -88,7 +88,7 @@ void scopeXYZ :: lengthMess(int l)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: render(GemState *state)
 {
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_POLYGON;
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
   if (state->texture && state->numTexCoords)
@@ -135,7 +135,6 @@ void scopeXYZ :: render(GemState *state)
 	  if (state->texture)
 	    glTexCoord2f(m_vert[n][0] / maxVal[0],
 			 m_vert[n][1] / maxVal[1]);
-	  //	  post("%d %f %f %f", n, m_vert[n][0], m_vert[n][1], m_vert[n][2]);
 	  glVertex3fv(m_vert[n]);
 	}
       glEnd();
@@ -224,6 +223,8 @@ void scopeXYZ :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classscopeXYZ, gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
+
     class_addmethod(classPtr, (t_method)&scopeXYZ::linewidthMessCallback,
     	    gensym("linewidth"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&scopeXYZ::linewidthMessCallback,
@@ -272,18 +273,30 @@ t_int* scopeXYZ :: perform(t_int* w)
   if (length<n){
     n=length;
   } else 
-    position=(x->m_position+n)%length-n;
+    position=(x->m_position)%length;
 
   if(position<0)position=0;
-  //x->m_position=position+n;
 
-  t_float*vert=x->m_vertarray;//+position;
+  t_float*vert=x->m_vert[position];
 
-  while(n--){
-    *vert++=*in_X++;
-    *vert++=*in_Y++;
-    *vert++=*in_Z++;
+  x->m_position=position+n;
+
+  if(x->m_position>length){
+    // we have a wrap inside !
+    for(int i=0; i<n; i++){
+      x->m_vert[i%length][0]=*in_X++;
+      x->m_vert[i%length][1]=*in_Y++;
+      x->m_vert[i%length][2]=*in_Z++;
+    }
+  } else {
+    while(n--){
+      *vert++=*in_X++;
+      *vert++=*in_Y++;
+      *vert++=*in_Z++;
+    }
   }
+    
+
   x->setModified();
   return (w+index);
 }
