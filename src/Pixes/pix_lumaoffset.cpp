@@ -114,7 +114,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 	    pCurrentOutput+=(nWidth*nLineGap);
 	}
     } else {
-      if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<nWidth*sizeof(U32*)){
+      if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<(int)(nWidth*sizeof(U32*)) ){
 	free(hPreviousLineHeights);
 	hPreviousLineHeights_size=nWidth*sizeof(U32*);
 	hPreviousLineHeights=malloc(hPreviousLineHeights_size);	

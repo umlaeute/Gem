@@ -62,7 +62,7 @@ class GEM_EXTERN pix_lumaoffset : public GemPixObj
 	bool	m_DoSmoothFill;
 	
 	SPete_MemHandle 	hPreviousLineHeights;
-	long hPreviousLineHeights_size;
+	int hPreviousLineHeights_size;
     private:
     
     	//////////
