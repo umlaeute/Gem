@@ -30,9 +30,9 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN vertex_quad : public GemBase
+class GEM_EXTERN vertex_quad : public GemVertex
 {
-    CPPEXTERN_HEADER(vertex_quad, GemBase)
+    CPPEXTERN_HEADER(vertex_quad, GemVertex)
 
     public:
 

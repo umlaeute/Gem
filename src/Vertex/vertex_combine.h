@@ -30,9 +30,9 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN vertex_combine : public GemBase
+class GEM_EXTERN vertex_combine : public GemVertex
 {
-    CPPEXTERN_HEADER(vertex_combine, GemBase)
+    CPPEXTERN_HEADER(vertex_combine, GemVertex)
 
     public:
 
