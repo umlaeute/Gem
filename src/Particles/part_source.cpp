@@ -31,8 +31,8 @@ part_source :: part_source(t_floatarg num)
 {
   int i=9;while(i--)m_arg[i]=0.0;
   m_arg[3]=0.2f;
-  if (num > 0)
-    m_numberToAdd = (int)num;
+  if (num > 0) m_numberToAdd = num;
+
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numToAdd"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("symbol"), gensym("domain"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
@@ -98,7 +98,7 @@ void part_source :: obj_setupCallback(t_class *classPtr)
 }
 void part_source :: numberMessCallback(void *data, t_floatarg num)
 {
-  GetMyClass(data)->numberMess((int)num);
+  GetMyClass(data)->numberMess(num);
 }
 void part_source :: domainMessCallback(void *data, t_symbol*s)
 {

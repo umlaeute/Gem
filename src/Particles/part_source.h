@@ -50,8 +50,8 @@ class GEM_EXTERN part_source : public GemBase
 		
   //////////
   // Number to add
-  void			numberMess(int num)		{ m_numberToAdd = num; }
-  int			m_numberToAdd;
+  void			numberMess(t_float num)		{ m_numberToAdd = num; }
+  t_float			m_numberToAdd;
 
   //////////
   // vel.domain
