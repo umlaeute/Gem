@@ -18,6 +18,7 @@
 #include "pix_filmNEW.h"
 #include <ctype.h>
 
+#include "Pixes/filmQT4L.h"
 #include "Pixes/filmAVI.h"
 #include "Pixes/filmAVIPLAY.h"
 #include "Pixes/filmFFMPEG.h"
@@ -50,6 +51,7 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   while(i--)m_handles[i]=0;
   m_numHandles=0;
 
+ m_handles[m_numHandles]=new filmQT4L();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmAVI();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmAVIPLAY();  post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmFFMPEG();   post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
@@ -76,7 +78,9 @@ pix_filmNEW :: ~pix_filmNEW()
 void pix_filmNEW :: closeMess(void){
   // Clean up any open files
   int i=MAX_FILM_HANDLES;
-  while(i--)if(m_handles[i])m_handles[i]->close();
+  while(i--){
+    if(m_handles[i])m_handles[i]->close();
+  }
   if (m_handle!=0) m_handle->close();
 }
 
@@ -109,7 +113,6 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format)
   SETFLOAT(ap+1, m_handle->getWidth());
   SETFLOAT(ap+2, m_handle->getHeight());
   m_numFrames=m_handle->getFrameNum();
-  post("numframes=%d", m_numFrames);
   post("GEM: pix_filmNEW: Loaded file: %s with %d frames (%dx%d)", 
        buf, 
        m_handle->getFrameNum(), 
@@ -143,7 +146,7 @@ void pix_filmNEW :: postrender(GemState *state)
   if (state && state->image)state->image->newimage = 0;
   // automatic proceeding
   if (m_auto!=0){
-    if (m_handle&&m_handle->changeImage(m_reqFrame+=m_auto)==FILM_ERROR_FAILURE){
+    if (m_handle&&m_handle->changeImage((int)(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
       //      m_reqFrame = m_numFrames;
       outlet_bang(m_outEnd);
     }
@@ -194,8 +197,6 @@ void pix_filmNEW :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*arg
     else {
       char c =tolower(*atom_getsymbol(argv+1)->s_name);
       char c2=tolower(atom_getsymbol(argv+1)->s_name[3]);
-
-      post("%c\t%c", c, c2);
 
       switch (c){
       case 'g': format=GL_LUMINANCE; break;
