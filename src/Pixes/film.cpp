@@ -50,6 +50,7 @@ void film :: close(void)
 /////////////////////////////////////////////////////////
 bool film :: open(char *filename, int format)
 {
+  return false;
   if (format!=0)m_wantedFormat=format;
   int wantedFormat = (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   m_numFrames=0;
