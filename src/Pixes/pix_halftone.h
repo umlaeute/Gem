@@ -29,25 +29,19 @@ unsigned char g_pDotFuncTable[nMaxCellSize*nMaxCellSize];
 unsigned char g_pGreyScaleTable[512];
 const int nFPShift=16;
 const int nFPMult=(1<<nFPShift);
-/*
-#define SHIFT_ALPHA	(24)
-#define SHIFT_RED	(16)
-#define SHIFT_GREEN	(8)
-#define SHIFT_BLUE	(0)
-*/
+
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
     pix_halftone
     
-    View pix as halftone
+    View pix as halftone (like in newspaper-prints)
 
 KEYWORDS
     pix
     
 DESCRIPTION
-
-    
+   
    
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_halftone : public GemPixObj
@@ -69,19 +63,21 @@ class GEM_EXTERN pix_halftone : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
+  	virtual void 	processGrayImage(imageStruct &image);
+
     	//////////
 	//
 	imageStruct    myImage;
 	
-	float 	m_CellSize;
-	float 	m_Style;
+	int 	m_CellSize;
+	int 	m_Style;
 	float 	m_Angle;
-	float 	m_Smoothing;
+	int 	m_Smoothing;
 	int	init;
 
 	//struct SPete_HalfTone_Data {
-	    int nWidth;
-	    int nHeight;
+	int nWidth;
+	int nHeight;
 	//};
 	//SPete_HalfTone_Data*	pInstanceData;
 	U32*				pSource;
@@ -155,40 +151,23 @@ class GEM_EXTERN pix_halftone : public GemPixObj
 		SPete_HalfTone_Vertex* poutBottom);
 	int Pete_HalfTone_GetLowestVertex(SPete_HalfTone_Vertex* pVertices,int nVertexCount);
 	void Pete_HalfTone_RotateMultipleVertices(SPete_HalfTone_Vertex* pinVertices,
-		SPete_HalfTone_Vertex* poutVertices,
-		int nVertexCount,
-		float Angle);
+						  SPete_HalfTone_Vertex* poutVertices,
+						  int nVertexCount,
+						  float Angle);
 	void Pete_HalfTone_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,int nSmoothingThreshold);
 	U32	Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight);
-	
-/*	inline int GateInt (int nValue, int nMin, int nMax) {
-		if ( nValue<nMin) {
-		    return nMin;
-		} else if (nValue>nMax) {
-		    return nMax;
-		} else {
-		    return nValue;
-		}
-	}
-	
-	inline int GetLuminance(const U32 inColour) {
-	    const int nRed=(inColour&(0xff<<SHIFT_RED))>>16;
-	    const int nGreen=(inColour&(0xff<<SHIFT_GREEN))>>8;
-	    const int nBlue=(inColour&(0xff<<SHIFT_BLUE))>>0;
-	    
-	    const int nLuminance = ((90*nRed) + (115*nGreen) + (51*nBlue));
-	    
-	    return nLuminance;
-	}
- */   
+	U32	Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,int nImageHeight);
+
     private:
-    
     	//////////
     	// Static member functions
 	static void 	sizeCallback(void *data, t_floatarg m_CellSize);
     	static void 	styleCallback(void *data, t_floatarg m_Style);
 	static void 	smoothCallback(void *data, t_floatarg m_Smoothing);
-	static void 	angleCallback(void *data, t_floatarg m_Angle);
+	static void 	angleCallback(void *data, t_floatarg m_Angle); // 0..2pi 
+	/* callbacks for normalized values: smooth=0..1; angle=0..360 */
+	static void smoothNCallback(void *data, t_floatarg m_Smoothing);
+	static void angleDEGCallback(void *data, t_floatarg m_Angle);
 };
 
 #endif	// for header file

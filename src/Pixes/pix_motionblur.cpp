@@ -114,7 +114,46 @@ void pix_motionblur :: processRGBAImage(imageStruct &image)
     }
   }
 }
+void pix_motionblur :: processGrayImage(imageStruct &image)
+{
+  int h,w,height,width;
+  long src;
+  register int G, G1; //too many for x86?  i really don't know or care
+  int rightGain,imageGain;
+  unsigned char *pixels=image.data;
+  int Gray;
 
+  src = 0;
+  Gray=chGray;
+  if (m_motionblurH != image.ysize || m_motionblurW != image.xsize || m_motionblurBpp != image.csize) {
+    m_motionblurH = image.ysize;
+    m_motionblurW = image.xsize;
+    m_motionblurBpp = image.csize;
+    m_motionblurSize = m_motionblurH * m_motionblurW * m_motionblurBpp;
+    if(saved)delete saved;
+    saved = new int [m_motionblurSize];
+  }
+
+  rightGain = CLAMP((int)(m_motionblur * 255.));
+  imageGain = CLAMP((int)(255. - (m_motionblur * 255.)));
+  height = image.ysize;
+  width = image.xsize;
+
+  for (h=0; h<height; h++){
+    for(w=0; w<width; w++){
+      G = pixels[src+chGray];
+      G1 = saved[src+chGray];
+      G = G * imageGain;
+      G1 = G1 * rightGain;
+
+      G = G + G1;
+      G1 = G>>8;
+      saved[src+chGray] = (unsigned char)G1;
+      pixels[src+chGray] = (unsigned char)G1;
+      src ++;
+    }
+  }
+}
 
 /////////////////////////////////////////////////////////
 // do the YUV processing here

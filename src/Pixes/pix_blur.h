@@ -48,9 +48,7 @@ CPPEXTERN_HEADER(pix_blur, GemPixObj)
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-    	
-        //////////
-    	// Do the YUV processing
+      	virtual void 	processGrayImage(imageStruct &image);
     	virtual void 	processYUVImage(imageStruct &image);
         virtual void 	processYUVAltivec(imageStruct &image);
         

@@ -53,54 +53,101 @@ delete saved;
 /////////////////////////////////////////////////////////
 void pix_blur :: processRGBAImage(imageStruct &image)
 {
-       int h,w,hlength;
-    long src;
-    int R,G,B;
-    int rightGain,imageGain;
-    unsigned char *pixels=image.data;
+  int h,w,hlength;
+  long src;
+  int R,G,B;
+  int rightGain,imageGain;
+  unsigned char *pixels=image.data;
 
-src = 0;
+  src = 0;
 
-if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
-
+  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
     m_blurH = image.ysize;
     m_blurW = image.xsize;
     m_blurBpp = image.csize;
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
     delete saved;
     saved = new unsigned int [m_blurSize];
-}
+  }
 
-rightGain = (int)(m_blurf * 255.);
-imageGain = (int)(255. - (m_blurf * 255.));
-hlength = image.xsize;
+  rightGain = (int)(m_blurf * 255.);
+  imageGain = (int)(255. - (m_blurf * 255.));
+  hlength = image.xsize;
 
-
-for (h=0; h<image.ysize; h++){
+  
+  for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
-    
-
-      
-        R = ((pixels[src+chRed] * imageGain)) + ((saved[src+chRed] * rightGain));
-        saved[src+chRed] = (unsigned char)CLAMP(R>>8);
-        pixels[src+chRed] = saved[src+chRed];
+      R = ((pixels[src+chRed] * imageGain)) + ((saved[src+chRed] * rightGain));
+      saved[src+chRed] = (unsigned char)CLAMP(R>>8);
+      pixels[src+chRed] = saved[src+chRed];
         
-         G = ((pixels[src+chGreen] * imageGain)) + ((saved[src+chGreen] * rightGain));
-        saved[src+chGreen] = (unsigned char)CLAMP(G>>8);
-        pixels[src+chGreen] = saved[src+chGreen];
+      G = ((pixels[src+chGreen] * imageGain)) + ((saved[src+chGreen] * rightGain));
+      saved[src+chGreen] = (unsigned char)CLAMP(G>>8);
+      pixels[src+chGreen] = saved[src+chGreen];
  
-         B = ((pixels[src+chBlue] * imageGain)) + ((saved[src+chBlue] * rightGain));
-        saved[src+chBlue] = (unsigned char)CLAMP(B>>8);
-        pixels[src+chBlue] = saved[src+chBlue];
+      B = ((pixels[src+chBlue] * imageGain)) + ((saved[src+chBlue] * rightGain));
+      saved[src+chBlue] = (unsigned char)CLAMP(B>>8);
+      pixels[src+chBlue] = saved[src+chBlue];
 
-        src += 4;
-
-     
+      src += 4;
     }
+  }
 }
+void pix_blur :: processGrayImage(imageStruct &image)
+{
+  int h,w,hlength;
+  long src;
+  int Grey;
+  int rightGain,imageGain;
+  unsigned char *pixels=image.data;
 
+  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+    m_blurH = image.ysize;
+    m_blurW = image.xsize;
+    m_blurBpp = image.csize;
+    m_blurSize = m_blurH * m_blurW * m_blurBpp;
+    delete saved;
+    saved = new unsigned int [m_blurSize];
+  }
+
+  rightGain = (int)(m_blurf * 255.);
+  imageGain = (int)(255. - (m_blurf * 255.));
+  src=m_blurH*m_blurW;
+  while(src--){
+    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
+    saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
+    pixels[src+chGray] = saved[src+chGray];src--;
+
+    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
+    saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
+    pixels[src+chGray] = saved[src+chGray];src--;
+
+    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
+    saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
+    pixels[src+chGray] = saved[src+chGray];src--;
+
+    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
+    saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
+    pixels[src+chGray] = saved[src+chGray];
+  }
+  src=0;//m_blurH*m_blurW-4;
+  switch(m_blurH*m_blurW%4){
+  case 3:
+    Grey = ((pixels[src+chGray+3] * imageGain)) + ((saved[src+chGray+3] * rightGain));
+    saved[src+chGray+3] = (unsigned char)CLAMP(Grey>>8);
+    pixels[src+chGray+3] = saved[src+chGray+3];
+  case 2:
+    Grey = ((pixels[src+chGray+2] * imageGain)) + ((saved[src+chGray+2] * rightGain));
+    saved[src+chGray+2] = (unsigned char)CLAMP(Grey>>8);
+    pixels[src+chGray+2] = saved[src+chGray+2];
+  case 1:
+    Grey = ((pixels[src+chGray+1] * imageGain)) + ((saved[src+chGray+1] * rightGain));
+    saved[src+chGray+1] = (unsigned char)CLAMP(Grey>>8);
+    pixels[src+chGray+1] = saved[src+chGray+1];
+  default:
+    break;
+  }
 }
-
 
 /////////////////////////////////////////////////////////
 // do the YUV processing here
@@ -118,7 +165,6 @@ m_blurBpp = image.csize;
 m_blurSize = m_blurH * m_blurW * m_blurBpp;
 delete saved;
 saved = new unsigned int [m_blurSize];
-
 }
 
 #ifdef ALTIVEC
