@@ -149,6 +149,8 @@ short FindGDHandleFromRect (Rect * pRect, GDHandle * phgdOnThisDevice);
 
 short FindGDHandleFromWindow (WindowPtr pWindow, GDHandle * phgdOnThisDevice);
 
+
+
 /////////////////////////////////////////////////////////
 
 GEM_EXTERN void gemAbortRendering();
@@ -156,6 +158,8 @@ GEM_EXTERN void gemAbortRendering();
 #pragma mark -----functions-----
 /////////////////////////////////////////////////////////
 // createGemWindow
+//
+// this takes the parameters passed from the gemwin and decides which AGL paths to take
 //
 /////////////////////////////////////////////////////////
 GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
@@ -198,8 +202,84 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     hTargetDevice = hGD; // default to first device
 
     
-    //this should be whichDevice = fullscreen -1
-    //whichDevice = hints.fullscreen - 1;
+    
+    //////////////////////////////////////////////////////////////////
+    //check for a fullscreen request and then do the 10.3 workaround
+    //
+    // NOTE - this does NOT set the hints.height and width so the viewport is still the default
+    // maybe it's better to have a standard viewport so screen resizing doesn't change geometry settings?
+    //
+    if (hints.fullscreen) {
+        ////////////////////////////////////////////
+        // a new CGL method of determining the number of attached displays and their coords
+        //
+        
+        CGDisplayCount maxDisplays = 32;
+        CGDirectDisplayID activeDspys[32];
+        CGDisplayErr error;
+        CGDisplayCount newDspyCnt = 0;
+        CGRect displayRect;
+        
+        error = CGGetActiveDisplayList(maxDisplays, activeDspys, &newDspyCnt);
+        if (error) {
+            post("GemWinCreateMac: CGGetActiveDisplayList returned error %d", error);
+        }
+
+        post("GemWinCreateMac: newDspyCnt %d", newDspyCnt);
+
+        for (i=0; i < newDspyCnt; i++){
+            CGRect displayRect = CGDisplayBounds (activeDspys[i]);
+            post("GemWinCreateMac: display %d width %d height %d origin.x %d origin.y %d", i, (long)displayRect.size.width, (long)displayRect.size.height, (long)displayRect.origin.x, (long)displayRect.origin.y);
+        }
+        
+        post("GemWinCreateMac: attempting fullscreen on display %d",hints.fullscreen-1);
+        if (hints.fullscreen-1 > newDspyCnt){
+            post("GemWinCreateMac: display %d does not exist",hints.fullscreen-1);
+            return 0;
+        }
+
+        //the device should be the first one so this will find the next one until it gets the user requested device
+        //i think this should work
+        whichDevice = hints.fullscreen;
+        do
+        {
+            if (numDevices == whichDevice)
+                hTargetDevice = hGD; // if device number matches
+            numDevices++;
+            hGD = DMGetNextScreenDevice (hGD, true);
+        }
+        while (hGD);
+
+        //grab the coords of the requested display
+        displayRect = CGDisplayBounds (activeDspys[hints.fullscreen-1]);
+        //hTargetDevice = hGD;
+
+        //set a rect to cover the entire selected display
+        SetRect(&info.r,
+                (long)displayRect.origin.x,
+                (long)displayRect.origin.y,
+                ((long)displayRect.size.width + (long)displayRect.origin.x),
+                ((long)displayRect.size.height + (long)displayRect.origin.y)
+                );
+
+        //this winodw has no attributes like a title bar etc
+        err = CreateNewWindow ( kDocumentWindowClass,
+                                kWindowNoAttributes,
+                                &info.r,
+                                &info.pWind );
+        
+        if (err)
+        {
+            post("GemWinCreateMac: Fullscreen CreateNewWindow err = %d",err);
+            return 0;
+        }
+      //  gaglDraw = GetWindowPort( info.pWind );
+    }
+    else{ //go the usual windowed way
+    
+    ///////////////////////////////////////////
+    //find the right device
+    //might be redundant now with the new fullscreen stuff??
     do
     {
         if (numDevices == whichDevice)
@@ -210,6 +290,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     while (hGD);
     post("GemwinMac: width - %d height - %d",hints.width,hints.height);
 
+    /* //old fullscreen method that doesn't work so hot on 10.3
     //change this to use the fullscreen message
     //the device number will be (fullscreen -1) so 'fullscreen 1' is main, 'fullscreen 2' is second, etc 
     //
@@ -231,12 +312,15 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         post( "AGL Full Screen: %d x %d", width, height);
         
     }else{	// end of fullscreen creation on 2nd/external device
+        */
 
     // show and update main window
 
+    // this should put the title bar below the menu bar
         if (hints.y_offset < 50){
-            hints.y_offset+=50; //should put the title bar below the menu bar??
+            hints.y_offset+=50; 
         }
+        
         SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset,
                 (short)(hints.width + hints.x_offset),
                 (short)(hints.height + hints.y_offset));
@@ -252,10 +336,14 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
             post("err = %d",err);
             return 0;
         }
+
+        //this should take whatever input the user sets with the gemwin 'title' message?
         SetWindowTitleWithCFString ( info.pWind, CFSTR("GEM") );
 
         gaglDraw = GetWindowPort( info.pWind );
-
+        
+    }//end of conditional for fullscreen vs windowed
+    
         gEvtHandler = NewEventHandlerUPP( evtHandler );
         InstallEventHandler( GetApplicationEventTarget(), gEvtHandler,
                                         GetEventTypeCount( list ), list,
@@ -295,7 +383,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         BuildGLFromWindow (GetWindowFromPort(gaglDraw), &info.context, &glWInfo, hints.shared);
 */        
         BuildGLFromWindow ( info.pWind, &info.context, &glWInfo, hints.shared);
-    }// end of window creation on main device
+   // }// end of window creation on main device - this is the old fullscreen code
     
     if (!info.context){
         post("MAC:  no info.context");
@@ -368,11 +456,14 @@ GEM_EXTERN void destroyGemWindow(WindowInfo &info)
         post("destroy context done");
 #endif
     }
-        
+
+    if (info.pWind){
+      post("destroyGemWindow() DisposeWindow");  
     ::DisposeWindow( info.pWind );
 #ifdef DEBUG
     post("destroyGemWindow() finished");
 #endif
+    }else post("no info.pWind to destroy!!");
 }
 int cursorGemWindow(WindowInfo &info, int state)
 {
