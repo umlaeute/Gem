@@ -19,20 +19,19 @@
 #include "GemMan.h"
 
 #ifdef unix
-#include <sys/time.h>
-#include <GL/glx.h>
-#include <X11/Xlib.h>
+# include <sys/time.h>
+# include <GL/glx.h>
+# include <X11/Xlib.h>
 #elif __APPLE__
-#include <stdlib.h>
-#include <string.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#include <Carbon/Carbon.h>
-#include <Quicktime/Quicktime.h>
-#include <time.h>
-
+# include <stdlib.h>
+# include <string.h>
+# include <OpenGL/gl.h>
+# include <OpenGL/glext.h>
+# include <Carbon/Carbon.h>
+# include <Quicktime/Quicktime.h>
+# include <time.h>
 #elif _WINDOWS
-#include <stdlib.h>
+# include <stdlib.h>
 // I hate Microsoft...I shouldn't have to do this!
 #endif
 
@@ -44,7 +43,8 @@
 #include "Controls/gemhead.h"
 
 #include "Base/config.h"
-#ifdef INCLUDE_GLEXT
+
+#if !defined __APPLE__ && !defined DONT_INCLUDE_GLEXT
 # include <GL/glext.h>
 #endif
 
