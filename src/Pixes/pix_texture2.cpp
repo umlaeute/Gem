@@ -85,8 +85,8 @@ void pix_texture2 :: setUpTextureState()
             glPixelStoref(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
         else
             glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
@@ -197,7 +197,8 @@ void pix_texture2 :: render(GemState *state)
 	  m_buffer.type = state->image->image.type;
           
 	  m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
-	  memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+          post("pix_texture2: new buffer allocated ");
+	 // memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
 #ifndef MACOSX            
 	  m_coords[0].s = 0.f;
 	  m_coords[0].t = 0.f;
@@ -240,7 +241,14 @@ void pix_texture2 :: render(GemState *state)
 			m_buffer.ysize, 0,
 			m_buffer.format,
 			m_buffer.type,
-			m_buffer.data);
+			m_buffer.data);  //test for eliminating xtra buffer
+       /*     glTexImage2D( GL_TEXTURE_RECTANGLE_EXT, 0,
+			m_buffer.csize,
+			m_buffer.xsize,
+			m_buffer.ysize, 0,
+			m_buffer.format,
+			m_buffer.type,
+			state->image->image.data); */
 	else
 #endif
 	  glTexImage2D(GL_TEXTURE_2D,   // target
