@@ -76,6 +76,12 @@ void pix_invert :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_invert :: processYUVImage(imageStruct &image)
 {
+
+#ifdef ALTIVEC
+    processYUVAltivec(image);
+    return;
+#else
+
   int h,w;
   long src;
 
@@ -92,7 +98,51 @@ void pix_invert :: processYUVImage(imageStruct &image)
       src+=4;
     }
   }
+#endif
 }
+
+/////////////////////////////////////////////////////////
+// processYUVAltivec  -- good stuff apply liberally
+//
+/////////////////////////////////////////////////////////
+void pix_invert :: processYUVAltivec(imageStruct &image)
+{
+#ifdef ALTIVEC
+int h,w,width;
+//post("pix_invert: Altivec");
+   width = image.xsize/8;
+
+    union{
+        unsigned char c[16];
+        vector unsigned char v;
+    }charBuffer;
+
+    vector unsigned char offset;
+    vector unsigned char *inData = (vector unsigned char*) image.data;
+    
+    charBuffer.c[0] = 255;
+    offset = charBuffer.v;
+    offset = (vector unsigned char) vec_splat(offset,0);
+    
+    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+	vec_dst( inData, prefetchSize, 0 );
+        
+    for ( h=0; h<image.ysize; h++){
+        for (w=0; w<width; w++)
+        {
+        
+	vec_dst( inData, prefetchSize, 0 );
+        
+        inData[0]=vec_subs(offset,inData[0]);
+        inData++;
+        
+         }
+        vec_dss( 0 );
+    }  /*end of working altivec function */
+    
+#endif ALTIVEC
+}
+
 
 /////////////////////////////////////////////////////////
 // static member function
