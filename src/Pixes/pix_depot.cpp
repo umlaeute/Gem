@@ -158,10 +158,14 @@ void pix_put :: frameMess(int f){
 }
 
 void pix_put :: render(GemState*state){
+  if (m_frame<0)return;
   if (state && state->image && &state->image->image){
     if (state->image->newimage || m_frame!=m_lastframe){
       pix_depot *depot=(pix_depot *)((Obj_header*)pd_findbyclass(m_bindname, pix_depot_class))->data;
-      if (depot)depot->putMess(&state->image->image,m_lastframe=m_frame);
+      if (depot){
+	depot->putMess(&state->image->image,m_lastframe=m_frame);
+	m_frame=-1;
+      }
     }
   }
 }
