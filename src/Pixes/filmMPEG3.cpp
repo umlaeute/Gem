@@ -71,25 +71,9 @@ bool filmMPEG3 :: open(char *filename, int format)
 
     m_image.image.xsize=mpeg3_video_width(mpeg_file, 0);
     m_image.image.ysize=mpeg3_video_height(mpeg_file, 0);
-    m_image.image.csize=4;
-
-    switch (format){
-      //    case GL_RGB:     case GL_BGR:    m_image.image.csize=3; break; 
-    case GL_YCBCR_422_GEM:
-      m_image.image.csize=2;
-      break;
-    case GL_LUMINANCE:
-      m_image.image.csize=1;
-      break;
-    default: format=GL_RGBA;
-    case GL_RGBA:    case GL_BGRA:   
-      m_image.image.csize=4; 
-      break;
-    }
+    if (!m_image.image.xsize*m_image.image.ysize)goto unsupported;
     m_wantedFormat=format;
-    if (!m_image.image.xsize*m_image.image.ysize*m_image.image.csize)goto unsupported;
-
-    m_image.image.format=m_wantedFormat;
+    m_image.image.setCsizeByFormat(format);
     m_image.image.reallocate();
     changeImage(0,-1);
     post("MPEG3 opened");
