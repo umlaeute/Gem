@@ -302,9 +302,10 @@ void GemMan :: createContext(char* disp)
   if (!createConstWindow(disp))
     {
       error("GEM: A serious error occured creating const Context");
-      error("GEM: Do not continue!");
-    }
-  m_windowContext = 1;
+      error("GEM: Continue at your own risk!");
+      m_windowContext = 0;
+    } else 
+      m_windowContext = 1;
   setResizeCallback(resizeCallback, NULL);
 }
 
@@ -1181,7 +1182,12 @@ int createConstWindow(char* disp)
   if (!createGemWindow(constInfo, myHints) )
     {
       error("GEM: Error creating const context");
+      constInfo.have_constContext=0;
+        gfxInfo.have_constContext=0;
       return(0);
+    } else{
+      constInfo.have_constContext=1;
+        gfxInfo.have_constContext=1;
     }
 
   return(1);

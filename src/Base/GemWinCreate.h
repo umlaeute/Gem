@@ -56,6 +56,7 @@ class GEM_EXTERN WindowInfo
 #endif
     {}
   int         fs;                 // FullScreen
+  int         have_constContext;  // 1 if we have a constant context
   
 #ifdef unix
   Display     *dpy;               // X Display
