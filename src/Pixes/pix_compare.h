@@ -55,10 +55,8 @@ CPPEXTERN_HEADER(pix_compare, GemPixDualObj)
     	//////////
     	// Do the processing
     	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
-        
-    	//////////
-    	// Do the processing
-    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
+	virtual void 	processYUV_YUV  (imageStruct &image, imageStruct &right);
+	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
 
         //////////
     	// Do the Altivec processing

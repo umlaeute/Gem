@@ -240,6 +240,24 @@ void pix_diff :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 #endif
 }
 
+/////////////////////////////////////////////////////////
+// processDualImage
+//
+/////////////////////////////////////////////////////////
+void pix_diff :: processGray_Gray(imageStruct &image, imageStruct &right)
+{
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
+  
+  while(datasize--)
+    {
+      leftPix[chGray] =
+	abs(leftPix[chGray] - (int)rightPix[chGray]);
+      leftPix++;
+      rightPix++;
+    }
+}
 
 /////////////////////////////////////////////////////////
 // static member function

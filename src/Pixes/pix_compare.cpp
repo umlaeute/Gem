@@ -67,6 +67,35 @@ void pix_compare :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   };
 }
 
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_compare :: processGray_Gray(imageStruct &image, imageStruct &right)
+{
+  long src,h,w;
+  src =0;
+  if (m_direction) {
+    for (h=0; h<image.ysize; h++){
+      for(w=0; w<image.xsize; w++){
+	if (image.data[src+chGray] < right.data[src+chGray]) {
+	  image.data[src+chGray] = right.data[src+chGray];
+	}
+	src++;
+      }
+    }
+  } else {
+    for (h=0; h<image.ysize; h++){
+      for(w=0; w<image.xsize; w++){
+	if (image.data[src+chGray]>right.data[src+chGray])
+	  {
+	    image.data[src+chGray] = right.data[src+chGray];
+	  }
+	src++;
+      }
+    } 
+  }
+}
 
 /////////////////////////////////////////////////////////
 // do the YUV processing here
