@@ -1208,7 +1208,8 @@ int createConstWindow(char* disp)
   myHints.actuallyDisplay = 0;
   myHints.fullscreen = 0;
   myHints.display = disp;
-  
+  myHints.fsaa = GemMan::fsaa;
+
   if (!createGemWindow(constInfo, myHints) )
     {
       error("GEM: Error creating const context");

@@ -18,6 +18,8 @@
 #include "GemWinCreate.h"
 #include <m_pd.h>
 #include <X11/cursorfont.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define EVENT_MASK  \
  ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
@@ -54,6 +56,12 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   int modeNum=4;
   int bestMode=0;
   int fullscreen=hints.fullscreen;
+
+  char svalue[3];
+  int fsaa=(int)hints.fsaa;
+  sprintf(svalue, "%d", fsaa);
+  setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
+
 
   XSetErrorHandler (ErrorHandler);
 
