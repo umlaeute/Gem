@@ -148,18 +148,11 @@ void pix_movement :: processYUVImage(imageStruct &image)
 #endif  
 }
 
-#ifdef __VEC__
+
 void pix_movement :: processYUVAltivec(imageStruct &image)
 {
-    // assume that the pix_size does not change !
-    /*
-    bool doclear=(image.xsize*image.ysize != buffer.xsize*buffer.ysize);
-    buffer.xsize = image.xsize;
-    buffer.ysize = image.ysize;
-    buffer.reallocate();
-    if(doclear) buffer.setWhite();
-    if(doclear) post("pix_movement: doclear");
-*/
+    #ifdef __VEC__
+
 
     if (image.xsize*image.ysize != buffer.xsize*buffer.ysize){
         buffer.xsize = image.xsize;
@@ -204,20 +197,6 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
     vec_dst( wp, prefetchSize, 1 );
     #endif
 
-    /*
-    if (j > 32 || j < 0) j = 0;
-    if (index > 1800){
-        post("pix_movement: average time %d prefetch: %d 0 %d",averageTime/index+1,j,j*16);
-        j+=2;
-        index = 0;
-        averageTime = 0;
-    }
-
-    index++;
-    
-    UnsignedWide startTime;
-    ::Microseconds(&startTime);
-    */
 
     j = 16;
     
@@ -287,22 +266,18 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
        // rp+=4;
        // rp++;
     }
-
+    
+    #ifndef PPC970
     vec_dss(0);
     vec_dss(1);
     vec_dss(2);
     vec_dss(3);
-/*
-    UnsignedWide endTime;
-    int elapsedTime;
-    ::Microseconds(&endTime);
-    elapsedTime = endTime.lo - startTime.lo;
-    //post("pix_movement: time %d prefetch %d 0 %d",elapsedTime,j,j*16);
-    averageTime += elapsedTime;
-    */
+    #endif
+
+    #endif /* __VEC__ */
 }
 
-#endif /* __VEC__ */
+
 
 void pix_movement :: processGrayImage(imageStruct &image)
 {
