@@ -16,8 +16,9 @@
 /////////////////////////////////////////////////////////
 
 /* -------------------------- setup function ------------------------------ */
-
+#ifndef MACOSX
 #include "../Base/config.h"
+#endif
 
 #include "GemMan.h"
 
@@ -31,8 +32,10 @@ extern "C" {
   void gemkeyname_setup();
   void gemkeyboard_setup();
   void gemmouse_setup();
+#ifndef MACOSX
   void gemtablet_setup();
   void gemorb_setup();
+#endif
   void render_trigger_setup();
   
   void accumrotate_setup();
@@ -68,18 +71,24 @@ extern "C" {
   void curve_setup();
   void cylinder_setup();
   void disk_setup();
+#ifndef NOMODEL
   void model_setup();
   void multimodel_setup();
+#endif
   void teapot_setup();
   void polygon_setup();
   void primTri_setup();
   void rectangle_setup();
   void sphere_setup();
   void square_setup();
+#ifndef NOTEXT
   void text2d_setup();
   void text3d_setup();
   void textoutline_setup();
+#endif
   void triangle_setup();
+  
+  void newWave_setup();		//tigital
   
   void world_light_setup();
   void light_setup();
@@ -157,11 +166,49 @@ extern "C" {
   void pix_test_setup();
 
   void imageVert_setup();
-
+#ifdef MACOSX
+  void pix_filmDarwin_setup();
+#else
   void pix_filmNT_setup();
   void pix_filmLinux_setup();
+#endif
   void pix_movie_setup();
+#ifdef YUV
+  void pix_movieYUV_setup();
+  
+  void yuv_average_setup();
+  void yuv_add_setup();
+  void yuv_adjust_setup();
+  void yuv_bandw_setup();
+  void yuv_chroma_key_setup();
+  void yuv_clamp_setup();
+  void yuv_compare_setup();
+  void yuv_difference_setup();
+  void yuv_emboss_setup();
+  void yuv_film_setup();
+  void yuv_gain_setup();
+  void yuv_invert_setup();
+  void yuv_luma_key_setup();
+  void yuv_movie_setup();
+  void yuv_mult_setup();
+  void yuv_pixel_data_setup();
+  void yuv_pixel_isolate_setup();
+  void yuv_pixel_replace_setup();
+  void yuv_posterize_setup();
+  void yuv_set_setup();
+  void yuv_subtract_setup();
+#ifdef MACOSX
+  void pix_filmDarwinYUV_setup();
+  void yuv_filmDarwin_setup();
+#endif //MACOSX
+#endif //YUV
 
+//#ifdef MACOSX && VIDEO
+  //void pix_video_setup();
+  void pix_videoDarwin_setup();
+  //void pix_dv_setup();
+  //void pix_dvDarwin();
+#ifndef MACOSX
   void pix_indycam_setup();
   void pix_videoSGI_setup();
   void pix_videoLinux_setup();
@@ -170,7 +217,7 @@ extern "C" {
   void pix_dv_setup();
   void pix_dvLinux_setup();
   void pix_dvNT_setup();
-
+#endif
   void pix_puzzle_setup();
 
   void tv_biquad_setup();
@@ -190,8 +237,10 @@ extern "C" {
     gemkeyboard_setup();
     gemkeyname_setup();
     gemmouse_setup();
+#ifndef MACOSX
     gemorb_setup();
     gemtablet_setup();
+#endif
     render_trigger_setup();
     
     // Manipulators
@@ -229,9 +278,11 @@ extern "C" {
     curve_setup();
     cylinder_setup();
     disk_setup();
+#ifndef NOMODEL
     model_setup();
     multimodel_setup();
-#if HAVE_LIBGLUT
+#endif
+#if HAVE_LIBGLUT || MACOSX
     teapot_setup();
 #endif
     polygon_setup();
@@ -239,10 +290,13 @@ extern "C" {
     rectangle_setup();
     sphere_setup();
     square_setup();
+#ifndef NOTEXT
     text2d_setup();
     text3d_setup();
     textoutline_setup();
+#endif
     triangle_setup();
+    newWave_setup();		//tigital
 
     // Particles
     part_head_setup();
@@ -273,6 +327,7 @@ extern "C" {
     pix_draw_setup();
     pix_imageInPlace_setup();
     pix_texture_setup();
+    pix_texture2_setup();
     pix_snap_setup();
 
     // Pix-controls
@@ -335,7 +390,9 @@ extern "C" {
     pix_dvLinux_setup();
 #endif /* OS */
 #else
+#ifndef MACOSX
     pix_dv_setup();
+#endif
 #endif /* HAVE_DV */
 
 #ifdef __sgi
@@ -346,8 +403,40 @@ extern "C" {
 #ifdef __linux__
     pix_videoLinux_setup();
     pix_filmLinux_setup();
-
 #endif
+#ifdef MACOSX
+    pix_filmDarwin_setup();
+    pix_videoDarwin_setup();
+#endif
+
+#ifdef YUV
+    pix_movieYUV_setup();
+    
+    yuv_add_setup();
+    yuv_average_setup();
+    yuv_adjust_setup();
+    yuv_bandw_setup();
+    yuv_chroma_key_setup();
+    yuv_clamp_setup();
+    yuv_compare_setup();
+    yuv_difference_setup();
+    yuv_emboss_setup();
+    yuv_gain_setup();
+    yuv_invert_setup();
+    yuv_luma_key_setup();
+    yuv_movie_setup();
+    yuv_mult_setup();
+    yuv_pixel_data_setup();
+    yuv_pixel_isolate_setup();
+    yuv_pixel_replace_setup();
+    yuv_posterize_setup();
+    yuv_set_setup();
+    yuv_subtract_setup();
+#ifdef MACOSX
+    pix_filmDarwinYUV_setup();
+    yuv_filmDarwin_setup();
+#endif //MACOSX
+#endif //YUV
 
     // WinNT-specific
 #ifdef _WINDOWS
