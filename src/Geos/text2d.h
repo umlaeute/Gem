@@ -84,8 +84,8 @@ class GEM_EXTERN text2d : public TextBase
 	   	//////////
     	// The font structure
 #ifndef FTGL
-    	GLTTBitmapFont	*m_bfont;
     	GLTTPixmapFont	*m_pfont;
+    	GLTTBitmapFont	*m_bfont;
 #else
     	FTGLBitmapFont	*m_bfont;
     	FTGLPixmapFont	*m_pfont;
