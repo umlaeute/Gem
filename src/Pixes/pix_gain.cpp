@@ -86,48 +86,34 @@ void pix_gain :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_gain :: processYUVImage(imageStruct &image)
 {
-  post("1111");
     int h,w,width;
     long src;
-    float y1,y2,u,v;
+    int y1,y2,u,v;
 
-    float Y=m_gain[0];
-    float U=m_gain[1];
-    float V=m_gain[2];
-    post("---");
-    
+    short Y=(short)(m_gain[1] * 255);
+    short U=(short)(m_gain[2] * 255);
+    short V=(short)(m_gain[3] * 255);
+
+    src = 0;
     width = image.xsize/2;
     for (h=0; h<image.ysize; h++){
-      for(w=0; w<width; w++){
-	post("w=%d\th=%d", w, h);
-	//U
-        if (image.data[src] > 128)
-	  u = (image.data[src] - ((image.data[src] - 128) * (1 - U)));
-        if (image.data[src] < 128)
-	  u = ((128 - image.data[src]) * (1 - U)) + image.data[src];
+        for(w=0; w<width; w++){
+        
+      u = (((image.data[src] - 128) * U)>>8)+128;
         image.data[src] = (unsigned char)CLAMP(u);
-	
-        //Y1
-        y1 = image.data[src+1] * Y;
+        
+        y1 = (image.data[src+1] * Y)>>8;
         image.data[src+1] = (unsigned char)CLAMP(y1);
-	post("v");
-	
-	//V
-	//v = image.data[src+2] * G;
-	if (image.data[src+2] > 128)
-	  v = ((float)image.data[src+2] - ((image.data[src+2] - 128) * (1 - V)));
-	if (image.data[src+2] < 128)
-	  v = (((128 - image.data[src+2]) * (1 - V)) + image.data[src+2]);
+        
+       v = (((image.data[src+2] - 128) * V)>>8)+128;
         image.data[src+2] = (unsigned char)CLAMP(v);
-	post("y2");
-        //Y2
-        y2 = image.data[src+3] * Y;
-	image.data[src+3] = (unsigned char)CLAMP(y2);
+
+        y2 = (image.data[src+3] * Y)>>8;
+        image.data[src+3] = (unsigned char)CLAMP(y2);
+       
         src+=4;
-	
-      }
-    }
-    post("::::");
+        }
+        }
 }
 
 /////////////////////////////////////////////////////////
