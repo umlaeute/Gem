@@ -17,8 +17,9 @@
 
   IOhannes m zmoelnig
   mailto:zmoelnig@iem.kug.ac.at
-	
-  this code is published under the Gnu GeneralPublicLicense that should be distributed with gem & pd
+
+  time-domain filtering:
+  arguments: number of feedforward-taps, number of feedback-taps
 	  
   -----------------------------------------------------------------*/
 
