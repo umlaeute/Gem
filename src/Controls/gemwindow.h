@@ -92,9 +92,12 @@ class GEM_EXTERN gemwindow : public GemOutput
   // what is necessary ???
   int m_windowNumber;
   int m_width, m_height;
-  
 
-  WindowInfo gfxInfo, constInfo;
+  WindowInfo m_gfxInfo;
+  WindowInfo constInfo;
+
+  int m_windowDelTime;
+  t_clock *m_windowClock;
 
 
   int m_windowContext;
@@ -105,7 +108,8 @@ class GEM_EXTERN gemwindow : public GemOutput
   void windowInit       ();
   void resetValues      ();
   void swapBuffers      ();
-  void resizeCallback   (int xSize, int ySize, void*);
+  void resize           (int,int);
+  void dispatchGemWindowMessages();
 
  private:
 
@@ -123,6 +127,9 @@ class GEM_EXTERN gemwindow : public GemOutput
   static void 	cursorMessCallback(void *data, t_floatarg val);	
   static void 	topmostMessCallback(void *data, t_floatarg val);
   static void 	bangMessCallback(void *data);
+
+  static void   resizeCallback   (int xSize, int ySize, void*);
+  static void   dispatchCallback (void*);
 };
 
 #endif	// for header file

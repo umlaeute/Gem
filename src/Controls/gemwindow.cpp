@@ -14,7 +14,7 @@
 //
 /////////////////////////////////////////////////////////
 #include "Base/config.h"
-
+#include <stdio.h>
 #include "gemwindow.h"
 
 // I hate Microsoft...I shouldn't have to do this!
@@ -48,17 +48,14 @@
  * we leave it here for now
  */
 static int s_singleContext = 0; // LATER think about removing
-    
 
 ////////////////////////
 // makeCurrent
 static void makeCurrent(WindowInfo wi){
 #ifdef unix                 // for Unix
   if (!wi.dpy && !wi.win && !wi.context)return; // do not crash
-
   glXMakeCurrent(wi.dpy, wi.win, wi.context);   
 #elif _WINDOWS              // for Windows
-
   if (!wi.dc && !wi.context)return; // do not crash ??
 
   wglMakeCurrent(wi.dc, wi.context);
@@ -84,7 +81,8 @@ CPPEXTERN_NEW(gemwindow)
 gemwindow :: gemwindow() : GemOutput(), 
 			   m_width(500), m_height(500),
 			   m_fullscreen(0), m_xoffset(0), m_yoffset(0), m_border(1),
-			   m_cursor(1), m_topmost(0)
+			   m_cursor(1), m_topmost(0),
+			   m_windowClock(NULL), m_windowDelTime(10)
 {
 
 #ifdef _WINDOWS
@@ -125,7 +123,7 @@ gemwindow :: ~gemwindow()
 //
 /////////////////////////////////////////////////////////
 #ifdef _WINDOWS
-static void dispatchGemWindowMessages()
+void dispatchGemWindowMessages()
 {
   if (!s_windowRun)
     return;
@@ -136,17 +134,17 @@ static void dispatchGemWindowMessages()
       TranslateMessage(&msg);
       DispatchMessage(&msg);
     }
-  clock_delay(s_windowClock, s_windowDelTime);
+  clock_delay(m_windowClock, m_windowDelTime);
 }
 #elif unix 
-static void dispatchGemWindowMessages()
+void gemwindow::dispatchGemWindowMessages()
 {
-  WindowInfo win; 
+  WindowInfo win = m_gfxInfo;
+
   XEvent event; 
   XButtonEvent* eb = (XButtonEvent*)&event; 
   XKeyEvent* kb  = (XKeyEvent*)&event; 
   XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
-  //win = GemMan::getWindowInfo(); 
 
   while (XCheckWindowEvent(win.dpy,win.win,
 			   ResizeRedirectMask | 
@@ -175,17 +173,17 @@ static void dispatchGemWindowMessages()
 	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
 	  break;
 	case ResizeRequest:
-	  triggerResizeEvent(res->width, res->height);
+	  resize(res->width, res->height);
 	  XResizeWindow(win.dpy, win.win, res->width, res->height);
 	  break;
 	default:
 	  break; 
 	}
     }
-  //  clock_delay(s_windowClock, s_windowDelTime);
+  clock_delay(m_windowClock, m_windowDelTime);
 } 
 #elif __APPLE__
-static pascal OSStatus dispatchGemWindowMessages()
+pascal OSStatus dispatchGemWindowMessages()
 {
     EventRef	theEvent;
     EventTargetRef theTarget;
@@ -197,38 +195,33 @@ static pascal OSStatus dispatchGemWindowMessages()
         SendEventToEventTarget( theEvent, theTarget);
         ReleaseEvent( theEvent );
     }
-    clock_delay(s_windowClock, s_windowDelTime);
+    clock_delay(m_windowClock, m_windowDelTime);
     return noErr;
 }
 #endif // for Unix
 
-#define RESIZE_CB_STATIC
-#ifndef RESIZE_CB_STATIC
-void gemwindow::resizeCallback(int xSize, int ySize, void *)
-#else
-static void resizeCallbackStatic(int xSize, int ySize, void *)
-#endif
+void gemwindow::resize(int xSize, int ySize)
 {
-  /*
   if (ySize==0)ySize=1;
+
 
   float xDivy = (float)xSize / (float)ySize;
   m_height = ySize;
   m_width = xSize;
-  m_h = m_height;
-  m_w = m_width;
+  GemOutput::m_height = m_height;
+  GemOutput::m_width  = m_width;
 
   // setup the viewpoint
   glViewport(0, 0, m_width, m_height);
   // setup the matrices
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
+
   glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
 	    m_perspect[2], m_perspect[3],			// bottom, top
 	    m_perspect[4], m_perspect[5]);			// front, back
 
   glMatrixMode(GL_MODELVIEW);
-  */
 }
 
 void gemwindow :: createContext(char* disp)
@@ -255,7 +248,7 @@ void gemwindow :: createContext(char* disp)
             return;
     }
 #endif
-    //s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
+    //    m_windowClock = clock_new(this, (t_method)dispatchCallback);
 
     if (!createConstWindow(disp))  {
       error("GEM: A serious error occured creating const Context");
@@ -263,11 +256,8 @@ void gemwindow :: createContext(char* disp)
       m_outputContext = false;
     } else 
       m_outputContext = true;
-#ifdef RESIZE_CB_STATIC
-    setResizeCallback(resizeCallbackStatic, NULL);
-#else
-    setResizeCallback((this->resizeCallback), NULL);
-#endif
+
+    setResizeCallback(resizeCallback, this->x_obj);
 }
 
 int gemwindow :: createConstWindow(char* disp) {
@@ -296,11 +286,11 @@ int gemwindow :: createConstWindow(char* disp) {
   if (!createGemWindow(constInfo, myHints) )  {
     error("GEM: Error creating const context");
     constInfo.have_constContext=0;
-    gfxInfo.have_constContext=0;
+    m_gfxInfo.have_constContext=0;
     return(0);
   } else{
     constInfo.have_constContext=1;
-    gfxInfo.have_constContext=1;
+    m_gfxInfo.have_constContext=1;
   }
 
   return(1);
@@ -328,7 +318,7 @@ int gemwindow :: createWindow(char* disp) {
   myHints.fsaa = m_fsaa;
   
   if (disp) post("GEM: creating gem-window on display %s",disp);
-  if (!createGemWindow(gfxInfo, myHints) )  {
+  if (!createGemWindow(m_gfxInfo, myHints) )  {
     error("GEM: Unable to create window");
     return(0);
   }
@@ -340,7 +330,9 @@ int gemwindow :: createWindow(char* disp) {
   cursorMess(m_cursor);
   topmostMess(m_topmost);
   windowInit();
-  //  clock_delay(s_windowClock, s_windowDelTime);
+
+  m_windowClock = clock_new(this->x_obj, (t_method)dispatchCallback);
+  clock_delay(m_windowClock, m_windowDelTime);
 
   m_windowRun = 1;
   return(1);
@@ -362,7 +354,7 @@ void gemwindow :: windowInit()
  
   #ifdef __APPLE__
   GLint swapInt = 1;
-  aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
+  aglSetInteger ( m_gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
   #endif
 
   /* i am not really sure whether it is a good idea to enable FSAA by default
@@ -387,11 +379,11 @@ void gemwindow :: swapBuffers()
   if (!m_outputState) return;
   if (m_buffer == 2)
 #ifdef unix             // for Unix
-    glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
+    glXSwapBuffers(m_gfxInfo.dpy, m_gfxInfo.win);
 #elif _WINDOWS          // for WinNT
-  SwapBuffers(gfxInfo.dc);
+  SwapBuffers(m_gfxInfo.dc);
 #elif __APPLE__		// for Macintosh
-  ::aglSwapBuffers(gfxInfo.context);
+  ::aglSwapBuffers(m_gfxInfo.context);
 #else                   // everyone else
 #error Define OS specific swap buffer
 #endif
@@ -448,13 +440,13 @@ void gemwindow :: destroyMess()
 
   if (!m_outputState) return;
 
-  //clock_unset(s_windowClock);
-  //s_windowClock = NULL;
+  clock_unset(m_windowClock);
+  m_windowClock = NULL;
 
   glFlush();
   glFinish();
 
-  destroyGemWindow(gfxInfo);
+  destroyGemWindow(m_gfxInfo);
 
   m_outputState = 0;
     
@@ -524,7 +516,7 @@ void gemwindow :: titleMess(t_symbol* s)
 void gemwindow :: cursorMess(bool on)
 {
   if (m_outputState)
-    cursorGemWindow(gfxInfo, (int)on);
+    cursorGemWindow(m_gfxInfo, (int)on);
 }
 
 /////////////////////////////////////////////////////////
@@ -534,7 +526,7 @@ void gemwindow :: cursorMess(bool on)
 void gemwindow :: topmostMess(bool on)
 {
   if (m_outputState)
-    topmostGemWindow(gfxInfo, (int)on);
+    topmostGemWindow(m_gfxInfo, (int)on);
 }
 
 
@@ -570,7 +562,7 @@ void gemwindow :: resetValues()
 //
 /////////////////////////////////////////////////////////
 void gemwindow :: preRender(GemState){
-  makeCurrent(gfxInfo);
+  makeCurrent(m_gfxInfo);
   resetState();
 }
 
@@ -648,4 +640,13 @@ void gemwindow :: topmostMessCallback(void *data, t_floatarg val)
 void gemwindow :: bangMessCallback(void *data)
 {
   GetMyClass(data)->swapBuffers();
+}
+
+
+void gemwindow :: resizeCallback(int x, int y, void*data){
+  GetMyClass(data)->resize(x, y);
+}
+
+void gemwindow :: dispatchCallback(void*data){
+  GetMyClass(data)->dispatchGemWindowMessages();
 }
