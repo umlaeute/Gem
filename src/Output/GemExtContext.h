@@ -4,9 +4,7 @@
 
   Interface for an external openGL context
 
-  Copyright (c) 1997-200 Mark Danks.
-  Copyright (c) Günther Geiger. geiger@epy.co.at
-  Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+  Copyright (c) 2004 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -16,10 +14,23 @@
 #ifndef INCLUDE_GEMEXTCONTEXT_H_
 #define INCLUDE_GEMEXTCONTEXT_H_
 
+
+
+#ifndef EXPORT_CLASS
+# ifdef _WINDOWS
+#  define EXPORT_CLASS __declspec(dllexport)
+# else
+#  define EXPORT_CLASS
+# endif
+#endif
+
+
 // a magic number: this is 'GemX' in ASCII
 #define GEMEXTCONTEXT_MAGIC (long int)0x47656D58
 
-class GEM_EXTERN GemExtContext
+
+
+class EXPORT_CLASS GemExtContext
 {
  public:
 
@@ -35,7 +46,7 @@ class GEM_EXTERN GemExtContext
 
   //////////
   // Destructor
-  ~GemExtContext(){
+  ~GemExtContext(){ 
     magic=0;
   }
 
