@@ -277,6 +277,7 @@ GEM_EXTERN void destroyGemWindow(WindowInfo &info)
         ::DisposeGWorld(info.offscreen);
         info.offscreen = NULL;
         ::DisposeWindow( ::GetWindowFromPort(gaglDraw) );
+	return;
     }
     if (info.context)
     {
