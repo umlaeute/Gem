@@ -23,7 +23,9 @@ LOG
 #endif
 #define PI	3.1415926535897932384626433832795
 
+#ifndef _WINDOWS
 using namespace std;
+#endif
 
 // This is our basic 3D point/vector class
 class CVector3
