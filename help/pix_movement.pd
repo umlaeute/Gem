@@ -1,4 +1,4 @@
-#N canvas 118 22 683 405 10;
+#N canvas 0 198 683 405 10;
 #X text 452 8 GEM object;
 #X obj 9 265 cnv 15 430 135 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -70,9 +70,8 @@
 #X obj 451 232 pix_movement 0.5;
 #X obj 526 207 / 100;
 #X obj 451 279 alpha;
-#X obj 481 258 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 481 258 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
-#X obj 451 172 pix_rgba;
 #X text 17 125 since image-noise can disturb this processing \, changes
 between two corresponding pixels that are smaller than <threshold>
 are ignored.;
@@ -85,11 +84,12 @@ the luminance-channels for YUV-&Grayscale-images.;
 #X text 24 303 Inlet 2: float: <threshold> changes in the image that
 are smaller then <threshold> are ignored;
 #X text 50 12 Synopsis: [pix_movement];
+#X obj 451 172 pix_rgba;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 20 0;
 #X connect 18 0 17 0;
-#X connect 20 0 35 0;
+#X connect 20 0 41 0;
 #X connect 20 2 21 0;
 #X connect 21 0 20 1;
 #X connect 22 0 23 0;
@@ -99,4 +99,4 @@ are smaller then <threshold> are ignored;
 #X connect 32 0 31 1;
 #X connect 33 0 18 0;
 #X connect 34 0 33 0;
-#X connect 35 0 31 0;
+#X connect 41 0 31 0;

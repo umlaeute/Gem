@@ -48,16 +48,11 @@
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
-#X obj 77 281 pix_buf;
-#X text 156 263 [pix_buf] is important if we want to recalculate our
-pix-effect each frame but don't want to reload the image all the time.
-;
 #X connect 0 0 2 0;
-#X connect 2 0 6 0;
+#X connect 2 0 1 0;
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X connect 6 0 1 0;
 #X restore 451 113 pd image;
 #X text 63 307 <none>;
 #X text 56 448 Outlet 1: gemlist;
@@ -78,7 +73,7 @@ pix-effect each frame but don't want to reload the image all the time.
 #X msg 464 155 width \$1;
 #X msg 544 155 height \$1;
 #X obj 451 226 pix_refraction;
-#X obj 544 176 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 544 176 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
 #X text 29 56 Description: display a pix through glass bricks;
 #X text 80 158 range = 0.01 to 16 \, default = 2;

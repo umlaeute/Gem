@@ -52,27 +52,21 @@
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
-#X obj 77 281 pix_buf;
-#X obj 378 103 inlet;
-#X text 312 85 re-send the image to the [pix_]-object;
 #X text 231 37 open;
 #X text 79 30 gemlist;
 #X connect 0 0 2 0;
-#X connect 2 0 6 0;
+#X connect 2 0 1 0;
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X connect 6 0 1 0;
-#X connect 7 0 6 0;
 #X restore 451 113 pd image;
 #X obj 451 233 pix_texture;
 #X text 63 186 <none>;
 #X text 57 323 Outlet 1: gemlist;
 #X text 63 232 Inlet 1: gemlist;
-#X obj 460 138 tgl 15 0 empty empty mode 20 8 0 8 -262144 -1 -1 0 1
+#X obj 460 158 tgl 15 0 empty empty mode 20 8 0 8 -262144 -1 -1 0 1
 ;
 #X text 29 77 Description: random dot stereogram for luminance;
-#X obj 460 158 t f b;
 #X obj 451 255 square 3;
 #X text 34 96 [pix_rds] produces b/w random dot stereograms (aka: the
 magic eye (tm)) for either cross-eyed and wall-eyed viewers. Wall-eyed
@@ -82,21 +76,16 @@ is basically an invertation (front becomes back) of cross-eyed.;
 #X text 50 12 Synopsis: [pix_rds];
 #X msg 460 177 method \$1;
 #X obj 451 196 pix_rds;
-#X floatatom 533 140 5 10 100 1 stride - -;
+#X floatatom 495 139 5 10 100 1 stride - -;
 #X text 63 245 Inlet 1: method [0|1] (crosseyed|walleyed);
-#X obj 533 158 t b f;
 #X text 63 259 Inlet 1: stride <int> distance (default: 40);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
 #X connect 16 0 17 1;
-#X connect 17 0 31 0;
-#X connect 18 0 25 0;
-#X connect 22 0 24 0;
-#X connect 24 0 30 0;
-#X connect 24 1 17 2;
-#X connect 30 0 31 0;
-#X connect 31 0 18 0;
-#X connect 32 0 34 0;
-#X connect 34 0 17 2;
-#X connect 34 1 31 1;
+#X connect 17 0 30 0;
+#X connect 18 0 24 0;
+#X connect 22 0 29 0;
+#X connect 29 0 30 0;
+#X connect 30 0 18 0;
+#X connect 31 0 30 1;

@@ -1,4 +1,4 @@
-#N canvas 105 476 636 411 10;
+#N canvas 76 273 636 411 10;
 #X text 452 8 GEM object;
 #X obj 8 295 cnv 15 430 90 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -48,16 +48,11 @@
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
-#X obj 77 281 pix_buf;
-#X text 156 263 [pix_buf] is important if we want to recalculate our
-pix-effect each frame but don't want to reload the image all the time.
-;
 #X connect 0 0 2 0;
-#X connect 2 0 6 0;
+#X connect 2 0 1 0;
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X connect 6 0 1 0;
 #X restore 451 113 pd image;
 #X text 63 266 <none>;
 #X text 56 368 Outlet 1: gemlist;

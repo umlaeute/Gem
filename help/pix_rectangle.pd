@@ -48,16 +48,11 @@
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
-#X obj 77 281 pix_buf;
-#X text 156 263 [pix_buf] is important if we want to recalculate our
-pix-effect each frame but don't want to reload the image all the time.
-;
 #X connect 0 0 2 0;
-#X connect 2 0 6 0;
+#X connect 2 0 1 0;
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X connect 6 0 1 0;
 #X restore 451 113 pd image;
 #X text 63 216 <none>;
 #X text 8 348 Outlet 1: gemlist;
@@ -65,10 +60,6 @@ pix-effect each frame but don't want to reload the image all the time.
 #X obj 451 233 pix_draw;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
-#X text 21 111 pix_rectangle renders a rectangle onto a pix_buffer.
-This means that you have to have an image already loaded to render
-into. Set the positione and size with the two corners of the rectangle.
-;
 #X text 50 12 Synopsis: [pix_rectangle];
 #X text 28 76 Description: draw a rectangle into a pix;
 #X msg 537 175 1 0 0;
@@ -78,11 +69,15 @@ rectangle: <x1> <y1> <x2> <y2>;
 #X msg 494 151 40 10 100 200;
 #X text 13 305 Inlet 3: list : 3(RGB) or 4(RGBA) float-values defining
 the color of the rectangle (defaut: 1 1 1 1);
+#X text 21 111 pix_rectangle renders a rectangle onto a pix-buffer.
+This means that you have to have an image already loaded to render
+into. Set the positione and size with the two corners of the rectangle.
+;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
 #X connect 16 0 17 1;
-#X connect 17 0 28 0;
-#X connect 27 0 28 2;
-#X connect 28 0 21 0;
-#X connect 30 0 28 1;
+#X connect 17 0 27 0;
+#X connect 26 0 27 2;
+#X connect 27 0 21 0;
+#X connect 29 0 27 1;
