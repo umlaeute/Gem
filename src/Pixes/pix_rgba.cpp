@@ -59,7 +59,7 @@ void pix_rgba :: processImage(imageStruct &image)
   m_image.ysize=image.ysize;
  
   switch (image.format){
-  case GL_RGBA: /* nothing to do */
+  case GL_RGBA: 
     m_image.fromRGBA(image.data);
     break;
   case GL_RGB:  
@@ -68,10 +68,8 @@ void pix_rgba :: processImage(imageStruct &image)
   case GL_BGR_EXT:
     m_image.fromBGR(image.data);
     break;
-  case GL_BGRA_EXT:
-    #ifndef __APPLE__
+  case GL_BGRA_EXT: /* "RGBA" on apple */
     m_image.fromBGRA(image.data);
-    #endif //__APPLE__
     break;
   case GL_LUMINANCE:
     m_image.fromGray(image.data);
@@ -88,8 +86,7 @@ void pix_rgba :: processImage(imageStruct &image)
 
   image.data   = m_image.data;
   image.notowned = 0;
-  image.format = m_image.format;
-  image.csize  = m_image.csize;
+  image.setCsizeByFormat(m_image.format);
 }
 
 /////////////////////////////////////////////////////////
