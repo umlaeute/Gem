@@ -28,7 +28,20 @@ CPPEXTERN_NEW(pix_videoNEW)
 //
 /////////////////////////////////////////////////////////
 pix_videoNEW :: pix_videoNEW(){
-  m_videoHandle=new videoV4L(GL_RGBA);
+  m_videoHandle=NULL;
+  int i = MAX_VIDEO_HANDLES;
+  while(i--)m_videoHandles[i]=NULL;
+  m_numVideoHandles=0;
+
+#ifdef __linux__
+  m_videoHandles[m_numVideoHandles]=new videoV4L(GL_RGBA);  m_numVideoHandles++;
+#ifdef HAVE_DV
+  m_videoHandles[m_numVideoHandles]=new videoDV4L(GL_RGBA);  m_numVideoHandles++;
+#endif
+#endif
+  driverMess(0);
+
+  //  m_videoHandle=new videoDV4L(GL_RGBA);
 }
 
 /////////////////////////////////////////////////////////
@@ -55,6 +68,7 @@ void pix_videoNEW :: startRendering(){
     post("GEM: pix_video: do video for this OS");
     return;
   }
+  post("pix_videoNEW: starting transfer");
   m_videoHandle->startTransfer();
 }
 
@@ -123,26 +137,31 @@ void pix_videoNEW :: colorMess(t_atom*a)
 {
   int format=0;
   if (a->a_type==A_SYMBOL){
-      char c =tolower(*atom_getsymbol(a)->s_name);
-      char c2=tolower(atom_getsymbol(a)->s_name[3]);
-
+      char c =*atom_getsymbol(a)->s_name;
+      // we only have 3 colour-spaces: monochrome (GL_LUMINANCE), yuv (GL_YCBCR_422_GEM), and rgba (GL_RGBA)
+      // if you don't need colour, i suggest, take monochrome
+      // if you don't need alpha,  i suggest, take yuv
+      // else take rgba
       switch (c){
-      case 'g': format=GL_LUMINANCE; break;
-      case 'y': format=GL_YCBCR_422_GEM; break;
-      case 'r':
-	if (c2=='a')format=GL_RGBA;
-	else format=GL_RGB;
-	break;
-#if defined (GL_BGRA) & defined (GL_BGR)
-      case 'b':
-	if (c2=='a')format=GL_BGRA;	else 
-		format=GL_BGR;
-	break;
-#endif
+      case 'g': case 'G': format=GL_LUMINANCE; break;
+      case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
+      case 'r': case 'R':
       default: format=GL_RGBA;
       }
   } else format=atom_getint(a);
   if(m_videoHandle)m_videoHandle->setColor(format);
+}
+/////////////////////////////////////////////////////////
+// driverMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: driverMess(int dev)
+{
+  if(dev>=m_numVideoHandles){
+    post("driverID (%d) must not exceed %d", dev, m_numVideoHandles);
+    return;
+  }
+  m_videoHandle=m_videoHandles[dev];
 }
 /////////////////////////////////////////////////////////
 // deviceMess
@@ -176,6 +195,8 @@ void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
     	    gensym("color"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::deviceMessCallback,
     	    gensym("device"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::driverMessCallback,
+    	    gensym("driver"), A_FLOAT, A_NULL);
 }
 void pix_videoNEW :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -232,4 +253,8 @@ void pix_videoNEW :: colorMessCallback(void *data, t_symbol* nop, int argc, t_at
 void pix_videoNEW :: deviceMessCallback(void *data, t_floatarg state)
 {
     GetMyClass(data)->deviceMess((int)state);
+}
+void pix_videoNEW :: driverMessCallback(void *data, t_floatarg state)
+{
+    GetMyClass(data)->driverMess((int)state);
 }
