@@ -23,9 +23,15 @@ extern "C" {
 #include "Base/config.h"
 #endif /* __linux__ */
 
-#if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
-
 #include "Pixes/pix_filmFFMPEG.h"
+
+#if defined(HAVE_FFMPEG)
+
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmFFMPEG, t_symbol *, A_DEFSYM)
 
@@ -64,10 +70,13 @@ void pix_filmFFMPEG :: realOpen(char *filename)
     int err;
     AVCodec* codec;
     int i;
+    struct stat buf;
     POST("opening %s mem %d",filename);
 
     //    POST("***  Memory  alloc %d, free %d, res %d",av_mem,av_freed,av_mem-av_freed);
 
+    stat(filename,&buf);
+      
     err = av_open_input_file(&m_Format,filename,NULL,0,NULL);
     if (err < 0) {
         error("GEM: pix_film: Unable to open file: %s", filename);
@@ -130,31 +139,77 @@ void pix_filmFFMPEG :: realOpen(char *filename)
     m_Pkt.data = NULL;
 
     //    outlet_float(m_outFramerate,m_Format->streams[i]->codec.frame_rate/FRAME_RATE_BASE);
+
+    //    post("framsesize %f, filesize %f, frames %d",m_Format->streams[m_track]->codec.frame_size,buf.st_size,buf.st_size/m_Format->streams[m_track]->codec.frame_size);
+
+    /* estimate number of frames */
+
+    estimateFramesize(10);
+    m_numFrames = buf.st_size/m_framesize;
+
     return;
 
    fail:
    closeMess();
 }
 
+
+void pix_filmFFMPEG :: estimateFramesize(int num) {
+  int ret,len;
+  int gotit;
+  int framesize = 0;
+  int count = 0;
+  unsigned char* ptr;
+
+  while (count < num) {
+    if (av_read_packet(m_Format,&m_Pkt) < 0) {
+      post("Can't estimate framesize");
+      return;
+    }
+    ptr = m_Pkt.data;
+    len = m_Pkt.size;
+
+    ret = avcodec_decode_video(&m_Format->streams[m_track]->codec,
+			       &m_avFrame,
+			       &gotit,
+			       ptr,
+			       len);
+    if (gotit) {    
+      framesize += ret;
+      count++;  
+    }
+  }
+  m_framesize = framesize/num;
+}
+
+
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-#if LIBAVCODEC_VERSION_INT == 0x000406
-static void AV_frame2picture(AVFrame f, AVPicture *p){ // jmz
-  p->data = f.data;
-  p->linesize = f.linesize;
-}
-#endif
 
 void pix_filmFFMPEG :: getFrame()
 {
-  UINT8* ptr;
+  unsigned char* ptr;
   int len;
   int i;
   int gotit = 0;
   int ret;
-  
+
+  // Seek
+
+  if (m_curFrame != m_reqFrame-1) {
+    int pos,err;
+    POST("seeking to %d",m_reqFrame*m_framesize);
+    POST("url is streamed %d",url_is_streamed(&m_Format->pb));
+
+    pos = url_fseek(&m_Format->pb,m_reqFrame*m_framesize,SEEK_SET);
+    err = av_find_stream_info(m_Format);
+    POST("done pos %d %d seek %d",m_Format->pb.pos,pos,m_Format->pb.seek);
+
+    ptr = m_Pkt.data;
+    len = m_Pkt.size;
+  }
   if (m_haveMovie) {
        len = m_PacketLen;
        ptr = m_PacketPtr;
@@ -171,16 +226,12 @@ void pix_filmFFMPEG :: getFrame()
 		 len = m_Pkt.size;
 	    }
 	    POST("decode");
-#if LIBAVCODEC_VERSION_INT == 0x000406
 	    ret = avcodec_decode_video(&m_Format->streams[m_track]->codec,
-				       &m_avFrame, // was m_Picture; jmz
+				       &m_avFrame,
 				       &gotit,
 				       ptr,
 				       len);
-	    AV_frame2picture(m_avFrame, &m_Picture); // jmz
-#else
-	    ret = avcodec_decode_video(&m_Format->streams[m_track]->codec, &m_Picture, &gotit, ptr, len);
-#endif
+
 	    if (ret < 0 ) { // TODO recover gracefully 
 		 post("error while decoding");
 		 break;
@@ -198,7 +249,7 @@ void pix_filmFFMPEG :: getFrame()
 		 
 		 m_curFrame = m_Format->streams[m_track]->codec.frame_number;
 		 avpicture_fill(&rgba,m_data,dstfmt,width,height);
-		 if (img_convert(&rgba,dstfmt,&m_Picture,fmt,width,height)<0) 
+		 if (img_convert(&rgba,dstfmt,(AVPicture*)&m_avFrame,fmt,width,height)<0) 
 		      post("pix_film: image conversion failed");
 		 
 	    }

@@ -16,6 +16,10 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_FILMFFMPEG_H_
 #define INCLUDE_PIX_FILMFFMPEG_H_
 
+#ifdef HAVE_LIBAVCODEC
+#define HAVE_FFMPEG
+
+
 #include "Pixes/pix_film.h"
 extern "C" {
 #include "ffmpeg/avformat.h"
@@ -62,17 +66,11 @@ class GEM_EXTERN pix_filmFFMPEG : public pix_film
   //-----------------------------------
 
    AVFormatContext* m_Format;
-#if LIBAVCODEC_VERSION_INT == 0x000406
-   /* jmz: i don't know which version of ffmpeg Günter uses.
-    * i don't know either, whether it is more recent or older than mine
-    * at least with 0.4.6 avcodec_decode_video wants AVFrame instead of AVPicture
-    */
    AVFrame   m_avFrame;
-#endif
-   AVPicture m_Picture;
    AVPacket  m_Pkt;
    int       m_PacketLen;
-   UINT8*    m_PacketPtr;
+   unsigned char*    m_PacketPtr;
+   int m_framesize;
 
   //-----------------------------------
   // GROUP:	Texturing
@@ -80,6 +78,7 @@ class GEM_EXTERN pix_filmFFMPEG : public pix_film
 
  protected:
 	
+   void  estimateFramesize(int);
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);
@@ -87,5 +86,5 @@ class GEM_EXTERN pix_filmFFMPEG : public pix_film
   static void autoCallback(void *data, t_floatarg state);
 
 };
-
+#endif // HAVE_LIBAVCODEC
 #endif	// for header file
