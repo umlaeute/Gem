@@ -51,6 +51,7 @@ pix_movement :: pix_movement(t_floatarg f)
   if(f<=0.)f=0.5;
   if(f>1.f)f=1.0;
   treshold = (unsigned char)(255*f);
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("tresh"));
 }
 
 /////////////////////////////////////////////////////////
@@ -85,9 +86,40 @@ void pix_movement :: processRGBAImage(imageStruct &image)
     //   rp[chAlpha] = 255*(fabs((unsigned char)grey-*wp)>treshold);
     unsigned char grey = (rp[chRed]*79+rp[chGreen]*156+rp[chBlue]*21)>>8;
     rp[chAlpha] = 255*(abs(grey-*wp)>treshold);
-   *wp++=(unsigned char)grey;
+    *wp++=(unsigned char)grey;
     rp+=4;
   } 
+}
+void pix_movement :: processYUVImage(imageStruct &image)
+{
+  // assume that the pix_size does not change !
+  bool doclear=(image.xsize*image.ysize != buffer.xsize*buffer.ysize);
+  buffer.xsize = image.xsize;
+  buffer.ysize = image.ysize;
+  buffer.reallocate();
+  if(doclear) buffer.setWhite();
+  
+  int pixsize = image.ysize * image.xsize;
+
+  unsigned char *rp = image.data;			// read pointer
+  unsigned char *wp=buffer.data;			// write pointer to the copy
+  unsigned char grey=0;
+  pixsize/=2;
+  while(pixsize--) {
+    grey = rp[chY0];
+    rp[chY0]=255*(abs(grey-*wp)>treshold);
+    *wp++=grey;
+
+    grey = rp[chY1];
+    rp[chY1]=255*(abs(grey-*wp)>treshold);
+    *wp++=grey;
+    /*
+      // looks cool (C64), but what for ?
+      rp[chU]=128;
+      rp[chV]=128;
+    */
+    rp+=4;
+  }
 }
 void pix_movement :: processGrayImage(imageStruct &image)
 {
@@ -113,7 +145,6 @@ void pix_movement :: processGrayImage(imageStruct &image)
     *wp++=grey;
   }
   image.data = buffer2.data;
-  
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -121,13 +152,13 @@ void pix_movement :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_movement :: obj_setupCallback(t_class *classPtr)
 {
-
+  class_addmethod(classPtr, (t_method)&pix_movement::treshMessCallback,
+		  gensym("threshold"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movement::treshMessCallback,
 		  gensym("tresh"), A_FLOAT, A_NULL);
-
+  // rather trash than threshold
 }
 void pix_movement :: treshMessCallback(void *data, t_floatarg newmode)
 {
-  GetMyClass(data)->treshold=(unsigned char)(255*newmode);
-  post("treshold = %d", GetMyClass(data)->treshold);
+  GetMyClass(data)->treshold=CLAMP((float)255.*newmode);
 }
