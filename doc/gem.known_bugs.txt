@@ -12,6 +12,30 @@ BUG: each time an AVI is loaded, the used memory increases for about 400k.
 ANS: i fear, this is really a mikro$oft bug! (probably not;-))
 
 
+loading MPEG-movies crashes under Win32
+--------------
+POSTED 4/05/04
+--------------
+BUG: loading MPEG-movies (*.MPG) crashes pd
+ANS: MPEG is not really supported under the Win32-version of Gem
+     however Gem tries to decode MPEGs via QuickTime which might crash (see below)
+
+loading quicktime-movies crashes under Win32
+--------------
+POSTED 4/05/04
+--------------
+BUG: loading quicktime-movies (*.MOV) crashes pd; i am using QuickTime-6.5
+ANS: people have reported, that QuickTime-6.4 works but v6.5 does not -
+
+loading AVI-movies does not work under Win32
+--------------
+POSTED 4/05/04
+--------------
+BUG: loading some AVI-movies with certain codecs does not work under Win2k and bigger.
+ANS: Gem is (still) using a rather old API for decoding videos. 
+     it might well be, that not all installed codecs are supported (e.g. Indeo-5)
+
+
 have to destroy / create window to change lighting state in buffer == 1
 --------------
 POSTED 11/07/98
@@ -228,7 +252,7 @@ POSTED 6/16/97
 --------------
 BUG: The pix_composite object should have its inlets swapped.  Conceptually
      it doesn't make sense the way it works currently.
-ANS: Just did it.
+FIX: Just did it.
 
 
 pix_convolve is broken
@@ -270,5 +294,5 @@ FIXED  4/02/02
 POSTED 4/01/02
 --------------
 BUG: the example fonts for text2d/text3d do not load
-ANS: accidentally i did a dos2unix to the *.ttf files. this damaged them.
+FIX: accidentally i did a dos2unix to the *.ttf files. this damaged them.
      Get new ones from ftp://iem.at/pd/Externals/GEM/misc
