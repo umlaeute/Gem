@@ -50,6 +50,13 @@ class GEM_EXTERN cube : public GemShape
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
+	
+	int	m_blend;
+	
+    private:
+    //////////
+    // Static member functions
+    static void 	blendMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file
