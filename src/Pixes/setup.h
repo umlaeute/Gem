@@ -78,6 +78,7 @@ extern "C" {
    void pix_video_setup();
    void pix_videoLinux_setup();
    void pix_videoNT_setup();
+   void pix_videoDS_setup();
    void pix_videoSGI_setup();
    void pix_videoDarwin_setup();
 
@@ -173,6 +174,9 @@ extern "C" {
 #endif
 #ifdef _WINDOWS
       pix_videoNT_setup();
+#  ifdef HAVE_DIRECTSHOW
+	  pix_videoDS_setup();
+#  endif
 #endif
 #ifdef __sgi
       pix_videoSGI_setup();

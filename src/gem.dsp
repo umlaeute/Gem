@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G5 /W3 /O2 /Ob2 /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# ADD CPP /nologo /G5 /MT /W3 /O2 /Ob2 /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /D "HAVE_DIRECTSHOW" /FD /c
 # SUBTRACT CPP /Fr /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -54,8 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib opengl32.lib glu32.lib vfw32.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib ../../bin/pd.lib /nologo /subsystem:windows /dll /profile /machine:I386 /out:"../gem.dll"
-# SUBTRACT LINK32 /nodefaultlib
+# ADD LINK32 ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbase.lib winmm.lib vfw32.lib libcmt.lib shlwapi.lib OLDNAMES.lib /nologo /subsystem:windows /dll /profile /machine:I386 /nodefaultlib /out:"../gem.dll" /libpath:"..\..\bin\\" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\Release"
 
 !ELSEIF  "$(CFG)" == "gem - Win32 Debug"
 
@@ -71,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /ML /W3 /Zi /Od /Ob2 /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# ADD CPP /nologo /MTd /W3 /Zi /Od /Ob0 /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /I "../src" /I "../../GemLibs/glut" /I "../../GemLibs/glm" /I "../../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/gltt" /I "../../GemLibs/wintab/include" /I "../../GemLibs/particle" /I "../../GemLibs/liborb" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /D "HAVE_DIRECTSHOW" /D "DEBUG" /FD /c
 # SUBTRACT CPP /X /Fr /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -82,8 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib opengl32.lib glu32.lib vfw32.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib ../../bin/pd.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../gem.dll"
-# SUBTRACT LINK32 /nodefaultlib
+# ADD LINK32 ../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../gem.dll" /libpath:"..\..\bin\\" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug"
 
 !ENDIF 
 
@@ -1267,6 +1265,14 @@ SOURCE=.\Pixes\pix_write.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\Pixes\DSgrabber.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\DSgrabber.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_dv.cpp
 # End Source File
 # Begin Source File
@@ -1304,6 +1310,14 @@ SOURCE=.\Pixes\pix_video.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_video.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_videoDS.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_videoDS.h
 # End Source File
 # Begin Source File
 
