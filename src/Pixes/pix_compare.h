@@ -16,7 +16,7 @@ LOG
 #ifndef INCLUDE_pix_compare_H_ 
 #define INCLUDE_pix_compare_H_ 
 
-#include "GemPixDualObj.h"
+#include "Base/GemPixDualObj.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
