@@ -61,6 +61,10 @@ class GEM_EXTERN alpha : public GemBase
     	// alpha test state
     	int	    	    m_alphaTest;
 
+	/////////
+	// depthtest
+	int                 m_depthtest;
+
 	//////////
 	// the blending function
 	GLenum              m_function;
@@ -75,6 +79,10 @@ class GEM_EXTERN alpha : public GemBase
     	// Alpha test changed
     	void	    	testMess(int alphaTest);
 
+     	//////////
+    	// Disable Depthtest
+    	void	    	depthtestMess(int i);
+
     	t_inlet *m_inlet;
    private:
     	
@@ -82,6 +90,7 @@ class GEM_EXTERN alpha : public GemBase
     	// static member functions
     	static void 	alphaMessCallback(void *data, t_floatarg alpha);
         static void     testMessCallback(void *data, t_floatarg alphaTest);
+        static void     depthtestMessCallback(void*, t_floatarg);
         static void     funMessCallback(void *data, t_floatarg alphaTest);
 };
 

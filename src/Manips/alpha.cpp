@@ -27,7 +27,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(alpha, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 alpha :: alpha(t_floatarg fun=0)
-       : m_alphaState(1), m_alphaTest(1)
+       : m_alphaState(1), 
+	 m_alphaTest(1),
+	 m_depthtest(0)
 {
   funMess((int)fun);
   m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("function"));
@@ -50,8 +52,10 @@ void alpha :: render(GemState *)
 {
   if (m_alphaState)    {
     glEnable(GL_BLEND);
-    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBlendFunc(GL_SRC_ALPHA, m_function);
+    if (!m_depthtest)
+      glDepthMask(GL_FALSE);  // turn off depth test for transparent objects
+
     if (m_alphaTest)		{
       glEnable(GL_ALPHA_TEST);
       glAlphaFunc(GL_GREATER, 0.f);
@@ -68,11 +72,14 @@ void alpha :: postrender(GemState *)
   if (m_alphaState)
     {
       glDisable(GL_BLEND);
+      if (!m_depthtest)
+	glDepthMask(GL_TRUE);
+
       if (m_alphaTest)
 	glDisable(GL_ALPHA_TEST);
     }
-}
 
+}
 /////////////////////////////////////////////////////////
 // alphaMess
 //
@@ -106,6 +113,15 @@ void alpha :: testMess(int alphaTest)
     m_alphaTest = alphaTest;
     setModified();
 }
+/////////////////////////////////////////////////////////
+// depthtestMess
+//
+/////////////////////////////////////////////////////////
+void alpha :: depthtestMess(int i)
+{
+    m_depthtest = i;
+    setModified();
+}
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -118,6 +134,8 @@ void alpha :: obj_setupCallback(t_class *classPtr)
     	gensym("test"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&alpha::funMessCallback,
     	gensym("function"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&alpha::depthtestMessCallback,
+    	gensym("auto"), A_FLOAT, A_NULL);
 }
 void alpha :: alphaMessCallback(void *data, t_floatarg alphaState)
 {
@@ -127,6 +145,12 @@ void alpha :: testMessCallback(void *data, t_floatarg alphaTest)
 {
     GetMyClass(data)->testMess((int)alphaTest);
 }
+
+void alpha :: depthtestMessCallback(void *data, t_floatarg f)
+{
+    GetMyClass(data)->depthtestMess(!(int)f);
+}
+
 void alpha :: funMessCallback(void *data, t_floatarg alphaFun)
 {
     GetMyClass(data)->funMess((int)alphaFun);
