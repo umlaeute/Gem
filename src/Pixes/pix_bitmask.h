@@ -55,10 +55,8 @@ class GEM_EXTERN pix_bitmask : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-
-    	//////////
-    	// Do the processing
-        virtual void	processGrayImage(imageStruct &image);
+	virtual void	processGrayImage(imageStruct &image);
+	virtual void	processYUVImage(imageStruct &image);
 
     	//////////
     	// Set the new gain
@@ -71,6 +69,8 @@ class GEM_EXTERN pix_bitmask : public GemPixObj
     	//////////
     	// The new gain
     	unsigned char	m_mask[4];
+
+	int m_mode; // whether we have only 1 value or separate values; interesting for YUV 
     
     private:
     

@@ -32,6 +32,7 @@ pix_bitmask :: pix_bitmask()
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_mask"));
 
     m_mask[chRed] = m_mask[chGreen] = m_mask[chBlue] = m_mask[chAlpha] = 255;
+    m_mode=0;
 }
 
 /////////////////////////////////////////////////////////
@@ -47,33 +48,46 @@ pix_bitmask :: ~pix_bitmask()
 /////////////////////////////////////////////////////////
 void pix_bitmask :: processRGBAImage(imageStruct &image)
 {
-    int datasize = image.xsize * image.ysize;
-	unsigned char *pixels = image.data;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *pixels = image.data;
     
-	while(datasize--)
-	{
-		pixels[chRed] &= m_mask[chRed];
-		pixels[chGreen] &= m_mask[chGreen];
-		pixels[chBlue] &= m_mask[chBlue];
-		pixels[chAlpha] &= m_mask[chAlpha];
-		pixels += 4;
-	}
+  while(datasize--)	{
+    pixels[chRed] &= m_mask[chRed];
+    pixels[chGreen] &= m_mask[chGreen];
+    pixels[chBlue] &= m_mask[chBlue];
+    pixels[chAlpha] &= m_mask[chAlpha];
+    pixels += 4;
+  }
 }
-
-/////////////////////////////////////////////////////////
-// processGrayImage
-//
-/////////////////////////////////////////////////////////
+void pix_bitmask :: processYUVImage(imageStruct &image)
+{
+  int datasize = image.xsize * image.ysize / 2;
+  unsigned char *pixels = image.data;
+  
+  if (m_mode)
+    while(datasize--)	{
+      pixels[chU] &= m_mask[chGreen];
+      pixels[chY0] &= m_mask[chRed];
+      pixels[chV] &= m_mask[chBlue];
+      pixels[chY1] &= m_mask[chRed];
+      pixels += 4;
+    }
+  else
+    while(datasize--)	{
+      pixels[chY0] &= m_mask[chRed];
+      pixels[chY1] &= m_mask[chRed];
+      pixels += 4;
+    }
+}
 void pix_bitmask :: processGrayImage(imageStruct &image)
 {
-    int datasize = image.xsize * image.ysize;
-	unsigned char *pixels = image.data;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *pixels = image.data;
     
-	while(datasize--)
-	{
-		pixels[chGray] &= m_mask[chRed];
-		pixels++;
-	}
+  while(datasize--)	{
+    pixels[chGray] &= m_mask[chRed];
+    pixels++;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -93,6 +107,7 @@ void pix_bitmask :: vecMaskMess(int argc, t_atom *argv)
     m_mask[chGreen] = atom_getint(&argv[1]);
     m_mask[chBlue] = atom_getint(&argv[2]);
     setPixModified();
+    m_mode=1;
 }
 
 /////////////////////////////////////////////////////////
@@ -105,6 +120,7 @@ void pix_bitmask :: intMaskMess(int mask)
     m_mask[chAlpha] = 255;
     m_mask[chRed] = m_mask[chGreen] = m_mask[chBlue] = mask;
     setPixModified();
+    m_mode=0;
 }
 
 /////////////////////////////////////////////////////////
