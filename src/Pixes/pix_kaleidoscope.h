@@ -61,6 +61,8 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
     	virtual void 	processYUVImage(imageStruct &image);
+	virtual void 	processGrayImage(imageStruct &image);
+
 
 	imageStruct    myImage;
 
@@ -176,6 +178,15 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 #else
 	static int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections 
 #endif
+
+	/* inlets for parameters */
+	t_inlet* m_inDiv;
+	t_inlet* m_inSAngle;
+	t_inlet* m_inSCtr;
+	t_inlet* m_inOAngle;
+	t_inlet* m_inOCtr;
+	t_inlet* m_inRlp;
+	t_inlet* m_inSap;
     
     private:
     
@@ -185,6 +196,8 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
         static void 	outputCtrCallback(void *data, t_floatarg m_OutputCentreX, t_floatarg m_SourceCentreY);
     	static void 	outputAngCallback(void *data, t_floatarg m_OutputAnglePreIncrement);
 	static void 	sourceAngCallback(void *data, t_floatarg m_SourceAnglePreIncrement);
+    	static void 	outputAngleCallback(void *data, t_floatarg m_OutputAnglePreIncrement);
+	static void 	sourceAngleCallback(void *data, t_floatarg m_SourceAnglePreIncrement);
     	static void 	divCallback(void *data, t_floatarg m_Divisions);
 	static void 	sapCallback(void *data, t_floatarg m_SourceAngleProportion);
 	static void 	rlpCallback(void *data, t_floatarg m_ReflectionLineProportion);
