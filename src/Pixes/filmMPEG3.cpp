@@ -76,6 +76,7 @@ bool filmMPEG3 :: open(char *filename, int format)
     m_image.image.setCsizeByFormat(format);
     m_image.image.reallocate();
     changeImage(0,-1);
+    m_newfilm=true;
     post("MPEG3 opened");
     return true; 
   }
@@ -133,6 +134,7 @@ pixBlock* filmMPEG3 :: getFrame(){
     m_image.image.fromYV12((unsigned char*)y, (unsigned char*)u, (unsigned char*)v);
     m_image.image.upsidedown=true;
   }
+  if(m_newfilm)m_image.newfilm=1;  m_newfilm=false;
   m_image.newimage=1;
   return &m_image;
 }

@@ -81,6 +81,8 @@ bool film :: open(char *filename, int format)
   }
   m_image.image.allocate();
 
+  m_newfilm = true;
+
   return true;
 }
 
@@ -97,6 +99,7 @@ bool film :: haveFilm()
 //
 /////////////////////////////////////////////////////////
 pixBlock* film :: getFrame(){
+  if(m_newfilm)m_image.newfilm=1;  m_newfilm=false;
   m_image.newimage=1;
   unsigned char *dummy=m_image.image.data;
   int i = m_image.image.xsize*m_image.image.ysize*m_image.image.csize;

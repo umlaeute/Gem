@@ -102,6 +102,8 @@ bool filmQT4L :: open(char *filename, int format)
     m_qtimage.csize=3; m_qtimage.format=GL_RGB;
     m_qtimage.reallocate();
 
+    m_newfilm = true;
+
    return true;
   }
   goto unsupported;
@@ -134,6 +136,7 @@ pixBlock* filmQT4L :: getFrame(){
     m_image.image.fromRGB(m_qtimage.data);
     m_image.newimage=1; m_image.image.upsidedown=false;
     pimage = &m_image;
+    if(m_newfilm)m_image.newfilm=1;  m_newfilm=false;
   }
 
   delete[] rows;

@@ -94,6 +94,7 @@ bool filmAVIPLAY :: open(char *filename, int format)
   m_image.image.setCsizeByFormat(m_wantedFormat);
   if (!(m_image.image.xsize*m_image.image.ysize*m_image.image.csize))goto unsupported;
   m_readNext=true;
+  m_newfilm = true;
   return true;
   goto unsupported;
  unsupported:
@@ -136,6 +137,7 @@ pixBlock* filmAVIPLAY :: getFrame(){
       m_image.image.fromRGB16(m_rawdata); break;
     }
     m_image.newimage=1;
+    if (m_newfilm)m_image.newfilm=1;  m_newfilm=false;
     m_image.image.upsidedown=true;
     m_readNext=false;
     return &m_image;

@@ -98,7 +98,7 @@ bool filmMPEG1 :: open(char *filename, int format)
       m_data=new unsigned char[m_length];
     }
     m_reachedEnd=false;
-    post("MPEG1 opened");
+    m_newfilm = true;
     return true;
   }
   goto unsupported;
@@ -140,6 +140,7 @@ pixBlock* filmMPEG1 :: getFrame(){
     if(m_image.image.format==GL_YCBCR_422_GEM){
       m_image.image.fromRGBA(m_data);
     }  else  m_image.image.data=m_data;
+    if(m_newfilm)m_image.newfilm=1;  m_newfilm=false;
     m_image.newimage=1;
     return &m_image;
   }

@@ -155,6 +155,8 @@ class GEM_EXTERN film
    * if so m_readNext should be FALSE
    */
   bool m_readNext;
+
+  bool m_newfilm;
 };
 
 #endif	// for header file
