@@ -105,8 +105,11 @@ void pix_texture :: setUpTextureState() {
   //		texture_rectangle can't be used (otherwise, we'd just see one pixel!)
 }
 
-inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
-#ifndef __APPLE__
+
+// upsidedown is derived from the imageStruct.upsidedown
+// use this when loading images...
+inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean upsidedown=false){
+  if(!upsidedown){
       coords[0].s = 0.f;
       coords[0].t = 0.f;
       coords[1].s = xRatio;
@@ -115,7 +118,7 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
       coords[2].t = yRatio;
       coords[3].s = 0.f;
       coords[3].t = yRatio;
-#else // __APPLE__
+  } else {
       coords[3].s = 0.f;		// switched the order of coords on __APPLE__
       coords[3].t = 0.f;		// otherwise we'd be upside down!
       coords[2].s = xRatio;
@@ -124,7 +127,7 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
       coords[1].t = yRatio;
       coords[0].s = 0.f;
       coords[0].t = yRatio;
-#endif // __APPLE__
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -134,6 +137,7 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
 void pix_texture :: render(GemState *state) {
   if (!state->image        || !m_textureOnOff          )return;
   if(!&state->image->image || !state->image->image.data)return;
+  GLboolean upsidedown = state->image->image.upsidedown;
   state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
@@ -224,7 +228,7 @@ void pix_texture :: render(GemState *state) {
 	    m_buffer.format = m_imagebuf.format;
 	    m_buffer.type   = m_imagebuf.type;
 	    m_buffer.reallocate();
-	    setTexCoords(m_coords, 1.0, 1.0);
+	    setTexCoords(m_coords, 1.0, 1.0, upsidedown);
 	    state->texCoords = m_coords;
 	    state->numTexCoords = 4;
 	    if (m_buffer.csize != m_dataSize[0] ||
@@ -260,7 +264,7 @@ void pix_texture :: render(GemState *state) {
 	    m_buffer.format = m_imagebuf.format;
 	    m_buffer.type   = m_imagebuf.type;
 	    m_buffer.reallocate();
-	    setTexCoords(m_coords, m_xRatio, m_yRatio);
+	    setTexCoords(m_coords, m_xRatio, m_yRatio, upsidedown);
 	    state->texCoords = m_coords;
 	    state->numTexCoords = 4;
 
@@ -272,17 +276,7 @@ void pix_texture :: render(GemState *state) {
 		m_dataSize[2] = m_buffer.ysize; 
      
             
-            if (m_buffer.csize == 2 && !m_mode){
-                int datasize=m_buffer.xsize*m_buffer.ysize*m_buffer.csize/4;
-                unsigned char* dummy=m_buffer.data;
-                while(datasize--){
-                *dummy++ = 128;
-                *dummy++ = 0;
-                *dummy++ = 128;
-                *dummy++ = 0;
-                }
-		//                post("pix_texture: zeroing YUV buffer");
-            }
+		if (m_buffer.format == GL_YUV422_GEM && !m_mode)m_buffer.setBlack();
 
 	    //this is for dealing with power of 2 textures which need a buffer that's 2^n
 	    if ( !GemMan::texture_rectangle_supported || !m_mode ) {            
