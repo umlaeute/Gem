@@ -20,7 +20,7 @@ CPPEXTERN_NEW(pix_compare)
 /////////////////////////////////////////////////////////
 pix_compare :: pix_compare()
 {
-m_processOnOff=0;
+  //m_processOnOff=0;
 }
 
 /////////////////////////////////////////////////////////
@@ -28,9 +28,7 @@ m_processOnOff=0;
 //
 /////////////////////////////////////////////////////////
 pix_compare :: ~pix_compare()
-{
-
-}
+{}
 
 /////////////////////////////////////////////////////////
 // processImage
@@ -38,44 +36,35 @@ pix_compare :: ~pix_compare()
 /////////////////////////////////////////////////////////
 void pix_compare :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-      long src,h,w;
-   src =0;
-
-   //format is U Y V Y
-    if (m_direction) {
-    
+  long src,h,w;
+  src =0;
+  if (m_direction) {
     for (h=0; h<image.ysize; h++){
-        for(w=0; w<image.xsize; w++){
-        
-            if ((image.data[src+chRed] < right.data[src+chRed])
-                &&(image.data[src+chBlue] < right.data[src+chBlue])
-                &&(image.data[src+chGreen] < right.data[src+chGreen]))
-                {
-                image.data[src+chRed] = right.data[src+chRed];
-                image.data[src+chBlue] = right.data[src+chBlue];
-                image.data[src+chGreen] = right.data[src+chGreen];
-                }
-        src+=4;
-            }
-        }
-    } else {
-        
-     for (h=0; h<image.ysize; h++){
-        for(w=0; w<image.xsize; w++){
-        
-            if ((image.data[src+chRed] > right.data[src+chRed])
-                &&(image.data[src+chBlue] > right.data[src+chBlue])
-                &&(image.data[src+chGreen] > right.data[src+chGreen]))
-                {
-                 image.data[src+chRed] = right.data[src+chRed];
-                image.data[src+chBlue] = right.data[src+chBlue];
-                image.data[src+chGreen] = right.data[src+chGreen];
-                }
-        src+=4;
-            }
-        }   
-        
-    };
+      for(w=0; w<image.xsize; w++){
+	if ((90*image.data[src+chRed]+115*image.data[src+chGreen]+51*image.data[src+chBlue]) <
+	    (90*right.data[src+chRed]+115*right.data[src+chGreen]+51*right.data[src+chBlue]))
+	  {
+	    image.data[src+chRed] = right.data[src+chRed];
+	    image.data[src+chBlue] = right.data[src+chBlue];
+	    image.data[src+chGreen] = right.data[src+chGreen];
+	  }
+	src+=4;
+      }
+    }
+  } else {
+    for (h=0; h<image.ysize; h++){
+      for(w=0; w<image.xsize; w++){
+	if ((90*image.data[src+chRed]+115*image.data[src+chGreen]+51*image.data[src+chBlue]) >
+	    (90*right.data[src+chRed]+115*right.data[src+chGreen]+51*right.data[src+chBlue]))
+	  {
+	    image.data[src+chRed] = right.data[src+chRed];
+	    image.data[src+chBlue] = right.data[src+chBlue];
+	    image.data[src+chGreen] = right.data[src+chGreen];
+	  }
+	src+=4;
+      }
+    }   
+  };
 }
 
 
@@ -83,53 +72,43 @@ void pix_compare :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 // do the YUV processing here
 //
 /////////////////////////////////////////////////////////
-
-
 void pix_compare :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
 #ifdef ALTIVEC
-processYUVAltivec(image,right);
-return;
+  processYUVAltivec(image,right);
+  return;
 #else
+  long src,h,w;
+  src =0;
 
-   long src,h,w;
-   src =0;
-
-   //format is U Y V Y
-    if (m_direction) {
-    
+  //format is U Y V Y
+  if (m_direction) {    
     for (h=0; h<image.ysize; h++){
-        for(w=0; w<image.xsize/2; w++){
-        
-            if ((image.data[src+1] < right.data[src+1])&&(image.data[src+3] < right.data[src+3]))
-                {
-                image.data[src] = right.data[src];
-                image.data[src+1] = right.data[src+1];
-            
-                image.data[src+2] = right.data[src+2];
-                image.data[src+3] = right.data[src+3];
-                }
+      for(w=0; w<image.xsize/2; w++){
+	if ((image.data[src+1] < right.data[src+1])&&(image.data[src+3] < right.data[src+3]))
+	  {
+	    image.data[src] = right.data[src];
+	    image.data[src+1] = right.data[src+1];
+	    image.data[src+2] = right.data[src+2];
+	    image.data[src+3] = right.data[src+3];
+	  }
         src+=4;
-            }
-        }
-    } else {
-        
-     for (h=0; h<image.ysize; h++){
-        for(w=0; w<image.xsize/2; w++){
-        
-            if ((image.data[src+1] > right.data[src+1])&&(image.data[src+3] > right.data[src+3]))
-                {
-                image.data[src] = right.data[src];
-                image.data[src+1] = right.data[src+1];
-            
-                image.data[src+2] = right.data[src+2];
-                image.data[src+3] = right.data[src+3];
-                }
-        src+=4;
-            }
-        }   
-        
+      }
     }
+  } else {
+    for (h=0; h<image.ysize; h++){
+      for(w=0; w<image.xsize/2; w++){
+	if ((image.data[src+1] > right.data[src+1])&&(image.data[src+3] > right.data[src+3]))
+	  {
+	    image.data[src] = right.data[src];
+	    image.data[src+1] = right.data[src+1];
+	    image.data[src+2] = right.data[src+2];
+	    image.data[src+3] = right.data[src+3];
+	  }
+        src+=4;
+      }
+    }   
+  }
 #endif //ALTIVEC
 }
 
