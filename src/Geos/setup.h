@@ -55,9 +55,7 @@ extern "C" {
       rectangle_setup();
       sphere_setup();
       square_setup();
-#ifdef HAVE_GLUT // MACOSX ???
       teapot_setup();
-#endif
 #ifndef NOTEXT
       text2d_setup();
       text3d_setup();

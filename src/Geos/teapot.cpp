@@ -14,8 +14,6 @@
 //
 /////////////////////////////////////////////////////////
 
-#include  "Base/config.h"
-#if HAVE_LIBGLUT || MACOSX
 #include "teapot.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(teapot, t_floatarg, A_DEFFLOAT)
@@ -45,10 +43,13 @@ teapot :: ~teapot()
 /////////////////////////////////////////////////////////
 void teapot :: render(GemState *state)
 {
+#ifdef HAVE_LIBGLUT
 	glPushMatrix();
 	glRotatef(180.f, 1.f, 0.f, 0.f);
-	glutSolidTeapot(-m_size);
+	if (m_drawType == GL_LINE_LOOP) glutWireTeapot(-m_size);
+	else glutSolidTeapot(-m_size);
 	glPopMatrix();
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -57,4 +58,3 @@ void teapot :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void teapot :: obj_setupCallback(t_class *)
 { }
-#endif

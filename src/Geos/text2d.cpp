@@ -19,7 +19,7 @@
 #include "FTFace.h"
 #ifndef FTGL
 #include "GLTTBitmapFont.h"
-#ifdef __linux__ || __APPLE__
+#if defined __linux__ || defined __APPLE__
 #include "GLTTPixmapFont.h"
 #endif
 #else
@@ -45,7 +45,7 @@ CPPEXTERN_NEW_WITH_GIMME(text2d)
 //
 /////////////////////////////////////////////////////////
 text2d :: text2d(int argc, t_atom *argv)
-#ifdef __linux__ || __APPLE__
+#if defined __linux__ || defined __APPLE__
   : TextBase(argc, argv), m_pfont(NULL), m_bfont(NULL), m_face(NULL), m_antialias(0)
 #else
     : TextBase(argc, argv), m_pfont(NULL), m_face(NULL)
@@ -66,7 +66,7 @@ text2d :: text2d(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 text2d :: ~text2d()
 {
-#ifdef __linux__ || __APPLE__
+#if defined __linux__ || defined __APPLE__
   delete m_pfont;
 #endif
   delete m_bfont;
@@ -92,7 +92,7 @@ void text2d :: setFontSize(int size)
 void text2d :: fontNameMess(const char *filename)
 {
   m_valid = 0;
-#ifdef __linux__ || __APPLE__
+#if defined __linux__ || defined __APPLE__
   delete m_pfont;
   m_pfont = NULL;
 #endif
@@ -134,12 +134,12 @@ int text2d :: makeFontFromFace()
   //delete m_bfont;
 #ifndef FTGL
   m_bfont = new GLTTBitmapFont(m_face);
-#ifdef __linux__ || __APPLE__
+#if defined __linux__ || defined __APPLE__
   m_pfont = new GLTTPixmapFont(m_face);
 #endif
 #else
   m_bfont = new FTGLBitmapFont();
-#ifdef __linux__ || __APPLE__
+#if defned __linux__ || defined __APPLE__
   m_pfont = new FTGLPixmapFont(m_face);
 #endif
 #endif
@@ -148,7 +148,7 @@ int text2d :: makeFontFromFace()
       post("GEM: text2d: unable to create bitmap'ed font");
       return(0);
     }
-#ifdef __linux__ || __APPLE__
+#if defined __linux__ || defined __APPLE__
   if( ! m_pfont->create(m_fontSize) )
     {
       post("GEM: text2d: unable to create pixmap'ed font");
@@ -167,7 +167,7 @@ void text2d :: render(GemState *)
   if (m_valid)
     if (m_antialias)
       {
-#ifdef __linux__  || __APPLE__ /* used to be "#ifndef NT", maybe this is better ? */
+#if defined __linux__  || defined __APPLE__ /* used to be "#ifndef NT", maybe this is better ? */
 	// compute the offset due to the justification
 	int width = 0;
 	if (m_widthJus == LEFT)
