@@ -18,7 +18,7 @@
 #include "pix_gain.h"
 
 CPPEXTERN_NEW(pix_gain)
-
+  
 /////////////////////////////////////////////////////////
 //
 // pix_gain
@@ -129,45 +129,32 @@ return;
        
         src+=4;
         }
-        }
+    }
 #endif
 }
-
+ 
 void pix_gain :: processYUV_Altivec(imageStruct &image)
 {
  #ifdef __VEC__
- int h,w,width;
+ int h,w,width,height;
     /*altivec code starts */
     width = image.xsize/8;
+    height = image.ysize;
     union
     {
-        //unsigned int	i;
         short	elements[8];
-        //vector signed char v;
         vector	signed short v;
     }shortBuffer;
     
-        union
+    union
     {
-        //unsigned int	i;
         unsigned long	elements[8];
-        //vector signed char v;
         vector	unsigned int v;
     }bitBuffer;
     
-    /*    union
-    {
-        //unsigned int	i;
-        unsigned char	elements[16];
-        //vector signed char v;
-        vector	unsigned char v;
-    }charBuffer; */
     
     register vector signed short d, hiImage, loImage, YImage, UVImage;
-    //vector signed short UVTemp, YTemp;
     vector unsigned char zero = vec_splat_u8(0);
-   // vector signed short szero = vec_splat_s16(0);
-    //vector unsigned char c,gain,one;
     register vector signed int UVhi,UVlo,Yhi,Ylo;
     register vector signed short c,gain;
     register vector unsigned int bitshift;
@@ -201,11 +188,13 @@ void pix_gain :: processYUV_Altivec(imageStruct &image)
     //Load it into the vector unit
     d = shortBuffer.v;
     d = (vector signed short)vec_splat((vector signed short)d,0);
-#ifndef PPC970
+    
+    #ifndef PPC970
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
-        #endif
-    for ( h=0; h<image.ysize; h++){
+    #endif
+        
+    for ( h=0; h<height; h++){
         for (w=0; w<width; w++)
         {
         #ifndef PPC970
@@ -252,13 +241,13 @@ void pix_gain :: processYUV_Altivec(imageStruct &image)
             //pack back to 16 chars
             inData[0] = vec_packsu(hiImage, loImage);
             
-        
+          
             inData++;
         }
         #ifndef PPC970
         vec_dss( 0 );
         #endif
-}  /* end of working altivec function */
+    }  /* end of working altivec function */
 #endif
 }
 
