@@ -74,7 +74,7 @@ class GEM_EXTERN gemextwin : public GemOutput
  private:
   static void	windowMessCallback(void *, t_symbol*);
 #ifdef _WINDOWS
-  static BOOL windowMessCallback(HWND, LPARAM);
+  static BOOL CALLBACK windowMessCB(HWND, LPARAM);
 #endif
 
 };

@@ -41,7 +41,7 @@ static int dblBuf24[] = {GLX_RGBA, GLX_RED_SIZE, 4, GLX_GREEN_SIZE, 4, GLX_BLUE_
 static int snglBuf8[] = {GLX_RGBA, GLX_RED_SIZE, 3, GLX_GREEN_SIZE, 3, GLX_BLUE_SIZE, 2, GLX_DEPTH_SIZE, 16, None};
 static int dblBuf8[] = {GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 2, GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 #elif defined _WINDOWS
-typedef struct EnumWindowsParm {void*me; char*pcWindID; }
+typedef struct EnumWindowsParm {void*me; char*pcWinID; };
 #endif
 
 
@@ -57,6 +57,7 @@ CPPEXTERN_NEW(gemextwin)
 /////////////////////////////////////////////////////////
 gemextwin :: gemextwin() : GemOutput()
 {
+	post("gemextwin %X", this);
 }
 
 /////////////////////////////////////////////////////////
@@ -139,20 +140,23 @@ void gemextwin :: windowMess(char*cWin){
 #elif defined _WINDOWS
   m_outputState=0;
 
-  EnumParam p;
-  p.me = (void*)(this->x_obj);
+  EnumWindowsParm p;
+//  p.me = (void*)(this->x_obj);
+  p.me = (void*)(this);
   p.pcWinID = cWin;
-  EnumWindows(windowMessCallback, (LPARAM)&p); /* try to get a window with this window-ID */
+  EnumWindows(windowMessCB, (LPARAM)&p); /* try to get a window with this window-ID */
 #endif /* OS */
 }
 
 #ifdef  _WINDOWS
 bool gemextwin :: windowMess(HWND hWnd){
   // setup this window to render to
+	post("i (%X) am getting window %X", this, hWnd);
    // create the device context
   m_info.dc = GetDC(m_info.win);
   if (!m_info.dc)  {
-    error("GEM: Unable to create device context");
+
+    error("GEM: Unable to create device context %d", GetLastError());
     //DestroyWindow(m_info.win);
     return(0);
   }
@@ -165,10 +169,11 @@ bool gemextwin :: windowMess(HWND hWnd){
     return(0);
   }
   */
+  post("now creating device context!");
   // create the OpenGL context
   m_info.context = wglCreateContext(m_info.dc);
   if (!m_info.context)  {
-    error("GEM: Unable to create OpenGL context");
+    error("GEM: Unable to create OpenGL context %d", GetLastError());
     ReleaseDC(m_info.win, m_info.dc);
     //DestroyWindow(m_info.win);
     return(0);
@@ -183,6 +188,7 @@ bool gemextwin :: windowMess(HWND hWnd){
     wglDeleteContext(m_info.context);
     ReleaseDC(m_info.win, m_info.dc);
     //DestroyWindow(m_info.win);
+	post("couldn't make context current %d", GetLastError());
     return(0);
   }
 
@@ -190,6 +196,7 @@ bool gemextwin :: windowMess(HWND hWnd){
   ShowWindow(m_info.win, SW_SHOWNORMAL);
 
   UpdateWindow(m_info.win);
+  return true;
 }
 #endif /* NT */
 
@@ -211,7 +218,7 @@ void gemextwin :: postRender(GemState){
 #ifdef unix             // for Unix
     glXSwapBuffers(m_info.dpy, m_info.win);
 #elif _WINDOWS          // for WinNT
-  SwapBuffers(m_dc);
+  SwapBuffers(m_info.dc);
 #elif __APPLE__		// for Macintosh
   ::aglSwapBuffers(m_info.context);
 #else                   // everyone else
@@ -255,14 +262,15 @@ void gemextwin :: windowMessCallback(void *data, t_symbol*s){
 }
 
 #ifdef _WINDOWS
-BOOL CALLBACK gemextwin :: windowMessCallback(HWND hWnd, LPARAM lParam){
+BOOL CALLBACK gemextwin :: windowMessCB(HWND hWnd, LPARAM lParam){
+//	post("trying hwnd %X", hWnd);
   EnumWindowsParm*e=(EnumWindowsParm*)lParam;
-  const char* cWin = e->pcWindID;
+  const char* cWin = e->pcWinID;
   // 1.st check whether this is "our" window
 
   if(GetProp(hWnd, cWin)==NULL)return true; // no, this is another window
 
   // we have found it, make it our current
-  return !((gemextwin*e->me)->windowMess(hWnd));
+  return !(((gemextwin*)(e->me))->windowMess(hWnd));
 }
 #endif /* NT */
