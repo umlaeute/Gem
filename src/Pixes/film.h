@@ -59,7 +59,7 @@ class GEM_EXTERN film
   /* could be used for switching the colourspace on the fly 
    * normally the colour-space of a film could be set when opening a movie
    */
-  virtual void requestColor(int format){}
+  virtual void requestColor(int format){m_wantedFormat=format;}
   //////////
   // get the actual color-space
   /* what colour-space is in use ?
