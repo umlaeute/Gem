@@ -47,6 +47,7 @@ class GEM_EXTERN filmMPEG1 : public film {
   // Destructor
   virtual ~filmMPEG1();
 
+#ifdef HAVE_LIBMPEG
   //////////
   // open a movie up
   virtual bool open(char *filename, int format = 0);
@@ -72,11 +73,9 @@ class GEM_EXTERN filmMPEG1 : public film {
  protected:
 
   FILE         *m_streamfile;
-#ifdef HAVE_LIBMPEG
   ImageDesc     m_streamVid;
-#endif
   bool          m_reachedEnd;
-
+#endif
 };
 
 #endif	// for header file

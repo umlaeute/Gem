@@ -34,7 +34,9 @@ filmMPEG1 :: filmMPEG1(int format) : film(format) {
     first_time = false;
   }
 
+#ifdef HAVE_LIBMPEG
   m_streamfile=0;
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -46,6 +48,7 @@ filmMPEG1 :: ~filmMPEG1()
   close();
 }
 
+#ifdef HAVE_LIBMPEG
 void filmMPEG1 :: close(void)
 {
   if (m_streamfile)fclose(m_streamfile);
@@ -60,7 +63,6 @@ bool filmMPEG1 :: open(char *filename, int format)
 {
   if (format>0)m_wantedFormat=format;
   if (!(m_streamfile = fopen (filename, "rb")))return false;
-#ifdef HAVE_LIBMPEG
   int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   switch (wantedFormat){
   case GL_LUMINANCE:
@@ -105,7 +107,6 @@ bool filmMPEG1 :: open(char *filename, int format)
     post("MPEG1 opened");
     return true;
   }
-#endif
   goto unsupported;
  unsupported:
   post("MPEG1: unsupported!");
@@ -127,7 +128,6 @@ pixBlock* filmMPEG1 :: getFrame(){
   }
   m_readNext = false;
 
-#ifdef HAVE_LIBMPEG
   if (m_reachedEnd=!GetMPEGFrame ((char*)(m_image.image.data))){
     m_curFrame=-1;
     return &m_image;// was 0; but then we have one non-textured frame in auto-mode
@@ -135,7 +135,6 @@ pixBlock* filmMPEG1 :: getFrame(){
     m_image.newimage=1;
     return &m_image;
   }
-#endif
   return 0;
 }
 
@@ -144,11 +143,10 @@ int filmMPEG1 :: changeImage(int imgNum, int trackNum){
 
   m_readNext = true;
   if (imgNum==0){
-#ifdef HAVE_LIBMPEG
     if (!RewindMPEG(m_streamfile, &m_streamVid))return FILM_ERROR_FAILURE;
-#endif
     m_curFrame=0;
     m_reachedEnd=false;
   }
   return FILM_ERROR_DONTKNOW;
 }
+#endif
