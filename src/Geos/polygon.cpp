@@ -33,7 +33,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_FLOAT)
 /////////////////////////////////////////////////////////
 polygon :: polygon(t_floatarg numInputs)
     	 : GemShape(1.0),
-	   m_linewidth(1.0), m_numInputs(0), m_drawType(GL_POLYGON)
+	    m_numInputs(0), m_drawType(GL_POLYGON)
 {
     int i;
 	int realNum = (int)numInputs;
@@ -132,7 +132,9 @@ void polygon :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void polygon :: linewidthMess(float linewidth)
 {
+  //  post("polygon: linewidth %f",linewidth);
     m_linewidth = (linewidth < 0.0f) ? 0.0f : linewidth;
+  //  post("polygon: m_linewidth %f",m_linewidth);
     setModified();
 }
 
@@ -160,6 +162,21 @@ void polygon :: typeMess(t_symbol *type)
 	    m_drawType = GL_POLYGON;
     else if (!strcmp(type->s_name, "point"))
 	    m_drawType = GL_POINTS;
+    else if (!strcmp(type->s_name, "linestrip")) 
+	    m_drawType = GL_LINE_STRIP;
+    else if (!strcmp(type->s_name, "tri")) 
+	    m_drawType = GL_TRIANGLES;
+    else if (!strcmp(type->s_name, "tristrip")) 
+	    m_drawType = GL_TRIANGLE_STRIP;
+    else if (!strcmp(type->s_name, "trifan")) 
+	    m_drawType = GL_TRIANGLE_FAN;
+    else if (!strcmp(type->s_name, "quad")) 
+	    m_drawType = GL_QUADS;
+    else if (!strcmp(type->s_name, "quadstrip")) 
+	    m_drawType = GL_QUAD_STRIP;
+    
+        
+
     else
     {
 	    error ("GEM: polygon: draw style");
@@ -175,7 +192,7 @@ void polygon :: typeMess(t_symbol *type)
 void polygon :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&polygon::linewidthMessCallback,
-    	    gensym("width"), A_FLOAT, A_NULL);
+    	    gensym("linewidth"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&polygon::typeMessCallback,
     	    gensym("draw"), A_SYMBOL, A_NULL);
 
@@ -203,6 +220,7 @@ void polygon :: obj_setupCallback(t_class *classPtr)
 void polygon :: linewidthMessCallback(void *data, t_floatarg linewidth)
 {
     GetMyClass(data)->linewidthMess((float)linewidth);
+   // post("linewidthMessCallback");
 }
 void polygon :: typeMessCallback(void *data, t_symbol *type)
 {
