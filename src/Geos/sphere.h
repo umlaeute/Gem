@@ -57,6 +57,7 @@ class GEM_EXTERN sphere : public GemGluObj
         float		*m_z;
         int 		oldStacks, oldSlices;
         GLenum		oldDrawType;
+	int             oldTexture;
         
 };
 

@@ -16,7 +16,7 @@
 
 #include "sphere.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(sphere, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(sphere, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -41,6 +41,7 @@ sphere :: sphere(t_floatarg size, t_floatarg slize)
       //init these so the first render always creates the Sphere
       oldStacks = -1;
       oldSlices = -1;
+      oldTexture= 0;
     
 }
 
@@ -246,7 +247,8 @@ void sphere :: render(GemState *state)
   /* cannot use triangle fan on texturing (s coord. at top/bottom tip varies) */
 
   //if anything changed then the geometry is rebuilt
-  if (stacks != oldStacks || slices != oldSlices || m_drawType != oldDrawType){
+  if (stacks != oldStacks || slices != oldSlices || 
+      m_drawType != oldDrawType || state->texture!=oldTexture){
 
       //call the sphere creation function to fill the array
       createSphere(state);
@@ -254,6 +256,7 @@ void sphere :: render(GemState *state)
       oldStacks = stacks;
       oldSlices = slices;
       oldDrawType = m_drawType;
+      oldTexture = state->texture;
   }
   
   if (m_drawType == GL_FILL) {
