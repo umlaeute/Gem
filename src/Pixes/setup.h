@@ -11,7 +11,9 @@
 /* -------------------------- setup function ------------------------------ */
 
 extern "C" {
-
+  void pix_depot_setup();
+  void pix_put_setup();
+  void pix_get_setup();
   void pix_info_setup();
   void pix_2grey_setup();
    void pix_a_2grey_setup();
@@ -36,6 +38,7 @@ extern "C" {
    //void pix_dot_setup();
    void pix_draw_setup();
    void pix_dump_setup();
+  void pix_crop_setup();
    void pix_dvLinux_setup();
    void pix_dv_setup();
    void pix_film_setup();
@@ -44,6 +47,9 @@ extern "C" {
    void pix_filmDarwin_setup();
    void pix_filmDarwinYUV_setup();
    void pix_filmFFMPEG_setup();
+
+  void pix_filmNEW_setup();
+
    void pix_flip_setup();
    void pix_gain_setup();
    void pix_histo_setup();
@@ -94,9 +100,12 @@ extern "C" {
   void pix_rtx_setup();
   
 
-   void Pixes_setup() {
-     pix_info_setup();
-      pix_2grey_setup();
+  void Pixes_setup() {
+    pix_depot_setup();
+    pix_put_setup();
+    pix_get_setup();
+    pix_info_setup();
+    pix_2grey_setup();
       pix_a_2grey_setup();
       pix_add_setup();
       pix_aging_setup();
@@ -118,6 +127,7 @@ extern "C" {
       //pix_dot_setup();
       pix_draw_setup();
       pix_dump_setup();
+      pix_crop_setup();
 #if defined(HAVE_DV) &&  defined(__linux__)
       pix_dvLinux_setup();
 #else
@@ -127,6 +137,7 @@ extern "C" {
 #endif
       //      pix_film_setup();
 #ifdef __linux
+//      pix_filmNEW_setup();
       pix_filmLinux_setup();
 #if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
       pix_filmFFMPEG_setup();
