@@ -75,6 +75,7 @@ void GemGluObj :: typeMess(t_symbol *type)
     break;
   case 'P': case 'p': // point
     m_drawType = GL_POINT;
+    break;
   default:
     error ("GEM: GemGluObj draw style");
     return;
