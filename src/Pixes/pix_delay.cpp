@@ -76,8 +76,7 @@ void pix_delay :: processImage(imageStruct &image)
 
   if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
 #ifdef IMAGE_CLASS
-    myImage.clear();
-    myImage.allocate(dataSize*m_maxframes);
+    myImage.reallocate(dataSize*m_maxframes);
 #else
     if(myImage.data)delete [] myImage.data;
     myImage.data = new unsigned char[m_maxframes * dataSize];
@@ -88,8 +87,8 @@ void pix_delay :: processImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
 
   dest = myImage.data+m_curframe*dataSize;
   readframe=m_curframe-m_frame;
