@@ -873,7 +873,7 @@ static OSStatus BuildGLonDevice (AGLDrawable* paglDraw, AGLContext* paglContext,
 			if (16 > pcontextInfo->pixelDepth)
 				pcontextInfo->pixelDepth = 16;
 		}
-		if (pcontextInfo->fDepthMust && (pcontextInfo->pixelDepth != (**(**hGD).gdPMap).pixelSize))	// device depth must match and does not
+		if (pcontextInfo->fDepthMust && ((int)(pcontextInfo->pixelDepth) != (**(**hGD).gdPMap).pixelSize))	// device depth must match and does not
 		{
 			post("Pixel Depth does not match device in windowed mode.");
 			return err;
