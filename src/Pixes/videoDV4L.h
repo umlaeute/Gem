@@ -18,17 +18,24 @@
 #define INCLUDE_VIDEODV4L_H_
 
 #include "Base/config.h"
+#ifdef HAVE_LIBDV
+#define HAVE_DV
+#endif
 
 #include "Pixes/video.h"
 #ifdef HAVE_DV
-#include <libdv/dv.h>
 #include <libdv/dv1394.h>
+#include <libdv/dv.h>
+
+
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
+#include <pthread.h>
 #endif
 
 
@@ -64,9 +71,9 @@ class GEM_EXTERN videoDV4L : public video {
 #ifdef HAVE_DV
 	////////
 	// open the video-device
-	virtual int            openDevice(int devnum, int format=0){return 1;}
-	virtual void          closeDevice(void){}
-	virtual int           resetDevice(void){return 1;}
+	virtual int            openDevice(int devnum, int format=0);
+	virtual void          closeDevice(void);
+	virtual int           resetDevice(void);
     
     	//////////
     	// Start up the video device
@@ -83,9 +90,6 @@ class GEM_EXTERN videoDV4L : public video {
 
 	//////////
 	// Set the video dimensions
-  	virtual int	    	setDimen(int x, int y, int leftmargin, int rightmargin,
-					 int topmargin, int bottommargin);
-	virtual int	    	setChannel(int c, float f);
 	virtual int	    	setNorm(char*);
 	virtual int	    	setDevice(int);
 	virtual int	    	setColor(int);
@@ -98,13 +102,27 @@ class GEM_EXTERN videoDV4L : public video {
   //-----------------------------------
   int dvfd;
   unsigned char *videobuf;
+  unsigned char *decodedbuf;
   bool m_frame_ready;
   int  m_frame, m_lastframe;
+
+
   //////////
   // the capturing thread
   static void*capturing(void*);
   bool m_continue_thread;
-#endif
+  pthread_t m_thread_id;
+
+  int m_framesize;
+  unsigned char *m_mmapbuf;
+
+  ////////
+  // the DV-decoder
+  dv_decoder_t *m_decoder;
+#else
+  pixBlock    *getFrame(){return NULL;}
+#endif /* HAVE_DV */
+
 };
 
 #endif	// for header file
