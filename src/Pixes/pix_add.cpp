@@ -85,25 +85,24 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
    long src,h,w;
-   int	y1,y2;
+   int	y0,y1;
    int u,v;
    src =0;
    //format is U Y V Y
 
    for (h=0; h<image.ysize; h++){
-    for(w=0; w<image.xsize/2; w++){
-        
-        u = image.data[src] + (2*right.data[src]) - 255;
+     for(w=0; w<image.xsize/2; w++){   
+        u = image.data [src+chU ] + (2*right.data[src+chU ]) - 255;
         image.data[src] = CLAMP(u);
-        y1 =image.data[src+1] + right.data[src+1];
-        image.data[src+1] = CLAMP(y1);
-        v = image.data[src+2] + (2*right.data[src+2]) - 255;
+        y0 =image.data [src+chY0] + right.data   [src+chY0];
+        image.data[src+1] = CLAMP(y0);
+        v = image.data [src+chV ] + (2*right.data[src+chV ]) - 255;
         image.data[src+2] = CLAMP(v);
-        y2 = image.data[src+3] + right.data[src+3];
-        image.data[src+3] = CLAMP(y2);
+        y1 = image.data[src+chY1] + right.data   [src+chY1];
+        image.data[src+3] = CLAMP(y1);
        
         src+=4;
-    }
+     }
    }
 }
 
@@ -124,7 +123,25 @@ void pix_add :: processRGBA_MMX(imageStruct &image, imageStruct &right){
   _mm_empty();
 }
 void pix_add :: processYUV_MMX (imageStruct &image, imageStruct &right){
-  processRGBA_MMX(image, right);
+  int datasize =   image.xsize * image.ysize * image.csize;
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+  __m64 mask = _mm_setr_pi8(0x40, 0x00, 0x40, 0x00,
+			    0x40, 0x00, 0x40, 0x00);
+  __m64 l, r;
+  while (datasize--) {
+    l=leftPix[datasize];
+    r=rightPix[datasize];
+    l=_mm_subs_pu8(l, mask);
+    r=_mm_subs_pu8(r, mask);
+
+    l=_mm_adds_pu8(l,r);
+
+    leftPix[datasize]=l;
+  }
+  _mm_empty();
 }
 void pix_add :: processGray_MMX(imageStruct &image, imageStruct &right){
   processRGBA_MMX(image, right);
