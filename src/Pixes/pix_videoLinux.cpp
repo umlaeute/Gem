@@ -44,19 +44,19 @@
 #include "pix_videoLinux.h"
 #include "Base/GemCache.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoLinuxT,t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoLinux,t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 #define BYTESIN 3
 
 /////////////////////////////////////////////////////////
 //
-// pix_videoLinuxT
+// pix_videoLinux
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_videoLinuxT :: pix_videoLinuxT(t_floatarg w = 320, t_floatarg h = 240) :
+pix_videoLinux :: pix_videoLinux(t_floatarg w = 320, t_floatarg h = 240) :
      m_width((int)w),
      m_height((int)h),
      m_channel(COMPOSITEIN),
@@ -74,7 +74,7 @@ pix_videoLinuxT :: pix_videoLinuxT(t_floatarg w = 320, t_floatarg h = 240) :
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_videoLinuxT :: ~pix_videoLinuxT()
+pix_videoLinux :: ~pix_videoLinux()
 {
   if (m_haveVideo)stopTransfer();
 }
@@ -83,9 +83,9 @@ pix_videoLinuxT :: ~pix_videoLinuxT()
 // render
 //
 /////////////////////////////////////////////////////////
-void *pix_videoLinuxT :: capturing(void*you)
+void *pix_videoLinux :: capturing(void*you)
 {
-  pix_videoLinuxT *me=(pix_videoLinuxT *)you;
+  pix_videoLinux *me=(pix_videoLinux *)you;
   unsigned char *pixp;
   while(me->m_continue_thread){
 
@@ -124,7 +124,7 @@ void *pix_videoLinuxT :: capturing(void*you)
   }
   return NULL;
 }
-void pix_videoLinuxT :: render(GemState *state){
+void pix_videoLinux :: render(GemState *state){
   unsigned char *newimage = videobuf + vmbuf.offsets[last_frame];
   int row, column;
  
@@ -140,7 +140,7 @@ void pix_videoLinuxT :: render(GemState *state){
 // startRendering
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinuxT :: startRendering()
+void pix_videoLinux :: startRendering()
 {
      startTransfer();
      m_pixBlock.newimage = 0;
@@ -150,7 +150,7 @@ void pix_videoLinuxT :: startRendering()
 // stopRendering
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinuxT :: stopRendering()
+void pix_videoLinux :: stopRendering()
 {
      stopTransfer();
 }
@@ -159,7 +159,7 @@ void pix_videoLinuxT :: stopRendering()
 // postrender
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinuxT :: postrender(GemState *state)
+void pix_videoLinux :: postrender(GemState *state)
 {
     m_pixBlock.newimage = 0;
     state->image = NULL;
@@ -169,7 +169,7 @@ void pix_videoLinuxT :: postrender(GemState *state)
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-int pix_videoLinuxT :: startTransfer()
+int pix_videoLinux :: startTransfer()
 {
   post("starting transfer");
     char buf[256];
@@ -306,7 +306,7 @@ closit:
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-int pix_videoLinuxT :: stopTransfer()
+int pix_videoLinux :: stopTransfer()
 {
   /* close the v4l device and dealloc buffer */
     /* terminate thread if there is one */
@@ -327,7 +327,7 @@ int pix_videoLinuxT :: stopTransfer()
 // dimenMess
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinuxT :: dimenMess(int x, int y, int leftmargin, int rightmargin,
+void pix_videoLinux :: dimenMess(int x, int y, int leftmargin, int rightmargin,
     int topmargin, int bottommargin)
 {
 
@@ -362,20 +362,20 @@ void pix_videoLinuxT :: dimenMess(int x, int y, int leftmargin, int rightmargin,
 // static member function
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinuxT :: obj_setupCallback(t_class *classPtr)
+void pix_videoLinux :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_videoLinuxT,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
+  class_addcreator((t_newmethod)_classpix_videoLinux,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
   pix_video::real_obj_setupCallback(classPtr);
-  class_addmethod(classPtr, (t_method)&pix_videoLinuxT::freqMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_videoLinux::freqMessCallback,
 		  gensym("freq"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoLinuxT::modeMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_videoLinux::modeMessCallback,
 		  gensym("mode"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoLinuxT::channelMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_videoLinux::channelMessCallback,
 		  gensym("channel"), A_FLOAT, A_NULL);
 }
 
 
-void pix_videoLinuxT :: modeMess(int argc, t_atom *argv)
+void pix_videoLinux :: modeMess(int argc, t_atom *argv)
 {
   int mode=m_channel;
   char c=0;
@@ -414,7 +414,7 @@ void pix_videoLinuxT :: modeMess(int argc, t_atom *argv)
   if(gem_amRendering)startTransfer();
 }
 
-void pix_videoLinuxT :: channelMess(int c)
+void pix_videoLinux :: channelMess(int c)
 {
   if(gem_amRendering)stopTransfer();
 
@@ -424,14 +424,14 @@ void pix_videoLinuxT :: channelMess(int c)
   if(gem_amRendering)startTransfer();
 }
 
-void pix_videoLinuxT :: deviceMess(int d)
+void pix_videoLinux :: deviceMess(int d)
 {
   if(gem_amRendering)stopTransfer();
   m_devicenum=d;
   if(gem_amRendering)startTransfer();
 }
 
-void pix_videoLinuxT :: freqMess(t_floatarg c)
+void pix_videoLinux :: freqMess(t_floatarg c)
 {
      int freq = (int) c;
      vtuner.tuner = m_channel;
@@ -446,7 +446,7 @@ void pix_videoLinuxT :: freqMess(t_floatarg c)
      }
 }
 
-void pix_videoLinuxT :: modeMessCallback(void *data, t_symbol* norm, int argc, t_atom *argv)
+void pix_videoLinux :: modeMessCallback(void *data, t_symbol* norm, int argc, t_atom *argv)
 {
 
   //if (argc==1 || argc==2)
@@ -454,17 +454,17 @@ void pix_videoLinuxT :: modeMessCallback(void *data, t_symbol* norm, int argc, t
 }
 
 
-void pix_videoLinuxT :: freqMessCallback(void *data, t_floatarg f)
+void pix_videoLinux :: freqMessCallback(void *data, t_floatarg f)
 {
     GetMyClass(data)->freqMess(f);
 }
 
-void pix_videoLinuxT :: channelMessCallback(void *data, t_floatarg f)
+void pix_videoLinux :: channelMessCallback(void *data, t_floatarg f)
 {
     GetMyClass(data)->channelMess((int)f);
 }
 
-void pix_videoLinuxT :: deviceMessCallback(void *data, t_floatarg f)
+void pix_videoLinux :: deviceMessCallback(void *data, t_floatarg f)
 {
     GetMyClass(data)->deviceMess((int)f);
 }

@@ -51,7 +51,7 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   while(i--)m_handles[i]=0;
   m_numHandles=0;
 
- m_handles[m_numHandles]=new filmQT4L();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmQT4L();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmAVI();    post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmAVIPLAY();  post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
   m_handles[m_numHandles]=new filmFFMPEG();   post("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;

@@ -14,8 +14,8 @@
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_VIDEOLINUXT_H_
-#define INCLUDE_PIX_VIDEOLINUXT_H_
+#ifndef INCLUDE_PIX_VIDEOLINUX_H_
+#define INCLUDE_PIX_VIDEOLINUX_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -59,22 +59,22 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_videoLinuxT : public pix_video
+class GEM_EXTERN pix_videoLinux : public pix_video
 {
-    CPPEXTERN_HEADER(pix_videoLinuxT, GemBase)
+    CPPEXTERN_HEADER(pix_videoLinux, GemBase)
 
     public:
 
         //////////
         // Constructor
-    	pix_videoLinuxT(t_floatarg, t_floatarg);
+    	pix_videoLinux(t_floatarg, t_floatarg);
 
     	
     protected:
     	
     	//////////
     	// Destructor
-    	virtual ~pix_videoLinuxT();
+    	virtual ~pix_videoLinux();
 
     	//////////
     	// Do the rendering

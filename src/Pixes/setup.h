@@ -51,6 +51,7 @@ extern "C" {
    void pix_filmFFMPEG_setup();
 
   void pix_filmNEW_setup();
+  void pix_videoNEW_setup();
 
    void pix_flip_setup();
    void pix_gain_setup();
@@ -143,8 +144,9 @@ extern "C" {
 #endif
 #endif
       //      pix_film_setup();
+      pix_filmNEW_setup();
 #ifdef __linux
-//      pix_filmNEW_setup();
+      pix_videoNEW_setup();
       pix_filmLinux_setup();
 #if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
       pix_filmFFMPEG_setup();

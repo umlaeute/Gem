@@ -19,6 +19,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_dot.h"
+#include <stdlib.h>
 
 CPPEXTERN_NEW(pix_dot)
 
