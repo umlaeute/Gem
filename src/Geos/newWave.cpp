@@ -240,8 +240,10 @@ void newWave :: typeMess(t_symbol *type)
 void newWave :: getforce()
 {
     float d;
-    for ( int i=0; i<grid; i++)
-        for ( int j=0;j<grid; j++)
+    int i;
+    int j;
+    for (i=0; i<grid; i++)
+        for ( j=0;j<grid; j++)
         {
             force[i][j] =0.0;
         }
