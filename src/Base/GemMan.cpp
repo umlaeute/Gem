@@ -74,6 +74,7 @@ int GemMan::m_windowState = 0;
 int GemMan::m_windowNumber = 0;
 int GemMan::m_windowContext = 0;
 int GemMan::m_cursor = 1;
+int GemMan::m_topmost = 0;
 float GemMan::m_perspect[6];
 double GemMan::m_lastRenderTime = 0.;
 float GemMan::m_lookat[9];
@@ -606,6 +607,7 @@ void GemMan :: resetState()
 
   // turn on the cursor
   m_cursor = 1;
+  m_topmost = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -1044,6 +1046,7 @@ int GemMan :: createWindow(char* disp)
 
   m_windowState = 1;
   cursorOnOff(m_cursor);
+  topmostOnOff(m_topmost);
   m_windowNumber++;
 
   windowInit();
@@ -1221,6 +1224,20 @@ void GemMan :: cursorOnOff(int state)
   m_cursor = state;
 }
 
+/////////////////////////////////////////////////////////
+// topmostOnOff
+//
+/////////////////////////////////////////////////////////
+void GemMan :: topmostOnOff(int state)
+{
+#ifdef _WINDOWS
+  if (m_windowState)
+    topmostGemWindow(gfxInfo,state);
+#else
+	post("gemwin: \"topmost\" message not supported on this platform");
+#endif
+  m_topmost = state;
+}
 
 /////////////////////////////////////////////////////////
 // frameRate

@@ -119,6 +119,11 @@ class GEM_EXTERN GemMan
 	// Turn on/off cursor
 	static void         cursorOnOff(int state);
 
+	//////////
+	// Turn on/off topmost position
+	static void         topmostOnOff(int state);
+
+
     	//////////
     	// Request a lighting value - it is yours until you free it.
     	// The return can be 0, in which there are too many lights
@@ -202,6 +207,7 @@ class GEM_EXTERN GemMan
     	static int  	    m_windowNumber;
     	static int  	    m_windowContext;
 	static int          m_cursor;
+	static int          m_topmost;
 
     	static void 	    windowInit();
     	static void 	    windowCleanup();

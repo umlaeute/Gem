@@ -334,6 +334,15 @@ void gemwin :: cursorMess(float setting)
   GemMan :: cursorOnOff((int)setting);
 }
 
+/////////////////////////////////////////////////////////
+// topmostMess
+//
+/////////////////////////////////////////////////////////
+void gemwin :: topmostMess(float topmost)
+{
+  GemMan::topmostOnOff((int) topmost);
+}
+
 
 /////////////////////////////////////////////////////////
 // cursorMess
@@ -425,6 +434,8 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("border"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::frameMessCallback,
 		  gensym("frame"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemwin::topmostMessCallback,
+		  gensym("topmost"), A_FLOAT, A_NULL);
 }
 void gemwin :: printMessCallback(void *)
 {
@@ -631,6 +642,10 @@ void gemwin :: shininessMessCallback(void *data, t_floatarg val)
 void gemwin :: cursorMessCallback(void *data, t_floatarg val)
 {
   GetMyClass(data)->cursorMess((float)val);
+}
+void gemwin :: topmostMessCallback(void *data, t_floatarg val)
+{
+  GetMyClass(data)->topmostMess((float)val);
 }
 void gemwin :: blurMessCallback(void *data, t_floatarg val)
 {

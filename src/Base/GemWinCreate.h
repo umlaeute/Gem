@@ -174,4 +174,8 @@ GEM_EXTERN extern void destroyGemWindow(WindowInfo &info);
 // Set the cursor
 GEM_EXTERN extern int cursorGemWindow(WindowInfo &info, int state);
 
+//////////
+// Set the topmost position
+GEM_EXTERN extern int topmostGemWindow(WindowInfo &info, int state);
+
 #endif  // for header file

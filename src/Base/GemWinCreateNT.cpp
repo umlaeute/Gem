@@ -579,4 +579,23 @@ int cursorGemWindow(WindowInfo &info, int state)
   return cursor_state;
 }
 
+/////////////////////////////////////////////////////////
+// set topmost position on/off
+//
+/////////////////////////////////////////////////////////
+int topmostGemWindow(WindowInfo &info, int state)
+{
+  static int topmost_state = 0;
+  state=!(!state);
+  if (topmost_state != state){
+	if (state)
+		SetWindowPos(info.win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+	else
+		SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+	topmost_state = state;
+  }
+
+  return topmost_state;
+}
+
 #endif
