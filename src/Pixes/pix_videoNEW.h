@@ -16,10 +16,11 @@ Linux version by Millier Puckette. msp@ucsd.edu
 
 #ifndef INCLUDE_PIX_VIDEONEW_H_
 #define INCLUDE_PIX_VIDEONEW_H_
+#include "Base/config.h"
 
 #define MAX_VIDEO_HANDLES 4
 
-#ifndef __NEW__
+#ifndef __VIDEO__NEW
 # define NO_AUTO_REGISTER_CLASS
 #endif
 
@@ -94,7 +95,13 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   // Set the driver architecture; (probably this makes only sense under linux right now: you can choose between video4linux(0) and video1394(1))
   virtual void	driverMess(int dev);
 
+  // List the available devices
+  virtual void 	enumerateMess();
+
+  // fire the format dialogs
+  virtual void	dialogMess(int,t_atom*);
         
+
   //-----------------------------------
   // GROUP:	Video data
   //-----------------------------------
@@ -117,6 +124,9 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   static void colorMessCallback(void *data, t_symbol*,int,t_atom*);
   static void deviceMessCallback(void *data, t_floatarg dev);
   static void driverMessCallback(void *data, t_floatarg dev);
+  static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void enumerateMessCallback(void *data);
+
 
 };
 

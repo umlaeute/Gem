@@ -173,6 +173,23 @@ void pix_videoNEW :: deviceMess(int dev)
   if (m_videoHandle)m_videoHandle->setDevice(dev);
 }
 /////////////////////////////////////////////////////////
+// enumerate devices
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: enumerateMess()
+{
+  error("enumerate not supported on this OS");
+}
+/////////////////////////////////////////////////////////
+// dialog
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: dialogMess(int argc, t_atom*argv)
+{
+  error("dialog not supported on this OS");
+}
+
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -200,6 +217,12 @@ void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
     	    gensym("device"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::driverMessCallback,
     	    gensym("driver"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::driverMessCallback,
+    	    gensym("open"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::enumerateMessCallback,
+    	    gensym("enumerate"), A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::dialogMessCallback,
+    	    gensym("dialog"), A_GIMME, A_NULL);
 }
 void pix_videoNEW :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -260,4 +283,12 @@ void pix_videoNEW :: deviceMessCallback(void *data, t_floatarg state)
 void pix_videoNEW :: driverMessCallback(void *data, t_floatarg state)
 {
     GetMyClass(data)->driverMess((int)state);
+}
+void pix_videoNEW :: enumerateMessCallback(void *data)
+{
+  GetMyClass(data)->enumerateMess();
+}
+void pix_videoNEW :: dialogMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
+  GetMyClass(data)->dialogMess(argc, argv);
 }
