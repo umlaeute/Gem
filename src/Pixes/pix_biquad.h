@@ -46,7 +46,7 @@ class GEM_EXTERN pix_biquad : public GemPixObj
 	
   //////////
   // Constructor
-  pix_biquad();
+  pix_biquad(int, t_atom*);
 	
  protected:
 	
@@ -57,22 +57,25 @@ class GEM_EXTERN pix_biquad : public GemPixObj
   //////////
   // Do the processing
   virtual void 	processImage(imageStruct &image);
-
-  //////////
-  // set-flag
-  bool set;
 	
   //////////
   // the image-latches
   imageStruct    prev;
   imageStruct	 last;
+
+  //////////
+  // set-flag: if "set", the buffers (prev&last) are set to the current image
+  bool set;
 	
   //////////
   // the biquad-factors
   t_float ff1, ff2, ff3, fb1, fb2, fb0;
-  
+  void faktorMess(int, t_atom*);
+ 
+  // 0..integer-processing(fast) [default]
+  // 1..float-processing(slow)
   int m_mode;
-	
+  	
   //////////
   // the methods
   static void setMessCallback(void *data);
