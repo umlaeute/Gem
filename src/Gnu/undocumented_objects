@@ -1,37 +1,4 @@
-	terrain
-pix_background
-pix_backlight
-pix_blur
-pix_buffer
-pix_buffer_read
-pix_buffer_write
-pix_chroma_key
-pix_color
-pix_colorreduce
-pix_compare
-	pix_convert
-pix_crop
-pix_delay
-	pix_depot
-pix_dot
-pix_duotone
-	pix_dv
-	pix_emboss
-pix_film
-	pix_get
-pix_info
-pix_levels
-pix_lumaoffset
-pix_mix
-pix_motionblur
-	pix_movieYUV
-pix_pix2sig
-pix_posterize
-pix_put
-pix_rds
-pix_roll
-pix_scanline
-pix_sig2pix
-pix_snap2tex
-pix_tIIR
-	pix_test
+<comment>
+none i know of
+objects that are still missing, are either deprecated (like [pix_put]) , still non-functional (like [pix_emboss]) or will probably never be (like [pix_dv])
+
