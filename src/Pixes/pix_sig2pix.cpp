@@ -76,7 +76,7 @@ void pix_sig2pix :: dimenMess(int width, int height) {
   m_pixBlock.image.type = GL_UNSIGNED_BYTE;
 
   m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
-  m_pixBlock.image.data = new unsigned char [m_pixsize * m_pixBlock.image.csize];
+  m_pixBlock.image.allocate(m_pixsize * m_pixBlock.image.csize);
 
   clearImage();
 }
@@ -116,7 +116,7 @@ void pix_sig2pix :: cleanImage()
   if (!m_pixBlock.image.data) return;
 
   // release previous data
-  delete [] m_pixBlock.image.data;
+  m_pixBlock.image.clear();
   m_pixBlock.image.data = NULL;
 }
 

@@ -15,6 +15,9 @@ LOG
 #ifndef INCLUDE_TEAPOT_H_
 #define INCLUDE_TEAPOT_H_
 
+
+#if HAVE_LIBGLUT
+
 #include "Base/GemGlutObj.h"
 
 
@@ -52,4 +55,5 @@ class GEM_EXTERN teapot : public GemGlutObj
     	virtual void 	render(GemState *state);
 };
 
+#endif
 #endif	// for header file

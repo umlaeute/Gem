@@ -68,24 +68,6 @@ void curve :: resolutionMess(int resolution)
 }
 
 /////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void curve :: typeMess(t_symbol *type)
-{
-    if (!strcmp(type->s_name, "line")) 
-	    m_drawType = GL_LINE_STRIP;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else
-    {
-	    error("GEM: curve draw style");
-	    return;
-    }
-    setModified();
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////

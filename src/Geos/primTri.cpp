@@ -20,7 +20,7 @@
 #include "Base/GemState.h"
 #include <string.h>
 
-CPPEXTERN_NEW(primTri)
+CPPEXTERN_NEW_WITH_ONE_ARG(primTri, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -30,7 +30,7 @@ CPPEXTERN_NEW(primTri)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-primTri :: primTri()
+primTri :: primTri(t_floatarg size) : GemShape(size)
 {
     m_drawType = GL_TRIANGLES;
 

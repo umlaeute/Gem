@@ -203,7 +203,9 @@ int pix_videoLinux :: startTransfer()
     int width, height;
     
     skipnext = 0;
-    sprintf(buf, "/dev/video%d", m_devicenum);
+    if (m_devicenum<0){
+      sprintf(buf, "/dev/video");
+    } else sprintf(buf, "/dev/video%d", m_devicenum);
     if ((tvfd = open(buf, O_RDWR)) < 0)
     {
 	perror(buf);

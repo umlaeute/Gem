@@ -32,7 +32,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_FLOAT)
 //
 /////////////////////////////////////////////////////////
 polygon :: polygon(t_floatarg numInputs)
-    	 : m_linewidth(1.0), m_numInputs(0), m_drawType(GL_POLYGON)
+    	 : GemShape(1.0),
+	   m_linewidth(1.0), m_numInputs(0), m_drawType(GL_POLYGON)
 {
     int i;
 	int realNum = (int)numInputs;

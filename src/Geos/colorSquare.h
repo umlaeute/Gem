@@ -55,10 +55,6 @@ class GEM_EXTERN colorSquare : public GemShape
     	virtual void 	postrender(GemState *state);
 
     	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-
-    	//////////
     	// Set the individual color vertices
         void            vertColorMess(int whichVert, float r, float g, float b);
 

@@ -57,9 +57,9 @@ void pix_buf :: render(GemState *state)
     if ( state->image->newimage || m_cache->resendImage )
     {
     	if (!m_pixBlock.image.data)
-    	    copy2Image(&(m_pixBlock.image), &(state->image->image));
+    	    state->image->image.copy2Image(&(m_pixBlock.image));
     	else
-    	    refreshImage(&(m_pixBlock.image), &(state->image->image));
+    	    state->image->image.refreshImage(&(m_pixBlock.image));
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }
@@ -106,8 +106,7 @@ void pix_buf :: cleanImage()
 {
     if (m_pixBlock.image.data)
     {
-    	delete [] m_pixBlock.image.data;
-    	m_pixBlock.image.data = NULL;
+     	m_pixBlock.image.clear();
     }
 }
 

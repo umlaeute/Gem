@@ -55,7 +55,6 @@ class GEM_EXTERN pix_image : public GemBase
                         { imageName = strdup(_imageName); }
                 ~singleImageCache()
                             { delete imageName;
-                              if (image) delete [] image->data;
                               delete image;
                             }
                 int                 refCount;

@@ -49,10 +49,6 @@ class GEM_EXTERN square : public GemShape
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
-
-    	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
 };
 
 #endif	// for header file

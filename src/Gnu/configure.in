@@ -4,7 +4,7 @@ twice_lib=`dirname $(find $2 -name "lib$1.a" | sed 1q)
 
 AC_INIT(../Base/CPPExtern.h)
 
-VERSION=0.87
+VERSION=0.87-cvs
 PACKAGE=gem
 GEMLIBS="../../../GemLibs"
 
@@ -133,6 +133,12 @@ dnl
 dnl Check for OpenGLlut
 dnl
      AC_CHECK_LIB_TWICE(glut,glutSolidTeapot, "/usr/local")
+
+dnl
+dnl Check for MUFTI (fake)
+dnl
+     AC_CHECK_LIB(mufti,muftiMain)
+     AC_ADD_HAVELIB
 
 dnl
 dnl Check for PNG and GLIB

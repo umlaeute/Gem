@@ -58,7 +58,7 @@ class GEM_EXTERN pix_multiimage : public GemBase
                 ~multiImageCache()
                             { delete imageName;
                               for(int i=0; i < numImages;i++)
-                              { delete [] images[i]->data;
+                              {
                         	    delete images[i];
                               }
 							  delete [] textBind;

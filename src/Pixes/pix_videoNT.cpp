@@ -62,22 +62,11 @@ pix_videoNT :: pix_videoNT(t_floatarg num)
     error("GEM: pix_videoNT: Unable to create capture window");
     return;
   } 
-#if 1
-int index=0;
-boolean result=false;
-while(!result && index<10){
-	post("driver %d", index);
-	capDriverConnect(m_hWndC, index);
-	index++;
-}
-if (!result){
-#else
+
   if (!capDriverConnect(m_hWndC, 0)) {
-#endif
-	  error("GEM: pix_videoNT: Unable to connect to video driver");
+    error("GEM: pix_videoNT: Unable to connect to video driver");
     return;
   }
-
 
   CAPTUREPARMS params;
   if (!capCaptureGetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS))) {
@@ -141,7 +130,7 @@ if (!result){
   m_pixBlock.image.type = GL_UNSIGNED_BYTE;
   const int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
     * m_pixBlock.image.csize * sizeof(unsigned char);
-  m_pixBlock.image.data = new unsigned char[dataSize];
+  m_pixBlock.image.allocate(dataSize);
   memset(m_pixBlock.image.data, 255, dataSize);
 
   m_haveVideo = 1;
@@ -342,7 +331,7 @@ void pix_videoNT :: dimenMess(int x, int y)
   cleanPixBlock();
   int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
     * 4 * sizeof(unsigned char);
-  m_pixBlock.image.data = new unsigned char[dataSize];
+  m_pixBlock.image.allocate(dataSize);
   memset(m_pixBlock.image.data, 255, dataSize);
 
   // start the transfer and rebuild the buffer
@@ -359,8 +348,7 @@ void pix_videoNT :: dimenMess(int x, int y)
 /////////////////////////////////////////////////////////
 void pix_videoNT :: cleanPixBlock()
 {
-  delete [] m_pixBlock.image.data;
-  m_pixBlock.image.data = NULL;
+  m_pixBlock.image.clear();
 }
 
 /////////////////////////////////////////////////////////

@@ -94,7 +94,6 @@ void pix_write :: doWrite()
       if (m_originalImage->xsize != width ||
 	  m_originalImage->ysize != height)
 	{
-	  delete [] m_originalImage->data;
 	  delete m_originalImage;
 	  m_originalImage = NULL;
 	  makeNew = 1;
@@ -113,8 +112,7 @@ void pix_write :: doWrite()
       m_originalImage->csize = 3;
       m_originalImage->format = GL_RGB;
 
-      m_originalImage->data = new
-	unsigned char[m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize];
+      m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
     }
   
   glReadPixels(m_xoff, m_yoff, width, height,
@@ -200,7 +198,6 @@ void pix_write :: cleanImage()
   // release previous data
   if (m_originalImage)
     {
-      delete [] m_originalImage->data;
       delete m_originalImage;
       m_originalImage = NULL;
     }

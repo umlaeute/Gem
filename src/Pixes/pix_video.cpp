@@ -141,7 +141,7 @@ int pix_video :: stopTransfer()
 /////////////////////////////////////////////////////////
 void pix_video :: offsetMess(int x, int y)
 {
-  error("swap not supported on this OS");
+  error("offset not supported on this OS");
 }
 
 /////////////////////////////////////////////////////////

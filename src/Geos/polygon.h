@@ -16,6 +16,7 @@ LOG
 #define INCLUDE_POLYGON_H_
 
 #include "Base/GemBase.h"
+#include "Base/GemShape.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -39,9 +40,9 @@ DESCRIPTION
     "vert_9" - The tenth vertex
      
 -----------------------------------------------------------------*/
-class GEM_EXTERN polygon : public GemBase
+class GEM_EXTERN polygon : public GemShape
 {
-    CPPEXTERN_HEADER(polygon, GemBase)
+    CPPEXTERN_HEADER(polygon, GemShape)
 
     public:
 

@@ -93,7 +93,7 @@ void pix_snap :: snapMess()
 		if (m_originalImage->xsize != m_width ||
 			m_originalImage->ysize != m_height)
 		{
-			delete [] m_originalImage->data;
+			m_originalImage->clear();
 			delete m_originalImage;
 			m_originalImage = NULL;
 			makeNew = 1;
@@ -110,8 +110,7 @@ void pix_snap :: snapMess()
 		m_originalImage->csize = 4;
 		m_originalImage->type  = GL_UNSIGNED_BYTE;
 		m_originalImage->format = GL_RGBA;
-		m_originalImage->data = new
-    		unsigned char[m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize];
+		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
 	}
 
     glReadPixels(m_x, m_y, m_width, m_height,
@@ -136,7 +135,7 @@ void pix_snap :: render(GemState *state)
     // do we need to reload the image?    
     if (m_cache->resendImage)
     {
-		refreshImage(&(m_pixBlock.image), m_originalImage);
+      m_originalImage->refreshImage(&(m_pixBlock.image));
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }
@@ -183,12 +182,10 @@ void pix_snap :: cleanImage()
     // release previous data
     if (m_originalImage)
     {
-		delete [] m_originalImage->data;
-		delete m_originalImage;
-		m_originalImage = NULL;
+      delete m_originalImage;
+      m_originalImage = NULL;
 
-    	delete [] m_pixBlock.image.data;
-        m_pixBlock.image.data = NULL;
+      m_pixBlock.image.clear();
     }
 }
 

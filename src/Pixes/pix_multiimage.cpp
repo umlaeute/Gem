@@ -99,7 +99,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
         m_loadedCache->refCount++;
         m_curImage = 0;
         m_numImages = m_loadedCache->numImages;
-        copy2Image(&(m_pixBlock.image), m_loadedCache->images[m_curImage]);
+        m_loadedCache->images[m_curImage]->copy2Image(&(m_pixBlock.image));
         m_pixBlock.newimage = 1;
         if (m_cache) m_cache->resendImage = 1;
         return;
@@ -161,7 +161,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     }
 
     m_curImage = 0;
-    copy2Image(&(m_pixBlock.image), newCache->images[m_curImage]);
+    newCache->images[m_curImage]->copy2Image(&(m_pixBlock.image));
     m_pixBlock.newimage = 1;
     if (m_cache) m_cache->resendImage = 1;
 
@@ -194,7 +194,7 @@ void pix_multiimage :: render(GemState *state)
     // do we need to reload the image?    
     if (m_cache->resendImage)
     {
-	    refreshImage(&(m_pixBlock.image), m_loadedCache->images[m_curImage]);
+      m_loadedCache->images[m_curImage]->refreshImage(&(m_pixBlock.image));
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }
@@ -220,7 +220,7 @@ void pix_multiimage :: startRendering()
 {
     if (!m_numImages) return;
 
-    refreshImage(&(m_pixBlock.image), m_loadedCache->images[m_curImage]);
+    m_loadedCache->images[m_curImage]->refreshImage(&(m_pixBlock.image));
     m_pixBlock.newimage = 1;
 }
 
@@ -281,7 +281,7 @@ void pix_multiimage :: cleanImages()
 
 	    m_loadedCache = NULL;
     	m_numImages = 0;
-    	delete [] m_pixBlock.image.data;
+    	m_pixBlock.image.clear();
         m_pixBlock.image.data = NULL;
     }
 }

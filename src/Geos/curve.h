@@ -51,10 +51,6 @@ class GEM_EXTERN curve : public polygon
     	virtual void 	render(GemState *state);
 
     	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-
-    	//////////
     	// Resolution callback
     	void	    	resolutionMess(int res);
     	
