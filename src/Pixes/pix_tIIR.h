@@ -59,6 +59,12 @@ class GEM_EXTERN pix_tIIR : public GemPixObj
   // Do the processing
   virtual void 	processImage(imageStruct &image);
 
+#ifdef __MMX__
+  virtual void 	processRGBAMMX(imageStruct &image);
+  virtual void 	processYUVMMX (imageStruct &image);
+  virtual void 	processGrayMMX(imageStruct &image);
+#endif
+
   //////////
   // set-flag
   bool set;      // set the buffers
