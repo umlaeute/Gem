@@ -52,6 +52,7 @@ GemOutput :: GemOutput() : m_outputState(0), m_outputContext(false),
   ambientMess    (0.f, 0.f, 0.f, 1.f);
   specularMess   (1.f, 1.f, 1.f, 1.f);
   shininessMess  (100.f);
+  lightMess      (0);
 }
 
 /////////////////////////////////////////////////////////
@@ -81,6 +82,10 @@ void GemOutput :: renderMess()
 {
   GemState currentState;
   GemMan::fillGemState(currentState);
+  if(m_lightState){
+    currentState.lighting=1;
+    currentState.smooth  =1;
+  }
 
   if(!m_outputState)return;
   preRender(currentState);
@@ -125,6 +130,17 @@ void GemOutput :: perspectiveMess(t_float left,   t_float right,
 
   m_perspect[4]=front;
   m_perspect[5]=back;
+}
+
+
+/////////////////////////////////////////////////////////
+// lightMess
+//
+/////////////////////////////////////////////////////////
+void GemOutput :: lightMess(int on)
+{
+  m_lightState=(on!=0);
+  post("light %d", m_lightState);
 }
 
 /////////////////////////////////////////////////////////
@@ -262,8 +278,7 @@ void GemOutput :: fogModeMess(int mode)
 /////////////////////////////////////////////////////////
 void GemOutput :: resetState()
 {
-  int s_lightState=0; // LATER: remove this
-  if (s_lightState)
+  if (m_lightState)
     {
       glEnable(GL_LIGHTING);
       glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
@@ -342,7 +357,7 @@ void GemOutput :: resetValues()
   specularMess(1.0, 1.0, 1.0, 1.0);
   shininessMess(100.0);
 
-  //s_lightState = 0;
+  m_lightState = 0;
 
   m_buffer = 2;
 
@@ -385,6 +400,8 @@ void GemOutput :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&GemOutput::viewMessCallback,
 		  gensym("view"), A_GIMME, A_NULL);
 
+  class_addmethod(classPtr, (t_method)&GemOutput::lightMessCallback,
+		  gensym("lighting"), A_FLOAT, A_NULL);
 
   class_addmethod(classPtr, (t_method)&GemOutput::colorMessCallback,
 		  gensym("color"), A_GIMME, A_NULL);
@@ -403,7 +420,6 @@ void GemOutput :: obj_setupCallback(t_class *classPtr)
 		  gensym("fogcolor"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&GemOutput::fogModeMessCallback,
 		  gensym("fogmode"), A_FLOAT, A_NULL);
-
 }
 void GemOutput :: renderMessCallback(void *data)
 {
@@ -413,7 +429,9 @@ void GemOutput :: resetMessCallback(void *data)
 {
   GetMyClass(data)->resetValues();
 }
-
+void GemOutput :: lightMessCallback(void *data, t_floatarg val){
+  GetMyClass(data)->lightMess((int)val);
+}
 void GemOutput :: colorMessCallback(void *data, t_symbol*, int argc, t_atom*argv){
   GLfloat r, g, b, a;
   a=0;

@@ -120,6 +120,9 @@ class GEM_EXTERN GemOutput : public CPPExtern
   float	   m_fogStart;		// start of the linear fog
   float	   m_fogEnd;		// start of the linear fog
 
+  void	   lightMess(int val);
+  bool     m_lightState;
+
 
   int               m_stereo;                   // stereo-mode
   GLfloat	    m_stereoSep;		// stereo seperation
@@ -145,6 +148,7 @@ class GEM_EXTERN GemOutput : public CPPExtern
   static void	viewMessCallback(void *, t_symbol *, int argc, t_atom *argv);
 
   /* lights and colors */
+  static void	lightMessCallback(void *, t_floatarg val);
   static void 	colorMessCallback(void *data, t_symbol*, int, t_atom*);
   static void 	clearmaskMessCallback(void *data, t_floatarg bitmask);
   static void 	ambientMessCallback(void *data, t_symbol*, int, t_atom*);
