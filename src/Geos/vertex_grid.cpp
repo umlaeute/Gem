@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 #include "string.h"
-CPPEXTERN_NEW(vertex_grid)
+CPPEXTERN_NEW_WITH_TWO_ARGS(vertex_grid, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -28,10 +28,15 @@ CPPEXTERN_NEW(vertex_grid)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_grid :: vertex_grid()
+vertex_grid :: vertex_grid(t_floatarg f1, t_floatarg f2)
 {
     m_x = 4;
     m_y = 4;
+
+  if(f1>=1.0)m_x=(int)f1;
+  if(f2>=1.0)m_y=(int)f1;
+
+
     maxX = 0;
     maxY = 0;
     m_spacex = 1;

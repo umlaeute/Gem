@@ -38,7 +38,7 @@ class GEM_EXTERN vertex_grid : public GemBase
 
         //////////
         // Constructor
-    	vertex_grid();
+  vertex_grid(t_floatarg w, t_floatarg h);
     	
     protected:
     	
