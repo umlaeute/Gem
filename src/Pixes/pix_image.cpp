@@ -203,6 +203,7 @@ void pix_image :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_image :: clickMess()
 {
+  post("pix_image: clicked");
     if (!m_loadedImage) return;
 
     // fork to display an image

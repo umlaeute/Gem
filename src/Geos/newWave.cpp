@@ -246,7 +246,7 @@ void newWave :: setSize( int value )
     {
         case SMALL : grid = MAXGRID/4; break;
         case MEDIUM: grid = MAXGRID/2; break;
-        case LARGE : grid = MAXGRID/1.5; break;
+        case LARGE : grid = (int)(MAXGRID/1.5); break;
         case XLARGE : grid = MAXGRID; break;
     }
     if (prevGrid > grid)

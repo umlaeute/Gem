@@ -19,7 +19,7 @@
 
 CPPEXTERN_NEW(imageVert)
 
-/////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
 //
 // imageVert
 //
@@ -28,9 +28,9 @@ CPPEXTERN_NEW(imageVert)
 //
 /////////////////////////////////////////////////////////
 imageVert :: imageVert()
-           : m_rebuildList(1)
+  : m_rebuildList(1)
 {
-    m_dispList = glGenLists(1);
+  m_dispList = glGenLists(1);
 }
 
 /////////////////////////////////////////////////////////
@@ -39,8 +39,8 @@ imageVert :: imageVert()
 /////////////////////////////////////////////////////////
 imageVert :: ~imageVert()
 {
-    // Delete our display list
-    if (m_dispList) glDeleteLists(m_dispList, 1);
+  // Delete our display list
+  if (m_dispList) glDeleteLists(m_dispList, 1);
 }
 
 /////////////////////////////////////////////////////////
@@ -49,98 +49,91 @@ imageVert :: ~imageVert()
 /////////////////////////////////////////////////////////
 void imageVert :: processRGBAPix(imageStruct &image, int texture)
 {
-    float red, green, blue, alpha;
-    float red2, green2, blue2, alpha2;
+  float red, green, blue, alpha;
+  float red2, green2, blue2, alpha2;
     
-    const int ySize = image.ysize;
-    const int xSize = image.xsize;
-    const int yStride = xSize * image.csize;
-    const int xStride = image.csize;
+  const int ySize = image.ysize;
+  const int xSize = image.xsize;
+  const int yStride = xSize * image.csize;
+  const int xStride = image.csize;
 
-    const float yDiff = 1.f / ySize;
-    float yDown = -.5f;
-    float yCurrent = yDown + yDiff;
-    float yTexDown = 0.f;
-    float yTex = yTexDown + yDiff;
+  const float yDiff = 1.f / ySize;
+  float yDown = -.5f;
+  float yCurrent = yDown + yDiff;
+  float yTexDown = 0.f;
+  float yTex = yTexDown + yDiff;
 
-    const float xDiff = 1.f / xSize;
+  const float xDiff = 1.f / xSize;
 
-    glShadeModel(GL_SMOOTH);
+  glShadeModel(GL_SMOOTH);
 
-    glNormal3f(0.0f, 0.0f, 1.0f);
+  glNormal3f(0.0f, 0.0f, 1.0f);
 
-    unsigned char *data = image.data + yStride;
-    if (texture)
-    {
-        int yCount = ySize;
-        while(yCount--)
-        {
-    	    float xCurrent = -.5f;
-    	    float xTex = 0.f;
-            int xCount = xSize;
-	        glBegin(GL_QUAD_STRIP);
-    	        while(xCount--)
-    	        {
-                    unsigned char *oneDown = data - yStride;
-    		        red   = data[chRed] / 255.f;
-    		        green = data[chGreen] / 255.f;
-    		        blue  = data[chBlue] / 255.f;
+  unsigned char *data = image.data + yStride;
+  if (texture)   {
+    int yCount = ySize;
+    while(yCount--)  {
+      float xCurrent = -.5f;
+      float xTex = 0.f;
+      int xCount = xSize;
+      glBegin(GL_QUAD_STRIP);
+      while(xCount--)   {
+	unsigned char *oneDown = data - yStride;
+	red   = data[chRed] / 255.f;
+	green = data[chGreen] / 255.f;
+	blue  = data[chBlue] / 255.f;
 
-    		        red2   = oneDown[chRed] / 255.f;
-    		        green2 = oneDown[chGreen] / 255.f;
-    		        blue2  = oneDown[chBlue] / 255.f;
+	red2   = oneDown[chRed] / 255.f;
+	green2 = oneDown[chGreen] / 255.f;
+	blue2  = oneDown[chBlue] / 255.f;
     		        
-    	            glTexCoord2f(xTex, yTexDown);
-	    	        glVertex3f(xCurrent, yDown, red2 + green2 + blue2);
-    	            glTexCoord2f(xTex, yTex);
-	    	        glVertex3f(xCurrent, yCurrent, red + green + blue);
+	glTexCoord2f(xTex, yTexDown);
+	glVertex3f(xCurrent, yDown, red2 + green2 + blue2);
+	glTexCoord2f(xTex, yTex);
+	glVertex3f(xCurrent, yCurrent, red + green + blue);
 
-    	    	    xCurrent += xDiff;
-    	    	    xTex += xDiff;
-                    data += xStride;
-    	        }
-	        glEnd();
-            yDown = yCurrent;
-	        yCurrent += yDiff;
-            yTexDown = yTex;
-            yTex += yDiff;
-        }
+	xCurrent += xDiff;
+	xTex += xDiff;
+	data += xStride;
+      }
+      glEnd();
+      yDown = yCurrent;
+      yCurrent += yDiff;
+      yTexDown = yTex;
+      yTex += yDiff;
     }
-    else
-    {
-        int yCount = ySize;
-        while(yCount--)
-        {
-            int xCount = xSize;
-    	    float xCurrent = -.5f;
+  } else {
+    int yCount = ySize;
+    while(yCount--) {
+      int xCount = xSize;
+      float xCurrent = -.5f;
     	    
-	        glBegin(GL_QUAD_STRIP);
-    	        while(xCount--)
-    	        {
-                    unsigned char *oneDown = data - yStride;
-    		        red   = data[chRed] / 255.f;
-    		        green = data[chGreen] / 255.f;
-    		        blue  = data[chBlue] / 255.f;
-    		        alpha = data[chAlpha] / 255.f;
+      glBegin(GL_QUAD_STRIP);
+      while(xCount--) {
+	unsigned char *oneDown = data - yStride;
+	red   = data[chRed] / 255.f;
+	green = data[chGreen] / 255.f;
+	blue  = data[chBlue] / 255.f;
+	alpha = data[chAlpha] / 255.f;
 
-    		        red2   = oneDown[chRed] / 255.f;
-    		        green2 = oneDown[chGreen] / 255.f;
-    		        blue2  = oneDown[chBlue] / 255.f;
-    		        alpha2 = oneDown[chAlpha] / 255.f;
+	red2   = oneDown[chRed] / 255.f;
+	green2 = oneDown[chGreen] / 255.f;
+	blue2  = oneDown[chBlue] / 255.f;
+	alpha2 = oneDown[chAlpha] / 255.f;
     		        
-    	    	    glColor4f(red2, green2, blue2, alpha2);
-	    	        glVertex3f(xCurrent, yDown, red2 + green2 + blue2);
-    	    	    glColor4f(red, green, blue, alpha);
-	    	        glVertex3f(xCurrent, yCurrent, red + green + blue);
+	glColor4f(red2, green2, blue2, alpha2);
+	glVertex3f(xCurrent, yDown, red2 + green2 + blue2);
+	glColor4f(red, green, blue, alpha);
+	glVertex3f(xCurrent, yCurrent, red + green + blue);
 
-    	    	    xCurrent += xDiff;
-                    data += xStride;
-    	        }
-	        glEnd();
-            yDown = yCurrent;
-	        yCurrent += yDiff;
-        }
+	xCurrent += xDiff;
+	data += xStride;
+      }
+      glEnd();
+      yDown = yCurrent;
+      yCurrent += yDiff;
     }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -149,86 +142,79 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
 /////////////////////////////////////////////////////////
 void imageVert :: processGrayPix(imageStruct &image, int texture)
 {
-    float gray, gray2;
+  float gray, gray2;
     
-    const int ySize = image.ysize;
-    const int xSize = image.xsize;
-    const int yStride = xSize * image.csize;
-    const int xStride = image.csize;
+  const int ySize = image.ysize;
+  const int xSize = image.xsize;
+  const int yStride = xSize * image.csize;
+  const int xStride = image.csize;
 
-    const float yDiff = 1.f / ySize;
-    float yDown = -.5f;
-    float yCurrent = yDown + yDiff;
-    float yTexDown = 0.f;
-    float yTex = yTexDown + yDiff;
+  const float yDiff = 1.f / ySize;
+  float yDown = -.5f;
+  float yCurrent = yDown + yDiff;
+  float yTexDown = 0.f;
+  float yTex = yTexDown + yDiff;
 
-    const float xDiff = 1.f / xSize;
+  const float xDiff = 1.f / xSize;
 
-    glShadeModel(GL_SMOOTH);
+  glShadeModel(GL_SMOOTH);
 
-    glNormal3f(0.0f, 0.0f, 1.0f);
+  glNormal3f(0.0f, 0.0f, 1.0f);
 
-    unsigned char *data = image.data + yStride;
-    if (texture)
-    {
-        int yCount = ySize;
-        while(yCount--)
-        {
-    	    float xCurrent = -.5f;
-    	    float xTex = 0.f;
-            int xCount = xSize;
-	        glBegin(GL_QUAD_STRIP);
+  unsigned char *data = image.data + yStride;
+  if (texture) {
+    int yCount = ySize;
+    while(yCount--) {
+      float xCurrent = -.5f;
+      float xTex = 0.f;
+      int xCount = xSize;
+      glBegin(GL_QUAD_STRIP);
                 
-    	        while(xCount--)
-    	        {
-                    unsigned char *oneDown = data - yStride;
-    		        gray   = data[chGray] / 255.f;
-    		        gray2  = oneDown[chGray] / 255.f;
-    		        
-    	            glTexCoord2f(xTex, yTexDown);
-	    	        glVertex3f(xCurrent, yDown, gray2 + gray2 + gray2);
-    	            glTexCoord2f(xTex, yTex);
-	    	        glVertex3f(xCurrent, yCurrent, gray + gray + gray);
+      while(xCount--) {
+	unsigned char *oneDown = data - yStride;
+	gray   = data[chGray] / 255.f;
+	gray2  = oneDown[chGray] / 255.f;
+		    
+	glTexCoord2f(xTex, yTexDown);
+	glVertex3f(xCurrent, yDown, gray2 + gray2 + gray2);
+	glTexCoord2f(xTex, yTex);
+	glVertex3f(xCurrent, yCurrent, gray + gray + gray);
 
-    	    	    xCurrent += xDiff;
-    	    	    xTex += xDiff;
-                    data += xStride;
-    	        }
-	        glEnd();
-            yDown = yCurrent;
-	        yCurrent += yDiff;
-            yTexDown = yTex;
-            yTex += yDiff;
-        }
+	xCurrent += xDiff;
+	xTex += xDiff;
+	data += xStride;
+      }
+      glEnd();
+      yDown = yCurrent;
+      yCurrent += yDiff;
+      yTexDown = yTex;
+      yTex += yDiff;
     }
-    else
-    {
-        int yCount = ySize;
-        while(yCount--)
-        {
-            int xCount = xSize;
-    	    float xCurrent = -.5f;
-    	    
-	        glBegin(GL_QUAD_STRIP);
-    	        while(xCount--)
-    	        {
-                    unsigned char *oneDown = data - yStride;
-    		        gray   = data[chGray] / 255.f;
-    		        gray2  = oneDown[chGray] / 255.f;
+  } else {
+    int yCount = ySize;
+    while(yCount--)  {
+      int xCount = xSize;
+      float xCurrent = -.5f;
+	
+      glBegin(GL_QUAD_STRIP);
+      while(xCount--)  {
+	unsigned char *oneDown = data - yStride;
+	gray   = data[chGray] / 255.f;
+	gray2  = oneDown[chGray] / 255.f;
     		        
-    	    	    glColor4f(gray2, gray2, gray2, 1.0f);
-	    	        glVertex3f(xCurrent, yDown, gray2 + gray2 + gray2);
-    	    	    glColor4f(gray, gray, gray, 1.0f);
-	    	        glVertex3f(xCurrent, yCurrent, gray + gray + gray);
+	glColor4f(gray2, gray2, gray2, 1.0f);
+	glVertex3f(xCurrent, yDown, gray2 + gray2 + gray2);
+	glColor4f(gray, gray, gray, 1.0f);
+	glVertex3f(xCurrent, yCurrent, gray + gray + gray);
 
-    	    	    xCurrent += xDiff;
-                    data += xStride;
-    	        }
-	        glEnd();
-            yDown = yCurrent;
-	        yCurrent += yDiff;
-        }
+	xCurrent += xDiff;
+	data += xStride;
+      }
+      glEnd();
+      yDown = yCurrent;
+      yCurrent += yDiff;
     }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -237,7 +223,7 @@ void imageVert :: processGrayPix(imageStruct &image, int texture)
 /////////////////////////////////////////////////////////
 void imageVert :: processYUVPix(imageStruct &image, int texture)
 {
-    post("GEM:imageVert: YUV not yet implemented :-(");
+  post("GEM:imageVert: YUV not yet implemented :-(");
 }
 /////////////////////////////////////////////////////////
 // render
@@ -245,40 +231,36 @@ void imageVert :: processYUVPix(imageStruct &image, int texture)
 /////////////////////////////////////////////////////////
 void imageVert :: render(GemState *state)
 {
-    // always want to render
-    if (!state->image) return;
+  // always want to render
+  if (!state->image) return;
 
-    if (state->image->newimage) m_rebuildList = 1;
+  if (state->image->newimage) m_rebuildList = 1;
 
-    // can we build a display list?
-    if (!state->inDisplayList && m_rebuildList)
+  if (!m_dispList){
+    m_dispList=glGenLists(1);
+    m_rebuildList=1;
+  }
+
+  // can we build a display list?
+  if (!state->inDisplayList && m_rebuildList)
     {
-        glNewList(m_dispList, GL_COMPILE_AND_EXECUTE);
-#ifdef MACOSX
-        if (state->image->image.format == GL_RGBA || state->image->image.format == GL_BGRA_EXT)	//tigital
-#else
-        if (state->image->image.format == GL_RGBA)
-#endif
-            processRGBAPix(state->image->image, state->texture);
-        else
-            processGrayPix(state->image->image, state->texture);
-        glEndList();
-        m_rebuildList = 0;
+      glNewList(m_dispList, GL_COMPILE_AND_EXECUTE);
+      if (state->image->image.format == GL_RGBA || state->image->image.format == GL_BGRA_EXT)	//tigital
+	processRGBAPix(state->image->image, state->texture);
+      else
+	processGrayPix(state->image->image, state->texture);
+      glEndList();
+      m_rebuildList = 0;
     }
-	// nope, but our current one isn't valid
-    else if (m_rebuildList)
-    {
-#ifdef MACOSX
-        if (state->image->image.format == GL_RGBA || state->image->image.format == GL_BGRA_EXT)	//tigital
-#else
-        if (state->image->image.format == GL_RGBA)
-#endif
-            processRGBAPix(state->image->image, state->texture);
-        else
-            processGrayPix(state->image->image, state->texture);
-    }
-	// the display list has already been built
-    else glCallList(m_dispList);
+  // nope, but our current one isn't valid
+  else if (m_rebuildList) {
+    if (state->image->image.format == GL_RGBA || state->image->image.format == GL_BGRA_EXT)	//tigital
+      processRGBAPix(state->image->image, state->texture);
+    else
+      processGrayPix(state->image->image, state->texture);
+  }
+  // the display list has already been built
+  else glCallList(m_dispList);
 }
 
 /////////////////////////////////////////////////////////

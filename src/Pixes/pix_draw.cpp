@@ -44,7 +44,7 @@ pix_draw :: ~pix_draw()
 /////////////////////////////////////////////////////////
 void pix_draw :: render(GemState *state)
 {
-    if ( !state->image ) return;
+    if ( !state->image || !&state->image->image ) return;
 
     glRasterPos2i(0, 0);
     // hack to center image at 0,0
