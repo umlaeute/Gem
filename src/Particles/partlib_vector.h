@@ -14,6 +14,10 @@
 #define M_PI 3.1415926535897932384626433f
 #endif
 
+#ifdef __APPLE__
+#define sqrtf(i) ( (float)(sqrt( (double)(i) ) ))
+#endif
+
 #ifdef WIN32
 #define drand48() (((float) rand())/((float) RAND_MAX))
 #define srand48(x) srand(x)
