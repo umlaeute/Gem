@@ -95,11 +95,11 @@ void pix_add :: processGray_Gray(imageStruct &image, imageStruct &right)
       rightPix++;
     }
 #else
-    int datasize = (image.xsize * image.ysize)>>2;
+    int datasize = (image.xsize * image.ysize)>>3;
+    register unsigned char *leftPix = image.data;
+    register unsigned char *rightPix = right.data;
 
     while (datasize--) {
-      register unsigned char *leftPix = image.data;
-      register unsigned char *rightPix = right.data;
       ADD8(leftPix,rightPix);
       leftPix+=8;rightPix+=8;
     }
