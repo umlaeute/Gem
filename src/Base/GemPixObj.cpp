@@ -49,11 +49,12 @@ void GemPixObj :: render(GemState *state)
 		processImage(state->image->image);
 	else
 #ifdef MACOSX                
+	  // YCBCR_422_APPLE                 0x85B9
     if (state->image->image.format == GL_YCBCR_422_APPLE)
         processYUVImage(state->image->image);
     else
 #endif
-		processGrayImage(state->image->image);
+      processGrayImage(state->image->image);
 }
 
 /////////////////////////////////////////////////////////

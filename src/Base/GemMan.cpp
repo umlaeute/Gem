@@ -1347,7 +1347,7 @@ void GemMan :: printInfo()
   post("Vendor: %s", glGetString(GL_VENDOR));
   post("Renderer: %s", glGetString(GL_RENDERER));
   post("Version: %s", glGetString(GL_VERSION));
-#ifdef MACOSX
+#ifndef MACOSX
     char *text = new char [strlen((char *)glGetString(GL_EXTENSIONS)) + 1];
     strcpy(text,(char *)glGetString(GL_EXTENSIONS));
     char *token = strtok(text, " ");	// Parse 'text' For Words, Seperated By " " (spaces)
