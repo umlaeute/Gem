@@ -32,32 +32,28 @@ CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_FLOAT)
 //
 /////////////////////////////////////////////////////////
 polygon :: polygon(t_floatarg numInputs)
-    	 : GemShape(1.0),
-	    m_numInputs(0), m_drawType(GL_POLYGON)
+    	 : m_numInputs(0), m_drawType(GL_POLYGON)
 {
-    int i;
-	int realNum = (int)numInputs;
-	for (i = 0; i < 10; i++)
-    {
-	    m_vert[i][0] = m_vert[i][1] = m_vert[i][2] = 0.0;
-    }
+  int i;
+  int realNum = (int)numInputs;
+  for (i = 0; i < POLYGON_MAX_POINTS; i++)  {
+    m_vert[i][0] = m_vert[i][1] = m_vert[i][2] = 0.0;
+  }
 
-    // configure the inlets
-    if (realNum <= 0 || realNum > 10)
-    {
-	    error("GEM: polygon: illegal number of points");
-	    return;
-    }
-    m_numInputs = realNum;
+  // configure the inlets
+  if (realNum <= 0 || realNum > POLYGON_MAX_POINTS)   {
+    error("GEM: polygon: illegal number of points");
+    return;
+  }
+  m_numInputs = realNum;
     
-    char tempVt[7];
+  char tempVt[7];
     
-    // create the proper number of inputs
-    for (i = 0; i < realNum; i++)
-    {
-	    sprintf(tempVt, "vert_%d", i);
-	    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym(tempVt) );
-    }
+  // create the proper number of inputs
+  for (i = 0; i < realNum; i++) {
+    sprintf(tempVt, "vert_%d", i);
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym(tempVt) );
+  }
 }
 
 /////////////////////////////////////////////////////////

@@ -41,6 +41,7 @@ class GEM_EXTERN GemShape : public GemBase
         // Constructor
         // [in] size - A size of 0. means to just use the default (ie, 1.)
     	GemShape(t_floatarg size);
+	GemShape();
     	
     protected:
     	

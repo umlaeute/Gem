@@ -30,7 +30,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(primTri, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-primTri :: primTri(t_floatarg size) : GemShape(size)
+primTri :: primTri(t_floatarg size)
 {
     m_drawType = GL_TRIANGLES;
 

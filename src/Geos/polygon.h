@@ -15,6 +15,8 @@ LOG
 #ifndef INCLUDE_POLYGON_H_
 #define INCLUDE_POLYGON_H_
 
+#define POLYGON_MAX_POINTS 10
+
 #include "Base/GemBase.h"
 #include "Base/GemShape.h"
 
@@ -86,7 +88,7 @@ class GEM_EXTERN polygon : public GemShape
     	
     	//////////
     	// The vertices
-    	float	    	m_vert[10][3];
+    	float	    	m_vert[POLYGON_MAX_POINTS][3];
 
         //////////
         // The drawing style (GL_LINE, GL_POLYGON, etc)

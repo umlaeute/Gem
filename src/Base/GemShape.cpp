@@ -26,13 +26,17 @@
 //
 /////////////////////////////////////////////////////////
 GemShape :: GemShape(t_floatarg size)
-    	  : m_linewidth(1.0f), m_size((float)size)
+  : m_linewidth(1.0f), m_size((float)size), m_inlet(NULL)
 {
-	if (m_size == 0.f)
-		m_size = 1.f;
+  if (m_size == 0.f)m_size = 1.f;
 
-	// the size inlet
-    m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
+  // the size inlet
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
+}
+GemShape :: GemShape()
+  : m_linewidth(1.0f), m_size(1.0f), m_inlet(NULL)
+{
+  // no size inlet
 }
 
 /////////////////////////////////////////////////////////
@@ -41,7 +45,7 @@ GemShape :: GemShape(t_floatarg size)
 /////////////////////////////////////////////////////////
 GemShape :: ~GemShape()
 {
-    inlet_free(m_inlet);
+  if(m_inlet)inlet_free(m_inlet);
 }
 
 /////////////////////////////////////////////////////////
