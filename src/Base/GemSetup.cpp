@@ -176,16 +176,17 @@ extern "C" {
 #ifdef YUV
   void pix_movieYUV_setup();
   
-  void yuv_average_setup();
   void yuv_add_setup();
   void yuv_adjust_setup();
+  void yuv_average_setup();
   void yuv_bandw_setup();
+  void yuv_bitshift_setup();
+  void yuv_blank_setup();
   void yuv_chroma_key_setup();
   void yuv_clamp_setup();
   void yuv_compare_setup();
   void yuv_difference_setup();
   void yuv_emboss_setup();
-  void yuv_film_setup();
   void yuv_gain_setup();
   void yuv_invert_setup();
   void yuv_luma_key_setup();
@@ -413,9 +414,11 @@ extern "C" {
     pix_movieYUV_setup();
     
     yuv_add_setup();
-    yuv_average_setup();
     yuv_adjust_setup();
+    yuv_average_setup();
     yuv_bandw_setup();
+    yuv_bitshift_setup();
+    yuv_blank_setup();
     yuv_chroma_key_setup();
     yuv_clamp_setup();
     yuv_compare_setup();
