@@ -33,6 +33,8 @@ LOG
 
 class gemhead;
 class gemheadLink;
+class gemcontrol;
+class gemctrlLink;
 class GemState;
 class WindowInfo;
 
@@ -55,8 +57,12 @@ class GEM_EXTERN GemMan
     	static void 	    initGem();
 
     	//////////
-    	static void 	    addObj(gemhead *obj, int priority);
-    	
+    	static void 	    addCtrl(gemcontrol *obj);   	
+    	//////////
+    	static void 	    removeCtrl(gemcontrol *obj);
+
+    	//////////
+    	static void 	    addObj(gemhead *obj, int priority);   	
     	//////////
     	static void 	    removeObj(gemhead *obj, int priority);
 

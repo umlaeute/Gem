@@ -42,6 +42,7 @@
 #include "GemEvent.h"
 
 #include "Controls/gemhead.h"
+#include "Controls/gemcontrol.h"
 
 #include "Base/config.h"
 #ifdef INCLUDE_GLEXT
@@ -76,6 +77,8 @@ static int s_hit = 0;
 static gemheadLink *s_linkHead = NULL;
 static gemheadLink *s_linkHead_2 = NULL;
 
+static gemctrlLink *s_ctrlHead = NULL;
+
 
 class gemheadLink
 {
@@ -94,6 +97,25 @@ public:
 private:
   gemheadLink();
 };
+
+class gemctrlLink
+{
+public:
+  gemctrlLink(const gemctrlLink &s)
+    : base(s.base), next(s.next) {}
+  gemctrlLink(gemcontrol *base_)
+    : base(base_), next(NULL) {}
+  gemctrlLink(gemcontrol *base_, gemctrlLink *link)
+    : base(base_)
+  { this->next = link->next; link->next = this; }
+    	
+  gemcontrol *base;
+  gemctrlLink *next;
+private:
+  gemctrlLink();
+};
+
+
 
 static int createConstWindow(char *disp);
 
@@ -201,6 +223,53 @@ void GemMan :: initGem()
   post("GEM: \t\tDaniel Heckenberg (windows)");
   post("GEM: \t\tJames Tittle (macOS-X)");
   post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
+}
+
+
+
+/////////////////////////////////////////////////////////
+// addCtrl
+//
+/////////////////////////////////////////////////////////
+void GemMan :: addCtrl(gemcontrol *obj)
+{
+  gemctrlLink *linkPtr = s_ctrlHead;
+  if (!linkPtr) {
+    s_ctrlHead = new gemctrlLink(obj);
+    return;
+  }
+
+  while (linkPtr->next)linkPtr = linkPtr->next;
+
+  linkPtr = new gemctrlLink(obj, linkPtr);
+}
+
+/////////////////////////////////////////////////////////
+// removeCtrl
+//
+/////////////////////////////////////////////////////////
+void GemMan :: removeCtrl(gemcontrol *obj)
+{
+  gemctrlLink *linkPtr = s_ctrlHead;
+  if (!linkPtr) return;
+    
+  // unique case if the object is the s_ctrlHead
+  if (linkPtr->base == obj) {
+    gemctrlLink *nextPtr = linkPtr->next;
+    delete s_ctrlHead;
+    s_ctrlHead = nextPtr;
+    return;
+  }
+    
+  while (linkPtr->next && linkPtr->next->base != obj)
+    linkPtr = linkPtr->next;
+    
+  // didn't find anything
+  if ( !linkPtr->next ) return;
+    
+  gemctrlLink *removePtr = linkPtr->next;
+  linkPtr->next = removePtr->next;
+  delete [] removePtr;
 }
 
 /////////////////////////////////////////////////////////
@@ -311,7 +380,6 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
 
 void GemMan :: render(void *)
 {
-  post("renderChain: %x", &renderChain);
 #ifdef _WINDOWS
   static int firstTime = 1;
   static float countFreq = 0;
@@ -348,14 +416,16 @@ void GemMan :: render(void *)
 
   GemState currentState;
 
-  // fill in the elapsed time
-  /*
-  if (m_buffer == 1)
-    currentState.tickTime = 50.f;
-  else
-  */
-    currentState.tickTime = (float)(clock_gettimesince(m_lastRenderTime));
+  currentState.tickTime = (float)(clock_gettimesince(m_lastRenderTime));
   m_lastRenderTime = clock_getsystime();
+
+
+  gemctrlLink* head = s_ctrlHead;
+  while(head){
+    head->base->render();
+    head = head->next;
+  }
+
   // are we profiling?
   if (m_profile == 1 || m_profile == 2)
 #ifdef _WINDOWS
@@ -403,9 +473,10 @@ void GemMan :: startRendering()
 {
   if (m_rendering)
     return;
-    
+#ifdef DEBUG
   post("GEM: Start rendering");
-    
+#endif
+
   // set up all of the gemheads
   gemheadLink *head = s_linkHead_2;
   while(head) {
@@ -447,8 +518,9 @@ void GemMan :: stopRendering()
       head->base->stopRendering();
       head = head->next;
     }
-
+#ifdef DEBUG
   post("GEM: Stop rendering");
+#endif
 }
 
 void GemMan :: checkExtensions() {
