@@ -200,7 +200,7 @@ void vertex_draw :: render(GemState *state)
 		glGenBuffersARB( 1, &m_nVBOVertices );
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
 	  glBufferDataARB( GL_ARRAY_BUFFER_ARB, state->VertexArraySize*4*sizeof(float),
-						state->VertexArray, GL_STATIC_DRAW_ARB );
+						state->VertexArray, GL_DYNAMIC_DRAW_ARB );
 	  glVertexPointer( 4, GL_FLOAT,0, (char*) NULL);
 	  }else{
 	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
@@ -214,7 +214,7 @@ void vertex_draw :: render(GemState *state)
 			glGenBuffersARB( 1, &m_nVBOColor );
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
 		glBufferDataARB( GL_ARRAY_BUFFER_ARB, state->VertexArraySize*4*sizeof(float),
-						state->ColorArray, GL_STATIC_DRAW_ARB );
+						state->ColorArray, GL_DYNAMIC_DRAW_ARB );
         glColorPointer(4,GL_FLOAT,0,(char*) NULL);
         }else{
 			glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
