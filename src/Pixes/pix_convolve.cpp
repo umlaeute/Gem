@@ -535,8 +535,10 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
     vec_dst( dst, prefetchSize, 0 );
          
     i = 0;
+    h =0;
+    w = 0;
    // dst = i;     
-    i = xsize+16;
+    i = xsize+2;
 // i = xsize;
     //load our initial values
    /* val1 = 0;
@@ -548,9 +550,9 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
    val7 = vec_ld(0,src+i+xsize-2); 
    val8 = vec_ld(0,src+i+xsize); 
    val9 = vec_ld(0,src+i+xsize+2); */
- 
+ // post("pix_convolve: h %d w %d total pixels %d ",h,w,i);
     for ( h=1; h<image.ysize-1; h++){
-        for (w=1; w<width-1; w++)
+        for (w=1; w<width; w++)
         {
         
             vec_dst( src, prefetchSize, 0 );
@@ -669,13 +671,13 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
            
         }
         vec_dss( 0 );
-         i=(h+1)*(xsize+2);
-        
+      //   i=(h+1)*(xsize+2);
+    //    post("pix_convolve: h %d w %d total pixels %d ",h,w,i);
       //dst+=16;
       //i+=16;
       //  dst++;
 }  /*end of working altivec function */
-post("pix_convolve: h %d w %d total pixels %d ",h,w,i);
+
 #endif
 }
 
