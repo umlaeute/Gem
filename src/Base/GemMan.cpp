@@ -217,6 +217,7 @@ static pascal OSStatus dispatchGemWindowMessages()
         ReleaseEvent( theEvent );
     }
     clock_delay(s_windowClock, s_windowDelTime);
+    return noErr;
 }
 #endif // for Unix
 
