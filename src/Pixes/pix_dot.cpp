@@ -41,7 +41,10 @@ pix_dot :: pix_dot()
   sharedbuffer_length =0;
   tail = 0;
   m_scale = 1;
+  m_useScale=true;
+  dots_width=dots_height=64;
   yuv_init();
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("scale"));
 }
 
 /////////////////////////////////////////////////////////
@@ -133,8 +136,19 @@ void pix_dot :: drawDot(int xx, int yy, unsigned char c, unsigned int *dest)
 /////////////////////////////////////////////////////////
 void pix_dot :: sizeMess(int width, int height)
 {
+#if 0
   dot_size = (width>0)?width:8;
   dot_hsize = (height>0)?height:8;
+#else
+  if(width>0)dots_width=width;
+  else  error("pix_dot: width must be > 0!");
+  if(height>0)dots_height=height;
+  else  error("pix_dot: height must be > 0!");
+  m_useScale=false;
+  alreadyInit=0;
+  myImage.setBlack();
+
+#endif
 }
 
 unsigned char pix_dot :: inline_RGB2Y(int rgb)
@@ -160,23 +174,31 @@ void pix_dot :: processRGBAImage(imageStruct &image)
   
     if (m_xsize != image.xsize)
         alreadyInit = 0;
-    
-    if (!alreadyInit)
-    {
+    if (!alreadyInit)    {
         m_xsize = image.xsize;
         m_ysize = image.ysize;
-        dot_size = 8 * m_scale;
-        dot_size = dot_size & 0xfe;
-        dot_hsize = dot_size / 2;
-        dots_width = m_xsize / dot_size;
-        dots_height = m_ysize / dot_size;
+	if(m_useScale){
+	  dot_size = (int)(8 * m_scale);
+	  dot_size = dot_size & 0xfe;
+	  if(dot_size==0)dot_size=2;
+	  dots_width = m_xsize / dot_size;
+	  dots_height = m_ysize / dot_size;
+	} else {
+	  dot_size=m_xsize / dots_width;
+	  if(dot_size==0){
+	    dot_size=2;
+	    dots_width  = m_xsize / dot_size;
+	    dots_height = m_ysize / dot_size;	    
+	  }
+	}
+	dot_hsize = dot_size / 2;
   
         pattern = (unsigned int *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(unsigned int));
         if (pattern == NULL) {
             post("pix_dot couldn't make pattern");
             return;
         }
-        
+       
         sharedbuffer_init();
         sharedbuffer_reset();
         sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
@@ -186,10 +208,8 @@ void pix_dot :: processRGBAImage(imageStruct &image)
         }
         makePattern();
         sampxy_table_init();
-
         alreadyInit = 1;
     }
-
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
   myImage.csize = image.csize;
@@ -198,7 +218,6 @@ void pix_dot :: processRGBAImage(imageStruct &image)
   myImage.reallocate();
 
   dest = (unsigned int*)myImage.data;
-  
   for ( y=0; y<dots_height; y++) {
     sy = sampy[y];
     for ( x=0; x<dots_width; x++){
@@ -230,7 +249,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
     {
         m_xsize = image.xsize;
         m_ysize = image.ysize;
-        dot_size = 8 * m_scale;
+        dot_size = (int)(8 * m_scale);
         dot_size = dot_size & 0xfe;
         dot_hsize = dot_size / 2;
         dots_width = m_xsize / dot_size;
@@ -284,14 +303,17 @@ void pix_dot :: processYUVImage(imageStruct &image)
 
 void pix_dot :: scaleMess(float state)
 {
-    m_scale = (int)state;
-    alreadyInit = 0;
-
-    myImage.clear();
-    myImage.allocate(dataSize);
-    
-    free(sharedbuffer);
-    free(pattern);
+  if(state<=0.f){
+    error("pix_dot: scale-Factor must not be < 0!");
+    return;
+  }
+  m_scale=state; /* used to be as (int)cast, but i have removed this...*/
+  alreadyInit = 0;
+  //myImage.reallocate(dataSize);we dont need to reallocate the image, since nothing changed
+  myImage.setBlack();
+  free(sharedbuffer); sharedbuffer=NULL;
+  free(pattern); pattern=NULL;
+  m_useScale=true;
 }
 
 void pix_dot :: sampxy_table_init()
