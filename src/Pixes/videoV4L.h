@@ -119,13 +119,18 @@ class GEM_EXTERN videoV4L : public video {
   int skipnext;
   int mytopmargin, mybottommargin;
   int myleftmargin, myrightmargin;
+
+  int m_gotFormat; // the format returned by the v4l-device (not an openGL-format!)
+  bool m_colorConvert; // do we have to convert the colour-space manually ?
   
+  //////////
+  // the capturing thread
   pthread_t m_thread_id;
   bool      m_continue_thread;
   bool      m_frame_ready;
-  //////////
-  // the capturing thread
   static void*capturing(void*);
+
+
 };
 
 #endif	// for header file

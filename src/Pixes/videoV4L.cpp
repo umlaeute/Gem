@@ -85,7 +85,9 @@ void *videoV4L :: capturing(void*you)
   while(me->m_continue_thread){
     //post("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
 
-  me->frame = !me->frame;
+    //  me->frame = !me->frame;
+    me->frame++;
+    me->frame%=NBUF;
 
     me->vmmap[me->frame].width = me->m_image.image.xsize + 
       me->myleftmargin + me->myrightmargin;
@@ -105,7 +107,7 @@ void *videoV4L :: capturing(void*you)
     	if (errno == EAGAIN)
 	  fprintf(stderr, "can't sync (no video source?)\n");
     	else 
-	  perror("VIDIOCMCAPTURE");
+	  perror("VIDIOCMCAPTURE1");
 	if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
 	  perror("VIDIOCMCAPTURE2");
       
@@ -125,7 +127,24 @@ pixBlock *videoV4L :: getFrame(){
   //  post("getting frame %d", m_frame_ready);
   if (!m_frame_ready) m_image.newimage = 0;
   else {
+#if 0
     m_image.image.data=videobuf + vmbuf.offsets[last_frame];
+#else
+    if (m_colorConvert){
+      switch(m_gotFormat){
+      case VIDEO_PALETTE_YUV420P: m_image.image.fromYUV420P(videobuf + vmbuf.offsets[last_frame]); break;
+      case VIDEO_PALETTE_RGB24:   m_image.image.fromBGR    (videobuf + vmbuf.offsets[last_frame]); break;
+      case VIDEO_PALETTE_RGB32:   m_image.image.fromBGRA   (videobuf + vmbuf.offsets[last_frame]); break;
+      case VIDEO_PALETTE_GREY:    m_image.image.fromGray   (videobuf + vmbuf.offsets[last_frame]); break;
+      default: // ? what should we do ?
+	m_image.image.data=videobuf + vmbuf.offsets[last_frame];
+	m_image.image.notowned = true;
+      }
+    } else {
+      m_image.image.data=videobuf + vmbuf.offsets[last_frame];
+      m_image.image.notowned = true;
+    }
+#endif
     m_image.newimage = 1;
     m_frame_ready = false;
   }
@@ -185,8 +204,8 @@ int videoV4L :: startTransfer(int format)
 	       vchannel.channel, vchannel.name, 
 	       vchannel.type, vchannel.flags);
     }
-    post("setting to channel %d", m_channel);
-    vchannel.channel = m_channel;
+    vchannel.channel = ((vcap.channels-1)<m_channel)?(vcap.channels-1):m_channel;
+    post("setting to channel %d", vchannel.channel);
     if (ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
     {
 	perror("VDIOCGCHAN");
@@ -221,32 +240,36 @@ int videoV4L :: startTransfer(int format)
     height = m_height > vcap.minheight ? m_height : vcap.minheight;
     height = (height > vcap.maxheight) ? vcap.maxheight : height;
 
-    for (i = 0; i < NBUF; i++)
-    {
-      post("wanted format is 0x%X", m_reqFormat);
+    post("wanted format is 0x%X", m_reqFormat);
+    for (i = 0; i < NBUF; i++)    {
       switch(m_reqFormat){
       case GL_LUMINANCE:
     	vmmap[i].format = VIDEO_PALETTE_GREY;
 	break;
       case GL_RGBA:
       case GL_BGRA:
-    	vmmap[i].format = VIDEO_PALETTE_RGB32;
+    	vmmap[i].format = 15;//VIDEO_PALETTE_RGB32;
 	break;
       case GL_YCBCR_422_GEM:
 #if 0
-VIDEO_PALETTE_YUV422	7	/* YUV422 capture */
-VIDEO_PALETTE_YUYV	8
-VIDEO_PALETTE_UYVY	9	/* The great thing about standards is ... */
-VIDEO_PALETTE_YUV420	10
-VIDEO_PALETTE_YUV411	11	/* YUV411 capture */
-VIDEO_PALETTE_RAW	12	/* RAW capture (BT848) */
-VIDEO_PALETTE_YUV422P	13	/* YUV 4:2:2 Planar */
-VIDEO_PALETTE_YUV411P	14	/* YUV 4:1:1 Planar */
-VIDEO_PALETTE_YUV420P	15	/* YUV 4:2:0 Planar */
-VIDEO_PALETTE_YUV410P	16	/* YUV 4:1:0 Planar */
+        VIDEO_PALETTE_GREY	1	/* Linear greyscale */
+	VIDEO_PALETTE_HI240	2	/* High 240 cube (BT848) */
+	VIDEO_PALETTE_RGB565	3	/* 565 16 bit RGB */
+	VIDEO_PALETTE_RGB24	4	/* 24bit RGB */
+	VIDEO_PALETTE_RGB32	5	/* 32bit RGB */	
+	VIDEO_PALETTE_RGB555	6	/* 555 15bit RGB */
+	VIDEO_PALETTE_YUV422	7	/* YUV422 capture */
+	VIDEO_PALETTE_YUYV	8
+	VIDEO_PALETTE_UYVY	9	/* The great thing about standards is ... */
+	VIDEO_PALETTE_YUV420	10
+	VIDEO_PALETTE_YUV411	11	/* YUV411 capture */
+	VIDEO_PALETTE_RAW	12	/* RAW capture (BT848) */
+	VIDEO_PALETTE_YUV422P	13	/* YUV 4:2:2 Planar */
+	VIDEO_PALETTE_YUV411P	14	/* YUV 4:1:1 Planar */
+	VIDEO_PALETTE_YUV420P	15	/* YUV 4:2:0 Planar */
+	VIDEO_PALETTE_YUV410P	16	/* YUV 4:1:0 Planar */
 #endif
-  post("trying to get YUV");
- vmmap[i].format = VIDEO_PALETTE_YUV422;
+	  vmmap[i].format = VIDEO_PALETTE_YUV422; //OK for philips is only 0==15
 	break;
       default:
       case GL_RGB:
@@ -258,44 +281,57 @@ VIDEO_PALETTE_YUV410P	16	/* YUV 4:1:0 Planar */
       vmmap[i].height = height;
       vmmap[i].frame  = i;
     }
-    if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
-    {
-    	if (errno == EAGAIN)
-	    fprintf(stderr, "can't sync (no video source?)\n");
-    	else 
-	    perror("VIDIOCMCAPTURE");
+
+    post("setting cmcapture to %dx%d\t%d", vmmap[0].width,  vmmap[0].height, vmmap[0].format);
+
+    if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
+      for (i = 0; i < NBUF; i++)vmmap[i].format = vpicture.palette;
+      post("now trying standard palette %d", vmmap[0].format);
+      if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
+	if (errno == EAGAIN)
+	  fprintf(stderr, "can't sync (no video source?)\n");
+	else 
+	  perror("VIDIOCMCAPTURE");
 	goto closit;
+      }
     }
     post("frame %d %d, format %d, width %d, height %d\n",
-    	frame, vmmap[frame].frame, vmmap[frame].format,
-    	vmmap[frame].width, vmmap[frame].height);
-
-    	/* fill in image specifics for Gem pixel object.  Could we have
-	just used RGB, I wonder? */
+	 frame, vmmap[frame].frame, vmmap[frame].format,
+	 vmmap[frame].width, vmmap[frame].height);
+    
+    /* fill in image specifics for Gem pixel object.  Could we have
+       just used RGB, I wonder? */
     m_image.image.xsize = width;
     m_image.image.ysize = height;
+
+    m_image.image.format = m_reqFormat;
     switch(m_reqFormat){
     case GL_LUMINANCE:
-      m_image.image.format = GL_LUMINANCE;
       m_image.image.csize = 1;
       break;
     case GL_RGBA:
     case GL_BGRA:
       m_image.image.csize = 4;
-      m_image.image.format = GL_BGRA;
+      //m_image.image.format = GL_BGRA;
     break;
     case GL_YCBCR_422_GEM:
       m_image.image.csize = 2;
-      m_image.image.format =  GL_YCBCR_422_GEM;
       break;
     default:
     case GL_RGB:
     case GL_BGR:
       m_image.image.csize = 3;
-      m_image.image.format = GL_BGR;
+      //m_image.image.format = GL_BGR;
+    }
+    switch((m_gotFormat=vmmap[frame].format)){
+    case VIDEO_PALETTE_GREY  : m_colorConvert=(m_reqFormat!=GL_LUMINANCE); break;
+    case VIDEO_PALETTE_RGB24 : m_colorConvert=(m_reqFormat!=GL_BGR); break;
+    case VIDEO_PALETTE_RGB32 : m_colorConvert=(m_reqFormat!=GL_BGRA); break;
+    case VIDEO_PALETTE_YUV422: m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM); break;
+    default: m_colorConvert=true;
     }
   
-   m_image.image.reallocate();
+    m_image.image.reallocate();
     myleftmargin = 0;
     myrightmargin = 0;
     mytopmargin = 0;
@@ -330,19 +366,18 @@ int videoV4L :: stopTransfer()
 {
   post("stop transfer");
   /* close the v4l device and dealloc buffer */
-    /* terminate thread if there is one */
-    if(m_continue_thread){
-      void *dummy;
-      m_continue_thread = 0;
-      pthread_join (m_thread_id, &dummy);
-    }
-    while(m_capturing){post("waiting for thread");}
-    munmap(videobuf, vmbuf.size);
-    if (tvfd) close(tvfd);
-    tvfd = 0;
-    m_haveVideo = 0;
-    return(1);
-
+  /* terminate thread if there is one */
+  if(m_continue_thread){
+    void *dummy;
+    m_continue_thread = 0;
+    pthread_join (m_thread_id, &dummy);
+  }
+  while(m_capturing){post("waiting for thread");}
+  munmap(videobuf, vmbuf.size);
+  if (tvfd) close(tvfd);
+  tvfd = 0;
+  m_haveVideo = 0;
+  return(1);
 }
 
 /////////////////////////////////////////////////////////
