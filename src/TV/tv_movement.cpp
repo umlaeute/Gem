@@ -120,10 +120,6 @@ void tv_movement :: processImage(imageStruct &image)
   }
 
   int pixsize = image.ysize * image.xsize;
-  int count = pixsize;
-
-  int cols=image.xsize, c=0, c1=0;
-  int rows=image.ysize, r=0;
 
   unsigned char *rp = image.data;			// read pointer
   unsigned char *wp=buffer.data;			// write pointer

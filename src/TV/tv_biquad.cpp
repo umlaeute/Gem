@@ -143,8 +143,6 @@ void tv_biquad :: processImage(imageStruct &image)
   } 
 
   int pixsize = image.ysize * image.xsize * image.csize;
-  int size=pixsize;
-  int count = pixsize;
 
   unsigned char *this_p = image.data;
   unsigned char *last_p= last.data;
