@@ -16,7 +16,9 @@ LOG
 #define INCLUDE_TEXTBASE_H_
 
 #include "Base/GemBase.h"
+#ifdef __linux__
 #include "Base/config.h"
+#endif /* __linux__ */
 
 
 #define USE_FONTS
