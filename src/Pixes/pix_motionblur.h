@@ -54,7 +54,7 @@ CPPEXTERN_HEADER(pix_motionblur, GemPixObj)
     	virtual void 	processYUVImage(imageStruct &image);
         virtual void 	processYUVAltivec(imageStruct &image);
         
-        unsigned int  *saved;
+         int  *saved;
         float		m_motionblur;
         int		m_motionblurH,m_motionblurW,m_motionblurSize,m_motionblurBpp;
         t_inlet         *inletmotionblur;
