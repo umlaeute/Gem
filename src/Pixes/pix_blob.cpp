@@ -166,8 +166,9 @@ void pix_blob :: processYUVImage(imageStruct &image)
   unsigned char *pixels = image.data;
   int rows  = image.ysize;
 
-  float sum = 0.0, sum_x = 0.0, sum_y = 0.0;
-  float /*blob_x = 0., blob_y = 0.,*/ blob_z = 0.;
+  //float sum = 0.0, sum_x = 0.0, sum_y = 0.0;
+   int sum = 0, sum_x = 0,sum_y = 0;
+  //float /*blob_x = 0., blob_y = 0.,*/ blob_z = 0.;
   while (rows--) {
     int cols = image.xsize;
     while (cols--) {
@@ -179,11 +180,11 @@ void pix_blob :: processYUVImage(imageStruct &image)
     }
   }
 
-  blob_z = sum;
-  outlet_float(m_zOut, sum/(image.xsize*image.ysize*255));
+//  blob_z = sum;
+  outlet_float(m_zOut, (float)sum/(float)(image.xsize*image.ysize*255));
   if (sum) {
-    outlet_float(m_yOut, 1 - sum_y/(image.ysize*sum));
-    outlet_float(m_xOut, 1 - sum_x/(image.xsize*sum));
+    outlet_float(m_yOut, 1 - (float)sum_y/(float)(image.ysize*sum));
+    outlet_float(m_xOut, 1 - (float)sum_x/(float)(image.xsize*sum));
   }
 }
 
