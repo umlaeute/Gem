@@ -140,7 +140,7 @@ int h,w,width;
         vec_dss( 0 );
     }  /*end of working altivec function */
     
-#endif ALTIVEC
+#endif // ALTIVEC
 }
 
 
