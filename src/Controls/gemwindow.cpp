@@ -25,7 +25,8 @@
 #elif defined __APPLE__
 # include <stdlib.h>
 // or is it spelled Carbon/Carbon.h ??
-# include <Carbon/carbon.h>
+// yes, it is -> jamie
+# include <Carbon/Carbon.h>
 # include <OpenGL/gl.h>
 # include <OpenGL/glext.h>
 #include "macosx_math.h"
@@ -221,7 +222,7 @@ void gemwindow::dispatchGemWindowMessages()
   clock_delay(m_windowClock, m_windowDelTime);
 } 
 #elif __APPLE__
-pascal OSStatus dispatchGemWindowMessages()
+void gemwindow::dispatchGemWindowMessages()
 {
     EventRef	theEvent;
     EventTargetRef theTarget;
