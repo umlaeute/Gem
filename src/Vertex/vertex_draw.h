@@ -52,6 +52,7 @@ class GEM_EXTERN vertex_draw : public GemBase
         int	m_oldsize;
         int	m_init;
         int 	m_defaultDraw;
+		GLuint	m_nVBOVertices, m_nVBOColor, m_nVBOTexCoords, m_nVBONormals;
 
         
     	//////////
