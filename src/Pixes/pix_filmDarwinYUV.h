@@ -73,6 +73,7 @@ class GEM_EXTERN pix_filmDarwinYUV : public pix_filmYUV
   Track			m_movieTrack;
   TimeValue		m_timeScale;
   TimeValue		duration;
+ float			durationf;
 
   //-----------------------------------
   // GROUP:	Texturing

@@ -116,7 +116,8 @@ UnsignedWide startTime;
         }
         m_haveMovie = GEM_MOVIE_MOV;
     }
-    
+    m_movieTime = 0;
+    duration = 0;
     short	refnum = 0;
     err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
     if (err) {
@@ -134,6 +135,7 @@ UnsignedWide startTime;
         post("GEM: pix_filmdarwinYUV:  m_numTracks = %d",m_numTracks);
 
 	// Get the length of the movie
+
         long	movieDur, movieScale;
         movieDur = (long)GetMovieDuration(m_movie);
         movieScale = (long)GetMovieTimeScale(m_movie);
@@ -145,10 +147,36 @@ UnsignedWide startTime;
         // we want to begin with the first frame (sample) in the track
 	short		flags = nextTimeMediaSample + nextTimeEdgeOK;
         
-        GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
+       GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
              fixed1, NULL, &duration);
         m_numFrames = movieDur/duration;
-     
+        post("pix_filmdarwinYUV:  bogus duration = %d",duration);
+        post("pix_filmdarwinYUV:  bogus number of frames = %d",m_numFrames);
+             
+       TimeValue	theTime = 0;
+	
+	m_numFrames = -1;
+	while (theTime >= 0) {
+		m_numFrames++;
+		::GetMovieNextInterestingTime(m_movie,
+                                            flags,
+                                            1,
+                                            &whichMediaType,
+                                            theTime,
+                                            0,
+                                            &theTime,
+                                            &duration);
+		// after the first interesting time, don't include the time we
+		//  are currently at.
+		flags = nextTimeMediaSample;
+	}
+        
+        durationf = (float)movieDur/(float)m_numFrames;
+        post("pix_filmdarwinYUV:  real duration = %f",durationf);
+        post("pix_filmdarwinYUV:  real number of frames = %d",m_numFrames);
+        
+         
+       
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
         OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
@@ -162,7 +190,7 @@ UnsignedWide startTime;
         m_csize =2;
         m_format = GL_YCBCR_422_APPLE;
         m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-
+  
         createBuffer();
         prepareTexture();
         m_rowBytes = m_xsize * 2;
@@ -180,24 +208,13 @@ UnsignedWide startTime;
 		m_haveMovie = 0;
 		return;
 	}
-        
+      
         m_movieTime = 0;
-      //  TimeValue timeNow;
- Fixed playRate;
-// timeNow = GetMovieTime(theMovie, NIL);
- playRate = GetMoviePreferredRate(m_movie);
- post("playRate: %d",playRate);
-//playRate = 0;  //test to see if only first 10 frames will be fast
-// PrePrerollMovie(m_movie, m_movieTime, playRate, NULL, NULL);
-// PrerollMovie(m_movie, m_movieTime, playRate);
-
- 
-// SetMovieRate(m_movie, 2);
 
 	// *** set the graphics world for displaying the movie ***
 	::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
 	::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-      // StartMovie(m_movie);
+      
         //end timer
          UnsignedWide endTime;
         ::Microseconds(&endTime);
@@ -214,9 +231,6 @@ void pix_filmDarwinYUV :: getFrame()
 {
     if (!m_haveMovie) return;
 
-//timer start
-    UnsignedWide startTime;
-    ::Microseconds(&startTime);
 
     int num;
 
@@ -224,13 +238,14 @@ void pix_filmDarwinYUV :: getFrame()
 
     short 	flags = nextTimeStep;
     OSType	whichMediaType = VisualMediaCharacteristic;
-    
+    /*
     if (m_reqFrame > m_curFrame) {
         num = m_reqFrame - m_curFrame;
     } else {
         num = m_reqFrame;
         if (!m_auto) m_movieTime = 0;
     }
+*/
 
     //check for last frame to loop the clip
     if (m_curFrame >= m_numFrames){
@@ -244,6 +259,9 @@ void pix_filmDarwinYUV :: getFrame()
     // if this is the first frame, include the frame we are currently on
     if (m_curFrame == 0) flags |= nextTimeEdgeOK;
 
+
+/*
+//if (m_auto || (m_reqFrame - m_curFrame == 1)) {
 if (m_auto) {
         ::GetMovieNextInterestingTime(	m_movie,
                                         flags,
@@ -260,18 +278,29 @@ if (m_auto) {
         }else{
             m_movieTime = m_reqFrame * duration;
         }
-       
+  */     
+  
+    m_movieTime = (long)((float)m_reqFrame * durationf);
+    
+    m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place 
+    
+    ::GetMovieNextInterestingTime(	m_movie,
+                                        flags,
+                                        1,
+                                    &whichMediaType,
+                                        m_movieTime,
+                                        0,
+                                        &m_movieTime,
+                                        // NULL);
+                                        &duration);
+        flags = 0;
+        flags = nextTimeStep; 
+  
     // set the time for the frame and give time to the movie toolbox	
 
     SetMovieTimeValue(m_movie, m_movieTime); 
     MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
     
-    //end timer
-         UnsignedWide endTime;
-        ::Microseconds(&endTime);
-        float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
-        //m_fps = 1 / (seconds * 1000.f) * 1000;
-      //  post("GEM: time to render frame: %f", seconds);
 }
 
 void pix_filmDarwinYUV :: LoadRam()
