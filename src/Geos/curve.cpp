@@ -18,14 +18,6 @@
 
 CPPEXTERN_NEW_WITH_ONE_ARG(curve, t_floatarg, A_FLOAT)
 
-static float tex[2][2][2] =
-{
-  { {0, 0},
-    {1, 0}},
-  { {0, 1},
-    {1, 1}}
-};
-
 /////////////////////////////////////////////////////////
 //
 // curve

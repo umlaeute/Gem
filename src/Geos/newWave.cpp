@@ -323,7 +323,7 @@ void newWave :: getdamp()
     {
         for ( i=1; i<grid; i++)
         {
-            for (int j=1;j<grid; j++)
+            for (j=1;j<grid; j++)
             {
                 d = D1 * ((posit[i][j] - posit[i][j-1])-(positold[i][j] - positold[i][j-1]));
                 force[i][j] -= d;
@@ -339,7 +339,7 @@ void newWave :: getdamp()
     if (D2 != 0)
     {
         for ( i=1; i<grid; i++)
-            for (int j=1;j<grid; j++)
+            for (j=1;j<grid; j++)
             {
                 d = D2 * ((posit[i][j] - posit[i-1][j-1])-(positold[i][j] - positold[i-1][j-1]));
                 force[i][j] -= d;
@@ -347,7 +347,7 @@ void newWave :: getdamp()
             }
 
         for ( i=0; i<grid-1; i++)
-            for (int j=1;j<grid; j++)
+            for (j=1;j<grid; j++)
             {
                 d = D2 * ((posit[i][j] - posit[i+1][j-1])-(positold[i][j] - positold[i+1][j-1]));
                 force[i][j] -= d;
@@ -358,7 +358,7 @@ void newWave :: getdamp()
     if (D3 != 0)
     {
         for ( i=1; i<grid-1; i++)
-            for (int j=1;j<grid-1; j++)
+            for (j=1;j<grid-1; j++)
             {
                 d = D3 * (posit[i][j]-positold[i][j]);
                 force[i][j] -= d;
@@ -396,7 +396,6 @@ void newWave :: position(float posX, float posY, float posZ)
 /////////////////////////////////////////////////////////
 void newWave :: savepos()
 {
-    float d;
     int i;
     int j;
     for (i=0; i<grid; i++)

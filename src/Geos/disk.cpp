@@ -88,7 +88,6 @@ void disk :: render(GemState *state)
   GLfloat da, dr;
 
   GLenum orientation = true; /* GLU_INSIDE; */
-  GLfloat nsign = (orientation)?-1.0:1.0;
   GLboolean normals = (state->lighting);
 
   GLfloat xsize = 1.0, xsize0 = 0.0;

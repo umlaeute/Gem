@@ -98,9 +98,6 @@ void slideSquares :: render(GemState *state)
     int curCoord = 0;
     if (state->texture && state->numTexCoords)
     {
-      GLfloat s = state->texCoords[curCoord].s;
-      GLfloat t = state->texCoords[curCoord].t;
-
       glBegin(m_drawType);
       for (i=0; i<= 31; i++){
 	glTexCoord2f(state->texCoords[curCoord].s*Sliders[i].U, state->texCoords[curCoord].t*Sliders[i].V ); 
