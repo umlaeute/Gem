@@ -53,7 +53,7 @@ post("pix_videoDarwin: constructor");
 					* 4 * sizeof(unsigned char);
   m_pixBlock.image.data = new unsigned char[dataSize];
   m_quality = 1; //high quality for DV. why not?
-  m_colorspace = 1; //default to RGB
+  m_colorspace = GL_RGBA; //default to RGB
   InitSeqGrabber();
   m_haveVideo = 1;
 }
@@ -279,7 +279,7 @@ void pix_videoDarwin :: InitSeqGrabber()
         break;
     
     }
-    if (m_colorspace){
+    if (m_colorspace==GL_RGBA){
         m_pixBlock.image.xsize = m_vidXSize;
         m_pixBlock.image.ysize = m_vidYSize;
         m_pixBlock.image.csize = 4;
@@ -445,18 +445,21 @@ void pix_videoDarwin ::dialogCallback(void *data)
 
 void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
 {
-   char c=toupper(*state->s_name);
-   if (c == 'Y'){
-   post("pix_film: yuv");
-   GetMyClass(data)->m_colorspace = 0;
-   }else
-   if (c == 'R')
-   {
-   post("pix_film: rgb");
-   GetMyClass(data)->m_colorspace = 1;
-   }
-   
+  int format=0;
+  char c =*s->s_name;
+  switch (c){
+  case 'g': case 'G': format=GL_LUMINANCE; break;
+  case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
+  case 'r': case 'R': format=GL_RGBA; break;
+  default:
+    post("pix_video: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+  }
 
+  if(format==GL_LUMINANCE){
+    post("pix_video: 'Gray' not yet supported...using YUV");
+    format=GL_YCBCR_422_GEM;
+  }
+  if(format)GetMyClass(data)->m_colorspace = format;
 }
 
 #endif // __APPLE__
