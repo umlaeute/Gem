@@ -130,18 +130,25 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
     rightPix++;
     }
 }
-
+ 
 /////////////////////////////////////////////////////////
 // do the YUV processing here
 //
 /////////////////////////////////////////////////////////
 void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
+#ifdef ALTIVEC
+
+processYUV_Altivec(image,right);
+return;
+#else
    long src,h,w;
    int	y1,y2;
    int u,v;
    src =0;
    //format is U Y V Y
+   
+   post("pix_add : scalar");
    for (h=0; h<image.ysize; h++){
     for(w=0; w<image.xsize/2; w++){
         
@@ -157,6 +164,111 @@ void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
         src+=4;
     }
     }
+#endif
+}
+
+void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
+{
+ #ifdef ALTIVEC
+ int h,w,width;
+   width = image.xsize/8;
+   //format is U Y V Y
+   post("pix_add : altivec test");
+    union
+    {
+        //unsigned int	i;
+        short	elements[8];
+        //vector signed char v;
+        vector	short v;
+    }shortBuffer;
+    
+        union
+    {
+        //unsigned int	i;
+        unsigned char	elements[16];
+        //vector signed char v;
+        vector	unsigned char v;
+    }charBuffer;
+    
+    //vector unsigned char c;
+    vector signed short d, hiImage, loImage, hiRight,loRight, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
+    vector unsigned char zero = vec_splat_u8(0);
+    vector unsigned char c,one;
+    vector signed short zshort = vec_splat_s16(0);
+    vector unsigned char *inData = (vector unsigned char*) image.data;
+    vector unsigned char *rightData = (vector unsigned char*) right.data;
+
+    //Write the pixel (pair) to the transfer buffer
+    charBuffer.elements[0] = 2;
+    charBuffer.elements[1] = 1;
+    charBuffer.elements[2] = 2;
+    charBuffer.elements[3] = 1;
+    charBuffer.elements[4] = 2;
+    charBuffer.elements[5] = 1;
+    charBuffer.elements[6] = 2;
+    charBuffer.elements[7] = 1;
+    charBuffer.elements[8] = 2;
+    charBuffer.elements[9] = 1;
+    charBuffer.elements[10] = 2;
+    charBuffer.elements[11] = 1;
+    charBuffer.elements[12] = 2;
+    charBuffer.elements[13] = 1;
+    charBuffer.elements[14] = 2;
+    charBuffer.elements[15] = 1;
+
+
+    //Load it into the vector unit
+    c = charBuffer.v;
+        
+    one =  vec_splat_u8( 1 );
+     
+    shortBuffer.elements[0] = 255;
+   
+    //Load it into the vector unit
+    d = shortBuffer.v;
+    d = (vector signed short)vec_splat((vector signed short)d,0);
+
+   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+	vec_dst( inData, prefetchSize, 0 );
+        
+    for ( h=0; h<image.ysize; h++){
+        for (w=0; w<width; w++)
+        {
+        
+	vec_dst( inData, prefetchSize, 0 );
+            
+            //interleaved U Y V Y chars
+            
+            //vec_mule UV * 2 to short vector U V U V shorts
+            UVImage = (vector signed short)vec_mule(one,inData[0]);
+            UVRight = (vector signed short)vec_mule(c,rightData[0]);
+            
+            //vec_mulo Y * 1 to short vector Y Y Y Y shorts
+            YImage = (vector signed short)vec_mulo(c,inData[0]);
+            YRight = (vector signed short)vec_mulo(c,rightData[0]);
+
+            
+            //vel_subs UV - 255
+            UVRight = (vector signed short)vec_subs(UVRight, d);
+            
+            //vec_adds UV
+            UVTemp = vec_adds(UVImage,UVRight);
+            
+            //vec_adds Y
+            YTemp = vec_adds(YImage,YRight);
+            
+            hiImage = vec_mergeh(UVTemp,YTemp);
+            loImage = vec_mergel(UVTemp,YTemp);
+            
+            //vec_mergel + vec_mergeh Y and UV
+            inData[0] = vec_packsu(hiImage, loImage);
+        
+            inData++;
+            rightData++;
+        }
+        vec_dss( 0 );
+}  /*end of working altivec function */
+#endif
 }
 
 /////////////////////////////////////////////////////////
