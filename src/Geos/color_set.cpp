@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 #include "string.h"
-CPPEXTERN_NEW_WITH_ONE_ARG(color_set, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW(color_set)
 
 /////////////////////////////////////////////////////////
 //
@@ -28,8 +28,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(color_set, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-color_set :: color_set(t_floatarg size)
-        : GemShape(size)
+color_set :: color_set()
 {
       
     m_Red=1.f;
@@ -122,17 +121,35 @@ void color_set :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void color_set :: obj_setupCallback(t_class *classPtr)
 {     class_addmethod(classPtr, (t_method)&color_set::colorMessCallback,
-    	    gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+    	    gensym("color"), A_GIMME, A_NULL);
       class_addmethod(classPtr, (t_method)&color_set::numberMessCallback,
     	    gensym("number"), A_FLOAT, A_FLOAT, A_NULL);
 }
 
-void color_set :: colorMessCallback(void *data, t_floatarg R, t_floatarg G, t_floatarg B, t_floatarg A)
+void color_set :: colorMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
-    GetMyClass(data)->m_Red=((float)R);
-    GetMyClass(data)->m_Green=((float)G);
-    GetMyClass(data)->m_Blue=((float)B);
-    GetMyClass(data)->m_Alpha=((float)A);
+  float R, G, B, A;
+  A=1;
+  switch (argc){
+  case 1:
+    R = G = B = atom_getfloat(argv);
+    break;
+  case 4:
+    A = atom_getfloat(argv+3);
+  case 3:
+    R = atom_getfloat(argv);
+    G = atom_getfloat(argv+1);
+    B = atom_getfloat(argv+2);
+    break;
+  default:
+    error("color_set: color must be 1, 3 or 4 values!");
+    return;
+  }
+
+  GetMyClass(data)->m_Red=((float)R);
+  GetMyClass(data)->m_Green=((float)G);
+  GetMyClass(data)->m_Blue=((float)B);
+  GetMyClass(data)->m_Alpha=((float)A);
 }
 
 void color_set :: numberMessCallback(void *data,  t_floatarg num, t_floatarg counter)

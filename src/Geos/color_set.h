@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_color_set_H_
 #define INCLUDE_color_set_H_
 
-#include "Base/GemShape.h"
+#include "Base/GemVertex.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -30,15 +30,15 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN color_set : public GemShape
+class GEM_EXTERN color_set : public GemBase
 {
-    CPPEXTERN_HEADER(color_set, GemShape)
+    CPPEXTERN_HEADER(color_set, GemBase)
 
     public:
 
         //////////
         // Constructor
-    	color_set(t_floatarg size);
+    	color_set();
     	
     protected:
     	
@@ -55,7 +55,7 @@ class GEM_EXTERN color_set : public GemShape
     	virtual void 	render(GemState *state);
         virtual void 	postrender(GemState *state);
         
-        static void 	colorMessCallback(void *data, t_floatarg R, t_floatarg G, t_floatarg B, t_floatarg A);
+        static void 	colorMessCallback(void *data, t_symbol*, int, t_atom*);
         static void 	numberMessCallback(void *data, t_floatarg num, t_floatarg counter);
 
 };
