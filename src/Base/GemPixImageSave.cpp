@@ -33,6 +33,7 @@
 #include <OpenGL/glext.h>
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h> 
 #endif // __APPLE__
 
 #include <stdio.h>
@@ -85,7 +86,7 @@ void* MemAlloc(unsigned long memsize)
 
 char* CStringToPString(char *string)
 {
-    char *newString = MemAlloc(strlen(string) + 1);
+    char *newString = (char *)MemAlloc(strlen(string) + 1);
     unsigned long i = 0;
     
     for(i = 0; i < strlen(string); i++)
@@ -94,6 +95,19 @@ char* CStringToPString(char *string)
     newString[0] = i;
     
     return newString;
+}
+
+
+void InvertGLImage( unsigned char *imageData, unsigned char * outData, long imageSize, long rowBytes )
+{
+    long i, j;
+    // This is not an optimized routine!
+
+    // Copy rows into tmp buffer one at a time, reversing their order
+    for (i = 0, j = imageSize - rowBytes; i < imageSize; i += rowBytes, j -= rowBytes) {
+        memcpy( &outData[j], &imageData[i], (size_t) rowBytes );
+    }
+
 }
 
 GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int type)
@@ -105,31 +119,57 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
     GraphicsExportComponent 	geComp 	= NULL;
     Rect			r;
     
-    OSType			osFileType 	= kQTFileTypeJPEG; //kQTFileTypeTIFF fot Tiff kQTFileTypeSGIImage for sgi
-    FSSpec	spec;
-    StringPtr			PfileName;
-    
-  /*  if (filename[0] != '\0') {
-		
+    OSType			osFileType; 	//= kQTFileTypeJPEG; //kQTFileTypeTIFF fot Tiff kQTFileTypeSGIImage for sgi
+    FSSpec			spec;
+    FSRef			ref;
 
-		err = FSPathMaketoFSSpec( (Str255)filename, &spec, NULL);
-		if (err == noErr) {
-			error("GEM: Unable to find file: %#s", spec.name);
-                        error("GEM: Unable to find filename:%s", filename);
-			error("parID : %d", spec.parID); 
-                        error("GEM: File:%s exists!", filename);
-			return NULL;
-		}
-		
-	}*/
-     
-    GetAppFSSpec(&spec); 
-    PfileName = CStringToPString(filename);
+
+    switch (type){
+
+        case 0:
+            osFileType 	=kQTFileTypeTIFF;
+            break;
+        case 1:
+            osFileType 	= kQTFileTypeJPEG;
+            break;
+        default:
+           osFileType 	=kQTFileTypeTIFF;
+            break;
+    }
+    
+    err = ::FSPathMakeRef((UInt8*)filename, &ref,NULL );
+
+    if (err == fnfErr) {
+        // if the file does not yet exist, then let's create the file
+        int fd;
+                fd = open(filename, O_CREAT | O_RDWR, 0600);
+                if (fd < 0)
+                    return 0;
+                        write(fd, " ", 1);
+                        close(fd);
+                                err = FSPathMakeRef((UInt8*)filename, &ref, NULL);
+    }
+    
+    if (err != noErr)
+    {
+        error("ERROR: %d in FSPathMakeRef()", err);
+    }
+
+    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &spec, NULL);
+
+    if (err != noErr)
+    {
+        error("ERROR: %d in FSGetCatalogInfo()", err);
+    }
+
+  //  err = FSMakeFSSpec(spec.vRefNum, 0, filename, &spec); //spits out -37 error but still works?
+    err = FSMakeFSSpec(spec.vRefNum, spec.parID, (UInt8*)filename, &spec);  //this always gives an error -37 ???
+
+    if (err != noErr && err != -37)
+    {
+        error("ERROR: %d in FSMakeFSSpec()", err);
+    }
         
-    err = FSMakeFSSpec(spec.vRefNum, spec.parID, PfileName, &spec);
-    
-   // post("GEM: mem2image height %d width %d bpp %d",image->ysize,image->xsize,image->csize);
-    
     err = OpenADefaultComponent(GraphicsExporterComponentType, osFileType, &geComp);
     if (err != noErr)
     {
@@ -177,12 +217,16 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 	}
         
         // Set the compression quality (needed for JPEG, not necessarily for other formats)
-	cErr = GraphicsExportSetCompressionQuality(geComp, codecLosslessQuality);
-	if (cErr != noErr)
-	{
-	    error("ERROR: %i in GraphicsExportSetCompressionQuality()", cErr);
-	    return 0; // FIXME:
-	}
+        if (osFileType 	== kQTFileTypeJPEG){
+         //   cErr = GraphicsExportSetCompressionQuality(geComp, codecLosslessQuality);
+            cErr = GraphicsExportSetCompressionQuality(geComp,  codecHighQuality);
+
+            if (cErr != noErr)
+            {
+                error("ERROR: %i in GraphicsExportSetCompressionQuality()", cErr);
+                return 0; // FIXME:
+            }
+         }
         
         // Export it
 	cErr = GraphicsExportDoExport(geComp, NULL);
@@ -196,7 +240,6 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
         if (geComp != NULL)
 	    CloseComponent(geComp);
 
-    
     return 1;
 
 }

@@ -117,14 +117,38 @@ void pix_write :: doWrite()
       m_originalImage->type  = GL_UNSIGNED_INT_8_8_8_8_REV;
 
       m_originalImage->csize = 4;
-      m_originalImage->format = GL_BGRA_EXT;
+      m_originalImage->format = GL_BGRA; //or BGRA_EXT?
       #endif
 
       m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
     }
+
+#ifdef __APPLE__
+
+  unsigned char *dummy;
+  int imageSize, rowBytes;
+  long i, j;
+
+  imageSize = m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize;
+  rowBytes = m_originalImage->xsize * m_originalImage->csize;
+  
+  dummy = new unsigned char[imageSize];
+
+  glReadPixels(m_xoff, m_yoff, width, height,
+               m_originalImage->format, m_originalImage->type, dummy);
+
+  //flips the image for QT
+  for (i = 0, j = imageSize - rowBytes; i < imageSize; i += rowBytes, j -= rowBytes) {
+      memcpy( &m_originalImage->data[j], &dummy[i], (size_t) rowBytes );
+  }
+  
+  delete dummy;
+
+#else
   
   glReadPixels(m_xoff, m_yoff, width, height,
-	       m_originalImage->format, m_originalImage->type, m_originalImage->data); 
+	       m_originalImage->format, m_originalImage->type, m_originalImage->data);
+#endif
   mem2image(m_originalImage, m_filename, m_filetype);
 }
 

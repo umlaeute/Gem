@@ -34,4 +34,5 @@ struct imageStruct;
 //
 GEM_EXTERN extern int mem2image(imageStruct *image, const char *filename, const int type);
 
+
 #endif
