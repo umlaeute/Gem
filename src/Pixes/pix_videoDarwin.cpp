@@ -28,10 +28,20 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg,
 #define MAX_RECORDING_TIME	100 * 60	// n * 60 ticks  (n : seconds)
 #define DEFAULT_INTERVAL	5		// 5 milliseconds for calling SGIdle()
 
-pix_videoDarwin :: pix_videoDarwin( t_floatarg w=320, t_floatarg h=240 )
+pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h )
 {
-  m_vidXSize = 320;
-  m_vidYSize = 240;
+  if (w > 0){
+    m_vidXSize = (int)w;
+  }else{
+    m_vidXSize = 320;
+  }
+  if (h > 0){
+    m_vidYSize = (int)h;
+  }else{
+    m_vidYSize = 240;
+  }
+    
+  post("pix_videoDarwin: height %d width %d",m_vidXSize,m_vidYSize);  
   m_pixBlock.image.xsize = m_vidXSize;
   m_pixBlock.image.ysize = m_vidYSize;
   m_pixBlock.image.csize = 4;
@@ -40,7 +50,7 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w=320, t_floatarg h=240 )
   int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
 					* 4 * sizeof(unsigned char);
   m_pixBlock.image.data = new unsigned char[dataSize];
-  
+  m_quality = 1; //high quality for DV. why not?
   InitSeqGrabber();
   m_haveVideo = 0;
 }
@@ -86,7 +96,7 @@ void pix_videoDarwin :: startRendering()
 void pix_videoDarwin :: render(GemState *state)
 {
     OSErr	err;
- 
+
     err = SGIdle(m_sg);
     if (err != noErr){
             post("pix_videoDarwin: SGIdle failed\n");
@@ -121,7 +131,6 @@ void pix_videoDarwin :: InitSeqGrabber()
     OSErr anErr;
     Rect m_srcRect = {0,0, m_vidYSize, m_vidXSize};
     
-    //SetRect (&m_srcRect, 0, 0, m_vidYSize, m_vidXSize); // l,t, r, b
     m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
     if(m_sg==NULL){
         post("pix_videoDarwin: could not open defalut component");
@@ -163,6 +172,27 @@ void pix_videoDarwin :: InitSeqGrabber()
             post("pix_videoDarwin: set SG ChannelUsage");
         }
     m_rowBytes = m_vidXSize*4;
+    
+    switch (m_quality){
+    case 0:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayNormal);
+        post("pix_videoDarwin: set SG NormalQuality");
+        break;
+    case 1:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayHighQuality);
+        post("pix_videoDarwin: set SG HighQuality");
+        break;
+    case 2:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayFast);
+        post("pix_videoDarwin: set SG FastQuality");
+        break;
+    case 3:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
+        post("pix_videoDarwin: set SG PlayAlldata");
+        break;
+    
+    }
+    
     anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                                  k32ARGBPixelFormat,
                                  &m_srcRect, 
@@ -185,8 +215,52 @@ void pix_videoDarwin :: InitSeqGrabber()
     SGStartPreview(m_sg);
 }
 
+void pix_videoDarwin :: resetSeqGrabber()
+{
+OSErr anErr;
+post ("pix_videoDarwin: starting reset");
+
+    post("pix_videoDarwin: quality %d",m_quality);
+    switch (m_quality){
+    case 0:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayNormal);
+        post("pix_videoDarwin: set SG NormalQuality");
+        break;
+    case 1:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayHighQuality);
+        post("pix_videoDarwin: set SG HighQuality");
+        break;
+    case 2:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayFast);
+        post("pix_videoDarwin: set SG FastQuality");
+        break;
+    case 3:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
+        post("pix_videoDarwin: set SG PlayAlldata");
+        break;
+    
+    }
+    
+}
 void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
+    class_addmethod(classPtr, (t_method)&pix_videoDarwin::qualityCallback,
+		  gensym("quality"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
+		  gensym("reset"), A_NULL);
 }
+
+void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
+{
+  GetMyClass(data)->m_quality=((int)X);
+  
+}
+
+void pix_videoDarwin :: resetCallback(void *data)
+{
+GetMyClass(data)->resetSeqGrabber();
+  
+}
+
 
 #endif // MACOSX
