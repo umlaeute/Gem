@@ -40,8 +40,6 @@ pix_videoNEW :: pix_videoNEW(){
 #endif
 #endif
   driverMess(0);
-
-  //  m_videoHandle=new videoDV4L(GL_RGBA);
 }
 
 /////////////////////////////////////////////////////////

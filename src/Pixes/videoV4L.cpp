@@ -53,8 +53,7 @@
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoV4L :: videoV4L(int format) : video(format)
-{
+videoV4L :: videoV4L(int format) : video(format){
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
   m_capturing=false;
