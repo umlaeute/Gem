@@ -1,10 +1,19 @@
 #N canvas 151 485 600 500 10;
 #X text 124 68 GEM object;
-#X msg 170 156 1;
-#X obj 123 298 print out1;
 #X obj 123 219 invert;
-#X msg 123 155 0;
 #X text 139 22 invert;
-#X connect 1 0 3 0;
-#X connect 3 0 2 0;
-#X connect 4 0 3 0;
+#X text 75 333 do logic inversion;
+#X text 73 361 this is the same as [== 0];
+#X obj 315 362 == 0;
+#X obj 315 338 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X obj 315 388 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+1;
+#X obj 123 198 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X obj 123 244 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+1;
+#X connect 1 0 9 0;
+#X connect 5 0 7 0;
+#X connect 6 0 5 0;
+#X connect 8 0 1 0;

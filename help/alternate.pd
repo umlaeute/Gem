@@ -1,4 +1,4 @@
-#N canvas 296 299 600 500 10;
+#N canvas 296 299 430 500 10;
 #X text 124 68 GEM object;
 #X msg 170 156 1;
 #X obj 123 298 print out1;

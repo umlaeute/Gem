@@ -1,11 +1,11 @@
 #N canvas 44 129 647 577 10;
 #X text 124 68 GEM object;
 #X obj 228 190 unpack 0 0 0;
-#X floatatom 228 236 0 0 0;
-#X floatatom 273 265 0 0 0;
-#X floatatom 319 236 0 0 0;
+#X floatatom 228 236 0 0 0 0 - - -;
+#X floatatom 273 265 0 0 0 0 - - -;
+#X floatatom 319 236 0 0 0 0 - - -;
 #X text 138 24 [linear_path];
-#X floatatom 228 90 5 0 0;
+#X floatatom 228 90 5 0 0 0 - - -;
 #X msg 249 114 open <table_name>;
 #X obj 463 153 linear_path 3 array2;
 #X text 60 368 You can set the table to be read with the "open" message
@@ -21,8 +21,8 @@ table stores its values in n-tuples like: "<r1> <g1> <b1> <r2> <g2>
 of a linear table. You can specify the dimension <D> of the table with
 the first creation-argument. (default 1);
 #X obj 228 140 linear_path 3;
-#X floatatom 20 245 0 0 0;
-#X floatatom 20 87 5 0 0;
+#X floatatom 20 245 0 0 0 0 - - -;
+#X floatatom 20 87 5 0 0 0 - - -;
 #X msg 37 121 open <table_name>;
 #X obj 20 149 linear_path;
 #X text 158 552 see also:;
