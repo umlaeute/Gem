@@ -78,6 +78,10 @@ static gemheadLink *s_linkHead_2 = NULL;
 
 static gemctrlLink *s_ctrlHead = NULL;
 
+static GLuint s_dispList1 = 0;
+static GLuint s_dispList2 = 0;
+
+
 
 class gemheadLink
 {
@@ -378,10 +382,26 @@ static bool s_doUpdate;
 
 void GemMan :: render1(GemState currentState){
   currentState.doUpdate=s_doUpdate;
-  renderChain(s_linkHead, &currentState);
+  if(!s_dispList1)s_dispList1=glGenLists(1);
+
+  if (s_doUpdate){
+    glNewList(s_dispList1, GL_COMPILE);
+      renderChain(s_linkHead, &currentState);
+    glEndList();
+  }
+  glCallList(s_dispList1);
+  
 }
 void GemMan :: render2(GemState currentState){
-  renderChain(s_linkHead_2, &currentState);
+  if(!s_dispList2)s_dispList2=glGenLists(1);
+
+  if (s_doUpdate){
+    glNewList(s_dispList2, GL_COMPILE);
+      renderChain(s_linkHead_2, &currentState);
+    glEndList();
+  }
+  glCallList(s_dispList2);
+
   s_doUpdate=false;
 }
 
