@@ -15,8 +15,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_PIX_FILM_H_
 #define INCLUDE_PIX_FILM_H_
+#include "Base/config.h"
 
-#ifdef __NEW__
+#if defined __FILM__NEW && !defined(DO_AUTO_REGISTER_CLASS)
 # define NO_AUTO_REGISTER_CLASS
 #endif
 
@@ -73,7 +74,8 @@ class GEM_EXTERN pix_film : public GemBase
   virtual void closeMess(void){}
   //////////
   // open a movie up
-  virtual void openMess(t_symbol *filename);
+  virtual void openMess(t_symbol *filename, int colorspace=0);
+
   // really open the file ! (OS dependent)
   virtual void realOpen(char *filename) {}
 
@@ -105,7 +107,9 @@ class GEM_EXTERN pix_film : public GemBase
   //////////
   // Change which image to display
   virtual void changeImage(int imgNum, int trackNum);
-	
+  //////////
+  // change the colorspace
+  virtual void csMess(int format);	
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
@@ -142,13 +146,13 @@ class GEM_EXTERN pix_film : public GemBase
 
   int		m_xsize;
   int		m_ysize;
-  int           m_csize;
+  int       m_csize;
 
-  int           m_format;
+  int       m_format;
 
-  bool          m_film; // are we in film- or in movie-mode
+  bool      m_film; // are we in film- or in movie-mode
   int		m_newFilm;
-  int			m_colorspace;
+  int		m_colorspace;
 
   //////////
   // a outlet for information like #frames and "reached end"
@@ -159,11 +163,11 @@ class GEM_EXTERN pix_film : public GemBase
 	
   //////////
   // static member functions
-  static void openMessCallback   (void *data, t_symbol *filename);
+  static void openMessCallback   (void *data, t_symbol *, int, t_atom*);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback       (void *data, t_floatarg state);
-   // static void colorspaceCallback(void *data, t_floatarg state);
-    static void colorspaceCallback(void *data, t_symbol *state);
+  // static void colorspaceCallback(void *data, t_floatarg state);
+  static void colorspaceCallback(void *data, t_symbol *state);
 };
 
 #endif	// for header file

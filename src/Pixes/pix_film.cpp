@@ -14,6 +14,12 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+
+#if defined NT && defined __APPLE__ && defined __linux__
+// on this OSs we surely have child-classes for the real function
+# define NO_AUTO_REGISTER_CLASS
+#endif
+
 #include "pix_film.h"
 #include <ctype.h>
 
@@ -30,7 +36,13 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM)
 pix_film :: pix_film(t_symbol *filename) :
   m_haveMovie(0), m_auto(0), 
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
-  m_numTracks(0), m_track(0), m_frame(NULL), m_data(NULL), m_film(true)
+  m_numTracks(0), m_track(0), m_frame(NULL), m_data(NULL), m_film(true),
+  m_newFilm(0),
+#ifdef __APPLE__
+  m_colorspace(GL_BGRA_EXT), m_format(GL_BGRA_EXT)
+#else
+  m_colorspace(GL_RGBA), m_format(GL_RGBA)
+#endif
 {
  // setting the current frame
  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
@@ -40,23 +52,8 @@ pix_film :: pix_film(t_symbol *filename) :
 
  // initialize the pix block data
  m_pixBlock.image=m_imageStruct;
- m_pixBlock.image.data = NULL;
- m_pixBlock.image.xsize = 0;
- m_pixBlock.image.ysize = 0;
- m_newFilm = 0;
-#ifndef __APPLE__
- m_pixBlock.image.csize = 3;
- m_pixBlock.image.format = GL_RGB;
- m_pixBlock.image.type = GL_UNSIGNED_BYTE;
- m_format = GL_RGB;
-#else
- m_pixBlock.image.csize = 4;
- m_pixBlock.image.format = GL_BGRA_EXT;
- //m_pixBlock.image.format = GL_RGBA;
- m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
- m_format = GL_BGRA_EXT;
- //m_format = GL_RGBA;
-#endif
+ m_pixBlock.image.setCsizeByFormat(m_format);
+
  // make sure that there are some characters
  x_filename=gensym("");
 }
@@ -118,10 +115,11 @@ void pix_film :: createBuffer()
 //
 /////////////////////////////////////////////////////////
 
-void pix_film :: openMess(t_symbol *filename)
+void pix_film :: openMess(t_symbol *filename, int format)
 {
   //  if (filename==x_filename)return;
   x_filename=filename;
+  if (format)m_colorspace=format;
 
   char buf[MAXPDSTRING];
   canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
@@ -246,13 +244,27 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 }
 
 /////////////////////////////////////////////////////////
+// changeImage
+//
+/////////////////////////////////////////////////////////
+void pix_film :: csMess(int format){
+	if(format && format != m_colorspace){
+		m_colorspace=format;
+		post("pix_film: colorspace change will take effect the next time you load a film");
+	}
+}
+
+
+
+
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void pix_film :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&pix_film::openMessCallback,
-		  gensym("open"), A_SYMBOL, A_NULL);
+		  gensym("open"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_film::changeImageCallback,
 		  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_film::autoCallback,
@@ -262,9 +274,18 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&pix_film::colorspaceCallback,
 		  gensym("colourspace"), A_SYMBOL, A_NULL);
 }
-void pix_film :: openMessCallback(void *data, t_symbol *filename)
+void pix_film :: openMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
-    GetMyClass(data)->openMess(filename);
+	int format=0;
+	switch(argc){
+	case 2:
+		format=getPixFormat(atom_getsymbol(argv+1)->s_name);
+	case 1:
+	    GetMyClass(data)->openMess(atom_getsymbol(argv), format);
+		break;
+	default:
+		error("pix_film: open <filename> [<format>]");
+	}
 }
 
 void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
@@ -279,15 +300,5 @@ void pix_film :: autoCallback(void *data, t_floatarg state)
 
 void pix_film :: colorspaceCallback(void *data, t_symbol *state)
 {
-  char c=*state->s_name;
-  switch(c){
-  case 'Y':case 'y':
-    post("pix_film: yuv");
-    GetMyClass(data)->m_colorspace = 0;
-    break;
-  case 'R':case 'r': default:
-    post("pix_film: rgba");
-    GetMyClass(data)->m_colorspace = 1;
-    break;
-  }
+  GetMyClass(data)->csMess(getPixFormat(state->s_name));
 }
