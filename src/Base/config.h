@@ -16,4 +16,14 @@
 # include "Base/configNT.h"
 #endif
 
+
+#ifdef __NEW__
+# ifndef __FILM__NEW
+#  define __FILM__NEW
+# endif
+# ifndef __VIDEO__NEW
+#  define __VIDEO__NEW
+# endif
+#endif
+
 #endif /* HAVE_BASE_CONFIG_H_ */
