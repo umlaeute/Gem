@@ -219,8 +219,9 @@ fi
 ggstatic="-Wl,-Bstatic"
 AC_ARG_WITH(static,"  ",LIBS="$ggstatic $LIBS")
 
-LDFLAGS="$LDFLAGS -L$GEMLIBS/glm  -L$GEMLIBS/particle  -L$GEMLIBS/liborb"
-LIBS="$LIBS -lglm -lparticle -lorb"
+LDFLAGS="$LDFLAGS -L$GEMLIBS/glm  -L$GEMLIBS/particle  -L$GEMLIBS/liborb\
+        -L$GEMLIBS/ffmpeg/libav -L$GEMLIBS/ffmpeg/libavcodec"
+LIBS="$LIBS -lglm -lparticle -lorb -lavcodec -lavformat"
 
 
 
@@ -230,7 +231,9 @@ dnl ***********************************************************************
 
 dnl look for pd
 
-INCLUDES="-I..  $INCLUDES -I$GEMLIBS/glm -I$GEMLIBS/liborb -I$GEMLIBS/particle"
+INCLUDES="-I..  $INCLUDES -I$GEMLIBS/glm -I$GEMLIBS/liborb \
+          -I$GEMLIBS/ffmpeg/libav -I$GEMLIBS/ffmpeg/libavcodec \
+	  -I$GEMLIBS/particle"
 
 pdsearchlibs="/usr/local/include /usr/local/src /usr/include $HOME"
 AC_PATH_INCLUDE(m_pd.h,$pdsearchlibs)

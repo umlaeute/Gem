@@ -14,7 +14,7 @@ AFLAGS = -mieee  -mcpu=ev56
 endif
 
 
-CXXFLAGS = -g  @CXXFLAGS@ $(AFLAGS) -I../ @INCLUDES@
+CXXFLAGS = -g  -Wall @CXXFLAGS@ $(AFLAGS) -I../ @INCLUDES@
 
 all: $(OBJECTS)
 

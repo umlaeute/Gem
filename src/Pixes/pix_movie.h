@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifdef _WINDOWS
 #include "Pixes/pix_filmNT.h"
 #elif __linux__
-#include "Pixes/pix_filmLinux.h"
+#include "Pixes/pix_filmFFMPEG.h"
 #else
 #error Define pix_film for this OS
 #endif
@@ -41,9 +41,9 @@ class GEM_EXTERN pix_movie : public pix_filmNT
 {
   CPPEXTERN_HEADER(pix_movie, pix_filmNT)
 #elif __linux__
-class GEM_EXTERN pix_movie : public pix_filmLinux
+class GEM_EXTERN pix_movie : public pix_filmFFMPEG
 {
-  CPPEXTERN_HEADER(pix_movie, pix_filmLinux)
+  CPPEXTERN_HEADER(pix_movie, pix_filmFFMPEG)
 #endif
    
     public:

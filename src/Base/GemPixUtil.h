@@ -47,7 +47,7 @@ CLASS
 struct GEM_EXTERN imageStruct
 {
 
-  imageStruct() : xsize (0), ysize(0),csize(0),data(0),pdata(0),notowned(0) {}
+  imageStruct() : xsize (0), ysize(0),csize(0),notowned(0),data(0),pdata(0) {}
 
   ~imageStruct() { clear(); }
     //////////

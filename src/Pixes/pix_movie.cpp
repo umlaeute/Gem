@@ -39,7 +39,7 @@ pix_movie :: pix_movie(t_symbol *filename) :
 #ifdef _WINDOWS
   pix_filmNT(filename)
 #elif __linux__
-  pix_filmLinux(filename)
+  pix_filmFFMPEG(filename)
 #else
 #error define pix_film for your OS
 #endif

@@ -159,7 +159,7 @@ extern "C" {
   void imageVert_setup();
 
   void pix_filmNT_setup();
-  void pix_filmLinux_setup();
+  void pix_filmFFMPEG_setup();
   void pix_movie_setup();
 
   void pix_indycam_setup();
@@ -345,7 +345,7 @@ extern "C" {
 #endif
 #ifdef __linux__
     pix_videoLinux_setup();
-    pix_filmLinux_setup();
+    pix_filmFFMPEG_setup();
 
 #endif
 
