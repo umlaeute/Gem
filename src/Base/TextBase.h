@@ -16,21 +16,7 @@
 #define INCLUDE_TEXTBASE_H_
 
 #include "Base/GemBase.h"
-#ifdef __linux__
 #include "Base/config.h"
-#endif /* __linux__ */
-
-#ifdef _WINDOWS
-# define GLTT
-#elif defined __APPLE__
-# define FTGL
-#elif defined __linux__
-# ifdef HAVE_LIBFTGL
-#  define FTGL
-# elif defined HAVE_LIBGLTT
-#  define GLTT
-# endif
-#endif
 
 #ifdef FTGL
 #define FONT_SCALE 0.2/3.0

@@ -26,4 +26,10 @@
 # endif
 #endif
 
+#ifdef HAVE_LIBFTGL
+#  define FTGL
+#elif defined HAVE_LIBGLTT
+#  define GLTT
+#endif
+
 #endif /* HAVE_BASE_CONFIG_H_ */
