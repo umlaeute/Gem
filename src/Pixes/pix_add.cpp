@@ -165,7 +165,7 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
  int h,w,width;
    width = image.xsize/8;
    //format is U Y V Y
-   post("pix_add : altivec test");
+//   post("pix_add : altivec test");
     union
     {
         //unsigned int	i;
@@ -183,10 +183,10 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
     }charBuffer;
     
     //vector unsigned char c;
-    vector signed short d, hiImage, loImage, hiRight,loRight, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
-    vector unsigned char zero = vec_splat_u8(0);
-    vector unsigned char c,one;
-    vector signed short zshort = vec_splat_s16(0);
+    register vector signed short d, hiImage, loImage, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
+   // vector unsigned char zero = vec_splat_u8(0);
+    register vector unsigned char c,one;
+  //  vector signed short zshort = vec_splat_s16(0);
     vector unsigned char *inData = (vector unsigned char*) image.data;
     vector unsigned char *rightData = (vector unsigned char*) right.data;
 
@@ -222,12 +222,14 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( rightData, prefetchSize, 1 );
         
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
         
 	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( rightData, prefetchSize, 1 );
             
             //interleaved U Y V Y chars
             
@@ -259,6 +261,7 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
             rightData++;
         }
         vec_dss( 0 );
+        vec_dss( 1 );
 }  /*end of working altivec function */
 #endif
 }
