@@ -61,11 +61,12 @@ void pix_normalize :: processRGBAImage(imageStruct &image)
   }
 
   t_float scale=(max-min)?255./(max-min):0;
+  int iscale=(int)(scale*256);
  
   n = datasize*image.csize;
   pixels=image.data;
   while(n--){
-    *pixels = (unsigned char)((*pixels-min)*scale);
+    *pixels = (unsigned char)((*pixels-min)*iscale>>8);
     pixels++;
   }
 }
@@ -86,11 +87,12 @@ void pix_normalize :: processGrayImage(imageStruct &image)
     memset(pixels, 0, datasize*sizeof(unsigned char));
   } else {
     t_float scale=(max-min)?255./(max-min):0;
+    int iscale=(int)(scale*256);
     //    post("max=%d min=%d\t%f", max, min, scale);
     while(n--){
       int val=*pixels;
       //      if (n<2)post("n=%d\t%d %f %d", n, val, ((val-min)*scale), (unsigned char)((val-min)*scale));
-      *pixels++= (unsigned char)((val-min)*scale);
+      *pixels++= (unsigned char)((val-min)*iscale>>8);
     }
   }
 }
@@ -112,12 +114,14 @@ void pix_normalize :: processYUVImage(imageStruct &image)
   }
 
   t_float scale=(max-min)?255./(max-min):0;
+  int iscale=(int)(scale*256);
+
  
   n = datasize/2;
   pixels=image.data;
   while(n--){
-    pixels[chY0] = (unsigned char)((pixels[chY0]-min)*scale);
-    pixels[chY1] = (unsigned char)((pixels[chY1]-min)*scale);
+    pixels[chY0] = (unsigned char)((pixels[chY0]-min)*iscale>>8);
+    pixels[chY1] = (unsigned char)((pixels[chY1]-min)*iscale>>8);
     pixels+=4;
   }
 }
