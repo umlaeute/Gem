@@ -28,7 +28,9 @@ LOG
 #include <QuickTime/QuickTime.h>
 #else
 #include <GL/gl.h>
+#ifndef NT
 #include "config.h"
+#endif // NT
 #endif // MACOSX
 
 // packed pixel defines for textures

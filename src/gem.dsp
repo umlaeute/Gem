@@ -96,10 +96,6 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Base\config.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Base\CPPExtern.cpp
 # End Source File
 # Begin Source File

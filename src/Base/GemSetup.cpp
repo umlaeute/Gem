@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////
 
 /* -------------------------- setup function ------------------------------ */
-#ifndef MACOSX
+#if !defined(MACOSX) && !defined(NT)
 #include "../Base/config.h"
 #endif
 
