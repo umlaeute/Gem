@@ -48,10 +48,9 @@ void pix_mean_color::processGrayImage(imageStruct &image)
 		base++;
 	}
 	
-	t_atom out[1];
-	
+		
 	SETFLOAT(out, (float)sum / (float)datasize );
-	outlet_list(m_list, 0, 1, out);
+	outlet_float(m_list, (float)sum / (float)datasize);
 }
 
 void pix_mean_color::processRGBImage(imageStruct &image)
