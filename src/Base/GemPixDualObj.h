@@ -135,21 +135,21 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
 	 * the functions defined are like : 
 	 **  processRGBA_Altivec(left, right);
 	 */
-#define PROCESS_DUALIMAGE_SIMD(CS1, SIMD1)				\
-  virtual void process##CS1 ##_##SIMD1 (imageStruct &left, imageStruct &right){ \
-  process##CS1 ##_##CS1 (left, right);}
+#define PROCESS_DUALIMAGE_SIMD(CS1, CS2,_SIMD_EXT)			\
+	virtual void process##CS1 ##_##_SIMD_EXT (imageStruct &left, imageStruct &right){ \
+	  process##CS1 ##_##CS2 (left, right);}
 
-	  PROCESS_DUALIMAGE_SIMD(RGBA, MMX);
-	  PROCESS_DUALIMAGE_SIMD(RGBA, SSE2);
-	  PROCESS_DUALIMAGE_SIMD(RGBA, Altivec);
+	PROCESS_DUALIMAGE_SIMD(RGBA, RGBA, MMX);
+	PROCESS_DUALIMAGE_SIMD(RGBA, MMX , SSE2);
+	PROCESS_DUALIMAGE_SIMD(RGBA, RGBA, Altivec);
 
-	  PROCESS_DUALIMAGE_SIMD(YUV , MMX);
-	  PROCESS_DUALIMAGE_SIMD(YUV , SSE2);
-	  PROCESS_DUALIMAGE_SIMD(YUV , Altivec);
+	PROCESS_DUALIMAGE_SIMD(YUV , YUV , MMX);
+	PROCESS_DUALIMAGE_SIMD(YUV , MMX , SSE2);
+	PROCESS_DUALIMAGE_SIMD(YUV , YUV , Altivec);
 
-	  PROCESS_DUALIMAGE_SIMD(Gray, MMX);
-	  PROCESS_DUALIMAGE_SIMD(Gray, SSE2);
-	  PROCESS_DUALIMAGE_SIMD(Gray, Altivec);
+	PROCESS_DUALIMAGE_SIMD(Gray, Gray, MMX);
+	PROCESS_DUALIMAGE_SIMD(Gray, MMX , SSE2);
+	PROCESS_DUALIMAGE_SIMD(Gray, Gray, Altivec);
 #undef PROCESS_DUALIMAGE_SIMD
 
 #endif                
