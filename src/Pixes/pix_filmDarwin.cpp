@@ -133,38 +133,11 @@ void pix_filmDarwin :: realOpen(char *filename)
                                             
 	OSType		whichMediaType = VisualMediaCharacteristic;
 	short		flags = nextTimeMediaSample + nextTimeEdgeOK;
-	//TimeValue	duration;
-	//TimeValue	theTime = 0;
-        
-        //m_movieTrack = GetMovieIndTrack( m_movie, 1);
-        m_movieMedia = GetTrackMedia( m_movieTrack );
-        mediaDur = (long)GetMediaDuration(m_movieMedia);
-        mediaScale = (long)GetMediaTimeScale(m_movieMedia);
-        post("Media duration = %d timescale = %d", mediaDur, mediaScale);
-        m_timeScale = mediaScale/movieScale;
         
         GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
              fixed1, NULL, &duration);
         m_numFrames = movieDur/duration;
-/*	
-	m_numFrames = -1;
-	while (theTime >= 0) {
-		m_numFrames++;
-		::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                            1,
-                                            &whichMediaType,
-                                            theTime,
-                                            0,
-                                            &theTime,
-                                            &duration);
-		// after the first interesting time, don't include the time we
-		//  are currently at.
-		//flags = nextTimeMediaSample;
-                flags = 0;
-                flags = nextTimeStep;
-	}
-*/
+
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
         OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
@@ -263,19 +236,6 @@ if (m_auto) {
                                             
         }else{
             m_movieTime = m_reqFrame * duration;
-            //SampleNumToMediaTime( m_movieMedia, m_reqFrame, &mFrame, NULL );
-            //m_movieTime = mFrame/m_timeScale;
-/*        for (int i=0; i<num; i++) {
-    // skip to the next interesting time and get the duration for that frame
-        ::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                                1,
-                                &whichMediaType,
-                                    m_movieTime,
-                                                0,
-                                    &m_movieTime,
-                                           &duration);
-        }*/
         }
 
     // set the time for the frame and give time to the movie toolbox	
@@ -287,19 +247,19 @@ if (m_auto) {
 
 void pix_filmDarwin :: LoadRam()
 {
-      TimeValue	length;
-      OSErr err;
-if (m_haveMovie){      
-m_movieTime = 0;
- length = GetMovieDuration(m_movie);
- err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
- if (err)
- {
- post("pix_film: LoadMovieIntoRam failed miserably");
- }
- }else{
- post("pix_film: no movie to load into RAM!");
- }
+    TimeValue	length;
+    OSErr err;
+    if (m_haveMovie){      
+        m_movieTime = 0;
+        length = GetMovieDuration(m_movie);
+        err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
+        if (err)
+        {
+            post("pix_film: LoadMovieIntoRam failed miserably");
+        }
+    }else{
+        post("pix_film: no movie to load into RAM!");
+    }
 }
 
 /////////////////////////////////////////////////////////
