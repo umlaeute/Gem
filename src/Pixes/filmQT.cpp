@@ -60,11 +60,11 @@ filmQT :: filmQT(int format) : film(format)
   }	
 #endif // WINDOWS
 
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+  m_image.image.setCsizeByFormat(GL_RGBA);
 #ifdef __APPLE__
-  m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+  m_image.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
 #else
-  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
+  m_image.image.type = GL_UNSIGNED_BYTE;
 #endif // APPLE
 
   m_bInit = true;
@@ -95,7 +95,6 @@ void filmQT :: close(void)
   ::DisposeMovie(m_movie);
   ::DisposeGWorld(m_srcGWorld);
   m_srcGWorld = NULL;
-  m_haveMovie = GEM_MOVIE_NONE;
 }
 
 bool filmQT :: open(char*filename, int format) {
@@ -121,7 +120,6 @@ bool filmQT :: open(char*filename, int format) {
       error("GEM: pix_film: Unable to find file: %s", filename);
       return false;
     }
-    m_haveMovie = GEM_MOVIE_MOV;
   }
     
   short	refnum = 0;
@@ -168,17 +166,15 @@ bool filmQT :: open(char*filename, int format) {
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
   post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
   post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
-  post("movie size x:%d y:%d", m_xsize, m_ysize);
+  post("movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
 
 #ifdef __APPLE__
-  m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+  m_image.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
 #else
-  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
+  m_image.image.type = GL_UNSIGNED_BYTE;
 #endif
 
-  createBuffer();
-  prepareTexture();
-  m_rowBytes = m_xsize * 4;
+  m_rowBytes = m_image.image.xsize * 4;
   SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
   err = QTNewGWorldFromPtr(	&m_srcGWorld, 
 #ifdef __APPLE__
@@ -190,11 +186,10 @@ bool filmQT :: open(char*filename, int format) {
 				NULL, 
 				NULL, 
 				0, 
-				m_pixBlock.image.data, 
+				m_image.image.data, 
 				m_rowBytes);
   if (err) {
     error("GEM: filmQT: Couldn't make QTNewGWorldFromPtr %d", err);
-    m_haveMovie = 0;
     return false;
   }
   m_movieTime = 0;
@@ -234,7 +229,7 @@ pixBlock* filmQT :: getFrame()
     num = m_reqFrame - m_curFrame;
   } else {
     num = m_reqFrame;
-    if (!m_auto) m_movieTime = 0;
+//    if (!m_auto) m_movieTime = 0;
   }
     
   //check for last frame to loop the clip
@@ -273,6 +268,21 @@ pixBlock* filmQT :: getFrame()
   m_image.image.reallocate();
   m_image.image.fromBGRA((unsigned char *)m_baseAddr);
   m_image.image.upsidedown=true;
+
+  return &m_image;
+}
+
+
+int filmQT :: changeImage(int imgNum, int trackNum){
+  m_readNext = true;
+  if (imgNum  ==-1)  imgNum=m_curFrame;
+  if (m_numFrames>1 && imgNum>=m_numFrames)return FILM_ERROR_FAILURE;
+  if (trackNum==-1||trackNum>m_numTracks)trackNum=m_curTrack;
+    m_curFrame=imgNum;
+    m_curTrack=trackNum;
+    return FILM_ERROR_SUCCESS;
+  m_readNext=false;
+  return FILM_ERROR_FAILURE;
 }
 
 #ifdef LOADRAM
