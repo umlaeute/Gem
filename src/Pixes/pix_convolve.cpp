@@ -28,7 +28,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_convolve, t_floatarg, A_DEFFLOAT, t_floatarg, A_
 //
 /////////////////////////////////////////////////////////
 pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol)
-  : m_matrix(NULL), m_imatrix(NULL)
+  : m_imatrix(NULL)
 {
   int row = (int)fRow;
   int col = (int)fCol;
@@ -47,17 +47,13 @@ pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol)
     
     m_rows = row;
     m_cols = col;
-    m_range = 1.0;
     m_irange = 255;
-    m_matrix = new float[m_rows * m_cols];
     m_imatrix = new signed short[m_rows * m_cols];
 
     // zero out the matrix
     int i;
-    for (i = 0; i < m_cols * m_rows; i++) m_matrix[i] = 0.0;
     for (i = 0; i < m_cols * m_rows; i++) m_imatrix[i] = 0;
     // insert a one for the default center value (identity matrix)
-    m_matrix[ ((m_cols / 2 + 1) * m_rows) + (m_rows / 2 + 1) ] = 1.0;
     m_imatrix[ ((m_cols / 2 + 1) * m_rows) + (m_rows / 2 + 1) ] = 255;
     
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
@@ -70,8 +66,6 @@ pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol)
 /////////////////////////////////////////////////////////
 pix_convolve :: ~pix_convolve()
 {
-  post("convolution...%x %x", m_matrix, m_imatrix);
-    if (m_matrix)delete [] m_matrix;
     if (m_imatrix)delete [] m_imatrix;
     post("done...");
   
@@ -82,9 +76,7 @@ pix_convolve :: ~pix_convolve()
 //
 /////////////////////////////////////////////////////////
 
-#ifndef MMX
-#else
-void pix_convolve :: calculate3x3(imageStruct &image,imageStruct &tempImg)
+void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
 {
   int i;
   int j;
@@ -92,6 +84,7 @@ void pix_convolve :: calculate3x3(imageStruct &image,imageStruct &tempImg)
   int xsize =  tempImg.xsize;
   int ysize =  tempImg.ysize;
   int size = xsize*ysize - xsize-1;
+  int csize = tempImg.csize;
 
   int* src = (int*) tempImg.data;
   int* dest = (int*)image.data;
@@ -132,17 +125,15 @@ void pix_convolve :: calculate3x3(imageStruct &image,imageStruct &tempImg)
       res += m_imatrix[8]*(int)((unsigned char*)val9)[j];
       res*=m_irange;
       res>>=16;
-      ((unsigned char*)dest)[i*4+j] = CLAMP(res);
+      ((unsigned char*)dest)[i*csize+j] = CLAMP(res);
     }
 
   }
 
   //  MMXDONE;
 }
-#endif
 
 
-#define MMULT(a,b) (a*b>>8)
 void pix_convolve :: processImage(imageStruct &image)
 {
     image.copy2Image(&tempImg);
@@ -152,7 +143,13 @@ void pix_convolve :: processImage(imageStruct &image)
     int maxY = tempImg.ysize - initY;
     int xTimesc = tempImg.xsize * tempImg.csize;
     int initOffset = initY * xTimesc + initX * tempImg.csize;
-#ifndef MMX
+
+
+    if (m_rows == 3 && m_cols == 3 && tempImg.csize == 4) {
+      calculateRGBA3x3(image,tempImg);
+      return;
+    }
+
     for (int y = initY; y < maxY; y++)
     {
         int realY = y * xTimesc;
@@ -160,75 +157,35 @@ void pix_convolve :: processImage(imageStruct &image)
 
     	for (int x = initX; x < maxX; x++)
     	{
-    	    int realPos = x * tempImg.csize + realY;
-            int offsetXY = x * tempImg.csize + offsetY;
+	    int csize = tempImg.csize;
+    	    int realPos = x * csize + realY;
+            int offsetXY = x * csize + offsetY;
 
     	    // skip the alpha value
-            #ifndef MACOSX
-    	    for (int c = 0; c < 3; c++)
-            #else
-              for (int c = 1; c < 4; c++)
-            #endif
+
+	    for (int c = 1; c < csize; c++)
     	    {
     		    int new_val = 0;
-                int offsetXYC = offsetXY + c;
+		    int offsetXYC = offsetXY + c;
     		    for (int matY = 0; matY < m_cols; matY++)
     		    {
     		        int offsetXYCMat = matY * xTimesc + offsetXYC;
     		        int realMatY = matY * m_rows;
     	    	    for (int matX = 0; matX < m_rows; matX++)
     	    	    {
-                        new_val += (tempImg.data[offsetXYCMat + matX * tempImg.csize] *
+                        new_val += (tempImg.data[offsetXYCMat + matX * csize] *
                                         m_imatrix[realMatY + matX])>>8;
     	    	    }
     		    }
-    		    //image.data[realPos + c] = CLAMP(new_val/m_range);
-                    image.data[realPos + c] = CLAMP(new_val);  //removes insult from injury
+                    image.data[realPos + c] = CLAMP(new_val);  
+		    //removes insult from injury ??
+		    // we do not use the m_irange anymore ...  remove it ??
 
     	    }
     	}
     }
-    //delete [] tempImg.data;
-#else
-    if (m_rows == 3 && m_cols == 3) {
-      calculate3x3(image,tempImg);
-    }
-    else {
-      for (int y = initY; y < maxY; y++)
-	{
-	  int realY = y * xTimesc;
-	  int offsetY = realY - initOffset;
-	  
-	  for (int x = initX; x < maxX; x++)
-	    {
-	      int realPos = x * tempImg.csize + realY;
-	      int offsetXY = x * tempImg.csize + offsetY;
-	      
-	      // skip the alpha value
-	      for (int c = 0; c < 3; c++)
-              
-		{
-		  int new_val = 0;
-		  int offsetXYC = offsetXY + c;
-		  for (int matY = 0; matY < m_cols; matY++)
-		    {
-		      int offsetXYCMat = matY * xTimesc + offsetXYC;
-		      int realMatY = matY * m_rows;
-		      for (int matX = 0; matX < m_rows; matX++)
-			{
-			  new_val += MMULT(tempImg.data[offsetXYCMat + matX * tempImg.csize],
-					   m_imatrix[realMatY + matX]);
-                                
-			}
-		    }
-		  image.data[realPos + c] = CLAMP(new_val/m_range);
-                 
-		}
-	    }
-	}
-    }
-#endif
 }
+
 
 void pix_convolve :: processYUVImage(imageStruct &image)
 {
@@ -264,13 +221,10 @@ void pix_convolve :: processYUVImage(imageStruct &image)
     		        int realMatY = matY * m_rows;
     	    	    for (int matX = 0; matX < m_rows; matX++)
     	    	    {
-                      //new_val += (int)(tempImg.data[offsetXYCMat + matX * tempImg.csize] *
-                      //                  m_matrix[realMatY + matX]);
                       new_val += (tempImg.data[offsetXYCMat + matX * tempImg.csize] *
                                         m_imatrix[realMatY + matX])>>8;
     	    	    }
     		    }
-    		   // image.data[realPos + c] = CLAMP(new_val/m_range);
                    image.data[realPos + c] = CLAMP(new_val);
                    // image.data[realPos + c-1] = 128;  //remove the U+V
     	    }
@@ -298,13 +252,10 @@ void pix_convolve :: processYUVImage(imageStruct &image)
     		        int realMatY = matY * m_rows;
     	    	    for (int matX = 0; matX < m_rows; matX++)
     	    	    {
-                      //new_val += (int)(tempImg.data[offsetXYCMat + matX * tempImg.csize] *
-                      //                  m_matrix[realMatY + matX]);
                       new_val += (tempImg.data[offsetXYCMat + matX * tempImg.csize] *
                                         m_imatrix[realMatY + matX])>>8;
     	    	    }
     		    }
-    		   // image.data[realPos + c] = CLAMP(new_val/m_range);
                    image.data[realPos + c] = CLAMP(new_val);
                     image.data[realPos + c-1] = 128;  //remove the U+V
     	    }
@@ -319,7 +270,6 @@ void pix_convolve :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_convolve :: rangeMess(float range)
 {
-    m_range = range;
     m_irange = (int)(range*255.f);
     setPixModified();
 }
@@ -337,7 +287,6 @@ void pix_convolve :: matrixMess(int argc, t_atom *argv)
     }
 
     int i;
-    for (i = 0; i < argc; i++) m_matrix[i] = atom_getfloat(&argv[i]);
     for (i = 0; i < argc; i++) m_imatrix[i] = (int)(atom_getfloat(&argv[i])*255.);
 
 

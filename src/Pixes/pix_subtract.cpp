@@ -43,7 +43,7 @@ pix_subtract :: ~pix_subtract()
 /////////////////////////////////////////////////////////
 void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-#ifndef MMX
+#if 0
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
@@ -68,7 +68,7 @@ void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
       SUB8(leftPix,rightPix);
       leftPix+=8;rightPix+=8;
     }
-    MMXDONE;
+
 #endif
 }
 

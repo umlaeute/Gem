@@ -43,7 +43,7 @@ pix_add :: ~pix_add()
 /////////////////////////////////////////////////////////
 void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-#ifndef MMX
+#if 0
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
@@ -65,7 +65,6 @@ void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   register unsigned char *rightPix = right.data;
 
   // Now the Alpha channel is added too, if this is good ?
-  //MMXSTART;
   
   while (datasize--) {
     ADD8(leftPix,rightPix);
@@ -77,7 +76,7 @@ void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
     ADD8(leftPix,rightPix);
     leftPix+=8;rightPix+=8;
   }
-  MMXDONE;
+
 #endif
 }
 
@@ -87,7 +86,7 @@ void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_add :: processGray_Gray(imageStruct &image, imageStruct &right)
 {
-#ifndef MMX
+#if 0
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
@@ -99,7 +98,6 @@ void pix_add :: processGray_Gray(imageStruct &image, imageStruct &right)
     }
 #else
     int datasize = (image.xsize * image.ysize)>>2;
-    MMXSTART;
 
     while (datasize--) {
       register unsigned char *leftPix = image.data;
@@ -107,7 +105,7 @@ void pix_add :: processGray_Gray(imageStruct &image, imageStruct &right)
       ADD8(leftPix,rightPix);
       leftPix+=8;rightPix+=8;
     }
-    MMXDONE;
+
 #endif
 }
 
