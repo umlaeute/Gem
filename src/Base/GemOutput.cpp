@@ -62,14 +62,6 @@ GemOutput :: GemOutput() : m_outputState(0), m_outputContext(false),
 GemOutput :: ~GemOutput()
 {}
 
-
-void GemOutput :: bufferMess(int buf) {
-  if (buf == 1)
-    m_buffer = 1;
-  else
-    m_buffer = 2;
-}
-
 /////////////////////////////////////////////////////////
 // renderMess
 //
