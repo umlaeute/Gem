@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buf, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 pix_buf :: pix_buf(t_floatarg a=0) :
- m_banged(false), m_auto(a!=0.0)
+  m_banged(false), m_auto(a!=0.0), orgPixBlock(NULL)
 {
 }
 
