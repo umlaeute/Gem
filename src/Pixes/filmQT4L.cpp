@@ -128,9 +128,10 @@ bool filmQT4L :: open(char *filename, int format)
 /////////////////////////////////////////////////////////
 pixBlock* filmQT4L :: getFrame(){
   int i=m_image.image.ysize;
-  unsigned char **rows = new unsigned char*[m_image.image.ysize];
   if (m_lastFrame==m_curFrame){m_image.newimage=0; return &m_image;}
+  pixBlock* pimage = 0;
 #ifdef HAVE_LIBQUICKTIME
+  unsigned char **rows = new unsigned char*[m_image.image.ysize];
   m_lastFrame=m_curFrame;
   while(i--)rows[i]=m_image.image.data
 	      +m_image.image.xsize*m_image.image.csize*(m_image.image.ysize-i-1);
@@ -140,15 +141,15 @@ pixBlock* filmQT4L :: getFrame(){
 				m_qtformat,
 				&m_image.image.data, 0)) {
       post("GEM: pix_film:: couldn't decode video !");
-    } else {m_image.newimage=1;return &m_image;}
+    } else {m_image.newimage=1;pimage = &m_image;}
   } else {
     if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
       post("GEM: pix_film:: couldn't decode video !");
-    }else {m_image.newimage=1;return &m_image;}
+    }else {m_image.newimage=1;pimage = &m_image;}
   }
-#endif
   delete[] rows;
-  return 0;
+#endif
+  return pimage;
 }
 
 int filmQT4L :: changeImage(int imgNum, int trackNum){
