@@ -17,11 +17,14 @@ LOG
 #ifndef INCLUDE_GEMGLUTOBJ_H_
 #define INCLUDE_GEMGLUTOBJ_H_
 
-#if HAVE_LIBGLUT
-
+#if HAVE_LIBGLUT || MACOSX
 #include "Base/GemShape.h"
 
+#ifdef MACOSX
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif	//MACOSX
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

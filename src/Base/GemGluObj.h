@@ -15,10 +15,14 @@ LOG
 #ifndef INCLUDE_GEMGLUOBJ_H_
 #define INCLUDE_GEMGLUOBJ_H_
 
+#ifdef MACOSX
+#include <OpenGL/glu.h>
+#else
+#include <GL/glu.h>
+#endif MACOSX
+
 #include <string.h>
 #include "Base/GemShape.h"
-
-#include <GL/glu.h>
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

@@ -18,7 +18,11 @@ LOG
 #define INCLUDE_GEMGLUTIL_H_
 
 #include "Base/GemExportDef.h"
+#ifndef MACOSX
 #include <GL/gl.h>
+#else
+#include <OpenGL/gl.h>
+#endif
 
 GEM_EXTERN extern int           getGLdefine(char *name);
 

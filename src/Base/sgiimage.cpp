@@ -1,6 +1,9 @@
 #include <stdlib.h>
+#ifdef MACOSX
+#include "sgiimage.h"
+#else
 #include "Base/sgiimage.h"
-
+#endif MACOSX
 /*
  *    	fastimg -
  *		Faster reading and writing of image files.
@@ -24,11 +27,11 @@
 
 #ifndef WIN32
 #include <unistd.h>
-#ifdef linux
-#include <string.h>
-#else
+#ifdef WIN32
 #include <bstring.h>
-#endif	// for linux
+#else
+#include <string.h>
+#endif	// for !linux or !MACOSX
 #endif	// for !win32
 #include <stdio.h>
 

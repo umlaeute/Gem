@@ -20,7 +20,11 @@ LOG
 #include <windows.h>
 #endif
 
+#ifdef MACOSX
+#import <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif MACOSX
 
 #ifndef INCLUDE_CPPEXTERN_H_
 #include "Base/CPPExtern.h"
