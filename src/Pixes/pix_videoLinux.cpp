@@ -94,7 +94,8 @@ void pix_videoLinux :: render(GemState *state)
     unsigned char *pixp;
     
     if (!m_haveVideo)return;
-    
+
+    post("syncing %X %d %X", tvfd, VIDIOCSYNC, &vmmap[frame].frame);
     if (ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
     {
 	perror("VIDIOCSYNC");
