@@ -20,6 +20,7 @@
 #endif
 
 #include "Base/GemOutput.h"
+#include "Base/GemWinCreate.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -77,13 +78,32 @@ class GEM_EXTERN gemwindow : public CPPExtern
   virtual void	topmostMess   (bool on);
 
 
-  char* m_title;
-  int m_fullscreen;
+  char*        m_title;
+  int          m_fullscreen;
+  bool         m_border, m_cursor;
   unsigned int m_width, m_height;
-  int m_xoffset, m_yoffset;
+  int          m_xoffset, m_yoffset;
+  int          m_fsaa;
+  int          m_topmost;
+
+  // what is necessary ???
+  int m_windowNumber, m_buffer;
+  int m_w, m_h;
 
  private:
-    
+
+  WindowInfo gfxInfo;
+
+
+  int m_windowContext;
+  bool m_windowState;
+
+  void createContext    (char* disp);
+  int  createWindow     (char* disp);
+  int  createConstWindow(char* disp);
+  void windowInit       ();
+
+
   //////////
   // Static member functions
   static void 	createMessCallback(void *data, t_symbol* s);
