@@ -56,7 +56,7 @@ void GemBase :: gem_startstopMess(int state)
   if (state && !gem_amRendering)startRendering();
   else if (!state && gem_amRendering)stopRendering();
 
-  gem_amRendering=(bool)state;
+  gem_amRendering=(state!=0);
   // continue sending out the cache message
   t_atom ap[1];
   SETFLOAT(ap, state);

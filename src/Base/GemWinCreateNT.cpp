@@ -412,7 +412,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
   int x = hints.x_offset;
   int y = hints.y_offset;
 
-  bool fullscreen=hints.fullscreen;
+  bool fullscreen=(hints.fullscreen!=0);
   if (fullscreen){
     DEVMODE dmScreenSettings;								// Device Mode
     
