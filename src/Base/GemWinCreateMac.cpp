@@ -1375,9 +1375,14 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
     OSStatus result = eventNotHandledErr;
     UInt32 evtClass = GetEventClass (event);
     UInt32 kind = GetEventKind (event);
-    WindowRef	winRef;
-    UInt32	keyCode=0;
-    char	macKeyCode[2];
+    WindowRef			winRef;
+    UInt32				keyCode=0;
+    char				macKeyCode[2];
+	HIPoint				location;
+	EventMouseButton	button = 0;
+	//MouseWheelAxis	axis = 0;
+	UInt32				modifiers = 0;
+	long				wheelDelta = 0;
 
     if (eventNotHandledErr == result)
     {
@@ -1425,15 +1430,10 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                 }
                 break;
             case kEventClassMouse:
-                HIPoint			location = {0.0f, 0.0f};
-                EventMouseButton	button = 0;
-                //MouseWheelAxis		axis = 0;
-                UInt32		modifiers = 0;
-                long		wheelDelta = 0;
                 switch (kind)
                 {
                     case kEventMouseMoved:
-                        GetEventParameter(event, kEventParamMouseLocation, typeHIPoint, NULL, sizeof(HIPoint), NULL, &location);
+						GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, NULL, sizeof(HIPoint), NULL, &location);
                         triggerMotionEvent( (int)location.x, (int)location.y );
                         result = noErr;
                         break;
