@@ -19,7 +19,9 @@
 # ifdef __APPLE__
 #  include "OpenGL/glext.h"
 # else
+/* TextUtils.h is from QTdev */
 #  include "TextUtils.h"
+#  define OffsetRect MacOffsetRect
 # endif
 #endif
 
@@ -33,7 +35,10 @@
 /////////////////////////////////////////////////////////
 
 filmQT :: filmQT(int format) : film(format)
-			     , m_bInit(false){
+#ifdef HAVE_QUICKTIME
+			     , m_bInit(false), m_srcGWorld(NULL)
+#endif
+{
   static bool first_time=true;
   if (first_time) {
 #ifdef HAVE_QUICKTIME
@@ -42,31 +47,27 @@ filmQT :: filmQT(int format) : film(format)
     first_time = false;
   }
 #ifdef HAVE_QUICKTIME
-#ifdef _WINDOWS
-  OSErr		err = noErr;
-
+# ifdef _WINDOWS
   // Initialize QuickTime Media Layer
-  err = InitializeQTML(0);
-  if (err){
+  OSErr		err = noErr;
+  if ((err = InitializeQTML(0))) {
     error("filmQT: Could not initialize quicktime: error %d\n", err);
     return;
   }
 	
   // Initialize QuickTime
-  EnterMovies();
-  if (err) {
+  if (err = EnterMovies()) {
     error("filmQT: Could not initialize quicktime: error %d\n", err);
     return;
   }	
-#endif // WINDOWS
+# endif // WINDOWS
 
   m_image.image.setCsizeByFormat(GL_RGBA);
-#ifdef __APPLE__
+# ifdef __APPLE__
   m_image.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
-#else
+# else
   m_image.image.type = GL_UNSIGNED_BYTE;
-#endif // APPLE
-
+# endif // APPLE
   m_bInit = true;
 #endif // HAVE_QUICKTIME
 }
@@ -79,13 +80,12 @@ filmQT :: ~filmQT()
 {
     close();
     /* i'd rather have "#ifdef QTML" (jmz) */
-#ifdef HAVE_QUICKTIME
-# ifndef __APPLE__
+	/* but now, i don't know why anymore... (jmz) */
+#if defined HAVE_QUICKTIME && !defined __APPLE__
     // Deinitialize QuickTime Media Layer
     ExitMovies();
     // Deinitialize QuickTime Media Layer
     TerminateQTML();
-# endif // APPLE
 #endif // HAVE_QT
 }
 
@@ -93,7 +93,7 @@ filmQT :: ~filmQT()
 void filmQT :: close(void)
 {
   ::DisposeMovie(m_movie);
-  ::DisposeGWorld(m_srcGWorld);
+  if(m_srcGWorld)::DisposeGWorld(m_srcGWorld);
   m_srcGWorld = NULL;
 }
 
@@ -114,14 +114,13 @@ bool filmQT :: open(char*filename, int format) {
 
   {  
     Str255	pstrFilename;
-    CopyCStringToPascal(filename, pstrFilename);                          // Convert to Pascal string
+    CopyCStringToPascal(filename, pstrFilename);           // Convert to Pascal string
     err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
     if (err) {
       error("GEM: pix_film: Unable to find file: %s", filename);
       return false;
     }
   }
-    
   short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
@@ -129,15 +128,13 @@ bool filmQT :: open(char*filename, int format) {
     if (refnum) ::CloseMovieFile(refnum);
     return false;
   }
-
+  //startpost("new movie might crash... ");
   ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
+  //post("...survived");
   if (refnum) ::CloseMovieFile(refnum);
-
-  m_reqFrame = 0;
   m_curFrame = -1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
   post("GEM: filmQT:  m_numTracks = %d",m_numTracks);
-
   // Get the length of the movie
   long	movieDur, movieScale;
   movieDur = (long)GetMovieDuration(m_movie);
@@ -148,7 +145,8 @@ bool filmQT :: open(char*filename, int format) {
        (long)GetMovieTimeBase(m_movie));
                                             
   OSType	whichMediaType = VisualMediaCharacteristic;
-  short		flags = nextTimeMediaSample + nextTimeEdgeOK;
+  // shouldn't the flags be OR'ed instead of ADDed ? (jmz) 
+  short		flags = nextTimeMediaSample | nextTimeEdgeOK;
   
   GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
 			       (Fixed)1<<16, NULL, &duration);
@@ -156,11 +154,7 @@ bool filmQT :: open(char*filename, int format) {
 
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
-#ifdef __APPLE__
   OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
-#else
-  MacOffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
-#endif
   SetMovieBox(m_movie, &m_srcRect);	
   m_image.image.xsize = m_srcRect.right - m_srcRect.left;
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
@@ -180,7 +174,7 @@ bool filmQT :: open(char*filename, int format) {
 #ifdef __APPLE__
 				k32ARGBPixelFormat, // gives noErr
 #else
-				k32BGRAPixelFormat,
+				k32RGBAPixelFormat,
 #endif
 				&m_srcRect, 
 				NULL, 
@@ -210,7 +204,7 @@ pixBlock* filmQT :: getFrame()
   GDHandle     	savedDevice;
   Rect		m_srcRect;
   PixMapHandle	m_pixMap;
-  Ptr			m_baseAddr;
+  Ptr		m_baseAddr;
     
   ::GetGWorld(&savedPort, &savedDevice);
   ::SetGWorld(m_srcGWorld, NULL);
@@ -218,55 +212,17 @@ pixBlock* filmQT :: getFrame()
     
   m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
   m_baseAddr = ::GetPixBaseAddr(m_pixMap);
- 
-  int num;
-
-  // get the next frame of the source movie
-  short 	flags = nextTimeStep;
-  OSType	whichMediaType = VisualMediaCharacteristic;
-
-  if (m_reqFrame > m_curFrame) {
-    num = m_reqFrame - m_curFrame;
-  } else {
-    num = m_reqFrame;
-//    if (!m_auto) m_movieTime = 0;
-  }
-    
-  //check for last frame to loop the clip
-  if (m_curFrame >= m_numFrames){
-    m_curFrame = 0;
-    m_movieTime = 0;
-  }
-    
-  //check for -1
-  if (m_movieTime < 0) m_movieTime = 0;
-    
-  // if this is the first frame, include the frame we are currently on
-  if (m_curFrame == 0) flags |= nextTimeEdgeOK;
-
-  if (m_auto) {
-    ::GetMovieNextInterestingTime(m_movie,
-				  flags,
-				  1,
-				  &whichMediaType,
-				  m_movieTime,
-				  0,
-				  &m_movieTime,
-				  // NULL);
-				  &duration);
-    flags = 0;
-    flags = nextTimeStep;
-  }else{
-    m_movieTime = m_reqFrame * duration;
-  }
 
   // set the time for the frame and give time to the movie toolbox	
   SetMovieTimeValue(m_movie, m_movieTime); 
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-  
+
+  m_image.newimage = 1;
   m_image.image.setCsizeByFormat(m_wantedFormat);
   m_image.image.reallocate();
-  m_image.image.fromBGRA((unsigned char *)m_baseAddr);
+  m_image.image.fromRGBA((unsigned char *)m_baseAddr);
+  //m_image.image.fromUYVY((unsigned char *)m_baseAddr);
+
   m_image.image.upsidedown=true;
 
   return &m_image;
@@ -274,15 +230,23 @@ pixBlock* filmQT :: getFrame()
 
 
 int filmQT :: changeImage(int imgNum, int trackNum){
-  m_readNext = true;
+  m_readNext = false;
   if (imgNum  ==-1)  imgNum=m_curFrame;
-  if (m_numFrames>1 && imgNum>=m_numFrames)return FILM_ERROR_FAILURE;
+  if (m_numFrames>1 && imgNum>=m_numFrames){
+    m_movieTime=0;
+    return FILM_ERROR_FAILURE;
+  }
   if (trackNum==-1||trackNum>m_numTracks)trackNum=m_curTrack;
-    m_curFrame=imgNum;
-    m_curTrack=trackNum;
-    return FILM_ERROR_SUCCESS;
-  m_readNext=false;
-  return FILM_ERROR_FAILURE;
+  m_readNext=true;
+  m_curFrame = imgNum;
+
+  /* i have moved the "auto"-thing into [pix_film].
+   * this is good because the decoder-class need not care about auto-play anylonger
+   * this is bad, because e might do it more sophisticated in the decoder-class
+   */
+  m_movieTime = (long)(m_curFrame * duration);
+  
+  return FILM_ERROR_SUCCESS;
 }
 
 #ifdef LOADRAM

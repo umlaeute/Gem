@@ -16,16 +16,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "Pixes/film.h"
 
+#if defined __APPLE__ && !defined HAVE_QUICKTIME
+#define HAVE_QUICKTIME
+#endif
 
-#ifdef __APPLE__
-# include <Carbon/carbon.h>
-# include <QuickTime/quicktime.h>
-# ifndef HAVE_QUICKTIME
-#  define HAVE_QUICKTIME
+#ifdef HAVE_QUICKTIME
+# ifdef __APPLE__
+#  include <Carbon/carbon.h>
+#  include <QuickTime/quicktime.h>
+# elif defined _WINDOWS
+#  include <QTML.h>
+#  include <Movies.h>
+# else
+#  undef HAVE_QUICKTIME
 # endif
-#elif defined _WINDOWS && defined (HAVE_QUICKTIME)
-# include <QTML.h>
-# include <Movies.h>
 #endif
 
 /*-----------------------------------------------------------------
@@ -76,13 +80,9 @@ class GEM_EXTERN filmQT : public film
   TimeValue		m_movieTime;
   Track			m_movieTrack;
   TimeValue		m_timeScale;
-  TimeValue		duration;
-#endif // HAVE_QT
-
+  TimeValue		duration; 
   bool			m_bInit;
-
-  t_float       m_auto;
-  int           m_reqFrame;
+#endif // HAVE_QT
 };
 
 #endif	// for header file
