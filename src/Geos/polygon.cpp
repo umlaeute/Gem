@@ -189,6 +189,8 @@ void polygon :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&polygon::linewidthMessCallback,
     	    gensym("linewidth"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&polygon::linewidthMessCallback,
+    	    gensym("width"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&polygon::typeMessCallback,
     	    gensym("draw"), A_SYMBOL, A_NULL);
 
