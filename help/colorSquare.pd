@@ -66,7 +66,7 @@ corner;
 #X text 27 322 Inlet 6: list: 3(RGB) float values for the upperleft
 corner;
 #X text 16 86 The colorSquare object renders a square at the current
-position. The size of the cube can be changed via the second inlet.
+position. The size of the square can be changed via the second inlet.
 The colors of the 4 corners can be specified separately and are drawn
 as gradients.;
 #X connect 3 0 4 0;
