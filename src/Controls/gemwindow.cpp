@@ -282,11 +282,8 @@ int gemwindow :: createConstWindow(char* disp) {
   myHints.y_offset = 0;
   myHints.width    = m_width;
   myHints.height   = m_height;
-#ifdef __APPLE__
   myHints.shared   = m_constInfo.context;
-#else
-  myHints.shared   = NULL;
-#endif
+
   myHints.actuallyDisplay = 0;
   myHints.fullscreen      = 0;
   myHints.display         = disp;
