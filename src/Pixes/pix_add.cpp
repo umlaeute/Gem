@@ -44,7 +44,7 @@ pix_add :: ~pix_add()
 void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
 #ifdef __VEC__
-processRGB_Altivec(image,right);
+processRGBA_Altivec(image,right);
 return;
 #else
 #if 0
@@ -81,7 +81,7 @@ return;
 }
 
 
-void pix_add :: processRGB_Altivec(imageStruct &image, imageStruct &right)
+void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
 {
  #ifdef __VEC__
  int h,w,width;
