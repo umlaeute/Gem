@@ -14,6 +14,11 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#ifdef _WINDOWS
+# pragma warning( disable : 4244 )
+# pragma warning( disable : 4305 )
+# pragma warning( disable : 4091 )
+#endif
 
 #include "m_pd.h"
 #include "GemPixUtil.h"
@@ -63,6 +68,7 @@ GEM_EXTERN void imageStruct::copy2Image(imageStruct *to) {
     to->format 	= format;
     to->type 	= type;
     to->reallocate();
+    to->upsidedown 	= upsidedown;
 
     memcpy(to->data, data, xsize*ysize*csize);
 }
@@ -491,7 +497,7 @@ GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
 GEM_EXTERN void imageStruct::fromYV12(unsigned char*yuvdata) {
   if(!yuvdata)return;
   int pixelnum=xsize*ysize;
-  fromYV12(yuvdata, yuvdata+(pixelnum+pixelnum>>2), yuvdata+(pixelnum));  
+  fromYV12((yuvdata), yuvdata+(pixelnum+(pixelnum>>2)), yuvdata+(pixelnum));
 }
 GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned char*V) {
   // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes

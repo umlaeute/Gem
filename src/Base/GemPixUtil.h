@@ -19,19 +19,23 @@ LOG
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WINDOWS
-#include <windows.h>
+# include <windows.h>
+
+# pragma warning( disable : 4244 )
+# pragma warning( disable : 4305 )
+# pragma warning( disable : 4091 )
 #endif
 
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#include <QuickTime/QuickTime.h>
+# include <OpenGL/gl.h>
+# include <OpenGL/glu.h>
+# include <OpenGL/glext.h>
+# include <QuickTime/QuickTime.h>
 #else
-#include <GL/gl.h>
-#ifndef NT
-#include "config.h"
-#endif // NT
+# include <GL/gl.h>
+# ifndef NT
+#  include "config.h"
+# endif // NT
 #endif // __APPLE__
 
 #include <string.h>
@@ -45,6 +49,16 @@ LOG
 #define GL_UNSIGNED_INT_8_8_8_8_EXT         0x8035
 #define GL_UNSIGNED_INT_10_10_10_2_EXT      0x8036
 #endif
+
+
+// windows has this oh so old openGL installed...
+#ifndef GL_BGRA
+#define GL_BGRA GL_BGRA_EXT
+#endif
+#ifndef GL_BGR
+#define GL_BGR GL_BGR_EXT
+#endif
+
 
 #ifdef GL_YCBCR_422_APPLE
 #define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
