@@ -8,7 +8,7 @@ the policy is quite simple:
 each openGL-command is wrapped into a pd-object with a prefixed "GEM"
 for instance "glVertex3fv" becomes [GEMglVertex3fv]
 
-if an openGL-command eats numbers (byte, int, double, ...) these are fed into the corresponding gem.object as single (floating-point) numbers.
+if an openGL-command eats scalars (byte, int, double, ...) these are fed into the corresponding gem.object as single (floating-point) numbers.
 if  an openGL-command eats pointers to arrays, these are fed into the corresponding gem.object as lists of (floating-point) numbers.
 if the openGL-command eats pixel-data, these are taken from the [pix_*]-objects in the rendering chain. you don't have to worry about format,... but maybe you have to worry about the dimensions (because of sub-images -- i have to check this)
 
@@ -22,7 +22,7 @@ Having had long quarrels with chris, i somehow stated, that Gem has to portable.
 Now i am doing something contradictionary:
 the openGL-wrapper somehow gives deep interaction with the system. it is meant for experts only (i don't know, whether i would use it...), who do know, what they are doing.
 i do think, that it would be best to wrap all available functions for all systems, but they have to be #ifdef'd.
-For instance, windof (VC++6) does not support openGL1.2, only 1.1, so no ARB-mulitexturing and the like.
+For instance, windof (VC++6) does not support openGL1.2, only 1.1, so no ARB-multitexturing and the like.
 The openGL-wrapper would thus produce Gem-patches that are as portable as openGL is: "very much, but!"
 
 
