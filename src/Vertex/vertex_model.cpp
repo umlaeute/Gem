@@ -74,7 +74,7 @@ GLMtriangle*  	triangle;
 float*	tritext;  //texture coords for a triangle
 float*	trivert;  //vertices of one point in a triangle
 float*  trinorm;
- int src2,src3, src4,numvertices;
+ int src4,numvertices;
  unsigned int i;
 m_haveModel = 0;
 #ifdef __APPLE__
@@ -114,25 +114,23 @@ m_haveModel = 0;
   // (fill up the missing elements with zeros
 
   delete [] m_VertexArray;
-  m_VertexArray = new float[numvertices * 4];  // x, y, z, w
+  m_VertexArray = new float  [numvertices * 4];  // x, y, z, w
   delete [] m_ColorArray;
-  m_ColorArray = new float[numvertices * 4];   // r, g, b, a
+  m_ColorArray = new float   [numvertices * 4];  // r, g, b, a
   delete [] m_TexCoordArray;
-  m_TexCoordArray = new float[numvertices * 2];// u, v
+  m_TexCoordArray = new float[numvertices * 4];  // u, v, 0, 0
   delete [] m_NormalArray;
-  m_NormalArray = new float[numvertices * 3];  // x, y, z
+  m_NormalArray = new float  [numvertices * 4];  // x, y, z, 0
 
   delete [] m_tempVA;
   m_tempVA = new float[numvertices * 4];
   delete [] m_tempCA;
   m_tempCA = new float[numvertices * 4];
   delete [] m_tempTA;
-  m_tempTA = new float[numvertices * 2];
+  m_tempTA = new float[numvertices * 4];
   delete [] m_tempNA;
-  m_tempNA = new float[numvertices * 3];
+  m_tempNA = new float[numvertices * 4];
   
-  src2 = 0;
-  src3 = 0;
   src4 = 0;
   while(group){
     for (i = 0; i < group->numtriangles; i++) {
@@ -142,57 +140,74 @@ m_haveModel = 0;
         m_VertexArray[src4+1] = trivert[1];
         m_VertexArray[src4+2] = trivert[2];
         m_VertexArray[src4+3] = 1;
+
         m_ColorArray[src4] = 1;
         m_ColorArray[src4+1] = 1;
         m_ColorArray[src4+2] = 1;
         m_ColorArray[src4+3] = 1;
+
         tritext = &m_model->texcoords[2 * triangle->tindices[0]];
-        m_TexCoordArray[src2] = tritext[0];
-        m_TexCoordArray[src2+1] = tritext[1];
+        m_TexCoordArray[src4] = tritext[0];
+        m_TexCoordArray[src4+1] = tritext[1];
+        m_TexCoordArray[src4+3] = 0;
+        m_TexCoordArray[src4+4] = 0;
+
         trinorm = &m_model->normals[3 * triangle->nindices[0]];
-        m_NormalArray[src3] = trinorm[0];
-        m_NormalArray[src3+1] = trinorm[1];
-        m_NormalArray[src3+2] = trinorm[2];
-        src3 += 3;
-        src2 += 2;
+        m_NormalArray[src4] = trinorm[0];
+        m_NormalArray[src4+1] = trinorm[1];
+        m_NormalArray[src4+2] = trinorm[2];
+        m_NormalArray[src4+3] = 0;
+
         src4 += 4;
+
         trivert = &m_model->vertices[3 * triangle->vindices[1]];
         m_VertexArray[src4] = trivert[0];
         m_VertexArray[src4+1] = trivert[1];
         m_VertexArray[src4+2] = trivert[2];
         m_VertexArray[src4+3] = 1;
+
         m_ColorArray[src4] = 1;
         m_ColorArray[src4+1] = 1;
         m_ColorArray[src4+2] = 1;
         m_ColorArray[src4+3] = 1;
+
         tritext = &m_model->texcoords[2 * triangle->tindices[1]];
-        m_TexCoordArray[src2] = tritext[0];
-        m_TexCoordArray[src2+1] = tritext[1];
+        m_TexCoordArray[src4] = tritext[0];
+        m_TexCoordArray[src4+1] = tritext[1];
+        m_TexCoordArray[src4+3] = 0;
+        m_TexCoordArray[src4+4] = 0;
+
         trinorm = &m_model->normals[3 * triangle->nindices[1]];
-        m_NormalArray[src3] = trinorm[0];
-        m_NormalArray[src3+1] = trinorm[1];
-        m_NormalArray[src3+2] = trinorm[2];
-        src3 += 3;
-        src2 += 2;
+        m_NormalArray[src4] = trinorm[0];
+        m_NormalArray[src4+1] = trinorm[1];
+        m_NormalArray[src4+2] = trinorm[2];
+        m_NormalArray[src4+3] = 0;
+
         src4 += 4;
+
         trivert = &m_model->vertices[3 * triangle->vindices[2]];
         m_VertexArray[src4] = trivert[0];
         m_VertexArray[src4+1] = trivert[1];
         m_VertexArray[src4+2] = trivert[2];
         m_VertexArray[src4+3] = 1;
+
         m_ColorArray[src4] = 1;
         m_ColorArray[src4+1] = 1;
         m_ColorArray[src4+2] = 1;
         m_ColorArray[src4+3] = 1;
+
         tritext = &m_model->texcoords[2 * triangle->tindices[2]];
-        m_TexCoordArray[src2] = tritext[0];
-        m_TexCoordArray[src2+1] = tritext[1];
+        m_TexCoordArray[src4] = tritext[0];
+        m_TexCoordArray[src4+1] = tritext[1];
+        m_TexCoordArray[src4+3] = 0;
+        m_TexCoordArray[src4+4] = 0;
+
         trinorm = &m_model->normals[3 * triangle->nindices[2]];
-        m_NormalArray[src3] = trinorm[0];
-        m_NormalArray[src3+1] = trinorm[1];
-        m_NormalArray[src3+2] = trinorm[2];
-        src3 += 3;
-        src2 += 2;
+        m_NormalArray[src4] = trinorm[0];
+        m_NormalArray[src4+1] = trinorm[1];
+        m_NormalArray[src4+2] = trinorm[2];
+        m_NormalArray[src4+3] = 0;
+
         src4 += 4;
         
         }
@@ -200,10 +215,8 @@ m_haveModel = 0;
    }
   
   src4 = src4/4;
-  src2 = src2/4;
   post("vertex_model: i %d",i);
-  post("vertex_model: src2 %d",src2);
-  post("vertex_model: src4 %d",src4);
+  post("vertex_model: src %d",src4);
 
   m_haveModel = 1;
   setModified();
@@ -222,83 +235,31 @@ void vertex_model :: render(GemState *state)
     //this will get the appropriate maximum texcoord size for use with the model
     src = 0;
     
-    
         
     size = m_vertcount * 4 * 4;
-   // post("vertex_model: m_vertcount %d",m_vertcount);
+    // post("vertex_model: m_vertcount %d",m_vertcount);
     memcpy(m_tempVA, m_VertexArray, size);
     memcpy(m_tempCA, m_ColorArray, size); 
-    size = m_vertcount * 4 * 3;
+    //size = m_vertcount * 4 * 3;
     memcpy(m_tempNA, m_NormalArray, size);
-    /*
-    if (state->numTexCoords) {
     
-        if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
-            post("vertex_model: changing texcoords");
-            
-            post("vertex_model: state->texCoordX(1) %f",state->texCoordX(1));
-            post("vertex_model: state->texCoordY(1) %f",state->texCoordY(1));
-            maxX = state->texCoordX(1);
-            maxY = state->texCoordY(1);
-            post("vertex_model: maxX %f",maxX);
-            post("vertex_model: maxY %f",maxY);
-            //resize the texcoords
-            //length = sizeof(m_TexCoordArray)/2;
-            length = m_vertcount;
-            post("vertex_model: length %d",length);
-            post("vertex_model: m_tempTA[0] start %f",m_TexCoordArray[0]);
-            post("vertex_model: m_tempTA[1] start %f",m_TexCoordArray[1]);
-            post("vertex_model: m_tempTA[2] start %f",m_TexCoordArray[2]);
-            post("vertex_model: m_tempTA[length] start %f",m_TexCoordArray[length]);
-            for(i=0; i < length; i++){
-                m_TexCoordArray[src] = m_TexCoordArray[src] * maxX;
-                m_TexCoordArray[src+1] = m_TexCoordArray[src+1] * maxY;
-                src+=2;
-                }
-            post("vertex_model: src %d",src);
-            post("vertex_model: m_tempTA[0] end %f",m_TexCoordArray[0]);
-            post("vertex_model: m_tempTA[1] end %f",m_TexCoordArray[1]);
-            post("vertex_model: m_tempTA[src] end %f",m_TexCoordArray[src]);
-            }
-        } */
-    
-    size = m_vertcount * 4 * 2;
-   // memcpy(m_tempTA, m_TexCoordArray, size); 
+    //size = m_vertcount * 4 * 2;
     
      if (state->numTexCoords) {
-    
-        if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
-         //   post("vertex_model: changing texcoords");
-            
-         //   post("vertex_model: state->texCoordX(1) %f",state->texCoordX(1));
-        //    post("vertex_model: state->texCoordY(1) %f",state->texCoordY(1));
-            maxX = state->texCoordX(1);
-            maxY = state->texCoordY(1);
-        //    post("vertex_model: maxX %f",maxX);
-        //    post("vertex_model: maxY %f",maxY);
-            //resize the texcoords
-            //length = sizeof(m_TexCoordArray)/2;
-            length = m_vertcount;
-        //    post("vertex_model: length %d",length);
-        //    post("vertex_model: m_tempTA[0] start %f",m_tempTA[0]);
-        //    post("vertex_model: m_tempTA[1] start %f",m_tempTA[1]);
-        //    post("vertex_model: m_tempTA[2] start %f",m_tempTA[2]);
-        //    post("vertex_model: m_tempTA[length] start %f",m_tempTA[length]);
-        //can this be unrolled??
-            for(i=0; i < length; i++){
-                m_tempTA[src] = m_TexCoordArray[src] * maxX;
-                m_tempTA[src+1] = m_TexCoordArray[src+1] * maxY;
-                src+=2;
-                }
-        //    post("vertex_model: src %d",src);
-        //    post("vertex_model: m_tempTA[0] end %f",m_tempTA[0]);
-        //    post("vertex_model: m_tempTA[1] end %f",m_tempTA[1]);
-        //    post("vertex_model: m_tempTA[src] end %f",m_tempTA[src]);
-        //    }
-        }
-        }else{
-            memcpy(m_tempTA, m_TexCoordArray, size); 
-            }
+       if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
+	 maxX = state->texCoordX(1);
+	 maxY = state->texCoordY(1);
+	 length = m_vertcount;
+	 //can this be unrolled??
+	 for(i=0; i < length; i++){
+	   m_tempTA[src] = m_TexCoordArray[src] * maxX;
+	   m_tempTA[src+1] = m_TexCoordArray[src+1] * maxY;
+	   src+=2;
+	 }
+       }
+     }else{
+       memcpy(m_tempTA, m_TexCoordArray, size); 
+     }
     
            
     state->VertexArray = m_tempVA;
@@ -309,9 +270,8 @@ void vertex_model :: render(GemState *state)
     state->HaveTexCoordArray = 1;
     state->HaveNormalArray = 1;
     state->VertexArrayStride = 4;
-    state->VertexArraySize = m_vertcount;
-      
-    
+    state->VertexArraySize = m_vertcount/3;
+
 }
  
 /////////////////////////////////////////////////////////

@@ -19,9 +19,7 @@
 #include "Base/GemState.h"
 #include "Base/GemCache.h"
 
-//#ifdef __APPLE__
-# define __VBO
-//#endif
+//#define __VBO
 
 #ifdef __VBO
 # include "glVBO_ext.h"
@@ -86,7 +84,7 @@ void vertex_draw :: render(GemState *state)
     //color = 0;
   }
   bool texcoord=m_texcoord;
-  if (state->TexCoordArray == NULL || state->HaveTexCoordArray == 0){
+  if (texcoord && (state->TexCoordArray == NULL || state->HaveTexCoordArray == 0)){
     post("vertex_draw: no Texture Coordinate array!");
     texcoord = 0;
   }
@@ -123,14 +121,14 @@ void vertex_draw :: render(GemState *state)
 
   //if(texcoord){
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glTexCoordPointer(2,GL_FLOAT,0,state->TexCoordArray);
+  glTexCoordPointer(2,GL_FLOAT,16,state->TexCoordArray);
   //   }else{
   //   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   //   }
   
   if(state->HaveNormalArray || state->NormalArray!=NULL){
     glEnableClientState(GL_NORMAL_ARRAY);
-    glNormalPointer(GL_FLOAT,0,state->NormalArray);    
+    glNormalPointer(GL_FLOAT,16,state->NormalArray);
   }
   
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -196,12 +194,12 @@ void vertex_draw :: render(GemState *state)
     if (rebuild || !m_nVBOTexCoords ){
       if(!m_nVBOTexCoords)glGenBuffersARB( 1, &m_nVBOTexCoords );
       glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
-      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*2*sizeof(float),
+      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*4*sizeof(float),
 		       state->TexCoordArray, GL_DYNAMIC_DRAW_ARB );
-      glTexCoordPointer(2, GL_FLOAT, 0, (char *) NULL);
+      glTexCoordPointer(4, GL_FLOAT, 16, (char *) NULL);
     }else{
       glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
-      glTexCoordPointer(2, GL_FLOAT, 0, (char *) NULL);
+      glTexCoordPointer(4, GL_FLOAT, 16, (char *) NULL);
     }
   }
 
@@ -211,14 +209,32 @@ void vertex_draw :: render(GemState *state)
     if (rebuild || !m_nVBONormals ){
       if(!m_nVBONormals)glGenBuffersARB( 1, &m_nVBONormals );
       glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
-      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*1*sizeof(float),
+      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*4*sizeof(float),
 		       state->NormalArray, GL_DYNAMIC_DRAW_ARB );
-      glNormalPointer(GL_FLOAT,0, (char *) NULL);    
+      glNormalPointer(GL_FLOAT,16, (char *) NULL);    
     }else{
       glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
-      glNormalPointer(GL_FLOAT,0, (char *) NULL);
+      glNormalPointer(GL_FLOAT,16, (char *) NULL);
     }
   }
+
+
+  // setup the TextureArray
+  if(state->HaveTexCoordArray || state->TexCoordArray!=NULL){
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    if (rebuild || !m_nVBOTexCoords ){
+      if(!m_nVBOTexCoords)glGenBuffersARB( 1, &m_nVBOTexCoords );
+      glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords );
+      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*4*sizeof(float),
+		       state->TexCoordArray, GL_DYNAMIC_DRAW_ARB );
+      glTexCoordPointer(2,GL_FLOAT,16, (char *) NULL);    
+    }else{
+      glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords );
+      glTexCoordPointer(2,GL_FLOAT,16, (char *) NULL);
+    }
+  }
+
+
   
   //glEnableClientState(GL_VERTEX_ARRAY);
   //glVertexPointer( 4, GL_FLOAT,0, (char*) NULL);
