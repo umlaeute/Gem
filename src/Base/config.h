@@ -17,12 +17,12 @@
 #endif
 
 
-#ifdef __NEW__
-# ifndef __FILM__NEW
-#  define __FILM__NEW
+#ifdef NEW_VIDEOFILM
+# ifndef FILM_NEW
+#  define FILM_NEW
 # endif
-# ifndef __VIDEO__NEW
-#  define __VIDEO__NEW
+# ifndef VIDEO_NEW
+#  define VIDEO_NEW
 # endif
 #endif
 

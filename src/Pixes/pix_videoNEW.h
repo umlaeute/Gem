@@ -20,7 +20,7 @@ Linux version by Millier Puckette. msp@ucsd.edu
 
 #define MAX_VIDEO_HANDLES 4
 
-#ifdef __VIDEO__NEW
+#ifdef VIDEO_NEW
 # define DO_AUTO_REGISTER_CLASS
 #endif
 

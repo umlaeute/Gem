@@ -160,7 +160,7 @@ AC_CHECK_PROGS(shell_prog,sh)
 AC_PATH_XTRA
 
 if test "$enable_new" != "no"; then
- CXXFLAGS="$CXXFLAGS -D__NEW__"
+ CXXFLAGS="$CXXFLAGS -DNEW_VIDEOFILM
 fi
 
 dnl Checks for MMX
