@@ -15,9 +15,8 @@ endif
 
 
 cxxflags = -g @CXXFLAGS@ $(AFLAGS) -I../ @INCLUDES@
-
+#cxxflags += -Wall -pedantic -ansi -Dunix -D__linux__
 cxxflags += -fno-builtin -O3 -funroll-loops -ffast-math
-
 cxxflags += $(CXXFLAGS)
 
 
