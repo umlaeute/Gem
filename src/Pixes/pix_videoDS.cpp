@@ -30,7 +30,18 @@
 #include <dshow.h>
 #include <qedit.h>
 #include <Dvdmedia.h>
+
+#ifndef DEBUG
+# define DEBUG
+#endif
+/* this needs the DEBUG somehow ... */
 #include <streams.h>
+/* but probably we don't need it */
+#if defined(DEBUG) && !defined (_DEBUG)
+# undef DEBUG
+#endif
+
+
 #include "DSgrabber.h"
 
 #define COMRELEASE(x) { if (x) x->Release(); x = NULL; }

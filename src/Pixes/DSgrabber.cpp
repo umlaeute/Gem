@@ -8,9 +8,18 @@
 //------------------------------------------------------------------------------
 #include "Base/config.h"
 
-#ifdef HAVE_DIRECTSHOW
+#if defined(_WINDOWS) && defined(HAVE_DIRECTSHOW)
 
+#ifndef DEBUG
+# define DEBUG
+#endif
+/* this needs the DEBUG somehow ... */
 #include <streams.h>     // Active Movie (includes windows.h)
+/* but probably we don't need it */
+#if defined(DEBUG) && !defined (_DEBUG)
+# undef DEBUG
+#endif
+
 #include <initguid.h>    // declares DEFINE_GUID to declare an EXTERN_C const.
 
 #include "qedit.h"
