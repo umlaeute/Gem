@@ -66,7 +66,7 @@ void pix_yuv :: processImage(imageStruct &image)
   if (image.xsize*image.ysize != m_size){
     delete [] m_data;
     m_size = image.xsize*image.ysize;
-    m_data = new unsigned char[m_size*2];
+    m_data = new unsigned char[m_size*2]; // 2 is the size of the YUV_pixel
     //post("made buffer of size %d at %X", m_size, m_data);
   }
 
