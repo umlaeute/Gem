@@ -130,7 +130,7 @@ void pix_2grey :: processRGBAltivec(imageStruct &image)
     //bitshift down 8 bits
     grey = vec_sra(grey, shift);
     
-    lo = vec_packsu(grey,A);
+    lo = vec_packsu(A,grey);
     hi = vec_packsu(grey,grey);
     
     lo = vec_mergel(lo,hi);
