@@ -77,8 +77,16 @@ void pix_data :: trigger()
 			break;
         // YUV
         case(2):
-            error("GEM: pix_data: YUV not yet implemented");	//tigital
-            return;
+
+           if ( xPos % 2) { //odd
+        color[0] = data[1];
+        color[1] = data[-2];
+        color[2] = data[0];
+    }else{
+        color[0] = data[1];
+        color[1] = data[0];
+        color[2] = data[2];
+    }
             break;
 		// RGB
 		case(3):
