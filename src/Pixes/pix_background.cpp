@@ -25,23 +25,23 @@ pix_background :: pix_background()
     
 inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blur"));
 
-m_Yrange = 0;
-m_Urange = 0;
-m_Vrange = 0;
-m_blur = 0;
-m_reset = 0;
-m_blurH = 240;
-m_blurW = 240;
-m_blurBpp = 2;
-size = 320 * 240 * 4;
-saved = new unsigned char [size];
-src=0;
-for (i=0;i<size/2;i++)
-{
-saved[src] = 128;
-saved[src+1] = 0;
-src += 2;
-}
+    m_Yrange = 0;
+    m_Urange = 0;
+    m_Vrange = 0;
+    m_blur = 0;
+    m_reset = 0;
+    m_blurH = 240;
+    m_blurW = 240;
+    m_blurBpp = 2;
+    size = 320 * 240 * 4;
+    saved = new unsigned char [size];
+    src=0;
+    for (i=0;i<size/2;i++)
+    {
+        saved[src] = 128;
+        saved[src+1] = 0;
+        src += 2;
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -258,11 +258,11 @@ int pixsize = image.xsize * image.ysize * image.csize;
     for ( i=0; i<h; i++){
         for (j=0; j<w; j++)
         {
-        
+        #ifndef PPC970
         //this function is probably memory bound on most G4's -- what else is new?
         vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
-        
+        #endif
         //separate the U and V from Y
         UVres1 = (vector unsigned short)vec_mule(one,inData[0]);
         UVres2 = (vector unsigned short)vec_mule(one,rightData[0]);
@@ -331,8 +331,10 @@ int pixsize = image.xsize * image.ysize * image.csize;
          rightData++;
         
         }
+        #ifndef PPC970
         vec_dss(1);
         vec_dss(0);
+        #endif
     }
     
 #endif //ALTIVEC

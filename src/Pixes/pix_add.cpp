@@ -181,7 +181,7 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
         //vector signed char v;
         vector	unsigned char v;
     }charBuffer;
-    
+     
     //vector unsigned char c;
     register vector signed short d, hiImage, loImage, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
    // vector unsigned char zero = vec_splat_u8(0);
@@ -219,18 +219,18 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
     //Load it into the vector unit
     d = shortBuffer.v;
     d = (vector signed short)vec_splat((vector signed short)d,0);
-
+        #ifndef PPC970
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
-        
+        #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
-        
+        #ifndef PPC970
 	vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
-            
+        #endif
             //interleaved U Y V Y chars
             
             //vec_mule UV * 2 to short vector U V U V shorts
@@ -260,8 +260,10 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
             inData++;
             rightData++;
         }
+        #ifndef PPC970
         vec_dss( 0 );
         vec_dss( 1 );
+        #endif
 }  /*end of working altivec function */
 #endif
 }

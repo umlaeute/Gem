@@ -393,22 +393,22 @@ register int h,w,i,j,width;
     
     
     Vlo = longBuffer.v;
-    
+    #ifndef PPC970
     //setup the cache prefetch -- A MUST!!!
     UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
     vec_dst( inData, prefetchSize, 0 );
     vec_dst( rightData, prefetchSize, 1 );
-    
+    #endif
     if (m_direction) {
     
     for ( i=0; i<h; i++){
         for (j=0; j<w; j++)
         {
-        
+        #ifndef PPC970
         //this function is probably memory bound on most G4's -- what else is new?
         vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
-
+        #endif
         
 
         //separate the U and V from Y
@@ -474,8 +474,10 @@ register int h,w,i,j,width;
             rightData++;
          
         }
+        #ifndef PPC970
         vec_dss(1);
         vec_dss(0);
+        #endif
     }
     }else{
     /*

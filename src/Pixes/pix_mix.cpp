@@ -161,7 +161,7 @@ long h,w, width;
     }charBuffer;
     
     //vector unsigned char c;
-    register vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage,YRight, UVRight, UVTemp, YTemp;
+    register vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage, UVRight, UVTemp, YTemp;
     register vector unsigned char zero = vec_splat_u8(0);
     //vector signed short szero = vec_splat_s16(0);
     register vector unsigned char c,one;
@@ -171,7 +171,7 @@ long h,w, width;
     register vector unsigned int bitshift;
     vector unsigned char *inData = (vector unsigned char*) image.data;
     vector unsigned char *rightData = (vector unsigned char*) right.data;
-    register vector unsigned char tempImage,tempRight;
+    register vector unsigned char tempImage;//,tempRight;
     
     //Write the pixel (pair) to the transfer buffer
     charBuffer.elements[0] = 2;
@@ -233,18 +233,18 @@ long h,w, width;
     //Load it into the vector unit
     gainAdd = shortBuffer.v;
     gainAdd = (vector signed short)vec_splat((vector signed short)gainAdd,0);
-
+    #ifndef PPC970
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
 	vec_dst( rightData, prefetchSize, 1 );
-        
+        #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
-        
+        #ifndef PPC970
 	vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
-
+        #endif
             //interleaved U Y V Y chars
             
             //expand the UInt8's to short's
@@ -347,16 +347,28 @@ long h,w, width;
             inData++;
             rightData++;
         }
-        
-        //stop the cache streams
-        vec_dss( 0 );
-        vec_dss( 1 );
 
     }  /* end of working altivec function */   
- 
+    #ifndef PPC970
+  //stop the cache streams
+        vec_dss( 0 );
+        vec_dss( 1 );
+        #endif
 #endif  
 }
 
+/////////////////////////////////////////////////////////
+//gain converted from float to int
+//
+/////////////////////////////////////////////////////////
+void pix_mix :: gainMess (float X, float Y)
+{
+
+  imageGain = (int)(255.f * X);
+  rightGain = (int)(255.f * Y);
+  
+}
+  
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -369,7 +381,10 @@ void pix_mix :: obj_setupCallback(t_class *classPtr)
 
 void pix_mix :: gainCallback(void *data, t_floatarg X, t_floatarg Y)
 {
-  GetMyClass(data)->imageGain=((int)X);
-  GetMyClass(data)->rightGain=((int)Y);
+
+  GetMyClass(data)->gainMess((float) X, (float) Y);
+ 
+  //GetMyClass(data)->imageGain=((int)X);
+  //GetMyClass(data)->rightGain=((int)Y);
 
 }

@@ -114,7 +114,7 @@ void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
     val8 = val9;
     val9 = src+i+xsize+1;
     if (i%xsize == 0 || i%xsize == xsize-1) continue;
-    #ifndef MACOSX
+    #ifndef __APPLE__
     for (j=0;j<3;j++) 
     #else
     for (j=1;j<4;j++)
@@ -405,7 +405,7 @@ i=xsize+1;
     val9 = src+i+xsize+1; 
     
    /* if (i%xsize == 0 || i%xsize == xsize-1) continue;
-    #ifndef MACOSX
+    #ifndef __APPLE__
     for (j=0;j<3;j++) 
     #else
     for (j=1;j<3;j+=2)
@@ -473,7 +473,7 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
     register vector signed short y1,y2,y3,y4,y5,y6,y7,y8,y9,yres,uvres,hiImage,loImage;
     vector signed short range,uvnone,uv128;
     unsigned char *dst =  (unsigned char*) image.data;
-    unsigned char *src =  tempImg.data;
+    unsigned char *src =  (unsigned char*) tempImg.data;
    
 
     one =  vec_splat_u8( 1 );
@@ -531,11 +531,11 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
     shortBuffer.elements[0] = 128;
     uv128 = shortBuffer.v;
     uv128 = (vector signed short)vec_splat((vector signed short)uv128,0);
-
+    #ifndef PPC970 
     UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
     vec_dst( src, prefetchSize, 0 );
     vec_dst( dst, prefetchSize, 0 );
-         
+      #endif   
  
     i = xsize*2;
 
@@ -543,13 +543,14 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
 //or just skip the first 2 rows ;)
  
     for ( h=2; h<image.ysize-1; h++){
-    i+=2; //this gets rid of the echoes but kills the vertical edge-detects???
-        for (w=0; w<width; w++)
+   // i+=2; //this gets rid of the echoes but kills the vertical edge-detects???
+   i+=8;
+        for (w=0; w<width-1; w++)
         {
-        
+        #ifndef PPC970
             vec_dst( src, prefetchSize, 0 );
             vec_dst( dst, prefetchSize, 1 );    
-     
+     #endif
             
             val1 = vec_ld(0,src+(i-xsize-2));//this might crash?
             val2 = vec_ld(0,src+(i-xsize)); 
@@ -622,6 +623,8 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
             //pack back to one short vector??
             yhi = vec_mergeh(res1a,res1);
             ylo = vec_mergel(res1a,res1);
+           
+
             yres = vec_packs(yhi,ylo);
             
             
@@ -636,9 +639,10 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
            
         }
         i = h * xsize;
+        #ifndef PPC970
         vec_dss( 0 );
         vec_dss( 1 );
-    
+    #endif
 }  /*end of working altivec function */
 
 

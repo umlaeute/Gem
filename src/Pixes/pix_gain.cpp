@@ -201,16 +201,16 @@ void pix_gain :: processYUV_Altivec(imageStruct &image)
     //Load it into the vector unit
     d = shortBuffer.v;
     d = (vector signed short)vec_splat((vector signed short)d,0);
-
+#ifndef PPC970
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
-        
+        #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
-        
+        #ifndef PPC970
 	vec_dst( inData, prefetchSize, 0 );
-        
+        #endif
             //interleaved U Y V Y chars
             
             //expand the UInt8's to short's
@@ -255,7 +255,9 @@ void pix_gain :: processYUV_Altivec(imageStruct &image)
         
             inData++;
         }
+        #ifndef PPC970
         vec_dss( 0 );
+        #endif
 }  /* end of working altivec function */
 #endif
 }

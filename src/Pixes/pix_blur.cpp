@@ -273,18 +273,18 @@ unsigned short rightGain,imageGain;
     //Load it into the vector unit
     gainAdd = shortBuffer.v;
     gainAdd = (vector unsigned short)vec_splat((vector unsigned short)gainAdd,0);
-
+#ifndef PPC970
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
 	vec_dst( rightData, prefetchSize, 1 );
-        
+      #endif  
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
-        
+        #ifndef PPC970
 	vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
-
+        #endif
             //interleaved U Y V Y chars
             
             //expand the UInt8's to short's
@@ -334,9 +334,11 @@ unsigned short rightGain,imageGain;
             rightData++;
         }
        }
+       #ifndef PPC970
        //stop the cache streams
         vec_dss( 0 );
         vec_dss( 1 );
+        #endif
          /* end of working altivec function */   
          
 #endif

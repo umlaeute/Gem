@@ -159,16 +159,16 @@ width = image.xsize/8; //for altivec
     //        inData++;
     //    }
    // }
-   
+   #ifndef PPC970
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
-        
+      #endif  
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
-        
+        #ifndef PPC970
 	vec_dst( inData, prefetchSize, 0 );
-        
+        #endif
             //expand the UInt8's to short's
             hi = (vector signed short) vec_mergeh( zero, inData[0] );
             lo = (vector signed short) vec_mergel( zero, inData[0] );
@@ -184,7 +184,9 @@ width = image.xsize/8; //for altivec
         }
        
 }
+#ifndef PPC970
 vec_dss( 0 );  /*end of working altivec function */
+#endif
 #endif
 }
 
