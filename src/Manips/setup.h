@@ -16,6 +16,7 @@ extern "C" {
    void alpha_setup();
    void ambient_setup();
    void ambientRGB_setup();
+   void camera_setup();
    void color_setup();
    void colorRGB_setup();
    void depth_setup();
@@ -25,7 +26,7 @@ extern "C" {
    void emissionRGB_setup();
    void linear_path_setup();
    void ortho_setup();
-  void polygon_smooth_setup();
+   void polygon_smooth_setup();
    void rotate_setup();
    void rotateXYZ_setup();
    void scale_setup();
@@ -44,6 +45,7 @@ extern "C" {
       alpha_setup();
       ambient_setup();
       ambientRGB_setup();
+      camera_setup();
       color_setup();
       colorRGB_setup();
       depth_setup();
