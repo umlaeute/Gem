@@ -206,6 +206,7 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 	    const int nDotFuncResult=*pCurrentDotFunc;
 	    const int nDiff=nLuminance-nDotFuncResult;
 	    const int nGreyValue=pGreyScaleTableStart[nDiff];
+	    const int nAlphaValue=0xff;
 
 //					if (nDotFuncResult>=nLuminance) {
 //
@@ -238,7 +239,8 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 	    const U32 OutputColour=
 	      (nGreyValue<<SHIFT_RED)|
 	      (nGreyValue<<SHIFT_GREEN)|
-	      (nGreyValue<<SHIFT_BLUE);
+	      (nGreyValue<<SHIFT_BLUE)|
+	      (nAlphaValue<<SHIFT_ALPHA);
 //						(nDotFuncResult<<SHIFT_RED)|
 //						(nDotFuncResult<<SHIFT_GREEN)|
 //						(nDotFuncResult<<SHIFT_BLUE);
@@ -1150,7 +1152,7 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
   const int nRedAverage=(nRedTotal/nTotalSamples);
   const int nGreenAverage=(nGreenTotal/nTotalSamples);
   const int nBlueAverage=(nBlueTotal/nTotalSamples);
-  
+ 
   return (nRedAverage<<SHIFT_RED)|(nGreenAverage<<SHIFT_GREEN)|(nBlueAverage<<SHIFT_BLUE);
 }
 U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,int nImageHeight) {

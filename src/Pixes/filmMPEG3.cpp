@@ -123,6 +123,14 @@ pixBlock* filmMPEG3 :: getFrame(){
       post("GEM: pix_film:: could not read frame ! %d", m_curFrame);
       return 0;
     }
+    // unfortunately the ALPHA is set to 0!
+    i = m_image.image.xsize*m_image.image.ysize;
+    unsigned char*aptr=m_image.image.data;
+    while(i--){
+      aptr[chAlpha]=255;
+      aptr+=4;
+    }
+
     m_image.image.upsidedown=false;
     delete[]rows;
   } else {

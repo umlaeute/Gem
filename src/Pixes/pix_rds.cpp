@@ -84,7 +84,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
                     continue;
 
                 x = image.xsize / 2 + i;
-                *(dest + x) = 0xffffff;
+                *(dest + x) = 0xffffffff;
 	
                 while(x + stride/2 < image.xsize) {
                     v = *(src + x + stride/2);
@@ -93,7 +93,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
                     B = (v&0xff)>>7;
                     x += stride + R + G + B;
                     if(x >= image.xsize) break;
-                    *(dest + x) = 0xffffff;
+                    *(dest + x) = 0xffffffff;
                 }
 
                 x = image.xsize / 2 + i;
@@ -104,7 +104,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
 		    B = (v&0xff)>>7;
                     x -= stride + R + G + B;
                     if(x < 0) break;
-                    *(dest + x) = 0xffffff;
+                    *(dest + x) = 0xffffffff;
                 }
             }
             src += image.xsize;
@@ -117,7 +117,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
                     continue;
 
                 x = image.xsize / 2 + i;
-                *(dest + x) = 0xffffff;
+                *(dest + x) = 0xffffffff;
 	
                 while(x + stride/2 < image.xsize) {
                     v = *(src + x + stride/2);
@@ -126,7 +126,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
                     B = (v&0xff)>>7;
                     x += stride - R - G - B;
                     if(x >= image.xsize) break;
-                    *(dest + x) = 0xffffff;
+                    *(dest + x) = 0xffffffff;
                 }
 
                 x = image.xsize / 2 + i;
@@ -137,7 +137,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
                     B = (v&0xff)>>7;
                     x -= stride - R - G - B;
                     if(x < 0) break;
-                    *(dest + x) = 0xffffff;
+                    *(dest + x) = 0xffffffff;
                 }
             }
             src += image.xsize;
@@ -149,8 +149,8 @@ void pix_rds :: processRGBAImage(imageStruct &image)
       target += image.xsize + (image.xsize - stride) / 2;
       for(y=0; y<4; y++) {
         for(x=0; x<4; x++) {
-	  target[x] = 0xff0000;
-	  target[x+stride] = 0xff0000;
+	  target[x] = 0xffff0000;
+	  target[x+stride] = 0xffff0000;
         }
         target += image.xsize;
       }

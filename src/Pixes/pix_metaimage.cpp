@@ -260,13 +260,18 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
   const int nSubRed=(SubImageAverage>>SHIFT_RED)&0xff;
   const int nSubGreen=(SubImageAverage>>SHIFT_GREEN)&0xff;
   const int nSubBlue=(SubImageAverage>>SHIFT_BLUE)&0xff;
+  const int nSubAlpha=(SubImageAverage>>SHIFT_ALPHA)&0xff;
+
   const int nWholeRed=(WholeImageAverage>>SHIFT_RED)&0xff;
   const int nWholeGreen=(WholeImageAverage>>SHIFT_GREEN)&0xff;
   const int nWholeBlue=(WholeImageAverage>>SHIFT_BLUE)&0xff;
-  
+  const int nWholeAlpha=(WholeImageAverage>>SHIFT_ALPHA)&0xff;
+
   const int nRedDelta=(nSubRed-nWholeRed);
   const int nGreenDelta=(nSubGreen-nWholeGreen);
   const int nBlueDelta=(nSubBlue-nWholeBlue);
+  const int nAlphaDelta=(nSubAlpha-nWholeAlpha);
+
 
   const int nXDelta=nClippedRightX-nClippedLeftX;
   const int nYDelta=nClippedBottomY-nClippedTopY;
@@ -291,15 +296,18 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
       const U32 nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
       const U32 nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
       const U32 nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
+      const U32 nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
 
       const U32 nOutputRed=GateInt(nSourceRed+nRedDelta,0,255);
       const U32 nOutputGreen=GateInt(nSourceGreen+nGreenDelta,0,255);
       const U32 nOutputBlue=GateInt(nSourceBlue+nBlueDelta,0,255);
+      const U32 nOutputAlpha=GateInt(nSourceAlpha+nAlphaDelta,0,255);//0xff;
 
       const U32 OutputColour=
 	((nOutputRed&0xff)<<SHIFT_RED)|
 	((nOutputGreen&0xff)<<SHIFT_GREEN)|
-	((nOutputBlue&0xff)<<SHIFT_BLUE);
+	((nOutputBlue&0xff)<<SHIFT_BLUE)|
+	((nOutputAlpha&0xff)<<SHIFT_ALPHA);
 
       *pCurrentOutput=OutputColour;
 
@@ -328,6 +336,8 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
   int nRedTotal=0;
   int nGreenTotal=0;
   int nBlueTotal=0;
+  int nAlphaTotal=0;
+
   int nSampleCount=0;
 
   while (pCurrentImage<pImageEnd) {		
@@ -340,11 +350,13 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
       const U32 nImageRed=(ImageColour>>SHIFT_RED)&0xff;
       const U32 nImageGreen=(ImageColour>>SHIFT_GREEN)&0xff;
       const U32 nImageBlue=(ImageColour>>SHIFT_BLUE)&0xff;
+      const U32 nImageAlpha=(ImageColour>>SHIFT_ALPHA)&0xff;
 
       nRedTotal+=nImageRed;
       nGreenTotal+=nImageGreen;
       nBlueTotal+=nImageBlue;
-      
+      nAlphaTotal+=nImageAlpha;
+   
       nSampleCount+=1;
       
       pCurrentImage+=nStride;
@@ -356,11 +368,14 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
   const int nAverageRed=(nRedTotal/nSampleCount);
   const int nAverageGreen=(nGreenTotal/nSampleCount);
   const int nAverageBlue=(nBlueTotal/nSampleCount);
+  const int nAverageAlpha=(nAlphaTotal/nSampleCount);
+
 
   U32 Average=
     (nAverageRed<<SHIFT_RED)|
     (nAverageGreen<<SHIFT_GREEN)|
-    (nAverageBlue<<SHIFT_BLUE);
+    (nAverageBlue<<SHIFT_BLUE)|
+    (nAverageAlpha<<SHIFT_ALPHA);
 
   return Average;
 }
@@ -376,6 +391,8 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
   int nRedTotal=0;
   int nGreenTotal=0;
   int nBlueTotal=0;
+  int nAlphaTotal=0;
+
   int nSampleCount=0;
 
   U32* pCurrentOutput=pOutput;
@@ -401,10 +418,12 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
       const U32 nOutputRed=(OutputColour>>SHIFT_RED)&0xff;
       const U32 nOutputGreen=(OutputColour>>SHIFT_GREEN)&0xff;
       const U32 nOutputBlue=(OutputColour>>SHIFT_BLUE)&0xff;
+      const U32 nOutputAlpha=(OutputColour>>SHIFT_ALPHA)&0xff;
 
       nRedTotal+=nOutputRed;
       nGreenTotal+=nOutputGreen;
       nBlueTotal+=nOutputBlue;
+      nAlphaTotal+=nOutputAlpha;
 
       nSampleCount+=1;
 
@@ -419,11 +438,13 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
   const int nAverageRed=(nRedTotal/nSampleCount);
   const int nAverageGreen=(nGreenTotal/nSampleCount);
   const int nAverageBlue=(nBlueTotal/nSampleCount);
+  const int nAverageAlpha=(nAlphaTotal/nSampleCount);
 
   U32 Average=
     (nAverageRed<<SHIFT_RED)|
     (nAverageGreen<<SHIFT_GREEN)|
-    (nAverageBlue<<SHIFT_BLUE);
+    (nAverageBlue<<SHIFT_BLUE)|
+    (nAverageAlpha<<SHIFT_ALPHA);
 
   return Average;
 }
@@ -439,6 +460,8 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOu
   int nRedTotal=0;
   int nGreenTotal=0;
   int nBlueTotal=0;
+  int nAlphaTotal=0;
+
   int nSampleCount=0;
 
   U32* pCurrentOutput=pOutput;
@@ -456,10 +479,12 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOu
       const U32 nOutputRed=(OutputColour>>SHIFT_RED)&0xff;
       const U32 nOutputGreen=(OutputColour>>SHIFT_GREEN)&0xff;
       const U32 nOutputBlue=(OutputColour>>SHIFT_BLUE)&0xff;
+      const U32 nOutputAlpha=(OutputColour>>SHIFT_ALPHA)&0xff;
 
       nRedTotal+=nOutputRed;
       nGreenTotal+=nOutputGreen;
       nBlueTotal+=nOutputBlue;
+      nAlphaTotal+=nOutputAlpha;
 
       nSampleCount+=1;
       *pCurrentOutput=OutputColour;
@@ -471,11 +496,13 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOu
   const int nAverageRed=(nRedTotal/nSampleCount);
   const int nAverageGreen=(nGreenTotal/nSampleCount);
   const int nAverageBlue=(nBlueTotal/nSampleCount);
+  const int nAverageAlpha=(nAlphaTotal/nSampleCount);
 
   U32 Average=
     (nAverageRed<<SHIFT_RED)|
     (nAverageGreen<<SHIFT_GREEN)|
-    (nAverageBlue<<SHIFT_BLUE);
+    (nAverageBlue<<SHIFT_BLUE)|
+    (nAverageAlpha<<SHIFT_ALPHA);
 
   return Average;
 }
