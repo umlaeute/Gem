@@ -52,7 +52,7 @@ GEMglAreTexturesResident :: ~GEMglAreTexturesResident () {
 //
 void GEMglAreTexturesResident :: render(GemState *state) {
 #ifdef GL_VERSION_1_1
-  bool ok = glAreTexturesResident (n, textures, residences);
+  GLboolean ok = glAreTexturesResident (n, textures, residences);
   int i=n;
   while(i--){
     t_float f = residences[i]?1.0:0.0;
