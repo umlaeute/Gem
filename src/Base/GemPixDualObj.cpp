@@ -158,7 +158,7 @@ void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
     lformat ="YUV";break;
   default:
     lformat = new char[6];
-    sprintf(lformat,"0x%04X", left.format);
+    sprintf(lformat,"0x%04X", (unsigned int)left.format);
   }
   switch (right.format) {
   case GL_RGBA:
@@ -170,7 +170,7 @@ void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
     rformat ="YUV";break;
   default:
     rformat = new char[6];
-    sprintf(rformat, "0x%04X", left.format);
+    sprintf(rformat, "0x%04X", (unsigned int)left.format);
   }
   
   error("processDualImage: no method to combine (%s) and (%s)",
