@@ -69,7 +69,7 @@ class GEM_EXTERN GemShape : public GemBase
 	    // GROUP:	Utility functions
 	    //-----------------------------------
 	
-		void SetVertix(GemState* state,float x, float y, float z, float tx, float ty,int curCoord);
+		void SetVertex(GemState* state,float x, float y, float z, float tx, float ty,int curCoord);
 
 	    //-----------------------------------
 	    // GROUP:	Member variables
