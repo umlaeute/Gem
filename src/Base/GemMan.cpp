@@ -67,7 +67,6 @@ float GemMan::fps;
 
 // static data
 static const int NUM_LIGHTS = 8;   	// the maximum number of lights
-static int s_lightState = 0;        // is lighting on or off
 static int s_lights[NUM_LIGHTS];    // the lighting array
 
 static t_clock *s_clock = NULL;
@@ -251,13 +250,17 @@ void GemMan :: addCtrl(gemcontrol *obj)
 void GemMan :: removeCtrl(gemcontrol *obj)
 {
   gemctrlLink *linkPtr = s_ctrlHead;
-  if (!linkPtr) return;
+  if (!linkPtr){
+    stopRendering();
+    return;
+  }
     
   // unique case if the object is the s_ctrlHead
   if (linkPtr->base == obj) {
     gemctrlLink *nextPtr = linkPtr->next;
     delete s_ctrlHead;
     s_ctrlHead = nextPtr;
+    if(s_ctrlHead==NULL)stopRendering();
     return;
   }
     
@@ -347,24 +350,13 @@ void GemMan :: removeObj(gemhead *obj, int priority=50)
   delete [] removePtr;
 }
 
-void GemMan :: render1(GemState currentState){
-  renderChain(s_linkHead, &currentState);
-}
-void GemMan :: render2(GemState currentState){
-  renderChain(s_linkHead_2, &currentState);
-}
-
-
 /////////////////////////////////////////////////////////
 // fillGemState
 //
 /////////////////////////////////////////////////////////
 void GemMan :: fillGemState(GemState &state)
 {
-  if (s_lightState) {
-    state.lighting = 1;
-    state.smooth = 1;
-  }
+
 }
 
 /////////////////////////////////////////////////////////
@@ -376,6 +368,13 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
     head->base->renderGL(state);
     head = head->next;
   }
+}
+
+void GemMan :: render1(GemState currentState){
+  renderChain(s_linkHead, &currentState);
+}
+void GemMan :: render2(GemState currentState){
+  renderChain(s_linkHead_2, &currentState);
 }
 
 void GemMan :: render(void *)
@@ -445,13 +444,14 @@ void GemMan :: render(void *)
     float seconds = (endTime.tv_sec - startTime.tv_sec) +
       (endTime.tv_usec - startTime.tv_usec) * 0.000001;
     post("GEM: time: %f", seconds);
+    GemMan::fps = (1. / (seconds * 1000.)) * 1000.;
   }
 #elif __APPLE__
     {
         UnsignedWide endTime;
         ::Microseconds(&endTime);
         float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
-        GemMan::fps = (1 / (seconds * 1000)) * 1000;
+        GemMan::fps = (1. / (seconds * 1000.)) * 1000.;
     //   m_fps = (1 / (seconds * 1000)) * 1000;
       //  post("GEM: time: %f", seconds);
     }
@@ -596,17 +596,6 @@ void GemMan :: checkExtensions() {
 #endif
 }
 
-
-/////////////////////////////////////////////////////////
-// lightingOnOff
-//
-/////////////////////////////////////////////////////////
-void GemMan :: lightingOnOff(int state)
-{
-  if (state) s_lightState = 1;
-  else s_lightState = 0;
-}
-
 /////////////////////////////////////////////////////////
 // frameRate
 //
@@ -623,6 +612,7 @@ void GemMan :: frameRate(float framespersecond)
       error("GEM: Invalid frame rate: %f", framespersecond);
       framespersecond = 20;
     }
+  GemMan::fps = framespersecond;
   s_deltime = 1000. / framespersecond;
 }
 
