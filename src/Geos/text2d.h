@@ -62,7 +62,7 @@ class GEM_EXTERN text2d : public TextBase
 #ifdef FTGL
 	void            setFontSize(t_float size);
 
-	virtual FTFont*makeFont(const char*fontname);
+	virtual FTFont*	makeFont(const char*fontname);
 	FTFont                  *m_afont;
 #elif defined GLTT
 	virtual void    destroyFont();
