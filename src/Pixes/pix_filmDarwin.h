@@ -67,7 +67,9 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   TimeValue		m_movieTime;
   Track			m_movieTrack;
   Media			m_movieMedia;
-  int			m_timeScale;
+  TimeValue		m_timeScale;
+  TimeValue		duration;
+  
 
   //-----------------------------------
   // GROUP:	Texturing

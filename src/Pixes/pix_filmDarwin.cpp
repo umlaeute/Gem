@@ -133,16 +133,20 @@ void pix_filmDarwin :: realOpen(char *filename)
                                             
 	OSType		whichMediaType = VisualMediaCharacteristic;
 	short		flags = nextTimeMediaSample + nextTimeEdgeOK;
-	TimeValue	duration;
-	TimeValue	theTime = 0;
+	//TimeValue	duration;
+	//TimeValue	theTime = 0;
         
-        m_movieTrack = GetMovieIndTrack( m_movie, 1);
+        //m_movieTrack = GetMovieIndTrack( m_movie, 1);
         m_movieMedia = GetTrackMedia( m_movieTrack );
         mediaDur = (long)GetMediaDuration(m_movieMedia);
         mediaScale = (long)GetMediaTimeScale(m_movieMedia);
         post("Media duration = %d timescale = %d", mediaDur, mediaScale);
         m_timeScale = mediaScale/movieScale;
-	
+        
+        GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
+             fixed1, NULL, &duration);
+        m_numFrames = movieDur/duration;
+/*	
 	m_numFrames = -1;
 	while (theTime >= 0) {
 		m_numFrames++;
@@ -160,7 +164,7 @@ void pix_filmDarwin :: realOpen(char *filename)
                 flags = 0;
                 flags = nextTimeStep;
 	}
-
+*/
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
         OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
@@ -211,7 +215,6 @@ void pix_filmDarwin :: getFrame()
     Rect		m_srcRect;
     PixMapHandle	m_pixMap;
     Ptr			m_baseAddr;
-    TimeValue		mFrame;
     
     ::GetGWorld(&savedPort, &savedDevice);
     ::SetGWorld(m_srcGWorld, NULL);
@@ -223,7 +226,7 @@ void pix_filmDarwin :: getFrame()
     int num;
 
     // get the next frame of the source movie
-    short 	flags = nextTimeStep; //nextTimeMediaSample;
+    short 	flags = nextTimeStep;
     OSType	whichMediaType = VisualMediaCharacteristic;
     TimeValue	duration;
     if (m_reqFrame > m_curFrame) {
@@ -259,8 +262,9 @@ if (m_auto) {
         flags = nextTimeStep;
                                             
         }else{
-            SampleNumToMediaTime( m_movieMedia, m_reqFrame, &mFrame, NULL );
-            m_movieTime = mFrame/m_timeScale;
+            m_movieTime = m_reqFrame * duration;
+            //SampleNumToMediaTime( m_movieMedia, m_reqFrame, &mFrame, NULL );
+            //m_movieTime = mFrame/m_timeScale;
 /*        for (int i=0; i<num; i++) {
     // skip to the next interesting time and get the duration for that frame
         ::GetMovieNextInterestingTime(m_movie,
@@ -276,8 +280,8 @@ if (m_auto) {
 
        
     // set the time for the frame and give time to the movie toolbox	
-    ::SetMovieTimeValue(m_movie, m_movieTime); 
-    ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+    SetMovieTimeValue(m_movie, m_movieTime); 
+    MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
     
     m_frame = (unsigned char *)m_baseAddr;
 }
