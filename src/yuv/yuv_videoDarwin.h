@@ -75,6 +75,7 @@ class GEM_EXTERN yuv_videoDarwin : public yuv_video
         //OSErr	videoFrame(SGChannel c, short bufferNum, Boolean *done);
         
         void InitSeqGrabber();
+        void resetSeqGrabber();
 
         //-----------------------------------
         // GROUP:	Video data
@@ -106,11 +107,14 @@ class GEM_EXTERN yuv_videoDarwin : public yuv_video
         PixMapHandle		m_pixMap;	// PixMap Handle for capture image
         Ptr			m_baseAddr;		// Base address of pixel Data
         long			m_rowBytes;		// Row bytes in a row
+        int			m_quality;
 
     private:
     	
     	//////////
     	// static member functions
+        static void qualityCallback(void *data, t_floatarg X);
+        static void resetCallback(void *data);
 };
 
 #endif

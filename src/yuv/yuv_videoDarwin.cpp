@@ -28,12 +28,20 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(yuv_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg,
 #define MAX_RECORDING_TIME	100 * 60	// n * 60 ticks  (n : seconds)
 #define DEFAULT_INTERVAL	5		// 5 milliseconds for calling SGIdle()
 
-yuv_videoDarwin :: yuv_videoDarwin( t_floatarg w=320, t_floatarg h=240 )
+yuv_videoDarwin :: yuv_videoDarwin( t_floatarg w, t_floatarg h )
 {
+   if (w > 0){
+    m_vidXSize = (int)w;
+  }else{
     m_vidXSize = 320;
+  }
+  if (h > 0){
+    m_vidYSize = (int)h;
+  }else{
     m_vidYSize = 240;
-    //m_vidXSize = w;
-    //m_vidYSize = h;
+  }
+    
+  post("yuv_videoDarwin: height %d width %d",m_vidXSize,m_vidYSize); 
     m_pixBlock.image.xsize = m_vidXSize;
     m_pixBlock.image.ysize = m_vidYSize;
 
@@ -43,7 +51,7 @@ yuv_videoDarwin :: yuv_videoDarwin( t_floatarg w=320, t_floatarg h=240 )
     int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
 					* 2 * sizeof(unsigned char);
     m_pixBlock.image.data = new unsigned char[dataSize];
-
+    m_quality = 1; //high quality for DV. why not?
     InitSeqGrabber();
     m_haveVideo = 1;
 }
@@ -121,9 +129,11 @@ void yuv_videoDarwin :: postrender(GemState *state)
 void yuv_videoDarwin :: InitSeqGrabber()
 {
     OSErr anErr;
-    Rect m_srcRect = {0,0,m_vidYSize,m_vidXSize} ;
+   Rect tempRect = {0,0,m_vidYSize,m_vidXSize} ;
     
-    //SetRect (&m_srcRect, 0, 0,m_vidYSize,m_vidXSize); // l,t, r, b
+    m_srcRect = tempRect ;
+   // SetRect (&m_srcRect, 0, 0,m_vidYSize,m_vidXSize); // l,t, r, b
+  // OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
     m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
     if(m_sg==NULL){
         post("yuv_videoDarwin: could not open default component");
@@ -164,6 +174,27 @@ void yuv_videoDarwin :: InitSeqGrabber()
     }else{
             post("yuv_videoDarwin: set SG ChannelUsage");
         }
+    
+    switch (m_quality){
+    case 0:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayNormal);
+        post("yuv_videoDarwin: set SG NormalQuality");
+        break;
+    case 1:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayHighQuality);
+        post("yuv_videoDarwin: set SG HighQuality");
+        break;
+    case 2:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayFast);
+        post("yuv_videoDarwin: set SG FastQuality");
+        break;
+    case 3:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
+        post("yuv_videoDarwin: set SG PlayAlldata");
+        break;
+    
+    }
+        
     m_rowBytes = m_vidXSize*2;
     anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                                  k422YpCbCr8CodecType,
@@ -186,9 +217,53 @@ void yuv_videoDarwin :: InitSeqGrabber()
     SGSetGWorld(m_sg,(CGrafPtr)m_srcGWorld, NULL);
     SGStartPreview(m_sg);
 }
+ 
+void yuv_videoDarwin :: resetSeqGrabber()
+{
+OSErr anErr;
+post ("pix_videoDarwin: starting reset");
 
+    post("pix_videoDarwin: quality %d",m_quality);
+    switch (m_quality){
+    case 0:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayNormal);
+        post("pix_videoDarwin: set SG NormalQuality");
+        break;
+    case 1:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayHighQuality);
+        post("pix_videoDarwin: set SG HighQuality");
+        break;
+    case 2:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayFast);
+        post("pix_videoDarwin: set SG FastQuality");
+        break;
+    case 3:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
+        post("pix_videoDarwin: set SG PlayAlldata");
+        break;
+    
+    }
+    
+} 
+ 
 void yuv_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
+    class_addmethod(classPtr, (t_method)&yuv_videoDarwin::qualityCallback,
+		  gensym("quality"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&yuv_videoDarwin::resetCallback,
+		  gensym("reset"), A_NULL);
+}
+
+void yuv_videoDarwin :: qualityCallback(void *data, t_floatarg X)
+{
+  GetMyClass(data)->m_quality=((int)X);
+  
+}
+
+void yuv_videoDarwin :: resetCallback(void *data)
+{
+GetMyClass(data)->resetSeqGrabber();
+  
 }
 
 #endif // MACOSX
