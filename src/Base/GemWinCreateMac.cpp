@@ -226,13 +226,13 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 
         post("GemWinCreateMac: newDspyCnt %d", newDspyCnt);
 
-        for (i=0; i < newDspyCnt; i++){
+        for (i=0; i < (int)newDspyCnt; i++){
             CGRect displayRect = CGDisplayBounds (activeDspys[i]);
             post("GemWinCreateMac: display %d width %d height %d origin.x %d origin.y %d", i, (long)displayRect.size.width, (long)displayRect.size.height, (long)displayRect.origin.x, (long)displayRect.origin.y);
         }
         
         post("GemWinCreateMac: attempting fullscreen on display %d",hints.fullscreen-1);
-        if (hints.fullscreen-1 > newDspyCnt){
+        if (hints.fullscreen-1 > (int)newDspyCnt){
             post("GemWinCreateMac: display %d does not exist",hints.fullscreen-1);
             return 0;
         }
@@ -1463,7 +1463,7 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                                                 NULL, sizeof(EventMouseButton), NULL, &button);
                         GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
                                                 NULL, sizeof(HIPoint), NULL, &location);
-			triggerButtonEvent((button==1)?0:((button==2)?2:1), 0, (int)location.x, (int)location.y );
+						triggerButtonEvent((button==1)?0:((button==2)?2:1), 0, (int)location.x, (int)location.y );
                        result = noErr;
                         break;
                         
