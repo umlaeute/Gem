@@ -232,7 +232,11 @@ dnl Checking the rest
 dnl video formats (selectable by command-line args)
 if test "$with_mpeg3" != "no"
 then
-  AC_FIND_LIB(mpeg3, mpeg3_check_sig, $search_libs, $with_mpeg3)
+  AC_FIND_LIB(mpeg3, mpeg3_check_sig $search_libs, $with_mpeg3)
+fi
+if  test "$ac_tr_lib" != "HAVE_LIBMPEG3"
+then
+  with_mpeg3="no"
 fi
 if test "$with_mpeg" != "no"
 then
@@ -243,17 +247,28 @@ then
     echo skipping check for mpeg because mpeg3 is used
   fi
 fi
+if  test "$ac_tr_lib" != "HAVE_LIBMPEG"
+then
+  with_mpeg="no"
+fi
 
 if test "$with_quicktime" != "no"
 then
   AC_FIND_LIB(quicktime, quicktime_check_sig, $search_libs, $with_quicktime)
+fi
+if  test "$ac_tr_lib" != "HAVE_LIBQUICKTIME"
+then
+  with_quicktime="no"
 fi
 
 if test "$with_avi" != "no"
 then
   AC_FIND_LIB(aviplay, CreateIAviReadFile, $search_libs, $with_avi)
 fi
-
+if  test "$ac_tr_lib" != "HAVE_LIBAVI"
+then
+  with_avi="no"
+fi
 #
 #  Test for FFMPEG libraries
 #
@@ -272,7 +287,12 @@ if test "$with_ieee1394" != "no"
 then
   AC_FIND_LIB(libdv, dv_init, $search_libs, $with_ieee1394)
 fi
-
+if  test "$ac_tr_lib" != "HAVE_LIBDV"
+then
+  with_ieee1394="no"
+else
+  
+fi
 
 dnl Checking for Headers !
 dnl there should be a flag for which paths to search
@@ -292,16 +312,34 @@ AC_CHECK_HEADER(GL/glut.h)
 dnl truetype
 if test "$with_gltt" != "no"
 then 
-AC_FIND_HEADER(GLTTFont.h, $search_heads, $with_gltt)
+  AC_FIND_HEADER(GLTTFont.h, $search_heads, $with_gltt)
 fi
 
 dnl video formats
-AC_FIND_HEADER(mpeg.h, $search_heads)
-AC_FIND_HEADER(libmpeg3.h, $search_heads)
-AC_FIND_HEADER(quicktime/quicktime.h, $search_heads)
-AC_FIND_HEADER(avifile/avifile.h, $search_heads)
-AC_FIND_HEADER(libdv/dv.h, $search_heads)
+if test "$with_mpeg" != "no"
+then
+  AC_FIND_HEADER(mpeg.h, $search_heads, $with_mpeg)
+fi
 
+if test "$with_mpeg3" != "no"
+then
+  AC_FIND_HEADER(libmpeg3.h, $search_heads, $with_mpeg3)
+fi
+
+if test "$with_quicktime" != "no"
+then
+  AC_FIND_HEADER(quicktime/quicktime.h, $search_heads, $with_quicktime)
+fi
+
+if test "$with_avi" != "no"
+then
+  AC_FIND_HEADER(avifile/avifile.h, $search_heads, $with_avi)
+fi
+
+if test "$with_ieee1394" != "no"
+then
+  AC_FIND_HEADER(libdv/dv.h, $search_heads, $with_ieee1394)
+fi
 
 
 dnl Checks for typedefs, structures, and compiler characteristics.
