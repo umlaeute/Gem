@@ -60,9 +60,44 @@ void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 		rightPix += 4;
 	}
 #else
-  register int datasize = (image.xsize * image.ysize)>>1;
+  register int datasize = (image.xsize * image.ysize)>>3;
   register unsigned char *leftPix = image.data;
   register unsigned char *rightPix = right.data;
+
+    while (datasize--) {
+      SUB8_NOALPHA(leftPix,rightPix);
+      leftPix+=8;rightPix+=8;
+      SUB8_NOALPHA(leftPix,rightPix);
+      leftPix+=8;rightPix+=8;
+      SUB8_NOALPHA(leftPix,rightPix);
+      leftPix+=8;rightPix+=8;
+      SUB8_NOALPHA(leftPix,rightPix);
+      leftPix+=8;rightPix+=8;
+    }
+
+#endif
+}
+#if 0
+/////////////////////////////////////////////////////////
+// processDualGray
+//
+/////////////////////////////////////////////////////////
+void pix_subtract :: processGray_Gray(imageStruct &image, imageStruct &right)
+{
+#if 0
+    int datasize = image.xsize * image.ysize;
+    unsigned char *leftPix = image.data;
+    unsigned char *rightPix = right.data;
+
+    while(datasize--) {
+      leftPix[chGray] = CLAMP_LOW((int)leftPix[chGray] - (int)rightPix[chGray]);
+      leftPix++;
+      rightPix++;
+    }
+#else
+    int datasize = (image.xsize * image.ysize)>>3;
+    register unsigned char *leftPix  = image.data;
+    register unsigned char *rightPix = right.data;
 
     while (datasize--) {
       SUB8(leftPix,rightPix);
@@ -70,6 +105,25 @@ void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
     }
 
 #endif
+}
+#endif
+/////////////////////////////////////////////////////////
+// processRightGray
+//
+/////////////////////////////////////////////////////////
+void pix_subtract :: processRGBA_Gray(imageStruct &image, imageStruct &right)
+{
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
+  
+  while(datasize--)    {
+    register int alpha = *rightPix++;
+    leftPix[chRed]   = CLAMP_LOW((int)leftPix[chRed]   - alpha);
+    leftPix[chGreen] = CLAMP_LOW((int)leftPix[chGreen] - alpha);
+    leftPix[chBlue]  = CLAMP_LOW((int)leftPix[chBlue]  - alpha);
+    leftPix += 4;
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -209,6 +263,32 @@ void pix_subtract :: processYUVAltivec(imageStruct &image, imageStruct &right)
         vec_dss( 0 );
 }  /*end of working altivec function */
 #endif
+}
+
+void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right){
+  if (image.format!=right.format){
+    error("pix_add: no method to combine (0x%X) and (0x%X)", image.format, right.format);
+    return;
+  }
+  int datasize = (image.xsize * image.ysize * image.csize)>>5;
+  int restsize = image.xsize * image.ysize * image.csize - datasize;
+  register unsigned char *leftPix  = image.data;
+  register unsigned char *rightPix = right.data;
+
+  while (datasize--) {
+    SUB8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    SUB8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    SUB8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    SUB8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+  }
+  while(restsize--){
+    *leftPix = CLAMP_LOW((int)(*leftPix - *rightPix));
+    leftPix++; rightPix++;
+  }
 }
 
 /////////////////////////////////////////////////////////

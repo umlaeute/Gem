@@ -50,14 +50,14 @@ class GEM_EXTERN pix_add : public GemPixDualObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
-    	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
+	//    	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
     	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
     	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
-        
-        //////////
+	//////////
     	// altivec
     	virtual void 	processYUV_Altivec(imageStruct &image, imageStruct &right);
 
+	virtual void    processDualImage(imageStruct &image, imageStruct &right);
 };
 
 #endif	// for header file

@@ -62,22 +62,20 @@ void pix_add :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   register unsigned char *leftPix = image.data;
   register unsigned char *rightPix = right.data;
 
-  // Now the Alpha channel is added too, if this is good ?
-  
   while (datasize--) {
-    ADD8(leftPix,rightPix);
+    ADD8_NOALPHA(leftPix,rightPix);
     leftPix+=8;rightPix+=8;
-    ADD8(leftPix,rightPix);
+    ADD8_NOALPHA(leftPix,rightPix);
     leftPix+=8;rightPix+=8;
-    ADD8(leftPix,rightPix);
+    ADD8_NOALPHA(leftPix,rightPix);
     leftPix+=8;rightPix+=8;
-    ADD8(leftPix,rightPix);
+    ADD8_NOALPHA(leftPix,rightPix);
     leftPix+=8;rightPix+=8;
   }
-
 #endif
 }
 
+#if 0
 /////////////////////////////////////////////////////////
 // processDualGray
 //
@@ -96,7 +94,7 @@ void pix_add :: processGray_Gray(imageStruct &image, imageStruct &right)
     }
 #else
     int datasize = (image.xsize * image.ysize)>>3;
-    register unsigned char *leftPix = image.data;
+    register unsigned char *leftPix  = image.data;
     register unsigned char *rightPix = right.data;
 
     while (datasize--) {
@@ -106,7 +104,7 @@ void pix_add :: processGray_Gray(imageStruct &image, imageStruct &right)
 
 #endif
 }
-
+#endif
 /////////////////////////////////////////////////////////
 // processRightGray
 //
@@ -133,7 +131,6 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
 #ifdef ALTIVEC
-
 processYUV_Altivec(image,right);
 return;
 #else
@@ -265,6 +262,33 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 }  /*end of working altivec function */
 #endif
 }
+
+void pix_add :: processDualImage(imageStruct &image, imageStruct &right){
+  if (image.format!=right.format){
+    error("pix_add: no method to combine (0x%X) and (0x%X)", image.format, right.format);
+    return;
+  }
+  int datasize = (image.xsize * image.ysize * image.csize)>>5;
+  int restsize = image.xsize * image.ysize * image.csize - datasize;
+  register unsigned char *leftPix  = image.data;
+  register unsigned char *rightPix = right.data;
+
+  while (datasize--) {
+    ADD8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    ADD8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    ADD8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    ADD8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+  }
+  while(restsize--){
+    *leftPix = CLAMP_HIGH((int)(*leftPix + *rightPix));
+    leftPix++; rightPix++;
+  }
+}
+
 
 /////////////////////////////////////////////////////////
 // static member function
