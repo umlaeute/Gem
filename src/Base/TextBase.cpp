@@ -38,11 +38,11 @@ TextBase :: TextBase(int argc, t_atom *argv)
   m_theString = new char[16];
   m_theMaxStringSize = 16;
   strcpy(m_theString, "gem");
-
+#ifndef MACOSX
   // do we have a text message?
   if (argc)
     textMess(argc, argv);
-
+#endif
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
 

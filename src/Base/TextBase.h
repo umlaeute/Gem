@@ -26,7 +26,7 @@ CLASS
 
 DESCRIPTION
 
-	"ft1" - The font size
+    "ft1" - The font size
     "text" - The text to draw
   
 -----------------------------------------------------------------*/
@@ -72,7 +72,7 @@ class GEM_EXTERN TextBase : public GemBase
 
 		//////////
 		// Set the width justification
-		void			setJustification(JustifyWidth wType, JustifyHeight hType);
+		void	setJustification(JustifyWidth wType, JustifyHeight hType);
 
 	    //-----------------------------------
 	    // GROUP:	Member variables
@@ -80,7 +80,7 @@ class GEM_EXTERN TextBase : public GemBase
     
 		//////////
 		// Do we have a valid font?
-		int				m_valid;
+		int	m_valid;
 
     	//////////
     	// The string to display
@@ -89,15 +89,15 @@ class GEM_EXTERN TextBase : public GemBase
     	//////////
     	// The maximum memory currently allocated for the string
 		// This includes the terminator /0 !!!
-    	int			   	m_theMaxStringSize;
+    	int	m_theMaxStringSize;
     	
 		//////////
 		// The font fize
-		int				m_fontSize;
+		int		m_fontSize;
     	
 		//////////
 		// The rendering precision
-		float			m_precision;
+		float		m_precision;
 
 		//////////
 		// The width justification
