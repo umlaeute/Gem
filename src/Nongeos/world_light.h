@@ -15,17 +15,6 @@ LOG
 #ifndef INCLUDE_WORLD_LIGHT_H_
 #define INCLUDE_WORLD_LIGHT_H_
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
-#include <windows.h>
-#endif
-
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif // __APPLE__
-
 #include "Base/GemBase.h"
 
 /*-----------------------------------------------------------------
