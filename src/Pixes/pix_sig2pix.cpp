@@ -87,9 +87,8 @@ void pix_sig2pix :: dimenMess(int width, int height) {
   m_pixBlock.image.type = GL_UNSIGNED_BYTE;
 
   m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
-  m_pixBlock.image.allocate(m_pixsize * m_pixBlock.image.csize);
-
-  clearImage();
+  m_pixBlock.image.reallocate();
+  m_pixBlock.image.setBlack();
 }
 
 
