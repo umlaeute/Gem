@@ -45,7 +45,7 @@ static void rgb2hsv_float(t_rgb2hsv *x, t_floatarg r, t_floatarg g, t_floatarg b
 {
 	t_atom argv[3];
 
-	float h, s, v;
+	float h=0, s, v;
 
 	r = FLOAT_CLAMP(r);
 	g = FLOAT_CLAMP(g);
@@ -138,7 +138,7 @@ static void hsv2rgb_float(t_hsv2rgb *x, t_floatarg h, t_floatarg s, t_floatarg v
 	h = FLOAT_CLAMP(h);
 	s = FLOAT_CLAMP(s);
 	v = FLOAT_CLAMP(v);
-	float r, g, b;
+	float r=0, g=0, b=0;
 	// convert hue to degrees
 	h *= 360.f;
 	
