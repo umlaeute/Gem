@@ -1050,7 +1050,7 @@ int GemMan :: createWindow(char* disp)
   myHints.title = m_title;
   myHints.fsaa = fsaa;
   
-  if (disp) post("Creating on display %s",disp);
+  if (disp) post("GEM: creating gem-window on display %s",disp);
   if (!createGemWindow(gfxInfo, myHints) )
     {
       error("GEM: Unable to create window");
