@@ -47,13 +47,11 @@ filmQT4L :: ~filmQT4L()
   close();
 }
 
+#ifdef HAVE_LIBQUICKTIME
 void filmQT4L :: close(void)
 {
-  //  post("qt4l: closing");
-#ifdef HAVE_LIBQUICKTIME
   if(m_quickfile)quicktime_close(m_quickfile);
   m_quickfile=0;
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -64,7 +62,6 @@ bool filmQT4L :: open(char *filename, int format)
 {
   if (format>0)m_wantedFormat=format;
   int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
-#ifdef HAVE_LIBQUICKTIME
   if (quicktime_check_sig(filename)){ /* ok, this is quicktime */
     if (!(m_quickfile = quicktime_open(filename, 1, 0))){
       post("GEM: pix_film: Unable to open file: %s", filename);
@@ -86,37 +83,27 @@ bool filmQT4L :: open(char *filename, int format)
       return false;
     } 
     switch (wantedFormat){
-    case GL_BGR:
-      if (quicktime_reads_cmodel(m_quickfile, BC_BGR888, 0)){
-	m_image.image.csize=3; m_qtformat=BC_BGR888;
-      } else goto label_rgb;
-      break;
-      break;
     default:
     case GL_RGBA:
-      //      post("rgba");
-      if (quicktime_reads_cmodel(m_quickfile, BC_RGBA8888, 0)){
-	m_image.image.csize=4;m_qtformat=BC_RGBA8888;
-      } else goto label_rgb;
+      m_image.image.csize=4;
       break;
-    case GL_YCBCR_422_GEM: // this crashes ?
-      if (quicktime_reads_cmodel(m_quickfile, BC_YUV422P, 0)){
-	m_image.image.csize=2;m_qtformat=BC_YUV422P;
-      } else goto label_rgb;
+    case GL_YCBCR_422_GEM:
+      m_image.image.csize=2;
       break;
-    label_rgb:
-   case GL_RGB:
-     //     post("rgb");
-      if (quicktime_reads_cmodel(m_quickfile, BC_RGB888, 0)){
-	m_image.image.csize=3;m_qtformat=0;
-	wantedFormat=GL_RGB;
-      }
+    case GL_LUMINANCE:
+      m_image.image.csize=1;
+      break;
     }
     m_image.image.format=wantedFormat;
     m_image.image.reallocate();
-    return true;
+
+    m_qtimage.xsize=m_image.image.xsize;
+    m_qtimage.ysize=m_image.image.ysize;
+    m_qtimage.csize=3; m_qtimage.format=GL_RGB;
+    m_qtimage.reallocate();
+
+   return true;
   }
-#endif
   goto unsupported;
  unsupported:
   post("quicktime4linux: unsupported!");
@@ -132,35 +119,29 @@ pixBlock* filmQT4L :: getFrame(){
   int i=m_image.image.ysize;
   if (m_lastFrame==m_curFrame){m_image.newimage=0; return &m_image;}
   pixBlock* pimage = 0;
-#ifdef HAVE_LIBQUICKTIME
   unsigned char **rows = new unsigned char*[m_image.image.ysize];
   m_lastFrame=m_curFrame;
-  while(i--)rows[i]=m_image.image.data
-	      +m_image.image.xsize*m_image.image.csize*(m_image.image.ysize-i-1);
-  if (m_qtformat){
-    if (quicktime_decode_scaled(m_quickfile, 
-				0, 0, m_image.image.xsize, m_image.image.ysize, m_image.image.xsize, m_image.image.ysize,
-				m_qtformat,
-				&m_image.image.data, 0)) {
-      post("GEM: pix_film:: couldn't decode video !");
-    } else {m_image.newimage=1;pimage = &m_image;}
-  } else {
-    if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
-      post("GEM: pix_film:: couldn't decode video !");
-    }else {m_image.newimage=1;pimage = &m_image;}
+
+  while(i--)rows[i]=m_qtimage.data+m_qtimage.xsize*m_qtimage.csize*(m_qtimage.ysize-i-1);
+
+  if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
+    post("GEM: pix_film:: couldn't decode video !");
+  }else {
+    m_image.image.fromRGB(m_qtimage.data);
+    m_image.newimage=1; pimage = &m_image;
   }
+
   delete[] rows;
-#endif
   return pimage;
 }
 
 int filmQT4L :: changeImage(int imgNum, int trackNum){
+  if(imgNum>m_numFrames || imgNum<0)return FILM_ERROR_FAILURE;
   if  (imgNum>0)m_curFrame=imgNum;
   if(trackNum>0)m_curTrack=trackNum;
 
-#ifdef HAVE_LIBQUICKTIME
-  if (quicktime_set_video_position(m_quickfile, m_curFrame, m_curTrack)){}
+  int i=-1;
+  if (i=quicktime_set_video_position(m_quickfile, m_curFrame, m_curTrack)){  }
   return FILM_ERROR_SUCCESS;
-#endif
-  return FILM_ERROR_DONTKNOW;
 }
+#endif // QT4L

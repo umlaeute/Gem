@@ -48,6 +48,7 @@ class GEM_EXTERN filmQT4L : public film {
   // Destructor
   virtual ~filmQT4L();
 
+#ifdef HAVE_LIBQUICKTIME
   //////////
   // open a movie up
   virtual bool open(char *filename, int format = 0);
@@ -68,9 +69,10 @@ class GEM_EXTERN filmQT4L : public film {
   //-----------------------------------
  protected:
 
-#ifdef HAVE_LIBQUICKTIME
   quicktime_t  *m_quickfile;
   int           m_qtformat;
+
+  imageStruct   m_qtimage;
 #endif
   int m_lastFrame;
 
