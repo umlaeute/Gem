@@ -33,6 +33,15 @@
 
 const float tube::TWO_PI = 8.f * (float)atan(1.f);
 
+/* only gcc allows to allocate arrays of non-constant length, like:
+ *   int i;
+ *   float array[i];
+ * other compilers will need to know the array-size at runtime!
+ */
+#ifndef __GNUC__
+# define TUBE_NUMPTS 80
+#endif
+
 CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
@@ -91,10 +100,13 @@ tube :: ~tube(){
 //
 /////////////////////////////////////////////////////////
 void tube :: render(GemState *state){
-  const int num_points = order;
-  // this will most probably not work with vc++
-  GLfloat vectors1[num_points+3][3];
-  GLfloat vectors2[num_points+3][3];
+#ifdef __GNUC__
+  GLfloat vectors1[order+3][3];
+  GLfloat vectors2[order+3][3];
+#else
+  GLfloat vectors1[TUBE_NUMPTS+3][3];
+  GLfloat vectors2[TUBE_NUMPTS+3][3];
+#endif
   GLfloat vectors_tmp; 
   float normal[3];
 
@@ -276,6 +288,13 @@ void tube :: rotY2Mess(float rotY2){
 //
 /////////////////////////////////////////////////////////
 void tube :: slicesMess(int slices){
+#ifndef __GNUC__
+  if(slices>TUBE_NUMPTS){
+    error("tube: number of slices (%d) clamped to %d", slices, TUBE_NUMPTS);
+    slices=TUBE_NUMPTS;
+  }
+#endif
+
   if(slices==order)return;
 
   order=slices;
@@ -285,10 +304,15 @@ void tube :: slicesMess(int slices){
   if(m_cos)delete[]m_cos;
   if(m_sin)delete[]m_sin;
 
+#ifndef __GNUC__
+  m_cos = new GLfloat[TUBE_NUMPTS];
+  m_sin = new GLfloat[TUBE_NUMPTS];
+#else
   m_cos = new GLfloat[order];
   m_sin = new GLfloat[order];
+#endif
 
-  for(int i=0; i<order; i++)    
+  for(int i=0; i<order; i++)
     {
       m_cos[i] = (float)cos(TWO_PI * (double)i / (double)order);
       m_sin[i] = (float)sin(TWO_PI * (double)i / (double)order);
