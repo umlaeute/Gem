@@ -108,7 +108,7 @@ void pix_write :: doWrite()
       m_originalImage = new imageStruct;
       m_originalImage->xsize = width;
       m_originalImage->ysize = height;
-      #ifndef MACOSX
+      #ifndef __APPLE__
       m_originalImage->type  = GL_UNSIGNED_BYTE;
 
       m_originalImage->csize = 3;
