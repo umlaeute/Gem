@@ -17,6 +17,7 @@
 #include "polygon.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "Base/GemState.h"
@@ -36,22 +37,29 @@ polygon :: polygon(t_floatarg numInputs)
 {
   int i;
   int realNum = (int)numInputs;
-  for (i = 0; i < POLYGON_MAX_POINTS; i++)  {
-    m_vert[i][0] = m_vert[i][1] = m_vert[i][2] = 0.0;
-  }
 
   // configure the inlets
-  if (realNum <= 0 || realNum > POLYGON_MAX_POINTS)   {
+  if (realNum <= 0)   {
     error("GEM: polygon: illegal number of points");
     return;
   }
   m_numInputs = realNum;
-    
+
+  m_vert = new float*[realNum];
+  m_vertarray = new float[realNum*3];
+
+  for (i = 0; i < realNum*3; i++)  {
+    m_vertarray[i]=0.0f;
+  }
+  for (i = 0; i < realNum; i++)  {
+    m_vert[i]=m_vertarray+3*i;
+  }
+
+
   char tempVt[7];
-    
   // create the proper number of inputs
   for (i = 0; i < realNum; i++) {
-    sprintf(tempVt, "vert_%d", i);
+    sprintf(tempVt, "%d", i+1);
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym(tempVt) );
   }
 }
@@ -61,7 +69,10 @@ polygon :: polygon(t_floatarg numInputs)
 //
 /////////////////////////////////////////////////////////
 polygon :: ~polygon()
-{ }
+{
+  delete[]m_vert;
+  delete[]m_vertarray;
+ }
 
 /////////////////////////////////////////////////////////
 // render
@@ -128,9 +139,7 @@ void polygon :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void polygon :: linewidthMess(float linewidth)
 {
-  //  post("polygon: linewidth %f",linewidth);
     m_linewidth = (linewidth < 0.0f) ? 0.0f : linewidth;
-  //  post("polygon: m_linewidth %f",m_linewidth);
     setModified();
 }
 
@@ -194,74 +203,21 @@ void polygon :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, (t_method)&polygon::typeMessCallback,
     	    gensym("draw"), A_SYMBOL, A_NULL);
 
-    class_addmethod(classPtr, (t_method)&polygon::setVert0Callback,
-    	    gensym("vert_0"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert1Callback,
-    	    gensym("vert_1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert2Callback,
-    	    gensym("vert_2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert3Callback,
-    	    gensym("vert_3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert4Callback,
-    	    gensym("vert_4"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert5Callback,
-    	    gensym("vert_5"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert6Callback,
-    	    gensym("vert_6"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert7Callback,
-    	    gensym("vert_7"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert8Callback,
-    	    gensym("vert_8"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::setVert9Callback,
-    	    gensym("vert_9"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+    class_addanything(classPtr, (t_method)&polygon::vertCallback);
 }
 void polygon :: linewidthMessCallback(void *data, t_floatarg linewidth)
 {
     GetMyClass(data)->linewidthMess((float)linewidth);
-   // post("linewidthMessCallback");
 }
 void polygon :: typeMessCallback(void *data, t_symbol *type)
 {
     GetMyClass(data)->typeMess(type);
 }
-void polygon :: setVert0Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(0, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert1Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(1, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert2Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(2, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert3Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(3, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert4Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(4, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert5Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(5, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert6Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(6, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert7Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(7, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert8Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(8, (float)x, (float)y, (float)z);
-}
-void polygon :: setVert9Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->setVert(9, (float)x, (float)y, (float)z);
-}
 
+void polygon :: vertCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
+  int i = atoi(s->s_name);
+  if (i>0 && argc==3){
+    GetMyClass(data)->setVert(i-1, atom_getfloat(argv), atom_getfloat(argv+1), atom_getfloat(argv+2));
+  }
+}

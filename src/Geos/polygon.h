@@ -15,10 +15,9 @@ LOG
 #ifndef INCLUDE_POLYGON_H_
 #define INCLUDE_POLYGON_H_
 
-#define POLYGON_MAX_POINTS 10
-
 #include "Base/GemBase.h"
 #include "Base/GemShape.h"
+
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -79,16 +78,13 @@ class GEM_EXTERN polygon : public GemShape
 	    //-----------------------------------
     
     	//////////
-    	// The line width for GL_LINE mode
-		GLfloat	    	m_linewidth;
-
-    	//////////
     	// The number of inputs (the number of points)
     	int 	    	m_numInputs;
     	
     	//////////
     	// The vertices
-    	float	    	m_vert[POLYGON_MAX_POINTS][3];
+	float  *m_vertarray;
+    	float **m_vert;
 
         //////////
         // The drawing style (GL_LINE, GL_POLYGON, etc)
@@ -100,16 +96,7 @@ class GEM_EXTERN polygon : public GemShape
     	// Static member functions
     	static void 	linewidthMessCallback(void *data, t_floatarg linewidth);
     	static void 	typeMessCallback(void *data, t_symbol *type);
-    	static void 	setVert0Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert1Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert2Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert3Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert4Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert5Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert6Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert7Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert8Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
-    	static void 	setVert9Callback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
+    	static void 	vertCallback(void *data, t_symbol *type, int argc, t_atom*argv);
 };
 
 #endif	// for header file
