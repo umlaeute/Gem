@@ -21,10 +21,9 @@ CPPEXTERN_NEW(pix_chroma_key)
 /////////////////////////////////////////////////////////
 pix_chroma_key :: pix_chroma_key()
 {
-m_processOnOff=0;
-m_direction = 1;
-m_mode=1;
-m_Yrange = m_Vrange = m_Vrange = m_Yvalue = m_Uvalue = m_Vvalue = 0;
+  m_direction = 1;
+  m_mode=1;
+  m_Yrange = m_Vrange = m_Vrange = m_Yvalue = m_Uvalue = m_Vvalue = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -32,9 +31,7 @@ m_Yrange = m_Vrange = m_Vrange = m_Yvalue = m_Uvalue = m_Vvalue = 0;
 //
 /////////////////////////////////////////////////////////
 pix_chroma_key :: ~pix_chroma_key()
-{
-
-}
+{}
 
 /////////////////////////////////////////////////////////
 // processImage
@@ -42,58 +39,47 @@ pix_chroma_key :: ~pix_chroma_key()
 /////////////////////////////////////////////////////////
 void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-   long src;
-   int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
-   unsigned char Ghi,Glo,Bhi,Blo,Rhi,Rlo;
-   src =0;
+  long src;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
+  unsigned char Ghi,Glo,Bhi,Blo,Rhi,Rlo;
+  src =0;
 
-   Rhi = CLAMP(m_Yvalue + m_Yrange); 
-   Rlo = CLAMP(m_Yvalue - m_Yrange);
-   Ghi = CLAMP(m_Uvalue + m_Urange); 
-   Glo = CLAMP(m_Uvalue - m_Urange);
-   Bhi = CLAMP(m_Vvalue + m_Vrange); 
-   Blo = CLAMP(m_Vvalue - m_Vrange);
+  Rhi = CLAMP(m_Yvalue + m_Yrange); 
+  Rlo = CLAMP(m_Yvalue - m_Yrange);
+  Ghi = CLAMP(m_Uvalue + m_Urange); 
+  Glo = CLAMP(m_Uvalue - m_Urange);
+  Bhi = CLAMP(m_Vvalue + m_Vrange); 
+  Blo = CLAMP(m_Vvalue - m_Vrange);
 
-
-    if (m_direction) {
-    
+  if (m_direction) {    
+    while(datasize--){        
+      if ((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
+	  (leftPix[chRed] < Rhi)&&(leftPix[chRed] > Rlo)&&
+	  (leftPix[chGreen] < Ghi)&&(leftPix[chGreen] > Glo))
+	{
+	  leftPix[chRed] = rightPix[chRed];
+	  leftPix[chGreen] = rightPix[chGreen];
+	  leftPix[chBlue] = rightPix[chBlue];
+	}
+      leftPix+=4;
+      rightPix+=4;
+    }
+  } else { //this needs help
     while(datasize--){
-        
-            if ((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
-            (leftPix[chRed] < Rhi)&&(leftPix[chRed] > Rlo)&&
-            (leftPix[chGreen] < Ghi)&&(leftPix[chGreen] > Glo))
-                {
-                leftPix[chRed] = rightPix[chRed];
-                leftPix[chGreen] = rightPix[chGreen];
-            
-                leftPix[chBlue] = rightPix[chBlue];
-                }
-        leftPix+=4;
-        rightPix+=4;
-            }
-        
-    } else { //this needs help
-        
-     while(datasize--){
-        
-            if (!((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
+      if (!((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
             (leftPix[chRed] < Ghi)&&(leftPix[chRed] > Glo)&&
             (leftPix[chGreen] < Rhi)&&(leftPix[chGreen] > Rlo)))
-                {
-                leftPix[chRed] = rightPix[chRed];
-                leftPix[chGreen] = rightPix[chGreen];
-            
-                leftPix[chBlue] = rightPix[chBlue];
-                }
-        leftPix+=4;
-        rightPix+=4;
-            
-        }   
-        
+	{
+	  leftPix[chRed] = rightPix[chRed];
+	  leftPix[chGreen] = rightPix[chGreen];
+	  leftPix[chBlue] = rightPix[chBlue];
+	}
+      leftPix+=4;
+      rightPix+=4;
     }
-    
+  }
 }
 
 
@@ -121,195 +107,149 @@ return;
    Vlo = CLAMP(m_Vvalue - m_Vrange);
    //format is U Y V Y
    xsize = image.xsize/2;
-    if (m_mode){
-
-   
-    if (m_direction) {
-    
-    for (h=0; h<image.ysize; h++){
-        for(w=0; w<xsize; w++){
-        
-         /*   if (
-            ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
-            ((image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)||(image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))&&
-            ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)))
+   if (m_mode){
+     if (m_direction) {
+       for (h=0; h<image.ysize; h++){
+	 for(w=0; w<xsize; w++){
+	   /*   if (
+		((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
+		((image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)||(image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))&&
+		((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)))
                 {
                 image.data[src] = right.data[src];
                 image.data[src+1] = right.data[src+1];
-            
+		
                 image.data[src+2] = right.data[src+2];
                 image.data[src+3] = right.data[src+3];
                 } */
-        if (
-            ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
-            ((image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo))&&
-            ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))
-            )
-            {
-            image.data[src] = right.data[src];
-                image.data[src+1] = right.data[src+1];
-                }
-            if (
-            ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
-            ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))&&
-            ((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))
-             )   
-            {
-            image.data[src+2] = right.data[src+2];
-                image.data[src+3] = right.data[src+3];
-                }    
-            
-        src+=4;
-            }
-        }
-    } else { //this needs help
-        
-     for (h=0; h<image.ysize; h++){
-        for(w=0; w<xsize; w++){
-        
-            if (!((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
-            (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
-            (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)))
-                {
-                image.data[src] = right.data[src];
-                image.data[src+1] = right.data[src+1];
-            
-                image.data[src+2] = right.data[src+2];
-                image.data[src+3] = right.data[src+3];
-                }
-        src+=4;
-            }
-        }   
-        
-    } 
-    
-    }else{
-    /**/
-    //this mode does interpolation between Y values if one of the pair lies outside the range
-    // could this also be done even if both lie in the range too??
-    
-    if (m_direction) {
-    
-    for (h=0; h<image.ysize; h++){
-        for(w=0; w<image.xsize/4; w++){
-    
-    change1 = 0;
-    change2 = 0;  
-    change3 = 0;
-    change4 = 0;  
-    if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
-        (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
-        (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
-            
-           
-            change1 = 1;
-            
-        }
-        
-    if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
-        (image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
-        (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
-            
-          
-        change2 = 1;
-        
-        }
-        
-     if ((image.data[src+4] < Uhi)&&(image.data[src+4] > Ulo)&&
-        (image.data[src+5] < Yhi)&&(image.data[src+5] > Ylo)&&
-        (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
-            
-           
-            change3 = 1;
-            
-        }
-        
-    if ((image.data[src+4] < Uhi)&&(image.data[src+4] > Ulo)&&
-        (image.data[src+7] < Yhi)&&(image.data[src+7] > Ylo)&&
-        (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
-            
-          
-        change4 = 1;
-        
-        }   
-        
-        if (change1 && change2 && change3 && change4){
-        
-            image.data[src] = right.data[src];
-            image.data[src+1] = right.data[src+1];
-            image.data[src+2] = right.data[src+2];
-            image.data[src+3] = right.data[src+3];
-            image.data[src+4] = right.data[src+4];
-            image.data[src+5] = right.data[src+5];
-            image.data[src+6] = right.data[src+6];
-            image.data[src+7] = right.data[src+7];
-        
-        }else{
-            
-            if(change1 || change2 || change3 || change4){
+	   if (
+	       ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
+	       ((image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo))&&
+	       ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))
+	       )
+	     {
+	       image.data[src] = right.data[src];
+	       image.data[src+1] = right.data[src+1];
+	     }
+	   if (
+	       ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
+	       ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))&&
+	       ((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))
+	       )   
+	     {
+	       image.data[src+2] = right.data[src+2];
+	       image.data[src+3] = right.data[src+3];
+	     }    
+	   src+=4;
+	 }
+       }
+     } else { //this needs help
+       for (h=0; h<image.ysize; h++){
+	 for(w=0; w<xsize; w++){
+	   if (!((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
+		 (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
+		 (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)))
+	     {
+	       image.data[src] = right.data[src];
+	       image.data[src+1] = right.data[src+1];
+	       image.data[src+2] = right.data[src+2];
+	       image.data[src+3] = right.data[src+3];
+	     }
+	   src+=4;
+	 }
+       }   
+     } 
+   }else{
+     /**/
+     //this mode does interpolation between Y values if one of the pair lies outside the range
+     // could this also be done even if both lie in the range too??
+     if (m_direction) {
+       for (h=0; h<image.ysize; h++){
+	 for(w=0; w<image.xsize/4; w++){
+	   change1 = 0;
+	   change2 = 0;  
+	   change3 = 0;
+	   change4 = 0;  
+	   if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
+	       (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
+	       (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
+	     change1 = 1;
+	   }
+
+	   if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
+	       (image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
+	       (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
+	     change2 = 1;
+	   }
+
+	   if ((image.data[src+4] < Uhi)&&(image.data[src+4] > Ulo)&&
+	       (image.data[src+5] < Yhi)&&(image.data[src+5] > Ylo)&&
+	       (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
+	     change3 = 1;
+	   }
+
+	   if ((image.data[src+4] < Uhi)&&(image.data[src+4] > Ulo)&&
+	       (image.data[src+7] < Yhi)&&(image.data[src+7] > Ylo)&&
+	       (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
+	     change4 = 1;
+	   }   
+
+	   if (change1 && change2 && change3 && change4){
+	     image.data[src] = right.data[src];
+	     image.data[src+1] = right.data[src+1];
+	     image.data[src+2] = right.data[src+2];
+	     image.data[src+3] = right.data[src+3];
+	     image.data[src+4] = right.data[src+4];
+	     image.data[src+5] = right.data[src+5];
+	     image.data[src+6] = right.data[src+6];
+	     image.data[src+7] = right.data[src+7];
+	   }else{
+	     if(change1 || change2 || change3 || change4){
+	       int temp1,temp2;
+	       image.data[src] = right.data[src];
+	       temp1 = ((image.data[src+1] * 32) + (image.data[src+3] * 32) + (image.data[src+5] * 32) + (image.data[src+7] * 32))>>8;
+	       temp2 = ((right.data[src+1] * 32) + (right.data[src+3] * 32)+ (right.data[src+5] * 32) + (right.data[src+7] * 32))>>8;
+
+	       //   temp1 = ((image.data[src+1] * 255) + (right.data[src+1] * 0))>>8;
+	       image.data[src+1] = CLAMP(temp1 + temp2) ;
+	       image.data[src+2] = right.data[src+2];
                 
-                int temp1,temp2;
-                
-                image.data[src] = right.data[src];
-                
-                temp1 = ((image.data[src+1] * 32) + (image.data[src+3] * 32) + (image.data[src+5] * 32) + (image.data[src+7] * 32))>>8;
-                temp2 = ((right.data[src+1] * 32) + (right.data[src+3] * 32)+ (right.data[src+5] * 32) + (right.data[src+7] * 32))>>8;
-                
-             //   temp1 = ((image.data[src+1] * 255) + (right.data[src+1] * 0))>>8;
-                image.data[src+1] = CLAMP(temp1 + temp2) ;
-                
-                image.data[src+2] = right.data[src+2];
-                
-              //  temp2 = ((image.data[src+3] * 192) + (right.data[src+3] * 64))>>8;
-                image.data[src+3] = CLAMP(temp1 + temp2);
-                
-                image.data[src+4] = right.data[src+4];
-                
-              //  temp1 = ((image.data[src+5] * 128) + (right.data[src+5] * 128))>>8;
-                image.data[src+5] = CLAMP(temp1 + temp2);
-                
-                image.data[src+6] = right.data[src+6];
-                
-              //  temp2 = ((image.data[src+7] * 64) + (right.data[src+7] * 192))>>8;
-                image.data[src+7] = CLAMP(temp1 + temp2);
-                
-                change1 = 0; change2 = 0;change3 = 0; change4 = 0;
-              }  
-          //  }else{
-            
-           // }
-                
-            
-        }    
-        
-        src+=8;
-        
-        }
-    }
-    
-    }else{
-    for (h=0; h<image.ysize; h++){
-        for(w=0; w<image.xsize/2; w++){
-    if (!((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
-            (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo))){
-            
-            image.data[src] = right.data[src];
-            image.data[src+1] = right.data[src+1];
-            
-        }
-        
-    if (!((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
-            (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))){
-            
-         image.data[src+2] = right.data[src+2];
-         image.data[src+3] = right.data[src+3];   
-        
-        }
-        src+=4;
-        }
-    }
-    }/**/
-}
+	       //  temp2 = ((image.data[src+3] * 192) + (right.data[src+3] * 64))>>8;
+	       image.data[src+3] = CLAMP(temp1 + temp2);
+	       image.data[src+4] = right.data[src+4];
+
+	       //  temp1 = ((image.data[src+5] * 128) + (right.data[src+5] * 128))>>8;
+	       image.data[src+5] = CLAMP(temp1 + temp2);
+	       image.data[src+6] = right.data[src+6];
+
+	       //  temp2 = ((image.data[src+7] * 64) + (right.data[src+7] * 192))>>8;
+	       image.data[src+7] = CLAMP(temp1 + temp2);                
+	       change1 = 0; change2 = 0;change3 = 0; change4 = 0;
+	     }  
+	     //  }else{
+	     // }
+	   }    
+	   src+=8;
+	 }
+       }    
+     }else{
+       for (h=0; h<image.ysize; h++){
+	 for(w=0; w<image.xsize/2; w++){
+	   if (!((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
+		 (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo))){
+	     image.data[src] = right.data[src];
+	     image.data[src+1] = right.data[src+1];
+	   }
+	   if (!((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
+		 (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))){
+	     image.data[src+2] = right.data[src+2];
+	     image.data[src+3] = right.data[src+3];   
+	   }
+	   src+=4;
+	 }
+       }
+     }/**/
+   }
 #endif //ALTIVEC
 }
 
