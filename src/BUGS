@@ -7,3 +7,9 @@ ripple: what is the height for ?
 rubber/ripple: sizeMess obsolete ?
 
 release critical: [filmQT4L] produces RGB output if RGBA is not supported by the codec -- FIXED
+
+RC: the linker flags for libavifile could be obtained via `avifile-config`. these are more correct than just adding `-lavifile` (aka: i had big problems without these..) -- FIXED
+
+sending the gemwin to another machine makes Gem crash (at least on my configuration)
+
+pix_buffer_read/write sometimes crashes
