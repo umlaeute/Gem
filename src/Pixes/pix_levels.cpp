@@ -77,11 +77,37 @@ pix_levels :: ~pix_levels()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_levels :: processImage(imageStruct &image)
+void pix_levels :: processYUVImage(imageStruct &image)
 {
     nWidth = image.xsize*image.csize/4;
     nHeight = image.ysize;
     
+    pSource = (U32*)image.data;
+
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.csize = image.csize;
+    myImage.type  = image.type;
+    myImage.format=image.format;
+    myImage.reallocate();
+    pOutput = (U32*)myImage.data;
+
+    if(m_DoAuto)Pete_Levels_CalculateAutoLevels(GL_RGBA);
+    Pete_Levels_SetupCFSettings();
+    Pete_ChannelFunction_RenderYUV();
+
+    image.data = myImage.data;
+}
+
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_levels :: processRGBAImage(imageStruct &image)
+{
+    nWidth = image.xsize*image.csize/4;
+    nHeight = image.ysize;
+
     pSource = (U32*)image.data;
 
     myImage.xsize = image.xsize;
@@ -500,6 +526,52 @@ void pix_levels :: Pete_ChannelFunction_Render() {
 		pCurrentSource+=1;
 		pCurrentOutput+=1;
 	}
+}
+
+
+void pix_levels :: Pete_ChannelFunction_RenderYUV() {
+
+    const int*const pRedTable=m_nRedTable;
+    const int*const pGreenTable=m_nGreenTable;
+    const int*const pBlueTable=m_nBlueTable;
+    const int*const pAlphaTable=m_nAlphaTable;
+
+    const int nNumPixels = nWidth*nHeight;
+
+    U32* pCurrentSource=pSource;
+    U32* pCurrentOutput=pOutput;
+    const U32* pSourceEnd=(pSource+nNumPixels);
+    while (pCurrentSource!=pSourceEnd) {
+        const U32 SourceColour=*pCurrentSource;
+        const unsigned int nSourceU=(SourceColour>>SHIFT_U)&0xff;
+        const unsigned int nSourceY1=(SourceColour>>SHIFT_Y1)&0xff;
+        const unsigned int nSourceV=(SourceColour>>SHIFT_V)&0xff;
+        //		const unsigned int nSourceAlpha=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
+        const unsigned int nSourceY2=(SourceColour>>SHIFT_Y2)&0xff;
+        //const unsigned int nSourceAlpha0=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
+
+
+        const int nOutputY1=pRedTable[nSourceY1];
+        const int nOutputY2=pBlueTable[nSourceY2];
+        const int nOutputU=pAlphaTable[nSourceU];
+        const int nOutputV=pGreenTable[nSourceV];
+ //       const int nOutputBlue=pBlueTable[nSourceBlue];
+ //       const int nOutputAlpha=pAlphaTable[nSourceAlpha];
+        /*
+         post("IN  %d %d %d %d", (nSourceRed&0xff), (nSourceGreen&0xff), (nSourceBlue&0xff), (nSourceAlpha&0xff));
+
+         post("OUT %d %d %d %d", (nOutputRed&0xff), (nOutputGreen&0xff), (nOutputBlue&0xff), (nOutputAlpha&0xff));
+         */
+        const U32 OutputColour=
+            ((nOutputU&0xff)<<SHIFT_U)| //Y0
+            ((nOutputY1&0xff)<<SHIFT_Y1)| //Y1
+            ((nOutputV&0xff)<<SHIFT_V)| //V
+            ((nOutputY2&0xff)<<SHIFT_Y2); //U
+
+        *pCurrentOutput=OutputColour;
+        pCurrentSource+=1;
+        pCurrentOutput+=1;
+    }
 }
 
 /////////////////////////////////////////////////////////

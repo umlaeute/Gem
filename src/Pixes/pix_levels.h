@@ -49,7 +49,11 @@ class GEM_EXTERN pix_levels : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
+    	virtual void 	processYUVImage(imageStruct &image);
+
+        //////////
+        // Do the processing
+        virtual void 	processRGBAImage(imageStruct &image);
 
 	imageStruct	myImage;
 	int		nHeight;
@@ -100,6 +104,7 @@ class GEM_EXTERN pix_levels : public GemPixObj
 	void Pete_Levels_SetupCFSettings(int colour=GL_RGBA);
 	void Pete_Levels_CalculateAutoLevels(int colour=GL_RGBA);
 	void Pete_ChannelFunction_Render();
+        void Pete_ChannelFunction_RenderYUV();
 	
 	
     private:
