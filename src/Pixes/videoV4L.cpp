@@ -60,6 +60,7 @@ videoV4L :: videoV4L(int format) : video(format){
   m_channel=COMPOSITEIN;
   m_norm=VIDEO_MODE_AUTO;
   m_devicenum=DEVICENO;
+  post("video4linux");
   //  post("w = %d, h= %d",m_width, m_height);
   //m_image.image.reallocate();
 }
@@ -349,7 +350,6 @@ closit:
     }
     m_haveVideo = 0;
     m_frame_ready=0;
-    post("fish");
     return(0);
 }
 
