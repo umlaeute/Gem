@@ -25,6 +25,7 @@ LOG
 #ifdef MACOSX
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
 #include <QuickTime/QuickTime.h>
 #else
 #include <GL/gl.h>
@@ -87,7 +88,7 @@ struct GEM_EXTERN imageStruct
 #else
     type(GL_UNSIGNED_BYTE), format(GL_RGBA),
 #endif
-    notowned(0),data(0),datasize(0),pdata(0)
+    notowned(0),data(0),pdata(0),datasize(0)
 {}
 
   ~imageStruct() { clear(); }
