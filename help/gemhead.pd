@@ -1,4 +1,4 @@
-#N canvas -37 37 902 724 10;
+#N canvas 20 14 817 611 10;
 #X text 52 365 Any gem object can be connected after the gemhead and
 it will receive the render command.;
 #X text 47 294 gemhead connects the gem objects to the window manager.
@@ -10,12 +10,12 @@ This is useful for a single buffered window when you want to control
 when things are rendered.;
 #X text 45 468 gemhead also accepts a 1 or 0 to enable and disable
 rendering for the chain.;
-#X text 439 532 you can dynamically set this value via the "set" message
+#X text 434 386 you can dynamically set this value via the "set" message
 ;
-#X obj 554 318 cnv 15 140 65 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 337 528 cnv 15 140 65 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X msg 569 338 destroy;
-#X text 565 317 Create window:;
+#X msg 352 548 create;
+#X text 348 527 Create window:;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -34,7 +34,7 @@ rendering for the chain.;
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 569 358 pd gemwin (2fps);
+#X restore 352 568 pd gemwin (2fps);
 #X obj 42 37 cnv 15 200 240 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 51 42 enable/disable rendering;
@@ -70,18 +70,18 @@ rendering for the chain.;
 #X obj 569 141 translate 2 1 0 0;
 #X obj 335 162 circle 0.5;
 #X obj 569 162 triangle 0.5;
-#X text 434 434 gemhead takes an argument to determine when it receives
+#X text 429 288 gemhead takes an argument to determine when it receives
 the render command. The default value is 50 The lower the value is
 \, the sooner the gemhead will receive the rendering command (a value
 of 1 is the lowest possible value (see below)). This value becomes
 important when you are doing alpha blending and for certain objects
 (such as light).;
-#X text 435 562 the rendering-order value can also be negative. Negative
+#X text 430 416 the rendering-order value can also be negative. Negative
 numbered [gemhead]s will be rendered AFTER all positive [gemhead]s.
 Lower values (-10) will be rendered before higher values (-3). [gemhead]s
 with negative numbers will NOT be affected by view-point changes !!!
 ;
-#X text 434 641 example: "1" before "50" before "-23" before "-10"
+#X text 429 495 example: "1" before "50" before "-23" before "-10"
 ;
 #X connect 7 0 9 0;
 #X connect 9 0 7 0;
