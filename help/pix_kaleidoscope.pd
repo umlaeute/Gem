@@ -1,0 +1,82 @@
+#N canvas 413 30 632 510 10;
+#X obj 15 431 tgl 15 0 empty empty empty 20 8 32 8 -262144 -1 -1 0
+1;
+#X obj 41 446 pix_kaleidoscope;
+#X msg 91 113 div \$1;
+#X floatatom 91 92 5 0 64 0 - - -;
+#X obj 91 206 pack;
+#X floatatom 133 185 5 0 1 0 - - -;
+#X floatatom 134 208 5 0 1 0 - - -;
+#X obj 91 316 pack;
+#X floatatom 136 297 5 0 1 0 - - -;
+#X floatatom 136 318 5 0 1 0 - - -;
+#X msg 91 228 sourceCtr \$1 \$2;
+#X msg 91 338 outputCtr \$1 \$2;
+#X floatatom 93 141 5 0 6.28 0 - - -;
+#X floatatom 92 254 5 0 6.28 0 - - -;
+#X floatatom 91 404 5 0.1 10 0 - - -;
+#X msg 91 425 sap \$1;
+#X msg 92 275 outputAng \$1;
+#X msg 93 162 sourceAng \$1;
+#X floatatom 91 361 5 0 1 0 - - -;
+#X msg 91 382 rlp \$1;
+#X msg 41 71 gemList;
+#X msg 41 472 gemList;
+#X text 199 5 This effect is similar to a traditional kaleidoscope
+\, and allows you to reflect a part of the image multiple times around
+a centre point. You can set how many segments you want the image reflected
+as \, how the mirrors are rotated \, where the center of the output
+images is \, and what part of the source image is used as the source.
+;
+#X text 160 92 Controls the number of segments composing the output
+image;
+#X text 190 135 Rotates the segment of the input image that is used
+for all the output segments;
+#X text 196 249 Sets how much to rotate segments around the center
+point when they're drawn;
+#X text 181 185 X;
+#X text 182 206 Y;
+#X text 180 297 X;
+#X text 181 318 Y;
+#X text 202 189 Sets the horizontal and vertical position of the central
+corner of the segment in the input image;
+#X text 204 300 Sets the horizontal and vertical position of the rotated
+segments in the output image;
+#X text 159 362 Reflection Line Proportion: controls the relative sizes
+of each pair of adjacent segments in the output image;
+#X text 159 412 Source Angle Porportion: sets the angular size of the
+source segment \, relative to the size of the output segment \; altering
+this value will squash or expand;
+#X text 197 475 (ported from "pete's_plugins" \, www.petewarden.com)
+;
+#X text 213 451 range = 0.1 to 10 \, default = 1;
+#X text 210 388 range = 0 to 1 \, default = 0.5;
+#X text 234 326 range = 0 to 1 \, default = 0.5;
+#X text 239 219 range = 0 to 1 \, default = 0.5;
+#X text 198 107 range = 0 to 64 \, default = 7;
+#X text 239 276 range = 0 to 6.28 \, default = 0;
+#X text 241 162 range = 0 to 6.28 \, default = 0;
+#X text 18 8 [pix_kaleidoscope];
+#X text 18 391 on/off;
+#X text 2 409 default: on;
+#X connect 0 0 1 0;
+#X connect 1 0 21 0;
+#X connect 2 0 1 0;
+#X connect 3 0 2 0;
+#X connect 4 0 10 0;
+#X connect 5 0 4 0;
+#X connect 6 0 4 1;
+#X connect 7 0 11 0;
+#X connect 8 0 7 0;
+#X connect 9 0 7 1;
+#X connect 10 0 1 0;
+#X connect 11 0 1 0;
+#X connect 12 0 17 0;
+#X connect 13 0 16 0;
+#X connect 14 0 15 0;
+#X connect 15 0 1 0;
+#X connect 16 0 1 0;
+#X connect 17 0 1 0;
+#X connect 18 0 19 0;
+#X connect 19 0 1 0;
+#X connect 20 0 1 0;

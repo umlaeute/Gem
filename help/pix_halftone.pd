@@ -1,0 +1,43 @@
+#N canvas 460 319 571 282 10;
+#X text 21 9 [pix_halftone];
+#X msg 83 32 gemList;
+#X msg 83 249 gemList;
+#X obj 42 211 tgl 15 0 empty empty empty 20 8 32 8 -262144 -1 -1 0
+1;
+#X floatatom 102 54 5 1 31 0 - - -;
+#X floatatom 105 172 5 0 255 0 - - -;
+#X floatatom 103 94 5 0 4 0 - - -;
+#X floatatom 104 130 5 0 6.28 0 - - -;
+#X obj 83 226 pix_halftone;
+#X msg 102 71 size \$1;
+#X msg 103 110 style \$1;
+#X msg 105 188 smooth \$1;
+#X msg 104 146 angle \$1;
+#X text 171 8 Draws the input using the patterns of dots or diamonds
+that are found in newspaper photographs.;
+#X text 21 174 on/off;
+#X text 3 188 default: on;
+#X text 180 174 Sets how blurry the dots on-screen are;
+#X text 180 137 Sets the orientation of the grids of dots on screen
+;
+#X text 179 93 Picks from 5 styles: round dots \, lines \, diamonds
+\, 'euclidean' \, and postscript diamonds;
+#X text 180 48 Sets the size of the dots/diamonds used to make up the
+picture;
+#X text 179 248 (ported from "pete's_plugins" \, www.petewarden.com)
+;
+#X text 205 73 range = 1 to 31 \, default = 8;
+#X text 205 119 range = 0 to 4 \, default = 0 (round dots);
+#X text 204 148 range = 0 to 6.28 \, default = 0;
+#X text 206 186 range = 0 to 255 \, default = 128;
+#X connect 1 0 8 0;
+#X connect 3 0 8 0;
+#X connect 4 0 9 0;
+#X connect 5 0 11 0;
+#X connect 6 0 10 0;
+#X connect 7 0 12 0;
+#X connect 8 0 2 0;
+#X connect 9 0 8 0;
+#X connect 10 0 8 0;
+#X connect 11 0 8 0;
+#X connect 12 0 8 0;

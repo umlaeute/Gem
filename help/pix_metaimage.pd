@@ -1,0 +1,48 @@
+#N canvas 614 135 455 490 10;
+#X msg 86 32 gemList;
+#X msg 86 197 gemList;
+#X obj 47 151 tgl 15 0 empty empty empty 20 8 32 8 -262144 -1 -1 0
+1;
+#X obj 86 171 pix_metaimage;
+#X obj 47 151 tgl 15 0 empty empty empty 20 8 32 8 -262144 -1 -1 0
+1;
+#X text 11 6 [pix_metaimage];
+#X text 223 78 0 = on \, 1 = off;
+#X text 225 129 0 = on \, 1 = off;
+#X text 35 222 The output image is composed of many smaller versions
+of the input image \, altered to match the colors of the area they
+cover in the original image.;
+#X text 15 268 messages:;
+#X text 26 289 size;
+#X text 19 392 distance;
+#X text 25 338 cheap;
+#X text 88 284 This controls the size of the smaller sub-images that
+make up the picture \, where 1 is as big as the original \, and 0 is
+tiny.;
+#X text 89 335 Part of the scaling down process on the images involves
+properly smoothing them \; turning this parameter on skips that step
+\, giving a more jagged output but speeding up the processing.;
+#X text 90 392 This controls how the size of the images is changed
+by the 'Size' message. If turned on \, then the size doesn't scale
+linearly \, but is used as if the images were on a plane in 3D space
+\, and controls the distance from the plane.;
+#X text 24 120 on/off;
+#X floatatom 170 33 5 0 1 0 - - -;
+#X floatatom 171 129 5 0 1 0 - - -;
+#X floatatom 170 79 5 0 1 0 - - -;
+#X msg 170 54 size \$1;
+#X msg 171 150 distance \$1;
+#X msg 170 100 cheap \$1;
+#X text 6 134 default: on;
+#X text 21 459 (ported from "pete's plugins" \, www.petewarden.com)
+;
+#X text 221 32 range = 0 to 1 \, default = 0.2;
+#X connect 0 0 3 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X connect 17 0 20 0;
+#X connect 18 0 21 0;
+#X connect 19 0 22 0;
+#X connect 20 0 3 0;
+#X connect 21 0 3 0;
+#X connect 22 0 3 0;

@@ -1,0 +1,45 @@
+#N canvas 320 22 590 332 10;
+#X obj 57 218 tgl 15 0 empty empty empty 20 8 32 8 -262144 -1 -1 0
+1;
+#X floatatom 104 181 5 1 255 0 - - -;
+#X floatatom 99 135 5 1 255 0 - - -;
+#X floatatom 97 90 5 0.01 16 0 - - -;
+#X floatatom 104 227 5 0 1 0 - - -;
+#X obj 90 275 pix_refraction;
+#X msg 97 111 refract \$1;
+#X msg 99 156 width \$1;
+#X msg 104 202 height \$1;
+#X msg 104 248 mag \$1;
+#X msg 90 67 gemList;
+#X msg 90 297 gemList;
+#X text 31 8 [pix_refraction];
+#X text 223 108 range = 0.01 to 16 \, default = 2;
+#X text 222 158 range = 1 to 255 \, default = 16;
+#X text 223 200 range = 1 to 255 \, default = 16;
+#X text 223 260 range = 0 or 1 \, default = 1;
+#X text 207 298 (ported from "pete's_plugins" \, www.petewarden.com)
+;
+#X text 23 180 on/off;
+#X text 7 198 default: on;
+#X text 171 7 The input image is broken up into rectangular cells \,
+and scaled up or down within them. The effect is like looking through
+a wall of glass bricks \, each acting as a magnifying or shrinking
+lens for its part of the image;
+#X text 180 88 How much to shrink or expand the input image within
+each cell;
+#X text 180 142 Width of each cell \, where 1 is the image width;
+#X text 180 184 Height of each cell \, where 1 is the image height
+;
+#X text 171 231 Turning this off prevents the image from being expanded
+to larger than it's original size (within each cell);
+#X connect 0 0 5 0;
+#X connect 1 0 8 0;
+#X connect 2 0 7 0;
+#X connect 3 0 6 0;
+#X connect 4 0 9 0;
+#X connect 5 0 11 0;
+#X connect 6 0 5 0;
+#X connect 7 0 5 0;
+#X connect 8 0 5 0;
+#X connect 9 0 5 0;
+#X connect 10 0 5 0;
