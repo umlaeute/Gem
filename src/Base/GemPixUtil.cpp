@@ -31,7 +31,8 @@ GEM_EXTERN unsigned char* imageStruct::allocate(int size)
     if (pdata&&!notowned){
 		delete [] pdata;
 	}
-#if 1
+#if 0
+    /* aligned memory */
     pdata = new unsigned char[size+31];
     data = (unsigned char*) ((((unsigned int)pdata)+31)& (~31));
 #else
