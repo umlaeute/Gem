@@ -18,16 +18,9 @@
 #include "pix_snap2tex.h"
 
 #include "Base/GemMan.h"
+#include "Base/GemFuncUtil.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_snap2tex)
-
-  static inline int powerOfTwo(int value)
-{
-  int x = 1;
-  while(x < value) x <<= 1;
-
-  return(x);
-}
 
 /////////////////////////////////////////////////////////
 //

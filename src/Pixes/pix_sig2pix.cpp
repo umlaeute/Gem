@@ -25,13 +25,6 @@
 
 #include "Base/GemCache.h"
 
-static inline int powerOfTwo(int value)
-{
-  int x = 1;
-  while(x < value) x <<= 1;
-  return(x);
-}
-
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////

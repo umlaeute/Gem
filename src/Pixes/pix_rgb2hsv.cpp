@@ -18,7 +18,7 @@
 
 CPPEXTERN_NEW(pix_rgb2hsv)
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // pix_rgb2hsv
 //
@@ -35,23 +35,6 @@ pix_rgb2hsv :: pix_rgb2hsv()
 /////////////////////////////////////////////////////////
 pix_rgb2hsv :: ~pix_rgb2hsv()
 { }
-
-///////////////////////////////////////
-// Utilities
-//
-///////////////////////////////////////
-
-static inline unsigned char TRI_MAX(unsigned char v1, unsigned char v2, unsigned char v3){
-  if (v1 > v2 && v1 > v3) return(v1);
-  if (v2 > v3) return(v2);
-  return(v3);
-}
-
-static inline unsigned char TRI_MIN(unsigned char v1, unsigned char v2, unsigned char v3){
-  if (v1 < v2 && v1 < v3) return(v1);
-  if (v2 < v3) return(v2);
-  return(v3);
-}
 
 /////////////////////////////////////////////////////////
 // processImage

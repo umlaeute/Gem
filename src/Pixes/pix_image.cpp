@@ -23,13 +23,6 @@
 
 #include "Base/GemCache.h"
 
-static inline int powerOfTwo(int value)
-{
-    int x = 1;
-    while(x < value) x <<= 1;
-    return(x);
-}
-
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM)
 
 pix_image::singleImageCache *pix_image::s_imageCache = NULL;
@@ -118,10 +111,6 @@ void pix_image :: openMess(t_symbol *filename)
     m_loadedImage->image->copy2Image(&m_pixBlock.image);
     m_pixBlock.newimage = 1;
     post("GEM: loaded image: %s", buf);
-    if (powerOfTwo(m_pixBlock.image.xsize) != m_pixBlock.image.xsize ||
-	powerOfTwo(m_pixBlock.image.ysize) != m_pixBlock.image.ysize)	{
-      error("GEM: pix_image: image size not a power of 2: %s", buf);
-    }
 }
 
 /////////////////////////////////////////////////////////
