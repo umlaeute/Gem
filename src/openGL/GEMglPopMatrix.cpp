@@ -1,0 +1,58 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// zmoelnig@iem.kug.ac.at
+//
+// Implementation file
+//
+//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    this file has been generated automatically
+//
+//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
+//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+//
+/////////////////////////////////////////////////////////
+
+#include "GEMglPopMatrix.h"
+
+CPPEXTERN_NEW (GEMglPopMatrix )
+
+/////////////////////////////////////////////////////////
+//
+// GEMglPopMatrix
+//
+/////////////////////////////////////////////////////////
+// Constructor
+//
+/////////////////////////////////////////////////////////
+GEMglPopMatrix :: GEMglPopMatrix()
+{
+	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym(""));
+}
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+GEMglPopMatrix :: ~GEMglPopMatrix(){
+inlet_free(m_inlet[0]);
+}
+/////////////////////////////////////////////////////////
+// Render
+//
+/////////////////////////////////////////////////////////
+void GEMglPopMatrix :: render(GemState *state)
+{ glPopMatrix(); }
+
+
+/////////////////////////////////////////////////////////
+// static member function
+//
+/////////////////////////////////////////////////////////
+
+void GEMglPopMatrix :: obj_setupCallback(t_class *classPtr) {
+        class_addcreator((t_newmethod)_classGEMglPopMatrix,gensym("glPopMatrix"),A_NULL);
+}
+
+
