@@ -106,12 +106,22 @@ void camera :: render(GemState *)
     }
 */    
     calcCameraVals();
-
+/*
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(m_vPosition.x, m_vPosition.y, m_vPosition.z, 
 	      m_vView.x, m_vView.y, m_vView.z, 
 	      m_vUpVector.x, m_vUpVector.y, m_vUpVector.z);
+*/
+	GemMan::m_lookat[0] = m_vPosition.x;
+	GemMan::m_lookat[1] = m_vPosition.y;
+	GemMan::m_lookat[2] = m_vPosition.z;
+	GemMan::m_lookat[3] = m_vView.x;
+	GemMan::m_lookat[4] = m_vView.y;
+	GemMan::m_lookat[5] = m_vView.z;
+	GemMan::m_lookat[6] = m_vUpVector.x;
+	GemMan::m_lookat[7] = m_vUpVector.y;
+	GemMan::m_lookat[8] = m_vUpVector.z;
 #if 0
     post("m_vPosition = %f %f %f",m_vPosition.x, m_vPosition.y ,m_vPosition.z);
     post("m_vView     = %f %f %f",m_vView.x,m_vView.y,m_vView.z);
@@ -288,7 +298,6 @@ float Magnitude(CVector3 vNormal)
     // The magnitude has to do with the length of the vector.  We use this
     // information to normalize a vector, which gives it a length of 1.
     // Here is the equation:  magnitude = sqrt(V.x^2 + V.y^2 + V.z^2)   Where V is the vector
-
     return (float)sqrt( (vNormal.x * vNormal.x) + 
                         (vNormal.y * vNormal.y) + 
                         (vNormal.z * vNormal.z) );

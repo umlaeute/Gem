@@ -14,13 +14,16 @@ LOG
 #define INCLUDE_CAMERA_H_
 
 #include "Base/GemBase.h"
+#include "Base/GemMan.h"
 #include <stdlib.h>
 #include <math.h>
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
 #endif
+
 #define PI	3.1415926535897932384626433832795
 
 #ifndef _WINDOWS
