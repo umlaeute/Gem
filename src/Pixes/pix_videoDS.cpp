@@ -886,6 +886,7 @@ void pix_videoDS :: copyBuffer(IMediaSample* pSample)
 void pix_videoDS :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_videoDS"), A_DEFFLOAT, A_NULL);
+  class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_video_ds"), A_DEFFLOAT, A_NULL);  // alias to old external
   class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_dv"), A_DEFFLOAT, A_NULL);
   pix_video::real_obj_setupCallback(classPtr);
 
