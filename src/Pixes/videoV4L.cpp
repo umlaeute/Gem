@@ -124,6 +124,7 @@ void *videoV4L :: capturing(void*you)
 }
 pixBlock *videoV4L :: getFrame(){
   //  post("getting frame %d", m_frame_ready);
+  m_image.newfilm=0;
   if (!m_frame_ready) m_image.newimage = 0;
   else {
     if (m_colorConvert){
@@ -143,8 +144,9 @@ pixBlock *videoV4L :: getFrame(){
       m_image.image.data=videobuf + vmbuf.offsets[last_frame];
       m_image.image.notowned = true;
     }
-    m_image.newimage = 1;
     m_image.image.upsidedown=true;
+    
+    m_image.newimage = 1;
     m_frame_ready = false;
   }
   return &m_image;
@@ -308,7 +310,7 @@ int videoV4L :: startTransfer(int format)
        just used RGB, I wonder? */
     m_image.image.xsize = width;
     m_image.image.ysize = height;
-
+    m_image.image.type  = GL_UNSIGNED_BYTE; // true on linux
     m_image.image.format = m_reqFormat;
     switch(m_reqFormat){
     case GL_LUMINANCE:
