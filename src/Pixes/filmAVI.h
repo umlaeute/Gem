@@ -46,6 +46,7 @@ class GEM_EXTERN filmAVI : public film {
   // Destructor
   virtual ~filmAVI();
 
+#ifdef _WINDOWS
   //////////
   // open a movie up
   virtual bool open(char *filename, int format=0);
@@ -62,7 +63,6 @@ class GEM_EXTERN filmAVI : public film {
   virtual int changeImage(int imgNum, int trackNum=-1);
 
  protected:
-#ifdef _WINDOWS
   PGETFRAME	m_getFrame;		// the frame information
   PAVISTREAM	m_streamVid;		// the stream itself
 #endif //AVI

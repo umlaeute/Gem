@@ -51,12 +51,11 @@ filmAVI :: ~filmAVI()
 #endif
 }
 
+#ifdef _WINDOWS
 void filmAVI :: close(void)
 {
-#ifdef _WINDOWS
     if(m_getFrame)AVIStreamGetFrameClose(m_getFrame);
     m_getFrame=NULL;
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -66,7 +65,6 @@ void filmAVI :: close(void)
 bool filmAVI :: open(char *filename, int format)
 {
   if (format>0)m_wantedFormat=format;
-#ifdef _WINDOWS
   if (AVIStreamOpenFromFile(&m_streamVid, filename, streamtypeVIDEO, 0, OF_READ, NULL)) {
     error("GEM: pix_film: Unable to open file: %s", filename);
     goto unsupported;
@@ -92,7 +90,6 @@ bool filmAVI :: open(char *filename, int format)
   m_image.image.reallocate();
   return true;
  unsupported:
-#endif
   post("AVI: unsupported!");
   close();
   return false;
@@ -103,9 +100,7 @@ bool filmAVI :: open(char *filename, int format)
 //
 /////////////////////////////////////////////////////////
 pixBlock* filmAVI :: getFrame(){
-#ifdef _WINDOWS
   m_image.image.data = (unsigned char *)AVIStreamGetFrame(m_getFrame, m_curFrame)+40;
-#endif
   return 0;
 }
 
@@ -113,3 +108,4 @@ int filmAVI :: changeImage(int imgNum, int trackNum){
   m_curFrame=imgNum;
   return FILM_ERROR_SUCCESS;
 }
+#endif
