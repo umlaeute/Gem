@@ -1,6 +1,6 @@
-dnl aclocal.m4 generated automatically by aclocal 1.4-p6
+dnl aclocal.m4 generated automatically by aclocal 1.4-p4
 
-dnl Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+dnl Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -30,7 +30,7 @@ AC_DEFUN(AC_FIND_LIB,
 	dirs="$2"
      fi
 
-dnl next 2 lines have been dnl'ed. why?
+dnl next 2 lines had been dnl'ed. why?
      ac_save_LIBS=$LIBS
      gem_system_lib=no
      AC_CHECK_LIB($1,$testfun,gem_system_lib=yes)
@@ -91,6 +91,7 @@ dnl this might not be very portable, but at least it works for now
 dnl i thought this would be handled by AC_CHECK_LIB
 	ac_tr_lib=`echo "HAVE_LIB$1" | sed -e 's/^a-zA-Z0-9_/_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
 	AC_DEFINE_UNQUOTED($ac_tr_lib)
+        LIBS="-l$1 $LIBS"
      fi
 )
 

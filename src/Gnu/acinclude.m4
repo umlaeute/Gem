@@ -18,7 +18,7 @@ AC_DEFUN(AC_FIND_LIB,
 	dirs="$2"
      fi
 
-dnl next 2 lines have been dnl'ed. why?
+dnl next 2 lines had been dnl'ed. why?
      ac_save_LIBS=$LIBS
      gem_system_lib=no
      AC_CHECK_LIB($1,$testfun,gem_system_lib=yes)
@@ -79,6 +79,7 @@ dnl this might not be very portable, but at least it works for now
 dnl i thought this would be handled by AC_CHECK_LIB
 	ac_tr_lib=`echo "HAVE_LIB$1" | sed -e 's/^a-zA-Z0-9_/_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
 	AC_DEFINE_UNQUOTED($ac_tr_lib)
+        LIBS="-l$1 $LIBS"
      fi
 )
 
