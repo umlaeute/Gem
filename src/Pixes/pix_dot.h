@@ -48,7 +48,7 @@ class GEM_EXTERN pix_dot : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
+  virtual void 	processRGBAImage(imageStruct &image);
   virtual void 	processYUVImage( imageStruct &image );
   virtual void	drawDot( int xx, int yy, unsigned char c, unsigned int *dest );
   virtual void  dot_init();

@@ -150,16 +150,15 @@ void pix_dot :: sizeMess(int width, int height)
 
 
 /////////////////////////////////////////////////////////
-// processImage
+// processRGBAImage
 //
 /////////////////////////////////////////////////////////
-void pix_dot :: processImage(imageStruct &image)
+void pix_dot :: processRGBAImage(imageStruct &image)
 {
   unsigned int *src = (unsigned int*)image.data;
   unsigned int *dest;
 
   int x, y, i, sx, sy;
-  //unsigned char *p, *q;
   int scale =1;
   
   
@@ -186,15 +185,11 @@ void pix_dot :: processImage(imageStruct &image)
         sharedbuffer_reset();
         sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
         sampy = (int *)sharedbuffer_alloc(m_ysize*sizeof(int));
-        //sampx = (int *)malloc(m_xsize * sizeof(int) );
-        //sampy = (int *)malloc(m_ysize * sizeof(int) );
         if (sampx == NULL || sampy == NULL ){
             return;
         }
         makePattern();
         sampxy_table_init();
-
-        //dot_init();
 
         alreadyInit = 1;
     }
@@ -230,36 +225,70 @@ void pix_dot :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_dot :: processYUVImage(imageStruct &image)
 {
-/*  unsigned char *src = image.data;
-  unsigned char *dest;
+    post("pix_dot:  YUV under construction");
+/*    unsigned int *src = (unsigned int*)image.data;
+    unsigned int *dest;
 
-  int x, y, i, sx, sy;
-  unsigned char *p, *q;
-
-  if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
-    int dataSize = image.xsize * image.ysize * image.csize;
-    myImage.clear();
-
-    myImage.allocate(dataSize);
-  }
-
-  myImage.xsize = image.xsize;
-  myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
-
-  dest = myImage.data;
+    int x, y, i, sx, sy;
+    int scale = 1;
   
-  for ( y=0; y<dots_height; y++) {
-    sy = sampy[y];
-    for ( x=0; x<dots_width; x++){
-        sx = sampx[x];
-        drawDot(x, y, src[sy*image.xsize+sx], dest);
-    }
-  }
+    if (m_xsize != image.xsize)
+        alreadyInit = 0;
+    
+    if (!alreadyInit)
+    {
+        m_xsize = image.xsize;
+        m_ysize = image.ysize;
+        dot_size = 8 * scale;
+        dot_size = dot_size & 0xfe;
+        dot_hsize = dot_size / 2;
+        dots_width = m_xsize / dot_size;
+        dots_height = m_ysize / dot_size;
+  
+        pattern = (unsigned int *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(unsigned int));
+        if (pattern == NULL) {
+            post("pix_dot couldn't make pattern");
+            return;
+        }
+        
+        sharedbuffer_init();
+        sharedbuffer_reset();
+        sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
+        sampy = (int *)sharedbuffer_alloc(m_ysize*sizeof(int));
+        if (sampx == NULL || sampy == NULL ){
+            return;
+        }
+        makePattern();
+        sampxy_table_init();
 
-  image.data=myImage.data;
-  */
+        alreadyInit = 1;
+    }
+
+    if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)
+    {
+        int dataSize = image.xsize * image.ysize * image.csize;
+        myImage.clear();
+
+        myImage.allocate(dataSize);
+    }
+
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.csize = image.csize;
+    myImage.type  = image.type;
+
+    dest = (unsigned int*)myImage.data;
+  
+    for ( y=0; y<dots_height; y++) {
+        sy = sampy[y];
+        for ( x=0; x<dots_width; x++){
+            sx = sampx[x];
+            drawDot(x, y, (unsigned char)src[sy*image.xsize+sx+1], dest);
+        }
+    }
+
+    image.data = myImage.data;
+*/
 }
 
 void pix_dot :: dot_init()
