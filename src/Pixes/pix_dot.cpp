@@ -32,12 +32,12 @@ CPPEXTERN_NEW(pix_dot)
 //
 /////////////////////////////////////////////////////////
 pix_dot :: pix_dot() : 
-  sharedbuffer(NULL), sharedbuffer_length(0),
-  m_scale(1), m_useScale(true),
-  dots_width(64), dots_height(64),
-  tail(0),
   m_xsize(0), m_ysize(0), m_csize(0),
-  alreadyInit(0)
+  sharedbuffer(NULL), sharedbuffer_length(0),
+  tail(0),
+  alreadyInit(0),
+  dots_width(64), dots_height(64),
+  m_scale(1), m_useScale(true)
 {
   myImage.xsize=myImage.ysize=0;
   DOTDEPTH = 5;
@@ -373,7 +373,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
 {
     U16 *dest;
     U16 *src = (U16*)image.data;
-    int x, y, sx, sx2, sy;
+    int x, y, sx, sy;
     int luma = 0;
     int luma2 = 0;
     int avgluma = 0;
@@ -445,7 +445,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
 {
     unsigned char *dest;
     unsigned char *src = (unsigned char*)image.data;
-    int x, y, sx, sx2, sy;
+    int x, y, sx, sy;
 
     if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
     

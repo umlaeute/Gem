@@ -47,8 +47,8 @@ pix_texture :: pix_texture()
   : m_textureOnOff(1), 
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
     m_rebuildList(0), m_textureObj(0),m_textureType( GL_TEXTURE_2D ),
-    m_clientStorage(0), //have to do this due to texture corruption issues
-    m_mode(0)
+    m_mode(0),
+    m_clientStorage(0) //have to do this due to texture corruption issues
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;

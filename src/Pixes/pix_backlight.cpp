@@ -331,22 +331,8 @@ void pix_backlight :: processYUVImage(imageStruct &image)
 
 	    U32 SourceColour=*pCurrentSource;
 		
-	    int nRed=(SourceColour&(0xff<<SHIFT_RED))>>SHIFT_RED;
-	    int nGreen=(SourceColour&(0xff<<SHIFT_GREEN))>>SHIFT_GREEN;
-	    int nBlue=(SourceColour&(0xff<<SHIFT_BLUE))>>SHIFT_BLUE;
-
-            /*
-	    int nLuminance = 
-			((90 * nRed)+
-			(115 * nGreen)+
-			(51 * nBlue));
-
-	    nLuminance>>=8;
-             */
-            int nLuminance = nRed;
+	    int nLuminance=(SourceColour&(0xff<<SHIFT_Y1))>>SHIFT_Y1;
             
-//			SourceColour|=(nLuminance<<24);
-
 	    nLuminance=clampFunc(nLuminance,nSpikeFloor,nSpikeCeiling);
 	    nLuminance-=nSpikeFloor;
 

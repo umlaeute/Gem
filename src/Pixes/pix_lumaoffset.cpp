@@ -258,13 +258,13 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
     if (!init) {
 	init = 1;
     }
-    U8* pSource = image.data;
+    U8* pSource = (U8*)image.data;
     
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    U8* pOutput = myImage.data;
+    U8* pOutput = (U8*)myImage.data;
 
     const int nNumPixels=nWidth*nHeight;
 

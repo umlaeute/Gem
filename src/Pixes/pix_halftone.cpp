@@ -524,9 +524,7 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 	      pDotFuncTableStart+
 	      (nTexVInt*nCellSize)+
 	      nTexUInt;
-
-	    const int nDiff=nLuminance-*pCurrentDotFunc;
-
+              
 	    unsigned char* pCurrentOutput=
 	      pOutput+(nCurrentY*nWidth)+nCurrentX;
 	    *pCurrentOutput=pGreyScaleTableStart[nLuminance-*pCurrentDotFunc];
@@ -1062,7 +1060,7 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
   const int nBlueAverage=(nBlueTotal/nTotalSamples);
   const int nAlphaAverage=(nAlphaTotal/nTotalSamples);
 
-  return (nRedAverage<<SHIFT_RED)|(nGreenAverage<<SHIFT_GREEN)|(nBlueAverage<<SHIFT_BLUE)|(nBlueAverage<<SHIFT_ALPHA);
+  return (nRedAverage<<SHIFT_RED)|(nGreenAverage<<SHIFT_GREEN)|(nBlueAverage<<SHIFT_BLUE)|(nAlphaAverage<<SHIFT_ALPHA);
 }
 
 U16 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U16* pImageData,int nImageWidth,int nImageHeight) {
