@@ -24,12 +24,14 @@
 #include "Pixes/filmFFMPEG.h"
 #include "Pixes/filmMPEG1.h"
 #include "Pixes/filmMPEG3.h"
+#include "Pixes/filmQT.h"
 
 #if 0
-# define DEBUG post
+# define debug post
 #else
-# define DEBUG
+# define debug
 #endif
+
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmNEW, t_symbol *, A_DEFSYM)
 
@@ -47,7 +49,7 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   m_numTracks(0), m_track(0), 
   m_format(GL_RGBA)
 {
-  DEBUG("pix_filmNEW");
+  debug("pix_filmNEW");
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
   // create an outlet to send out how many frames are in the movie + bang when we reached the end
@@ -59,12 +61,13 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   while(i--)m_handles[i]=0;
   m_numHandles=0;
 
-  m_handles[m_numHandles]=new filmQT4L();    DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmMPEG3();    DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmAVI();    DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmAVIPLAY();  DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmFFMPEG();   DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmMPEG1();    DEBUG("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmQT();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmQT4L();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmMPEG3();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmAVI();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmAVIPLAY();  debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmFFMPEG();   debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+  m_handles[m_numHandles]=new filmMPEG1();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
 
   //openMess(filename);
 }
@@ -86,14 +89,14 @@ pix_filmNEW :: ~pix_filmNEW()
 void pix_filmNEW :: closeMess(void){
   // Clean up any open files
   int i=MAX_FILM_HANDLES;
-  DEBUG("closing %d handles", i);
+  debug("closing %d handles", i);
   while(i--){
-    DEBUG("close %d", i);
+    debug("close %d", i);
     if(m_handles[i])m_handles[i]->close();
   }
-  m_handle==NULL;
+  m_handle=NULL;
   //if(m_handle!=0)m_handle->close();
-  DEBUG("closed");
+  debug("closed");
 }
 
 /////////////////////////////////////////////////////////
@@ -103,7 +106,7 @@ void pix_filmNEW :: closeMess(void){
 
 void pix_filmNEW :: openMess(t_symbol *filename, int format)
 {
-  DEBUG("openMess");
+  debug("openMess");
   //  if (filename==x_filename)return;
   closeMess();
 
@@ -113,13 +116,13 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format)
   int i=-1;
   post("opening %s with format %X", buf, format);
   while(i++<m_numHandles){
-    DEBUG("trying handle %d: %X", i, m_handles[i]);
+    debug("trying handle %d: %X", i, m_handles[i]);
     if (m_handles[i] && m_handles[i]->open(buf, format ))      {
       m_handle = m_handles[i];
       break;
     }
   }
-  DEBUG("got handle = %X", m_handle);
+  debug("got handle = %X", m_handle);
   if (!m_handle)return;
 
   t_atom ap[3];
