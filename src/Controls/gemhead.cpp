@@ -16,7 +16,7 @@
 
 #include "gemhead.h"
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #import <Carbon/Carbon.h>
 #endif
 
