@@ -8,7 +8,7 @@
 #ifndef particle_vector_h
 #define particle_vector_h
 
-#ifndef MACOSX
+#ifndef __APPLE__
 #include <math.h>
 #else
 #include </usr/include/math.h>
@@ -26,10 +26,10 @@
 #define inline __forceinline
 #endif
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #define drand48() (((float) rand())/((float) RAND_MAX))
 #define srand48(x) srand(x)
-#include "macosx_math.h"
+#include "__APPLE___math.h"
 #endif
 
 #ifdef __linux__
