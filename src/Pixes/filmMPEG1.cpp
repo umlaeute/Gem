@@ -25,7 +25,9 @@
 //
 /////////////////////////////////////////////////////////
 
-filmMPEG1 :: filmMPEG1(int format) : film(format) {
+filmMPEG1 :: filmMPEG1(int format) : film(format),
+				     m_data(NULL), m_length(0)
+{
   static bool first_time=true;
   if (first_time) {
 #ifdef HAVE_LIBMPEG
@@ -46,6 +48,7 @@ filmMPEG1 :: filmMPEG1(int format) : film(format) {
 filmMPEG1 :: ~filmMPEG1()
 {
   close();
+  if(m_data)delete[]m_data;
 }
 
 #ifdef HAVE_LIBMPEG
@@ -68,11 +71,9 @@ bool filmMPEG1 :: open(char *filename, int format)
   case GL_LUMINANCE:
       SetMPEGOption (MPEG_DITHER, GRAY_DITHER);
       break;
-  case GL_YCBCR_422_GEM:
-    //      SetMPEGOption (MPEG_DITHER, FULL_COLOR_DITHER);
-    //break;
   default:
     wantedFormat=GL_RGBA;
+  case GL_YCBCR_422_GEM:
   case GL_RGBA:
     SetMPEGOption (MPEG_DITHER, FULL_COLOR_DITHER);
   }
@@ -84,25 +85,18 @@ bool filmMPEG1 :: open(char *filename, int format)
     
     m_image.image.xsize  = m_streamVid.Width;
     m_image.image.ysize  = m_streamVid.Height;
-    switch (wantedFormat){
-    case GL_LUMINANCE:
-      m_image.image.csize  = 1;
-      m_image.image.format = GL_LUMINANCE;
-      break;
-#if 0
-    case GL_YCBCR_422_GEM:
-      m_image.image.csize  = 2;
-      m_image.image.format = GL_YCBCR_422_GEM;
-      break;
-#endif
-    case GL_RGBA:
-    default:
-      m_image.image.csize  = 4;
-      m_image.image.format = GL_RGBA;
-    }
-    if (!(m_image.image.xsize*m_image.image.ysize*m_image.image.csize))goto unsupported;
+    if (!(m_image.image.xsize*m_image.image.ysize))goto unsupported;
 
+    m_image.image.setCsizeByFormat(wantedFormat);
     m_image.image.reallocate();
+
+    int length=m_image.image.xsize*m_image.image.ysize;
+    length*=((m_image.image.format==GL_LUMINANCE)?1:4)+4;
+    if(m_length<length){
+      if (m_data)delete[]m_data;
+      m_length=length;
+      m_data=new unsigned char[m_length];
+    }
     m_reachedEnd=false;
     post("MPEG1 opened");
     return true;
@@ -126,12 +120,26 @@ pixBlock* filmMPEG1 :: getFrame(){
   if (!m_readNext){
     return &m_image;
   }
-  m_readNext = false;
+  m_image.image.upsidedown=true;
 
-  if (m_reachedEnd=!GetMPEGFrame ((char*)(m_image.image.data))){
+  m_readNext = false;
+  int length=m_image.image.xsize*m_image.image.ysize;
+  length*=((m_image.image.format==GL_LUMINANCE)?1:4)+4;
+  if(m_length<length){
+    if (m_data)delete[]m_data;
+    m_length=length;
+    m_data=new unsigned char[m_length];
+  }
+  if (m_reachedEnd=!GetMPEGFrame ((char*)(m_data))){
+    if(m_image.image.format==GL_YCBCR_422_GEM){
+      m_image.image.fromRGBA(m_data);
+    }  else  m_image.image.data=m_data;
     m_curFrame=-1;
     return &m_image;// was 0; but then we have one non-textured frame in auto-mode
   } else {
+    if(m_image.image.format==GL_YCBCR_422_GEM){
+      m_image.image.fromRGBA(m_data);
+    }  else  m_image.image.data=m_data;
     m_image.newimage=1;
     return &m_image;
   }

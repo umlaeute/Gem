@@ -76,6 +76,8 @@ class GEM_EXTERN filmMPEG1 : public film {
   ImageDesc     m_streamVid;
   bool          m_reachedEnd;
 #endif
+  unsigned char*m_data;
+  int           m_length;
 };
 
 #endif	// for header file
