@@ -21,7 +21,7 @@ default_search_heads="/usr/include /usr/local/include $GEMLIBS"
 dnl
 dnl first comes the user-config stuff
 dnl
-AC_ARG_ENABLE(x, [  --libdir=DIR{:DIRS}     where to search for non-standard libs (aka GemLibs)])
+AC_ARG_ENABLE(x, [  --gemlibs=DIR{:DIRS}     where to search for non-standard libs (aka GemLibs)])
 AC_ARG_ENABLE(x, [                          [DIR=../../../GemLibs:/usr/local/lib:/usr/local/src ]])
 AC_ARG_ENABLE(x, [  --includedir=DIR{:DIRS} where to search for non-standard headers])
 AC_ARG_ENABLE(x, [                          [DIR=/usr/include:/usr/local/include:../../../GemLibs]])
@@ -66,10 +66,18 @@ then
 fi
 
 dnl there should be a flag for which paths to search the libs in
-dnl maybe ab-use "--libdir"
-if test "$libdir" != "\${exec_prefix}/lib"
+dnl "--libdir"
+if test "$libdir" && test "$libdir" != "\${exec_prefix}/lib"
 then
-  search_libs=`echo $libdir | sed -e 's/:/ /g'`
+  libdir=":$libdir"
+  LIBS="$LIBS `echo $libdir | sed -e 's/:/ -L/g'`"
+fi
+
+dnl there should be a flag for which paths to search the libs in
+dnl "--gemlibs"
+if test "$gemlibs"
+then
+  search_libs=`echo $gemlibs | sed -e 's/:/ /g'`
 else
   search_libs=$default_search_libs
 fi
@@ -249,8 +257,8 @@ dnl Check for GLU (Original or Mesa)
 		AC_CHECK_LIB(MesaGLU,gluLookAt,,
 		echo "incomplete OpenGL (no GLU)";exit 1)
 		)
-dnl Check for GLUT (not necessary)
 
+dnl Check for GLUT (not necessary)
 if test "$with_glut" != "no"
 then
   AC_FIND_LIB(glut,glutSolidTeapot, $search_libs, $with_glut)
