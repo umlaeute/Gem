@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////
 
 /* -------------------------- setup function ------------------------------ */
-#if !defined(MACOSX) && !defined(NT)
+#if !defined(__APPLE__) && !defined(NT)
 #include "../Base/config.h"
 #endif
 
@@ -29,7 +29,7 @@
 #include "../Pixes/setup.h"
 //#include "../TV/setup.h"
 #include "../openGL/setup.h"
-#include "../yuv/setup.h"
+//#include "../yuv/setup.h"
 
 // notice that this is not inside of the extern "C"
 void MarkEx_setup();
@@ -51,7 +51,7 @@ extern "C" {
     Pixes_setup();
     //    TV_setup();
     openGL_setup();
-    yuv_setup();
+   // yuv_setup();
   }
 
   GEM_EXTERN void gem_setup()
