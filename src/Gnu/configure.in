@@ -224,7 +224,7 @@ AC_CHECK_LIB(X11,main)
 AC_CHECK_LIB(Xext,main)
 AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
 dnl add -shared to the libraries, so X will be shared
-LIBS="-Wl,-shared -Wl,-export-dynamic $LIBS"
+LIBS="-shared -Wl,-export-dynamic $LIBS"
 
 dnl AC_ARG_ENABLE(static, "   " ,LIBS="/usr/lib/gcc-lib/i486-linux/egcs-2.91.57/libstdc++.a $LIBS")
 
