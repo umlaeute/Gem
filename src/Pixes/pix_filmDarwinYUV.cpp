@@ -172,7 +172,7 @@ void pix_filmDarwinYUV :: realOpen(char *filename)
         createBuffer();
         prepareTexture();
         m_rowBytes = m_xsize * 2;
-
+        SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
 	err = QTNewGWorldFromPtr(	&m_srcGWorld, 
                                         k422YpCbCr8CodecType, 
 					&m_srcRect, 

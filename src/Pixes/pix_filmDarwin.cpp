@@ -165,7 +165,7 @@ void pix_filmDarwin :: realOpen(char *filename)
         createBuffer();
         prepareTexture();
         m_rowBytes = m_xsize * 4;
-
+        SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
 	err = QTNewGWorldFromPtr(	&m_srcGWorld, 
                                         k32ARGBPixelFormat,	// gives noErr
 					&m_srcRect, 
