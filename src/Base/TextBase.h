@@ -91,9 +91,9 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // The different types of justification
-  enum JustifyWidth { LEFT, RIGHT, CENTER };
-  enum JustifyHeight { BOTTOM, TOP, MIDDLE };
-  enum JustifyDepth { FRONT, BACK, HALFWAY };
+  enum JustifyWidth { LEFT, RIGHT, CENTER, BASEW };
+  enum JustifyHeight { BOTTOM, TOP, MIDDLE, BASEH };
+  enum JustifyDepth { FRONT, BACK, HALFWAY, BASED };
 	
   //////////
   // Set the justification

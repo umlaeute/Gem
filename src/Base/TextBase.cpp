@@ -267,14 +267,17 @@ void TextBase :: justifyFont(float x1, float y1, float z1, float x2, float y2, f
   if (m_widthJus == LEFT)       width = x1;
   else if (m_widthJus == RIGHT) width = x2-x1;
   else if (m_widthJus == CENTER)width = x2 / 2.f;
+  else if (m_widthJus == BASEW) width = 0;
 
   if (m_heightJus == BOTTOM)     height = y1;
   else if (m_heightJus == TOP)   height = y2-y1;
   else if (m_heightJus == MIDDLE)height = y2 / 2.f;
+  else if (m_heightJus == BASEH) height = 0;
     
   if (m_depthJus == FRONT)       depth = z1;
   else if (m_depthJus == BACK)   depth = z2-z1;
   else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
+  else if (m_depthJus == BASED)  depth = 0;
 
   glScalef(FONT_SCALE, FONT_SCALE, FONT_SCALE);
   glTranslatef(-width, -height, -depth);
@@ -366,9 +369,11 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     switch (c){
     case 'o': case 'O': dType = FRONT; break;
     case 'c': case 'C': dType = BACK; break;
-    case 'l': case 'L': dType = HALFWAY; break;
+    case 's': case 'S': dType = BASED; break;
+    case 'l': case 'L': case 'n': case 'N': dType = HALFWAY; break;
     default:
-      error("GEM: TextBase: invalid depth justification: %s", atom_getsymbol(argv+2)->s_name);
+      error("GEM: TextBase: invalid depth justification: %s (must be: front|back|halfway|base)", 
+	    atom_getsymbol(argv+2)->s_name);
       return;
     }
   case 2:    
@@ -376,9 +381,11 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     switch (c){
     case 't': case 'T': hType = BOTTOM; break;
     case 'p': case 'P': hType = TOP; break;
-    case 'd': case 'D': hType = MIDDLE; break;
+    case 'd': case 'D': case 'n': case 'N': hType = MIDDLE; break;
+    case 's': case 'S': hType = BASEH; break;
     default:
-      error("GEM: TextBase: invalid height justification: %s", atom_getsymbol(argv+1)->s_name);
+      error("GEM: TextBase: invalid height justification: %s (must be bottom|top|middle|base)", 
+	    atom_getsymbol(argv+1)->s_name);
       return;
     }
   case 1:
@@ -387,8 +394,10 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 'f': case 'F': wType = LEFT; break;
     case 'g': case 'G': wType = RIGHT; break;
     case 'n': case 'N': wType = CENTER; break;
+    case 's': case 'S': wType = BASEW; break;
     default:
-      error("GEM: TextBase: invalid width justification: %s", atom_getsymbol(argv+0)->s_name);
+      error("GEM: TextBase: invalid width justification: %s (must be left|right|center|base)",
+	    atom_getsymbol(argv+0)->s_name);
       return;
     }
     break;
