@@ -14,13 +14,13 @@ AFLAGS = -mieee  -mcpu=ev56
 endif
 
 
-CXXFLAGS = -g  @CXXFLAGS@ $(AFLAGS) -I../ @INCLUDES@
+cxxflags = $(CXXFLAGS) -g  @CXXFLAGS@ $(AFLAGS) -I../ @INCLUDES@
 
 all: $(OBJECTS)
 
 
 depend:
-	$(CXX) -M $(CXXFLAGS) $(SOURCES) > Make.depend
+	$(CXX) -M $(cxxflags) $(SOURCES) > Make.depend
 
 
 clean:
@@ -31,4 +31,4 @@ distclean:
 	touch Make.depend
 
 %.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $*.cpp -o $*.o
+	$(CXX) -c $(cxxflags) $*.cpp -o $*.o
