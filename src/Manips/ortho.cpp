@@ -14,11 +14,14 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "ortho.h"
-
-#include "Base/GemMan.h"
-
+#ifdef MACOSX
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif MACOSX
+
+#include "ortho.h"
+#include "Base/GemMan.h"
 
 CPPEXTERN_NEW(ortho)
 
