@@ -343,12 +343,20 @@ void GemMan :: initGem()
 
   s_clock = clock_new(NULL, (t_method)&GemMan::render);
 
-  post("GEM: IOhannes m zmoelnig");
+  post("GEM: Graphics Environment for Multimedia");
   post("GEM: ver: %s", GEM_VERSION);
   post("GEM: compiled: " __DATE__);
-#ifdef MACOSX
-	post("GEM: Mac OS X port by James Tittle & Chris Clepper");
-#endif
+  post("GEM: maintained by IOhannes m zmoelnig");
+  post("GEM: Authors :\tMark Danks (original version on irix/windows");
+  post("GEM: \t\tChris Clepper (macOS-X)");
+  post("GEM: \t\tDaniel Heckenberg (windows)");
+  post("GEM: \t\tGuenter Geiger (linux)");
+  post("GEM: \t\tJames Tittle (macOS-X)");
+  post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
+
+  //#ifdef MACOSX
+  //	post("GEM: Mac OS X port by James Tittle & Chris Clepper");
+  //#endif
 
   // setup the perspective values
   m_perspect[0] = -1.f;	// left
