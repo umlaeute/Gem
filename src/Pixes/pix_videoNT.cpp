@@ -164,6 +164,7 @@ void pix_videoNT :: videoFrame(LPVIDEOHDR lpVHdr)
 {
   int count = lpVHdr->dwBytesUsed;
   // notice that it is times 3 for the color!
+  // incoming data is BGR
   const int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * 3;
 	
   if (count < dataSize)
@@ -178,7 +179,7 @@ void pix_videoNT :: videoFrame(LPVIDEOHDR lpVHdr)
   const int dstXSize = m_pixBlock.image.xsize * 4;
   const int xSize = m_pixBlock.image.xsize;
   const int ySize = m_pixBlock.image.ysize;
-
+#if 0
   for (int i = 0; i < ySize; ++i)
     {
       const unsigned char *srcPix = srcLine;
@@ -196,6 +197,9 @@ void pix_videoNT :: videoFrame(LPVIDEOHDR lpVHdr)
       srcLine += srcXSize;
       dstLine += dstXSize;
     }
+#else
+  m_pixBlock.image.fromBGR(lpVHdr->lpData);
+#endif
   m_newFrame = 1;
 }
 
@@ -275,35 +279,6 @@ int pix_videoNT :: stopTransfer()
   return(1);
 }
 
-/////////////////////////////////////////////////////////
-// offsetMess
-//
-/////////////////////////////////////////////////////////
-void pix_videoNT :: offsetMess(int x, int y)
-{
-  post("GEM: pix_video: offset message not supported");
-  return;
-
-  if (!m_haveVideo)
-    {
-      error("GEM: pix_video: Connect to video first");
-      return;
-    }
-    
-  // stop the transfer and destroy the buffer
-  if ( !stopTransfer() ) 
-    {
-      error("GEM: pix_video: error stopping transfer");
-      return;
-    }
-
-  // start the transfer and rebuild the buffer
-  if ( !startTransfer() ) 
-    {
-      error("GEM: pix_video: error starting transfer");
-      return;
-    }
-}
 
 /////////////////////////////////////////////////////////
 // dimenMess
@@ -351,18 +326,12 @@ void pix_videoNT :: cleanPixBlock()
 }
 
 /////////////////////////////////////////////////////////
-// swapMess
+// csMess
 //
 /////////////////////////////////////////////////////////
-void pix_videoNT :: swapMess(int state)
+void pix_videoNT :: csMess(int format)
 {
-  post("GEM: pix_video: swap message not supported");
-  return;
-
-  if (state)
-    m_swap = 1;
-  else
-    m_swap = 0;
+  if(format)m_pixBlock.image.setCsizeByFormat(format);
 }
 
 /////////////////////////////////////////////////////////
@@ -372,26 +341,28 @@ void pix_videoNT :: swapMess(int state)
 void pix_videoNT :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)_classpix_videoNT, gensym("pix_video"), A_DEFFLOAT, A_NULL);
-  pix_video::real_obj_setupCallback(classPtr);
 
   class_addmethod(classPtr, (t_method)&pix_videoNT::dimenMessCallback,
 		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoNT::offsetMessCallback,
-		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoNT::swapMessCallback,
-		  gensym("swap"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_videoNT::csMessCallback,
+		  gensym("colorspace"), A_FLOAT, A_NULL);
 }
 void pix_videoNT :: dimenMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
   GetMyClass(data)->dimenMess((int)x, (int)y);
 }
-void pix_videoNT :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
+void pix_videoNT :: csMessCallback(void *data, t_symbol *s)
 {
-  GetMyClass(data)->offsetMess((int)x, (int)y);
-}
-void pix_videoNT :: swapMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->swapMess((int)state);
+  int format=0;
+  char c =*s->s_name;
+  switch (c){
+  case 'g': case 'G': format=GL_LUMINANCE; break;
+  case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
+  case 'r': case 'R': format=GL_RGBA; break;
+  default:
+    post("pix_video: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+  }
+  GetMyClass(data)->csMess(format);
 }
 
 void pix_videoNT :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr) 

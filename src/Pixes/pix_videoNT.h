@@ -77,9 +77,6 @@ class GEM_EXTERN pix_videoNT : public pix_video
     	//////////
     	// Set the video dimensions
     	void	    	dimenMess(int x, int y);
-    	//////////
-    	// Set the video offset
-    	void	    	offsetMess(int x, int y);
     
     	//////////
     	// Start up the video device
@@ -92,9 +89,8 @@ class GEM_EXTERN pix_videoNT : public pix_video
     	int	    	stopTransfer();
     
     	////////// 
-    	// Stop the video device
-    	// [out] int - returns 0 if bad
-    	void	    	swapMess(int state);
+    	// set the colorspace
+    	void	    	csMess(int state);
 
 	//-----------------------------------
 	// GROUP:	Video data
@@ -112,8 +108,7 @@ class GEM_EXTERN pix_videoNT : public pix_video
     	// static member functions
 
     	static void dimenMessCallback(void *data, t_floatarg x, t_floatarg y);
-    	static void offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
-    	static void swapMessCallback(void *data, t_floatarg state);
+    	static void csMessCallback(void *data, t_symbol*);
 
 	static void videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr);
 };
