@@ -56,14 +56,11 @@ void pix_alpha :: processRGBAImage(imageStruct &image)
     unsigned char *pixels = image.data;
 
     while(count--) {
-      if ( (pixels[chRed] >= m_lowThresh[0] &&
-	    pixels[chRed] <= m_highThresh[0] ) 
+      if ( (pixels[chRed] >= m_lowThresh[0] &&  pixels[chRed] <= m_highThresh[0] ) 
 	   &&
-	   (pixels[chGreen] >= m_lowThresh[1] &&
-	    pixels[chGreen] <= m_highThresh[1] )
+	   (pixels[chGreen] >= m_lowThresh[1] &&  pixels[chGreen] <= m_highThresh[1] )
 	   &&
-	   (pixels[chBlue] >= m_lowThresh[2] &&
-	    pixels[chBlue] <= m_highThresh[2] ) ) {
+	   (pixels[chBlue] >= m_lowThresh[2] &&  pixels[chBlue] <= m_highThresh[2] ) ) {
 	pixels[chAlpha] = m_alpha;
       }
       else pixels[chAlpha] = m_otheralpha;
@@ -77,12 +74,11 @@ void pix_alpha :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_alpha :: processGrayImage(imageStruct & image)
 {
-
+  /* BUG: this looks rather like RGB than gray ... */
      unsigned char *in = image.data + image.ysize*image.xsize*3-1;
      unsigned char *out = image.data + image.ysize*image.xsize*4-1;
      int i;
-     for (i = 0 ; i < image.ysize*image.xsize; i++)
-     {
+     for (i = 0 ; i < image.ysize*image.xsize; i++) {
     	    *out-- = 255; 	/* opaque */
     	    *out-- = *in--;
     	    *out-- = *in--;
