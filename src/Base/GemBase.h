@@ -80,6 +80,10 @@ LOG
 # define GL_BGR_EXT 0x80E0
 #endif
 
+#ifndef GL_DEFAULT_GEM
+# define GL_DEFAULT_GEM 0xFFFF
+#endif
+
 #ifndef HELPSYMBOL_BASE
 # define HELPSYMBOL_BASE "Gem/"
 #endif
