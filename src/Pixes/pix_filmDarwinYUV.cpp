@@ -107,7 +107,7 @@ UnsignedWide startTime;
     if (!filename[0]) {
         post("pix_filmdarwinYUV:  no filename passed");
     } else {            
-        err = ::FSPathMakeRef((Str255)filename, &ref, NULL);
+        err = ::FSPathMakeRef((UInt8*)filename, &ref, NULL);
         err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
             
         if (err) {

@@ -97,7 +97,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     if (!filename[0]) {
         post("pix_filmDarwin:  no filename passed");
     } else {            
-        err = ::FSPathMakeRef((Str255)filename, &ref, NULL);
+        err = ::FSPathMakeRef((UInt8*)filename, &ref, NULL);
         err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
             
         if (err) {
