@@ -174,7 +174,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle);
  */
 GLvoid
 //glmLinearTexture(GLMmodel* model);
-glmLinearTexture(GLMmodel* model, float h, float w);
+glmLinearTexture(GLMmodel* model, float h=1.0, float w=1.0);
 
 /* glmSpheremapTexture: Generates texture coordinates according to a
  * spherical projection of the texture map.  Sometimes referred to as
@@ -188,7 +188,7 @@ glmLinearTexture(GLMmodel* model, float h, float w);
  * model - pointer to initialized GLMmodel structure
  */
 GLvoid
-glmSpheremapTexture(GLMmodel* model);
+ glmSpheremapTexture(GLMmodel* model, float h=1.0, float w=1.0);
 
 /* glmDelete: Deletes a GLMmodel structure.
  *

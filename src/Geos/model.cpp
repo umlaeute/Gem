@@ -91,7 +91,7 @@ void model :: textureMess(int state)
 {
   if (!m_model) return;
 
-  if (state)glmSpheremapTexture(m_model);
+  if (state)glmSpheremapTexture(m_model,currentH,currentW);
   else glmLinearTexture(m_model,currentH,currentW);
   buildList();
 }

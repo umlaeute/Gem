@@ -1209,7 +1209,7 @@ glmLinearTexture(GLMmodel* model, float h, float w)
  * model - pointer to initialized GLMmodel structure
  */
 GLvoid
-glmSpheremapTexture(GLMmodel* model)
+glmSpheremapTexture(GLMmodel* model, float h, float w)
 {
     GLMgroup* group;
     GLfloat theta, phi, rho, x, y, z, r;
@@ -1235,18 +1235,18 @@ glmSpheremapTexture(GLMmodel* model)
             phi = 0.0;
         } else {
             if(z == 0.0)
-                phi = 3.14159265 / 2.0;
+                phi = M_PI / 2.0;
             else
                 phi = acos(z / rho);
             
             if(y == 0.0)
-                theta = 3.141592365 / 2.0;
+                theta = M_PI / 2.0;
             else
-                theta = asin(y / r) + (3.14159265 / 2.0);
+                theta = asin(y / r) + (M_PI / 2.0);
         }
         
-        model->texcoords[2 * i + 0] = theta / 3.14159265;
-        model->texcoords[2 * i + 1] = phi / 3.14159265;
+        model->texcoords[2 * i + 0] = w * theta / M_PI;
+        model->texcoords[2 * i + 1] = h * phi / M_PI;
     }
     
     /* go through and put texcoord indices in all the triangles */
