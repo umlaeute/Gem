@@ -33,12 +33,27 @@ char *TextBase::DEFAULT_FONT = "arial.ttf";
 /////////////////////////////////////////////////////////
 TextBase :: TextBase(int argc, t_atom *argv)
   : m_valid(0), m_theString(NULL), m_theMaxStringSize(0),
-    m_fontSize(20), m_precision(1.f),
-    m_widthJus(CENTER), m_heightJus(MIDDLE)
-{
-#ifndef USE_FONTS
-  post("Gem has been compiled without FONT-support !");
+    m_fontSize(20), m_fontDepth(20), m_precision(1.f),
+  //  m_precision= 72;
+#ifdef FTGL
+    m_font(NULL),
 #endif
+#if defined GLTT || defined FTGL
+    m_face(NULL),
+#endif    
+    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY)
+{
+  static bool first_time=true;
+  if (first_time){
+#ifdef GLTT
+    post("Gem has been compiled with GLTT !");
+#elif defined FTGL
+    post("Gem has been compiled with FTGL !");
+#else
+    post("Gem has been compiled without FONT-support !");
+#endif
+    first_time=false;
+  }
 
   // at least allocate something
   m_theString = new char[16];
@@ -62,15 +77,111 @@ TextBase :: ~TextBase()
   delete [] m_theString;
 }
 
+
+/////////////////////////////////////////////////////////
+// setFontSize
+//
+/////////////////////////////////////////////////////////
+void TextBase :: setFontSize(int size)
+{
+  m_fontSize = size;
+#ifdef FTGL
+  if (!m_font)return;
+  if( ! m_font->FaceSize(m_fontSize) ) {
+    error("GEMtext: unable to create font!");
+    m_valid=0;
+  } else m_valid=1;
+  m_font->Depth(m_fontDepth);
+#elif defined GLTT
+  m_valid = makeFontFromFace();
+#endif
+  setModified();
+}
+/////////////////////////////////////////////////////////
+// setPrecision
+//
+/////////////////////////////////////////////////////////
+void TextBase :: setPrecision(float prec)
+{
+  m_precision = prec;
+#ifdef FTGL
+#elif defined GLTT
+  m_valid = makeFontFromFace();
+#endif
+  setModified();
+}
+
+/////////////////////////////////////////////////////////
+// fontNameMess
+//
+/////////////////////////////////////////////////////////
+void TextBase :: fontNameMess(const char *filename)
+{
+  m_valid = 0;
+  char buf[MAXPDSTRING];
+  canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
+#ifdef FTGL
+  if (!m_font)return;
+  if( ! m_font->Open(buf, false) ) {
+    error("GEMtext: unable to open font: %s", buf);
+    return;
+  }
+  m_valid = 1;
+
+  setFontSize(m_fontSize);
+#elif defined GLTT
+  delete m_face;
+  m_face = new FTFace;
+
+  if( ! m_face->open(buf) ) {
+    error("GEMtext: unable to open font: %s", buf);
+    return;
+  }
+  m_valid = makeFontFromFace();
+#endif
+  setModified();
+}
 /////////////////////////////////////////////////////////
 // setJustification
 //
 /////////////////////////////////////////////////////////
+void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType)
+{
+  m_widthJus = wType;
+  m_heightJus = hType;
+  m_depthJus = dType;
+}
 void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType)
 {
   m_widthJus = wType;
   m_heightJus = hType;
 }
+void TextBase :: setJustification(JustifyWidth wType)
+{
+  m_widthJus = wType;
+}
+
+void TextBase :: justifyFont(float x1, float y1, float z1, float x2, float y2, float z2){
+  float width  = 0.f;
+  float height = 0.f;
+  float depth  = 0.f;
+
+  if (m_widthJus == LEFT)       width = x1;
+  else if (m_widthJus == RIGHT) width = x2-x1;
+  else if (m_widthJus == CENTER)width = x2 / 2.f;
+
+  if (m_heightJus == BOTTOM)     height = y1;
+  else if (m_heightJus == TOP)   height = y2-y1;
+  else if (m_heightJus == MIDDLE)height = y2 / 2.f;
+    
+  if (m_depthJus == FRONT)       depth = z1;
+  else if (m_depthJus == BACK)   depth = z2-z1;
+  else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
+
+  glScalef(FONT_SCALE, FONT_SCALE, FONT_SCALE);
+  glTranslatef(-width, -height, -depth);
+}
+
 
 /////////////////////////////////////////////////////////
 // textMess
@@ -141,7 +252,7 @@ void TextBase :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&TextBase::fontNameMessCallback,
 		  gensym("font"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&TextBase::justifyMessCallback,
-		  gensym("justify"), A_SYMBOL, A_SYMBOL, A_NULL);
+		  gensym("justify"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&TextBase::fontSizeMessCallback,
 		  gensym("ft1"), A_FLOAT, A_NULL);
   class_addlist(classPtr, (t_method)&TextBase::textMessCallback);
@@ -154,35 +265,55 @@ void TextBase :: fontNameMessCallback(void *data, t_symbol *s)
 {
   GetMyClass(data)->fontNameMess(s->s_name);
 }
-void TextBase :: justifyMessCallback(void *data, t_symbol *width, t_symbol *height)
+void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*argv)
 {
-  JustifyWidth wType;
-  if ( !strcmp(width->s_name, "left") )
-    wType = LEFT;
-  else if ( !strcmp(width->s_name, "right") )
-    wType = RIGHT;
-  else if ( !strcmp(width->s_name, "center") )
-    wType = CENTER;
-  else
-    {
-      error("GEM: TextBase: invalid width justification: %s", width->s_name);
-      return;
-    }
-
+  JustifyWidth  wType;
   JustifyHeight hType;
-  if ( !strcmp(height->s_name, "bottom") )
-    hType = BOTTOM;
-  else if ( !strcmp(height->s_name, "top") )
-    hType = TOP;
-  else if ( !strcmp(height->s_name, "center") )
-    hType = MIDDLE;
-  else
-    {
-      error("GEM: TextBase: invalid height justification: %s", height->s_name);
+  JustifyDepth  dType;
+  char c;
+
+  switch(argc){
+  case 3:
+    c=atom_getsymbol(argv+2)->s_name[2];
+    switch (c){
+    case 'o': case 'O': dType = FRONT; break;
+    case 'c': case 'C': dType = BACK; break;
+    case 'l': case 'L': dType = HALFWAY; break;
+    default:
+      error("GEM: TextBase: invalid depth justification: %s", atom_getsymbol(argv+2)->s_name);
       return;
     }
+  case 2:    
+    c=atom_getsymbol(argv+1)->s_name[2];
+    switch (c){
+    case 't': case 'T': hType = BOTTOM; break;
+    case 'p': case 'P': hType = TOP; break;
+    case 'd': case 'D': hType = MIDDLE; break;
+    default:
+      error("GEM: TextBase: invalid height justification: %s", atom_getsymbol(argv+1)->s_name);
+      return;
+    }
+  case 1:
+    c=atom_getsymbol(argv)->s_name[2];
+    switch (c){
+    case 'f': case 'F': wType = LEFT; break;
+    case 'g': case 'G': wType = RIGHT; break;
+    case 'n': case 'N': wType = CENTER; break;
+    default:
+      error("GEM: TextBase: invalid width justification: %s", atom_getsymbol(argv+0)->s_name);
+      return;
+    }
+    break;
+  default:
+    error("GEM: TextBase: justification most be \"width [height [depth]]\"");
+    return;
+  }
 
-  GetMyClass(data)->setJustification(wType, hType);
+  switch(argc){
+  case 1: GetMyClass(data)->setJustification(wType); break;
+  case 2: GetMyClass(data)->setJustification(wType, hType); break;
+  case 3: GetMyClass(data)->setJustification(wType, hType, dType); break;
+  }
 }
 void TextBase :: fontSizeMessCallback(void *data, t_floatarg size)
 {

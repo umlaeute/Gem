@@ -16,18 +16,16 @@ LOG
 #define INCLUDE_TEXT2D_H_
 
 #include "Base/TextBase.h"
-#ifdef USE_FONTS
 
-#ifndef FTGL
-class GLTTBitmapFont;
-class GLTTPixmapFont;
-class FTFace;
-#else
-class FTGLBitmapFont;
-class FTGLPixmapFont;
-class FTFace;
+#ifdef FTGL
+# include "FTGLBitmapFont.h"
+# include "FTGLPixmapFont.h"
+#elif defined GLTT
+#include "GLTTBitmapFont.h"
+# if defined __linux__ || defined __APPLE__
+# include "GLTTPixmapFont.h"
+# endif
 #endif
-#endif // USE_FONTS
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -59,44 +57,37 @@ class GEM_EXTERN text2d : public TextBase
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
-    	//////////
-    	// The font to use
-    	virtual void   	fontNameMess(const char *filename);
+	//////////
+	// Set the font size
+	virtual void	setFontSize(int size);
 
-		//////////
-		// Create the actual font from the face
-		int		makeFontFromFace();
+	//////////
+	// The font to use
+	virtual void  fontNameMess(const char *filename);
 
-		//////////
-		// Set the font size
-		virtual void	setFontSize(int size);
+	//-----------------------------------
+	// GROUP:	Member variables
+	//-----------------------------------
+#ifdef FTGL
+    	FTGLPixmapFont	*m_pfont;
+    	FTGLBitmapFont	*m_bfont;
+#elif defined GLTT
+	////////
+	// make the actual fonts
+	virtual int     makeFontFromFace();
 
-		//////////
-		// Set the precision for rendering
-		// This is a no-op
-		virtual void	setPrecision(float)			{ }
-
-	    //-----------------------------------
-	    // GROUP:	Member variables
-	    //-----------------------------------
-#ifdef USE_FONTS
-
-	   	//////////
+	//////////
     	// The font structure
-#ifndef FTGL
-    	GLTTPixmapFont	*m_pfont;
-    	GLTTBitmapFont	*m_bfont;
-#else
-    	FTGLBitmapFont	*m_pfont;
-    	FTGLPixmapFont	*m_bfont;
+#if defined __linux__ || defined __APPLE__
+    	GLTTPixmapFont		*m_pfont;
 #endif
-    	//////////
-    	// The font structure
-    	FTFace 		*m_face;
-#endif // USE_FONTS
+    	GLTTBitmapFont		*m_bfont;
+#endif
+	//////
+	// anti aliasing (aka: pixmap instead of bitmap)
 	int 		m_antialias;
-
 	void            aliasMess(float size);
+ private:
 	static void     aliasMessCallback(void *data, t_floatarg tog);
 };
 

@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2001-2003 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -16,14 +16,9 @@
 
 #include "textoutline.h"
 
-#ifdef USE_FONTS
-#include "FTFace.h"
-#ifndef FTGL
-#include "GLTTOutlineFont.h"
-#else
+#ifdef FTGL
 #include "FTGLOutlineFont.h"
 #endif
-#endif // USE_FONTS
 
 #ifdef MACOSX
 #include <AGL/agl.h>
@@ -41,19 +36,18 @@ CPPEXTERN_NEW_WITH_GIMME(textoutline)
 //
 /////////////////////////////////////////////////////////
 textoutline :: textoutline(int argc, t_atom *argv)
-            : TextBase(argc, argv)
-#ifdef USE_FONTS
-	    , m_font(NULL), m_face(NULL)
-#endif // USE_FONTS
-{
-    m_fontSize = 20;
-#ifdef MACOSX
-  if (!HaveValidContext ()) {
-    post("GEM: geo: textoutline - need window to load font");
-    return;
-  }
+  : TextBase(argc, argv)
+#ifdef GLTT
+    , m_font(NULL)
 #endif
-    fontNameMess(DEFAULT_FONT);
+{
+#ifdef MACOSX
+  if (!HaveValidContext ()) {post("GEM: geo: textoutline - need window to load font");return;}
+#endif
+#ifdef FTGL
+  m_font = new FTGLOutlineFont;
+#endif
+  fontNameMess(DEFAULT_FONT);
 }
 
 /////////////////////////////////////////////////////////
@@ -62,84 +56,34 @@ textoutline :: textoutline(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 textoutline :: ~textoutline()
 {
-#ifdef USE_FONTS
-  delete m_font;
-  delete m_face;
-#endif // USE_FONTS
+#if defined GLTT || defined FTGL
+  if(m_font)delete m_font;
+  if(m_face)delete m_face;
+#endif
 }
 
-/////////////////////////////////////////////////////////
-// setPrecision
-//
-/////////////////////////////////////////////////////////
-void textoutline :: setPrecision(float prec)
-{
-	m_precision = prec;
-	m_valid = makeFontFromFace();
-	setModified();
-}
-
-/////////////////////////////////////////////////////////
-// setFontSize
-//
-/////////////////////////////////////////////////////////
-void textoutline :: setFontSize(int size)
-{
-	m_fontSize = size;
-	m_valid = makeFontFromFace();
-	setModified();
-}
-
-/////////////////////////////////////////////////////////
-// fontNameMess
-//
-/////////////////////////////////////////////////////////
-void textoutline :: fontNameMess(const char *filename)
-{
-#ifdef USE_FONTS
-  m_valid = 0;
-  delete m_font;
-  m_font = NULL;
-  delete m_face;
-  m_face = new FTFace;
-  char buf[MAXPDSTRING];
-  canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
-
-  if( ! m_face->open(buf) )    {
-    error("GEM: textoutline: unable to open font: %s", buf);
-    return;
-  }
-  m_valid = makeFontFromFace();
-  setModified();
-#endif // USE_FONTS
-}
-
+#ifdef GLTT
 /////////////////////////////////////////////////////////
 // makeFontFromFace
 //
 /////////////////////////////////////////////////////////
 int textoutline :: makeFontFromFace()
 {
-#ifdef USE_FONTS
-  if (!m_face)	{
-    error("GEM: text2d: True type font doesn't exist");
-    return(0);
-  }
-
-  delete m_font;
-#ifndef FTGL
+  if(m_font)delete m_font;
+  if (!m_face)    {
+      error("GEM: textoutline: True type font doesn't exist");
+      return(0);
+    }
   m_font = new GLTTOutlineFont(m_face);
-#else
-  m_font = new FTGLOutlineFont(m_face);
-#endif
-  //	m_font->setPrecision((double)m_precision);
-  if( ! m_font->create(m_fontSize) )    {
-    error("GEM: textoutline: unable to create vectored font");
-    return(0);
-  }
+  m_font->setPrecision((double)m_precision);
+  if( ! m_font->create(m_fontSize) ) {
+      error("GEM: textoutline: unable to create outlined font");
+      delete m_font; m_font = NULL;
+      return(0);
+    }
   return(1);
-#endif // USE_FONTS
 }
+#endif
 
 /////////////////////////////////////////////////////////
 // render
@@ -147,34 +91,26 @@ int textoutline :: makeFontFromFace()
 /////////////////////////////////////////////////////////
 void textoutline :: render(GemState *)
 {
-#ifdef USE_FONTS
-  if (m_valid)	{
-    glPushMatrix();
-    
+  if (m_valid && m_theString) {
     // compute the offset due to the justification
-    float width = 0.f;
-    if (m_widthJus == LEFT)
-      width = 0.f;
-    else if (m_widthJus == RIGHT)
-      width = (float)(m_font->getWidth(m_theString));
-    else if (m_widthJus == CENTER)
-      width = (float)(m_font->getWidth(m_theString) / 2.f);
-    
-    float height = 0.f;
-    if (m_heightJus == BOTTOM)
-      height = 0.f;
-    else if (m_heightJus == TOP)
-      height = (float)(m_font->getHeight());
-    else if (m_heightJus == MIDDLE)
-      height = (float)(m_font->getHeight() / 2.f);
-    
-    glScalef(.05f, .05f, .05f);
-    glTranslatef(-width, -height, 0.f);
+    float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
+
+#if defined FTGL
+    m_font->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
+#elif defined GLTT
+    x2=m_font->getWidth (m_theString);
+    y2=m_font->getHeight();
+#endif
+    glPushMatrix();
+    justifyFont(x1, y1, z1, x2, y2, z2);
+#ifdef FTGL
+    m_font->render(m_theString);
+#elif defined GLTT
     m_font->output(m_theString);
+#endif
     
     glPopMatrix();
   }
-#endif // USE_FONTS
 }
 
 /////////////////////////////////////////////////////////

@@ -17,15 +17,9 @@ LOG
 
 #include "Base/TextBase.h"
 
-#ifdef USE_FONTS
-
-#ifndef FTGL
-class GLTTFont;
-#else
-class FTGLFont;
+#ifdef GLTT
+#include "GLTTFont.h"
 #endif
-class FTFace;
-#endif // USE_FONTS
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -57,37 +51,16 @@ class GEM_EXTERN text3d : public TextBase
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
-    	//////////
-    	// The font to use
-    	virtual void   	fontNameMess(const char *filename);
+	//-----------------------------------
+	// GROUP:	Member variables
+	//-----------------------------------
+#ifdef GLTT
+	virtual int     makeFontFromFace();
 
-		//////////
-		// Create the actual font from the face
-		int		makeFontFromFace();
-
-		//////////
-		// Set the font size
-		virtual void	setFontSize(int size);
-
-		//////////
-		// Set the precision for rendering
-		virtual void	setPrecision(float prec);
-
-	    //-----------------------------------
-	    // GROUP:	Member variables
-	    //-----------------------------------
-#ifdef USE_FONTS
-	   	//////////
+	//////////
     	// The font structure
-#ifndef FTGL
     	GLTTFont		*m_font;
-#else
-    	FTGLFont		*m_font;
 #endif
-    	//////////
-    	// The font structure
-    	FTFace 			*m_face;
-#endif // USE_FONTS
 };
 
 #endif	// for header file

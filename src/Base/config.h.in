@@ -1,5 +1,7 @@
 #undef HAVE_LIBGLUT
+#undef HAVE_LIBFTGL
 #undef HAVE_LIBGLTT
+
 
 #undef HAVE_LIBMPEG
 #undef HAVE_LIBMPEG3
