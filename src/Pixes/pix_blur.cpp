@@ -142,7 +142,6 @@ for (h=0; h<image.ysize; h++){
         y1 = ((image.data[src+1] * imageGain)>>8) + ((saved[src+1] * rightGain)>>8);
         saved[src+1] = (unsigned char)clamp(y1);
         image.data[src+1] = saved[src+1];
- 
         
         y2 = ((image.data[src+3] * imageGain)>>8) + ((saved[src+3] * rightGain)>>8);;
         saved[src+3] = (unsigned char)clamp(y2);
@@ -172,3 +171,4 @@ void pix_blur :: blurCallback(void *data, t_floatarg value)
   GetMyClass(data)->m_blur=((long)value);
 
 }
+

@@ -27,6 +27,7 @@ extern "C" {
    void pix_coloralpha_setup();
    void pix_colormatrix_setup();
    void pix_composite_setup();
+   void pix_mix_setup();
    void pix_convolve_setup();
    void pix_coordinate_setup();
    void pix_curve_setup();
@@ -80,6 +81,9 @@ extern "C" {
 
    void pix_write_setup();
    void pix_zoom_setup();
+
+  void pix_blur_setup();
+  void pix_tIIR_setup();
   
 
    void Pixes_setup() {
@@ -98,6 +102,7 @@ extern "C" {
       pix_coloralpha_setup();
       pix_colormatrix_setup();
       pix_composite_setup();
+      pix_mix_setup();
       pix_convolve_setup();
       pix_coordinate_setup();
       pix_curve_setup();
@@ -169,6 +174,8 @@ extern "C" {
     pix_filmDarwin_setup();
     pix_videoDarwin_setup();
 #endif
+    pix_blur_setup();
+    pix_tIIR_setup();
    }
 } // for extern "C"
 
