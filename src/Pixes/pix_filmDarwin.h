@@ -64,8 +64,9 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   //-----------------------------------
   Movie			m_movie;
   //TimeValue		m_movieTime;
-  //Rect			m_srcRect;
+  //Rect			m_srcRect;  
   GWorldPtr		m_srcGWorld;
+  TimeValue		m_movieTime;
   //PixMapHandle		m_pixMap;
   //Ptr			m_baseAddr;
   //long			m_rowBytes;

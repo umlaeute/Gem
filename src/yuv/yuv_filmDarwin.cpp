@@ -24,7 +24,7 @@ static inline int powerOfTwo( int value )
     int x = 1;
     while ( x<value ) x<<= 1;
     return( x );
-}
+} 
 
 CPPEXTERN_NEW_WITH_ONE_ARG(yuv_filmDarwin, t_symbol *, A_DEFSYM)
 
@@ -42,6 +42,7 @@ yuv_filmDarwin :: yuv_filmDarwin(t_symbol *filename) :
 {
   // make sure that there are some characters
   if (filename->s_name[0]) openMess(filename);
+  m_movieTime = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -155,7 +156,7 @@ void yuv_filmDarwin :: realOpen(char *filename)
 		//  are currently at.
 		flags = nextTimeMediaSample;
 	}
-
+    post("frames: %d",m_numFrames);
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
         OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
@@ -173,7 +174,7 @@ void yuv_filmDarwin :: realOpen(char *filename)
         createBuffer();
         prepareTexture();
         m_rowBytes = m_xsize * 2;
-
+        SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
 	err = QTNewGWorldFromPtr(	&m_srcGWorld, 
                                         k422YpCbCr8CodecType, 
 					&m_srcRect, 
@@ -187,12 +188,80 @@ void yuv_filmDarwin :: realOpen(char *filename)
 		m_haveMovie = 0;
 		return;
 	}
-
+        m_movieTime =0;
 	// *** set the graphics world for displaying the movie ***
 	::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
 	::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+        //StartMovie(m_movie);
 }
 
+
+//New getFrame()
+/*
+void yuv_filmDarwin :: getFrame()
+{
+ CGrafPtr   savedPort;
+  GDHandle      savedDevice;
+  Rect     theRect;
+ char     frame[32];
+ Str255    theString;
+ Rect     invalRect;
+     TimeValue		m_movieTime = 0;
+
+
+// if ( m_curFrame < m_numFrames ) {
+
+  TimeValue duration;
+    
+  // get the next frame of the source movie
+  short  flags = nextTimeMediaSample;
+  OSType whichMediaType = VIDEO_TYPE;
+
+  // if this is the first frame, include the frame we are currently on
+  if (m_curFrame == 0)
+   flags |= nextTimeEdgeOK;
+
+  // skip to the next interesting time and get the duration for that frame
+  GetMovieNextInterestingTime(m_movie,
+         flags,
+         1,
+         &whichMediaType,
+         m_movieTime,
+         1,
+         &m_movieTime,
+         &duration);
+
+  // set the time for the frame and give time to the movie toolbox
+//  SetMovieTimeValue(m_movie,m_movieTime);
+  
+  // *** this does the actual drawing into the GWorld ***
+  MoviesTask(m_movie,0); 
+
+  m_curFrame++;
+        
+//        SetGWorld(savedPort, savedDevice);
+  
+  // inval the window to generate an update event
+//  GetPort(&savedPort);
+//  SetPortWindowPort(gWindow);
+  
+//  GetWindowBounds(gWindow, kWindowContentRgn, &invalRect);
+//  GlobalToLocal( (Point *)&invalRect.top);
+//  InvalWindowRect(gWindow, &invalRect);
+  
+//  SetPort(savedPort);
+  
+ //} else {
+   // reset the movie time back to the beginning
+   // then do it all over again
+ if (m_curFrame == m_numFrames){  
+  m_movieTime = 0;
+  m_curFrame = 0;
+ // getFrame();
+ }
+}
+
+*/
 /////////////////////////////////////////////////////////
 // render
 //
@@ -201,37 +270,60 @@ void yuv_filmDarwin :: getFrame()
 {
     if (!m_haveMovie) return;
     
-    CGrafPtr	 	savedPort;
+/*    CGrafPtr	 	savedPort;
     GDHandle     	savedDevice;
     Rect		m_srcRect;
-    TimeValue		m_movieTime;
+//    TimeValue		m_movieTime;
     PixMapHandle	m_pixMap;
     Ptr		m_baseAddr;
     
     ::GetGWorld(&savedPort, &savedDevice);
-    ::SetGWorld(m_srcGWorld, NULL);
+   ::SetGWorld(m_srcGWorld, NULL);
     ::GetMovieBox(m_movie, &m_srcRect);
     
     m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
     m_baseAddr = ::GetPixBaseAddr(m_pixMap);
-
+*/
     int num;
 
     // get the next frame of the source movie
     short 	flags = nextTimeMediaSample;
     OSType	whichMediaType = VIDEO_TYPE;
-    
+     TimeValue duration;
     if (m_reqFrame > m_curFrame) {
         num = m_reqFrame - m_curFrame;
     } else {
         num = m_reqFrame;
-        m_movieTime = 0;
+        if (!m_auto) m_movieTime = 0;
     }
-
+    
+    //check for last frame to loop the clip
+    if (m_curFrame >= m_numFrames){
+    m_curFrame = 0;
+    m_movieTime = 0;
+    }
+    
+    //check for -1
+    if (m_movieTime < 0) m_movieTime = 0;
+    
     // if this is the first frame, include the frame we are currently on
     if (m_curFrame == 0) flags |= nextTimeEdgeOK;
 
-    for (int i=0; i<num; i++) {
+if (m_auto) {
+        ::GetMovieNextInterestingTime(m_movie,
+                                            flags,
+                                                1,
+                                &whichMediaType,
+                                    m_movieTime,
+                                                0,
+                                    &m_movieTime,
+                                           // NULL);
+                                           &duration);
+                                            
+                                            
+        }else{
+        
+        for (int i=0; i<num; i++) {
     // skip to the next interesting time and get the duration for that frame
         ::GetMovieNextInterestingTime(m_movie,
                                             flags,
@@ -240,16 +332,21 @@ void yuv_filmDarwin :: getFrame()
                                     m_movieTime,
                                                 0,
                                     &m_movieTime,
-                                            NULL);
+                                           // NULL);
+                                           &duration);
+                                            
+                                            
         }
-        
+        }
+
+       
     // set the time for the frame and give time to the movie toolbox	
-    ::SetMovieTimeValue(m_movie, m_movieTime);
+    ::SetMovieTimeValue(m_movie, m_movieTime); 
     ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
     
-    m_frame = (unsigned char *)m_baseAddr;
+ //   m_frame = (unsigned char *)m_baseAddr;
 }
-
+/**/
 /////////////////////////////////////////////////////////
 // static member function
 //

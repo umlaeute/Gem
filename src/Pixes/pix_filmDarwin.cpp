@@ -179,7 +179,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 		m_haveMovie = 0;
 		return;
 	}
-
+        m_movieTime = 0;
 	// *** set the graphics world for displaying the movie ***
 	::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
 	::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
@@ -192,13 +192,13 @@ void pix_filmDarwin :: realOpen(char *filename)
 void pix_filmDarwin :: getFrame()
 {
     if (!m_haveMovie) return;
-
+    
     CGrafPtr	 	savedPort;
     GDHandle     	savedDevice;
     Rect		m_srcRect;
-    TimeValue		m_movieTime;
+//    TimeValue		m_movieTime;
     PixMapHandle	m_pixMap;
-    Ptr			m_baseAddr;
+    Ptr		m_baseAddr;
     
     ::GetGWorld(&savedPort, &savedDevice);
     ::SetGWorld(m_srcGWorld, NULL);
@@ -212,18 +212,41 @@ void pix_filmDarwin :: getFrame()
     // get the next frame of the source movie
     short 	flags = nextTimeMediaSample;
     OSType	whichMediaType = VIDEO_TYPE;
-    
+     TimeValue duration;
     if (m_reqFrame > m_curFrame) {
         num = m_reqFrame - m_curFrame;
     } else {
         num = m_reqFrame;
-        m_movieTime = 0;
+        if (!m_auto) m_movieTime = 0;
     }
-
+    
+    //check for last frame to loop the clip
+    if (m_curFrame >= m_numFrames){
+    m_curFrame = 0;
+    m_movieTime = 0;
+    }
+    
+    //check for -1
+    if (m_movieTime < 0) m_movieTime = 0;
+    
     // if this is the first frame, include the frame we are currently on
     if (m_curFrame == 0) flags |= nextTimeEdgeOK;
 
-    for (int i=0; i<num; i++) {
+if (m_auto) {
+        ::GetMovieNextInterestingTime(m_movie,
+                                            flags,
+                                                1,
+                                &whichMediaType,
+                                    m_movieTime,
+                                                0,
+                                    &m_movieTime,
+                                           // NULL);
+                                           &duration);
+                                            
+                                            
+        }else{
+        
+        for (int i=0; i<num; i++) {
     // skip to the next interesting time and get the duration for that frame
         ::GetMovieNextInterestingTime(m_movie,
                                             flags,
@@ -232,11 +255,15 @@ void pix_filmDarwin :: getFrame()
                                     m_movieTime,
                                                 0,
                                     &m_movieTime,
-                                            NULL);
+                                           &duration);
+                                            
+                                            
         }
-        
+        }
+
+       
     // set the time for the frame and give time to the movie toolbox	
-    ::SetMovieTimeValue(m_movie, m_movieTime);
+    ::SetMovieTimeValue(m_movie, m_movieTime); 
     ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
     
     m_frame = (unsigned char *)m_baseAddr;

@@ -66,7 +66,7 @@ class GEM_EXTERN yuv_filmDarwin : public yuv_film
   //-----------------------------------
   Movie			m_movie;
   GWorldPtr		m_srcGWorld;
-
+  TimeValue		m_movieTime;
   //-----------------------------------
   // GROUP:	Texturing
   //-----------------------------------
