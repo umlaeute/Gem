@@ -211,7 +211,13 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
-}
+}\
+class NEW_CLASS ## _cppclass { \
+public: \
+  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
+}; \
+static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // one arg
@@ -239,7 +245,12 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
-}
+}\
+class NEW_CLASS ## _cppclass { \
+public: \
+  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
+}; \
+static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
 
 ///////////////////////////////////////////////////////////////////////////////
 // gimme arg
@@ -267,7 +278,12 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
-}
+}\
+class NEW_CLASS ## _cppclass { \
+public: \
+  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
+}; \
+static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
 
 ///////////////////////////////////////////////////////////////////////////////
 // two args
@@ -295,7 +311,12 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
-}
+}\
+class NEW_CLASS ## _cppclass { \
+public: \
+  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
+}; \
+static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
 
 ///////////////////////////////////////////////////////////////////////////////
 // three args
@@ -323,7 +344,12 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
-}
+}\
+class NEW_CLASS ## _cppclass { \
+public: \
+  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
+}; \
+static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
 
 ///////////////////////////////////////////////////////////////////////////////
 // four args
@@ -351,7 +377,12 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym("Gem/"#NEW_CLASS));\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME); \
 }   	    	    	    	    	    	    	    	\
-}
+}\
+class NEW_CLASS ## _cppclass { \
+public: \
+  NEW_CLASS ## _cppclass() {NEW_CLASS ## SETUP_FUNCTION();} \
+}; \
+static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
 
     
 #endif	// for header file
