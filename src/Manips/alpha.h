@@ -37,7 +37,7 @@ class GEM_EXTERN alpha : public GemBase
 
         //////////
         // Constructor
-    	alpha();
+    	alpha(int);
     	
     protected:
     	
@@ -61,6 +61,12 @@ class GEM_EXTERN alpha : public GemBase
     	// alpha test state
     	int	    	    m_alphaTest;
 
+	//////////
+	// the blending function
+	GLenum              m_function;
+    	void	    	funMess(int fun);
+
+
     	//////////
     	// Alpha state changed
     	void	    	alphaMess(int alphaState);
@@ -68,14 +74,15 @@ class GEM_EXTERN alpha : public GemBase
      	//////////
     	// Alpha test changed
     	void	    	testMess(int alphaTest);
-    	
+
+    	t_inlet *m_inlet;
    private:
     	
     	//////////
     	// static member functions
     	static void 	alphaMessCallback(void *data, t_floatarg alpha);
         static void     testMessCallback(void *data, t_floatarg alphaTest);
-
+        static void     funMessCallback(void *data, t_floatarg alphaTest);
 };
 
 #endif	// for header file

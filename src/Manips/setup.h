@@ -25,6 +25,7 @@ extern "C" {
    void emissionRGB_setup();
    void linear_path_setup();
    void ortho_setup();
+  void polygon_smooth_setup();
    void rotate_setup();
    void rotateXYZ_setup();
    void scale_setup();
@@ -51,6 +52,7 @@ extern "C" {
       emission_setup();
       emissionRGB_setup();
       linear_path_setup();
+      polygon_smooth_setup();
       ortho_setup();
       rotate_setup();
       rotateXYZ_setup();
