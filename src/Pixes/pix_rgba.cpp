@@ -77,7 +77,7 @@ void pix_rgba :: processImage(imageStruct &image)
       old_pix+=3;
     }
     break;
-  case GL_BGR: // == GL_BGR_EXT
+  case GL_BGR_EXT: 
     while(count--){
       new_pix[chRed]  =old_pix[2];
       new_pix[chGreen]=old_pix[1];
@@ -87,7 +87,7 @@ void pix_rgba :: processImage(imageStruct &image)
       new_pix+=4;
     }
     break;
-  case GL_BGRA: // == GL_BGRA_EXT
+  case GL_BGRA_EXT: 
     while(count--){
       new_pix[chRed]  =old_pix[2];
       new_pix[chGreen]=old_pix[1];
