@@ -209,7 +209,7 @@ void model :: render(GemState *state)
         currentH = state->texCoordX(1);
         currentW = state->texCoordY(1);
         
-        glmLinearTexture(m_model,currentH,currentW);
+        if(m_model)glmLinearTexture(m_model,currentH,currentW);
         post("model: resizing texcoords");
         buildList();
         }
