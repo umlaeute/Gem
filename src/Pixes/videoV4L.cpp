@@ -57,13 +57,12 @@ videoV4L :: videoV4L(int format) : video(format)
 {
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
-
   m_capturing=false;
   m_channel=COMPOSITEIN;
   m_norm=VIDEO_MODE_AUTO;
   m_devicenum=DEVICENO;
   //  post("w = %d, h= %d",m_width, m_height);
-  m_image.image.reallocate();
+  //m_image.image.reallocate();
 }
 
 /////////////////////////////////////////////////////////
@@ -82,7 +81,6 @@ videoV4L :: ~videoV4L()
 void *videoV4L :: capturing(void*you)
 {
   videoV4L *me=(videoV4L *)you;
-  unsigned char *pixp;
   me->m_capturing=true;
   while(me->m_continue_thread){
     //post("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
@@ -143,7 +141,7 @@ int videoV4L :: startTransfer(int format)
   if (format>1)m_reqFormat=format;
   post("starting transfer");
   char buf[256];
-  int i, dataSize;
+  int i;
   int width, height;
 
   frame = 0;
@@ -168,7 +166,7 @@ int videoV4L :: startTransfer(int format)
 	    vcap.minwidth,  vcap.minheight);
     if (ioctl(tvfd, VIDIOCGPICT, &vpicture) < 0)
     {
-	perror("VIDIOCGCAP");
+	perror("VIDIOCGPICT");
 	goto closit;
     }
     
@@ -225,6 +223,7 @@ int videoV4L :: startTransfer(int format)
 
     for (i = 0; i < NBUF; i++)
     {
+      post("wanted format is 0x%X", m_reqFormat);
       switch(m_reqFormat){
       case GL_LUMINANCE:
     	vmmap[i].format = VIDEO_PALETTE_GREY;
@@ -234,7 +233,20 @@ int videoV4L :: startTransfer(int format)
     	vmmap[i].format = VIDEO_PALETTE_RGB32;
 	break;
       case GL_YCBCR_422_GEM:
-    	vmmap[i].format = VIDEO_PALETTE_YUV422;
+#if 0
+VIDEO_PALETTE_YUV422	7	/* YUV422 capture */
+VIDEO_PALETTE_YUYV	8
+VIDEO_PALETTE_UYVY	9	/* The great thing about standards is ... */
+VIDEO_PALETTE_YUV420	10
+VIDEO_PALETTE_YUV411	11	/* YUV411 capture */
+VIDEO_PALETTE_RAW	12	/* RAW capture (BT848) */
+VIDEO_PALETTE_YUV422P	13	/* YUV 4:2:2 Planar */
+VIDEO_PALETTE_YUV411P	14	/* YUV 4:1:1 Planar */
+VIDEO_PALETTE_YUV420P	15	/* YUV 4:2:0 Planar */
+VIDEO_PALETTE_YUV410P	16	/* YUV 4:1:0 Planar */
+#endif
+  post("trying to get YUV");
+ vmmap[i].format = VIDEO_PALETTE_YUV422;
 	break;
       default:
       case GL_RGB:
@@ -269,7 +281,7 @@ int videoV4L :: startTransfer(int format)
       break;
     case GL_RGBA:
     case GL_BGRA:
-      m_image.image.csize = 3;
+      m_image.image.csize = 4;
       m_image.image.format = GL_BGRA;
     break;
     case GL_YCBCR_422_GEM:
@@ -436,5 +448,20 @@ int videoV4L :: setDevice(int d)
   }
   return 0;
 }
+
+
+int videoV4L :: setColor(int format)
+{
+  if (format<=0 || format==m_reqFormat)return -1;
+  post("setting color space: 0x%X", format);
+  if(m_capturing){
+    post("restarting transfer");
+    stopTransfer();
+    startTransfer(format);
+  }
+  m_reqFormat=format;
+  return 0;
+}
+
 
 #endif

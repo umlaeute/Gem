@@ -16,6 +16,7 @@
     
 #include "pix_videoNEW.h"
 #include "Pixes/videoV4L.h"
+#include "Pixes/videoDV4L.h"
 CPPEXTERN_NEW(pix_videoNEW)
 
 /////////////////////////////////////////////////////////
@@ -27,7 +28,7 @@ CPPEXTERN_NEW(pix_videoNEW)
 //
 /////////////////////////////////////////////////////////
 pix_videoNEW :: pix_videoNEW(){
-  m_videoHandle=new videoV4L();
+  m_videoHandle=new videoV4L(GL_RGBA);
 }
 
 /////////////////////////////////////////////////////////
@@ -51,7 +52,7 @@ void pix_videoNEW :: render(GemState *state){
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: startRendering(){
   if (!m_videoHandle) {
-    post("GEM: pix_videoNEW: do video for this OS");
+    post("GEM: pix_video: do video for this OS");
     return;
   }
   m_videoHandle->startTransfer();
@@ -114,13 +115,43 @@ void pix_videoNEW :: normMess(t_symbol *s)
 {
   if(m_videoHandle)m_videoHandle->setNorm(s->s_name);
 }
+/////////////////////////////////////////////////////////
+// colorMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: colorMess(t_atom*a)
+{
+  int format=0;
+  if (a->a_type==A_SYMBOL){
+      char c =tolower(*atom_getsymbol(a)->s_name);
+      char c2=tolower(atom_getsymbol(a)->s_name[3]);
 
+      switch (c){
+      case 'g': format=GL_LUMINANCE; break;
+      case 'y': format=GL_YCBCR_422_GEM; break;
+      case 'r':
+	if (c2=='a')format=GL_RGBA;
+	else format=GL_RGB;
+	break;
+#if defined (GL_BGRA) & defined (GL_BGR)
+      case 'b':
+	if (c2=='a')format=GL_BGRA;	else 
+		format=GL_BGR;
+	break;
+#endif
+      default: format=GL_RGBA;
+      }
+  } else format=atom_getint(a);
+  if(m_videoHandle)m_videoHandle->setColor(format);
+}
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classpix_videoNEW,gensym("pix_video"),A_NULL);
+
     class_addmethod(classPtr, (t_method)&pix_videoNEW::dimenMessCallback,
     	    gensym("dimen"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::offsetMessCallback,
@@ -133,7 +164,8 @@ void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
     	    gensym("channel"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::modeMessCallback,
     	    gensym("mode"), A_GIMME, A_NULL);
-
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::colorMessCallback,
+    	    gensym("color"), A_GIMME, A_NULL);
 }
 void pix_videoNEW :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -182,4 +214,8 @@ void pix_videoNEW :: modeMessCallback(void *data, t_symbol* nop, int argc, t_ato
   mode_error:
     post("invalid arguments for message \"mode [<norm>] [<channel>]\"");
   }
+}
+void pix_videoNEW :: colorMessCallback(void *data, t_symbol* nop, int argc, t_atom *argv){
+  if (argc==1)GetMyClass(data)->colorMess(argv);
+  else post("pix_video: invalid number of arguments (must be 1)");
 }

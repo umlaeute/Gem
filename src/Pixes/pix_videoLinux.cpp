@@ -86,7 +86,6 @@ pix_videoLinux :: ~pix_videoLinux()
 void *pix_videoLinux :: capturing(void*you)
 {
   pix_videoLinux *me=(pix_videoLinux *)you;
-  unsigned char *pixp;
   while(me->m_continue_thread){
 
   me->frame = !me->frame;
@@ -126,9 +125,8 @@ void *pix_videoLinux :: capturing(void*you)
 }
 void pix_videoLinux :: render(GemState *state){
   unsigned char *newimage = videobuf + vmbuf.offsets[last_frame];
-  int row, column;
  
-  if (!m_frame_ready)  m_pixBlock.newimage = 0;
+  if (!m_frame_ready)  m_pixBlock.newimage = 1;
   else {
     m_pixBlock.image.data=newimage;
     m_pixBlock.newimage = 1;
@@ -171,9 +169,8 @@ void pix_videoLinux :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 int pix_videoLinux :: startTransfer()
 {
-  post("starting transfer");
     char buf[256];
-    int i, dataSize;
+    int i;
     frame = 0;
     int width, height;
     
@@ -202,7 +199,7 @@ int pix_videoLinux :: startTransfer()
     
     post("picture: brightness %d depth %d palette %d\n",
 	    vpicture.brightness, vpicture.depth, vpicture.palette);
-
+    post("vcap.channels %d", vcap.channels);
     for (i = 0; i < vcap.channels; i++)
     {
 	vchannel.channel = i;
@@ -216,21 +213,20 @@ int pix_videoLinux :: startTransfer()
 	    vchannel.type, vchannel.flags);
     }
     vchannel.channel = m_channel;
-    if (ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
-    {
+
+    if (vchannel.channel>1){
+      if (ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0) {
 	perror("VDIOCGCHAN");
 	goto closit;
-    }
-
-    vchannel.norm = m_norm;
-    if (ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0)
-    {
+      }
+      vchannel.norm = m_norm;
+      if (ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0) {
 	perror("VDIOCSCHAN");
 	goto closit;
+      }
     }
 
-
-    	/* get mmap numbers */
+    /* get mmap numbers */
     if (ioctl(tvfd, VIDIOCGMBUF, &vmbuf) < 0)
     {
 	perror("VIDIOCGMBUF");
@@ -252,7 +248,10 @@ int pix_videoLinux :: startTransfer()
 
     for (i = 0; i < NBUF; i++)
     {
-    	vmmap[i].format = VIDEO_PALETTE_RGB32;
+      //    	vmmap[i].format = VIDEO_PALETTE_RGB32;
+      // how to detect whether the camera supports RGB32 ?
+      vmmap[i].format = VIDEO_PALETTE_RGB24; // this is actually BGR on creative webcam
+
     	vmmap[i].width = width;
     	vmmap[i].height = height;
 	vmmap[i].frame  = i;
@@ -273,10 +272,16 @@ int pix_videoLinux :: startTransfer()
 	just used RGB, I wonder? */
     m_pixBlock.image.xsize = width;
     m_pixBlock.image.ysize = height;
+
+    if (vmmap[frame].format==VIDEO_PALETTE_RGB32){
+    // how to detect this properly ?
     m_pixBlock.image.csize = 4;
     m_pixBlock.image.format = GL_RGBA;
-    m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-    //    m_pixBlock.image.reallocate();
+    } else {
+    m_pixBlock.image.csize = 3;
+    m_pixBlock.image.format = GL_BGR;
+    }
+
     myleftmargin = 0;
     myrightmargin = 0;
     mytopmargin = 0;
@@ -293,6 +298,7 @@ int pix_videoLinux :: startTransfer()
     return(1);
 
 closit:
+    post("closing connection");
     if (tvfd >= 0)
     {
     	close(tvfd);

@@ -80,7 +80,9 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   virtual void	channelMess(int channel, t_float freq=0);
   // Set the channel of the capturing device 
   virtual void	normMess(t_symbol *s);
-    
+  // Set the color-space
+  virtual void	colorMess(t_atom*);
+        
   //-----------------------------------
   // GROUP:	Video data
   //-----------------------------------
@@ -98,6 +100,7 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
   static void normMessCallback(void *data, t_symbol*format);
   static void modeMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void colorMessCallback(void *data, t_symbol*,int,t_atom*);
 
 };
 
