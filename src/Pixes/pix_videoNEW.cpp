@@ -145,6 +145,14 @@ void pix_videoNEW :: colorMess(t_atom*a)
   if(m_videoHandle)m_videoHandle->setColor(format);
 }
 /////////////////////////////////////////////////////////
+// deviceMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: deviceMess(int dev)
+{
+  if (m_videoHandle)m_videoHandle->setDevice(dev);
+}
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -166,6 +174,8 @@ void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
     	    gensym("mode"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::colorMessCallback,
     	    gensym("color"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::deviceMessCallback,
+    	    gensym("device"), A_FLOAT, A_NULL);
 }
 void pix_videoNEW :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -218,4 +228,8 @@ void pix_videoNEW :: modeMessCallback(void *data, t_symbol* nop, int argc, t_ato
 void pix_videoNEW :: colorMessCallback(void *data, t_symbol* nop, int argc, t_atom *argv){
   if (argc==1)GetMyClass(data)->colorMess(argv);
   else post("pix_video: invalid number of arguments (must be 1)");
+}
+void pix_videoNEW :: deviceMessCallback(void *data, t_floatarg state)
+{
+    GetMyClass(data)->deviceMess((int)state);
 }
