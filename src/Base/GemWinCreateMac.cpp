@@ -132,12 +132,6 @@ OSStatus aglReportError (void);
 // Handle reporting of OpenGL errors, error code is passed through
 OSStatus glReportError (void);
 
-// Error reporter, can be set to report however the application desires
-void ReportError (char * strError);
-
-// Error with numeric code reporter, can be set to report however the application desires
-void ReportErrorNum (char * strError, long numError);
-
 // Runtime check to see if we are running on Mac OS X
 // Inputs:  None
 // Returns: 0 if < Mac OS X or version number of Mac OS X (10.0 for GM)
@@ -160,14 +154,14 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     GDHandle hGD, hTargetDevice = NULL;
     short numDevices = 0;
     short whichDevice = 1; // number of device to try (0 = 1st device, 1 = 2nd/external device)
-    
+#ifdef DEBUG
     post("MAC: createGemWindow()");
+#endif
     short i =0;
 	
     // Build GL context and window or fullscreen
 
     if (!hints.actuallyDisplay){
-        post("MAC: !hints.actuallyDisplay");
         return(1);
     }
     // look for connected graphics devices
@@ -262,30 +256,36 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 /////////////////////////////////////////////////////////
 GEM_EXTERN void destroyGemWindow(WindowInfo &info)
 {
-	post("destroyGemWindow()");
-	if (info.offscreen) {
-		if (info.context) {
-			::aglSetCurrentContext(NULL);
-			::aglSetDrawable(info.context, NULL);
-			::aglDestroyContext(info.context);
-			info.context  = NULL;
-		}
-		::UnlockPixels(info.pixMap);
-		::DisposeGWorld(info.offscreen);
-		info.offscreen = NULL;
-                ::DisposeWindow( ::GetWindowFromPort(gaglDraw) );
-	}
-        if (info.context)
-        {
+#ifdef DEBUG
+    post("destroyGemWindow()");
+#endif
+    if (info.offscreen) {
+        if (info.context) {
             ::aglSetCurrentContext(NULL);
             ::aglSetDrawable(info.context, NULL);
             ::aglDestroyContext(info.context);
             info.context  = NULL;
-            post("destroy context done");
         }
+        ::UnlockPixels(info.pixMap);
+        ::DisposeGWorld(info.offscreen);
+        info.offscreen = NULL;
+        ::DisposeWindow( ::GetWindowFromPort(gaglDraw) );
+    }
+    if (info.context)
+    {
+        ::aglSetCurrentContext(NULL);
+        ::aglSetDrawable(info.context, NULL);
+        ::aglDestroyContext(info.context);
+        info.context  = NULL;
+#ifdef DEBUG
+        post("destroy context done");
+#endif
+    }
         
-        ::DisposeWindow( info.pWind );
-	post("destroyGemWindow() finished");
+    ::DisposeWindow( info.pWind );
+#ifdef DEBUG
+    post("destroyGemWindow() finished");
+#endif
 }
 int cursorGemWindow(WindowInfo &info, int state)
 {
@@ -365,12 +365,10 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight
 
 OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructGLWindowInfo pcontextInfo, AGLContext aglShareContext)
 {
-    post("MAC:  BuildGLFromWindow entered");
-	if (!pWindow){
-            post("MAC: BuildGLFromWindow =!pWindow");
-		return paramErr;
-        }
-	return BuildGLonWindow (pWindow, paglContext, pcontextInfo, aglShareContext);
+    if (!pWindow){
+        return paramErr;
+    }
+    return BuildGLonWindow (pWindow, paglContext, pcontextInfo, aglShareContext);
 }
 // --------------------------------------------------------------------------
 
@@ -399,7 +397,9 @@ static OSStatus BuildGLonWindow (WindowPtr pWindow, AGLContext* paglContext, pst
 #endif
     if (!pWindow || !pcontextInfo)
     {
+#ifdef DEBUG
         post("MAC: BuildGLonWindow: no drawable");
+#endif
         return paramErr;
     }
 	
@@ -410,24 +410,34 @@ static OSStatus BuildGLonWindow (WindowPtr pWindow, AGLContext* paglContext, pst
     numDevices = FindGDHandleFromWindow (pWindow, &hGD);
     if (!pcontextInfo->fDraggable) 	// if numDevices > 1 then we will only be using the software renderer otherwise check only window device
     {
+#ifdef DEBUG
         post("MAC: BuildGLonWindow: fDraggable= false");
+#endif
         if ((numDevices > 1) || (numDevices == 0)) // this window spans mulitple devices thus will be software only
         {
+#ifdef DEBUG
             post("MAC: BuildGLonWindow: numDevices>1 || numDevices ==0");
+#endif
             // software renderer
             // infinite VRAM, infinite textureRAM, not accelerated
             if (pcontextInfo->fAcceleratedMust)
             {
+#ifdef DEBUG
                 post("MAC: BuildGLonWindow: Unable to accelerate window that spans multiple devices");
+#endif
                 return err;
             }
         }
         else // not draggable on single device
         {
+#ifdef DEBUG
         post("MAC: BuildGLonWindow: not draggable on single device");
+#endif
         if (!CheckRenderer (hGD, &(pcontextInfo->VRAM), &(pcontextInfo->textureRAM), &depthSizeSupport, pcontextInfo->fAcceleratedMust))
         {
+#ifdef DEBUG
             post("MAC: BuildGLonWindow: Renderer check failed 1");
+#endif
             return err;
         }
     }
@@ -435,42 +445,56 @@ static OSStatus BuildGLonWindow (WindowPtr pWindow, AGLContext* paglContext, pst
 	// else draggable so must check all for support (each device should have at least one renderer that meets the requirements)
 	else if (!CheckAllDeviceRenderers (&(pcontextInfo->VRAM), &(pcontextInfo->textureRAM), &depthSizeSupport, pcontextInfo->fAcceleratedMust))
 	{
-                post("MAC: BuildGLonWindow: Renderer check failed 2");
-		return err;
+#ifdef DEBUG
+            post("MAC: BuildGLonWindow: Renderer check failed 2");
+#endif
+            return err;
 	}
 	
 	// do agl
 	if ((Ptr) kUnresolvedCFragSymbolAddress == (Ptr) aglChoosePixelFormat) // check for existance of OpenGL
 	{
+#ifdef DEBUG
                 post("MAC: BuildGLonWindow: OpenGL not installed");
+#endif
 		return NULL;
 	}	
 	// we successfully passed the renderer check
 
 	if ((!pcontextInfo->fDraggable && (numDevices == 1))){  // not draggable on a single device
 		pcontextInfo->fmt = aglChoosePixelFormat (&hGD, 1, pcontextInfo->aglAttributes); // get an appropriate pixel format
+#ifdef DEBUG
                 post("MAC: BuildGLonWindow (!pcontextInfo->fDraggable && (numDevices == 1))");
+#endif
         } else {
 		pcontextInfo->fmt = aglChoosePixelFormat (NULL, 0, pcontextInfo->aglAttributes); // get an appropriate pixel format
+#ifdef DEBUG
                 post("MAC: BuildGLonWindow else");
+#endif
         }
 	aglReportError ();
 	if (NULL == pcontextInfo->fmt) 
 	{
+#ifdef DEBUG
                 post("MAC: BuildGLonWindow: Could not find valid pixel format");
+#endif
 		return NULL;
 	}
 
         *paglContext = aglCreateContext (pcontextInfo->fmt, aglShareContext); // Create an AGL context
         
 	if (AGL_BAD_MATCH == aglGetError()){
+#ifdef DEBUG
             post("MAC: BuildGLonWindow: AGL_BAD_MATCH");
+#endif
             *paglContext = aglCreateContext (pcontextInfo->fmt, 0); // unable to sahre context, create without sharing
         }
 	aglReportError ();
 	if (NULL == *paglContext) 
 	{
+#ifdef DEBUG
             post("MAC: BuildGLonWindow: Unable to create AGL context");
+#endif
             return NULL;
 	}
 	
@@ -483,9 +507,9 @@ static OSStatus BuildGLonWindow (WindowPtr pWindow, AGLContext* paglContext, pst
             post("MAC: BuildGLonWindow: Unable to make the context the current context");
             return aglReportError ();
         }
-
-	//SetPort (cgrafSave);
+#ifdef DEBUG
         post("MAC: BuildGLonWindow exit");
+#endif
 	return err;
 }
 
@@ -752,7 +776,7 @@ static Boolean CheckRenderer (GDHandle hGD, long* pVRAM, long* pTextureRAM, GLin
 	aglReportError ();
 	if(!head_info)
 	{
-		ReportError ("aglQueryRendererInfo error");
+		post("aglQueryRendererInfo error");
 		return false;
 	}
 	else
@@ -955,7 +979,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, 
 
 	if ((Ptr) kUnresolvedCFragSymbolAddress == (Ptr) aglChoosePixelFormat) // check for existance of OpenGL
 	{
-		ReportError ("OpenGL not installed");
+		post("OpenGL not installed");
 		return noErr;
 	}	
 	
@@ -975,7 +999,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, 
 	aglReportError ();
 	if (NULL == pcontextInfo->fmt) 
 	{
-		ReportError("Could not find valid pixel format");
+		post("Could not find valid pixel format");
 		return noErr;
 	}
 
@@ -987,7 +1011,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, 
 	aglReportError ();
 	if (NULL == *paglContext) 
 	{
-		ReportError ("Could not create context");
+		post("Could not create context");
 		return paramErr;
 	}
 	if (aglShareContext == NULL)
@@ -1000,7 +1024,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, 
 		err = BuildDrawable (paglDraw, hGD, pcontextInfo);
 		if (err != noErr)
 		{
-			ReportError ("Could not build drawable");
+			post("Could not build drawable");
 			return err;
 		}
 		if (!aglSetDrawable (*paglContext, *paglDraw))		// attach the CGrafPtr to the context
@@ -1146,7 +1170,7 @@ OSStatus aglReportError (void)
 {
 	GLenum err = aglGetError();
 	if (AGL_NO_ERROR != err)
-		ReportError ((char *)aglErrorString(err));
+		post((char *)aglErrorString(err));
 	// ensure we are returning an OSStatus noErr if no error condition
 	if (err == AGL_NO_ERROR)
 		return noErr;
