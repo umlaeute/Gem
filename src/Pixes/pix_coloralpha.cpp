@@ -66,4 +66,7 @@ void pix_coloralpha :: processRGBAImage(imageStruct &image)
 //
 /////////////////////////////////////////////////////////
 void pix_coloralpha :: obj_setupCallback(t_class *)
-{ }
+{
+  class_addcreator((t_newmethod)_classpix_coloralpha, 
+		   gensym("pix_colouralpha"), A_NULL);
+}

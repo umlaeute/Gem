@@ -473,6 +473,8 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
 /////////////////////////////////////////////////////////
 void pix_colorreduce :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classpix_colorreduce, 
+		   gensym("pix_colourreduce"), A_NULL);
     class_addmethod(classPtr, (t_method)&pix_colorreduce::countCallback,
 		  gensym("count"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_colorreduce::persistCallback,
