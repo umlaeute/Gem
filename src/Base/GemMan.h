@@ -21,13 +21,13 @@ LOG
 #include <windows.h>
 #endif
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <OpenGL/glu.h>
 #include <Carbon/Carbon.h>
 #include <AGL/agl.h>
 #else
 #include <GL/glu.h>
-#endif // MACOSX
+#endif // __APPLE__
 
 #include "Base/GemExportDef.h"
 
@@ -176,6 +176,7 @@ class GEM_EXTERN GemMan
 	static int	   texture_rectangle_supported;
 	static int	   client_storage_supported;
         static float	   fps;
+        
 	
         //////////
         // Changing these variables is likely to crash GEM

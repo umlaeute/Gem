@@ -22,7 +22,7 @@ LOG
 #endif /* __linux__ */
 #include "Base/GemShape.h"
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #ifdef HAVE_LIBGLUT

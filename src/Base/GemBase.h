@@ -20,12 +20,12 @@ LOG
 #include <windows.h>
 #endif
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #else
 #include <GL/gl.h>
-#endif // MACOSX
+#endif // __APPLE__
 
 #ifndef INCLUDE_CPPEXTERN_H_
 #include "Base/CPPExtern.h"

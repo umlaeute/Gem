@@ -93,7 +93,7 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
   case GL_LUMINANCE:  format=GL_LUMINANCE;  csize=1; break;
   case GL_YUV422_GEM: format=GL_YUV422_GEM; csize=2; break;
   default:
-#ifndef MACOSX
+#ifndef __APPLE__
   case GL_RGBA:       format=GL_RGBA;
 #else
   case GL_BGRA_EXT:   format=GL_BGRA_EXT;
@@ -884,7 +884,7 @@ GEM_EXTERN extern int getPixFormat(char*cformat){
   case 'g': return GL_LUMINANCE;
   case 'y': return GL_YUV422_GEM;
   case 'r': 
-#ifndef MACOSX
+#ifndef __APPLE__
     return GL_RGBA;
 #else
     return GL_BGRA_EXT;

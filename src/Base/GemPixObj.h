@@ -87,9 +87,9 @@ class GEM_EXTERN GemPixObj : public GemBase
 
   //////////
   int             m_processOnOff;
-#ifndef MACOSX
+#ifndef __APPLE__
   int             m_mmx;
-#endif // MACOSX
+#endif // __APPLE__
   //////////
   // creation callback
   static void 	real_obj_setupCallback(t_class *classPtr) { 
@@ -425,7 +425,7 @@ inline void Pete_UnLockHandle(SPete_MemHandle InHandle) {
 }
 // end of PeteHelpers.h stuff
 
-#ifdef MACOSX
+#ifdef __APPLE__
 //Ian Ollman's function to determine the cache prefetch for altivec vec_dst()
 inline UInt32 GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
 {

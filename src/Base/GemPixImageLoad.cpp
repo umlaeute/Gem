@@ -204,13 +204,13 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 	error("GEM: Unable to load image: %s", newName);
 	return(NULL);
 }
-#endif // MACOSX
+#endif // __APPLE__
 /***************************************************************************
  *
  * Read in a image utilizing QuickTime GraphicsImporterComponent
  *
  ***************************************************************************/
-#ifdef MACOSX
+#ifdef __APPLE__
 imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 {
 	Rect		r;
@@ -717,5 +717,5 @@ imageStruct *sgiImage2mem(const char *filename)
 	
 	return(image_block);
 }
-#endif //MACOSX
+#endif //__APPLE__
 

@@ -20,11 +20,11 @@ LOG
 #include <windows.h>
 #endif
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
-#endif // MACOSX
+#endif // __APPLE__
 
 #include <string.h>
 #include "Base/GemShape.h"

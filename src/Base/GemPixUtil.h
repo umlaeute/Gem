@@ -22,7 +22,7 @@ LOG
 #include <windows.h>
 #endif
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
@@ -32,7 +32,7 @@ LOG
 #ifndef NT
 #include "config.h"
 #endif // NT
-#endif // MACOSX
+#endif // __APPLE__
 
 #include <string.h>
 #include <stdlib.h>
@@ -283,7 +283,7 @@ GEM_EXTERN extern int getPixFormat(char*);
 ///////////////////////////////////////////////////////////////////////////////
 
 /* RGBA */
-#ifdef MACOSX				//tigital
+#ifdef __APPLE__				//tigital
 const int chAlpha	= 0;
 const int chRed		= 1;
 const int chGreen	= 2;

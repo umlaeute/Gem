@@ -17,16 +17,15 @@ LOG
 #ifndef INCLUDE_GEMGLUTIL_H_
 #define INCLUDE_GEMGLUTIL_H_
 
-//<<<<<<< GemGLUtil.h
 #include "Base/GemBase.h"
-//=======
+
 #include "Base/GemExportDef.h"
-#ifndef MACOSX
+#ifndef __APPLE__
 #include <GL/gl.h>
 #else
 #include <OpenGL/gl.h>
 #endif
-//>>>>>>> 1.2
+
 
 GEM_EXTERN extern int           getGLdefine(char *name);
 GEM_EXTERN extern int           getGLdefine(t_symbol *name);

@@ -22,7 +22,7 @@
 #include <sys/time.h>
 #include <GL/glx.h>
 #include <X11/Xlib.h>
-#elif MACOSX
+#elif __APPLE__
 #include <stdlib.h>
 #include <string.h>
 #include <OpenGL/gl.h>
@@ -43,9 +43,9 @@
 
 #include "Controls/gemhead.h"
 
-#ifdef MACOSX
+#ifdef __APPLE__
 extern bool HaveValidContext (void);
-#endif // MACOSX
+#endif // __APPLE__
 
 static WindowInfo gfxInfo;
 static WindowInfo constInfo;
@@ -196,7 +196,7 @@ static void dispatchGemWindowMessages()
     }
   clock_delay(s_windowClock, s_windowDelTime);  
 } 
-#elif MACOSX
+#elif __APPLE__
 static void dispatchGemWindowMessages(void *)
 {
 //	::clock_xdelay(s_windowClock, s_windowDelTime);
@@ -279,7 +279,7 @@ void GemMan :: createContext(char* disp)
       m_width = 640;
       m_height = 480;
     }
-#elif MACOSX
+#elif __APPLE__
     // Check QuickTime installed
     long	QDfeature;
     if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
@@ -356,7 +356,7 @@ void GemMan :: initGem()
   post("GEM: \t\tJames Tittle (macOS-X)");
   post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
 
-  //#ifdef MACOSX
+  //#ifdef __APPLE__
   //	post("GEM: Mac OS X port by James Tittle & Chris Clepper");
   //#endif
 
@@ -556,12 +556,12 @@ void GemMan :: resetState()
   m_clear_color[1] = 0.0;
   m_clear_color[2] = 0.0;
   m_clear_color[3] = 0.0;
-#ifdef MACOSX
+#ifdef __APPLE__
   if (HaveValidContext ())
     glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
 #else
   glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
-#endif //MACOSX
+#endif //__APPLE__
   m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
   m_mat_ambient[0] = 0.1f;
   m_mat_ambient[1] = 0.1f;
@@ -666,7 +666,7 @@ void GemMan :: render(void *)
   {
     gettimeofday(&startTime, 0);
   }
-#elif MACOSX
+#elif __APPLE__
     UnsignedWide startTime;
     ::Microseconds(&startTime);
 #else
@@ -889,7 +889,7 @@ void GemMan :: render(void *)
       (endTime.tv_usec - startTime.tv_usec) * 0.000001;
     post("GEM: time: %f", seconds);
   }
-#elif MACOSX
+#elif __APPLE__
     {
         UnsignedWide endTime;
         ::Microseconds(&endTime);
@@ -985,7 +985,7 @@ void GemMan :: windowInit()
   glClearDepth(1.0);    
   glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
  
-  #ifdef MACOSX
+  #ifdef __APPLE__
   GLint swapInt = 1;
   aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
   #endif
@@ -1072,7 +1072,7 @@ int GemMan :: createWindow(char* disp)
         to avoid the application -> driver copy as long as you agree to
         keep your copy of the texture image around for when the driver
         needs it.  GL_APPLE_client_storage is supported on all video
-        cards under MacOSX 10.1 and above.
+        cards under __APPLE__ 10.1 and above.
     */
 
   client_storage_supported
@@ -1140,7 +1140,7 @@ void GemMan :: destroyWindow()
 
   wglMakeCurrent(constInfo.dc, constInfo.context);
   s_windowRun = 0;
-#elif MACOSX		// for PPC Macintosh
+#elif __APPLE__		// for PPC Macintosh
     ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
     ::aglSetCurrentContext(constInfo.context);
 #else
@@ -1170,7 +1170,7 @@ int createConstWindow(char* disp)
   myHints.y_offset = 0;
   myHints.width = GemMan::m_width;
   myHints.height = GemMan::m_height;
-#ifndef MACOSX
+#ifndef __APPLE__
   myHints.shared = NULL;
 #else
   myHints.shared = constInfo.context;
@@ -1220,7 +1220,7 @@ void GemMan :: swapBuffers()
     glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
 #elif _WINDOWS          // for WinNT
   SwapBuffers(gfxInfo.dc);
-#elif MACOSX		// for Macintosh
+#elif __APPLE__		// for Macintosh
   ::aglSwapBuffers(gfxInfo.context);
 #else                   // everyone else
 #error Define OS specific swap buffer

@@ -25,7 +25,7 @@
 #include <unistd.h>
 #endif
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <QuickTime/ImageCompression.h>
@@ -33,7 +33,7 @@
 #include <OpenGL/glext.h>
 #include <string.h>
 #include <stdio.h>
-#endif // MACOSX
+#endif // __APPLE__
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +41,7 @@
 
 extern "C"
 {
-#ifndef MACOSX
+#ifndef __APPLE__
 
 #include "tiffio.h"
 
@@ -60,7 +60,7 @@ extern "C"
 #include "GemPixUtil.h"
 
 
-#ifdef MACOSX
+#ifdef __APPLE__
 OSStatus FSPathMaketoFSSpec(const UInt8 *path,FSSpec *spec,Boolean *isDirectory);
        
 void GetAppFSSpec(FSSpec *fileSpec)
@@ -402,5 +402,5 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
 
   return(1);
 }
-#endif //MACOSX
+#endif //__APPLE__
 
