@@ -90,14 +90,14 @@ class GEM_EXTERN GemShape : public GemBase
         // The size inlet
         t_inlet         *m_inlet;
 
-	    //-----------------------------------
-	    // GROUP:	Setup functions
-	    //-----------------------------------
+	//-----------------------------------
+	// GROUP:	Setup functions
+	//-----------------------------------
     
     	//////////
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr)
-    	    { GemBase::real_obj_setupCallback(classPtr); GemShape::obj_setupCallback(classPtr); }
+	  { GemBase::real_obj_setupCallback(classPtr); GemShape::obj_setupCallback(classPtr); }
     	
     private:
     
