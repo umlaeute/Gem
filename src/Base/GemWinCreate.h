@@ -132,6 +132,10 @@ class GEM_EXTERN WindowHints
   //////////
   // Should we do fullscreen ?
   int			fullscreen;
+  
+  //////////
+  // Is there a second screen ?
+  int			secondscreen;
 
   //////////
   // Should there be a window border?

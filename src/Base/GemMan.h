@@ -83,7 +83,8 @@ class GEM_EXTERN GemMan
     	//////////
     	// Just send out one frame (if double buffered, will swap buffers)
     	static void 	    render(void *);
-    	static void 	    renderChain(gemheadLink*, GemState*);
+        
+
     	    	
     	//////////
     	// Start a clock to do rendering.
@@ -136,6 +137,7 @@ class GEM_EXTERN GemMan
         // computer and window information
 	static char       *m_title;             // title to be displayed
         static int	   m_fullscreen;	// fullscreen (1) or not (0!)
+        static int	   m_secondscreen;	// set the second screen
         static int	   m_height;		// window height
         static int	   m_width;		// window width
         static int	   m_w;                 // the real window width (reported by gemCreateWindow())

@@ -178,7 +178,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     }
     while (hGD);
     
-    if ( numDevices > 1 ) // Try AGL full screen on 2nd device if more than one device found
+    if (( numDevices > 1 ) && (hints.secondscreen)) // Try AGL full screen on 2nd device if more than one device found
     {
         short width = 640, height = 480; 
         info.context = SetupAGLFullScreen (hTargetDevice, &width, &height); // Setup the OpenGL context
@@ -485,7 +485,7 @@ static OSStatus BuildGLonWindow (WindowPtr pWindow, AGLContext* paglContext, pst
 	}
 
         *paglContext = aglCreateContext (pcontextInfo->fmt, aglShareContext); // Create an AGL context
-        
+         
 	if (AGL_BAD_MATCH == aglGetError()){
 #ifdef DEBUG
             post("MAC: BuildGLonWindow: AGL_BAD_MATCH");

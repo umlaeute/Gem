@@ -54,6 +54,7 @@ char* GemMan::m_title = "GEM";
 int GemMan::m_xoffset = 0;
 int GemMan::m_yoffset = 0;
 int GemMan::m_fullscreen = 0;
+int GemMan::m_secondscreen = 0;
 int GemMan::m_height = 500;
 int GemMan::m_width = 500;
 int GemMan::m_h = 500;
@@ -997,6 +998,7 @@ int GemMan :: createWindow(char* disp)
   myHints.width = m_width;
   myHints.height = m_height;
   myHints.fullscreen = m_fullscreen;
+  myHints.secondscreen = m_secondscreen;
   myHints.x_offset = m_xoffset;
   myHints.y_offset = m_yoffset;
   myHints.shared = constInfo.context;
