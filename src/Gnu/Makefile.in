@@ -91,8 +91,8 @@ installdocs:
 
 	install -m644 ../../doc/*.* $(DESTDIR)/$(PDLIBDIR)/doc/gem/
 
-	install -d $(DESTDIR)/$(PDLIBDIR)/extra/help-Gem
-	install -m644 ../../help/*.* $(DESTDIR)/$(PDLIBDIR)/extra/help-Gem
+	install -d $(DESTDIR)/$(PDLIBDIR)/@REFERENCEPATH@
+	install -m644 ../../help/*.* $(DESTDIR)/$(PDLIBDIR)/@REFERENCEPATH@
 
 ## don't use this, just a remembrance
 installdocs_sys:
@@ -111,3 +111,4 @@ installdocs_sys:
 
 #	touch $(DESTDIR)/$(SYSTEMDOCS)/CVS
 #	rm -rf `find $(DESTDIR)/$(SYSTEMDOCS) -name *CVS*`
+

@@ -441,6 +441,26 @@ then
   AC_FIND_HEADER(libdv/dv.h, $search_heads, $with_ieee1394)
 fi
 
+dnl Checks for pd-version, to set the correct help-path
+AC_MSG_CHECKING("pd\>=0.37")
+cat > conftest.c << EOF
+#include "m_pd.h"
+int main(){
+  if(PD_MAJOR_VERSION>0 || PD_MINOR_VERSION>36){
+  // we now have this weird help-path thing
+  }
+}
+EOF
+REFPATH=OLD
+$CXX $INCLUDES -o /dev/null conftest.c > /dev/null 2>&1 && REFPATH=NEW
+if test "$REFPATH" = "OLD"
+then
+  REFERENCEPATH=doc/5.reference/Gem
+  echo "no"
+else
+  REFERENCEPATH=extra/help-Gem
+  echo "yes"
+fi
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -457,6 +477,8 @@ AC_SUBST(SGI_SPECIFIC)
 AC_SUBST(arch_ld_flags)
 AC_SUBST(LIBS)
 AC_SUBST(INCLUDES)
+
+AC_SUBST(REFERENCEPATH)
 
 RANLIB=gcc 
 AC_SUBST(RANLIB)
