@@ -10,6 +10,11 @@
 //
 /////////////////////////////////////////////////////////
 
+#ifdef NT
+#pragma warning( disable : 4244 )
+#pragma warning( disable : 4305 )
+#pragma warning( disable : 4091 )
+#endif
 #include "m_pd.h"
 
 #include <math.h>
