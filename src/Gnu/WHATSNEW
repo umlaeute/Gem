@@ -1,4 +1,8 @@
 gem-0.88-cvs (so far):
+=== 09-07-2003
+added some rudimentary video-over-ieee1394 (aka: ilink, firewire, dv) support for linux.
+you will need the "dv1394"-module to be loaded (only with very recent kernels (2.4.21 should fix some bugs))
+send the [pix_video] object a "driver 1" message to switch from video4linux (0) to dv1394 (1)
 === 24-02-2003
 no more stupid [tv_*]-class
 a new [pix_tIIR] that's like [pix_biquad] (but more optimized) and [pix_blur] (but more general)
