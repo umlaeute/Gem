@@ -23,9 +23,8 @@ CPPEXTERN_NEW(pix_background)
 pix_background :: pix_background()
 {
   long size,src,i;
-    
-  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blur"));
-
+  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
+  
     m_Yrange = 0;
     m_Urange = 0;
     m_Vrange = 0;
@@ -371,8 +370,9 @@ int pixsize = image.xsize * image.ysize * image.csize;
 /////////////////////////////////////////////////////////
 void pix_background :: obj_setupCallback(t_class *classPtr)
 {
-
-
+  class_addbang(classPtr, (t_method)&pix_background::resetCallback);
+  class_addmethod(classPtr, (t_method)&pix_background::rangeNCallback,
+		  gensym("range_n"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_background::rangeCallback,
 		  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_background::resetCallback,
@@ -391,5 +391,24 @@ void pix_background :: rangeCallback(void *data, t_floatarg Y, t_floatarg U, t_f
 void pix_background :: resetCallback(void *data)
 {
   GetMyClass(data)->m_reset=1;
+}
 
+void pix_background :: rangeNCallback(void *data, t_symbol*,int argc, t_atom*argv){
+  /* normalized values (float)0..1 instead of (int)0..255 */
+  unsigned int v=0;
+  switch(argc){
+  case 4:  case 3:
+    GetMyClass(data)->m_Yrange=CLAMP((float)255.*atom_getfloat(argv));
+    GetMyClass(data)->m_Urange=CLAMP((float)255.*atom_getfloat(argv+1));
+    GetMyClass(data)->m_Vrange=CLAMP((float)255.*atom_getfloat(argv+2));
+    break;
+  case 1:
+    v=CLAMP((float)255.*atom_getfloat(argv));
+    GetMyClass(data)->m_Yrange=v;
+    GetMyClass(data)->m_Urange=v;
+    GetMyClass(data)->m_Vrange=v;
+    break;
+  default:
+    error("pix_background: only 1 or 3 values are allowed as ranges (%d)", argc);
+  }
 }
