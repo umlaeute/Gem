@@ -128,7 +128,6 @@ void tv_rtx :: processImage(imageStruct &image)
   }
 
    int pixsize = image.ysize * image.xsize;
-   int count = pixsize;
 
    int cols=image.xsize, c=0, c1=0;
    int rows=image.ysize, r=0;
