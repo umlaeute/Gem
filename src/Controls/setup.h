@@ -27,7 +27,7 @@ extern "C" {
       gemkeyboard_setup();
       gemkeyname_setup();
       gemmouse_setup();
-#ifndef MACOSX
+#ifndef __APPLE__
       gemorb_setup();
       gemtablet_setup();
 #endif

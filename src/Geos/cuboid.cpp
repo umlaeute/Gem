@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////
 
 #include "cuboid.h"
-#ifdef MACOSX
+#ifdef __APPLE__
 #include "string.h"
 #endif
 

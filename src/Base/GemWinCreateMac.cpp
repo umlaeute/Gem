@@ -13,7 +13,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#ifdef MACOSX
+#ifdef __APPLE__
 
 #include <Carbon/Carbon.h>
 #include "GemWinCreate.h"
@@ -70,7 +70,7 @@ Boolean gfHasPackedPixels = false;
 //structGLInfo		glInfo;
 structGLWindowInfo	glWInfo;
 AGLDrawable 		gaglDraw = NULL;
-Rect 			grectWin;
+//Rect 			grectWin;
 AGLContext 		gaglContext = 0;
 GLuint 			gFontList = 0;
 char 			gInfoString [512] = "";
@@ -277,7 +277,7 @@ GEM_EXTERN void destroyGemWindow(WindowInfo &info)
         ::DisposeGWorld(info.offscreen);
         info.offscreen = NULL;
         ::DisposeWindow( ::GetWindowFromPort(gaglDraw) );
-	return;
+        return;
     }
     if (info.context)
     {

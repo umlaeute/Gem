@@ -20,15 +20,15 @@
 #ifdef _WINDOWS
 #include <windows.h>
 #endif
-
-#ifdef MACOSX
+ 
+#ifdef __APPLE__
 #include <Carbon/carbon.h>
 #include <OpenGL/gl.h>
 #include "macosx_math.h"
 #else
 #include <GL/gl.h>
 #include <math.h>
-#endif // MACOSX
+#endif // __APPLE__
 
 #include "Base/GemMan.h"
 
@@ -224,7 +224,7 @@ void gemwin :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 void gemwin :: colorMess(float red, float green, float blue)
 {
-#ifdef MACOSX
+#ifdef __APPLE__
   if ( !GemMan::windowExists() )  {
     post("GEM: gemwin: !windowExists");
     return;

@@ -17,7 +17,7 @@
 
 #include "imageVert.h"
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <AGL/agl.h>
 extern bool HaveValidContext (void);
 #endif
@@ -35,7 +35,7 @@ CPPEXTERN_NEW(imageVert)
 imageVert :: imageVert()
   : m_rebuildList(1)
 {
-#ifdef MACOSX
+#ifdef __APPLE__
   if (!HaveValidContext ()) {
     post("GEM: geo: imageVert - need window for glGenLists");
     return;
