@@ -72,7 +72,7 @@ videoDV4L :: ~videoDV4L()
 {
     if (m_haveVideo)stopTransfer();
 }
-
+#ifdef HAVE_DV
 /////////////////////////////////////////////////////////
 // render
 //
@@ -203,5 +203,5 @@ int videoDV4L :: setColor(int format)
   return 0;
 }
 
-
-#endif
+#endif // HAVE_DV
+#endif // linux

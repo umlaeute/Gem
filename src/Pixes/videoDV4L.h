@@ -17,7 +17,10 @@
 #ifndef INCLUDE_VIDEODV4L_H_
 #define INCLUDE_VIDEODV4L_H_
 
+#include "Base/config.h"
+
 #include "Pixes/video.h"
+#ifdef HAVE_DV
 #include <libdv/dv.h>
 #include <libdv/dv1394.h>
 #include <unistd.h>
@@ -26,6 +29,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#endif
 
 
 /*-----------------------------------------------------------------
@@ -57,7 +61,7 @@ class GEM_EXTERN videoDV4L : public video {
     	//////////
     	// Destructor
     	virtual ~videoDV4L();
-
+#ifdef HAVE_DV
 	////////
 	// open the video-device
 	virtual int            openDevice(int devnum, int format=0){return 1;}
@@ -100,6 +104,7 @@ class GEM_EXTERN videoDV4L : public video {
   // the capturing thread
   static void*capturing(void*);
   bool m_continue_thread;
+#endif
 };
 
 #endif	// for header file
