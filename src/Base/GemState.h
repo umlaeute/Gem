@@ -98,28 +98,28 @@ class GEM_EXTERN GemState
     	
     	//////////
     	// Stereoscopic rendering?
-	// 0 - no
-	// 1 - left
-	// 2 - right
+	    // 0 - no
+	    // 1 - left
+	    // 2 - right
     	int					stereo;
     	
-	//////////
-	// Milliseconds since last frame
-	// If in Stereoscopic mode, then it is the same number for both left
-	//		and right renderings
-	float				tickTime;
+		//////////
+		// Milliseconds since last frame
+		// If in Stereoscopic mode, then it is the same number for both left
+		//		and right renderings
+		float				tickTime;
 
-	////////////
+		////////////
         //vertex-array data
 
-	int                             VertexDirty; // the vertex-arrays has changed
+		int                 VertexDirty; // the vertex-arrays has changed
 
         GLfloat				*VertexArray;
-        int				VertexArraySize;
-        int				VertexArrayStride;
+        int					VertexArraySize;
+        int					VertexArrayStride;
 
         GLfloat				*ColorArray;
-        int				HaveColorArray;
+        int					HaveColorArray;
 
         GLfloat				*NormalArray;
         int				HaveNormalArray;
