@@ -34,6 +34,7 @@ clean:
 distclean:
 	-rm Makefile.in Makefile Make.source Make.depend Make.depend.bak
 	touch Make.depend
+	if which dos2unix; then dos2unix *.cpp *.h; fi
 
 %.o: %.cpp
 	$(CXX) -c $(cxxflags) $*.cpp -o $*.o
