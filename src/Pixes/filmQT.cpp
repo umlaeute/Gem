@@ -134,6 +134,7 @@ bool filmQT :: open(char*filename, int format) {
   //post("refnum=%d", refnum);
   //post("movie = %x", &m_movie);
   //startpost("new movie might crash... ");
+
   err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (err) {
     error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
@@ -141,6 +142,7 @@ bool filmQT :: open(char*filename, int format) {
 	m_movie=NULL;
     return false;
   }
+
   //post("...survived");
   if (refnum) ::CloseMovieFile(refnum);
   m_curFrame = -1;

@@ -252,7 +252,7 @@ int videoV4L :: startTransfer(int format)
 	break;
       case GL_RGBA:
       case GL_BGRA:
-    	vmmap[i].format = VIDEO_PALETTE_RGB32;
+    	vmmap[i].format = VIDEO_PALETTE_RGB24;
 	break;
       case GL_YCBCR_422_GEM:
 #if 0
@@ -260,8 +260,9 @@ int videoV4L :: startTransfer(int format)
 	VIDEO_PALETTE_HI240	2	/* High 240 cube (BT848) */
 	VIDEO_PALETTE_RGB565	3	/* 565 16 bit RGB */
 	VIDEO_PALETTE_RGB24	4	/* 24bit RGB */
-	VIDEO_PALETTE_RGB32	5	/* 32bit RGB */	
+	VIDEO_PALETTE_RGB32	5	/* 32bit RGB */
 	  /* note: all of my devices give BGR instead of RGB (jmz) */
+	  /* note: RGB32 unfortunately sets the alpha-channel 0! */
 	VIDEO_PALETTE_RGB555	6	/* 555 15bit RGB */
 	VIDEO_PALETTE_YUV422	7	/* YUV422 capture */
 	VIDEO_PALETTE_YUYV	8

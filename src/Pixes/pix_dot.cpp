@@ -155,7 +155,13 @@ void pix_dot :: makePattern(int format)
 	      }
 	      c = (c>15)?15:c;
 	      c<<=4;
+#ifdef __APPLE__
+/* LATER fix the defines in GemPixPete.h instead of the code here ...*/
+/* (the same goes for pix_halftone.cpp) */
+	      *pat-- = (chroma<<SHIFT_V)|((c&0xff)<<SHIFT_Y2);
+#else
 	      *pat-- = (chroma<<SHIFT_U)|((c&0xff)<<SHIFT_Y1);
+#endif
 	    }
 	  }
 	}
