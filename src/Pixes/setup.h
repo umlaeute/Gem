@@ -11,9 +11,17 @@
 /* -------------------------- setup function ------------------------------ */
 
 extern "C" {
-  void pix_depot_setup();
-  void pix_put_setup();
-  void pix_get_setup();
+
+	/*
+	 * void pix_depot_setup();
+	 * void pix_put_setup();
+	 * void pix_get_setup();
+	 */
+
+  void pix_buffer_setup();
+  void pix_buffer_write_setup();
+  void pix_buffer_read_setup();
+
   void pix_info_setup();
   void pix_2grey_setup();
    void pix_a_2grey_setup();
@@ -98,73 +106,82 @@ extern "C" {
    void pix_zoom_setup();
 
   void pix_biquad_setup();
-  void pix_blur_setup();
+  void pix_motionblur_setup();
   void pix_tIIR_setup();
 
   void pix_delay_setup();
   void pix_movement_setup();
   void pix_rtx_setup();
-  
+  void pix_convert_setup();  
+  void pix_emboss_setup();
 
   void Pixes_setup() {
-    pix_depot_setup();
-    pix_put_setup();
-    pix_get_setup();
+
+/*
+ * pix_depot_setup();
+ * pix_put_setup();
+ * pix_get_setup();
+ */
+
+    pix_buffer_setup();
+    pix_buffer_write_setup();
+    pix_buffer_read_setup();
+
     pix_info_setup();
     pix_2grey_setup();
-      pix_a_2grey_setup();
-      pix_add_setup();
-      pix_aging_setup();
-      pix_alpha_setup();
-      pix_background_setup();
-      pix_bitmask_setup();
-      pix_blob_setup();   
-      pix_buf_setup();
-      pix_chroma_key_setup();
-      pix_clearblock_setup();
-      pix_color_setup();
-      pix_coloralpha_setup();
-      pix_colormatrix_setup();
-      pix_composite_setup();
-      pix_mix_setup();
-      pix_convolve_setup();
-      pix_coordinate_setup();
-      pix_curve_setup();
-      pix_data_setup();
-      pix_diff_setup();
-      pix_dot_setup();
-      pix_draw_setup();
-      pix_dump_setup();
-      pix_duotone_setup();
-      pix_crop_setup();
+    pix_a_2grey_setup();
+    pix_add_setup();
+    pix_aging_setup();
+    pix_alpha_setup();
+    pix_background_setup();
+    pix_bitmask_setup();
+    pix_blob_setup();   
+    pix_buf_setup();
+    pix_chroma_key_setup();
+    pix_clearblock_setup();
+    pix_color_setup();
+    pix_coloralpha_setup();
+    pix_colormatrix_setup();
+    pix_composite_setup();
+    pix_mix_setup();
+    pix_convolve_setup();
+    pix_coordinate_setup();
+    pix_curve_setup();
+    pix_data_setup();
+    pix_diff_setup();
+    pix_dot_setup();
+    pix_draw_setup();
+    pix_dump_setup();
+    pix_duotone_setup();
+    pix_crop_setup();
 #if defined(HAVE_DV) &&  defined(__linux__)
-      pix_dvLinux_setup();
+    pix_dvLinux_setup();
 #else
 #ifndef MACOSX
-      pix_dv_setup();
+    pix_dv_setup();
 #endif
 #endif
-      //      pix_film_setup();
-      pix_filmNEW_setup();
+    //      pix_film_setup();
+    pix_filmNEW_setup();
 #ifdef __linux
-      pix_videoNEW_setup();
-      pix_filmLinux_setup();
+    pix_videoNEW_setup();
+    pix_filmLinux_setup();
 #if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
-      pix_filmFFMPEG_setup();
+    pix_filmFFMPEG_setup();
 #endif
 
 #endif
 #ifdef _WINDOWS
-      pix_filmNT_setup();
+    pix_filmNT_setup();
 #endif
-      pix_flip_setup();
-      pix_gain_setup();
-      pix_histo_setup();
-      pix_hsv2rgb_setup();
-      pix_image_setup();
-      pix_imageInPlace_setup();
+    pix_flip_setup();
+    pix_gain_setup();
+    pix_histo_setup();
+    pix_hsv2rgb_setup();
+    pix_image_setup();
+    pix_imageInPlace_setup();
 #ifdef __sgi
-      pix_indycam_setup();
+    pix_indycam_setup();
 #endif
       pix_invert_setup();
       pix_mask_setup();
@@ -194,19 +211,19 @@ extern "C" {
       pix_texture2_setup();
       pix_threshold_setup();
 #ifdef __linux__
-      pix_videoLinux_setup();
+    pix_videoLinux_setup();
 #endif
 #ifdef _WINDOWS
-      pix_videoNT_setup();
+    pix_videoNT_setup();
 #  ifdef HAVE_DIRECTSHOW
-	  pix_videoDS_setup();
+    pix_videoDS_setup();
 #  endif
 #endif
 #ifdef __sgi
-      pix_videoSGI_setup();
+    pix_videoSGI_setup();
 #endif
-      pix_write_setup();
-      pix_zoom_setup();
+    pix_write_setup();
+    pix_zoom_setup();
 
 #ifdef MACOSX
     pix_filmDarwinYUV_setup();
@@ -214,12 +231,13 @@ extern "C" {
     pix_videoDarwin_setup();
 #endif
     pix_biquad_setup();
-    pix_blur_setup();
+    pix_motionblur_setup();
     pix_tIIR_setup();
     pix_delay_setup();
     pix_movement_setup();
     pix_rtx_setup();
-	pix_chroma_key_setup();
-   }
+    pix_chroma_key_setup();
+    pix_convert_setup();
+    pix_emboss_setup();
+  }
 } // for extern "C"
-
