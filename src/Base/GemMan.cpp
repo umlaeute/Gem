@@ -1347,18 +1347,16 @@ void GemMan :: printInfo()
   post("Vendor: %s", glGetString(GL_VENDOR));
   post("Renderer: %s", glGetString(GL_RENDERER));
   post("Version: %s", glGetString(GL_VERSION));
-#ifndef MACOSX
+
     char *text = new char [strlen((char *)glGetString(GL_EXTENSIONS)) + 1];
     strcpy(text,(char *)glGetString(GL_EXTENSIONS));
     char *token = strtok(text, " ");	// Parse 'text' For Words, Seperated By " " (spaces)
-    while(token != NULL) {				// While The Token Isn't NULL
+    while(token != NULL) {		// While The Token Isn't NULL
         post("Extensions: %s", token);	// Print extension string
         token = strtok(NULL, " ");
     }
     delete [] text;
-#else
-  post("Extensions: %s", glGetString(GL_EXTENSIONS));
-#endif // MACOSX
+
   post("---------------");
   post("window state: %d", m_windowState);
   post("profile: %d", m_profile);
