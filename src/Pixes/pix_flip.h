@@ -54,7 +54,8 @@ class GEM_EXTERN pix_flip : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
+       	virtual void 	processRGBAImage(imageStruct &image);
+ 	virtual void 	processGrayImage(imageStruct &image);
     	virtual void 	processYUVImage(imageStruct &image);
 
     	//////////
@@ -75,6 +76,7 @@ class GEM_EXTERN pix_flip : public GemPixObj
     	static void 	vertMessCallback(void *data);
     	static void 	bothMessCallback(void *data);
     	static void 	noneMessCallback(void *data);
+	static void     flipMessCallback(void *data, t_symbol*s);
 };
 
 #endif	// for header file
