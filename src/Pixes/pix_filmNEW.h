@@ -15,8 +15,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_PIX_FILMNEW_H_
 #define INCLUDE_PIX_FILMNEW_H_
+#include "Base/config.h"
 
-#ifndef __NEW__
+#ifndef __FILM__NEW
 # define NO_AUTO_REGISTER_CLASS
 #endif
 
