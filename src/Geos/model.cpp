@@ -36,6 +36,7 @@ model :: model(t_symbol *filename)
 {
   // make sure that there are some characters
   m_model = 0;
+  m_group = 0;
   if (filename->s_name[0]) openMess(filename);
 }
 
@@ -127,6 +128,17 @@ void model :: rescaleMess(int state)
 }
 
 /////////////////////////////////////////////////////////
+// matrialMess
+//
+/////////////////////////////////////////////////////////
+void model :: groupMess(int state)
+{
+  m_group = state;
+  buildList();
+}
+
+
+/////////////////////////////////////////////////////////
 // openMess
 //
 /////////////////////////////////////////////////////////
@@ -174,7 +186,15 @@ void model :: buildList()
   if (m_dispList)glDeleteLists(m_dispList, 1);
 
   //  m_flags = GLM_SMOOTH | GLM_MATERIAL;
-  m_dispList = glmList(m_model, m_flags);
+  if (!m_group){
+    post("model: drawing all groups");
+    m_dispList = glmList(m_model, m_flags);
+  }
+  else
+  {
+    post("model: drawing group %d",m_group);
+    m_dispList = glmListGroup(m_model, m_flags,m_group);
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -212,7 +232,8 @@ void model :: obj_setupCallback(t_class *classPtr)
 		  gensym("material"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&model::textureMessCallback,
 		  gensym("texture"), A_FLOAT, A_NULL);
-
+  class_addmethod(classPtr, (t_method)&model::groupMessCallback,
+		  gensym("group"), A_FLOAT, A_NULL);
 
 }
 void model :: openMessCallback(void *data, t_symbol *filename)
@@ -238,4 +259,9 @@ void model :: textureMessCallback(void *data, t_floatarg state)
 void model :: materialMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->materialMess((int)state);
+}
+
+void model :: groupMessCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->groupMess((int)state);
 }

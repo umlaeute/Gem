@@ -612,7 +612,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                     &vertices[3 * numvertices + 0], 
                     &vertices[3 * numvertices + 1], 
                     &vertices[3 * numvertices + 2]);
-                numvertices++;
+                numvertices++; 
                 break;
             case 'n':           /* normal */
                 fscanf(file, "%f %f %f", 
@@ -1701,6 +1701,143 @@ glmList(GLMmodel* model, GLuint mode)
     modList = glGenLists(1);
     glNewList(modList, GL_COMPILE);
     glmDraw(model, mode);
+    glEndList();
+    
+    return modList;
+}
+/***********
+* this draws only a single group instead of the entire model
+* added for Leif and Annette
+*/
+
+GLvoid
+glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber)
+{
+    static GLuint i;
+    static GLMgroup* group;
+    static GLMtriangle* triangle;
+    static GLMmaterial* material;
+    
+    assert(model);
+    assert(model->vertices);
+    
+    /* do a bit of warning */
+    if (mode & GLM_FLAT && !model->facetnorms) {
+        printf("glmDraw() warning: flat render mode requested "
+            "with no facet normals defined.\n");
+        mode &= ~GLM_FLAT;
+    }
+    if (mode & GLM_SMOOTH && !model->normals) {
+        printf("glmDraw() warning: smooth render mode requested "
+            "with no normals defined.\n");
+        mode &= ~GLM_SMOOTH;
+    }
+    if (mode & GLM_TEXTURE && !model->texcoords) {
+        printf("glmDraw() warning: texture render mode requested "
+            "with no texture coordinates defined.\n");
+        mode &= ~GLM_TEXTURE;
+    }
+    if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
+        printf("glmDraw() warning: flat render mode requested "
+            "and smooth render mode requested (using smooth).\n");
+        mode &= ~GLM_FLAT;
+    }
+    if (mode & GLM_COLOR && !model->materials) {
+        printf("glmDraw() warning: color render mode requested "
+            "with no materials defined.\n");
+        mode &= ~GLM_COLOR;
+    }
+    if (mode & GLM_MATERIAL && !model->materials) {
+        printf("glmDraw() warning: material render mode requested "
+            "with no materials defined.\n");
+        mode &= ~GLM_MATERIAL;
+    }
+    if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
+        printf("glmDraw() warning: color and material render mode requested "
+            "using only material mode.\n");
+        mode &= ~GLM_COLOR;
+    }
+    if (mode & GLM_COLOR)
+        glEnable(GL_COLOR_MATERIAL);
+    else if (mode & GLM_MATERIAL)
+        glDisable(GL_COLOR_MATERIAL);
+    
+    /* perhaps this loop should be unrolled into material, color, flat,
+       smooth, etc. loops?  since most cpu's have good branch prediction
+       schemes (and these branches will always go one way), probably
+       wouldn't gain too much?  */
+    
+    group = model->groups;
+    
+    int count = 1;
+    int numgroup;
+    
+    numgroup = model->numgroups-1;
+    
+    fprintf(stderr,"number of groups: %d\n",numgroup);
+    //groupNumber-=1;
+    if ( (!(groupNumber > numgroup)) && (groupNumber > 0)){
+        fprintf(stderr,"model group requested is %d number of groups: %d\n",groupNumber,numgroup);
+        
+    
+    while (count < groupNumber) {
+        group = group->next; 
+        count++;
+        }
+    
+    
+        if (mode & GLM_MATERIAL) {
+            material = &model->materials[group->material];
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
+            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
+        }
+        
+        if (mode & GLM_COLOR) {
+            glColor3fv(material->diffuse);
+        }
+        
+        glBegin(GL_TRIANGLES);
+        for (i = 0; i < group->numtriangles; i++) {
+            triangle = &T(group->triangles[i]);
+            
+            if (mode & GLM_FLAT)
+                glNormal3fv(&model->facetnorms[3 * triangle->findex]);
+            
+            if (mode & GLM_SMOOTH)
+                glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
+            if (mode & GLM_TEXTURE)
+                glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
+            glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
+            
+            if (mode & GLM_SMOOTH)
+                glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
+            if (mode & GLM_TEXTURE)
+                glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
+            glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
+            
+            if (mode & GLM_SMOOTH)
+                glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
+            if (mode & GLM_TEXTURE)
+                glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
+            glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
+            
+        }
+        glEnd();
+      }  
+       // group = group->next;
+  //  }
+}
+
+GLuint
+glmListGroup(GLMmodel* model, GLuint mode, int groupNumber)
+{
+    GLuint modList;
+    
+    modList = glGenLists(1);
+    glNewList(modList, GL_COMPILE);
+    glmDrawGroup(model, mode,groupNumber);
     glEndList();
     
     return modList;

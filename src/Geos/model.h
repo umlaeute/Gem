@@ -69,6 +69,10 @@ class GEM_EXTERN model : public GemBase
   	//////////
     	// Set material mode
 	virtual void    materialMess(int material);
+        
+        //////////
+    	// Set material mode
+	virtual void    groupMess(int group);
 
    	//////////
     	virtual void	cleanModel();   	
@@ -93,6 +97,8 @@ class GEM_EXTERN model : public GemBase
 	int             m_material;
 
 	int             m_flags;
+        
+        int             m_group;
     	
     private:
     
@@ -104,6 +110,7 @@ class GEM_EXTERN model : public GemBase
 	static void     reverseMessCallback(void *data, t_floatarg);
 	static void     materialMessCallback(void *data, t_floatarg);
 	static void     textureMessCallback(void *data, t_floatarg);
+        static void     groupMessCallback(void *data, t_floatarg);
 };
 
 #endif	// for header file

@@ -229,6 +229,21 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode);
 GLvoid
 glmDraw(GLMmodel* model, GLuint mode);
 
+
+/* glmDrawGroup: Renders a single group of model to the current OpenGL context using the
+ * mode specified.
+ *
+ * model    - initialized GLMmodel structure
+ * mode     - a bitwise OR of values describing what is to be rendered.
+ *            GLM_NONE    -  render with only vertices
+ *            GLM_FLAT    -  render with facet normals
+ *            GLM_SMOOTH  -  render with vertex normals
+ *            GLM_TEXTURE -  render with texture coords
+ *            GLM_FLAT and GLM_SMOOTH should not both be specified.
+ */
+GLvoid
+glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber);
+
 /* glmList: Generates and returns a display list for the model using
  * the mode specified.
  *
@@ -242,6 +257,20 @@ glmDraw(GLMmodel* model, GLuint mode);
  */
 GLuint
 glmList(GLMmodel* model, GLuint mode);
+
+/* glmListGroup: Generates and returns a display list for the model group using
+ * the mode specified.
+ *
+ * model    - initialized GLMmodel structure
+ * mode     - a bitwise OR of values describing what is to be rendered.
+ *            GLM_NONE    -  render with only vertices
+ *            GLM_FLAT    -  render with facet normals
+ *            GLM_SMOOTH  -  render with vertex normals
+ *            GLM_TEXTURE -  render with texture coords
+ *            GLM_FLAT and GLM_SMOOTH should not both be specified.  
+ */
+GLuint
+glmListGroup(GLMmodel* model, GLuint mode, int groupNumber);
 
 /* glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.
