@@ -137,6 +137,12 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) {
 GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
   switch(setformat){
   case GL_LUMINANCE:  format=GL_LUMINANCE;  csize=1; type=GL_UNSIGNED_BYTE; break;
+#ifndef __APPLE__
+  case GL_RGB: format=GL_RGB;
+#else
+  case GL_BGR_EXT: format=GL_BGR_EXT;
+#endif
+    type=GL_UNSIGNED_BYTE; csize =3; break;
   case GL_YUV422_GEM:
 #ifdef __APPLE__
   default:
@@ -253,6 +259,9 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     }
     break;
   case GL_YUV422_GEM:
+#if 0
+	RGB_to_YCbCr(rgbdata, pixelnum, pixels);
+#else
     pixelnum>>=1;
     while(pixelnum--){
       *pixels++=((-43*rgbdata[0]-85 *rgbdata[1]+128*rgbdata[2])>>8)+128; // U
@@ -261,8 +270,122 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
       *pixels++=(77 *rgbdata[3]+150*rgbdata[4]+29 *rgbdata[5])>>8;     // Y
       rgbdata+=6;
     }
+#endif
     break;
   }
+}
+void RGB_to_YCbCr(unsigned char *rgbdata, int RGB_size, 
+                  unsigned char *pixels)
+{
+#ifdef __VEC__
+  vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
+  vector unsigned char z0, tc0, tc1, tc2, tc3;
+  vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
+  vector signed short t0, t1, t2, t3, t4, t5;
+  int i;
+  
+  vector unsigned char	*RGB_ptr = (vector unsigned char*) rgbdata;
+  vector unsigned char	*YCC_ptr = (vector unsigned char*) pixels;
+
+  /* Permutation vector is used to extract the interleaved RGB. */
+  vector unsigned char vPerm1 =
+    (vector unsigned char)( 0,  3,  6,  9, 12, 15, 18, 21, /* R0..R7    */
+                            1,  4,  7, 10, 13, 16, 19, 22  /* G0..G7    */);
+  vector unsigned char vPerm2 =
+    (vector unsigned char)( 2,  5,  8, 11, 14, 17, 20, 23, /* B0..B7    */
+                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+  vector unsigned char vPerm3 =
+    (vector unsigned char)( 8, 11, 14, 17, 20, 23, 26, 29, /* R8..R15   */
+                            9, 12, 15, 18, 21, 24, 27, 30  /* G8..G15   */);
+  vector unsigned char vPerm4 =
+    (vector unsigned char)(10, 13, 16, 19, 22, 25, 28, 31, /* B8..B15   */
+                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+
+  /* Load the equation constants. */
+  vector signed short vConst1 =
+    (vector signed short)( 8432,  16425,  3176,
+                          -4818,  -9527, 14345,
+                              0,      0 );
+
+  vector signed short vConst2 =
+    (vector signed short)( 14345, -12045, -2300,
+                              16, 128, 0, 0, 0 );
+
+  r0 = vec_splat( vConst1, 0 ); /*  8432 */
+  g0 = vec_splat( vConst1, 1 ); /* 16425 */
+  b0 = vec_splat( vConst1, 2 ); /*  3176 */
+  r1 = vec_splat( vConst1, 3 ); /* -4818 */
+  g1 = vec_splat( vConst1, 4 ); /* -9527 */
+  b1 = vec_splat( vConst1, 5 ); /* 14345 */
+  r2 = vec_splat( vConst2, 0 ); /* 14345 */
+  g2 = vec_splat( vConst2, 1 ); /*-12045 */
+  b2 = vec_splat( vConst2, 2 ); /* -2300 */
+  c16  = vec_splat( vConst2, 3 ); /*  16 */
+  c128 = vec_splat( vConst2, 4 ); /* 128 */
+  c0 = (vector signed short) (0); /*   0 */
+  z0 = (vector unsigned char) (0); /*  0 */
+
+  for ( i = 0; i < (RGB_size/sizeof(vector unsigned char)); i+=3 ) {
+
+    /* Load the 3 RGB input vectors and seperate into red,
+       green and blue from the interleaved format. */
+    tc0 = vec_perm( RGB_ptr[i], RGB_ptr[i+1], vPerm1 );   /* R0..R7  G0..G7  */
+    tc1 = vec_perm( RGB_ptr[i], RGB_ptr[i+1], vPerm2 );   /* B0..B7          */
+    tc2 = vec_perm( RGB_ptr[i+1], RGB_ptr[i+2], vPerm3 ); /* R8..R15 G8..G15 */
+    tc3 = vec_perm( RGB_ptr[i+1], RGB_ptr[i+2], vPerm4 ); /* B8..B15         */
+
+    /* Unpack to 16 bit arithmatic for converstion. */
+    tr0 = vec_unpack2sh( z0, tc0 );  /* tr0 = R0 .. R7  */
+    tg0 = vec_unpack2sl( z0, tc0 );  /* tg0 = G0 .. G7  */
+    tb0 = vec_unpack2sh( z0, tc1 );  /* tb0 = B0 .. B7  */
+    tr1 = vec_unpack2sh( z0, tc2 );  /* tr0 = R8 .. R15 */
+    tg1 = vec_unpack2sl( z0, tc2 );  /* tg0 = G8 .. G15 */
+    tb1 = vec_unpack2sh( z0, tc3 );  /* tb0 = B8 .. B15 */
+
+    /* Convert the first three input vectors.  Note that
+       only the top 17 bits of the 32 bit product are
+       stored.  This is the same as doing the divide by 32768. */
+
+    t0 = vec_mradds( tr0, r0, c0 ); /* (R0 .. R7) *  8432 */
+    t1 = vec_mradds( tr0, r1, c0 ); /* (R0 .. R7) * -4818 */
+    t2 = vec_mradds( tr0, r2, c0 ); /* (R0 .. R7) * 14345 */
+
+    t0 = vec_mradds( tg0, g0, t0 ); /* += (G0 .. G7) *  16425 */
+    t1 = vec_mradds( tg0, g1, t1 ); /* += (G0 .. G7) *  -9527 */
+    t2 = vec_mradds( tg0, g2, t2 ); /* += (G0 .. G7) * -12045 */
+
+    t0 = vec_mradds( tb0, b0, t0 ); /* += (B0 .. B7) *  3176 */
+    t1 = vec_mradds( tb0, b1, t1 ); /* += (B0 .. B7) * 14345 */
+    t2 = vec_mradds( tb0, b2, t2 ); /* += (B0 .. B7) * -2300 */
+
+    /* Convert the next three input vectors. */
+    t3 = vec_mradds( tr1, r0, c0 ); /* (R8 .. R15) *  8432 */
+    t4 = vec_mradds( tr1, r1, c0 ); /* (R8 .. R15) * -4818 */
+    t5 = vec_mradds( tr1, r2, c0 ); /* (R8 .. R15) * 14345 */
+
+    t3 = vec_mradds( tg1, g0, t3 ); /* += (G8 .. G15) *  16425 */
+    t4 = vec_mradds( tg1, g1, t4 ); /* += (G8 .. G15) *  -9527 */
+    t5 = vec_mradds( tg1, g2, t5 ); /* += (G8 .. G15) * -12045 */
+
+    t3 = vec_mradds( tb1, b0, t3 ); /* += (B8 .. B15) *  3176 */
+    t4 = vec_mradds( tb1, b1, t4 ); /* += (B8 .. B15) * 14345 */
+    t5 = vec_mradds( tb1, b2, t5 ); /* += (B8 .. B15) * -2300 */
+
+    /* Add the constants. */
+    t0 = vec_adds( t0, c16 );
+    t3 = vec_adds( t3, c16 );
+    t1 = vec_adds( t1, c128 );
+    t4 = vec_adds( t4, c128 );
+    t2 = vec_adds( t2, c128 );
+    t5 = vec_adds( t5, c128 );
+
+    /* Pack the results, and store them. */
+    YCC_ptr[i]   = vec_packsu( t0, t3 );  /*  Y0 .. Y15  */
+    YCC_ptr[i+1] = vec_packsu( t1, t4 );  /* Cb0 .. Cb15 */
+    YCC_ptr[i+2] = vec_packsu( t2, t5 );  /* Cr0 .. Cr15 */
+
+    }
+#endif
 }
 GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
   //   B B B B B G G G   G G G R R R R R
@@ -537,7 +660,7 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
   case GL_RGB:  case GL_BGR_EXT: // of course this is stupid, RGB isn't BGR
     {
       unsigned char *pixels1=data;
-      unsigned char *pixels2=data+xsize*csize;
+      unsigned char *pixels2=data+xsize*3;
 
       unsigned char*py1=Y;
       unsigned char*py2=Y+xsize; // plane_1 is luminance (csize==1)
@@ -598,7 +721,7 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
   case GL_BGRA_EXT:
     {
       unsigned char *pixels1=data;
-      unsigned char *pixels2=data+xsize*csize;
+      unsigned char *pixels2=data+xsize*4;
 
       unsigned char*py1=Y;//yuvdata;
       unsigned char*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
@@ -672,21 +795,194 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
       unsigned char u, v;
       /* this is only re-ordering of the data */
       while(row--){
-	int col=cols;
-	while(col--){
-	  // yuv422 is U Y0 V Y1
-	  u=*pu++;	  v=*pv++;
-	  *pixels1++=u;
-	  *pixels1++=*py1++;
-	  *pixels1++=v;
-	  *pixels1++=*py1++;
-	  *pixels2++=u;
-	  *pixels2++=*py2++;
-	  *pixels2++=v;
-	  *pixels2++=*py2++;	  
-	}
-	pixels1+=xsize*csize;	pixels2+=xsize*csize;
-	py1+=xsize*1;	py2+=xsize*1;
+		int col=cols;
+		while(col--){
+			// yuv422 is U Y0 V Y1
+			u=*pu++;	  v=*pv++;
+			*pixels1++=u;
+			*pixels1++=*py1++;
+			*pixels1++=v;
+			*pixels1++=*py1++;
+			*pixels2++=u;
+			*pixels2++=*py2++;
+			*pixels2++=v;
+			*pixels2++=*py2++;	  
+		}
+		pixels1+=xsize*csize;	pixels2+=xsize*csize;
+		py1+=xsize*1;	py2+=xsize*1;
+      }
+    }
+    break;
+  }
+}
+//  for gem2pdp
+GEM_EXTERN void imageStruct::fromYV12(short*yuvdata) {
+  if(!yuvdata)return;
+  int pixelnum=xsize*ysize;
+  fromYV12((yuvdata), yuvdata+(pixelnum+(pixelnum>>2)), yuvdata+(pixelnum));
+}
+GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
+  // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
+  if(!U && !V)fromGray((unsigned char*)(*Y>>7));
+  if(!Y || !U || !V)return;
+
+  int pixelnum=xsize*ysize;
+  setCsizeByFormat();
+  reallocate();
+  switch (format){
+  case GL_LUMINANCE:
+    memcpy(pdata, Y, pixelnum);
+    break;
+  case GL_RGB:  case GL_BGR_EXT: // of course this is stupid, RGB isn't BGR
+    {
+      unsigned char *pixels1=data;
+      unsigned char *pixels2=data+xsize*csize;
+
+      short*py1=Y;
+      short*py2=Y+xsize; // plane_1 is luminance (csize==1)
+      short*pv=(format==GL_BGR_EXT)?V:U;
+      short*pu=(format==GL_RGB)?V:U;
+
+      int y, u, v, yy, vr, ug, vg, ub;
+      int row=ysize>>1;
+      int cols=xsize>>1;
+      yy=128;
+      while(row--){
+		int col=cols;
+		while(col--){
+		  u=((*pu++)>>8);
+		  v=((*pv++)>>8);
+		  ug=88*u;
+		  ub=454*u;
+		  vg =  183 * v;
+		  vr =  358 * v;
+
+		  // 1st row - 1st pixel
+		  y=(*py1++)>>7;
+		  yy=y<<8;
+		  *pixels1++ = CLAMP((yy + ub     ) >> 8); // b
+		  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
+		  *pixels1++ = CLAMP((yy +      vr) >> 8); // r
+		  // 1st row - 2nd pixel
+		  y=(*py1++)>>7;
+		  yy=y<<8;
+		  *pixels1++ = CLAMP((yy + ub     ) >> 8);
+		  *pixels1++ = CLAMP((yy - ug - vg) >> 8);
+		  *pixels1++ = CLAMP((yy +      vr) >> 8);
+
+		  // 2nd row - 1st pixel
+		  y=(*py2++)>>7;
+		  yy=y<<8;
+		  *pixels2++ = CLAMP((yy + ub     ) >> 8); // b
+		  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
+		  *pixels2++ = CLAMP((yy +      vr) >> 8); // r
+
+		  // 2nd row - 2nd pixel
+		  y=(*py2++)>>7;
+		  yy=y<<8;
+		  *pixels2++ = CLAMP((yy + ub     ) >> 8);
+		  *pixels2++ = CLAMP((yy - ug - vg) >> 8);
+		  *pixels2++ = CLAMP((yy +      vr) >> 8);
+		}
+		pixels1+=xsize*csize;	pixels2+=xsize*csize;
+		py1+=xsize*1;	py2+=xsize*1;
+      }
+    }
+    break;
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    {
+      unsigned char *pixels1=data;
+      unsigned char *pixels2=data+xsize*csize;
+
+      short*py1=Y;//yuvdata;
+      short*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
+	  short*pv=(format==GL_BGRA_EXT)?U:V;
+      short*pu=(format==GL_RGBA)?U:V;
+
+      int y, u, v, yy, vr, ug, vg, ub;
+      int row=ysize>>1;
+      int cols=xsize>>1;
+      yy=128;
+      while(row--){
+		int col=cols;
+		while(col--){
+		  u=(*pu++)>>8;
+		  ug=88*u;
+		  ub=454*u;
+		  v=(*pv++)>>8;
+		  vg =  183 * v;
+		  vr =  358 * v;
+
+		  // 1st row - 1st pixel
+		  y=(*py1++)>>7;
+		  yy=y<<8;
+		  *pixels1++ = 0; // a
+		  *pixels1++ = CLAMP((yy + ub     ) >> 8); // r
+		  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
+		  *pixels1++ = CLAMP((yy +      vr) >> 8); // b
+		  //*pixels1++ = 0; // a
+		  // 1st row - 2nd pixel
+		  y=(*py1++)>>7;
+		  yy=y<<8;
+		  *pixels1++ = 0; // a
+		  *pixels1++ = CLAMP((yy + ub     ) >> 8); // r
+		  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
+		  *pixels1++ = CLAMP((yy +      vr) >> 8); // b
+		  //*pixels1++ = 0; // a
+
+		  // 2nd row - 1st pixel
+		  y=(*py2++)>>7;
+		  yy=y<<8;
+		  *pixels2++ = 0; // a
+		  *pixels2++ = CLAMP((yy + ub     ) >> 8); // r
+		  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
+		  *pixels2++ = CLAMP((yy +      vr) >> 8); // b
+		  //*pixels2++ = 0; // a
+
+		  // 2nd row - 2nd pixel
+		  y=(*py2++)>>7;
+		  yy=y<<8;
+		  *pixels2++ = 0; // a
+		  *pixels2++ = CLAMP((yy + ub     ) >> 8); // r
+		  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
+		  *pixels2++ = CLAMP((yy +      vr) >> 8); // b
+		  //*pixels2++ = 0; // a
+		}
+		pixels1+=xsize*csize;	pixels2+=xsize*csize;
+		py1+=xsize*1;	py2+=xsize*1;
+      }
+    }
+
+    break;
+  case GL_YUV422_GEM:
+    {
+      unsigned char *pixels1=data;
+      unsigned char *pixels2=data+xsize*csize;
+      short*py1=Y;
+      short*py2=Y+xsize; // plane_1 is luminance (csize==1)
+      short*pu=U;
+      short*pv=V;
+      int row=ysize>>1;
+      int cols=xsize>>1;
+      unsigned char u, v;
+      /* this is only re-ordering of the data */
+      while(row--){
+		int col=cols;
+		while(col--){
+			// yuv422 is U Y0 V Y1
+			u=((*pu++)>>8)+128;	  v=((*pv++)>>8)+128;
+			*pixels1++=u;
+			*pixels1++=(*py1++)>>7;
+			*pixels1++=v;
+			*pixels1++=(*py1++)>>7;
+			*pixels2++=u;
+			*pixels2++=(*py2++)>>7;
+			*pixels2++=v;
+			*pixels2++=(*py2++)>>7;	  
+		}
+		pixels1+=xsize*csize;	pixels2+=xsize*csize;
+		py1+=xsize*1;	py2+=xsize*1;
       }
     }
     break;
@@ -1001,3 +1297,4 @@ GEM_EXTERN extern int getPixFormat(char*cformat){
   }
   return 0;
 }
+
