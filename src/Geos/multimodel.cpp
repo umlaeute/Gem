@@ -192,7 +192,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
     glmFacetNormals (m_model);
     glmVertexNormals(m_model, 90); /* SMOOTH */
     
-    glmLinearTexture(m_model);
+    glmLinearTexture(m_model,1,1);
     newCache->realmodels[i]=m_model;
   }
   m_curModel = 0;

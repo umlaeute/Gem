@@ -37,6 +37,8 @@ model :: model(t_symbol *filename)
   // make sure that there are some characters
   m_model = 0;
   m_group = 0;
+  currentH = 1.f;
+  currentW = 1.f;
   if (filename->s_name[0]) openMess(filename);
 }
 
@@ -90,7 +92,7 @@ void model :: textureMess(int state)
   if (!m_model) return;
 
   if (state)glmSpheremapTexture(m_model);
-  else glmLinearTexture(m_model);
+  else glmLinearTexture(m_model,currentH,currentW);
   buildList();
 }
 
@@ -170,7 +172,7 @@ void model :: openMess(t_symbol *filename)
   glmFacetNormals (m_model);
   glmVertexNormals(m_model, m_smooth);
 
-  glmLinearTexture(m_model);
+  glmLinearTexture(m_model,currentH,currentW);
 
   buildList();
   this->setModified();
@@ -201,8 +203,17 @@ void model :: buildList()
 // render
 //
 /////////////////////////////////////////////////////////
-void model :: render(GemState *)
+void model :: render(GemState *state)
 {
+    if (currentH != state->texCoordX(1) || currentW != state->texCoordY(1)){
+        currentH = state->texCoordX(1);
+        currentW = state->texCoordY(1);
+        
+        glmLinearTexture(m_model,currentH,currentW);
+        post("model: resizing texcoords");
+        buildList();
+        }
+        
   if (!m_dispList)return;
   glCallList(m_dispList);
 }

@@ -100,6 +100,8 @@ class GEM_EXTERN model : public GemBase
         
         int             m_group;
     	
+        float		currentH, currentW;
+        
     private:
     
     	//////////

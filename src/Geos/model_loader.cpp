@@ -1153,7 +1153,8 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
  * model - pointer to initialized GLMmodel structure
  */
 GLvoid
-glmLinearTexture(GLMmodel* model)
+//glmLinearTexture(GLMmodel* model)
+glmLinearTexture(GLMmodel* model, float h, float w)
 {
     GLMgroup *group;
     GLfloat dimensions[3];
@@ -1175,8 +1176,8 @@ glmLinearTexture(GLMmodel* model)
     for(i = 1; i <= model->numvertices; i++) {
         x = model->vertices[3 * i + 0] * scalefactor;
         y = model->vertices[3 * i + 2] * scalefactor;
-        model->texcoords[2 * i + 0] = (x + 1.0) / 2.0;
-        model->texcoords[2 * i + 1] = (y + 1.0) / 2.0;
+        model->texcoords[2 * i + 0] = ((x + 1.0) / 2.0) * w;
+        model->texcoords[2 * i + 1] = ((y + 1.0) / 2.0) * h;
     }
     
     /* go through and put texture coordinate indices in all the triangles */
