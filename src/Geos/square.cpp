@@ -61,10 +61,10 @@ void square :: render(GemState *state)
     }
     glBegin(m_drawType);
 
-    SetVertix(state, -m_size,  -m_size, 0.0f,0.,0.,0);
-    SetVertix(state, m_size,  -m_size, 0.0f,1.,0.,1);
-    SetVertix(state, m_size,  m_size, 0.0f,1.,1.,2);
-    SetVertix(state, -m_size,  m_size, 0.0f,0.,1.,3);
+    SetVertex(state, -m_size,  -m_size, 0.0f,0.,0.,0);
+    SetVertex(state, m_size,  -m_size, 0.0f,1.,0.,1);
+    SetVertex(state, m_size,  m_size, 0.0f,1.,1.,2);
+    SetVertex(state, -m_size,  m_size, 0.0f,0.,1.,3);
 
     glEnd();
     if (m_blend) {
