@@ -45,13 +45,21 @@ void pix_2grey :: processRGBAImage(imageStruct &image)
 {
   unsigned char *pixels = image.data;
   int count = image.ysize * image.xsize;
- 
+ /*
   while (count--)    {
      float grey = pixels[chRed] * 0.3086f + pixels[chGreen] * 0.6094f
       + pixels[chBlue] * 0.0820f;
      pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
      pixels += 4;
-     }
+     }*/
+   
+     while (count--)    {
+     int grey = (pixels[chRed] * 79 + pixels[chGreen] * 155
+      + pixels[chBlue] * 21)>>8;
+     pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
+     pixels += 4;
+     }  
+     
 }
 void pix_2grey :: processYUVImage(imageStruct &image)
 {
