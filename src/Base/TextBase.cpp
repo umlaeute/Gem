@@ -34,7 +34,7 @@ char *TextBase::DEFAULT_FONT = "arial.ttf";
 TextBase :: TextBase(int argc, t_atom *argv)
   : m_valid(0), m_theString(NULL), m_theMaxStringSize(0),
     m_fontSize(20), m_fontDepth(20), m_precision(1.f),
-    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL)
+    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL), m_fontname(NULL)
 {
   static bool first_time=true;
   if (first_time){
@@ -48,6 +48,7 @@ TextBase :: TextBase(int argc, t_atom *argv)
   if(argc)textMess(argc, argv);
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
+
 /////////////////////////////////////////////////////////
 // render
 //
@@ -97,15 +98,26 @@ void TextBase :: fontNameMess(const char *filename){
   char buf2[MAXPDSTRING];
   char *bufptr=NULL;
   int fd=-1;
+
+  if(!filename){
+    post("no font-file specified");
+    return;
+  }
+
   if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, (char*)filename, "", buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
     sprintf(buf, "%s/%s", buf2, bufptr);
   } else
     canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
 
+
   if (makeFont(buf)==NULL){
     error("GEMtext: unable to open font %s", buf);
     return;
+  }
+  if(m_fontname!=filename){
+    if(m_fontname)delete[]m_fontname;m_fontname=NULL;
+    m_fontname=new char[strlen(buf)];sprintf(m_fontname, "%s", filename);
   }
   setFontSize(m_fontSize);
   m_font->Depth(m_fontDepth);
@@ -228,8 +240,8 @@ void TextBase :: render(GemState*)
 /////////////////////////////////////////////////////////
 TextBase :: ~TextBase(){
   /* textbase deletion */
-  inlet_free(m_inlet);
-  delete [] m_theString;
+  if(m_inlet)inlet_free(m_inlet);
+  if(m_theString)delete [] m_theString;
 }
 
 /////////////////////////////////////////////////////////
