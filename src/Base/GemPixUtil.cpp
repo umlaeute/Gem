@@ -348,7 +348,7 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     break;
   case GL_LUMINANCE:
     while(pixelnum--){
-      //      *pixels++=(unsigned char)(rgbadata[0] * 0.3086f + rgbadata[1] * 0.06094f + rgbadata[2] * 0.0820f);
+      //      *pixels++=(unsigned char)(rgbadata[0] * 0.3086f + rgbadata[1] * 0.6094f + rgbadata[2] * 0.0820f);
       *pixels++=(rgbadata[0]*79+rgbadata[1]*156+rgbadata[2]*21)>>8;
       rgbadata+=4;
     }
