@@ -12,7 +12,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifdef MACOSX
+#ifdef __APPLE__
 
 #include "pix_filmDarwinYUV.h"
 #include "OpenGL/glext.h"
@@ -232,7 +232,7 @@ void pix_filmDarwinYUV :: getFrame()
     if (!m_haveMovie) return;
 
 
-    int num;
+   // int num;
 
     // get the next frame of the source movie
 
@@ -359,4 +359,4 @@ void pix_filmDarwinYUV :: ramCallback(void *data)
   GetMyClass(data)->LoadRam();
 }
 
-#endif // MACOSX
+#endif // __APPLE__

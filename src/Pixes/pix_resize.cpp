@@ -18,11 +18,11 @@
 #include "pix_resize.h"
 
 #include <math.h>
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
-#endif // MACOSX
+#endif // __APPLE__
 
 CPPEXTERN_NEW(pix_resize)
 

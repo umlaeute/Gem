@@ -18,9 +18,9 @@
 
 #include "pix_movie.h"
 #include "Base/GemMan.h"
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <OpenGL/glu.h>
-#endif // MACOSX
+#endif // __APPLE__
 
 static inline int powerOfTwo(int value)
 {
@@ -44,7 +44,7 @@ pix_movie :: pix_movie(t_symbol *filename) :
   pix_filmNT(filename)
 #elif __linux__
   pix_filmLinux(filename)
-#elif MACOSX
+#elif __APPLE__
   pix_filmDarwin(filename)
 #else
 #error define pix_film for your OS
@@ -101,7 +101,7 @@ void pix_movie :: prepareTexture()
         // ratio for the texture map coordinates
         m_xRatio = (float)m_xsize / (float)neededXSize;
         m_yRatio = (float)m_ysize / (float)neededYSize;
-#ifndef MACOSX   
+#ifndef __APPLE__   
         m_coords[0].s = 0.f;
         m_coords[0].t = 0.f;
     
@@ -127,7 +127,7 @@ void pix_movie :: prepareTexture()
         m_coords[0].t = m_yRatio;
 #endif
     } else {
-#ifndef MACOSX
+#ifndef __APPLE__
         m_coords[0].s = 0.f;
         m_coords[0].t = 0.f;
     
@@ -214,7 +214,7 @@ void pix_movie :: texFrame(GemState *state, int doit)
 		     m_pixBlock.image.format,
 		     m_pixBlock.image.type,
 		     m_pixBlock.image.data);
-#endif // MACOSX
+#endif // __APPLE__
     }
    // okay, load in the actual pixel data
 #ifdef GL_TEXTURE_RECTANGLE_EXT
@@ -244,7 +244,7 @@ void pix_movie :: texFrame(GemState *state, int doit)
 		    m_pixBlock.image.format,	// the format
 		    m_pixBlock.image.type,	// the type
 		    m_frame);		// the data + header offset
-#endif // MACOSX
+#endif // __APPLE__
   }
 }
 
@@ -341,7 +341,7 @@ void pix_movie :: setUpTextureState()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-#endif // MACOSX
+#endif // __APPLE__
 }
 
 /////////////////////////////////////////////////////////

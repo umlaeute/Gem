@@ -45,7 +45,7 @@ m_pixBlock.newfilm = 0;
  m_pixBlock.image.xsize = 0;
  m_pixBlock.image.ysize = 0;
  m_pixBlock.image.csize = 3;
-#ifndef MACOSX
+#ifndef __APPLE__
  post("GEM: yuv_film - OS needs YUV info");
  m_pixBlock.image.format = GL_RGB;
  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
@@ -93,7 +93,7 @@ void pix_filmYUV :: createBuffer()
   m_pixBlock.image.ysize = neededYSize;
   m_pixBlock.image.csize = m_csize;
   m_pixBlock.image.format= m_format;
-#ifdef MACOSX
+#ifdef __APPLE__
   int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize;
 #else
   int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize+4; /* +4 from MPEG */
@@ -131,7 +131,7 @@ void pix_filmYUV :: openMess(t_symbol *filename)
   realOpen(buf);
   if (m_haveMovie == GEM_MOVIE_NONE)return;
   
-#ifndef MACOSX
+#ifndef __APPLE__
   createBuffer();
   prepareTexture();
 #endif
@@ -183,7 +183,7 @@ void pix_filmYUV :: render(GemState *state)
   }
   state->image = &m_pixBlock;
   
-#ifdef MACOSX
+#ifdef __APPLE__
   if (m_reqFrame == m_curFrame)
         ::MoviesTask(NULL, 0);
 #endif

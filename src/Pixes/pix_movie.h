@@ -20,7 +20,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Pixes/pix_filmNT.h"
 #elif __linux__
 #include "Pixes/pix_filmLinux.h"
-#elif MACOSX
+#elif __APPLE__
 #include "pix_filmDarwin.h"
 #else
 #error Define pix_film for this OS
@@ -47,7 +47,7 @@ class GEM_EXTERN pix_movie : public pix_filmNT
 class GEM_EXTERN pix_movie : public pix_filmLinux
 {
   CPPEXTERN_HEADER(pix_movie, pix_filmLinux)
-#elif MACOSX
+#elif __APPLE__
 class GEM_EXTERN pix_movie : public pix_filmDarwin
 {
     CPPEXTERN_HEADER(pix_movie, pix_filmDarwin)

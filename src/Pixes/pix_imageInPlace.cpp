@@ -121,7 +121,7 @@ void pix_imageInPlace :: downloadMess()
   if (!mInPreload)return;
   if (!m_loadedCache->textBind[0])
     {
-      glGenTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//MACOSX
+      glGenTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
 		
       for (int i = 0; i < m_numImages; ++i)
 	{
@@ -162,7 +162,7 @@ void pix_imageInPlace :: purgeMess()
 
   if (m_loadedCache->textBind[0])
     {
-      glDeleteTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//MACOSX
+      glDeleteTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
       for (int i = 0; i < m_numImages; ++i)
 	{
 	  m_loadedCache->textBind[i] = 0;

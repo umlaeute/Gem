@@ -16,7 +16,7 @@
 
 #include "pix_movieYUV.h"
 #include "Base/GemMan.h"
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <OpenGL/glu.h>
 #endif
 
@@ -42,7 +42,7 @@ pix_movieYUV :: pix_movieYUV(t_symbol *filename) :
   pix_filmNT(filename)
 #elif __linux__
   pix_filmLinux(filename)
-#elif MACOSX
+#elif __APPLE__
   pix_filmDarwinYUV(filename)
 #else
 #error define pix_film for your OS
@@ -99,7 +99,7 @@ void pix_movieYUV :: prepareTexture()
         // ratio for the texture map coordinates
         m_xRatio = (float)m_xsize / (float)neededXSize;
         m_yRatio = (float)m_ysize / (float)neededYSize;
-#ifndef MACOSX   
+#ifndef __APPLE__   
         m_coords[0].s = 0.f;
         m_coords[0].t = 0.f;
     
@@ -125,7 +125,7 @@ void pix_movieYUV :: prepareTexture()
         m_coords[0].t = m_yRatio;
 #endif
     } else {
-#ifndef MACOSX
+#ifndef __APPLE__
         m_coords[0].s = 0.f;
         m_coords[0].t = 0.f;
     
