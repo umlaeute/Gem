@@ -94,7 +94,6 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
     Pete_HalfTone_CalcCorners(nWidth,nHeight,AngleRadians,nCellSize,&Left,&Right,&Top,&Bottom);
 
     //U32 TestColour=0x00ffffff;
-
     int nCurrentV;
     for (nCurrentV=Bottom.nY; nCurrentV<Top.nY; nCurrentV+=nCellSizeFP) {
       int nSnappedV=((nCurrentV+(nCellSizeFP*1024))/nCellSize);
@@ -208,53 +207,18 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 	    const int nGreyValue=pGreyScaleTableStart[nDiff];
 	    const int nAlphaValue=0xff;
 
-//					if (nDotFuncResult>=nLuminance) {
-//
-//						nGreyValue=0;
-//
-//					} else {
-//
-//						const int nDiff=(nLuminance-nDotFuncResult);
-//						
-//						if (nDiff>nSmoothingThreshold) {
-//							nGreyValue=255;
-//						} else {
-//							nGreyValue=(nDiff*255)/nSmoothingThreshold;
-//						}
-//						
-//					}
-
-//					if ((nTexUInt>=nCellSize)||
-//						(nTexVInt>=nCellSize)) {
-//						nGreyValue=0x0000ff00;
-//					} else if ((nTexUInt<0)||
-//						(nTexVInt<0)) {
-//						nGreyValue=0x000000ff;
-//					} else {
-//						nGreyValue=0x00ffffff;
-//					}
-
-//					nDotFuncResult=((nTexUInt^nTexVInt)&0x4)*63;
-
 	    const U32 OutputColour=
 	      (nGreyValue<<SHIFT_RED)|
 	      (nGreyValue<<SHIFT_GREEN)|
 	      (nGreyValue<<SHIFT_BLUE)|
 	      (nAlphaValue<<SHIFT_ALPHA);
-//						(nDotFuncResult<<SHIFT_RED)|
-//						(nDotFuncResult<<SHIFT_GREEN)|
-//						(nDotFuncResult<<SHIFT_BLUE);
 
 	    U32* pCurrentOutput=
 	      pOutput+(nCurrentY*nWidth)+nCurrentX;
 	    *pCurrentOutput=OutputColour;
 
-//					*pCurrentOutput=TestColour;
 	  }
-	}
-
-//			TestColour^=0x00ff00ff;
-		
+	}		
       }
     }
     image.data = myImage.data;
@@ -266,16 +230,17 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_halftone :: processYUVImage(imageStruct &image)
 {
-    nWidth = image.xsize/2;
+    nWidth = image.xsize;
     nHeight = image.ysize;
 	
-	const unsigned char chroma = 128;
-    /*
+    const unsigned char chroma = 128;
+
     if (!init) {
 	Init(nWidth, nHeight);
 	init = 1;
-    }*/
-    pSource = (U32*)image.data;
+    }
+
+    U16*pSource = (U16*)image.data;
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
@@ -283,7 +248,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
     myImage.type  = image.type;
     myImage.format= image.format;
     myImage.reallocate();
-    pOutput = (U32*)myImage.data;
+    U16*pOutput = (U16*)myImage.data;
     
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
@@ -292,7 +257,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
     const float AngleRadians=m_Angle;
     const int nCellSizeFP=(nCellSize<<nFPShift);
 
-    const int nHalfWidth=(nWidth);
+    const int nHalfWidth=(nWidth>>1);
     const int nHalfHeight=(nHeight>>1);
 
     unsigned char* pDotFuncTableStart=&g_pDotFuncTable[0];
@@ -330,10 +295,10 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 		nSnappedU-=(nCellSizeFP*1024);
 			
 		SPete_HalfTone_Vertex RotatedPoints[4]={ 
-					{{nSnappedU,nSnappedV},				{0,0}},
-					{{(nSnappedU+nCellSizeFP),nSnappedV},			{nCellSizeFP-nFPMult,0}},
-					{{(nSnappedU+nCellSizeFP),(nSnappedV+nCellSizeFP)},	{nCellSizeFP-nFPMult,nCellSizeFP-nFPMult}},
-					{{nSnappedU,(nSnappedV+nCellSizeFP)},			{0,nCellSizeFP-nFPMult}}
+		  {{nSnappedU,nSnappedV},				{0,0}},
+		  {{(nSnappedU+nCellSizeFP),nSnappedV},			{nCellSizeFP-nFPMult,0}},
+		  {{(nSnappedU+nCellSizeFP),(nSnappedV+nCellSizeFP)},	{nCellSizeFP-nFPMult,nCellSizeFP-nFPMult}},
+		  {{nSnappedU,(nSnappedV+nCellSizeFP)},			{0,nCellSizeFP-nFPMult}}
 		};
 
 		SPete_HalfTone_Vertex ScreenSpacePoints[4];
@@ -362,14 +327,13 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 		const int nSampleTopY=(ScreenSpacePoints[0].Pos.nY>>nFPShift);
 		const int nSampleLeftX=(ScreenSpacePoints[0].Pos.nX>>nFPShift);
 
-		U32 nLuminance=
+		U16 nLuminance=
 			GetImageAreaAverageLuma(
 				   nSampleLeftX,nSampleTopY,
 				   nCellSize,nCellSize,
 				   pSource,nWidth,nHeight);
 				  //pSource,nWidth,nHeight)>>9;
-
-		nLuminance/=256;
+		//nLuminance/=256;
 		nLuminance+=256;
 
 		int nCurrentYFP;
@@ -403,25 +367,17 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 
 				if (nCurrentX<0)continue;
 				if (nCurrentX>=nWidth)break;
-
+				
 				const int nTexUInt=(nTexU>>nFPShift);
 				const int nTexVInt=(nTexV>>nFPShift);
 
 				unsigned char* pCurrentDotFunc = pDotFuncTableStart+(nTexVInt*nCellSize)+nTexUInt;
 
-				const int nDotFuncResult=*pCurrentDotFunc;
-				const int nDiff=nLuminance-nDotFuncResult;
-				const int nGreyValue=pGreyScaleTableStart[nDiff];
-
 				/* the defines for the SHIFT-amount are in Base/GemPixPete.h */
-				
-				const U32 OutputColour = (chroma<<SHIFT_U) |
-				  (nGreyValue<<SHIFT_Y1) |
-				  (chroma<<SHIFT_V) |
-				  (nGreyValue<<SHIFT_Y2);
 
-				U32* pCurrentOutput = pOutput+(nCurrentY*nWidth)+nCurrentX;
-				*pCurrentOutput=OutputColour;
+				U16* pCurrentOutput = pOutput+(nCurrentY*nWidth)+nCurrentX;
+				*pCurrentOutput=(chroma<<SHIFT_U)|
+				  (pGreyScaleTableStart[nLuminance-*pCurrentDotFunc]<<SHIFT_Y1);
 				}
 			}
 		}
@@ -578,6 +534,8 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 	      pDotFuncTableStart+
 	      (nTexVInt*nCellSize)+
 	      nTexUInt;
+
+	    const int nDiff=nLuminance-*pCurrentDotFunc;
 
 	    unsigned char* pCurrentOutput=
 	      pOutput+(nCurrentY*nWidth)+nCurrentX;
@@ -880,7 +838,7 @@ void pix_halftone :: Pete_HalfTone_LerpAlongEdges_Vertex(
       poutVertex->TexCoords.nX=nStartU;
       poutVertex->TexCoords.nY=nStartV;
     } else {
-      const int nMiddleX=pMiddle->Pos.nX;
+     const int nMiddleX=pMiddle->Pos.nX;
       const int nMiddleU=pMiddle->TexCoords.nX;
       const int nMiddleV=pMiddle->TexCoords.nY;
 
@@ -908,11 +866,11 @@ void pix_halftone :: Pete_HalfTone_LerpAlongEdges_Vertex(
     const int nMiddleV=pMiddle->TexCoords.nY;
 
     if (nYDist<nFPMult) {
-      poutVertex->Pos.nX=nMiddleX;
+     poutVertex->Pos.nX=nMiddleX;
       poutVertex->TexCoords.nX=nMiddleU;
       poutVertex->TexCoords.nY=nMiddleV;
     } else {
-      const int nEndX=pEnd->Pos.nX;
+     const int nEndX=pEnd->Pos.nX;
       const int nEndU=pEnd->TexCoords.nX;
       const int nEndV=pEnd->TexCoords.nY;
 
@@ -1113,7 +1071,7 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
   return (nRedAverage<<SHIFT_RED)|(nGreenAverage<<SHIFT_GREEN)|(nBlueAverage<<SHIFT_BLUE);
 }
 
-U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight) {
+U16 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U16* pImageData,int nImageWidth,int nImageHeight) {
 
   if (nLeftX<0) {
     nDeltaX-=(0-nLeftX);   nLeftX=0;
@@ -1129,33 +1087,26 @@ U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int
 
   if ((nDeltaX<1)||(nDeltaY<1)) return 0;
 
-  U32* pSourceStart=    pImageData+(nTopY*nImageWidth)+nLeftX;
-  U32* pSourceEnd=      pSourceStart+(nDeltaY*nImageWidth);
-  U32* pCurrentSource=pSourceStart;
+  U16* pSourceStart=    pImageData+(nTopY*nImageWidth)+nLeftX;
+  U16* pSourceEnd=      pSourceStart+(nDeltaY*nImageWidth);
+  U16* pCurrentSource=pSourceStart;
   
   int nLumaTotal=0;
-  int nLuma1, nLuma2 = 0;
 
   while (pCurrentSource<pSourceEnd) {
-    U32* pSourceLineStart=pCurrentSource;
-    U32* pSourceLineEnd=pCurrentSource+nDeltaX;
+    U16* pSourceLineStart=pCurrentSource;
+    U16* pSourceLineEnd=pCurrentSource+nDeltaX;
 
     while (pCurrentSource<pSourceLineEnd) {
-		const U32 CurrentColour=*pCurrentSource;
-		nLuma1 = ((CurrentColour&(0xff<<16))>>16)<<8;
-		nLuma2 = ((CurrentColour&(0xff<<0))>>0)<<8;
-		
-		nLumaTotal += nLuma1 + nLuma2;
-		//nLumaTotal += nLuma1;
-
-      pCurrentSource+=1;
+      nLumaTotal += ((*pCurrentSource++)&0xff00)>>8;
+      nLumaTotal += ((*pCurrentSource++)&0xff00)>>8;
     }
     pCurrentSource=pSourceLineStart+nImageWidth;
   }
 
-  const int nTotalSamples=(nDeltaX*nDeltaY)*2;
+  const int nTotalSamples=(nDeltaX*nDeltaY);
   const int nLumaAverage=(nLumaTotal/nTotalSamples);
- 
+  //post("%d/%d=%d", nLumaTotal, nTotalSamples, nLumaAverage);
   return (nLumaAverage);
 }
 
