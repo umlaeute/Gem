@@ -94,6 +94,8 @@ void GemOutput :: fillGemState(GemState &state){
     state.lighting=1;
     state.smooth  =1;
   }
+  state.screenWidth = m_width;
+  state.screenHeight= m_height;
 }
 
 void GemOutput :: renderMess()
