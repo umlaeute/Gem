@@ -25,6 +25,8 @@
 #include "pix_movement.h"
 #include <string.h>
 #include <math.h>
+#include <time.h>
+#include <Carbon/Carbon.h>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT)
 
@@ -52,6 +54,9 @@ pix_movement :: pix_movement(t_floatarg f)
   if(f>1.f)f=1.0;
   treshold = (unsigned char)(255*f);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("tresh"));
+
+  index = 0;
+  averageTime = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -92,27 +97,44 @@ void pix_movement :: processRGBAImage(imageStruct &image)
 }
 void pix_movement :: processYUVImage(imageStruct &image)
 {
+
+#ifdef __VEC__
+    processYUVAltivec(image);
+    return;
+#else
+    
   // assume that the pix_size does not change !
   bool doclear=(image.xsize*image.ysize != buffer.xsize*buffer.ysize);
   buffer.xsize = image.xsize;
   buffer.ysize = image.ysize;
   buffer.reallocate();
   if(doclear) buffer.setWhite();
+  if(doclear) post("pix_movement: doclear");
   
   int pixsize = image.ysize * image.xsize;
 
+  int Y1, Y0;
+  unsigned char thresh;
+  //these get rid of the invariant loads of the global chY0 and chY1
+  Y1 = chY1;
+  Y0 = chY0;
+  thresh = treshold;
+  
   unsigned char *rp = image.data;			// read pointer
   unsigned char *wp=buffer.data;			// write pointer to the copy
-  unsigned char grey=0;
+  unsigned char grey,grey1;
+
+  grey = 0;
+  grey1 = 0;
   pixsize/=2;
   while(pixsize--) {
-    grey = rp[chY0];
-    rp[chY0]=255*(abs(grey-*wp)>treshold);
+    grey = rp[Y0];
+    rp[Y0]=255*(abs(grey-*wp)>thresh);
     *wp++=grey;
 
-    grey = rp[chY1];
-    rp[chY1]=255*(abs(grey-*wp)>treshold);
-    *wp++=grey;
+    grey1 = rp[Y1];
+    rp[Y1]=255*(abs(grey1-*wp)>thresh);
+    *wp++=grey1;
     /*
       // looks cool (C64), but what for ?
       rp[chU]=128;
@@ -120,7 +142,165 @@ void pix_movement :: processYUVImage(imageStruct &image)
     */
     rp+=4;
   }
+
+#endif  
 }
+
+void pix_movement :: processYUVAltivec(imageStruct &image)
+{
+    // assume that the pix_size does not change !
+    /*
+    bool doclear=(image.xsize*image.ysize != buffer.xsize*buffer.ysize);
+    buffer.xsize = image.xsize;
+    buffer.ysize = image.ysize;
+    buffer.reallocate();
+    if(doclear) buffer.setWhite();
+    if(doclear) post("pix_movement: doclear");
+*/
+
+    if (image.xsize*image.ysize != buffer.xsize*buffer.ysize){
+        buffer.xsize = image.xsize;
+        buffer.ysize = image.ysize;
+        buffer.data = new unsigned char [buffer.xsize*buffer.ysize*2];
+    }
+
+    
+    union{
+        signed short 		c[8];
+        vector signed short 	v;
+    }shortBuffer;
+    
+    int pixsize = image.ysize * image.xsize/8;
+
+    int i;
+    vector signed short thresh;
+    
+
+    shortBuffer.c[0] = treshold;
+    thresh = shortBuffer.v;
+    thresh = (vector signed short)vec_splat(thresh,0);
+
+    vector unsigned char *rp = (vector unsigned char *) image.data;	// read pointer
+    vector unsigned char *wp = (vector unsigned char *) buffer.data;	// write pointer to the copy
+    vector unsigned char grey,grey1;
+    vector unsigned char one = vec_splat_u8(1);
+    vector unsigned short Y,UV,Ywp,UVwp,hiImage,loImage;
+    vector unsigned short Y1,UV1,Ywp1,UVwp1,hiImage1,loImage1;
+    vector signed short temp,temp1;
+    //vector signed int Ye, Yo;
+    //vector signed short twofivefive;
+
+   // int const1, const2, const3,j;
+    
+
+
+    #ifndef PPC970
+    //setup the cache prefetch -- A MUST!!!
+    UInt32			prefetchSize = GetPrefetchConstant( 16, 0, 256 );
+    vec_dst( rp, prefetchSize, 0 );
+    vec_dst( wp, prefetchSize, 1 );
+    #endif
+
+    /*
+    if (j > 32 || j < 0) j = 0;
+    if (index > 1800){
+        post("pix_movement: average time %d prefetch: %d 0 %d",averageTime/index+1,j,j*16);
+        j+=2;
+        index = 0;
+        averageTime = 0;
+    }
+
+    index++;
+    
+    UnsignedWide startTime;
+    ::Microseconds(&startTime);
+    */
+
+    j = 16;
+    
+    pixsize/=2;
+    for (i=0; i < pixsize; i++) {
+
+
+
+        #ifndef PPC970
+        //setup the cache prefetch -- A MUST!!!
+        UInt32			prefetchSize = GetPrefetchConstant( j, 0, j * 16 );
+        vec_dst( rp, prefetchSize, 0 );
+        vec_dst( wp, prefetchSize, 1 );
+        vec_dst( rp+16, prefetchSize, 2 );
+        vec_dst( wp+16, prefetchSize, 3 );
+        #endif
+        
+        grey = rp[0];
+        grey1 = rp[1];
+            
+       // rp[Y0]=255*(abs(grey-*wp)>thresh);
+
+        UV = (vector unsigned short)vec_mule(rp[0],one);
+        Y = (vector unsigned short)vec_mulo(rp[0],one);
+
+        UV1 = (vector unsigned short)vec_mule(grey1,one);
+        Y1 = (vector unsigned short)vec_mulo(grey1,one);
+
+        //wp is actually 1/2 the size of the image because it is only Y??
+        
+        //here the full U Y V Y is stored
+        UVwp = (vector unsigned short)vec_mule(wp[0],one);
+        Ywp = (vector unsigned short)vec_mulo(wp[0],one);
+
+        UVwp1 = (vector unsigned short)vec_mule(wp[1],one);
+        Ywp1 = (vector unsigned short)vec_mulo(wp[1],one);
+
+        //store the current pixels as the history for next time
+        wp[0]=grey;
+        wp++;
+        wp[0] = grey1;
+        wp++;
+
+        temp = vec_abs(vec_sub((vector signed short)Y,(vector signed short)Ywp));
+        Y = (vector unsigned short)vec_cmpgt(temp,thresh);
+
+        temp1 = vec_abs(vec_sub((vector signed short)Y1,(vector signed short)Ywp1));
+        Y1 = (vector unsigned short)vec_cmpgt(temp1,thresh);
+       
+        hiImage = vec_mergeh(UV,Y);
+        loImage = vec_mergel(UV,Y);
+
+        hiImage1 = vec_mergeh(UV1,Y1);
+        loImage1 = vec_mergel(UV1,Y1);
+        
+        grey = vec_packsu(hiImage,loImage);
+        grey1 = vec_packsu(hiImage1,loImage1);
+        
+        rp[0] = grey;
+        rp++;
+        rp[0] = grey1;
+        rp++;
+       // grey = rp[0];
+       // rp[Y1]=255*(abs(grey-*wp)>thresh);
+       // *wp++=grey;
+        
+       // rp+=4;
+       // rp++;
+    }
+
+    vec_dss(0);
+    vec_dss(1);
+    vec_dss(2);
+    vec_dss(3);
+/*
+    UnsignedWide endTime;
+    int elapsedTime;
+    ::Microseconds(&endTime);
+    elapsedTime = endTime.lo - startTime.lo;
+    //post("pix_movement: time %d prefetch %d 0 %d",elapsedTime,j,j*16);
+    averageTime += elapsedTime;
+    */
+}
+
+
+
 void pix_movement :: processGrayImage(imageStruct &image)
 {
   // assume that the pix_size does not change !
