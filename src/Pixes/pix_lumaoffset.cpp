@@ -28,10 +28,16 @@ pix_lumaoffset :: pix_lumaoffset()
 { 
     m_OffsetScale = 12.0f; 	// -127 to 127
     m_LineGap = 1.2f;		// 0 to 32
-    m_DoFilledLines = 0.0f;	// 0 or 1
-    m_DoSmoothFill = 0.0f;	// 0 or 1
+    m_DoFilledLines = false;	// 0 or 1
+    m_DoSmoothFill = false;	// 0 or 1
 
     init =0;
+
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("offset"));
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("gap"));
+
+    hPreviousLineHeights_size=0;
+    hPreviousLineHeights=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -85,18 +91,12 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
     U32* pSourceEnd=(pSource+nNumPixels);
     U32* pOutputEnd=(pOutput+nNumPixels);
 
-    const bool bDoFilledLines=(m_DoFilledLines!=0.0f);
-
-    if (!bDoFilledLines) {
-
+    if (!m_DoFilledLines) {
 	while (pCurrentSource<pSourceEnd) {
-			
 	    const U32* pSourceLineEnd=pCurrentSource+nWidth;
-				
+
 	    while (pCurrentSource!=pSourceLineEnd) {
-
 		const U32 SourceColour=*pCurrentSource;
-
 		int nLuma=GetLuminance(SourceColour);
 		nLuma-=(128*255);
 				
@@ -112,36 +112,28 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 
 		pCurrentSource+=1;
 		pCurrentOutput+=1;
-				
 	    }
-
 	    pCurrentSource+=(nWidth*nLineGap);
 	    pCurrentOutput+=(nWidth*nLineGap);
-
 	}
-
     } else {
-
-	const bool bDoSmoothFill=(m_DoSmoothFill!=0.0f);
-
+      if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<nWidth*sizeof(U32*)){
+	free(hPreviousLineHeights);
+	hPreviousLineHeights_size=nWidth*sizeof(U32*);
+	hPreviousLineHeights=malloc(hPreviousLineHeights_size);	
+      }
 	U32** ppPreviousLineHeights=(U32**)Pete_LockHandle(hPreviousLineHeights);
-	if (ppPreviousLineHeights==NULL) {
-	    return;
-	}
+	if (ppPreviousLineHeights==NULL)return;
 
 	Pete_ZeroMemory(ppPreviousLineHeights,(nWidth*sizeof(U32*)));
 
 	//int nCurrentY=0;
 	while (pCurrentSource<pSourceEnd) {
-			
 	    const U32* pSourceLineEnd=pCurrentSource+nWidth;
-				
 	    U32** ppCurrentLineHeight=ppPreviousLineHeights;
 
-	    if (bDoSmoothFill) {
-
+	    if (m_DoSmoothFill) {
 		while (pCurrentSource!=pSourceLineEnd) {
-
 		    const U32 SourceColour=*pCurrentSource;
 		    const int nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
 		    const int nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
@@ -150,7 +142,6 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 
 		    int nLuma=GetLuminance(SourceColour);
 		    nLuma-=(128*255);
-					
 		    const int nOffset=(nLuma*nOffsetScale)>>16;
 
 		    U32* pOffsetOutputStart=
@@ -177,9 +168,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 			nDestBlue=(DestColour>>SHIFT_BLUE)&0xff;
 			nDestAlpha=(DestColour>>SHIFT_ALPHA)&0xff;
 			nDestDistance=(pOffsetOutput-pPreviousOffsetOutput)/nWidth;
-			if (nDestDistance==0) {
-			    nDestDistance=1;
-			}
+			if (nDestDistance==0)nDestDistance=1;
 		    }
 
 		    const int nDeltaRed=(nDestRed-nSourceRed);
@@ -200,7 +189,6 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 		    while ((pOffsetOutput<pOutputEnd)&&
 				(pOffsetOutput>=pOutput)&&
 				(pOffsetOutput>pPreviousOffsetOutput)) {
-
 			U32 CurrentColour=
 					    (nCurrentRed<<SHIFT_RED)|
 					    (nCurrentGreen<<SHIFT_GREEN)|
@@ -215,7 +203,6 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 			nCurrentAlpha+=nIncAlpha;
 					
 			pOffsetOutput-=nWidth;
-
 		    }
 
 		    *ppCurrentLineHeight=pOffsetOutputStart;
@@ -223,34 +210,22 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 		    pCurrentSource+=1;
 		    pCurrentOutput+=1;
 		    ppCurrentLineHeight+=1;
-					
 		}
-
 	    } else {
-
 		while (pCurrentSource!=pSourceLineEnd) {
-
 		    const U32 SourceColour=*pCurrentSource;
-		    
 		    int nLuma=GetLuminance(SourceColour);
 		    nLuma-=(128*255);
-					
 		    const int nOffset=(nLuma*nOffsetScale)>>16;
-
-		    U32* pOffsetOutputStart=
-			    pCurrentOutput+(nOffset*nWidth);
-
+		    U32* pOffsetOutputStart=pCurrentOutput+(nOffset*nWidth);
 		    U32* pOffsetOutput=pOffsetOutputStart;
 		    U32* pPreviousOffsetOutput=*ppCurrentLineHeight;
 
 		    while ((pOffsetOutput<pOutputEnd)&&
 				(pOffsetOutput>=pOutput)&&
 				(pOffsetOutput>pPreviousOffsetOutput)) {
-
 			*pOffsetOutput=SourceColour;
-					
 			pOffsetOutput-=nWidth;
-
 		    }
 
 		    *ppCurrentLineHeight=pOffsetOutputStart;
@@ -258,30 +233,20 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 		    pCurrentSource+=1;
 		    pCurrentOutput+=1;
 		    ppCurrentLineHeight+=1;
-					
 		}
-
-
 	    }
-
 	    pCurrentSource+=(nWidth*nLineGap);
 	    pCurrentOutput+=(nWidth*nLineGap);
-
 	}
 
 	U32* pFinalLineStart=pOutputEnd-nWidth;
 	U32* pFinalLineEnd=pOutputEnd;
-				
 	U32** ppCurrentLineHeight=ppPreviousLineHeights;
-
 	U32* pCurrentOutput=pFinalLineStart;
 
 	while (pCurrentOutput<pFinalLineEnd) {
-
 	    U32* pPreviousOffsetOutput=*ppCurrentLineHeight;
-
 	    const U32 SourceColour=*pPreviousOffsetOutput;
-
 	    U32* pOffsetOutput=pCurrentOutput;
 
 	    while ((pOffsetOutput<pOutputEnd)&&
@@ -320,14 +285,15 @@ void pix_lumaoffset :: offsetCallback(void *data, t_floatarg m_OffsetScale)
 
 void pix_lumaoffset :: gapCallback(void *data, t_floatarg m_LineGap)
 {
+  if(m_LineGap<0)m_LineGap=0.f;
   GetMyClass(data)->m_LineGap=(m_LineGap);
 }
 void pix_lumaoffset :: fillCallback(void *data, t_floatarg m_DoFilledLines)
 {
-  GetMyClass(data)->m_DoFilledLines=(m_DoFilledLines);  
+  GetMyClass(data)->m_DoFilledLines=(m_DoFilledLines!=0.0);  
 }
 
 void pix_lumaoffset :: smoothCallback(void *data, t_floatarg m_DoSmoothFill)
 {
-  GetMyClass(data)->m_DoSmoothFill=(m_DoSmoothFill);  
+  GetMyClass(data)->m_DoSmoothFill=(m_DoSmoothFill!=0.0);  
 }

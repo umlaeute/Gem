@@ -34,9 +34,9 @@ class GEM_EXTERN pix_lumaoffset : public GemPixObj
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_lumaoffset();
+    //////////
+    // Constructor
+    pix_lumaoffset();
     	
     protected:
     	
@@ -58,11 +58,11 @@ class GEM_EXTERN pix_lumaoffset : public GemPixObj
 
 	float	m_OffsetScale;
 	float	m_LineGap;
-	float	m_DoFilledLines;
-	float	m_DoSmoothFill;
+	bool	m_DoFilledLines;
+	bool	m_DoSmoothFill;
 	
 	SPete_MemHandle 	hPreviousLineHeights;
-	
+	long hPreviousLineHeights_size;
     private:
     
     	//////////
