@@ -887,10 +887,10 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
-      pixels[0]=yuvdata[3]; // u
-      pixels[1]=yuvdata[0]; // y
-      pixels[2]=yuvdata[1]; // v
-      pixels[3]=yuvdata[2]; // y
+      pixels[chU]=yuvdata[1]; // u
+      pixels[chY0]=yuvdata[0]; // y
+      pixels[chV]=yuvdata[3]; // v
+      pixels[chY1]=yuvdata[2]; // y
       pixels+=4;
       yuvdata+=4;
     }
