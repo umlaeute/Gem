@@ -26,10 +26,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(alpha, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-alpha :: alpha(int fun=0)
+alpha :: alpha(t_floatarg fun=0)
        : m_alphaState(1), m_alphaTest(1)
 {
-  funMess(fun);
+  funMess((int)fun);
   m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("function"));
 }
 

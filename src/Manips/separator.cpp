@@ -60,7 +60,7 @@ void separator :: render(GemState *state)
     m_state.image   	 = state->image;
     m_state.numTexCoords = state->numTexCoords;
     
-    delete [] m_state.texCoords;
+    if(m_state.texCoords)delete [] m_state.texCoords;
     if (state->texCoords)
     {
     	m_state.texCoords = new TexCoord[m_state.numTexCoords];
@@ -92,8 +92,10 @@ void separator :: postrender(GemState *state)
     state->texture  	= m_state.texture;
     state->image    	= m_state.image;
     state->numTexCoords = m_state.numTexCoords;
-
-    delete [] state->texCoords;
+#ifdef CRASH
+    post("likely to crash:"); // do we have a memory hole without ? i think so...
+    if (state->texCoords)delete [] (state->texCoords);
+#endif
     if (m_state.texCoords)
     {
     	state->texCoords = new TexCoord[m_state.numTexCoords];

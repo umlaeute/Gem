@@ -37,7 +37,7 @@ class GEM_EXTERN alpha : public GemBase
 
         //////////
         // Constructor
-    	alpha(int);
+    	alpha(t_floatarg);
     	
     protected:
     	
