@@ -11,7 +11,7 @@
 /* -------------------------- setup function ------------------------------ */
 
 extern "C" {
-
+   void GLdefine_setup();
    void GEMglAccum_setup();
    void GEMglAlphaFunc_setup();
    void GEMglAreTexturesResident_setup();
@@ -283,6 +283,7 @@ extern "C" {
 
 
    void openGL_setup() {
+      GLdefine_setup();
       GEMglAccum_setup();
       GEMglAlphaFunc_setup();
       GEMglAreTexturesResident_setup();
