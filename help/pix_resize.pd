@@ -1,0 +1,9 @@
+#N canvas;
+#X msg 122 72 gemList;
+#X msg 122 213 gemList;
+#X text 121 27 pix_resize;
+#X obj 122 167 pix_resize;
+#X text 56 251 automatically resizes a pix to the next larger power of two. Remember that all texture maps have to be a power of two!;
+#X text 114 48 resize a pix;
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;

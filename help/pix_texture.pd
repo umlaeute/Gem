@@ -1,0 +1,121 @@
+#N canvas 22 29 639 640 10;
+#X text 452 8 GEM object;
+#X obj 8 346 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 19 348 Inlets:;
+#X text 19 490 Outlets:;
+#X obj 8 306 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#X text 17 305 Arguments:;
+#X obj 8 56 cnv 15 430 240 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 449 77 cnv 15 170 300 empty empty empty 20 12 0 14 -228992 -66577
+0;
+#X text 453 60 Example:;
+#X obj 514 306 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#N canvas 0 22 450 300 gemwin 0;
+#X obj 132 136 gemwin;
+#X obj 67 89 outlet;
+#X obj 67 10 inlet;
+#X obj 67 41 route create;
+#X msg 67 70 set destroy;
+#X msg 142 68 set create;
+#X msg 132 112 create \, 1;
+#X msg 198 112 destroy;
+#X msg 234 221 dimen 500 500;
+#X msg 279 189 dimen 1024 768;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;
+#X connect 3 0 6 0;
+#X connect 3 1 5 0;
+#X connect 3 1 7 0;
+#X connect 4 0 1 0;
+#X connect 5 0 1 0;
+#X connect 6 0 0 0;
+#X connect 7 0 0 0;
+#X connect 8 0 0 0;
+#X connect 9 0 0 0;
+#X restore 519 345 pd gemwin;
+#X msg 519 326 create;
+#X text 515 305 Create window:;
+#X obj 450 136 cnv 15 160 150 empty empty empty 20 12 0 14 -24198 -66577
+0;
+#X obj 451 84 gemhead;
+#X text 71 31 Class: pix object;
+#X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
+-1 -1;
+#N canvas 0 22 587 366 image 0;
+#X obj 77 48 inlet;
+#X obj 77 344 outlet;
+#X obj 77 205 pix_image ../../doc/gem/examples/data/fractal.JPG;
+#X obj 223 55 inlet;
+#X msg 223 123 open \$1;
+#X obj 223 100 openpanel;
+#X text 312 85 re-send the image to the [pix_]-object;
+#X text 231 37 open;
+#X text 79 30 gemlist;
+#X connect 0 0 2 0;
+#X connect 2 0 1 0;
+#X connect 3 0 5 0;
+#X connect 4 0 2 0;
+#X connect 5 0 4 0;
+#X restore 451 113 pd image;
+#X obj 451 253 pix_texture;
+#X text 63 316 <none>;
+#X text 57 503 Outlet 1: gemlist;
+#X text 33 362 Inlet 1: gemlist;
+#X obj 451 305 square 3;
+#X text 516 105 open an image;
+#X text 509 118 (JPEG \, TIFF \, ..);
+#X text 50 12 Synopsis: [pix_texture];
+#X text 29 57 Description: apply texture mapping;
+#X text 16 79 enables texture mapping with the current pix. Whatever
+pix values are in the network currently will be used (ie \, all processing
+after the pix_texture will not have any effect).;
+#X msg 458 157 quality \$1;
+#X obj 458 138 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X text 33 377 Inlet 1: 0|1 turn texturing On/off;
+#X text 33 391 Inlet 1: quality 0|1 : GL_NEAREST | GL_LINEAR(default)
+;
+#X text 15 122 Send a quality message to change the quality of the
+texture mapping. GL_LINEAR is better than GL_NEAREST (but also more
+computationally expensive). However \, on many machines (especially
+SGIs) \, there is no speed difference.;
+#X text 14 177 [pix_texture] is able to texture images of ANY size
+(even non-power of 2);
+#X obj 539 178 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X msg 539 197 mode \$1;
+#X obj 466 203 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X obj 539 138 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X msg 466 222 client_storage \$1;
+#X msg 539 157 repeat \$1;
+#X text 33 407 Inlet 1: repeat 0|1 : CLAMP_TO_EDGE or REPEAT(default)
+;
+#X text 32 424 Inlet 1: mode 0|1 : use rectangle-texturing when available
+(default=1);
+#X text 32 452 Inlet 1: client_storage 0|1 : use client-storage when
+available (default=1);
+#X text 14 206 [pix_texture] tries to use the fastest way to get a
+pix onto a texture. This implies using "rectangle"-texturing if available.
+This \, in turn \, can lead to some problems with several geos. Try
+using "mode 0" is you experience problems. Rectangle textures cannot
+be REPEATed (they are always clamped-to-edge);
+#X connect 10 0 11 0;
+#X connect 11 0 10 0;
+#X connect 14 0 17 0;
+#X connect 16 0 17 1;
+#X connect 17 0 18 0;
+#X connect 18 0 22 0;
+#X connect 28 0 18 0;
+#X connect 29 0 28 0;
+#X connect 34 0 35 0;
+#X connect 35 0 18 0;
+#X connect 36 0 38 0;
+#X connect 37 0 39 0;
+#X connect 38 0 18 0;
+#X connect 39 0 18 0;
