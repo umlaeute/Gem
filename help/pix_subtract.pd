@@ -47,20 +47,11 @@
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
-#X obj 77 281 pix_buf;
-#X msg 103 257 auto 1;
-#X obj 103 236 loadbang;
-#X text 156 263 [pix_buf] with auto 1 is important if we want to recalculate
-our pix-effect each frame but don't want to reload the image all the
-time.;
 #X connect 0 0 2 0;
-#X connect 2 0 6 0;
+#X connect 2 0 1 0;
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X connect 6 0 1 0;
-#X connect 7 0 6 0;
-#X connect 8 0 7 0;
 #X restore 451 138 pd image;
 #X obj 451 263 pix_texture;
 #X text 63 196 <none>;
@@ -72,24 +63,15 @@ time.;
 #N canvas 0 0 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
-#X obj 77 205 pix_image ../../doc/gem/examples/data/fractal.JPG;
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
-#X obj 77 281 pix_buf;
-#X msg 103 257 auto 1;
-#X obj 103 236 loadbang;
-#X text 156 263 [pix_buf] with auto 1 is important if we want to recalculate
-our pix-effect each frame but don't want to reload the image all the
-time.;
-#X connect 0 0 2 0;
-#X connect 2 0 6 0;
+#X obj 77 205 pix_image ../../doc/gem/examples/data/dancer.JPG;
+#X connect 0 0 5 0;
+#X connect 2 0 4 0;
 #X connect 3 0 5 0;
-#X connect 4 0 2 0;
-#X connect 5 0 4 0;
-#X connect 6 0 1 0;
-#X connect 7 0 6 0;
-#X connect 8 0 7 0;
+#X connect 4 0 3 0;
+#X connect 5 0 1 0;
 #X restore 541 141 pd image;
 #X obj 592 103 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;

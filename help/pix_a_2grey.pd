@@ -49,19 +49,15 @@
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
 #X obj 77 281 pix_buf;
-#X msg 103 257 auto 1;
-#X obj 103 236 loadbang;
-#X text 156 263 [pix_buf] with auto 1 is important if we want to recalculate
-our pix-effect each frame but don't want to reload the image all the
-time.;
+#X text 156 263 [pix_buf] is important if we want to recalculate our
+pix-effect each frame but don't want to reload the image all the time.
+;
 #X connect 0 0 2 0;
 #X connect 2 0 6 0;
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X connect 6 0 1 0;
-#X connect 7 0 6 0;
-#X connect 8 0 7 0;
 #X restore 451 113 pd image;
 #X text 63 246 <none>;
 #X text 56 338 Outlet 1: gemlist;
@@ -81,7 +77,7 @@ where ever the pixel alpha is greater than the alphaVal.;
 where ever the pixel alpha is less than the -alphaVal.;
 #X text 22 210 Obviously \, this will work for RGBA-images only.;
 #X obj 451 196 pix_a_2grey;
-#X floatatom 523 176 5 0 0 2 alpha-thresh - -;
+#X floatatom 523 176 4 -1 1 2 alpha-thresh - -;
 #X text 63 305 Inlet 2: <float>: alpha-threshold (-1..0..+1);
 #X text 512 118 (TIFF \, ..);
 #X msg 523 141 0.5;

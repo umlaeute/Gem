@@ -49,23 +49,19 @@
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
 #X obj 77 321 pix_buf;
-#X msg 103 297 auto 1;
-#X obj 103 276 loadbang;
-#X text 156 303 [pix_buf] with auto\ 1 is important if we want to recalculate
-our pix-effect each frame but don't want to reload the image all the
-time.;
 #X obj 77 238 pix_yuv;
 #X text 133 234 pix_posterize doesn't like RGBA. For now we do a rgba2yuv
 conversion. LATER make pix_posterize eat RGBA too...;
+#X text 156 303 [pix_buf] is important if we want to recalculate our
+pix-effect each frame but don't want to reload the image all the time.
+;
 #X connect 0 0 2 0;
-#X connect 2 0 10 0;
+#X connect 2 0 7 0;
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X connect 6 0 1 0;
 #X connect 7 0 6 0;
-#X connect 8 0 7 0;
-#X connect 10 0 6 0;
 #X restore 451 113 pd image;
 #X obj 451 233 pix_texture;
 #X text 63 186 <none>;

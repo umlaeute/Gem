@@ -48,12 +48,9 @@
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
-#X obj 77 281 pix_buf;
-#X msg 103 257 auto 1;
-#X obj 103 236 loadbang;
-#X text 156 263 [pix_buf] with auto\ 1 is important if we want to recalculate
-our pix-effect each frame but don't want to reload the image all the
-time.;
+#X obj 77 280 pix_buf;
+#X msg 133 253 auto 1;
+#X obj 133 232 loadbang;
 #X connect 0 0 2 0;
 #X connect 2 0 6 0;
 #X connect 3 0 5 0;
@@ -77,25 +74,16 @@ time.;
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
-#X obj 77 281 pix_buf;
-#X msg 103 257 auto 1;
-#X obj 103 236 loadbang;
-#X text 156 263 [pix_buf] with auto\ 1 is important if we want to recalculate
-our pix-effect each frame but don't want to reload the image all the
-time.;
 #X connect 0 0 2 0;
-#X connect 2 0 6 0;
+#X connect 2 0 1 0;
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X connect 6 0 1 0;
-#X connect 7 0 6 0;
-#X connect 8 0 7 0;
 #X restore 541 141 pd image;
 #X obj 592 103 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;
 #X msg 491 196 direction \$1;
-#X obj 491 178 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X obj 491 178 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X text 50 12 Synopsis: [pix_compare];
 #X text 29 67 Description: mix 2 images based on their luminance;
