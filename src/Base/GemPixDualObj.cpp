@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -76,6 +77,20 @@ void GemPixDualObj :: processImage(imageStruct &image)
 		else
 			processDualImage(image, m_pixRight->image);
 	}
+	if (image.csize == 2)
+	{
+		if (m_pixRight->image.csize == 2)
+			processBothYUV(image, m_pixRight->image);
+		else
+			processLeftYUV(image, m_pixRight->image);
+	}
+	else
+	{
+		if (m_pixRight->image.csize == 2)
+			processRightYUV(image, m_pixRight->image);
+		else
+			processDualImage(image, m_pixRight->image);
+	}
 }
 
 /////////////////////////////////////////////////////////
@@ -105,6 +120,32 @@ void GemPixDualObj :: processRightGray(imageStruct &, imageStruct &)
 	error("GEM: GemPixDualObj: cannot handle gray image");
 }
 
+/////////////////////////////////////////////////////////
+// processBothYUV
+//
+/////////////////////////////////////////////////////////
+void GemPixDualObj :: processBothYUV(imageStruct &, imageStruct &)
+{
+	error("GEM: GemPixDualObj: cannot handle both YUV images");
+}
+
+/////////////////////////////////////////////////////////
+// processLeftYUV
+//
+/////////////////////////////////////////////////////////
+void GemPixDualObj :: processLeftYUV(imageStruct &, imageStruct &)
+{
+	error("GEM: GemPixDualObj: cannot handle left YUV image");
+}
+
+/////////////////////////////////////////////////////////
+// processRightYUV
+//
+/////////////////////////////////////////////////////////
+void GemPixDualObj :: processRightYUV(imageStruct &, imageStruct &)
+{
+	error("GEM: GemPixDualObj: cannot handle right YUV image");
+}
 
 /////////////////////////////////////////////////////////
 // postrender
