@@ -118,7 +118,7 @@ void pix_snap :: snapMess()
 	if (m_cache)
 		m_cache->resendImage = 1;
 
-    post("GEM: pix_snap: snapped image"); 
+    //post("GEM: pix_snap: snapped image"); 
 }
 
 /////////////////////////////////////////////////////////
