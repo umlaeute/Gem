@@ -27,7 +27,7 @@
 //
 /////////////////////////////////////////////////////////
 GemBase :: GemBase()
-  : gem_amRendering(false), m_cache(NULL)
+  : gem_amRendering(false), m_cache(NULL), m_modified(true)
 {
   m_out1 = outlet_new(this->x_obj, 0);
 }
@@ -84,7 +84,6 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   (ap+1)->a_type=A_POINTER;
   (ap+1)->a_w.w_gpointer=(t_gpointer *)state;
   outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
-
   if(state)postrender(state);
   m_modified=false;
 }

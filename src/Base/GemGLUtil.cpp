@@ -62,6 +62,7 @@ GEM_EXTERN int getGLdefine(t_atom *ap)
 GEM_EXTERN int getGLdefine(t_symbol *s)
 {
   if (s && s->s_name)return getGLdefine(s->s_name);
+  else return _GL_UNDEFINED;
 }
 
 GEM_EXTERN int getGLdefine(char *name)

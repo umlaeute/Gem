@@ -24,7 +24,7 @@
 //
 /////////////////////////////////////////////////////////
 GemPixObj :: GemPixObj() : 
-  m_processOnOff(1) {
+  m_processOnOff(1), orgPixBlock(NULL) {
 }
 
 
@@ -47,8 +47,7 @@ void GemPixObj :: render(GemState *state){
   //   change formats, sizes, databuffer, whatever
   // the data is restored in the <postrender> call,
   // so that the objects can rely on their (buffered) images
-
-  if (!state || !state->image || !&state->image->image) return;
+  if (!state || !state->image || !&state->image->image)return;
   cachedPixBlock.newimage=state->image->newimage;
   if (!state->image->newimage) {
     state->image = &cachedPixBlock;
@@ -58,20 +57,20 @@ void GemPixObj :: render(GemState *state){
     state->image->image.copy2ImageStruct(&cachedPixBlock.image);
     state->image = &cachedPixBlock;
     if (m_processOnOff){
-    switch(state->image->image.format){
-    case GL_RGBA:
-    case GL_BGRA_EXT:
-      processRGBAImage(state->image->image);
-      break;
-    case GL_LUMINANCE:
-      processGrayImage(state->image->image);
-      break;
-    case GL_YCBCR_422_GEM: //GL_YCBCR_422_APPLE
-      processYUVImage(state->image->image);
-      break;
-    default:
-      processImage(state->image->image);
-    }
+      switch(state->image->image.format){
+      case GL_RGBA:
+      case GL_BGRA_EXT:
+	processRGBAImage(state->image->image);
+	break;
+      case GL_LUMINANCE:
+	processGrayImage(state->image->image);
+	break;
+      case GL_YCBCR_422_GEM: //GL_YCBCR_422_APPLE
+	processYUVImage(state->image->image);
+	break;
+      default:
+	processImage(state->image->image);
+      }
     }
   }
 }
