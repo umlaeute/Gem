@@ -198,12 +198,8 @@ inline int GetLuminance(const U32 inColour) {
 	const int nBlue=(inColour&(0xff<<SHIFT_BLUE))>>0;
 
 	const int nLuminance =
-            //these old values are wrong
-		//((90 * nRed)+
             ((77 * nRed)+
-		//(115 * nGreen)+
-             (50 * nGreen)+
-		//(51 * nBlue));
+             (150* nGreen)+ // used to be 50 which is plain wron
              (29 * nBlue));
 
 	return nLuminance;
