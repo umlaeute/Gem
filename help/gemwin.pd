@@ -46,7 +46,7 @@ units suddenly disappear;
 #X text 26 303 view <x> <y> <z>::;
 #X text 62 329 translate the camera / set the viewpoint:: the viewing-direction
 will not be changed.;
-#X text 59 369 default: 0 0 -4;
+#X text 59 369 default: 0 0 4;
 #X text 58 388 the viewing direction defaults to "0 0 1" \, with y-axis
 as "up";
 #X text 25 434 view <x> <y> <z> <azimuth>::;
@@ -58,8 +58,8 @@ will still be the y-axis;
 #X text 54 597 set viewpoint (view_X view_Y view_Z). the camera will
 look at the target-point (target_X \, target_Y \, target_Z). "up" is
 defined via the vector (up_X \, up_Y \, up_Z);
-#X text 61 522 default: 0 0 -4 0 0;
-#X text 54 650 default: 0 0 -4 0 0 0 0 1 0;
+#X text 61 522 default: 0 0 4 0 0;
+#X text 54 650 default: 0 0 4 0 0 0 0 1 0;
 #X restore 578 582 pd viewing;
 #X text 566 465 cursor 0/1: turn the cursor on/off;
 #X text 47 682 print : show some information on the stderr.;
