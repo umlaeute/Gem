@@ -51,14 +51,15 @@ class GEM_EXTERN pix_dot : public GemPixObj
   virtual void 	processRGBAImage(imageStruct &image);
   virtual void 	processYUVImage( imageStruct &image );
   virtual void	drawDot( int xx, int yy, unsigned char c, unsigned int *dest );
-  virtual void  dot_init();
   virtual void  sampxy_table_init();
   virtual void  yuv_init();
   virtual void  makePattern();
   virtual void  sizeMess(int width, int height);
+  virtual void 	scaleMess( float state );
   int	sharedbuffer_init();
   void	sharedbuffer_reset();
   unsigned char *sharedbuffer_alloc(int size);
+  unsigned char inline_RGB2Y( int rgb );
 
   imageStruct    myImage;
 
@@ -77,9 +78,13 @@ class GEM_EXTERN pix_dot : public GemPixObj
     int dot_size, dot_hsize;
     int *sampx, *sampy;
     int state;
+    int m_scale, dataSize;
     unsigned int *pattern;
     unsigned int *heart_pattern;
     int mode;
+    int R2Y[256];
+    int G2Y[256];
+    int B2Y[256];
 
  private:
   
@@ -87,7 +92,7 @@ class GEM_EXTERN pix_dot : public GemPixObj
   // static member functions
   static void bangMessCallback(void *data);
   static void sizeMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void stateMessCallback(void *data, t_floatarg state);
+  static void scaleMessCallback(void *data, t_floatarg state);
 };
 
 #endif	// for header file
