@@ -29,8 +29,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_videoNT, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 pix_videoNT :: pix_videoNT(t_floatarg num)
-  : m_haveVideo(0), m_swap(1), m_colorSwap(0),
-    m_hWndC(NULL), m_newFrame(0)
+  : m_hWndC(NULL), m_newFrame(0)
 {
   char driverName[64];
   char driverDesc[64];

@@ -54,7 +54,7 @@ pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol)
 
     // zero out the matrix
     for (int i = 0; i < m_cols * m_rows; i++) m_matrix[i] = 0.0;
-    for (int i = 0; i < m_cols * m_rows; i++) m_imatrix[i] = 0;
+    for (i = 0; i < m_cols * m_rows; i++) m_imatrix[i] = 0;
     // insert a one for the default center value (identity matrix)
     m_matrix[ ((m_cols / 2 + 1) * m_rows) + (m_rows / 2 + 1) ] = 1.0;
     m_imatrix[ ((m_cols / 2 + 1) * m_rows) + (m_rows / 2 + 1) ] = 255;
@@ -249,7 +249,7 @@ void pix_convolve :: matrixMess(int argc, t_atom *argv)
     }
     
     for (int i = 0; i < argc; i++) m_matrix[i] = atom_getfloat(&argv[i]);
-    for (int i = 0; i < argc; i++) m_imatrix[i] = (int)(atom_getfloat(&argv[i])*255.);
+    for (i = 0; i < argc; i++) m_imatrix[i] = (int)(atom_getfloat(&argv[i])*255.);
 
     setPixModified();
 }

@@ -293,7 +293,7 @@ int pix_addmean(unsigned char Dest, unsigned char *Src, int length)
 #endif // MACOSX
 
 
-int pix_addsat(unsigned char *leftPix, unsigned char *rightPix, int datasize)
+void pix_addsat(unsigned char *leftPix, unsigned char *rightPix, int datasize)
 {
   while(datasize--)
     {           
@@ -304,7 +304,7 @@ int pix_addsat(unsigned char *leftPix, unsigned char *rightPix, int datasize)
 }
 
 
-int pix_sub(unsigned char *leftPix, unsigned char *rightPix, int datasize)
+void pix_sub(unsigned char *leftPix, unsigned char *rightPix, int datasize)
 {
   while(datasize--)
     {           

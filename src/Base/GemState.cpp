@@ -17,6 +17,11 @@
 
 #include "GemState.h"
 
+// I hate Microsoft...I shouldn't have to do this!
+#ifdef _WINDOWS
+#include <windows.h>
+#endif
+
 #ifdef MACOSX
 #include <OpenGL/gl.h>
 #else

@@ -16,6 +16,10 @@
 #include <string.h>
 #include <math.h>
 
+#ifndef M_PI	
+#define M_PI 3.1415926535898
+#endif
+
 /* Grid */
 enum {WIREFRAME, HIDDENLINE, FLATSHADED, SMOOTHSHADED, TEXTURED};
 enum {FACENORMALS, ENVMAP};
@@ -241,7 +245,7 @@ void newWave :: getforce()
         {
             force[i][j] =0.0;
         }
-    for (int i=2; i<grid-2; i++)
+    for ( i=2; i<grid-2; i++)
         for (int j=2;j<grid-2; j++)
         {
             d = posit[i][j] - posit[i][j-1];

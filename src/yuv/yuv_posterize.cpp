@@ -8,7 +8,7 @@
  *
  */
 
-#include <stdint.h>
+//#include <stdint.h> not present in Windows and not required for compilation? drh 
 #include "yuv_posterize.h"
 
 CPPEXTERN_NEW(yuv_posterize)
