@@ -14,8 +14,14 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Base/config.h"
+
 #define DO_AUTO_REGISTER_CLASS
+// JMZ: disabled the helpsymbol for now, 
+// since the help for pix_videoDS ha to be QUITE different...
+/*
 #define HELPSYMBOL "pix_video"
+*/
 
 #if defined(_WINDOWS) && defined(HAVE_DIRECTSHOW)
 
