@@ -133,7 +133,6 @@ void pix_dot :: drawDot(int xx, int yy, unsigned char c, unsigned int *dest)
 /////////////////////////////////////////////////////////
 void pix_dot :: sizeMess(int width, int height)
 {
-
   dot_size = (width>0)?width:8;
   dot_hsize = (height>0)?height:8;
 }
@@ -191,17 +190,12 @@ void pix_dot :: processRGBAImage(imageStruct &image)
         alreadyInit = 1;
     }
 
-  if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
-    int dataSize = image.xsize * image.ysize * image.csize;
-    myImage.clear();
-
-    myImage.allocate(dataSize);
-  }
-
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
   myImage.csize = image.csize;
+  myImage.format= image.format;
   myImage.type  = image.type;
+  myImage.reallocate();
 
   dest = (unsigned int*)myImage.data;
   
