@@ -12,4 +12,8 @@ RC: the linker flags for libavifile could be obtained via `avifile-config`. thes
 
 sending the gemwin to another machine makes Gem crash (at least on my configuration)
 
-pix_buffer_read/write sometimes crashes
+pix_buffer_read/write sometimes crashes -- FIXED
+
+the "--without-aviplay" flag doesn't really work -- FIXED
+
+Gem doesn't load if the no font-support AND "-Wl,-rpath,/usr/lib -laviplay" is specified (something with cannot resolve symbol "GemState" in TextBase::render()
