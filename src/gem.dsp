@@ -1039,6 +1039,14 @@ SOURCE=.\Pixes\pix_add.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_chroma_key.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_chroma_key.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_composite.cpp
 # End Source File
 # Begin Source File

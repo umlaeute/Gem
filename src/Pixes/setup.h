@@ -21,6 +21,7 @@ extern "C" {
    void pix_bitmask_setup();
    void pix_blob_setup();
    void pix_buf_setup();
+   void pix_chroma_key_setup();
    void pix_clearblock_setup();
    void pix_color_setup();
    void pix_coloralpha_setup();
@@ -190,6 +191,7 @@ extern "C" {
     pix_delay_setup();
     pix_movement_setup();
     pix_rtx_setup();
+	pix_chroma_key_setup();
    }
 } // for extern "C"
 
