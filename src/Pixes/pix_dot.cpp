@@ -33,8 +33,7 @@ CPPEXTERN_NEW(pix_dot)
 /////////////////////////////////////////////////////////
 pix_dot :: pix_dot()
 {
-  myImage.xsize=myImage.ysize=myImage.csize=1;
-  myImage.allocate(1);
+  myImage.xsize=myImage.ysize=0;
   DOTDEPTH = 5;
   DOTMAX = (1<<DOTDEPTH);
   sharedbuffer = NULL;
@@ -242,9 +241,7 @@ void pix_dot :: processRGBAImage(imageStruct &image)
     }
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.format= image.format;
-  myImage.type  = image.type;
+  myImage.setCsizeByFormat(image.format);
   myImage.reallocate();
 
   dest = (unsigned int*)myImage.data;
@@ -306,18 +303,10 @@ void pix_dot :: processYUVImage(imageStruct &image)
         alreadyInit = 1;
     }
 
-    if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)
-    {
-        dataSize = image.xsize * image.ysize * image.csize;
-        myImage.clear();
-
-        myImage.allocate(dataSize);
-    }
-
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
 
     dest = (unsigned int*)myImage.data;
 /*  

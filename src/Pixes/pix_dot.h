@@ -79,7 +79,6 @@ class GEM_EXTERN pix_dot : public GemPixObj
     int *sampx, *sampy;
     int state;
     t_float m_scale;
-    int dataSize;
     unsigned int *pattern;
     unsigned int *heart_pattern;
     int mode;
