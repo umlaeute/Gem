@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G5 /MTd /W3 /Zi /Od /I "C:\Programme\pd\src" /I "../../src" /I "../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs\freetype2\include" /I "../../GemLibs\FTGL\include" /I "C:\dev\QTDevWin\CIncludes" /I "C:\DXSDK\include" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /D "_DEBUG" /D "DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# ADD CPP /nologo /G5 /MTd /W3 /GX- /Zi /O2 /I "C:\Programme\pd\src" /I "../../src" /I "../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs\freetype2\include" /I "../../GemLibs\FTGL\include" /I "C:\dev\QTDevWin\CIncludes" /I "C:\DXSDK\include" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /D "__MMX__" /D "_DEBUG" /D "DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
 # SUBTRACT CPP /X /Fr /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
