@@ -64,7 +64,7 @@ pix_texture :: pix_texture()
   //|| defined(GL_NV_TEXTURE_RECTANGLE)
   m_mode = 1;  //default to the fastest mode for systems that support it
   #endif
-  
+  m_clientStorage = 1;
 }
 
 /////////////////////////////////////////////////////////
@@ -89,14 +89,23 @@ void pix_texture :: setUpTextureState() {
 #endif // GL_TEXTURE_RECTANGLE_EXT
 
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
-  if (GemMan::client_storage_supported){
+  if (GemMan::client_storage_supported && m_clientStorage){
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-    debug("pix_texture: using client storage");
+    post("pix_texture: using client storage");
   }
 
-  else
-#endif // CLIENT_STORAGE
+  else {
+    glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
+    post("pix_texture: not using client storage");
+  }
+
+#else
+  
+  glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
+  
+#endif // CLIENT_STORAGE
+    
 
   glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
   glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
@@ -186,6 +195,7 @@ void pix_texture :: render(GemState *state) {
     
     glEnable(m_textureType);
     glBindTexture(m_textureType, m_textureObj);
+    
 #ifdef GL_APPLE_texture_range
     if (state->image->newfilm ){
 	if ( GemMan::texture_range_supported && GemMan::texture_rectangle_supported && m_mode){
@@ -486,6 +496,8 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("repeat"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::modeCallback,
 		  gensym("mode"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_texture::clientStorageCallback,
+		  gensym("client_storage"), A_FLOAT, A_NULL);
   class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
 }
 void pix_texture :: floatMessCallback(void *data, float n)
@@ -506,3 +518,7 @@ void pix_texture :: modeCallback(void *data, t_floatarg quality)
   GetMyClass(data)->m_mode=((int)quality);
 }
 
+void pix_texture :: clientStorageCallback(void *data, t_floatarg quality)
+{
+  GetMyClass(data)->m_clientStorage=((int)quality);
+}

@@ -124,6 +124,7 @@ class GEM_EXTERN pix_texture : public GemBase
 	int             m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 	bool            m_normalized;  // whether the image is power of 2
         int		m_mode; //rectangle or power of 2
+        int		m_clientStorage; //for Apple's client storage extension
         GLenum		m_internalFormat;
         
 	
@@ -136,6 +137,7 @@ class GEM_EXTERN pix_texture : public GemBase
 	static void 	textureMessCallback(void *data, t_floatarg n);
         static void 	modeCallback(void *data, t_floatarg n);
 	static void 	repeatMessCallback(void *data, t_floatarg n);
+        static void 	clientStorageCallback(void *data, t_floatarg n);
 };
 
 #endif	// for header file
