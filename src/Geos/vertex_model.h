@@ -31,15 +31,15 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN vertex_model : public GemShape
+class GEM_EXTERN vertex_model : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_model, GemShape)
+    CPPEXTERN_HEADER(vertex_model, GemBase)
 
     public:
 
         //////////
         // Constructor
-    	vertex_model(t_floatarg size);
+    	vertex_model();
     	
     protected:
     	

@@ -29,9 +29,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_draw, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 vertex_draw :: vertex_draw(t_floatarg size)
-        : GemShape(size)
 {
-    m_linewidth=1.0;
    // m_drawType = GL_QUADS;
    m_drawType = GL_TRIANGLES;
    m_defaultDraw = 1;
@@ -168,10 +166,43 @@ void vertex_draw :: render(GemState *state)
    // if(m_texcoord)glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     
     glDisable(GL_BLEND);
-  //  glDeleteVertexArraysAPPLE(2, fences);
-  
-   
+  //  glDeleteVertexArraysAPPLE(2, fences);   
 }
+
+/////////////////////////////////////////////////////////
+// typeMess
+//
+/////////////////////////////////////////////////////////
+void vertex_draw :: typeMess(t_symbol *type)
+{
+  char c=*type->s_name;
+  switch (c){
+  case 'L': case 'l': // line
+    m_drawType = GL_LINE_LOOP;
+    break;
+  case 'F': case 'f': // fill
+    m_drawType = GL_POLYGON;
+    break;
+  case 'Q': case 'q': // fill
+    m_drawType = GL_QUADS;
+    break;
+  case 'P': case 'p': // point
+    m_drawType = GL_POINTS;
+    break;
+  case 'T': case 't': // triangles
+    m_drawType = GL_TRIANGLES;
+    break;
+  case 'S': case 's': // tri-strip
+    m_drawType = GL_TRIANGLE_STRIP;
+    break;  
+    
+  default:
+    error ("GEM: square draw style");
+    return;
+  }
+  setModified();
+}
+
  
 /////////////////////////////////////////////////////////
 // static member function
@@ -184,7 +215,8 @@ void vertex_draw :: obj_setupCallback(t_class *classPtr)
     	    gensym("color"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&vertex_draw::texcoordMessCallback,
     	    gensym("texcoord"), A_FLOAT, A_NULL);        
-    
+    class_addmethod(classPtr, (t_method)&vertex_draw::typeMessCallback,
+    	    gensym("draw"), A_SYMBOL, A_NULL);  
 }
 
 void vertex_draw :: blendMessCallback(void *data, t_floatarg size)
@@ -200,4 +232,8 @@ void vertex_draw :: colorMessCallback(void *data, t_floatarg size)
 void vertex_draw :: texcoordMessCallback(void *data, t_floatarg t)
 {
     GetMyClass(data)->m_texcoord=((int)t);
+}
+void vertex_draw :: typeMessCallback(void *data, t_symbol *type)
+{
+    GetMyClass(data)->typeMess(type);
 }

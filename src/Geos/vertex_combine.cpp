@@ -19,7 +19,7 @@
 #include "Base/GemState.h"
 #include "string.h"
 #include "math.h"
-CPPEXTERN_NEW_WITH_ONE_ARG(vertex_combine, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW(vertex_combine)
  
 /////////////////////////////////////////////////////////
 //
@@ -29,10 +29,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_combine, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_combine :: vertex_combine(t_floatarg size)
-        : GemShape(size)
-{
-      
+vertex_combine :: vertex_combine()
+{      
     m_x=0.f;
     m_y=0.f;
     m_z=0.f;

@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 #include "string.h"
-CPPEXTERN_NEW_WITH_ONE_ARG(vertex_offset, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW(vertex_offset)
 
 /////////////////////////////////////////////////////////
 //
@@ -28,8 +28,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_offset, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_offset :: vertex_offset(t_floatarg size)
-        : GemShape(size)
+vertex_offset :: vertex_offset()
 {
       
     m_x=0.f;

@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 #include "string.h"
-CPPEXTERN_NEW_WITH_ONE_ARG(vertex_quad, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW(vertex_quad)
 
 /////////////////////////////////////////////////////////
 //
@@ -28,11 +28,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_quad, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_quad :: vertex_quad(t_floatarg size)
-        : GemShape(size)
+vertex_quad :: vertex_quad()
 {
-    m_linewidth=1.0;
-    m_drawType = GL_QUADS;
     m_blend=0;
     m_VertexArray = new float [16];
     m_ColorArray = new float [16];

@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 #include "string.h"
-CPPEXTERN_NEW_WITH_ONE_ARG(vertex_grid, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW(vertex_grid)
 
 /////////////////////////////////////////////////////////
 //
@@ -28,8 +28,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_grid, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_grid :: vertex_grid(t_floatarg size)
-        : GemShape(size)
+vertex_grid :: vertex_grid()
 {
     m_x = 4;
     m_y = 4;

@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) GÂ¸nther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂ¸r::umlâ€°ute. IEM
+//    Copyright (c) Günther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -25,7 +25,7 @@ extern bool HaveValidContext (void);
 
 #define T(x) (m_model->triangles[(x)])
 
-CPPEXTERN_NEW_WITH_ONE_ARG(vertex_model, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW(vertex_model)
 
 /////////////////////////////////////////////////////////
 //
@@ -35,11 +35,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_model, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_model :: vertex_model(t_floatarg size)
-        : GemShape(size)
+vertex_model :: vertex_model()
 {
-    m_linewidth=1.0;
-    m_drawType = GL_QUADS;
     m_VertexArray = new float [16];
     m_ColorArray = new float [16];
     m_TexCoordArray = new float [16];

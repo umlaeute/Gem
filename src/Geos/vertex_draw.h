@@ -30,9 +30,9 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN vertex_draw : public GemShape
+class GEM_EXTERN vertex_draw : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_draw, GemShape)
+    CPPEXTERN_HEADER(vertex_draw, GemBase)
 
     public:
 
@@ -52,13 +52,21 @@ class GEM_EXTERN vertex_draw : public GemShape
         int	m_oldsize;
         int	m_init;
         int 	m_defaultDraw;
+
         
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
+
+
+	virtual void    typeMess(t_symbol*s);
+	GLint m_drawType;
+
+ private:
         static void 	blendMessCallback(void *data, t_floatarg size);
         static void 	colorMessCallback(void *data, t_floatarg size);
         static void 	texcoordMessCallback(void *data, t_floatarg t);
+        static void 	typeMessCallback(void *data, t_symbol*s);
 
 };
 

@@ -30,15 +30,15 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN vertex_quad : public GemShape
+class GEM_EXTERN vertex_quad : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_quad, GemShape)
+    CPPEXTERN_HEADER(vertex_quad, GemBase)
 
     public:
 
         //////////
         // Constructor
-    	vertex_quad(t_floatarg size);
+    	vertex_quad();
     	
     protected:
     	

@@ -30,15 +30,15 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN vertex_offset : public GemShape
+class GEM_EXTERN vertex_offset : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_offset, GemShape)
+    CPPEXTERN_HEADER(vertex_offset, GemBase)
 
     public:
 
         //////////
         // Constructor
-    	vertex_offset(t_floatarg size);
+    	vertex_offset();
     	
     protected:
     	
