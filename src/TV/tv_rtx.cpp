@@ -85,9 +85,12 @@ void tv_rtx :: create_buffer(imageStruct image)
    buffer.xsize = image.xsize;
    buffer.ysize = image.ysize;
    buffer.csize = image.csize;
-
+#ifdef IMAGE_CLASS
+   buffer.allocate( dataSize );
+#else
    buffer.data = new unsigned char[dataSize];
    memset(buffer.data, 0, dataSize);
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -96,8 +99,12 @@ void tv_rtx :: create_buffer(imageStruct image)
 /////////////////////////////////////////////////////////
 void tv_rtx :: delete_buffer()
 {
+#ifdef IMAGE_CLASS
+    buffer.clear();
+#else
     delete [] buffer.data;
     buffer.data = NULL;
+#endif
 }
 
 
@@ -119,8 +126,13 @@ void tv_rtx :: processImage(imageStruct &image)
   // assume that the pix_size does not change !
   if (image.xsize != buffer.xsize || image.ysize != buffer.ysize || image.csize != buffer.csize) {
     long dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char);
+#ifdef IMAGE_CLASS		//tigital
+    buffer.clear();
+    buffer.allocate( dataSize );
+#else
     delete [] buffer.data;
     buffer.data = new unsigned char[dataSize];
+#endif
     buffer.xsize = image.xsize;
     buffer.ysize = image.ysize;
     buffer.csize = image.csize;
