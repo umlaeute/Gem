@@ -1,11 +1,8 @@
-This is GEM 0.88-1
+This is GEM 0.90
 ===================
-You can get the current release (0.87) from:
-http://gem.iem.at/
-ftp://iem.kug.ac.at/pd/Externals/GEM
-
-You can get a current unstable version via cvs from cvs.gem.iem.at:
-"cvs -z3 -d:pserver:anonymous@cvs.gem.iem.at:/cvsroot/pd-gem co Gem"
+You can get the current distribution from:
+http://gem.iem.at
+ftp://iem.at/pd/Externals/GEM
 
 assumption:
 throughout this document, references of DOS actually means the OS from Redmont (known as Windoze)
@@ -14,17 +11,28 @@ throughout this document, references of DOS actually means the OS from Redmont (
 =============================================
 NEW:::
 ------
+
+Gem is now supported by DOS, linux and macOS
+the IRIX version might work (but most probably will not): if you want to use Gem under IRIX,feel free to make it work and report failure and success to me, so i can incorporate any needed changes into the main Gem-trunk.
+
+for installation instructions see below
+
+
+NEW (gem-0.87):::
+-----------------
+(note: this NEWs only refer to the packaging, not to features of Gem)
+
 As with GEM-0.87, i have broken the distribution into various packages
-Gem-<gemver>.tgz :: quite everything (except binaries and auxiliary libraries)
-Gem-doc-<gemver>.tgz :: example-patches, manual, ...
-Gem-src-<gemver>.tgz :: the sources (which are identical for DOS and linux)
-Gem-bin-<gemver>.zip :: DOS-binary (containing a single file "Gem.dll")
+gem-<gemver>.tgz :: quite everything (except binaries and auxiliary libraries)
+gem-doc-<gemver>.tgz :: example-patches, manual, ...
+gem-bin-<gemver>.zip :: DOS-binary (containing a single file "Gem.dll")
+gem-bin-doc-<gemver>.zip :: DOS-binary + documentation
 
 GemLibs-<OS>-<libver>.tgz :: auxiliary libraries (used to be "AuxLibs")
 
 1) the core Gem-packages:
 the core Gem-packages all extract into the same directory gem-<gemver>/
-there are install-scripts for windoze (and probably IRIX) users like GEM.INSTALL.bat
+there are install-scripts for windoze (and probably IRIX) like GEM_INSTALL.bat
 these will install the documentation...
 
 
@@ -38,35 +46,56 @@ You can get the newest GemLib from the place mentioned above
 
 DEPENDENCIES:
 =============
-current version: GEM-0.87
-GemLibs	= 1
+current version: GEM-0.90
+GemLibs	>= 1
 PD 	>= 0.34
 
+-------------------------------------
+-------------------------------------
 
--------------------------------------
--------------------------------------
+INSTALLATION:
+=============
+
 To install GEM on DOS:
 
-Prerequisites:
-0) as with Gem-0.87 you will need the GLUT-library to run Gem.
-get the newest release from http://www.xmission.com/~nate/glut.html or just use the
-files provided in gem/src/AuxLibs/glut
-follow the install-instructions (the important thing is to put the glut32.dll into your "%windows&\system"-directory)
+a) use the script
 
-1) unzip the GEM package so that it is located at pd/gem
+	1) unzip the GEM package so that it is located at pd/gem
 
+	2) edit line 3&6 of the GEM_INSTALL.bat file to match your installation of pd
 
-2) run GEM_INSTALL.bat
-    - this will put everything where it should be
+	3) run GEM_INSTALL.bat
+	    - this will put everything where it should be
 
+	4) Read the FAQ for instructions to run Pd and GEM
 
-3) Read the FAQ for instructions to run Pd and GEM
+	5) Check the release notes for changes and usage information
 
-
-4) Check the release notes for changes and usage information
+	6) Use the manual html files to learn how to use GEM
 
 
-5) Use the manual html files to learn how to use GEM
+b) do it by hand
+
+	1) unzip the GEM package
+
+	2) put the Gem.dll-file somewhere pd can find it (e.g.: ...\pd\extra)
+
+	3) when using pd>=0.37, copy the entire "help"-folder into the same place where the Gem.dll lies
+	   rename the "help"-folder to "help-Gem"
+	   you should now have following structure
+	     (...)\Gem.dll
+	     (...)\help-Gem\
+	     (...)\help-Gem\accumrotate.pd
+	     
+	4) when using pd<0.37, copy the entire "help"-folder into the pd's reference path ( ...\pd\doc\5.reference)
+	   rename the newly created "help"-folder to "Gem"
+	   you should have following structure
+	   (...)\pd\extra\Gem.dll
+	   (...)\pd\doc\5.reference\Gem\
+	   (...)\pd\doc\5.reference\Gem\accumrotate.pd
+
+note: in prior versions of Gem, GLUT was needed; this is obsolete
+
 
 -------------------------------------
 To install GEM on linux:
@@ -76,4 +105,46 @@ read the README.build etc...
 -------------------------------------
 -------------------------------------
 
-zmoelnig@iem.kug.ac.at
+
+
+RUNNING:
+========
+
+just installing Gem is not enough !
+you will have to tell pd that it should load that library !!
+you cannot create any Gem-objects without having loaded the Gem-library into pd !!!
+
+make sure you have the proper binary for you OS
+  - windows: Gem.dll
+  - macOS  : Gem.pd_darwin
+  - linux  : Gem.pd_linux
+  - irix   : Gem.pd_irix
+
+when starting pd, tell it to load Gem with the "-lib" flag
+if your Gem-binary lives in pd/extra/, you could just try "pd -lib Gem"
+if your Gem-binary lives somewhere else use something like "pd -lib /path/to/my/Gem"
+you could also use "pd -path /path/to/my -lib Gem"
+after loading Gem you will see a bit of a welcome message on the konsole
+
+NOTE: there *must not* be any file extension with the "-lib"-flag:: "pd -lib Gem.dll" will miserably fail
+NOTE: please note the spelling: it is "Gem" and not "gem" nor "GEM"
+
+if you have problems loading any library including Gem, have a look at the pd-documentation
+if you have problems loading just Gem (but other libraries work), send me a bug-report (see below)
+
+BUG-REPORT:
+===========
+if your mail only says "hey, it does not work !", it is an annoyance and no bug-report
+please specify at least the following things:
+
+	Operating-System (kernel-version,...)
+	video-card, driver
+	other hardware that is related to your problem (e.g.: camera)
+	does your system work with similar applications (e.g.: capture-software, openGL (games, "glxgears")
+	what is the output of pd when you start it with the "-verbose" flag (e.g.:"pd -verbose -lib Gem")
+
+----
+have fun
+
+zmoelnig@iem.at
+
