@@ -68,36 +68,38 @@ static inline int powerOfTwo(int value)
 	return(x);  
 }
 
-void pix_texture2 :: setUpTextureState()
-{
+void pix_texture2 :: setUpTextureState() {
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-    if ( !GemMan::texture_rectangle_supported )				//tigital
-    {
-        glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    } else {
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
-        if (GemMan::client_storage_supported)
-            glPixelStoref(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
-        else
-            glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    }
-#else
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  if ( !GemMan::texture_rectangle_supported ) {				//tigital
+    glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  } else {
+    glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
+#ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
+    if (GemMan::client_storage_supported)
+      glPixelStoref(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
+    else
 #endif
+      glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
+    glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  }
+#else
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+#endif
+  // note:  On MacOS X, pix_texture is used for power of two/normalised textures, so 
+  //		texture_rectangle can't be used (otherwise, we'd just see one pixel!)
 }
 
 /////////////////////////////////////////////////////////
@@ -107,6 +109,7 @@ void pix_texture2 :: setUpTextureState()
 void pix_texture2 :: render(GemState *state)
 {
   if ( !state->image || !m_textureOnOff) return;
+  if(!&state->image->image || !state->image->image.data)return;
   state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
