@@ -211,7 +211,7 @@ static int writeheader(FILE *outf, IMAGE *image)
 
 static int writetab(FILE *outf, unsigned int32 *tab, int32 len)
 {
-    int r;
+    int r=0;
 
     while(len) {
 	r = putlong(outf,*tab++);
