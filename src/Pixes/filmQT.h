@@ -80,6 +80,9 @@ class GEM_EXTERN filmQT : public film
 #endif // HAVE_QT
 
   bool			m_bInit;
+
+  t_float       m_auto;
+  int           m_reqFrame;
 };
 
 #endif	// for header file
