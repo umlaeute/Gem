@@ -654,15 +654,15 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                     sscanf(buf, "%d//%d", &v, &n);
                     T(numtriangles).vindices[0] = v;
                     T(numtriangles).nindices[0] = n;
-                    fscanf(file, "%d//%d", &v, &n);
+                    fscanf(file, "%d//%d", (int*)&v, (int*)&n);
                     T(numtriangles).vindices[1] = v;
                     T(numtriangles).nindices[1] = n;
-                    fscanf(file, "%d//%d", &v, &n);
+                    fscanf(file, "%d//%d", (int*)&v, (int*)&n);
                     T(numtriangles).vindices[2] = v;
                     T(numtriangles).nindices[2] = n;
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
-                    while(fscanf(file, "%d//%d", &v, &n) > 0) {
+                    while(fscanf(file, "%d//%d", (int*)&v, (int*)&n) > 0) {
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
                         T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
                         T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
@@ -677,17 +677,17 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                     T(numtriangles).vindices[0] = v;
                     T(numtriangles).tindices[0] = t;
                     T(numtriangles).nindices[0] = n;
-                    fscanf(file, "%d/%d/%d", &v, &t, &n);
+                    fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n);
                     T(numtriangles).vindices[1] = v;
                     T(numtriangles).tindices[1] = t;
                     T(numtriangles).nindices[1] = n;
-                    fscanf(file, "%d/%d/%d", &v, &t, &n);
+                    fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n);
                     T(numtriangles).vindices[2] = v;
                     T(numtriangles).tindices[2] = t;
                     T(numtriangles).nindices[2] = n;
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
-                    while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
+                    while(fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n) > 0) {
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
                         T(numtriangles).tindices[0] = T(numtriangles-1).tindices[0];
                         T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
@@ -704,15 +704,15 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                     /* v/t */
                     T(numtriangles).vindices[0] = v;
                     T(numtriangles).tindices[0] = t;
-                    fscanf(file, "%d/%d", &v, &t);
+                    fscanf(file, "%d/%d", (int*)&v, (int*)&t);
                     T(numtriangles).vindices[1] = v;
                     T(numtriangles).tindices[1] = t;
-                    fscanf(file, "%d/%d", &v, &t);
+                    fscanf(file, "%d/%d", (int*)&v, (int*)&t);
                     T(numtriangles).vindices[2] = v;
                     T(numtriangles).tindices[2] = t;
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
-                    while(fscanf(file, "%d/%d", &v, &t) > 0) {
+                    while(fscanf(file, "%d/%d", (int*)&v, (int*)&t) > 0) {
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
                         T(numtriangles).tindices[0] = T(numtriangles-1).tindices[0];
                         T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
@@ -726,13 +726,13 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                     /* v */
                     sscanf(buf, "%d", &v);
                     T(numtriangles).vindices[0] = v;
-                    fscanf(file, "%d", &v);
+                    fscanf(file, "%d", (int*)&v);
                     T(numtriangles).vindices[1] = v;
-                    fscanf(file, "%d", &v);
+                    fscanf(file, "%d", (int*)&v);
                     T(numtriangles).vindices[2] = v;
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
-                    while(fscanf(file, "%d", &v) > 0) {
+                    while(fscanf(file, "%d", (int*)&v) > 0) {
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
                         T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
                         T(numtriangles).vindices[2] = v;
