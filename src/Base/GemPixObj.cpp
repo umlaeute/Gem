@@ -43,16 +43,16 @@ void GemPixObj :: render(GemState *state)
 
 #ifdef MACOSX
     if (state->image->image.format == GL_BGRA_EXT || state->image->image.format == GL_RGBA )
-            //|| state->image->image.format == GL_YCBCR_422_APPLE )
 #else
     if (state->image->image.format == GL_RGBA)
 #endif
 		processImage(state->image->image);
 	else
 		processGrayImage(state->image->image);
-                
+#ifdef MACOSX                
     if (state->image->image.format == GL_YCBCR_422_APPLE)
         processYUVImage(state->image->image);
+#endif
 }
 
 /////////////////////////////////////////////////////////
