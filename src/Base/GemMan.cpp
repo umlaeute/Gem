@@ -90,6 +90,7 @@ float GemMan::m_motionBlur=0.f;
 int GemMan::texture_rectangle_supported = 0;	//tigital
 int GemMan::client_storage_supported = 0;
 int GemMan::texture_range_supported = 0;
+int GemMan::texture_yuv_supported = 0;
 float GemMan::fps;
 int GemMan::fsaa = 0;
 
@@ -1121,6 +1122,22 @@ int GemMan :: createWindow(char* disp)
     = 0;
 #endif
 
+
+    /*
+        GL_APPLE_ycbcr_422 allows for direct texturing of YUV-textures
+	we want to check this at runtime, since modern implementations 
+	of Mesa support this feature while nvidia's drivers still don't.
+	checks at pre-processer-stage will eventually lead to no texturing
+	as the header files support YUV while the drivers don't
+    */
+
+  texture_yuv_supported
+#ifdef GL_YCBCR_422_APPLE
+    = OpenGLExtensionIsSupported("GL_APPLE_ycbcr_422");
+#else
+  = 0;
+#endif
+
   m_w=myHints.real_w;
   m_h=myHints.real_h;
 
@@ -1500,6 +1517,8 @@ void GemMan :: printInfo()
   }
 
   post("rectangle texturing: %d", texture_rectangle_supported);
+  post("direct yuv texturing: %d", texture_yuv_supported);
+
   post("");
 }
 
