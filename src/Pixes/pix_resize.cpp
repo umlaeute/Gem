@@ -75,7 +75,7 @@ void pix_resize :: processImage(imageStruct &image)
 	  if(resizedData)delete [] resizedData;resizedData=NULL;
 	  return;
 	}
-      image.clear();
+      //      image.clear();
       image.data = resizedData;
       image.xsize = wN;
       image.ysize = hN;
