@@ -23,6 +23,12 @@ LOG
 
 #include "Base/GemExportDef.h"
 
+/* this should be included for ALL platforms:
+ * should we define __MMX__ for windows in there ?
+ */
+#include "config.h"
+#include "GemSIMD.h"
+
 #include <math.h>
 #include <stdlib.h>
 
