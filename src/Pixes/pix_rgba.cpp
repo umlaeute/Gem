@@ -89,7 +89,7 @@ void pix_rgba :: processImage(imageStruct &image)
     }
     break;
   case GL_BGRA_EXT:
-  #ifndef MACOSX  //bypassed on OSX since this is the correct format
+#ifndef MACOSX  //bypassed on OSX since this is the correct format
     while(count--){
       new_pix[chRed]  =old_pix[2];
       new_pix[chGreen]=old_pix[1];
@@ -98,7 +98,7 @@ void pix_rgba :: processImage(imageStruct &image)
       old_pix+=4;
       new_pix+=4;
     }
-    #endif //MACOSX
+#endif //MACOSX
     break;
     
   case GL_LUMINANCE:
@@ -124,7 +124,6 @@ void pix_rgba :: processImage(imageStruct &image)
     G = Y - (0.3455 * (U - 128)) - (0.7169 * (V - 128));
     B = Y + (1.7790 * (U - 128));
     */
-
 
     R = (int)(1 * Y -  0.0009267*(U-128)  + 1.4016868*(V-128));
     G = (int)(1 * Y -  0.3436954*(U-128)  - 0.7141690*(V-128));
@@ -174,9 +173,12 @@ void pix_rgba :: processImage(imageStruct &image)
 
   image.data   = m_data;
   image.notowned = 0;
-  #ifndef MACOSX  //keeps this object from messing up display on OSX
+#ifndef MACOSX  //keeps this object from messing up display on OSX
   image.format = GL_RGBA;
-  #endif
+#else
+  // guess this is not true, but who knows ? (jmz)
+  image.format = GL_ABGR_EXT;
+#endif
   image.csize  = 4;
 }
 
