@@ -1,0 +1,14 @@
+#N canvas;
+#X msg 215 178 gemList;
+#X msg 164 146 gemList;
+#X msg 164 302 gemList;
+#X text 179 20 part of GEM;
+#X text 88 146 source pix;
+#X text 176 43 pix_add;
+#X text 151 73 add two pixes together;
+#X obj 164 217 pix_add;
+#X text 283 178 second pix;
+#X text 65 341 pix_add simply adds two pixes together. It clamps the images so that they remain in the range of the image. (In other words \, it is easy to get a white out).;
+#X connect 0 0 7 1;
+#X connect 1 0 7 0;
+#X connect 7 0 2 0;

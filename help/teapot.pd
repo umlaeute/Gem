@@ -1,0 +1,12 @@
+#N canvas 320 240 600 500 10;
+#X msg 181 192 size;
+#X msg 144 141 gemList;
+#X text 135 84 GEM object;
+#X text 158 42 [teapot];
+#X obj 144 240 teapot;
+#X text 91 291 [teapot] renders a teapot with the current color \,
+transformation matrix \, and texture data.;
+#X text 92 338 this is \, of course of no real use \, but it is a common
+way to demonstrate the power of openGL.;
+#X connect 0 0 4 1;
+#X connect 1 0 4 0;

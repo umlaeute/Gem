@@ -1,0 +1,16 @@
+#N canvas 286 237 656 376 12;
+#X msg 216 179 gemList;
+#X msg 164 146 gemList;
+#X msg 164 251 gemList;
+#X text 179 20 part of GEM;
+#X obj 164 217 pix_diff;
+#X text 176 43 [pix_diff];
+#X text 74 75 get the difference between two images;
+#X text 144 125 source pix1;
+#X text 286 180 source pix2;
+#X text 63 291 In contrast to [pix_subtract] \, there will be no clipping
+as pixels get values < 0 with [pix_diff]. [pix_diff] returns the absolute
+value of the difference between 2 images.;
+#X connect 0 0 4 1;
+#X connect 1 0 4 0;
+#X connect 4 0 2 0;

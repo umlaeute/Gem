@@ -1,0 +1,11 @@
+#N canvas 872 413 600 500 10;
+#X msg 218 123 gemList;
+#X text 214 72 GEM object;
+#X obj 218 224 multimodel;
+#X text 231 21 multimodel;
+#X text 53 270 multimodel renders an Alias/Wavefront .obj file. You can either give it a filename or send an open message.;
+#X text 53 318 The open message is the name of the of model file \, the base model number (ie \, what number to start at) \, the top model number (what number to end at) \, and the skip rate (how to count).;
+#X msg 254 181 open mymodel*.obj 0 10 1;
+#X text 54 405 When you send the open message \, multimodel looks for the * in the file name and replaces it with a number.;
+#X connect 0 0 2 0;
+#X connect 6 0 2 0;

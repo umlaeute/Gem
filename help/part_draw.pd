@@ -1,0 +1,13 @@
+#N canvas 162 181 644 394 12;
+#X msg 139 109 gemList;
+#X text 176 62 GEM object;
+#X obj 139 207 part_draw;
+#X text 186 26 [part_draw];
+#X msg 169 134 draw line;
+#X msg 170 160 draw point;
+#X text 294 136 This is the drawing mode: line/point;
+#X text 43 296 [part_draw] finally draws a particle system that was
+set up with [part_head] and other [part_]-objects.;
+#X connect 0 0 2 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 0;

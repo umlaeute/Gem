@@ -1,0 +1,35 @@
+#N canvas 357 79 682 788 12;
+#X msg 120 56 gemList;
+#X msg 120 241 gemList;
+#X text 110 13 [pix_film];
+#X text 62 32 loads in a digital-video file;
+#X msg 171 79 open someFile.avi;
+#X obj 120 212 pix_film;
+#X msg 187 183 frame#;
+#X msg 186 148 auto 1/0;
+#X text 47 323 [pix_film] loads in a digital-video to be used as a
+texture \, bitblit \, or something else. You can send the open message
+with a filename.;
+#X text 51 381 On Windos32-platforms \, you can load only AVI-files.
+On Linux-platforms \, you can load only MPEG2-files (*.MPG) and quicktime-files
+(*.MOV). However \, most of the quicktime-formats might be unsupported
+by Linux (not by GEM);
+#X text 48 505 There is no attempt to resize the film to be a power
+of 2 \, which is required for texture mapping. Use [pix_resize] if
+you need this feature \, or -- less consumptive -- [pix_texture2];
+#X text 46 586 "auto <state>" will start playing the movie from the
+current frame. Each rendering-frame the film-frame is incremented by
+one. When the last frame is reached \, a <bang> will appear on the
+third outlet.;
+#X text 56 455 After loading \, the number of frames is output on outlet2
+if it is possible (it might not be possible with MPEG-streams);
+#X text 51 660 With [pix_film] you can process the film-data with various
+[pix_]-objects. However \, films are often stored in RGB- or BGR-format
+\, whereas most [pix_]-objects need RGBA-data to process color-images.
+You might want to use [pix_rgba] to convert your image into RGBA-space.
+;
+#X connect 0 0 5 0;
+#X connect 4 0 5 0;
+#X connect 5 0 1 0;
+#X connect 6 0 5 1;
+#X connect 7 0 5 0;

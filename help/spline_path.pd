@@ -1,0 +1,38 @@
+#N canvas 211 44 647 574 10;
+#X text 124 68 GEM object;
+#X obj 228 190 unpack 0 0 0;
+#X floatatom 228 236 0 0 0;
+#X floatatom 273 265 0 0 0;
+#X floatatom 319 236 0 0 0;
+#X floatatom 228 90 5 0 0;
+#X msg 249 114 open <table_name>;
+#X text 57 356 You can set the table to be read with the "open" message
+or as the second creation-argument.;
+#X floatatom 20 245 0 0 0;
+#X floatatom 20 87 5 0 0;
+#X msg 37 121 open <table_name>;
+#X obj 20 149 spline_path;
+#X obj 228 140 spline_path 3;
+#X obj 463 153 spline_path 3 array2;
+#X text 138 24 [spline_path];
+#X text 54 290 [spline_path] reads out a table. You can specify the
+reading-point by sending a float between 0.0f (beginning of table)
+and 1.0f (end of table). Between points \, a spline interpolation is
+made.;
+#X text 53 392 [spline_path] is able to excerpt more than 1 dimension
+of a linear table. You can specify the dimension <D> of the table with
+the first creation-argument. (default 1);
+#X text 53 461 [spline_path] will output a list of <D> floats. A multi-dimensional
+table stores its values in n-tuples like: "<r1> <g1> <b1> <r2> <g2>
+<b2>..." Therefore \, a table must have the size <D>*<n>;
+#X text 55 543 see also:;
+#X obj 131 546 linear_path;
+#X connect 1 0 2 0;
+#X connect 1 1 3 0;
+#X connect 1 2 4 0;
+#X connect 5 0 12 0;
+#X connect 6 0 12 0;
+#X connect 9 0 11 0;
+#X connect 10 0 11 0;
+#X connect 11 0 8 0;
+#X connect 12 0 1 0;

@@ -1,0 +1,34 @@
+#N canvas 362 228 612 643 12;
+#X msg 164 99 gemList;
+#X msg 164 286 gemList;
+#X text 169 16 part of GEM;
+#X obj 164 251 pix_sig2pix~;
+#X obj 262 120 osc~;
+#X obj 264 148 osc~;
+#X obj 265 175 osc~;
+#X obj 267 207 osc~;
+#X text 313 118 Red;
+#X text 307 148 Green;
+#X text 312 177 Blue;
+#X text 313 207 Alpha;
+#X text 175 43 [pix_sig2pix~];
+#X text 76 73 convert signals to images;
+#X obj 408 244 pix_sig2pix~ 128 256;
+#X msg 48 205 dimen 128 32;
+#X text 47 337 [pix_sig2pix~] will write the data it gets from the
+signals initially into an 256x256-pixel image.;
+#X text 46 382 you can change the image-size either via initial arguments
+or via the "dimen <width> <height>" message.;
+#X text 48 427 [pix_sig2pix~] will take the data of one audio-block
+for one image. it will not accumulate various audio-blocks into one
+image. therefore you will have to set the audio-blocksize with [block~
+<n>].;
+#X text 50 506 Since the default image is so large \, you will want
+to put a [block~ 65536 32] into your patch.;
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;
+#X connect 4 0 3 0;
+#X connect 5 0 3 1;
+#X connect 6 0 3 2;
+#X connect 7 0 3 3;
+#X connect 15 0 3 0;

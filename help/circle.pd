@@ -1,0 +1,16 @@
+#N canvas 575 375 600 500 10;
+#X msg 167 185 size;
+#X obj 124 229 circle;
+#X msg 124 130 gemList;
+#X msg 25 122 draw line;
+#X msg 25 153 draw fill;
+#X msg 25 185 draw point;
+#X text 115 73 GEM object;
+#X text 125 24 [circle];
+#X text 91 291 [circle] renders a circle with the current color \,
+transformation matrix \, and texture information.;
+#X connect 0 0 1 1;
+#X connect 2 0 1 0;
+#X connect 3 0 1 0;
+#X connect 4 0 1 0;
+#X connect 5 0 1 0;

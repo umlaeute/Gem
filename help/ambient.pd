@@ -1,0 +1,25 @@
+#N canvas 668 300 600 500 10;
+#X msg 19 131 gemList;
+#X msg 19 278 gemList;
+#X msg 63 164 R G B;
+#X msg 80 192 R G B A;
+#X text 129 29 part of GEM;
+#X text 56 454 If you set the alpha value \, then you probably want
+to use the alpha object.;
+#X msg 275 131 gemList;
+#X msg 275 278 gemList;
+#X obj 275 224 ambient 1 0 0 0.4;
+#X obj 19 224 ambient;
+#X text 60 315 [ambient] accepts a gemList and sets the ambient-color
+for all subsequent vertex operations;
+#X text 58 363 [ambient] accepts either a list of RGB colors or RGBA
+(RGBA only has effect if blending is enabled);
+#X text 130 80 [ambient];
+#X text 58 408 [ambient] can take initial arguments. The RGB values
+default to 0.2f \, the Alpha value defaults to 1.0f.;
+#X connect 0 0 9 0;
+#X connect 2 0 9 1;
+#X connect 3 0 9 1;
+#X connect 6 0 8 0;
+#X connect 8 0 7 0;
+#X connect 9 0 1 0;

@@ -1,0 +1,10 @@
+#N canvas;
+#X obj 142 103 gemhead;
+#X text 146 66 world_light;
+#X msg 215 184 R G B;
+#X obj 142 239 world_light;
+#X text 48 274 world_light produces a light which is at an infinite distance from the scene. This means that all of the light rays are parallel \, which reduces the computation somewhat.;
+#X text 49 325 The R G B is the color of the light.;
+#X text 48 347 Keep in mind that the attributes have to be set before rendering the vertices \, so if you are trying for frame accurate rendering \, you will want to set the gemhead order to a low nuber so that all of the values of the light get set first.;
+#X connect 0 0 3 0;
+#X connect 2 0 3 1;

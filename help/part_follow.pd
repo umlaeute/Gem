@@ -1,0 +1,11 @@
+#N canvas 23 236 644 359 12;
+#X msg 139 109 gemList;
+#X text 176 62 GEM object;
+#X obj 139 207 part_follow;
+#X text 186 26 [part_follow];
+#X msg 233 152 accel;
+#X text 295 155 particle acceleration;
+#X text 43 257 [part_follow] lets the particles follow each other.
+;
+#X connect 0 0 2 0;
+#X connect 4 0 2 1;

@@ -1,0 +1,13 @@
+#N canvas 225 263 600 500 10;
+#X msg 136 255 gemList;
+#X obj 136 160 render_trigger;
+#X text 124 54 render_trigger;
+#X msg 136 105 gemList;
+#X msg 189 227 pre-bang;
+#X text 80 301 render_trigger allows you to know when the actual rendering is occuring in a gemList. If you think of the gemList as a list of actions which occur \, the pre-bang outlet sends a bang out before any of the actions below the render_trigger in the gemList. The post-bang sends out a bang after all of the actions have occured.;
+#X msg 243 197 post-bang;
+#X text 80 418 The bangs occur every frame.;
+#X connect 1 0 0 0;
+#X connect 1 1 4 0;
+#X connect 1 2 6 0;
+#X connect 3 0 1 0;

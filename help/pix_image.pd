@@ -1,0 +1,21 @@
+#N canvas 105 72 639 448 12;
+#X text 49 275 pix_image only loads in TIFF files. This is because
+gem uses Sam Leffler's libtiff library \, a great \, portable image
+file reading and processing package (Thanks Sam!).;
+#X obj 120 114 pix_image;
+#X msg 120 56 gemList;
+#X msg 120 165 gemList;
+#X msg 171 79 open someFile.tif;
+#X text 50 216 pix_image loads in an image to be used a texture \,
+bitblit \, or something else. If you don't give it a default image
+file \, you can send the open message with a filename.;
+#X text 62 32 loads in an image file;
+#X text 50 344 There is no attempt to resize the image to be a power
+of 2 \, which is required for texture mapping. Use pix_resize if you
+need this feature.;
+#X text 56 409 If you click on pix_image when it has loaded in an image
+\, then GEM will display the image in imgview (on the SGIs);
+#X text 144 5 [pix_image];
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 4 0 1 0;

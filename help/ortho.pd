@@ -1,0 +1,12 @@
+#N canvas 444 164 600 328 10;
+#X msg 139 111 gemList;
+#X msg 139 168 gemList;
+#X text 124 63 GEM object;
+#X obj 139 139 ortho;
+#X text 130 17 [ortho];
+#X text 91 211 [ortho] accepts a gemList and changes the current viewing-mode
+from (evtl.) "perspective" (objects that are fare away appear smaller
+than objects thta are near) to "orthographic" (parallels appear parallel)
+for all subsequent shapes.;
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;

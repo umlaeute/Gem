@@ -1,0 +1,37 @@
+#N canvas 311 165 679 525 12;
+#X msg 164 99 gemList;
+#X msg 164 286 gemList;
+#X text 169 16 part of GEM;
+#X text 234 262 Red;
+#X text 269 241 Green;
+#X text 310 211 Blue;
+#X text 347 181 Alpha;
+#X text 175 43 [pix_sig2pix~];
+#X obj 164 136 pix_pix2sig~;
+#X obj 189 236 env~;
+#X floatatom 189 261 3 0 0;
+#X obj 311 159 env~;
+#X floatatom 311 184 3 0 0;
+#X obj 271 185 env~;
+#X floatatom 271 210 3 0 0;
+#X obj 231 211 env~;
+#X floatatom 231 236 3 0 0;
+#X text 76 73 convert images to signals;
+#X text 47 337 [pix_sig2pix~] will write the data it gets from images
+as signals for each color-channel.;
+#X text 48 392 [pix_sig2pix~] will try to put all the image-data into
+one audio-block. it will not spread the data of one image over more
+than one audio-block. therefore you will have to set the audio-blocksize
+with [block~ <n>].;
+#X text 45 465 Depending on the size of the images you are converting
+\, you will want to put a huge [block~ 65536 32] into your patch.;
+#X connect 0 0 8 0;
+#X connect 8 0 1 0;
+#X connect 8 1 9 0;
+#X connect 8 2 15 0;
+#X connect 8 3 13 0;
+#X connect 8 4 11 0;
+#X connect 9 0 10 0;
+#X connect 11 0 12 0;
+#X connect 13 0 14 0;
+#X connect 15 0 16 0;

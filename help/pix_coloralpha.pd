@@ -1,0 +1,11 @@
+#N canvas 199 230 586 375 12;
+#X msg 120 148 gemList;
+#X msg 120 272 gemList;
+#X text 169 16 part of GEM;
+#X obj 120 187 pix_coloralpha;
+#X text 176 43 [pix_coloralpha];
+#X text 151 73 calculate the Alpha-channel from the RGB-data;
+#X text 21 314 [pix_coloralpha] will set the alpha-channel to be the
+mean-value of the RGB-triple for each pixel.;
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;

@@ -1,0 +1,42 @@
+#!/bin/sh
+
+#AUXPATH=../AuxLibs
+AUXPATH=../../../GemLibs
+
+if test $1 = "clean"
+then
+
+echo Cleaning up Auxilliary Libraries
+echo =============================
+echo
+
+echo CLEANING LIBORB
+(cd $AUXPATH/liborb;make clean )
+echo CLEANING PARTICLE
+(cd $AUXPATH/particle;make -f Makefile.linux clean)
+echo CLEANING GLM
+(cd $AUXPATH/glm;make clean)
+
+echo
+echo Finished cleaning Auxilliary Libraries
+echo ======================================
+
+else
+
+
+echo Building Auxilliary Libraries
+echo =============================
+echo
+
+echo BUILDING LIBORB
+(cd $AUXPATH/liborb;make )
+echo BUILDING PARTICLE
+(cd $AUXPATH/particle;make -f Makefile.linux lib)
+echo BUILDING GLM
+(cd $AUXPATH/glm;make)
+
+echo
+echo Finished building Auxilliary Libraries
+echo ======================================
+
+fi

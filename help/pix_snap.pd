@@ -1,0 +1,16 @@
+#N canvas 614 199 600 500 10;
+#X text 59 255 pix_snap takes a picture of the frame buffer which can then be used as a pix. When a snap message is sent to pix_snap \, that is the moment that something is captured from the current frame buffer. pix_snap works best with single buffered windows.;
+#X obj 164 191 pix_snap;
+#X text 174 43 pix_snap;
+#X text 96 64 snap a pix of the frame buffer;
+#X msg 164 109 gemList;
+#X msg 164 227 gemList;
+#X msg 223 163 sizeX sizeY;
+#X msg 193 137 posX posY;
+#X msg 115 149 snap;
+#X text 58 332 You can set the size of the snap window as well as the position. As usual \, remember that texture maps want images that are a power of 2 \, so you might want to make the size correct.;
+#X connect 1 0 5 0;
+#X connect 4 0 1 0;
+#X connect 6 0 1 2;
+#X connect 7 0 1 1;
+#X connect 8 0 1 0;

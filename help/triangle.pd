@@ -1,0 +1,15 @@
+#N canvas 125 258 600 500 8;
+#X text 138 26 triangle;
+#X text 91 291 triangle renders a triangle with the current color \, transformation matrix \, and texture information.;
+#X msg 188 187 size;
+#X msg 137 132 gemList;
+#X msg 38 124 draw line;
+#X msg 38 155 draw fill;
+#X msg 38 187 draw point;
+#X obj 137 234 triangle;
+#X text 133 67 GEM object;
+#X connect 2 0 7 1;
+#X connect 3 0 7 0;
+#X connect 4 0 7 0;
+#X connect 5 0 7 0;
+#X connect 6 0 7 0;

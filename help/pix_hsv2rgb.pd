@@ -1,0 +1,16 @@
+#N canvas 246 257 586 422 12;
+#X msg 116 114 gemList;
+#X msg 116 196 gemList;
+#X text 169 16 part of GEM;
+#X text 121 376 see also:;
+#X obj 214 374 pix_rgb2hsv;
+#X obj 116 153 pix_hsv2rgb;
+#X text 176 43 [pix_hsv2rgb];
+#X text 24 232 [pix_hsv2rgb] will (virtually) transform an HSV(hue
+\, saturation \, value)images into RGB(red \, green \, blue) color-space.
+;
+#X text 24 298 On the technical (internal) side \, the image is always
+RGBA. The Red-channel is interpreted as Hue-values....;
+#X text 151 73 convert HSV into RGB;
+#X connect 0 0 5 0;
+#X connect 5 0 1 0;

@@ -1,0 +1,17 @@
+#N canvas 212 239 600 500 10;
+#X msg 137 155 size;
+#X msg 151 186 slices;
+#X obj 124 230 cone;
+#X text 121 18 cone;
+#X text 38 294 cone renders a cone with the current color \, transformation matrix \, and texture information. Slices is the number of slices which will be used to make up the cone.;
+#X msg 124 110 gemList;
+#X msg 25 122 draw line;
+#X msg 25 153 draw fill;
+#X msg 25 185 draw point;
+#X text 113 60 GEM object;
+#X connect 0 0 2 1;
+#X connect 1 0 2 2;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;
+#X connect 7 0 2 0;
+#X connect 8 0 2 0;

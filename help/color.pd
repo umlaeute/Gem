@@ -1,0 +1,24 @@
+#N canvas 604 119 600 500 10;
+#X msg 19 131 gemList;
+#X msg 19 278 gemList;
+#X obj 19 224 color;
+#X msg 54 162 R G B;
+#X msg 71 190 R G B A;
+#X text 129 29 part of GEM;
+#X text 56 454 If you set the alpha value \, then you probably want
+to use the alpha object.;
+#X msg 275 131 gemList;
+#X msg 275 278 gemList;
+#X obj 275 224 color 1 0 0 0.4;
+#X text 130 80 [color];
+#X text 60 315 [color] accepts a gemList and sets the color for all
+subsequent vertex operations;
+#X text 58 357 [color] accepts either a list of RGB colors or RGBA
+(RGBA only has effect if blending is enabled);
+#X text 57 415 [color] can take initial arguments.;
+#X connect 0 0 2 0;
+#X connect 2 0 1 0;
+#X connect 3 0 2 1;
+#X connect 4 0 2 1;
+#X connect 7 0 9 0;
+#X connect 9 0 8 0;

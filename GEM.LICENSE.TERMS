@@ -1,0 +1,204 @@
+GEM - Graphics Environment for Multimedia
+Copyright (C) 1997-2000 Mark Danks
+Copyright (C) Günter Geiger
+Copyright (C) 2001-2002 IOhannes m zmölnig
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+In the official GEM distribution, the GNU General Public License is
+in the file GnuGPL.LICENSE
+
+---------------------------------------------------------
+
+             ACKNOWLEDGMENTS
+
+---------------------------------------------------------
+Not all of the source code provided here has entirely been written by me.
+I would like to point at the great openGL-tutorials at http://nehe.gamedev.net
+Since these are tutorials, there is no copyright notice here.
+Some of the pix_fx code is borrowed from effecTV by Kentarou Fukuchi et al.
+at http://effectv.sourceforge.net released under the Gnu GPL.
+Future releases might also incorporate the FreeJ-tool by Jaromil
+at http://freej.dyne.org/ released under the Gnu GPL.
+
+
+---------------------------------------------------------
+
+             OTHER COPYRIGHT NOTICES
+
+---------------------------------------------------------
+
+
+This file contains all of the licenses from the various libraries which
+are included in GEM.  If there is no license associated with a 
+library, then the author has not included one or not required that the 
+full license be included.
+
+All of the files and documentation for the various libraries in the
+"Gemlibs" portion of GEM are copyrighted by their respective authors
+and not by Mark Danks/Guenter Geiger/IOhannes m zmoelnig.  All copyright notices are included in the
+respective library directories, GemLibs/*, and this file.
+The "GemLibs" portion of GEM consists of 
+
+libTiff:
+    Author: Sam Leffner
+            sam@engr.sgi.com
+            ftp://ftp.sgi.com/graphics/tiff/ 
+    Copyright (c) 1988-1996 Sam Leffler
+    Copyright (c) 1991-1996 Silicon Graphics, Inc.
+    see license below
+
+fstimage:
+    Masayuki Matsumoto
+        sgi image loader.
+            matumot@dst.nk-exa.co.jp
+    Copyright (C) 1995 Masayuki Mastumoto
+    Modified so that it doesn't exit on error.
+    Added support for reading grayscale, rgb, and rgba images
+            Mark Danks - 1998
+
+libjpeg:
+    Author: Independent JPEG Group
+            jpeg-info@uunet.uu.net
+            ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/
+    Copyright (C) 1991-1996, Thomas G. Lane.
+
+Glut:
+	Author: Mark Kilgard
+	http://reality.sgi.com/mjk_asd/
+    Copyright 1996 by Evans & Sutherland Computer Corporation.  
+
+GLTT:
+    Author: Stephane Rehel
+            rehel@worldnet.fr
+            http://home.worldnet.fr/~rehel/gltt/gltt.html
+    Copyright (C) 1991 Stephane Rehel
+	This is covered under the GNU Library General Public License, 
+        Version 2 or greater.
+
+Freetype:
+    Authors: David Turner, Robert Wilhelm, and Werner Lemberg
+            turner@enst.fr
+            robert@physiol.med.tu-muenchen.de
+            a7971428@unet.univie.ac.at
+            http://www.physiol.med.tu-muenchen.de/~robert/freetype.html
+    Copyright 1996,1997 by David Turner, Robert Wilhelm, and Werner Lemberg
+
+libmpeg:
+    Authors: MPEG Software Simulation Group
+            mssg@mpeg.org
+            http://www.mpeg.org/MSSG/
+    Copyright (c) 1996 MPEG Software Simulation Group
+
+Wintab:
+    Author: Rick Poyner, LCS/Telegraphics
+            wintab@pointing.com
+    Copyright 1991-1995 by LCS/Telegraphics.
+    see license below
+
+libOrb:
+    Author: John Stone
+            j.stone@acm.org
+            http://www.umr.edu/~johns/projects/liborb/
+    Copyright (c) 1997-1998 John E. Stone
+    see license below
+
+particle:
+    Author: David McAllister
+            davemc@cs.unc.edu
+            http://www.cs.unc.edu/~davemc/Particle/
+    Copyright (c) 1998 David K. McAllister
+
+----------------------------------------------------------------------------
+libTiff:
+    Author: Sam Leffner
+            sam@engr.sgi.com
+            ftp://ftp.sgi.com/graphics/tiff/ 
+    Copyright (c) 1988-1996 Sam Leffler
+    Copyright (c) 1991-1996 Silicon Graphics, Inc.
+
+Copyright (c) 1988-1996 Sam Leffler
+Copyright (c) 1991-1996 Silicon Graphics, Inc.
+
+Permission to use, copy, modify, distribute, and sell this software and 
+its documentation for any purpose is hereby granted without fee, provided
+that (i) the above copyright notices and this permission notice appear in
+all copies of the software and related documentation, and (ii) the names of
+Sam Leffler and Silicon Graphics may not be used in any advertising or
+publicity relating to the software without the specific, prior written
+permission of Sam Leffler and Silicon Graphics.
+
+THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+
+IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+OF THIS SOFTWARE.
+
+
+----------------------------------------------------------------------------
+Wintab:
+    Author: Rick Poyner, LCS/Telegraphics
+            wintab@pointing.com
+
+     The Wintab specification is intended to be an open standard. The
+     Wintab Programmer's Kit is an aid to understanding the Wintab
+     standard and implementing Wintab-compliant applications.  As such,
+     the text and information contained herein may be freely used, copied,
+     or distributed without compensation or licensing restrictions.
+
+     The Wintab Programmer's Kit is copyright 1991-1995 by
+     LCS/Telegraphics.
+
+     LCS/Telegraphics does not assume any liability for damages resulting
+     from the use of the information contained herein.
+
+----------------------------------------------------------------------------
+libOrb:
+
+/*
+ * Copyright (c) 1997, 1998 John E. Stone (j.stone@acm.org)
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *      This product includes software developed by John E. Stone
+ * 4. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+ * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */

@@ -1,0 +1,21 @@
+#N canvas 299 95 580 486 10;
+#X msg 152 134 gemList;
+#X msg 152 224 gemList;
+#X text 169 16 part of GEM;
+#X msg 256 121 tresh <threshold>;
+#X text 176 43 [tv_rtx];
+#X text 113 63 realtime vs. x transformation;
+#X obj 152 185 tv_rtx;
+#X text 112 80 relative time-x transformation;
+#X text 48 286 [tv_rtx] does something similar to tx-transform. The
+main differences are: 1) it is done in realtime \; 2) it is released
+under the GnuGPL and hopes to stay free forever.;
+#X text 51 333 basically the time-axis (now->later) and the x-axis
+(left->right) are swapped. for more information see http://umlaeute.mur.at/rtx
+;
+#X text 52 383 beware: [tv_rtx] needs a lot of memory:: mem=(width^2)*height*4
+bytes (for a 320x240 movie \, this would be more than 70MByte that
+have to stay in RAM);
+#X connect 0 0 6 0;
+#X connect 3 0 6 0;
+#X connect 6 0 1 0;

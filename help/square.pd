@@ -1,0 +1,15 @@
+#N canvas 305 245 600 500 8;
+#X text 173 18 square;
+#X text 91 291 square renders a square with the current color \, transformation matrix \, and texture information.;
+#X msg 236 183 size;
+#X msg 199 131 gemList;
+#X msg 100 123 draw line;
+#X msg 100 154 draw fill;
+#X msg 100 186 draw point;
+#X obj 199 230 square;
+#X text 176 62 GEM object;
+#X connect 2 0 7 1;
+#X connect 3 0 7 0;
+#X connect 4 0 7 0;
+#X connect 5 0 7 0;
+#X connect 6 0 7 0;

@@ -1,0 +1,9 @@
+#N canvas 633 391 600 500 10;
+#X text 89 287 model renders an Alias/Wavefront .obj file. You can either give it a filename or send an open message.;
+#X text 231 21 model;
+#X obj 218 224 model;
+#X msg 254 181 open mymodel.obj;
+#X msg 218 123 gemList;
+#X text 214 72 GEM object;
+#X connect 3 0 2 0;
+#X connect 4 0 2 0;

@@ -1,0 +1,26 @@
+#N canvas 501 150 600 500 10;
+#X msg 31 49 gemList;
+#X msg 31 285 gemList;
+#X text 345 41 GEM object;
+#X msg 249 133 gemList;
+#X msg 249 280 gemList;
+#X text 264 189 this rotates 45 degrees on the X axis;
+#X obj 31 230 accumrotate;
+#X msg 55 153 deltaX degrees;
+#X msg 79 175 deltaY degrees;
+#X msg 103 195 deltaZ degrees;
+#X msg 76 101 reset;
+#X text 130 16 [accumrotate];
+#X obj 249 225 accumrotate 45 0 0;
+#X text 85 352 [accumrotate] accepts a gemList and changes the current
+transformation matrix by the specified delta-rotation;
+#X text 86 396 the delta-values add to the current rotation-matrix.
+;
+#X connect 0 0 6 0;
+#X connect 3 0 12 0;
+#X connect 6 0 1 0;
+#X connect 7 0 6 1;
+#X connect 8 0 6 2;
+#X connect 9 0 6 3;
+#X connect 10 0 6 0;
+#X connect 12 0 4 0;

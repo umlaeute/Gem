@@ -1,0 +1,14 @@
+#N canvas;
+#X msg 122 72 gemList;
+#X msg 122 213 gemList;
+#X msg 174 135 R G B;
+#X obj 122 167 pix_gain;
+#X text 121 27 pix_gain;
+#X msg 148 106 float;
+#X text 56 251 pix_gain applies a gain multipler to each pixel in a pix. The float is a constant modifier applied to all color components. If you use just R G B \, it asumes an alpha of 1.0.;
+#X msg 227 135 R G B A;
+#X connect 0 0 3 0;
+#X connect 2 0 3 2;
+#X connect 3 0 1 0;
+#X connect 5 0 3 1;
+#X connect 7 0 3 2;

@@ -1,0 +1,14 @@
+#N canvas;
+#X msg 255 178 gemList;
+#X msg 164 146 gemList;
+#X msg 164 302 gemList;
+#X text 179 20 part of GEM;
+#X text 88 146 source pix;
+#X text 323 178 second pix;
+#X obj 164 217 pix_subtract;
+#X text 177 43 pix_subtract;
+#X text 152 74 subtract two pixes;
+#X text 65 341 pix_subtract simply subtracts two pixes from each other. It clamps the resultant image so that no pixel values go below zero (In other words \, it is easy to get a black out).;
+#X connect 0 0 6 1;
+#X connect 1 0 6 0;
+#X connect 6 0 2 0;
