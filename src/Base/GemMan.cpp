@@ -353,7 +353,6 @@ void GemMan :: initGem()
   post("GEM: Authors :\tMark Danks (original version on irix/windows)");
   post("GEM: \t\tChris Clepper (macOS-X)");
   post("GEM: \t\tDaniel Heckenberg (windows)");
-  post("GEM: \t\tGuenter Geiger (linux)");
   post("GEM: \t\tJames Tittle (macOS-X)");
   post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
 
