@@ -25,9 +25,6 @@
 /////////////////////////////////////////////////////////
 GemPixObj :: GemPixObj() : 
   m_processOnOff(1) {
-#ifndef MACOSX
-  m_mmx = detect_mmx();
-#endif
 }
 
 

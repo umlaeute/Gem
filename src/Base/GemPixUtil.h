@@ -200,96 +200,26 @@ const int chGray	= 0;
 
 
 //
-// Accelerated Pixel Manipulations
-//
-#ifndef MACOSX
-
-int detect_mmx( void );
-
-
-#if HAVE_MMX
-
-
-#define MMXDONE asm volatile ("emms  \n\t")
-
-#define MMXSTART   \
-asm volatile ( \
-        "push %ebx \n\t"                    \
-        "mov       %esp, %ebx \n\t"    \
-        "sub          $4, %ebx \n\t"  \
-        "and        $-32, %ebx \n\t"  \
-        "mov     %esp, (%ebx) \n\t"  \
-        "mov       %ebx, %esp \n\t"  \
-        "pop %ebx")
-
-#define ADD8(a,b) \
-asm volatile (\
-   "movq    (%1), %%mm1 \n\t"       \
-   "paddusb (%0), %%mm1 \n\t"       \
-   "movq    %%mm1, (%0) \n\t"       \
-   : : "r" (a), "r" (b))
-
-#define SUB8(a,b) \
-asm volatile (\
-       "movq    (%0), %%mm1 \n\t"   \
-       "psubusb (%1), %%mm1 \n\t"   \
-       "movq    %%mm1, (%0) \n\t"   \
-       : : "r" (a), "r" (b))
-
-#define ABSDIFF8(a,b) \
-asm volatile (\
-       "movq    (%0), %%mm1 \n\t"   \
-       "movq    (%1), %%mm2 \n\t"   \
-       "psubusb (%1), %%mm1 \n\t"   \
-       "psubusb (%0), %%mm2 \n\t"   \
-       "por    %%mm2, %%mm1 \n\t"   \
-       "movq    %%mm1, (%0) \n\t"   \
-	      : : "r" (a), "r" (b))
-
-
-#define MULT4_b_s(a,b) \
-asm volatile (\
-       "pxor      %%mm0, %%mm0 \n\t" \
-       "movq    (%0), %%mm1 \n\t"    \
-       "movq    (%1), %%mm2 \n\t"    \
-       "punpcklbw %%mm0, %%mm1 \n\t" \
-       "pmullw    %%mm2, %%mm1 \n\t" \
-       "packuswb  %%mm0, %%mm1 \n\t" \
-       "movq    %%mm1, (%0) \n\t"   \
-       : : "r" (a), "r" (b))
-
-
-
-#else // non MMX versions
-
-#define MMXSTART
-#define MMXDONE
+// Accelerated Pixel Manipulations 
+// This is sort on a vector operation on 8 chars at the same time .... could be
+// implemented in MMX
+// Alpha channel is not added !! (would be nr 3 and 7)
 
 #define ADD8(a,b) \
  ((unsigned char*)(a))[0] = CLAMP_HIGH((int)((unsigned char*)(a))[0] + ((unsigned char*)(b))[0]);\
  ((unsigned char*)(a))[1] = CLAMP_HIGH((int)((unsigned char*)(a))[1] + ((unsigned char*)(b))[1]);\
  ((unsigned char*)(a))[2] = CLAMP_HIGH((int)((unsigned char*)(a))[2] + ((unsigned char*)(b))[2]);\
- ((unsigned char*)(a))[3] = CLAMP_HIGH((int)((unsigned char*)(a))[3] + ((unsigned char*)(b))[3]);\
  ((unsigned char*)(a))[4] = CLAMP_HIGH((int)((unsigned char*)(a))[4] + ((unsigned char*)(b))[4]);\
  ((unsigned char*)(a))[5] = CLAMP_HIGH((int)((unsigned char*)(a))[5] + ((unsigned char*)(b))[5]);\
  ((unsigned char*)(a))[6] = CLAMP_HIGH((int)((unsigned char*)(a))[6] + ((unsigned char*)(b))[6]);\
- ((unsigned char*)(a))[7] = CLAMP_HIGH((int)((unsigned char*)(a))[7] + ((unsigned char*)(b))[7]);
-
 
 #define SUB8(a,b) \
  ((unsigned char*)(a))[0] = CLAMP_LOW((int)((unsigned char*)(a))[0] - ((unsigned char*)(b))[0]);\
  ((unsigned char*)(a))[1] = CLAMP_LOW((int)((unsigned char*)(a))[1] - ((unsigned char*)(b))[1]);\
  ((unsigned char*)(a))[2] = CLAMP_LOW((int)((unsigned char*)(a))[2] - ((unsigned char*)(b))[2]);\
- ((unsigned char*)(a))[3] = CLAMP_LOW((int)((unsigned char*)(a))[3] - ((unsigned char*)(b))[3]);\
  ((unsigned char*)(a))[4] = CLAMP_LOW((int)((unsigned char*)(a))[4] - ((unsigned char*)(b))[4]);\
  ((unsigned char*)(a))[5] = CLAMP_LOW((int)((unsigned char*)(a))[5] - ((unsigned char*)(b))[5]);\
  ((unsigned char*)(a))[6] = CLAMP_LOW((int)((unsigned char*)(a))[6] - ((unsigned char*)(b))[6]);\
- ((unsigned char*)(a))[7] = CLAMP_LOW((int)((unsigned char*)(a))[7] - ((unsigned char*)(b))[7]);
-
-#endif // MMX
-
-#endif //MACOSX
-
 
 
 #endif
