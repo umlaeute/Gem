@@ -16,7 +16,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "vertexProgram.h"
+#include "vertex_program.h"
 #include "Base/GemState.h"
 #include "string.h"
 #ifdef __APPLE__
@@ -229,6 +229,27 @@ void vertex_program :: printInfo()
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_ENV_PARAMETERS_ARB, &bitnum);
 	post("MAX_PROGRAM_ENV_PARAMETERS: %d", bitnum);
 	post("");
+	
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
+	post("PROGRAM_INSTRUCTIONS: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
+	post("PROGRAM_NATIVE_INSTRUCTIONS: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_TEMPORARIES_ARB, &bitnum);
+	post("PROGRAM_TEMPORARIES: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
+	post("PROGRAM_NATIVE_TEMPORARIES: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_PARAMETERS_ARB, &bitnum);
+	post("PROGRAM_PARAMETERS: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
+	post("PROGRAM_NATIVE_PARAMETERS: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_ATTRIBS_ARB, &bitnum);
+	post("PROGRAM_ATTRIBS: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
+	post("PROGRAM_NATIVE_ATTRIBS: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
+	post("PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
+	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
+	post("PROGRAM_NATIVE_ADDRESS_REGISTERS: %d", bitnum);
 }
 
 /////////////////////////////////////////////////////////
