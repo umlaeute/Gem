@@ -63,18 +63,30 @@ class GEM_EXTERN GemPixObj : public GemBase
   // This is called whenever a new RGBA image comes through.
   // The default is to call processImage().
   virtual void 	processRGBAImage(imageStruct &image);
+  // SIMD-optimized functions: by default the non-optimized function is called
+  virtual void 	processRGBAMMX(imageStruct &image);
+  virtual void 	processRGBASSE2(imageStruct &image);
+  virtual void 	processRGBAAltivec(imageStruct &image);
 
   //////////
   // The derived class should override this.
   // This is called whenever a new gray8 image comes through.
   // The default is to call processImage().
   virtual void 	processGrayImage(imageStruct &image);
-        
+  // SIMD-optimized functions: by default the non-optimized function is called
+  virtual void 	processGrayMMX(imageStruct &image);
+  virtual void 	processGraySSE2(imageStruct &image);
+  virtual void 	processGrayAltivec(imageStruct &image);     
+
   //////////
   // The derived class should override this.
   // This is called whenever a new YUV422 image comes through.
   // The default is to call processImage().
   virtual void 	processYUVImage(imageStruct &image);
+  // SIMD-optimized functions: by default the non-optimized function is called
+  virtual void 	processYUVMMX(imageStruct &image);
+  virtual void 	processYUVSSE2(imageStruct &image);
+  virtual void 	processYUVAltivec(imageStruct &image);
     	
   //////////
   // If the derived class needs the image resent.
@@ -87,9 +99,8 @@ class GEM_EXTERN GemPixObj : public GemBase
 
   //////////
   int             m_processOnOff;
-#ifndef __APPLE__
-  int             m_mmx;
-#endif // __APPLE__
+  int             m_simd;
+
   //////////
   // creation callback
   static void 	real_obj_setupCallback(t_class *classPtr) { 
@@ -125,6 +136,7 @@ class GEM_EXTERN GemPixObj : public GemBase
   // static member functions
   static void     obj_setupCallback(t_class *classPtr);
   static void 	floatMessCallback(void *data, float n);
+  static void 	simdMessCallback(void *data, float n);
 };
 
 
