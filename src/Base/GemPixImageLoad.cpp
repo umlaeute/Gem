@@ -34,8 +34,9 @@ extern "C"
 {
 #include "tiffio.h"
 
-#ifdef _WINDOWS
 #undef EXTERN
+
+#ifdef _WINDOWS
 #undef FAR
 #endif
 
@@ -49,6 +50,25 @@ extern "C"
 imageStruct *tiffImage2mem(const char *filename);
 imageStruct *jpegImage2mem(const char *filename);
 imageStruct *sgiImage2mem(const char *filename);
+
+
+/* this function gives us 32 byte aligned data, the cache line size
+   of  pentiums */
+
+unsigned char* img_allocate(int size)
+{
+  unsigned char* pad;
+  unsigned char* data;
+
+#if 0
+  pad = new unsigned char[size];
+  data = (unsigned char*) ((((unsigned int)pad)+31)& (~31));
+#else
+  data = new unsigned char [size];
+#endif
+
+  return data; 
+}
 
 /***************************************************************************
  *
@@ -88,10 +108,6 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 
 		sprintf(newName, "%s/%s", realName, realResult);
 	}
-
-	// try to load in a TIFF file
-	if ( (image_block = tiffImage2mem(newName)) )
-			return(image_block);
 	
 	// try to load in a JPEG file
 	if ( (image_block = jpegImage2mem(newName)) )
@@ -99,6 +115,10 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 
 	// try to load in an SGI file
 	if ( (image_block = sgiImage2mem(newName)) )
+			return(image_block);
+
+	// try to load in a TIFF file
+	if ( (image_block = tiffImage2mem(newName)) )
 			return(image_block);
 
 	// unable to load image
@@ -169,7 +189,7 @@ imageStruct *tiffImage2mem(const char *filename)
 			return(NULL);
 		}
     
-		image_block->data = new unsigned char[npixels * image_block->csize];
+		image_block->allocate(npixels * image_block->csize);
 		unsigned char *dstLine = &(image_block->data[npixels * image_block->csize]);
         int yStride = image_block->xsize * image_block->csize;
         dstLine -= yStride;
@@ -255,7 +275,7 @@ imageStruct *tiffImage2mem(const char *filename)
 
 		image_block->csize = 4;
 		image_block->format = GL_RGBA;
-		image_block->data = new unsigned char[npixels * image_block->csize];
+		image_block->allocate(npixels * image_block->csize);
 		unsigned char *dstLine = &(image_block->data[npixels * image_block->csize]);
         int yStride = image_block->xsize * image_block->csize;
         dstLine -= yStride;
@@ -391,7 +411,7 @@ imageStruct *jpegImage2mem(const char *filename)
 	int cSize = image_block->csize;
 	image_block->xsize = xSize;
 	image_block->ysize = ySize;
-	image_block->data = new unsigned char[xSize * ySize * cSize];
+	image_block->allocate(xSize * ySize * cSize);
 	
 	// cycle through the scan lines
 	unsigned char *srcLine = new unsigned char[xSize * cSize];
@@ -493,7 +513,7 @@ imageStruct *sgiImage2mem(const char *filename)
 	}
 
 	const int dataSize = image_block->ysize * image_block->xsize * image_block->csize;
-	image_block->data = new unsigned char[dataSize];
+	image_block->allocate(dataSize);
 	unsigned char *src = (unsigned char *)readData;
 	unsigned char *dst = &(image_block->data[0]);
     const int yStride = image_block->xsize * image_block->csize;

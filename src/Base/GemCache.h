@@ -41,12 +41,7 @@ class GEM_EXTERN GemCache
     	// Should the image be resent?
     	int 	    	    resendImage;
 
-    	//////////
-    	// The DAG is incorrect and the rendering in the 
-    	//  	chain should stop.
-    	void	    	    breakDAG();
-    	
-        //////////
+	//////////
         // Constructor
     	GemCache(gemhead *parent);
     	

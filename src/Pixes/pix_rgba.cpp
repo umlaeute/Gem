@@ -19,16 +19,6 @@
 
 #include "pix_rgba.h"
 
-static unsigned int fastrand_val;
-static unsigned int fastrand()
-{
-  //	return (fastrand_val=fastrand_val*1103515245+12345+2);
-  return(fastrand_val=fastrand_val*435898247+382842987);
-}
-
-static int dx[8] = { 1, 1, 0,-1,-1,-1, 0, 1};
-static int dy[8] = { 0,-1,-1,-1, 0, 1, 1, 1};
-
 CPPEXTERN_NEW(pix_rgba)
 
 /////////////////////////////////////////////////////////
@@ -126,8 +116,9 @@ void pix_rgba :: processFX(imageStruct &image)
 
 
   image.data   = m_data;
+  image.notowned = 1;
   image.format = GL_RGBA;
-  image.csize  = 4; 
+  image.csize  = 4;
 
 }
 

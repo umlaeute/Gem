@@ -14,6 +14,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_puzzle.h"
+#include <string.h>
 
 CPPEXTERN_NEW(pix_puzzle)
 
@@ -37,7 +38,7 @@ pix_puzzle :: pix_puzzle()
 {
   myImage.xsize=myImage.ysize=myImage.csize=1;
   blocknum=1;
-  myImage.data = new unsigned char[blocknum];
+  myImage.allocate(blocknum);
 
   m_force = true;
 
@@ -58,7 +59,7 @@ pix_puzzle :: ~pix_puzzle()
 {
   if (blockoffset) delete [] blockoffset;
   if (blockpos)    delete [] blockpos;
-  if (myImage.data)delete [] myImage.data;
+  myImage.clear();
 }
 
 
@@ -181,10 +182,10 @@ void pix_puzzle :: processFX(imageStruct &image)
 
   if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)){
     int dataSize = image.xsize * image.ysize * image.csize;
-    if (myImage.data) delete [] myImage.data;
+    myImage.clear();
     m_force = false;
 
-    myImage.data = new unsigned char[dataSize];
+    myImage.allocate(dataSize);
 
     makePuzzleBlocks(image.xsize, image.ysize, image.csize);
     shuffle();

@@ -39,14 +39,6 @@ pix_resize :: pix_resize()
 pix_resize :: ~pix_resize()
 { }
 
-static inline int powerOfTwo(int value)
-{
-    int x = 1;
-    //    while(x <= value) x <<= 1;
-    while(x < value) x <<= 1;
-    return(x);
-}
-
 /////////////////////////////////////////////////////////
 // processImage
 //
@@ -78,7 +70,7 @@ void pix_resize :: processImage(imageStruct &image)
 	  delete [] resizedData;
 	  return;
 	}
-      delete [] image.data;
+      image.clear();
       image.data = resizedData;
       image.xsize = wN;
       image.ysize = hN;

@@ -34,7 +34,7 @@ class GEM_EXTERN GemPixObj : public GemBase
 
         //////////
         // Constructor
-    	GemPixObj() : m_processOnOff(1)		{ }
+    	GemPixObj() : m_processOnOff(1)		{ m_mmx = detect_mmx();}
     	
     protected:
     	
@@ -65,6 +65,8 @@ class GEM_EXTERN GemPixObj : public GemBase
         //////////
         int             m_processOnOff;
 
+	int             m_mmx;
+
     	//////////
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr) { GemBase::real_obj_setupCallback(classPtr);
@@ -76,6 +78,8 @@ class GEM_EXTERN GemPixObj : public GemBase
     	// Do the rendering, which calls processImage or processGrayImage
     	virtual void 	render(GemState *state);
 
+	void startRendering(void) {post("start rendering");setPixModified();}
+
     private:
 
     	static inline GemPixObj *GetMyClass(void *data) {return((GemPixObj *)((Obj_header *)data)->data);}
@@ -85,5 +89,15 @@ class GEM_EXTERN GemPixObj : public GemBase
     	static void     obj_setupCallback(t_class *classPtr);
         static void 	floatMessCallback(void *data, float n);
 };
+
+static inline int powerOfTwo(int value)
+{
+    int x = 1;
+    //    while(x <= value) x <<= 1;
+    while(x < value) x <<= 1;
+    return(x);
+}
+
+
 
 #endif	// for header file

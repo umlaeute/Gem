@@ -127,26 +127,6 @@ void cube :: render(GemState *state)
 }
 
 /////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void cube :: typeMess(t_symbol *type)
-{
-    if (!strcmp(type->s_name, "line")) 
-	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill")) 
-	    m_drawType = GL_QUADS;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else
-    {
-	    error ("GEM: cube draw style");
-	    return;
-    }
-    setModified();
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////

@@ -52,6 +52,8 @@ class GEM_EXTERN pix_convolve : public GemPixObj
     	// Destructor
     	virtual ~pix_convolve();
 
+	void calculate3x3(imageStruct &image,imageStruct &tempImg);
+
     	//////////
     	// Do the processing
     	virtual void 	processImage(imageStruct &image);
@@ -67,11 +69,14 @@ class GEM_EXTERN pix_convolve : public GemPixObj
     	//////////
     	// The matrix
     	float  	    	*m_matrix;
+    	short int  	*m_imatrix;
     
     	//////////
     	// The range
     	float 	    	m_range;
-    	
+    	int             m_irange;
+	
+
     	//////////
     	// The number of rows
     	int 	    	m_rows;
@@ -81,6 +86,7 @@ class GEM_EXTERN pix_convolve : public GemPixObj
     	int 	    	m_cols;
     	
     private:
+	imageStruct tempImg;
     
     	//////////
     	// Static member functions

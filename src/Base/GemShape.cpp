@@ -16,10 +16,10 @@
 /////////////////////////////////////////////////////////
 
 #include "GemShape.h"
-
+#include <ctype.h>
 /////////////////////////////////////////////////////////
 //
-// square
+// a generic GemShape
 //
 /////////////////////////////////////////////////////////
 // Constructor
@@ -45,6 +45,18 @@ GemShape :: ~GemShape()
 }
 
 /////////////////////////////////////////////////////////
+// SetVertix
+// set up the texture-coordinates
+/////////////////////////////////////////////////////////
+int GemShape :: SetVertix(GemState* state,float x, float y, float z, float tx, float ty,int curCoord)
+{
+    if (state->numTexCoords) 
+      glTexCoord2f(state->texCoordX(curCoord), state->texCoordY(curCoord));
+    else glTexCoord2f(tx, ty);
+    glVertex3f( x,  y, z);
+}
+
+/////////////////////////////////////////////////////////
 // linewidthMess
 //
 /////////////////////////////////////////////////////////
@@ -62,6 +74,31 @@ void GemShape :: sizeMess(float size)
 {
     m_size = size;
     setModified();
+}
+
+/////////////////////////////////////////////////////////
+// typeMess
+//
+/////////////////////////////////////////////////////////
+void GemShape :: typeMess(t_symbol *type)
+{
+  char c=toupper(*type->s_name);
+  switch (c){
+  case 'L': // line
+    m_drawType = GL_LINE_LOOP;
+    break;
+  case 'F': // fill
+    //    m_drawType = GL_QUADS;
+    m_drawType = GL_POLYGON;
+    break;
+  case 'P': // point
+    m_drawType = GL_POINTS;
+    break;
+  default:
+    error ("GEM: square draw style");
+    return;
+  }
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

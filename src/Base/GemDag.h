@@ -36,8 +36,9 @@ class GEM_EXTERN GemDag
     public:
 
     	//////////
-    	void	    	    addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *));
-    	
+        //   	void	    	    addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *));
+        void			addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), 								void (*postrenderFunc)(GemBase *, GemState *), 									void (*stoprenderFunc)(GemBase*));	//DH	
+
     	//////////
     	void	    	    childDone(GemBase *data);
     	
@@ -70,16 +71,19 @@ class gemBaseLink
 
     	gemBaseLink();
        	~gemBaseLink();
-    	
-    	void	    	    setData(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *));
-    	gemBaseLink			*addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *));
-    	
+     	//void	    	    setData(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *));
+     	//gemBaseLink			*addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *));
+ 
+     	void	    	    setData(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *), void (*stoprenderFunc)(GemBase*));
+     	gemBaseLink	   *addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *), void (*stoprenderFunc)(GemBase*));
+ 
     	GemBase     	    *data;
     	gemBaseLink 	    **children;
     	gemBaseLink 	    *parent;
     	int 	    	    numChildren;
     	void	    	    (*renderFunc)(GemBase *, GemState *);
     	void	    	    (*postrenderFunc)(GemBase *, GemState *);
+	void	    	    (*stoprenderFunc)(GemBase *);
 };
 
 #endif	// for header file

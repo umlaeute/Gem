@@ -42,21 +42,24 @@ pix_add :: ~pix_add()
 /////////////////////////////////////////////////////////
 void pix_add :: processDualImage(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
+  register int datasize = (image.xsize * image.ysize)>>3;
+  register unsigned char *leftPix = image.data;
+  register unsigned char *rightPix = right.data;
 
-    while(datasize--)
-    {
-    	leftPix[chRed] =
-			CLAMP_HIGH((int)leftPix[chRed] + (int)rightPix[chRed]);
-    	leftPix[chGreen] =
-			CLAMP_HIGH((int)leftPix[chGreen] + (int)rightPix[chGreen]);
-    	leftPix[chBlue] =
-			CLAMP_HIGH((int)leftPix[chBlue] + (int)rightPix[chBlue]);
-        leftPix += 4;
-		rightPix += 4;
-    }
+  // Now the Alpha channel is added too, if this is good ?
+  //MMXSTART;
+  
+  while (datasize--) {
+    ADD8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    ADD8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    ADD8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+    ADD8(leftPix,rightPix);
+    leftPix+=8;rightPix+=8;
+  }
+  MMXDONE;
 }
 
 /////////////////////////////////////////////////////////
@@ -65,17 +68,16 @@ void pix_add :: processDualImage(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_add :: processDualGray(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
+    int datasize = (image.xsize * image.ysize)>>2;
+    MMXSTART;
 
-    while(datasize--)
-    {
-    	leftPix[chGray] =
-			CLAMP_HIGH((int)leftPix[chGray] + (int)rightPix[chGray]);
-        leftPix++;
-		rightPix++;
+    while (datasize--) {
+      register unsigned char *leftPix = image.data;
+      register unsigned char *rightPix = right.data;
+      ADD8(leftPix,rightPix);
+      leftPix+=8;rightPix+=8;
     }
+    MMXDONE;
 }
 
 /////////////////////////////////////////////////////////

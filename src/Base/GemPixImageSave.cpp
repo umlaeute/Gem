@@ -33,8 +33,9 @@ extern "C"
 {
 #include "tiffio.h"
 
-#ifdef _WINDOWS
 #undef EXTERN
+
+#ifdef _WINDOWS
 #undef FAR
 #endif
 

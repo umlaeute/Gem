@@ -16,6 +16,7 @@ LOG
 #define INCLUDE_PRIMTRI_H_
 
 #include "Base/GemBase.h"
+#include "Base/GemShape.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -30,15 +31,15 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN primTri : public GemBase
+class GEM_EXTERN primTri : public GemShape
 {
-    CPPEXTERN_HEADER(primTri, GemBase)
+    CPPEXTERN_HEADER(primTri, GemShape)
 
     public:
 
         //////////
         // Constructor
-    	primTri();
+    	primTri(t_floatarg size);
     	
     protected:
     	

@@ -14,6 +14,8 @@
 //
 /////////////////////////////////////////////////////////
 
+#include  "Base/config.h"
+#if HAVE_LIBGLUT
 #include "teapot.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(teapot, t_floatarg, A_DEFFLOAT)
@@ -55,3 +57,4 @@ void teapot :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void teapot :: obj_setupCallback(t_class *)
 { }
+#endif

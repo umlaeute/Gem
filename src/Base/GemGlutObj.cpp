@@ -15,6 +15,8 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Base/config.h"
+#if HAVE_LIBGLUT
 #include "GemGlutObj.h"
 
 /////////////////////////////////////////////////////////
@@ -111,4 +113,6 @@ void GemGlutObj :: numSlicesMessCallback(void *data, t_floatarg numSlices)
 {
     GetMyClass(data)->numSlicesMess((int)numSlices);
 }
+
+#endif
 

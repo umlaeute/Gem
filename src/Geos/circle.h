@@ -51,10 +51,6 @@ class GEM_EXTERN circle : public GemShape
         virtual void 	render(GemState *state);
 
         //////////
-        // How the object should be drawn
-        virtual void	typeMess(t_symbol *type);
-
-        //////////
         // number of points in the lookup table
         static const int NUM_PNTS;
 

@@ -3,7 +3,7 @@
 #AUXPATH=../AuxLibs
 AUXPATH=../../../GemLibs
 
-if test $1 = "clean"
+if [ "$1" = "clean" ]
 then
 
 echo Cleaning up Auxilliary Libraries

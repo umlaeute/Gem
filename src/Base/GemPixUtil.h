@@ -34,6 +34,7 @@ LOG
 #endif
 
 #include "Base/GemFuncUtil.h"
+#include "config.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -45,8 +46,31 @@ CLASS
 -----------------------------------------------------------------*/
 struct GEM_EXTERN imageStruct
 {
+
+  imageStruct() : xsize (0), ysize(0),csize(0),data(0),pdata(0),notowned(0) {}
+
+  ~imageStruct() { clear(); }
     //////////
     // columns
+  unsigned char* allocate(int size) {
+    if (pdata) delete [] pdata;
+#if 1
+    pdata = new unsigned char[size];
+    data = (unsigned char*) ((((unsigned int)pdata)+31)& (~31));
+#else
+    data = pdata =  new unsigned char [size];
+#endif
+    return data; 
+  }
+
+  void clear() {
+    if (!notowned && pdata) {
+      delete [] pdata;
+      data = pdata = 0;      
+    }
+    xsize = ysize = csize = 0;
+  }
+
     GLint           xsize;
 
     //////////
@@ -65,9 +89,27 @@ struct GEM_EXTERN imageStruct
      // data type - always UNSIGNED_BYTE
     GLenum          type;
 
+
+  int notowned;
     //////////
     // the actual image data
+
+  //////////
+  // gets a pixel
+  inline unsigned char GetPixel(int Y, int X, int C)
+  { return(data[Y * xsize * csize + X * csize + C]); }
+  
+  //////////
+  // sets a pixel
+  inline void SetPixel(int Y, int X, int C, unsigned char VAL)
+  { data[Y * xsize * csize + X * csize + C] = VAL; }
+
+  void copy2Image(imageStruct *to);
+  void refreshImage(imageStruct *to);
+
     unsigned char   *data;
+  private:
+    unsigned char   *pdata;
 };
 
 /*-----------------------------------------------------------------
@@ -119,15 +161,98 @@ const int chGray	= 0;
 // Pixel access functions
 //
 ///////////////////////////////////////////////////////////////////////////////
-//////////
-// gets a pixel
-inline unsigned char GetPixel(imageStruct *IMG, int Y, int X, int C)
-    { return(IMG->data[Y * IMG->xsize * IMG->csize + X * IMG->csize + C]); }
 
-//////////
-// sets a pixel
-inline void SetPixel(imageStruct *IMG, int Y, int X, int C, unsigned char VAL)
-    { IMG->data[Y * IMG->xsize * IMG->csize + X * IMG->csize + C] = VAL; }
+
+//
+// Accelerated Pixel Manipulations
+//
+
+int detect_mmx( void );
+
+
+#if HAVE_MMX
+
+
+#define MMXDONE asm volatile ("emms  \n\t")
+
+#define MMXSTART   \
+asm volatile ( \
+        "push %ebx \n\t"                    \
+        "mov       %esp, %ebx \n\t"    \
+        "sub          $4, %ebx \n\t"  \
+        "and        $-32, %ebx \n\t"  \
+        "mov     %esp, (%ebx) \n\t"  \
+        "mov       %ebx, %esp \n\t"  \
+        "pop %ebx")
+
+#define ADD8(a,b) \
+asm volatile (\
+   "movq    (%1), %%mm1 \n\t"       \
+   "paddusb (%0), %%mm1 \n\t"       \
+   "movq    %%mm1, (%0) \n\t"       \
+   : : "r" (a), "r" (b))
+
+#define SUB8(a,b) \
+asm volatile (\
+       "movq    (%0), %%mm1 \n\t"   \
+       "psubusb (%1), %%mm1 \n\t"   \
+       "movq    %%mm1, (%0) \n\t"   \
+       : : "r" (a), "r" (b))
+
+#define ABSDIFF8(a,b) \
+asm volatile (\
+       "movq    (%0), %%mm1 \n\t"   \
+       "movq    (%1), %%mm2 \n\t"   \
+       "psubusb (%1), %%mm1 \n\t"   \
+       "psubusb (%0), %%mm2 \n\t"   \
+       "por    %%mm2, %%mm1 \n\t"   \
+       "movq    %%mm1, (%0) \n\t"   \
+	      : : "r" (a), "r" (b))
+
+
+#define MULT4_b_s(a,b) \
+asm volatile (\
+       "pxor      %%mm0, %%mm0 \n\t" \
+       "movq    (%0), %%mm1 \n\t"    \
+       "movq    (%1), %%mm2 \n\t"    \
+       "punpcklbw %%mm0, %%mm1 \n\t" \
+       "pmullw    %%mm2, %%mm1 \n\t" \
+       "packuswb  %%mm0, %%mm1 \n\t" \
+       "movq    %%mm1, (%0) \n\t"   \
+       : : "r" (a), "r" (b))
+
+
+
+#else // non MMX versions
+
+#define MMXSTART
+#define MMXDONE
+
+#define ADD8(a,b) \
+ ((unsigned char*)(a))[0] = CLAMP_HIGH((int)((unsigned char*)(a))[0] + ((unsigned char*)(b))[0]);\
+ ((unsigned char*)(a))[1] = CLAMP_HIGH((int)((unsigned char*)(a))[1] + ((unsigned char*)(b))[1]);\
+ ((unsigned char*)(a))[2] = CLAMP_HIGH((int)((unsigned char*)(a))[2] + ((unsigned char*)(b))[2]);\
+ ((unsigned char*)(a))[3] = CLAMP_HIGH((int)((unsigned char*)(a))[3] + ((unsigned char*)(b))[3]);\
+ ((unsigned char*)(a))[4] = CLAMP_HIGH((int)((unsigned char*)(a))[4] + ((unsigned char*)(b))[4]);\
+ ((unsigned char*)(a))[5] = CLAMP_HIGH((int)((unsigned char*)(a))[5] + ((unsigned char*)(b))[5]);\
+ ((unsigned char*)(a))[6] = CLAMP_HIGH((int)((unsigned char*)(a))[6] + ((unsigned char*)(b))[6]);\
+ ((unsigned char*)(a))[7] = CLAMP_HIGH((int)((unsigned char*)(a))[7] + ((unsigned char*)(b))[7]);
+
+
+#define SUB8(a,b) \
+ ((unsigned char*)(a))[0] = CLAMP_LOW((int)((unsigned char*)(a))[0] - ((unsigned char*)(b))[0]);\
+ ((unsigned char*)(a))[1] = CLAMP_LOW((int)((unsigned char*)(a))[1] - ((unsigned char*)(b))[1]);\
+ ((unsigned char*)(a))[2] = CLAMP_LOW((int)((unsigned char*)(a))[2] - ((unsigned char*)(b))[2]);\
+ ((unsigned char*)(a))[3] = CLAMP_LOW((int)((unsigned char*)(a))[3] - ((unsigned char*)(b))[3]);\
+ ((unsigned char*)(a))[4] = CLAMP_LOW((int)((unsigned char*)(a))[4] - ((unsigned char*)(b))[4]);\
+ ((unsigned char*)(a))[5] = CLAMP_LOW((int)((unsigned char*)(a))[5] - ((unsigned char*)(b))[5]);\
+ ((unsigned char*)(a))[6] = CLAMP_LOW((int)((unsigned char*)(a))[6] - ((unsigned char*)(b))[6]);\
+ ((unsigned char*)(a))[7] = CLAMP_LOW((int)((unsigned char*)(a))[7] - ((unsigned char*)(b))[7]);
+
+#endif // MMX
+
+
+
 
 
 #endif

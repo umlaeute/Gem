@@ -2,6 +2,21 @@ GEM ONLINE DOCUMENTATION CHAPTER 4: Known bugs
 ----------------------------------------------
 
 ---------------------------- KNOWN BUGS -----------------------------
+
+model crashes when nothing is loaded
+---------------
+POSTED 10/25/02
+---------------
+BUG: if rendering is started without a model being loaded before,
+	pd crashes
+
+pix_imageInPlace crashes when nothing is loaded
+---------------
+POSTED 10/25/02
+---------------
+BUG: when trying to download non-existant images (by specifying the wrong
+preload-name), pd-crashes
+
 loading movies leaks memory under Win32
 --------------
 POSTED 4/16/02

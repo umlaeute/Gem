@@ -117,13 +117,20 @@ void pix_film :: openMess(t_symbol *filename)
   // Clean up any open files
   closeMess();
 
+  m_haveMovie	= GEM_MOVIE_NONE;
   realOpen(buf);
   if (m_haveMovie == GEM_MOVIE_NONE)return;
 
   createBuffer();
   prepareTexture();
 
-  outlet_float(m_outNumFrames, (float)m_numFrames);
+  t_atom ap[3];
+  SETFLOAT(ap, m_numFrames);
+  SETFLOAT(ap+1, m_xsize);
+  SETFLOAT(ap+2, m_ysize);
+
+  //outlet_float(m_outNumFrames, (float)m_numFrames);
+  outlet_list(m_outNumFrames, 0, 3, ap);
   post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
 }
 
@@ -155,7 +162,7 @@ void pix_film :: render(GemState *state)
   texFrame(state, newImage);
 
   // automatic proceeding
-  if (m_auto)m_reqFrame+=1;
+  if (m_auto)m_reqFrame++;
 }
 
 

@@ -52,7 +52,7 @@ pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize)
 	
 	dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
 		* 4 * sizeof(unsigned char);
-	m_pixBlock.image.data = new unsigned char[dataSize];
+	m_pixBlock.image.allocate(dataSize);
 	
 	memset(m_pixBlock.image.data, 0, dataSize);
 	
@@ -182,7 +182,7 @@ void pix_set :: SETMess(int xsize, int ysize)
 	int dataSize;
 	if ((xsize < 1) || (ysize < 1)) return;
 	
-	delete [] m_pixBlock.image.data;
+	m_pixBlock.image.clear();
 	
 	m_pixBlock.image.xsize = (int)xsize;
 	m_pixBlock.image.ysize = (int)ysize;
@@ -192,7 +192,7 @@ void pix_set :: SETMess(int xsize, int ysize)
 	
 	dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
 		* 4 * sizeof(unsigned char);
-	m_pixBlock.image.data = new unsigned char[dataSize];
+	m_pixBlock.image.allocate(dataSize);
 	
 	memset(m_pixBlock.image.data, 0, dataSize);
 }
@@ -203,7 +203,7 @@ void pix_set :: SETMess(int xsize, int ysize)
 /////////////////////////////////////////////////////////
 void pix_set :: cleanPixBlock()
 {
-    delete [] m_pixBlock.image.data;
+    m_pixBlock.image.clear();
     m_pixBlock.image.data = NULL;
 }
 

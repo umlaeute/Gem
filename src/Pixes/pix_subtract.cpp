@@ -42,21 +42,15 @@ pix_subtract :: ~pix_subtract()
 /////////////////////////////////////////////////////////
 void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
+  register int datasize = (image.xsize * image.ysize)>>1;
+  register unsigned char *leftPix = image.data;
+  register unsigned char *rightPix = right.data;
 
-    while(datasize--)
-    {
-    	leftPix[chRed] =
-			CLAMP_LOW((int)leftPix[chRed] - (int)rightPix[chRed]);
-    	leftPix[chGreen] =
-			CLAMP_LOW((int)leftPix[chGreen] - (int)rightPix[chGreen]);
-    	leftPix[chBlue] =
-			CLAMP_LOW((int)leftPix[chBlue] - (int)rightPix[chBlue]);
-        leftPix += 4;
-		rightPix += 4;
+    while (datasize--) {
+      SUB8(leftPix,rightPix);
+      leftPix+=8;rightPix+=8;
     }
+    MMXDONE;
 }
 
 /////////////////////////////////////////////////////////

@@ -78,10 +78,11 @@ void pix_image :: openMess(t_symbol *filename)
     // yep, we have it
     if (found)
     {
+      //post("using cached image");
         m_loadedImage = cache;
         m_loadedImage->refCount++;
         strcpy(m_filename, filename->s_name);
-        copy2Image(&(m_pixBlock.image), m_loadedImage->image);
+        m_loadedImage->image->copy2Image(&(m_pixBlock.image));
         m_pixBlock.newimage = 1;
         if (m_cache) m_cache->resendImage = 1;
         return;
@@ -111,7 +112,7 @@ void pix_image :: openMess(t_symbol *filename)
         ptr->next = m_loadedImage;
     }
 
-    copy2Image(&(m_pixBlock.image), m_loadedImage->image);
+    m_loadedImage->image->copy2Image(&(m_pixBlock.image));
     m_pixBlock.newimage = 1;
     post("GEM: loaded image: %s", buf);
 	if (powerOfTwo(m_pixBlock.image.xsize) != m_pixBlock.image.xsize ||
@@ -133,7 +134,7 @@ void pix_image :: render(GemState *state)
     // do we need to reload the image?    
     if (m_cache->resendImage)
     {
-	    refreshImage(&(m_pixBlock.image), m_loadedImage->image);
+      m_loadedImage->image->refreshImage(&(m_pixBlock.image));
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }
@@ -159,7 +160,7 @@ void pix_image :: startRendering()
 {
     if (!m_loadedImage) return;
 
-    refreshImage(&(m_pixBlock.image), m_loadedImage->image);
+    m_loadedImage->image->refreshImage(&(m_pixBlock.image));
     m_pixBlock.newimage = 1;
 }
 
@@ -195,7 +196,7 @@ void pix_image :: cleanImage()
         }
 	    m_loadedImage = NULL;
 
-    	delete [] m_pixBlock.image.data;
+    	m_pixBlock.image.clear();
         m_pixBlock.image.data = NULL;
     }
 }

@@ -1,4 +1,4 @@
-#N canvas 357 145 602 280 8;
+#N canvas 361 165 602 280 10;
 #X obj 23 247 gemwin;
 #X msg 25 50 create;
 #X obj 372 91 gemhead;
@@ -10,8 +10,13 @@
 #X floatatom 416 122 0 0 0;
 #X obj 372 197 cube;
 #X obj 372 159 translateXYZ;
-#X obj 81 201 loadbang;
-#X msg 81 224 reset;
+#N canvas 26 40 290 300 Gem.init 0;
+#X obj 68 196 outlet;
+#X obj 68 86 loadbang;
+#X msg 68 136 reset;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X restore 49 223 pd Gem.init;
 #X connect 1 0 0 0;
 #X connect 2 0 10 0;
 #X connect 3 0 0 0;
@@ -20,5 +25,4 @@
 #X connect 8 0 10 1;
 #X connect 8 0 10 2;
 #X connect 10 0 9 0;
-#X connect 11 0 12 0;
-#X connect 12 0 0 0;
+#X connect 11 0 0 0;

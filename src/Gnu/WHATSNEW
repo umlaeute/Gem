@@ -1,3 +1,15 @@
+gem-0.88-cvs (so far):
+- fixed some bugs with avi-reading, video4linux, model, imageInPlace,...
+- rewrote the rendering system:
+-- previous versions built a dag (directed acyclic graph ?) when rendering was started, which established the static rendering-chain
+-- now in each rendering-cycle the [gemhead] "bangs" the following gem.objects
+-- this means:
+--- when modifying a gem.objects you don't have to restart the rendering
+--- when deleting a connection between 2 gem.objects, the lower (unconnected) part won't be rendered immediately
+--- we can now retrigger parts of the render-chain (cool for particles, arrays,...)
+- the [gemhead]s priority can be "set" dynamically: so we can change the rendering-order on the fly (good for complex alpha-blending)
+- [gemhead]'s with negative priority will be rendered AFTER those with a positive one, AND will not be affected by the "view"point message (good for displaying help-messages, logos, etc...)
+
 gem-0.87:
 - added much documentation
 - you can set the title of the GEM-window with the "title"-message. Up till now only one symbol is allowed.

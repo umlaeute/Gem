@@ -40,7 +40,6 @@ void GemPixObj :: setPixModified()
 void GemPixObj :: render(GemState *state)
 {
     if (!state->image || !state->image->newimage || !m_processOnOff) return;
-    
 	if (state->image->image.format == GL_RGBA)
 		processImage(state->image->image);
 	else

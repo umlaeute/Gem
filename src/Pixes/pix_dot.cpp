@@ -61,7 +61,7 @@ static void drawDot(int xx, int yy, unsigned char c, unsigned char *dest)
 pix_dot :: pix_dot()
 {
   myImage.xsize=myImage.ysize=myImage.csize=1;
-  myImage.data = new unsigned char[1];
+  myImage.allocate(1);
 
   m_dotx = 8;
   m_doty = 8;
@@ -75,7 +75,7 @@ pix_dot :: ~pix_dot()
 {
   delete [] blockoffset;
   delete [] blockpos;
-  if (myImage.data) delete [] myImage.data;
+  myImage.clear();
 }
 
 
@@ -133,10 +133,10 @@ void pix_dot :: processFX(imageStruct &image)
 
   if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)){
     int dataSize = image.xsize * image.ysize * image.csize;
-    delete [] myImage.data;
+    myImage.clear();
     m_force = false;
 
-    myImage.data = new unsigned char[dataSize];
+    myImage.allocate(dataSize);
 
     makePuzzleBlocks(image.xsize, image.ysize, image.csize);
     shuffle();

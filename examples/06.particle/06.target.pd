@@ -1,5 +1,5 @@
-#N canvas 752 244 600 500 8;
-#X obj 40 230 gemwin;
+#N canvas 396 160 600 500 10;
+#X obj 40 296 gemwin;
 #X msg 40 97 create;
 #X msg 60 135 destroy;
 #X obj 198 50 gemhead;
@@ -20,6 +20,13 @@
 #X obj 198 116 part_size 0.1;
 #X obj 198 236 part_targetcolor 0 0 1;
 #X obj 198 201 part_targetsize 3;
+#N canvas 87 154 247 179 Gem.init 0;
+#X obj 118 46 loadbang;
+#X msg 118 81 reset;
+#X obj 118 113 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X restore 95 271 pd Gem.init;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 4 0;
@@ -33,3 +40,4 @@
 #X connect 18 0 9 0;
 #X connect 19 0 15 0;
 #X connect 20 0 19 0;
+#X connect 21 0 0 0;

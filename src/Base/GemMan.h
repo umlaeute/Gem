@@ -22,7 +22,6 @@ LOG
 #endif
 
 #include <GL/glu.h>
-
 #include "Base/GemExportDef.h"
 
 
@@ -53,7 +52,7 @@ class GEM_EXTERN GemMan
     	static void 	    addObj(gemhead *obj, int priority);
     	
     	//////////
-    	static void 	    removeObj(gemhead *obj);
+    	static void 	    removeObj(gemhead *obj, int priority);
 
         //////////
     	// Is there a window.
@@ -138,6 +137,7 @@ class GEM_EXTERN GemMan
         static int	   m_border;		// window border
         static int	   m_buffer;		// single(1) or double(2)
 	static int	   m_stereo;		// stereoscopic
+
         static int	   m_profile;		// off(0), on(1), w/o image caching(2)
 	static float	   m_perspect[6];	// values for the perspective matrix
 	
@@ -149,6 +149,9 @@ class GEM_EXTERN GemMan
 	static GLfloat	   m_fogColor[4];	// colour of the fog
 	static float	   m_fogStart;		// start of the linear fog
 	static float	   m_fogEnd;		// start of the linear fog
+
+	static float       m_motionBlur;        // motion-blur factor in double-buffer mode
+
 	
         //////////
         // Changing these variables is likely to crash GEM
@@ -165,7 +168,6 @@ class GEM_EXTERN GemMan
 	
         //////////
     	static void 	    fillGemState(GemState &);
-	
  private:
 	
     	// gemwin is allowed to modifying "global" window attributes

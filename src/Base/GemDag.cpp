@@ -49,7 +49,8 @@ GemDag :: ~GemDag()
 // addChild
 //
 /////////////////////////////////////////////////////////
-void GemDag :: addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *))
+void GemDag :: addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *), void (*stoprenderFunc)(GemBase*))
+
 {
     // a new entry at the top
     if (m_current == NULL)
@@ -61,13 +62,13 @@ void GemDag :: addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *)
     	delete [] m_list;
     	m_list = newList;
     	m_current = m_list[m_numChildren] = new gemBaseLink;
-    	m_list[m_numChildren]->setData(data, renderFunc, postrenderFunc);
+     	m_list[m_numChildren]->setData(data, renderFunc, postrenderFunc, stoprenderFunc);
     	m_numChildren++;
     }
     // else put it into the current link
     else
     {
-    	m_current = m_current->addChild(data, renderFunc, postrenderFunc);
+     	m_current = m_current->addChild(data, renderFunc, postrenderFunc, stoprenderFunc);
     }
 }
 
@@ -112,25 +113,26 @@ gemBaseLink :: ~gemBaseLink()
 // setData
 //
 /////////////////////////////////////////////////////////
-void gemBaseLink :: setData(GemBase *_data, void (*_renderFunc)(GemBase *, GemState *), void (*_postrenderFunc)(GemBase *, GemState *))
+void gemBaseLink :: setData(GemBase *_data, void (*_renderFunc)(GemBase *, GemState *), void (*_postrenderFunc)(GemBase *, GemState *), void (*_stoprenderFunc)(GemBase*))
 {
     data = _data;
     renderFunc = _renderFunc;
     postrenderFunc = _postrenderFunc;
+    stoprenderFunc = _stoprenderFunc;
 }
 
 /////////////////////////////////////////////////////////
 // addChild
 //
 /////////////////////////////////////////////////////////
-gemBaseLink *gemBaseLink :: addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *))
+gemBaseLink *gemBaseLink :: addChild(GemBase *data, void (*renderFunc)(GemBase *, GemState *), void (*postrenderFunc)(GemBase *, GemState *), void (*stoprenderFunc)(GemBase*))
 {
     // the very first entry
     if (children == NULL)
     {
     	children = new gemBaseLink*[1];
     	children[0] = new gemBaseLink;
-    	children[0]->setData(data, renderFunc, postrenderFunc);
+	children[0]->setData(data, renderFunc, postrenderFunc, stoprenderFunc);
     	children[0]->parent = this;
    		numChildren = 1;
    		return(children[0]);
@@ -146,7 +148,7 @@ gemBaseLink *gemBaseLink :: addChild(GemBase *data, void (*renderFunc)(GemBase *
     	children = newList;
     	
     	children[numChildren] = new gemBaseLink;
-    	children[numChildren]->setData(data, renderFunc, postrenderFunc);
+     	children[numChildren]->setData(data, renderFunc, postrenderFunc, stoprenderFunc);
     	children[numChildren]->parent = this;
     	numChildren++;
     	return(children[numChildren - 1]);

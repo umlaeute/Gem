@@ -78,7 +78,7 @@ class GEM_EXTERN pix_video : public GemBase
   //////////
   // Set the video dimensions
   virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
-			  int topmargin = 0 , int bottommargin = 0);
+			  int topmargin = 0 , int bottommargin = 0) {}
 
   //////////
   // Set the video offset

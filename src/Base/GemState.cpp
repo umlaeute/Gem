@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "GemState.h"
+#include <GL/gl.h>
 
 /////////////////////////////////////////////////////////
 //
@@ -27,5 +28,12 @@
 /////////////////////////////////////////////////////////
 GemState :: GemState()
 		  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
-    		image(0), texCoords(0), numTexCoords(0), stereo(0), tickTime(50.f)
+    		image(0), texCoords(0), numTexCoords(0),
+		    numVertexColors(0), stereo(0), tickTime(50.f)
 { }
+
+void GemState::setColor(int num)
+{
+  if (numVertexColors > num)
+    glColor3fv(vertexColors[num]); 
+}

@@ -1,4 +1,4 @@
-#N canvas 324 83 602 502 12;
+#N canvas 328 103 602 502 12;
 #X floatatom 241 258 0 0 0;
 #X text 172 376 click on the pix_image object to display the loaded
 image with imgview;
@@ -20,6 +20,13 @@ image with imgview;
 ;
 #X text 62 442 On most machines \, pix_draw is MUCH slower than pix_texture.
 However \, pix_draw is easier to use in an example patch.;
+#N canvas 87 154 247 179 Gem.init 0;
+#X obj 118 46 loadbang;
+#X msg 118 81 reset;
+#X obj 118 113 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X restore 39 232 pd Gem.init;
 #X connect 0 0 13 2;
 #X connect 3 0 2 0;
 #X connect 4 0 12 0;
@@ -30,3 +37,4 @@ However \, pix_draw is easier to use in an example patch.;
 #X connect 13 0 8 0;
 #X connect 14 0 13 1;
 #X connect 15 0 13 3;
+#X connect 18 0 2 0;

@@ -28,7 +28,7 @@ CPPEXTERN_NEW(pix_test)
 pix_test :: pix_test()
 {
   myImage.xsize=myImage.ysize=myImage.csize=1;
-  myImage.data = new unsigned char[1];
+  myImage.allocate(1);
  }
 
 /////////////////////////////////////////////////////////
@@ -53,8 +53,8 @@ void pix_test :: processImage(imageStruct &image)
 
     if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
       int dataSize = image.xsize * image.ysize * image.csize;
-      delete [] myImage.data;
-      myImage.data = new unsigned char[dataSize];
+      myImage.clear();
+      myImage.allocate(dataSize);
     }
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;

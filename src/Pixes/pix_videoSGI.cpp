@@ -92,7 +92,7 @@ pix_video :: pix_video()
         
     int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
     	    	     * 4 * sizeof(unsigned char);
-    m_pixBlock.image.data = new unsigned char[dataSize];
+    m_pixBlock.image.allocate(dataSize);
 
     m_haveVideo = 1;
     if ( !startTransfer() )
@@ -329,7 +329,7 @@ void pix_video :: dimenMess(int x, int y)
     cleanPixBlock();
     int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
     	    	    * 4 * sizeof(unsigned char);
-    m_pixBlock.image.data = new unsigned char[dataSize];
+    m_pixBlock.image.allocate(dataSize);
 
     // start the transfer and rebuild the buffer
     if ( !startTransfer() ) 
@@ -345,8 +345,7 @@ void pix_video :: dimenMess(int x, int y)
 /////////////////////////////////////////////////////////
 void pix_video :: cleanPixBlock()
 {
-    delete [] m_pixBlock.image.data;
-    m_pixBlock.image.data = NULL;
+    m_pixBlock.image.clear();
 }
 
 /////////////////////////////////////////////////////////

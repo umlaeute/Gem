@@ -1,4 +1,4 @@
-#N canvas 48 152 635 502 12;
+#N canvas 52 158 635 502 12;
 #X obj 27 337 gemwin;
 #X msg 59 120 create;
 #X obj 350 226 gemhead;
@@ -15,7 +15,10 @@
 #X obj 350 337 rotateXYZ;
 #X obj 29 398 gemhead;
 #X obj 29 420 world_light;
-#N canvas 203 -12 600 400 init 0;
+#X msg 452 196 1 1 0;
+#X text 109 29 this demonstrates how to create a yellow teapot;
+#X text 451 266 rotate the teapot;
+#N canvas 207 8 231 160 Gem.init 0;
 #X obj 73 30 loadbang;
 #X obj 73 53 t b b;
 #X msg 113 77 reset;
@@ -26,10 +29,7 @@
 #X connect 1 1 2 0;
 #X connect 2 0 4 0;
 #X connect 3 0 4 0;
-#X restore 154 284 pd init;
-#X msg 452 196 1 1 0;
-#X text 109 29 this demonstrates how to create a yellow teapot;
-#X text 451 266 rotate the teapot;
+#X restore 76 306 pd Gem.init;
 #X connect 1 0 0 0;
 #X connect 2 0 7 0;
 #X connect 3 0 0 0;
@@ -41,5 +41,5 @@
 #X connect 8 0 7 1;
 #X connect 13 0 12 0;
 #X connect 14 0 15 0;
-#X connect 16 0 0 0;
-#X connect 17 0 7 1;
+#X connect 16 0 7 1;
+#X connect 19 0 0 0;

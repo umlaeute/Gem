@@ -60,9 +60,13 @@ pix_videoLinux :: pix_videoLinux(t_floatarg w = 320, t_floatarg h = 240) :
      m_width((int)w),
      m_height((int)h),
      m_channel(COMPOSITEIN),
-     m_norm(VIDEO_MODE_AUTO)
+     m_norm(VIDEO_MODE_AUTO),
+     m_devicenum(DEVICENO)
 {
-  post("w = %d, h= %d",m_width, m_height);
+  if (!m_width)m_width=64;
+  if (!m_height)m_height=64;
+
+  //  post("w = %d, h= %d",m_width, m_height);
   m_pixBlock.image.data = NULL;
 }
 
@@ -87,10 +91,7 @@ void pix_videoLinux :: render(GemState *state)
     int i, row, column;
     unsigned char *pixp;
     
-    if (!m_haveVideo)
-    {
-	return;
-    }
+    if (!m_haveVideo)return;
     
     if (ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
     {
@@ -202,7 +203,9 @@ int pix_videoLinux :: startTransfer()
     int width, height;
     
     skipnext = 0;
-    sprintf(buf, "/dev/video%d", DEVICENO);
+    if (m_devicenum<0){
+      sprintf(buf, "/dev/video");
+    } else sprintf(buf, "/dev/video%d", m_devicenum);
     if ((tvfd = open(buf, O_RDWR)) < 0)
     {
 	perror(buf);
@@ -335,15 +338,6 @@ int pix_videoLinux :: stopTransfer()
 }
 
 /////////////////////////////////////////////////////////
-// offsetMess
-//
-/////////////////////////////////////////////////////////
-void pix_videoLinux :: offsetMess(int x, int y)
-{
-    post("warning: pix_video_offset does nothing in Linux");
-}
-
-/////////////////////////////////////////////////////////
 // dimenMess
 //
 /////////////////////////////////////////////////////////
@@ -361,14 +355,16 @@ void pix_videoLinux :: dimenMess(int x, int y, int leftmargin, int rightmargin,
     if (ytotal > vcap.maxheight)
     	post("y dimensions too great");
     else if (ytotal < vcap.minheight || y < 1 ||
-    	topmargin < 0 || bottommargin < 0)
-    	    post("y dimensions too small");
+	     topmargin < 0 || bottommargin < 0)
+      post("y dimensions too small");
 
     myleftmargin = leftmargin;
     myrightmargin = rightmargin;
     mytopmargin = topmargin;
     mybottommargin = bottommargin;
 
+    m_width=x;
+    m_height=y;
     m_pixBlock.image.xsize = x;
     m_pixBlock.image.ysize = y;
 
@@ -390,17 +386,6 @@ void pix_videoLinux :: cleanPixBlock()
 }
 
 /////////////////////////////////////////////////////////
-// swapMess
-//
-/////////////////////////////////////////////////////////
-void pix_videoLinux :: swapMess(int state)
-{
-    post("warning: pix_video_swap does nothing in Linux");
-    if (state) m_swap = 1;
-    else m_swap = 0;
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -408,30 +393,70 @@ void pix_videoLinux :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)_classpix_videoLinux,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
   pix_video::real_obj_setupCallback(classPtr);
-  class_addmethod(classPtr, (t_method)&pix_videoLinux::channelMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_videoLinux::freqMessCallback,
 		  gensym("freq"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_videoLinux::modeMessCallback,
-		  gensym("mode"), A_SYMBOL, A_FLOAT, A_NULL);
+		  gensym("mode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_videoLinux::channelMessCallback,
+		  gensym("channel"), A_FLOAT, A_NULL);
 }
 
 
-void pix_videoLinux :: modeMess(t_symbol* norm, t_floatarg mode)
+void pix_videoLinux :: modeMess(int argc, t_atom *argv)
 {
-  vchannel.channel = (int) mode;
+  int mode=m_channel;
+  char c=0;
+  if (argc==1){
+    if (argv->a_type==A_FLOAT)mode=atom_getint(argv);
+    else if (argv->a_type==A_SYMBOL)c=toupper(*argv->a_w.w_symbol->s_name);
+    else return;
+  } else if (argc==2){
+    if (argv->a_type==A_FLOAT && (argv+1)->a_type==A_SYMBOL){
+      mode=atom_getint(argv);
+      c=toupper(*(argv+1)->a_w.w_symbol->s_name);
+    } else if ((argv+1)->a_type==A_FLOAT && argv->a_type==A_SYMBOL){
+      mode=atom_getint(argv+1);
+      c=toupper(*argv->a_w.w_symbol->s_name);
+    } else return;
+  }
 
-  if (!strcmp(norm->s_name,"PAL")) 
-       m_norm = VIDEO_MODE_PAL;
-
-  if (!strcmp(norm->s_name,"NTSC"))
-       m_norm = VIDEO_MODE_NTSC;
-
-  m_channel = (int) mode;
   stopTransfer();
-  startTransfer();
+
+  switch (c){
+  case 'P':
+    m_norm = VIDEO_MODE_PAL;
+    break;
+  case 'N':
+    m_norm = VIDEO_MODE_NTSC;
+    break;
+  default:
+    error("pix_video: unknown norm");
+    break;
+  }
+  m_channel = (int) mode;
+  vchannel.channel = m_channel;
+
+  if(gem_amRendering)startTransfer();
 }
 
+void pix_videoLinux :: channelMess(int c)
+{
+  if(gem_amRendering)stopTransfer();
 
-void pix_videoLinux :: channelMess(t_floatarg c)
+  m_channel = c;
+  vchannel.channel = m_channel;
+
+  if(gem_amRendering)startTransfer();
+}
+
+void pix_videoLinux :: deviceMess(int d)
+{
+  if(gem_amRendering)stopTransfer();
+  m_devicenum=d;
+  if(gem_amRendering)startTransfer();
+}
+
+void pix_videoLinux :: freqMess(t_floatarg c)
 {
      int freq = (int) c;
      vtuner.tuner = m_channel;
@@ -446,14 +471,24 @@ void pix_videoLinux :: channelMess(t_floatarg c)
      }
 }
 
-void pix_videoLinux :: modeMessCallback(void *data, t_symbol* norm,t_floatarg f)
+void pix_videoLinux :: modeMessCallback(void *data, t_symbol* norm, int argc, t_atom *argv)
 {
-    GetMyClass(data)->modeMess(norm,f);
+  if (argc==1 || argc==2)GetMyClass(data)->modeMess(argc, argv);
 }
 
 
+void pix_videoLinux :: freqMessCallback(void *data, t_floatarg f)
+{
+    GetMyClass(data)->freqMess(f);
+}
+
 void pix_videoLinux :: channelMessCallback(void *data, t_floatarg f)
 {
-    GetMyClass(data)->channelMess(f);
+    GetMyClass(data)->channelMess((int)f);
+}
+
+void pix_videoLinux :: deviceMessCallback(void *data, t_floatarg f)
+{
+    GetMyClass(data)->deviceMess((int)f);
 }
 #endif

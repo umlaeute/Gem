@@ -17,7 +17,6 @@
 #include "circle.h"
 
 #include <math.h>
-#include <string.h>
 
 #include "Base/GemState.h"
 
@@ -76,26 +75,6 @@ void circle :: render(GemState *state)
 	    }
     glEnd();
     glLineWidth(1.0);
-}
-
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void circle :: typeMess(t_symbol *type)
-{
-    if (!strcmp(type->s_name, "line")) 
-	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill")) 
-	    m_drawType = GL_POLYGON;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else
-    {
-	    error("GEM: circle draw style");
-	    return;
-    }
-    setModified();
 }
 
 /////////////////////////////////////////////////////////

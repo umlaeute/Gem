@@ -14,9 +14,18 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "pix_texture.h"
+/////////////////////////////////////////////////////////
+//
+//  pix_texture
+//
+//  2001:forum::für::umläute:2001
+//  IOhannes m zmoelnig
+//  mailto:zmoelnig@iem.kug.ac.at
+//
+/////////////////////////////////////////////////////////
 
-#include "Base/GemPixUtil.h"
+#include "pix_texture.h"
+#include <string.h>
 
 CPPEXTERN_NEW(pix_texture)
 
@@ -32,7 +41,10 @@ pix_texture :: pix_texture()
     	     : m_textureOnOff(1), m_textureQuality(GL_LINEAR),
                m_rebuildList(0), m_textureObj(0)
 {
-	m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
+  m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
+
+  m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
+  m_buffer.data = NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -40,7 +52,8 @@ pix_texture :: pix_texture()
 //
 /////////////////////////////////////////////////////////
 pix_texture :: ~pix_texture()
-{ }
+{
+}
 
 /////////////////////////////////////////////////////////
 // setUpTextureState
@@ -57,6 +70,15 @@ void pix_texture :: setUpTextureState()
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
+
+static inline int powerOfTwo(int value)                                         {
+	int x = 1;
+	while(x <= value) x <<= 1;
+	while(x < value) x <<= 1;
+	return(x);  
+}       
+	                  
+
 /////////////////////////////////////////////////////////
 // render
 //
@@ -66,7 +88,7 @@ void pix_texture :: render(GemState *state)
     if ( !state->image || !m_textureOnOff) return;
 
     state->texture = 1;
-    
+
     glEnable(GL_TEXTURE_2D);
 
 #ifdef GL_VERSION_1_1
@@ -93,34 +115,63 @@ void pix_texture :: render(GemState *state)
     if (m_rebuildList)
 #endif
     {
-		// if the size changed, then reset the texture
-		if (state->image->image.csize != m_dataSize[0] ||
-			state->image->image.xsize != m_dataSize[1] ||
-			state->image->image.ysize != m_dataSize[2])
-		{
-			m_dataSize[0] = state->image->image.csize;
-			m_dataSize[1] = state->image->image.xsize;
-			m_dataSize[2] = state->image->image.ysize;
+    // if the size changed, then reset the texture
+	int x_2 = powerOfTwo(state->image->image.xsize);
+	int y_2 = powerOfTwo(state->image->image.ysize);
 
-			glTexImage2D(GL_TEXTURE_2D, 0,
-	    		state->image->image.csize,
-	    		state->image->image.xsize,
-	    		state->image->image.ysize, 0,
-	    		state->image->image.format,
-    			state->image->image.type,
-    			state->image->image.data);
-		}
-		// the size is the same, so just use subimage
-		else
-		{
-  			glTexSubImage2D(GL_TEXTURE_2D, 0,
-	    		0, 0,							// position
-	    		state->image->image.xsize,
-	    		state->image->image.ysize,
-	    		state->image->image.format,
-    			state->image->image.type,
-    			state->image->image.data);		
-		}
+	if (x_2 != m_buffer.xsize || y_2 != m_buffer.ysize) {
+		m_buffer.clear();
+		m_buffer.xsize = x_2;
+		m_buffer.ysize = y_2;
+		m_buffer.csize = state->image->image.csize;
+		m_buffer.format = state->image->image.format;
+		m_buffer.type = state->image->image.type;
+				
+		m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+		memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+	
+		float m_xRatio = (float)state->image->image.xsize / (float)x_2;
+		float m_yRatio = (float)state->image->image.ysize / (float)y_2;
+		
+		m_coords[0].s = 0.f;
+		m_coords[0].t = 0.f;
+		
+		m_coords[1].s = m_xRatio;
+		m_coords[1].t = 0.f;
+		
+		m_coords[2].s = m_xRatio;
+		m_coords[2].t = m_yRatio;
+		
+		m_coords[3].s = 0.f;
+		m_coords[3].t = m_yRatio;
+	}
+
+
+	if (m_buffer.csize != m_dataSize[0] ||
+	  m_buffer.xsize != m_dataSize[1] ||
+	  m_buffer.ysize != m_dataSize[2])
+	{
+	  m_dataSize[0] = m_buffer.csize;
+	  m_dataSize[1] = m_buffer.xsize;
+	  m_dataSize[2] = m_buffer.ysize;
+
+	  glTexImage2D(GL_TEXTURE_2D, 0,
+		       m_buffer.csize,
+		       m_buffer.xsize,
+		       m_buffer.ysize, 0,
+		       m_buffer.format,
+		       m_buffer.type,
+		       m_buffer.data);
+	}
+	// okay, load in the actual pixel data
+
+	  glTexSubImage2D(GL_TEXTURE_2D, 0,
+			  0, 0,				// position
+			  state->image->image.xsize,
+			  state->image->image.ysize,
+			  state->image->image.format,
+			  state->image->image.type,
+			  state->image->image.data);
 
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
@@ -128,16 +179,22 @@ void pix_texture :: render(GemState *state)
         if (creatingDispList)
         {
             glEndList();
-//            m_rebuildList = 0;
         }
 #endif
     }
 #ifdef GL_VERSION_1_1
+
 #elif GL_EXT_texture_object
+
 #else
     else glCallList(m_textureObj);
 #endif
 	m_rebuildList = 0;
+
+	if (!state->texCoords) {
+	  state->texCoords = m_coords;
+	  state->numTexCoords = 4;
+	}
 }
 
 /////////////////////////////////////////////////////////
@@ -172,7 +229,6 @@ void pix_texture :: startRendering()
     m_rebuildList = 1;
 #endif
 	m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
-
 	if (!m_textureObj)
 	{
 		error("GEM: pix_texture: Unable to allocate texture object");
@@ -230,8 +286,10 @@ void pix_texture :: textureQuality(int type)
 #else
 #endif
     }
-	setModified();
+    setModified();
 }
+
+
 
 /////////////////////////////////////////////////////////
 // static member functions
@@ -239,15 +297,16 @@ void pix_texture :: textureQuality(int type)
 /////////////////////////////////////////////////////////
 void pix_texture :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, (t_method)&pix_texture::floatMessCallback);    
-    class_addmethod(classPtr, (t_method)&pix_texture::textureMessCallback,
-    	    gensym("quality"), A_FLOAT, A_NULL);
+  class_addfloat(classPtr, (t_method)&pix_texture::floatMessCallback);    
+  class_addmethod(classPtr, (t_method)&pix_texture::textureMessCallback,
+		  gensym("quality"), A_FLOAT, A_NULL);
+  class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
 }
 void pix_texture :: floatMessCallback(void *data, float n)
 {
-    GetMyClass(data)->textureOnOff((int)n);
+  GetMyClass(data)->textureOnOff((int)n);
 }
 void pix_texture :: textureMessCallback(void *data, t_floatarg quality)
 {
-    GetMyClass(data)->textureQuality((int)quality);
+  GetMyClass(data)->textureQuality((int)quality);
 }

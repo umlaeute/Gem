@@ -23,6 +23,25 @@ class TexCoord;
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
+	TexCoord
+    
+
+DESCRIPTION
+    
+-----------------------------------------------------------------*/
+class GEM_EXTERN TexCoord
+{
+    public:
+        TexCoord() : s(0.f), t(0.f) { }
+        TexCoord(float s_, float t_) : s(s_), t(t_) { }
+    	float   	    s;
+    	float   	    t;
+};
+
+
+/*-----------------------------------------------------------------
+-------------------------------------------------------------------
+CLASS
     GemState
     
     The state to pass among GEM objects
@@ -67,6 +86,9 @@ class GEM_EXTERN GemState
     	// The number of TexCoords
     	int 	    	    numTexCoords;
     	
+	float**             vertexColors;
+	int 	    	    numVertexColors;
+
     	//////////
     	// Stereoscopic rendering?
 	// 0 - no
@@ -83,24 +105,20 @@ class GEM_EXTERN GemState
         //////////
         // Constructor
     	GemState();
-};
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-	TexCoord
-    
+	float texCoordX(int num) {
+	  if (texture && numTexCoords > num)
+	    return texCoords[num].s;
+	  else return 0.;
+	}
 
-DESCRIPTION
-    
------------------------------------------------------------------*/
-class GEM_EXTERN TexCoord
-{
-    public:
-        TexCoord() : s(0.f), t(0.f) { }
-        TexCoord(float s_, float t_) : s(s_), t(t_) { }
-    	float   	    s;
-    	float   	    t;
+	float texCoordY(int num) {
+	  if (texture && numTexCoords > num)
+	    return texCoords[num].t;
+	  else return 0.;
+	}
+
+	void setColor(int num);
 };
     	
 #endif	// for header file

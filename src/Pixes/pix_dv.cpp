@@ -94,7 +94,7 @@ void pix_dv :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_dv :: cleanPixBlock()
 {
-  if (m_pixBlock.image.data) delete [] m_pixBlock.image.data;
+  m_pixBlock.image.clear();
   m_pixBlock.image.data = NULL;
   m_pixBlock.image.xsize=m_pixBlock.image.ysize=0;
 }
@@ -112,7 +112,7 @@ void pix_dv :: makePixBlock()
     m_pixBlock.image.ysize=(m_norm==DV_PAL)?576:480;
     m_pixBlock.image.csize=3;
     m_pixBlock.image.format = GL_RGB;
-    m_pixBlock.image.data = new unsigned char[num_pix*m_pixBlock.image.csize];
+    m_pixBlock.image.allocate(num_pix*m_pixBlock.image.csize);
   }
 }
 
