@@ -71,7 +71,6 @@ class GEM_EXTERN pix_filmDarwinYUV : public pix_filmYUV
   TimeValue		m_movieTime;
 
   Track			m_movieTrack;
-  Media			m_movieMedia;
   TimeValue		m_timeScale;
   TimeValue		duration;
 

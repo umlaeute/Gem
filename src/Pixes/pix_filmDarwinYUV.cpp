@@ -144,39 +144,11 @@ UnsignedWide startTime;
 	OSType		whichMediaType = VisualMediaCharacteristic;
         // we want to begin with the first frame (sample) in the track
 	short		flags = nextTimeMediaSample + nextTimeEdgeOK;
-	//TimeValue	duration = 0;
-	//TimeValue	theTime = 0;
-        
-	//m_movieTrack = GetMovieIndTrack( m_movie, 1);
-        m_movieTrack = GetMovieIndTrackType(m_movie, 1, VisualMediaCharacteristic, 							movieTrackCharacteristic | movieTrackEnabledOnly);
-        m_movieMedia = GetTrackMedia( m_movieTrack );
-        mediaDur = (long)GetMediaDuration(m_movieMedia);
-        mediaScale = (long)GetMediaTimeScale(m_movieMedia);
-        post("Media duration = %d timescale = %d", mediaDur, mediaScale);
-        m_timeScale = mediaScale/movieScale;
         
         GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
              fixed1, NULL, &duration);
         m_numFrames = movieDur/duration;
-/*
-	m_numFrames = -1;
-	while (theTime >= 0) {
-		m_numFrames++;
-		::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                            1,
-                                            &whichMediaType,
-                                            theTime,
-                                            0,
-                                            &theTime,
-                                            &duration);
-                                          // NULL);
-		// after the first interesting time, don't include the time we
-		//  are currently at.
-		flags = nextTimeMediaSample;
-
-	}
-*/        
+     
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
         OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
@@ -241,21 +213,6 @@ UnsignedWide startTime;
 void pix_filmDarwinYUV :: getFrame()
 {
     if (!m_haveMovie) return;
-    
- /*   CGrafPtr	 	savedPort;
-    GDHandle     	savedDevice;
-    Rect		m_srcRect;
-    PixMapHandle	m_pixMap;
-    Ptr			m_baseAddr;
-    
-    
-    
-    ::GetGWorld(&savedPort, &savedDevice);
-    ::SetGWorld(m_srcGWorld, NULL);
-    ::GetMovieBox(m_movie, &m_srcRect);
-    
-    m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
-    m_baseAddr = ::GetPixBaseAddr(m_pixMap); */
 
 //timer start
     UnsignedWide startTime;
@@ -301,27 +258,7 @@ if (m_auto) {
         flags = nextTimeStep;
                                             
         }else{
-/*          SampleNumToMediaTime( m_movieMedia, m_reqFrame, &mFrame, NULL);
-            m_movieTime = mFrame/m_timeScale;
-*/
             m_movieTime = m_reqFrame * duration;
-            //post("m_movieTime: %d, m_numFrames: %d", (long)m_movieTime, (long)m_numFrames);
-            //apost("m_timeScale: %d, m_reqFrame: %d", (long)m_timeScale, (long)m_reqFrame);
-            //post("mFrame: %d", (long)mFrame);
-            /*for (int i=0; i<num; i++) {
-                // skip to the next interesting time and get the duration for that frame
-                ::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                                1,
-                                &whichMediaType,
-                                    m_movieTime,
-                                                0,
-                                    &m_movieTime,
-                                           // NULL);
-                                           &duration);
-                flags = NULL;
-                flags = nextTimeStep;                             
-            } */
         }
        
     // set the time for the frame and give time to the movie toolbox	
@@ -333,25 +270,25 @@ if (m_auto) {
          UnsignedWide endTime;
         ::Microseconds(&endTime);
         float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
-        m_fps = 1 / (seconds * 1000.f) * 1000;
+        //m_fps = 1 / (seconds * 1000.f) * 1000;
       //  post("GEM: time to render frame: %f", seconds);
 }
 
 void pix_filmDarwinYUV :: LoadRam()
 {
-      TimeValue	length;
-      OSErr err;
-if (m_haveMovie){      
-m_movieTime = 0;
- length = GetMovieDuration(m_movie);
- err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
- if (err)
- {
- post("pix_filmYUV: LoadMovieIntoRam failed miserably");
- }
- }else{
- post("pix_filmYUV: no movie to load into RAM!");
- }
+    TimeValue	length;
+    OSErr 	err;
+    if (m_haveMovie){      
+        m_movieTime = 0;
+        length = GetMovieDuration(m_movie);
+        err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
+        if (err)
+        {
+            post("pix_filmYUV: LoadMovieIntoRam failed miserably");
+        }
+    }else{
+        post("pix_filmYUV: no movie to load into RAM!");
+    }
 }
 
 /////////////////////////////////////////////////////////
