@@ -2271,7 +2271,7 @@ fi
 
 
 if test "$enable_new" != "no"; then
- CXXFLAGS="$CXXFLAGS -DNEW_VIDEOFILM
+ CXXFLAGS="$CXXFLAGS -DNEW_VIDEOFILM"
 fi
 
 if test "$enable_mmx" != "no"; then
