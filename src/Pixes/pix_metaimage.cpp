@@ -58,17 +58,10 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
     }
     pSource = (U32*)image.data;
     
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
-
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
     pOutput = (U32*)myImage.data;
 
     float SubWidth;
@@ -115,18 +108,11 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
     }
     pSource = (U32*)image.data;
     
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
-
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.setBlack();
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
+    //    myImage.setBlack();
     pOutput = (U32*)myImage.data;
 
     float SubWidth;
@@ -152,9 +138,54 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
 		return;
     } 
 
-    U32 AverageColour = YUV_CreateSubImage(pSource,pSubImageData,SubWidth,SubHeight);
+    U32 AverageColour = CreateSubImageYUV(pSource,pSubImageData,SubWidth,SubHeight);
 
-    YUV_DrawSubImages(pSubImageData,AverageColour,SubWidth,SubHeight);
+    DrawSubImagesYUV(pSubImageData,AverageColour,SubWidth,SubHeight);
+
+    image.data = myImage.data;
+}
+
+/////////////////////////////////////////////////////////
+// processGrayImage
+//
+/////////////////////////////////////////////////////////
+void pix_metaimage :: processGrayImage(imageStruct &image)
+{
+    nWidth = image.xsize;
+    nHeight = image.ysize;
+    if (!init) {
+	Pete_MetaImage_Init();
+	init = 1;
+    }
+    pSource = (U32*)image.data;
+    
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
+    //    myImage.setBlack();
+    pOutput = (U32*)myImage.data;
+
+    float SubWidth;
+    float SubHeight;
+    
+    m_Size = clampFunc(m_Size,0.0f,1.0f);
+
+    if (m_DoDistanceBased>0.0f) {
+      const float Distance=1.0f+(m_Size*(nHeight-1.0f));
+      SubWidth=nWidth/Distance;
+      SubHeight=nHeight/Distance;
+    } else {
+      SubWidth=1+(m_Size*(nWidth-1));
+      SubHeight=1+(m_Size*(nHeight-1));
+    }
+
+    U32* pSubImageData=(U32*)Pete_LockHandle(hSubImage);
+    if (pSubImageData==NULL)return;
+
+    U8 AverageColour = CreateSubImageGray((U8*)pSource,(U8*)pSubImageData,SubWidth,SubHeight);
+
+    DrawSubImagesGray((U8*)pSubImageData,AverageColour,SubWidth,SubHeight);
 
     image.data = myImage.data;
 }
@@ -511,19 +542,19 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOu
 // YUV processing
 //
 /////////////////////////////////////////////////////////
-U32 pix_metaimage :: YUV_CreateSubImage(U32* pInput,U32* pSubImage,float SubWidth,float SubHeight)
+U32 pix_metaimage :: CreateSubImageYUV(U32* pInput,U32* pSubImage,float SubWidth,float SubHeight)
 {
   U32 AverageColour;
 
   if (m_DoCheapAndNasty>0.0f) {
-    AverageColour = YUV_ShrinkSourceImageFast(pInput,pSubImage,SubWidth,SubHeight);
+    AverageColour = ShrinkSourceImageFastYUV(pInput,pSubImage,SubWidth,SubHeight);
   } else {
-    AverageColour = YUV_ShrinkSourceImage(pInput,pSubImage,SubWidth,SubHeight);
+    AverageColour = ShrinkSourceImageYUV(pInput,pSubImage,SubWidth,SubHeight);
   }
   return AverageColour;
 }
 
-void pix_metaimage :: YUV_DrawSubImages(U32* pSubImage,U32 AverageColour,float SubWidth,float SubHeight)
+void pix_metaimage :: DrawSubImagesYUV(U32* pSubImage,U32 AverageColour,float SubWidth,float SubHeight)
 {
   const int nHalfWidth=nWidth/2;
   const int nHalfHeight=nHeight/2;
@@ -552,7 +583,7 @@ void pix_metaimage :: YUV_DrawSubImages(U32* pSubImage,U32 AverageColour,float S
       const int nClippedRightX=clampFunc(nRightX,0,(nWidth-1));
       const int nClippedBottomY=clampFunc(nBottomY,0,(nHeight-1));
 
-      U32 SubImageAverage = YUV_GetAreaAverage(
+      U32 SubImageAverage = GetAreaAverageYUV(
 							pSource,
 							nClippedLeftX,
 							nClippedTopY,
@@ -560,7 +591,7 @@ void pix_metaimage :: YUV_DrawSubImages(U32* pSubImage,U32 AverageColour,float S
 							nClippedBottomY,
 							4);
 
-      YUV_DrawSubImage(
+      DrawSubImageYUV(
 				  pSource,
 				  pSubImage,
 				  pOutput,
@@ -578,7 +609,7 @@ void pix_metaimage :: YUV_DrawSubImages(U32* pSubImage,U32 AverageColour,float S
   }
 }
 
-void pix_metaimage :: YUV_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOutput,
+void pix_metaimage :: DrawSubImageYUV(U32* pSource, U32* pShrunkBuffer,U32* pOutput,
 				       int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,
 				       int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,
 				       U32 SubImageAverage)
@@ -646,7 +677,7 @@ void pix_metaimage :: YUV_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOu
   }
 }
 
-U32 pix_metaimage :: YUV_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride)
+U32 pix_metaimage :: GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride)
 {
   const int nXDelta=nRightX-nLeftX;
   const int nYDelta=nBottomY-nTopY;
@@ -699,7 +730,7 @@ U32 pix_metaimage :: YUV_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRi
   return Average;
 }
 
-U32 pix_metaimage :: YUV_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
+U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
  
   if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
   if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
@@ -730,7 +761,7 @@ U32 pix_metaimage :: YUV_ShrinkSourceImage(U32* pSource, U32* pOutput, float Sub
       int nRightX=static_cast<int>(SourceX+SourceXInc);
       nRightX=clampFunc(nRightX,0,(nWidth-1));
 
-      const U32 OutputColour = YUV_GetAreaAverage(pSource,nLeftX,nTopY,nRightX,nBottomY,1);
+      const U32 OutputColour = GetAreaAverageYUV(pSource,nLeftX,nTopY,nRightX,nBottomY,1);
 
       const U32 nOutputU  = (OutputColour>>SHIFT_U )&0xff;
       const U32 nOutputY1 = (OutputColour>>SHIFT_Y1)&0xff;
@@ -766,7 +797,7 @@ U32 pix_metaimage :: YUV_ShrinkSourceImage(U32* pSource, U32* pOutput, float Sub
   return Average;
 }
 
-U32 pix_metaimage :: YUV_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight)
+U32 pix_metaimage :: ShrinkSourceImageFastYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight)
 {
   if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
   if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
@@ -809,9 +840,9 @@ U32 pix_metaimage :: YUV_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float
     pCurrentOutput=pOutputLineStart+nWidth;
   }
 
+  const unsigned char nAverageY=(nYTotal/(nSampleCount<<1));
   const unsigned char nAverageU=(nUTotal/nSampleCount);
-  const unsigned char nAverageY=(nYTotal/nSampleCount);
-  const unsigned char nAverageV=(nVTotal/(nSampleCount<<1));
+  const unsigned char nAverageV=(nVTotal/nSampleCount);
 
   U32 Average=
     (nAverageU<<SHIFT_U )|
@@ -821,6 +852,241 @@ U32 pix_metaimage :: YUV_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float
 
   return Average;
 }
+
+
+/////////////////////////////////////////////////////////
+// Gray processing
+//
+/////////////////////////////////////////////////////////
+U8 pix_metaimage :: CreateSubImageGray(U8*pInput,U8*pSubImage,float SubWidth,float SubHeight)
+{
+  U8 AverageColour;
+
+  if (m_DoCheapAndNasty>0.0f) {
+    AverageColour = ShrinkSourceImageFastGray(pInput,pSubImage,SubWidth,SubHeight);
+  } else {
+    AverageColour = ShrinkSourceImageGray(pInput,pSubImage,SubWidth,SubHeight);
+  }
+  return AverageColour;
+}
+
+void pix_metaimage :: DrawSubImagesGray(U8* pSubImage,U8 AverageColour,float SubWidth,float SubHeight)
+{
+  const int nHalfWidth=nWidth/2;
+  const int nHalfHeight=nHeight/2;
+
+  float CentreX=nHalfWidth+(SubWidth/2);
+  float CentreY=nHalfHeight+(SubHeight/2);
+
+  int nSubImageCountX=static_cast<int>(CentreX/SubWidth);
+  int nSubImageCountY=static_cast<int>(CentreY/SubHeight);
+
+  const float StartX=(nHalfWidth-(SubWidth/2))-(nSubImageCountX*SubWidth);
+  const float EndX=(nHalfWidth+(SubWidth/2))+(nSubImageCountX*SubWidth);
+  const float StartY=(nHalfHeight-(SubHeight/2))-(nSubImageCountY*SubHeight);
+  const float EndY=(nHalfHeight+(SubHeight/2))+(nSubImageCountY*SubHeight);
+
+  float CurrentY;
+  for (CurrentY=StartY; CurrentY<EndY; CurrentY+=SubHeight) {
+    float CurrentX;
+    for (CurrentX=StartX; CurrentX<EndX; CurrentX+=SubWidth) {
+      const int nLeftX=static_cast<int>(CurrentX);
+      const int nTopY=static_cast<int>(CurrentY);
+      const int nRightX=static_cast<int>(CurrentX+SubWidth);
+      const int nBottomY=static_cast<int>(CurrentY+SubHeight);
+      const int nClippedLeftX=clampFunc(nLeftX,0,(nWidth-1));
+      const int nClippedTopY=clampFunc(nTopY,0,(nHeight-1));
+      const int nClippedRightX=clampFunc(nRightX,0,(nWidth-1));
+      const int nClippedBottomY=clampFunc(nBottomY,0,(nHeight-1));
+
+      U8 SubImageAverage = GetAreaAverageGray(
+					      (U8*)pSource,
+					      nClippedLeftX,
+					      nClippedTopY,
+					      nClippedRightX,
+					      nClippedBottomY,
+					      1);
+
+
+      DrawSubImageGray(
+		       (U8*)pSource,
+		       (U8*)pSubImage,
+		       (U8*)pOutput,
+		       nLeftX,
+		       nTopY,
+		       nRightX,
+		       nBottomY,
+		       AverageColour,
+		       nClippedLeftX,
+		       nClippedTopY,
+		       nClippedRightX,
+		       nClippedBottomY,
+		       SubImageAverage);
+    }
+  }
+}
+
+void pix_metaimage :: DrawSubImageGray(U8* pSource, U8* pShrunkBuffer,U8* pOutput,
+				       int nLeftX,int nTopY,int nRightX,int nBottomY,U8 WholeImageAverage,
+				       int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,
+				       U8 SubImageAverage)
+{
+  const int nSubU =(SubImageAverage>>SHIFT_U)&0xff;
+  const int nWholeU =(WholeImageAverage>>SHIFT_U)&0xff;
+  const int nUDelta  = (nSubU  - nWholeU);
+
+  const int nXDelta=nClippedRightX-nClippedLeftX;
+  const int nYDelta=nClippedBottomY-nClippedTopY;
+
+  if ((nXDelta<=0)||(nYDelta<=0))return;
+  
+  U8*pCurrentSource=(U8*)pShrunkBuffer;
+
+  pCurrentSource+=((nClippedTopY-nTopY)*nWidth);
+  pCurrentSource+=(nClippedLeftX-nLeftX);
+
+  U8*pCurrentOutput=pOutput+(nClippedTopY*nWidth)+nClippedLeftX;
+  U8*const pOutputEnd=(pCurrentOutput+(nYDelta*nWidth)+nXDelta);
+
+  while (pCurrentOutput<pOutputEnd) {		
+    U8*const pOutputLineStart=pCurrentOutput;
+    U8*const pOutputLineEnd=pCurrentOutput+nXDelta;
+    U8*pSourceLineStart=pCurrentSource;
+
+    while (pCurrentOutput<pOutputLineEnd) {
+      const U8 SourceColour=*pCurrentSource;
+      const U8 OutputColour =clampFunc(SourceColour+nUDelta ,0,255);
+      *pCurrentOutput=OutputColour;
+
+      pCurrentOutput+=1;
+      pCurrentSource+=1;
+    }
+
+    pCurrentOutput=pOutputLineStart+nWidth;
+    pCurrentSource=pSourceLineStart+nWidth;
+  }
+}
+
+U8 pix_metaimage :: GetAreaAverageGray(U8* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride)
+{
+  const int nXDelta=nRightX-nLeftX;
+  const int nYDelta=nBottomY-nTopY;
+
+  if ((nXDelta<=0)||(nYDelta<=0))return 0x00000000;
+	
+  U8* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
+  U8*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
+  
+  int nYTotal=0;
+  int nSampleCount=0;
+
+  while (pCurrentImage<pImageEnd) {		
+    U8*const pImageLineStart=pCurrentImage;
+    U8*const pImageLineEnd=pCurrentImage+nXDelta;
+
+    while (pCurrentImage<pImageLineEnd) {
+      const U8 ImageColour=*pCurrentImage;
+
+      nYTotal+=ImageColour;
+
+      nSampleCount++;
+      pCurrentImage+=nStride;
+    }
+
+    pCurrentImage=pImageLineStart+(nStride*nWidth);
+  }
+  const U8 Average=nYTotal/nSampleCount;
+
+  return Average;
+}
+
+U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight) {
+ 
+  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
+  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
+
+  const float SourceYInc=(nHeight/SubHeight);
+  const float SourceXInc=(nWidth/SubWidth);
+
+  int nYTotal=0;
+
+  int nSampleCount=0;
+
+  U8* pCurrentOutput=pOutput;
+	
+  float SourceY;
+  for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
+
+    U8* pOutputLineStart=pCurrentOutput;
+    const int nTopY=static_cast<int>(SourceY);
+    int nBottomY=static_cast<int>(SourceY+SourceYInc);
+    nBottomY=clampFunc(nBottomY,0,(nHeight-1));
+
+    float SourceX;
+    for (SourceX=0.0f; SourceX<nWidth; SourceX+=SourceXInc) {
+
+      const int nLeftX=static_cast<int>(SourceX);
+      int nRightX=static_cast<int>(SourceX+SourceXInc);
+      nRightX=clampFunc(nRightX,0,(nWidth-1));
+
+      const U8 OutputColour = GetAreaAverageGray(pSource,nLeftX,nTopY,nRightX,nBottomY,1);
+
+      nYTotal+=OutputColour;
+
+      nSampleCount+=1;
+
+      *pCurrentOutput=OutputColour;
+
+      pCurrentOutput+=1;
+    }
+
+    pCurrentOutput=pOutputLineStart+nWidth;
+  }
+
+  const U8 Average=nYTotal/nSampleCount;
+
+  return Average;
+}
+
+U8 pix_metaimage :: ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight)
+{
+  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
+  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
+
+  const float SourceYInc=(nHeight/SubHeight);
+  const float SourceXInc=(nWidth/SubWidth);
+
+  int nYTotal=0;
+
+  int nSampleCount=0;
+
+  U8* pCurrentOutput=pOutput;
+	
+  float SourceY;
+  for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
+    U8* pOutputLineStart=pCurrentOutput;
+    const int nTopY=static_cast<int>(SourceY);
+    U8* pSourceLineStart=pSource+(nTopY*nWidth);
+
+    float SourceX;
+    for (SourceX=0.0f; SourceX<nWidth; SourceX+=SourceXInc) {
+      const int nLeftX=static_cast<int>(SourceX);
+      const U8 OutputColour=*(pSourceLineStart+nLeftX);
+
+      nYTotal+=OutputColour;
+
+      nSampleCount+=1;
+      *pCurrentOutput=OutputColour;
+      pCurrentOutput+=1;
+    }
+    pCurrentOutput=pOutputLineStart+nWidth;
+  }
+
+  const U8 Average=nYTotal/nSampleCount;
+
+  return Average;
+}
+
 
 /////////////////////////////////////////////////////////
 // static member function

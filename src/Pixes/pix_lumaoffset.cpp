@@ -91,7 +91,6 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 		nLuma-=(128*255);
 				
 		const int nOffset=(nLuma*nOffsetScale)>>16;
-
 		U32*const pOffsetOutput=
 			    pCurrentOutput+(nOffset*nWidth);
 
@@ -252,7 +251,168 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
     }
     image.data = myImage.data;
 }
+void pix_lumaoffset :: processGrayImage(imageStruct &image)
+{
+    nWidth = image.xsize;
+    nHeight = image.ysize;
+    if (!init) {
+	init = 1;
+    }
+    U8* pSource = image.data;
+    
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
+    U8* pOutput = myImage.data;
 
+    const int nNumPixels=nWidth*nHeight;
+
+    const int nOffsetScale=static_cast<int>(m_OffsetScale);
+    const int nLineGap=static_cast<int>(m_LineGap);
+
+    Pete_ZeroMemory(pOutput,(nNumPixels*sizeof(U8)));
+	
+    U8* pCurrentSource=pSource;
+    U8* pCurrentOutput=pOutput;
+	
+    U8* pSourceEnd=(pSource+nNumPixels);
+    U8* pOutputEnd=(pOutput+nNumPixels);
+
+    if (!m_DoFilledLines) {
+	while (pCurrentSource<pSourceEnd) {
+	    const U8* pSourceLineEnd=pCurrentSource+nWidth;
+
+	    while (pCurrentSource!=pSourceLineEnd) {
+		const U8 SourceColour=*pCurrentSource;
+		int nLuma=(SourceColour<<8);
+		nLuma-=(128*255);
+		const int nOffset=(nLuma*nOffsetScale)>>16;
+		U8*const pOffsetOutput=
+			    pCurrentOutput+(nOffset*nWidth);
+
+		if ((pOffsetOutput<pOutputEnd)&& (pOffsetOutput>=pOutput)) {
+
+		    *pOffsetOutput=SourceColour;
+		}
+
+		pCurrentSource+=1;
+		pCurrentOutput+=1;
+	    }
+	    pCurrentSource+=(nWidth*nLineGap);
+	    pCurrentOutput+=(nWidth*nLineGap);
+	}
+    } else {
+      if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<(int)(nWidth*sizeof(U8*)) ){
+	free(hPreviousLineHeights);
+	hPreviousLineHeights_size=nWidth*sizeof(U8*);
+	hPreviousLineHeights=malloc(hPreviousLineHeights_size);	
+      }
+	U8** ppPreviousLineHeights=(U8**)Pete_LockHandle(hPreviousLineHeights);
+	if (ppPreviousLineHeights==NULL)return;
+
+	Pete_ZeroMemory(ppPreviousLineHeights,(nWidth*sizeof(U8*)));
+
+	//int nCurrentY=0;
+	while (pCurrentSource<pSourceEnd) {
+	    const U8* pSourceLineEnd=pCurrentSource+nWidth;
+	    U8** ppCurrentLineHeight=ppPreviousLineHeights;
+
+	    if (m_DoSmoothFill) {
+		while (pCurrentSource!=pSourceLineEnd) {
+		    const U8 SourceColour=*pCurrentSource;
+
+		    int nLuma=(SourceColour<<8);
+		    nLuma-=(128*255);
+		    const int nOffset=(nLuma*nOffsetScale)>>16;
+		    U8* pOffsetOutputStart=
+			    pCurrentOutput+(nOffset*nWidth);
+
+		    U8* pOffsetOutput=pOffsetOutputStart;
+		    U8* pPreviousOffsetOutput=*ppCurrentLineHeight;
+
+		    int nDestGray;
+		    int nDestDistance;
+		    if (pPreviousOffsetOutput==NULL) {
+			nDestGray=0;
+			nDestDistance=10000;
+		    } else {
+			const U8 DestColour=*pPreviousOffsetOutput;
+			nDestGray=DestColour;
+			nDestDistance=(pOffsetOutput-pPreviousOffsetOutput)/nWidth;
+			if(nDestDistance==0)nDestDistance=1;
+		    }
+
+		    const int nDeltaGray=(nDestGray-SourceColour);
+		    const int nIncGray=(nDeltaGray/nDestDistance);
+		    int nCurrentGray=SourceColour;
+
+		    while ((pOffsetOutput<pOutputEnd)&&
+				(pOffsetOutput>=pOutput)&&
+				(pOffsetOutput>pPreviousOffsetOutput)) {
+			*pOffsetOutput=nCurrentGray;
+			nCurrentGray+=nIncGray;
+					
+			pOffsetOutput-=nWidth;
+		    }
+
+		    *ppCurrentLineHeight=pOffsetOutputStart;
+
+		    pCurrentSource+=1;
+		    pCurrentOutput+=1;
+		    ppCurrentLineHeight+=1;
+		}
+	    } else {
+		while (pCurrentSource!=pSourceLineEnd) {
+		    const U8 SourceColour=*pCurrentSource;
+		    int nLuma=(SourceColour<<8);
+		    nLuma-=(128*255);
+		    const int nOffset=(nLuma*nOffsetScale)>>16;
+		    U8* pOffsetOutputStart=pCurrentOutput+(nOffset*nWidth);
+		    U8* pOffsetOutput=pOffsetOutputStart;
+		    U8* pPreviousOffsetOutput=*ppCurrentLineHeight;
+
+		    while ((pOffsetOutput<pOutputEnd)&&
+				(pOffsetOutput>=pOutput)&&
+				(pOffsetOutput>pPreviousOffsetOutput)) {
+			*pOffsetOutput=SourceColour;
+			pOffsetOutput-=nWidth;
+		    }
+
+		    *ppCurrentLineHeight=pOffsetOutputStart;
+
+		    pCurrentSource+=1;
+		    pCurrentOutput+=1;
+		    ppCurrentLineHeight+=1;
+		}
+	    }
+	    pCurrentSource+=(nWidth*nLineGap);
+	    pCurrentOutput+=(nWidth*nLineGap);
+	}
+
+	U8* pFinalLineStart=pOutputEnd-nWidth;
+	U8* pFinalLineEnd=pOutputEnd;
+	U8** ppCurrentLineHeight=ppPreviousLineHeights;
+	U8* pCurrentOutput=pFinalLineStart;
+
+	while (pCurrentOutput<pFinalLineEnd) {
+	    U8* pPreviousOffsetOutput=*ppCurrentLineHeight;
+	    const U8 SourceColour=*pPreviousOffsetOutput;
+	    U8* pOffsetOutput=pCurrentOutput;
+
+	    while ((pOffsetOutput<pOutputEnd)&&
+		    (pOffsetOutput>=pOutput)&&
+		    (pOffsetOutput>pPreviousOffsetOutput)) {
+
+		*pOffsetOutput=SourceColour;
+		pOffsetOutput-=nWidth;
+	    }
+	    pCurrentOutput+=1;
+	    ppCurrentLineHeight+=1;
+	}
+    }
+    image.data = myImage.data;
+}
 /////////////////////////////////////////////////////////
 // processYUVImage
 //
@@ -332,12 +492,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 			pCurrentSource+=(nWidth*nLineGap);
 			pCurrentOutput+=(nWidth*nLineGap);
 		}
-	/*post ("equal luma's: %d",cnt);
-	post ("diff luma's: %d",cnt2);
-	post ("largest offset1: %d",off1);
-	post ("largest offset2: %d",off2);*/
     } else {
-	//
 		if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<(int)(nWidth*sizeof(U32*)) ){
 			free(hPreviousLineHeights);
 			hPreviousLineHeights_size=nWidth*sizeof(U32*);
