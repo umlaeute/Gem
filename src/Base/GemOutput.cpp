@@ -19,10 +19,11 @@
 
 #ifdef  __APPLE__
 // or is it spelled Carbon/Carbon.h ??
-# include <Carbon/carbon.h>
+# include <Carbon/Carbon.h>
 #include <OpenGL/glu.h>
 # include <OpenGL/glext.h>
 #include "macosx_math.h"
+extern bool HaveValidContext (void);
 #else
 #include <GL/glu.h>
 #include <math.h>
