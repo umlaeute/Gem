@@ -58,7 +58,13 @@ class GEM_EXTERN pix_biquad : public GemPixObj
   // Do the processing
   virtual void 	processRGBAImage(imageStruct &image);
   virtual void 	processYUVImage(imageStruct &image);
+#ifdef __MMX__
+  virtual void 	processRGBAMMX(imageStruct &image);
+#endif
+#ifdef __VEC__
   virtual void 	processYUVAltivec(imageStruct &image);
+#endif
+
   
   //////////
   // the image-latches

@@ -43,10 +43,6 @@ pix_2grey :: ~pix_2grey()
 /////////////////////////////////////////////////////////
 void pix_2grey :: processRGBAImage(imageStruct &image)
 {
-#ifdef __VEC__
-processRGBAltivec(image);
-return;
-#else
   unsigned char *pixels = image.data;
   int count = image.ysize * image.xsize;
    
@@ -56,13 +52,50 @@ return;
      pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
      pixels += 4;
      }  
-#endif     
 }
 
-
-void pix_2grey :: processRGBAltivec(imageStruct &image)
+void pix_2grey :: processYUVImage(imageStruct &image)
 {
+  unsigned char *pixels = image.data;
+  int count = image.ysize * image.xsize / 2;
+ 
+  while (count--)    {
+    pixels[chU]=127; pixels[chV]=127;
+    pixels+=4;
+  }
+}
+
+#ifdef __MMX__
+void pix_2grey :: processRGBAMMX(imageStruct &image){
+
+
+}
+
+void pix_2grey :: processYUVMMX(imageStruct &image){
+ register int pixsize = (image.ysize * image.xsize)>>2;
+
+ register __m64 mask_64   = _mm_set_pi8(0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00);
+ register __m64 offset_64 = _mm_setr_pi8(0xF0, 0x00, 0xF0, 0x00, 0xF0, 0x00, 0xF0, 0x00);
+ register __m64*data_p= (__m64*)image.data;
+ _mm_empty();
+
+ register __m64 pixel;
+
+ while(pixsize--) {
+   
+   pixel=data_p[0];
+   pixel = _mm_and_si64(pixel, mask_64);
+   pixel = _mm_add_pi8 (pixel, offset_64);
+   *data_p++=pixel;
+ }
+ _mm_empty();
+
+}
+#endif
+
 #ifdef __VEC__
+void pix_2grey :: processRGBAAltivec(imageStruct &image)
+{
  
   union{
     unsigned char		c[16];
@@ -159,31 +192,10 @@ void pix_2grey :: processRGBAltivec(imageStruct &image)
     vec_dss( 1 );
   # endif
   
-#endif //altivec function
-}
-
-
-void pix_2grey :: processYUVImage(imageStruct &image)
-{
-#ifdef __VEC__
-    processYUVAltivec(image);
-    return;
-#else
-
-  unsigned char *pixels = image.data;
-  int count = image.ysize * image.xsize / 2;
- 
-  while (count--)    {
-    pixels[chU]=127; pixels[chV]=127;
-    pixels+=4;
-  }
-#endif  
 }
 
 void pix_2grey :: processYUVAltivec(imageStruct &image)
 {
-#ifdef __VEC__
- 
   union{
     unsigned char		c[16];
     vector unsigned char	v;
@@ -221,8 +233,9 @@ void pix_2grey :: processYUVAltivec(imageStruct &image)
    pixels++;
    
   }
-#endif //altivec function
 }
+#endif //altivec function
+
 
 /////////////////////////////////////////////////////////
 // static member function
