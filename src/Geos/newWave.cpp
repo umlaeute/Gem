@@ -5,6 +5,7 @@
  *  gem_darwin
  *
  *  Created by Jamie Tittle on Thu Oct 10 2002.
+ *  modified by cyrille Henry
  *  Copyright (c) 2002 tigital. All rights reserved.
  *    For information on usage and redistribution, and for a DISCLAIMER OF ALL
  *    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -13,6 +14,7 @@
 
 #include "newWave.h"
 #include "Base/GemState.h"
+#include "Base/GemFuncUtil.h"
 #include <string.h>
 #include <math.h>
 
@@ -29,8 +31,7 @@ enum {CURRENT, FLAT, SPIKE, DIAGONALWALL, SIDEWALL, HOLE,
       MIDDLEBLOCK, DIAGONALBLOCK, CORNERBLOCK, HILL, HILLFOUR};
 int displayMode = WIREFRAME;
 int resetMode = DIAGONALBLOCK;
-int grid = 17;
-float dt = 0.004;
+int grid = 50;
 
 bool waving = false, editing = false, 
      drawFaceNorms = false, antialias = false,
@@ -47,7 +48,7 @@ static inline int powerOfTwo(int value)
 }
 
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(newWave, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(newWave, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -57,20 +58,20 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(newWave, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 // Constructor
 //
 /////////////////////////////////////////////////////////
-newWave :: newWave( t_floatarg width, t_floatarg height )
-    	     : GemShape(MEDIUM), m_height(height),
-               m_speed(NORMAL), alreadyInit(0)
+newWave :: newWave( t_floatarg width)
+    	     : GemShape(MEDIUM), alreadyInit(0)
 {
-    if (m_height == 0.f)m_height = 1.f;
+    m_height = 1.f;
 
-    // the height inlet
-    m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
-    inletM = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("M"));
-    inletSp = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Sp"));
+    grid = ( MIN((int)width, MAXGRID ));
+    if (grid < 3) grid =3; // min grid
 
     m_blend = 0;
     m_drawType = GL_TRIANGLE_STRIP;
     alreadyInit = 0;
+
+    K1=K2=K3=D1=D2=D3=0;
+
 }
 
 /////////////////////////////////////////////////////////
@@ -79,10 +80,7 @@ newWave :: newWave( t_floatarg width, t_floatarg height )
 /////////////////////////////////////////////////////////
 newWave :: ~newWave()
 {
-	 inlet_free(m_inletH);
-         inlet_free(inletM);
-         inlet_free(inletSp);
-         alreadyInit = 0;
+    alreadyInit = 0;
 }
 
 void newWave :: modeMess(float mode)
@@ -90,9 +88,16 @@ void newWave :: modeMess(float mode)
     reset((int)mode);
     setModified();
 }
-void newWave :: speedMess(float speed)
+
+void newWave :: positionMess(float posX, float posY, float posZ)
 {
-    setSpeed((float)speed);
+    position((float) posX, (float) posY, (float) posZ);
+    setModified();
+    
+}
+void newWave :: forceMess(float posX, float posY, float valforce)
+{
+    setforce((float) posX, (float) posY, (float) valforce);
     setModified();
     
 }
@@ -133,19 +138,12 @@ void newWave :: render(GemState *state)
             xsize = state->texCoords[2].s;
             ysize = state->texCoords[2].t;
 #endif
-            setSize( SMALL );
-            setSpeed( NORMAL);
+            setSize( grid );
             setOther( ENVMAP );
             reset( HILLFOUR );
             alreadyInit = 1;
         }
-    
-        getFaceNorms();
-        getVertNorms();
-    
-        getforce();
-        getvelocity();
-        getposition();
+
         for (int i=0; i<grid -1; ++i)
         {
             glBegin(GL_TRIANGLE_STRIP);
@@ -167,21 +165,14 @@ void newWave :: render(GemState *state)
         {
             xsize = 1;
             ysize = 1;
-            setSize( SMALL );
-            setSpeed( NORMAL);
+            setSize( grid );
             setOther( ENVMAP );
             reset( HILLFOUR );
             alreadyInit = 1;
         }
-    
-        getFaceNorms();
-        getVertNorms();
-    
-        getforce();
-        getvelocity();
-        getposition();
+ 
         
-	post("m_size=%f", m_size);
+// post("m_size=%f", m_size);
         for ( i=0; i<grid -1; ++i)
         {
             glBegin(m_drawType);
@@ -234,6 +225,7 @@ void newWave :: typeMess(t_symbol *type)
     setModified();
 }
 
+
 /////////////////////////////////////////////////////////
 // getforce
 //
@@ -248,42 +240,151 @@ void newWave :: getforce()
         {
             force[i][j] =0.0;
         }
-    for ( i=2; i<grid-2; i++)
-        for (int j=2;j<grid-2; j++)
+
+		if (K1 != 0)
+	{
+		for ( i=1; i<grid; i++)
+			for (int j=1;j<grid; j++)
+			{
+				d = K1 * (posit[i][j] - posit[i][j-1]);
+				force[i][j] -= d;
+				force[i][j-1] += d;
+
+            
+				d = K1 * (posit[i][j] - posit[i-1][j]);
+				force[i][j] -= d;
+				force[i-1][j] += d;
+			}
+    }
+
+	if (K2 != 0)
+	{
+		for ( i=1; i<grid; i++)
+			for (int j=1;j<grid; j++)
+			{
+				d = K2 * (posit[i][j] - posit[i-1][j-1]);
+				force[i][j] -= d;
+				force[i-1][j-1] += d;
+            
+			}
+
+		for ( i=0; i<grid-1; i++)
+			for (int j=1;j<grid; j++)
+			{
+				d = K2 * (posit[i][j] - posit[i+1][j-1]);
+				force[i][j] -= d;
+				force[i+1][j-1] += d;
+			}
+    }
+
+	if (K3 != 0)
+	{
+		for ( i=1; i<grid-1; i++)
+			for (int j=1;j<grid-1; j++)
+			{
+				d = K3 * posit[i][j];
+			    force[i][j] -= d;
+			}
+    }
+
+}
+/////////////////////////////////////////////////////////
+// getdamp
+//
+/////////////////////////////////////////////////////////
+void newWave :: getdamp()
+{
+    float d;
+    int i;
+    int j;
+
+    if (D1 != 0)
+    {
+        for ( i=1; i<grid; i++)
         {
-            d = posit[i][j] - posit[i][j-1];
-            force[i][j] -= d;
-            force[i][j-1] += d;
+            for (int j=1;j<grid; j++)
+            {
+                d = D1 * ((posit[i][j] - posit[i][j-1])-(positold[i][j] - positold[i][j-1]));
+                force[i][j] -= d;
+                force[i][j-1] += d;
             
-            d = posit[i][j] - posit[i-1][j];
-            force[i][j] -= d;
-            force[i-1][j] += d;
-            
-            d = (posit[i][j] - posit[i][j+1]);
-            force[i][j] -= d;
-            force[i][j+1] += d;
-            
-            d = (posit[i][j] - posit[i+1][j]);
-            force[i][j] -= d;
-            force[i+1][j] += d;
-            
-            d= (posit[i][j]-posit[i+1][j+1])*SQRTOFTWOINV; 
-            force[i][j] -= d ;
-            force[i+1][j+1] += d;
+                d = D1 * ((posit[i][j] - posit[i-1][j])-(positold[i][j] - positold[i-1][j]));
+                force[i][j] -= d;
+                force[i-1][j] += d;
+            }
+        }
+    }
 
-            d= (posit[i][j]-posit[i-1][j-1])*SQRTOFTWOINV; 
-            force[i][j] -= d ;
-            force[i-1][j-1] += d;
+    if (D2 != 0)
+    {
+        for ( i=1; i<grid; i++)
+            for (int j=1;j<grid; j++)
+            {
+                d = D2 * ((posit[i][j] - posit[i-1][j-1])-(positold[i][j] - positold[i-1][j-1]));
+                force[i][j] -= d;
+                force[i-1][j-1] += d;
+            }
 
-            d= (posit[i][j]-posit[i+1][j-1])*SQRTOFTWOINV; 
-            force[i][j] -= d ;
-            force[i+1][j-1] += d;
+        for ( i=0; i<grid-1; i++)
+            for (int j=1;j<grid; j++)
+            {
+                d = D2 * ((posit[i][j] - posit[i+1][j-1])-(positold[i][j] - positold[i+1][j-1]));
+                force[i][j] -= d;
+                force[i+1][j-1] += d;
+            }
+    }
 
-            d= (posit[i][j]-posit[i-1][j+1])*SQRTOFTWOINV; 
-            force[i][j] -= d ;
-            force[i- 1][j+1] += d;
+    if (D3 != 0)
+    {
+        for ( i=1; i<grid-1; i++)
+            for (int j=1;j<grid-1; j++)
+            {
+                d = D3 * (posit[i][j]-positold[i][j]);
+                force[i][j] -= d;
+            
+                d = D3 * (posit[i][j]-positold[i][j]);
+                force[i][j] -= d;
+            }
+    }
+}
+
+/////////////////////////////////////////////////////////
+// force
+//
+/////////////////////////////////////////////////////////
+void newWave :: setforce(float posX, float posY, float valforce)
+{
+    if ( ((int)posX > 0) & ((int)posX < grid - 1) & ((int)posY > 0) & ((int)posY < grid - 1) )
+      force[(int)posX][(int)posY] += valforce;   
+}
+
+/////////////////////////////////////////////////////////
+// position
+//
+/////////////////////////////////////////////////////////
+void newWave :: position(float posX, float posY, float posZ)
+{
+    if ( ((int)posX > 0) & ((int)posX < grid - 1) & ((int)posY > 0) & ((int)posY < grid - 1) )
+      posit[(int)posX][(int)posY] = posZ;                        
+}
+
+
+/////////////////////////////////////////////////////////
+// savepos
+//
+/////////////////////////////////////////////////////////
+void newWave :: savepos()
+{
+    float d;
+    int i;
+    int j;
+    for (i=0; i<grid; i++)
+        for ( j=0;j<grid; j++)
+        {
+            positold[i][j] = posit[i][j];
         }
 }
+
 
 /////////////////////////////////////////////////////////
 // getvelocity
@@ -291,9 +392,9 @@ void newWave :: getforce()
 /////////////////////////////////////////////////////////
 void newWave :: getvelocity()
 {
-    for (int i=0; i<grid; i++)
-        for (int j=0;j<grid; j++)
-            veloc[i][j] += force[i][j] * dt;
+    for (int i=1; i<grid-1; i++)
+        for (int j=1;j<grid-1; j++)
+            veloc[i][j] += force[i][j] ;
 }
 
 /////////////////////////////////////////////////////////
@@ -302,8 +403,8 @@ void newWave :: getvelocity()
 /////////////////////////////////////////////////////////
 void newWave :: getposition()
 {
-    for ( int i=0; i<grid; i++)
-        for ( int j=0;j<grid; j++)
+    for ( int i=1; i<grid-1; i++)
+        for ( int j=1;j<grid-1; j++)
             posit[i][j] += veloc[i][j];
 }
 
@@ -332,13 +433,9 @@ void newWave :: getTexCoords()
 void newWave :: setSize( int value )
 {
     int prevGrid = grid;
-    switch(value) 
-    {
-        case SMALL : grid = MAXGRID/4; break;
-        case MEDIUM: grid = MAXGRID/2; break;
-        case LARGE : grid = (int)(MAXGRID/1.5); break;
-        case XLARGE : grid = MAXGRID; break;
-    }
+    
+    grid = value;
+    
     if (prevGrid > grid)
     {
         reset(resetMode);
@@ -348,19 +445,23 @@ void newWave :: setSize( int value )
 }
 
 /////////////////////////////////////////////////////////
-// setSpeed
+// bang
 //
 /////////////////////////////////////////////////////////
-void newWave :: setSpeed(float value)
+void newWave :: bangMess( )
 {
-  /*  switch(value) 
-    {
-        case VWEAK : dt = 0.0005; break;
-        case WEAK  : dt = 0.001; break;
-        case NORMAL: dt = 0.004; break;
-        case STRONG: dt = 0.008; break;
-    } */
-    dt = value * 0.001;
+    
+		savepos();
+
+		getvelocity();
+		getposition();
+
+		getFaceNorms();
+        getVertNorms();
+
+        getforce();
+		getdamp();
+
 }
 
 /////////////////////////////////////////////////////////
@@ -534,9 +635,6 @@ void newWave :: getFaceNormSegs(void)
 
 void newWave :: reset(int value)
 {
-    //if (waving)
-    //    stop();
-
     if (value != CURRENT)
         resetMode = value;
     for( int i=0;i<grid;i++)
@@ -575,12 +673,12 @@ void newWave :: reset(int value)
                 posit[i][j]= 
                     (sin(M_PI * ((float)i/(float)grid)) +
                      sin(M_PI * ((float)j/(float)grid)))* grid/6.0;
-            break;        
+				break;        
             case HILLFOUR:
                 posit[i][j]= 
                     (sin(M_PI*2 * ((float)i/(float)grid)) +
                      sin(M_PI*2 * ((float)j/(float)grid)))* grid/6.0;
-            break;        
+				break;        
             }
             if (i==0||j==0||i==grid-1||j==grid-1) posit[i][j]=0.0;
         }
@@ -616,31 +714,85 @@ void newWave :: setOther(int value)
 // static member function
 //
 /////////////////////////////////////////////////////////
-void newWave :: obj_setupCallback(t_class *classPtr)
+void newWave :: obj_setupCallback(t_class *classPtr) 
 {
     class_addmethod(classPtr, (t_method)&newWave::heightMessCallback,
-    	    gensym("Ht"), A_FLOAT, A_NULL);
+    	    gensym("height"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&newWave::modeMessCallback,
-    	    gensym("M"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&newWave::speedMessCallback,
-    	    gensym("Sp"), A_FLOAT, A_NULL);
+    	    gensym("mode"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&newWave::blendMessCallback,
     	    gensym("blend"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&newWave::setK1MessCallback,
+	   	    gensym("K1"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&newWave::setD1MessCallback,
+		    gensym("D1"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&newWave::setK2MessCallback,
+	   	    gensym("K2"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&newWave::setD2MessCallback,
+		    gensym("D2"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&newWave::setK3MessCallback,
+	   	    gensym("K3"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&newWave::setD3MessCallback,
+		    gensym("D3"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&newWave::forceMessCallback,
+		    gensym("force"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&newWave::positionMessCallback,
+		    gensym("position"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+	class_addbang(classPtr, (t_method)&newWave::bangMessCallback);
 }
 
+void newWave :: bangMessCallback(void *data)
+{
+   	GetMyClass(data)->bangMess();
+    
+}
 void newWave :: heightMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->heightMess((float)size);
+}
+void newWave :: forceMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce )
+{
+    GetMyClass(data)->forceMess((float)posX, (float)posY, (float)valforce);
+}
+void newWave :: positionMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg posZ)
+{
+    GetMyClass(data)->positionMess((float)posX, (float)posY, (float)posZ);
 }
 void newWave :: modeMessCallback(void *data, t_floatarg mode)
 {
     GetMyClass(data)->modeMess((float)mode);
 }
-void newWave :: speedMessCallback(void *data, t_floatarg speed)
-{
-    GetMyClass(data)->speedMess((float)speed);
-}
+
 void newWave :: blendMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->m_blend=((int)size);
 }
+
+void newWave :: setK1MessCallback(void *data, t_floatarg K)
+{
+    GetMyClass(data)->K1=((float)K);
+}
+void newWave :: setK2MessCallback(void *data, t_floatarg K)
+{
+    GetMyClass(data)->K2=((float)K);
+}
+void newWave :: setK3MessCallback(void *data, t_floatarg K)
+{
+    GetMyClass(data)->K3=((float)K);
+}
+
+
+void newWave :: setD1MessCallback(void *data, t_floatarg D)
+{
+    GetMyClass(data)->D1=((float)D);
+}
+void newWave :: setD2MessCallback(void *data, t_floatarg D)
+{
+    GetMyClass(data)->D2=((float)D);
+}
+void newWave :: setD3MessCallback(void *data, t_floatarg D)
+{
+    GetMyClass(data)->D3=((float)D);
+}
+
+
