@@ -65,15 +65,21 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
     	virtual void	startRendering();
         
           //////////
-  // Start up the video device
-  // [out] int - returns 0 if bad
-  virtual int	startTransfer();
-    
-  //////////
-  // Stop the video device
-  // [out] int - returns 0 if bad
-  virtual int	stopTransfer();
-    
+          // Start up the video device
+          // [out] int - returns 0 if bad
+        virtual int	startTransfer();
+
+        //////////
+        // Stop the video device
+        // [out] int - returns 0 if bad
+        virtual int	stopTransfer();
+
+        virtual void csMess(int format);
+
+        //////////
+        // property-dialog
+        virtual void	dialogMess(int,t_atom*);
+  
 	//-----------------------------------
 	// GROUP:	Macintosh specific video data
 	//-----------------------------------
@@ -111,7 +117,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         Ptr			m_baseAddr;		// Base address of pixel Data
         long			m_rowBytes;		// Row bytes in a row
         int			m_quality;
-        int			m_colorspace;
+    //    int			m_colorspace;
     private:
     	
     	//////////
@@ -120,7 +126,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         static void resetCallback(void *data);
         static void dialogCallback(void *data);
         static void colorspaceCallback(void *data, t_symbol *cs);
-        
+        static void csMessCallback(void *data, t_symbol *cs);
 };
 
 #endif

@@ -30,7 +30,6 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg,
 
 pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h )
 {
-post("pix_videoDarwin: constructor");
 
   if (w > 0 ){
     m_vidXSize = (int)w;
@@ -43,6 +42,7 @@ post("pix_videoDarwin: constructor");
     m_vidYSize = 240;
   }
     
+  m_haveVideo = 0;
   post("pix_videoDarwin: height %d width %d",m_vidXSize,m_vidYSize);  
   m_pixBlock.image.xsize = m_vidXSize;
   m_pixBlock.image.ysize = m_vidYSize;
@@ -52,10 +52,10 @@ post("pix_videoDarwin: constructor");
   int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
 					* 4 * sizeof(unsigned char);
   m_pixBlock.image.data = new unsigned char[dataSize];
-  m_quality = 1; //high quality for DV. why not?
-  m_colorspace = GL_YCBCR_422_GEM; //default to RGB
+  m_quality = 0; //normal quality gives non-interlaced images from DV cams
+  m_colorspace = GL_YCBCR_422_GEM; //default to YUV
   InitSeqGrabber();
-  m_haveVideo = 1;
+  
 }
 
 /////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ void pix_videoDarwin :: startRendering()
 void pix_videoDarwin :: render(GemState *state)
 {
     OSErr	err;
-
+ 
     err = SGIdle(m_sg);
     if (err != noErr){
             post("pix_videoDarwin: SGIdle failed\n");
@@ -156,20 +156,20 @@ int pix_videoDarwin :: stopTransfer()
 pascal Boolean pix_videoDarwin :: SeqGrabberModalFilterProc (DialogPtr theDialog, const EventRecord *theEvent, short *itemHit, long refCon){
 //#pragma unused(theDialog, itemHit)
     Boolean	handled = false;
-/*
+
     if ((theEvent->what == updateEvt) &&
         ((WindowPtr) theEvent->message == (WindowPtr) refCon))
     {
         BeginUpdate ((WindowPtr) refCon);
         EndUpdate ((WindowPtr) refCon);
         handled = true;
-    } */
+    } 
     
      WindowRef  awin = GetDialogWindow(theDialog);
     ShowWindow (awin);
     SetWindowClass(awin,kUtilityWindowClass);
     //ChangeWindowAttributes(awin,kWindowStandardHandlerAttribute,0);     	SGPanelEvent(m_sg,m_vc,theDialog,0,theEvent,itemHit,&handled);
-    AEProcessAppleEvent (theEvent);
+  //  AEProcessAppleEvent (theEvent);
     
     return (handled);
 }
@@ -217,47 +217,36 @@ void pix_videoDarwin :: InitSeqGrabber()
      
      while((c = FindNextComponent(c, &cd)) != 0) {
        num_components++;  }                 // add component c to the list.
-     post("pix_videoDarwin: number of SGcomponents: %d",num_components);
+  //   post("pix_videoDarwin: number of SGcomponents: %d",num_components);
     m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
     if(m_sg==NULL){
         post("pix_videoDarwin: could not open defalut component");
         return;
-    }    else{
-            post("pix_videoDarwin: opened default component");
-        }
-
+    }    
 	anErr = SGInitialize(m_sg);
     if(anErr!=noErr){
         post("pix_videoDarwin: could not initialize SG");
-    }else{
-            post("pix_videoDarwin: initialized SG");
-        }
+    }
     
     anErr = SGSetDataRef(m_sg, 0, 0, seqGrabDontMakeMovie);
         if (anErr != noErr){
             post("dataref failed\n");
-        }else{
-            post("dataref ok\n");
         }
-    
+        
     anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);		
     if(anErr!=noErr){
         post("pix_videoDarwin: could not make new SG channnel");
-    }else{
-            post("pix_videoDarwin: made new SG channnel");
-        }
+    }
+    
     anErr = SGSetChannelBounds(m_vc, &m_srcRect);
     if(anErr!=noErr){
         post("pix_videoDarwin: could not set SG ChannelBounds ");
-    }else{
-            post("pix_videoDarwin: set SG ChannelBounds");
-        }
+    }
+        
     anErr = SGSetChannelUsage(m_vc, seqGrabPreview);
     if(anErr!=noErr){
         post("pix_videoDarwin: could not set SG ChannelUsage ");
-    }else{
-            post("pix_videoDarwin: set SG ChannelUsage");
-        }
+    }
     m_rowBytes = m_vidXSize*4;
     
     switch (m_quality){
@@ -279,7 +268,7 @@ void pix_videoDarwin :: InitSeqGrabber()
         break;
     
     }
-    if (m_colorspace==GL_RGBA){
+    if (m_colorspace==GL_BGRA_EXT){
         m_pixBlock.image.xsize = m_vidXSize;
         m_pixBlock.image.ysize = m_vidYSize;
         m_pixBlock.image.csize = 4;
@@ -298,7 +287,7 @@ void pix_videoDarwin :: InitSeqGrabber()
                                     m_pixBlock.image.data, 
                                     m_rowBytes);
                                     
-                                 
+        post ("pix_videoDarwin: Using RGB");                         
         }else{
             m_pixBlock.image.xsize = m_vidXSize;
             m_pixBlock.image.ysize = m_vidYSize;
@@ -317,7 +306,8 @@ void pix_videoDarwin :: InitSeqGrabber()
                                     0, 
                                     m_pixBlock.image.data, 
                                     m_rowBytes);
-        
+            
+        post ("pix_videoDarwin: Using YUV");
         }
         
 	if (anErr!= noErr)
@@ -332,8 +322,10 @@ void pix_videoDarwin :: InitSeqGrabber()
 	}
     SGSetGWorld(m_sg,(CGrafPtr)m_srcGWorld, NULL);
     SGStartPreview(m_sg);
+    m_haveVideo = 1;
+    
 }
-
+ 
 void pix_videoDarwin :: destroySeqGrabber()
 {
     if (m_vc) {
@@ -364,7 +356,6 @@ void pix_videoDarwin :: resetSeqGrabber()
     destroySeqGrabber();
     InitSeqGrabber();
 
-    post("pix_videoDarwin: quality %d",m_quality);
     switch (m_quality){
     case 0:
         anErr = SGSetChannelPlayFlags(m_vc, channelPlayNormal);
@@ -411,6 +402,31 @@ void pix_videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
     
 }
 
+/////////////////////////////////////////////////////////
+// colorspaceMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoDarwin :: csMess(int format)
+{
+    m_colorspace = format;
+    if (format == GL_RGBA) post("pix_videoDarwin: colorspace is GL_RGBA %d",m_colorspace);
+    else
+        if (format == GL_BGRA_EXT) post("pix_videoDarwin: colorspace is GL_RGBA %d",m_colorspace);
+    else
+        if (format == GL_YCBCR_422_GEM) post("pix_videoDarwin: colorspace is YUV %d",m_colorspace);
+    else post("pix_videoDarwin: colorspace is unknown %d",m_colorspace);
+}
+
+/////////////////////////////////////////////////////////
+// dialog
+//
+/////////////////////////////////////////////////////////
+//void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
+void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
+{
+    DoVideoSettings();
+}
+
 void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
 class_addcreator((t_newmethod)_classpix_videoDarwin,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
@@ -419,17 +435,21 @@ pix_video::real_obj_setupCallback(classPtr);
 		  gensym("quality"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
 		  gensym("reset"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
-		  gensym("dialog"), A_NULL);
+   // class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
+//		  gensym("dialog"), A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogMess,
+                    gensym("dialog"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::colorspaceCallback,
 		  gensym("colorspace"), A_SYMBOL, A_NULL);
+//    class_addmethod(classPtr, (t_method)&pix_videoDarwin::csMessCallback,
+ //                   		  gensym("colorspace"), A_SYMBOL, A_NULL);
 }
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
 {
   GetMyClass(data)->m_quality=((int)X);
   
-}
+} 
 
 void pix_videoDarwin :: resetCallback(void *data)
 {
@@ -439,9 +459,33 @@ GetMyClass(data)->resetSeqGrabber();
 
 void pix_videoDarwin ::dialogCallback(void *data)
 {
+    
 //GetMyClass(data)->DoVideoSettings();
   
 }
+ 
+void pix_videoDarwin :: csMessCallback(void *data, t_symbol*s)
+{
+   // GetMyClass(data)->csMess(getPixFormat(s->s_name));
+    post("pix_video: Am I even being called??????????????");
+    int format=0;
+    char c =*s->s_name;
+    switch (c){
+        case 'g': case 'G': format=GL_LUMINANCE; break;
+        case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
+        case 'r': case 'R': format=GL_RGBA; break;
+        default:
+            post("pix_video: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+    }
+
+    if(format==GL_LUMINANCE){
+        post("pix_video: 'Gray' not yet supported...using YUV");
+        format=GL_YCBCR_422_GEM;
+    }
+    if(format)GetMyClass(data)->csMess(format);
+    if(format)GetMyClass(data)->m_colorspace = format;
+}
+
 
 void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
 {
