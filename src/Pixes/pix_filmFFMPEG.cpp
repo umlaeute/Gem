@@ -19,7 +19,10 @@ extern "C" {
      extern int av_freed;
 }
 
+#ifdef __linux__
 #include "Base/config.h"
+#endif /* __linux__ */
+
 #if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
 
 #include "Pixes/pix_filmFFMPEG.h"

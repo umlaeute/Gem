@@ -14,7 +14,10 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "../Base/config.h"
+#ifdef __linux__
+#include "Base/config.h"
+#endif /* __linux__ */
+
 #ifdef HAVE_DV
 
 #include "pix_dvLinux.h"
