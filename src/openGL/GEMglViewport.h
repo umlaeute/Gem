@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glViewport(GLint x, GLint y, GLsizei width, GLsizei height)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLVIEWPORT_H_
 #define INCLUDE_GEM_GLVIEWPORT_H_
@@ -18,68 +16,53 @@ A wrapper for "glViewport(GLint x, GLint y, GLsizei width, GLsizei height)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglViewport
-
-    A Wrapper for the openGL-command "glViewport(GLint x, GLint y, GLsizei width, GLsizei height)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglViewport
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glViewport( GLint x, GLint y, GLsizei width, GLsizei height)"
+ */
 
 class GEM_EXTERN GEMglViewport : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglViewport, GemBase)
+	CPPEXTERN_HEADER(GEMglViewport, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglViewport (t_float, t_float, t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglViewport (t_floatarg, t_floatarg, t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglViewport ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLint	x;		// VAR
+	  virtual void	xMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglViewport();
+	  GLint	y;		// VAR
+	  virtual void	yMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
+	  GLsizei	width;		// VAR
+	  virtual void	widthMess(t_float);	// FUN
 
-       //////////
-       // define and set the variables
-
-	 GLint x;		// VAR
-	virtual void	xMess 	(int);		// FUN glViewport GLint
-
-	GLint y;		// VAR
-	virtual void	yMess 	(int);		// FUN glViewport GLint
-
-	GLsizei width;		// VAR
-	virtual void	widthMess 	(int);		// FUN glViewport GLsizei
-
-	GLsizei height;		// VAR
-	virtual void	heightMess 	(int);		// FUN glViewport GLsizei
+	  GLsizei	height;		// VAR
+	  virtual void	heightMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	xMessCallback	(void*, t_floatarg);		// CALLBACK glViewport
-	static void	yMessCallback	(void*, t_floatarg);		// CALLBACK glViewport
-	static void	widthMessCallback	(void*, t_floatarg);		// CALLBACK glViewport
-	static void	heightMessCallback	(void*, t_floatarg);		// CALLBACK glViewport
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 4 ];
-};
+	  t_inlet *m_inlet[4];
 
-#endif  // for header file
+	// static member functions
+	  static void	 xMessCallback (void*, t_floatarg);
+	  static void	 yMessCallback (void*, t_floatarg);
+	  static void	 widthMessCallback (void*, t_floatarg);
+	  static void	 heightMessCallback (void*, t_floatarg);
+};
+#endif // for header file

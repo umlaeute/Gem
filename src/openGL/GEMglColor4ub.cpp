@@ -2,113 +2,99 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglColor4ub.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS (GEMglColor4ub , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4ub , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
-// GEMglColor4ub
+// GEMglViewport
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglColor4ub :: GEMglColor4ub(t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0, t_floatarg arg4=0) :
-             		red((GLubyte)arg1),
-		green((GLubyte)arg2),
-		blue((GLubyte)arg3),
-		alpha((GLubyte)arg4)
+GEMglColor4ub :: GEMglColor4ub	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+		red((GLubyte)arg0), 
+		green((GLubyte)arg1), 
+		blue((GLubyte)arg2), 
+		alpha((GLubyte)arg3)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("red"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("green"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blue"));
 	m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("alpha"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglColor4ub :: ~GEMglColor4ub(){
+GEMglColor4ub :: ~GEMglColor4ub () {
 inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 inlet_free(m_inlet[2]);
 inlet_free(m_inlet[3]);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglColor4ub :: render(GemState *state)
-{ glColor4ub(red, green, blue, alpha); }
+void GEMglColor4ub :: render(GemState *state) {
+	glColor4ub (red, green, blue, alpha);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglColor4ub :: redMess (int arg1) {
+// Variables
+//
+void GEMglColor4ub :: redMess (t_float arg1) {	// FUN
 	red = (GLubyte)arg1;
 	setModified();
 }
 
-
-void GEMglColor4ub :: greenMess (int arg1) {
+void GEMglColor4ub :: greenMess (t_float arg1) {	// FUN
 	green = (GLubyte)arg1;
 	setModified();
 }
 
-
-void GEMglColor4ub :: blueMess (int arg1) {
+void GEMglColor4ub :: blueMess (t_float arg1) {	// FUN
 	blue = (GLubyte)arg1;
 	setModified();
 }
 
-
-void GEMglColor4ub :: alphaMess (int arg1) {
+void GEMglColor4ub :: alphaMess (t_float arg1) {	// FUN
 	alpha = (GLubyte)arg1;
 	setModified();
 }
 
 
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglColor4ub :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglColor4ub,gensym("glColor4ub"),A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColor4ub::redMessCallback,  	gensym("red"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColor4ub::greenMessCallback,  	gensym("green"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColor4ub::blueMessCallback,  	gensym("blue"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColor4ub::alphaMessCallback,  	gensym("alpha"), A_DEFFLOAT, A_NULL);
+};
 
-	class_addmethod(classPtr, (t_method)&GEMglColor4ub::redMessCallback, gensym("red"), A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglColor4ub::greenMessCallback, gensym("green"), A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglColor4ub::blueMessCallback, gensym("blue"), A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglColor4ub::alphaMessCallback, gensym("alpha"), A_NULL);
+void GEMglColor4ub :: redMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->redMess ( (t_float)    arg0);
 }
-
-
-void GEMglColor4ub :: redMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->redMess ( (t_int)    arg0);
+void GEMglColor4ub :: greenMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->greenMess ( (t_float)    arg0);
 }
-void GEMglColor4ub :: greenMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->greenMess ( (t_int)    arg0);
+void GEMglColor4ub :: blueMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->blueMess ( (t_float)    arg0);
 }
-void GEMglColor4ub :: blueMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->blueMess ( (t_int)    arg0);
-}
-void GEMglColor4ub :: alphaMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->alphaMess ( (t_int)    arg0);
+void GEMglColor4ub :: alphaMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->alphaMess ( (t_float)    arg0);
 }

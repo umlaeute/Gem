@@ -1,73 +1,54 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glRasterPos4dv (GLdouble* v)"
-
-  Copyright  (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLRASTERPOS4DV_H_
 #define INCLUDE_GEM_GLRASTERPOS4DV_H_
 
-#include "Base/GemBase.h"
 #include "Base/GemGLUtil.h"
+#include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglRasterPos4dv
-
-    A Wrapper for the openGL-command "glRasterPos4dv (GLdouble* v)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglRasterPos4dv
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glRasterPos4dv( GLdouble* v)"
+ */
 
 class GEM_EXTERN GEMglRasterPos4dv : public GemBase
 {
-    CPPEXTERN_HEADER (GEMglRasterPos4dv, GemBase)
+	CPPEXTERN_HEADER(GEMglRasterPos4dv, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglRasterPos4dv (t_float, t_float, t_float, t_float);	// CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglRasterPos4dv ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-        //////////
-        // Constructor
-        GEMglRasterPos4dv  (t_floatarg, t_floatarg, t_floatarg, t_floatarg);         // CON
+	// variable
+	GLdouble	v[4];		// VAR
+	virtual void	vMess(t_float, t_float, t_float, t_float);	// FUN
 
-    protected:
+	private:
 
-        //////////
-        // Destructor
-	virtual~GEMglRasterPos4dv ();
+	// we need one inlet
+	  t_inlet *m_inlet;
 
-        //////////
-        // Do the rendering
-        virtual void    render  (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLdouble m_v[4];		// VAR
-	virtual void	vMess 	 (t_float, t_float, t_float, t_float);		// FUN glRasterPos4dv GLdouble*
-
-
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	vMessCallback	 (void*, t_floatarg, t_floatarg, t_floatarg, t_floatarg);		// CALLBACK glRasterPos4dv
-
-	// we need some inlets
-	t_inlet	*m_inlet[ 1 ];
+	// static member functions
+         static void    vMessCallback (void*, t_floatarg, t_floatarg, t_floatarg, t_floatarg);
 };
-
-#endif  // for header file
+#endif // for header file

@@ -2,22 +2,19 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglVertex4fv.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS (GEMglVertex4fv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
-
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglVertex4fv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -26,56 +23,43 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS (GEMglVertex4fv , t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglVertex4fv :: GEMglVertex4fv(t_floatarg arg1=0, t_floatarg arg2=0,
-				 t_floatarg arg3=0, t_floatarg arg4=0)
-{
-  vMess(arg1, arg2, arg3, arg4);
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+GEMglVertex4fv :: GEMglVertex4fv	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) {
+vMess(arg0, arg1, arg2, arg3);
+	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglVertex4fv :: ~GEMglVertex4fv(){
-inlet_free(m_inlet[0]);
+GEMglVertex4fv :: ~GEMglVertex4fv () {
+	inlet_free(m_inlet);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglVertex4fv :: render(GemState *state)
-{ glVertex4fv(m_v); }
-
-
-/////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglVertex4fv :: vMess (t_float arg1, t_float arg2, t_float arg3, t_float arg4) {
-  m_v[0]=(GLfloat)arg1;
-  m_v[1]=(GLfloat)arg2;
-  m_v[2]=(GLfloat)arg3;
-  m_v[3]=(GLfloat)arg4;
-  setModified();
+void GEMglVertex4fv :: render(GemState *state) {
+	glVertex4fv (v);
 }
 
-
-
 /////////////////////////////////////////////////////////
-// static member function
+// variable
 //
+void GEMglVertex4fv :: vMess (t_float arg0, t_float arg1, t_float arg2, t_float arg3) {	// FUN
+	v[0]=(GLfloat)arg0;
+	v[1]=(GLfloat)arg1;
+	v[2]=(GLfloat)arg2;
+	v[3]=(GLfloat)arg3;
+	setModified();
+}
+
 /////////////////////////////////////////////////////////
+// static member functions
+//
 
 void GEMglVertex4fv :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglVertex4fv,gensym("glVertex4fv"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-
-	class_addmethod(classPtr, (t_method)&GEMglVertex4fv::vMessCallback, gensym("v"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglVertex4fv::vMessCallback,  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-
-void GEMglVertex4fv :: vMessCallback (void* data, t_floatarg f1, t_floatarg f2,
-				     t_floatarg f3, t_floatarg f4) {
-  GetMyClass(data)->vMess(f1, f2, f3, f4);
+void GEMglVertex4fv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) {
+	GetMyClass(data)->vMess ( arg0, arg1, arg2, arg3);
 }

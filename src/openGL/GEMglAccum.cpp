@@ -2,92 +2,75 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
-// checked
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglAccum.h"
 
-CPPEXTERN_NEW_WITH_GIMME (GEMglAccum)
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAccum , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
-// GEMglAccum
+// GEMglViewport
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglAccum :: GEMglAccum(int argc, t_atom *argv)
+GEMglAccum :: GEMglAccum	(t_floatarg arg0=0, t_floatarg arg1=0) :
+		op((GLenum)arg0), 
+		value((GLfloat)arg1)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("op"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("value"));
-	opMess(argc, argv);
-	if (argc>1)valueMess(atom_getfloat(argv+1));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglAccum :: ~GEMglAccum(){
+GEMglAccum :: ~GEMglAccum () {
 inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglAccum :: render(GemState *state)
-{ glAccum(op, value); }
-
-
-/////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglAccum :: opMess (int argc, t_atom *argv) {
-  if (argc>0 && argv!= 0){
-    if (argv->a_type == A_SYMBOL)
-      op = (GLenum)getGLdefine(argv->a_w.w_symbol->s_name);
-    else op = atom_getint(argv);
-    setModified();
-  }
+void GEMglAccum :: render(GemState *state) {
+	glAccum (op, value);
 }
 
+/////////////////////////////////////////////////////////
+// Variables
+//
+void GEMglAccum :: opMess (t_float arg1) {	// FUN
+	op = (GLenum)arg1;
+	setModified();
+}
 
-void GEMglAccum :: valueMess (t_float arg1) {
+void GEMglAccum :: valueMess (t_float arg1) {	// FUN
 	value = (GLfloat)arg1;
 	setModified();
 }
 
 
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglAccum :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglAccum,gensym("glAccum"), A_GIMME, A_NULL);
-
-	class_addmethod(classPtr, (t_method)&GEMglAccum::opMessCallback, gensym("op"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglAccum::valueMessCallback, gensym("value"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglAccum::opMessCallback,  	gensym("op"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglAccum::valueMessCallback,  	gensym("value"), A_DEFFLOAT, A_NULL);
 }
 
-
-void GEMglAccum :: opMessCallback (   void* data, t_symbol *s, int argc, t_atom *argv) {
-	GetMyClass(data)->opMess (argc, argv);
+void GEMglAccum :: opMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->opMess ( (t_float)    arg0);
 }
-void GEMglAccum :: valueMessCallback (   void* data, t_float arg0) {
-	GetMyClass(data)->valueMess (arg0);
+void GEMglAccum :: valueMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->valueMess ( (t_float)    arg0);
 }

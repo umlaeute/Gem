@@ -2,57 +2,39 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglEnd.h"
 
-CPPEXTERN_NEW (GEMglEnd )
+CPPEXTERN_NEW ( GEMglEnd )
 
 /////////////////////////////////////////////////////////
 //
-// GEMglEnd
+// GEMglViewport
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglEnd :: GEMglEnd()
-{
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym(""));
-}
-
+GEMglEnd :: GEMglEnd	(){}
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglEnd :: ~GEMglEnd(){
-inlet_free(m_inlet[0]);
-}
+GEMglEnd :: ~GEMglEnd () {}
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglEnd :: render(GemState *state)
-{ glEnd(); }
-
-
+void GEMglEnd :: render(GemState *state) {
+	glEnd ();
+}
 /////////////////////////////////////////////////////////
 // static member function
-//
-/////////////////////////////////////////////////////////
-
-void GEMglEnd :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglEnd,gensym("glEnd"),A_NULL);
-}
-
-
+void GEMglEnd :: obj_setupCallback(t_class *classPtr) {}

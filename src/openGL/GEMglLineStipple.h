@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glLineStipple(GLint factor, GLushort pattern)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLLINESTIPPLE_H_
 #define INCLUDE_GEM_GLLINESTIPPLE_H_
@@ -18,60 +16,45 @@ A wrapper for "glLineStipple(GLint factor, GLushort pattern)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglLineStipple
-
-    A Wrapper for the openGL-command "glLineStipple(GLint factor, GLushort pattern)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglLineStipple
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glLineStipple( GLint factor, GLushort pattern)"
+ */
 
 class GEM_EXTERN GEMglLineStipple : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglLineStipple, GemBase)
+	CPPEXTERN_HEADER(GEMglLineStipple, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglLineStipple (t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglLineStipple (t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglLineStipple ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLint	factor;		// VAR
+	  virtual void	factorMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglLineStipple();
-
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLint factor;		// VAR
-	virtual void	factorMess 	(int);		// FUN glLineStipple GLint
-
-	GLushort pattern;		// VAR
-	virtual void	patternMess 	(int);		// FUN glLineStipple GLushort
+	  GLushort	pattern;		// VAR
+	  virtual void	patternMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	factorMessCallback	(void*, t_floatarg);		// CALLBACK glLineStipple
-	static void	patternMessCallback	(void*, t_floatarg);		// CALLBACK glLineStipple
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 2 ];
-};
+	  t_inlet *m_inlet[2];
 
-#endif  // for header file
+	// static member functions
+	  static void	 factorMessCallback (void*, t_floatarg);
+	  static void	 patternMessCallback (void*, t_floatarg);
+};
+#endif // for header file

@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glPopAttrib(void)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLPOPATTRIB_H_
 #define INCLUDE_GEM_GLPOPATTRIB_H_
@@ -18,52 +16,28 @@ A wrapper for "glPopAttrib(void)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglPopAttrib
-
-    A Wrapper for the openGL-command "glPopAttrib(void)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglPopAttrib
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glPopAttrib()"
+ */
 
 class GEM_EXTERN GEMglPopAttrib : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglPopAttrib, GemBase)
+	CPPEXTERN_HEADER(GEMglPopAttrib, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglPopAttrib ();	// CON
 
-        //////////
-        // Constructor
-        GEMglPopAttrib ();         // CON
-
-    protected:
-
-        //////////
-        // Destructor
-        virtual ~GEMglPopAttrib();
-
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-
-    private:
-
-        //////////
-        // Static member functions
-
-
-	// we need some inlets
-	t_inlet	*m_inlet[ 1 ];
+	protected:
+	  // Destructor
+	  virtual ~GEMglPopAttrib ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 };
-
-#endif  // for header file
+#endif // for header file

@@ -2,74 +2,63 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglDepthMask.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG (GEMglDepthMask , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDepthMask , t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
-// GEMglDepthMask
+// GEMglViewport
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglDepthMask :: GEMglDepthMask(t_floatarg arg1=0) :
-             		flag((GLboolean)arg1)
+GEMglDepthMask :: GEMglDepthMask	(t_floatarg arg0=0) :
+		flag((GLboolean)arg0)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("flag"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglDepthMask :: ~GEMglDepthMask(){
+GEMglDepthMask :: ~GEMglDepthMask () {
 inlet_free(m_inlet[0]);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglDepthMask :: render(GemState *state)
-{ glDepthMask(flag); }
+void GEMglDepthMask :: render(GemState *state) {
+	glDepthMask (flag);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglDepthMask :: flagMess (int arg1) {
+// Variables
+//
+void GEMglDepthMask :: flagMess (t_float arg1) {	// FUN
 	flag = (GLboolean)arg1;
 	setModified();
 }
 
 
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglDepthMask :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglDepthMask,gensym("glDepthMask"),A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglDepthMask::flagMessCallback,  	gensym("flag"), A_DEFFLOAT, A_NULL);
+};
 
-	class_addmethod(classPtr, (t_method)&GEMglDepthMask::flagMessCallback, gensym("flag"), A_NULL);
-}
-
-
-void GEMglDepthMask :: flagMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->flagMess ( (t_int)    arg0);
+void GEMglDepthMask :: flagMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->flagMess ( (t_float)    arg0);
 }

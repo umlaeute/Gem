@@ -2,57 +2,40 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglFlush.h"
 
-CPPEXTERN_NEW (GEMglFlush )
+CPPEXTERN_NEW ( GEMglFlush )
 
 /////////////////////////////////////////////////////////
 //
-// GEMglFlush
+// GEMglViewport
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglFlush :: GEMglFlush()
-{
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym(""));
-}
-
+GEMglFlush :: GEMglFlush	(){}
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglFlush :: ~GEMglFlush(){
-inlet_free(m_inlet[0]);
-}
+GEMglFlush :: ~GEMglFlush () {}
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglFlush :: render(GemState *state)
-{ glFlush(); }
-
+void GEMglFlush :: render(GemState *state) {
+	glFlush ();
+}
 
 /////////////////////////////////////////////////////////
 // static member function
-//
-/////////////////////////////////////////////////////////
-
-void GEMglFlush :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglFlush,gensym("glFlush"),A_NULL);
-}
-
-
+void GEMglFlush :: obj_setupCallback(t_class *classPtr) {}

@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glColor3i(GLint red, GLint green, GLint blue)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLCOLOR3I_H_
 #define INCLUDE_GEM_GLCOLOR3I_H_
@@ -18,64 +16,49 @@ A wrapper for "glColor3i(GLint red, GLint green, GLint blue)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglColor3i
-
-    A Wrapper for the openGL-command "glColor3i(GLint red, GLint green, GLint blue)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglColor3i
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glColor3i( GLint red, GLint green, GLint blue)"
+ */
 
 class GEM_EXTERN GEMglColor3i : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglColor3i, GemBase)
+	CPPEXTERN_HEADER(GEMglColor3i, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglColor3i (t_float, t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglColor3i (t_floatarg, t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglColor3i ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLint	red;		// VAR
+	  virtual void	redMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglColor3i();
+	  GLint	green;		// VAR
+	  virtual void	greenMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLint red;		// VAR
-	virtual void	redMess 	(int);		// FUN glColor3i GLint
-
-	GLint green;		// VAR
-	virtual void	greenMess 	(int);		// FUN glColor3i GLint
-
-	GLint blue;		// VAR
-	virtual void	blueMess 	(int);		// FUN glColor3i GLint
+	  GLint	blue;		// VAR
+	  virtual void	blueMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	redMessCallback	(void*, t_floatarg);		// CALLBACK glColor3i
-	static void	greenMessCallback	(void*, t_floatarg);		// CALLBACK glColor3i
-	static void	blueMessCallback	(void*, t_floatarg);		// CALLBACK glColor3i
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 3 ];
-};
+	  t_inlet *m_inlet[3];
 
-#endif  // for header file
+	// static member functions
+	  static void	 redMessCallback (void*, t_floatarg);
+	  static void	 greenMessCallback (void*, t_floatarg);
+	  static void	 blueMessCallback (void*, t_floatarg);
+};
+#endif // for header file

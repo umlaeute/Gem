@@ -2,87 +2,75 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglPolygonOffset.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS (GEMglPolygonOffset , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPolygonOffset , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
-// GEMglPolygonOffset
+// GEMglViewport
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglPolygonOffset :: GEMglPolygonOffset(t_floatarg arg1=0, t_floatarg arg2=0) :
-             		factor((GLfloat)arg1),
-		units((GLfloat)arg2)
+GEMglPolygonOffset :: GEMglPolygonOffset	(t_floatarg arg0=0, t_floatarg arg1=0) :
+		factor((GLfloat)arg0), 
+		units((GLfloat)arg1)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("factor"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("units"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglPolygonOffset :: ~GEMglPolygonOffset(){
+GEMglPolygonOffset :: ~GEMglPolygonOffset () {
 inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglPolygonOffset :: render(GemState *state)
-{ glPolygonOffset(factor, units); }
+void GEMglPolygonOffset :: render(GemState *state) {
+	glPolygonOffset (factor, units);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglPolygonOffset :: factorMess (t_float arg1) {
+// Variables
+//
+void GEMglPolygonOffset :: factorMess (t_float arg1) {	// FUN
 	factor = (GLfloat)arg1;
 	setModified();
 }
 
-
-void GEMglPolygonOffset :: unitsMess (t_float arg1) {
+void GEMglPolygonOffset :: unitsMess (t_float arg1) {	// FUN
 	units = (GLfloat)arg1;
 	setModified();
 }
 
 
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglPolygonOffset :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglPolygonOffset,gensym("glPolygonOffset"),A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglPolygonOffset::factorMessCallback,  	gensym("factor"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglPolygonOffset::unitsMessCallback,  	gensym("units"), A_DEFFLOAT, A_NULL);
+};
 
-	class_addmethod(classPtr, (t_method)&GEMglPolygonOffset::factorMessCallback, gensym("factor"), A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglPolygonOffset::unitsMessCallback, gensym("units"), A_NULL);
+void GEMglPolygonOffset :: factorMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->factorMess ( (t_float)    arg0);
 }
-
-
-void GEMglPolygonOffset :: factorMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->factorMess ( (t_int)    arg0);
-}
-void GEMglPolygonOffset :: unitsMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->unitsMess ( (t_int)    arg0);
+void GEMglPolygonOffset :: unitsMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->unitsMess ( (t_float)    arg0);
 }

@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glRasterPos2s(GLshort x, GLshort y)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLRASTERPOS2S_H_
 #define INCLUDE_GEM_GLRASTERPOS2S_H_
@@ -18,60 +16,45 @@ A wrapper for "glRasterPos2s(GLshort x, GLshort y)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglRasterPos2s
-
-    A Wrapper for the openGL-command "glRasterPos2s(GLshort x, GLshort y)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglRasterPos2s
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glRasterPos2s( GLshort x, GLshort y)"
+ */
 
 class GEM_EXTERN GEMglRasterPos2s : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglRasterPos2s, GemBase)
+	CPPEXTERN_HEADER(GEMglRasterPos2s, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglRasterPos2s (t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglRasterPos2s (t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglRasterPos2s ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLshort	x;		// VAR
+	  virtual void	xMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglRasterPos2s();
-
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLshort x;		// VAR
-	virtual void	xMess 	(int);		// FUN glRasterPos2s GLshort
-
-	GLshort y;		// VAR
-	virtual void	yMess 	(int);		// FUN glRasterPos2s GLshort
+	  GLshort	y;		// VAR
+	  virtual void	yMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	xMessCallback	(void*, t_floatarg);		// CALLBACK glRasterPos2s
-	static void	yMessCallback	(void*, t_floatarg);		// CALLBACK glRasterPos2s
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 2 ];
-};
+	  t_inlet *m_inlet[2];
 
-#endif  // for header file
+	// static member functions
+	  static void	 xMessCallback (void*, t_floatarg);
+	  static void	 yMessCallback (void*, t_floatarg);
+};
+#endif // for header file

@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glStencilFunc(GLenum func, GLint ref, GLuint mask)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLSTENCILFUNC_H_
 #define INCLUDE_GEM_GLSTENCILFUNC_H_
@@ -18,64 +16,49 @@ A wrapper for "glStencilFunc(GLenum func, GLint ref, GLuint mask)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglStencilFunc
-
-    A Wrapper for the openGL-command "glStencilFunc(GLenum func, GLint ref, GLuint mask)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglStencilFunc
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glStencilFunc( GLenum func, GLint ref, GLuint mask)"
+ */
 
 class GEM_EXTERN GEMglStencilFunc : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglStencilFunc, GemBase)
+	CPPEXTERN_HEADER(GEMglStencilFunc, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglStencilFunc (t_float, t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglStencilFunc (t_symbol*, t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglStencilFunc ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLenum	func;		// VAR
+	  virtual void	funcMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglStencilFunc();
+	  GLint	ref;		// VAR
+	  virtual void	refMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLenum func;		// VAR
-	virtual void	funcMess 	(int);		// FUN glStencilFunc GLenum
-
-	GLint ref;		// VAR
-	virtual void	refMess 	(int);		// FUN glStencilFunc GLint
-
-	GLuint mask;		// VAR
-	virtual void	maskMess 	(int);		// FUN glStencilFunc GLuint
+	  GLuint	mask;		// VAR
+	  virtual void	maskMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	funcMessCallback	(void*, t_symbol*);		// CALLBACK glStencilFunc
-	static void	refMessCallback	(void*, t_floatarg);		// CALLBACK glStencilFunc
-	static void	maskMessCallback	(void*, t_floatarg);		// CALLBACK glStencilFunc
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 3 ];
-};
+	  t_inlet *m_inlet[3];
 
-#endif  // for header file
+	// static member functions
+	  static void	 funcMessCallback (void*, t_floatarg);
+	  static void	 refMessCallback (void*, t_floatarg);
+	  static void	 maskMessCallback (void*, t_floatarg);
+};
+#endif // for header file

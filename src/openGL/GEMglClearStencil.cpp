@@ -2,74 +2,63 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglClearStencil.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG (GEMglClearStencil , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearStencil , t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
-// GEMglClearStencil
+// GEMglViewport
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglClearStencil :: GEMglClearStencil(t_floatarg arg1=0) :
-             		s((GLint)arg1)
+GEMglClearStencil :: GEMglClearStencil	(t_floatarg arg0=0) :
+		s((GLint)arg0)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("s"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglClearStencil :: ~GEMglClearStencil(){
+GEMglClearStencil :: ~GEMglClearStencil () {
 inlet_free(m_inlet[0]);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglClearStencil :: render(GemState *state)
-{ glClearStencil(s); }
+void GEMglClearStencil :: render(GemState *state) {
+	glClearStencil (s);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglClearStencil :: sMess (int arg1) {
+// Variables
+//
+void GEMglClearStencil :: sMess (t_float arg1) {	// FUN
 	s = (GLint)arg1;
 	setModified();
 }
 
 
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglClearStencil :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglClearStencil,gensym("glClearStencil"),A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglClearStencil::sMessCallback,  	gensym("s"), A_DEFFLOAT, A_NULL);
+};
 
-	class_addmethod(classPtr, (t_method)&GEMglClearStencil::sMessCallback, gensym("s"), A_NULL);
-}
-
-
-void GEMglClearStencil :: sMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->sMess ( (t_int)    arg0);
+void GEMglClearStencil :: sMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->sMess ( (t_float)    arg0);
 }

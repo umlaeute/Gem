@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glNormal3i(GLint nx, GLint ny, GLint nz)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLNORMAL3I_H_
 #define INCLUDE_GEM_GLNORMAL3I_H_
@@ -18,64 +16,49 @@ A wrapper for "glNormal3i(GLint nx, GLint ny, GLint nz)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglNormal3i
-
-    A Wrapper for the openGL-command "glNormal3i(GLint nx, GLint ny, GLint nz)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglNormal3i
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glNormal3i( GLint nx, GLint ny, GLint nz)"
+ */
 
 class GEM_EXTERN GEMglNormal3i : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglNormal3i, GemBase)
+	CPPEXTERN_HEADER(GEMglNormal3i, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglNormal3i (t_float, t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglNormal3i (t_floatarg, t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglNormal3i ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLint	nx;		// VAR
+	  virtual void	nxMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglNormal3i();
+	  GLint	ny;		// VAR
+	  virtual void	nyMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLint nx;		// VAR
-	virtual void	nxMess 	(int);		// FUN glNormal3i GLint
-
-	GLint ny;		// VAR
-	virtual void	nyMess 	(int);		// FUN glNormal3i GLint
-
-	GLint nz;		// VAR
-	virtual void	nzMess 	(int);		// FUN glNormal3i GLint
+	  GLint	nz;		// VAR
+	  virtual void	nzMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	nxMessCallback	(void*, t_floatarg);		// CALLBACK glNormal3i
-	static void	nyMessCallback	(void*, t_floatarg);		// CALLBACK glNormal3i
-	static void	nzMessCallback	(void*, t_floatarg);		// CALLBACK glNormal3i
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 3 ];
-};
+	  t_inlet *m_inlet[3];
 
-#endif  // for header file
+	// static member functions
+	  static void	 nxMessCallback (void*, t_floatarg);
+	  static void	 nyMessCallback (void*, t_floatarg);
+	  static void	 nzMessCallback (void*, t_floatarg);
+};
+#endif // for header file

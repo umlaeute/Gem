@@ -2,21 +2,19 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglTexCoord4sv.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS (GEMglTexCoord4sv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglTexCoord4sv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -25,54 +23,43 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS (GEMglTexCoord4sv, t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglTexCoord4sv :: GEMglTexCoord4sv(t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0, t_floatarg arg4=0)
-{
-	vMess (arg1, arg2, arg3, arg4);
-	m_inlet[0] = inlet_new (this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+GEMglTexCoord4sv :: GEMglTexCoord4sv	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) {
+vMess(arg0, arg1, arg2, arg3);
+	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglTexCoord4sv :: ~GEMglTexCoord4sv(){
-inlet_free(m_inlet[0]);
+GEMglTexCoord4sv :: ~GEMglTexCoord4sv () {
+	inlet_free(m_inlet);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglTexCoord4sv :: render(GemState *state)
-{ glTexCoord4sv(m_v); }
+void GEMglTexCoord4sv :: render(GemState *state) {
+	glTexCoord4sv (v);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglTexCoord4sv :: vMess (t_float arg1, t_float arg2, t_float arg3, t_float arg4) {
-	m_v[0]=(GLshort)arg1;
-	m_v[1]=(GLshort)arg2;
-	m_v[2]=(GLshort)arg3;
-	m_v[3]=(GLshort)arg4;
+// variable
+//
+void GEMglTexCoord4sv :: vMess (t_float arg0, t_float arg1, t_float arg2, t_float arg3) {	// FUN
+	v[0]=(GLshort)arg0;
+	v[1]=(GLshort)arg1;
+	v[2]=(GLshort)arg2;
+	v[3]=(GLshort)arg3;
 	setModified();
 }
 
-
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglTexCoord4sv :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglTexCoord4sv,gensym("glTexCoord4sv"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-
-	class_addmethod(classPtr, (t_method)&GEMglTexCoord4sv::vMessCallback, gensym("v"),  A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglTexCoord4sv::vMessCallback,  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-
-void GEMglTexCoord4sv :: vMessCallback (void* data, t_floatarg f1, t_floatarg f2, t_floatarg f3, t_floatarg f4) {
-	GetMyClass(data)->vMess (f1, f2, f3, f4);
+void GEMglTexCoord4sv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) {
+	GetMyClass(data)->vMess ( arg0, arg1, arg2, arg3);
 }

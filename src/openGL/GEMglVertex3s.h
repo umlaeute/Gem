@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glVertex3s(GLshort x, GLshort y, GLshort z)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLVERTEX3S_H_
 #define INCLUDE_GEM_GLVERTEX3S_H_
@@ -18,64 +16,49 @@ A wrapper for "glVertex3s(GLshort x, GLshort y, GLshort z)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglVertex3s
-
-    A Wrapper for the openGL-command "glVertex3s(GLshort x, GLshort y, GLshort z)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglVertex3s
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glVertex3s( GLshort x, GLshort y, GLshort z)"
+ */
 
 class GEM_EXTERN GEMglVertex3s : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglVertex3s, GemBase)
+	CPPEXTERN_HEADER(GEMglVertex3s, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglVertex3s (t_float, t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglVertex3s (t_floatarg, t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglVertex3s ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLshort	x;		// VAR
+	  virtual void	xMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglVertex3s();
+	  GLshort	y;		// VAR
+	  virtual void	yMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLshort x;		// VAR
-	virtual void	xMess 	(int);		// FUN glVertex3s GLshort
-
-	GLshort y;		// VAR
-	virtual void	yMess 	(int);		// FUN glVertex3s GLshort
-
-	GLshort z;		// VAR
-	virtual void	zMess 	(int);		// FUN glVertex3s GLshort
+	  GLshort	z;		// VAR
+	  virtual void	zMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	xMessCallback	(void*, t_floatarg);		// CALLBACK glVertex3s
-	static void	yMessCallback	(void*, t_floatarg);		// CALLBACK glVertex3s
-	static void	zMessCallback	(void*, t_floatarg);		// CALLBACK glVertex3s
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 3 ];
-};
+	  t_inlet *m_inlet[3];
 
-#endif  // for header file
+	// static member functions
+	  static void	 xMessCallback (void*, t_floatarg);
+	  static void	 yMessCallback (void*, t_floatarg);
+	  static void	 zMessCallback (void*, t_floatarg);
+};
+#endif // for header file

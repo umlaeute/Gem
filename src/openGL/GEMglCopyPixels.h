@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glCopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum type)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLCOPYPIXELS_H_
 #define INCLUDE_GEM_GLCOPYPIXELS_H_
@@ -18,72 +16,57 @@ A wrapper for "glCopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLe
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglCopyPixels
-
-    A Wrapper for the openGL-command "glCopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum type)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglCopyPixels
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glCopyPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum type)"
+ */
 
 class GEM_EXTERN GEMglCopyPixels : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglCopyPixels, GemBase)
+	CPPEXTERN_HEADER(GEMglCopyPixels, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglCopyPixels (int, t_atom*);	// CON
 
-    //////////
-    // Constructor
-    GEMglCopyPixels (int argc, t_atom* argv);
+	protected:
+	  // Destructor
+	  virtual ~GEMglCopyPixels ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLint	x;		// VAR
+	  virtual void	xMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglCopyPixels();
+	  GLint	y;		// VAR
+	  virtual void	yMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
+	  GLsizei	width;		// VAR
+	  virtual void	widthMess(t_float);	// FUN
 
-       //////////
-       // define and set the variables
+	  GLsizei	height;		// VAR
+	  virtual void	heightMess(t_float);	// FUN
 
-	 GLint x;		// VAR
-	virtual void	xMess 	(int);		// FUN glCopyPixels GLint
-
-	GLint y;		// VAR
-	virtual void	yMess 	(int);		// FUN glCopyPixels GLint
-
-	GLsizei width;		// VAR
-	virtual void	widthMess 	(int);		// FUN glCopyPixels GLsizei
-
-	GLsizei height;		// VAR
-	virtual void	heightMess 	(int);		// FUN glCopyPixels GLsizei
-
-	GLenum type;		// VAR
-	virtual void	typeMess 	(int);		// FUN glCopyPixels GLenum
+	  GLenum	type;		// VAR
+	  virtual void	typeMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	xMessCallback	(void*, t_floatarg);		// CALLBACK glCopyPixels
-	static void	yMessCallback	(void*, t_floatarg);		// CALLBACK glCopyPixels
-	static void	widthMessCallback	(void*, t_floatarg);		// CALLBACK glCopyPixels
-	static void	heightMessCallback	(void*, t_floatarg);		// CALLBACK glCopyPixels
-	static void	typeMessCallback	(void*, t_symbol*);		// CALLBACK glCopyPixels
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 5 ];
-};
+	  t_inlet *m_inlet[5];
 
-#endif  // for header file
+	// static member functions
+	  static void	 xMessCallback (void*, t_floatarg);
+	  static void	 yMessCallback (void*, t_floatarg);
+	  static void	 widthMessCallback (void*, t_floatarg);
+	  static void	 heightMessCallback (void*, t_floatarg);
+	  static void	 typeMessCallback (void*, t_floatarg);
+};
+#endif // for header file

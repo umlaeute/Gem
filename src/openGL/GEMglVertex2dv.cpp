@@ -2,21 +2,19 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglVertex2dv.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS (GEMglVertex2dv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2dv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -25,52 +23,41 @@ CPPEXTERN_NEW_WITH_TWO_ARGS (GEMglVertex2dv, t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglVertex2dv :: GEMglVertex2dv (t_floatarg arg1, t_floatarg arg2)
-{
-	vMess(arg1, arg2);
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+GEMglVertex2dv :: GEMglVertex2dv	(t_floatarg arg0=0, t_floatarg arg1=0) {
+vMess(arg0, arg1);
+	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglVertex2dv :: ~GEMglVertex2dv(){
-inlet_free(m_inlet[0]);
+GEMglVertex2dv :: ~GEMglVertex2dv () {
+	inlet_free(m_inlet);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglVertex2dv :: render(GemState *state)
-{ glVertex2dv(m_v); }
+void GEMglVertex2dv :: render(GemState *state) {
+	glVertex2dv (v);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglVertex2dv :: vMess (t_float arg1, t_float arg2) {
-	m_v[0] = (GLdouble)arg1;
-	m_v[1] = (GLdouble)arg2;
+// variable
+//
+void GEMglVertex2dv :: vMess (t_float arg0, t_float arg1) {	// FUN
+	v[0]=(GLdouble)arg0;
+	v[1]=(GLdouble)arg1;
 	setModified();
 }
 
-
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglVertex2dv :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglVertex2dv,gensym("glVertex2dv"),A_FLOAT, A_FLOAT, A_NULL);
-
-	class_addmethod(classPtr, (t_method)&GEMglVertex2dv::vMessCallback, gensym("v"), A_FLOAT, A_FLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglVertex2dv::vMessCallback,  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-
-void GEMglVertex2dv :: vMessCallback (void *data, t_floatarg f1, t_floatarg f2){
-	GetMyClass(data)->vMess (f1, f2);
+void GEMglVertex2dv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1) {
+	GetMyClass(data)->vMess ( arg0, arg1);
 }

@@ -2,21 +2,19 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglColor3ubv.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS (GEMglColor3ubv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3ubv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -25,53 +23,42 @@ CPPEXTERN_NEW_WITH_THREE_ARGS (GEMglColor3ubv , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglColor3ubv :: GEMglColor3ubv(t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0)
-{
-  vMess(arg1, arg2, arg3);
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+GEMglColor3ubv :: GEMglColor3ubv	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) {
+vMess(arg0, arg1, arg2);
+	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglColor3ubv :: ~GEMglColor3ubv(){
-inlet_free(m_inlet[0]);
+GEMglColor3ubv :: ~GEMglColor3ubv () {
+	inlet_free(m_inlet);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglColor3ubv :: render(GemState *state)
-{ glColor3ubv(m_v); }
+void GEMglColor3ubv :: render(GemState *state) {
+	glColor3ubv (v);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglColor3ubv :: vMess (t_float arg1, t_float arg2, t_float arg3) {
-  m_v[0] = (GLubyte)arg1;
-  m_v[1] = (GLubyte)arg2;
-  m_v[2] = (GLubyte)arg3;
+// variable
+//
+void GEMglColor3ubv :: vMess (t_float arg0, t_float arg1, t_float arg2) {	// FUN
+	v[0]=(GLubyte)arg0;
+	v[1]=(GLubyte)arg1;
+	v[2]=(GLubyte)arg2;
 	setModified();
 }
 
-
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglColor3ubv :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglColor3ubv,gensym("glColor3ubv"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-
-	class_addmethod(classPtr, (t_method)&GEMglColor3ubv::vMessCallback, gensym("v"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColor3ubv::vMessCallback,  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-
-void GEMglColor3ubv :: vMessCallback  (void* data, t_floatarg f1, t_floatarg f2, t_floatarg f3){
-  GetMyClass(data)->vMess (f1, f2, f3);
+void GEMglColor3ubv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) {
+	GetMyClass(data)->vMess ( arg0, arg1, arg2);
 }

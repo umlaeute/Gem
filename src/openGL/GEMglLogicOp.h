@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glLogicOp(GLenum opcode)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLLOGICOP_H_
 #define INCLUDE_GEM_GLLOGICOP_H_
@@ -18,56 +16,41 @@ A wrapper for "glLogicOp(GLenum opcode)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglLogicOp
-
-    A Wrapper for the openGL-command "glLogicOp(GLenum opcode)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglLogicOp
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glLogicOp( GLenum opcode)"
+ */
 
 class GEM_EXTERN GEMglLogicOp : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglLogicOp, GemBase)
+	CPPEXTERN_HEADER(GEMglLogicOp, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglLogicOp (t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglLogicOp (t_symbol*);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglLogicOp ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
-
-        //////////
-        // Destructor
-        virtual ~GEMglLogicOp();
-
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLenum opcode;		// VAR
-	virtual void	opcodeMess 	(int);		// FUN glLogicOp GLenum
+	// variables
+	  GLenum	opcode;		// VAR
+	  virtual void	opcodeMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	opcodeMessCallback	(void*, t_symbol*);		// CALLBACK glLogicOp
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 1 ];
-};
+	  t_inlet *m_inlet[1];
 
-#endif  // for header file
+	// static member functions
+	  static void	 opcodeMessCallback (void*, t_floatarg);
+};
+#endif // for header file

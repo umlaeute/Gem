@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glFrustum(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLFRUSTUM_H_
 #define INCLUDE_GEM_GLFRUSTUM_H_
@@ -18,76 +16,61 @@ A wrapper for "glFrustum(GLdouble left, GLdouble right, GLdouble bottom, GLdoubl
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglFrustum
-
-    A Wrapper for the openGL-command "glFrustum(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglFrustum
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar)"
+ */
 
 class GEM_EXTERN GEMglFrustum : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglFrustum, GemBase)
+	CPPEXTERN_HEADER(GEMglFrustum, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglFrustum (int, t_atom*);	// CON
 
-    //////////
-    // Constructor
-    GEMglFrustum (int argc, t_atom* argv);
+	protected:
+	  // Destructor
+	  virtual ~GEMglFrustum ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLdouble	left;		// VAR
+	  virtual void	leftMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglFrustum();
+	  GLdouble	right;		// VAR
+	  virtual void	rightMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
+	  GLdouble	bottom;		// VAR
+	  virtual void	bottomMess(t_float);	// FUN
 
-       //////////
-       // define and set the variables
+	  GLdouble	top;		// VAR
+	  virtual void	topMess(t_float);	// FUN
 
-	 GLdouble left;		// VAR
-	virtual void	leftMess 	(double);		// FUN glFrustum GLdouble
+	  GLdouble	zNear;		// VAR
+	  virtual void	zNearMess(t_float);	// FUN
 
-	GLdouble right;		// VAR
-	virtual void	rightMess 	(double);		// FUN glFrustum GLdouble
-
-	GLdouble bottom;		// VAR
-	virtual void	bottomMess 	(double);		// FUN glFrustum GLdouble
-
-	GLdouble top;		// VAR
-	virtual void	topMess 	(double);		// FUN glFrustum GLdouble
-
-	GLdouble zNear;		// VAR
-	virtual void	zNearMess 	(double);		// FUN glFrustum GLdouble
-
-	GLdouble zFar;		// VAR
-	virtual void	zFarMess 	(double);		// FUN glFrustum GLdouble
+	  GLdouble	zFar;		// VAR
+	  virtual void	zFarMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	leftMessCallback	(void*, t_floatarg);		// CALLBACK glFrustum
-	static void	rightMessCallback	(void*, t_floatarg);		// CALLBACK glFrustum
-	static void	bottomMessCallback	(void*, t_floatarg);		// CALLBACK glFrustum
-	static void	topMessCallback	(void*, t_floatarg);		// CALLBACK glFrustum
-	static void	zNearMessCallback	(void*, t_floatarg);		// CALLBACK glFrustum
-	static void	zFarMessCallback	(void*, t_floatarg);		// CALLBACK glFrustum
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 6 ];
-};
+	  t_inlet *m_inlet[6];
 
-#endif  // for header file
+	// static member functions
+	  static void	 leftMessCallback (void*, t_floatarg);
+	  static void	 rightMessCallback (void*, t_floatarg);
+	  static void	 bottomMessCallback (void*, t_floatarg);
+	  static void	 topMessCallback (void*, t_floatarg);
+	  static void	 zNearMessCallback (void*, t_floatarg);
+	  static void	 zFarMessCallback (void*, t_floatarg);
+};
+#endif // for header file

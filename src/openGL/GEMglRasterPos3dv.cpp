@@ -2,21 +2,19 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglRasterPos3dv.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS (GEMglRasterPos3dv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglRasterPos3dv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -25,53 +23,42 @@ CPPEXTERN_NEW_WITH_THREE_ARGS (GEMglRasterPos3dv, t_floatarg, A_DEFFLOAT, t_floa
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglRasterPos3dv :: GEMglRasterPos3dv(t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0)
-{
-	vMess(arg1, arg2, arg3);
-	m_inlet[0] = inlet_new (this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+GEMglRasterPos3dv :: GEMglRasterPos3dv	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) {
+vMess(arg0, arg1, arg2);
+	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglRasterPos3dv :: ~GEMglRasterPos3dv(){
-inlet_free(m_inlet[0]);
+GEMglRasterPos3dv :: ~GEMglRasterPos3dv () {
+	inlet_free(m_inlet);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglRasterPos3dv :: render(GemState *state)
-{ glRasterPos3dv (m_v); }
+void GEMglRasterPos3dv :: render(GemState *state) {
+	glRasterPos3dv (v);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglRasterPos3dv :: vMess (t_float arg1, t_float arg2, t_float arg3) {
-	m_v[0]=(GLdouble)arg1;
-	m_v[1]=(GLdouble)arg2;
-	m_v[2]=(GLdouble)arg3;
+// variable
+//
+void GEMglRasterPos3dv :: vMess (t_float arg0, t_float arg1, t_float arg2) {	// FUN
+	v[0]=(GLdouble)arg0;
+	v[1]=(GLdouble)arg1;
+	v[2]=(GLdouble)arg2;
 	setModified();
 }
 
-
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglRasterPos3dv :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglRasterPos3dv,gensym("glRasterPos3dv"),A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-
-	class_addmethod(classPtr, (t_method)&GEMglRasterPos3dv::vMessCallback, gensym("v"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglRasterPos3dv::vMessCallback,  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-
-void GEMglRasterPos3dv :: vMessCallback (void* data, t_floatarg f1, t_floatarg f2, t_floatarg f3) {
-	GetMyClass(data)->vMess (f1, f2, f3);
+void GEMglRasterPos3dv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) {
+	GetMyClass(data)->vMess ( arg0, arg1, arg2);
 }

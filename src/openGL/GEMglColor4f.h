@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glColor4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLCOLOR4F_H_
 #define INCLUDE_GEM_GLCOLOR4F_H_
@@ -18,68 +16,53 @@ A wrapper for "glColor4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglColor4f
-
-    A Wrapper for the openGL-command "glColor4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglColor4f
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glColor4f( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)"
+ */
 
 class GEM_EXTERN GEMglColor4f : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglColor4f, GemBase)
+	CPPEXTERN_HEADER(GEMglColor4f, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglColor4f (t_float, t_float, t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglColor4f (t_floatarg, t_floatarg, t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglColor4f ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLfloat	red;		// VAR
+	  virtual void	redMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglColor4f();
+	  GLfloat	green;		// VAR
+	  virtual void	greenMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
+	  GLfloat	blue;		// VAR
+	  virtual void	blueMess(t_float);	// FUN
 
-       //////////
-       // define and set the variables
-
-	 GLfloat red;		// VAR
-	virtual void	redMess 	(t_float);		// FUN glColor4f GLfloat
-
-	GLfloat green;		// VAR
-	virtual void	greenMess 	(t_float);		// FUN glColor4f GLfloat
-
-	GLfloat blue;		// VAR
-	virtual void	blueMess 	(t_float);		// FUN glColor4f GLfloat
-
-	GLfloat alpha;		// VAR
-	virtual void	alphaMess 	(t_float);		// FUN glColor4f GLfloat
+	  GLfloat	alpha;		// VAR
+	  virtual void	alphaMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	redMessCallback	(void*, t_floatarg);		// CALLBACK glColor4f
-	static void	greenMessCallback	(void*, t_floatarg);		// CALLBACK glColor4f
-	static void	blueMessCallback	(void*, t_floatarg);		// CALLBACK glColor4f
-	static void	alphaMessCallback	(void*, t_floatarg);		// CALLBACK glColor4f
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 4 ];
-};
+	  t_inlet *m_inlet[4];
 
-#endif  // for header file
+	// static member functions
+	  static void	 redMessCallback (void*, t_floatarg);
+	  static void	 greenMessCallback (void*, t_floatarg);
+	  static void	 blueMessCallback (void*, t_floatarg);
+	  static void	 alphaMessCallback (void*, t_floatarg);
+};
+#endif // for header file

@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glPushMatrix(void)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLPUSHMATRIX_H_
 #define INCLUDE_GEM_GLPUSHMATRIX_H_
@@ -18,52 +16,28 @@ A wrapper for "glPushMatrix(void)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglPushMatrix
-
-    A Wrapper for the openGL-command "glPushMatrix(void)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglPushMatrix
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glPushMatrix()"
+ */
 
 class GEM_EXTERN GEMglPushMatrix : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglPushMatrix, GemBase)
+	CPPEXTERN_HEADER(GEMglPushMatrix, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglPushMatrix ();	// CON
 
-        //////////
-        // Constructor
-        GEMglPushMatrix ();         // CON
-
-    protected:
-
-        //////////
-        // Destructor
-        virtual ~GEMglPushMatrix();
-
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-
-    private:
-
-        //////////
-        // Static member functions
-
-
-	// we need some inlets
-	t_inlet	*m_inlet[ 1 ];
+	protected:
+	  // Destructor
+	  virtual ~GEMglPushMatrix ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 };
-
-#endif  // for header file
+#endif // for header file

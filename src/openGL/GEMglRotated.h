@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glRotated(GLdouble angle, GLdouble x, GLdouble y, GLdouble z)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLROTATED_H_
 #define INCLUDE_GEM_GLROTATED_H_
@@ -18,68 +16,53 @@ A wrapper for "glRotated(GLdouble angle, GLdouble x, GLdouble y, GLdouble z)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglRotated
-
-    A Wrapper for the openGL-command "glRotated(GLdouble angle, GLdouble x, GLdouble y, GLdouble z)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglRotated
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glRotated( GLdouble angle, GLdouble x, GLdouble y, GLdouble z)"
+ */
 
 class GEM_EXTERN GEMglRotated : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglRotated, GemBase)
+	CPPEXTERN_HEADER(GEMglRotated, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglRotated (t_float, t_float, t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglRotated (t_floatarg, t_floatarg, t_floatarg, t_floatarg);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglRotated ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLdouble	angle;		// VAR
+	  virtual void	angleMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglRotated();
+	  GLdouble	x;		// VAR
+	  virtual void	xMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
+	  GLdouble	y;		// VAR
+	  virtual void	yMess(t_float);	// FUN
 
-       //////////
-       // define and set the variables
-
-	 GLdouble angle;		// VAR
-	virtual void	angleMess 	(double);		// FUN glRotated GLdouble
-
-	GLdouble x;		// VAR
-	virtual void	xMess 	(double);		// FUN glRotated GLdouble
-
-	GLdouble y;		// VAR
-	virtual void	yMess 	(double);		// FUN glRotated GLdouble
-
-	GLdouble z;		// VAR
-	virtual void	zMess 	(double);		// FUN glRotated GLdouble
+	  GLdouble	z;		// VAR
+	  virtual void	zMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	angleMessCallback	(void*, t_floatarg);		// CALLBACK glRotated
-	static void	xMessCallback	(void*, t_floatarg);		// CALLBACK glRotated
-	static void	yMessCallback	(void*, t_floatarg);		// CALLBACK glRotated
-	static void	zMessCallback	(void*, t_floatarg);		// CALLBACK glRotated
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 4 ];
-};
+	  t_inlet *m_inlet[4];
 
-#endif  // for header file
+	// static member functions
+	  static void	 angleMessCallback (void*, t_floatarg);
+	  static void	 xMessCallback (void*, t_floatarg);
+	  static void	 yMessCallback (void*, t_floatarg);
+	  static void	 zMessCallback (void*, t_floatarg);
+};
+#endif // for header file

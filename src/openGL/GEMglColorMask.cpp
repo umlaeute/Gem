@@ -2,113 +2,99 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
-//
 // Implementation file
 //
-//    Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    this file has been generated automatically
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//	zmoelnig@iem.kug.ac.at
+//  For information on usage and redistribution, and for a DISCLAIMER
+//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+//  this file has been generated...
+////////////////////////////////////////////////////////
 
 #include "GEMglColorMask.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS (GEMglColorMask , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColorMask , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
-// GEMglColorMask
+// GEMglViewport
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-/////////////////////////////////////////////////////////
-GEMglColorMask :: GEMglColorMask(t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0, t_floatarg arg4=0) :
-             		red((GLboolean)arg1),
-		green((GLboolean)arg2),
-		blue((GLboolean)arg3),
-		alpha((GLboolean)arg4)
+GEMglColorMask :: GEMglColorMask	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+		red((GLboolean)arg0), 
+		green((GLboolean)arg1), 
+		blue((GLboolean)arg2), 
+		alpha((GLboolean)arg3)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("red"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("green"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blue"));
 	m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("alpha"));
 }
-
 /////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
-GEMglColorMask :: ~GEMglColorMask(){
+GEMglColorMask :: ~GEMglColorMask () {
 inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 inlet_free(m_inlet[2]);
 inlet_free(m_inlet[3]);
 }
+
 /////////////////////////////////////////////////////////
 // Render
 //
-/////////////////////////////////////////////////////////
-void GEMglColorMask :: render(GemState *state)
-{ glColorMask(red, green, blue, alpha); }
+void GEMglColorMask :: render(GemState *state) {
+	glColorMask (red, green, blue, alpha);
+}
 
-
 /////////////////////////////////////////////////////////
-// set my variables
-/////////////////////////////////////////////////////////
-
-void GEMglColorMask :: redMess (int arg1) {
+// Variables
+//
+void GEMglColorMask :: redMess (t_float arg1) {	// FUN
 	red = (GLboolean)arg1;
 	setModified();
 }
 
-
-void GEMglColorMask :: greenMess (int arg1) {
+void GEMglColorMask :: greenMess (t_float arg1) {	// FUN
 	green = (GLboolean)arg1;
 	setModified();
 }
 
-
-void GEMglColorMask :: blueMess (int arg1) {
+void GEMglColorMask :: blueMess (t_float arg1) {	// FUN
 	blue = (GLboolean)arg1;
 	setModified();
 }
 
-
-void GEMglColorMask :: alphaMess (int arg1) {
+void GEMglColorMask :: alphaMess (t_float arg1) {	// FUN
 	alpha = (GLboolean)arg1;
 	setModified();
 }
 
 
-
 /////////////////////////////////////////////////////////
-// static member function
+// static member functions
 //
-/////////////////////////////////////////////////////////
 
 void GEMglColorMask :: obj_setupCallback(t_class *classPtr) {
-        class_addcreator((t_newmethod)_classGEMglColorMask,gensym("glColorMask"),A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColorMask::redMessCallback,  	gensym("red"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColorMask::greenMessCallback,  	gensym("green"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColorMask::blueMessCallback,  	gensym("blue"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColorMask::alphaMessCallback,  	gensym("alpha"), A_DEFFLOAT, A_NULL);
+};
 
-	class_addmethod(classPtr, (t_method)&GEMglColorMask::redMessCallback, gensym("red"), A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglColorMask::greenMessCallback, gensym("green"), A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglColorMask::blueMessCallback, gensym("blue"), A_NULL);
-	class_addmethod(classPtr, (t_method)&GEMglColorMask::alphaMessCallback, gensym("alpha"), A_NULL);
+void GEMglColorMask :: redMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->redMess ( (t_float)    arg0);
 }
-
-
-void GEMglColorMask :: redMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->redMess ( (t_int)    arg0);
+void GEMglColorMask :: greenMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->greenMess ( (t_float)    arg0);
 }
-void GEMglColorMask :: greenMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->greenMess ( (t_int)    arg0);
+void GEMglColorMask :: blueMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->blueMess ( (t_float)    arg0);
 }
-void GEMglColorMask :: blueMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->blueMess ( (t_int)    arg0);
-}
-void GEMglColorMask :: alphaMessCallback (   void* data, t_floatarg    arg0) {
-	GetMyClass(data)->alphaMess ( (t_int)    arg0);
+void GEMglColorMask :: alphaMessCallback (void* data, t_floatarg arg0){
+	GetMyClass(data)->alphaMess ( (t_float)    arg0);
 }

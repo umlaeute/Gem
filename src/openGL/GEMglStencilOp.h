@@ -1,16 +1,14 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-A wrapper for "glStencilOp(GLenum fail, GLenum zfail, GLenum zpass)"
-
-  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
-  this file has been generated automatically...
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
- -----------------------------------------------------------------*/
+ /* ------------------------------------------------------------------
+  * GEM - Graphics Environment for Multimedia
+  *
+  *  Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+  *	zmoelnig@iem.kug.ac.at
+  *  For information on usage and redistribution, and for a DISCLAIMER
+  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+  *
+  *  this file has been generated...
+  * ------------------------------------------------------------------
+  */
 
 #ifndef INCLUDE_GEM_GLSTENCILOP_H_
 #define INCLUDE_GEM_GLSTENCILOP_H_
@@ -18,64 +16,49 @@ A wrapper for "glStencilOp(GLenum fail, GLenum zfail, GLenum zpass)"
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GEMglStencilOp
-
-    A Wrapper for the openGL-command "glStencilOp(GLenum fail, GLenum zfail, GLenum zpass)"
-
-KEYWORDS
-    openGL
-
-OPENGL_VERSION 0
-
-------------------------------------------------------------------*/
+/*
+ CLASS
+	GEMglStencilOp
+ KEYWORDS
+	openGL	0
+ DESCRIPTION
+	wrapper for the openGL-function
+	"glStencilOp( GLenum fail, GLenum zfail, GLenum zpass)"
+ */
 
 class GEM_EXTERN GEMglStencilOp : public GemBase
 {
-    CPPEXTERN_HEADER(GEMglStencilOp, GemBase)
+	CPPEXTERN_HEADER(GEMglStencilOp, GemBase)
 
-    public:
+	public:
+	  // Constructor
+	  GEMglStencilOp (t_float, t_float, t_float);	// CON
 
-        //////////
-        // Constructor
-        GEMglStencilOp (t_symbol*, t_symbol*, t_symbol*);         // CON
+	protected:
+	  // Destructor
+	  virtual ~GEMglStencilOp ();
+	  // Do the rendering
+	  virtual void	render (GemState *state);
 
-    protected:
+	// variables
+	  GLenum	fail;		// VAR
+	  virtual void	failMess(t_float);	// FUN
 
-        //////////
-        // Destructor
-        virtual ~GEMglStencilOp();
+	  GLenum	zfail;		// VAR
+	  virtual void	zfailMess(t_float);	// FUN
 
-        //////////
-        // Do the rendering
-        virtual void    render (GemState *state);
-
-       //////////
-       // define and set the variables
-
-	 GLenum fail;		// VAR
-	virtual void	failMess 	(int);		// FUN glStencilOp GLenum
-
-	GLenum zfail;		// VAR
-	virtual void	zfailMess 	(int);		// FUN glStencilOp GLenum
-
-	GLenum zpass;		// VAR
-	virtual void	zpassMess 	(int);		// FUN glStencilOp GLenum
+	  GLenum	zpass;		// VAR
+	  virtual void	zpassMess(t_float);	// FUN
 
 
-    private:
-
-        //////////
-        // Static member functions
-
-	static void	failMessCallback	(void*, t_symbol*);		// CALLBACK glStencilOp
-	static void	zfailMessCallback	(void*, t_symbol*);		// CALLBACK glStencilOp
-	static void	zpassMessCallback	(void*, t_symbol*);		// CALLBACK glStencilOp
+	private:
 
 	// we need some inlets
-	t_inlet	*m_inlet[ 3 ];
-};
+	  t_inlet *m_inlet[3];
 
-#endif  // for header file
+	// static member functions
+	  static void	 failMessCallback (void*, t_floatarg);
+	  static void	 zfailMessCallback (void*, t_floatarg);
+	  static void	 zpassMessCallback (void*, t_floatarg);
+};
+#endif // for header file
