@@ -81,6 +81,26 @@ void pix_mix :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 }
 
 /////////////////////////////////////////////////////////
+// processDualImage
+//
+/////////////////////////////////////////////////////////
+void pix_mix :: processGray_Gray(imageStruct &image, imageStruct &right)
+{
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
+  // int A,R,G,B;
+
+  while(datasize--)    {
+    leftPix[chGray]  = ( leftPix[chGray] * imageGain)>>8;
+    rightPix[chGray] = (rightPix[chGray] * rightGain)>>8;
+    leftPix[chGray]  =
+      CLAMP_HIGH((int)leftPix[chGray] + (int)rightPix[chGray]);
+    leftPix ++;
+    rightPix++;
+  }
+}
+/////////////////////////////////////////////////////////
 // do the YUV processing here
 //
 /////////////////////////////////////////////////////////
