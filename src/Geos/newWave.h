@@ -5,7 +5,7 @@
  *  gem_darwin
  *
  *  Created by Jamie Tittle on Thu Oct 10 2002.
- *  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
+ *  Copyright (c) 2002 tigital. All rights reserved.
  *    For information on usage and redistribution, and for a DISCLAIMER OF ALL
  *    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  *
