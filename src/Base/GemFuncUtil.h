@@ -36,10 +36,22 @@ LOG
 ///////////////////////////////////////////////////////////////////////////////
 inline int powerOfTwo(int value)
 {
+/*
     int x = 1;
     //    while(x <= value) x <<= 1;
     while(x < value) x <<= 1;
     return(x);
+*/
+// optimization from "Hacker's Delight"
+// - above loop executes in 4n+3 instructions, where n is the power of 2 of returned int
+// - below code is branch-free and only 12 instructions!
+	value = value - 1;
+	value = value | (value >> 1);
+	value = value | (value >> 2);
+	value = value | (value >> 4);
+	value = value | (value >> 8);
+	value = value | (value >> 16);
+	return (value + 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
