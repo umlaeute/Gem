@@ -43,7 +43,7 @@ static bool StillHaveGemWin(bool up) {
   } else {
     ref_counter--;
     if (ref_counter<0)ref_counter=0;
-    return (ref_counter);
+    return (ref_counter!=0);
   }
   return true;
 }
