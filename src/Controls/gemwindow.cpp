@@ -53,7 +53,7 @@ static WindowInfo constInfo;
 
 ////////////////////////
 // makeCurrent
-static void makeCurrent(WindowInfo wi){
+static void makeContextCurrent(WindowInfo wi){
 #ifdef unix                 // for Unix
   if (!wi.dpy && !wi.win && !wi.context)return; // do not crash
   glXMakeCurrent(wi.dpy, wi.win, wi.context);   
@@ -166,7 +166,7 @@ void gemwindow::dispatchGemWindowMessages()
 	  triggerButtonEvent(eb->button-1, 0, eb->x, eb->y); 
 	  break; 
 	case MotionNotify: 
-	  triggerMotionEvent(eb->x, eb->y); 
+	  triggerMotionEvent(eb->x, eb->y, m_width, m_height); 
 	  break; 
 	case KeyPress:
 	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
@@ -461,7 +461,7 @@ void gemwindow :: destroyMess()
   m_outputState = 0;
     
   // reestablish the const glxContext
-  makeCurrent(m_constInfo);
+  makeContextCurrent(m_constInfo);
 }
 
 
@@ -571,9 +571,8 @@ void gemwindow :: resetValues()
 // renderMess
 //
 /////////////////////////////////////////////////////////
-void gemwindow :: preRender(GemState){
-  makeCurrent(m_gfxInfo);
-  resetState();
+void gemwindow :: makeCurrent(){
+  makeContextCurrent(m_gfxInfo);
 }
 
 void gemwindow :: postRender(GemState){

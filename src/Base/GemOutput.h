@@ -73,15 +73,19 @@ class GEM_EXTERN GemOutput : public CPPExtern
   virtual     	~GemOutput();
     	
   void		renderMess();
-  void          doRender  (GemState currentState);
-  virtual void  preRender (GemState currentState)=0; // get the current context
-  virtual void  postRender(GemState currentState){};
-  
-  unsigned int m_width, m_height;
-  bool m_outputState; // whether we can output (and thus want to render) or not
+
+  virtual void  fillGemState(GemState&);
+  virtual void  makeCurrent()=0; // get the current context
+  virtual void  doRender  (GemState currentState); // this does the actual rendering
+  virtual void  postRender(GemState currentState)=0; // e.g. swap buffers
+
+  unsigned int m_width, m_height; // dimension of the rendering context
+  bool m_outputState;   // whether we can output (and thus want to render) or not
   bool m_outputContext; // whether we have a valid rendering context
 
+
   int m_buffer; // buffer mode (single or double)
+  void bufferMess(int buffer);
 
 
   /* the viewpoint */
@@ -146,6 +150,7 @@ class GEM_EXTERN GemOutput : public CPPExtern
   /* camera settings */
   static void	perspectiveMessCallback(void *, t_symbol *, int argc, t_atom *argv);
   static void	viewMessCallback(void *, t_symbol *, int argc, t_atom *argv);
+  static void	bufferMessCallback(void *, t_floatarg val);
 
   /* lights and colors */
   static void	lightMessCallback(void *, t_floatarg val);

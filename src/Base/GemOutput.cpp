@@ -62,11 +62,21 @@ GemOutput :: GemOutput() : m_outputState(0), m_outputContext(false),
 GemOutput :: ~GemOutput()
 {}
 
+
+void GemOutput :: bufferMess(int buf) {
+  if (buf == 1)
+    m_buffer = 1;
+  else
+    m_buffer = 2;
+}
+
 /////////////////////////////////////////////////////////
 // renderMess
 //
 /////////////////////////////////////////////////////////
 void GemOutput :: doRender(GemState currentState){
+  resetState();
+
   GemMan::render1(currentState);
 
   glMatrixMode(GL_MODELVIEW);
@@ -78,17 +88,24 @@ void GemOutput :: doRender(GemState currentState){
   GemMan::render2(currentState);
 }
 
+void GemOutput :: fillGemState(GemState &state){
+  //GemMan::fillGemState(currentState);
+  if(m_lightState){
+    state.lighting=1;
+    state.smooth  =1;
+  }
+}
+
 void GemOutput :: renderMess()
 {
-  GemState currentState;
-  GemMan::fillGemState(currentState);
-  if(m_lightState){
-    currentState.lighting=1;
-    currentState.smooth  =1;
-  }
-
   if(!m_outputState)return;
-  preRender(currentState);
+
+  GemState currentState;
+  fillGemState(currentState);
+
+  makeCurrent();
+  if(m_buffer==1)return;
+
   doRender(currentState);
   postRender(currentState);
 }
@@ -140,7 +157,6 @@ void GemOutput :: perspectiveMess(t_float left,   t_float right,
 void GemOutput :: lightMess(int on)
 {
   m_lightState=(on!=0);
-  post("light %d", m_lightState);
 }
 
 /////////////////////////////////////////////////////////
@@ -394,6 +410,8 @@ void GemOutput :: obj_setupCallback(t_class *classPtr)
 		  gensym("gem_render"), A_NULL);
   class_addmethod(classPtr, (t_method)&GemOutput::resetMessCallback,
 		  gensym("reset"), A_NULL);
+  class_addmethod(classPtr, (t_method)&GemOutput::bufferMessCallback,
+		  gensym("buffer"), A_FLOAT, A_NULL);
 
   class_addmethod(classPtr, (t_method)&GemOutput::perspectiveMessCallback,
 		  gensym("perspec"), A_GIMME, A_NULL);
@@ -428,6 +446,9 @@ void GemOutput :: renderMessCallback(void *data)
 void GemOutput :: resetMessCallback(void *data)
 {
   GetMyClass(data)->resetValues();
+}
+void GemOutput :: bufferMessCallback(void *data, t_floatarg val){
+  GetMyClass(data)->bufferMess((int)val);
 }
 void GemOutput :: lightMessCallback(void *data, t_floatarg val){
   GetMyClass(data)->lightMess((int)val);

@@ -62,9 +62,9 @@ class GEM_EXTERN gemwindow : public GemOutput
   // Destructor
   virtual     	~gemwindow();
 
-  // overwrite parents functions
-  virtual void  preRender (GemState);
-  virtual void  postRender(GemState);
+  // do pure virtual functions
+  virtual void  makeCurrent();
+  virtual void  postRender (GemState);
 
   // specific for this module
   virtual void 	createMess    (t_symbol* s);
