@@ -275,8 +275,6 @@ void GemMan :: createContext(char* disp)
       m_height = 480;
     }
 #elif MACOSX
-    post("MAN: createContext entered");
-
     // Check QuickTime installed
     long	QDfeature;
     if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
@@ -345,9 +343,8 @@ void GemMan :: initGem()
   post("GEM: ver: %s", GEM_VERSION);
   post("GEM: compiled: " __DATE__);
 #ifdef MACOSX
-	post("GEM: Mac OS X port by James Tittle");
-	post("GEM:             and Chris Clepper");
-#endif MACOSX
+	post("GEM: Mac OS X port by James Tittle & Chris Clepper");
+#endif
 
   // setup the perspective values
   m_perspect[0] = -1.f;	// left
@@ -538,7 +535,9 @@ void GemMan :: fillGemState(GemState &state)
 /////////////////////////////////////////////////////////
 void GemMan :: resetState()
 {
+#ifdef DEBUG
   post("MAN::resetState entered");
+#endif
   m_clear_color[0] = 0.0;
   m_clear_color[1] = 0.0;
   m_clear_color[2] = 0.0;
@@ -987,7 +986,9 @@ void GemMan :: windowCleanup()
 int GemMan :: createWindow(char* disp)
 {
   if ( m_windowState ) return(0);
+#ifdef DEBUG
   post("GemMan: create window");
+#endif
 
   WindowHints myHints;
   myHints.border = m_border;
