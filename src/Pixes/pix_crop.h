@@ -1,0 +1,80 @@
+/*-----------------------------------------------------------------
+LOG
+    GEM - Graphics Environment for Multimedia
+
+    age an image
+
+    Copyright (c) 1997-1999 Mark Danks. mark@danks.org
+    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+    For information on usage and redistribution, and for a DISCLAIMER OF ALL
+    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+
+    this is based on EffecTV by Fukuchi Kentauro
+    * AgingTV - film-aging effect.
+    * Copyright (C) 2001 FUKUCHI Kentarou
+
+-----------------------------------------------------------------*/
+
+#ifndef INCLUDE_PIX_CROP_H_
+#define INCLUDE_PIX_CROP_H_
+
+#include "Base/GemPixObj.h"
+
+/*-----------------------------------------------------------------
+-------------------------------------------------------------------
+CLASS
+    pix_crop
+    
+    Change pix from "any" color-space to GL_RGBA
+
+KEYWORDS
+    pix
+    
+DESCRIPTION
+   
+-----------------------------------------------------------------*/
+
+class GEM_EXTERN pix_crop : public GemPixObj
+{
+    CPPEXTERN_HEADER(pix_crop, GemPixObj)
+
+    public:
+
+	    //////////
+	    // Constructor
+    	pix_crop(t_floatarg,t_floatarg,t_floatarg,t_floatarg);
+    	
+    protected:
+    	
+    	//////////
+    	// Destructor
+    	virtual ~pix_crop();
+
+	//////////
+	// set dimension
+	void dimenMess(int, int);
+
+	//////////
+	// set offset
+	void offsetMess(int, int);
+
+  	//////////
+    	// Do the processing
+    	void 	processImage(imageStruct &image);
+
+	unsigned char *m_data;
+	int            m_size;
+
+
+	int sizeX, sizeY, sizeC;
+	int offsetX, offsetY;
+	int wantSizeX, wantSizeY;
+
+ private:
+    	//////////
+    	// Static member functions
+	static void offsetMessCallback(void *data, t_float x, t_float y);
+	static void dimenMessCallback(void *data, t_float x, t_float y);
+};
+
+#endif	// for header file
