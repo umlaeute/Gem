@@ -161,17 +161,17 @@ long h,w, width;
     }charBuffer;
     
     //vector unsigned char c;
-    vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage,YRight, UVRight, UVTemp, YTemp;
-    vector unsigned char zero = vec_splat_u8(0);
+    register vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage,YRight, UVRight, UVTemp, YTemp;
+    register vector unsigned char zero = vec_splat_u8(0);
     //vector signed short szero = vec_splat_s16(0);
-    vector unsigned char c,one;
-    vector signed int UVhi,UVlo,Yhi,Ylo;
-    vector signed int UVhiR,UVloR,YhiR,YloR;
-    vector signed short gainSub,gain,gainR,d;
-    vector unsigned int bitshift;
+    register vector unsigned char c,one;
+    register vector signed int UVhi,UVlo,Yhi,Ylo;
+    register vector signed int UVhiR,UVloR,YhiR,YloR;
+    register vector signed short gainSub,gain,gainR,d;
+    register vector unsigned int bitshift;
     vector unsigned char *inData = (vector unsigned char*) image.data;
     vector unsigned char *rightData = (vector unsigned char*) right.data;
-    vector unsigned char tempImage,tempRight;
+    register vector unsigned char tempImage,tempRight;
     
     //Write the pixel (pair) to the transfer buffer
     charBuffer.elements[0] = 2;
@@ -278,6 +278,13 @@ long h,w, width;
             
             
             //this is where to do the bitshift/divide due to the resolution
+            //nope  do the add here then proceed?
+            
+            Yhi = vec_adds(Yhi,YhiR);
+            Ylo = vec_adds(Ylo,YloR);
+            UVhi = vec_adds(UVhi,UVhiR);
+            UVlo = vec_adds(UVlo,UVloR);
+            
             UVhi = vec_sra(UVhi,bitshift);
             UVlo = vec_sra(UVlo,bitshift);
             Yhi = vec_sra(Yhi,bitshift);
@@ -290,44 +297,46 @@ long h,w, width;
             
             //pack the UV into a single short vector
             UVImage = vec_packs(UVhi,UVlo);
-            UVRight = vec_packs(UVhiR,UVloR);
+         //   UVRight = vec_packs(UVhiR,UVloR);
 
             //pack the Y into a single short vector
             YImage = vec_packs(Yhi,Ylo);
-            YRight = vec_packs(YhiR,YloR);
+           // YRight = vec_packs(YhiR,YloR);
                                         
             
             //vec_adds +128 to U V U V short
             UVImage = vec_adds(UVImage,gainAdd);
-            UVRight = vec_adds(UVRight,gainAdd);
+         //   UVRight = vec_adds(UVRight,gainAdd);
             
             //vec_mergel + vec_mergeh Y and UV
             hiImage =  vec_mergeh(UVImage,YImage);
             loImage =  vec_mergel(UVImage,YImage);
-            hiRight =  vec_mergeh(UVRight,YRight);
-            loRight =  vec_mergel(UVRight,YRight);
+           // hiRight =  vec_mergeh(UVRight,YRight);
+           // loRight =  vec_mergel(UVRight,YRight);
             
             //pack back to 16 chars and prepare for add
             tempImage = vec_packsu(hiImage, loImage);
-            tempRight = vec_packsu(hiRight, loRight);
+           // tempRight = vec_packsu(hiRight, loRight);
         
             //vec_mule UV * 2 to short vector U V U V shorts
             UVImage = (vector signed short)vec_mule(one,tempImage);
-            UVRight = (vector signed short)vec_mule(c,tempRight);
+           // UVRight = (vector signed short)vec_mule(c,tempRight);
             
             //vec_mulo Y * 1 to short vector Y Y Y Y shorts
             YImage = (vector signed short)vec_mulo(c,tempImage);
-            YRight = (vector signed short)vec_mulo(c,tempRight);
+           // YRight = (vector signed short)vec_mulo(c,tempRight);
 
             
             //vel_subs UV - 255
             UVRight = (vector signed short)vec_subs(UVRight, d);
             
             //vec_adds UV
-            UVTemp = vec_adds(UVImage,UVRight);
+         //   UVTemp = vec_adds(UVImage,UVRight);
+            UVTemp = UVImage;
             
             //vec_adds Y
-            YTemp = vec_adds(YImage,YRight);
+           // YTemp = vec_adds(YImage,YRight);
+            YTemp = YImage;
             
             hiImage = vec_mergeh(UVTemp,YTemp);
             loImage = vec_mergel(UVTemp,YTemp);
