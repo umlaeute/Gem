@@ -53,75 +53,66 @@ if(saved)delete saved;
 /////////////////////////////////////////////////////////
 void pix_motionblur :: processRGBAImage(imageStruct &image)
 {
-       int h,w,height,width;
-    long src;
-    register int R,R1,G,G1,B,B1; //too many for x86?  i really don't know or care
-    int rightGain,imageGain;
-    unsigned char *pixels=image.data;
-    int Blue,Red,Green;
+  int h,w,height,width;
+  long src;
+  register int R,R1,G,G1,B,B1; //too many for x86?  i really don't know or care
+  int rightGain,imageGain;
+  unsigned char *pixels=image.data;
+  int Blue,Red,Green;
 
-src = 0;
-Blue=chBlue;
-Red=chRed;
-Green=chGreen;
-if (m_motionblurH != image.ysize || m_motionblurW != image.xsize || m_motionblurBpp != image.csize) {
-
+  src = 0;
+  Blue=chBlue;
+  Red=chRed;
+  Green=chGreen;
+  if (m_motionblurH != image.ysize || m_motionblurW != image.xsize || m_motionblurBpp != image.csize) {
     m_motionblurH = image.ysize;
     m_motionblurW = image.xsize;
     m_motionblurBpp = image.csize;
     m_motionblurSize = m_motionblurH * m_motionblurW * m_motionblurBpp;
     if(saved)delete saved;
     saved = new int [m_motionblurSize];
-}
+  }
 
-rightGain = CLAMP((int)(m_motionblur * 255.));
-imageGain = CLAMP((int)(255. - (m_motionblur * 255.)));
-height = image.ysize;
-width = image.xsize;
+  rightGain = CLAMP((int)(m_motionblur * 255.));
+  imageGain = CLAMP((int)(255. - (m_motionblur * 255.)));
+  height = image.ysize;
+  width = image.xsize;
 
-
-for (h=0; h<height; h++){
+  for (h=0; h<height; h++){
     for(w=0; w<width; w++){
+      R = pixels[src+Red];
+      R1 = saved[src+Red];
+      G = pixels[src+Green];
+      G1 = saved[src+Green];
+      B = pixels[src+Blue];
+      B1 = saved[src+Blue];
+        
+      R = R * imageGain;
+      R1 = R1 * rightGain;
+      G = G * imageGain;
+      G1 = G1 * rightGain;
+      B = B * imageGain;
+      B1 = B1 * rightGain;
 
+      R = R + R1;
+      G = G + G1;
+      B = B + B1;
 
-        R = pixels[src+Red];
-        R1 = saved[src+Red];
-        G = pixels[src+Green];
-        G1 = saved[src+Green];
-        B = pixels[src+Blue];
-        B1 = saved[src+Blue];
-        
-        R = R * imageGain;
-        R1 = R1 * rightGain;
-        G = G * imageGain;
-        G1 = G1 * rightGain;
-        B = B * imageGain;
-        B1 = B1 * rightGain;
+      R1 = R>>8;
+      G1 = G>>8;
+      B1 = B>>8;
 
+      saved[src+Red] = (unsigned char)R1;
+      saved[src+Green] = (unsigned char)G1;
+      saved[src+Blue] = (unsigned char)B1;
+  
+      pixels[src+Red] = (unsigned char)R1;
+      pixels[src+Green] = (unsigned char)G1;
+      pixels[src+Blue] = (unsigned char)B1;
         
-        R = R + R1;
-        G = G + G1;
-        B = B + B1;
-        
-        R1 = R>>8;
-        G1 = G>>8;
-        B1 = B>>8;
-        
-        
-        saved[src+Red] = (unsigned char)R1;
-        saved[src+Green] = (unsigned char)G1;
-        saved[src+Blue] = (unsigned char)B1;
-        
-        pixels[src+Red] = (unsigned char)R1;
-        pixels[src+Green] = (unsigned char)G1;
-        pixels[src+Blue] = (unsigned char)B1;
-        
-        src += 4;
-
-      
+      src += 4;
     }
-}
-
+  }
 }
 
 
@@ -133,110 +124,104 @@ for (h=0; h<height; h++){
 void pix_motionblur :: processYUVImage(imageStruct &image)
 {
 
-if (m_motionblurH != image.ysize || m_motionblurW != image.xsize || m_motionblurBpp != image.csize) {
+  if (m_motionblurH != image.ysize || m_motionblurW != image.xsize || m_motionblurBpp != image.csize) {
 
-m_motionblurH = image.ysize;
-m_motionblurW = image.xsize;
-m_motionblurBpp = image.csize;
-m_motionblurSize = m_motionblurH * m_motionblurW * m_motionblurBpp;
-if(saved)delete saved;
-saved = new signed int [m_motionblurSize];
-
-}
+    m_motionblurH = image.ysize;
+    m_motionblurW = image.xsize;
+    m_motionblurBpp = image.csize;
+    m_motionblurSize = m_motionblurH * m_motionblurW * m_motionblurBpp;
+    if(saved)delete saved;
+    saved = new signed int [m_motionblurSize];
+  }
 
 #ifdef ALTIVEC
-processYUVAltivec(image);
-return;
+  processYUVAltivec(image);
+  return;
 #else
-     int h,w,hlength;
-    register long src,dst;
+  int h,w,hlength;
+  register long src,dst;
 
-    register int rightGain,imageGain;
-    register int y1,y1a,y2,y2a,y1res,y2res,u,u1,v,v1;
-    register int loadU,loadV,loadY1, loadY2,loadU1,loadV1,loadY1a, loadY2a;
+  register int rightGain,imageGain;
+  register int y1,y1a,y2,y2a,y1res,y2res,u,u1,v,v1;
+  register int loadU,loadV,loadY1, loadY2,loadU1,loadV1,loadY1a, loadY2a;
     
-src = 0;
-dst = 0;
+  src = 0;
+  dst = 0;
 
 
-loadU = image.data[src];
-       loadU1 = saved[src]; 
-       loadY1 = image.data[src+1] ;
-       loadY1a = saved[src+1];
+  loadU = image.data[src];
+  loadU1 = saved[src]; 
+  loadY1 = image.data[src+1] ;
+  loadY1a = saved[src+1];
    
-       loadV = image.data[src+2];
-       loadV1 = saved[src+2]; 
-       loadY2 = image.data[src+3];
-       loadY2a = saved[src+3] ;
-       src += 4;
+  loadV = image.data[src+2];
+  loadV1 = saved[src+2]; 
+  loadY2 = image.data[src+3];
+  loadY2a = saved[src+3] ;
+  src += 4;
 
-rightGain = CLAMP((int)(m_motionblur * 235.));
-imageGain = CLAMP((int)(255. - (m_motionblur * 235.)));
-hlength = image.xsize/2;
+  rightGain = CLAMP((int)(m_motionblur * 235.));
+  imageGain = CLAMP((int)(255. - (m_motionblur * 235.)));
+  hlength = image.xsize/2;
 
-//unroll this, add register temps and schedule the ops better to remove the data depedencies
-for (h=0; h<image.ysize-1; h++){
+  //unroll this, add register temps and schedule the ops better to remove the data depedencies
+  for (h=0; h<image.ysize-1; h++){
     for(w=0; w<hlength; w++){
-     
-       u  = loadU - 128;
-       u1 = loadU1 >> 8;
-       v = loadV - 128;
-       v1 = loadV1>>8;
+      u  = loadU - 128;
+      u1 = loadU1 >> 8;
+      v = loadV - 128;
+      v1 = loadV1>>8;
        
-       y1  = loadY1 * imageGain;
-       y1a = loadY1a * rightGain; 
-       y2 = loadY2 * imageGain;
-       y2a = loadY2a  * rightGain; 
-        u *= imageGain;
-       u1 *= rightGain;
+      y1  = loadY1 * imageGain;
+      y1a = loadY1a * rightGain; 
+      y2 = loadY2 * imageGain;
+      y2a = loadY2a  * rightGain; 
+      u *= imageGain;
+      u1 *= rightGain;
       
-       v *= imageGain;
-       v1 *= rightGain;
-       
-       
-       loadU = (int)image.data[src]; 
-       loadU1 = (int)saved[src]; 
-       loadY1 = (int)image.data[src+1] ;
-       loadY1a = (int)saved[src+1];
-   
-       loadV = (int)image.data[src+2];
-       loadV1 = (int)saved[src+2]; 
-       loadY2 = (int)image.data[src+3];
-       loadY2a = (int)saved[src+3] ;
-       
+      v *= imageGain;
+      v1 *= rightGain;
+
+      loadU = (int)image.data[src]; 
+      loadU1 = (int)saved[src]; 
+      loadY1 = (int)image.data[src+1] ;
+      loadY1a = (int)saved[src+1];
+
+      loadV = (int)image.data[src+2];
+      loadV1 = (int)saved[src+2]; 
+      loadY2 = (int)image.data[src+3];
+      loadY2a = (int)saved[src+3] ;
       
-       y1a = y1a>>8;
-       y2a = y2a>>8;
-       
-       u += u1; 
-       v += v1;
-       saved[dst] = u;
-       saved[dst+2] = v;
-       u = u>>8; 
-       v = v>>8;
-       u += 128;
-       v += 128;
-       
-       
-       y1res = y1 + y1a;
-       y2res = y2 + y2a;
-       
+      y1a = y1a>>8;
+      y2a = y2a>>8;
+ 
+      u += u1; 
+      v += v1;
+      saved[dst] = u;
+      saved[dst+2] = v;
+      u = u>>8; 
+      v = v>>8;
+      u += 128;
+      v += 128;
+
+      y1res = y1 + y1a;
+      y2res = y2 + y2a;
+ 
 
       saved[dst+1] = y1res;
       saved[dst+3] = y2res;
       
       y1res = y1res >> 8; //shift to 16bit to store? 
-     
+
       y2res = y2res >> 8;
-     
+
       image.data[dst] = (unsigned char)u;
       image.data[dst+2] = (unsigned char)v;
       image.data[dst+1] =(unsigned char)y1res;
       image.data[dst+3] = (unsigned char)y2res;
       src+=4;dst+=4;
-       
     }
-}
+  }
 #endif
 }
 
