@@ -97,7 +97,7 @@ void GemPixDualObj :: processImage(imageStruct &image)
 // processBothGray
 //
 /////////////////////////////////////////////////////////
-void GemPixDualObj :: processBothGray(imageStruct &, imageStruct &)
+void GemPixDualObj :: processDualGray(imageStruct &, imageStruct &)
 {
 	error("GEM: GemPixDualObj: cannot handle gray image");
 }
@@ -124,7 +124,7 @@ void GemPixDualObj :: processRightGray(imageStruct &, imageStruct &)
 // processBothYUV
 //
 /////////////////////////////////////////////////////////
-void GemPixDualObj :: processBothYUV(imageStruct &, imageStruct &)
+void GemPixDualObj :: processDualYUV(imageStruct &, imageStruct &)
 {
 	error("GEM: GemPixDualObj: cannot handle both YUV images");
 }
