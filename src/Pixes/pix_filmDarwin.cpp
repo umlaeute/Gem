@@ -44,6 +44,9 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
   m_hiquality = 1;
   m_play = 0;
   m_rate = 1;
+  prevTime = 0;
+  curTime = 0;
+  
 }
 
 /////////////////////////////////////////////////////////
@@ -217,7 +220,8 @@ void pix_filmDarwin :: realOpen(char *filename)
 	::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
         
         if (m_auto) { 
-            SetMovieRate(m_movie,playRate);
+            //SetMovieRate(m_movie,playRate);
+            SetMovieRate(m_movie,X2Fix(1.0));
             m_play = 1;
         }
         else {
@@ -225,6 +229,9 @@ void pix_filmDarwin :: realOpen(char *filename)
         }
         
 	::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+        curTime = GetMovieTime(m_movie,NULL);
+        prevTime = 0;
+        newImage = 1;
         
 }
 
@@ -233,27 +240,112 @@ void pix_filmDarwin :: realOpen(char *filename)
 //
 /////////////////////////////////////////////////////////
 void pix_filmDarwin :: getFrame()
-{
+{	
+    short 	flags = nextTimeStep;
+    OSType	whichMediaType = VisualMediaCharacteristic;
     if (!m_haveMovie) return;
 
+    if (m_curFrame >= m_numFrames) m_curFrame = 0;
     
+    //************************************
+    //
+    //what follows is some of the worst hack work i've ever done to get QT to 'work'
+    //
+    //the problem is that QT is very good a playing media if it manages everything itself internally.
+    //however, that doesn't fit well with GEM because GEM has it's own internal tasking callbacks, so
+    //in order to get the two to play nice, a bunch of ugly, shit code has to be done.   below is a way to
+    //track the internal state of QT MoviesTask() and figure out which frame it is currently processing.
+    //this avoids the frame being processed twice by the GEM render chain by managing the newImage flag
+    //
+    //note all of the crap to check for the direction of the playback and loop points.
+    //
+    // THERE MUST BE A BETTER WAY!!!!!!!!!!!!!!
+    //
+    //************************************
     if (m_auto){
         //play the startmovie() way
         if (!m_play) SetMovieRate(m_movie,X2Fix(m_rate));
         m_play = 1;
         
-        if (m_rate > 0) {
-            if (IsMovieDone(m_movie)) GoToBeginningOfMovie(m_movie);
-        
+        if (m_rate > 0.f) {
+            if (IsMovieDone(m_movie)) {
+                GoToBeginningOfMovie(m_movie);
+           	prevTime = 0;
+                flags |= nextTimeEdgeOK;
+                }
+                
+                MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
+        curTime = GetMovieTime(m_movie,NULL);
+                
+                //check to see if the current position is past our next frame
+                if (prevTime < curTime){
+                    newImage = 1;
+                    prevTime = curTime;
+                    
+                    //find next frame bounds using GetMovieNextIntertestingTime()
+                    GetMovieNextInterestingTime(m_movie,
+                                        flags,
+                                        1,
+                                        &whichMediaType,
+                                        prevTime,
+                                        0,
+                                        &prevTime,
+                                         nil);
+    
+                }
+                else{
+                    //if it's still the same frame then don't process
+                    newImage = 0;
+                    }
+                
             }
-            else {
+        else {
+                
                 if (GetMovieTime(m_movie,nil) <= 0) {
                     GoToEndOfMovie(m_movie);
+                    prevTime = GetMovieTime(m_movie,NULL);
+                    curTime = prevTime;
+                   // get the frame prior to the last frame
+                    GetMovieNextInterestingTime(m_movie,
+                                        flags,
+                                        1,
+                                        &whichMediaType,
+                                        prevTime,
+                                        -1,
+                                        &prevTime,
+                                         NULL);
+                                         
+                    
+                    }else{
+                    
+                    MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
+                    curTime = GetMovieTime(m_movie,NULL);
+                    
+                    if (prevTime >= curTime){
+                        newImage = 1;
+                        prevTime = curTime;
+                        //find next frame bounds using GetMovieNextIntertestingTime()
+                        GetMovieNextInterestingTime(m_movie,
+                                            flags,
+                                            1,
+                                        &whichMediaType,
+                                        prevTime,
+                                        -1,
+                                        &prevTime,
+                                         NULL);
+    
+                    }
+                    else{
+                        newImage = 0;
+                        }
                 }
-            }
-            
-        MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
-        
+                }
+            if (m_newFilm){
+                        newImage = 1;
+                        //MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
+                       // curTime = GetMovieTime(m_movie,NULL);
+                    }
+                            
     }
     else
     {
@@ -267,12 +359,25 @@ void pix_filmDarwin :: getFrame()
         //m_movieTime = m_reqFrame * duration;
         m_movieTime = (long)((float)m_reqFrame * durationf);
         
+         m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
+        ::GetMovieNextInterestingTime(	m_movie,
+                                        flags,
+                                        1,
+                                        &whichMediaType,
+                                        m_movieTime,
+                                        0,
+                                        &m_movieTime,
+                                         NULL);
+                                       // &durationf);
+                                         
         SetMovieTimeValue(m_movie, m_movieTime);
         MoviesTask(m_movie, 0);
         
     }
 
 }
+
+
 
 void pix_filmDarwin :: LoadRam()
 {

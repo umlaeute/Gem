@@ -87,7 +87,8 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   int			m_play;
   float			m_rate;
   Fixed			playRate;
-  
+  int prevTime;
+    int curTime;
 private:
 Movie			m_movie;
 
