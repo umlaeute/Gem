@@ -222,7 +222,9 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         // mouse motion
         case WM_MOUSEMOVE:
-            triggerMotionEvent(LOWORD(lParam), HIWORD(lParam));
+            GetClientRect(hWnd, &rcClient);
+            triggerMotionEvent(LOWORD(lParam), HIWORD(lParam), 
+					rcClient.right, rcClient.bottom);//LATER fix this
             break;
 
         // left button up
