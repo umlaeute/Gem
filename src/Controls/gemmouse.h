@@ -36,7 +36,7 @@ class GEM_EXTERN gemmouse : public CPPExtern
 
         //////////
         // Constructor
-        gemmouse();
+  gemmouse(int,t_atom*);
     	
     protected:
     	
@@ -71,6 +71,16 @@ class GEM_EXTERN gemmouse : public CPPExtern
         //////////
         // The right outlet
         t_outlet    	*m_outRBut;
+
+	//////////
+	// coordinate-scales
+	// if !=0, the mouse-coordinate is scaled to 0..m_scale
+	// if ==0, the mouse-coordinate is scaled to 0..windowsize
+	t_float m_scaleX, m_scaleY;
+
+	//////////
+	// should Y we scaled separately or like X ?
+	bool m_doY;
 
     private:
 
