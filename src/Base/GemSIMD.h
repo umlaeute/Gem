@@ -30,7 +30,7 @@ typedef union{
   unsigned char c[16];
   __m128i v;
 } vector_128;
-#elifdef __VEC__
+#elif defined __VEC__
 /* for AltiVec (PowerPC) */
 typedef union{
   unsigned char c[16];
@@ -38,7 +38,7 @@ typedef union{
 } vector_128;
 #endif
 
-#ifdef __MMX__
+#if defined __MMX__
 # include <mmintrin.h>
 // for icc this should be <ivec.h>
 typedef union{
