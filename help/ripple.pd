@@ -1,4 +1,4 @@
-#N canvas 15 302 710 387 10;
+#N canvas 45 35 710 402 10;
 #X text 54 30 Class: geometric object;
 #X obj 479 47 cnv 15 170 300 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -26,19 +26,19 @@
 #X msg 549 304 create;
 #X text 545 283 Create window:;
 #X text 485 29 Example:;
-#X obj 7 65 cnv 15 450 102 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 52 cnv 15 450 132 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 226 cnv 15 450 145 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 244 cnv 15 450 145 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 9 231 Inlets:;
-#X obj 8 171 cnv 15 450 50 empty empty empty 20 12 0 14 -195568 -66577
+#X text 9 249 Inlets:;
+#X obj 8 189 cnv 15 450 50 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 170 Arguments:;
-#X text 27 257 Inlet 1: message: draw [line|fill|point];
+#X text 17 189 Arguments:;
+#X text 27 275 Inlet 1: message: draw [line|fill|point];
 #X text 452 8 GEM object;
-#X text 27 243 Inlet 1: gemlist;
-#X text 9 340 Outlets:;
-#X text 20 353 Outlet 1: gemlist;
+#X text 27 261 Inlet 1: gemlist;
+#X text 9 358 Outlets:;
+#X text 20 371 Outlet 1: gemlist;
 #X obj 484 141 cnv 15 160 140 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 488 54 gemhead;
@@ -50,15 +50,15 @@
 #X obj 574 156 bng 25 250 50 0 empty empty grab 0 -6 0 8 -262144 -1
 -1;
 #X floatatom 572 192 5 0 0 1 amount - -;
-#X text 7 69 Description: Renders and distorts a square.;
-#X text 27 313 Inlet 4: float: posX (centered);
-#X text 27 325 Inlet 5: float: posY (centered);
-#X text 27 270 Inlet 1: bang: grab;
-#X text 65 197 default: 32 32;
-#X text 63 183 segments of the square;
+#X text 7 56 Description: Renders and distorts a square.;
+#X text 27 331 Inlet 4: float: posX (centered);
+#X text 27 343 Inlet 5: float: posY (centered);
+#X text 27 288 Inlet 1: bang: grab;
+#X text 65 216 default: 32 32;
+#X text 63 202 segments of the square;
 #X text 33 14 Synopsis: [ripple];
 #X obj 488 259 ripple 16 16;
-#X text 16 86 When banged \, ripple will grab the vertex nearest to
+#X text 16 73 When banged \, ripple will grab the vertex nearest to
 the specified (ctrX ctrY) position. The vertices will be accelerated
 towards the selected one for a moment and then gradually fall back
 to their original position.;
@@ -66,8 +66,12 @@ to their original position.;
 ;
 #X obj 575 234 tgl 15 0 empty empty ctrY 18 8 0 8 -262144 -1 -1 0 1
 ;
-#X text 27 299 Inlet 3: float: amount;
-#X text 17 144 The amount of excursion can be specified.;
+#X text 27 317 Inlet 3: float: amount;
+#X text 17 131 The amount of excursion can be specified.;
+#X floatatom 510 217 5 0 0 0 - - -;
+#X text 17 150 note: [ripple] distorts a bit different when texture-mapping
+is used!;
+#X text 27 303 Inlet 2: float: size;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 18 0 23 0;
@@ -80,3 +84,4 @@ to their original position.;
 #X connect 25 0 33 2;
 #X connect 35 0 33 3;
 #X connect 36 0 33 4;
+#X connect 39 0 33 1;
