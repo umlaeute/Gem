@@ -49,18 +49,16 @@ extern "C" {
    void pix_dump_setup();
    void pix_duotone_setup();
    void pix_emboss_setup();
-   void pix_film_setup();
+   void pix_filmNEW_setup();
+   void pix_videoNEW_setup();
 #ifdef __APPLE__ 
    void pix_filmDarwin_setup();
    void pix_filmDarwinYUV_setup();
 #else
-   void pix_filmLinux_setup();
    void pix_filmNT_setup();
    void pix_filmQT_setup();
    void pix_filmFFMPEG_setup();
 #endif
-   void pix_filmNEW_setup();
-   void pix_videoNEW_setup();
 
    void pix_flip_setup();
    void pix_gain_setup();
@@ -124,6 +122,41 @@ extern "C" {
    void pix_zoom_setup();
 
   void Pixes_setup() {
+   // setting up [pix_film]
+#ifdef __NEW__
+    pix_filmNEW_setup();
+#endif // __NEW__
+
+#ifdef __linux__
+    pix_filmNEW_setup();
+#  if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
+    pix_filmFFMPEG_setup();
+#  endif
+#elif defined _WINDOWS
+    pix_filmNT_setup();
+#	ifdef HAVE_QUICKTIME
+    pix_filmQT_setup();
+#	endif
+#elif defined __APPLE__
+    pix_filmDarwinYUV_setup();
+    pix_filmDarwin_setup();
+#endif
+
+    // setting up [pix_video]
+#ifdef __sgi
+    pix_videoSGI_setup();
+    pix_indycam_setup();
+#elif defined __linux__
+    pix_videoNEW_setup();
+    pix_videoLinux_setup();
+#elif defined _WINDOWS
+    pix_videoNT_setup();
+#  ifdef HAVE_DIRECTSHOW
+    pix_videoDS_setup();
+#  endif
+#elif defined __APPLE__
+    pix_videoDarwin_setup();
+#endif
 
     pix_2grey_setup();
     pix_a_2grey_setup();
@@ -212,42 +245,5 @@ extern "C" {
     pix_write_setup();
     pix_yuv_setup();
     pix_zoom_setup();
-
-   // setting up [pix_film]
-#ifdef __NEW__
-    pix_filmNEW_setup();
-#endif // __NEW__
-
-#ifdef __linux
-    pix_videoNEW_setup();
-    pix_filmNEW_setup();
-    //    pix_filmLinux_setup();
-#  if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
-    pix_filmFFMPEG_setup();
-#  endif
-#elif defined _WINDOWS
-    pix_filmNT_setup();
-#	ifdef HAVE_QUICKTIME
-    pix_filmQT_setup();
-#	endif
-#elif defined __APPLE__
-    pix_filmDarwinYUV_setup();
-    pix_filmDarwin_setup();
-#endif
-
-    // setting up [pix_video]
-#ifdef __sgi
-    pix_videoSGI_setup();
-    pix_indycam_setup();
-#elif defined __linux__
-    pix_videoLinux_setup();
-#elif defined _WINDOWS
-    pix_videoNT_setup();
-#  ifdef HAVE_DIRECTSHOW
-    pix_videoDS_setup();
-#  endif
-#elif defined __APPLE__
-    pix_videoDarwin_setup();
-#endif
   }
 } // for extern "C"
