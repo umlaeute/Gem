@@ -1,0 +1,19 @@
+#N canvas 41 161 577 463 10;
+#X text 24 12 pix_background 'removes' the background of an image by
+comparing a static image in memory to an incoming video stream. all
+values withing a given range are turned black. for best effect \, place
+a camera on a static scene like a blank wall and hit 'reset'. then
+set the range control to cover any variance in the background. when
+a new object enters the scene it will be the only thing draw against
+a black background. use pix_chroma_key or pix_compare to add in images
+in place of the black.;
+#X obj 40 351 pix_background;
+#X msg 40 211 range \$1 \$2 \$3;
+#X msg 40 294 reset;
+#X text 167 211 the range is +/- the value of the pixels captured.
+for rgb \$1 = Red \, \$2 = Green \, \$3 = Blue. No alpha for yuv \$1
+= Y/luma \, \$2 = U/Cb \, \$3 = V/Cr;
+#X text 96 294 this captures a new image and resets the background.
+;
+#X connect 2 0 1 0;
+#X connect 3 0 1 0;
