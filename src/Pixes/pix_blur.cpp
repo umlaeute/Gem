@@ -167,7 +167,7 @@ delete saved;
 saved = new unsigned int [m_blurSize];
 }
 
-#ifdef ALTIVEC
+#ifdef __VEC__
 processYUVAltivec(image);
 return;
 #else
@@ -216,7 +216,7 @@ for (h=0; h<image.ysize-1; h++){
 /////////////////////////////////////////////////////////
 void pix_blur :: processYUVAltivec(imageStruct &image)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 int h,w,width;
 unsigned short rightGain,imageGain;
 /*altivec code starts */

@@ -135,7 +135,7 @@ void pix_background :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_background :: processYUVImage(imageStruct &image)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 processYUVImageAltivec(image);
 return;
 #else
@@ -191,7 +191,7 @@ m_reset = 0;
 /////////////////////////////////////////////////////////
 void pix_background :: processYUVImageAltivec(imageStruct &image)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 register int h,w,i,j,width;
 int pixsize = image.xsize * image.ysize * image.csize;
     h = image.ysize;

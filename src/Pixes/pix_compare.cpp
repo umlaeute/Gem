@@ -74,7 +74,7 @@ void pix_compare :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_compare :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
   processYUVAltivec(image,right);
   return;
 #else
@@ -119,7 +119,7 @@ void pix_compare :: processYUV_YUV(imageStruct &image, imageStruct &right)
 
 void pix_compare :: processYUVAltivec(imageStruct &image, imageStruct &right)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 register int h,w,i,j,width;
 
     h = image.ysize;

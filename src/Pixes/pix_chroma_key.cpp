@@ -89,7 +89,7 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 processYUV_YUVAltivec(image, right);
 return;
 #else
@@ -259,7 +259,7 @@ return;
 /////////////////////////////////////////////////////////
 void pix_chroma_key :: processYUV_YUVAltivec(imageStruct &image, imageStruct &right)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 register int h,w,i,j,width;
 
     h = image.ysize;

@@ -77,7 +77,7 @@ void pix_invert :: processGrayImage(imageStruct &image)
 void pix_invert :: processYUVImage(imageStruct &image)
 {
 
-#ifdef ALTIVEC
+#ifdef __VEC__
     processYUVAltivec(image);
     return;
 #else
@@ -107,7 +107,7 @@ void pix_invert :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_invert :: processYUVAltivec(imageStruct &image)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 int h,w,width;
 //post("pix_invert: Altivec");
    width = image.xsize/8;

@@ -130,7 +130,7 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 processYUV_Altivec(image,right);
 return;
 #else
@@ -161,7 +161,7 @@ return;
 
 void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 {
- #ifdef ALTIVEC
+ #ifdef __VEC__
  int h,w,width;
    width = image.xsize/8;
    //format is U Y V Y
@@ -171,7 +171,7 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
         //unsigned int	i;
         short	elements[8];
         //vector signed char v;
-        vector	short v;
+        vector	signed short v;
     }shortBuffer;
     
         union

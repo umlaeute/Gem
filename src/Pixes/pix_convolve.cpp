@@ -308,7 +308,7 @@ void pix_convolve :: processYUVImage(imageStruct &image)
 void pix_convolve :: calculate3x3YUV(imageStruct &image,imageStruct &tempImg)
 {
 
-#ifdef ALTIVEC
+#ifdef __VEC__
 calculate3x3YUVAltivec(image,tempImg);
 return;
 #else
@@ -471,7 +471,7 @@ i=xsize+1;
 //too many temps for all the registers - reuse some
 void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &tempImg)
 {
- #ifdef ALTIVEC
+ #ifdef __VEC__
  int h,w,width,i;
  int xsize =  (tempImg.xsize)*2;
  
@@ -481,7 +481,7 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
     union
     {
         short	elements[8];
-        vector	short v;
+        vector	signed short v;
     }shortBuffer;
     
     union
@@ -655,7 +655,7 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
             yres = vec_packs(yhi,ylo);
             
             
-            //combine with the UV\
+            //combine with the UV
             //vec_mergel + vec_mergeh Y and UV
             hiImage =  vec_mergeh(uvres,yres);
             loImage =  vec_mergel(uvres,yres);

@@ -85,7 +85,7 @@ void pix_mix :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 //
 /////////////////////////////////////////////////////////
 void pix_mix :: processYUV_YUV(imageStruct &image, imageStruct &right){
-#ifdef ALTIVEC
+#ifdef __VEC__
 //post("altivec");
 processYUVAltivec (image, right);
 return;
@@ -133,7 +133,7 @@ return;
 //needs fixing for better IQ
 void pix_mix :: processYUVAltivec (imageStruct &image, imageStruct &right)
 {
-#ifdef ALTIVEC
+#ifdef __VEC__
 long h,w, width;
  
     /*altivec code starts */
