@@ -117,7 +117,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         Ptr			m_baseAddr;		// Base address of pixel Data
         long			m_rowBytes;		// Row bytes in a row
         int			m_quality;
-    //    int			m_colorspace;
+        int			m_colorspace;
     private:
     	
     	//////////
