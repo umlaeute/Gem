@@ -16,6 +16,13 @@
 #define SQRT2PI 2.506628274631000502415765284811045253006
 #define ONEOVERSQRT2PI (1. / SQRT2PI)
 
+#ifdef __APPLE__
+#define logf(x)		((float)log( (double)(x) ))
+#define expf(x)		((float)exp( (double)(x) ))
+#define sinf(x)		((float)sin( (double)(x) ))
+#define cosf(x)		((float)cos( (double)(x) ))
+#endif
+
 // To offset [0 .. 1] vectors to [-.5 .. .5]
 static pVector vHalf(0.5, 0.5, 0.5);
 
