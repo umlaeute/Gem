@@ -48,8 +48,6 @@ void pix_mean_color::processGrayImage(imageStruct &image)
 		base++;
 	}
 	
-		
-	SETFLOAT(out, (float)sum / (float)datasize );
 	outlet_float(m_list, (float)sum / (float)datasize);
 }
 
