@@ -88,15 +88,39 @@ void pix_normalize :: processRGBAImage(imageStruct &image)
   n = datasize*image.csize;
   pixels=image.data;
   while(n--){
-    *pixels = (unsigned char)(*(pixels-min)*scale);
+    *pixels = (unsigned char)((*pixels-min)*scale);
     pixels++;
   }
 }
-
+void pix_normalize :: processGrayImage(imageStruct &image)
+{
+  unsigned char min=255, max=0;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *pixels = image.data;
+  int n = datasize;
+  while(n--){
+    int val=*pixels++;
+    if (val>max)max=val;
+    if (val<min)min=val;
+  }
+  pixels=image.data;
+  n = datasize;
+  if (max==min){
+    memset(pixels, 0, datasize*sizeof(unsigned char));
+  } else {
+    t_float scale=(max-min)?255./(max-min):0;
+    //    post("max=%d min=%d\t%f", max, min, scale);
+    while(n--){
+      int val=*pixels;
+      //      if (n<2)post("n=%d\t%d %f %d", n, val, ((val-min)*scale), (unsigned char)((val-min)*scale));
+      *pixels++= (unsigned char)((val-min)*scale);
+    }
+  }
+}
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void pix_normalize :: obj_setupCallback(t_class *classPtr)
-{
-}
+{}
+
