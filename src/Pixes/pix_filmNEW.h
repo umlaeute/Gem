@@ -16,6 +16,10 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_FILMNEW_H_
 #define INCLUDE_PIX_FILMNEW_H_
 
+#ifndef __NEW__
+# define NO_AUTO_REGISTER_CLASS
+#endif
+
 #define MAX_FILM_HANDLES 8
 
 #define GEM_MOVIE_NONE 0
@@ -26,14 +30,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include <string.h>
 #include <stdio.h>
 
-#include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
-
-#ifdef __linux__
-#include "Base/config.h"
-#endif /* __linux__ */
 #include "Pixes/film.h"
-
+#include "Base/GemBase.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
