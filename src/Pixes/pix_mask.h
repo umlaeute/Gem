@@ -55,6 +55,8 @@ class GEM_EXTERN pix_mask : public GemPixDualObj
     	//  This is called whenever a new image comes through.
         //	The left image is an RGBA, the right is a gray8
     	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
+
+    	virtual void 	processRGBA_YUV(imageStruct &image, imageStruct &right);
 };
 
 #endif	// for header file

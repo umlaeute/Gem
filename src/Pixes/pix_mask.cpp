@@ -49,9 +49,9 @@ void pix_mask :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 
   while (datasize--)	{
     // do we use the alpha value
-    pixels[chAlpha] = (	(int)mask[chRed] +
-			(int)mask[chGreen] +
-			(int)mask[chBlue] ) / 3;
+    pixels[chAlpha] = (mask[chRed  ] * 79  + 
+		       mask[chGreen] * 156 +
+		       mask[chBlue ] * 21)>>8;
     pixels += 4;
     mask += 4;
   }
@@ -72,6 +72,28 @@ void pix_mask :: processRGBA_Gray(imageStruct &image, imageStruct &right)
     pixels += 4;
   }
 }
+
+/////////////////////////////////////////////////////////
+// processRightGray
+//
+/////////////////////////////////////////////////////////
+void pix_mask :: processRGBA_YUV(imageStruct &image, imageStruct &right)
+{
+  int datasize = (image.xsize * image.ysize)>>1;
+  unsigned char *pixels = image.data;
+  unsigned char *mask = right.data;
+
+  while(datasize--)	{
+    pixels[chAlpha] = mask[chY0];
+    pixels += 4;
+    pixels[chAlpha] = mask[chY1];
+    pixels += 4;
+    mask   += 4;
+
+
+  }
+}
+
 
 /////////////////////////////////////////////////////////
 // static member function
