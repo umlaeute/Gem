@@ -125,7 +125,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_write, t_symbol*,A_DEFSYM)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer_write :: pix_buffer_write(t_symbol *s) : m_frame(-2), m_lastframe(-1) {
+pix_buffer_write :: pix_buffer_write(t_symbol *s) : m_frame(-2), m_lastframe(-1), m_bindname(NULL) {
   setMess(s);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
 }
@@ -162,7 +162,16 @@ void pix_buffer_write :: render(GemState*state){
   if (m_frame<0)return;
   if (state && state->image && &state->image->image){
     if (state->image->newimage || m_frame!=m_lastframe){
-      pix_buffer *buffer=(pix_buffer *)((Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class))->data;
+      if(m_bindname==NULL || m_bindname->s_name==NULL){
+	post("pix_buffer_write: cowardly refusing to write to no pix_buffer");
+	m_frame=-1; return;
+      }
+      Obj_header*ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
+      if(ohead==NULL){
+	post("pix_buffer_write: couldn't find pix_buffer '%s'", m_bindname->s_name);
+	m_frame=-1; return;
+      }
+      pix_buffer *buffer=(pix_buffer *)(ohead)->data;
       if (buffer){
 	buffer->putMess(&state->image->image,m_lastframe=m_frame);
 	m_frame=-1;
@@ -206,7 +215,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_read, t_symbol*,A_DEFSYM)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer_read :: pix_buffer_read(t_symbol *s) : m_frame(0) {
+pix_buffer_read :: pix_buffer_read(t_symbol *s) : m_frame(0), m_bindname(NULL) {
   setMess(s);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
 }
@@ -249,7 +258,13 @@ void pix_buffer_read :: render(GemState*state){
   }
   cachedPixBlock.newimage=1;
   state->image = &cachedPixBlock;
-  pix_buffer *buffer=(pix_buffer *)((Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class))->data;
+  if(m_bindname==NULL || m_bindname->s_name==NULL)return;
+  Obj_header*ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
+  if(ohead==NULL){
+    post("pix_buffer_read: couldn't find pix_buffer '%s'", m_bindname->s_name);
+    return;
+  }
+  pix_buffer *buffer=(pix_buffer *)(ohead)->data;
   if (buffer){
     imageStruct *img=buffer->getMess(m_frame);
     if (img && img->data)img->copy2ImageStruct(&state->image->image);
