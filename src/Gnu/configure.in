@@ -40,6 +40,8 @@ AC_ARG_WITH(aviplay,   [  --with-aviplay          alias for \"--with-avi\"])
 AC_ARG_WITH(avcodec,   [  --with-avcodec=<lib>    location of libavcodec.a])
 AC_ARG_WITH(avformat,  [  --with-avformat=<lib>   location of libavformat.a])
 AC_ARG_WITH(ieee1394,  [  --with-ieee1394         enable IEEE1394-support (aka. firewire or DV)])
+AC_ARG_WITH(pdversion, [  --with-pdversion=<ver>  enforce a certain pd-version (e.g. 0.37)])
+
 
 if test "$with_aviplay"
 then
@@ -443,23 +445,38 @@ fi
 
 dnl Checks for pd-version, to set the correct help-path
 AC_MSG_CHECKING("pd\>=0.37")
+
+if test "$with_pdversion" != ""
+then
+echo -n "($with_pdversion)... "
+  PD_VERSION="$with_pdversion"
+else
 cat > conftest.c << EOF
+#include <stdio.h>
 #include "m_pd.h"
 int main(){
-  if(PD_MAJOR_VERSION>0 || PD_MINOR_VERSION>36){
-  // we now have this weird help-path thing
-  }
+  printf("%d.%d\n", PD_MAJOR_VERSION, PD_MINOR_VERSION);
+  return 0;
 }
 EOF
-REFPATH=OLD
-$CXX $INCLUDES -o /dev/null conftest.c > /dev/null 2>&1 && REFPATH=NEW
-if test "$REFPATH" = "OLD"
+ if $CXX $INCLUDES -o conftest.o conftest.c > /dev/null 2>&1
+ then
+  PD_VERSION=`./conftest.o`
+ else
+  PD_VERSION=""
+ fi
+fi
+
+let PD_MAJORVERSION=`echo $PD_VERSION | cut -d"." -f1`+0
+let PD_MINORVERSION=`echo $PD_VERSION | cut -d"." -f2`+0
+
+if test "$PD_MAJORVERSION" -gt 0 || test "$PD_MINORVERSION" -ge 37
 then
-  REFERENCEPATH=doc/5.reference/Gem
-  echo "no"
-else
   REFERENCEPATH=extra/help-Gem
   echo "yes"
+else
+  REFERENCEPATH=doc/5.reference/Gem
+  echo "no"
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics.
