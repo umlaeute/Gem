@@ -133,13 +133,13 @@ void pix_tIIR :: processImage(imageStruct &image)
   f=m_fb[0];
   source=image.data;
   dest=m_buffer.data+m_counter*imagesize;
-  int factor=(int)(f*255);
+  int factor=(int)(f*256);
   i=imagesize;while(i--)*dest++ = (unsigned char)((factor**source++)>>8);
   j=fb_count;while(j--){
     f=m_fb[j+1];
     source=m_buffer.data+imagesize*((m_bufnum+m_counter-j-1)%m_bufnum);
     dest=m_buffer.data+m_counter*imagesize;
-    factor=(int)(255*f);
+    factor=(int)(256*f);
     if (factor!=0){
       i=imagesize;while(i--)*dest++ += (unsigned char)((factor**source++)>>8);
     }
@@ -149,13 +149,13 @@ void pix_tIIR :: processImage(imageStruct &image)
   f=m_ff[0];
   source=m_buffer.data+m_counter*imagesize;
   dest=image.data;
-  factor=(int)(f*255);
+  factor=(int)(f*256);
   i=imagesize;while(i--)*dest++ = (unsigned char)((factor**source++)>>8);
   j=ff_count;while(j--){
     f=m_ff[j+1];
     dest=image.data;
     source=m_buffer.data+imagesize*((m_bufnum+m_counter-j-1)%m_bufnum);
-    factor=(int)(f*255);
+    factor=(int)(f*256);
     if (factor!=0){
       i=imagesize;while(i--)*dest++ += (unsigned char)((factor**source++)>>8);
     }
