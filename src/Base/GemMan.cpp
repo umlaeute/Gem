@@ -15,7 +15,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+ 
 #include "GemMan.h"
 
 #ifdef unix
@@ -42,11 +42,6 @@
 #include "GemEvent.h"
 
 #include "Controls/gemhead.h"
-
-#include "Base/config.h"
-#ifdef INCLUDE_GLEXT
-# include <GL/glext.h>
-#endif
 
 #ifdef __APPLE__
 extern bool HaveValidContext (void);

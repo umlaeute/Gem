@@ -3,13 +3,6 @@ GEM ONLINE DOCUMENTATION CHAPTER 4: Known bugs
 
 ---------------------------- KNOWN BUGS -----------------------------
 
-[pix_lumaoffset] crashes
---------------
-POSTED 15/05/04
---------------
-BUG: pix_lumaoffset crashes when the offset-factor is very high and fill+smooth is turned on
-ANS: yes; but we haven't found where the bug is hidden yet
-
 loading movies leaks memory under Win32
 --------------
 POSTED 4/16/02
@@ -26,6 +19,13 @@ POSTED 4/05/04
 BUG: loading MPEG-movies (*.MPG) crashes pd
 ANS: MPEG is not really supported under the Win32-version of Gem
      however Gem tries to decode MPEGs via QuickTime which might crash (see below)
+
+loading quicktime-movies crashes under Win32
+--------------
+POSTED 4/05/04
+--------------
+BUG: loading quicktime-movies (*.MOV) crashes pd; i am using QuickTime-6.5
+ANS: people have reported, that QuickTime-6.4 works but v6.5 does not -
 
 loading AVI-movies does not work under Win32
 --------------
