@@ -222,8 +222,14 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
     }else{	// end of fullscreen creation on 2nd/external device
 
     // show and update main window
-        SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset+50, 
+     /*   SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset+50, 
                 (short)(hints.width + hints.x_offset), 
+                (short)(hints.height + hints.y_offset)); */
+        
+        hints.y_offset+=50; //should put the title bar below the menu bar??
+        
+        SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset,
+                (short)(hints.width + hints.x_offset),
                 (short)(hints.height + hints.y_offset));
 
         err = CreateNewWindow ( kDocumentWindowClass,
