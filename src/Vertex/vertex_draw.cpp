@@ -166,22 +166,20 @@ void vertex_draw :: render(GemState *state)
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(4,GL_FLOAT,0,(GLfloat *)state->VertexArray);
 
-/*
 #ifdef  GL_VERTEX_ARRAY_RANGE_APPLE
     glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
     glVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
     glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
     glFlushVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
 #endif
-*/  
+  
     glDrawArrays(m_drawType,0,size);
     glDisableClientState(GL_VERTEX_ARRAY);
-/*
+
 #ifdef  GL_VERTEX_ARRAY_RANGE_APPLE   
     glDisableClientState(GL_VERTEX_ARRAY_RANGE_APPLE);
         glVertexArrayRangeAPPLE(0,0);
 #endif
-*/
     if(m_color)glDisableClientState(GL_COLOR_ARRAY);
     
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -198,42 +196,58 @@ void vertex_draw :: render(GemState *state)
 	
     if (m_vao){
 	  glEnableClientState( GL_VERTEX_ARRAY );
-	  if ( !m_nVBOVertices )
+	  if ( !m_nVBOVertices ){
 		glGenBuffersARB( 1, &m_nVBOVertices );
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
 	  glBufferDataARB( GL_ARRAY_BUFFER_ARB, state->VertexArraySize*4*sizeof(float),
 						state->VertexArray, GL_STATIC_DRAW_ARB );
 	  glVertexPointer( 4, GL_FLOAT,0, (char*) NULL);
+	  }else{
+	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
+	  glVertexPointer( 4, GL_FLOAT,0, (char*) NULL);
+	  }
      }
     
     if(m_color && (state->ColorArray != NULL || state->HaveColorArray == 0) ){
         glEnableClientState(GL_COLOR_ARRAY);
-		if ( !m_nVBOColor )
+		if ( !m_nVBOColor ){
 			glGenBuffersARB( 1, &m_nVBOColor );
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
 		glBufferDataARB( GL_ARRAY_BUFFER_ARB, state->VertexArraySize*4*sizeof(float),
 						state->ColorArray, GL_STATIC_DRAW_ARB );
         glColorPointer(4,GL_FLOAT,0,(char*) NULL);
         }else{
+			glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
+			glColorPointer(4,GL_FLOAT,0,(char*) NULL);
+		}
+	}else{
         glDisableClientState(GL_COLOR_ARRAY);
         }
 	if ( state->HaveTexCoordArray || state->TexCoordArray != NULL ){
-		if ( !m_nVBOTexCoords )
+		if ( !m_nVBOTexCoords ){
 			glGenBuffersARB( 1, &m_nVBOTexCoords );
 		glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
 		glBufferDataARB( GL_ARRAY_BUFFER_ARB, state->VertexArraySize*2*sizeof(float),
 						state->TexCoordArray, GL_DYNAMIC_DRAW_ARB );
 		glTexCoordPointer(2, GL_FLOAT, 0, (char *) NULL);
+		}else{
+			glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
+			glTexCoordPointer(2, GL_FLOAT, 0, (char *) NULL);
+		}
 	}
 
     if(state->HaveNormalArray || state->NormalArray!=NULL){
 		glEnableClientState(GL_NORMAL_ARRAY);
-		if ( !m_nVBONormals )
+		if ( !m_nVBONormals ){
 			glGenBuffersARB( 1, &m_nVBONormals );
 		glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
 		glBufferDataARB( GL_ARRAY_BUFFER_ARB, state->VertexArraySize*sizeof(float),
 						state->NormalArray, GL_DYNAMIC_DRAW_ARB );
 		glNormalPointer(GL_FLOAT,0, (char *) NULL);    
+		}else{
+			glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
+			glNormalPointer(GL_FLOAT,0, (char *) NULL);
+		}
     }
 
     //glEnableClientState(GL_VERTEX_ARRAY);
