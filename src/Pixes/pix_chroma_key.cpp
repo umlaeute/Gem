@@ -56,12 +56,12 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   if (m_direction) {    
     while(datasize--){        
       if ((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
-	  (leftPix[chRed] < Rhi)&&(leftPix[chRed] > Rlo)&&
-	  (leftPix[chGreen] < Ghi)&&(leftPix[chGreen] > Glo))
+	  (leftPix[chRed]  < Rhi)&&(leftPix[chRed]  > Rlo)&&
+	  (leftPix[chGreen]< Ghi)&&(leftPix[chGreen]> Glo))
 	{
-	  leftPix[chRed] = rightPix[chRed];
+	  leftPix[chRed]   = rightPix[chRed];
 	  leftPix[chGreen] = rightPix[chGreen];
-	  leftPix[chBlue] = rightPix[chBlue];
+	  leftPix[chBlue]  = rightPix[chBlue];
 	}
       leftPix+=4;
       rightPix+=4;
@@ -69,12 +69,12 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   } else { //this needs help
     while(datasize--){
       if (!((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
-            (leftPix[chRed] < Ghi)&&(leftPix[chRed] > Glo)&&
-            (leftPix[chGreen] < Rhi)&&(leftPix[chGreen] > Rlo)))
+            (leftPix[chRed]  < Ghi)&&(leftPix[chRed]  > Glo)&&
+            (leftPix[chGreen]< Rhi)&&(leftPix[chGreen]> Rlo)))
 	{
-	  leftPix[chRed] = rightPix[chRed];
+	  leftPix[chRed]   = rightPix[chRed];
 	  leftPix[chGreen] = rightPix[chGreen];
-	  leftPix[chBlue] = rightPix[chBlue];
+	  leftPix[chBlue]  = rightPix[chBlue];
 	}
       leftPix+=4;
       rightPix+=4;
@@ -89,11 +89,6 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
-#ifdef __VEC__
-processYUV_YUVAltivec(image, right);
-return;
-#else
-
    long src,h,w,xsize;
    unsigned char Uhi,Ulo,Vhi,Vlo,Yhi,Ylo;
    src =0;
@@ -248,18 +243,87 @@ return;
 	   src+=4;
 	 }
        }
-     }/**/
+     }
    }
-#endif //ALTIVEC
 }
+
+#ifdef __MMX__
+void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
+{
+  int datasize = image.xsize * image.ysize * image.csize;
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+
+  __m64 *leftPix =  (__m64*)image.data;
+  __m64 *rightPix = (__m64*)right.data;
+
+
+  const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange), 
+			CLAMP(m_Uvalue + m_Urange),
+			CLAMP(m_Vvalue + m_Vrange),
+			0xFF,
+			CLAMP(m_Yvalue + m_Yrange), 
+			CLAMP(m_Uvalue + m_Urange),
+			CLAMP(m_Vvalue + m_Vrange),
+			0xFF);
+  const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange), 
+			CLAMP(m_Uvalue - m_Urange),
+			CLAMP(m_Vvalue - m_Vrange),
+			0x00,
+			CLAMP(m_Yvalue - m_Yrange), 
+			CLAMP(m_Uvalue - m_Urange),
+			CLAMP(m_Vvalue - m_Vrange),
+			0x00);
+
+  const __m64 nil=_mm_setzero_si64();
+
+  __m64 r, l, b0, b1;
+
+  if (m_direction) {    
+    while(datasize--){
+      l=leftPix [datasize];
+      r=rightPix[datasize];
+
+      b0=_mm_subs_pu8(lo, l);
+      b1=_mm_subs_pu8(l, hi);
+      b0=_mm_cmpeq_pi32(b0, nil);
+      b1=_mm_cmpeq_pi32(b1, nil);
+
+      b0=_mm_and_si64 (b0, b1);
+
+      b1=_mm_and_si64   (b0, r);
+      b0=_mm_andnot_si64(b0, l);
+
+      leftPix[datasize]=_mm_or_si64(b0, b1);
+    }
+  } else { //this needs help
+    while(datasize--){
+      l=leftPix [datasize];
+      r=rightPix[datasize];
+
+      b0=_mm_subs_pu8(lo, l);
+      b1=_mm_subs_pu8(l, hi);
+      b0=_mm_cmpeq_pi32(b0, nil);
+      b1=_mm_cmpeq_pi32(b1, nil);
+
+      b0=_mm_and_si64 (b0, b1);
+
+      b1=_mm_and_si64   (b0, l);
+      b0=_mm_andnot_si64(b0, r);
+
+      leftPix[datasize]=_mm_or_si64(b0, b1);
+    }
+  }
+  _mm_empty();
+}
+#endif
 
 /////////////////////////////////////////////////////////
 // the killer go fast stuff goes in here
 //
 /////////////////////////////////////////////////////////
-void pix_chroma_key :: processYUV_YUVAltivec(imageStruct &image, imageStruct &right)
-{
 #ifdef __VEC__
+void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right)
+{
 register int h,w,i,j,width;
 
     h = image.ysize;
@@ -453,12 +517,11 @@ register int h,w,i,j,width;
         }
         vec_dss(1);
         vec_dss(0);
+	}
+    */
     }
-*/
-    
-    }
-#endif
 }
+#endif
 
 
 /////////////////////////////////////////////////////////
