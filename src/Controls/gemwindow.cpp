@@ -41,18 +41,11 @@
 /* some statics variables */
 
 /*
- * s_windowRun indicates on windos that we have a "running" window and want to dispatchGemWindowMessages
- */
-static int s_windowRun = 0; // LATER think about making this part of the class!!
-
-/*
  * on windows there might be an option that we only want singleContext (on some stone-age hardware)
  * we leave it here for now
  */
 static int s_singleContext = 0; // LATER think about removing
 
-//static  WindowInfo gfxInfo;
-static  WindowInfo constInfo;
     
 
 CPPEXTERN_NEW(gemwindow)
@@ -65,10 +58,10 @@ CPPEXTERN_NEW(gemwindow)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemwindow :: gemwindow() :
+gemwindow :: gemwindow() : GemOutput(), 
   m_fullscreen(0), m_width(500), m_height(500), m_xoffset(0), m_yoffset(0), m_border(1),
   m_cursor(1), m_topmost(0),
-  m_windowState(0), m_windowContext(0)
+  m_windowContext(0), m_buffer(2)
 {
   m_title="GEM";
 }
@@ -138,12 +131,10 @@ void gemwindow :: createContext(char* disp)
 }
 
 int gemwindow :: createConstWindow(char* disp) {
-#ifdef _WINDOWS
   // can we only have one context?
   if (s_singleContext) {
     return(createWindow(disp));
   }
-#endif
 
   WindowHints myHints;
   myHints.title    = m_title;
@@ -177,7 +168,7 @@ int gemwindow :: createConstWindow(char* disp) {
 
 
 int gemwindow :: createWindow(char* disp) {
-  if ( m_windowState ) return(0);
+  if ( m_outputState ) return(0);
 #ifdef DEBUG
   post("gemwindow: create window");
 #endif
@@ -205,13 +196,13 @@ int gemwindow :: createWindow(char* disp) {
   m_w=myHints.real_w;
   m_h=myHints.real_h;
 
-  m_windowState = 1;
+  m_outputState = 1;
   cursorMess(m_cursor);
   topmostMess(m_topmost);
   windowInit(); // IMPORTANT
   //  clock_delay(s_windowClock, s_windowDelTime);
 
-  s_windowRun = 1;
+  m_windowRun = 1;
   return(1);
 }
 
@@ -249,6 +240,10 @@ void gemwindow :: windowInit()
 
 void gemwindow :: createMess(t_symbol* s)
 {
+  if(m_outputState){
+    error("GEM: gemwindow: window already made");
+    return;
+  }
   char* disp = (s==&s_)?NULL:s->s_name;
 
   createContext(disp);
@@ -256,6 +251,14 @@ void gemwindow :: createMess(t_symbol* s)
     error("GEM: gemwindow: no window made");
     return;
   }
+  glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glColor3f(1.0, 1.0, 1.0);
+  glLoadIdentity();
+  glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glColor3f(1.0, 1.0, 1.0);
+  glLoadIdentity();
   //GemMan::swapBuffers();
   //GemMan::swapBuffers();
 }
@@ -265,13 +268,11 @@ void gemwindow :: createMess(t_symbol* s)
 /////////////////////////////////////////////////////////
 void gemwindow :: destroyMess()
 {
-#ifdef _WINDOWS
-  // don't want to get rid of this
+  // don't want to get rid of this - but why ???
   if (s_singleContext)
     return;
-#endif
 
-  if (!m_windowState) return;
+  if (!m_outputState) return;
 
   //clock_unset(s_windowClock);
   //s_windowClock = NULL;
@@ -281,7 +282,7 @@ void gemwindow :: destroyMess()
 
   destroyGemWindow(gfxInfo);
 
-  m_windowState = 0;
+  m_outputState = 0;
     
   // reestablish the const glxContext
 #ifdef unix                 // for Unix
@@ -295,7 +296,7 @@ void gemwindow :: destroyMess()
   if (!constInfo.dc && !constInfo.context)return; // do not crash ??
 
   wglMakeCurrent(constInfo.dc, constInfo.context);
-  s_windowRun = 0;
+  m_windowRun = 0;
 #elif __APPLE__		// for PPC Macintosh
     ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
     ::aglSetCurrentContext(constInfo.context);
@@ -367,7 +368,7 @@ void gemwindow :: titleMess(t_symbol* s)
 /////////////////////////////////////////////////////////
 void gemwindow :: cursorMess(bool on)
 {
-  if (m_windowState)
+  if (m_outputState)
     cursorGemWindow(gfxInfo, (int)on);
 }
 
@@ -377,7 +378,7 @@ void gemwindow :: cursorMess(bool on)
 /////////////////////////////////////////////////////////
 void gemwindow :: topmostMess(bool on)
 {
-  if (m_windowState)
+  if (m_outputState)
     topmostGemWindow(gfxInfo, (int)on);
 }
 
