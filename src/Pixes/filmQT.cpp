@@ -116,12 +116,13 @@ bool filmQT :: open(char*filename, int format) {
 
   Str255	pstrFilename;
   CopyCStringToPascal(filename, pstrFilename);           // Convert to Pascal string
+
   err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
   if (err) {
     error("GEM: pix_film: Unable to find file: %s", filename);
     return false;
   }
-  
+
   short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
@@ -129,22 +130,25 @@ bool filmQT :: open(char*filename, int format) {
     if (refnum) ::CloseMovieFile(refnum);
     return false;
   }
+  //post("err=%d", err);
+  //post("refnum=%d", refnum);
+  //post("movie = %x", &m_movie);
   //startpost("new movie might crash... ");
   ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
-  //postpost("...survived");
+  //post("...survived");
   if (refnum) ::CloseMovieFile(refnum);
   m_curFrame = -1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
-  post("GEM: filmQT:  m_numTracks = %d",m_numTracks);
+  //post("GEM: filmQT:  m_numTracks = %d",m_numTracks);
   // Get the length of the movie
   long	movieDur, movieScale;
   movieDur = (long)GetMovieDuration(m_movie);
   movieScale = (long)GetMovieTimeScale(m_movie);
-  
+  /*
   post("Movie duration = %d timescale = %d timebase = %d",movieDur,
        movieScale,
        (long)GetMovieTimeBase(m_movie));
-                                            
+    */                                        
   OSType	whichMediaType = VisualMediaCharacteristic;
   // shouldn't the flags be OR'ed instead of ADDed ? (jmz) 
   short		flags = nextTimeMediaSample | nextTimeEdgeOK;
@@ -159,9 +163,9 @@ bool filmQT :: open(char*filename, int format) {
   SetMovieBox(m_movie, &m_srcRect);	
   m_image.image.xsize = m_srcRect.right - m_srcRect.left;
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
-  post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
-  post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
-  post("movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
+  //post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
+  //post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
+  //post("movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
 
 #ifdef __APPLE__
   m_image.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
@@ -190,8 +194,11 @@ bool filmQT :: open(char*filename, int format) {
   m_movieTime = 0;
   // *** set the graphics world for displaying the movie ***
   ::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
-  ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-
+  if(GetMoviesError()){
+	  close();
+	  return false;
+  }
+    ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
   return true;
 }
 
@@ -213,17 +220,14 @@ pixBlock* filmQT :: getFrame()
     
   m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
   m_baseAddr = ::GetPixBaseAddr(m_pixMap);
-
   // set the time for the frame and give time to the movie toolbox	
   SetMovieTimeValue(m_movie, m_movieTime); 
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-
-  m_image.newimage = 1;
   m_image.image.setCsizeByFormat(m_wantedFormat);
-  m_image.image.reallocate();
+  //post("7a");  m_image.image.reallocate();
   m_image.image.fromRGBA((unsigned char *)m_baseAddr);
   //m_image.image.fromUYVY((unsigned char *)m_baseAddr);
-
+  m_image.newimage = 1;
   m_image.image.upsidedown=true;
 
   return &m_image;

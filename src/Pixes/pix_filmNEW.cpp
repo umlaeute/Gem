@@ -123,7 +123,7 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format)
 
   if (format==0)format=m_format;
   int i=-1;
-  post("opening %s with format %X", buf, format);
+  //post("opening %s with format %X", buf, format);
   while(i++<m_numHandles){
     debug("trying handle %d: %X", i, m_handles[i]);
     if (m_handles[i] && m_handles[i]->open(buf, format ))      {
@@ -132,14 +132,17 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format)
     }
   }
   debug("got handle = %X", m_handle);
-  if (!m_handle)return;
+  if (!m_handle){
+    error("GEM: pix_film: Unable to open file: %s", filename->s_name);
+	return;
+  }
 
   t_atom ap[3];
   SETFLOAT(ap, m_handle->getFrameNum());
   SETFLOAT(ap+1, m_handle->getWidth());
   SETFLOAT(ap+2, m_handle->getHeight());
   m_numFrames=m_handle->getFrameNum();
-  post("GEM: pix_filmNEW: Loaded file: %s with %d frames (%dx%d)", 
+  post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d)", 
        buf, 
        m_handle->getFrameNum(), 
        m_handle->getWidth(), 
@@ -223,6 +226,7 @@ void pix_filmNEW :: csMess(t_symbol *s, bool immediately)
 void pix_filmNEW :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)_classpix_filmNEW, gensym("pix_film"), A_DEFSYM, A_NULL);
+  class_addcreator((t_newmethod)_classpix_filmNEW, gensym("pix_filmQT"), A_DEFSYM, A_NULL);
 
   class_addmethod(classPtr, (t_method)&pix_filmNEW::openMessCallback,
 		  gensym("open"), A_GIMME, A_NULL);

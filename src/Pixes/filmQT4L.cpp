@@ -64,7 +64,7 @@ bool filmQT4L :: open(char *filename, int format)
   int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   if (quicktime_check_sig(filename)){ /* ok, this is quicktime */
     if (!(m_quickfile = quicktime_open(filename, 1, 0))){
-      post("GEM: pix_film: Unable to open file: %s", filename);
+//      post("GEM: pix_film: Unable to open file: %s", filename);
       return false;
     }
     m_curFrame = -1;
@@ -78,8 +78,9 @@ bool filmQT4L :: open(char *filename, int format)
     m_image.image.ysize = quicktime_video_height(m_quickfile, 0);
     char *codec = quicktime_video_compressor(m_quickfile, 0);
     if (!quicktime_supported_video(m_quickfile, 0)){
-      post("GEM: pix_film: unsupported CODEC '%s'!", codec);
+//      post("GEM: pix_film: unsupported CODEC '%s'!", codec);
       quicktime_close(m_quickfile);
+	  m_quickfile=0;
       return false;
     } 
     switch (wantedFormat){
@@ -120,25 +121,30 @@ bool filmQT4L :: open(char *filename, int format)
 pixBlock* filmQT4L :: getFrame(){
   int i=m_image.image.ysize;
   if (m_lastFrame==m_curFrame && m_image.image.format==m_wantedFormat)
-    {m_image.newimage=0; return &m_image;}
+  {
+	  m_image.newimage=0; 
+	  return &m_image;
+  }
+
   m_image.image.setCsizeByFormat(m_wantedFormat);
   m_image.image.reallocate();
 
   pixBlock* pimage = 0;
   unsigned char **rows = new unsigned char*[m_image.image.ysize];
-  m_lastFrame=m_curFrame;
-
   while(i--)rows[i]=m_qtimage.data+m_qtimage.xsize*m_qtimage.csize*(m_qtimage.ysize-i-1);
 
+  m_lastFrame=m_curFrame;
+post("now decoding video");
   if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
     post("GEM: pix_film:: couldn't decode video !");
   }else {
+	  post("manually decoding from RGB");
     m_image.image.fromRGB(m_qtimage.data);
     m_image.newimage=1; m_image.image.upsidedown=false;
     pimage = &m_image;
-    if(m_newfilm)m_image.newfilm=1;  m_newfilm=false;
+    if(m_newfilm)m_image.newfilm=1; 
+	m_newfilm=false;
   }
-
   delete[] rows;
   return pimage;
 }
