@@ -16,6 +16,13 @@ LOG
 #define INCLUDE_TEXTBASE_H_
 
 #include "Base/GemBase.h"
+#include "Base/config.h"
+
+
+#define USE_FONTS
+#if defined __linux__ && !defined HAVE_LIBGLTT
+#undef USE_FONTS
+#endif
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -32,19 +39,19 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN TextBase : public GemBase
 {
-    CPPEXTERN_HEADER(TextBase, GemBase)
+  CPPEXTERN_HEADER(TextBase, GemBase)
 
     public:
 
-		//////////
-		// Constructor
-    	TextBase(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  TextBase(int argc, t_atom *argv);
     	
-    protected:
-    	
-    	//////////
-    	// Destructor
-    	virtual ~TextBase();
+ protected:
+  
+  //////////
+  // Destructor
+  virtual ~TextBase();
 
     	//////////
     	// Set the text string
@@ -54,33 +61,33 @@ class GEM_EXTERN TextBase : public GemBase
     	// The font to use
     	virtual void   	fontNameMess(const char *filename) = 0;
 
-		//////////
-		// Set the font size
-		virtual void	setFontSize(int size) = 0;
+	//////////
+	// Set the font size
+	virtual void	setFontSize(int size) = 0;
 
-		//////////
-		// Set the precision for rendering
-		virtual void	setPrecision(float prec) = 0;
+	//////////
+	// Set the precision for rendering
+	virtual void	setPrecision(float prec) = 0;
 
-		//////////
-		// The different types of justification
-		enum JustifyWidth { LEFT, RIGHT, CENTER };
+	//////////
+	// The different types of justification
+	enum JustifyWidth { LEFT, RIGHT, CENTER };
 
-		//////////
-		// The different types of justification
-		enum JustifyHeight { BOTTOM, TOP, MIDDLE };
+	//////////
+	// The different types of justification
+	enum JustifyHeight { BOTTOM, TOP, MIDDLE };
+	
+	//////////
+	// Set the width justification
+	void	setJustification(JustifyWidth wType, JustifyHeight hType);
 
-		//////////
-		// Set the width justification
-		void	setJustification(JustifyWidth wType, JustifyHeight hType);
-
-	    //-----------------------------------
-	    // GROUP:	Member variables
-	    //-----------------------------------
+	//-----------------------------------
+	// GROUP:	Member variables
+	//-----------------------------------
     
-		//////////
-		// Do we have a valid font?
-		int	m_valid;
+	//////////
+	// Do we have a valid font?
+	int	m_valid;
 
     	//////////
     	// The string to display
@@ -91,33 +98,33 @@ class GEM_EXTERN TextBase : public GemBase
 		// This includes the terminator /0 !!!
     	int	m_theMaxStringSize;
     	
-		//////////
-		// The font fize
-		int		m_fontSize;
+	//////////
+	// The font fize
+	int		m_fontSize;
     	
-		//////////
-		// The rendering precision
-		float		m_precision;
+	//////////
+	// The rendering precision
+	float		m_precision;
 
-		//////////
-		// The width justification
-		JustifyWidth	m_widthJus;
+	//////////
+	// The width justification
+	JustifyWidth	m_widthJus;
 
-		//////////
-		// The height justification
-		JustifyHeight	m_heightJus;
+	//////////
+	// The height justification
+	JustifyHeight	m_heightJus;
 
         //////////
         // The inlet
         t_inlet         *m_inlet;
 
-		//////////
-		// The default font name
-		static char *DEFAULT_FONT;
+	//////////
+	// The default font name
+	static char *DEFAULT_FONT;
 
-	    //-----------------------------------
-	    // GROUP:	Setup functions
-	    //-----------------------------------
+	//-----------------------------------
+	// GROUP:	Setup functions
+	//-----------------------------------
     
     private:
     	    

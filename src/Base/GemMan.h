@@ -77,10 +77,13 @@ class GEM_EXTERN GemMan
     	//////////
     	// reset to the initial state
     	static void 	    resetState();
+
+
     	    	
     	//////////
     	// Just send out one frame (if double buffered, will swap buffers)
     	static void 	    render(void *);
+    	static void 	    renderChain(gemheadLink*, GemState*);
     	    	
     	//////////
     	// Start a clock to do rendering.

@@ -16,6 +16,8 @@
 
 #include "TextBase.h"
 
+
+
 #include <stdio.h>
 #include <string.h>
 
@@ -34,6 +36,10 @@ TextBase :: TextBase(int argc, t_atom *argv)
     m_fontSize(20), m_precision(1.f),
     m_widthJus(CENTER), m_heightJus(MIDDLE)
 {
+#ifndef USE_FONTS
+  post("Gem has been compiled without FONT-support !");
+#endif
+
   // at least allocate something
   m_theString = new char[16];
   m_theMaxStringSize = 16;

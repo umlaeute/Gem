@@ -54,7 +54,7 @@ GemBase :: ~GemBase()
 void GemBase :: gem_startstopMess(int state)
 {
   if (state && !gem_amRendering)startRendering();
-  else if (!state && gem_amRendering) stopRendering();
+  else if (!state && gem_amRendering)stopRendering();
 
   gem_amRendering=(bool)state;
   // continue sending out the cache message
@@ -77,6 +77,7 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   }
 
   if(state)render(state);
+
   t_atom ap[2];
   ap->a_type=A_POINTER;
   ap->a_w.w_gpointer=(t_gpointer *)cache;  // the cache ?

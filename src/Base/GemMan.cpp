@@ -611,6 +611,13 @@ void GemMan :: resetState()
 // render
 //
 /////////////////////////////////////////////////////////
+void GemMan :: renderChain(gemheadLink *head, GemState *state){
+  while (head) {
+    head->base->renderGL(state);
+    head = head->next;
+  }
+}
+
 void GemMan :: render(void *)
 {
 #ifdef _WINDOWS
@@ -685,12 +692,13 @@ void GemMan :: render(void *)
       // render left view
       fillGemState(currentState);
       currentState.stereo = 1;
-      gemheadLink *head = s_linkHead;
-    
-      while (head) {
-	head->base->renderGL(&currentState);
-	head = head->next;
-      }
+
+      renderChain(s_linkHead, &currentState);
+
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+      renderChain(s_linkHead_2, &currentState);
 
       // setup the right viewpoint
       glViewport(xSize, 0, xSize, ySize);
@@ -709,12 +717,13 @@ void GemMan :: render(void *)
       // render right view
       fillGemState(currentState);
       currentState.stereo = 2;
-      head = s_linkHead;
-    
-      while (head) {
-	head->base->renderGL(&currentState);
-	head = head->next;
-      }
+      renderChain(s_linkHead, &currentState);
+
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+      renderChain(s_linkHead_2, &currentState);
+
 
       if (GemMan::m_stereoLine){
 	// draw a line between the views
@@ -749,8 +758,8 @@ void GemMan :: render(void *)
       int left_color=0;  // RED
       int right_color=1; // GREEN
 
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClear(GL_DEPTH_BUFFER_BIT);
+      glClear(GL_COLOR_BUFFER_BIT);
+      glClear(GL_DEPTH_BUFFER_BIT);
 
       // setup the left viewpoint
       switch (left_color){
@@ -780,12 +789,11 @@ void GemMan :: render(void *)
       // render left view
       fillGemState(currentState);
       currentState.stereo = 1;
-      gemheadLink *head = s_linkHead;
-    
-      while (head) {
-	head->base->renderGL(&currentState);
-	head = head->next;
-      }
+      renderChain(s_linkHead, &currentState);
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+      renderChain(s_linkHead_2, &currentState);
 
       // setup the right viewpoint
   glClear(GL_DEPTH_BUFFER_BIT);
@@ -816,38 +824,26 @@ void GemMan :: render(void *)
       // render right view
       fillGemState(currentState);
       currentState.stereo = 2;
-      head = s_linkHead;
-    
-      while (head) {
-	head->base->renderGL(&currentState);
-	head = head->next;
-      }
+      renderChain(s_linkHead, &currentState);
 
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+      renderChain(s_linkHead_2, &currentState);
+    
       glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
     }
     break;
   default: // normal rendering
     {
       fillGemState(currentState);
-      gemheadLink *head = s_linkHead;
-    
-      while (head)
-	{
-	  head->base->renderGL(&currentState);
-	  head = head->next;
-	}
+      renderChain(s_linkHead, &currentState);
 
-	// setup the matrices
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
-       
-	head = s_linkHead_2;
-    	while (head) {
-	  head->base->renderGL(&currentState);
-	  head = head->next;
-	}
-
+      // setup the matrices
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
+      renderChain(s_linkHead_2, &currentState);
     }
   }
 

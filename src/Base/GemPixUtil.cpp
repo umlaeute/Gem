@@ -44,25 +44,22 @@ GEM_EXTERN void imageStruct::info() {
        format, type, notowned);
 }
 
-GEM_EXTERN void imageStruct::copy2Image(imageStruct *to)
-{
+GEM_EXTERN void imageStruct::copy2Image(imageStruct *to) {
     if (!to || !this || !this->data)
     {
         error("GEM: Someone sent a bogus pointer to copy2Image");
         if (to)
-			to->data = NULL;
+	  to->data = NULL;
         return;
     }
 
     /* copy without new allocation if possible (speedup in convolve ..) */
-
     if (to->xsize*to->ysize*to->csize < xsize*ysize*csize || !to->data) {
       to->clear();
       to->allocate(xsize * ysize * csize);
     }
       
     // copy the information over
-
     to->xsize 	= xsize;
     to->ysize 	= ysize;
     to->csize 	= csize;
@@ -74,8 +71,7 @@ GEM_EXTERN void imageStruct::copy2Image(imageStruct *to)
     memcpy(to->data, data, to->datasize);
 }
 
-GEM_EXTERN void imageStruct::refreshImage(imageStruct *to)
-{
+GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) {
     if (!to || !data)
     {
         error("GEM: Someone sent a bogus pointer to refreshImage");
