@@ -58,6 +58,7 @@ void pix_pix2sig :: processImage(imageStruct &image)
   m_data = image.data;
   m_size = image.xsize * image.ysize;
   m_csize = image.csize;
+  m_format = image.format;
 }
 
 /////////////////////////////////////////////////////////
@@ -92,12 +93,38 @@ t_int* pix_pix2sig :: perform(t_int* w)
     case 0:
       break;
     }
-    while(n--){
-      *(out_red  ++) = data[0]*scale0;
-      *(out_green++) = data[1]*scale1;
-      *(out_blue ++) = data[2]*scale2;
-      *(out_alpha++) = data[3]*scale3;
-      data+=csize;
+    switch(x->m_format){
+    case GL_RGBA: default:
+      while(n--){
+	*(out_red  ++) = data[chRed]  *scale0;
+	*(out_green++) = data[chGreen]*scale1;
+	*(out_blue ++) = data[chBlue] *scale2;
+	*(out_alpha++) = data[chAlpha]*scale3;
+	data+=csize;
+      }
+      break;
+    case GL_YUV422_GEM:
+      n/=2;
+      while(n--){
+	*(out_red  ++) = data[chY0]   *scale0;
+	*(out_red  ++) = data[chY1]   *scale0;
+	*(out_green++) = data[chU] *scale1;
+	*(out_green++) = data[chU] *scale1;
+	*(out_blue ++) = data[chV] *scale2;
+	*(out_blue ++) = data[chV] *scale2;
+	*(out_alpha++) = 0; *(out_alpha++) = 0;
+	data+=4;
+      }
+      break;
+    case GL_LUMINANCE:
+      while(n--){
+	*(out_red  ++) = data[chGray]*scale0;
+	*(out_green++) = 0;
+	*(out_blue ++) = 0;
+	*(out_alpha++) = 0;
+	data++;
+      }
+      break;
     }
   } else {
     n=N;

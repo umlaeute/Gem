@@ -72,6 +72,7 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   unsigned char *m_data;
   long int       m_size;
   int            m_csize;
+  int            m_format;
 
   //////////
   // the outlets~
