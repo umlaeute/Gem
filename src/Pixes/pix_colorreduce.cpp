@@ -40,6 +40,10 @@ pix_colorreduce :: pix_colorreduce()
     cnBiggestSignedInt=0x7fffffff;
 
     init =0;
+
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("count"));
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("persist"));
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("smooth"));
 }
 
 /////////////////////////////////////////////////////////
@@ -459,6 +463,7 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
 	    }
 	}
     }
+post("bye pete");
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -475,15 +480,19 @@ void pix_colorreduce :: obj_setupCallback(t_class *classPtr)
 }
 void pix_colorreduce :: countCallback(void *data, t_floatarg m_TargetColorCount)
 {
-  GetMyClass(data)->m_TargetColorCount=(m_TargetColorCount);
+  if(m_TargetColorCount>255)m_TargetColorCount=255.f;
+  if(m_TargetColorCount<0)m_TargetColorCount=0.f;
+ GetMyClass(data)->m_TargetColorCount=(m_TargetColorCount);
 }
 
 void pix_colorreduce :: persistCallback(void *data, t_floatarg m_PalettePersistence)
 {
+  if(m_PalettePersistence>255)m_PalettePersistence=255.f;
+  if(m_PalettePersistence<0)m_PalettePersistence=0.f;
   GetMyClass(data)->m_PalettePersistence=(m_PalettePersistence);
 }
 
 void pix_colorreduce :: smoothCallback(void *data, t_floatarg m_BoundarySmoothing)
 {
-  GetMyClass(data)->m_BoundarySmoothing=(m_BoundarySmoothing);  
+  GetMyClass(data)->m_BoundarySmoothing=!(!(int)m_BoundarySmoothing);  
 }
