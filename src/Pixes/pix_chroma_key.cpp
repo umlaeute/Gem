@@ -260,19 +260,19 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
   const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange), 
 			CLAMP(m_Uvalue + m_Urange),
 			CLAMP(m_Vvalue + m_Vrange),
-			0xFF,
+			(unsigned char)0xFF,
 			CLAMP(m_Yvalue + m_Yrange), 
 			CLAMP(m_Uvalue + m_Urange),
 			CLAMP(m_Vvalue + m_Vrange),
-			0xFF);
+			(unsigned char)0xFF);
   const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange), 
 			CLAMP(m_Uvalue - m_Urange),
 			CLAMP(m_Vvalue - m_Vrange),
-			0x00,
+			(unsigned char)0x00,
 			CLAMP(m_Yvalue - m_Yrange), 
 			CLAMP(m_Uvalue - m_Urange),
 			CLAMP(m_Vvalue - m_Vrange),
-			0x00);
+			(unsigned char)0x00);
 
   const __m64 nil=_mm_setzero_si64();
 
