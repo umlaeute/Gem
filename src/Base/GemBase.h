@@ -60,6 +60,10 @@ class GEM_EXTERN GemBase : public CPPExtern
     	// You should reset all GEM/OpenGL states here.
     	virtual void 	postrender(GemState *)              { ; }
 
+     	//////////
+     	// Called when rendering stops
+     	virtual void 	stoprender()			{ realStopRendering(); }
+
     	//////////
     	// If you care about the start of rendering
     	virtual void	startRendering()                    { ; }
@@ -97,6 +101,7 @@ class GEM_EXTERN GemBase : public CPPExtern
     	static void 	gem_dagCacheMessCallback(void *x, void *gem_dag, void *gem_cache);
     	static void 	renderCallback(GemBase *data, GemState *state);
     	static void 	postrenderCallback(GemBase *data, GemState *state);
+	static void	stoprenderCallback(GemBase *data);	//DH
 };
 
 #endif	// for header file

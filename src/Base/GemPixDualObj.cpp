@@ -20,6 +20,8 @@
 #include "GemCache.h"
 #include "GemDag.h"
 
+#include <string.h>
+
 /////////////////////////////////////////////////////////
 //
 // GemPixDualObj
@@ -29,9 +31,10 @@
 //
 /////////////////////////////////////////////////////////
 GemPixDualObj :: GemPixDualObj()
-    	       : m_cacheRight(NULL), m_pixRight(NULL)
+   	       : m_cacheRight(NULL), m_pixRightValid(0) //, m_pixRight(NULL) changed DH 8/5/02
 {
     m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
+    memset(&m_pixRight, 0, sizeof(m_pixRight));
 }
 
 /////////////////////////////////////////////////////////
@@ -51,13 +54,14 @@ GemPixDualObj :: ~GemPixDualObj()
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: processImage(imageStruct &image)
 {
-    if (!m_pixRight) return;
+    if (!m_pixRightValid) return;
     
     if (image.xsize != m_pixRight->image.xsize ||
     	image.ysize != m_pixRight->image.ysize)
     {
     	error("GEM: GemPixDualObj: two images do not have equal dimensions");
-    	m_pixRight = NULL;
+     	m_pixRightValid = 0;
+
     	return;
     }
 	if (image.csize == 1)
@@ -109,8 +113,7 @@ void GemPixDualObj :: processRightGray(imageStruct &, imageStruct &)
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: stopRendering()
 {
-    m_cacheRight = NULL;
-    m_pixRight = NULL;
+  //    m_pixRightValid = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -119,9 +122,19 @@ void GemPixDualObj :: stopRendering()
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: rightRender(GemState *statePtr)
 {
-    m_pixRight = statePtr->image;
-    if (!statePtr->image) return;
-    if (statePtr->image->newimage) setPixModified();
+     if (!statePtr->image) 
+ 	{
+ 		m_pixRightValid = 0;
+ 		return;
+ 	}
+     if (statePtr->image->newimage)
+ 	{
+	  // 	    m_pixRight = *statePtr->image;
+	  m_pixRight = statePtr->image;
+
+	    m_pixRightValid = 1;
+	    setPixModified(); // force the left arm to create a new image
+ 	}
 }
 
 /////////////////////////////////////////////////////////
@@ -130,13 +143,23 @@ void GemPixDualObj :: rightRender(GemState *statePtr)
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: rightDagCacheMess(GemDag *dagPtr, GemCache *cachePtr)
 {
-    dagPtr->addChild(this, &GemPixDualObj::rightRenderCallback, &GemPixDualObj::rightPostrenderCallback);
+  dagPtr->addChild(this, &GemPixDualObj::rightRenderCallback, &GemPixDualObj::rightPostrenderCallback, &GemPixDualObj::rightStoprenderCallback);
     
     m_cacheRight = cachePtr;
 
     // do not send the message any farther
 }
 
+/////////////////////////////////////////////////////////
+// rightrealStopRendering
+//
+/////////////////////////////////////////////////////////
+void GemPixDualObj :: rightrealStopRendering()
+{
+  rightstopRendering();
+  m_pixRightValid = 0;
+  m_cacheRight = NULL;
+}
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -157,4 +180,8 @@ void GemPixDualObj :: rightRenderCallback(GemBase *data, GemState *state)
 void GemPixDualObj :: rightPostrenderCallback(GemBase *data, GemState *state)
 {
     ((GemPixDualObj *)data)->rightPostrender(state);
+}
+void GemPixDualObj :: rightStoprenderCallback(GemBase *data)
+{
+    ((GemPixDualObj *)data)->rightStoprender();
 }

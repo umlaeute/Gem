@@ -51,8 +51,8 @@ GemBase :: ~GemBase()
 /////////////////////////////////////////////////////////
 void GemBase :: gem_dagCacheMess(GemDag *dagPtr, GemCache *cachePtr)
 {
-    dagPtr->addChild(this, &GemBase::renderCallback, &GemBase::postrenderCallback);
-    
+    dagPtr->addChild(this, &GemBase::renderCallback, &GemBase::postrenderCallback, &GemBase::stoprenderCallback);
+   
     m_cache = cachePtr;
     if (m_cache) startRendering();
     else return;
@@ -108,4 +108,8 @@ void GemBase :: renderCallback(GemBase *data, GemState *state)
 void GemBase :: postrenderCallback(GemBase *data, GemState *state)
 {
     data->postrender(state);
+}
+void GemBase :: stoprenderCallback(GemBase *data)
+{
+    data->stoprender();
 }
