@@ -177,10 +177,17 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         hGD = DMGetNextScreenDevice (hGD, true);
     }
     while (hGD);
-    
+    post("GemwinMac: width - %d height - %d",hints.width,hints.height);
     if (( numDevices > 1 ) && (hints.secondscreen)) // Try AGL full screen on 2nd device if more than one device found
     {
         short width = 640, height = 480; 
+        
+        if ((hints.width < 640) || (hints.height < 480)){
+        width = 640; height = 480;
+        }else{
+        height = hints.height;
+        width = hints.width;
+        }
         info.context = SetupAGLFullScreen (hTargetDevice, &width, &height); // Setup the OpenGL context
         ::SetRect(&info.r, (short)hints.x_offset, (short)hints.y_offset, 
                                 (short)(hints.width + hints.x_offset), (short)(hints.height + hints.y_offset)); // l, t, r, b
@@ -333,7 +340,8 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight
 	}
         ::aglEnable( ctx, AGL_FS_CAPTURE_SINGLE );
 
-	if (!aglSetFullScreen (ctx, *pWidth, *pHeight, 60, 0))
+	//if (!aglSetFullScreen (ctx, *pWidth, *pHeight, 60, 0))
+        if (!aglSetFullScreen (ctx, *pWidth, *pHeight, 0, 0))
 	{
 		post ("SetFullScreen failed");
 		return NULL;
