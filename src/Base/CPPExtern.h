@@ -22,6 +22,32 @@ LOG
 #include "m_pd.h"
 #include "Base/GemExportDef.h"
 
+/*-----------------------------------------------------------------
+-------------------------------------------------------------------
+CLASS
+    GemException
+    
+    an exception class...
+
+DESCRIPTION
+    
+    this is a class, we can throw on creation, 
+    to make sure that the pd-object can not be created
+
+
+    
+-----------------------------------------------------------------*/
+class GEM_EXTERN GemException
+{
+ public:
+  GemException();
+  GemException(char*error);
+  
+  void report();
+ private:
+  char*ErrorString;
+};
+
 class CPPExtern;
 
 /*-----------------------------------------------------------------
@@ -106,8 +132,8 @@ class GEM_EXTERN CPPExtern
 
 	//////////
 	// my name
+	static char          *m_holdname;
 	t_symbol             *m_objectname;
-        void                  setCPPObjectName(char* name);
 
     protected:
     	
@@ -241,12 +267,15 @@ static void obj_setupCallback(t_class *classPtr);
 static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS ()                              \
 {     	    	    	    	    	    	    	    	\
+  try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(NEW_CLASS ## EXTERN_NAME),(void *)NULL) Obj_header; \
     CPPExtern::m_holder = &obj->pd_obj;                         \
+    CPPExtern::m_holdname=#NEW_CLASS;                           \
     obj->data = new NEW_CLASS;                                  \
     CPPExtern::m_holder = NULL;                                 \
-    obj->data->setCPPObjectName(#NEW_CLASS);                \
+    CPPExtern::m_holdname=NULL;                                 \
     return(obj);                                                \
+  } catch (GemException e) {e.report(); return NULL;}           \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
 void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
@@ -271,12 +300,15 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (VAR_TYPE arg)                  \
 {     	    	    	    	    	    	    	    	\
+  try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(NEW_CLASS ## EXTERN_NAME),(void *)NULL) Obj_header; \
     CPPExtern::m_holder = &obj->pd_obj;                         \
+    CPPExtern::m_holdname=#NEW_CLASS;                           \
     obj->data = new NEW_CLASS(arg);                             \
     CPPExtern::m_holder = NULL;                                 \
-    obj->data->setCPPObjectName(#NEW_CLASS);                \
+    CPPExtern::m_holdname=NULL;                                 \
     return(obj);                                                \
+  } catch (GemException e) {e.report(); return NULL;}           \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
 void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
@@ -299,14 +331,17 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 ///////////////////////////////////////////////////////////////////////////////
 #define REAL_NEW_WITH_GIMME(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME) \
 static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
-void * EXTERN_NAME ## NEW_CLASS (t_symbol *, int argc, t_atom *argv) \
+void * EXTERN_NAME ## NEW_CLASS (t_symbol *s, int argc, t_atom *argv) \
 {     	    	    	    	    	    	    	    	\
+  try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(NEW_CLASS ## EXTERN_NAME),(void *)NULL) Obj_header; \
     CPPExtern::m_holder = &obj->pd_obj;                         \
+    CPPExtern::m_holdname=s->s_name;                            \
     obj->data = new NEW_CLASS(argc, argv);                      \
-    CPPExtern::m_holder = NULL;                                 \
-    obj->data->setCPPObjectName(#NEW_CLASS);                 \
+    CPPExtern::m_holder=NULL;                                   \
+    CPPExtern::m_holdname=NULL;                                 \
     return(obj);                                                \
+  } catch (GemException e) {e.report(); return NULL;}           \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
 void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
@@ -331,12 +366,15 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo) \
 {     	    	    	    	    	    	    	    	\
+  try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(NEW_CLASS ## EXTERN_NAME),(void *)NULL) Obj_header; \
     CPPExtern::m_holder = &obj->pd_obj;                         \
+    CPPExtern::m_holdname=#NEW_CLASS;                           \
     obj->data = new NEW_CLASS(arg, argtwo);                     \
     CPPExtern::m_holder = NULL;                                 \
-    obj->data->setCPPObjectName(#NEW_CLASS);                \
+    CPPExtern::m_holdname=NULL;                                 \
     return(obj);                                                \
+  } catch (GemException e) {e.report(); return NULL;}           \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
 void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
@@ -361,12 +399,15 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree) \
 {     	    	    	    	    	    	    	    	\
+  try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(NEW_CLASS ## EXTERN_NAME),(void *)NULL) Obj_header; \
     CPPExtern::m_holder = &obj->pd_obj;                         \
+    CPPExtern::m_holdname=#NEW_CLASS;                           \
     obj->data = new NEW_CLASS(arg, argtwo, argthree);           \
     CPPExtern::m_holder = NULL;                                 \
-    obj->data->setCPPObjectName(#NEW_CLASS);                \
+    CPPExtern::m_holdname=NULL;                                 \
     return(obj);                                                \
+  } catch (GemException e) {e.report(); return NULL;}           \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
 void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
@@ -391,12 +432,15 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree, FOUR_VAR_TYPE argfour) \
 {     	    	    	    	    	    	    	    	\
+  try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(NEW_CLASS ## EXTERN_NAME),(void *)NULL) Obj_header; \
     CPPExtern::m_holder = &obj->pd_obj;                         \
+    CPPExtern::m_holdname=#NEW_CLASS;                           \
     obj->data = new NEW_CLASS(arg, argtwo, argthree, argfour);  \
     CPPExtern::m_holder = NULL;                                 \
-    obj->data->setCPPObjectName(#NEW_CLASS);                \
+    CPPExtern::m_holdname=NULL;                                 \
     return(obj);                                                \
+  } catch (GemException e) {e.report(); return NULL;}           \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
 void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
@@ -421,12 +465,15 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree, FOUR_VAR_TYPE argfour, FIVE_VAR_TYPE argfive) \
 {     	    	    	    	    	    	    	    	\
+  try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(NEW_CLASS ## EXTERN_NAME),(void *)NULL) Obj_header; \
     CPPExtern::m_holder = &obj->pd_obj;                         \
+    CPPExtern::m_holdname=#NEW_CLASS;                           \
     obj->data = new NEW_CLASS(arg, argtwo, argthree, argfour, argfive);  \
     CPPExtern::m_holder = NULL;                                 \
-    obj->data->setCPPObjectName(#NEW_CLASS);                \
+    CPPExtern::m_holdname=NULL;                                 \
     return(obj);                                                \
+  } catch (GemException e) {e.report(); return NULL;}           \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
 void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\

@@ -16,7 +16,20 @@
 
 GEM_EXTERN void *operator new(size_t, void *location, void *) {return(location);}
 
+
+GemException::GemException(char *error){
+  ErrorString=error;
+}
+GemException::GemException():ErrorString(NULL){}
+
+void GemException::report(){
+  if(ErrorString!=NULL)
+    error("GemException: %s", ErrorString);
+}
+
+
 t_object * CPPExtern::m_holder;
+char* CPPExtern::m_holdname;
 
 /////////////////////////////////////////////////////////
 //
@@ -27,9 +40,10 @@ t_object * CPPExtern::m_holder;
 //
 /////////////////////////////////////////////////////////
 CPPExtern :: CPPExtern()
-           : x_obj(m_holder)
+           : x_obj(m_holder) 
 {
     m_canvas = canvas_getcurrent();
+    m_objectname=gensym(m_holdname);
 }
 
 /////////////////////////////////////////////////////////
@@ -39,6 +53,3 @@ CPPExtern :: CPPExtern()
 CPPExtern :: ~CPPExtern()
 { }
 
-void CPPExtern :: setCPPObjectName(char* name){
-  m_objectname = gensym(name);
-}
