@@ -17,8 +17,10 @@ Linux version by Miller Puckette. msp@ucsd.edu
 #ifndef INCLUDE_PIX_VIDEO_H_
 #define INCLUDE_PIX_VIDEO_H_
 
-#ifdef __NEW__
-# define NO_AUTO_REGISTER_CLASS
+#if defined __NEW__  || defined HAVE_DIRECTSHOW
+# ifndef DO_AUTO_REGISTER_CLASS
+#  define NO_AUTO_REGISTER_CLASS
+# endif
 #endif
 
 #include "Base/GemBase.h"
