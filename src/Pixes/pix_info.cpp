@@ -55,7 +55,7 @@ pix_info :: ~pix_info()
 /////////////////////////////////////////////////////////
 void pix_info :: render(GemState *state)
 {
-  if (!state || !state->image|| !&state->image->image)return;
+  if (!state || !state->image|| !&state->image->image||!state->image->image.data)return;
   // send out the color information
   outlet_float(m_x, (t_float)state->image->image.xsize);
   outlet_float(m_y, (t_float)state->image->image.ysize);
@@ -64,5 +64,5 @@ void pix_info :: render(GemState *state)
   outlet_float(m_format, (t_float)state->image->image.format);
   outlet_pointer(m_data, (t_gpointer*)state->image->image.data);
 }
-void pix_info :: obj_setupCallback(t_class *classPtr)
-{}
+void pix_info :: obj_setupCallback(t_class *classPtr){
+}

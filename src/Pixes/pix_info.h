@@ -65,7 +65,6 @@ class GEM_EXTERN pix_info : public GemBase
         //////////
         // The color outlet
         t_outlet    	*m_x, *m_y, *m_c, *m_data, *m_format;
-
 };
 
 #endif	// for header file
