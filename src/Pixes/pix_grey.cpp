@@ -31,10 +31,7 @@ CPPEXTERN_NEW(pix_grey)
 /////////////////////////////////////////////////////////
 pix_grey :: pix_grey()
 {
-  m_image.xsize=64;
-  m_image.ysize=64;
   m_image.setCsizeByFormat(GL_LUMINANCE);
-  m_image.reallocate();
 }
 
 /////////////////////////////////////////////////////////

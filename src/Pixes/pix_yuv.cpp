@@ -31,10 +31,7 @@ CPPEXTERN_NEW(pix_yuv)
 /////////////////////////////////////////////////////////
 pix_yuv :: pix_yuv()
 {
-  m_image.xsize=64;
-  m_image.ysize=64;
   m_image.setCsizeByFormat(GL_YCBCR_422_GEM);
-  m_image.reallocate();
 }
 
 /////////////////////////////////////////////////////////
