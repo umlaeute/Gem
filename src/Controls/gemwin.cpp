@@ -62,6 +62,7 @@ gemwin :: gemwin(t_floatarg framespersecond)
     framespersecond = 20.;
   GemMan::frameRate((float)framespersecond);
   if(!StillHaveGemWin(true))GemMan::resetState();
+  m_FrameRate       = outlet_new(this->x_obj, 0);
 }
 
 /////////////////////////////////////////////////////////
@@ -375,6 +376,18 @@ void gemwin :: blurMess(float setting)
 }
 
 /////////////////////////////////////////////////////////
+// fpsMess
+//
+/////////////////////////////////////////////////////////
+void gemwin :: fpsMess()
+{
+//GemMan::m_fps = 0;
+ // post("gemwin: fps %d",GemMan::fps);
+    outlet_float(m_FrameRate,GemMan :: fps);
+}
+
+
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -458,6 +471,8 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("border"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::frameMessCallback,
 		  gensym("frame"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemwin::fpsMessCallback,
+		  gensym("fps"), A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::topmostMessCallback,
 		  gensym("topmost"), A_FLOAT, A_NULL);
 }
@@ -682,4 +697,8 @@ void gemwin :: topmostMessCallback(void *data, t_floatarg val)
 void gemwin :: blurMessCallback(void *data, t_floatarg val)
 {
   GetMyClass(data)->blurMess((float)val);
+}
+void gemwin :: fpsMessCallback(void *data)
+{
+  GetMyClass(data)->fpsMess();
 }

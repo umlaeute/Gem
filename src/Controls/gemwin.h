@@ -106,6 +106,9 @@ class GEM_EXTERN gemwin : public CPPExtern
   void          cursorMess(float setting);
   void			topmostMess(float settting);
   void          blurMess(float setting);
+  void          fpsMess();
+  
+  t_outlet	*m_FrameRate;
   
 
  private:
@@ -149,6 +152,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   static void 	cursorMessCallback(void *data, t_floatarg val);	
   static void 	topmostMessCallback(void *data, t_floatarg val);	
   static void 	blurMessCallback(void *data, t_floatarg val);	
+  static void 	fpsMessCallback(void *data);
 
 };
 
