@@ -312,7 +312,14 @@ fi
 
 if test "$with_avi" != "no"
 then
-  AC_FIND_LIB(aviplay, CreateIAviReadFile, $search_libs, $with_avi)
+  if which avifile-config > /dev/null
+  then
+    LIBS="`avifile-config --libs` $LIBS"
+    ac_tr_lib="HAVE_LIBAVIPLAY"
+    AC_DEFINE_UNQUOTED($ac_tr_lib)
+  else
+    AC_FIND_LIB(aviplay, CreateIAviReadFile, $search_libs, $with_avi)
+  fi
 fi
 if  test "$ac_tr_lib" != "HAVE_LIBAVIPLAY"
 then
@@ -388,7 +395,12 @@ fi
 
 if test "$with_avi" != "no"
 then
-  AC_FIND_HEADER(avifile.h, $search_heads, $with_avi)
+  if which avifile-config > /dev/null
+  then
+    INCLUDES="`avifile-config --cflags` $INCLUDES"
+  else
+    AC_FIND_HEADER(avifile.h, $search_heads, $with_avi)
+  fi
 fi
 
 if test "$with_ieee1394" != "no"
