@@ -54,6 +54,7 @@ class GEM_EXTERN pix_convolve : public GemPixObj
     	virtual ~pix_convolve();
 
         void calculate3x3YUV(imageStruct &image,imageStruct &tempImg);
+        void calculate3x3YUVAltivec(imageStruct &image,imageStruct &tempImg);
 	void calculateRGBA3x3(imageStruct &image,imageStruct &tempImg);
 
 
