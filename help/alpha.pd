@@ -64,7 +64,7 @@ all of the non-alpha blended ones.;
 #X obj 548 194 alpha;
 #X obj 548 108 color 0 1 0 0.5;
 #X text 61 308 Inlet 1: gemlist;
-#X text 61 330 Inlet 1: message "auto 1" | "auto 0" turn on/off automatic
+#X text 60 331 Inlet 1: message "auto 1" | "auto 0" turn on/off automatic
 depth detection;
 #X connect 11 0 12 0;
 #X connect 12 0 11 0;
