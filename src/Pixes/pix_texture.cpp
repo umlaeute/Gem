@@ -21,9 +21,18 @@
 #include "Base/GemPixUtil.h"
 #include <string.h>
 
-#ifdef GL_TEXTURE_RECTANGLE_EXT
-//#undef GL_TEXTURE_RECTANGLE_EXT
+#ifdef debug
+# undef debug
 #endif
+
+//#define DEBUG_ME
+
+#ifdef DEBUG_ME
+# define debug post
+#else
+# define debug
+#endif
+
 CPPEXTERN_NEW(pix_texture)
 
 static inline int powerOfTwo(int value){
@@ -75,14 +84,14 @@ void pix_texture :: setUpTextureState() {
     if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
       m_repeat = GL_CLAMP_TO_EDGE;
-      //    post("pix_texture: using rectangle texture");
+      debug("pix_texture: using rectangle texture");
   }
 #endif // GL_TEXTURE_RECTANGLE_EXT
 
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
   if (GemMan::client_storage_supported){
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-    //    post("pix_texture: using client storage");
+    debug("pix_texture: using client storage");
   }
 
   else
@@ -100,11 +109,7 @@ void pix_texture :: setUpTextureState() {
     if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
 #endif //GL_TEXTURE_RECTANGLE_EXT
       glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-  // note:  On MacOS X, pix_texture is used for power of two/normalised textures, so 
-  //		texture_rectangle can't be used (otherwise, we'd just see one pixel!)
 }
-
 
 // upsidedown is derived from the imageStruct.upsidedown
 // use this when loading images...
@@ -119,8 +124,8 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
       coords[3].s = 0.f;
       coords[3].t = yRatio;
   } else {
-      coords[3].s = 0.f;		// switched the order of coords on __APPLE__
-      coords[3].t = 0.f;		// otherwise we'd be upside down!
+      coords[3].s = 0.f;
+      coords[3].t = 0.f;
       coords[2].s = xRatio;
       coords[2].t = 0.f;
       coords[1].s = xRatio;
@@ -155,6 +160,8 @@ void pix_texture :: render(GemState *state) {
 
   bool normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
 
+  debug("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize, x_2, m_imagebuf.ysize, y_2);
+
 #ifdef GL_VERSION_1_1
     int texType = m_textureType;
 
@@ -162,18 +169,18 @@ void pix_texture :: render(GemState *state) {
     if (m_mode){
 	if (/*!normalized &&*/ GemMan::texture_rectangle_supported ){
 	    m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-	    //post("pix_texture:  using GL_TEXTURE_RECTANGLE_EXT");
+	    debug("pix_texture:  using GL_TEXTURE_RECTANGLE_EXT");
 	    normalized = 0;
-	} 
+	}
     } else 
 #endif // GL_TEXTURE_RECTANGLE_EXT
     {
 	m_textureType = GL_TEXTURE_2D;
-	//post("pix_texture:  using GL_TEXTURE_2D");
+	debug("pix_texture:  using GL_TEXTURE_2D");
 	normalized = 0;
     }
     if (m_textureType!=texType){
-	//post("pix_texture:  texType != m_textureType");
+	debug("pix_texture:  texType != m_textureType");
 	stopRendering();startRendering();
     }
     
@@ -185,7 +192,7 @@ void pix_texture :: render(GemState *state) {
 	    glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_EXT, 
 			    m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 
 			    m_imagebuf.data );
-	    post("pix_texture:  using glTextureRangeAPPLE()");
+	    debug("pix_texture:  using glTextureRangeAPPLE()");
 	}else{
 	    glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_EXT, 0, NULL );
 	}
@@ -289,19 +296,19 @@ void pix_texture :: render(GemState *state) {
 				m_buffer.type,
 				m_buffer.data);
      
-	//        post("pix_texture: TexImage2D non rectangle");
+		debug("pix_texture: TexImage2D non rectangle");
         }
         else //this deals with rectangle textures that are h*w
         { 
             glTexImage2D(m_textureType, 0,
-		   //  m_buffer.csize,
-                   GL_RGB,
-		     m_imagebuf.xsize,
-		     m_imagebuf.ysize, 0,
-		     m_imagebuf.format,
-		     m_imagebuf.type,
-		     m_imagebuf.data); 
-	    //            post("pix_texture: TexImage2D  rectangle");
+			 //  m_buffer.csize,
+			 GL_RGB,
+			 m_imagebuf.xsize,
+			 m_imagebuf.ysize, 0,
+			 m_imagebuf.format,
+			 m_imagebuf.type,
+			 m_imagebuf.data); 
+	    debug("pix_texture: TexImage2D  rectangle");
         }
         
       } //end of loop if size has changed
@@ -312,14 +319,14 @@ void pix_texture :: render(GemState *state) {
       //texturing is updated as well to prevent crashes
       if (state->image->newfilm ){
             glTexImage2D(m_textureType, 0,
-		   //  m_buffer.csize,  //this is completely wrong btw
-                   GL_RGB, 		//this is the correct internal format for YUV
-		     m_imagebuf.xsize,
-		     m_imagebuf.ysize, 0,
-		     m_imagebuf.format,
-		     m_imagebuf.type,
-		     m_imagebuf.data);
-	    //            post("pix_texture: new film");
+			 //  m_buffer.csize,  //this is completely wrong btw
+			 GL_RGB, 		//this is the correct internal format for YUV
+			 m_imagebuf.xsize,
+			 m_imagebuf.ysize, 0,
+			 m_imagebuf.format,
+			 m_imagebuf.type,
+			 m_imagebuf.data);
+	    debug("pix_texture: new film");
             state->image->newfilm = 0; //just to be sure
       } 
       glTexSubImage2D(m_textureType, 0,
