@@ -92,6 +92,8 @@ void gemhead :: renderGL(GemState *state)
 
 	// clear the state->image (might be still there from previous [gemhead]s)
 	state->image = 0;
+
+	state->VertexDirty=m_cache->vertexDirty;
         state->VertexArray = 0;
         state->VertexArraySize = 0;
         state->ColorArray = 0;
@@ -115,6 +117,7 @@ void gemhead :: renderGL(GemState *state)
    outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
 
     m_cache->dirty = 0;
+    m_cache->vertexDirty=0;
 
     glPopMatrix();
 }
