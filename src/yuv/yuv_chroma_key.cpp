@@ -41,9 +41,9 @@ void yuv_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
    long src,h,w;
    unsigned char Uhi,Ulo,Vhi,Vlo,Yhi,Ylo;
    src =0;
-
+#ifdef DEBUG
    post("yuv_chroma_key: %x %x \t %x %x", image, right, image.data, right.data);
-
+#endif
    Yhi = clamp(m_Yvalue + m_Yrange); 
    Ylo = clamp(m_Yvalue - m_Yrange);
    Uhi = clamp(m_Uvalue + m_Urange); 
