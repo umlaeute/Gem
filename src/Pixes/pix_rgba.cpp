@@ -174,7 +174,9 @@ void pix_rgba :: processImage(imageStruct &image)
 
   image.data   = m_data;
   image.notowned = 0;
+  #ifndef MACOSX  //keeps this object from messing up display on OSX
   image.format = GL_RGBA;
+  #endif
   image.csize  = 4;
 }
 
