@@ -57,6 +57,8 @@ class GEM_EXTERN part_source : public GemBase
   // vel.domain
   PDomainEnum           m_domain;
   void                  domainMess(t_symbol *s);
+  float			m_arg[9];
+  void			vectorMess(int argc, t_atom*argv);
 	
  private:
 
@@ -64,6 +66,7 @@ class GEM_EXTERN part_source : public GemBase
   // static member functions
   static void		numberMessCallback(void *data, t_floatarg num);
   static void		domainMessCallback(void *data, t_symbol*s);
+  static void		vectorMessCallback(void *data, t_symbol*, int, t_atom*);
 };
 
 #endif	// for header file

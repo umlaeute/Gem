@@ -29,9 +29,13 @@ CPPEXTERN_NEW_WITH_ONE_ARG(part_source, t_floatarg, A_DEFFLOAT)
 part_source :: part_source(t_floatarg num)
   : m_numberToAdd(150), m_domain(PDSphere)
 {
+  int i=9;while(i--)m_arg[i]=0.0;
+  m_arg[3]=0.2f;
   if (num > 0)
     m_numberToAdd = (int)num;
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numToAdd"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("symbol"), gensym("domain"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
 }
 
 /////////////////////////////////////////////////////////
@@ -59,7 +63,11 @@ void part_source :: domainMess(t_symbol*s)
   else if (!strcmp(str,"blob"     ))m_domain=PDBlob;
   else if (!strcmp(str,"disc"     ))m_domain=PDDisc;
   else if (!strcmp(str,"rectangle"))m_domain=PDRectangle;
-  else error("GEM: part_source: unknown domain");
+  else error("GEM: particles: unknown domain");
+}
+void part_source :: vectorMess(int argc, t_atom*argv){
+  int i=9;
+  while(i--)if(argc>i)m_arg[i]=atom_getfloat(argv+i);
 }
 
 /////////////////////////////////////////////////////////
@@ -70,7 +78,8 @@ void part_source :: render(GemState *state)
 {
   if (state->stereo == 0 ||
       state->stereo == 1) {
-    pSource((float)m_numberToAdd, m_domain, 0.f, 0.f, 0.f, .02f);
+    pSource((float)m_numberToAdd, m_domain, 
+	    m_arg[0],m_arg[1],m_arg[2],m_arg[3],m_arg[4],m_arg[5],m_arg[6],m_arg[7],m_arg[8]);
   }
 }
 
@@ -84,6 +93,8 @@ void part_source :: obj_setupCallback(t_class *classPtr)
 		  gensym("numToAdd"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&part_source::domainMessCallback,
 		  gensym("domain"), A_SYMBOL, A_NULL);
+  class_addmethod(classPtr, (t_method)&part_source::vectorMessCallback,
+		  gensym("vector"), A_GIMME, A_NULL);
 }
 void part_source :: numberMessCallback(void *data, t_floatarg num)
 {
@@ -92,5 +103,9 @@ void part_source :: numberMessCallback(void *data, t_floatarg num)
 void part_source :: domainMessCallback(void *data, t_symbol*s)
 {
   GetMyClass(data)->domainMess(s);
+}
+void part_source :: vectorMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+{
+  GetMyClass(data)->vectorMess(argc, argv);
 }
 
