@@ -50,6 +50,10 @@ class GEM_EXTERN pix_subtract : public GemPixDualObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
+        
+    	//////////
+    	// Do the processing
+    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
 };
 
 #endif	// for header file

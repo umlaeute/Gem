@@ -58,6 +58,10 @@ class GEM_EXTERN pix_add : public GemPixDualObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
+        
+    	//////////
+    	// Do the processing
+    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
 
 };
 

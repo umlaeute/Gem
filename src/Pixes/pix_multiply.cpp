@@ -95,6 +95,28 @@ void pix_multiply :: processGray_Gray(imageStruct &image, imageStruct &right)
 }
 
 /////////////////////////////////////////////////////////
+// do the YUV processing here
+//
+/////////////////////////////////////////////////////////
+void pix_multiply :: processYUV_YUV(imageStruct &image, imageStruct &right)
+{
+   long src,h,w;
+   int	y1,y2;
+   src =0;
+   //format is U Y V Y
+   for (h=0; h<image.ysize; h++){
+    for(w=0; w<image.xsize/2; w++){
+       y1 = (image.data[src+1] * right.data[src+1]) >> 8;
+        image.data[src+1] = CLAMP(y1);
+        y2 = (image.data[src+3] * right.data[src+3]) >> 8;
+        image.data[src+3] = CLAMP(y2);
+        
+        src+=4;
+    }
+    }
+}
+
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
