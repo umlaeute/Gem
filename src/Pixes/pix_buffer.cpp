@@ -94,6 +94,7 @@ imageStruct*pix_buffer :: getMess(int pos){
 /////////////////////////////////////////////////////////
 void pix_buffer :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classpix_buffer,gensym("pix_depot"),A_DEFSYM,A_DEFFLOAT,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer::allocateMessCallback,
   		  gensym("allocate"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   class_addbang(classPtr, (t_method)&pix_buffer::bangMessCallback);
@@ -176,6 +177,7 @@ void pix_buffer_write :: render(GemState*state){
 /////////////////////////////////////////////////////////
 void pix_buffer_write :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classpix_buffer_write,gensym("pix_put"),A_DEFSYM,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer_write::setMessCallback,
   		  gensym("set"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer_write::frameMessCallback,
@@ -261,6 +263,7 @@ void pix_buffer_read :: render(GemState*state){
 /////////////////////////////////////////////////////////
 void pix_buffer_read :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classpix_buffer_read,gensym("pix_get"),A_DEFSYM,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer_read::setMessCallback,
   		  gensym("set"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer_read::frameMessCallback,
