@@ -59,6 +59,9 @@ class GEM_EXTERN GemBase : public CPPExtern
     	//////////
     	virtual void 	render(GemState *state) = 0;
 
+	//////////
+	void    continueRender(GemState *state);
+
     	//////////
     	// After objects below you in the chain have finished.
     	// You should reset all GEM/OpenGL states here.
@@ -66,7 +69,9 @@ class GEM_EXTERN GemBase : public CPPExtern
 
      	//////////
      	// Called when rendering stops
-     	virtual void 	stoprender()			{ realStopRendering(); }
+#if 0/*(jmz)*/
+	virtual void 	stoprender()			{ realStopRendering(); }
+#endif
 
     	//////////
     	// If you care about the start of rendering
@@ -114,7 +119,9 @@ class GEM_EXTERN GemBase : public CPPExtern
      	static void 	gem_MessCallback(void *, t_symbol *,int, t_atom*);
    	static void 	renderCallback(GemBase *data, GemState *state);
     	static void 	postrenderCallback(GemBase *data, GemState *state);
+#if 0 /*jmz*/
 	static void	stoprenderCallback(GemBase *data);	//DH
+#endif
 };
 
 #endif	// for header file

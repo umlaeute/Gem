@@ -88,6 +88,16 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   m_modified=false;
 }
 
+void GemBase :: continueRender(GemState*state){
+  t_atom ap[2];
+  ap->a_type=A_POINTER;
+  ap->a_w.w_gpointer=(t_gpointer *)m_cache;  // the cache ?
+  (ap+1)->a_type=A_POINTER;
+  (ap+1)->a_w.w_gpointer=(t_gpointer *)state;
+  outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
+}
+
+
 
 /////////////////////////////////////////////////////////
 // setModified
