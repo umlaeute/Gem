@@ -17,16 +17,12 @@ LOG
 #define INCLUDE_PIX_TEXTURE_H_
 
 #include "Base/GemBase.h"
-//<<<<<<< pix_texture.h
-//=======
 #include "Base/GemPixUtil.h"
 #ifndef MACOSX
 #include <GL/glu.h>
 #else
 #include <OpenGL/glu.h>
 #endif
-
-//>>>>>>> 1.3
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -90,6 +86,14 @@ class GEM_EXTERN pix_texture : public GemBase
 	// [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
 	void          textureQuality(int type);
 
+
+	//////////
+	GLuint        m_repeat;
+	//////////
+	// Set the texture quality
+	// [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
+	void          repeatMess(int type);
+
 	//////////
 	// Do we need to rebuild the display List
 	int           m_rebuildList;
@@ -110,12 +114,17 @@ class GEM_EXTERN pix_texture : public GemBase
 	// The texture coordinates
 	TexCoord    	m_coords[4];
 
+	int             m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
+	bool            m_normalized;  // whether the image is power of 2
+	
+
  private:
 
 	//////////
 	// static member functions
 	static void 	floatMessCallback(void *data, float n);
 	static void 	textureMessCallback(void *data, t_floatarg n);
+	static void 	repeatMessCallback(void *data, t_floatarg n);
 };
 
 #endif	// for header file
