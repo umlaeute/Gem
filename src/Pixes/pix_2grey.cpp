@@ -75,10 +75,16 @@ void pix_2grey :: processRGBAltivec(imageStruct &image)
   }shortBuffer;
   
   vector unsigned char 	factors;
-  vector unsigned short	oddS, evenS, one,lo,hi,mask;
+  vector unsigned short	oddS, evenS, one,lo,hi,lo1,hi1,mask;
   vector unsigned int	R, G, B, A,shift,grey;
   vector unsigned char *pixels = (vector unsigned char *)image.data;
   int count = image.ysize * image.xsize / 4;
+ 
+  #ifndef PPC970
+   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+	vec_dst( pixels, prefetchSize, 0 );
+	vec_dst( pixels, prefetchSize, 1 );
+  #endif
  
   charBuffer.c[0] = 1;
   charBuffer.c[1] = 79;
@@ -113,6 +119,10 @@ void pix_2grey :: processRGBAltivec(imageStruct &image)
   shift = vec_splat_u32(8); 
   
   while (count--)    {
+    #ifndef PPC970
+	vec_dst( pixels, prefetchSize, 0 );
+        vec_dst( pixels+256, prefetchSize, 1 );
+    #endif    
     
     //mult to short vector of R and B
     oddS = vec_mulo(pixels[0],factors);
@@ -130,19 +140,25 @@ void pix_2grey :: processRGBAltivec(imageStruct &image)
     //bitshift down 8 bits
     grey = vec_sra(grey, shift);
     
-    lo = vec_packsu(A,grey);
+    lo = vec_packsu(grey,grey);
     hi = vec_packsu(grey,grey);
     
-    lo = vec_mergel(lo,hi);
-    hi = vec_mergeh(lo,hi);
+    lo1 = vec_mergel(lo,hi);
+    hi1 = vec_mergeh(lo,hi);
     
-    lo = vec_mergel(lo,hi);
-    hi = vec_mergeh(lo,hi);
+    lo = vec_mergel(lo1,hi1);
+    hi = vec_mergeh(lo1,hi1);
     
     pixels[0] = vec_packsu(hi,lo);
     pixels++;
    
   }
+  # ifndef PPC970
+    //stop the cache streams
+    vec_dss( 0 );
+    vec_dss( 1 );
+  # endif
+  
 #endif //altivec function
 }
 
