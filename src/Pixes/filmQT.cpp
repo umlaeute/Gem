@@ -36,7 +36,7 @@
 
 filmQT :: filmQT(int format) : film(format)
 #ifdef HAVE_QUICKTIME
-			     , m_bInit(false), m_srcGWorld(NULL)
+			     , m_bInit(false), m_srcGWorld(NULL), m_movie(NULL)
 #endif
 {
   static bool first_time=true;
@@ -95,7 +95,8 @@ void filmQT :: close(void)
   if(m_srcGWorld)::DisposeGWorld(m_srcGWorld);
   m_srcGWorld = NULL;
 
- ::DisposeMovie(m_movie);
+ if(m_movie)::DisposeMovie(m_movie);
+ m_movie=NULL;
 }
 
 bool filmQT :: open(char*filename, int format) {
@@ -122,7 +123,6 @@ bool filmQT :: open(char*filename, int format) {
     error("GEM: pix_film: Unable to find file: %s", filename);
     return false;
   }
-
   short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
@@ -134,7 +134,13 @@ bool filmQT :: open(char*filename, int format) {
   //post("refnum=%d", refnum);
   //post("movie = %x", &m_movie);
   //startpost("new movie might crash... ");
-  ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
+  err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
+  if (err) {
+    error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    if (refnum) ::CloseMovieFile(refnum);
+	m_movie=NULL;
+    return false;
+  }
   //post("...survived");
   if (refnum) ::CloseMovieFile(refnum);
   m_curFrame = -1;
@@ -172,7 +178,6 @@ bool filmQT :: open(char*filename, int format) {
 #else
   m_image.image.type = GL_UNSIGNED_BYTE;
 #endif
-
   m_rowBytes = m_image.image.xsize * 4;
   SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
   err = QTNewGWorldFromPtr(	&m_srcGWorld, 
