@@ -88,12 +88,21 @@ void GemShape :: typeMess(t_symbol *type)
     m_drawType = GL_LINE_LOOP;
     break;
   case 'F': // fill
-    //    m_drawType = GL_QUADS;
     m_drawType = GL_POLYGON;
+    break;
+  case 'Q': // fill
+    m_drawType = GL_QUADS;
     break;
   case 'P': // point
     m_drawType = GL_POINTS;
     break;
+  case 'T': // point
+    m_drawType = GL_TRIANGLES;
+    break;
+  case 's': // point
+    m_drawType = GL_TRIANGLE_STRIP;
+    break;  
+    
   default:
     error ("GEM: square draw style");
     return;
