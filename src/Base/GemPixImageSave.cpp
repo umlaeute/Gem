@@ -25,12 +25,24 @@
 #include <unistd.h>
 #endif
 
+#ifdef MACOSX
+#include <Carbon/Carbon.h>
+#include <QuickTime/QuickTime.h>
+#include <QuickTime/ImageCompression.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#include <string.h>
+#include <stdio.h>
+#endif // MACOSX
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>
 
 extern "C"
 {
+#ifndef MACOSX
+
 #include "tiffio.h"
 
 #undef EXTERN
@@ -40,15 +52,187 @@ extern "C"
 #endif
 
 #include "jpeglib.h"
+#endif
 }
 
 
-#include "sgiimage.h"
+
 #include "GemPixUtil.h"
+
+
+#ifdef MACOSX
+OSStatus FSPathMaketoFSSpec(const UInt8 *path,FSSpec *spec,Boolean *isDirectory);
+       
+void GetAppFSSpec(FSSpec *fileSpec)
+{
+    FSRef processRef;
+    FSCatalogInfo processInfo;
+    ProcessSerialNumber psn = {0, kCurrentProcess};
+    GetProcessBundleLocation(&psn, &processRef);
+    FSGetCatalogInfo(&processRef, kFSCatInfoNodeFlags, &processInfo, NULL, fileSpec, NULL);
+}
+
+// MemAlloc
+// Simple memory allocation wrapper
+void* MemAlloc(unsigned long memsize)
+{
+    if(memsize <= 0)
+	return NULL;
+    else
+	return (malloc(memsize));
+}
+
+
+char* CStringToPString(char *string)
+{
+    char *newString = MemAlloc(strlen(string) + 1);
+    long i = 0;
+    
+    for(i = 0; i < strlen(string); i++)
+	newString[i+1] = string[i];
+    
+    newString[0] = i;
+    
+    return newString;
+}
+
+GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int type)
+{
+    OSErr			err;
+    ComponentResult		cErr 	= 0;
+    
+    GWorldPtr 			img	= NULL;
+    GraphicsExportComponent 	geComp 	= NULL;
+    Rect			r;
+    
+    OSType			osFileType 	= kQTFileTypeJPEG; //kQTFileTypeTIFF fot Tiff kQTFileTypeSGIImage for sgi
+    FSSpec	spec;
+    StringPtr			PfileName;
+    
+  /*  if (filename[0] != '\0') {
+		
+
+		err = FSPathMaketoFSSpec( (Str255)filename, &spec, NULL);
+		if (err == noErr) {
+			error("GEM: Unable to find file: %#s", spec.name);
+                        error("GEM: Unable to find filename:%s", filename);
+			error("parID : %d", spec.parID); 
+                        error("GEM: File:%s exists!", filename);
+			return NULL;
+		}
+		
+	}*/
+     
+    GetAppFSSpec(&spec); 
+    PfileName = CStringToPString(filename);
+        
+    err = FSMakeFSSpec(spec.vRefNum, spec.parID, PfileName, &spec);
+    
+   // post("GEM: mem2image height %d width %d bpp %d",image->ysize,image->xsize,image->csize);
+    
+    err = OpenADefaultComponent(GraphicsExporterComponentType, osFileType, &geComp);
+    if (err != noErr)
+    {
+	error("ERROR: %d in OpenADefaultComponent()", err);
+	return 0; // FIXME:
+    }
+    
+    r.top = 0;
+    r.left = 0;
+    r.bottom = image->ysize;
+    r.right = image->xsize;
+    
+   // ::OffsetRect(&r, -r.left, -r.top);
+   //SetRect(&r,r.left,r.bottom,r.right,r.top);
+     err = QTNewGWorldFromPtr(&img,  
+                                    //k32RGBAPixelFormat,
+                                    k32ARGBPixelFormat,
+                                    &r, NULL, NULL, 0,
+                                   // keepLocal,	
+                                    //useDistantHdwrMem, 
+                                    image->data, 
+                                    (long)(image->xsize * image->csize));
+                
+    if (err != noErr)
+    {
+	error("ERROR: %d in QTNewGWorldFromPtr()", err);
+	return 0; // FIXME:
+    }
+    
+    
+    // Set the input GWorld for the exporter
+	cErr = GraphicsExportSetInputGWorld(geComp, img);
+	if (cErr != noErr)
+	{
+	    error("ERROR: %d in GraphicsExportSetInputGWorld()", cErr);
+	    return 0; // FIXME:
+	}
+    
+    // Set the output file to our FSSpec
+	cErr = GraphicsExportSetOutputFile(geComp, &spec);
+	if (cErr != noErr)
+	{
+	    error("ERROR: %i in GraphicsExportSetOutputFile()", cErr);
+	    return 0; // FIXME:
+	}
+        
+        // Set the compression quality (needed for JPEG, not necessarily for other formats)
+	cErr = GraphicsExportSetCompressionQuality(geComp, codecLosslessQuality);
+	if (cErr != noErr)
+	{
+	    error("ERROR: %i in GraphicsExportSetCompressionQuality()", cErr);
+	    return 0; // FIXME:
+	}
+        
+        // Export it
+	cErr = GraphicsExportDoExport(geComp, NULL);
+	if (cErr != noErr)
+	{
+	    error("ERROR: %i in GraphicsExportDoExport()", cErr);
+	    return 0; // FIXME:
+	}
+        
+        // finally, close the component
+        if (geComp != NULL)
+	    CloseComponent(geComp);
+
+    
+    return 1;
+
+}
+
+OSStatus
+FSPathMaketoFSSpec(
+	const UInt8 *path,
+	FSSpec *spec,
+	Boolean *isDirectory)	/* can be NULL */
+{
+	OSStatus	result;
+	FSRef		ref;
+	
+	/* check parameters */
+	require_action(NULL != spec, BadParameter, result = paramErr);
+	
+	/* convert the POSIX path to an FSRef */
+	result = ::FSPathMakeRef(path, &ref, isDirectory);
+	require_noerr(result, FSPathMakeRef);
+	
+	/* and then convert the FSRef to an FSSpec */
+	result = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
+	require_noerr(result, FSGetCatalogInfo);
+	
+FSGetCatalogInfo:
+FSPathMakeRef:
+BadParameter:
+
+	return ( result );
+}
+
+#else
+#include "sgiimage.h"
 
 int mem2tiffImage(imageStruct* image, const char *filename);
 int mem2jpegImage(imageStruct* image, const char *filenamem, int quality);
-
 /***************************************************************************
  *
  * mem2image - Save an image to a file
@@ -218,3 +402,4 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
 
   return(1);
 }
+#endif //MACOSX
