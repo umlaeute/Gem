@@ -319,19 +319,9 @@ void pix_dot :: yuv_init()
 
 	if(!initialized) {
 		for(i=0; i<256; i++) {
-			//YtoRGB[i] =  1.164*(i-16);
-			//VtoR[i] =  1.596*(i-128);
-			//VtoG[i] = -0.813*(i-128);
-			//UtoG[i] = -0.391*(i-128);
-			//UtoB[i] =  2.018*(i-128);
 			R2Y[i] =  (int)(0.257*i);
-			//RtoU[i] = -0.148*i;
-			//RtoV[i] =  0.439*i;
 			G2Y[i] =  (int)(0.504*i);
-			//GtoU[i] = -0.291*i;
-			//GtoV[i] = -0.368*i;
 			B2Y[i] =  (int)(0.098*i);
-			//BtoV[i] = -0.071*i;
 		}
 		initialized = 1;
 	}
