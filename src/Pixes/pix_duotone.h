@@ -23,7 +23,7 @@ LOG
 CLASS
     pix_duotone
     
-    Change the overall gain of a pix
+    Changes the pix to a two-tone image based on a threshold amount (< color1, > color2)
 
 KEYWORDS
     pix

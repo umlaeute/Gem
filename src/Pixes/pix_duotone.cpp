@@ -96,8 +96,7 @@ void pix_duotone :: processRGBImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_duotone :: processGrayImage(imageStruct &image)
 {
-  int datasize =  image.xsize * image.ysize*image.csize;
-  unsigned char *pixels = image.data;
+
 }
 
 /////////////////////////////////////////////////////////
