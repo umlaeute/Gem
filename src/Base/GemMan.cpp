@@ -204,9 +204,18 @@ static void dispatchGemWindowMessages()
   clock_delay(s_windowClock, s_windowDelTime);  
 } 
 #elif __APPLE__
-static void dispatchGemWindowMessages(void *)
+static pascal OSStatus dispatchGemWindowMessages()
 {
-//	::clock_xdelay(s_windowClock, s_windowDelTime);
+    EventRef	theEvent;
+    EventTargetRef theTarget;
+    
+    theTarget = GetEventDispatcherTarget();
+    ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true,
+                                &theEvent );
+    {
+        SendEventToEventTarget( theEvent, theTarget);
+        ReleaseEvent( theEvent );
+    }
     clock_delay(s_windowClock, s_windowDelTime);
 }
 #endif // for Unix
