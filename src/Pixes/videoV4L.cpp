@@ -272,7 +272,12 @@ int videoV4L :: startTransfer(int format)
 	VIDEO_PALETTE_YUV420P	15	/* YUV 4:2:0 Planar */
 	VIDEO_PALETTE_YUV410P	16	/* YUV 4:1:0 Planar */
 #endif
-	  vmmap[i].format = VIDEO_PALETTE_YUV422;// 420P ?
+	  /* this is very unfortunate:
+	   * PALETTE_YUV422 obviously is something different than ours
+	   * although our yuv422 reads uyvy it is
+	   * not PALETTE_UYVY either !
+	   */
+	  vmmap[i].format = VIDEO_PALETTE_YUV420P;
 	break;
       default:
       case GL_RGB:
