@@ -45,20 +45,19 @@ CPPEXTERN_NEW(pix_texture)
 /////////////////////////////////////////////////////////
 pix_texture :: pix_texture()
   : m_textureOnOff(1), 
-    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT), m_rebuildList(0), m_textureObj(0),m_textureType( GL_TEXTURE_2D )
-     
+    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
+    m_rebuildList(0), m_textureObj(0),m_textureType( GL_TEXTURE_2D ),
+    m_clientStorage(0), //have to do this due to texture corruption issues
+    m_mode(0)
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
   m_buffer.data = NULL;
   
-  m_mode = 0;
-  
   #if defined(GL_TEXTURE_RECTANGLE_EXT) 
   //|| defined(GL_NV_TEXTURE_RECTANGLE)
   m_mode = 1;  //default to the fastest mode for systems that support it
   #endif
-  m_clientStorage = 0; //have to do this due to texture corruption issues
 }
 
 /////////////////////////////////////////////////////////
@@ -221,17 +220,15 @@ void pix_texture :: render(GemState *state) {
 #endif //GL_VERSION_1_1
 
     if (m_rebuildList) {
-#ifndef GL_YCBCR_422_APPLE
 	// if YUV is not supported on this platform, we have to convert it to RGB
 	//(skip Alpha since it isnt used)
 	//
-	if (m_imagebuf.format == GL_YUV422_GEM){
+	if (!GemMan::texture_yuv_supported && m_imagebuf.format == GL_YUV422_GEM){
 	    m_imagebuf.format=GL_RGB;
 	    m_imagebuf.csize=3;
 	    m_imagebuf.reallocate();
 	    m_imagebuf.fromYUV422(state->image->image.data);
 	}
-#endif // GL_YCBCR_422_APPLE 
 	if (normalized) {
 	    m_buffer.xsize = m_imagebuf.xsize;
 	    m_buffer.ysize = m_imagebuf.ysize;
