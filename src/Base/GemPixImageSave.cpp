@@ -86,7 +86,7 @@ void* MemAlloc(unsigned long memsize)
 char* CStringToPString(char *string)
 {
     char *newString = MemAlloc(strlen(string) + 1);
-    long i = 0;
+    unsigned long i = 0;
     
     for(i = 0; i < strlen(string); i++)
 	newString[i+1] = string[i];
