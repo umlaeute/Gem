@@ -124,6 +124,12 @@ static inline int powerOfTwo(int value)
     return(x);
 }
 
-
+#ifdef MACOSX
+//Ian Ollman's function to determine the cache prefetch for altivec vec_dst()
+inline UInt32 GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
+{
+	return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) && 0x00FF0000) | (blockStride & 0xFFFF);
+} 
+#endif
 
 #endif	// for header file
