@@ -27,9 +27,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(ripple, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLO
 // Constructor
 //
 /////////////////////////////////////////////////////////
-ripple :: ripple( t_floatarg gridY, t_floatarg gridX )
-    	     : GemShape(1.0), m_height(1.0), m_size(0),
-               alreadyInit(0)
+ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
+    	     : GemShape(1.0), m_height(1.0), alreadyInit(0)
 {
     if (m_height == 0.f)m_height = 1.f;
 
@@ -40,7 +39,6 @@ ripple :: ripple( t_floatarg gridY, t_floatarg gridX )
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
     inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cX"));
     inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
-    inletfov = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("fov"));
 
     m_drawType = GL_POLYGON;
     m_blend = 0;
@@ -62,7 +60,6 @@ ripple :: ~ripple()
 	 inlet_free(m_inletH);
          inlet_free(inletcX);
          inlet_free(inletcY);
-         inlet_free(inletfov);
          alreadyInit = 0;
 }
 /////////////////////////////////////////////////////////
@@ -83,6 +80,8 @@ void ripple :: render(GemState *state)
     }
     
     glNormal3f(0.0f, 0.0f, 1.0f);
+
+    glScalef(2.*m_size, 2.*m_size, 2.*m_size);
     
     if (state->texture && state->numTexCoords)
     {
@@ -109,55 +108,53 @@ void ripple :: render(GemState *state)
             precalc_ripple_vector();
             alreadyInit = 1;
         }
-        for (i = 0; i < m_grid_sizeX - 1; i++)
-        {
-            for (j = 0; j < m_grid_sizeY - 1; j++)
-            {
-                glBegin(GL_POLYGON);
-                glTexCoord2fv(ripple_vertex[i][j].t);
-                glVertex2fv(ripple_vertex[i][j].x);
-                glTexCoord2fv(ripple_vertex[i][j + 1].t);
-                glVertex2fv(ripple_vertex[i][j + 1].x);
-                glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
-                glVertex2fv(ripple_vertex[i + 1][j + 1].x);
-                glTexCoord2fv(ripple_vertex[i + 1][j].t);
-                glVertex2fv(ripple_vertex[i + 1][j].x);
-                glEnd();
-            }
+        for (i = 0; i < m_grid_sizeX - 1; i++)  {
+	  for (j = 0; j < m_grid_sizeY - 1; j++)  {
+	    glBegin(m_drawType);
+	      glTexCoord2fv(ripple_vertex[i][j].t);
+	      glVertex2fv(ripple_vertex[i][j].x);
+	      glTexCoord2fv(ripple_vertex[i][j + 1].t);
+	      glVertex2fv(ripple_vertex[i][j + 1].x);
+	      glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
+	      glVertex2fv(ripple_vertex[i + 1][j + 1].x);
+	      glTexCoord2fv(ripple_vertex[i + 1][j].t);
+	      glVertex2fv(ripple_vertex[i + 1][j].x);
+	    glEnd();
+	  }
         }
         ripple_dynamics();
-    }
-    else
-    {
-        if (!alreadyInit)
-        {
-            xsize = 1;
-            ysize = 1;
-            win_size_x = 1;
-            win_size_y = 1;
+    }  else  {
+      if (!alreadyInit)   {
+	xsize = 1;
+	ysize = 1;
+	win_size_x = 1;
+	win_size_y = 1;
 
-            ripple_init();
-            precalc_ripple_vector();
-            alreadyInit = 1;
-        }
-        for (i = 0; i < m_grid_sizeX - 1; i++)
-        {
-            for (j = 0; j < m_grid_sizeY - 1; j++)
-            {
-                glBegin(m_drawType);
-                    glTexCoord2fv(ripple_vertex[i][j].t);
-                    glVertex2fv(ripple_vertex[i][j].t);
-                    glTexCoord2fv(ripple_vertex[i][j + 1].t);
-                    glVertex2fv(ripple_vertex[i][j + 1].t);
-                    glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
-                    glVertex2fv(ripple_vertex[i + 1][j + 1].t);
-                    glTexCoord2fv(ripple_vertex[i + 1][j].t);
-                    glVertex2fv(ripple_vertex[i + 1][j].t);
-                glEnd();
-            }
-        }
-        ripple_dynamics();
+	ripple_init();
+	precalc_ripple_vector();
+	alreadyInit = 1;
+      }
+      glTranslatef(-.5, -.5, 0.0);
+      for (i = 0; i < m_grid_sizeX - 1; i++)  {
+	for (j = 0; j < m_grid_sizeY - 1; j++) {
+	  glBegin(m_drawType);
+	    glTexCoord2fv(ripple_vertex[i][j].t);
+	    glVertex2fv(ripple_vertex[i][j].t);
+	    glTexCoord2fv(ripple_vertex[i][j + 1].t);
+	    glVertex2fv(ripple_vertex[i][j + 1].t);
+	    glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
+	    glVertex2fv(ripple_vertex[i + 1][j + 1].t);
+	    glTexCoord2fv(ripple_vertex[i + 1][j].t);
+	    glVertex2fv(ripple_vertex[i + 1][j].t);
+	  glEnd();
+	}
+      }
+      glTranslatef(.5, .5, 0.0);
+      ripple_dynamics();
     }
+
+    glScalef(.5/m_size, .5/m_size, .5/m_size);
+
     if (m_blend) {
         glDisable(GL_POLYGON_SMOOTH);
         glDisable(GL_BLEND);
@@ -474,8 +471,6 @@ void ripple :: obj_setupCallback(t_class *classPtr)
     	    gensym("cX"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&ripple::ctrYMessCallback,
     	    gensym("cY"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&ripple::fovMessCallback,
-    	    gensym("fov"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&ripple::blendMessCallback,
     	    gensym("blend"), A_FLOAT, A_NULL);
 }
@@ -495,10 +490,6 @@ void ripple :: ctrXMessCallback(void *data, t_floatarg center)
 void ripple :: ctrYMessCallback(void *data, t_floatarg center)
 {
     GetMyClass(data)->ctrYMess((float)center);
-}
-void ripple :: fovMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->fov=((float)size);
 }
 void ripple :: blendMessCallback(void *data, t_floatarg size)
 {

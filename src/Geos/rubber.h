@@ -57,7 +57,7 @@ class GEM_EXTERN rubber : public GemShape
 
   //////////
   // The height of the object
-  short		size, ctrX, ctrY;
+  float		ctrX, ctrY;
   void	    	heightMess(float height);
   void		ctrXMess(float center);
   void		ctrYMess(float center);
@@ -89,12 +89,10 @@ class GEM_EXTERN rubber : public GemShape
   //////////
   // Stuff
   
-  //  int 	m_size;
   int		m_speed;
   int		m_blend;
   int		alreadyInit;
   float 	xsize, ysize;
-  int		win_size_x, win_size_y;
 
   // number of grid-segments in X/Y direction (defaults: 32);
   int           m_grid_sizeX,m_grid_sizeY;
@@ -107,7 +105,7 @@ class GEM_EXTERN rubber : public GemShape
   static void 	heightMessCallback(void *data, t_floatarg height);
   static void 	ctrXMessCallback(void *data, t_floatarg center);
   static void 	ctrYMessCallback(void *data, t_floatarg center);
-  static void 	blendMessCallback(void *data, t_floatarg size);
+  static void 	blendMessCallback(void *data, t_floatarg blend);
 };
 
 #endif	// for header file

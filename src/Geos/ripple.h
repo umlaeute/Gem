@@ -91,7 +91,6 @@ class GEM_EXTERN ripple : public GemShape
   void	    	heightMess(float height);
   void		ctrXMess(float center);
   void		ctrYMess(float center);
-  //void		fovMess(float size);        
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
@@ -117,20 +116,17 @@ class GEM_EXTERN ripple : public GemShape
         t_inlet         *m_inletH;
         t_inlet		*inletcX;
         t_inlet		*inletcY;
-        t_inlet		*inletfov;
   
   //////////
   // getStuff
-	int m_grid_sizeX, m_grid_sizeY;
+  int m_grid_sizeX, m_grid_sizeY;
   
-  int 		m_size;
   int		alreadyInit;
   int		win_size_x;
   int		win_size_y;
   int		xyratio;
   int		m_blend;
   float		xsize, ysize;
-  float		fov;
   RIPPLE_VECTOR ripple_vector[GRID_MAX_X][GRID_MAX_Y];
   RIPPLE_AMP ripple_amp[RIPPLE_LENGTH];
   RIPPLE_VERTEX ripple_vertex[GRID_MAX_X][GRID_MAX_Y];
@@ -151,7 +147,6 @@ class GEM_EXTERN ripple : public GemShape
   static void 	heightMessCallback(void *data, t_floatarg height);
   static void 	ctrXMessCallback(void *data, t_floatarg center);
   static void 	ctrYMessCallback(void *data, t_floatarg center);
-  static void 	fovMessCallback(void *data, t_floatarg size);
   static void 	blendMessCallback(void *data, t_floatarg size);
 };
 
