@@ -299,7 +299,7 @@ void pix_texture :: render(GemState *state) {
 	    if ( !GemMan::texture_rectangle_supported || !m_mode ) {            
 		glTexImage2D(	m_textureType, 0,
 				//m_buffer.csize,
-				GL_RGB8,
+				GL_RGBA,
 				m_buffer.xsize,
 				m_buffer.ysize, 0,
 				m_buffer.format,
@@ -312,7 +312,7 @@ void pix_texture :: render(GemState *state) {
         { 
             glTexImage2D(m_textureType, 0,
 			 //  m_buffer.csize,
-			 GL_RGB,
+			 GL_RGBA,
 			 m_imagebuf.xsize,
 			 m_imagebuf.ysize, 0,
 			 m_imagebuf.format,
@@ -330,7 +330,7 @@ void pix_texture :: render(GemState *state) {
       if (state->image->newfilm ){
             glTexImage2D(m_textureType, 0,
 			 //  m_buffer.csize,  //this is completely wrong btw
-			 GL_RGB, 		//this is the correct internal format for YUV
+			 GL_RGBA, 		//this is the correct internal format for YUV
 			 m_imagebuf.xsize,
 			 m_imagebuf.ysize, 0,
 			 m_imagebuf.format,
