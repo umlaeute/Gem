@@ -15,27 +15,30 @@
 /////////////////////////////////////////////////////////
 #include "Base/config.h"
 
-
 #include "gemwindow.h"
 
 // I hate Microsoft...I shouldn't have to do this!
 #if defined _WINDOWS
 # include <stdlib.h>
 # include <windows.h>
+#include <math.h>
 #elif defined __APPLE__
 # include <stdlib.h>
 // or is it spelled Carbon/Carbon.h ??
 # include <Carbon/carbon.h>
 # include <OpenGL/gl.h>
 # include <OpenGL/glext.h>
+#include "macosx_math.h"
 #elif defined __unix__
 # include <GL/gl.h>
 # include <GL/glx.h>
 # include <X11/Xlib.h>
+#include <math.h>
 #endif // OS
 
 #include "Base/GemMan.h"
 #include "Base/GemWinCreate.h"
+#include "Base/GemEvent.h"
 
 
 /* some statics variables */
@@ -45,8 +48,28 @@
  * we leave it here for now
  */
 static int s_singleContext = 0; // LATER think about removing
-
     
+
+////////////////////////
+// makeCurrent
+static void makeCurrent(WindowInfo wi){
+#ifdef unix                 // for Unix
+  if (!wi.dpy && !wi.win && !wi.context)return; // do not crash
+
+  glXMakeCurrent(wi.dpy, wi.win, wi.context);   
+#elif _WINDOWS              // for Windows
+
+  if (!wi.dc && !wi.context)return; // do not crash ??
+
+  wglMakeCurrent(wi.dc, wi.context);
+  m_windowRun = 0;
+#elif __APPLE__		// for PPC Macintosh
+    ::aglSetDrawable( wi.context, GetWindowPort(wi.pWind) );
+    ::aglSetCurrentContext(wi.context);
+#else
+#error Define OS specific OpenGL context make current
+#endif
+}
 
 CPPEXTERN_NEW(gemwindow)
 
@@ -59,10 +82,26 @@ CPPEXTERN_NEW(gemwindow)
 //
 /////////////////////////////////////////////////////////
 gemwindow :: gemwindow() : GemOutput(), 
-  m_fullscreen(0), m_width(500), m_height(500), m_xoffset(0), m_yoffset(0), m_border(1),
-  m_cursor(1), m_topmost(0),
-  m_windowContext(0), m_buffer(2)
+			   m_width(500), m_height(500),
+			   m_fullscreen(0), m_xoffset(0), m_yoffset(0), m_border(1),
+			   m_cursor(1), m_topmost(0)
 {
+
+#ifdef _WINDOWS
+  // can we only have one context?
+  if (getenv("GEM_SINGLE_CONTEXT") &&
+      !strcmp("1", getenv("GEM_SINGLE_CONTEXT")))
+    {
+      post("GEM: using GEM_SINGLE_CONTEXT");
+      s_singleContext = 1;
+      m_width = 640;
+      m_height = 480;
+    }
+#endif
+
+  GemOutput::m_width =m_width;
+  GemOutput::m_height=m_height;
+
   m_title="GEM";
 }
 
@@ -75,15 +114,122 @@ gemwindow :: ~gemwindow()
   destroyMess();
 }
 
-
-
-
-
-
 /////////////////////////////////////////////////////////
 // createMess
 //
 /////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////
+// dispatchGemWindowMessages
+//
+/////////////////////////////////////////////////////////
+#ifdef _WINDOWS
+static void dispatchGemWindowMessages()
+{
+  if (!s_windowRun)
+    return;
+
+  MSG msg;
+  while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE)
+    {
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);
+    }
+  clock_delay(s_windowClock, s_windowDelTime);
+}
+#elif unix 
+static void dispatchGemWindowMessages()
+{
+  WindowInfo win; 
+  XEvent event; 
+  XButtonEvent* eb = (XButtonEvent*)&event; 
+  XKeyEvent* kb  = (XKeyEvent*)&event; 
+  XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
+  //win = GemMan::getWindowInfo(); 
+
+  while (XCheckWindowEvent(win.dpy,win.win,
+			   ResizeRedirectMask | 
+			   KeyPressMask | KeyReleaseMask |
+			   PointerMotionMask | 
+			   ButtonMotionMask |
+			   ButtonPressMask | 
+			   ButtonReleaseMask,
+			   &event))
+    {
+      switch (event.type)
+	{
+	case ButtonPress: 
+	  triggerButtonEvent(eb->button-1, 1, eb->x, eb->y); 
+	  break; 
+	case ButtonRelease: 
+	  triggerButtonEvent(eb->button-1, 0, eb->x, eb->y); 
+	  break; 
+	case MotionNotify: 
+	  triggerMotionEvent(eb->x, eb->y); 
+	  break; 
+	case KeyPress:
+	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
+	  break;
+	case KeyRelease:
+	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
+	  break;
+	case ResizeRequest:
+	  triggerResizeEvent(res->width, res->height);
+	  XResizeWindow(win.dpy, win.win, res->width, res->height);
+	  break;
+	default:
+	  break; 
+	}
+    }
+  //  clock_delay(s_windowClock, s_windowDelTime);
+} 
+#elif __APPLE__
+static pascal OSStatus dispatchGemWindowMessages()
+{
+    EventRef	theEvent;
+    EventTargetRef theTarget;
+    
+    theTarget = GetEventDispatcherTarget();
+    ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true,
+                                &theEvent );
+    {
+        SendEventToEventTarget( theEvent, theTarget);
+        ReleaseEvent( theEvent );
+    }
+    clock_delay(s_windowClock, s_windowDelTime);
+    return noErr;
+}
+#endif // for Unix
+
+#define RESIZE_CB_STATIC
+#ifndef RESIZE_CB_STATIC
+void gemwindow::resizeCallback(int xSize, int ySize, void *)
+#else
+static void resizeCallbackStatic(int xSize, int ySize, void *)
+#endif
+{
+  /*
+  if (ySize==0)ySize=1;
+
+  float xDivy = (float)xSize / (float)ySize;
+  m_height = ySize;
+  m_width = xSize;
+  m_h = m_height;
+  m_w = m_width;
+
+  // setup the viewpoint
+  glViewport(0, 0, m_width, m_height);
+  // setup the matrices
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
+	    m_perspect[2], m_perspect[3],			// bottom, top
+	    m_perspect[4], m_perspect[5]);			// front, back
+
+  glMatrixMode(GL_MODELVIEW);
+  */
+}
 
 void gemwindow :: createContext(char* disp)
 {
@@ -102,16 +248,6 @@ void gemwindow :: createContext(char* disp)
       XCloseDisplay(dummyDpy);
       return;
     }
-#elif _WINDOWS
-  // can we only have one context?
-  if (getenv("GEM_SINGLE_CONTEXT") &&
-      !strcmp("1", getenv("GEM_SINGLE_CONTEXT")))
-    {
-      post("GEM: using GEM_SINGLE_CONTEXT");
-      s_singleContext = 1;
-      m_width = 640;
-      m_height = 480;
-    }
 #elif __APPLE__
     // check existence of OpenGL libraries
     if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
@@ -124,10 +260,14 @@ void gemwindow :: createContext(char* disp)
     if (!createConstWindow(disp))  {
       error("GEM: A serious error occured creating const Context");
       error("GEM: Continue at your own risk!");
-      m_windowContext = 0;
+      m_outputContext = false;
     } else 
-      m_windowContext = 1;
-    //setResizeCallback(resizeCallback, NULL);
+      m_outputContext = true;
+#ifdef RESIZE_CB_STATIC
+    setResizeCallback(resizeCallbackStatic, NULL);
+#else
+    setResizeCallback((this->resizeCallback), NULL);
+#endif
 }
 
 int gemwindow :: createConstWindow(char* disp) {
@@ -193,13 +333,13 @@ int gemwindow :: createWindow(char* disp) {
     return(0);
   }
 
-  m_w=myHints.real_w;
-  m_h=myHints.real_h;
+  GemOutput::m_width =myHints.real_w;
+  GemOutput::m_height=myHints.real_h;
 
   m_outputState = 1;
   cursorMess(m_cursor);
   topmostMess(m_topmost);
-  windowInit(); // IMPORTANT
+  windowInit();
   //  clock_delay(s_windowClock, s_windowDelTime);
 
   m_windowRun = 1;
@@ -218,7 +358,7 @@ void gemwindow :: windowInit()
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0);    
-  glClearColor(0, 0, 0, 0);//m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
+  glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
  
   #ifdef __APPLE__
   GLint swapInt = 1;
@@ -228,13 +368,55 @@ void gemwindow :: windowInit()
   /* i am not really sure whether it is a good idea to enable FSAA by default
    * this might slow down everything a lot
    */
-
 #if defined GL_MULTISAMPLE_ARB && defined GL_MULTISAMPLE_FILTER_HINT_NV
   glEnable (GL_MULTISAMPLE_ARB);
   glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
 #endif
 
-  //resetValues();
+  resetState();
+}
+
+
+
+/////////////////////////////////////////////////////////
+// swapBuffers
+//
+/////////////////////////////////////////////////////////
+void gemwindow :: swapBuffers()
+{
+  if (!m_outputState) return;
+  if (m_buffer == 2)
+#ifdef unix             // for Unix
+    glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
+#elif _WINDOWS          // for WinNT
+  SwapBuffers(gfxInfo.dc);
+#elif __APPLE__		// for Macintosh
+  ::aglSwapBuffers(gfxInfo.context);
+#else                   // everyone else
+#error Define OS specific swap buffer
+#endif
+  else glFlush();
+
+  glClear(m_clear_mask);
+  glColor3f(1.0, 1.0, 1.0);
+  glLoadIdentity();
+
+  if (m_buffer == 1)
+    {
+      glFlush();
+      // setup the transformation matrices
+      float xDivy = (float)GemOutput::m_width / (float)GemOutput::m_height;
+
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
+		m_perspect[2], m_perspect[3],			// bottom, top
+		m_perspect[4], m_perspect[5]);			// front, back
+    
+      glMatrixMode(GL_MODELVIEW);
+      gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+		m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
+    }
 }
 
 
@@ -251,19 +433,11 @@ void gemwindow :: createMess(t_symbol* s)
     error("GEM: gemwindow: no window made");
     return;
   }
-  glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glColor3f(1.0, 1.0, 1.0);
-  glLoadIdentity();
-  glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glColor3f(1.0, 1.0, 1.0);
-  glLoadIdentity();
-  //GemMan::swapBuffers();
-  //GemMan::swapBuffers();
+  swapBuffers();
+  swapBuffers();
 }
 /////////////////////////////////////////////////////////
-// createMess
+// destroyMess
 //
 /////////////////////////////////////////////////////////
 void gemwindow :: destroyMess()
@@ -285,27 +459,8 @@ void gemwindow :: destroyMess()
   m_outputState = 0;
     
   // reestablish the const glxContext
-#ifdef unix                 // for Unix
-  //post("dpy=%x\twin=%x\tcontext=%x", constInfo.dpy, constInfo.win, constInfo.context);
-
-  if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
-
-  glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
-#elif _WINDOWS              // for Windows
-
-  if (!constInfo.dc && !constInfo.context)return; // do not crash ??
-
-  wglMakeCurrent(constInfo.dc, constInfo.context);
-  m_windowRun = 0;
-#elif __APPLE__		// for PPC Macintosh
-    ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
-    ::aglSetCurrentContext(constInfo.context);
-#else
-#error Define OS specific OpenGL context make current
-#endif
+  makeCurrent(constInfo);
 }
-
-
 
 
 
@@ -383,23 +538,45 @@ void gemwindow :: topmostMess(bool on)
 }
 
 
+/////////////////////////////////////////////////////////
+// resetValues
+//
+/////////////////////////////////////////////////////////
+void gemwindow :: resetValues()
+{
+#ifdef DEBUG
+  post("gemwindow::resetValues entered");
+#endif
+  GemOutput::resetValues();
+
+  // window hints
+  dimensionsMess(500, 500);
+  GemOutput::m_width=m_width;
+  GemOutput::m_height=m_height;
+  
+  offsetMess(0,0);
+  fullscreenMess(0);
+  m_title = "GEM";
+
+  // turn on the cursor
+  m_cursor = 1;
+  m_topmost = 0;
+}
+
 
 
 /////////////////////////////////////////////////////////
 // renderMess
 //
 /////////////////////////////////////////////////////////
-void gemwindow :: preRender(gem_control gc)
-{
+void gemwindow :: preRender(GemState){
+  makeCurrent(gfxInfo);
+  resetState();
 }
 
-void gemwindow :: postRender(gem_control gc)
-{
+void gemwindow :: postRender(GemState){
+  if(m_buffer==2)swapBuffers();
 }
-
-
-
-
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -427,7 +604,6 @@ void gemwindow :: obj_setupCallback(t_class *classPtr)
 		  gensym("cursor"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwindow::topmostMessCallback,
 		  gensym("topmost"), A_FLOAT, A_NULL);
-
 }
 
 void gemwindow :: createMessCallback(void *data, t_symbol* disp)
@@ -468,4 +644,8 @@ void gemwindow :: cursorMessCallback(void *data, t_floatarg val)
 void gemwindow :: topmostMessCallback(void *data, t_floatarg val)
 {
   GetMyClass(data)->topmostMess((int)val);
+}
+void gemwindow :: bangMessCallback(void *data)
+{
+  GetMyClass(data)->swapBuffers();
 }

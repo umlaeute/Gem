@@ -33,13 +33,15 @@
     
   Access to GemMan.
     
-  "title" - set a title for the graphics window
   "create" - create a graphics window
   "destroy" - destroy the graphics window
+
   "dimen" - the window dimensions
   "fullscreen" - fullscreen mode
   "offset" - the window offset
+
   "border" - whether we want a border or not
+  "title" - set a title for the graphics window
   "cursor" - whether we want a cursor or not
   "topmost" - set the window to stay on top
 
@@ -61,8 +63,8 @@ class GEM_EXTERN gemwindow : public GemOutput
   virtual     	~gemwindow();
 
   // overwrite parents functions
-  virtual void  preRender (gem_control gc);
-  virtual void  postRender(gem_control gc);
+  virtual void  preRender (GemState);
+  virtual void  postRender(GemState);
 
   // specific for this module
   virtual void 	createMess    (t_symbol* s);
@@ -81,7 +83,6 @@ class GEM_EXTERN gemwindow : public GemOutput
   char*        m_title;
   int          m_fullscreen;
   bool         m_border, m_cursor;
-  unsigned int m_width, m_height;
   int          m_xoffset, m_yoffset;
   int          m_fsaa;
   int          m_topmost;
@@ -89,10 +90,9 @@ class GEM_EXTERN gemwindow : public GemOutput
   bool m_windowRun;
 
   // what is necessary ???
-  int m_windowNumber, m_buffer;
-  int m_w, m_h;
-
- private:
+  int m_windowNumber;
+  int m_width, m_height;
+  
 
   WindowInfo gfxInfo, constInfo;
 
@@ -103,7 +103,11 @@ class GEM_EXTERN gemwindow : public GemOutput
   int  createWindow     (char* disp);
   int  createConstWindow(char* disp);
   void windowInit       ();
+  void resetValues      ();
+  void swapBuffers      ();
+  void resizeCallback   (int xSize, int ySize, void*);
 
+ private:
 
   //////////
   // Static member functions
@@ -117,7 +121,8 @@ class GEM_EXTERN gemwindow : public GemOutput
   static void 	titleMessCallback(void *data, t_symbol* s);
 
   static void 	cursorMessCallback(void *data, t_floatarg val);	
-  static void 	topmostMessCallback(void *data, t_floatarg val);	
+  static void 	topmostMessCallback(void *data, t_floatarg val);
+  static void 	bangMessCallback(void *data);
 };
 
 #endif	// for header file
