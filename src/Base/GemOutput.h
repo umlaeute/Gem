@@ -71,12 +71,32 @@ class GEM_EXTERN GemOutput : public CPPExtern
   //////////
   // Destructor
   virtual     	~GemOutput();
-    	
+
+
+  ////////////
+  // an outlet to get information back to the user...
+  t_outlet *m_outlet;
+
+  ////////////
+  // output information about this "window"
+  virtual void      infoMess();
+
+  ////////////
+  // whenever a "render"-message is received from gemcontrol 
+  // the rendering is setup and done...
   void		renderMess();
 
+  ////////////
+  // reset the gem-state (lighting,...)
   virtual void  fillGemState(GemState&);
+  ////////////
+  // make the context owned by this instance the current one
   virtual void  makeCurrent()=0; // get the current context
+  ////////////
+  // call the render-callbacks from GemMan
   virtual void  doRender  (GemState currentState); // this does the actual rendering
+  ////////////
+  // after the rendering is done...
   virtual void  postRender(GemState currentState)=0; // e.g. swap buffers
 
   unsigned int m_width, m_height; // dimension of the rendering context
@@ -143,6 +163,8 @@ class GEM_EXTERN GemOutput : public CPPExtern
   // Static member functions
   static void 	renderMessCallback (void *data);
   static void	resetMessCallback(void *);
+
+  static void	infoMessCallback(void *);
 
   //////////
   // change the rendering somehow

@@ -44,6 +44,8 @@ GemOutput :: GemOutput() : m_outputState(0), m_outputContext(false),
 			   m_stereo(0), m_stereoSep(-15.f), m_stereoFocal(0.f), m_stereoLine(true)
 {
 
+  m_outlet = outlet_new(this->x_obj, 0);
+
   // setup default values
   perspectiveMess(-1.f, 1.f, -1.f, 1.f, 1.f, 20.f);
   viewMess       (0.f, 0.f, 4.f,  0.f, 0.f, 0.f,  0.f, 1.f, 0.f);
@@ -60,7 +62,22 @@ GemOutput :: GemOutput() : m_outputState(0), m_outputContext(false),
 //
 /////////////////////////////////////////////////////////
 GemOutput :: ~GemOutput()
-{}
+{
+  outlet_free(m_outlet);
+}
+
+
+/////////////////////////////////////////////////////////
+// infoMess
+//
+/////////////////////////////////////////////////////////
+void GemOutput :: infoMess() {
+  // fill this with information you want...  
+  t_atom ap[2];
+  SETFLOAT(ap, (t_float)m_width);
+  SETFLOAT(ap+1, (t_float)m_height);
+  outlet_anything(m_outlet, gensym("dimen"), 2, ap);
+}
 
 /////////////////////////////////////////////////////////
 // renderMess
@@ -415,6 +432,8 @@ void GemOutput :: obj_setupCallback(t_class *classPtr)
 		  gensym("gem_render"), A_NULL);
   class_addmethod(classPtr, (t_method)&GemOutput::resetMessCallback,
 		  gensym("reset"), A_NULL);
+  class_addmethod(classPtr, (t_method)&GemOutput::infoMessCallback,
+		  gensym("info"), A_NULL);
   class_addmethod(classPtr, (t_method)&GemOutput::bufferMessCallback,
 		  gensym("buffer"), A_FLOAT, A_NULL);
 
@@ -451,6 +470,10 @@ void GemOutput :: renderMessCallback(void *data)
 void GemOutput :: resetMessCallback(void *data)
 {
   GetMyClass(data)->resetValues();
+}
+void GemOutput :: infoMessCallback(void *data)
+{
+  GetMyClass(data)->infoMess();
 }
 void GemOutput :: bufferMessCallback(void *data, t_floatarg val){
   GetMyClass(data)->bufferMess((int)val);
