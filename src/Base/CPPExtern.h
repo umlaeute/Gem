@@ -183,7 +183,12 @@ static void obj_setupCallback(t_class *classPtr);
 #define CPPEXTERN_NEW_WITH_FOUR_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR) \
     REAL_NEW_WITH_ARG_ARG_ARG_ARG(NEW_CLASS, _setup, _class, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR)
 
-
+//
+// FIVE ARGUMENTS
+/////////////////////////////////////////////////
+#define CPPEXTERN_NEW_WITH_FIVE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR, TFIVE, PD_FIVE) \
+    REAL_NEW_WITH_ARG_ARG_ARG_ARG_ARG(NEW_CLASS, _setup, _class, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR, TFIVE, PD_FIVE)
+	
 //////////////////////////////////////////////////////////////////////////////
 // These should never be called or used directly!!!
 //
@@ -408,5 +413,35 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
  }									\
 }									\
   AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
-    
+
+///////////////////////////////////////////////////////////////////////////////
+// five args
+///////////////////////////////////////////////////////////////////////////////
+#define REAL_NEW_WITH_ARG_ARG_ARG_ARG_ARG(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE, THREE_VAR_TYPE, THREE_PD_TYPE, FOUR_VAR_TYPE, FOUR_PD_TYPE, FIVE_VAR_TYPE, FIVE_PD_TYPE) \
+static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
+void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree, FOUR_VAR_TYPE argfour, FIVE_VAR_TYPE argfive) \
+{     	    	    	    	    	    	    	    	\
+    Obj_header *obj = new (pd_new(NEW_CLASS ## EXTERN_NAME),(void *)NULL) Obj_header; \
+    CPPExtern::m_holder = &obj->pd_obj;                         \
+    obj->data = new NEW_CLASS(arg, argtwo, argthree, argfour, argfive);  \
+    CPPExtern::m_holder = NULL;                                 \
+    obj->data->setCPPObjectName(#NEW_CLASS);                \
+    return(obj);                                                \
+}   	    	    	    	    	    	    	    	\
+extern "C" {	    	    	    	    	    	    	\
+void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
+{   	    	    	    	    	    	    	    	\
+    NEW_CLASS ## EXTERN_NAME = class_new(                       \
+    	     	gensym(#NEW_CLASS), 	    	    	    	\
+    	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
+    	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
+    	     	sizeof(Obj_header), 0,                          \
+    	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE, FOUR_PD_TYPE, FIVE_PD_TYPE,	\
+    	     	A_NULL);						\
+    SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
+    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME);	\
+ }									\
+}									\
+  AUTO_REGISTER_CLASS(NEW_CLASS, SETUP_FUNCTION);
+
 #endif	// for header file
