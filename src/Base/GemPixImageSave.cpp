@@ -403,3 +403,4 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
   return(1);
 }
 #endif //MACOSX
+
