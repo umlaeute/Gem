@@ -16,7 +16,7 @@ LOG
 #define INCLUDE_GEMSTATE_H_
 
 #include "Base/GemExportDef.h"
-
+#include "OpenGL/gl.h"
 struct pixBlock;
 class TexCoord;
 
@@ -102,6 +102,22 @@ class GEM_EXTERN GemState
 	//		and right renderings
 	float				tickTime;
 
+        //vertex array data
+        GLfloat				*VertexArray;
+        int				VertexArraySize;
+        int				VertexArrayStride;
+
+        GLfloat				*ColorArray;
+        int				HaveColorArray;
+
+        GLfloat				*NormalArray;
+        int				HaveNormalArray;
+
+        GLfloat				*TexCoordArray;
+        int				HaveTexCoordArray;
+
+        GLenum				drawType;
+        
         //////////
         // Constructor
     	GemState();
