@@ -55,6 +55,7 @@ gemmouse :: gemmouse(int argc, t_atom*argv)
     // register event callback
     setMotionCallback(&gemmouse::mouseMotionCallback, this);
     setButtonCallback(&gemmouse::mouseButtonCallback, this);
+    setWheelCallback(&gemmouse::mouseWheelCallback, this);
 }
 
 /////////////////////////////////////////////////////////
@@ -66,6 +67,7 @@ gemmouse :: ~gemmouse()
     // remove event callback
     removeMotionCallback(&gemmouse::mouseMotionCallback, this);
     removeButtonCallback(&gemmouse::mouseButtonCallback, this);
+    removeWheelCallback(&gemmouse::mouseWheelCallback, this);
 
     outlet_free(m_outXPos);
     outlet_free(m_outYPos);
@@ -94,12 +96,29 @@ void gemmouse :: mouseMotion(int x, int y)
 /////////////////////////////////////////////////////////
 void gemmouse :: mouseButton(int which, int state, int x, int y)
 {
+#ifndef __APPLE__
     if (which == 0)
         outlet_float(m_outLBut, (t_float)state);
     else if (which == 1)
         outlet_float(m_outMBut, (t_float)state);
     else if (which == 2)
         outlet_float(m_outRBut, (t_float)state);
+#else
+    if (which == 1)
+        outlet_float(m_outLBut, (t_float)state);
+    else if (which == 2)
+        outlet_float(m_outRBut, (t_float)state);
+    else if (which == 3)
+        outlet_float(m_outMBut, (t_float)state);
+#endif
+}
+
+/////////////////////////////////////////////////////////
+// mouseButton
+//
+/////////////////////////////////////////////////////////
+void gemmouse :: mouseWheel(int axis, int value)
+{
 }
 
 /////////////////////////////////////////////////////////
@@ -115,4 +134,8 @@ void gemmouse :: mouseMotionCallback(int x, int y, void *data)
 void gemmouse :: mouseButtonCallback(int which, int state, int x, int y, void *data)
 {
     ((gemmouse *)data)->mouseButton(which, state, x, y);
+}
+void gemmouse :: mouseWheelCallback(int axis, int value, void *data)
+{
+    ((gemmouse *)data)->mouseWheel(axis, value);
 }
