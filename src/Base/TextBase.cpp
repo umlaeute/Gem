@@ -32,8 +32,8 @@ char *TextBase::DEFAULT_FONT = "arial.ttf";
 #ifdef FTGL
 TextBase :: TextBase(int argc, t_atom *argv)
   : m_valid(0), m_theString(NULL), m_theMaxStringSize(0),
-    m_fontSize(20), m_fontDepth(20), m_precision(1.f), m_font(NULL),
-    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY)
+    m_fontSize(20), m_fontDepth(20), m_precision(1.f),
+    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL)
 {
   static bool first_time=true;
   if (first_time){
