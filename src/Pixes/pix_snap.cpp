@@ -70,6 +70,9 @@ pix_snap :: ~pix_snap()
 /////////////////////////////////////////////////////////
 void pix_snap :: snapMess()
 {
+  if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
+    m_cache=NULL;
+
     if ( !GemMan::windowExists() )
 		return;
         
@@ -122,7 +125,7 @@ void pix_snap :: snapMess()
     glReadPixels(m_x, m_y, m_width, m_height,
     	    	 m_originalImage->format, m_originalImage->type, m_originalImage->data);    
            
-	if (m_cache)
+    if (m_cache)
 		m_cache->resendImage = 1;
 
     //post("GEM: pix_snap: snapped image"); 
@@ -139,7 +142,7 @@ void pix_snap :: render(GemState *state)
 		return;
     
     // do we need to reload the image?    
-    if (m_cache->resendImage)
+    if (m_cache&&m_cache->resendImage)
     {
       m_originalImage->refreshImage(&m_pixBlock.image);
     	m_pixBlock.newimage = 1;

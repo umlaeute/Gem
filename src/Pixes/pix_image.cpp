@@ -66,7 +66,10 @@ pix_image :: ~pix_image()
 void pix_image :: openMess(t_symbol *filename)
 {
     cleanImage();
-    
+
+    if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
+      m_cache=NULL;    
+
     // is the image already loaded?
     singleImageCache *cache = s_imageCache;
     int found = 0;
@@ -130,7 +133,7 @@ void pix_image :: render(GemState *state)
     // if we don't have an image, just return
     if (!m_loadedImage) return;
     // do we need to reload the image?    
-    if (m_cache->resendImage)
+    if (m_cache&&m_cache->resendImage)
     {
       m_loadedImage->image->refreshImage(&m_pixBlock.image);
     	m_pixBlock.newimage = 1;

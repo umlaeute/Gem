@@ -62,9 +62,14 @@ void GemPixDualObj :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: processImage(imageStruct &image)
 {
-  //if (!m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
-  if (!m_pixRightValid || !m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
+  if (!m_cacheRight || m_cacheRight->m_magic!=GEMCACHE_MAGIC){
+    m_cacheRight=NULL;
+    return;
+  }
 
+  //if (!m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
+  if (!m_pixRightValid || !&image || !&m_pixRight || !&m_pixRight->image) return;
+  
     if (image.xsize != m_pixRight->image.xsize ||
     	image.ysize != m_pixRight->image.ysize)    {
       error("GEM: GemPixDualObj: two images do not have equal dimensions");

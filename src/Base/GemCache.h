@@ -29,6 +29,7 @@ CLASS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
+#define GEMCACHE_MAGIC 0x1234567
 class GEM_EXTERN GemCache
 {
     public:
@@ -55,6 +56,10 @@ class GEM_EXTERN GemCache
 
         //////////
     	gemhead     	    *m_parent;
+
+	//////////
+	// indicates a valid cache
+	int m_magic;
 };
 
 #endif	// for header file

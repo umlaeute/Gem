@@ -65,7 +65,10 @@ pix_multiimage :: ~pix_multiimage()
 void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage, int skipRate)
 {
     cleanImages();
-    
+
+    if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
+      m_cache=NULL;   
+
     if (!topImage)
     {
     	post("GEM: pix_multiimage: requires an int for number of images");
@@ -228,6 +231,9 @@ void pix_multiimage :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_multiimage :: changeImage(int imgNum)
 {
+  if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
+    m_cache=NULL;
+
     if (imgNum >= m_numImages)
     {
     	error("GEM: pix_multiimage: selection number too high: %d (max num is %d)", imgNum, m_numImages);

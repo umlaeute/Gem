@@ -36,7 +36,8 @@ GemPixObj :: GemPixObj() :
 /////////////////////////////////////////////////////////
 void GemPixObj :: setPixModified()
 {
-  if(m_cache)m_cache->resendImage = 1;
+  if(m_cache && m_cache->m_magic!=GEMCACHE_MAGIC)m_cache=NULL;
+  if (m_cache)m_cache->resendImage = 1;
 }
 
 /////////////////////////////////////////////////////////

@@ -70,6 +70,8 @@ void GemBase :: gem_startstopMess(int state)
 void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
 {
   m_cache=cache;
+  if(m_cache->m_magic!=GEMCACHE_MAGIC)
+    m_cache=NULL;
 
   if (!gem_amRendering){ // init Rendering if not done yet
     startRendering();
@@ -98,6 +100,8 @@ void GemBase :: continueRender(GemState*state){
 /////////////////////////////////////////////////////////
 void GemBase :: setModified()
 {
+  if (m_cache&& (m_cache->m_magic!=GEMCACHE_MAGIC))
+    m_cache=NULL;
   if (m_cache) m_cache->dirty = 1;
   m_modified=true;
 }

@@ -27,7 +27,7 @@
 //
 /////////////////////////////////////////////////////////
 GemCache :: GemCache(gemhead *parent)
-  : dirty(1), resendImage(0), m_parent(parent)
+  : dirty(1), resendImage(0), m_parent(parent), m_magic(GEMCACHE_MAGIC)
 {
 }
 void GemCache :: reset(gemhead *parent)
@@ -35,10 +35,14 @@ void GemCache :: reset(gemhead *parent)
   dirty      =1;
   resendImage=0;
   m_parent   =parent;
+  m_magic    =GEMCACHE_MAGIC;
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
 GemCache :: ~GemCache()
-{ }
+{
+  m_magic=0xFFFFFFF;
+  m_parent=NULL;
+}
