@@ -78,7 +78,8 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 
         //////////
         // property-dialog
-        virtual void	dialogMess(int,t_atom*);
+        //virtual void	dialogMess(int,t_atom*);
+		virtual void	dialogMess();
   
 	//-----------------------------------
 	// GROUP:	Macintosh specific video data
