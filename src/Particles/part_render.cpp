@@ -86,11 +86,18 @@ void part_render :: render(GemState *state)
       //      post("%d size: %f %f %f", i, size[0], size[1], size[2]);
       size+=3;
     }
-    continueRender(state);
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
+    if(i<(cnt-1)){
+      continueRender(state);
+      glMatrixMode(GL_MODELVIEW);
+      glPopMatrix();
+    }
   }
 }
+void part_render :: postrender(GemState*){
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
+}
+
 /////////////////////////////////////////////////////////
 // typeMess
 void part_render :: colorMess(int state)

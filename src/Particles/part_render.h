@@ -40,6 +40,7 @@ class GEM_EXTERN part_render : public GemBase
     	
   //////////
   virtual void 	render(GemState *state);
+  virtual void 	postrender(GemState *state);
 
  protected:
     	
