@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1998 Mark Danks.
-//    Copyright (c) GÂ¸nther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂ¸r::umlâ€°ute. IEM
+//    Copyright (c) Günther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -17,7 +17,7 @@
 
 #include "pix_mix.h"
 
-CPPEXTERN_NEW(pix_mix)
+CPPEXTERN_NEW_WITH_GIMME(pix_mix)
 
 /////////////////////////////////////////////////////////
 //
@@ -27,9 +27,21 @@ CPPEXTERN_NEW(pix_mix)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_mix :: pix_mix()
+pix_mix :: pix_mix(int argc, t_atom*argv)
 { 
-  imageGain = rightGain = 128;
+  switch (argc){
+  case 0:
+    imageGain = rightGain = 128;
+    break;
+  case 1:
+    rightGain=CLAMP((float)255.*atom_getfloat(argv));
+    imageGain=255-rightGain;
+    break;
+  default:
+    imageGain=CLAMP((float)255.*atom_getfloat(argv));
+    rightGain=CLAMP((float)255.*atom_getfloat(argv+1));
+  }
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gain"));
 }
 
 /////////////////////////////////////////////////////////
@@ -45,85 +57,76 @@ pix_mix :: ~pix_mix()
 /////////////////////////////////////////////////////////
 void pix_mix :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
+  // int A,R,G,B;
 
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
-   // int A,R,G,B;
-
-    while(datasize--)
-    {
-        leftPix[chRed] = (leftPix[chRed] * imageGain)>>8;
-        rightPix[chRed] = (rightPix[chRed] * rightGain)>>8;
-    	leftPix[chRed] =
-			CLAMP_HIGH((int)leftPix[chRed] + (int)rightPix[chRed]);
-        leftPix[chGreen] = (leftPix[chGreen] * imageGain)>>8;
-        rightPix[chGreen] = (rightPix[chGreen] * rightGain)>>8;
-    	leftPix[chGreen] =
-			CLAMP_HIGH((int)leftPix[chGreen] + (int)rightPix[chGreen]);
-        leftPix[chBlue] = (leftPix[chBlue] * imageGain)>>8;
-        rightPix[chBlue] = (rightPix[chBlue] * rightGain)>>8;
-    	leftPix[chBlue] =
-			CLAMP_HIGH((int)leftPix[chBlue] + (int)rightPix[chBlue]);
-        leftPix += 4;
-		rightPix += 4;
-    }
-
+  while(datasize--)    {
+    leftPix[chRed] = (leftPix[chRed] * imageGain)>>8;
+    rightPix[chRed] = (rightPix[chRed] * rightGain)>>8;
+    leftPix[chRed] =
+      CLAMP_HIGH((int)leftPix[chRed] + (int)rightPix[chRed]);
+    leftPix[chGreen] = (leftPix[chGreen] * imageGain)>>8;
+    rightPix[chGreen] = (rightPix[chGreen] * rightGain)>>8;
+    leftPix[chGreen] =
+      CLAMP_HIGH((int)leftPix[chGreen] + (int)rightPix[chGreen]);
+    leftPix[chBlue] = (leftPix[chBlue] * imageGain)>>8;
+    rightPix[chBlue] = (rightPix[chBlue] * rightGain)>>8;
+    leftPix[chBlue] =
+      CLAMP_HIGH((int)leftPix[chBlue] + (int)rightPix[chBlue]);
+    leftPix += 4;
+    rightPix += 4;
+  }
 }
-
-
 
 /////////////////////////////////////////////////////////
 // do the YUV processing here
 //
 /////////////////////////////////////////////////////////
-void pix_mix :: processYUV_YUV(imageStruct &image, imageStruct &right)
-{
+void pix_mix :: processYUV_YUV(imageStruct &image, imageStruct &right){
 #ifdef ALTIVEC
 //post("altivec");
 processYUVAltivec (image, right);
 return;
 #else
-    int	y1,y2;
-   int u,v,u1,v1;
-   long width,h,w;
-   long src =0;
+ int	y1,y2;
+ int u,v,u1,v1;
+ long width,h,w;
+ long src =0;
  
-   width = image.xsize/2;
+ width = image.xsize/2;
    
-   //format is U Y V Y
-       for (h=0; h<image.ysize; h++){
-        for(w=0; w<width; w++){
-        
-        
-       /*  u = (((image.data[src] - 128) * imageGain)>>8)+128;
+ //format is U Y V Y
+ for (h=0; h<image.ysize; h++){
+   for(w=0; w<width; w++){
+     /*  u = (((image.data[src] - 128) * imageGain)>>8)+128;
          u1 = (((right.data[src] - 128) * rightGain)>>8)+128;
          u = u + ((2*u1) -255); */
-        u = (image.data[src] - 128) * imageGain;
-        u1 = (right.data[src] - 128) * rightGain;
-        u = ((u + u1)>>8) + 128;
-        image.data[src] = (unsigned char)CLAMP(u);
-        
-        y1 = ((image.data[src+1] * imageGain) + (right.data[src+1] * rightGain))>>8;
-        image.data[src+1] = (unsigned char)CLAMP(y1);
-        
-        /*v = (((image.data[src+2] - 128) * imageGain)>>8)+128;
-        v1 = (((right.data[src+2] - 128) * rightGain)>>8)+128;
-        v = v + (2*v1) - 255;*/
-        v = (image.data[src+2] - 128) * imageGain;
+     u = (image.data[src] - 128) * imageGain;
+     u1 = (right.data[src] - 128) * rightGain;
+     u = ((u + u1)>>8) + 128;
+     image.data[src] = (unsigned char)CLAMP(u);
      
-        v1 = (right.data[src+2] - 128) * rightGain;
-        v = ((v + v1)>>8) + 128;
+     y1 = ((image.data[src+1] * imageGain) + (right.data[src+1] * rightGain))>>8;
+     image.data[src+1] = (unsigned char)CLAMP(y1);
         
-        image.data[src+2] = (unsigned char)CLAMP(v);
+     /*v = (((image.data[src+2] - 128) * imageGain)>>8)+128;
+       v1 = (((right.data[src+2] - 128) * rightGain)>>8)+128;
+       v = v + (2*v1) - 255;*/
+     v = (image.data[src+2] - 128) * imageGain;
+     
+     v1 = (right.data[src+2] - 128) * rightGain;
+     v = ((v + v1)>>8) + 128;
+     
+     image.data[src+2] = (unsigned char)CLAMP(v);
 
-        y2 = ((image.data[src+3] * imageGain) + (right.data[src+3] * rightGain))>>8;
-        image.data[src+3] = (unsigned char)CLAMP(y2);
+     y2 = ((image.data[src+3] * imageGain) + (right.data[src+3] * rightGain))>>8;
+     image.data[src+3] = (unsigned char)CLAMP(y2);
 
-        src += 4;
-        
-        }
-      }
+     src += 4;
+   }
+ }
 #endif
 }
 
@@ -132,8 +135,7 @@ void pix_mix :: processYUVAltivec (imageStruct &image, imageStruct &right)
 {
 #ifdef ALTIVEC
 long h,w, width;
-   
-      
+ 
     /*altivec code starts */
     width = image.xsize/8;
     union
@@ -349,11 +351,11 @@ long h,w, width;
         }
 
     }  /* end of working altivec function */   
-    #ifndef PPC970
-  //stop the cache streams
-        vec_dss( 0 );
-        vec_dss( 1 );
-        #endif
+# ifndef PPC970
+    //stop the cache streams
+    vec_dss( 0 );
+    vec_dss( 1 );
+# endif
 #endif  
 }
 
@@ -363,10 +365,8 @@ long h,w, width;
 /////////////////////////////////////////////////////////
 void pix_mix :: gainMess (float X, float Y)
 {
-
-  imageGain = (int)(255.f * X);
-  rightGain = (int)(255.f * Y);
-  
+  imageGain = CLAMP(255.f * X);
+  rightGain = CLAMP(255.f * Y);
 }
   
 /////////////////////////////////////////////////////////
@@ -375,16 +375,21 @@ void pix_mix :: gainMess (float X, float Y)
 /////////////////////////////////////////////////////////
 void pix_mix :: obj_setupCallback(t_class *classPtr)
 { 
-    class_addmethod(classPtr, (t_method)&pix_mix::gainCallback,
-		  gensym("gain"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_mix::gainCallback,
+		  gensym("gain"), A_GIMME, A_NULL);//A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void pix_mix :: gainCallback(void *data, t_floatarg X, t_floatarg Y)
+//void pix_mix :: gainCallback(void *data, t_floatarg X, t_floatarg Y)
+void pix_mix :: gainCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-
-  GetMyClass(data)->gainMess((float) X, (float) Y);
- 
-  //GetMyClass(data)->imageGain=((int)X);
-  //GetMyClass(data)->rightGain=((int)Y);
-
+  if (argc<1)return;
+  float X, Y;
+  if(argc>1){
+    X=atom_getfloat(argv);
+    Y=atom_getfloat(argv+1);
+  } else {
+    Y=atom_getfloat(argv);
+    X=1.0-Y;
+  }
+  GetMyClass(data)->gainMess(X, Y);
 }
