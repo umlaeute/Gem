@@ -71,15 +71,16 @@ gemextwin :: ~gemextwin()
 
 void gemextwin :: closeWindow(){
 #ifdef unix
- if (m_info.context) {
-    if (!glXMakeCurrent(m_info.dpy, None, NULL))  {
-      printf("Could not release drawing context.\n");
+  if(m_info.dpy){
+    if (m_info.context) {
+      if (!glXMakeCurrent(m_info.dpy, None, NULL))  {
+	printf("Could not release drawing context.\n");
+      }
+      glXDestroyContext(m_info.dpy, m_info.context);
+      m_info.context = NULL;
     }
-    glXDestroyContext(m_info.dpy, m_info.context);
-    m_info.context = NULL;
+    XCloseDisplay(m_info.dpy);
   }
-
-  XCloseDisplay(m_info.dpy);
 #elif defined _WINDOWS
 
 #endif
