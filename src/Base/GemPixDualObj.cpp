@@ -72,7 +72,7 @@ void GemPixDualObj :: processImage(imageStruct &image)
   
     if (image.xsize != m_pixRight->image.xsize ||
     	image.ysize != m_pixRight->image.ysize)    {
-      error("GEM: GemPixDualObj: two images do not have equal dimensions");
+      error("GEM: GemPixDualObj [%s]: two images do not have equal dimensions", m_objectname->s_name);
       m_pixRightValid = 0;
       
     	return;
@@ -178,7 +178,7 @@ void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
     sprintf(rformat, "0x%04X", (unsigned int)left.format);
   }
   
-  error("processDualImage: no method to combine (%s) and (%s)",
+  error("processDualImage [%s]: no method to combine (%s) and (%s)", m_objectname->s_name,
 	lformat, rformat);
 }
 
@@ -236,5 +236,5 @@ void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
     GetMyClass(data)->m_cacheRight = (GemCache*)argv->a_w.w_gpointer;
     GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
-  } else error("GEM: wrong righthand arguments....");
+  } else error("GEM: [%s] wrong righthand arguments....", GetMyClass(data)->m_objectname->s_name);
 }

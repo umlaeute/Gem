@@ -97,20 +97,20 @@ void GemPixObj :: processImage(imageStruct &image)
   switch (image.format) {
   case GL_RGBA:
   case GL_BGRA_EXT:
-    error("Gem: pix object cannot handle RGBA image");
+    error("Gem: pix object [%s] cannot handle RGBA image", m_objectname->s_name);
     break;
   case GL_RGB:
   case GL_BGR_EXT:
-    error("Gem: pix object cannot handle RGB image");
+    error("Gem: pix object [%s] cannot handle RGB image", m_objectname->s_name);
 	break;
   case GL_LUMINANCE:
-    error("Gem: pix object cannot handle Grey image");
+    error("Gem: pix object [%s] cannot handle Grey image", m_objectname->s_name);
     break;
   case GL_YCBCR_422_GEM:
-    error("Gem: pix object cannot handle YUV image");
+    error("Gem: pix object [%s] cannot handle YUV image", m_objectname->s_name);
     break;
   default:
-    error("Gem: pix object cannot handle this format (%x) !", image.format);
+    error("Gem: pix object [%s] cannot handle this format (%x) !", m_objectname->s_name, image.format);
   }
 }
 

@@ -133,6 +133,6 @@ void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc, t_atom *argv
 
     GetMyClass(data)->gem_renderMess((GemCache *)argv->a_w.w_gpointer, (GemState *)(argv+1)->a_w.w_gpointer);
   } else {
-    error("GEM: wrong arguments....");
+    error("GEM [%s]: wrong arguments....", GetMyClass(data)->m_objectname->s_name);
   }
 }

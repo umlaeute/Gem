@@ -104,11 +104,16 @@ class GEM_EXTERN CPPExtern
         // This is a holder - don't touch it
         static t_object     *m_holder;
 
+	//////////
+	// my name
+	t_symbol             *m_objectname;
+        void                  setCPPObjectName(char* name);
+
     protected:
     	
     	//////////
     	// Creation callback
-    	static void 	real_obj_setupCallback(t_class *) {}	
+    	static void 	real_obj_setupCallback(t_class *) {}
 
     private:
 
@@ -235,6 +240,7 @@ void * EXTERN_NAME ## NEW_CLASS ()                              \
     CPPExtern::m_holder = &obj->pd_obj;                         \
     obj->data = new NEW_CLASS;                                  \
     CPPExtern::m_holder = NULL;                                 \
+    obj->data->setCPPObjectName(#NEW_CLASS);                \
     return(obj);                                                \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
@@ -264,6 +270,7 @@ void * EXTERN_NAME ## NEW_CLASS (VAR_TYPE arg)                  \
     CPPExtern::m_holder = &obj->pd_obj;                         \
     obj->data = new NEW_CLASS(arg);                             \
     CPPExtern::m_holder = NULL;                                 \
+    obj->data->setCPPObjectName(#NEW_CLASS);                \
     return(obj);                                                \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
@@ -293,6 +300,7 @@ void * EXTERN_NAME ## NEW_CLASS (t_symbol *, int argc, t_atom *argv) \
     CPPExtern::m_holder = &obj->pd_obj;                         \
     obj->data = new NEW_CLASS(argc, argv);                      \
     CPPExtern::m_holder = NULL;                                 \
+    obj->data->setCPPObjectName(#NEW_CLASS);                 \
     return(obj);                                                \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
@@ -322,6 +330,7 @@ void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo) \
     CPPExtern::m_holder = &obj->pd_obj;                         \
     obj->data = new NEW_CLASS(arg, argtwo);                     \
     CPPExtern::m_holder = NULL;                                 \
+    obj->data->setCPPObjectName(#NEW_CLASS);                \
     return(obj);                                                \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
@@ -351,6 +360,7 @@ void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VA
     CPPExtern::m_holder = &obj->pd_obj;                         \
     obj->data = new NEW_CLASS(arg, argtwo, argthree);           \
     CPPExtern::m_holder = NULL;                                 \
+    obj->data->setCPPObjectName(#NEW_CLASS);                \
     return(obj);                                                \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\
@@ -380,6 +390,7 @@ void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VA
     CPPExtern::m_holder = &obj->pd_obj;                         \
     obj->data = new NEW_CLASS(arg, argtwo, argthree, argfour);  \
     CPPExtern::m_holder = NULL;                                 \
+    obj->data->setCPPObjectName(#NEW_CLASS);                \
     return(obj);                                                \
 }   	    	    	    	    	    	    	    	\
 extern "C" {	    	    	    	    	    	    	\

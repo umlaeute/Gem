@@ -38,3 +38,7 @@ CPPExtern :: CPPExtern()
 /////////////////////////////////////////////////////////
 CPPExtern :: ~CPPExtern()
 { }
+
+void CPPExtern :: setCPPObjectName(char* name){
+  m_objectname = gensym(name);
+}
