@@ -66,35 +66,38 @@ class GEM_EXTERN rubber : public GemShape
   // Do the rendering
   virtual void 	render(GemState *state);
   
-    	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
+  //////////
+  // How the object should be drawn
+  virtual void	typeMess(t_symbol *type);
         
-        virtual void	rubber_init();
-        virtual void	rubber_dynamics();
-        virtual void	rubber_bang();
-        virtual int	rubber_grab();
+  virtual void	rubber_init();
+  virtual void	rubber_dynamics();
+  virtual void	rubber_bang();
+  virtual int	rubber_grab();
 		
-    	//////////
-    	// The height of the object
-        GLfloat	    	m_height;
+  //////////
+  // The height of the object
+  GLfloat	    	m_height;
 
-        //////////
-        // The height inlet
-        t_inlet         *m_inletH;
-        t_inlet		*inletcX;
-        t_inlet		*inletcY;
-        //t_inlet		*inletOt;
+  //////////
+  // The height inlet
+  t_inlet         *m_inletH;
+  t_inlet		*inletcX;
+  t_inlet		*inletcY;
+  //t_inlet		*inletOt;
   
   //////////
   // Stuff
   
-    int 	m_size;
-    int		m_speed;
-    int		m_blend;
-    int		alreadyInit;
-    float	xsize, ysize;
-    int		win_size_x, win_size_y;
+  //  int 	m_size;
+  int		m_speed;
+  int		m_blend;
+  int		alreadyInit;
+  float 	xsize, ysize;
+  int		win_size_x, win_size_y;
+
+  // number of grid-segments in X/Y direction (defaults: 32);
+  int           m_grid_sizeX,m_grid_sizeY;
     
  private:
 

@@ -57,12 +57,14 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(rubber, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLO
 // Constructor
 //
 /////////////////////////////////////////////////////////
-rubber :: rubber( t_floatarg width, t_floatarg height )
-    	     : GemShape(width), m_height(height), m_size(0),
+rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
+    	     : GemShape(1.0), m_height(1.0),
                m_speed(0), alreadyInit(0)
 {
-    if (m_height == 0.f)
-		m_height = 1.f;
+  m_grid_sizeX = (gridX>0.)?(int)gridX:GRID_SIZE_X;
+  m_grid_sizeY = (gridY>0.)?(int)gridY:GRID_SIZE_Y;
+
+    if (m_height == 0.f)m_height = 1.f;
 
     // the height inlet
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
@@ -91,95 +93,90 @@ rubber :: ~rubber()
 void rubber :: ctrXMess(float center)
 {
     ctrX = (short)center;
-    //post("rubber: ctrX = %d\n",ctrX);
     setModified();
 }
 void rubber :: ctrYMess(float center)
 {
     ctrY = (short)center;
-    //post("rubber: ctrY = %d\n",ctrY);
     setModified();
 }
 
 void rubber :: rubber_init()
 {
-    int i, j;
-    int k;
-    int m;
-    win_size_x = GemMan::m_width;
-    win_size_y = GemMan::m_height;
+  int i, j;
+  int k;
+  int m;
+  win_size_x = GemMan::m_width;
+  win_size_y = GemMan::m_height;
     
-    //glOrtho(-0.5, win_size_x - 0.5, -0.5, win_size_y - 0.5, CLIP_NEAR, CLIP_FAR);
-    glEnable(GL_DEPTH_TEST);
+  //glOrtho(-0.5, win_size_x - 0.5, -0.5, win_size_y - 0.5, CLIP_NEAR, CLIP_FAR);
+  glEnable(GL_DEPTH_TEST);
 
-  if (mass == NULL)
-  {
-    mass = (MASS *) malloc(sizeof(MASS)*GRID_SIZE_X*GRID_SIZE_Y);
-    if (mass == NULL)
-    {
-      post("rubber: Can't allocate memory.\n");	
-      exit(-1);
-    }
+  if (mass != NULL)delete[]mass;    mass=NULL;
+    
+  mass = new MASS[m_grid_sizeX*m_grid_sizeY];
+  if (mass == NULL)    {
+    post("rubber: Can't allocate memory.\n");	
+    exit(-1);
   }
 
   k = 0;
-  for (i = 0; i < GRID_SIZE_X; i++)
-    for (j = 0; j < GRID_SIZE_Y; j++)
-    {
-      mass[k].nail = (i == 0 || j == 0 || i == GRID_SIZE_X - 1
-		      || j == GRID_SIZE_Y - 1);
-      mass[k].x[0] = i/(GRID_SIZE_X - 1.0)*win_size_x;
-      mass[k].x[1] = j/(GRID_SIZE_Y - 1.0)*win_size_y;
+  for (i = 0; i < m_grid_sizeX; i++)
+    for (j = 0; j < m_grid_sizeY; j++)
+      {
+      mass[k].nail = (i == 0 || j == 0 || i == m_grid_sizeX - 1
+		      || j == m_grid_sizeY - 1);
+      mass[k].x[0] = i/(m_grid_sizeX - 1.0)*win_size_x;
+      mass[k].x[1] = j/(m_grid_sizeY - 1.0)*win_size_y;
       mass[k].x[2] = -(CLIP_FAR - CLIP_NEAR)/2.0;
-      
-      post("mass[%d].nail = %d\n",k,mass[k].nail);
-      post("mass[%d].x[0] = %f\n",k,mass[k].x[0]);
-      post("mass[%d].x[1] = %f\n",k,mass[k].x[1]);
+      /*
+      post("mass[%d].nail = %d",k,mass[k].nail);
+      post("mass[%d].x[0] = %f",k,mass[k].x[0]);
+      post("mass[%d].x[1] = %f",k,mass[k].x[1]);
       post("mass[%d].x[2] = %f\n",k,mass[k].x[2]);
-
+      */
       mass[k].v[0] = 0.0;
       mass[k].v[1] = 0.0;
       mass[k].v[2] = 0.0;
 
-      mass[k].t[0] = xsize*( i/(GRID_SIZE_X - 1.0) );
-      mass[k].t[1] = ysize*( j/(GRID_SIZE_Y - 1.0) );
-      post("mass[%d].t[0] = %f\n",k,mass[k].t[0]);
+      mass[k].t[0] = xsize*( i/(m_grid_sizeX - 1.0) );
+      mass[k].t[1] = ysize*( j/(m_grid_sizeY - 1.0) );
+      /*
+      post("mass[%d].t[0] = %f",k,mass[k].t[0]);
       post("mass[%d].t[1] = %f\n",k,mass[k].t[1]);
-
+      */
       k++;
     }
 
-  if (spring == NULL)
-  {
-    spring_count = (GRID_SIZE_X - 1)*(GRID_SIZE_Y - 2)
-      + (GRID_SIZE_Y - 1)*(GRID_SIZE_X - 2);
+  if (spring != NULL)delete[]spring;
+  spring_count = (m_grid_sizeX - 1)*(m_grid_sizeY - 2)
+    + (m_grid_sizeY - 1)*(m_grid_sizeX - 2);
     
-    spring = (SPRING *) malloc(sizeof(SPRING)*spring_count);
-    if (spring == NULL)
-    {
-      post("rubber: Can't allocate memory.\n");	
-      exit(-1);
-    }
+  //spring = (SPRING *) malloc(sizeof(SPRING)*spring_count);
+  spring=new SPRING[spring_count];
+  if (spring == NULL)    {
+    post("rubber: Can't allocate memory.\n");	
+    exit(-1);
   }
-
+  
   k = 0;
-  for (i = 1; i < GRID_SIZE_X - 1; i++)
-    for (j = 0; j < GRID_SIZE_Y - 1; j++)
+  for (i = 1; i < m_grid_sizeX - 1; i++)
+    for (j = 0; j < m_grid_sizeY - 1; j++)
     {
-      m = GRID_SIZE_Y*i + j;
+      m = m_grid_sizeY*i + j;
       spring[k].i = m;
       spring[k].j = m + 1;
-      spring[k].r = (win_size_y - 1.0)/(GRID_SIZE_Y - 1.0);
+      spring[k].r = (win_size_y - 1.0)/(m_grid_sizeY - 1.0);
       k++;
     }
 
-  for (j = 1; j < GRID_SIZE_Y - 1; j++)
-    for (i = 0; i < GRID_SIZE_X - 1; i++)
+  for (j = 1; j < m_grid_sizeY - 1; j++)
+    for (i = 0; i < m_grid_sizeX - 1; i++)
     {
-      m = GRID_SIZE_Y*i + j;
+      m = m_grid_sizeY*i + j;
       spring[k].i = m;
-      spring[k].j = m + GRID_SIZE_X;
-      spring[k].r = (win_size_x - 1.0)/(GRID_SIZE_X - 1.0);
+      spring[k].j = m + m_grid_sizeX;
+      spring[k].r = (win_size_x - 1.0)/(m_grid_sizeX - 1.0);
       k++;
     }
 }
@@ -205,7 +202,7 @@ void rubber :: render(GemState *state)
     }
     
     glNormal3f(0.0f, 0.0f, 1.0f);
-    
+     
     if (state->texture && state->numTexCoords)
     {
 #ifdef __APPLE__
@@ -229,19 +226,19 @@ void rubber :: render(GemState *state)
         }
 
         k = 0;
-        for (i = 0; i < GRID_SIZE_X - 1; i++)
+        for (i = 0; i < m_grid_sizeX - 1; i++)
         {
-            for (j = 0; j < GRID_SIZE_Y - 1; j++)
+            for (j = 0; j < m_grid_sizeY - 1; j++)
             {
                 glBegin(GL_POLYGON);
                     glTexCoord2fv(mass[k].t);
                 glVertex3fv(mass[k].x);
                     glTexCoord2fv(mass[k + 1].t);
                 glVertex3fv(mass[k + 1].x);
-                    glTexCoord2fv(mass[k + GRID_SIZE_Y + 1].t);
-                glVertex3fv(mass[k + GRID_SIZE_Y + 1].x);
-                    glTexCoord2fv(mass[k + GRID_SIZE_Y].t);
-                glVertex3fv(mass[k + GRID_SIZE_Y].x);
+                    glTexCoord2fv(mass[k + m_grid_sizeY + 1].t);
+                glVertex3fv(mass[k + m_grid_sizeY + 1].x);
+                    glTexCoord2fv(mass[k + m_grid_sizeY].t);
+                glVertex3fv(mass[k + m_grid_sizeY].x);
                 glEnd();
                 k++;
             }
@@ -258,19 +255,19 @@ void rubber :: render(GemState *state)
         }
 
         k = 0;
-        for (i = 0; i < GRID_SIZE_X - 1; i++)
+        for (i = 0; i < m_grid_sizeX - 1; i++)
         {
-            for (j = 0; j < GRID_SIZE_Y - 1; j++)
+            for (j = 0; j < m_grid_sizeY - 1; j++)
             {
                 glBegin(m_drawType);
                     glTexCoord2fv(mass[k].t);
                 glVertex3fv(mass[k].x);
                     glTexCoord2fv(mass[k + 1].t);
                 glVertex3fv(mass[k + 1].x);
-                    glTexCoord2fv(mass[k + GRID_SIZE_Y + 1].t);
-                glVertex3fv(mass[k + GRID_SIZE_Y + 1].x);
-                    glTexCoord2fv(mass[k + GRID_SIZE_Y].t);
-                glVertex3fv(mass[k + GRID_SIZE_Y].x);
+                    glTexCoord2fv(mass[k + m_grid_sizeY + 1].t);
+                glVertex3fv(mass[k + m_grid_sizeY + 1].x);
+                    glTexCoord2fv(mass[k + m_grid_sizeY].t);
+                glVertex3fv(mass[k + m_grid_sizeY].x);
                 glEnd();
                 k++;
             }
@@ -332,7 +329,7 @@ void rubber :: rubber_dynamics()
 
   /* update the state of the mass points */
 
-  for (k = 0; k < GRID_SIZE_X*GRID_SIZE_Y; k++)
+  for (k = 0; k < m_grid_sizeX*m_grid_sizeY; k++)
     if (!mass[k].nail)
     {
       mass[k].x[0] += mass[k].v[0];
@@ -356,7 +353,7 @@ void rubber :: rubber_dynamics()
     mass[grab].x[0] = ctrX;
     mass[grab].x[1] = ctrY;
     //mass[grab].x[2] = -(CLIP_FAR - CLIP_NEAR)/4.0;
-    mass[grab].x[2] = (CLIP_FAR - CLIP_NEAR)/4.0;
+    mass[grab].x[2] = (CLIP_FAR - CLIP_NEAR)/4.0*m_height; /* jmz: added height */
   }
 }
 
@@ -373,7 +370,7 @@ int rubber :: rubber_grab()
   float min_i=0;
   int i;
 
-  for (i = 0; i < GRID_SIZE_X*GRID_SIZE_Y; i++)
+  for (i = 0; i < m_grid_sizeX*m_grid_sizeY; i++)
   {
     dx[0] = mass[i].x[0] - ctrX;
     dx[1] = mass[i].x[1] - ctrY;
@@ -396,7 +393,6 @@ void rubber :: rubber_bang()
 {
     if ( grab == -1 ){ 
         grab = rubber_grab();
-        post("rubber: grab = %d\n",grab);
     }else{
         grab = -1;
     }
@@ -409,7 +405,6 @@ void rubber :: rubber_bang()
 void rubber :: heightMess(float height)
 {
     m_height = height;
-    post("rubber: height = %f\n",m_height);
     setModified();
 }
 

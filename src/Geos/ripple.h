@@ -35,6 +35,9 @@
 #define GRID_SIZE_X   32
 #define GRID_SIZE_Y   32
 
+#define GRID_MAX_X   128
+#define GRID_MAX_Y   128
+
 #define CLIP_NEAR  0.0
 #define CLIP_FAR   1000.0
 
@@ -118,7 +121,7 @@ class GEM_EXTERN ripple : public GemShape
   
   //////////
   // getStuff
-
+	int m_grid_sizeX, m_grid_sizeY;
   
   int 		m_size;
   int		alreadyInit;
@@ -128,9 +131,9 @@ class GEM_EXTERN ripple : public GemShape
   int		m_blend;
   float		xsize, ysize;
   float		fov;
-  RIPPLE_VECTOR ripple_vector[GRID_SIZE_X][GRID_SIZE_Y];
+  RIPPLE_VECTOR ripple_vector[GRID_MAX_X][GRID_MAX_Y];
   RIPPLE_AMP ripple_amp[RIPPLE_LENGTH];
-  RIPPLE_VERTEX ripple_vertex[GRID_SIZE_X][GRID_SIZE_Y];
+  RIPPLE_VERTEX ripple_vertex[GRID_MAX_X][GRID_MAX_Y];
 
   int cx[RIPPLE_COUNT];
   int cy[RIPPLE_COUNT];
