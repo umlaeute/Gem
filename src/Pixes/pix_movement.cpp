@@ -336,7 +336,7 @@ void pix_movement :: processGrayMMX(imageStruct &image)
     m2 =_mm_subs_pu8 (m2, grey); // (m2-grey)
     wp[pixsize]=grey; // buffer.data
 
-    m2 = _mm_or_si64 (m2, m1);
+    m2 = _mm_or_si64 (m2, m1); // |grey-m2|
 
     m2 =_mm_subs_pu8 (m2, tresh);
     m2 =_mm_cmpgt_pi8(m2, _mm_setzero_si64());
