@@ -148,7 +148,7 @@ void pix_texture2 :: render(GemState *state)
 	int x_2 = powerOfTwo(state->image->image.xsize);
 	int y_2 = powerOfTwo(state->image->image.ysize);
 	
-	if (x_2 != m_buffer.xsize || y_2 != m_buffer.ysize) {
+	if (x_2 != m_buffer.xsize || y_2 != m_buffer.ysize || state->image->image.csize != m_buffer.csize) {
 	  m_buffer.clear();
 	  m_buffer.xsize = x_2;
 	  m_buffer.ysize = y_2;
@@ -188,7 +188,8 @@ void pix_texture2 :: render(GemState *state)
 #endif
 	}
       } else {				// tigital
-	if (state->image->image.xsize != m_buffer.xsize || state->image->image.ysize != m_buffer.ysize) {
+	if (state->image->image.xsize != m_buffer.xsize || state->image->image.ysize != m_buffer.ysize 
+		|| state->image->image.csize != m_buffer.csize) {
 	  m_buffer.clear();
 	  m_buffer.xsize = state->image->image.xsize;
 	  m_buffer.ysize = state->image->image.ysize;

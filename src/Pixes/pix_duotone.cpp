@@ -67,6 +67,30 @@ void pix_duotone :: processRGBAImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_duotone :: processRGBImage(imageStruct &image)
+{
+  int datasize =  image.xsize * image.ysize;
+  unsigned char *pixels = image.data;
+
+  while(datasize--) {
+    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1]) && (pixels[chBlue] > m_thresh[2])){
+    pixels[chRed]   = m_color1[0];
+    pixels[chGreen] = m_color1[1];
+    pixels[chBlue]  = m_color1[2];
+    
+  } else {
+	pixels[chRed]   = m_color2[0];
+    pixels[chGreen] = m_color2[1];
+    pixels[chBlue]  = m_color2[2];
+  }
+  pixels += 3;
+  }
+}
+
+/////////////////////////////////////////////////////////
 // processGrayImage
 //
 /////////////////////////////////////////////////////////

@@ -48,7 +48,13 @@ class GEM_EXTERN GemPixObj : public GemBase
   // This is called whenever a new image comes through.
   // The default is to output an error
   virtual void 	processImage(imageStruct &image);
-    	
+
+  //////////
+  // The derived class should override this.
+  // This is called whenever a new RGB image comes through.
+  // The default is to call processImage().
+  virtual void 	processRGBImage(imageStruct &image);
+
   //////////
   // The derived class should override this.
   // This is called whenever a new RGBA image comes through.

@@ -1230,6 +1230,9 @@
 			Name="Particles"
 			Filter="">
 			<File
+				RelativePath="Particles\papi.h">
+			</File>
+			<File
 				RelativePath=".\Particles\part_color.cpp">
 			</File>
 			<File
@@ -1266,6 +1269,12 @@
 				RelativePath=".\Particles\part_head.h">
 			</File>
 			<File
+				RelativePath="Particles\part_info.cpp">
+			</File>
+			<File
+				RelativePath="Particles\part_info.h">
+			</File>
+			<File
 				RelativePath=".\Particles\part_killold.cpp">
 			</File>
 			<File
@@ -1282,6 +1291,12 @@
 			</File>
 			<File
 				RelativePath=".\Particles\part_orbitpoint.h">
+			</File>
+			<File
+				RelativePath="Particles\part_render.cpp">
+			</File>
+			<File
+				RelativePath="Particles\part_render.h">
 			</File>
 			<File
 				RelativePath=".\Particles\part_size.cpp">
@@ -1308,6 +1323,9 @@
 				RelativePath=".\Particles\part_targetsize.h">
 			</File>
 			<File
+				RelativePath="Particles\part_vector.h">
+			</File>
+			<File
 				RelativePath=".\Particles\part_velcone.cpp">
 			</File>
 			<File
@@ -1318,6 +1336,27 @@
 			</File>
 			<File
 				RelativePath=".\Particles\part_velsphere.h">
+			</File>
+			<File
+				RelativePath="Particles\partlib_actionapi.cpp">
+			</File>
+			<File
+				RelativePath="Particles\partlib_actions.cpp">
+			</File>
+			<File
+				RelativePath="Particles\partlib_general.h">
+			</File>
+			<File
+				RelativePath="Particles\partlib_opengl.cpp">
+			</File>
+			<File
+				RelativePath="Particles\partlib_system.cpp">
+			</File>
+			<File
+				RelativePath="Particles\partlib_vector.h">
+			</File>
+			<File
+				RelativePath="Particles\setup.h">
 			</File>
 		</Filter>
 		<Filter

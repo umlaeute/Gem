@@ -287,7 +287,7 @@ void pix_gain :: floatGainMess(float gain)
 {
     // assumption that the alpha should be one
     m_gain[chAlpha] = 1.0f;
-    m_gain[chRed] = m_gain[chGreen] = m_gain[chBlue] = FLOAT_CLAMP(gain);
+    m_gain[chRed] = m_gain[chGreen] = m_gain[chBlue] = gain;
     setPixModified();
 }
 

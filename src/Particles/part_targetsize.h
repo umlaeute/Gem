@@ -57,7 +57,7 @@ class GEM_EXTERN part_targetsize : public GemBase
 
     	//////////
     	// Scale changed
-    	void	    	scaleMess(float x, float y, float y);
+    	void	    	scaleMess(float x, float y, float z);
     	
     	//////////
     	// Size changed

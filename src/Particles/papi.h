@@ -18,13 +18,7 @@
 
 #ifdef WIN32
 #include <windows.h>
-
-#ifdef PARTICLEDLL_EXPORTS
-#define PARTICLEDLL_API __declspec(dllexport)
-#else
-#define PARTICLEDLL_API __declspec(dllimport)
-#endif
-
+#define PARTICLEDLL_API
 #else
 #define PARTICLEDLL_API
 #endif

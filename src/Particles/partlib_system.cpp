@@ -14,7 +14,7 @@
 // XXX
 #include <iostream.h>
 // using namespace std;
-
+/*
 // For Windows DLL.
 #ifdef WIN32
 BOOL APIENTRY DllMain( HANDLE hModule, 
@@ -33,7 +33,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
     return TRUE;
 }
 #endif
-
+*/
 float ParticleAction::dt;
 
 ParticleGroup **_ParticleState::group_list;

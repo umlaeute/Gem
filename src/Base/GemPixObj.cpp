@@ -62,6 +62,10 @@ void GemPixObj :: render(GemState *state){
       case GL_BGRA_EXT:
 	processRGBAImage(state->image->image);
 	break;
+      case GL_RGB:
+      case GL_BGR_EXT:
+	processRGBImage(state->image->image);
+	break;
       case GL_LUMINANCE:
 	processGrayImage(state->image->image);
 	break;
@@ -92,6 +96,10 @@ void GemPixObj :: processImage(imageStruct &image)
   case GL_BGRA_EXT:
     error("Gem: pix object cannot handle RGBA image");
     break;
+  case GL_RGB:
+  case GL_BGR_EXT:
+    error("Gem: pix object cannot handle RGB image");
+	break;
   case GL_LUMINANCE:
     error("Gem: pix object cannot handle Grey image");
     break;
@@ -108,6 +116,8 @@ void GemPixObj :: processImage(imageStruct &image)
 //
 /////////////////////////////////////////////////////////
 void GemPixObj :: processRGBAImage(imageStruct &image)
+{  processImage(image); }
+void GemPixObj :: processRGBImage(imageStruct &image)
 {  processImage(image); }
 void GemPixObj :: processGrayImage(imageStruct &image)
 {  processImage(image); }

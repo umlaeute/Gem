@@ -62,13 +62,13 @@ pix_texture :: ~pix_texture()
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState() {
-//#ifdef GL_TEXTURE_RECTANGLE_EXT
+#ifdef GL_TEXTURE_RECTANGLE_EXT
 if (m_mode && GemMan::texture_rectangle_supported){
   if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)				//tigital
     glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
     post("pix_texture: using rectangle texture");
     }
-//#endif
+#endif // GL_TEXTURE_RECTANGLE_EXT
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
   if (GemMan::client_storage_supported){
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
@@ -83,17 +83,17 @@ if (m_mode && GemMan::texture_rectangle_supported){
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
 
 
-//#ifdef GL_TEXTURE_RECTANGLE_EXT
+#ifdef GL_TEXTURE_RECTANGLE_EXT
 if (m_mode)
   if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
-//#endif
+#endif //GL_TEXTURE_RECTANGLE_EXT
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
   // note:  On MacOS X, pix_texture is used for power of two/normalised textures, so 
   //		texture_rectangle can't be used (otherwise, we'd just see one pixel!)
 }
 
-inline int setTexCoords(TexCoord *coords, float xRatio, float yRatio){
+inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio){
 #ifndef MACOSX
       coords[0].s = 0.f;
       coords[0].t = 0.f;
@@ -137,14 +137,15 @@ void pix_texture :: render(GemState *state) {
 #ifdef GL_VERSION_1_1
   int texType = m_textureType;
 
-//#ifdef GL_TEXTURE_RECTANGLE_EXT
+#ifdef GL_TEXTURE_RECTANGLE_EXT
 if (m_mode){
   if (!normalized && GemMan::texture_rectangle_supported ){
     m_textureType = GL_TEXTURE_RECTANGLE_EXT;
     normalized = 0;
   } 
-  } else {
-//#endif
+  } else 
+#endif // GL_TEXTURE_RECTANGLE_EXT
+ {
     m_textureType = GL_TEXTURE_2D;
     normalized = 0;
     }
@@ -381,7 +382,12 @@ void pix_texture :: repeatMess(int type)
   if (type)
     m_repeat = GL_REPEAT;
   else
+#ifdef GL_CLAMP_TO_EDGE
     m_repeat = GL_CLAMP_TO_EDGE;
+#else
+    m_repeat = GL_CLAMP;
+#endif
+
   if (m_textureObj) {
 #ifdef GL_VERSION_1_1
     glBindTexture(m_textureType, m_textureObj);
