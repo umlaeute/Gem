@@ -969,6 +969,11 @@ void GemMan :: windowInit()
   glClearDepth(1.0);    
   glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
  
+  #ifdef MACOSX
+  GLint swapInt = 1;
+  aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
+  #endif
+ 
   resetValues();
 }
 
