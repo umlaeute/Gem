@@ -42,7 +42,7 @@ pix_videoNEW :: ~pix_videoNEW(){
 //
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: render(GemState *state){
-   if (m_videoHandle)m_videoHandle->getFrame();
+   if (m_videoHandle)state->image=m_videoHandle->getFrame();
 }
 
 /////////////////////////////////////////////////////////
@@ -54,6 +54,7 @@ void pix_videoNEW :: startRendering(){
     post("GEM: pix_videoNEW: do video for this OS");
     return;
   }
+  m_videoHandle->startTransfer();
 }
 
 /////////////////////////////////////////////////////////
@@ -61,7 +62,7 @@ void pix_videoNEW :: startRendering(){
 //
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: stopRendering(){
-
+  if (m_videoHandle)m_videoHandle->stopTransfer();
 }
 
 /////////////////////////////////////////////////////////
@@ -69,6 +70,16 @@ void pix_videoNEW :: stopRendering(){
 //
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: postrender(GemState *state){
+  state->image = NULL;
+}
+/////////////////////////////////////////////////////////
+// dimenMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: dimenMess(int x, int y, int leftmargin, int rightmargin,
+			       int topmargin, int bottommargin)
+{
+  if (m_videoHandle)m_videoHandle->setDimen(x,y,leftmargin,rightmargin,topmargin,bottommargin);
 }
 
 /////////////////////////////////////////////////////////
@@ -77,16 +88,31 @@ void pix_videoNEW :: postrender(GemState *state){
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: offsetMess(int x, int y)
 {
-  error("offset not supported on this OS");
+  if (m_videoHandle)m_videoHandle->setOffset(x,y);
 }
-
 /////////////////////////////////////////////////////////
 // swapMess
 //
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: swapMess(int state)
 {
-  error("swap not supported on this OS");
+  if (m_videoHandle)m_videoHandle->setSwap(state);
+}
+/////////////////////////////////////////////////////////
+// channelMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: channelMess(int channel, t_float freq)
+{
+  if(m_videoHandle)m_videoHandle->setChannel(channel, freq);
+}
+/////////////////////////////////////////////////////////
+// normMess
+//
+/////////////////////////////////////////////////////////
+void pix_videoNEW :: normMess(t_symbol *s)
+{
+  if(m_videoHandle)m_videoHandle->setNorm(s->s_name);
 }
 
 /////////////////////////////////////////////////////////
@@ -101,8 +127,13 @@ void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
     	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::swapMessCallback,
     	    gensym("swap"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoNEW::formatMessCallback,
-    	    gensym("format"), A_SYMBOL, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::normMessCallback,
+    	    gensym("norm"), A_SYMBOL, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::channelMessCallback,
+    	    gensym("channel"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoNEW::modeMessCallback,
+    	    gensym("mode"), A_GIMME, A_NULL);
+
 }
 void pix_videoNEW :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -121,8 +152,34 @@ void pix_videoNEW :: swapMessCallback(void *data, t_floatarg state)
 {
     GetMyClass(data)->swapMess((int)state);
 }
-
-void pix_videoNEW :: formatMessCallback(void *data, t_symbol*s)
+void pix_videoNEW :: channelMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-  //    GetMyClass(data)->formatMess(s);
+  if (argc!=1&&argc!=2)return;
+  int chan = atom_getint(argv);
+  t_float freq = (argc==1)?0:atom_getfloat(argv+1);
+  GetMyClass(data)->channelMess((int)chan, freq);
+
+}
+void pix_videoNEW :: normMessCallback(void *data, t_symbol*s)
+{
+  GetMyClass(data)->normMess(s);
+}
+void pix_videoNEW :: modeMessCallback(void *data, t_symbol* nop, int argc, t_atom *argv)
+{
+  switch (argc){
+  case 1:
+    if (argv->a_type==A_FLOAT)GetMyClass(data)->channelMess(atom_getint(argv));
+    else if (argv->a_type==A_FLOAT)GetMyClass(data)->normMess(atom_getsymbol(argv));
+    else goto mode_error;
+    break;
+  case 2:
+    if (argv->a_type==A_SYMBOL && (argv+1)->a_type==A_FLOAT){
+      GetMyClass(data)->normMess(atom_getsymbol(argv));
+      GetMyClass(data)->channelMess(atom_getint(argv+1));
+    } else goto mode_error;  
+    break;
+  default:
+  mode_error:
+    post("invalid arguments for message \"mode [<norm>] [<channel>]\"");
+  }
 }

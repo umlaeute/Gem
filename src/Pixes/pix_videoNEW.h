@@ -70,14 +70,16 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   //////////
   // Set the video dimensions
   virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
-			  int topmargin = 0 , int bottommargin = 0) {}
+			  int topmargin = 0 , int bottommargin = 0);
   //////////
   // Set the video offset
   virtual void	offsetMess(int x, int y);
-  ////////// 
-  // Stop the video device
-  // [out] int - returns 0 if bad
+  // should the video-data be swapped ?
   virtual void	swapMess(int state);
+  // Set the channel of the capturing device 
+  virtual void	channelMess(int channel, t_float freq=0);
+  // Set the channel of the capturing device 
+  virtual void	normMess(t_symbol *s);
     
   //-----------------------------------
   // GROUP:	Video data
@@ -93,7 +95,10 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
   static void offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
   static void swapMessCallback(void *data, t_floatarg state);
-  static void formatMessCallback(void *data, t_symbol*format);
+  static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void normMessCallback(void *data, t_symbol*format);
+  static void modeMessCallback(void *data, t_symbol*,int,t_atom*);
+
 };
 
 #endif	// for header file

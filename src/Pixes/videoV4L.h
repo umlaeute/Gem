@@ -79,7 +79,7 @@ class GEM_EXTERN videoV4L : public video {
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
-    	int	    	startTransfer();
+    	int	    	startTransfer(int format=0);
 	//////////
     	// Stop the video device
     	// [out] int - returns 0 if bad
@@ -93,11 +93,9 @@ class GEM_EXTERN videoV4L : public video {
 	// Set the video dimensions
   	virtual int	    	setDimen(int x, int y, int leftmargin, int rightmargin,
 					 int topmargin, int bottommargin);
-	virtual int	    	setChannel(int f);
+	virtual int	    	setChannel(int c, float f);
 	virtual int	    	setNorm(char*);
 	virtual int	    	setDevice(int);
-	virtual int	    	setFrequency(float);
-
 
     
  protected:

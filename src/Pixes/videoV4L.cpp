@@ -58,6 +58,10 @@ videoV4L :: videoV4L(int format) : video(format)
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
 
+  m_capturing=false;
+  m_channel=COMPOSITEIN;
+  m_norm=VIDEO_MODE_AUTO;
+  m_devicenum=DEVICENO;
   //  post("w = %d, h= %d",m_width, m_height);
   m_image.image.reallocate();
 }
@@ -79,8 +83,9 @@ void *videoV4L :: capturing(void*you)
 {
   videoV4L *me=(videoV4L *)you;
   unsigned char *pixp;
+  me->m_capturing=true;
   while(me->m_continue_thread){
-    post("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
+    //post("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
 
   me->frame = !me->frame;
 
@@ -115,13 +120,16 @@ void *videoV4L :: capturing(void*you)
     me->m_frame_ready = 1;
     me->last_frame=me->frame;
   }
+  me->m_capturing=false;
   return NULL;
 }
 pixBlock *videoV4L :: getFrame(){
+  //  post("getting frame %d", m_frame_ready);
   if (!m_frame_ready) m_image.newimage = 0;
   else {
     m_image.image.data=videobuf + vmbuf.offsets[last_frame];
     m_image.newimage = 1;
+    m_frame_ready = false;
   }
   return &m_image;
 }
@@ -130,17 +138,20 @@ pixBlock *videoV4L :: getFrame(){
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-int videoV4L :: startTransfer()
+int videoV4L :: startTransfer(int format)
 {
+  if (format>1)m_reqFormat=format;
   post("starting transfer");
-    char buf[256];
-    int i, dataSize;
-    frame = 0;
-    int width, height;
-    
-    skipnext = 0;
-    if (m_devicenum<0){
-      sprintf(buf, "/dev/video");
+  char buf[256];
+  int i, dataSize;
+  int width, height;
+
+  frame = 0;
+  skipnext = 0;
+  last_frame = 0;
+
+  if (m_devicenum<0){
+    sprintf(buf, "/dev/video");
     } else sprintf(buf, "/dev/video%d", m_devicenum);
     if ((tvfd = open(buf, O_RDWR)) < 0)
     {
@@ -172,10 +183,11 @@ int videoV4L :: startTransfer()
 	    perror("VDIOCGCHAN");
 	    goto closit;
 	}
-    	printf("channel %d name %s type %d flags %d\n",
-    	    vchannel.channel, vchannel.name, 
-	    vchannel.type, vchannel.flags);
+    	post("channel %d name %s type %d flags %d\n",
+	       vchannel.channel, vchannel.name, 
+	       vchannel.type, vchannel.flags);
     }
+    post("setting to channel %d", m_channel);
     vchannel.channel = m_channel;
     if (ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
     {
@@ -213,10 +225,26 @@ int videoV4L :: startTransfer()
 
     for (i = 0; i < NBUF; i++)
     {
+      switch(m_reqFormat){
+      case GL_LUMINANCE:
+    	vmmap[i].format = VIDEO_PALETTE_GREY;
+	break;
+      case GL_RGBA:
+      case GL_BGRA:
+    	vmmap[i].format = VIDEO_PALETTE_RGB32;
+	break;
+      case GL_YCBCR_422_GEM:
+    	vmmap[i].format = VIDEO_PALETTE_YUV422;
+	break;
+      default:
+      case GL_RGB:
+      case GL_BGR:
     	vmmap[i].format = VIDEO_PALETTE_RGB24;
-    	vmmap[i].width = width;
-    	vmmap[i].height = height;
-	vmmap[i].frame  = i;
+      }
+
+      vmmap[i].width = width;
+      vmmap[i].height = height;
+      vmmap[i].frame  = i;
     }
     if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
     {
@@ -234,10 +262,28 @@ int videoV4L :: startTransfer()
 	just used RGB, I wonder? */
     m_image.image.xsize = width;
     m_image.image.ysize = height;
-    m_image.image.csize = 3;
-    m_image.image.format = GL_BGR;
-    m_image.image.type = GL_UNSIGNED_BYTE;
-    m_image.image.reallocate();
+    switch(m_reqFormat){
+    case GL_LUMINANCE:
+      m_image.image.format = GL_LUMINANCE;
+      m_image.image.csize = 1;
+      break;
+    case GL_RGBA:
+    case GL_BGRA:
+      m_image.image.csize = 3;
+      m_image.image.format = GL_BGRA;
+    break;
+    case GL_YCBCR_422_GEM:
+      m_image.image.csize = 2;
+      m_image.image.format =  GL_YCBCR_422_GEM;
+      break;
+    default:
+    case GL_RGB:
+    case GL_BGR:
+      m_image.image.csize = 3;
+      m_image.image.format = GL_BGR;
+    }
+  
+   m_image.image.reallocate();
     myleftmargin = 0;
     myrightmargin = 0;
     mytopmargin = 0;
@@ -254,6 +300,7 @@ int videoV4L :: startTransfer()
     return(1);
 
 closit:
+    post("closing video");
     if (tvfd >= 0)
     {
     	close(tvfd);
@@ -269,6 +316,7 @@ closit:
 /////////////////////////////////////////////////////////
 int videoV4L :: stopTransfer()
 {
+  post("stop transfer");
   /* close the v4l device and dealloc buffer */
     /* terminate thread if there is one */
     if(m_continue_thread){
@@ -276,6 +324,7 @@ int videoV4L :: stopTransfer()
       m_continue_thread = 0;
       pthread_join (m_thread_id, &dummy);
     }
+    while(m_capturing){post("waiting for thread");}
     munmap(videobuf, vmbuf.size);
     if (tvfd) close(tvfd);
     tvfd = 0;
@@ -322,6 +371,7 @@ int videoV4L :: setDimen(int x, int y, int leftmargin, int rightmargin,
 
 int videoV4L :: setNorm(char*norm)
 {
+  post("setting norm to %s", norm);
   char c=*norm;
   int i_norm=-1;
 
@@ -339,21 +389,39 @@ int videoV4L :: setNorm(char*norm)
     return -1;
     break;
   }
-  if (i_norm==m_norm)return 0;
+  //  if (i_norm==m_norm)return 0;
   if(m_capturing){
+    post("restarting transfer");
     stopTransfer();
+    m_norm=i_norm;
     startTransfer();
   }
   return 0;
 }
 
-int videoV4L :: setChannel(int c)
-{
-  if (c==m_channel)return 0;
-  m_channel=c;
-  if(m_capturing){
-    stopTransfer();
-    startTransfer();
+int videoV4L :: setChannel(int c, t_float f){
+  int freq = (int) f;
+  if (freq>0){
+    if (c>-1)m_channel=c;
+    vtuner.tuner = m_channel;
+    if (ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
+      post("Error setting frequency -- no tuner");
+      return -1;
+    }
+    post("setting freq: %d", freq);
+    if (ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
+      post("Error setting frequency");
+      return -1;
+    }
+  } else {
+    if(c>-1 && m_channel!=c){
+      if (m_capturing){
+	stopTransfer();
+	m_channel=c;
+	startTransfer();
+      }
+      m_channel=c;
+    }
   }
   return 0;
 }
@@ -368,19 +436,5 @@ int videoV4L :: setDevice(int d)
   }
   return 0;
 }
-int videoV4L :: setFrequency(float c)
-{
-  int freq = (int) c;
-  vtuner.tuner = m_channel;
-  if (ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
-    post("Error setting frequency -- no tuner");
-    return -1;
-  }
-     
-  if (ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
-    post("Error setting frequency");
-    return -1;
-  }
-  return 0;
-}
+
 #endif
