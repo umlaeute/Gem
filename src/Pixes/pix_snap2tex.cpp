@@ -40,8 +40,8 @@ CPPEXTERN_NEW_WITH_GIMME(pix_snap2tex)
 
 pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
   : m_textureOnOff(1), m_textureQuality(GL_LINEAR),
-    m_textureObj(0), m_texWidth(-1), m_texHeight(-1),
-    m_oldWidth(-1), m_oldHeight(-1)
+    m_texWidth(-1), m_texHeight(-1),
+    m_oldWidth(-1), m_oldHeight(-1), m_textureObj(0)
 {
   if (argc == 4)
     {
