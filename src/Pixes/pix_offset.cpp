@@ -95,10 +95,10 @@ void pix_offset :: processYUVImage(imageStruct &image)
 
 for (h=0; h<image.ysize; h++){
     for(w=0; w<image.xsize/2; w++){
-        image.data[src] = CLAMP( image.data[src] + U );
-        image.data[src+1] = CLAMP( image.data[src+1] + Y );
-        image.data[src+2] = CLAMP( image.data[src+2] + V );
-        image.data[src+3] = CLAMP( image.data[src+3] + Y );
+        image.data[src+chU ] = CLAMP( image.data[src+chU] + U );
+        image.data[src+chY0] = CLAMP( image.data[src+chY0]+ Y );
+        image.data[src+chV ] = CLAMP( image.data[src+chV] + V );
+        image.data[src+chY1] = CLAMP( image.data[src+chY1]+ Y );
 
         src+=4;
     }
@@ -107,13 +107,10 @@ for (h=0; h<image.ysize; h++){
 #ifdef __MMX__
 void pix_offset :: processRGBAMMX(imageStruct &image)
 {
-
   char  R = m_offset[chRed];
   char  G = m_offset[chGreen];
   char  B = m_offset[chBlue];
   char  A = m_offset[chAlpha];
-
-  //post("%d %d %d %d", R, G, B, A);
 
   register int pixsize = (image.ysize * image.xsize)>>1;
 
@@ -127,7 +124,38 @@ void pix_offset :: processRGBAMMX(imageStruct &image)
   }
   _mm_empty();
 }
-#endif
+
+void pix_offset :: processYUVMMX(imageStruct &image)
+{
+  register int pixsize = (image.ysize * image.xsize)>>2;
+
+  register __m64 offset_64 = _mm_setr_pi8(U, Y, V, Y, U, Y, V, Y);
+  register __m64*data_p= (__m64*)image.data;
+  _mm_empty();
+
+  while(pixsize--) {
+    data_p[0]=_mm_add_pi8(data_p[0], offset_64);
+    data_p++;      
+  }
+  _mm_empty();
+}
+void pix_offset :: processGrayMMX(imageStruct &image)
+{
+  unsigned char m_grey=m_offset[chRed];
+
+  register int pixsize = (image.ysize * image.xsize)>>3;
+
+  register __m64 offset_64 = _mm_set1_pi8(m_grey);
+  register __m64*data_p= (__m64*)image.data;
+  _mm_empty();
+
+  while(pixsize--) {
+    data_p[0]=_mm_add_pi8(data_p[0], offset_64);
+    data_p++;      
+  }
+  _mm_empty();
+}
+#endif /* MMX */
 
 #ifdef __VEC__
 /* more optimized version - unrolled and load-hoisted */

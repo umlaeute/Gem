@@ -62,6 +62,8 @@ class GEM_EXTERN pix_offset : public GemPixObj
 	//////////
 	// MMX
     	virtual void 	processRGBAMMX(imageStruct &image); 
+     	virtual void 	processYUVMMX(imageStruct &image); 
+   	virtual void 	processGrayMMX(imageStruct &image); 
 #endif
 #ifdef __VEC__
 	//////////
