@@ -360,7 +360,8 @@ GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
     memcpy(pdata, greydata, pixelnum);
   }
 }
-GEM_EXTERN void imageStruct::fromYUV420P(unsigned char *yuvdata) {
+GEM_EXTERN void imageStruct::fromYV12(unsigned char *yuvdata) {
+  // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
   if(!yuvdata)return;
   int pixelnum=xsize*ysize;
   reallocate();
@@ -375,8 +376,7 @@ GEM_EXTERN void imageStruct::fromYUV420P(unsigned char *yuvdata) {
     memcpy(pdata, yuvdata, pixelnum);
 #endif
     break;
-  case GL_RGB:
-  case GL_BGR_EXT:
+  case GL_RGB:  case GL_BGR_EXT: // of course this is stupid, RGB isn't BGR
     csize=3;
     {
       unsigned char *pixels1=data;
@@ -529,7 +529,8 @@ GEM_EXTERN void imageStruct::fromYUV420P(unsigned char *yuvdata) {
   }
 }
 
-GEM_EXTERN void imageStruct::fromYUV422(unsigned char *yuvdata) {
+GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
+  // this is the yuv-format with Gem
   if(!yuvdata)return;
   data=pdata;
   int pixelnum=xsize*ysize;
@@ -543,8 +544,8 @@ GEM_EXTERN void imageStruct::fromYUV422(unsigned char *yuvdata) {
   case GL_LUMINANCE:
     pixelnum>>1;
     while(pixelnum--){
-      *pixels++=yuvdata[chY0];
-      *pixels++=yuvdata[chY1];
+      *pixels++=yuvdata[1];
+      *pixels++=yuvdata[3];
       yuvdata+=4;
     }
     break;
@@ -556,15 +557,15 @@ GEM_EXTERN void imageStruct::fromYUV422(unsigned char *yuvdata) {
       pixelnum>>1;
 
       while(pixelnum--){
-	u=yuvdata[chU]-128;
+	u=yuvdata[0]-128;
 	ug=88*u;
 	ub=454*u;
-	v=yuvdata[chV]-128;
+	v=yuvdata[2]-128;
 	vg =  183 * v;
 	vr =  359 * v;
 	
 	// 1st pixel
-	y=yuvdata[chY0];
+	y=yuvdata[1];
 	yy=y<<8;
 	pixels[chRed  ] = (yy +      vr) >> 8; // r
 	pixels[chGreen] = (yy - ug - vg) >> 8; // g
@@ -572,7 +573,7 @@ GEM_EXTERN void imageStruct::fromYUV422(unsigned char *yuvdata) {
 	pixels+=3;
 
 	// 2nd pixel
-	y=yuvdata[chY1];
+	y=yuvdata[3];
 	yy=y<<8;
 	pixels[chRed  ] = (yy +      vr) >> 8; // r
 	pixels[chGreen] = (yy - ug - vg) >> 8; // g
@@ -590,15 +591,15 @@ GEM_EXTERN void imageStruct::fromYUV422(unsigned char *yuvdata) {
       int y, u, v, yy, vr, ug, vg, ub;
       pixelnum>>=1;
       while(pixelnum--){
-	u=yuvdata[chU]-128;
+	u=yuvdata[0]-128;
 	ug=88*u;
 	ub=454*u;
-	v=yuvdata[chV]-128;
+	v=yuvdata[2]-128;
 	vg =  183 * v;
 	vr =  359 * v;
 	
 	// 1st pixel
-	y=yuvdata[chY0];
+	y=yuvdata[1];
 	yy=y<<8;
 	pixels[chRed  ] = (yy +      vr) >> 8; // r
 	pixels[chGreen] = (yy - ug - vg) >> 8; // g
@@ -606,11 +607,212 @@ GEM_EXTERN void imageStruct::fromYUV422(unsigned char *yuvdata) {
 	pixels[chAlpha] = 255;
 	pixels+=4;
 	// 2nd pixel
-	y=yuvdata[chY1];
+	y=yuvdata[3];
 	yy=y<<8;
 	pixels[chRed  ] = (yy +      vr) >> 8; // r
 	pixels[chGreen] = (yy - ug - vg) >> 8; // g
 	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chAlpha] = 255;
+	pixels+=4;
+
+	yuvdata+=4;
+      }
+    }
+    break;
+  }
+}
+
+GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
+  if(!yuvdata)return;
+  data=pdata;
+  int pixelnum=xsize*ysize;
+  setCsizeByFormat();
+  reallocate();
+  unsigned char *pixels=pdata;
+  switch (format){
+  case GL_YUV422_GEM:
+    pixelnum>>1;
+    while(pixelnum--){
+      pixels[0]=yuvdata[1]; // u
+      pixels[1]=yuvdata[0]; // y
+      pixels[2]=yuvdata[3]; // v
+      pixels[3]=yuvdata[2]; // y
+      pixels+=4;
+      yuvdata+=4;
+    }
+    break;
+  case GL_LUMINANCE:
+    pixelnum>>1;
+    while(pixelnum--){
+      *pixels++=yuvdata[0];
+      *pixels++=yuvdata[2];
+      yuvdata+=4;
+    }
+    break;
+  case GL_RGB:
+  case GL_BGR:
+    {
+      unsigned char *pixels=data;
+      int y, u, v, yy, vr, ug, vg, ub;
+      pixelnum>>1;
+
+      while(pixelnum--){
+	u=yuvdata[1]-128;
+	ug=88*u;
+	ub=454*u;
+	v=yuvdata[3]-128;
+	vg =  183 * v;
+	vr =  359 * v;
+	
+	// 1st pixel
+	y=yuvdata[0];
+	yy=y<<8;
+	pixels[chRed  ] = (yy +      vr) >> 8; // r
+	pixels[chGreen] = (yy - ug - vg) >> 8; // g
+	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels+=3;
+
+	// 2nd pixel
+	y=yuvdata[2];
+	yy=y<<8;
+	pixels[chRed  ] = (yy +      vr) >> 8; // r
+	pixels[chGreen] = (yy - ug - vg) >> 8; // g
+	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels+=3;
+
+	yuvdata+=4;
+      }
+    }
+    break;
+  case GL_RGBA:
+  case GL_BGRA: /* ==GL_BGRA_EXT */
+    {
+      unsigned char *pixels=data;
+      int y, u, v, yy, vr, ug, vg, ub;
+      pixelnum>>=1;
+      while(pixelnum--){
+	u=yuvdata[1]-128;
+	ug=88*u;
+	ub=454*u;
+	v=yuvdata[2]-128;
+	vg =  183 * v;
+	vr =  359 * v;
+	
+	// 1st pixel
+	y=yuvdata[0];
+	yy=y<<8;
+	pixels[chRed  ] = (yy +      vr) >> 8; // r
+	pixels[chGreen] = (yy - ug - vg) >> 8; // g
+	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chAlpha] = 255;
+	pixels+=4;
+	// 2nd pixel
+	y=yuvdata[2];
+	yy=y<<8;
+	pixels[chRed  ] = (yy +      vr) >> 8; // r
+	pixels[chGreen] = (yy - ug - vg) >> 8; // g
+	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chAlpha] = 255;
+	pixels+=4;
+
+	yuvdata+=4;
+      }
+    }
+    break;
+  }
+}
+
+GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
+  // this is the yuv-format with Gem
+  if(!yuvdata)return;
+  data=pdata;
+  int pixelnum=xsize*ysize;
+  setCsizeByFormat();
+  reallocate();
+  unsigned char *pixels=pdata;
+  switch (format){
+  case GL_YUV422_GEM:
+    pixelnum>>1;
+    while(pixelnum--){
+      pixels[0]=yuvdata[3]; // u
+      pixels[1]=yuvdata[0]; // y
+      pixels[2]=yuvdata[1]; // v
+      pixels[3]=yuvdata[2]; // y
+      pixels+=4;
+      yuvdata+=4;
+    }
+    break;
+  case GL_LUMINANCE:
+    pixelnum>>1;
+    while(pixelnum--){
+      *pixels++=yuvdata[0];
+      *pixels++=yuvdata[2];
+      yuvdata+=4;
+    }
+    break;
+  case GL_RGB:  case GL_BGR:
+    {
+      unsigned char *pixels=data;
+      int y, u, v, yy, vr, ug, vg, ub;
+      pixelnum>>1;
+
+      while(pixelnum--){
+	u=yuvdata[3]-128;
+	ug=88*u;
+	ub=454*u;
+	v=yuvdata[1]-128;
+	vg =  183 * v;
+	vr =  359 * v;
+	
+	// 1st pixel
+	y=yuvdata[0];
+	yy=y<<8;
+	pixels[chRed  ] = (yy +      vr) >> 8; // r
+	pixels[chGreen] = (yy - ug - vg) >> 8; // g
+	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels+=3;
+
+	// 2nd pixel
+	y=yuvdata[2];
+	yy=y<<8;
+	pixels[chRed  ] = (yy +      vr) >> 8; // r
+	pixels[chGreen] = (yy - ug - vg) >> 8; // g
+	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels+=3;
+
+	yuvdata+=4;
+      }
+    }
+    break;
+  case GL_RGBA:
+  case GL_BGRA: /* ==GL_BGRA_EXT */
+    {
+      unsigned char *pixels=data;
+      int y, u, v, yy, vr, ug, vg, ub;
+      pixelnum>>=1;
+      while(pixelnum--){
+	u=yuvdata[3]-128;
+	ug=88*u;
+	ub=454*u;
+	v=yuvdata[1]-128;
+	vg =  183 * v;
+	vr =  359 * v;
+	
+	// 1st pixel
+	y=yuvdata[0];
+	yy=y<<8;
+	// somehow i have colours swapped with my dv-cam...
+	pixels[chBlue  ] = (yy +      vr) >> 8; // r
+	pixels[chGreen] = (yy - ug - vg) >> 8; // g
+	pixels[chRed ] = (yy + ub     ) >> 8; // b
+	pixels[chAlpha] = 255;
+	pixels+=4;
+	// 2nd pixel
+	y=yuvdata[2];
+	yy=y<<8;
+	pixels[chBlue  ] = (yy +      vr) >> 8; // r
+	pixels[chGreen] = (yy - ug - vg) >> 8; // g
+	pixels[chRed ] = (yy + ub     ) >> 8; // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 

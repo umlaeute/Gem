@@ -222,8 +222,13 @@ struct GEM_EXTERN imageStruct
   void fromBGR    (unsigned char* orgdata);
   void fromBGRA   (unsigned char* orgdata);
   void fromGray   (unsigned char* orgdata);
-  void fromYUV420P(unsigned char* orgdata);
-  void fromYUV422 (unsigned char* orgdata);
+  void fromUYVY   (unsigned char* orgdata);
+  void fromYUY2   (unsigned char* orgdata); // YUYV
+  void fromYVYU   (unsigned char* orgdata);
+  void fromYV12   (unsigned char* orgdata);
+
+  void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
+  void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
 
   unsigned char   *data;
   private:
