@@ -35,13 +35,7 @@ CPPEXTERN_NEW(imageVert)
 imageVert :: imageVert()
   : m_rebuildList(1)
 {
-#ifdef __APPLE__
-  if (!HaveValidContext ()) {
-    post("GEM: geo: imageVert - need window for glGenLists");
-    return;
-  }
-#endif
-  m_dispList = glGenLists(1);
+  m_dispList = 0;
 }
 
 /////////////////////////////////////////////////////////
