@@ -49,6 +49,8 @@
  */
 static int s_singleContext = 0; // LATER think about removing
 
+static WindowInfo constInfo;
+
 ////////////////////////
 // makeCurrent
 static void makeCurrent(WindowInfo wi){
@@ -265,6 +267,13 @@ int gemwindow :: createConstWindow(char* disp) {
   if (s_singleContext) {
     return(createWindow(disp));
   }
+  if(constInfo.context!=NULL){ // JMZ
+    m_constInfo=constInfo;
+
+    m_constInfo.have_constContext=1;
+    m_gfxInfo.have_constContext=1;
+    return(1);
+  }
 
   WindowHints myHints;
   myHints.title    = m_title;
@@ -275,7 +284,7 @@ int gemwindow :: createConstWindow(char* disp) {
   myHints.width    = m_width;
   myHints.height   = m_height;
 #ifdef __APPLE__
-  myHints.shared   = constInfo.context;
+  myHints.shared   = m_constInfo.context;
 #else
   myHints.shared   = NULL;
 #endif
@@ -283,16 +292,17 @@ int gemwindow :: createConstWindow(char* disp) {
   myHints.fullscreen      = 0;
   myHints.display         = disp;
 
-  if (!createGemWindow(constInfo, myHints) )  {
+  if (!createGemWindow(m_constInfo, myHints) )  {
     error("GEM: Error creating const context");
-    constInfo.have_constContext=0;
+    m_constInfo.have_constContext=0;
     m_gfxInfo.have_constContext=0;
     return(0);
   } else{
-    constInfo.have_constContext=1;
+    m_constInfo.have_constContext=1;
     m_gfxInfo.have_constContext=1;
   }
 
+  constInfo=m_constInfo;
   return(1);
 }
 
@@ -311,7 +321,7 @@ int gemwindow :: createWindow(char* disp) {
   myHints.fullscreen = m_fullscreen;
   myHints.x_offset = m_xoffset;
   myHints.y_offset = m_yoffset;
-  myHints.shared = constInfo.context;
+  myHints.shared = m_constInfo.context;
   myHints.actuallyDisplay = 1;
   myHints.display = disp;
   myHints.title = m_title;
@@ -451,7 +461,7 @@ void gemwindow :: destroyMess()
   m_outputState = 0;
     
   // reestablish the const glxContext
-  makeCurrent(constInfo);
+  makeCurrent(m_constInfo);
 }
 
 

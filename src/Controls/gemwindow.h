@@ -94,7 +94,7 @@ class GEM_EXTERN gemwindow : public GemOutput
   int m_width, m_height;
 
   WindowInfo m_gfxInfo;
-  WindowInfo constInfo;
+  WindowInfo m_constInfo;
 
   int m_windowDelTime;
   t_clock *m_windowClock;
