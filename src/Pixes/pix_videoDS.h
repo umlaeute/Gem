@@ -79,16 +79,16 @@ class pix_videoDS : public pix_video
   void	    	openMess(int device);
 
   // List the available devices
-  void	    	enumerateMess();
+  virtual void	    	enumerateMess();
 
   // Setup the video input
-  void	    	setupMess();
+  virtual void	    	setupMess();
 
   // fire the format dialogs
-  void		dialogMess(t_symbol* type);
+  virtual void		dialogMess(int,t_atom*);
 
   // fire the format dialogs
-  void		dvMess(int argc, t_atom *argv);
+  virtual void		dvMess(int argc, t_atom *argv);
 
   // Close the video device
   void	    	closeMess();
@@ -184,12 +184,9 @@ class pix_videoDS : public pix_video
 
   static void openMessCallback(void *data, t_floatarg device);
   static void closeMessCallback(void *data);
-  static void enumerateMessCallback(void *data);
   static void setupMessCallback(void *data);
   static void floatMessCallback(void *data, float n);
-  static void dialogMessCallback(void *data, t_symbol *type, int, t_atom*);
   static void dvMessCallback(void *data, t_symbol *type, int argc, t_atom *argv);
-  static void csMessCallback(void *data, t_symbol *type);
 
   //	static void videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr);
 };

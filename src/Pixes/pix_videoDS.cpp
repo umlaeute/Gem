@@ -94,7 +94,7 @@ pix_videoDS :: pix_videoDS(t_floatarg num)
   // Initialize COM
   if(FAILED(CoInitialize(NULL)))
     {
-      error("pix_film_ds: could not initialise COM.");
+      error("pix_video: could not initialise COM.");
       return;
     }
 
@@ -611,13 +611,15 @@ void pix_videoDS :: dvMess(int argc, t_atom *argv)
 // dialogMess
 //
 /////////////////////////////////////////////////////////
-void pix_videoDS :: dialogMess(t_symbol *type)
+void pix_videoDS :: dialogMess(int argc, t_atom*argv)
 {
   HRESULT hr;
+  if (argc==0)setupMess();
+  t_symbol *type=atom_getsymbol(argv);
 
   if (!m_haveVideo)
     {
-      error("pix_film_ds: No open video device.");
+      error("pix_video: No open video device.");
       return;
     }
 
@@ -849,7 +851,6 @@ void pix_videoDS :: obj_setupCallback(t_class *classPtr)
   class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_videoDS"), A_DEFFLOAT, A_NULL);
   class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_video_ds"), A_DEFFLOAT, A_NULL);  // alias to old external
   class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_dv"), A_DEFFLOAT, A_NULL);
-  //pix_video::real_obj_setupCallback(classPtr);
 
   class_addmethod(classPtr, (t_method)&pix_videoDS::openMessCallback,
 		  gensym("device"), A_DEFFLOAT, A_NULL);
@@ -857,18 +858,13 @@ void pix_videoDS :: obj_setupCallback(t_class *classPtr)
 		  gensym("open"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_videoDS::closeMessCallback,
 		  gensym("close"), A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoDS::enumerateMessCallback,
-		  gensym("enumerate"), A_NULL);
   class_addmethod(classPtr, (t_method)&pix_videoDS::setupMessCallback,
 		  gensym("setup"), A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoDS::dialogMessCallback,
-		  gensym("dialog"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_videoDS::dvMessCallback,
 		  gensym("dv"), A_GIMME, A_NULL);
   class_addfloat(classPtr, (t_method)&pix_videoDS::floatMessCallback);
 
-  class_addmethod(classPtr, (t_method)&pix_videoDS::csMessCallback,
-		  gensym("colorspace"), A_SYMBOL, A_NULL);
+  //  pix_video::real_obj_setupCallback(classPtr);
 } 
 
 void pix_videoDS :: openMessCallback(void *data, t_floatarg device)
@@ -879,18 +875,9 @@ void pix_videoDS :: closeMessCallback(void *data)
 {
   GetMyClass(data)->closeMess();
 }
-void pix_videoDS :: enumerateMessCallback(void *data)
-{
-  GetMyClass(data)->enumerateMess();
-}
 void pix_videoDS :: setupMessCallback(void *data)
 {
   GetMyClass(data)->setupMess();
-}
-void pix_videoDS :: dialogMessCallback(void *data, t_symbol *type, int argc, t_atom*argv)
-{
-  if(argc)GetMyClass(data)->dialogMess(atom_getsymbol(argv));
-  else GetMyClass(data)->setupMess();
 }
 void pix_videoDS :: floatMessCallback(void *data, float n)
 {
@@ -899,19 +886,6 @@ void pix_videoDS :: floatMessCallback(void *data, float n)
 void pix_videoDS :: dvMessCallback(void *data, t_symbol *type, int argc, t_atom *argv)
 {
   GetMyClass(data)->dvMess(argc, argv);
-}
-void pix_videoDS :: csMessCallback(void *data, t_symbol *s)
-{
-  int format=0;
-  char c =*s->s_name;
-  switch (c){
-  case 'g': case 'G': format=GL_LUMINANCE; break;
-  case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
-  case 'r': case 'R': format=GL_RGBA; break;
-  default:
-    post("pix_video: colorspace must be 'RGBA', 'YUV' or 'Gray'");
-  }
-  GetMyClass(data)->csMess(format);
 }
 
 // From Microsoft sample:
