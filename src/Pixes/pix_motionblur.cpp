@@ -428,7 +428,8 @@ signed short rightGain,imageGain;
            
          
 #endif
-}/* end of basic altivec function */ 
+}
+ end of basic altivec function */ 
 
 /* start of optimized motionblur */
 void pix_motionblur :: processYUVAltivec(imageStruct &image)
