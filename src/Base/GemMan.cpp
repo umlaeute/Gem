@@ -347,7 +347,7 @@ void GemMan :: initGem()
   post("GEM: ver: %s", GEM_VERSION);
   post("GEM: compiled: " __DATE__);
   post("GEM: maintained by IOhannes m zmoelnig");
-  post("GEM: Authors :\tMark Danks (original version on irix/windows");
+  post("GEM: Authors :\tMark Danks (original version on irix/windows)");
   post("GEM: \t\tChris Clepper (macOS-X)");
   post("GEM: \t\tDaniel Heckenberg (windows)");
   post("GEM: \t\tGuenter Geiger (linux)");
@@ -1040,8 +1040,12 @@ int GemMan :: createWindow(char* disp)
         power-of-two textures.  GL_EXT_texture_rectangle is available
         on the NVidia GeForce2MX and above, or the ATI Radeon and above.
     */
-    texture_rectangle_supported
-        = OpenGLExtensionIsSupported("GL_EXT_texture_rectangle");
+  
+  /* on my system, nvidia chose to use GL_NV instead of GL_EXT ... (jmz) */ 
+    if (texture_rectangle_supported
+	  = OpenGLExtensionIsSupported("GL_EXT_texture_rectangle")){}
+    else  texture_rectangle_supported
+	    =  OpenGLExtensionIsSupported("GL_NV_texture_rectangle");
  
     /*
         GL_APPLE_client_storage allows better performance when modifying
@@ -1389,14 +1393,16 @@ void GemMan :: printInfo()
   post("Renderer: %s", glGetString(GL_RENDERER));
   post("Version: %s", glGetString(GL_VERSION));
 
+  if (glGetString(GL_EXTENSIONS)){
     char *text = new char [strlen((char *)glGetString(GL_EXTENSIONS)) + 1];
     strcpy(text,(char *)glGetString(GL_EXTENSIONS));
     char *token = strtok(text, " ");	// Parse 'text' For Words, Seperated By " " (spaces)
     while(token != NULL) {		// While The Token Isn't NULL
-        post("Extensions: %s", token);	// Print extension string
-        token = strtok(NULL, " ");
+      post("Extensions: %s", token);	// Print extension string
+      token = strtok(NULL, " ");
     }
     delete [] text;
+  }
 
   post("---------------");
   post("window state: %d", m_windowState);
@@ -1418,12 +1424,14 @@ void GemMan :: printInfo()
   post("blue: %d", bitnum);
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &bitnum);
   post("max texture: %d", bitnum);
-
+  
   post("lighting %d", s_lightState);
   for (int i = 0; i < NUM_LIGHTS; i++) {
     if (s_lights[i])
       post("light%d: on", i);
   }
+
+  post("rectangle texturing: %d", texture_rectangle_supported);
   post("");
 }
 
