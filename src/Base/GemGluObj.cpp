@@ -62,18 +62,24 @@ void GemGluObj :: numSlicesMess(int numSlices)
 /////////////////////////////////////////////////////////
 void GemGluObj :: typeMess(t_symbol *type)
 {
-    if (!strcmp(type->s_name, "line")) 
-	    m_drawType = (GLenum) GL_LINE;
-    else if (!strcmp(type->s_name, "fill")) 
-	    m_drawType = (GLenum) GL_FILL;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = (GLenum) GL_POINT;
-    else
-    {
-	    error ("GEM: GemGluObj draw style");
-	    return;
-    }
-    setModified();
+  char c=*type->s_name;
+  switch (c){
+  case 'D': case 'd': // default
+    m_drawType = GL_DEFAULT_GEM;
+    break;
+  case 'L': case 'l': // line
+    m_drawType = GL_LINE;
+    break;
+  case 'F': case 'f': // fill
+    m_drawType = GL_FILL;
+    break;
+  case 'P': case 'p': // point
+    m_drawType = GL_POINT;
+  default:
+    error ("GEM: GemGluObj draw style");
+    return;
+  }
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
