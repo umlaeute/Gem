@@ -17,6 +17,11 @@
 
 #include "imageVert.h"
 
+#ifdef MACOSX
+#include <AGL/agl.h>
+extern bool HaveValidContext (void);
+#endif
+
 CPPEXTERN_NEW(imageVert)
 
   /////////////////////////////////////////////////////////
@@ -30,6 +35,12 @@ CPPEXTERN_NEW(imageVert)
 imageVert :: imageVert()
   : m_rebuildList(1)
 {
+#ifdef MACOSX
+  if (!HaveValidContext ()) {
+    post("GEM: geo: imageVert - need window for glGenLists");
+    return;
+  }
+#endif
   m_dispList = glGenLists(1);
 }
 
@@ -224,6 +235,89 @@ void imageVert :: processGrayPix(imageStruct &image, int texture)
 void imageVert :: processYUVPix(imageStruct &image, int texture)
 {
   post("GEM:imageVert: YUV not yet implemented :-(");
+/*  float Y, Y2, U, U2, V, V2;
+    
+  const int ySize = image.ysize;
+  const int xSize = image.xsize;
+  const int yStride = xSize * image.csize;
+  const int xStride = image.csize;
+
+  const float yDiff = 1.f / ySize;
+  float yDown = -.5f;
+  float yCurrent = yDown + yDiff;
+  float yTexDown = 0.f;
+  float yTex = yTexDown + yDiff;
+
+  const float xDiff = 1.f / xSize;
+
+  glShadeModel(GL_SMOOTH);
+
+  glNormal3f(0.0f, 0.0f, 1.0f);
+
+  unsigned char *data = image.data + yStride;
+  if (texture)   {
+    int yCount = ySize;
+    while(yCount--)  {
+      float xCurrent = -.5f;
+      float xTex = 0.f;
+      int xCount = xSize;
+      glBegin(GL_QUAD_STRIP);
+      while(xCount--)   {
+	unsigned char *oneDown = data - yStride;
+	Y   = data[chY] / 255.f;
+	U = data[chU] / 255.f;
+	V  = data[chV] / 255.f;
+
+	Y2   = oneDown[chY] / 255.f;
+	U2 = oneDown[chU] / 255.f;
+	V2  = oneDown[chV] / 255.f;
+    		        
+	glTexCoord2f(xTex, yTexDown);
+	glVertex3f(xCurrent, yDown, Y2 + U2 + V2);
+	glTexCoord2f(xTex, yTex);
+	glVertex3f(xCurrent, yCurrent, Y + U + V);
+
+	xCurrent += xDiff;
+	xTex += xDiff;
+	data += xStride;
+      }
+      glEnd();
+      yDown = yCurrent;
+      yCurrent += yDiff;
+      yTexDown = yTex;
+      yTex += yDiff;
+    }
+  } else {
+    int yCount = ySize;
+    while(yCount--) {
+      int xCount = xSize;
+      float xCurrent = -.5f;
+    	    
+      glBegin(GL_QUAD_STRIP);
+      while(xCount--) {
+	unsigned char *oneDown = data - yStride;
+	Y   = data[chY] / 255.f;
+	U = data[chU] / 255.f;
+        V = data[chV] / 255.f;
+
+	Y2   = oneDown[chY] / 255.f;
+	U2 = oneDown[chU] / 255.f;
+	V2  = oneDown[chV] / 255.f;
+    		        
+	glColor3f(Y2, U2, V2);
+	glVertex3f(xCurrent, yDown, Y2 + U2 + V2);
+	glColor3f(Y, U, V);
+	glVertex3f(xCurrent, yCurrent, Y + U + V);
+
+	xCurrent += xDiff;
+	data += xStride;
+      }
+      glEnd();
+      yDown = yCurrent;
+      yCurrent += yDiff;
+    }
+  }
+*/
 }
 /////////////////////////////////////////////////////////
 // render
