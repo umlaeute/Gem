@@ -29,7 +29,7 @@ filmQT4L :: filmQT4L(int format) : film(format) {
   static bool first_time=true;
   if (first_time) {
 #ifdef HAVE_LIBQUICKTIME
-    post("pix_film:: quicktime4linux support");
+    post("pix_film:: quicktime support");
 #endif
     first_time = false;
   }
@@ -49,7 +49,7 @@ filmQT4L :: ~filmQT4L()
 
 void filmQT4L :: close(void)
 {
-  post("qt4l: closing");
+  //  post("qt4l: closing");
 #ifdef HAVE_LIBQUICKTIME
   if(m_quickfile)quicktime_close(m_quickfile);
   m_quickfile=0;
@@ -94,6 +94,7 @@ bool filmQT4L :: open(char *filename, int format)
       break;
     default:
     case GL_RGBA:
+      //      post("rgba");
       if (quicktime_reads_cmodel(m_quickfile, BC_RGBA8888, 0)){
 	m_image.image.csize=4;m_qtformat=BC_RGBA8888;
       } else goto label_rgb;
@@ -105,6 +106,7 @@ bool filmQT4L :: open(char *filename, int format)
       break;
     label_rgb:
    case GL_RGB:
+     //     post("rgb");
       if (quicktime_reads_cmodel(m_quickfile, BC_RGB888, 0)){
 	m_image.image.csize=3;m_qtformat=0;
 	wantedFormat=GL_RGB;
