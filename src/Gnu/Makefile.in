@@ -61,8 +61,17 @@ clean:
 	    echo "\n----------$$d----------"; \
 	    cd $$d ; ${MAKE} clean;cd ../Gnu; \
 	done
-	-rm Gem.pd_linux ../../Gem.pd_linux *~
+	-rm Gem.pd_linux *~
 
+distclean: clean
+	-rm ../../Gem.pd_linux
+	@for d in ${TARG_DIR}; do \
+	  echo "\n----------$$d----------"; \
+	  cd $$d ; ${MAKE} distclean;cd ../Gnu; \
+	done
+	-rm config.cache config.log config.status Makefile
+	./makeauxlibs clean
+	cp Makefile.clean Makefile
 
 install: installdocs
 	install -m644 -D ../../Gem.pd_linux $(DESTDIR)/$(PDLIBDIR)/extra/Gem.pd_linux
@@ -84,12 +93,3 @@ installdocs:
 
 #	touch $(DESTDIR)/$(SYSTEMDOCS)/CVS
 #	rm -rf `find $(DESTDIR)/$(SYSTEMDOCS) -name *CVS*`
-
-distclean: clean
-	@for d in ${TARG_DIR}; do \
-	    echo "\n----------$$d----------"; \
-	    cd $$d ; ${MAKE} distclean;cd ../Gnu; \
-	done
-	-rm config.cache config.log config.status Makefile
-	./makeauxlibs clean
-	cp Makefile.clean Makefile
