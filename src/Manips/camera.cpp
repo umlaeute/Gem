@@ -13,7 +13,6 @@
 /////////////////////////////////////////////////////////
 
 #include "camera.h"
-#include "Base/GemMan.h"
 
 CPPEXTERN_NEW_WITH_GIMME(camera)
 
@@ -108,27 +107,15 @@ void camera :: render(GemState *)
 */    
     calcCameraVals();
 
-#if 1
-    GemMan::m_lookat[0]= m_vPosition.x;
-    GemMan::m_lookat[1]= m_vPosition.y;
-    GemMan::m_lookat[2]= m_vPosition.z;
-    GemMan::m_lookat[3]= m_vView.x;
-    GemMan::m_lookat[4]= m_vView.y;
-    GemMan::m_lookat[5]= m_vView.z;
-    GemMan::m_lookat[6]= m_vUpVector.x;
-    GemMan::m_lookat[7]= m_vUpVector.y;
-    GemMan::m_lookat[8]= m_vUpVector.z;
-#endif
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(m_vPosition.x, m_vPosition.y, m_vPosition.z, 
+	      m_vView.x, m_vView.y, m_vView.z, 
+	      m_vUpVector.x, m_vUpVector.y, m_vUpVector.z);
 #if 0
-    post("GemMan::m_lookat[0] = %f",GemMan::m_lookat[0]);
-    post("GemMan::m_lookat[1] = %f",GemMan::m_lookat[1]);
-    post("GemMan::m_lookat[2] = %f",GemMan::m_lookat[2]);
-    post("GemMan::m_lookat[3] = %f",GemMan::m_lookat[3]);
-    post("GemMan::m_lookat[4] = %f",GemMan::m_lookat[4]);
-    post("GemMan::m_lookat[5] = %f",GemMan::m_lookat[5]);
-    post("GemMan::m_lookat[6] = %f",GemMan::m_lookat[6]);
-    post("GemMan::m_lookat[7] = %f",GemMan::m_lookat[7]);
-    post("GemMan::m_lookat[8] = %f",GemMan::m_lookat[8]);
+    post("m_vPosition = %f %f %f",m_vPosition.x, m_vPosition.y ,m_vPosition.z);
+    post("m_vView     = %f %f %f",m_vView.x,m_vView.y,m_vView.z);
+    post("m_vUpVector = %f %f %f",m_vUpVector.x,m_vUpVector.y,m_vUpVector.z);
     post("g_Camera.hAngle = %f", hAngle);
     post("g_Camera.vAngle = %f", vAngle);
     post("g_Camera.distance = %f", distance);
