@@ -55,18 +55,6 @@ class GEM_EXTERN pix_biquad : public GemPixObj
   virtual ~pix_biquad();
 	
   //////////
-  // create a buffer that fits to the current imageSize
-  virtual void   create_buffer(imageStruct image);
-	
-  //////////
-  // delete the buffer
-  virtual void   delete_buffer();
-	
-  //////////
-  // clear the buffer
-  virtual void   clear_buffer();
-
-  //////////
   // Do the processing
   virtual void 	processImage(imageStruct &image);
 

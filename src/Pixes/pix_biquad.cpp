@@ -42,17 +42,22 @@ CPPEXTERN_NEW(pix_biquad)
 /////////////////////////////////////////////////////////
 pix_biquad :: pix_biquad()
 { 
-  imageStruct image;
+  prev.xsize = 64;
+  prev.ysize = 64;
+  prev.setCsizeByFormat(GL_RGBA);
+  prev.reallocate();
+  prev.setBlack();
 
-  image.xsize  = image.ysize = 64;
-  image.format = GL_RGBA;
-  image.csize  = 4;
-
-  create_buffer(image);
+  last.xsize = 64;
+  last.ysize = 64;
+  last.setCsizeByFormat(GL_RGBA);
+  last.csize = 4;
+  last.reallocate();
+  last.setBlack();
 
   fb0=fb1=fb2=ff1=ff2=ff3 = 0;
 
-    m_mode = 1;
+  m_mode = 1;
   set = false;
 }
 
@@ -63,37 +68,6 @@ pix_biquad :: pix_biquad()
 pix_biquad :: ~pix_biquad()
 {
   // clean my buffer
-  delete_buffer();
-}
-
-/////////////////////////////////////////////////////////
-// CreateBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_biquad :: create_buffer(imageStruct image)
-{
-  long dataSize;
-
-  prev.xsize = image.xsize;
-  prev.ysize = image.ysize;
-  prev.csize = image.csize;
-  prev.reallocate();
-  prev.setBlack();
-  last.xsize = image.xsize;
-  last.ysize = image.ysize;
-  last.csize = image.csize;
-  last.reallocate();
-  last.setBlack();
-}
-
-/////////////////////////////////////////////////////////
-// ClearBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_biquad :: clear_buffer()
-{
-  last.setBlack();
-  prev.setBlack();
 }
 
 /////////////////////////////////////////////////////////
