@@ -76,6 +76,7 @@ pix_convolve :: ~pix_convolve()
 //
 /////////////////////////////////////////////////////////
 
+
 void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
 {
   int i;
@@ -90,7 +91,7 @@ void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
   int* dest = (int*)image.data;
   
   //  MMXSTART;
-
+//unroll this to do R G B in one pass?? (too many registers?)
   i = xsize;
   int* val1 = 0;
   int* val2 = src+i-xsize;
@@ -113,7 +114,12 @@ void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
     val8 = val9;
     val9 = src+i+xsize+1;
     if (i%xsize == 0 || i%xsize == xsize-1) continue;
-    for (j=0;j<3;j++) {
+    #ifndef MACOSX
+    for (j=0;j<3;j++) 
+    #else
+    for (j=1;j<4;j++)
+    #endif
+    {
       res = m_imatrix[0]*(int)((unsigned char*)val1)[j];
       res += m_imatrix[1]*(int)((unsigned char*)val2)[j];
       res += m_imatrix[2]*(int)((unsigned char*)val3)[j];
@@ -130,9 +136,8 @@ void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
 
   }
 
-  //  MMXDONE;
+  
 }
-
 
 void pix_convolve :: processImage(imageStruct &image)
 {
@@ -143,6 +148,7 @@ void pix_convolve :: processImage(imageStruct &image)
     int maxY = tempImg.ysize - initY;
     int xTimesc = tempImg.xsize * tempImg.csize;
     int initOffset = initY * xTimesc + initX * tempImg.csize;
+
 
 
     if (m_rows == 3 && m_cols == 3 && tempImg.csize == 4) {
@@ -184,6 +190,7 @@ void pix_convolve :: processImage(imageStruct &image)
     	    }
     	}
     }
+
 }
 
 
@@ -198,6 +205,11 @@ void pix_convolve :: processYUVImage(imageStruct &image)
     int xTimesc = tempImg.xsize * tempImg.csize;
     int initOffset = initY * xTimesc + initX * tempImg.csize;
     
+ //   calculate3x3YUV(image,tempImg);
+    if (m_rows == 3 && m_cols == 3) {
+      calculate3x3YUV(image,tempImg);
+      return;
+    }
     if (m_chroma) {
     
     for (int y = initY; y < maxY; y++)
@@ -264,6 +276,132 @@ void pix_convolve :: processYUVImage(imageStruct &image)
     }
    
 }
+
+void pix_convolve :: calculate3x3YUV(imageStruct &image,imageStruct &tempImg)
+{
+  int i;
+  int j;
+  int k;
+  int xsize =  tempImg.xsize;
+  int ysize =  tempImg.ysize;
+  int size = xsize*ysize - xsize-1;
+
+  short* src = (short*) tempImg.data;
+  short* dest = (short*)image.data;
+  
+ 
+if (m_chroma){
+//post("pix_convolve: new YUV method");
+  i = xsize;
+  //make these temp register vars rather than pointers?
+  /*short* val1 = 0;  
+  short* val2 = src+i-xsize; //val2 = src[i-xsize];
+  short* val3 = src+i-xsize+1; //val3 = src[i-xsize+1];
+  short* val4 = src+i-1; //val4 = src[i-1];
+  short* val5 = src+i; //val5 = src[i];
+  short* val6 = src+i+1; //val6 = src[i+1];
+  short* val7 = src+i+xsize-1; //val7 = src[i+xsize-1];
+  short* val8 = src+i+xsize; //val8 = src[i+xsize];
+  short* val9 = src+i+xsize+1; //val9 = src[i+xsize+1];*/
+  register unsigned char val1 = 0;  
+  register unsigned char val2 = src[i-xsize+1]; 
+  register unsigned char val3 = src[i-xsize+3];
+  register unsigned char val4 = src[i-1];
+  register unsigned char val5 = src[i+1];
+  register unsigned char val6 = src[i+3];
+  register unsigned char val7 = src[i+xsize-1];
+  register unsigned char val8 = src[i+xsize+1];
+  register unsigned char val9 = src[i+xsize+3];
+  int res;
+
+  
+  //unroll this 2x to fill the registers? (matrix*y1*y2= 9*9*9 =27)
+  for (i=xsize+1;i<size;i++) {
+  //load furthest value first...the rest should be in cache
+    val7 = val8;
+    val8 = val9;
+    val9 = src[i+xsize+3]; //should be in cache from previous pass
+    val1 = val2;
+    val2 = val3;
+    val3 = src[i-xsize+3]; //should be in cache from previous pass
+    val4 = val5;
+    val5 = val6;
+    val6 = src[i+3];
+    
+    if (i%xsize == 0 || i%xsize == xsize-1) continue;
+   /* #ifndef MACOSX
+    for (j=0;j<3;j++) 
+    #else
+    for (j=1;j<3;j+=2)
+    #endif
+    { */
+    //use separate temp vars here??
+    //register the matrix values as separate vars??
+      res = m_imatrix[0]*(int)((unsigned char)val1);
+      res += m_imatrix[1]*(int)((unsigned char)val2);
+      res += m_imatrix[2]*(int)((unsigned char)val3);
+      res += m_imatrix[3]*(int)((unsigned char)val4);
+      res += m_imatrix[4]*(int)((unsigned char)val5);
+      res += m_imatrix[5]*(int)((unsigned char)val6);
+      res += m_imatrix[6]*(int)((unsigned char)val7);
+      res += m_imatrix[7]*(int)((unsigned char)val8);
+      res += m_imatrix[8]*(int)((unsigned char)val9);
+      res*=m_irange;
+      res>>=16;
+      ((unsigned char*)dest)[i*2+1] = CLAMP(res);
+   // }
+  } 
+  }else{
+  
+  i = xsize;
+  //make these temp register vars rather than pointers?
+  short* val1 = 0;  
+  short* val2 = src+i-xsize; //val2 = src[i-xsize];
+  short* val3 = src+i-xsize+1; //val3 = src[i-xsize+1];
+  short* val4 = src+i-1; //val4 = src[i-1];
+  short* val5 = src+i; //val5 = src[i];
+  short* val6 = src+i+1; //val6 = src[i+1];
+  short* val7 = src+i+xsize-1; //val7 = src[i+xsize-1];
+  short* val8 = src+i+xsize; //val8 = src[i+xsize];
+  short* val9 = src+i+xsize+1; //val9 = src[i+xsize+1];
+  int res;
+  for (i=xsize+1;i<size;i++) {
+    val1 = val2;
+    val2 = val3;
+    val3 = src+i-xsize+1;
+    val4 = val5;
+    val5 = val6;
+    val6 = src+i+1;
+    val7 = val8;
+    val8 = val9;
+    val9 = src+i+xsize+1;
+    if (i%xsize == 0 || i%xsize == xsize-1) continue;
+    #ifndef MACOSX
+    for (j=0;j<3;j++) 
+    #else
+    for (j=1;j<3;j+=2)
+    #endif
+    {
+      res = m_imatrix[0]*(int)((unsigned char*)val1)[j];
+      res += m_imatrix[1]*(int)((unsigned char*)val2)[j];
+      res += m_imatrix[2]*(int)((unsigned char*)val3)[j];
+      res += m_imatrix[3]*(int)((unsigned char*)val4)[j];
+      res += m_imatrix[4]*(int)((unsigned char*)val5)[j];
+      res += m_imatrix[5]*(int)((unsigned char*)val6)[j];
+      res += m_imatrix[6]*(int)((unsigned char*)val7)[j];
+      res += m_imatrix[7]*(int)((unsigned char*)val8)[j];
+      res += m_imatrix[8]*(int)((unsigned char*)val9)[j];
+      res*=m_irange;
+      res>>=16;
+      ((unsigned char*)dest)[i*2] = 128;
+      ((unsigned char*)dest)[i*2+2] = 128;
+      ((unsigned char*)dest)[i*2+j] = CLAMP(res);
+    }
+  }
+  }
+}
+
+
 /////////////////////////////////////////////////////////
 // rangeMess
 //
