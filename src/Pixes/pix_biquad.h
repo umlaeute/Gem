@@ -69,7 +69,7 @@ class GEM_EXTERN pix_biquad : public GemPixObj
 	
   //////////
   // the biquad-factors
-  t_float ff1, ff2, ff3, fb1, fb2, fb0;
+  t_float fb0, fb1, fb2, ff1, ff2, ff3;
   void faktorMess(int, t_atom*);
  
   // 0..integer-processing(fast) [default]
