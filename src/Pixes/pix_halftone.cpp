@@ -409,10 +409,10 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 				if (nDiff2<257)
 					diffLo += 1;
 				*/
-				const U32 OutputColour =    ((chroma<<24)&0xff000000)|
-											((nGreyValue<<16)&0x00ff0000)|
-											((chroma<<8)&0x0000ff00) |
-											((nGreyValue2)&0x000000ff);
+				const U32 OutputColour =    ((chroma&0xff)<<SHIFT_U)|
+				  ((nGreyValue&0xff)<<SHIFT_Y1)|
+				  ((chroma&0xff)<<SHIFT_V)|
+				  ((nGreyValue2&0xff)<<SHIFT_Y2);
 
 				U32* pCurrentOutput = pOutput+(nCurrentY*nWidth)+nCurrentX;
 				*pCurrentOutput=OutputColour;
@@ -1169,8 +1169,8 @@ U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int
 		//nLuma1 = ((CurrentColour&(0xff<<16))>>16)<<8;
 		//nLuma2 = ((CurrentColour&(0xff<<0))>>0)<<8;
 		
-		nLuma1 = ((CurrentColour&(0xff<<16))>>16);
-		nLuma2 = ((CurrentColour&(0xff<<0))>>0);
+		nLuma1 = ((CurrentColour&(0xff<<SHIFT_Y1))>>SHIFT_Y1);
+		nLuma2 = ((CurrentColour&(0xff<<SHIFT_Y2))>>SHIFT_Y2);
 		
 		nLumaTotal += nLuma1 + nLuma2;
 		//nLuma1Total += nLuma1;
