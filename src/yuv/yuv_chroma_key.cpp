@@ -122,7 +122,7 @@ void yuv_chroma_key :: obj_setupCallback(t_class *classPtr)
 		  gensym("direction"), A_DEFFLOAT, A_NULL);
                   
     class_addmethod(classPtr, (t_method)&yuv_chroma_key::rangeCallback,
-		  gensym("range"), A_DEFFLOAT, A_NULL);
+		  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
                   
     class_addmethod(classPtr, (t_method)&yuv_chroma_key::valueCallback,
 		  gensym("value"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
