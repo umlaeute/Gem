@@ -30,7 +30,10 @@ AC_ARG_WITH(gltt, [  --with-gltt             enable GL-TrueType rendering (fonts
 AC_ARG_WITH(mpeg, [  --with-mpeg             enable MPEG-filmIN support])
 AC_ARG_WITH(mpeg3, [  --with-mpeg3            enable MPEG3-filmIN support (overrides MPEG-support)])
 AC_ARG_WITH(quicktime, [  --with-quicktime        enable quicktime-filmIN support])
-AC_ARG_WITH(avi, [  --with-avi        enable AVI-support (might provide MPEG and quicktime)])
+AC_ARG_WITH(avi,     [  --with-avi              enable AVI-support (might provide MPEG and quicktime)])
+AC_ARG_WITH(avcodec, [  --with-avcodec=<lib>    location of libavcodec.a])
+AC_ARG_WITH(avformat,[  --with-avformat=<lib>   location of libavformat.a])
+
 
 dnl of course we need X, so don't let the user disable it
 if test "$with_x" = "no"
@@ -251,6 +254,20 @@ if test "$with_avi" != "no"
 then
   AC_FIND_LIB(aviplay, CreateIAviReadFile, search_libs, $with_avi)
 fi
+
+#
+#  Test for FFMPEG libraries
+#
+
+if test "$with_avcodec" != "no" -a "$with_avformat" != "no"
+then
+  echo "building pix_filmFFMPEG"
+  LIBS="$with_avcodec $with_avformat $LIBS $with_avcodec $with_avformat"
+  AC_DEFINE_UNQUOTED(HAVE_LIBAVCODEC)
+  AC_DEFINE_UNQUOTED(HAVE_LIBAVFORMAT)
+fi
+
+# end FFMPEG
 
 
 dnl Checking for Headers !

@@ -31,7 +31,7 @@ cleangem:
 	@rm -f Gem.pd_linux
 
 Gem.pd_linux: cleangem $(Gem_pd_DEPENDENCIES)
-	$(CXXLINK) $(LDFLAGS) $(OBJECTS) $(LDADD) $(LIBS) $(INCLUDES)
+	$(CXXLINK) $(LDFLAGS) $(OBJECTS) $(LDADD) $(LIBS)
 	strip --strip-unneeded Gem.pd_linux
 	cp Gem.pd_linux ../../
 
