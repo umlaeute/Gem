@@ -91,8 +91,10 @@ void vertex_draw :: render(GemState *state)
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-    
+#ifdef __APPLE__
+# error please replace __APPLE__ by something more specific; JMZ    
     glGenVertexArraysAPPLE(2, fences);
+#endif
     
     vao = fences[0];
    //works but is slow
@@ -111,11 +113,13 @@ void vertex_draw :: render(GemState *state)
   //  glGenVertexArraysAPPLE(2, fences);
     
     vao = fences[0];
+#ifdef __APPLE__
+# error please replace __APPLE__ by something more specific; JMZ
     if (m_vao){
-    if (!glIsVertexArrayAPPLE(1)) post("vertex draw: not using VAO");
-     glBindVertexArrayAPPLE(1);
+      if (!glIsVertexArrayAPPLE(1)) post("vertex draw: not using VAO");
+      glBindVertexArrayAPPLE(1);
      }
-    
+#endif
     glDisableClientState(GL_INDEX_ARRAY);
     
     if(m_color && (state->ColorArray != NULL || state->HaveColorArray == 0) ){
@@ -140,8 +144,10 @@ void vertex_draw :: render(GemState *state)
     #ifdef __APPLE__
     glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
     glVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
+#ifdef  GL_VERTEX_ARRAY_RANGE_APPLE
     glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
     glFlushVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
+#endif
     #endif //__APPLE__
   
   
@@ -149,10 +155,12 @@ void vertex_draw :: render(GemState *state)
     glDrawArrays(m_drawType,0,size);
     
     glDisableClientState(GL_VERTEX_ARRAY);
-    
+
+#ifdef  GL_VERTEX_ARRAY_RANGE_APPLE   
     glDisableClientState(GL_VERTEX_ARRAY_RANGE_APPLE);
         glVertexArrayRangeAPPLE(0,0);
-    
+#endif
+
     if(m_color)glDisableClientState(GL_COLOR_ARRAY);
     
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
