@@ -49,16 +49,27 @@ void pix_gain :: processRGBAImage(imageStruct &image)
 {
     int datasize =  image.xsize * image.ysize;
     unsigned char *pixels = image.data;
+    short R,G,B,A;
+    int red,green,blue,alpha;
+    R   = int( 255 * m_gain[chRed]);
+    G = int(255 * m_gain[chGreen]);
+    B  = int(255 * m_gain[chBlue]);
+    A = int(255 * m_gain[chAlpha]);
 
 	while(datasize--)
 	{
-		int red   = (int)(pixels[chRed] * m_gain[chRed]);
-		int green = (int)(pixels[chGreen] * m_gain[chGreen]);
-		int blue  = (int)(pixels[chBlue] * m_gain[chBlue]);
-		int alpha = (int)(pixels[chAlpha] * m_gain[chAlpha]);
+        //old float code
+		//int red   = (int)(pixels[chRed] * m_gain[chRed]);
+		//int green = (int)(pixels[chGreen] * m_gain[chGreen]);
+		//int blue  = (int)(pixels[chBlue] * m_gain[chBlue]);
+                //int alpha = (int)(pixels[chAlpha] * m_gain[chAlpha]);
+                red = (pixels[chRed] * R)>>8;
 		pixels[chRed]	= CLAMP(red);
+                green = (pixels[chGreen] * G)>>8;
 		pixels[chGreen] = CLAMP(green);
+                blue = (pixels[chBlue] * B)>>8;
 		pixels[chBlue]	= CLAMP(blue);
+                alpha = (pixels[chAlpha] * A)>>8;
 		pixels[chAlpha] = CLAMP(alpha);
 		pixels += 4;
 	}
