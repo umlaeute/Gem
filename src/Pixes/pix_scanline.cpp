@@ -44,12 +44,12 @@ if(saved)delete saved;
 /////////////////////////////////////////////////////////
 void pix_scanline :: processRGBAImage(imageStruct &image)
 {
-
     int h,w,i,length,width,cleanup;
     long srcline,dstline;
     long interlace;
 
 interlace = m_interlace;
+if (interlace <= 0){interlace = 1;}
 length = image.ysize /interlace; 
 width = image.xsize * image.csize;
 cleanup = image.ysize % interlace;
@@ -94,9 +94,7 @@ if (m_mode == 0){
                 image.data[dstline+w] = 0;
                 }
             }
-        
         }
-
     }
 }
 
@@ -113,7 +111,7 @@ void pix_scanline :: processYUVImage(imageStruct &image)
     long interlace;
 
 interlace = m_interlace;
-if (interlace < 0){interlace = 0;}
+if (interlace <= 0){interlace = 1;}
 length = image.ysize /interlace; 
 width = image.xsize * image.csize;
 cleanup = image.ysize % interlace;
