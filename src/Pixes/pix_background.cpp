@@ -23,25 +23,20 @@ CPPEXTERN_NEW(pix_background)
 pix_background :: pix_background()
 {
   long size,src,i;
-  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
+  inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
   
     m_Yrange = 0;
     m_Urange = 0;
     m_Vrange = 0;
-    m_blur = 0;
     m_reset = 0;
-    m_blurH = 240;
-    m_blurW = 240;
-    m_blurBpp = 2;
-    size = 320 * 240 * 4;
-    saved = new unsigned char [size];
-    src=0;
-    for (i=0;i<size/2;i++)
-    {
-        saved[src] = 128;
-        saved[src+1] = 0;
-        src += 2;
-    }
+
+    m_savedImage.xsize=320;
+    m_savedImage.ysize=240;
+    m_savedImage.setCsizeByFormat(GL_RGBA);
+    m_savedImage.reallocate();
+    m_savedImage.setBlack();
+
+
 }
 
 /////////////////////////////////////////////////////////
@@ -50,7 +45,7 @@ pix_background :: pix_background()
 /////////////////////////////////////////////////////////
 pix_background :: ~pix_background()
 {
-if(saved)delete saved;
+  if(inletRange)inlet_free(inletRange);
 }
 
 /////////////////////////////////////////////////////////
@@ -64,32 +59,36 @@ void pix_background :: processRGBAImage(imageStruct &image)
   
   src = 0;
   pixsize = image.xsize * image.ysize * image.csize;
-  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
-    m_blurH = image.ysize;
-    m_blurW = image.xsize;
-    m_blurBpp = image.csize;
-    m_blurSize = m_blurH * m_blurW * m_blurBpp;
-    if(saved)delete saved;
-    saved = new unsigned char [m_blurSize];
-  }
+
+  if(m_savedImage.xsize!=image.xsize ||
+     m_savedImage.ysize!=image.ysize ||
+     m_savedImage.format!=image.format)m_reset=1;
+
+  m_savedImage.xsize=image.xsize;
+  m_savedImage.ysize=image.ysize;
+  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.reallocate();
 
   if (m_reset){
-    memcpy(saved,image.data,pixsize);
+    memcpy(m_savedImage.data,image.data,pixsize);
     m_reset = 0; 
   }
 
   hlength = image.xsize;
 
+  unsigned char*data =image.data;
+  unsigned char*saved=m_savedImage.data;
+
 
   for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
-      if (((image.data[src+chRed] > saved[src+chRed] - m_Urange)&&(image.data[src+chRed] < saved[src+chRed] + m_Urange))&&
-	  ((image.data[src+chGreen] > saved[src+chGreen] - m_Yrange)&&(image.data[src+chGreen] < saved[src+chGreen] + m_Yrange))&&
-	  ((image.data[src+chBlue] > saved[src+chBlue] - m_Vrange)&&(image.data[src+chBlue] < saved[src+chBlue] + m_Vrange)))
+      if (((data[src+chRed] > saved[src+chRed] - m_Urange)&&(data[src+chRed] < saved[src+chRed] + m_Urange))&&
+	  ((data[src+chGreen] > saved[src+chGreen] - m_Yrange)&&(data[src+chGreen] < saved[src+chGreen] + m_Yrange))&&
+	  ((data[src+chBlue] > saved[src+chBlue] - m_Vrange)&&(data[src+chBlue] < saved[src+chBlue] + m_Vrange)))
 	{
-	  image.data[src+chRed] = 0;
-	  image.data[src+chGreen] = 0;
-	  image.data[src+chBlue] = 0;
+	  data[src+chRed] = 0;
+	  data[src+chGreen] = 0;
+	  data[src+chBlue] = 0;
 	}
       src+=4;
     }
@@ -105,22 +104,22 @@ void pix_background :: processGrayImage(imageStruct &image)
 
   src = 0;
   pixsize = image.xsize * image.ysize * image.csize;
-  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
-    m_blurH = image.ysize;
-    m_blurW = image.xsize;
-    m_blurBpp = image.csize;
-    m_blurSize = m_blurH * m_blurW * m_blurBpp;
-    if(saved)delete saved;
-    saved = new unsigned char [m_blurSize];
-  }
+  if(m_savedImage.xsize!=image.xsize ||
+     m_savedImage.ysize!=image.ysize ||
+     m_savedImage.format!=image.format)m_reset=1;
+
+  m_savedImage.xsize=image.xsize;
+  m_savedImage.ysize=image.ysize;
+  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.reallocate();
 
   if (m_reset){
-    memcpy(saved,image.data,pixsize);
+    memcpy(m_savedImage.data,image.data,pixsize);
     m_reset = 0; 
   }
 
   npixes=image.data;
-  opixes=saved;
+  opixes=m_savedImage.data;
   i=pixsize;
   while(i--){
     newpix=*npixes++;
@@ -135,63 +134,58 @@ void pix_background :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_background :: processYUVImage(imageStruct &image)
 {
-#ifdef __VEC__
-processYUVImageAltivec(image);
-return;
-#else
-       int h,w,hlength;
-    long src,pixsize;
+  int h,w,hlength;
+  long src,pixsize;
 
-src = 0;
-pixsize = image.xsize * image.ysize * image.csize;
-if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+  src = 0;
+  pixsize = image.xsize * image.ysize * image.csize;
 
-m_blurH = image.ysize;
-m_blurW = image.xsize;
-m_blurBpp = image.csize;
-m_blurSize = m_blurH * m_blurW * m_blurBpp;
-if(saved)delete saved;
-saved = new unsigned char [m_blurSize];
+  if(m_savedImage.xsize!=image.xsize ||
+     m_savedImage.ysize!=image.ysize ||
+     m_savedImage.format!=image.format)m_reset=1;
 
-}
-
-if (m_reset){
-    memcpy(saved,image.data,pixsize);
+  m_savedImage.xsize=image.xsize;
+  m_savedImage.ysize=image.ysize;
+  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.reallocate();
+  
+  if (m_reset){
+    memcpy(m_savedImage.data,image.data,pixsize);
     m_reset = 0; 
-   // return;
-}
+    // return;
+  }
 
    
-   hlength = image.xsize/2;
+  hlength = image.xsize/2;
 
-for (h=0; h<image.ysize; h++){
+  unsigned char*data =image.data;
+  unsigned char*saved=m_savedImage.data;
+
+  for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
           
-        if (((image.data[src] > saved[src] - m_Urange)&&(image.data[src] < saved[src] + m_Urange))&&
-            ((image.data[src+1] > saved[src+1] - m_Yrange)&&(image.data[src+1] < saved[src+1] + m_Yrange))&&
-            ((image.data[src+2] > saved[src+2] - m_Vrange)&&(image.data[src+2] < saved[src+2] + m_Vrange)))
-                {
-                image.data[src] = 128;
-                image.data[src+1] = 0;
-                image.data[src+2] = 128;
-                image.data[src+3] = 0;
-                }
-        src+=4;
-
-     
+      if (((data[src] > saved[src] - m_Urange)&&(data[src] < saved[src] + m_Urange))&&
+	  ((data[src+1] > saved[src+1] - m_Yrange)&&(data[src+1] < saved[src+1] + m_Yrange))&&
+	  ((data[src+2] > saved[src+2] - m_Vrange)&&(data[src+2] < saved[src+2] + m_Vrange)))
+	{
+	  data[src]   = 128;
+	  data[src+1] = 0;
+	  data[src+2] = 128;
+	  data[src+3] = 0;
+	}
+      src+=4;
     }
-}
-#endif 
-m_reset = 0; 
+  }
+  m_reset = 0; 
 }
 
 /////////////////////////////////////////////////////////
 // the killer go fast stuff goes in here
 //
 /////////////////////////////////////////////////////////
+#ifdef __VEC__
 void pix_background :: processYUVImageAltivec(imageStruct &image)
 {
-#ifdef __VEC__
 register int h,w,i,j,width;
 int pixsize = image.xsize * image.ysize * image.csize;
     h = image.ysize;
@@ -208,20 +202,18 @@ int pixsize = image.xsize * image.ysize * image.csize;
         unsigned short		s[8];
         vector unsigned short	v;
     }shortBuffer;
-    
-    if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
 
-        m_blurH = image.ysize;
-        m_blurW = image.xsize;
-        m_blurBpp = image.csize;
-        m_blurSize = m_blurH * m_blurW * m_blurBpp;
-        if(saved)delete saved;
-        saved = new unsigned char [m_blurSize];
+    if(m_savedImage.xsize!=image.xsize ||
+       m_savedImage.ysize!=image.ysize ||
+       m_savedImage.format!=image.format)m_reset=1;
 
-    }
+    m_savedImage.xsize=image.xsize;
+    m_savedImage.ysize=image.ysize;
+    m_savedImage.setCsizeByFormat(image.format);
+    m_savedImage.reallocate();
     
     if (m_reset){
-    memcpy(saved,image.data,pixsize);
+    memcpy(m_savedImage.data,image.data,pixsize);
     m_reset = 0; 
     }
     
@@ -236,7 +228,7 @@ int pixsize = image.xsize * image.ysize * image.csize;
     register vector bool int 			Umasklo, Umaskhi, Vmaskhi, Vmasklo;
 
     vector unsigned char	*inData = (vector unsigned char*) image.data;
-    vector unsigned char	*rightData = (vector unsigned char*) saved;
+    vector unsigned char	*rightData = (vector unsigned char*) m_savedImage.data;
     
     shortBuffer.s[0] =  m_Yrange;
     Yrange = shortBuffer.v;
@@ -365,9 +357,8 @@ int pixsize = image.xsize * image.ysize * image.csize;
         vec_dss(3);
         #endif
     }
-    
-#endif //ALTIVEC
 }
+#endif //ALTIVEC
 
 /////////////////////////////////////////////////////////
 // static member function
