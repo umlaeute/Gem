@@ -87,14 +87,6 @@ static float teapot_cpdata[][3] =
     {1.425, 0, 0}, {0.798, -1.425, 0}, {0, -1.5, 0.075}, 
     {0, -1.425, 0}, {1.5, -0.84, 0.075}, {0.84, -1.5, 0.075}
 };
-static float teapot_tex[2][2][2] =
-  {
-    { {0, 0},
-      {1, 0}},
-    { {0, 1},
-      {1, 1}}
-  };
-
 
 
 CPPEXTERN_NEW_WITH_ONE_ARG(teapot, t_floatarg, A_DEFFLOAT)
@@ -108,10 +100,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(teapot, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 teapot :: teapot(t_floatarg size)
-      : GemShape(size), m_numSlices(14)
+      : GemGluObj(size)
 {
   m_drawType=GL_FILL;
-  m_sliceInlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numslices"));
+  m_numSlices=14;
   
   m_texCoords[0][0]=0;m_texCoords[0][1]=0;
   m_texCoords[1][0]=1;m_texCoords[1][1]=0;
@@ -124,9 +116,7 @@ teapot :: teapot(t_floatarg size)
 //
 /////////////////////////////////////////////////////////
 teapot :: ~teapot()
-{
-  inlet_free(m_sliceInlet);
-}
+{}
 
 /////////////////////////////////////////////////////////
 // render
@@ -134,12 +124,19 @@ teapot :: ~teapot()
 /////////////////////////////////////////////////////////
 void teapot :: render(GemState *state)
 {
-  GLenum type = m_drawType;
-  switch(type){
-  case GL_LINE_LOOP: type=GL_LINE; break;    
-  case GL_POINTS:    type=GL_POINT; break;
-  default: case GL_POLYGON:   type=GL_FILL; break;
+  GLenum type = GL_FILL;
+  switch(m_drawType){
+  case GL_LINE_LOOP: type=GL_LINE;  break;    
+  case GL_POINTS   : type=GL_POINT; break;
+  case GL_POLYGON  : type=GL_FILL;  break;
   }
+#ifdef GLU_TRUE
+  switch(m_drawType){
+  case GLU_LINE : type=GL_LINE;  break;    
+  case GLU_POINT: type=GL_POINT; break;
+  case GLU_FILL : type=GL_FILL;  break;
+  }
+#endif
 
   float p[4][4][3], q[4][4][3], r[4][4][3], s[4][4][3];
   long i, j, k, l;
@@ -203,27 +200,10 @@ void teapot :: render(GemState *state)
   glPopMatrix();
   glPopAttrib();
 }
+
 /////////////////////////////////////////////////////////
-// numSlicesMess
+// static member function
 //
 /////////////////////////////////////////////////////////
-void teapot :: numSlicesMess(int numSlices)
-{
-    m_numSlices = (numSlices < 1) ? 1 : numSlices;
-    setModified();
-}
-/////////////////////////////////////////////////////////
-// static member functions
-//
-/////////////////////////////////////////////////////////
-void teapot :: obj_setupCallback(t_class *classPtr)
-{
-  class_addmethod(classPtr, (t_method)&teapot::numSlicesMessCallback,
-		  gensym("numslices"), A_FLOAT, A_NULL); 
-}
-void teapot :: numSlicesMessCallback(void *data, t_floatarg numSlices)
-{
-    GetMyClass(data)->numSlicesMess((int)numSlices);
-}
-
-
+void teapot :: obj_setupCallback(t_class *)
+{ }

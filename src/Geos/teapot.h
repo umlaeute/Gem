@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_TEAPOT_H_
 #define INCLUDE_TEAPOT_H_
 
-#include "Base/GemShape.h"
+#include "Base/GemGluObj.h"
 
 
 /*-----------------------------------------------------------------
@@ -31,9 +31,9 @@ KEYWORD
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN teapot : public GemShape
+class GEM_EXTERN teapot : public GemGluObj
 {
-    CPPEXTERN_HEADER(teapot, GemShape)
+    CPPEXTERN_HEADER(teapot, GemGluObj)
 
     public:
 
@@ -51,23 +51,8 @@ class GEM_EXTERN teapot : public GemShape
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
-    	//////////
-    	// The number of slices in the quadric
-    	void	    	numSlicesMess(int numSlices);
-
-    	//////////
-    	// The number of slices
-    	GLint 	    	m_numSlices;
-        //////////
-        t_inlet         *m_sliceInlet;
 
 	GLfloat m_texCoords[4][2];
-
-    private:
-	//////////
-    	// Static member functions
-    	static void 	numSlicesMessCallback(void *data, t_floatarg numSlices);
-
 
 };
 
