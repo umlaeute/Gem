@@ -39,7 +39,7 @@ extern "C" {
    void pix_filmLinux_setup();
    void pix_filmNT_setup();
    void pix_filmDarwin_setup();
- 
+   void pix_filmDarwinYUV_setup();
    void pix_flip_setup();
    void pix_gain_setup();
    void pix_histo_setup();
