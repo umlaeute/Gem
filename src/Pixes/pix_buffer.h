@@ -25,7 +25,7 @@ LOG
   CLASS
   pix_buffer
   
-  change the pixBuf into dots
+  this is a buffer object for storing frames of video
   
   KEYWORDS
   pix

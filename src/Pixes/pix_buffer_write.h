@@ -22,7 +22,7 @@ LOG
   CLASS
   pix_buffer_write
   
-  change the pixBuf into dots
+  writes into a pix_buffer
   
   KEYWORDS
   pix

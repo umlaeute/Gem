@@ -22,7 +22,7 @@ LOG
   CLASS
   pix_buffer_read
   
-  change the pixBuf into dots
+  reads from a pix_buffer
   
   KEYWORDS
   pix
