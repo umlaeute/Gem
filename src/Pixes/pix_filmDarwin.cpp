@@ -133,10 +133,30 @@ void pix_filmDarwin :: realOpen(char *filename)
                                             
 	OSType		whichMediaType = VisualMediaCharacteristic;
 	short		flags = nextTimeMediaSample + nextTimeEdgeOK;
-        
+        /*
         GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
              fixed1, NULL, &duration);
-        m_numFrames = movieDur/duration;
+        m_numFrames = movieDur/duration;*/
+        
+        TimeValue	theTime = 0;
+	
+	m_numFrames = -1;
+	while (theTime >= 0) {
+		m_numFrames++;
+		::GetMovieNextInterestingTime(m_movie,
+                                            flags,
+                                            1,
+                                            &whichMediaType,
+                                            theTime,
+                                            0,
+                                            &theTime,
+                                            &duration);
+		// after the first interesting time, don't include the time we
+		//  are currently at.
+		flags = nextTimeMediaSample;
+	}
+
+        durationf = (float)movieDur/(float)m_numFrames;
 
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
@@ -244,7 +264,8 @@ void pix_filmDarwin :: getFrame()
             return;
             }
         
-        m_movieTime = m_reqFrame * duration;
+        //m_movieTime = m_reqFrame * duration;
+        m_movieTime = (long)((float)m_reqFrame * durationf);
         
         SetMovieTimeValue(m_movie, m_movieTime);
         MoviesTask(m_movie, 0);

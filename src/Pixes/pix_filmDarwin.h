@@ -81,6 +81,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   Track			m_movieTrack;
   TimeValue		m_timeScale;
   TimeValue		duration;
+  float			durationf;
   long			movieDur, movieScale;
   int			m_hiquality;
   int			m_play;
