@@ -25,8 +25,7 @@
 #endif // __APPLE__
 
 #include "Base/GemShape.h"
-#define MAXGRID 63
-
+#define MAXGRID 200
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -48,7 +47,7 @@ class GEM_EXTERN newWave : public GemShape
 
   //////////
   // Constructor
-  newWave( t_floatarg width, t_floatarg height);
+  newWave( t_floatarg width);
     	
  protected:
     	
@@ -59,10 +58,11 @@ class GEM_EXTERN newWave : public GemShape
   //////////
   // The height of the object
   short		size, mode, speed;
-  void	    	heightMess(float size);
+  void	    heightMess(float size);
   void		modeMess(float mode);
-  void		speedMess(float speed);
-  //void		otherMess(float other);        
+  void		forceMess(float posX, float posY, float valforce);
+  void		positionMess(float posX, float posY, float posZ);
+  void		bangMess();        
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
@@ -80,16 +80,21 @@ class GEM_EXTERN newWave : public GemShape
         t_inlet         *m_inletH;
         t_inlet		*inletM;
         t_inlet		*inletSp;
-        //t_inlet		*inletOt;
   
   //////////
   // getStuff
   void		getforce(void);
   void 		getvelocity(void);
   void 		getposition(void);
+  void 		savepos(void);
+  void 		getK(void);
+  void 		getdamp(void);
   void		getTexCoords(void);
   void		setSize( int value );
-  void		setSpeed( float value );
+ // void		setK( float value );
+ // void		setD( float value );
+  void		position( float posX, float posY, float posZ );
+  void		setforce( float posX, float posY, float valforce);
 
   void copy( float vec0[3], float vec1[3]);
   void sub(float vec0[3], float vec1[3], float vec2[3]);
@@ -104,15 +109,15 @@ class GEM_EXTERN newWave : public GemShape
   void getFaceNorms( void );
   void getVertNorms( void );
   void getFaceNormSegs( void );
-  
-  //  int 		m_size; /* jmz: this one isn't used anyhow, but overwrites the one from GemShape */
-  int		m_speed;
+
   int		m_blend;
   float		xsize, ysize;
+  float		K1, D1, K2, D2, K3, D3;
   
   float force[MAXGRID][MAXGRID],
       veloc[MAXGRID][MAXGRID],
       posit[MAXGRID][MAXGRID],
+      positold[MAXGRID][MAXGRID],
       vertNorms[MAXGRID][MAXGRID][3],
       faceNorms[2][MAXGRID][MAXGRID][3],
       faceNormSegs[2][2][MAXGRID][MAXGRID][3];
@@ -124,9 +129,18 @@ class GEM_EXTERN newWave : public GemShape
   //////////
   // static member functions
   static void 	heightMessCallback(void *data, t_floatarg size);
-  static void 	modeMessCallback(void *data, t_floatarg mode);
-  static void 	speedMessCallback(void *data, t_floatarg speed);
+  static void 	modeMessCallback(void *data, t_floatarg mode); 
   static void 	blendMessCallback(void *data, t_floatarg size);
+  static void 	setK1MessCallback(void *data, t_floatarg K);
+  static void 	setD1MessCallback(void *data, t_floatarg D);
+  static void 	setK2MessCallback(void *data, t_floatarg K);
+  static void 	setD2MessCallback(void *data, t_floatarg D);
+  static void 	setK3MessCallback(void *data, t_floatarg K);
+  static void 	setD3MessCallback(void *data, t_floatarg D);
+  static void 	forceMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce );
+  static void 	positionMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg posZ );
+  static void 	bangMessCallback(void *data );
+
 };
 
 #endif	// for header file
