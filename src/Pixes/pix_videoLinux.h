@@ -65,7 +65,7 @@ class GEM_EXTERN pix_videoLinux : public pix_video
 
         //////////
         // Constructor
-    	pix_videoLinux(t_floatarg w = 320, t_floatarg h = 240);
+    	pix_videoLinux(t_floatarg, t_floatarg);
 
     	
     protected:
