@@ -62,17 +62,10 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
     }
     pSource = (U32*)image.data;
     
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
-
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
     pOutput = (U32*)myImage.data;
 
     const int nNumPixels=nWidth*nHeight;
@@ -275,17 +268,11 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
     }
     pSource = (U32*)image.data;
     
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-		int dataSize = image.xsize * image.ysize * image.csize;
-		myImage.clear();
-		myImage.allocate(dataSize);
-    }
-
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-	myImage.setBlack();
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
+    myImage.setBlack();
     pOutput = (U32*)myImage.data;
 
     const int nNumPixels=nWidth*nHeight;
@@ -304,11 +291,13 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 			const U32* pSourceLineEnd = pCurrentSource + nWidth;
 
 			while ( pCurrentSource != pSourceLineEnd) {
-				const U32 SourceColour=*pCurrentSource;
-				nSourceY1 = ((SourceColour&(0xff<<16))>>16)<<8;
-				nSourceY1 -= 32640;								// 128*255
-				nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
-				nSourceY2 -= 32640;
+			  const U32 SourceColour=*pCurrentSource;
+			  //nSourceY1 = ((SourceColour&(0xff<<16))>>16)<<8;
+			  nSourceY1 = ((SourceColour>>SHIFT_Y1)&0xff)<<8;
+			  nSourceY1 -= 32640;	// 128*255
+			  nSourceY2 = ((SourceColour>>SHIFT_Y2)&0xff)<<8;
+			  //nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
+			  nSourceY2 -= 32640;
 				
 				const int nOffset1=(nSourceY1*nOffsetScale)>>16;
 				const int nOffset2=(nSourceY2*nOffsetScale)>>16;
