@@ -1,0 +1,34 @@
+
+
+include Make.source
+
+OBJECTS = $(SOURCES:.cpp=.o)
+
+CXX = @CXX@
+CC = @CC@
+
+ARCH = $(shell uname --machine)
+
+ifeq (${ARCH},alpha)
+AFLAGS = -mieee  -mcpu=ev56
+endif
+
+
+CXXFLAGS = -g  @CXXFLAGS@ $(AFLAGS) -I../ @INCLUDES@
+
+all: $(OBJECTS)
+
+
+depend:
+	$(CXX) -M $(CXXFLAGS) $(SOURCES) > Make.depend
+
+
+clean:
+	-rm $(OBJECTS) *~
+
+distclean:
+	-rm Makefile.in Makefile Make.source Make.depend Make.depend.bak
+	touch Make.depend
+
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $*.cpp -o $*.o

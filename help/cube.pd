@@ -1,0 +1,15 @@
+#N canvas 193 209 600 500 10;
+#X text 158 42 cube;
+#X text 91 291 cube renders a cube with the current color \, transformation matrix \, and texture data.;
+#X msg 171 193 size;
+#X msg 144 141 gemList;
+#X msg 45 133 draw line;
+#X msg 45 164 draw fill;
+#X msg 45 196 draw point;
+#X text 135 84 GEM object;
+#X obj 144 240 cube;
+#X connect 2 0 8 1;
+#X connect 3 0 8 0;
+#X connect 4 0 8 0;
+#X connect 5 0 8 0;
+#X connect 6 0 8 0;

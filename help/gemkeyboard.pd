@@ -1,0 +1,12 @@
+#N canvas 372 150 600 368 10;
+#X text 135 37 part of GEM;
+#X obj 169 152 gemkeyboard;
+#X text 152 70 [gemkeyboard];
+#X text 87 100 keyboard events in the GEM window;
+#X text 84 261 [gemkeyboard] sends out keyboard events which occur
+in the GEM window. Such event will appear on KEY_DOWN and will gibe
+the KeyCode of the button.;
+#X text 82 318 It is not guaranteed \, that Windows and Linux versions
+will give the same KeyCode for the same key pressed !!!;
+#X msg 169 196 KeyCode;
+#X connect 1 0 6 0;

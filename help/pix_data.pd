@@ -1,0 +1,34 @@
+#N canvas 134 87 634 482 12;
+#X msg 164 99 gemList;
+#X msg 142 307 gemList;
+#X text 169 16 part of GEM;
+#X text 176 43 [pix_data];
+#X obj 142 207 pix_data;
+#X text 93 73 get pixel-data of an image;
+#X msg 82 153 bang;
+#X msg 186 138 x-pos;
+#X msg 209 167 y-pos;
+#X floatatom 209 233 5 0 0;
+#X obj 175 260 unpack 0 0 0;
+#X floatatom 280 283 5 0 0;
+#X floatatom 226 283 5 0 0;
+#X floatatom 175 283 5 0 0;
+#X text 289 235 gray-value;
+#X text 289 261 color-list;
+#X text 52 330 [pix_data] will get the colour of a specified pixel
+within an image when triggered.;
+#X text 55 369 The coordinates within the image (x-pos \, y-pos) range
+from (0.0f \, 0.0f) (left-bottom) to (1.0f \, 1.0f) (right-top).;
+#X text 54 414 After the first inlet is triggered with a "bang" \,
+the color of the specified pixels is output both as gray-value and
+as RGB-triplet.;
+#X connect 0 0 4 1;
+#X connect 4 0 1 0;
+#X connect 4 1 10 0;
+#X connect 4 2 9 0;
+#X connect 6 0 4 0;
+#X connect 7 0 4 2;
+#X connect 8 0 4 3;
+#X connect 10 0 13 0;
+#X connect 10 1 12 0;
+#X connect 10 2 11 0;

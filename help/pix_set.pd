@@ -1,0 +1,31 @@
+#N canvas 81 0 634 619 12;
+#X msg 142 112 gemList;
+#X msg 142 307 gemList;
+#X text 169 16 part of GEM;
+#X text 176 43 [pix_set];
+#X text 93 73 set all the pixel-data of an image;
+#X obj 142 264 pix_set;
+#X obj 418 268 pix_set 8 8;
+#X msg 232 127 RGB;
+#X msg 233 152 RGBA;
+#X msg 235 179 GREY;
+#X msg 200 235 R1 G1 B1 A1 R2 G2 B2 ...;
+#X text 276 151 (default);
+#X text 29 344 [pix_set] will allow you to set the image-data of a
+pixel with one long list of (m*n) Pixel-Tupel.;
+#X text 30 384 The size of the image can be set with creation-arguments.
+It defaults to 64*64.;
+#X text 30 428 How the list is interpreted depends on the mode \, [pix_set]
+is set to. When in RGBA-Mode (default) you should pass a float-list
+of the form "R1 G1 B1 A1 R2 G2 B2 A2 ...". In RGB-Mode the float-list
+will be of the form "R1 G1 B1 R2 G2 B2 ...". In GREY-Mode the float-list
+is simply "V1 V2 ...";
+#X text 26 525 If the list does not contain enough data \, the rest
+of the image will be set to 0 (black).;
+#X text 24 582 The image will always be in RGBA-color-space !;
+#X connect 0 0 5 0;
+#X connect 5 0 1 0;
+#X connect 7 0 5 0;
+#X connect 8 0 5 0;
+#X connect 9 0 5 0;
+#X connect 10 0 5 1;

@@ -1,0 +1,63 @@
+GEM ONLINE DOCUMENTATION CHAPTER 7: TODO
+----------------------------------------
+
+  This is a list of future improvements and changes.
+No importance should be given to the order...it is just
+when I thought of things.
+    - Mark D.
+    - IOhannes m z
+
+---------------------------- TODO -----------------------------
+
+GENERAL
+-------
+only connect to tablet if gem_tablet exists
+new particle objects
+
+
+OBJECTS
+-------
+triangle_fan
+stereoscopic display with hardware glasses
+NURBS/bezier patches
+3DstudioMax file loader
+CAL3d (character animation library): to come with gem0.88
+Alias|Wavefront file data
+    - articulation hierarchies in Wavefront's Kinemation
+    - read Preview's .mov files (an ascii list of x, y, and/or z values)
+	- write my own A/W parser
+morphing between alias|wavefront models
+    - assume same number of points in each model
+
+PIXES
+-----
+pix_dv
+motion and image analysis
+crop for all pix objects
+    - like dimen and offset for pix_video
+some way to fragment an image so that it can be used as multiple
+    texture maps (hopefully arbitrary shapes, but possibly only rectangular)
+pix_erosion
+pix_dilation
+pix_median/min/max filter
+pix_lowpass
+pix_highpass
+video external keyer
+    - three inputs - the matte and two image inputs
+increased control of the Threshold object.
+    - upper and lower levels adjustable
+stereoscopic texture loader
+pix_circle
+pix_triangle
+test pix_video - espec offset message
+
+OPENGL
+------
+be able to switch between single and double buffering on the fly
+have multiple graphics windows
+increased control of view port, etc.
+be able to use multiple pipes (MCO)
+try out glMatrixMode(GL_TEXTURE) to deal with nonstandard texture mapping
+render to a pixblock (use pbuffers or offscreen renderer)
+multipass rendering
+multitexturing

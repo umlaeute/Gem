@@ -1,0 +1,17 @@
+#N canvas 391 157 600 500 10;
+#X text 135 37 part of GEM;
+#X text 87 100 keyboard events in the GEM window;
+#X obj 162 177 gemkeyname;
+#X msg 227 227 KeyName;
+#X msg 162 274 state;
+#X text 152 70 [gemkeyname];
+#X text 52 383 It is not guaranteed \, that Windows and Linux versions
+will give the same description for the same key pressed !!! Also \,
+there is no guarantee \, that the pcd-object [keyname] will return
+the same symbols as [gemkeyname];
+#X text 51 318 [gemkeyname] sends out keyboard events which occur in
+the GEM window. Such event will give a symbolic description of the
+button. The "state"-outlet will be 1 for KEY_DOWN and 0 for KEY_UP.
+;
+#X connect 2 0 4 0;
+#X connect 2 1 3 0;

@@ -1,0 +1,27 @@
+#N canvas 256 391 600 500 10;
+#X msg 19 79 gemList;
+#X msg 19 278 gemList;
+#X text 129 29 part of GEM;
+#X msg 33 118 red;
+#X msg 48 145 green;
+#X msg 63 171 blue;
+#X msg 78 199 alpha;
+#X msg 252 183 gemList;
+#X msg 252 280 gemList;
+#X text 59 427 If you set the alpha value \, then you probably want
+to use the alpha object.;
+#X obj 19 225 emissionRGB;
+#X obj 252 228 emissionRGB 1 0 1 0.4;
+#X text 131 80 [emissionRGB];
+#X text 61 397 [emissionRGB] accepts initial arguments;
+#X text 64 345 [emissionRGB] sets the emission color for all subsequent
+shape and vertex operations. The alpha value defaults to 1.0f. The
+RGB-values default to 0.0f.;
+#X connect 0 0 10 0;
+#X connect 3 0 10 1;
+#X connect 4 0 10 2;
+#X connect 5 0 10 3;
+#X connect 6 0 10 4;
+#X connect 7 0 11 0;
+#X connect 10 0 1 0;
+#X connect 11 0 8 0;

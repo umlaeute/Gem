@@ -1,0 +1,20 @@
+#N canvas 188 0 499 487 10;
+#X msg 164 99 gemList;
+#X msg 164 302 gemList;
+#X text 169 16 part of GEM;
+#X obj 164 217 pix_bitmask;
+#X msg 200 152 mask;
+#X msg 237 180 maskR maskB maskG;
+#X text 151 73 mask out the pixels;
+#X text 56 329 pix_bitmask uses a bit masking to change the pixels.
+If a single mask is used \, the alpha mask is assumed to be 255 (or
+\, pass everything).;
+#X text 55 385 The mask is an unsigned char \, which means it can go
+from 0-255 \, with 0 not passing any bits.;
+#X text 54 432 You may need to use pix_gain either before or after
+since low bit values will reduce the luminance of the pix.;
+#X text 176 43 [pix_bitmask];
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;
+#X connect 4 0 3 1;
+#X connect 5 0 3 2;

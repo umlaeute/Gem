@@ -1,0 +1,311 @@
+dnl Process this file with autoconf to produce a configure script.
+
+twice_lib=`dirname $(find $2 -name "lib$1.a" | sed 1q)
+
+AC_INIT(../Base/CPPExtern.h)
+
+VERSION=0.87
+PACKAGE=gem
+GEMLIBS="../../../GemLibs"
+
+AC_SUBST(GEMLIBS)
+AC_SUBST(VERSION)
+AC_SUBST(PACKAGE)
+
+HAVING_LIBS=""
+HAVING_HEADERS=""
+
+
+. makeauxlibs
+dnl 
+dnl We will use the same Makefiles for any subdir .. so build the Makefile.in
+dnl 
+
+. makesource
+
+
+dnl check for architecture
+dnl ***********************************************************************
+
+
+AC_CANONICAL_HOST
+
+ttarget=pd_`echo $host_os | sed /.*/s/-.*//`
+target=`echo $ttarget | sed -e 's/\[.].*//'`
+
+echo Configuring for Gem.$target
+AC_SUBST(target)
+
+dnl Check for make version
+
+AC_SUBST_FILE(build_rules)
+
+
+echo $ac_n "checking for gnu make""... $ac_c"  1>&6
+
+ac_make_gnu=`make -v | sed /GNU/p`
+if test "$ac_make_gnu" != ""; then
+  ac_make_gnu="yes";
+  build_rules="Config.gnumake"
+  echo $ac_t "yes";
+else 
+  ac_make_gnu="no";
+  build_rules="Config.make"
+  echo $ac_t "no";
+fi
+
+
+
+dnl Checks for programs.
+dnl ***********************************************************************
+
+AC_PROG_CXX
+#case $target in 
+#pd_irix*)
+#    echo $ac_n "checking for irix C++ compiler""... $ac_c" 1>&6
+
+#    if test "${GXX+set}" = set; then 
+#      echo $ac_t yes;
+#      echo "adding flags for irix CC compiler";
+#      CXXFLAGS="$CXXFLAGS -o32 -mips2 -xansi -woff 3157,3173";
+#    else
+#      echo $ac_t no;
+#    fi;;
+#esac
+
+
+AC_PROG_CC
+AC_SUBST(CC)
+AC_SUBST(CXX)
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_CHECK_PROGS(shell_prog,sh)
+
+AC_PATH_XTRA
+
+
+dnl Checks for libraries.
+dnl ***********************************************************************
+
+
+source_dirs="$SOURCEDIRS"
+AC_SUBST(source_dirs)
+
+LIBTOOL=""
+AC_SUBST(LIBTOOL)
+arch_ld_flags="-shared"
+AC_SUBST(arch_ld_flags)
+
+if test "$x_libraries" != ""; then
+LDFLAGS="$LDFLAGS -L$x_libraries";
+fi
+
+AC_CHECK_LIB(X11,main)
+AC_CHECK_LIB(Xext,main)
+AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
+dnl add -shared to the libraries, so X will be shared
+LIBS="-Wl,-shared -Wl,-export-dynamic $LIBS"
+
+AC_ARG_WITH(static,"  ",LIBS="/usr/lib/gcc-lib/i486-linux/egcs-2.91.57/libstdc++.a $LIBS")
+
+AC_CHECK_LIB(m,sin)
+dnl AC_CHECK_LIB(glib,main)
+
+dnl Check for OpenGL (Original or Mesa)
+
+AC_CHECK_LIB(GL,
+	     glInitNames,
+             ,
+             AC_CHECK_LIB(MesaGL,glInitNames,,
+                          echo "OpenGL is mandatory";exit 1)
+            )
+                            
+dnl Check for OpenGLU (Original or Mesa)
+
+AC_CHECK_LIB(GLU,
+             gluLookAt,
+             ,
+             AC_CHECK_LIB(MesaGLU,gluLookAt,,
+                          echo "incomplete OpenGL (no GLU)";exit 1)
+             )                                                 
+
+dnl
+dnl Check for OpenGLlut
+dnl
+     AC_CHECK_LIB_TWICE(glut,glutSolidTeapot, "/usr/local")
+
+dnl
+dnl Check for PNG and GLIB
+dnl
+        AC_CHECK_LIB(png, png_set_compression_level)
+        AC_CHECK_LIB(glib, main)
+
+
+dnl
+dnl Check for quicktime
+dnl
+	AC_CHECK_LIB(quicktime, quicktime_open)
+	AC_ADD_HAVELIB
+
+dnl
+dnl Check for mpeg
+dnl
+
+      AC_CHECK_LIB(mpeg, OpenMPEG)
+      AC_ADD_HAVELIB
+
+dnl
+dnl Check for mpeg3
+dnl
+
+      AC_CHECK_LIB(mpeg3, mpeg3_open)
+      AC_ADD_HAVELIB
+
+
+dnl 
+dnl  The following libraries are not that common, so they are looked for
+dnl  in two different places
+dnl  1) in the system
+dnl  2) in the gem distribution
+dnl
+
+search_libs="/usr/local ../../../"
+
+dnl
+dnl Check for tiff
+dnl
+
+      AC_CHECK_LIB_TWICE(tiff,$search_libs)
+
+dnl
+dnl Check for Jpeg
+dnl
+
+     AC_CHECK_LIB_TWICE(jpeg,$search_libs)
+
+dnl
+dnl Check for ttf
+dnl
+
+     AC_CHECK_LIB_TWICE(ttf,$search_libs)
+
+dnl
+dnl Check for gltt
+dnl
+
+     AC_CHECK_LIB_TWICE(gltt,$search_libs)
+
+dnl Check for sgi vl library
+AC_CHECK_LIB(vl,main,
+             SGI_SPECIFIC="pix_videoSGI.o pix_indycam.o")
+
+AC_CHECK_LIB(z,main)
+
+AC_SUBST(SGI_SPECIFIC)
+
+dnl check for dl , stdc++ 
+
+if test "${GXX+set}" != set; then
+AC_CHECK_LIB(dl,dlopen)
+AC_CHECK_LIB(stdc++,main)
+fi
+
+ggstatic="-Wl,-Bstatic"
+AC_ARG_WITH(static,"  ",LIBS="$ggstatic $LIBS")
+
+LDFLAGS="$LDFLAGS -L$GEMLIBS/glm  -L$GEMLIBS/particle  -L$GEMLIBS/liborb"
+LIBS="$LIBS -lglm -lparticle -lorb"
+
+
+
+dnl Checks and searches(!) for header files.
+dnl ***********************************************************************
+
+
+dnl look for pd
+
+INCLUDES="-I..  $INCLUDES -I$GEMLIBS/glm -I$GEMLIBS/liborb -I$GEMLIBS/particle"
+
+pdsearchlibs="/usr/local/include /usr/local/src /usr/include $HOME"
+AC_PATH_INCLUDE(m_pd.h,$pdsearchlibs)
+
+dnl look for the locals...
+AC_PATH_INCLUDE(GLTTFont.h,/usr/include /usr/local/include $search_libs)
+
+dnl check the rest
+
+dnl MPEG3 is still problematic (wait for the Debian-libmpeg3
+dnl AC_PATH_INCLUDE(libmpeg3.h, /usr/include /usr/local/include $searchlibs)
+
+AC_CONFIG_HEADER(../Base/config.h)
+
+AC_CHECK_HEADERS(mpeg.h quicktime/quicktime.h)
+AC_CHECK_HEADERS(libmpeg3.h)
+
+
+if [test "`echo $HAVING_LIBS | grep QUICKTIME`" = ""]
+then
+  :
+else
+  :
+dnl	  AC_PATH_INCLUDE(libdv.h, /usr/include/quicktime/)
+dnl AC_CHECK_HEADERS(quicktime/libdv.h)
+dnl as with debian and quicktime4linux-dev_1.3-5 the libdv is sorted out now....see:
+dnl http://lists.debian.org/debian-devel-changes/2002/debian-devel-changes-200202/msg00437.html
+fi
+
+dnl we need GLIB if we want firewire/DV support
+if [test "`echo $LIBS | grep glib`" = ""]
+then
+  :
+else
+  INCLUDES="`glib-config --cflags` $INCLUDES"
+  LIBS="`glib-config --libs` $LIBS"
+fi  
+
+
+
+
+dnl AC_ADD_HAVEHEAD
+
+
+AC_SUBST(INCLUDES)
+
+AC_HEADER_STDC
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+dnl AC_C_INLINE
+AC_TYPE_SIZE_T
+
+dnl Checks for library functions.
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(strdup strstr)
+
+AC_SUBST(arch_ld_flags)
+AC_SUBST(LIBS)
+
+RANLIB=gcc 
+AC_SUBST(RANLIB)
+
+CXXFLAGS="-fPIC"
+AC_SUBST(CXXFLAGS)
+
+AC_SUBST(HAVING_LIBS)
+AC_SUBST(HAVING_HEADERS)
+
+dnl gemsrc=/slink/home/geiger/PD/gem-0.79/src
+gemsrc=./..
+
+AC_OUTPUT(Makefile  
+$gemsrc/Manips/Makefile
+$gemsrc/Particles/Makefile
+$gemsrc/Base/Makefile
+$gemsrc/MarkEx/Makefile 
+$gemsrc/Pixes/Makefile 
+$gemsrc/Controls/Makefile 
+$gemsrc/Nongeos/Makefile 
+$gemsrc/Geos/Makefile
+$gemsrc/TV/Makefile
+)
+

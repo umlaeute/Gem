@@ -1,0 +1,96 @@
+Build instructions for GEM Linux
+================================
+
+Prerequisites for compiling GEM (version >=0.87):
+
+Mesa       http://mesa3d.sourceforge.net
+GLUT       http://reality.sgi.com/mjk_asd/glut3/glut-3.6.tar.gz
+tiff       ftp://ftp.sgi.com/graphics/tiff/tiff-v3.4beta037-tar.gz
+freetype   ftp://ftp.physiol.med.tu-muenchen.de/pub/freetype/
+gltt       http://home.worldnet.fr/~rehel/gltt/gltt.html
+jpeg       ftp://ftp.uu.net:graphics/jpeg/
+
+To enable movie-loading you might want to install one (or all) of the following:
+quicktime4linux	http://heroine.linuxave.net/quicktime.html
+MPEG		ftp://ftp.bic.mni.mcgill.ca/pub/mpeg/mpeg_lib-1.3.1.tar.gz
+mpeg3		http://heroines.sourceforge.net/libmpeg3-1.3.tar.gz
+
+note: sorry to say, but heroine doesn't seem to support neither quicktime4linux nor mpeg3 any more.
+try to find a developer-package for your distribution.
+
+On a Debian system (most of) these library are already in your distribution.
+Some packages, that are not in the official Debian-release (esp. libmpeg3(-dev)), can be found at
+http://marillat.free.fr
+For other distributions you may have a look which ones are there
+and download and install the other ones.
+
+Try using http://rpmfind.net for rpm-packages.
+
+Some libraries which are not that common are distributed with this
+package. You have to build them first with the 
+
+#> ./makeauxlibs
+
+command in the src/Gnu directory. 
+
+If this suceeds, the next step is 
+
+#> ./configure
+
+followed by a 
+
+#> make
+
+This should build Gem.pd_linux in the gem root directory.
+
+The configure script tries to figure out several things. An important one is 
+the location of the pd header file "m_pd.h".
+
+You can put m_pd.h into any place within gem (suggested is the src/Base 
+directory), or have your pd source tree reside beside the gem source tree. 
+Take care that there is only one m_pd.h there, otherwise it is possible that 
+the script finds the wrong one.
+(having two different pd versions in the same directory may cause this problem).
+
+
+To test Gem (you need to have pd installed) 
+
+#> cd ../..
+#> pd -lib Gem
+
+
+Other:
+
+"make distclean" removes all traces from a build.
+"make clean" removes the object files
+"make depend" creates a dependency file
+
+"makeauxlibs clean" cleans up the auxilliary libraries
+
+
+-----------------------------------------------------------------
+Advanced:
+ To make the porting from WinNT easier the make process is rather 
+sophisticated. 
+
+This is done by a script called "makesources"
+
+- One point here is, that all the files to be built are
+detected automatically (so I can basically just compile any new version
+of Gem without adding the additional objects).
+
+- The Makefiles for the subdirectories are created the following way:
+  * The file Makefile.subdir is copied to every subdirectory, and renamed
+  to Makefile.in
+  * The configure scripts translates every Makefile.in into a Makefile.
+  * A file Make.sources is included in every Makefile. This is where the
+  objects to be built are listed.
+
+
+Report any failures to <zmoelnig@iem.kug.ac.at>
+
+IOhannes
+
+
+
+

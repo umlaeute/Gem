@@ -1,0 +1,25 @@
+#N canvas 293 148 600 385 10;
+#X text 135 37 part of GEM;
+#X text 152 70 [gemtablet];
+#X text 69 93 respond to events of a graph-tablet;
+#X obj 110 118 gemtablet ........;
+#X msg 110 295 X Pos;
+#X msg 125 274 Y Pos;
+#X msg 140 253 Pressure;
+#X msg 155 230 Azimuth;
+#X msg 185 188 Twist;
+#X msg 240 178 Left_Button;
+#X msg 262 136 Right_Button;
+#X msg 254 157 Middle_Button;
+#X msg 170 209 Altitude;
+#X text 67 326 [gemtablet] connects to a graph-tablet. You have to
+have a graph-tablet to make any use of [gemtablet];
+#X connect 3 0 4 0;
+#X connect 3 1 5 0;
+#X connect 3 2 6 0;
+#X connect 3 3 7 0;
+#X connect 3 4 12 0;
+#X connect 3 5 8 0;
+#X connect 3 6 9 0;
+#X connect 3 7 11 0;
+#X connect 3 8 10 0;

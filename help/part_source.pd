@@ -1,0 +1,17 @@
+#N canvas 318 36 664 366 12;
+#X msg 180 86 gemList;
+#X text 176 62 GEM object;
+#X msg 180 195 gemList;
+#X text 260 196 partList;
+#X text 254 89 partList;
+#X obj 180 152 part_source;
+#X text 184 25 [part_source];
+#X obj 489 191 part_size 20;
+#X text 51 252 add a particle-source. You will need this if you want
+any particles in your particle-system.;
+#X text 53 290 The initial argument (that can be changed) gives the
+number of particles that are emitted at each rendering-frame;
+#X msg 274 128 number_of_particles_per_frame;
+#X connect 0 0 5 0;
+#X connect 5 0 2 0;
+#X connect 10 0 5 1;

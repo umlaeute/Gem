@@ -1,0 +1,16 @@
+#N canvas 633 327 600 500 10;
+#X msg 121 107 gemList;
+#X msg 121 212 gemList;
+#X text 120 28 pix_a_2grey;
+#X text 57 63 convert a pix to greyscale based on the alpha channel;
+#X text 46 277 Assuming that you have an image in the gemList (for instance \, loaded in with pix_image) \, pix_a_2grey will convert the image into a greyscale.;
+#X obj 121 165 pix_a_2grey 0.5;
+#X msg 221 131 alphaVal;
+#X text 48 341 If alphaVal > 0 \, then it will convert to greyscale where ever the pixel alpha is greater than the alphaVal.;
+#X text 43 419 If alphaVal = 0 \, then nothing happens.;
+#X text 45 379 If alphaVal < 0 \, then it will convert to greyscale where ever the pixel alpha is less than the -alphaVal.;
+#X text 217 104 Between -1 < alphaVal < 1;
+#X text 39 449 Thanks to iohannes m zmoelnig at zmoelnig@iem.mhsg.ac.at for the code!;
+#X connect 0 0 5 0;
+#X connect 5 0 1 0;
+#X connect 6 0 5 1;

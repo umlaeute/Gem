@@ -1,0 +1,29 @@
+#N canvas 97 158 708 461 12;
+#X msg 120 56 gemList;
+#X msg 120 182 gemList;
+#X text 62 32 loads in an image file;
+#X msg 259 129 an int for which image;
+#X text 110 12 [pix_imageInPlace];
+#X obj 120 154 pix_imageInPlace;
+#X msg 267 47 preload myFiles*.tif 5;
+#X msg 267 74 download;
+#X msg 268 101 purge;
+#X text 66 310 This is potentially slow if you are trying to change
+between a lot of images \, but it doesn't use a lot of texture ram.
+;
+#X text 65 242 [pix_imageInPlace] is slightly different than [pix_multiimage].
+When you select an image to display with [pix_multiimage] \, it copies
+over the image data to the pix_buffer \, which is then used by [pix_texture].
+;
+#X text 66 361 [pix_imageInPlace] sends all of the image data to texture
+RAM when the preload message is received. This means that you cannot
+process any of the pixel data \, but it is extremely quick to change
+between the various images.;
+#X text 64 430 Additionally \, you do not need a [pix_texture] object.
+;
+#X connect 0 0 5 0;
+#X connect 3 0 5 1;
+#X connect 5 0 1 0;
+#X connect 6 0 5 0;
+#X connect 7 0 5 0;
+#X connect 8 0 5 0;

@@ -1,0 +1,11 @@
+#N canvas;
+#X msg 164 109 gemList;
+#X msg 164 227 gemList;
+#X obj 164 168 pix_buf;
+#X text 175 43 pix_buf;
+#X text 154 73 buffer a pix;
+#X text 59 255 pix_buf buffers pixes. This allows you to do some processing which might require a lot of time (for example \, convolution) and store it. All images use a pull system \, so as long as nothing is modified in the pix "upstream" \, the pix_buf is still valid.;
+#X text 58 348 pix_buf is only effective if it is storing a static image. If you are continually modifying the buffered pix \, then pix_buf is going to be spending a lot of time copying pixels.;
+#X text 155 10 part of GEM;
+#X connect 0 0 2 0;
+#X connect 2 0 1 0;

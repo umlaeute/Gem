@@ -1,0 +1,17 @@
+#N canvas 746 184 600 500 10;
+#X msg 149 157 size;
+#X msg 175 188 slices;
+#X msg 124 110 gemList;
+#X msg 25 122 draw line;
+#X msg 25 153 draw fill;
+#X msg 25 185 draw point;
+#X text 113 60 GEM object;
+#X text 121 18 cylinder;
+#X obj 124 230 cylinder;
+#X text 38 294 cylinder renders a cylinder with the current color \, transformation matrix \, and texture information. Slices is the number of slices which will be used to make up the cylinder;
+#X connect 0 0 8 1;
+#X connect 1 0 8 2;
+#X connect 2 0 8 0;
+#X connect 3 0 8 0;
+#X connect 4 0 8 0;
+#X connect 5 0 8 0;

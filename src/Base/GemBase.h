@@ -1,0 +1,102 @@
+/*-----------------------------------------------------------------
+LOG
+    GEM - Graphics Environment for Multimedia
+
+    The base class for all of the gem objects
+
+    Copyright (c) 1997-1999 Mark Danks. mark@danks.org
+    Copyright (c) Günther Geiger.
+    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+    For information on usage and redistribution, and for a DISCLAIMER OF ALL
+    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+	
+-----------------------------------------------------------------*/
+
+#ifndef INCLUDE_GEMBASE_H_
+#define INCLUDE_GEMBASE_H_
+
+// I hate Microsoft...I shouldn't have to do this!
+#ifdef _WINDOWS
+#include <windows.h>
+#endif
+
+#include <GL/gl.h>
+
+#ifndef INCLUDE_CPPEXTERN_H_
+#include "Base/CPPExtern.h"
+#endif INCLUDE_CPPEXTERN_H_
+#include "Base/GemState.h"
+
+class GemCache;
+class GemDag;
+
+/*-----------------------------------------------------------------
+-------------------------------------------------------------------
+CLASS
+    GemBase
+    
+    Base class for gem objects
+
+DESCRIPTION
+    
+-----------------------------------------------------------------*/
+class GEM_EXTERN GemBase : public CPPExtern
+{
+    protected:
+    	
+        //////////
+        // Constructor
+    	GemBase();
+    	
+    	//////////
+    	// Destructor
+    	virtual     	~GemBase();
+
+    	//////////
+    	virtual void 	render(GemState *state) = 0;
+
+    	//////////
+    	// After objects below you in the chain have finished.
+    	// You should reset all GEM/OpenGL states here.
+    	virtual void 	postrender(GemState *)              { ; }
+
+    	//////////
+    	// If you care about the start of rendering
+    	virtual void	startRendering()                    { ; }
+
+    	//////////
+    	// If you care about the stop of rendering
+    	virtual void	stopRendering()    	                { ; }
+    	
+    	//////////
+    	// If anything in the object has changed
+    	void	    	setModified();
+
+    	//////////
+    	// Don't mess with this unless you know what you are doing.
+    	GemCache    	*m_cache;
+
+        //////////
+        // The outlet
+        t_outlet    	*m_out1;
+
+    	//////////
+    	// creation callback
+    	static void 	real_obj_setupCallback(t_class *classPtr)
+    	    { CPPExtern::real_obj_setupCallback(classPtr); GemBase::obj_setupCallback(classPtr); }
+    	
+    private:
+    
+    	void	    	realStopRendering();
+        void            gem_dagCacheMess(GemDag *dagPtr, GemCache *cachePtr);
+    	    	
+    	static inline GemBase *GetMyClass(void *data) {return((GemBase *)((Obj_header *)data)->data);}
+
+    	friend class    gemhead;
+    	static void 	obj_setupCallback(t_class *classPtr);
+    	static void 	gem_dagCacheMessCallback(void *x, void *gem_dag, void *gem_cache);
+    	static void 	renderCallback(GemBase *data, GemState *state);
+    	static void 	postrenderCallback(GemBase *data, GemState *state);
+};
+
+#endif	// for header file

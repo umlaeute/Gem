@@ -1,0 +1,16 @@
+#N canvas 134 87 634 482 12;
+#X msg 142 112 gemList;
+#X msg 142 307 gemList;
+#X text 169 16 part of GEM;
+#X text 176 43 [pix_dump];
+#X obj 142 207 pix_dump;
+#X msg 211 149 bang;
+#X text 261 147 trigger;
+#X text 93 73 dump all the pixel-data of an image;
+#X text 52 330 [pix_dump] will output one long list of (m*n) Pixel-Tupel.
+;
+#X text 53 361 For a RGBA-image the list will have the form:;
+#X text 73 381 R1 G1 B1 A1 R2 G2 B2 A2 R3 G3 ... B(m*n) A(m*n);
+#X connect 0 0 4 0;
+#X connect 4 0 1 0;
+#X connect 5 0 4 0;

@@ -1,0 +1,22 @@
+#N canvas 352 201 600 500 10;
+#X msg 173 156 1;
+#X msg 173 184 0;
+#X msg 124 249 gemList;
+#X obj 124 219 alpha;
+#X text 138 22 alpha;
+#X msg 124 120 gemList;
+#X text 124 68 GEM object;
+#X text 92 291 [alpha] turns on and off alpha blending. [alpha] automatically
+uses the glBlendFunc(GL_SRC_ALPHA \, GL_ONE_MINUS_SRC_ALPHA) function
+from OpenGL. If you want a different blending technique \, you will
+need to make your own external. The blending that [alpha] does is the
+"stereotypical" blending which you will usually want. In a nutshell
+\, any pixel which has an alpha component will be blended with the
+pixel that is in the frame buffer \, producing the usual "colored glass"
+effect. Beaware that the rendering order matters \, so you probably
+want to set the gemhead order number high so that the object is rendered
+after all of the non-alpha blended ones.;
+#X connect 0 0 3 0;
+#X connect 1 0 3 0;
+#X connect 3 0 2 0;
+#X connect 5 0 3 0;

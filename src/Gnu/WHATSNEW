@@ -1,0 +1,46 @@
+gem-0.87:
+- added much documentation
+- you can set the title of the GEM-window with the "title"-message. Up till now only one symbol is allowed.
+- added [gemkeyboard] and [gemkeyname] for keyboard-interaction in the GEM-window. However, Windows and Linux versions do not give the same results...
+- added Red/Green stereo
+- cleaned up the stereo-thing. we can switch between the different stereo-modes (including no-stereo) while rendering
+- added "fullscreen" mode
+- fixed "border" under linux
+- "cursor" is now available on Windoze
+- readded "externals" with additional libraries to close up with the windows version::
+- added pix_movie for Linux (mpeg2+quicktime-support)
+- added pix_film, which is in fact like pix_movie but does not write the pix-buf directly into a texture
+- fixed the model
+- added the stupid "teapot"
+- added a pix_write that let's you capture the current screen into a file (TIFF/JPEG)
+- added pix_hsv2rgb, pix_rgb2hsv (colour-space converters)
+- added pix_blob (center of gravity:: colour detection)
+- added pix_curves, pix_histo
+- added pix_set, pix_dump
+- added pix_pix2sig~, pix_sig2pix~
+- started a new class "TV" for pix-operations that change over time: like tv_movement (formerly: pix_movement), tv_biquad, tv_rtx; but i am not really happy with this...
+- started a new pix_fx class for inserting pix-FX. there is not much about it, but you can now bend the image.data pointer to wherever you like (including size-changes, format-changes) - it will be bent back in the postrender()-thing
+- started to import classes from effecTV (by Fukuchi Kentarou): pix_aging, pix_puzzle; most of his FX are real crap, but some are ok and it's easy to import them
+- made a pix_rgba
+
+gem-0.84-5:
+- bugfixes for gemwin "cursor" message (cursor [1|0])
+- removed "externals" with additional libraries, they are separated now
+- added a "freq" and "mode" message to Linux video object, you can watch
+  TV now ...
+- it is possible to add the display to the create command for X windows,
+  whole initialization stuff is moved into the create method,
+  so you can look at the patches without having succesfully generated
+  an OpenGl context.
+- made the pix_video and pix_movie into real base classes of OS specific
+  classes. The OS spezific classes for Windows and SGI have to be fixed ..
+
+
+gem-0.84-4:
+- text2d:  added a message "alias", which toggles between antialiases 
+  and standard fonts. Usage "alias 1" or "alias 0"
+
+- gemwin:  additional message cursor, which hides the cursor in 
+  GEM windows
+
+

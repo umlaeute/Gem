@@ -1,0 +1,15 @@
+#N canvas 162 181 644 394 12;
+#X msg 139 109 gemList;
+#X text 176 62 GEM object;
+#X obj 139 207 part_damp;
+#X msg 215 164 x y z;
+#X text 294 136 This is the damping vector;
+#X text 294 155 To slow particles down;
+#X text 297 182 keep all of the values less than one;
+#X text 186 26 [part_damp];
+#X text 43 296 [part_damp] dampens the velocity of the particles. A
+damping vector less than 1 \, 1 \, 1 will slow the particles done.
+A damping vector greater than 1 \, 1 \, 1 will speed up the particles.
+;
+#X connect 0 0 2 0;
+#X connect 3 0 2 1;

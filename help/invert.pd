@@ -1,0 +1,10 @@
+#N canvas 151 485 600 500 10;
+#X text 124 68 GEM object;
+#X msg 170 156 1;
+#X obj 123 298 print out1;
+#X obj 123 219 invert;
+#X msg 123 155 0;
+#X text 139 22 invert;
+#X connect 1 0 3 0;
+#X connect 3 0 2 0;
+#X connect 4 0 3 0;

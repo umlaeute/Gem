@@ -1,0 +1,15 @@
+#N canvas;
+#X msg 216 179 gemList;
+#X msg 164 146 gemList;
+#X msg 164 302 gemList;
+#X text 179 20 part of GEM;
+#X obj 164 217 pix_mask;
+#X text 284 179 mask pix;
+#X text 88 146 source pix;
+#X text 176 43 pix_mask;
+#X text 151 73 masks out a pix;
+#X text 64 341 pix_mask uses one pix as a mask against another. Where ever the mask has a colored pixel \, the alpha component of the other image will be set to 0 (transparent).;
+#X text 62 411 This is still experimental.;
+#X connect 0 0 4 1;
+#X connect 1 0 4 0;
+#X connect 4 0 2 0;

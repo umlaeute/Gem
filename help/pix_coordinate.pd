@@ -1,0 +1,18 @@
+#N canvas;
+#X msg 115 183 gemList;
+#X msg 115 299 gemList;
+#X text 222 19 part of GEM;
+#X obj 115 254 pix_coordinate;
+#X text 210 44 pix_coordinate;
+#X text 151 66 set the texture coordinates for a pix;
+#X msg 222 112 the S \, T values;
+#X text 64 340 pix_coordinate remaps the S \, T texture values from the default values. For instance \, a texture could repeat by increasing the texture S \, T values from 1.0 \, 1.0 to 2.0 \, 2.0 (See the examples).;
+#X msg 241 164 2.0 2.0 0.0 2.0 0.0 0.0 2.0 0.0;
+#X msg 245 215 0.5 0.5 0.0 0.5 0.0 0.0 0.5 0.0;
+#X text 240 142 for a square \, this would repeat the image;
+#X text 243 194 for a square \, this would show only have of the image;
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;
+#X connect 6 0 3 1;
+#X connect 8 0 3 1;
+#X connect 9 0 3 1;

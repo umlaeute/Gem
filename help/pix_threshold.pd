@@ -1,0 +1,16 @@
+#N canvas;
+#X msg 122 72 gemList;
+#X msg 122 213 gemList;
+#X text 121 26 pix_threshold;
+#X obj 122 166 pix_threshold;
+#X text 83 44 apply a threshold to the pixels;
+#X msg 165 111 float;
+#X msg 209 111 R G B;
+#X msg 257 110 R G B A;
+#X text 47 278 pix_threshold is a simply threshold filter. Any pixel above the value is passed. Any pixel below the value is zeroed out.;
+#X text 47 332 If the float is used \, alpha is assumed to be 1.0;
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;
+#X connect 5 0 3 1;
+#X connect 6 0 3 2;
+#X connect 7 0 3 2;

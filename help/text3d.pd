@@ -1,0 +1,27 @@
+#N canvas 474 165 730 643 12;
+#X msg 199 131 gemList;
+#X text 176 62 GEM object;
+#X msg 309 295 <size>;
+#X msg 301 118 text this is a line of text;
+#X msg 307 184 font <font.ttf>;
+#X text 74 446 "text <list>": text to render;
+#X text 77 470 "font <font.ttf>": true type font;
+#X text 78 494 "<size>": font-size in points;
+#X msg 307 158 alias <mode>;
+#X text 79 518 "alias <mode>": turn anti-aliasing on(1) r off(0);
+#X msg 306 212 justify <horizontal> <vertical>;
+#X text 78 546 "justify <h> <v>": text-justification. <h> can be "left"
+\, "right" or "center". <v> can be "top" \, "bottom" or "center";
+#X text 79 590 "precision <prec>": select precision;
+#X msg 306 243 precision <prec>;
+#X text 173 18 [text3d];
+#X obj 199 293 text3d;
+#X text 74 374 [text3d] renders one line of a text with the current
+color and all 3d-transformations;
+#X connect 0 0 15 0;
+#X connect 2 0 15 1;
+#X connect 3 0 15 0;
+#X connect 4 0 15 0;
+#X connect 8 0 15 0;
+#X connect 10 0 15 0;
+#X connect 13 0 15 0;

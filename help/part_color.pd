@@ -1,0 +1,15 @@
+#N canvas 309 237 664 366 12;
+#X msg 199 131 gemList;
+#X text 176 62 GEM object;
+#X text 184 25 [part_killold];
+#X msg 199 225 gemList;
+#X obj 199 182 part_color;
+#X msg 313 104 R1 G1 B1;
+#X msg 313 139 R2 G2 B2;
+#X text 56 276 sets the color(s) of a particle-system. You can set
+2 different colors \, particles will have either the one or the other.
+;
+#X connect 0 0 4 0;
+#X connect 4 0 3 0;
+#X connect 5 0 4 1;
+#X connect 6 0 4 2;

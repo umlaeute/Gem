@@ -1,0 +1,11 @@
+#N canvas 376 298 586 375 12;
+#X msg 120 148 gemList;
+#X msg 120 272 gemList;
+#X text 169 16 part of GEM;
+#X obj 120 187 pix_normalize;
+#X text 176 43 [pix_normalize];
+#X text 151 73 normalize an image;
+#X text 21 314 [pix_normalize] will normalize your image \, so that
+contrasts will appear sharper.;
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;
