@@ -30,7 +30,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix
   
   DESCRIPTION
-
+  
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_filmDarwin : public pix_film
 {
@@ -72,7 +72,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   Track			m_movieTrack;
   TimeValue		m_timeScale;
   TimeValue		duration;
-  
+  int			m_colorspace;
 
 
   //-----------------------------------
@@ -87,6 +87,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback(void *data, t_floatarg state);
   static void ramCallback(void *data);
+  static void colorspaceCallback(void *data, t_floatarg state);
 
 };
 

@@ -30,7 +30,9 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg,
 
 pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h )
 {
-  if (w > 0){
+post("pix_videoDarwin: constructor");
+
+  if (w > 0 ){
     m_vidXSize = (int)w;
   }else{
     m_vidXSize = 320;
@@ -51,8 +53,9 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h )
 					* 4 * sizeof(unsigned char);
   m_pixBlock.image.data = new unsigned char[dataSize];
   m_quality = 1; //high quality for DV. why not?
+  m_colorspace = 1; //default to RGB
   InitSeqGrabber();
-  m_haveVideo = 0;
+  m_haveVideo = 1;
 }
 
 /////////////////////////////////////////////////////////
@@ -126,11 +129,95 @@ state->image = NULL;
   
 }
 
+/////////////////////////////////////////////////////////
+// startTransfer
+//
+/////////////////////////////////////////////////////////
+int pix_videoDarwin :: startTransfer()
+{
+     m_haveVideo = 1;
+     m_pixBlock.newimage = 1;
+     return 1;
+}
+
+/////////////////////////////////////////////////////////
+// startTransfer
+//
+/////////////////////////////////////////////////////////
+int pix_videoDarwin :: stopTransfer()
+{
+     
+     return 1;
+}
+
+/*---------------------------------------------------------------------*/
+//	video settings dialog to setup camera				//
+/*---------------------------------------------------------------------*/
+pascal Boolean pix_videoDarwin :: SeqGrabberModalFilterProc (DialogPtr theDialog, const EventRecord *theEvent, short *itemHit, long refCon){
+//#pragma unused(theDialog, itemHit)
+    Boolean	handled = false;
+/*
+    if ((theEvent->what == updateEvt) &&
+        ((WindowPtr) theEvent->message == (WindowPtr) refCon))
+    {
+        BeginUpdate ((WindowPtr) refCon);
+        EndUpdate ((WindowPtr) refCon);
+        handled = true;
+    } */
+    
+     WindowRef  awin = GetDialogWindow(theDialog);
+    ShowWindow (awin);
+    SetWindowClass(awin,kUtilityWindowClass);
+    //ChangeWindowAttributes(awin,kWindowStandardHandlerAttribute,0);     	SGPanelEvent(m_sg,m_vc,theDialog,0,theEvent,itemHit,&handled);
+    AEProcessAppleEvent (theEvent);
+    
+    return (handled);
+}
+
+void pix_videoDarwin :: DoVideoSettings(void){
+    Rect	newActiveVideoRect;
+    Rect	curBounds, curVideoRect, newVideoRect;
+    ComponentResult	err;
+    SGModalFilterUPP	seqGragModalFilterUPP;
+
+    // Get our current state - do i need this???
+    err = SGGetChannelBounds (m_vc, &curBounds);
+    err = SGGetVideoRect (m_vc, &curVideoRect);
+
+    // Pause
+    err = SGPause (m_sg, true);
+
+    // Do the dialog thang
+    seqGragModalFilterUPP = (SGModalFilterUPP)NewSGModalFilterUPP(SeqGrabberModalFilterProc);
+    err = SGSettingsDialog(m_sg, m_vc, 0,
+                           NULL, seqGrabSettingsPreviewOnly, seqGragModalFilterUPP, (long)m_srcGWorld);
+    DisposeSGModalFilterUPP(seqGragModalFilterUPP);
+
+    // What happened?
+    err = SGGetVideoRect (m_vc, &newVideoRect);
+    err = SGGetSrcVideoBounds (m_vc, &newActiveVideoRect);
+
+    err = SGPause (m_sg, false);
+}
+
+
 void pix_videoDarwin :: InitSeqGrabber()
 {
     OSErr anErr;
     Rect m_srcRect = {0,0, m_vidYSize, m_vidXSize};
-    
+    int num_components = 0;
+    Component c = 0;
+     ComponentDescription cd;
+     
+     cd.componentType = SeqGrabComponentType;
+     cd.componentSubType = 0;
+     cd.componentManufacturer = 0;
+     cd.componentFlags = 0;
+     cd.componentFlagsMask = 0;
+     
+     while((c = FindNextComponent(c, &cd)) != 0) {
+       num_components++;  }                 // add component c to the list.
+     post("pix_videoDarwin: number of SGcomponents: %d",num_components);
     m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
     if(m_sg==NULL){
         post("pix_videoDarwin: could not open defalut component");
@@ -192,15 +279,47 @@ void pix_videoDarwin :: InitSeqGrabber()
         break;
     
     }
-    
-    anErr = QTNewGWorldFromPtr (&m_srcGWorld,
-                                 k32ARGBPixelFormat,
-                                 &m_srcRect, 
-                                 NULL, 
-                                 NULL, 
-                                 0, 
-                                 m_pixBlock.image.data, 
-                                 m_rowBytes);
+    if (m_colorspace){
+        m_pixBlock.image.xsize = m_vidXSize;
+        m_pixBlock.image.ysize = m_vidYSize;
+        m_pixBlock.image.csize = 4;
+        m_pixBlock.image.format = GL_BGRA_EXT;
+        m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+        int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
+                                            * 4 * sizeof(unsigned char);
+        m_pixBlock.image.data = new unsigned char[dataSize]; 
+         m_rowBytes = m_vidXSize*4;
+        anErr = QTNewGWorldFromPtr (&m_srcGWorld,
+                                    k32ARGBPixelFormat,
+                                    &m_srcRect, 
+                                    NULL, 
+                                    NULL, 
+                                    0, 
+                                    m_pixBlock.image.data, 
+                                    m_rowBytes);
+                                    
+                                 
+        }else{
+            m_pixBlock.image.xsize = m_vidXSize;
+            m_pixBlock.image.ysize = m_vidYSize;
+            m_pixBlock.image.csize = 2;
+            m_pixBlock.image.format = GL_YCBCR_422_APPLE;
+            m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+            int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
+                                                * 2 * sizeof(unsigned char);
+            m_pixBlock.image.data = new unsigned char[dataSize]; 
+             m_rowBytes = m_vidXSize*2;
+            anErr = QTNewGWorldFromPtr (&m_srcGWorld,
+                                    k422YpCbCr8CodecType,
+                                    &m_srcRect, 
+                                    NULL, 
+                                    NULL, 
+                                    0, 
+                                    m_pixBlock.image.data, 
+                                    m_rowBytes);
+        
+        }
+        
 	if (anErr!= noErr)
   	{
 		post ("pix_videoDarwin: %d error at QTNewGWorldFromPtr", anErr);
@@ -215,10 +334,35 @@ void pix_videoDarwin :: InitSeqGrabber()
     SGStartPreview(m_sg);
 }
 
+void pix_videoDarwin :: destroySeqGrabber()
+{
+    if (m_vc) {
+		if (::SGDisposeChannel(m_sg, m_vc)) {
+			error ("GEM: pix_video: Unable to dispose a video channel");
+		}
+		m_vc = NULL;
+	}
+	if (m_sg) {
+		if (::CloseComponent(m_sg)) {
+			error("GEM: pix_video: Unable to dispose a sequence grabber component");
+		}
+		m_sg = NULL;
+        if (m_srcGWorld) {
+		::DisposeGWorld(m_srcGWorld);
+		m_pixMap = NULL;
+		m_srcGWorld = NULL;
+		m_baseAddr = NULL;
+	}
+    }
+}
+
 void pix_videoDarwin :: resetSeqGrabber()
 {
-OSErr anErr;
-post ("pix_videoDarwin: starting reset");
+    OSErr anErr;
+    post ("pix_videoDarwin: starting reset");
+
+    destroySeqGrabber();
+    InitSeqGrabber();
 
     post("pix_videoDarwin: quality %d",m_quality);
     switch (m_quality){
@@ -242,12 +386,21 @@ post ("pix_videoDarwin: starting reset");
     }
     
 }
+
+
+
 void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
+class_addcreator((t_newmethod)_classpix_videoDarwin,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
+pix_video::real_obj_setupCallback(classPtr);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::qualityCallback,
 		  gensym("quality"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
 		  gensym("reset"), A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
+		  gensym("dialog"), A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoDarwin::colorspaceCallback,
+		  gensym("colorspace"), A_DEFFLOAT, A_NULL);
 }
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
@@ -262,5 +415,16 @@ GetMyClass(data)->resetSeqGrabber();
   
 }
 
+void pix_videoDarwin ::dialogCallback(void *data)
+{
+//GetMyClass(data)->DoVideoSettings();
+  
+}
+
+void pix_videoDarwin ::colorspaceCallback(void *data, t_floatarg cs)
+{
+GetMyClass(data)->m_colorspace=(int)cs;
+  
+}
 
 #endif // MACOSX

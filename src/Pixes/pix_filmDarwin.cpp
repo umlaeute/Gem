@@ -40,6 +40,7 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
 {
   // make sure that there are some characters
   if (filename->s_name[0]) openMess(filename);
+  m_colorspace = 1;
 }
 
 /////////////////////////////////////////////////////////
@@ -147,23 +148,43 @@ void pix_filmDarwin :: realOpen(char *filename)
         post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
         post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
 	post("movie size x:%d y:%d", m_xsize, m_ysize);
-
-        m_csize = 4;
-        m_format = GL_BGRA_EXT;
-        m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
         
-        createBuffer();
-        prepareTexture();
-        m_rowBytes = m_xsize * 4;
-        SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
-	err = QTNewGWorldFromPtr(	&m_srcGWorld, 
-                                        k32ARGBPixelFormat,	// gives noErr
-					&m_srcRect, 
-					NULL, 
-					NULL, 
-					0, 
-					m_pixBlock.image.data, 
-					m_rowBytes);
+        if (m_colorspace){
+            m_csize = 4;
+            m_format = GL_BGRA_EXT;
+            m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+            
+            createBuffer();
+            prepareTexture();
+            m_rowBytes = m_xsize * 4;
+            SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+            err = QTNewGWorldFromPtr(	&m_srcGWorld, 
+                                            k32ARGBPixelFormat,	// gives noErr
+                                            &m_srcRect, 
+                                            NULL, 
+                                            NULL, 
+                                            0, 
+                                            m_pixBlock.image.data, 
+                                            m_rowBytes);
+                                        
+        }else{
+            m_csize = 2;
+            m_format = GL_YCBCR_422_APPLE;
+            m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+            
+            createBuffer();
+            prepareTexture();
+            m_rowBytes = m_xsize * 2;
+            SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+            err = QTNewGWorldFromPtr(	&m_srcGWorld, 
+                                            k422YpCbCr8CodecType,	// gives noErr
+                                            &m_srcRect, 
+                                            NULL, 
+                                            NULL, 
+                                            0, 
+                                            m_pixBlock.image.data, 
+                                            m_rowBytes);
+        }
 	if (err) {
 		error("GEM: pix_filmDarwin: Couldn't make QTNewGWorldFromPtr %d", err);
 		m_haveMovie = 0;
@@ -201,14 +222,14 @@ void pix_filmDarwin :: getFrame()
     // get the next frame of the source movie
     short 	flags = nextTimeStep;
     OSType	whichMediaType = VisualMediaCharacteristic;
-
+/*
     if (m_reqFrame > m_curFrame) {
         num = m_reqFrame - m_curFrame;
     } else {
         num = m_reqFrame;
         if (!m_auto) m_movieTime = 0;
     }
-    
+    */
     //check for last frame to loop the clip
     if (m_curFrame >= m_numFrames){
     m_curFrame = 0;
@@ -220,6 +241,7 @@ void pix_filmDarwin :: getFrame()
     
     // if this is the first frame, include the frame we are currently on
     if (m_curFrame == 0) flags |= nextTimeEdgeOK;
+
 
 if (m_auto) {
         ::GetMovieNextInterestingTime(m_movie,
@@ -237,6 +259,20 @@ if (m_auto) {
         }else{
             m_movieTime = m_reqFrame * duration;
         }
+/*
+    m_movieTime = m_reqFrame * duration;
+    
+    ::GetMovieNextInterestingTime(m_movie,
+                                            flags,
+                                                1,
+                                &whichMediaType,
+                                    m_movieTime,
+                                                0,
+                                    &m_movieTime,
+                                           // NULL);
+                                           &duration);
+        flags = 0;
+        flags = nextTimeStep;*/
 
     // set the time for the frame and give time to the movie toolbox	
     SetMovieTimeValue(m_movie, m_movieTime); 
@@ -277,6 +313,8 @@ void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmDarwin::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_filmDarwin::colorspaceCallback,
+		  gensym("colorspace"), A_DEFFLOAT, A_NULL);
 }
 
 void pix_filmDarwin :: openMessCallback(void *data, t_symbol *filename)
@@ -292,5 +330,10 @@ void pix_filmDarwin :: changeImageCallback(void *data, t_symbol *, int argc, t_a
 void pix_filmDarwin :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
+}
+
+void pix_filmDarwin :: colorspaceCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->m_colorspace=(int)state;
 }
 #endif // MACOSX

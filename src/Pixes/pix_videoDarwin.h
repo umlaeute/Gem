@@ -6,6 +6,8 @@
     Copyright (c) 2002 James Tittle & Chris Clepper
  *
  */
+
+ 
 #ifndef INCLUDE_PIX_VIDEODARWIN_H_
 #define INCLUDE_PIX_VIDEODARWIN_H_
 
@@ -61,6 +63,16 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 
     	//////////
     	virtual void	startRendering();
+        
+          //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  virtual int	startTransfer();
+    
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  virtual int	stopTransfer();
     
 	//-----------------------------------
 	// GROUP:	Macintosh specific video data
@@ -73,9 +85,12 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         void			disposeOffscreen();
         void			disposeVideoChannel();
         //OSErr	videoFrame(SGChannel c, short bufferNum, Boolean *done);
-
+        
         void InitSeqGrabber();
         void resetSeqGrabber();
+        void destroySeqGrabber();
+        void DoVideoSettings();
+        static pascal Boolean SeqGrabberModalFilterProc (DialogPtr theDialog, const EventRecord *theEvent, short *itemHit, long refCon); 
 
         //-----------------------------------
         // GROUP:	Video data
@@ -94,12 +109,16 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         Ptr			m_baseAddr;		// Base address of pixel Data
         long			m_rowBytes;		// Row bytes in a row
         int			m_quality;
+        int			m_colorspace;
     private:
     	
     	//////////
     	// static member functions
         static void qualityCallback(void *data, t_floatarg X);
         static void resetCallback(void *data);
+        static void dialogCallback(void *data);
+        static void colorspaceCallback(void *data, t_floatarg cs);
+        
 };
 
 #endif
