@@ -14,6 +14,8 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#define DO_AUTO_REGISTER_CLASS
+#define HELPSYMBOL "pix_video"
 
 #if defined(_WINDOWS) && defined(HAVE_DIRECTSHOW)
 
@@ -37,18 +39,19 @@ HRESULT GetPin(IBaseFilter *, PIN_DIRECTION, IPin **);
 HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister);
 void RemoveGraphFromRot(DWORD pdwRegister);
 
-// /////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 //
 // Callback for SampleGrabber filter
 //
 /////////////////////////////////////////////////////////
 static HRESULT Callback(void* pUser, IMediaSample* pSample, REFERENCE_TIME* StartTime,
-  REFERENCE_TIME* StopTime, BOOL TypeChanged)
+			REFERENCE_TIME* StopTime, BOOL TypeChanged)
 {
-	((pix_videoDS*)pUser)->copyBuffer(pSample);
+  ((pix_videoDS*)pUser)->copyBuffer(pSample);
 
-	// Tell the source to stop delivering samples.
-    return S_FALSE; 
+  return NOERROR; /* jmz: why should we stop delivering ? */
+  // Tell the source to stop delivering samples.
+  return S_FALSE; 
 }
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_videoDS, t_floatarg, A_DEFFLOAT)
@@ -63,72 +66,71 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_videoDS, t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 pix_videoDS :: pix_videoDS(t_floatarg num)
   : m_haveVideo(0),
-    m_swap(1),
     m_colorSwap(0),
     m_hWndC(NULL),
     m_newFrame(0),
-  	m_RawBuffer(NULL),
-	m_nRawBuffSize(0),
-	m_pGB(NULL),
-	m_pMC(NULL),
-	m_pME(NULL),
-	m_pMF(NULL),
-	m_pVW(NULL),
-	m_pBA(NULL),
-	m_pBV(NULL),
-	m_pMS(NULL),
-	m_pMP(NULL),
-	m_pSG(NULL),
-	m_pFG(NULL),
-	m_pCDbase(NULL),
-	m_pCG(NULL),
-	m_pVC(NULL),
-	m_GraphRegister(0),
-	m_rendering(0),
-	m_capturing(0),
-	m_captureOnOff(0),
-	m_bInitCOM(false)
+    m_RawBuffer(NULL),
+    m_nRawBuffSize(0),
+    m_pGB(NULL),
+    m_pMC(NULL),
+    m_pME(NULL),
+    m_pMF(NULL),
+    m_pVW(NULL),
+    m_pBA(NULL),
+    m_pBV(NULL),
+    m_pMS(NULL),
+    m_pMP(NULL),
+    m_pSG(NULL),
+    m_pFG(NULL),
+    m_pCDbase(NULL),
+    m_pCG(NULL),
+    m_pVC(NULL),
+    m_GraphRegister(0),
+    m_rendering(0),
+    m_capturing(0),
+    m_captureOnOff(1),
+    m_bInitCOM(false)
 {
-    // Initialize COM
-    if(FAILED(CoInitialize(NULL)))
+  // Initialize COM
+  if(FAILED(CoInitialize(NULL)))
     {
-        error("pix_film_ds: could not initialise COM.");
-        return;
+      error("pix_film_ds: could not initialise COM.");
+      return;
     }
 
-	m_bInitCOM = true;
+  m_bInitCOM = true;
 
-	// Initialize the input buffers
-	for (int i = 0; i <= 2; i++)
-	{
-		m_pixBlock[i].image.data = NULL;
-		m_pixBlock[i].newimage = 0;
-		m_nPixDataSize[i] = 0;
-	}
+  // Initialize the input buffers
+  for (int i = 0; i <= 2; i++)
+    {
+      m_pixBlockBuf[i].image.data = NULL;
+      m_pixBlockBuf[i].newimage = 0;
+      m_nPixDataSize[i] = 0;
+    }
 
-	// set resolution to a reasonable default
-	m_vidXSize = 320;
-    m_vidYSize = 240;
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+
+  openMess(num);
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
 pix_videoDS :: ~pix_videoDS()
 {
-	stopTransfer();  
+  stopTransfer();  
 
-	// Clean up the movie
-	closeMess();
-	cleanPixBlock();
+  // Clean up the movie
+  closeMess();
+  cleanPixBlock();
 
-	// Finished with COM
-	if (m_bInitCOM)
-	{
-		CoUninitialize();
-		m_bInitCOM = false;
-	}
+  // Finished with COM
+  if (m_bInitCOM)
+    {
+      CoUninitialize();
+      m_bInitCOM = false;
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -137,376 +139,369 @@ pix_videoDS :: ~pix_videoDS()
 /////////////////////////////////////////////////////////
 void pix_videoDS :: openMess(int device)
 {
-	HRESULT hr;
-	IBaseFilter		*pSGbase = NULL;
-	IBaseFilter		*pNRbase = NULL;
+  HRESULT hr;
+  IBaseFilter		*pSGbase = NULL;
+  IBaseFilter		*pNRbase = NULL;
 
-	if (!m_bInitCOM)
-	{
-		error("pix_videoDS: COM has not been initialized.");
-		return;
-	}
+  if (!m_bInitCOM)
+    {
+      error("pix_videoDS: COM has not been initialized.");
+      return;
+    }
 
-	if (m_haveVideo)
-		closeMess();
+  if (m_haveVideo) closeMess();
 
-	do 
-	{
-		// Get the interface for DirectShow's GraphBuilder
-		if (FAILED(hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void **)&m_pGB)))
-		{
-			error("pix_videoDS: Could not get DShow GraphBuilder, hr 0x%X", hr);
-			break;
-		}
+  do  {
+    // Get the interface for DirectShow's GraphBuilder
+    if (FAILED(hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void **)&m_pGB)))  {
+      error("pix_videoDS: Could not get DShow GraphBuilder, hr 0x%X", hr);
+      break;
+    }
 
-	    // Get the interface for DirectShow's CaptureGraphBuilder2
-		if (	FAILED(hr = (CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void **)&m_pCG)))
-			||	FAILED(hr = m_pCG->SetFiltergraph(m_pGB)))
-		{
-			error("pix_videoDS: Could not get DShow GraphBuilder, hr 0x%X", hr);
-			break;
-		} 
+    // Get the interface for DirectShow's CaptureGraphBuilder2
+    if (	FAILED(hr = (CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void **)&m_pCG)))
+		||	FAILED(hr = m_pCG->SetFiltergraph(m_pGB))){
+      error("pix_videoDS: Could not get DShow GraphBuilder, hr 0x%X", hr);
+      break;
+    }
 
-		// Create the capture device.
-		if (FAILED(hr = FindCaptureDevice(device, &m_pCDbase)))
-		{
-			error("pix_videoDS: Could not open device: %d\n", device);
-			break;
-		}
+    // Create the capture device.
+    if (FAILED(hr = FindCaptureDevice(device, &m_pCDbase))){
+      error("pix_videoDS: Could not open device: %d\n", device);
+      break;
+    }
 		
-		// Create an instance of our local sample grabber object.
-		if (!(m_pSG = new CSampleGrabber(NULL, &hr, FALSE)))
-		{
-			error("pix_videoDS: Could not create a Sample Grabber filter, hr 0x%X", hr);
-			break;
-		}
-		m_pSG->AddRef();
+    // Create an instance of our local sample grabber object.
+    if (!(m_pSG = new CSampleGrabber(NULL, &hr, FALSE))) {
+      error("pix_videoDS: Could not create a Sample Grabber filter, hr 0x%X", hr);
+      break;
+    }
+    m_pSG->AddRef();
 		
-		// Set the grabber's media type
-		CMediaType mtSG;
-		mtSG.SetType(&MEDIATYPE_Video);
-		mtSG.SetSubtype(&MEDIASUBTYPE_RGB24);
-		if (FAILED(hr = m_pSG->SetAcceptedMediaType(&mtSG)))
-		{
-			error("pix_videoDS: Could not set the MediaType of the Sample Grabber, hr 0x%X", hr);
-			break;
-		}
-		
-		// Set the Sample Grabber callback.
-		if (FAILED(hr = m_pSG->SetCallback(&Callback, this)))
-		{	
-			error("pix_videoDS: Could not set the callback of the Sample Grabber, hr 0x%X", hr);
-			break;
-		}
+    // Set the grabber's media type
+    CMediaType mtSG;
+    mtSG.SetType(&MEDIATYPE_Video);
+    mtSG.SetSubtype(&MEDIASUBTYPE_RGB24);
+    if (FAILED(hr = m_pSG->SetAcceptedMediaType(&mtSG))){
+      error("pix_videoDS: Could not set the MediaType of the Sample Grabber, hr 0x%X", hr);
+      break;
+    }
 
-		// Create the Null Renderer.
-		if (FAILED(hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,IID_IBaseFilter, reinterpret_cast<void**>(&pNRbase))))
-		{
-			error("pix_videoDS: Could not create the Null Renderer, hr 0x%X", hr);
-			break;
-		}
+    // Set the Sample Grabber callback.
+    if (FAILED(hr = m_pSG->SetCallback(&Callback, this))){	
+      error("pix_videoDS: Could not set the callback of the Sample Grabber, hr 0x%X", hr);
+      break;
+    }
 
-		// get the base interface so we can connect the graph
-		if (FAILED(hr = m_pSG->QueryInterface(IID_IBaseFilter, reinterpret_cast<void**>(&pSGbase))))
-		{
-			error("pix_videoDS: Could not get the Sample Grabber's base interface, hr 0x%X", hr);
-			break;
-		}
+    // Create the Null Renderer.
+    if (FAILED(hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,IID_IBaseFilter, reinterpret_cast<void**>(&pNRbase)))) {
+      error("pix_videoDS: Could not create the Null Renderer, hr 0x%X", hr);
+      break;
+    }
 
-		// add the filters to the graph
-		if (	FAILED(hr = m_pGB->AddFilter(m_pCDbase, L"CaptureDevice"))
-			||	FAILED(hr = m_pGB->AddFilter(pNRbase, L"NullRenderer"))
-			||	FAILED(hr = m_pGB->AddFilter(pSGbase, L"GrabberSample")))
-		{
-			error("pix_videoDS: Could not add the filters to the graph, hr 0x%X", hr);
-			break;
-		}
+    // get the base interface so we can connect the graph
+    if (FAILED(hr = m_pSG->QueryInterface(IID_IBaseFilter, reinterpret_cast<void**>(&pSGbase)))){
+      error("pix_videoDS: Could not get the Sample Grabber's base interface, hr 0x%X", hr);
+      break;
+    }
 
-		// Connect the modules
-		if (	FAILED(hr = ConnectFilters(m_pGB, m_pCDbase, pSGbase))
-			||	FAILED(hr = ConnectFilters(m_pGB, pSGbase, pNRbase)))
-		{
-			error("pix_videoDS: Could not connect the filters in the graph, hr 0x%X", hr);
-			break;
-		}
+    // add the filters to the graph
+    if (	FAILED(hr = m_pGB->AddFilter(m_pCDbase, L"CaptureDevice"))
+		||	FAILED(hr = m_pGB->AddFilter(pNRbase, L"NullRenderer"))
+		||	FAILED(hr = m_pGB->AddFilter(pSGbase, L"GrabberSample"))){
+      error("pix_videoDS: Could not add the filters to the graph, hr 0x%X", hr);
+      break;
+    }
 
-		// QueryInterface for DirectShow interfaces
-		if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaFilter, (void **)&m_pMF))))
-		{
-			error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
-			break;
-		}
-		if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaControl, (void **)&m_pMC))))
-		{
-			error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
-			break;
-		}
-		if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaEvent, (void **)&m_pME))))
-		{
-			error("pix_videoDS: Could not get media event interface, hr 0x%X", hr);
-			break;
-		}
-		if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaSeeking, (void **)&m_pMS))))
-		{
-			error("pix_videoDS: Could not get media seeking interface, hr 0x%X", hr);
-			break;
-		}
-		if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaPosition, (void **)&m_pMP))))
-		{
-			error("pix_videoDS: Could not get media position interface, hr 0x%X", hr);
-			break;
-		}
+    // Connect the modules
+    if (	FAILED(hr = ConnectFilters(m_pGB, m_pCDbase, pSGbase))
+		||	FAILED(hr = ConnectFilters(m_pGB, pSGbase, pNRbase)))	{
+      error("pix_videoDS: Could not connect the filters in the graph, hr 0x%X", hr);
+      break;
+    }
 
-		// Expose the filter graph so we can view it using GraphEdit
+    // QueryInterface for DirectShow interfaces
+    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaFilter, (void **)&m_pMF))))     {
+      error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
+      break;
+    }
+    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaControl, (void **)&m_pMC)))){
+      error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
+      break;
+    }
+    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaEvent, (void **)&m_pME))))	{
+      error("pix_videoDS: Could not get media event interface, hr 0x%X", hr);
+      break;
+    }
+    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaSeeking, (void **)&m_pMS)))){
+      error("pix_videoDS: Could not get media seeking interface, hr 0x%X", hr);
+      break;
+    }
+    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaPosition, (void **)&m_pMP)))){
+      error("pix_videoDS: Could not get media position interface, hr 0x%X", hr);
+      break;
+    }
+
+    // Expose the filter graph so we can view it using GraphEdit
 #ifdef REGISTER_FILTERGRAPH
-		if (FAILED(hr = AddGraphToRot(m_pGB, &m_GraphRegister)))
-		{
-			error("pix_videoDS: failed to register filter graph with ROT!  hr=0x%X", hr);
-			m_GraphRegister = 0;
-		}
+    if (FAILED(hr = AddGraphToRot(m_pGB, &m_GraphRegister))){
+      error("pix_videoDS: failed to register filter graph with ROT!  hr=0x%X", hr);
+      m_GraphRegister = 0;
+    }
 #endif
-		// Turn off the reference clock.
-		if (FAILED(hr = m_pMF->SetSyncSource(NULL)))
-		{
-			error("pix_videoDS: failed to turn off the reference clock  hr=0x%X", hr);
-			break;
-		}
+    // Turn off the reference clock.
+    if (FAILED(hr = m_pMF->SetSyncSource(NULL))){
+      error("pix_videoDS: failed to turn off the reference clock  hr=0x%X", hr);
+      break;
+    }
 
-		m_haveVideo = 1;
-		startTransfer();
+    m_haveVideo = 1;
+    startTransfer();
 
-	} while (0);
+  } while (0);
 
-	COMRELEASE(pSGbase);
-	COMRELEASE(pNRbase);
+  COMRELEASE(pSGbase);
+  COMRELEASE(pNRbase);
 
-	if (!m_haveVideo)
-		closeMess();
+  if (!m_haveVideo)closeMess();
 
+  post("opened device %d", device);
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // close message
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: closeMess()
 {
-	m_haveVideo = 0;
+  m_haveVideo = 0;
 
-	COMRELEASE(m_pGB);
-	COMRELEASE(m_pMC);
-	COMRELEASE(m_pME);
-	COMRELEASE(m_pMF);
-	COMRELEASE(m_pVW);
-	COMRELEASE(m_pBA);
-	COMRELEASE(m_pBV);
-	COMRELEASE(m_pMS);
-	COMRELEASE(m_pMP);
-	COMRELEASE(m_pSG);
-	COMRELEASE(m_pFG);
-	COMRELEASE(m_pCDbase);
-	COMRELEASE(m_pCG);
-	COMRELEASE(m_pVC);
+  COMRELEASE(m_pGB);
+  COMRELEASE(m_pMC);
+  COMRELEASE(m_pME);
+  COMRELEASE(m_pMF);
+  COMRELEASE(m_pVW);
+  COMRELEASE(m_pBA);
+  COMRELEASE(m_pBV);
+  COMRELEASE(m_pMS);
+  COMRELEASE(m_pMP);
+  COMRELEASE(m_pSG);
+  COMRELEASE(m_pFG);
+  COMRELEASE(m_pCDbase);
+  COMRELEASE(m_pCG);
+  COMRELEASE(m_pVC);
 
 #ifdef REGISTER_FILTERGRAPH
-	if (m_GraphRegister)
-	{	
-		HRESULT hr;
+  if (m_GraphRegister)
+    {	
+      HRESULT hr;
 
-		RemoveGraphFromRot(m_GraphRegister);
-		m_GraphRegister = 0;
-	}
+      RemoveGraphFromRot(m_GraphRegister);
+      m_GraphRegister = 0;
+    }
 #endif
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // enumerate message
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: enumerateMess()
 {
-    HRESULT hr;
-    IBaseFilter * pSrc = NULL;
+  HRESULT hr;
+  IBaseFilter * pSrc = NULL;
 
-    IMoniker* pMoniker =NULL;
-    ULONG cFetched;
+  IMoniker* pMoniker =NULL;
+  ULONG cFetched;
 
-	ICreateDevEnum* pDevEnum =NULL;
-	IEnumMoniker* pClassEnum = NULL;
+  ICreateDevEnum* pDevEnum =NULL;
+  IEnumMoniker* pClassEnum = NULL;
 
-	do 
+  do 
+    {
+      // Create the system device enumerator
+      hr = CoCreateInstance (CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC,
+			     IID_ICreateDevEnum, (void ** ) &pDevEnum);
+      if (FAILED(hr))
 	{
-		// Create the system device enumerator
-		hr = CoCreateInstance (CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC,
-			IID_ICreateDevEnum, (void ** ) &pDevEnum);
-		if (FAILED(hr))
+	  error("pix_videoDS: Couldn't create system enumerator!");
+	  break;
+	}
+
+      // Create an enumerator for the video capture devices
+      hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
+      if (FAILED(hr))
+	{
+	  error("pix_videoDS: Couldn't create class enumerator!");
+	  break;
+	}
+
+      // If there are no enumerators for the requested type, then 
+      // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
+      if (pClassEnum == NULL)
+	{
+	  error("pix_videoDS: No video capture devices found!");
+	  break;
+	}
+
+      // Use the first video capture device on the device list.
+      // Note that if the Next() call succeeds but there are no monikers,
+      // it will return S_FALSE (which is not a failure).  Therefore, we
+      // check that the return code is S_OK instead of using SUCCEEDED() macro.
+      int devIndex = 0;
+      while (S_OK == (pClassEnum->Next (1, &pMoniker, &cFetched)))
+	{
+	  IPropertyBag *pPropBag;
+	  if (SUCCEEDED(hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pPropBag)))
+	    {
+	      // To retrieve the friendly name of the filter, do the following:
+	      VARIANT varName;
+	      VariantInit(&varName);
+	      hr = pPropBag->Read(L"FriendlyName", &varName, 0);
+	      if (SUCCEEDED(hr))
 		{
-			error("pix_videoDS: Couldn't create system enumerator!");
-			break;
+		  post("Dev %d: %S", devIndex, varName.bstrVal);
 		}
+	      VariantClear(&varName);
 
-		// Create an enumerator for the video capture devices
-		hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
-		if (FAILED(hr))
-		{
-			error("pix_videoDS: Couldn't create class enumerator!");
-			break;
-		}
+	      COMRELEASE(pPropBag);
+	    }
+	  COMRELEASE(pMoniker);
+	  devIndex++;
+	}
+    } while (0);
 
-		// If there are no enumerators for the requested type, then 
-		// CreateClassEnumerator will succeed, but pClassEnum will be NULL.
-		if (pClassEnum == NULL)
-		{
-			error("pix_videoDS: No video capture devices found!");
-			break;
-		}
-
-		// Use the first video capture device on the device list.
-		// Note that if the Next() call succeeds but there are no monikers,
-		// it will return S_FALSE (which is not a failure).  Therefore, we
-		// check that the return code is S_OK instead of using SUCCEEDED() macro.
-		int devIndex = 0;
-		while (S_OK == (pClassEnum->Next (1, &pMoniker, &cFetched)))
-		{
-			IPropertyBag *pPropBag;
-			if (SUCCEEDED(hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pPropBag)))
-			{
-				// To retrieve the friendly name of the filter, do the following:
-				VARIANT varName;
-				VariantInit(&varName);
-				hr = pPropBag->Read(L"FriendlyName", &varName, 0);
-				if (SUCCEEDED(hr))
-				{
-					post("Dev %d: %S", devIndex, varName.bstrVal);
-				}
-				VariantClear(&varName);
-
-				COMRELEASE(pPropBag);
-			}
-			COMRELEASE(pMoniker);
-			devIndex++;
-		}
-	} while (0);
-
-    // Copy the found filter pointer to the output parameter.
-    // Do NOT Release() the reference, since it will still be used
-    // by the calling function.
-	COMRELEASE(pDevEnum);
-	COMRELEASE(pClassEnum);
+  // Copy the found filter pointer to the output parameter.
+  // Do NOT Release() the reference, since it will still be used
+  // by the calling function.
+  COMRELEASE(pDevEnum);
+  COMRELEASE(pClassEnum);
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // setup message
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: setupMess()
 {
-	if (!m_haveVideo)
-	{
-		error("pix_videoDS: No open video device.");
-		return;
-	}
+  if (!m_haveVideo)
+    {
+      error("pix_videoDS: No open video device.");
+      return;
+    }
 	
-	SetupCaptureDevice(m_pCG, m_pCDbase);
+  SetupCaptureDevice(m_pCG, m_pCDbase);
 }
-
+////////////////////////////////////////////////////////
+// colorspace message
+//
 /////////////////////////////////////////////////////////
+void pix_videoDS :: csMess(int format)
+{
+  if(format)m_pixBlock.image.setCsizeByFormat(format);
+}
+////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: render(GemState *state)
 {
-  if (!m_haveVideo || !m_capturing)
-  {
-//      error("pix_videoDS: Video not active");
-	  state->image = NULL;	
-      return;
+  if (!m_haveVideo || !m_capturing)  {
+    //      error("pix_videoDS: Video not active");
+    state->image = NULL;	
+    return;
   }
 
   m_readIdx = m_lastwriteIdx;
-  if (m_nPixDataSize[m_readIdx])
-	  state->image = &m_pixBlock[m_readIdx];
+  if (m_nPixDataSize[m_readIdx]){
+    m_pixBlock.newimage=m_pixBlockBuf[m_readIdx].newimage;
+    m_pixBlock.image.xsize=m_pixBlockBuf[m_readIdx].image.xsize;
+    m_pixBlock.image.ysize=m_pixBlockBuf[m_readIdx].image.ysize;
+    switch (m_pixBlockBuf[m_readIdx].image.format){
+    case GL_BGR_EXT:
+    default:
+      m_pixBlock.image.fromBGR(m_pixBlockBuf[m_readIdx].image.data);
+    }
+    
+    state->image = &m_pixBlock;
+  }
   else 
-	  state->image = NULL;
+    state->image = NULL;
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // postrender
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: postrender(GemState *state)
 {
-  if (!m_haveVideo || !m_capturing)
-	return;
+  if (!m_haveVideo || !m_capturing)return;
 
-  m_pixBlock[m_readIdx].newimage = 0;
+  m_pixBlockBuf[m_readIdx].newimage = 0;
   state->image = NULL;
   m_lastreadIdx = m_readIdx;
 }
 
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // startRendering
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: startRendering()
 {
-	m_rendering = 1;
-
-	startTransfer();
+  m_rendering = 1;
+  startTransfer();
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // stopRendering
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: stopRendering()
 {
-	m_rendering = 0;
-
-	stopTransfer();
+  m_rendering = 0;
+  stopTransfer();
 }
 
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // startTransfer
 //
 /////////////////////////////////////////////////////////
 int pix_videoDS :: startTransfer()
 {
-	m_capturing = 0;
+  m_capturing = 0;
 
-	if (m_haveVideo && m_captureOnOff)
+  if (m_haveVideo && m_captureOnOff)   {
+      HRESULT hr;
+
+      m_readIdx = 0;
+      m_lastreadIdx = 0;
+      m_writeIdx = 1;
+      m_lastwriteIdx = 0;
+
+      // Get the stream characteristics
+      CMediaType mt;
+      BITMAPINFOHEADER* pbmih;
+      if (FAILED(hr = m_pSG->GetConnectedMediaType(&mt)))
 	{
-		HRESULT hr;
-
-		m_readIdx = 0;
-		m_lastreadIdx = 0;
-		m_writeIdx = 1;
-		m_lastwriteIdx = 0;
-
-		// Get the stream characteristics
-		CMediaType mt;
-		BITMAPINFOHEADER* pbmih;
-		if (FAILED(hr = m_pSG->GetConnectedMediaType(&mt)))
-		{
-			error("pix_videoDS: Could not get connect media type, hr 0x%X", hr);
-			return 0;
-		}
-		GetBitmapInfoHdr(&mt, &pbmih);
-		m_xsize = pbmih->biWidth;
-		m_ysize = pbmih->biHeight;
-		m_csize = 3;
-		m_format = GL_BGR_EXT;
-
-		if (FAILED(hr = m_pMC->Run()))
-		{
-			error("pix_videoDS: Could not start graph playback, hr 0x%X", hr);
-		} else
-			m_capturing = 1;
+	  error("pix_videoDS: Could not get connect media type, hr 0x%X", hr);
+	  return 0;
 	}
+      GetBitmapInfoHdr(&mt, &pbmih);
+      m_xsize = pbmih->biWidth;
+      m_ysize = pbmih->biHeight;
+      m_csize = 3;
+      m_format = GL_BGR_EXT;
 
-	return m_capturing;
+      if (FAILED(hr = m_pMC->Run()))
+	{
+	  error("pix_videoDS: Could not start graph playback, hr 0x%X", hr);
+	} else
+	m_capturing = 1;
+    }
+
+  return m_capturing;
 }
 
 /////////////////////////////////////////////////////////
@@ -515,367 +510,332 @@ int pix_videoDS :: startTransfer()
 /////////////////////////////////////////////////////////
 int pix_videoDS :: stopTransfer()
 {
-	if (m_haveVideo)
+  if (m_haveVideo)
+    {
+      HRESULT hr;
+      if (FAILED(hr = m_pMC->Stop()))
 	{
-		HRESULT hr;
-		if (FAILED(hr = m_pMC->Stop()))
-		{
-			error("pix_videoDS: Could not stop graph playback, hr 0x%X", hr);
-		} else
-			m_capturing = 0;
-	}
+	  error("pix_videoDS: Could not stop graph playback, hr 0x%X", hr);
+	} else
+	m_capturing = 0;
+    }
 
-	return !(!m_capturing);
+  return !(!m_capturing);
 }
 
 
 /////////////////////////////////////////////////////////
-// captureOnOff
-//
-/////////////////////////////////////////////////////////
-void pix_videoDS :: captureOnOff(int n)
+    // captureOnOff
+    //
+    /////////////////////////////////////////////////////////
+    void pix_videoDS :: captureOnOff(int n)
 {
-	m_captureOnOff = n;
+  m_captureOnOff = n;
 
-	if (n)
-		startTransfer();
-	else
-		stopTransfer();
+  if (n)
+    startTransfer();
+  else
+    stopTransfer();
 }
 
 
-/////////////////////////////////////////////////////////
-// offsetMess
-//
-/////////////////////////////////////////////////////////
-void pix_videoDS :: offsetMess(int x, int y)
-{
-  post("pix_videoDS: offset message not supported");
-  return;
-}
-
-/////////////////////////////////////////////////////////
-// dimenMess
-//
-/////////////////////////////////////////////////////////
-void pix_videoDS :: dimenMess(int x, int y)
-{
-  post("pix_videoDS: offset message not supported");
-  return;
-}
-
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // dvMess
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: dvMess(int argc, t_atom *argv)
 {
-	HRESULT hr = S_OK;
+  HRESULT hr = S_OK;
 
-	// Set DV interface to full resolution
-	if (argc < 1)
+  // Set DV interface to full resolution
+  if (argc < 1)
+    {
+      error("dv: Missing required argument");
+      return;
+    }
+
+  if (!m_haveVideo)
+    {
+      error("No open video device.");
+      return;
+    }
+
+  stopTransfer();
+
+  const char* szCmd = atom_getsymbolarg(0, argc, argv)->s_name;
+
+  if (!strcmp(szCmd,"res"))
+    {
+      if (argc >= 2)
 	{
-		error("dv: Missing required argument");
-		return;
-	}
+	  const char* szRes = atom_getsymbolarg(1, argc, argv)->s_name;
 
-	if (!m_haveVideo)
-	{
-		error("No open video device.");
-		return;
-	}
-
-	stopTransfer();
-
-	const char* szCmd = atom_getsymbolarg(0, argc, argv)->s_name;
-
-	if (!strcmp(szCmd,"res"))
-	{
-		if (argc >= 2)
+	  IIPDVDec* pDV;
+	  if (SUCCEEDED(hr = (m_pCG->FindInterface(NULL, NULL, m_pCDbase, IID_IIPDVDec, (void **)&pDV))))
+	    {
+	      if (!strcmp(szRes, "full"))
 		{
-			const char* szRes = atom_getsymbolarg(1, argc, argv)->s_name;
-
-			IIPDVDec* pDV;
-			if (SUCCEEDED(hr = (m_pCG->FindInterface(NULL, NULL, m_pCDbase, IID_IIPDVDec, (void **)&pDV))))
-			{
-				if (!strcmp(szRes, "full"))
-				{
-					hr = pDV->put_IPDisplay(DVRESOLUTION_FULL);
-				} else if (!strcmp(szRes, "half"))
-				{
-					hr = pDV->put_IPDisplay(DVRESOLUTION_HALF);
-				} else if (!strcmp(szRes, "quarter"))
-				{
-					hr = pDV->put_IPDisplay(DVRESOLUTION_QUARTER);
-				} else if (!strcmp(szRes, "dc"))
-				{
-					hr = pDV->put_IPDisplay(DVRESOLUTION_DC);
-				} else
-				{
-					error("pix_videoDS: unknown DV decoder setting");
-				}
-				if (FAILED(hr))
-				{
-					error("pix_videoDS: Could not set decoder resolution.");
-				}
-				pDV->Release();
-			} else
-			{
-				error("pix_videoDS: Device does not have DV decoder interface");
-			}
+		  hr = pDV->put_IPDisplay(DVRESOLUTION_FULL);
+		} else if (!strcmp(szRes, "half"))
+		{
+		  hr = pDV->put_IPDisplay(DVRESOLUTION_HALF);
+		} else if (!strcmp(szRes, "quarter"))
+		{
+		  hr = pDV->put_IPDisplay(DVRESOLUTION_QUARTER);
+		} else if (!strcmp(szRes, "dc"))
+		{
+		  hr = pDV->put_IPDisplay(DVRESOLUTION_DC);
 		} else
 		{
-			error("pix_videoDS: 'dv' Missing required argument(s)");
+		  error("pix_videoDS: unknown DV decoder setting");
 		}
+	      if (FAILED(hr))
+		{
+		  error("pix_videoDS: Could not set decoder resolution.");
+		}
+	      pDV->Release();
+	    } else
+	    {
+	      error("pix_videoDS: Device does not have DV decoder interface");
+	    }
+	} else
+	{
+	  error("pix_videoDS: 'dv' Missing required argument(s)");
 	}
+    }
 
-	startTransfer();
+  startTransfer();
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////
 // dialogMess
 //
 /////////////////////////////////////////////////////////
 void pix_videoDS :: dialogMess(t_symbol *type)
 {
-	HRESULT hr;
+  HRESULT hr;
 
-	if (!m_haveVideo)
-	{
-		error("pix_film_ds: No open video device.");
-		return;
-	}
-
-	stopTransfer();
-
-	// Check for old style VFW dialogs
-    IAMVfwCaptureDialogs *pDlg = NULL;
-	hr = m_pCG->FindInterface(NULL, NULL, m_pCDbase, IID_IAMVfwCaptureDialogs, (void **)&pDlg);
-
-    ISpecifyPropertyPages *pSpec;
-    CAUUID cauuid;
-
-    if (!strcmp(type->s_name, "source")) 
-	{
-		if (pDlg)
-		{
-			if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source)))
-			{
-				if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL)))
-				{
-					error("pix_videoDS: Could not show VFW Capture Source Dialog");
-				}
-			}
-		} else
-		{
-			hr = m_pCDbase->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
-			if(hr == S_OK) 
-			{
-				hr = pSpec->GetPages(&cauuid);
-				if (hr == S_OK && cauuid.cElems > 0) 
-				{
-					hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
-						(IUnknown **)&m_pCDbase, cauuid.cElems,
-						(GUID *)cauuid.pElems, 0, 0, NULL);
-					CoTaskMemFree(cauuid.pElems);
-				}
-				pSpec->Release();
-			}
-		}
-	} else if(!strcmp(type->s_name, "format"))
-	{
-		if (pDlg)
-		{
-			if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
-				if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL)))
-				{
-					error("pix_videoDS: Could not show VFW Capture Format Dialog");
-				}
-
-		} else
-		{
-			IAMStreamConfig *pSC;
-			hr = m_pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
-				&MEDIATYPE_Interleaved,
-				m_pCDbase, IID_IAMStreamConfig, (void **)&pSC);
-			if(hr != S_OK)
-				hr = m_pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
-					&MEDIATYPE_Video, m_pCDbase,
-					IID_IAMStreamConfig, (void **)&pSC);
-
-			if(hr == S_OK) {
-				hr = pSC->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
-				if(hr == S_OK) {
-					hr = pSpec->GetPages(&cauuid);
-					if(hr == S_OK && cauuid.cElems > 0) {
-						hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
-							(IUnknown **)&pSC, cauuid.cElems,
-							(GUID *)cauuid.pElems, 0, 0, NULL);
-						CoTaskMemFree(cauuid.pElems);
-					}
-					pSpec->Release();
-				}
-				pSC->Release();
-			}
-		}
-	} else if(!strcmp(type->s_name, "display"))
-	{
-		if (pDlg)
-		{
-			if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display)))
-			{
-				if FAILED((hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))
-				{
-					error("pix_videoDS: Could not show VFW Capture Display Dialog");
-				}
-			} else
-				post("pix_videoDS: No display dialog for this device");
-		} 
-	} else if(!strcmp(type->s_name, "crossbar")) 
-	{
-		IAMCrossbar *pX, *pX2;
-		IBaseFilter *pXF;
-		hr = m_pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
-			&MEDIATYPE_Interleaved, m_pCDbase,
-			IID_IAMCrossbar, (void **)&pX);
-		if(hr != S_OK)
-			hr = m_pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
-				&MEDIATYPE_Video, m_pCDbase,
-				IID_IAMCrossbar, (void **)&pX);
-
-		if(hr == S_OK) {
-			hr = pX->QueryInterface(IID_IBaseFilter, (void **)&pXF);
-			if(hr == S_OK) {
-				hr = pX->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
-				if(hr == S_OK) {
-					hr = pSpec->GetPages(&cauuid);
-					if(hr == S_OK && cauuid.cElems > 0) {
-						hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
-							(IUnknown **)&pX, cauuid.cElems,
-							(GUID *)cauuid.pElems, 0, 0, NULL);
-						CoTaskMemFree(cauuid.pElems);
-					}
-					pSpec->Release();
-				}
-				hr = m_pCG->FindInterface(&LOOK_UPSTREAM_ONLY, NULL, pXF,
-					IID_IAMCrossbar, (void **)&pX2);
-				if(hr == S_OK) {
-					hr = pX2->QueryInterface(IID_ISpecifyPropertyPages,
-						(void **)&pSpec);
-					if(hr == S_OK) {
-						hr = pSpec->GetPages(&cauuid);
-						if(hr == S_OK && cauuid.cElems > 0) {
-							hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
-								(IUnknown **)&pX2, cauuid.cElems,
-								(GUID *)cauuid.pElems, 0, 0, NULL);
-							CoTaskMemFree(cauuid.pElems);
-						}
-						pSpec->Release();
-					}
-					pX2->Release();
-				}
-				pXF->Release();
-			}
-			pX->Release();
-		}
-	} else
+  if (!m_haveVideo)
     {
-	    error ("pix_videoDS: dialog not known");
+      error("pix_film_ds: No open video device.");
+      return;
     }
-    setModified();
-	startTransfer();
+
+  stopTransfer();
+
+  // Check for old style VFW dialogs
+  IAMVfwCaptureDialogs *pDlg = NULL;
+  hr = m_pCG->FindInterface(NULL, NULL, m_pCDbase, IID_IAMVfwCaptureDialogs, (void **)&pDlg);
+
+  ISpecifyPropertyPages *pSpec;
+  CAUUID cauuid;
+
+  if (!strcmp(type->s_name, "source")) 
+    {
+      if (pDlg)
+	{
+	  if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source)))
+	    {
+	      if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL)))
+		{
+		  error("pix_videoDS: Could not show VFW Capture Source Dialog");
+		}
+	    }
+	} else
+	{
+	  hr = m_pCDbase->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
+	  if(hr == S_OK) 
+	    {
+	      hr = pSpec->GetPages(&cauuid);
+	      if (hr == S_OK && cauuid.cElems > 0) 
+		{
+		  hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
+					      (IUnknown **)&m_pCDbase, cauuid.cElems,
+					      (GUID *)cauuid.pElems, 0, 0, NULL);
+		  CoTaskMemFree(cauuid.pElems);
+		}
+	      pSpec->Release();
+	    }
+	}
+    } else if(!strcmp(type->s_name, "format"))
+    {
+      if (pDlg)
+	{
+	  if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
+	    if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL)))
+	      {
+		error("pix_videoDS: Could not show VFW Capture Format Dialog");
+	      }
+	  
+	} else
+	{
+	  IAMStreamConfig *pSC;
+	  hr = m_pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
+				    &MEDIATYPE_Interleaved,
+				    m_pCDbase, IID_IAMStreamConfig, (void **)&pSC);
+	  if(hr != S_OK)
+	    hr = m_pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
+				      &MEDIATYPE_Video, m_pCDbase,
+				      IID_IAMStreamConfig, (void **)&pSC);
+
+	  if(hr == S_OK) {
+	    hr = pSC->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
+	    if(hr == S_OK) {
+	      hr = pSpec->GetPages(&cauuid);
+	      if(hr == S_OK && cauuid.cElems > 0) {
+		hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
+					    (IUnknown **)&pSC, cauuid.cElems,
+					    (GUID *)cauuid.pElems, 0, 0, NULL);
+		CoTaskMemFree(cauuid.pElems);
+	      }
+	      pSpec->Release();
+	    }
+	    pSC->Release();
+	  }
+	}
+    } else if(!strcmp(type->s_name, "display"))
+    {
+      if (pDlg)
+	{
+	  if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display)))
+	    {
+	      if FAILED((hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))
+	      {
+		error("pix_videoDS: Could not show VFW Capture Display Dialog");
+	      }
+	    } else
+	    post("pix_videoDS: No display dialog for this device");
+	} 
+    } else if(!strcmp(type->s_name, "crossbar")) 
+    {
+      IAMCrossbar *pX, *pX2;
+      IBaseFilter *pXF;
+      hr = m_pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
+				&MEDIATYPE_Interleaved, m_pCDbase,
+				IID_IAMCrossbar, (void **)&pX);
+      if(hr != S_OK)
+	hr = m_pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
+				  &MEDIATYPE_Video, m_pCDbase,
+				  IID_IAMCrossbar, (void **)&pX);
+
+      if(hr == S_OK) {
+	hr = pX->QueryInterface(IID_IBaseFilter, (void **)&pXF);
+	if(hr == S_OK) {
+	  hr = pX->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
+	  if(hr == S_OK) {
+	    hr = pSpec->GetPages(&cauuid);
+	    if(hr == S_OK && cauuid.cElems > 0) {
+	      hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
+					  (IUnknown **)&pX, cauuid.cElems,
+					  (GUID *)cauuid.pElems, 0, 0, NULL);
+	      CoTaskMemFree(cauuid.pElems);
+	    }
+	    pSpec->Release();
+	  }
+	  hr = m_pCG->FindInterface(&LOOK_UPSTREAM_ONLY, NULL, pXF,
+				    IID_IAMCrossbar, (void **)&pX2);
+	  if(hr == S_OK) {
+	    hr = pX2->QueryInterface(IID_ISpecifyPropertyPages,
+				     (void **)&pSpec);
+	    if(hr == S_OK) {
+	      hr = pSpec->GetPages(&cauuid);
+	      if(hr == S_OK && cauuid.cElems > 0) {
+		hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
+					    (IUnknown **)&pX2, cauuid.cElems,
+					    (GUID *)cauuid.pElems, 0, 0, NULL);
+		CoTaskMemFree(cauuid.pElems);
+	      }
+	      pSpec->Release();
+	    }
+	    pX2->Release();
+	  }
+	  pXF->Release();
+	}
+	pX->Release();
+      }
+    } else
+    {
+      error ("pix_videoDS: dialog not known");
+    }
+  setModified();
+  startTransfer();
 }
 
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // cleanPixBlock
 //
 /////////////////////////////////////////////////////////
-void pix_videoDS :: cleanPixBlock()
+    void pix_videoDS :: cleanPixBlock()
 {
-	for (int i = 0; i <= 2; i++)
+  for (int i = 0; i <= 2; i++)
+    {
+      if (m_pixBlockBuf[i].image.data)
 	{
-		if (m_pixBlock[i].image.data)
-		{
-			delete [] m_pixBlock[i].image.data;
-			m_pixBlock[i].image.data = NULL;
-		}
-		m_pixBlock[i].newimage = 0;
-		m_nPixDataSize[i] = 0;
+	  delete [] m_pixBlockBuf[i].image.data;
+	  m_pixBlockBuf[i].image.data = NULL;
 	}
-}
-
-/////////////////////////////////////////////////////////
-// swapMess
-//
-/////////////////////////////////////////////////////////
-void pix_videoDS :: swapMess(int state)
-{
-  post("pix_videoDS: swap message not supported");
-  return;
-
-  if (state)
-    m_swap = 1;
-  else
-    m_swap = 0;
+      m_pixBlockBuf[i].newimage = 0;
+      m_nPixDataSize[i] = 0;
+    }
 }
 
 void pix_videoDS :: copyBuffer(IMediaSample* pSample)
 {
-	HRESULT hr;
-	unsigned char* pBuffer;
+  HRESULT hr;
+  unsigned char* pBuffer;
 	
-	// Get the media type
-	AM_MEDIA_TYPE* pmt;
-	int readIdx = m_readIdx;
+  // Get the media type
+  AM_MEDIA_TYPE* pmt;
+  int readIdx = m_readIdx;
 
-	if ((m_writeIdx = (m_lastwriteIdx + 1) % 3) == readIdx)
-		m_writeIdx = (readIdx + 1) % 3;
+  if ((m_writeIdx = (m_lastwriteIdx + 1) % 3) == readIdx)
+    m_writeIdx = (readIdx + 1) % 3;
 
-	int nRawBuffSize = pSample->GetSize();
+  int nRawBuffSize = pSample->GetSize();
 
-	// Check for a format change.
-	if (FAILED(hr = pSample->GetMediaType(&pmt)))
+  // Check for a format change.
+  if (FAILED(hr = pSample->GetMediaType(&pmt)))
+    {
+      error("pix_videoDS : could not get sample media type.");
+      closeMess();
+      return;
+    }
+
+  if (S_OK == hr)
+    {
+      BITMAPINFOHEADER* pbmih;
+      GetBitmapInfoHdr(pmt, &pbmih);
+      m_xsize = pbmih->biWidth;
+      m_ysize = pbmih->biHeight;
+      m_csize = 3;
+      m_format = GL_BGR_EXT;
+      DeleteMediaType(pmt);	// is this necessary?!	
+    }
+
+  if (m_nPixDataSize[m_writeIdx] != nRawBuffSize)
+    {
+      m_pixBlockBuf[m_writeIdx].image.xsize = m_xsize;
+      m_pixBlockBuf[m_writeIdx].image.ysize = m_ysize;
+      m_pixBlockBuf[m_writeIdx].image.csize = m_csize;
+      m_pixBlockBuf[m_writeIdx].image.format = m_format;
+      m_pixBlockBuf[m_writeIdx].image.type = GL_UNSIGNED_BYTE;
+
+      // setup the buffer
+      if (m_pixBlockBuf[m_writeIdx].image.data)
 	{
-		error("pix_videoDS : could not get sample media type.");
-		closeMess();
-		return;
+	  delete[] m_pixBlockBuf[m_writeIdx].image.data;
 	}
+      m_pixBlockBuf[m_writeIdx].image.data = new unsigned char[nRawBuffSize];
+      m_nPixDataSize[m_writeIdx] = nRawBuffSize;
+    }
 
-	if (S_OK == hr)
-	{
-		BITMAPINFOHEADER* pbmih;
-		GetBitmapInfoHdr(pmt, &pbmih);
-		m_xsize = pbmih->biWidth;
-		m_ysize = pbmih->biHeight;
-		m_csize = 3;
-		m_format = GL_BGR_EXT;
-		DeleteMediaType(pmt);	// is this necessary?!	
-	}
+  pSample->GetPointer(&pBuffer);
 
-	if (m_nPixDataSize[m_writeIdx] != nRawBuffSize)
-	{
-		m_pixBlock[m_writeIdx].image.xsize = m_xsize;
-		m_pixBlock[m_writeIdx].image.ysize = m_ysize;
-		m_pixBlock[m_writeIdx].image.csize = m_csize;
-		m_pixBlock[m_writeIdx].image.format = m_format;
-		m_pixBlock[m_writeIdx].image.type = GL_UNSIGNED_BYTE;
+  memcpy(m_pixBlockBuf[m_writeIdx].image.data, pBuffer, nRawBuffSize);
 
-		// setup the buffer
-		if (m_pixBlock[m_writeIdx].image.data)
-		{
-			delete[] m_pixBlock[m_writeIdx].image.data;
-		}
-		m_pixBlock[m_writeIdx].image.data = new unsigned char[nRawBuffSize];
-		m_nPixDataSize[m_writeIdx] = nRawBuffSize;
-	}
-
-	pSample->GetPointer(&pBuffer);
-
-	memcpy(m_pixBlock[m_writeIdx].image.data, pBuffer, nRawBuffSize);
-
-	m_pixBlock[m_writeIdx].newimage = 1;
-	m_lastwriteIdx = m_writeIdx;
+  m_pixBlockBuf[m_writeIdx].newimage = 1;
+  m_lastwriteIdx = m_writeIdx;
 }
 
 
@@ -885,17 +845,14 @@ void pix_videoDS :: copyBuffer(IMediaSample* pSample)
 /////////////////////////////////////////////////////////
 void pix_videoDS :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_video"), A_DEFFLOAT, A_NULL);
   class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_videoDS"), A_DEFFLOAT, A_NULL);
   class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_video_ds"), A_DEFFLOAT, A_NULL);  // alias to old external
   class_addcreator((t_newmethod)_classpix_videoDS, gensym("pix_dv"), A_DEFFLOAT, A_NULL);
-  pix_video::real_obj_setupCallback(classPtr);
+  //pix_video::real_obj_setupCallback(classPtr);
 
-  class_addmethod(classPtr, (t_method)&pix_videoDS::dimenMessCallback,
-		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoDS::offsetMessCallback,
-		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoDS::swapMessCallback,
-		  gensym("swap"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_videoDS::openMessCallback,
+		  gensym("device"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_videoDS::openMessCallback,
 		  gensym("open"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_videoDS::closeMessCallback,
@@ -904,25 +861,16 @@ void pix_videoDS :: obj_setupCallback(t_class *classPtr)
 		  gensym("enumerate"), A_NULL);
   class_addmethod(classPtr, (t_method)&pix_videoDS::setupMessCallback,
 		  gensym("setup"), A_NULL);
-  class_addfloat(classPtr, (t_method)&pix_videoDS::floatMessCallback);
   class_addmethod(classPtr, (t_method)&pix_videoDS::dialogMessCallback,
-   	    gensym("dialog"), A_SYMBOL, A_NULL);
+		  gensym("dialog"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_videoDS::dvMessCallback,
-   	    gensym("dv"), A_GIMME, A_NULL);
+		  gensym("dv"), A_GIMME, A_NULL);
+  class_addfloat(classPtr, (t_method)&pix_videoDS::floatMessCallback);
+
+  class_addmethod(classPtr, (t_method)&pix_videoDS::csMessCallback,
+		  gensym("colorspace"), A_SYMBOL, A_NULL);
 } 
 
-void pix_videoDS :: dimenMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-  GetMyClass(data)->dimenMess((int)x, (int)y);
-}
-void pix_videoDS :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-  GetMyClass(data)->offsetMess((int)x, (int)y);
-}
-void pix_videoDS :: swapMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->swapMess((int)state);
-}
 void pix_videoDS :: openMessCallback(void *data, t_floatarg device)
 {
   GetMyClass(data)->openMess((int)device);
@@ -939,9 +887,10 @@ void pix_videoDS :: setupMessCallback(void *data)
 {
   GetMyClass(data)->setupMess();
 }
-void pix_videoDS :: dialogMessCallback(void *data, t_symbol *type)
+void pix_videoDS :: dialogMessCallback(void *data, t_symbol *type, int argc, t_atom*argv)
 {
-    GetMyClass(data)->dialogMess(type);
+  if(argc)GetMyClass(data)->dialogMess(atom_getsymbol(argv));
+  else GetMyClass(data)->setupMess();
 }
 void pix_videoDS :: floatMessCallback(void *data, float n)
 {
@@ -949,9 +898,21 @@ void pix_videoDS :: floatMessCallback(void *data, float n)
 }
 void pix_videoDS :: dvMessCallback(void *data, t_symbol *type, int argc, t_atom *argv)
 {
-    GetMyClass(data)->dvMess(argc, argv);
+  GetMyClass(data)->dvMess(argc, argv);
 }
-
+void pix_videoDS :: csMessCallback(void *data, t_symbol *s)
+{
+  int format=0;
+  char c =*s->s_name;
+  switch (c){
+  case 'g': case 'G': format=GL_LUMINANCE; break;
+  case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
+  case 'r': case 'R': format=GL_RGBA; break;
+  default:
+    post("pix_video: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+  }
+  GetMyClass(data)->csMess(format);
+}
 
 // From Microsoft sample:
 //
@@ -1010,345 +971,345 @@ void pix_videoDS :: dvMessCallback(void *data, t_symbol *type, int argc, t_atom 
 
 void SetupCaptureDevice(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase) 
 {
-    HRESULT hr;
+  HRESULT hr;
 
-	// Check for old style VFW dialogs
-    IAMVfwCaptureDialogs *pDlg;
-	if (SUCCEEDED(hr = (pCG->FindInterface(NULL, NULL, pCDbase, IID_IAMVfwCaptureDialogs, (void **)&pDlg))))
-	{
-		if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source)))
-			if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL)))
-				error("pix_videoDS: Could not show VFW Capture Source Dialog");
-		if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
-			if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL)))
-				error("pix_videoDS: Could not show VFW Capture Format Dialog");
-		if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display)))
-			if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))
-				error("pix_videoDS: Could not show VFW Capture Display Dialog");
-		pDlg->Release();
-	}	
+  // Check for old style VFW dialogs
+  IAMVfwCaptureDialogs *pDlg;
+  if (SUCCEEDED(hr = (pCG->FindInterface(NULL, NULL, pCDbase, IID_IAMVfwCaptureDialogs, (void **)&pDlg))))
+    {
+      if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source)))
+	if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL)))
+	  error("pix_videoDS: Could not show VFW Capture Source Dialog");
+      if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
+	if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL)))
+	  error("pix_videoDS: Could not show VFW Capture Format Dialog");
+      if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display)))
+	if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))
+	  error("pix_videoDS: Could not show VFW Capture Display Dialog");
+      pDlg->Release();
+    }	
 	
-    ISpecifyPropertyPages *pSpec;
-    CAUUID cauuid;
-    // 1. the video capture filter itself
-    hr = pCDbase->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
-    if(hr == S_OK) 
+  ISpecifyPropertyPages *pSpec;
+  CAUUID cauuid;
+  // 1. the video capture filter itself
+  hr = pCDbase->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
+  if(hr == S_OK) 
+    {
+      hr = pSpec->GetPages(&cauuid);
+      if (hr == S_OK && cauuid.cElems > 0) 
 	{
-        hr = pSpec->GetPages(&cauuid);
-        if (hr == S_OK && cauuid.cElems > 0) 
-		{
-            hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
-                (IUnknown **)&pCDbase, cauuid.cElems,
-                (GUID *)cauuid.pElems, 0, 0, NULL);
-            CoTaskMemFree(cauuid.pElems);
+	  hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
+				      (IUnknown **)&pCDbase, cauuid.cElems,
+				      (GUID *)cauuid.pElems, 0, 0, NULL);
+	  CoTaskMemFree(cauuid.pElems);
         }
-        pSpec->Release();
+      pSpec->Release();
     }
 
 
-    // 2.  The video capture capture pin
-    IAMStreamConfig *pSC;
+  // 2.  The video capture capture pin
+  IAMStreamConfig *pSC;
+  hr = pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
+			  &MEDIATYPE_Interleaved,
+			  pCDbase, IID_IAMStreamConfig, (void **)&pSC);
+  if(hr != S_OK)
     hr = pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
-        &MEDIATYPE_Interleaved,
-        pCDbase, IID_IAMStreamConfig, (void **)&pSC);
-    if(hr != S_OK)
-        hr = pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
-            &MEDIATYPE_Video, pCDbase,
-            IID_IAMStreamConfig, (void **)&pSC);
+			    &MEDIATYPE_Video, pCDbase,
+			    IID_IAMStreamConfig, (void **)&pSC);
 
+  if(hr == S_OK) {
+    hr = pSC->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
     if(hr == S_OK) {
-        hr = pSC->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
-        if(hr == S_OK) {
-            hr = pSpec->GetPages(&cauuid);
-            if(hr == S_OK && cauuid.cElems > 0) {
-				hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
-					(IUnknown **)&pSC, cauuid.cElems,
+      hr = pSpec->GetPages(&cauuid);
+      if(hr == S_OK && cauuid.cElems > 0) {
+	hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
+				    (IUnknown **)&pSC, cauuid.cElems,
+				    (GUID *)cauuid.pElems, 0, 0, NULL);
+	CoTaskMemFree(cauuid.pElems);
+      }
+      pSpec->Release();
+    }
+    pSC->Release();
+  }
+
+  // 4 & 5.  The video crossbar, and a possible second crossbar
+  IAMCrossbar *pX, *pX2;
+  IBaseFilter *pXF;
+  hr = pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
+			  &MEDIATYPE_Interleaved, pCDbase,
+			  IID_IAMCrossbar, (void **)&pX);
+  if(hr != S_OK)
+    hr = pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
+			    &MEDIATYPE_Video, pCDbase,
+			    IID_IAMCrossbar, (void **)&pX);
+
+  if(hr == S_OK) {
+    hr = pX->QueryInterface(IID_IBaseFilter, (void **)&pXF);
+    if(hr == S_OK) {
+      hr = pX->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
+      if(hr == S_OK) {
+	hr = pSpec->GetPages(&cauuid);
+	if(hr == S_OK && cauuid.cElems > 0) {
+	  hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
+				      (IUnknown **)&pX, cauuid.cElems,
+				      (GUID *)cauuid.pElems, 0, 0, NULL);
+	  CoTaskMemFree(cauuid.pElems);
+	}
+	pSpec->Release();
+      }
+      hr = pCG->FindInterface(&LOOK_UPSTREAM_ONLY, NULL, pXF,
+			      IID_IAMCrossbar, (void **)&pX2);
+      if(hr == S_OK) {
+	hr = pX2->QueryInterface(IID_ISpecifyPropertyPages,
+				 (void **)&pSpec);
+	if(hr == S_OK) {
+	  hr = pSpec->GetPages(&cauuid);
+	  if(hr == S_OK && cauuid.cElems > 0) {
+	    hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
+					(IUnknown **)&pX2, cauuid.cElems,
 					(GUID *)cauuid.pElems, 0, 0, NULL);
-                CoTaskMemFree(cauuid.pElems);
-            }
-            pSpec->Release();
-        }
-        pSC->Release();
+	    CoTaskMemFree(cauuid.pElems);
+	  }
+	  pSpec->Release();
+	}
+	pX2->Release();
+      }
+      pXF->Release();
     }
+    pX->Release();
+  }
 
-    // 4 & 5.  The video crossbar, and a possible second crossbar
-    IAMCrossbar *pX, *pX2;
-    IBaseFilter *pXF;
-    hr = pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
-        &MEDIATYPE_Interleaved, pCDbase,
-        IID_IAMCrossbar, (void **)&pX);
-    if(hr != S_OK)
-        hr = pCG->FindInterface(&PIN_CATEGORY_CAPTURE,
-            &MEDIATYPE_Video, pCDbase,
-            IID_IAMCrossbar, (void **)&pX);
+  /*
+  // 6.  The TVTuner!!
+  IAMTVTuner *pTV;
+  hr = gcap.pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE,
+  &MEDIATYPE_Interleaved, gcap.pVCap,
+  IID_IAMTVTuner, (void **)&pTV);
+  if(hr != S_OK)
+  hr = gcap.pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE,
+  &MEDIATYPE_Video, gcap.pVCap,
+  IID_IAMTVTuner, (void **)&pTV);
+  if(hr == S_OK) {
+  hr = pTV->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
+  if(hr == S_OK) {
+  hr = pSpec->GetPages(&cauuid);
+  if(hr == S_OK && cauuid.cElems > 0) {
+  AppendMenu(hMenuSub,MF_STRING,MENU_DIALOG0+zz, TEXT("TV Tuner..."));
+  gcap.iTVTunerDialogPos = zz++;
+  CoTaskMemFree(cauuid.pElems);
+  }
+  pSpec->Release();
+  }
+  pTV->Release();
+  }
 
-    if(hr == S_OK) {
-        hr = pX->QueryInterface(IID_IBaseFilter, (void **)&pXF);
-        if(hr == S_OK) {
-            hr = pX->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
-            if(hr == S_OK) {
-                hr = pSpec->GetPages(&cauuid);
-                if(hr == S_OK && cauuid.cElems > 0) {
-					hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
-						(IUnknown **)&pX, cauuid.cElems,
-						(GUID *)cauuid.pElems, 0, 0, NULL);
-                    CoTaskMemFree(cauuid.pElems);
-                }
-                pSpec->Release();
-            }
-            hr = pCG->FindInterface(&LOOK_UPSTREAM_ONLY, NULL, pXF,
-                IID_IAMCrossbar, (void **)&pX2);
-            if(hr == S_OK) {
-                hr = pX2->QueryInterface(IID_ISpecifyPropertyPages,
-                    (void **)&pSpec);
-                if(hr == S_OK) {
-                    hr = pSpec->GetPages(&cauuid);
-                    if(hr == S_OK && cauuid.cElems > 0) {
-						hr = OleCreatePropertyFrame(NULL, 30, 30, NULL, 1,
-							(IUnknown **)&pX2, cauuid.cElems,
-							(GUID *)cauuid.pElems, 0, 0, NULL);
-                        CoTaskMemFree(cauuid.pElems);
-                    }
-                    pSpec->Release();
-                }
-                pX2->Release();
-            }
-            pXF->Release();
-        }
-        pX->Release();
-    }
+  // 10.  Crossbar class helper menu item, to let you choose an input
 
-/*
-    // 6.  The TVTuner!!
-    IAMTVTuner *pTV;
-    hr = gcap.pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE,
-        &MEDIATYPE_Interleaved, gcap.pVCap,
-        IID_IAMTVTuner, (void **)&pTV);
-    if(hr != S_OK)
-        hr = gcap.pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE,
-            &MEDIATYPE_Video, gcap.pVCap,
-            IID_IAMTVTuner, (void **)&pTV);
-    if(hr == S_OK) {
-        hr = pTV->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pSpec);
-        if(hr == S_OK) {
-            hr = pSpec->GetPages(&cauuid);
-            if(hr == S_OK && cauuid.cElems > 0) {
-                AppendMenu(hMenuSub,MF_STRING,MENU_DIALOG0+zz, TEXT("TV Tuner..."));
-                gcap.iTVTunerDialogPos = zz++;
-                CoTaskMemFree(cauuid.pElems);
-            }
-            pSpec->Release();
-        }
-        pTV->Release();
-    }
+  if(gcap.pCrossbar && gcap.NumberOfVideoInputs) {
+  gcap.hMenuPopup = CreatePopupMenu();
+  LONG j;
+  LONG  PhysicalType;
+  TCHAR buf[MAX_PATH];
+  LONG InputToEnable = -1;
 
-    // 10.  Crossbar class helper menu item, to let you choose an input
+  gcap.iVideoInputMenuPos = zz++;
+  AppendMenu(hMenuSub, MF_SEPARATOR, 0, NULL);
 
-    if(gcap.pCrossbar && gcap.NumberOfVideoInputs) {
-        gcap.hMenuPopup = CreatePopupMenu();
-        LONG j;
-        LONG  PhysicalType;
-        TCHAR buf[MAX_PATH];
-        LONG InputToEnable = -1;
+  for(j = 0; j < gcap.NumberOfVideoInputs; j++) {
+  EXECUTE_ASSERT(S_OK == gcap.pCrossbar->GetInputType(j, &PhysicalType));
+  EXECUTE_ASSERT(S_OK == gcap.pCrossbar->GetInputName(j, buf, sizeof (buf)));
+  AppendMenu(gcap.hMenuPopup,MF_STRING,MENU_DIALOG0+zz, buf);
+  zz++;
 
-        gcap.iVideoInputMenuPos = zz++;
-        AppendMenu(hMenuSub, MF_SEPARATOR, 0, NULL);
+  // Route the first TVTuner by default
+  if((PhysicalType == PhysConn_Video_Tuner) && InputToEnable == -1) {
+  InputToEnable = j;
+  }
+  }
 
-        for(j = 0; j < gcap.NumberOfVideoInputs; j++) {
-            EXECUTE_ASSERT(S_OK == gcap.pCrossbar->GetInputType(j, &PhysicalType));
-            EXECUTE_ASSERT(S_OK == gcap.pCrossbar->GetInputName(j, buf, sizeof (buf)));
-            AppendMenu(gcap.hMenuPopup,MF_STRING,MENU_DIALOG0+zz, buf);
-            zz++;
+  AppendMenu(hMenuSub, MF_STRING | MF_POPUP, (UINT_PTR)gcap.hMenuPopup, TEXT("Video Input"));
 
-            // Route the first TVTuner by default
-            if((PhysicalType == PhysConn_Video_Tuner) && InputToEnable == -1) {
-                InputToEnable = j;
-            }
-        }
+  if(InputToEnable == -1) {
+  InputToEnable = 0;
+  }
+  CheckMenuItem(gcap.hMenuPopup, InputToEnable, MF_BYPOSITION | MF_CHECKED); 
 
-        AppendMenu(hMenuSub, MF_STRING | MF_POPUP, (UINT_PTR)gcap.hMenuPopup, TEXT("Video Input"));
-
-        if(InputToEnable == -1) {
-            InputToEnable = 0;
-        }
-        CheckMenuItem(gcap.hMenuPopup, InputToEnable, MF_BYPOSITION | MF_CHECKED); 
-
-        gcap.pCrossbar->SetInputIndex(InputToEnable);
-    }
-    // !!! anything needed to delete the popup when selecting a new input?
-*/
+  gcap.pCrossbar->SetInputIndex(InputToEnable);
+  }
+  // !!! anything needed to delete the popup when selecting a new input?
+  */
 }
 
 
 HRESULT 
 FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter)
 {
-    HRESULT hr;
-    IBaseFilter * pSrc = NULL;
+  HRESULT hr;
+  IBaseFilter * pSrc = NULL;
 
-    IMoniker* pMoniker =NULL;
-    ULONG cFetched;
+  IMoniker* pMoniker =NULL;
+  ULONG cFetched;
 
-	ICreateDevEnum* pDevEnum =NULL;
-	IEnumMoniker* pClassEnum = NULL;
+  ICreateDevEnum* pDevEnum =NULL;
+  IEnumMoniker* pClassEnum = NULL;
 
-	do 
+  do 
+    {
+      // Create the system device enumerator
+      hr = CoCreateInstance (CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC,
+			     IID_ICreateDevEnum, (void ** ) &pDevEnum);
+      if (FAILED(hr))
 	{
-		// Create the system device enumerator
-		hr = CoCreateInstance (CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC,
-			IID_ICreateDevEnum, (void ** ) &pDevEnum);
-		if (FAILED(hr))
+	  error("GEM: Couldn't create system enumerator!");
+	  break;
+	}
+
+      // Create an enumerator for the video capture devices
+
+      hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
+      if (FAILED(hr))
+	{
+	  error("pix_videoDS: Couldn't create class enumerator!");
+	  break;
+	}
+
+      // If there are no enumerators for the requested type, then 
+      // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
+      if (pClassEnum == NULL)
+	{
+	  error("pix_videoDS: No video capture devices found!");
+	  hr = E_FAIL;
+	  break;
+	}
+
+      // Use the first video capture device on the device list.
+      // Note that if the Next() call succeeds but there are no monikers,
+      // it will return S_FALSE (which is not a failure).  Therefore, we
+      // check that the return code is S_OK instead of using SUCCEEDED() macro.
+      int devIndex = 0;
+      while(		(S_OK == (pClassEnum->Next (1, &pMoniker, &cFetched)))
+			&&	(devIndex <= device))
+	{
+	  if (devIndex == device)
+	    {
+	      // Bind Moniker to a filter object
+	      hr = pMoniker->BindToObject(0,0,IID_IBaseFilter, (void**)&pSrc);
+	      if (FAILED(hr))
 		{
-			error("GEM: Couldn't create system enumerator!");
-			break;
+		  error("pix_videoDS: Couldn't bind moniker to filter object!");
 		}
+	    }
+	  COMRELEASE(pMoniker);
+	  devIndex++;
+	}
+    } while (0);
 
-		// Create an enumerator for the video capture devices
+  // Copy the found filter pointer to the output parameter.
+  // Do NOT Release() the reference, since it will still be used
+  // by the calling function.
+  COMRELEASE(pDevEnum);
+  COMRELEASE(pClassEnum);
 
-		hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
-		if (FAILED(hr))
-		{
-			error("pix_videoDS: Couldn't create class enumerator!");
-			break;
-		}
+  *ppSrcFilter = pSrc;
 
-		// If there are no enumerators for the requested type, then 
-		// CreateClassEnumerator will succeed, but pClassEnum will be NULL.
-		if (pClassEnum == NULL)
-		{
-			error("pix_videoDS: No video capture devices found!");
-			hr = E_FAIL;
-			break;
-		}
-
-		// Use the first video capture device on the device list.
-		// Note that if the Next() call succeeds but there are no monikers,
-		// it will return S_FALSE (which is not a failure).  Therefore, we
-		// check that the return code is S_OK instead of using SUCCEEDED() macro.
-		int devIndex = 0;
-		while(		(S_OK == (pClassEnum->Next (1, &pMoniker, &cFetched)))
-				&&	(devIndex <= device))
-		{
-			if (devIndex == device)
-			{
-			   // Bind Moniker to a filter object
-				hr = pMoniker->BindToObject(0,0,IID_IBaseFilter, (void**)&pSrc);
-				if (FAILED(hr))
-				{
-					error("pix_videoDS: Couldn't bind moniker to filter object!");
-				}
-			}
-			COMRELEASE(pMoniker);
-			devIndex++;
-		}
-	} while (0);
-
-    // Copy the found filter pointer to the output parameter.
-    // Do NOT Release() the reference, since it will still be used
-    // by the calling function.
-	COMRELEASE(pDevEnum);
-	COMRELEASE(pClassEnum);
-
-    *ppSrcFilter = pSrc;
-
-    return hr;
+  return hr;
 }
 
 HRESULT ConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond)
 {
-    IPin *pOut = NULL, *pIn = NULL;
-    HRESULT hr = GetPin(pFirst, PINDIR_OUTPUT, &pOut);
-    if (FAILED(hr)) return hr;
-    hr = GetPin(pSecond, PINDIR_INPUT, &pIn);
-    if (FAILED(hr)) 
+  IPin *pOut = NULL, *pIn = NULL;
+  HRESULT hr = GetPin(pFirst, PINDIR_OUTPUT, &pOut);
+  if (FAILED(hr)) return hr;
+  hr = GetPin(pSecond, PINDIR_INPUT, &pIn);
+  if (FAILED(hr)) 
     {
-        pOut->Release();
-        return E_FAIL;
-     }
-    hr = pGraph->Connect(pOut, pIn);
-    pIn->Release();
-    pOut->Release();
-    return hr;
+      pOut->Release();
+      return E_FAIL;
+    }
+  hr = pGraph->Connect(pOut, pIn);
+  pIn->Release();
+  pOut->Release();
+  return hr;
 }
 
 void GetBitmapInfoHdr(AM_MEDIA_TYPE* pmt, BITMAPINFOHEADER** ppbmih)
 {
-	*ppbmih = NULL;
+  *ppbmih = NULL;
 
-    if (IsEqualGUID(pmt->formattype, FORMAT_VideoInfo) ||
-        IsEqualGUID(pmt->formattype, FORMAT_MPEGVideo)) 
-	{
+  if (IsEqualGUID(pmt->formattype, FORMAT_VideoInfo) ||
+      IsEqualGUID(pmt->formattype, FORMAT_MPEGVideo)) 
+    {
 
-        VIDEOINFOHEADER * pVideoFormat = (VIDEOINFOHEADER *) pmt->pbFormat;
-		*ppbmih = &(((VIDEOINFOHEADER *) pmt->pbFormat)->bmiHeader);
-	}
-	else if (	IsEqualGUID(pmt->formattype, FORMAT_MPEG2Video) ||
-				IsEqualGUID(pmt->formattype, FORMAT_VideoInfo2))
-	{
-		*ppbmih = &(((VIDEOINFOHEADER2 *) pmt->pbFormat)->bmiHeader);
-	}
-	else
-	{
-		error("pix_videoDS: Unknown media format");
-		return;
-	}
+      VIDEOINFOHEADER * pVideoFormat = (VIDEOINFOHEADER *) pmt->pbFormat;
+      *ppbmih = &(((VIDEOINFOHEADER *) pmt->pbFormat)->bmiHeader);
+    }
+  else if (	IsEqualGUID(pmt->formattype, FORMAT_MPEG2Video) ||
+		IsEqualGUID(pmt->formattype, FORMAT_VideoInfo2))
+    {
+      *ppbmih = &(((VIDEOINFOHEADER2 *) pmt->pbFormat)->bmiHeader);
+    }
+  else
+    {
+      error("pix_videoDS: Unknown media format");
+      return;
+    }
 }
 
 HRESULT GetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
 {
-    IEnumPins  *pEnum;
-    IPin       *pPin;
-    pFilter->EnumPins(&pEnum);
-    while(pEnum->Next(1, &pPin, 0) == S_OK)
+  IEnumPins  *pEnum;
+  IPin       *pPin;
+  pFilter->EnumPins(&pEnum);
+  while(pEnum->Next(1, &pPin, 0) == S_OK)
     {
-        PIN_DIRECTION PinDirThis;
-        pPin->QueryDirection(&PinDirThis);
-        if (PinDir == PinDirThis)
+      PIN_DIRECTION PinDirThis;
+      pPin->QueryDirection(&PinDirThis);
+      if (PinDir == PinDirThis)
         {
-            pEnum->Release();
-            *ppPin = pPin;
-            return S_OK;
+	  pEnum->Release();
+	  *ppPin = pPin;
+	  return S_OK;
         }
-        pPin->Release();
+      pPin->Release();
     }
-    pEnum->Release();
-    return E_FAIL;  
+  pEnum->Release();
+  return E_FAIL;  
 }
 
 
 
 HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) 
 {
-    IMoniker * pMoniker;
-    IRunningObjectTable *pROT;
-    if (FAILED(GetRunningObjectTable(0, &pROT))) 
+  IMoniker * pMoniker;
+  IRunningObjectTable *pROT;
+  if (FAILED(GetRunningObjectTable(0, &pROT))) 
     {
-        return E_FAIL;
+      return E_FAIL;
     }
 
-    WCHAR wsz[128];
-    wsprintfW(wsz, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph, 
-              GetCurrentProcessId());
+  WCHAR wsz[128];
+  wsprintfW(wsz, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph, 
+	    GetCurrentProcessId());
 
-    HRESULT hr = CreateItemMoniker(L"!", wsz, &pMoniker);
-    if (SUCCEEDED(hr)) 
+  HRESULT hr = CreateItemMoniker(L"!", wsz, &pMoniker);
+  if (SUCCEEDED(hr)) 
     {
-        hr = pROT->Register(0, pUnkGraph, pMoniker, pdwRegister);
-        pMoniker->Release();
+      hr = pROT->Register(0, pUnkGraph, pMoniker, pdwRegister);
+      pMoniker->Release();
     }
 
-    pROT->Release();
-    return hr;
+  pROT->Release();
+  return hr;
 }
 
 void RemoveGraphFromRot(DWORD pdwRegister)
 {
-    IRunningObjectTable *pROT;
+  IRunningObjectTable *pROT;
 
-    if (SUCCEEDED(GetRunningObjectTable(0, &pROT))) 
+  if (SUCCEEDED(GetRunningObjectTable(0, &pROT))) 
     {
-        pROT->Revoke(pdwRegister);
-        pROT->Release();
+      pROT->Revoke(pdwRegister);
+      pROT->Release();
     }
 }
 #endif
