@@ -68,6 +68,7 @@ struct GEM_EXTERN imageStruct
   imageStruct() : xsize (0), ysize(0),csize(0),notowned(0),data(0),pdata(0) {}
 
   ~imageStruct() { clear(); }
+  void info();
     //////////
     // columns
   unsigned char* allocate(int size) {
@@ -125,6 +126,8 @@ struct GEM_EXTERN imageStruct
 
   void copy2Image(imageStruct *to);
   void refreshImage(imageStruct *to);
+  void copy2ImageStruct(imageStruct *to); // copy the imageStruct (but not the actual data)
+
 
     unsigned char   *data;
   private:

@@ -17,28 +17,32 @@ LOG
 #ifndef INCLUDE_GEMGLUTOBJ_H_
 #define INCLUDE_GEMGLUTOBJ_H_
 
-#if HAVE_LIBGLUT || MACOSX
+#include "Base/config.h"
 #include "Base/GemShape.h"
 
 #ifdef MACOSX
+#define HAVE_LIBGLUT
 #include <GLUT/glut.h>
 #else
+#ifdef HAVE_LIBGLUT
 #include <GL/glut.h>
-#endif	//MACOSX
+#endif
+#endif
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-    GemGluObj
+    GemGlutObj
     
-    A Glu object
+    A Glut object
 
 DESCRIPTION
+    not every one has Glut installed,
+    therefor, the Glut-routines itself have to be #ifdef-ed, like
+#ifdef HAVE_LIBGLUT
+  glutSolidTeapot(10.0);
+#endif
 
-    Inlet for an int - "in2"
-
-    "in2" - the number of slices in the object
-        
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemGlutObj : public GemShape
 {
@@ -55,32 +59,6 @@ class GEM_EXTERN GemGlutObj : public GemShape
     	virtual ~GemGlutObj();
 
     	//////////
-    	// Create the quadric
-    	virtual void	startRendering();
-    	
-    	//////////
-    	// Clean it up
-    	virtual void	stopRendering();
-    	
-    	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-
-    	//////////
-    	// The number of slices in the quadric
-    	void	    	numSlicesMess(int numSlices);
-
-    	//////////
-    	// The number of slices
-    	int 	    	m_numSlices;
-
-    	//////////
-    	GLUquadricObj 	*m_thing;
-    	
-        //////////
-        t_inlet         *m_sliceInlet;
-
-    	//////////
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr)
     	    { GemShape::real_obj_setupCallback(classPtr); GemGlutObj::obj_setupCallback(classPtr); }
@@ -92,8 +70,5 @@ class GEM_EXTERN GemGlutObj : public GemShape
     	//////////
     	// Static member functions
     	static void 	obj_setupCallback(t_class *classPtr);
-    	static void 	numSlicesMessCallback(void *data, t_floatarg numSlices);
 };
-
-#endif
 #endif	// for header file

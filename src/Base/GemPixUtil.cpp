@@ -20,6 +20,29 @@
 
 #include <string.h>
 
+GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
+    if (!to || !this || !this->data) {
+      error("GEM: Someone sent a bogus pointer to copy2Image");
+      if (to) to->data = NULL;
+      return;
+    }
+
+    // copy the information over
+    to->xsize 	= xsize;
+    to->ysize 	= ysize;
+    to->csize 	= csize;
+    to->format 	= format;
+    to->type 	= type;
+    to->data    = data;
+    to->pdata   = pdata;
+}
+GEM_EXTERN void imageStruct::info() {
+  post("imageStruct\t:%dx%dx%d\n\t\t%X\t(%x)\n\t\t%x\t%x\t%d",
+       xsize, ysize, csize,
+       data, pdata,
+       format, type, notowned);
+}
+
 GEM_EXTERN void imageStruct::copy2Image(imageStruct *to)
 {
     if (!to || !this || !this->data)

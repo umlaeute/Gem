@@ -21,6 +21,7 @@
 #include "GemCache.h"
 
 #include <string.h>
+#include <stdio.h>
 
 /////////////////////////////////////////////////////////
 //
@@ -31,7 +32,7 @@
 //
 /////////////////////////////////////////////////////////
 GemPixDualObj :: GemPixDualObj()
-   	       : m_cacheRight(NULL), m_pixRightValid(-1) //, m_pixRight(NULL) changed DH 8/5/02
+  : m_cacheRight(NULL), m_pixRightValid(-1) //, m_pixRight(NULL) changed DH 8/5/02
 {
     m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
     memset(&m_pixRight, 0, sizeof(m_pixRight));
@@ -50,10 +51,19 @@ GemPixDualObj :: ~GemPixDualObj()
 // processImage
 //
 /////////////////////////////////////////////////////////
+void GemPixDualObj :: render(GemState *state)
+{
+  GemPixObj::render(state);
+}
+
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
 void GemPixDualObj :: processImage(imageStruct &image)
 {
-  if (!m_pixRightValid || !m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
   //if (!m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
+  if (!m_pixRightValid || !m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
 
     if (image.xsize != m_pixRight->image.xsize ||
     	image.ysize != m_pixRight->image.ysize)    {
@@ -62,106 +72,73 @@ void GemPixDualObj :: processImage(imageStruct &image)
       
     	return;
     }
-#ifndef NEW_DUAL_PIX
-	if (image.csize == 1)
-	{
-		if (m_pixRight->image.csize == 1)
-			processDualGray(image, m_pixRight->image);
-		else
-			processLeftGray(image, m_pixRight->image);
-	}
-	else
-	{
-		if (m_pixRight->image.csize == 1)
-			processRightGray(image, m_pixRight->image);
-		else
-			processDualImage(image, m_pixRight->image);
-	}
-	if (image.csize == 2)
-	{
-		if (m_pixRight->image.csize == 2)
-			processDualYUV(image, m_pixRight->image);
-		else
-			processLeftYUV(image, m_pixRight->image);
-	}
-	else
-	{
-		if (m_pixRight->image.csize == 2)
-			processRightYUV(image, m_pixRight->image);
-		else
-			processDualImage(image, m_pixRight->image);
-	}
-
-#else
-	bool found = false;
-	switch (image.format) {
-	case GL_RGBA:
-	case GL_BGRA_EXT:
-	  switch (m_pixRight->image.format) {
-	  case GL_RGBA:
-	  case GL_BGRA_EXT:
-	    found=true; processRGBA_RGBA(image, m_pixRight->image);
-	    break;
-	  case GL_LUMINANCE:
-	    found=true; processRGBA_Gray(image, m_pixRight->image);
-	    break;
-	  case GL_YCBCR_422_GEM:
-	    found=true; processRGBA_YUV(image, m_pixRight->image);
-	    break;
-	  default:
-	    found=true; processRGBA_Any(image, m_pixRight->image);
-	  }
-	  break;
-	case GL_LUMINANCE:
-	  switch (m_pixRight->image.format) {
-	  case GL_RGBA:
-	  case GL_BGRA_EXT:
-	    found=true; processGray_RGBA(image, m_pixRight->image);
-	    break;
-	  case GL_LUMINANCE:
-	    found=true; processGray_Gray(image, m_pixRight->image);
-	    break;
-	  case GL_YCBCR_422_GEM:
-	    found=true; processGray_YUV(image, m_pixRight->image);
-	    break;
-	  default:
-	    found=true; processGray_Any(image, m_pixRight->image);
-	  }
-	  break;
-	case GL_YCBCR_422_GEM:
-	  switch (m_pixRight->image.format) {
-	  case GL_RGBA:
-	  case GL_BGRA_EXT:
-	    found=true; processYUV_RGBA(image, m_pixRight->image);
-	    break;
-	  case GL_LUMINANCE:
-	    found=true; processYUV_Gray(image, m_pixRight->image);
-	    break;
-	  case GL_YCBCR_422_GEM:
-	    found=true; processYUV_YUV(image, m_pixRight->image);
-	    break;
-	  default:
-	    found=true; processYUV_Any(image, m_pixRight->image);
-	  }
-	  break;
-	default:
-	  switch (m_pixRight->image.format) {
-	  case GL_RGBA:
-	  case GL_BGRA_EXT:
-	    found=true; processAny_RGBA(image, m_pixRight->image);
-	    break;
-	  case GL_LUMINANCE:
-	    found=true; processAny_Gray(image, m_pixRight->image);
-	    break;
-	  case GL_YCBCR_422_GEM:
-	    found=true; processAny_YUV(image, m_pixRight->image);
-	    break;
-	  default:break;
-	  }
-	}
-	if (!found)processDualImage(image, m_pixRight->image);
-#endif
-
+    bool found = false;
+    switch (image.format) {
+    case GL_RGBA:
+    case GL_BGRA_EXT:
+      switch (m_pixRight->image.format) {
+      case GL_RGBA:
+      case GL_BGRA_EXT:
+	found=true; processRGBA_RGBA(image, m_pixRight->image);
+	break;
+      case GL_LUMINANCE:
+	found=true; processRGBA_Gray(image, m_pixRight->image);
+	break;
+      case GL_YCBCR_422_GEM:
+	found=true; processRGBA_YUV(image, m_pixRight->image);
+	break;
+      default:
+	found=true; processRGBA_Any(image, m_pixRight->image);
+      }
+      break;
+    case GL_LUMINANCE:
+      switch (m_pixRight->image.format) {
+      case GL_RGBA:
+      case GL_BGRA_EXT:
+	found=true; processGray_RGBA(image, m_pixRight->image);
+	break;
+      case GL_LUMINANCE:
+	found=true; processGray_Gray(image, m_pixRight->image);
+	break;
+      case GL_YCBCR_422_GEM:
+	found=true; processGray_YUV(image, m_pixRight->image);
+	break;
+      default:
+	found=true; processGray_Any(image, m_pixRight->image);
+      }
+      break;
+    case GL_YCBCR_422_GEM:
+      switch (m_pixRight->image.format) {
+      case GL_RGBA:
+      case GL_BGRA_EXT:
+	found=true; processYUV_RGBA(image, m_pixRight->image);
+	break;
+      case GL_LUMINANCE:
+	found=true; processYUV_Gray(image, m_pixRight->image);
+	break;
+      case GL_YCBCR_422_GEM:
+	found=true; processYUV_YUV(image, m_pixRight->image);
+	break;
+      default:
+	found=true; processYUV_Any(image, m_pixRight->image);
+      }
+      break;
+    default:
+      switch (m_pixRight->image.format) {
+      case GL_RGBA:
+      case GL_BGRA_EXT:
+	found=true; processAny_RGBA(image, m_pixRight->image);
+	break;
+      case GL_LUMINANCE:
+	found=true; processAny_Gray(image, m_pixRight->image);
+	break;
+      case GL_YCBCR_422_GEM:
+	found=true; processAny_YUV(image, m_pixRight->image);
+	break;
+      default:break;
+      }
+    }
+    if (!found)processDualImage(image, m_pixRight->image);
 }
 
 /////////////////////////////////////////////////////////
@@ -169,66 +146,36 @@ void GemPixDualObj :: processImage(imageStruct &image)
 //
 /////////////////////////////////////////////////////////
 
-#ifndef NEW_DUAL_PIX
-void GemPixDualObj :: processDualGray(imageStruct &, imageStruct &)
-{error("GEM: GemPixDualObj: cannot handle gray image");}
-void GemPixDualObj :: processLeftGray(imageStruct &, imageStruct &)
-{error("GEM: GemPixDualObj: cannot handle gray image");}
-void GemPixDualObj :: processRightGray(imageStruct &, imageStruct &)
-{error("GEM: GemPixDualObj: cannot handle gray image");}
-void GemPixDualObj :: processDualYUV(imageStruct &, imageStruct &)
-{error("GEM: GemPixDualObj: cannot handle both YUV images");}
-void GemPixDualObj :: processLeftYUV(imageStruct &, imageStruct &)
-{error("GEM: GemPixDualObj: cannot handle left YUV image");}
-void GemPixDualObj :: processRightYUV(imageStruct &, imageStruct &)
-{error("GEM: GemPixDualObj: cannot handle right YUV image");}
-#else
-#if 0
-void GemPixDualObj :: processRGBA_RGBA(imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processRGBA_Gray(imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processRGBA_YUV (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processRGBA_Any (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processGray_RGBA(imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processGray_Gray(imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processGray_YUV (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processGray_Any (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processYUV_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processYUV_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processYUV_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processYUV_Any  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processAny_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processAny_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-void GemPixDualObj :: processAny_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-#endif
 void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
-  startpost("processDualImage: no method to combine images of formats (");
+  char *lformat, *rformat;
   switch (left.format) {
   case GL_RGBA:
   case GL_BGRA_EXT:
-    startpost("RGBA");break;
+    lformat ="RGBA";break;
   case GL_LUMINANCE:
-    startpost("Gray");break;
+    lformat ="Gray";break;
   case GL_YCBCR_422_GEM:
-    startpost("YUV");break;
+    lformat ="YUV";break;
   default:
-    startpost("%X", left.format);
+    lformat = new char[6];
+    sprintf(lformat,"0x%04X", left.format);
   }
-  startpost(") and (");
   switch (right.format) {
   case GL_RGBA:
   case GL_BGRA_EXT:
-    startpost("RGBA");break;
+    rformat ="RGBA";break;
   case GL_LUMINANCE:
-    startpost("Gray");break;
+    rformat ="Gray";break;
   case GL_YCBCR_422_GEM:
-    startpost("YUV");break;
+    rformat ="YUV";break;
   default:
-    startpost("%X", left.format);
+    rformat = new char[6];
+    sprintf(rformat, "0x%04X", left.format);
   }
-  post(")");
-
+  
+  error("processDualImage: no method to combine (%s) and (%s)",
+	lformat, rformat);
 }
-#endif
 
 /////////////////////////////////////////////////////////
 // postrender
@@ -266,11 +213,10 @@ void GemPixDualObj :: rightRender(GemState *statePtr)
   
   m_pixRightValid = 1;
   m_pixRight = statePtr->image;
- 
   if (statePtr->image->newimage)setPixModified(); // force the left arm to create a new image
 }
 
-/////////////////////////^////////////////////////////////
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////

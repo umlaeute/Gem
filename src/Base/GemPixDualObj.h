@@ -48,9 +48,11 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
     	// Destructor
     	virtual ~GemPixDualObj();
 
+	void render(GemState *state);
+
     	//////////
-		// Derived classes should NOT override this!
-		// This makes sure that the images are the same size.
+	// Derived classes should NOT override this!
+	// This makes sure that the images are the same size.
     	// This calls the other process functions based on the input images.
     	virtual void 	processImage(imageStruct &image);
 
@@ -123,8 +125,7 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
 	virtual void processAny_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
 	virtual void processAny_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
 	virtual void processAny_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-#endif
-                
+#endif                
         //////////
         virtual void	postrender(GemState *);
     	
