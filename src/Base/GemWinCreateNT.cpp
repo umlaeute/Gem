@@ -331,7 +331,6 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         // resize event
         case WM_SIZE:
             triggerResizeEvent(LOWORD(lParam), HIWORD(lParam));
-            GetClientRect(hWnd, &rcClient);
             break;
 
 		// we want to override these messages
