@@ -36,6 +36,9 @@ LOG
 #define GL_BGR GL_BGR_EXT
 #endif
 
+#ifndef HELPSYMBOL_BASE
+# define HELPSYMBOL_BASE "Gem/"
+#endif
 
 #include "Base/CPPExtern.h"
 #include "Base/GemState.h"
