@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 char *TextBase::DEFAULT_FONT = "arial.ttf";
 
@@ -93,7 +94,14 @@ void TextBase :: setPrecision(float prec)
 void TextBase :: fontNameMess(const char *filename){
   m_valid = 0;
   char buf[MAXPDSTRING];
-  canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
+  char buf2[MAXPDSTRING];
+  char *bufptr=NULL;
+  int fd=-1;
+  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, (char*)filename, "", buf2, &bufptr, MAXPDSTRING, 1))>=0){
+    close(fd);
+    sprintf(buf, "%s/%s", buf2, bufptr);
+  } else
+    canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
 
   if (makeFont(buf)==NULL){
     error("GEMtext: unable to open font %s", buf);
