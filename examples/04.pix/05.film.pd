@@ -1,17 +1,16 @@
-#N canvas 57 48 827 656 12;
+#N canvas 57 48 827 638 12;
 #X obj 23 151 gemwin;
 #X msg 20 89 create;
 #X msg 27 114 destroy;
-#X obj 88 105 tgl 30 0 empty empty empty 20 8 0 8 -262144 -1 -1 1 1
+#X obj 88 105 tgl 30 0 empty empty empty 20 8 0 8 -262144 -1 -1 0 1
 ;
 #X obj 90 186 gemhead;
 #X obj 90 500 pix_texture2;
-#X floatatom 220 105 5 0 0;
+#X floatatom 220 105 5 0 0 0 - - -;
 #X msg 150 106 auto \$1;
-#X obj 150 87 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 1 1
+#X obj 150 87 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0 1
 ;
-#X floatatom 175 257 5 0 0;
-#X obj 90 297 pix_rgba;
+#X floatatom 175 257 5 0 0 0 - - -;
 #X msg 197 392 -1 -2 -1 -2 8 -2 1 -2 1;
 #X obj 90 467 pix_convolve 3 3;
 #X text 472 233 load and play-back a movie;
@@ -39,11 +38,9 @@ nothing when initialized with "0 0 0 0 1 0 0 0 0". When [pix_rgba]
 is "off" \, the [pix_convolve] will be bypassed \, and therefore be
 very fast.;
 #X restore 635 187 pd README;
-#X obj 117 269 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0
-1;
 #X obj 90 573 square 4;
 #X obj 90 233 pix_film;
-#X floatatom 149 547 5 0 0;
+#X floatatom 149 547 5 0 0 0 - - -;
 #X msg 393 48 open ../data/homer.avi;
 #X msg 390 108 open ../data/anim-1.mov;
 #X msg 391 136 open ../data/alea.mpg;
@@ -71,24 +68,22 @@ very fast.;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 0 0;
-#X connect 4 0 20 0;
-#X connect 5 0 19 0;
-#X connect 6 0 20 1;
-#X connect 7 0 20 0;
+#X connect 4 0 18 0;
+#X connect 5 0 17 0;
+#X connect 6 0 18 1;
+#X connect 7 0 18 0;
 #X connect 8 0 7 0;
-#X connect 10 0 12 0;
-#X connect 11 0 12 2;
-#X connect 12 0 5 0;
-#X connect 18 0 10 0;
-#X connect 20 0 10 0;
-#X connect 20 1 9 0;
-#X connect 20 2 32 0;
-#X connect 21 0 19 1;
-#X connect 22 0 20 0;
-#X connect 23 0 20 0;
-#X connect 24 0 20 0;
-#X connect 29 0 12 2;
-#X connect 31 0 0 0;
-#X connect 32 0 20 1;
+#X connect 10 0 11 2;
+#X connect 11 0 5 0;
+#X connect 18 0 11 0;
+#X connect 18 1 9 0;
+#X connect 18 2 30 0;
+#X connect 19 0 17 1;
+#X connect 20 0 18 0;
+#X connect 21 0 18 0;
+#X connect 22 0 18 0;
+#X connect 27 0 11 2;
+#X connect 29 0 0 0;
+#X connect 30 0 18 1;
+#X connect 31 0 10 0;
 #X connect 33 0 11 0;
-#X connect 35 0 12 0;
