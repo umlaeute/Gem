@@ -1,6 +1,11 @@
 #!/bin/sh
 
-subdirs="../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../openGL" 
+if [ "@" ]
+then
+  subdirs="$@"
+else
+  subdirs="../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../openGL" 
+fi
 
 for j in $subdirs
 do
