@@ -251,37 +251,6 @@ void pix_filmNT :: realOpen(char *filename)
 	
   return;
 }
->>>>>>> 1.3
-
-<<<<<<< pix_filmNT.cpp
-	// Opens the AVI stream
-	if (AVIStreamOpenFromFile(&m_streamVid, filename, streamtypeVIDEO, 0, OF_READ, NULL)) {
-		error("GEM: pix_film: Unable to open file: %s", filename);
-		return;
-	}
-
-  m_reqFrame = 0;
-  m_curFrame = -1;
-
-  // Create the PGETFRAME
-  if (!(m_getFrame = AVIStreamGetFrameOpen(m_streamVid,NULL)))return;
-
-  // get all of the information about the stream
-  AVISTREAMINFO psi;
-  if (AVIStreamInfo(m_streamVid, &psi, sizeof(AVISTREAMINFO)))return;
-
-  m_haveMovie = GEM_MOVIE_AVI;
-  // Get the length of the movie
-  m_numFrames = psi.dwLength - 1;
-
-  m_xsize = psi.rcFrame.right - psi.rcFrame.left;
-  m_ysize = psi.rcFrame.bottom - psi.rcFrame.top;
-
-  m_csize=3;
-  m_format=GL_BGR_EXT;
-}
-=======
->>>>>>> 1.3
 
 /////////////////////////////////////////////////////////
 // render

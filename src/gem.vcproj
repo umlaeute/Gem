@@ -701,6 +701,12 @@
 					RelativePath=".\Pixes\pix_alpha.h">
 				</File>
 				<File
+					RelativePath="Pixes\pix_background.cpp">
+				</File>
+				<File
+					RelativePath="Pixes\pix_background.h">
+				</File>
+				<File
 					RelativePath=".\Pixes\pix_bitmask.cpp">
 				</File>
 				<File
@@ -753,6 +759,12 @@
 				</File>
 				<File
 					RelativePath=".\Pixes\pix_dot.h">
+				</File>
+				<File
+					RelativePath="Pixes\pix_duotone.cpp">
+				</File>
+				<File
+					RelativePath="Pixes\pix_duotone.h">
 				</File>
 				<File
 					RelativePath=".\Pixes\pix_flip.cpp">
@@ -831,6 +843,12 @@
 				</File>
 				<File
 					RelativePath=".\Pixes\pix_rgb2hsv.h">
+				</File>
+				<File
+					RelativePath="Pixes\pix_roll.cpp">
+				</File>
+				<File
+					RelativePath="Pixes\pix_roll.h">
 				</File>
 				<File
 					RelativePath=".\Pixes\pix_test.cpp">
@@ -1089,6 +1107,12 @@
 					RelativePath="Pixes\filmMPEG3.h">
 				</File>
 				<File
+					RelativePath="Pixes\filmQT4L.cpp">
+				</File>
+				<File
+					RelativePath="Pixes\filmQT4L.h">
+				</File>
+				<File
 					RelativePath=".\Pixes\pix_dv.cpp">
 				</File>
 				<File
@@ -1131,10 +1155,28 @@
 					RelativePath="Pixes\pix_videoDS.h">
 				</File>
 				<File
+					RelativePath="Pixes\pix_videoDarwin.cpp">
+				</File>
+				<File
+					RelativePath="Pixes\pix_videoDarwin.h">
+				</File>
+				<File
+					RelativePath="Pixes\pix_videoLinux.cpp">
+				</File>
+				<File
+					RelativePath="Pixes\pix_videoLinux.h">
+				</File>
+				<File
 					RelativePath=".\Pixes\pix_videoNT.cpp">
 				</File>
 				<File
 					RelativePath=".\Pixes\pix_videoNT.h">
+				</File>
+				<File
+					RelativePath="Pixes\pix_videoSGI.cpp">
+				</File>
+				<File
+					RelativePath="Pixes\pix_videoSGI.h">
 				</File>
 			</Filter>
 			<Filter
