@@ -462,6 +462,11 @@ GEM_EXTERN void destroyGemWindow(WindowInfo &info)
 #endif
     }else post("no info.pWind to destroy!!");
 }
+
+int topmostGemWindow(WindowInfo &info, int state){
+  return 1;
+}
+
 int cursorGemWindow(WindowInfo &info, int state)
 {
   if (state)
@@ -1382,6 +1387,7 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
     UInt32				keyCode=0;
     char				macKeyCode[2];
 	Point				location;
+	Rect				wBounds;
 	EventMouseButton	button = 0;
 	//MouseWheelAxis	axis = 0;
 	UInt32				modifiers = 0;
@@ -1440,7 +1446,12 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
 						GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
 													NULL, sizeof(Point), NULL, &location);
 						QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
-                        triggerMotionEvent( (int)location.h, (int)location.v );
+						GetWindowBounds( winRef, kWindowContentRgn, // or should we use kWindowStructureRgn?
+										 &wBounds);
+						//QDGlobalToLocalPoint( GetWindowPort( winRef ), &wBounds );
+                        triggerMotionEvent( (int)location.h, (int)location.v, 
+											(int)(wBounds.right - wBounds.left),
+											(int)(wBounds.bottom - wBounds.top));
                         result = noErr;
                         break;
                         
@@ -1448,7 +1459,12 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
 						GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
 													NULL, sizeof(Point), NULL, &location);
 						QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
-						triggerMotionEvent( (int)location.h, (int)location.v );
+						GetWindowBounds( winRef, kWindowContentRgn, // or should we use kWindowStructureRgn?
+										 &wBounds);
+						//QDGlobalToLocalPoint( GetWindowPort( winRef ), &wBounds );
+						triggerMotionEvent( (int)location.h, (int)location.v,
+											(int)(wBounds.right - wBounds.left),
+											(int)(wBounds.bottom - wBounds.top));
                         result = noErr;
                         break;
                         
