@@ -122,6 +122,7 @@ pixBlock* filmMPEG3 :: getFrame(){
       post("GEM: pix_film:: could not read frame ! %d", m_curFrame);
       return 0;
     }
+    m_image.image.upsidedown=false;
     delete[]rows;
   } else {
     // unfortunately this is upside down.
@@ -130,6 +131,7 @@ pixBlock* filmMPEG3 :: getFrame(){
       return 0;
     }
     m_image.image.fromYV12((unsigned char*)y, (unsigned char*)u, (unsigned char*)v);
+    m_image.image.upsidedown=true;
   }
   m_image.newimage=1;
   return &m_image;

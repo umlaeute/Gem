@@ -133,6 +133,7 @@ pixBlock* filmAVIPLAY :: getFrame(){
       m_image.image.fromRGB16(m_rawdata); break;
     }
     m_image.newimage=1;
+    m_image.image.upsidedown=true;
     m_readNext=false;
     return &m_image;
   }
