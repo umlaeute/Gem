@@ -1041,12 +1041,27 @@ int GemMan :: createWindow(char* disp)
         on the NVidia GeForce2MX and above, or the ATI Radeon and above.
     */
   
-  /* on my system, nvidia chose to use GL_NV instead of GL_EXT ... (jmz) */ 
+  /* of course, nvidia choose their own extension... (jmz) */
+  /* i have ifdef'ed these, because some code in [pix_texture]
+   * depends on texture_rectangle_supported, without checking
+   * whether it was compiled with rectangle support or not (depending on the GL-headers)
+   * so, if Gem was compiled with the original (non-nvidia) GL-headers,
+   * there was no rectangle-support from within Gem.
+   * however, when it was run with nvidia-drivers, the openGL-extension was present
+   * resulting in doing a lot of stupid things (like texturing black!)
+   */
+#ifdef GL_EXT_TEXTURE_RECTANGLE
+  if (texture_rectangle_supported
+      = OpenGLExtensionIsSupported("GL_EXT_texture_rectangle")){}
+  else
+#endif
+#ifdef GL_TEXTURE_RECTANGLE_NV
     if (texture_rectangle_supported
-	  = OpenGLExtensionIsSupported("GL_EXT_texture_rectangle")){}
-    else  texture_rectangle_supported
-	    =  OpenGLExtensionIsSupported("GL_NV_texture_rectangle");
- 
+	=  OpenGLExtensionIsSupported("GL_NV_texture_rectangle")){}
+    else
+#endif
+      texture_rectangle_supported = 0;
+  
     /*
         GL_APPLE_client_storage allows better performance when modifying
         a texture image extensively:  under normal circumstances, a
@@ -1057,8 +1072,13 @@ int GemMan :: createWindow(char* disp)
         needs it.  GL_APPLE_client_storage is supported on all video
         cards under MacOSX 10.1 and above.
     */
-    client_storage_supported
-        = OpenGLExtensionIsSupported("GL_APPLE_client_storage");
+
+  client_storage_supported
+#ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
+    = OpenGLExtensionIsSupported("GL_APPLE_client_storage");
+#else
+    = 0;
+#endif
 
   m_w=myHints.real_w;
   m_h=myHints.real_h;
@@ -1253,7 +1273,10 @@ void GemMan :: topmostOnOff(int state)
   if (m_windowState)
     topmostGemWindow(gfxInfo,state);
 #else
-	post("gemwin: \"topmost\" message not supported on this platform");
+  /* we don't care for this warning, since only windows has problems with
+   * the Gem-window being not automatically on top (?) (jmz)
+   */
+  //  post("gemwin: \"topmost\" message not supported on this platform");
 #endif
   m_topmost = state;
 }
