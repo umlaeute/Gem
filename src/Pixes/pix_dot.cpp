@@ -23,20 +23,6 @@
 
 CPPEXTERN_NEW(pix_dot)
 
-int R2Y[256];
-int G2Y[256];
-int B2Y[256];
-
-inline static unsigned char inline_RGB2Y(int rgb)
-{
-	int i;
-
-	i = R2Y[(rgb>>16)&0xff];
-	i += G2Y[(rgb>>8)&0xff];
-	i += B2Y[rgb&0xff];
-	return i;
-}
-
 /////////////////////////////////////////////////////////
 //
 // pix_dot
@@ -53,7 +39,8 @@ pix_dot :: pix_dot()
   DOTMAX = (1<<DOTDEPTH);
   sharedbuffer = NULL;
   sharedbuffer_length =0;
-  tail =0;
+  tail = 0;
+  m_scale = 1;
   yuv_init();
 }
 
@@ -63,7 +50,10 @@ pix_dot :: pix_dot()
 /////////////////////////////////////////////////////////
 pix_dot :: ~pix_dot()
 {
-  myImage.clear();
+    myImage.clear();
+    sharedbuffer_length = 0;
+    free(sharedbuffer);
+    free(pattern);
 }
 
 /////////////////////////////////////////////////////////
@@ -144,10 +134,19 @@ void pix_dot :: drawDot(int xx, int yy, unsigned char c, unsigned int *dest)
 void pix_dot :: sizeMess(int width, int height)
 {
 
-  dotw = (width>0)?width:8;
-  doth = (height>0)?height:8;
+  dot_size = (width>0)?width:8;
+  dot_hsize = (height>0)?height:8;
 }
 
+unsigned char pix_dot :: inline_RGB2Y(int rgb)
+{
+	int i;
+
+	i = R2Y[(rgb>>16)&0xff];
+	i += G2Y[(rgb>>8)&0xff];
+	i += B2Y[rgb&0xff];
+	return i;
+}
 
 /////////////////////////////////////////////////////////
 // processRGBAImage
@@ -159,8 +158,6 @@ void pix_dot :: processRGBAImage(imageStruct &image)
   unsigned int *dest;
 
   int x, y, sx, sy;
-  int scale =1;
-  
   
     if (m_xsize != image.xsize)
         alreadyInit = 0;
@@ -169,7 +166,7 @@ void pix_dot :: processRGBAImage(imageStruct &image)
     {
         m_xsize = image.xsize;
         m_ysize = image.ysize;
-        dot_size = 8 * scale;
+        dot_size = 8 * m_scale;
         dot_size = dot_size & 0xfe;
         dot_hsize = dot_size / 2;
         dots_width = m_xsize / dot_size;
@@ -226,11 +223,11 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 void pix_dot :: processYUVImage(imageStruct &image)
 {
     post("pix_dot:  YUV under construction");
-/*    unsigned int *src = (unsigned int*)image.data;
+    unsigned int *src = (unsigned int*)image.data;
     unsigned int *dest;
 
-    int x, y, i, sx, sy;
-    int scale = 1;
+    int x, y, sx, sy;
+    int luma = 0;
   
     if (m_xsize != image.xsize)
         alreadyInit = 0;
@@ -239,7 +236,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
     {
         m_xsize = image.xsize;
         m_ysize = image.ysize;
-        dot_size = 8 * scale;
+        dot_size = 8 * m_scale;
         dot_size = dot_size & 0xfe;
         dot_hsize = dot_size / 2;
         dots_width = m_xsize / dot_size;
@@ -266,7 +263,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
 
     if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)
     {
-        int dataSize = image.xsize * image.ysize * image.csize;
+        dataSize = image.xsize * image.ysize * image.csize;
         myImage.clear();
 
         myImage.allocate(dataSize);
@@ -283,17 +280,24 @@ void pix_dot :: processYUVImage(imageStruct &image)
         sy = sampy[y];
         for ( x=0; x<dots_width; x++){
             sx = sampx[x];
-            drawDot(x, y, (unsigned char)src[sy*image.xsize+sx+1], dest);
+            luma = src[sy*image.xsize+sx+1];
+            //drawDot(x, y, (unsigned char *)luma[1], dest);
         }
     }
 
     image.data = myImage.data;
-*/
 }
 
-void pix_dot :: dot_init()
+void pix_dot :: scaleMess(float state)
 {
+    m_scale = (int)state;
+    alreadyInit = 0;
 
+    myImage.clear();
+    myImage.allocate(dataSize);
+    
+    free(sharedbuffer);
+    free(pattern);
 }
 
 void pix_dot :: sampxy_table_init()
@@ -375,7 +379,8 @@ void pix_dot :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&pix_dot::sizeMessCallback,
   		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addfloat(classPtr, (t_method)&pix_dot::stateMessCallback);
+  class_addmethod(classPtr, (t_method)&pix_dot::scaleMessCallback,
+                    gensym("scale"), A_FLOAT, A_NULL);
 }
 
 
@@ -384,7 +389,7 @@ void pix_dot :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height
   GetMyClass(data)->sizeMess((int)width, (int)height);  
 }
 
-void pix_dot :: stateMessCallback(void *data, t_floatarg state)
+void pix_dot :: scaleMessCallback(void *data, t_floatarg state)
 {
-  //GetMyClass(data)->activate(state);
+  GetMyClass(data)->scaleMess( state );
 }
