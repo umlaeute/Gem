@@ -155,6 +155,17 @@ void curve3d :: render(GemState *state){
   glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3, (GLint)nb_pts_control_X, 0,1,(GLint)(3*nb_pts_control_X),(GLint)nb_pts_control_Y, &(posXYZ[0][0]));
   glEnable(GL_MAP2_VERTEX_3);
 
+  GLfloat xsize = 1.0f;
+  GLfloat ysize = 1.0f;
+  GLfloat ysize0= 0.0f;
+
+  if (state->texture)
+    {
+      xsize  = state->texCoords[1].s;
+      ysize0 = state->texCoords[2].t;
+      ysize  = state->texCoords[1].t;
+    }
+  GLfloat ysizediff = ysize0 - ysize;
 
   switch (m_drawType){
     //line
@@ -163,7 +174,7 @@ void curve3d :: render(GemState *state){
       for (int n = 0; n < nb_pts_affich_X+1; n++)   {
 	glBegin(GL_LINE_STRIP);
 	for (int m = 0; m  < nb_pts_affich_Y+1; m++){	
-	  glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	  glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	  glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	}
 	glEnd();
@@ -171,7 +182,7 @@ void curve3d :: render(GemState *state){
       for (int m = 0; m < nb_pts_affich_Y+1; m++) {
 	glBegin(GL_LINE_STRIP);
 	for (int n = 0; n  < nb_pts_affich_X+1; n++){
-	  glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	  glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	  glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	}
 	glEnd();
@@ -201,9 +212,9 @@ void curve3d :: render(GemState *state){
 	for (int n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_TRIANGLE_STRIP);
 	  for (int m = 0; m  < nb_pts_affich_Y+1; m++)   {	
-	    glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	    glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	    glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
-	    glTexCoord2f((GLfloat)(n+1)/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	    glTexCoord2f(xsize*(GLfloat)(n+1)/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	    glEvalCoord2f((GLfloat)(n+1)/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	  }
 	  glEnd();
@@ -226,7 +237,7 @@ void curve3d :: render(GemState *state){
       if (state->texture)
 	for (int n = 0; n < nb_pts_affich_X+1; n++) {
 	  for (int m = 0; m  < nb_pts_affich_Y+1; m++) {
-	    glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	    glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	    glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	  }
 	}
@@ -246,7 +257,7 @@ void curve3d :: render(GemState *state){
 	for (int n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_LINE_STRIP);
 	  for (int m = 0; m  < nb_pts_affich_Y; m++)  {	
-	    glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	    glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	    glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	  }
 	  glEnd();
@@ -269,7 +280,7 @@ void curve3d :: render(GemState *state){
 	for (int m = 0; m < nb_pts_affich_Y+1; m++) {
 	  glBegin(GL_LINE_STRIP);
 	  for (int n = 0; n  < nb_pts_affich_X+1; n++)  {	
-	    glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	    glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X,ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	    glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	  }
 	  glEnd();
@@ -278,7 +289,7 @@ void curve3d :: render(GemState *state){
 	for (int m = 0; m < nb_pts_affich_Y+1; m++) {
 	  glBegin(GL_LINE_STRIP);
 	  for (int n = 0; n  < nb_pts_affich_X+1; n++)  {	
-	    glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	    glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	    glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	  }
 	  glEnd();
@@ -294,7 +305,7 @@ void curve3d :: render(GemState *state){
 	  glBegin(GL_LINES);
 	  for (int m = 0; m  < nb_pts_affich_Y; m++)
 	    {
-	      glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	      glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	      glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	    }
 	  glEnd();
@@ -318,7 +329,7 @@ void curve3d :: render(GemState *state){
 	  {
 	    glBegin(GL_LINES);
 	    for (int n = 0; n  < nb_pts_affich_X; n++) {	
-	      glTexCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
+	      glTexCoord2f(xsize*(GLfloat)n/(float)nb_pts_affich_X, ysize+ysizediff*(GLfloat)m/(float)nb_pts_affich_Y);
 	      glEvalCoord2f((GLfloat)n/(float)nb_pts_affich_X, (GLfloat)m/(float)nb_pts_affich_Y);
 	    }
 	    glEnd();
@@ -344,22 +355,22 @@ void curve3d :: render(GemState *state){
 	    glNormal3fv(norm);
 
 	    glBegin(GL_TRIANGLE_STRIP);
-	    glTexCoord2f((GLfloat)n/(nb_pts_control_X-1),(GLfloat)m/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)n/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)m/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+m*nb_pts_control_X]);	    
-	    glTexCoord2f((GLfloat)(n+1)/(nb_pts_control_X-1),(GLfloat)m/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)(n+1)/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)m/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+m*nb_pts_control_X+1]);
-	    glTexCoord2f((GLfloat)n/(nb_pts_control_X-1),(GLfloat)(m+1)/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)n/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)(m+1)/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+(m+1)*nb_pts_control_X]);
 	    glEnd();
 
 	    Matrix::generateNormal(posXYZ[n+1+(m+1)*nb_pts_control_X],posXYZ[n+1+m*nb_pts_control_X], posXYZ[n+(m+1)*nb_pts_control_X], norm);
 	    glNormal3fv(norm);
 	    glBegin(GL_TRIANGLE_STRIP);
-	    glTexCoord2f((GLfloat)(n+1)/(nb_pts_control_X-1),(GLfloat)(m+1)/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)(n+1)/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)(m+1)/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+1+(m+1)*nb_pts_control_X]);
-	    glTexCoord2f((GLfloat)(n+1)/(nb_pts_control_X-1),(GLfloat)m/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)(n+1)/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)m/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+1+m*nb_pts_control_X]);
-	    glTexCoord2f((GLfloat)n/(nb_pts_control_X-1),(GLfloat)(m+1)/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)n/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)(m+1)/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+(m+1)*nb_pts_control_X]);
 	    glEnd();
 	  }
@@ -393,7 +404,7 @@ void curve3d :: render(GemState *state){
 	for (int n = 0; n < nb_pts_control_X; n++)
 	  for (int m = 0; m  < nb_pts_control_Y; m++)   {	
 	    glBegin(GL_POINTS);
-	    glTexCoord2f((GLfloat)n/(nb_pts_control_X-1),(GLfloat)m/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)n/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)m/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+m*nb_pts_control_X]);
 	    glEnd();
 	  }
@@ -414,7 +425,7 @@ void curve3d :: render(GemState *state){
 	for (int n = 0; n < nb_pts_control_X; n++)   {
 	  glBegin(GL_LINE_STRIP);
 	  for (int m = 0; m  < nb_pts_control_Y; m++){	
-	    glTexCoord2f((GLfloat)n/(nb_pts_control_X-1),(GLfloat)m/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)n/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)m/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+m*nb_pts_control_X]);
 	  }
 	  glEnd();
@@ -423,7 +434,7 @@ void curve3d :: render(GemState *state){
 	for (int m = 0; m < nb_pts_control_Y; m++)  {
 	  glBegin(GL_LINE_STRIP);
 	  for (int n = 0; n  < nb_pts_control_X; n++){
-	    glTexCoord2f((GLfloat)n/(nb_pts_control_X-1),(GLfloat)m/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)n/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)m/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+m*nb_pts_control_X]);
 	  }
 	  glEnd();
@@ -452,7 +463,7 @@ void curve3d :: render(GemState *state){
 	for (int m = 0; m < nb_pts_control_Y; m++) {
 	  glBegin(GL_LINE_STRIP);
 	  for (int n = 0; n  < nb_pts_control_X; n++) {
-	    glTexCoord2f((GLfloat)n/(nb_pts_control_X-1),(GLfloat)m/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)n/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)m/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+m*nb_pts_control_X]);			
 	  }
 	  glEnd();
@@ -474,7 +485,7 @@ void curve3d :: render(GemState *state){
 	for (int n = 0; n < nb_pts_control_X; n++) {
 	  glBegin(GL_LINE_STRIP);
 	  for (int m = 0; m  < nb_pts_control_Y; m++)  {	
-	    glTexCoord2f((GLfloat)n/(nb_pts_control_X-1),(GLfloat)m/(nb_pts_control_Y-1));
+	    glTexCoord2f(xsize*(GLfloat)n/(nb_pts_control_X-1),ysize+ysizediff*(GLfloat)m/(nb_pts_control_Y-1));
 	    glVertex3fv(posXYZ[n+m*nb_pts_control_X]);			
 	  }
 	  glEnd();
