@@ -15,9 +15,10 @@
 #ifndef INCLUDE_VIDEO_H_
 #define INCLUDE_VIDEO_H_
 
-#include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
 #include "Base/config.h"
+#include "Base/GemPixUtil.h"
+#include "m_pd.h" /* for post() and friends */
+
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
