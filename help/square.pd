@@ -1,6 +1,7 @@
-#N canvas 305 245 600 500 8;
+#N canvas 305 245 600 500 10;
 #X text 173 18 square;
-#X text 91 291 square renders a square with the current color \, transformation matrix \, and texture information.;
+#X text 91 291 square renders a square with the current color \, transformation
+matrix \, and texture information.;
 #X msg 236 183 size;
 #X msg 199 131 gemList;
 #X msg 100 123 draw line;

@@ -1,4 +1,4 @@
-#N canvas 348 160 600 500 10;
+#N canvas 135 33 713 541 10;
 #X text 135 37 part of GEM;
 #X obj 162 177 gemmouse;
 #X text 87 100 mouse events in the GEM window;
@@ -7,14 +7,23 @@
 #X msg 176 293 Y Position;
 #X msg 221 213 right button;
 #X msg 206 239 middle button;
-#X text 73 423 The button outlets send a 1 when the specified button
+#X text 80 493 The button outlets send a 1 when the specified button
 is pressed and a 0 when it is released.;
 #X text 152 70 [gemmouse];
 #X text 74 366 [gemmouse] sends out mouse events which occur in the
 GEM window. The X and Y Position go from 0 to the size of the window
 (which can be set via the gemwin object).;
+#X text 74 418 You can also set some normalization of the output-coordinates
+with arguments.;
+#X obj 459 179 gemmouse 1 2;
+#X msg 459 237 X Position;
+#X text 539 240 normalized to 0..1;
+#X msg 478 207 Y Position;
+#X text 558 210 normalized to 0..2;
 #X connect 1 0 3 0;
 #X connect 1 1 5 0;
 #X connect 1 2 4 0;
 #X connect 1 3 7 0;
 #X connect 1 4 6 0;
+#X connect 12 0 13 0;
+#X connect 12 1 15 0;

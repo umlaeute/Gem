@@ -1,7 +1,12 @@
-#N canvas;
-#X obj 218 185 gemhead;
-#X text 91 341 This is still experimental...please report any problems or suggestions with it.;
-#X obj 218 224 imageVert;
-#X text 89 287 imageVert maps a pix to a series of polygons. The height of the polygons is the sum of the colors (so brighter pixels will be taller \, while darker pixels are shorter).;
-#X text 206 139 imageVert;
-#X connect 0 0 2 0;
+#N canvas 0 0 519 296 10;
+#X text 61 231 This is still experimental...please report any problems
+or suggestions with it.;
+#X obj 188 108 imageVert;
+#X text 59 177 imageVert maps a pix to a series of polygons. The height
+of the polygons is the sum of the colors (so brighter pixels will be
+taller \, while darker pixels are shorter).;
+#X text 176 29 imageVert;
+#X msg 188 78 gemList;
+#X msg 188 138 gemList;
+#X connect 1 0 5 0;
+#X connect 4 0 1 0;

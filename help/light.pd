@@ -1,13 +1,16 @@
-#N canvas;
-#X text 50 348 The R G B is the color of the light.;
-#X text 50 380 Keep in mind that the attributes have to be set before rendering the vertices \, so if you are trying for frame accurate rendering \, you will want to set the gemhead order to a low nuber so that all of the values of the light get set first.;
+#N canvas 0 0 601 494 10;
+#X text 50 319 The R G B is the color of the light.;
+#X text 50 351 Keep in mind that the attributes have to be set before
+rendering the vertices \, so if you are trying for frame accurate rendering
+\, you will want to set the gemhead order to a low nuber so that all
+of the values of the light get set first.;
 #X obj 148 185 light;
 #X obj 148 49 gemhead;
 #X text 152 12 light;
-#X msg 163 87 R G B;
-#X msg 179 127 x y z;
-#X text 48 240 light produces a light which is local to the scene (unlike world_light which is at an infinite distance). Because light is local light \, there is more computation required. Use a world_light if you don't mind parallet light rays.;
-#X text 49 304 The X Y Z is a point in space which is where the light will be located.;
+#X msg 178 147 R G B;
+#X text 48 240 light produces a light which is local to the scene (unlike
+world_light which is at an infinite distance). Because light is local
+light \, there is more computation required. Use a world_light if you
+don't mind parallet light rays.;
 #X connect 3 0 2 0;
 #X connect 5 0 2 1;
-#X connect 6 0 2 2;

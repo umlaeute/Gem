@@ -1,12 +1,15 @@
-#N canvas;
+#N canvas 0 0 569 390 10;
 #X msg 222 209 x y z;
 #X msg 208 186 x y z;
 #X msg 195 161 x y z;
 #X msg 181 135 x y z;
 #X msg 155 59 gemList;
-#X text 59 326 Each inlet will accept an X Y Z point which is where the control point will be.;
+#X text 59 326 Each inlet will accept an X Y Z point which is where
+the control point will be.;
 #X obj 155 232 polygon 5;
-#X text 60 276 polygon creates a polygon graphics. The initial argument is the number of points in the polygon. There can be a maximum of 10 points.;
+#X text 60 276 polygon creates a polygon graphics. The initial argument
+is the number of points in the polygon. There can be a maximum of 10
+points.;
 #X msg 168 109 x y z;
 #X text 161 24 polygon;
 #X text 274 145 these are the five control points;

@@ -1,4 +1,4 @@
-#N canvas 372 150 600 368 10;
+#N canvas 372 150 600 537 10;
 #X text 135 37 part of GEM;
 #X obj 169 152 gemkeyboard;
 #X text 152 70 [gemkeyboard];
@@ -9,4 +9,8 @@ the KeyCode of the button.;
 #X text 82 318 It is not guaranteed \, that Windows and Linux versions
 will give the same KeyCode for the same key pressed !!!;
 #X msg 169 196 KeyCode;
+#X text 77 361 Furthermore \, i would like to make this object really
+cross-platform one day. Thus the KeyCode might change on one system
+or another in future times.;
+#X text 80 407 USE AT YOUR OWN RISK !!!;
 #X connect 1 0 6 0;

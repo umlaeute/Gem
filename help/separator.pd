@@ -1,4 +1,4 @@
-#N canvas 733 296 600 500 8;
+#N canvas 237 36 601 672 10;
 #X text 121 21 separator;
 #X text 118 50 GEM object;
 #X msg 124 134 gemList;
@@ -9,9 +9,16 @@
 #X obj 230 213 separator;
 #X obj 66 289 square;
 #X obj 230 290 square;
-#X text 65 336 If you did not use a separator in the example \, then one of the chains would have an extra rotation (it is basically random).;
-#X text 64 393 With the separator \, both squares will by translated \, but they will only be rotated the correct amount.;
-#X text 64 436 separator isolates everything below it (and everything else in the chain) from all transformation effects.;
+#X text 65 336 If you did not use a separator in the example \, then
+one of the chains would have an extra rotation (it is basically random).
+;
+#X text 64 393 With the separator \, both squares will by translated
+\, but they will only be rotated the correct amount.;
+#X text 64 436 separator isolates everything below it (and everything
+else in the chain) from all transformation effects.;
+#X text 69 481 however \, it has now effect on pixel-operations. to
+make separate [pix_*]-chains independent \, use:;
+#X obj 202 521 pix_separator;
 #X connect 2 0 4 0;
 #X connect 3 0 5 0;
 #X connect 4 0 3 0;

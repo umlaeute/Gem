@@ -1,4 +1,4 @@
-#N canvas 0 -101 1114 732 12;
+#N canvas 0 0 1114 726 12;
 #X obj 285 51 gemwin 20;
 #X text 222 25 access to the window manager;
 #X text 183 144 The initial argument is the number of frames per second
@@ -85,7 +85,7 @@ with the dimensions passed via "dimen");
 #X text 71 56 messages to [gemwin] regarding stereoscopic appearance:
 ;
 #X restore 580 548 pd stereoscopic display;
-#X text 606 684 createStereo:: do not use this!! use 'create'+'stereo
+#X text 596 657 createStereo:: do not use this!! use 'create'+'stereo
 1';
 #X text 617 631 deprecated::;
 #X text 285 5 [gemwin];
