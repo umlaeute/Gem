@@ -1463,7 +1463,7 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                                                 NULL, sizeof(EventMouseButton), NULL, &button);
                         GetEventParameter(event, kEventParamWindowMouseLocation, typeHIPoint, 
                                                 NULL, sizeof(HIPoint), NULL, &location);
-			triggerButtonEvent((button==1)?0:((button==2)?2:1), 1, (int)location.x, (int)location.y );
+			triggerButtonEvent((button==1)?0:((button==2)?2:1), 0, (int)location.x, (int)location.y );
                        result = noErr;
                         break;
                         
