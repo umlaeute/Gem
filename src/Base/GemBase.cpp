@@ -27,7 +27,7 @@
 //
 /////////////////////////////////////////////////////////
 GemBase :: GemBase()
-  : m_cache(NULL), gem_amRendering(false)
+  : gem_amRendering(false), m_cache(NULL)
 {
   m_out1 = outlet_new(this->x_obj, 0);
 }
