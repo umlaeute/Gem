@@ -55,7 +55,7 @@ class GEM_EXTERN vertex_offset : public GemBase
     	virtual void 	render(GemState *state);
         virtual void 	postrender(GemState *state);
         
-        static void 	offsetMessCallback(void *data, t_floatarg y, t_floatarg y, t_floatarg z, t_floatarg w);
+        static void 	offsetMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z, t_floatarg w);
         static void 	vertexMessCallback(void *data, t_floatarg num, t_floatarg counter);
 
 };
