@@ -52,8 +52,7 @@ class GEM_EXTERN pix_filmNEW : public GemBase
 {
   CPPEXTERN_HEADER(pix_filmNEW, GemBase)
     
-    public:
-  
+    public:  
   //////////
   // Constructor
   pix_filmNEW(t_symbol *filename);
@@ -88,6 +87,13 @@ class GEM_EXTERN pix_filmNEW : public GemBase
   // Change which image to display
   virtual void changeImage(int imgNum, int trackNum);
 	
+  //////////
+  // Change the colorspace
+  // normally the cs-change will be passed through immediately.
+  // however, when we want to do an openMess this will be called first and we don't
+  // want to change the cs before the actual opening is done
+  virtual void csMess(t_symbol*s, bool immediately=true);
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
@@ -95,8 +101,8 @@ class GEM_EXTERN pix_filmNEW : public GemBase
   //////////
   // If a movie was loaded and what kind of Movie this is
   int 	    	m_haveMovie;
-
-  t_float           m_auto;
+  t_float       m_auto;
+  int           m_format;
 
   //////////
   // frame infromation
@@ -129,6 +135,7 @@ class GEM_EXTERN pix_filmNEW : public GemBase
   static void openMessCallback   (void *data, t_symbol*,int,t_atom*);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback       (void *data, t_floatarg state);
+  static void csCallback         (void *data, t_symbol*s);
 };
 
 #endif	// for header file
