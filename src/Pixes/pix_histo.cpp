@@ -150,8 +150,6 @@ void pix_histo :: update_graphs(void)
   }
 }
 
-
-
 /////////////////////////////////////////////////////////
 // processImage
 //
@@ -171,26 +169,6 @@ void pix_histo :: processRGBAImage(imageStruct &image)
   t_float *tab;
 
   if (m_mode==0) return;
-#if 0
-  if (!(tab_R=checkarray(name_R, &n_R))) return;
-  scale_R=n_R/256.;
-  //  n = n_R;    tab = tab_R;    while(n--)*tab++=0;
-
-  if (m_mode > 1) {
-    if (!(tab_G=checkarray(name_G, &n_G))) return;
-    scale_G=n_G/256.;
-    //    n = n_G;    tab = tab_G;    while(n--)*tab++=0;
-    if (!(tab_B=checkarray(name_B, &n_B))) return;
-    scale_B=n_B/256.;
-    //    n = n_B;    tab = tab_B;    while(n--)*tab++=0;
-
-    if (m_mode == 4) {
-      if (!(tab_A=checkarray(name_A, &n_A))) return;
-      scale_A=n_A/256.;
-      //      n = n_A;    tab = tab_A;    while(n--)*tab++=0;
-    }
-  }
-#endif
   switch (m_mode) {
   case 4:
     if (!(tab_A=checkarray(name_A, &n_A))) return;
@@ -210,7 +188,6 @@ void pix_histo :: processRGBAImage(imageStruct &image)
   default:
     break;
   }
-
 
   f = 1./i;
 
@@ -251,6 +228,81 @@ void pix_histo :: processRGBAImage(imageStruct &image)
   update_graphs();
 }
 
+void pix_histo :: processYUVImage(imageStruct &image)
+{
+  int i=image.xsize*image.ysize;
+  unsigned char *base = image.data;
+  
+  int n_Y, n_U, n_V;
+  t_float *tab_Y=NULL, *tab_U=NULL, *tab_V=NULL;
+  int n;
+  t_float *tab;
+
+  if (m_mode==0) return;
+  switch (m_mode) {
+  case 3:
+    if (!(tab_V=checkarray(name_B, &n_V))) return;
+    n = n_V;    tab = tab_V;    while(n--)*tab++=0;
+    if (!(tab_U=checkarray(name_G, &n_U))) return;
+    n = n_U;    tab = tab_U;    while(n--)*tab++=0;
+  case 1:
+    if (!(tab_Y=checkarray(name_R, &n_Y))) return;
+    n = n_Y;    tab = tab_Y;    while(n--)*tab++=0;
+  default:
+    break;
+  }
+
+  t_float f = 1./i;
+  t_float f2 = f*2.f;
+
+  i/=2;
+  switch (m_mode) {
+  case 1: // RGB->grey
+    while (i--) {
+      *(tab_Y+((n_Y*base[chY0])>>8))+=f;
+      *(tab_Y+((n_Y*base[chY1])>>8))+=f;
+      base+=4;
+    }
+    break;
+  case 3: // RGB
+    while (i--) {
+      *(tab_Y+((n_Y*base[chY0])>>8))  +=f;
+      *(tab_Y+((n_Y*base[chY1])>>8))  +=f;
+      *(tab_U+((n_U*base[chU])>>8))   +=f2;
+      *(tab_V+((n_V*base[chV])>>8))   +=f2;
+      base+=4;
+    }
+    break;
+  default:
+    break;
+  }
+  update_graphs();
+}
+
+void pix_histo :: processGrayImage(imageStruct &image)
+{
+  int i=image.xsize*image.ysize;
+  unsigned char *base = image.data;
+  
+  int n_G;
+  t_float *tab_G=NULL;
+  t_float scale_R=0;
+  t_float f;
+
+  int n;
+  t_float *tab;
+
+  if (m_mode==0) return;
+  
+  if (!(tab_G=checkarray(name_A, &n_G))) return;
+  n = n_G;    tab = tab_G;    while(n--)*tab++=0;
+
+  f = 1./i;
+
+  while (i--)*(tab_G+((n_G*(*base++))>>8))  +=f;
+
+  update_graphs();
+}
 /////////////////////////////////////////////////////////
 // static member function
 //

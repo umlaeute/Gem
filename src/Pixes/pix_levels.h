@@ -59,9 +59,9 @@ class GEM_EXTERN pix_levels : public GemPixObj
 	U32*		pSource;
 	U32*		pOutput;
 	
-	float m_DoAuto;
-	float m_DoUniform;
-	float m_DoAllowInversion;
+	bool m_DoAuto;
+	bool m_DoUniform;
+	bool m_DoAllowInversion;
 
 	float m_UniformInputFloor;
 	float m_UniformInputCeiling;

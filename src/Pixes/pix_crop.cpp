@@ -30,9 +30,12 @@ pix_crop :: pix_crop(t_floatarg x=0, t_floatarg y=0, t_floatarg w=64, t_floatarg
   m_size = 0;
 
   offsetMess((int)x,(int)y);
-  if (w < 1.f)w=64.f;
-  if (h < 1.f)h=64.f;
   dimenMess((int)w,(int)h);
+
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("dimenX"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("dimenY"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("offsetX"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("offsetY"));
 }
 
 /////////////////////////////////////////////////////////
@@ -50,17 +53,16 @@ pix_crop :: ~pix_crop()
 /////////////////////////////////////////////////////////
 void pix_crop :: processImage(imageStruct &image)
 {
-  int x=(wantSizeX<image.xsize)?wantSizeX:image.xsize;
-  int y=(wantSizeY<image.ysize)?wantSizeY:image.ysize;
+  int csize=image.csize;
+  int x=(wantSizeX<image.xsize&&wantSizeX>0)?wantSizeX:image.xsize;
+  int y=(wantSizeY<image.ysize&&wantSizeY>0)?wantSizeY:image.ysize;
 
-  if (x*y*image.csize>m_size){
+  if (x*y*csize>m_size){
     if (m_data)delete[]m_data;
-    m_size = wantSizeX*wantSizeY*image.csize;
+    m_size = x*y*csize;
     m_data = new unsigned char [m_size];
   }
 
-  //  int offX=((offsetX%x)+x)%x;
-  //  int offY=((offsetY%y)+y)%y;
   int offX=offsetX;
   int offY=offsetY;
   if (offX>(image.xsize-x)) offX=image.xsize-x;
@@ -70,12 +72,10 @@ void pix_crop :: processImage(imageStruct &image)
 
   int i=0;
   while(i<y){
-    unsigned char *newdata = m_data+(x*i)*image.csize;
-    unsigned char *olddata = image.data+(((offY+i)%image.ysize)*image.xsize+offX)*image.csize;
-    int j=x*image.csize;
-    while(j--){
-      *newdata++=*olddata++;
-    }
+    unsigned char *newdata = m_data+(x*i)*csize;
+    unsigned char *olddata = image.data+(((offY+i)%image.ysize)*image.xsize+offX)*csize;
+    int j=x*csize;
+    while(j--)*newdata++=*olddata++;
     i++;
   }
 
@@ -86,12 +86,30 @@ void pix_crop :: processImage(imageStruct &image)
 
 
 void pix_crop :: dimenMess(int x, int y){
-  if(x<1)x=1;
-  if(y<1)y=1;
+  if(x<0)x=0;
+  if(y<0)y=0;
   
   wantSizeX=x;
   wantSizeY=y;
   
+  setPixModified();
+}
+void pix_crop :: dimXMess(int x){
+  if(x<0)x=0;
+  wantSizeX=x;
+  setPixModified();
+}
+void pix_crop :: dimYMess(int y){
+  if(y<0)y=0;
+  wantSizeY=y;
+  setPixModified();
+}
+void pix_crop :: offXMess(int x){
+  offsetX=x;
+  setPixModified();
+}
+void pix_crop :: offYMess(int y){
+  offsetY=y;
   setPixModified();
 }
 void pix_crop :: offsetMess(int x, int y){
@@ -110,11 +128,30 @@ void pix_crop :: obj_setupCallback(t_class *classPtr){
 		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_crop::offsetMessCallback, 
 		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-}
+  class_addmethod(classPtr, (t_method)&pix_crop::dimXMessCallback, 
+		  gensym("dimenX"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_crop::dimYMessCallback, 
+		  gensym("dimenY"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_crop::offXMessCallback, 
+		  gensym("offsetX"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_crop::offYMessCallback, 
+		  gensym("offsetY"), A_FLOAT, A_NULL);}
 
 void pix_crop :: dimenMessCallback(void *data, t_float x, t_float y){
   GetMyClass(data)->dimenMess((int)x, (int)y);
 }
 void pix_crop :: offsetMessCallback(void *data, t_float x, t_float y){
   GetMyClass(data)->offsetMess((int)x, (int)y);
+}
+void pix_crop :: dimXMessCallback(void *data, t_float x){
+  GetMyClass(data)->dimXMess((int)x);
+}
+void pix_crop :: dimYMessCallback(void *data, t_float x){
+  GetMyClass(data)->dimYMess((int)x);
+}
+void pix_crop :: offXMessCallback(void *data, t_float x){
+  GetMyClass(data)->offXMess((int)x);
+}
+void pix_crop :: offYMessCallback(void *data, t_float x){
+  GetMyClass(data)->offYMess((int)x);
 }

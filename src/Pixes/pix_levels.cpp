@@ -26,9 +26,9 @@ CPPEXTERN_NEW(pix_levels)
 /////////////////////////////////////////////////////////
 pix_levels :: pix_levels()
 { 
-    m_DoAuto = 0.0f;		// 0 to 1
-    m_DoUniform = 1.0f;		// 0 to 1
-    m_DoAllowInversion = 1.0f;	// 0 to 1
+    m_DoAuto = false;
+    m_DoUniform = true;
+    m_DoAllowInversion = true;
     
     m_UniformInputFloor = 0.0f;		// 0 to 255
     m_UniformInputCeiling = 255.0f;	// 0 to 255
@@ -52,6 +52,13 @@ pix_levels :: pix_levels()
     
     m_LowPercentile = 5.0f;		// 0 to 100
     m_HighPercentile = 95.0f;		// 0 to 100
+
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("uniform"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("red"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("green"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("blue"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("lowP"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("hiP"));
 }
 
 /////////////////////////////////////////////////////////
@@ -71,25 +78,19 @@ void pix_levels :: processRGBAImage(imageStruct &image)
     nHeight = image.ysize;
     
     pSource = (U32*)image.data;
-    if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
-	int dataSize = image.xsize * image.ysize * image.csize;
-	myImage.clear();
-
-	myImage.allocate(dataSize);
-    }
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.csize = image.csize;
     myImage.type  = image.type;
+    myImage.format=image.format;
+    myImage.reallocate();
     pOutput = (U32*)myImage.data;
     
     //SPete_ChannelFunction_Settings CFSettings;
 
     Pete_Levels_CalculateAutoLevels();
-
     Pete_Levels_SetupCFSettings();
-
     Pete_ChannelFunction_Render();
 
     image.data = myImage.data;
@@ -102,177 +103,132 @@ void pix_levels :: processRGBAImage(imageStruct &image)
 void pix_levels :: Pete_Levels_SetupCFSettings()
 {
     const int cnFixedShift=16;
-	const int cnFixedMult=(1<<cnFixedShift);
-	const int cnFixedOne=1*cnFixedMult;
+    const int cnFixedMult=(1<<cnFixedShift);
+    const int cnFixedOne=1*cnFixedMult;
+    if (m_DoUniform) {
+      const int nInputLow=static_cast<int>(m_UniformInputFloor);
+      int nInputDelta=static_cast<int>(m_UniformInputCeiling-m_UniformInputFloor);
 
-	if (m_DoUniform>0.0f) {
+      const int nOutputLow=static_cast<int>(m_UniformOutputFloor);
+      int nOutputDelta=static_cast<int>(m_UniformOutputCeiling-m_UniformOutputFloor);
+      // avoid the possibility of divide-by-zeros
+      if (m_DoAllowInversion) {
+	if (nInputDelta==0) nInputDelta=1;
+	if (nOutputDelta==0)nOutputDelta=1;
+	nInputDelta=GateInt(nInputDelta,-255,255);
+	nOutputDelta=GateInt(nOutputDelta,-255,255);
+      } else {
+	nInputDelta=GateInt(nInputDelta,1,255);
+	nOutputDelta=GateInt(nOutputDelta,1,255);
+      }
 
-		const int nInputLow=static_cast<int>(m_UniformInputFloor);
-		int nInputDelta=static_cast<int>(m_UniformInputCeiling-m_UniformInputFloor);
+      const int nRecipInputDelta=cnFixedOne/nInputDelta;
 
-		const int nOutputLow=static_cast<int>(m_UniformOutputFloor);
-		int nOutputDelta=static_cast<int>(m_UniformOutputCeiling-m_UniformOutputFloor);
+      int*const pRedTable=&(m_nRedTable[0]);
+      int*const pGreenTable=&(m_nGreenTable[0]);
+      int*const pBlueTable=&(m_nBlueTable[0]);
 
-		// avoid the possibility of divide-by-zeros
-		if (m_DoAllowInversion>0.0f) {
+      int nCount;
+      for (nCount=0; nCount<256; nCount+=1) {
+	const int nSourceRed=nCount;
+	const int nSourceGreen=nCount;
+	const int nSourceBlue=nCount;
 
-			if (nInputDelta==0) {
-				nInputDelta=1;
-			}
-			if (nOutputDelta==0) {
-				nOutputDelta=1;
-			}
+	const int nTempRed=(((nSourceRed-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+	const int nTempGreen=(((nSourceGreen-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+	const int nTempBlue=(((nSourceBlue-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
 
-			nInputDelta=GateInt(nInputDelta,-255,255);
-			nOutputDelta=GateInt(nOutputDelta,-255,255);
+	int nOutputRed=((nTempRed*nOutputDelta)/256)+nOutputLow;
+	int nOutputGreen=((nTempGreen*nOutputDelta)/256)+nOutputLow;
+	int nOutputBlue=((nTempBlue*nOutputDelta)/256)+nOutputLow;
 
-		} else {
+	nOutputRed=GateInt(nOutputRed,0,255);
+	nOutputGreen=GateInt(nOutputGreen,0,255);
+	nOutputBlue=GateInt(nOutputBlue,0,255);
 
-			nInputDelta=GateInt(nInputDelta,1,255);
-			nOutputDelta=GateInt(nOutputDelta,1,255);
+	pRedTable[nCount]=(nOutputRed<<SHIFT_RED);
+	pGreenTable[nCount]=(nOutputGreen<<SHIFT_GREEN);
+	pBlueTable[nCount]=(nOutputBlue<<SHIFT_BLUE);
+      }
+    } else { // !m_doUniform
+	  const int nRedInputLow=static_cast<int>(m_RedInputFloor);
+	  int nRedInputDelta=static_cast<int>(m_RedInputCeiling-m_RedInputFloor);
+	  const int nRedOutputLow=static_cast<int>(m_RedOutputFloor);
+	  int nRedOutputDelta=static_cast<int>(m_RedOutputCeiling-m_RedOutputFloor);
 
-		}
+	  const int nGreenInputLow=static_cast<int>(m_GreenInputFloor);
+	  int nGreenInputDelta=static_cast<int>(m_GreenInputCeiling-m_GreenInputFloor);
+	  const int nGreenOutputLow=static_cast<int>(m_GreenOutputFloor);
+	  int nGreenOutputDelta=static_cast<int>(m_GreenOutputCeiling-m_GreenOutputFloor);
 
-		const int nRecipInputDelta=cnFixedOne/nInputDelta;
+	  const int nBlueInputLow=static_cast<int>(m_BlueInputFloor);
+	  int nBlueInputDelta=static_cast<int>(m_BlueInputCeiling-m_BlueInputFloor);
+	  const int nBlueOutputLow=static_cast<int>(m_BlueOutputFloor);
+	  int nBlueOutputDelta=static_cast<int>(m_BlueOutputCeiling-m_BlueOutputFloor);
 
-		int*const pRedTable=&(m_nRedTable[0]);
-		int*const pGreenTable=&(m_nGreenTable[0]);
-		int*const pBlueTable=&(m_nBlueTable[0]);
+	  // avoid the possibility of divide-by-zeros
+	  if (m_DoAllowInversion) {
+	    if (nRedInputDelta==0)   nRedInputDelta=1;
+	    if (nRedOutputDelta==0)	 nRedOutputDelta=1;
+	    if (nGreenInputDelta==0) nGreenInputDelta=1;
+	    if (nGreenOutputDelta==0)nGreenOutputDelta=1;
+	    if (nRedInputDelta==0)	 nRedInputDelta=1;
+	    if (nRedOutputDelta==0)  nRedOutputDelta=1;
 
-		int nCount;
-		for (nCount=0; nCount<256; nCount+=1) {
+	    nRedInputDelta=GateInt(nRedInputDelta,-255,255);
+	    nRedOutputDelta=GateInt(nRedOutputDelta,-255,255);
 
-			const int nSourceRed=nCount;
-			const int nSourceGreen=nCount;
-			const int nSourceBlue=nCount;
+	    nGreenInputDelta=GateInt(nGreenInputDelta,-255,255);
+	    nGreenOutputDelta=GateInt(nGreenOutputDelta,-255,255);
 
-			const int nTempRed=(((nSourceRed-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-			const int nTempGreen=(((nSourceGreen-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-			const int nTempBlue=(((nSourceBlue-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+	    nBlueInputDelta=GateInt(nBlueInputDelta,-255,255);
+	    nBlueOutputDelta=GateInt(nBlueOutputDelta,-255,255);
+	  } else {
+	    nRedInputDelta=GateInt(nRedInputDelta,1,255);
+	    nRedOutputDelta=GateInt(nRedOutputDelta,1,255);
 
-			int nOutputRed=((nTempRed*nOutputDelta)/256)+nOutputLow;
-			int nOutputGreen=((nTempGreen*nOutputDelta)/256)+nOutputLow;
-			int nOutputBlue=((nTempBlue*nOutputDelta)/256)+nOutputLow;
+	    nGreenInputDelta=GateInt(nGreenInputDelta,1,255);
+	    nGreenOutputDelta=GateInt(nGreenOutputDelta,1,255);
 
-			nOutputRed=GateInt(nOutputRed,0,255);
-			nOutputGreen=GateInt(nOutputGreen,0,255);
-			nOutputBlue=GateInt(nOutputBlue,0,255);
+	    nBlueInputDelta=GateInt(nBlueInputDelta,1,255);
+	    nBlueOutputDelta=GateInt(nBlueOutputDelta,1,255);
+	  }
 
-			pRedTable[nCount]=(nOutputRed<<SHIFT_RED);
-			pGreenTable[nCount]=(nOutputGreen<<SHIFT_GREEN);
-			pBlueTable[nCount]=(nOutputBlue<<SHIFT_BLUE);
+	  const int nRedRecipInputDelta=cnFixedOne/nRedInputDelta;
+	  const int nGreenRecipInputDelta=cnFixedOne/nGreenInputDelta;
+	  const int nBlueRecipInputDelta=cnFixedOne/nBlueInputDelta;
 
-		}
+	  int*const pRedTable=&(m_nRedTable[0]);
+	  int*const pGreenTable=&(m_nGreenTable[0]);
+	  int*const pBlueTable=&(m_nBlueTable[0]);
 
-	} else {
-
-		const int nRedInputLow=static_cast<int>(m_RedInputFloor);
-		int nRedInputDelta=static_cast<int>(m_RedInputCeiling-m_RedInputFloor);
-
-		const int nRedOutputLow=static_cast<int>(m_RedOutputFloor);
-		int nRedOutputDelta=static_cast<int>(m_RedOutputCeiling-m_RedOutputFloor);
-
-		const int nGreenInputLow=static_cast<int>(m_GreenInputFloor);
-		int nGreenInputDelta=static_cast<int>(m_GreenInputCeiling-m_GreenInputFloor);
-
-		const int nGreenOutputLow=static_cast<int>(m_GreenOutputFloor);
-		int nGreenOutputDelta=static_cast<int>(m_GreenOutputCeiling-m_GreenOutputFloor);
-
-		const int nBlueInputLow=static_cast<int>(m_BlueInputFloor);
-		int nBlueInputDelta=static_cast<int>(m_BlueInputCeiling-m_BlueInputFloor);
-
-		const int nBlueOutputLow=static_cast<int>(m_BlueOutputFloor);
-		int nBlueOutputDelta=static_cast<int>(m_BlueOutputCeiling-m_BlueOutputFloor);
-
-		// avoid the possibility of divide-by-zeros
-		if (m_DoAllowInversion>0.0f) {
-
-			if (nRedInputDelta==0) {
-				nRedInputDelta=1;
-			}
-			if (nRedOutputDelta==0) {
-				nRedOutputDelta=1;
-			}
-
-			if (nGreenInputDelta==0) {
-				nGreenInputDelta=1;
-			}
-			if (nGreenOutputDelta==0) {
-				nGreenOutputDelta=1;
-			}
-
-			if (nRedInputDelta==0) {
-				nRedInputDelta=1;
-			}
-			if (nRedOutputDelta==0) {
-				nRedOutputDelta=1;
-			}
-
-			nRedInputDelta=GateInt(nRedInputDelta,-255,255);
-			nRedOutputDelta=GateInt(nRedOutputDelta,-255,255);
-
-			nGreenInputDelta=GateInt(nGreenInputDelta,-255,255);
-			nGreenOutputDelta=GateInt(nGreenOutputDelta,-255,255);
-
-			nBlueInputDelta=GateInt(nBlueInputDelta,-255,255);
-			nBlueOutputDelta=GateInt(nBlueOutputDelta,-255,255);
-
-		} else {
-
-			nRedInputDelta=GateInt(nRedInputDelta,1,255);
-			nRedOutputDelta=GateInt(nRedOutputDelta,1,255);
-
-			nGreenInputDelta=GateInt(nGreenInputDelta,1,255);
-			nGreenOutputDelta=GateInt(nGreenOutputDelta,1,255);
-
-			nBlueInputDelta=GateInt(nBlueInputDelta,1,255);
-			nBlueOutputDelta=GateInt(nBlueOutputDelta,1,255);
-
-		}
-
-		const int nRedRecipInputDelta=cnFixedOne/nRedInputDelta;
-		const int nGreenRecipInputDelta=cnFixedOne/nGreenInputDelta;
-		const int nBlueRecipInputDelta=cnFixedOne/nBlueInputDelta;
-
-		int*const pRedTable=&(m_nRedTable[0]);
-		int*const pGreenTable=&(m_nGreenTable[0]);
-		int*const pBlueTable=&(m_nBlueTable[0]);
-
-		int nCount;
-		for (nCount=0; nCount<256; nCount+=1) {
-
-			const int nSourceRed=nCount;
-			const int nSourceGreen=nCount;
-			const int nSourceBlue=nCount;
-
-			const int nTempRed=(((nSourceRed-nRedInputLow)*256)*nRedRecipInputDelta)>>cnFixedShift;
-			const int nTempGreen=(((nSourceGreen-nGreenInputLow)*256)*nGreenRecipInputDelta)>>cnFixedShift;
-			const int nTempBlue=(((nSourceBlue-nBlueInputLow)*256)*nBlueRecipInputDelta)>>cnFixedShift;
-
-			int nOutputRed=((nTempRed*nRedOutputDelta)/256)+nRedOutputLow;
-			int nOutputGreen=((nTempGreen*nGreenOutputDelta)/256)+nGreenOutputLow;
-			int nOutputBlue=((nTempBlue*nBlueOutputDelta)/256)+nBlueOutputLow;
-
-			nOutputRed=GateInt(nOutputRed,0,255);
-			nOutputGreen=GateInt(nOutputGreen,0,255);
-			nOutputBlue=GateInt(nOutputBlue,0,255);
-
-			pRedTable[nCount]=(nOutputRed<<SHIFT_RED);
-			pGreenTable[nCount]=(nOutputGreen<<SHIFT_GREEN);
-			pBlueTable[nCount]=(nOutputBlue<<SHIFT_BLUE);
-
-
-		}
-
-
-	}
+	  int nCount;
+	  for (nCount=0; nCount<256; nCount+=1) {
+	    const int nSourceRed=nCount;
+	    const int nSourceGreen=nCount;
+	    const int nSourceBlue=nCount;
+	    
+	    const int nTempRed=(((nSourceRed-nRedInputLow)*256)*nRedRecipInputDelta)>>cnFixedShift;
+	    const int nTempGreen=(((nSourceGreen-nGreenInputLow)*256)*nGreenRecipInputDelta)>>cnFixedShift;
+	    const int nTempBlue=(((nSourceBlue-nBlueInputLow)*256)*nBlueRecipInputDelta)>>cnFixedShift;
+	    
+	    int nOutputRed=((nTempRed*nRedOutputDelta)/256)+nRedOutputLow;
+	    int nOutputGreen=((nTempGreen*nGreenOutputDelta)/256)+nGreenOutputLow;
+	    int nOutputBlue=((nTempBlue*nBlueOutputDelta)/256)+nBlueOutputLow;
+	    
+	    nOutputRed=GateInt(nOutputRed,0,255);
+	    nOutputGreen=GateInt(nOutputGreen,0,255);
+	    nOutputBlue=GateInt(nOutputBlue,0,255);
+	    
+	    pRedTable[nCount]=(nOutputRed<<SHIFT_RED);
+	    pGreenTable[nCount]=(nOutputGreen<<SHIFT_GREEN);
+	    pBlueTable[nCount]=(nOutputBlue<<SHIFT_BLUE);
+	  }
+    }
 }
 
 void pix_levels :: Pete_Levels_CalculateAutoLevels() {
-
-	if (m_DoAuto==0.0f) {
-		return;
-	}
+	if (!m_DoAuto)return;
 
 	int	nRedHistogram[256];
 	int	nGreenHistogram[256];
@@ -307,17 +263,11 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels() {
 			nBlueHistogram[nSourceBlue]+=1;
 
 			pCurrentSource+=nSampleSpacing;
-
 		}
-
-		pCurrentSource=
-			pSourceLineStart+(nSampleSpacing*nWidth);
-
+		pCurrentSource=	pSourceLineStart+(nSampleSpacing*nWidth);
 	}
 
-	const int nSampleCount=
-		(nWidth/nSampleSpacing)*
-		(nHeight/nSampleSpacing);
+	const int nSampleCount=	(nWidth/nSampleSpacing)*(nHeight/nSampleSpacing);
 
 	const int nStartThreshold=static_cast<int>((m_LowPercentile*nSampleCount)/100.0f);
 	const int nEndThreshold=static_cast<int>((m_HighPercentile*nSampleCount)/100.0f);
@@ -423,10 +373,8 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels() {
 			nLowLuminance=GateInt(nHighLuminance-1,0,255);
 		}
 	}
-
 	m_UniformInputFloor=(float)(nLowLuminance);
 	m_UniformInputCeiling=(float)(nHighLuminance);
-
 }
 
 void pix_levels :: Pete_ChannelFunction_Render() {
@@ -442,9 +390,7 @@ void pix_levels :: Pete_ChannelFunction_Render() {
 	const U32* pSourceEnd=(pSource+nNumPixels);
 
 	while (pCurrentSource!=pSourceEnd) {
-		
 		const U32 SourceColour=*pCurrentSource;
-
 		const unsigned int nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
 		const unsigned int nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
 		const unsigned int nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
@@ -464,10 +410,7 @@ void pix_levels :: Pete_ChannelFunction_Render() {
 
 		pCurrentSource+=1;
 		pCurrentOutput+=1;
-
 	}
-
-
 }
 
 /////////////////////////////////////////////////////////
@@ -492,51 +435,24 @@ void pix_levels :: obj_setupCallback(t_class *classPtr)
 		  gensym("blue"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_levels::lowPCallback,
 		  gensym("lowP"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::lowPCallback,
-		  gensym("lowP"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_levels::hiPCallback,
+		  gensym("hiP"), A_DEFFLOAT, A_NULL);
 }
 
 void pix_levels :: autoCallback(void *data, t_floatarg m_DoAuto)
 {
-  GetMyClass(data)->m_DoAuto=(m_DoAuto);
+  GetMyClass(data)->m_DoAuto=(m_DoAuto>0.);
 }
 
 void pix_levels :: uniCallback(void *data, t_floatarg m_DoUniform)
 {
-  GetMyClass(data)->m_DoUniform=(m_DoUniform);
+  GetMyClass(data)->m_DoUniform=(m_DoUniform>0.);
 }
 void pix_levels :: invCallback(void *data, t_floatarg m_DoAllowInversion)
 {
-  GetMyClass(data)->m_DoAllowInversion=(m_DoAllowInversion);  
+  GetMyClass(data)->m_DoAllowInversion=(m_DoAllowInversion>0.);
 }
-void pix_levels :: uniformCallback(void *data, t_floatarg m_UniformInputFloor, t_floatarg m_UniformInputCeiling, t_floatarg m_UniformOutputFloor, t_floatarg m_UniformOutputCeiling)
-{
-  GetMyClass(data)->m_UniformInputFloor=(m_UniformInputFloor);
-  GetMyClass(data)->m_UniformInputCeiling=(m_UniformInputCeiling);
-  GetMyClass(data)->m_UniformOutputFloor=(m_UniformOutputFloor);
-  GetMyClass(data)->m_UniformOutputCeiling=(m_UniformOutputCeiling);  
-}
-void pix_levels :: redCallback(void *data, t_floatarg m_RedInputFloor, t_floatarg m_RedInputCeiling, t_floatarg m_RedOutputFloor, t_floatarg m_RedOutputCeiling)
-{
-  GetMyClass(data)->m_RedInputFloor=(m_RedInputFloor);
-  GetMyClass(data)->m_RedInputCeiling=(m_RedInputCeiling);
-  GetMyClass(data)->m_RedOutputFloor=(m_RedOutputFloor);
-  GetMyClass(data)->m_RedOutputCeiling=(m_RedOutputCeiling);  
-}
-void pix_levels :: greenCallback(void *data, t_floatarg m_GreenInputFloor, t_floatarg m_GreenInputCeiling, t_floatarg m_GreenOutputFloor, t_floatarg m_GreenOutputCeiling)
-{
-  GetMyClass(data)->m_GreenInputFloor=(m_GreenInputFloor);
-  GetMyClass(data)->m_GreenInputCeiling=(m_GreenInputCeiling);
-  GetMyClass(data)->m_GreenOutputFloor=(m_GreenOutputFloor);
-  GetMyClass(data)->m_GreenOutputCeiling=(m_GreenOutputCeiling);  
-}
-void pix_levels :: blueCallback(void *data, t_floatarg m_BlueInputFloor, t_floatarg m_BlueInputCeiling, t_floatarg m_BlueOutputFloor, t_floatarg m_BlueOutputCeiling)
-{
-  GetMyClass(data)->m_BlueInputFloor=(m_BlueInputFloor);
-  GetMyClass(data)->m_BlueInputCeiling=(m_BlueInputCeiling);
-  GetMyClass(data)->m_BlueOutputFloor=(m_BlueOutputFloor);
-  GetMyClass(data)->m_BlueOutputCeiling=(m_BlueOutputCeiling);  
-}
+
 void pix_levels :: lowPCallback(void *data, t_floatarg m_LowPercentile)
 {
   GetMyClass(data)->m_LowPercentile=(m_LowPercentile);
@@ -544,4 +460,33 @@ void pix_levels :: lowPCallback(void *data, t_floatarg m_LowPercentile)
 void pix_levels :: hiPCallback(void *data, t_floatarg m_HighPercentile)
 {
   GetMyClass(data)->m_HighPercentile=(m_HighPercentile);  
+}
+
+void pix_levels :: uniformCallback(void *data, t_floatarg m_UniformInputFloor, t_floatarg m_UniformInputCeiling, t_floatarg m_UniformOutputFloor, t_floatarg m_UniformOutputCeiling)
+{
+  GetMyClass(data)->m_UniformInputFloor=(m_UniformInputFloor*255.);
+  GetMyClass(data)->m_UniformInputCeiling=(m_UniformInputCeiling*255.);
+  GetMyClass(data)->m_UniformOutputFloor=(m_UniformOutputFloor*255.);
+  GetMyClass(data)->m_UniformOutputCeiling=(m_UniformOutputCeiling*255.);  
+}
+void pix_levels :: redCallback(void *data, t_floatarg m_RedInputFloor, t_floatarg m_RedInputCeiling, t_floatarg m_RedOutputFloor, t_floatarg m_RedOutputCeiling)
+{
+  GetMyClass(data)->m_RedInputFloor=(m_RedInputFloor*255.);
+  GetMyClass(data)->m_RedInputCeiling=(m_RedInputCeiling*255.);
+  GetMyClass(data)->m_RedOutputFloor=(m_RedOutputFloor*255.);
+  GetMyClass(data)->m_RedOutputCeiling=(m_RedOutputCeiling*255.);  
+}
+void pix_levels :: greenCallback(void *data, t_floatarg m_GreenInputFloor, t_floatarg m_GreenInputCeiling, t_floatarg m_GreenOutputFloor, t_floatarg m_GreenOutputCeiling)
+{
+  GetMyClass(data)->m_GreenInputFloor=(m_GreenInputFloor*255.);
+  GetMyClass(data)->m_GreenInputCeiling=(m_GreenInputCeiling*255.);
+  GetMyClass(data)->m_GreenOutputFloor=(m_GreenOutputFloor*255.);
+  GetMyClass(data)->m_GreenOutputCeiling=(m_GreenOutputCeiling*255.);  
+}
+void pix_levels :: blueCallback(void *data, t_floatarg m_BlueInputFloor, t_floatarg m_BlueInputCeiling, t_floatarg m_BlueOutputFloor, t_floatarg m_BlueOutputCeiling)
+{
+  GetMyClass(data)->m_BlueInputFloor=(m_BlueInputFloor*255.);
+  GetMyClass(data)->m_BlueInputCeiling=(m_BlueInputCeiling*255.);
+  GetMyClass(data)->m_BlueOutputFloor=(m_BlueOutputFloor*255.);
+  GetMyClass(data)->m_BlueOutputCeiling=(m_BlueOutputCeiling*255.);  
 }

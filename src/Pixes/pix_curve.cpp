@@ -137,7 +137,6 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   
   int n_R, n_G, n_B, n_A;
   t_float *tab_R, *tab_G, *tab_B, *tab_A;
-  t_float scale_R, scale_G, scale_B, scale_A;
 
   int r, g, b, a;
 
@@ -147,16 +146,12 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   if (!(tab_G=checkarray(name_G, &n_G))) return;
   if (!(tab_B=checkarray(name_B, &n_B))) return;
 
-  scale_R=n_R/256.;
-  scale_G=n_G/256.;
-  scale_B=n_B/256.;
-
   switch (m_mode) {
   case 3: // only RGB
     while (i--) {
-      r = (int)*(tab_R+(int)(scale_R*base[chRed]));
-      g = (int)*(tab_G+(int)(scale_R*base[chGreen]));
-      b = (int)*(tab_B+(int)(scale_R*base[chBlue]));
+      r = (int)*(tab_R+((n_R*base[chRed])>>8));
+      g = (int)*(tab_G+((n_G*base[chGreen])>>8));
+      b = (int)*(tab_B+((n_B*base[chBlue])>>8));
    
       base[chRed]   = CLAMP(r);
       base[chGreen] = CLAMP(g);
@@ -168,13 +163,12 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   case 4: // RGBA
   case 1: // one table for all
     if (!(tab_A=checkarray(name_A, &n_A))) return;
-    scale_A=n_A/256.;
     
     while (i--) {
-      r = (int)*(tab_R+(int)(scale_R*base[chRed]));
-      g = (int)*(tab_G+(int)(scale_G*base[chGreen]));
-      b = (int)*(tab_B+(int)(scale_B*base[chBlue]));
-      a = (int)*(tab_A+(int)(scale_A*base[chAlpha]));
+      r = (int)*(tab_R+((n_R*base[chRed])>>8));
+      g = (int)*(tab_G+((n_G*base[chGreen])>>8));
+      b = (int)*(tab_B+((n_B*base[chBlue])>>8));
+      a = (int)*(tab_A+((n_A*base[chAlpha])>>8));
    
       base[chRed]   = CLAMP(r);
       base[chGreen] = CLAMP(g);
@@ -207,7 +201,53 @@ void pix_curve :: processGrayImage(imageStruct &image)
   }
 }
 
+void pix_curve :: processYUVImage(imageStruct &image)
+{
+  int i=image.xsize*image.ysize/2;
+  unsigned char *base = image.data;
+  
+  int n_Y, n_U, n_V;
+  t_float *tab_Y, *tab_U, *tab_V;
 
+  int y0, y1, u, v;
+
+  if (m_mode==0) return;
+
+  if (!(tab_Y=checkarray(name_R, &n_Y))) return;
+  if (!(tab_U=checkarray(name_G, &n_U))) return;
+  if (!(tab_V=checkarray(name_B, &n_V))) return;
+  switch (m_mode) {
+  case 3: // YUV
+    while (i--) {
+      u  = (int)*(tab_U+((n_U*base[chU])>>8));
+      y0 = (int)*(tab_Y+((n_Y*base[chY0])>>8));
+      v  = (int)*(tab_V+((n_V*base[chV])>>8));
+      y1 = (int)*(tab_Y+((n_Y*base[chY1])>>8));
+
+      base[chU]  = CLAMP(u);
+      base[chY0] = CLAMP(y0);
+      base[chV]  = CLAMP(v);
+      base[chY1] = CLAMP(y1);
+
+      base+=4;
+    }
+    break;
+  case 1: // only Y
+    if (!(tab_Y=checkarray(name_A, &n_Y))) return;
+    
+    while (i--) {
+      y0 = (int)*(tab_Y+((n_Y*base[chY0])>>8));
+      y1 = (int)*(tab_Y+((n_Y*base[chY1])>>8));
+   
+      base[chY0] = CLAMP(y0);
+      base[chY1] = CLAMP(y1);
+
+      base+=4;
+    }
+  default:
+    break;
+  }
+}
 
 /////////////////////////////////////////////////////////
 // static member function

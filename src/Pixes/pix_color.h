@@ -54,20 +54,22 @@ class pix_color : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-  	
+      	virtual void 	processGrayImage(imageStruct &image);
+    	virtual void 	processYUVImage(imageStruct &image);
+	
     	//////////
     	// Set the new color
-    	void	    	vecGainMess(float red, float green, float blue);
+    	void	    	vecGainMess(float red, float green, float blue, float alpha=1.0);
     	
     	//////////
     	// The new color
-    	unsigned char  	m_color[3];
+    	unsigned char  	m_color[4];
     
     private:
     
     	//////////
     	// Static member functions
-    	static void 	vecGainMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);
+    	static void 	vecGainMessCallback(void *data, t_symbol*,int,t_atom*);
 };
 
 #endif	// for header file

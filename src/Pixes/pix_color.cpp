@@ -29,7 +29,7 @@ CPPEXTERN_NEW(pix_color)
 /////////////////////////////////////////////////////////
 pix_color :: pix_color()
 {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_gain"));
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("vec_gain"));
     m_color[0] = m_color[1] = m_color[2] = 255;
 }
 
@@ -57,17 +57,38 @@ void pix_color :: processRGBAImage(imageStruct &image)
       base += 4;
     }
 }
+void pix_color :: processGrayImage(imageStruct &image)
+{
+  int i = image.xsize * image.ysize;
+  unsigned char grey=(m_color[0]*79+m_color[1]*156+m_color[2]*21)>>8;
+  unsigned char *base = image.data;
+  while (i--)*base++=grey;
+}
+void pix_color :: processYUVImage(imageStruct &image)
+{
+  int i = image.xsize * image.ysize / 2;
+  unsigned char u =((-43*m_color[0]- 85*m_color[1]+128*m_color[2])>>8)+128;
+  unsigned char y =(  77*m_color[0]+150*m_color[1]+ 29*m_color[2])>>8;
+  unsigned char v =((128*m_color[0]-107*m_color[1]- 21*m_color[2])>>8)+128;
 
+  unsigned char *base = image.data;
+  while (i--){
+    base[chU]=u; base[chY0]=y;
+    base[chV]=v; base[chY1]=y;
+    base+=4;
+  }
+}
 /////////////////////////////////////////////////////////
 // vecGainMess
 //
 /////////////////////////////////////////////////////////
-void pix_color :: vecGainMess(float red, float green, float blue)
+void pix_color :: vecGainMess(float red, float green, float blue, float alpha)
 {
-    m_color[0] = CLAMP(red * 255);
+    m_color[0] = CLAMP(red   * 255);
     m_color[1] = CLAMP(green * 255);
-    m_color[2] = CLAMP(blue * 255);
-    setPixModified();
+    m_color[2] = CLAMP(blue  * 255);
+    m_color[3] = CLAMP(alpha * 255);
+   setPixModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -77,9 +98,26 @@ void pix_color :: vecGainMess(float red, float green, float blue)
 void pix_color :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&pix_color::vecGainMessCallback,
-    	    gensym("vec_gain"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+    	    gensym("vec_gain"), A_GIMME, A_NULL);
 }
-void pix_color :: vecGainMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue)
+void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
-    GetMyClass(data)->vecGainMess((float)red, (float)green, (float)blue);
+  float r=0.0, g=0.0, b=0.0;
+  float a=1.0;
+  switch(argc){
+  case 1:
+    r=g=b=atom_getfloat(argv); break;
+  case 4:
+    a=atom_getfloat(argv+3);
+  case 3:
+    r=atom_getfloat(argv+0);
+    g=atom_getfloat(argv+1);
+    b=atom_getfloat(argv+2);
+    break;
+  default:
+    error("pix_color: color must be 1, 3 or 4 values");
+    return;
+  }
+   
+  GetMyClass(data)->vecGainMess(r, g, b, a);
 }
