@@ -223,8 +223,8 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	image_block->xsize	= (*imageDescH)->width;
 	image_block->ysize	= (*imageDescH)->height;
 	//image_block->type	= GL_UNSIGNED_BYTE;
-        //image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
-        image_block->type	= GL_UNSIGNED_INT_8_8_8_8;
+        image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
+        //image_block->type	= GL_UNSIGNED_INT_8_8_8_8;
 	if ((*imageDescH)->depth <= 32) {
 		image_block->csize = 4;
 		//image_block->format = GL_RGBA;
@@ -242,13 +242,13 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	post("QTImage2mem() : allocate %d bytes", dataSize);
 #endif
         GWorldPtr	gw = NULL;
-/*
-#ifdef __QTNEWGWORLDFROMPTR__
+
+//#ifdef __QTNEWGWORLDFROMPTR__
 	OSErr err = QTNewGWorldFromPtr(&gw,  
                                     //k32RGBAPixelFormat,
                                     k32ARGBPixelFormat,
-                                    &r, NULL, NULL, 
-                                    keepLocal,	
+                                    &r, NULL, NULL, 0,
+                                   // keepLocal,	
                                     //useDistantHdwrMem, 
                                     image_block->data, 
                                     (long)(image_block->xsize * image_block->csize));
@@ -264,8 +264,8 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
         ::DisposeGWorld(gw);			//dispose the offscreen
 	gw = NULL;
         
-#else	//don't "USE_QTNEWGWORLDFROMPTR"
-*/	::NewGWorld(&gw, k32ARGBPixelFormat, &r, NULL, NULL, keepLocal);	//make an offscreen
+/*#else	//don't "USE_QTNEWGWORLDFROMPTR"
+	::NewGWorld(&gw, k32ARGBPixelFormat, &r, NULL, NULL, keepLocal);	//make an offscreen
 	::PixMapHandle pixmapH = GetGWorldPixMap(gw);
         //image_block->pixelFormat = k32ARGBPixelFormat;
 	::LockPixels(pixmapH);						//lock a pixmap
@@ -280,10 +280,10 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 		for (int i=0, y=image_block->ysize-1; y>=0; y--) {
 			unsigned char *tmpP = baseP + y * rowbytes;
 			for (int x=image_block->xsize-1; x>=0; x--) {
-				/*image_block->data[i++] = *(tmpP + 1);
-				image_block->data[i++] = *(tmpP + 2);
-				image_block->data[i++] = *(tmpP + 3);
-				image_block->data[i++] = *(tmpP);*/
+				//image_block->data[i++] = *(tmpP + 1);
+				//image_block->data[i++] = *(tmpP + 2);
+				//image_block->data[i++] = *(tmpP + 3);
+				//image_block->data[i++] = *(tmpP);
                                 image_block->data[i++] = *(tmpP + 3);
 				image_block->data[i++] = *(tmpP + 2);
 				image_block->data[i++] = *(tmpP + 1);
@@ -305,7 +305,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	::UnlockPixels(pixmapH);		//unlock the pixmap
 	pixmapH = NULL;				//
 	::DisposeGWorld(gw);			//dispose the offscreen
-	gw = NULL;
+	gw = NULL;*/
 	return image_block;
 //#endif	//__QTNEWGWORLDFROMPTR__
 }
