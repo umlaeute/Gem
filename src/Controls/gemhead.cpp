@@ -56,6 +56,7 @@ gemhead :: ~gemhead()
     GemMan::removeObj(this, m_priority);
     if (m_cache)
         stopRendering();
+    if(m_cache)delete m_cache;
     outlet_free(m_out1);
 }
 
@@ -171,9 +172,8 @@ void gemhead :: outputRenderOnOff(int state)
 /////////////////////////////////////////////////////////
 void gemhead :: startRendering()
 {
-  if (m_cache)
-    delete m_cache;
-  m_cache = new GemCache(this);
+  if (m_cache) m_cache->reset(this);
+  else         m_cache = new GemCache(this);
 
   outputRenderOnOff(1);
 }
@@ -185,9 +185,6 @@ void gemhead :: startRendering()
 void gemhead :: stopRendering()
 {
   outputRenderOnOff(0);
-
-  if (m_cache) delete m_cache;
-  m_cache = NULL;
 }
 
 /////////////////////////////////////////////////////////
