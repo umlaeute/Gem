@@ -1,9 +1,16 @@
 #!/bin/sh
 
-if [ "$@" ]
+subdirs="$@"
+
+## configure just includes this file with ". makesource"
+if [ -z "${0%*./configure}" ]
 then
-  subdirs="$@"
-else
+ echo \"makesoure\" called from configure
+ subdirs=""
+fi
+
+if [ -z "$subdirs" ]
+then
   subdirs="../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../openGL" 
 fi
 
