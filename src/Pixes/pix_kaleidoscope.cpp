@@ -563,14 +563,6 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
-// processGrayImage
-//
-/////////////////////////////////////////////////////////
-void pix_kaleidoscope :: processGrayImage(imageStruct &image)
-{
-}
-
-/////////////////////////////////////////////////////////
 // do the YUV processing here
 //
 /////////////////////////////////////////////////////////
@@ -1061,10 +1053,6 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 
 	}
     image.data = myImage.data;
-}
-
-void pix_kaleidoscope :: processYUV_Altivec(imageStruct &image)
-{
 }
 
 inline int pix_kaleidoscope :: Pete_Kaleidoscope_CosFA(int nAngleFA) {
