@@ -21,9 +21,15 @@ LOG
 #include <windows.h>
 #endif
 
+#ifdef MACOSX
+#include <OpenGL/glu.h>
+#include <Carbon/Carbon.h>
+#include <AGL/agl.h>
+#else
 #include <GL/glu.h>
-#include "Base/GemExportDef.h"
+#endif MACOSX
 
+#include "Base/GemExportDef.h"
 
 class gemhead;
 class gemheadLink;
@@ -151,6 +157,8 @@ class GEM_EXTERN GemMan
 	static float	   m_fogEnd;		// start of the linear fog
 
 	static float       m_motionBlur;        // motion-blur factor in double-buffer mode
+	static int			texture_rectangle_supported;
+	static int			client_storage_supported;
 
 	
         //////////

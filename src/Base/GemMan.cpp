@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute
+//    Copyright (c) 2002 tigital
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -21,6 +22,14 @@
 #include <sys/time.h>
 #include <GL/glx.h>
 #include <X11/Xlib.h>
+#elif MACOSX
+#include <stdlib.h>
+#include <string.h>
+#include <OpenGL/gl.h>
+#include <Carbon/Carbon.h>
+#include <Quicktime/Quicktime.h>
+#include <time.h>
+
 #elif _WINDOWS
 #include <stdlib.h>
 // I hate Microsoft...I shouldn't have to do this!
@@ -32,6 +41,10 @@
 #include "GemEvent.h"
 
 #include "Controls/gemhead.h"
+
+#ifdef MACOSX
+extern bool HaveValidContext (void);
+#endif MACOSX
 
 static WindowInfo gfxInfo;
 static WindowInfo constInfo;
@@ -69,6 +82,9 @@ GLfloat GemMan::m_fogColor[4];
 float GemMan::m_fogStart;
 float GemMan::m_fogEnd;
 float GemMan::m_motionBlur=0.f;
+int GemMan::texture_rectangle_supported = 0;	//tigital
+int GemMan::client_storage_supported = 0;
+
 
 // static data
 static const int NUM_LIGHTS = 8;   	// the maximum number of lights
@@ -175,7 +191,14 @@ static void dispatchGemWindowMessages()
     }
   clock_delay(s_windowClock, s_windowDelTime);  
 } 
+#elif MACOSX
+static void dispatchGemWindowMessages(void *)
+{
+//	::clock_xdelay(s_windowClock, s_windowDelTime);
+    clock_delay(s_windowClock, s_windowDelTime);
+}
 #endif // for Unix
+
 static void resizeCallback(int xSize, int ySize, void *)
 {
   float xDivy = (float)xSize / (float)ySize;
@@ -193,7 +216,36 @@ static void resizeCallback(int xSize, int ySize, void *)
  
   glMatrixMode(GL_MODELVIEW);
 }
+/*
+ This is SGI sample code taken directly from OpenGL.org:
+ http://www.opengl.org/developers/code/features/OGLextensions/OGLextensions.html
+ */
+int OpenGLExtensionIsSupported(const char* extension) {
+  const GLubyte *extensions = NULL;
+  const GLubyte *start;
+  GLubyte *where, *terminator;
 
+  /* Extension names should not have spaces. */
+  where = (GLubyte *) strchr(extension, ' ');
+  if (where || *extension == '\0')
+    return 0;
+  extensions = glGetString(GL_EXTENSIONS);
+  /* It takes a bit of care to be fool-proof about parsing the
+     OpenGL extensions string. Don't be fooled by sub-strings,
+     etc. */
+  start = extensions;
+  for (;;) {
+    where = (GLubyte *) strstr((const char *) start, extension);
+    if (!where)
+      break;
+    terminator = where + strlen(extension);
+    if (where == start || *(where - 1) == ' ')
+      if (*terminator == ' ' || *terminator == '\0')
+        return 1;
+    start = terminator;
+  }
+  return 0;
+}
 
 void GemMan :: createContext(char* disp)
 {
@@ -221,6 +273,25 @@ void GemMan :: createContext(char* disp)
       s_singleContext = 1;
       m_width = 640;
       m_height = 480;
+    }
+#elif MACOSX
+    post("MAN: createContext entered");
+
+    // Check QuickTime installed
+    long	QDfeature;
+    if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
+            error ("GEM: QuickTime is not installed : %d", err);
+            return;
+    } else {
+            if (OSErr err = ::EnterMovies()) {
+                error("GEM: Couldn't initialize QuickTime : %d", err);
+                return;
+            }
+    }
+    // check existence of OpenGL libraries
+    if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
+            error ("GEM : OpenGL is not installed");
+            return;
     }
 #endif
   s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
@@ -273,6 +344,10 @@ void GemMan :: initGem()
   post("GEM: IOhannes m zmoelnig");
   post("GEM: ver: %s", GEM_VERSION);
   post("GEM: compiled: " __DATE__);
+#ifdef MACOSX
+	post("GEM: Mac OS X port by James Tittle");
+	post("GEM:             and Chris Clepper");
+#endif MACOSX
 
   // setup the perspective values
   m_perspect[0] = -1.f;	// left
@@ -434,6 +509,9 @@ void GemMan :: resetValues()
     case (FOG_EXP2):
       glFogf(GL_FOG_MODE, GL_EXP2);
       break;
+    case (FOG_OFF):
+        glDisable(GL_FOG);
+        break;
     }
     glFogf(GL_FOG_DENSITY, GemMan::m_fog);
     glFogf(GL_FOG_START, GemMan::m_fogStart);
@@ -460,11 +538,17 @@ void GemMan :: fillGemState(GemState &state)
 /////////////////////////////////////////////////////////
 void GemMan :: resetState()
 {
+  post("MAN::resetState entered");
   m_clear_color[0] = 0.0;
   m_clear_color[1] = 0.0;
   m_clear_color[2] = 0.0;
   m_clear_color[3] = 0.0;
+#ifdef MACOSX
+  if (HaveValidContext ())
+    glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
+#else
   glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
+#endif //MACOSX
   m_mat_ambient[0] = 0.1f;
   m_mat_ambient[1] = 0.1f;
   m_mat_ambient[2] = 0.1f;
@@ -558,6 +642,9 @@ void GemMan :: render(void *)
   {
     gettimeofday(&startTime, 0);
   }
+#elif MACOSX
+    UnsignedWide startTime;
+    ::Microseconds(&startTime);
 #else
 #error Define OS specific profiling
 #endif
@@ -663,8 +750,8 @@ void GemMan :: render(void *)
       int left_color=0;  // RED
       int right_color=1; // GREEN
 
- glClear(GL_COLOR_BUFFER_BIT);
-  glClear(GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_DEPTH_BUFFER_BIT);
 
       // setup the left viewpoint
       switch (left_color){
@@ -789,6 +876,13 @@ void GemMan :: render(void *)
       (endTime.tv_usec - startTime.tv_usec) * 0.000001;
     post("GEM: time: %f", seconds);
   }
+#elif MACOSX
+    {
+        UnsignedWide endTime;
+        ::Microseconds(&endTime);
+        float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+        post("GEM: time: %f", seconds);
+    }
 #else
 #error Define OS specific profiling
 #endif
@@ -915,6 +1009,31 @@ int GemMan :: createWindow(char* disp)
       error("GEM: Unable to create window");
       return(0);
     }
+    /*
+        Check for the presence of a couple of useful OpenGL extensions
+        we can use to speed up the movie rendering.
+   
+        GL_EXT_texture_rectangle allows for non-power-of-two sized
+        textures.  Texture coordinates for these textures run from
+        0..width, 0..height instead of 0..1, 0..1 as for normal
+        power-of-two textures.  GL_EXT_texture_rectangle is available
+        on the NVidia GeForce2MX and above, or the ATI Radeon and above.
+    */
+    texture_rectangle_supported
+        = OpenGLExtensionIsSupported("GL_EXT_texture_rectangle");
+ 
+    /*
+        GL_APPLE_client_storage allows better performance when modifying
+        a texture image extensively:  under normal circumstances, a
+        texture image is passed from the application to the driver and
+        then to the graphics card.  GL_APPLE_client_storage allows you
+        to avoid the application -> driver copy as long as you agree to
+        keep your copy of the texture image around for when the driver
+        needs it.  GL_APPLE_client_storage is supported on all video
+        cards under MacOSX 10.1 and above.
+    */
+    client_storage_supported
+        = OpenGLExtensionIsSupported("GL_APPLE_client_storage");
 
   m_w=myHints.real_w;
   m_h=myHints.real_h;
@@ -962,12 +1081,19 @@ void GemMan :: destroyWindow()
   // reestablish the const glxContext
 #ifdef unix                 // for Unix
   //post("dpy=%x\twin=%x\tcontext=%x", constInfo.dpy, constInfo.win, constInfo.context);
+
   if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
+
   glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
 #elif _WINDOWS              // for Windows
+
   if (!constInfo.dc && !constInfo.context)return; // do not crash ??
+
   wglMakeCurrent(constInfo.dc, constInfo.context);
   s_windowRun = 0;
+#elif MACOSX		// for PPC Macintosh
+    ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
+    ::aglSetCurrentContext(constInfo.context);
 #else
 #error Define OS specific OpenGL context make current
 #endif
@@ -995,7 +1121,11 @@ int createConstWindow(char* disp)
   myHints.y_offset = 0;
   myHints.width = GemMan::m_width;
   myHints.height = GemMan::m_height;
+#ifndef MACOSX
   myHints.shared = NULL;
+#else
+  myHints.shared = constInfo.context;
+#endif
   myHints.actuallyDisplay = 0;
   myHints.fullscreen = 0;
   myHints.display = disp;
@@ -1036,6 +1166,8 @@ void GemMan :: swapBuffers()
     glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
 #elif _WINDOWS          // for WinNT
   SwapBuffers(gfxInfo.dc);
+#elif MACOSX		// for Macintosh
+  ::aglSwapBuffers(gfxInfo.context);
 #else                   // everyone else
 #error Define OS specific swap buffer
 #endif
@@ -1054,8 +1186,8 @@ void GemMan :: swapBuffers()
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
       glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
-		m_perspect[2], m_perspect[3],					// bottom, top
-		m_perspect[4], m_perspect[5]);				// front, back
+		m_perspect[2], m_perspect[3],			// bottom, top
+		m_perspect[4], m_perspect[5]);			// front, back
     
       glMatrixMode(GL_MODELVIEW);
       gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
@@ -1214,7 +1346,18 @@ void GemMan :: printInfo()
   post("Vendor: %s", glGetString(GL_VENDOR));
   post("Renderer: %s", glGetString(GL_RENDERER));
   post("Version: %s", glGetString(GL_VERSION));
+#ifdef MACOSX
+    char *text = new char [strlen((char *)glGetString(GL_EXTENSIONS)) + 1];
+    strcpy(text,(char *)glGetString(GL_EXTENSIONS));
+    char *token = strtok(text, " ");	// Parse 'text' For Words, Seperated By " " (spaces)
+    while(token != NULL) {				// While The Token Isn't NULL
+        post("Extensions: %s", token);	// Print extension string
+        token = strtok(NULL, " ");
+    }
+    delete [] text;
+#else
   post("Extensions: %s", glGetString(GL_EXTENSIONS));
+#endif MACOSX
   post("---------------");
   post("window state: %d", m_windowState);
   post("profile: %d", m_profile);
