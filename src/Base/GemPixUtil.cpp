@@ -264,10 +264,18 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
 #else
     pixelnum>>=1;
     while(pixelnum--){
+#if 0
       *pixels++=((-43*rgbdata[0]-85 *rgbdata[1]+128*rgbdata[2])>>8)+128; // U
       *pixels++=(77 *rgbdata[0]+150*rgbdata[1]+29 *rgbdata[2])>>8;     // Y
       *pixels++=((128*rgbdata[0]-107*rgbdata[1]-21 *rgbdata[2])>>8)+128; // V
       *pixels++=(77 *rgbdata[3]+150*rgbdata[4]+29 *rgbdata[5])>>8;     // Y
+#else
+      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
+      *pixels++=((-38*rgbdata[0]- 74*rgbdata[1]+112*rgbdata[2])>>8)+128; // U
+      *pixels++=(( 66*rgbdata[0]+129*rgbdata[1]+ 25*rgbdata[2])>>8)+ 16; // Y
+      *pixels++=((112*rgbdata[0]- 94*rgbdata[1]- 18*rgbdata[2])>>8)+128; // V
+      *pixels++=(( 66*rgbdata[3]+129*rgbdata[4]+ 25*rgbdata[5])>>8)+ 16; // Y
+#endif
       rgbdata+=6;
     }
 #endif
@@ -421,15 +429,25 @@ GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
       unsigned char r=((rgb>>8)&0xF8);
       unsigned char g=((rgb>>3)&0xFC);
       unsigned char b=((rgb<<3)&0xF8);
-
-      *pixels++=((-43*r-85 *g+128*b)>>8)+128; // U
-      *pixels++=(77 *r+150*g+29 *b)>>8;     // Y
-      *pixels++=((128*r-107*g-21 *b)>>8)+128; // V
+#if 0
+      *pixels++=((-43*r- 85*g+128*b)>>8)+128; // U
+      *pixels++=(  77*r+150*g+ 29*b)>>8;     // Y
+      *pixels++=((128*r-107*g- 21*b)>>8)+128; // V
+#else
+      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
+      *pixels++=((-38*r- 74*g+112*b)>>8)+128; // U
+      *pixels++=(( 66*r+129*g+ 25*b)>>8)+16;  // Y
+      *pixels++=((112*r- 94*g- 18*b)>>8)+128; // V
+#endif
       rgb=*rgbdata++;
       r=((rgb>>8)&0xF8);
       g=((rgb>>3)&0xFC);
       b=((rgb<<3)&0xF8);
+#if 0
       *pixels++=(77 *r+150*g+29 *b)>>8;     // Y
+#else
+      *pixels++=(( 66*r+129*g+ 25*b)>>8)+16;     // Y
+#endif
     }
     break;
   }
@@ -479,10 +497,18 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
+#if 0
       *pixels++=((-43*rgbadata[chRed]-85 *rgbadata[chGreen]+128*rgbadata[chBlue])>>8)+128; // U
       *pixels++=(77 *rgbadata[chRed]+150*rgbadata[chGreen]+29 *rgbadata[chBlue])>>8;     // Y
       *pixels++=((128*rgbadata[chRed]-107*rgbadata[chGreen]-21 *rgbadata[chBlue])>>8)+128; // V
       *pixels++=(77 *rgbadata[4+chRed]+150*rgbadata[4+chGreen]+29 *rgbadata[4+chBlue])>>8;     // Y
+#else
+      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
+      *pixels++=((-38*rgbadata[chRed]- 74*rgbadata[chGreen]+112*rgbadata[chBlue])>>8)+128; // U
+      *pixels++=(( 66*rgbadata[chRed]+129*rgbadata[chGreen]+ 25*rgbadata[chBlue])>>8)+ 16; // Y
+      *pixels++=((112*rgbadata[chRed]- 94*rgbadata[chGreen]- 18*rgbadata[chBlue])>>8)+128; // V
+      *pixels++=(( 66*rgbadata[4+chRed]+129*rgbadata[4+chGreen]+ 25*rgbadata[4+chBlue])>>8)+ 16; // Y
+#endif
       rgbadata+=8;
     }
     break;
@@ -533,10 +559,18 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
+#if 0
       *pixels++=((-43*bgrdata[2]-85 *bgrdata[1]+128*bgrdata[0])>>8)+128; // U
       *pixels++=(77 *bgrdata[2]+150*bgrdata[1]+29 *bgrdata[0])>>8;     // Y
       *pixels++=((128*bgrdata[2]-107*bgrdata[1]-21 *bgrdata[0])>>8)+128; // V
       *pixels++=(77 *bgrdata[5]+150*bgrdata[4]+29 *bgrdata[3])>>8;     // Y
+#else
+      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
+      *pixels++=((-38*bgrdata[2]- 74*bgrdata[1]+112*bgrdata[0])>>8)+128; // U
+      *pixels++=(( 66*bgrdata[2]+129*bgrdata[1]+ 25*bgrdata[0])>>8)+ 16; // Y
+      *pixels++=((112*bgrdata[2]- 94*bgrdata[1]- 18*bgrdata[0])>>8)+128; // V
+      *pixels++=(( 66*bgrdata[5]+129*bgrdata[4]+ 25*bgrdata[3])>>8)+ 16; // Y
+#endif
       bgrdata+=6;
     }
     break;
@@ -588,10 +622,18 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
+#if 0
       *pixels++=((-43*bgradata[chRed]-85 *bgradata[chGreen]+128*bgradata[chBlue])>>8)+128; // U
       *pixels++=(77 *bgradata[chRed]+150*bgradata[chGreen]+29 *bgradata[chBlue])>>8;     // Y
       *pixels++=((128*bgradata[chRed]-107*bgradata[chGreen]-21 *bgradata[chBlue])>>8)+128; // V
       *pixels++=(77 *bgradata[4+chRed]+150*bgradata[4+chGreen]+29 *bgradata[4+chBlue])>>8;     // Y
+#else
+      // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
+      *pixels++=((-38*bgradata[chRed]- 74*bgradata[chGreen]+112*bgradata[chBlue])>>8)+128; // U
+      *pixels++=(( 66*bgradata[chRed]+129*bgradata[chGreen]+ 25*bgradata[chBlue])>>8)+ 16; // Y
+      *pixels++=((112*bgradata[chRed]- 94*bgradata[chGreen]- 18*bgradata[chBlue])>>8)+128; // V
+      *pixels++=(( 66*bgradata[4+chRed]+129*bgradata[4+chGreen]+ 25*bgradata[4+chBlue])>>8)+ 16; // Y
+#endif
       bgradata+=8;
     }
     break;
@@ -688,29 +730,29 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
 	  // 1st row - 1st pixel
 	  y=*py1++;
  	  yy=y<<8;
-	  *pixels1++ = (yy + ub     ) >> 8; // b
-	  *pixels1++ = (yy - ug - vg) >> 8; // g
-	  *pixels1++ = (yy +      vr) >> 8; // r
+	  *pixels1++ = CLAMP((yy + ub     ) >> 8); // b
+	  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
+	  *pixels1++ = CLAMP((yy +      vr) >> 8); // r
 	  // 1st row - 2nd pixel
 	  y=*py1++;
 	  yy=y<<8;
-	  *pixels1++ = (yy + ub     ) >> 8;
-	  *pixels1++ = (yy - ug - vg) >> 8;
-	  *pixels1++ = (yy +      vr) >> 8;
+	  *pixels1++ = CLAMP((yy + ub     ) >> 8);
+	  *pixels1++ = CLAMP((yy - ug - vg) >> 8);
+	  *pixels1++ = CLAMP((yy +      vr) >> 8);
 
 	  // 2nd row - 1st pixel
 	  y=*py2++;
 	  yy=y<<8;
-	  *pixels2++ = (yy + ub     ) >> 8; // b
-	  *pixels2++ = (yy - ug - vg) >> 8; // g
-	  *pixels2++ = (yy +      vr) >> 8; // r
+	  *pixels2++ = CLAMP((yy + ub     ) >> 8); // b
+	  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
+	  *pixels2++ = CLAMP((yy +      vr) >> 8); // r
 
 	  // 2nd row - 2nd pixel
 	  y=*py2++;
 	  yy=y<<8;
-	  *pixels2++ = (yy + ub     ) >> 8;
-	  *pixels2++ = (yy - ug - vg) >> 8;
-	  *pixels2++ = (yy +      vr) >> 8;
+	  *pixels2++ = CLAMP((yy + ub     ) >> 8);
+	  *pixels2++ = CLAMP((yy - ug - vg) >> 8);
+	  *pixels2++ = CLAMP((yy +      vr) >> 8);
 	}
 	pixels1+=xsize*csize;	pixels2+=xsize*csize;
 	py1+=xsize*1;	py2+=xsize*1;
@@ -749,32 +791,32 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
 	  // 1st row - 1st pixel
 	  y=*py1++;
 	  yy=y<<8;
-	  *pixels1++ = (yy + ub     ) >> 8; // r
-	  *pixels1++ = (yy - ug - vg) >> 8; // g
-	  *pixels1++ = (yy +      vr) >> 8; // b
+	  *pixels1++ = CLAMP((yy + ub     ) >> 8); // r
+	  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
+	  *pixels1++ = CLAMP((yy +      vr) >> 8); // b
 	  *pixels1++ = 255; // a
 	  // 1st row - 2nd pixel
 	  y=*py1++;
 	  yy=y<<8;
-	  *pixels1++ = (yy + ub     ) >> 8; // r
-	  *pixels1++ = (yy - ug - vg) >> 8; // g
-	  *pixels1++ = (yy +      vr) >> 8; // b
+	  *pixels1++ = CLAMP((yy + ub     ) >> 8); // r
+	  *pixels1++ = CLAMP((yy - ug - vg) >> 8); // g
+	  *pixels1++ = CLAMP((yy +      vr) >> 8); // b
 	  *pixels1++ = 255; // a
 
 	  // 2nd row - 1st pixel
 	  y=*py2++;
 	  yy=y<<8;
-	  *pixels2++ = (yy + ub     ) >> 8; // r
-	  *pixels2++ = (yy - ug - vg) >> 8; // g
-	  *pixels2++ = (yy +      vr) >> 8; // b
+	  *pixels2++ = CLAMP((yy + ub     ) >> 8); // r
+	  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
+	  *pixels2++ = CLAMP((yy +      vr) >> 8); // b
 	  *pixels2++ = 255; // a
 
 	  // 2nd row - 2nd pixel
 	  y=*py2++;
 	  yy=y<<8;
-	  *pixels2++ = (yy + ub     ) >> 8; // r
-	  *pixels2++ = (yy - ug - vg) >> 8; // g
-	  *pixels2++ = (yy +      vr) >> 8; // b
+	  *pixels2++ = CLAMP((yy + ub     ) >> 8); // r
+	  *pixels2++ = CLAMP((yy - ug - vg) >> 8); // g
+	  *pixels2++ = CLAMP((yy +      vr) >> 8); // b
 	  *pixels2++ = 255; // a
 	}
 	pixels1+=xsize*csize;	pixels2+=xsize*csize;
@@ -1027,17 +1069,17 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 	// 1st pixel
 	y=yuvdata[1];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels+=3;
 
 	// 2nd pixel
 	y=yuvdata[3];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels+=3;
 
 	yuvdata+=4;
@@ -1061,17 +1103,17 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 	// 1st pixel
 	y=yuvdata[1];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 	// 2nd pixel
 	y=yuvdata[3];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 
@@ -1127,17 +1169,17 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
 	// 1st pixel
 	y=yuvdata[0];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels+=3;
 
 	// 2nd pixel
 	y=yuvdata[2];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels+=3;
 
 	yuvdata+=4;
@@ -1161,17 +1203,17 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
 	// 1st pixel
 	y=yuvdata[0];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 	// 2nd pixel
 	y=yuvdata[2];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 
@@ -1227,17 +1269,17 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
 	// 1st pixel
 	y=yuvdata[0];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels+=3;
 
 	// 2nd pixel
 	y=yuvdata[2];
 	yy=y<<8;
-	pixels[chRed  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chBlue ] = (yy + ub     ) >> 8; // b
+	pixels[chRed  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chBlue ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels+=3;
 
 	yuvdata+=4;
@@ -1262,17 +1304,17 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
 	y=yuvdata[0];
 	yy=y<<8;
 	// somehow i have colours swapped with my dv-cam...
-	pixels[chBlue  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chRed ] = (yy + ub     ) >> 8; // b
+	pixels[chBlue  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chRed ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 	// 2nd pixel
 	y=yuvdata[2];
 	yy=y<<8;
-	pixels[chBlue  ] = (yy +      vr) >> 8; // r
-	pixels[chGreen] = (yy - ug - vg) >> 8; // g
-	pixels[chRed ] = (yy + ub     ) >> 8; // b
+	pixels[chBlue  ] = CLAMP((yy +      vr) >> 8); // r
+	pixels[chGreen] = CLAMP((yy - ug - vg) >> 8); // g
+	pixels[chRed ] = CLAMP((yy + ub     ) >> 8); // b
 	pixels[chAlpha] = 255;
 	pixels+=4;
 
