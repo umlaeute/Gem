@@ -1,0 +1,112 @@
+#N canvas 596 99 540 557 10;
+#X obj 237 208 vertex_program;
+#X obj 199 161 openpanel;
+#X msg 199 182 open \$1;
+#X obj 199 141 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#X obj 281 42 gemhead;
+#X obj 66 154 gemwin;
+#X msg 67 80 create;
+#X msg 77 116 destroy;
+#X msg 33 55 1;
+#X msg 94 43 0;
+#X obj 312 138 pix_image;
+#X obj 313 94 openpanel;
+#X msg 313 115 open \$1;
+#X obj 313 74 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#X obj 290 171 pix_texture;
+#X obj 234 523 sphere;
+#X obj 234 497 rotateXYZ;
+#X obj 254 456 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+-262144 -1 -1 0 256;
+#X obj 295 475 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+-262144 -1 -1 0 256;
+#X obj 306 499 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+-262144 -1 -1 0 256;
+#X msg 75 192 lighting 1;
+#X msg 76 244 lighting 0;
+#X obj 82 317 gemhead;
+#X obj 95 369 world_light;
+#X obj 61 279 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+;
+#X msg 98 284 1;
+#X msg 153 292 100;
+#X obj 386 219 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+-262144 -1 -1 0 256;
+#X obj 396 236 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+-262144 -1 -1 0 256;
+#X obj 439 253 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+-262144 -1 -1 0 256;
+#X obj 396 269 t b f;
+#X obj 438 271 t b f;
+#X obj 297 321 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+-262144 -1 -1 -1 256;
+#X obj 357 335 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+-262144 -1 -1 0 256;
+#X obj 385 294 pack 0 0 0 0;
+#X obj 235 361 GEMglProgramEnvParameter4fvARB;
+#X obj 249 250 loadbang;
+#X obj 242 383 GLdefine GL_VERTEX_PROGRAM_ARB;
+#X msg 265 279 bang;
+#X obj 310 265 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#X text 254 403 GL_VERTEX_PROGRAM_ARB = 34336;
+#X text 253 421 GL_FRAGMENT_PROGRAM_ARB = 34820;
+#X obj 53 511 model;
+#X obj 54 467 openpanel;
+#X msg 54 488 open \$1;
+#X obj 54 447 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#X obj 131 451 fragment_program;
+#X obj 54 396 openpanel;
+#X msg 54 417 open \$1;
+#X obj 54 376 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#X msg 164 211 print;
+#X connect 0 0 35 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 1 0;
+#X connect 4 0 10 0;
+#X connect 6 0 5 0;
+#X connect 7 0 5 0;
+#X connect 8 0 5 0;
+#X connect 9 0 5 0;
+#X connect 10 0 14 0;
+#X connect 11 0 12 0;
+#X connect 12 0 10 0;
+#X connect 13 0 11 0;
+#X connect 14 0 0 0;
+#X connect 16 0 42 0;
+#X connect 17 0 16 1;
+#X connect 18 0 16 2;
+#X connect 19 0 16 3;
+#X connect 20 0 5 0;
+#X connect 21 0 5 0;
+#X connect 22 0 23 0;
+#X connect 24 0 22 0;
+#X connect 25 0 22 0;
+#X connect 26 0 22 0;
+#X connect 27 0 34 0;
+#X connect 28 0 30 0;
+#X connect 29 0 31 0;
+#X connect 30 0 34 0;
+#X connect 30 1 34 1;
+#X connect 31 0 34 0;
+#X connect 31 1 34 2;
+#X connect 32 0 35 1;
+#X connect 33 0 35 2;
+#X connect 34 0 35 3;
+#X connect 35 0 16 0;
+#X connect 36 0 37 0;
+#X connect 37 0 32 0;
+#X connect 38 0 37 0;
+#X connect 39 0 37 0;
+#X connect 43 0 44 0;
+#X connect 44 0 42 0;
+#X connect 45 0 43 0;
+#X connect 47 0 48 0;
+#X connect 48 0 46 0;
+#X connect 49 0 47 0;
+#X connect 50 0 0 0;
