@@ -27,9 +27,17 @@ LOG
 #include <GL/gl.h>
 #endif // __APPLE__
 
-#ifndef INCLUDE_CPPEXTERN_H_
+
+// windows has this oh so old openGL installed...
+#ifndef GL_BGRA
+#define GL_BGRA GL_BGRA_EXT
+#endif
+#ifndef GL_BGR
+#define GL_BGR GL_BGR_EXT
+#endif
+
+
 #include "Base/CPPExtern.h"
-#endif 
 #include "Base/GemState.h"
 
 class GemCache;
