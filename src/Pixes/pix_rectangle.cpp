@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -103,38 +104,47 @@ void pix_rectangle :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rectangle :: processGrayImage(imageStruct &image)
 {
-	int bytesize = 1 * sizeof(unsigned char); // 1 for grayscale
-	int rowsize  = image.xsize * bytesize;
+    int bytesize = 1 * sizeof(unsigned char); // 1 for grayscale
+    int rowsize  = image.xsize * bytesize;
     unsigned char *pixels = image.data;
-	int col, row;
+    int col, row;
 	
-	if (m_upper_right[0] > image.xsize)
-	{
-		m_upper_right[0] = image.xsize;
-		if (m_lower_left[0] > image.xsize) 
-			m_lower_left[0] = image.xsize;
-	}
+    if (m_upper_right[0] > image.xsize)
+    {
+        m_upper_right[0] = image.xsize;
+        if (m_lower_left[0] > image.xsize) 
+                m_lower_left[0] = image.xsize;
+    }
 
-	if (m_upper_right[1] > image.ysize)
-	{
-		m_upper_right[1] = image.ysize;
-		if (m_lower_left[1] > image.ysize) 
-			m_lower_left[1] = image.ysize;
-	}
+    if (m_upper_right[1] > image.ysize)
+    {
+        m_upper_right[1] = image.ysize;
+        if (m_lower_left[1] > image.ysize) 
+                m_lower_left[1] = image.ysize;
+    }
 
-	row = (m_upper_right[1] - m_lower_left[1]);
+    row = (m_upper_right[1] - m_lower_left[1]);
 
-	while (row--)
-	{
-		pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * bytesize;
-		col = (m_upper_right[0] - m_lower_left[0]);
+    while (row--)
+    {
+        pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * bytesize;
+        col = (m_upper_right[0] - m_lower_left[0]);
 		
-		while (col--)
-		{
-			pixels[chGray] = m_color[chGray];
-			pixels++;
-		}
-	}
+        while (col--)
+        {
+            pixels[chGray] = m_color[chGray];
+            pixels++;
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_rectangle :: processYUVImage(imageStruct &image)
+{
+    post("pix_rectangle: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

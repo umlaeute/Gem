@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -50,8 +51,8 @@ void pix_mask :: processDualImage(imageStruct &image, imageStruct &right)
 	{
     	// do we use the alpha value
     	pixels[chAlpha] = (	(int)mask[chRed] +
-					    	(int)mask[chGreen] +
-    						(int)mask[chBlue] ) / 3;
+                                (int)mask[chGreen] +
+                                (int)mask[chBlue] ) / 3;
 		pixels += 4;
 		mask += 4;
 	}
@@ -73,6 +74,24 @@ void pix_mask :: processRightGray(imageStruct &image, imageStruct &right)
 		pixels += 4;
 		mask++;
 	}
+}
+
+/////////////////////////////////////////////////////////
+// processDualYUV
+//
+/////////////////////////////////////////////////////////
+void pix_mask :: processDualYUV(imageStruct &image, imageStruct &right)
+{
+    post("pix_mask:  YUV not yet implemented :-P");
+}
+
+/////////////////////////////////////////////////////////
+// processRightYUV
+//
+/////////////////////////////////////////////////////////
+void pix_mask :: processRightYUV(imageStruct &image, imageStruct &right)
+{
+    post("pix_mask:  YUV not yet implemented :-P");
 }
 
 /////////////////////////////////////////////////////////

@@ -8,11 +8,11 @@
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 // this is based on EffecTV by Fukuchi Kentarou
-// * AgingTV - film-aging effect.
 // * Copyright (C) 2001 FUKUCHI Kentarou
 //
 /////////////////////////////////////////////////////////
@@ -122,8 +122,14 @@ void pix_rgba :: processFX(imageStruct &image)
 
 }
 
-
-
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_rgba :: processYUVfx(imageStruct &image)
+{
+    post("pix_rgba: YUV not yet implemented :-(");
+}
 /////////////////////////////////////////////////////////
 // static member function
 //

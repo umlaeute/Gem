@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -74,6 +75,11 @@ void pix_data :: trigger()
 		case(1):
 			color[0] = color[1] = color[2] = data[chGray] / 256.f;
 			break;
+        // YUV
+        case(2):
+            error("GEM: pix_data: YUV not yet implemented");	//tigital
+            return;
+            break;
 		// RGB
 		case(3):
 			color[0] = data[chRed] / 256.f;

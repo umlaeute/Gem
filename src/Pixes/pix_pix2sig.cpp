@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 2000 Guenter Geiger geiger@epy.co.at
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -49,10 +50,19 @@ pix_pix2sig :: ~pix_pix2sig()
 
 /////////////////////////////////////////////////////////
 // processImage
+/////////////////////////////////////////////////////////
 void pix_pix2sig :: processImage(imageStruct &image)
 {
   m_data = image.data;
   m_size = image.xsize * image.ysize;
+}
+
+/////////////////////////////////////////////////////////
+// processImage
+/////////////////////////////////////////////////////////
+void pix_pix2sig :: processYUVImage(imageStruct &image)
+{
+    post("pix_pix2sig: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

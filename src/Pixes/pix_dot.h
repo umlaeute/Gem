@@ -6,6 +6,7 @@ LOG
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
+    Copyleft (l) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -21,7 +22,7 @@ LOG
   CLASS
   pix_dot
   
-  shuffle areas of the pixBuf
+  change the pixBuf into dots
   
   KEYWORDS
   pix
@@ -48,13 +49,14 @@ class GEM_EXTERN pix_dot : public pix_fx
   //////////
   // Do the processing
   virtual void 	processFX(imageStruct &image);
+  virtual void 	processYUVfx(imageStruct &image);
 
   imageStruct    myImage;
 
   //////////
   // Make a puzzle
-  virtual void 	makePuzzleBlocks(int xsize, int ysize, int csize);
-  virtual void  shuffle();
+  //virtual void 	makePuzzleBlocks(int xsize, int ysize, int csize);
+  virtual void  makePattern();
   virtual void  sizeMess(int width, int height);
  
   int blocksize, blockxsize,blockysize,  blocknum, spacepos;

@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyleft  (l) 2001 IOhannes m zmölnig
+//    Copyleft (l) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -17,37 +18,60 @@
 
 CPPEXTERN_NEW(pix_dot)
 
+#define DOTDEPTH 5
+#define DOTMAX (1<<DOTDEPTH)
+
+static int state;
+static unsigned char *pattern;
+static unsigned char *heart_pattern;
+static int dots_width;
+static int dots_height;
+static int dot_size;
+static int dot_hsize;
+static int *sampx, *sampy;
+static int mode = 0;
+
 static void drawDot(int xx, int yy, unsigned char c, unsigned char *dest)
 {
   int x, y;
   unsigned char *pat;
 
-  c = (c>>(8-m_dotdepth));
-  pat = m_pattern + c * m_xdot * m_xdot;
+  c = (c>>(8-DOTDEPTH));
+  pat = pattern + c * dot_hsize * dot_hsize;
   dest = dest + yy * dot_size * m_xsize + xx * dot_size;
-  for(y=0; y<m_xdot; y++) {
-    for(x=0; x<m_xdot; x++) {
+  for(y=0; y<dot_hsize; y++) {
+    for(x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<m_xdot-1; x++) {
+    for(x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
-    pat += m_xdot + 1;
+    pat += dot_hsize + 1;
   }
-  pat -= m_xdot*2;
-  for(y=0; y<m_xdot-1; y++) {
-    for(x=0; x<m_xdot; x++) {
+  pat -= dot_hsize*2;
+  for(y=0; y<dot_hsize-1; y++) {
+    for(x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<m_xdot-1; x++) {
+    for(x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
-    pat += -m_xdot + 1;
+    pat += -dot_hsize + 1;
   }
+}
+
+inline static unsigned char inline_RGBtoY(int rgb)
+{
+	int i;
+
+	i = RtoY[(rgb>>16)&0xff];
+	i += GtoY[(rgb>>8)&0xff];
+	i += BtoY[rgb&0xff];
+	return i;
 }
 
 /////////////////////////////////////////////////////////
@@ -62,9 +86,31 @@ pix_dot :: pix_dot()
 {
   myImage.xsize=myImage.ysize=myImage.csize=1;
   myImage.allocate(1);
+  
+  dot_size = 8;
+  dot_hsize = dot_size / 2;
+  dots_width = m_xsize / dot_size;
+  dots_hieght = m_ysize / dot_size;
+  
+  pattern = (unsigned char *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(unsigned char));
+  if (pattern == NULL) {
+    post("pix_dot couldn't make pattern");
+    return NULL;
+  }
+  makePattern();
+  // init_sampxy_table()
+    int i, j;
 
-  m_dotx = 8;
-  m_doty = 8;
+    j = m_dot_xsize;
+    for(i=0; i<dots_width; i++) {
+        sampx[i] = j;// * video_width / m_xsize;
+        j += dot_size;
+    }
+    j = m_dot_xsize;
+    for(i=0; i<dots_height; i++) {
+        sampy[i] = j;// * video_height / screen_height;
+        j += dot_size;
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -73,8 +119,6 @@ pix_dot :: pix_dot()
 /////////////////////////////////////////////////////////
 pix_dot :: ~pix_dot()
 {
-  delete [] blockoffset;
-  delete [] blockpos;
   myImage.clear();
 }
 
@@ -85,26 +129,37 @@ pix_dot :: ~pix_dot()
 /////////////////////////////////////////////////////////
 void pix_dot :: makePattern()
 {
-  int i, x, y;
-  delete [] blockoffset;
-  delete [] blockpos;
-
-  blockxsize = xsize / blockw;
-  blockysize = ysize / blockh;
-  blocknum = blockw * blockh;
-
-  marginw = xsize - blockw*blockxsize;
-  marginh = ysize - blockh*blockysize;
-
-  spacepos = blocknum - 1;
-
-  blockoffset = new int[blocknum];
-  blockpos = new int[blocknum];
-
-  for(y=0; y<blockh; y++)
-    for(x=0; x<blockw; x++) blockoffset[y*blockw+x] = (y*blockysize*xsize + x*blockxsize)*csize;
-
-  for(i=0; i<blocknum; i++) blockpos[i] = i;
+  int i, x, y, c;
+  int u, v;
+  double p, q, r;
+  unsigned char *pat;
+  
+  for (i=0; i<DOTMAX; i++)
+  {
+/* Generated pattern is a quadrant of a disk. */
+    pat = pattern + (i+1) * m_xdot * m_xdot - 1;
+    r = (0.2 * i / DOTMAX + 0.8) * m_xdot;
+    r = r*r;
+    for(y=0; y<m_xdot; y++) {
+        for(x=0; x<m_xdot; x++) {
+            c = 0;
+            for(u=0; u<4; u++) {
+                p = (double)u/4.0 + y;
+                p = p*p;
+                for(v=0; v<4; v++) {
+                    q = (double)v/4.0 + x;
+                    if(p+q*q<r) {
+                        c++;
+                    }
+                }
+            }
+            c = (c>15)?15:c;
+            *pat-- = c<<20 | c<<12 | c<<4;
+/* The upper left part of a disk is needed, but generated pattern is a bottom
+ * right part. So I spin the pattern. */
+        }
+    }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -128,18 +183,14 @@ void pix_dot :: processFX(imageStruct &image)
   unsigned char *src = image.data;
   unsigned char *dest;
 
-  int x, y, xx, yy, i;
+  int x, y, i, sx, sy;
   unsigned char *p, *q;
 
-  if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)){
+  if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
     int dataSize = image.xsize * image.ysize * image.csize;
     myImage.clear();
-    m_force = false;
 
     myImage.allocate(dataSize);
-
-    makePuzzleBlocks(image.xsize, image.ysize, image.csize);
-    shuffle();
   }
 
   myImage.xsize = image.xsize;
@@ -148,49 +199,13 @@ void pix_dot :: processFX(imageStruct &image)
   myImage.type  = image.type;
 
   dest = myImage.data;
- 
-  i=0;
-  for (y=0; y<blockh; y++){
-    for(x=0; x<blockw; x++) {
-      p = &src[blockoffset[blockpos[i]]];
-      q = &dest[blockoffset[i]];
-      if(m_game && spacepos == i) { // leave one rectangle blank (for the puzzle game)
-	for(yy=0; yy<blockysize; yy++) {
-	  for(xx=0; xx<blockxsize*image.csize; xx++) {
-	    q[xx] = 0;
-	  }
-	  q += image.xsize*image.csize;
-	}
-      } else {
-	for(yy=0; yy<blockysize; yy++) {
-	  for(xx=0; xx<blockxsize*image.csize; xx++) {
-	    q[xx] = p[xx];
-	  }
-	  q += image.xsize*image.csize;
-	  p += image.xsize*image.csize;
-	}
-      }
-      i++;
+  
+  for ( y=0; y<dots_height; y++) {
+    sy = sampy[y];
+    for ( x=0; x<dots_width; x++){
+        sx = sampx[x];
+        drawDot(x, y, inline_RGBtoY( src[sy*image.xsize+sx]), dest);
     }
-  }
-
-  p = src +  blockw * blockxsize;
-  q = dest + blockw * blockxsize;
-
-  if(marginw) {
-    for(y=0; y<blockh*blockysize; y++) {
-      for(x=0; x<marginw; x++) {
-	*q++ = *p++;
-      }
-      p += image.xsize - marginw;
-      q += image.xsize - marginw;
-    }
-  }
-
-  if(marginh) {
-    p = src + (blockh * blockysize) * image.xsize;
-    q = dest + (blockh * blockysize) * image.xsize;
-    memcpy(p, q, marginh*image.xsize*image.csize);
   }
 
   image.data=myImage.data;

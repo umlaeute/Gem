@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -80,8 +81,8 @@ pix_convolve :: ~pix_convolve()
 //
 /////////////////////////////////////////////////////////
 
-
-
+#ifndef MMX
+#else
 void pix_convolve :: calculate3x3(imageStruct &image,imageStruct &tempImg)
 {
   int i;
@@ -137,7 +138,7 @@ void pix_convolve :: calculate3x3(imageStruct &image,imageStruct &tempImg)
 
   //  MMXDONE;
 }
-
+#endif
 
 
 #define MMULT(a,b) (a*b>>8)
@@ -150,7 +151,38 @@ void pix_convolve :: processImage(imageStruct &image)
     int maxY = tempImg.ysize - initY;
     int xTimesc = tempImg.xsize * tempImg.csize;
     int initOffset = initY * xTimesc + initX * tempImg.csize;
+#ifndef MMX
+    for (int y = initY; y < maxY; y++)
+    {
+        int realY = y * xTimesc;
+        int offsetY = realY - initOffset;
 
+    	for (int x = initX; x < maxX; x++)
+    	{
+    	    int realPos = x * tempImg.csize + realY;
+            int offsetXY = x * tempImg.csize + offsetY;
+
+    	    // skip the alpha value
+    	    for (int c = 0; c < 3; c++)
+    	    {
+    		    int new_val = 0;
+                int offsetXYC = offsetXY + c;
+    		    for (int matY = 0; matY < m_cols; matY++)
+    		    {
+    		        int offsetXYCMat = matY * xTimesc + offsetXYC;
+    		        int realMatY = matY * m_rows;
+    	    	    for (int matX = 0; matX < m_rows; matX++)
+    	    	    {
+                        new_val += tempImg.data[offsetXYCMat + matX * tempImg.csize] *
+                                        m_matrix[realMatY + matX];
+    	    	    }
+    		    }
+    		    image.data[realPos + c] = CLAMP(new_val/m_range);
+    	    }
+    	}
+    }
+    //delete [] tempImg.data;
+#else
     if (m_rows == 3 && m_cols == 3) {
       calculate3x3(image,tempImg);
     }
@@ -185,9 +217,13 @@ void pix_convolve :: processImage(imageStruct &image)
 	    }
 	}
     }
-
+#endif
 }
 
+void pix_convolve :: processYUVImage(imageStruct &image)
+{
+    post("pix_convolve: YUV not yet implemented :-(");
+}
 /////////////////////////////////////////////////////////
 // rangeMess
 //

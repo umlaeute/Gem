@@ -7,6 +7,7 @@ LOG
     Copyright (c) 1997-1998 Mark Danks
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -58,7 +59,17 @@ class GEM_EXTERN pix_multiply : public GemPixDualObj
     	//////////
     	//  This is called whenever a new image comes through.
 		//	Both images are gray8
-    	virtual void 	processBothGray(imageStruct &image, imageStruct &right); 	
+    	virtual void 	processDualGray(imageStruct &image, imageStruct &right);
+
+    	//////////
+    	//  This is called whenever a new image comes through.
+		//	The left image is an RGBA, the right is a YUV
+    	virtual void 	processRightYUV(imageStruct &image, imageStruct &right); 	
+
+    	//////////
+    	//  This is called whenever a new image comes through.
+		//	Both images are YUV
+    	virtual void 	processDualYUV(imageStruct &image, imageStruct &right); 
 };
 
 #endif	// for header file

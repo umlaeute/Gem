@@ -7,6 +7,7 @@ LOG
     Copyright (c) 1997-1998 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -57,7 +58,7 @@ class GEM_EXTERN pix_data : public GemPixDualObj
     	virtual void 	render(GemState *state)			{}
 
     	//////////
-		virtual void 	processImage(imageStruct &)		{}
+        virtual void 	processImage(imageStruct &)		{}
 
     	//////////
     	virtual void 	processDualImage(imageStruct &, imageStruct &)	{}
@@ -67,18 +68,27 @@ class GEM_EXTERN pix_data : public GemPixDualObj
 
     	//////////
     	virtual void 	processRightGray(imageStruct &, imageStruct &)	{}
+        
+        //////////
+        virtual void 	processYUVImage(imageStruct &)		{}
+        
+    	//////////
+    	virtual void 	processDualYUV(imageStruct &, imageStruct &)	{}
 
-		//////////
-		void			trigger();
+    	//////////
+    	virtual void 	processRightYUV(imageStruct &, imageStruct &)	{}
 
-		//////////
-		void			xPos(float pos)			{ m_position[0] = pos; }
+        //////////
+        void			trigger();
 
-		//////////
-		void			yPos(float pos)			{ m_position[1] = pos; }
+        //////////
+        void			xPos(float pos)			{ m_position[0] = pos; }
 
-		//////////
-		float			m_position[2];
+        //////////
+        void			yPos(float pos)			{ m_position[1] = pos; }
+
+        //////////
+        float			m_position[2];
 
         //////////
         // The color outlet

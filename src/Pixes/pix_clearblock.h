@@ -16,7 +16,6 @@ LOG
 #define INCLUDE_PIX_CLEARBLOCK_H_
 
 #include "Base/GemBase.h"
-
 #include "Base/GemPixUtil.h"
 #include "Base/GemState.h"
 

@@ -7,6 +7,7 @@ LOG
     Copyright (c) 1997-1998 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -57,6 +58,14 @@ class GEM_EXTERN pix_add : public GemPixDualObj
     	//////////
     	// Do the processing
     	virtual void 	processRightGray(imageStruct &image, imageStruct &right);
+        
+    	//////////
+    	// Do the processing
+    	virtual void 	processDualYUV(imageStruct &image, imageStruct &right);
+
+    	//////////
+    	// Do the processing
+    	virtual void 	processRightYUV(imageStruct &image, imageStruct &right);
 };
 
 #endif	// for header file

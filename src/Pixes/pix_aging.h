@@ -6,6 +6,7 @@ LOG
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -25,7 +26,7 @@ LOG
 CLASS
     pix_aging
     
-    Change pix to greyscale
+    Make pix look old
 
 KEYWORDS
     pix
@@ -60,7 +61,10 @@ class GEM_EXTERN pix_aging : public pix_fx
     	//////////
     	// Do the processing
     	virtual void 	processFX(imageStruct &image);
-
+        
+    	//////////
+    	// Do the processing
+    	virtual void 	processYUVfx(imageStruct &image);
 #if 1
     	//////////
     	// Do the processing - this is a no-op

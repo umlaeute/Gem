@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -42,6 +43,23 @@ pix_add :: ~pix_add()
 /////////////////////////////////////////////////////////
 void pix_add :: processDualImage(imageStruct &image, imageStruct &right)
 {
+#ifndef MMX
+    int datasize = image.xsize * image.ysize;
+    unsigned char *leftPix = image.data;
+    unsigned char *rightPix = right.data;
+
+    while(datasize--)
+    {
+    	leftPix[chRed] =
+			CLAMP_HIGH((int)leftPix[chRed] + (int)rightPix[chRed]);
+    	leftPix[chGreen] =
+			CLAMP_HIGH((int)leftPix[chGreen] + (int)rightPix[chGreen]);
+    	leftPix[chBlue] =
+			CLAMP_HIGH((int)leftPix[chBlue] + (int)rightPix[chBlue]);
+        leftPix += 4;
+		rightPix += 4;
+    }
+#else
   register int datasize = (image.xsize * image.ysize)>>3;
   register unsigned char *leftPix = image.data;
   register unsigned char *rightPix = right.data;
@@ -60,6 +78,7 @@ void pix_add :: processDualImage(imageStruct &image, imageStruct &right)
     leftPix+=8;rightPix+=8;
   }
   MMXDONE;
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -68,6 +87,19 @@ void pix_add :: processDualImage(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_add :: processDualGray(imageStruct &image, imageStruct &right)
 {
+#ifndef MMX
+    int datasize = image.xsize * image.ysize;
+    unsigned char *leftPix = image.data;
+    unsigned char *rightPix = right.data;
+
+    while(datasize--)
+    {
+    	leftPix[chGray] =
+			CLAMP_HIGH((int)leftPix[chGray] + (int)rightPix[chGray]);
+        leftPix++;
+		rightPix++;
+    }
+#else
     int datasize = (image.xsize * image.ysize)>>2;
     MMXSTART;
 
@@ -78,6 +110,7 @@ void pix_add :: processDualGray(imageStruct &image, imageStruct &right)
       leftPix+=8;rightPix+=8;
     }
     MMXDONE;
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -102,6 +135,23 @@ void pix_add :: processRightGray(imageStruct &image, imageStruct &right)
         leftPix += 4;
 		rightPix++;
     }
+}
+
+/////////////////////////////////////////////////////////
+// processDualYUV
+//
+/////////////////////////////////////////////////////////
+void pix_add :: processDualYUV(imageStruct &image, imageStruct &right)
+{
+    post("pix_add:  YUV not yet implemented");
+}
+/////////////////////////////////////////////////////////
+// processRightYUV
+//
+/////////////////////////////////////////////////////////
+void pix_add :: processRightYUV(imageStruct &image, imageStruct &right)
+{
+    post("pix_add:  YUV not yet implemented");
 }
 
 /////////////////////////////////////////////////////////

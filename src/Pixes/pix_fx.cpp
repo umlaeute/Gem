@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyleft  (l) 2001 IOhannes m zmölnig
+//    Copyleft (l) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -44,7 +45,6 @@ pix_fx :: pix_fx()
 pix_fx :: ~pix_fx()
 { }
 
-
 /////////////////////////////////////////////////////////
 // ProcessImage: insert the FX into the chain
 //
@@ -74,6 +74,24 @@ void pix_fx :: processGrayImage(imageStruct &image)
   old_format= image.format;
 
   if (m_active)processFX(image);
+}
+/////////////////////////////////////////////////////////
+// ProcessImage: insert the FX into the chain
+//
+/////////////////////////////////////////////////////////
+void pix_fx :: processYUVImage(imageStruct &image)
+{
+  post("pix_fx: YUVImage via pix_fx not supported yet");
+/*
+  oldImage  = &image;
+  old_data  = image.data;
+  old_xsize = image.xsize;
+  old_ysize = image.ysize;
+  old_csize = image.csize;
+  old_format= image.format;
+
+  if (m_active)processYUVfx(image);
+*/
 }
 //////////
 // get the original state back

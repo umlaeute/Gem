@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -51,6 +52,15 @@ void pix_2grey :: processImage(imageStruct &image)
     	pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
         pixels += 4;
     }
+}
+
+/////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_2grey :: processYUVImage(imageStruct &image)
+{
+    post("pix_2grey: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

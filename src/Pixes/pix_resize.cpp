@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -17,7 +18,11 @@
 #include "pix_resize.h"
 
 #include <math.h>
+#ifdef MACOSX
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif MACOSX
 
 CPPEXTERN_NEW(pix_resize)
 

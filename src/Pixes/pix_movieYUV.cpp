@@ -2,21 +2,19 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// tigital@mac.com & cclep@artic.edu
 //
 // Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    Copyright (c) 2002 James Tittle
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
 
-#include "pix_movie.h"
+#include "pix_movieYUV.h"
 #include "Base/GemMan.h"
 #include <OpenGL/glu.h>
 
@@ -27,7 +25,7 @@ static inline int powerOfTwo(int value)
   return(x);
 }
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieYUV, t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
 //
@@ -37,13 +35,13 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_movie :: pix_movie(t_symbol *filename) :
+pix_movieYUV :: pix_movieYUV(t_symbol *filename) :
 #ifdef _WINDOWS
   pix_filmNT(filename)
 #elif __linux__
   pix_filmLinux(filename)
 #elif MACOSX
-  pix_filmDarwin(filename)
+  pix_filmDarwinYUV(filename)
 #else
 #error define pix_film for your OS
 #endif
@@ -55,7 +53,7 @@ pix_movie :: pix_movie(t_symbol *filename) :
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_movie :: ~pix_movie()
+pix_movieYUV :: ~pix_movieYUV()
 {
   // Clean up the movie
   closeMess();
@@ -66,29 +64,29 @@ pix_movie :: ~pix_movie()
 // Buffer for Frames
 //
 /////////////////////////////////////////////////////////
-void pix_movie :: createBuffer()
+void pix_movieYUV :: createBuffer()
 {
   int neededXSize = powerOfTwo(m_xsize);
   int neededYSize = powerOfTwo(m_ysize);
-  
+
   deleteBuffer();
   int dataSize = neededXSize * neededYSize * m_csize;
   m_pixBlock.image.data = new unsigned char[dataSize];
   m_data=m_pixBlock.image.data; // ??????????????
   memset(m_pixBlock.image.data, 0, dataSize);
   m_frame =/*(char*)*/m_pixBlock.image.data;
-
-  m_pixBlock.image.xsize  = neededXSize;
-  m_pixBlock.image.ysize  = neededYSize;
-  m_pixBlock.image.csize  = m_csize;
-  m_pixBlock.image.format = m_format;
+  
+  m_pixBlock.image.xsize = neededXSize;
+  m_pixBlock.image.ysize = neededYSize;
+  m_pixBlock.image.csize = m_csize;
+  m_pixBlock.image.format= m_format;
 }
 
 /////////////////////////////////////////////////////////
 // on opening a file, prepare for texturing
 //
 /////////////////////////////////////////////////////////
-void pix_movie :: prepareTexture()
+void pix_movieYUV :: prepareTexture()
 {
     if (!GemMan::texture_rectangle_supported)
     {
@@ -157,17 +155,17 @@ void pix_movie :: prepareTexture()
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_movie :: texFrame(GemState *state, int doit)
+void pix_movieYUV :: texFrame(GemState *state, int doit)
 {
   state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
   // enable to texture binding
-  if (!GemMan::texture_rectangle_supported)	//tigital
+  if (!GemMan::texture_rectangle_supported)		//tigital
   {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_textureObj);
-  }else{
+  } else {
     glEnable(GL_TEXTURE_RECTANGLE_EXT);
     glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
   }
@@ -190,7 +188,7 @@ void pix_movie :: texFrame(GemState *state, int doit)
 		   m_pixBlock.image.format,
 		   m_pixBlock.image.type,
 		   m_pixBlock.image.data);
-        }else{
+        } else {
             glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
 		   m_pixBlock.image.csize,
 		   m_pixBlock.image.xsize,
@@ -200,7 +198,7 @@ void pix_movie :: texFrame(GemState *state, int doit)
 		   m_pixBlock.image.data);
         }
     }
-   // okay, load in the actual pixel data
+    // okay, load in the actual pixel data
     if ( !GemMan::texture_rectangle_supported)
     {
         glTexSubImage2D(GL_TEXTURE_2D, 0,
@@ -226,7 +224,7 @@ void pix_movie :: texFrame(GemState *state, int doit)
 // postrender
 //
 /////////////////////////////////////////////////////////
-void pix_movie :: postrender(GemState *state)
+void pix_movieYUV :: postrender(GemState *state)
 {
   m_pixBlock.newimage = 0;
   state->image = NULL;
@@ -235,7 +233,7 @@ void pix_movie :: postrender(GemState *state)
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
   }
-  if ( !GemMan::texture_rectangle_supported)
+  if ( !GemMan::texture_rectangle_supported )
     glDisable(GL_TEXTURE_2D);
   else
     glDisable(GL_TEXTURE_RECTANGLE_EXT);
@@ -246,7 +244,7 @@ void pix_movie :: postrender(GemState *state)
 // startRendering
 //
 /////////////////////////////////////////////////////////
-void pix_movie :: startRendering()
+void pix_movieYUV :: startRendering()
 {
     glGenTextures(1, &m_textureObj);
     if ( ! GemMan::texture_rectangle_supported )
@@ -264,7 +262,7 @@ void pix_movie :: startRendering()
 // stopRendering
 //
 /////////////////////////////////////////////////////////
-void pix_movie :: stopRendering()
+void pix_movieYUV :: stopRendering()
 {
   if (m_textureObj) glDeleteTextures(1, &m_textureObj);
   m_textureObj = 0;
@@ -275,7 +273,7 @@ void pix_movie :: stopRendering()
 // setUpTextureState
 //
 /////////////////////////////////////////////////////////
-void pix_movie :: setUpTextureState()
+void pix_movieYUV :: setUpTextureState()
 {
     if ( !GemMan::texture_rectangle_supported )				//tigital
     {
@@ -302,28 +300,28 @@ void pix_movie :: setUpTextureState()
 // static member function
 //
 /////////////////////////////////////////////////////////
-void pix_movie :: obj_setupCallback(t_class *classPtr)
+void pix_movieYUV :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_movie::openMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_movieYUV::openMessCallback,
 		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movie::changeImageCallback,
+  class_addmethod(classPtr, (t_method)&pix_movieYUV::changeImageCallback,
 		  gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movie::autoCallback,
+  class_addmethod(classPtr, (t_method)&pix_movieYUV::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
 }
 
-void pix_movie :: openMessCallback(void *data, t_symbol *filename)
+void pix_movieYUV :: openMessCallback(void *data, t_symbol *filename)
 {
     GetMyClass(data)->openMess(filename);
 }
 
-void pix_movie :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_movieYUV :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   //  GetMyClass(data)->changeImage((int)imgNum);
     GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 
-void pix_movie :: autoCallback(void *data, t_floatarg state)
+void pix_movieYUV :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }

@@ -6,15 +6,14 @@ Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+Copyright (c) 2002 James Tittle & Chris Clepper
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_FILM_H_
-#define INCLUDE_PIX_FILM_H_
+#ifndef INCLUDE_pix_filmYUV_H_
+#define INCLUDE_pix_filmYUV_H_
 
 #define GEM_MOVIE_NONE 0
 #define GEM_MOVIE_AVI  1
@@ -35,7 +34,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  pix_film
+  pix_filmYUV
     
   Loads in a movie
     
@@ -45,22 +44,22 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_film : public GemBase
+class GEM_EXTERN pix_filmYUV : public GemBase
 {
-  CPPEXTERN_HEADER(pix_film, GemBase)
+  CPPEXTERN_HEADER(pix_filmYUV, GemBase)
     
     public:
   
   //////////
   // Constructor
-  pix_film(t_symbol *filename);
-  //  pix_film();
+  pix_filmYUV(t_symbol *filename);
+  //  pix_filmYUV();
 
  protected:
     
   //////////
   // Destructor
-  virtual ~pix_film();
+  virtual ~pix_filmYUV();
 
   //////////
   // create and delete buffers

@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyleft  (l) 2001 IOhannes m zmölnig
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -75,6 +76,15 @@ void pix_test :: processImage(imageStruct &image)
     }
 
     image.data=myImage.data;
+}
+
+/////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_test :: processYUVImage(imageStruct &image)
+{
+    post("pix_test: YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

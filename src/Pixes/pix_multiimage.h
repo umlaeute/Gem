@@ -52,8 +52,7 @@ class GEM_EXTERN pix_multiimage : public GemBase
                 
                 multiImageCache(const char *_imageName)
                         : refCount(0), next(NULL), images(NULL), textBind(NULL),
-							numImages(0), baseImage(0), topImage(0),
-							skipRate(0)
+                            numImages(0), baseImage(0), topImage(0), skipRate(0)
                         { imageName = strdup(_imageName); }
                 ~multiImageCache()
                             { delete imageName;
@@ -67,8 +66,8 @@ class GEM_EXTERN pix_multiimage : public GemBase
                 int                 refCount;
                 multiImageCache     *next;
                 imageStruct         **images;
+                unsigned int		*textBind;
                 int                 numImages;
-				unsigned int		*textBind;
                 char                *imageName;
                 int                 baseImage;
                 int                 topImage;

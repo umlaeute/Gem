@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -78,10 +79,10 @@ void pix_multiply :: processRightGray(imageStruct &image, imageStruct &right)
 }
 
 /////////////////////////////////////////////////////////
-// processBothGray
+// processDualGray
 //
 /////////////////////////////////////////////////////////
-void pix_multiply :: processBothGray(imageStruct &image, imageStruct &right)
+void pix_multiply :: processDualGray(imageStruct &image, imageStruct &right)
 {
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
@@ -96,6 +97,23 @@ void pix_multiply :: processBothGray(imageStruct &image, imageStruct &right)
 	}
 }
 
+/////////////////////////////////////////////////////////
+// processDualYUV
+//
+/////////////////////////////////////////////////////////
+void pix_multiply :: processDualYUV(imageStruct &image, imageStruct &right)
+{
+    post("pix_multiply: YUV not yet implemented :-(");
+}
+
+/////////////////////////////////////////////////////////
+// processRightYUV
+//
+/////////////////////////////////////////////////////////
+void pix_multiply :: processRightYUV(imageStruct &image, imageStruct &right)
+{
+    post("pix_multiply: YUV not yet implemented :-(");
+}
 
 /////////////////////////////////////////////////////////
 // static member function

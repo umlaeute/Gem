@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -99,6 +100,15 @@ void pix_dump :: processImage(imageStruct &image)
   }
 
   m_data = image.data;
+}
+
+/////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_dump :: processYUVImage(imageStruct &image)
+{
+    post("pix_dump:  YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

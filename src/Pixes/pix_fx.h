@@ -5,6 +5,7 @@ LOG
     effect-processing for pixels
 
     Copyleft  (l) 2002 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
+    Copyleft (l) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -52,6 +53,10 @@ class GEM_EXTERN pix_fx : public GemPixObj
   // insert FX into the chain
   virtual void processGrayImage(imageStruct &image);
 
+  //////////
+  // insert FX into the chain
+  virtual void processYUVImage(imageStruct &image);
+  
   //////////
   // turn the pointer back to the old data after rendering
   virtual void postrender(GemState *state);

@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 2000 Guenter Geiger geiger@epy.co.at
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -45,7 +46,7 @@ pix_sig2pix :: pix_sig2pix(t_float& width, t_float& height)
 
   m_pixBlock.image.data=NULL;
 
-  dimenMess(width, height);
+  dimenMess((int)width, (int)height);	//tigital
 
   for (i=0; i<3; i++)
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal, &s_signal); /* channels inlet */

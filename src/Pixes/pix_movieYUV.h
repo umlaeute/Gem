@@ -5,23 +5,21 @@ GEM - Graphics Environment for Multimedia
 Load an digital video (like AVI, Mpeg, Quicktime) into a texture
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
 Copyright (c) 2002 James Tittle & Chris Clepper
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_MOVIE_H_
-#define INCLUDE_PIX_MOVIE_H_
+#ifndef INCLUDE_PIX_MOVIEYUV_H_
+#define INCLUDE_PIX_MOVIEYUV_H_
 
 #ifdef _WINDOWS
 #include "Pixes/pix_filmNT.h"
 #elif __linux__
 #include "Pixes/pix_filmLinux.h"
 #elif MACOSX
-#include "pix_filmDarwin.h"
+#include "pix_filmDarwinYUV.h"
 #else
 #error Define pix_film for this OS
 #endif
@@ -48,22 +46,22 @@ class GEM_EXTERN pix_movie : public pix_filmLinux
 {
   CPPEXTERN_HEADER(pix_movie, pix_filmLinux)
 #elif MACOSX
-class GEM_EXTERN pix_movie : public pix_filmDarwin
+class GEM_EXTERN pix_movieYUV : public pix_filmDarwinYUV
 {
-    CPPEXTERN_HEADER(pix_movie, pix_filmDarwin)
+    CPPEXTERN_HEADER(pix_movieYUV, pix_filmDarwinYUV)
 #endif
    
     public:
   
   //////////
   // Constructor
-  pix_movie(t_symbol *filename);
+  pix_movieYUV(t_symbol *filename);
 
  protected:
     
   //////////
   // Destructor
-  virtual ~pix_movie();
+  virtual ~pix_movieYUV();
 
   //////////
   // create and delete buffers

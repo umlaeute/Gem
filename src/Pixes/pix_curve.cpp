@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -189,6 +190,10 @@ void pix_curve :: processImage(imageStruct &image)
 
 }
 
+void pix_curve :: processYUVImage(imageStruct &image)
+{
+    post("pix_curve: YUV not yet implemented :-(");
+}
 /////////////////////////////////////////////////////////
 // static member function
 //

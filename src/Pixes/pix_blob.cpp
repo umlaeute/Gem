@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -71,14 +72,14 @@ void pix_blob :: processImage(imageStruct &image)
   unsigned char *pixels = image.data;
   int rows  = image.ysize;
 
-  t_float x_inv = 1./image.xsize;
-  t_float y_inv = 1./image.ysize;
+  //t_float x_inv = 1./image.xsize;
+  //t_float y_inv = 1./image.ysize;
 
   char channel = -1;
   float gain_r = 0.3, gain_g = 0.3, gain_b = 0.3, gain_a = 0.1;
 
   float sum = 0.0, sum_x = 0.0, sum_y = 0.0;
-  float blob_x = 0., blob_y = 0., blob_z = 0.;
+  float /*blob_x = 0., blob_y = 0.,*/ blob_z = 0.;
 
   switch (m_method) {
   case 1:
@@ -174,6 +175,15 @@ void pix_blob :: GainMess(int argc, t_atom *argv)
   }
 
   m_method = -1;
+}
+
+/////////////////////////////////////////////////////////
+// processYUVImage
+//
+/////////////////////////////////////////////////////////
+void pix_blob :: processYUVImage(imageStruct &image)
+{
+    post("pix_blob:  YUV not yet implemented :-(");
 }
 
 /////////////////////////////////////////////////////////

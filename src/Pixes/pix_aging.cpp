@@ -8,6 +8,7 @@
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -69,7 +70,7 @@ void pix_aging :: processFX(imageStruct &image)
   unsigned char *pixes = image.data;
   unsigned char *p;
   int count = image.ysize * image.xsize * image.csize;
-  unsigned char a, b;
+  unsigned char a;
   int width = image.xsize * image.csize;
   int height= image.ysize;
  
@@ -207,7 +208,14 @@ void pix_aging :: processFX(imageStruct &image)
   ;
 }
 
-
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_aging :: processYUVfx(imageStruct &image)
+{
+    post("pix_aging:  YUV not yet implemented :-(");
+}
 
 void pix_aging :: scratchMess(int scratchlines)
 {
