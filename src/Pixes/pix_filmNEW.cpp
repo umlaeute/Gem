@@ -27,6 +27,7 @@
 #include "Pixes/filmMPEG1.h"
 #include "Pixes/filmMPEG3.h"
 #include "Pixes/filmQT.h"
+#include <stdio.h>
 
 #if 0
 # define debug post
@@ -112,9 +113,14 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format)
   //  if (filename==x_filename)return;
   closeMess();
 
-  //  char buf[MAXPDSTRING];
-  //canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
-  char*buf=filename->s_name;
+  char buff[MAXPDSTRING];
+  char*buf=buff;
+  // we first try to find the file-to-open with canvas_makefilename
+  // if this fails, we just pass the given filename (could be a stream)
+  canvas_makefilename(getCanvas(), filename->s_name, buff, MAXPDSTRING);
+  if (FILE*fd=fopen(buff, "r"))fclose(fd);
+  else buf=filename->s_name;
+
   if (format==0)format=m_format;
   int i=-1;
   post("opening %s with format %X", buf, format);
