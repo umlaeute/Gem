@@ -17,7 +17,9 @@
 
 #include "Base/config.h"
 #include "Base/GemPixUtil.h"
-#include "m_pd.h" /* for post() and friends */
+#ifndef CLASS_PD
+# include "m_pd.h" /* for post() and friends */
+#endif
 
 
 /*-----------------------------------------------------------------
