@@ -93,8 +93,9 @@ void newWave :: modeMess(float mode)
 }
 void newWave :: speedMess(float speed)
 {
-    setSpeed((int)speed);
+    setSpeed((float)speed);
     setModified();
+    
 }
 
 /////////////////////////////////////////////////////////
@@ -211,6 +212,7 @@ void newWave :: heightMess(float size)
 {
     m_height = size;
     setModified();
+    post("height changed %f",m_height);
 }
 
 /////////////////////////////////////////////////////////
@@ -350,15 +352,19 @@ void newWave :: setSize( int value )
 // setSpeed
 //
 /////////////////////////////////////////////////////////
-void newWave :: setSpeed(int value)
+void newWave :: setSpeed(float value)
 {
-    switch(value) 
+  /*  switch(value) 
     {
         case VWEAK : dt = 0.0005; break;
         case WEAK  : dt = 0.001; break;
         case NORMAL: dt = 0.004; break;
         case STRONG: dt = 0.008; break;
-    }
+    } */
+    dt = value * 0.001;
+    post("speed changed %f",dt);
+    
+    
 }
 
 /////////////////////////////////////////////////////////

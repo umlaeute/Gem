@@ -89,7 +89,7 @@ class GEM_EXTERN newWave : public GemShape
   void 		getposition(void);
   void		getTexCoords(void);
   void		setSize( int value );
-  void		setSpeed( int value );
+  void		setSpeed( float value );
 
   void copy( float vec0[3], float vec1[3]);
   void sub(float vec0[3], float vec1[3], float vec2[3]);
