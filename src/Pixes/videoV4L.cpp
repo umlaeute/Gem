@@ -123,6 +123,7 @@ void *videoV4L :: capturing(void*you)
   return NULL;
 }
 pixBlock *videoV4L :: getFrame(){
+  if(!m_haveVideo)return NULL;
   //  post("getting frame %d", m_frame_ready);
   m_image.newfilm=0;
   if (!m_frame_ready) m_image.newimage = 0;
@@ -158,8 +159,9 @@ pixBlock *videoV4L :: getFrame(){
 /////////////////////////////////////////////////////////
 int videoV4L :: startTransfer(int format)
 {
+  m_rendering=true;
   if (format>1)m_reqFormat=format;
-  post("starting transfer");
+  //  post("starting transfer");
   char buf[256];
   int i;
   int width, height;
@@ -339,13 +341,15 @@ int videoV4L :: startTransfer(int format)
     return(1);
 
 closit:
-    post("closing video");
+    post("closing video", tvfd);
     if (tvfd >= 0)
     {
     	close(tvfd);
 	tvfd = -1;
     }
     m_haveVideo = 0;
+    m_frame_ready=0;
+    post("fish");
     return(0);
 }
 
@@ -368,6 +372,8 @@ int videoV4L :: stopTransfer()
   if (tvfd) close(tvfd);
   tvfd = 0;
   m_haveVideo = 0;
+  m_frame_ready = 0;
+  m_rendering=false;
   return(1);
 }
 
@@ -468,10 +474,10 @@ int videoV4L :: setDevice(int d)
 {
   if (d==m_devicenum)return 0;
   m_devicenum=d;
-  if(m_capturing){
-    stopTransfer();
-    startTransfer();
-  }
+  bool rendering=m_rendering;
+  if(m_capturing)stopTransfer();
+  if (rendering)startTransfer();
+  //  post("new device set %d", m_devicenum);
   return 0;
 }
 
@@ -479,9 +485,9 @@ int videoV4L :: setDevice(int d)
 int videoV4L :: setColor(int format)
 {
   if (format<=0 || format==m_reqFormat)return -1;
-  post("setting color space: 0x%X", format);
+  //  post("setting color space: 0x%X", format);
   if(m_capturing){
-    post("restarting transfer");
+    //    post("restarting transfer");
     stopTransfer();
     startTransfer(format);
   }
