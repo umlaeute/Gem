@@ -32,6 +32,7 @@ square :: square(t_floatarg size)
         : GemShape(size)
 {
     m_drawType = GL_QUADS;
+    m_blend=0;
 }
 
 /////////////////////////////////////////////////////////
@@ -50,7 +51,13 @@ void square :: render(GemState *state)
     glNormal3f(0.0f, 0.0f, 1.0f);
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(m_linewidth);
-    
+        
+    if (m_blend) {
+        glEnable(GL_POLYGON_SMOOTH);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE); 
+    }
     glBegin(m_drawType);
 
     SetVertix(state, -m_size,  -m_size, 0.0f,0.,0.,0);
@@ -59,14 +66,24 @@ void square :: render(GemState *state)
     SetVertix(state, -m_size,  m_size, 0.0f,0.,1.,3);
 
     glEnd();
-
+    if (m_blend) {
+        glDisable(GL_POLYGON_SMOOTH);
+        glDisable(GL_BLEND);
+    }
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(1.0);
 }
-
+ 
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
-void square :: obj_setupCallback(t_class *)
-{ }
+void square :: obj_setupCallback(t_class *classPtr)
+{     class_addmethod(classPtr, (t_method)&square::blendMessCallback,
+    	    gensym("blend"), A_FLOAT, A_NULL);
+}
+
+void square :: blendMessCallback(void *data, t_floatarg size)
+{
+    GetMyClass(data)->m_blend=((int)size);
+}
