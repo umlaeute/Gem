@@ -43,7 +43,7 @@ pix_depot :: pix_depot(t_symbol *s,t_float f=100.0)
   m_numframes = (int)f;
   m_buffer = new imageStruct[m_numframes];
   
-  pd_bind(&this->x_obj->ob_pd, m_bindname);  
+  pd_bind(&this->x_obj->ob_pd, m_bindname); 
   outlet_new(this->x_obj, &s_float);
 }
 /////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ pix_depot :: pix_depot(t_symbol *s,t_float f=100.0)
 /////////////////////////////////////////////////////////
 pix_depot :: ~pix_depot()
 {
-  delete m_buffer;
+  delete [] m_buffer;
   pd_unbind(&this->x_obj->ob_pd, m_bindname);
 }
 /////////////////////////////////////////////////////////
