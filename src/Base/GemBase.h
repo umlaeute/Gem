@@ -17,7 +17,7 @@ LOG
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WINDOWS
-#include <windows.h>
+# include <windows.h>
 #endif
 
 #include "config.h"
@@ -25,15 +25,35 @@ LOG
 #include "Base/GemState.h"
 
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
+# include <OpenGL/gl.h>
+# include <OpenGL/glu.h>
+# include <OpenGL/glext.h>
 #else
-#include <GL/gl.h>
-#include <GL/glu.h>
-# ifdef INCLUDE_GLEXT
-# include <GL/glext.h>
-# endif
+
+// on mesa, GL_GLEXT_LEGACY automatically includes glext.h from within gl.h
+# define GL_GLEXT_LEGACY
+# define GL_GLEXT_PROTOTYPES   1
+
+# include <GL/gl.h>
+# include <GL/glu.h>
+
+# if  (!defined GL_GLEXT_VERSION) && (!defined DONT_INCLUDE_GLEXT)
+/* windos is (again) a bit difficult:
+ * by default, there are no GL/glext.h headers
+ * but of course you can install nvidia's headers to get them.
+ * since i don't know, whether the system has this headers,
+ * we define DONT_INCLUDE_GLEXT in Base/configNT.h on demand
+ * so, if your system lacks GL/glext.h,
+ * just undefine the appropriate line in Base/configNT.h
+ */
+
+// stupid hack, as nvidia has erroneous glext-headers!
+#  define boolean GLboolean
+
+#  include <GL/glext.h>
+
+# endif /* GLEXT */ 
+
 #endif // __APPLE__
 
 
