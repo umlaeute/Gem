@@ -17,3 +17,6 @@ pix_buffer_read/write sometimes crashes -- FIXED
 the "--without-aviplay" flag doesn't really work -- FIXED
 
 Gem doesn't load if the no font-support AND "-Wl,-rpath,/usr/lib -laviplay" is specified (something with cannot resolve symbol "GemState" in TextBase::render()
+
+
+pix_filmDS produces BGR-output -- FIXED (now it produces RGBA, YUV and Grey on demand)
