@@ -17,11 +17,14 @@ LOG
 #ifndef INCLUDE_GEMFUNCUTIL_H_
 #define INCLUDE_GEMFUNCUTIL_H_
 
+#ifdef __APPLE__
+#include <Carbon/Carbon.h>
+#endif
+
 #include "Base/GemExportDef.h"
 
 #include <math.h>
 #include <stdlib.h>
-
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
