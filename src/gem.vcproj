@@ -22,7 +22,7 @@
 				InlineFunctionExpansion="2"
 				OptimizeForProcessor="1"
 				AdditionalIncludeDirectories="../src,../../GemLibs/glut,../../GemLibs/glm,../../src,../../GemLibs/Jpeg,../../GemLibs/tiff/libtiff,../../GemLibs/gltt,../../GemLibs/wintab/include,../../GemLibs/particle,../../GemLibs/liborb,C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;NT;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;HAVE_DIRECTSHOW-NO"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;NT;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;HAVE_DIRECTSHOW"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
@@ -38,7 +38,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib winmm.lib vfw32.lib libcmt.lib shlwapi.lib OLDNAMES.lib"
+				AdditionalDependencies="../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib winmm.lib vfw32.lib libcmt.lib shlwapi.lib OLDNAMES.lib strmbase.lib"
 				OutputFile="../gem.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
