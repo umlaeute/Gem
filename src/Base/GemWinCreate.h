@@ -142,6 +142,9 @@ class GEM_EXTERN WindowHints
   // Should there be a window border?
   int			border;
 
+  //////////
+  // mode for full-screen antialiasing
+  int                   fsaa;
 
   ///// if we can use a different display , this has its meaning under X
   char* display;
