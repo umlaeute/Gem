@@ -119,14 +119,13 @@ void pix_2grey :: processYUVMMX(imageStruct &image){
  register __m64 mask_64   = _mm_setr_pi8(0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF);
  register __m64 offset_64 = _mm_setr_pi8(0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00);
  __m64*data_p= (__m64*)image.data;
- _mm_empty();
 
  register __m64 pixel;
  while(pixsize--) {
-   pixel = data_p[0];
+   pixel = data_p[pixsize];
    pixel = _mm_and_si64(pixel, mask_64);
    pixel = _mm_add_pi8 (pixel, offset_64);
-   *data_p++=pixel;
+   data_p[pixsize]=pixel;
  }
  _mm_empty();
 }
