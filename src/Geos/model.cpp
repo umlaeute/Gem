@@ -16,6 +16,11 @@
 
 #include "model.h"
 
+#ifdef MACOSX
+#include <AGL/agl.h>
+extern bool HaveValidContext (void);
+#endif
+
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM)
 
   /////////////////////////////////////////////////////////
@@ -126,6 +131,12 @@ void model :: rescaleMess(int state)
 /////////////////////////////////////////////////////////
 void model :: openMess(t_symbol *filename)
 {
+#ifdef MACOSX
+  if (!HaveValidContext ()) {
+    post("GEM: geo: model - need window to load model");
+    return;
+  }
+#endif
   cleanModel();
     
   char buf[MAXPDSTRING];
