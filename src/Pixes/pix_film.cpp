@@ -14,7 +14,6 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
 #include "pix_film.h"
 #include <ctype.h>
 
@@ -258,10 +257,10 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
 		  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_film::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
- // class_addmethod(classPtr, (t_method)&pix_film::colorspaceCallback,
-//		  gensym("colorspace"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_film::colorspaceCallback,
+  class_addmethod(classPtr, (t_method)&pix_film::colorspaceCallback,
 		  gensym("colorspace"), A_SYMBOL, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_film::colorspaceCallback,
+		  gensym("colourspace"), A_SYMBOL, A_NULL);
 }
 void pix_film :: openMessCallback(void *data, t_symbol *filename)
 {
@@ -280,16 +279,15 @@ void pix_film :: autoCallback(void *data, t_floatarg state)
 
 void pix_film :: colorspaceCallback(void *data, t_symbol *state)
 {
-   char c=toupper(*state->s_name);
-   if (c == 'Y'){
-   post("pix_film: yuv");
-   GetMyClass(data)->m_colorspace = 0;
-   }else
-   if (c == 'R')
-   {
-   post("pix_film: rgb");
-   GetMyClass(data)->m_colorspace = 1;
-   }
-   
-
+  char c=*state->s_name;
+  switch(c){
+  case 'Y':case 'y':
+    post("pix_film: yuv");
+    GetMyClass(data)->m_colorspace = 0;
+    break;
+  case 'R':case 'r': default:
+    post("pix_film: rgba");
+    GetMyClass(data)->m_colorspace = 1;
+    break;
+  }
 }
