@@ -48,10 +48,6 @@ pix_alpha :: pix_alpha()
 pix_alpha :: ~pix_alpha()
 { }
 
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
 void pix_alpha :: processRGBAImage(imageStruct &image)
 {
     // process the image

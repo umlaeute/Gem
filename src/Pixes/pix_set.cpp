@@ -40,23 +40,22 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize)
 {
   int dataSize;
-  if (xsize < 1) xsize = 64;
-  if (ysize < 1) ysize = 64;
-	
+  if (xsize < 1) xsize = 256;
+  if (ysize < 1) ysize = 256;
+
+  m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.xsize = (int)xsize;
   m_pixBlock.image.ysize = (int)ysize;
   m_pixBlock.image.csize = 4;
   m_pixBlock.image.format = GL_RGBA;
   m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-	
-  dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-    * 4 * sizeof(unsigned char);
+  
+  dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * 
+    m_pixBlock.image.csize * sizeof(unsigned char);
   m_pixBlock.image.allocate(dataSize);
-	
+  
   memset(m_pixBlock.image.data, 0, dataSize);
-	
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("data"));
-  return;
 }
 
 /////////////////////////////////////////////////////////
@@ -65,7 +64,7 @@ pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize)
 /////////////////////////////////////////////////////////
 pix_set :: ~pix_set()
 {
-    cleanPixBlock();
+  cleanPixBlock();
 }
 
 /////////////////////////////////////////////////////////
@@ -93,7 +92,7 @@ void pix_set :: startRendering()
 void pix_set :: postrender(GemState *state)
 {
     m_pixBlock.newimage = 0;
-    state->image = NULL;
+    //state->image = NULL;
 }
 
 
@@ -181,9 +180,7 @@ void pix_set :: SETMess(int xsize, int ysize)
 {
 	int dataSize;
 	if ((xsize < 1) || (ysize < 1)) return;
-	
 	m_pixBlock.image.clear();
-	
 	m_pixBlock.image.xsize = (int)xsize;
 	m_pixBlock.image.ysize = (int)ysize;
 	m_pixBlock.image.csize = 4;
@@ -193,7 +190,6 @@ void pix_set :: SETMess(int xsize, int ysize)
 	dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
 		* 4 * sizeof(unsigned char);
 	m_pixBlock.image.allocate(dataSize);
-	
 	memset(m_pixBlock.image.data, 0, dataSize);
 }
 
@@ -203,8 +199,8 @@ void pix_set :: SETMess(int xsize, int ysize)
 /////////////////////////////////////////////////////////
 void pix_set :: cleanPixBlock()
 {
-    m_pixBlock.image.clear();
-    m_pixBlock.image.data = NULL;
+  m_pixBlock.image.clear();
+  m_pixBlock.image.data = NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -256,7 +252,7 @@ void pix_set :: GREYMessCallback(void *data)
 }
 void pix_set :: YUVMessCallback(void *data)
 {
-	GetMyClass(data)->m_mode=GL_YCBCR_422_GEM;
+  //	GetMyClass(data)->m_mode=GL_YCBCR_422_GEM;
 }
 void pix_set :: SETMessCallback(void *data, t_float x, t_float y)
 {

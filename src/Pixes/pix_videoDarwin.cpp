@@ -30,20 +30,19 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg,
 
 pix_videoDarwin :: pix_videoDarwin( t_floatarg w=320, t_floatarg h=240 )
 {
-
-m_vidXSize = 320;
-m_vidYSize = 240;
-m_pixBlock.image.xsize = m_vidXSize;
-	m_pixBlock.image.ysize = m_vidYSize;
-	m_pixBlock.image.csize = 4;
-	m_pixBlock.image.format = GL_BGRA_EXT;
-	m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
-	int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
+  m_vidXSize = 320;
+  m_vidYSize = 240;
+  m_pixBlock.image.xsize = m_vidXSize;
+  m_pixBlock.image.ysize = m_vidYSize;
+  m_pixBlock.image.csize = 4;
+  m_pixBlock.image.format = GL_BGRA_EXT;
+  m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+  int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
 					* 4 * sizeof(unsigned char);
-m_pixBlock.image.data = new unsigned char[dataSize];
-
-InitSeqGrabber();
-m_haveVideo = 0;
+  m_pixBlock.image.data = new unsigned char[dataSize];
+  
+  InitSeqGrabber();
+  m_haveVideo = 0;
 }
 
 /////////////////////////////////////////////////////////

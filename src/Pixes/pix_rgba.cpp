@@ -109,6 +109,59 @@ void pix_rgba :: processImage(imageStruct &image)
       new_pix+=4;
     }
     break;
+  case GL_YCBCR_422_GEM: // YUV
+    int Y, U, V, R, G, B;
+    R=255; G=0; B=0;
+
+    Y = (int)(0.299*R + 0.587*G + 0.114*B);
+    U = (int)(-0.169*R - 0.331*G + 0.500*B + 128.0);
+    V = (int)(0.500*R - 0.419*G - 0.081*B + 128.0);
+    /*
+    R = Y + (1.4075 * (V - 128));
+    G = Y - (0.3455 * (U - 128)) - (0.7169 * (V - 128));
+    B = Y + (1.7790 * (U - 128));
+    */
+
+
+    R = (int)(1 * Y -  0.0009267*(U-128)  + 1.4016868*(V-128));
+    G = (int)(1 * Y -  0.3436954*(U-128)  - 0.7141690*(V-128));
+    B = (int)(1 * Y +  1.7721604*(U-128)  + 0.0009902*(V-128));
+
+    //    post("YUV: %d %d %d", Y, U, V);
+    //    post("RGB: %d %d %d", R, G, B);
+    /*
+    // we store data like this
+    // UYVY
+    // 8-bit:  U Y0 V Y1
+    // U0=U1:=U; V0=V1:=V;
+    */
+    unsigned char y0, y1, u, v;
+    register int x;
+    while (count-=2){
+      u =*old_pix++;
+      y0=*old_pix++;
+      v =*old_pix++;
+      y1=*old_pix++;
+      x = (int)(y0 + (1.4075 * (v - 128)));
+      new_pix[chRed]  = CLAMP(x);
+      x = (int)(y0 - (0.3455 * (u - 128)) - (0.7169 * (v - 128)));
+      new_pix[chGreen]= CLAMP(x);
+      x = (int)(y0 + (1.7790 * (u - 128)));
+      new_pix[chBlue] = CLAMP(x);
+      new_pix[chAlpha]=255;     
+      new_pix+=4;
+      x = (int)(y1 + (1.4075 * (v - 128)));
+      new_pix[chRed]  = CLAMP(x);
+      x = (int)(y1 - (0.3455 * (u - 128)) - (0.7169 * (v - 128)));
+      new_pix[chGreen]= CLAMP(x);
+      x = (int)(y1 + (1.7790 * (u - 128)));
+      new_pix[chBlue] = CLAMP(x);
+      new_pix[chAlpha]=255;     
+      new_pix+=4;
+    }
+    new_pix-=4;
+    //    post("RGBA: %d %d%d %d", new_pix[0], new_pix[1],new_pix[2], new_pix[3]); 
+    break;
   default:
     post("no method for this format !!!");
     post("if you know how to convert this format (%X) to RGBA,\n"
@@ -121,7 +174,6 @@ void pix_rgba :: processImage(imageStruct &image)
   image.notowned = 1;
   image.format = GL_RGBA;
   image.csize  = 4;
-
 }
 
 /////////////////////////////////////////////////////////

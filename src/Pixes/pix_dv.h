@@ -88,6 +88,7 @@ class GEM_EXTERN pix_dv : public GemBase
   //////////
   // The pixBlock with the current image
   pixBlock    	m_pixBlock;
+  imageStruct   m_imageStruct;
 
   //////////
   // is it PAL or NTSC ?

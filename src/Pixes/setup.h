@@ -12,6 +12,7 @@
 
 extern "C" {
 
+  void pix_info_setup();
   void pix_2grey_setup();
    void pix_a_2grey_setup();
    void pix_add_setup();
@@ -59,6 +60,7 @@ extern "C" {
    void pix_resize_setup();
    void pix_rgb2hsv_setup();
    void pix_rgba_setup();
+   void pix_yuv_setup();
    void pix_set_setup();
    void pix_sig2pix_setup();
    void pix_snap_setup();
@@ -79,6 +81,7 @@ extern "C" {
   
 
    void Pixes_setup() {
+     pix_info_setup();
       pix_2grey_setup();
       pix_a_2grey_setup();
       pix_add_setup();
@@ -135,6 +138,7 @@ extern "C" {
       pix_resize_setup();
       pix_rgb2hsv_setup();
       pix_rgba_setup();
+      pix_yuv_setup();
       pix_set_setup();
       pix_sig2pix_setup();
       pix_snap_setup();

@@ -80,21 +80,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         // GROUP:	Video data
         //-----------------------------------
     
-     	//////////
-    	// If video is connected
-    	int 	    	m_haveVideo;
-    	
-    	//////////
-    	// The pixBlock with the current image
-    	pixBlock    	m_pixBlock;
-    	
-    	//////////
-    	// Should swap the pixels?
-    	int 	    	m_swap;
     	int		m_newFrame; 
-    	//////////
-    	// Do we have to color swap?
-    	int 	    	m_colorSwap;
         
         SeqGrabComponent	m_sg;		// Sequence Grabber Component
         SGChannel		m_vc;			// Video Channel

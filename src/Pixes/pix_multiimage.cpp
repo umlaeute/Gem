@@ -35,20 +35,18 @@ pix_multiimage::multiImageCache *pix_multiimage::s_imageCache = NULL;
 pix_multiimage :: pix_multiimage(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
     	    	: m_numImages(0), m_curImage(-1), m_loadedCache(NULL)
 {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
+  m_pixBlock.image = m_imageStruct;
 
-    // make sure that there are some characters
-    if (filename->s_name[0])
-    { 
-        if (skipRate == 0)
-        {
-            if (topImage == 0)
-                openMess(filename, 0, (int)baseImage, 1);
-            else
-                openMess(filename, (int)baseImage, (int)topImage, 1);
-        }
-        else openMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
-    }
+  // make sure that there are some characters
+  if (filename->s_name[0]) { 
+    if (skipRate == 0)  {
+      if (topImage == 0)
+	openMess(filename, 0, (int)baseImage, 1);
+      else
+	openMess(filename, (int)baseImage, (int)topImage, 1);
+    }else openMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -99,7 +97,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
         m_loadedCache->refCount++;
         m_curImage = 0;
         m_numImages = m_loadedCache->numImages;
-        m_loadedCache->images[m_curImage]->copy2Image(&(m_pixBlock.image));
+        m_loadedCache->images[m_curImage]->copy2Image(&m_pixBlock.image);
         m_pixBlock.newimage = 1;
         if (m_cache) m_cache->resendImage = 1;
         return;
@@ -161,7 +159,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     }
 
     m_curImage = 0;
-    newCache->images[m_curImage]->copy2Image(&(m_pixBlock.image));
+    newCache->images[m_curImage]->copy2Image(&m_pixBlock.image);
     m_pixBlock.newimage = 1;
     if (m_cache) m_cache->resendImage = 1;
 
@@ -194,7 +192,7 @@ void pix_multiimage :: render(GemState *state)
     // do we need to reload the image?    
     if (m_cache->resendImage)
     {
-      m_loadedCache->images[m_curImage]->refreshImage(&(m_pixBlock.image));
+      m_loadedCache->images[m_curImage]->refreshImage(&m_pixBlock.image);
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }
@@ -220,7 +218,7 @@ void pix_multiimage :: startRendering()
 {
     if (!m_numImages) return;
 
-    m_loadedCache->images[m_curImage]->refreshImage(&(m_pixBlock.image));
+    m_loadedCache->images[m_curImage]->refreshImage(&m_pixBlock.image);
     m_pixBlock.newimage = 1;
 }
 

@@ -23,6 +23,8 @@ pix_set
 #ifndef INCLUDE_PIX_SET_H_
 #define INCLUDE_PIX_SET_H_
 
+#include "Base/GemPixObj.h"
+
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include "Base/GemCache.h"
@@ -44,9 +46,9 @@ pix_set
     "GREY"
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_set : public GemBase
+class GEM_EXTERN pix_set : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_set, GemBase)
+    CPPEXTERN_HEADER(pix_set, GemPixObj)
 		
 public:
 	
@@ -107,6 +109,7 @@ protected:
 	//////////
 	// The pixBlock with the current image
 	pixBlock    	m_pixBlock;
+	imageStruct     m_imageStruct;
 	
 private:
 	

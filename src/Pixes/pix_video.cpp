@@ -58,7 +58,8 @@ CPPEXTERN_NEW(pix_video)
 pix_video :: pix_video(t_floatarg num)
     	   : m_haveVideo(0), m_swap(1), m_colorSwap(0)
 {
-    m_haveVideo = 0;
+  m_pixBlock.image = m_imageStruct;
+  m_haveVideo = 0;
 }
 
 /////////////////////////////////////////////////////////

@@ -85,6 +85,7 @@ class GEM_EXTERN pix_snap : public GemBase
     	//////////
     	// The pixBlock with the current image
     	pixBlock    	m_pixBlock;
+	imageStruct     m_imageStruct;
     	
     	//////////
     	// The x position

@@ -254,6 +254,7 @@ void pix_movie :: texFrame(GemState *state, int doit)
 /////////////////////////////////////////////////////////
 void pix_movie :: postrender(GemState *state)
 {
+  post("pix_movie: postrender");
   m_pixBlock.newimage = 0;
   state->image = NULL;
   state->texture = 0;

@@ -95,26 +95,10 @@ class GEM_EXTERN pix_videoNT : public pix_video
     	// Stop the video device
     	// [out] int - returns 0 if bad
     	void	    	swapMess(int state);
-    
-	    //-----------------------------------
-	    // GROUP:	Video data
-	    //-----------------------------------
-    
-     	//////////
-    	// If video is connected
-    	int 	    	m_haveVideo;
-    	
-    	//////////
-    	// The pixBlock with the current image
-    	pixBlock    	m_pixBlock;
-    	
-    	//////////
-    	// Should swap the pixels?
-    	int 	    	m_swap;
-    	 
-    	//////////
-    	// Do we have to color swap?
-    	int 	    	m_colorSwap;
+
+	//-----------------------------------
+	// GROUP:	Video data
+	//-----------------------------------
 
 	HWND		m_hWndC;
 	void		videoFrame(LPVIDEOHDR lpVHdr);

@@ -39,23 +39,19 @@ pix_film :: pix_film(t_symbol *filename) :
  m_outEnd       = outlet_new(this->x_obj, 0);
 
  // initialize the pix block data
-#ifndef MACOSX
+ m_pixBlock.image=m_imageStruct;
  m_pixBlock.image.data = NULL;
  m_pixBlock.image.xsize = 0;
  m_pixBlock.image.ysize = 0;
+#ifndef MACOSX
  m_pixBlock.image.csize = 3;
  m_pixBlock.image.format = GL_RGB;
  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-
  m_format = GL_RGB;
 #else
- m_pixBlock.image.data = NULL;
- m_pixBlock.image.xsize = 0;
- m_pixBlock.image.ysize = 0;
  m_pixBlock.image.csize = 4;
  m_pixBlock.image.format = GL_RGBA;
  m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
-
  m_format = GL_RGBA;
 #endif
  // make sure that there are some characters
@@ -140,18 +136,14 @@ void pix_film :: openMess(t_symbol *filename)
 #endif
 
   t_atom ap[3];
-
   SETFLOAT(ap, m_numFrames);
-
   SETFLOAT(ap+1, m_xsize);
-
   SETFLOAT(ap+2, m_ysize);
 
 
   //outlet_float(m_outNumFrames, (float)m_numFrames);
-
-  outlet_list(m_outNumFrames, 0, 3, ap);
   post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
+  outlet_list(m_outNumFrames, 0, 3, ap);
 }
 
 /////////////////////////////////////////////////////////
@@ -166,10 +158,8 @@ void pix_film :: render(GemState *state)
 {
   /* get the current frame from the file */
   int newImage = 0;
-  if (!m_haveMovie)return;
-
+  if (!m_haveMovie || !m_pixBlock.image.data)return;
   // do we actually need to get a new frame from the movie ?
-
   if (m_reqFrame != m_curFrame) {
     newImage = 1;
     m_curFrame = m_reqFrame;
@@ -184,8 +174,6 @@ void pix_film :: render(GemState *state)
   // automatic proceeding
   if (m_auto)m_reqFrame++;
 }
-
-
 
 /////////////////////////////////////////////////////////
 // postrender

@@ -136,6 +136,7 @@ class GEM_EXTERN pix_film : public GemBase
   unsigned char*m_data;   /* this points always to the real data */
 
   pixBlock    	m_pixBlock;
+  imageStruct   m_imageStruct;
   
 
   int		m_xsize;

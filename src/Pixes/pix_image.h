@@ -106,6 +106,9 @@ class GEM_EXTERN pix_image : public GemBase
     	//////////
     	// The pixBlock with the current image
     	pixBlock    	m_pixBlock;
+	//////////
+	// The current image
+	imageStruct     m_imageStruct;
     	
     	//////////
     	char	    	m_filename[80];

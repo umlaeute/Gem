@@ -121,6 +121,7 @@ class GEM_EXTERN pix_multiimage : public GemBase
     	//////////
     	// The pixBlock with the current image
     	pixBlock    	m_pixBlock;
+	imageStruct     m_imageStruct;
 
     	//////////
     	// The original images

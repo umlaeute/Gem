@@ -73,6 +73,7 @@ class GEM_EXTERN pix_buf : public GemBase
     	//////////
     	// The buffered block
     	pixBlock    	m_pixBlock;
+	imageStruct     m_imageStruct;
     	
     	//////////
     	// The old cache

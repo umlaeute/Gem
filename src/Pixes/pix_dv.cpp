@@ -42,6 +42,8 @@ pix_dv :: pix_dv(void)
   already_in_use=1;
 
   m_norm = DV_PAL;
+
+  m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data  = NULL;
   m_pixBlock.image.xsize = m_pixBlock.image.ysize=0;
   m_pixBlock.image.csize = 3;

@@ -32,33 +32,27 @@ CPPEXTERN_NEW_WITH_GIMME(pix_snap)
 pix_snap :: pix_snap(int argc, t_atom *argv)
     	  : m_originalImage(NULL)
 {
-	m_pixBlock.image.data = NULL;
-	if (argc == 4)
-	{
-		m_x = (int)atom_getfloat(&argv[0]);
-		m_y = (int)atom_getfloat(&argv[1]);
-		m_width = (int)atom_getfloat(&argv[2]);
-		m_height = (int)atom_getfloat(&argv[3]);
-	}
-	else if (argc == 2)
-	{
-		m_x = m_y = 0;
-		m_width = (int)atom_getfloat(&argv[0]);
-		m_height = (int)atom_getfloat(&argv[1]);
-	}
-	else if (argc == 0)
-	{
-		m_x = m_y = 0;
-		m_width = m_height = 128;
-	}
-	else
-	{
-		error("GEM: pix_snap: needs 0, 2, or 4 values");
-		m_x = m_y = 0;
-		m_width = m_height = 128;
-	}
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
+  m_pixBlock.image = m_imageStruct;
+  m_pixBlock.image.data = NULL;
+  if (argc == 4){
+    m_x = (int)atom_getfloat(&argv[0]);
+    m_y = (int)atom_getfloat(&argv[1]);
+    m_width = (int)atom_getfloat(&argv[2]);
+    m_height = (int)atom_getfloat(&argv[3]);
+  } else if (argc == 2)	{
+    m_x = m_y = 0;
+    m_width = (int)atom_getfloat(&argv[0]);
+    m_height = (int)atom_getfloat(&argv[1]);
+  } else if (argc == 0)	{
+    m_x = m_y = 0;
+    m_width = m_height = 128;
+  } else {
+    error("GEM: pix_snap: needs 0, 2, or 4 values");
+    m_x = m_y = 0;
+    m_width = m_height = 128;
+  }
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
 }
 
 /////////////////////////////////////////////////////////
@@ -135,7 +129,7 @@ void pix_snap :: render(GemState *state)
     // do we need to reload the image?    
     if (m_cache->resendImage)
     {
-      m_originalImage->refreshImage(&(m_pixBlock.image));
+      m_originalImage->refreshImage(&m_pixBlock.image);
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }

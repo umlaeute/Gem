@@ -65,7 +65,7 @@ pix_texture2 :: ~pix_texture2()
 static inline int powerOfTwo(int value)
 {
 	int x = 1;
-	while(x <= value) x <<= 1;
+	//	while(x <= value) x <<= 1;
 	while(x < value) x <<= 1;
 	return(x);  
 }
@@ -108,192 +108,188 @@ void pix_texture2 :: setUpTextureState()
 /////////////////////////////////////////////////////////
 void pix_texture2 :: render(GemState *state)
 {
-    if ( !state->image || !m_textureOnOff) return;
-
-    state->texture = 1;
-	state->texCoords = m_coords;
-	state->numTexCoords = 4;
+  if ( !state->image || !m_textureOnOff) return;
+  state->texture = 1;
+  state->texCoords = m_coords;
+  state->numTexCoords = 4;
 
 #ifdef GL_VERSION_1_1		//tigital
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-    if ( GemMan::texture_rectangle_supported )
-    {
-        glEnable(GL_TEXTURE_RECTANGLE_EXT);
-        glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
-    } else
+  if ( GemMan::texture_rectangle_supported ){
+    glEnable(GL_TEXTURE_RECTANGLE_EXT);
+    glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+  } else
 #endif
-      {
-        glEnable(GL_TEXTURE_2D);
-    	glBindTexture(GL_TEXTURE_2D, m_textureObj);
+    {
+      glEnable(GL_TEXTURE_2D);
+      glBindTexture(GL_TEXTURE_2D, m_textureObj);
     }
 #elif GL_EXT_texture_object
-	glEnable(GL_TEXTURE_2D);
-    glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);
+  glEnable(GL_TEXTURE_2D);
+  glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);
 #else
-    // can we build a display list?
-    int creatingDispList = 0;
-    if (state->image->newimage) m_rebuildList = 1;
-    if (!state->inDisplayList && m_rebuildList)
-    {
-        glNewList(m_textureObj, GL_COMPILE_AND_EXECUTE);
-        creatingDispList = 1;
-    }
-	setUpTextureState();
+  // can we build a display list?
+  int creatingDispList = 0;
+  if (state->image->newimage) m_rebuildList = 1;
+  if (!state->inDisplayList && m_rebuildList) {
+    glNewList(m_textureObj, GL_COMPILE_AND_EXECUTE);
+    creatingDispList = 1;
+  }
+  setUpTextureState();
 #endif    
 
 #ifdef GL_VERSION_1_1
-    if (state->image->newimage)
+  if (state->image->newimage)
 #elif GL_EXT_texture_object
-    if (state->image->newimage)
+  if (state->image->newimage)
 #else
-    if (m_rebuildList)
+  if (m_rebuildList)
 #endif
     {
-    // if the size changed, then reset the texture
-      if (!GemMan::texture_rectangle_supported )
-      {
-            int x_2 = powerOfTwo(state->image->image.xsize);
-            int y_2 = powerOfTwo(state->image->image.ysize);
-
-            if (x_2 != m_buffer.xsize || y_2 != m_buffer.ysize) {
-		//delete [] buffer.data;
-                m_buffer.clear();
-		m_buffer.xsize = x_2;
-		m_buffer.ysize = y_2;
-		m_buffer.csize = state->image->image.csize;
-		m_buffer.format = state->image->image.format;
-		m_buffer.type = state->image->image.type;
-				
-		//buffer.data = new unsigned char [buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char)];
-		//memset(buffer.data, 0, buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char));
-                m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
-		memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+      // if the size changed, then reset the texture
+      if (!GemMan::texture_rectangle_supported ) {
+	int x_2 = powerOfTwo(state->image->image.xsize);
+	int y_2 = powerOfTwo(state->image->image.ysize);
 	
-		float m_xRatio = (float)state->image->image.xsize / (float)x_2;
-		float m_yRatio = (float)state->image->image.ysize / (float)y_2;
+	if (x_2 != m_buffer.xsize || y_2 != m_buffer.ysize) {
+	  //delete [] buffer.data;
+	  m_buffer.clear();
+	  m_buffer.xsize = x_2;
+	  m_buffer.ysize = y_2;
+	  m_buffer.csize = state->image->image.csize;
+	  m_buffer.format = state->image->image.format;
+	  m_buffer.type = state->image->image.type;
+	  
+	  //buffer.data = new unsigned char [buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char)];
+	  //memset(buffer.data, 0, buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char));
+	  m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+	  memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+	
+	  float m_xRatio = (float)state->image->image.xsize / (float)x_2;
+	  float m_yRatio = (float)state->image->image.ysize / (float)y_2;
 #ifndef MACOSX		
-		m_coords[0].s = 0.f;
-		m_coords[0].t = 0.f;
-		
-		m_coords[1].s = m_xRatio;
-		m_coords[1].t = 0.f;
-		
-		m_coords[2].s = m_xRatio;
-		m_coords[2].t = m_yRatio;
-		
-		m_coords[3].s = 0.f;
-		m_coords[3].t = m_yRatio;
+	  m_coords[0].s = 0.f;
+	  m_coords[0].t = 0.f;
+	  
+	  m_coords[1].s = m_xRatio;
+	  m_coords[1].t = 0.f;
+	  
+	  m_coords[2].s = m_xRatio;
+	  m_coords[2].t = m_yRatio;
+	  
+	  m_coords[3].s = 0.f;
+	  m_coords[3].t = m_yRatio;
 #else
-		m_coords[3].s = 0.f;		// switched the order of m_coords on MACOSX
-		m_coords[3].t = 0.f;		// otherwise we'd be upside down!
+	  m_coords[3].s = 0.f;		// switched the order of m_coords on MACOSX
+	  m_coords[3].t = 0.f;		// otherwise we'd be upside down!
+	  
+	  m_coords[2].s = m_xRatio;
+	  m_coords[2].t = 0.f;
 		
-		m_coords[2].s = m_xRatio;
-		m_coords[2].t = 0.f;
+	  m_coords[1].s = m_xRatio;
+	  m_coords[1].t = m_yRatio;
 		
-		m_coords[1].s = m_xRatio;
-		m_coords[1].t = m_yRatio;
-		
-		m_coords[0].s = 0.f;
-		m_coords[0].t = m_yRatio;
+	  m_coords[0].s = 0.f;
+	  m_coords[0].t = m_yRatio;
 #endif
-            }
-        } else {				// tigital
+	}
+      } else {				// tigital
 	if (state->image->image.xsize != m_buffer.xsize || state->image->image.ysize != m_buffer.ysize) {
-		//delete [] buffer.data;
-                m_buffer.clear();
-		m_buffer.xsize = state->image->image.xsize;
-		m_buffer.ysize = state->image->image.ysize;
-		m_buffer.csize = state->image->image.csize;
-		m_buffer.format = state->image->image.format;
-		m_buffer.type = state->image->image.type;
+	  //delete [] buffer.data;
+	  m_buffer.clear();
+	  m_buffer.xsize = state->image->image.xsize;
+	  m_buffer.ysize = state->image->image.ysize;
+	  m_buffer.csize = state->image->image.csize;
+	  m_buffer.format = state->image->image.format;
+	  m_buffer.type = state->image->image.type;
 				
-		//buffer.data = new unsigned char [buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char)];
-		//memset(buffer.data, 0, buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char));
-                m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
-		memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+	  //buffer.data = new unsigned char [buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char)];
+	  //memset(buffer.data, 0, buffer.xsize*buffer.ysize*buffer.csize*sizeof(unsigned char));
+	  m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+	  memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
 #ifndef MACOSX            
-		m_coords[0].s = 0.f;
-		m_coords[0].t = 0.f;
+	  m_coords[0].s = 0.f;
+	  m_coords[0].t = 0.f;
+	  
+	  m_coords[1].s = (float)state->image->image.xsize;
+	  m_coords[1].t = 0.f;
+	  
+	  m_coords[2].s = (float)state->image->image.xsize;
+	  m_coords[2].t = (float)state->image->image.ysize;
 		
-		m_coords[1].s = (float)state->image->image.xsize;
-		m_coords[1].t = 0.f;
-		
-		m_coords[2].s = (float)state->image->image.xsize;
-		m_coords[2].t = (float)state->image->image.ysize;
-		
-		m_coords[3].s = 0.f;
-		m_coords[3].t = (float)state->image->image.ysize;
+	  m_coords[3].s = 0.f;
+	  m_coords[3].t = (float)state->image->image.ysize;
 #else
-                m_coords[3].s = 0.f;		// switched the order of m_coords on MACOSX
-		m_coords[3].t = 0.f;		// otherwise we'd be upside down!
+	  m_coords[3].s = 0.f;		// switched the order of m_coords on MACOSX
+	  m_coords[3].t = 0.f;		// otherwise we'd be upside down!
 		
-		m_coords[2].s = (float)state->image->image.xsize;
-		m_coords[2].t = 0.f;
+	  m_coords[2].s = (float)state->image->image.xsize;
+	  m_coords[2].t = 0.f;
 		
-		m_coords[1].s = (float)state->image->image.xsize;
-		m_coords[1].t = (float)state->image->image.ysize;
+	  m_coords[1].s = (float)state->image->image.xsize;
+	  m_coords[1].t = (float)state->image->image.ysize;
 		
-		m_coords[0].s = 0.f;
-		m_coords[0].t = (float)state->image->image.ysize;
+	  m_coords[0].s = 0.f;
+	  m_coords[0].t = (float)state->image->image.ysize;
 #endif
-            }
-        }
+	}
+      }
 
-	if (m_buffer.csize != m_dataSize[0] ||
+
+      if (m_buffer.csize != m_dataSize[0] ||
 	  m_buffer.xsize != m_dataSize[1] ||
-	  m_buffer.ysize != m_dataSize[2])
-	{
-	  m_dataSize[0] = m_buffer.csize;
-	  m_dataSize[1] = m_buffer.xsize;
-	  m_dataSize[2] = m_buffer.ysize;
-
+	  m_buffer.ysize != m_dataSize[2]){
+	m_dataSize[0] = m_buffer.csize;
+	m_dataSize[1] = m_buffer.xsize;
+	m_dataSize[2] = m_buffer.ysize;
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-	  if (GemMan::texture_rectangle_supported)
-	    glTexImage2D( GL_TEXTURE_RECTANGLE_EXT, 0,
-			  m_buffer.csize,
-			  m_buffer.xsize,
-			  m_buffer.ysize, 0,
-			  m_buffer.format,
-			  m_buffer.type,
-			  m_buffer.data);
-	  else
+	if (GemMan::texture_rectangle_supported)
+	  glTexImage2D( GL_TEXTURE_RECTANGLE_EXT, 0,
+			m_buffer.csize,
+			m_buffer.xsize,
+			m_buffer.ysize, 0,
+			m_buffer.format,
+			m_buffer.type,
+			m_buffer.data);
+	else
 #endif
-	    glTexImage2D(GL_TEXTURE_2D, 0,
-			 m_buffer.csize,
-			 m_buffer.xsize,
-			 m_buffer.ysize, 0,
-			 m_buffer.format,
-			 m_buffer.type,
-			 m_buffer.data);
-
-        }
-        // okay, load in the actual pixel data
+	  glTexImage2D(GL_TEXTURE_2D,   // target
+		       0,               // level
+		       m_buffer.csize,  // internalFormat
+		       m_buffer.xsize,  // widht
+		       m_buffer.ysize,  // height
+		       0,               // border
+		       m_buffer.format, // format
+		       m_buffer.type,   // type
+		       m_buffer.data);  // *pixels
+      }
+      // okay, load in the actual pixel data
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-        if (GemMan::texture_rectangle_supported)
-           glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+      if (GemMan::texture_rectangle_supported)
+	glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+			0, 0,				// position
+			state->image->image.xsize,
+			state->image->image.ysize,
+			state->image->image.format,
+			state->image->image.type,
+			state->image->image.data);
+      else
+#endif
+	{
+	  glTexSubImage2D(GL_TEXTURE_2D, 0,
 			  0, 0,				// position
 			  state->image->image.xsize,
 			  state->image->image.ysize,
 			  state->image->image.format,
 			  state->image->image.type,
 			  state->image->image.data);
-#endif
-	else
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
-                        0, 0,				// position
-                        state->image->image.xsize,
-                        state->image->image.ysize,
-                        state->image->image.format,
-                        state->image->image.type,
-                        state->image->image.data);
-
+	}
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
 #else
-        if (creatingDispList)
-        {
-            glEndList();
-        }
+      if (creatingDispList) {
+	glEndList();
+      }
 #endif
     }
 #ifdef GL_VERSION_1_1
@@ -301,10 +297,9 @@ void pix_texture2 :: render(GemState *state)
 #elif GL_EXT_texture_object
 
 #else
-    else glCallList(m_textureObj);
+  else glCallList(m_textureObj);
 #endif
-	m_rebuildList = 0;
-
+  m_rebuildList = 0;
 }
 
 /////////////////////////////////////////////////////////

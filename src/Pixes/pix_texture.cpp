@@ -27,7 +27,7 @@ CPPEXTERN_NEW(pix_texture)
 static inline int powerOfTwo(int value)
 {
 	int x = 1;
-	while(x <= value) x <<= 1;
+	//	while(x <= value) x <<= 1;
 	while(x < value) x <<= 1;
 	return(x);  
 }
@@ -62,34 +62,34 @@ pix_texture :: ~pix_texture()
 void pix_texture :: setUpTextureState()
 {
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
-    if ( !GemMan::client_storage_supported )	//tigital
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    else
-        glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
+  if ( !GemMan::client_storage_supported )	//tigital
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  else
+    glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
 #else
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 #endif
     
-//    if ( !GemMan::texture_rectangle_supported )
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-        //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-// note:  On MacOS X, pix_texture is used for power of two/normalised textures, so 
-//		texture_rectangle can't be used (otherwise, we'd just see one pixel!)
-/*    else
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
-        //glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-*/
+  //    if ( !GemMan::texture_rectangle_supported )
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+  //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  // note:  On MacOS X, pix_texture is used for power of two/normalised textures, so 
+  //		texture_rectangle can't be used (otherwise, we'd just see one pixel!)
+  /*    else
+	glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
+	//glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  */
 }
 
 /////////////////////////////////////////////////////////
@@ -101,9 +101,6 @@ void pix_texture :: render(GemState *state)
     if ( !state->image || !m_textureOnOff) return;
 
     state->texture = 1;
-    //<<<<<<< pix_texture.cpp
-    
-    //=======
     
 //#ifdef /*GL_VERSION_1_1 && !GemMan::texture_rectangle_supported	//tigital
 //    glEnable(GL_TEXTURE_RECTANGLE_EXT);
@@ -135,90 +132,88 @@ void pix_texture :: render(GemState *state)
 #else
     if (m_rebuildList)
 #endif
-    {
-      //<<<<<<< pix_texture.cpp
-		// if the size changed, then reset the texture
-		if (state->image->image.csize != m_dataSize[0] ||
-			state->image->image.xsize != m_dataSize[1] ||
-			state->image->image.ysize != m_dataSize[2])
-		{
-			m_dataSize[0] = state->image->image.csize;
-			m_dataSize[1] = state->image->image.xsize;
-			m_dataSize[2] = state->image->image.ysize;
-
-			glTexImage2D(GL_TEXTURE_2D, 0,
-	    		state->image->image.csize,
-	    		state->image->image.xsize,
-	    		state->image->image.ysize, 0,
-	    		state->image->image.format,
-    			state->image->image.type,
-    			state->image->image.data);
-		}
-		// the size is the same, so just use subimage
-		else
-		{
-  			glTexSubImage2D(GL_TEXTURE_2D, 0,
-	    		0, 0,							// position
-	    		state->image->image.xsize,
-	    		state->image->image.ysize,
-	    		state->image->image.format,
-    			state->image->image.type,
-    			state->image->image.data);		
-		}
-		//=======
-    // if the size changed, then reset the texture
+      {
+	//<<<<<<< pix_texture.cpp
+	// if the size changed, then reset the texture
+	if (state->image->image.csize != m_dataSize[0] ||
+	    state->image->image.xsize != m_dataSize[1] ||
+	    state->image->image.ysize != m_dataSize[2])	{
+	  m_dataSize[0] = state->image->image.csize;
+	  m_dataSize[1] = state->image->image.xsize;
+	  m_dataSize[2] = state->image->image.ysize;
+	  
+	  glTexImage2D(GL_TEXTURE_2D, 0,
+		       state->image->image.csize,
+		       state->image->image.xsize,
+		       state->image->image.ysize, 0,
+		       state->image->image.format,
+		       state->image->image.type,
+		       state->image->image.data);
+	}
+	// the size is the same, so just use subimage
+	else {
+	  glTexSubImage2D(GL_TEXTURE_2D, 0,
+			  0, 0,							// position
+			  state->image->image.xsize,
+			  state->image->image.ysize,
+			  state->image->image.format,
+			  state->image->image.type,
+			  state->image->image.data);		
+	}
+#if 0
+	//=======
+	// if the size changed, then reset the texture
 	int x_2 = powerOfTwo(state->image->image.xsize);
 	int y_2 = powerOfTwo(state->image->image.ysize);
 
 	if (x_2 != m_buffer.xsize || y_2 != m_buffer.ysize) {
-		m_buffer.clear();
-		m_buffer.xsize = x_2;
-		m_buffer.ysize = y_2;
-		m_buffer.csize = state->image->image.csize;
-		m_buffer.format = state->image->image.format;
-		m_buffer.type = state->image->image.type;
-				
-		m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
-		memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
-	
-		float m_xRatio = (float)state->image->image.xsize / (float)x_2;
-		float m_yRatio = (float)state->image->image.ysize / (float)y_2;
+	  m_buffer.clear();
+	  m_buffer.xsize = x_2;
+	  m_buffer.ysize = y_2;
+	  m_buffer.csize = state->image->image.csize;
+	  m_buffer.format = state->image->image.format;
+	  m_buffer.type = state->image->image.type;
+	  
+	  m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+	  memset(m_buffer.data, 0, m_buffer.xsize*m_buffer.ysize*m_buffer.csize*sizeof(unsigned char));
+	  
+	  float m_xRatio = (float)state->image->image.xsize / (float)x_2;
+	  float m_yRatio = (float)state->image->image.ysize / (float)y_2;
 #ifndef MACOSX
-		m_coords[0].s = 0.f;
-		m_coords[0].t = 0.f;
+	  m_coords[0].s = 0.f;
+	  m_coords[0].t = 0.f;
+	  
+	  m_coords[1].s = m_xRatio;
+	  m_coords[1].t = 0.f;
 		
-		m_coords[1].s = m_xRatio;
-		m_coords[1].t = 0.f;
-		
-		m_coords[2].s = m_xRatio;
-		m_coords[2].t = m_yRatio;
-		
-		m_coords[3].s = 0.f;
-		m_coords[3].t = m_yRatio;
+	  m_coords[2].s = m_xRatio;
+	  m_coords[2].t = m_yRatio;
+	  
+	  m_coords[3].s = 0.f;
+	  m_coords[3].t = m_yRatio;
 #else
-		m_coords[3].s = 0.f;		// switched the order of m_coords on MACOSX
-		m_coords[3].t = 0.f;		// otherwise we'd be upside down!
+	  m_coords[3].s = 0.f;		// switched the order of m_coords on MACOSX
+	  m_coords[3].t = 0.f;		// otherwise we'd be upside down!
 		
-		m_coords[2].s = m_xRatio;
-		m_coords[2].t = 0.f;
+	  m_coords[2].s = m_xRatio;
+	  m_coords[2].t = 0.f;
 		
-		m_coords[1].s = m_xRatio;
-		m_coords[1].t = m_yRatio;
+	  m_coords[1].s = m_xRatio;
+	  m_coords[1].t = m_yRatio;
 		
-		m_coords[0].s = 0.f;
-		m_coords[0].t = m_yRatio;
+	  m_coords[0].s = 0.f;
+	  m_coords[0].t = m_yRatio;
 #endif
 	}
 
 
 	if (m_buffer.csize != m_dataSize[0] ||
-	  m_buffer.xsize != m_dataSize[1] ||
-	  m_buffer.ysize != m_dataSize[2])
-	{
+	    m_buffer.xsize != m_dataSize[1] ||
+	    m_buffer.ysize != m_dataSize[2]){
 	  m_dataSize[0] = m_buffer.csize;
 	  m_dataSize[1] = m_buffer.xsize;
 	  m_dataSize[2] = m_buffer.ysize;
-
+	  
 	  glTexImage2D(GL_TEXTURE_2D, 0,
 		       m_buffer.csize,
 		       m_buffer.xsize,
@@ -229,15 +224,15 @@ void pix_texture :: render(GemState *state)
 	}
 	// okay, load in the actual pixel data
 
-	  glTexSubImage2D(GL_TEXTURE_2D, 0,
-			  0, 0,				// position
-			  state->image->image.xsize,
-			  state->image->image.ysize,
-			  state->image->image.format,
-			  state->image->image.type,
-			  state->image->image.data);
+	glTexSubImage2D(GL_TEXTURE_2D, 0,
+			0, 0,				// position
+			state->image->image.xsize,
+			state->image->image.ysize,
+			state->image->image.format,
+			state->image->image.type,
+			state->image->image.data);
 	  //>>>>>>> 1.3
-
+#endif
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
 #else
@@ -278,24 +273,23 @@ void pix_texture :: postrender(GemState *state)
 void pix_texture :: startRendering()
 {
 #ifdef GL_VERSION_1_1
-    glGenTextures(1, &m_textureObj);
-    glBindTexture(GL_TEXTURE_2D, m_textureObj);
-	setUpTextureState();
+  glGenTextures(1, &m_textureObj); // this crashes sometimes!!!!
+  glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  setUpTextureState();
 #elif GL_EXT_texture_object
-    glGenTexturesEXT(1, &m_textureObj);
-    glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);    
-	setUpTextureState();
+  glGenTexturesEXT(1, &m_textureObj);
+  glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);
+  setUpTextureState();
 #else
-    m_textureObj = glGenLists(1);
-    m_rebuildList = 1;
+  m_textureObj = glGenLists(1);
+  m_rebuildList = 1;
 #endif
-	m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
+  m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 
-	if (!m_textureObj)
-	{
-		error("GEM: pix_texture: Unable to allocate texture object");
-		return;
-	}
+  if (!m_textureObj)	{
+    error("GEM: pix_texture: Unable to allocate texture object");
+    return;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -305,14 +299,14 @@ void pix_texture :: startRendering()
 void pix_texture :: stopRendering()
 {
 #ifdef GL_VERSION_1_1
-    if (m_textureObj) glDeleteTextures(1, &m_textureObj);
+  if (m_textureObj) glDeleteTextures(1, &m_textureObj);
 #elif GL_EXT_texture_object
-    if (m_textureObj) glDeleteTexturesEXT(1, &m_textureObj);
+  if (m_textureObj) glDeleteTexturesEXT(1, &m_textureObj);
 #else
-    if (m_textureObj) glDeleteLists(m_textureObj, 1);
+  if (m_textureObj) glDeleteLists(m_textureObj, 1);
 #endif
-    m_textureObj = 0;
-	m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
+  m_textureObj = 0;
+  m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 }
 
 /////////////////////////////////////////////////////////

@@ -45,12 +45,23 @@ void pix_2grey :: processRGBAImage(imageStruct &image)
 {
   unsigned char *pixels = image.data;
   int count = image.ysize * image.xsize;
+  post("pix_2grey:: start processing %d pixels @ %x", count, pixels);
+  post("*pixels=%d", *pixels);
+  post("red0  =%d", pixels[chRed]);
+  post("green0=%d", pixels[chGreen]);
+  post("blue0 =%d", pixels[chBlue]);
+
   while (count--)    {
+    //    post("count=%d", count);
     float grey = pixels[chRed] * 0.3086f + pixels[chGreen] * 0.6094f
       + pixels[chBlue] * 0.0820f;
+    //post(".");
     pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
+    //post("..");
     pixels += 4;
+    //post("...");
     }
+  post("pix_2grey: done");
 }
 
 /////////////////////////////////////////////////////////

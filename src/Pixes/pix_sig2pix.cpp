@@ -44,6 +44,7 @@ pix_sig2pix :: pix_sig2pix(t_float& width, t_float& height)
 {
   int i;
 
+  m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data=NULL;
 
   dimenMess((int)width, (int)height);	//tigital

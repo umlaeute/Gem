@@ -31,7 +31,8 @@ CPPEXTERN_NEW(pix_buf)
 pix_buf :: pix_buf()
     	 : m_oldcache(NULL)
 {
-    m_pixBlock.image.data = NULL;
+  m_pixBlock.image = m_imageStruct;
+  m_pixBlock.image.data = NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -56,10 +57,13 @@ void pix_buf :: render(GemState *state)
     // if it is a new image or a dirty image, reprocess
     if ( state->image->newimage || m_cache->resendImage )
     {
-    	if (!m_pixBlock.image.data)
-    	    state->image->image.copy2Image(&(m_pixBlock.image));
-    	else
-    	    state->image->image.refreshImage(&(m_pixBlock.image));
+      if (!m_pixBlock.image.data) {
+	  imageStruct i = m_pixBlock.image;
+	  //	  state->image->image->copy2Image(&(m_pixBlock->image));
+	  state->image->image.copy2Image(&m_pixBlock.image);
+
+      }	else
+    	    state->image->image.refreshImage(&m_pixBlock.image);
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }

@@ -45,8 +45,9 @@ pix_image::singleImageCache *pix_image::s_imageCache = NULL;
 pix_image :: pix_image(t_symbol *filename)
     	   : m_loadedImage(NULL)
 {
-    // make sure that there are some characters
-    if (filename->s_name[0]) openMess(filename);
+  m_pixBlock.image = m_imageStruct;
+  // make sure that there are some characters
+  if (filename->s_name[0]) openMess(filename);
 }
 
 /////////////////////////////////////////////////////////
@@ -82,7 +83,7 @@ void pix_image :: openMess(t_symbol *filename)
         m_loadedImage = cache;
         m_loadedImage->refCount++;
         strcpy(m_filename, filename->s_name);
-        m_loadedImage->image->copy2Image(&(m_pixBlock.image));
+        m_loadedImage->image->copy2Image(&m_pixBlock.image);
         m_pixBlock.newimage = 1;
         if (m_cache) m_cache->resendImage = 1;
         return;
@@ -111,15 +112,13 @@ void pix_image :: openMess(t_symbol *filename)
         while(ptr->next) ptr = ptr->next;
         ptr->next = m_loadedImage;
     }
-
-    m_loadedImage->image->copy2Image(&(m_pixBlock.image));
+    m_loadedImage->image->copy2Image(&m_pixBlock.image);
     m_pixBlock.newimage = 1;
     post("GEM: loaded image: %s", buf);
-	if (powerOfTwo(m_pixBlock.image.xsize) != m_pixBlock.image.xsize ||
-		powerOfTwo(m_pixBlock.image.ysize) != m_pixBlock.image.ysize)
-	{
-		error("GEM: pix_image: image size not a power of 2: %s", buf);
-	}
+    if (powerOfTwo(m_pixBlock.image.xsize) != m_pixBlock.image.xsize ||
+	powerOfTwo(m_pixBlock.image.ysize) != m_pixBlock.image.ysize)	{
+      error("GEM: pix_image: image size not a power of 2: %s", buf);
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -130,15 +129,13 @@ void pix_image :: render(GemState *state)
 {
     // if we don't have an image, just return
     if (!m_loadedImage) return;
-    
     // do we need to reload the image?    
     if (m_cache->resendImage)
     {
-      m_loadedImage->image->refreshImage(&(m_pixBlock.image));
+      m_loadedImage->image->refreshImage(&m_pixBlock.image);
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }
-    
     state->image = &m_pixBlock;
 }
 
@@ -148,8 +145,8 @@ void pix_image :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_image :: postrender(GemState *state)
 {
-    m_pixBlock.newimage = 0;
-    state->image = NULL;
+  m_pixBlock.newimage = 0;
+  state->image = NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -159,8 +156,7 @@ void pix_image :: postrender(GemState *state)
 void pix_image :: startRendering()
 {
     if (!m_loadedImage) return;
-
-    m_loadedImage->image->refreshImage(&(m_pixBlock.image));
+    m_loadedImage->image->refreshImage(&m_pixBlock.image);
     m_pixBlock.newimage = 1;
 }
 

@@ -38,21 +38,18 @@ pix_filmYUV :: pix_filmYUV(t_symbol *filename) :
  m_outEnd       = outlet_new(this->x_obj, 0);
 
  // initialize the pix block data
-#ifndef MACOSX
- post("GEM: yuv_film - OS needs YUV info");
+ m_pixBlock.image=m_imageStruct;
  m_pixBlock.image.data = NULL;
  m_pixBlock.image.xsize = 0;
  m_pixBlock.image.ysize = 0;
  m_pixBlock.image.csize = 3;
+#ifndef MACOSX
+ post("GEM: yuv_film - OS needs YUV info");
  m_pixBlock.image.format = GL_RGB;
  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
 
  m_format = GL_RGB;
 #else
- m_pixBlock.image.data = NULL;
- m_pixBlock.image.xsize = 0;
- m_pixBlock.image.ysize = 0;
- m_pixBlock.image.csize = 3;
  m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
 #endif
  // make sure that there are some characters
