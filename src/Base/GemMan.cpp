@@ -1010,10 +1010,17 @@ void GemMan :: windowInit()
   #ifdef __APPLE__
   GLint swapInt = 1;
   aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
+  #endif
+
+  /* i am not really sure whether it is a good idea to enable FSAA by default
+   * this might slow down everything a lot
+   */
+
+#if defined GL_MULTISAMPLE_ARB && defined GL_MULTISAMPLE_FILTER_HINT_NV
   glEnable (GL_MULTISAMPLE_ARB);
   glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+#endif
 
-  #endif
  
   resetValues();
 }
