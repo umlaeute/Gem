@@ -54,8 +54,14 @@ class GEM_EXTERN pix_mix : public GemPixDualObj
     	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
       	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
     	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
-       
-        virtual void 	processYUVAltivec (imageStruct &image, imageStruct &right);
+#ifdef __MMX__
+	virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
+      	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
+    	virtual void 	processYUV_MMX(imageStruct &image, imageStruct &right);
+#endif
+#ifdef __VEC__
+        virtual void 	processYUV_Altivec (imageStruct &image, imageStruct &right);
+#endif
         
         virtual void 	gainMess (float X, float Y);
         

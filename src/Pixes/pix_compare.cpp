@@ -103,10 +103,6 @@ void pix_compare :: processGray_Gray(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_compare :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
-#ifdef __VEC__
-  processYUVAltivec(image,right);
-  return;
-#else
   long src,h,w;
   src =0;
 
@@ -138,17 +134,93 @@ void pix_compare :: processYUV_YUV(imageStruct &image, imageStruct &right)
       }
     }   
   }
-#endif //ALTIVEC
 }
+
+#ifdef __MMX__
+void pix_compare :: processGray_MMX(imageStruct &image, imageStruct &right){
+  long datasize =   image.xsize * image.ysize * image.csize;
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  __m64 l, r, b;
+  __m64 zeros = _mm_set1_pi8(0x00);
+  //format is U Y V Y
+  if (m_direction) {
+    while(datasize--){
+      l=leftPix[datasize];
+      r=rightPix[datasize];
+
+      b=_mm_subs_pu8   (l, r);
+      b=_mm_cmpeq_pi8  (b, zeros);
+      r=_mm_and_si64   (r, b);
+      l=_mm_andnot_si64(b, l);
+
+      leftPix[datasize]=_mm_or_si64(l, r);
+    }
+  } else {
+    while(datasize--){
+      l=leftPix[datasize];
+      r=rightPix[datasize];
+ 
+      b=_mm_subs_pu8   (l, r);
+      b=_mm_cmpeq_pi8  (b, zeros);
+      l=_mm_and_si64   (l, b);
+      r=_mm_andnot_si64(b, r);
+
+      leftPix[datasize]=_mm_or_si64(l, r);
+    }
+  }
+  _mm_empty();
+}
+
+void pix_compare :: processYUV_MMX(imageStruct &image, imageStruct &right)
+{
+  long datasize =   image.xsize * image.ysize * image.csize;
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  __m64 l, r, b;
+  __m64 mask = _mm_setr_pi8(0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF);
+  __m64 zeros = _mm_set1_pi8(0x00);
+  //format is U Y V Y
+  if (m_direction) {
+    while(datasize--){
+      l=leftPix[datasize];
+      r=rightPix[datasize];
+      b=_mm_subs_pu8(l, r);
+      b=_mm_and_si64(b, mask);
+      b=_mm_cmpeq_pi32(b, zeros);
+      r=_mm_and_si64(r, b);
+      l=_mm_andnot_si64(b, l);
+
+      leftPix[datasize]=_mm_or_si64(l, r);
+    }
+  } else {
+    while(datasize--){
+      l=leftPix[datasize];
+      r=rightPix[datasize];
+      b=_mm_subs_pu8(r, l);
+      b=_mm_and_si64(b, mask);
+      b=_mm_cmpeq_pi32(b, zeros);
+      r=_mm_and_si64(r, b);
+      l=_mm_andnot_si64(b, l);
+
+      leftPix[datasize]=_mm_or_si64(l, r);
+    }
+  }
+  _mm_empty();
+}
+#endif
 
 /////////////////////////////////////////////////////////
 // do the Altivec YUV processing here
 //
 /////////////////////////////////////////////////////////
-
-void pix_compare :: processYUVAltivec(imageStruct &image, imageStruct &right)
-{
 #ifdef __VEC__
+void pix_compare :: processYUV_Altivec(imageStruct &image, imageStruct &right)
+{
 register int h,w,i,j,width;
 
     h = image.ysize;
@@ -256,11 +328,9 @@ register int h,w,i,j,width;
         vec_dss(0);
         #endif
     }
-
-    
     }
-#endif
 }
+#endif
 
 /////////////////////////////////////////////////////////
 // static member function

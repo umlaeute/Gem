@@ -62,19 +62,17 @@ void pix_mix :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   unsigned char *rightPix = right.data;
   // int A,R,G,B;
 
+  int l, r;
   while(datasize--)    {
-    leftPix[chRed] = (leftPix[chRed] * imageGain)>>8;
-    rightPix[chRed] = (rightPix[chRed] * rightGain)>>8;
-    leftPix[chRed] =
-      CLAMP_HIGH((int)leftPix[chRed] + (int)rightPix[chRed]);
-    leftPix[chGreen] = (leftPix[chGreen] * imageGain)>>8;
-    rightPix[chGreen] = (rightPix[chGreen] * rightGain)>>8;
-    leftPix[chGreen] =
-      CLAMP_HIGH((int)leftPix[chGreen] + (int)rightPix[chGreen]);
-    leftPix[chBlue] = (leftPix[chBlue] * imageGain)>>8;
-    rightPix[chBlue] = (rightPix[chBlue] * rightGain)>>8;
-    leftPix[chBlue] =
-      CLAMP_HIGH((int)leftPix[chBlue] + (int)rightPix[chBlue]);
+    l = (leftPix [chRed]   * imageGain)>>8;
+    r = (rightPix[chRed]   * rightGain)>>8;
+    leftPix[chRed] =   CLAMP_HIGH(l + r);
+    l = (leftPix [chGreen] * imageGain)>>8;
+    r = (rightPix[chGreen] * rightGain)>>8;
+    leftPix[chGreen] = CLAMP_HIGH(l + r);
+    l = (leftPix [chBlue]  * imageGain)>>8;
+    r = (rightPix[chBlue]  * rightGain)>>8;
+    leftPix[chBlue] =  CLAMP_HIGH(l + r);
     leftPix += 4;
     rightPix += 4;
   }
@@ -91,11 +89,11 @@ void pix_mix :: processGray_Gray(imageStruct &image, imageStruct &right)
   unsigned char *rightPix = right.data;
   // int A,R,G,B;
 
+  int l, r;
   while(datasize--)    {
-    leftPix[chGray]  = ( leftPix[chGray] * imageGain)>>8;
-    rightPix[chGray] = (rightPix[chGray] * rightGain)>>8;
-    leftPix[chGray]  =
-      CLAMP_HIGH((int)leftPix[chGray] + (int)rightPix[chGray]);
+    l = ( leftPix[chGray] * imageGain)>>8;
+    r = (rightPix[chGray] * rightGain)>>8;
+    leftPix[chGray] = CLAMP_HIGH(l + r);
     leftPix ++;
     rightPix++;
   }
@@ -105,11 +103,6 @@ void pix_mix :: processGray_Gray(imageStruct &image, imageStruct &right)
 //
 /////////////////////////////////////////////////////////
 void pix_mix :: processYUV_YUV(imageStruct &image, imageStruct &right){
-#ifdef __VEC__
-//post("altivec");
-processYUVAltivec (image, right);
-return;
-#else
  int	y1,y2;
  int u,v,u1,v1;
  long width,h,w;
@@ -147,13 +140,57 @@ return;
      src += 4;
    }
  }
-#endif
 }
 
-//needs fixing for better IQ
-void pix_mix :: processYUVAltivec (imageStruct &image, imageStruct &right)
-{
+#ifdef __MMX__
+void pix_mix :: processRGBA_MMX (imageStruct &image, imageStruct &right){
+  int datasize =   image.xsize * image.ysize * image.csize;
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+  __m64 rGain = _mm_set1_pi16((short)rightGain);
+  __m64 lGain = _mm_set1_pi16((short)imageGain);
+  __m64 nil =   _mm_setzero_si64();
+
+  __m64 l1, r1, l2, r2;
+  while (datasize--) {
+    l1=leftPix [datasize];
+    r1=rightPix[datasize];
+
+    l2=_mm_unpackhi_pi8 (l1, nil);
+    l1=_mm_unpacklo_pi8 (l1, nil);
+    r2=_mm_unpackhi_pi8 (r1, nil);
+    r1=_mm_unpacklo_pi8 (r1, nil);
+
+    l1 = _mm_mullo_pi16(l1, lGain);
+    l2 = _mm_mullo_pi16(l2, lGain);
+    r1 = _mm_mullo_pi16(r1, rGain);
+    r2 = _mm_mullo_pi16(r2, rGain);
+
+    l1 = _mm_adds_pu16 (l1, r1);
+    l2 = _mm_adds_pu16 (l2, r2);
+
+    l1 = _mm_srli_pi16 (l1, 8);
+    l2 = _mm_srli_pi16 (l2, 8);
+    l1 = _mm_packs_pu16(l1, l2);
+    leftPix[datasize]=l1;
+  }
+  _mm_empty();
+}
+void pix_mix :: processYUV_MMX (imageStruct &image, imageStruct &right){
+  processRGBA_MMX(image, right);
+}
+void pix_mix :: processGray_MMX (imageStruct &image, imageStruct &right){
+  processRGBA_MMX(image, right);
+
+}
+#endif
+
 #ifdef __VEC__
+//needs fixing for better IQ
+void pix_mix :: processYUV_Altivec (imageStruct &image, imageStruct &right)
+{
 long h,w, width;
  
     /*altivec code starts */
@@ -376,8 +413,8 @@ long h,w, width;
     vec_dss( 0 );
     vec_dss( 1 );
 # endif
-#endif  
 }
+#endif
 
 /////////////////////////////////////////////////////////
 //gain converted from float to int
