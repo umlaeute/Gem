@@ -15,7 +15,6 @@
 #include "newWave.h"
 #include "Base/GemState.h"
 #include "Base/GemFuncUtil.h"
-#include <string.h>
 
 /* Grid */
 enum {WIREFRAME, HIDDENLINE, FLATSHADED, SMOOTHSHADED, TEXTURED};
@@ -117,7 +116,7 @@ void newWave :: render(GemState *state)
 
     GLfloat size = 2.*m_size / (GLfloat)grid;
 
-    if (m_drawType == GL_LINE_LOOP)
+    if (m_drawType == GL_LINE_STRIP)
         glLineWidth(m_linewidth);
         
     if (m_blend) {
@@ -229,18 +228,16 @@ void newWave :: heightMess(float size)
 /////////////////////////////////////////////////////////
 void newWave :: typeMess(t_symbol *type)
 {
-    if (!strcmp(type->s_name, "line")) 
-	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill")) 
-	    m_drawType = GL_TRIANGLE_STRIP;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else
-    {
-	    error ("GEM: newWave draw style");
-	    return;
-    }
-    setModified();
+  char c=*type->s_name;
+  switch(c){
+  case 'l': case 'L': m_drawType = GL_LINE_STRIP; break;
+  case 'f': case 'F': m_drawType = GL_TRIANGLE_STRIP; break;
+  case 'p': case 'P': m_drawType = GL_POINTS; break;
+  default:
+    error ("GEM: newWave draw style");
+    return;
+  }
+  setModified();
 }
 
 
