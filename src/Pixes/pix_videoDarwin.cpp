@@ -53,7 +53,7 @@ post("pix_videoDarwin: constructor");
 					* 4 * sizeof(unsigned char);
   m_pixBlock.image.data = new unsigned char[dataSize];
   m_quality = 1; //high quality for DV. why not?
-  m_colorspace = GL_RGBA; //default to RGB
+  m_colorspace = GL_YCBCR_422_GEM; //default to RGB
   InitSeqGrabber();
   m_haveVideo = 1;
 }
