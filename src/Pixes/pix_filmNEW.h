@@ -115,10 +115,6 @@ class GEM_EXTERN pix_filmNEW : public GemBase
   int           m_numTracks;
   int           m_track;
 
-  //////////
-  // frame data
-  bool          m_film; // are we in film- or in movie-mode
-
   film         *m_handles[MAX_FILM_HANDLES];
   film         *m_handle;
   int           m_numHandles;
