@@ -44,21 +44,19 @@
 #include "pix_videoLinux.h"
 #include "Base/GemCache.h"
 
-#include "Base/GemGLUtil.h"
-
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoLinux,t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoLinuxT,t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
 #define BYTESIN 3
 
 /////////////////////////////////////////////////////////
 //
-// pix_videoLinux
+// pix_videoLinuxT
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_videoLinux :: pix_videoLinux(t_floatarg w = 320, t_floatarg h = 240) :
+pix_videoLinuxT :: pix_videoLinuxT(t_floatarg w = 320, t_floatarg h = 240) :
      m_width((int)w),
      m_height((int)h),
      m_channel(COMPOSITEIN),
@@ -68,118 +66,91 @@ pix_videoLinux :: pix_videoLinux(t_floatarg w = 320, t_floatarg h = 240) :
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
 
-  //  post("w = %d, h= %d",m_width, m_height);
-  m_pixBlock.image.data = NULL;
+  //  m_pixBlock.image.reallocate();
+  m_pixBlock.image.notowned=1;
 }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_videoLinux :: ~pix_videoLinux()
+pix_videoLinuxT :: ~pix_videoLinuxT()
 {
-    if (m_haveVideo)
-    	stopTransfer();
-
-    cleanPixBlock();
+  if (m_haveVideo)stopTransfer();
 }
 
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinux :: render(GemState *state)
+void *pix_videoLinuxT :: capturing(void*you)
 {
-    int i, row, column;
-    unsigned char *pixp;
-    
-    if (!m_haveVideo)return;
+  pix_videoLinuxT *me=(pix_videoLinuxT *)you;
+  unsigned char *pixp;
+  while(me->m_continue_thread){
 
-    post("syncing %X %d %X", tvfd, VIDIOCSYNC, &vmmap[frame].frame);
-    if (ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
+  me->frame = !me->frame;
+
+    me->vmmap[me->frame].width = me->m_pixBlock.image.xsize + 
+      me->myleftmargin + me->myrightmargin;
+    me->vmmap[me->frame].height = me->m_pixBlock.image.ysize + 
+      me->mytopmargin + me->mybottommargin;
+    
+   /* syncing */
+    if (ioctl(me->tvfd, VIDIOCSYNC, &me->vmmap[me->frame].frame) < 0)
     {
 	perror("VIDIOCSYNC");
-	m_haveVideo = 0;
-	stopTransfer();
-	return;
+	//me->m_haveVideo = 0;me->stopTransfer();
     }
-    unsigned char *newimage = videobuf + vmbuf.offsets[frame];
 
-    int dataSize =
-    	m_pixBlock.image.xsize * m_pixBlock.image.ysize *
-    	m_pixBlock.image.csize * sizeof(unsigned char);
-
-    if (skipnext)
-    {
-    	for (i = 0; i < dataSize; i += 4)
-	{
-    	    m_pixBlock.image.data[i + 0] = 0;
-    	    m_pixBlock.image.data[i + 1] = 0;
-    	    m_pixBlock.image.data[i + 2] = 0;
-    	    m_pixBlock.image.data[i + 3] = 255;
-	}
-	skipnext = 0;
-    }
-    	/* copy the image, converting from RGB to RGBA. */
-    else for (row = 0; row < m_pixBlock.image.ysize; row++)
-    {
-    	unsigned char * inrow = (newimage + BYTESIN *
-	    ((m_pixBlock.image.xsize + myleftmargin + myrightmargin) *
-	    (row + mytopmargin) + myleftmargin));
-    	unsigned char *outrow = m_pixBlock.image.data +
-	    4 * m_pixBlock.image.xsize * (m_pixBlock.image.ysize - row - 1);
-	for (column = 0; column < m_pixBlock.image.xsize; column++)
-	{
-    	    outrow[0] = *(inrow+2);
-    	    outrow[1] = *(inrow+1);
-    	    outrow[2] = *(inrow);
-    	    outrow[3] = 255; 	/* opaque */
-    	    inrow += 3;
-	    outrow += 4;
-	}
-    }
-    m_pixBlock.newimage = 1;
-    state->image = &m_pixBlock;
-    frame = !frame;
-
-    vmmap[frame].width = m_pixBlock.image.xsize + myleftmargin + myrightmargin;
-    vmmap[frame].height = m_pixBlock.image.ysize + mytopmargin + mybottommargin;
-
-    if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
-    {
+    /* capturing */
+    if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
+      {
     	if (errno == EAGAIN)
-	    fprintf(stderr, "can't sync (no video source?)\n");
+	  fprintf(stderr, "can't sync (no video source?)\n");
     	else 
-	    perror("VIDIOCMCAPTURE");
-	if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
+	  perror("VIDIOCMCAPTURE");
+	if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
 	  perror("VIDIOCMCAPTURE2");
       
 	post("frame %d %d, format %d, width %d, height %d\n",
-	     frame, vmmap[frame].frame, vmmap[frame].format,
-	     vmmap[frame].width, vmmap[frame].height);
+	     me->frame, me->vmmap[me->frame].frame, me->vmmap[me->frame].format,
+	     me->vmmap[me->frame].width, me->vmmap[me->frame].height);
 
-	stopTransfer();
-
-	m_haveVideo = 0;
-	return;
-    }
+	//me->stopTransfer();me->m_haveVideo = 0;
+      }
+    me->m_frame_ready = 1;
+    me->last_frame=me->frame;
+  }
+  return NULL;
+}
+void pix_videoLinuxT :: render(GemState *state){
+  unsigned char *newimage = videobuf + vmbuf.offsets[last_frame];
+  int row, column;
+ 
+  if (!m_frame_ready)  m_pixBlock.newimage = 0;
+  else {
+    m_pixBlock.image.data=newimage;
+    m_pixBlock.newimage = 1;
+  }
+  state->image = &m_pixBlock;
 }
 
 /////////////////////////////////////////////////////////
 // startRendering
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinux :: startRendering()
+void pix_videoLinuxT :: startRendering()
 {
      startTransfer();
-     m_pixBlock.newimage = 1;
+     m_pixBlock.newimage = 0;
 }
 
 /////////////////////////////////////////////////////////
 // stopRendering
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinux :: stopRendering()
+void pix_videoLinuxT :: stopRendering()
 {
      stopTransfer();
 }
@@ -188,7 +159,7 @@ void pix_videoLinux :: stopRendering()
 // postrender
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinux :: postrender(GemState *state)
+void pix_videoLinuxT :: postrender(GemState *state)
 {
     m_pixBlock.newimage = 0;
     state->image = NULL;
@@ -198,8 +169,9 @@ void pix_videoLinux :: postrender(GemState *state)
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-int pix_videoLinux :: startTransfer()
+int pix_videoLinuxT :: startTransfer()
 {
+  post("starting transfer");
     char buf[256];
     int i, dataSize;
     frame = 0;
@@ -280,7 +252,7 @@ int pix_videoLinux :: startTransfer()
 
     for (i = 0; i < NBUF; i++)
     {
-    	vmmap[i].format = VIDEO_PALETTE_RGB24;
+    	vmmap[i].format = VIDEO_PALETTE_RGB32;
     	vmmap[i].width = width;
     	vmmap[i].height = height;
 	vmmap[i].frame  = i;
@@ -304,17 +276,20 @@ int pix_videoLinux :: startTransfer()
     m_pixBlock.image.csize = 4;
     m_pixBlock.image.format = GL_RGBA;
     m_pixBlock.image.type = GL_UNSIGNED_BYTE;
+    //    m_pixBlock.image.reallocate();
     myleftmargin = 0;
     myrightmargin = 0;
     mytopmargin = 0;
     mybottommargin = 0;
     
-    dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-    	    	     * 4 * sizeof(unsigned char);
-    m_pixBlock.image.data = new unsigned char[dataSize];
-
     m_haveVideo = 1;
-    post("GEM: pix_video: Opened video connection");
+
+    /* create thread */
+    m_continue_thread = 1;
+    m_frame_ready = 0;
+    post("GEM: pix_video: Opened video connection %X", tvfd);
+    post("vmmap %X", vmmap);
+    pthread_create(&m_thread_id, 0, capturing, this);
     return(1);
 
 closit:
@@ -331,20 +306,28 @@ closit:
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-int pix_videoLinux :: stopTransfer()
+int pix_videoLinuxT :: stopTransfer()
 {
-     munmap(videobuf, vmbuf.size);
-     if (tvfd) close(tvfd);
-     tvfd = 0;
-     m_haveVideo = 0;
-     return(1);
+  /* close the v4l device and dealloc buffer */
+    /* terminate thread if there is one */
+    if(m_continue_thread){
+      void *dummy;
+      m_continue_thread = 0;
+      pthread_join (m_thread_id, &dummy);
+    }
+    munmap(videobuf, vmbuf.size);
+    if (tvfd) close(tvfd);
+    tvfd = 0;
+    m_haveVideo = 0;
+    return(1);
+
 }
 
 /////////////////////////////////////////////////////////
 // dimenMess
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinux :: dimenMess(int x, int y, int leftmargin, int rightmargin,
+void pix_videoLinuxT :: dimenMess(int x, int y, int leftmargin, int rightmargin,
     int topmargin, int bottommargin)
 {
 
@@ -371,44 +354,29 @@ void pix_videoLinux :: dimenMess(int x, int y, int leftmargin, int rightmargin,
     m_pixBlock.image.xsize = x;
     m_pixBlock.image.ysize = y;
 
-    cleanPixBlock();
-    int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-    	    	    * 4 * sizeof(unsigned char);
-    m_pixBlock.image.data = new unsigned char[dataSize];
+    //    m_pixBlock.image.reallocate();
     skipnext = 1;
-}
-
-/////////////////////////////////////////////////////////
-// cleanPixBlock -- free the pixel buffer memory
-//
-/////////////////////////////////////////////////////////
-void pix_videoLinux :: cleanPixBlock()
-{
-    if (m_pixBlock.image.data) delete [] m_pixBlock.image.data;
-    m_pixBlock.image.data = NULL;
 }
 
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
-void pix_videoLinux :: obj_setupCallback(t_class *classPtr)
+void pix_videoLinuxT :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_videoLinux,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
+  class_addcreator((t_newmethod)_classpix_videoLinuxT,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
   pix_video::real_obj_setupCallback(classPtr);
-  class_addmethod(classPtr, (t_method)&pix_videoLinux::freqMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_videoLinuxT::freqMessCallback,
 		  gensym("freq"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoLinux::modeMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_videoLinuxT::modeMessCallback,
 		  gensym("mode"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoLinux::channelMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_videoLinuxT::channelMessCallback,
 		  gensym("channel"), A_FLOAT, A_NULL);
 }
 
 
-void pix_videoLinux :: modeMess(int argc, t_atom *argv)
+void pix_videoLinuxT :: modeMess(int argc, t_atom *argv)
 {
-    post("glBitField:: %d", getGLbitfield(argc, argv));
-    //return;
   int mode=m_channel;
   char c=0;
   if (argc==1){
@@ -428,9 +396,11 @@ void pix_videoLinux :: modeMess(int argc, t_atom *argv)
   stopTransfer();
 
   switch (c){
+  case 'p':
   case 'P':
     m_norm = VIDEO_MODE_PAL;
     break;
+  case 'n':
   case 'N':
     m_norm = VIDEO_MODE_NTSC;
     break;
@@ -444,7 +414,7 @@ void pix_videoLinux :: modeMess(int argc, t_atom *argv)
   if(gem_amRendering)startTransfer();
 }
 
-void pix_videoLinux :: channelMess(int c)
+void pix_videoLinuxT :: channelMess(int c)
 {
   if(gem_amRendering)stopTransfer();
 
@@ -454,14 +424,14 @@ void pix_videoLinux :: channelMess(int c)
   if(gem_amRendering)startTransfer();
 }
 
-void pix_videoLinux :: deviceMess(int d)
+void pix_videoLinuxT :: deviceMess(int d)
 {
   if(gem_amRendering)stopTransfer();
   m_devicenum=d;
   if(gem_amRendering)startTransfer();
 }
 
-void pix_videoLinux :: freqMess(t_floatarg c)
+void pix_videoLinuxT :: freqMess(t_floatarg c)
 {
      int freq = (int) c;
      vtuner.tuner = m_channel;
@@ -476,7 +446,7 @@ void pix_videoLinux :: freqMess(t_floatarg c)
      }
 }
 
-void pix_videoLinux :: modeMessCallback(void *data, t_symbol* norm, int argc, t_atom *argv)
+void pix_videoLinuxT :: modeMessCallback(void *data, t_symbol* norm, int argc, t_atom *argv)
 {
 
   //if (argc==1 || argc==2)
@@ -484,17 +454,17 @@ void pix_videoLinux :: modeMessCallback(void *data, t_symbol* norm, int argc, t_
 }
 
 
-void pix_videoLinux :: freqMessCallback(void *data, t_floatarg f)
+void pix_videoLinuxT :: freqMessCallback(void *data, t_floatarg f)
 {
     GetMyClass(data)->freqMess(f);
 }
 
-void pix_videoLinux :: channelMessCallback(void *data, t_floatarg f)
+void pix_videoLinuxT :: channelMessCallback(void *data, t_floatarg f)
 {
     GetMyClass(data)->channelMess((int)f);
 }
 
-void pix_videoLinux :: deviceMessCallback(void *data, t_floatarg f)
+void pix_videoLinuxT :: deviceMessCallback(void *data, t_floatarg f)
 {
     GetMyClass(data)->deviceMess((int)f);
 }

@@ -14,8 +14,8 @@
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_VIDEOLINUX_H_
-#define INCLUDE_PIX_VIDEOLINUX_H_
+#ifndef INCLUDE_PIX_VIDEOLINUXT_H_
+#define INCLUDE_PIX_VIDEOLINUXT_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,6 +31,8 @@
 #include <linux/types.h>
 #include <linux/videodev.h>
 #include <sys/mman.h>
+#include <pthread.h>
+
 #define DEVICENO 0
 #define NBUF 2
 #define COMPOSITEIN 1
@@ -57,22 +59,22 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_videoLinux : public pix_video
+class GEM_EXTERN pix_videoLinuxT : public pix_video
 {
-    CPPEXTERN_HEADER(pix_videoLinux, GemBase)
+    CPPEXTERN_HEADER(pix_videoLinuxT, GemBase)
 
     public:
 
         //////////
         // Constructor
-    	pix_videoLinux(t_floatarg, t_floatarg);
+    	pix_videoLinuxT(t_floatarg, t_floatarg);
 
     	
     protected:
     	
     	//////////
     	// Destructor
-    	virtual ~pix_videoLinux();
+    	virtual ~pix_videoLinuxT();
 
     	//////////
     	// Do the rendering
@@ -131,7 +133,7 @@ class GEM_EXTERN pix_videoLinux : public pix_video
 	struct video_mbuf vmbuf;
 	struct video_mmap vmmap[NBUF];
 	int tvfd;
-	int frame;
+	int frame, last_frame;
 	unsigned char *videobuf;
 	int skipnext;
 	int mytopmargin, mybottommargin;
@@ -144,6 +146,10 @@ class GEM_EXTERN pix_videoLinux : public pix_video
 
 	int m_devicenum;
 
+	pthread_t m_thread_id;
+	bool      m_continue_thread;
+	bool      m_frame_ready;
+
     private:
     	
     	//////////
@@ -153,6 +159,12 @@ class GEM_EXTERN pix_videoLinux : public pix_video
     	static void channelMessCallback(void *data, t_floatarg f);
     	static void deviceMessCallback(void *data, t_floatarg f);
      	static void modeMessCallback(void *data, t_symbol* norm, int argc, t_atom *argv);
+
+	//////////
+	// the capturing thread
+	static void*capturing(void*);
+
+
 };
 
 #endif	// for header file
