@@ -286,7 +286,6 @@ void pix_histo :: processGrayImage(imageStruct &image)
   
   int n_G;
   t_float *tab_G=NULL;
-  t_float scale_R=0;
   t_float f;
 
   int n;
