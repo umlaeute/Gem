@@ -63,9 +63,7 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format= image.format;
+    myImage.setCsizeByFormat(image.csize);
     myImage.reallocate();
     pOutput = (U32*)myImage.data;
     
@@ -244,9 +242,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format= image.format;
+    myImage.setCsizeByFormat(image.csize);
     myImage.reallocate();
     U16*pOutput = (U16*)myImage.data;
     
@@ -400,9 +396,7 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format= image.format;
+    myImage.setCsizeByFormat(image.csize);
     myImage.reallocate();
     unsigned char* pOutput = myImage.data;
     
