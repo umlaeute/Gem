@@ -446,7 +446,7 @@ void pix_videoDarwin ::dialogCallback(void *data)
 void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
 {
   int format=0;
-  char c =*s->s_name;
+  char c =*state->s_name;
   switch (c){
   case 'g': case 'G': format=GL_LUMINANCE; break;
   case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
