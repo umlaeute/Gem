@@ -13,7 +13,8 @@ mkdir ..\doc\gem\08.io
 mkdir ..\doc\gem\99.games
 mkdir ..\doc\gem\manual
 
-mkdir ..\doc\5.reference\Gem
+echo assuming you are using pd-0.37
+mkdir ..\doc\5.reference\help-Gem
 
 echo Copying examples...
 copy examples\01.basic\* ..\doc\gem\01.basic > tempInstall.trash
@@ -31,7 +32,7 @@ echo Copying documentation...
 copy doc\gem*.* ..\doc\gem\manual > tempInstall.trash
 copy manual\*.html ..\doc\gem\manual > tempInstall.trash
 echo Copying reference files...
-copy help\* ..\doc\5.reference\Gem > tempInstall.trash
+copy help\* ..\doc\5.reference\help-Gem > tempInstall.trash
 
 del tempInstall.trash
 

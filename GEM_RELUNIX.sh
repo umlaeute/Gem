@@ -5,6 +5,11 @@
 # Mark Danks - mark@danks.org
 #
 
+## IOhannes m zmölnig:
+# i guess this is for irix
+# i have NEVER used this.
+# RELUNIX means "RELease UNIX"
+
 case $# in
     1)  echo Creating GEM release version $1
     	;;
@@ -38,7 +43,7 @@ To install GEM on SGI:\n\n\
 3) Read the FAQ for instructions to run Pd and GEM\n\n\
 4) Check the release notes for changes and usage information\n\n\
 5) Read the manual html files to learn how to use GEM\n\n\
-zmoelnig@iem.kuga.c.at" > GEM.README
+zmoelnig@iem.at" > GEM.README
 
 # set the permissions on the install file
 chmod 777 GEM_INSTALL.sh

@@ -2,9 +2,13 @@
 #
 # Install GEM
 #
-# IOhannes m zmoelnig, zmoelnig@iem.kug.ac.at
+# IOhannes m zmoelnig, zmoelnig@iem.at
 # IEM, Graz
 #
+
+# this should be used for IRIX
+# the install process is not very sophisticated
+# we assume that you are using pd<0.37 (the help-paths changed)
 
 echo Installing GEM...
 
