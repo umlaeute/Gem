@@ -62,9 +62,18 @@ class GEM_EXTERN pix_filmNT : public pix_film
   // GROUP:	Movie data
   //-----------------------------------
 
-  PGETFRAME	m_getFrame;		// the frame information
   PAVISTREAM	m_streamVid;		// the stream itself
-	
+
+	int		m_nRawBuffSize;
+
+	BITMAPINFOHEADER* m_pbmihRaw;
+	BITMAPINFOHEADER* m_pbmihDst;
+
+	HIC m_hic;
+
+	unsigned char*	m_RawBuffer;
+
+
  protected:
 	
   //////////
