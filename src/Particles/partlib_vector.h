@@ -15,7 +15,7 @@
 #endif
 
 #ifdef __APPLE__
-#define sqrtf(i) ( (float)(sqrt( (double)(i) ) ))
+#include "macosx_math.h"
 #endif
 
 #ifdef WIN32
