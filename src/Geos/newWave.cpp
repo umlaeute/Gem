@@ -18,8 +18,8 @@
 
 /* Grid */
 enum {WIREFRAME, HIDDENLINE, FLATSHADED, SMOOTHSHADED, TEXTURED};
-enum {FULLSCREEN, FACENORMALS, ANTIALIAS, ENVMAP};
-enum {WEAK, NORMAL, STRONG};
+enum {FACENORMALS, ANTIALIAS, ENVMAP};
+enum {VWEAK, WEAK, NORMAL, STRONG};
 enum {SMALL, MEDIUM, LARGE, XLARGE};
 enum {CURRENT, FLAT, SPIKE, DIAGONALWALL, SIDEWALL, HOLE, 
       MIDDLEBLOCK, DIAGONALBLOCK, CORNERBLOCK, HILL, HILLFOUR};
@@ -54,14 +54,17 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(newWave, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 //
 /////////////////////////////////////////////////////////
 newWave :: newWave( t_floatarg width, t_floatarg height )
-    	     : GemShape(width), m_height(height), m_size(XLARGE),
+    	     : GemShape(width), m_height(height), m_size(MEDIUM),
                m_speed(NORMAL), alreadyInit(0)
 {
     if (m_height == 0.f)
 		m_height = 1.f;
 
     // the height inlet
-    m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
+    m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
+    inletM = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("M"));
+    inletSp = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Sp"));
+    //inletOt = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ot"));
     //m_drawType = GL_QUADS;
     m_drawType = GL_TRIANGLE_STRIP;
     alreadyInit = 0;
@@ -74,24 +77,58 @@ newWave :: newWave( t_floatarg width, t_floatarg height )
 newWave :: ~newWave()
 {
 	 inlet_free(m_inletH);
+         inlet_free(inletM);
+         inlet_free(inletSp);
+         //inlet_free(inletOt);
          alreadyInit = 0;
 }
 
+void newWave :: modeMess(float mode)
+{
+    reset((int)mode);
+    setModified();
+}
+void newWave :: speedMess(float speed)
+{
+    setSpeed((int)speed);
+    setModified();
+}
+//void newWave :: otherMess(float other)
+//{
+//    setOther((int)other);
+//    setModified();
+//}
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
 void newWave :: render(GemState *state)
 {
+#ifdef __APPLE__
+    if (xsize != state->texCoords[1].s)
+#else
+    if (xsize != state->texCoords[2].s)
+#endif
+        alreadyInit = 0;
+        
     if (!alreadyInit)
     {
+#ifdef __APPLE__
+        xsize = state->texCoords[1].s;
+        ysize = state->texCoords[1].t;
+#else
+        xsize = state->texCoords[2].s;
+        ysize = state->texCoords[2].t;
+#endif
+        //win_size_x = GemMan::m_width;
+        //win_size_y = GemMan::m_height;
         glPolygonOffset( 1.0, 1.0 );
         setSize( SMALL );
         setSpeed( NORMAL);
         setOther( ENVMAP );
         reset( HILLFOUR );
+        alreadyInit = 1;
     }
-    alreadyInit = 1;
     
     getFaceNorms();
     getVertNorms();
@@ -107,9 +144,11 @@ void newWave :: render(GemState *state)
         glBegin(GL_TRIANGLE_STRIP);
         for (int j = 0; j < grid; ++j)
         {
+            //j = j/grid;
             glNormal3fv( vertNorms[i][j] );
             glTexCoord2fv( texCoords[i][j] );
             glVertex3f( i, j, posit[i][j] );
+            
             glNormal3fv( vertNorms[i+1][j] );
             glTexCoord2fv( texCoords[i+1][j] );
             glVertex3f( i+1, j, posit[i+1][j] );
@@ -229,8 +268,10 @@ void newWave :: getTexCoords()
     {
         for ( int j = 0; j < grid; ++j)
         {
-            texCoords[i][j][0] = (float)j/(float)(grid-1);
-            texCoords[i][j][1] = (float)i/(float)(grid-1);
+            texCoords[i][j][0] = ( ((float)j/(float)(grid-1)) );
+            texCoords[i][j][1] = ( ((float)i/(float)(grid-1)) );
+            //post("texCoords[%d][%d][0] = %f",i,j,texCoords[i][j][0]);
+            //post("texCoords[%d][%d][1] = %f",i,j,texCoords[i][j][1]);
         }
     }
 }
@@ -265,6 +306,7 @@ void newWave :: setSpeed(int value)
 {
     switch(value) 
     {
+        case VWEAK : dt = 0.0005; break;
         case WEAK  : dt = 0.001; break;
         case NORMAL: dt = 0.004; break;
         case STRONG: dt = 0.008; break;
@@ -505,16 +547,19 @@ void newWave :: setOther(int value)
             antialias = !antialias;
             if (antialias)
             {
-                glEnable(GL_BLEND);
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                glEnable(GL_LINE_SMOOTH);
-                glLineWidth(1.5);
+                post("GEM: newWave: antialias on");
+                //glEnable(GL_BLEND);
+                //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                //glBlendFunc(GL_SRC_ALPHA_SATURATE, GL_ONE);
+                //glEnable(GL_LINE_SMOOTH);
+                //glLineWidth(1.5);
             }
             else
             {
-                glDisable(GL_BLEND);
-                glDisable(GL_LINE_SMOOTH);
-                glLineWidth(1.0);
+                post("GEM: newWave: antialias off");
+                //glDisable(GL_BLEND);
+                //glDisable(GL_LINE_SMOOTH);
+                //glLineWidth(1.0);
             }
             break;
         case ENVMAP: 
@@ -543,10 +588,28 @@ void newWave :: setOther(int value)
 void newWave :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&newWave::heightMessCallback,
-    	    gensym("ft2"), A_FLOAT, A_NULL);
+    	    gensym("Ht"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&newWave::modeMessCallback,
+    	    gensym("M"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&newWave::speedMessCallback,
+    	    gensym("Sp"), A_FLOAT, A_NULL);
+    //class_addmethod(classPtr, (t_method)&newWave::otherMessCallback,
+    //	    gensym("Ot"), A_FLOAT, A_NULL);
 }
 
 void newWave :: heightMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->heightMess((float)size);
 }
+void newWave :: modeMessCallback(void *data, t_floatarg mode)
+{
+    GetMyClass(data)->modeMess((float)mode);
+}
+void newWave :: speedMessCallback(void *data, t_floatarg speed)
+{
+    GetMyClass(data)->speedMess((float)speed);
+}
+//void newWave :: otherMessCallback(void *data, t_floatarg other)
+//{
+//    GetMyClass(data)->otherMess((float)other);
+//}

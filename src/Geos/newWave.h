@@ -53,8 +53,11 @@ class GEM_EXTERN newWave : public GemShape
 
   //////////
   // The height of the object
+  short		size, mode, speed;
   void	    	heightMess(float size);
-        
+  void		modeMess(float mode);
+  void		speedMess(float speed);
+  //void		otherMess(float other);        
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
@@ -70,6 +73,9 @@ class GEM_EXTERN newWave : public GemShape
         //////////
         // The height inlet
         t_inlet         *m_inletH;
+        t_inlet		*inletM;
+        t_inlet		*inletSp;
+        //t_inlet		*inletOt;
   
   //////////
   // getStuff
@@ -96,6 +102,7 @@ class GEM_EXTERN newWave : public GemShape
   
   int 		m_size;
   int		m_speed;
+  float		xsize, ysize;
   
   float force[MAXGRID][MAXGRID],
       veloc[MAXGRID][MAXGRID],
@@ -111,6 +118,9 @@ class GEM_EXTERN newWave : public GemShape
   //////////
   // static member functions
   static void 	heightMessCallback(void *data, t_floatarg size);
+  static void 	modeMessCallback(void *data, t_floatarg mode);
+  static void 	speedMessCallback(void *data, t_floatarg speed);
+  //static void 	otherMessCallback(void *data, t_floatarg other);
 };
 
 #endif	// for header file
