@@ -46,6 +46,7 @@ filmMPEG3 :: ~filmMPEG3()
 {
   close();
 }
+
 #ifdef HAVE_LIBMPEG3
 void filmMPEG3 :: close(void)
 {
@@ -73,11 +74,19 @@ bool filmMPEG3 :: open(char *filename, int format)
     m_image.image.csize=4;
 
     switch (format){
+      //    case GL_RGB:     case GL_BGR:    m_image.image.csize=3; break; 
+    case GL_YCBCR_422_GEM:
+      m_image.image.csize=2;
+      break;
+    case GL_LUMINANCE:
+      m_image.image.csize=1;
+      break;
     default: format=GL_RGBA;
-    case GL_RGBA:    case GL_BGRA:   m_wantedFormat=format;m_image.image.csize=4; break; 
-    case GL_RGB:     case GL_BGR:    m_wantedFormat=format;m_image.image.csize=3; break; 
-    case GL_YCBCR_422_GEM:        m_wantedFormat=format;m_image.image.csize=2; break;
+    case GL_RGBA:    case GL_BGRA:   
+      m_image.image.csize=4; 
+      break;
     }
+    m_wantedFormat=format;
     if (!m_image.image.xsize*m_image.image.ysize*m_image.image.csize)goto unsupported;
 
     m_image.image.format=m_wantedFormat;
@@ -107,35 +116,36 @@ pixBlock* filmMPEG3 :: getFrame(){
   int i;
   int mpegFormat=0;
   int wantedFormat=m_wantedFormat;
-  switch(wantedFormat){
-  case GL_BGRA:
-    mpegFormat=MPEG3_BGRA8888;
-    m_image.image.csize=4;
-    break;
-  case GL_BGR: mpegFormat= MPEG3_BGR888; m_image.image.csize=3; break;
-  case GL_RGB: mpegFormat= MPEG3_RGB888; m_image.image.csize=3; break;
-    //  case GL_YCBCR_422_GEM: mpegFormat = MPEG3_YUV422P; m_image.image.csize=2; break;
-  default: wantedFormat=GL_RGBA;
-  case GL_RGBA:
-    mpegFormat=MPEG3_RGBA8888; m_image.image.csize=4;
-  }
-  m_image.image.format=wantedFormat;
-  int datasize=m_image.image.xsize*m_image.image.ysize*m_image.image.csize+4;
-  m_image.image.reallocate(datasize);
 
-  i=m_image.image.ysize;
-  //  unsigned char *rows[m_image.image.ysize];
-  unsigned char **rows = new unsigned char* [m_image.image.ysize];
+  char*u=NULL,*y=NULL,*v=NULL;
 
-  unsigned char **dummy=rows;
-  while(i--)*dummy++=(unsigned char *)(m_image.image.data+i*m_image.image.xsize*m_image.image.csize);
-  if (mpeg3_read_frame(mpeg_file, rows,
-		       0, 0, 
-		       m_image.image.xsize, m_image.image.ysize, 
-		       m_image.image.xsize, m_image.image.ysize,
-		       mpegFormat, 0)) {
-    post("GEM: pix_film:: could not read frame ! %d", m_curFrame);
-    return 0;
+  m_image.image.setCsizeByFormat(wantedFormat);
+  int datasize=m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
+  m_image.image.reallocate(datasize+4);
+
+  if(m_wantedFormat==GL_RGBA){
+    // the mpeg3-YUV2RGB decoder works better than ours
+    unsigned char **rows = new unsigned char* [m_image.image.ysize];
+    unsigned char **dummy=rows;
+    i=m_image.image.ysize;
+    while(i--)*dummy++=m_image.image.data+(i*m_image.image.xsize*m_image.image.csize);
+    if (mpeg3_read_frame(mpeg_file, rows,
+			 0, 0, 
+			 m_image.image.xsize, m_image.image.ysize, 
+			 m_image.image.xsize, m_image.image.ysize,
+			 MPEG3_RGBA8888,
+			 0)) {
+      post("GEM: pix_film:: could not read frame ! %d", m_curFrame);
+      return 0;
+    }
+    delete[]rows;
+  } else {
+    // unfortunately this is upside down.
+    if(mpeg3_read_yuvframe_ptr(mpeg_file,&y,&u,&v,0)){
+      post("GEM: pix_film:: could not read frame ! %d", m_curFrame);
+      return 0;
+    }
+    m_image.image.fromYV12((unsigned char*)y, (unsigned char*)u, (unsigned char*)v);
   }
   m_image.newimage=1;
   return &m_image;
