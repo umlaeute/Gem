@@ -15,12 +15,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_FILM_H_
 #define INCLUDE_FILM_H_
-  
+
+#include "Base/config.h"
+ 
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
-#ifdef __linux__
-#include "Base/config.h"
-#endif
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
