@@ -83,7 +83,7 @@ void pix_sig2pix :: dimenMess(int width, int height) {
   m_pixBlock.image.setBlack();
 }
 
-void pix_sig2pix :: csMess(int cs) {
+void pix_sig2pix :: csMess(GLint cs) {
   m_reqFormat=cs;
   m_pixBlock.image.setCsizeByFormat(m_reqFormat);
   m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
