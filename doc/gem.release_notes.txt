@@ -16,11 +16,11 @@ günter has removed himself from the splash-screen, but he still contributes stuf
 supported platforms: windows (XP,2000,...), linux, and (tadah:) macOS-X(>10.2)
 irix-support seems to be broken, but i cannot prove it
 
-architecture: up till now, the rendering-tree was statically built when rendering was 		turned on, so you couldn't add objects dynamically and editing was painful.
-	now, Gem utilizes the normal pd-messaging system all the time: you can disable 		parts of the rendering tree with [spigot], render sub-trees multiple times with
+architecture: up till now, the rendering-tree was statically built when rendering was
+	turned on, so you couldn't add objects dynamically and editing was painful.
+	now, Gem utilizes the normal pd-messaging system all the time: you can disable 
+	parts of the rendering tree with [spigot], render sub-trees multiple times with
 	[t a a] and put objects into the gem-tree on the fly.
-	the only object that has to be initialized by turning the rendering (off/)on is 	[gemhead]
-
 
 documentation: added help for (almost ?) all Gem-objects (excluding openGL-wrappers)
 	new reference-patches are now working out of the box (not the old "abstract" way)
@@ -28,52 +28,75 @@ documentation: added help for (almost ?) all Gem-objects (excluding openGL-wrapp
 
 
 openGL: GEM features now a full openGL-wrapper (supporting openGL-1.2)
-	you can use any openGL-command like "glNormal3f" by creating a pd-object like 		[GEMglNormal3f] (note the "GEM"-prefix); this should be very powerful, however most 	of the objects are not (yet) tested. if you intend to use them and think they don't 	work, send me a bug report for the objects you need; i will try to fix them 		gradually.
+	you can use any openGL-command like "glNormal3f" by creating a pd-object like
+	[GEMglNormal3f] (note the "GEM"-prefix); this should be very powerful, 
+	however most of the objects are not (yet) tested. 
+	if you intend to use them and think they don't 	work, 
+	send me a bug report for the objects you need; 
+	i will try to fix them gradually.
 	there will be not much help in GEM, since you might consult any openGL-reference
 
-text:	we now use FTGL instead of GLTT (which is still available at compile time) for 		freetype-rendering. this is supported on all 3 platforms, looks better (at all 		sizes!) and allows the new [textextruded]
+text:	we now use FTGL instead of GLTT (which is still available at compile time)
+	for freetype-rendering. this is supported on all 3 platforms, 
+	looks better (at all sizes!) and allows the new [textextruded]
 
 geos:	tube, curve3d, rubber, ripple, slideSquares, newWave
 
 manips:	polygon_smooth for anti-aliasing of single objects
 	[camera]
 
-controls: the output of [gemmouse] can now be normalized (by giving the maxVal for x/y as 	arguments: [gemmouse 1 1] will output coordinates between 0..1, no matter what
+controls: the output of [gemmouse] can now be normalized (by giving the maxVal for x/y as
+	arguments: [gemmouse 1 1] will output coordinates between 0..1, no matter what
 	dimensions the screen has.
 
 particles: now the underlying libparticle-engine can be used more directly.
-	velocity-domains (like [part_velcone]) are deprecated and [part_velocity] 		should be used instead (allowing on-the-fly domain-switching)
-	there are objects that allow to influence single particles (like 			[part_vertex])
-	most interesting: with [part_render] and [part_info] you can now use any 		geo as particles (e.g: .obj-models) not only points/lines as before.
+	velocity-domains (like [part_velcone]) are deprecated and [part_velocity]
+	should be used instead (allowing on-the-fly domain-switching)
+	there are objects that allow to influence single particles 
+	(like [part_vertex])
+	most interesting: with [part_render] and [part_info] you can now use any
+	geo as particles (e.g: .obj-models) not only points/lines as before.
 
 texturing: [pix_texture] and [pix_texture2] has merged. so [pix_texture] will texture
-	textures of any size (even non-power-of-2) and it will use hw-support if available 	(at least on macOS and on linux if the gfx-card supports it (at least nvidia does 	so))
+	textures of any size (even non-power-of-2) and it will use hw-support if available
+	(at least on macOS and on linux if the gfx-card supports it
+	(at least nvidia does so))
 
 pixes:	lots of new objects (too much to enumerate them here)
 	we now support 3 different colorspaces: RGBA, YUV, Greyscale
-	YUV is new and allows processing of coloured-images with far less memory/CPU than 	RGBA (factor 2) but without alpha.
+	YUV is new and allows processing of coloured-images with far less memory/CPU
+	than RGBA (factor 2) but without alpha.
 	lots of pix-processing on apple-computers is ALTIVEC-enhanced (faster by numbers!)
 	SIMD-enhancements for PCs (MMX/SSE2) is yet to come...
-	as the new colorspace has been pushed, also a lot of objects has received 		greyscale-support
+	as the new colorspace has been pushed, also a lot of objects has received 
+	greyscale-support
 	the TV-class has been deprecated and is now part of pix_* again
 	lot's of color-space converters (most of them not available as objects)
 	the "pix_fx"-stuff is now built into all pix-objects
 
 video:	on mac-OS the [pix_video] object supports all cameras that are supported by the OS
-	on windows there is now support for DirectShow, which makes new (usb/ieee1394) 		cameras work most probably
+	on windows there is now support for DirectShow, 
+	which makes new (usb/ieee1394) cameras work most probably
 	on linux there is some prelaminary(!) support for ieee1394 devices.
 	the v4l-support is now multi-threaded which speeds up the whole thing significantly
 
 film-formats:
-	windows: AVI; there is also some QUICKTIME-support (needs the quicktime-sdk at 		compile time and quicktime installed on execution time), but this crashes sometimes 	(haven't found out when). it should enable "a lot" of file-formats (MPEG, MOV)
-	macOS: quicktime servers your needs
-	linux: support for libavifile, libmpeg3 (or libmpeg1 but libmpeg3 is preferred), 	libquicktime (or libquicktime4linux; doesn't matter) and ffmpeg.
+	windows: AVI; there is also some QUICKTIME-support
+	(needs the quicktime-sdk at compile time and quicktime installed on execution time),
+	but this crashes sometimes (haven't found out when).
+	it should enable "a lot" of file-formats (MPEG, MOV)
+	macOS: quicktime serves your needs
+	linux: support for libavifile, libmpeg3 (or libmpeg1 but libmpeg3 is preferred),
+		libquicktime (or libquicktime4linux; doesn't matter) and ffmpeg.
 
 codecs: macOS: everything that is supported by your system should work fine
 	win: all codecs installed on your machine should work
 	 (if another program can play a avi-file, Gem should be able to do so too)
-	linux: depends on how you compiled Gem. libmpegX will decode mpegs, libquicktime 	will (most likely) decode quicktime-files with non-proprietary codecs, libavifile
-	decodes a lot of formats (avi, quicktime, divx, asf,...) and you can utilize 		windows-codecs (.dll-files; if you have them ;-)) which enables you to play-back 	proprietary codecs!
+	linux: depends on how you compiled Gem. libmpegX will decode mpegs,
+	libquicktime will (most likely) decode quicktime-files with non-proprietary codecs,
+	libavifile decodes a lot of formats (avi, quicktime, divx, asf,...)
+	and you can utilize windows-codecs (.dll-files; if you have them ;-))
+	which enables you to play-back 	proprietary codecs!
 
 bug-fixes: probably lots of, but most of them seem to linger around for a while now.
 
