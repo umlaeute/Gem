@@ -555,7 +555,7 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
         {
         
             vec_dst( src, prefetchSize, 0 );
-            vec_dst( dst, prefetchSize, 0 );    
+            vec_dst( dst, prefetchSize, 1 );    
         /*
             //swap around the pixels for this pass
             val7 = val8;
@@ -670,6 +670,7 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
            
         }
         vec_dss( 0 );
+        vec_dss( 1 );
       //   i=(h+1)*(xsize+2);
     //    post("pix_convolve: h %d w %d total pixels %d ",h,w,i);
       //dst+=16;
