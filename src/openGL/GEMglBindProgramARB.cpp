@@ -4,7 +4,7 @@
 //
 // Implementation file
 //
-// Copyright (c) 2004 tigital@mac.com
+// Copyright (c) 2004-2005 tigital@mac.com
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -16,7 +16,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindProgramARB , t_floatarg, A_DEFFLOAT, t_fl
 
 /////////////////////////////////////////////////////////
 //
-// GEMglViewport
+// GEMglBindProgramARB
 //
 /////////////////////////////////////////////////////////
 // Constructor
