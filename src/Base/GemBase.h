@@ -54,6 +54,11 @@ LOG
 
 # endif /* GLEXT */ 
 
+/* some people have problems with the ARB-extensions for vertex shaders */
+# if defined DONT_USE_ARB && defined GL_ARB_vertex_program
+#  undef GL_ARB_vertex_program
+# endif /* DONT_USE_ARB */
+
 #endif // __APPLE__
 
 
