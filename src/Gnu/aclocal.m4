@@ -134,8 +134,8 @@ dnl       	 AC_MSG_RESULT($found_path)
           AC_MSG_ERROR("can\'t find path to $1"); else
           AC_MSG_WARN("can\'t find path to $1"); fi
      else
-	dummy=`echo "HAVE_$1" | sed -e 's/^a-zA-Z0-9_./_/g' -e 's/\./_/g' -e 's/\//_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
-	AC_DEFINE_UNQUOTED($dummy)
+	ac_hdr=`echo "HAVE_$1" | sed -e 's/^a-zA-Z0-9_./_/g' -e 's/\./_/g' -e 's/\//_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+	AC_DEFINE_UNQUOTED($ac_hdr)
      fi
 )
 

@@ -1,11 +1,31 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(../Base/CPPExtern.h)
-dnl AC_CONFIG_HEADER(../Base/configLinux.h)
-CONFFILE=../Base/config`uname`.h
+
+ARCH=$(uname --machine)
+KERN=$(uname --kernel-name)
+
+CONFFILE=../Base/config$KERN.h
 AC_CONFIG_HEADER($CONFFILE)
+
+
+dnl for now i can test ICC only on linux
+dnl LATER we might want to use it for other platforms (namely:windoze) too
+
+if test "$KERN" = "Linux"; then
+ AC_ARG_ENABLE(icc,    [  --enable-icc            enable ICC-support])
+ if test "$enable_icc" = "yes"; then
+   CXX=icc
+ fi
+fi
+
+if test "$ARCH" = "alpha"; then
+  AFLAGS="-mieee  -mcpu=ev56"
+fi
+     
+
 gemsrc="./.."
 
-VERSION=0.87-cvs
+VERSION=cvs
 PACKAGE=gem
 
 AC_SUBST(VERSION)
@@ -21,11 +41,11 @@ default_search_heads="/usr/include /usr/local/include $GEMLIBS"
 dnl
 dnl first comes the user-config stuff
 dnl
-AC_ARG_ENABLE(x, [  --gemlibs=DIR{:DIRS}     where to search for non-standard libs (aka GemLibs)])
-AC_ARG_ENABLE(x, [                          [DIR=../../../GemLibs:/usr/local/lib:/usr/local/src ]])
-AC_ARG_ENABLE(x, [  --includedir=DIR{:DIRS} where to search for non-standard headers])
-AC_ARG_ENABLE(x, [                          [DIR=/usr/include:/usr/local/include:../../../GemLibs]])
-AC_ARG_ENABLE(x, [])
+AC_ARG_WITH(gemlibs, [  --with-gemlibs=DIR{:DIRS}     where to search for non-standard libs (aka GemLibs)])
+AC_ARG_ENABLE(y, [                          [DIR=../../../GemLibs:/usr/local/lib:/usr/local/src ]])
+AC_ARG_ENABLE(y, [  --includedir=DIR{:DIRS} where to search for non-standard headers])
+AC_ARG_ENABLE(y, [                          [DIR=/usr/include:/usr/local/include:../../../GemLibs]])
+AC_ARG_ENABLE(y, [])
 AC_ARG_ENABLE(mmx,    [  --enable-mmx            enable MMX-support])
 AC_ARG_ENABLE(static, [  --enable-static         static linking (default is: dynamic) ])
 AC_ARG_ENABLE(new,    [  --disable-new           disable new versions of pix_film/pix_video])
@@ -74,9 +94,9 @@ fi
 
 dnl there should be a flag for which paths to search the libs in
 dnl "--gemlibs"
-if test "$gemlibs"
+if test "$with_gemlibs" != ""
 then
-  search_libs=`echo $gemlibs | sed -e 's/:/ /g'`
+  search_libs=`echo $with_gemlibs | sed -e 's/:/ /g'`
 else
   search_libs=$default_search_libs
 fi
@@ -153,6 +173,7 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_SUBST(CC)
 AC_SUBST(CXX)
+
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_CHECK_PROGS(shell_prog,sh)
@@ -175,19 +196,23 @@ int main(){
 }
 EOF
 MMXFLAGS=""
-$CXX $CXXFLAGS $CPPFLAGS $MMXFLAGS -mmmx -o conftest.o conftest.c++ && MMXFLAGS="-mmmx"
+if test "$CXX" = "icc"; then
+ $CXX $CXXFLAGS $CPPFLAGS $MMXFLAGS -xK -o conftest.o conftest.c++ && MMXFLAGS="-xK"
+else
+ $CXX $CXXFLAGS $CPPFLAGS $MMXFLAGS -mmmx -o conftest.o conftest.c++ && MMXFLAGS="-mmmx"
+fi
 dnl $CXX $CXXFLAGS $CPPFLAGS $MMXFLAGS -mfpmath=sse -o conftest.o conftest.c++ && MMXFLAGS="-mmmx"
 fi
 if test "$MMXFLAGS" != ""; then
-  MMXFLAGS="$MMXFLAGS"
   AC_MSG_CHECKING("MMX found")
   echo
   dummy="HAVE_MMX"
   AC_DEFINE_UNQUOTED($dummy)	
 else
-  if test "$enable_mmx" == "yes"; then
+  MMXFLAGS=""
+  if test "$enable_mmx" = "yes"; then
     AC_MSG_ERROR([you enforced the use of MMX although the compiler ($CXX) doesn't support it])
-  elif test "$enable_mmx" == ""; then
+  elif test "$enable_mmx" = ""; then
     AC_MSG_CHECKING("MMX not found")
     echo
   else
@@ -195,17 +220,55 @@ else
   fi
 fi
 
-dnl Checks for libraries.
+dnl Checks for headers and libraries.
 dnl ***********************************************************************
 
 dnl 
 dnl make the auxiliary libraries GemLibs
 dnl 
-
-
 if test -d $GEMLIBS
 then
   . makeauxlibs
+fi
+
+dnl look for PD
+AC_FIND_HEADER(m_pd.h, $search_heads , fail)
+
+
+dnl Checks for pd-version, to set the correct help-path
+AC_MSG_CHECKING("pd\>=0.37")
+
+if test "$with_pdversion" != ""
+then
+echo -n "($with_pdversion)... "
+  PD_VERSION="$with_pdversion"
+else
+cat > conftest.c << EOF
+#include <stdio.h>
+#include "m_pd.h"
+int main(){
+  printf("%d.%d\n", PD_MAJOR_VERSION, PD_MINOR_VERSION);
+  return 0;
+}
+EOF
+ if $CXX $INCLUDES -o conftest.o conftest.c > /dev/null 2>&1
+ then
+  PD_VERSION=`./conftest.o`
+ else
+  PD_VERSION=""
+ fi
+fi
+
+let PD_MAJORVERSION=`echo $PD_VERSION | cut -d"." -f1`+0
+let PD_MINORVERSION=`echo $PD_VERSION | cut -d"." -f2`+0
+
+if test "$PD_MAJORVERSION" -gt 0 || test "$PD_MINORVERSION" -ge 37
+then
+  REFERENCEPATH=extra/help-Gem
+  echo "yes"
+else
+  REFERENCEPATH=doc/5.reference/Gem
+  echo "no"
 fi
 
 source_dirs="$SOURCEDIRS"
@@ -244,18 +307,25 @@ then
 fi
 
 
-dnl Check for OpenGL (Original or Mesa)
+dnl we first check for the headers, as we need them anyhow
+dnl if the headers are there we check for the libraries 
+dnl on any reasonable distribution it shouldn't be possible to
+dnl install the headers without the libraries...
 
-	AC_CHECK_LIB(GL, glInitNames,,
-		AC_CHECK_LIB(MesaGL,glInitNames,,
-        	echo "OpenGL is mandatory";exit 1)
-		)
+dnl Check for OpenGL (Original or Mesa)
+AC_CHECK_HEADERS(GL/gl.h GL/glu.h,,
+      	echo "OpenGL is mandatory";exit 1)
+
+AC_CHECK_LIB(GL, glInitNames,,
+	AC_CHECK_LIB(MesaGL,glInitNames,,
+       	echo "OpenGL is mandatory";exit 1)
+)
 
 dnl Check for GLU (Original or Mesa)
-	AC_CHECK_LIB(GLU, gluLookAt, ,
-		AC_CHECK_LIB(MesaGLU,gluLookAt,,
-		echo "incomplete OpenGL (no GLU)";exit 1)
-		)
+AC_CHECK_LIB(GLU, gluLookAt, ,
+	AC_CHECK_LIB(MesaGLU,gluLookAt,,
+	echo "incomplete OpenGL (no GLU)";exit 1)
+)
 
 dnl Checking image-libraries
 dnl Check for PNG
@@ -266,40 +336,54 @@ dnl Check for Jpeg
 	AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, fail)
 
 dnl Checking font-libraries
-if test "$with_gltt" == "yes"; then
+dnl FTGL should overrule GLTT
+dnl
+dnl GLTT | FTGL || result
+dnl   y  |  y   || ftgl
+dnl   -  |  y   || ftgl
+dnl   n  |  y   || ftgl
+dnl   y  |  -   || gltt
+dnl   -  |  -   || ftgl,gltt,- !!
+dnl   n  |  -   || ftgl,-
+dnl   y  |  n   || gltt
+dnl   -  |  n   || gltt,-
+dnl   n  |  n   || -
+
+
+if test "$with_gltt" = "yes"; then
   if test "$with_ftgl" != "yes"; then
     with_ftgl="no"
   fi
 fi
 
-dnl Check for ftgl
-if test "$with_gltt" == "yes"; then
- if test "$with_ftgl" != "yes"; then
+
+if test "$with_ftgl" != "no"; then
+ AC_FIND_HEADER(FTGLPixmapFont.h, $search_heads, $with_ftgl)
+ if test "$ac_hdr" = "HAVE_FTGLPIXMAPFONT_H"; then
+  with_ftgl="yes"
+  AC_FIND_LIB(ftgl, FTGLPixmapFont,$search_libs, $with_ftgl)
+  dnl Check for freetype (ftgl depends on freetype)
+  AC_FIND_HEADER(freetype/config/ftheader.h, $search_heads, $with_ftgl)
+  AC_FIND_LIB(freetype, New_Face,$search_libs, $with_ftgl)
+  with_gltt="no"
+ else
   with_ftgl="no"
  fi
 fi
 
-if test "$with_ftgl" != "no"; then
-AC_FIND_LIB(ftgl, FTGLPixmapFont,$search_libs, $with_ftgl)
-if test "$ac_tr_lib" == "HAVE_LIBFTGL"; then
-  dnl Check for freetype (ftgl depends on freetype)
-  AC_FIND_LIB(freetype, New_Face,$search_libs, fail)
-  with_ftgl="yes"
-  with_gltt="no"
-else
-  with_ftgl="no"
-  with_gltt="yes"
-fi  fi
-
 if test "$with_gltt" != "no"
 then
 dnl Check for gltt
-  AC_FIND_LIB(gltt, open, $search_libs, $with_gltt)
+  AC_FIND_HEADER(GLTTFont.h, $search_heads, $with_gltt)
 dnl Check for TTF (gltt depends on ttf)
-  if test "$ac_tr_lib" == "HAVE_LIBGLTT"; then
+  if test "$ac_hdr" = "HAVE_GLTTFONT_H"; then
+    with_gltt="yes"
+    AC_FIND_LIB(gltt, open, $search_libs, $with_gltt)
+    dnl Check for ttf (gltt depends on this)
     AC_FIND_LIB(ttf, TT_FreeType_Version, $search_libs, fail)
   fi
 fi
+
 
 dnl Checking for video-libraries
 dnl Check for sgi vl library
@@ -308,173 +392,77 @@ AC_CHECK_LIB(vl,main,
 
 
 dnl Check glib (do we need this for png ?)
-	AC_CHECK_LIB(glib, main)
+AC_CHECK_LIB(glib, main)
 
 dnl Checking the rest
 
 dnl video formats (selectable by command-line args)
+
+dnl MPEG3 (is better than MPEG1)
 if test "$with_mpeg3" != "no"
 then
-  AC_FIND_LIB(mpeg3, mpeg3_check_sig, $search_libs, $with_mpeg3)
-fi
-
-if test "$ac_tr_lib" != "HAVE_LIBMPEG3"
-then
-  with_mpeg3="no"
+  AC_FIND_HEADER(libmpeg3.h, $search_heads, $with_mpeg3)
+  if test "$ac_hdr" = "HAVE_LIBMPEG3_H"; then
+    AC_FIND_LIB(mpeg3, mpeg3_check_sig, $search_libs, fail)
+  fi
 fi
 
 if test "$with_mpeg" != "no"
 then
   if test "$ac_tr_lib" != "HAVE_LIBMPEG3"
   then
-    AC_FIND_LIB(mpeg, OpenMPEG, $search_libs, $with_mpeg)
+    AC_FIND_HEADER(mpeg.h, $search_heads, $with_mpeg)
+    if test "$ac_hdr" = "HAVE_MPEG_H"; then
+      AC_FIND_LIB(mpeg, OpenMPEG, $search_libs, fail)
+    fi
   else
     echo skipping check for mpeg because mpeg3 is used
   fi
 fi
-if  test "$ac_tr_lib" != "HAVE_LIBMPEG"
-then
-  with_mpeg="no"
-fi
 
-if test "$with_quicktime" != "no"
-then
-  AC_FIND_LIB(quicktime, quicktime_check_sig, $search_libs, $with_quicktime)
-fi
-if  test "$ac_tr_lib" != "HAVE_LIBQUICKTIME"
-then
-  with_quicktime="no"
-fi
-
-if test "$with_avi" != "no"
-then
-  if which avifile-config > /dev/null
-  then
-    LIBS="`avifile-config --libs` $LIBS"
-    ac_tr_lib="HAVE_LIBAVIPLAY"
-    AC_DEFINE_UNQUOTED($ac_tr_lib)
-  else
-    AC_FIND_LIB(aviplay, CreateIAviReadFile, $search_libs, $with_avi)
-  fi
-fi
-if  test "$ac_tr_lib" != "HAVE_LIBAVIPLAY"
-then
-  with_avi="no"
-fi
-#
-#  Test for FFMPEG libraries
-#
-
-if test "$with_avcodec" != "" -a "$with_avformat" != ""
-then
-  echo "building pix_filmFFMPEG"
-  LIBS="$with_avcodec $with_avformat $LIBS $with_avcodec $with_avformat"
-  AC_DEFINE_UNQUOTED(HAVE_LIBAVCODEC)
-  AC_DEFINE_UNQUOTED(HAVE_LIBAVFORMAT)
-fi
-
-# end FFMPEG
-
-if test "$with_ieee1394" != "no"
-then
-  AC_FIND_LIB(dv, dv_init, $search_libs, $with_ieee1394)
-fi
-
-if test "$ac_tr_lib" != "HAVE_LIBDV"
-then
-  with_ieee1394="no"
-else
-  :  
-fi
-
-dnl Checking for Headers !
-dnl there should be a flag for which paths to search
-dnl maybe ab-use "--includedir"
-
-dnl look for PD
-AC_FIND_HEADER(m_pd.h, $search_heads , fail)
-
-dnl OpenGL
-AC_CHECK_HEADERS(GL/gl.h GL/glu.h,,
-        	echo "OpenGL is mandatory";exit 1)
-
-
-dnl truetype
-if test "$with_ftgl" != "no"
-then 
-  AC_FIND_HEADER(freetype/config/ftheader.h, $search_heads, $with_ftgl)
-  AC_FIND_HEADER(FTGLPixmapFont.h, $search_heads, $with_ftgl)
-fi
-if test "$with_gltt" != "no"
-then 
-  AC_FIND_HEADER(GLTTFont.h, $search_heads, $with_gltt)
-fi
-
-dnl video formats
-if test "$with_mpeg" != "no"
-then
-  AC_FIND_HEADER(mpeg.h, $search_heads, $with_mpeg)
-fi
-
-if test "$with_mpeg3" != "no"
-then
-  AC_FIND_HEADER(libmpeg3.h, $search_heads, $with_mpeg3)
-fi
 
 if test "$with_quicktime" != "no"
 then
   AC_FIND_HEADER(quicktime/quicktime.h, $search_heads, $with_quicktime)
+  if test "$ac_hdr" = "HAVE_QUICKTIME_QUICKTIME_H"; then
+    AC_FIND_LIB(quicktime, quicktime_check_sig, $search_libs, fail)
+  fi
 fi
+
 
 if test "$with_avi" != "no"
 then
   if which avifile-config > /dev/null
   then
     INCLUDES="`avifile-config --cflags` $INCLUDES"
+    LIBS="`avifile-config --libs` $LIBS"
+    AC_DEFINE_UNQUOTED(HAVE_LIBAVIPLAY)
   else
     AC_FIND_HEADER(avifile.h, $search_heads, $with_avi)
+    if test "$ac_hdr" = "HAVE_AVIFILE_H"; then
+      AC_FIND_LIB(aviplay, CreateIAviReadFile, $search_libs, fail)
+    fi
   fi
 fi
+
+#
+#  Test for FFMPEG libraries
+#
+if test "$with_avcodec" != "" -a "$with_avformat" != ""
+then
+  echo "building pix_film with FFMPEG support"
+  LIBS="$with_avcodec $with_avformat $LIBS $with_avcodec $with_avformat"
+  AC_DEFINE_UNQUOTED(HAVE_LIBAVCODEC)
+  AC_DEFINE_UNQUOTED(HAVE_LIBAVFORMAT)
+fi
+# end FFMPEG
 
 if test "$with_ieee1394" != "no"
 then
   AC_FIND_HEADER(libdv/dv.h, $search_heads, $with_ieee1394)
-fi
-
-dnl Checks for pd-version, to set the correct help-path
-AC_MSG_CHECKING("pd\>=0.37")
-
-if test "$with_pdversion" != ""
-then
-echo -n "($with_pdversion)... "
-  PD_VERSION="$with_pdversion"
-else
-cat > conftest.c << EOF
-#include <stdio.h>
-#include "m_pd.h"
-int main(){
-  printf("%d.%d\n", PD_MAJOR_VERSION, PD_MINOR_VERSION);
-  return 0;
-}
-EOF
- if $CXX $INCLUDES -o conftest.o conftest.c > /dev/null 2>&1
- then
-  PD_VERSION=`./conftest.o`
- else
-  PD_VERSION=""
- fi
-fi
-
-let PD_MAJORVERSION=`echo $PD_VERSION | cut -d"." -f1`+0
-let PD_MINORVERSION=`echo $PD_VERSION | cut -d"." -f2`+0
-
-if test "$PD_MAJORVERSION" -gt 0 || test "$PD_MINORVERSION" -ge 37
-then
-  REFERENCEPATH=extra/help-Gem
-  echo "yes"
-else
-  REFERENCEPATH=doc/5.reference/Gem
-  echo "no"
+  if test "$ac_hdr" = "HAVE_LIBDV_DV_H"; then
+   AC_FIND_LIB(dv, dv_init, $search_libs, fail)
+  fi
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -495,11 +483,29 @@ AC_SUBST(INCLUDES)
 
 AC_SUBST(REFERENCEPATH)
 
-RANLIB=gcc 
-AC_SUBST(RANLIB)
-
-CXXFLAGS="$CXXFLAGS -fPIC $MMXFLAGS"
+CXXFLAGS="$CXXFLAGS -fPIC"
 AC_SUBST(CXXFLAGS)
+
+AC_SUBST(AFLAGS)
+
+
+
+dnl optimization and debugging flags
+
+CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS $MMXFLAGS"
+
+if test "$CXX" = "icc"; then
+ CXXDEBUG_FLAGS="$CXXDEBUG_FLAGS"
+ CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS -ip -ipo_obj -ftz -rcd"
+ LDFLAGS="$LDFLAGS -ip -ipo_obj"
+else
+ CXXDEBUG_FLAGS="$CXXDEBUG_FLAGS -fno-builtin"
+ CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS -O3 -funroll-loops -ffast-math"
+fi
+
+AC_SUBST(CXXDEBUG_FLAGS)
+AC_SUBST(CXXOPTIMIZE_FLAGS)
+
 
 dnl 
 dnl We will use the same Makefiles for any subdir .. so build the Makefile.in

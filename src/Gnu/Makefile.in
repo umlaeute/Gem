@@ -1,6 +1,6 @@
 #use "configure" to generate a Makefile out of this
 
-CXXLINK = $(CXX) $(CXXFLAGS) -o $@
+CXXLINK = @CXX@ $(CXXFLAGS) -o $@
 LDFLAGS = @LDFLAGS@ 
 LDADD = @arch_ld_flags@
 LIBS = @LIBS@
@@ -8,8 +8,6 @@ INCLUDES = @INCLUDES@
 
 PDLIBDIR = @prefix@@PDBASE@
 DOCBASE = @DOCBASE@
-
-#SYSTEMDOCS = @prefix@@DOCBASE@/gem
 
 TARG_DIR = ../Manips  ../Particles ../Base ../MarkEx ../Pixes ../Controls ../Nongeos  ../Geos ../openGL
 
@@ -22,7 +20,6 @@ OBJECTS = ../Manips/*.o \
          ../Nongeos/*.o \
          ../Geos/*.o \
 	 ../openGL/*.o \
-#OBJECTS = ../Objects/*.o
 
 
 all: subdirs Gem.pd_linux
@@ -94,21 +91,4 @@ installdocs:
 	install -d $(DESTDIR)/$(PDLIBDIR)/@REFERENCEPATH@
 	install -m644 ../../help/*.* $(DESTDIR)/$(PDLIBDIR)/@REFERENCEPATH@
 
-## don't use this, just a remembrance
-installdocs_sys:
-#	install -d $(DESTDIR)/$(SYSTEMDOCS)
-#	install -m644 ../../doc/*.* $(DESTDIR)/$(SYSTEMDOCS)
-	install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
-	install -m644 ../../examples/*.* $(DESTDIR)/$(PDLIBDIR)/doc/gem
-
-	install -d $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/Gem
-	install -m644 ../../help/*.* $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/Gem
-
-#	cp -r ../../examples $(DESTDIR)/$(SYSTEMDOCS)
-#	cp -r ../../manual $(DESTDIR)/$(SYSTEMDOCS)
-
-#	ln -fs $(SYSTEMDOCS) $(DESTDIR)/$(PDLIBDIR)/doc/
-
-#	touch $(DESTDIR)/$(SYSTEMDOCS)/CVS
-#	rm -rf `find $(DESTDIR)/$(SYSTEMDOCS) -name *CVS*`
 
