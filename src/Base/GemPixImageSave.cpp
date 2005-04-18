@@ -56,8 +56,6 @@ extern "C"
 #endif
 }
 
-
-
 #include "GemPixUtil.h"
 
 
@@ -247,6 +245,12 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 #else
 #include "sgiimage.h"
 
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+# include <Magick++.h>
+int mem2magickImage(imageStruct* image, const char *filename);
+#endif
+
+
 int mem2tiffImage(imageStruct* image, const char *filename);
 int mem2jpegImage(imageStruct* image, const char *filenamem, int quality);
 /***************************************************************************
@@ -259,6 +263,9 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 
   switch (type) {
   case 0:
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+    if (mem2magickImage(image, filename)) return(1);else
+#endif
     // write to a TIFF file
     if (mem2tiffImage(image, filename))
       return(1);
@@ -420,3 +427,23 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
 }
 #endif //__APPLE__
 
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+/***************************************************************************
+ *
+ * Write an image using ImageMagick++
+ *
+ ***************************************************************************/
+int mem2magickImage(imageStruct *image, const char *filename)
+{
+  try{
+    Magick::Blob blob(image->data, image->xsize*image->ysize*image->csize);
+    Magick::Image mimage(blob, Magick::Geometry(image->xsize, image->ysize, 0, 0, false, true));
+
+    mimage.write(filename);
+    post("magick");
+  } catch (Magick::Exception e){
+    return 0;
+  }
+  return 1;
+}
+#endif

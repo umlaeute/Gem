@@ -59,6 +59,12 @@ extern "C"
 
 #include "GemPixUtil.h"
 
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+# include <Magick++.h>
+imageStruct *magickImage2mem(const char *filename);
+#endif
+
+
 #ifdef __APPLE__
 imageStruct *QTImage2mem(GraphicsImportComponent inImporter);
 OSStatus FSPathMakeFSSpec(
@@ -70,23 +76,6 @@ imageStruct *tiffImage2mem(const char *filename);
 imageStruct *jpegImage2mem(const char *filename);
 imageStruct *sgiImage2mem(const char *filename);
 
-
-/* this function gives us 32 byte aligned data, the cache line size
-   of  pentiums */
-
-unsigned char* img_allocate(int size)
-{
-  unsigned char* data;
-#if 0
-  unsigned char* pad;
-  pad = new unsigned char[size];
-  data = (unsigned char*) ((((unsigned int)pad)+31)& (~31));
-#else
-  data = new unsigned char [size];
-#endif
-
-  return data; 
-}
 #endif // __APPLE__
 
 /***************************************************************************
@@ -187,7 +176,13 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 		sprintf(newName, "%s/%s", realName, realResult);
 	}
 
-	
+# ifdef HAVE_LIBMAGICKPLUSPLUS
+	// try to load via ImageMagick
+	if ( (image_block = magickImage2mem(newName)) )
+			return(image_block);
+# endif
+
+
 	// try to load in a JPEG file
 	if ( (image_block = jpegImage2mem(newName)) )
 			return(image_block);
@@ -719,3 +714,28 @@ imageStruct *sgiImage2mem(const char *filename)
 }
 #endif //__APPLE__
 
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+imageStruct *magickImage2mem(const char *filename){
+  imageStruct *image_block = new imageStruct;
+  Magick::Image image;
+  try {
+    // Read a file into image object
+    image.read( filename );
+    image.flip();
+
+    image_block->xsize=(GLint)image.columns();
+    image_block->ysize=(GLint)image.rows();
+    image_block->setCsizeByFormat(GL_RGBA);
+    image_block->reallocate();
+
+    image.write(0,0,image_block->xsize,image_block->ysize,
+		"RGBA",
+		Magick::CharPixel,
+		(void*)(image_block->data));
+  }catch( Magick::Exception e )  {
+    return NULL;
+  }
+  return image_block;
+}
+
+#endif
