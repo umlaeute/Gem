@@ -180,9 +180,15 @@ AC_CHECK_PROGS(shell_prog,sh)
 
 AC_PATH_XTRA
 
-if test "$enable_new" != "no"; then
- CXXFLAGS="$CXXFLAGS -DNEW_VIDEOFILM"
-fi
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+dnl AC_C_INLINE
+AC_TYPE_SIZE_T
+
+dnl Checks for library functions.
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(strdup strstr)
 
 dnl Checks for MMX
 if test "$enable_mmx" != "no"; then
@@ -465,29 +471,12 @@ then
   fi
 fi
 
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-dnl AC_C_INLINE
-AC_TYPE_SIZE_T
-
-dnl Checks for library functions.
-AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(strdup strstr)
 
 
-AC_SUBST(SGI_SPECIFIC)
-
-AC_SUBST(arch_ld_flags)
-AC_SUBST(LIBS)
-AC_SUBST(INCLUDES)
-
-AC_SUBST(REFERENCEPATH)
-
-CXXFLAGS="$CXXFLAGS -fPIC"
-AC_SUBST(CXXFLAGS)
-
-AC_SUBST(AFLAGS)
-
+dnl a (not so) new scheme for movie/video-loading
+if test "$enable_new" != "no"; then
+ CXXFLAGS="$CXXFLAGS -DNEW_VIDEOFILM"
+fi
 
 
 dnl optimization and debugging flags
@@ -502,6 +491,22 @@ else
  CXXDEBUG_FLAGS="$CXXDEBUG_FLAGS -fno-builtin"
  CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS -O3 -funroll-loops -ffast-math"
 fi
+
+
+dnl do some substitution
+
+AC_SUBST(SGI_SPECIFIC)
+
+AC_SUBST(arch_ld_flags)
+AC_SUBST(LIBS)
+AC_SUBST(INCLUDES)
+
+AC_SUBST(REFERENCEPATH)
+
+CXXFLAGS="$CXXFLAGS -fPIC"
+AC_SUBST(CXXFLAGS)
+
+AC_SUBST(AFLAGS)
 
 AC_SUBST(CXXDEBUG_FLAGS)
 AC_SUBST(CXXOPTIMIZE_FLAGS)
