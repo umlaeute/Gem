@@ -51,6 +51,7 @@ AC_ARG_ENABLE(static, [  --enable-static         static linking (default is: dyn
 AC_ARG_ENABLE(new,    [  --disable-new           disable new versions of pix_film/pix_video])
 AC_ARG_WITH(gltt,      [  --with-gltt             enable GLTT (for font rendering (old))])
 AC_ARG_WITH(ftgl,      [  --with-ftgl             enable FTGL (for font rendering)])
+AC_ARG_WITH(magick,    [  --with-imagemagick      enable image-magick image loading])
 AC_ARG_WITH(mpeg,      [  --with-mpeg             enable MPEG(1)-filmIN support])
 AC_ARG_WITH(mpeg3,     [  --with-mpeg3            enable MPEG3-filmIN support (overrides MPEG(1)-support)])
 AC_ARG_WITH(quicktime, [  --with-quicktime        enable quicktime-filmIN support])
@@ -341,6 +342,16 @@ dnl Check for TIFF
 dnl Check for Jpeg
 	AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, fail)
 
+dnl Check for ImageMagick++
+if test "$with_magick" != "no"
+then
+  AC_FIND_HEADER(Magick++.h, $search_heads, $with_quicktime)
+  if test "$ac_hdr" = "HAVE_MAGICKPLUSPLUS_H"; then
+    AC_FIND_LIB(Magick++, Image, $search_libs, fail)
+  fi
+fi
+
+
 dnl Checking font-libraries
 dnl FTGL should overrule GLTT
 dnl
@@ -401,6 +412,7 @@ dnl Check glib (do we need this for png ?)
 AC_CHECK_LIB(glib, main)
 
 dnl Checking the rest
+
 
 dnl video formats (selectable by command-line args)
 

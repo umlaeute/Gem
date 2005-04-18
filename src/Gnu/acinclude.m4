@@ -77,7 +77,7 @@ dnl this might not be very portable, but at least it works for now
          fi
      else
 dnl i thought this would be handled by AC_CHECK_LIB
-	ac_tr_lib=`echo "HAVE_LIB$1" | sed -e 's/^a-zA-Z0-9_/_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+	ac_tr_lib=`echo "HAVE_LIB$1" | sed -e 's/^a-zA-Z0-9_/_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' -e 's/+/PLUS/g'`
 	AC_DEFINE_UNQUOTED($ac_tr_lib)
         LIBS="-l$1 $LIBS"
      fi
@@ -121,7 +121,7 @@ dnl       	 AC_MSG_RESULT($found_path)
           AC_MSG_ERROR("can\'t find path to $1"); else
           AC_MSG_WARN("can\'t find path to $1"); fi
      else
-	ac_hdr=`echo "HAVE_$1" | sed -e 's/^a-zA-Z0-9_./_/g' -e 's/\./_/g' -e 's/\//_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+	ac_hdr=`echo "HAVE_$1" | sed -e 's/^a-zA-Z0-9_./_/g' -e 's/\./_/g' -e 's/\//_/g' -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' -e 's/+/PLUS/g'`
 	AC_DEFINE_UNQUOTED($ac_hdr)
      fi
 )
