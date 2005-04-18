@@ -455,6 +455,8 @@ then
     INCLUDES="`avifile-config --cflags` $INCLUDES"
     LIBS="`avifile-config --libs` $LIBS"
     AC_DEFINE_UNQUOTED(HAVE_LIBAVIPLAY)
+    AC_MSG_CHECKING("for avifile")
+    echo "yes"
   else
     AC_FIND_HEADER(avifile.h, $search_heads, $with_avi)
     if test "$ac_hdr" = "HAVE_AVIFILE_H"; then
