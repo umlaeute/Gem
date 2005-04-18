@@ -198,7 +198,7 @@ void rubber :: render(GemState *state)
     
     glNormal3f(0.0f, 0.0f, 1.0f);
      
-    if (state->texture && state->numTexCoords) {
+    if (state->texture && state->numTexCoords>=3) {
 
       if ((xsize  != state->texCoords[1].s) ||
 	  (ysize  != state->texCoords[1].t) ||

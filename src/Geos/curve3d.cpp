@@ -162,7 +162,7 @@ void curve3d :: render(GemState *state){
   GLfloat ysize = 1.0f;
   GLfloat ysize0= 0.0f;
 
-  if (state->texture)
+  if (state->texture && state->numTexCoords>=3)
     {
       xsize  = state->texCoords[1].s;
       ysize0 = state->texCoords[2].t;

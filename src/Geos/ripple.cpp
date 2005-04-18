@@ -80,7 +80,7 @@ void ripple :: render(GemState *state)
 
     glScalef(2.*m_size, 2.*m_size, 2.*m_size);
     
-    if (state->texture && state->numTexCoords)
+    if (state->texture && state->numTexCoords>=3)
     {
       if ((xsize  != state->texCoords[1].s) ||
 	  (ysize  != state->texCoords[1].t) ||

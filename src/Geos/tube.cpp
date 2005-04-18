@@ -178,7 +178,7 @@ void tube :: render(GemState *state){
     GLfloat ysize0 = 0.0;
     GLfloat ysize1 = 1.0;
 
-    if (state->image){
+    if (state->image  && state->numTexCoords>=3){
       xsize =  state->texCoords[1].s;
       ysize0 = state->texCoords[2].t;
       ysize1 = state->texCoords[1].t;

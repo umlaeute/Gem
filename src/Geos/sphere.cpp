@@ -231,15 +231,13 @@ void sphere :: render(GemState *state)
   int src;
   src = 0;
 
-  
-  
-  GLfloat xsize = 1.0, xsize0 = 0.0;
+    GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(state->texture){
-    xsize0 = state->texCoords[0].s;
-    xsize  = state->texCoords[1].s-xsize0;
-    ysize0 = state->texCoords[1].t;
-    ysize  = state->texCoords[2].t-ysize0;
+  if(state->texture && state->numTexCoords>=3){
+      xsize0 = state->texCoords[0].s;
+      xsize  = state->texCoords[1].s-xsize0;
+      ysize0 = state->texCoords[1].t;
+      ysize  = state->texCoords[2].t-ysize0;
   }
     
   drho = M_PI / (GLfloat) stacks;
@@ -261,7 +259,7 @@ void sphere :: render(GemState *state)
       oldDrawType = m_drawType;
       oldTexture = state->texture;
   }
-  
+ 
   if (m_drawType == GL_FILL) {
 
     src = 0;
@@ -332,7 +330,7 @@ void sphere :: render(GemState *state)
     }
   }
   else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
-      
+     
       src = 0;
       
       for (i = 1; i < stacks; i++) {	// stack line at i==stacks-1 was missing here

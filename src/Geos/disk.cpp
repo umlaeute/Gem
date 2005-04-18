@@ -94,11 +94,11 @@ void disk :: render(GemState *state)
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(state->texture){
-    xsize0 = state->texCoords[0].s;
-    xsize  = state->texCoords[1].s-xsize0;
-    ysize0 = state->texCoords[1].t;
-    ysize  = state->texCoords[2].t-ysize0;
+  if(state->texture && state->numTexCoords>=3){
+      xsize0 = state->texCoords[0].s;
+      xsize  = state->texCoords[1].s-xsize0;
+      ysize0 = state->texCoords[1].t;
+      ysize  = state->texCoords[2].t-ysize0;
   }
 
   //gluDisk(m_thing, m_innerRadius, m_size, m_numSlices, m_numSlices);
