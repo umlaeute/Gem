@@ -60,13 +60,15 @@ pix_freeframe :: pix_freeframe(t_symbol*s) : m_plugin(NULL),m_instance(FF_FAIL)
     sprintf(buf, "%s/%s", buf2, bufptr);
   } else
     canvas_makefilename(getCanvas(), pluginname, buf, MAXPDSTRING);
-
+  post("trying to load %s", buf);
 
   m_plugin=ff_loadplugin(buf, &can_rgba);
 
+  post("plugin @ %X", m_plugin);
+
   m_image.setCsizeByFormat(can_rgba?GL_RGBA:GL_RGB);
 
-  if(!m_plugin)throw("couldn't load %s", pluginname);
+  if(!m_plugin)throw(GemException("couldn't load FreeFrame-plugin"));
 
   PlugInfoStruct *pis = (m_plugin(FF_GETINFO, NULL, 0)).PISvalue;
   strncpy(m_pluginName, (char *)(pis->pluginName), 16);
@@ -77,7 +79,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s) : m_plugin(NULL),m_instance(FF_FAIL)
   int numparams = m_plugin(FF_GETNUMPARAMETERS, NULL, 0).ivalue;
   if (numparams == FF_FAIL){
     error("plugin %s: numparameters failed",  pluginname);
-    throw("reading numparameters failed");
+    throw(GemException("reading numparameters failed"));
   }
   // we have a maximum of 8 parameters (?)
   if(numparams>8)numparams=8;
@@ -236,6 +238,7 @@ plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   unsigned int instance;
 
   char*libname=name;
+  if(name==NULL)return NULL;
 
   void *plugin_handle = dlopen(libname, RTLD_NOW);
   if(!plugin_handle){
@@ -284,10 +287,5 @@ void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 
 void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
   int i = atoi(s->s_name+1);
-  if (i>0){
-    if(argc>0)
-      GetMyClass(data)->parmMess(i-1, argv);
-    else 
-      GetMyClass(data)->parmMess(i-1, NULL);
-  }
+  GetMyClass(data)->parmMess(i, (argc>0)?argv:NULL);
 }
