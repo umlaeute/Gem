@@ -18,12 +18,18 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_freeframe.h"
-#include <dlfcn.h>
 #include <stdio.h>
 
 #ifdef NT
 # include <io.h>
+# include <windows.h>
 #else
+# ifdef __APPLE__
+#  include <mach-o/dyld.h> 
+# else
+#  define DL_OPEN
+#  include <dlfcn.h>
+# endif /* __APPLE__ */
 # include <unistd.h>
 #endif
 
@@ -235,21 +241,58 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
 /////////////////////////////////////////////////////////
 plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
 {
+  char*hookname="plugMain";
+  char*libname=name;
+
   unsigned int instance;
 
-  char*libname=name;
   if(name==NULL)return NULL;
-
-  void *plugin_handle = dlopen(libname, RTLD_NOW);
+  
+  void *plugin_handle = NULL;
+  plugMainType *plugmain = NULL;
+  
+#ifdef DL_OPEN
+  plugin_handle=dlopen(libname, RTLD_NOW);
   if(!plugin_handle){
     error("pix_freeframe[%s]: %s", libname, dlerror());
     return NULL;
   }
   dlerror();
 
-  plugMainType *plugmain = (plugMainType *)(unsigned)dlsym(plugin_handle, "plugMain");
+  plugmain = (plugMainType *)(unsigned)dlsym(plugin_handle, hookname);
+
+#elif defined __APPLE__
+  NSObjectFileImage image; 
+  void *ret;
+  NSSymbol s; 
+  if ( NSCreateObjectFileImageFromFile( libname, &image) != NSObjectFileImageSuccess ) {
+    post("%s: couldn't load", libname);
+    class_set_extern_dir(&s_);
+    return 0;
+  }
+  ret = NSLinkModule( image, libname, 
+		      NSLINKMODULE_OPTION_BINDNOW + NSLINKMODULE_OPTION_PRIVATE); 
+  
+  s = NSLookupSymbolInModule(ret, hookname); 
+  
+  if (s)
+    makeout = (plugMainType *)NSAddressOfSymbol( s);
+  else makeout = 0;
+  
+#elif defined NT
+  HINSTANCE ntdll;
+
+  sys_bashfilename(libname, libname);
+  ntdll = LoadLibrary(libname);
+  if (!ntdll) {
+    post("%s: couldn't load", libname);
+    return (0);
+  }
+  makeout = (plugMainType *)GetProcAddress(ntdll, hookname);
+#else
+# error no way to load dynamic linked libraries on this OS
+#endif
   if(plugmain == NULL){
-    error("plugin [%s]: %s", libname, dlerror());
     return NULL;
   }
 
@@ -262,19 +305,21 @@ plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
     }
   }
 
-  if ((plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_32BITVIDEO, 0)).ivalue == FF_TRUE){
-    *can_rgba=1;
-  } else {
-    *can_rgba=0;
-    if ((plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_24BITVIDEO, 0)).ivalue != FF_TRUE){
-      error("plugin %s: no %dbit support", name, 24);
-      return NULL;
-    }
-  }
-
   if ((plugmain(FF_INITIALISE, NULL, 0)).ivalue == FF_FAIL){
     error("plugin %s: init failed", name);
     return NULL;
+  }
+
+  if ((plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_32BITVIDEO, 0)).ivalue == FF_TRUE){
+    if(can_rgba)*can_rgba=1;
+  } else {
+    if(can_rgba)*can_rgba=0;
+    if ((plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_24BITVIDEO, 0)).ivalue != FF_TRUE){
+      error("plugin %s: no %dbit support", name, 24);
+
+      plugmain(FF_DEINITIALISE, NULL, 0);
+      return NULL;
+    }
   }
 
   return plugmain;
