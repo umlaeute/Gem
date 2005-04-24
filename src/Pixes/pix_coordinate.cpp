@@ -50,8 +50,10 @@ pix_coordinate :: ~pix_coordinate()
 /////////////////////////////////////////////////////////
 void pix_coordinate :: render(GemState *state)
 {
-    state->numTexCoords = m_numCoords;
-    state->texCoords = m_coords;
+    if (state->texture && m_numCoords){
+        state->numTexCoords = m_numCoords;
+        state->texCoords = m_coords;
+    }
 }
 
 /////////////////////////////////////////////////////////
