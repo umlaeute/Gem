@@ -24,7 +24,7 @@ class GEM_EXTERN pix_movement2 : public GemPixObj
 
   unsigned char m_tresh, m_lowtresh;
 
-  boolean m_storeBackground, m_resetTreshold;
+  bool m_storeBackground, m_resetTreshold;
 
   t_inlet*m_treshInlet, *m_lowtreshInlet;
 
