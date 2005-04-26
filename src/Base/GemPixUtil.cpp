@@ -153,7 +153,7 @@ GEM_EXTERN void imageStruct::clear()
 
 GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
     if (!to || !this || !this->data) {
-      error("GEM: Someone sent a bogus pointer to copy2Image");
+      error("GEM: Someone sent a bogus pointer to copy2ImageStruct");
       if (to) to->data = NULL;
       return;
     }
@@ -1322,6 +1322,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 
 	  // 1st row - 1st pixel
 	  y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
+#ifndef __APPLE__
 	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
 	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
 	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
@@ -1347,6 +1348,35 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
 	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
 	  pixels2+=3;
+
+#else
+	  pixels1[2 ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels1[1] = CLAMP((y + uv_g) >> 8); // g
+	  pixels1[0] = CLAMP((y + uv_b) >> 8); // b
+	  pixels1+=3;
+
+	  // 1st row - 2nd pixel
+	  y=YUV2RGB_11*((*py1++)>>7);
+	  pixels1[2 ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels1[1] = CLAMP((y + uv_g) >> 8); // g
+	  pixels1[0] = CLAMP((y + uv_b) >> 8); // b
+	  pixels1+=3;
+
+	  // 2nd row - 1st pixel
+	  y=YUV2RGB_11*((*py2++)>>7);
+	  pixels2[2 ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels2[1] = CLAMP((y + uv_g) >> 8); // g
+	  pixels2[0 ] = CLAMP((y + uv_b) >> 8); // b
+	  pixels2+=3;
+
+	  // 2nd row - 2nd pixel
+	  y=YUV2RGB_11*((*py2++)>>7);
+	  pixels2[2 ] = CLAMP((y + uv_r) >> 8); // r
+	  pixels2[1] = CLAMP((y + uv_g) >> 8); // g
+	  pixels2[0] = CLAMP((y + uv_b) >> 8); // b
+	  pixels2+=3;
+#endif
+
 	}
 	pixels1+=xsize*csize;	pixels2+=xsize*csize;
 	py1+=xsize*1;	py2+=xsize*1;
@@ -1361,8 +1391,8 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 
       short*py1=Y;//yuvdata;
       short*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
-      short*pv=(format==GL_BGRA_EXT)?U:V;
-      short*pu=(format==GL_RGBA)?U:V;
+      short*pv=V;//(format==GL_BGRA_EXT)?U:V;
+      short*pu=U;//(format==GL_RGBA)?U:V;
 
       int y, u, v, yy, vr, ug, vg, ub;
       int uv_r, uv_g, uv_b;
