@@ -71,6 +71,9 @@ class GEM_EXTERN GemState
     	
     	//////////
     	// Texture mapping on?
+	// 0..off
+	// 1..normalized texture
+	// 2..rectangle texture
     	int 	    	    texture;
     	
     	//////////
@@ -85,7 +88,7 @@ class GEM_EXTERN GemState
     	//////////
     	// The number of TexCoords
     	int 	    	    numTexCoords;
-    	
+
 	float**             vertexColors;
 	int 	    	    numVertexColors;
 
