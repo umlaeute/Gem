@@ -18,16 +18,11 @@ LOG
 #include "Base/GemPixObj.h"
 #include "FreeFrame.h"
 
-//typedef plugMainUnion plugMainType(DWORD, LPVOID, DWORD);
-
-typedef struct
-{
-    char	name[17];
-    char	id[5];
-    plugMainType *plugmain;
-    unsigned	instance;
-    unsigned	numparameters;
-} PLUGIN;
+#ifdef __linux__
+# define T_FFPLUGMAIN plugMainType*
+#else
+# define T_FFPLUGMAIN FF_Main_FuncPtr
+#endif
 
 
 /*-----------------------------------------------------------------
@@ -65,14 +60,14 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     void 	processImage(imageStruct &image);
 
     imageStruct m_image;
-    plugMainType*m_plugin;
+    T_FFPLUGMAIN m_plugin;
     unsigned int m_instance;
 
     char	 m_pluginName[17];
     char	 m_pluginId[5];
     unsigned int m_numparameters;
 
-    static plugMainType*ff_loadplugin(char*name, int*can_rgba);
+    static T_FFPLUGMAIN ff_loadplugin(char*name, int*can_rgba);
 
     t_inlet**m_inlet;
 

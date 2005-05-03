@@ -34,6 +34,33 @@
 #endif
 
 
+/*
+ * here comes some magic:
+ *
+ * on linux, "m_plugmain" is a pointer to the "plugMainType"-union, 
+ *    so we can access the values via .-notation
+ * on windows, "m_plugmain" is a pointer to "FF_Main_FuncPtr", which is "void*",
+ *    so we have to cast
+ * on osX i am not sure, but i guess it is the same as on windows
+ *
+ * the magic:
+ *   "T_FFPLUGMAIN" is the type of m_plugmain (whatever it actually is)
+ *   "FF_PLUGMAIN_...()" are some helper-functions, that do the actual union-access (or cast)
+ *
+ * this should keep the code fairly simple
+ */
+
+#ifdef __linux__
+# define FF_PLUGMAIN_INT(x) (x).ivalue
+# define FF_PLUGMAIN_STR(x) (x).svalue
+# define FF_PLUGMAIN_PIS(x) (x).PISvalue
+#else
+# define FF_PLUGMAIN_INT(x) (int)(x)
+# define FF_PLUGMAIN_STR(x) (char*)(x)
+# define FF_PLUGMAIN_PIS(x) (PlugInfoStruct*)(x)
+#endif
+
+
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_freeframe,  t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
@@ -76,19 +103,18 @@ pix_freeframe :: pix_freeframe(t_symbol*s) : m_plugin(NULL),m_instance(FF_FAIL)
 
   if(!m_plugin)throw(GemException("couldn't load FreeFrame-plugin"));
 
-  PlugInfoStruct *pis = (m_plugin(FF_GETINFO, NULL, 0)).PISvalue;
+  PlugInfoStruct *pis = FF_PLUGMAIN_PIS(m_plugin(FF_GETINFO, NULL, 0));
+
   strncpy(m_pluginName, (char *)(pis->pluginName), 16);
   strncpy(m_pluginId, (char *)(pis->uniqueID), 4);
   m_pluginName[16] = 0;
   m_pluginId[4] = 0;
 
-  int numparams = m_plugin(FF_GETNUMPARAMETERS, NULL, 0).ivalue;
+  int numparams = FF_PLUGMAIN_INT(m_plugin(FF_GETNUMPARAMETERS, NULL, 0));
   if (numparams == FF_FAIL){
     error("plugin %s: numparameters failed",  pluginname);
     throw(GemException("reading numparameters failed"));
   }
-  // we have a maximum of 8 parameters (?)
-  if(numparams>8)numparams=8;
 
   m_inlet=new t_inlet*[numparams];
 
@@ -106,8 +132,8 @@ pix_freeframe :: pix_freeframe(t_symbol*s) : m_plugin(NULL),m_instance(FF_FAIL)
     // use
     //   ParameterType
 
-    parmType=m_plugin(FF_GETPARAMETERTYPE, (LPVOID)i, 0).ivalue;
-    p_name=m_plugin(FF_GETPARAMETERNAME, (LPVOID)i, 0).svalue;
+    parmType=FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, (LPVOID)i, 0));
+    p_name=  FF_PLUGMAIN_STR(m_plugin(FF_GETPARAMETERNAME, (LPVOID)i, 0));
     post("\tparam%s: %s", tempVt, p_name);
 
     switch(parmType){
@@ -149,59 +175,65 @@ void pix_freeframe :: processImage(imageStruct &image)
   int format=m_image.format;
   unsigned char*data=image.data;
 
-  if(m_plugin){
-    if(m_instance==FF_FAIL ||  m_image.xsize!=image.xsize || m_image.ysize!=image.ysize){
-      // either make the first instance of the plugin
-      // OR the input format has changed, so we have to re-instantiate
+  if(m_plugin==NULL)return;
 
-      if(m_instance!=FF_FAIL)m_plugin(FF_DEINSTANTIATE, NULL, m_instance);
+  if(m_instance==FF_FAIL ||  m_image.xsize!=image.xsize || m_image.ysize!=image.ysize){
+    // either make the first instance of the plugin
+    // OR the input format has changed, so we have to re-instantiate
 
-      VideoInfoStruct vidinfo;
-      m_image.xsize=image.xsize;
-      m_image.ysize=image.ysize;
+    if(m_instance!=FF_FAIL)m_plugin(FF_DEINSTANTIATE, NULL, m_instance);
+    
+    VideoInfoStruct vidinfo;
+    m_image.xsize=image.xsize;
+    m_image.ysize=image.ysize;
+    
+    vidinfo.frameWidth = image.xsize;
+    vidinfo.frameHeight = image.ysize;
+    // the default openGL-orientation is (0,0)==lowerleft, which is 2 in FreeFrame
+    vidinfo.orientation = (image.upsidedown)?1:2;
 
-      vidinfo.frameWidth = image.xsize;
-      vidinfo.frameHeight = image.ysize;
-      vidinfo.orientation = 1;
-
-      // this needs a bit more intelligence:
-      // the plugin might support RGBA and/or RGB
-      // what is fastest ???
-      vidinfo.bitDepth = (format==GL_RGBA)?FF_CAP_32BITVIDEO:FF_CAP_32BITVIDEO;
-
-      m_instance = m_plugin(FF_INSTANTIATE, &vidinfo, 0).ivalue;
-
-      if(m_instance==FF_FAIL)return;
-      m_image.reallocate();
-
-    }
-    if(image.format!=format){
-      switch (image.format){
-      case GL_RGBA:
-	m_image.fromRGBA(image.data);
-	break;
-      case GL_BGRA_EXT: /* "RGBA" on apple */
-	m_image.fromBGRA(image.data);
-	break;
-      case GL_LUMINANCE:
-	m_image.fromGray(image.data);
-	break;
-      case GL_YCBCR_422_GEM: // YUV
-	m_image.fromUYVY(image.data);
-	break;
-      }
-      data=m_image.data;
-    } else 
-      data=image.data;
-
-    m_plugin(FF_PROCESSFRAME, data,  m_instance);
-
-    if(image.data!=data)
-      if(format==GL_RGBA)
-	image.fromRGBA(m_image.data);
-      else
-	image.fromRGB(m_image.data);
+    // this needs a bit more intelligence:
+    // the plugin might support RGBA and/or RGB
+    // what is fastest ???
+    vidinfo.bitDepth = (format==GL_RGBA)?FF_CAP_32BITVIDEO:FF_CAP_32BITVIDEO;
+    
+    m_instance = FF_PLUGMAIN_INT(m_plugin(FF_INSTANTIATE, &vidinfo, 0));
+    
+    if(m_instance==FF_FAIL)return;
+    m_image.reallocate();
+    
   }
+
+  // convert the current image into a format that suits the FreeFrame-plugin
+  if(image.format!=format){
+    switch (image.format){
+    case GL_RGBA:
+      m_image.fromRGBA(image.data);
+      break;
+    case GL_BGRA_EXT: /* "RGBA" on apple */
+      m_image.fromBGRA(image.data);
+      break;
+    case GL_LUMINANCE: // greyscale
+      m_image.fromGray(image.data);
+      break;
+    case GL_YUV422_GEM: // YUV
+      m_image.fromYUV422(image.data);
+      break;
+    }
+    data=m_image.data;
+  } else 
+    data=image.data;
+  
+  // yeah, do it!
+  m_plugin(FF_PROCESSFRAME, data,  m_instance);
+  
+  // check whether we have converted our image data
+  if(image.data!=data)
+    // it seems, like we did: convert it back
+    if(format==GL_RGBA)
+      image.fromRGBA(m_image.data);
+    else
+      image.fromRGB(m_image.data);
 }
 
 
@@ -210,7 +242,7 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
     SetParameterStruct sps;
     sps.index = param;
 
-    switch (m_plugin(FF_GETPARAMETERTYPE, (LPVOID)param, 0).ivalue){
+    switch (FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, (LPVOID)param, 0))){
     case FF_TYPE_EVENT:
       sps.value.fvalue=1.0;
       break;
@@ -238,10 +270,13 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
 //
 // LATER: check whether we already have loaded THIS plugin
 //
+// note: on linux we can load the same dll multiple times, so we don't need this check
+// LATER check the other OS's
+//
 /////////////////////////////////////////////////////////
-plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
+T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
 {
-  char*hookname="plugMain";
+  const char*hookname="plugMain";
   char*libname=name;
 
   unsigned int instance;
@@ -249,7 +284,7 @@ plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   if(name==NULL)return NULL;
   
   void *plugin_handle = NULL;
-  plugMainType *plugmain = NULL;
+  T_FFPLUGMAIN plugmain = NULL;
   
 #ifdef DL_OPEN
   plugin_handle=dlopen(libname, RTLD_NOW);
@@ -259,7 +294,7 @@ plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   }
   dlerror();
 
-  plugmain = (plugMainType *)(unsigned)dlsym(plugin_handle, hookname);
+  plugmain = (T_FFPLUGMAIN)(unsigned)dlsym(plugin_handle, hookname);
 
 #elif defined __APPLE__
   NSObjectFileImage image; 
@@ -276,8 +311,8 @@ plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   s = NSLookupSymbolInModule(ret, hookname); 
   
   if (s)
-    makeout = (plugMainType *)NSAddressOfSymbol( s);
-  else makeout = 0;
+    plugmain = (T_FFPLUGMAIN)NSAddressOfSymbol( s);
+  else plugmain = 0;
   
 #elif defined NT
   HINSTANCE ntdll;
@@ -286,9 +321,9 @@ plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   ntdll = LoadLibrary(libname);
   if (!ntdll) {
     post("%s: couldn't load", libname);
-    return (0);
+    return NULL;
   }
-  makeout = (plugMainType *)GetProcAddress(ntdll, hookname);
+  plugmain = (T_FFPLUGMAIN)GetProcAddress(ntdll, hookname);
 #else
 # error no way to load dynamic linked libraries on this OS
 #endif
@@ -296,8 +331,7 @@ plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
     return NULL;
   }
 
-  PlugInfoStruct *pis = (plugmain(FF_GETINFO, NULL, 0)).PISvalue;
-
+  PlugInfoStruct *pis = FF_PLUGMAIN_PIS(plugmain(FF_GETINFO, NULL, 0));
   if(pis){
     if (pis->APIMajorVersion < 1){
       error("plugin %s: old api version", name);
@@ -305,17 +339,25 @@ plugMainType* pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
     }
   }
 
-  if ((plugmain(FF_INITIALISE, NULL, 0)).ivalue == FF_FAIL){
+  if (FF_PLUGMAIN_INT(plugmain(FF_INITIALISE, NULL, 0)) == FF_FAIL){
     error("plugin %s: init failed", name);
     return NULL;
   }
 
-  if ((plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_32BITVIDEO, 0)).ivalue == FF_TRUE){
+  /*
+   * check which formats are supported:
+   * currently we cannot handle RGB16 as we don't have any conversion routines implemented
+   * the other options are RGB==RGB24 and RGBA=RGB32
+   * we prefer RGB32, as this is one of our native formats (and YUV2RGBA conversion is likely to be faster)
+   * so we check whether the plugin knows how to do RGB32
+   * if it doesn't, we try RGB24
+   */
+  if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_32BITVIDEO, 0)) == FF_TRUE){
     if(can_rgba)*can_rgba=1;
   } else {
     if(can_rgba)*can_rgba=0;
-    if ((plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_24BITVIDEO, 0)).ivalue != FF_TRUE){
-      error("plugin %s: no %dbit support", name, 24);
+    if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_24BITVIDEO, 0)) != FF_TRUE){
+      error("plugin %s: neither RGB32 nor RGB24 support!", name);
 
       plugmain(FF_DEINITIALISE, NULL, 0);
       return NULL;
