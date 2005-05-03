@@ -520,12 +520,16 @@ else
 fi
 
 dnl disabling ARB-extensions
+if test "x$enable_ARB" = "x"; then
+ AC_CHECK_LIB(GL,glBindProgramARB,
+	enable_ARB="yes",enable_ARB="no")
+fi
+
 if test "$enable_ARB" = "no"; then
  echo "disabling ARB-extensions"
- CXXFLAGS="$CXXFLAGS -DDONT_USE_ARB"
-else
-  enable_ARB=yes
+ AC_DEFINE_UNQUOTED(DONT_USE_ARB)
 fi
+
 
 dnl enabling "-freg-struct-return"
 if test "$enable_registerstruct" = "yes"; then
@@ -534,7 +538,7 @@ if test "$enable_registerstruct" = "yes"; then
   echo "  might break things, if you are using several different compilers"
   CXXFLAGS="$CXXFLAGS -freg-struct-return"
 else
-  enable_registerstruct=no
+  enable_registerstruct="no"
 fi
 
 
