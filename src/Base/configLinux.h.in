@@ -13,3 +13,5 @@
 #undef HAVE_LIBDV
 
 #undef HAVE_MMX
+
+#undef DONT_USE_ARB
