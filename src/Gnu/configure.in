@@ -347,9 +347,12 @@ dnl Check for Jpeg
 dnl Check for ImageMagick++
 if test "$with_magick" != "no"
 then
-  AC_FIND_HEADER(Magick++.h, $search_heads, $with_quicktime)
+  AC_FIND_HEADER(Magick++.h, $search_heads, $with_magick)
   if test "$ac_hdr" = "HAVE_MAGICKPLUSPLUS_H"; then
     AC_FIND_LIB(Magick++, Image, $search_libs, fail)
+    with_magick="yes"
+  else
+    with_magick="no"
   fi
 fi
 
@@ -368,13 +371,13 @@ dnl   y  |  n   || gltt
 dnl   -  |  n   || gltt,-
 dnl   n  |  n   || -
 
+with_font="no"
 
 if test "$with_gltt" = "yes"; then
   if test "$with_ftgl" != "yes"; then
     with_ftgl="no"
   fi
 fi
-
 
 if test "$with_ftgl" != "no"; then
  AC_FIND_HEADER(FTGLPixmapFont.h, $search_heads, $with_ftgl)
@@ -384,9 +387,8 @@ if test "$with_ftgl" != "no"; then
   dnl Check for freetype (ftgl depends on freetype)
   AC_FIND_HEADER(freetype/config/ftheader.h, $search_heads, $with_ftgl)
   AC_FIND_LIB(freetype, New_Face,$search_libs, $with_ftgl)
-  with_gltt="no"
- else
-  with_ftgl="no"
+  with_font="FTGL"
+  with_gltt="no"  
  fi
 fi
 
@@ -400,6 +402,7 @@ dnl Check for TTF (gltt depends on ttf)
     AC_FIND_LIB(gltt, open, $search_libs, $with_gltt)
     dnl Check for ttf (gltt depends on this)
     AC_FIND_LIB(ttf, TT_FreeType_Version, $search_libs, fail)
+    with_font="gltt"
   fi
 fi
 
@@ -424,6 +427,9 @@ then
   AC_FIND_HEADER(libmpeg3.h, $search_heads, $with_mpeg3)
   if test "$ac_hdr" = "HAVE_LIBMPEG3_H"; then
     AC_FIND_LIB(mpeg3, mpeg3_check_sig, $search_libs, fail)
+    with_mpeg3=yes
+  else
+    with_mpeg3=no
   fi
 fi
 
@@ -434,8 +440,10 @@ then
     AC_FIND_HEADER(mpeg.h, $search_heads, $with_mpeg)
     if test "$ac_hdr" = "HAVE_MPEG_H"; then
       AC_FIND_LIB(mpeg, OpenMPEG, $search_libs, fail)
+      with_mpeg=yes
     fi
   else
+    with_mpeg=no
     echo skipping check for mpeg because mpeg3 is used
   fi
 fi
@@ -446,6 +454,9 @@ then
   AC_FIND_HEADER(quicktime/quicktime.h, $search_heads, $with_quicktime)
   if test "$ac_hdr" = "HAVE_QUICKTIME_QUICKTIME_H"; then
     AC_FIND_LIB(quicktime, quicktime_check_sig, $search_libs, fail)
+    with_quicktime=yes
+  else
+    with_quicktime=no
   fi
 fi
 
@@ -459,10 +470,14 @@ then
     AC_DEFINE_UNQUOTED(HAVE_LIBAVIPLAY)
     AC_MSG_CHECKING("for avifile")
     echo "yes"
+    with_avi=yes
   else
     AC_FIND_HEADER(avifile.h, $search_heads, $with_avi)
     if test "$ac_hdr" = "HAVE_AVIFILE_H"; then
       AC_FIND_LIB(aviplay, CreateIAviReadFile, $search_libs, fail)
+      with_avi=yes
+    else
+      with_avi=no
     fi
   fi
 fi
@@ -476,14 +491,22 @@ then
   LIBS="$with_avcodec $with_avformat $LIBS $with_avcodec $with_avformat"
   AC_DEFINE_UNQUOTED(HAVE_LIBAVCODEC)
   AC_DEFINE_UNQUOTED(HAVE_LIBAVFORMAT)
+  with_ffmpeg=yes
+else
+  with_ffmpeg=no
 fi
 # end FFMPEG
+
+with_v4l=yes
 
 if test "$with_ieee1394" != "no"
 then
   AC_FIND_HEADER(libdv/dv.h, $search_heads, $with_ieee1394)
   if test "$ac_hdr" = "HAVE_LIBDV_DV_H"; then
    AC_FIND_LIB(dv, dv_init, $search_libs, fail)
+   with_ieee1394=yes
+  else
+   with_ieee1394=no
   fi
 fi
 
@@ -500,6 +523,8 @@ dnl disabling ARB-extensions
 if test "$enable_ARB" = "no"; then
  echo "disabling ARB-extensions"
  CXXFLAGS="$CXXFLAGS -DDONT_USE_ARB"
+else
+  enable_ARB=yes
 fi
 
 dnl enabling "-freg-struct-return"
@@ -508,6 +533,8 @@ if test "$enable_registerstruct" = "yes"; then
   echo "  allows to make use of FreeFrame-effects without recompiling them"
   echo "  might break things, if you are using several different compilers"
   CXXFLAGS="$CXXFLAGS -freg-struct-return"
+else
+  enable_registerstruct=no
 fi
 
 
@@ -561,3 +588,37 @@ $gemsrc/Geos/Makefile
 $gemsrc/openGL/Makefile
 )
 
+AC_MSG_RESULT([
+Configuration:
+  Compiler               : ${CXX}
+  CXXFLAGS               : ${CXXFLAGS}
+  optimization           : ${CXXOPTIMIZE_FLAGS}
+  debugging              : ${CXXDEBUG_FLAGS}
+
+  Install path           : ${prefix}
+
+ pure-data:
+  version                : ${PD_MAJORVERSION}.${PD_MINORVERSION}
+
+ optional libraries:
+
+  font-rendering         : ${with_font}
+
+  image-support
+    use ImageMagick      : ${with_magick}
+  video-support
+    use mpeg             : ${with_mpeg}
+    use mpeg-3           : ${with_mpeg3}
+    use QuickTime        : ${with_quicktime}
+    use aviplay          : ${with_avi}
+    use ffmpeg           : ${with_ffmpeg}
+  input-support
+    use v4l              : ${with_v4l}
+    use ieee1394         : ${with_ieee1394}
+
+  misc
+    using ARB-extensions : ${enable_ARB}
+    using reg-struct-ret : ${enable_registerstruct}
+
+Now run make ...
+])
