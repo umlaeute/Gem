@@ -225,6 +225,18 @@ static void obj_setupCallback(t_class *classPtr);
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
+// static class:
+//   by default classes are declared static
+//   however, sometimes we need classes not-static, so we can refer to them
+//   from other classes
+///////////////////////////////////////////////////////////////////////////////
+#ifdef NO_STATIC_CLASS
+# define STATIC_CLASS
+#else
+# define STATIC_CLASS static
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 // auto registering a class
 // this creates a dummy class, whose constructor calls the setup-function 
 // (registering the class with pd)
@@ -267,7 +279,7 @@ static void obj_setupCallback(t_class *classPtr);
 // no args
 ///////////////////////////////////////////////////////////////////////////////
 #define REAL_NEW(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME)        \
-static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
+STATIC_CLASS t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS ()                              \
 {     	    	    	    	    	    	    	    	\
   try{	    	    	    	    	    	    	    	\
@@ -300,7 +312,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 // one arg
 ///////////////////////////////////////////////////////////////////////////////
 #define REAL_NEW_WITH_ARG(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME, VAR_TYPE, PD_TYPE) \
-static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
+STATIC_CLASS t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (VAR_TYPE arg)                  \
 {     	    	    	    	    	    	    	    	\
   try{	    	    	    	    	    	    	    	\
@@ -333,7 +345,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 // gimme arg
 ///////////////////////////////////////////////////////////////////////////////
 #define REAL_NEW_WITH_GIMME(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME) \
-static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
+STATIC_CLASS t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (t_symbol *s, int argc, t_atom *argv) \
 {     	    	    	    	    	    	    	    	\
   try{	    	    	    	    	    	    	    	\
@@ -366,7 +378,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 // two args
 ///////////////////////////////////////////////////////////////////////////////
 #define REAL_NEW_WITH_ARG_ARG(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE) \
-static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
+STATIC_CLASS t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo) \
 {     	    	    	    	    	    	    	    	\
   try{	    	    	    	    	    	    	    	\
@@ -399,7 +411,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 // three args
 ///////////////////////////////////////////////////////////////////////////////
 #define REAL_NEW_WITH_ARG_ARG_ARG(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE, THREE_VAR_TYPE, THREE_PD_TYPE) \
-static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
+STATIC_CLASS t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree) \
 {     	    	    	    	    	    	    	    	\
   try{	    	    	    	    	    	    	    	\
@@ -432,7 +444,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 // four args
 ///////////////////////////////////////////////////////////////////////////////
 #define REAL_NEW_WITH_ARG_ARG_ARG_ARG(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE, THREE_VAR_TYPE, THREE_PD_TYPE, FOUR_VAR_TYPE, FOUR_PD_TYPE) \
-static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
+STATIC_CLASS t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree, FOUR_VAR_TYPE argfour) \
 {     	    	    	    	    	    	    	    	\
   try{	    	    	    	    	    	    	    	\
@@ -465,7 +477,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
 // five args
 ///////////////////////////////////////////////////////////////////////////////
 #define REAL_NEW_WITH_ARG_ARG_ARG_ARG_ARG(NEW_CLASS, SETUP_FUNCTION, EXTERN_NAME, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE, THREE_VAR_TYPE, THREE_PD_TYPE, FOUR_VAR_TYPE, FOUR_PD_TYPE, FIVE_VAR_TYPE, FIVE_PD_TYPE) \
-static t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
+STATIC_CLASS t_class * NEW_CLASS ## EXTERN_NAME;    	    	    	\
 void * EXTERN_NAME ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree, FOUR_VAR_TYPE argfour, FIVE_VAR_TYPE argfive) \
 {     	    	    	    	    	    	    	    	\
   try{	    	    	    	    	    	    	    	\
