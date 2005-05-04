@@ -15,6 +15,17 @@
 #include "pix_buffer.h"
 #include "pix_buffer_write.h"
 
+
+/*
+ * we export the "pix_buffer_class"
+ * so other objects can bind to it with "pd_findbyclass()"
+ * NOTE: we need NO_STATIC_CLASS to be defined in pix_buffer.cpp for this to work
+ * NOTE: we define it only in pix_buffer.cpp (before pix_buffer.h&CPPExtern.h are included)
+ *       in order to not interfere with the class-status (non-static/static) of objects that 
+ *       include this header-file
+ */
+extern t_class *pix_buffer_class;
+
 /////////////////////////////////////////////////////////
 //
 // pix_buffer_write
