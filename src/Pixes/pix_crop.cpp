@@ -72,13 +72,14 @@ void pix_crop :: processImage(imageStruct &image)
 
   int i=0;
   while(i<y){
+    int oldrow=image.upsidedown?(image.ysize-((offY+i)%image.ysize)-1):(offY+i)%image.ysize;
     unsigned char *newdata = m_data+(x*i)*csize;
-    unsigned char *olddata = image.data+(((offY+i)%image.ysize)*image.xsize+offX)*csize;
+    unsigned char *olddata = image.data+(offX+image.xsize*oldrow)*csize;
     int j=x*csize;
     while(j--)*newdata++=*olddata++;
     i++;
   }
-
+  image.upsidedown=0;
   image.data   = m_data;
   image.xsize  = x;
   image.ysize  = y;
