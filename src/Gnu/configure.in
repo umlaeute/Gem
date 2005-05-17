@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(../Base/CPPExtern.h)
 
-ARCH=$(uname --machine)
-KERN=$(uname --kernel-name)
+ARCH=$(uname -m)
+KERN=$(uname -s)
 
 CONFFILE=../Base/config$KERN.h
 AC_CONFIG_HEADER($CONFFILE)
@@ -134,6 +134,12 @@ AC_CANONICAL_HOST
 
 ttarget=pd_`echo $host_os | sed /.*/s/-.*//`
 target=`echo $ttarget | sed -e 's/\[.].*//'`
+
+if test "x$host_os" = "x"
+then
+dnl just assuming that it is still linux (e.g. x86_64)
+ target="pd_linux"
+fi
 
 echo Configuring for Gem.$target
 AC_SUBST(target)
