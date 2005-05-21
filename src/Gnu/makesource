@@ -5,7 +5,7 @@ subdirs="$@"
 ## configure just includes this file with ". makesource"
 if [ -z "${0%*./configure}" ]
 then
- echo \"makesoure\" called from configure
+ echo \"makesource\" called from configure
  subdirs=""
 fi
 
