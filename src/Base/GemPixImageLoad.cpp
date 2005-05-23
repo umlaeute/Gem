@@ -19,6 +19,7 @@
 #include "GemPixImageLoad.h"
 
 #include "m_pd.h"
+#include "Base/config.h"
 
 #ifdef __APPLE__
 #include <Carbon/carbon.h>
@@ -42,7 +43,9 @@
 #ifndef __APPLE__
 extern "C"
 {
-#include "tiffio.h"
+#ifdef HAVE_LIBTIFF
+# include "tiffio.h"
+#endif
 
 #undef EXTERN
 
@@ -50,9 +53,10 @@ extern "C"
 #undef FAR
 #endif
 
-#include "jpeglib.h"
+#ifdef HAVE_LIBJPEG
+# include "jpeglib.h"
+#endif
 }
-
 
 #include "sgiimage.h"
 #endif // __APPLE__
@@ -72,8 +76,12 @@ OSStatus FSPathMakeFSSpec(
 	FSSpec *spec,
 	Boolean *isDirectory);
 #else
+# ifdef HAVE_LIBTIFF
 imageStruct *tiffImage2mem(const char *filename);
+# endif
+# ifdef HAVE_LIBJPEG
 imageStruct *jpegImage2mem(const char *filename);
+# endif /* LIBJPEG */
 imageStruct *sgiImage2mem(const char *filename);
 
 #endif // __APPLE__
@@ -182,19 +190,19 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 			return(image_block);
 # endif
 
-
+#ifdef HAVE_LIBJPEG
 	// try to load in a JPEG file
 	if ( (image_block = jpegImage2mem(newName)) )
 			return(image_block);
-
+#endif
 	// try to load in an SGI file
 	if ( (image_block = sgiImage2mem(newName)) )
 			return(image_block);
-
+#ifdef HAVE_LIBTIFF
 	// try to load in a TIFF file
 	if ( (image_block = tiffImage2mem(newName)) )
 			return(image_block);
-
+#endif
 	// unable to load image
 	error("GEM: Unable to load image: %s", newName);
 	return(NULL);
@@ -261,6 +269,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	return image_block;
 }
 #else
+# ifdef HAVE_LIBTIFF
 /***************************************************************************
  *
  * Read in a TIFF image.
@@ -437,7 +446,8 @@ imageStruct *tiffImage2mem(const char *filename)
 
     return(image_block);
 }
-
+# endif /* HAVE_LIBTIFF */
+# ifdef HAVE_LIBJPEG
 /***************************************************************************
  *
  * Read in a JPEG image.
@@ -604,7 +614,7 @@ imageStruct *jpegImage2mem(const char *filename)
 
 	return(image_block);
 }
-
+# endif /* HAVE_LIBJPEG */
 /***************************************************************************
  *
  * Read in an SGI image.
