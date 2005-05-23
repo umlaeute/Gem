@@ -40,23 +40,6 @@ default_search_heads="/usr/include /usr/local/include $GEMLIBS"
 
 
 dnl
-dnl libraries that are need on some systems, but not on others
-dnl set these to something other than "" if configure should exit on failure to detect them
-dnl
-need_png=""
-need_tiff=""
-need_jpeg=""
-
-dnl on Linux we do need png, tiff and jpeg
-if test "x$KERN" = "xLinux"
-then
-  need_png="yes"
-  need_tiff="yes"
-  need_jpeg="yes"
-fi
-
-
-dnl
 dnl first comes the user-config stuff
 dnl
 AC_ARG_WITH(gemlibs, [  --with-gemlibs=DIR{:DIRS}     where to search for non-standard libs (aka GemLibs)])
@@ -72,6 +55,8 @@ AC_ARG_ENABLE(registerstruct, [  --enable-registerstruct enable the \"-freg-stru
 AC_ARG_WITH(ftgl,      [  --without-ftgl          disable FTGL (for font rendering)])
 AC_ARG_WITH(gltt,      [  --without-gltt          disable GLTT (for font rendering (old))])
 AC_ARG_WITH(magick,    [  --without-imagemagick   disable image-magick image loading])
+AC_ARG_WITH(jpeg,      [  --without-jpeg          disable jpeg-image loading])
+AC_ARG_WITH(magick,    [  --without-tiff          disable tiff-image loading])
 AC_ARG_WITH(mpeg,      [  --without-mpeg          disable MPEG(1)-filmIN support])
 AC_ARG_WITH(mpeg3,     [  --without-mpeg3         disable MPEG3-filmIN support (overrides MPEG(1)-support)])
 AC_ARG_WITH(quicktime, [  --without-quicktime     disable quicktime-filmIN support])
@@ -364,12 +349,41 @@ AC_CHECK_LIB(GLU, gluLookAt, ,
 )
 
 dnl Checking image-libraries
-dnl Check for PNG
-	AC_FIND_LIB(png, png_set_compression_level, $search_libs, [$need_png])
+dnl Check for PNG (do we need PNG at all ???)
+#if test "$with_png" != "no"
+#then
+#  AC_FIND_HEADER(png.h, $search_heads, $with_png)
+#  if test "$ac_hdr" = "HAVE_PNG_H"; then
+#    AC_FIND_LIB(png, png_set_compression_level, $search_libs, fail)
+#    with_png="yes"
+#  else
+#    with_png="no"
+#  fi
+#fi
+
 dnl Check for TIFF
-	AC_FIND_LIB(tiff, TIFFOpen, $search_libs, [$need_tiff])
+if test "$with_tiff" != "no"
+then
+  AC_FIND_HEADER(tiffio.h, $search_heads, $with_tiff)
+  if test "$ac_hdr" = "HAVE_TIFFIO_H"; then
+    AC_FIND_LIB(tiff, TIFFOpen, $search_libs, fail)
+    with_tiff="yes"
+  else
+    with_tiff="no"
+  fi
+fi
+
 dnl Check for Jpeg
-	AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, [$need_jpeg])
+if test "$with_jpeg" != "no"
+then
+  AC_FIND_HEADER(jpeglib.h, $search_heads, $with_jpeg)
+  if test "$ac_hdr" = "HAVE_JPEGLIB_H"; then
+    AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, fail)
+    with_jpeg="yes"
+  else
+    with_jpeg="no"
+  fi
+fi
 
 dnl Check for ImageMagick++
 if test "$with_magick" != "no"
@@ -440,6 +454,7 @@ AC_CHECK_LIB(vl,main,
 
 
 dnl Check glib (do we need this for png ?)
+dnl (if so, we could strip it, as we don't need png any more)
 AC_CHECK_LIB(glib, main)
 
 dnl Checking the rest
@@ -669,6 +684,8 @@ Configuration:
 
   image-support
     use ImageMagick      : ${with_magick}
+    use TIFF             : ${with_tiff}
+    use JPEG             : ${with_jpeg}
   video-support
     use mpeg             : ${with_mpeg}
     use mpeg-3           : ${with_mpeg3}
