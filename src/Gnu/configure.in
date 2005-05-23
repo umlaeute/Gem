@@ -64,7 +64,6 @@ AC_ARG_WITH(avformat,  [  --with-avformat=<lib>   location of libavformat.a])
 AC_ARG_WITH(ieee1394,  [  --with-ieee1394         enable IEEE1394-support (aka. firewire or DV)])
 AC_ARG_WITH(pdversion, [  --with-pdversion=<ver>  enforce a certain pd-version (e.g. 0.37)])
 
-
 if test "$with_aviplay"
 then
   if test -z "$with_avi"
@@ -80,8 +79,9 @@ then
   fi
 fi
 
-dnl of course we need X, so don't let the user disable it
-if test "$with_x" = "no"
+dnl of course we need X on Linux, so don't let the user disable it
+
+if test "$with_x" = "no" && test "$KERN" = "Linux"
 then
   echo "Gem will not run without X"
   exit 1
@@ -140,6 +140,7 @@ then
 dnl just assuming that it is still linux (e.g. x86_64)
  target="pd_linux"
 fi
+
 
 echo Configuring for Gem.$target
 AC_SUBST(target)
