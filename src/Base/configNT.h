@@ -24,6 +24,12 @@
 //#define DONT_INCLUDE_GLEXT
 
 
+/*
+ * we want libjpeg and libtiff for reading/writing images
+ */
+#define HAVE_LIBTIFF
+#define HAVE_LIBJPEG
+
 
 
 /*
