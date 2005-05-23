@@ -38,6 +38,24 @@ dnl i have no idea, how to display these default-strings in the "--help"-stuff b
 default_search_libs="$GEMLIBS /usr/local/lib /usr/local/src"
 default_search_heads="/usr/include /usr/local/include $GEMLIBS"
 
+
+dnl
+dnl libraries that are need on some systems, but not on others
+dnl set these to something other than "" if configure should exit on failure to detect them
+dnl
+need_png=""
+need_tiff=""
+need_jpeg=""
+
+dnl on Linux we do need png, tiff and jpeg
+if test "x$KERN" = "xLinux"
+then
+  need_png="yes"
+  need_tiff="yes"
+  need_jpeg="yes"
+fi
+
+
 dnl
 dnl first comes the user-config stuff
 dnl
@@ -328,9 +346,11 @@ dnl if the headers are there we check for the libraries
 dnl on any reasonable distribution it shouldn't be possible to
 dnl install the headers without the libraries...
 
-dnl Check for OpenGL (Original or Mesa)
+dnl Check for OpenGL (Original or Mesa) (or osX-framework)
 AC_CHECK_HEADERS(GL/gl.h GL/glu.h,,
-      	echo "OpenGL is mandatory";exit 1)
+        [AC_CHECK_HEADERS(OpenGL/gl.h OpenGL/glu.h,,
+      	[echo "OpenGL is mandatory";exit 1])]
+)
 
 AC_CHECK_LIB(GL, glInitNames,,
 	AC_CHECK_LIB(MesaGL,glInitNames,,
@@ -345,11 +365,11 @@ AC_CHECK_LIB(GLU, gluLookAt, ,
 
 dnl Checking image-libraries
 dnl Check for PNG
-	AC_FIND_LIB(png, png_set_compression_level, $search_libs, fail)
+	AC_FIND_LIB(png, png_set_compression_level, $search_libs, [$need_png])
 dnl Check for TIFF
-	AC_FIND_LIB(tiff, TIFFOpen, $search_libs, fail)
+	AC_FIND_LIB(tiff, TIFFOpen, $search_libs, [$need_tiff])
 dnl Check for Jpeg
-	AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, fail)
+	AC_FIND_LIB(jpeg, jpeg_read_header, $search_libs, [$need_jpeg])
 
 dnl Check for ImageMagick++
 if test "$with_magick" != "no"
