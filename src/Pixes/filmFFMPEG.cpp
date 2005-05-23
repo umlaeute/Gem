@@ -27,12 +27,12 @@
 filmFFMPEG :: filmFFMPEG(int format) : film(format) {
   static bool first_time=true;
   if (first_time) {
-#ifdef HAVE_LIBFFMPEG
+#ifdef HAVE_FFMPEG
     post("pix_film:: libffmpeg support");
 #endif
     first_time = false;
   }
-#ifdef HAVE_LIBFFMPEG
+#ifdef HAVE_FFMPEG
   m_Format=NULL;
 #endif
 }
@@ -45,7 +45,7 @@ filmFFMPEG :: ~filmFFMPEG()
 {
   close();
 }
-#ifdef HAVE_LIBFFMPEG
+#ifdef HAVE_FFMPEG
 void filmFFMPEG :: close(void)
 {
   if (m_Format){
@@ -211,4 +211,4 @@ int filmFFMPEG :: changeImage(int imgNum, int trackNum){
   m_readNext = true;
   return FILM_ERROR_DONTKNOW;
 }
-#endif
+#endif /* HAVE_FFMPEG */
