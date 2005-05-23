@@ -25,6 +25,7 @@ clean:
 
 distclean:
 	-rm Makefile.in Makefile Make.source Make.depend Make.depend.bak
+	-rm *.o *.obj *~
 	touch Make.depend
 	if which dos2unix; then dos2unix *.cpp *.h; fi
 
