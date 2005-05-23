@@ -6,18 +6,15 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 CXX = @CXX@
 
-#CXXFLAGS=@CXXFLAGS@
-#CXXDEBUG_FLAGS=@CXXDEBUG_FLAGS@
-#CXXOPTIMIZE_FLAGS=@CXXOPTIMIZE_FLAGS@
-
-CXXFLAGS += @CXXFLAGS@ @CXXDEBUG_FLAGS@ @CXXOPTIMIZE_FLAGS@ @AFLAGS@ -I../ @INCLUDES@
+CXXFLAGS += @CPPFLAGS@ @CXXFLAGS@ @CXXDEBUG_FLAGS@ @CXXOPTIMIZE_FLAGS@ @AFLAGS@
+INCLUDES += -I../ @INCLUDES@
 
 
 all: $(OBJECTS)
 
 
 depend:
-	$(CXX) -M $(CXXFLAGS) $(SOURCES) > Make.depend
+	$(CXX) -M $(CXXFLAGS) $(INCLUDES) $(SOURCES) > Make.depend
 
 
 clean:
@@ -30,4 +27,4 @@ distclean:
 	if which dos2unix; then dos2unix *.cpp *.h; fi
 
 %.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $*.cpp -o $*.o
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $*.cpp -o $*.o
