@@ -541,7 +541,7 @@ then
   if which ffmpeg-config > /dev/null
   then
     INCLUDES="`ffmpeg-config --cflags` $INCLUDES"
-    LIBS="`ffmpeg-config --libs avformat` $LIBS"
+    LIBS="`ffmpeg-config --plugin-libs avformat` $LIBS"
     AC_DEFINE_UNQUOTED(HAVE_FFMPEG)
     AC_MSG_CHECKING("for ffmpeg")
     echo "yes"
