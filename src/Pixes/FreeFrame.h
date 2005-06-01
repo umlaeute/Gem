@@ -66,9 +66,10 @@ typedef unsigned int DWORD;
 typedef void *LPVOID;
 typedef unsigned char BYTE;
 
-#elif defined __apple__
+#elif defined __APPLE__
 
 typedef unsigned int DWORD;
+typedef void * LPVOID;
 typedef unsigned char BYTE;
 
 #endif
