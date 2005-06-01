@@ -143,7 +143,7 @@ text2d :: text2d(int argc, t_atom *argv)
   , m_afont(NULL)
 #endif
 {
-#ifdef MACOSX
+#ifdef __APPLE__
   if (!HaveValidContext ()) {post("GEM: geo: text2d - need window to load font");return;}
 #endif
   fontNameMess(DEFAULT_FONT);
