@@ -18,11 +18,6 @@
 #include "pix_resize.h"
 
 #include <math.h>
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif // __APPLE__
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_resize, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
 
