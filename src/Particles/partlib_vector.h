@@ -15,7 +15,12 @@
 #endif
 
 #ifdef __APPLE__
+#include <AvailabilityMacros.h>
+#if defined (MAC_OS_X_VERSION_10_3) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+#include <math.h>
+#else
 #include "macosx_math.h"
+#endif
 #endif
 
 #ifdef __ppc__

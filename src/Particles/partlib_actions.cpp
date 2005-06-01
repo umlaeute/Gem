@@ -23,7 +23,12 @@
 #define ONEOVERSQRT2PI (1. / SQRT2PI)
 
 #ifdef __APPLE__
-#include <macosx_math.h>
+#include <AvailabilityMacros.h>
+#if defined (MAC_OS_X_VERSION_10_3) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+#include <math.h>
+#else
+#include "macosx_math.h"
+#endif
 #endif
 
 // To offset [0 .. 1] vectors to [-.5 .. .5]
