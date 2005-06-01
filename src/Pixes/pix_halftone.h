@@ -14,7 +14,12 @@ LOG
 #include "Base/GemPixObj.h"
 
 #ifdef __APPLE__
+#include <AvailabilityMacros.h>
+#if defined (MAC_OS_X_VERSION_10_3) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+#include <math.h>
+#else
 #include "macosx_math.h"
+#endif
 #endif
 	
 enum {
@@ -92,15 +97,15 @@ class GEM_EXTERN pix_halftone : public GemPixObj
 	    SPete_HalfTone_Point TexCoords;
 	};
 
-	int RoundDotFunc(float X,float Y);
-	int LineDotFunc(float X,float Y);
-	int DiamondDotFunc(float X,float Y);
-	int EuclideanDotFunc(float X,float Y);
-	int PSDiamondDotFunc(float X,float Y);
+	int RoundDotFunc(float X,float Y, float scale);
+	int LineDotFunc(float X,float Y, float scale);
+	int DiamondDotFunc(float X,float Y, float scale);
+	int EuclideanDotFunc(float X,float Y, float scale);
+	int PSDiamondDotFunc(float X,float Y, float scale);
 	int Init(int nWidth, int nHeight);
 	void Pete_HalfTone_DeInit();
 	void Rotate(SPete_HalfTone_Point* pinPoint,SPete_HalfTone_Point* poutPoint,float Angle);
-	void Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTableStart,int nCellSize,int nStyle);
+	void Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTableStart,int nCellSize,int nStyle, float scale);
 	void Pete_HalfTone_CalcCorners(int nWidth,int nHeight,float AngleRadians,int nCellSize,
 		SPete_HalfTone_Point* poutLeft,
 		SPete_HalfTone_Point* poutRight,
