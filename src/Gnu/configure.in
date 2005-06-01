@@ -139,10 +139,15 @@ AC_CANONICAL_HOST
 ttarget=pd_`echo $host_os | sed /.*/s/-.*//`
 target=`echo $ttarget | sed -e 's/\[.].*//'`
 
-if test "x$host_os" = "x"
+if test `uname -s` != Darwin;
 then
+ if test "x$host_os" = "x"
+ then
 dnl just assuming that it is still linux (e.g. x86_64)
- target="pd_linux"
+  target="pd_linux"
+ fi
+else
+  target="pd_darwin"
 fi
 
 echo Configuring for Gem.$target
@@ -295,7 +300,12 @@ AC_SUBST(source_dirs)
 
 LIBTOOL=""
 AC_SUBST(LIBTOOL)
-arch_ld_flags="-shared"
+if test `uname -s` != Darwin;
+then
+ arch_ld_flags="-shared"
+else
+ arch_ld_flags="-bundle -undefined suppress -flat_namespace"
+fi
 AC_SUBST(arch_ld_flags)
 
 if test "$x_libraries" != ""; then
@@ -306,7 +316,10 @@ AC_CHECK_LIB(X11,main)
 AC_CHECK_LIB(Xext,main)
 AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
 dnl add -shared to the libraries, so X will be shared
+if test `uname -s` != Darwin;
+ then
 LIBS="-shared -Wl,-export-dynamic $LIBS"
+fi
 
 dnl AC_ARG_ENABLE(static, "   " ,LIBS="/usr/lib/gcc-lib/i486-linux/egcs-2.91.57/libstdc++.a $LIBS")
 
@@ -337,6 +350,8 @@ AC_CHECK_HEADERS(GL/gl.h GL/glu.h,,
       	[echo "OpenGL is mandatory";exit 1])]
 )
 
+if test `uname -s` != Darwin;
+ then
 AC_CHECK_LIB(GL, glInitNames,,
 	AC_CHECK_LIB(MesaGL,glInitNames,,
        	echo "OpenGL is mandatory";exit 1)
@@ -347,6 +362,7 @@ AC_CHECK_LIB(GLU, gluLookAt, ,
 	AC_CHECK_LIB(MesaGLU,gluLookAt,,
 	echo "incomplete OpenGL (no GLU)";exit 1)
 )
+fi
 
 dnl Checking image-libraries
 dnl Check for PNG (do we need PNG at all ???)
@@ -560,7 +576,12 @@ dnl we need "avformat" which depends on "avcodec"
 fi
 dnl end FFMPEG
 
-with_v4l=yes
+if test `uname -s` == Darwin;
+ then
+  with_v4l=no
+ else
+  with_v4l=yes
+fi
 
 if test "$with_ieee1394" != "no"
 then
@@ -602,18 +623,26 @@ else
   enable_registerstruct="no"
 fi
 
-
 dnl optimization and debugging flags
-
-CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS $MMXFLAGS"
+if test `uname -s` != Darwin;
+ then
+  CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS $MMXFLAGS"
+fi
 
 if test "$CXX" = "icc"; then
  CXXDEBUG_FLAGS="$CXXDEBUG_FLAGS"
  CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS -ip -ipo_obj -ftz -rcd"
  LDFLAGS="$LDFLAGS -ip -ipo_obj"
 else
- CXXDEBUG_FLAGS="$CXXDEBUG_FLAGS -fno-builtin"
- CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS -O3 -funroll-loops -ffast-math"
+ if test `uname -s` == Darwin;
+  then
+   CXXDEBUG_FLAGS="$CXXDEBUG_FLAGS -O0 -fno-builtin"
+   CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS -Os -c -faltivec -fno-builtin -falign-loops=16 -funroll-loops -ffast-math"
+   LDFLAGS="-framework OpenGL -framework AGL -framework Carbon -framework QuickTime"
+  else
+   CXXDEBUG_FLAGS="$CXXDEBUG_FLAGS -fno-builtin"
+   CXXOPTIMIZE_FLAGS="$CXXOPTIMIZE_FLAGS -O3 -funroll-loops -ffast-math"
+  fi
 fi
 
 
@@ -631,6 +660,7 @@ AC_SUBST(CPPFLAGS)
 
 dnl i am not entirely sure, whether "-fPIC" is a good idea on ALL platforms
 CXXFLAGS="$CXXFLAGS -fPIC"
+
 AC_SUBST(CXXFLAGS)
 
 AC_SUBST(AFLAGS)
