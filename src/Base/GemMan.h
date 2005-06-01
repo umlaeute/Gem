@@ -22,8 +22,10 @@ LOG
 #endif
 
 #ifdef __APPLE__
-#include <OpenGL/glu.h>
 #include <Carbon/Carbon.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
 #include <AGL/agl.h>
 #else
 #include <GL/glu.h>
