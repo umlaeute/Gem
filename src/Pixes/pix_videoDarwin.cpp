@@ -3,13 +3,13 @@
  *  gem_darwin
  *
  *  Created by James Tittle on Fri Jul 12 2002.
- *  Copyright (c) 2002 James Tittle & Chris Clepper
+ *  Copyright (c) 2002-2005 James Tittle & Chris Clepper
  *
  */
 #ifdef __APPLE__
 
 #include "pix_videoDarwin.h"
-#include "GemCache.h"
+#include "Base/GemCache.h"
 #include <Carbon/Carbon.h>
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
@@ -433,10 +433,10 @@ pix_video::real_obj_setupCallback(classPtr);
 		  gensym("quality"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
 		  gensym("reset"), A_NULL);
-   // class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
-//		  gensym("dialog"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogMess,
-                    gensym("dialog"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
+		  gensym("dialog"), A_NULL);
+//    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogMess,
+//                    gensym("dialog"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::colorspaceCallback,
 		  gensym("colorspace"), A_SYMBOL, A_NULL);
 //    class_addmethod(classPtr, (t_method)&pix_videoDarwin::csMessCallback,
