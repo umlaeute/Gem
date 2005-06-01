@@ -49,10 +49,10 @@ GemShape :: ~GemShape()
 }
 
 /////////////////////////////////////////////////////////
-// SetVertix
+// SetVertex
 // set up the texture-coordinates
 /////////////////////////////////////////////////////////
-void GemShape :: SetVertix(GemState* state,float x, float y, float z, float tx, float ty,int curCoord)
+void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, float ty,int curCoord)
 {
     if (state->numTexCoords) 
       glTexCoord2f(state->texCoordX(curCoord), state->texCoordY(curCoord));
