@@ -14,6 +14,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#ifdef unix
 
 #include "GemWinCreate.h"
 #include <m_pd.h>
@@ -265,3 +266,5 @@ void destroyGemWindow(WindowInfo &info)
   info.cmap = 0;
   info.context = NULL;
 }
+
+#endif // unix
