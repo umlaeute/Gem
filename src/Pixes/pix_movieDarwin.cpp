@@ -19,9 +19,6 @@
 
 #include "pix_movieDarwin.h"
 #include "Base/GemMan.h"
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#endif
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieDarwin, t_symbol *, A_DEFSYM)
 

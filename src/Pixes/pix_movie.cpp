@@ -18,9 +18,6 @@
 
 #include "pix_movie.h"
 #include "Base/GemMan.h"
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#endif // __APPLE__
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM)
 
