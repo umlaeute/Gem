@@ -420,12 +420,12 @@ GEM_EXTERN void imageStruct :: RGB_to_YCbCr_altivec(unsigned char *rgbdata, int 
     tc3 = vec_perm( RGB_ptr[i+1], RGB_ptr[i+2], vPerm4 ); /* B8..B15         */
 
     /* Unpack to 16 bit arithmatic for converstion. */
-    tr0 = vec_unpack2sh( z0, tc0 );  /* tr0 = R0 .. R7  */
-    tg0 = vec_unpack2sl( z0, tc0 );  /* tg0 = G0 .. G7  */
-    tb0 = vec_unpack2sh( z0, tc1 );  /* tb0 = B0 .. B7  */
-    tr1 = vec_unpack2sh( z0, tc2 );  /* tr0 = R8 .. R15 */
-    tg1 = vec_unpack2sl( z0, tc2 );  /* tg0 = G8 .. G15 */
-    tb1 = vec_unpack2sh( z0, tc3 );  /* tb0 = B8 .. B15 */
+    tr0 = (vector signed short) vec_mergeh( z0, tc0 );  // tr0 = R0 .. R7
+    tg0 = (vector signed short) vec_mergel( z0, tc0 );  // tg0 = G0 .. G7
+    tb0 = (vector signed short) vec_mergeh( z0, tc1 );  // tb0 = B0 .. B7
+    tr1 = (vector signed short) vec_mergeh( z0, tc2 );  // tr0 = R8 .. R15
+    tg1 = (vector signed short) vec_mergel( z0, tc2 );  // tg0 = G8 .. G15
+    tb1 = (vector signed short) vec_mergeh( z0, tc3 );  // tb0 = B8 .. B15
 
     /* Convert the first three input vectors.  Note that
        only the top 17 bits of the 32 bit product are
@@ -643,12 +643,12 @@ GEM_EXTERN void imageStruct :: RGBA_to_YCbCr_altivec(unsigned char *rgbadata, in
     tc3 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2], vPerm4 ); /* B8..B15         */
 
     /* Unpack to 16 bit arithmatic for converstion. */
-    tr0 = vec_unpack2sh( z0, tc0 );  /* tr0 = R0 .. R7  */
-    tg0 = vec_unpack2sl( z0, tc0 );  /* tg0 = G0 .. G7  */
-    tb0 = vec_unpack2sh( z0, tc1 );  /* tb0 = B0 .. B7  */
-    tr1 = vec_unpack2sh( z0, tc2 );  /* tr0 = R8 .. R15 */
-    tg1 = vec_unpack2sl( z0, tc2 );  /* tg0 = G8 .. G15 */
-    tb1 = vec_unpack2sh( z0, tc3 );  /* tb0 = B8 .. B15 */
+    tr0 = (vector signed short) vec_mergeh( z0, tc0 );  /* tr0 = R0 .. R7  */
+    tg0 = (vector signed short) vec_mergel( z0, tc0 );  /* tg0 = G0 .. G7  */
+    tb0 = (vector signed short) vec_mergeh( z0, tc1 );  /* tb0 = B0 .. B7  */
+    tr1 = (vector signed short) vec_mergeh( z0, tc2 );  /* tr0 = R8 .. R15 */
+    tg1 = (vector signed short) vec_mergel( z0, tc2 );  /* tg0 = G8 .. G15 */
+    tb1 = (vector signed short) vec_mergeh( z0, tc3 );  /* tb0 = B8 .. B15 */
 
     /* Convert the first three input vectors.  Note that
        only the top 17 bits of the 32 bit product are
@@ -812,12 +812,12 @@ GEM_EXTERN void imageStruct :: BGR_to_YCbCr_altivec(unsigned char *bgrdata, int 
     tc3 = vec_perm( BGR_ptr[i+1], BGR_ptr[i+2], vPerm4 ); /* B8..B15         */
 
     /* Unpack to 16 bit arithmatic for converstion. */
-    tr0 = vec_unpack2sh( z0, tc0 );  /* tr0 = R0 .. R7  */
-    tg0 = vec_unpack2sl( z0, tc0 );  /* tg0 = G0 .. G7  */
-    tb0 = vec_unpack2sh( z0, tc1 );  /* tb0 = B0 .. B7  */
-    tr1 = vec_unpack2sh( z0, tc2 );  /* tr0 = R8 .. R15 */
-    tg1 = vec_unpack2sl( z0, tc2 );  /* tg0 = G8 .. G15 */
-    tb1 = vec_unpack2sh( z0, tc3 );  /* tb0 = B8 .. B15 */
+    tr0 = (vector signed short) vec_mergeh( z0, tc0 );  /* tr0 = R0 .. R7  */
+    tg0 = (vector signed short) vec_mergel( z0, tc0 );  /* tg0 = G0 .. G7  */
+    tb0 = (vector signed short) vec_mergeh( z0, tc1 );  /* tb0 = B0 .. B7  */
+    tr1 = (vector signed short) vec_mergeh( z0, tc2 );  /* tr0 = R8 .. R15 */
+    tg1 = (vector signed short) vec_mergel( z0, tc2 );  /* tg0 = G8 .. G15 */
+    tb1 = (vector signed short) vec_mergeh( z0, tc3 );  /* tb0 = B8 .. B15 */
 
     /* Convert the first three input vectors.  Note that
        only the top 17 bits of the 32 bit product are
@@ -909,6 +909,10 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     }
     break;
   case GL_YUV422_GEM:
+#ifdef __TIMING__
+	  UnsignedWide start, end;
+	  Microseconds(&start);
+#endif
 #ifdef __VEC__
 	BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
 #else
@@ -928,6 +932,11 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
 		  RGB2YUV_13*bgradata[4+chBlue])>>8)+ Y_OFFSET; // Y
       bgradata+=8;
     }
+#endif
+#ifdef __TIMING__
+	  Microseconds(&end);
+	  float seconds = (float)(end.lo - start.lo) / 1000000.f;
+	  post("BGRAtoUYVY frame time = %f", seconds);
 #endif
     break;
   }
@@ -1007,12 +1016,12 @@ GEM_EXTERN void imageStruct :: BGRA_to_YCbCr_altivec(unsigned char *bgradata, un
 	tc3 = vec_perm( *vec3, *vec4, vPerm2 ); // R8..R15
 
     /* Unpack to 16 bit arithmatic for conversion. */
-    tr0 = vec_unpack2sh( z0, tc0 );  /* tr0 = R0 .. R7  */
-    tg0 = vec_unpack2sl( z0, tc0 );  /* tg0 = G0 .. G7  */
-    tb0 = vec_unpack2sh( z0, tc1 );  /* tb0 = B0 .. B7  */
-    tr1 = vec_unpack2sh( z0, tc2 );  /* tr0 = R8 .. R15 */
-    tg1 = vec_unpack2sl( z0, tc2 );  /* tg0 = G8 .. G15 */
-    tb1 = vec_unpack2sh( z0, tc3 );  /* tb0 = B8 .. B15 */
+    tr0 = (vector signed short) vec_mergeh( z0, tc0 );  /* tr0 = R0 .. R7  */
+    tg0 = (vector signed short) vec_mergel( z0, tc0 );  /* tg0 = G0 .. G7  */
+    tb0 = (vector signed short) vec_mergeh( z0, tc1 );  /* tb0 = B0 .. B7  */
+    tr1 = (vector signed short) vec_mergeh( z0, tc2 );  /* tr0 = R8 .. R15 */
+    tg1 = (vector signed short) vec_mergel( z0, tc2 );  /* tg0 = G8 .. G15 */
+    tb1 = (vector signed short) vec_mergeh( z0, tc3 );  /* tb0 = B8 .. B15 */
 
     /* Convert the first three input vectors.  Note that
        only the top 17 bits of the 32 bit product are
@@ -1448,6 +1457,10 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
     break;
   case GL_YUV422_GEM:
     {
+#ifdef __TIMING__
+	  UnsignedWide start, end;
+	  Microseconds(&start);
+#endif
 #ifdef __VEC__
 	YV12_to_YUV422_altivec(Y, U, V, pixelnum);
 #else
@@ -1478,6 +1491,11 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 		pixels1+=xsize*csize;	pixels2+=xsize*csize;
 		py1+=xsize*1;	py2+=xsize*1;
       }
+#endif
+#ifdef __TIMING__
+	  Microseconds(&end);
+	  float seconds = (float)(end.lo - start.lo) / 1000000.f;
+	  post("YV12toUYVY frame time = %f\n", seconds);
 #endif
     }
     break;
@@ -1617,6 +1635,10 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
   case GL_RGBA:
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
+#ifdef __TIMING__
+	  UnsignedWide start, end;
+	  Microseconds(&start);
+#endif
 #if 0
 	  YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
 #else
@@ -1625,29 +1647,34 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
-	u=yuvdata[0]-UV_OFFSET;
-	v=yuvdata[2]-UV_OFFSET;
-	uv_r=YUV2RGB_12*v+YUV2RGB_13*v;
-	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+	    u=yuvdata[0]-UV_OFFSET;
+		v=yuvdata[2]-UV_OFFSET;
+		uv_r=YUV2RGB_12*v+YUV2RGB_13*v;
+		uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+		uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	// 1st pixel
-	y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels[chAlpha] = 255;
-	pixels+=4;
-	// 2nd pixel
-	y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels[chAlpha] = 255;
-	pixels+=4;
+		// 1st pixel
+		y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
+		pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+		pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+		pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+		pixels[chAlpha] = 255;
+		pixels+=4;
+		// 2nd pixel
+		y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
+		pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+		pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+		pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+		pixels[chAlpha] = 255;
+		pixels+=4;
 
-	yuvdata+=4;
+		yuvdata+=4;
       }
+#endif
+#ifdef __TIMING__
+	  Microseconds(&end);
+	  float seconds = (float)(end.lo - start.lo) / 1000000.f;
+	  post("UYVYtoRGBA/BGRA frame time = %f\n", seconds);
 #endif
     }
     break;
