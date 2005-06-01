@@ -261,7 +261,6 @@ void sphere :: render(GemState *state)
   }
  
   if (m_drawType == GL_FILL) {
-
     src = 0;
     if (!state->texture) {
       /* draw +Z end as a triangle fan */
@@ -269,10 +268,10 @@ void sphere :: render(GemState *state)
       glNormal3f(0.0, 0.0, 1.0);
       glVertex3f(0.0, 0.0, nsign * radius);
       for (j = 0; j <= slices; j++) {
-	if (normals)
-	  glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-	glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
+			if (normals)
+				glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+			glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+			src++;
       }
       glEnd();
     }
@@ -295,16 +294,18 @@ void sphere :: render(GemState *state)
       s = 0.0;
       for (j = 0; j <= slices; j++) {
 
-	if (normals)
-	  glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-	if(state->texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-	glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
-	if (normals)
-	  glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-	if(state->texture)glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
-	s += ds;
-	glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+		if (normals)
+			glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+		if(state->texture)
+			glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+		glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+		src++;
+		if (normals)
+			glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+		if(state->texture)
+			glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+		s += ds;
+		glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }
       glEnd();
@@ -319,11 +320,10 @@ void sphere :: render(GemState *state)
       s = 1.0;
       t = dt;
       for (j = slices; j >= 0; j--) {
-	
-	if (normals)
-	  glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-	s -= ds;
-	glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+		if (normals)
+			glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+		s -= ds;
+		glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }
       glEnd();
