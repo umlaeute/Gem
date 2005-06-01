@@ -171,8 +171,9 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 #ifdef DEBUG
     post("MAC: createGemWindow()");
 #endif
-    EventTypeSpec	list[] = {		{ kEventClassWindow, kEventWindowActivated },
-                                    { kEventClassWindow, kEventWindowClose },
+    EventTypeSpec	list[] = {		//{ kEventClassWindow, kEventWindowActivated },
+									//{ kEventClassWindow, kEventWindowGetClickActivation },
+                                    //{ kEventClassWindow, kEventWindowClose },
                                     { kEventClassMouse, kEventMouseDown },
                                     { kEventClassMouse, kEventMouseUp },
                                     { kEventClassMouse, kEventMouseMoved },
@@ -359,7 +360,22 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         glWInfo.aglAttributes [i++] = AGL_PIXEL_SIZE;
         glWInfo.aglAttributes [i++] = 32;
         glWInfo.aglAttributes [i++] = AGL_DEPTH_SIZE;
-        glWInfo.aglAttributes [i++] = 16;
+        glWInfo.aglAttributes [i++] = 32;
+/*		glWInfo.aglAttributes [i++] = AGL_AUX_BUFFERS;
+		glWInfo.aglAttributes [i++] = 3;
+		glWInfo.aglAttributes [i++] = AGL_STENCIL_SIZE;
+		glWInfo.aglAttributes [i++] = 16;
+		glWInfo.aglAttributes [i++] = AGL_ACCUM_RED_SIZE;
+		glWInfo.aglAttributes [i++] = 8;
+		glWInfo.aglAttributes [i++] = AGL_ACCUM_RED_SIZE;
+		glWInfo.aglAttributes [i++] = 8;
+		glWInfo.aglAttributes [i++] = AGL_ACCUM_GREEN_SIZE;
+		glWInfo.aglAttributes [i++] = 8;
+		glWInfo.aglAttributes [i++] = AGL_ACCUM_BLUE_SIZE;
+		glWInfo.aglAttributes [i++] = 8;
+		glWInfo.aglAttributes [i++] = AGL_ACCUM_ALPHA_SIZE;
+		glWInfo.aglAttributes [i++] = 8;
+*/
         if (hints.buffer == 2){
             glWInfo.aglAttributes [i++] = AGL_DOUBLEBUFFER;
         }
@@ -1126,7 +1142,7 @@ static Boolean CheckWindowExtents (GDHandle hGD, short width, short height)
 	short deviceWidth = (short) ((**hGD).gdRect.right - (**hGD).gdRect.left);
 	short windowWidthExtra, windowHeightExtra;
 	// build window (not visible)
-	WindowPtr pWindow = NewCWindow (NULL, &rectWin, "\p", true, kWindowType, (WindowPtr)-1, 0, 0);
+	WindowPtr pWindow = NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", true, kWindowType, (WindowPtr)-1, 0, 0);
 	
 	GetWindowBounds (pWindow, kWindowStructureRgn, &strucRect);
 
@@ -1145,7 +1161,7 @@ static Boolean CheckWindowExtents (GDHandle hGD, short width, short height)
 // Builds OpenGL context
 
 // Inputs: 	hGD: GDHandle to device to look at
-//			pcontextInfo: request and requirements for cotext and drawable
+//			pcontextInfo: request and requirements for context and drawable
 
 // Outputs: paglContext as allocated
 //			pcontextInfo:  allocated parameters
@@ -1153,11 +1169,10 @@ static Boolean CheckWindowExtents (GDHandle hGD, short width, short height)
 // if fail to allocate: paglContext will be NULL
 // if error: will return error paglContext will be NULL
 
-static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, //DSpContextReference* pdspContext,
+static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext,
 							  GDHandle hGD, pstructGLInfo pcontextInfo, AGLContext aglShareContext)
 {
 	OSStatus err = noErr;
-	//NumVersion versionDSp = GetDSpVersion ();
 
 	if ((Ptr) kUnresolvedCFragSymbolAddress == (Ptr) aglChoosePixelFormat) // check for existance of OpenGL
 	{
@@ -1166,7 +1181,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, 
 	}	
 	
 	// DSp has problems on Mac OS X with DSp version less than 1.99 so use agl full screen
-	if ((pcontextInfo->fFullscreen) && (CheckMacOSX ()) /*&& ((versionDSp.majorRev == 0x01) && (versionDSp.minorAndBugRev < 0x99))*/) // need to set pixel format for full screen
+	if ((pcontextInfo->fFullscreen) && (CheckMacOSX ()) ) // need to set pixel format for full screen
 	{
 		short i = 0;
 		while (pcontextInfo->aglAttributes[i++] != AGL_NONE) {}
@@ -1189,7 +1204,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, 
 	*paglContext = aglCreateContext (pcontextInfo->fmt, aglShareContext);		
         // Create an AGL context
  	if (AGL_BAD_MATCH == aglGetError())
-		*paglContext = aglCreateContext (pcontextInfo->fmt, 0); // unable to sahre context, create without sharing
+		*paglContext = aglCreateContext (pcontextInfo->fmt, 0); // unable to share context, create without sharing
 	aglReportError ();
 	if (NULL == *paglContext) 
 	{
@@ -1200,7 +1215,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, 
 		aglShareContext = *paglContext;
 	
 	// set our drawable
-        // not Mac OS X fullscreen:  this is for three cases 1) Mac OS 9 windowed 2) Mac OS X windowed 3) Mac OS 9 fullscreen (as you need to build a window on top of DSp for GL to work correctly
+	// not Mac OS X fullscreen:  this is for three cases 1) Mac OS 9 windowed 2) Mac OS X windowed 3) Mac OS 9 fullscreen (as you need to build a window on top of DSp for GL to work correctly
 	{
 		// build window as late as possible
 		err = BuildDrawable (paglDraw, hGD, pcontextInfo);
@@ -1214,7 +1229,12 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext, 
 	}
 	if(!aglSetCurrentContext (*paglContext))			// make the context the current context
 		return aglReportError ();
-	
+		
+	// set swap interval to sync with vbl
+	GLint	swapinterval = 1;
+	if (!aglSetInteger(*paglContext, AGL_SWAP_INTERVAL, &swapinterval))
+		return aglReportError();
+		
 	return err;
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -1327,9 +1347,9 @@ static OSStatus BuildDrawable (AGLDrawable* paglDraw, GDHandle hGD, pstructGLInf
 	rectWin.bottom = (short) (rectWin.top + pcontextInfo->height);
 	
 	if (pcontextInfo->fFullscreen)
-		*paglDraw = GetWindowPort (NewCWindow (NULL, &rectWin, "\p", 0, plainDBox, (WindowPtr)-1, 0, 0));
+		*paglDraw = GetWindowPort (NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", 0, plainDBox, (WindowPtr)-1, 0, 0));
 	else
-		*paglDraw = GetWindowPort (NewCWindow (NULL, &rectWin, "\p", 0, kWindowType, (WindowPtr)-1, 0, 0));
+		*paglDraw = GetWindowPort (NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", 0, kWindowType, (WindowPtr)-1, 0, 0));
 		ShowWindow (GetWindowFromPort (*paglDraw));
 
 	GetPort (&pGrafSave);
@@ -1403,7 +1423,12 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
             case kEventClassWindow:
                 switch (kind)
                 {
-                    case kEventWindowActivated:
+/*                    case kEventWindowActivated:
+                        GetEventParameter( event, kEventParamDirectObject, typeWindowRef, NULL, sizeof(WindowRef), NULL, &winRef);
+                        SelectWindow(winRef);
+                        result = noErr;
+                        break;
+                    case kEventWindowGetClickActivation:
                         GetEventParameter( event, kEventParamDirectObject, typeWindowRef, NULL, sizeof(WindowRef), NULL, &winRef);
                         SelectWindow(winRef);
                         result = noErr;
@@ -1411,7 +1436,7 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                     case kEventWindowClosed:
                         //destroyGemWindow(
                         break;
-                }
+*/                }
                 break;
             case kEventClassKeyboard:
                 switch (kind)
