@@ -39,6 +39,7 @@ class GEM_EXTERN pix_mean_color : public GemPixObj
 	virtual void processRGBImage(imageStruct &image);
 	virtual void processRGBAImage(imageStruct &image);
 	virtual void processGrayImage(imageStruct &image);
+	virtual void processYUVImage(imageStruct &image);
 	
 	t_outlet * m_list;
 };
