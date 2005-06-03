@@ -259,7 +259,20 @@ void destroyGemWindow(WindowInfo &info)
 	XF86VidModeSetViewPort(info.dpy, info.screen, 0, 0);
 	info.fs=0;
       }
-      XCloseDisplay(info.dpy);
+/*
+ * JMZ: disabled XCloseDisplay() because it likes to freeze the screen
+ * the problem seems to be the event-handler which starts to send
+ * to nowhere when we stop the display
+ * probably it is just sending the "close" message which is 
+ * caught by Gem which in turn sends a "close" message,....
+ *
+ * the problem with disabling the XCloseDisplay() is, 
+ * that the ressource is not freed at all, resulting in
+ * a memory leak _and_ the X-server is going to refuse
+ * connections after a certain number of creations
+ */
+ post("ERROR: not closing X-Display ! this should be fixed!!!");
+ // XCloseDisplay(info.dpy);
     }
   info.dpy = NULL;
   info.win = 0;
