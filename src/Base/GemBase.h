@@ -21,6 +21,13 @@ LOG
 #endif
 
 #include "config.h"
+
+
+#ifndef HELPSYMBOL_BASE
+/* this must be defined before including CPPExtern.h */
+# define HELPSYMBOL_BASE "Gem/"
+#endif
+
 #include "Base/CPPExtern.h"
 #include "Base/GemState.h"
 
@@ -87,10 +94,6 @@ LOG
 
 #ifndef GL_DEFAULT_GEM
 # define GL_DEFAULT_GEM 0xFFFF
-#endif
-
-#ifndef HELPSYMBOL_BASE
-# define HELPSYMBOL_BASE "Gem/"
 #endif
 
 class GemCache;
