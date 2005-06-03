@@ -1,24 +1,45 @@
 Build instructions for GEM Linux
 ================================
 
+
+VERY SHORT INSTRUCTION:
+-----------------------
+
+#> autoconf && ./configure && make
+
+
+
+=============================================
+
+DETAILED INSTRUCTIONS:
+----------------------
+
 Prerequisites for compiling GEM (version >=0.90):
 
 openGL & GLU
   e.g: 	Mesa       http://mesa3d.sourceforge.net
+  platforms: ALL
+
 tiff       ftp://ftp.sgi.com/graphics/tiff/tiff-v3.4beta037-tar.gz
+ platforms: linux, windows
 jpeg       ftp://ftp.uu.net/graphics/jpeg/
+ platforms: linux, windows
 freetype   http://freetype.sourceforge.net/index2.html
+ platforms: ALL
 
 for font rendering you need (beside the freetype-package)
  gltt       http://gltt.sourceforge.net/
+    platforms: linux, windows (deprecated!!!)
   OR
  FTGL      http://homepages.paradise.net.nz/henryj/code/
+    platforms: ALL
 
 To enable movie-loading you might want to install one (or all) of the following:
 quicktime4linux	http://heroinewarrior.com/quicktime.php3
 avifile-0.7	http://avifile.sourceforge.net
 MPEG		 ftp://ftp.bic.mni.mcgill.ca/pub/mpeg/mpeg_lib-1.3.1.tar.gz
 mpeg3		http://heroinewarrior.com/libmpeg3.php3
+ platforms: linux
 
 note: sorry to say, but heroine doesn't seem to support neither quicktime4linux nor mpeg3 any more.
 try to find a developer-package for your distribution.
@@ -40,8 +61,15 @@ For other distributions you may have a look which ones are there and download an
 
 Try using http://rpmfind.net for rpm-packages.
 
+
+
+
 ================================
-Building Gem should work in 2 steps
+Building Gem should work in 3 steps
+
+#> autoconf
+
+followed by a
 
 #> ./configure
 
@@ -49,7 +77,7 @@ followed by a
 
 #> make
 
-This should build Gem.pd_linux in the Gem root directory.
+This should build Gem.{pd_linux,pd_darwin,...} in the Gem root directory.
 
 The configure script tries to figure out several things. An important one is 
 the location of the pd header file "m_pd.h".
@@ -89,8 +117,8 @@ To test Gem (you need to have pd installed)
 ==================================1
 Other:
 
-"make distclean" removes all traces from a build.
 "make clean" removes the object files
+"make distclean" removes all traces from a build.
 
 -----------------------------------------------------------------
 Advanced:
