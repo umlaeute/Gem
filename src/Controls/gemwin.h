@@ -88,7 +88,7 @@ class GEM_EXTERN gemwin : public CPPExtern
 
   void 	    	bangMess();
   void 	    	intMess(int state);
-  void			renderMess();
+  void		renderMess();
   void 	    	titleMess(t_symbol* s);
   void 	    	createMess(t_symbol* s);
   void 	    	stereoMess(int mode);
@@ -97,18 +97,18 @@ class GEM_EXTERN gemwin : public CPPExtern
   void 	    	fullscreenMess(int on);
   void 	    	secondscreenMess(int on);
   void 	    	offsetMess(int x, int y);
-  void 	    	colorMess(float red, float green, float blue);
+  void 	    	colorMess(float red, float green, float blue, float alpha);
   void 	    	clearmaskMess(float bitmask);
-  void 	    	ambientMess(float red, float green, float blue);
-  void 	    	specularMess(float red, float green, float blue);
+  void 	    	ambientMess(float red, float green, float blue, float alpha);
+  void 	    	specularMess(float red, float green, float blue, float alpha);
   void 	    	shininessMess(float val);
 
   void		fogModeMess(int mode);
   void 	    	fogDensityMess(float val);
   void		fogRangeMess(float start, float end);
-  void 	    	fogColorMess(float red, float green, float blue);
+  void 	    	fogColorMess(float red, float green, float blue, float alpha);
   void          cursorMess(float setting);
-  void			topmostMess(float settting);
+  void		topmostMess(float settting);
   void          blurMess(float setting);
   void          fpsMess();
   void          fsaaMess(int value);
@@ -130,13 +130,13 @@ class GEM_EXTERN gemwin : public CPPExtern
   static void 	offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
   static void 	fullscreenMessCallback(void *data, t_floatarg on);
   static void 	secondscreenMessCallback(void *data, t_floatarg on);
-  static void 	colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);
+  static void 	colorMessCallback(void *data, t_symbol*,int,t_atom*);
   static void 	clearmaskMessCallback(void *data, t_floatarg bitmask);
-  static void 	ambientMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);
-  static void 	specularMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);
+  static void 	ambientMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void 	specularMessCallback(void *data, t_symbol*,int,t_atom*);
   static void 	shininessMessCallback(void *data, t_floatarg val);
   static void	fogMessCallback(void *, t_symbol *, int argc, t_atom *argv);
-  static void 	fogColorMessCallback(void *, t_floatarg red, t_floatarg green, t_floatarg blue);
+  static void 	fogColorMessCallback(void *, t_symbol*,int,t_atom*);
   static void	fogModeMessCallback(void *, t_floatarg val);
 
   // just call GemMan directly

@@ -227,7 +227,7 @@ void gemwin :: offsetMess(int x, int y)
 // colorMess
 //
 /////////////////////////////////////////////////////////
-void gemwin :: colorMess(float red, float green, float blue)
+void gemwin :: colorMess(float red, float green, float blue, float alpha)
 {
 #ifdef __APPLE__
   if ( !GemMan::windowExists() )  {
@@ -235,12 +235,12 @@ void gemwin :: colorMess(float red, float green, float blue)
     return;
   }
 #endif
-  glClearColor(red, green, blue, 0.);
+  glClearColor(red, green, blue, alpha);
   GemMan::m_clear_color[0] = red;
   GemMan::m_clear_color[1] = green;
   GemMan::m_clear_color[2] = blue;
+  GemMan::m_clear_color[3] = alpha;
 }
-
 /////////////////////////////////////////////////////////
 // clearmaskMess
 //
@@ -254,22 +254,26 @@ void gemwin :: clearmaskMess(float bitmask)
 // ambientMess
 //
 /////////////////////////////////////////////////////////
-void gemwin :: ambientMess(float red, float green, float blue)
+void gemwin :: ambientMess(float red, float green, float blue, float alpha)
 {
   GemMan::m_mat_ambient[0] = red;
   GemMan::m_mat_ambient[1] = green;
   GemMan::m_mat_ambient[2] = blue;
+  GemMan::m_mat_ambient[3] = blue;
+
 }
 
 /////////////////////////////////////////////////////////
 // specularMess
 //
 /////////////////////////////////////////////////////////
-void gemwin :: specularMess(float red, float green, float blue)
+void gemwin :: specularMess(float red, float green, float blue, float alpha)
 {
   GemMan::m_mat_specular[0] = red;
   GemMan::m_mat_specular[1] = green;
   GemMan::m_mat_specular[2] = blue;
+  GemMan::m_mat_specular[2] = alpha;
+
 }
 
 /////////////////////////////////////////////////////////
@@ -313,12 +317,12 @@ void gemwin :: fogRangeMess(float start, float end)
 // fogColorMess
 //
 /////////////////////////////////////////////////////////
-void gemwin :: fogColorMess(float red, float green, float blue)
+void gemwin :: fogColorMess(float red, float green, float blue, float alpha)
 {
   GemMan::m_fogColor[0] = red;
   GemMan::m_fogColor[1] = green;
   GemMan::m_fogColor[2] = blue;
-  GemMan::m_fogColor[3] = 0.f;
+  GemMan::m_fogColor[3] = alpha;
 }
 
 /////////////////////////////////////////////////////////
@@ -436,7 +440,7 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&gemwin::offsetMessCallback,
 		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::colorMessCallback,
-		  gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+		  gensym("color"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::clearmaskMessCallback,
 		  gensym("clearmask"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::perspectiveMessCallback,
@@ -446,14 +450,14 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&gemwin::fogMessCallback,
 		  gensym("fog"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::fogColorMessCallback,
-		  gensym("fogcolor"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+		  gensym("fogcolor"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::fogModeMessCallback,
 		  gensym("fogmode"), A_FLOAT, A_NULL);
 
   class_addmethod(classPtr, (t_method)&gemwin::ambientMessCallback,
-		  gensym("ambient"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+		  gensym("ambient"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::specularMessCallback,
-		  gensym("specular"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+		  gensym("specular"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::shininessMessCallback,
 		  gensym("shininess"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::cursorMessCallback,
@@ -523,9 +527,25 @@ void gemwin :: fogMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
       error("GEM : fog message needs 1 or 2 arguments");
     }
 }
-void gemwin :: fogColorMessCallback(void *data, t_float red, t_float green, t_float blue)
+void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
-  GetMyClass(data)->fogColorMess(red, green, blue);
+  float red, green, blue, alpha=1.f;
+  if(argc<3){
+    error("gemwin: \"color\" expects 3 or 4 values");
+    return;
+  }
+  switch(argc){
+  case 4:
+    alpha=atom_getfloat(argv+3);
+  case 3:
+    red=  atom_getfloat(argv);
+    green=atom_getfloat(argv+1);
+    blue= atom_getfloat(argv+2);
+    GetMyClass(data)->fogColorMess((float)red, (float)green, (float)blue, (float)alpha);
+    break;
+  default:
+    error("gemwin: \"color\" expects 3 or 4 values");
+  }
 }
 void gemwin :: fogModeMessCallback(void *data, t_float val)
 {
@@ -687,21 +707,57 @@ void gemwin :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
   GetMyClass(data)->offsetMess((int)x, (int)y);
 }
-void gemwin :: colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue)
+void gemwin :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-  GetMyClass(data)->colorMess((float)red, (float)green, (float)blue);
+  float red, green, blue, alpha=0.f;
+  switch(argc){
+  case 4:
+    alpha=atom_getfloat(argv+3);
+  case 3:
+    red=  atom_getfloat(argv);
+    green=atom_getfloat(argv+1);
+    blue= atom_getfloat(argv+2);
+    GetMyClass(data)->colorMess((float)red, (float)green, (float)blue, (float)alpha);
+    break;
+  default:
+    error("gemwin: \"color\" expects 3 or 4 values");
+  }
 }
 void gemwin :: clearmaskMessCallback(void *data, t_floatarg bitmask)
 {
   GetMyClass(data)->clearmaskMess((float)bitmask);
 }
-void gemwin :: ambientMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue)
+void gemwin :: ambientMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
-  GetMyClass(data)->ambientMess((float)red, (float)green, (float)blue);
+  float red, green, blue, alpha=1.f;
+  switch(argc){
+  case 4:
+    alpha=atom_getfloat(argv+3);
+  case 3:
+    red=  atom_getfloat(argv);
+    green=atom_getfloat(argv+1);
+    blue= atom_getfloat(argv+2);
+    GetMyClass(data)->ambientMess((float)red, (float)green, (float)blue, (float)alpha);
+    break;
+  default:
+    error("gemwin: \"ambient\" expects 3 or 4 values");
+  }
 }
-void gemwin :: specularMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue)
+void gemwin :: specularMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
-  GetMyClass(data)->specularMess((float)red, (float)green, (float)blue);
+  float red, green, blue, alpha=1.f;
+  switch(argc){
+  case 4:
+    alpha=atom_getfloat(argv+3);
+  case 3:
+    red=  atom_getfloat(argv);
+    green=atom_getfloat(argv+1);
+    blue= atom_getfloat(argv+2);
+    GetMyClass(data)->specularMess((float)red, (float)green, (float)blue, (float)alpha);
+    break;
+  default:
+    error("gemwin: \"specular\" expects 3 or 4 values");
+  }
 }
 void gemwin :: shininessMessCallback(void *data, t_floatarg val)
 {
