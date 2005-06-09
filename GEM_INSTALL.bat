@@ -1,6 +1,6 @@
 @echo off
 REM where does PD reside ??
-set PDPATH=C:\programme\pd
+set PDPATH="%PROGRAMFILES%\pd"
 
 REM which pd-version do we have ? 
 set PDVERSION=0.37
