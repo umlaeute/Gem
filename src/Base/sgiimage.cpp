@@ -248,13 +248,14 @@ int sizeofimage(char *name, int32 *xsize, int32 *ysize, int32 *csize)
     if(image.imagic != IMAGIC)
 	{
 		/* fprintf(stderr,"sizeofimage: bad magic number in image file\n"); */
+	        fclose(inf); 
 		return(0);
     }
     *xsize = image.xsize;
     *ysize = image.ysize;
-	*csize = image.zsize;
+    *csize = image.zsize;
     fclose(inf);
-	return(1);
+    return(1);
 }
 
 /*
@@ -287,6 +288,7 @@ unsigned int32 *longimagedata(char *name)
     if(image->imagic != IMAGIC)
 	{
 		/* fprintf(stderr,"longimagedata: bad magic number in image file\n"); */
+	        fclose(inf);
 		return(NULL);
     }
     rle = ISRLE(image->type);
@@ -294,6 +296,7 @@ unsigned int32 *longimagedata(char *name)
     if(bpp != 1 )
 	{
 		fprintf(stderr,"longimagedata: image must have 1 byte per pix chan\n");
+	        fclose(inf);
 		return(NULL);
     }
     xsize = image->xsize;
@@ -602,7 +605,8 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, ch
 	    }
 	    if(len>rlebuflen) {
 		fprintf(stderr,"longstoimage: rlebuf is too small - bad poop\n");
-		exit(1);
+		goodwrite=0;
+		goto longstoimage_close;
 	    }
 	    goodwrite *= fwrite(rlebuf,len,1,outf);
 	    starttab[y+z*ysize] = pos;
@@ -615,6 +619,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, ch
     fseek(outf,512,SEEK_SET);
     goodwrite *= writetab(outf,(unsigned int32 *)starttab,tablen);
     goodwrite *= writetab(outf,(unsigned int32 *)lengthtab,tablen);
+ longstoimage_close:
     free(image);
     free(starttab);
     free(lengthtab);
