@@ -28,11 +28,11 @@ LOG
 #  define M_PI (3.1415926)
 #endif
 
+#include "Base/GemShape.h"
+
 #ifndef GLU_SILHOUETTE
 # define GLU_SILHOUETTE 0
 #endif
-
-#include "Base/GemShape.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
