@@ -47,7 +47,7 @@ filmQT :: filmQT(int format) : film(format)
     first_time = false;
   }
 #ifdef HAVE_QUICKTIME
-# ifdef _WINDOWS
+# ifdef __WIN32__
   // Initialize QuickTime Media Layer
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {

@@ -16,6 +16,10 @@ LOG
 #define INCLUDE_PIX_FREEFRAME_H_
 
 #include "Base/GemPixObj.h"
+
+#if defined __WIN32__ && !defined WIN32
+# define WIN32
+#endif
 #include "FreeFrame.h"
 
 #ifdef __linux__

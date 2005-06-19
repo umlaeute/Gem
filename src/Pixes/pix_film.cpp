@@ -15,7 +15,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#if defined NT || defined __APPLE__ || defined __linux__
+#if defined __WIN32__ || defined __APPLE__ || defined __linux__
 // on this OSs we surely have child-classes for the real function
 // so we don't want pix_film.cpp to reserve [pix_film]
 # define NO_AUTO_REGISTER_CLASS

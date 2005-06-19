@@ -14,7 +14,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_MOVIEYUV_H_
 #define INCLUDE_PIX_MOVIEYUV_H_
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 #include "Pixes/pix_filmNT.h"
 #elif __linux__
 #include "Pixes/pix_filmLinux.h"
@@ -37,7 +37,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-#ifdef _WINDOWS
+#ifdef __WIN32__
 class GEM_EXTERN pix_movieYUV : public pix_filmNT
 {
   CPPEXTERN_HEADER(pix_movieYUV, pix_filmNT)

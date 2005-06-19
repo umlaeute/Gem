@@ -31,7 +31,7 @@ typedef struct SPete_Kaleidoscope_Line {
 };
 extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void* pElem2);
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 # define NO_HACK
 #endif
 /*-----------------------------------------------------------------

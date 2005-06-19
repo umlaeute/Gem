@@ -20,7 +20,7 @@
 #include "pix_freeframe.h"
 #include <stdio.h>
 
-#ifdef NT
+#ifdef __WIN32__
 # include <io.h>
 # include <windows.h>
 #else
@@ -81,7 +81,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s) : m_plugin(NULL),m_instance(FF_FAIL)
   char *bufptr=NULL;
 
   char *extension=
-#ifdef NT
+#ifdef __WIN32__
     ".dll";
 #else
     ".so";
@@ -314,7 +314,7 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
     plugmain = (T_FFPLUGMAIN)NSAddressOfSymbol( s);
   else plugmain = 0;
   
-#elif defined NT
+#elif defined __WIN32__
   HINSTANCE ntdll;
 
   sys_bashfilename(libname, libname);
