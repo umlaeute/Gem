@@ -21,7 +21,7 @@
  * if we use nvidia's headers, we will most likely want to include gl/glext.h
  * if you don't have gl/glext.h, enable the following...
  */
-//#define DONT_INCLUDE_GLEXT
+#define DONT_INCLUDE_GLEXT
 
 
 /*
