@@ -14,12 +14,10 @@
 /////////////////////////////////////////////////////////
 
 #ifdef __APPLE__
-
 #include <Carbon/Carbon.h>
 #include "GemWinCreate.h"
 #include "GemMan.h"
 #include "GemEvent.h"
-#include "m_pd.h"
 
 #define PIXEL_SIZE	32		// 16 or 32
 #define DEPTH_SIZE	16

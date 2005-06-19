@@ -14,11 +14,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_GEMWINCREATE_H_
 #define INCLUDE_GEMWINCREATE_H_
+#include "Base/config.h"
 
 #ifdef unix
 #include <GL/glx.h>
 #include <X11/extensions/xf86vmode.h>
-#elif _WINDOWS
+#elif __WIN32__
 #include <windows.h>
 #elif __APPLE__
 #import <AGL/agl.h>
@@ -27,6 +28,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #endif
 
 #include "Base/GemExportDef.h"
+
+#include "m_pd.h"
+
 #include <string.h>
 
 /*-----------------------------------------------------------------
@@ -48,7 +52,7 @@ class GEM_EXTERN WindowInfo
     fs(0), 
 #ifdef unix
     dpy(NULL), win(0), cmap(0), context(NULL)
-#elif _WINDOWS
+#elif __WIN32__
     win(NULL), dc(NULL), context(NULL)
 #elif __APPLE__
         pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
@@ -67,7 +71,7 @@ class GEM_EXTERN WindowInfo
 
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
 
-#elif _WINDOWS
+#elif __WIN32__
 
   HWND        win;                // Window handle
   HDC         dc;                 // Device context handle
@@ -157,7 +161,7 @@ class GEM_EXTERN WindowHints
   // The GLXcontext to share rendering with
 #ifdef unix
     GLXContext  shared;
-#elif _WINDOWS
+#elif __WIN32__
     HGLRC       shared;
 #elif __APPLE__
     AGLContext	shared;

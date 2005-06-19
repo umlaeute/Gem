@@ -15,12 +15,12 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemPixImageSave.h"
-
-#include "m_pd.h"
 #include "Base/config.h"
 
-#ifdef _WINDOWS
+#include "GemPixImageSave.h"
+#include "m_pd.h"
+
+#ifdef __WIN32__
 #include <io.h>
 #else
 #include <unistd.h>
@@ -33,7 +33,6 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #include <string.h>
-#include <stdio.h>
 #include <fcntl.h> 
 #endif // __APPLE__
 
@@ -50,7 +49,7 @@ extern "C"
 
 # undef EXTERN
 
-# ifdef _WINDOWS
+# ifdef __WIN32__
 #  undef FAR
 # endif
 # ifdef HAVE_LIBJPEG

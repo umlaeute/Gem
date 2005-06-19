@@ -25,9 +25,11 @@
  *				Mark Danks - 1998
  */
 
-#ifndef WIN32
+
+/* LATER: look at the following lines; jmz */
+#ifndef __WIN32__
 #include <unistd.h>
-#ifdef WIN32
+#ifdef __WIN32__
 #include <bstring.h>
 #else
 #include <string.h>

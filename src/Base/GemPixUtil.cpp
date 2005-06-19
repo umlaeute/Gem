@@ -14,11 +14,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifdef _WINDOWS
-# pragma warning( disable : 4244 )
-# pragma warning( disable : 4305 )
-# pragma warning( disable : 4091 )
-#endif
+#include "Base/config.h"
 
 #include "m_pd.h"
 #include "GemPixUtil.h"
@@ -1152,7 +1148,7 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
       unsigned char*pv=(format==GL_BGR_EXT)?U:V;
       unsigned char*pu=(format==GL_RGB)?U:V;
 
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
@@ -1206,7 +1202,7 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
       unsigned char*pv=(format==GL_BGRA_EXT)?V:U;
       unsigned char*pu=(format==GL_RGBA)?V:U;
  
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
@@ -1314,7 +1310,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
       short*pv=V;//(format==GL_BGR_EXT)?V:U;
       short*pu=U;//(format==GL_RGB)?V:U;
 
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
@@ -1403,7 +1399,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
       short*pv=V;//(format==GL_BGRA_EXT)?U:V;
       short*pu=U;//(format==GL_RGBA)?U:V;
 
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
@@ -1604,7 +1600,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
   case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
@@ -1643,7 +1639,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 	  YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
 #else
       unsigned char *pixels=data;
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
@@ -1719,7 +1715,7 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
   case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
@@ -1751,7 +1747,7 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
       unsigned char *pixels=data;
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
@@ -1814,7 +1810,7 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
   case GL_RGB:  case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
@@ -1846,7 +1842,7 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
       unsigned char *pixels=data;
-      int y, u, v, yy, vr, ug, vg, ub;
+      int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){

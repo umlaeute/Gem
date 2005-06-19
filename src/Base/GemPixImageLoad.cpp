@@ -16,20 +16,19 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemPixImageLoad.h"
-
-#include "m_pd.h"
 #include "Base/config.h"
+
+#include "GemPixImageLoad.h"
+#include "m_pd.h"
 
 #ifdef __APPLE__
 #include <Carbon/carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
-#include <string.h>
 #endif // __APPLE__
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 #include <io.h>
 #else
 #include <unistd.h>
@@ -49,7 +48,7 @@ extern "C"
 
 #undef EXTERN
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 #undef FAR
 #endif
 

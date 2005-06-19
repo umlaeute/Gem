@@ -18,7 +18,7 @@ LOG
 #define INCLUDE_GEMPIXUTIL_H_
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
+#ifdef __WIN32__
 # include <windows.h>
 
 # pragma warning( disable : 4244 )

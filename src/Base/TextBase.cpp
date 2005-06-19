@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef NT
+#ifdef __WIN32__
 # include <io.h>
 #else
 # include <unistd.h>

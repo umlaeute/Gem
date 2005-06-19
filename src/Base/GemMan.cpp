@@ -27,7 +27,7 @@
 #include <string.h>
 #include <Quicktime/Quicktime.h>
 #include <time.h>
-#elif _WINDOWS
+#elif __WIN32__
 # include <stdlib.h>
 // I hate Microsoft...I shouldn't have to do this!
 #endif
@@ -139,7 +139,7 @@ GEM_EXTERN void gemAbortRendering()
 static t_clock *s_windowClock = NULL;
 static int s_windowDelTime = 10;
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 static int s_windowRun = 0;
 static int s_singleContext = 0;
 
@@ -316,7 +316,7 @@ void GemMan :: createContext(char* disp)
       XCloseDisplay(dummyDpy);
       return;
     }
-#elif _WINDOWS
+#elif __WIN32__
   // can we only have one context?
   if (getenv("GEM_SINGLE_CONTEXT") &&
       !strcmp("1", getenv("GEM_SINGLE_CONTEXT")))
@@ -686,7 +686,7 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
 
 void GemMan :: render(void *)
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   static int firstTime = 1;
   static float countFreq = 0;
 #endif
@@ -695,7 +695,7 @@ void GemMan :: render(void *)
     return;
 
   // are we profiling?
-#ifdef _WINDOWS
+#ifdef __WIN32__
   if (firstTime)
     {
       LARGE_INTEGER freq;
@@ -919,7 +919,7 @@ void GemMan :: render(void *)
 
   // are we profiling?
   if (m_profile == 1 || m_profile == 2)
-#ifdef _WINDOWS
+#ifdef __WIN32__
     {
       LARGE_INTEGER endTime;
       QueryPerformanceCounter(&endTime);
@@ -1172,7 +1172,7 @@ int GemMan :: createWindow(char* disp)
   m_windowNumber++;
   windowInit();
   clock_delay(s_windowClock, s_windowDelTime);
-#ifdef _WINDOWS
+#ifdef __WIN32__
   s_windowRun = 1;
 #endif
 
@@ -1185,7 +1185,7 @@ int GemMan :: createWindow(char* disp)
 /////////////////////////////////////////////////////////
 void GemMan :: destroyWindow()
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   // don't want to get rid of this
   if (s_singleContext)
     return;
@@ -1213,7 +1213,7 @@ void GemMan :: destroyWindow()
   if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
 
   glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
-#elif _WINDOWS              // for Windows
+#elif __WIN32__              // for Windows
 
   if (!constInfo.dc && !constInfo.context)return; // do not crash ??
 
@@ -1233,7 +1233,7 @@ void GemMan :: destroyWindow()
 /////////////////////////////////////////////////////////
 int createConstWindow(char* disp)
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   // can we only have one context?
   if (s_singleContext)
     {
@@ -1279,7 +1279,7 @@ int createConstWindow(char* disp)
 /////////////////////////////////////////////////////////
 void destroyConstWindow()
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   if (s_singleContext)
     {
     }
@@ -1298,7 +1298,7 @@ void GemMan :: swapBuffers()
   if (GemMan::m_buffer == 2)
 #ifdef unix             // for Unix
     glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
-#elif _WINDOWS          // for WinNT
+#elif __WIN32__          // for WinNT
   SwapBuffers(gfxInfo.dc);
 #elif __APPLE__		// for Macintosh
   ::aglSwapBuffers(gfxInfo.context);
@@ -1356,7 +1356,7 @@ void GemMan :: cursorOnOff(int state)
 /////////////////////////////////////////////////////////
 void GemMan :: topmostOnOff(int state)
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   if (m_windowState)
     topmostGemWindow(gfxInfo,state);
 #else

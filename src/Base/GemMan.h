@@ -16,7 +16,7 @@ LOG
 #ifndef INCLUDE_GEMMAN_H_
 #define INCLUDE_GEMMAN_H_
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 // I hate Microsoft...I shouldn't have to do this!
 #include <windows.h>
 #endif

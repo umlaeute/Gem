@@ -19,6 +19,8 @@
 # define HELPSYMBOL_BASE "Gem/"
 #endif
 
+#include "Base/config.h"
+#include "m_pd.h"
 #include "Base/CPPExtern.h"
 
 /*-----------------------------------------------------------------

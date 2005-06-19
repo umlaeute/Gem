@@ -14,8 +14,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#ifdef _WINDOWS
-
+#ifdef __WIN32__
 #include "GemWinCreate.h"
 
 #include <stdlib.h>
@@ -26,7 +25,6 @@
 #include "pktdef.h"
 
 #include "GemEvent.h"
-#include "m_pd.h"
 
 GEM_EXTERN void gemAbortRendering();
 
