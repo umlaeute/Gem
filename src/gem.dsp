@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="gem" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** DO NOT EDIT **
+# ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
 CFG=gem - Win32 Release
-!MESSAGE This is not a valid makefile. To build this project using NMAKE,
-!MESSAGE use the Export Makefile command and run
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "gem.mak".
 !MESSAGE 
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "gem.mak" CFG="gem - Win32 Release"
 !MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE 
-!MESSAGE "gem - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gem - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gem - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gem - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -70,8 +70,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G5 /MTd /W3 /Zi /Od /I "$(PROGRAMFILES)/pd/src" /I "../../src" /I "../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs\freetype2\include" /I "../../GemLibs\FTGL\include" /I "C:\dev\QTDevWin\CIncludes" /I "C:\DXSDK\include" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /D "_DEBUG" /D "DEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
-# SUBTRACT CPP /X /Fr /YX
+# ADD CPP /nologo /G6 /ML /Ze /W3 /Gm /Gi- /GX /Zi /Od /I "$(PROGRAMFILES)/pd/src" /I "../../src" /I "../src" /I "../../GemLibs/JPEG" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs/freetype2/include" /I "../../GemLibs/FTGL/include" /I "C:/dev/QTDevWin/CIncludes" /I "C:/DXSDK/include" /I "C:/DXSDK/samples/Multimedia/DirectShow/BaseClasses" /D "_DEBUG" /D "DEBUG" /D "__WIN32__" /D "WIN32" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# SUBTRACT CPP /Gf /Gy
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 freetype214MT.lib ftgl_static_MT.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\liborb\liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib qtmlclient.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"C:\Programme\pd\bin\\" /libpath:"..\..\bin\\" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug" /libpath:"../../GemLibs\FTGL\win32_vcpp\Build" /libpath:"../../GemLibs\freetype2\objs"
+# ADD LINK32 freetype214MT.lib ftgl_static_MT.lib ../../GemLibs/tiff/libtiff.lib ../../GemLibs/Jpeg/libjpeg.lib ../../GemLibs/liborb/liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib qtmlclient.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"$(PROGRAMFILES)/pd/bin/" /libpath:"../../bin/" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug" /libpath:"../../GemLibs\FTGL\win32_vcpp\Build" /libpath:"../../GemLibs\freetype2\objs"
 
 !ENDIF 
 
@@ -226,6 +226,10 @@ SOURCE=.\Base\GemPixObj.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Base\GemPixPete.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Base\GemPixUtil.cpp
 # End Source File
 # Begin Source File
@@ -246,11 +250,23 @@ SOURCE=.\Base\GemShape.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Base\GemSIMD.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Base\GemState.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Base\GemState.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Base\GemVector.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Base\GemVector.h
 # End Source File
 # Begin Source File
 
@@ -446,6 +462,14 @@ SOURCE=.\Geos\rubber.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Geos\scopeXYZ.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\scopeXYZ.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Geos\slideSquares.cpp
 # End Source File
 # Begin Source File
@@ -475,6 +499,10 @@ SOURCE=.\Geos\teapot.cpp
 # Begin Source File
 
 SOURCE=.\Geos\teapot.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\TexFont.h
 # End Source File
 # Begin Source File
 
@@ -510,6 +538,14 @@ SOURCE=.\Geos\textoutline.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Geos\torus.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Geos\torus.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Geos\triangle.cpp
 # End Source File
 # Begin Source File
@@ -538,7 +574,11 @@ SOURCE=.\Nongeos\light.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Nongeos\setup.h
+SOURCE=.\Nongeos\spot_light.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Nongeos\spot_light.h
 # End Source File
 # Begin Source File
 
@@ -714,6 +754,54 @@ SOURCE=.\Manips\separator.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Manips\shearXY.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearXY.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearXZ.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearXZ.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearYX.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearYX.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearYZ.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearYZ.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearZX.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearZX.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearZY.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\shearZY.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Manips\shininess.cpp
 # End Source File
 # Begin Source File
@@ -790,6 +878,14 @@ SOURCE=.\Controls\gemkeyname.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Controls\gemlist_info.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Controls\gemlist_info.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Controls\gemmouse.cpp
 # End Source File
 # Begin Source File
@@ -828,10 +924,6 @@ SOURCE=.\Controls\render_trigger.cpp
 
 SOURCE=.\Controls\render_trigger.h
 # End Source File
-# Begin Source File
-
-SOURCE=.\Controls\setup.h
-# End Source File
 # End Group
 # Begin Group "Pixes"
 
@@ -839,6 +931,10 @@ SOURCE=.\Controls\setup.h
 # Begin Group "Processing"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Pixes\FreeFrame.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\Pixes\pix_2grey.cpp
@@ -974,6 +1070,14 @@ SOURCE=.\Pixes\pix_flip.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_flip.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_freeframe.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_freeframe.h
 # End Source File
 # Begin Source File
 
@@ -1273,7 +1377,15 @@ SOURCE=.\Pixes\pix_buffer.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_buffer_read.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_buffer_read.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_buffer_write.cpp
 # End Source File
 # Begin Source File
 
@@ -1354,6 +1466,22 @@ SOURCE=.\Pixes\pix_info.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_info.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_mean_color.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_mean_color.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_multiblob.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_multiblob.h
 # End Source File
 # Begin Source File
 
@@ -1615,6 +1743,14 @@ SOURCE=.\Pixes\pix_videoNT.cpp
 
 SOURCE=.\Pixes\pix_videoNT.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\video.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\video.h
+# End Source File
 # End Group
 # Begin Group "TV"
 
@@ -1666,6 +1802,14 @@ SOURCE=.\Pixes\pix_movement.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_movement.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_movement2.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_movement2.h
 # End Source File
 # Begin Source File
 
@@ -1877,58 +2021,6 @@ SOURCE=.\Particles\part_vertex.cpp
 SOURCE=.\Particles\part_vertex.h
 # End Source File
 # End Group
-# Begin Group "MarkEx"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\MarkEx\abs.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\average.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\counter.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\hsvrgb.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\m_control.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\MarkExSetup.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\multiselect.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\randomF.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\reson.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\strcat.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\tripleLine.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MarkEx\vector.cpp
-# End Source File
-# End Group
 # Begin Group "OpenGL"
 
 # PROP Default_Filter ""
@@ -1939,6 +2031,14 @@ SOURCE=.\openGL\GEMglAccum.cpp
 # Begin Source File
 
 SOURCE=.\openGL\GEMglAccum.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglActiveTextureARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglActiveTextureARB.h
 # End Source File
 # Begin Source File
 
@@ -1971,6 +2071,14 @@ SOURCE=.\openGL\GEMglBegin.cpp
 # Begin Source File
 
 SOURCE=.\openGL\GEMglBegin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBindProgramARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBindProgramARB.h
 # End Source File
 # Begin Source File
 
@@ -2478,6 +2586,14 @@ SOURCE=.\openGL\GEMglEnd.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\openGL\GEMglEndList.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglEndList.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\openGL\GEMglEvalCoord1d.cpp
 # End Source File
 # Begin Source File
@@ -2654,6 +2770,14 @@ SOURCE=.\openGL\GEMglGenLists.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\openGL\GEMglGenProgramsARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGenProgramsARB.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\openGL\GEMglGenTextures.cpp
 # End Source File
 # Begin Source File
@@ -2667,6 +2791,14 @@ SOURCE=.\openGL\GEMglGetError.cpp
 # Begin Source File
 
 SOURCE=.\openGL\GEMglGetError.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetFloatv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglGetFloatv.h
 # End Source File
 # Begin Source File
 
@@ -2894,11 +3026,43 @@ SOURCE=.\openGL\GEMglLoadIdentity.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\openGL\GEMglLoadMatrixd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadMatrixd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadMatrixf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadMatrixf.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\openGL\GEMglLoadName.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\openGL\GEMglLoadName.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadTransposeMatrixd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadTransposeMatrixd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadTransposeMatrixf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglLoadTransposeMatrixf.h
 # End Source File
 # Begin Source File
 
@@ -2995,6 +3159,54 @@ SOURCE=.\openGL\GEMglMatrixMode.cpp
 # Begin Source File
 
 SOURCE=.\openGL\GEMglMatrixMode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultiTexCoord2fARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultiTexCoord2fARB.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultMatrixd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultMatrixd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultMatrixf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultMatrixf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultTransposeMatrixd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultTransposeMatrixd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultTransposeMatrixf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglMultTransposeMatrixf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNewList.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglNewList.h
 # End Source File
 # Begin Source File
 
@@ -3195,6 +3407,38 @@ SOURCE=.\openGL\GEMglPrioritizeTextures.cpp
 # Begin Source File
 
 SOURCE=.\openGL\GEMglPrioritizeTextures.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglProgramEnvParameter4dARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglProgramEnvParameter4dARB.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglProgramEnvParameter4fvARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglProgramEnvParameter4fvARB.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglProgramLocalParameter4fvARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglProgramLocalParameter4fvARB.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglProgramStringARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglProgramStringARB.h
 # End Source File
 # Begin Source File
 
@@ -3883,6 +4127,14 @@ SOURCE=.\openGL\GEMglTranslatef.cpp
 # Begin Source File
 
 SOURCE=.\openGL\GEMglTranslatef.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMgluPerspective.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMgluPerspective.h
 # End Source File
 # Begin Source File
 
