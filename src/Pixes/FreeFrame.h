@@ -56,8 +56,9 @@ extern "C" {
 #if _MSC_VER > 1000
 #pragma once
 #endif /* _MSC_VER > 1000 */
-
-#define WIN32_LEAN_AND_MEAN		/* Exclude rarely-used stuff from Windows headers */
+#ifndef WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN		/* Exclude rarely-used stuff from Windows headers */
+#endif /* WIN32_LEAN_AND_MEAN */
 #include <windows.h>
 
 #elif defined(__linux__) || defined(__APPLE__)
