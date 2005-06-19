@@ -53,7 +53,7 @@ double Blob:: ymid(){
 double Blob:: diameter2(){
   return (m_xmax-m_xmin)*(m_xmax-m_xmin)+(m_ymax-m_ymin)*(m_ymax-m_ymin);}
 double Blob:: diameter(){
-  return sqrt(diameter());
+  return sqrt(diameter2());
 }
 double Blob:: distance2(Blob b){
   return (b.xmid()-xmid())*(b.xmid()-xmid())+(b.ymid()-ymid())*(b.ymid()-ymid());
