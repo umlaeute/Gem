@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMgluPerspective , t_floatarg, A_DEFFLOAT, t_flo
 GEMgluPerspective :: GEMgluPerspective	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
 		fovy((GLdouble)arg0), 
 		aspect((GLdouble)arg1), 
-		near((GLdouble)arg2), 
-		far((GLdouble)arg3)
+		m_near((GLdouble)arg2), 
+		m_far((GLdouble)arg3)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("fovy"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("aspect"));
@@ -46,7 +46,7 @@ inlet_free(m_inlet[3]);
 // Render
 //
 void GEMgluPerspective :: render(GemState *state) {
-	gluPerspective (fovy, aspect, near, far);
+	gluPerspective (fovy, aspect, m_near, m_far);
 }
 
 /////////////////////////////////////////////////////////
@@ -63,12 +63,12 @@ void GEMgluPerspective :: aspectMess (t_float arg1) {	// FUN
 }
 
 void GEMgluPerspective :: nearMess (t_float arg1) {	// FUN
-	near = (GLdouble)arg1;
+	m_near = (GLdouble)arg1;
 	setModified();
 }
 
 void GEMgluPerspective :: farMess (t_float arg1) {	// FUN
-	far = (GLdouble)arg1;
+	m_far = (GLdouble)arg1;
 	setModified();
 }
 

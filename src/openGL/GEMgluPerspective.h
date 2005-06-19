@@ -46,10 +46,10 @@ class GEM_EXTERN GEMgluPerspective : public GemBase
 	  GLdouble	aspect;		// VAR
 	  virtual void	aspectMess(t_float);	// FUN
 
-	  GLdouble	near;		// VAR
+	  GLdouble	m_near;		// VAR
 	  virtual void	nearMess(t_float);	// FUN
 
-	  GLdouble	far;		// VAR
+	  GLdouble	m_far;		// VAR
 	  virtual void	farMess(t_float);	// FUN
 
 
