@@ -12,7 +12,7 @@
 #include <memory.h>
 
 // XXX
-#ifdef _WINDOWS
+#ifdef __WIN32__
 /* jmz: at least my vc6 doesn't like <iostream> */
 #include <iostream.h>
 #else
@@ -21,7 +21,7 @@
 // using namespace std;
 /*
 // For Windows DLL.
-#ifdef WIN32
+#ifdef __WIN32__
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  ul_reason_for_call, 
                        LPVOID lpReserved

@@ -8,7 +8,7 @@
 
 #include "partlib_general.h"
 
-#ifdef WIN32
+#ifdef __WIN32__
 // This is for something in gl.h.
 #include <windows.h>
 #endif

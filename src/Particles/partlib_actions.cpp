@@ -11,7 +11,7 @@
 
 #include "partlib_general.h"
 #include <float.h>
-#ifdef _WINDOWS
+#ifdef __WIN32__
 /* jmz: at least my vc6 doesn't like linking against the "new" io-libraries
  * with <iostream.h> it links against the old libs */
 #include <iostream.h>

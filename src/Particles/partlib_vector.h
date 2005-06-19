@@ -34,7 +34,7 @@ inline float fast_sqrtf(float x)
 }
 #endif
 
-#ifdef WIN32
+#ifdef __WIN32__
 #define drand48() (((float) rand())/((float) RAND_MAX))
 #define srand48(x) srand(x)
 
