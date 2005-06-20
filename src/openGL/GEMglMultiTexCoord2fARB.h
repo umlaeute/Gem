@@ -60,3 +60,4 @@ class GEM_EXTERN GEMglMultiTexCoord2fARB : public GemBase
 	  static void	 tMessCallback (void*, t_floatarg);
 };
 #endif // for header file
+
