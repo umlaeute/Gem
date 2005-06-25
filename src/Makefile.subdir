@@ -1,0 +1,23 @@
+include ../Make.config
+
+
+OBJECTS = $(SOURCES:.cpp=.o)
+SOURCES = $(shell ls *.cpp)
+
+all: $(OBJECTS)
+
+
+depend:
+	$(CXX) -M $(CXXFLAGS) $(SOURCES) > Make.depend
+
+clean:
+	-rm -f $(OBJECTS) *~
+
+distclean:
+	-rm Makefile Make.depend 
+	touch Make.depend
+	if which dos2unix; then dos2unix *.cpp *.h; fi
+
+$(OBJECTS): %.o : %.cpp
+	$(CXX) -c $(CXXFLAGS) $*.cpp -o $(OBJ_DIR)/$*.o
+

@@ -1,0 +1,14 @@
+TARG_DIR = @GEM_TARGETS@
+
+OBJ_DIR = ../Objects
+
+CXXLINK = $(CXX) -o $@
+
+CXXFLAGS= -fPIC @CXXFLAGS@ @X_CFLAGS@ @PKG_CFLAGS@ -I.. @INCLUDES@ @DEFINES@
+LDFLAGS = @LDFLAGS@ @X_LIBS@
+LIBS = @LIBS@ @PKG_LIBS@
+SHARED = -shared
+STRIP = strip --strip-unneeded -R .note -R .comment
+
+PDLIBDIR = @prefix@/lib/pd
+
