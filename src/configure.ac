@@ -11,6 +11,8 @@ KERN=$(uname -s)
 AC_CONFIG_HEADER([Base/config$KERN.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
 
+AC_SUBST(GEM_TARGETS)
+AC_SUBST(EXT)
 AC_SUBST(INCLUDES)
 AC_SUBST(LIBS)
 AC_SUBST(X_LIBS)
@@ -20,7 +22,8 @@ AC_SUBST(DEFINES)
 AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
-AC_SUBST(GEM_TARGETS)
+AC_SUBST(REFERENCEPATH)
+AC_SUBST(STRIP)
 
 # Checks for programs.
 AC_PROG_CXX
@@ -132,6 +135,23 @@ AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup st
 
 
 ### weird configuration hacks
+# the extension
+if test "x$with_extension" != "x"; then
+ EXT=$with_extension
+else
+ EXT=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
+
+ if test "x$KERN" != "xDarwin";
+ then
+  if test "x$host_os" = "x"
+  then
+ dnl just assuming that it is still linux (e.g. x86_64)
+   EXT="pd_linux"
+  fi
+ else
+   EXT="pd_darwin"
+ fi
+fi
 
 #pd version
 # this is mainly interesting for the documentation
@@ -200,8 +220,28 @@ fi
 
 
 GEM_CHECK_LDFLAGS([-shared -Wl,-export-dynamic])
+# rather do "-bundle_loader /path/to/pd/bin/pd"
 GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
 
+
+dnl if we don't have $STRIP set, we set it to ${host}-strip or strip
+if test "x$STRIP" = "x"
+then
+ if test "x$host" != "x"
+ then
+  STRIP=${host}-strip
+ else
+# we need a method to check arguments for arbitrary commands like strip
+  STRIP=strip --strip-uneeded
+ fi
+fi
+
+if $(which ${STRIP} > /dev/null)
+then
+  :
+else
+  STRIP="echo fake strip"
+fi
 
 
 AC_CONFIG_FILES([Make.config])
@@ -218,6 +258,21 @@ dnl echo aviplay support:      $ac_cv_lib_aviplay_main
 dnl echo libdv support:        $ac_cv_lib_dv_main
 dnl echo
 dnl echo ========================================
+
+dnl make sources
+
+for j in ${GEM_TARGETS}
+do
+    echo Sources for $j
+    cd $j
+    echo SOURCES= \\ > Make.source
+    for f in $(ls -b --ignore"* *" *.cpp 2>/dev/null )
+    do
+     echo  $f \\ >> Make.source
+    done
+    echo >> Make.source
+    cd -
+done
 
 
 dnl
@@ -267,5 +322,3 @@ Configuration:
     using reg-struct-ret : ${enable_registerstruct}
 Now run make ...
 ])
-
-set > /tmp/SET

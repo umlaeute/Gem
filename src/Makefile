@@ -2,17 +2,16 @@ include Make.config
 
 BUILDDIR = ../
 
-
 OBJECTS = ./Objects/*.o
 
-all: subdirs Gem.pd_linux
+all: subdirs Gem.$(EXT)
 
 Gem.static:
-#	-ld  $(OBJECTS) $(LIBS) $(X_LIBS) /usr/bin/pd
+#	-ld $(LDFLAGS) $(OBJECTS) $(LIBS) $(X_LIBS) /usr/bin/pd
 
-Gem.pd_linux: Gem.static $(Gem_pd_DEPENDENCIES)
-	$(CXXLINK) $(SHARED) $(OBJECTS) $(LIBS) $(X_LIBS)
-	$(STRIP) Gem.pd_linux
+Gem.$(EXT): Gem.static $(Gem_pd_DEPENDENCIES)
+	$(CXXLINK) $(LDFLAGS) $(OBJECTS) $(LIBS) $(X_LIBS)
+	$(STRIP) Gem.$(EXT)
 
 subdirs:
 	for d in ${TARG_DIR}; do \
@@ -34,20 +33,18 @@ clean:
 	    echo "\n----------$$d----------"; \
 	    ${MAKE} -f $(BUILDDIR)/Makefile.subdir -C $$d clean; \
 	done
-	-rm Gem.pd_linux *~ Gem.static
+	-rm Gem.$(EXT) *~ Gem.static
 
 
 install: installdocs
-	install -m644 -D Gem.pd_linux $(DESTDIR)/$(PDLIBDIR)/extra/Gem.pd_linux
+	install -m644 -D Gem.$(EXT) $(DESTDIR)/$(PDLIBDIR)/extra/Gem.$(EXT)
 
 
 installdocs:
 	install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
 	cp -r ./../examples $(DESTDIR)/$(PDLIBDIR)/doc/gem
-       
-	install -d $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/Gem
-	install -m644 ./../help/*.* $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/Gem
-	ln -s Gem $(DESTDIR)/$(PDLIBDIR)/doc/5.reference/help-Gem
+	install -d $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
+	install -m644 ./../help/*.* $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
 
 distclean: clean
 	@for d in ${TARG_DIR}; do \
