@@ -232,13 +232,13 @@ then
   STRIP=${host}-strip
  else
 # we need a method to check arguments for arbitrary commands like strip
-  STRIP=strip --strip-uneeded
+  STRIP="strip"
  fi
 fi
 
-if $(which ${STRIP} > /dev/null)
+if which ${STRIP} > /dev/null
 then
-  :
+  STRIP="${STRIP} --strip-uneeded"
 else
   STRIP="echo fake strip"
 fi
@@ -266,18 +266,25 @@ do
     echo Sources for $j
     cd $j
     echo SOURCES= \\ > Make.source
-    for f in $(ls -b --ignore"* *" *.cpp 2>/dev/null )
+    for f in $(ls -b1 *.cpp 2>/dev/null )
     do
      echo  $f \\ >> Make.source
     done
     echo >> Make.source
-    cd -
+    cd - > /dev/null 2>&1
 done
 
 
 dnl
 dnl give some feedback about the configuration
 dnl
+
+if test "x$have_ftgl" = "xyes"; then
+  have_font=FTGL
+elif test "x$have_gltt" = "xyes"; then
+  have_font=GLTT
+fi
+
 AC_MSG_RESULT([
 Result:
   Target                 : Gem.${EXT}
@@ -285,14 +292,17 @@ Result:
 
 Configuration:
   Compiler               : ${CXX}
-  CPPFLAGS               : ${CPPFLAGS}
-  CXXFLAGS               : ${CXXFLAGS}
-  CFLAGS                 : ${CFLAGS}
+  CXXFLAGS               : ${CXXFLAGS} ${X_CFLAGS}
+			 : ${PKG_CFLAGS}
   INCLUDES               : ${INCLUDES}
-  LIBS                   : ${LIBSS}
+  DEFINES		 : ${DEFINES}
 
-  optimization           : ${CXXOPTIMIZE_FLAGS}
-  debugging              : ${CXXDEBUG_FLAGS}
+  LIBS                   : ${LIBS}
+			 : ${PKG_LIBS}
+  LDFLAGS		 : ${LDFLAGS}
+			 : ${X_LIBS}
+
+  Strip			 : ${STRIP}
 
   Install path           : ${prefix}
 
@@ -320,5 +330,8 @@ Configuration:
   misc
     using ARB-extensions : ${enable_ARB}
     using reg-struct-ret : ${enable_registerstruct}
+
+
 Now run make ...
+
 ])
