@@ -60,5 +60,5 @@ Make.config: Make.config.in configure
 	./configure
 
 configure: configure.ac
-	#autoheader && aclocal && autoconf
+	aclocal && autoconf
 
