@@ -186,11 +186,22 @@ if test "x$enable_registerstruct" = "xyes"; then
 fi
 fi
 
-GEM_CHECK_CXXFLAGS([-fno-builtin -falign-loops=16 -funroll-loops -ffast-math])
+GEM_CHECK_CXXFLAGS([-O3])
+
+GEM_CHECK_CXXFLAGS([-fno-builtin])
+GEM_CHECK_CXXFLAGS([-falign-loops=16 -funroll-loops])
+GEM_CHECK_CXXFLAGS([-ffast-math])
+
 if test "x$enable_SIMD" != "xno"; then
   GEM_CHECK_CXXFLAGS([-mmmx])
   GEM_CHECK_CXXFLAGS([-faltivec])
+  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 fi
+
+
+GEM_CHECK_LDFLAGS([-shared -Wl,-export-dynamic])
+GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
+
 
 
 AC_CONFIG_FILES([Make.config])

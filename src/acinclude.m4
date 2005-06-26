@@ -1079,15 +1079,18 @@ fi
 AC_DEFUN([GEM_CHECK_LDFLAGS],
 [
   AC_MSG_CHECKING([whether linker accepts "$1"])
+  gem_check_ldflags_org="${LDFLAGS}"
+  LDFLAGS="$1 ${LDFLAGS}"
 
-if ${LD} ${LDFLAGS} -o conftest.o conftest.c++ [$1] > /dev/null 2>&1
-then
-  AC_MSG_RESULT([yes])
-  LDFLAGS="${LDFLAGS} [$1]"
-  [$2]
-else
-  AC_MSG_RESULT([no])
-  [$3]
-fi
+  AC_LINK_IFELSE(AC_LANG_PROGRAM(,), gem_check_ldflags_org="",:)
+
+  if test "x$gem_check_ldflags_org" = "x"; then
+    AC_MSG_RESULT([yes])
+    [$2]
+  else
+    AC_MSG_RESULT([no])
+    LDFLAGS="$gem_check_ldflags_org"
+    [$3]
+  fi
 ])# GEM_CHECK_LDFLAGS
 
