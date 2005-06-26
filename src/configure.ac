@@ -35,7 +35,7 @@ LIBS="$LIBS $X_LIBS"
 
 
 
-GEM_ARG_ENABLE(mmx, MMX-support)
+GEM_ARG_ENABLE(SIMD, SIMD-support)
 GEM_ARG_ENABLE(ARB, openGL-ARB-support)
 GEM_ARG_ENABLE(registerstruct, [use \"-freg-struct-return\" (needed for FreeFrame)])
 GEM_ARG_ENABLE(filmnew, [all in one version of pix_film/pix_video])
@@ -69,6 +69,15 @@ AC_CHECK_LIB(Xext,main)
 AC_CHECK_LIB(GL,glInitNames)
 AC_CHECK_LIB(GLU,gluLookAt)
 
+GEM_CHECK_FRAMEWORK(OpenGL)
+GEM_CHECK_FRAMEWORK(AGL)
+
+
+dnl some checks for osX
+GEM_CHECK_FRAMEWORK(Carbon)
+GEM_CHECK_FRAMEWORK(QuickTime)
+
+
 GEM_CHECK_LIB(ImageMagick++, Magick++, main,AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS),,,[image loader])
 dnl  [AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS)]
 dnl  LIBS="-lMagick++ $LIBS")
@@ -79,8 +88,8 @@ GEM_CHECK_LIB(quicktime,quicktime, quicktime_init,,,,[movie loader])
 GEM_CHECK_LIB(mpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
 GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
 GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
-GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,,,[-lavcodec],[movie loader])
-
+GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,[PKG_CFLAGS="-I/usr/include/ffmpeg $PKG_CFLAGS"],,
+		[-lavcodec],[movie loader])
 
 GEM_ARG_WITH(v4l, [video input])
 if test "x$with_v4l" != "xno"; then
@@ -160,19 +169,27 @@ if test "x$enable_ARB" = "x"; then
 fi
 
 if test "x$enable_ARB" = "xno"; then
- echo "disabling ARB-extensions"
+AC_MSG_RESULT([disabling ARB-extensions])
  AC_DEFINE_UNQUOTED(DONT_USE_ARB)
 fi
 
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
-if test "$enable_registerstruct" = "yes"; then
-  echo "enabling \"register struct return\""
-  echo "  allows to make use of FreeFrame-effects without recompiling them"
-  echo "  might break things, if you are using several different compilers"
-  CXXFLAGS="$CXXFLAGS -freg-struct-return"
-else
-  enable_registerstruct="no"
+if test "x$enable_registerstruct" != "xno"; then
+GEM_CHECK_CXXFLAGS([-freg-struct-return],
+		[enable_registerstruct="yes"], [enable_registerstruct="no"])
+
+if test "x$enable_registerstruct" = "xyes"; then
+ AC_MSG_RESULT([enabling "register struct return"
+   allows to make use of FreeFrame-effects without recompiling them
+   might break things, if you are using several different compilers])
+fi
+fi
+
+GEM_CHECK_CXXFLAGS([-fno-builtin -falign-loops=16 -funroll-loops -ffast-math])
+if test "x$enable_SIMD" != "xno"; then
+  GEM_CHECK_CXXFLAGS([-mmmx])
+  GEM_CHECK_CXXFLAGS([-faltivec])
 fi
 
 
@@ -228,7 +245,7 @@ Configuration:
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_mpeg3}
     use QuickTime        : ${have_quicktime}
-    use aviplay          : ${have_avi}
+    use aviplay          : ${have_avifile}
     use ffmpeg           : ${have_ffmpeg}
   input-support
     use v4l              : ${have_v4l}

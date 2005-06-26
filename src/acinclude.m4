@@ -1007,6 +1007,9 @@ else
    [
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1))
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1))
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$2))
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2))
+dnl    PKG_LIBS="$6 ${PKG_LIBS}"
     have_[]Name="yes"
 dnl turn of further checking for this package
     with_[]Name="no"
@@ -1022,5 +1025,69 @@ fi[]dnl
 undefine([Name])
 ])# GEM_CHECK_LIB
 
+# GEM_CHECK_CXXFLAGS(ADDITIONAL-CXXFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
+#
+# checks whether the $(CXX) compiler accepts the ADDITIONAL-CXXFLAGS
+# if so, they are added to the CXXFLAGS
+AC_DEFUN([GEM_CHECK_CXXFLAGS],
+[
+  AC_MSG_CHECKING([whether compiler accepts "$1"])
+cat > conftest.c++ << EOF
+int main(){
+  return 0;
+}
+EOF
+if $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ [$1] > /dev/null 2>&1
+then
+  AC_MSG_RESULT([yes])
+  CXXFLAGS="${CXXFLAGS} [$1]"
+  [$2]
+else
+  AC_MSG_RESULT([no])
+  [$3]
+fi
+])# GEM_CHECK_CXXFLAGS
 
+# GEM_CHECK_FRAMEWORK(FRAMEWORK, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
+#
+#
+AC_DEFUN([GEM_CHECK_FRAMEWORK],
+[
+  AC_MSG_CHECKING([for "$1"-framework])
+cat > conftest.c++ << EOF
+int main(){
+  return 0;
+}
+EOF
+if $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ -framework [$1] > /dev/null 2>&1
+then
+  AC_MSG_RESULT([yes])
+  AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_FRAMEWORK_$1))
+  CXXFLAGS="${CXXFLAGS} -framework [$1]"
+  [$2]
+else
+  AC_MSG_RESULT([no])
+  [$3]
+fi
+
+])# GEM_CHECK_FRAMEWORK
+
+# GEM_CHECK_LDFLAGS(ADDITIONAL-LDFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
+#
+# checks whether the $(LD) linker accepts the ADDITIONAL-LDFLAGS
+# if so, they are added to the LDFLAGS
+AC_DEFUN([GEM_CHECK_LDFLAGS],
+[
+  AC_MSG_CHECKING([whether linker accepts "$1"])
+
+if ${LD} ${LDFLAGS} -o conftest.o conftest.c++ [$1] > /dev/null 2>&1
+then
+  AC_MSG_RESULT([yes])
+  LDFLAGS="${LDFLAGS} [$1]"
+  [$2]
+else
+  AC_MSG_RESULT([no])
+  [$3]
+fi
+])# GEM_CHECK_LDFLAGS
 
