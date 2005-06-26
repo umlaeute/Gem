@@ -2,32 +2,11 @@
 # Process this file with autoconf to produce a configure script.
 
 
-
 AC_PREREQ(2.57)
 AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
 
 ARCH=$(uname -m)
 KERN=$(uname -s)
-
-
-GEM_ARG_ENABLE(mmx, MMX-support)
-GEM_ARG_ENABLE(ARB, openGL-ARB-support)
-GEM_ARG_ENABLE(registerstruct, [use \"-freg-struct-return\" (needed for FreeFrame)])
-GEM_ARG_ENABLE(filmnew, [all in one version of pix_film/pix_video])
-
-AC_ARG_WITH(pdversion, [  --with-pdversion=<ver>  enforce a certain pd-version (e.g. 0.37)])
-
-
-GEM_WITH_TARGET(Base)
-GEM_WITH_TARGET(Controls)
-GEM_WITH_TARGET(Geos)
-GEM_WITH_TARGET(Manips)
-GEM_WITH_TARGET(MarkEx)
-GEM_WITH_TARGET(Nongeos)
-GEM_WITH_TARGET(Particles)
-GEM_WITH_TARGET(Pixes)
-GEM_WITH_TARGET(openGL)
-
 
 AC_CONFIG_HEADER([Base/config$KERN.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
@@ -54,6 +33,29 @@ AC_PATH_XTRA
 LIBS="$LIBS $X_LIBS"
 
 
+
+
+GEM_ARG_ENABLE(mmx, MMX-support)
+GEM_ARG_ENABLE(ARB, openGL-ARB-support)
+GEM_ARG_ENABLE(registerstruct, [use \"-freg-struct-return\" (needed for FreeFrame)])
+GEM_ARG_ENABLE(filmnew, [all in one version of pix_film/pix_video])
+
+AC_ARG_WITH([pdversion], 
+		AC_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
+AC_ARG_WITH([extension], 
+		AC_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
+
+GEM_WITH_TARGET(Base)
+GEM_WITH_TARGET(Controls)
+GEM_WITH_TARGET(Geos)
+GEM_WITH_TARGET(Manips)
+GEM_WITH_TARGET(MarkEx)
+GEM_WITH_TARGET(Nongeos)
+GEM_WITH_TARGET(Particles)
+GEM_WITH_TARGET(Pixes)
+GEM_WITH_TARGET(openGL)
+
+
 AC_CHECK_LIB(m,sin)
 AC_CHECK_LIB(z,main)
 AC_CHECK_LIB(dl,dlopen)
@@ -67,36 +69,36 @@ AC_CHECK_LIB(Xext,main)
 AC_CHECK_LIB(GL,glInitNames)
 AC_CHECK_LIB(GLU,gluLookAt)
 
-AC_CHECK_LIB(tiff, TIFFOpen)
-AC_CHECK_LIB(jpeg, jpeg_read_header)
-AC_CHECK_LIB(Magick++, main,
-  [AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS)]
-  LIBS="-lMagick++ $LIBS")
+GEM_CHECK_LIB(ImageMagick++, Magick++, main,AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS),,,[image loader])
+dnl  [AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS)]
+dnl  LIBS="-lMagick++ $LIBS")
+GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
+GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
 
-AC_CHECK_LIB(quicktime, quicktime_init)
-AC_CHECK_LIB(mpeg3,mpeg3_check_sig)
-AC_CHECK_LIB(mpeg,OpenMPEG)
+GEM_CHECK_LIB(quicktime,quicktime, quicktime_init,,,,[movie loader])
+GEM_CHECK_LIB(mpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
+GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
+GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
+GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,,,[-lavcodec],[movie loader])
 
-AC_CHECK_LIB(gltt, GLTTFont)
 
+GEM_ARG_WITH(v4l, [video input])
+if test "x$with_v4l" != "xno"; then
+  AC_CHECK_HEADER(linux/videodev.h,
+                  [
+                    AC_DEFINE(HAVE_VIDEO4LINUX)
+                    have_v4l="yes"
+                  ],[have_v4l="no"])
+fi
+GEM_CHECK_LIB(ieee1394,dv,main,,,,video input) 
 
-AC_CHECK_LIB(dv,main) 
-AC_CHECK_LIB(ftgl,main,
-  [AC_DEFINE(HAVE_LIBFTGL)]
-  INCLUDES="$INCLUDES -I/usr/include/FTGL" && LIBS="-lftgl $LIBS")
+GEM_CHECK_LIB(ftgl,ftgl,main,
+  [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetpye], font support)
 
+GEM_CHECK_LIB(gltt,gltt, GLTTFont,,,,font support (deprecated))
 # pkg-config checks
 
-PKG_CHECK_MODULES(PKG_FTGL,ftgl)
-PKG_CHECK_MODULES(PKG_FT2,freetype2)
-PKG_CHECK_MODULES(PKG_AVI,avifile)
-PKG_CHECK_MODULES(PKG_FFMPEG,ffmpeg,,[PKG2=""])
-
-PKG_CHECK_MODULES(PKG_GLTT, gltt, [AC_DEFINE(HAVE_LIBGLTT)],[
-	AC_CHECK_LIB(gltt, GLTTFont,
-	  AC_DEFINE(HAVE_LIBGLTT)
-	  INCLUDES="$INCLUDES -I/usr/include/gltt" && LIBS="-lgltt $LIBS")
-])
+dnl PKG_CHECK_MODULES(PKG_FT2,freetype2)
 
 # Checks for header files.
 AC_PATH_X
@@ -121,6 +123,35 @@ AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup st
 
 
 ### weird configuration hacks
+
+#pd version
+# this is mainly interesting for the documentation
+if test "x$with_pdversion" != "x"; then
+  PD_VERSION="$with_pdversion"
+else
+cat > conftest.c << EOF
+#include <stdio.h>
+#include "m_pd.h"
+int main(){
+  printf("%d.%d\n", PD_MAJOR_VERSION, PD_MINOR_VERSION);
+  return 0;
+}
+EOF
+ if $CXX $INCLUDES -o conftest.o conftest.c > /dev/null 2>&1; then
+  PD_VERSION=`./conftest.o`
+ else
+  PD_VERSION=""
+ fi
+fi
+
+let PD_MAJORVERSION=`echo $PD_VERSION | cut -d"." -f1`+0
+let PD_MINORVERSION=`echo $PD_VERSION | cut -d"." -f2`+0
+
+if test "$PD_MAJORVERSION" -gt 0 -o "$PD_MINORVERSION" -ge 37; then
+  REFERENCEPATH=extra/help-Gem
+else
+  REFERENCEPATH=doc/5.reference/Gem
+fi
 
 # disabling ARB-extensions
 if test "x$enable_ARB" = "x"; then
@@ -166,13 +197,17 @@ dnl give some feedback about the configuration
 dnl
 AC_MSG_RESULT([
 Result:
-  Target                 : Gem.${target}
+  Target                 : Gem.${EXT}
   Objects                : ${GEM_TARGETS}
 
 Configuration:
   Compiler               : ${CXX}
   CPPFLAGS               : ${CPPFLAGS}
   CXXFLAGS               : ${CXXFLAGS}
+  CFLAGS                 : ${CFLAGS}
+  INCLUDES               : ${INCLUDES}
+  LIBS                   : ${LIBSS}
+
   optimization           : ${CXXOPTIMIZE_FLAGS}
   debugging              : ${CXXDEBUG_FLAGS}
 
@@ -183,25 +218,26 @@ Configuration:
 
  used optional libraries:
 
-  font-rendering         : ${with_font}
+  font-rendering         : ${have_font}
 
   image-support
-    use ImageMagick      : ${with_magick}
-    use TIFF             : ${with_tiff}
-    use JPEG             : ${with_jpeg}
+    use ImageMagick      : ${have_ImageMagick}
+    use TIFF             : ${have_tiff}
+    use JPEG             : ${have_jpeg}
   video-support
-    use mpeg             : ${with_mpeg}
-    use mpeg-3           : ${with_mpeg3}
-    use QuickTime        : ${with_quicktime}
-    use aviplay          : ${with_avi}
-    use ffmpeg           : ${with_ffmpeg}
+    use mpeg             : ${have_mpeg}
+    use mpeg-3           : ${have_mpeg3}
+    use QuickTime        : ${have_quicktime}
+    use aviplay          : ${have_avi}
+    use ffmpeg           : ${have_ffmpeg}
   input-support
-    use v4l              : ${with_v4l}
-    use ieee1394         : ${with_ieee1394}
+    use v4l              : ${have_v4l}
+    use ieee1394         : ${have_ieee1394}
 
   misc
     using ARB-extensions : ${enable_ARB}
     using reg-struct-ret : ${enable_registerstruct}
-
 Now run make ...
 ])
+
+set > /tmp/SET
