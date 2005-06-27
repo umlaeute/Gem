@@ -238,7 +238,7 @@ fi
 
 if which ${STRIP} > /dev/null
 then
-  STRIP="${STRIP} --strip-uneeded"
+  STRIP="${STRIP} --strip-unneeded"
 else
   STRIP="echo fake strip"
 fi
