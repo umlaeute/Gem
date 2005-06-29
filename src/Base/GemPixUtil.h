@@ -171,11 +171,11 @@ struct GEM_EXTERN imageStruct
   void info();
   //////////
   // columns
-  unsigned char* allocate(int size);
+  unsigned char* allocate(size_t size);
   unsigned char* allocate();
 
   // if we have allocated some space already, only re-allocate when needed.
-  unsigned char* reallocate(int size);
+  unsigned char* reallocate(size_t size);
   unsigned char* reallocate();
  
   // delete the buffer (if it is ours)
@@ -287,19 +287,19 @@ struct GEM_EXTERN imageStruct
   
   /* altivec functions */
 #ifdef __VEC__
-  void RGB_to_YCbCr_altivec(unsigned char *rgbdata, int RGB_size, 
+  void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size, 
 							unsigned char *pixels);
-  void RGBA_to_YCbCr_altivec(unsigned char *rgbadata, int RGBA_size, 
+  void RGBA_to_YCbCr_altivec(unsigned char *rgbadata, size_t RGBA_size, 
 							 unsigned char *pixels);
-  void BGR_to_YCbCr_altivec(unsigned char *bgrdata, int BGR_size, 
+  void BGR_to_YCbCr_altivec(unsigned char *bgrdata, size_t BGR_size, 
 							unsigned char *pixels);
-  void BGRA_to_YCbCr_altivec(unsigned char *bgradata, unsigned int BGRA_size, 
+  void BGRA_to_YCbCr_altivec(unsigned char *bgradata, size_t BGRA_size, 
 							 unsigned char *pixels);
-  void YUV422_to_BGRA_altivec(unsigned char *yuvdata, unsigned int pixelnum,
+  void YUV422_to_BGRA_altivec(unsigned char *yuvdata, size_t pixelnum,
                              unsigned char *pixels);
-  void YV12_to_RGB_altivec(short*Y, short*U, short*V, int pixelnum);
-  void YV12_to_RGBA_altivec(short*Y, short*U, short*V, int pixelnum);
-  void YV12_to_YUV422_altivec(short*Y, short*U, short*V, int pixelnum);
+  void YV12_to_RGB_altivec(short*Y, short*U, short*V, size_t pixelnum);
+  void YV12_to_RGBA_altivec(short*Y, short*U, short*V, size_t pixelnum);
+  void YV12_to_YUV422_altivec(short*Y, short*U, short*V, size_t pixelnum);
 #endif
   
   /* aliases */
@@ -317,7 +317,7 @@ struct GEM_EXTERN imageStruct
   // this data is freed when the destructor is called
   unsigned char   *pdata;
   // "datasize" is the size of data reserved at "pdata"    
-  int             datasize;
+  size_t    datasize;
   
   public:
   //////////
