@@ -80,7 +80,7 @@ pix_rtx :: ~pix_rtx()
 /////////////////////////////////////////////////////////
 void pix_rtx :: create_buffer(imageStruct image)
 {
-   long dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char); // only 1 channel !!, to keep data-size handy
+   size_t dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char); // only 1 channel !!, to keep data-size handy
 
    buffer.xsize = image.xsize;
    buffer.ysize = image.ysize;
@@ -116,7 +116,7 @@ void pix_rtx :: processImage(imageStruct &image)
 {
   // assume that the pix_size does not change !
   if (image.xsize != buffer.xsize || image.ysize != buffer.ysize || image.csize != buffer.csize) {
-    long dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char);
+    size_t dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char);
 #ifdef IMAGE_CLASS		//tigital
     buffer.reallocate( dataSize );
 #else
@@ -129,7 +129,7 @@ void pix_rtx :: processImage(imageStruct &image)
     memset(buffer.data, 0, dataSize);
   }
 
-   int pixsize = image.ysize * image.xsize;
+   size_t pixsize = image.ysize * image.xsize;
    int cols=image.xsize, c=0, c1=0;
    int rows=image.ysize, r=0;
    
@@ -146,7 +146,7 @@ void pix_rtx :: processImage(imageStruct &image)
      // this might be useful to prevent the black screen in the beginning.
      // "set" message
      c=cols;
-     int imagesize=pixsize * buffer.csize * sizeof(unsigned char);
+     size_t imagesize=pixsize * buffer.csize * sizeof(unsigned char);
 	 while (c--) {
        wp = buffer.data + imagesize * c;
        memcpy(wp, pixels, imagesize);
