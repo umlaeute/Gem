@@ -1,61 +1,59 @@
-include Make.config
+default: all
+SRCDIR=.
+include Make.include
 
 BUILDDIR = ../
 
-OBJECTS = ./Objects/*.o
+# all objects that have been build
+OBJECTS = $(wildcard $(GEM_TARGETS:%=%/*.o))
 
-all: subdirs Gem.$(EXT)
+.PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs
 
-Gem.static:
-#	-ld $(LDFLAGS) $(OBJECTS) $(LIBS) $(X_LIBS) /usr/bin/pd
+all: subdirs Gem.$(EXT) strip
 
-Gem.$(EXT): Gem.static $(Gem_pd_DEPENDENCIES)
-	$(CXXLINK) $(LDFLAGS) $(OBJECTS) $(LIBS) $(X_LIBS)
-	$(STRIP) Gem.$(EXT)
+Gem.$(EXT):
+	$(CXXLINK) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
 
-subdirs:
-	for d in ${TARG_DIR}; do \
-	    echo ""\
-	    echo "----------$$d----------"; \
-	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir -j4|| exit -1; \
-	done
+strip:
+	-$(STRIP) $(STRIP_UNNEEDED) Gem.$(EXT)
 
+## handling of subdirs as proposed by the GNU-make documentation
 
-depend:
-	@for d in ${TARG_DIR}; do \
-	    echo "\n----------$$d----------"; \
-	    ${MAKE} -f $(BUILDDIR)/Makefile.subdir -C $$d depend; \
-	done
+subdirs: $(GEM_TARGETS)
 
+$(GEM_TARGETS):
+	${MAKE} -C $@ -f $(BUILDDIR)/Makefile.subdir -j4
 
 clean:
-	@for d in ${TARG_DIR}; do \
+	@for d in ${GEM_TARGETS}; do \
 	    echo "\n----------$$d----------"; \
 	    ${MAKE} -f $(BUILDDIR)/Makefile.subdir -C $$d clean; \
 	done
-	-rm Gem.$(EXT) *~ Gem.static
+	-rm Gem.$(EXT) *~
 
-
-install: installdocs
-	install -m644 -D Gem.$(EXT) $(DESTDIR)/$(PDLIBDIR)/extra/Gem.$(EXT)
-
-
-installdocs:
-	install -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
-	cp -r ./../examples $(DESTDIR)/$(PDLIBDIR)/doc/gem
-	install -d $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
-	install -m644 ./../help/*.* $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
-
-distclean: clean
-	@for d in ${TARG_DIR}; do \
+distclean:
+	@for d in ${GEM_TARGETS}; do \
 	    echo "\n----------$$d----------"; \
 	    cd $$d ; ${MAKE} -f $(BUILDDIR)/Makefile.subdir distclean; \
 	done
+	-rm Gem.$(EXT) *~
 	-rm config.cache config.log config.status Make.config
+
+install: installdocs
+	$(INSTALL_DATA) -D Gem.$(EXT) $(DESTDIR)/$(PDLIBDIR)/extra/Gem.$(EXT)
+
+installdocs:
+	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
+	cp -r ./../examples $(DESTDIR)/$(PDLIBDIR)/doc/gem
+	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
+	$(INSTALL_DATA) ./../help/*.* $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
+
 
 Make.config: Make.config.in configure
 	./configure
 
-configure: configure.ac
-	aclocal && autoconf
+configure: configure.ac aclocal.m4
+	autoconf
 
+aclocal.m4: acinclude.m4
+	aclocal

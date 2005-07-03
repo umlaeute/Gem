@@ -29,6 +29,8 @@ AC_SUBST(STRIP)
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
+AC_PROG_LN_S
+
 
 # Checks for libraries.
 
@@ -225,22 +227,17 @@ GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
 
 
 dnl if we don't have $STRIP set, we set it to ${host}-strip or strip
-if test "x$STRIP" = "x"
+AC_CHECK_TOOL([STRIP], [strip], [echo fake strip])
+AC_MSG_CHECKING([if strip is GNU strip])
+if $STRIP -V | grep GNU > /dev/null
 then
- if test "x$host" != "x"
- then
-  STRIP=${host}-strip
- else
-# we need a method to check arguments for arbitrary commands like strip
-  STRIP="strip"
- fi
-fi
-
-if which ${STRIP} > /dev/null
-then
-  STRIP="${STRIP} --strip-unneeded"
+    AC_SUBST(STRIP_ALL," -s")
+    AC_SUBST(STRIP_UNNEEDED, "--strip-unneeded")
+    AC_MSG_RESULT([yes])
 else
-  STRIP="echo fake strip"
+    AC_SUBST(STRIP_ALL, "")
+    AC_SUBST(STRIP_UNNEEDED,"-x")
+    AC_MSG_RESULT([no])
 fi
 
 
@@ -302,7 +299,7 @@ Configuration:
   LDFLAGS		 : ${LDFLAGS}
 			 : ${X_LIBS}
 
-  Strip			 : ${STRIP}
+  Strip			 : ${STRIP} ${STRIP_UNNEEDED}
 
   Install path           : ${prefix}
 

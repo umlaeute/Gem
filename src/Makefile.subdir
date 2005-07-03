@@ -1,23 +1,32 @@
-include ../Make.config
+default: all
+.PHONY: default all clean distclean
 
+include ../Make.include
+
+## the following gives us all files ending with *.cpp, BUT those 
+## with whitespaces in it, and removes duplicates (e.g. because of whitespaces)
+SOURCES=$(sort $(filter %.cpp, $(wildcard *.cpp)))
 
 OBJECTS = $(SOURCES:.cpp=.o)
-SOURCES = $(shell ls *.cpp)
 
 all: $(OBJECTS)
 
-
-depend:
-	$(CXX) -M $(CXXFLAGS) $(SOURCES) > Make.depend
+## dependencies: as proposed by the GNU-make documentation
+## see http://www.gnu.org/software/make/manual/html_node/make_47.html#SEC51
+## LATER think about using "-MM" instead of "-M" for Gnu-preprocessors
+-include $(SOURCES:.cpp=.d)
+%.d: %.cpp
+	@set -e; rm -f $@; \
+	 $(CXX) -M $(GEM_CXXFLAGS) $< > $@.$$$$; \
+	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	 rm -f $@.$$$$
 
 clean:
 	-rm -f $(OBJECTS) *~
 
 distclean:
-	-rm Makefile Make.depend 
-	touch Make.depend
+	-rm *.o *.d *~
 	if which dos2unix; then dos2unix *.cpp *.h; fi
 
 $(OBJECTS): %.o : %.cpp
-	$(CXX) -c $(CXXFLAGS) $*.cpp -o $(OBJ_DIR)/$*.o
-
+	$(CXX) -c $(GEM_CXXFLAGS) $*.cpp -o $*.o
