@@ -13,11 +13,10 @@ all: $(OBJECTS)
 
 ## dependencies: as proposed by the GNU-make documentation
 ## see http://www.gnu.org/software/make/manual/html_node/make_47.html#SEC51
-## LATER think about using "-MM" instead of "-M" for Gnu-preprocessors
 -include $(SOURCES:.cpp=.d)
 %.d: %.cpp
 	@set -e; rm -f $@; \
-	 $(CXX) -M $(GEM_CXXFLAGS) $< > $@.$$$$; \
+	 $(CXX) $(MAKEDEP_FLAGS) $(GEM_CXXFLAGS) $< > $@.$$$$; \
 	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	 rm -f $@.$$$$
 

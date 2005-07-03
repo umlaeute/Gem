@@ -38,8 +38,6 @@ AC_PATH_XTRA
 LIBS="$LIBS $X_LIBS"
 
 
-
-
 GEM_ARG_ENABLE(SIMD, SIMD-support)
 GEM_ARG_ENABLE(ARB, openGL-ARB-support)
 GEM_ARG_ENABLE(registerstruct, [use \"-freg-struct-return\" (needed for FreeFrame)])
@@ -134,6 +132,13 @@ AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr])
 
+
+### make-depend flags
+if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
+    AC_SUBST(MAKEDEP_FLAGS, "-MM")
+else
+    AC_SUBST(MAKEDEP_FLAGS, "-M")
+fi
 
 
 ### weird configuration hacks
@@ -256,22 +261,6 @@ dnl echo libdv support:        $ac_cv_lib_dv_main
 dnl echo
 dnl echo ========================================
 
-dnl make sources
-
-for j in ${GEM_TARGETS}
-do
-    echo Sources for $j
-    cd $j
-    echo SOURCES= \\ > Make.source
-    for f in $(ls -b1 *.cpp 2>/dev/null )
-    do
-     echo  $f \\ >> Make.source
-    done
-    echo >> Make.source
-    cd - > /dev/null 2>&1
-done
-
-
 dnl
 dnl give some feedback about the configuration
 dnl
@@ -328,6 +317,8 @@ Configuration:
     using ARB-extensions : ${enable_ARB}
     using reg-struct-ret : ${enable_registerstruct}
 
+
+    compiler	$ac_cv_c_compiler_gnu
 
 Now run make ...
 
