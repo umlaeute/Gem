@@ -25,7 +25,7 @@ clean:
 
 distclean:
 	-rm *.o *.d *~
-	if which dos2unix; then dos2unix *.cpp *.h; fi
+	$(DOS2UNIX) *.cpp *.h
 
 $(OBJECTS): %.o : %.cpp
 	$(CXX) -c $(GEM_CXXFLAGS) $*.cpp -o $*.o

@@ -23,7 +23,6 @@ AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
 AC_SUBST(REFERENCEPATH)
-AC_SUBST(STRIP)
 
 # Checks for programs.
 AC_PROG_CXX
@@ -244,6 +243,9 @@ else
     AC_SUBST(STRIP_UNNEEDED,"-x")
     AC_MSG_RESULT([no])
 fi
+
+dnl we want dos2unix...
+AC_CHECK_TOOL([DOS2UNIX], [dos2unix], [echo fake dos2unix])
 
 
 AC_CONFIG_FILES([Make.config])
