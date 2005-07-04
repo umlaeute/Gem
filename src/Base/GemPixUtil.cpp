@@ -543,12 +543,22 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     memcpy(data, rgbadata, pixelnum*csize);
     break;
   case GL_BGRA_EXT:
-    while(pixelnum--){
-      pixels[0]=rgbadata[2];
-      pixels[1]=rgbadata[1];
-      pixels[2]=rgbadata[0];
-      pixels[3]=rgbadata[3];
-      pixels+=4;rgbadata+=4;
+    if(pixels==rgbadata){
+      unsigned char dummy=0;
+      while(pixelnum--){
+	dummy=pixels[2];
+	pixels[2]=pixels[0];
+	pixels[0]=dummy;
+	pixels+=4;
+      }
+    } else {
+      while(pixelnum--){
+	pixels[0]=rgbadata[2];
+	pixels[1]=rgbadata[1];
+	pixels[2]=rgbadata[0];
+	pixels[3]=rgbadata[3];
+	pixels+=4;rgbadata+=4;
+      }
     }
     break;
   case GL_LUMINANCE:
@@ -888,12 +898,23 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     memcpy(data, bgradata, pixelnum*csize);
     break;
   case GL_RGBA:
-    while(pixelnum--){
-      pixels[0]=bgradata[2];
-      pixels[1]=bgradata[1];
-      pixels[2]=bgradata[0];
-      pixels[3]=bgradata[3];
-      pixels+=4;bgradata+=4;
+    if(bgradata==data){
+      // in place conversion
+      unsigned char dummy=0;
+      while(pixelnum--){
+	dummy    =pixels[2];
+	pixels[2]=pixels[0];
+	pixels[0]=dummy;
+	pixels+=4;
+      } 
+    } else {
+      while(pixelnum--){
+	pixels[0]=bgradata[2];
+	pixels[1]=bgradata[1];
+	pixels[2]=bgradata[0];
+	pixels[3]=bgradata[3];
+	pixels+=4;bgradata+=4;
+      }
     }
     break;
   case GL_LUMINANCE:
@@ -1887,4 +1908,40 @@ GEM_EXTERN extern int getPixFormat(char*cformat){
 #endif
   }
   return 0;
+}
+
+/* swap the Red and Blue channel _in-place_ */
+GEM_EXTERN void imageStruct::swapRedBlue() {
+  size_t pixelnum=xsize*ysize;
+  unsigned char *pixels=data;
+  unsigned char dummy=0;
+  switch (format){
+  case GL_YUV422_GEM:
+    pixelnum>>=1;
+    while(pixelnum--){
+      dummy=pixels[chU];
+      pixels[chU]=pixels[chV]; // u
+      pixels[chV]=dummy; // v
+      pixels+=4;
+    }
+    break;
+  case GL_RGB:  case GL_BGR:
+    while(pixelnum--){
+      dummy=pixels[chRed];
+      pixels[chRed]=pixels[chBlue];
+      pixels[chBlue]=dummy;
+      pixels+=3;
+    }
+    break;
+  case GL_RGBA:
+  case GL_BGRA: /* ==GL_BGRA_EXT */
+    while(pixelnum--){
+      dummy=pixels[chRed];
+      pixels[chRed]=pixels[chBlue];
+      pixels[chBlue]=dummy;
+      pixels+=4;
+    }
+    break;
+  }
+
 }

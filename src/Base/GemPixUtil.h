@@ -254,6 +254,10 @@ struct GEM_EXTERN imageStruct
    */
   void refreshImage(imageStruct *to);
 
+  /* inplace swapping Red and Blue channel */
+  void swapRedBlue    ();
+
+
   ///////////////////////////////////////////////////////////////////////////////
   // acquiring data including colour-transformations
   // should be accelerated if possible
