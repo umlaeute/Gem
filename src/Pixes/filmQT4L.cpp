@@ -109,7 +109,7 @@ bool filmQT4L :: open(char *filename, int format)
   }
   goto unsupported;
  unsupported:
-  post("quicktime failed ...");
+  startpost("quicktime failed");
   close();
   return false;
 }

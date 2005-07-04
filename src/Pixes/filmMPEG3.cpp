@@ -81,7 +81,7 @@ bool filmMPEG3 :: open(char *filename, int format)
   }
   goto unsupported;
  unsupported:
-  post("MPEG3 failed ...");
+  startpost("MPEG3 failed");
   close();
   return false;
 

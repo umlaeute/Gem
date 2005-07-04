@@ -190,7 +190,7 @@ bool filmAVI :: open(char *filename, int format)
   return true;
 
  unsupported:
-  post("AVI failed ... ");
+  startpost("AVI failed");
   close();
   return false;
 }

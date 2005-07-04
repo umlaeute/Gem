@@ -133,13 +133,17 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format, int codec)
     while(i++<m_numHandles){
       debug("trying handle %d: %X", i, m_handles[i]);
       if (m_handles[i] && m_handles[i]->open(buf, format ))      {
-	m_handle = m_handles[i];
-	break;
+        m_handle = m_handles[i];
+        break;
       }
+      post(" ... ");
     }
   }
+
   debug("got handle = %X", m_handle);
+
   if (!m_handle){
+    post(" ... giving up!");
     error("GEM: pix_film: Unable to open file: %s", filename->s_name);
 	return;
   }

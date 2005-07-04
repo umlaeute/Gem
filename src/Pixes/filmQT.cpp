@@ -207,7 +207,7 @@ bool filmQT :: open(char*filename, int format) {
   return true;
 
  unsupported:
-  post("QuickTime failed ...");
+  startpost("QuickTime failed ...");
   //close();
   return false;
 

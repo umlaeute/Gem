@@ -64,15 +64,15 @@ bool filmFFMPEG :: open(char *filename, int format)
 {
   if (format>0)m_wantedFormat=format;
   int err, i;
+  int state=0;
   AVCodec* codec;
   err = av_open_input_file(&m_Format,filename,NULL,0,NULL);
   if (err < 0) {
-    error("GEM: pix_film (ffmpeg): Unable to open file: %s %d", filename, err);
     goto unsupported;
   }
+  state=1;
   err = av_find_stream_info(m_Format);
   if (err < 0) {
-    error("pix_film: can't find stream info for %s",filename);
     goto unsupported;
   }
   m_numTracks = m_Format->nb_streams;
@@ -84,16 +84,14 @@ bool filmFFMPEG :: open(char *filename, int format)
   }
 
   m_curTrack = i;  // remember the stream
-
+  state=2;
   if (i == m_Format->nb_streams) {
-    error("pix_film: Unsupported Video Codec"); 
     goto unsupported;
   }   
 
-
+  state=3;
   err = avcodec_open(&m_Format->streams[i]->codec,codec);
   if (err < 0) {
-    error("pix_film: Can't open codec");
     goto unsupported;
   }
   m_curFrame = 0;
@@ -114,7 +112,32 @@ bool filmFFMPEG :: open(char *filename, int format)
   m_Pkt.data = NULL;
   return true;
  unsupported:
-  post("FFMPEG failed ...");
+  startpost("FFMPEG failed");
+  switch (state){
+  case(0):
+    startpost(" at opening");
+    break;
+  case(1):
+    startpost(" at stream");
+    break;
+  case(2):
+    startpost(" at codec");
+    break;
+  case(3):
+    startpost(" at CoDec");
+    break;
+  default:;
+  }
+  switch(err){
+  case(AVERROR_UNKNOWN):startpost("[unknown error]"); break;
+  case(AVERROR_IO):startpost("[i/o error]"); break;
+  case(AVERROR_NUMEXPECTED): startpost("[number syntax expected in filename]"); break;
+  case(AVERROR_INVALIDDATA): startpost("[invalid data found]"); break;
+  case(AVERROR_NOMEM):startpost("[not enough memory]"); break;
+  case(AVERROR_NOFMT):startpost("[unknown format]"); break;
+  case(AVERROR_NOTSUPP):startpost("[operation not supported]"); break;
+  default:;
+     }
   close();
   return false;
 }
