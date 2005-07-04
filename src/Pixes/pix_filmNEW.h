@@ -69,8 +69,8 @@ class GEM_EXTERN pix_filmNEW : public GemBase
   // close the movie file
   virtual void closeMess(void);
   //////////
-  // open a movie up
-  virtual void openMess(t_symbol *filename, int format=0);
+  // open a movie up (with a given format and a preferred codec)
+  virtual void openMess(t_symbol *filename, int format=0, int codec=-1);
 
   //////////
   // prepare for texturing (on open)
