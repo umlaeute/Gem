@@ -967,11 +967,11 @@ AC_DEFUN([GEM_ARG_DISABLE],
 ])# GEM_ARG_DISABLE
 
 
-AC_DEFUN([GEM_WITH_TARGET],
-[AC_ARG_WITH([$1],
-             AC_HELP_STRING([--without-$1], [disable $1-objects]),
+AC_DEFUN([GEM_TARGET],
+[AC_ARG_ENABLE([$1],
+             AC_HELP_STRING([--disable-$1], [disable $1-objects]),
              [
-                if test "x$withval" != "xno"; then
+                if test "x$enableval" != "xno"; then
                   GEM_TARGETS=["$GEM_TARGETS $1"]
                 else
                   echo not building $1-objects
