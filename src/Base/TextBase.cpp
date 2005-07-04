@@ -65,6 +65,7 @@ void TextBase :: render(GemState *)
     float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
     m_font->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
     glPushMatrix();
+    glNormal3f(0.0, 0.0, 1.0);
     justifyFont(x1, y1, z1, x2, y2, z2);
     m_font->Render(m_theString);
     glPopMatrix();
