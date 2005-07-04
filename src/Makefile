@@ -11,7 +11,7 @@ OBJECTS = $(wildcard $(GEM_TARGETS:%=%/*.o))
 
 all: subdirs Gem.$(EXT) strip
 
-Gem.$(EXT):
+Gem.$(EXT): subdirs
 	$(CXXLINK) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
 
 strip:
