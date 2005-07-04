@@ -23,7 +23,7 @@ AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
 AC_SUBST(REFERENCEPATH)
-
+AC_SUBST(NEW_VIDEOFILM)
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
@@ -47,15 +47,15 @@ AC_ARG_WITH([pdversion],
 AC_ARG_WITH([extension], 
 		AC_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
 
-GEM_WITH_TARGET(Base)
-GEM_WITH_TARGET(Controls)
-GEM_WITH_TARGET(Geos)
-GEM_WITH_TARGET(Manips)
-GEM_WITH_TARGET(MarkEx)
-GEM_WITH_TARGET(Nongeos)
-GEM_WITH_TARGET(Particles)
-GEM_WITH_TARGET(Pixes)
-GEM_WITH_TARGET(openGL)
+GEM_TARGETS=Base
+GEM_TARGET(Controls)
+GEM_TARGET(Geos)
+GEM_TARGET(Manips)
+GEM_TARGET(MarkEx)
+GEM_TARGET(Nongeos)
+GEM_TARGET(Particles)
+GEM_TARGET(Pixes)
+GEM_TARGET(openGL)
 
 
 AC_CHECK_LIB(m,sin)
@@ -186,6 +186,14 @@ if test "$PD_MAJORVERSION" -gt 0 -o "$PD_MINORVERSION" -ge 37; then
   REFERENCEPATH=extra/help-Gem
 else
   REFERENCEPATH=doc/5.reference/Gem
+fi
+
+
+# using pix_filmNEW rather than pix_filmOS
+if test "$enable_filmnew" != "no"; then
+ AC_DEFINE_UNQUOTED(NEW_VIDEOFILM)
+else
+ echo "using deprecated video-loader"
 fi
 
 # disabling ARB-extensions
