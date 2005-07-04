@@ -77,12 +77,11 @@ bool filmMPEG3 :: open(char *filename, int format)
     m_image.image.reallocate();
     changeImage(0,-1);
     m_newfilm=true;
-    post("MPEG3 opened");
     return true; 
   }
   goto unsupported;
  unsupported:
-  post("MPEG3: unsupported!");
+  post("MPEG3 failed ...");
   close();
   return false;
 
@@ -136,7 +135,7 @@ pixBlock* filmMPEG3 :: getFrame(){
   } else {
     // unfortunately this is upside down.
     if(mpeg3_read_yuvframe_ptr(mpeg_file,&y,&u,&v,0)){
-      post("GEM: pix_film:: could not read frame ! %d", m_curFrame);
+      post("GEM: pix_film:: could not read yuv-frame ! %d", m_curFrame);
       return 0;
     }
     m_image.image.fromYV12((unsigned char*)y, (unsigned char*)u, (unsigned char*)v);

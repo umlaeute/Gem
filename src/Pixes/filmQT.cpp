@@ -103,7 +103,7 @@ bool filmQT :: open(char*filename, int format) {
   if (filename==NULL)return false;
   if (!m_bInit){
     error("filmQT: object not correctly initialized\n");
-    return false;
+    goto unsupported;
   }
   if (format>0)m_wantedFormat=format;
   int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
@@ -121,14 +121,14 @@ bool filmQT :: open(char*filename, int format) {
   err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
   if (err) {
     error("GEM: pix_film: Unable to find file: %s", filename);
-    return false;
+    goto unsupported;
   }
   short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
     error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
     if (refnum) ::CloseMovieFile(refnum);
-    return false;
+    goto unsupported;
   }
   //post("err=%d", err);
   //post("refnum=%d", refnum);
@@ -139,7 +139,7 @@ bool filmQT :: open(char*filename, int format) {
     error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
     if (refnum) ::CloseMovieFile(refnum);
 	m_movie=NULL;
-    return false;
+    goto unsupported;
   }
   //post("...survived");
   if (refnum) ::CloseMovieFile(refnum);
@@ -194,17 +194,23 @@ bool filmQT :: open(char*filename, int format) {
 				m_rowBytes);
   if (err) {
     error("GEM: filmQT: Couldn't make QTNewGWorldFromPtr %d", err);
-    return false;
+    goto unsupported;
   }
   m_movieTime = 0;
   // *** set the graphics world for displaying the movie ***
   ::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
   if(GetMoviesError()){
 	  close();
-	  return false;
+	  goto unsupported;
   }
     ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
   return true;
+
+ unsupported:
+  post("QuickTime failed ...");
+  //close();
+  return false;
+
 }
 
 /////////////////////////////////////////////////////////

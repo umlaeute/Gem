@@ -98,7 +98,7 @@ bool filmAVIPLAY :: open(char *filename, int format)
   return true;
   goto unsupported;
  unsupported:
-  post("AVIPLAY: unsupported!");
+  post("aviplay failed ...");
   close();
   return false;
 }
