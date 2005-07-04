@@ -39,11 +39,8 @@
     channel to 255.
 
 */
-#ifdef __linux__
-    
-#include "videoV4L.h"
 
-#define BYTESIN 3
+#include "videoV4L.h"
 
 /////////////////////////////////////////////////////////
 //
@@ -54,6 +51,7 @@
 //
 /////////////////////////////////////////////////////////
 videoV4L :: videoV4L(int format) : video(format){
+#ifdef HAVE_VIDEO4LINUX
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
   m_capturing=false;
@@ -61,8 +59,7 @@ videoV4L :: videoV4L(int format) : video(format){
   m_norm=VIDEO_MODE_AUTO;
   m_devicenum=DEVICENO;
   post("video4linux");
-  //  post("w = %d, h= %d",m_width, m_height);
-  //m_image.image.reallocate();
+#endif /* HAVE_VIDEO4LINUX */
 }
 
 /////////////////////////////////////////////////////////
@@ -71,9 +68,12 @@ videoV4L :: videoV4L(int format) : video(format){
 /////////////////////////////////////////////////////////
 videoV4L :: ~videoV4L()
 {
+#ifdef HAVE_VIDEO4LINUX
     if (m_haveVideo)stopTransfer();
+#endif /* HAVE_VIDEO4LINUX */
 }
 
+#ifdef HAVE_VIDEO4LINUX
 /////////////////////////////////////////////////////////
 // render
 //
@@ -110,11 +110,11 @@ void *videoV4L :: capturing(void*you)
 	  perror("VIDIOCMCAPTURE1");
 	if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
 	  perror("VIDIOCMCAPTURE2");
-      
-	post("frame %d %d, format %d, width %d, height %d\n",
+        /*
+	verbose(1, "frame %d %d, format %d, width %d, height %d\n",
 	     me->frame, me->vmmap[me->frame].frame, me->vmmap[me->frame].format,
 	     me->vmmap[me->frame].width, me->vmmap[me->frame].height);
-
+        */
 	//me->stopTransfer();me->m_haveVideo = 0;
       }
     me->m_frame_ready = 1;
@@ -162,7 +162,7 @@ int videoV4L :: startTransfer(int format)
 {
   m_rendering=true;
   if (format>1)m_reqFormat=format;
-  //  post("starting transfer");
+  //  verbose(1, "starting transfer");
   char buf[256];
   int i;
   int width, height;
@@ -184,18 +184,20 @@ int videoV4L :: startTransfer(int format)
 	perror("get capabilities");
 	goto closit;
     }
-    post("cap: name %s type %d channels %d maxw %d maxh %d minw %d minh %d\n",
+    /*
+    verbose(1, "cap: name %s type %d channels %d maxw %d maxh %d minw %d minh %d\n",
     	vcap.name, vcap.type,  vcap.channels,  vcap.maxwidth,  vcap.maxheight,
 	    vcap.minwidth,  vcap.minheight);
+    */
     if (ioctl(tvfd, VIDIOCGPICT, &vpicture) < 0)
     {
 	perror("VIDIOCGPICT");
 	goto closit;
     }
-    
-    post("picture: brightness %d depth %d palette %d\n",
+    /*
+    verbose(1, "picture: brightness %d depth %d palette %d\n",
 	    vpicture.brightness, vpicture.depth, vpicture.palette);
-
+    */
     for (i = 0; i < vcap.channels; i++)
     {
 	vchannel.channel = i;
@@ -204,12 +206,14 @@ int videoV4L :: startTransfer(int format)
 	    perror("VDIOCGCHAN");
 	    goto closit;
 	}
-    	post("channel %d name %s type %d flags %d\n",
+        /*
+    	verbose(1, "channel %d name %s type %d flags %d\n",
 	       vchannel.channel, vchannel.name, 
 	       vchannel.type, vchannel.flags);
+        */
     }
     vchannel.channel = ((vcap.channels-1)<m_channel)?(vcap.channels-1):m_channel;
-    post("setting to channel %d", vchannel.channel);
+    //verbose(1, "setting to channel %d", vchannel.channel);
     if (ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
     {
 	perror("VDIOCGCHAN");
@@ -230,8 +234,10 @@ int videoV4L :: startTransfer(int format)
 	perror("VIDIOCGMBUF");
 	goto closit;
     }
-    post("buffer size %d, frames %d, offset %d %d\n", vmbuf.size,
+    /*
+    verbose(1, "buffer size %d, frames %d, offset %d %d\n", vmbuf.size,
     	vmbuf.frames, vmbuf.offsets[0], vmbuf.offsets[1]);
+    */
     if (!(videobuf = (unsigned char *)
     	mmap(0, vmbuf.size, PROT_READ|PROT_WRITE, MAP_SHARED, tvfd, 0)))
     {
@@ -244,7 +250,7 @@ int videoV4L :: startTransfer(int format)
     height = m_height > vcap.minheight ? m_height : vcap.minheight;
     height = (height > vcap.maxheight) ? vcap.maxheight : height;
 
-    post("wanted format is 0x%X", m_reqFormat);
+    //verbose(1, "wanted format is 0x%X", m_reqFormat);
     for (i = 0; i < NBUF; i++)    {
       switch(m_reqFormat){
       case GL_LUMINANCE:
@@ -293,11 +299,11 @@ int videoV4L :: startTransfer(int format)
       vmmap[i].frame  = i;
     }
 
-    post("setting cmcapture to %dx%d\t%d", vmmap[0].width,  vmmap[0].height, vmmap[0].format);
+    //verbose(1, "setting cmcapture to %dx%d\t%d", vmmap[0].width,  vmmap[0].height, vmmap[0].format);
 
     if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
       for (i = 0; i < NBUF; i++)vmmap[i].format = vpicture.palette;
-      post("now trying standard palette %d", vmmap[0].format);
+      //verbose(1, "now trying standard palette %d", vmmap[0].format);
       if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
 	if (errno == EAGAIN)
 	  fprintf(stderr, "can't sync (no video source?)\n");
@@ -306,9 +312,11 @@ int videoV4L :: startTransfer(int format)
 	goto closit;
       }
     }
-    post("frame %d %d, format %d, width %d, height %d\n",
+    /*
+    verbose(1, "frame %d %d, format %d, width %d, height %d\n",
 	 frame, vmmap[frame].frame, vmmap[frame].format,
 	 vmmap[frame].width, vmmap[frame].height);
+    */
     
     /* fill in image specifics for Gem pixel object.  Could we have
        just used RGB, I wonder? */
@@ -338,7 +346,6 @@ int videoV4L :: startTransfer(int format)
     pthread_create(&m_thread_id, 0, capturing, this);
 
     post("GEM: pix_video: Opened video connection %X", tvfd);
-    post("vmmap %X", vmmap);
 
     return(1);
 
@@ -360,7 +367,6 @@ closit:
 /////////////////////////////////////////////////////////
 int videoV4L :: stopTransfer()
 {
-  post("stop transfer");
   /* close the v4l device and dealloc buffer */
   /* terminate thread if there is one */
   if(m_continue_thread){
@@ -388,16 +394,15 @@ int videoV4L :: setDimen(int x, int y, int leftmargin, int rightmargin,
 
     int xtotal = x + leftmargin + rightmargin;
     int ytotal = y + topmargin + bottommargin;
-    if (xtotal > 844)
-    	post("x dimensions too great");
-    else if (xtotal < vcap.minwidth || x < 1 ||
-    	leftmargin < 0 || rightmargin < 0)
-    	    post("x dimensions too small");
+    if (xtotal > vcap.maxwidth) /* 844 */
+      error("x dimensions too great");
+    else if (xtotal < vcap.minwidth || x < 1 || leftmargin < 0 || rightmargin < 0)
+      error("x dimensions too small");
     if (ytotal > vcap.maxheight)
-    	post("y dimensions too great");
+      error("y dimensions too great");
     else if (ytotal < vcap.minheight || y < 1 ||
 	     topmargin < 0 || bottommargin < 0)
-      post("y dimensions too small");
+      error("y dimensions too small");
 
     myleftmargin = leftmargin;
     myrightmargin = rightmargin;
@@ -416,7 +421,6 @@ int videoV4L :: setDimen(int x, int y, int leftmargin, int rightmargin,
 
 int videoV4L :: setNorm(char*norm)
 {
-  post("setting norm to %s", norm);
   char c=*norm;
   int i_norm=-1;
 
@@ -450,12 +454,12 @@ int videoV4L :: setChannel(int c, t_float f){
     if (c>-1)m_channel=c;
     vtuner.tuner = m_channel;
     if (ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
-      post("Error setting frequency -- no tuner");
+      error("Error setting frequency -- no tuner");
       return -1;
     }
     post("setting freq: %d", freq);
     if (ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
-      post("Error setting frequency");
+      error("Error setting frequency");
       return -1;
     }
   } else {
@@ -478,7 +482,7 @@ int videoV4L :: setDevice(int d)
   bool rendering=m_rendering;
   if(m_capturing)stopTransfer();
   if (rendering)startTransfer();
-  //  post("new device set %d", m_devicenum);
+  //  verbose(1, "new device set %d", m_devicenum);
   return 0;
 }
 
@@ -486,15 +490,11 @@ int videoV4L :: setDevice(int d)
 int videoV4L :: setColor(int format)
 {
   if (format<=0 || format==m_reqFormat)return -1;
-  //  post("setting color space: 0x%X", format);
   if(m_capturing){
-    //    post("restarting transfer");
     stopTransfer();
     startTransfer(format);
   }
   m_reqFormat=format;
   return 0;
 }
-
-
-#endif
+#endif /* HAVE_VIDEO4LINUX */
