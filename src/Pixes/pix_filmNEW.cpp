@@ -29,7 +29,7 @@
 #include "Pixes/filmQT.h"
 #include <stdio.h>
 
-#if 1
+#if 0
 # define debug post
 #else
 # define debug
