@@ -1,0 +1,178 @@
+Build instructions for GEM Linux
+================================
+
+VERY SHORT INSTRUCTION:
+-----------------------
+
+#> autoconf && ./configure && make
+
+=============================================
+
+DETAILED INSTRUCTIONS:
+----------------------
+
+Prerequisites for compiling GEM (version >=0.90):
+
+openGL & GLU
+  e.g: 	Mesa       http://mesa3d.sourceforge.net
+  platforms: ALL
+
+tiff       ftp://ftp.sgi.com/graphics/tiff/tiff-v3.4beta037-tar.gz
+ platforms: linux, windows
+ level    : optional, suggested
+jpeg       ftp://ftp.uu.net/graphics/jpeg/
+ platforms: linux, windows
+ level    : optional, suggested
+
+for font rendering you need (beside the freetype-package)
+ FTGL      http://homepages.paradise.net.nz/henryj/code/
+    platforms: ALL
+    level    : optional, suggested
+  freetype2   http://freetype.sourceforge.net/index2.html
+    platforms: ALL
+    level    : needed for FTGL
+  OR
+ gltt       http://gltt.sourceforge.net/
+    platforms: linux, windows (deprecated!!!)
+    level    : optional, deprecated
+  freetype1   http://freetype.sourceforge.net/index2.html
+    platforms: linux, windows (deprecated)
+    level    : needed for GLTT
+
+To enable movie-loading you might want to install one (or all) of the following:
+quicktime4linux	http://heroinewarrior.com/quicktime.php3
+avifile-0.7	http://avifile.sourceforge.net
+MPEG		ftp://ftp.bic.mni.mcgill.ca/pub/mpeg/mpeg_lib-1.3.1.tar.gz
+mpeg3		http://heroinewarrior.com/libmpeg3.php3
+ffmpeg		http://ffmpeg.sourceforge.net
+ platforms : linux
+ level     : optional
+
+note: sorry to say, but heroine doesn't seem to support neither quicktime4linux nor mpeg3 any more.
+try to find a developer-package for your distribution.
+
+
+
+Debian-users:
+=============
+On a Debian system (most of) these library are already in your distribution.
+Some packages, that are not in the official Debian-release (esp. libmpeg3(-dev)), can be found at
+ http://marillat.free.fr
+you might have to put a line like
+ deb http://marillat.free.fr/ stable main
+into your /etc/apt/sources.list
+
+#> apt-get install libgl-dev ftgl-dev libtiff3g-dev libjpeg62-dev libmpeg3-dev libavifile-0.7-dev libquicktime-dev libdv4-dev
+
+RedHat-users:
+=============
+at least Mesa should come with your distribution (either they are already installed, or you have to install the RPM's from the CD/DVD/whatever.
+
+For other distributions you may have a look which ones are there and download and install the other ones.
+
+Try using http://rpmfind.net for rpm-packages.
+
+Fedora-users:
+=============
+SuSe-users:
+===========
+  see RedHat-users
+
+
+
+================================
+Building Gem should work in 4 steps
+
+#.../Gem/src> aclocal
+
+followed by a
+
+#.../Gem/src> autoconf
+
+followed by a
+
+#.../Gem/src> ./configure
+
+followed by a 
+
+#.../Gem/src> make
+
+This should build Gem.{pd_linux,pd_darwin,...} in the Gem/src directory.
+
+The configure script tries to figure out several things. An important one is 
+the location of the pd header file "m_pd.h".
+
+------------------------------
+CONFIGURE
+~~~~~~~~~
+!! you really should remove any existing config.cache from the src/Gnu directory when running ./configure for the "first" time !!
+you can give various options to configure, try "./configure --help" to see them.
+
+configure tries to find which (needed) packages are installed on your system (in default places)
+you can turn off the usage of certain packages via the "--with"-options, even if they could be found on your system
+
+you can change turn on/off certain features of Gem via the "--enable"-options:
+  e.g. Gem normally compiles with the "-freg-struct-return" compiler-flag, to enable the use of FreeFrame-plugins;
+       if you do not want this, you can turn it off with "--disable-registerstruct"
+  e.g. you can turn off compilation of whole sub-modules of Gem:
+       e.g. "--enable-openGL=no" will build a version of Gem that comes without the openGL-wrapper objects
+
+configure tries using pkg-config for configuration of packages that support it: you can help this process by defining environment variables
+
+
+
+
+-------------------------------
+after compilation:
+
+To test Gem (you need to have pd installed) 
+
+#> pd -lib Gem
+
+
+==================================
+Other:
+
+"make clean" removes the object files
+"make distclean" removes all traces from a build.
+
+-----------------------------------------------------------------
+Advanced:
+
+yout:
+
+src/acinclude.m4-(aclocal)->src/aclocal.m4-+
+                                           |-(autoconf)-> src/configure
+src/configure.ac---------------------------+
+
+src/Make.config.in ---------------(./configure)-->src/Make.config
+
+src/Base/config${KERN}.h.in --(./configure)-->src/Base/config${KERN}.h
+
+with ${KERN} being $(uname -s) (Linux, Darwin,...)
+
+
+src/Makefile
+	includes src/Make.include
+		includes src/Make.config
+	master-makefile, cd's into subdirs and calls make there
+
+src/Makefile.subdir
+	includes src/Make.include
+		includes src/Make.config
+	makefile for subdirectories (called via "make -f ../Makefile.subdir")
+
+
+so after configuration, you run "make" (in Gem/src)
+this will call "make -C $@ -f ../Makefile.subdir" for all subdirectories (that were not turned off by configure)
+this means, that make will first cd into the said subdirectory and will then call "make" with src/Makefile.subdir as makefile
+this should compile all the objects in the subdirectories
+then all the objects are linked together to form a Gem.pd_linux
+finally the Gem.pd_linux is stripped from unneeded symbols
+
+
+
+
+Report any failures to <zmoelnig@iem.at>
+
+IOhannes
