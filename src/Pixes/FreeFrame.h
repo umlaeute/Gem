@@ -216,7 +216,7 @@ typedef __declspec(dllimport) LPVOID (__stdcall *FF_Main_FuncPtr)(DWORD, LPVOID,
 plugMainUnion plugMain(DWORD functionCode, LPVOID pParam, DWORD reserved);
 
 
-#elif __apple__
+#elif __APPLE__
 
 typedef LPVOID (*FF_Main_FuncPtr)(DWORD, LPVOID, DWORD);
 
