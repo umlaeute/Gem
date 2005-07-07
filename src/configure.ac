@@ -47,6 +47,16 @@ AC_ARG_WITH([pdversion],
 AC_ARG_WITH([extension], 
 		AC_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
 
+AC_ARG_WITH([pd], 
+		AC_HELP_STRING([--with-pd=<path/to/pd>],[pd-binary]))
+if test "x$with_pd" != "x"; then
+ PD_BINARY=$with_pd
+else
+ if test "x$PD_BINARY" = "x"; then
+  PD_BINARY=$(which pd)
+ fi
+fi
+
 GEM_TARGETS=Base
 GEM_TARGET(Controls)
 GEM_TARGET(Geos)
@@ -229,17 +239,15 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 if test "x$enable_SIMD" != "xno"; then
   GEM_CHECK_CXXFLAGS([-mmmx])
   GEM_CHECK_CXXFLAGS([-faltivec])
-  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
+dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 fi
 
 
 GEM_CHECK_LDFLAGS([-shared -Wl,-export-dynamic])
-# rather do "-bundle_loader /path/to/pd/bin/pd"
-GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
-
+GEM_CHECK_LDFLAGS([-bundle -bundle_loader $(which pd)])
 
 dnl if we don't have $STRIP set, we set it to ${host}-strip or strip
-AC_CHECK_TOOL([STRIP], [strip], [echo fake strip])
+AC_CHECK_TOOL([STRIP], [strip], [true])
 AC_MSG_CHECKING([if strip is GNU strip])
 if $STRIP -V | grep GNU > /dev/null
 then
@@ -253,7 +261,7 @@ else
 fi
 
 dnl we want dos2unix...
-AC_CHECK_TOOL([DOS2UNIX], [dos2unix], [echo fake dos2unix])
+AC_CHECK_TOOL([DOS2UNIX], [dos2unix], [true])
 
 
 AC_CONFIG_FILES([Make.config])
@@ -326,9 +334,6 @@ Configuration:
   misc
     using ARB-extensions : ${enable_ARB}
     using reg-struct-ret : ${enable_registerstruct}
-
-
-    compiler	$ac_cv_c_compiler_gnu
 
 Now run make ...
 
