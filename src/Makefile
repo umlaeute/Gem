@@ -26,15 +26,15 @@ $(GEM_TARGETS):
 
 clean:
 	@for d in ${GEM_TARGETS}; do \
-	    echo "\n----------$$d----------"; \
-	    ${MAKE} -f $(BUILDDIR)/Makefile.subdir -C $$d clean; \
+	    echo "----------$$d----------"; \
+	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir -C $$d clean; \
 	done
 	-rm Gem.$(EXT) *~
 
 distclean:
 	@for d in ${GEM_TARGETS}; do \
-	    echo "\n----------$$d----------"; \
-	    cd $$d ; ${MAKE} -f $(BUILDDIR)/Makefile.subdir distclean; \
+	    echo "----------$$d----------"; \
+	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir distclean; \
 	done
 	-rm Gem.$(EXT) *~
 	-rm config.cache config.log config.status Make.config
