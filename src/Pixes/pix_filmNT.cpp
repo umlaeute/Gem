@@ -208,7 +208,9 @@ void pix_filmNT :: realOpen(char *filename)
 				//	m_pbmihRaw->biSizeImage = m_xsize * m_ysize * m_csize;
 
 				//m_nRawBuffSize = min(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
-				m_nRawBuffSize = max(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
+                          // JMZ: added "std::" in the next line as suggested by Thoralf Schulze
+                          // JMZ: please complain if it doesn't work with M$VC
+                          m_nRawBuffSize = std::max(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
 				if (!m_nRawBuffSize)
 					m_nRawBuffSize = m_xsize * m_ysize * m_csize;
 
