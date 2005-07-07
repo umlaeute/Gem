@@ -21,7 +21,7 @@ all: $(OBJECTS)
 	 rm -f $@.$$$$
 
 clean:
-	-rm -f $(OBJECTS) *~
+	-rm -f $(OBJECTS) $(SOURCES:.cpp=.d) *~
 
 distclean:
 	-rm *.o *.d *~
