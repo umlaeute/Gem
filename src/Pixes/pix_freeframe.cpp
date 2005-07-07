@@ -302,7 +302,6 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   NSSymbol s; 
   if ( NSCreateObjectFileImageFromFile( libname, &image) != NSObjectFileImageSuccess ) {
     post("%s: couldn't load", libname);
-    class_set_extern_dir(&s_);
     return 0;
   }
   ret = NSLinkModule( image, libname, 
