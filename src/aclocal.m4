@@ -1,3 +1,16 @@
+# generated automatically by aclocal 1.7.9 -*- Autoconf -*-
+
+# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002
+# Free Software Foundation, Inc.
+# This file is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
 # lib-prefix.m4 serial 4 (gettext-0.14.2)
 dnl Copyright (C) 2001-2005 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
@@ -1091,4 +1104,5 @@ AC_DEFUN([GEM_CHECK_LDFLAGS],
     [$3]
   fi
 ])# GEM_CHECK_LDFLAGS
+
 
