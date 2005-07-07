@@ -23,12 +23,8 @@ LOG
 
 #include "Base/GemExportDef.h"
 
-#include <math.h>
+#include "Base/GemMath.h"
 #include <stdlib.h>
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // powerOfTwo
@@ -53,35 +49,6 @@ inline int powerOfTwo(int value)
 	value = value | (value >> 16);
 	return (value + 1);
 }
-
-///////////////////////////////////////////////////////////////////////////////
-//  Speedup found via Shark:  ppc only
-//
-//   If you do not require full precision, you can use the PowerPC floating-point 
-// reciprocal square-root estimate instruction (frsqrte) instead of calling sqrt().
-//
-//   If needed, you can increase the precision of the estimate returned by 
-// frsqrte (5-bits of precision) by using the Newton-Raphson method for improving 
-// the estimate (x0) for 1/sqrt(a) (x1 = 0.5 * x0 * [3.0 - a * x0 * x0]).
-///////////////////////////////////////////////////////////////////////////////
-#ifdef __ppc__
-#include <ppc_intrinsics.h>
-#undef sqrt
-#define sqrt fast_sqrtf
-#define sqrtf fast_sqrtf
-
-inline double fast_sqrt(double x)
-{
-	register double est = __frsqrte(x);
-	return x * 0.5 * est * __fnmsub(est * est, x, 3.0);
-}
-
-inline float fast_sqrtf(float x)
-{
-	register float est = (float)__frsqrte(x);
-	return x * 0.5f * est * __fnmsubs(est * est, x, 3.0f);
-}
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // min/max functions

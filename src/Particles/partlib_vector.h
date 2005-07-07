@@ -8,39 +8,7 @@
 #ifndef particle_vector_h
 #define particle_vector_h
 
-#include <math.h>
-
-#ifndef M_PI
-#define M_PI 3.1415926535897932384626433f
-#endif
-
-#ifdef __APPLE__
-#include <AvailabilityMacros.h>
-#if defined (MAC_OS_X_VERSION_10_3) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-#include <math.h>
-#else
-#include "macosx_math.h"
-#endif
-#endif
-
-#ifdef __ppc__
-#include "ppc_intrinsics.h"
-#undef sqrtf
-#define sqrtf fast_sqrtf
-inline float fast_sqrtf(float x)
-{
-	register float est = (float)__frsqrte(x);
-	return x * 0.5f * est * __fnmsubs(est * est, x, 3.0f);
-}
-#endif
-
-#ifdef __WIN32__
-#define drand48() (((float) rand())/((float) RAND_MAX))
-#define srand48(x) srand(x)
-
-// This is because their stupid compiler thinks it's smart.
-#define inline __forceinline
-#endif
+#include "Base/GemMath.h"
 
 class pVector
 {

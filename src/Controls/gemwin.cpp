@@ -22,19 +22,14 @@
 #endif
  
 #ifdef __APPLE__
-#include <Carbon/carbon.h>
-#include <OpenGL/gl.h>
-#include <AvailabilityMacros.h>
-#if defined (MAC_OS_X_VERSION_10_3) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-#include <math.h>
+# include <Carbon/carbon.h>
+# include <OpenGL/gl.h>
+# include <AvailabilityMacros.h>
 #else
-#include "macosx_math.h"
-#endif
-#else
-#include <GL/gl.h>
-#include <math.h>
+# include <GL/gl.h>
 #endif // __APPLE__
 
+#include "Base/GemMath.h"
 #include "Base/GemMan.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemwin, t_floatarg, A_DEFFLOAT)
@@ -578,6 +573,7 @@ void gemwin :: borderMessCallback(void *, t_floatarg state)
 }
 void gemwin :: destroyMessCallback(void *)
 {
+	post("gemwin: destroy mess");
   GemMan::destroyWindow();
 }
 void gemwin :: resetMessCallback(void *)

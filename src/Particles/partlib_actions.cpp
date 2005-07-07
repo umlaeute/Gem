@@ -22,14 +22,7 @@
 #define SQRT2PI 2.506628274631000502415765284811045253006
 #define ONEOVERSQRT2PI (1. / SQRT2PI)
 
-#ifdef __APPLE__
-#include <AvailabilityMacros.h>
-#if defined (MAC_OS_X_VERSION_10_3) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-#include <math.h>
-#else
-#include "macosx_math.h"
-#endif
-#endif
+#include "Base/GemMath.h"
 
 // To offset [0 .. 1] vectors to [-.5 .. .5]
 static pVector vHalf(0.5, 0.5, 0.5);
