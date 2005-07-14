@@ -32,15 +32,14 @@ AC_PROG_LN_S
 
 
 # Checks for libraries.
-
 AC_PATH_XTRA
 LIBS="$LIBS $X_LIBS"
 
 
-GEM_ARG_ENABLE(SIMD, SIMD-support)
-GEM_ARG_ENABLE(ARB, openGL-ARB-support)
-GEM_ARG_ENABLE(registerstruct, [use \"-freg-struct-return\" (needed for FreeFrame)])
-GEM_ARG_ENABLE(filmnew, [all in one version of pix_film/pix_video])
+GEM_ARG_ENABLE([SIMD], [SIMD-support])
+GEM_ARG_ENABLE([ARB], [openGL-ARB-support])
+GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)])
+GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video])
 
 AC_ARG_WITH([pdversion], 
 		AC_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
