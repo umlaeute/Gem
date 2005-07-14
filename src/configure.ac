@@ -249,7 +249,7 @@ GEM_CHECK_LDFLAGS([-bundle -bundle_loader $(which pd)])
 dnl if we don't have $STRIP set, we set it to ${host}-strip or strip
 AC_CHECK_TOOL([STRIP], [strip], [true])
 AC_MSG_CHECKING([if strip is GNU strip])
-if $STRIP -V | grep GNU > /dev/null
+if $STRIP -V 2>&1 | grep GNU > /dev/null
 then
     AC_SUBST(STRIP_ALL," -s")
     AC_SUBST(STRIP_UNNEEDED, "--strip-unneeded")
