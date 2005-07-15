@@ -947,10 +947,14 @@ To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.])],
 else
 	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
 	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
- 	AC_LIB_APPENDTOVAR([PKG_CFLAGS], "${$1_CFLAGS}")
-	PKG_LIBS="${$1[]_LIBS} ${PKG_LIBS}"
 	ifelse([$3], , :, [$3])
-fi[]dnl
+fi[]
+if test "x${$1[]_CFLAGS}" != "x"; then
+   AC_LIB_APPENDTOVAR([PKG_CFLAGS], "${$1_CFLAGS}")
+fi
+if test "x${$1[]_LIBS}" != "x"; then
+   PKG_LIBS="${$1[]_LIBS} ${PKG_LIBS}"
+fi
 ])# PKG_CHECK_MODULES
 
 
@@ -998,16 +1002,27 @@ AC_DEFUN([GEM_TARGET],
 
 # GEM_CHECK_LIB(NAME, LIBRARY, FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ADDITIONAL_LIBS], [HELP-TEXT])
 #
-#
 AC_DEFUN([GEM_CHECK_LIB],
 [
  define([Name],[translit([$1],[./-+], [____])])
 
 AC_ARG_WITH([Name],
              AC_HELP_STRING([--without-[]Name], [disable []Name ($7)]))
+AC_ARG_WITH([]Name-includes,
+             AC_HELP_STRING([--with-[]Name-includes=/path/to/[]Name/include/], [include path for []Name]))
+AC_ARG_WITH([]Name-libs,
+             AC_HELP_STRING([--with-[]Name-libs=/path/to/[]Name/lib/], [library path for []Name]))
 if test x$with_[]Name = "xno"; then
   have_[]Name="no (forced)"
 else
+  if test -d "$with_[]Name[]_includes"; then
+    CFLAGS="-I$with_[]Name[]_includes $CFLAGS"
+    CPPFLAGS="-I$with_[]Name[]_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_[]Name[]_includes $CXXFLAGS"
+  fi
+  if test -d "$with_[]Name[]_libs"; then
+    LIBS="-L$with_[]Name[]_libs $LIBS"
+  fi
   AS_LITERAL_IF([$2],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$3])],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$3])])dnl

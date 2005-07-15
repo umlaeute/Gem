@@ -252,6 +252,7 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 if test "x$enable_SIMD" != "xno"; then
   GEM_CHECK_CXXFLAGS([-mmmx])
   GEM_CHECK_CXXFLAGS([-faltivec])
+# damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 fi
 
@@ -280,21 +281,10 @@ AC_CHECK_TOOL([DOS2UNIX], [dos2unix], [true])
 AC_CONFIG_FILES([Make.config])
 AC_OUTPUT
 
-dnl echo GEM compilation options:
-dnl echo =======================================
-dnl echo
-dnl echo FTGL support:         $ac_cv_lib_ftgl_main
-dnl echo GLTT support:         $ac_cv_lib_gltt_GLTTFont
-dnl echo libmpeg3 support:     $ac_cv_lib_mpeg3_main
-dnl echo libquicktime support: $ac_cv_lib_quicktime_quicktime_init
-dnl echo aviplay support:      $ac_cv_lib_aviplay_main
-dnl echo libdv support:        $ac_cv_lib_dv_main
-dnl echo
-dnl echo ========================================
-
+dnl GEM compilation options:
+dnl =======================================
 dnl
 dnl give some feedback about the configuration
-dnl
 
 if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL

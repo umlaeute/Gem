@@ -973,20 +973,64 @@ Optional Packages:
   --with-x                use the X Window System
   --without-ImageMagick
                           disable ImageMagick (image loader)
+  --with-ImageMagick-includes=/path/to/ImageMagick/include/
+                          include path for ImageMagick
+  --with-ImageMagick-libs=/path/to/ImageMagick/lib/
+                          library path for ImageMagick
   --without-tiff        disable tiff (image loader)
+  --with-tiff-includes=/path/to/tiff/include/
+                          include path for tiff
+  --with-tiff-libs=/path/to/tiff/lib/
+                          library path for tiff
   --without-jpeg        disable jpeg (image loader)
+  --with-jpeg-includes=/path/to/jpeg/include/
+                          include path for jpeg
+  --with-jpeg-libs=/path/to/jpeg/lib/
+                          library path for jpeg
   --without-quicktime
                           disable quicktime (movie loader)
+  --with-quicktime-includes=/path/to/quicktime/include/
+                          include path for quicktime
+  --with-quicktime-libs=/path/to/quicktime/lib/
+                          library path for quicktime
   --without-mpeg3        disable mpeg3 (movie loader)
+  --with-mpeg3-includes=/path/to/mpeg3/include/
+                          include path for mpeg3
+  --with-mpeg3-libs=/path/to/mpeg3/lib/
+                          library path for mpeg3
   --without-mpeg        disable mpeg (movie loader)
+  --with-mpeg-includes=/path/to/mpeg/include/
+                          include path for mpeg
+  --with-mpeg-libs=/path/to/mpeg/lib/
+                          library path for mpeg
   --without-avifile
                           disable avifile (movie loader)
+  --with-avifile-includes=/path/to/avifile/include/
+                          include path for avifile
+  --with-avifile-libs=/path/to/avifile/lib/
+                          library path for avifile
   --without-ffmpeg        disable ffmpeg (movie loader)
+  --with-ffmpeg-includes=/path/to/ffmpeg/include/
+                          include path for ffmpeg
+  --with-ffmpeg-libs=/path/to/ffmpeg/lib/
+                          library path for ffmpeg
   --without-v4l           disable v4l-lib (video input)
   --without-ieee1394
                           disable ieee1394 (video input)
+  --with-ieee1394-includes=/path/to/ieee1394/include/
+                          include path for ieee1394
+  --with-ieee1394-libs=/path/to/ieee1394/lib/
+                          library path for ieee1394
   --without-ftgl        disable ftgl (font support)
+  --with-ftgl-includes=/path/to/ftgl/include/
+                          include path for ftgl
+  --with-ftgl-libs=/path/to/ftgl/lib/
+                          library path for ftgl
   --without-gltt        disable gltt (font support (deprecated))
+  --with-gltt-includes=/path/to/gltt/include/
+                          include path for gltt
+  --with-gltt-libs=/path/to/gltt/lib/
+                          library path for gltt
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -5745,9 +5789,29 @@ if test "${with_ImageMagick+set}" = set; then
   withval="$with_ImageMagick"
 
 fi;
+
+# Check whether --with-ImageMagick-includes or --without-ImageMagick-includes was given.
+if test "${with_ImageMagick_includes+set}" = set; then
+  withval="$with_ImageMagick_includes"
+
+fi;
+
+# Check whether --with-ImageMagick-libs or --without-ImageMagick-libs was given.
+if test "${with_ImageMagick_libs+set}" = set; then
+  withval="$with_ImageMagick_libs"
+
+fi;
 if test x$with_ImageMagick = "xno"; then
   have_ImageMagick="no (forced)"
 else
+  if test -d "$with_ImageMagick_includes"; then
+    CFLAGS="-I$with_ImageMagick_includes $CFLAGS"
+    CPPFLAGS="-I$with_ImageMagick_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_ImageMagick_includes $CXXFLAGS"
+  fi
+  if test -d "$with_ImageMagick_libs"; then
+    LIBS="-L$with_ImageMagick_libs $LIBS"
+  fi
 
 
 
@@ -5945,6 +6009,9 @@ fi
 else
 	PKG_IMAGEMAGICK___CFLAGS=$pkg_cv_PKG_IMAGEMAGICK___CFLAGS
 	PKG_IMAGEMAGICK___LIBS=$pkg_cv_PKG_IMAGEMAGICK___LIBS
+	acLib==yes
+fi
+if test "x${PKG_IMAGEMAGICK___CFLAGS}" != "x"; then
 
   for element in "${PKG_IMAGEMAGICK___CFLAGS}"; do
     haveit=
@@ -5968,9 +6035,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_IMAGEMAGICK___LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_IMAGEMAGICK___LIBS}" != "x"; then
+   PKG_LIBS="${PKG_IMAGEMAGICK___LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_Magickpp_main" != "xno"; then
 
@@ -6017,9 +6086,29 @@ if test "${with_tiff+set}" = set; then
   withval="$with_tiff"
 
 fi;
+
+# Check whether --with-tiff-includes or --without-tiff-includes was given.
+if test "${with_tiff_includes+set}" = set; then
+  withval="$with_tiff_includes"
+
+fi;
+
+# Check whether --with-tiff-libs or --without-tiff-libs was given.
+if test "${with_tiff_libs+set}" = set; then
+  withval="$with_tiff_libs"
+
+fi;
 if test x$with_tiff = "xno"; then
   have_tiff="no (forced)"
 else
+  if test -d "$with_tiff_includes"; then
+    CFLAGS="-I$with_tiff_includes $CFLAGS"
+    CPPFLAGS="-I$with_tiff_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_tiff_includes $CXXFLAGS"
+  fi
+  if test -d "$with_tiff_libs"; then
+    LIBS="-L$with_tiff_libs $LIBS"
+  fi
 
 
 
@@ -6229,6 +6318,9 @@ fi
 else
 	PKG_TIFF_CFLAGS=$pkg_cv_PKG_TIFF_CFLAGS
 	PKG_TIFF_LIBS=$pkg_cv_PKG_TIFF_LIBS
+	acLib==yes
+fi
+if test "x${PKG_TIFF_CFLAGS}" != "x"; then
 
   for element in "${PKG_TIFF_CFLAGS}"; do
     haveit=
@@ -6252,9 +6344,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_TIFF_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_TIFF_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_TIFF_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_tiff_TIFFOpen" != "xno"; then
 
@@ -6298,9 +6392,29 @@ if test "${with_jpeg+set}" = set; then
   withval="$with_jpeg"
 
 fi;
+
+# Check whether --with-jpeg-includes or --without-jpeg-includes was given.
+if test "${with_jpeg_includes+set}" = set; then
+  withval="$with_jpeg_includes"
+
+fi;
+
+# Check whether --with-jpeg-libs or --without-jpeg-libs was given.
+if test "${with_jpeg_libs+set}" = set; then
+  withval="$with_jpeg_libs"
+
+fi;
 if test x$with_jpeg = "xno"; then
   have_jpeg="no (forced)"
 else
+  if test -d "$with_jpeg_includes"; then
+    CFLAGS="-I$with_jpeg_includes $CFLAGS"
+    CPPFLAGS="-I$with_jpeg_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_jpeg_includes $CXXFLAGS"
+  fi
+  if test -d "$with_jpeg_libs"; then
+    LIBS="-L$with_jpeg_libs $LIBS"
+  fi
 
 
 
@@ -6510,6 +6624,9 @@ fi
 else
 	PKG_JPEG_CFLAGS=$pkg_cv_PKG_JPEG_CFLAGS
 	PKG_JPEG_LIBS=$pkg_cv_PKG_JPEG_LIBS
+	acLib==yes
+fi
+if test "x${PKG_JPEG_CFLAGS}" != "x"; then
 
   for element in "${PKG_JPEG_CFLAGS}"; do
     haveit=
@@ -6533,9 +6650,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_JPEG_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_JPEG_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_JPEG_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_jpeg_jpeg_read_header" != "xno"; then
 
@@ -6580,9 +6699,29 @@ if test "${with_quicktime+set}" = set; then
   withval="$with_quicktime"
 
 fi;
+
+# Check whether --with-quicktime-includes or --without-quicktime-includes was given.
+if test "${with_quicktime_includes+set}" = set; then
+  withval="$with_quicktime_includes"
+
+fi;
+
+# Check whether --with-quicktime-libs or --without-quicktime-libs was given.
+if test "${with_quicktime_libs+set}" = set; then
+  withval="$with_quicktime_libs"
+
+fi;
 if test x$with_quicktime = "xno"; then
   have_quicktime="no (forced)"
 else
+  if test -d "$with_quicktime_includes"; then
+    CFLAGS="-I$with_quicktime_includes $CFLAGS"
+    CPPFLAGS="-I$with_quicktime_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_quicktime_includes $CXXFLAGS"
+  fi
+  if test -d "$with_quicktime_libs"; then
+    LIBS="-L$with_quicktime_libs $LIBS"
+  fi
 
 
 
@@ -6792,6 +6931,9 @@ fi
 else
 	PKG_QUICKTIME_CFLAGS=$pkg_cv_PKG_QUICKTIME_CFLAGS
 	PKG_QUICKTIME_LIBS=$pkg_cv_PKG_QUICKTIME_LIBS
+	acLib==yes
+fi
+if test "x${PKG_QUICKTIME_CFLAGS}" != "x"; then
 
   for element in "${PKG_QUICKTIME_CFLAGS}"; do
     haveit=
@@ -6815,9 +6957,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_QUICKTIME_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_QUICKTIME_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_QUICKTIME_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_quicktime_quicktime_init" != "xno"; then
 
@@ -6861,9 +7005,29 @@ if test "${with_mpeg3+set}" = set; then
   withval="$with_mpeg3"
 
 fi;
+
+# Check whether --with-mpeg3-includes or --without-mpeg3-includes was given.
+if test "${with_mpeg3_includes+set}" = set; then
+  withval="$with_mpeg3_includes"
+
+fi;
+
+# Check whether --with-mpeg3-libs or --without-mpeg3-libs was given.
+if test "${with_mpeg3_libs+set}" = set; then
+  withval="$with_mpeg3_libs"
+
+fi;
 if test x$with_mpeg3 = "xno"; then
   have_mpeg3="no (forced)"
 else
+  if test -d "$with_mpeg3_includes"; then
+    CFLAGS="-I$with_mpeg3_includes $CFLAGS"
+    CPPFLAGS="-I$with_mpeg3_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_mpeg3_includes $CXXFLAGS"
+  fi
+  if test -d "$with_mpeg3_libs"; then
+    LIBS="-L$with_mpeg3_libs $LIBS"
+  fi
 
 
 
@@ -7073,6 +7237,9 @@ fi
 else
 	PKG_MPEG3_CFLAGS=$pkg_cv_PKG_MPEG3_CFLAGS
 	PKG_MPEG3_LIBS=$pkg_cv_PKG_MPEG3_LIBS
+	acLib==yes
+fi
+if test "x${PKG_MPEG3_CFLAGS}" != "x"; then
 
   for element in "${PKG_MPEG3_CFLAGS}"; do
     haveit=
@@ -7096,9 +7263,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_MPEG3_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_MPEG3_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_MPEG3_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_mpeg3_mpeg3_check_sig" != "xno"; then
 
@@ -7142,9 +7311,29 @@ if test "${with_mpeg+set}" = set; then
   withval="$with_mpeg"
 
 fi;
+
+# Check whether --with-mpeg-includes or --without-mpeg-includes was given.
+if test "${with_mpeg_includes+set}" = set; then
+  withval="$with_mpeg_includes"
+
+fi;
+
+# Check whether --with-mpeg-libs or --without-mpeg-libs was given.
+if test "${with_mpeg_libs+set}" = set; then
+  withval="$with_mpeg_libs"
+
+fi;
 if test x$with_mpeg = "xno"; then
   have_mpeg="no (forced)"
 else
+  if test -d "$with_mpeg_includes"; then
+    CFLAGS="-I$with_mpeg_includes $CFLAGS"
+    CPPFLAGS="-I$with_mpeg_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_mpeg_includes $CXXFLAGS"
+  fi
+  if test -d "$with_mpeg_libs"; then
+    LIBS="-L$with_mpeg_libs $LIBS"
+  fi
 
 
 
@@ -7354,6 +7543,9 @@ fi
 else
 	PKG_MPEG_CFLAGS=$pkg_cv_PKG_MPEG_CFLAGS
 	PKG_MPEG_LIBS=$pkg_cv_PKG_MPEG_LIBS
+	acLib==yes
+fi
+if test "x${PKG_MPEG_CFLAGS}" != "x"; then
 
   for element in "${PKG_MPEG_CFLAGS}"; do
     haveit=
@@ -7377,9 +7569,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_MPEG_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_MPEG_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_MPEG_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_mpeg_OpenMPEG" != "xno"; then
 
@@ -7423,9 +7617,29 @@ if test "${with_avifile+set}" = set; then
   withval="$with_avifile"
 
 fi;
+
+# Check whether --with-avifile-includes or --without-avifile-includes was given.
+if test "${with_avifile_includes+set}" = set; then
+  withval="$with_avifile_includes"
+
+fi;
+
+# Check whether --with-avifile-libs or --without-avifile-libs was given.
+if test "${with_avifile_libs+set}" = set; then
+  withval="$with_avifile_libs"
+
+fi;
 if test x$with_avifile = "xno"; then
   have_avifile="no (forced)"
 else
+  if test -d "$with_avifile_includes"; then
+    CFLAGS="-I$with_avifile_includes $CFLAGS"
+    CPPFLAGS="-I$with_avifile_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_avifile_includes $CXXFLAGS"
+  fi
+  if test -d "$with_avifile_libs"; then
+    LIBS="-L$with_avifile_libs $LIBS"
+  fi
 
 
 
@@ -7635,6 +7849,9 @@ fi
 else
 	PKG_AVIFILE_CFLAGS=$pkg_cv_PKG_AVIFILE_CFLAGS
 	PKG_AVIFILE_LIBS=$pkg_cv_PKG_AVIFILE_LIBS
+	acLib==yes
+fi
+if test "x${PKG_AVIFILE_CFLAGS}" != "x"; then
 
   for element in "${PKG_AVIFILE_CFLAGS}"; do
     haveit=
@@ -7658,9 +7875,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_AVIFILE_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_AVIFILE_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_AVIFILE_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_aviplay_CreateIAviReadFile" != "xno"; then
 
@@ -7704,9 +7923,29 @@ if test "${with_ffmpeg+set}" = set; then
   withval="$with_ffmpeg"
 
 fi;
+
+# Check whether --with-ffmpeg-includes or --without-ffmpeg-includes was given.
+if test "${with_ffmpeg_includes+set}" = set; then
+  withval="$with_ffmpeg_includes"
+
+fi;
+
+# Check whether --with-ffmpeg-libs or --without-ffmpeg-libs was given.
+if test "${with_ffmpeg_libs+set}" = set; then
+  withval="$with_ffmpeg_libs"
+
+fi;
 if test x$with_ffmpeg = "xno"; then
   have_ffmpeg="no (forced)"
 else
+  if test -d "$with_ffmpeg_includes"; then
+    CFLAGS="-I$with_ffmpeg_includes $CFLAGS"
+    CPPFLAGS="-I$with_ffmpeg_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_ffmpeg_includes $CXXFLAGS"
+  fi
+  if test -d "$with_ffmpeg_libs"; then
+    LIBS="-L$with_ffmpeg_libs $LIBS"
+  fi
 
 
 
@@ -7916,6 +8155,9 @@ fi
 else
 	PKG_FFMPEG_CFLAGS=$pkg_cv_PKG_FFMPEG_CFLAGS
 	PKG_FFMPEG_LIBS=$pkg_cv_PKG_FFMPEG_LIBS
+	acLib==yes
+fi
+if test "x${PKG_FFMPEG_CFLAGS}" != "x"; then
 
   for element in "${PKG_FFMPEG_CFLAGS}"; do
     haveit=
@@ -7939,9 +8181,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_FFMPEG_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_FFMPEG_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_FFMPEG_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_avformat_av_open_input_file" != "xno"; then
 
@@ -8397,9 +8641,29 @@ if test "${with_ieee1394+set}" = set; then
   withval="$with_ieee1394"
 
 fi;
+
+# Check whether --with-ieee1394-includes or --without-ieee1394-includes was given.
+if test "${with_ieee1394_includes+set}" = set; then
+  withval="$with_ieee1394_includes"
+
+fi;
+
+# Check whether --with-ieee1394-libs or --without-ieee1394-libs was given.
+if test "${with_ieee1394_libs+set}" = set; then
+  withval="$with_ieee1394_libs"
+
+fi;
 if test x$with_ieee1394 = "xno"; then
   have_ieee1394="no (forced)"
 else
+  if test -d "$with_ieee1394_includes"; then
+    CFLAGS="-I$with_ieee1394_includes $CFLAGS"
+    CPPFLAGS="-I$with_ieee1394_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_ieee1394_includes $CXXFLAGS"
+  fi
+  if test -d "$with_ieee1394_libs"; then
+    LIBS="-L$with_ieee1394_libs $LIBS"
+  fi
 
 
 
@@ -8597,6 +8861,9 @@ fi
 else
 	PKG_IEEE1394_CFLAGS=$pkg_cv_PKG_IEEE1394_CFLAGS
 	PKG_IEEE1394_LIBS=$pkg_cv_PKG_IEEE1394_LIBS
+	acLib==yes
+fi
+if test "x${PKG_IEEE1394_CFLAGS}" != "x"; then
 
   for element in "${PKG_IEEE1394_CFLAGS}"; do
     haveit=
@@ -8620,9 +8887,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_IEEE1394_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_IEEE1394_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_IEEE1394_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_dv_main" != "xno"; then
 
@@ -8667,9 +8936,29 @@ if test "${with_ftgl+set}" = set; then
   withval="$with_ftgl"
 
 fi;
+
+# Check whether --with-ftgl-includes or --without-ftgl-includes was given.
+if test "${with_ftgl_includes+set}" = set; then
+  withval="$with_ftgl_includes"
+
+fi;
+
+# Check whether --with-ftgl-libs or --without-ftgl-libs was given.
+if test "${with_ftgl_libs+set}" = set; then
+  withval="$with_ftgl_libs"
+
+fi;
 if test x$with_ftgl = "xno"; then
   have_ftgl="no (forced)"
 else
+  if test -d "$with_ftgl_includes"; then
+    CFLAGS="-I$with_ftgl_includes $CFLAGS"
+    CPPFLAGS="-I$with_ftgl_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_ftgl_includes $CXXFLAGS"
+  fi
+  if test -d "$with_ftgl_libs"; then
+    LIBS="-L$with_ftgl_libs $LIBS"
+  fi
 
 
 
@@ -8867,6 +9156,9 @@ fi
 else
 	PKG_FTGL_CFLAGS=$pkg_cv_PKG_FTGL_CFLAGS
 	PKG_FTGL_LIBS=$pkg_cv_PKG_FTGL_LIBS
+	acLib==yes
+fi
+if test "x${PKG_FTGL_CFLAGS}" != "x"; then
 
   for element in "${PKG_FTGL_CFLAGS}"; do
     haveit=
@@ -8890,9 +9182,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_FTGL_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_FTGL_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_FTGL_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_ftgl_main" != "xno"; then
 
@@ -8937,9 +9231,29 @@ if test "${with_gltt+set}" = set; then
   withval="$with_gltt"
 
 fi;
+
+# Check whether --with-gltt-includes or --without-gltt-includes was given.
+if test "${with_gltt_includes+set}" = set; then
+  withval="$with_gltt_includes"
+
+fi;
+
+# Check whether --with-gltt-libs or --without-gltt-libs was given.
+if test "${with_gltt_libs+set}" = set; then
+  withval="$with_gltt_libs"
+
+fi;
 if test x$with_gltt = "xno"; then
   have_gltt="no (forced)"
 else
+  if test -d "$with_gltt_includes"; then
+    CFLAGS="-I$with_gltt_includes $CFLAGS"
+    CPPFLAGS="-I$with_gltt_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_gltt_includes $CXXFLAGS"
+  fi
+  if test -d "$with_gltt_libs"; then
+    LIBS="-L$with_gltt_libs $LIBS"
+  fi
 
 
 
@@ -9149,6 +9463,9 @@ fi
 else
 	PKG_GLTT_CFLAGS=$pkg_cv_PKG_GLTT_CFLAGS
 	PKG_GLTT_LIBS=$pkg_cv_PKG_GLTT_LIBS
+	acLib==yes
+fi
+if test "x${PKG_GLTT_CFLAGS}" != "x"; then
 
   for element in "${PKG_GLTT_CFLAGS}"; do
     haveit=
@@ -9172,9 +9489,11 @@ else
     fi
   done
 
-	PKG_LIBS="${PKG_GLTT_LIBS} ${PKG_LIBS}"
-	acLib==yes
 fi
+if test "x${PKG_GLTT_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_GLTT_LIBS} ${PKG_LIBS}"
+fi
+
 
   if test "x$ac_cv_lib_gltt_GLTTFont" != "xno"; then
 
@@ -11978,6 +12297,7 @@ echo "${ECHO_T}no" >&6
 
 fi
 
+# damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 fi
 
 
@@ -13454,7 +13774,6 @@ if test "$no_create" != yes; then
   # would make configure fail if this is the last instruction.
   $ac_cs_success || { (exit 1); exit 1; }
 fi
-
 
 
 
