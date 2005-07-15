@@ -992,11 +992,9 @@ AC_DEFUN([GEM_CHECK_LIB],
 
 AC_ARG_WITH([Name],
              AC_HELP_STRING([--without-[]Name], [disable []Name ($7)]))
-
-if test x$withval = "xno"; then
-  :
+if test x$with_[]Name = "xno"; then
+  have_[]Name="no (forced)"
 else
-
   AS_LITERAL_IF([$2],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$3])],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$3])])dnl

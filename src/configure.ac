@@ -30,12 +30,6 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
-
-# Checks for libraries.
-AC_PATH_XTRA
-LIBS="$LIBS $X_LIBS"
-
-
 GEM_ARG_ENABLE([SIMD], [SIMD-support])
 GEM_ARG_ENABLE([ARB], [openGL-ARB-support])
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)])
@@ -45,6 +39,7 @@ AC_ARG_WITH([pdversion],
 		AC_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
 AC_ARG_WITH([extension], 
 		AC_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
+
 
 AC_ARG_WITH([pd], 
 		AC_HELP_STRING([--with-pd=<path/to/pd>],[pd-binary]))
@@ -71,11 +66,26 @@ AC_CHECK_LIB(m,sin)
 AC_CHECK_LIB(z,main)
 AC_CHECK_LIB(dl,dlopen)
 
-AC_CHECK_LIB(X11,main)
-AC_CHECK_LIB(Xext,main)
-AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
+# Checks for libraries.
 
-AC_CHECK_LIB(Xext,main)
+## on OSX X shouldn't be used by default as there are other ways
+## however, if people really want it ("--with-x") they should get it
+if test "x$KERN" = "xDarwin"; then
+ if test "x$with_x" = "x"; then
+   with_x="no"
+ fi
+fi
+
+AC_PATH_XTRA
+LIBS="$LIBS $X_LIBS"
+
+if test "x$with_x" != "xno"; then
+ AC_CHECK_LIB(X11,main)
+ AC_CHECK_LIB(Xext,main)
+ AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
+
+ AC_CHECK_LIB(Xext,main)
+fi
 
 AC_CHECK_LIB(GL,glInitNames)
 AC_CHECK_LIB(GLU,gluLookAt)
@@ -88,6 +98,10 @@ dnl some checks for osX
 GEM_CHECK_FRAMEWORK(Carbon)
 GEM_CHECK_FRAMEWORK(QuickTime)
 
+#fallback to imagemagick if people are too lazy to type ImageMagick
+if test "x$with_ImageMagick" = "x"; then
+ with_ImageMagick="$with_imagemagick"
+fi
 
 GEM_CHECK_LIB(ImageMagick++, Magick++, main,AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS),,,[image loader])
 dnl  [AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS)]

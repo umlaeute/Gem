@@ -967,10 +967,10 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-x                use the X Window System
   --with-pdversion=<ver>  enforce a certain pd-version (e.g. 0.37)
   --with-extension=<ext>  enforce a certain file-extension (e.g. pd_linux)
   --with-pd=<path/to/pd>  pd-binary
+  --with-x                use the X Window System
   --without-ImageMagick
                           disable ImageMagick (image loader)
   --without-tiff        disable tiff (image loader)
@@ -2906,8 +2906,422 @@ echo "${ECHO_T}no, using $LN_S" >&6
 fi
 
 
+# Check whether --enable-SIMD or --disable-SIMD was given.
+if test "${enable_SIMD+set}" = set; then
+  enableval="$enable_SIMD"
+
+else
+  enable_SIMD="yes"
+fi;
+
+# Check whether --enable-ARB or --disable-ARB was given.
+if test "${enable_ARB+set}" = set; then
+  enableval="$enable_ARB"
+
+else
+  enable_ARB="yes"
+fi;
+
+# Check whether --enable-registerstruct or --disable-registerstruct was given.
+if test "${enable_registerstruct+set}" = set; then
+  enableval="$enable_registerstruct"
+
+else
+  enable_registerstruct="yes"
+fi;
+
+# Check whether --enable-filmnew or --disable-filmnew was given.
+if test "${enable_filmnew+set}" = set; then
+  enableval="$enable_filmnew"
+
+else
+  enable_filmnew="yes"
+fi;
+
+
+
+# Check whether --with-pdversion or --without-pdversion was given.
+if test "${with_pdversion+set}" = set; then
+  withval="$with_pdversion"
+
+fi;
+
+# Check whether --with-extension or --without-extension was given.
+if test "${with_extension+set}" = set; then
+  withval="$with_extension"
+
+fi;
+
+
+
+# Check whether --with-pd or --without-pd was given.
+if test "${with_pd+set}" = set; then
+  withval="$with_pd"
+
+fi;
+if test "x$with_pd" != "x"; then
+ PD_BINARY=$with_pd
+else
+ if test "x$PD_BINARY" = "x"; then
+  PD_BINARY=$(which pd)
+ fi
+fi
+
+GEM_TARGETS=Base
+# Check whether --enable-Controls or --disable-Controls was given.
+if test "${enable_Controls+set}" = set; then
+  enableval="$enable_Controls"
+
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS Controls"
+                else
+                  echo not building Controls-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS Controls"
+
+fi;
+
+# Check whether --enable-Geos or --disable-Geos was given.
+if test "${enable_Geos+set}" = set; then
+  enableval="$enable_Geos"
+
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS Geos"
+                else
+                  echo not building Geos-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS Geos"
+
+fi;
+
+# Check whether --enable-Manips or --disable-Manips was given.
+if test "${enable_Manips+set}" = set; then
+  enableval="$enable_Manips"
+
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS Manips"
+                else
+                  echo not building Manips-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS Manips"
+
+fi;
+
+# Check whether --enable-MarkEx or --disable-MarkEx was given.
+if test "${enable_MarkEx+set}" = set; then
+  enableval="$enable_MarkEx"
+
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS MarkEx"
+                else
+                  echo not building MarkEx-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS MarkEx"
+
+fi;
+
+# Check whether --enable-Nongeos or --disable-Nongeos was given.
+if test "${enable_Nongeos+set}" = set; then
+  enableval="$enable_Nongeos"
+
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS Nongeos"
+                else
+                  echo not building Nongeos-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS Nongeos"
+
+fi;
+
+# Check whether --enable-Particles or --disable-Particles was given.
+if test "${enable_Particles+set}" = set; then
+  enableval="$enable_Particles"
+
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS Particles"
+                else
+                  echo not building Particles-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS Particles"
+
+fi;
+
+# Check whether --enable-Pixes or --disable-Pixes was given.
+if test "${enable_Pixes+set}" = set; then
+  enableval="$enable_Pixes"
+
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS Pixes"
+                else
+                  echo not building Pixes-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS Pixes"
+
+fi;
+
+# Check whether --enable-openGL or --disable-openGL was given.
+if test "${enable_openGL+set}" = set; then
+  enableval="$enable_openGL"
+
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS openGL"
+                else
+                  echo not building openGL-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS openGL"
+
+fi;
+
+
+
+
+
+echo "$as_me:$LINENO: checking for sin in -lm" >&5
+echo $ECHO_N "checking for sin in -lm... $ECHO_C" >&6
+if test "${ac_cv_lib_m_sin+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lm  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char sin ();
+int
+main ()
+{
+sin ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_m_sin=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_m_sin=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_m_sin" >&5
+echo "${ECHO_T}$ac_cv_lib_m_sin" >&6
+if test $ac_cv_lib_m_sin = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBM 1
+_ACEOF
+
+  LIBS="-lm $LIBS"
+
+fi
+
+
+echo "$as_me:$LINENO: checking for main in -lz" >&5
+echo $ECHO_N "checking for main in -lz... $ECHO_C" >&6
+if test "${ac_cv_lib_z_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lz  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_z_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_z_main=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_z_main" >&5
+echo "${ECHO_T}$ac_cv_lib_z_main" >&6
+if test $ac_cv_lib_z_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBZ 1
+_ACEOF
+
+  LIBS="-lz $LIBS"
+
+fi
+
+
+echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dlopen ();
+int
+main ()
+{
+dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_dl_dlopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_dl_dlopen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6
+if test $ac_cv_lib_dl_dlopen = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBDL 1
+_ACEOF
+
+  LIBS="-ldl $LIBS"
+
+fi
+
 
 # Checks for libraries.
+
+## on OSX X shouldn't be used by default as there are other ways
+## however, if people really want it ("--with-x") they should get it
+if test "x$KERN" = "xDarwin"; then
+ if test "x$with_x" = "x"; then
+   with_x="no"
+ fi
+fi
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4526,412 +4940,7 @@ fi
 
 LIBS="$LIBS $X_LIBS"
 
-
-# Check whether --enable-SIMD or --disable-SIMD was given.
-if test "${enable_SIMD+set}" = set; then
-  enableval="$enable_SIMD"
-
-else
-  enable_SIMD="yes"
-fi;
-
-# Check whether --enable-ARB or --disable-ARB was given.
-if test "${enable_ARB+set}" = set; then
-  enableval="$enable_ARB"
-
-else
-  enable_ARB="yes"
-fi;
-
-# Check whether --enable-registerstruct or --disable-registerstruct was given.
-if test "${enable_registerstruct+set}" = set; then
-  enableval="$enable_registerstruct"
-
-else
-  enable_registerstruct="yes"
-fi;
-
-# Check whether --enable-filmnew or --disable-filmnew was given.
-if test "${enable_filmnew+set}" = set; then
-  enableval="$enable_filmnew"
-
-else
-  enable_filmnew="yes"
-fi;
-
-
-
-# Check whether --with-pdversion or --without-pdversion was given.
-if test "${with_pdversion+set}" = set; then
-  withval="$with_pdversion"
-
-fi;
-
-# Check whether --with-extension or --without-extension was given.
-if test "${with_extension+set}" = set; then
-  withval="$with_extension"
-
-fi;
-
-
-# Check whether --with-pd or --without-pd was given.
-if test "${with_pd+set}" = set; then
-  withval="$with_pd"
-
-fi;
-if test "x$with_pd" != "x"; then
- PD_BINARY=$with_pd
-else
- if test "x$PD_BINARY" = "x"; then
-  PD_BINARY=$(which pd)
- fi
-fi
-
-GEM_TARGETS=Base
-# Check whether --enable-Controls or --disable-Controls was given.
-if test "${enable_Controls+set}" = set; then
-  enableval="$enable_Controls"
-
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS Controls"
-                else
-                  echo not building Controls-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS Controls"
-
-fi;
-
-# Check whether --enable-Geos or --disable-Geos was given.
-if test "${enable_Geos+set}" = set; then
-  enableval="$enable_Geos"
-
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS Geos"
-                else
-                  echo not building Geos-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS Geos"
-
-fi;
-
-# Check whether --enable-Manips or --disable-Manips was given.
-if test "${enable_Manips+set}" = set; then
-  enableval="$enable_Manips"
-
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS Manips"
-                else
-                  echo not building Manips-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS Manips"
-
-fi;
-
-# Check whether --enable-MarkEx or --disable-MarkEx was given.
-if test "${enable_MarkEx+set}" = set; then
-  enableval="$enable_MarkEx"
-
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS MarkEx"
-                else
-                  echo not building MarkEx-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS MarkEx"
-
-fi;
-
-# Check whether --enable-Nongeos or --disable-Nongeos was given.
-if test "${enable_Nongeos+set}" = set; then
-  enableval="$enable_Nongeos"
-
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS Nongeos"
-                else
-                  echo not building Nongeos-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS Nongeos"
-
-fi;
-
-# Check whether --enable-Particles or --disable-Particles was given.
-if test "${enable_Particles+set}" = set; then
-  enableval="$enable_Particles"
-
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS Particles"
-                else
-                  echo not building Particles-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS Particles"
-
-fi;
-
-# Check whether --enable-Pixes or --disable-Pixes was given.
-if test "${enable_Pixes+set}" = set; then
-  enableval="$enable_Pixes"
-
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS Pixes"
-                else
-                  echo not building Pixes-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS Pixes"
-
-fi;
-
-# Check whether --enable-openGL or --disable-openGL was given.
-if test "${enable_openGL+set}" = set; then
-  enableval="$enable_openGL"
-
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS openGL"
-                else
-                  echo not building openGL-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS openGL"
-
-fi;
-
-
-
-
-echo "$as_me:$LINENO: checking for sin in -lm" >&5
-echo $ECHO_N "checking for sin in -lm... $ECHO_C" >&6
-if test "${ac_cv_lib_m_sin+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lm  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char sin ();
-int
-main ()
-{
-sin ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_m_sin=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_m_sin=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_m_sin" >&5
-echo "${ECHO_T}$ac_cv_lib_m_sin" >&6
-if test $ac_cv_lib_m_sin = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBM 1
-_ACEOF
-
-  LIBS="-lm $LIBS"
-
-fi
-
-
-echo "$as_me:$LINENO: checking for main in -lz" >&5
-echo $ECHO_N "checking for main in -lz... $ECHO_C" >&6
-if test "${ac_cv_lib_z_main+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lz  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-main ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_z_main=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_z_main=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_z_main" >&5
-echo "${ECHO_T}$ac_cv_lib_z_main" >&6
-if test $ac_cv_lib_z_main = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBZ 1
-_ACEOF
-
-  LIBS="-lz $LIBS"
-
-fi
-
-
-echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
-echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6
-if test "${ac_cv_lib_dl_dlopen+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ldl  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char dlopen ();
-int
-main ()
-{
-dlopen ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_dl_dlopen=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_dl_dlopen=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
-echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6
-if test $ac_cv_lib_dl_dlopen = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDL 1
-_ACEOF
-
-  LIBS="-ldl $LIBS"
-
-fi
-
-
+if test "x$with_x" != "xno"; then
 
 echo "$as_me:$LINENO: checking for main in -lX11" >&5
 echo $ECHO_N "checking for main in -lX11... $ECHO_C" >&6
@@ -5207,6 +5216,7 @@ _ACEOF
 
 fi
 
+fi
 
 
 echo "$as_me:$LINENO: checking for glInitNames in -lGL" >&5
@@ -5614,6 +5624,10 @@ echo "${ECHO_T}no" >&6
   fi
 
 
+#fallback to imagemagick if people are too lazy to type ImageMagick
+if test "x$with_ImageMagick" = "x"; then
+ with_ImageMagick="$with_imagemagick"
+fi
 
 
 
@@ -5731,11 +5745,9 @@ if test "${with_ImageMagick+set}" = set; then
   withval="$with_ImageMagick"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_ImageMagick = "xno"; then
+  have_ImageMagick="no (forced)"
 else
-
 
 
 
@@ -6005,11 +6017,9 @@ if test "${with_tiff+set}" = set; then
   withval="$with_tiff"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_tiff = "xno"; then
+  have_tiff="no (forced)"
 else
-
 
 
 
@@ -6288,11 +6298,9 @@ if test "${with_jpeg+set}" = set; then
   withval="$with_jpeg"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_jpeg = "xno"; then
+  have_jpeg="no (forced)"
 else
-
 
 
 
@@ -6572,11 +6580,9 @@ if test "${with_quicktime+set}" = set; then
   withval="$with_quicktime"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_quicktime = "xno"; then
+  have_quicktime="no (forced)"
 else
-
 
 
 
@@ -6855,11 +6861,9 @@ if test "${with_mpeg3+set}" = set; then
   withval="$with_mpeg3"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_mpeg3 = "xno"; then
+  have_mpeg3="no (forced)"
 else
-
 
 
 
@@ -7138,11 +7142,9 @@ if test "${with_mpeg+set}" = set; then
   withval="$with_mpeg"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_mpeg = "xno"; then
+  have_mpeg="no (forced)"
 else
-
 
 
 
@@ -7421,11 +7423,9 @@ if test "${with_avifile+set}" = set; then
   withval="$with_avifile"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_avifile = "xno"; then
+  have_avifile="no (forced)"
 else
-
 
 
 
@@ -7704,11 +7704,9 @@ if test "${with_ffmpeg+set}" = set; then
   withval="$with_ffmpeg"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_ffmpeg = "xno"; then
+  have_ffmpeg="no (forced)"
 else
-
 
 
 
@@ -8399,11 +8397,9 @@ if test "${with_ieee1394+set}" = set; then
   withval="$with_ieee1394"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_ieee1394 = "xno"; then
+  have_ieee1394="no (forced)"
 else
-
 
 
 
@@ -8671,11 +8667,9 @@ if test "${with_ftgl+set}" = set; then
   withval="$with_ftgl"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_ftgl = "xno"; then
+  have_ftgl="no (forced)"
 else
-
 
 
 
@@ -8943,11 +8937,9 @@ if test "${with_gltt+set}" = set; then
   withval="$with_gltt"
 
 fi;
-
-if test x$withval = "xno"; then
-  :
+if test x$with_gltt = "xno"; then
+  have_gltt="no (forced)"
 else
-
 
 
 
