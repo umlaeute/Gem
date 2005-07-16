@@ -12059,7 +12059,7 @@ else
 fi
 
 # disabling ARB-extensions
-if test "x$enable_ARB" = "x"; then
+if test "x$enable_ARB" != "xno"; then
  echo "$as_me:$LINENO: checking for glBindProgramARB in -lGL" >&5
 echo $ECHO_N "checking for glBindProgramARB in -lGL... $ECHO_C" >&6
 if test "${ac_cv_lib_GL_glBindProgramARB+set}" = set; then

@@ -220,7 +220,7 @@ else
 fi
 
 # disabling ARB-extensions
-if test "x$enable_ARB" = "x"; then
+if test "x$enable_ARB" != "xno"; then
  AC_CHECK_LIB(GL,glBindProgramARB,
         enable_ARB="yes",enable_ARB="no")
 fi
