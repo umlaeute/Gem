@@ -11,7 +11,7 @@
 #ifndef INCLUDE_pix_record_H_
 #define INCLUDE_pix_record_H_
 
-
+#ifdef __APPLE__
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include "Base/GemPixImageSave.h"
@@ -188,5 +188,5 @@ class GEM_EXTERN pix_record : public GemBase
     	static void 	posMessCallback(void *data, t_floatarg x, t_floatarg y);
 		static void 	recordMessCallback(void *data, t_floatarg on);
 };
-
+#endif //for __APPLE__
 #endif	// for header file

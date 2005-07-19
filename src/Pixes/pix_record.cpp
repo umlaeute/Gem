@@ -11,6 +11,7 @@
 #include "Base/GemMan.h"
 #include "Base/GemCache.h"
 
+#ifdef __APPLE__
 #include <Quicktime/Quicktime.h>
 #include <Carbon/Carbon.h>
 
@@ -577,3 +578,5 @@ void pix_record :: recordMessCallback(void *data, t_floatarg on)
 		GetMyClass(data)->m_recordStop=1;
 		}
 }
+
+#endif // __APPLE__
