@@ -27,7 +27,7 @@ $(GEM_TARGETS):
 clean:
 	@for d in ${GEM_TARGETS}; do \
 	    echo "----------$$d----------"; \
-	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir -C $$d clean; \
+	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir clean; \
 	done
 	-rm Gem.$(EXT) *~
 
