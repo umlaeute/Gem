@@ -54,10 +54,6 @@ class GEM_EXTERN pix_record : public GemBase
     	//////////
     	// Destructor
     	virtual ~pix_record();
-
-    	//////////
-    	// Write to the current filename
-    	virtual void	doWrite();
 		
 		virtual void	setupQT();
 		
@@ -86,14 +82,22 @@ class GEM_EXTERN pix_record : public GemBase
     	//////////
     	// When a position message is received
     	virtual void	posMess(int x, int y);
+		
+		/////////
+		// call up compression dialog
+		virtual void	dialogMess();
+		
+		virtual void	getCodecList();
+		
+		virtual void	codecMess(int argc, t_atom *argv);
     	
     	//////////
     	// Clean up the image
-    	void	    	cleanImage();
+   // 	void	    	cleanImage();
     	
     	//////////
     	// The original pix_record
-    	imageStruct 	*m_originalImage;
+    //	imageStruct 	*m_originalImage;
 
 
 	//////////
@@ -119,6 +123,8 @@ class GEM_EXTERN pix_record : public GemBase
 	//////
 	// is recording setup and ready to go?
 	bool			m_recordSetup;
+	
+	bool			m_dialog;
     	
     	//////////
 	// path to write to
@@ -174,8 +180,38 @@ class GEM_EXTERN pix_record : public GemBase
 		long					dataSize;
     	ImageDescriptionHandle	hImageDesc;
 		
+		//these are for the programmatic setting of the compressor
+		CodecType				m_codecType;
+		CodecComponent			m_codec;
+		short					m_depth;
+		CodecQ					m_spatialQuality;
+		//set these to reflect if the codec settings are good or not
+		bool				m_codecSet;
+		bool				m_codecQualitySet;
+
+		
 		short		nFileRefNum;
 		short		nResID;
+		
+		//this will hold the ctype value of the codecs listed by getCodecList()
+		typedef struct codecListStorage{
+			int		position;
+			int		ctype;
+			int		codec;
+		};
+
+		codecListStorage	codecContainer[64];//anyone with more than 64 codecs can change this
+		
+		
+				
+		int					m_fps;
+		
+		//duration of frames in ms
+		int					m_frameDuration;
+		
+		//number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
+		int					m_ticks;
+
 		
     private:
     	
@@ -187,6 +223,9 @@ class GEM_EXTERN pix_record : public GemBase
     	static void 	sizeMessCallback(void *data, t_floatarg width, t_floatarg height );
     	static void 	posMessCallback(void *data, t_floatarg x, t_floatarg y);
 		static void 	recordMessCallback(void *data, t_floatarg on);
+		static void 	dialogMessCallback(void *data);
+		static void 	codeclistMessCallback(void *data);
+		static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
 };
 #endif //for __APPLE__
 #endif	// for header file

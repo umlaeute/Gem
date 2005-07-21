@@ -31,7 +31,6 @@ CPPEXTERN_NEW_WITH_GIMME(pix_record)
 //
 /////////////////////////////////////////////////////////
 pix_record :: pix_record(int argc, t_atom *argv)
-  : m_originalImage(NULL)
 {
  //cna ditch the offsets
   m_xoff = m_yoff = 0;
@@ -63,12 +62,23 @@ pix_record :: pix_record(int argc, t_atom *argv)
     
   m_banged = false;
   
+  
+  /* */
   //get list of codecs installed  -- useful later
-  CodecNameSpecListPtr codecList;
-  CodecNameSpec	codecName;
-  GetCodecNameList(&codecList,1);
-  post("pix_record : %i codecs installed",codecList->count);
-  codecName = codecList->list[1];
+	CodecNameSpecListPtr codecList;
+	CodecNameSpec	codecName;
+	int	i;
+	int count;
+	
+	GetCodecNameList(&codecList,1);
+	post("pix_record : %i codecs installed",codecList->count);
+	if (codecList->count < 64) count = codecList->count; else count = 64;
+	for (i = 0; i < count; i++){
+		codecName = codecList->list[i];
+	//	post("pix_record : codec %i %s %i ctype",i,codecName.typeName, codecName.cType);
+		codecContainer[i].position = i;
+		codecContainer[i].ctype = codecName.cType;
+		}
   
   //initialize member variables
   stdComponent = NULL;
@@ -78,6 +88,14 @@ pix_record :: pix_record(int argc, t_atom *argv)
   m_recordStart = 0;
   m_recordStop = 0;
   m_recordSetup = 0;
+  m_codecType = kJPEGCodecType;
+  m_codec = (CodecComponent)65708; //this is pjpeg????
+  m_codecSet = true;
+  m_spatialQuality = codecHighQuality;
+  m_codecQualitySet = true;
+  m_dialog = 0;
+  
+  post("pix_record : anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
      
 }
 
@@ -87,7 +105,6 @@ pix_record :: pix_record(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 pix_record :: ~pix_record()
 {
-  cleanImage();
 }
 
 /////////////////////////////////////////////////////////
@@ -105,7 +122,6 @@ void pix_record :: setupQT()
 	
 	
 	//this mess should create and open a file for QT to use
-	//sprintf(m_filename,"/Users/lincoln/Movies/test/test");
 	post("filename %s",m_filename);
 	if (!m_filename[0]) {
         post("pix_filmDarwin:  no filename passed");
@@ -191,18 +207,74 @@ void pix_record :: setupQT()
 	stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
 	if (stdComponent == NULL){
-		post("pix_record failed to open default component");
+		post("pix_record failed to open compressor component");
 		return;
 	}
 	
-	compErr = SCRequestSequenceSettings(stdComponent);
+	//if the settings aren't already set then go ahead and do them
+	if (!m_spatialQuality || !m_codecType || m_dialog ){
+		post("pix_record : opening settings Dialog");
+		compErr = SCRequestSequenceSettings(stdComponent);
 	
-	if (compErr != noErr) post("pix_record : SCRequestSequenceSettings failed with error %d",compErr);
+		if (compErr != noErr) post("pix_record : SCRequestSequenceSettings failed with error %d",compErr);
 	
-	compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
-	compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
+		compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
+		compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 	
-	if (compErr != noErr) post("pix_record : SCGetInfo failed with error %d",compErr);
+		if (compErr != noErr) post("pix_record : SCGetInfo failed with error %d",compErr);
+		
+		m_codecType = SpatialSettings.codecType;
+		m_depth = SpatialSettings.depth;
+		m_spatialQuality = SpatialSettings.spatialQuality;
+		m_codec = SpatialSettings.codec;
+		
+		post("pix_record : Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+		post("pix_record : Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
+		post("pix_record : Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
+		post("pix_record : Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
+		post("pix_record : Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
+		post("pix_record : Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
+		post("pix_record : Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+		
+	}else{
+	
+	/*
+		compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
+		compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
+		compErr = SCGetInfo(stdComponent, scDataRateSettingsType, &datarate);
+	
+		if (compErr != noErr) post("pix_record : SCGetInfo failed with error %d",compErr);
+	*/	
+		post("pix_record : manually filling in codec info");
+		//fill in manually
+		SpatialSettings.codecType = m_codecType;
+		SpatialSettings.codec = m_codec;
+		SpatialSettings.depth = 0; //should choose best depth
+		SpatialSettings.spatialQuality = m_spatialQuality;
+		
+		TemporalSettings.temporalQuality = m_spatialQuality;
+		TemporalSettings.frameRate = 0;
+		TemporalSettings.keyFrameRate = 0;
+		
+		post("pix_record : manual returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+		post("pix_record : manual returned SpatialSettings.codec %d",SpatialSettings.codec);
+		post("pix_record : manual returned SpatialSettings.depth %d",SpatialSettings.depth);
+		post("pix_record : manual returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
+		post("pix_record : manual returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
+		post("pix_record : manual returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
+		post("pix_record : manual returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+		
+		
+	}
+	
+	if (m_codecType == kJPEGCodecType)
+	post("pix_record : SCSpatialSettings CodecType %d is p-jpeg",m_codecType);
+	//m_codec = SpatialSettings.codec;
+	//post("pix_record : SCSpatialSettings Codec %s",m_codec);
+	
+	post("pix_record : SCSpatialSettings depth %d",m_depth);
+	
+	if (m_spatialQuality == codecHighQuality) post("pix_record : SCSpatialSettings SpatialQuality codecHighQuality");
 	
 	datarate.frameDuration = 33;
 	
@@ -214,7 +286,10 @@ void pix_record :: setupQT()
 	
 	compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),&m_srcRect,&hImageDesc);
 	
-	if (compErr != noErr) post("pix_record : SCCompressSequenceBegin failed with error %d",compErr);
+	if (compErr != noErr) {
+		post("pix_record : SCCompressSequenceBegin failed with error %d",compErr);
+		return;
+		}
 	
 	err = BeginMediaEdits(media);
 	if (err != noErr) post("pix_record : BeginMediaEdits failed with error %d",err);
@@ -267,6 +342,8 @@ void pix_record :: stopRecording()
 	m_recordStop = 0;
 	m_recordSetup = 0;
 	m_recordStart = 0; //just to be sure
+	
+	post("pix_record : movie written to %s",m_filename);
 
 }
 
@@ -307,83 +384,7 @@ void pix_record :: compressFrame()
 	
 }
 
-/////////////////////////////////////////////////////////
-// writeMess
-//
-/////////////////////////////////////////////////////////
-void pix_record :: doWrite()
-{
-  if ( !GemMan::windowExists() )
-    return;
-  
-  int width  = (m_width > 0)?m_width :GemMan::m_width;
-  int height = (m_height> 0)?m_height:GemMan::m_height;
 
-  // do we need to remake the data?
-  int makeNew = 0;
-  
-  // release previous data
-  if (m_originalImage)
-    {
-      if (m_originalImage->xsize != width ||
-	  m_originalImage->ysize != height)
-	{
-	  delete m_originalImage;
-	  m_originalImage = NULL;
-	  makeNew = 1;
-	}
-    }
-  else
-    makeNew = 1;
-  
-  if (makeNew)
-    {
-      m_originalImage = new imageStruct;
-      m_originalImage->xsize = width;
-      m_originalImage->ysize = height;
-      #ifndef __APPLE__
-      m_originalImage->type  = GL_UNSIGNED_BYTE;
-
-      m_originalImage->csize = 3;
-      m_originalImage->format = GL_RGB;
-      #else
-      m_originalImage->type  = GL_UNSIGNED_INT_8_8_8_8_REV;
-
-      m_originalImage->csize = 4;
-      m_originalImage->format = GL_BGRA; //or BGRA_EXT?
-      #endif
-
-      m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
-    }
-
-#ifdef __APPLE__
-
-  unsigned char *dummy;
-  int imageSize, rowBytes;
-  long i, j;
-
-  imageSize = m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize;
-  rowBytes = m_originalImage->xsize * m_originalImage->csize;
-  
-  dummy = new unsigned char[imageSize];
-
-  glReadPixels(m_xoff, m_yoff, width, height,
-               m_originalImage->format, m_originalImage->type, dummy);
-
-  //flips the image for QT
-  for (i = 0, j = imageSize - rowBytes; i < imageSize; i += rowBytes, j -= rowBytes) {
-      memcpy( &m_originalImage->data[j], &dummy[i], (size_t) rowBytes );
-  }
-  
-  delete dummy;
-
-#else
-
-  glReadPixels(m_xoff, m_yoff, width, height,
-	       m_originalImage->format, m_originalImage->type, m_originalImage->data);
-#endif
-  mem2image(m_originalImage, m_filename, m_filetype);
-}
 
 /////////////////////////////////////////////////////////
 // render
@@ -398,15 +399,6 @@ void pix_record :: render(GemState *state)
 		m_height = m_pixBlock->image.ysize;
 		m_width = m_pixBlock->image.xsize;
 			
-//	post("pix_record : Grabbed one frame");
-//	if (m_pixBlock->image.type == GL_UNSIGNED_SHORT_8_8_REV_APPLE)
-	//	post("pix_record : GL type GL_UNSIGNED_SHORT_8_8_REV_APPLE");
-		
-//	if (m_pixBlock->image.format == GL_YCBCR_422_GEM)
-//		post("pix_record : pixel format GL_YCBCR_422_GEM");
-//	post("pix_record : width %d",m_width);
-//	post("pix_record : height %d",m_height);
-//	post("pix_record : bytes per pixel %d",m_pixBlock->image.csize);
 
   if (m_automatic || m_banged) {
   /*
@@ -441,7 +433,7 @@ void pix_record :: render(GemState *state)
 			//go ahead and grab a frame if everything is ready to go
 			if (m_recordSetup) 
 				compressFrame();
-				post("grabbing frame");
+			//	post("grabbing frame");
 			}else{
 				post("pix_record: movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
 				m_recordStop = 1;
@@ -455,11 +447,7 @@ void pix_record :: render(GemState *state)
 		stopRecording();
 	}
 	
-//	m_originalImage = m_pixBlock->image;
-	
-	//mem2image(&m_pixBlock->image, m_filename, m_filetype);	
-	
-  //  doWrite();
+
   }
   }
 }
@@ -485,6 +473,83 @@ void pix_record :: posMess(int x, int y)
   m_yoff = y;
 }
 
+/////////////////////////////////////////////////////////
+// dialogMess
+//
+/////////////////////////////////////////////////////////
+void pix_record :: dialogMess()
+{
+	//if recording is going do not open the dialog
+  if (!m_recordStart) {
+		post("pix_record : opening compression dialog");
+		m_dialog = true;
+		setupQT();
+  }else{
+		post("pix_record : cannot open compression dialog while recording");
+  }
+}
+
+/////////////////////////////////////////////////////////
+// spits out a list of installed codecs and stores them
+//
+/////////////////////////////////////////////////////////
+void pix_record :: getCodecList()
+{
+	  //get list of codecs installed  -- useful later
+	CodecNameSpecListPtr codecList;
+	CodecNameSpec	codecName;
+	int	i;
+	int count;
+	
+	GetCodecNameList(&codecList,1);
+	post("pix_record : %i codecs installed",codecList->count);
+	if (codecList->count < 64) count = codecList->count; else count = 64;
+	for (i = 0; i < count; i++){
+		codecName = codecList->list[i];
+		post("pix_record : codec %i %s %i ctype %d",i,codecName.typeName, codecName.cType,codecName.codec);
+		codecContainer[i].position = i;
+		codecContainer[i].ctype = codecName.cType;
+		
+		}
+}
+
+
+/////////////////////////////////////////////////////////
+// deals with the name of a codec
+//
+/////////////////////////////////////////////////////////
+void pix_record :: codecMess(int argc, t_atom *argv)
+{
+
+	char codecName[80];
+
+	//might be nice to allow both a symbol corresponding to the codecType and a number from the list
+	if (argc) {
+		if (argv->a_type == A_SYMBOL) {
+			atom_string(argv++, codecName, 80);
+			argc--;
+		}
+     }
+	
+	if (!strncmp(codecName,"jpeg",4)) {
+		//have to put the right things in here
+		m_codecType = kJPEGCodecType;
+		m_codec = (CodecComponent)65708; //this is pjpeg?!? 
+		post("pix_record : kJPEGCodecType");
+	}
+	//do the same for these
+	if (!strcmp(codecName,"animation")) post("pix_record : kAnimationCodecType");
+	if (!strncmp(codecName,"yuv2",4)) post("pix_record : kComponentVideoCodecType");
+	if (!strncmp(codecName,"yuvu",4)) post("pix_record : kComponentVideoSigned");
+	if (!strncmp(codecName,"raw",3)) post("pix_record : kRawCodecType");
+	if (!strncmp(codecName,"dvc",3)) post("pix_record : kDVCNTSCCodecType");
+	if (!strncmp(codecName,"dvcp",4)) post("pix_record : kDVCPALCodecType");
+	if (!strncmp(codecName,"y420",4)) post("pix_record : kYUV420CodecType");
+	post("pix_record : codecName %s",codecName);
+
+}
+
+
 void pix_record :: fileMess(int argc, t_atom *argv)
 {
 
@@ -502,18 +567,14 @@ void pix_record :: fileMess(int argc, t_atom *argv)
   m_autocount = 0;
 
 post("pix_record : filename %s",m_filename);
-  /*
-  setupQT();
-  compressFrame();
-  stopRecording();
-*/
-  //  GetMyClass(data)->doWrite();
+
 }
 
 /////////////////////////////////////////////////////////
 // cleanImage
 //
 /////////////////////////////////////////////////////////
+/*
 void pix_record :: cleanImage()
 {
   // release previous data
@@ -523,6 +584,7 @@ void pix_record :: cleanImage()
       m_originalImage = NULL;
     }
 }
+*/
 
 /////////////////////////////////////////////////////////
 // static member functions
@@ -542,8 +604,12 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
 		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_record::recordMessCallback,
 		  gensym("record"), A_FLOAT, A_NULL);
-		  
-	
+  class_addmethod(classPtr, (t_method)&pix_record::dialogMessCallback,
+		  gensym("dialog"),  A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_record::codeclistMessCallback,
+		  gensym("codeclist"),  A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_record::codecMessCallback,
+		  gensym("codec"), A_GIMME, A_NULL);
 }
 
 void pix_record :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
@@ -577,6 +643,22 @@ void pix_record :: recordMessCallback(void *data, t_floatarg on)
 		GetMyClass(data)->m_recordStart=0;
 		GetMyClass(data)->m_recordStop=1;
 		}
+}
+
+void pix_record :: dialogMessCallback(void *data)
+{
+	GetMyClass(data)->dialogMess();
+}
+
+void pix_record :: codeclistMessCallback(void *data)
+{
+	GetMyClass(data)->getCodecList();
+}
+
+void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+{
+  GetMyClass(data)->codecMess(argc, argv);
+ // if (s->s_name == kJPEGCodecType) post("pix_record : photo-jpeg codec"); else post("pix_record : not photo-jpeg");
 }
 
 #endif // __APPLE__
