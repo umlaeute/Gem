@@ -46,6 +46,9 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h )
   m_pixBlock.image.data = new unsigned char[dataSize];
   m_quality = 0; //normal quality gives non-interlaced images from DV cams
   m_colorspace = GL_YCBCR_422_GEM; //default to YUV
+  
+  //set to the first input device
+  m_inputDevice = 0;
   InitSeqGrabber();
   
 }
@@ -197,6 +200,15 @@ void pix_videoDarwin :: InitSeqGrabber()
 {
     OSErr anErr;
     Rect m_srcRect = {0,0, m_vidYSize, m_vidXSize};
+	
+	SGDeviceList	devices;
+	short			deviceIndex,inputIndex;
+	short			deviceCount = 0;
+	SGDeviceInputList theSGInputList = NULL;
+	bool showInputsAsDevices;
+	
+	
+	
     int num_components = 0;
     Component c = 0;
      ComponentDescription cd;
@@ -217,19 +229,67 @@ void pix_videoDarwin :: InitSeqGrabber()
     }    
 	anErr = SGInitialize(m_sg);
     if(anErr!=noErr){
-        post("pix_videoDarwin: could not initialize SG");
+        post("pix_videoDarwin: could not initialize SG error %d",anErr);
+		return;
     }
     
     anErr = SGSetDataRef(m_sg, 0, 0, seqGrabDontMakeMovie);
         if (anErr != noErr){
-            post("dataref failed\n");
+            post("dataref failed with error %d",anErr);
         }
         
     anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);		
     if(anErr!=noErr){
-        post("pix_videoDarwin: could not make new SG channnel");
+        post("pix_videoDarwin: could not make new SG channnel error %d",anErr);
+		return;
     }
-    
+	
+	 anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);		
+    if(anErr!=noErr){
+        post("pix_videoDarwin: could not get SG channnel Device List");
+    }else{
+		deviceCount = (*devices)->count;
+		deviceIndex = (*devices)->selectedIndex;
+		post("pix_videoDarwin: SG channnel Device List count %d index %d",deviceCount,deviceIndex);
+		int i;
+		for (i = 0; i < deviceCount; i++){
+			//post("pix_videoDarwin: SG channnel Device List  %s",(*devices)->entry[i].name);
+			}
+		SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
+		
+		showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) & sgDeviceNameFlagShowInputsAsDevices;
+		
+		theSGInputList = ((SGDeviceName *)(&((*devices)->entry[deviceIndex])))->inputs; //fugly
+		
+		//we should have device names in big ass undocumented structs
+		
+		//walk through the list
+		for (i = 0; i < deviceCount; i++){			 
+			post("pix_videoDarwin: SG channnel Input Device List %d %s",i,(*theSGInputList)->entry[i].name);
+		}
+		
+		
+	}
+	
+	//this call sets the input device
+	if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
+	anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice); 
+	if(anErr!=noErr){
+        post("pix_videoDarwin: SGSetChannelDeviceInputNames returned error %d",anErr);
+    }
+	
+	//grab the VDIG info from the SGChannel
+	m_vdig = SGGetVideoDigitizerComponent(m_vc);
+	vdigErr = VDGetDigitizerInfo(m_vdig,&m_vdigInfo); //not sure if this is useful
+	
+	Str255	vdigName;
+	vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
+	post("pix_record : vdigName is %s",vdigName);
+	
+	unsigned short brightness;
+	vdigErr = VDGetBrightness(m_vdig,&brightness);
+	post("pix_record : brightness is %d",brightness);
+	
     anErr = SGSetChannelBounds(m_vc, &m_srcRect);
     if(anErr!=noErr){
         post("pix_videoDarwin: could not set SG ChannelBounds ");
@@ -434,13 +494,13 @@ pix_video::real_obj_setupCallback(classPtr);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
 		  gensym("reset"), A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
-		  gensym("dialog"), A_NULL);
-//    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogMess,
+		  gensym("open_dialog"), A_NULL);
+//    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogMessCallback,
 //                    gensym("dialog"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::colorspaceCallback,
 		  gensym("colorspace"), A_SYMBOL, A_NULL);
-//    class_addmethod(classPtr, (t_method)&pix_videoDarwin::csMessCallback,
- //                   		  gensym("colorspace"), A_SYMBOL, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_videoDarwin::deviceCallback,
+                    		  gensym("device"), A_DEFFLOAT, A_NULL);
 }
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
@@ -458,7 +518,7 @@ GetMyClass(data)->resetSeqGrabber();
 void pix_videoDarwin ::dialogCallback(void *data)
 {
     
-//GetMyClass(data)->DoVideoSettings();
+GetMyClass(data)->DoVideoSettings();
   
 }
  
@@ -509,4 +569,9 @@ void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
   }
 }
 
+void pix_videoDarwin :: deviceCallback(void *data, t_floatarg X)
+{
+  GetMyClass(data)->m_inputDevice=((int)X);
+  
+} 
 #endif // __APPLE__
