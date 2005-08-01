@@ -163,6 +163,12 @@ class GEM_EXTERN pix_record : public GemBase
 		
 		imageStruct	m_compressImage;
 		
+		//////////
+		// a outlet for information like #frames
+		t_outlet     *m_outNumFrames;
+		
+		int				m_currentFrame; //keep track of the number of frames
+		
 		///////////
 		/// QT stuff
 		

@@ -53,6 +53,8 @@ pix_record :: pix_record(int argc, t_atom *argv)
 
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("size"));
+  
+  m_outNumFrames = outlet_new(this->x_obj, 0);
 
   m_automatic = false;
   m_autocount = 0;
@@ -94,6 +96,7 @@ pix_record :: pix_record(int argc, t_atom *argv)
   m_spatialQuality = codecHighQuality;
   m_codecQualitySet = true;
   m_dialog = 0;
+  m_currentFrame = 0;
   
   post("pix_record : anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
      
@@ -119,7 +122,7 @@ void pix_record :: setupQT()
 	
 	ComponentResult			compErr = noErr;
 
-	
+	m_recordSetup = 0; //if it fails then there is no setup
 	
 	//this mess should create and open a file for QT to use
 	post("filename %s",m_filename);
@@ -132,8 +135,10 @@ void pix_record :: setupQT()
 				// if the file does not yet exist, then let's create the file
 				int fd;
                 fd = open(m_filename, O_CREAT | O_RDWR, 0600);
-                if (fd < 0)
-                    return ;
+                if (fd < 0){
+                    post("pix_record : problem with fd");
+					return ;
+					}
                         write(fd, " ", 1);
                         close(fd);
 						err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
@@ -212,7 +217,8 @@ void pix_record :: setupQT()
 	}
 	
 	//if the settings aren't already set then go ahead and do them
-	if (!m_spatialQuality || !m_codecType || m_dialog ){
+	//if (!m_spatialQuality || !m_codecType || m_dialog ){
+	if (m_dialog ){
 		post("pix_record : opening settings Dialog");
 		compErr = SCRequestSequenceSettings(stdComponent);
 	
@@ -235,6 +241,8 @@ void pix_record :: setupQT()
 		post("pix_record : Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
 		post("pix_record : Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
 		post("pix_record : Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+		
+		m_dialog = false; //don't keep doing it again
 		
 	}else{
 	
@@ -302,7 +310,8 @@ void pix_record :: setupQT()
 	m_prevWidth = m_width;
 	m_prevHeight = m_height;
 	
-	
+	//reset frame counter for new movie file
+	m_currentFrame = 0;
 
 }
 
@@ -343,6 +352,10 @@ void pix_record :: stopRecording()
 	m_recordSetup = 0;
 	m_recordStart = 0; //just to be sure
 	
+	m_currentFrame = 0; //reset the frame counter?
+	
+	outlet_float(m_outNumFrames,m_currentFrame);
+	
 	post("pix_record : movie written to %s",m_filename);
 
 }
@@ -380,7 +393,9 @@ void pix_record :: compressFrame()
 							
 	if (err != noErr) post("pix_record : AddMediaSample failed with error %d",err);
 							
-
+	m_currentFrame++;
+	
+	outlet_float(m_outNumFrames,m_currentFrame);
 	
 }
 
@@ -437,6 +452,8 @@ void pix_record :: render(GemState *state)
 			}else{
 				post("pix_record: movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
 				m_recordStop = 1;
+				m_prevWidth = m_width;
+				m_prevHeight = m_height; //go ahead and change dimensions
 			}
 	}
 	
