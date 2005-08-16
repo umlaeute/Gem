@@ -57,6 +57,7 @@ char* GemMan::m_title = "GEM";
 int GemMan::m_xoffset = 0;
 int GemMan::m_yoffset = 0;
 int GemMan::m_fullscreen = 0;
+int GemMan::m_menuBar = 1;
 int GemMan::m_secondscreen = 0;
 int GemMan::m_height = 500;
 int GemMan::m_width = 500;

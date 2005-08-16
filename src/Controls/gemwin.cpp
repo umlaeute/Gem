@@ -183,6 +183,27 @@ void gemwin :: fullscreenMess(int on)
 }
 
 /////////////////////////////////////////////////////////
+// menuBarMess		1 = show	-1 = hide, but autoshow
+//					0 = hide, but neverShow
+/////////////////////////////////////////////////////////
+void gemwin :: menuBarMess(int on)
+{
+  GemMan::m_menuBar = on;
+#ifdef __APPLE__
+  if (on == 0) {
+    SetSystemUIMode( kUIModeAllHidden, kUIOptionDisableAppleMenu |
+									   kUIOptionDisableProcessSwitch |
+									   kUIOptionDisableSessionTerminate |
+									   kUIOptionDisableForceQuit );
+  }else if (on > 0) {
+    SetSystemUIMode( kUIModeNormal, NULL);
+  }else if (on < 0) {
+    SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar );
+  }
+#endif
+}
+
+/////////////////////////////////////////////////////////
 // secondScreen
 //
 /////////////////////////////////////////////////////////
@@ -428,6 +449,8 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("buffer"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::fullscreenMessCallback,
 		  gensym("fullscreen"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemwin::menuBarMessCallback,
+		  gensym("menubar"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::secondscreenMessCallback,
 		  gensym("secondscreen"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemwin::dimensionsMessCallback,
@@ -690,6 +713,10 @@ void gemwin :: bufferMessCallback(void *data, t_floatarg buf)
 void gemwin :: fullscreenMessCallback(void *data, t_floatarg on)
 {
   GetMyClass(data)->fullscreenMess((int)on);
+}
+void gemwin :: menuBarMessCallback(void *data, t_floatarg on)
+{
+  GetMyClass(data)->menuBarMess((int)on);
 }
 void gemwin :: secondscreenMessCallback(void *data, t_floatarg on)
 {

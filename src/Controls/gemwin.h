@@ -90,13 +90,14 @@ class GEM_EXTERN gemwin : public CPPExtern
 
   void 	    	bangMess();
   void 	    	intMess(int state);
-  void		renderMess();
+  void			renderMess();
   void 	    	titleMess(t_symbol* s);
   void 	    	createMess(t_symbol* s);
   void 	    	stereoMess(int mode);
   void 	    	bufferMess(int buf);
   void 	    	dimensionsMess(int width, int height);
   void 	    	fullscreenMess(int on);
+  void			menuBarMess(int on);
   void 	    	secondscreenMess(int on);
   void 	    	offsetMess(int x, int y);
   void 	    	colorMess(float red, float green, float blue, float alpha);
@@ -131,6 +132,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   static void 	dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
   static void 	offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
   static void 	fullscreenMessCallback(void *data, t_floatarg on);
+  static void 	menuBarMessCallback(void *data, t_floatarg on);
   static void 	secondscreenMessCallback(void *data, t_floatarg on);
   static void 	colorMessCallback(void *data, t_symbol*,int,t_atom*);
   static void 	clearmaskMessCallback(void *data, t_floatarg bitmask);
