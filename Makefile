@@ -1,9 +1,9 @@
 
 
 all:
-	cd src/Gnu; make
+	make -C src all
 
 install:
-	cd src/Gnu; make
+	make -C src install
 
 
