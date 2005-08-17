@@ -91,15 +91,22 @@ pix_record :: pix_record(int argc, t_atom *argv)
   m_recordStop = 0;
   m_recordSetup = 0;
   m_codecType = kJPEGCodecType;
-  m_codec = (CodecComponent)65708; //this is pjpeg????
+  m_codec = (CodecComponent)65719;//65708; //this is pjpeg????
   m_codecSet = true;
-  m_spatialQuality = codecHighQuality;
+  m_spatialQuality = codecNormalQuality; //codecHighQuality;
   m_codecQualitySet = true;
   m_dialog = 0;
   m_currentFrame = 0;
   
-  post("pix_record : anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
-     
+  
+ // post("pix_record : anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
+   stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
+	
+	if (stdComponent == NULL){
+		post("pix_record failed to open compressor component");
+		return;
+	}
+	   
 }
 
 /////////////////////////////////////////////////////////
@@ -108,13 +115,18 @@ pix_record :: pix_record(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 pix_record :: ~pix_record()
 {
+	ComponentResult			compErr = noErr;
+
+	compErr = CloseComponent(stdComponent);
+	
+	if (compErr != noErr) post("pix_record : CloseComponent failed with error %d",compErr);
 }
 
 /////////////////////////////////////////////////////////
 // Prepares QT for recording
 //
 /////////////////////////////////////////////////////////
-void pix_record :: setupQT()
+void pix_record :: setupQT() //this only needs to be done when codec info changes
 {
 	FSSpec		theFSSpec;
     OSErr		err = noErr;
@@ -125,9 +137,10 @@ void pix_record :: setupQT()
 	m_recordSetup = 0; //if it fails then there is no setup
 	
 	//this mess should create and open a file for QT to use
+	//probably should be a separate function
 	post("filename %s",m_filename);
 	if (!m_filename[0]) {
-        post("pix_filmDarwin:  no filename passed");
+        post("pix_record:  no filename passed");
 		return;
 		} else {            
 			err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
@@ -209,16 +222,32 @@ void pix_record :: setupQT()
 	
 	media = NewTrackMedia(track,VideoMediaType,600,NULL,0);
 	
+	//moved to constructor
+	/*
 	stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
 	if (stdComponent == NULL){
 		post("pix_record failed to open compressor component");
 		return;
-	}
+	}*/
 	
 	//if the settings aren't already set then go ahead and do them
 	//if (!m_spatialQuality || !m_codecType || m_dialog ){
 	if (m_dialog ){
+	
+		//close the component if already open
+		if (stdComponent) compErr = CloseComponent(stdComponent);
+	
+		if (compErr != noErr) post("pix_record : CloseComponent failed with error %d",compErr);
+		
+		//open a new component from scratch
+		stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
+	
+		if (stdComponent == NULL){
+			post("pix_record failed to open compressor component");
+			return;
+		}
+		
 		post("pix_record : opening settings Dialog");
 		compErr = SCRequestSequenceSettings(stdComponent);
 	
@@ -264,6 +293,7 @@ void pix_record :: setupQT()
 		TemporalSettings.frameRate = 0;
 		TemporalSettings.keyFrameRate = 0;
 		
+		/*
 		post("pix_record : manual returned SpatialSettings.codecType %d",SpatialSettings.codecType);
 		post("pix_record : manual returned SpatialSettings.codec %d",SpatialSettings.codec);
 		post("pix_record : manual returned SpatialSettings.depth %d",SpatialSettings.depth);
@@ -271,7 +301,7 @@ void pix_record :: setupQT()
 		post("pix_record : manual returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
 		post("pix_record : manual returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
 		post("pix_record : manual returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
-		
+		*/
 		
 	}
 	
@@ -280,9 +310,9 @@ void pix_record :: setupQT()
 	//m_codec = SpatialSettings.codec;
 	//post("pix_record : SCSpatialSettings Codec %s",m_codec);
 	
-	post("pix_record : SCSpatialSettings depth %d",m_depth);
+	//post("pix_record : SCSpatialSettings depth %d",m_depth);
 	
-	if (m_spatialQuality == codecHighQuality) post("pix_record : SCSpatialSettings SpatialQuality codecHighQuality");
+	//if (m_spatialQuality == codecHighQuality) post("pix_record : SCSpatialSettings SpatialQuality codecHighQuality");
 	
 	datarate.frameDuration = 33;
 	
@@ -344,10 +374,12 @@ void pix_record :: stopRecording()
 	
 	if (compErr != noErr) post("pix_record : SCCompressSequenceEnd failed with error %d",compErr);
 	
+	/*moved to destructor
 	compErr = CloseComponent(stdComponent);
 	
 	if (compErr != noErr) post("pix_record : CloseComponent failed with error %d",compErr);
 	
+	*/
 	m_recordStop = 0;
 	m_recordSetup = 0;
 	m_recordStart = 0; //just to be sure
@@ -416,23 +448,7 @@ void pix_record :: render(GemState *state)
 			
 
   if (m_automatic || m_banged) {
-  /*
-    char *extension;
-    if (m_filetype<0)m_filetype=0;
-    if (m_filetype==0) extension="tif";
-    else {
-#if 0
-      post("pix_record: you can only write TIFF-files ! (forcing to TIFF)");
-      m_filetype=0;
-      extension="tif";
-#else
-      extension="jpg";
-#endif
-    }
-    
-    sprintf(m_filename, "%s%d.%s", m_pathname, m_autocount+10000, extension);
-    m_filename[strlen(m_pathname)]-=1;
-    */
+ 
     m_autocount++;
     m_banged = false;
 	
@@ -551,7 +567,7 @@ void pix_record :: codecMess(int argc, t_atom *argv)
 	if (!strncmp(codecName,"jpeg",4)) {
 		//have to put the right things in here
 		m_codecType = kJPEGCodecType;
-		m_codec = (CodecComponent)65708; //this is pjpeg?!? 
+		m_codec = (CodecComponent)65719;//65708; //this is pjpeg?!? 
 		post("pix_record : kJPEGCodecType");
 	}
 	//do the same for these
