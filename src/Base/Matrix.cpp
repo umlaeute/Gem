@@ -21,6 +21,17 @@
 #include <math.h>
 #include <stdio.h>
 
+#ifdef __ppc__
+#include <ppc_intrinsics.h>
+#undef sqrt
+#define sqrt fast_sqrtf
+inline float fast_sqrtf(float x)
+{
+	register float est = (float)__frsqrte(x);
+	return x * 0.5f * est * __fnmsubs(est * est, x, 3.0f);
+}
+#endif
+
 static const float PI = 3.141592f;
 static const float DEGREES_TO_RADIANS = 0.017453f;
 

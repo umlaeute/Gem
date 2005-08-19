@@ -12,17 +12,24 @@
 # include "Base/configDarwin.h"
 #endif
 
-#ifdef NT
+#ifdef __WIN32__
 # include "Base/configNT.h"
+
+#ifndef NT
+# define NT
+#endif
+#ifndef MSW
+# define MSW
+#endif
 #endif
 
 
-#ifdef __NEW__
-# ifndef __FILM__NEW
-#  define __FILM__NEW
+#ifdef NEW_VIDEOFILM
+# ifndef FILM_NEW
+#  define FILM_NEW
 # endif
-# ifndef __VIDEO__NEW
-#  define __VIDEO__NEW
+# ifndef VIDEO_NEW
+#  define VIDEO_NEW
 # endif
 #endif
 
@@ -30,6 +37,13 @@
 #  define FTGL
 #elif defined HAVE_LIBGLTT
 #  define GLTT
+#endif
+
+#ifdef HAVE_FFMPEG
+# define HAVE_LIBAVCODEC
+# define HAVE_LIBAVFORMAT
+#elif defined (HAVE_LIBAVCODEC) && defined (HAVE_LIBAVFORMAT)
+# define HAVE_FFMPEG
 #endif
 
 #endif /* HAVE_BASE_CONFIG_H_ */

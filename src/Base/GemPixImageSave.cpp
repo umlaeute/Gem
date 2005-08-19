@@ -15,11 +15,12 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemPixImageSave.h"
+#include "Base/config.h"
 
+#include "GemPixImageSave.h"
 #include "m_pd.h"
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 #include <io.h>
 #else
 #include <unistd.h>
@@ -32,7 +33,6 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #include <string.h>
-#include <stdio.h>
 #include <fcntl.h> 
 #endif // __APPLE__
 
@@ -43,20 +43,20 @@
 extern "C"
 {
 #ifndef __APPLE__
+# ifdef HAVE_LIBTIFF
+#  include "tiffio.h"
+# endif
 
-#include "tiffio.h"
+# undef EXTERN
 
-#undef EXTERN
-
-#ifdef _WINDOWS
-#undef FAR
-#endif
-
-#include "jpeglib.h"
-#endif
+# ifdef __WIN32__
+#  undef FAR
+# endif
+# ifdef HAVE_LIBJPEG
+#  include "jpeglib.h"
+# endif
+#endif /* APPLE */
 }
-
-
 
 #include "GemPixUtil.h"
 
@@ -247,8 +247,17 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 #else
 #include "sgiimage.h"
 
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+# include <Magick++.h>
+int mem2magickImage(imageStruct* image, const char *filename);
+#endif
+
+#ifdef HAVE_LIBTIFF
 int mem2tiffImage(imageStruct* image, const char *filename);
+#endif
+#ifdef HAVE_LIBJPEG
 int mem2jpegImage(imageStruct* image, const char *filenamem, int quality);
+#endif
 /***************************************************************************
  *
  * mem2image - Save an image to a file
@@ -259,21 +268,33 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 
   switch (type) {
   case 0:
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+    if (mem2magickImage(image, filename)) return(1);else
+#endif
+#ifdef HAVE_LIBTIFF
     // write to a TIFF file
     if (mem2tiffImage(image, filename))
       return(1);
+#endif
     break;
   default:
+#ifdef HAVE_LIBJPEG
     // write a JPEG file
      if (mem2jpegImage(image, filename, type))
        return(1);
+     else
+#endif
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+    if (mem2magickImage(image, filename)) return(1);else
+#endif
+     break;
   }
 
   // unable to save image
   error("GEM: Unable to save image to '%s'", filename);
   return(0);
 }
-
+#ifdef HAVE_LIBTIFF
 /***************************************************************************
  *
  * Write a TIFF image.
@@ -321,8 +342,8 @@ int mem2tiffImage(imageStruct *image, const char *filename)
 
   return (1);
 }
-
-
+#endif /* HAVE_LIBTIFF */
+#ifdef HAVE_LIBJPEG
 /***************************************************************************
  *
  * Save a JPEG image.
@@ -418,5 +439,26 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
 
   return(1);
 }
+#endif /* HAVE_LIBJPEG */
 #endif //__APPLE__
 
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+/***************************************************************************
+ *
+ * Write an image using ImageMagick++
+ *
+ ***************************************************************************/
+int mem2magickImage(imageStruct *image, const char *filename)
+{
+  // LATER: think about writing RGBA
+  try{
+    Magick::Image mimage(image->xsize, image->ysize, "RGB", Magick::CharPixel, image->data);
+    mimage.flip(); // since openGL is upside down
+    mimage.write(filename);
+  } catch (Magick::Exception e){
+    error("%s", e.what());
+    return 0;
+  }
+  return 1;
+}
+#endif

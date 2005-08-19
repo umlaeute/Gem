@@ -16,14 +16,16 @@ LOG
 #ifndef INCLUDE_GEMMAN_H_
 #define INCLUDE_GEMMAN_H_
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 // I hate Microsoft...I shouldn't have to do this!
 #include <windows.h>
 #endif
 
 #ifdef __APPLE__
-#include <OpenGL/glu.h>
 #include <Carbon/Carbon.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
 #include <AGL/agl.h>
 #else
 #include <GL/glu.h>
@@ -146,6 +148,7 @@ class GEM_EXTERN GemMan
         // computer and window information
 	static char       *m_title;             // title to be displayed
         static int	   m_fullscreen;	// fullscreen (1) or not (0!)
+		static int     m_menuBar;		// hide (0), show(1), hide but autoshow(-1)
         static int	   m_secondscreen;	// set the second screen
         static int	   m_height;		// window height
         static int	   m_width;		// window width

@@ -16,7 +16,7 @@ LOG
 #define INCLUDE_GEMGLUOBJ_H_
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
+#ifdef __WIN32__
 #include <windows.h>
 #endif
 
@@ -28,11 +28,11 @@ LOG
 #  define M_PI (3.1415926)
 #endif
 
+#include "Base/GemShape.h"
+
 #ifndef GLU_SILHOUETTE
 # define GLU_SILHOUETTE 0
 #endif
-
-#include "Base/GemShape.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
