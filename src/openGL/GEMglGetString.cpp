@@ -41,7 +41,7 @@ GEMglGetString :: ~GEMglGetString () {
 //
 void GEMglGetString :: render(GemState *state) {
   const GLubyte* test=glGetString (name);
-  outlet_symbol(m_outlet, gensym((char*)test));
+  if(test!=NULL)outlet_symbol(m_outlet, gensym((char*)test));
 }
 
 /////////////////////////////////////////////////////////

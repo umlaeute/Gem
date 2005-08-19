@@ -12,12 +12,6 @@
  */
 
 #include "rubber.h"
-#include "Base/GemState.h"
-#include "Base/GemMan.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
 
 #define GRID_SIZE_X  32
 #define GRID_SIZE_Y  32
@@ -204,7 +198,7 @@ void rubber :: render(GemState *state)
     
     glNormal3f(0.0f, 0.0f, 1.0f);
      
-    if (state->texture && state->numTexCoords) {
+    if (state->texture && state->numTexCoords>=3) {
 
       if ((xsize  != state->texCoords[1].s) ||
 	  (ysize  != state->texCoords[1].t) ||
@@ -297,7 +291,6 @@ void rubber :: rubber_dynamics()
     d[2] = mass[i].x[2] - mass[j].x[2];
 
     l = sqrt(d[0]*d[0] + d[1]*d[1] + d[2]*d[2]);
-
     if (l != 0.0)
     {
       d[0] /= l;
@@ -399,6 +392,7 @@ void rubber :: typeMess(t_symbol *type)
   char c=*type->s_name;
   switch(c){
   case 'l': case 'L':   m_drawType = GL_LINE_LOOP; break;
+  case 'd': case 'D': // default
   case 'f': case 'F':   m_drawType = GL_POLYGON; break;
   case 'p': case 'P':   m_drawType = GL_POINTS; break;
   default:

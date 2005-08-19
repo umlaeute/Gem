@@ -78,7 +78,7 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 
     unsigned char* pDotFuncTableStart=&g_pDotFuncTable[0];
 
-    Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle);
+    Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle, 255.0f);
 
     unsigned char* pGreyScaleTableStart=&g_pGreyScaleTable[0];
 
@@ -258,7 +258,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 
     unsigned char* pDotFuncTableStart=&g_pDotFuncTable[0];
 
-    Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle);
+    Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle, 235.0f);
 
     unsigned char* pGreyScaleTableStart=&g_pGreyScaleTable[0];
 
@@ -327,23 +327,10 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 		U32 nLuminance=
 			GetImageAreaAverageLuma(
 				   nSampleLeftX,nSampleTopY,
-				   nCellSize>>1,nCellSize,
+				   nCellSize,nCellSize,
 				   pSource,nWidth,nHeight);
-				   //pSource,nWidth,nHeight)>>8;
-		//nLuminance/=256;
 		nLuminance+=220;
 		//nLuminance+=256;
-		//U32 nLuma1 = ((nLuminance & 0xffff0000)>>16)>>8;
-		//nLuma1/=256;
-		//nLuma1+=256;
-		
-		//U32 nLuma2 = ((nLuminance & 0x0000ffff)>>8);
-		//nLuma2/=256;
-		//nLuma2+=256;
-		//if (nLuma1 != 256)
-		//	luma1cnt += 1;
-		//if (nLuma2 != 256)
-		//	luma2cnt += 1;
 
 		int nCurrentYFP;
 		for (nCurrentYFP=CellBottom.Pos.nY; nCurrentYFP<=CellTop.Pos.nY; nCurrentYFP+=nFPMult) {
@@ -460,7 +447,7 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 
     unsigned char* pDotFuncTableStart=&g_pDotFuncTable[0];
 
-    Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle);
+    Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle, 255.0f);
 
     unsigned char* pGreyScaleTableStart=&g_pGreyScaleTable[0];
 
@@ -599,25 +586,25 @@ int pix_halftone :: Init(int nWidth, int nHeight)
 void pix_halftone :: Pete_HalfTone_DeInit() {
   // do nothing
 }
-int pix_halftone :: RoundDotFunc(float X,float Y) {
+int pix_halftone :: RoundDotFunc(float X,float Y, float scale) {
   const float XSquared=(X*X);
   const float YSquared=(Y*Y);
   const float Result=(2.0f-(XSquared+YSquared))/2.0f;
 
-  return static_cast<int>(Result*255.0f);
+  return static_cast<int>(Result*scale);
 }
 
-int pix_halftone :: LineDotFunc(float X,float Y) {
+int pix_halftone :: LineDotFunc(float X,float Y, float scale) {
   const float Result=(1.0f-fabsf(Y));
-  return static_cast<int>(Result*255.0f);
+  return static_cast<int>(Result*scale);
 }
 
-int pix_halftone :: DiamondDotFunc(float X,float Y) {
+int pix_halftone :: DiamondDotFunc(float X,float Y, float scale) {
   const float Result=(2.0f-(fabsf(X)+fabsf(Y)))/2.0f;
-  return static_cast<int>(Result*255.0f);
+  return static_cast<int>(Result*scale);
 }
 
-int pix_halftone :: EuclideanDotFunc(float X,float Y) {
+int pix_halftone :: EuclideanDotFunc(float X,float Y, float scale) {
   const float AbsX=fabsf(X);
   const float AbsY=fabsf(Y);
   float Result;
@@ -631,10 +618,10 @@ int pix_halftone :: EuclideanDotFunc(float X,float Y) {
 
   Result/=2.0f;
 
-  return static_cast<int>(Result*255.0f);
+  return static_cast<int>(Result*scale);
 }
 
-int pix_halftone :: PSDiamondDotFunc(float X,float Y) {
+int pix_halftone :: PSDiamondDotFunc(float X,float Y, float scale) {
   const float AbsX=fabsf(X);
   const float AbsY=fabsf(Y);
 	
@@ -650,7 +637,7 @@ int pix_halftone :: PSDiamondDotFunc(float X,float Y) {
   }
 
   Result/=2.0f;
-  return static_cast<int>(Result*255.0f);
+  return static_cast<int>(Result*scale);
 }
 
 void pix_halftone :: Rotate(SPete_HalfTone_Point* pinPoint,SPete_HalfTone_Point* poutPoint,float Angle)
@@ -667,7 +654,8 @@ void pix_halftone :: Rotate(SPete_HalfTone_Point* pinPoint,SPete_HalfTone_Point*
     (SinFP*(pinPoint->nX>>nFPShift));
 }
 
-void pix_halftone :: Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTableStart,int nCellSize,int nStyle) {
+void pix_halftone :: Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTableStart,int nCellSize,int nStyle,
+													float scale) {
   const int nHalfCellSize=(nCellSize/2);
   unsigned char* pCurrentDotFunc=pDotFuncTableStart;
   int nCurrentY;
@@ -679,23 +667,23 @@ void pix_halftone :: Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTable
       int nDotFuncResult;
       switch (nStyle) {
       case eRoundStyle: {
-	nDotFuncResult= RoundDotFunc(NormalX,NormalY);
+	nDotFuncResult= RoundDotFunc(NormalX,NormalY, scale);
       }break;
       case eLineStyle: {
-	nDotFuncResult=LineDotFunc(NormalX,NormalY);
+	nDotFuncResult=LineDotFunc(NormalX,NormalY, scale);
       }break;
       case eDiamondStyle: {
-	nDotFuncResult=DiamondDotFunc(NormalX,NormalY);
+	nDotFuncResult=DiamondDotFunc(NormalX,NormalY, scale);
       }break;
       case eEuclideanStyle: {
-	nDotFuncResult=EuclideanDotFunc(NormalX,NormalY);
+	nDotFuncResult=EuclideanDotFunc(NormalX,NormalY, scale);
       }break;
       case ePSDiamond: {
-	nDotFuncResult=PSDiamondDotFunc(NormalX,NormalY);
+	nDotFuncResult=PSDiamondDotFunc(NormalX,NormalY, scale);
       }break;
       default: {
 	assert(false);
-	nDotFuncResult=255;
+	nDotFuncResult=(int)scale;
       }break;
       }
       *pCurrentDotFunc=nDotFuncResult;

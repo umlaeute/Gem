@@ -62,6 +62,8 @@ class GEM_EXTERN pix_coordinate : public GemBase
     	//////////
     	// The texture coordinates
     	TexCoord    	*m_coords;
+	// a place-holder, in case we want to scale the coords (for rectangle textures)
+	TexCoord        *m_rectcoords;
     	
     	//////////
     	// The number

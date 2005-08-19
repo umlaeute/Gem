@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
 #include "Pixes/film.h"
 
-#if defined (_WINDOWS) & defined (HAVE_LIBAVIPLAY)
+#if defined (__WIN32__) & defined (HAVE_LIBAVIPLAY)
    // un windows there are other ways...
 #undef HAVE_LIBAVIPLAY
 #endif

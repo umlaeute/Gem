@@ -8,17 +8,20 @@
 #ifndef particle_vector_h
 #define particle_vector_h
 
-#ifndef __APPLE__
 #include <math.h>
-#else
-#include </usr/include/math.h>
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#define sqrtf fast_sqrtf
 #endif
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433f
 #endif
 
-#ifdef WIN32
+#ifdef __WIN32__
 #define drand48() (((float) rand())/((float) RAND_MAX))
 #define srand48(x) srand(x)
 

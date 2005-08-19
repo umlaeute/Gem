@@ -17,11 +17,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "pix_film.h"
 
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <Carbon/carbon.h>
 #include <QuickTime/quicktime.h>
 #else 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 #include <QTML.h>
 #include <Movies.h>
 #endif

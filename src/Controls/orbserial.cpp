@@ -4,12 +4,12 @@
  *  Copyright 1997 (unix code)  John E. Stone (j.stone@acm.org)
  *                 (Win32 code) Mike Connell  (M.Connell@swansea.ac.uk)  
  *
- *  $Id: orbserial.cpp,v 1.2 2003-04-28 17:10:40 zmoelnig Exp $
+ *  $Id: orbserial.cpp,v 1.2.6.1 2005-08-19 12:31:19 zmoelnig Exp $
  *
  */
 
 
-#if !defined(WIN32) && !defined(_MSC_VER)
+#if !defined(__WIN32__) && !defined(_MSC_VER)
 
 /*
  * Unix serial I/O code by John Stone
@@ -125,7 +125,7 @@ int orb_comm_open(char * commname, OrbCommHandle * commhandleptr) {
 
   *commhandleptr = NULL;
 
-  serial = malloc(sizeof(commstruct));
+  serial = (commstruct *)malloc(sizeof(commstruct));
   if (serial == NULL)
     return -1;
 
@@ -154,7 +154,7 @@ int orb_comm_write(OrbCommHandle commhandle, char * buf) {
 
   len=strlen(buf);
 
-  if (F_spaceorb_serial_write(serial,buf,len))
+  if (F_spaceorb_serial_write(serial,(unsigned char*)buf,len))
     return len;
   else
     return 0;
@@ -166,7 +166,7 @@ int orb_comm_read(OrbCommHandle commhandle, char * buf, int sz) {
   if (serial == NULL) 
     return -1;
 
-  return F_spaceorb_serial_read(serial,buf,sz);
+  return F_spaceorb_serial_read(serial,(unsigned char*)buf,sz);
 }
 
 int orb_comm_close(OrbCommHandle * commhandleptr) {

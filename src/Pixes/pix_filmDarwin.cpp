@@ -91,8 +91,19 @@ void pix_filmDarwin :: realOpen(char *filename)
     FSSpec		theFSSpec;
     OSErr		err = noErr;
     FSRef		ref;
+	
+	Track		movieTrack;
+	Media		trackMedia;
+	
+	long		sampleCount;
 
     long		m_rowBytes;
+	
+	
+	//UnsignedWide startTime, endTime;
+	//float seconds;
+	
+	//::Microseconds(&startTime);
 
     if (!filename[0]) {
         post("pix_filmDarwin:  no filename passed");
@@ -106,6 +117,14 @@ void pix_filmDarwin :: realOpen(char *filename)
         }
         m_haveMovie = GEM_MOVIE_MOV;
     }
+	
+	/*
+	::Microseconds(&endTime);
+        seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+	
+	post("pix_filmDarwin : OFS functions took %f", seconds );
+	*/
+	//::Microseconds(&startTime);
 
     short	refnum = 0;
     err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
@@ -115,28 +134,50 @@ void pix_filmDarwin :: realOpen(char *filename)
         return;
     }
 
+	
+
     ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
     if (refnum) ::CloseMovieFile(refnum);
+	/*
+	::Microseconds(&endTime);
+        seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+	
+	post("pix_filmDarwin : OpenMovie and NewMovie calls took %f", seconds );
+	*/
 
     m_reqFrame = 0;
     m_curFrame = -1;
     m_numTracks = (int)GetMovieTrackCount(m_movie);
+	
+	//movieTrack = GetMovieTrack(m_movie,1);
+	movieTrack = GetMovieIndTrackType(m_movie,1,VideoMediaType,movieTrackMediaType);  //get first video track
+	
+	trackMedia = GetTrackMedia(movieTrack);
+	
+	sampleCount = GetMediaSampleCount(trackMedia);
+	
+	m_numFrames = sampleCount;
+	
+	//post("pix_filmDarwin : MediaSampleCount %d",sampleCount);
 
     // Get the length of the movie
 
     movieDur = (long)GetMovieDuration(m_movie);
     movieScale = (long)GetMovieTimeScale(m_movie);
 
+	
 
-    OSType		whichMediaType = VisualMediaCharacteristic;
-    short		flags = nextTimeMediaSample + nextTimeEdgeOK;
+    
     /*
      GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0,
                                   fixed1, NULL, &duration);
      m_numFrames = movieDur/duration;*/
 
-    TimeValue	theTime = 0;
+ /*   TimeValue	theTime = 0;
+	OSType		whichMediaType = VisualMediaCharacteristic;
+    short		flags = nextTimeMediaSample + nextTimeEdgeOK;
 
+		
     m_numFrames = -1;
     while (theTime >= 0) {
         m_numFrames++;
@@ -152,7 +193,10 @@ void pix_filmDarwin :: realOpen(char *filename)
         //  are currently at.
         flags = nextTimeMediaSample;
     }
-
+	
+*/
+	
+	
     durationf = (float)movieDur/(float)m_numFrames;
 
     // Get the bounds for the movie
@@ -161,6 +205,10 @@ void pix_filmDarwin :: realOpen(char *filename)
     SetMovieBox(m_movie, &m_srcRect);
     m_xsize = m_srcRect.right - m_srcRect.left;
     m_ysize = m_srcRect.bottom - m_srcRect.top;
+	
+        
+	
+	
 
     if (m_colorspace == GL_BGRA_EXT){
         m_csize = 4;
@@ -204,7 +252,7 @@ void pix_filmDarwin :: realOpen(char *filename)
         return;
     }
 
-
+	
 
     /* movies task method */
     m_movieTime = GetMovieTime(m_movie,nil);
@@ -226,6 +274,9 @@ void pix_filmDarwin :: realOpen(char *filename)
     curTime = GetMovieTime(m_movie,NULL);
     prevTime = 0;
     newImage = 1;
+	
+	
+        
 
 }
 

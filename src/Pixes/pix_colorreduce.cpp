@@ -66,16 +66,18 @@ pix_colorreduce :: ~pix_colorreduce()
 /////////////////////////////////////////////////////////
 void pix_colorreduce :: processYUVImage(imageStruct &image){
 
-//this code is not working on OSX
-#ifndef __APPLE__
   tempImage.xsize=image.xsize;
   tempImage.ysize=image.ysize;
+#ifndef __APPLE__
+  tempImage.format=GL_RGBA;
+#else
+  tempImage.format=GL_BGRA_EXT;
+#endif
   tempImage.fromUYVY(image.data);
 
   processRGBAImage(tempImage);
 
   image.fromRGBA(tempImage.data);
-#endif
 }
 
 void pix_colorreduce :: processGrayImage(imageStruct &image){
@@ -258,7 +260,6 @@ inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_C
 
 	const float ClosestDist=(float)sqrt(nClosestDistSqrd);
 	const float NextClosestDist=(float)sqrt(nNextClosestDistSqrd);
-
 	const float TotalDist=(ClosestDist+NextClosestDist);
 
 	if (TotalDist==0.0f) {

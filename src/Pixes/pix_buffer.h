@@ -18,11 +18,11 @@ LOG
 #ifndef HELPSYMBOL_BASE
 # define HELPSYMBOL_BASE "Gem/"
 #endif
-
 #include "Base/CPPExtern.h"
 #include "Base/GemPixUtil.h"
 
 #define DEFAULT_NUM_FRAMES 100
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -48,7 +48,7 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   pix_buffer(t_symbol *s,t_float f);
   virtual bool  putMess(imageStruct*img,int pos);
   virtual imageStruct* getMess(int pos);
-
+  virtual int numFrames(void);
     	
  protected:
     	

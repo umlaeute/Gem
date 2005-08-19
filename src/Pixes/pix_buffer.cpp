@@ -11,9 +11,12 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+
+// we want our pd-class "pix_buffer_class" to be defined not-static
+// so other pix_buffer_...-objects can bind to it
+#define NO_STATIC_CLASS
+
 #include "pix_buffer.h"
-#include "pix_buffer_write.h"
-#include "pix_buffer_read.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -57,6 +60,7 @@ pix_buffer :: ~pix_buffer()
 }
 /////////////////////////////////////////////////////////
 // allocateMess
+//   allocate memory for m_numframes images of size x*y (with pixelsize=c)
 //
 /////////////////////////////////////////////////////////
 void pix_buffer :: allocateMess(int x, int y, int c)
@@ -71,19 +75,31 @@ void pix_buffer :: allocateMess(int x, int y, int c)
   }    
 }
 /////////////////////////////////////////////////////////
-// allocateMess
+// query the number of frames in the buffer
 //
 /////////////////////////////////////////////////////////
 void pix_buffer :: bangMess()
 {
   outlet_float(this->x_obj->ob_outlet, m_numframes);
 }
+int pix_buffer :: numFrames()
+{
+  return m_numframes;
+}
+/////////////////////////////////////////////////////////
+// put an image into the buffer @ position <pos>
+//
+/////////////////////////////////////////////////////////
 bool pix_buffer :: putMess(imageStruct*img,int pos){
   if (pos<0 || pos>=m_numframes)return false;
   if(!img)return false;
   img->copy2Image(m_buffer+pos);
   return true;
 }
+/////////////////////////////////////////////////////////
+// get an image from the buffer @ position <pos>
+//
+/////////////////////////////////////////////////////////
 imageStruct*pix_buffer :: getMess(int pos){
   if (pos<0 || pos>=m_numframes)return 0;
   return (m_buffer+pos);
@@ -112,184 +128,4 @@ void pix_buffer :: allocateMessCallback(void *data, t_floatarg x, t_floatarg y, 
 void pix_buffer :: bangMessCallback(void *data)
 {
   GetMyClass(data)->bangMess();
-}
-
-/////////////////////////////////////////////////////////
-//
-// pix_buffer_write
-//
-/////////////////////////////////////////////////////////
-
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_write, t_symbol*,A_DEFSYM)
-
-/////////////////////////////////////////////////////////
-// Constructor
-//
-/////////////////////////////////////////////////////////
-pix_buffer_write :: pix_buffer_write(t_symbol *s) : m_frame(-2), m_lastframe(-1), m_bindname(NULL) {
-  setMess(s);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
-}
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-pix_buffer_write :: ~pix_buffer_write(){
-
-}
-
-/////////////////////////////////////////////////////////
-// setMess
-//
-/////////////////////////////////////////////////////////
-void pix_buffer_write :: setMess(t_symbol*s){
-  if (s!=&s_){
-    m_bindname = s;
-  }
-}
-/////////////////////////////////////////////////////////
-// setMess
-//
-/////////////////////////////////////////////////////////
-void pix_buffer_write :: frameMess(int f){
-  if (f<0){
-    error("frame# must not be less than zero (%d)", f);
-  }
-  m_frame=f;
-}
-
-void pix_buffer_write :: render(GemState*state){
-  if (m_frame<0)return;
-  if (state && state->image && &state->image->image){
-    if (state->image->newimage || m_frame!=m_lastframe){
-      if(m_bindname==NULL || m_bindname->s_name==NULL){
-	post("pix_buffer_write: cowardly refusing to write to no pix_buffer");
-	m_frame=-1; return;
-      }
-      Obj_header*ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
-      if(ohead==NULL){
-	post("pix_buffer_write: couldn't find pix_buffer '%s'", m_bindname->s_name);
-	m_frame=-1; return;
-      }
-      pix_buffer *buffer=(pix_buffer *)(ohead)->data;
-      if (buffer){
-	buffer->putMess(&state->image->image,m_lastframe=m_frame);
-	m_frame=-1;
-      }
-    }
-  }
-}
-
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
-void pix_buffer_write :: obj_setupCallback(t_class *classPtr)
-{
-  class_addcreator((t_newmethod)_classpix_buffer_write,gensym("pix_put"),A_DEFSYM,A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer_write::setMessCallback,
-  		  gensym("set"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer_write::frameMessCallback,
-  		  gensym("frame"), A_FLOAT, A_NULL);
-}
-void pix_buffer_write :: setMessCallback(void *data, t_symbol*s)
-{
-  GetMyClass(data)->setMess(s);
-}
-void pix_buffer_write :: frameMessCallback(void *data, t_floatarg f)
-{
-  GetMyClass(data)->frameMess((int)f);
-}
-
-
-
-/////////////////////////////////////////////////////////
-//
-// pix_buffer_read
-//
-/////////////////////////////////////////////////////////
-
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_read, t_symbol*,A_DEFSYM)
-
-/////////////////////////////////////////////////////////
-// Constructor
-//
-/////////////////////////////////////////////////////////
-pix_buffer_read :: pix_buffer_read(t_symbol *s) : m_frame(0), m_bindname(NULL) {
-  setMess(s);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
-}
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-pix_buffer_read :: ~pix_buffer_read(){
-
-}
-
-/////////////////////////////////////////////////////////
-// setMess
-//
-/////////////////////////////////////////////////////////
-void pix_buffer_read :: setMess(t_symbol*s){
-  if (s!=&s_){
-    m_bindname = s;
-  }
-}
-/////////////////////////////////////////////////////////
-// setMess
-//
-/////////////////////////////////////////////////////////
-void pix_buffer_read :: frameMess(int f){
-  if (f<0){
-    error("frame# must not be less than zero (%d)", f);
-  }
-  m_frame=f;
-}
-
-void pix_buffer_read :: render(GemState*state){
-  if (!state)return;
-  orgPixBlock = state->image;
-  if (state->image && state->image->newimage) {
-    cachedPixBlock.newimage = state->image->newimage;
-    state->image->image.copy2ImageStruct(&cachedPixBlock.image);
-    state->image = &cachedPixBlock;
-  }
-  cachedPixBlock.newimage=1;
-  state->image = &cachedPixBlock;
-  if(m_bindname==NULL || m_bindname->s_name==NULL)return;
-  Obj_header*ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
-  if(ohead==NULL){
-    post("pix_buffer_read: couldn't find pix_buffer '%s'", m_bindname->s_name);
-    return;
-  }
-  pix_buffer *buffer=(pix_buffer *)(ohead)->data;
-  if (buffer){
-    imageStruct *img=buffer->getMess(m_frame);
-    if (img && img->data)img->copy2ImageStruct(&state->image->image);
-    else state->image=0;
-  }
-}
-
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
-void pix_buffer_read :: obj_setupCallback(t_class *classPtr)
-{
-  class_addcreator((t_newmethod)_classpix_buffer_read,gensym("pix_get"),A_DEFSYM,A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer_read::setMessCallback,
-  		  gensym("set"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer_read::frameMessCallback,
-  		  gensym("frame"), A_FLOAT, A_NULL);
-}
-void pix_buffer_read :: setMessCallback(void *data, t_symbol*s)
-{
-  GetMyClass(data)->setMess(s);
-}
-void pix_buffer_read :: frameMessCallback(void *data, t_floatarg f)
-{
-  GetMyClass(data)->frameMess((int)f);
 }

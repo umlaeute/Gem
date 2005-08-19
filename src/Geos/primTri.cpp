@@ -72,6 +72,7 @@ primTri :: ~primTri()
 /////////////////////////////////////////////////////////
 void primTri :: render(GemState *state)
 {
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLES;
 	float norm[3];
 	Matrix::generateNormal(mVectors[0], mVectors[1], mVectors[2], norm);
     glNormal3fv(norm);

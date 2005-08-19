@@ -53,6 +53,7 @@ void cylinder :: setupParameters(void){
 void cylinder :: render(GemState *state)
 {
   setupParameters();
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_FILL;
 
   GLdouble da, r, dr, dz;
   GLfloat x, y, z, nz;
@@ -62,7 +63,7 @@ void cylinder :: render(GemState *state)
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(state->texture){
+  if(state->texture && state->numTexCoords>=3){
     xsize0 = state->texCoords[0].s;
     xsize  = state->texCoords[1].s-xsize0;
     ysize0 = state->texCoords[1].t;

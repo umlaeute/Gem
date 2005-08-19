@@ -16,14 +16,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_FILMFFMPEG_H_
 #define INCLUDE_PIX_FILMFFMPEG_H_
 
-#ifdef HAVE_LIBAVCODEC
-#define HAVE_FFMPEG
+#ifdef HAVE_FFMPEG
 
 
 #include "Pixes/pix_film.h"
 extern "C" {
-#include "ffmpeg/avformat.h"
-#include "ffmpeg/avcodec.h"
+#include "avformat.h"
+#include "avcodec.h"
 }
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -86,5 +85,5 @@ class GEM_EXTERN pix_filmFFMPEG : public pix_film
   static void autoCallback(void *data, t_floatarg state);
 
 };
-#endif // HAVE_LIBAVCODEC
+#endif // HAVE_FFMPEG
 #endif	// for header file

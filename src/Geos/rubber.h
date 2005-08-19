@@ -13,18 +13,19 @@
 #ifndef INCLUDE_RUBBER_H_
 #define INCLUDE_RUBBER_H_
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
-#include <windows.h>
-#endif
-
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif // __APPLE__
-
 #include "Base/GemShape.h"
+#include "Base/GemState.h"
+#include "Base/GemMan.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#endif
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

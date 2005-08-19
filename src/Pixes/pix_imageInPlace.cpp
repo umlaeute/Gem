@@ -50,7 +50,7 @@ void pix_imageInPlace :: render(GemState *state)
   // if we don't have an image, just return
   if (!m_numImages)
     return;
-    
+
   // if nothing has been bound yet
   if (!m_loadedCache->textBind[m_curImage])
     return;
@@ -60,7 +60,7 @@ void pix_imageInPlace :: render(GemState *state)
   glEnable(GL_TEXTURE_2D);
 
 #ifdef GL_VERSION_1_1
-  glBindTexture(GL_TEXTURE_2D, m_loadedCache->textBind[m_curImage]);
+  glBindTexture   (GL_TEXTURE_2D, m_loadedCache->textBind[m_curImage]);
 #elif GL_EXT_texture_object
   glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[m_curImage]);
 #else

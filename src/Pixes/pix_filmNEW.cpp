@@ -107,9 +107,8 @@ void pix_filmNEW :: closeMess(void){
 //
 /////////////////////////////////////////////////////////
 
-void pix_filmNEW :: openMess(t_symbol *filename, int format)
+void pix_filmNEW :: openMess(t_symbol *filename, int format, int codec)
 {
-  debug("openMess");
   //  if (filename==x_filename)return;
   closeMess();
 
@@ -120,19 +119,31 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format)
   canvas_makefilename(getCanvas(), filename->s_name, buff, MAXPDSTRING);
   if (FILE*fd=fopen(buff, "r"))fclose(fd);
   else buf=filename->s_name;
+  m_handle=0;
 
   if (format==0)format=m_format;
-  int i=-1;
-  //post("opening %s with format %X", buf, format);
-  while(i++<m_numHandles){
-    debug("trying handle %d: %X", i, m_handles[i]);
-    if (m_handles[i] && m_handles[i]->open(buf, format ))      {
-      m_handle = m_handles[i];
-      break;
+  if(codec>=0){
+    codec=codec%m_numHandles;
+    if (m_handles[codec] && m_handles[codec]->open(buf, format ))
+      m_handle = m_handles[codec];
+  }
+  if(!m_handle && m_handles){
+    int i=-1;
+    //post("opening %s with format %X", buf, format);
+    while(i++<m_numHandles){
+      debug("trying handle %d: %X", i, m_handles[i]);
+      if (m_handles[i] && m_handles[i]->open(buf, format ))      {
+        m_handle = m_handles[i];
+        break;
+      }
+      post(" ... ");
     }
   }
+
   debug("got handle = %X", m_handle);
+
   if (!m_handle){
+    post(" ... giving up!");
     error("GEM: pix_film: Unable to open file: %s", filename->s_name);
 	return;
   }
@@ -215,7 +226,7 @@ void pix_filmNEW :: csMess(t_symbol *s, bool immediately)
   case 'y': case 'Y': m_format=GL_YCBCR_422_GEM; break;
   case 'r': case 'R': m_format=GL_RGBA; break;
   default:
-    post("pix_film: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+    error("pix_film: colorspace must be 'RGBA', 'YUV' or 'Gray'");
   }
   if(immediately && m_handle)m_handle->requestColor(m_format);
 }
@@ -239,18 +250,30 @@ void pix_filmNEW :: obj_setupCallback(t_class *classPtr)
 }
 void pix_filmNEW :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
-  int format=0;
-  if (argc!=1 && argc!=2)goto illegal_openmess;
+  int codec=-1;
+  if (!argc || argc>3)goto illegal_openmess;
   if (argv[0].a_type != A_SYMBOL)goto illegal_openmess;
+
   if (argc==2){
-    if (argv[1].a_type != A_SYMBOL)goto illegal_openmess;
-    else GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
+    if (argv[1].a_type == A_SYMBOL)
+      GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
+    else if (argv[1].a_type == A_FLOAT)
+      codec=atom_getint(argv+1);
+  } else if (argc==3){
+    if ((argv[1].a_type == A_SYMBOL) || (argv[2].a_type == A_FLOAT)) {
+      GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
+      codec=atom_getint(argv+2);    
+    } else if ((argv[2].a_type == A_SYMBOL) || (argv[1].a_type == A_FLOAT)) {
+      GetMyClass(data)->csMess(atom_getsymbol(argv+2), false);
+      codec=atom_getint(argv+1);  
+    }
   }
-  GetMyClass(data)->openMess(atom_getsymbol(argv), 0);
+  
+  GetMyClass(data)->openMess(atom_getsymbol(argv), 0, codec);
 
   return;
  illegal_openmess:
-  error("pix_film: \"open <filename> [<format>]\"");
+  error("pix_film: \"open <filename> [<format>] [<preferred codec#>]\"");
   return;
   
 }

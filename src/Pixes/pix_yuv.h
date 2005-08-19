@@ -25,7 +25,7 @@ LOG
 CLASS
     pix_yuv
     
-    Change pix from "any" color-space to GL_RGBA
+    Change pix from "any" color-space to GL_YUV
 
 KEYWORDS
     pix

@@ -18,16 +18,10 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
 #include "Pixes/film.h"
 
-#if defined(HAVE_LIBAVFORMAT) & defined(HAVE_LIBAVCODEC)
-#define HAVE_LIBFFMPEG
-#else
-#undef HAVE_LIBFFMPEG
-#endif
-
-#ifdef HAVE_LIBFFMPEG
+#ifdef HAVE_FFMPEG
 extern "C" {
-#include "ffmpeg/avformat.h"
-#include "ffmpeg/avcodec.h"
+#include "avformat.h"
+#include "avcodec.h"
 }
 #endif
 
@@ -55,7 +49,7 @@ class GEM_EXTERN filmFFMPEG : public film {
   // Destructor
   virtual ~filmFFMPEG();
 
-#ifdef HAVE_LIBFFMPEG
+#ifdef HAVE_FFMPEG
   //////////
   // open a movie up
   virtual bool open(char *filename, int format=0);

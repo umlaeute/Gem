@@ -80,6 +80,8 @@ polygon :: ~polygon()
 /////////////////////////////////////////////////////////
 void polygon :: render(GemState *state)
 {
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_POLYGON;
+
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
   if (state->texture && state->numTexCoords)

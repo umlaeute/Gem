@@ -12,12 +12,12 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#if defined(MACOSX) || defined(HAVE_QUICKTIME)
+#if defined(__APPLE__) || defined(HAVE_QUICKTIME)
 
 #define DO_AUTO_REGISTER_CLASS
 
 #include "pix_filmQT.h"
-#ifdef MACOSX
+#ifdef __APPLE__
 #	include "OpenGL/glext.h"
 #else
 #	include "TextUtils.h"
@@ -39,7 +39,7 @@ pix_filmQT :: pix_filmQT(t_symbol *filename) :
 , m_bInit(false)
 {
 
-#ifndef MACOSX
+#ifndef __APPLE__
     OSErr		err = noErr;
 
 	// Initialize QuickTime Media Layer
@@ -62,7 +62,7 @@ pix_filmQT :: pix_filmQT(t_symbol *filename) :
  m_pixBlock.image.csize = 4;
  m_pixBlock.image.format = GL_BGRA_EXT;
  m_format = GL_BGRA_EXT;
-#ifndef MACOSX
+#ifndef __APPLE__
  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
 #else
  m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
@@ -86,7 +86,7 @@ pix_filmQT :: ~pix_filmQT()
     outlet_free(m_outNumFrames);
     outlet_free(m_outEnd);
 
-#ifndef MACOSX
+#ifndef __APPLE__
 	// Deinitialize QuickTime Media Layer
 	ExitMovies();
 
@@ -142,7 +142,7 @@ void pix_filmQT :: openMess(t_symbol *filename)
   realOpen(buf);
   if (m_haveMovie == GEM_MOVIE_NONE)return;
   
-#ifndef MACOSX
+#ifndef __APPLE__
 //  createBuffer();
 //  prepareTexture();
 #endif
@@ -222,7 +222,7 @@ void pix_filmQT :: realOpen(char *filename)
 
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
-#ifdef MACOSX
+#ifdef __APPLE__
 	OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
 #else
 	MacOffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
@@ -236,7 +236,7 @@ void pix_filmQT :: realOpen(char *filename)
 
         m_csize = 4;
         m_format = GL_BGRA_EXT;
-#ifdef MACOSX
+#ifdef __APPLE__
         m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
 #else
         m_pixBlock.image.type = GL_UNSIGNED_BYTE;
@@ -247,7 +247,7 @@ void pix_filmQT :: realOpen(char *filename)
         m_rowBytes = m_xsize * 4;
         SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
 	err = QTNewGWorldFromPtr(	&m_srcGWorld, 
-#ifdef MACOSX
+#ifdef __APPLE__
 								k32ARGBPixelFormat, // gives noErr
 #else
 								k32BGRAPixelFormat,
@@ -417,4 +417,4 @@ void pix_filmQT :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
-#endif // MACOSX
+#endif // __APPLE__

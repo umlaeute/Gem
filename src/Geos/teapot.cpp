@@ -129,6 +129,7 @@ void teapot :: render(GemState *state)
   switch(m_drawType){
   case GL_LINE_LOOP: type=GL_LINE;  break;    
   case GL_POINTS   : type=GL_POINT; break;
+  case GL_DEFAULT_GEM: // default
   case GL_POLYGON  : type=GL_FILL;  break;
   }
 #ifdef GLU_TRUE
@@ -142,7 +143,7 @@ void teapot :: render(GemState *state)
   float p[4][4][3], q[4][4][3], r[4][4][3], s[4][4][3];
   long i, j, k, l;
 
-  if (state->texture) {
+  if (state->texture && state->numTexCoords>=4) {
     m_texCoords[0][0]=state->texCoords[0].s;m_texCoords[0][1]=state->texCoords[0].t;
     m_texCoords[1][0]=state->texCoords[1].s;m_texCoords[1][1]=state->texCoords[1].t;
     m_texCoords[2][0]=state->texCoords[2].s;m_texCoords[2][1]=state->texCoords[2].t;

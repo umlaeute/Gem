@@ -49,11 +49,24 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   //////////
   // Do the processing
   virtual void  setMess(t_symbol*);
-  virtual void  frameMess(int);
+  virtual void  frameMess(t_float);
+  virtual void  autoMess(t_float);
+  virtual void  loopMess(int);
 
   virtual void render(GemState*state);
 
-  int m_frame;
+  //////////
+  // the frame to read in the next render-cycle
+  t_float m_frame;
+  //////////
+  // an auto-increment value for proceeding to the next value
+  t_float m_auto;
+  //////////
+  // should we loop when we reach the end of the buffer ?
+  bool m_loop;
+
+  //////////
+  // the name of the buffer we bind to
   t_symbol *m_bindname;
 
  private:
@@ -62,6 +75,8 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   // static member functions
   static void setMessCallback  (void*data, t_symbol*s);
   static void frameMessCallback(void*data, t_float  f);
+  static void autoMessCallback(void*data, t_float  f);
+  static void loopMessCallback(void*data, t_float  f);
 };
 
 #endif	// for header file

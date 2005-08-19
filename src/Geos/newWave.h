@@ -13,19 +13,16 @@
 #ifndef INCLUDE_NEWWAVE_H_
 #define INCLUDE_NEWWAVE_H_
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
-#include <windows.h>
+#include "Base/GemShape.h"
+#include "Base/GemState.h"
+#include "Base/GemFuncUtil.h"
+
+#ifdef __ppc__
+#undef sqrt
+#define sqrt fast_sqrtf
 #endif
 
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif // __APPLE__
-
-#include "Base/GemShape.h"
-#define MAXGRID 200
+#define MAXGRID 600
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -47,7 +44,7 @@ class GEM_EXTERN newWave : public GemShape
 
   //////////
   // Constructor
-  newWave( t_floatarg width);
+  newWave( int, t_atom* );
     	
  protected:
     	
@@ -57,12 +54,15 @@ class GEM_EXTERN newWave : public GemShape
 
   //////////
   // The height of the object
+  int		gridX, gridY;
   short		size, mode, speed;
   void	    heightMess(float size);
   void		modeMess(float mode);
   void		forceMess(float posX, float posY, float valforce);
   void		positionMess(float posX, float posY, float posZ);
+  void		textureMess(int mode);
   void		bangMess();        
+
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
@@ -88,8 +88,9 @@ class GEM_EXTERN newWave : public GemShape
   void 		savepos(void);
   void 		getK(void);
   void 		getdamp(void);
+  void 		noise(float);
   void		getTexCoords(void);
-  void		setSize( int value );
+  void		setSize( int valueX, int valueY );
  // void		setK( float value );
  // void		setD( float value );
   void		position( float posX, float posY, float posZ );
@@ -110,8 +111,12 @@ class GEM_EXTERN newWave : public GemShape
   void getFaceNormSegs( void );
 
   int		m_blend;
-  float		xsize, ysize, ysize0;
+  float		xsize, xsize0, ysize, ysize0;
   float		K1, D1, K2, D2, K3, D3;
+
+  int alreadyInit;
+  int m_textureMode; // how to texture...
+
   
   float force[MAXGRID][MAXGRID],
       veloc[MAXGRID][MAXGRID],
@@ -120,7 +125,7 @@ class GEM_EXTERN newWave : public GemShape
       vertNorms[MAXGRID][MAXGRID][3],
       faceNorms[2][MAXGRID][MAXGRID][3],
       faceNormSegs[2][2][MAXGRID][MAXGRID][3];
-  int alreadyInit;
+  
   float texCoords[MAXGRID][MAXGRID][2];
 
   bool m_upsidedown;
@@ -140,7 +145,9 @@ class GEM_EXTERN newWave : public GemShape
   static void 	setD3MessCallback(void *data, t_floatarg D);
   static void 	forceMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce );
   static void 	positionMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg posZ );
-  static void 	bangMessCallback(void *data );
+  static void 	textureMessCallback(void *data, t_floatarg mode);
+  static void 	bangMessCallback(void *data);
+  static void 	noiseMessCallback(void *data, t_floatarg rnd);
 
 };
 

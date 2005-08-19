@@ -13,12 +13,25 @@
 #ifndef GLM_H
 #define GLM_H
 
+
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
+#ifdef __WIN32__
 #include <windows.h>
 #endif
 
@@ -27,7 +40,7 @@ extern "C" {
 #else
 #include <GL/gl.h>
 #endif
-	
+
 #ifndef M_PI
 #define M_PI 3.14159265f
 #endif

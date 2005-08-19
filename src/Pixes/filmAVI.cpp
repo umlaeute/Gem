@@ -27,13 +27,13 @@
 filmAVI :: filmAVI(int format) : film(format) {
   static bool first_time=true;
   if (first_time) {
-#ifdef _WINDOWS
+#ifdef __WIN32__
     post("pix_film:: avi support");
 #endif
     first_time = false;
   }
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
   m_getFrame     = NULL;
   m_streamVid    = NULL;
   m_pbmihRaw     = NULL;
@@ -53,12 +53,12 @@ filmAVI :: filmAVI(int format) : film(format) {
 filmAVI :: ~filmAVI()
 {
   close();
-#ifdef _WINDOWS
+#ifdef __WIN32__
   AVIFileExit();
 #endif
 }
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 void filmAVI :: close(void)
 {
   if (m_streamVid){
@@ -190,7 +190,7 @@ bool filmAVI :: open(char *filename, int format)
   return true;
 
  unsupported:
-  //post("AVI: unsupported!");
+  startpost("AVI failed");
   close();
   return false;
 }

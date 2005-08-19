@@ -47,7 +47,7 @@ filmQT :: filmQT(int format) : film(format)
     first_time = false;
   }
 #ifdef HAVE_QUICKTIME
-# ifdef _WINDOWS
+# ifdef __WIN32__
   // Initialize QuickTime Media Layer
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {
@@ -100,15 +100,6 @@ void filmQT :: close(void)
 }
 
 bool filmQT :: open(char*filename, int format) {
-  if (filename==NULL)return false;
-  if (!m_bInit){
-    error("filmQT: object not correctly initialized\n");
-    return false;
-  }
-  if (format>0)m_wantedFormat=format;
-  int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
-  // Clean up any open files:  closeMess();
-
   FSSpec	theFSSpec;
   OSErr		err = noErr;
   FSRef		ref;
@@ -116,40 +107,55 @@ bool filmQT :: open(char*filename, int format) {
   long		m_rowBytes;
 
   Str255	pstrFilename;
+
+  short	refnum = 0;
+  long	movieDur, movieScale;
+  OSType	whichMediaType;
+  short		flags = 0;
+  int wantedFormat;
+
+
+  if (filename==NULL)return false;
+  if (!m_bInit){
+    error("filmQT: object not correctly initialized\n");
+    goto unsupported;
+  }
+  if (format>0)m_wantedFormat=format;
+  wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
+  // Clean up any open files:  closeMess();
+
+
+
   CopyCStringToPascal(filename, pstrFilename);           // Convert to Pascal string
 
   err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
   if (err) {
     error("GEM: pix_film: Unable to find file: %s", filename);
-    return false;
+    goto unsupported;
   }
-  short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
     error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
     if (refnum) ::CloseMovieFile(refnum);
-    return false;
+    goto unsupported;
   }
   //post("err=%d", err);
   //post("refnum=%d", refnum);
   //post("movie = %x", &m_movie);
   //startpost("new movie might crash... ");
-
   err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (err) {
     error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
     if (refnum) ::CloseMovieFile(refnum);
 	m_movie=NULL;
-    return false;
+    goto unsupported;
   }
-
   //post("...survived");
   if (refnum) ::CloseMovieFile(refnum);
   m_curFrame = -1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
   //post("GEM: filmQT:  m_numTracks = %d",m_numTracks);
   // Get the length of the movie
-  long	movieDur, movieScale;
   movieDur = (long)GetMovieDuration(m_movie);
   movieScale = (long)GetMovieTimeScale(m_movie);
   /*
@@ -157,9 +163,9 @@ bool filmQT :: open(char*filename, int format) {
        movieScale,
        (long)GetMovieTimeBase(m_movie));
     */                                        
-  OSType	whichMediaType = VisualMediaCharacteristic;
+  whichMediaType = VisualMediaCharacteristic;
   // shouldn't the flags be OR'ed instead of ADDed ? (jmz) 
-  short		flags = nextTimeMediaSample | nextTimeEdgeOK;
+  flags = nextTimeMediaSample | nextTimeEdgeOK;
   
   GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
 			       (Fixed)1<<16, NULL, &duration);
@@ -196,17 +202,23 @@ bool filmQT :: open(char*filename, int format) {
 				m_rowBytes);
   if (err) {
     error("GEM: filmQT: Couldn't make QTNewGWorldFromPtr %d", err);
-    return false;
+    goto unsupported;
   }
   m_movieTime = 0;
   // *** set the graphics world for displaying the movie ***
   ::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
   if(GetMoviesError()){
 	  close();
-	  return false;
+	  goto unsupported;
   }
     ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
   return true;
+
+ unsupported:
+  startpost("QuickTime failed ...");
+  //close();
+  return false;
+
 }
 
 /////////////////////////////////////////////////////////
@@ -220,7 +232,6 @@ pixBlock* filmQT :: getFrame()
   Rect		m_srcRect;
   PixMapHandle	m_pixMap;
   Ptr		m_baseAddr;
-  //post("qt: weird: when i allow the 4 posts, it seems to work...");
     
   ::GetGWorld(&savedPort, &savedDevice);
   ::SetGWorld(m_srcGWorld, NULL);

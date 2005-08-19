@@ -19,6 +19,19 @@
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include "Base/GemPixImageLoad.h"
+#include "Base/GemCache.h"
+#include <math.h>
+
+#ifdef unix
+#include <unistd.h>
+#include <strings.h>
+#endif
+
+#ifdef __ppc__
+#include "Base/GemFuncUtil.h"
+#undef sqrt
+#define sqrt fast_sqrtf
+#endif
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

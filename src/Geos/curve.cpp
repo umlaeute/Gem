@@ -51,13 +51,24 @@ curve :: ~curve()
 /////////////////////////////////////////////////////////
 void curve :: render(GemState *state)
 {
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
     glNormal3f(0.0f, 0.0f, 1.0f);
     glLineWidth(m_linewidth);
     if(state->texture){
+    switch(state->numTexCoords){
+    default:
       m_texCoords[0][0]=state->texCoords[0].s;m_texCoords[0][1]=state->texCoords[0].t;
       m_texCoords[1][0]=state->texCoords[1].s;m_texCoords[1][1]=state->texCoords[1].t;
       m_texCoords[2][0]=state->texCoords[2].s;m_texCoords[2][1]=state->texCoords[2].t;
       m_texCoords[3][0]=state->texCoords[3].s;m_texCoords[3][1]=state->texCoords[3].t;
+      break;
+    case 0: case 1: case 2: case 3:
+      m_texCoords[0][0]=0.f;m_texCoords[0][1]=0.f;
+      m_texCoords[1][0]=1.f;m_texCoords[1][1]=0.f;
+      m_texCoords[2][0]=1.f;m_texCoords[2][1]=1.f;
+      m_texCoords[3][0]=0.f;m_texCoords[3][1]=1.f;
+      break;
+    }
 
       glEnable(GL_MAP1_TEXTURE_COORD_2);
       glMap1f(GL_MAP1_TEXTURE_COORD_2, 0,   1,   2, m_numInputs, &m_texCoords[0][0]);
@@ -65,7 +76,7 @@ void curve :: render(GemState *state)
     glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, m_numInputs, &(m_vert[0][0]));
     glEnable(GL_MAP1_VERTEX_3);
     glBegin(m_drawType);
-	    for (int n = 0; n < m_resolution; n++)
+	    for (int n = 0; n <= m_resolution; n++)
 	        glEvalCoord1f((GLfloat)n/(float)m_resolution);
     glEnd();
     glLineWidth(1.0);

@@ -77,7 +77,9 @@ void pix_texture :: setUpTextureState() {
   if (m_mode && GemMan::texture_rectangle_supported){
     if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
-      m_repeat = GL_CLAMP_TO_EDGE;
+    // JMZ: disabled the following, as rectangle-textures are clamped anyhow
+    // JMZ: and normalized ones, lose their setting 
+    //      m_repeat = GL_CLAMP_TO_EDGE;
       debug("pix_texture: using rectangle texture");
   }
 #endif // GL_TEXTURE_RECTANGLE_EXT
@@ -146,7 +148,6 @@ void pix_texture :: render(GemState *state) {
   if (!state->image        || !m_textureOnOff          )return;
   if(!&state->image->image || !state->image->image.data)return;
   GLboolean upsidedown = state->image->image.upsidedown;
-  state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
   if (state->image->newimage) m_rebuildList = 1;
@@ -167,6 +168,7 @@ void pix_texture :: render(GemState *state) {
 
 #ifdef GL_VERSION_1_1
     int texType = m_textureType;
+
 
 #ifdef GL_TEXTURE_RECTANGLE_EXT
     if (m_mode){
@@ -354,8 +356,13 @@ void pix_texture :: render(GemState *state) {
 #endif
   m_rebuildList = 0;
   
+  state->texture = 1;
 
-  
+#ifdef GL_TEXTURE_RECTANGLE_EXT
+  // if we are using rectangle textures, this is a way to inform the downstream objects 
+  // (this is important for things like [pix_coordinate]
+  if(m_textureType==GL_TEXTURE_RECTANGLE_EXT)state->texture=2;
+#endif
 }
 
 

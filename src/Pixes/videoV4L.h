@@ -19,27 +19,28 @@
 
 #include "Pixes/video.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <unistd.h>
-#include <string.h>
-#include <ctype.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <linux/types.h>
-#include <linux/videodev.h>
-#include <sys/mman.h>
+#ifdef HAVE_VIDEO4LINUX
+# include <stdio.h>
+# include <stdlib.h>
+# include <stdarg.h>
+# include <unistd.h>
+# include <string.h>
+# include <ctype.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <sys/ioctl.h>
+# include <sys/types.h>
+# include <sys/time.h>
+# include <linux/types.h>
+# include <linux/videodev.h>
+# include <sys/mman.h>
 //#ifdef HAVE_PTHREADS
-#include <pthread.h>
+# include <pthread.h>
 //#endif
-#define DEVICENO 0
-#define NBUF 2
-#define COMPOSITEIN 1
-
+# define DEVICENO 0
+# define NBUF 2
+# define COMPOSITEIN 1
+#endif
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -70,6 +71,7 @@ class GEM_EXTERN videoV4L : public video {
     	// Destructor
     	virtual ~videoV4L();
 
+#ifdef HAVE_VIDEO4LINUX
 	////////
 	// open the video-device
 	virtual int            openDevice(int devnum, int format=0){return 1;}
@@ -137,7 +139,7 @@ class GEM_EXTERN videoV4L : public video {
   // now when rendering is turned on and we want to switch back to /dev/video0 we should reconnect to the good device
   bool      m_rendering; // "true" when rendering is on, false otherwise
   
-
+#endif /* HAVE_VIDEO4LINUX */
 
 };
 

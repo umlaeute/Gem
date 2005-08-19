@@ -136,8 +136,10 @@ void curve3d :: typeMess(t_symbol *type){
     m_drawType = 10; 
   else if (!strcmp(type->s_name, "control_line2"))
     m_drawType = 11; 
+  else if (!strcmp(type->s_name, "default"))
+    m_drawType = 1;
   else    {
-    error ("GEM : no ripple draw style?");
+    error ("GEM : invalid draw style for curve3d?");
     return;
   }
   setModified();
@@ -148,6 +150,7 @@ void curve3d :: typeMess(t_symbol *type){
 //
 /////////////////////////////////////////////////////////
 void curve3d :: render(GemState *state){
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=1;
   float norm[3];
 
   glNormal3f(0.0f, 0.0f, 1.0f);
@@ -159,7 +162,7 @@ void curve3d :: render(GemState *state){
   GLfloat ysize = 1.0f;
   GLfloat ysize0= 0.0f;
 
-  if (state->texture)
+  if (state->texture && state->numTexCoords>=3)
     {
       xsize  = state->texCoords[1].s;
       ysize0 = state->texCoords[2].t;

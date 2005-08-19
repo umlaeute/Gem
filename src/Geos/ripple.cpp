@@ -12,10 +12,6 @@
  */
 
 #include "ripple.h"
-#include "Base/GemState.h"
-#include <string.h>
-#include <math.h>
-#include <Base/GemMan.h>
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(ripple, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
@@ -84,7 +80,7 @@ void ripple :: render(GemState *state)
 
     glScalef(2.*m_size, 2.*m_size, 2.*m_size);
     
-    if (state->texture && state->numTexCoords)
+    if (state->texture && state->numTexCoords>=3)
     {
       if ((xsize  != state->texCoords[1].s) ||
 	  (ysize  != state->texCoords[1].t) ||
@@ -166,9 +162,7 @@ void ripple :: ripple_init()
   int i, j;
   glDisable(GL_DEPTH_TEST);
 
-  //ripple_max = (int)sqrt(win_size_x*win_size_y+win_size_x*win_size_x);
   ripple_max = (int)sqrt(xsize * (ysize+ysize0) + xsize * xsize);
-
   for (i = 0; i < RIPPLE_COUNT; i++)
   {
     t[i] = ripple_max + RIPPLE_LENGTH;
@@ -212,7 +206,6 @@ void ripple :: precalc_ripple_vector()
     {
       x = (float) i/(m_grid_sizeX - 1);
       y = (float) j/(m_grid_sizeY - 1);
-
       l = (float) sqrt(x*x + y*y);
       if (l == 0.0)
       {
@@ -443,6 +436,8 @@ void ripple :: typeMess(t_symbol *type)
 	    m_drawType = GL_POLYGON;
     else if (!strcmp(type->s_name, "point"))
 	    m_drawType = GL_POINTS;
+    else if (!strcmp(type->s_name, "default"))
+	    m_drawType = GL_POLYGON;
     else
     {
 	    error ("GEM: no ripple draw style?");

@@ -8,23 +8,7 @@
 #ifndef particle_vector_h
 #define particle_vector_h
 
-#include <math.h>
-
-#ifndef M_PI
-#define M_PI 3.1415926535897932384626433f
-#endif
-
-#ifdef __APPLE__
-#include "macosx_math.h"
-#endif
-
-#ifdef WIN32
-#define drand48() (((float) rand())/((float) RAND_MAX))
-#define srand48(x) srand(x)
-
-// This is because their stupid compiler thinks it's smart.
-#define inline __forceinline
-#endif
+#include "Base/GemMath.h"
 
 class pVector
 {

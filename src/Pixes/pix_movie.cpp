@@ -18,9 +18,6 @@
 
 #include "pix_movie.h"
 #include "Base/GemMan.h"
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#endif // __APPLE__
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM)
 
@@ -33,7 +30,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 pix_movie :: pix_movie(t_symbol *filename) :
-#ifdef _WINDOWS
+#ifdef __WIN32__
   pix_filmNT(filename)
 #elif __linux__
   pix_filmLinux(filename)

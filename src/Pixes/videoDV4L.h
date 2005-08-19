@@ -24,6 +24,7 @@
 
 #include "Pixes/video.h"
 #ifdef HAVE_DV
+// you will have to add "/usr/src/linux/drivers" to your include-path
 #include "dv1394.h"
 #include <libdv/dv.h>
 

@@ -4,15 +4,10 @@
  * WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  */
 
-#ifdef NT
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4305 )
-#pragma warning( disable : 4091 )
-#endif
 #include "m_pd.h"
 #include <math.h>
 #include <stdlib.h>
-#ifdef NT
+#ifdef __WIN32__
 int random(void)
 {
     static int foo = 1489853723;

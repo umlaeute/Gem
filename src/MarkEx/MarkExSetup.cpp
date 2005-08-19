@@ -7,24 +7,23 @@
 // -------------------------- setup functions ------------------------------
 
 // control objects
-void alternate_setup();
+void alternate_setup(); //build as an abstraction!
 void average_setup();
-void change_setup();
-void counter_setup();
+void counter_setup();//build as an abstraction!
 // void multipack_setup();
 void multiselect_setup();
-void oneshot_setup();
-void invert_setup();
+void oneshot_setup();//build as an abstraction!
+void invert_setup();//build as an abstraction!
 void strcat_setup();
 
 void vector_setup();
 
 // GEM utilities
-void tripleLine_setup();
+void tripleLine_setup();//build as an abstraction!
 void randomF_setup();
-void tripleRand_setup();
-void hsv2rgb_setup();
-void rgb2hsv_setup();
+void tripleRand_setup();//build as an abstraction!
+void hsv2rgb_setup();//build as an abstraction!
+void rgb2hsv_setup();//build as an abstraction!
 
 // DSP objects
 void reson_setup();
@@ -34,7 +33,6 @@ void MarkEx_setup()
 {
     alternate_setup();
     average_setup();
-	change_setup();
     counter_setup();
 //    multipack_setup();
     multiselect_setup();

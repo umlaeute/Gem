@@ -78,7 +78,8 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 
         //////////
         // property-dialog
-        virtual void	dialogMess(int,t_atom*);
+        //virtual void	dialogMess(int,t_atom*);
+		virtual void	dialogMess();
   
 	//-----------------------------------
 	// GROUP:	Macintosh specific video data
@@ -107,17 +108,23 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
     	int		m_newFrame; 
         
         SeqGrabComponent	m_sg;		// Sequence Grabber Component
-        SGChannel		m_vc;			// Video Channel
-        short			m_pixelDepth;	//
-        int			m_vidXSize;		//
-        int			m_vidYSize;		//
-        Rect			m_srcRect;		// Capture Rectangle
-        GWorldPtr		m_srcGWorld;	// Capture Destination
+        SGChannel			m_vc;			// Video Channel
+        short				m_pixelDepth;	//
+        int					m_vidXSize;		//
+        int					m_vidYSize;		//
+        Rect				m_srcRect;		// Capture Rectangle
+        GWorldPtr			m_srcGWorld;	// Capture Destination
         PixMapHandle		m_pixMap;	// PixMap Handle for capture image
-        Ptr			m_baseAddr;		// Base address of pixel Data
-        long			m_rowBytes;		// Row bytes in a row
-        int			m_quality;
-        int			m_colorspace;
+        Ptr					m_baseAddr;		// Base address of pixel Data
+        long				m_rowBytes;		// Row bytes in a row
+        int					m_quality;
+        int					m_colorspace;
+		
+		int					m_inputDevice;
+		VideoDigitizerComponent			m_vdig; //gotta have the vdig
+		VideoDigitizerError	vdigErr;
+		DigitizerInfo       m_vdigInfo; //the info about the VDIG
+		
     private:
     	
     	//////////
@@ -127,6 +134,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         static void dialogCallback(void *data);
         static void colorspaceCallback(void *data, t_symbol *cs);
         static void csMessCallback(void *data, t_symbol *cs);
+		static void deviceCallback(void *data, t_floatarg X);
 };
 
 #endif

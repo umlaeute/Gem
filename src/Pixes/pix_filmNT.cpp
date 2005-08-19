@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifdef _WINDOWS
+#ifdef __WIN32__
 
 #include "Pixes/pix_filmNT.h"
 #include <memory>
@@ -208,7 +208,9 @@ void pix_filmNT :: realOpen(char *filename)
 				//	m_pbmihRaw->biSizeImage = m_xsize * m_ysize * m_csize;
 
 				//m_nRawBuffSize = min(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
-				m_nRawBuffSize = max(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
+                          // JMZ: added "std::" in the next line as suggested by Thoralf Schulze
+                          // JMZ: please complain if it doesn't work with M$VC
+                          m_nRawBuffSize = std::max(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
 				if (!m_nRawBuffSize)
 					m_nRawBuffSize = m_xsize * m_ysize * m_csize;
 
@@ -316,4 +318,4 @@ void pix_filmNT :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
-#endif // _WINDOWS
+#endif // __WIN32__

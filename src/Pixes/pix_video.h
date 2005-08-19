@@ -18,7 +18,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
 #define INCLUDE_PIX_VIDEO_H_
 #include "Base/config.h"
 
-#if defined __VIDEO__NEW  || defined HAVE_DIRECTSHOW
+#if defined VIDEO_NEW  || defined HAVE_DIRECTSHOW
 # ifndef DO_AUTO_REGISTER_CLASS
 #  define NO_AUTO_REGISTER_CLASS
 # endif

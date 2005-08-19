@@ -17,7 +17,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_PIX_FILMNEW_H_
 #include "Base/config.h"
 
-#ifndef __FILM__NEW
+#ifndef FILM_NEW
 # define NO_AUTO_REGISTER_CLASS
 #else
 # define DO_AUTO_REGISTER_CLASS
@@ -69,8 +69,8 @@ class GEM_EXTERN pix_filmNEW : public GemBase
   // close the movie file
   virtual void closeMess(void);
   //////////
-  // open a movie up
-  virtual void openMess(t_symbol *filename, int format=0);
+  // open a movie up (with a given format and a preferred codec)
+  virtual void openMess(t_symbol *filename, int format=0, int codec=-1);
 
   //////////
   // prepare for texturing (on open)
