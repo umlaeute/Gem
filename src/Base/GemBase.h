@@ -15,21 +15,18 @@ LOG
 #ifndef INCLUDE_GEMBASE_H_
 #define INCLUDE_GEMBASE_H_
 
+#include "config.h"
+
+#ifndef HELPSYMBOL_BASE
+/* this must be defined before including CPPExtern.h (see below) */
+# define HELPSYMBOL_BASE "Gem/"
+#endif
+
+
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef __WIN32__
 # include <windows.h>
 #endif
-
-#include "config.h"
-
-
-#ifndef HELPSYMBOL_BASE
-/* this must be defined before including CPPExtern.h */
-# define HELPSYMBOL_BASE "Gem/"
-#endif
-
-#include "Base/CPPExtern.h"
-#include "Base/GemState.h"
 
 #ifdef __APPLE__
 # include <OpenGL/gl.h>
@@ -62,12 +59,16 @@ LOG
 # endif /* GLEXT */ 
 
 /* some people have problems with the ARB-extensions for vertex shaders */
-# if defined DONT_USE_ARB && defined GL_ARB_vertex_program
-#  undef GL_ARB_vertex_program
+# ifdef DONT_USE_ARB
+#  ifdef GL_ARB_vertex_program
+#   undef GL_ARB_vertex_program
+#  endif
+#  ifdef GL_ARB_fragment_program
+#   undef GL_ARB_fragment_program
+#  endif
 # endif /* DONT_USE_ARB */
 
 #endif // __APPLE__
-
 
 // windows has this oh so old openGL installed...
 #if !defined GL_BGRA && defined GL_BGRA_EXT
@@ -95,6 +96,9 @@ LOG
 #ifndef GL_DEFAULT_GEM
 # define GL_DEFAULT_GEM 0xFFFF
 #endif
+
+#include "Base/CPPExtern.h"
+#include "Base/GemState.h"
 
 class GemCache;
 
