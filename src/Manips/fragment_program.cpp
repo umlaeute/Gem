@@ -340,7 +340,7 @@ void fragment_program :: printInfo()
 # endif
 # ifdef GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB, &bitnum);
-	post("MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS: %d", bitnum);
+	post("MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS: %d", bitnum);
 	post("");
 # endif
 # ifdef GL_PROGRAM_ALU_INSTRUCTIONS_ARB
