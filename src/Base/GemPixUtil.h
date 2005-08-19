@@ -18,13 +18,15 @@ LOG
 #define INCLUDE_GEMPIXUTIL_H_
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
+#ifdef __WIN32__
 # include <windows.h>
 
 # pragma warning( disable : 4244 )
 # pragma warning( disable : 4305 )
 # pragma warning( disable : 4091 )
 #endif
+
+# include "config.h"
 
 #ifdef __APPLE__
 # include <OpenGL/gl.h>
@@ -33,8 +35,8 @@ LOG
 # include <QuickTime/QuickTime.h>
 #else
 # include <GL/gl.h>
-# include "config.h"
-# ifdef INCLUDE_GLEXT
+# ifndef DONT_INCLUDE_GLEXT
+/* yhä: in glext.h some GL_YCBCR_* definitions might be hidden */
 #  include <GL/glext.h>
 # endif
 #endif // __APPLE__
@@ -105,21 +107,24 @@ const int chY1          = 3;
 # define GL_BGR_EXT 0x80E0
 #endif
 
+#ifndef GL_YUV422_GEM
 
-#ifdef GL_YCBCR_422_APPLE
-#define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
-#elif defined GL_CRYCBY_422_NVX
-#define GL_YCBCR_422_GEM GL_CRYCBY_422_NVX
-//#define GL_YCBCR_422_GEM GL_YCRYCB_422_NVX
-#elif defined GL_YCRCB_422_SGIX
-#define GL_YCBCR_422_GEM GL_YCRCB_422_SGIX
-#endif
+# ifdef GL_YCBCR_422_APPLE
+#  define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
+# elif defined GL_CRYCBY_422_NVX
+#  define GL_YCBCR_422_GEM GL_CRYCBY_422_NVX
+//#  define GL_YCBCR_422_GEM GL_YCRYCB_422_NVX
+# elif defined GL_YCRCB_422_SGIX
+#  define GL_YCBCR_422_GEM GL_YCRCB_422_SGIX
+# endif
 
-#ifndef GL_YCBCR_422_GEM
-#define GL_YCBCR_422_GEM 0x85B9
-#endif
+# ifndef GL_YCBCR_422_GEM
+#  define GL_YCBCR_422_GEM 0x85B9
+# endif
 
-#define GL_YUV422_GEM GL_YCBCR_422_GEM
+# define GL_YUV422_GEM GL_YCBCR_422_GEM
+
+#endif /* GL_YUV422_GEM */
 
 #if !defined(GL_TEXTURE_RECTANGLE_EXT) && defined(GL_TEXTURE_RECTANGLE_NV)
 #define GL_TEXTURE_RECTANGLE_EXT GL_TEXTURE_RECTANGLE_NV
@@ -166,11 +171,11 @@ struct GEM_EXTERN imageStruct
   void info();
   //////////
   // columns
-  unsigned char* allocate(int size);
+  unsigned char* allocate(size_t size);
   unsigned char* allocate();
 
   // if we have allocated some space already, only re-allocate when needed.
-  unsigned char* reallocate(int size);
+  unsigned char* reallocate(size_t size);
   unsigned char* reallocate();
  
   // delete the buffer (if it is ours)
@@ -205,6 +210,7 @@ struct GEM_EXTERN imageStruct
    * C is the offset in the interleaved data (like chRed==0 for red)
    * you should use chRed instead of 0 (because it might not be 0)
    */
+  // heck, why are X&Y swapped ?? (JMZ)
   inline unsigned char GetPixel(int Y, int X, int C)
   { return(data[Y * xsize * csize + X * csize + C]); }
   
@@ -248,6 +254,10 @@ struct GEM_EXTERN imageStruct
    */
   void refreshImage(imageStruct *to);
 
+  /* inplace swapping Red and Blue channel */
+  void swapRedBlue    ();
+
+
   ///////////////////////////////////////////////////////////////////////////////
   // acquiring data including colour-transformations
   // should be accelerated if possible
@@ -275,7 +285,27 @@ struct GEM_EXTERN imageStruct
   void fromYV12   (unsigned char* Y, unsigned char*U, unsigned char*V);
   /* assume that the planes are near each other: YVU */
   void fromYV12   (unsigned char* orgdata);
-
+  /* overloading the above two in order to accept pdp YV12 packets */
+  void fromYV12   (short* Y, short*U, short*V);
+  void fromYV12   (short* orgdata);
+  
+  /* altivec functions */
+#ifdef __VEC__
+  void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size, 
+							unsigned char *pixels);
+  void RGBA_to_YCbCr_altivec(unsigned char *rgbadata, size_t RGBA_size, 
+							 unsigned char *pixels);
+  void BGR_to_YCbCr_altivec(unsigned char *bgrdata, size_t BGR_size, 
+							unsigned char *pixels);
+  void BGRA_to_YCbCr_altivec(unsigned char *bgradata, size_t BGRA_size, 
+							 unsigned char *pixels);
+  void YUV422_to_BGRA_altivec(unsigned char *yuvdata, size_t pixelnum,
+                             unsigned char *pixels);
+  void YV12_to_RGB_altivec(short*Y, short*U, short*V, size_t pixelnum);
+  void YV12_to_RGBA_altivec(short*Y, short*U, short*V, size_t pixelnum);
+  void YV12_to_YUV422_altivec(short*Y, short*U, short*V, size_t pixelnum);
+#endif
+  
   /* aliases */
   void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
   void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
@@ -291,7 +321,7 @@ struct GEM_EXTERN imageStruct
   // this data is freed when the destructor is called
   unsigned char   *pdata;
   // "datasize" is the size of data reserved at "pdata"    
-  int             datasize;
+  size_t    datasize;
   
   public:
   //////////
@@ -338,5 +368,4 @@ GEM_EXTERN extern void copy2Image(imageStruct *to, imageStruct *from);
 GEM_EXTERN extern void refreshImage(imageStruct *to, imageStruct *from);
 
 GEM_EXTERN extern int getPixFormat(char*);
-
 #endif // GEMPIXUTIL_H_

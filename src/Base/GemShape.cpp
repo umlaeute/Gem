@@ -26,7 +26,7 @@
 //
 /////////////////////////////////////////////////////////
 GemShape :: GemShape(t_floatarg size)
-  : m_linewidth(1.0f), m_size((float)size), m_inlet(NULL)
+  : m_linewidth(1.0f), m_size((float)size), m_inlet(NULL), m_drawType(GL_DEFAULT_GEM)
 {
   if (m_size == 0.f)m_size = 1.f;
 
@@ -88,22 +88,25 @@ void GemShape :: typeMess(t_symbol *type)
 {
   char c=toupper(*type->s_name);
   switch (c){
+  case 'D': // default
+    m_drawType = GL_DEFAULT_GEM;
+    break;
   case 'L': // line
     m_drawType = GL_LINE_LOOP;
     break;
   case 'F': // fill
     m_drawType = GL_POLYGON;
     break;
-  case 'Q': // fill
+  case 'Q': // quads
     m_drawType = GL_QUADS;
     break;
   case 'P': // point
     m_drawType = GL_POINTS;
     break;
-  case 'T': // point
+  case 'T': // triangles
     m_drawType = GL_TRIANGLES;
     break;
-  case 's': // point
+  case 'S': // strip
     m_drawType = GL_TRIANGLE_STRIP;
     break;  
     

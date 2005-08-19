@@ -4,21 +4,32 @@
  * so you might have to edit Project->Settings too
  */
 
-
+/* use FTGL instead of GLTT for font-rendering */
 #define FTGL
 
+/* use the "new" film-objects, to allow the use of multiple APIs */
+#define FILM_NEW
 
-#define __FILM__NEW
-
-#define HAVE_DIRECTSHOW
-
+/* quicktime-support for film-loading */
 #define HAVE_QUICKTIME
+
+/* use direct-show for video-in (e.g. for firewire,...) */
+#define HAVE_DIRECTSHOW
 
 
 /*
- * if we use nvidia's headers, we will most likely want to include GL/gl.h
+ * if we use nvidia's headers, we will most likely want to include gl/glext.h
+ * if you don't have gl/glext.h, enable the following...
  */
-#define INCLUDE_GLEXT
+#define DONT_INCLUDE_GLEXT
+
+
+/*
+ * we want libjpeg and libtiff for reading/writing images
+ */
+#define HAVE_LIBTIFF
+#define HAVE_LIBJPEG
+
 
 
 /*
