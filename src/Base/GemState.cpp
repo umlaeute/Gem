@@ -35,3 +35,4 @@ GemState :: GemState()
     TexCoordArray(0), HaveTexCoordArray(0),
     drawType(0)
 { }
+

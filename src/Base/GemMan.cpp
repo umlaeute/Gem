@@ -18,21 +18,23 @@
 
 #include "GemMan.h"
 
-#ifdef unix
-#include <sys/time.h>
-#include <GL/glx.h>
-#include <X11/Xlib.h>
-#elif __APPLE__
-#include <stdlib.h>
-#include <string.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#include <Carbon/Carbon.h>
-#include <Quicktime/Quicktime.h>
-#include <time.h>
+#include "Base/config.h"
 
-#elif _WINDOWS
-#include <stdlib.h>
+#ifdef unix
+# include <sys/time.h>
+# include <GL/glx.h>
+# include <X11/Xlib.h>
+#elif __APPLE__
+# include <stdlib.h>
+# include <string.h>
+# include <OpenGL/gl.h>
+# include <OpenGL/glext.h>
+# include <Carbon/Carbon.h>
+# include <Quicktime/Quicktime.h>
+# include <time.h>
+
+#elif __WIN32__
+# include <stdlib.h>
 // I hate Microsoft...I shouldn't have to do this!
 #endif
 
@@ -43,8 +45,7 @@
 
 #include "Controls/gemhead.h"
 
-#include "Base/config.h"
-#ifdef INCLUDE_GLEXT
+#if !defined __APPLE__ && !defined DONT_INCLUDE_GLEXT
 # include <GL/glext.h>
 #endif
 
@@ -60,6 +61,7 @@ char* GemMan::m_title = "GEM";
 int GemMan::m_xoffset = 0;
 int GemMan::m_yoffset = 0;
 int GemMan::m_fullscreen = 0;
+int GemMan::m_menuBar = 1;
 int GemMan::m_secondscreen = 0;
 int GemMan::m_height = 500;
 int GemMan::m_width = 500;
@@ -142,7 +144,7 @@ GEM_EXTERN void gemAbortRendering()
 static t_clock *s_windowClock = NULL;
 static int s_windowDelTime = 10;
 
-#ifdef _WINDOWS
+#ifdef __WIN32__
 static int s_windowRun = 0;
 static int s_singleContext = 0;
 
@@ -171,6 +173,8 @@ static void dispatchGemWindowMessages()
   XButtonEvent* eb = (XButtonEvent*)&event; 
   XKeyEvent* kb  = (XKeyEvent*)&event; 
   XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
+  char keystring[2];
+  KeySym keysym_return;
   win = GemMan::getWindowInfo(); 
 
   while (XCheckWindowEvent(win.dpy,win.win,
@@ -194,10 +198,31 @@ static void dispatchGemWindowMessages()
 	  triggerMotionEvent(eb->x, eb->y); 
 	  break; 
 	case KeyPress:
-	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
+	  if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
+	    //modifier key:use keysym
+	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+	  }
+	  if ( (keysym_return & 0xff00)== 0xff00 ) {
+	    //non alphanumeric key: use keysym
+	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+	  } else {
+	    triggerKeyboardEvent(keystring, kb->keycode, 1);
+	  }
+	  //triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
 	  break;
 	case KeyRelease:
-	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
+	  if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
+	    //modifier key:use keysym
+	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
+	  }
+
+	  if ( (keysym_return & 0xff00)== 0xff00 ) {
+	    //non alphanumeric key: use keysym
+	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
+	  } else {
+	    triggerKeyboardEvent(keystring, kb->keycode, 0);
+	  }
+	  //	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
 	  break;
 	case ResizeRequest:
 	  triggerResizeEvent(res->width, res->height);
@@ -296,7 +321,7 @@ void GemMan :: createContext(char* disp)
       XCloseDisplay(dummyDpy);
       return;
     }
-#elif _WINDOWS
+#elif __WIN32__
   // can we only have one context?
   if (getenv("GEM_SINGLE_CONTEXT") &&
       !strcmp("1", getenv("GEM_SINGLE_CONTEXT")))
@@ -666,7 +691,7 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
 
 void GemMan :: render(void *)
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   static int firstTime = 1;
   static float countFreq = 0;
 #endif
@@ -675,7 +700,7 @@ void GemMan :: render(void *)
     return;
 
   // are we profiling?
-#ifdef _WINDOWS
+#ifdef __WIN32__
   if (firstTime)
     {
       LARGE_INTEGER freq;
@@ -899,7 +924,7 @@ void GemMan :: render(void *)
 
   // are we profiling?
   if (m_profile == 1 || m_profile == 2)
-#ifdef _WINDOWS
+#ifdef __WIN32__
     {
       LARGE_INTEGER endTime;
       QueryPerformanceCounter(&endTime);
@@ -1152,7 +1177,7 @@ int GemMan :: createWindow(char* disp)
   m_windowNumber++;
   windowInit();
   clock_delay(s_windowClock, s_windowDelTime);
-#ifdef _WINDOWS
+#ifdef __WIN32__
   s_windowRun = 1;
 #endif
 
@@ -1165,7 +1190,7 @@ int GemMan :: createWindow(char* disp)
 /////////////////////////////////////////////////////////
 void GemMan :: destroyWindow()
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   // don't want to get rid of this
   if (s_singleContext)
     return;
@@ -1193,7 +1218,7 @@ void GemMan :: destroyWindow()
   if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
 
   glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
-#elif _WINDOWS              // for Windows
+#elif __WIN32__              // for Windows
 
   if (!constInfo.dc && !constInfo.context)return; // do not crash ??
 
@@ -1213,7 +1238,7 @@ void GemMan :: destroyWindow()
 /////////////////////////////////////////////////////////
 int createConstWindow(char* disp)
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   // can we only have one context?
   if (s_singleContext)
     {
@@ -1259,7 +1284,7 @@ int createConstWindow(char* disp)
 /////////////////////////////////////////////////////////
 void destroyConstWindow()
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   if (s_singleContext)
     {
     }
@@ -1278,7 +1303,7 @@ void GemMan :: swapBuffers()
   if (GemMan::m_buffer == 2)
 #ifdef unix             // for Unix
     glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
-#elif _WINDOWS          // for WinNT
+#elif __WIN32__          // for WinNT
   SwapBuffers(gfxInfo.dc);
 #elif __APPLE__		// for Macintosh
   ::aglSwapBuffers(gfxInfo.context);
@@ -1336,7 +1361,7 @@ void GemMan :: cursorOnOff(int state)
 /////////////////////////////////////////////////////////
 void GemMan :: topmostOnOff(int state)
 {
-#ifdef _WINDOWS
+#ifdef __WIN32__
   if (m_windowState)
     topmostGemWindow(gfxInfo,state);
 #else

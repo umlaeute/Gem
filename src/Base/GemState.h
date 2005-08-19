@@ -65,72 +65,75 @@ class GEM_EXTERN GemState
 
         //////////
         // Has something changed since the last time?
-        int                 dirty;
+        int             dirty;
 
     	//////////
     	// Are we in a display list creation?
-    	int 	    	    inDisplayList;
+    	int 	    	inDisplayList;
     	
     	//////////
     	// Lighting on?
-    	int 	    	    lighting;
+    	int 	    	lighting;
     	
     	//////////
     	// Smooth shading (flat is other type)
-    	int 	    	    smooth;
+    	int 	        smooth;
     	
     	//////////
     	// Texture mapping on?
-    	int 	    	    texture;
+	// 0..off
+	// 1..normalized texture
+	// 2..rectangle texture
+    	int 	        texture;
     	
     	//////////
     	// The image to texture map
-    	pixBlock	        *image;
+    	pixBlock       *image;
     	
     	//////////
     	// Texture coordinates.
     	// This can be NULL if there aren't any coordinates
-    	TexCoord    	    *texCoords;
+    	TexCoord       *texCoords;
     	
     	//////////
     	// The number of TexCoords
-    	int 	    	    numTexCoords;
-    	
+    	int 	    	numTexCoords;
+
     	//////////
     	// Stereoscopic rendering?
-	    // 0 - no
-	    // 1 - left
-	    // 2 - right
-    	int					stereo;
-    	
-		//////////
-		// Milliseconds since last frame
-		// If in Stereoscopic mode, then it is the same number for both left
-		//		and right renderings
-		float				tickTime;
-
-		////////////
+	// 0 - no
+	// 1 - left
+	// 2 - right
+    	int		stereo;
+ 	
+	//////////
+	// Milliseconds since last frame
+	// If in Stereoscopic mode, then it is the same number for both left
+	//		and right renderings
+	float		tickTime;
+   
+	////////////
         //vertex-array data
+	
+	int             VertexDirty; // the vertex-arrays has changed
 
-		int                 VertexDirty; // the vertex-arrays has changed
+        GLfloat		*VertexArray;
+        int		VertexArraySize;
+        int		VertexArrayStride;
 
-        GLfloat				*VertexArray;
-        int					VertexArraySize;
-        int					VertexArrayStride;
+        GLfloat		*ColorArray;
+        int		HaveColorArray;
 
-        GLfloat				*ColorArray;
-        int					HaveColorArray;
+        GLfloat		*NormalArray;
+        int		HaveNormalArray;
 
-        GLfloat				*NormalArray;
-        int				HaveNormalArray;
-
-        GLfloat				*TexCoordArray;
-        int				HaveTexCoordArray;
+        GLfloat		*TexCoordArray;
+        int		HaveTexCoordArray;
 
 	//////////////////
 	// the default draw-type (might be overriden within a Geo)
-        GLenum				drawType;
-        
+        GLenum		drawType;
+
         //////////
         // Constructor
     	GemState();
@@ -146,8 +149,6 @@ class GEM_EXTERN GemState
 	    return texCoords[num].t;
 	  else return 0.;
 	}
-
-	void setColor(int num);
 };
     	
 #endif	// for header file

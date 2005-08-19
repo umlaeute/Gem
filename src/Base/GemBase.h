@@ -15,27 +15,52 @@ LOG
 #ifndef INCLUDE_GEMBASE_H_
 #define INCLUDE_GEMBASE_H_
 
+#ifndef HELPSYMBOL_BASE
+/* this must be defined before including CPPExtern.h */
+# define HELPSYMBOL_BASE "Gem/"
+#endif
+
+#include "config.h"
+
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef _WINDOWS
+#ifdef __WIN32__
 # include <windows.h>
 #endif
 
 #ifdef __APPLE__
 # include <OpenGL/gl.h>
+# include <OpenGL/glu.h>
 # include <OpenGL/glext.h>
 #else
-# include "config.h"
+
+// on mesa, GL_GLEXT_LEGACY automatically includes glext.h from within gl.h
 # define GL_GLEXT_LEGACY
+# define GL_GLEXT_PROTOTYPES   1
+
 # include <GL/gl.h>
-# if defined INCLUDE_GLEXT || defined __linux__
+# include <GL/glu.h>
+
+# if  (!defined GL_GLEXT_VERSION) && (!defined DONT_INCLUDE_GLEXT)
+/* windos is (again) a bit difficult:
+ * by default, there are no GL/glext.h headers
+ * but of course you can install nvidia's headers to get them.
+ * since i don't know, whether the system has this headers,
+ * we define DONT_INCLUDE_GLEXT in Base/configNT.h on demand
+ * so, if your system lacks GL/glext.h,
+ * just undefine the appropriate line in Base/configNT.h
+ */
 
 // stupid hack, as nvidia has erroneous glext-headers!
 #  define boolean GLboolean
-
-#  define GL_GLEXT_PROTOTYPES   1
 #  include <GL/glext.h>
 
-# endif /* GLEXT */
+# endif /* GLEXT */ 
+
+/* some people have problems with the ARB-extensions for vertex shaders */
+# if defined DONT_USE_ARB && defined GL_ARB_vertex_program
+#  undef GL_ARB_vertex_program
+# endif /* DONT_USE_ARB */
+
 #endif // __APPLE__
 
 
@@ -62,12 +87,14 @@ LOG
 # define GL_BGR_EXT 0x80E0
 #endif
 
-#ifndef HELPSYMBOL_BASE
-# define HELPSYMBOL_BASE "Gem/"
+#ifndef GL_DEFAULT_GEM
+# define GL_DEFAULT_GEM 0xFFFF
 #endif
+
 
 #include "Base/CPPExtern.h"
 #include "Base/GemState.h"
+
 
 class GemCache;
 
