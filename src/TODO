@@ -1,3 +1,22 @@
-TODO for gem-0.888 release:
+Base:
+	multiple output ?
+	"external" windows
 
+Controls:
+	selectables
 
+Geos:
+	vertex stuff
+
+Manips:
+
+Nongeos: 
+	add other light-types
+	check for the maximum number of lights during runtime
+
+Particles:
+
+Pixes:
+	motion detection
+	MMX, SSE2
+	windows movie loader (have a look at guliverkli)

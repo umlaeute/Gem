@@ -1,0 +1,12 @@
+SRCDIR?=..
+
+include $(SRCDIR)/Make.config
+
+INSTALL ?= install
+INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA = ${INSTALL} -m 644
+
+CXXLINK = $(CXX) -o $@
+#STRIP = strip --strip-unneeded -R .note -R .comment
+
+SHELL = /bin/sh
