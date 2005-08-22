@@ -26,11 +26,8 @@
 //
 /////////////////////////////////////////////////////////
 
-film :: film(int format) {
-  m_wantedFormat = format;
-  m_curFrame=0;
-  m_curTrack=0;
-}
+film :: film(int format) : m_wantedFormat(format), m_curFrame(0), m_curTrack(0) 
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor
