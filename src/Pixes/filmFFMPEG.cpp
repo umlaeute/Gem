@@ -102,6 +102,8 @@ bool filmFFMPEG :: open(char *filename, int format)
     goto unsupported;
   }
   m_curFrame = 0;
+  m_wantedFrame=0;
+  m_wantedTrack=m_curTrack;
 
   // get all of the information about the stream
   
@@ -111,13 +113,18 @@ bool filmFFMPEG :: open(char *filename, int format)
     int frames=(int)((((t_float)(m_Format->streams[i]->duration))/AV_TIME_BASE)*
                 (m_Format->streams[i]->codec.frame_rate));
     m_numFrames=frames;
-    post("%d :: %d %d (%d) %d", m_numFrames, (int)m_Format->streams[i]->duration,(int)m_Format->duration, (int)AV_TIME_BASE,(int)m_Format->streams[i]->codec.frame_rate);
+    //    post("%d :: %d %d (%d) %d", m_numFrames, (int)m_Format->streams[i]->duration,(int)m_Format->duration, (int)AV_TIME_BASE,(int)m_Format->streams[i]->codec.frame_rate);
 
   } else
     m_numFrames = -1;
 
   m_readNext=true;
+
+#if FFMPEG_VERSION_INT >= 0x000409
   m_allowSeek=true;
+  if(av_seek_frame(m_Format, 0, 0, 0))
+    m_allowSeek=false;
+#endif /* FFMPEG_VERSION */
 
   m_image.image.xsize = m_Format->streams[i]->codec.width;
   m_image.image.ysize = m_Format->streams[i]->codec.height;
@@ -173,14 +180,17 @@ pixBlock* filmFFMPEG :: getFrame(){
   int ret;
   if (m_Format) {
     if (!m_readNext)return &m_image;
+#if FFMPEG_VERSION_INT >= 0x000409
     if(m_allowSeek && (m_wantedTrack!=m_curTrack || m_wantedFrame!=m_curFrame)){
+      int err=0;
       int64_t timestamp = m_wantedFrame;
-      int err = av_seek_frame(m_Format, m_wantedTrack, timestamp, AVSEEK_FLAG_BACKWARD|AVSEEK_FLAG_ANY);
+      int flags = AVSEEK_FLAG_ANY;
+      if(m_wantedFrame<m_curFrame)flags|=AVSEEK_FLAG_BACKWARD;
+      err = av_seek_frame(m_Format, m_wantedTrack, timestamp, flags);
       if(-1==err)m_allowSeek=false;
-      //post("editcount=%d", m_Format->edit_count);
       m_curTrack=m_wantedTrack;
     }
-
+#endif
     len = m_PacketLen;
     ptr = m_PacketPtr;
     while (!gotit) {
