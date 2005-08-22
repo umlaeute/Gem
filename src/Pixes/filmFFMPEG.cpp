@@ -29,7 +29,7 @@ filmFFMPEG :: filmFFMPEG(int format) : film(format) {
   if (first_time) {
 #ifdef HAVE_FFMPEG
     av_register_all();
-    post("pix_film:: libffmpeg support");
+    post("pix_film:: FFMPEG support");
 #endif
     first_time = false;
   }
@@ -50,7 +50,11 @@ filmFFMPEG :: ~filmFFMPEG()
 void filmFFMPEG :: close(void)
 {
   if (m_Format){
-    avcodec_close(&m_Format->streams[m_curTrack]->codec);
+    if(m_curTrack>=0 && 
+       NULL!=m_Format->streams[m_curTrack] && 
+       NULL!=&m_Format->streams[m_curTrack]->codec){
+      avcodec_close(&m_Format->streams[m_curTrack]->codec);
+    }
     av_close_input_file(m_Format);
     m_Format=0;
   }
@@ -85,12 +89,15 @@ bool filmFFMPEG :: open(char *filename, int format)
 
   m_curTrack = i;  // remember the stream
   state=2;
-  if (i == m_Format->nb_streams) {
+  //  if (i == m_Format->nb_streams) { /* jmz: ?? weird error-check ??
+  if(i < 0 || NULL==codec) {
     goto unsupported;
-  }   
+  }
 
   state=3;
-  err = avcodec_open(&m_Format->streams[i]->codec,codec);
+  if(codec)
+    err = avcodec_open(&m_Format->streams[i]->codec,codec);
+
   if (err < 0) {
     goto unsupported;
   }
@@ -99,7 +106,18 @@ bool filmFFMPEG :: open(char *filename, int format)
   // get all of the information about the stream
   
   // Get the length of the movie
-  m_numFrames = -1;
+  //AVStream*stream=m_Format->streams[i];
+  if(0!=(int)m_Format->streams[i]->duration){
+    int frames=(int)((((t_float)(m_Format->streams[i]->duration))/AV_TIME_BASE)*
+                (m_Format->streams[i]->codec.frame_rate));
+    m_numFrames=frames;
+    post("%d :: %d %d (%d) %d", m_numFrames, (int)m_Format->streams[i]->duration,(int)m_Format->duration, (int)AV_TIME_BASE,(int)m_Format->streams[i]->codec.frame_rate);
+
+  } else
+    m_numFrames = -1;
+
+  m_readNext=true;
+  m_allowSeek=true;
 
   m_image.image.xsize = m_Format->streams[i]->codec.width;
   m_image.image.ysize = m_Format->streams[i]->codec.height;
@@ -111,6 +129,7 @@ bool filmFFMPEG :: open(char *filename, int format)
   m_PacketPtr = NULL;
   m_Pkt.data = NULL;
   return true;
+
  unsupported:
   startpost("FFMPEG failed");
   switch (state){
@@ -129,14 +148,14 @@ bool filmFFMPEG :: open(char *filename, int format)
   default:;
   }
   switch(err){
-  case(AVERROR_UNKNOWN):startpost("[unknown error]"); break;
-  case(AVERROR_IO):startpost("[i/o error]"); break;
-  case(AVERROR_NUMEXPECTED): startpost("[number syntax expected in filename]"); break;
-  case(AVERROR_INVALIDDATA): startpost("[invalid data found]"); break;
-  case(AVERROR_NOMEM):startpost("[not enough memory]"); break;
-  case(AVERROR_NOFMT):startpost("[unknown format]"); break;
-  case(AVERROR_NOTSUPP):startpost("[operation not supported]"); break;
-  default:;
+  case(AVERROR_UNKNOWN):startpost(" [unknown error]"); break;
+  case(AVERROR_IO):startpost(" [i/o error]"); break;
+  case(AVERROR_NUMEXPECTED): startpost(" [number syntax expected in filename]"); break;
+  case(AVERROR_INVALIDDATA): startpost(" [invalid data found]"); break;
+  case(AVERROR_NOMEM):startpost(" [not enough memory]"); break;
+  case(AVERROR_NOFMT):startpost(" [unknown format]"); break;
+  case(AVERROR_NOTSUPP):startpost(" [operation not supported]"); break;
+  default:startpost(" [%d]", err);
      }
   close();
   return false;
@@ -154,6 +173,14 @@ pixBlock* filmFFMPEG :: getFrame(){
   int ret;
   if (m_Format) {
     if (!m_readNext)return &m_image;
+    if(m_allowSeek && (m_wantedTrack!=m_curTrack || m_wantedFrame!=m_curFrame)){
+      int64_t timestamp = m_wantedFrame;
+      int err = av_seek_frame(m_Format, m_wantedTrack, timestamp, AVSEEK_FLAG_BACKWARD|AVSEEK_FLAG_ANY);
+      if(-1==err)m_allowSeek=false;
+      //post("editcount=%d", m_Format->edit_count);
+      m_curTrack=m_wantedTrack;
+    }
+
     len = m_PacketLen;
     ptr = m_PacketPtr;
     while (!gotit) {
@@ -227,7 +254,15 @@ pixBlock* filmFFMPEG :: getFrame(){
 }
 
 int filmFFMPEG :: changeImage(int imgNum, int trackNum){
-  m_readNext = true;
+  if(m_Format){
+    m_wantedFrame=(imgNum==-1)?m_curFrame:imgNum;
+    m_wantedTrack=(trackNum==-1)?m_curTrack:trackNum;
+    m_readNext = true;
+    if(m_numFrames!=-1){
+      if(m_wantedFrame<0 || m_wantedFrame>=m_numFrames)
+        return FILM_ERROR_FAILURE;
+    }
+  }
   return FILM_ERROR_DONTKNOW;
 }
 #endif /* HAVE_FFMPEG */

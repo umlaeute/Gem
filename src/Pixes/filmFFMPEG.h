@@ -73,7 +73,11 @@ class GEM_EXTERN filmFFMPEG : public film {
    int       m_PacketLen;
    uint8_t*    m_PacketPtr;
 #endif //FFMPEG
-  bool m_readNext;
+
+   int m_wantedFrame, m_wantedTrack;
+   //////
+   // some formats do not allow to seek
+   bool m_allowSeek;
 
 };
 
