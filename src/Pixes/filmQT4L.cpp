@@ -76,9 +76,9 @@ bool filmQT4L :: open(char *filename, int format)
     // Get the video dimensions
     m_image.image.xsize = quicktime_video_width (m_quickfile, 0);
     m_image.image.ysize = quicktime_video_height(m_quickfile, 0);
-    char *codec = quicktime_video_compressor(m_quickfile, 0);
     if (!quicktime_supported_video(m_quickfile, 0)){
-//      post("GEM: pix_film: unsupported CODEC '%s'!", codec);
+      //    char *codec = quicktime_video_compressor(m_quickfile, 0);
+      //    post("GEM: pix_film: unsupported CODEC '%s'!", codec);
       quicktime_close(m_quickfile);
 	  m_quickfile=0;
       return false;
