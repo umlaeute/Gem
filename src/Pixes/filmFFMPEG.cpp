@@ -66,14 +66,17 @@ void filmFFMPEG :: close(void)
 /////////////////////////////////////////////////////////
 bool filmFFMPEG :: open(char *filename, int format)
 {
-  if (format>0)m_wantedFormat=format;
-  int err, i;
+  int i=0;
   int state=0;
-  AVCodec* codec;
-  err = av_open_input_file(&m_Format,filename,NULL,0,NULL);
+  AVCodec* codec=0;
+
+  int err = av_open_input_file(&m_Format,filename,NULL,0,NULL);
   if (err < 0) {
     goto unsupported;
   }
+
+  if (format>0)m_wantedFormat=format;
+
   state=1;
   err = av_find_stream_info(m_Format);
   if (err < 0) {
@@ -94,9 +97,9 @@ bool filmFFMPEG :: open(char *filename, int format)
     goto unsupported;
   }
 
+  //  post("codec=%x", codec); post("streamcodec = %x %X", &m_Format->streams[i]->codec, m_Format->streams[i]->codec);
   state=3;
-  if(codec)
-    err = avcodec_open(&m_Format->streams[i]->codec,codec);
+  err = avcodec_open(&m_Format->streams[i]->codec,codec);
 
   if (err < 0) {
     goto unsupported;
