@@ -36,12 +36,9 @@ pix_videoNEW :: pix_videoNEW(){
   while(i--)m_videoHandles[i]=NULL;
   m_numVideoHandles=0;
 
-#ifdef HAVE_VIDEO4LINUX
   m_videoHandles[m_numVideoHandles]=new videoV4L(GL_RGBA);  m_numVideoHandles++;
-#ifdef HAVE_DV
   m_videoHandles[m_numVideoHandles]=new videoDV4L(GL_RGBA);  m_numVideoHandles++;
-#endif
-#endif
+
   driverMess(0);
 }
 
