@@ -1,16 +1,17 @@
 /*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
+  LOG
+  GEM - Graphics Environment for Multimedia
 
 
 
-    Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
-    Copyleft (l) 2002 James Tittle & Chris Clepper
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+  Copyright (c) 1997-1999 Mark Danks. mark@danks.org
+  Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
+  Copyleft  (l) 2002 James Tittle & Chris Clepper
+  Copyleft  (l) 2005 Georg Holzmann <grh@mur.at>
+  For information on usage and redistribution, and for a DISCLAIMER OF ALL
+  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 
 #ifndef INCLUDE_PIX_BUFFER_READ_H_
 #define INCLUDE_PIX_BUFFER_READ_H_
@@ -47,13 +48,23 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   virtual ~pix_buffer_read();
 
   //////////
-  // Do the processing
+  // set some stuff
   virtual void  setMess(t_symbol*);
   virtual void  frameMess(t_float);
   virtual void  autoMess(t_float);
   virtual void  loopMess(int);
 
+  //////////
+  // do the rendering
   virtual void render(GemState*state);
+
+  //////////
+  // Clear the dirty flag on the pixBlock
+  virtual void postrender(GemState *state);
+
+  //////////
+  // update buffer at startRendering
+  virtual void	startRendering();
 
   //////////
   // the frame to read in the next render-cycle
@@ -66,10 +77,24 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   bool m_loop;
 
   //////////
+  // the current pix_buffer
+  pix_buffer *m_buffer;
+  //////////
+  // the pixBlock with the current image
+  pixBlock m_pixBlock;
+  //////////
+  // do we currently have an image ?
+  bool m_haveImage;
+
+  //////////
   // the name of the buffer we bind to
   t_symbol *m_bindname;
 
  private:
+  //////////
+  // update pix_buffer, image
+  virtual void update_pix_buffer();
+  virtual void update_image();
   
   //////////
   // static member functions
