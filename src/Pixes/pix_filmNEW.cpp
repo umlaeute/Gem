@@ -226,17 +226,18 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format, int codec)
 	return;
   }
 
-  t_atom ap[3];
+  t_atom ap[4];
   SETFLOAT(ap, m_handle->getFrameNum());
   SETFLOAT(ap+1, m_handle->getWidth());
   SETFLOAT(ap+2, m_handle->getHeight());
+  SETFLOAT(ap+3, m_handle->getFPS());
   m_numFrames=m_handle->getFrameNum();
-  post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d)", 
+  post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d) at %f fps", 
        buf, 
        m_handle->getFrameNum(), 
        m_handle->getWidth(), 
-       m_handle->getHeight());
-  outlet_list(m_outNumFrames, 0, 3, ap);
+       m_handle->getHeight(), m_handle->getFPS());
+  outlet_list(m_outNumFrames, 0, 4, ap);
 }
 
 /////////////////////////////////////////////////////////
@@ -246,7 +247,7 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format, int codec)
 void pix_filmNEW :: render(GemState *state)
 {
   /* get the current frame from the file */
-  if (!state || !m_handle)return;
+  if (!m_handle)return;
   state->image=m_handle->getFrame();
   int frame=(int)m_reqFrame;
   if (state->image==0){
