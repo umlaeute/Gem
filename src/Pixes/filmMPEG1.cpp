@@ -82,6 +82,8 @@ bool filmMPEG1 :: open(char *filename, int format)
     
     // Unfortunately there is no way to get the length of an MPEG-Stream
     m_numFrames = -1;
+
+    m_fps = (double)m_streamVid.PictureRate; // ??
     
     m_image.image.xsize  = m_streamVid.Width;
     m_image.image.ysize  = m_streamVid.Height;

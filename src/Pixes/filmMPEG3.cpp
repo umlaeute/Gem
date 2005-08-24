@@ -67,10 +67,13 @@ bool filmMPEG3 :: open(char *filename, int format)
       goto unsupported;
     }
     m_numTracks = mpeg3_total_vstreams(mpeg_file);
+    if(m_curTrack>=m_numTracks || m_curTrack<0)
+      m_curTrack=0;
     m_numFrames = mpeg3_video_frames(mpeg_file, m_curTrack);
+    m_fps = mpeg3_frame_rate(mpeg_file, m_curTrack);
 
-    m_image.image.xsize=mpeg3_video_width(mpeg_file, 0);
-    m_image.image.ysize=mpeg3_video_height(mpeg_file, 0);
+    m_image.image.xsize=mpeg3_video_width(mpeg_file, m_curTrack);
+    m_image.image.ysize=mpeg3_video_height(mpeg_file, m_curTrack);
     if (!m_image.image.xsize*m_image.image.ysize)goto unsupported;
     m_wantedFormat=format;
     m_image.image.setCsizeByFormat(format);

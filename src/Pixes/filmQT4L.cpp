@@ -71,13 +71,15 @@ bool filmQT4L :: open(char *filename, int format)
 	
     // Get the number of tracks
     m_numTracks = quicktime_video_tracks(m_quickfile);
-    // Get the length of the movie (on track 0)
-    m_numFrames = quicktime_video_length(m_quickfile, 0) - 1;
+    // Get the length of the movie (on track current track)
+    m_numFrames = quicktime_video_length(m_quickfile, m_curTrack) - 1;
+    // Get the frame-rate
+    m_fps = quicktime_frame_rate(m_quickfile, m_curTrack);
     // Get the video dimensions
-    m_image.image.xsize = quicktime_video_width (m_quickfile, 0);
-    m_image.image.ysize = quicktime_video_height(m_quickfile, 0);
-    if (!quicktime_supported_video(m_quickfile, 0)){
-      //    char *codec = quicktime_video_compressor(m_quickfile, 0);
+    m_image.image.xsize = quicktime_video_width (m_quickfile, m_curTrack);
+    m_image.image.ysize = quicktime_video_height(m_quickfile, m_curTrack);
+    if (!quicktime_supported_video(m_quickfile, m_curTrack)){
+      //    char *codec = quicktime_video_compressor(m_quickfile, m_curTrack);
       //    post("GEM: pix_film: unsupported CODEC '%s'!", codec);
       quicktime_close(m_quickfile);
 	  m_quickfile=0;

@@ -121,6 +121,8 @@ bool filmFFMPEG :: open(char *filename, int format)
   } else
     m_numFrames = -1;
 
+  m_fps=m_Format->streams[i]->codec.frame_rate;
+
   m_readNext=true;
 
 #if FFMPEG_VERSION_INT >= 0x000409

@@ -113,10 +113,14 @@ class GEM_EXTERN film
    */
   virtual int getFrameNum(){return m_numFrames;}
 
+  // get the frames per seconds (or "-1" if unknown)
+  virtual double getFPS();
+
   // get xsize of the frame
   virtual int getWidth() {return m_image.image.xsize;}
   // get ysize of the frame
   virtual int getHeight() {return m_image.image.ysize;}
+
 
   /* some error codes */
 #define FILM_ERROR_SUCCESS 0 /* no error */
@@ -155,6 +159,10 @@ class GEM_EXTERN film
    * if so m_readNext should be FALSE
    */
   bool m_readNext;
+
+  //////////////////////
+  // the frame-rate
+  double m_fps;
 
   bool m_newfilm;
 };

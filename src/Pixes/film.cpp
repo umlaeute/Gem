@@ -26,7 +26,10 @@
 //
 /////////////////////////////////////////////////////////
 
-film :: film(int format) : m_wantedFormat(format), m_curFrame(0), m_curTrack(0) 
+film :: film(int format) : 
+  m_wantedFormat(format), 
+  m_curFrame(0), m_curTrack(0),
+  m_fps(-1.0)
 {}
 
 /////////////////////////////////////////////////////////
@@ -102,6 +105,13 @@ pixBlock* film :: getFrame(){
   int i = m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
   while(i--)*dummy++=rand()%256;
   return &m_image;
+}
+
+///////////////////////////////
+// get the frames-per-second
+double film :: getFPS() {
+  // we don't know, so we return "-1"
+  return m_fps;
 }
 
 int film :: changeImage(int imgNum, int trackNum){
