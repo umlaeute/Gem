@@ -17,6 +17,8 @@
 #define NO_STATIC_CLASS
 
 #include "pix_buffer.h"
+#include "Base/GemPixImageLoad.h"
+
 #include <string.h>
 #include <stdio.h>
 
@@ -105,6 +107,37 @@ imageStruct*pix_buffer :: getMess(int pos){
   return (m_buffer+pos);
 }
 
+
+/////////////////////////////////////////////////////////
+// openMess
+//
+/////////////////////////////////////////////////////////
+void pix_buffer :: openMess(t_symbol *filename, int pos)
+{
+  // muss i wie in pix_image die ganzen andern Sachen a machen ????
+
+  // load an image into mem
+  char buf[MAXPDSTRING];
+  imageStruct *image = NULL;
+  canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
+  image = image2mem(buf);
+
+  // some checks
+  if (pos<0 || pos>=m_numframes)
+  {
+    post("pix_buffer: index %d out of range (0..%d)!", pos, m_numframes);
+    return;
+  }
+  if(!image)
+  {
+    post("pix_buffer: no valid image!");
+    return;
+  }
+
+  putMess(image,pos);
+}
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -115,6 +148,8 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&pix_buffer::allocateMessCallback,
   		  gensym("allocate"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   class_addbang(classPtr, (t_method)&pix_buffer::bangMessCallback);
+  class_addmethod(classPtr, (t_method)&pix_buffer::openMessCallback,
+  		  gensym("open"), A_SYMBOL, A_FLOAT, A_NULL);
 }
 void pix_buffer :: allocateMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg c=4)
 {
@@ -128,4 +163,8 @@ void pix_buffer :: allocateMessCallback(void *data, t_floatarg x, t_floatarg y, 
 void pix_buffer :: bangMessCallback(void *data)
 {
   GetMyClass(data)->bangMess();
+}
+void pix_buffer :: openMessCallback(void *data, t_symbol *filename, t_floatarg pos)
+{
+  GetMyClass(data)->openMess(filename, (int)pos);
 }
