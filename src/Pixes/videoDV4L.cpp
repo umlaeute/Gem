@@ -238,7 +238,7 @@ void videoDV4L :: closeDevice(void){
 int videoDV4L :: startTransfer(int format)
 {
   if ((dvfd=openDevice(m_devicenum, format))<0){
-    post("closed");
+    post("DV4L: closed");
     return(0);
   }
   m_image.newimage=0;
@@ -253,12 +253,12 @@ int videoDV4L :: startTransfer(int format)
 
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);
   if (!(m_decoder=dv_decoder_new(true, true, true))){
-    post("unable to create DV-decoder...closing");
+    post("DV4L: unable to create DV-decoder...closing");
     closeDevice();
     return(0);
   }
   m_decoder->quality=m_quality;
-  post("DV decoding quality %d ", m_decoder->quality);
+  post("DV4L: DV decoding quality %d ", m_decoder->quality);
 
   m_continue_thread = true;
   pthread_create(&m_thread_id, 0, capturing, this);
@@ -277,7 +277,7 @@ int videoDV4L :: stopTransfer()
   int i=0;
   if(m_haveVideo){
     while(m_capturing){usleep(10);i++;}
-    post("shutting down dv1394 after %d usec", i*10);
+    post("DV4L: shutting down dv1394 after %d usec", i*10);
     ioctl(dvfd, DV1394_SHUTDOWN);
   }
   closeDevice();
