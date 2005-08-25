@@ -80,6 +80,8 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         // property-dialog
         //virtual void	dialogMess(int,t_atom*);
 		virtual void	dialogMess();
+		
+		virtual void	derSwizzler(imageStruct &image);
   
 	//-----------------------------------
 	// GROUP:	Macintosh specific video data
@@ -125,6 +127,21 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 		VideoDigitizerError	vdigErr;
 		DigitizerInfo       m_vdigInfo; //the info about the VDIG
 		
+		
+		//functions and variables for controlling the vdig
+		unsigned short		m_brightness;
+		unsigned short		m_contrast;
+		unsigned short		m_saturation;
+		
+		virtual void		brightnessMess(float X);
+		virtual void		saturationMess(float X);
+		virtual void		contrastMess(float X);
+		
+		//IIDC functions
+		virtual void		exposureMess(float X);
+		virtual void		gainMess(float X);
+		virtual void		whiteBalanceMess(float U,float V);
+		
     private:
     	
     	//////////
@@ -135,6 +152,12 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         static void colorspaceCallback(void *data, t_symbol *cs);
         static void csMessCallback(void *data, t_symbol *cs);
 		static void deviceCallback(void *data, t_floatarg X);
+		static void brightnessCallback(void *data, t_floatarg X);
+		static void saturationCallback(void *data, t_floatarg X);
+		static void contrastCallback(void *data, t_floatarg X);
+		static void exposureCallback(void *data, t_floatarg X);
+		static void gainCallback(void *data, t_floatarg X);
+		static void whiteBalanceCallback(void *data, t_floatarg U,t_floatarg V);
 };
 
 #endif
