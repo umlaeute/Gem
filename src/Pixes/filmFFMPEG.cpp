@@ -110,18 +110,26 @@ bool filmFFMPEG :: open(char *filename, int format)
 
   // get all of the information about the stream
   
-  // Get the length of the movie
+  // Get the length and the fps of the movie
   //AVStream*stream=m_Format->streams[i];
+
+#ifdef AV_TIME_BASE_Q
+  /*
+    the AV_TIME_BASE_Q is rather a guess than something i could prove
+   */
+  m_fps=1/av_q2d(m_Format->streams[i]->codec.time_base);
+#else
+  m_fps=m_Format->streams[i]->codec.frame_rate;
+#endif
+  if(m_fps<=0.f)m_fps=-1.0;
+
   if(0!=(int)m_Format->streams[i]->duration){
     int frames=(int)((((t_float)(m_Format->streams[i]->duration))/AV_TIME_BASE)*
-                (m_Format->streams[i]->codec.frame_rate));
-    m_numFrames=frames;
-    //    post("%d :: %d %d (%d) %d", m_numFrames, (int)m_Format->streams[i]->duration,(int)m_Format->duration, (int)AV_TIME_BASE,(int)m_Format->streams[i]->codec.frame_rate);
-
+                (m_fps));
+    m_numFrames=(frames<0)?-frames:frames;
   } else
     m_numFrames = -1;
 
-  m_fps=m_Format->streams[i]->codec.frame_rate;
 
   m_readNext=true;
 
