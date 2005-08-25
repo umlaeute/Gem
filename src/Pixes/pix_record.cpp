@@ -80,6 +80,7 @@ pix_record :: pix_record(int argc, t_atom *argv)
 	//	post("pix_record : codec %i %s %i ctype",i,codecName.typeName, codecName.cType);
 		codecContainer[i].position = i;
 		codecContainer[i].ctype = codecName.cType;
+		codecContainer[i].codec = codecName.codec;
 		}
   
   //initialize member variables
@@ -91,7 +92,7 @@ pix_record :: pix_record(int argc, t_atom *argv)
   m_recordStop = 0;
   m_recordSetup = 0;
   m_codecType = kJPEGCodecType;
-  m_codec = (CodecComponent)65719;//65708; //this is pjpeg????
+  m_codec = (CodecComponent)65731;//65719;//65708; //this is pjpeg????
   m_codecSet = true;
   m_spatialQuality = codecNormalQuality; //codecHighQuality;
   m_codecQualitySet = true;
@@ -138,7 +139,7 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 	
 	//this mess should create and open a file for QT to use
 	//probably should be a separate function
-	post("filename %s",m_filename);
+	//post("filename %s",m_filename);
 	if (!m_filename[0]) {
         post("pix_record:  no filename passed");
 		return;
@@ -155,7 +156,7 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
                         write(fd, " ", 1);
                         close(fd);
 						err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
-						post("pix_record : made new file %s",m_filename);
+						//post("pix_record : made new file %s",m_filename);
 			}
 
             
@@ -203,7 +204,7 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 	//give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
 	m_rowBytes = m_width * 2;
 	
-	m_srcGWorld = NULL;
+	//m_srcGWorld = NULL;//probably a memory leak
 	err = QTNewGWorldFromPtr(&m_srcGWorld,
 							k422YpCbCr8CodecType,
 							//k32ARGBPixelFormat,
@@ -282,7 +283,7 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 	
 		if (compErr != noErr) post("pix_record : SCGetInfo failed with error %d",compErr);
 	*/	
-		post("pix_record : manually filling in codec info");
+		//post("pix_record : manually filling in codec info");
 		//fill in manually
 		SpatialSettings.codecType = m_codecType;
 		SpatialSettings.codec = m_codec;
@@ -305,8 +306,8 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 		
 	}
 	
-	if (m_codecType == kJPEGCodecType)
-	post("pix_record : SCSpatialSettings CodecType %d is p-jpeg",m_codecType);
+	//if (m_codecType == kJPEGCodecType)
+	//post("pix_record : SCSpatialSettings CodecType %d is p-jpeg",m_codecType);
 	//m_codec = SpatialSettings.codec;
 	//post("pix_record : SCSpatialSettings Codec %s",m_codec);
 	
@@ -369,6 +370,8 @@ void pix_record :: stopRecording()
 	if (err != noErr) post("pix_record : CloseMovieFile failed with error %d",err);
 	
 	DisposeMovie(m_movie);
+	DisposeGWorld(m_srcGWorld);
+	m_srcGWorld = NULL;
 		
 	compErr = SCCompressSequenceEnd(stdComponent);
 	
@@ -599,7 +602,7 @@ void pix_record :: fileMess(int argc, t_atom *argv)
 
   m_autocount = 0;
 
-post("pix_record : filename %s",m_filename);
+//post("pix_record : filename %s",m_filename);
 
 }
 

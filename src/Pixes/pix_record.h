@@ -203,7 +203,7 @@ class GEM_EXTERN pix_record : public GemBase
 		typedef struct codecListStorage{
 			int		position;
 			int		ctype;
-			int		codec;
+			CodecComponent		codec;
 		};
 
 		codecListStorage	codecContainer[64];//anyone with more than 64 codecs can change this
