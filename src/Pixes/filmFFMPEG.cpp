@@ -127,7 +127,15 @@ bool filmFFMPEG :: open(char *filename, int format)
 
 #if FFMPEG_VERSION_INT >= 0x000409
   m_allowSeek=true;
+#ifdef AVSEEK_FLAG_ANY
+  /* wow, in the CVS-version of ffmpeg-4.0.9 there is a flag
+   * in av_seek_frame(), but i have seen other versions of
+   * ffmpeg-4.0.9 that don't support this!
+   */
   if(av_seek_frame(m_Format, 0, 0, 0))
+#else
+  if(av_seek_frame(m_Format, 0, 0))
+#endif
     m_allowSeek=false;
 #endif /* FFMPEG_VERSION */
 
@@ -189,9 +197,14 @@ pixBlock* filmFFMPEG :: getFrame(){
     if(m_allowSeek && (m_wantedTrack!=m_curTrack || m_wantedFrame!=m_curFrame)){
       int err=0;
       int64_t timestamp = m_wantedFrame;
+# if defined AVSEEK_FLAG_ANY && defined AVSEEK_FLAG_BACKWARD
+      /* see above for an explenation what is going on here */
       int flags = AVSEEK_FLAG_ANY;
       if(m_wantedFrame<m_curFrame)flags|=AVSEEK_FLAG_BACKWARD;
       err = av_seek_frame(m_Format, m_wantedTrack, timestamp, flags);
+# else
+      err = av_seek_frame(m_Format, m_wantedTrack, timestamp);
+# endif /* av_seek_frame_flags */
       if(-1==err)m_allowSeek=false;
       m_curTrack=m_wantedTrack;
     }
