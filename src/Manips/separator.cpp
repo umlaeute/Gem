@@ -91,14 +91,25 @@ void separator :: postrender(GemState *state)
     state->smooth   	= m_state.smooth;
     state->texture  	= m_state.texture;
     state->image    	= m_state.image;
-    state->numTexCoords = m_state.numTexCoords;
-#ifdef CRASH
-    post("likely to crash:"); // do we have a memory hole without ? i think so...
-    if (state->texCoords)delete [] (state->texCoords);
-#endif
-    if (m_state.texCoords)
+	
+//this is a partial fix for the separator memory leak
+//
+//if the texcoords are of equal number, which they almost always are
+//then just copy them in a loop without delete and new being done
+//
+//when texcoords are not equal the memory leak happens as usual
+   
+   if (state->numTexCoords != m_state.numTexCoords){
+		if (state->texCoords) state->texCoords = NULL;
+		state->texCoords = new TexCoord[m_state.numTexCoords];
+		post("separator : state->numTexCoords %d != m_state.numTexCoords %d",state->numTexCoords,m_state.numTexCoords);
+		state->numTexCoords = m_state.numTexCoords;
+   }
+   
+
+    if (m_state.texCoords) 
     {
-    	state->texCoords = new TexCoord[m_state.numTexCoords];
+    //	state->texCoords = new TexCoord[m_state.numTexCoords];
     	for (int i = 0; i < m_state.numTexCoords; i++)
     	{
     	    state->texCoords[i].s = m_state.texCoords[i].s;
