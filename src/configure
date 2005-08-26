@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS GEM_TARGETS EXT INCLUDES X_LIBS X_CFLAGS CXXFLAGS DEFINES PKG_CFLAGS PKG_LIBS REFERENCEPATH NEW_VIDEOFILM CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S CPP X_PRE_LIBS X_EXTRA_LIBS PKG_CONFIG ac_pt_PKG_CONFIG PKG_IMAGEMAGICK___CFLAGS PKG_IMAGEMAGICK___LIBS PKG_TIFF_CFLAGS PKG_TIFF_LIBS PKG_JPEG_CFLAGS PKG_JPEG_LIBS PKG_QUICKTIME_CFLAGS PKG_QUICKTIME_LIBS PKG_MPEG3_CFLAGS PKG_MPEG3_LIBS PKG_MPEG_CFLAGS PKG_MPEG_LIBS PKG_AVIFILE_CFLAGS PKG_AVIFILE_LIBS PKG_FFMPEG_CFLAGS PKG_FFMPEG_LIBS EGREP PKG_IEEE1394_CFLAGS PKG_IEEE1394_LIBS PKG_FTGL_CFLAGS PKG_FTGL_LIBS PKG_GLTT_CFLAGS PKG_GLTT_LIBS LIBOBJS MAKEDEP_FLAGS STRIP ac_ct_STRIP STRIP_ALL STRIP_UNNEEDED DOS2UNIX ac_ct_DOS2UNIX LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS GEM_TARGETS EXT INCLUDES X_LIBS X_CFLAGS CXXFLAGS DEFINES PKG_CFLAGS PKG_LIBS REFERENCEPATH NEW_VIDEOFILM CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S CPP X_PRE_LIBS X_EXTRA_LIBS PKG_CONFIG ac_pt_PKG_CONFIG PKG_IMAGEMAGICK___CFLAGS PKG_IMAGEMAGICK___LIBS PKG_TIFF_CFLAGS PKG_TIFF_LIBS PKG_JPEG_CFLAGS PKG_JPEG_LIBS PKG_LIBQUICKTIME_CFLAGS PKG_LIBQUICKTIME_LIBS PKG_LQT_CFLAGS PKG_LQT_LIBS PKG_MPEG3_CFLAGS PKG_MPEG3_LIBS PKG_MPEG_CFLAGS PKG_MPEG_LIBS PKG_AVIFILE_CFLAGS PKG_AVIFILE_LIBS PKG_FFMPEG_CFLAGS PKG_FFMPEG_LIBS EGREP PKG_IEEE1394_CFLAGS PKG_IEEE1394_LIBS PKG_FTGL_CFLAGS PKG_FTGL_LIBS PKG_GLTT_CFLAGS PKG_GLTT_LIBS LIBOBJS MAKEDEP_FLAGS STRIP ac_ct_STRIP STRIP_ALL STRIP_UNNEEDED DOS2UNIX ac_ct_DOS2UNIX LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -808,14 +808,22 @@ ac_env_PKG_JPEG_LIBS_set=${PKG_JPEG_LIBS+set}
 ac_env_PKG_JPEG_LIBS_value=$PKG_JPEG_LIBS
 ac_cv_env_PKG_JPEG_LIBS_set=${PKG_JPEG_LIBS+set}
 ac_cv_env_PKG_JPEG_LIBS_value=$PKG_JPEG_LIBS
-ac_env_PKG_QUICKTIME_CFLAGS_set=${PKG_QUICKTIME_CFLAGS+set}
-ac_env_PKG_QUICKTIME_CFLAGS_value=$PKG_QUICKTIME_CFLAGS
-ac_cv_env_PKG_QUICKTIME_CFLAGS_set=${PKG_QUICKTIME_CFLAGS+set}
-ac_cv_env_PKG_QUICKTIME_CFLAGS_value=$PKG_QUICKTIME_CFLAGS
-ac_env_PKG_QUICKTIME_LIBS_set=${PKG_QUICKTIME_LIBS+set}
-ac_env_PKG_QUICKTIME_LIBS_value=$PKG_QUICKTIME_LIBS
-ac_cv_env_PKG_QUICKTIME_LIBS_set=${PKG_QUICKTIME_LIBS+set}
-ac_cv_env_PKG_QUICKTIME_LIBS_value=$PKG_QUICKTIME_LIBS
+ac_env_PKG_LIBQUICKTIME_CFLAGS_set=${PKG_LIBQUICKTIME_CFLAGS+set}
+ac_env_PKG_LIBQUICKTIME_CFLAGS_value=$PKG_LIBQUICKTIME_CFLAGS
+ac_cv_env_PKG_LIBQUICKTIME_CFLAGS_set=${PKG_LIBQUICKTIME_CFLAGS+set}
+ac_cv_env_PKG_LIBQUICKTIME_CFLAGS_value=$PKG_LIBQUICKTIME_CFLAGS
+ac_env_PKG_LIBQUICKTIME_LIBS_set=${PKG_LIBQUICKTIME_LIBS+set}
+ac_env_PKG_LIBQUICKTIME_LIBS_value=$PKG_LIBQUICKTIME_LIBS
+ac_cv_env_PKG_LIBQUICKTIME_LIBS_set=${PKG_LIBQUICKTIME_LIBS+set}
+ac_cv_env_PKG_LIBQUICKTIME_LIBS_value=$PKG_LIBQUICKTIME_LIBS
+ac_env_PKG_LQT_CFLAGS_set=${PKG_LQT_CFLAGS+set}
+ac_env_PKG_LQT_CFLAGS_value=$PKG_LQT_CFLAGS
+ac_cv_env_PKG_LQT_CFLAGS_set=${PKG_LQT_CFLAGS+set}
+ac_cv_env_PKG_LQT_CFLAGS_value=$PKG_LQT_CFLAGS
+ac_env_PKG_LQT_LIBS_set=${PKG_LQT_LIBS+set}
+ac_env_PKG_LQT_LIBS_value=$PKG_LQT_LIBS
+ac_cv_env_PKG_LQT_LIBS_set=${PKG_LQT_LIBS+set}
+ac_cv_env_PKG_LQT_LIBS_value=$PKG_LQT_LIBS
 ac_env_PKG_MPEG3_CFLAGS_set=${PKG_MPEG3_CFLAGS+set}
 ac_env_PKG_MPEG3_CFLAGS_value=$PKG_MPEG3_CFLAGS
 ac_cv_env_PKG_MPEG3_CFLAGS_set=${PKG_MPEG3_CFLAGS+set}
@@ -987,12 +995,17 @@ Optional Packages:
                           include path for jpeg
   --with-jpeg-libs=/path/to/jpeg/lib/
                           library path for jpeg
-  --without-quicktime
-                          disable quicktime (movie loader)
-  --with-quicktime-includes=/path/to/quicktime/include/
-                          include path for quicktime
-  --with-quicktime-libs=/path/to/quicktime/lib/
-                          library path for quicktime
+  --without-libquicktime
+                          disable libquicktime (movie loader)
+  --with-libquicktime-includes=/path/to/libquicktime/include/
+                          include path for libquicktime
+  --with-libquicktime-libs=/path/to/libquicktime/lib/
+                          library path for libquicktime
+  --without-lqt        disable lqt (movie loader)
+  --with-lqt-includes=/path/to/lqt/include/
+                          include path for lqt
+  --with-lqt-libs=/path/to/lqt/lib/
+                          library path for lqt
   --without-mpeg3        disable mpeg3 (movie loader)
   --with-mpeg3-includes=/path/to/mpeg3/include/
                           include path for mpeg3
@@ -1055,10 +1068,14 @@ Some influential environment variables:
               C compiler flags for PKG_JPEG, overriding pkg-config
   PKG_JPEG_LIBS
               linker flags for PKG_JPEG, overriding pkg-config
-  PKG_QUICKTIME_CFLAGS
-              C compiler flags for PKG_QUICKTIME, overriding pkg-config
-  PKG_QUICKTIME_LIBS
-              linker flags for PKG_QUICKTIME, overriding pkg-config
+  PKG_LIBQUICKTIME_CFLAGS
+              C compiler flags for PKG_LIBQUICKTIME, overriding pkg-config
+  PKG_LIBQUICKTIME_LIBS
+              linker flags for PKG_LIBQUICKTIME, overriding pkg-config
+  PKG_LQT_CFLAGS
+              C compiler flags for PKG_LQT, overriding pkg-config
+  PKG_LQT_LIBS
+              linker flags for PKG_LQT, overriding pkg-config
   PKG_MPEG3_CFLAGS
               C compiler flags for PKG_MPEG3, overriding pkg-config
   PKG_MPEG3_LIBS
@@ -5784,6 +5801,7 @@ fi
 
 
 
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_ImageMagick+set}" = set; then
   withval="$with_ImageMagick"
@@ -5812,6 +5830,8 @@ else
   if test -d "$with_ImageMagick_libs"; then
     LIBS="-L$with_ImageMagick_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_Magickpp_main) >/dev/null 2>&1 && unset ac_cv_lib_Magickpp_main
 
 
 
@@ -5871,145 +5891,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_IMAGEMAGICK___PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for main in -lMagick++" >&5
-echo $ECHO_N "checking for main in -lMagick++... $ECHO_C" >&6
-if test "${ac_cv_lib_Magickpp_main+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lMagick++  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-main ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_Magickpp_main=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_Magickpp_main=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_Magickpp_main" >&5
-echo "${ECHO_T}$ac_cv_lib_Magickpp_main" >&6
-if test $ac_cv_lib_Magickpp_main = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMAGICK__ 1
-_ACEOF
-
-  LIBS="-lMagick++ $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for main in -lMagick++" >&5
-echo $ECHO_N "checking for main in -lMagick++... $ECHO_C" >&6
-if test "${ac_cv_lib_Magickpp_main+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lMagick++  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-main ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_Magickpp_main=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_Magickpp_main=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_Magickpp_main" >&5
-echo "${ECHO_T}$ac_cv_lib_Magickpp_main" >&6
-if test $ac_cv_lib_Magickpp_main = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMAGICK__ 1
-_ACEOF
-
-  LIBS="-lMagick++ $LIBS"
-
-fi
-
+	:
 else
 	PKG_IMAGEMAGICK___CFLAGS=$pkg_cv_PKG_IMAGEMAGICK___CFLAGS
 	PKG_IMAGEMAGICK___LIBS=$pkg_cv_PKG_IMAGEMAGICK___LIBS
-	acLib==yes
+	ac_cv_lib_Magickpp_main=yes
 fi
 if test "x${PKG_IMAGEMAGICK___CFLAGS}" != "x"; then
 
@@ -6040,6 +5928,117 @@ if test "x${PKG_IMAGEMAGICK___LIBS}" != "x"; then
    PKG_LIBS="${PKG_IMAGEMAGICK___LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_Magickpp_main" != "xyes"; then
+   echo "$as_me:$LINENO: checking for ImageMagick++-config" >&5
+echo $ECHO_N "checking for ImageMagick++-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xImageMagick++" != "x"; then
+    pkgconfig="ImageMagick++"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "ImageMagick++"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_IMAGEMAGICK___CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_IMAGEMAGICK___CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_IMAGEMAGICK___CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_IMAGEMAGICK___LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_IMAGEMAGICK___LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_IMAGEMAGICK___LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_IMAGEMAGICK___LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for main in -lMagick++" >&5
+echo $ECHO_N "checking for main in -lMagick++... $ECHO_C" >&6
+if test "${ac_cv_lib_Magickpp_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lMagick++  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_Magickpp_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_Magickpp_main=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_Magickpp_main" >&5
+echo "${ECHO_T}$ac_cv_lib_Magickpp_main" >&6
+if test $ac_cv_lib_Magickpp_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMAGICK__ 1
+_ACEOF
+
+  LIBS="-lMagick++ $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_IMAGEMAGICK___LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_Magickpp_main" != "xno"; then
 
@@ -6081,6 +6080,8 @@ fi
 
 
 
+
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_tiff+set}" = set; then
   withval="$with_tiff"
@@ -6109,6 +6110,8 @@ else
   if test -d "$with_tiff_libs"; then
     LIBS="-L$with_tiff_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_tiff_TIFFOpen) >/dev/null 2>&1 && unset ac_cv_lib_tiff_TIFFOpen
 
 
 
@@ -6168,157 +6171,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_TIFF_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for TIFFOpen in -ltiff" >&5
-echo $ECHO_N "checking for TIFFOpen in -ltiff... $ECHO_C" >&6
-if test "${ac_cv_lib_tiff_TIFFOpen+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ltiff  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char TIFFOpen ();
-int
-main ()
-{
-TIFFOpen ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_tiff_TIFFOpen=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_tiff_TIFFOpen=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_tiff_TIFFOpen" >&5
-echo "${ECHO_T}$ac_cv_lib_tiff_TIFFOpen" >&6
-if test $ac_cv_lib_tiff_TIFFOpen = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBTIFF 1
-_ACEOF
-
-  LIBS="-ltiff $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for TIFFOpen in -ltiff" >&5
-echo $ECHO_N "checking for TIFFOpen in -ltiff... $ECHO_C" >&6
-if test "${ac_cv_lib_tiff_TIFFOpen+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ltiff  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char TIFFOpen ();
-int
-main ()
-{
-TIFFOpen ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_tiff_TIFFOpen=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_tiff_TIFFOpen=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_tiff_TIFFOpen" >&5
-echo "${ECHO_T}$ac_cv_lib_tiff_TIFFOpen" >&6
-if test $ac_cv_lib_tiff_TIFFOpen = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBTIFF 1
-_ACEOF
-
-  LIBS="-ltiff $LIBS"
-
-fi
-
+	:
 else
 	PKG_TIFF_CFLAGS=$pkg_cv_PKG_TIFF_CFLAGS
 	PKG_TIFF_LIBS=$pkg_cv_PKG_TIFF_LIBS
-	acLib==yes
+	ac_cv_lib_tiff_TIFFOpen=yes
 fi
 if test "x${PKG_TIFF_CFLAGS}" != "x"; then
 
@@ -6349,6 +6208,123 @@ if test "x${PKG_TIFF_LIBS}" != "x"; then
    PKG_LIBS="${PKG_TIFF_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_tiff_TIFFOpen" != "xyes"; then
+   echo "$as_me:$LINENO: checking for tiff-config" >&5
+echo $ECHO_N "checking for tiff-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xtiff" != "x"; then
+    pkgconfig="tiff"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "tiff"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_TIFF_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_TIFF_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_TIFF_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_TIFF_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_TIFF_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_TIFF_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_TIFF_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for TIFFOpen in -ltiff" >&5
+echo $ECHO_N "checking for TIFFOpen in -ltiff... $ECHO_C" >&6
+if test "${ac_cv_lib_tiff_TIFFOpen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ltiff  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char TIFFOpen ();
+int
+main ()
+{
+TIFFOpen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_tiff_TIFFOpen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_tiff_TIFFOpen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_tiff_TIFFOpen" >&5
+echo "${ECHO_T}$ac_cv_lib_tiff_TIFFOpen" >&6
+if test $ac_cv_lib_tiff_TIFFOpen = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBTIFF 1
+_ACEOF
+
+  LIBS="-ltiff $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_TIFF_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_tiff_TIFFOpen" != "xno"; then
 
@@ -6387,6 +6363,8 @@ fi
 
 
 
+
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_jpeg+set}" = set; then
   withval="$with_jpeg"
@@ -6415,6 +6393,8 @@ else
   if test -d "$with_jpeg_libs"; then
     LIBS="-L$with_jpeg_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_jpeg_jpeg_read_header) >/dev/null 2>&1 && unset ac_cv_lib_jpeg_jpeg_read_header
 
 
 
@@ -6474,157 +6454,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_JPEG_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for jpeg_read_header in -ljpeg" >&5
-echo $ECHO_N "checking for jpeg_read_header in -ljpeg... $ECHO_C" >&6
-if test "${ac_cv_lib_jpeg_jpeg_read_header+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ljpeg  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char jpeg_read_header ();
-int
-main ()
-{
-jpeg_read_header ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_jpeg_jpeg_read_header=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_jpeg_jpeg_read_header=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_jpeg_jpeg_read_header" >&5
-echo "${ECHO_T}$ac_cv_lib_jpeg_jpeg_read_header" >&6
-if test $ac_cv_lib_jpeg_jpeg_read_header = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBJPEG 1
-_ACEOF
-
-  LIBS="-ljpeg $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for jpeg_read_header in -ljpeg" >&5
-echo $ECHO_N "checking for jpeg_read_header in -ljpeg... $ECHO_C" >&6
-if test "${ac_cv_lib_jpeg_jpeg_read_header+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ljpeg  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char jpeg_read_header ();
-int
-main ()
-{
-jpeg_read_header ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_jpeg_jpeg_read_header=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_jpeg_jpeg_read_header=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_jpeg_jpeg_read_header" >&5
-echo "${ECHO_T}$ac_cv_lib_jpeg_jpeg_read_header" >&6
-if test $ac_cv_lib_jpeg_jpeg_read_header = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBJPEG 1
-_ACEOF
-
-  LIBS="-ljpeg $LIBS"
-
-fi
-
+	:
 else
 	PKG_JPEG_CFLAGS=$pkg_cv_PKG_JPEG_CFLAGS
 	PKG_JPEG_LIBS=$pkg_cv_PKG_JPEG_LIBS
-	acLib==yes
+	ac_cv_lib_jpeg_jpeg_read_header=yes
 fi
 if test "x${PKG_JPEG_CFLAGS}" != "x"; then
 
@@ -6655,6 +6491,123 @@ if test "x${PKG_JPEG_LIBS}" != "x"; then
    PKG_LIBS="${PKG_JPEG_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_jpeg_jpeg_read_header" != "xyes"; then
+   echo "$as_me:$LINENO: checking for jpeg-config" >&5
+echo $ECHO_N "checking for jpeg-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xjpeg" != "x"; then
+    pkgconfig="jpeg"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "jpeg"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_JPEG_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_JPEG_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_JPEG_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_JPEG_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_JPEG_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_JPEG_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_JPEG_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for jpeg_read_header in -ljpeg" >&5
+echo $ECHO_N "checking for jpeg_read_header in -ljpeg... $ECHO_C" >&6
+if test "${ac_cv_lib_jpeg_jpeg_read_header+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ljpeg  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char jpeg_read_header ();
+int
+main ()
+{
+jpeg_read_header ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_jpeg_jpeg_read_header=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_jpeg_jpeg_read_header=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_jpeg_jpeg_read_header" >&5
+echo "${ECHO_T}$ac_cv_lib_jpeg_jpeg_read_header" >&6
+if test $ac_cv_lib_jpeg_jpeg_read_header = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBJPEG 1
+_ACEOF
+
+  LIBS="-ljpeg $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_JPEG_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_jpeg_jpeg_read_header" != "xno"; then
 
@@ -6694,34 +6647,38 @@ fi
 
 
 
+
+
 # Check whether --with-Name or --without-Name was given.
-if test "${with_quicktime+set}" = set; then
-  withval="$with_quicktime"
+if test "${with_libquicktime+set}" = set; then
+  withval="$with_libquicktime"
 
 fi;
 
-# Check whether --with-quicktime-includes or --without-quicktime-includes was given.
-if test "${with_quicktime_includes+set}" = set; then
-  withval="$with_quicktime_includes"
+# Check whether --with-libquicktime-includes or --without-libquicktime-includes was given.
+if test "${with_libquicktime_includes+set}" = set; then
+  withval="$with_libquicktime_includes"
 
 fi;
 
-# Check whether --with-quicktime-libs or --without-quicktime-libs was given.
-if test "${with_quicktime_libs+set}" = set; then
-  withval="$with_quicktime_libs"
+# Check whether --with-libquicktime-libs or --without-libquicktime-libs was given.
+if test "${with_libquicktime_libs+set}" = set; then
+  withval="$with_libquicktime_libs"
 
 fi;
-if test x$with_quicktime = "xno"; then
-  have_quicktime="no (forced)"
+if test x$with_libquicktime = "xno"; then
+  have_libquicktime="no (forced)"
 else
-  if test -d "$with_quicktime_includes"; then
-    CFLAGS="-I$with_quicktime_includes $CFLAGS"
-    CPPFLAGS="-I$with_quicktime_includes $CPPFLAGS"
-    CXXFLAGS="-I$with_quicktime_includes $CXXFLAGS"
+  if test -d "$with_libquicktime_includes"; then
+    CFLAGS="-I$with_libquicktime_includes $CFLAGS"
+    CPPFLAGS="-I$with_libquicktime_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_libquicktime_includes $CXXFLAGS"
   fi
-  if test -d "$with_quicktime_libs"; then
-    LIBS="-L$with_quicktime_libs $LIBS"
+  if test -d "$with_libquicktime_libs"; then
+    LIBS="-L$with_libquicktime_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_quicktime_quicktime_init) >/dev/null 2>&1 && unset ac_cv_lib_quicktime_quicktime_init
 
 
 
@@ -6729,20 +6686,20 @@ else
 
 
 pkg_failed=no
-echo "$as_me:$LINENO: checking for PKG_QUICKTIME_CFLAGS" >&5
-echo $ECHO_N "checking for PKG_QUICKTIME_CFLAGS... $ECHO_C" >&6
-if test "${pkg_cv_PKG_QUICKTIME_CFLAGS+set}" = set; then
+echo "$as_me:$LINENO: checking for PKG_LIBQUICKTIME_CFLAGS" >&5
+echo $ECHO_N "checking for PKG_LIBQUICKTIME_CFLAGS... $ECHO_C" >&6
+if test "${pkg_cv_PKG_LIBQUICKTIME_CFLAGS+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  if test "x$ac_cv_env_PKG_QUICKTIME_CFLAGS_set" = "xset"; then
-	pkg_cv_PKG_QUICKTIME_CFLAGS=$ac_cv_env_PKG_QUICKTIME_CFLAGS_value
+  if test "x$ac_cv_env_PKG_LIBQUICKTIME_CFLAGS_set" = "xset"; then
+	pkg_cv_PKG_LIBQUICKTIME_CFLAGS=$ac_cv_env_PKG_LIBQUICKTIME_CFLAGS_value
 elif test -n "$PKG_CONFIG"; then
-	if { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists \"quicktime\" >/dev/null 2>&1") >&5
-  ($PKG_CONFIG --exists "quicktime" >/dev/null 2>&1) 2>&5
+	if { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists \"libquicktime\" >/dev/null 2>&1") >&5
+  ($PKG_CONFIG --exists "libquicktime" >/dev/null 2>&1) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-		pkg_cv_PKG_QUICKTIME_CFLAGS=`$PKG_CONFIG --cflags "quicktime" 2>/dev/null`
+		pkg_cv_PKG_LIBQUICKTIME_CFLAGS=`$PKG_CONFIG --cflags "libquicktime" 2>/dev/null`
 	else
 		pkg_failed=yes
 	fi
@@ -6750,22 +6707,22 @@ else
 	pkg_failed=untried
 fi
 fi
-echo "$as_me:$LINENO: result: $pkg_cv_PKG_QUICKTIME_CFLAGS" >&5
-echo "${ECHO_T}$pkg_cv_PKG_QUICKTIME_CFLAGS" >&6
-echo "$as_me:$LINENO: checking for PKG_QUICKTIME_LIBS" >&5
-echo $ECHO_N "checking for PKG_QUICKTIME_LIBS... $ECHO_C" >&6
-if test "${pkg_cv_PKG_QUICKTIME_LIBS+set}" = set; then
+echo "$as_me:$LINENO: result: $pkg_cv_PKG_LIBQUICKTIME_CFLAGS" >&5
+echo "${ECHO_T}$pkg_cv_PKG_LIBQUICKTIME_CFLAGS" >&6
+echo "$as_me:$LINENO: checking for PKG_LIBQUICKTIME_LIBS" >&5
+echo $ECHO_N "checking for PKG_LIBQUICKTIME_LIBS... $ECHO_C" >&6
+if test "${pkg_cv_PKG_LIBQUICKTIME_LIBS+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  if test "x$ac_cv_env_PKG_QUICKTIME_LIBS_set" = "xset"; then
-	pkg_cv_PKG_QUICKTIME_LIBS=$ac_cv_env_PKG_QUICKTIME_LIBS_value
+  if test "x$ac_cv_env_PKG_LIBQUICKTIME_LIBS_set" = "xset"; then
+	pkg_cv_PKG_LIBQUICKTIME_LIBS=$ac_cv_env_PKG_LIBQUICKTIME_LIBS_value
 elif test -n "$PKG_CONFIG"; then
-	if { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists \"quicktime\" >/dev/null 2>&1") >&5
-  ($PKG_CONFIG --exists "quicktime" >/dev/null 2>&1) 2>&5
+	if { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists \"libquicktime\" >/dev/null 2>&1") >&5
+  ($PKG_CONFIG --exists "libquicktime" >/dev/null 2>&1) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-		pkg_cv_PKG_QUICKTIME_LIBS=`$PKG_CONFIG --libs "quicktime" 2>/dev/null`
+		pkg_cv_PKG_LIBQUICKTIME_LIBS=`$PKG_CONFIG --libs "libquicktime" 2>/dev/null`
 	else
 		pkg_failed=yes
 	fi
@@ -6773,169 +6730,25 @@ else
 	pkg_failed=untried
 fi
 fi
-echo "$as_me:$LINENO: result: $pkg_cv_PKG_QUICKTIME_LIBS" >&5
-echo "${ECHO_T}$pkg_cv_PKG_QUICKTIME_LIBS" >&6
+echo "$as_me:$LINENO: result: $pkg_cv_PKG_LIBQUICKTIME_LIBS" >&5
+echo "${ECHO_T}$pkg_cv_PKG_LIBQUICKTIME_LIBS" >&6
 
 if test $pkg_failed = yes; then
-	PKG_QUICKTIME_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "quicktime"`
+	PKG_LIBQUICKTIME_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libquicktime"`
 	# Put the nasty error message in config.log where it belongs
-	echo "$PKG_QUICKTIME_PKG_ERRORS" 1>&5
+	echo "$PKG_LIBQUICKTIME_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for quicktime_init in -lquicktime" >&5
-echo $ECHO_N "checking for quicktime_init in -lquicktime... $ECHO_C" >&6
-if test "${ac_cv_lib_quicktime_quicktime_init+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lquicktime  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char quicktime_init ();
-int
-main ()
-{
-quicktime_init ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_quicktime_quicktime_init=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_quicktime_quicktime_init=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_quicktime_quicktime_init" >&5
-echo "${ECHO_T}$ac_cv_lib_quicktime_quicktime_init" >&6
-if test $ac_cv_lib_quicktime_quicktime_init = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBQUICKTIME 1
-_ACEOF
-
-  LIBS="-lquicktime $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for quicktime_init in -lquicktime" >&5
-echo $ECHO_N "checking for quicktime_init in -lquicktime... $ECHO_C" >&6
-if test "${ac_cv_lib_quicktime_quicktime_init+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+	:
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lquicktime  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char quicktime_init ();
-int
-main ()
-{
-quicktime_init ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_quicktime_quicktime_init=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_quicktime_quicktime_init=no
+	PKG_LIBQUICKTIME_CFLAGS=$pkg_cv_PKG_LIBQUICKTIME_CFLAGS
+	PKG_LIBQUICKTIME_LIBS=$pkg_cv_PKG_LIBQUICKTIME_LIBS
+	ac_cv_lib_quicktime_quicktime_init=yes
 fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_quicktime_quicktime_init" >&5
-echo "${ECHO_T}$ac_cv_lib_quicktime_quicktime_init" >&6
-if test $ac_cv_lib_quicktime_quicktime_init = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBQUICKTIME 1
-_ACEOF
+if test "x${PKG_LIBQUICKTIME_CFLAGS}" != "x"; then
 
-  LIBS="-lquicktime $LIBS"
-
-fi
-
-else
-	PKG_QUICKTIME_CFLAGS=$pkg_cv_PKG_QUICKTIME_CFLAGS
-	PKG_QUICKTIME_LIBS=$pkg_cv_PKG_QUICKTIME_LIBS
-	acLib==yes
-fi
-if test "x${PKG_QUICKTIME_CFLAGS}" != "x"; then
-
-  for element in "${PKG_QUICKTIME_CFLAGS}"; do
+  for element in "${PKG_LIBQUICKTIME_CFLAGS}"; do
     haveit=
     for x in $PKG_CFLAGS; do
 
@@ -6958,14 +6771,139 @@ if test "x${PKG_QUICKTIME_CFLAGS}" != "x"; then
   done
 
 fi
-if test "x${PKG_QUICKTIME_LIBS}" != "x"; then
-   PKG_LIBS="${PKG_QUICKTIME_LIBS} ${PKG_LIBS}"
+if test "x${PKG_LIBQUICKTIME_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_LIBQUICKTIME_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_quicktime_quicktime_init" != "xyes"; then
+   echo "$as_me:$LINENO: checking for libquicktime-config" >&5
+echo $ECHO_N "checking for libquicktime-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xlibquicktime" != "x"; then
+    pkgconfig="libquicktime"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "libquicktime"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_LIBQUICKTIME_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_LIBQUICKTIME_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_LIBQUICKTIME_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_LIBQUICKTIME_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_LIBQUICKTIME_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_LIBQUICKTIME_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_LIBQUICKTIME_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for quicktime_init in -lquicktime" >&5
+echo $ECHO_N "checking for quicktime_init in -lquicktime... $ECHO_C" >&6
+if test "${ac_cv_lib_quicktime_quicktime_init+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lquicktime  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char quicktime_init ();
+int
+main ()
+{
+quicktime_init ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_quicktime_quicktime_init=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_quicktime_quicktime_init=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_quicktime_quicktime_init" >&5
+echo "${ECHO_T}$ac_cv_lib_quicktime_quicktime_init" >&6
+if test $ac_cv_lib_quicktime_quicktime_init = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBQUICKTIME 1
+_ACEOF
+
+  LIBS="-lquicktime $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_LIBQUICKTIME_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_quicktime_quicktime_init" != "xno"; then
 
     cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBQUICKTIME 1
+_ACEOF
+
+    cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBLIBQUICKTIME 1
+_ACEOF
+
+    cat >>confdefs.h <<_ACEOF
 #define HAVE_QUICKTIME 1
 _ACEOF
 
@@ -6973,27 +6911,304 @@ _ACEOF
 #define HAVE_LIBQUICKTIME 1
 _ACEOF
 
-    cat >>confdefs.h <<_ACEOF
-#define HAVE_QUICKTIME 1
-_ACEOF
-
-    cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBQUICKTIME 1
-_ACEOF
-
-    have_quicktime="yes"
-    with_quicktime="no"
+    have_libquicktime="yes"
+    with_libquicktime="no"
 
 
 else
 
-    have_quicktime="no"
+    have_libquicktime="no"
 
 
 fi
 
 
    fi
+
+
+
+
+
+
+
+
+# Check whether --with-Name or --without-Name was given.
+if test "${with_lqt+set}" = set; then
+  withval="$with_lqt"
+
+fi;
+
+# Check whether --with-lqt-includes or --without-lqt-includes was given.
+if test "${with_lqt_includes+set}" = set; then
+  withval="$with_lqt_includes"
+
+fi;
+
+# Check whether --with-lqt-libs or --without-lqt-libs was given.
+if test "${with_lqt_libs+set}" = set; then
+  withval="$with_lqt_libs"
+
+fi;
+if test x$with_lqt = "xno"; then
+  have_lqt="no (forced)"
+else
+  if test -d "$with_lqt_includes"; then
+    CFLAGS="-I$with_lqt_includes $CFLAGS"
+    CPPFLAGS="-I$with_lqt_includes $CPPFLAGS"
+    CXXFLAGS="-I$with_lqt_includes $CXXFLAGS"
+  fi
+  if test -d "$with_lqt_libs"; then
+    LIBS="-L$with_lqt_libs $LIBS"
+  fi
+
+  (unset ac_cv_lib_quicktime_quicktime_init) >/dev/null 2>&1 && unset ac_cv_lib_quicktime_quicktime_init
+
+
+
+
+
+
+pkg_failed=no
+echo "$as_me:$LINENO: checking for PKG_LQT_CFLAGS" >&5
+echo $ECHO_N "checking for PKG_LQT_CFLAGS... $ECHO_C" >&6
+if test "${pkg_cv_PKG_LQT_CFLAGS+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test "x$ac_cv_env_PKG_LQT_CFLAGS_set" = "xset"; then
+	pkg_cv_PKG_LQT_CFLAGS=$ac_cv_env_PKG_LQT_CFLAGS_value
+elif test -n "$PKG_CONFIG"; then
+	if { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists \"lqt\" >/dev/null 2>&1") >&5
+  ($PKG_CONFIG --exists "lqt" >/dev/null 2>&1) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+		pkg_cv_PKG_LQT_CFLAGS=`$PKG_CONFIG --cflags "lqt" 2>/dev/null`
+	else
+		pkg_failed=yes
+	fi
+else
+	pkg_failed=untried
+fi
+fi
+echo "$as_me:$LINENO: result: $pkg_cv_PKG_LQT_CFLAGS" >&5
+echo "${ECHO_T}$pkg_cv_PKG_LQT_CFLAGS" >&6
+echo "$as_me:$LINENO: checking for PKG_LQT_LIBS" >&5
+echo $ECHO_N "checking for PKG_LQT_LIBS... $ECHO_C" >&6
+if test "${pkg_cv_PKG_LQT_LIBS+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test "x$ac_cv_env_PKG_LQT_LIBS_set" = "xset"; then
+	pkg_cv_PKG_LQT_LIBS=$ac_cv_env_PKG_LQT_LIBS_value
+elif test -n "$PKG_CONFIG"; then
+	if { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists \"lqt\" >/dev/null 2>&1") >&5
+  ($PKG_CONFIG --exists "lqt" >/dev/null 2>&1) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+		pkg_cv_PKG_LQT_LIBS=`$PKG_CONFIG --libs "lqt" 2>/dev/null`
+	else
+		pkg_failed=yes
+	fi
+else
+	pkg_failed=untried
+fi
+fi
+echo "$as_me:$LINENO: result: $pkg_cv_PKG_LQT_LIBS" >&5
+echo "${ECHO_T}$pkg_cv_PKG_LQT_LIBS" >&6
+
+if test $pkg_failed = yes; then
+	PKG_LQT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "lqt"`
+	# Put the nasty error message in config.log where it belongs
+	echo "$PKG_LQT_PKG_ERRORS" 1>&5
+
+	:
+elif test $pkg_failed = untried; then
+	:
+else
+	PKG_LQT_CFLAGS=$pkg_cv_PKG_LQT_CFLAGS
+	PKG_LQT_LIBS=$pkg_cv_PKG_LQT_LIBS
+	ac_cv_lib_quicktime_quicktime_init=yes
+fi
+if test "x${PKG_LQT_CFLAGS}" != "x"; then
+
+  for element in "${PKG_LQT_CFLAGS}"; do
+    haveit=
+    for x in $PKG_CFLAGS; do
+
+  acl_save_prefix="$prefix"
+  prefix="$acl_final_prefix"
+  acl_save_exec_prefix="$exec_prefix"
+  exec_prefix="$acl_final_exec_prefix"
+  eval x=\"$x\"
+  exec_prefix="$acl_save_exec_prefix"
+  prefix="$acl_save_prefix"
+
+      if test "X$x" = "X$element"; then
+        haveit=yes
+        break
+      fi
+    done
+    if test -z "$haveit"; then
+      PKG_CFLAGS="${PKG_CFLAGS}${PKG_CFLAGS:+ }$element"
+    fi
+  done
+
+fi
+if test "x${PKG_LQT_LIBS}" != "x"; then
+   PKG_LIBS="${PKG_LQT_LIBS} ${PKG_LIBS}"
+fi
+
+
+  if test "x$ac_cv_lib_quicktime_quicktime_init" != "xyes"; then
+   echo "$as_me:$LINENO: checking for lqt-config" >&5
+echo $ECHO_N "checking for lqt-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xlqt" != "x"; then
+    pkgconfig="lqt"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "lqt"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_LQT_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_LQT_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_LQT_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_LQT_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_LQT_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_LQT_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_LQT_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for quicktime_init in -lquicktime" >&5
+echo $ECHO_N "checking for quicktime_init in -lquicktime... $ECHO_C" >&6
+if test "${ac_cv_lib_quicktime_quicktime_init+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lquicktime  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char quicktime_init ();
+int
+main ()
+{
+quicktime_init ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_quicktime_quicktime_init=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_quicktime_quicktime_init=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_quicktime_quicktime_init" >&5
+echo "${ECHO_T}$ac_cv_lib_quicktime_quicktime_init" >&6
+if test $ac_cv_lib_quicktime_quicktime_init = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBQUICKTIME 1
+_ACEOF
+
+  LIBS="-lquicktime $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_LQT_LIBS} ${PKG_LIBS}"
+   fi
+  fi
+
+  if test "x$ac_cv_lib_quicktime_quicktime_init" != "xno"; then
+
+    cat >>confdefs.h <<_ACEOF
+#define HAVE_LQT 1
+_ACEOF
+
+    cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBLQT 1
+_ACEOF
+
+    cat >>confdefs.h <<_ACEOF
+#define HAVE_QUICKTIME 1
+_ACEOF
+
+    cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBQUICKTIME 1
+_ACEOF
+
+    have_lqt="yes"
+    with_lqt="no"
+
+
+else
+
+    have_lqt="no"
+
+
+fi
+
+
+   fi
+
+
 
 
 
@@ -7028,6 +7243,8 @@ else
   if test -d "$with_mpeg3_libs"; then
     LIBS="-L$with_mpeg3_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_mpeg3_mpeg3_check_sig) >/dev/null 2>&1 && unset ac_cv_lib_mpeg3_mpeg3_check_sig
 
 
 
@@ -7087,157 +7304,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_MPEG3_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for mpeg3_check_sig in -lmpeg3" >&5
-echo $ECHO_N "checking for mpeg3_check_sig in -lmpeg3... $ECHO_C" >&6
-if test "${ac_cv_lib_mpeg3_mpeg3_check_sig+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmpeg3  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char mpeg3_check_sig ();
-int
-main ()
-{
-mpeg3_check_sig ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_mpeg3_mpeg3_check_sig=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_mpeg3_mpeg3_check_sig=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mpeg3_mpeg3_check_sig" >&5
-echo "${ECHO_T}$ac_cv_lib_mpeg3_mpeg3_check_sig" >&6
-if test $ac_cv_lib_mpeg3_mpeg3_check_sig = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMPEG3 1
-_ACEOF
-
-  LIBS="-lmpeg3 $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for mpeg3_check_sig in -lmpeg3" >&5
-echo $ECHO_N "checking for mpeg3_check_sig in -lmpeg3... $ECHO_C" >&6
-if test "${ac_cv_lib_mpeg3_mpeg3_check_sig+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmpeg3  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char mpeg3_check_sig ();
-int
-main ()
-{
-mpeg3_check_sig ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_mpeg3_mpeg3_check_sig=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_mpeg3_mpeg3_check_sig=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mpeg3_mpeg3_check_sig" >&5
-echo "${ECHO_T}$ac_cv_lib_mpeg3_mpeg3_check_sig" >&6
-if test $ac_cv_lib_mpeg3_mpeg3_check_sig = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMPEG3 1
-_ACEOF
-
-  LIBS="-lmpeg3 $LIBS"
-
-fi
-
+	:
 else
 	PKG_MPEG3_CFLAGS=$pkg_cv_PKG_MPEG3_CFLAGS
 	PKG_MPEG3_LIBS=$pkg_cv_PKG_MPEG3_LIBS
-	acLib==yes
+	ac_cv_lib_mpeg3_mpeg3_check_sig=yes
 fi
 if test "x${PKG_MPEG3_CFLAGS}" != "x"; then
 
@@ -7268,6 +7341,123 @@ if test "x${PKG_MPEG3_LIBS}" != "x"; then
    PKG_LIBS="${PKG_MPEG3_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_mpeg3_mpeg3_check_sig" != "xyes"; then
+   echo "$as_me:$LINENO: checking for mpeg3-config" >&5
+echo $ECHO_N "checking for mpeg3-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xmpeg3" != "x"; then
+    pkgconfig="mpeg3"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "mpeg3"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_MPEG3_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_MPEG3_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_MPEG3_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_MPEG3_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_MPEG3_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_MPEG3_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_MPEG3_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for mpeg3_check_sig in -lmpeg3" >&5
+echo $ECHO_N "checking for mpeg3_check_sig in -lmpeg3... $ECHO_C" >&6
+if test "${ac_cv_lib_mpeg3_mpeg3_check_sig+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lmpeg3  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char mpeg3_check_sig ();
+int
+main ()
+{
+mpeg3_check_sig ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_mpeg3_mpeg3_check_sig=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_mpeg3_mpeg3_check_sig=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_mpeg3_mpeg3_check_sig" >&5
+echo "${ECHO_T}$ac_cv_lib_mpeg3_mpeg3_check_sig" >&6
+if test $ac_cv_lib_mpeg3_mpeg3_check_sig = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMPEG3 1
+_ACEOF
+
+  LIBS="-lmpeg3 $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_MPEG3_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_mpeg3_mpeg3_check_sig" != "xno"; then
 
@@ -7306,6 +7496,8 @@ fi
 
 
 
+
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_mpeg+set}" = set; then
   withval="$with_mpeg"
@@ -7334,6 +7526,8 @@ else
   if test -d "$with_mpeg_libs"; then
     LIBS="-L$with_mpeg_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_mpeg_OpenMPEG) >/dev/null 2>&1 && unset ac_cv_lib_mpeg_OpenMPEG
 
 
 
@@ -7393,157 +7587,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_MPEG_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for OpenMPEG in -lmpeg" >&5
-echo $ECHO_N "checking for OpenMPEG in -lmpeg... $ECHO_C" >&6
-if test "${ac_cv_lib_mpeg_OpenMPEG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmpeg  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char OpenMPEG ();
-int
-main ()
-{
-OpenMPEG ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_mpeg_OpenMPEG=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_mpeg_OpenMPEG=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mpeg_OpenMPEG" >&5
-echo "${ECHO_T}$ac_cv_lib_mpeg_OpenMPEG" >&6
-if test $ac_cv_lib_mpeg_OpenMPEG = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMPEG 1
-_ACEOF
-
-  LIBS="-lmpeg $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for OpenMPEG in -lmpeg" >&5
-echo $ECHO_N "checking for OpenMPEG in -lmpeg... $ECHO_C" >&6
-if test "${ac_cv_lib_mpeg_OpenMPEG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmpeg  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char OpenMPEG ();
-int
-main ()
-{
-OpenMPEG ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_mpeg_OpenMPEG=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_mpeg_OpenMPEG=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mpeg_OpenMPEG" >&5
-echo "${ECHO_T}$ac_cv_lib_mpeg_OpenMPEG" >&6
-if test $ac_cv_lib_mpeg_OpenMPEG = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMPEG 1
-_ACEOF
-
-  LIBS="-lmpeg $LIBS"
-
-fi
-
+	:
 else
 	PKG_MPEG_CFLAGS=$pkg_cv_PKG_MPEG_CFLAGS
 	PKG_MPEG_LIBS=$pkg_cv_PKG_MPEG_LIBS
-	acLib==yes
+	ac_cv_lib_mpeg_OpenMPEG=yes
 fi
 if test "x${PKG_MPEG_CFLAGS}" != "x"; then
 
@@ -7574,6 +7624,123 @@ if test "x${PKG_MPEG_LIBS}" != "x"; then
    PKG_LIBS="${PKG_MPEG_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_mpeg_OpenMPEG" != "xyes"; then
+   echo "$as_me:$LINENO: checking for mpeg-config" >&5
+echo $ECHO_N "checking for mpeg-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xmpeg" != "x"; then
+    pkgconfig="mpeg"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "mpeg"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_MPEG_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_MPEG_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_MPEG_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_MPEG_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_MPEG_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_MPEG_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_MPEG_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for OpenMPEG in -lmpeg" >&5
+echo $ECHO_N "checking for OpenMPEG in -lmpeg... $ECHO_C" >&6
+if test "${ac_cv_lib_mpeg_OpenMPEG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lmpeg  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char OpenMPEG ();
+int
+main ()
+{
+OpenMPEG ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_mpeg_OpenMPEG=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_mpeg_OpenMPEG=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_mpeg_OpenMPEG" >&5
+echo "${ECHO_T}$ac_cv_lib_mpeg_OpenMPEG" >&6
+if test $ac_cv_lib_mpeg_OpenMPEG = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMPEG 1
+_ACEOF
+
+  LIBS="-lmpeg $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_MPEG_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_mpeg_OpenMPEG" != "xno"; then
 
@@ -7612,6 +7779,8 @@ fi
 
 
 
+
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_avifile+set}" = set; then
   withval="$with_avifile"
@@ -7640,6 +7809,8 @@ else
   if test -d "$with_avifile_libs"; then
     LIBS="-L$with_avifile_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_aviplay_CreateIAviReadFile) >/dev/null 2>&1 && unset ac_cv_lib_aviplay_CreateIAviReadFile
 
 
 
@@ -7699,157 +7870,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_AVIFILE_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for CreateIAviReadFile in -laviplay" >&5
-echo $ECHO_N "checking for CreateIAviReadFile in -laviplay... $ECHO_C" >&6
-if test "${ac_cv_lib_aviplay_CreateIAviReadFile+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-laviplay  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char CreateIAviReadFile ();
-int
-main ()
-{
-CreateIAviReadFile ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_aviplay_CreateIAviReadFile=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_aviplay_CreateIAviReadFile=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_aviplay_CreateIAviReadFile" >&5
-echo "${ECHO_T}$ac_cv_lib_aviplay_CreateIAviReadFile" >&6
-if test $ac_cv_lib_aviplay_CreateIAviReadFile = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBAVIPLAY 1
-_ACEOF
-
-  LIBS="-laviplay $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for CreateIAviReadFile in -laviplay" >&5
-echo $ECHO_N "checking for CreateIAviReadFile in -laviplay... $ECHO_C" >&6
-if test "${ac_cv_lib_aviplay_CreateIAviReadFile+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-laviplay  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char CreateIAviReadFile ();
-int
-main ()
-{
-CreateIAviReadFile ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_aviplay_CreateIAviReadFile=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_aviplay_CreateIAviReadFile=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_aviplay_CreateIAviReadFile" >&5
-echo "${ECHO_T}$ac_cv_lib_aviplay_CreateIAviReadFile" >&6
-if test $ac_cv_lib_aviplay_CreateIAviReadFile = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBAVIPLAY 1
-_ACEOF
-
-  LIBS="-laviplay $LIBS"
-
-fi
-
+	:
 else
 	PKG_AVIFILE_CFLAGS=$pkg_cv_PKG_AVIFILE_CFLAGS
 	PKG_AVIFILE_LIBS=$pkg_cv_PKG_AVIFILE_LIBS
-	acLib==yes
+	ac_cv_lib_aviplay_CreateIAviReadFile=yes
 fi
 if test "x${PKG_AVIFILE_CFLAGS}" != "x"; then
 
@@ -7880,6 +7907,123 @@ if test "x${PKG_AVIFILE_LIBS}" != "x"; then
    PKG_LIBS="${PKG_AVIFILE_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_aviplay_CreateIAviReadFile" != "xyes"; then
+   echo "$as_me:$LINENO: checking for avifile-config" >&5
+echo $ECHO_N "checking for avifile-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xavifile" != "x"; then
+    pkgconfig="avifile"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "avifile"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_AVIFILE_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_AVIFILE_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_AVIFILE_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_AVIFILE_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_AVIFILE_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_AVIFILE_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_AVIFILE_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for CreateIAviReadFile in -laviplay" >&5
+echo $ECHO_N "checking for CreateIAviReadFile in -laviplay... $ECHO_C" >&6
+if test "${ac_cv_lib_aviplay_CreateIAviReadFile+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-laviplay  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char CreateIAviReadFile ();
+int
+main ()
+{
+CreateIAviReadFile ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_aviplay_CreateIAviReadFile=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_aviplay_CreateIAviReadFile=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_aviplay_CreateIAviReadFile" >&5
+echo "${ECHO_T}$ac_cv_lib_aviplay_CreateIAviReadFile" >&6
+if test $ac_cv_lib_aviplay_CreateIAviReadFile = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBAVIPLAY 1
+_ACEOF
+
+  LIBS="-laviplay $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_AVIFILE_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_aviplay_CreateIAviReadFile" != "xno"; then
 
@@ -7918,6 +8062,8 @@ fi
 
 
 
+
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_ffmpeg+set}" = set; then
   withval="$with_ffmpeg"
@@ -7946,6 +8092,8 @@ else
   if test -d "$with_ffmpeg_libs"; then
     LIBS="-L$with_ffmpeg_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_avformat_av_open_input_file) >/dev/null 2>&1 && unset ac_cv_lib_avformat_av_open_input_file
 
 
 
@@ -8005,157 +8153,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_FFMPEG_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for av_open_input_file in -lavformat" >&5
-echo $ECHO_N "checking for av_open_input_file in -lavformat... $ECHO_C" >&6
-if test "${ac_cv_lib_avformat_av_open_input_file+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lavformat -lavcodec $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char av_open_input_file ();
-int
-main ()
-{
-av_open_input_file ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_avformat_av_open_input_file=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_avformat_av_open_input_file=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_avformat_av_open_input_file" >&5
-echo "${ECHO_T}$ac_cv_lib_avformat_av_open_input_file" >&6
-if test $ac_cv_lib_avformat_av_open_input_file = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBAVFORMAT 1
-_ACEOF
-
-  LIBS="-lavformat $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for av_open_input_file in -lavformat" >&5
-echo $ECHO_N "checking for av_open_input_file in -lavformat... $ECHO_C" >&6
-if test "${ac_cv_lib_avformat_av_open_input_file+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lavformat -lavcodec $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char av_open_input_file ();
-int
-main ()
-{
-av_open_input_file ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_avformat_av_open_input_file=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_avformat_av_open_input_file=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_avformat_av_open_input_file" >&5
-echo "${ECHO_T}$ac_cv_lib_avformat_av_open_input_file" >&6
-if test $ac_cv_lib_avformat_av_open_input_file = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBAVFORMAT 1
-_ACEOF
-
-  LIBS="-lavformat $LIBS"
-
-fi
-
+	:
 else
 	PKG_FFMPEG_CFLAGS=$pkg_cv_PKG_FFMPEG_CFLAGS
 	PKG_FFMPEG_LIBS=$pkg_cv_PKG_FFMPEG_LIBS
-	acLib==yes
+	ac_cv_lib_avformat_av_open_input_file=yes
 fi
 if test "x${PKG_FFMPEG_CFLAGS}" != "x"; then
 
@@ -8186,6 +8190,123 @@ if test "x${PKG_FFMPEG_LIBS}" != "x"; then
    PKG_LIBS="${PKG_FFMPEG_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_avformat_av_open_input_file" != "xyes"; then
+   echo "$as_me:$LINENO: checking for ffmpeg-config" >&5
+echo $ECHO_N "checking for ffmpeg-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xffmpeg" != "x"; then
+    pkgconfig="ffmpeg"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "ffmpeg"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_FFMPEG_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_FFMPEG_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_FFMPEG_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_FFMPEG_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_FFMPEG_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_FFMPEG_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_FFMPEG_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for av_open_input_file in -lavformat" >&5
+echo $ECHO_N "checking for av_open_input_file in -lavformat... $ECHO_C" >&6
+if test "${ac_cv_lib_avformat_av_open_input_file+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lavformat  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char av_open_input_file ();
+int
+main ()
+{
+av_open_input_file ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_avformat_av_open_input_file=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_avformat_av_open_input_file=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_avformat_av_open_input_file" >&5
+echo "${ECHO_T}$ac_cv_lib_avformat_av_open_input_file" >&6
+if test $ac_cv_lib_avformat_av_open_input_file = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBAVFORMAT 1
+_ACEOF
+
+  LIBS="-lavformat $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_FFMPEG_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_avformat_av_open_input_file" != "xno"; then
 
@@ -8636,6 +8757,7 @@ fi
 
 
 
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_ieee1394+set}" = set; then
   withval="$with_ieee1394"
@@ -8664,6 +8786,8 @@ else
   if test -d "$with_ieee1394_libs"; then
     LIBS="-L$with_ieee1394_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_dv_main) >/dev/null 2>&1 && unset ac_cv_lib_dv_main
 
 
 
@@ -8723,145 +8847,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_IEEE1394_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for main in -ldv" >&5
-echo $ECHO_N "checking for main in -ldv... $ECHO_C" >&6
-if test "${ac_cv_lib_dv_main+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ldv  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-main ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_dv_main=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_dv_main=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_dv_main" >&5
-echo "${ECHO_T}$ac_cv_lib_dv_main" >&6
-if test $ac_cv_lib_dv_main = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDV 1
-_ACEOF
-
-  LIBS="-ldv $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for main in -ldv" >&5
-echo $ECHO_N "checking for main in -ldv... $ECHO_C" >&6
-if test "${ac_cv_lib_dv_main+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ldv  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-main ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_dv_main=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_dv_main=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_dv_main" >&5
-echo "${ECHO_T}$ac_cv_lib_dv_main" >&6
-if test $ac_cv_lib_dv_main = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDV 1
-_ACEOF
-
-  LIBS="-ldv $LIBS"
-
-fi
-
+	:
 else
 	PKG_IEEE1394_CFLAGS=$pkg_cv_PKG_IEEE1394_CFLAGS
 	PKG_IEEE1394_LIBS=$pkg_cv_PKG_IEEE1394_LIBS
-	acLib==yes
+	ac_cv_lib_dv_main=yes
 fi
 if test "x${PKG_IEEE1394_CFLAGS}" != "x"; then
 
@@ -8892,6 +8884,117 @@ if test "x${PKG_IEEE1394_LIBS}" != "x"; then
    PKG_LIBS="${PKG_IEEE1394_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_dv_main" != "xyes"; then
+   echo "$as_me:$LINENO: checking for ieee1394-config" >&5
+echo $ECHO_N "checking for ieee1394-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xieee1394" != "x"; then
+    pkgconfig="ieee1394"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "ieee1394"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_IEEE1394_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_IEEE1394_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_IEEE1394_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_IEEE1394_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_IEEE1394_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_IEEE1394_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_IEEE1394_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for main in -ldv" >&5
+echo $ECHO_N "checking for main in -ldv... $ECHO_C" >&6
+if test "${ac_cv_lib_dv_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldv  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_dv_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_dv_main=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_dv_main" >&5
+echo "${ECHO_T}$ac_cv_lib_dv_main" >&6
+if test $ac_cv_lib_dv_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBDV 1
+_ACEOF
+
+  LIBS="-ldv $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_IEEE1394_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_dv_main" != "xno"; then
 
@@ -8931,6 +9034,8 @@ fi
 
 
 
+
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_ftgl+set}" = set; then
   withval="$with_ftgl"
@@ -8959,6 +9064,8 @@ else
   if test -d "$with_ftgl_libs"; then
     LIBS="-L$with_ftgl_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_ftgl_main) >/dev/null 2>&1 && unset ac_cv_lib_ftgl_main
 
 
 
@@ -9018,145 +9125,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_FTGL_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for main in -lftgl" >&5
-echo $ECHO_N "checking for main in -lftgl... $ECHO_C" >&6
-if test "${ac_cv_lib_ftgl_main+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lftgl  -lfreetpye $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-main ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_ftgl_main=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_ftgl_main=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_ftgl_main" >&5
-echo "${ECHO_T}$ac_cv_lib_ftgl_main" >&6
-if test $ac_cv_lib_ftgl_main = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBFTGL 1
-_ACEOF
-
-  LIBS="-lftgl $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for main in -lftgl" >&5
-echo $ECHO_N "checking for main in -lftgl... $ECHO_C" >&6
-if test "${ac_cv_lib_ftgl_main+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lftgl  -lfreetpye $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-main ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_ftgl_main=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_ftgl_main=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_ftgl_main" >&5
-echo "${ECHO_T}$ac_cv_lib_ftgl_main" >&6
-if test $ac_cv_lib_ftgl_main = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBFTGL 1
-_ACEOF
-
-  LIBS="-lftgl $LIBS"
-
-fi
-
+	:
 else
 	PKG_FTGL_CFLAGS=$pkg_cv_PKG_FTGL_CFLAGS
 	PKG_FTGL_LIBS=$pkg_cv_PKG_FTGL_LIBS
-	acLib==yes
+	ac_cv_lib_ftgl_main=yes
 fi
 if test "x${PKG_FTGL_CFLAGS}" != "x"; then
 
@@ -9187,6 +9162,117 @@ if test "x${PKG_FTGL_LIBS}" != "x"; then
    PKG_LIBS="${PKG_FTGL_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_ftgl_main" != "xyes"; then
+   echo "$as_me:$LINENO: checking for ftgl-config" >&5
+echo $ECHO_N "checking for ftgl-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xftgl" != "x"; then
+    pkgconfig="ftgl"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "ftgl"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_FTGL_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_FTGL_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_FTGL_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_FTGL_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_FTGL_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_FTGL_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_FTGL_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for main in -lftgl" >&5
+echo $ECHO_N "checking for main in -lftgl... $ECHO_C" >&6
+if test "${ac_cv_lib_ftgl_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lftgl  -lfreetpye $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_ftgl_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_ftgl_main=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_ftgl_main" >&5
+echo "${ECHO_T}$ac_cv_lib_ftgl_main" >&6
+if test $ac_cv_lib_ftgl_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBFTGL 1
+_ACEOF
+
+  LIBS="-lftgl $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_FTGL_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_ftgl_main" != "xno"; then
 
@@ -9226,6 +9312,8 @@ fi
 
 
 
+
+
 # Check whether --with-Name or --without-Name was given.
 if test "${with_gltt+set}" = set; then
   withval="$with_gltt"
@@ -9254,6 +9342,8 @@ else
   if test -d "$with_gltt_libs"; then
     LIBS="-L$with_gltt_libs $LIBS"
   fi
+
+  (unset ac_cv_lib_gltt_GLTTFont) >/dev/null 2>&1 && unset ac_cv_lib_gltt_GLTTFont
 
 
 
@@ -9313,157 +9403,13 @@ if test $pkg_failed = yes; then
 	# Put the nasty error message in config.log where it belongs
 	echo "$PKG_GLTT_PKG_ERRORS" 1>&5
 
-
-echo "$as_me:$LINENO: checking for GLTTFont in -lgltt" >&5
-echo $ECHO_N "checking for GLTTFont in -lgltt... $ECHO_C" >&6
-if test "${ac_cv_lib_gltt_GLTTFont+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lgltt  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char GLTTFont ();
-int
-main ()
-{
-GLTTFont ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_gltt_GLTTFont=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_gltt_GLTTFont=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_gltt_GLTTFont" >&5
-echo "${ECHO_T}$ac_cv_lib_gltt_GLTTFont" >&6
-if test $ac_cv_lib_gltt_GLTTFont = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGLTT 1
-_ACEOF
-
-  LIBS="-lgltt $LIBS"
-
-fi
-
+	:
 elif test $pkg_failed = untried; then
-
-echo "$as_me:$LINENO: checking for GLTTFont in -lgltt" >&5
-echo $ECHO_N "checking for GLTTFont in -lgltt... $ECHO_C" >&6
-if test "${ac_cv_lib_gltt_GLTTFont+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lgltt  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char GLTTFont ();
-int
-main ()
-{
-GLTTFont ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_gltt_GLTTFont=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_gltt_GLTTFont=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_gltt_GLTTFont" >&5
-echo "${ECHO_T}$ac_cv_lib_gltt_GLTTFont" >&6
-if test $ac_cv_lib_gltt_GLTTFont = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGLTT 1
-_ACEOF
-
-  LIBS="-lgltt $LIBS"
-
-fi
-
+	:
 else
 	PKG_GLTT_CFLAGS=$pkg_cv_PKG_GLTT_CFLAGS
 	PKG_GLTT_LIBS=$pkg_cv_PKG_GLTT_LIBS
-	acLib==yes
+	ac_cv_lib_gltt_GLTTFont=yes
 fi
 if test "x${PKG_GLTT_CFLAGS}" != "x"; then
 
@@ -9494,6 +9440,123 @@ if test "x${PKG_GLTT_LIBS}" != "x"; then
    PKG_LIBS="${PKG_GLTT_LIBS} ${PKG_LIBS}"
 fi
 
+
+  if test "x$ac_cv_lib_gltt_GLTTFont" != "xyes"; then
+   echo "$as_me:$LINENO: checking for gltt-config" >&5
+echo $ECHO_N "checking for gltt-config... $ECHO_C" >&6
+   locale pkgconfig
+   pkgconfig=""
+   if test "xgltt" != "x"; then
+    pkgconfig="gltt"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "gltt"-config`
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+     pkgconfig=""
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+
+    if test "x$PKG_GLTT_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_GLTT_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_GLTT_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+
+    if test "x$PKG_GLTT_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_GLTT_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_GLTT_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+   if test "x${PKG_GLTT_LIBS}" = "x"; then
+
+echo "$as_me:$LINENO: checking for GLTTFont in -lgltt" >&5
+echo $ECHO_N "checking for GLTTFont in -lgltt... $ECHO_C" >&6
+if test "${ac_cv_lib_gltt_GLTTFont+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lgltt  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char GLTTFont ();
+int
+main ()
+{
+GLTTFont ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_gltt_GLTTFont=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_gltt_GLTTFont=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_gltt_GLTTFont" >&5
+echo "${ECHO_T}$ac_cv_lib_gltt_GLTTFont" >&6
+if test $ac_cv_lib_gltt_GLTTFont = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGLTT 1
+_ACEOF
+
+  LIBS="-lgltt $LIBS"
+
+fi
+
+   else
+     PKG_LIBS="${PKG_GLTT_LIBS} ${PKG_LIBS}"
+   fi
+  fi
 
   if test "x$ac_cv_lib_gltt_GLTTFont" != "xno"; then
 
@@ -9526,6 +9589,7 @@ fi
 
 
    fi
+
 
 
 # pkg-config checks
@@ -10556,6 +10620,820 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 fi
+
+
+echo "$as_me:$LINENO: checking for unsigned int" >&5
+echo $ECHO_N "checking for unsigned int... $ECHO_C" >&6
+if test "${ac_cv_type_unsigned_int+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+if ((unsigned int *) 0)
+  return 0;
+if (sizeof (unsigned int))
+  return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_type_unsigned_int=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_type_unsigned_int=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_type_unsigned_int" >&5
+echo "${ECHO_T}$ac_cv_type_unsigned_int" >&6
+
+echo "$as_me:$LINENO: checking size of unsigned int" >&5
+echo $ECHO_N "checking size of unsigned int... $ECHO_C" >&6
+if test "${ac_cv_sizeof_unsigned_int+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test "$ac_cv_type_unsigned_int" = yes; then
+  # The cast to unsigned long works around a bug in the HP C Compiler
+  # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
+  # declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
+  # This bug is HP SR number 8606223364.
+  if test "$cross_compiling" = yes; then
+  # Depending upon the size, compute the lo and hi bounds.
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (unsigned int))) >= 0)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_lo=0 ac_mid=0
+  while :; do
+    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (unsigned int))) <= $ac_mid)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_hi=$ac_mid; break
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_lo=`expr $ac_mid + 1`
+		    if test $ac_lo -le $ac_mid; then
+		      ac_lo= ac_hi=
+		      break
+		    fi
+		    ac_mid=`expr 2 '*' $ac_mid + 1`
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+  done
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (unsigned int))) < 0)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_hi=-1 ac_mid=-1
+  while :; do
+    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (unsigned int))) >= $ac_mid)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_lo=$ac_mid; break
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_hi=`expr '(' $ac_mid ')' - 1`
+		       if test $ac_mid -le $ac_hi; then
+			 ac_lo= ac_hi=
+			 break
+		       fi
+		       ac_mid=`expr 2 '*' $ac_mid`
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+  done
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_lo= ac_hi=
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+# Binary search between lo and hi bounds.
+while test "x$ac_lo" != "x$ac_hi"; do
+  ac_mid=`expr '(' $ac_hi - $ac_lo ')' / 2 + $ac_lo`
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (unsigned int))) <= $ac_mid)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_hi=$ac_mid
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_lo=`expr '(' $ac_mid ')' + 1`
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+done
+case $ac_lo in
+?*) ac_cv_sizeof_unsigned_int=$ac_lo;;
+'') { { echo "$as_me:$LINENO: error: cannot compute sizeof (unsigned int), 77
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot compute sizeof (unsigned int), 77
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; } ;;
+esac
+else
+  if test "$cross_compiling" = yes; then
+  { { echo "$as_me:$LINENO: error: internal error: not reached in cross-compile" >&5
+echo "$as_me: error: internal error: not reached in cross-compile" >&2;}
+   { (exit 1); exit 1; }; }
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+long longval () { return (long) (sizeof (unsigned int)); }
+unsigned long ulongval () { return (long) (sizeof (unsigned int)); }
+#include <stdio.h>
+#include <stdlib.h>
+int
+main ()
+{
+
+  FILE *f = fopen ("conftest.val", "w");
+  if (! f)
+    exit (1);
+  if (((long) (sizeof (unsigned int))) < 0)
+    {
+      long i = longval ();
+      if (i != ((long) (sizeof (unsigned int))))
+	exit (1);
+      fprintf (f, "%ld\n", i);
+    }
+  else
+    {
+      unsigned long i = ulongval ();
+      if (i != ((long) (sizeof (unsigned int))))
+	exit (1);
+      fprintf (f, "%lu\n", i);
+    }
+  exit (ferror (f) || fclose (f) != 0);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_sizeof_unsigned_int=`cat conftest.val`
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+{ { echo "$as_me:$LINENO: error: cannot compute sizeof (unsigned int), 77
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot compute sizeof (unsigned int), 77
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+fi
+rm -f conftest.val
+else
+  ac_cv_sizeof_unsigned_int=0
+fi
+fi
+echo "$as_me:$LINENO: result: $ac_cv_sizeof_unsigned_int" >&5
+echo "${ECHO_T}$ac_cv_sizeof_unsigned_int" >&6
+cat >>confdefs.h <<_ACEOF
+#define SIZEOF_UNSIGNED_INT $ac_cv_sizeof_unsigned_int
+_ACEOF
+
+
+echo "$as_me:$LINENO: checking for void *" >&5
+echo $ECHO_N "checking for void *... $ECHO_C" >&6
+if test "${ac_cv_type_void_p+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+if ((void * *) 0)
+  return 0;
+if (sizeof (void *))
+  return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_type_void_p=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_type_void_p=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_type_void_p" >&5
+echo "${ECHO_T}$ac_cv_type_void_p" >&6
+
+echo "$as_me:$LINENO: checking size of void *" >&5
+echo $ECHO_N "checking size of void *... $ECHO_C" >&6
+if test "${ac_cv_sizeof_void_p+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test "$ac_cv_type_void_p" = yes; then
+  # The cast to unsigned long works around a bug in the HP C Compiler
+  # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
+  # declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
+  # This bug is HP SR number 8606223364.
+  if test "$cross_compiling" = yes; then
+  # Depending upon the size, compute the lo and hi bounds.
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (void *))) >= 0)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_lo=0 ac_mid=0
+  while :; do
+    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (void *))) <= $ac_mid)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_hi=$ac_mid; break
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_lo=`expr $ac_mid + 1`
+		    if test $ac_lo -le $ac_mid; then
+		      ac_lo= ac_hi=
+		      break
+		    fi
+		    ac_mid=`expr 2 '*' $ac_mid + 1`
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+  done
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (void *))) < 0)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_hi=-1 ac_mid=-1
+  while :; do
+    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (void *))) >= $ac_mid)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_lo=$ac_mid; break
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_hi=`expr '(' $ac_mid ')' - 1`
+		       if test $ac_mid -le $ac_hi; then
+			 ac_lo= ac_hi=
+			 break
+		       fi
+		       ac_mid=`expr 2 '*' $ac_mid`
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+  done
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_lo= ac_hi=
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+# Binary search between lo and hi bounds.
+while test "x$ac_lo" != "x$ac_hi"; do
+  ac_mid=`expr '(' $ac_hi - $ac_lo ')' / 2 + $ac_lo`
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+static int test_array [1 - 2 * !(((long) (sizeof (void *))) <= $ac_mid)];
+test_array [0] = 0
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_hi=$ac_mid
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_lo=`expr '(' $ac_mid ')' + 1`
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+done
+case $ac_lo in
+?*) ac_cv_sizeof_void_p=$ac_lo;;
+'') { { echo "$as_me:$LINENO: error: cannot compute sizeof (void *), 77
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot compute sizeof (void *), 77
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; } ;;
+esac
+else
+  if test "$cross_compiling" = yes; then
+  { { echo "$as_me:$LINENO: error: internal error: not reached in cross-compile" >&5
+echo "$as_me: error: internal error: not reached in cross-compile" >&2;}
+   { (exit 1); exit 1; }; }
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+long longval () { return (long) (sizeof (void *)); }
+unsigned long ulongval () { return (long) (sizeof (void *)); }
+#include <stdio.h>
+#include <stdlib.h>
+int
+main ()
+{
+
+  FILE *f = fopen ("conftest.val", "w");
+  if (! f)
+    exit (1);
+  if (((long) (sizeof (void *))) < 0)
+    {
+      long i = longval ();
+      if (i != ((long) (sizeof (void *))))
+	exit (1);
+      fprintf (f, "%ld\n", i);
+    }
+  else
+    {
+      unsigned long i = ulongval ();
+      if (i != ((long) (sizeof (void *))))
+	exit (1);
+      fprintf (f, "%lu\n", i);
+    }
+  exit (ferror (f) || fclose (f) != 0);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_sizeof_void_p=`cat conftest.val`
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+{ { echo "$as_me:$LINENO: error: cannot compute sizeof (void *), 77
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot compute sizeof (void *), 77
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+fi
+rm -f conftest.val
+else
+  ac_cv_sizeof_void_p=0
+fi
+fi
+echo "$as_me:$LINENO: result: $ac_cv_sizeof_void_p" >&5
+echo "${ECHO_T}$ac_cv_sizeof_void_p" >&6
+cat >>confdefs.h <<_ACEOF
+#define SIZEOF_VOID_P $ac_cv_sizeof_void_p
+_ACEOF
+
+
 
 
 # Checks for library functions.
@@ -13257,8 +14135,10 @@ s,@PKG_TIFF_CFLAGS@,$PKG_TIFF_CFLAGS,;t t
 s,@PKG_TIFF_LIBS@,$PKG_TIFF_LIBS,;t t
 s,@PKG_JPEG_CFLAGS@,$PKG_JPEG_CFLAGS,;t t
 s,@PKG_JPEG_LIBS@,$PKG_JPEG_LIBS,;t t
-s,@PKG_QUICKTIME_CFLAGS@,$PKG_QUICKTIME_CFLAGS,;t t
-s,@PKG_QUICKTIME_LIBS@,$PKG_QUICKTIME_LIBS,;t t
+s,@PKG_LIBQUICKTIME_CFLAGS@,$PKG_LIBQUICKTIME_CFLAGS,;t t
+s,@PKG_LIBQUICKTIME_LIBS@,$PKG_LIBQUICKTIME_LIBS,;t t
+s,@PKG_LQT_CFLAGS@,$PKG_LQT_CFLAGS,;t t
+s,@PKG_LQT_LIBS@,$PKG_LQT_LIBS,;t t
 s,@PKG_MPEG3_CFLAGS@,$PKG_MPEG3_CFLAGS,;t t
 s,@PKG_MPEG3_LIBS@,$PKG_MPEG3_LIBS,;t t
 s,@PKG_MPEG_CFLAGS@,$PKG_MPEG_CFLAGS,;t t
@@ -13818,7 +14698,7 @@ Configuration:
   video-support
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_mpeg3}
-    use QuickTime        : ${have_quicktime}
+    use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
     use ffmpeg           : ${have_ffmpeg}
   input-support
@@ -13867,7 +14747,7 @@ Configuration:
   video-support
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_mpeg3}
-    use QuickTime        : ${have_quicktime}
+    use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
     use ffmpeg           : ${have_ffmpeg}
   input-support
