@@ -17,6 +17,14 @@ LOG
 
 #include "Base/GemPixObj.h"
 
+#if defined SIZEOF_VOID_P && defined SIZEOF_UNSIGNED_INT
+# if SIZEOF_VOID_P != SIZEOF_UNSIGNED_INT
+#  define DONT_WANT_FREEFRAME
+# endif
+#endif
+
+#ifndef DONT_WANT_FREEFRAME
+
 #if defined __WIN32__ && !defined WIN32
 # define WIN32
 #endif
@@ -27,6 +35,9 @@ LOG
 #else
 # define T_FFPLUGMAIN FF_Main_FuncPtr
 #endif
+
+#endif /* DONT_WANT_FREEFRAME */
+
 
 
 /*-----------------------------------------------------------------
@@ -59,6 +70,8 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     // Destructor
     virtual ~pix_freeframe();
 
+#ifndef DONT_WANT_FREEFRAME
+
     //////////
     // Do the processing
     void 	processImage(imageStruct &image);
@@ -76,6 +89,8 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     t_inlet**m_inlet;
 
     void parmMess(int param, t_atom*value);
+#endif /* DONT_WANT_FREEFRAME */
+
  private:
     static void parmCallback(void *data, t_symbol*s, int argc, t_atom*argv);
 

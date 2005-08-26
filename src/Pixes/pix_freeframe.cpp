@@ -18,21 +18,22 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_freeframe.h"
-#include <stdio.h>
 
-#ifdef __WIN32__
-# include <io.h>
-# include <windows.h>
-#else
-# ifdef __APPLE__
-#  include <mach-o/dyld.h> 
+#ifndef DONT_WANT_FREEFRAME
+
+# include <stdio.h>
+# ifdef __WIN32__
+#  include <io.h>
+#  include <windows.h>
 # else
-#  define DL_OPEN
-#  include <dlfcn.h>
-# endif /* __APPLE__ */
-# include <unistd.h>
-#endif
-
+#  ifdef __APPLE__
+#   include <mach-o/dyld.h> 
+#  else
+#   define DL_OPEN
+#   include <dlfcn.h>
+#  endif /* __APPLE__ */
+#  include <unistd.h>
+# endif
 
 /*
  * here comes some magic:
@@ -50,15 +51,17 @@
  * this should keep the code fairly simple
  */
 
-#ifdef __linux__
-# define FF_PLUGMAIN_INT(x) (x).ivalue
-# define FF_PLUGMAIN_STR(x) (x).svalue
-# define FF_PLUGMAIN_PIS(x) (x).PISvalue
-#else
-# define FF_PLUGMAIN_INT(x) (int)(x)
-# define FF_PLUGMAIN_STR(x) (char*)(x)
-# define FF_PLUGMAIN_PIS(x) (PlugInfoStruct*)(x)
-#endif
+# ifdef __linux__
+#  define FF_PLUGMAIN_INT(x) (x).ivalue
+#  define FF_PLUGMAIN_STR(x) (x).svalue
+#  define FF_PLUGMAIN_PIS(x) (x).PISvalue
+# else
+#  define FF_PLUGMAIN_INT(x) (int)(x)
+#  define FF_PLUGMAIN_STR(x) (char*)(x)
+#  define FF_PLUGMAIN_PIS(x) (PlugInfoStruct*)(x)
+# endif
+
+#endif /* DONT_WANT_FREEFRAME */
 
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_freeframe,  t_symbol *, A_DEFSYM)
@@ -72,8 +75,14 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_freeframe,  t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 
-pix_freeframe :: pix_freeframe(t_symbol*s) : m_plugin(NULL),m_instance(FF_FAIL)
+pix_freeframe :: pix_freeframe(t_symbol*s)
+#ifndef DONT_WANT_FREEFRAME
+  : m_plugin(NULL),m_instance(FF_FAIL)
+#endif /* DONT_WANT_FREEFRAME */
 {
+#ifdef DONT_WANT_FREEFRAME
+  throw(GemException("Gem has been compiled without FreeFrame-support!"));
+#else
   int can_rgba=0;
   char *pluginname = s->s_name;
   char buf[MAXPDSTRING];
@@ -148,6 +157,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s) : m_plugin(NULL),m_instance(FF_FAIL)
     }
     m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType, gensym(tempVt));
   }
+#endif /* DONT_WANT_FREEFRAME */
 }
 
 /////////////////////////////////////////////////////////
@@ -156,6 +166,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s) : m_plugin(NULL),m_instance(FF_FAIL)
 /////////////////////////////////////////////////////////
 pix_freeframe :: ~pix_freeframe()
 {
+#ifndef DONT_WANT_FREEFRAME
   if(m_inlet){
     delete[]m_inlet;
   }
@@ -164,8 +175,10 @@ pix_freeframe :: ~pix_freeframe()
     m_plugin(FF_DEINITIALISE, NULL, 0);
     m_plugin=NULL;
   }
+#endif /* DONT_WANT_FREEFRAME */
 }
 
+#ifndef DONT_WANT_FREEFRAME
 /////////////////////////////////////////////////////////
 // processImage
 //
@@ -365,6 +378,7 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
 
   return plugmain;
 }
+#endif /* DONT_WANT_FREEFRAME */
 
 void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 {
@@ -372,6 +386,8 @@ void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 }
 
 void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
+#ifndef DONT_WANT_FREEFRAME
   int i = atoi(s->s_name+1);
   GetMyClass(data)->parmMess(i, (argc>0)?argv:NULL);
+#endif /* DONT_WANT_FREEFRAME */
 }
