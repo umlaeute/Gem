@@ -110,6 +110,10 @@ GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
 GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
 
 GEM_CHECK_LIB(libquicktime,quicktime, quicktime_init,,,,[movie loader])
+dnl lqt is the same as libquicktime
+dnl this is double because there exists "lqt-config" and "pkg-config libquicktime"
+dnl another option would have been to introduce aliases for packages
+GEM_CHECK_LIB(lqt,quicktime, quicktime_init,,,,[movie loader])
 GEM_CHECK_LIB(mpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
 GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
 GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
