@@ -146,6 +146,10 @@ AC_C_INLINE
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
 
+AC_CHECK_SIZEOF(unsigned int)
+AC_CHECK_SIZEOF(void *)
+
+
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_FORK
