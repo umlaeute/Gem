@@ -1020,11 +1020,61 @@ else
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$3])],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$3])])dnl
 
+## unset ac_Lib is possible
+  (unset ac_Lib) >/dev/null 2>&1 && unset ac_Lib
+
+## 1st we check, whether pkg-config knows something about this package
 dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB([$2],[$3],,,[$6]))
   PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(ac_Lib)yes,:)
+
   if test "x$ac_Lib" != "xyes"; then
-   if test "x$PKG_[]NAME[]_LIBS" = "x"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
+   AC_MSG_CHECKING([for $1-config])
+   locale pkgconfig
+   pkgconfig=""
+   if test "x$1" != "x"; then
+    pkgconfig="$1"-config
+    if which -- "$pkgconfig" >/dev/null 2>&1; then
+     pkgconfig=`which "$1"-config`
+     AC_MSG_RESULT([yes])
+    else
+     pkgconfig=""
+     AC_MSG_RESULT([no])
+    fi
+   fi
+
+   if test "x$pkgconfig" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
+
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
+    if test "x$PKG_[]NAME[]_CFLAGS" = "x"; then
+      if $pkgconfig --cflags >/dev/null 2>&1; then
+        PKG_[]NAME[]_CFLAGS=$(${pkgconfig} --cflags)
+        PKG_CFLAGS="$PKG_[]NAME[]_CFLAGS $PKG_CFLAGS"
+      fi
+    fi
+ 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
+    if test "x$PKG_[]NAME[]_LIBS" = "x"; then
+      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
+        PKG_[]NAME[]_LIBS=$(${pkgconfig} --plugin-libs)
+      else
+       if $pkgconfig --libs >/dev/null 2>&1; then
+        PKG_[]NAME[]_LIBS=$(${pkgconfig} --libs)
+       fi
+      fi
+    fi
+   fi
+
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
+   if test "x${PKG_[]NAME[]_LIBS}" = "x"; then
     AC_CHECK_LIB([$2],[$3],,,[$6])
+   else
+     PKG_LIBS="${PKG_[]NAME[]_LIBS} ${PKG_LIBS}"
    fi
   fi
 
@@ -1048,6 +1098,7 @@ dnl turn of further checking for this package
 fi[]dnl
 
 undefine([Name])
+undefine([NAME])
 ])# GEM_CHECK_LIB
 
 # GEM_CHECK_CXXFLAGS(ADDITIONAL-CXXFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
