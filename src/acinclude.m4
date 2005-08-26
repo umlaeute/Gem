@@ -996,6 +996,8 @@ AC_DEFUN([GEM_TARGET],
 AC_DEFUN([GEM_CHECK_LIB],
 [
  define([Name],[translit([$1],[./-+], [____])])
+ define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
+                              [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
 
 AC_ARG_WITH([Name],
              AC_HELP_STRING([--without-[]Name], [disable []Name ($7)]))
@@ -1018,7 +1020,13 @@ else
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$3])],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$3])])dnl
 
-  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)=yes, AC_CHECK_LIB([$2],[$3],,,[$6]))
+dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB([$2],[$3],,,[$6]))
+  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(ac_Lib)yes,:)
+  if test "x$ac_Lib" != "xyes"; then
+   if test "x$PKG_[]NAME[]_LIBS" = "x"; then
+    AC_CHECK_LIB([$2],[$3],,,[$6])
+   fi
+  fi
 
   AS_IF([test "x$ac_Lib" != "xno"],
    [
