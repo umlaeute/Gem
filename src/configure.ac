@@ -109,13 +109,12 @@ dnl  LIBS="-lMagick++ $LIBS")
 GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
 GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
 
-GEM_CHECK_LIB(quicktime,quicktime, quicktime_init,,,,[movie loader])
+GEM_CHECK_LIB(libquicktime,quicktime, quicktime_init,,,,[movie loader])
 GEM_CHECK_LIB(mpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
 GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
 GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
-GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,[PKG_CFLAGS="-I/usr/include/ffmpeg $PKG_CFLAGS"],,
-		[-lavcodec],[movie loader])
-
+dnl GEM_CHECK_LIB(avcodec, avcodec_pic, avcodec_close,,,,[movie loader])
+GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,[PKG_CFLAGS="-I/usr/include/ffmpeg $PKG_CFLAGS"],,,[movie loader])
 GEM_ARG_WITH(v4l, [video input])
 if test "x$with_v4l" != "xno"; then
   AC_CHECK_HEADER(linux/videodev.h,
@@ -331,7 +330,7 @@ Configuration:
   video-support
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_mpeg3}
-    use QuickTime        : ${have_quicktime}
+    use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
     use ffmpeg           : ${have_ffmpeg}
   input-support
