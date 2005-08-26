@@ -171,6 +171,27 @@ then all the objects are linked together to form a Gem.pd_linux
 finally the Gem.pd_linux is stripped from unneeded symbols
 
 
+=============================================
+KNOWN ISSUES
+=============================================
+
+-fPIC:
+	on some architectures (namely x86_64) Gem MUST link against 
+	the PIC-versions of certain libraries (ffmpeg, ftgl);
+	on other architectures i think it doesn't hurt to do so either
+
+	unfortunately Gem's configure uses "pkg-config" which 
+	does not provide a mechanism (yet?) for getting the 
+	PIC-versions of libraries if needed.
+	however, you can always export PKG_<libname>_LIBS before 
+	running configure to override the detected values
+
+	something like the following should do the trick:
+	%>export PKG_FFMPEG_LIBS=`ffmpeg-config --plugin-libs avformat`
+	%>export PKG_FTGL_LIBS=`pkg-config --libs ftgl | sed 's/-lftgl/-lftgl_pic/g'`
+	%>./configure
+
+
 
 
 Report any failures to <zmoelnig@iem.at>
