@@ -77,9 +77,6 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   bool m_loop;
 
   //////////
-  // the current pix_buffer
-  pix_buffer *m_buffer;
-  //////////
   // the pixBlock with the current image
   pixBlock m_pixBlock;
   //////////
@@ -92,8 +89,7 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
 
  private:
   //////////
-  // update pix_buffer, image
-  virtual void update_pix_buffer();
+  // update pix_buffer & image
   virtual void update_image();
   
   //////////
