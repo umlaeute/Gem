@@ -18,8 +18,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "Pixes/pix_film.h"
 #ifdef HAVE_LIBQUICKTIME
-#include <quicktime/quicktime.h>
-#include <quicktime/colormodels.h>
+#include <quicktime.h>
+#include <colormodels.h>
 #endif // QT
 #ifdef HAVE_LIBMPEG3
 #include <libmpeg3.h>

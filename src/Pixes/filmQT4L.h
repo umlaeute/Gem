@@ -20,8 +20,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include <stdio.h>
 
 #ifdef HAVE_LIBQUICKTIME
-#include <quicktime/quicktime.h>
-#include <quicktime/colormodels.h>
+#include <quicktime.h>
+#include <colormodels.h>
 #endif // QT
 
 /*-----------------------------------------------------------------
