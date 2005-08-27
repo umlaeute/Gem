@@ -119,8 +119,6 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
   // load an image into mem
   char buf[MAXPDSTRING];
   imageStruct *image = NULL;
-  canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
-  image = image2mem(buf);
 
   // some checks
   if (pos<0 || pos>=m_numframes)
@@ -128,6 +126,9 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
     post("pix_buffer: index %d out of range (0..%d)!", pos, m_numframes);
     return;
   }
+
+  canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
+  image = image2mem(buf);
   if(!image)
   {
     post("pix_buffer: no valid image!");
@@ -135,6 +136,9 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
   }
 
   putMess(image,pos);
+
+  // destroy the image-data
+  delete image;
 }
 
 
