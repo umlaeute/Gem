@@ -58,6 +58,14 @@ pix_image :: ~pix_image()
 /////////////////////////////////////////////////////////
 void pix_image :: openMess(t_symbol *filename)
 {
+#if 1
+  /*
+   * temporary hack to disable the cache, in order to get rid of the memoryleak
+   * in theory we should limit the cache to a maximum size (e.g. 10 images)
+   */
+    if(m_loadedImage)delete m_loadedImage; m_loadedImage=NULL;
+    s_imageCache=NULL;
+#endif
     cleanImage();
 
     if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
@@ -95,10 +103,10 @@ void pix_image :: openMess(t_symbol *filename)
         delete newCache;
         return;
     }
-
-    strcpy(m_filename, filename->s_name);
     m_loadedImage = newCache;
     m_loadedImage->refCount++;
+
+    strcpy(m_filename, filename->s_name);
 
     // insert the image into the cache
     singleImageCache *ptr = s_imageCache;
