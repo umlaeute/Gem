@@ -59,6 +59,9 @@ pix_texture :: pix_texture()
   //|| defined(GL_NV_TEXTURE_RECTANGLE)
   m_mode = 1;  //default to the fastest mode for systems that support it
   #endif
+  
+  // create an outlet to send texture ID
+  m_outTexID = outlet_new(this->x_obj, &s_float);
 }
 
 /////////////////////////////////////////////////////////
@@ -79,7 +82,7 @@ void pix_texture :: setUpTextureState() {
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
     // JMZ: disabled the following, as rectangle-textures are clamped anyhow
     // JMZ: and normalized ones, lose their setting 
-    //      m_repeat = GL_CLAMP_TO_EDGE;
+	//  m_repeat = GL_CLAMP_TO_EDGE;
       debug("pix_texture: using rectangle texture");
   }
 #endif // GL_TEXTURE_RECTANGLE_EXT
@@ -363,6 +366,9 @@ void pix_texture :: render(GemState *state) {
   // (this is important for things like [pix_coordinate]
   if(m_textureType==GL_TEXTURE_RECTANGLE_EXT)state->texture=2;
 #endif
+  
+  // send textureID to outlet
+  outlet_float(m_outTexID, (t_float)m_textureObj);
 }
 
 
