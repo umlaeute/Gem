@@ -34,11 +34,12 @@ pix_videoNEW :: pix_videoNEW(){
   m_videoHandle=NULL;
   int i = MAX_VIDEO_HANDLES;
   while(i--)m_videoHandles[i]=NULL;
-  m_numVideoHandles=0;
+  i=0;
 
-  m_videoHandles[m_numVideoHandles]=new videoV4L(GL_RGBA);  m_numVideoHandles++;
-  m_videoHandles[m_numVideoHandles]=new videoDV4L(GL_RGBA);  m_numVideoHandles++;
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L (GL_RGBA);  i++;
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoDV4L(GL_RGBA);  i++;
 
+  m_numVideoHandles=i;
   driverMess(0);
 }
 
