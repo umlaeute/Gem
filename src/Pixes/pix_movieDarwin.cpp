@@ -41,6 +41,7 @@ pix_movieDarwin :: pix_movieDarwin(t_symbol *filename)
   prevTime = 0;
   curTime = 0; 
   m_rectangle = 1;
+  m_haveMovie = 0;
   
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
   
@@ -831,7 +832,7 @@ void pix_movieDarwin :: stopRendering()
 void pix_movieDarwin :: MovRate(float rate)
 {
     m_rate = (float)rate;
-    if (m_auto) {
+    if (m_auto && m_haveMovie) {
     SetMovieRate(m_movie,X2Fix((double)m_rate));
     }
 }
