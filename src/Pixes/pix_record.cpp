@@ -92,7 +92,12 @@ pix_record :: pix_record(int argc, t_atom *argv)
   m_recordStop = 0;
   m_recordSetup = 0;
   m_codecType = kJPEGCodecType;
-  m_codec = (CodecComponent)65731;//65719;//65708; //this is pjpeg????
+  
+  for(i = 0; i < count; i++){
+		if (codecContainer[i].ctype == kJPEGCodecType) m_codec = codecContainer[i].codec;
+  }
+  post("pix_record : pjpeg codec %i %i %i ctype",i,m_codecType, m_codec);
+ // m_codec = (CodecComponent)65731;//65719;//65708; //this is pjpeg????
   m_codecSet = true;
   m_spatialQuality = codecNormalQuality; //codecHighQuality;
   m_codecQualitySet = true;
@@ -170,6 +175,7 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 
 			if (err != noErr){
 					error("GEM: pix_record: error %d in FSGetCatalogInfo()", err);
+					return;
 				}
 		
 		
@@ -177,6 +183,7 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 			
 			if (err != noErr && err != -37){
 					error("GEM: pix_record: error %d in FSMakeFSSpec()", err);
+					return;
 				}
 
 		}
@@ -191,7 +198,10 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 							&nFileRefNum,
 							&m_movie);
 
-	if (err != noErr) post("pix_record : CreateMovieFile failed with error %d",err);
+	if (err != noErr) {
+		post("pix_record : CreateMovieFile failed with error %d",err);
+		return;
+		}
 	
 
 
@@ -215,7 +225,10 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 							m_compressImage.data,
 							m_rowBytes);
 	
-	if (err != noErr) post("pix_record : QTNewGWorldFromPtr failed with error %d",err);
+	if (err != noErr){
+		post("pix_record : QTNewGWorldFromPtr failed with error %d",err);
+		return;
+		}
 	
 	SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
 	
@@ -331,7 +344,10 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 		}
 	
 	err = BeginMediaEdits(media);
-	if (err != noErr) post("pix_record : BeginMediaEdits failed with error %d",err);
+	if (err != noErr) {
+		post("pix_record : BeginMediaEdits failed with error %d",err);
+		return;
+		}
 	
 
 	//this will show that everything is OK for recording
@@ -588,6 +604,11 @@ void pix_record :: codecMess(int argc, t_atom *argv)
 
 void pix_record :: fileMess(int argc, t_atom *argv)
 {
+
+//if recording is going do not accept a new file name
+//on OSX changing the name while recording won't have any effect 
+//but it will give the wrong message at the end if recording
+if (m_recordStart) return;
 
 //  char *extension = ".mov";
   if (argc) {
