@@ -5,7 +5,7 @@ include Make.include
 BUILDDIR = ../
 
 # all objects that have been build
-OBJECTS = $(wildcard $(GEM_TARGETS:%=%/*.o))
+OBJECTS = $(GEM_TARGETS:%=%/*.o)
 
 .PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs
 
