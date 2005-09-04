@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2003 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2005 Georg Holzmann <grh@mur.at>
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -32,10 +33,13 @@ CPPEXTERN_NEW_WITH_GIMME(text2d)
 //
 /////////////////////////////////////////////////////////
 #ifdef FTGL
+
 text2d :: text2d(int argc, t_atom *argv)
-  : TextBase(argc, argv), m_antialias(1), m_afont(NULL) {
+  : TextBase(0,NULL), m_antialias(1), m_afont(NULL)
+{
   fontNameMess(DEFAULT_FONT);
 } 
+
 text2d :: ~text2d() {
   if(m_font) delete m_font; m_font=NULL;
   if(m_afont)delete m_afont;m_afont=NULL;
@@ -78,61 +82,71 @@ void text2d :: setFontSize(t_float size){
 /////////////////////////////////////////////////////////
 void text2d :: render(GemState *)
 {
-  if (!m_theString || !(m_afont || m_font))return;
+  if (m_theText.empty() || !(m_afont || m_font))return;
   if (m_antialias && !m_afont)m_antialias=0;
   if (!m_antialias && !m_font)m_antialias=1;
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-  // compute the offset due to the justification
-  if(m_antialias && m_afont){
-    m_afont->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
-    float width  = 0.f;
-    float height = 0.f;
-    float depth  = 0.f;
+  float width, height, y_offset, ascender;
+
+
+  if(m_antialias && m_afont)
+  {
+    // Get ascender height (= height of the text)
+    ascender = m_afont->Ascender();
+
+    // step through the lines
+    for(int i=0; i<m_theText.size(); i++)
+    {
+      m_afont->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
+      y_offset = m_lineDist[i]*m_fontSize;
 
     if (m_widthJus == LEFT)       width = x1;
     else if (m_widthJus == RIGHT) width = x2-x1;
     else if (m_widthJus == CENTER)width = x2 / 2.f;
 
-    if (m_heightJus == BOTTOM)     height = y1;
-    else if (m_heightJus == TOP)   height = y2-y1;
-    else if (m_heightJus == MIDDLE)height = y2 / 2.f;
-    
-    if (m_depthJus == FRONT)       depth = z1;
-    else if (m_depthJus == BACK)   depth = z2-z1;
-    else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
+      if (m_heightJus == BOTTOM || m_heightJus == BASEH)
+        height = y_offset;
+      else if (m_heightJus == TOP)   height = ascender + y_offset;
+      else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
 
     glPushMatrix();
 
     glRasterPos2i(0,0);
     glBitmap(0,0,0.0,0.0,-width,-height, NULL);
-    justifyFont(x1, y1, z1, x2, y2, z2);
-    m_afont->Render(m_theString);
+      m_afont->Render(m_theText[i].c_str());
+
     glPopMatrix();
-  } else if (m_font) {
-    m_font->BBox( m_theString, x1, y1, z1, x2, y2, z2); // FTGL
-    float width  = 0.f;
-    float height = 0.f;
-    float depth  = 0.f;
+    }
+  }
+  else if (m_font) 
+  {
+    // Get ascender height (= height of the text)
+    ascender = m_font->Ascender();
+
+    // step through the lines
+    for(int i=0; i<m_theText.size(); i++)
+    {
+      m_font->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
+      y_offset = m_lineDist[i]*m_fontSize;
 
     if (m_widthJus == LEFT)       width = x1;
     else if (m_widthJus == RIGHT) width = x2-x1;
     else if (m_widthJus == CENTER)width = x2 / 2.f;
 
-    if (m_heightJus == BOTTOM)     height = y1;
-    else if (m_heightJus == TOP)   height = y2-y1;
-    else if (m_heightJus == MIDDLE)height = y2 / 2.f;
-    
-    if (m_depthJus == FRONT)       depth = z1;
-    else if (m_depthJus == BACK)   depth = z2-z1;
-    else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
+      if (m_heightJus == BOTTOM || m_heightJus == BASEH)
+        height = y_offset;
+      else if (m_heightJus == TOP)   height = ascender + y_offset;
+      else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
 
     glPushMatrix();
 
     glRasterPos2i(0,0);
     glBitmap(0,0,0.0,0.0,-width,-height, NULL);
-    m_font->Render(m_theString);
+      m_font->Render(m_theText[i].c_str());
+
     glPopMatrix();
   }
+}
 }
 
 #elif defined GLTT
@@ -209,7 +223,7 @@ int text2d :: makeFontFromFace()
 /////////////////////////////////////////////////////////
 void text2d :: render(GemState *)
 {
-  if (m_valid && m_theString) {
+  if (m_valid && m_theText) {
     glPushMatrix();
 
     // compute the offset due to the justification
@@ -221,7 +235,7 @@ void text2d :: render(GemState *)
     // pixmap'ed fonts are not supported under GLTT/NT
     if (m_antialias){
       if(!m_afont)return;
-      x2=m_afont->getWidth (m_theString);
+      x2=m_afont->getWidth (m_theText);
       y2=m_afont->getHeight();
 
       float width  = 0.f;
@@ -240,13 +254,13 @@ void text2d :: render(GemState *)
       else if (m_depthJus == BACK)   depth = z2-z1;
       else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
 
-      m_afont->output((int)-width, (int)-height, m_theString);
+      m_afont->output((int)-width, (int)-height, m_theText);
     }else
 #endif
       {
 	if(!m_font)return;
 
-	x2=m_font->getWidth (m_theString);
+	x2=m_font->getWidth (m_theText);
 	y2=m_font->getHeight();
 
 	float width  = 0.f;
@@ -265,7 +279,7 @@ void text2d :: render(GemState *)
 	else if (m_depthJus == BACK)   depth = z2-z1;
 	else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
 
-	m_font->output((int)-width, (int)-height, m_theString);
+	m_font->output((int)-width, (int)-height, m_theText);
       }
     glPopMatrix();
   }
@@ -299,11 +313,11 @@ void text2d :: obj_setupCallback(t_class *classPtr )
 		  gensym("alias"), A_FLOAT, A_NULL);
 }
 
-void text2d :: aliasMess(int size)
+void text2d :: aliasMess(int io)
 {
-  m_antialias = (int)size;
+  m_antialias = io;
 }
-void text2d :: aliasMessCallback(void *data, t_floatarg tog)
+void text2d :: aliasMessCallback(void *data, t_floatarg io)
 {
-  GetMyClass(data)->aliasMess((int)tog);
+  GetMyClass(data)->aliasMess((int)io);
 }

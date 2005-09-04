@@ -7,6 +7,7 @@
   Copyright (c) 1997-1999 Mark Danks. mark@danks.org
   Copyright (c) Günther Geiger. geiger@epy.co.at
   Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+  Copyright (c) 2005 Georg Holzmann <grh@mur.at>
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -14,6 +15,9 @@
 
 #ifndef INCLUDE_TEXTBASE_H_
 #define INCLUDE_TEXTBASE_H_
+
+#include <vector>
+#include <string>
 
 #include "Base/GemBase.h"
 #include "Base/config.h"
@@ -32,6 +36,9 @@
 #include <AGL/agl.h>
 extern bool HaveValidContext (void);
 #endif
+
+using std::string;
+using std::vector;
 
 
 /*-----------------------------------------------------------------
@@ -54,8 +61,9 @@ class GEM_EXTERN TextBase : public GemBase
     public:
 
   //////////
-  // Constructor
+  // Constructor with args
   TextBase(int argc, t_atom *argv);
+    	
     	
  protected:
   
@@ -64,7 +72,7 @@ class GEM_EXTERN TextBase : public GemBase
   virtual ~TextBase();
 
   //////////
-  // Set the text string
+  // Do the rendering
 #ifdef GLTT
   // when we are in GLTT, we have to define the rendering function again and again...
   virtual void	render(GemState*)=0;
@@ -74,16 +82,20 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // Set the text string
-  void	    	textMess(int argc, t_atom *argv);
+  virtual void  textMess(int argc, t_atom *argv);
 
   //////////
   // The font to use
   virtual void  fontNameMess(const char *filename);
 
   //////////
+  // set line distance
+  virtual void linedistMess(float dist);
+
+  //////////
   // Set the font size
   virtual void	setFontSize(float size);
-  void          setFontSize();
+  virtual void  setFontSize();
 
   //////////
   // Set the precision for rendering
@@ -97,14 +109,16 @@ class GEM_EXTERN TextBase : public GemBase
 	
   //////////
   // Set the justification
-  void	setJustification(JustifyWidth wType);
-  void	setJustification(JustifyWidth wType, JustifyHeight hType);
-  void	setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType);
+  virtual void setJustification(JustifyWidth wType);
+  virtual void setJustification(JustifyWidth wType, JustifyHeight hType);
+  virtual void setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType);
 
   //////////
   // do the justification
   // x1,...,z2 just defines the bounding box of the rendered string.
-  void justifyFont(float x1, float y1, float z1, float x2, float y2, float z2);
+  // y_offset is the offset of the current line
+  virtual void justifyFont(float x1, float y1, float z1,
+			   float x2, float y2, float z2, float y_offset=0);
 
 
   //-----------------------------------
@@ -112,95 +126,109 @@ class GEM_EXTERN TextBase : public GemBase
   //-----------------------------------
     
   //////////
-  // Do we have a valid font?
-  int	m_valid;
+  // The text to display
+  // (one entry for each line)
+  vector<string> m_theText;
 
   //////////
-  // The string to display
-  char	    	*m_theString;
+  // distance between the lines
+  // (1 = 1 line, 0.5 = 0.5 lines, ...)
+  float m_dist;
+
+  ///////////
+    // vector with the offset
+    // of the individual lines
+    vector<float> m_lineDist;
+
+    //////////
+    // Do we have a valid font?
+    int m_valid;
     	
-  //////////
-  // The maximum memory currently allocated for the string
-  // This includes the terminator /0 !!!
-  int	m_theMaxStringSize;
-    	
-  //////////
-  // The font fize
-  float		m_fontSize;
+    //////////
+    // The font fize
+    float		m_fontSize;
 
-  //////////
-  // The font depth (only for extruded fonts)
-  float		m_fontDepth;
+    //////////
+    // The font depth (only for extruded fonts)
+    float		m_fontDepth;
 
-    	
-  //////////
-  // The rendering precision
-  float		m_precision;
+    //////////
+    // The rendering precision
+    float		m_precision;
 
-  //////////
-  // The width justification
-  JustifyWidth	m_widthJus;
+    //////////
+    // The width justification
+    JustifyWidth	m_widthJus;
 
-  //////////
-  // The height justification
-  JustifyHeight	m_heightJus;
+    //////////
+    // The height justification
+    JustifyHeight	m_heightJus;
 
-  //////////
-  // The depth justification
-  JustifyDepth	m_depthJus;
+    //////////
+    // The depth justification
+    JustifyDepth	m_depthJus;
 
-  //////////
-  // The inlet
-  t_inlet         *m_inlet;
+    //////////
+    // The inlet
+    t_inlet         *m_inlet;
 
 
-  //////////
-  // The default font name
-  static char *DEFAULT_FONT;
+    //////////
+    // The default font name
+    static char *DEFAULT_FONT;
  
-  //////////
-  // The font structure
+    //////////
+    // The font structure
 #ifdef FTGL
-  FTFont		*m_font;
-  /* this should delete (m_font) if it is notnull and recreate it.
-   * a pointer to the new structure is returned (and is set to m_font).
-   * if creation fails, the font is cleaned-up and NULL is returned
-   */
-  virtual FTFont* makeFont(const char*fontname)=0;
+    FTFont		*m_font;
+    /* this should delete (m_font) if it is notnull and recreate it.
+     * a pointer to the new structure is returned (and is set to m_font).
+     * if creation fails, the font is cleaned-up and NULL is returned
+     */
+    virtual FTFont* makeFont(const char*fontname)=0;
 
-  /* this is just handy to reload a font */
-  char* m_fontname;
-  /* on starting to render, we reload the font, to make sure it is there 
-   * this rids us of having to reload the font by hand everytime the rendering is restarted
-   */
-  virtual  void startRendering(void){if(m_fontname)fontNameMess(m_fontname);}
+    /* this is just handy to reload a font */
+    char* m_fontname;
+    /* on starting to render, we reload the font, to make sure it is there 
+     * this rids us of having to reload the font by hand everytime the rendering is restarted
+     */
+    virtual  void startRendering(void){if(m_fontname)fontNameMess(m_fontname);}
 #elif defined GLTT
-  FTFace 		*m_face;
+    FTFace 		*m_face;
 
-  //////////
-  // make the actual font
-  /* return values: 1==success; 0==failure
-   * the actual fonts (members are declared in child-classes) are created
-   * if creation fails, the fonts should be cleaned-up and
-   * 0 is returned (for historic reasons)
-   */
-  virtual int makeFontFromFace() = 0;
+    //////////
+    // make the actual font
+    /* return values: 1==success; 0==failure
+     * the actual fonts (members are declared in child-classes) are created
+     * if creation fails, the fonts should be cleaned-up and
+     * 0 is returned (for historic reasons)
+     */
+    virtual int makeFontFromFace() = 0;
 
-  ////////
-  // destroy the current font.
-  /* this has to be done before(!) destroying the face */
-  virtual void destroyFont() = 0;
+    ////////
+    // destroy the current font.
+    /* this has to be done before(!) destroying the face */
+    virtual void destroyFont() = 0;
 #endif
   
  private:
     	    
-  //////////
-  // Static member functions
-  static void 	textMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void 	fontSizeMessCallback(void *data, t_floatarg size);
-  static void 	precisionMessCallback(void *data, t_floatarg prec);
-  static void 	fontNameMessCallback(void *data, t_symbol *s);
-  static void 	justifyMessCallback(void *data, t_symbol *, int, t_atom*);
+    ///////////
+   // helpers:
+
+   ///////////
+   // helper to make the
+   // line distance vector
+   void makeLineDist();
+
+   //////////
+   // Static member functions
+   static void 	textMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+   static void 	fontSizeMessCallback(void *data, t_floatarg size);
+   static void   linedistMessCallback(void *data, t_floatarg dist);
+   static void 	precisionMessCallback(void *data, t_floatarg prec);
+   static void 	fontNameMessCallback(void *data, t_symbol *s);
+   static void 	justifyMessCallback(void *data, t_symbol *, int, t_atom*);
 };
 
 #endif	// for header file

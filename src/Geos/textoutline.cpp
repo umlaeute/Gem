@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2003 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2005 Georg Holzmann <grh@mur.at>
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -100,16 +101,16 @@ int textoutline :: makeFontFromFace()
 /////////////////////////////////////////////////////////
 void textoutline :: render(GemState *)
 {
-  if (m_valid && m_theString) {
+  if (m_valid && !m_theText.empty()) 
+  {
     // compute the offset due to the justification
     float x=0, y=0;
 
-    x=m_font->getWidth (m_theString);
+    x=m_font->getWidth (m_theText[0]);
     y=m_font->getHeight();
     glPushMatrix();
-    justifyFont(0, 0, 0, x, y, 0);
-    m_font->output(m_theString);
-    
+    justifyFont(0, 0, 0, x, y, 0, y);
+    m_font->output(m_theText[0]);
     glPopMatrix();
   }
 }
