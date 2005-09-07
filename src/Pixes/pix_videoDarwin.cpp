@@ -142,39 +142,14 @@ int pix_videoDarwin :: startTransfer()
 /////////////////////////////////////////////////////////
 int pix_videoDarwin :: stopTransfer()
 {
-     
      return 1;
 }
 
-/*---------------------------------------------------------------------*/
-//	video settings dialog to setup camera				//
-/*---------------------------------------------------------------------*/
-pascal Boolean pix_videoDarwin :: SeqGrabberModalFilterProc (DialogPtr theDialog, const EventRecord *theEvent, short *itemHit, long refCon){
-//#pragma unused(theDialog, itemHit)
-    Boolean	handled = false;
-
-    if ((theEvent->what == updateEvt) &&
-        ((WindowPtr) theEvent->message == (WindowPtr) refCon))
-    {
-        BeginUpdate ((WindowPtr) refCon);
-        EndUpdate ((WindowPtr) refCon);
-        handled = true;
-    } 
-    
-     WindowRef  awin = GetDialogWindow(theDialog);
-    ShowWindow (awin);
-    SetWindowClass(awin,kUtilityWindowClass);
-    //ChangeWindowAttributes(awin,kWindowStandardHandlerAttribute,0);     	SGPanelEvent(m_sg,m_vc,theDialog,0,theEvent,itemHit,&handled);
-  //  AEProcessAppleEvent (theEvent);
-    
-    return (handled);
-}
-
-void pix_videoDarwin :: DoVideoSettings(){
+void pix_videoDarwin :: DoVideoSettings()
+{
     Rect	newActiveVideoRect;
     Rect	curBounds, curVideoRect, newVideoRect;
     ComponentResult	err;
-    SGModalFilterUPP	seqGragModalFilterUPP;
 
     // Get our current state - do i need this???
     err = SGGetChannelBounds (m_vc, &curBounds);
@@ -184,11 +159,8 @@ void pix_videoDarwin :: DoVideoSettings(){
     err = SGPause (m_sg, true);
 
     // Do the dialog thang
-    seqGragModalFilterUPP = (SGModalFilterUPP)NewSGModalFilterUPP(SeqGrabberModalFilterProc);
-    err = SGSettingsDialog(m_sg, m_vc, 0,
-                           NULL, seqGrabSettingsPreviewOnly, seqGragModalFilterUPP, (long)m_srcGWorld);
-    DisposeSGModalFilterUPP(seqGragModalFilterUPP);
-
+	err = SGSettingsDialog( m_sg, m_vc, 0, nil, 0, nil, 0);
+	
     // What happened?
     err = SGGetVideoRect (m_vc, &newVideoRect);
     err = SGGetSrcVideoBounds (m_vc, &newActiveVideoRect);
@@ -834,8 +806,7 @@ void pix_videoDarwin :: whiteBalanceMess(float U, float V)
 // dialog
 //
 /////////////////////////////////////////////////////////
-//void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
-void pix_videoDarwin :: dialogMess()
+void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
 {
     DoVideoSettings();
 }
@@ -849,9 +820,7 @@ pix_video::real_obj_setupCallback(classPtr);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
 		  gensym("reset"), A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
-		  gensym("open_dialog"), A_NULL);
-//    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogMessCallback,
-//                    gensym("dialog"), A_GIMME, A_NULL);
+		  gensym("dialog"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::colorspaceCallback,
 		  gensym("colorspace"), A_SYMBOL, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::deviceCallback,
@@ -872,21 +841,17 @@ pix_video::real_obj_setupCallback(classPtr);
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
 {
-  GetMyClass(data)->m_quality=((int)X);
-  
+	GetMyClass(data)->m_quality=((int)X);
 } 
 
 void pix_videoDarwin :: resetCallback(void *data)
 {
-GetMyClass(data)->resetSeqGrabber();
-  
+	GetMyClass(data)->resetSeqGrabber();
 }
 
 void pix_videoDarwin ::dialogCallback(void *data)
 {
-    
-GetMyClass(data)->DoVideoSettings();
-  
+	GetMyClass(data)->DoVideoSettings();
 }
  
 void pix_videoDarwin :: csMessCallback(void *data, t_symbol*s)
@@ -938,43 +903,36 @@ void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
 
 void pix_videoDarwin :: deviceCallback(void *data, t_floatarg X)
 {
-  GetMyClass(data)->m_inputDevice=((int)X);
-  
+  GetMyClass(data)->m_inputDevice=((int)X);  
 } 
 
 void pix_videoDarwin :: brightnessCallback(void *data, t_floatarg X)
 {
-  GetMyClass(data)->brightnessMess(X);
-  
+  GetMyClass(data)->brightnessMess(X);  
 } 
 
 void pix_videoDarwin :: saturationCallback(void *data, t_floatarg X)
 {
   GetMyClass(data)->saturationMess(X);
-  
 } 
 
 void pix_videoDarwin :: contrastCallback(void *data, t_floatarg X)
 {
   GetMyClass(data)->contrastMess(X);
-  
 }
 
 void pix_videoDarwin :: exposureCallback(void *data, t_floatarg X)
 {
   GetMyClass(data)->exposureMess(X);
-  
 } 
 
 void pix_videoDarwin :: gainCallback(void *data, t_floatarg X)
 {
   GetMyClass(data)->gainMess(X);
-  
 }
 
 void pix_videoDarwin :: whiteBalanceCallback(void *data, t_floatarg U, t_floatarg V)
 {
   GetMyClass(data)->whiteBalanceMess(U,V);
-  
 }
 #endif // __APPLE__

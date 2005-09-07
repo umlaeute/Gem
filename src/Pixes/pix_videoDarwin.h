@@ -78,8 +78,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 
         //////////
         // property-dialog
-        //virtual void	dialogMess(int,t_atom*);
-		virtual void	dialogMess();
+        virtual void	dialogMess(int,t_atom*);
 		
 		virtual void	derSwizzler(imageStruct &image);
   
@@ -99,8 +98,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         void resetSeqGrabber();
         void destroySeqGrabber();
         void DoVideoSettings();
-        static pascal Boolean SeqGrabberModalFilterProc (DialogPtr theDialog, const EventRecord *theEvent, short *itemHit, long refCon); 
-        void	    	dimenMess(int x, int y, int leftmargin, int rightmargin,
+        void dimenMess(int x, int y, int leftmargin, int rightmargin,
     	    	    	    int topmargin, int bottommargin);
 
         //-----------------------------------
