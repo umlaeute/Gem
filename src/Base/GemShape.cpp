@@ -26,7 +26,7 @@
 //
 /////////////////////////////////////////////////////////
 GemShape :: GemShape(t_floatarg size)
-  : m_linewidth(1.0f), m_size((float)size), m_inlet(NULL), m_drawType(GL_DEFAULT_GEM)
+  : m_linewidth(1.0f), m_size((float)size), m_drawType(GL_DEFAULT_GEM), m_inlet(NULL)
 {
   if (m_size == 0.f)m_size = 1.f;
 

@@ -24,7 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglNewList , t_floatarg, A_DEFFLOAT, t_floatarg,
 // Constructor
 //
 GEMglNewList :: GEMglNewList	(t_floatarg arg0=0, t_floatarg arg1=GL_COMPILE_AND_EXECUTE) :
-		mode((GLenum)arg1), list((GLuint)arg0)
+  list((GLuint)arg0),
+		mode((GLenum)arg1)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("displaylist"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));

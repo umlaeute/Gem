@@ -1117,8 +1117,8 @@ int GemMan :: createWindow(char* disp)
   else
 #endif
 #ifdef GL_TEXTURE_RECTANGLE_NV
-    if (texture_rectangle_supported
-	=  OpenGLExtensionIsSupported("GL_NV_texture_rectangle")){}
+    if ((texture_rectangle_supported
+	 =  OpenGLExtensionIsSupported("GL_NV_texture_rectangle"))){}
     else
 #endif
       texture_rectangle_supported = 0;

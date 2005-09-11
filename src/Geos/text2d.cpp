@@ -86,8 +86,8 @@ void text2d :: render(GemState *)
   if (m_antialias && !m_afont)m_antialias=0;
   if (!m_antialias && !m_font)m_antialias=1;
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-  float width, height, y_offset, ascender;
-
+  float width=0, height=0, y_offset=0, ascender=0;
+  unsigned int i;
 
   if(m_antialias && m_afont)
   {
@@ -95,7 +95,7 @@ void text2d :: render(GemState *)
     ascender = m_afont->Ascender();
 
     // step through the lines
-    for(int i=0; i<m_theText.size(); i++)
+    for(i=0; i<m_theText.size(); i++)
     {
       m_afont->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
       y_offset = m_lineDist[i]*m_fontSize;
@@ -124,7 +124,7 @@ void text2d :: render(GemState *)
     ascender = m_font->Ascender();
 
     // step through the lines
-    for(int i=0; i<m_theText.size(); i++)
+    for(i=0; i<m_theText.size(); i++)
     {
       m_font->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
       y_offset = m_lineDist[i]*m_fontSize;

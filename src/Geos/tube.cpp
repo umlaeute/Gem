@@ -53,12 +53,17 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOA
 //
 /////////////////////////////////////////////////////////
 tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg order_in)
-  : GemShape(size), m_size2(size2),
-    m_high(height),
-    m_TX(0.0),  m_TY(0.0),
-    sin_rotX1(0.0),   sin_rotX2(0.0),     sin_rotY1(0.0),   sin_rotY2(0.0), 
-    cos_rotX1(1.0),   cos_rotX2(1.0),     cos_rotY1(1.0),   cos_rotY2(1.0),
-    m_cos(NULL), m_sin(NULL)
+  : GemShape(size),
+    m_cos(NULL), m_sin(NULL), 
+    m_size2(size2), m_inlet2(NULL),
+    m_high(height), m_inlethigh(NULL),
+    m_TX(0.0), m_inletTX(NULL),
+    m_TY(0.0), m_inletTY(NULL), 
+    cos_rotX1(1.0),   sin_rotX1(0.0), m_inletrotX1(NULL),
+    cos_rotY1(1.0),   sin_rotY1(0.0), m_inletrotY1(NULL),
+    cos_rotX2(1.0),   sin_rotX2(0.0), m_inletrotX2(NULL),
+    cos_rotY2(1.0),   sin_rotY2(0.0), m_inletrotY2(NULL),
+    order(80)
 {
   if (m_size2 == 0.f) m_size2 = 1.f;
   if (m_size == 0.f)  m_size = 1.f;

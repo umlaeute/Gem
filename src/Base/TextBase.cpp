@@ -38,8 +38,8 @@ char *TextBase::DEFAULT_FONT = "arial.ttf";
 /////////////////////////////////////////////////////////
 #ifdef FTGL
 TextBase :: TextBase(int argc, t_atom *argv)
-  : m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
-    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL), m_fontname(NULL), m_dist(1)
+  : m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
+    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL), m_fontname(NULL)
 {
 /*
   static bool first_time=true;
@@ -65,11 +65,12 @@ void TextBase :: render(GemState *)
 {
   if (m_theText.empty() || !m_font)return;
 
-    float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-  float width, height, y_offset;
+  float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
+  float y_offset;
+  unsigned int i=0;
 
   // step through the lines
-  for(int i=0; i<m_theText.size(); i++)
+  for(i=0; i<m_theText.size(); i++)
   {
     m_font->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
     y_offset = m_lineDist[i]*m_fontSize;
@@ -336,9 +337,7 @@ void TextBase :: textMess(int argc, t_atom *argv)
 
   string line = "";
   char newtext[MAXPDSTRING];
-  
-  int numlines=0;
-  unsigned int length=0;
+
   int i=0;
 
   // convert the atom-list into 1 string
@@ -370,13 +369,14 @@ void TextBase :: textMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void TextBase :: makeLineDist()
 {
+  unsigned int i=0;
   m_lineDist.clear();
 
   if (m_heightJus == BOTTOM || m_heightJus == BASEH)
   {
     // so the offset will be a simple 
     // [0 1 2 3 ... n] sequence
-    for(int i=0; i<m_theText.size(); i++)
+    for(i=0; i<m_theText.size(); i++)
       m_lineDist.push_back(i);
     return;
   }
@@ -385,7 +385,7 @@ void TextBase :: makeLineDist()
   {
     // now in the other direction:
     // [-n ... -2 -1 0]
-    for(int i=m_theText.size()-1; i>=0; i--)
+    for(i=m_theText.size()-1; i>=0; i--)
       m_lineDist.push_back(-i);
     return;
   }
@@ -404,7 +404,7 @@ void TextBase :: makeLineDist()
 
   float diff = (m_theText.size()-1)*0.5;
 
-  for(int i=0; i<m_theText.size(); i++)
+  for(i=0; i<m_theText.size(); i++)
     m_lineDist.push_back((i-diff)*m_dist);
 }
 
@@ -440,9 +440,9 @@ void TextBase :: fontNameMessCallback(void *data, t_symbol *s)
 }
 void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*argv)
 {
-  JustifyWidth  wType;
-  JustifyHeight hType;
-  JustifyDepth  dType;
+  JustifyWidth  wType=CENTER;
+  JustifyHeight hType=MIDDLE;
+  JustifyDepth  dType=HALFWAY;
   char c;
   
   switch(argc){

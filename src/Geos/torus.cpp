@@ -85,7 +85,6 @@ void torus :: innerRadius(float radius)
 /////////////////////////////////////////////////////////
 void torus :: render(GemState *state)
 {
-  GLenum orientation = true; /* GLU_INSIDE; */
   GLboolean normals = (state->lighting);
   GLboolean texture = (state->texture);
 

@@ -173,12 +173,12 @@ class GEM_EXTERN tube : public GemShape
   float	    	sin_rotY2;
 
   //////////
-  // The order of the object
-  int			order;
-
-  //////////
   // The rotY2 inlet
   t_inlet         *m_inletrotY2;
+
+  //////////
+  // The order of the object
+  int			order;
 
  private:
   //////////

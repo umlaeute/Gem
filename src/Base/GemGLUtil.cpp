@@ -69,7 +69,11 @@ GEM_EXTERN int getGLdefine(char *name)
 {
     char *c=name;
     int count=0;
-    while (*c){*c++=toupper(*c);count++;}
+    while (*c){
+      *c=toupper(*c);
+      c++;
+      count++;
+    }
     if (count<4)return _GL_UNDEFINED;
     if (!(name[0]=='G' && name[1]=='L' && name[2]=='_'))return _GL_UNDEFINED;
     name+=3;

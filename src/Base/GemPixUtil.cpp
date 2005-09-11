@@ -260,8 +260,10 @@ void pix_addsat(unsigned char *leftPix, unsigned char *rightPix, size_t datasize
 
 void pix_sub(unsigned char *leftPix, unsigned char *rightPix, size_t datasize)
 {
-  while(datasize--)
-    *leftPix = CLAMP_LOW((int)*leftPix++ - (int)*rightPix++);
+  while(datasize--){
+    *leftPix = CLAMP_LOW((int)*leftPix - (int)*rightPix++);
+    leftPix++;
+  }
 }
 
 GEM_EXTERN void imageStruct::setBlack() {
@@ -1621,7 +1623,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
   case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
@@ -1660,7 +1662,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 	  YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
 #else
       unsigned char *pixels=data;
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
@@ -1736,7 +1738,7 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
   case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
@@ -1768,7 +1770,7 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
       unsigned char *pixels=data;
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
@@ -1831,7 +1833,7 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
   case GL_RGB:  case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
@@ -1863,7 +1865,7 @@ GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
       unsigned char *pixels=data;
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
