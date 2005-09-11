@@ -17,14 +17,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Base/config.h"
 
 #ifdef unix
-#include <GL/glx.h>
-#include <X11/extensions/xf86vmode.h>
+# include <GL/glx.h>
+# ifdef HAVE_LIBXXF86VM
+#  include <X11/extensions/xf86vmode.h>
+# endif
 #elif __WIN32__
-#include <windows.h>
+# include <windows.h>
 #elif __APPLE__
-#import <AGL/agl.h>
+# import <AGL/agl.h>
 #else
-#error Define OS specific window creation
+# error Define OS specific window creation
 #endif
 
 #include "Base/GemExportDef.h"
@@ -69,7 +71,9 @@ class GEM_EXTERN WindowInfo
   Colormap    cmap;               // X color map
   GLXContext  context;            // OpenGL context
 
+#ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
+#endif
 
 #elif __WIN32__
 

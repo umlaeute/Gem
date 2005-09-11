@@ -53,7 +53,9 @@ Bool WaitForNotify(Display *, XEvent *e, char *arg)
 
 int createGemWindow(WindowInfo &info, WindowHints &hints)
 {
+#ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo **modes;
+#endif
   int modeNum=4;
   int bestMode=0;
   int fullscreen=hints.fullscreen;
@@ -79,8 +81,12 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
       error("GEM: fullscreen not available on remote display");
       fullscreen=0;
     } else {
+#ifdef HAVE_LIBXXF86VM
       XF86VidModeGetAllModeLines(info.dpy, info.screen, &modeNum, &modes);
       info.deskMode = *modes[0];
+#else
+      error("GEM: no xxf86vm-supprt: cannot switch to fullscreen");
+#endif
     }
   }
 
@@ -155,6 +161,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   int flags;
   int x = hints.x_offset;
   int y = hints.y_offset;
+#ifdef HAVE_LIBXXF86VM
   if (fullscreen){
     /* look for mode with requested resolution */
     for (int i = 0; i < modeNum; i++) {
@@ -172,7 +179,9 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     swa.override_redirect = True;
     flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
     x=y=0;
-  } else { // !fullscren
+  } else
+#endif
+  { // !fullscren
     if (hints.border){
       swa.override_redirect = False;
       flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
@@ -247,18 +256,20 @@ void destroyGemWindow(WindowInfo &info)
 {
   if (info.dpy)
     {
-      int error=0;
+      int err=0;
       if (info.win)
-	error=XDestroyWindow(info.dpy, info.win);
+	err=XDestroyWindow(info.dpy, info.win);
       if (info.have_constContext && info.context)
 	glXDestroyContext(info.dpy, info.context); // this crashes sometimes on my laptop
       if (info.cmap)
-	error=XFreeColormap(info.dpy, info.cmap);
+	err=XFreeColormap(info.dpy, info.cmap);
+#ifdef HAVE_LIBXXF86VM
       if (info.fs){
 	XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
 	XF86VidModeSetViewPort(info.dpy, info.screen, 0, 0);
 	info.fs=0;
       }
+#endif
 /*
  * JMZ: disabled XCloseDisplay() because it likes to freeze the screen
  * the problem seems to be the event-handler which starts to send
@@ -271,8 +282,10 @@ void destroyGemWindow(WindowInfo &info)
  * a memory leak _and_ the X-server is going to refuse
  * connections after a certain number of creations
  */
- post("ERROR: not closing X-Display ! this should be fixed!!!");
- // XCloseDisplay(info.dpy);
+      error("[gemwin]: not really closing X-Display");
+      error("[gemwin]:   this is just a temporary workaround to avoid freezes");
+      error("[gemwin]:   this should be fixed properly!!!");
+      // XCloseDisplay(info.dpy);
     }
   info.dpy = NULL;
   info.win = 0;

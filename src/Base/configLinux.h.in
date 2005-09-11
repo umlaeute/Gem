@@ -1,3 +1,7 @@
+/* fullscreen: querying via libXxf86vm */
+#undef HAVE_LIBXXF86VM
+
+
 /* font rendering */
 #undef HAVE_LIBFTGL
 /* gltt has been deprecated in favour of FTGL */
