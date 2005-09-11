@@ -69,8 +69,6 @@ void *videoDV4L :: capturing(void*you)
   struct dv1394_status dvst;
   int n_frames = N_BUF;
   unsigned char* mmapbuf = me->m_mmapbuf;
-  unsigned char* dvdata = NULL;       // encoded data (somewhere in the mmap'ed region)
-  unsigned char** data = &me->videobuf; // decoded data
 
   /* this will hang if no ieee1394-device is present, what to do about it ??? */
   me->m_haveVideo=false;

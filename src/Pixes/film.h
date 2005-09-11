@@ -47,7 +47,7 @@ class GEM_EXTERN film
    * if format==0, the default is set by the filmloader
    * (for instance: the fastest colour-space)
    */
-  film(int format=0);
+  film(GLenum format=0);
 
   ////////
   // Destructor
@@ -59,7 +59,7 @@ class GEM_EXTERN film
   /* could be used for switching the colourspace on the fly 
    * normally the colour-space of a film could be set when opening a movie
    */
-  virtual void requestColor(int format){m_wantedFormat=format;}
+  virtual void requestColor(GLenum format){m_wantedFormat=format;}
   //////////
   // get the actual color-space
   /* what colour-space is in use ?
@@ -145,7 +145,7 @@ class GEM_EXTERN film
   pixBlock m_image;
   /* this is the colour-space the user requested (like GL_RGBA)
    */
-  int  m_wantedFormat;
+  GLenum  m_wantedFormat;
 
   /* probably a good idea to know how many frames/tracks there are in this movie
    * the number of frames might vary between tracks, so this refers to the current track
@@ -154,6 +154,7 @@ class GEM_EXTERN film
   /* most often we will also want to know what the current frame/track is...
    */
   int  m_curFrame, m_curTrack;
+
   /* if the (frame,track) is the same as the last time, 
    * we probably don't want to decode this frame again.
    * if so m_readNext should be FALSE

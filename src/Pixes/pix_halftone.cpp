@@ -54,9 +54,6 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 {
     nWidth = image.xsize;
     nHeight = image.ysize;
-	int lumacnt =0;
-	int diffHi =0;
-	int diffLo = 0;
     
     pSource = (U32*)image.data;
 
@@ -229,10 +226,6 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 {
     nWidth = image.xsize>>1;
     nHeight = image.ysize;
-	int luma1cnt=0;
-	int luma2cnt=0;
-	int diffHi=0, diffLo =0;
-	int diff2Hi=0, diff2Lo=0;
 	
     const unsigned char chroma = 128;
     pSource = (U32*)image.data;
@@ -1143,10 +1136,8 @@ U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int
   U32* pSourceEnd=      pSourceStart+(nDeltaY*nImageWidth);
   U32* pCurrentSource=pSourceStart;
   
-  int nLuma1Total, nLuma2Total = 0;
   int nLumaTotal =0;
   int nLuma1, nLuma2 = 0;
-  int cnt =0;
 
   while (pCurrentSource<pSourceEnd) {
     U32* pSourceLineStart=pCurrentSource;

@@ -79,7 +79,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multiblob,t_floatarg, A_DEFFLOAT)
   
 pix_multiblob
 
-------------------------------------------------------------*
+------------------------------------------------------------*/
 
 /*------------------------------------------------------------
 
@@ -181,7 +181,7 @@ void pix_multiblob :: doProcessing() {
   int blobsize = (int)(m_blobsize * m_image.xsize * m_image.ysize);
 
   // reset the currentblobs array
-  int i=m_blobNumber;
+
 
   // detect blobs and add them to the currentBlobs-array
   for(int y = 0; y < m_image.ysize; y++){

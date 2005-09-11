@@ -235,7 +235,7 @@ pixBlock* filmFFMPEG :: getFrame(){
 				 &gotit,
 				 ptr,
 				 len);
-      for(int i=0;i<4;i++){
+      for(i=0;i<4;i++){
 	m_Picture.data[i]=m_avFrame.data[i];
 	m_Picture.linesize[i]=m_avFrame.linesize[i];
       }

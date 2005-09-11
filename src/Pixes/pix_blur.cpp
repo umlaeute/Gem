@@ -174,7 +174,7 @@ return;
     long src;
 
     register int rightGain,imageGain;
-    register int y1res,y2res,out1,out2,temp1,temp2;
+    register int y1res,y2res;
 src = 0;
 rightGain = (int)(m_blurf * 255.);
 imageGain = (int)(255. - (m_blurf * 255.));

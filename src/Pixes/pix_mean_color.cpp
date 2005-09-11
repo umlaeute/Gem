@@ -38,7 +38,6 @@ void pix_mean_color::processYUVImage(imageStruct &image)
 {
 	t_atom out[4];
 	unsigned int datasize = (image.xsize * image.ysize) >> 1;
-	unsigned int xsize = image.xsize;
 	unsigned char *base = image.data;
 	
 	unsigned long sum[4] = {0,0,0,0};
@@ -79,7 +78,6 @@ void pix_mean_color::processGrayImage(imageStruct &image)
 {
 	t_atom out[4];
 	unsigned int datasize = image.xsize * image.ysize;
-	unsigned int xsize = image.xsize;
 	unsigned char *base = image.data;
 	
 	unsigned long sum = 0;
@@ -104,7 +102,6 @@ void pix_mean_color::processRGBImage(imageStruct &image)
 {
 	t_atom out[4];
 	unsigned int datasize = image.xsize * image.ysize;
-	unsigned int xsize = image.xsize;
 	unsigned char *base = image.data;
 	
 	unsigned long sum[3] = {0,0,0};
@@ -130,7 +127,6 @@ void pix_mean_color::processRGBImage(imageStruct &image)
 void pix_mean_color::processRGBAImage(imageStruct &image)
 {
 	unsigned int datasize = image.xsize * image.ysize;
-	unsigned int xsize = image.xsize;
 	unsigned char *base = image.data;
 	
 	unsigned long sum[4] = {0,0,0,0};

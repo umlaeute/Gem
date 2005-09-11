@@ -122,7 +122,8 @@ bool filmQT4L :: open(char *filename, int format)
 /////////////////////////////////////////////////////////
 pixBlock* filmQT4L :: getFrame(){
   int i=m_image.image.ysize;
-  if (m_lastFrame==m_curFrame && m_image.image.format==m_wantedFormat)
+  if (m_lastFrame==m_curFrame && 
+      m_image.image.format==m_wantedFormat) 
   {
 	  m_image.newimage=0; 
 	  return &m_image;
@@ -155,7 +156,7 @@ int filmQT4L :: changeImage(int imgNum, int trackNum){
   if(trackNum>0)m_curTrack=trackNum;
 
   int i=-1;
-  if (i=quicktime_set_video_position(m_quickfile, m_curFrame, m_curTrack)){  }
+  if ((i=quicktime_set_video_position(m_quickfile, m_curFrame, m_curTrack))){  }
   return FILM_ERROR_SUCCESS;
 }
 #endif // QT4L

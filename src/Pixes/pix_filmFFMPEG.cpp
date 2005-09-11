@@ -67,9 +67,9 @@ void pix_filmFFMPEG :: closeMess(void)
 /////////////////////////////////////////////////////////
 void pix_filmFFMPEG :: realOpen(char *filename)
 {
-    int err;
-    AVCodec* codec;
-    int i;
+    int err=0;
+    AVCodec* codec=NULL;
+    int i=0;
     struct stat buf;
     POST("opening %s mem %d",filename);
 
@@ -192,7 +192,6 @@ void pix_filmFFMPEG :: getFrame()
 {
   unsigned char* ptr;
   int len;
-  int i;
   int gotit = 0;
   int ret;
 

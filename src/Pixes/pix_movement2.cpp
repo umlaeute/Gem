@@ -97,7 +97,6 @@ void pix_movement2 :: processImage(imageStruct &image){
 
     i = 3;
     while(i--){
-      unsigned char*cp = m_frame[i].data;
       m_frame[i].xsize=image.xsize;
       m_frame[i].ysize=image.ysize;
       m_frame[i].reallocate();

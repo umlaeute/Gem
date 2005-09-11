@@ -119,7 +119,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   m_pluginName[16] = 0;
   m_pluginId[4] = 0;
 
-  int numparams = FF_PLUGMAIN_INT(m_plugin(FF_GETNUMPARAMETERS, NULL, 0));
+  unsigned int numparams = FF_PLUGMAIN_INT(m_plugin(FF_GETNUMPARAMETERS, NULL, 0));
   if (numparams == FF_FAIL){
     error("plugin %s: numparameters failed",  pluginname);
     throw(GemException("reading numparameters failed"));
@@ -133,7 +133,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char *p_name;
   post("pix_freeframe[%s]:", pluginname);
 
-  for(int i=0;i<numparams; i++){
+  for(unsigned int i=0;i<numparams; i++){
     sprintf(tempVt, "#%d", i);
     // display
     //   ParameterName:
@@ -185,7 +185,7 @@ pix_freeframe :: ~pix_freeframe()
 /////////////////////////////////////////////////////////
 void pix_freeframe :: processImage(imageStruct &image)
 {
-  int format=m_image.format;
+  unsigned int format=m_image.format;
   unsigned char*data=image.data;
 
   if(m_plugin==NULL)return;
@@ -291,8 +291,6 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
 {
   const char*hookname="plugMain";
   char*libname=name;
-
-  unsigned int instance;
 
   if(name==NULL)return NULL;
   

@@ -101,7 +101,6 @@ pixBlock* filmMPEG3 :: getFrame(){
   m_readNext = false;
 
   int i;
-  int mpegFormat=0;
   int wantedFormat=m_wantedFormat;
 
   char*u=NULL,*y=NULL,*v=NULL;

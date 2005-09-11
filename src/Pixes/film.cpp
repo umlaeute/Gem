@@ -26,7 +26,7 @@
 //
 /////////////////////////////////////////////////////////
 
-film :: film(int format) : 
+film :: film(GLenum format) : 
   m_wantedFormat(format), 
   m_curFrame(0), m_curTrack(0),
   m_fps(-1.0)

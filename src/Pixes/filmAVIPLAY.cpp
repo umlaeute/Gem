@@ -118,7 +118,6 @@ pixBlock* filmAVIPLAY :: getFrame(){
   m_aviimage = (*m_avistream).GetFrame(true); // this might crash sometimes...
   if (m_aviimage){
     int format = (*m_aviimage).Format();
-    int i = (*m_aviimage).Pixels();
 
     m_rawdata=(*m_aviimage).Data();
     m_image.image.setCsizeByFormat(m_wantedFormat);

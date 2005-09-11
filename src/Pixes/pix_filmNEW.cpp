@@ -125,12 +125,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmNEW, t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
-  m_auto(0), 
+  m_auto(0), m_format(GL_RGBA),
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
-  m_numTracks(0), m_track(0), 
-  m_format(GL_RGBA)
+  m_numTracks(0), m_track(0)
 {
-  debug("pix_filmNEW");
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
   // create an outlet to send out how many frames are in the movie + bang when we reached the end
@@ -298,7 +296,6 @@ void pix_filmNEW :: changeImage(int imgNum, int trackNum)
 /////////////////////////////////////////////////////////
 void pix_filmNEW :: csMess(t_symbol *s, bool immediately)
 {
-  int format=0;
   char c =*s->s_name;
   switch (c){
   case 'g': case 'G': m_format=GL_LUMINANCE; break;

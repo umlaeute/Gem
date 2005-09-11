@@ -42,8 +42,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_read, t_symbol*,A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 pix_buffer_read :: pix_buffer_read(t_symbol *s) : 
-  m_frame(0.f), m_auto(0.f), m_loop(0), m_bindname(NULL), 
-  m_haveImage(false) {
+  m_frame(0.f), m_auto(0.f), m_loop(0),
+  m_haveImage(false),
+  m_bindname(NULL)
+{
   setMess(s);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
 }
