@@ -31,6 +31,7 @@ LOG
   DESCRIPTION
     
   -----------------------------------------------------------------*/
+
 class GEM_EXTERN curve3d : public GemShape
 {
   CPPEXTERN_HEADER(curve3d, GemShape)
@@ -50,11 +51,11 @@ class GEM_EXTERN curve3d : public GemShape
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
-		
-  //////////
-  static const int NUM_PNTS_MAX;
-  static const int NUM_PNTS_CONTROL_MAX;
 
+
+  typedef struct {
+    GLfloat x,y,z;
+  } t_float3;
 
   int nb_pts_control_X;
   int nb_pts_control_Y;
@@ -64,15 +65,11 @@ class GEM_EXTERN curve3d : public GemShape
   void gridMess(int gridX, int gridY);
   void setMess(int X,int Y,float posX, float posY,float posZ);
 
-  //////////
-  // Vertex vectors
-  float			mVectors[3][3];
-  
   virtual void	typeMess(t_symbol *type);
  
   GLenum	    	m_drawType;
 		
-  float			posXYZ[2500][3]; // attention, valeur critique
+  t_float3		*m_posXYZ; // attention, valeur critique
 
  private:
   static void		resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY );
