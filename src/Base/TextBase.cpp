@@ -336,15 +336,14 @@ void TextBase :: textMess(int argc, t_atom *argv)
   if ( argc < 1 ) {return; }
 
   string line = "";
-  char newtext[MAXPDSTRING];
-
+  
   int i=0;
 
   // convert the atom-list into 1 string
   for (i = 0; i < argc; ++i)
     {
-      atom_string(&argv[i], newtext, MAXPDSTRING);
-      line += newtext;
+         string newtext = atom_getsymbol(&argv[i])->s_name;
+         line += newtext;
       if(argc-1>i)line += " ";
     }
   
