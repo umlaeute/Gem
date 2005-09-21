@@ -65,22 +65,22 @@ class GEM_EXTERN scopeXYZ : public GemShape
 	//-----------------------------------
 	// GROUP:	Member variables
 	//-----------------------------------
-    
+        
+		//////////
+        // The drawing style (GL_LINE, GL_SCOPEXYZ, etc)
+        GLenum	    	m_drawType;
+		
     	//////////
     	// the number of points
     	int 	    	m_length;
     	virtual void	lengthMess(int length);
 
-	int m_position; 
+		int m_position; 
     	
     	//////////
     	// The vertices
-	float  *m_vertarray;
+		float  *m_vertarray;
     	float **m_vert;
-
-        //////////
-        // The drawing style (GL_LINE, GL_SCOPEXYZ, etc)
-        GLenum	    	m_drawType;
 
 	t_inlet*m_inX, *m_inY, *m_inZ;
 
