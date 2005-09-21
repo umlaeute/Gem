@@ -71,7 +71,9 @@ class GEM_EXTERN text2d : public TextBase
 	//////////
     	// The font structure
     	GLTTBitmapFont		*m_font;
+#if defined __linux__ || defined __APPLE__
     	GLTTPixmapFont		*m_afont;
+#endif
 #endif
 
  private:
