@@ -30,8 +30,6 @@
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <QuickTime/ImageCompression.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
 #include <string.h>
 #include <fcntl.h> 
 #endif // __APPLE__
