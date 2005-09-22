@@ -81,6 +81,16 @@ class GEM_EXTERN TextBase : public GemBase
 #endif
 
   //////////
+  // break a string according to '\n'
+  virtual void  breakLine(string line);
+
+  //-- moocow
+  //////////
+  // Set the text string from an ASCII list
+  virtual void  stringMess(int argc, t_atom *argv);
+  //-- /moocow
+ 
+  //////////
   // Set the text string
   virtual void  textMess(int argc, t_atom *argv);
 
@@ -224,8 +234,9 @@ class GEM_EXTERN TextBase : public GemBase
    //////////
    // Static member functions
    static void 	textMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+   static void  stringMessCallback(void *data, t_symbol *, int argc, t_atom *argv); //--moo
    static void 	fontSizeMessCallback(void *data, t_floatarg size);
-   static void   linedistMessCallback(void *data, t_floatarg dist);
+   static void  linedistMessCallback(void *data, t_floatarg dist);
    static void 	precisionMessCallback(void *data, t_floatarg prec);
    static void 	fontNameMessCallback(void *data, t_symbol *s);
    static void 	justifyMessCallback(void *data, t_symbol *, int, t_atom*);

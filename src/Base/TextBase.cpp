@@ -41,14 +41,6 @@ TextBase :: TextBase(int argc, t_atom *argv)
   : m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
     m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL), m_fontname(NULL)
 {
-/*
-  static bool first_time=true;
-  if (first_time){
-    post("Gem has been compiled with FTGL !");
-    first_time=false;
-  }
-*/
-
   // initial text
   m_theText.push_back("gem");
   makeLineDist();
@@ -117,7 +109,7 @@ void TextBase :: fontNameMess(const char *filename){
   int fd=-1;
 
   if(!filename){
-    post("no font-file specified");
+    error("no font-file specified");
     return;
   }
 
@@ -298,7 +290,11 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
   float depth  = 0.f;
 
   // Get ascender height (= height of the text)
+#ifdef FTGL
   float ascender = m_font->Ascender();
+#else
+  float ascender = m_fontSize;
+#endif
 
   if (m_widthJus == LEFT)       width = x1;
   else if (m_widthJus == RIGHT) width = x2-x1;
@@ -329,24 +325,8 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
 // textMess
 //
 /////////////////////////////////////////////////////////
-void TextBase :: textMess(int argc, t_atom *argv)
+void TextBase :: breakLine(string line)
 {
-  m_theText.clear();
-
-  if ( argc < 1 ) {return; }
-
-  string line = "";
-  
-  int i=0;
-
-  // convert the atom-list into 1 string
-  for (i = 0; i < argc; ++i)
-    {
-         string newtext = atom_getsymbol(&argv[i])->s_name;
-         line += newtext;
-      if(argc-1>i)line += " ";
-    }
-  
   // split the string wherever there is a '\n'
   while(line.length()>0){
     int pos=line.find('\n');
@@ -354,12 +334,32 @@ void TextBase :: textMess(int argc, t_atom *argv)
     m_theText.push_back(line.substr(0,pos));
     line=line.erase(0,pos+1);
   }
-
+  
   // if there is still a text append it
   if(line.length())
     m_theText.push_back(line);
   makeLineDist();
   setModified();
+}
+
+
+void TextBase :: textMess(int argc, t_atom *argv)
+{
+  m_theText.clear();
+
+  if ( argc < 1 ) {return; }
+
+  string line = "";
+  int i=0;
+
+  // convert the atom-list into 1 string
+  for (i = 0; i < argc; ++i)
+    {
+      string newtext = atom_getsymbol(&argv[i])->s_name;
+         line += newtext;
+         if(argc-1>i)line += " ";
+    }
+  breakLine(line);
 }
 
 /////////////////////////////////////////////////////////
@@ -368,9 +368,8 @@ void TextBase :: textMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void TextBase :: makeLineDist()
 {
-  unsigned int i=0;
+  int i=0;
   m_lineDist.clear();
-
   if (m_heightJus == BOTTOM || m_heightJus == BASEH)
   {
     // so the offset will be a simple 
@@ -384,8 +383,9 @@ void TextBase :: makeLineDist()
   {
     // now in the other direction:
     // [-n ... -2 -1 0]
-    for(i=m_theText.size()-1; i>=0; i--)
+    for(i=m_theText.size()-1; i>=0; i--){
       m_lineDist.push_back(-i);
+    }
     return;
   }
 
@@ -402,10 +402,33 @@ void TextBase :: makeLineDist()
   */
 
   float diff = (m_theText.size()-1)*0.5;
-
   for(i=0; i<m_theText.size(); i++)
     m_lineDist.push_back((i-diff)*m_dist);
 }
+
+
+//-- moocow: modified version of "textMess" for float lists
+/////////////////////////////////////////////////////////
+// stringMess
+//
+/////////////////////////////////////////////////////////
+void TextBase :: stringMess(int argc, t_atom *argv)
+{
+  m_theText.clear();
+
+  if ( argc < 1 ) { return; }
+
+  int i;
+  string line = "";
+
+  for (i = 0; i < argc; i++)    {
+    line += (char)(atom_getint(argv+i));
+  }
+  line += '\0';
+
+  breakLine(line);
+}
+//-- /moocow
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -418,6 +441,10 @@ void TextBase :: obj_setupCallback(t_class *classPtr)
 
   class_addmethod(classPtr, (t_method)&TextBase::textMessCallback,
 		  gensym("text"), A_GIMME, A_NULL);
+  //-- moocow
+  class_addmethod(classPtr, (t_method)&TextBase::stringMessCallback,
+		  gensym("string"), A_GIMME, A_NULL);
+  //-- /moocow
   class_addmethod(classPtr, (t_method)&TextBase::precisionMessCallback,
 		  gensym("precision"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&TextBase::fontNameMessCallback,
@@ -433,6 +460,14 @@ void TextBase :: textMessCallback(void *data, t_symbol *, int argc, t_atom *argv
 {
   GetMyClass(data)->textMess(argc, argv);
 }
+
+//-- moocow
+void TextBase :: stringMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+{
+  GetMyClass(data)->stringMess(argc, argv);
+}
+//-- /moocow
+
 void TextBase :: fontNameMessCallback(void *data, t_symbol *s)
 {
   GetMyClass(data)->fontNameMess(s->s_name);
