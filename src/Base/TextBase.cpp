@@ -49,7 +49,7 @@ TextBase :: TextBase(int argc, t_atom *argv)
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
@@ -63,22 +63,22 @@ void TextBase :: render(GemState *)
 
   // step through the lines
   for(i=0; i<m_theText.size(); i++)
-  {
-    m_font->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
-    y_offset = m_lineDist[i]*m_fontSize;
+    {
+      m_font->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
+      y_offset = m_lineDist[i]*m_fontSize;
 
-    glPushMatrix();
-    glNormal3f(0.0, 0.0, 1.0);
-    justifyFont(x1, y1, z1, x2, y2, z2, y_offset);
-    m_font->Render(m_theText[i].c_str());
-    glPopMatrix();
-  }
+      glPushMatrix();
+      glNormal3f(0.0, 0.0, 1.0);
+      justifyFont(x1, y1, z1, x2, y2, z2, y_offset);
+      m_font->Render(m_theText[i].c_str());
+      glPopMatrix();
+    }
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // setFontSize
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 void TextBase :: setFontSize(t_float size){
   m_fontSize = size;
   if (!m_font)return;
@@ -87,20 +87,20 @@ void TextBase :: setFontSize(t_float size){
   }
   setModified();
 }
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // setPrecision
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 void TextBase :: setPrecision(float prec)
 {
   m_precision = prec;
   error("GEMtext: no settable precision for FTGL !");
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // fontNameMess
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 void TextBase :: fontNameMess(const char *filename){
   m_valid = 0;
   char buf[MAXPDSTRING];
@@ -283,7 +283,7 @@ void TextBase :: setJustification(JustifyWidth wType)
 }
 
 void TextBase :: justifyFont(float x1, float y1, float z1,
-    float x2, float y2, float z2, float y_offset)
+                             float x2, float y2, float z2, float y_offset)
 {
   float width  = 0.f;
   float height = 0.f;
@@ -293,6 +293,7 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
 #ifdef FTGL
   float ascender = m_font->Ascender();
 #else
+  // we don't have any ascender when not using FTGL
   float ascender = m_fontSize;
 #endif
 
@@ -301,10 +302,10 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
   else if (m_widthJus == CENTER)width = x2 / 2.f;
   else if (m_widthJus == BASEW) width = 0;
 
-//  if (m_heightJus == BOTTOM)     height = y1;
-//  else if (m_heightJus == TOP)   height = y2-y1;
-//  else if (m_heightJus == MIDDLE)height = y2 / 2.f;
-//  else if (m_heightJus == BASEH) height = 0;
+  //  if (m_heightJus == BOTTOM)     height = y1;
+  //  else if (m_heightJus == TOP)   height = y2-y1;
+  //  else if (m_heightJus == MIDDLE)height = y2 / 2.f;
+  //  else if (m_heightJus == BASEH) height = 0;
 
   if (m_heightJus == BOTTOM || m_heightJus == BASEH)
     height = y_offset;
@@ -346,6 +347,7 @@ void TextBase :: breakLine(string line)
 void TextBase :: textMess(int argc, t_atom *argv)
 {
   m_theText.clear();
+  char tmp_char[MAXPDSTRING];
 
   if ( argc < 1 ) {return; }
 
@@ -355,9 +357,15 @@ void TextBase :: textMess(int argc, t_atom *argv)
   // convert the atom-list into 1 string
   for (i = 0; i < argc; ++i)
     {
-      string newtext = atom_getsymbol(&argv[i])->s_name;
-         line += newtext;
-         if(argc-1>i)line += " ";
+      string newtext;
+      if (A_FLOAT == argv[i].a_type) {
+        atom_string(&argv[i], tmp_char, MAXPDSTRING);
+        newtext = tmp_char; 
+      } else {
+        newtext = atom_getsymbol(&argv[i])->s_name;
+      }
+      line += newtext;
+      if(argc-1>i)line += " ";
     }
   breakLine(line);
 }
@@ -371,34 +379,34 @@ void TextBase :: makeLineDist()
   int i=0;
   m_lineDist.clear();
   if (m_heightJus == BOTTOM || m_heightJus == BASEH)
-  {
-    // so the offset will be a simple 
-    // [0 1 2 3 ... n] sequence
-    for(i=0; i<m_theText.size(); i++)
-      m_lineDist.push_back(i);
-    return;
-  }
+    {
+      // so the offset will be a simple 
+      // [0 1 2 3 ... n] sequence
+      for(i=0; i<m_theText.size(); i++)
+        m_lineDist.push_back(i);
+      return;
+    }
 
   if (m_heightJus == TOP)
-  {
-    // now in the other direction:
-    // [-n ... -2 -1 0]
-    for(i=m_theText.size()-1; i>=0; i--){
-      m_lineDist.push_back(-i);
+    {
+      // now in the other direction:
+      // [-n ... -2 -1 0]
+      for(i=m_theText.size()-1; i>=0; i--){
+        m_lineDist.push_back(-i);
+      }
+      return;
     }
-    return;
-  }
 
   // else:
   // calculate the y offset of each line, so
   // that the text will be centered:
   /*lines    y-offset        calculation
-      1:   0                 = 0- 0
-      2:   -0.5 0.5          = [0 1]   - 0.5
-      3:   -1 0 1            = [0 1 2] - 1
-      4:   -1.5 -0.5 0.5 1.5 = [0 1 2 3] - 1.5
-      5:   -2 -1 0 1 2       = [0 1 2 3 4] - 2
-     ...
+    1:   0                 = 0- 0
+    2:   -0.5 0.5          = [0 1]   - 0.5
+    3:   -1 0 1            = [0 1 2] - 1
+    4:   -1.5 -0.5 0.5 1.5 = [0 1 2 3] - 1.5
+    5:   -2 -1 0 1 2       = [0 1 2 3 4] - 2
+    ...
   */
 
   float diff = (m_theText.size()-1)*0.5;
@@ -408,6 +416,9 @@ void TextBase :: makeLineDist()
 
 
 //-- moocow: modified version of "textMess" for float lists
+// this can be used with moocow's pd-string external
+// available at http://www.ling.uni-potsdam.de/~moocow/projects/pd/#externs
+// it works like this:   a string is represented as a list of ASCII-values
 /////////////////////////////////////////////////////////
 // stringMess
 //
