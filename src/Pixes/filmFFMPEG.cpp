@@ -15,6 +15,19 @@
 /////////////////////////////////////////////////////////
 #include "Pixes/filmFFMPEG.h"
 
+/* 
+ * the current (2005-09-26) CVS-version of ffmpeg seems to have changed 
+ * the type of (AVStream)->codec from 
+ * "AVCodecContext" to "*AVCodecContext"
+ * if you are using that version, change the following "0" to "1"
+ */
+#if 0
+# define GEM_AVCODEC_GETFIELD(codec, field) codec->field
+# define GEM_AVCODEC_CODECPOINTER(codec) codec
+#else
+# define GEM_AVCODEC_GETFIELD(codec, field) codec.field
+# define GEM_AVCODEC_CODECPOINTER(codec) &(codec)
+#endif
 /////////////////////////////////////////////////////////
 //
 // filmFFMPEG
@@ -52,8 +65,8 @@ void filmFFMPEG :: close(void)
   if (m_Format){
     if(m_curTrack>=0 && 
        NULL!=m_Format->streams[m_curTrack] && 
-       NULL!=&m_Format->streams[m_curTrack]->codec){
-      avcodec_close(&m_Format->streams[m_curTrack]->codec);
+       NULL!=GEM_AVCODEC_CODECPOINTER(m_Format->streams[m_curTrack]->codec)){
+      avcodec_close(GEM_AVCODEC_CODECPOINTER(m_Format->streams[m_curTrack]->codec));
     }
     av_close_input_file(m_Format);
     m_Format=0;
@@ -69,6 +82,7 @@ bool filmFFMPEG :: open(char *filename, int format)
   int i=0;
   int state=0;
   AVCodec* codec=0;
+  AVStream*stream=0;
 
   int err = av_open_input_file(&m_Format,filename,NULL,0,NULL);
   if (err < 0) {
@@ -84,9 +98,10 @@ bool filmFFMPEG :: open(char *filename, int format)
   }
   m_numTracks = m_Format->nb_streams;
   for (i=0;i<m_Format->nb_streams;i++) { 
-    codec = avcodec_find_decoder(m_Format->streams[i]->codec.codec_id);
+    stream=m_Format->streams[i];
+    codec = avcodec_find_decoder(GEM_AVCODEC_GETFIELD(stream->codec,codec_id));
     if (!codec) continue;
-    if (m_Format->streams[i]->codec.codec_type == CODEC_TYPE_VIDEO)
+    if (GEM_AVCODEC_GETFIELD(stream->codec,codec_type) == CODEC_TYPE_VIDEO)
       break;
   }
 
@@ -99,7 +114,8 @@ bool filmFFMPEG :: open(char *filename, int format)
 
   //  post("codec=%x", codec); post("streamcodec = %x %X", &m_Format->streams[i]->codec, m_Format->streams[i]->codec);
   state=3;
-  err = avcodec_open(&m_Format->streams[i]->codec,codec);
+  stream=m_Format->streams[i];
+  err = avcodec_open(GEM_AVCODEC_CODECPOINTER(stream->codec),codec);
 
   if (err < 0) {
     goto unsupported;
@@ -117,14 +133,14 @@ bool filmFFMPEG :: open(char *filename, int format)
   /*
     the AV_TIME_BASE_Q is rather a guess than something i could prove
    */
-  m_fps=1/av_q2d(m_Format->streams[i]->codec.time_base);
+  m_fps=1/av_q2d(GEM_AVCODEC_GETFIELD(stream->codec,time_base));
 #else
-  m_fps=m_Format->streams[i]->codec.frame_rate;
+  m_fps=GEM_AVCODEC_GETFIELD(stream->codec,frame_rate);
 #endif
   if(m_fps<=0.f)m_fps=-1.0;
 
-  if(0!=(int)m_Format->streams[i]->duration){
-    int frames=(int)((((t_float)(m_Format->streams[i]->duration))/AV_TIME_BASE)*
+  if(0!=(int)stream->duration){
+    int frames=(int)((((t_float)(stream->duration))/AV_TIME_BASE)*
                 (m_fps));
     m_numFrames=(frames<0)?-frames:frames;
   } else
@@ -147,8 +163,8 @@ bool filmFFMPEG :: open(char *filename, int format)
     m_allowSeek=false;
 #endif /* FFMPEG_VERSION */
 
-  m_image.image.xsize = m_Format->streams[i]->codec.width;
-  m_image.image.ysize = m_Format->streams[i]->codec.height;
+  m_image.image.xsize = GEM_AVCODEC_GETFIELD(stream->codec,width);
+  m_image.image.ysize = GEM_AVCODEC_GETFIELD(stream->codec,height);
   m_image.image.csize=4;
   m_image.image.format=GL_RGBA;
   m_image.image.reallocate();
@@ -219,18 +235,19 @@ pixBlock* filmFFMPEG :: getFrame(){
 #endif
     len = m_PacketLen;
     ptr = m_PacketPtr;
+    AVStream *stream=m_Format->streams[m_curTrack];
     while (!gotit) {
       if (len == 0) { 
 	if (av_read_packet(m_Format,&m_Pkt) < 0) {
 	  // ?? TODO is this the only way to say goodbye 
-	  m_numFrames = m_Format->streams[m_curTrack]->codec.frame_number;
+	  m_numFrames = GEM_AVCODEC_GETFIELD(stream->codec,frame_number);
 	  break;
 	}
 	ptr = m_Pkt.data;
 	len = m_Pkt.size;
       }
 #if LIBAVCODEC_VERSION_INT >= 0x000406
-      ret = avcodec_decode_video(&m_Format->streams[m_curTrack]->codec,
+      ret = avcodec_decode_video(GEM_AVCODEC_CODECPOINTER(stream->codec),
 				 &m_avFrame,
 				 &gotit,
 				 ptr,
@@ -240,7 +257,7 @@ pixBlock* filmFFMPEG :: getFrame(){
 	m_Picture.linesize[i]=m_avFrame.linesize[i];
       }
 #else
-      ret = avcodec_decode_video(&m_Format->streams[m_curTrack]->codec,
+      ret = avcodec_decode_video(&stream->codec,
 				 &m_Picture,
 				 &gotit,
 				 ptr,
@@ -267,9 +284,9 @@ pixBlock* filmFFMPEG :: getFrame(){
 	}
 	m_image.image.setCsizeByFormat(m_wantedFormat);
 	m_image.image.reallocate();
-	int width = m_Format->streams[m_curTrack]->codec.width;
-	int height = m_Format->streams[m_curTrack]->codec.height;
-	int fmt = m_Format->streams[m_curTrack]->codec.pix_fmt;
+	int width = GEM_AVCODEC_GETFIELD(stream->codec,width);
+	int height = GEM_AVCODEC_GETFIELD(stream->codec,height);
+	int fmt = GEM_AVCODEC_GETFIELD(stream->codec,pix_fmt);
 	avpicture_fill(&rgba,m_image.image.data,dstfmt,width,height);
 	// cannot convert yuv420 to yuv422
 	if (img_convert(&rgba,dstfmt,&m_Picture,fmt,width,height)<0)
@@ -277,7 +294,7 @@ pixBlock* filmFFMPEG :: getFrame(){
 	if(m_wantedFormat==GL_RGBA){
 	  m_image.image.swapRedBlue();
 	}	
-	m_curFrame = m_Format->streams[m_curTrack]->codec.frame_number;
+	m_curFrame = GEM_AVCODEC_GETFIELD(stream->codec,frame_number);
       }
     }
     m_PacketLen = len;
