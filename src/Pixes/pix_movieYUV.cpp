@@ -15,6 +15,9 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_movieYUV.h"
+
+#ifndef FILM_NEW
+
 #include "Base/GemMan.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieYUV, t_symbol *, A_DEFSYM)
@@ -41,7 +44,7 @@ pix_movieYUV :: pix_movieYUV(t_symbol *filename) :
   m_film=false;
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
@@ -80,67 +83,67 @@ void pix_movieYUV :: createBuffer()
 /////////////////////////////////////////////////////////
 void pix_movieYUV :: prepareTexture()
 {
-    if (!GemMan::texture_rectangle_supported)
+  if (!GemMan::texture_rectangle_supported)
     {
-        int neededXSize = m_pixBlock.image.xsize;
-        int neededYSize = m_pixBlock.image.ysize;
-        post("pix_movie: prepareTexture: x : %d, y : %d", neededXSize, neededYSize );
+      int neededXSize = m_pixBlock.image.xsize;
+      int neededYSize = m_pixBlock.image.ysize;
+      post("pix_movie: prepareTexture: x : %d, y : %d", neededXSize, neededYSize );
 
-        // ratio for the texture map coordinates
-        m_xRatio = (float)m_xsize / (float)neededXSize;
-        m_yRatio = (float)m_ysize / (float)neededYSize;
+      // ratio for the texture map coordinates
+      m_xRatio = (float)m_xsize / (float)neededXSize;
+      m_yRatio = (float)m_ysize / (float)neededYSize;
 #ifndef __APPLE__   
-        m_coords[0].s = 0.f;
-        m_coords[0].t = 0.f;
+      m_coords[0].s = 0.f;
+      m_coords[0].t = 0.f;
     
-        m_coords[1].s = m_xRatio;
-        m_coords[1].t = 0.f;
+      m_coords[1].s = m_xRatio;
+      m_coords[1].t = 0.f;
     
-        m_coords[2].s = m_xRatio;
-        m_coords[2].t = m_yRatio;
+      m_coords[2].s = m_xRatio;
+      m_coords[2].t = m_yRatio;
     
-        m_coords[3].s = 0.f;
-        m_coords[3].t = m_yRatio;
+      m_coords[3].s = 0.f;
+      m_coords[3].t = m_yRatio;
 #else
-        m_coords[3].s = 0.f;
-        m_coords[3].t = 0.f;
+      m_coords[3].s = 0.f;
+      m_coords[3].t = 0.f;
     
-        m_coords[2].s = m_xRatio;
-        m_coords[2].t = 0.f;
+      m_coords[2].s = m_xRatio;
+      m_coords[2].t = 0.f;
     
-        m_coords[1].s = m_xRatio;
-        m_coords[1].t = m_yRatio;
+      m_coords[1].s = m_xRatio;
+      m_coords[1].t = m_yRatio;
     
-        m_coords[0].s = 0.f;
-        m_coords[0].t = m_yRatio;
+      m_coords[0].s = 0.f;
+      m_coords[0].t = m_yRatio;
 #endif
     } else {
 #ifndef __APPLE__
-        m_coords[0].s = 0.f;
-        m_coords[0].t = 0.f;
+    m_coords[0].s = 0.f;
+    m_coords[0].t = 0.f;
     
-        m_coords[1].s = m_pixBlock.image.xsize;
-        m_coords[1].t = 0.f;
+    m_coords[1].s = m_pixBlock.image.xsize;
+    m_coords[1].t = 0.f;
     
-        m_coords[2].s = m_pixBlock.image.xsize;
-        m_coords[2].t = m_pixBlock.image.ysize;
+    m_coords[2].s = m_pixBlock.image.xsize;
+    m_coords[2].t = m_pixBlock.image.ysize;
     
-        m_coords[3].s = 0.f;
-        m_coords[3].t = m_pixBlock.image.ysize;
+    m_coords[3].s = 0.f;
+    m_coords[3].t = m_pixBlock.image.ysize;
 #else
-        m_coords[3].s = 0.f;
-        m_coords[3].t = 0.f;
+    m_coords[3].s = 0.f;
+    m_coords[3].t = 0.f;
     
-        m_coords[2].s = m_pixBlock.image.xsize;
-        m_coords[2].t = 0.f;
+    m_coords[2].s = m_pixBlock.image.xsize;
+    m_coords[2].t = 0.f;
     
-        m_coords[1].s = m_pixBlock.image.xsize;
-        m_coords[1].t = m_pixBlock.image.ysize;
+    m_coords[1].s = m_pixBlock.image.xsize;
+    m_coords[1].t = m_pixBlock.image.ysize;
     
-        m_coords[0].s = 0.f;
-        m_coords[0].t = m_pixBlock.image.ysize;
+    m_coords[0].s = 0.f;
+    m_coords[0].t = m_pixBlock.image.ysize;
 #endif
-    }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -155,16 +158,16 @@ void pix_movieYUV :: texFrame(GemState *state, int doit)
   // enable to texture binding
 #ifdef GL_TEXTURE_RECTANGLE_EXT
   if (!GemMan::texture_rectangle_supported)		//tigital
-  {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_textureObj);
-  } else {
+    {
+      glEnable(GL_TEXTURE_2D);
+      glBindTexture(GL_TEXTURE_2D, m_textureObj);
+    } else {
     glEnable(GL_TEXTURE_RECTANGLE_EXT);
     glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
   }
 #else
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, m_textureObj);
 #endif
   
   if (doit) {
@@ -197,22 +200,22 @@ void pix_movieYUV :: texFrame(GemState *state, int doit)
     // okay, load in the actual pixel data
 #ifdef GL_TEXTURE_RECTANGLE_EXT     
     if ( !GemMan::texture_rectangle_supported)
-        glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
-		    0, 0,			// position
-		    m_xsize,			// the x size of the data
-		    m_ysize,			// the y size of the data
-		    m_pixBlock.image.format,	// the format
-		    m_pixBlock.image.type,	// the type
-		    m_frame);		// the data + header offset
+      glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+                      0, 0,			// position
+                      m_xsize,			// the x size of the data
+                      m_ysize,			// the y size of the data
+                      m_pixBlock.image.format,	// the format
+                      m_pixBlock.image.type,	// the type
+                      m_frame);		// the data + header offset
     else
 #endif
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
-		    0, 0,			// position
-		    m_xsize,			// the x size of the data
-		    m_ysize,			// the y size of the data
-		    m_pixBlock.image.format,	// the format
-		    m_pixBlock.image.type,	// the type
-		    m_frame);		// the data + header offset
+      glTexSubImage2D(GL_TEXTURE_2D, 0,
+                      0, 0,			// position
+                      m_xsize,			// the x size of the data
+                      m_ysize,			// the y size of the data
+                      m_pixBlock.image.format,	// the format
+                      m_pixBlock.image.type,	// the type
+                      m_frame);		// the data + header offset
   }
 }
 
@@ -235,7 +238,7 @@ void pix_movieYUV :: postrender(GemState *state)
   else
     glDisable(GL_TEXTURE_RECTANGLE_EXT);
 #else
-    glDisable(GL_TEXTURE_2D);
+  glDisable(GL_TEXTURE_2D);
 #endif
 }
 
@@ -246,20 +249,20 @@ void pix_movieYUV :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_movieYUV :: startRendering()
 {
-    glGenTextures(1, &m_textureObj);
+  glGenTextures(1, &m_textureObj);
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-    if ( ! GemMan::texture_rectangle_supported )
-        glBindTexture(GL_TEXTURE_2D, m_textureObj);
-    else
-        glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
-#else
+  if ( ! GemMan::texture_rectangle_supported )
     glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  else
+    glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+#else
+  glBindTexture(GL_TEXTURE_2D, m_textureObj);
 #endif
   
-    setUpTextureState();
+  setUpTextureState();
     
-    m_pixBlock.newimage = 1;
-    m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
+  m_pixBlock.newimage = 1;
+  m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 }
 
 /////////////////////////////////////////////////////////
@@ -280,28 +283,28 @@ void pix_movieYUV :: stopRendering()
 void pix_movieYUV :: setUpTextureState()
 {
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-    if ( !GemMan::texture_rectangle_supported )				//tigital
-{
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
+  if ( !GemMan::texture_rectangle_supported )				//tigital
+    {
+      glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
-        if (GemMan::client_storage_supported)
-            glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
-        else
+      if (GemMan::client_storage_supported)
+        glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
+      else
 #endif
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+      glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     } else
 #endif
     {
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     } 
 }
 
@@ -321,16 +324,18 @@ void pix_movieYUV :: obj_setupCallback(t_class *classPtr)
 
 void pix_movieYUV :: openMessCallback(void *data, t_symbol *filename)
 {
-    GetMyClass(data)->openMess(filename);
+  GetMyClass(data)->openMess(filename);
 }
 
 void pix_movieYUV :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   //  GetMyClass(data)->changeImage((int)imgNum);
-    GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_movieYUV :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
+#endif /* FILM_NEW */
+

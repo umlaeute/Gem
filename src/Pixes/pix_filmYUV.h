@@ -15,6 +15,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_pix_filmYUV_H_
 #define INCLUDE_pix_filmYUV_H_
 
+#include "Base/config.h"
+#ifndef FILM_NEW
+
 #define GEM_MOVIE_NONE 0
 #define GEM_MOVIE_AVI  1
 #define GEM_MOVIE_MPG  2
@@ -158,5 +161,5 @@ class GEM_EXTERN pix_filmYUV : public GemBase
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback       (void *data, t_floatarg state);
 };
-
+#endif /* FILM_NEW */
 #endif	// for header file

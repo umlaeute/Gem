@@ -16,13 +16,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_PIX_FILM_H_
 #define INCLUDE_PIX_FILM_H_
-#include "Base/config.h"
 
-#if defined FILM_NEW
-# ifndef DO_AUTO_REGISTER_CLASS
-#  define NO_AUTO_REGISTER_CLASS
-# endif
-#endif
+#include "Base/config.h"
+#ifndef FILM_NEW
 
 #define GEM_MOVIE_NONE 0
 #define GEM_MOVIE_AVI  1
@@ -171,5 +167,5 @@ class GEM_EXTERN pix_film : public GemBase
   // static void colorspaceCallback(void *data, t_floatarg state);
   static void colorspaceCallback(void *data, t_symbol *state);
 };
-
+#endif /* FILM_NEW */
 #endif	// for header file

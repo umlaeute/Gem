@@ -17,6 +17,9 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_movie.h"
+
+#ifndef FILM_NEW
+
 #include "Base/GemMan.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM)
@@ -363,3 +366,6 @@ void pix_movie :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
+
+#endif /* FILM_NEW */
+

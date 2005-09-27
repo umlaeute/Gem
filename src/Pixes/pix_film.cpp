@@ -22,6 +22,9 @@
 #endif
 
 #include "pix_film.h"
+
+#ifndef FILM_NEW
+
 #include <ctype.h>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM)
@@ -321,3 +324,5 @@ void pix_film :: colorspaceCallback(void *data, t_symbol *state)
 {
   GetMyClass(data)->csMess(getPixFormat(state->s_name));
 }
+#endif /* FILM_NEW */
+

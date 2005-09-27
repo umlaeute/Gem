@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_filmYUV.h"
+#ifndef FILM_NEW
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmYUV, t_symbol *, A_DEFSYM)
 
@@ -274,3 +275,6 @@ void pix_filmYUV :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
+#endif /* FILM_NEW */
+
+
