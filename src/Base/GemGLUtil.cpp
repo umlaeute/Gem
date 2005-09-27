@@ -3723,6 +3723,9 @@ GEM_EXTERN int getGLdefine(char *name)
 #pragma mark *** 24 ***
 	case 24:
 		if (0)  return _GL_UNDEFINED;
+#ifdef GL_TEXTURE_RECTANGLE_EXT
+		else if (!strcmp(name, "TEXTURE_RECTANGLE_EXT")) return GL_TEXTURE_RECTANGLE_EXT;
+#endif
 #ifdef GL_APPLE_specular_vector
 		else if (!strcmp(name, "APPLE_SPECULAR_VECTOR")) return GL_APPLE_specular_vector;
 #endif
