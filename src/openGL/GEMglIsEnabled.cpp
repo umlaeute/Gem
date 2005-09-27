@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIsEnabled , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglIsEnabled :: GEMglIsEnabled	(t_floatarg arg0=0) : cap((GLenum)arg0) {
-#ifndef GL_VERSION_1_0
-  error("GEMglIsEnabled: GEM was compiled without GL_VERSION_1_0");
+#if !defined(GL_VERSION_1_0) || !defined(GL_VERSION_1_1)
+  error("GEMglIsEnabled: GEM was compiled without GL_VERSION_1_1");
   error("GEMglIsEnabled: therefore this object will do nothing");
 #endif
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cap"));
