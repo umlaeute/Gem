@@ -80,8 +80,10 @@ void pix_snap2tex :: setUpTextureState()
 {
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+ // glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+ // glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
   glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -141,9 +143,9 @@ void pix_snap2tex :: snapMess()
 		
       m_coords[3].s = 0.f;
       m_coords[3].t = m_yRatio;
-    }
+//    }
 
-  if (x_2 != m_texWidth || y_2 != m_texHeight)	{
+/*  if (x_2 != m_texWidth || y_2 != m_texHeight)	{ */
     m_texWidth = x_2;
     m_texHeight = y_2;
 		
@@ -154,6 +156,9 @@ void pix_snap2tex :: snapMess()
 			0);
 
   } else
+  m_texHeight = m_height;
+  m_texWidth = m_width;
+  
     {
       glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
 			  0, 0,
@@ -161,6 +166,9 @@ void pix_snap2tex :: snapMess()
 			  m_texWidth,
 			  m_texHeight);		
     }
+
+//post("pix_snap2tex: m_x %d m_y %d m_texWidth %d m_texHeight %d",m_x,m_y,m_texWidth,m_texHeight);
+
 
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
