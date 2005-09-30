@@ -18,12 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_FRAGMENT_PROGRAM_H_
 #define INCLUDE_FRAGMENT_PROGRAM_H_
 
-#include <string.h>
-#include <stdio.h>
-
-#include "Base/config.h"
-
-#include "Base/GemBase.h"
+#include "Manips/vertex_program.h"
 
 #ifndef DONT_USE_ARB
 # ifndef GL_ARB_fragment_program
@@ -59,9 +54,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN fragment_program : public GemBase
+class GEM_EXTERN fragment_program : public vertex_program
 {
-  CPPEXTERN_HEADER(fragment_program, GemBase)
+  CPPEXTERN_HEADER(fragment_program, vertex_program)
     
     public:
   
@@ -76,37 +71,12 @@ class GEM_EXTERN fragment_program : public GemBase
   virtual ~fragment_program();
 
   //////////
-  // close the program file
-  virtual void closeMess(void){}
-  //////////
-  // open a program up
-  virtual void openMess(t_symbol *filename);
+  // which Program do we have (ARB, NV,...)
+  virtual GLint queryProgramtype(char*program);
 
-  //////////
-  // Do the rendering
-  virtual void render(GemState *state);
-
-
-  //////////
-  // Clear the dirty flag on the pixBlock
-  virtual void postrender(GemState *state);
-
-  //////////
-  virtual void startRendering();
-
-  //////////
-  // Delete texture object
-  virtual void stopRendering() {}
-  
   //////////
   // Print Info about Hardware limits
   virtual void printInfo();
-
-  //////////
-  //
-  GLuint 	m_programTarget;
-  GLuint        m_programID;
-  char*		m_programString;
 
  protected:
 	

@@ -8,8 +8,8 @@ Load an ARB vertex program/shader
  *  Copyright 2004 tigital.
  
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) GÂ¸nther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂ¸r::umlâ€°ute. IEM. zmoelnig@iem.kug.ac.at
+Copyright (c) Günther Geiger. geiger@epy.co.at
+Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -18,19 +18,19 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_VERTEX_PROGRAM_H_
 #define INCLUDE_VERTEX_PROGRAM_H_
 
-#include <string.h>
-#include <stdio.h>
-
-#include "Base/config.h"
-
 #include "Base/GemBase.h"
+
+#define GEM_PROGRAM_none 0
+#define GEM_PROGRAM_NV  1
+#define GEM_PROGRAM_ARB 2
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
   vertex_program
     
-  Loads in an ARB vertex program/shader
+  Loads in a vertex program/shader
     
   KEYWORDS
   
@@ -46,8 +46,8 @@ class GEM_EXTERN vertex_program : public GemBase
   
   //////////
   // Constructor
+  vertex_program(void);
   vertex_program(t_symbol *filename);
-  //  pix_film();
 
  protected:
     
@@ -57,14 +57,19 @@ class GEM_EXTERN vertex_program : public GemBase
 
   //////////
   // close the program file
-  virtual void closeMess(void){}
+  virtual void closeMess(void);
   //////////
   // open a program up
   virtual void openMess(t_symbol *filename);
 
+
   //////////
-  // prepare for texturing (on open)
-  virtual void prepareTexture() {}
+  // which Program do we have (ARB, NV,...)
+  virtual GLint queryProgramtype(char*program);
+
+  //////////
+  // load the program string to the openGL-engine
+  virtual void LoadProgram();
 
   //////////
   // Do the rendering
@@ -79,15 +84,13 @@ class GEM_EXTERN vertex_program : public GemBase
   virtual void startRendering();
 
   //////////
-  // Delete texture object
-  virtual void stopRendering() {}
-  
-  //////////
   // Print Info about Hardware limits
   virtual void printInfo();
 
   //////////
   //
+  GLuint        m_programType;
+
   GLuint 	m_programTarget;
   GLuint        m_programID;
   char*		m_programString;
