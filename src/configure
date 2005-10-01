@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS GEM_TARGETS EXT INCLUDES X_LIBS X_CFLAGS CXXFLAGS DEFINES PKG_CFLAGS PKG_LIBS REFERENCEPATH NEW_VIDEOFILM CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S CPP X_PRE_LIBS X_EXTRA_LIBS PKG_CONFIG ac_pt_PKG_CONFIG PKG_IMAGEMAGICK___CFLAGS PKG_IMAGEMAGICK___LIBS PKG_TIFF_CFLAGS PKG_TIFF_LIBS PKG_JPEG_CFLAGS PKG_JPEG_LIBS PKG_LIBQUICKTIME_CFLAGS PKG_LIBQUICKTIME_LIBS PKG_LQT_CFLAGS PKG_LQT_LIBS PKG_MPEG3_CFLAGS PKG_MPEG3_LIBS PKG_MPEG_CFLAGS PKG_MPEG_LIBS PKG_AVIFILE_CFLAGS PKG_AVIFILE_LIBS PKG_FFMPEG_CFLAGS PKG_FFMPEG_LIBS EGREP PKG_IEEE1394_CFLAGS PKG_IEEE1394_LIBS PKG_FTGL_CFLAGS PKG_FTGL_LIBS PKG_GLTT_CFLAGS PKG_GLTT_LIBS LIBOBJS MAKEDEP_FLAGS STRIP ac_ct_STRIP STRIP_ALL STRIP_UNNEEDED DOS2UNIX ac_ct_DOS2UNIX LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS GEM_TARGETS EXT GEM_CONFIGFILE INCLUDES X_LIBS X_CFLAGS CXXFLAGS DEFINES PKG_CFLAGS PKG_LIBS REFERENCEPATH NEW_VIDEOFILM CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S CPP X_PRE_LIBS X_EXTRA_LIBS PKG_CONFIG ac_pt_PKG_CONFIG PKG_IMAGEMAGICK___CFLAGS PKG_IMAGEMAGICK___LIBS PKG_TIFF_CFLAGS PKG_TIFF_LIBS PKG_JPEG_CFLAGS PKG_JPEG_LIBS PKG_LIBQUICKTIME_CFLAGS PKG_LIBQUICKTIME_LIBS PKG_LQT_CFLAGS PKG_LQT_LIBS PKG_MPEG3_CFLAGS PKG_MPEG3_LIBS PKG_MPEG_CFLAGS PKG_MPEG_LIBS PKG_AVIFILE_CFLAGS PKG_AVIFILE_LIBS PKG_FFMPEG_CFLAGS PKG_FFMPEG_LIBS EGREP PKG_IEEE1394_CFLAGS PKG_IEEE1394_LIBS PKG_FTGL_CFLAGS PKG_FTGL_LIBS PKG_GLTT_CFLAGS PKG_GLTT_LIBS LIBOBJS MAKEDEP_FLAGS STRIP ac_ct_STRIP STRIP_ALL STRIP_UNNEEDED DOS2UNIX ac_ct_DOS2UNIX LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -957,7 +957,8 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-SIMD          disable SIMD (SIMD-support)
-  --disable-ARB           disable ARB (openGL-ARB-support)
+  --disable-ARB           disable ARB (openGL-ARB-extension support)
+  --disable-NV            disable NV (openGL-NV-extension support)
   --disable-registerstruct
                           disable registerstruct (use \"-freg-struct-return\"
                           (needed for FreeFrame))
@@ -1560,6 +1561,9 @@ KERN=$(uname -s)
 
           ac_config_headers="$ac_config_headers Base/config$KERN.h"
 
+
+
+GEM_CONFIGFILE=Base/config${KERN}.h
 
 
 
@@ -2981,6 +2985,14 @@ if test "${enable_ARB+set}" = set; then
 
 else
   enable_ARB="yes"
+fi;
+
+# Check whether --enable-NV or --disable-NV was given.
+if test "${enable_NV+set}" = set; then
+  enableval="$enable_NV"
+
+else
+  enable_NV="yes"
 fi;
 
 # Check whether --enable-registerstruct or --disable-registerstruct was given.
@@ -13018,6 +13030,88 @@ _ACEOF
 
 fi
 
+# disabling NV-extensions
+if test "x$enable_NV" != "xno"; then
+ echo "$as_me:$LINENO: checking for glBindProgramNV in -lGL" >&5
+echo $ECHO_N "checking for glBindProgramNV in -lGL... $ECHO_C" >&6
+if test "${ac_cv_lib_GL_glBindProgramNV+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGL  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char glBindProgramNV ();
+int
+main ()
+{
+glBindProgramNV ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_GL_glBindProgramNV=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_GL_glBindProgramNV=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_GL_glBindProgramNV" >&5
+echo "${ECHO_T}$ac_cv_lib_GL_glBindProgramNV" >&6
+if test $ac_cv_lib_GL_glBindProgramNV = yes; then
+  enable_NV="yes"
+else
+  enable_NV="no"
+fi
+
+fi
+
+if test "x$enable_NV" = "xno"; then
+echo "$as_me:$LINENO: result: disabling NV-extensions" >&5
+echo "${ECHO_T}disabling NV-extensions" >&6
+ cat >>confdefs.h <<_ACEOF
+#define DONT_USE_NV 1
+_ACEOF
+
+fi
+
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
 if test "x$enable_registerstruct" != "xno"; then
@@ -14102,6 +14196,7 @@ s,@ECHO_T@,$ECHO_T,;t t
 s,@LIBS@,$LIBS,;t t
 s,@GEM_TARGETS@,$GEM_TARGETS,;t t
 s,@EXT@,$EXT,;t t
+s,@GEM_CONFIGFILE@,$GEM_CONFIGFILE,;t t
 s,@INCLUDES@,$INCLUDES,;t t
 s,@X_LIBS@,$X_LIBS,;t t
 s,@X_CFLAGS@,$X_CFLAGS,;t t
@@ -14707,6 +14802,7 @@ Configuration:
 
   misc
     using ARB-extensions : ${enable_ARB}
+    using NV-extensions  : ${enable_NV}
     using reg-struct-ret : ${enable_registerstruct}
 
 Now run make ...
@@ -14756,6 +14852,7 @@ Configuration:
 
   misc
     using ARB-extensions : ${enable_ARB}
+    using NV-extensions  : ${enable_NV}
     using reg-struct-ret : ${enable_registerstruct}
 
 Now run make ...

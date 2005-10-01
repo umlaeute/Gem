@@ -11,8 +11,11 @@ KERN=$(uname -s)
 AC_CONFIG_HEADER([Base/config$KERN.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
 
+GEM_CONFIGFILE=Base/config${KERN}.h
+
 AC_SUBST(GEM_TARGETS)
 AC_SUBST(EXT)
+AC_SUBST(GEM_CONFIGFILE)
 AC_SUBST(INCLUDES)
 AC_SUBST(LIBS)
 AC_SUBST(X_LIBS)
@@ -31,7 +34,8 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 
 GEM_ARG_ENABLE([SIMD], [SIMD-support])
-GEM_ARG_ENABLE([ARB], [openGL-ARB-support])
+GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support])
+GEM_ARG_ENABLE([NV], [openGL-NV-extension support])
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)])
 GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video])
 
@@ -237,6 +241,17 @@ AC_MSG_RESULT([disabling ARB-extensions])
  AC_DEFINE_UNQUOTED(DONT_USE_ARB)
 fi
 
+# disabling NV-extensions
+if test "x$enable_NV" != "xno"; then
+ AC_CHECK_LIB(GL,glBindProgramNV,
+        enable_NV="yes",enable_NV="no")
+fi
+
+if test "x$enable_NV" = "xno"; then
+AC_MSG_RESULT([disabling NV-extensions])
+ AC_DEFINE_UNQUOTED(DONT_USE_NV)
+fi
+
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
 if test "x$enable_registerstruct" != "xno"; then
@@ -343,6 +358,7 @@ Configuration:
 
   misc
     using ARB-extensions : ${enable_ARB}
+    using NV-extensions  : ${enable_NV}
     using reg-struct-ret : ${enable_registerstruct}
 
 Now run make ...
