@@ -37,8 +37,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(fragment_program, t_symbol *, A_DEFSYM)
 fragment_program :: fragment_program(t_symbol *filename) :
   vertex_program()
 {
-#ifndef GL_FRAGMENT_PROGRAM_ARB
+#if !defined GL_ARB_fragment_program && !defined GL_NV_fragment_program 
   post("GEM has been compiled without 'fragment_program' support");
+  return;
 #endif
   openMess(filename);
 }
@@ -59,7 +60,6 @@ fragment_program :: ~fragment_program()
 /////////////////////////////////////////////////////////
 GLint fragment_program :: queryProgramtype(char*program)
 {
-  post("query fragment program");
 #ifdef GL_FRAGMENT_PROGRAM_ARB
   if(!strncmp(program,"!!ARBfp1.0",10)){
     m_programTarget=GL_FRAGMENT_PROGRAM_ARB;
@@ -108,7 +108,8 @@ void fragment_program :: printInfo()
 	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
 	post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
 #endif
-#ifdef GL_FRAGMENT_PROGRAM_ARB
+
+#ifdef GL_ARB_fragment_program
 # ifdef GL_MAX_PROGRAM_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_INSTRUCTIONS: %d", bitnum);
@@ -256,7 +257,7 @@ void fragment_program :: printInfo()
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_TEX_INDIRECTIONS: %d", bitnum);
 # endif
-#endif /* GL_FRAGMENT_PROGRAM_ARB */
+#endif /* GL_ARB_fragment_program */
 	post("");
 
 }

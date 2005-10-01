@@ -71,12 +71,12 @@ void vertex_program :: closeMess(void)
   m_size=0;
   if(m_programID){
     switch(m_programType){
-#ifdef GL_VERTEX_PROGRAM_NV
+#ifdef GL_NV_vertex_program
     case(GEM_PROGRAM_NV):
       glDeleteProgramsNV(1,&m_programID);
       break;
 #endif
-#ifdef GL_VERTEX_PROGRAM_ARB
+#ifdef GL_ARB_vertex_program
     case(GEM_PROGRAM_ARB):
       glDeleteProgramsARB(1,&m_programID);
       break;
@@ -170,7 +170,7 @@ void vertex_program :: LoadProgram(void){
   GLint error=-1;
 
   switch(m_programType){
-#ifdef GL_VERTEX_PROGRAM_NV
+#ifdef GL_NV_vertex_program
   case  GEM_PROGRAM_NV:
     if (m_programID==0)
       {
@@ -185,8 +185,8 @@ void vertex_program :: LoadProgram(void){
 	return;
     }
     break;
-#endif /* GL_VERTEX_PROGRAM_NV */
-#ifdef GL_VERTEX_PROGRAM_ARB
+#endif /* GL_NV_vertex_program */
+#ifdef GL_ARB_vertex_program
   case  GEM_PROGRAM_ARB:
     if (m_programID==0)
       {
@@ -201,7 +201,7 @@ void vertex_program :: LoadProgram(void){
 	return;
     }
     break;
-#endif /* GL_VERTEX_PROGRAM_ARB */
+#endif /* GL_ARB_vertex_program */
   default:
     return;
   }
@@ -220,7 +220,7 @@ void vertex_program :: LoadProgram(void){
 #endif /* GL_PROGRAM_ERROR_STRING_ARB */
   }
 
-#if defined GL_VERTEX_PROGRAM_ARB && defined GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB
+#if defined GL_ARB_vertex_program && defined GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB
   GLint bitnum;
   glGetProgramivARB( m_programTarget, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &bitnum);
   if (!bitnum)
