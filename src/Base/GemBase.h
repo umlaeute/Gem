@@ -15,87 +15,12 @@ LOG
 #ifndef INCLUDE_GEMBASE_H_
 #define INCLUDE_GEMBASE_H_
 
-#include "config.h"
-
 #ifndef HELPSYMBOL_BASE
 /* this must be defined before including CPPExtern.h (see below) */
 # define HELPSYMBOL_BASE "Gem/"
 #endif
 
-
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
-# include <windows.h>
-#endif
-
-#ifdef __APPLE__
-# include <OpenGL/gl.h>
-# include <OpenGL/glu.h>
-# include <OpenGL/glext.h>
-#else
-
-// on mesa, GL_GLEXT_LEGACY automatically includes glext.h from within gl.h
-# define GL_GLEXT_LEGACY
-# define GL_GLEXT_PROTOTYPES   1
-
-# include <GL/gl.h>
-# include <GL/glu.h>
-
-# if  (!defined GL_GLEXT_VERSION) && (!defined DONT_INCLUDE_GLEXT)
-/* windos is (again) a bit difficult:
- * by default, there are no GL/glext.h headers
- * but of course you can install nvidia's headers to get them.
- * since i don't know, whether the system has this headers,
- * we define DONT_INCLUDE_GLEXT in Base/configNT.h on demand
- * so, if your system lacks GL/glext.h,
- * just undefine the appropriate line in Base/configNT.h
- */
-
-// stupid hack, as nvidia has erroneous glext-headers!
-#  define boolean GLboolean
-
-#  include <GL/glext.h>
-
-# endif /* GLEXT */ 
-
-/* some people have problems with the ARB-extensions for vertex shaders */
-# ifdef DONT_USE_ARB
-#  ifdef GL_ARB_vertex_program
-#   undef GL_ARB_vertex_program
-#  endif
-#  ifdef GL_ARB_fragment_program
-#   undef GL_ARB_fragment_program
-#  endif
-# endif /* DONT_USE_ARB */
-
-#endif // __APPLE__
-
-// windows has this oh so old openGL installed...
-#if !defined GL_BGRA && defined GL_BGRA_EXT
-# define GL_BGRA GL_BGRA_EXT
-#endif
-#if !defined GL_BGRA_EXT && defined GL_BGRA
-# define GL_BGRA_EXT GL_BGRA
-#endif
-#if !defined GL_BGRA && !defined GL_BGRA_EXT
-# define GL_BGRA 0x80E1
-# define GL_BGRA_EXT 0x80E1
-#endif
-
-#if !defined GL_BGR && defined GL_BGR_EXT
-# define GL_BGR GL_BGR_EXT
-#endif
-#if !defined GL_BGR_EXT && defined GL_BGR
-# define GL_BGR_EXT GL_BGR
-#endif
-#if !defined GL_BGR && !defined GL_BGR_EXT
-# define GL_BGR 0x80E0
-# define GL_BGR_EXT 0x80E0
-#endif
-
-#ifndef GL_DEFAULT_GEM
-# define GL_DEFAULT_GEM 0xFFFF
-#endif
+#include "Base/GemGL.h"
 
 #include "Base/CPPExtern.h"
 #include "Base/GemState.h"
