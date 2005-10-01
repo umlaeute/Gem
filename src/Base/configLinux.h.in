@@ -29,9 +29,11 @@
 /* disable the use of openGL-ARB extensions */
 #undef DONT_USE_ARB
 
+/* disable the use of openGL-nvidia extensions */
+#undef DONT_USE_NV
+
 /* enable the use of the all-in-one video/movie objects */
 #undef NEW_VIDEOFILM
-
 
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
