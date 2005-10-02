@@ -49,7 +49,7 @@ installdocs:
 	$(INSTALL_DATA) ./../help/*.* $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
 
 
-Make.config: Make.config.in configure $(GEM_CONFIGFILE).in
+Make.config: Make.config.in configure $(GEM_CONFIGFILE)
 	./configure
 
 configure: configure.ac aclocal.m4
