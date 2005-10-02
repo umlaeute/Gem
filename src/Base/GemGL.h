@@ -49,9 +49,6 @@
  * just undefine the appropriate line in Base/configNT.h
  */
 
-// stupid hack, as nvidia has erroneous glext-headers!
-#  define boolean GLboolean
-
 #  include <GL/glext.h>
 
 # endif /* GLEXT */ 
