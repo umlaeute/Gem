@@ -19,26 +19,15 @@ LOG
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef __WIN32__
-# include <windows.h>
-
 # pragma warning( disable : 4244 )
 # pragma warning( disable : 4305 )
 # pragma warning( disable : 4091 )
 #endif
 
-# include "config.h"
+#include "Base/GemGL.h"
 
 #ifdef __APPLE__
-# include <OpenGL/gl.h>
-# include <OpenGL/glu.h>
-# include <OpenGL/glext.h>
 # include <QuickTime/QuickTime.h>
-#else
-# include <GL/gl.h>
-# ifndef DONT_INCLUDE_GLEXT
-/* yhä: in glext.h some GL_YCBCR_* definitions might be hidden */
-#  include <GL/glext.h>
-# endif
 #endif // __APPLE__
 
 #include <string.h>

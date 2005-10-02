@@ -16,27 +16,25 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "Base/config.h"
+#include "Base/GemGL.h"
 
 #include "GemPixImageLoad.h"
 #include "m_pd.h"
 
 #ifdef __APPLE__
-#include <Carbon/carbon.h>
-#include <QuickTime/QuickTime.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
+# include <Carbon/carbon.h>
+# include <QuickTime/QuickTime.h>
 #endif // __APPLE__
 
 #ifdef __WIN32__
-#include <io.h>
+# include <io.h>
 #else
-#include <unistd.h>
+# include <unistd.h>
 #endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>
-
 #include <string.h>
 
 #ifndef __APPLE__
@@ -49,7 +47,7 @@ extern "C"
 #undef EXTERN
 
 #ifdef __WIN32__
-#undef FAR
+# undef FAR
 #endif
 
 #ifdef HAVE_LIBJPEG

@@ -16,19 +16,12 @@ LOG
 #ifndef INCLUDE_GEMMAN_H_
 #define INCLUDE_GEMMAN_H_
 
-#ifdef __WIN32__
-// I hate Microsoft...I shouldn't have to do this!
-#include <windows.h>
-#endif
+#include "Base/GemGL.h"
+
 
 #ifdef __APPLE__
 #include <Carbon/Carbon.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
 #include <AGL/agl.h>
-#else
-#include <GL/glu.h>
 #endif // __APPLE__
 
 #include "Base/GemExportDef.h"

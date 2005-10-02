@@ -17,16 +17,8 @@
 
 #include "GemState.h"
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
-#include <windows.h>
-#endif
+#include "Base/GemGL.h"
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
 
 /////////////////////////////////////////////////////////
 //

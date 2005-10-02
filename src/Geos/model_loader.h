@@ -30,16 +30,7 @@
 extern "C" {
 #endif
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
-#include <windows.h>
-#endif
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "Base/GemGL.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265f

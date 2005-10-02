@@ -16,17 +16,11 @@
 
 #include "gemwin.h"
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
-#include <windows.h>
-#endif
+#include "Base/GemGL.h"
  
 #ifdef __APPLE__
 # include <Carbon/carbon.h>
-# include <OpenGL/gl.h>
 # include <AvailabilityMacros.h>
-#else
-# include <GL/gl.h>
 #endif // __APPLE__
 
 #include "Base/GemMath.h"

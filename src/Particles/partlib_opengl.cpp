@@ -8,16 +8,8 @@
 
 #include "partlib_general.h"
 
-#ifdef __WIN32__
-// This is for something in gl.h.
-#include <windows.h>
-#endif
+#include "Base/GemGL.h"
 
-#ifndef __APPLE__
-#include <GL/gl.h>
-#else
-#include <OpenGL/gl.h>
-#endif
 // XXX #include <iostream.h>
 
 // Emit OpenGL calls to draw the particles. These are drawn with
