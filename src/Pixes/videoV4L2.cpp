@@ -52,7 +52,7 @@
 videoV4L2 :: videoV4L2(int format) : video(format)
 #ifdef HAVE_VIDEO4LINUX2
                                    , m_gotFormat(0), m_colorConvert(0),
-                                     m_tvfd(0), m_deviceName(NULL),
+                                     m_tvfd(0),
                                      m_buffers(NULL), m_nbuffers(0), 
                                      m_currentBuffer(NULL),
                                      m_frame(0), m_last_frame(0),
@@ -98,6 +98,7 @@ static int xioctl(int                    fd,
 int videoV4L2::init_mmap (void)
 {
   struct v4l2_requestbuffers req;
+  char*devname=(m_devicename)?m_devicename:"device";
 
   memset (&(req), 0, sizeof (req));
 
@@ -108,7 +109,7 @@ int videoV4L2::init_mmap (void)
   if (-1 == xioctl (m_tvfd, VIDIOC_REQBUFS, &req)) {
     if (EINVAL == errno) {
       error("%s does not support "
-               "memory mapping\n", m_deviceName);
+               "memory mapping\n", devname);
       return 0;
     } else {
       error ("VIDIOC_REQBUFS");
@@ -117,7 +118,7 @@ int videoV4L2::init_mmap (void)
   }
 
   if (req.count < NBUF) {
-    error("Insufficient buffer memory on %s", m_deviceName);
+    error("Insufficient buffer memory on %s", devname);
     return(0);
   }
 
@@ -312,7 +313,7 @@ int videoV4L2 :: startTransfer(int format)
   if (format>1)m_reqFormat=format;
   //  verbose(1, "starting transfer");
   char buf[256];
-  char*dev_name=m_deviceName;
+  char*dev_name=m_devicename;
   int i;
 
   struct stat st; 
@@ -595,13 +596,21 @@ int videoV4L2 :: setChannel(int c, t_float f){
 
 int videoV4L2 :: setDevice(int d)
 {
+  m_devicename=NULL;
   if (d==m_devicenum)return 0;
   m_devicenum=d;
   restartTransfer();
   //  verbose(1, "new device set %d", m_devicenum);
   return 0;
 }
-
+int videoV4L2 :: setDevice(char*s)
+{
+  m_devicenum=-1;
+  m_devicename=name;
+  restartTransfer();
+  //  verbose(1, "new device set %d", m_devicenum);
+  return 0;
+}
 
 int videoV4L2 :: setColor(int format)
 {

@@ -171,9 +171,14 @@ int videoV4L :: startTransfer(int format)
   skipnext = 0;
   last_frame = 0;
 
-  if (m_devicenum<0){
-    sprintf(buf, "/dev/video");
+  if(m_devicename){
+    sprintf(buf,m_devicename);
+  } else {
+    if (m_devicenum<0){
+      sprintf(buf, "/dev/video");
     } else sprintf(buf, "/dev/video%d", m_devicenum);
+  }
+
     if ((tvfd = open(buf, O_RDWR)) < 0)
     {
 	perror(buf);
@@ -477,6 +482,7 @@ int videoV4L :: setChannel(int c, t_float f){
 
 int videoV4L :: setDevice(int d)
 {
+  m_devicename=NULL;
   if (d==m_devicenum)return 0;
   m_devicenum=d;
   bool rendering=m_rendering;
@@ -485,7 +491,16 @@ int videoV4L :: setDevice(int d)
   //  verbose(1, "new device set %d", m_devicenum);
   return 0;
 }
-
+int videoV4L :: setDevice(char*name)
+{
+  m_devicenum=-1;
+  m_devicename=name;
+  bool rendering=m_rendering;
+  if(m_capturing)stopTransfer();
+  if (rendering)startTransfer();
+  //  verbose(1, "new device set %d", m_devicenum);
+  return 0;
+}
 
 int videoV4L :: setColor(int format)
 {

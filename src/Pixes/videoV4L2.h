@@ -111,6 +111,7 @@ class GEM_EXTERN videoV4L2 : public video {
   virtual int	    	setChannel(int c, float f);
   virtual int	    	setNorm(char*);
   virtual int	    	setDevice(int);
+  virtual int	    	setDevice(char*);
   virtual int	    	setColor(int);
 
     
@@ -126,7 +127,6 @@ class GEM_EXTERN videoV4L2 : public video {
 
 
   int m_tvfd;
-  char*m_deviceName;
 
   struct t_v4l2_buffer*m_buffers;
   int  m_nbuffers;

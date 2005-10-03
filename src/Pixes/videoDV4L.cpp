@@ -170,7 +170,7 @@ pixBlock *videoDV4L :: getFrame(){
 // openDevice
 //
 /////////////////////////////////////////////////////////
-int videoDV4L :: openDevice(int devnum, int format){
+int videoDV4L :: openDevice(int format){
   int fd = -1;
   char buf[255];
   struct dv1394_init init = {
@@ -182,15 +182,22 @@ int videoDV4L :: openDevice(int devnum, int format){
   };
   m_framesize=(m_norm==NTSC)?DV1394_NTSC_FRAME_SIZE:DV1394_PAL_FRAME_SIZE;
 
-  if (devnum<0)devnum=0;
-  sprintf(buf, "/dev/ieee1394/dv/host%d/%s/in", devnum, (m_norm==NTSC)?"NTSC":"PAL");
-  if ((fd = open(buf, O_RDWR)) < 0)    {
-    if ((fd=open("/dev/dv1394", O_RDWR)) < 0)    {
-      perror(buf);
-      return -1;
+  if(m_devicename){
+    if ((fd = open(m_devicename, O_RDWR)) < 0) {
+        perror(buf);
+        return -1;
+    }
+  } else {
+    int devnum=(m_devicenum<0)?0:m_devicenum;
+    if (devnum<0)devnum=0;
+    sprintf(buf, "/dev/ieee1394/dv/host%d/%s/in", devnum, (m_norm==NTSC)?"NTSC":"PAL");
+    if ((fd = open(buf, O_RDWR)) < 0)    {
+      if ((fd=open("/dev/dv1394", O_RDWR)) < 0)    {
+        perror(buf);
+        return -1;
+      }
     }
   }
-
   if (ioctl(fd, DV1394_INIT, &init) < 0)    {
     perror("initializing");
     close(fd);
@@ -235,7 +242,7 @@ void videoDV4L :: closeDevice(void){
 /////////////////////////////////////////////////////////
 int videoDV4L :: startTransfer(int format)
 {
-  if ((dvfd=openDevice(m_devicenum, format))<0){
+  if ((dvfd=openDevice(format))<0){
     post("DV4L: closed");
     return(0);
   }
@@ -302,9 +309,20 @@ int videoDV4L :: setNorm(char*norm){
 }
 
 int videoDV4L :: setDevice(int d){
+  m_devicename=NULL;
   if (d==m_devicenum)return 0;
   m_devicenum=d;
-  // need this commented out for testing
+
+  if(m_haveVideo){
+    stopTransfer();
+    startTransfer();
+  }
+  return 0;
+}
+int videoDV4L :: setDevice(char*name){
+  m_devicenum=-1;
+  m_devicename=name;
+
   if(m_haveVideo){
     stopTransfer();
     startTransfer();

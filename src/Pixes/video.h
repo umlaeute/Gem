@@ -81,7 +81,8 @@ class GEM_EXTERN video {
   virtual int	    	setChannel(int c, float f=0);
   virtual int	    	setNorm(char*n);
   virtual int	    	setDevice(int d);
-  virtual int	    	setColor(int);
+   virtual int	    	setDevice(char*name);
+ virtual int	    	setColor(int);
   virtual int	    	setQuality(int);
 
  protected:
@@ -94,8 +95,12 @@ class GEM_EXTERN video {
   int m_channel;
   int m_norm;
   int m_reqFormat;
-  
+
+  /* specify either devicename XOR devicenum */  
+  char*m_devicename;
   int m_devicenum;
+
+
   int m_quality;
 };
 

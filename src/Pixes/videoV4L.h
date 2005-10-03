@@ -98,6 +98,7 @@ class GEM_EXTERN videoV4L : public video {
 	virtual int	    	setChannel(int c, float f);
 	virtual int	    	setNorm(char*);
 	virtual int	    	setDevice(int);
+	virtual int	    	setDevice(char*);
 	virtual int	    	setColor(int);
 
     

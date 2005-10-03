@@ -72,7 +72,7 @@ class GEM_EXTERN videoDV4L : public video {
 #ifdef HAVE_DV
 	////////
 	// open the video-device
-	virtual int            openDevice(int devnum, int format=0);
+	virtual int            openDevice(int format=0);
 	virtual void          closeDevice(void);
 	virtual int           resetDevice(void);
     
@@ -92,6 +92,7 @@ class GEM_EXTERN videoDV4L : public video {
 	//////////
 	// Set the video dimensions
 	virtual int	    	setNorm(char*);
+	virtual int	    	setDevice(char*);
 	virtual int	    	setDevice(int);
 	virtual int	    	setColor(int);
 	virtual int		setQuality(int);

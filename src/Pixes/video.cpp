@@ -126,6 +126,10 @@ int video :: setDevice(int d){
   post("setting the video-device is not supported by this OS/device");
   return -1;
 }
+int video :: setDevice(char*name){
+  post("setting the video-device is not supported by this OS/device");
+  return -1;
+}
 /////////////////////////////////////////////////////////
 // set the color-space
 int video :: setColor(int d){
