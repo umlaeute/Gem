@@ -46,26 +46,6 @@ class GEM_EXTERN pix_image : public GemBase
 	    // Constructor
     	pix_image(t_symbol *filename);
     	
-        class singleImageCache
-        {
-            public:
-                
-                singleImageCache(const char *_imageName)
-                        : refCount(0), next(NULL), image(NULL)
-                        { imageName = strdup(_imageName); }
-                ~singleImageCache()
-                            { delete imageName;
-                              delete image;
-                            }
-                int                 refCount;
-                singleImageCache    *next;
-                imageStruct         *image;
-                char                *imageName;
-        };
-    	
-    	//////////
-        static singleImageCache  *s_imageCache;
-
     protected:
     	
     	//////////
@@ -91,17 +71,13 @@ class GEM_EXTERN pix_image : public GemBase
     	// Clean up the image and the pixBlock
     	void	    	cleanImage();
     
-    	//////////
-    	// Display the image
-    	void	    	clickMess();
-    
-	        //-----------------------------------
-	        // GROUP:	Image data
-	        //-----------------------------------
+        //-----------------------------------
+        // GROUP:	Image data
+        //-----------------------------------
     
     	//////////
     	// The original image
-    	singleImageCache *m_loadedImage;
+    	imageStruct     *m_loadedImage;
     	
     	//////////
     	// The pixBlock with the current image
@@ -109,16 +85,12 @@ class GEM_EXTERN pix_image : public GemBase
 	//////////
 	// The current image
 	imageStruct     m_imageStruct;
-    	
-    	//////////
-    	char	    	m_filename[80];
-    	
+    	    	
     private:
     	
     	//////////
     	// static member functions
     	static void 	openMessCallback(void *data, t_symbol *filename);
-    	static void 	clickMessCallback(void *data, t_floatarg , t_floatarg , t_floatarg );
 };
 
 #endif	// for header file
