@@ -14,7 +14,9 @@
 
 #include "pix_halftone.h"
 
-#define NDEBUG
+#ifndef NDEBUG
+# define NDEBUG
+#endif
 #include <assert.h>
 
 CPPEXTERN_NEW(pix_halftone)
