@@ -1,17 +1,16 @@
+/* font rendering */
 #undef HAVE_LIBFTGL
-#undef HAVE_LIBGLTT
 
+/* image loading / saving */
 #undef HAVE_LIBMAGICKPLUSPLUS
 
-#undef HAVE_LIBMPEG
-#undef HAVE_LIBMPEG3
-#undef HAVE_LIBQUICKTIME
-#undef HAVE_LIBAVIPLAY
-#undef HAVE_LIBAVFORMAT
-#undef HAVE_LIBAVCODEC
 
-#undef HAVE_LIBDV
-
-#undef HAVE_MMX
-
+/* disable the use of openGL-ARB extensions */
 #undef DONT_USE_ARB
+
+/* disable the use of openGL-nvidia extensions */
+#undef DONT_USE_NV
+
+/* types, structures, compiler characteristics, ... */
+#undef SIZEOF_VOID_P
+#undef SIZEOF_UNSIGNED_INT
