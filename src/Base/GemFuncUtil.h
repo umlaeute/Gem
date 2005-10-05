@@ -23,7 +23,15 @@ LOG
 
 #include "Base/GemExportDef.h"
 
-#include "Base/GemMath.h"
+/* this should be included for ALL platforms:
+ * should we define __MMX__ for windows in there ?
+ */
+#include "config.h"
+#include "GemSIMD.h"
+#include "GemMath.h"
+
+
+// for rand()
 #include <stdlib.h>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -346,7 +354,7 @@ GEM_EXTERN extern void splineFunc(float val, float *ret, int numDimen, int nknot
 inline UInt32 GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
 {
 	return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
-}
+} 
 #endif
 
 

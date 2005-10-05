@@ -24,7 +24,17 @@
 //
 /////////////////////////////////////////////////////////
 GemPixObj :: GemPixObj() : 
-  m_processOnOff(1), orgPixBlock(NULL) {
+  m_processOnOff(1), orgPixBlock(NULL),
+#ifdef __MMX__
+  m_simd(GEM_SIMD_MMX)
+#elif defined __SSE2__
+  m_simd(GEM_SIMD_SSE2)
+#elif defined __VEC__
+  m_simd(GEM_SIMD_ALTIVEC)
+#else
+  m_simd(GEM_SIMD_NONE)
+#endif
+{
     cachedPixBlock.newimage=0;
     cachedPixBlock.newfilm =0;
 }
@@ -63,17 +73,53 @@ void GemPixObj :: render(GemState *state){
       switch(state->image->image.format){
       case GL_RGBA:
       case GL_BGRA_EXT:
-	processRGBAImage(state->image->image);
+	switch(m_simd){
+	case(GEM_SIMD_MMX):
+	  processRGBAMMX(state->image->image);
+	  break;
+	case(GEM_SIMD_SSE2):
+	  processRGBASSE2(state->image->image);
+	  break;
+	case(GEM_SIMD_ALTIVEC):
+	  processRGBAAltivec(state->image->image);
+	  break;
+	default:
+	  processRGBAImage(state->image->image);
+	}
 	break;
       case GL_RGB:
       case GL_BGR_EXT:
 	processRGBImage(state->image->image);
 	break;
       case GL_LUMINANCE:
-	processGrayImage(state->image->image);
+	switch(m_simd){
+	case(GEM_SIMD_MMX):
+	  processGrayMMX(state->image->image);
+	  break;
+	case(GEM_SIMD_SSE2):
+	  processGraySSE2(state->image->image);
+	  break;
+	case(GEM_SIMD_ALTIVEC):
+	  processGrayAltivec(state->image->image);
+	  break;
+	default:
+	  processGrayImage(state->image->image);
+	}
 	break;
       case GL_YCBCR_422_GEM: //GL_YCBCR_422_APPLE
-	processYUVImage(state->image->image);
+	switch(m_simd){
+	case(GEM_SIMD_MMX):
+	  processYUVMMX(state->image->image);
+	  break;
+	case(GEM_SIMD_SSE2):
+	  processYUVSSE2(state->image->image);
+	  break;
+	case(GEM_SIMD_ALTIVEC):
+	  processYUVAltivec(state->image->image);
+	  break;
+	default:
+	  processYUVImage(state->image->image);
+	}
       	break;
       default:
 	processImage(state->image->image);
@@ -128,6 +174,30 @@ void GemPixObj :: processYUVImage(imageStruct &image)
 {  processImage(image); }
 
 /////////////////////////////////////////////////////////
+// processImage - SIMD (typed)
+//
+/////////////////////////////////////////////////////////
+void GemPixObj :: processRGBAMMX    (imageStruct &image)
+{  processRGBAImage(image); }
+void GemPixObj :: processGrayMMX    (imageStruct &image)
+{  processGrayImage(image); }
+void GemPixObj :: processYUVMMX     (imageStruct &image)
+{  processYUVImage(image); }
+void GemPixObj :: processRGBASSE2   (imageStruct &image)
+{  processRGBAMMX(image); }
+void GemPixObj :: processGraySSE2   (imageStruct &image)
+{  processGrayMMX(image); }
+void GemPixObj :: processYUVSSE2    (imageStruct &image)
+{  processYUVMMX(image); }
+void GemPixObj :: processRGBAAltivec(imageStruct &image)
+{  processRGBAImage(image); }
+void GemPixObj :: processGrayAltivec(imageStruct &image)
+{  processGrayImage(image); }
+void GemPixObj :: processYUVAltivec (imageStruct &image)
+{  processYUVImage(image); }
+
+
+/////////////////////////////////////////////////////////
 // processOnOff
 //
 /////////////////////////////////////////////////////////
@@ -144,8 +214,14 @@ void GemPixObj :: processOnOff(int on)
 void GemPixObj :: obj_setupCallback(t_class *classPtr)
 {
     class_addfloat(classPtr, (t_method)&GemPixObj::floatMessCallback);    
+    class_addmethod(classPtr, (t_method)&GemPixObj::simdMessCallback,
+		  gensym("simd"), A_DEFFLOAT, A_NULL);
 }
 void GemPixObj :: floatMessCallback(void *data, float n)
 {
     GetMyClass(data)->processOnOff((int)n);
+}
+void GemPixObj :: simdMessCallback(void *data, float n)
+{
+    GetMyClass(data)->m_simd=(int)n;
 }

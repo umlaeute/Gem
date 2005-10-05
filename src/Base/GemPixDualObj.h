@@ -110,39 +110,56 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
 	virtual void processDualImage(imageStruct &left, imageStruct &right);
 	// Here come the more specific dual-processors
     	// The derived class SHOULD override these as needed
-	virtual void processRGBA_RGBA(imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processRGBA_Gray(imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processRGBA_YUV (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processRGBA_Any (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processGray_RGBA(imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processGray_Gray(imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processGray_YUV (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processGray_Any (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processYUV_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processYUV_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processYUV_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processYUV_Any  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processAny_RGBA (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processAny_Gray (imageStruct &left, imageStruct &right){processDualImage(left, right);}
-	virtual void processAny_YUV  (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+
+	/* for simplicity this is done via preprocessor defines:
+	 * the functions defined are like : 
+	 **  processRGBA_RGBA(left, right);
+	 */
+
+#define PROCESS_DUALIMAGE(CS1, CS2)		\
+	virtual void process##CS1 ##_##CS2 (imageStruct &left, imageStruct &right){processDualImage(left, right);}
+	PROCESS_DUALIMAGE(RGBA, RGBA);
+	PROCESS_DUALIMAGE(RGBA, Gray);
+	PROCESS_DUALIMAGE(RGBA, YUV );
+
+	PROCESS_DUALIMAGE(Gray, RGBA);
+	PROCESS_DUALIMAGE(Gray, Gray);
+	PROCESS_DUALIMAGE(Gray, YUV );
+
+	PROCESS_DUALIMAGE(YUV,  RGBA);
+	PROCESS_DUALIMAGE(YUV,  Gray);
+	PROCESS_DUALIMAGE(YUV,  YUV );
+#undef  PROCESS_DUALIMAGE
+
+	/* for simplicity this is done via preprocessor defines:
+	 * the functions defined are like : 
+	 **  processRGBA_Altivec(left, right);
+	 */
+#define PROCESS_DUALIMAGE_SIMD(CS1, CS2,_SIMD_EXT)			\
+	virtual void process##CS1 ##_##_SIMD_EXT (imageStruct &left, imageStruct &right){ \
+	  process##CS1 ##_##CS2 (left, right);}
+
+	PROCESS_DUALIMAGE_SIMD(RGBA, RGBA, MMX);
+	PROCESS_DUALIMAGE_SIMD(RGBA, MMX , SSE2);
+	PROCESS_DUALIMAGE_SIMD(RGBA, RGBA, Altivec);
+
+	PROCESS_DUALIMAGE_SIMD(YUV , YUV , MMX);
+	PROCESS_DUALIMAGE_SIMD(YUV , MMX , SSE2);
+	PROCESS_DUALIMAGE_SIMD(YUV , YUV , Altivec);
+
+	PROCESS_DUALIMAGE_SIMD(Gray, Gray, MMX);
+	PROCESS_DUALIMAGE_SIMD(Gray, MMX , SSE2);
+	PROCESS_DUALIMAGE_SIMD(Gray, Gray, Altivec);
+#undef PROCESS_DUALIMAGE_SIMD
+
 #endif                
         //////////
         virtual void	postrender(GemState *);
-    	
-    	//////////
     	virtual void	stopRendering();
-        
-        //////////
         virtual void	rightstopRendering()	{ ; }
-
-    	//////////
     	virtual void   	rightRender(GemState *state);
-
-    	//////////
     	virtual void   	rightPostrender(GemState *)    	{ ; }
-        
-        //////////
-        virtual void	rightStoprender()		{ ; }
+	virtual void	rightStoprender()		{ ; }
 
     	//////////
     	GemCache    	*m_cacheRight;

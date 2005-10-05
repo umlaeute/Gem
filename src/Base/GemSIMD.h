@@ -13,6 +13,17 @@ LOG
 
 -----------------------------------------------------------------*/
 
+/* 
+ * compiler-issues:
+ *
+ * gcc: when gcc is invoked with "-mmmx" (or "-msse2" or "-maltivec") 
+ *      the defines __MMX__ (or corresponding) will be defined automatically
+ *
+ * vc6: you will have to install the microsoft processor-pack to use MMX/SSE2
+ *      you have to have the sp5 for vc6 installed (note: do not install sp6!!)
+ * vc6/vc7: (i think) you need to define __MMX__ (and friends) by hand
+ */
+
 #ifndef INCLUDE_GEMSIMD_H_
 #define INCLUDE_GEMSIMD_H_
 
@@ -30,7 +41,7 @@ typedef union{
   unsigned char c[16];
   __m128i v;
 } vector_128;
-#elifdef __VEC__
+#elif defined __VEC__
 /* for AltiVec (PowerPC) */
 typedef union{
   unsigned char c[16];
@@ -38,7 +49,7 @@ typedef union{
 } vector_128;
 #endif
 
-#ifdef __MMX__
+#if defined __MMX__
 # include <mmintrin.h>
 // for icc this should be <ivec.h>
 typedef union{

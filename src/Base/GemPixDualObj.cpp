@@ -60,6 +60,34 @@ void GemPixDualObj :: render(GemState *state)
 // processImage
 //
 /////////////////////////////////////////////////////////
+#define PROCESS_DUALIMAGE_SIMD(CS) \
+  switch(m_simd){		   \
+  case (GEM_SIMD_MMX):				\
+    process##CS ##_MMX(image, m_pixRight->image);	\
+    break;					\
+  case(GEM_SIMD_SSE2):				\
+    process##CS ##_SSE2(image, m_pixRight->image);	\
+    break;					\
+  case(GEM_SIMD_ALTIVEC):				\
+    process##CS ##_Altivec(image, m_pixRight->image);		\
+    break;						\
+  default:						\
+    process##CS ##_##CS(image, m_pixRight->image);		\
+  }
+  
+#define PROCESS_DUALIMAGE(CS1, CS2) \
+  process##CS1 ##_##CS2 (image, m_pixRight->image);
+
+#define PROCESS_COLORSPACE(FUN_RGBA, FUN_YUV, FUN_GRAY)			\
+  switch (m_pixRight->image.format) {					\
+  case GL_RGBA: case GL_BGRA_EXT:					\
+    found=true; FUN_RGBA; break;		\
+  case GL_LUMINANCE:							\
+    found=true; FUN_GRAY; break;		\
+  case GL_YCBCR_422_GEM:						\
+    found=true; FUN_YUV ; break;		\
+  default:break;}
+
 void GemPixDualObj :: processImage(imageStruct &image)
 {
   if (!m_cacheRight || m_cacheRight->m_magic!=GEMCACHE_MAGIC){
@@ -81,67 +109,21 @@ void GemPixDualObj :: processImage(imageStruct &image)
     switch (image.format) {
     case GL_RGBA:
     case GL_BGRA_EXT:
-      switch (m_pixRight->image.format) {
-      case GL_RGBA:
-      case GL_BGRA_EXT:
-	found=true; processRGBA_RGBA(image, m_pixRight->image);
-	break;
-      case GL_LUMINANCE:
-	found=true; processRGBA_Gray(image, m_pixRight->image);
-	break;
-      case GL_YCBCR_422_GEM:
-	found=true; processRGBA_YUV(image, m_pixRight->image);
-	break;
-      default:
-	found=true; processRGBA_Any(image, m_pixRight->image);
-      }
+      PROCESS_COLORSPACE(PROCESS_DUALIMAGE_SIMD(RGBA),
+			 PROCESS_DUALIMAGE(RGBA, YUV),
+			 PROCESS_DUALIMAGE(RGBA, Gray));
       break;
     case GL_LUMINANCE:
-      switch (m_pixRight->image.format) {
-      case GL_RGBA:
-      case GL_BGRA_EXT:
-	found=true; processGray_RGBA(image, m_pixRight->image);
-	break;
-      case GL_LUMINANCE:
-	found=true; processGray_Gray(image, m_pixRight->image);
-	break;
-      case GL_YCBCR_422_GEM:
-	found=true; processGray_YUV(image, m_pixRight->image);
-	break;
-      default:
-	found=true; processGray_Any(image, m_pixRight->image);
-      }
+      PROCESS_COLORSPACE(PROCESS_DUALIMAGE(Gray, RGBA),
+			 PROCESS_DUALIMAGE(Gray, YUV),
+			 PROCESS_DUALIMAGE_SIMD(Gray));
       break;
     case GL_YCBCR_422_GEM:
-      switch (m_pixRight->image.format) {
-      case GL_RGBA:
-      case GL_BGRA_EXT:
-	found=true; processYUV_RGBA(image, m_pixRight->image);
-	break;
-      case GL_LUMINANCE:
-	found=true; processYUV_Gray(image, m_pixRight->image);
-	break;
-      case GL_YCBCR_422_GEM:
-	found=true; processYUV_YUV(image, m_pixRight->image);
-	break;
-      default:
-	found=true; processYUV_Any(image, m_pixRight->image);
-      }
+      PROCESS_COLORSPACE(PROCESS_DUALIMAGE(YUV, RGBA),
+			 PROCESS_DUALIMAGE_SIMD(YUV),
+			 PROCESS_DUALIMAGE(YUV, Gray));
       break;
-    default:
-      switch (m_pixRight->image.format) {
-      case GL_RGBA:
-      case GL_BGRA_EXT:
-	found=true; processAny_RGBA(image, m_pixRight->image);
-	break;
-      case GL_LUMINANCE:
-	found=true; processAny_Gray(image, m_pixRight->image);
-	break;
-      case GL_YCBCR_422_GEM:
-	found=true; processAny_YUV(image, m_pixRight->image);
-	break;
-      default:break;
-      }
+    default: break;
     }
     if (!found)processDualImage(image, m_pixRight->image);
 }
