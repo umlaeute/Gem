@@ -21,7 +21,9 @@ all: $(OBJECTS)
 	 rm -f $@.$$$$
 
 clean:
-	-rm -f $(OBJECTS) $(SOURCES:.cpp=.d) *~
+	-rm -f $(OBJECTS) 
+	-rm -f $(SOURCES:.cpp=.d) 
+	-rm -f *~
 
 distclean:
 	-rm *.o *.d *~
@@ -29,3 +31,5 @@ distclean:
 
 $(OBJECTS): %.o : %.cpp
 	$(CXX) -c $(GEM_CXXFLAGS) $*.cpp -o $*.o
+
+depend: $(SOURCES:.cpp=.d)
