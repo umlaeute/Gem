@@ -225,7 +225,7 @@ else
 fi
 
 # using pix_filmNEW rather than pix_filmOS
-if test "$enable_filmnew" != "no"; then
+if test "x$enable_filmnew" != "xno"; then
  AC_DEFINE_UNQUOTED(NEW_VIDEOFILM)
 else
  echo "using deprecated video-loader"
