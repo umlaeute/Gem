@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS GEM_TARGETS EXT GEM_CONFIGFILE INCLUDES X_LIBS X_CFLAGS CXXFLAGS DEFINES PKG_CFLAGS PKG_LIBS REFERENCEPATH NEW_VIDEOFILM CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S CPP X_PRE_LIBS X_EXTRA_LIBS PKG_CONFIG ac_pt_PKG_CONFIG PKG_IMAGEMAGICK___CFLAGS PKG_IMAGEMAGICK___LIBS PKG_TIFF_CFLAGS PKG_TIFF_LIBS PKG_JPEG_CFLAGS PKG_JPEG_LIBS PKG_LIBQUICKTIME_CFLAGS PKG_LIBQUICKTIME_LIBS PKG_LQT_CFLAGS PKG_LQT_LIBS PKG_MPEG3_CFLAGS PKG_MPEG3_LIBS PKG_MPEG_CFLAGS PKG_MPEG_LIBS PKG_AVIFILE_CFLAGS PKG_AVIFILE_LIBS PKG_FFMPEG_CFLAGS PKG_FFMPEG_LIBS EGREP PKG_IEEE1394_CFLAGS PKG_IEEE1394_LIBS PKG_FTGL_CFLAGS PKG_FTGL_LIBS PKG_GLTT_CFLAGS PKG_GLTT_LIBS LIBOBJS MAKEDEP_FLAGS STRIP ac_ct_STRIP STRIP_ALL STRIP_UNNEEDED DOS2UNIX ac_ct_DOS2UNIX LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXX GEM_TARGETS EXT GEM_CONFIGFILE INCLUDES X_LIBS X_CFLAGS CXXFLAGS DEFINES PKG_CFLAGS PKG_LIBS REFERENCEPATH NEW_VIDEOFILM LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S CPP X_PRE_LIBS X_EXTRA_LIBS PKG_CONFIG ac_pt_PKG_CONFIG PKG_IMAGEMAGICK___CFLAGS PKG_IMAGEMAGICK___LIBS PKG_TIFF_CFLAGS PKG_TIFF_LIBS PKG_JPEG_CFLAGS PKG_JPEG_LIBS PKG_LIBQUICKTIME_CFLAGS PKG_LIBQUICKTIME_LIBS PKG_LQT_CFLAGS PKG_LQT_LIBS PKG_MPEG3_CFLAGS PKG_MPEG3_LIBS PKG_MPEG_CFLAGS PKG_MPEG_LIBS PKG_AVIFILE_CFLAGS PKG_AVIFILE_LIBS PKG_FFMPEG_CFLAGS PKG_FFMPEG_LIBS EGREP PKG_IEEE1394_CFLAGS PKG_IEEE1394_LIBS PKG_FTGL_CFLAGS PKG_FTGL_LIBS PKG_GLTT_CFLAGS PKG_GLTT_LIBS LIBOBJS MAKEDEP_FLAGS STRIP ac_ct_STRIP STRIP_ALL STRIP_UNNEEDED DOS2UNIX ac_ct_DOS2UNIX LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1564,6 +1564,7 @@ KERN=$(uname -s)
 
 
 GEM_CONFIGFILE=Base/config${KERN}.h
+
 
 
 
@@ -3737,7 +3738,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -3764,7 +3765,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
   for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Intrinsic.h"; then
+  if test -r "$ac_dir/X11/Xlib.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -3778,18 +3779,18 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lXt $LIBS"
+  LIBS="-lX11 $LIBS"
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 int
 main ()
 {
-XtMalloc (0)
+XrmInitialize ()
   ;
   return 0;
 }
@@ -3827,7 +3828,7 @@ for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r $ac_dir/libXt.$ac_extension; then
+    if test -r $ac_dir/libX11.$ac_extension; then
       ac_x_libraries=$ac_dir
       break 2
     fi
@@ -9712,7 +9713,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -9739,7 +9740,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
   for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Intrinsic.h"; then
+  if test -r "$ac_dir/X11/Xlib.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -9753,18 +9754,18 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lXt $LIBS"
+  LIBS="-lX11 $LIBS"
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 int
 main ()
 {
-XtMalloc (0)
+XrmInitialize ()
   ;
   return 0;
 }
@@ -9802,7 +9803,7 @@ for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r $ac_dir/libXt.$ac_extension; then
+    if test -r $ac_dir/libX11.$ac_extension; then
       ac_x_libraries=$ac_dir
       break 2
     fi
@@ -12909,6 +12910,155 @@ else
 fi
 
 #pd version
+
+for ac_header in m_pd.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+if eval "test \"\${$as_ac_Header+set}\" = set"; then
+  echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
+if eval "test \"\${$as_ac_Header+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking $ac_header usability" >&5
+echo $ECHO_N "checking $ac_header usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking $ac_header presence" >&5
+echo $ECHO_N "checking $ac_header presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <$ac_header>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
+echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## --------------------------------- ##
+## Report this to BUG-REPORT-ADDRESS ##
+## --------------------------------- ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
+if eval "test \"\${$as_ac_Header+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  eval "$as_ac_Header=\$ac_header_preproc"
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
+
+fi
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
 # this is mainly interesting for the documentation
 if test "x$with_pdversion" != "x"; then
   PD_VERSION="$with_pdversion"
@@ -12937,9 +13087,8 @@ else
   REFERENCEPATH=doc/5.reference/Gem
 fi
 
-
 # using pix_filmNEW rather than pix_filmOS
-if test "$enable_filmnew" != "no"; then
+if test "x$enable_filmnew" != "xno"; then
  cat >>confdefs.h <<_ACEOF
 #define NEW_VIDEOFILM 1
 _ACEOF
@@ -12950,31 +13099,58 @@ fi
 
 # disabling ARB-extensions
 if test "x$enable_ARB" != "xno"; then
- echo "$as_me:$LINENO: checking for glBindProgramARB in -lGL" >&5
-echo $ECHO_N "checking for glBindProgramARB in -lGL... $ECHO_C" >&6
-if test "${ac_cv_lib_GL_glBindProgramARB+set}" = set; then
+ echo "$as_me:$LINENO: checking for glBindProgramARB" >&5
+echo $ECHO_N "checking for glBindProgramARB... $ECHO_C" >&6
+if test "${ac_cv_func_glBindProgramARB+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGL  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
+/* Define glBindProgramARB to an innocuous variant, in case <limits.h> declares glBindProgramARB.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define glBindProgramARB innocuous_glBindProgramARB
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char glBindProgramARB (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef glBindProgramARB
 
 /* Override any gcc2 internal prototype to avoid an error.  */
 #ifdef __cplusplus
 extern "C"
+{
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
 char glBindProgramARB ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_glBindProgramARB) || defined (__stub___glBindProgramARB)
+choke me
+#else
+char (*f) () = glBindProgramARB;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
 int
 main ()
 {
-glBindProgramARB ();
+return f != glBindProgramARB;
   ;
   return 0;
 }
@@ -13000,20 +13176,19 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_GL_glBindProgramARB=yes
+  ac_cv_func_glBindProgramARB=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_GL_glBindProgramARB=no
+ac_cv_func_glBindProgramARB=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_GL_glBindProgramARB" >&5
-echo "${ECHO_T}$ac_cv_lib_GL_glBindProgramARB" >&6
-if test $ac_cv_lib_GL_glBindProgramARB = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_func_glBindProgramARB" >&5
+echo "${ECHO_T}$ac_cv_func_glBindProgramARB" >&6
+if test $ac_cv_func_glBindProgramARB = yes; then
   enable_ARB="yes"
 else
   enable_ARB="no"
@@ -13032,31 +13207,58 @@ fi
 
 # disabling NV-extensions
 if test "x$enable_NV" != "xno"; then
- echo "$as_me:$LINENO: checking for glBindProgramNV in -lGL" >&5
-echo $ECHO_N "checking for glBindProgramNV in -lGL... $ECHO_C" >&6
-if test "${ac_cv_lib_GL_glBindProgramNV+set}" = set; then
+ echo "$as_me:$LINENO: checking for glBindProgramNV" >&5
+echo $ECHO_N "checking for glBindProgramNV... $ECHO_C" >&6
+if test "${ac_cv_func_glBindProgramNV+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGL  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
+/* Define glBindProgramNV to an innocuous variant, in case <limits.h> declares glBindProgramNV.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define glBindProgramNV innocuous_glBindProgramNV
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char glBindProgramNV (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef glBindProgramNV
 
 /* Override any gcc2 internal prototype to avoid an error.  */
 #ifdef __cplusplus
 extern "C"
+{
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
 char glBindProgramNV ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_glBindProgramNV) || defined (__stub___glBindProgramNV)
+choke me
+#else
+char (*f) () = glBindProgramNV;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
 int
 main ()
 {
-glBindProgramNV ();
+return f != glBindProgramNV;
   ;
   return 0;
 }
@@ -13082,20 +13284,19 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_GL_glBindProgramNV=yes
+  ac_cv_func_glBindProgramNV=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_GL_glBindProgramNV=no
+ac_cv_func_glBindProgramNV=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_GL_glBindProgramNV" >&5
-echo "${ECHO_T}$ac_cv_lib_GL_glBindProgramNV" >&6
-if test $ac_cv_lib_GL_glBindProgramNV = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_func_glBindProgramNV" >&5
+echo "${ECHO_T}$ac_cv_func_glBindProgramNV" >&6
+if test $ac_cv_func_glBindProgramNV = yes; then
   enable_NV="yes"
 else
   enable_NV="no"
@@ -14194,6 +14395,7 @@ s,@ECHO_C@,$ECHO_C,;t t
 s,@ECHO_N@,$ECHO_N,;t t
 s,@ECHO_T@,$ECHO_T,;t t
 s,@LIBS@,$LIBS,;t t
+s,@CXX@,$CXX,;t t
 s,@GEM_TARGETS@,$GEM_TARGETS,;t t
 s,@EXT@,$EXT,;t t
 s,@GEM_CONFIGFILE@,$GEM_CONFIGFILE,;t t
@@ -14206,7 +14408,6 @@ s,@PKG_CFLAGS@,$PKG_CFLAGS,;t t
 s,@PKG_LIBS@,$PKG_LIBS,;t t
 s,@REFERENCEPATH@,$REFERENCEPATH,;t t
 s,@NEW_VIDEOFILM@,$NEW_VIDEOFILM,;t t
-s,@CXX@,$CXX,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
 s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@ac_ct_CXX@,$ac_ct_CXX,;t t
