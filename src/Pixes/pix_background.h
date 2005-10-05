@@ -49,16 +49,21 @@ class GEM_EXTERN pix_background : public GemPixObj
   // Do the processing
   virtual void 	processRGBAImage(imageStruct &image);
   virtual void 	processGrayImage(imageStruct &image);
-  virtual void 	processYUVImage(imageStruct &image);
-        
+  virtual void 	processYUVImage (imageStruct &image);
+#ifdef __MMX__
+  virtual void processRGBAMMX   (imageStruct &image);
+  virtual void processYUVMMX    (imageStruct &image);
+  virtual void processGrayMMX   (imageStruct &image);
+#endif 
+#ifdef __VEC__
   //////////
   // Do the YUV Altivec processing
-  virtual void 	processYUVImageAltivec(imageStruct &image);
+  virtual void 	processYUVAltivec(imageStruct &image);
+#endif
         
-  unsigned char  *saved;
-  int		m_Yrange,m_Urange,m_Vrange;
-  int		m_blur,m_blurH,m_blurW,m_blurSize,m_blurBpp;
-  t_inlet      *inletBlur;
+  imageStruct   m_savedImage;
+  int		m_Yrange,m_Urange,m_Vrange, m_Arange;
+  t_inlet      *inletRange;
   int		m_reset;
 
         

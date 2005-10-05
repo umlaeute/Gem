@@ -67,9 +67,8 @@ void pix_rds :: processRGBAImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format  = image.format;
+    myImage.setCsizeByFormat(image.format);
+    myImage.upsidedown = image.upsidedown;
     myImage.reallocate();
 
     dest = (unsigned int*)myImage.data;
@@ -168,9 +167,8 @@ void pix_rds :: processGrayImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format  = image.format;
+    myImage.setCsizeByFormat(GL_LUMINANCE);
+    myImage.upsidedown = image.upsidedown;
     myImage.reallocate();
 
     dest = (unsigned char*)myImage.data;
@@ -255,14 +253,13 @@ void pix_rds :: processYUVImage(imageStruct &image)
     int x, y, i;
     unsigned char *target, *dest;
     unsigned short *src = (unsigned short*)image.data;
-    unsigned char v;
+    unsigned short v;
     unsigned short R, B;
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = 1;//image.csize;
-    myImage.type  = image.type;
-    myImage.format  = GL_LUMINANCE;//image.format;
+    myImage.setCsizeByFormat(GL_LUMINANCE);
+    myImage.upsidedown = image.upsidedown;
     myImage.reallocate();
 
     dest = (unsigned char*)myImage.data;
@@ -278,7 +275,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
 	  if(inline_fastrand()&0xc0000000) continue;
 	  
 	  x = image.xsize / 2 + i;
-	  dest[x] = 0x80ff;
+	  dest[x] = 0xff;
 	
 	  while(x + stride/2 < image.xsize) {
 	    v = src[x + stride/2] & 0x00ff; // UYVY, we only want Y
@@ -286,7 +283,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
 	    x += stride;
 	    x += R + R + B;
 	    if(x >= image.xsize) break;
-	    dest[x] = 0x80ff;
+	    dest[x] = 0xff;
 	  }
 
 	  x = image.xsize / 2 + i;
@@ -296,7 +293,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
 	    x -= stride;
 	    x -= R + R + B;
 	    if(x < 0) break;
-	    dest[x] = 0x80ff;
+	    dest[x] = 0xff;
 	  }
 	}
 	src += image.xsize;
@@ -308,14 +305,14 @@ void pix_rds :: processYUVImage(imageStruct &image)
 	  if(inline_fastrand()&0xc0000000) continue;
 
 	  x = image.xsize / 2 + i;
-	  dest[x] = 0x80ff;
+	  dest[x] = 0xff;
 	
 	  while(x + stride/2 < image.xsize) {
 	    v = src[x + stride/2] & 0x00ff;
 	    R=v>>6; B=v>>7;
 	    x += stride - R - R - B;
 	    if(x >= image.xsize) break;
-	    dest[x] = 0x80ff;
+	    dest[x] = 0xff;
 	  }
 	  
 	  x = image.xsize / 2 + i;
@@ -324,7 +321,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
 	    R=v>>6; B=v>>7;
 	    x -= stride - R - R - B;
 	    if(x < 0) break;
-	    dest[x] = 0x80ff;
+	    dest[x] = 0xff;
 	  }
 	}
 	src += image.xsize;
@@ -336,10 +333,8 @@ void pix_rds :: processYUVImage(imageStruct &image)
       target += image.xsize + (image.xsize - stride) / 2;
       for(y=0; y<4; y++) {
 	for(x=0; x<4; x++) {
-	  target[x] = 0x80ff    ;
-	  target[x+stride] = 0x80ff    ;
-	  target[x+1] = 0x80ff    ;
-	  target[x+stride+1] = 0x80ff    ;
+	  target[x] = 0xff    ;
+	  target[x+stride] = 0xff    ;
 	}
 	target += image.xsize;
       }

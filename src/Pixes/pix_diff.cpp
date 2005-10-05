@@ -43,10 +43,6 @@ pix_diff :: ~pix_diff()
 /////////////////////////////////////////////////////////
 void pix_diff :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-#ifdef __VEC__
-processRGBA_Altivec(image,right);
-return;
-#else
     int datasize = image.xsize * image.ysize;
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
@@ -61,14 +57,113 @@ return;
       leftPix += 4;
       rightPix += 4;
     }
-
-#endif    
-    
 }
 
+/////////////////////////////////////////////////////////
+// do the YUV processing here
+//
+/////////////////////////////////////////////////////////
+
+void pix_diff :: processYUV_YUV(imageStruct &image, imageStruct &right)
+{
+   long src,h,w;
+   int	y1,y2;
+   int u,v;
+   src =0;
+   //format is U Y V Y
+   for (h=0; h<image.ysize; h++){
+    for(w=0; w<image.xsize/2; w++){
+       
+        u = (image.data[src] - 128) - (right.data[src] - 128);
+        image.data[src] = abs(u + 128);
+        y1 =image.data[src+1] - right.data[src+1];
+        image.data[src+1] = abs(y1);
+        v = (image.data[src+2] - 128) - (right.data[src+2] - 128);
+        image.data[src+2] = abs(v+128);
+        y2 = image.data[src+3] - right.data[src+3];
+        image.data[src+3] = abs(y2);
+       
+        src+=4;
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////
+// processDualImage
+//
+/////////////////////////////////////////////////////////
+void pix_diff :: processGray_Gray(imageStruct &image, imageStruct &right)
+{
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
+  
+  while(datasize--)
+    {
+      leftPix[chGray] =
+	abs(leftPix[chGray] - (int)rightPix[chGray]);
+      leftPix++;
+      rightPix++;
+    }
+}
+
+
+#ifdef __MMX__
+void pix_diff :: processRGBA_MMX(imageStruct &image, imageStruct &right){
+  int datasize = image.xsize * image.ysize * image.csize;
+  __m64*leftPix  = (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+
+  __m64 l, r, b;
+
+  while(datasize--){
+    l =leftPix [datasize];
+    r=rightPix[datasize];
+
+    b  = l;
+    b  = _mm_subs_pu8     (b, r);
+    r  = _mm_subs_pu8     (r, l);
+    b  = _mm_or_si64      (b, r);
+
+    leftPix[datasize]=b;
+  }
+  _mm_empty();
+}
+void pix_diff :: processYUV_MMX (imageStruct &image, imageStruct &right){
+  int datasize =   image.xsize * image.ysize * image.csize;
+  __m64*leftPix =  (__m64*)image.data;
+  __m64*rightPix = (__m64*)right.data;
+
+  datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
+  __m64 mask = _mm_setr_pi8(0x40, 0x00, 0x40, 0x00,
+			    0x40, 0x00, 0x40, 0x00);
+  __m64 l, r, b;
+  while (datasize--) {
+    l=leftPix[datasize];
+    r=rightPix[datasize];
+
+    l=_mm_adds_pu8(l, mask);
+    r=_mm_subs_pu8(r, mask);
+
+    b  = l;
+    b  = _mm_subs_pu8     (b, r);
+    r  = _mm_subs_pu8     (r, l);
+    b  = _mm_or_si64      (b, r);
+
+    leftPix[datasize]=b;
+  }
+  _mm_empty();
+}
+void pix_diff :: processGray_MMX(imageStruct &image, imageStruct &right){
+  processRGBA_MMX(image, right);
+}
+
+#endif
+
+#ifdef __VEC__
 void pix_diff :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
 {
-#ifdef __VEC__
 
     int datasize = image.xsize * image.ysize / 4;
     vector signed short  hiImage, loImage, hiRight, loRight;
@@ -116,48 +211,9 @@ void pix_diff :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
         vec_dss( 2 );
         vec_dss( 3 );
     #endif
-
-#endif
 }
-/////////////////////////////////////////////////////////
-// do the YUV processing here
-//
-/////////////////////////////////////////////////////////
-
-void pix_diff :: processYUV_YUV(imageStruct &image, imageStruct &right)
-{
-
-#ifdef __VEC__
-processYUV_Altivec(image,right);
-return;
-#else
-   long src,h,w;
-   int	y1,y2;
-   int u,v;
-   src =0;
-   //format is U Y V Y
-   for (h=0; h<image.ysize; h++){
-    for(w=0; w<image.xsize/2; w++){
-       
-        u = (image.data[src] - 128) - (right.data[src] - 128);
-        image.data[src] = abs(u + 128);
-        y1 =image.data[src+1] - right.data[src+1];
-        image.data[src+1] = abs(y1);
-        v = (image.data[src+2] - 128) - (right.data[src+2] - 128);
-        image.data[src+2] = abs(v+128);
-        y2 = image.data[src+3] - right.data[src+3];
-        image.data[src+3] = abs(y2);
-       
-        src+=4;
-        }
-    }
-#endif    
-    
-}
-
 void pix_diff :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 {
-#ifdef __VEC__
   long h,w,width;
 
    width = image.xsize/8;
@@ -236,28 +292,10 @@ void pix_diff :: processYUV_Altivec(imageStruct &image, imageStruct &right)
         vec_dss( 0 );
         vec_dss( 1 );
         #endif
-}  /*end of working altivec function */
+    }  /*end of working altivec function */
+}
 #endif
-}
 
-/////////////////////////////////////////////////////////
-// processDualImage
-//
-/////////////////////////////////////////////////////////
-void pix_diff :: processGray_Gray(imageStruct &image, imageStruct &right)
-{
-  int datasize = image.xsize * image.ysize;
-  unsigned char *leftPix = image.data;
-  unsigned char *rightPix = right.data;
-  
-  while(datasize--)
-    {
-      leftPix[chGray] =
-	abs(leftPix[chGray] - (int)rightPix[chGray]);
-      leftPix++;
-      rightPix++;
-    }
-}
 
 /////////////////////////////////////////////////////////
 // static member function

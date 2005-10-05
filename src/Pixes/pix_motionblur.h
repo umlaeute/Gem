@@ -45,16 +45,28 @@ CPPEXTERN_HEADER(pix_motionblur, GemPixObj)
     	// Destructor
     	virtual ~pix_motionblur();
 
+
+	void motionblurMessage(int, t_atom*);
+
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
       	virtual void 	processGrayImage(imageStruct &image);
   	virtual void 	processYUVImage(imageStruct &image);
+#ifdef __MMX__
+	virtual void    processMMX(imageStruct &image);
+
+	virtual void    processRGBAMMX(imageStruct &image);
+	virtual void    processYUVMMX(imageStruct &image);
+	virtual void    processGrayMMX(imageStruct &image);
+#endif
+
+#ifdef __VEC__
         virtual void 	processYUVAltivec(imageStruct &image);
+#endif
         
-         int  *saved;
-        float		m_motionblur;
-        int		m_motionblurH,m_motionblurW,m_motionblurSize,m_motionblurBpp;
+	imageStruct     m_savedImage;
+        int		m_blur0, m_blur1;
         t_inlet         *inletmotionblur;
 
         
@@ -62,8 +74,7 @@ CPPEXTERN_HEADER(pix_motionblur, GemPixObj)
     
     	//////////
     	// Static member functions
-    	
-        static void motionblurCallback       (void *data, t_floatarg value);
+        static void motionblurCallback       (void *data, t_symbol*,int,t_atom*);
 
 
 };

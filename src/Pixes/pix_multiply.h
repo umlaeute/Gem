@@ -64,6 +64,12 @@ class GEM_EXTERN pix_multiply : public GemPixDualObj
     	//////////
     	// Do the processing
     	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
+
+#ifdef __MMX__
+     	virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
+    	virtual void 	processYUV_MMX(imageStruct &image, imageStruct &right);
+   	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
+#endif
         
 };
 

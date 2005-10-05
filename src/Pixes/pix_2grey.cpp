@@ -43,26 +43,118 @@ pix_2grey :: ~pix_2grey()
 /////////////////////////////////////////////////////////
 void pix_2grey :: processRGBAImage(imageStruct &image)
 {
-#ifdef __VEC__
-processRGBAltivec(image);
-return;
-#else
   unsigned char *pixels = image.data;
   int count = image.ysize * image.xsize;
    
      while (count--)    {
-     int grey = (pixels[chRed] * 79 + pixels[chGreen] * 155
-      + pixels[chBlue] * 21)>>8;
+     int grey = (pixels[chRed  ] * 79  + 
+		 pixels[chGreen] * 156 +
+		 pixels[chBlue ] * 21)>>8;
      pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
      pixels += 4;
      }  
-#endif     
 }
 
-
-void pix_2grey :: processRGBAltivec(imageStruct &image)
+void pix_2grey :: processYUVImage(imageStruct &image)
 {
+  unsigned char *pixels = image.data;
+  int count = image.ysize * image.xsize / 2;
+ 
+  while (count--)    {
+    pixels[chU]=0x80; pixels[chV]=0x80;
+    pixels+=4;
+  }
+}
+
+#ifdef __MMX__
+void pix_2grey :: processRGBAMMX(imageStruct &image){
+  __m64*data      =(__m64*)image.data;
+
+  register __m64 alpha_mask=_mm_setr_pi8((unsigned char)0x00,
+					 (unsigned char)0x00,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF,
+					 (unsigned char)0x00,
+					 (unsigned char)0x00,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF);
+  register __m64 rgb2Y     =_mm_setr_pi16(77, 150, 29, 0);
+  register __m64 pixel, y1, y2, y1_2;
+  register int pixsize = (image.ysize * image.xsize)>>1;
+
+  while(pixsize--){
+    pixel=data[pixsize]; /* RGBARGBA */
+
+    y1_2= _mm_setzero_si64 ();
+
+    y1  = _mm_unpacklo_pi8 (pixel, y1_2); /* lower RGB(A) */
+    y2  = _mm_unpackhi_pi8 (pixel, y1_2); /* upper RGB(A) */
+    pixel=_mm_and_si64     (pixel, alpha_mask); /* 000A000A */
+
+    y1  = _mm_madd_pi16    (y1, rgb2Y); /* R+G, B(+A) */
+    y2  = _mm_madd_pi16    (y2, rgb2Y); /* R+G, B(+A) */
+
+    y1_2= _mm_srli_si64    (y1, 32);
+    y1  = _mm_add_pi32     (y1, y1_2);  /* (RG + BA)*256  in the lower 32bit */
+
+    y1_2= _mm_srli_si64    (y2, 32);
+    y2  = _mm_add_pi32     (y2, y1_2);  /* (RG + BA)*256  in the lower 32bit */
+
+    y1  = _mm_srli_pi32    (y1, 8);   /* Y  in the lower 32bit */
+    y2  = _mm_srli_pi32    (y2, 8);   /* Y  in the lower 32bit */
+
+    y1  = _mm_unpacklo_pi32(y1, y1);  /* Y in both buf32 */
+    y2  = _mm_unpacklo_pi32(y2, y2);  /* Y in both buf32 */
+
+
+    y1  = _mm_packs_pi32   (y1, y1);  /* Y in all buf16 */
+    y2  = _mm_packs_pi32   (y2, y2);  /* Y in all buf16 */
+
+    y1= _mm_packs_pu16     (y1, y2);  /* YYYYJJJJ */
+
+    y1_2=alpha_mask;
+    y1_2=_mm_andnot_si64   (y1_2, y1);/* YYY0JJJ0 */
+
+    data[pixsize]=_mm_or_si64(pixel, y1_2); /* YYYAJJJA */
+  }
+  _mm_empty();
+}
+
+void pix_2grey :: processYUVMMX(imageStruct &image){
+ register int pixsize = (image.ysize * image.xsize)>>2;
+
+ register __m64 mask_64   = _mm_setr_pi8((unsigned char)0x00,
+					 (unsigned char)0xFF,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF,
+					 (unsigned char)0x00,
+					 (unsigned char)0xFF);
+ register __m64 offset_64 = _mm_setr_pi8((unsigned char)0x80,
+					 (unsigned char)0x00,
+					 (unsigned char)0x80,
+					 (unsigned char)0x00,
+					 (unsigned char)0x80,
+					 (unsigned char)0x00,
+					 (unsigned char)0x80,
+					 (unsigned char)0x00);
+ __m64*data_p= (__m64*)image.data;
+
+ register __m64 pixel;
+ while(pixsize--) {
+   pixel = data_p[pixsize];
+   pixel = _mm_and_si64(pixel, mask_64);
+   pixel = _mm_add_pi8 (pixel, offset_64);
+   data_p[pixsize]=pixel;
+ }
+ _mm_empty();
+}
+#endif
+
 #ifdef __VEC__
+void pix_2grey :: processRGBAAltivec(imageStruct &image)
+{
  
   union{
     unsigned char		c[16];
@@ -159,31 +251,10 @@ void pix_2grey :: processRGBAltivec(imageStruct &image)
     vec_dss( 1 );
   # endif
   
-#endif //altivec function
-}
-
-
-void pix_2grey :: processYUVImage(imageStruct &image)
-{
-#ifdef __VEC__
-    processYUVAltivec(image);
-    return;
-#else
-
-  unsigned char *pixels = image.data;
-  int count = image.ysize * image.xsize / 2;
- 
-  while (count--)    {
-    pixels[chU]=127; pixels[chV]=127;
-    pixels+=4;
-  }
-#endif  
 }
 
 void pix_2grey :: processYUVAltivec(imageStruct &image)
 {
-#ifdef __VEC__
- 
   union{
     unsigned char		c[16];
     vector unsigned char	v;
@@ -221,8 +292,9 @@ void pix_2grey :: processYUVAltivec(imageStruct &image)
    pixels++;
    
   }
-#endif //altivec function
 }
+#endif //altivec function
+
 
 /////////////////////////////////////////////////////////
 // static member function

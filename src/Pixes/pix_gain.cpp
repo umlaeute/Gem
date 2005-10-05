@@ -97,12 +97,6 @@ void pix_gain :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_gain :: processYUVImage(imageStruct &image)
 {
-  
-#ifdef __VEC__
-//post("using altivec");  
-processYUV_Altivec(image);
-return;
-#else
   int h,w,width;
     long src;
     int y1,y2,u,v;
@@ -130,12 +124,59 @@ return;
         src+=4;
         }
     }
-#endif
 }
- 
+
+#ifdef __MMX__
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_gain :: processRGBAMMX(imageStruct &image)
+{
+
+  short  R = int(256 * m_gain[chRed]);
+  short  G = int(256 * m_gain[chGreen]);
+  short  B = int(256 * m_gain[chBlue]);
+  short  A = int(256 * m_gain[chAlpha]);
+
+
+  /* the MMX code goes easily into clipping, 
+   * since we are using (short) instead of (int)
+   */
+  if((R>256)||(G>256)||(B>256)||(B>256))processRGBAImage(image);
+  
+  register int pixsize = (image.ysize * image.xsize)>>1;
+
+  register __m64 gain_64 = _mm_setr_pi16(R, G, B, A);
+  register __m64*data_p= (__m64*)image.data;
+  register __m64 null_64 = _mm_setzero_si64();
+  register __m64 a0,a1;
+  _mm_empty();
+
+  while(pixsize--) {
+    a1 = data_p[0];
+    
+    a0=_mm_unpacklo_pi8(a1, null_64);
+    a1=_mm_unpackhi_pi8(a1, null_64);
+
+    a0 = _mm_mullo_pi16(a0, gain_64);
+    a1 = _mm_mullo_pi16(a1, gain_64);
+
+    a0 = _mm_srai_pi16(a0, 8);
+    a1 = _mm_srai_pi16(a1, 8);
+
+    data_p[0]=_mm_packs_pi16(a0, a1);
+    data_p++;      
+  }
+  _mm_empty();
+}
+#endif /* __MMX__ */
+
+
+
+#ifdef __VEC__
 void pix_gain :: processYUV_Altivec(imageStruct &image)
 {
- #ifdef __VEC__
  int h,w,width,height;
     /*altivec code starts */
     width = image.xsize/8;
@@ -248,8 +289,8 @@ void pix_gain :: processYUV_Altivec(imageStruct &image)
         vec_dss( 0 );
         #endif
     }  /* end of working altivec function */
-#endif
 }
+#endif /* __VEC__ */
 
 /////////////////////////////////////////////////////////
 // vecGainMess

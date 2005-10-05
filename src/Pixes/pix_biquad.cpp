@@ -122,12 +122,16 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
     iff2 = (int)(256. * ff2);
     iff3 = (int)(256. * ff3);
     
+    int max=0;//JMZ
+
     while(pixsize--) {
       ioutput = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
+      if(max<ioutput)max=ioutput;//JMZ
       *this_p++    = (unsigned char)CLAMP(((iff1 * ioutput) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
       *prev_p++	 = *last_p;
       *last_p++	 = (unsigned char)CLAMP(ioutput);
     }
+    //post("maxval=%d", max);//JMZ
   }
 }
 
@@ -138,12 +142,6 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_biquad :: processYUVImage(imageStruct &image)
 {
-
-#ifdef __VEC__
-    processYUVAltivec(image);
-    return;
-#else
-    
     // assume that the pix_size does not change !
     bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
     prev.xsize = image.xsize;
@@ -206,17 +204,157 @@ void pix_biquad :: processYUVImage(imageStruct &image)
             *prev_p++ = *last_p;
             *last_p++ = (unsigned char)CLAMP_Y(Youtput1);
         }
-
-#endif 
 }
 
+#ifdef __MMX__
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_biquad :: processRGBAMMX(imageStruct &image)
+{
+  // assume that the pix_size does not change !
+  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
+  prev.xsize = image.xsize;
+  prev.ysize = image.ysize;
+  prev.setCsizeByFormat(image.format);
+  prev.reallocate();
+  last.xsize = image.xsize;
+  last.ysize = image.ysize;
+  last.setCsizeByFormat(image.format);
+  last.reallocate();
+
+  if (set) { 
+    memcpy(prev.data, image.data, image.ysize * image.xsize * image.csize);
+    memcpy(last.data, image.data, image.ysize * image.xsize * image.csize);
+    set = false;
+  } else if (do_blank){
+    prev.setBlack();
+    last.setBlack();
+  }
+  int pixsize = image.ysize * image.xsize * image.csize / sizeof(__m64);
+  
+  //post("%f %f %f\t%f %f %f", fb0, fb1, fb2, ff1, ff2, ff3);
+  //post("alpha-pre=%d", image.data[chAlpha]);
+
+  // fast, because calculations are done in int !
+
+  const short ifb0 = (short)(256.f * fb0);
+  const short ifb1 = (short)(256.f * fb1);
+  const short ifb2 = (short)(256.f * fb2);
+  const short iff1 = (short)(256.f * ff1);
+  const short iff2 = (short)(256.f * ff2);
+  const short iff3 = (short)(256.f * ff3);
+
+  //post("%d %d %d\t%d %d %d", ifb0, ifb1, ifb2, iff1, iff2, iff3);
+  _mm_empty();
+
+  const __m64 fb0_64 = _mm_set1_pi16(ifb0);
+  const __m64 fb1_64 = _mm_set1_pi16(ifb1);
+  const __m64 fb2_64 = _mm_set1_pi16(ifb2);
+  const __m64 ff1_64 = _mm_set1_pi16(iff1);
+  const __m64 ff2_64 = _mm_set1_pi16(iff2);
+  const __m64 ff3_64 = _mm_set1_pi16(iff3);
+
+  __m64 this_64, last_64, prev_64;
+  __m64 a0,a1;
+  __m64 b0,b1;
+  __m64 A0,A1;
+  __m64 B0,B1;
+  
+  __m64*this_p= (__m64*)image.data;
+  __m64*last_p= (__m64*)last.data;
+  __m64*prev_p= (__m64*)prev.data;
+  
+  __m64 null_64 = _mm_setzero_si64();
+  
+  /*
+    float output = fb0 * *this_p + fb1 * *last_p + fb2 * *prev_p;
+    *this_p++    = (unsigned char)(ff1 * output + ff2 * *last_p + ff3 * *prev_p);
+    *prev_p++	 = *last_p;
+    *last_p++	 = (unsigned char)output;
+    */
+
+  while(pixsize--) {
+    this_64 = this_p[pixsize];
+    last_64 = last_p[pixsize];
+    prev_64 = prev_p[pixsize];
+    
+    a0=_mm_unpacklo_pi8 (this_64, null_64);
+    a1=_mm_unpackhi_pi8 (this_64, null_64);
+
+    b0=_mm_unpacklo_pi8 (last_64, null_64);
+    b1=_mm_unpackhi_pi8 (last_64, null_64);
+
+    a0 = _mm_mullo_pi16 (a0, fb0_64);
+    a1 = _mm_mullo_pi16 (a1, fb0_64);
+
+    b0 = _mm_mullo_pi16 (b0, fb1_64);
+    b1 = _mm_mullo_pi16 (b1, fb1_64);
+
+    a0 = _mm_adds_pu16  (a0, b0); // this might already by saturated !
+    a1 = _mm_adds_pu16  (a1, b1);
+
+    b0 =_mm_unpacklo_pi8(prev_64, null_64);
+    b1 =_mm_unpackhi_pi8(prev_64, null_64);
+    b0 = _mm_mullo_pi16 (b0, fb2_64);
+    b1 = _mm_mullo_pi16 (b1, fb2_64);
+
+    a0 = _mm_adds_pu16  (a0, b0);
+    a1 = _mm_adds_pu16  (a1, b1);
+
+    a0 = _mm_srli_pi16  (a0, 8);
+    a1 = _mm_srli_pi16  (a1, 8);
+
+
+
+    A0=a0;
+    A1=a1;
+
+    B0=_mm_unpacklo_pi8 (last_64, null_64);
+    B1=_mm_unpackhi_pi8 (last_64, null_64);
+
+    A0 = _mm_mullo_pi16 (A0, ff1_64);
+    A1 = _mm_mullo_pi16 (A1, ff1_64);
+
+    B0 = _mm_mullo_pi16 (B0, ff2_64);
+    B1 = _mm_mullo_pi16 (B1, ff2_64);
+
+    A0 = _mm_adds_pu16  (A0, B0); // this might already By saturated !
+    A1 = _mm_adds_pu16  (A1, B1);
+
+    B0 =_mm_unpacklo_pi8(prev_64, null_64);
+    B1 =_mm_unpackhi_pi8(prev_64, null_64);
+    B0 = _mm_mullo_pi16 (B0, ff3_64);
+    B1 = _mm_mullo_pi16 (B1, ff3_64);
+
+    A0 = _mm_adds_pu16  (A0, B0);
+    A1 = _mm_adds_pu16  (A1, B1);
+
+    A0 = _mm_srli_pi16  (A0, 8);
+    A1 = _mm_srli_pi16  (A1, 8);
+
+    prev_p[pixsize]=last_p[pixsize];
+    last_p[pixsize]=_mm_packs_pu16(a0, a1);
+    this_p[pixsize]=_mm_packs_pu16(A0, A1);
+  }
+  _mm_empty();
+  //  post("alpha-post=%d\n", image.data[chAlpha]);
+}
+void pix_biquad :: processYUVMMX(imageStruct &image)
+{ processRGBAMMX(image); }
+void pix_biquad :: processGrayMMX(imageStruct &image)
+{ processRGBAMMX(image); }
+
+#endif /* __MMX__ */
+
+#ifdef __VEC__
 /////////////////////////////////////////////////////////
 // processImage
 //
 /////////////////////////////////////////////////////////
 void pix_biquad :: processYUVAltivec(imageStruct &image)
 {
-#ifdef __VEC__
     // assume that the pix_size does not change !
     bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
     prev.xsize = image.xsize;
@@ -459,9 +597,8 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
     vec_dss(1);
     vec_dss(0);
 #endif
-    
-#endif
 }
+#endif /* __VEC__ */
 
 
 void pix_biquad :: faktorMess(int argc, t_atom*argv){

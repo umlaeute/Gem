@@ -99,12 +99,6 @@ void pix_movement :: processRGBAImage(imageStruct &image)
 }
 void pix_movement :: processYUVImage(imageStruct &image)
 {
-
-#ifdef __VEC__
-    processYUVAltivec(image);
-    return;
-#else
-    
   // assume that the pix_size does not change !
   bool doclear=(image.xsize*image.ysize != buffer.xsize*buffer.ysize);
   buffer.xsize = image.xsize;
@@ -144,16 +138,11 @@ void pix_movement :: processYUVImage(imageStruct &image)
     */
     rp+=4;
   }
-
-#endif  
 }
 
-
+#ifdef __VEC__
 void pix_movement :: processYUVAltivec(imageStruct &image)
 {
-    #ifdef __VEC__
-
-
     if (image.xsize*image.ysize != buffer.xsize*buffer.ysize){
         buffer.xsize = image.xsize;
         buffer.ysize = image.ysize;
@@ -273,9 +262,8 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
     vec_dss(2);
     vec_dss(3);
     #endif
-
-    #endif /* __VEC__ */
 }
+#endif /* __VEC__ */
 
 
 
@@ -300,10 +288,65 @@ void pix_movement :: processGrayImage(imageStruct &image)
   while(pixsize--) {
     unsigned char grey = *rp++;
     *wp2++=255*(abs(grey-*wp)>treshold);
+    //*wp2++=(abs(grey-*wp));
     *wp++=grey;
   }
   image.data = buffer2.data;
 }
+#ifdef __MMX__
+void pix_movement :: processGrayMMX(imageStruct &image)
+{
+  // assume that the pix_size does not change !
+  bool doclear=(image.xsize*image.ysize != buffer.xsize*buffer.ysize);
+  buffer.xsize = image.xsize;
+  buffer.ysize = image.ysize;
+  buffer.reallocate();
+  if(doclear) buffer.setWhite();
+  buffer2.xsize = image.xsize;
+  buffer2.ysize = image.ysize;
+  buffer2.reallocate();
+
+  int pixsize = image.ysize * image.xsize / sizeof(__m64);
+
+  unsigned char thresh=treshold;
+
+  __m64*rp = (__m64*)image.data;	// read pointer
+  __m64*wp = (__m64*)buffer.data;	// write pointer to the copy
+  __m64*wp2= (__m64*)buffer2.data;      // write pointer to the diff-image
+
+  __m64 m0, m1, m2, grey;
+  __m64 tresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
+			  thresh,thresh,thresh,thresh);
+
+  // there is still one problem with the treshold: is the cmpgt only for signed ?
+  while(pixsize--) {
+    grey = rp[pixsize]; // image.data
+    m2   = wp[pixsize]; // buffer.data
+
+    //m0 =_mm_cmpgt_pi8(grey, m2); // (grey>m2)
+    //m1 =_mm_subs_pu8 (grey, m2); // (grey-m2)
+    //m2 =_mm_subs_pu8 (m2, grey); // (m2-grey)
+    //m1 =_mm_and_si64   (m1, m0); // (m2-grey)&(grey>m2)   ((??))
+    //m0 =_mm_andnot_si64(m0, m2); // !(grey>m2)&(grey-m2)  ((??))
+    //m2 =_mm_or_si64    (m2, m0); // [(a-b)&(a>b)]|[(b-a)&!(a>b)]=abs(a-b)
+
+    // this is better: use saturated arithmetic!
+
+    m1 =_mm_subs_pu8 (grey, m2); // (grey-m2)
+    m2 =_mm_subs_pu8 (m2, grey); // (m2-grey)
+    wp[pixsize]=grey; // buffer.data
+
+    m2 = _mm_or_si64 (m2, m1); // |grey-m2|
+
+    m2 =_mm_subs_pu8 (m2, tresh);
+    m2 =_mm_cmpgt_pi8(m2, _mm_setzero_si64());
+
+    wp2[pixsize]=m2;  // output.data
+  }
+  _mm_empty();
+  image.data = buffer2.data;
+}
+#endif
 /////////////////////////////////////////////////////////
 // static member function
 //

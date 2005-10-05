@@ -58,6 +58,12 @@ class GEM_EXTERN pix_bitmask : public GemPixObj
 	virtual void	processGrayImage(imageStruct &image);
 	virtual void	processYUVImage(imageStruct &image);
 
+#ifdef __MMX__
+    	virtual void 	processRGBAMMX(imageStruct &image);
+	virtual void	processGrayMMX(imageStruct &image);
+	virtual void	processYUVMMX(imageStruct &image);
+#endif
+
     	//////////
     	// Set the new gain
     	void	    	vecMaskMess(int argc, t_atom *argv);

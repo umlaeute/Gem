@@ -54,11 +54,18 @@ CPPEXTERN_HEADER(pix_chroma_key, GemPixDualObj)
         //////////
     	// Do the YUV processing
     	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
-        
+   
+#ifdef __MMX__
+    	virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
+      	virtual void 	processYUV_MMX(imageStruct &image, imageStruct &right);
+  	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
+#endif
+     
+#ifdef __VEC__
         //////////
     	// Do the YUV Altivec processing
-    	virtual void 	processYUV_YUVAltivec(imageStruct &image, imageStruct &right);
-
+    	virtual void 	processYUV_Altivec(imageStruct &image, imageStruct &right);
+#endif
         
         int m_direction,m_mode;
         unsigned char m_Yrange,m_Urange,m_Vrange,m_Yvalue,m_Uvalue,m_Vvalue;
