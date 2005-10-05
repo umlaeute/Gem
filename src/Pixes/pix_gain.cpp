@@ -175,7 +175,7 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
 
 
 #ifdef __VEC__
-void pix_gain :: processYUV_Altivec(imageStruct &image)
+void pix_gain :: processYUVAltivec(imageStruct &image)
 {
  int h,w,width,height;
     /*altivec code starts */

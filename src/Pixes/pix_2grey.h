@@ -56,7 +56,7 @@ class GEM_EXTERN pix_2grey : public GemPixObj
         virtual void 	processYUVMMX(imageStruct &image);
 #endif
 #ifdef __VEC__
-        virtual void 	processRGBAltivec(imageStruct &image);
+        virtual void 	processRGBAAltivec(imageStruct &image);
         virtual void 	processYUVAltivec(imageStruct &image);
 #endif
      	    	  
