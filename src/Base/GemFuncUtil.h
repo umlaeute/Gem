@@ -54,10 +54,14 @@ inline int powerOfTwo(int value)
 // min/max functions
 //
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef MIN
 inline int MIN(int x, int y) {  return (x<y)?x:y; }
-inline int MAX(int x, int y) {  return (x>y)?x:y; }
 inline float MIN(float x, float y) {  return (x<y)?x:y; }
+#endif
+#ifndef MAX
+inline int MAX(int x, int y) {  return (x>y)?x:y; }
 inline float MAX(float x, float y) {  return (x>y)?x:y; }
+#endif
 
 inline unsigned char TRI_MAX(unsigned char v1, unsigned char v2, unsigned char v3){
   if (v1 > v2 && v1 > v3) return(v1);
