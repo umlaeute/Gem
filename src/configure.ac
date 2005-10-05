@@ -13,6 +13,7 @@ AC_CONFIG_SRCDIR([Base/GemBase.h])
 
 GEM_CONFIGFILE=Base/config${KERN}.h
 
+AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
 AC_SUBST(EXT)
 AC_SUBST(GEM_CONFIGFILE)
@@ -194,6 +195,7 @@ else
 fi
 
 #pd version
+AC_CHECK_HEADERS(m_pd.h)
 # this is mainly interesting for the documentation
 if test "x$with_pdversion" != "x"; then
   PD_VERSION="$with_pdversion"
@@ -222,7 +224,6 @@ else
   REFERENCEPATH=doc/5.reference/Gem
 fi
 
-
 # using pix_filmNEW rather than pix_filmOS
 if test "$enable_filmnew" != "no"; then
  AC_DEFINE_UNQUOTED(NEW_VIDEOFILM)
@@ -232,7 +233,7 @@ fi
 
 # disabling ARB-extensions
 if test "x$enable_ARB" != "xno"; then
- AC_CHECK_LIB(GL,glBindProgramARB,
+ AC_CHECK_FUNC(glBindProgramARB,
         enable_ARB="yes",enable_ARB="no")
 fi
 
@@ -243,7 +244,7 @@ fi
 
 # disabling NV-extensions
 if test "x$enable_NV" != "xno"; then
- AC_CHECK_LIB(GL,glBindProgramNV,
+ AC_CHECK_FUNC(glBindProgramNV,
         enable_NV="yes",enable_NV="no")
 fi
 
