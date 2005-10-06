@@ -161,7 +161,11 @@ GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
     to->format 	= format;
     to->type 	= type;
     to->data    = data;
-    to->datasize= datasize;
+    /* from SIMD-branch: datasize refers to the private pdata
+     * thus we shouldn't set it to something else, in order to not break
+     * reallocate() and friends...
+     */
+    //to->datasize= datasize;
     to->upsidedown=upsidedown;
     to->notowned= true; /* but pdata is always owned by us */
 }
