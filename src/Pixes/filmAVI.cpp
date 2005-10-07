@@ -158,7 +158,7 @@ bool filmAVI :: open(char *filename, int format)
   // Get the length of the movie
   m_numFrames = streaminfo.dwLength - 1;
 
-  m_fps = (double)streaminfo.dwRate / streamInfo.dwScale;
+  m_fps = (double)streaminfo.dwRate / streaminfo.dwScale;
 
   m_image.image.xsize = streaminfo.rcFrame.right - streaminfo.rcFrame.left;
   m_image.image.ysize = streaminfo.rcFrame.bottom - streaminfo.rcFrame.top;
