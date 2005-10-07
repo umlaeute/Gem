@@ -16,11 +16,17 @@
 #ifndef INCLUDE_TEXTBASE_H_
 #define INCLUDE_TEXTBASE_H_
 
-#include <vector>
-#include <string>
+
+#ifdef __WIN32__
+# pragma warning( disable : 4786 )
+# pragma warning( disable : 4788 )
+#endif
 
 #include "Base/GemBase.h"
 #include "Base/config.h"
+
+#include <vector>
+#include <string>
 
 #ifdef FTGL
 #define FONT_SCALE 0.2/3.0

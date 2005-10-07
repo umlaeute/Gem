@@ -17,13 +17,6 @@ LOG
 #ifndef INCLUDE_GEMPIXUTIL_H_
 #define INCLUDE_GEMPIXUTIL_H_
 
-// I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
-# pragma warning( disable : 4244 )
-# pragma warning( disable : 4305 )
-# pragma warning( disable : 4091 )
-#endif
-
 #include "Base/GemGL.h"
 
 #ifdef __APPLE__
