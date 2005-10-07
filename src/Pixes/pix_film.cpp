@@ -23,7 +23,8 @@
 
 #include "pix_film.h"
 
-#ifndef FILM_NEW
+//#ifndef FILM_NEW
+#if 1
 
 #include <ctype.h>
 

@@ -18,7 +18,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_PIX_FILM_H_
 
 #include "Base/config.h"
-#ifndef FILM_NEW
+//#ifndef FILM_NEW
+#if 1
 
 #define GEM_MOVIE_NONE 0
 #define GEM_MOVIE_AVI  1
