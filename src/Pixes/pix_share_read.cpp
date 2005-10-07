@@ -13,6 +13,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_share_read,t_float,A_FLOAT,t_float,A_FLOAT,t_fl
 
 pix_share_read :: pix_share_read(t_float f1, t_float width, t_float height, t_float color)
 {
+#ifndef __WIN32__
 	int fake;
 //	int size;
 	
@@ -34,7 +35,7 @@ pix_share_read :: pix_share_read(t_float f1, t_float width, t_float height, t_fl
 	post("pix_share_read: height %d width %d color %d size %d",m_height,m_width,m_color,m_size);
 	
 	fake = (int)f1;
-	
+
 	shm_id = shmget(fake,m_size, IPC_CREAT | 0666);
 	post("pix_share: shm_id %d",shm_id);
 	
@@ -53,6 +54,7 @@ pix_share_read :: pix_share_read(t_float f1, t_float width, t_float height, t_fl
 	pix.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
 	//pix.allocate();
 	pix.image.data = new unsigned char [m_size];
+#endif
 }
 
 pix_share_read :: ~pix_share_read()
@@ -62,6 +64,7 @@ pix_share_read :: ~pix_share_read()
 
 void pix_share_read :: render(GemState *state)
 {	
+#ifndef __WIN32__
 	//int size;
 	//size = 640 * 480 * 2;
 	//unsigned char *pixels;
@@ -78,6 +81,7 @@ void pix_share_read :: render(GemState *state)
 		post("pix_share_read: no shmaddr");
 	}
 	//post("pix_share_read: shm_addr[0] %d shm_addr[1] %d",shm_addr[0],shm_addr[1]);
+#endif
 }
 
 void pix_share_read :: obj_setupCallback(t_class *classPtr)

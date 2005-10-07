@@ -14,8 +14,10 @@
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
+#ifndef __WIN32__
+# include <sys/ipc.h>
+# include <sys/shm.h>
+#endif
 
 class GEM_EXTERN pix_share_read : public GemBase
 {
@@ -30,8 +32,10 @@ CPPEXTERN_HEADER(pix_share_read, GemBase)
 		virtual void render(GemState *state);
 		
 		int	shm_id;
+#ifndef __WIN32__
 		unsigned char *shm_addr;
 		struct shmid_ds shm_desc;
+#endif
 		int	m_height, m_width, m_color, m_size;
 		
 		pixBlock	pix;

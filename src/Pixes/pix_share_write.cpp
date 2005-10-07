@@ -18,8 +18,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_share_write,t_float, A_FLOAT,t_float, A_FLOAT,t
 /////////////////////////////////////////////////////////
 pix_share_write :: pix_share_write(t_float f,t_float width, t_float height, t_float color)
 {
-	
-	
+#ifndef __WIN32__
 	int fake;
 	//int size;
 	
@@ -52,20 +51,21 @@ pix_share_write :: pix_share_write(t_float f,t_float width, t_float height, t_fl
 	shmctl(shm_id,IPC_STAT,&shm_desc);
 	
 	post("pix_share_write: shm_segsz %d shm_cpid %d",shm_desc.shm_segsz,shm_desc.shm_cpid);
-	
+#endif /* WIN32 */	
 }
 
 pix_share_write :: ~pix_share_write()
 {
-
+#ifndef __WIN32__
 	if (shmdt(shm_addr) == -1) post("shmdt failed");
 	
 	if (shmctl(shm_id,IPC_RMID, &shm_desc) == -1) post("shmctl failed");
-
+#endif
 }
 
 void pix_share_write :: render(GemState *state)
 {
+#ifndef __WIN32__
 	imageStruct pix;
 	//int size;
 	//size = 640 * 480 * 2;
@@ -86,9 +86,7 @@ void pix_share_write :: render(GemState *state)
 		else{
 			post("pix_share_write: input image not the proper size");
 		}
-		
-		
-			
+#endif /* WIN32 */			
 }
 
 void pix_share_write :: obj_setupCallback(t_class *classPtr)
