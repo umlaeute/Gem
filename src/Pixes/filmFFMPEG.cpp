@@ -21,7 +21,7 @@
  * "AVCodecContext" to "*AVCodecContext"
  * if you are using that version, change the following "0" to "1"
  */
-#if 0
+#if 1
 # define GEM_AVCODEC_GETFIELD(codec, field) codec->field
 # define GEM_AVCODEC_CODECPOINTER(codec) codec
 #else
