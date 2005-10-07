@@ -109,7 +109,7 @@ void fragment_program :: printInfo()
 	post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
 #endif
 
-#ifdef GL_ARB_fragment_program
+#if defined GL_ARB_fragment_program && defined GL_ARB_vertex_program
 # ifdef GL_MAX_PROGRAM_INSTRUCTIONS_ARB
 	glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_INSTRUCTIONS: %d", bitnum);
