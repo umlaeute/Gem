@@ -19,6 +19,13 @@
 #include <ctype.h>
 #include <string.h>
 
+// I hate Microsoft...I shouldn't have to do this!
+#ifdef __WIN32__
+/* disable warnings about unknown pragmas */
+# pragma warning( disable : 4068 )
+#endif
+
+
 #define _GL_UNDEFINED -1
 
 GEM_EXTERN int getGLbitfield(int argc, t_atom *argv){
