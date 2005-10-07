@@ -16,6 +16,8 @@
 #ifdef __WIN32__
 
 #include "Pixes/pix_filmNT.h"
+#ifndef FILM_NEW
+
 #include <memory>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmNT, t_symbol *, A_DEFSYM)
@@ -318,4 +320,6 @@ void pix_filmNT :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
+
+#endif /* FILM_NEW */
 #endif // __WIN32__
