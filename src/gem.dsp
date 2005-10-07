@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G6 /ML /Ze /W3 /Gm /Gi- /GX /Zi /Od /I "$(PROGRAMFILES)/pd/src" /I "../../src" /I "../src" /I "../../GemLibs/JPEG" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs/freetype2/include" /I "../../GemLibs/FTGL/include" /I "C:/dev/QTDevWin/CIncludes" /I "C:/DXSDK/include" /I "C:/DXSDK/samples/Multimedia/DirectShow/BaseClasses" /D "_DEBUG" /D "DEBUG" /D "__WIN32__" /D "WIN32" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# ADD CPP /nologo /G6 /ML /W3 /Gm /GX /Zi /Od /I "$(PROGRAMFILES)/pd/src" /I "../../src" /I "../src" /I "../../GemLibs/JPEG" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs/freetype2/include" /I "../../GemLibs/FTGL/include" /I "C:/dev/QTDevWin/CIncludes" /I "C:/DXSDK/include" /I "C:/DXSDK/samples/Multimedia/DirectShow/BaseClasses" /D "_DEBUG" /D "DEBUG" /D "__WIN32__" /D "WIN32" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
 # SUBTRACT CPP /Gf /Gy
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 freetype214MT.lib ftgl_static_MT.lib ../../GemLibs/tiff/libtiff.lib ../../GemLibs/Jpeg/libjpeg.lib ../../GemLibs/liborb/liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib qtmlclient.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"$(PROGRAMFILES)/pd/bin/" /libpath:"../../bin/" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug" /libpath:"../../GemLibs\FTGL\win32_vcpp\Build" /libpath:"../../GemLibs\freetype2\objs"
+# ADD LINK32 freetype214MT.lib ftgl_static_MT.lib ../../GemLibs/tiff/libtiff.lib ../../GemLibs/Jpeg/libjpeg.lib ../../GemLibs/liborb/liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib oldnames.lib MSVCPRT.LIB vfw32.lib libcmtd.lib shlwapi.lib qtmlclient.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"$(PROGRAMFILES)/pd/bin/" /libpath:"../../bin/" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug" /libpath:"../../GemLibs\FTGL\win32_vcpp\Build" /libpath:"../../GemLibs\freetype2\objs"
 
 !ENDIF 
 
@@ -146,6 +146,10 @@ SOURCE=.\Base\GemFuncUtil.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Base\GemGL.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Base\GemGluObj.cpp
 # End Source File
 # Begin Source File
@@ -175,6 +179,10 @@ SOURCE=.\Base\GemMan.cpp
 # Begin Source File
 
 SOURCE=.\Base\GemMan.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Base\GemMath.h
 # End Source File
 # Begin Source File
 
@@ -690,6 +698,14 @@ SOURCE=.\Manips\emissionRGB.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Manips\fragment_program.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\fragment_program.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Manips\linear_path.cpp
 # End Source File
 # Begin Source File
@@ -847,6 +863,14 @@ SOURCE=.\Manips\translateXYZ.cpp
 # Begin Source File
 
 SOURCE=.\Manips\translateXYZ.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\vertex_program.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\vertex_program.h
 # End Source File
 # End Group
 # Begin Group "Controls"
@@ -1521,6 +1545,22 @@ SOURCE=.\Pixes\pix_set.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_share_read.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_share_read.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_share_write.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_share_write.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_sig2pix.cpp
 # End Source File
 # Begin Source File
@@ -1538,6 +1578,14 @@ SOURCE=.\Pixes\pix_draw.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_draw.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_record.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_record.h
 # End Source File
 # Begin Source File
 
@@ -4344,6 +4392,10 @@ SOURCE=.\openGL\GLdefine.cpp
 
 SOURCE=.\openGL\GLdefine.h
 # End Source File
+# End Group
+# Begin Group "tmp"
+
+# PROP Default_Filter ""
 # End Group
 # End Target
 # End Project
