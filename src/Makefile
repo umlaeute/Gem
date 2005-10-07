@@ -29,15 +29,15 @@ clean:
 	    echo "----------$$d----------"; \
 	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir clean; \
 	done
-	-rm Gem.$(EXT) *~
+	-rm -f Gem.$(EXT) *~
 
 distclean:
 	@for d in ${GEM_TARGETS}; do \
 	    echo "----------$$d----------"; \
 	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir distclean; \
 	done
-	-rm Gem.$(EXT) *~
-	-rm config.cache config.log config.status Make.config
+	-rm -f Gem.$(EXT) *~
+	-rm -f config.cache config.log config.status Make.config
 
 install: installdocs
 	$(INSTALL_DATA) -D Gem.$(EXT) $(DESTDIR)/$(PDLIBDIR)/extra/Gem.$(EXT)

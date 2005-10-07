@@ -26,7 +26,7 @@ clean:
 	-rm -f *~
 
 distclean:
-	-rm *.o *.d *~
+	-rm -f *.o *.d *~
 	$(DOS2UNIX) *.cpp *.h
 
 $(OBJECTS): %.o : %.cpp
