@@ -11,13 +11,7 @@
 
 #include <memory.h>
 
-// XXX
-#ifdef __WIN32__
-/* jmz: at least my vc6 doesn't like <iostream> */
-#include <iostream.h>
-#else
 #include <iostream>
-#endif
 // using namespace std;
 /*
 // For Windows DLL.

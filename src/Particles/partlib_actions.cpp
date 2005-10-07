@@ -11,13 +11,7 @@
 
 #include "partlib_general.h"
 #include <float.h>
-#ifdef __WIN32__
-/* jmz: at least my vc6 doesn't like linking against the "new" io-libraries
- * with <iostream.h> it links against the old libs */
-#include <iostream.h>
-#else
 #include <iostream>
-#endif
 
 #define SQRT2PI 2.506628274631000502415765284811045253006
 #define ONEOVERSQRT2PI (1. / SQRT2PI)
