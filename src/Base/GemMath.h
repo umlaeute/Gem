@@ -76,5 +76,12 @@ inline float fast_sqrtf(float x)
 }
 #endif /* __ppc__ */
 
+#ifdef __WIN32__
+/* seems like there is no drand48() on w32 */
+/* JMZ: this should really return "double" instead of "float",
+ * but we need only float... */
+# define drand48() ((float)rand())/((float)RAND_MAX)
+#endif /* _WIN32 */
+
 
 #endif	// for header file
