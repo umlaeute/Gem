@@ -458,6 +458,9 @@ GEM_EXTERN int getGLdefine(char *name)
 #pragma mark *** 10 ***
 	case 10:
 		if (0)  return _GL_UNDEFINED;
+#ifdef GL_COMBINE
+		else if (!strcmp(name, "COMBINE")) return GL_COMBINE;
+#endif
 #ifdef GL_2_BYTES
 		else if (!strcmp(name, "2_BYTES")) return GL_2_BYTES;
 #endif
@@ -543,6 +546,66 @@ GEM_EXTERN int getGLdefine(char *name)
 #pragma mark *** 11 ***
 	case 11:
 		if (0)  return _GL_UNDEFINED;
+#ifdef GL_SUBTRACT
+		else if (!strcmp(name, "SUBTRACT")) return GL_SUBTRACT;
+#endif
+#ifdef GL_DOT3_RGB
+		else if (!strcmp(name, "DOT3_RGB")) return GL_DOT3_RGB;
+#endif
+#ifdef GL_CONSTANT
+		else if (!strcmp(name, "CONSTANT")) return GL_CONSTANT;
+#endif
+#ifdef GL_TEXTURE0
+		else if (!strcmp(name, "TEXTURE0")) return GL_TEXTURE0;
+#endif
+#ifdef GL_TEXTURE1
+		else if (!strcmp(name, "TEXTURE1")) return GL_TEXTURE1;
+#endif
+#ifdef GL_TEXTURE2
+		else if (!strcmp(name, "TEXTURE2")) return GL_TEXTURE2;
+#endif
+#ifdef GL_TEXTURE3
+		else if (!strcmp(name, "TEXTURE3")) return GL_TEXTURE3;
+#endif
+#ifdef GL_TEXTURE4
+		else if (!strcmp(name, "TEXTURE4")) return GL_TEXTURE4;
+#endif
+#ifdef GL_TEXTURE5
+		else if (!strcmp(name, "TEXTURE5")) return GL_TEXTURE5;
+#endif
+#ifdef GL_TEXTURE6
+		else if (!strcmp(name, "TEXTURE6")) return GL_TEXTURE6;
+#endif
+#ifdef GL_TEXTURE7
+		else if (!strcmp(name, "TEXTURE7")) return GL_TEXTURE7;
+#endif
+#ifdef GL_PREVIOUS
+		else if (!strcmp(name, "PREVIOUS")) return GL_PREVIOUS;
+#endif
+#ifdef GL_SRC0_RGB
+		else if (!strcmp(name, "SRC0_RGB")) return GL_SRC0_RGB;
+#endif
+#ifdef GL_SRC1_RGB
+		else if (!strcmp(name, "SRC1_RGB")) return GL_SRC1_RGB;
+#endif
+#ifdef GL_SRC2_RGB
+		else if (!strcmp(name, "SRC2_RGB")) return GL_SRC2_RGB;
+#endif
+#ifdef GL_SRC3_RGB
+		else if (!strcmp(name, "SRC3_RGB")) return GL_SRC3_RGB;
+#endif
+#ifdef GL_SRC4_RGB
+		else if (!strcmp(name, "SRC4_RGB")) return GL_SRC4_RGB;
+#endif
+#ifdef GL_SRC5_RGB
+		else if (!strcmp(name, "SRC5_RGB")) return GL_SRC5_RGB;
+#endif
+#ifdef GL_SRC6_RGB
+		else if (!strcmp(name, "SRC6_RGB")) return GL_SRC6_RGB;
+#endif
+#ifdef GL_SRC7_RGB
+		else if (!strcmp(name, "SRC7_RGB")) return GL_SRC7_RGB;
+#endif
 #ifdef GL_3D_COLOR
 		else if (!strcmp(name, "3D_COLOR")) return GL_3D_COLOR;
 #endif
@@ -652,6 +715,9 @@ GEM_EXTERN int getGLdefine(char *name)
 #pragma mark *** 12 ***
 	case 12:
 		if (0)  return _GL_UNDEFINED;
+#ifdef GL_DOT3_RGBA
+		else if (!strcmp(name, "DOT3_RGBA")) return GL_DOT3_RGBA;
+#endif
 #ifdef GL_1PASS_EXT
 		else if (!strcmp(name, "1PASS_EXT")) return GL_1PASS_EXT;
 #endif
@@ -785,6 +851,9 @@ GEM_EXTERN int getGLdefine(char *name)
 #pragma mark *** 13 ***
 	case 13:
 		if (0)  return _GL_UNDEFINED;
+#ifdef GL_ADD_SIGNED
+		else if (!strcmp(name, "ADD_SIGNED")) return GL_ADD_SIGNED;
+#endif
 #ifdef GL_1PASS_SGIS
 		else if (!strcmp(name, "1PASS_SGIS")) return GL_1PASS_SGIS;
 #endif
@@ -942,6 +1011,12 @@ GEM_EXTERN int getGLdefine(char *name)
 #pragma mark *** 14 ***
 	case 14:
 		if (0)  return _GL_UNDEFINED;
+#ifdef GL_INTERPOLATE
+		else if (!strcmp(name, "INTERPOLATE")) return GL_INTERPOLATE;
+#endif
+#ifdef GL_COMBINE_RGB
+		else if (!strcmp(name, "COMBINE_RGB")) return GL_COMBINE_RGB;
+#endif
 #ifdef GL_2PASS_0_EXT
 		else if (!strcmp(name, "2PASS_0_EXT")) return GL_2PASS_0_EXT;
 #endif
@@ -1526,6 +1601,12 @@ GEM_EXTERN int getGLdefine(char *name)
 #pragma mark *** 16 ***
 	case 16:
 		if (0)  return _GL_UNDEFINED;
+#ifdef GL_PRIMARY_COLOR
+		else if (!strcmp(name, "PRIMARY_COLOR")) return GL_PRIMARY_COLOR;
+#endif
+#ifdef GL_COMBINE_ALPHA
+		else if (!strcmp(name, "COMBINE_ALPHA")) return GL_COMBINE_ALPHA;
+#endif
 #ifdef GL_CLAMP_TO_EDGE
 		else if (!strcmp(name, "CLAMP_TO_EDGE")) return GL_CLAMP_TO_EDGE;
 #endif
