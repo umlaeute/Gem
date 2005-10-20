@@ -99,8 +99,8 @@ note: in prior versions of Gem, GLUT was needed; this is obsolete
 
 -------------------------------------
 To install GEM on linux:
-chdir into <Gemdir>/src/Gnu
-read the README.build etc...
+chdir into <Gemdir>/src/
+read the README.<os> (like README.linux) etc...
 
 -------------------------------------
 -------------------------------------
