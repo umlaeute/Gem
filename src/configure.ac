@@ -138,6 +138,14 @@ GEM_CHECK_LIB(ftgl,ftgl,main,
   [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetpye], font support)
 
 GEM_CHECK_LIB(gltt,gltt, GLTTFont,,,,font support (deprecated))
+
+
+dnl Checking for `pthread_create' function in -pthread
+AC_CHECK_LIB(pthread, pthread_create,[
+                                      AC_DEFINE(HAVE_PTHREADS)
+                                      LIBS="$LIBS -lpthread"],)
+
+
 # pkg-config checks
 
 dnl PKG_CHECK_MODULES(PKG_FT2,freetype2)
