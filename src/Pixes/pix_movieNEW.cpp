@@ -54,9 +54,15 @@ pix_movieNEW :: ~pix_movieNEW()
 void pix_movieNEW :: render(GemState *state)
 {
   /* get the current frame from the file */
+
   if (!state || !m_handle)return;
+
+  // get the frame from the decoding-object: film[].cpp
   state->image=m_handle->getFrame();
+
+  // render using the pix_texture-object
   m_pixtexture.render(state);
+
   int frame=(int)m_reqFrame;
   if (state->image==0){
     outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
