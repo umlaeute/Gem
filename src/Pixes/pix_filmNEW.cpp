@@ -14,7 +14,6 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
 #define HELPSYMBOL "pix_film"
 
 #include "pix_filmNEW.h"
@@ -28,6 +27,11 @@
 #include "Pixes/filmMPEG3.h"
 #include "Pixes/filmQT.h"
 #include <stdio.h>
+
+#ifdef HAVE_PTHREADS
+// we need that for usleep() to avoid locks in the grabThread()
+# include <unistd.h>
+#endif
 
 /***************************************
  * on the order of codec-libraries
@@ -116,6 +120,38 @@
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmNEW, t_symbol *, A_DEFSYM)
 
+#ifdef HAVE_PTHREADS
+/* the "capturing"-thread */
+void *pix_filmNEW :: grabThread(void*you)
+{
+  pix_filmNEW *me=(pix_filmNEW*)you;
+  pthread_mutex_t *mutex=me->m_mutex;
+  me->m_thread_running=true;
+
+  while(me->m_thread_continue){
+    int reqFrame=(int)me->m_reqFrame;
+    int reqTrack=(int)me->m_reqTrack;
+    if(reqFrame!=me->m_curFrame || reqTrack!=me->m_curTrack){
+
+      pthread_mutex_lock(me->m_mutex);
+
+      if (me->m_handle->changeImage(reqFrame, reqTrack)!=FILM_ERROR_FAILURE){
+        me->m_frame=me->m_handle->getFrame();
+      } else me->m_frame=0;
+
+      me->m_curFrame=reqFrame;
+      me->m_curTrack=reqTrack;
+
+      pthread_mutex_unlock(me->m_mutex);
+    }
+    usleep(100);
+  }
+  
+  me->m_thread_running=false;
+  return NULL;
+}
+#endif
+
 /////////////////////////////////////////////////////////
 //
 // pix_filmNEW
@@ -127,7 +163,12 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmNEW, t_symbol *, A_DEFSYM)
 pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   m_auto(0), m_format(GL_RGBA),
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
-  m_numTracks(0), m_track(0)
+  m_numTracks(0), m_reqTrack(0), m_curTrack(0),
+#ifdef HAVE_PTHREADS
+  m_thread_id(0), m_mutex(NULL), m_frame(NULL), m_thread_continue(false),
+#endif
+  m_thread_running(false), m_wantThread(false)
+
 {
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
@@ -166,12 +207,37 @@ pix_filmNEW :: ~pix_filmNEW()
 //
 /////////////////////////////////////////////////////////
 void pix_filmNEW :: closeMess(void){
+
+#ifdef HAVE_PTHREADS
+  if(m_thread_running)
+    {
+      void *dummy=0;
+      int counter=0;
+      m_thread_continue = false;
+      pthread_join (m_thread_id, &dummy);
+      while(m_thread_running)
+        {
+          counter++;
+        }
+    }
+  m_thread_id=0;
+  
+  if ( m_mutex ) 
+    {
+      pthread_mutex_destroy(m_mutex);
+      free(m_mutex);
+      m_mutex=NULL;
+    }
+#endif
+
   // Clean up any open files
   int i=MAX_FILM_HANDLES;
   debug("closing %d handles", i);
   while(i--){
     debug("close %d", i);
-    if(m_handles[i])m_handles[i]->close();
+    if(m_handles[i]){
+      m_handles[i]->close();
+    }
   }
   m_handle=NULL;
   //if(m_handle!=0)m_handle->close();
@@ -183,7 +249,7 @@ void pix_filmNEW :: closeMess(void){
 //
 /////////////////////////////////////////////////////////
 
-void pix_filmNEW :: openMess(t_symbol *filename, int format, int codec)
+    void pix_filmNEW :: openMess(t_symbol *filename, int format, int codec)
 {
   //  if (filename==x_filename)return;
   closeMess();
@@ -236,6 +302,22 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format, int codec)
        m_handle->getWidth(), 
        m_handle->getHeight(), m_handle->getFPS());
   outlet_list(m_outNumFrames, 0, 4, ap);
+
+#ifdef HAVE_PTHREADS
+  if(m_wantThread){
+    post("creating thread");
+    m_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+    if ( pthread_mutex_init(m_mutex, NULL) < 0 ) {
+      perror("pix_film : couldn't create mutex");
+    } else {
+      m_thread_continue = true;
+      m_reqFrame=0;
+      m_curFrame=-1;
+      pthread_create(&m_thread_id, 0, grabThread, this);
+    }
+  }
+#endif
+
 }
 
 /////////////////////////////////////////////////////////
@@ -244,14 +326,30 @@ void pix_filmNEW :: openMess(t_symbol *filename, int format, int codec)
 /////////////////////////////////////////////////////////
 void pix_filmNEW :: render(GemState *state)
 {
+  int frame=-1;
   /* get the current frame from the file */
   if (!m_handle)return;
-  state->image=m_handle->getFrame();
-  int frame=(int)m_reqFrame;
+
+#ifdef HAVE_PTHREADS
+  if(m_thread_running) {
+    pthread_mutex_lock(m_mutex);
+    state->image=m_frame;
+  } else
+#endif /* PTHREADS */
+    state->image=m_handle->getFrame();
+
+  frame=(int)m_reqFrame;
   if (state->image==0){
     outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
+
+    if(!m_thread_running){
+      if(frame!=(int)m_reqFrame){
+        // someone responded immediately to the outlet_float and changed the requested frame
+        // so get the newly requested frame:
+        state->image=m_handle->getFrame();
+      }
+    }
   }
-  if (frame!=(int)m_reqFrame)render(state);//state->image=m_handle->getFrame();
 }
 
 /////////////////////////////////////////////////////////
@@ -260,13 +358,24 @@ void pix_filmNEW :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_filmNEW :: postrender(GemState *state)
 {
+  if(!m_handle)return;
   if (state && state->image)state->image->newimage = 0;
+
+#ifdef HAVE_PTHREADS
+  if(m_thread_running){
+    pthread_mutex_unlock(m_mutex);
+  }
+#endif /* PTHREADS */
+
   // automatic proceeding
   if (m_auto!=0){
-    if (m_handle&&m_handle->changeImage((int)(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
-      //      m_reqFrame = m_numFrames;
-      outlet_bang(m_outEnd);
-    }
+    if(m_thread_running){
+      m_reqFrame+=m_auto;
+    } else
+      if (m_handle->changeImage((int)(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
+        //      m_reqFrame = m_numFrames;
+        outlet_bang(m_outEnd);
+      }
   }
 }
 
@@ -284,11 +393,15 @@ void pix_filmNEW :: changeImage(int imgNum, int trackNum)
     error("GEM: pix_filmNEW: track number must be > 0");
     trackNum=0;
   }
-  if (m_handle)
-    if (m_handle->changeImage(imgNum, trackNum)==FILM_ERROR_FAILURE){
-      outlet_bang(m_outEnd);
+  if (m_handle){
+    if(!m_thread_running){
+      if (m_handle->changeImage(imgNum, trackNum)==FILM_ERROR_FAILURE){
+        outlet_bang(m_outEnd);
+      }
     }
-  m_reqFrame=imgNum;
+    m_reqFrame=imgNum;
+    m_reqTrack=trackNum;
+  }
 }
 /////////////////////////////////////////////////////////
 // colorSpace
@@ -300,12 +413,32 @@ void pix_filmNEW :: csMess(t_symbol *s, bool immediately)
   switch (c){
   case 'g': case 'G': m_format=GL_LUMINANCE; break;
   case 'y': case 'Y': m_format=GL_YCBCR_422_GEM; break;
-  case 'r': case 'R': m_format=GL_RGBA; break;
+  case 'r': case 'R': 
+    if(gensym("RGB")==s||gensym("rgb")==s)
+      m_format=GL_RGB; 
+    else
+      m_format=GL_RGBA; 
+    break;
   default:
     error("pix_film: colorspace must be 'RGBA', 'YUV' or 'Gray'");
   }
   if(immediately && m_handle)m_handle->requestColor(m_format);
 }
+/////////////////////////////////////////////////////////
+// threading
+//
+/////////////////////////////////////////////////////////
+void pix_filmNEW :: threadMess(int state)
+{
+  m_wantThread=!(!state);
+#ifdef HAVE_PTHREADS
+  post("[pix_film]: thread settings will have an effect on next open!");
+#else
+  post("[pix_film]: no thread support");
+#endif
+}
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -323,6 +456,8 @@ void pix_filmNEW :: obj_setupCallback(t_class *classPtr)
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmNEW::csCallback,
 		  gensym("colorspace"), A_DEFSYM, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_filmNEW::threadCallback,
+		  gensym("thread"), A_FLOAT, A_NULL);
 }
 void pix_filmNEW :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
@@ -365,4 +500,9 @@ void pix_filmNEW :: autoCallback(void *data, t_floatarg state)
 void pix_filmNEW :: csCallback(void *data, t_symbol*s)
 {
   GetMyClass(data)->csMess(s);
+}
+
+void pix_filmNEW :: threadCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->threadMess((int)state);
 }

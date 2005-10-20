@@ -53,21 +53,33 @@ pix_movieNEW :: ~pix_movieNEW()
 /////////////////////////////////////////////////////////
 void pix_movieNEW :: render(GemState *state)
 {
-  /* get the current frame from the file */
+  int frame=-1;
+
+ /* get the current frame from the file */
 
   if (!state || !m_handle)return;
 
   // get the frame from the decoding-object: film[].cpp
-  state->image=m_handle->getFrame();
+#ifdef HAVE_PTHREADS
+  if(m_thread_running) {
+    pthread_mutex_lock(m_mutex);
+    state->image=m_frame;
+  } else
+#endif /* PTHREADS */
+    state->image=m_handle->getFrame();
 
   // render using the pix_texture-object
   m_pixtexture.render(state);
 
-  int frame=(int)m_reqFrame;
+  frame=(int)m_reqFrame;
   if (state->image==0){
     outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
   }
-  if (frame!=(int)m_reqFrame)render(state);//state->image=m_handle->getFrame();
+  if(!m_thread_running && frame!=(int)m_reqFrame){
+      // someone responded immediately to the outlet_float and changed the requested frame
+      // so get the newly requested frame (but only if we are un-threaded!) 
+      render(state);
+  }
 }
 /////////////////////////////////////////////////////////
 // postrender
@@ -75,10 +87,21 @@ void pix_movieNEW :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_movieNEW :: postrender(GemState *state)
 {
+  if(!m_handle)return;
   if (state && state->image)state->image->newimage = 0;
+
+#ifdef HAVE_PTHREADS
+  if(m_thread_running){
+    pthread_mutex_unlock(m_mutex);
+  }
+#endif /* PTHREADS */
+
   // automatic proceeding
   if (m_auto!=0){
-    if (m_handle&&m_handle->changeImage((int)(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
+    if(m_thread_running){
+      m_reqFrame+=m_auto;
+    } else
+    if (m_handle->changeImage((int)(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
       //      m_reqFrame = m_numFrames;
       outlet_bang(m_outEnd);
     }
