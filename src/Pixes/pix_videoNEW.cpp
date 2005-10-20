@@ -19,6 +19,7 @@
 
 #include "pix_videoNEW.h"
 #include "Pixes/videoV4L.h"
+#include "Pixes/videoV4L2.h"
 #include "Pixes/videoDV4L.h"
 CPPEXTERN_NEW(pix_videoNEW)
 
@@ -35,9 +36,14 @@ pix_videoNEW :: pix_videoNEW(){
   int i = MAX_VIDEO_HANDLES;
   while(i--)m_videoHandles[i]=NULL;
   i=0;
-
-  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L (GL_RGBA);  i++;
+#ifdef HAVE_VIDEO4LINUX2
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L2(GL_RGBA);  i++;
+#elif defined HAVE_VIDEO4LINUX
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L(GL_RGBA);  i++;
+#endif /* V4L */
+#ifdef HAVE_LIBDV
   startpost("video driver %d: ", i); m_videoHandles[i]=new videoDV4L(GL_RGBA);  i++;
+#endif /* DV4L */
 
   m_numVideoHandles=i;
   driverMess(0);
@@ -174,6 +180,22 @@ void pix_videoNEW :: deviceMess(int dev)
 {
   if (m_videoHandle)m_videoHandle->setDevice(dev);
 }
+void pix_videoNEW :: deviceMess(t_symbol*s)
+{
+  int err=0;
+  if (m_videoHandle)err=m_videoHandle->setDevice(s->s_name);
+  if(!err){
+    int d=0;
+    if(m_videoHandle)m_videoHandle->stopTransfer();
+    for(d=0; d<m_numVideoHandles; d++){
+      if(m_videoHandles[d]->setDevice(s->s_name)){
+        m_videoHandle=m_videoHandles[d];
+        break;
+      }
+    }
+  }
+  if(m_videoHandle)m_videoHandle->startTransfer();  
+}
 /////////////////////////////////////////////////////////
 // enumerate devices
 //
@@ -224,7 +246,7 @@ void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, (t_method)&pix_videoNEW::colorMessCallback,
     	    gensym("colorspace"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::deviceMessCallback,
-    	    gensym("device"), A_FLOAT, A_NULL);
+    	    gensym("device"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::driverMessCallback,
     	    gensym("driver"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoNEW::driverMessCallback,
@@ -288,9 +310,22 @@ void pix_videoNEW :: colorMessCallback(void *data, t_symbol* nop, int argc, t_at
   if (argc==1)GetMyClass(data)->colorMess(argv);
   else post("pix_video: invalid number of arguments (must be 1)");
 }
-void pix_videoNEW :: deviceMessCallback(void *data, t_floatarg state)
+void pix_videoNEW :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*argv)
 {
-    GetMyClass(data)->deviceMess((int)state);
+  if(argc==1){
+    switch(argv->a_type){
+    case A_FLOAT:
+      GetMyClass(data)->deviceMess(atom_getint(argv));
+      break;
+    case A_SYMBOL:
+      GetMyClass(data)->deviceMess(atom_getsymbol(argv));
+      break;
+    default:
+      error("pix_video: device must be integer or symbol");
+    }
+  } else {
+    error("pix_video: can only set to 1 device at a time");
+  }
 }
 void pix_videoNEW :: driverMessCallback(void *data, t_floatarg state)
 {

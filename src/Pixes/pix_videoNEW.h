@@ -91,6 +91,7 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   // Set the color-space
   virtual void	colorMess(t_atom*);
   // Set the device
+  virtual void	deviceMess(t_symbol*dev);
   virtual void	deviceMess(int dev);
   // Set the driver architecture; (probably this makes only sense under linux right now: you can choose between video4linux(0) and video1394(1))
   virtual void	driverMess(int dev);
@@ -124,7 +125,7 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   static void normMessCallback(void *data, t_symbol*format);
   static void modeMessCallback(void *data, t_symbol*,int,t_atom*);
   static void colorMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void deviceMessCallback(void *data, t_floatarg dev);
+  static void deviceMessCallback(void *data, t_symbol*,int,t_atom*);
   static void driverMessCallback(void *data, t_floatarg dev);
   static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
   static void enumerateMessCallback(void *data);
