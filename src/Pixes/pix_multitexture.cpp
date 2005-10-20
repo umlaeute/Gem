@@ -32,7 +32,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
-  : m_reqTexUnits(reqTexUnits), m_max(0), m_mode(1)
+  : m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_mode(1)
 {
   if (m_reqTexUnits==0) {
 	post("[pix_multitexture]: Please specify more than 0 texture units");
@@ -121,7 +121,7 @@ void pix_multitexture :: obj_setupCallback(t_class *classPtr)
 }
 void pix_multitexture :: texUnitMessCallback(void *data, float n, float texture)
 {
-  GetMyClass(data)->m_texID[(int)n] = (GLfloat)texture;
+  GetMyClass(data)->m_texID[(int)n] = (GLint)texture;
 }
 void pix_multitexture :: modeCallback(void *data, t_floatarg quality)
 {
