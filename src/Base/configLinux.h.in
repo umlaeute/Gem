@@ -23,8 +23,8 @@
 #undef HAVE_VIDEO4LINUX
 #undef HAVE_LIBDV
 
-/* SIMD */
-#undef HAVE_MMX
+/* posix threads */
+#undef HAVE_PTHREADS
 
 /* disable the use of openGL-ARB extensions */
 #undef DONT_USE_ARB
