@@ -28,11 +28,6 @@
 #include "Pixes/filmQT.h"
 #include <stdio.h>
 
-#ifdef HAVE_PTHREADS
-// we need that for usleep() to avoid locks in the grabThread()
-# include <unistd.h>
-#endif
-
 /***************************************
  * on the order of codec-libraries
  *
@@ -126,11 +121,15 @@ void *pix_filmNEW :: grabThread(void*you)
 {
   pix_filmNEW *me=(pix_filmNEW*)you;
   pthread_mutex_t *mutex=me->m_mutex;
+  struct timeval timout;
   me->m_thread_running=true;
 
   while(me->m_thread_continue){
     int reqFrame=(int)me->m_reqFrame;
     int reqTrack=(int)me->m_reqTrack;
+    timout.tv_sec = 0;
+    timout.tv_usec=100;
+
     if(reqFrame!=me->m_curFrame || reqTrack!=me->m_curTrack){
 
       pthread_mutex_lock(me->m_mutex);
@@ -144,7 +143,7 @@ void *pix_filmNEW :: grabThread(void*you)
 
       pthread_mutex_unlock(me->m_mutex);
     }
-    usleep(100);
+    select(0,0,0,0,&timout);
   }
   
   me->m_thread_running=false;
@@ -166,8 +165,10 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   m_numTracks(0), m_reqTrack(0), m_curTrack(0),
 #ifdef HAVE_PTHREADS
   m_thread_id(0), m_mutex(NULL), m_frame(NULL), m_thread_continue(false),
-#endif
+  m_thread_running(false), m_wantThread(true)
+#else
   m_thread_running(false), m_wantThread(false)
+#endif
 
 {
   // setting the current frame
@@ -342,12 +343,18 @@ void pix_filmNEW :: render(GemState *state)
   if (state->image==0){
     outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
 
-    if(!m_thread_running){
-      if(frame!=(int)m_reqFrame){
-        // someone responded immediately to the outlet_float and changed the requested frame
-        // so get the newly requested frame:
-        state->image=m_handle->getFrame();
+    if(frame!=(int)m_reqFrame){
+      // someone responded immediately to the outlet_float and changed the requested frame
+      // so get the newly requested frame:
+
+      if(m_thread_running){
+	/* if we are threaded (currently locked!), we change the frame# and grab the frame immediately
+	 * (if we are not threaded, the frame# is already changed and the grabbing is always immediately)
+	 */
+	m_handle->changeImage((int)m_reqFrame, m_reqTrack);
       }
+      
+      state->image=m_handle->getFrame();
     }
   }
 }

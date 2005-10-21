@@ -68,18 +68,25 @@ void pix_movieNEW :: render(GemState *state)
 #endif /* PTHREADS */
     state->image=m_handle->getFrame();
 
-  // render using the pix_texture-object
-  m_pixtexture.render(state);
-
   frame=(int)m_reqFrame;
   if (state->image==0){
     outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
-  }
-  if(!m_thread_running && frame!=(int)m_reqFrame){
+
+    if(frame!=(int)m_reqFrame){
       // someone responded immediately to the outlet_float and changed the requested frame
-      // so get the newly requested frame (but only if we are un-threaded!) 
-      render(state);
+      // so try to get the newly requested frame:
+      if(m_thread_running){
+	/* the grabbing-thread is currently locked
+	 * we do the grabbing ourselfes
+	 */
+	m_handle->changeImage((int)m_reqFrame, m_reqTrack);
+      }
+      state->image=m_handle->getFrame();
+    }
   }
+
+  // render using the pix_texture-object
+  m_pixtexture.render(state);
 }
 /////////////////////////////////////////////////////////
 // postrender
