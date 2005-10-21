@@ -124,6 +124,30 @@ GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
 GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
 dnl GEM_CHECK_LIB(avcodec, avcodec_pic, avcodec_close,,,,[movie loader])
 GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,[PKG_CFLAGS="-I/usr/include/ffmpeg $PKG_CFLAGS"],,,[movie loader])
+
+dnl checking whether (AVStream)->codec is "AVCodecContext" or "*AVCodecContext"
+if test "x$have_ffmpeg" = "xyes"; then
+ AC_MSG_CHECKING([whether (AVStream)->codec is of type \"*AVCodecContext\"])
+ cflags_temp="$CFLAGS"
+ CFLAGS="$CFLAGS $PKG_CFLAGS"
+ AC_COMPILE_IFELSE(
+ AC_LANG_PROGRAM([[
+#include "avformat.h"
+#include "avcodec.h"
+]],[[
+AVStream*stream;
+stream->codec->codec_id;
+]]),
+AC_DEFINE(GEM_AVSTREAM_CODECPOINTER)
+AC_MSG_RESULT(yes),
+AC_MSG_RESULT(no)
+)
+ CFLAGS=$cflags_temp
+fi
+
+
+
+
 GEM_ARG_WITH(v4l, [video input])
 if test "x$with_v4l" != "xno"; then
   AC_CHECK_HEADER(linux/videodev.h,

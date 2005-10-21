@@ -19,9 +19,10 @@
  * the current (2005-09-26) CVS-version of ffmpeg seems to have changed 
  * the type of (AVStream)->codec from 
  * "AVCodecContext" to "*AVCodecContext"
- * if you are using that version, change the following "0" to "1"
+ * this should be detected by configure, 
+ * and GEM_AVSTREAM_CODECPOINTER should be set in Base/config*.h
  */
-#if 1
+#ifdef GEM_AVSTREAM_CODECPOINTER
 # define GEM_AVCODEC_GETFIELD(codec, field) codec->field
 # define GEM_AVCODEC_CODECPOINTER(codec) codec
 #else
