@@ -35,8 +35,7 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   : m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_mode(1)
 {
   if (m_reqTexUnits==0) {
-	post("[pix_multitexture]: Please specify more than 0 texture units");
-	return;
+    throw (GemException("[pix_multitexture]: Please specify more than 0 texture units"));
   }
 }
 
@@ -115,7 +114,7 @@ void pix_multitexture :: stopRendering()
 void pix_multitexture :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&pix_multitexture::texUnitMessCallback,
-                  gensym("texUnit"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("texUnit"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_multitexture::modeCallback,
 		gensym("mode"), A_FLOAT, A_NULL);
 }
