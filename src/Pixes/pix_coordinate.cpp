@@ -79,8 +79,8 @@ void pix_coordinate :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_coordinate :: postrender(GemState *state)
 {
-    state->numTexCoords = 0;
-    state->texCoords = NULL;
+   // state->numTexCoords = 0;
+   // state->texCoords = NULL;
 }
 
 /////////////////////////////////////////////////////////
