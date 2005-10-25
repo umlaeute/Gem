@@ -115,7 +115,7 @@ void pix_multitexture :: stopRendering()
 void pix_multitexture :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&pix_multitexture::texUnitMessCallback,
-		gensym("texUnit"), A_DEFFLOAT, A_DEFFLOAT);
+                  gensym("texUnit"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_multitexture::modeCallback,
 		gensym("mode"), A_FLOAT, A_NULL);
 }
