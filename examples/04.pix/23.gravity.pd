@@ -39,7 +39,7 @@
 #X text 341 425 x/y-coordinates from lower-left \; 0..1;
 #X text 329 96 upper-left;
 #X text 428 93 lower-right;
-#X obj 54 176 pix_multiimage blob*.TIF 2;
+#X obj 54 176 pix_multiimage ../data/blob*.tif 2;
 #X obj 54 148 gemhead;
 #X msg 154 116 0;
 #X msg 154 136 1;
