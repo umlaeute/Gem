@@ -166,7 +166,7 @@ struct GEM_EXTERN imageStruct
 
   //////////
   // dimensions of the image
-  GLint             xsize;
+  GLint         xsize;
   GLint   	    ysize;
 
   //////////
@@ -260,6 +260,7 @@ struct GEM_EXTERN imageStruct
   void fromBGRA   (unsigned char* orgdata);
   void fromRGB16  (unsigned char* orgdata);
   void fromGray   (unsigned char* orgdata);
+  void fromGray   (short* orgdata);
   void fromUYVY   (unsigned char* orgdata);
   void fromYUY2   (unsigned char* orgdata); // YUYV
   void fromYVYU   (unsigned char* orgdata);

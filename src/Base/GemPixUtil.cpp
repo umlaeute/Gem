@@ -1155,6 +1155,51 @@ GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
     break;
   }
 }
+
+GEM_EXTERN void imageStruct::fromGray(short *greydata) {
+  if(!greydata)return;
+  size_t pixelnum=xsize*ysize;
+  setCsizeByFormat();
+  reallocate();
+  unsigned char *pixels=data;
+  register short grey=0;
+  switch (format){
+  case GL_RGB:
+  case GL_BGR_EXT:
+    while(pixelnum--){
+      grey=*greydata++;
+      *pixels++=grey;
+      *pixels++=grey;
+      *pixels++=grey;
+      greydata++;
+    }
+    break;
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    while(pixelnum--){
+      grey=*greydata++;
+      pixels[chRed]=grey;
+      pixels[chGreen]=grey;
+      pixels[chBlue]=grey;
+      pixels[chAlpha]=255;
+      pixels+=4;
+    }
+    break;
+  case GL_LUMINANCE:
+    memcpy(pdata, greydata, pixelnum);
+    break;
+  case GL_YUV422_GEM:
+    pixelnum>>=1;
+    while(pixelnum--){
+      pixels[chY0]=(*greydata++)>>7;
+      pixels[chY1]=(*greydata++)>>7;
+      pixels[chU]=pixels[chV]=128;
+      pixels+=4;      
+    }
+    break;
+  }
+}
+
 GEM_EXTERN void imageStruct::fromYV12(unsigned char*yuvdata) {
   if(!yuvdata)return;
   size_t pixelnum=xsize*ysize;
@@ -1536,9 +1581,9 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 GEM_EXTERN void imageStruct :: YV12_to_YUV422_altivec(short*Y, short*U, short*V, size_t pixelnum)
 {
   vector unsigned char *pixels1=(vector unsigned char *)data;
-  vector unsigned char *pixels2=(vector unsigned char *)(data+((xsize*csize)));
+  vector unsigned char *pixels2=(vector unsigned char *)(data+(xsize*csize));
   vector unsigned short *py1 = (vector unsigned short *)Y;
-  vector unsigned short *py2 = (vector unsigned short *)(Y + ((xsize)));
+  vector unsigned short *py2 = (vector unsigned short *)(Y + xsize );
   vector unsigned short *pu = (vector unsigned short *)U;
   vector unsigned short *pv = (vector unsigned short *)V;
   vector unsigned short uvAdd = (vector unsigned short)( 128, 128, 128, 128,
