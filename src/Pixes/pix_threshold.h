@@ -64,6 +64,10 @@ class GEM_EXTERN pix_threshold : public GemPixObj
         //////////
     	// Do the processing
     	virtual void 	processYUVImage(imageStruct &image);
+		
+		//////////
+    	// Do the processing
+    	virtual void 	processYUVAltivec(imageStruct &image);
                 
     	//////////
     	// Set the new threshold vector

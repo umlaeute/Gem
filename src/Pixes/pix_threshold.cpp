@@ -66,6 +66,12 @@ void pix_threshold :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_threshold :: processYUVImage(imageStruct &image)
 {
+
+#ifdef __VEC__
+processYUVAltivec(image);
+return;
+#else
+
     int datasize = (image.xsize/2) * image.ysize;
 
     unsigned char *base = image.data;
@@ -77,6 +83,59 @@ void pix_threshold :: processYUVImage(imageStruct &image)
 		//if (base[2] < m_thresh[2]) base[2] = 0;//v
 		if (base[3] < m_Y) base[3] = 0;//y2
 		base += 4;
+    }  
+#endif //Altivec	  
+}
+
+/////////////////////////////////////////////////////////
+// processImage
+//
+/////////////////////////////////////////////////////////
+void pix_threshold :: processYUVAltivec(imageStruct &image)
+{
+    int datasize = (image.xsize/8) * image.ysize;
+	
+	vector unsigned char thresh, in;	
+	vector bool char	mask;
+    unsigned char *base = image.data;
+
+	union{
+		unsigned char			c[16];
+		vector unsigned char	v;
+	}charBuf;
+
+	charBuf.c[0] = 0;
+	charBuf.c[1] = m_Y;
+	charBuf.c[2] = 0;
+	charBuf.c[3] = m_Y;
+	charBuf.c[4] = 0;
+	charBuf.c[5] = m_Y;
+	charBuf.c[6] = 0;
+	charBuf.c[7] = m_Y;
+	charBuf.c[8] = 0;
+	charBuf.c[9] = m_Y;
+	charBuf.c[10] = 0;
+	charBuf.c[11] = m_Y;
+	charBuf.c[12] = 0;
+	charBuf.c[13] = m_Y;
+	charBuf.c[14] = 0;
+	charBuf.c[15] = m_Y;
+	
+	thresh = charBuf.v;
+
+    while(datasize--)
+    {
+		//if (base[0] < m_thresh[1]) base[0] = 0; //u
+		//if (base[1] < m_Y) base[1] = 0;//y1
+		//if (base[2] < m_thresh[2]) base[2] = 0;//v
+		//if (base[3] < m_Y) base[3] = 0;//y2
+		//base += 4;
+		in = vec_ld(0,base);
+		mask = vec_cmpgt(in,thresh);
+		in = vec_and(in,mask);
+		vec_st(in,0,base);
+		
+		base += 16;
     }    
 }
 
