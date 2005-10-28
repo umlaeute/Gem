@@ -65,10 +65,11 @@ class GEM_EXTERN pix_threshold : public GemPixObj
     	// Do the processing
     	virtual void 	processYUVImage(imageStruct &image);
 		
-		//////////
+#ifdef __VEC__
+	//////////
     	// Do the processing
     	virtual void 	processYUVAltivec(imageStruct &image);
-                
+#endif  
     	//////////
     	// Set the new threshold vector
     	void	    	vecThreshMess(int argc, t_atom *argv);

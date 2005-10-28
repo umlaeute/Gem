@@ -66,12 +66,6 @@ void pix_threshold :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_threshold :: processYUVImage(imageStruct &image)
 {
-
-#ifdef __VEC__
-processYUVAltivec(image);
-return;
-#else
-
     int datasize = (image.xsize/2) * image.ysize;
 
     unsigned char *base = image.data;
@@ -84,9 +78,9 @@ return;
 		if (base[3] < m_Y) base[3] = 0;//y2
 		base += 4;
     }  
-#endif //Altivec	  
 }
 
+#ifdef __VEC__
 /////////////////////////////////////////////////////////
 // processImage
 //
@@ -138,6 +132,7 @@ void pix_threshold :: processYUVAltivec(imageStruct &image)
 		base += 16;
     }    
 }
+#endif //Altivec	  
 
 /////////////////////////////////////////////////////////
 // processGrayImage
