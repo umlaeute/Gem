@@ -318,6 +318,7 @@ void pix_filmDarwin :: getFrame()
                 GoToBeginningOfMovie(m_movie);
                 prevTime = 0;
                 flags |= nextTimeEdgeOK;
+				outlet_bang(m_outEnd);
             }
 
             m_Task = 1;
