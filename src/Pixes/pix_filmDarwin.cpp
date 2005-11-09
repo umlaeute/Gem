@@ -15,7 +15,6 @@
 #ifdef __APPLE__
 
 #include "pix_filmDarwin.h"
-#include "OpenGL/glext.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmDarwin, t_symbol *, A_DEFSYM)
 
@@ -29,7 +28,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmDarwin, t_symbol *, A_DEFSYM)
 /////////////////////////////////////////////////////////
 
 pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
-pix_film(filename)
+	pix_film(filename), m_srcGWorld(NULL), m_movie(NULL)
 {
     // make sure that there are some characters
     if (filename->s_name[0]) openMess(filename);
@@ -206,9 +205,23 @@ void pix_filmDarwin :: realOpen(char *filename)
     m_xsize = m_srcRect.right - m_srcRect.left;
     m_ysize = m_srcRect.bottom - m_srcRect.top;
 	
-        
-	
-	
+	// We will use a YUV GWorld/Texture to get the fastest performance
+	// 16 bits per pixel for 4:2:2
+	// RowBytes should be a multiple of 32 for GL_STORAGE_SHARED_APPLE to work
+	// This means movie width for 16bits need to be a multiple of 16
+	//   (and for rgba/32bits width needs to be a multiple of 32)
+	// we pad out to that. The texture coords ensure we do not use the extra bytes.
+	int bpp;
+	if (m_colorspace == GL_BGRA_EXT)
+		bpp = 32;
+	else
+		bpp = 16;
+	UInt32 thePadOffset = m_xsize % bpp;
+	if( thePadOffset != 0 )
+	{
+		m_xsize += (bpp - thePadOffset);
+		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
+	}
 
     if (m_colorspace == GL_BGRA_EXT){
         m_csize = 4;
