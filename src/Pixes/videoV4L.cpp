@@ -172,7 +172,7 @@ int videoV4L :: startTransfer(int format)
   last_frame = 0;
 
   if(m_devicename){
-    sprintf(buf,m_devicename);
+    sprintf(buf,"%s", m_devicename);
   } else {
     if (m_devicenum<0){
       sprintf(buf, "/dev/video");

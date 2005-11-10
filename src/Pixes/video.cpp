@@ -29,6 +29,8 @@ video :: video(int format) {
   m_width=64;
   m_height=64;
   m_capturing=false;
+  m_devicename=NULL;
+  m_devicenum=0;
 #if 0
   m_channel=COMPOSITEIN;
   m_norm=VIDEO_MODE_AUTO;
