@@ -9,11 +9,11 @@
 #X obj 62 392 square 4;
 #X text 264 32 ============;
 #X text 216 48 store/get images into/from a buffer;
-#X msg 206 87 bang;
-#X floatatom 206 184 5 0 0 0 - - -;
-#X text 245 87 get the size of the depot;
-#X msg 217 126 allocate 128 64 4;
-#X text 351 114 pre-allocate each image-buffer to hold at east 128*64*4
+#X msg 206 77 bang;
+#X floatatom 206 174 5 0 0 0 - - -;
+#X text 245 77 get the size of the depot;
+#X msg 217 116 allocate 128 64 4;
+#X text 351 104 pre-allocate each image-buffer to hold at east 128*64*4
 pixels;
 #X obj 316 316 gemhead;
 #X obj 316 342 pix_film;
@@ -46,13 +46,13 @@ pixels;
 #X obj 361 456 moses 10;
 #X floatatom 663 406 5 0 0 0 - - -;
 #X msg 663 386 5;
-#X text 368 165 a storage-place for "10" pix-images called "myImages"
+#X text 368 155 a storage-place for "10" pix-images called "myImages"
 ;
 #X text 467 493 put the next image into "myImages" @ index;
 #X msg 140 390 set yourImages;
 #X msg 212 490 set yourImages;
 #X text 213 473 set the storage-name;
-#X obj 206 163 pix_buffer myImages 10;
+#X obj 206 153 pix_buffer myImages 10;
 #X obj 62 349 pix_buffer_read myImages;
 #X obj 316 515 pix_buffer_write myImages;
 #X obj 571 453 pix_buffer_write myImages;
@@ -61,6 +61,8 @@ pixels;
 #X text 15 422 read an image from a certain storage-buffer;
 #X text 17 302 get an image from the pix_buffer;
 #X obj 33 227 pix_buffer yourImages 10;
+#X msg 333 181 open ../data/fractal.JPG 5;
+#X text 524 182 load an image into a certain storage-buffer;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 0 0;
@@ -108,3 +110,4 @@ pixels;
 #X connect 47 0 51 0;
 #X connect 49 0 11 0;
 #X connect 50 0 6 0;
+#X connect 58 0 49 0;
