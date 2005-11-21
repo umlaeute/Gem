@@ -21,6 +21,10 @@ LOG
 #include "Base/GemPixUtil.h"
 #include "Base/GemPixImageLoad.h"
 
+#ifdef HAVE_PTHREADS
+# include <pthread.h>
+#endif
+
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -74,7 +78,34 @@ class GEM_EXTERN pix_image : public GemBase
         //-----------------------------------
         // GROUP:	Image data
         //-----------------------------------
-    
+
+    	//////////
+    	// do we want threaded reading (default: yes);
+    	virtual void	threadMess(int onoff);
+ 
+
+#ifdef HAVE_PTHREADS
+        /* a thread for loading the image */
+        static void* openThread(void*);
+
+        pthread_t m_thread_id;
+        pthread_mutex_t *m_mutex;
+
+        bool m_thread_continue;
+#endif /* HAVE_PTHREADS */
+
+        //////////
+        // do we have a running thread? always FALSE when compiled without threads
+        bool m_thread_running;
+
+        //////////
+        // did a thread just finished loading an image?
+        bool m_threadloaded;
+
+        //////////
+        // the full filename of the image
+        char            m_filename[MAXPDSTRING];
+   
     	//////////
     	// The original image
     	imageStruct     *m_loadedImage;
@@ -91,6 +122,7 @@ class GEM_EXTERN pix_image : public GemBase
     	//////////
     	// static member functions
     	static void 	openMessCallback(void *data, t_symbol *filename);
+    	static void 	threadMessCallback(void *data, t_floatarg f);
 };
 
 #endif	// for header file
