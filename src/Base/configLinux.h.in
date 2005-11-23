@@ -39,3 +39,4 @@
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
 #undef SIZEOF_UNSIGNED_INT
+#undef HAVE_GLSIZEIPTRARB
