@@ -28,6 +28,9 @@ AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
 AC_SUBST(REFERENCEPATH)
 AC_SUBST(NEW_VIDEOFILM)
+AC_SUBST(HAVE_GLSIZEIPTRARB)
+
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
@@ -92,12 +95,28 @@ if test "x$with_x" != "xno"; then
  AC_CHECK_LIB(Xext,main)
 fi
 
+have_gl="no"
+have_glu="no"
+
 AC_CHECK_LIB(GL,glInitNames)
+if test "x$ac_cv_lib_GL_glInitNames" = "xyes"; then
+  have_gl="yes"
+fi
+
 AC_CHECK_LIB(GLU,gluLookAt)
+if test "x$ac_cv_lib_GLU_gluLookAt" = "xyes"; then
+  have_glu="yes"
+fi
 
 GEM_CHECK_FRAMEWORK(OpenGL)
-GEM_CHECK_FRAMEWORK(AGL)
+if test "x$gem_check_ldflags_success" = "xyes"; then
+  have_gl="yes"
+fi
 
+GEM_CHECK_FRAMEWORK(AGL)
+if test "x$gem_check_ldflags_success" = "xyes"; then
+  have_glu="yes"
+fi
 
 dnl some checks for osX
 GEM_CHECK_FRAMEWORK(Carbon)
@@ -185,6 +204,23 @@ AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
+
+## check for GLsizeiptrARB
+## uäh! isn't there something more cross-platform???
+AC_CHECK_TYPES([GLsizeiptrARB],,
+        ,[
+#ifdef __APPLE__
+# include <OpenGL/gl.h>
+# include <OpenGL/glu.h>
+# include <OpenGL/glext.h>
+#else
+# include <GL/gl.h>
+# include <GL/glu.h>
+# include <GL/glext.h>
+#endif
+]
+        )
+
 
 AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(void *)
@@ -340,6 +376,9 @@ dnl GEM compilation options:
 dnl =======================================
 dnl
 dnl give some feedback about the configuration
+if test "x$have_gl" != "xyes"; then
+ AC_MSG_ERROR([GL not found! you need openGL!!!])
+fi
 
 if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL

@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXX GEM_TARGETS EXT GEM_CONFIGFILE INCLUDES X_LIBS X_CFLAGS CXXFLAGS DEFINES PKG_CFLAGS PKG_LIBS REFERENCEPATH NEW_VIDEOFILM LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S CPP X_PRE_LIBS X_EXTRA_LIBS PKG_CONFIG ac_pt_PKG_CONFIG PKG_IMAGEMAGICK___CFLAGS PKG_IMAGEMAGICK___LIBS PKG_TIFF_CFLAGS PKG_TIFF_LIBS PKG_JPEG_CFLAGS PKG_JPEG_LIBS PKG_LIBQUICKTIME_CFLAGS PKG_LIBQUICKTIME_LIBS PKG_LQT_CFLAGS PKG_LQT_LIBS PKG_MPEG3_CFLAGS PKG_MPEG3_LIBS PKG_MPEG_CFLAGS PKG_MPEG_LIBS PKG_AVIFILE_CFLAGS PKG_AVIFILE_LIBS PKG_FFMPEG_CFLAGS PKG_FFMPEG_LIBS EGREP PKG_IEEE1394_CFLAGS PKG_IEEE1394_LIBS PKG_FTGL_CFLAGS PKG_FTGL_LIBS PKG_GLTT_CFLAGS PKG_GLTT_LIBS LIBOBJS MAKEDEP_FLAGS STRIP ac_ct_STRIP STRIP_ALL STRIP_UNNEEDED DOS2UNIX ac_ct_DOS2UNIX LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXX GEM_TARGETS EXT GEM_CONFIGFILE INCLUDES X_LIBS X_CFLAGS CXXFLAGS DEFINES PKG_CFLAGS PKG_LIBS REFERENCEPATH NEW_VIDEOFILM HAVE_GLSIZEIPTRARB LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S CPP X_PRE_LIBS X_EXTRA_LIBS PKG_CONFIG ac_pt_PKG_CONFIG PKG_IMAGEMAGICK___CFLAGS PKG_IMAGEMAGICK___LIBS PKG_TIFF_CFLAGS PKG_TIFF_LIBS PKG_JPEG_CFLAGS PKG_JPEG_LIBS PKG_LIBQUICKTIME_CFLAGS PKG_LIBQUICKTIME_LIBS PKG_LQT_CFLAGS PKG_LQT_LIBS PKG_MPEG3_CFLAGS PKG_MPEG3_LIBS PKG_MPEG_CFLAGS PKG_MPEG_LIBS PKG_AVIFILE_CFLAGS PKG_AVIFILE_LIBS PKG_FFMPEG_CFLAGS PKG_FFMPEG_LIBS EGREP PKG_IEEE1394_CFLAGS PKG_IEEE1394_LIBS PKG_FTGL_CFLAGS PKG_FTGL_LIBS PKG_GLTT_CFLAGS PKG_GLTT_LIBS LIBOBJS MAKEDEP_FLAGS STRIP ac_ct_STRIP STRIP_ALL STRIP_UNNEEDED DOS2UNIX ac_ct_DOS2UNIX LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1564,6 +1564,9 @@ KERN=$(uname -s)
 
 
 GEM_CONFIGFILE=Base/config${KERN}.h
+
+
+
 
 
 
@@ -5292,6 +5295,9 @@ fi
 
 fi
 
+have_gl="no"
+have_glu="no"
+
 
 echo "$as_me:$LINENO: checking for glInitNames in -lGL" >&5
 echo $ECHO_N "checking for glInitNames in -lGL... $ECHO_C" >&6
@@ -5363,6 +5369,10 @@ _ACEOF
 
   LIBS="-lGL $LIBS"
 
+fi
+
+if test "x$ac_cv_lib_GL_glInitNames" = "xyes"; then
+  have_gl="yes"
 fi
 
 
@@ -5438,6 +5448,9 @@ _ACEOF
 
 fi
 
+if test "x$ac_cv_lib_GLU_gluLookAt" = "xyes"; then
+  have_glu="yes"
+fi
 
 
   echo "$as_me:$LINENO: checking for \"OpenGL\"-framework" >&5
@@ -5503,6 +5516,10 @@ echo "${ECHO_T}no" >&6
 
   fi
 
+if test "x$gem_check_ldflags_success" = "xyes"; then
+  have_gl="yes"
+fi
+
 
   echo "$as_me:$LINENO: checking for \"AGL\"-framework" >&5
 echo $ECHO_N "checking for \"AGL\"-framework... $ECHO_C" >&6
@@ -5567,7 +5584,9 @@ echo "${ECHO_T}no" >&6
 
   fi
 
-
+if test "x$gem_check_ldflags_success" = "xyes"; then
+  have_glu="yes"
+fi
 
 
   echo "$as_me:$LINENO: checking for \"Carbon\"-framework" >&5
@@ -10780,6 +10799,86 @@ _ACEOF
 fi
 
 
+## check for GLsizeiptrARB
+## uäh! isn't there something more cross-platform???
+echo "$as_me:$LINENO: checking for GLsizeiptrARB" >&5
+echo $ECHO_N "checking for GLsizeiptrARB... $ECHO_C" >&6
+if test "${ac_cv_type_GLsizeiptrARB+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#ifdef __APPLE__
+# include <OpenGL/gl.h>
+# include <OpenGL/glu.h>
+# include <OpenGL/glext.h>
+#else
+# include <GL/gl.h>
+# include <GL/glu.h>
+# include <GL/glext.h>
+#endif
+
+
+
+int
+main ()
+{
+if ((GLsizeiptrARB *) 0)
+  return 0;
+if (sizeof (GLsizeiptrARB))
+  return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_type_GLsizeiptrARB=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_type_GLsizeiptrARB=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_type_GLsizeiptrARB" >&5
+echo "${ECHO_T}$ac_cv_type_GLsizeiptrARB" >&6
+if test $ac_cv_type_GLsizeiptrARB = yes; then
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_GLSIZEIPTRARB 1
+_ACEOF
+
+
+fi
+
+
+
 echo "$as_me:$LINENO: checking for unsigned int" >&5
 echo $ECHO_N "checking for unsigned int... $ECHO_C" >&6
 if test "${ac_cv_type_unsigned_int+set}" = set; then
@@ -11986,18 +12085,24 @@ else
   ac_cv_func_fork_works=cross
 else
   cat >conftest.$ac_ext <<_ACEOF
-/* By Ruediger Kuhlmann. */
-      #include <sys/types.h>
-      #if HAVE_UNISTD_H
-      # include <unistd.h>
-      #endif
-      /* Some systems only have a dummy stub for fork() */
-      int main ()
-      {
-	if (fork() < 0)
-	  exit (1);
-	exit (0);
-      }
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+int
+main ()
+{
+
+	  /* By Ruediger Kuhlmann. */
+	  if (fork() < 0)
+	    exit (1);
+	  exit (0);
+
+  ;
+  return 0;
+}
 _ACEOF
 rm -f conftest$ac_exeext
 if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
@@ -14553,6 +14658,7 @@ s,@PKG_CFLAGS@,$PKG_CFLAGS,;t t
 s,@PKG_LIBS@,$PKG_LIBS,;t t
 s,@REFERENCEPATH@,$REFERENCEPATH,;t t
 s,@NEW_VIDEOFILM@,$NEW_VIDEOFILM,;t t
+s,@HAVE_GLSIZEIPTRARB@,$HAVE_GLSIZEIPTRARB,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
 s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@ac_ct_CXX@,$ac_ct_CXX,;t t
@@ -15097,6 +15203,11 @@ if test "$no_create" != yes; then
 fi
 
 
+if test "x$have_gl" != "xyes"; then
+ { { echo "$as_me:$LINENO: error: GL not found! you need openGL!!!" >&5
+echo "$as_me: error: GL not found! you need openGL!!!" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL
