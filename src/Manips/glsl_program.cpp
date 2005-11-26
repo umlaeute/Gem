@@ -35,7 +35,7 @@ CPPEXTERN_NEW(glsl_program)
 glsl_program :: glsl_program() :
   m_program(0), 
   m_maxLength(0), m_uniformCount(0),
-  m_name(NULL), m_length(NULL), m_size(NULL), m_type(NULL),
+  m_name(NULL), m_symname(NULL), m_length(NULL), m_size(NULL), m_type(NULL),
   m_linked(0),
   m_infoLog(NULL), 
   m_num(0)
@@ -59,6 +59,7 @@ glsl_program :: ~glsl_program()
   if (m_type) free(m_type);
   if (m_length) free(m_length);
   if (m_name) free(m_name);
+  if (m_symname) free(m_symname);
 #endif
 }
 
@@ -87,7 +88,28 @@ void glsl_program :: postrender(GemState *state)
   glUseProgramObjectARB(0);
 #endif
 }
+/////////////////////////////////////////////////////////
+// shaderMess
+//
+/////////////////////////////////////////////////////////
+void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
+{
+  int i=0;
+  for(i=0; i<=m_num; i++){
+    if(s==m_symname[i]){
+      post("uniform parameters #%d", i);
+      // don't know what to do with that...
+      // sketch:
+      //   copy the values into memory and add a flag that we have them for this parameter
+      //   in the render cycle use it
 
+
+      return;
+    }
+  }
+  // if we reach this, then no param-name was matching!
+  if(i>m_num)error("glsl_program: no method for '%s' (this is no uniform parameter)", s->s_name);
+}
 /////////////////////////////////////////////////////////
 // shaderMess
 //
@@ -203,11 +225,13 @@ void glsl_program :: getVariables()
     if (m_type) free(m_type);
     if (m_length) free(m_length);
     if (m_name) free(m_name);
+    if (m_symname) free(m_symname);
 
     m_size   = (GLint *) malloc(m_uniformCount * sizeof(GLint));
     m_type   = (GLenum *) malloc(m_uniformCount * sizeof(GLenum));
     m_length = (GLsizei *) malloc(m_uniformCount * sizeof(GLsizei));
     m_name   = (GLcharARB **) malloc(m_uniformCount * sizeof(GLcharARB *));
+    m_symname= (t_symbol**) malloc(m_uniformCount * sizeof(t_symbol *));
 
     //
     // Loop over glGetActiveUniformARB and store the results away.
@@ -217,6 +241,7 @@ void glsl_program :: getVariables()
 	  m_name[i] = (GLcharARB *) malloc(m_maxLength * sizeof(GLcharARB));
 	  glGetActiveUniformARB(m_program, i, m_maxLength, &m_length[i],
 			      &m_size[i], &m_type[i], m_name[i]);
+	  m_symname[i]=gensym(m_name[i]);
 //	  post("[%s]: active uniform variable: %s", m_objectname->s_name, m_name[i]);
     }
   }
@@ -328,6 +353,7 @@ void glsl_program :: obj_setupCallback(t_class *classPtr)
 		gensym("link"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&glsl_program::printMessCallback,
 		gensym("print"), A_NULL);
+ class_addanything(classPtr, (t_method)&glsl_program::paramMessCallback);
 }
 void glsl_program :: shaderMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
@@ -340,4 +366,8 @@ void glsl_program :: linkCallback(void *data)
 void glsl_program :: printMessCallback(void *data)
 {
 	GetMyClass(data)->printInfo();
+}
+void glsl_program :: paramMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+{
+  GetMyClass(data)->paramMess(s, argc, argv);
 }

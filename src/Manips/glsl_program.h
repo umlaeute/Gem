@@ -65,6 +65,10 @@ class GEM_EXTERN glsl_program : public GemBase
   //////////
   // Clean up after rendering
   virtual void 	postrender(GemState *state);
+
+  //////////
+  // parameters to the glsl-program
+  virtual void  paramMess(t_symbol*s, int argc, t_atom*argv);
   
   //////////
   // shader message
@@ -87,6 +91,7 @@ class GEM_EXTERN glsl_program : public GemBase
   GLint				m_maxLength;
   GLint				m_uniformCount;
   GLcharARB			**m_name;
+  t_symbol                      **m_symname;
   GLsizei			*m_length;
   GLint				*m_size;
   GLenum			*m_type;
@@ -98,6 +103,7 @@ class GEM_EXTERN glsl_program : public GemBase
 	
   //////////
   // static member functions
+  static void paramMessCallback (void *data, t_symbol *, int, t_atom*);
   static void shaderMessCallback (void *data, t_symbol *, int, t_atom*);
   static void openMessCallback   (void *data, t_symbol *filename);
   static void linkCallback  (void *);
