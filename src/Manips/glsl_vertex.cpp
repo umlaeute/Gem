@@ -18,6 +18,7 @@
 #include "glsl_vertex.h"
 
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 #ifdef __APPLE__
@@ -38,7 +39,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_vertex, t_symbol *, A_DEFSYM)
 glsl_vertex :: glsl_vertex() :
   m_shaderType(GEM_shader_none), 
   m_shader(0), m_program(0), m_compiled(0), m_linked(0),
-  m_size(0), m_shaderID(0)
+  m_size(0), m_shaderID(0), m_shaderString(NULL)
 {
 #ifdef GL_ARB_shader_objects
   m_shaderTarget = GL_VERTEX_SHADER_ARB;
@@ -47,7 +48,7 @@ glsl_vertex :: glsl_vertex() :
 glsl_vertex :: glsl_vertex(t_symbol *filename) :
   m_shaderType(GEM_shader_none), 
   m_shader(0), m_program(0), m_compiled(0), m_linked(0), 
-  m_size(0), m_shaderID(0)
+  m_size(0), m_shaderID(0), m_shaderString(NULL)
 {
 #ifdef GL_ARB_shader_objects
   m_shaderTarget = GL_VERTEX_SHADER_ARB;
@@ -73,7 +74,7 @@ glsl_vertex :: ~glsl_vertex()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: closeMess(void)
 {
-  delete [] m_shaderString;
+  if(m_shaderString)delete [] m_shaderString;
   m_shaderString=NULL;
   m_size=0;
   if(m_shader){
@@ -146,8 +147,8 @@ void glsl_vertex :: openMess(t_symbol *filename)
 	glGetObjectParameterivARB( m_shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length );
 	log = (GLcharARB*)malloc( length * sizeof(GLcharARB) );
 	glGetInfoLogARB( m_shader, length, NULL, log );
-	printf("[%s]: compile Info_log:\n", m_objectname->s_name );
-	printf("%s\n", log );
+	post("[%s]: compile Info_log:", m_objectname->s_name );
+	post("%s", log );
 	post("[%s]: shader not loaded", m_objectname->s_name );
 	free(log);
 	return;
