@@ -82,9 +82,9 @@ void pix_image :: threadMess(int onoff)
         if((err=pthread_create(&m_thread_id, 0, openThread, this)))
           {
             /* ack! thread creation failed! fall back to unthreaded loading */
-            post("pix_image: couldn't create thread! %d", err);
+            //post("pix_image: couldn't create thread! %d", err);
           } else {
-          post("pix_image: created thread %x", m_thread_id);
+          //post("pix_image: created thread %x", m_thread_id);
           return;
         }
       }
@@ -138,7 +138,7 @@ void *pix_image :: openThread(void*you)
       strcpy(orgfilename, me->m_filename);
       pthread_mutex_unlock(mutex);
 
-      post("loading in thread %s", orgfilename);
+      //post("loading in thread %s", orgfilename);
       
       delete loadedImage;
       loadedImage = image2mem(orgfilename);
