@@ -26,6 +26,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # define t_GLshaderObj GLhandleARB
 #endif
 
+#define MAX_NUM_SHADERS 32
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -81,7 +83,7 @@ class GEM_EXTERN glsl_program : public GemBase
   virtual void printInfo();
   
   GLhandleARB		m_program;
-  t_GLshaderObj		m_shaderObj[32];
+  t_GLshaderObj		m_shaderObj[MAX_NUM_SHADERS];
   GLint				m_maxLength;
   GLint				m_uniformCount;
   GLcharARB			**m_name;

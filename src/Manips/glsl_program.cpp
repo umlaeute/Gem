@@ -33,7 +33,12 @@ CPPEXTERN_NEW(glsl_program)
 //
 /////////////////////////////////////////////////////////
 glsl_program :: glsl_program() :
-  m_program(0), m_infoLog(NULL)
+  m_program(0), 
+  m_maxLength(0), m_uniformCount(0),
+  m_name(NULL), m_length(NULL), m_size(NULL), m_type(NULL),
+  m_linked(0),
+  m_infoLog(NULL), 
+  m_num(0)
 {
 #if !defined GL_ARB_shader_objects && !defined GL_ARB_shading_language_100
   post("GEM has been compiled without GLSL support");
@@ -102,14 +107,19 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     	return;
   }
   m_program = glCreateProgramObjectARB();
+  if(argc>MAX_NUM_SHADERS)
+    {
+      argc=MAX_NUM_SHADERS;
+      post("[%s]: only %d shaders supported; skipping the rest", MAX_NUM_SHADERS);
+    }
   for (int i = 0; i < argc; i++)
   {
     m_shaderObj[i] = (t_GLshaderObj)(atom_getint(&argv[i]));
   }
 //  m_linked = 0;
-// not sure what to do here:  we don't want to link & re-link every render cycle,
+//  not sure what to do here:  we don't want to link & re-link every render cycle,
 //  but we do want to link when there are new shaders to link...so I made a seperate
-//	link message
+//  link message
   m_num = argc;
 //  LinkProgram(argc);
 #endif
@@ -122,7 +132,7 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
 void glsl_program :: LinkProgram()
 {
 #ifdef GL_ARB_shader_objects
-//  post("link %d prog", m_num);
+  post("link %d progs", m_num);
   GLsizei length;
   if (!m_num)
   {
@@ -140,7 +150,7 @@ void glsl_program :: LinkProgram()
   glLinkProgramARB( m_program );
   glGetObjectParameterivARB( m_program, GL_OBJECT_LINK_STATUS_ARB, &m_linked );
   glGetObjectParameterivARB( m_program, GL_OBJECT_INFO_LOG_LENGTH_ARB, &m_maxLength );
-  //post("getting %d chars for infolog", m_maxLength);
+  post("getting %d chars for infolog", m_maxLength);
   if(m_infoLog)free(m_infoLog);m_infoLog=NULL;
   m_infoLog = (GLcharARB *) malloc(m_maxLength * sizeof(GLcharARB));
   glGetInfoLogARB( m_program, m_maxLength, &length, m_infoLog );
@@ -157,10 +167,10 @@ void glsl_program :: LinkProgram()
   //
   //post("did we link?");
   if (m_linked) {
-	    glUseProgramObjectARB( m_program );
+    glUseProgramObjectARB( m_program );
   } else {
-	    post("GEM: [%s]:  Link failed!", m_objectname->s_name);
-		return;
+    post("GEM: [%s]:  Link failed!", m_objectname->s_name);
+    return;
   }
   //post("getting variables");
   getVariables();
@@ -190,13 +200,14 @@ void glsl_program :: getVariables()
     // from malloc is not checked for NULL.
     //
     if (m_size) free(m_size);
-	if (m_type) free(m_type);
+    if (m_type) free(m_type);
     if (m_length) free(m_length);
     if (m_name) free(m_name);
-	m_size   = (GLint *) malloc(m_uniformCount * sizeof(GLint));
+
+    m_size   = (GLint *) malloc(m_uniformCount * sizeof(GLint));
     m_type   = (GLenum *) malloc(m_uniformCount * sizeof(GLenum));
     m_length = (GLsizei *) malloc(m_uniformCount * sizeof(GLsizei));
-    m_name   = (GLcharARB **) malloc(m_uniformCount * sizeof(GLcharARB **));
+    m_name   = (GLcharARB **) malloc(m_uniformCount * sizeof(GLcharARB *));
 
     //
     // Loop over glGetActiveUniformARB and store the results away.
