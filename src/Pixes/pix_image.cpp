@@ -78,12 +78,20 @@ void pix_image :: threadMess(int onoff)
         int err=0;
         m_thread_running=false;
         m_thread_continue=true;
-        
+       
+	pthread_mutex_lock(m_mutex);
+
         if((err=pthread_create(&m_thread_id, 0, openThread, this)))
           {
             /* ack! thread creation failed! fall back to unthreaded loading */
             //post("pix_image: couldn't create thread! %d", err);
           } else {
+	  int counter=0;
+	  // wait until the thread is up and running
+	  pthread_mutex_lock(m_mutex);
+	  pthread_mutex_unlock(m_mutex);
+	  // now m_thread_running has been set by the child thread */
+
           //post("pix_image: created thread %x", m_thread_id);
           return;
         }
@@ -115,8 +123,12 @@ void *pix_image :: openThread(void*you)
   pthread_mutex_t *mutex=me->m_mutex;
   imageStruct     *loadedImage=NULL;
   struct timeval timout;
-  
+
   me->m_thread_running=true;
+
+  // now that m_thread_running is set, we unlock the main-thread
+  // the lock has been set outside
+  pthread_mutex_unlock(mutex);
 
   while(me->m_thread_continue){
 
