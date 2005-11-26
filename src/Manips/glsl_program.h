@@ -20,6 +20,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "Base/GemBase.h"
 
+#ifdef __APPLE__
+# define t_GLshaderObj GLhandleARB*
+#else
+# define t_GLshaderObj GLhandleARB
+#endif
+
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -74,7 +81,7 @@ class GEM_EXTERN glsl_program : public GemBase
   virtual void printInfo();
   
   GLhandleARB		m_program;
-  GLhandleARB*		m_shaderObj[32];
+  t_GLshaderObj		m_shaderObj[32];
   GLint				m_maxLength;
   GLint				m_uniformCount;
   GLcharARB			**m_name;

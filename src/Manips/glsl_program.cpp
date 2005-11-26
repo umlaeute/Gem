@@ -13,7 +13,9 @@
 /////////////////////////////////////////////////////////
 
 #include "glsl_program.h"
-#include "string.h"
+
+#include <string.h>
+#include <stdlib.h>
 #ifdef __APPLE__
 #include <AGL/agl.h>
 extern bool HaveValidContext (void);
@@ -31,7 +33,7 @@ CPPEXTERN_NEW(glsl_program)
 //
 /////////////////////////////////////////////////////////
 glsl_program :: glsl_program() :
-	m_program(0)
+  m_program(0), m_infoLog(NULL)
 {
 #if !defined GL_ARB_shader_objects && !defined GL_ARB_shading_language_100
   post("GEM has been compiled without GLSL support");
@@ -102,7 +104,7 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
   m_program = glCreateProgramObjectARB();
   for (int i = 0; i < argc; i++)
   {
-    m_shaderObj[i] = (GLhandleARB*)(atom_getint(&argv[i]));
+    m_shaderObj[i] = (t_GLshaderObj)(atom_getint(&argv[i]));
   }
 //  m_linked = 0;
 // not sure what to do here:  we don't want to link & re-link every render cycle,
@@ -120,42 +122,47 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
 void glsl_program :: LinkProgram()
 {
 #ifdef GL_ARB_shader_objects
+//  post("link %d prog", m_num);
   GLsizei length;
   if (!m_num)
   {
     	error("GEM: [%s]: can't link zero shaders", m_objectname->s_name);
     	return;
   }
-  
   for (int i = 0; i < m_num; i++)
   {
+    post("attach object %d", i);
     glAttachObjectARB( m_program, m_shaderObj[i] );
-	// This only flags the shader to be deleted later,
-	// when the program is deleted and they are no longer referenced
-	glDeleteObjectARB( m_shaderObj[i] );
+    // This only flags the shader to be deleted later,
+    // when the program is deleted and they are no longer referenced
+    glDeleteObjectARB( m_shaderObj[i] );
   }
   glLinkProgramARB( m_program );
   glGetObjectParameterivARB( m_program, GL_OBJECT_LINK_STATUS_ARB, &m_linked );
   glGetObjectParameterivARB( m_program, GL_OBJECT_INFO_LOG_LENGTH_ARB, &m_maxLength );
+  //post("getting %d chars for infolog", m_maxLength);
+  if(m_infoLog)free(m_infoLog);m_infoLog=NULL;
   m_infoLog = (GLcharARB *) malloc(m_maxLength * sizeof(GLcharARB));
   glGetInfoLogARB( m_program, m_maxLength, &length, m_infoLog );
   if (length)
   {
-    printf("GEM: [%s]: Info_log:", m_objectname->s_name);
-    printf("%s", m_infoLog);
+    post("GEM: [%s]: Info_log:", m_objectname->s_name);
+    post("%s", m_infoLog);
   }
-  free(m_infoLog);
+  //post("freeing log");
+  if(m_infoLog)free(m_infoLog);m_infoLog=NULL;
   
   //
   // If all went well, make the ProgramObject part of the current state
   //
+  //post("did we link?");
   if (m_linked) {
 	    glUseProgramObjectARB( m_program );
   } else {
 	    post("GEM: [%s]:  Link failed!", m_objectname->s_name);
 		return;
   }
-  
+  //post("getting variables");
   getVariables();
 #endif
 }
