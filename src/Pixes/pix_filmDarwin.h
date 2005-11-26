@@ -61,6 +61,10 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   
   virtual void postrender(GemState *state);
   
+  virtual void startRendering();
+  
+  virtual void stopRendering();
+  
   //////////
   // load film into RAM
   virtual void LoadRam();
