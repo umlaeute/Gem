@@ -98,6 +98,8 @@ void pix_filmDarwin :: realOpen(char *filename)
 
     long		m_rowBytes;
 	
+	MatrixRecord	matrix;
+	
 	
 	//UnsignedWide startTime, endTime;
 	//float seconds;
@@ -204,6 +206,59 @@ void pix_filmDarwin :: realOpen(char *filename)
     SetMovieBox(m_movie, &m_srcRect);
     m_xsize = m_srcRect.right - m_srcRect.left;
     m_ysize = m_srcRect.bottom - m_srcRect.top;
+	
+	/*  //this may all be useful someday, but for now it doesn't help with HD
+	Fixed	h,w;
+	GetTrackDimensions(movieTrack,&w,&h);
+	
+	GetMovieMatrix(m_movie,&matrix);
+	
+	post("pix_filmDarwin : track dimensions width %d height %d",Fix2Long(w),Fix2Long(h));
+	post("pix_filmDarwin : movie matrix %d %d %d",Fix2Long(matrix.matrix[0][0]),Fix2Long(matrix.matrix[0][1]),Fix2Long(matrix.matrix[0][2]));
+	post("pix_filmDarwin : movie matrix %d %d %d",Fix2Long(matrix.matrix[1][0]),Fix2Long(matrix.matrix[1][1]),Fix2Long(matrix.matrix[1][2]));
+	post("pix_filmDarwin : movie matrix %d %d %d",Fix2Long(matrix.matrix[2][0]),Fix2Long(matrix.matrix[2][1]),Fix2Long(matrix.matrix[2][2]));
+
+	GetTrackDisplayMatrix(movieTrack,&matrix);
+	
+	post("pix_filmDarwin : track matrix %f %d %d",Fix2X(matrix.matrix[0][0]),Fix2Long(matrix.matrix[0][1]),Fix2Long(matrix.matrix[0][2]));
+	post("pix_filmDarwin : track matrix %d %d %d",Fix2Long(matrix.matrix[1][0]),Fix2Long(matrix.matrix[1][1]),Fix2Long(matrix.matrix[1][2]));
+	post("pix_filmDarwin : track matrix %d %d %f",Fix2Long(matrix.matrix[2][0]),Fix2Long(matrix.matrix[2][1]),Fix2X(matrix.matrix[2][2]));
+	
+	
+	
+	Rect	arect;
+	GetMovieNaturalBoundsRect(m_movie,&arect);
+	
+	post("pix filmDarwin : movie natural bounds top %d bottom %d left %d right %d",arect.top,arect.bottom,arect.left,arect.right);
+	*/
+	//long	index;
+	
+	//special code for trapping HD formats which have pixel dimensions which are different from what QT reports
+	//this is undocumented anywhere by Apple - thanks to Marc Van Olmen for helping sort this out
+	
+	ImageDescriptionHandle desc = NULL;
+	
+	desc = (ImageDescriptionHandle)NewHandle(0);
+	
+	GetMediaSampleDescription(trackMedia,1,(SampleDescriptionHandle)desc);
+	
+	//DVCPRO720p
+	if ((*desc)->cType == kDVCPROHD720pCodecType){
+	
+		post("pix_filmDarwin : kDVCPROHD720pCodecType");
+		m_xsize = 960;
+		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
+				
+		ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
+	
+		SetMovieMatrix(m_movie,&matrix);
+	}
+	
+	//DVCPRO 1080i
+	
+	//HDV
+	
+	post("pix_filmDarwin : image description width %d heigh %d hRes %d vRes %d",(*desc)->width,(*desc)->height,Fix2Long((*desc)->hRes),Fix2Long((*desc)->vRes));
 	
 	// We will use a YUV GWorld/Texture to get the fastest performance
 	// 16 bits per pixel for 4:2:2
@@ -323,15 +378,19 @@ void pix_filmDarwin :: getFrame()
     //************************************
     if (m_auto){
         //play the startmovie() way
-        if (!m_play) SetMovieRate(m_movie,X2Fix(m_rate));
-        m_play = 1;
+        if (!m_play){
+			SetMovieRate(m_movie,X2Fix(m_rate));}
+			m_play = 1;
+		//	SetMovieVolume(m_movie, kFullVolume);
+		//	}
 
         if (m_rate > 0.f) {
             if (IsMovieDone(m_movie)) {
+				outlet_bang(m_outEnd);
                 GoToBeginningOfMovie(m_movie);
                 prevTime = 0;
                 flags |= nextTimeEdgeOK;
-				outlet_bang(m_outEnd);
+				
             }
 
             m_Task = 1;
@@ -415,7 +474,8 @@ void pix_filmDarwin :: getFrame()
         if (m_play) {
             SetMovieRate(m_movie,X2Fix(0.0));
             m_play = 0; //turn off play
-            return;
+		//	SetMovieVolume(m_movie, kNoVolume);
+           // return;  //not sure about this
         }
 
         m_movieTime = m_reqFrame * duration;
@@ -448,6 +508,18 @@ void pix_filmDarwin :: postrender(GemState *state)
     // post("pix_filmDarwin postrender called");
 }
 
+void pix_filmDarwin :: startRendering()
+{
+	//bit of a hack related to stopRendering()
+	SetMovieVolume(m_movie, kFullVolume);
+}
+
+void pix_filmDarwin :: stopRendering()
+{
+	//bit of a hack to keep the sound from playing after rendering stops
+	SetMovieVolume(m_movie, kNoVolume);
+}
+
 void pix_filmDarwin :: LoadRam()
 {
     TimeValue	length;
@@ -455,7 +527,7 @@ void pix_filmDarwin :: LoadRam()
     if (m_haveMovie){
         m_movieTime = 0;
         length = GetMovieDuration(m_movie);
-        err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
+        err = LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
         if (err)
         {
             post("pix_film: LoadMovieIntoRam failed miserably");
