@@ -101,14 +101,14 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 
 		err = ::FSPathMakeFSSpec( (UInt8*)filename, &spec, NULL);
 		if (err) {
-			error("GEM: Unable to find file: %#s", spec.name);
-                        error("GEM: Unable to find filename:%s", filename);
+			error("GemImageLoad: Unable to find file: %#s", spec.name);
+                        error("GemImageLoad: Unable to find filename:%s", filename);
 			error("parID : %d", spec.parID); 
 			return NULL;
 		}
 		err = ::GetGraphicsImporterForFile(&spec, &importer);
 		if (err) {
-			error("GEM: Unable to import an image: %#s", spec.name);
+			error("GemImageLoad: Unable to import an image: %#s", spec.name);
 			return NULL;
 		}
 	}
@@ -165,7 +165,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 		int fd = open_via_path(".", filename, "", realName, &realResult, 256, 0);
 		if (fd < 0)
 		{
-			error("GEM: Unable to find file: %s", filename);
+			error("GemImageLoad: Unable to find file: %s", filename);
 			return(NULL);
 		}
 		else
@@ -201,7 +201,6 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 			return(image_block);
 #endif
 	// unable to load image
-	error("GEM: Unable to load image: %s", newName);
 	return(NULL);
 }
 #endif // __APPLE__
@@ -324,7 +323,7 @@ imageStruct *tiffImage2mem(const char *filename)
 	    unsigned char *buf = new unsigned char [TIFFScanlineSize(tif)];
 	    if (buf == NULL)
 		{
-			error("GEM: can't allocate memory for scanline buffer: %s", filename);
+			error("GemImageLoad(TIFF): can't allocate memory for scanline buffer: %s", filename);
 		    TIFFClose(tif);
 			delete image_block;
 			return(NULL);
@@ -339,7 +338,7 @@ imageStruct *tiffImage2mem(const char *filename)
     		unsigned char *pixels = dstLine;
 			if (TIFFReadScanline(tif, buf, row, 0) < 0)
 			{
-			    error("GEM: bad image data read on line: %d: %s", row, filename);
+			    error("GemImageLoad(TIFF): bad image data read on line: %d: %s", row, filename);
 			    TIFFClose(tif);
 				delete image_block;
 				delete [] buf;
@@ -388,7 +387,7 @@ imageStruct *tiffImage2mem(const char *filename)
 		TIFFRGBAImage img;
 		if (TIFFRGBAImageBegin(&img, tif, 0, emsg) == 0)
 		{
-	        error("GEM: Error reading in image file: %s : %s", filename, emsg);
+	        //error("GemImageLoad(TIFF): Error reading in image file: %s : %s", filename, emsg);
 			delete image_block;
 	        TIFFClose(tif);
 	        return(NULL);
@@ -397,7 +396,7 @@ imageStruct *tiffImage2mem(const char *filename)
 		uint32 *raster = (uint32 *) _TIFFmalloc(npixels * sizeof(uint32));
 		if (raster == NULL)
 		{
-			error("GEM: Unable to allocate memory for image: %s", filename);
+			error("GemImageLoad(TIFF): Unable to allocate memory for image: %s", filename);
 			TIFFClose(tif);
 			delete image_block;
 			return(NULL);
@@ -405,7 +404,7 @@ imageStruct *tiffImage2mem(const char *filename)
 
 		if (TIFFRGBAImageGet(&img, raster, width, height) == 0)
 		{
-			error("GEM: Error getting image data in file: %s, %s", filename, emsg);
+			//error("GemImageLoad(TIFF): Error getting image data in file: %s, %s", filename, emsg);
 			_TIFFfree(raster);
 			TIFFClose(tif);
 			delete image_block;
@@ -492,7 +491,7 @@ imageStruct *jpegImage2mem(const char *filename)
 	FILE * infile;
 	if ((infile = fopen(filename, "rb")) == NULL)
 	{
-	    error("GEM: Unable to open image file: %s", filename);
+	    //error("GemImageLoad(JPEG): Unable to open image file: %s", filename);
 	    return(NULL);
 	}
 
@@ -641,7 +640,7 @@ imageStruct *sgiImage2mem(const char *filename)
 	}
 	else
 	{
-		error("GEM: unknown color components in SGI file: %s", filename);
+		//error("GemImageLoad(SGI): unknown color components in SGI file: %s", filename);
 		delete image_block;
 		return(NULL);
 	}
@@ -649,7 +648,7 @@ imageStruct *sgiImage2mem(const char *filename)
 	unsigned int32 *readData = longimagedata((char *)filename);
 	if (!readData)
 	{
-		error("GEM: error reading SGI image file: %s", filename);
+		//error("GemImageLoad: error reading SGI image file: %s", filename);
 		delete image_block;
 		return(NULL);
 	}
