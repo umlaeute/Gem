@@ -41,8 +41,10 @@ pix_image :: pix_image(t_symbol *filename) :
   m_thread_running(false), m_threadloaded(false), 
   m_loadedImage(NULL)
 {
+  int i=MAXPDSTRING;
+  while(i--)m_filename[i]=0;
+
   m_pixBlock.image = m_imageStruct;
-  openMess(filename);
 
 #ifdef HAVE_PTHREADS
   m_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
@@ -54,6 +56,7 @@ pix_image :: pix_image(t_symbol *filename) :
       threadMess(1);
   }
 #endif
+  if(filename!=&s_)openMess(filename);
 
 }
 
@@ -65,6 +68,10 @@ pix_image :: ~pix_image()
 {
   threadMess(0);
   cleanImage();
+
+#ifdef HAVE_PTHREADS
+  freebytes(m_mutex ,sizeof(pthread_mutex_t));
+#endif
 }
 
 
@@ -121,11 +128,14 @@ void *pix_image :: openThread(void*you)
 {
   pix_image *me=(pix_image*)you;
   pthread_mutex_t *mutex=me->m_mutex;
-  imageStruct     *loadedImage=NULL;
+  imageStruct     *loadedImage=me->m_loadedImage;
   struct timeval timout;
+  int i=MAXPDSTRING;
+  char*orgfilename=new char[MAXPDSTRING];
+  while(i--)orgfilename[i]=0;
 
   me->m_thread_running=true;
-
+  
   // now that m_thread_running is set, we unlock the main-thread
   // the lock has been set outside
   pthread_mutex_unlock(mutex);
@@ -143,16 +153,14 @@ void *pix_image :: openThread(void*you)
        * before returning the data to Gem we check, whether the 
        * main thread still wants _this_ file to be opened
        */
-      char*orgfilename=NULL;
 
       pthread_mutex_lock(mutex);
-      orgfilename=(char*)getbytes(strlen(me->m_filename)*sizeof(char));
-      strcpy(orgfilename, me->m_filename);
+       strcpy(orgfilename, me->m_filename);
       pthread_mutex_unlock(mutex);
 
       //post("loading in thread %s", orgfilename);
       
-      delete loadedImage;
+      if(loadedImage)delete loadedImage; loadedImage=NULL;
       loadedImage = image2mem(orgfilename);
       
       pthread_mutex_lock(mutex);
@@ -165,8 +173,14 @@ void *pix_image :: openThread(void*you)
       pthread_mutex_unlock(mutex);
     }
   }
-  me->m_thread_running=false;
+
+  if(me->m_loadedImage==loadedImage)
+    me->m_loadedImage=NULL;
+
+  if(loadedImage)delete loadedImage;  loadedImage=NULL;
+  if(orgfilename)delete[]orgfilename; orgfilename=NULL;
   
+  me->m_thread_running=false;
   return 0;
 }
 #endif
