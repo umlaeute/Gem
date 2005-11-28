@@ -12,6 +12,9 @@
 #include "Base/GemCache.h"
 #include <Carbon/Carbon.h>
 
+#include <unistd.h> //needed for Unix file open() type functions
+#include <stdio.h>
+
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
  
 #define DEFAULT_WIDTH		320
@@ -49,7 +52,11 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h )
   
   //set to the first input device
   m_inputDevice = 0;
+  m_auto = 1; //keeps previous default functionailty
+  m_banged = false;
   InitSeqGrabber();
+  m_record = 0;
+  //startTransfer();
   
 }
 
@@ -87,6 +94,18 @@ void pix_videoDarwin :: startRendering()
      m_haveVideo = 1;
      m_pixBlock.newimage = 1;
 }
+
+/////////////////////////////////////////////////////////
+// startrender
+//
+/////////////////////////////////////////////////////////
+void pix_videoDarwin :: stopRendering()
+{
+	//this should stop the recording process
+	m_record = 0;
+	setupCapture();
+	//stopTransfer();
+}
 /////////////////////////////////////////////////////////
 // render
 //
@@ -94,24 +113,45 @@ void pix_videoDarwin :: startRendering()
 void pix_videoDarwin :: render(GemState *state)
 {
     OSErr	err;
+	short	frameCount = 0;
+	Boolean	*done;
+ 
+	if (m_auto || m_banged) {
  
     err = SGIdle(m_sg);
+
     if (err != noErr){
             post("pix_videoDarwin: SGIdle failed with error %d",err);
             m_haveVideo = 0;
         } else {
+		//this doesn't do anything so far
+		//VDCompressDone(m_vdig,frameCount,data,size,similar,time);
+		//err = SGGrabFrameComplete(m_vc,frameCount,done);
+		//if (err != noErr) post("pix_videoDarwin: SGGrabCompressComplete failed with error %d",err);
+		//post("pix_video: SGGrabFramecomplete done %d framecount = %d",done[0],frameCount);
+		
         m_haveVideo = 1;
         m_newFrame = 1;
         } 
     if (!m_haveVideo)
     {
-	post("GEM: pix_videoDarwin: no video yet");
-	return;
+		post("GEM: pix_videoDarwin: no video yet");
+		return;
     }
 //	derSwizzler(m_pixBlock.image);
     m_pixBlock.newimage = m_newFrame;
-  state->image = &m_pixBlock;
-  m_newFrame = 0;
+	state->image = &m_pixBlock;
+	m_newFrame = 0;
+	
+  }else {
+  
+	m_newFrame = 0;
+	m_pixBlock.newimage = m_newFrame;
+	state->image = &m_pixBlock;
+  
+  }
+  
+  m_banged = false;
 }
 
 /////////////////////////////////////////////////////////
@@ -120,8 +160,8 @@ void pix_videoDarwin :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_videoDarwin :: postrender(GemState *state)
 {
-  m_pixBlock.newimage = 0;
-state->image = NULL;
+	m_pixBlock.newimage = 0;
+	state->image = NULL;
   
 }
 
@@ -131,6 +171,13 @@ state->image = NULL;
 /////////////////////////////////////////////////////////
 int pix_videoDarwin :: startTransfer()
 {
+	OSErr	err = noErr;
+
+	if (m_record)	{
+		SGStartRecord(m_sg);
+		if (err != noErr) post("pix_videoDarwin SGStartRecord failed with error %d",err);
+		}
+	else SGStartPreview(m_sg);
      m_haveVideo = 1;
      m_pixBlock.newimage = 1;
      return 1;
@@ -142,6 +189,11 @@ int pix_videoDarwin :: startTransfer()
 /////////////////////////////////////////////////////////
 int pix_videoDarwin :: stopTransfer()
 {
+	OSErr	err = noErr;
+
+	//might need SGPause or SGStop here
+	err = SGStop(m_sg);
+	if (err != noErr) post("pix_videoDarwin SGStop failed with error %d",err);
      return 1;
 }
 
@@ -151,6 +203,7 @@ void pix_videoDarwin :: DoVideoSettings()
     Rect	curBounds, curVideoRect, newVideoRect;
     ComponentResult	err;
 
+
     // Get our current state - do i need this???
     err = SGGetChannelBounds (m_vc, &curBounds);
     err = SGGetVideoRect (m_vc, &curVideoRect);
@@ -159,12 +212,34 @@ void pix_videoDarwin :: DoVideoSettings()
     err = SGPause (m_sg, true);
 
     // Do the dialog thang
+
 	err = SGSettingsDialog( m_sg, m_vc, 0, nil, 0, nil, 0);
 	
+
     // What happened?
     err = SGGetVideoRect (m_vc, &newVideoRect);
     err = SGGetSrcVideoBounds (m_vc, &newActiveVideoRect);
-
+	
+	/* //Attempt to save SG settings to disk
+	UserData	uD = NULL;
+	//NewUserData(uD);
+	SGGetSettings(m_sg,&uD,0);
+	//short uDCount;
+	//uDCount = CountUserDataType(*uD,sgClipType);
+	//post("pix_videoDarwin: UserDataType count %d",uDCount);
+	
+	Handle myHandle = NewHandle(0);
+	int length;
+	
+	PutUserDataIntoHandle(uD,myHandle);
+	length = GetHandleSize(myHandle);
+	
+	int myFile;
+	myFile = open("/Users/lincoln/Documents/temp",O_CREAT | O_RDWR, 0600);
+	write(myFile,myHandle,length);
+	close(myFile);
+	*/
+	
     err = SGPause (m_sg, false);
 }
 
@@ -179,6 +254,7 @@ void pix_videoDarwin :: InitSeqGrabber()
 	short			deviceCount = 0;
 	SGDeviceInputList theSGInputList = NULL;
 	bool showInputsAsDevices;
+//	UserData 	*uD;
 	
 	
 	
@@ -246,16 +322,34 @@ void pix_videoDarwin :: InitSeqGrabber()
 	
 	//this call sets the input device
 	if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
-	anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice); 
+		anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice); 
 	if(anErr!=noErr){
         post("pix_videoDarwin: SGSetChannelDeviceInputNames returned error %d",anErr);
     }
+	
+	/*  //attempt to save SG settings to disk
+	NewUserData(uD);
+	SGGetSettings(m_sg,uD,0);
+	short uDCount;
+	uDCount = CountUserDataType(*uD,sgClipType);
+	post("pix_videoDarwin: UserDataType count %d",uDCount);
+	
+	Handle myHandle;
+	
+	PutUserDataIntoHandle(*uD,myHandle);
+	
+	int myFile;
+	myFile = open("/Users/lincoln/Documents/temp",O_CREAT | O_RDWR, 0600);
+	write(myFile,myHandle,4096);
+	close(myFile);
+	*/
 	
 	//grab the VDIG info from the SGChannel
 	m_vdig = SGGetVideoDigitizerComponent(m_vc);
 	vdigErr = VDGetDigitizerInfo(m_vdig,&m_vdigInfo); //not sure if this is useful
 	
 	Str255	vdigName;
+	memset(vdigName,0,255);
 	vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
 	post("pix_videoDarwin : vdigName is %s",vdigName);
 	
@@ -275,7 +369,6 @@ void pix_videoDarwin :: InitSeqGrabber()
     if(anErr!=noErr){
         post("pix_videoDarwin: could not set SG ChannelUsage ");
     }
-    m_rowBytes = m_vidXSize*4;
     
     switch (m_quality){
     case 0:
@@ -352,9 +445,43 @@ void pix_videoDarwin :: InitSeqGrabber()
 		return;
 	}
     SGSetGWorld(m_sg,(CGrafPtr)m_srcGWorld, NULL);
-    SGStartPreview(m_sg);
+    SGStartPreview(m_sg); //moved to starttransfer?
     m_haveVideo = 1;
     
+}
+
+void pix_videoDarwin :: setupCapture()
+{
+	stopTransfer();
+	SGSetChannelUsage(m_vc, 0);
+	
+	if (m_record) {
+		SGSetDataOutput(m_sg,&theFSSpec,seqGrabToDisk);
+		switch(m_record){
+		
+		case 1:
+			SGSetChannelPlayFlags(m_vc, channelPlayAllData);
+			SGSetChannelUsage(m_vc, seqGrabRecord | seqGrabPlayDuringRecord);
+			post("pix_videoDarwin: record full preview");
+			break;
+		case 2:
+			SGSetChannelUsage(m_vc, seqGrabRecord | seqGrabPlayDuringRecord);
+			post("pix_videoDarwin: record some preview");
+			break;
+		case 3:
+			SGSetChannelUsage(m_vc, seqGrabRecord);
+			post("pix_videoDarwin: record no preview");
+			break;
+		default:
+			SGSetChannelUsage(m_vc, seqGrabRecord);	
+		}
+	}
+	else {
+		SGSetChannelUsage(m_vc, seqGrabPreview);
+	}
+	SGUpdate(m_sg,0);
+	
+	startTransfer();
 }
  
 void pix_videoDarwin :: destroySeqGrabber()
@@ -507,6 +634,90 @@ void pix_videoDarwin :: csMess(int format)
 	resetSeqGrabber();
 	startTransfer();
 }
+
+
+void pix_videoDarwin :: fileMess(int argc, t_atom *argv)
+{
+
+	
+    OSErr		err = noErr;
+    FSRef		ref;
+
+//if recording is going do not accept a new file name
+//on OSX changing the name while recording won't have any effect 
+//but it will give the wrong message at the end if recording
+//if (m_recordStart) return;
+
+//  char *extension = ".mov";
+  if (argc) {
+    if (argv->a_type == A_SYMBOL) {
+      atom_string(argv++, m_filename, 80);
+      argc--;
+     // sprintf(m_filename, "%s", m_pathname);
+    }
+   // if (argc>0)
+  //    m_filetype = atom_getint(argv);
+  }
+
+ // m_autocount = 0;
+	setModified();
+
+	post("pix_videoDarwin : filename %s",m_filename);
+	
+	if (!m_filename[0]) {
+        post("pix_record:  no filename passed");
+		return;
+		} else {            
+			err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
+			if (err == fnfErr) {
+				// if the file does not yet exist, then let's create the file
+				int fd;
+                fd = open(m_filename, O_CREAT | O_RDWR, 0600);
+                if (fd < 0){
+                    post("pix_record : problem with fd");
+					return ;
+					}
+                        write(fd, " ", 1);
+                        close(fd);
+						err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
+						//post("pix_record : made new file %s",m_filename);
+			}
+
+            
+			if (err) {
+				error("GEM: pix_record: Unable to make file ref from filename %s", m_filename);
+				return;
+			}
+			
+			//err = ::FSsetCatalogInfo(&ref, kFSCatInfoSettableInfo, NULL);
+			err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
+
+			if (err != noErr){
+					error("GEM: pix_record: error %d in FSGetCatalogInfo()", err);
+					return;
+				}
+		
+		
+		//	err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
+			
+			if (err != noErr && err != -37){
+					error("GEM: pix_record: error %d in FSMakeFSSpec()", err);
+					return;
+				}
+
+		}
+
+	CreateMovieFile(	&theFSSpec,
+							FOUR_CHAR_CODE('TVOD'),
+							smSystemScript,
+							createMovieFileDontOpenFile | 
+							createMovieFileDontCreateMovie | 
+							createMovieFileDontCreateResFile,
+							NULL,
+							NULL);
+
+}
+
 
 void pix_videoDarwin :: brightnessMess(float X)
 {
@@ -819,6 +1030,8 @@ pix_video::real_obj_setupCallback(classPtr);
 		  gensym("quality"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
 		  gensym("reset"), A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_videoDarwin::autoCallback,
+		  gensym("auto"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
 		  gensym("dialog"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::colorspaceCallback,
@@ -837,11 +1050,34 @@ pix_video::real_obj_setupCallback(classPtr);
                     		  gensym("gain"), A_DEFFLOAT, A_NULL);
 	class_addmethod(classPtr, (t_method)&pix_videoDarwin::whiteBalanceCallback,
                     		  gensym("whitebalance"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_videoDarwin::fileMessCallback,
+		  gensym("file"), A_GIMME, A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_videoDarwin::recordCallback,
+		  gensym("record"), A_DEFFLOAT, A_NULL);
+							  
+	class_addbang(classPtr,(t_method)&pix_videoDarwin::bangMessCallback);
 }
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
 {
 	GetMyClass(data)->m_quality=((int)X);
+} 
+
+void pix_videoDarwin :: autoCallback(void *data, t_floatarg X)
+{
+	GetMyClass(data)->m_auto=((int)X);
+} 
+
+void pix_videoDarwin :: recordCallback(void *data, t_floatarg X)
+{
+	GetMyClass(data)->m_record=((int)X);
+	GetMyClass(data)->setupCapture();
+} 
+
+
+void pix_videoDarwin :: bangMessCallback(void *data)
+{
+	GetMyClass(data)->m_banged=true;
 } 
 
 void pix_videoDarwin :: resetCallback(void *data)
@@ -935,4 +1171,10 @@ void pix_videoDarwin :: whiteBalanceCallback(void *data, t_floatarg U, t_floatar
 {
   GetMyClass(data)->whiteBalanceMess(U,V);
 }
+
+void pix_videoDarwin :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+{
+  GetMyClass(data)->fileMess(argc, argv);
+}
+
 #endif // __APPLE__

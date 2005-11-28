@@ -63,6 +63,9 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 
     	//////////
     	virtual void	startRendering();
+		
+		//////////
+    	virtual void	stopRendering();
         
           //////////
           // Start up the video device
@@ -81,6 +84,10 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         virtual void	dialogMess(int,t_atom*);
 		
 		virtual void	derSwizzler(imageStruct &image);
+		
+		virtual void	setupCapture();
+		
+		virtual void	fileMess(int argc, t_atom *argv);
   
 	//-----------------------------------
 	// GROUP:	Macintosh specific video data
@@ -106,9 +113,15 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         //-----------------------------------
     
     	int		m_newFrame; 
+		bool	m_banged;
+		bool	m_auto;
+		char	m_filename[80];
+		int		m_record;
         
         SeqGrabComponent	m_sg;		// Sequence Grabber Component
         SGChannel			m_vc;			// Video Channel
+		SGOutput			m_sgout; //output for writing to disk
+		Movie				m_movie;
         short				m_pixelDepth;	//
         int					m_vidXSize;		//
         int					m_vidYSize;		//
@@ -125,6 +138,9 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 		VideoDigitizerError	vdigErr;
 		DigitizerInfo       m_vdigInfo; //the info about the VDIG
 		
+		FSSpec		theFSSpec;
+		short		nFileRefNum;
+		short		nResID;
 		
 		//functions and variables for controlling the vdig
 		unsigned short		m_brightness;
@@ -156,6 +172,10 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 		static void exposureCallback(void *data, t_floatarg X);
 		static void gainCallback(void *data, t_floatarg X);
 		static void whiteBalanceCallback(void *data, t_floatarg U,t_floatarg V);
+		static void bangMessCallback(void *data);
+		static void autoCallback(void *data, t_floatarg X);
+		static void fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+		static void recordCallback(void *data, t_floatarg X);
 };
 
 #endif
