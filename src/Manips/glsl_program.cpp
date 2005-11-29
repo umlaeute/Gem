@@ -17,6 +17,7 @@
 #include <string.h>
 #include <stdlib.h>
 #ifdef __APPLE__
+#include <OpenGL/OpenGL.h>
 #include <AGL/agl.h>
 extern bool HaveValidContext (void);
 #endif
@@ -110,6 +111,7 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
   // if we reach this, then no param-name was matching!
   if(i>m_num)error("glsl_program: no method for '%s' (this is no uniform parameter)", s->s_name);
 }
+
 /////////////////////////////////////////////////////////
 // shaderMess
 //
@@ -128,7 +130,7 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     	error("GEM: [%s]: can't link non-existent shaders", m_objectname->s_name);
     	return;
   }
-  m_program = glCreateProgramObjectARB();
+
   if(argc>MAX_NUM_SHADERS)
     {
       argc=MAX_NUM_SHADERS;
@@ -138,17 +140,16 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
   {
     m_shaderObj[i] = (t_GLshaderObj)(atom_getint(&argv[i]));
   }
-//  m_linked = 0;
+  
 //  not sure what to do here:  we don't want to link & re-link every render cycle,
 //  but we do want to link when there are new shaders to link...so I made a seperate
 //  link message
   m_num = argc;
-//  LinkProgram(argc);
 #endif
 }
 
 /////////////////////////////////////////////////////////
-// render
+// LinkProgram
 //
 /////////////////////////////////////////////////////////
 void glsl_program :: LinkProgram()
@@ -161,6 +162,14 @@ void glsl_program :: LinkProgram()
     	error("GEM: [%s]: can't link zero shaders", m_objectname->s_name);
     	return;
   }
+  
+  if (!m_program) m_program = glCreateProgramObjectARB();
+  else
+  {
+    glDeleteObjectARB( m_program );
+	m_program = glCreateProgramObjectARB();
+  }
+  
   for (int i = 0; i < m_num; i++)
   {
     post("attach object %d", i);
@@ -191,16 +200,33 @@ void glsl_program :: LinkProgram()
   if (m_linked) {
     glUseProgramObjectARB( m_program );
   } else {
+    glUseProgramObjectARB( 0 );
     post("GEM: [%s]:  Link failed!", m_objectname->s_name);
     return;
   }
   //post("getting variables");
   getVariables();
+#ifdef __APPLE__
+  // call API to check if linked program is running on hardware or in software emulation
+  long int vertexGPUProcessing, fragmentGPUProcessing;
+  CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUVertexProcessing, &vertexGPUProcessing);
+  CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUFragmentProcessing, &fragmentGPUProcessing);
+  
+  if (vertexGPUProcessing)
+    post("[%s]: vertex shader running in hardware", m_objectname->s_name);
+  else
+    post("[%s]: vertex shader running in software", m_objectname->s_name);
+  
+  if (fragmentGPUProcessing)
+    post("[%s]: fragment shader running in hardware", m_objectname->s_name);
+  else
+    post("[%s]: fragment shader running in software", m_objectname->s_name);	
+#endif //__APPLE__
 #endif
 }
 
 /////////////////////////////////////////////////////////
-// render
+// getVariables
 //
 /////////////////////////////////////////////////////////
 void glsl_program :: getVariables()
