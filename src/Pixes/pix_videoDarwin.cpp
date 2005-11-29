@@ -23,7 +23,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg,
 #define MAX_RECORDING_TIME	100 * 60	// n * 60 ticks  (n : seconds)
 #define DEFAULT_INTERVAL	5		// 5 milliseconds for calling SGIdle()
 
-pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h )
+pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h ) :
+	m_srcGWorld(NULL)
 {
 
   if (w > 0 ){
@@ -260,7 +261,7 @@ void pix_videoDarwin :: InitSeqGrabber()
 	
     int num_components = 0;
     Component c = 0;
-     ComponentDescription cd;
+	ComponentDescription cd;
      
      cd.componentType = SeqGrabComponentType;
      cd.componentSubType = 0;
@@ -273,7 +274,7 @@ void pix_videoDarwin :: InitSeqGrabber()
   //   post("pix_videoDarwin: number of SGcomponents: %d",num_components);
     m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
     if(m_sg==NULL){
-        post("pix_videoDarwin: could not open defalut component");
+        post("pix_videoDarwin: could not open default component");
         return;
     }    
 	anErr = SGInitialize(m_sg);
@@ -369,7 +370,7 @@ void pix_videoDarwin :: InitSeqGrabber()
     if(anErr!=noErr){
         post("pix_videoDarwin: could not set SG ChannelUsage ");
     }
-    
+
     switch (m_quality){
     case 0:
         anErr = SGSetChannelPlayFlags(m_vc, channelPlayNormal);
@@ -422,7 +423,7 @@ void pix_videoDarwin :: InitSeqGrabber()
             anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                                   //  k422YpCbCr8CodecType,
 								 // k422YpCbCr8PixelFormat,
-								 '2vuy',
+								    '2vuy',
 								  // kComponentVideoUnsigned,
                                     &m_srcRect, 
                                     NULL, 
@@ -610,7 +611,7 @@ void pix_videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
 	stopTransfer();
     resetSeqGrabber();
 	startTransfer();
-	post("pix_videoDarwin: height %d width %d",m_vidXSize,m_vidYSize);  
+	post("pix_videoDarwin: height %d width %d",m_vidYSize,m_vidXSize);  
 //  m_pixBlock.image.xsize = m_vidXSize;
 //  m_pixBlock.image.ysize = m_vidYSize;
     
