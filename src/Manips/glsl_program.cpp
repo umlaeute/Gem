@@ -37,9 +37,8 @@ glsl_program :: glsl_program() :
   m_program(0), 
   m_maxLength(0), m_uniformCount(0),
   m_name(NULL), m_symname(NULL), m_length(NULL), m_size(NULL), m_type(NULL),
-  m_linked(0),
-  m_infoLog(NULL), 
-  m_num(0)
+  m_param(NULL), m_flag(NULL), m_linked(0),
+  m_infoLog(NULL), m_num(0)
 {
 #if !defined GL_ARB_shader_objects && !defined GL_ARB_shading_language_100
   post("GEM has been compiled without GLSL support");
@@ -61,6 +60,13 @@ glsl_program :: ~glsl_program()
   if (m_length) free(m_length);
   if (m_name) free(m_name);
   if (m_symname) free(m_symname);
+  if (m_param)
+  {
+	for (int i = 0; i < m_uniformCount; i++)
+	  free(m_param[i]);
+	free(m_param);
+  }
+  if (m_flag) free(m_flag);
 #endif
 }
 
@@ -72,7 +78,58 @@ void glsl_program :: render(GemState *state)
 {
 #ifdef GL_ARB_shader_objects
   if (m_linked) {
-	    glUseProgramObjectARB( m_program );
+	glUseProgramObjectARB( m_program );
+	for(int i=0; i<=m_uniformCount; i++)
+	{
+	  if(m_flag[i])
+	  {
+	    switch (m_type[i])
+	    {
+	  case 0x1404:  // GL_INT
+	    glUniform1iARB( i, (GLint)m_param[i][0] );
+		break;
+	  case 0x1406:  // GL_FLOAT
+	    glUniform1fARB( i, (GLfloat)m_param[i][0] );
+		break;
+	  case 0x8B50:  // GL_FLOAT_VEC2_ARB
+	    glUniform2fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1] );
+		break;
+	  case 0x8B51:  // GL_FLOAT_VEC3_ARB
+	    glUniform3fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
+							(GLfloat)m_param[i][2] );
+		break;
+	  case 0x8B52:  // GL_FLOAT_VEC4_ARB
+	    glUniform4fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
+							(GLfloat)m_param[i][2], (GLfloat)m_param[i][3] );
+		break;
+	  case 0x8B53:  // GL_INT_VEC2_ARB
+	    glUniform2iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1] );
+		break;
+	  case 0x8B54:  // GL_INT_VEC3_ARB
+	    glUniform3iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1], 
+							(GLint)m_param[i][2] );
+		break;
+	  case 0x8B55:  // GL_INT_VEC4_ARB
+	    glUniform4iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1], 
+							(GLint)m_param[i][2], (GLint)m_param[i][3] );
+		break;
+	  case 0x8B5A:  // GL_FLOAT_MAT2_ARB
+					// GL_TRUE = row major order, GL_FALSE = column major
+	    glUniformMatrix2fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
+		break;
+	  case 0x8B5B:  // GL_FLOAT_MAT3_ARB
+	    glUniformMatrix3fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
+		break;
+	  case 0x8B5C:  // GL_FLOAT_MAT4_ARB
+	    glUniformMatrix4fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
+		break;
+	  default:
+		;
+	    }
+		// remove flag because the value is in GL's state now...
+		m_flag[i]=0;
+	  }
+	}
   } else {
 	    post("GEM: [%s]:  no program linked", m_objectname->s_name);
   }
@@ -96,20 +153,24 @@ void glsl_program :: postrender(GemState *state)
 void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 {
   int i=0;
-  for(i=0; i<=m_num; i++){
+  for(i=0; i<=m_uniformCount; i++){
     if(s==m_symname[i]){
-      post("uniform parameters #%d", i);
+//      post("uniform parameters #%d", i);
       // don't know what to do with that...
       // sketch:
       //   copy the values into memory and add a flag that we have them for this parameter
       //   in the render cycle use it
-
-
+	  for (int j=0; j < argc; j++)
+	  {
+	    m_param[i][j] = atom_getfloat(&argv[j]);
+	  }
+	  // tell the GL state that this variable has changed next render
+	  m_flag[i] = 1;
       return;
     }
   }
   // if we reach this, then no param-name was matching!
-  if(i>m_num)error("glsl_program: no method for '%s' (this is no uniform parameter)", s->s_name);
+  if(i>m_num)error("glsl_program: no method for '%s' (it's not uniform variable)", s->s_name);
 }
 
 /////////////////////////////////////////////////////////
@@ -241,7 +302,7 @@ void glsl_program :: getVariables()
 			      GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB,
 			      &m_maxLength);
     glGetObjectParameterivARB( m_program, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
-			      &m_uniformCount);
+			      &m_uniformCount); 
 
     //
     // Allocate arrays to store the answers in. For simplicity, the return
@@ -252,12 +313,21 @@ void glsl_program :: getVariables()
     if (m_length) free(m_length);
     if (m_name) free(m_name);
     if (m_symname) free(m_symname);
+	if (m_param)
+	{
+	  for (int i = 0; i < m_uniformCount; i++)
+	    free(m_param[i]);
+	  free(m_param);
+	}
+	if (m_flag) free(m_flag);
 
     m_size   = (GLint *) malloc(m_uniformCount * sizeof(GLint));
     m_type   = (GLenum *) malloc(m_uniformCount * sizeof(GLenum));
     m_length = (GLsizei *) malloc(m_uniformCount * sizeof(GLsizei));
     m_name   = (GLcharARB **) malloc(m_uniformCount * sizeof(GLcharARB *));
     m_symname= (t_symbol**) malloc(m_uniformCount * sizeof(t_symbol *));
+	m_param  = (float**) malloc(m_uniformCount * sizeof(float*));
+	m_flag   = (int *) malloc(m_uniformCount * sizeof(int*));
 
     //
     // Loop over glGetActiveUniformARB and store the results away.
@@ -268,6 +338,11 @@ void glsl_program :: getVariables()
 	  glGetActiveUniformARB(m_program, i, m_maxLength, &m_length[i],
 			      &m_size[i], &m_type[i], m_name[i]);
 	  m_symname[i]=gensym(m_name[i]);
+	  // allocate maximum size for a param, which is a 4x4 matrix of floats
+	  // in the future, only allocate for specific type
+	  // also, technically we should handle arrays of matrices, too...sheesh!
+	  m_param[i] = (float*) malloc(15 * sizeof(float*));
+	  m_flag[i] = 0;
 //	  post("[%s]: active uniform variable: %s", m_objectname->s_name, m_name[i]);
     }
   }

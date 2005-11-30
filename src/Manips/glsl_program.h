@@ -89,12 +89,18 @@ class GEM_EXTERN glsl_program : public GemBase
   GLhandleARB		m_program;
   t_GLshaderObj		m_shaderObj[MAX_NUM_SHADERS];
   GLint				m_maxLength;
+  
+  //////////
+  // Variables for the, uh, variables
   GLint				m_uniformCount;
   GLcharARB			**m_name;
-  t_symbol                      **m_symname;
+  t_symbol          **m_symname;
   GLsizei			*m_length;
   GLint				*m_size;
   GLenum			*m_type;
+  float				**m_param;
+  int				*m_flag;
+  
   GLint				m_linked;
   GLcharARB*		m_infoLog;
   int				m_num;
