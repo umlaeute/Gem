@@ -62,15 +62,6 @@ class GEM_EXTERN glsl_vertex : public GemBase
   // open a shader up
   virtual void openMess(t_symbol *filename);
 
-
-  //////////
-  // which shader do we have (ARB, NV,...)
-  virtual GLint queryshadertype(char*shader);
-
-  //////////
-  // load the shader string to the openGL-engine
-  virtual void LoadShader();
-
   //////////
   // Do the rendering
   virtual void render(GemState *state);
@@ -93,11 +84,9 @@ class GEM_EXTERN glsl_vertex : public GemBase
 
   GLuint		m_shaderTarget;
   GLhandleARB   m_shader;
-  GLuint		m_program;
   GLint			m_compiled;
-  GLint			m_linked;
-  char*			m_shaderString;
   int			m_size;
+  char*			m_shaderString;
   
   GLint			m_shaderID;
   t_outlet		*m_outShaderID;

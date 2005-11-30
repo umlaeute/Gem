@@ -38,8 +38,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_vertex, t_symbol *, A_DEFSYM)
 /////////////////////////////////////////////////////////
 glsl_vertex :: glsl_vertex() :
   m_shaderType(GEM_shader_none), 
-  m_shader(0), m_program(0), m_compiled(0), m_linked(0),
-  m_size(0), m_shaderID(0), m_shaderString(NULL)
+  m_shader(0), m_compiled(0), m_size(0), 
+  m_shaderString(NULL), m_shaderID(0)
 {
 #ifdef GL_ARB_shader_objects
   m_shaderTarget = GL_VERTEX_SHADER_ARB;
@@ -47,8 +47,8 @@ glsl_vertex :: glsl_vertex() :
 }
 glsl_vertex :: glsl_vertex(t_symbol *filename) :
   m_shaderType(GEM_shader_none), 
-  m_shader(0), m_program(0), m_compiled(0), m_linked(0), 
-  m_size(0), m_shaderID(0), m_shaderString(NULL)
+  m_shader(0), m_compiled(0), m_size(0), 
+  m_shaderString(NULL), m_shaderID(0)
 {
 #ifdef GL_ARB_shader_objects
   m_shaderTarget = GL_VERTEX_SHADER_ARB;
@@ -83,16 +83,8 @@ void glsl_vertex :: closeMess(void)
 #endif
   }
   m_shader=0;
+  m_compiled=0;
   m_shaderType=GEM_shader_none;
-}
-
-/////////////////////////////////////////////////////////
-// queryshadertypes
-//
-/////////////////////////////////////////////////////////
-GLint glsl_vertex :: queryshadertype(char*shader)
-{
-  return GEM_shader_GLSL;
 }
 
 /////////////////////////////////////////////////////////
@@ -115,7 +107,6 @@ void glsl_vertex :: openMess(t_symbol *filename)
   // Clean up any open files
   closeMess();
 
-  //char *data;
   FILE *file = fopen(buf,"r");
   if(file) {
     fseek(file,0,SEEK_END);
@@ -158,38 +149,9 @@ void glsl_vertex :: openMess(t_symbol *filename)
 }
 
 /////////////////////////////////////////////////////////
-// LoadShader
+// startRendering
 //
 /////////////////////////////////////////////////////////
-void glsl_vertex :: LoadShader(void)
-{
-  if(NULL==m_shaderString)return;
-  GLint error=-1;
-
-  if(error != -1) {
-    int line = 0;
-    char *s = m_shaderString;
-    while(error-- && *s) if(*s++ == '\n') line++;
-    while(s >= m_shaderString && *s != '\n') s--;
-    char *e = ++s;
-    while(*e != '\n' && *e != '\0') e++;
-    *e = '\0';
-    post("vertex_shader:  shader error at line %d:\n\"%s\"",line,s);
-#ifdef GL_shader_ERROR_STRING_ARB
-    post("vertex_shader:  %s", glGetString(GL_shader_ERROR_STRING_ARB));
-#endif /* GL_shader_ERROR_STRING_ARB */
-  }
-
-#if defined GL_ARB_vertex_shader && defined GL_shader_UNDER_NATIVE_LIMITS_ARB
-  GLint bitnum;
-  glGetshaderivARB( m_shaderTarget, GL_shader_UNDER_NATIVE_LIMITS_ARB, &bitnum);
-  if (!bitnum)
-    post("GEM: vertex_shader not within native limits!!!");
-#endif
-
-}
-
-
 void glsl_vertex :: startRendering()
 {
   if (m_shaderString == NULL)
@@ -197,16 +159,20 @@ void glsl_vertex :: startRendering()
       error("[%s]: need to load a shader", m_objectname->s_name);
       return;
     }
-
-  LoadShader();
 }
 
+/////////////////////////////////////////////////////////
+// render
+//
+/////////////////////////////////////////////////////////
 void glsl_vertex :: render(GemState *state)
 {
   if (m_shader)
+  {
+    glEnable( m_shaderTarget );
     // send textureID to outlet
-    //outlet_pointer(m_outShaderID, (t_gpointer*)m_shader);
 	outlet_float(m_outShaderID, (t_float)(unsigned int)m_shader);
+  }
 }
 
 /////////////////////////////////////////////////////////
