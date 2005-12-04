@@ -104,6 +104,8 @@ class GEM_EXTERN glsl_program : public GemBase
   GLint				m_linked;
   GLcharARB*		m_infoLog;
   int				m_num;
+  
+  t_outlet		*m_outProgramID;
 
  private:
 	

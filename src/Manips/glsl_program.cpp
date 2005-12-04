@@ -44,6 +44,8 @@ glsl_program :: glsl_program() :
   post("GEM has been compiled without GLSL support");
   return;
 #endif
+  // create an outlet to send texture ID
+  m_outProgramID = outlet_new(this->x_obj, &s_float);
 }
 
 /////////////////////////////////////////////////////////
@@ -134,6 +136,9 @@ void glsl_program :: render(GemState *state)
 	    post("GEM: [%s]:  no program linked", m_objectname->s_name);
   }
 #endif
+
+  // send program ID to outlet
+  outlet_float(m_outProgramID, (t_float)(int)m_program);
 }
 
 /////////////////////////////////////////////////////////
