@@ -217,7 +217,7 @@ void glsl_program :: LinkProgram()
 {
 #ifdef GL_ARB_shader_objects
   post("link %d progs", m_num);
-  GLsizei length;
+  GLsizei length=0;
   if (!m_num)
   {
     	error("GEM: [%s]: can't link zero shaders", m_objectname->s_name);
@@ -235,9 +235,6 @@ void glsl_program :: LinkProgram()
   {
     post("attach object %d", i);
     glAttachObjectARB( m_program, m_shaderObj[i] );
-    // This only flags the shader to be deleted later,
-    // when the program is deleted and they are no longer referenced
-    glDeleteObjectARB( m_shaderObj[i] );
   }
   glLinkProgramARB( m_program );
   glGetObjectParameterivARB( m_program, GL_OBJECT_LINK_STATUS_ARB, &m_linked );
