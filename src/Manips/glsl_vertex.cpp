@@ -65,6 +65,7 @@ glsl_vertex :: glsl_vertex(t_symbol *filename) :
 /////////////////////////////////////////////////////////
 glsl_vertex :: ~glsl_vertex()
 {
+  glDeleteObjectARB( m_shader );
   closeMess();
 }
 
@@ -121,8 +122,13 @@ void glsl_vertex :: openMess(t_symbol *filename)
     strcpy(m_shaderString,buf);
   }
   m_size=strlen(m_shaderString);
-#ifdef GL_ARB_shader_objects 
-  m_shader = glCreateShaderObjectARB( m_shaderTarget );
+#ifdef GL_ARB_shader_objects
+  if (!m_shader) m_shader = glCreateShaderObjectARB( m_shaderTarget );
+  else
+  {
+    glDeleteObjectARB( m_shader );
+	m_shader = glCreateShaderObjectARB( m_shaderTarget );
+  }
   if (!m_shader)
   {
 	post("[%s]: could not create shader object", m_objectname->s_name);
@@ -169,7 +175,6 @@ void glsl_vertex :: render(GemState *state)
 {
   if (m_shader)
   {
-    glEnable( m_shaderTarget );
     // send textureID to outlet
 	outlet_float(m_outShaderID, (t_float)(unsigned int)m_shader);
   }
@@ -181,7 +186,6 @@ void glsl_vertex :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_vertex :: postrender(GemState *state)
 {
-    glDisable( m_shaderTarget );
 }
 
 /////////////////////////////////////////////////////////
