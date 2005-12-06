@@ -28,13 +28,13 @@ GEMglUseProgramObjectARB :: GEMglUseProgramObjectARB() :
         error("GEMglUseProgramObjectARB: GEM was compiled without GL_ARB_shader_objects");
         error("GEMglUseProgramObjectARB: therefore this object will do nothing");
 #endif
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
+	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglUseProgramObjectARB :: ~GEMglUseProgramObjectARB () {
-	inlet_free(m_inlet[0]);
+	inlet_free(m_inlet);
 }
 
 /////////////////////////////////////////////////////////

@@ -54,7 +54,7 @@ class GEM_EXTERN GEMglUseProgramObjectARB : public GemBase
 	private:
 
 	// we need some inlets
-	  t_inlet *m_inlet[1];
+	  t_inlet *m_inlet;
 
 	// static member functions
 	  static void	 programMessCallback (void*, t_floatarg);
