@@ -65,7 +65,6 @@ glsl_vertex :: glsl_vertex(t_symbol *filename) :
 /////////////////////////////////////////////////////////
 glsl_vertex :: ~glsl_vertex()
 {
-  glDeleteObjectARB( m_shader );
   closeMess();
 }
 
