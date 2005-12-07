@@ -92,11 +92,11 @@ filmQT :: ~filmQT()
 #ifdef HAVE_QUICKTIME
 void filmQT :: close(void)
 {
-  if(m_srcGWorld)::DisposeGWorld(m_srcGWorld);
-  m_srcGWorld = NULL;
+	DisposeMovie(m_movie);
+	//in QT Bizzaro World GWorlds dispose themselves!  And leak about 4k per call
+//	::DisposeGWorld(m_srcGWorld);
+//	m_srcGWorld = NULL;
 
- if(m_movie)::DisposeMovie(m_movie);
- m_movie=NULL;
 }
 
 bool filmQT :: open(char*filename, int format) {
@@ -142,7 +142,7 @@ bool filmQT :: open(char*filename, int format) {
   //post("err=%d", err);
   //post("refnum=%d", refnum);
   //post("movie = %x", &m_movie);
-  //startpost("new movie might crash... ");
+  //post("new movie might crash... ");
   err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (err) {
     error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
@@ -150,19 +150,21 @@ bool filmQT :: open(char*filename, int format) {
 	m_movie=NULL;
     goto unsupported;
   }
-  //post("...survived");
+ // post("...survived");
   if (refnum) ::CloseMovieFile(refnum);
+
+  
   m_curFrame = -1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
   //post("GEM: filmQT:  m_numTracks = %d",m_numTracks);
   // Get the length of the movie
   movieDur = (long)GetMovieDuration(m_movie);
   movieScale = (long)GetMovieTimeScale(m_movie);
-  /*
-  post("Movie duration = %d timescale = %d timebase = %d",movieDur,
-       movieScale,
-       (long)GetMovieTimeBase(m_movie));
-    */                                        
+  
+  //post("Movie duration = %d timescale = %d timebase = %d",movieDur,
+  //     movieScale,
+  //     (long)GetMovieTimeBase(m_movie));
+                                           
   whichMediaType = VisualMediaCharacteristic;
   // shouldn't the flags be OR'ed instead of ADDed ? (jmz) 
   flags = nextTimeMediaSample | nextTimeEdgeOK;
@@ -173,26 +175,34 @@ bool filmQT :: open(char*filename, int format) {
 
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
-  OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
+ // OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
   SetMovieBox(m_movie, &m_srcRect);	
   m_image.image.xsize = m_srcRect.right - m_srcRect.left;
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
   //post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
   //post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
-  //post("movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
+  post("movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
 
 #ifdef __APPLE__
   m_image.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
 #else
   m_image.image.type = GL_UNSIGNED_BYTE;
 #endif
+  m_image.image.csize = 4;
+  if (m_image.image.data) delete [] m_image.image.data;
+  m_image.image.data = new unsigned char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize]; 
   m_rowBytes = m_image.image.xsize * 4;
-  SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+ // SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+
+
   err = QTNewGWorldFromPtr(	&m_srcGWorld, 
 #ifdef __APPLE__
 				k32ARGBPixelFormat, // gives noErr
 #else
 				k32RGBAPixelFormat,
+				//'2vuy',
+				//k32BGRAPixelFormat, 
+				//k32RGBAPixelFormat,
 #endif
 				&m_srcRect, 
 				NULL, 
@@ -204,14 +214,19 @@ bool filmQT :: open(char*filename, int format) {
     error("GEM: filmQT: Couldn't make QTNewGWorldFromPtr %d", err);
     goto unsupported;
   }
-  m_movieTime = 0;
+  
+ // m_movieTime = GetMovieTime(m_movie,nil);;
   // *** set the graphics world for displaying the movie ***
   ::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
   if(GetMoviesError()){
 	  close();
 	  goto unsupported;
   }
+
+	SetMovieRate(m_movie,X2Fix(1.0));
     ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+
+	
   return true;
 
  unsupported:
@@ -244,7 +259,7 @@ pixBlock* filmQT :: getFrame()
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
   m_image.image.setCsizeByFormat(m_wantedFormat);
   //post("7a");  m_image.image.reallocate();
-  m_image.image.fromRGBA((unsigned char *)m_baseAddr);
+ // m_image.image.fromRGBA((unsigned char *)m_baseAddr);
   //m_image.image.fromUYVY((unsigned char *)m_baseAddr);
   m_image.newimage = 1;
   m_image.image.upsidedown=true;
@@ -252,6 +267,12 @@ pixBlock* filmQT :: getFrame()
   return &m_image;
 }
 
+
+double filmQT :: getFPS() {
+  // we don't know, so we return "-1"
+	m_fps = m_numFrames;
+  return m_fps;
+}
 
 int filmQT :: changeImage(int imgNum, int trackNum){
   m_readNext = false;
