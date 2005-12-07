@@ -33,8 +33,10 @@ CPPEXTERN_NEW_WITH_GIMME(pix_snap2tex)
 
 pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
   : m_textureOnOff(1), m_textureQuality(GL_LINEAR),
+    m_textureType(GL_TEXTURE_2D), m_repeat(GL_REPEAT),
     m_texWidth(-1), m_texHeight(-1),
-    m_oldWidth(-1), m_oldHeight(-1), m_textureObj(0)
+    m_oldWidth(-1), m_oldHeight(-1),
+	m_textureObj(0)
 {
   if (argc == 4)
     {
@@ -62,6 +64,9 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
     }
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
+  
+  // create an outlet to send texture info
+  m_outTexInfo = outlet_new(this->x_obj, 0);
 }
 
 /////////////////////////////////////////////////////////
@@ -80,12 +85,14 @@ void pix_snap2tex :: setUpTextureState()
 {
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
- // glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
- // glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
+  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
+  glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+  glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+#ifdef GL_TEXTURE_RECTANGLE_EXT
+  if (m_mode)
+    if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
+#endif //GL_TEXTURE_RECTANGLE_EXT
   glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
@@ -106,12 +113,12 @@ void pix_snap2tex :: snapMess()
       return;
     }
 
-  glEnable(GL_TEXTURE_2D);
+  glEnable(m_textureType);
 
 #ifdef GL_VERSION_1_1
-  glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  glBindTexture(m_textureType, m_textureObj);
 #elif GL_EXT_texture_object
-  glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);
+  glBindTextureEXT(m_textureType, m_textureObj);
 #else
   // can we build a display list?
   int creatingDispList = 0;
@@ -149,7 +156,7 @@ void pix_snap2tex :: snapMess()
     m_texWidth = x_2;
     m_texHeight = y_2;
 		
-    glCopyTexImage2D(	GL_TEXTURE_2D, 0,
+    glCopyTexImage2D(	m_textureType, 0,
 			GL_RGB,
 			m_x, m_y,
 			m_texWidth, m_texHeight, 
@@ -160,7 +167,7 @@ void pix_snap2tex :: snapMess()
   m_texWidth = m_width;
   
     {
-      glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
+      glCopyTexSubImage2D(m_textureType, 0,
 			  0, 0,
 			  m_x, m_y,		// position
 			  m_texWidth,
@@ -179,7 +186,7 @@ void pix_snap2tex :: snapMess()
     }
 #endif
 
-  glDisable(GL_TEXTURE_2D);
+  glDisable(m_textureType);
 
 }
 
@@ -195,17 +202,24 @@ void pix_snap2tex :: render(GemState *state)
   state->texCoords = m_coords;
   state->numTexCoords = 4;
 
-  glEnable(GL_TEXTURE_2D);
+  glEnable(m_textureType);
 
 #ifdef GL_VERSION_1_1
-  glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  glBindTexture(m_textureType, m_textureObj);
 #elif GL_EXT_texture_object
-  glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);
+  glBindTextureEXT(m_textureType, m_textureObj);
 #else
   glCallList(m_textureObj)
 #endif    
-	
-    }
+
+  t_atom ap[4];
+  SETFLOAT(ap, (t_float)m_textureObj);
+  SETFLOAT(ap+1, m_texWidth);
+  SETFLOAT(ap+2, m_texHeight);
+  SETFLOAT(ap+3, m_textureType);
+  // send texture info to outlet
+  outlet_list(m_outTexInfo, 0, 4, ap);
+}
 
 
 /////////////////////////////////////////////////////////
@@ -220,7 +234,7 @@ void pix_snap2tex :: postrender(GemState *state)
   state->numTexCoords = 0;	
   state->texCoords = NULL;	
 
-  glDisable(GL_TEXTURE_2D);
+  glDisable(m_textureType);
 }
 
 /////////////////////////////////////////////////////////
@@ -231,11 +245,11 @@ void pix_snap2tex :: startRendering()
 {
 #ifdef GL_VERSION_1_1
   glGenTextures(1, &m_textureObj);
-  glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  glBindTexture(m_textureType, m_textureObj);
   setUpTextureState();
 #elif GL_EXT_texture_object
   glGenTexturesEXT(1, &m_textureObj);
-  glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);    
+  glBindTextureEXT(m_textureType, m_textureObj);    
   setUpTextureState();
 #else
   m_textureObj = glGenLists(1);
@@ -323,19 +337,48 @@ void pix_snap2tex :: textureQuality(int type)
   if (m_textureObj)
     {
 #ifdef GL_VERSION_1_1
-      glBindTexture(GL_TEXTURE_2D, m_textureObj);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+      glBindTexture(m_textureType, m_textureObj);
+      glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+      glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
 #elif GL_EXT_texture_object
-      glBindTextureEXT(GL_TEXTURE_2D, m_textureObj);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+      glBindTextureEXT(m_textureType, m_textureObj);
+      glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+      glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
 #else
 #endif
     }
   setModified();
 }
 
+/////////////////////////////////////////////////////////
+// repeatMess
+//
+/////////////////////////////////////////////////////////
+void pix_snap2tex :: repeatMess(int type)
+{
+  if (type)
+    m_repeat = GL_REPEAT;
+  else
+#ifdef GL_CLAMP_TO_EDGE
+    m_repeat = GL_CLAMP_TO_EDGE;
+#else
+    m_repeat = GL_CLAMP;
+#endif
+
+  if (m_textureObj) {
+#ifdef GL_VERSION_1_1
+    glBindTexture(m_textureType, m_textureObj);
+    glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
+    glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
+#elif GL_EXT_texture_object
+    glBindTextureEXT(m_textureType, m_textureObj);
+    glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
+    glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
+#else
+#endif
+  }
+  setModified();
+}
 
 /////////////////////////////////////////////////////////
 // static member functions
@@ -355,7 +398,10 @@ void pix_snap2tex :: obj_setupCallback(t_class *classPtr)
   class_addfloat(classPtr, (t_method)&pix_snap2tex::floatMessCallback);    
   class_addmethod(classPtr, (t_method)&pix_snap2tex::textureMessCallback,
 		  gensym("quality"), A_FLOAT, A_NULL);
-
+  class_addmethod(classPtr, (t_method)&pix_snap2tex::repeatMessCallback,
+		  gensym("repeat"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_snap2tex::modeCallback,
+		  gensym("mode"), A_FLOAT, A_NULL);
 }
 void pix_snap2tex :: snapMessCallback(void *data)
 {
@@ -376,4 +422,13 @@ void pix_snap2tex :: floatMessCallback(void *data, float n)
 void pix_snap2tex :: textureMessCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->textureQuality((int)quality);
+}
+void pix_snap2tex :: repeatMessCallback(void *data, t_floatarg quality)
+{
+  GetMyClass(data)->repeatMess((int)quality);
+}
+void pix_snap2tex :: modeCallback(void *data, t_floatarg quality)
+{
+  GetMyClass(data)->m_mode=((int)quality);
+//  GetMyClass(data)->m_rebuildList=1;
 }

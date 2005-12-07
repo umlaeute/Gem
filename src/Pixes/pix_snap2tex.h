@@ -106,6 +106,14 @@ class pix_snap2tex : public GemBase
         // Set the texture quality
         // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
         void            textureQuality(int type);
+		int				m_mode;
+		int				m_textureType;
+		
+		//////////
+		// Set the texture quality
+		// [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
+		void			repeatMess(int type);
+		GLuint			m_repeat;
     	
     	//////////
     	// The x position
@@ -142,6 +150,7 @@ class pix_snap2tex : public GemBase
     	//////////
     	// The texture object number
     	GLuint	    	m_textureObj;
+		t_outlet		*m_outTexInfo;
 
     private:
     	
@@ -152,6 +161,8 @@ class pix_snap2tex : public GemBase
     	static void 	posMessCallback(void *data, t_floatarg x, t_floatarg y);
     	static void 	floatMessCallback(void *data, float n);
     	static void 	textureMessCallback(void *data, t_floatarg n);
+		static void 	modeCallback(void *data, t_floatarg n);
+		static void 	repeatMessCallback(void *data, t_floatarg n);
 };
 
 #endif	// for header file
