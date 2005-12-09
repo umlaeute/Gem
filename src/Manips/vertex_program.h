@@ -95,6 +95,9 @@ class GEM_EXTERN vertex_program : public GemBase
   GLuint        m_programID;
   char*		m_programString;
   int		m_size;
+  
+  float		m_param[4];
+  int		m_envNum;
 
  protected:
 	

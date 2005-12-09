@@ -244,6 +244,7 @@ void vertex_program :: startRendering()
 void vertex_program :: render(GemState *state)
 {
   LoadProgram();
+  glProgramEnvParameter4fvARB(m_programTarget, m_envNum, m_param);
 }
 
 /////////////////////////////////////////////////////////
