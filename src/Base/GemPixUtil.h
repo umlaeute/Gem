@@ -56,63 +56,6 @@ const int chY0          = 1;
 const int chV           = 2;
 const int chY1          = 3;
 
-// packed pixel defines for textures
-#ifndef GL_EXT_packed_pixels
-#define GL_UNSIGNED_BYTE_3_3_2_EXT          0x8032
-#define GL_UNSIGNED_SHORT_4_4_4_4_EXT       0x8033
-#define GL_UNSIGNED_SHORT_5_5_5_1_EXT       0x8034
-#define GL_UNSIGNED_INT_8_8_8_8_EXT         0x8035
-#define GL_UNSIGNED_INT_10_10_10_2_EXT      0x8036
-#endif
-
-
-// windows has this oh so old openGL installed...
-#if !defined GL_BGRA && defined GL_BGRA_EXT
-# define GL_BGRA GL_BGRA_EXT
-#endif
-#if !defined GL_BGRA_EXT && defined GL_BGRA
-# define GL_BGRA_EXT GL_BGRA
-#endif
-#if !defined GL_BGRA && !defined GL_BGRA_EXT
-# define GL_BGRA 0x80E1
-# define GL_BGRA_EXT 0x80E1
-#endif
-
-#if !defined GL_BGR && defined GL_BGR_EXT
-# define GL_BGR GL_BGR_EXT
-#endif
-#if !defined GL_BGR_EXT && defined GL_BGR
-# define GL_BGR_EXT GL_BGR
-#endif
-#if !defined GL_BGR && !defined GL_BGR_EXT
-# define GL_BGR 0x80E0
-# define GL_BGR_EXT 0x80E0
-#endif
-
-#ifndef GL_YUV422_GEM
-
-# ifdef GL_YCBCR_422_APPLE
-#  define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
-# elif defined GL_CRYCBY_422_NVX
-#  define GL_YCBCR_422_GEM GL_CRYCBY_422_NVX
-//#  define GL_YCBCR_422_GEM GL_YCRYCB_422_NVX
-# elif defined GL_YCRCB_422_SGIX
-#  define GL_YCBCR_422_GEM GL_YCRCB_422_SGIX
-# endif
-
-# ifndef GL_YCBCR_422_GEM
-#  define GL_YCBCR_422_GEM 0x85B9
-# endif
-
-# define GL_YUV422_GEM GL_YCBCR_422_GEM
-
-#endif /* GL_YUV422_GEM */
-
-#if !defined(GL_TEXTURE_RECTANGLE_EXT) && defined(GL_TEXTURE_RECTANGLE_NV)
-#define GL_TEXTURE_RECTANGLE_EXT GL_TEXTURE_RECTANGLE_NV
-#endif
-
-
 // basic helper functions, like CLAMP and powerOfTwo
 #include "Base/GemFuncUtil.h"
 
