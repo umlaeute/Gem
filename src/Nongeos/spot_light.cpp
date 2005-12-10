@@ -38,9 +38,9 @@ spot_light :: spot_light(t_floatarg lightNum)
   m_position[2] = 0.0;
   m_position[3] = 1.0;
 
-  spotDirection[0] = -1.0;
+  spotDirection[0] = 0.0;
   spotDirection[1] = 0.0;
-  spotDirection[2] = 0.0;
+  spotDirection[2] = -1.0;
 
   constantAttenuation = 0.0;
   linearAttenuation = 0.1;
@@ -68,9 +68,15 @@ spot_light :: ~spot_light()
 void spot_light :: lightParamMess(float linAtt, float cutoff, float exponent)
 {
   // convert from spherical coordinates
-  linearAttenuation = linAtt;
-  spotCutoff = cutoff;
-  spotExponent = exponent;
+  // needs to be positive?
+  if (linAtt >= 0) linearAttenuation = linAtt;
+  
+  // spotCutoff needs to be 0-90 or 180
+  if ( (cutoff >= 0) && (cutoff <= 90) ) spotCutoff = cutoff;
+  else if (cutoff == 180) spotCutoff = cutoff;
+  
+  // only 0-128
+  if ( (exponent >= 0) && (exponent <= 128) ) spotExponent = exponent;
   m_change = 1;
   setModified();
 }
