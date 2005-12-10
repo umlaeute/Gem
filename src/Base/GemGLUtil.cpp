@@ -28,6 +28,20 @@
 
 #define _GL_UNDEFINED -1
 
+// if error dump gl errors to debugger string, return error
+GEM_EXTERN GLenum glReportError (void)
+{
+	GLenum err = glGetError();
+	if (GL_NO_ERROR != err) {
+		post("GL: %s",(char*)gluErrorString(err));
+	}
+	// ensure we are returning an OSStatus noErr if no error condition
+	if (err == GL_NO_ERROR)
+		return 0;
+	else
+		return err;
+}
+
 GEM_EXTERN int getGLbitfield(int argc, t_atom *argv){
   int accum=0;  
   int mode=0;

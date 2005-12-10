@@ -20,6 +20,7 @@ LOG
 #include "Base/GemBase.h"
 #include "Base/GemExportDef.h"
 
+GEM_EXTERN extern GLenum		glReportError (void);
 GEM_EXTERN extern int           getGLdefine(char *name);
 GEM_EXTERN extern int           getGLdefine(t_symbol *name);
 GEM_EXTERN extern int           getGLdefine(t_atom *name);
