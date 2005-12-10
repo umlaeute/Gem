@@ -105,7 +105,6 @@ void sphere :: createSphere(GemState *state)
                 m_z[src] = nsign * cos(drho);
                 src++;
             }
-            glEnd();
         }
 
         ds = 1.0 / slices;
