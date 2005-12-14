@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PART_KILLOLD_H_
-#define INCLUDE_PART_KILLOLD_H_
+#ifndef INCLUDE_PART_ORBITPOINT_H_
+#define INCLUDE_PART_ORBITPOINT_H_
 
 #include "Base/GemBase.h"
 
