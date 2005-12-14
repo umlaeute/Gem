@@ -31,8 +31,9 @@ CPPEXTERN_NEW(pix_videoNEW)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_videoNEW :: pix_videoNEW(){
-  m_videoHandle=NULL;
+pix_videoNEW :: pix_videoNEW() : 
+  m_videoHandle(NULL), m_driver(-1)
+{
   int i = MAX_VIDEO_HANDLES;
   while(i--)m_videoHandles[i]=NULL;
   i=0;
@@ -162,15 +163,17 @@ void pix_videoNEW :: colorMess(t_atom*a)
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: driverMess(int dev)
 {
-//  post("driver: %d", dev);
+  //  post("driver: %d", dev);
   if(dev>=m_numVideoHandles){
     post("driverID (%d) must not exceed %d", dev, m_numVideoHandles);
     return;
   }
-  if(m_videoHandle==m_videoHandles[dev])return;
-  //  if(m_videoHandle)m_videoHandle->stopTransfer();
-  m_videoHandle=m_videoHandles[dev];
-  //  if(m_videoHandle)m_videoHandle->startTransfer();
+  if((dev!=m_driver) && (m_videoHandle!=m_videoHandles[dev])){
+    if(m_videoHandle)m_videoHandle->stopTransfer();
+    m_videoHandle=m_videoHandles[dev];
+    if(m_videoHandle)m_videoHandle->startTransfer();
+    m_driver=dev;
+  }
 }
 /////////////////////////////////////////////////////////
 // deviceMess
@@ -184,6 +187,7 @@ void pix_videoNEW :: deviceMess(t_symbol*s)
 {
   int err=0;
   if (m_videoHandle)err=m_videoHandle->setDevice(s->s_name);
+  post("device-err: %d", err);
   if(!err){
     int d=0;
     if(m_videoHandle)m_videoHandle->stopTransfer();

@@ -113,6 +113,8 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   video *m_videoHandles[MAX_VIDEO_HANDLES];
   int    m_numVideoHandles;
 
+  int    m_driver;
+
  private:
     	
   //////////
