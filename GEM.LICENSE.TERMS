@@ -54,7 +54,7 @@ The "GemLibs" portion of GEM consists of
 
 libTiff:
     Author: Sam Leffner
-            sam@engr.sgi.com
+            sam[AT]engr.sgi.com
             ftp://ftp.sgi.com/graphics/tiff/ 
     Copyright (c) 1988-1996 Sam Leffler
     Copyright (c) 1991-1996 Silicon Graphics, Inc.
@@ -63,7 +63,7 @@ libTiff:
 fstimage:
     Masayuki Matsumoto
         sgi image loader.
-            matumot@dst.nk-exa.co.jp
+            matumot[AT]dst.nk-exa.co.jp
     Copyright (C) 1995 Masayuki Mastumoto
     Modified so that it doesn't exit on error.
     Added support for reading grayscale, rgb, and rgba images
@@ -71,7 +71,7 @@ fstimage:
 
 libjpeg:
     Author: Independent JPEG Group
-            jpeg-info@uunet.uu.net
+            jpeg-info[AT]uunet.uu.net
             ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/
     Copyright (C) 1991-1996, Thomas G. Lane.
 
@@ -82,7 +82,7 @@ Glut:
 
 GLTT:
     Author: Stephane Rehel
-            rehel@worldnet.fr
+            rehel[AT]worldnet.fr
             http://home.worldnet.fr/~rehel/gltt/gltt.html
     Copyright (C) 1991 Stephane Rehel
 	This is covered under the GNU Library General Public License, 
@@ -90,41 +90,57 @@ GLTT:
 
 Freetype:
     Authors: David Turner, Robert Wilhelm, and Werner Lemberg
-            turner@enst.fr
-            robert@physiol.med.tu-muenchen.de
-            a7971428@unet.univie.ac.at
+            turner[AT]enst.fr
+            robert[AT]physiol.med.tu-muenchen.de
+            a7971428[AT]unet.univie.ac.at
             http://www.physiol.med.tu-muenchen.de/~robert/freetype.html
     Copyright 1996,1997 by David Turner, Robert Wilhelm, and Werner Lemberg
 
 libmpeg:
     Authors: MPEG Software Simulation Group
-            mssg@mpeg.org
+            mssg[AT]mpeg.org
             http://www.mpeg.org/MSSG/
     Copyright (c) 1996 MPEG Software Simulation Group
 
 Wintab:
     Author: Rick Poyner, LCS/Telegraphics
-            wintab@pointing.com
+            wintab[AT]pointing.com
     Copyright 1991-1995 by LCS/Telegraphics.
     see license below
 
 libOrb:
     Author: John Stone
-            j.stone@acm.org
+            j.stone[AT]acm.org
             http://www.umr.edu/~johns/projects/liborb/
     Copyright (c) 1997-1998 John E. Stone
     see license below
 
 particle:
     Author: David McAllister
-            davemc@cs.unc.edu
+            davemc[AT]cs.unc.edu
             http://www.cs.unc.edu/~davemc/Particle/
     Copyright (c) 1998 David K. McAllister
+
+libfidtrack:
+    Author: Ross Bencina
+    	    rossb[AT]audiomulch.com
+	    http://www.iua.upf.es/mtg/reacTable/
+    Copyright (c) 2005 Ross Bencina
+	This is covered under the GNU Library General Public License, 
+        Version 2 or greater.
+
+reacTIVision:
+    Author: Martin Kaltenbrunner 
+	    mkalten[AT]iua.upf.es
+	    http://www.iua.upf.es/mtg/reacTable/
+    Copyright (c) 2005 Martin Kaltenbrunner
+	This is covered under the GNU General Public License, 
+        Version 2 or greater.
 
 ----------------------------------------------------------------------------
 libTiff:
     Author: Sam Leffner
-            sam@engr.sgi.com
+            sam[AT]engr.sgi.com
             ftp://ftp.sgi.com/graphics/tiff/ 
     Copyright (c) 1988-1996 Sam Leffler
     Copyright (c) 1991-1996 Silicon Graphics, Inc.
@@ -155,7 +171,7 @@ OF THIS SOFTWARE.
 ----------------------------------------------------------------------------
 Wintab:
     Author: Rick Poyner, LCS/Telegraphics
-            wintab@pointing.com
+            wintab[AT]pointing.com
 
      The Wintab specification is intended to be an open standard. The
      Wintab Programmer's Kit is an aid to understanding the Wintab
@@ -173,7 +189,7 @@ Wintab:
 libOrb:
 
 /*
- * Copyright (c) 1997, 1998 John E. Stone (j.stone@acm.org)
+ * Copyright (c) 1997, 1998 John E. Stone (j.stone[AT]acm.org)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
