@@ -13,7 +13,11 @@ all: $(OBJECTS)
 
 ## dependencies: as proposed by the GNU-make documentation
 ## see http://www.gnu.org/software/make/manual/html_node/make_47.html#SEC51
+ifeq (,$(findstring clean, $(MAKECMDGOALS)))
+## don't include when running clean
 -include $(SOURCES:.cpp=.d)
+endif
+
 %.d: %.cpp
 	@set -e; rm -f $@; \
 	 $(CXX) $(MAKEDEP_FLAGS) $(GEM_CXXFLAGS) $< > $@.$$$$; \
