@@ -7,9 +7,27 @@
  *
  */
 
+/*
+#ifdef __APPLE__
+#define HAVE_QUICKTIME
+#endif
+*/
+//#ifdef HAVE_QUICKTIME
+
+#if defined (__WIN32__) || defined (__APPLE__)
+
 #include "pix_record.h"
 #include "Base/GemMan.h"
 #include "Base/GemCache.h"
+
+#ifdef __WIN32__
+#include <io.h>
+#include <stdio.h>
+#include <QTML.h>
+#include <Movies.h>
+#include <QuicktimeComponents.h>
+#include <Files.h>
+#endif
 
 #ifdef __APPLE__
 #include <Quicktime/Quicktime.h>
@@ -19,6 +37,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h> 
+
+#endif
 
 CPPEXTERN_NEW_WITH_GIMME(pix_record)
 
@@ -59,12 +79,29 @@ pix_record :: pix_record(int argc, t_atom *argv)
   m_automatic = false;
   m_autocount = 0;
   m_filetype=0;
-  sprintf(m_pathname, "/Users/lincoln/Movies/temp");
   m_filename[0] = NULL;
     
   m_banged = false;
   
+
+# ifdef __WIN32__
+  // Initialize QuickTime Media Layer
+
   
+  OSErr		err = noErr;
+  if ((err = InitializeQTML(0))) {
+    error("filmQT: Could not initialize quicktime: error %d\n", err);
+    return;
+  }
+	
+  // Initialize QuickTime
+  if (err = EnterMovies()) {
+    error("filmQT: Could not initialize quicktime: error %d\n", err);
+    return;
+  }
+  post("pix_video: QT init done");
+# endif // WINDOWS
+
   /* */
   //get list of codecs installed  -- useful later
 	CodecNameSpecListPtr codecList;
@@ -123,9 +160,29 @@ pix_record :: ~pix_record()
 {
 	ComponentResult			compErr = noErr;
 
+	post("pix_record: deconstructor");
+	if (stdComponent != NULL){
 	compErr = CloseComponent(stdComponent);
 	
 	if (compErr != noErr) post("pix_record : CloseComponent failed with error %d",compErr);
+
+	}
+//most likely a dumb thing to do
+	/*
+	#ifdef HAVE_QUICKTIME
+# ifdef __WIN32__
+	
+	post("pix_video: exiting QT");
+  // Initialize QuickTime
+  ExitMovies();
+  
+  // Initialize QuickTime Media Layer
+  TerminateQTML();
+	
+# endif // WINDOWS
+#endif
+*/
+
 }
 
 /////////////////////////////////////////////////////////
@@ -145,9 +202,11 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 	//this mess should create and open a file for QT to use
 	//probably should be a separate function
 	//post("filename %s",m_filename);
+
 	if (!m_filename[0]) {
         post("pix_record:  no filename passed");
 		return;
+#ifdef __APPLE__
 		} else {            
 			err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
 			if (err == fnfErr) {
@@ -164,7 +223,10 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 						//post("pix_record : made new file %s",m_filename);
 			}
 
-            
+    
+
+			
+
 			if (err) {
 				error("GEM: pix_record: Unable to make file ref from filename %s", m_filename);
 				return;
@@ -179,7 +241,7 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 				}
 		
 		
-		//	err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
+			err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
 			
 			if (err != noErr && err != -37){
 					error("GEM: pix_record: error %d in FSMakeFSSpec()", err);
@@ -187,7 +249,28 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 				}
 
 		}
+#else //win32 here
+	} else {
+		/*
+		FILE *outfile;
+		if ((outfile = fopen(m_filename, "")) == NULL) {
+			post( "can't open %s", m_filename);
+			return ;
+		}
+		fclose(outfile);
+		*/
+		c2pstr(m_filename);
 
+		FSMakeFSSpec (0, 0L, (UInt8*)m_filename, &theFSSpec);
+	//err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
+	if (err != noErr && err != -37){
+					error("GEM: pix_record: error %d in FSMakeFSSpec()", err);
+					return;
+				}
+	
+
+	}
+#endif    //APPLE 
 
 	//create the movie from the file 
 	err = CreateMovieFile(	&theFSSpec,
@@ -211,6 +294,8 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 	m_srcRect.bottom = m_height;
 	m_srcRect.right = m_width;
 	
+
+#ifdef __APPLE__
 	//give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
 	m_rowBytes = m_width * 2;
 	
@@ -224,7 +309,23 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 							0,
 							m_compressImage.data,
 							m_rowBytes);
+
+#else
+	//give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
+	m_rowBytes = m_width * 4;
 	
+	//m_srcGWorld = NULL;//probably a memory leak
+	err = QTNewGWorldFromPtr(&m_srcGWorld,
+							k32RGBAPixelFormat,
+							//k32ARGBPixelFormat,
+							&m_srcRect,
+							NULL,
+							NULL,
+							0,
+							m_compressImage.data,
+							m_rowBytes);
+
+#endif
 	if (err != noErr){
 		post("pix_record : QTNewGWorldFromPtr failed with error %d",err);
 		return;
@@ -336,8 +437,11 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 	
 	if (compErr != noErr) post("pix_record : SCSetInfo failed with error %d",compErr);
 	
+#ifdef __APPLE__
 	compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),&m_srcRect,&hImageDesc);
-	
+#else
+	compErr = SCCompressSequenceBegin(stdComponent,m_srcGWorld->portPixMap,&m_srcRect,&hImageDesc);
+#endif
 	if (compErr != noErr) {
 		post("pix_record : SCCompressSequenceBegin failed with error %d",compErr);
 		return;
@@ -359,7 +463,7 @@ void pix_record :: setupQT() //this only needs to be done when codec info change
 	
 	//reset frame counter for new movie file
 	m_currentFrame = 0;
-
+	post("pix_record: setup end");
 }
 
 
@@ -421,15 +525,23 @@ void pix_record :: compressFrame()
 
 	short					syncFlag; //flag for keyframes
 	
-	
-	
+	//post("pix_record: compressing frame");
+//apparently on OSX there is no member portPixMap in a GWorld so a function is used instead
+#ifdef __APPLE__
 	compErr = SCCompressSequenceFrame(	stdComponent,
 										GetPortPixMap(m_srcGWorld),
 										&m_srcRect,
 										&compressedData,
 										&dataSize,
 										&syncFlag);
-										
+#else //Windows
+	compErr = SCCompressSequenceFrame(	stdComponent,
+										m_srcGWorld->portPixMap,
+										&m_srcRect,
+										&compressedData,
+										&dataSize,
+										&syncFlag);
+#endif
 	if (compErr != noErr) post("pix_record : SCCompressSequenceFrame failed with error %d",compErr);
 										
 	err = AddMediaSample(media,
@@ -483,7 +595,7 @@ void pix_record :: render(GemState *state)
 			//go ahead and grab a frame if everything is ready to go
 			if (m_recordSetup) 
 				compressFrame();
-			//	post("grabbing frame");
+				//post("grabbing frame");
 			}else{
 				post("pix_record: movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
 				m_recordStop = 1;
@@ -623,7 +735,7 @@ if (m_recordStart) return;
 
   m_autocount = 0;
 
-//post("pix_record : filename %s",m_filename);
+post("pix_record : filename %s",m_filename);
 
 }
 
@@ -693,13 +805,15 @@ void pix_record :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
 
 void pix_record :: recordMessCallback(void *data, t_floatarg on)
 {
-	if (on) {
+	if (!(!(int)on)) {
 		GetMyClass(data)->m_recordStart=1;
 		GetMyClass(data)->m_recordStop=0;
+		post("pix_video: recording on!");
 	}else{
 		GetMyClass(data)->m_recordStart=0;
 		GetMyClass(data)->m_recordStop=1;
 		}
+	//setModified();
 }
 
 void pix_record :: dialogMessCallback(void *data)

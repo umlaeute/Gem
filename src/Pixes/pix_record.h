@@ -11,10 +11,17 @@
 #ifndef INCLUDE_pix_record_H_
 #define INCLUDE_pix_record_H_
 
-#ifdef __APPLE__
+#if defined (__WIN32__) || defined(__APPLE__)
+
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include "Base/GemPixImageSave.h"
+
+#ifdef __WIN32__
+#include <QTML.h>
+#include <Movies.h>
+#include <QuicktimeComponents.h>
+#endif
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -232,6 +239,8 @@ class GEM_EXTERN pix_record : public GemBase
 		static void 	dialogMessCallback(void *data);
 		static void 	codeclistMessCallback(void *data);
 		static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+
+
 };
-#endif //for __APPLE__
+#endif //APPLE and WIN32
 #endif	// for header file
