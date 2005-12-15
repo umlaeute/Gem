@@ -87,42 +87,42 @@ void glsl_program :: render(GemState *state)
 	  {
 	    switch (m_type[i])
 	    {
-	  case 0x1404:  // GL_INT
+	  case GL_INT:
 	    glUniform1iARB( i, (GLint)m_param[i][0] );
 		break;
-	  case 0x1406:  // GL_FLOAT
+	  case GL_FLOAT:
 	    glUniform1fARB( i, (GLfloat)m_param[i][0] );
 		break;
-	  case 0x8B50:  // GL_FLOAT_VEC2_ARB
+	  case GL_FLOAT_VEC2_ARB:
 	    glUniform2fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1] );
 		break;
-	  case 0x8B51:  // GL_FLOAT_VEC3_ARB
+	  case GL_FLOAT_VEC3_ARB:
 	    glUniform3fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
 							(GLfloat)m_param[i][2] );
 		break;
-	  case 0x8B52:  // GL_FLOAT_VEC4_ARB
+	  case GL_FLOAT_VEC4_ARB:
 	    glUniform4fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
 							(GLfloat)m_param[i][2], (GLfloat)m_param[i][3] );
 		break;
-	  case 0x8B53:  // GL_INT_VEC2_ARB
+	  case GL_INT_VEC2_ARB:
 	    glUniform2iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1] );
 		break;
-	  case 0x8B54:  // GL_INT_VEC3_ARB
+	  case GL_INT_VEC3_ARB:
 	    glUniform3iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1], 
 							(GLint)m_param[i][2] );
 		break;
-	  case 0x8B55:  // GL_INT_VEC4_ARB
+	  case GL_INT_VEC4_ARB:
 	    glUniform4iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1], 
 							(GLint)m_param[i][2], (GLint)m_param[i][3] );
 		break;
-	  case 0x8B5A:  // GL_FLOAT_MAT2_ARB
+	  case GL_FLOAT_MAT2_ARB:
 					// GL_TRUE = row major order, GL_FALSE = column major
 	    glUniformMatrix2fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
 		break;
-	  case 0x8B5B:  // GL_FLOAT_MAT3_ARB
+	  case GL_FLOAT_MAT3_ARB:
 	    glUniformMatrix3fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
 		break;
-	  case 0x8B5C:  // GL_FLOAT_MAT4_ARB
+	  case GL_FLOAT_MAT4_ARB:
 	    glUniformMatrix4fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
 		break;
 	  default:
@@ -171,6 +171,8 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 	  }
 	  // tell the GL state that this variable has changed next render
 	  m_flag[i] = 1;
+	  setModified();
+	  // should we return here?  It only allows one m_param[i] to be changed
       return;
     }
   }
