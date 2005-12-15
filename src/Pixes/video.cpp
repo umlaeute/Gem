@@ -24,18 +24,13 @@
 // Constructor
 //
 /////////////////////////////////////////////////////////
-video :: video(int format) {
-  m_reqFormat=format;
-  m_width=64;
-  m_height=64;
-  m_capturing=false;
-  m_devicename=NULL;
-  m_devicenum=0;
-#if 0
-  m_channel=COMPOSITEIN;
-  m_norm=VIDEO_MODE_AUTO;
-  m_devicenum=DEVICENO;
-#endif
+video :: video(int format) :
+  m_capturing(false), m_haveVideo(false), 
+  m_width(64), m_height(64),
+  m_channel(0), m_norm(0),
+  m_reqFormat(format),
+  m_devicename(NULL), m_devicenum(0), m_quality(0)
+{
 }
 
 /////////////////////////////////////////////////////////

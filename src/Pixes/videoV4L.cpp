@@ -50,14 +50,30 @@
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoV4L :: videoV4L(int format) : video(format){
+videoV4L :: videoV4L(int format) : video(format)
+#ifdef HAVE_VIDEO4LINUX
+                                 ,
+                                   tvfd(0),
+                                   frame(0),last_frame(0), 
+                                   videobuf(NULL), 
+                                   skipnext(0),
+                                   mytopmargin(0), mybottommargin(0), 
+                                   myleftmargin(0), myrightmargin(0),
+                                   m_gotFormat(0),m_colorConvert(false),
+                                   m_thread_id(0),
+                                   m_continue_thread(false), m_frame_ready(false),
+                                   m_rendering(false)
+#endif
+{
 #ifdef HAVE_VIDEO4LINUX
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
+
   m_capturing=false;
-  m_channel=COMPOSITEIN;
-  m_norm=VIDEO_MODE_AUTO;
+  m_channel=COMPOSITEIN; 
+  m_norm=VIDEO_MODE_AUTO; 
   m_devicenum=DEVICENO;
+
   post("video4linux");
 #endif /* HAVE_VIDEO4LINUX */
 }
