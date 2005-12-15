@@ -30,14 +30,13 @@
    
   -----------------------------------------------------------------*/
 #define NUM_hit_areas 256
-#define DEF_TRESHOLD 0.5
+#define DEF_TRESHOLD 127
 #define DEF_MINIMUM 1
 #define DEF_MIN_DISTANCE 0.01
 #define DEBUG 0
 
 enum areaTypes
 {
-  point,
   rectangle,
   circle,
   line
@@ -61,7 +60,7 @@ class GEM_EXTERN pix_hit : public GemPixObj
 
   //////////
   // Constructor
-  pix_hit(t_symbol*s);
+  pix_hit(void);
     	
  protected:
     	
@@ -78,23 +77,19 @@ class GEM_EXTERN pix_hit : public GemPixObj
   void set_min_distance(float min);
   void set_show(int val);
   void del(float min);
-  void createPoint(int n, float x, float y);
   void createRectangle(int n, float x, float y, float w, float h);
   void createCircle(int n, float x, float y, float r);
   void createLine(int n, float x1, float y1, float x2, float y2);
   void move(int n, float x, float y, float w, float h);
   void del(int n);
-  void save(char *filename);
-  void load(char *filename);
-
-  float getGreyValue(imageStruct &image, unsigned char *data, float *color, int xPos);
+  unsigned char getGreyValue(GLenum format, unsigned char *data);
 
 
   t_hitarea hit_areas[NUM_hit_areas];
   bool area_active[NUM_hit_areas];
   float buffer[NUM_hit_areas];
 
-  float minimum_treshold;
+  unsigned char minimum_treshold;
   short int minimum_pixels;
   float min_distance;
   bool show;
@@ -107,13 +102,10 @@ class GEM_EXTERN pix_hit : public GemPixObj
   static void	minimumCallback(void *data, t_floatarg min);
   static void	min_distanceCallback(void *data, t_floatarg min);
   static void	deleteCallback(void *data, t_floatarg id);
-  static void	createPointCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
   static void	createRectangleCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
   static void	createCircleCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
   static void	createLineCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
   static void	moveCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
-  static void   saveCallback(void *data, t_symbol*s);
-  static void   loadCallback(void *data, t_symbol*s);
   static void	showCallback(void *data, t_floatarg val);
 
 };
