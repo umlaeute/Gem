@@ -1,13 +1,13 @@
 Source: gem
-Section: unknown
+Section: graphics
 Priority: optional
 Maintainer: IOhannes m zmoelnig <zmoelnig@iem.at>
-Build-Depends: debhelper (>> 3.0.0), pd (>=0.26), libglut3-dev, libtiff3g-dev, libgltt2-dev, libjpeg62-dev, libmpeg3-dev, libquicktime-dev | libquicktime4linux-dev
+Build-Depends: debhelper (>> 3.0.0), pd | puredata, libtiff4-dev, libmagick++9-dev | libmagick++6-dev, libjpeg62-dev, libmpeg3-dev, libquicktime-dev | libquicktime4linux-dev, libavifile-0.7-dev, libdv4-dev, ftgl-dev
 Standards-Version: 3.5.8
 
 Package: gem
 Architecture: any
-Depends: ${shlibs:Depends}, pd (>=0.26), libglut3, libtiff3g, libgltt2, libjpeg62, libmpeg3-1, libquicktime1 | libquicktime4linux0
+Depends: ${shlibs:Depends}, pd | puredata, libtiff4, libjpeg62, libmagick++9c2a | libmagick++6, libmpeg3-1, libquicktime1 | libquicktime4linux0, libavifile-0.7c2, libdv4
 Description: Graphics Environment for Multimedia
  GEM is a loadable library for PD (pure-data), which adds OpenGL(tm)
  graphics rendering and animation and image-processing to PD.

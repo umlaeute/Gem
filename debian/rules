@@ -25,14 +25,17 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
-	cd src/Gnu; ./configure \
+	cd src; ./configure \
 		--prefix=/usr   \
 		--without-avi   \
 		--without-mpeg  \
 		--with-mpeg3    \
-		--with-quickitme \
-		--with-glut     \
-		--with-gltt     ;\
+		--with-quicktime \
+		--with-avifile \
+		--without-ffmpeg \
+		--with-v4l \
+		--with-ieee1394 \
+		--with-ftgl     ;\
 	cd -
 
 	touch configure-stamp
@@ -44,7 +47,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	$(MAKE) -C src/Gnu
+	$(MAKE) -C src
 	#/usr/bin/docbook-to-man debian/gem.sgml > gem.1
 
 	touch build-stamp
@@ -55,7 +58,7 @@ clean:
 	rm -f build-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
-	-$(MAKE) -C src/Gnu clean
+	-$(MAKE) -C src clean
 
 	dh_clean
 
@@ -66,7 +69,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/gem.
-	$(MAKE) -C src/Gnu install DESTDIR=$(CURDIR)/debian/gem
+	$(MAKE) -C src install DESTDIR=$(CURDIR)/debian/gem
 
 
 # Build architecture-independent files here.
