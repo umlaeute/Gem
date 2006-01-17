@@ -61,6 +61,14 @@
 #  ifdef GL_ARB_fragment_program
 #   undef GL_ARB_fragment_program
 #  endif
+
+# ifdef GL_ARB_shader_objects
+#  undef GL_ARB_shader_objects
+# endif
+# ifdef GL_ARB_shading_language_100
+#  undef GL_ARB_shading_language_100
+# endif
+
 # endif /* DONT_USE_ARB */
 
 /* using ATI's GL-libraries you don't have nvidia's extensions... */
