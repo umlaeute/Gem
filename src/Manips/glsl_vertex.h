@@ -25,6 +25,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define GEM_shader_CG    2
 
 
+#if defined GL_ARB_shader_objects && !defined GL_ARB_shading_language_100
+/* i am not sure whether this can ever happen... */
+# undef GL_ARB_shader_objects
+#endif
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -80,15 +85,17 @@ class GEM_EXTERN glsl_vertex : public GemBase
 
   //////////
   //
+#ifdef GL_ARB_shader_objects
   GLuint		m_shaderType;
 
   GLuint		m_shaderTarget;
-  GLhandleARB   m_shader;
+  GLhandleARB           m_shader;
   GLint			m_compiled;
   int			m_size;
   char*			m_shaderString;
   
   GLint			m_shaderID;
+#endif
   t_outlet		*m_outShaderID;
 
  protected:

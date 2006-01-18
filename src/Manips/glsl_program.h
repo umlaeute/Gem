@@ -20,6 +20,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "Base/GemBase.h"
 
+#if defined GL_ARB_shader_objects && !defined GL_ARB_shading_language_100
+/* i am not sure whether this can ever happen... */
+# undef GL_ARB_shader_objects
+#endif
+
 #ifdef __APPLE__
 # define t_GLshaderObj GLhandleARB*
 #else
@@ -86,6 +91,7 @@ class GEM_EXTERN glsl_program : public GemBase
   // Print Info about Hardware limits
   virtual void printInfo();
   
+#ifdef GL_ARB_shader_objects
   GLhandleARB		m_program;
   t_GLshaderObj		m_shaderObj[MAX_NUM_SHADERS];
   GLint				m_maxLength;
@@ -104,6 +110,7 @@ class GEM_EXTERN glsl_program : public GemBase
   GLint				m_linked;
   GLcharARB*		m_infoLog;
   int				m_num;
+#endif
   
   t_outlet		*m_outProgramID;
 

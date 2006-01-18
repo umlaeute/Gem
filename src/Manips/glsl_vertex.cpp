@@ -36,29 +36,43 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_vertex, t_symbol *, A_DEFSYM)
 // Constructor
 //
 /////////////////////////////////////////////////////////
+#ifdef GL_ARB_shader_objects
 glsl_vertex :: glsl_vertex() :
   m_shaderType(GEM_shader_none), 
-  m_shader(0), m_compiled(0), m_size(0), 
+  m_shader(0),
+  m_compiled(0), m_size(0),
   m_shaderString(NULL), m_shaderID(0)
 {
-#ifdef GL_ARB_shader_objects
   m_shaderTarget = GL_VERTEX_SHADER_ARB;
-#endif
+  // create an outlet to send shader object ID
+  m_outShaderID = outlet_new(this->x_obj, &s_float);
 }
 glsl_vertex :: glsl_vertex(t_symbol *filename) :
   m_shaderType(GEM_shader_none), 
-  m_shader(0), m_compiled(0), m_size(0), 
+  m_shader(0),
+  m_compiled(0), m_size(0), 
   m_shaderString(NULL), m_shaderID(0)
 {
-#ifdef GL_ARB_shader_objects
   m_shaderTarget = GL_VERTEX_SHADER_ARB;
   openMess(filename);
-  
+
   // create an outlet to send shader object ID
   m_outShaderID = outlet_new(this->x_obj, &s_float);
-#endif
 }
-
+#else
+glsl_vertex :: glsl_vertex()
+{
+  post("GEM has been compiled without GLSL support");
+  // create an outlet to send shader object ID
+  m_outShaderID = outlet_new(this->x_obj, &s_float);
+}
+glsl_vertex :: glsl_vertex(t_symbol *filename)
+{
+  post("GEM has been compiled without GLSL support");
+  // create an outlet to send shader object ID
+  m_outShaderID = outlet_new(this->x_obj, &s_float);
+}
+#endif
 /////////////////////////////////////////////////////////
 // Destructor
 //
@@ -74,17 +88,17 @@ glsl_vertex :: ~glsl_vertex()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: closeMess(void)
 {
+#ifdef GL_ARB_shader_objects
   if(m_shaderString)delete [] m_shaderString;
   m_shaderString=NULL;
   m_size=0;
   if(m_shader){
-#ifdef GL_ARB_shader_objects
 	glDeleteObjectARB( m_shader );
-#endif
   }
   m_shader=0;
   m_compiled=0;
   m_shaderType=GEM_shader_none;
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -93,13 +107,14 @@ void glsl_vertex :: closeMess(void)
 /////////////////////////////////////////////////////////
 void glsl_vertex :: openMess(t_symbol *filename)
 {
+#ifdef GL_ARB_shader_objects
   if(NULL==filename || NULL==filename->s_name)return;
-#ifdef __APPLE__
+# ifdef __APPLE__
   if (!HaveValidContext ()) {
     post("GEM: [%s] - need window/context to load shader", m_objectname->s_name);
     return;
   }
-#endif
+# endif
 
   char buf[MAXPDSTRING];
   canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
@@ -121,7 +136,6 @@ void glsl_vertex :: openMess(t_symbol *filename)
     strcpy(m_shaderString,buf);
   }
   m_size=strlen(m_shaderString);
-#ifdef GL_ARB_shader_objects
   if (!m_shader) m_shader = glCreateShaderObjectARB( m_shaderTarget );
   else
   {
@@ -159,11 +173,13 @@ void glsl_vertex :: openMess(t_symbol *filename)
 /////////////////////////////////////////////////////////
 void glsl_vertex :: startRendering()
 {
+#ifdef GL_ARB_shader_objects
   if (m_shaderString == NULL)
     {
       error("[%s]: need to load a shader", m_objectname->s_name);
       return;
     }
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -172,11 +188,13 @@ void glsl_vertex :: startRendering()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: render(GemState *state)
 {
+#ifdef GL_ARB_shader_objects
   if (m_shader)
   {
     // send textureID to outlet
 	outlet_float(m_outShaderID, (t_float)(unsigned int)m_shader);
   }
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -193,13 +211,13 @@ void glsl_vertex :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_vertex :: printInfo()
 {
-#ifdef __APPLE__
+#ifdef GL_ARB_vertex_shader
+# ifdef __APPLE__
 	if (!HaveValidContext ()) {
 		post("GEM: vertex_shader - need window/context to load shader");
 		return;
 	}
-#endif
-#ifdef GL_ARB_vertex_shader
+# endif
 	GLint bitnum = 0;
 	post("Vertex_shader Hardware Info");
 	post("============================");

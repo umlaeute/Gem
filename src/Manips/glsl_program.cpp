@@ -33,14 +33,17 @@ CPPEXTERN_NEW(glsl_program)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-glsl_program :: glsl_program() :
+glsl_program :: glsl_program()
+#ifdef GL_ARB_shader_objects
+  :
   m_program(0), 
   m_maxLength(0), m_uniformCount(0),
   m_name(NULL), m_symname(NULL), m_length(NULL), m_size(NULL), m_type(NULL),
   m_param(NULL), m_flag(NULL), m_linked(0),
   m_infoLog(NULL), m_num(0)
+#endif
 {
-#if !defined GL_ARB_shader_objects && !defined GL_ARB_shading_language_100
+#if !defined GL_ARB_shader_objects
   post("GEM has been compiled without GLSL support");
   return;
 #endif
@@ -135,10 +138,9 @@ void glsl_program :: render(GemState *state)
   } else {
 	    post("GEM: [%s]:  no program linked", m_objectname->s_name);
   }
-#endif
-
   // send program ID to outlet
   outlet_float(m_outProgramID, (t_float)(int)m_program);
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -157,6 +159,7 @@ void glsl_program :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 {
+#ifdef GL_ARB_shader_objects
   int i=0;
   for(i=0; i<=m_uniformCount; i++){
     if(s==m_symname[i]){
@@ -178,6 +181,7 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
   }
   // if we reach this, then no param-name was matching!
   if(i>m_num)error("glsl_program: no method for '%s' (it's not uniform variable)", s->s_name);
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -186,13 +190,13 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void glsl_program :: shaderMess(int argc, t_atom *argv)
 {
-#ifdef __APPLE__
+#ifdef GL_ARB_shader_objects
+# ifdef __APPLE__
 	if (!HaveValidContext ()) {
 		post("GEM: glsl_program - need window/context to load program");
 		return;
 	}
-#endif
-#ifdef GL_ARB_shader_objects
+# endif
   if (!argc)
   {
     	error("GEM: [%s]: can't link non-existent shaders", m_objectname->s_name);
@@ -271,7 +275,7 @@ void glsl_program :: LinkProgram()
   }
   //post("getting variables");
   getVariables();
-#ifdef __APPLE__
+# ifdef __APPLE__
   // call API to check if linked program is running on hardware or in software emulation
   long int vertexGPUProcessing, fragmentGPUProcessing;
   CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUVertexProcessing, &vertexGPUProcessing);
@@ -286,7 +290,7 @@ void glsl_program :: LinkProgram()
     post("[%s]: fragment shader running in hardware", m_objectname->s_name);
   else
     post("[%s]: fragment shader running in software", m_objectname->s_name);	
-#endif //__APPLE__
+# endif //__APPLE__
 #endif
 }
 
@@ -359,18 +363,18 @@ void glsl_program :: getVariables()
 /////////////////////////////////////////////////////////
 void glsl_program :: printInfo()
 {
-#ifdef __APPLE__
+#ifdef GL_ARB_shader_objects
+# ifdef __APPLE__
 	if (!HaveValidContext ()) {
 		post("GEM: glsl_program - need window/context to load program");
 		return;
 	}
-#endif
+# endif
 	GLint bitnum = 0;
 	post("glsl_Program Hardware Info");
 	post("============================");
 	
 	post("");
-#ifdef GL_ARB_shader_objects
   if(m_linked)
   {
     for (int i=0; i<m_uniformCount; i++)
