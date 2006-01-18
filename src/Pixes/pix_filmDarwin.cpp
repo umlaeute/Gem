@@ -241,7 +241,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 	desc = (ImageDescriptionHandle)NewHandle(0);
 	
 	GetMediaSampleDescription(trackMedia,1,(SampleDescriptionHandle)desc);
-	
+# ifdef kDVCPROHD720pCodecType
 	//DVCPRO720p
 	if ((*desc)->cType == kDVCPROHD720pCodecType){
 	
@@ -253,7 +253,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 	
 		SetMovieMatrix(m_movie,&matrix);
 	}
-	
+# endif
 	//DVCPRO 1080i
 	
 	//HDV
