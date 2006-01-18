@@ -51,10 +51,6 @@ class GEM_EXTERN circle : public GemShape
         virtual void 	render(GemState *state);
 
         //////////
-        // number of points in the lookup table
-        static const int NUM_PNTS;
-
-        //////////
         // cos lookup table
         static GLfloat *m_cos;
 
