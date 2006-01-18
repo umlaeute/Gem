@@ -21,8 +21,10 @@ CPPEXTERN_NEW ( GEMglUseProgramObjectARB )
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglUseProgramObjectARB :: GEMglUseProgramObjectARB() :
-		m_program(0)
+GEMglUseProgramObjectARB :: GEMglUseProgramObjectARB()
+#ifdef GL_ARB_shader_objects
+  : m_program(0)
+#endif
 {
 #ifndef GL_ARB_shader_objects
         error("GEMglUseProgramObjectARB: GEM was compiled without GL_ARB_shader_objects");
@@ -59,7 +61,9 @@ void GEMglUseProgramObjectARB :: postrender(GemState *state) {
 // Variables
 //
 void GEMglUseProgramObjectARB :: programMess (int program) {	// FUN
+#ifdef GL_ARB_shader_objects
 	m_program = (t_GLshaderObj)program;
+#endif
 	setModified();
 }
 

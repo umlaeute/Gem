@@ -13,6 +13,7 @@
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
+/* LATER check this in configure */
 #ifdef __APPLE__
 # define t_GLshaderObj GLhandleARB*
 #else
@@ -48,7 +49,9 @@ class GEM_EXTERN GEMglUseProgramObjectARB : public GemBase
 	  virtual void	postrender (GemState *state);
 
 	// variables
+#ifdef GL_ARB_shader_objects
 	  t_GLshaderObj	m_program;		// VAR
+#endif
 	  virtual void	programMess(int);
 
 	private:
