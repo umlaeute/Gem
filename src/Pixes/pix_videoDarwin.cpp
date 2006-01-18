@@ -14,6 +14,7 @@
 
 #include <unistd.h> //needed for Unix file open() type functions
 #include <stdio.h>
+#include <fcntl.h> /* JMZ thinks that _this_ is needed for open() */
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
  
