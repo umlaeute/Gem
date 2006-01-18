@@ -1,15 +1,14 @@
-# generated automatically by aclocal 1.7.9 -*- Autoconf -*-
+dnl aclocal.m4 generated automatically by aclocal 1.4-p6
 
-# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002
-# Free Software Foundation, Inc.
-# This file is free software; the Free Software Foundation
-# gives unlimited permission to copy and/or distribute it,
-# with or without modifications, as long as this notice is preserved.
+dnl Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
-# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-# PARTICULAR PURPOSE.
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+dnl even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+dnl PARTICULAR PURPOSE.
 
 # lib-prefix.m4 serial 4 (gettext-0.14.2)
 dnl Copyright (C) 2001-2005 Free Software Foundation, Inc.
@@ -1036,34 +1035,33 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 
   if test "x$ac_Lib" != "xyes"; then
    AC_MSG_CHECKING([for $1-config])
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_[]NAME=""
    if test "x$1" != "x"; then
-    pkgconfig="$1"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "$1"-config`
+    gem_check_lib_pkgconfig_[]NAME="$1"-config
+    if which -- "$gem_check_lib_pkgconfig_[]NAME" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_[]NAME=`which "$1"-config`
      AC_MSG_RESULT([yes])
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_[]NAME=""
      AC_MSG_RESULT([no])
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_[]NAME" != "x"; then
 
     if test "x$PKG_[]NAME[]_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_[]NAME[]_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_[]NAME --cflags >/dev/null 2>&1; then
+        PKG_[]NAME[]_CFLAGS=$(${gem_check_lib_pkgconfig_[]NAME} --cflags)
         PKG_CFLAGS="$PKG_[]NAME[]_CFLAGS $PKG_CFLAGS"
       fi
     fi
  
     if test "x$PKG_[]NAME[]_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_[]NAME[]_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_[]NAME --plugin-libs >/dev/null 2>&1; then
+        PKG_[]NAME[]_LIBS=$(${gem_check_lib_pkgconfig_[]NAME} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_[]NAME[]_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_[]NAME --libs >/dev/null 2>&1; then
+        PKG_[]NAME[]_LIBS=$(${gem_check_lib_pkgconfig_[]NAME} --libs)
        fi
       fi
     fi

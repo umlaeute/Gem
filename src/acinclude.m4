@@ -1031,27 +1031,26 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 ## pkg-config has failed
 ## check whether there is a ${1}-config lying around
    AC_MSG_CHECKING([for $1-config])
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_[]NAME=""
    if test "x$1" != "x"; then
-    pkgconfig="$1"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "$1"-config`
+    gem_check_lib_pkgconfig_[]NAME="$1"-config
+    if which -- "$gem_check_lib_pkgconfig_[]NAME" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_[]NAME=`which "$1"-config`
      AC_MSG_RESULT([yes])
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_[]NAME=""
      AC_MSG_RESULT([no])
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_[]NAME" != "x"; then
 ## fabulous, we have ${1}-config
 ## lets see what it reveals
 
 ## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_[]NAME[]_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_[]NAME[]_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_[]NAME --cflags >/dev/null 2>&1; then
+        PKG_[]NAME[]_CFLAGS=$(${gem_check_lib_pkgconfig_[]NAME} --cflags)
         PKG_CFLAGS="$PKG_[]NAME[]_CFLAGS $PKG_CFLAGS"
       fi
     fi
@@ -1060,11 +1059,11 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 ## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
 ## if that fails we try to get it via  "--libs"
     if test "x$PKG_[]NAME[]_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_[]NAME[]_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_[]NAME --plugin-libs >/dev/null 2>&1; then
+        PKG_[]NAME[]_LIBS=$(${gem_check_lib_pkgconfig_[]NAME} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_[]NAME[]_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_[]NAME --libs >/dev/null 2>&1; then
+        PKG_[]NAME[]_LIBS=$(${gem_check_lib_pkgconfig_[]NAME} --libs)
        fi
       fi
     fi
