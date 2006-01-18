@@ -42,10 +42,10 @@ glsl_fragment :: glsl_fragment(t_symbol *filename) :
 #ifdef GL_ARB_shader_objects
   m_shaderTarget = GL_FRAGMENT_SHADER_ARB;
   openMess(filename);
+#endif
   
   // create an outlet to send shader object ID
   m_outShaderID = outlet_new(this->x_obj, &s_float);
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -63,28 +63,28 @@ glsl_fragment :: ~glsl_fragment()
 /////////////////////////////////////////////////////////
 void glsl_fragment :: printInfo()
 {
-#ifdef __APPLE__
+#ifdef GL_ARB_fragment_shader
+# ifdef __APPLE__
 	if (!HaveValidContext ()) {
 		post("GEM: glsl_fragment - need window/context to load shader");
 		return;
 	}
-#endif
-#ifdef GL_ARB_fragment_shader
+# endif
 	GLint bitnum = 0;
 	post("glsl_fragment Hardware Info");
 	post("============================");
-#ifdef GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB
+# ifdef GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB
 	glGetIntegerv( GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB, &bitnum );
 	post("MAX_FRAGMENT_UNIFORM_COMPONENTS: %d", bitnum);
-#endif
-#ifdef GL_MAX_TEXTURE_COORDS_ARB
+# endif
+# ifdef GL_MAX_TEXTURE_COORDS_ARB
 	glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
 	post("MAX_TEXTURE_COORDS: %d", bitnum);
-#endif 
-#ifdef GL_MAX_TEXTURE_IMAGE_UNITS_ARB
+# endif 
+# ifdef GL_MAX_TEXTURE_IMAGE_UNITS_ARB
 	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
 	post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
-#endif
+# endif
 #endif /* GL_ARB_fragment_shader */
 }
 
