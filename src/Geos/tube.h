@@ -24,7 +24,6 @@
 
 #include "Base/GemShape.h"
 
-
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -91,10 +90,6 @@ class GEM_EXTERN tube : public GemShape
   //////////
   // How the object should be drawn
   virtual void	typeMess(t_symbol *type);
-
-  //////////
-  // number of points in the lookup table
-  static const int NUM_PNTS; 
 
   //////////
   // 2 PI

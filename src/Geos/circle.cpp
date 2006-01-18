@@ -20,7 +20,7 @@
 
 #include "Base/GemState.h"
 
-const int circle::NUM_PNTS = 100;
+#define NUM_PNTS 100
 GLfloat *circle::m_cos = NULL;
 GLfloat *circle::m_sin = NULL;
 
