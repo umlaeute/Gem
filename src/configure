@@ -5644,12 +5644,12 @@ rm -f conftest.err conftest.$ac_objext \
   if test "x$gem_check_ldflags_success" = "xyes"; then
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-
+    have_carbon_framework="yes"
   else
     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     LDFLAGS="$gem_check_ldflags_org"
-
+    have_carbon_framework="no"
   fi
 
 
@@ -5708,12 +5708,12 @@ rm -f conftest.err conftest.$ac_objext \
   if test "x$gem_check_ldflags_success" = "xyes"; then
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-
+    have_quicktime_framework="yes"
   else
     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     LDFLAGS="$gem_check_ldflags_org"
-
+    have_quicktime_framework="no"
   fi
 
 
@@ -5964,36 +5964,35 @@ fi
   if test "x$ac_cv_lib_Magickpp_main" != "xyes"; then
    echo "$as_me:$LINENO: checking for ImageMagick++-config" >&5
 echo $ECHO_N "checking for ImageMagick++-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_IMAGEMAGICK__=""
    if test "xImageMagick++" != "x"; then
-    pkgconfig="ImageMagick++"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "ImageMagick++"-config`
+    gem_check_lib_pkgconfig_IMAGEMAGICK__="ImageMagick++"-config
+    if which -- "$gem_check_lib_pkgconfig_IMAGEMAGICK__" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_IMAGEMAGICK__=`which "ImageMagick++"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_IMAGEMAGICK__=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_IMAGEMAGICK__" != "x"; then
 
     if test "x$PKG_IMAGEMAGICK___CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_IMAGEMAGICK___CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_IMAGEMAGICK__ --cflags >/dev/null 2>&1; then
+        PKG_IMAGEMAGICK___CFLAGS=$(${gem_check_lib_pkgconfig_IMAGEMAGICK__} --cflags)
         PKG_CFLAGS="$PKG_IMAGEMAGICK___CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_IMAGEMAGICK___LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_IMAGEMAGICK___LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_IMAGEMAGICK__ --plugin-libs >/dev/null 2>&1; then
+        PKG_IMAGEMAGICK___LIBS=$(${gem_check_lib_pkgconfig_IMAGEMAGICK__} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_IMAGEMAGICK___LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_IMAGEMAGICK__ --libs >/dev/null 2>&1; then
+        PKG_IMAGEMAGICK___LIBS=$(${gem_check_lib_pkgconfig_IMAGEMAGICK__} --libs)
        fi
       fi
     fi
@@ -6244,36 +6243,35 @@ fi
   if test "x$ac_cv_lib_tiff_TIFFOpen" != "xyes"; then
    echo "$as_me:$LINENO: checking for tiff-config" >&5
 echo $ECHO_N "checking for tiff-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_TIFF=""
    if test "xtiff" != "x"; then
-    pkgconfig="tiff"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "tiff"-config`
+    gem_check_lib_pkgconfig_TIFF="tiff"-config
+    if which -- "$gem_check_lib_pkgconfig_TIFF" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_TIFF=`which "tiff"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_TIFF=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_TIFF" != "x"; then
 
     if test "x$PKG_TIFF_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_TIFF_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_TIFF --cflags >/dev/null 2>&1; then
+        PKG_TIFF_CFLAGS=$(${gem_check_lib_pkgconfig_TIFF} --cflags)
         PKG_CFLAGS="$PKG_TIFF_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_TIFF_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_TIFF_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_TIFF --plugin-libs >/dev/null 2>&1; then
+        PKG_TIFF_LIBS=$(${gem_check_lib_pkgconfig_TIFF} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_TIFF_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_TIFF --libs >/dev/null 2>&1; then
+        PKG_TIFF_LIBS=$(${gem_check_lib_pkgconfig_TIFF} --libs)
        fi
       fi
     fi
@@ -6527,36 +6525,35 @@ fi
   if test "x$ac_cv_lib_jpeg_jpeg_read_header" != "xyes"; then
    echo "$as_me:$LINENO: checking for jpeg-config" >&5
 echo $ECHO_N "checking for jpeg-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_JPEG=""
    if test "xjpeg" != "x"; then
-    pkgconfig="jpeg"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "jpeg"-config`
+    gem_check_lib_pkgconfig_JPEG="jpeg"-config
+    if which -- "$gem_check_lib_pkgconfig_JPEG" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_JPEG=`which "jpeg"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_JPEG=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_JPEG" != "x"; then
 
     if test "x$PKG_JPEG_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_JPEG_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_JPEG --cflags >/dev/null 2>&1; then
+        PKG_JPEG_CFLAGS=$(${gem_check_lib_pkgconfig_JPEG} --cflags)
         PKG_CFLAGS="$PKG_JPEG_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_JPEG_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_JPEG_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_JPEG --plugin-libs >/dev/null 2>&1; then
+        PKG_JPEG_LIBS=$(${gem_check_lib_pkgconfig_JPEG} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_JPEG_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_JPEG --libs >/dev/null 2>&1; then
+        PKG_JPEG_LIBS=$(${gem_check_lib_pkgconfig_JPEG} --libs)
        fi
       fi
     fi
@@ -6811,36 +6808,35 @@ fi
   if test "x$ac_cv_lib_quicktime_quicktime_init" != "xyes"; then
    echo "$as_me:$LINENO: checking for libquicktime-config" >&5
 echo $ECHO_N "checking for libquicktime-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_LIBQUICKTIME=""
    if test "xlibquicktime" != "x"; then
-    pkgconfig="libquicktime"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "libquicktime"-config`
+    gem_check_lib_pkgconfig_LIBQUICKTIME="libquicktime"-config
+    if which -- "$gem_check_lib_pkgconfig_LIBQUICKTIME" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_LIBQUICKTIME=`which "libquicktime"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_LIBQUICKTIME=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_LIBQUICKTIME" != "x"; then
 
     if test "x$PKG_LIBQUICKTIME_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_LIBQUICKTIME_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_LIBQUICKTIME --cflags >/dev/null 2>&1; then
+        PKG_LIBQUICKTIME_CFLAGS=$(${gem_check_lib_pkgconfig_LIBQUICKTIME} --cflags)
         PKG_CFLAGS="$PKG_LIBQUICKTIME_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_LIBQUICKTIME_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_LIBQUICKTIME_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_LIBQUICKTIME --plugin-libs >/dev/null 2>&1; then
+        PKG_LIBQUICKTIME_LIBS=$(${gem_check_lib_pkgconfig_LIBQUICKTIME} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_LIBQUICKTIME_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_LIBQUICKTIME --libs >/dev/null 2>&1; then
+        PKG_LIBQUICKTIME_LIBS=$(${gem_check_lib_pkgconfig_LIBQUICKTIME} --libs)
        fi
       fi
     fi
@@ -7094,36 +7090,35 @@ fi
   if test "x$ac_cv_lib_quicktime_quicktime_init" != "xyes"; then
    echo "$as_me:$LINENO: checking for lqt-config" >&5
 echo $ECHO_N "checking for lqt-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_LQT=""
    if test "xlqt" != "x"; then
-    pkgconfig="lqt"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "lqt"-config`
+    gem_check_lib_pkgconfig_LQT="lqt"-config
+    if which -- "$gem_check_lib_pkgconfig_LQT" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_LQT=`which "lqt"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_LQT=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_LQT" != "x"; then
 
     if test "x$PKG_LQT_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_LQT_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_LQT --cflags >/dev/null 2>&1; then
+        PKG_LQT_CFLAGS=$(${gem_check_lib_pkgconfig_LQT} --cflags)
         PKG_CFLAGS="$PKG_LQT_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_LQT_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_LQT_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_LQT --plugin-libs >/dev/null 2>&1; then
+        PKG_LQT_LIBS=$(${gem_check_lib_pkgconfig_LQT} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_LQT_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_LQT --libs >/dev/null 2>&1; then
+        PKG_LQT_LIBS=$(${gem_check_lib_pkgconfig_LQT} --libs)
        fi
       fi
     fi
@@ -7377,36 +7372,35 @@ fi
   if test "x$ac_cv_lib_mpeg3_mpeg3_check_sig" != "xyes"; then
    echo "$as_me:$LINENO: checking for mpeg3-config" >&5
 echo $ECHO_N "checking for mpeg3-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_MPEG3=""
    if test "xmpeg3" != "x"; then
-    pkgconfig="mpeg3"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "mpeg3"-config`
+    gem_check_lib_pkgconfig_MPEG3="mpeg3"-config
+    if which -- "$gem_check_lib_pkgconfig_MPEG3" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_MPEG3=`which "mpeg3"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_MPEG3=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_MPEG3" != "x"; then
 
     if test "x$PKG_MPEG3_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_MPEG3_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_MPEG3 --cflags >/dev/null 2>&1; then
+        PKG_MPEG3_CFLAGS=$(${gem_check_lib_pkgconfig_MPEG3} --cflags)
         PKG_CFLAGS="$PKG_MPEG3_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_MPEG3_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_MPEG3_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_MPEG3 --plugin-libs >/dev/null 2>&1; then
+        PKG_MPEG3_LIBS=$(${gem_check_lib_pkgconfig_MPEG3} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_MPEG3_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_MPEG3 --libs >/dev/null 2>&1; then
+        PKG_MPEG3_LIBS=$(${gem_check_lib_pkgconfig_MPEG3} --libs)
        fi
       fi
     fi
@@ -7660,36 +7654,35 @@ fi
   if test "x$ac_cv_lib_mpeg_OpenMPEG" != "xyes"; then
    echo "$as_me:$LINENO: checking for mpeg-config" >&5
 echo $ECHO_N "checking for mpeg-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_MPEG=""
    if test "xmpeg" != "x"; then
-    pkgconfig="mpeg"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "mpeg"-config`
+    gem_check_lib_pkgconfig_MPEG="mpeg"-config
+    if which -- "$gem_check_lib_pkgconfig_MPEG" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_MPEG=`which "mpeg"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_MPEG=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_MPEG" != "x"; then
 
     if test "x$PKG_MPEG_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_MPEG_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_MPEG --cflags >/dev/null 2>&1; then
+        PKG_MPEG_CFLAGS=$(${gem_check_lib_pkgconfig_MPEG} --cflags)
         PKG_CFLAGS="$PKG_MPEG_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_MPEG_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_MPEG_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_MPEG --plugin-libs >/dev/null 2>&1; then
+        PKG_MPEG_LIBS=$(${gem_check_lib_pkgconfig_MPEG} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_MPEG_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_MPEG --libs >/dev/null 2>&1; then
+        PKG_MPEG_LIBS=$(${gem_check_lib_pkgconfig_MPEG} --libs)
        fi
       fi
     fi
@@ -7943,36 +7936,35 @@ fi
   if test "x$ac_cv_lib_aviplay_CreateIAviReadFile" != "xyes"; then
    echo "$as_me:$LINENO: checking for avifile-config" >&5
 echo $ECHO_N "checking for avifile-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_AVIFILE=""
    if test "xavifile" != "x"; then
-    pkgconfig="avifile"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "avifile"-config`
+    gem_check_lib_pkgconfig_AVIFILE="avifile"-config
+    if which -- "$gem_check_lib_pkgconfig_AVIFILE" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_AVIFILE=`which "avifile"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_AVIFILE=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_AVIFILE" != "x"; then
 
     if test "x$PKG_AVIFILE_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_AVIFILE_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_AVIFILE --cflags >/dev/null 2>&1; then
+        PKG_AVIFILE_CFLAGS=$(${gem_check_lib_pkgconfig_AVIFILE} --cflags)
         PKG_CFLAGS="$PKG_AVIFILE_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_AVIFILE_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_AVIFILE_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_AVIFILE --plugin-libs >/dev/null 2>&1; then
+        PKG_AVIFILE_LIBS=$(${gem_check_lib_pkgconfig_AVIFILE} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_AVIFILE_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_AVIFILE --libs >/dev/null 2>&1; then
+        PKG_AVIFILE_LIBS=$(${gem_check_lib_pkgconfig_AVIFILE} --libs)
        fi
       fi
     fi
@@ -8226,36 +8218,35 @@ fi
   if test "x$ac_cv_lib_avformat_av_open_input_file" != "xyes"; then
    echo "$as_me:$LINENO: checking for ffmpeg-config" >&5
 echo $ECHO_N "checking for ffmpeg-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_FFMPEG=""
    if test "xffmpeg" != "x"; then
-    pkgconfig="ffmpeg"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "ffmpeg"-config`
+    gem_check_lib_pkgconfig_FFMPEG="ffmpeg"-config
+    if which -- "$gem_check_lib_pkgconfig_FFMPEG" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_FFMPEG=`which "ffmpeg"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_FFMPEG=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_FFMPEG" != "x"; then
 
     if test "x$PKG_FFMPEG_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_FFMPEG_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_FFMPEG --cflags >/dev/null 2>&1; then
+        PKG_FFMPEG_CFLAGS=$(${gem_check_lib_pkgconfig_FFMPEG} --cflags)
         PKG_CFLAGS="$PKG_FFMPEG_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_FFMPEG_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_FFMPEG_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_FFMPEG --plugin-libs >/dev/null 2>&1; then
+        PKG_FFMPEG_LIBS=$(${gem_check_lib_pkgconfig_FFMPEG} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_FFMPEG_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_FFMPEG --libs >/dev/null 2>&1; then
+        PKG_FFMPEG_LIBS=$(${gem_check_lib_pkgconfig_FFMPEG} --libs)
        fi
       fi
     fi
@@ -8989,36 +8980,35 @@ fi
   if test "x$ac_cv_lib_dv_main" != "xyes"; then
    echo "$as_me:$LINENO: checking for ieee1394-config" >&5
 echo $ECHO_N "checking for ieee1394-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_IEEE1394=""
    if test "xieee1394" != "x"; then
-    pkgconfig="ieee1394"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "ieee1394"-config`
+    gem_check_lib_pkgconfig_IEEE1394="ieee1394"-config
+    if which -- "$gem_check_lib_pkgconfig_IEEE1394" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_IEEE1394=`which "ieee1394"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_IEEE1394=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_IEEE1394" != "x"; then
 
     if test "x$PKG_IEEE1394_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_IEEE1394_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_IEEE1394 --cflags >/dev/null 2>&1; then
+        PKG_IEEE1394_CFLAGS=$(${gem_check_lib_pkgconfig_IEEE1394} --cflags)
         PKG_CFLAGS="$PKG_IEEE1394_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_IEEE1394_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_IEEE1394_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_IEEE1394 --plugin-libs >/dev/null 2>&1; then
+        PKG_IEEE1394_LIBS=$(${gem_check_lib_pkgconfig_IEEE1394} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_IEEE1394_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_IEEE1394 --libs >/dev/null 2>&1; then
+        PKG_IEEE1394_LIBS=$(${gem_check_lib_pkgconfig_IEEE1394} --libs)
        fi
       fi
     fi
@@ -9267,36 +9257,35 @@ fi
   if test "x$ac_cv_lib_ftgl_main" != "xyes"; then
    echo "$as_me:$LINENO: checking for ftgl-config" >&5
 echo $ECHO_N "checking for ftgl-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_FTGL=""
    if test "xftgl" != "x"; then
-    pkgconfig="ftgl"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "ftgl"-config`
+    gem_check_lib_pkgconfig_FTGL="ftgl"-config
+    if which -- "$gem_check_lib_pkgconfig_FTGL" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_FTGL=`which "ftgl"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_FTGL=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_FTGL" != "x"; then
 
     if test "x$PKG_FTGL_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_FTGL_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_FTGL --cflags >/dev/null 2>&1; then
+        PKG_FTGL_CFLAGS=$(${gem_check_lib_pkgconfig_FTGL} --cflags)
         PKG_CFLAGS="$PKG_FTGL_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_FTGL_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_FTGL_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_FTGL --plugin-libs >/dev/null 2>&1; then
+        PKG_FTGL_LIBS=$(${gem_check_lib_pkgconfig_FTGL} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_FTGL_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_FTGL --libs >/dev/null 2>&1; then
+        PKG_FTGL_LIBS=$(${gem_check_lib_pkgconfig_FTGL} --libs)
        fi
       fi
     fi
@@ -9545,36 +9534,35 @@ fi
   if test "x$ac_cv_lib_gltt_GLTTFont" != "xyes"; then
    echo "$as_me:$LINENO: checking for gltt-config" >&5
 echo $ECHO_N "checking for gltt-config... $ECHO_C" >&6
-   locale pkgconfig
-   pkgconfig=""
+   gem_check_lib_pkgconfig_GLTT=""
    if test "xgltt" != "x"; then
-    pkgconfig="gltt"-config
-    if which -- "$pkgconfig" >/dev/null 2>&1; then
-     pkgconfig=`which "gltt"-config`
+    gem_check_lib_pkgconfig_GLTT="gltt"-config
+    if which -- "$gem_check_lib_pkgconfig_GLTT" >/dev/null 2>&1; then
+     gem_check_lib_pkgconfig_GLTT=`which "gltt"-config`
      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
-     pkgconfig=""
+     gem_check_lib_pkgconfig_GLTT=""
      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
    fi
 
-   if test "x$pkgconfig" != "x"; then
+   if test "x$gem_check_lib_pkgconfig_GLTT" != "x"; then
 
     if test "x$PKG_GLTT_CFLAGS" = "x"; then
-      if $pkgconfig --cflags >/dev/null 2>&1; then
-        PKG_GLTT_CFLAGS=$(${pkgconfig} --cflags)
+      if $gem_check_lib_pkgconfig_GLTT --cflags >/dev/null 2>&1; then
+        PKG_GLTT_CFLAGS=$(${gem_check_lib_pkgconfig_GLTT} --cflags)
         PKG_CFLAGS="$PKG_GLTT_CFLAGS $PKG_CFLAGS"
       fi
     fi
 
     if test "x$PKG_GLTT_LIBS" = "x"; then
-      if $pkgconfig --plugin-libs >/dev/null 2>&1; then
-        PKG_GLTT_LIBS=$(${pkgconfig} --plugin-libs)
+      if $gem_check_lib_pkgconfig_GLTT --plugin-libs >/dev/null 2>&1; then
+        PKG_GLTT_LIBS=$(${gem_check_lib_pkgconfig_GLTT} --plugin-libs)
       else
-       if $pkgconfig --libs >/dev/null 2>&1; then
-        PKG_GLTT_LIBS=$(${pkgconfig} --libs)
+       if $gem_check_lib_pkgconfig_GLTT --libs >/dev/null 2>&1; then
+        PKG_GLTT_LIBS=$(${gem_check_lib_pkgconfig_GLTT} --libs)
        fi
       fi
     fi
@@ -15213,6 +15201,10 @@ if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL
 elif test "x$have_gltt" = "xyes"; then
   have_font=GLTT
+fi
+
+if test "x$have_quicktime_framework" = "xyes"; then
+ have_libquicktime="yes (framework)"
 fi
 
 echo "$as_me:$LINENO: result:

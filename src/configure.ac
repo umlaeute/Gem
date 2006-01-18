@@ -119,8 +119,12 @@ if test "x$gem_check_ldflags_success" = "xyes"; then
 fi
 
 dnl some checks for osX
-GEM_CHECK_FRAMEWORK(Carbon)
-GEM_CHECK_FRAMEWORK(QuickTime)
+GEM_CHECK_FRAMEWORK(Carbon, 
+                        [have_carbon_framework="yes"], 
+                        [have_carbon_framework="no"])
+GEM_CHECK_FRAMEWORK(QuickTime,
+                        [have_quicktime_framework="yes"], 
+                        [have_quicktime_framework="no"])
 
 #fallback to imagemagick if people are too lazy to type ImageMagick
 if test "x$with_ImageMagick" = "x"; then
@@ -384,6 +388,10 @@ if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL
 elif test "x$have_gltt" = "xyes"; then
   have_font=GLTT
+fi
+
+if test "x$have_quicktime_framework" = "xyes"; then
+ have_libquicktime="yes (framework)"
 fi
 
 AC_MSG_RESULT([
