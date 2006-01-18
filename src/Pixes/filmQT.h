@@ -17,7 +17,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Pixes/film.h"
 
 #if defined __APPLE__ && !defined HAVE_QUICKTIME
-#define HAVE_QUICKTIME
+# define HAVE_QUICKTIME
 #endif
 
 #ifdef HAVE_QUICKTIME
@@ -62,6 +62,9 @@ class GEM_EXTERN filmQT : public film
   //////////
   // close the movie file
   virtual void close(void);
+
+  // get the frames per seconds (or "-1" if unknown)
+  virtual double getFPS();
 
   //////////
   // get the next frame
