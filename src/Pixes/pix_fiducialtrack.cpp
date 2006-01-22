@@ -15,6 +15,10 @@
 
 #include "pix_fiducialtrack.h"
 
+#ifdef __WIN32__
+# include <io.h>
+#endif
+
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_fiducialtrack,  t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
