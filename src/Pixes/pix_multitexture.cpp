@@ -34,6 +34,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT)
 pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   : m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_mode(1)
 {
+#ifndef GL_TEXTURE0_ARB
+  post("[pix_multitexture]: GEM has been compiled without ARB-multitexture support");
+#endif
   if (m_reqTexUnits==0) {
     throw (GemException("[pix_multitexture]: Please specify more than 0 texture units"));
   }
@@ -52,6 +55,7 @@ pix_multitexture :: ~pix_multitexture()
 /////////////////////////////////////////////////////////
 void pix_multitexture :: render(GemState *state)
 {
+#ifdef GL_TEXTURE0_ARB
 	if ( !m_mode )
 		m_textureType = GL_TEXTURE_2D;
 	else
@@ -63,6 +67,7 @@ void pix_multitexture :: render(GemState *state)
 		glEnable( m_textureType );
 		glBindTexture( m_textureType, m_texID[i] );
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -71,6 +76,7 @@ void pix_multitexture :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_multitexture :: postrender(GemState *state)
 {
+#ifdef GL_TEXTURE0_ARB
   state->texture = 0;
   for ( int i = m_reqTexUnits; i>0; i--)
   {
@@ -78,6 +84,7 @@ void pix_multitexture :: postrender(GemState *state)
     glDisable( m_textureType );
   }
   glActiveTextureARB( GL_TEXTURE0_ARB );
+#endif
 }
 
 /////////////////////////////////////////////////////////
