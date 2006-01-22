@@ -26,6 +26,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBlendEquation , t_floatarg, A_DEFFLOAT)
 GEMglBlendEquation :: GEMglBlendEquation	(t_floatarg arg0=0) :
   mode((GLenum)arg0)
 {
+#ifdef __WIN32__
+  post("[%s]: has been compiled without glBlendEquation", m_objectname);
+#endif
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
 /////////////////////////////////////////////////////////
@@ -39,7 +42,9 @@ GEMglBlendEquation :: ~GEMglBlendEquation () {
 // Render
 //
 void GEMglBlendEquation :: render(GemState *state) {
+#ifndef __WIN32__
   glBlendEquation (mode);
+#endif
 }
 
 /////////////////////////////////////////////////////////
