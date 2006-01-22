@@ -104,8 +104,11 @@ public:
             maxAdjacencies = 0;
             
             while( !is.eof() ){
-
+#ifdef _MSC_VER
+	      std::string s;
+#else
                 s.clear();
+#endif
                 is >> s;
                 if( s.empty() )
                     continue;
@@ -163,7 +166,7 @@ public:
     ~TreeIdMapImplementation()
     {
         while( !strings_.empty() ){
-            delete [] strings_.back();
+	  delete [] (char*)strings_.back();
             strings_.pop_back();
         }
     }
