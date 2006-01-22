@@ -8,8 +8,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) GÂ¸nther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂ¸r::umlâ€°ute. IEM
+//    Copyright (c) Günther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -228,7 +228,7 @@ void vertex_program :: LoadProgram(void)
   if (isUnderNativeLimits!=1)
   {
 		// Go through the most common limits that are exceeded
-		post("[%s]:  is beyond hardware limits:\n", m_objectname->s_name);
+    post("[%s]:  is beyond hardware limits", m_objectname->s_name);
 
 		GLint aluInstructions, maxAluInstructions;
 		glGetProgramivARB(m_programTarget, GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &aluInstructions);
@@ -277,9 +277,11 @@ void vertex_program :: startRendering()
 
 void vertex_program :: render(GemState *state)
 {
+#if defined GL_ARB_vertex_program || defined GL_NV_vertex_program
   LoadProgram();
   glProgramEnvParameter4fvARB(m_programTarget, m_envNum, m_param);
-}
+#endif
+} 
 
 /////////////////////////////////////////////////////////
 // postrender
