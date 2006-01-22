@@ -33,7 +33,6 @@
 #define DEF_TRESHOLD 127
 #define DEF_MINIMUM 1
 #define DEF_MIN_DISTANCE 0.01
-#define DEBUG 0
 
 enum areaTypes
 {
