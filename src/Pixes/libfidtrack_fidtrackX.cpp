@@ -83,8 +83,8 @@ static void sum_leaf_centers( FidtrackerX *ft, Region *r, int width, int height 
         if( h < ft->min_leaf_width_or_height )
             ft->min_leaf_width_or_height = h;
 
-        x = ((r->left + r->right) * .5);
-        y = ((r->top + r->bottom) * .5);
+        x = ((r->left + r->right) * .5f);
+        y = ((r->top + r->bottom) * .5f);
 
         if( ft->pixelwarp ){
           int xx = (int)x;
