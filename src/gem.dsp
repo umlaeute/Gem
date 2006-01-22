@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G6 /MT /W3 /O2 /Ob2 /I "$(PROGRAMFILES)/pd" /I "$(PROGRAMFILES)/pd/src" /I "../../src" /I "../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs\freetype2\include" /I "../../GemLibs\FTGL\include" /I "C:\dev\QTDevWin\CIncludes" /I "C:\DXSDK\include" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "NT" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# ADD CPP /nologo /G6 /MT /W3 /GX /O2 /Ob2 /I "$(PROGRAMFILES)/pd" /I "$(PROGRAMFILES)/pd/src" /I "../../src" /I "../src" /I "../../GemLibs/Jpeg" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs\freetype2\include" /I "../../GemLibs\FTGL\include" /I "C:\dev\QTDevWin\CIncludes" /I "C:\DXSDK\include" /I "C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses" /D "GEM_INTERNAL" /D "NDEBUG" /D "_LANGUAGE_C_PLUS_PLUS" /D "__WIN32__" /D "WIN32" /D "WIN32_LEAN_AND_MEAN" /FD /c
 # SUBTRACT CPP /Fr /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 freetype214MT.lib ftgl_static_MT.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\liborb\liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib vfw32.lib libcmt.lib shlwapi.lib OLDNAMES.lib qtmlclient.lib /nologo /subsystem:windows /dll /profile /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"C:\Programme\pd\bin\\" /libpath:"..\..\bin\\" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug" /libpath:"../../GemLibs\FTGL\win32_vcpp\Build" /libpath:"../../GemLibs\freetype2\objs"
+# ADD LINK32 freetype214MT.lib ftgl_static_MT.lib ../../GemLibs\tiff\libtiff.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\liborb\liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbase.lib winmm.lib vfw32.lib libcmt.lib shlwapi.lib OLDNAMES.lib qtmlclient.lib MSVCPRT.LIB Msvcrt.lib strmiids.lib msdmo.lib /nologo /subsystem:windows /dll /profile /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"C:\Programme\pd\bin\\" /libpath:"..\..\bin\\" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\lib" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug" /libpath:"../../GemLibs\FTGL\win32_vcpp\Build" /libpath:"../../GemLibs\freetype2\objs"
 
 !ELSEIF  "$(CFG)" == "gem - Win32 Debug"
 
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G6 /ML /W3 /Gm /GX /Zi /Od /I "$(PROGRAMFILES)/pd/src" /I "../../src" /I "../src" /I "../../GemLibs/JPEG" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs/freetype2/include" /I "../../GemLibs/FTGL/include" /I "C:/dev/QTDevWin/CIncludes" /I "C:/DXSDK/include" /I "C:/DXSDK/samples/Multimedia/DirectShow/BaseClasses" /D "_DEBUG" /D "DEBUG" /D "__WIN32__" /D "WIN32" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "GEM_INTERNAL" /FD /c
+# ADD CPP /nologo /G6 /ML /W3 /Gm /GX /Zi /Od /I "$(PROGRAMFILES)/pd/src" /I "../../src" /I "../src" /I "../../GemLibs/JPEG" /I "../../GemLibs/tiff/libtiff" /I "../../GemLibs/wintab/include" /I "../../GemLibs/liborb" /I "../../GemLibs/freetype2/include" /I "../../GemLibs/freetype2/include/freetype2" /I "../../GemLibs/FTGL/include" /I "E:/dev/QTDevWin/CIncludes" /I "E:/dev/DXSDK/include" /I "E:/dev/DXSDK/samples/Multimedia/DirectShow/BaseClasses" /D "GEM_INTERNAL" /D "_DEBUG" /D "DEBUG" /D "_LANGUAGE_C_PLUS_PLUS" /D "WIN32_LEAN_AND_MEAN" /D "__WIN32__" /D "WIN32" /FD /c
 # SUBTRACT CPP /Gf /Gy
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 freetype214MT.lib ftgl_static_MT.lib ../../GemLibs/tiff/libtiff.lib ../../GemLibs/Jpeg/libjpeg.lib ../../GemLibs/liborb/liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib oldnames.lib MSVCPRT.LIB vfw32.lib libcmtd.lib shlwapi.lib qtmlclient.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"$(PROGRAMFILES)/pd/bin/" /libpath:"../../bin/" /libpath:"C:\dev\QTDevWin\Libraries" /libpath:"C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug" /libpath:"../../GemLibs\FTGL\win32_vcpp\Build" /libpath:"../../GemLibs\freetype2\objs"
+# ADD LINK32 freetype214MT.lib ftgl_static_MT.lib ../../GemLibs/tiff/libtiff.lib ../../GemLibs/Jpeg/libjpeg.lib ../../GemLibs/liborb/liborb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib strmbasd.lib winmm.lib oldnames.lib MSVCPRT.LIB vfw32.lib libcmtd.lib shlwapi.lib qtmlclient.lib /nologo /subsystem:windows /dll /debug /machine:I386 /nodefaultlib /out:"../Gem.dll" /libpath:"$(PROGRAMFILES)/pd/bin/" /libpath:"../../bin/" /libpath:"E:\dev\QTDevWin\Libraries" /libpath:"E:\dev\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug" /libpath:"../../GemLibs\FTGL\win32_vcpp\Build" /libpath:"../../GemLibs\freetype2\objs"
 
 !ENDIF 
 
@@ -706,6 +706,30 @@ SOURCE=.\Manips\fragment_program.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Manips\glsl_fragment.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\glsl_fragment.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\glsl_program.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\glsl_program.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\glsl_vertex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Manips\glsl_vertex.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Manips\linear_path.cpp
 # End Source File
 # Begin Source File
@@ -876,6 +900,30 @@ SOURCE=.\Manips\vertex_program.h
 # Begin Group "Controls"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Controls\gem_pdpin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Controls\gem_pdpin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Controls\gem_pdpout.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Controls\gem_pdpout.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Controls\gemframebuffer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Controls\gemframebuffer.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\Controls\gemhead.cpp
@@ -1281,6 +1329,14 @@ SOURCE=.\Pixes\pix_threshold.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_threshold_bernsen.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_threshold_bernsen.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_yuv.cpp
 # End Source File
 # Begin Source File
@@ -1375,6 +1431,34 @@ SOURCE=.\Pixes\pix_takealpha.h
 # Begin Group "Control"
 
 # PROP Default_Filter ""
+# Begin Group "libfidtrack"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Pixes\libfidtrack_fidtrackX.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\libfidtrack_fidtrackX.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\libfidtrack_segment.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\libfidtrack_segment.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\libfidtrack_treeidmap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\libfidtrack_treeidmap.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\Pixes\pix_blob.cpp
@@ -1457,6 +1541,14 @@ SOURCE=.\Pixes\pix_dump.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pixes\pix_fiducialtrack.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_fiducialtrack.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pixes\pix_get.h
 # End Source File
 # Begin Source File
@@ -1466,6 +1558,14 @@ SOURCE=.\Pixes\pix_histo.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_histo.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_hit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_hit.h
 # End Source File
 # Begin Source File
 
@@ -1578,6 +1678,14 @@ SOURCE=.\Pixes\pix_draw.cpp
 # Begin Source File
 
 SOURCE=.\Pixes\pix_draw.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_multitexture.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pixes\pix_multitexture.h
 # End Source File
 # Begin Source File
 
@@ -2002,6 +2110,14 @@ SOURCE=.\Particles\part_render.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Particles\part_sink.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Particles\part_sink.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Particles\part_size.cpp
 # End Source File
 # Begin Source File
@@ -2031,10 +2147,6 @@ SOURCE=.\Particles\part_targetsize.cpp
 # Begin Source File
 
 SOURCE=.\Particles\part_targetsize.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Particles\part_vector.h
 # End Source File
 # Begin Source File
 
@@ -2146,6 +2258,14 @@ SOURCE=.\openGL\GEMglBitmap.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\openGL\GEMglBlendEquation.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglBlendEquation.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\openGL\GEMglBlendFunc.cpp
 # End Source File
 # Begin Source File
@@ -2207,6 +2327,14 @@ SOURCE=.\openGL\GEMglClearStencil.cpp
 # Begin Source File
 
 SOURCE=.\openGL\GEMglClearStencil.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClipPlane.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglClipPlane.h
 # End Source File
 # Begin Source File
 
@@ -4178,11 +4306,27 @@ SOURCE=.\openGL\GEMglTranslatef.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\openGL\GEMglUniform1fARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglUniform1fARB.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\openGL\GEMgluPerspective.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\openGL\GEMgluPerspective.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglUseProgramObjectARB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\openGL\GEMglUseProgramObjectARB.h
 # End Source File
 # Begin Source File
 
