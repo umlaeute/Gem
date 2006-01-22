@@ -7,7 +7,7 @@ Standards-Version: 3.5.8
 
 Package: gem
 Architecture: any
-Depends: ${shlibs:Depends}, pd | puredata, libtiff4, libjpeg62, libmagick++9c2a | libmagick++6, libmpeg3-1, libquicktime1 | libquicktime4linux0, libavifile-0.7c2, libdv4
+Depends: ${shlibs:Depends}, pd | puredata, libtiff4, libjpeg62, libmagick++9c2a | libmagick++6 | libmagick++6c2, libmpeg3-1, libquicktime1 | libquicktime4linux0, libavifile-0.7c2 | libavifile-0.7, libdv4
 Description: Graphics Environment for Multimedia
  GEM is a loadable library for PD (pure-data), which adds OpenGL(tm)
  graphics rendering and animation and image-processing to PD.
