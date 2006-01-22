@@ -18,9 +18,11 @@ LOG
 #ifdef __WIN32__
 
 /* turn of some warnings on vc-compilers */
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4305 )
-#pragma warning( disable : 4091 )
+# pragma warning( disable : 4244 )
+# pragma warning( disable : 4305 )
+# pragma warning( disable : 4091 )
+// "switch" without "case" (just "default")
+# pragma warning( disable : 4065 )
 
 // Windows requires explicit import and exporting of functions and classes.
 // While this is a pain to do sometimes, in large software development
