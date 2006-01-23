@@ -8,7 +8,7 @@
 #X msg 103 158 1;
 #X msg 121 185 0;
 #X obj 198 331 part_gravity 0 -0.01 0;
-#X obj 198 160 part_velsphere 0 0.2 0 0.2;
+#X obj 198 160 part_velocity sphere 0 0.2 0 0.2;
 #X text 310 269 set the number per frame;
 #X text 310 378 set the age to kill at;
 #X text 366 327 gravity to affect the particles;

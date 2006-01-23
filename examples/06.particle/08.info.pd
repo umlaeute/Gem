@@ -10,7 +10,7 @@
 #X text 292 291 set the age to kill at;
 #X msg 290 201 0 0.2 0 0.3;
 #X msg 377 200 0.2 0 0 0.3;
-#X obj 168 229 part_velsphere 0 0.2 0 0.3;
+#X obj 168 229 part_velocity sphere 0 0.2 0 0.3;
 #N canvas 87 154 247 179 Gem.init 0;
 #X msg 118 81 reset;
 #X obj 118 113 outlet;
@@ -38,7 +38,7 @@
 #X obj 170 537 square 0.2;
 #X msg 283 378 \$1 \$2 0;
 #X obj 169 56 rotateXYZ;
-#X floatatom 272 20 5 0 0;
+#X floatatom 272 20 5 0 0 0 - - -;
 #X obj 168 205 part_color;
 #X msg 200 180 1 0 0;
 #X msg 252 180 0 0 1;
@@ -51,8 +51,8 @@
 #X connect 4 0 13 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
-#X connect 9 0 11 1;
-#X connect 10 0 11 1;
+#X connect 9 0 11 2;
+#X connect 10 0 11 2;
 #X connect 11 0 14 0;
 #X connect 12 0 0 0;
 #X connect 13 0 32 0;
