@@ -29,10 +29,13 @@ how to update these files:
  from	'#include <GL/glxew.h>' --> to	'#include "Base/glxew.h"'
  from	'#include <GL/wglew.h>' --> to	'#include "Base/wglew.h"'
 
- the following script should do that for you (no guarantees):
- 
- #>for i in glew.cpp glew.h glxew.h wglew.h
-   do
-    sed -i -e 's/<GL\/\(.*gl.*ew.*\)>/"Base\/\1"/' $i
-   done
+ once you have downloaded and extracted the glew-sources, you can simply
+ run the script ./importGLEW.sh which should do everything for you...
 
+case study:
+ ~/src/Gem/src$ cd /tmp
+ /tmp$ wget http://puzzle.dl.sourceforge.net/sourceforge/glew/glew-1.3.3-src.tgz
+ /tmp$ tar xvzf glew-1.3.3-src.tgz
+ /tmp$ cd ~/src/Gem/src
+ ~/src/Gem/src$ ./importGLEW.sh /tmp/glew/
+ 
