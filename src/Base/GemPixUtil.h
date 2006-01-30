@@ -77,22 +77,9 @@ CLASS
 
 struct GEM_EXTERN imageStruct
 {
-  imageStruct() : xsize (0),ysize(0),csize(0),
-#ifdef GL_UNSIGNED_SHORT_8_8_REV_APPLE
-    // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
-       type(GL_UNSIGNED_SHORT_8_8_REV_APPLE), format(GL_YCBCR_422_GEM),
-#else
-       type(GL_UNSIGNED_BYTE), format(GL_RGBA),
-#endif
-       notowned(0),data(NULL),pdata(NULL),datasize(0),
-#ifdef __APPLE__
-       upsidedown(1)
-#else
-       upsidedown(0)
-#endif
-{}
+  imageStruct();
+  ~imageStruct();
 
-  ~imageStruct() { clear(); }
   void info();
   //////////
   // columns
@@ -266,6 +253,8 @@ CLASS
 -----------------------------------------------------------------*/
 struct GEM_EXTERN pixBlock
 {
+  pixBlock();
+
     //////////
     // the block's image
     imageStruct     image;
