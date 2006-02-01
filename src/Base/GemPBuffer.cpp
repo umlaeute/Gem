@@ -26,7 +26,7 @@
 #include <vector>
 #include <GL/gl.h>
 #include <GL/glx.h>
-#include "pbuffer.h"
+#include "GemPBuffer.h"
 
 /*
  */
@@ -372,7 +372,7 @@ void PBuffer::disable() {
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/wglext.h>
-#include "pbuffer.h"
+#include "GemPBuffer.h"
 
 /*
  */
