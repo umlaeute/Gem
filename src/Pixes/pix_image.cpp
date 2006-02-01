@@ -16,7 +16,7 @@
 
 #include "pix_image.h"
 
-#ifdef unix
+#ifdef __unix__
 #include <unistd.h>
 #include <strings.h>
 #endif
@@ -45,7 +45,6 @@ pix_image :: pix_image(t_symbol *filename) :
   while(i--)m_filename[i]=0;
 
   m_pixBlock.image = m_imageStruct;
-
 #ifdef HAVE_PTHREADS
   m_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
   if(m_mutex){
