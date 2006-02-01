@@ -2,7 +2,7 @@
   LOG
   GEM - Graphics Environment for Multimedia
 
-  Convert 4 signals (R~, G~, B~, A¨) into a pixBuf
+  Convert 4 signals (R~, G~, B~, A~) into a pixBuf
 
   Copyright (c) 2000 Günther Geiger. geiger@epy.co.at
   Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
@@ -14,24 +14,8 @@
 #ifndef INCLUDE_PIX_SIG2PIX_H_
 #define INCLUDE_PIX_SIG2PIX_H_
 
-#include <string.h>
-
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
-#include "Base/GemPixImageLoad.h"
-#include "Base/GemCache.h"
-#include <math.h>
-
-#ifdef unix
-#include <unistd.h>
-#include <strings.h>
-#endif
-
-#ifdef __ppc__
-#include "Base/GemFuncUtil.h"
-#undef sqrt
-#define sqrt fast_sqrtf
-#endif
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
