@@ -161,6 +161,7 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 {
 #ifdef GL_ARB_shader_objects
   int i=0;
+  if (m_program){
   for(i=0; i<=m_uniformCount; i++){
     if(s==m_symname[i]){
 //      post("uniform parameters #%d", i);
@@ -179,8 +180,9 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
       return;
     }
   }
-  // if we reach this, then no param-name was matching!
-  if(i>m_num)error("glsl_program: no method for '%s' (it's not uniform variable)", s->s_name);
+    // if we reach this, then no param-name was matching!
+    if(i>m_num)error("glsl_program: no method for '%s' (it's not uniform variable)", s->s_name);
+  }
 #endif
 }
 
@@ -478,5 +480,5 @@ void glsl_program :: printMessCallback(void *data)
 }
 void glsl_program :: paramMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
-  GetMyClass(data)->paramMess(s, argc, argv);
+    GetMyClass(data)->paramMess(s, argc, argv);
 }
