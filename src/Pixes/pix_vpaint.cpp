@@ -179,11 +179,11 @@ void pix_vpaint :: init()
 	glPixelMapfv(GL_PIXEL_MAP_G_TO_G, 256, table);
 	glPixelMapfv(GL_PIXEL_MAP_B_TO_B, 256, table);
     } else {
-	printf("This OpenGL implementation does not support the color matrix and/or\n");
-	printf("the min/max blending equations, therefore the option to draw the\n");
-	printf("Voronoi region edges is unavailable.\n\n");
-	printf("The required features are available with OpenGL 1.2 or the GL_EXT_blend_minmax\n");
-	printf("and GL_SGI_color_matrix extensions.\n");
+	error("This OpenGL implementation does not support the color matrix and/or\n");
+	error("the min/max blending equations, therefore the option to draw the\n");
+	error("Voronoi region edges is unavailable.\n\n");
+	error("The required features are available with OpenGL 1.2 or the GL_EXT_blend_minmax\n");
+	error("and GL_SGI_color_matrix extensions.\n");
   }
   m_initialized = 1;
   m_pbuffer->disable();
