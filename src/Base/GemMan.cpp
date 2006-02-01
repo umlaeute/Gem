@@ -97,6 +97,10 @@ int GemMan::texture_yuv_supported = 0;
 float GemMan::fps;
 int GemMan::fsaa = 0;
 
+#ifdef __APPLE__
+AGLContext GemMan::masterContext = NULL;
+#endif
+
 // static data
 static const int NUM_LIGHTS = 8;   	// the maximum number of lights
 static int s_lightState = 0;        // is lighting on or off
@@ -237,8 +241,9 @@ static pascal OSStatus dispatchGemWindowMessages()
     EventTargetRef theTarget;
     
     theTarget = GetEventDispatcherTarget();
-    ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true,
-                                &theEvent );
+// TODO:
+//   this only gets one event per frame, so there's gotta be a better way, right?
+    ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true, &theEvent );
     {
         SendEventToEventTarget( theEvent, theTarget);
         ReleaseEvent( theEvent );
@@ -268,6 +273,9 @@ static void resizeCallback(int xSize, int ySize, void *)
 	    GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
 
   glMatrixMode(GL_MODELVIEW);
+//  TODO:
+//    shouldn't this be called here?
+//  glLoadIdentity();
 }
 /*
  This is SGI sample code taken directly from OpenGL.org:
@@ -406,10 +414,6 @@ void GemMan :: initGem()
   post("GEM: \t\tJames Tittle (macOS-X)");
   post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
 
-  //#ifdef __APPLE__
-  //	post("GEM: Mac OS X port by James Tittle & Chris Clepper");
-  //#endif
-
   // setup the perspective values
   m_perspect[0] = -1.f;	// left
   m_perspect[1] =  1.f;	// right
@@ -437,6 +441,32 @@ void GemMan :: initGem()
   m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
 
   m_motionBlur = 0.f;
+#ifdef __APPLE__
+
+  // This is to create a "master context" on Gem initialization, with
+  //  the hope that we can then share it with later context's created
+  //  when opening new rendering windows, and thereby share resources
+  //  - no window will be directly associate with this context!
+  //  - should remove the need for GemMan::HaveValidContext()
+  GLint attrib[] = {AGL_RGBA, AGL_DOUBLEBUFFER, AGL_NO_RECOVERY, AGL_NONE};
+  
+//  GDHandle display = GetMainDevice();
+//  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( &display, 1, attrib );
+  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( NULL, NULL, attrib );
+	GLenum err = aglGetError();
+	if (AGL_NO_ERROR != err)
+		post((char *)aglErrorString(err));
+  GemMan::masterContext = aglCreateContext( aglPixFmt, NULL );
+	err = aglGetError();
+	if (AGL_NO_ERROR != err)
+		post((char *)aglErrorString(err));
+  aglSetCurrentContext( masterContext);
+  
+//  AGL_MACRO_DECLARE_VARIABLES()
+
+  aglDestroyPixelFormat( aglPixFmt );
+  
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -535,6 +565,8 @@ void GemMan :: resetValues()
     }
   else
     {
+// TODO:
+//   this should be cached, & only disabled if it was enabled
       glDisable(GL_LIGHTING);
       glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
       glDisable(GL_COLOR_MATERIAL);
@@ -553,10 +585,15 @@ void GemMan :: resetValues()
 	    m_perspect[4], m_perspect[5]);				// front, back
     
   glMatrixMode(GL_MODELVIEW);
+// TODO:
+//   shouldn't this be called here?
+//  glLoadIdentity();
   gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
 	    m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
 
   if (m_fogMode == FOG_OFF) {
+//  TODO:
+//    this should be cached, & only disabled if it was enabled  
     glDisable(GL_FOG);
   } else {
     glEnable(GL_FOG);
@@ -955,6 +992,8 @@ void GemMan :: render(void *)
   //	    ahold of a stopRendering command)
   if (!s_hit && (0.0 != s_deltime))
     clock_delay(s_clock, s_deltime);
+	
+  glReportError();
 }
 
 /////////////////////////////////////////////////////////
@@ -1250,10 +1289,15 @@ int createConstWindow(char* disp)
   myHints.y_offset = 0;
   myHints.width = GemMan::m_width;
   myHints.height = GemMan::m_height;
+
+// TODO:
+//    masterContext for all platforms?
 #ifndef __APPLE__
   myHints.shared = NULL;
 #else
-  myHints.shared = constInfo.context;
+//  myHints.shared = constInfo.context;
+  constInfo.context = GemMan::masterContext;
+  myHints.shared = GemMan::masterContext;
 #endif
   myHints.actuallyDisplay = 0;
   myHints.fullscreen = 0;
@@ -1300,16 +1344,23 @@ void GemMan :: swapBuffers()
 #ifdef unix             // for Unix
     glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
 #elif __WIN32__          // for WinNT
-  SwapBuffers(gfxInfo.dc);
+    SwapBuffers(gfxInfo.dc);
 #elif __APPLE__		// for Macintosh
-  ::aglSwapBuffers(gfxInfo.context);
+    ::aglSwapBuffers(gfxInfo.context);
 #else                   // everyone else
 #error Define OS specific swap buffer
 #endif
   else glFlush();
 
+//  TODO:
+//  why is this called here?
+//		also called in resetState()
+//  seems like it'd ruin single buffer rendering...
   glClear(m_clear_mask);
+// why is this called here?
   glColor3f(1.0, 1.0, 1.0);
+// why is this called here?
+//  not clear what glMatrixMode() we're loading...probably GL_MODELVIEW?
   glLoadIdentity();
 
   if (GemMan::m_buffer == 1)
@@ -1325,6 +1376,9 @@ void GemMan :: swapBuffers()
 		m_perspect[4], m_perspect[5]);			// front, back
     
       glMatrixMode(GL_MODELVIEW);
+// TODO:
+// shouldn't this be called here?
+//	  glLoadIdentity();
       gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
 		m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
     }
@@ -1440,7 +1494,6 @@ GLenum GemMan :: requestLight(int specific)
     default :
       error("GEM: Unable to allocate world_light");
       return((GLenum)0);
-      // break;
     }
   return(retLight);
 }
@@ -1481,7 +1534,6 @@ void GemMan :: freeLight(GLenum lightNum)
     default:
       error("GEM: Error freeing a light - bad number");
       return;
-      // break;
     }
   s_lights[i]--;
   if (s_lights[i] < 0)
