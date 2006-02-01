@@ -84,7 +84,6 @@ void gemframebuffer :: render(GemState *state)
   SETFLOAT(ap+1, m_width);
   SETFLOAT(ap+2, m_height);
   SETFLOAT(ap+3, m_texTarget);
-  //outlet_float(m_outTexID, (t_float)m_offScreenID);
   outlet_list(m_outTexInfo, 0, 4, ap);
 }
 
@@ -234,7 +233,7 @@ void gemframebuffer :: dimMess(int width, int height)
   {
     m_width = width;
     m_height = height;
-//    setModified();
+    setModified();
 	destroyFBO();
 	initFBO();
   }
