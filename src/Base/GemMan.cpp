@@ -347,7 +347,7 @@ void GemMan :: createContext(char* disp)
 #endif
   s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
 
-  if (!createConstWindow(disp))
+  if (!m_windowContext && !createConstWindow(disp))
     {
       error("GEM: A serious error occured creating const Context");
       error("GEM: Continue at your own risk!");
