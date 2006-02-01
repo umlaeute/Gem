@@ -190,7 +190,7 @@ void gemwin :: menuBarMess(int on)
 									   kUIOptionDisableSessionTerminate |
 									   kUIOptionDisableForceQuit );
   }else if (on > 0) {
-    SetSystemUIMode( kUIModeNormal, NULL);
+    SetSystemUIMode( kUIModeNormal, 0 );
   }else if (on < 0) {
     SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar );
   }
