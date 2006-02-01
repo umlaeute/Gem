@@ -66,7 +66,7 @@ void glsl_fragment :: printInfo()
 #ifdef GL_ARB_fragment_shader
 # ifdef __APPLE__
 	if (!HaveValidContext ()) {
-		post("GEM: glsl_fragment - need window/context to load shader");
+		post("GEM:[%s] needs window/context to load shader", m_objectname->s_name);
 		return;
 	}
 # endif
