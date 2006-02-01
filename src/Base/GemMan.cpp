@@ -18,7 +18,7 @@
 
 #include "GemMan.h"
 
-#ifdef unix
+#ifdef __unix__
 # include <sys/time.h>
 # include <GL/glx.h>
 # include <X11/Xlib.h>
@@ -165,7 +165,7 @@ static void dispatchGemWindowMessages()
     }
   clock_delay(s_windowClock, s_windowDelTime);
 }
-#elif unix 
+#elif __unix__ 
 static void dispatchGemWindowMessages()
 {
   WindowInfo win; 
@@ -310,22 +310,7 @@ int OpenGLExtensionIsSupported(const char* extension) {
 
 void GemMan :: createContext(char* disp)
 {
-#ifdef unix
-  Display *dummyDpy;
-  if ( (dummyDpy = XOpenDisplay(disp)) == NULL)
-    { 
-      error("GEM: could not open X display %s",disp);
-      return;
-    }
-    
-  int dummy, dummy2;
-  if ( !glXQueryExtension(dummyDpy, &dummy, &dummy2) )
-    {
-      error("GEM: X server has no OpenGL GLX extension");
-      XCloseDisplay(dummyDpy);
-      return;
-    }
-#elif __WIN32__
+#ifdef __WIN32__
   // can we only have one context?
   if (getenv("GEM_SINGLE_CONTEXT") &&
       !strcmp("1", getenv("GEM_SINGLE_CONTEXT")))
@@ -746,7 +731,7 @@ void GemMan :: render(void *)
   LARGE_INTEGER startTime;
   //	if (m_profile == 1 || m_profile == 2)
   QueryPerformanceCounter(&startTime);
-#elif unix
+#elif __unix__
   timeval startTime;
   //	if (m_profile == 1 || m_profile == 2)
   {
@@ -967,7 +952,7 @@ void GemMan :: render(void *)
       else
 	error("GEM: unable to profile");
     }
-#elif unix
+#elif __unix__
   {
     timeval endTime;
     gettimeofday(&endTime, 0);
@@ -1247,7 +1232,7 @@ void GemMan :: destroyWindow()
   windowCleanup();
 
   // reestablish the const glxContext
-#ifdef unix                 // for Unix
+#ifdef __unix__                 // for Unix
   //post("dpy=%x\twin=%x\tcontext=%x", constInfo.dpy, constInfo.win, constInfo.context);
 
   if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
@@ -1341,7 +1326,7 @@ void GemMan :: swapBuffers()
 {
   if (!m_windowState) return;
   if (GemMan::m_buffer == 2)
-#ifdef unix             // for Unix
+#ifdef __unix__             // for Unix
     glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
 #elif __WIN32__          // for WinNT
     SwapBuffers(gfxInfo.dc);

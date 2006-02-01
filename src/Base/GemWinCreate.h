@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_GEMWINCREATE_H_
 #include "Base/config.h"
 
-#ifdef unix
+#ifdef __unix__
 # include <GL/glx.h>
 # ifdef HAVE_LIBXXF86VM
 #  include <X11/extensions/xf86vmode.h>
@@ -59,7 +59,7 @@ class GEM_EXTERN WindowInfo
   // Constructor
   WindowInfo() :
     fs(0), 
-#ifdef unix
+#ifdef __unix__
     dpy(NULL), win(0), cmap(0), context(NULL)
 #elif __WIN32__
     win(NULL), dc(NULL), context(NULL)
@@ -71,7 +71,7 @@ class GEM_EXTERN WindowInfo
   int         fs;                 // FullScreen
   int         have_constContext;  // 1 if we have a constant context
   
-#ifdef unix
+#ifdef __unix__
   Display     *dpy;               // X Display
   Window      win;                // X Window
   int         screen;             // X Screen
@@ -170,7 +170,7 @@ class GEM_EXTERN WindowHints
 
   //////////
   // The GLXcontext to share rendering with
-#ifdef unix
+#ifdef __unix__
     GLXContext  shared;
 #elif __WIN32__
     HGLRC       shared;

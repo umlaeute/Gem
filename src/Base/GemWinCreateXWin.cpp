@@ -14,7 +14,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifdef unix
+#ifdef __unix__
 
 #include "GemWinCreate.h"
 #include <m_pd.h>
@@ -65,7 +65,6 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   sprintf(svalue, "%d", fsaa);
   setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
 
-
   XSetErrorHandler (ErrorHandler);
 
   if ( (info.dpy = XOpenDisplay(hints.display)) == NULL)
@@ -76,6 +75,19 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   info.screen  = DefaultScreen(info.dpy);
 
+  /* this used to be in GemMan::createContext()
+   * and produced a number of XDisplays that were not closed
+   * i really think that it fits better in here;
+   * however, i have currently no way to test what really happens
+   * if the X-server has no glx extension
+   */
+  if ( !glXQueryExtension(info.dpy, NULL, NULL) )
+    {
+      error("GEM: X server has no OpenGL GLX extension");
+      destroyGemWindow(info);
+      return 0;
+    } 
+
   if (fullscreen){
     if (hints.display){
       error("GEM: fullscreen not available on remote display");
@@ -85,7 +97,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
       XF86VidModeGetAllModeLines(info.dpy, info.screen, &modeNum, &modes);
       info.deskMode = *modes[0];
 #else
-      error("GEM: no xxf86vm-supprt: cannot switch to fullscreen");
+      error("GEM: no xxf86vm-support: cannot switch to fullscreen");
 #endif
     }
   }
@@ -139,7 +151,6 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     destroyGemWindow(info);
     return(0);
   }
-    
   // create the X color map
   info.cmap = XCreateColormap(info.dpy, RootWindow(info.dpy, vi->screen), 
 			      vi->visual, AllocNone);
@@ -257,13 +268,14 @@ void destroyGemWindow(WindowInfo &info)
   if (info.dpy)
     {
       int err=0;
-      glXMakeCurrent(info.dpy, None, NULL); /* patch by cesare marilungo 
-                                             * to prevent the crash below */
+      /* patch by cesare marilungo to prevent the crash below */
+      glXMakeCurrent(info.dpy, None, NULL);
 
       if (info.win)
 	err=XDestroyWindow(info.dpy, info.win);
       if (info.have_constContext && info.context) {
-	glXDestroyContext(info.dpy, info.context); // this crashes sometimes on my laptop
+        // this crashes sometimes on my laptop:
+	glXDestroyContext(info.dpy, info.context);
       }
       if (info.cmap)
 	err=XFreeColormap(info.dpy, info.cmap);
@@ -291,7 +303,7 @@ void destroyGemWindow(WindowInfo &info)
       error("[gemwin]:   this is just a temporary workaround to avoid freezes");
       error("[gemwin]:   this should be fixed properly!!!");
 #else
-      XCloseDisplay(info.dpy);
+      err=XCloseDisplay(info.dpy);
 #endif
     }
   info.dpy = NULL;
