@@ -17,11 +17,17 @@ LOG
 #define INCLUDE_GEMMAN_H_
 
 #include "Base/GemGL.h"
-
+#include "Base/GemGLUtil.h"
 
 #ifdef __APPLE__
 #include <Carbon/Carbon.h>
 #include <AGL/agl.h>
+/*
+#define AGL_MACRO_CACHE_RENDERER
+#include <AGL/aglMacro.h>
+AGLContext agl_ctx;
+GLIContext agl_rend;
+*/
 #endif // __APPLE__
 
 #include "Base/GemExportDef.h"
@@ -175,6 +181,9 @@ class GEM_EXTERN GemMan
 	static int	   texture_yuv_supported;
         static float	   fps;
         static int	   fsaa;
+#ifdef __APPLE__
+		static AGLContext masterContext;
+#endif
 	
         //////////
         // Changing these variables is likely to crash GEM
