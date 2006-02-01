@@ -257,10 +257,14 @@ void destroyGemWindow(WindowInfo &info)
   if (info.dpy)
     {
       int err=0;
+      glXMakeCurrent(info.dpy, None, NULL); /* patch by cesare marilungo 
+                                             * to prevent the crash below */
+
       if (info.win)
 	err=XDestroyWindow(info.dpy, info.win);
-      if (info.have_constContext && info.context)
+      if (info.have_constContext && info.context) {
 	glXDestroyContext(info.dpy, info.context); // this crashes sometimes on my laptop
+      }
       if (info.cmap)
 	err=XFreeColormap(info.dpy, info.cmap);
 #ifdef HAVE_LIBXXF86VM
@@ -270,6 +274,7 @@ void destroyGemWindow(WindowInfo &info)
 	info.fs=0;
       }
 #endif
+#if 0
 /*
  * JMZ: disabled XCloseDisplay() because it likes to freeze the screen
  * the problem seems to be the event-handler which starts to send
@@ -285,7 +290,9 @@ void destroyGemWindow(WindowInfo &info)
       error("[gemwin]: not really closing X-Display");
       error("[gemwin]:   this is just a temporary workaround to avoid freezes");
       error("[gemwin]:   this should be fixed properly!!!");
-      // XCloseDisplay(info.dpy);
+#else
+      XCloseDisplay(info.dpy);
+#endif
     }
   info.dpy = NULL;
   info.win = 0;
