@@ -437,7 +437,7 @@ void GemMan :: initGem()
   
 //  GDHandle display = GetMainDevice();
 //  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( &display, 1, attrib );
-  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( NULL, NULL, attrib );
+  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( NULL, 0, attrib );
 	GLenum err = aglGetError();
 	if (AGL_NO_ERROR != err)
 		post((char *)aglErrorString(err));
