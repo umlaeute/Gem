@@ -519,7 +519,7 @@ bool recordQT :: dialog()
 // spits out a list of installed codecs and stores them
 //
 /////////////////////////////////////////////////////////
-void recordQT :: getCodecList()
+int recordQT :: getNumCodecs()
 {
   //get list of codecs installed  -- useful later
   CodecNameSpecListPtr codecList;
@@ -528,22 +528,22 @@ void recordQT :: getCodecList()
   int count;
 	
   GetCodecNameList(&codecList,1);
-  post("recordQT : %i codecs installed",codecList->count);
+  //  post("recordQT : %i codecs installed",codecList->count);
   if (codecList->count < 64) count = codecList->count; else count = 64;
   for (i = 0; i < count; i++){
     codecName = codecList->list[i];
-    post("recordQT : codec %i %s %i ctype %d",i,codecName.typeName, codecName.cType,codecName.codec);
+    //post("recordQT : codec %i %s %i ctype %d",i,codecName.typeName, codecName.cType,codecName.codec);
     codecContainer[i].position = i;
     codecContainer[i].ctype = codecName.cType;
-		
   }
+  return codecList->count;
 }
 
 /////////////////////////////////////////////////////////
 // deals with the name of a codec
 //
 /////////////////////////////////////////////////////////
-void recordQT :: codecMess(char*codecName)
+void recordQT :: setCodec(char*codecName)
 {
   if (!strncmp(codecName,"jpeg",4)) {
     //have to put the right things in here
@@ -560,6 +560,7 @@ void recordQT :: codecMess(char*codecName)
   if (!strncmp(codecName,"dvcp",4)) post("recordQT : kDVCPALCodecType");
   if (!strncmp(codecName,"y420",4)) post("recordQT : kYUV420CodecType");
   post("recordQT : codecName %s",codecName);
+  error("recordQT: oops, forgot to set the Codec...");
 }
 
 
