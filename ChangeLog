@@ -1,7 +1,661 @@
+2006-02-04 07:47  zmoelnig
+
+	* src/Base/config.h: define HAVE_QUICKTIME for __APPLE__ (later
+	  think about using autoconf for this)
+
+2006-02-04 07:44  zmoelnig
+
+	* src/Base/: GemPixUtil.cpp, GemPixUtil.h: added convertTo() and
+	  convertFrom() functions to the imageStruct-class for generic
+	  cs-conversion.
+
+2006-02-03 16:53  zmoelnig
+
+	* src/Pixes/: pix_record.cpp, pix_record.h: pix_record which is
+	  independent of the used API (like pix_filmNEW,...)
+
+2006-02-03 16:52  zmoelnig
+
+	* src/Pixes/recordQT.cpp: blind fixes to match record.h
+
+2006-02-03 16:40  zmoelnig
+
+	* src/Pixes/: record.cpp, record.h, recordQT.cpp, recordQT.h,
+	  recordQT4L.cpp, recordQT4L.h: implementation classes for
+	  pix-record APIs.  so far the recordQT4L (quicktime-for-linux) is
+	  tested, but not totally stable the recordQT (Apple's QuickTime
+	  API) has been copy'n'pasted from the original pix_record.cpp code
+	  - i am pretty sure i introduced some problems: at least the
+	  codec-querying and (more important) setting has certainly been
+	  broken.
+
+2006-02-03 10:33  tigital
+
+	* src/Base/GemMan.cpp: [osx]: shutup gcc warning in initGem()
+
+2006-02-01 13:38  zmoelnig
+
+	* src/Pixes/: pix_vpaint.cpp, pix_vpaint.h: replaced printf() by
+	  error() (it's more pdish and doesn't throw an error)
+
+2006-02-01 13:37  zmoelnig
+
+	* src/Base/GemPBuffer.cpp: at least it compiles here on linux...
+
+2006-02-01 13:21  zmoelnig
+
+	* src/Controls/gemframebuffer.cpp: probably a new-line at EOF
+
+2006-02-01 13:21  zmoelnig
+
+	* src/Geos/: pqtorusknots.cpp, pqtorusknots.h: cleaned up code a
+	  bit (so i can read it :-)) should perform a bit faster as well
+	  fixed a crash on my machine added type message
+
+	  still very crashy i _think_ there is a bug (most likely: a memory
+	  leak) in here
+
+2006-02-01 11:53  tigital
+
+	* src/Base/GemPBuffer.cpp: forgot header change to other platforms:
+	  this'll be cleaned and put in the correct spot (ie. the top of
+	  the file) sometime
+
+2006-02-01 10:43  tigital
+
+	* src/Geos/: pqtorusknots.cpp, pqtorusknots.h: initial commit:
+	  novel mathematical structure
+
+2006-02-01 10:42  tigital
+
+	* src/Pixes/: pix_vpaint.cpp, pix_vpaint.h: initial commit:  takes
+	  an image and creates a "voronoi region" painting out of
+	  it...works on OSX, but relies on GemPBuffer code, so other
+	  platforms can use this to test that code...
+
+2006-02-01 10:39  tigital
+
+	* src/Base/: GemPBuffer.cpp, GemPBuffer.h: initial commit:  works
+	  on OSX (still needs some serious cleanup!), but untested on other
+	  platforms:  code is there, but is it really equivalently
+	  functional?
+
+2006-02-01 10:37  tigital
+
+	* src/Manips/glsl_program.cpp: added check for a loaded program to
+	  the paramMess code; prevents crashing when sending parameters to
+	  the object but no program is actually loaded!
+
+2006-02-01 10:36  tigital
+
+	* src/Manips/glsl_fragment.cpp: error code reporting cleanup
+
+2006-02-01 10:34  tigital
+
+	* src/Controls/gemwin.cpp: [OSX] changed NULL to 0 to shutup gcc
+
+2006-02-01 10:33  tigital
+
+	* src/Base/GemMan.h: added header for glReportError(); [OSX] added
+	  "masterContext"
+
+2006-02-01 10:31  tigital
+
+	* src/Controls/gemframebuffer.cpp: cleanup; added setModified();
+
+2006-02-01 10:04  zmoelnig
+
+	* src/Pixes/pix_image.cpp: changed "#define unix" to "#define
+	  __unix__"
+
+2006-02-01 10:03  zmoelnig
+
+	* src/Pixes/pix_sig2pix.h: changed "#define unix" to "#define
+	  __unix__" removed unneccessary headers from inclusion
+
+2006-02-01 09:59  zmoelnig
+
+	* src/Base/: GemMan.cpp, GemWinCreate.h, GemWinCreateXWin.cpp:
+	  changed "#define unix" to "#define __unix__" moved the check for
+	  glx-support to GemWinCreateXWin.h
+
+2006-02-01 09:58  tigital
+
+	* src/Base/GemWinCreateMac.cpp: [OSX] added "masterContext", which
+	  gets rid of need for HaveValidContext()...needs non-jamie testing
+	  ;-)
+
+2006-02-01 09:53  tigital
+
+	* src/Base/GemMan.cpp: cleanups; added TODO questions; [OSX] added
+	  "masterContext", which gets rid of need for
+	  HaveValidContext()...needs non-jamie testing ;-)
+
+2006-02-01 08:24  zmoelnig
+
+	* src/Base/GemMan.cpp: only create constContext when its not
+	  already created
+
+2006-02-01 08:23  zmoelnig
+
+	* src/Base/GemWinCreateXWin.cpp: applied patch from cesare to avoid
+	  crashes on closing the window
+
+2006-01-30 08:12  zmoelnig
+
+	* src/Base/: GemPixUtil.h, GemPixUtil.cpp: added constructor for
+	  pixBlock-class (which properly initalizes newfilm and newimage to
+	  "false") moved constructor/destructor of imageStruct and pixBlock
+	  from header into the cpp-files to avoid unneccessary
+	  recompilation on changes)
+
+2006-01-26 09:47  zmoelnig
+
+	* src/: README.glew, importGLEW.sh: made a script (which will
+	  hopefully hardly ever be needed) to import glew mention it in the
+	  README.glew
+
+2006-01-26 09:07  zmoelnig
+
+	* src/: README.glew, Base/glew.cpp, Base/glew.h, Base/glxew.h,
+	  Base/wglew.h: added glew-files (+ a readme how i got them)
+
+2006-01-23 06:08  zmoelnig
+
+	* examples/06.particle/: 01.simple.pd, 02.fountain.pd, 03.orbit.pd,
+	  04.combo.pd, 05.twoSrc.pd, 06.target.pd, 07.render.pd,
+	  08.info.pd: changed [part_velsphere] to [part_velocity sphere]
+
+2006-01-23 06:07  zmoelnig
+
+	* src/Base/configNT.h: define DONT_HAVE_GLBLENDQUATION
+
+	  i think, this file should be used only for M$VC; LATER we can put
+	  #pragma's in here to enable linking with special libraries based
+	  on the configuration (or should we rather do it in the files that
+	  need these libraries??)
+
+2006-01-23 06:05  zmoelnig
+
+	* src/openGL/GEMglBlendEquation.cpp: use a DONT_HAVE_GLBLENDQUATION
+	  rather than __WIN32__ to determine whether this objects needs to
+	  be disabled
+
+2006-01-22 16:43  zmoelnig
+
+	* debian/control: added alternative dependencies for magick++6 and
+	  avifile-0.7
+
+2006-01-22 16:41  zmoelnig
+
+	* src/gem.dsp: added newly added files
+
+2006-01-22 16:40  zmoelnig
+
+	* src/: Controls/gemwin.h, Pixes/pix_share_read.cpp,
+	  Pixes/pix_share_read.h, Pixes/pix_share_write.cpp,
+	  Pixes/pix_share_write.h: minor changes (line.breaks)
+
+2006-01-22 16:37  zmoelnig
+
+	* src/Pixes/pix_fiducialtrack.cpp: on w32 we have to include <io.h>
+	  to be able to use "close(int)"
+
+2006-01-22 16:32  zmoelnig
+
+	* src/Pixes/libfidtrack_treeidmap.cpp: fixed string-template issues
+	  with vc6
+
+2006-01-22 16:29  zmoelnig
+
+	* src/Pixes/libfidtrack_fidtrackX.cpp: changed 0.5 to 0.5f to make
+	  floats instead of doubles (amd thus reduce warnings about
+	  conversion)
+
+2006-01-22 16:27  zmoelnig
+
+	* src/Pixes/pix_multitexture.cpp: disabled if GL_TEXTURE0_ARB is
+	  undefined (another candidate for GLEW)
+
+2006-01-22 16:26  zmoelnig
+
+	* src/Pixes/pix_hit.h: removed definition of DEBUG=0 since it is
+	  not needed anyhow
+
+2006-01-22 16:25  zmoelnig
+
+	* src/openGL/GEMglBlendEquation.cpp: turn glBlendEquation OFF on
+	  w32 (stupid restriction, but faster than finding anything more
+	  sophisticated)
+
+2006-01-22 16:23  zmoelnig
+
+	* src/Manips/vertex_program.cpp: only set glParameterEnvArg if
+	  vertexprograms are supported by the headers
+
+2006-01-22 16:17  zmoelnig
+
+	* src/Base/GemExportDef.h: disable more warnings (here:
+	  switch-statement without case (only default); this is possible is
+	  all cases are turned off by #ifdefs)
+
+	  NOTE: these pragmas should be within __MSC_VER_ instead of
+	  __WIN32__
+
+2006-01-18 07:10  zmoelnig
+
+	* src/Particles/part_sink.cpp, src/Particles/part_sink.h,
+	  help/part_sink.pd, examples/06.particle/09.sink.pd: found this
+	  lying around on my harddisk
+
+2006-01-18 06:22  zmoelnig
+
+	* src/Geos/circle.h: made circle::NUM_PTS a define rather than a
+	  const static variable
+
+2006-01-18 06:13  zmoelnig
+
+	* src/Geos/: circle.cpp, tube.h: removed unused variables made
+	  circle::NUM_PTS a define rather than a const static variable
+
+2006-01-18 05:54  zmoelnig
+
+	* src/: configure, configure.ac: set a variable when an
+	  apple-framework is found use it in the status-report (so
+	  apple-users don't get confused about no QuickTime even if the
+	  framework is installed) in "configure" the removal of
+	  "local"/"locale" is also applied
+
+2006-01-18 05:52  zmoelnig
+
+	* src/: acinclude.m4, aclocal.m4: fixed typo "locale" should read
+	  "local"; however, since the tests are not expanded into
+	  functions, this does not work so i removed the "locale" entirely
+	  and replaced it by a pseudo-localized variable (appending stuff
+	  derived from the arguments)
+
+2006-01-18 05:24  zmoelnig
+
+	* src/Pixes/pix_filmDarwin.cpp: properly ifdef the usage of
+	  "kDVCPROHD720pCodecType"
+
+2006-01-18 05:18  zmoelnig
+
+	* src/Pixes/filmQT.h: declare getFPS() (inherited from film.h)
+
+2006-01-18 05:15  zmoelnig
+
+	* src/Pixes/pix_videoDarwin.cpp: include <fcntl.h> for open()
+
+2006-01-18 05:02  zmoelnig
+
+	* src/Manips/glsl_fragment.cpp: disable more code, if
+	  GL_ARB_shader_objects is not defined (mostly cosmetic)
+
+2006-01-18 05:00  zmoelnig
+
+	* src/Manips/: glsl_program.cpp, glsl_program.h, glsl_vertex.cpp,
+	  glsl_vertex.h: disable most of the code if
+	  "GL_ARB_shader_objects" is not defined
+
+2006-01-18 04:13  zmoelnig
+
+	* src/openGL/: GEMglUseProgramObjectARB.cpp,
+	  GEMglUseProgramObjectARB.h: avoid using m_program if
+	  "GL_ARB_shader_objects" is not defined
+
+2006-01-17 06:01  zmoelnig
+
+	* src/Base/GemGL.h: prevent ARB-GLSL
+
+2005-12-27 14:03  tigital
+
+	* help/spot_light.pd: initial helpfile
+
+2005-12-15 12:45  zmoelnig
+
+	* src/Pixes/: pix_hit.cpp, pix_hit.h: removed loading/saving
+	  removed "point" area-type changed (float) to (unsigned char)
+	  where possible (at least where it was obvious to do)
+
+2005-12-15 08:09  zmoelnig
+
+	* debian/: changelog, control, copyright, files, rules: updated a
+	  bit so we can build a debian-package
+
+2005-12-15 07:17  zmoelnig
+
+	* src/Pixes/: pix_hit.cpp, pix_hit.h: added davide's hit-object
+
+2005-12-15 05:54  zmoelnig
+
+	* src/Pixes/: video.cpp, videoV4L.cpp: initialized more variables
+	  moved initialization (from body of constructor) into
+	  initialization-block of constructor
+
+2005-12-14 19:43  tigital
+
+	* src/Manips/glsl_program.cpp: clean up in render loop
+
+2005-12-14 18:19  cclepper
+
+	* src/Pixes/pix_record.h: works on windows. sorta.  only a few
+	  changes needed from the mac code.
+
+2005-12-14 18:15  cclepper
+
+	* src/Pixes/pix_record.cpp: works on windows. sorta.  only a few
+	  changes needed from the mac code.
+
+2005-12-14 10:53  tigital
+
+	* src/Manips/: vertex_program.cpp, vertex_program.h: string buffer
+	  is now member variable; more detailed reporting when program is
+	  outside hardware limits
+
+2005-12-14 08:34  zmoelnig
+
+	* examples/data/all.trees: TreeIdMap for reacTable*'s fiducials
+
+2005-12-14 08:29  zmoelnig
+
+	* src/Makefile.subdir: dont build depend-files when doing "make
+	  clean" or "make distclean"
+
+2005-12-14 08:29  zmoelnig
+
+	* src/Makefile: don't try to generate configure, Make.config and
+	  the like when doing a "make clean" or "make distclean"
+
+2005-12-14 08:28  zmoelnig
+
+	* src/Make.include: newline at end of file...
+
+2005-12-14 08:26  zmoelnig
+
+	* src/Particles/part_orbitpoint.h: fixed
+	  header-inclusion-prevention-defines (ye, my mother-tongue is
+	  German)
+
+2005-12-14 08:24  zmoelnig
+
+	* GEM.LICENSE.TERMS: included Ross and Martin for the reacTIVision
+	  system replaced "@" by "[AT]"
+
+2005-12-14 08:15  zmoelnig
+
+	* help/: pix_fiducialtrack.pd, pix_threshold_bernsen.pd:
+	  help-patches for the fiducial-tracker (and the binarizing
+	  thresholder)
+
+2005-12-14 08:14  zmoelnig
+
+	* src/Pixes/: libfidtrack_fidtrackX.cpp, libfidtrack_fidtrackX.h,
+	  libfidtrack_segment.cpp, libfidtrack_segment.h,
+	  libfidtrack_treeidmap.cpp, libfidtrack_treeidmap.h,
+	  pix_fiducialtrack.cpp, pix_fiducialtrack.h: fiducial-tracking as
+	  used in reacTIVision thanks to martin kaltenbrunner and ross
+	  bencina (and the mtg@upf) for releasing their code under (L)GPL
+
+2005-12-14 08:13  zmoelnig
+
+	* src/Pixes/: pix_threshold_bernsen.cpp, pix_threshold_bernsen.h:
+	  binarizing adaptive tiled thresholder
+
+2005-12-14 08:07  zmoelnig
+
+	* src/Pixes/: pix_videoNEW.cpp, pix_videoNEW.h: better check
+	  whether switching to another driver succeeds
+
+2005-12-10 14:45  tigital
+
+	* src/Base/: GemGLUtil.cpp, GemGLUtil.h: added glReportError() for
+	  helping debug
+
+2005-12-10 13:40  zmoelnig
+
+	* src/Base/: GemGL.h, GemPixUtil.h: moved GLdefine's from
+	  GemPixUtil to GemGL
+
+2005-12-10 11:01  tigital
+
+	* src/Nongeos/spot_light.cpp: corrected spotlight direction
+	  initialization; placed limits on light parameters (as supported
+	  by GL)
+
+2005-12-09 19:20  tigital
+
+	* src/Geos/sphere.cpp: removed spurious glEnd() called in
+	  createSphere:  it was causing a glError...
+
+2005-12-09 17:52  cclepper
+
+	* src/Manips/: vertex_program.h, vertex_program.cpp: added
+	  parameter message
+
+2005-12-09 17:49  cclepper
+
+	* src/Manips/: fragment_program.cpp, fragment_program.h: added
+	  parameter message
+
+2005-12-07 11:40  cclepper
+
+	* src/Pixes/filmQT.cpp: fixed QT crashing on Windows, but the fix
+	  introduces a small memory leak when loading new movies.  Also,
+	  removed a redundant memcpy() in getFrame.
+
+2005-12-07 11:17  tigital
+
+	* src/Pixes/: pix_snap2tex.cpp, pix_snap2tex.h: - added mode &
+	  repeat messages (like [pix_texture], same defaults) - added
+	  outlet for texture info:  ID, width, height, type
+
+2005-12-06 01:40  tigital
+
+	* src/Controls/: gemframebuffer.cpp, gemframebuffer.h: initial
+	  commit: - allows offscreen rendering on a per [gemhead] basis -
+	  defaults to 256x256, but can be set with [dimen x y< - float RGB
+	  only, atm - right outlet outputs list: texID, width, height, type
+	  - type can be switched with [mode 0/1< (ie. TEXTURE_2D or
+	  TEXTURE_RECTANGLE)
+
+2005-12-06 00:56  tigital
+
+	* src/openGL/: GEMglUseProgramObjectARB.h,
+	  GEMglUseProgramObjectARB.cpp: renamed inlet for some unknown
+	  reason
+
+2005-12-05 23:01  tigital
+
+	* src/Manips/glsl_vertex.cpp: don't need to enable/disable
+	  shader_arb; added check and better clean up for re-loaded shaders
+
+2005-12-04 17:45  tigital
+
+	* src/Manips/: glsl_program.cpp, glsl_program.h: added outlet for
+	  programID
+
+2005-12-04 11:15  tigital
+
+	* src/openGL/: GEMglUseProgramObjectARB.cpp,
+	  GEMglUseProgramObjectARB.h: useful glWrapper which allows one to
+	  use a glsl_program that was linked in an earlier chain in a later
+	  chain; but don't forget to frame it's usage with an ending call
+	  with value zero, or the program affects all later chains
+
+2005-12-03 20:17  tigital
+
+	* src/Manips/glsl_program.cpp: individual shader objects are now
+	  responsible for cleaning up after themselves; also, made
+	  initialized length=0
+
+2005-12-03 20:13  tigital
+
+	* src/Manips/glsl_vertex.cpp: object is now responsible for
+	  cleaning up after itself; also discovered that we don't need to
+	  glEnable the *_SHADER_ARB's
+
+2005-11-30 01:55  tigital
+
+	* src/Manips/: glsl_program.cpp, glsl_program.h: auto-magic uniform
+	  variable discovery working; shaderMess() fixes; lotsa cleanup in
+	  general (& stuff)
+
+2005-11-29 19:12  tigital
+
+	* src/Manips/: glsl_vertex.cpp, glsl_vertex.h: clean-up, & better
+	  initialization
+
+2005-11-29 18:55  tigital
+
+	* src/Manips/glsl_program.cpp: corrected shaderMess behavior; added
+	  OSX check for hardware/software execution
+
+2005-11-28 23:52  tigital
+
+	* src/Pixes/pix_videoDarwin.cpp: miscellaneous fixes of warnings,
+	  misspellings, and debug messages
+
+2005-11-28 18:29  cclepper
+
+	* src/Pixes/: pix_videoDarwin.h, pix_videoDarwin.cpp: added
+	  SequenceGrabber recording
+
+2005-11-27 09:30  zmoelnig
+
+	* src/Pixes/pix_image.cpp: thread fixes: + better initializing +
+	  more freeing + filenames given as argument are now opened via
+	  thread too
+
+2005-11-27 05:24  zmoelnig
+
+	* src/Base/GemPixImageLoad.cpp: reduced verbosity a bit made rest
+	  of error messages a bit more findable ("error: GemImageLoad"
+	  instead of just "erro: GEM")
+
+2005-11-26 16:17  zmoelnig
+
+	* src/Manips/: glsl_program.cpp, glsl_program.h: added dynamic
+	  methods for uniform parameters
+
+2005-11-26 14:13  cclepper
+
+	* src/Pixes/pix_filmDarwin.h: Added the first check for HD format
+	  clips to deal with their trickster frame sizes.  Also, a fix for
+	  sound continuing after rendering stops.
+
+2005-11-26 11:19  zmoelnig
+
+	* src/Manips/: glsl_program.cpp, glsl_program.h: use a #define for
+	  defining the max number of shaders fixed some typos and minor
+	  bugs
+
+2005-11-26 10:36  zmoelnig
+
+	* src/Pixes/pix_image.cpp: on creating the child-thread wait until
+	  it has set the m_thread_running (so we can use that in
+	  openMess())
+
+2005-11-26 08:12  zmoelnig
+
+	* src/Pixes/pix_image.cpp: reduced verbosity
+
+2005-11-26 07:48  zmoelnig
+
+	* src/Manips/: glsl_program.cpp, glsl_program.h: hmm: define
+	  "t_GLshaderObj" to whatever type the shaderobj should be; made it
+	  compile on linux (and not crash)
+
+2005-11-26 07:45  zmoelnig
+
+	* src/Manips/glsl_vertex.cpp: include stdlib (for malloc, free)
+	  replace printf() by post()
+
+2005-11-26 00:08  cclepper
+
+	* src/Pixes/pix_filmDarwin.cpp: Added the first check for HD format
+	  clips to deal with their trickster frame sizes.  Also, a fix for
+	  sound continuing after rendering stops.
+
+2005-11-25 19:50  tigital
+
+	* src/openGL/: GEMglUniform1fARB.cpp, GEMglUniform1fARB.h: initial
+	  wrapper support for GLSL support (ARB based): - there should be a
+	  whole host of these, but right now I'm only up to writing the
+	  one, for input of one indexed float ;-)
+
+2005-11-25 17:56  tigital
+
+	* src/Manips/: glsl_fragment.cpp, glsl_fragment.h,
+	  glsl_program.cpp, glsl_program.h, glsl_vertex.cpp, glsl_vertex.h:
+	  initial GLSL support (ARB based): - load individual shaders via
+	  glsl_vertex or glsl_fragment - combine multiple shader's right
+	  output into a [shader $1 $2...< and send into [glsl_program] -
+	  send [link< to [glsl_program] to actually link the objects:  this
+	  was done because we don't want to re-link objects every
+	  render-timeslice...  - each object accepts a [print< to give
+	  info, , and [glsl_program] will also report linked program's
+	  uniform variables, names, indices...	- uniform variable indices
+	  can be used with [GEMglUniform...] to change variables (but maybe
+	  there should be more auto-discovery in [glsl_program]?) -
+	  object's will also report a shader's compile-time error log (if
+	  any) to console (not pd's tk console):  need to figure out how to
+	  parse infolog into post()-friendly format...
+
+2005-11-23 08:08  zmoelnig
+
+	* src/Base/: configDarwin.h.in, configLinux.h.in: added check for
+	  GLsizeiptrARB
+
+2005-11-23 08:07  zmoelnig
+
+	* src/: configure, configure.ac: die at the end of configure if no
+	  openGL has been found check for typedef of GLsizeiptrARB
+
+2005-11-21 09:31  zmoelnig
+
+	* src/Pixes/: pix_image.cpp, pix_image.h: threaded image loading
+
+2005-11-15 09:24  zmoelnig
+
+	* help/: curve3d.pd, pix_buffer.pd: updated help-files
+
+2005-11-15 09:22  zmoelnig
+
+	* examples/04.pix/25.buffer.pd: show how to load an image into the
+	  buffer
+
+2005-11-15 09:21  zmoelnig
+
+	* src/openGL/: GEMglBlendEquation.cpp, GEMglBlendEquation.h,
+	  GEMglClipPlane.cpp, GEMglClipPlane.h: added some more wrappers
+	  (thanks to cyrille)
+
+2005-11-10 09:50  zmoelnig
+
+	* src/Pixes/: video.cpp, videoV4L.cpp: initialize m_devicename to
+	  NULL in order to not produce random crashes.	fixed printf()
+	  security-hole
+
+2005-11-08 22:08  tigital
+
+	* src/Pixes/pix_filmDarwin.cpp: cleaned up headers, initialization;
+	  also added code to pad rowbytes for dimensions not multitples of
+	  16 or 32 (helps GL_STORAGE_SHARED_APPLE)
+
+2005-11-08 18:01  cclepper
+
+	* src/Pixes/pix_filmDarwin.cpp: added a little hack to bang when
+	  film reaches the end in auto mode
+
+2005-10-31 11:04  tigital
+
+	* ChangeLog: update
+
 2005-10-28 04:59  zmoelnig
 
-	* src/Pixes/: pix_threshold.cpp (1.6), pix_threshold.h (1.6): use
-	  proper inheritance for the altivec function
+	* src/Pixes/: pix_threshold.cpp, pix_threshold.h: use proper
+	  inheritance for the altivec function
 
 2005-10-27 18:13  tigital
 
