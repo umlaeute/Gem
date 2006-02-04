@@ -336,6 +336,66 @@ GEM_EXTERN void imageStruct::setWhite() {
     break;
   }
 }
+GEM_EXTERN void imageStruct::convertFrom(imageStruct *from, GLenum to_format=0) {
+  if (!from || !this || !from->data) {
+    error("GEM: Someone sent a bogus pointer to convert");
+    return;
+  }
+  xsize=from->xsize;
+  ysize=from->ysize;
+  setCsizeByFormat(to_format);
+  switch (from->format){
+  case GL_RGBA: 
+    fromRGBA(from->data);
+    break;
+  case GL_RGB:  
+    fromRGB(from->data);
+    break;
+  case GL_BGR_EXT:
+    fromBGR(from->data);
+    break;
+  case GL_BGRA_EXT: /* "RGBA" on apple */
+    fromBGRA(from->data);
+    break;
+  case GL_LUMINANCE:
+    fromGray(from->data);
+    break;
+  case GL_YCBCR_422_GEM: // YUV
+    fromUYVY(from->data);
+    break;
+  }
+}
+
+GEM_EXTERN void imageStruct::convertTo(imageStruct *to, GLenum fmt=0) {
+  if (!to || !this || !this->data) {
+    error("GEM: Someone sent a bogus pointer to convert");
+    if (to) to->data = NULL;
+    return;
+  }
+  to->xsize=xsize;
+  to->ysize=ysize;
+  to->setCsizeByFormat(fmt);
+  switch (format){
+  case GL_RGBA: 
+    to->fromRGBA(data);
+    break;
+  case GL_RGB:  
+    to->fromRGB(data);
+    break;
+  case GL_BGR_EXT:
+    to->fromBGR(data);
+    break;
+  case GL_BGRA_EXT: /* "RGBA" on apple */
+    to->fromBGRA(data);
+    break;
+  case GL_LUMINANCE:
+    to->fromGray(data);
+    break;
+  case GL_YCBCR_422_GEM: // YUV
+    to->fromUYVY(data);
+    break;
+  }
+}
 
 GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
   if(!rgbdata)return;

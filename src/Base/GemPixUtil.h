@@ -184,6 +184,9 @@ struct GEM_EXTERN imageStruct
    *   this is maybe not really clean (the meta-data is stored in the destination, 
    *   while the source has no meta-data of its own)
    */
+  void convertTo  (imageStruct*to,   GLenum dest_format);
+  void convertFrom(imageStruct*from, GLenum dest_format);
+
   void fromRGB    (unsigned char* orgdata);
   void fromRGBA   (unsigned char* orgdata);
   void fromBGR    (unsigned char* orgdata);
