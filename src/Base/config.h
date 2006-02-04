@@ -10,17 +10,18 @@
 
 #ifdef __APPLE__
 # include "Base/configDarwin.h"
+# define HAVE_QUICKTIME
 #endif
 
 #ifdef __WIN32__
 # include "Base/configNT.h"
 
-#ifndef NT
-# define NT
-#endif
-#ifndef MSW
-# define MSW
-#endif
+# ifndef NT
+#  define NT
+# endif
+# ifndef MSW
+#  define MSW
+# endif
 #endif
 
 
