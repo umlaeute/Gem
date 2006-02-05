@@ -18,7 +18,11 @@ CPPEXTERN_NEW_WITH_GIMME(pix_record)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_record :: pix_record(int argc, t_atom *argv)
+pix_record :: pix_record(int argc, t_atom *argv):
+  m_recordStart(0), m_recordStop(0), 
+  m_automatic(false), m_banged(false),
+  m_currentFrame(-1),
+  m_handle(NULL)
 {
   int m_xoff = 0, m_yoff = 0;
   int m_width = 0, m_height = 0;
@@ -69,9 +73,8 @@ void pix_record :: stopRecording()
   if(m_handle){
     m_handle->close();
     m_currentFrame = 0; //reset the frame counter?
-    outlet_float(m_outNumFrames,m_currentFrame);
-
-    post("pix_record : movie written to %s","m_filename");
+    //outlet_float(m_outNumFrames,m_currentFrame);
+    post("pix_record : movie written");
   }
 
 }
@@ -86,10 +89,21 @@ void pix_record :: render(GemState *state)
   //check if state exists
   if(!state || !state->image)return;
   if(!m_handle)return;
-  if(m_banged||m_automatic){
-    int err=m_handle->putFrame(&state->image->image);
-    m_banged=false;
-    if(err<0)stopRecording();
+
+  if(m_recordStart){
+    m_recordStop=0;
+    if(m_banged||m_automatic){
+      m_currentFrame=m_handle->putFrame(&state->image->image);
+      m_banged=false;
+      if(m_currentFrame<0)m_recordStop=1;
+      outlet_float(m_outNumFrames,m_currentFrame);
+    }
+  }
+
+  if(m_recordStop){
+    m_recordStart=0;
+    stopRecording();
+    m_recordStop=0;
   }
 }
 
