@@ -19,6 +19,10 @@
 
 #include <stdlib.h>
 
+#ifdef HAVE_LIBQUICKTIME
+# include <colormodels.h>
+#endif
+
 /////////////////////////////////////////////////////////
 //
 // recordQT4L
@@ -30,11 +34,17 @@
 
 recordQT4L :: recordQT4L(int x, int y, int width, int height): record(x,y,width,height)
 #ifdef HAVE_LIBQUICKTIME
-							     , m_qtfile(NULL)
-#endif
+							     , m_qtfile(NULL),
+							       m_codec(NULL), m_codecs(NULL),
+							       m_track(-1), m_colormodel(0)
 {
-  strcpy(m_compressor, QUICKTIME_DV);
+  //  strcpy(m_compressor, QUICKTIME_DV);
+  lqt_registry_init ();
+
 }
+#else
+{}
+#endif
 
 ////////////////////////////////////////////////////////
 // Destructor
@@ -64,6 +74,7 @@ bool recordQT4L :: open(char *filename)
     return false;
   }
   m_currentFrame=0;
+  m_track=-1;
   return (true);
 }
 
@@ -73,35 +84,29 @@ bool recordQT4L :: open(char *filename)
 /////////////////////////////////////////////////////////
 int recordQT4L :: getNumCodecs()
 {
-  return(8);
+  lqt_codec_info_t**codecs = lqt_query_registry(0,1,1,0);
+  int n=0;
+  while(NULL!=codecs[n])n++;
+  lqt_destroy_codec_info(codecs);
+  return (n);
 }
 char*recordQT4L :: getCodecName(int i)
 {
-  switch(i){
-  default:return NULL;
-  case 0: return (gensym("divx")->s_name);
-  case 1: return (gensym("dv")->s_name);
-  case 2: return (gensym("raw")->s_name);
-  case 3: return (gensym("jpeg")->s_name);
-  case 4: return (gensym("png")->s_name);
-  case 5: return (gensym("mjpa")->s_name);
-  case 6: return (gensym("yuv2")->s_name);
-  case 7: return (gensym("yuv4")->s_name);
+  lqt_codec_info_t**codec = lqt_query_registry(0,1,1,0);
+  if(codec&&codec[i]){
+    char*name=gensym(codec[i]->name)->s_name;
+    lqt_destroy_codec_info(codec);
+    return name;
   }
   return NULL;
 }
 char*recordQT4L :: getCodecDescription(int i)
 {
-  switch(i){
-  default:return NULL;
-  case 0: return (gensym("divx")->s_name);
-  case 1: return (gensym("dv")->s_name);
-  case 2: return (gensym("raw")->s_name);
-  case 3: return (gensym("jpeg")->s_name);
-  case 4: return (gensym("png")->s_name);
-  case 5: return (gensym("mjpa")->s_name);
-  case 6: return (gensym("yuv2")->s_name);
-  case 7: return (gensym("yuv4")->s_name);
+  lqt_codec_info_t**codec = lqt_query_registry(0,1,1,0);
+  if(codec&&codec[i]){
+    char*name=gensym(codec[i]->long_name)->s_name;
+    lqt_destroy_codec_info(codec);
+    return name;
   }
   return NULL;
 }
@@ -111,18 +116,20 @@ char*recordQT4L :: getCodecDescription(int i)
 /////////////////////////////////////////////////////////
 bool recordQT4L :: setCodec(int num)
 {
-  post("qt4l: set codec %d", num);
-  switch(num){
-  default:return false;
-  case 0: strcpy(m_compressor, QUICKTIME_DIVX); break;
-  case 1: strcpy(m_compressor, QUICKTIME_DV); break;
-  case 2: strcpy(m_compressor, QUICKTIME_RAW); break;
-  case 3: strcpy(m_compressor, QUICKTIME_JPEG); break;
-  case 4: strcpy(m_compressor, QUICKTIME_PNG); break;
-  case 5: strcpy(m_compressor, QUICKTIME_MJPA); break;
-  case 6: strcpy(m_compressor, QUICKTIME_YUV2); break;
-  case 7: strcpy(m_compressor, QUICKTIME_YUV4); break;
+  lqt_codec_info_t**codec = lqt_query_registry(0,1,1,0);
+  int n=0;
+  if(!codec||!codec[0])return false;
+
+  while(codec[n])n++;
+  if(num<0||num>=n){
+    lqt_destroy_codec_info(codec);
+    return false;
   }
+
+  if(m_codecs)lqt_destroy_codec_info(m_codecs);
+  
+  m_codecs=codec;
+  m_codec=codec[num];
   return true;
 }
 /////////////////////////////////////////////////////////
@@ -131,19 +138,66 @@ bool recordQT4L :: setCodec(int num)
 /////////////////////////////////////////////////////////
 bool recordQT4L :: setCodec(char*name)
 {
-  return false;
+  lqt_codec_info_t**codec = (lqt_codec_info_t**)lqt_find_video_codec_by_name(name);
+  if(!codec || !codec[0]){
+    return false;
+  }
+
+  if(m_codecs)lqt_destroy_codec_info(m_codecs);
+  
+  m_codecs=codec;
+  m_codec=codec[0];
+  return true;
+
 }
 
 int recordQT4L :: putFrame(imageStruct*img)
 {
-  if(!m_qtfile)return (-1);
-  if(img==NULL)return (-1);
+  if(!m_qtfile || !img)return (-1);
   unsigned char**rowpointers;
   int row, row_stride;
   int err;
-  m_fps=25.f;
+  bool restart=false;
 
-  m_image.convertFrom(img, GL_RGBA);
+  if(m_width!=img->xsize || m_height!=img->ysize)restart=true;
+
+  if(!m_codec){
+    if (!setCodec("raw"))return(-1);
+    restart=true;
+  }
+
+
+  if(restart){
+    int cm=0;
+    int supported_cm[]={BC_RGBA8888, BC_YUV422, BC_RGB888, LQT_COLORMODEL_NONE};
+    err=lqt_add_video_track(m_qtfile, img->xsize, img->ysize, 1000, 20000, m_codec);
+    if(err!=0)return -1;
+    m_width =img->xsize;
+    m_height=img->ysize;
+    m_track++;
+#if 0
+    cm=lqt_get_cmodel(m_qtfile, m_track);
+    post("got cmodel: %d", cm);
+    m_colormodel=lqt_get_best_cmodel(m_qtfile, m_track, supported_cm);
+    post("best cmodel: %d", m_colormodel);
+    lqt_set_cmodel(m_qtfile, m_track, m_colormodel);
+#endif
+    m_colormodel=BC_RGBA8888;
+    m_colormodel=BC_RGB888;
+  }
+  switch(m_colormodel){
+  case BC_RGBA8888:
+    m_image.convertFrom(img, GL_RGBA);
+    break;
+  case BC_RGB888:
+    m_image.convertFrom(img, GL_RGB);
+    break;
+  case BC_YUV422:
+    m_image.convertFrom(img, GL_YUV422_GEM);
+    break;
+  default:
+    return (-1);
+  }
 
   row=m_image.ysize;
   row_stride=m_image.xsize*m_image.csize;
@@ -159,15 +213,10 @@ int recordQT4L :: putFrame(imageStruct*img)
     }
   }
 
-  quicktime_set_cmodel(m_qtfile, BC_RGBA8888 );
-  quicktime_set_copyright(m_qtfile, "GnuGPL");
-  quicktime_set_name(m_qtfile, "Graphics Environment for Multimedia");
-  quicktime_set_info  (m_qtfile, "created with pd/Gem");
-  quicktime_set_framerate(m_qtfile, m_fps );
-  if( ( err = quicktime_set_video(m_qtfile, 1, m_image.xsize, m_image.ysize, m_fps, m_compressor) ) != 0) {
-    return (-1);
-  }
-  quicktime_encode_video(m_qtfile, rowpointers, 0);
+  //  lqt_encode_video(m_qtfile, rowpointers, m_track, 1000);
+  quicktime_encode_video(m_qtfile, rowpointers, m_track);
+
+  //  quicktime_encode_video(m_qtfile, rowpointers, 0);
   m_currentFrame++;
   return m_currentFrame;
 }

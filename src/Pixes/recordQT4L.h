@@ -18,9 +18,10 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
    
 #include "Pixes/record.h"
    
-#include <quicktime.h>
-#include <colormodels.h>
-   
+#ifdef HAVE_LIBQUICKTIME
+# include <lqt.h>
+#endif
+ 
 /*---------------------------------------------------------------
  -------------------------------------------------------------------
   CLASS
@@ -83,13 +84,14 @@ class GEM_EXTERN recordQT4L : public record {
 
  private:
   quicktime_t *m_qtfile;
-  char        m_compressor[8];
-  double      m_fps;
-  int          m_jpeg_quality;
 
   imageStruct m_image;
-#else
-  virtual int putFrame(imageStruct*){return (-1);}
+
+  lqt_codec_info_t*m_codec;
+  lqt_codec_info_t**m_codecs;
+
+  int m_track;
+  int m_colormodel;
 #endif
 };
 
