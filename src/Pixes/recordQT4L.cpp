@@ -130,6 +130,7 @@ bool recordQT4L :: setCodec(int num)
   
   m_codecs=codec;
   m_codec=codec[num];
+  m_width=m_height=-1;
   return true;
 }
 /////////////////////////////////////////////////////////
@@ -147,6 +148,7 @@ bool recordQT4L :: setCodec(char*name)
   
   m_codecs=codec;
   m_codec=codec[0];
+  m_width=m_height=-1;
   return true;
 
 }
@@ -168,23 +170,31 @@ int recordQT4L :: putFrame(imageStruct*img)
 
 
   if(restart){
-    int cm=0;
-    int supported_cm[]={BC_RGBA8888, BC_YUV422, BC_RGB888, LQT_COLORMODEL_NONE};
     err=lqt_add_video_track(m_qtfile, img->xsize, img->ysize, 1000, 20000, m_codec);
     if(err!=0)return -1;
     m_width =img->xsize;
     m_height=img->ysize;
     m_track++;
+    /* JMZ: raw seems to be happy only with 32-bit RGB values
+     * whereas most other codecs cannot really handle this
+     * in theory lqt>=0.9.8 should be able to query which colormodels are supported
+     * but unfortunately 0.9.8 was released in mid january 2006 (now it is february)
+     * on debian i still have 0.9.7
+     * the real bad thing is, that i cannot handle this via preprocessor
+     */
 #if 0
-    cm=lqt_get_cmodel(m_qtfile, m_track);
-    post("got cmodel: %d", cm);
+    int supported_cm[]={BC_RGBA8888, BC_YUV422, BC_RGB888, LQT_COLORMODEL_NONE};
+    int cm=lqt_get_cmodel(m_qtfile, m_track);
     m_colormodel=lqt_get_best_cmodel(m_qtfile, m_track, supported_cm);
-    post("best cmodel: %d", m_colormodel);
-    lqt_set_cmodel(m_qtfile, m_track, m_colormodel);
+#else
+    if(gensym("raw")==gensym(m_codec->name))
+      m_colormodel=BC_RGBA8888;
+    else
+      m_colormodel=BC_RGB888;
 #endif
-    m_colormodel=BC_RGBA8888;
-    m_colormodel=BC_RGB888;
+    lqt_set_cmodel(m_qtfile, m_track, m_colormodel);
   }
+
   switch(m_colormodel){
   case BC_RGBA8888:
     m_image.convertFrom(img, GL_RGBA);
