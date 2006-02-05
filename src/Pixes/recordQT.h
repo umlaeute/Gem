@@ -148,8 +148,6 @@ class GEM_EXTERN recordQT : public record
   };
   
   codecListStorage	codecContainer[64];//anyone with more than 64 codecs can change this
-#else /* HAVE_QUICKTIME */
-  virtual int 	putFrame(imageStruct*img){return (-1);}
 #endif
 };
 #endif	// for header file
