@@ -30,10 +30,6 @@
 #endif
 
 #ifdef __APPLE__
-// m$vc doesn't like #warning directives...so it is just here
-#warning pix_recordQT is deprecated; 
-#warning instead make pix_record and recordQT work!!
-
 #include <Quicktime/Quicktime.h>
 #include <Carbon/Carbon.h>
 
@@ -83,6 +79,8 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   m_automatic = false;
   m_autocount = 0;
   m_filetype=0;
+ // sprintf(m_pathname, "/Users/lincoln/Movies/temp");
+
   m_filename[0] = NULL;
     
   m_banged = false;
@@ -145,6 +143,15 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   m_dialog = 0;
   m_currentFrame = 0;
   
+  #ifdef __APPLE__
+  m_colorspace = GL_YUV422_GEM;
+  #else
+  m_colorspace = GL_BGRA_EXT;
+  #endif
+  
+  m_firstRun = 1;
+  
+  m_ticks = 20;
   
  // post("pix_recordQT : anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
    stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
@@ -299,37 +306,54 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	m_srcRect.right = m_width;
 	
 
-#ifdef __APPLE__
+	if (m_colorspace == GL_YUV422_GEM){
+
 	//give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
 	m_rowBytes = m_width * 2;
-	
-	//m_srcGWorld = NULL;//probably a memory leak
-	err = QTNewGWorldFromPtr(&m_srcGWorld,
-							k422YpCbCr8CodecType,
-							//k32ARGBPixelFormat,
-							&m_srcRect,
-							NULL,
-							NULL,
-							0,
-							m_compressImage.data,
-							m_rowBytes);
 
-#else
-	//give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
-	m_rowBytes = m_width * 4;
+		//give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
+		m_rowBytes = m_width * 2;
+		
+		//m_srcGWorld = NULL;//probably a memory leak
+		err = QTNewGWorldFromPtr(&m_srcGWorld,
+								k422YpCbCr8CodecType,
+								//k32ARGBPixelFormat,
+								&m_srcRect,
+								NULL,
+								NULL,
+								0,
+								m_compressImage.data,
+								m_rowBytes);
 	
-	//m_srcGWorld = NULL;//probably a memory leak
-	err = QTNewGWorldFromPtr(&m_srcGWorld,
-							k32RGBAPixelFormat,
-							//k32ARGBPixelFormat,
-							&m_srcRect,
-							NULL,
-							NULL,
-							0,
-							m_compressImage.data,
-							m_rowBytes);
+	}else{
+			//give QT the length of each pixel row in bytes (4 for ARGB)
+		m_rowBytes = m_width * 4;
+		
+		#ifdef __APPLE__
+		
+		//m_srcGWorld = NULL;//probably a memory leak
+		err = QTNewGWorldFromPtr(&m_srcGWorld,
+								k32ARGBPixelFormat,
+								&m_srcRect,
+								NULL,
+								NULL,
+								0,
+								m_compressImage.data,
+								m_rowBytes);
 
-#endif
+		#else
+		err = QTNewGWorldFromPtr(&m_srcGWorld,
+								k32RGBAPixelFormat,
+								&m_srcRect,
+								NULL,
+								NULL,
+								0,
+								m_compressImage.data,
+								m_rowBytes);
+		#endif
+
+	}
+	
 	if (err != noErr){
 		post("pix_recordQT : QTNewGWorldFromPtr failed with error %d",err);
 		return;
@@ -467,7 +491,9 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	
 	//reset frame counter for new movie file
 	m_currentFrame = 0;
+
 	post("pix_recordQT: setup end");
+
 }
 
 
@@ -513,6 +539,8 @@ void pix_recordQT :: stopRecording()
 	
 	m_currentFrame = 0; //reset the frame counter?
 	
+	m_firstRun = 1;
+	
 	outlet_float(m_outNumFrames,m_currentFrame);
 	
 	post("pix_recordQT : movie written to %s",m_filename);
@@ -529,9 +557,36 @@ void pix_recordQT :: compressFrame()
 
 	short					syncFlag; //flag for keyframes
 	
+
+	
+	//this times the render length to give QT a better idea about the actual framerate of the movie
+	//the goal is to provide improved playback using internal QT playback routines
+	
+	#ifdef __APPLE__
+	//fakes the first run time
+	if (m_firstRun){
+	
+	  ::Microseconds(&startTime);
+		m_firstRun = 0;
+	
+	}
+	::Microseconds(&endTime);
+	
+	seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+	
+	m_ticks = (int)(600 * seconds);
+	
+	if (m_ticks < 20) m_ticks = 20;
+	
+	#endif //timers
+	
+	//post("pix_recordQT : frame compression took %f seconds %d ticks", seconds, m_ticks );
+	
+
 	//post("pix_recordQT: compressing frame");
 //apparently on OSX there is no member portPixMap in a GWorld so a function is used instead
 #ifdef __APPLE__
+
 	compErr = SCCompressSequenceFrame(	stdComponent,
 										GetPortPixMap(m_srcGWorld),
 										&m_srcRect,
@@ -547,19 +602,24 @@ void pix_recordQT :: compressFrame()
 										&syncFlag);
 #endif
 	if (compErr != noErr) post("pix_recordQT : SCCompressSequenceFrame failed with error %d",compErr);
-										
+										 
 	err = AddMediaSample(media,
 							compressedData,
 							0,
 							dataSize,
-							20, //this should not be a fixed value but vary with framerate
+							m_ticks, //this should not be a fixed value but vary with framerate
 							(SampleDescriptionHandle)hImageDesc,
 							1,
 							syncFlag,
 							NULL);
 							
 	if (err != noErr) post("pix_recordQT : AddMediaSample failed with error %d",err);
-							
+	
+	#ifdef __APPLE__
+	::Microseconds(&startTime);
+					
+	#endif //timer																		
+																																															
 	m_currentFrame++;
 	
 	outlet_float(m_outNumFrames,m_currentFrame);
@@ -585,7 +645,7 @@ void pix_recordQT :: render(GemState *state)
   if (m_automatic || m_banged) {
  
     m_autocount++;
-    m_banged = false;
+    
 	
 	
 	
@@ -598,8 +658,17 @@ void pix_recordQT :: render(GemState *state)
 		if (m_width == m_prevWidth && m_height == m_prevHeight) {
 			//go ahead and grab a frame if everything is ready to go
 			if (m_recordSetup) 
-				compressFrame();
-				//post("grabbing frame");
+				if (m_automatic && state->image->newimage) {
+					compressFrame();
+					}
+					else{
+						if (m_banged) {
+							compressFrame();
+							m_banged = false;
+							}
+					}
+			//	post("grabbing frame");
+
 			}else{
 				post("pix_recordQT: movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
 				m_recordStop = 1;
@@ -738,10 +807,19 @@ if (m_recordStart) return;
   }
 
   m_autocount = 0;
+  setModified();
 
 post("pix_recordQT : filename %s",m_filename);
 
 }
+
+void pix_recordQT :: csMess(int format){
+	if(format && format != m_colorspace){
+		m_colorspace=format;
+		post("pix_film: colorspace change will take effect the next time you load a film");
+	}
+}
+
 
 /////////////////////////////////////////////////////////
 // cleanImage
@@ -765,6 +843,7 @@ void pix_recordQT :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_recordQT :: obj_setupCallback(t_class *classPtr)
 {
+  class_addcreator((t_newmethod)_classpix_recordQT,gensym("pix_record"),A_DEFSYM,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_recordQT::fileMessCallback,
 		  gensym("file"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_recordQT::autoMessCallback,
@@ -783,6 +862,8 @@ void pix_recordQT :: obj_setupCallback(t_class *classPtr)
 		  gensym("codeclist"),  A_NULL);
 	class_addmethod(classPtr, (t_method)&pix_recordQT::codecMessCallback,
 		  gensym("codec"), A_GIMME, A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_recordQT::colorspaceCallback,
+		  gensym("colorspace"), A_SYMBOL, A_NULL);
 }
 
 void pix_recordQT :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
@@ -836,4 +917,9 @@ void pix_recordQT :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom
  // if (s->s_name == kJPEGCodecType) post("pix_recordQT : photo-jpeg codec"); else post("pix_recordQT : not photo-jpeg");
 }
 
-#endif // __APPLE__
+void pix_recordQT :: colorspaceCallback(void *data, t_symbol *state)
+{
+  GetMyClass(data)->csMess(getPixFormat(state->s_name));
+}
+
+#endif // __APPLE__pix_recordQTQT

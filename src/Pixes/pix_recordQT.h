@@ -8,20 +8,13 @@
  */
  
  //this will record QT movies
-#ifndef INCLUDE_PIX_RECORDQT_H_
-#define INCLUDE_PIX_RECORDQT_H_
+#ifndef INCLUDE_pix_recordQT_H_
+#define INCLUDE_pix_recordQT_H_
 
-#if defined (__WIN32__) || defined(__APPLE__)
-
+#ifdef __APPLE__
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include "Base/GemPixImageSave.h"
-
-#ifdef __WIN32__
-#include <QTML.h>
-#include <Movies.h>
-#include <QuicktimeComponents.h>
-#endif
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -97,6 +90,10 @@ class GEM_EXTERN pix_recordQT : public GemBase
 		virtual void	getCodecList();
 		
 		virtual void	codecMess(int argc, t_atom *argv);
+		
+		virtual void	csMess(int format);
+		
+		
     	
     	//////////
     	// Clean up the image
@@ -224,7 +221,17 @@ class GEM_EXTERN pix_recordQT : public GemBase
 		
 		//number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
 		int					m_ticks;
-
+		
+		bool	m_firstRun;
+		UnsignedWide startTime, endTime;
+		float seconds;
+		
+		Component			aComponent;
+		ComponentInstance	aClock;
+		TimeRecord			aTime;
+	
+		int		m_colorspace;
+		
 		
     private:
     	
@@ -239,8 +246,7 @@ class GEM_EXTERN pix_recordQT : public GemBase
 		static void 	dialogMessCallback(void *data);
 		static void 	codeclistMessCallback(void *data);
 		static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
-
-
+		static void		colorspaceCallback(void *data, t_symbol *state);
 };
-#endif //APPLE and WIN32
+#endif //for __APPLE__
 #endif	// for header file
