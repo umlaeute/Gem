@@ -549,6 +549,11 @@ int recordQT :: getNumCodecs()
 // deals with the name of a codec
 //
 /////////////////////////////////////////////////////////
+bool recordQT :: setCodec(int num)
+{
+  // not yet implemented
+  return false;
+}
 bool recordQT :: setCodec(char*codecName)
 {
   if (!strncmp(codecName,"jpeg",4)) {
