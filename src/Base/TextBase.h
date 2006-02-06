@@ -29,17 +29,17 @@
 #include <string>
 
 #ifdef FTGL
-#define FONT_SCALE 0.2/3.0
-#include "FTFont.h"
+# define FONT_SCALE 0.2/3.0
+# include "FTFont.h"
 #elif defined GLTT
-#define FONT_SCALE 0.05
-#include "FTFace.h"
+# define FONT_SCALE 0.05
+# include "FTFace.h"
 #else
-#define FONT_SCALE 1.0
+# define FONT_SCALE 1.0
 #endif
 
 #ifdef __APPLE__
-#include <AGL/agl.h>
+# include <AGL/agl.h>
 extern bool HaveValidContext (void);
 #endif
 
