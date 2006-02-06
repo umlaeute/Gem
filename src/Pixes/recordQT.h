@@ -69,17 +69,20 @@ class GEM_EXTERN recordQT : public record
  
   //////////
   // When a size message is received
-  virtual int	size(int width, int height);
+  virtual bool	size(int width, int height);
   //////////
   // When a position message is received
-  virtual int	position(int x, int y);
+  virtual bool	position(int x, int y);
 		
   ////////
   // call up compression dialog
-  virtual int	dialog();
+  virtual bool	dialog();
   virtual int	getNumCodecs();
-  virtual int	codecMess(int num);
-  virtual int	codecMess(char*name);
+  virtual char* getCodecName(int n);
+  virtual char* getCodecDescription(int n);
+
+  virtual bool	setCodec(int num);
+  virtual bool	setCodec(char*name);
 
  private:
 		

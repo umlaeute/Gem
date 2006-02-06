@@ -5,6 +5,12 @@
  */
 #include "recordQT.h"
 
+#ifdef __APPLE__
+# include <sys/types.h>
+# include <unistd.h>
+# include <fcntl.h>
+#endif
+
 /////////////////////////////////////////////////////////
 //
 // recordQT
@@ -28,16 +34,16 @@ recordQT :: recordQT(int x, int y, int w, int h)
   // Initialize QuickTime Media Layer
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {
-    error("filmQT: Could not initialize quicktime: error %d\n", err);
+    printf("filmQT: Could not initialize quicktime: error %d\n", err);
     return;
   }
 	
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    error("filmQT: Could not initialize quicktime: error %d\n", err);
+    printf("filmQT: Could not initialize quicktime: error %d\n", err);
     return;
   }
-  post("pix_video: QT init done");
+  printf("pix_video: QT init done\n");
 # endif // WINDOWS
 
   /* */
@@ -48,11 +54,11 @@ recordQT :: recordQT(int x, int y, int w, int h)
   int count;
 	
   GetCodecNameList(&codecList,1);
-  post("recordQT : %i codecs installed",codecList->count);
+  printf("recordQT : %i codecs installed\n",codecList->count);
   if (codecList->count < 64) count = codecList->count; else count = 64;
   for (i = 0; i < count; i++){
     codecName = codecList->list[i];
-    //	post("recordQT : codec %i %s %i ctype",i,codecName.typeName, codecName.cType);
+    //	printf("recordQT : codec %i %s %i ctype",i,codecName.typeName, codecName.cType);
     codecContainer[i].position = i;
     codecContainer[i].ctype = codecName.cType;
     codecContainer[i].codec = codecName.codec;
@@ -71,7 +77,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
   for(i = 0; i < count; i++){
     if (codecContainer[i].ctype == kJPEGCodecType) m_codec = codecContainer[i].codec;
   }
-  post("recordQT : pjpeg codec %i %i %i ctype",i,m_codecType, m_codec);
+  printf("recordQT : pjpeg codec %i %i %i ctype\n",i,m_codecType, m_codec);
   // m_codec = (CodecComponent)65731;//65719;//65708; //this is pjpeg????
   m_codecSet = true;
   m_spatialQuality = codecNormalQuality; //codecHighQuality;
@@ -84,7 +90,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
   stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
   if (stdComponent == NULL){
-    post("recordQT failed to open compressor component");
+    printf("recordQT failed to open compressor component\n");
     return;
   }
 	   
@@ -98,11 +104,11 @@ recordQT :: ~recordQT()
 {
   ComponentResult			compErr = noErr;
 
-  post("recordQT: deconstructor");
+  printf("recordQT: deconstructor\n");
   if (stdComponent != NULL){
     compErr = CloseComponent(stdComponent);
     
-    if (compErr != noErr) post("recordQT : CloseComponent failed with error %d",compErr);
+    if (compErr != noErr) printf("recordQT : CloseComponent failed with error %d\n",compErr);
   }
 }
 ////////////////////////////////////////////////////////
@@ -124,7 +130,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   //post("filename %s",m_filename);
 
   if (!m_filename[0]) {
-    post("recordQT:  no filename passed");
+    printf("recordQT:  no filename passed\n");
     return;
   }
 #ifdef __APPLE__
@@ -133,36 +139,36 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     if (err == fnfErr) {
       // if the file does not yet exist, then let's create the file
       int fd;
-      fd = open(m_filename, O_CREAT | O_RDWR, 0600);
+      fd = ::open(m_filename, O_CREAT | O_RDWR, 0600);
       if (fd < 0){
-	post("recordQT : problem with fd");
+	printf("recordQT : problem with fd\n");
 	return ;
       }
-      write(fd, " ", 1);
-      close(fd);
+      ::write(fd, " ", 1);
+      ::close(fd);
       err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
-      //post("recordQT : made new file %s",m_filename);
+      //printf("recordQT : made new file %s\n",m_filename);
     }
 
 
     if (err) {
-      error("GEM: recordQT: Unable to make file ref from filename %s", m_filename);
-      return;
+      printf("GEM: recordQT: Unable to make file ref from filename %s", m_filename);
+      return ;
     }
 			
     //err = ::FSsetCatalogInfo(&ref, kFSCatInfoSettableInfo, NULL);
     err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
 
     if (err != noErr){
-      error("GEM: recordQT: error %d in FSGetCatalogInfo()", err);
-      return;
+      printf("GEM: recordQT: error %d in FSGetCatalogInfo()", err);
+      return ;
     }
 		
 		
     err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
 			
     if (err != noErr && err != -37){
-      error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
+      printf("GEM: recordQT: error %d in FSMakeFSSpec()", err);
       return;
     }
 
@@ -174,7 +180,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     FSMakeFSSpec (0, 0L, (UInt8*)m_filename, &theFSSpec);
     //err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
     if (err != noErr && err != -37){
-      error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
+      printf("GEM: recordQT: error %d in FSMakeFSSpec()", err);
       return;
     }
   }
@@ -190,7 +196,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 				&m_movie);
 
   if (err != noErr) {
-    post("recordQT : CreateMovieFile failed with error %d",err);
+    printf("recordQT : CreateMovieFile failed with error %d\n",err);
     return;
   }
 	
@@ -233,7 +239,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 
 #endif
   if (err != noErr){
-    post("recordQT : QTNewGWorldFromPtr failed with error %d",err);
+    printf("recordQT : QTNewGWorldFromPtr failed with error %d\n",err);
     return;
   }
 	
@@ -259,38 +265,38 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     //close the component if already open
     if (stdComponent) compErr = CloseComponent(stdComponent);
 	
-    if (compErr != noErr) post("recordQT : CloseComponent failed with error %d",compErr);
+    if (compErr != noErr) printf("recordQT : CloseComponent failed with error %d\n",compErr);
 		
     //open a new component from scratch
     stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
     if (stdComponent == NULL){
-      post("recordQT failed to open compressor component");
+      printf("recordQT failed to open compressor component\n");
       return;
     }
 		
-    post("recordQT : opening settings Dialog");
+    printf("recordQT : opening settings Dialog\n");
     compErr = SCRequestSequenceSettings(stdComponent);
 	
-    if (compErr != noErr) post("recordQT : SCRequestSequenceSettings failed with error %d",compErr);
+    if (compErr != noErr) printf("recordQT : SCRequestSequenceSettings failed with error %d\n",compErr);
 	
     compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
     compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 	
-    if (compErr != noErr) post("recordQT : SCGetInfo failed with error %d",compErr);
+    if (compErr != noErr) printf("recordQT : SCGetInfo failed with error %d\n",compErr);
 		
     m_codecType = SpatialSettings.codecType;
     m_depth = SpatialSettings.depth;
     m_spatialQuality = SpatialSettings.spatialQuality;
     m_codec = SpatialSettings.codec;
 		
-    post("recordQT : Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
-    post("recordQT : Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
-    post("recordQT : Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
-    post("recordQT : Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
-    post("recordQT : Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
-    post("recordQT : Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
-    post("recordQT : Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+    printf("recordQT : Dialog returned SpatialSettings.codecType %d\n",SpatialSettings.codecType);
+    printf("recordQT : Dialog returned SpatialSettings.codec %d\n",SpatialSettings.codec);
+    printf("recordQT : Dialog returned SpatialSettings.depth %d\n",SpatialSettings.depth);
+    printf("recordQT : Dialog returned SpatialSettings.spatialQuality %d\n",SpatialSettings.spatialQuality);
+    printf("recordQT : Dialog returned TemporalSettings.temporalQualitye %d\n",TemporalSettings.temporalQuality);
+    printf("recordQT : Dialog returned TemporalSettings.frameRate %d\n",TemporalSettings.frameRate);
+    printf("recordQT : Dialog returned TemporalSettings.keyFrameRate %d\n",TemporalSettings.keyFrameRate);
 		
     m_dialog = false; //don't keep doing it again
 		
@@ -324,7 +330,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   compErr = SCSetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
   compErr = SCSetInfo(stdComponent, scDataRateSettingsType, &datarate);
 	
-  if (compErr != noErr) post("recordQT : SCSetInfo failed with error %d",compErr);
+  if (compErr != noErr) printf("recordQT : SCSetInfo failed with error %d\n",compErr);
 	
 #ifdef __APPLE__
   compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),&m_srcRect,&hImageDesc);
@@ -332,13 +338,13 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   compErr = SCCompressSequenceBegin(stdComponent,m_srcGWorld->portPixMap,&m_srcRect,&hImageDesc);
 #endif
   if (compErr != noErr) {
-    post("recordQT : SCCompressSequenceBegin failed with error %d",compErr);
+    printf("recordQT : SCCompressSequenceBegin failed with error %d\n",compErr);
     return;
   }
 	
   err = BeginMediaEdits(media);
   if (err != noErr) {
-    post("recordQT : BeginMediaEdits failed with error %d",err);
+    printf("recordQT : BeginMediaEdits failed with error %d\n",err);
     return;
   }
 	
@@ -352,7 +358,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 	
   //reset frame counter for new movie file
   m_currentFrame = 0;
-  post("recordQT: setup end");
+  printf("recordQT: setup end\n");
 }
 
 
@@ -367,16 +373,16 @@ void recordQT :: close()
 	
 	
   err = EndMediaEdits(media);
-  if (err != noErr) post("recordQT : EndMediaEdits failed with error %d",err);
+  if (err != noErr) printf("recordQT : EndMediaEdits failed with error %d\n",err);
 	
   err = InsertMediaIntoTrack(track,0,0,GetMediaDuration(media),0x00010000);
-  if (err != noErr) post("recordQT : InsertMediaIntoTrack failed with error %d",err);
+  if (err != noErr) printf("recordQT : InsertMediaIntoTrack failed with error %d\n",err);
 
   err = AddMovieResource(m_movie,nFileRefNum,&nResID,NULL);
-  if (err != noErr) post("recordQT : AddMovieResource failed with error %d",err);
+  if (err != noErr) printf("recordQT : AddMovieResource failed with error %d\n",err);
 	
   err = CloseMovieFile(nFileRefNum);
-  if (err != noErr) post("recordQT : CloseMovieFile failed with error %d",err);
+  if (err != noErr) printf("recordQT : CloseMovieFile failed with error %d\n",err);
 	
   DisposeMovie(m_movie);
   DisposeGWorld(m_srcGWorld);
@@ -384,7 +390,7 @@ void recordQT :: close()
 		
   compErr = SCCompressSequenceEnd(stdComponent);
 	
-  if (compErr != noErr) post("recordQT : SCCompressSequenceEnd failed with error %d",compErr);
+  if (compErr != noErr) printf("recordQT : SCCompressSequenceEnd failed with error %d\n",compErr);
 
   m_recordStop = 0;
   m_recordSetup = 0;
@@ -416,7 +422,7 @@ void recordQT :: compressFrame()
 					&dataSize,
 					&syncFlag);
 
-  if (compErr != noErr) post("recordQT : SCCompressSequenceFrame failed with error %d",compErr);
+  if (compErr != noErr) printf("recordQT : SCCompressSequenceFrame failed with error %d\n",compErr);
 										
   err = AddMediaSample(media,
 		       compressedData,
@@ -428,7 +434,7 @@ void recordQT :: compressFrame()
 		       syncFlag,
 		       NULL);
 							
-  if (err != noErr) post("recordQT : AddMediaSample failed with error %d",err);
+  if (err != noErr) printf("recordQT : AddMediaSample failed with error %d\n",err);
 							
   m_currentFrame++;
 }
@@ -459,7 +465,7 @@ int recordQT :: putFrame(imageStruct*img)
 	compressFrame();
       //post("grabbing frame");
     }else{
-      post("recordQT: movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
+      printf("recordQT: movie dimensions changed prev %dx%d now %dx%d stopping recording\n",m_prevWidth,m_prevHeight,m_width,m_height);
       m_recordStop = 1;
       m_prevWidth = m_width;
       m_prevHeight = m_height; //go ahead and change dimensions
@@ -469,7 +475,7 @@ int recordQT :: putFrame(imageStruct*img)
   //if recording is stopped and everything is setup then stop recording
   if (m_recordStop){
     //guard against someone not setting up QT beforehand
-    if (!m_recordSetup)	return;
+    if (!m_recordSetup)	return(-1);
     close();
   }
   return (m_currentFrame);
@@ -506,7 +512,7 @@ bool recordQT :: dialog()
 {
   //if recording is going do not open the dialog
   if (!m_recordStart) {
-    post("recordQT : opening compression dialog");
+    printf("recordQT : opening compression dialog\n");
     m_dialog = true;
     setupQT();
     return(true);
@@ -543,36 +549,38 @@ int recordQT :: getNumCodecs()
 // deals with the name of a codec
 //
 /////////////////////////////////////////////////////////
-void recordQT :: setCodec(char*codecName)
+bool recordQT :: setCodec(char*codecName)
 {
   if (!strncmp(codecName,"jpeg",4)) {
     //have to put the right things in here
     m_codecType = kJPEGCodecType;
     m_codec = (CodecComponent)65719;//65708; //this is pjpeg?!? 
-    post("recordQT : kJPEGCodecType");
+    printf("recordQT : kJPEGCodecType\n");
+    return true;
   }
   //do the same for these
-  if (!strcmp(codecName,"animation")) post("recordQT : kAnimationCodecType");
-  if (!strncmp(codecName,"yuv2",4)) post("recordQT : kComponentVideoCodecType");
-  if (!strncmp(codecName,"yuvu",4)) post("recordQT : kComponentVideoSigned");
-  if (!strncmp(codecName,"raw",3)) post("recordQT : kRawCodecType");
-  if (!strncmp(codecName,"dvc",3)) post("recordQT : kDVCNTSCCodecType");
-  if (!strncmp(codecName,"dvcp",4)) post("recordQT : kDVCPALCodecType");
-  if (!strncmp(codecName,"y420",4)) post("recordQT : kYUV420CodecType");
-  post("recordQT : codecName %s",codecName);
-  error("recordQT: oops, forgot to set the Codec...");
+  if (!strcmp(codecName,"animation")) printf("recordQT : kAnimationCodecType\n");
+  if (!strncmp(codecName,"yuv2",4)) printf("recordQT : kComponentVideoCodecType\n");
+  if (!strncmp(codecName,"yuvu",4)) printf("recordQT : kComponentVideoSigned\n");
+  if (!strncmp(codecName,"raw",3)) printf("recordQT : kRawCodecType\n");
+  if (!strncmp(codecName,"dvc",3)) printf("recordQT : kDVCNTSCCodecType\n");
+  if (!strncmp(codecName,"dvcp",4)) printf("recordQT : kDVCPALCodecType\n");
+  if (!strncmp(codecName,"y420",4)) printf("recordQT : kYUV420CodecType\n");
+  printf("recordQT : codecName %s\n",codecName);
+  return false;
 }
 
 
-void recordQT :: open(char*filename)
+bool recordQT :: open(char*filename)
 {
   //if recording is going do not accept a new file name
   //on OSX changing the name while recording won't have any effect 
   //but it will give the wrong message at the end if recording
-  if (m_recordStart) return;
+  if (m_recordStart) return false;
 
   sprintf(m_filename, "%s", filename);
-  post("recordQT : filename %s",m_filename);
+  printf("recordQT : filename %s\n",m_filename);
+  return true;
 }
 
 #endif // HAVE_QUICKTIME
