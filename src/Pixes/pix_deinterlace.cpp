@@ -19,9 +19,9 @@ CPPEXTERN_NEW(pix_deinterlace)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_deinterlace :: pix_deinterlace()
-{ 
-	m_mode = 1;
+pix_deinterlace :: pix_deinterlace() : 
+  m_mode(1)
+{
 }
 
 /////////////////////////////////////////////////////////

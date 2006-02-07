@@ -12,12 +12,10 @@
 CPPEXTERN_NEW(pix_contrast)
 
 
-pix_contrast :: pix_contrast()
+pix_contrast :: pix_contrast():
+  m_contrast(1.f), m_saturation(1.f)    
 {
-
-	m_contrast = 1.0;
-	m_saturation = 1.0;
-
+  
 }
 
 pix_contrast :: ~pix_contrast()
@@ -26,7 +24,10 @@ pix_contrast :: ~pix_contrast()
 }
 
 #ifdef __VEC__
-void pix_contrast :: processYUV_Altivec(imageStruct &image)
+// this will be called automatically _if and only if_
+// this function is called processYUVAltivec
+// (e.g. not processYUV_Altivec)
+void pix_contrast :: processYUVAltivec(imageStruct &image)
 {
 	union
     {
@@ -205,11 +206,8 @@ void pix_contrast :: processYUV_Altivec(imageStruct &image)
 
 void pix_contrast :: processYUVImage(imageStruct &image)
 {
-
-#ifdef __VEC__
-processYUV_Altivec(image);
-return;
-#else
+  // no need to call the altivec code from here
+  // it will be called automatically from the parent-class
 
 	int datasize = (image.xsize/2) * image.ysize;
 	unsigned char *pixels = image.data;
@@ -237,7 +235,6 @@ return;
 		
 		pixels+=4;
 	}
-#endif
 }
 
 void pix_contrast :: contrastMess(float contrast)

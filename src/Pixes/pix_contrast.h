@@ -30,7 +30,7 @@ class GEM_EXTERN pix_contrast : public GemPixObj
     	virtual ~pix_contrast();
 
 	#ifdef __VEC__
-		virtual void 	processYUV_Altivec(imageStruct &image);
+		virtual void 	processYUVAltivec(imageStruct &image);
 	#endif //__VEC__
 		virtual void 	processYUVImage(imageStruct &image);
 		
