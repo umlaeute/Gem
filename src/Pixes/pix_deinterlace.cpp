@@ -107,7 +107,7 @@ int	row, col,field1,field2,field3;
 
 }
 
-
+#ifdef __VEC__
 void pix_deinterlace :: processYUVAltivec(imageStruct &image)
 {
 
@@ -195,7 +195,7 @@ void pix_deinterlace :: processYUVAltivec(imageStruct &image)
 	
 	
 }
-
+#endif //__VEC__
 /////////////////////////////////////////////////////////
 // static member function
 //

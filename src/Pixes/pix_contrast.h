@@ -28,8 +28,10 @@ class GEM_EXTERN pix_contrast : public GemPixObj
     	//////////
     	// Destructor
     	virtual ~pix_contrast();
-		
+
+	#ifdef __VEC__
 		virtual void 	processYUV_Altivec(imageStruct &image);
+	#endif //__VEC__
 		virtual void 	processYUVImage(imageStruct &image);
 		
 		void	contrastMess(float contrast);
