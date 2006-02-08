@@ -44,7 +44,7 @@ class GEM_EXTERN pix_deinterlace : public GemPixObj
 
     	//////////
     	// Do the processing
-    //	virtual void 	processRGBAImage(imageStruct &image);
+    	virtual void 	processRGBAImage(imageStruct &image);
 		virtual void 	processYUVImage(imageStruct &image);
 #ifdef __MMX__
  //       virtual void 	processRGBAMMX(imageStruct &image);

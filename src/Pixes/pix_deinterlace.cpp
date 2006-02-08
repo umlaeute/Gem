@@ -31,6 +31,74 @@ pix_deinterlace :: pix_deinterlace() :
 pix_deinterlace :: ~pix_deinterlace()
 { }
 
+void pix_deinterlace :: processRGBAImage(imageStruct &image)
+{
+int	row, col,field1,field2,field3;
+	int temp1, temp2,temp3;
+	
+	unsigned char *pixels=image.data;
+	
+	field1 = 0;
+	field2 = image.xsize*4;
+	field3 = image.xsize*8;
+	
+	if (m_mode){
+	
+	for (row = 0; row < (image.ysize/2)-1; row++){
+		
+		for (col = 0; col < image.xsize; col++){
+			
+				
+				pixels[field2+chRed] = (pixels[field1+chRed] + pixels[field3+chRed]) / 2;
+				
+				pixels[field2+chGreen] = (pixels[field1+chGreen] + pixels[field3+chGreen]) / 2;
+				
+				pixels[field2+chBlue] = (pixels[field1+chBlue] + pixels[field3+chBlue]) / 2;
+				
+				field1+=4;
+				field2+=4;
+				field3+=4;
+		}
+		field1+=image.xsize*4;
+		field2+=image.xsize*4;
+
+		field3+=image.xsize*4;
+		
+	}
+	}else{
+	for (row = 0; row < (image.ysize/2)-1; row++){
+		
+		for (col = 0; col < image.xsize; col++){
+			
+				
+				temp1 = abs(pixels[field1] - pixels[field2]);
+				
+				if (temp1 > 10) pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
+				
+				field1++;
+				field2++; 
+				field3++;
+				
+				
+				temp1 = abs(pixels[field1] - pixels[field2]);
+				
+				if (temp1 > 10) pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
+				
+				field1++;
+				field2++;
+				field3++;
+		}
+		field1+=image.xsize;
+		field2+=image.xsize;
+		field1+=image.xsize;
+		field2+=image.xsize;
+		field3+=image.xsize;
+		field3+=image.xsize;
+	}	
+	}
+
+}
+
 void pix_deinterlace :: processYUVImage(imageStruct &image)
 {
 
