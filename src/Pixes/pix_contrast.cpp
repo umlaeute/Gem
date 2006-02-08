@@ -237,6 +237,47 @@ void pix_contrast :: processYUVImage(imageStruct &image)
 	}
 }
 
+
+void pix_contrast :: processRGBAImage(imageStruct &image)
+{
+int datasize = (image.xsize) * image.ysize;
+	unsigned char *pixels = image.data;
+	unsigned short c,s;
+	
+	int y,u,v;
+	
+	c = (short)(255. * m_contrast);
+	s = (short)(255. * m_saturation);
+
+	while(datasize--){
+	
+
+		u = (((pixels[chRed] * -38) +  (pixels[chGreen] * -74 ) + (pixels[chBlue] * 112))>>8)-0;
+		//u = CLAMP(((u * s) >> 8) + 0);
+		u = (((u * s) >> 8) + 0);
+
+		y = (((pixels[chRed] * 66) +  (pixels[chGreen] * 129 ) + (pixels[chBlue] * 25))>>8)-128;
+		//y = CLAMP(((y * c) >> 8) + 128);
+		y = (((y * c) >> 8) + 128);
+
+		v = (((pixels[chRed] * 112) +  (pixels[chGreen] * -94 ) + (pixels[chBlue] * -18))>>8)-0;
+		//v = CLAMP(((v * s) >> 8) + 0);
+		v = (((v * s) >> 8) + 0);
+		
+		pixels[chRed] = CLAMP(((y * 298) + (u * 1) + (v * 409))>>8);
+		pixels[chGreen] = CLAMP(((y * 298) + (u * -100) + (v * -208))>>8);
+		pixels[chBlue] = CLAMP(((y * 298) + (u * 516) + (v * 0))>>8);
+		
+		pixels+=4; 
+	}
+
+}
+
+void pix_contrast :: processGrayImage(imageStruct &image)
+{
+
+}
+
 void pix_contrast :: contrastMess(float contrast)
 {
 	m_contrast = contrast;

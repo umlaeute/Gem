@@ -29,6 +29,10 @@ class GEM_EXTERN pix_contrast : public GemPixObj
     	// Destructor
     	virtual ~pix_contrast();
 
+		virtual void	processRGBAImage(imageStruct &image);
+
+		virtual void	processGrayImage(imageStruct &image);
+
 	#ifdef __VEC__
 		virtual void 	processYUVAltivec(imageStruct &image);
 	#endif //__VEC__
