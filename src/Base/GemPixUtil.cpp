@@ -255,29 +255,39 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) {
 
 GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
   switch(setformat){
-  case GL_LUMINANCE:  format=GL_LUMINANCE;  csize=1; type=GL_UNSIGNED_BYTE; break;
+    case GL_LUMINANCE:  format=GL_LUMINANCE;  csize=1; type=GL_UNSIGNED_BYTE; break;
+
 #ifndef __APPLE__
-  case GL_RGB: format=GL_RGB;
+    case GL_RGB: format=GL_RGB;
 #else
-  case GL_BGR_EXT: format=GL_BGR_EXT;
+    case GL_RGB:
+    case GL_BGR_EXT: format=GL_BGR_EXT;
 #endif
-    type=GL_UNSIGNED_BYTE; csize =3; break;
-  case GL_YUV422_GEM:
+      type=GL_UNSIGNED_BYTE; csize =3; break;
+    
+	case GL_YUV422_GEM:
 #ifdef __APPLE__
-  default:
-    type=GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+      type=GL_UNSIGNED_SHORT_8_8_REV_APPLE;
 #else
-    type=GL_UNSIGNED_BYTE;
+      type=GL_UNSIGNED_BYTE;
 #endif
-    format=GL_YUV422_GEM; csize=2;
-    break;
+      format=GL_YUV422_GEM; csize=2; break;
+
 #ifndef __APPLE__
-  default:
-  case GL_RGBA:       format=GL_RGBA;     type=GL_UNSIGNED_BYTE;
+    case GL_RGBA:       format=GL_RGBA;     type=GL_UNSIGNED_BYTE;
 #else
-  case GL_BGRA_EXT:   format=GL_BGRA_EXT; type = GL_UNSIGNED_INT_8_8_8_8_REV;
+    case GL_RGBA:
+    case GL_BGRA_EXT:   format=GL_BGRA_EXT; type = GL_UNSIGNED_INT_8_8_8_8_REV;
 #endif
-    csize=4; break;
+      csize=4; break;
+	  
+	default:
+#ifdef __APPLE__
+	  format=GL_YUV422_GEM; type=GL_UNSIGNED_SHORT_8_8_REV_APPLE; csize=2;
+#else
+	  format=GL_RGBA; type=GL_UNSIGNED_BYTE; csize=4;
+#endif
+	  break;
   }
   return csize;
 }
