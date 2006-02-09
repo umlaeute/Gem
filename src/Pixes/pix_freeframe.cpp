@@ -92,6 +92,8 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char *extension=
 #ifdef __WIN32__
     ".dll";
+#elif defined __APPLE__
+    ".frf";
 #else
     ".so";
 #endif
@@ -308,22 +310,28 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   plugmain = (T_FFPLUGMAIN)(unsigned)dlsym(plugin_handle, hookname);
 
 #elif defined __APPLE__
-  NSObjectFileImage image; 
-  void *ret;
-  NSSymbol s; 
-  if ( NSCreateObjectFileImageFromFile( libname, &image) != NSObjectFileImageSuccess ) {
+  CFURLRef bundleURL = NULL;
+  CFBundleRef theBundle = NULL;
+  CFStringRef plugin = CFStringCreateWithCString(NULL, 
+											 libname, kCFStringEncodingMacRoman);
+  
+  bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
+											 plugin,
+											 kCFURLPOSIXPathStyle,
+											 true );
+  theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
+  
+  // Get a pointer to the function.
+  if (theBundle){
+	plugmain = (T_FFPLUGMAIN)CFBundleGetFunctionPointerForName(
+            theBundle, CFSTR("plugMain") );
+  }else{
     post("%s: couldn't load", libname);
     return 0;
   }
-  ret = NSLinkModule( image, libname, 
-		      NSLINKMODULE_OPTION_BINDNOW + NSLINKMODULE_OPTION_PRIVATE); 
-  
-  s = NSLookupSymbolInModule(ret, hookname); 
-  
-  if (s)
-    plugmain = (T_FFPLUGMAIN)NSAddressOfSymbol( s);
-  else plugmain = 0;
-  
+  CFRelease( bundleURL );
+  CFRelease( theBundle );
+  CFRelease( plugin );
 #elif defined __WIN32__
   HINSTANCE ntdll;
 
