@@ -174,7 +174,43 @@ int	row, col,field1,field2,field3;
 
 
 }
+void pix_deinterlace :: processGrayImage(imageStruct &image)
+{
 
+  int	row, col,field1,field2,field3;
+  int temp1, temp2,temp3;
+  unsigned char *pixels=image.data;
+  field1 = 0;
+  field2 = image.xsize;
+  field3 = image.xsize*2;
+  if (m_mode){
+    for (row = 0; row < image.ysize-1; row++){
+      for (col = 0; col < image.xsize; col++){
+        pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
+        field1++; field2++; field3++;
+        pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
+        field1++; field2++; field3++;
+      }
+      field1+=image.xsize; field1+=image.xsize;
+      field2+=image.xsize; field2+=image.xsize; 
+      field3+=image.xsize; field3+=image.xsize;
+    }
+  }else{
+    for (row = 0; row < image.ysize-1; row++){
+      for (col = 0; col < image.xsize; col++){
+        temp1 = abs(pixels[field1] - pixels[field2]);
+        if (temp1 > 10) pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
+        field1++; field2++; field3++;
+        temp1 = abs(pixels[field1] - pixels[field2]);
+        if (temp1 > 10) pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
+        field1++; field2++; field3++;
+      }
+      field1+=image.xsize; field1+=image.xsize;
+      field2+=image.xsize; field2+=image.xsize;
+      field3+=image.xsize; field3+=image.xsize;
+    }	
+  }
+}
 #ifdef __VEC__
 void pix_deinterlace :: processYUVAltivec(imageStruct &image)
 {

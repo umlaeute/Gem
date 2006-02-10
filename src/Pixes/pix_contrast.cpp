@@ -29,11 +29,16 @@ pix_contrast :: ~pix_contrast()
 // (e.g. not processYUV_Altivec)
 void pix_contrast :: processYUVAltivec(imageStruct &image)
 {
-	union
-    {
-        short	elements[8];
-        vector	signed short v;
-    }shortBuffer;
+  union
+  {
+    short	elements[8];
+    vector	signed short v;
+  }shortBuffer;
+
+  short s_contrast=(short)(256.*m_contrast);
+  short s_saturation=(short)(256. * m_saturation);
+
+  if(256==s_contrast && 256==s_saturation)return;
 
 	vector unsigned char *inData = (vector unsigned char*) image.data;
 	//vector unsigned char load1,store1;
@@ -143,11 +148,11 @@ void pix_contrast :: processYUVAltivec(imageStruct &image)
 	clampLO = vec_splat_s16(0);
 	
 	//contrast value
-	shortBuffer.elements[0] = (short)(255. * m_contrast);
+	shortBuffer.elements[0] = s_contrast;
 	con = shortBuffer.v;
 	con = vec_splat(con,0);
 	
-	shortBuffer.elements[0] = (short)(255. * m_saturation);
+	shortBuffer.elements[0] = s_saturation;
 	sat = shortBuffer.v;
 	sat = vec_splat(sat,0);
 	
@@ -215,8 +220,9 @@ void pix_contrast :: processYUVImage(imageStruct &image)
 	
 	int y0, y1,u,v;
 	
-	c = (short)(255. * m_contrast);
-	s = (short)(255. * m_saturation);
+	c = (short)(256. * m_contrast);
+	s = (short)(256. * m_saturation);
+        if(256==s && 256==c)return;
 
 	while(datasize--){
 	
@@ -246,8 +252,10 @@ int datasize = (image.xsize) * image.ysize;
 	
 	int y,u,v;
 	
-	c = (short)(255. * m_contrast);
-	s = (short)(255. * m_saturation);
+	c = (short)(256. * m_contrast);
+	s = (short)(256. * m_saturation);
+
+        if(256==s && 256==c)return;
 
 	while(datasize--){
 	
@@ -276,6 +284,18 @@ int datasize = (image.xsize) * image.ysize;
 void pix_contrast :: processGrayImage(imageStruct &image)
 {
 
+  int datasize = image.xsize * image.ysize;
+  unsigned char *pixels = image.data;
+  // we scale by 256, since "(x*256)>>8=x"
+  short c = (short)(256. * m_contrast);
+  int g;
+
+  if(256==c)return; // the effect would produce the same result...
+
+  while(datasize--){
+    g=(((*pixels - 128) * c) >> 8) + 128;
+    *pixels++ = CLAMP(g);
+  }
 }
 
 void pix_contrast :: contrastMess(float contrast)

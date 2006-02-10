@@ -16,9 +16,9 @@
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-    pix_2grey
+    pix_deinterlace
     
-    Change pix to greyscale
+    Deinterlace a pix
 
 KEYWORDS
     pix
@@ -56,8 +56,8 @@ class GEM_EXTERN pix_deinterlace : public GemPixObj
 #endif
      	    	  
     	//////////
-    	// Do the processing - this is a no-op
-  //  	virtual void 	processGrayImage(imageStruct &image) { }
+    	// Do the processing
+        virtual void 	processGrayImage(imageStruct &image);
 		
 		int	m_mode;
 		
