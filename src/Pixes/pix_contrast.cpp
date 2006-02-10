@@ -15,12 +15,14 @@ CPPEXTERN_NEW(pix_contrast)
 pix_contrast :: pix_contrast():
   m_contrast(1.f), m_saturation(1.f)    
 {
-  
+  m_inCon=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("contrast"));
+  m_inSat=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("saturation"));
 }
 
 pix_contrast :: ~pix_contrast()
 {
-
+  inlet_free(m_inSat);
+  inlet_free(m_inCon);
 }
 
 #ifdef __VEC__

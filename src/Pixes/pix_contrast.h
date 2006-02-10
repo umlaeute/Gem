@@ -44,6 +44,8 @@ class GEM_EXTERN pix_contrast : public GemPixObj
 		float	m_contrast;
 		float	m_saturation;
 
+                t_inlet*m_inSat, *m_inCon;
+
  private:
     
     	//////////
