@@ -1,9 +1,8 @@
+current:
+	make -C src
 
 
-all:
-	make -C src all
-
-install:
-	make -C src install
+$(MAKECMDGOALS):
+	make -C src $(MAKECMDGOALS)
 
 
