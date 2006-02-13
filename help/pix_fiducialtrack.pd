@@ -1,4 +1,4 @@
-#N canvas 23 75 711 466 10;
+#N canvas 23 75 787 476 10;
 #X text 452 8 GEM object;
 #X obj 9 317 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -9,12 +9,12 @@
 #X text 18 278 Arguments:;
 #X obj 8 56 cnv 15 430 200 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 37 cnv 15 255 380 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 37 cnv 15 320 380 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 20 Example:;
 #X obj 450 353 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -35,7 +35,7 @@
 #X restore 455 392 pd gemwin;
 #X msg 455 373 destroy;
 #X text 451 352 Create window:;
-#X obj 451 133 cnv 15 250 120 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 451 133 cnv 15 315 120 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 43 gemhead;
 #X text 17 378 Outlet 1: gemlist;
@@ -48,7 +48,6 @@
 #X floatatom 563 318 5 0 0 0 y - -;
 #X floatatom 563 334 5 0 0 0 angle - -;
 #X obj 451 64 pix_video;
-#X obj 451 222 pix_fiducialtrack ../data/all.trees;
 #X msg 463 188 open \$1;
 #X obj 463 167 openpanel;
 #X obj 463 148 bng 15 250 50 0 empty empty TreeIdMap 20 7 0 12 -262144
@@ -81,20 +80,21 @@ the "open"-message. The default file is "all.trees";
 ;
 #X obj 451 107 pix_threshold_bernsen 16 16;
 #X msg 520 64 dimen 256 256;
+#X obj 451 222 pix_fiducialtrack ../examples/data/all.trees;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 24 0;
 #X connect 17 0 19 0;
-#X connect 24 0 40 0;
-#X connect 25 0 17 0;
-#X connect 25 1 37 0;
+#X connect 24 0 39 0;
+#X connect 25 0 43 0;
 #X connect 26 0 25 0;
 #X connect 27 0 26 0;
-#X connect 28 0 27 0;
-#X connect 37 0 20 0;
-#X connect 37 1 21 0;
-#X connect 37 2 22 0;
-#X connect 37 3 23 0;
-#X connect 40 0 42 0;
-#X connect 42 0 25 0;
-#X connect 43 0 24 0;
+#X connect 36 0 20 0;
+#X connect 36 1 21 0;
+#X connect 36 2 22 0;
+#X connect 36 3 23 0;
+#X connect 39 0 41 0;
+#X connect 41 0 43 0;
+#X connect 42 0 24 0;
+#X connect 43 0 17 0;
+#X connect 43 1 36 0;
