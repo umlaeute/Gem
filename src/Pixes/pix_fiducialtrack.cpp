@@ -37,7 +37,6 @@ pix_fiducialtrack :: pix_fiducialtrack(t_symbol*s) :
     first_time=false;
     post("[pix_fiducialtrack]\n\tbased on fidtrack-library (c) R.Bencina\n\tbased on reacTIVision (c) M.Kaltenbrunner, R.Bencina\n\tsee http://www.iua.upf.es/mtg/reacTable/");
   }
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("tiles"));
   m_infoOut = outlet_new(this->x_obj, &s_list);
   if((NULL!=s) && (&s_!=s) && (NULL!=s->s_name)){
     treeMess(s);
