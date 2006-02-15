@@ -93,9 +93,15 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
 #ifdef __WIN32__
     ".dll";
 #elif defined __APPLE__
-    ".frf";
+    "";
 #else
     ".so";
+#endif
+
+#ifdef __linux__
+  char buf3[MAXPDSTRING];
+  sprintf(buf3, "%s.frf/%s", pluginname, pluginname);
+  pluginname=buf3;
 #endif
 
   int fd=-1;
