@@ -107,7 +107,11 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   int fd=-1;
   if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
+#ifndef __APPLE__
     sprintf(buf, "%s/%s", buf2, bufptr);
+#else
+	sprintf(buf, "%s", buf2);
+#endif
   } else
     canvas_makefilename(getCanvas(), pluginname, buf, MAXPDSTRING);
   post("trying to load %s", buf);
