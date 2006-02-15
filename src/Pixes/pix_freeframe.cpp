@@ -98,7 +98,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     ".so";
 #endif
 
-#ifdef __linux__
+#ifdef __APPLE__
   char buf3[MAXPDSTRING];
   sprintf(buf3, "%s.frf/%s", pluginname, pluginname);
   pluginname=buf3;
