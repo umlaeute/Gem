@@ -43,9 +43,6 @@ glsl_fragment :: glsl_fragment(t_symbol *filename) :
   m_shaderTarget = GL_FRAGMENT_SHADER_ARB;
   openMess(filename);
 #endif
-  
-  // create an outlet to send shader object ID
-  m_outShaderID = outlet_new(this->x_obj, &s_float);
 }
 
 /////////////////////////////////////////////////////////
