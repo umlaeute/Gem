@@ -8,10 +8,11 @@ AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
 ARCH=$(uname -m)
 KERN=$(uname -s)
 
-AC_CONFIG_HEADER([Base/config$KERN.h])
-AC_CONFIG_SRCDIR([Base/GemBase.h])
-
 GEM_CONFIGFILE=Base/config${KERN}.h
+AC_CHECK_FILES([${GEM_CONFIGFILE}.in],, GEM_CONFIGFILE=Base/configGeneric.h)
+
+AC_CONFIG_HEADER([$GEM_CONFIGFILE])
+AC_CONFIG_SRCDIR([Base/GemBase.h])
 
 AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
@@ -237,6 +238,11 @@ AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr])
+
+gem_tmp_lqt_libs="$LIBS"
+LIBS="$LIBS $PKG_LIBS"
+AC_CHECK_FUNCS(lqt_add_video_track)
+LIBS="$gem_tmp_lqt_libs"
 
 
 ### make-depend flags
