@@ -29,6 +29,9 @@
 ** THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "Base/config.h"
+#ifdef USE_GLEW
+
 #include "Base/glew.h"
 #if defined(_WIN32)
 #  include "Base/wglew.h"
@@ -9749,3 +9752,6 @@ GLboolean glxewIsSupported (const char* name)
 }
 
 #endif /* _WIN32 */
+
+
+#endif /* USE_GLEW */
