@@ -1,0 +1,43 @@
+/* fullscreen: querying via libXxf86vm */
+#undef HAVE_LIBXXF86VM
+
+
+/* font rendering */
+#undef HAVE_LIBFTGL
+/* gltt has been deprecated in favour of FTGL */
+#undef HAVE_LIBGLTT
+
+/* image loading / saving */
+#undef HAVE_LIBTIFF
+#undef HAVE_LIBJPEG
+#undef HAVE_LIBMAGICKPLUSPLUS
+
+/* movie decoding */
+#undef HAVE_LIBMPEG
+#undef HAVE_LIBMPEG3
+#undef HAVE_LIBQUICKTIME
+#undef HAVE_LQT_ADD_VIDEO_TRACK
+#undef HAVE_LIBAVIPLAY
+#undef HAVE_FFMPEG
+#undef GEM_AVSTREAM_CODECPOINTER
+
+/* video grabbing */
+#undef HAVE_VIDEO4LINUX
+#undef HAVE_LIBDV
+
+/* posix threads */
+#undef HAVE_PTHREADS
+
+/* disable the use of openGL-ARB extensions */
+#undef DONT_USE_ARB
+
+/* disable the use of openGL-nvidia extensions */
+#undef DONT_USE_NV
+
+/* enable the use of the all-in-one video/movie objects */
+#undef NEW_VIDEOFILM
+
+/* types, structures, compiler characteristics, ... */
+#undef SIZEOF_VOID_P
+#undef SIZEOF_UNSIGNED_INT
+#undef HAVE_GLSIZEIPTRARB
