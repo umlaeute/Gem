@@ -66,6 +66,7 @@ class GEM_EXTERN pqtorusknots : public GemShape
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
+  virtual void 	postrender(GemState *state);
 
 
   //////////

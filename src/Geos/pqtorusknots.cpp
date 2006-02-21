@@ -87,7 +87,6 @@ pqtorusknots :: ~pqtorusknots()
 void pqtorusknots :: render(GemState *state)
 {
   int i, j;
-
   m_thickness *= m_scale;
 
   GLfloat *vtx      = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 3];
@@ -239,29 +238,26 @@ void pqtorusknots :: render(GemState *state)
 
   texcoord[offsetSF2 + 0] = m_uScale;
   texcoord[offsetSF2 + 1] = m_vScale;
-  /*	
-    if (m_blend) {
-    glDisable(GL_POLYGON_SMOOTH);
-    glDisable(GL_BLEND);
-    }
-  */
+
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
   glVertexPointer(3, GL_FLOAT, 0, m_Vertex);            
   glNormalPointer(GL_FLOAT, 0, m_normal);
-
-  for (int i = 0; i < 4; i++)
+  
+  if (state->texture && state->numTexCoords)
     {
-      /* JMZ: this makes me crash so i commented it out */
-      //if (texcoord[i])
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      for (int i = 0; i < 4; i++)
         {
-          glClientActiveTextureARB(GL_TEXTURE0_ARB + i);
-          glTexCoordPointer(2, GL_FLOAT, 0, &texcoord[i]);
+          if (&texcoord[i])
+            {
+              glClientActiveTextureARB(GL_TEXTURE0_ARB + i);
+              glTexCoordPointer(2, GL_FLOAT, 0, &texcoord[i]);
+            }
         }
+      //glClientActiveTextureARB(GL_TEXTURE0_ARB);
     }
-  glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
   glDrawElements(m_PrimitiveType,m_Indices,GL_UNSIGNED_INT,m_Index);
 	
@@ -278,6 +274,13 @@ void pqtorusknots :: render(GemState *state)
   texcoord = NULL;
 
 }
+void pqtorusknots :: postrender(GemState *state)
+{
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_NORMAL_ARRAY);
+}
+
 ////////////////////////////////////////////////////////
 // scaleMess
 //
