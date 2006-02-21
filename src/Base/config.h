@@ -2,20 +2,27 @@
 #ifndef HAVE_BASE_CONFIG_H_
 #define HAVE_BASE_CONFIG_H_
 
-/* includes system-specific files */
+#ifdef HAVE_CONFIG_GENERIC_H
 
-#ifdef __linux__
-# include "Base/configLinux.h"
-#endif
+# include "Base/configGeneric.h"
 
-#ifdef __APPLE__
-# include "Base/configDarwin.h"
-# define HAVE_QUICKTIME
+#else /* includes system-specific files */
+
+# ifdef __linux__
+#  include "Base/configLinux.h"
+# endif
+
+# ifdef __APPLE__
+#  include "Base/configDarwin.h"
+#  define HAVE_QUICKTIME
+# endif
+
+# ifdef __WIN32__
+#  include "Base/configNT.h"
+# endif
 #endif
 
 #ifdef __WIN32__
-# include "Base/configNT.h"
-
 # ifndef NT
 #  define NT
 # endif
