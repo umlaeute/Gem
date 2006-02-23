@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
    
 #include "Pixes/record.h"
    
-#ifdef HAVE_LIBQUICKTIME
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
 # include <lqt.h>
 #endif
  
@@ -54,7 +54,7 @@ class GEM_EXTERN recordQT4L : public record {
   /* free what is apropriate */
   virtual ~recordQT4L();
 
-#ifdef HAVE_LIBQUICKTIME
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
   //////////
   // open a movie up
   /* open the recordQT4L "filename" (think better about URIs ?)

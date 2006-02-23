@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 
-#ifdef HAVE_LIBQUICKTIME
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
 # include <colormodels.h>
 #endif
 
@@ -33,7 +33,7 @@
 /////////////////////////////////////////////////////////
 
 recordQT4L :: recordQT4L(int x, int y, int width, int height): record(x,y,width,height)
-#ifdef HAVE_LIBQUICKTIME
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
 							     , m_qtfile(NULL),
 							       m_codec(NULL), m_codecs(NULL),
 							       m_track(-1), m_colormodel(0)
@@ -54,7 +54,7 @@ recordQT4L :: ~recordQT4L()
 {
   close();
 }
-#ifdef HAVE_LIBQUICKTIME
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
 void recordQT4L :: close(void)
 {
   if(m_qtfile){

@@ -430,5 +430,4 @@ void pix_snap2tex :: repeatMessCallback(void *data, t_floatarg quality)
 void pix_snap2tex :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_mode=((int)quality);
-//  GetMyClass(data)->m_rebuildList=1;
 }
