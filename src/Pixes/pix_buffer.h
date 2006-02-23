@@ -64,6 +64,7 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   virtual void  allocateMess(int,int,int);
   virtual void  bangMess();
   virtual void  openMess(t_symbol*,int);
+  virtual void  saveMess(t_symbol*,int);
 
   int m_numframes;
   t_symbol *m_bindname;
@@ -76,6 +77,7 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   static void allocateMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg c);
   static void bangMessCallback(void *data);
   static void openMessCallback(void *data, t_symbol*, t_floatarg);
+  static void saveMessCallback(void *data, t_symbol*, t_floatarg);
 };
 
 #endif	// for header file

@@ -18,6 +18,7 @@
 
 #include "pix_buffer.h"
 #include "Base/GemPixImageLoad.h"
+#include "Base/GemPixImageSave.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -141,6 +142,30 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
   delete image;
 }
 
+/////////////////////////////////////////////////////////
+// openMess
+//
+/////////////////////////////////////////////////////////
+void pix_buffer :: saveMess(t_symbol *filename, int pos)
+{
+  // load an image into mem
+  char buf[MAXPDSTRING];
+
+  imageStruct*img=NULL;
+
+  if(NULL==filename||NULL==filename->s_name||gensym("")==filename){
+    error("pix_buffer: no filename given!");
+    return;
+  }
+  img=getMess(pos);
+  
+  if(img && img->data){
+    mem2image(img, filename->s_name, 0);
+  } else {
+    error("pix_buffer: index %d out of range (0..%d) or slot empty!", pos, m_numframes);
+    return;
+  }
+}
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -154,6 +179,8 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
   class_addbang(classPtr, (t_method)&pix_buffer::bangMessCallback);
   class_addmethod(classPtr, (t_method)&pix_buffer::openMessCallback,
   		  gensym("open"), A_SYMBOL, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_buffer::saveMessCallback,
+  		  gensym("save"), A_SYMBOL, A_FLOAT, A_NULL);
 }
 void pix_buffer :: allocateMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg c=4)
 {
@@ -171,4 +198,8 @@ void pix_buffer :: bangMessCallback(void *data)
 void pix_buffer :: openMessCallback(void *data, t_symbol *filename, t_floatarg pos)
 {
   GetMyClass(data)->openMess(filename, (int)pos);
+}
+void pix_buffer :: saveMessCallback(void *data, t_symbol *filename, t_floatarg pos)
+{
+  GetMyClass(data)->saveMess(filename, (int)pos);
 }
