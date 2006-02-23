@@ -14,6 +14,8 @@
 //
 /////////////////////////////////////////////////////////
 
+#define GEM_CLASSFLAGS CLASS_NOINLET
+
 #include "gemmouse.h"
 
 #include "Base/GemEvent.h"
