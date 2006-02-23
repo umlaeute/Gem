@@ -273,6 +273,13 @@ static void obj_setupCallback(t_class *classPtr);
   class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym(HELPSYMBOL_BASE#NEW_CLASS));
 #endif /* HELPSYMBOL */
 
+
+///////////////////////////////////////////////////////////////////////////////
+// setting the class-flags
+///////////////////////////////////////////////////////////////////////////////
+#ifndef GEM_CLASSFLAGS
+# define GEM_CLASSFLAGS 0
+#endif
 ///////////////////////////////////////////////////////////////////////////////
 // no args
 ///////////////////////////////////////////////////////////////////////////////
@@ -297,7 +304,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	gensym(#NEW_CLASS), 	    	    	     	\
     	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), 0,                          \
+    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
     	     	A_NULL);                                        \
     SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
     NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## EXTERN_NAME);	\
@@ -330,7 +337,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	gensym(#NEW_CLASS), 	    	    	    	\
     	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), 0,                          \
+    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
     	     	PD_TYPE,                                        \
     	     	A_NULL);      	    	    	    	    	\
     SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
@@ -363,7 +370,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	gensym(#NEW_CLASS), 	    	    	    	\
     	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), 0,                          \
+    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
     	     	A_GIMME,                                        \
     	     	A_NULL);      	    	    	    	    	\
     SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
@@ -396,7 +403,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	gensym(#NEW_CLASS), 	    	    	    	\
     	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), 0,                          \
+    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
     	     	ONE_PD_TYPE, TWO_PD_TYPE,                       \
     	     	A_NULL);      	    	    	    	    	\
     SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
@@ -429,7 +436,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	gensym(#NEW_CLASS), 	    	    	    	\
     	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), 0,                          \
+    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
     	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE,        \
     	     	A_NULL);      	    	    	    	    	\
     SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
@@ -462,7 +469,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	gensym(#NEW_CLASS), 	    	    	    	\
     	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), 0,                          \
+    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
     	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE, FOUR_PD_TYPE,	\
     	     	A_NULL);						\
     SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
@@ -495,7 +502,7 @@ void NEW_CLASS ## SETUP_FUNCTION()    	    	    	    	\
     	     	gensym(#NEW_CLASS), 	    	    	    	\
     	    	(t_newmethod)EXTERN_NAME ## NEW_CLASS,	    	\
     	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), 0,                          \
+    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
     	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE, FOUR_PD_TYPE, FIVE_PD_TYPE,	\
     	     	A_NULL);						\
     SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME);				\
