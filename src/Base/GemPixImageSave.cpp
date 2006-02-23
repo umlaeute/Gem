@@ -448,9 +448,24 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
  ***************************************************************************/
 int mem2magickImage(imageStruct *image, const char *filename)
 {
+  char*cs=0;
+  if(image->format==GL_LUMINANCE)
+    cs=gensym("K")->s_name;
+  else if(image->format==GL_RGBA)
+    cs=gensym("RGBA")->s_name;
+  else if(image->format==GL_RGB)
+    cs=gensym("RGB")->s_name;
+  else if(image->format==GL_BGRA_EXT)
+    cs=gensym("BGRA")->s_name;
+  else if(image->format==GL_YUV422_GEM) {
+    error("don't know how to write YUV-data...");
+  }
+
+
+
   // LATER: think about writing RGBA
   try{
-    Magick::Image mimage(image->xsize, image->ysize, "RGB", Magick::CharPixel, image->data);
+    Magick::Image mimage(image->xsize, image->ysize, cs, Magick::CharPixel, image->data);
     mimage.flip(); // since openGL is upside down
     mimage.write(filename);
   } catch (Magick::Exception e){
