@@ -93,6 +93,8 @@ class GEM_EXTERN rubber : public GemShape
   int		m_speed;
   int		m_blend;
   int		alreadyInit;
+  float		m_springKS;
+  float		m_drag;
   float 	xsize, ysize, ysize0;
 
   // number of grid-segments in X/Y direction (defaults: 32);
@@ -107,6 +109,8 @@ class GEM_EXTERN rubber : public GemShape
   static void 	ctrXMessCallback(void *data, t_floatarg center);
   static void 	ctrYMessCallback(void *data, t_floatarg center);
   static void 	blendMessCallback(void *data, t_floatarg blend);
+  static void 	dragMessCallback(void *data, t_floatarg drag);
+  static void 	springMessCallback(void *data, t_floatarg spring);
 };
 
 #endif	// for header file

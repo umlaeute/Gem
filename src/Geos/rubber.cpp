@@ -19,9 +19,6 @@
 #define CLIP_NEAR  0.0
 #define CLIP_FAR   1000.0
 
-#define SPRING_KS  0.3
-#define DRAG	   0.5
-
 typedef struct {
     float x[3];
     float v[3];
@@ -52,8 +49,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(rubber, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLO
 //
 /////////////////////////////////////////////////////////
 rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
-    	     : GemShape(1.0), m_height(0.0),
-               m_speed(0), alreadyInit(0)
+    	     : GemShape(1.0), m_height(0.0), m_speed(0),
+               alreadyInit(0), m_springKS(0.3), m_drag(0.5)
 {
   m_grid_sizeX = (gridX>0.)?(int)gridX:GRID_SIZE_X;
   m_grid_sizeY = (gridY>0.)?(int)gridY:GRID_SIZE_Y;
@@ -100,7 +97,6 @@ void rubber :: rubber_init()
   int i, j;
   int k;
   int m;
-  glEnable(GL_DEPTH_TEST);
 
   if (mass != NULL)delete[]mass;    mass=NULL;
     
@@ -181,6 +177,7 @@ void rubber :: render(GemState *state)
     if (m_drawType == GL_LINE_LOOP)glLineWidth(m_linewidth);
     
     glMatrixMode(GL_MODELVIEW);
+//	glLoadIdentity();
     glPushMatrix();
 
     glScalef(m_size, m_size, m_size);
@@ -216,8 +213,8 @@ void rubber :: render(GemState *state)
 
       k = 0;
       for (i = 0; i < m_grid_sizeX - 1; i++)  {
-	for (j = 0; j < m_grid_sizeY - 1; j++){
-	  glBegin(GL_POLYGON);
+		  for (j = 0; j < m_grid_sizeY - 1; j++){
+			glBegin(GL_POLYGON);
 	  glTexCoord2fv(mass[k].t);
 	  glVertex3fv(mass[k].x);
 	  glTexCoord2fv(mass[k + 1].t);
@@ -256,14 +253,15 @@ void rubber :: render(GemState *state)
 	k++;
       }
       rubber_dynamics();
-      /*for (k = 0; k < spring_count; k++)
+/*      for (k = 0; k < spring_count; k++)
         {
 	glBegin(GL_LINES);
 	glVertex3fv(mass[spring[k].i].x);
 	glVertex3fv(mass[spring[k].j].x);
 	glEnd();
-        }*/
+        }
     }
+*/
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 }
@@ -299,13 +297,13 @@ void rubber :: rubber_dynamics()
 
       a = l - spring[k].r;
 
-      mass[i].v[0] -= d[0]*a*SPRING_KS;
-      mass[i].v[1] -= d[1]*a*SPRING_KS;
-      mass[i].v[2] -= d[2]*a*SPRING_KS;
+      mass[i].v[0] -= d[0]*a*m_springKS;
+      mass[i].v[1] -= d[1]*a*m_springKS;
+      mass[i].v[2] -= d[2]*a*m_springKS;
 
-      mass[j].v[0] += d[0]*a*SPRING_KS;
-      mass[j].v[1] += d[1]*a*SPRING_KS;
-      mass[j].v[2] += d[2]*a*SPRING_KS;
+      mass[j].v[0] += d[0]*a*m_springKS;
+      mass[j].v[1] += d[1]*a*m_springKS;
+      mass[j].v[2] += d[2]*a*m_springKS;
     }
   }
 
@@ -318,9 +316,9 @@ void rubber :: rubber_dynamics()
       mass[k].x[1] += mass[k].v[1];
       mass[k].x[2] += mass[k].v[2];
       
-      mass[k].v[0] *= (1.0 - DRAG);
-      mass[k].v[1] *= (1.0 - DRAG);
-      mass[k].v[2] *= (1.0 - DRAG);
+      mass[k].v[0] *= (1.0 - m_drag);
+      mass[k].v[1] *= (1.0 - m_drag);
+      mass[k].v[2] *= (1.0 - m_drag);
 
       if (mass[k].x[2] > -CLIP_NEAR - 0.01)mass[k].x[2] = -CLIP_NEAR - 0.01;
       if (mass[k].x[2] < -CLIP_FAR + 0.01) mass[k].x[2] = -CLIP_FAR  + 0.01;
@@ -416,6 +414,10 @@ void rubber :: obj_setupCallback(t_class *classPtr)
     	    gensym("cY"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&rubber::blendMessCallback,
     	    gensym("blend"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&rubber::dragMessCallback,
+    	    gensym("drag"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&rubber::springMessCallback,
+    	    gensym("spring"), A_FLOAT, A_NULL);
 }
 void rubber :: bangMessCallback(void *data)
 {
@@ -437,4 +439,11 @@ void rubber :: blendMessCallback(void *data, t_floatarg blend)
 {
     GetMyClass(data)->m_blend=((int)blend);
 }
-
+void rubber :: dragMessCallback(void *data, t_floatarg drag)
+{
+    GetMyClass(data)->m_drag=(drag);
+}
+void rubber :: springMessCallback(void *data, t_floatarg spring)
+{
+    GetMyClass(data)->m_springKS=(spring);
+}
