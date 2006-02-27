@@ -239,11 +239,43 @@ AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr])
 
+# enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $PKG_LIBS"
-AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_add_video_track])], AC_DEFINE(HAVE_LQT_ADD_VIDEO_TRACK))
+AC_MSG_CHECKING(for lqt_add_video_track)
+AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_add_video_track])], 
+        AC_DEFINE(HAVE_LQT_ADD_VIDEO_TRACK)
+        AC_MSG_RESULT(yes),
+        AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
 
+# disabling ARB-extensions
+if test "x$enable_ARB" != "xno"; then
+dnl AC_CHECK_FUNC(glBindProgramARB, enable_ARB="yes",enable_ARB="no")
+AC_MSG_CHECKING(for glBindProgramARB)
+AC_LINK_IFELSE([AC_LANG_CALL([], [glBindProgramARB])], 
+        enable_ARB="yes", enable_ARB="no")
+AC_MSG_RESULT([$enable_ARB])
+fi
+
+if test "x$enable_ARB" = "xno"; then
+AC_MSG_RESULT([disabling ARB-extensions])
+ AC_DEFINE_UNQUOTED(DONT_USE_ARB)
+fi
+
+# disabling NV-extensions
+if test "x$enable_NV" != "xno"; then
+dnl AC_CHECK_FUNC(glBindProgramNV, enable_NV="yes",enable_NV="no")
+AC_MSG_CHECKING(for glBindProgramNV)
+AC_LINK_IFELSE([AC_LANG_CALL([], [glBindProgramNV])], 
+        enable_NV="yes", enable_NV="no")
+AC_MSG_RESULT([$enable_NV])
+fi
+
+if test "x$enable_NV" = "xno"; then
+AC_MSG_RESULT([disabling NV-extensions])
+ AC_DEFINE_UNQUOTED(DONT_USE_NV)
+fi
 
 ### make-depend flags
 if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
@@ -307,28 +339,6 @@ if test "x$enable_filmnew" != "xno"; then
  AC_DEFINE_UNQUOTED(NEW_VIDEOFILM)
 else
  echo "using deprecated video-loader"
-fi
-
-# disabling ARB-extensions
-if test "x$enable_ARB" != "xno"; then
- AC_CHECK_FUNC(glBindProgramARB,
-        enable_ARB="yes",enable_ARB="no")
-fi
-
-if test "x$enable_ARB" = "xno"; then
-AC_MSG_RESULT([disabling ARB-extensions])
- AC_DEFINE_UNQUOTED(DONT_USE_ARB)
-fi
-
-# disabling NV-extensions
-if test "x$enable_NV" != "xno"; then
- AC_CHECK_FUNC(glBindProgramNV,
-        enable_NV="yes",enable_NV="no")
-fi
-
-if test "x$enable_NV" = "xno"; then
-AC_MSG_RESULT([disabling NV-extensions])
- AC_DEFINE_UNQUOTED(DONT_USE_NV)
 fi
 
 # enabling "-freg-struct-return" (for FreeFrame)

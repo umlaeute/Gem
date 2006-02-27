@@ -13147,8 +13147,11 @@ fi
 done
 
 
+# enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $PKG_LIBS"
+echo "$as_me:$LINENO: checking for lqt_add_video_track" >&5
+echo $ECHO_N "checking for lqt_add_video_track... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -13196,15 +13199,156 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
 #define HAVE_LQT_ADD_VIDEO_TRACK 1
 _ACEOF
 
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 LIBS="$gem_tmp_lqt_libs"
 
+# disabling ARB-extensions
+if test "x$enable_ARB" != "xno"; then
+echo "$as_me:$LINENO: checking for glBindProgramARB" >&5
+echo $ECHO_N "checking for glBindProgramARB... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char glBindProgramARB ();
+int
+main ()
+{
+glBindProgramARB ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  enable_ARB="yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+enable_ARB="no"
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $enable_ARB" >&5
+echo "${ECHO_T}$enable_ARB" >&6
+fi
+
+if test "x$enable_ARB" = "xno"; then
+echo "$as_me:$LINENO: result: disabling ARB-extensions" >&5
+echo "${ECHO_T}disabling ARB-extensions" >&6
+ cat >>confdefs.h <<_ACEOF
+#define DONT_USE_ARB 1
+_ACEOF
+
+fi
+
+# disabling NV-extensions
+if test "x$enable_NV" != "xno"; then
+echo "$as_me:$LINENO: checking for glBindProgramNV" >&5
+echo $ECHO_N "checking for glBindProgramNV... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char glBindProgramNV ();
+int
+main ()
+{
+glBindProgramNV ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  enable_NV="yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+enable_NV="no"
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $enable_NV" >&5
+echo "${ECHO_T}$enable_NV" >&6
+fi
+
+if test "x$enable_NV" = "xno"; then
+echo "$as_me:$LINENO: result: disabling NV-extensions" >&5
+echo "${ECHO_T}disabling NV-extensions" >&6
+ cat >>confdefs.h <<_ACEOF
+#define DONT_USE_NV 1
+_ACEOF
+
+fi
 
 ### make-depend flags
 if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
@@ -13420,222 +13564,6 @@ _ACEOF
 
 else
  echo "using deprecated video-loader"
-fi
-
-# disabling ARB-extensions
-if test "x$enable_ARB" != "xno"; then
- echo "$as_me:$LINENO: checking for glBindProgramARB" >&5
-echo $ECHO_N "checking for glBindProgramARB... $ECHO_C" >&6
-if test "${ac_cv_func_glBindProgramARB+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* Define glBindProgramARB to an innocuous variant, in case <limits.h> declares glBindProgramARB.
-   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
-#define glBindProgramARB innocuous_glBindProgramARB
-
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char glBindProgramARB (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-
-#undef glBindProgramARB
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char glBindProgramARB ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_glBindProgramARB) || defined (__stub___glBindProgramARB)
-choke me
-#else
-char (*f) () = glBindProgramARB;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-return f != glBindProgramARB;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func_glBindProgramARB=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_func_glBindProgramARB=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func_glBindProgramARB" >&5
-echo "${ECHO_T}$ac_cv_func_glBindProgramARB" >&6
-if test $ac_cv_func_glBindProgramARB = yes; then
-  enable_ARB="yes"
-else
-  enable_ARB="no"
-fi
-
-fi
-
-if test "x$enable_ARB" = "xno"; then
-echo "$as_me:$LINENO: result: disabling ARB-extensions" >&5
-echo "${ECHO_T}disabling ARB-extensions" >&6
- cat >>confdefs.h <<_ACEOF
-#define DONT_USE_ARB 1
-_ACEOF
-
-fi
-
-# disabling NV-extensions
-if test "x$enable_NV" != "xno"; then
- echo "$as_me:$LINENO: checking for glBindProgramNV" >&5
-echo $ECHO_N "checking for glBindProgramNV... $ECHO_C" >&6
-if test "${ac_cv_func_glBindProgramNV+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* Define glBindProgramNV to an innocuous variant, in case <limits.h> declares glBindProgramNV.
-   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
-#define glBindProgramNV innocuous_glBindProgramNV
-
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char glBindProgramNV (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-
-#undef glBindProgramNV
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char glBindProgramNV ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_glBindProgramNV) || defined (__stub___glBindProgramNV)
-choke me
-#else
-char (*f) () = glBindProgramNV;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-return f != glBindProgramNV;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func_glBindProgramNV=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_func_glBindProgramNV=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func_glBindProgramNV" >&5
-echo "${ECHO_T}$ac_cv_func_glBindProgramNV" >&6
-if test $ac_cv_func_glBindProgramNV = yes; then
-  enable_NV="yes"
-else
-  enable_NV="no"
-fi
-
-fi
-
-if test "x$enable_NV" = "xno"; then
-echo "$as_me:$LINENO: result: disabling NV-extensions" >&5
-echo "${ECHO_T}disabling NV-extensions" >&6
- cat >>confdefs.h <<_ACEOF
-#define DONT_USE_NV 1
-_ACEOF
-
 fi
 
 # enabling "-freg-struct-return" (for FreeFrame)
