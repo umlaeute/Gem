@@ -110,9 +110,6 @@ class GEM_EXTERN pqtorusknots : public GemShape
   int		m_Indices;
   int		m_Vertices;
   int		m_PrimitiveType;
-		
-		
-  int		m_blend;
 
  private:
 

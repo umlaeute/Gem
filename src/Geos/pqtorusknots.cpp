@@ -26,25 +26,19 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pqtorusknots, t_floatarg, A_DEFFLOAT, t_floatarg, A_
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg m_Q)
+pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg q)
   : 
   GemShape(width), m_steps(256), m_facets(16), m_scale(1), m_thickness(0.2),
-  m_clumps(12), m_clumpOffset(0), m_clumpScale(0.5), m_uScale(4), m_vScale(64), m_P(2),
-  m_Q(5)
+  m_clumps(12), m_clumpOffset(0), m_clumpScale(0.5), m_uScale(4), m_vScale(64), 
+  m_P(2), m_Q(q),
+  m_Vertex(NULL), m_normal(NULL), m_Index(NULL), m_Indices(0), m_Vertices(0), 
+  m_PrimitiveType(0)
 {
-  m_Vertex = NULL;
-  m_normal = NULL;
-  m_Index = NULL;
-  m_Indices = 0;
-  m_PrimitiveType = 0;
   m_Texcoord[0] = m_Texcoord[1] = m_Texcoord[2] = m_Texcoord[3] = 0;
-	
-  if (m_P == 0.f)
-    m_P = 1.f;
-  if (m_Q == 0.f)
-    m_Q = 0.f;
+
+  if (m_P == 0.f) m_P = 1.f;
+  if (m_Q == 0.f) m_Q = 0.f;
   m_drawType = GL_TRIANGLE_STRIP;
-  m_blend = 0;
 }
 
 ////////////////////////////////////////////////////////
@@ -53,14 +47,11 @@ pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg m_Q)
 /////////////////////////////////////////////////////////
 pqtorusknots :: ~pqtorusknots()
 {
-  delete[] m_Vertex;
-  m_Vertex = NULL;
+  delete[] m_Vertex; m_Vertex = NULL;
 
-  delete[] m_normal;
-  m_normal = NULL;
+  delete[] m_normal; m_normal = NULL;
 
-  delete[] m_Index;
-  m_Index = NULL;
+  delete[] m_Index;  m_Index = NULL;
 
   m_Indices = 0;
   m_PrimitiveType = 0;
@@ -87,19 +78,24 @@ pqtorusknots :: ~pqtorusknots()
 void pqtorusknots :: render(GemState *state)
 {
   int i, j;
-  m_thickness *= m_scale;
+  /* formerly this was "m_thickness*=m_scale" 
+     which diminuished m_thickness each render-cycle */
+  GLfloat thickness = m_thickness * m_scale;
 
   GLfloat *vtx      = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 3];
   GLfloat *normal   = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 3];
   GLfloat *texcoord = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 2];
-  GLuint *idx      = new GLuint[(m_steps + 1) * m_facets * 2];
+  GLuint  *idx      = new GLuint [ (m_steps + 1) *  m_facets * 2];
   m_Vertex = vtx;
   m_normal = normal;
   m_Index = idx;
   for (i=0; i<4; i++)
     m_Texcoord[i] = texcoord;
 
+
   m_Indices = (m_steps + 1) * m_facets * 2;
+  memset(idx, 0, m_Indices*sizeof(GLuint));
+
   m_Vertices = ((m_steps + 1) * (m_facets + 1) + 1);
   m_PrimitiveType = m_drawType;//GL_TRIANGLE_STRIP;
 
@@ -167,8 +163,8 @@ void pqtorusknots :: render(GemState *state)
 
       for (j = 0; j < m_facets; j++)
         {
-          float pointx = (float)sin(j * PI2 / m_facets) * m_thickness * (((float)sin(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
-          float pointy = (float)cos(j * PI2 / m_facets) * m_thickness * (((float)cos(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
+          float pointx = (float)sin(j * PI2 / m_facets) * thickness * (((float)sin(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
+          float pointy = (float)cos(j * PI2 / m_facets) * thickness * (((float)cos(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
           int offset3j= 3 * (i * (m_facets + 1) + j);
           int offset2j= 2 * (i * (m_facets + 1) + j);
 
@@ -182,8 +178,8 @@ void pqtorusknots :: render(GemState *state)
 
           float length;
           length = (float)sqrt(normal[offset3j + 0] * normal[offset3j + 0] +
-                          normal[offset3j + 1] * normal[offset3j + 1] +
-                          normal[offset3j + 2] * normal[offset3j + 2]);
+                               normal[offset3j + 1] * normal[offset3j + 1] +
+                               normal[offset3j + 2] * normal[offset3j + 2]);
             
           normal[offset3j + 0] /= length;
           normal[offset3j + 1] /= length;
@@ -244,7 +240,7 @@ void pqtorusknots :: render(GemState *state)
 
   glVertexPointer(3, GL_FLOAT, 0, m_Vertex);            
   glNormalPointer(GL_FLOAT, 0, m_normal);
-  
+
   if (state->texture && state->numTexCoords)
     {
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -258,9 +254,8 @@ void pqtorusknots :: render(GemState *state)
         }
       //glClientActiveTextureARB(GL_TEXTURE0_ARB);
     }
-
   glDrawElements(m_PrimitiveType,m_Indices,GL_UNSIGNED_INT,m_Index);
-	
+
   delete[] m_Vertex;
   m_Vertex = NULL;
 
@@ -272,7 +267,6 @@ void pqtorusknots :: render(GemState *state)
 	
   delete[] texcoord;
   texcoord = NULL;
-
 }
 void pqtorusknots :: postrender(GemState *state)
 {
