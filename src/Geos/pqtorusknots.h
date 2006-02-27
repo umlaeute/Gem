@@ -63,11 +63,13 @@ class GEM_EXTERN pqtorusknots : public GemShape
   virtual void	pqMess(float p, float q);
   virtual void	typeMess(t_symbol*s);
 
+  // setup the vertices and normals and...
+  virtual void genVert();
+
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
   virtual void 	postrender(GemState *state);
-
 
   //////////
   // Number of steps in the torus knot
@@ -104,8 +106,9 @@ class GEM_EXTERN pqtorusknots : public GemShape
   //////////
   // Vertex Array Stuff
   GLfloat*      m_Vertex;
-  GLfloat*	m_normal;
+  GLfloat*	m_Normal;
   GLfloat*	m_Texcoord[4];
+  GLfloat*      m_texcoords;
   GLuint*	m_Index;
   int		m_Indices;
   int		m_Vertices;

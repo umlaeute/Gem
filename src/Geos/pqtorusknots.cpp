@@ -31,7 +31,8 @@ pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg q)
   GemShape(width), m_steps(256), m_facets(16), m_scale(1), m_thickness(0.2),
   m_clumps(12), m_clumpOffset(0), m_clumpScale(0.5), m_uScale(4), m_vScale(64), 
   m_P(2), m_Q(q),
-  m_Vertex(NULL), m_normal(NULL), m_Index(NULL), m_Indices(0), m_Vertices(0), 
+  m_Vertex(NULL), m_Normal(NULL), m_texcoords(NULL), m_Index(NULL), 
+  m_Indices(0), m_Vertices(0), 
   m_PrimitiveType(0)
 {
   m_Texcoord[0] = m_Texcoord[1] = m_Texcoord[2] = m_Texcoord[3] = 0;
@@ -48,16 +49,12 @@ pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg q)
 pqtorusknots :: ~pqtorusknots()
 {
   delete[] m_Vertex; m_Vertex = NULL;
-
-  delete[] m_normal; m_normal = NULL;
-
+  delete[] m_Normal; m_Normal = NULL;
   delete[] m_Index;  m_Index = NULL;
 
-  m_Indices = 0;
-  m_PrimitiveType = 0;
+  m_Indices = 0;  m_PrimitiveType = 0;
 
   int i,j;
-
   // clear tex coord arrays, guarding against double deletion
   for (i = 0; i < 4; i++)
     {
@@ -70,41 +67,42 @@ pqtorusknots :: ~pqtorusknots()
       m_Texcoord[i] = NULL;
     }
 }
-
 ////////////////////////////////////////////////////////
-// render
+// set up vertices
 //
 /////////////////////////////////////////////////////////
-void pqtorusknots :: render(GemState *state)
-{
+void pqtorusknots :: genVert(){
+  if(m_Vertex)   delete[]m_Vertex;    m_Vertex = NULL;
+  if(m_Normal)   delete[]m_Normal;    m_Normal = NULL;
+  if(m_Index)    delete[]m_Index;     m_Index = NULL;
+  if(m_texcoords)delete[]m_texcoords; m_texcoords = NULL;
+
   int i, j;
   /* formerly this was "m_thickness*=m_scale" 
      which diminuished m_thickness each render-cycle */
   GLfloat thickness = m_thickness * m_scale;
 
-  GLfloat *vtx      = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 3];
-  GLfloat *normal   = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 3];
-  GLfloat *texcoord = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 2];
-  GLuint  *idx      = new GLuint [ (m_steps + 1) *  m_facets * 2];
-  m_Vertex = vtx;
-  m_normal = normal;
-  m_Index = idx;
+  m_Vertex   = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 3];
+  m_Normal   = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 3];
+  m_texcoords= new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 2];
+  m_Index    = new GLuint [ (m_steps + 1) *  m_facets * 2];
+
   for (i=0; i<4; i++)
-    m_Texcoord[i] = texcoord;
+    m_Texcoord[i] = m_texcoords;
 
 
   m_Indices = (m_steps + 1) * m_facets * 2;
-  memset(idx, 0, m_Indices*sizeof(GLuint));
+  memset(m_Index, 0, m_Indices*sizeof(GLuint));
 
   m_Vertices = ((m_steps + 1) * (m_facets + 1) + 1);
-  m_PrimitiveType = m_drawType;//GL_TRIANGLE_STRIP;
+  m_PrimitiveType = m_drawType;
 
   for (j = 0; j < m_facets; j++)
     {
       for (i = 0; i < m_steps + 1; i++)
         {
-          m_Index[2 * (i + j * (m_steps + 1) + 0)] = ((j + 1) + i * (m_facets + 1));
-          m_Index[2 * (i + j * (m_steps + 1) + 1)] = (j + i * (m_facets + 1));
+          m_Index[2 * (i + j * (m_steps + 1)) + 0] = ((j + 1) + i * (m_facets + 1));
+          m_Index[2 * (i + j * (m_steps + 1)) + 1] = (j + i * (m_facets + 1));
         }
     }
   for (i = 0; i < m_steps; i++)
@@ -168,38 +166,38 @@ void pqtorusknots :: render(GemState *state)
           int offset3j= 3 * (i * (m_facets + 1) + j);
           int offset2j= 2 * (i * (m_facets + 1) + j);
 
-          vtx[offset3j + 0] = N[0] * pointx + B[0] * pointy + centerpoint[0];
-          vtx[offset3j + 1] = N[1] * pointx + B[1] * pointy + centerpoint[1];
-          vtx[offset3j + 2] = N[2] * pointx + B[2] * pointy + centerpoint[2];
+          m_Vertex[offset3j + 0] = N[0] * pointx + B[0] * pointy + centerpoint[0];
+          m_Vertex[offset3j + 1] = N[1] * pointx + B[1] * pointy + centerpoint[1];
+          m_Vertex[offset3j + 2] = N[2] * pointx + B[2] * pointy + centerpoint[2];
 
-          normal[offset3j + 0] = vtx[offset3j + 0] - centerpoint[0];
-          normal[offset3j + 1] = vtx[offset3j + 1] - centerpoint[1];
-          normal[offset3j + 2] = vtx[offset3j + 2] - centerpoint[2];
+          m_Normal[offset3j + 0] = m_Vertex[offset3j + 0] - centerpoint[0];
+          m_Normal[offset3j + 1] = m_Vertex[offset3j + 1] - centerpoint[1];
+          m_Normal[offset3j + 2] = m_Vertex[offset3j + 2] - centerpoint[2];
 
           float length;
-          length = (float)sqrt(normal[offset3j + 0] * normal[offset3j + 0] +
-                               normal[offset3j + 1] * normal[offset3j + 1] +
-                               normal[offset3j + 2] * normal[offset3j + 2]);
+          length = (float)sqrt(m_Normal[offset3j + 0] * m_Normal[offset3j + 0] +
+                               m_Normal[offset3j + 1] * m_Normal[offset3j + 1] +
+                               m_Normal[offset3j + 2] * m_Normal[offset3j + 2]);
             
-          normal[offset3j + 0] /= length;
-          normal[offset3j + 1] /= length;
-          normal[offset3j + 2] /= length;
+          m_Normal[offset3j + 0] /= length;
+          m_Normal[offset3j + 1] /= length;
+          m_Normal[offset3j + 2] /= length;
 
-          texcoord[offset2j + 0] = ((float)j / m_facets) * m_uScale;
-          texcoord[offset2j + 1] = ((float)i / m_steps ) * m_vScale;
+          m_texcoords[offset2j + 0] = ((float)j / m_facets) * m_uScale;
+          m_texcoords[offset2j + 1] = ((float)i / m_steps ) * m_vScale;
         }
       // create duplicate vertex for sideways wrapping
       // otherwise identical to first vertex in the 'ring' except for the U coordinate
-      vtx[offsetF3 + 0] = vtx[offset3 + 0];
-      vtx[offsetF3 + 1] = vtx[offset3 + 1];
-      vtx[offsetF3 + 2] = vtx[offset3 + 2];
+      m_Vertex[offsetF3 + 0] = m_Vertex[offset3 + 0];
+      m_Vertex[offsetF3 + 1] = m_Vertex[offset3 + 1];
+      m_Vertex[offsetF3 + 2] = m_Vertex[offset3 + 2];
 
-      normal[offsetF3 + 0] = normal[offset3 + 0];
-      normal[offsetF3 + 1] = normal[offset3 + 1];
-      normal[offsetF3 + 2] = normal[offset3 + 2];
+      m_Normal[offsetF3 + 0] = m_Normal[offset3 + 0];
+      m_Normal[offsetF3 + 1] = m_Normal[offset3 + 1];
+      m_Normal[offsetF3 + 2] = m_Normal[offset3 + 2];
 
-      texcoord[offsetF2 + 0] = m_uScale;
-      texcoord[offsetF2 + 1] = texcoord[i * (m_facets + 1) * 2 + 1];
+      m_texcoords[offsetF2 + 0] = m_uScale;
+      m_texcoords[offsetF2 + 1] = m_texcoords[i * (m_facets + 1) * 2 + 1];
 
     }
   // create duplicate ring of vertices for longways wrapping
@@ -209,64 +207,63 @@ void pqtorusknots :: render(GemState *state)
       int offset3 = 3 * (m_steps * (m_facets + 1) + j);
       int offset2 = 2 * (m_steps * (m_facets + 1) + j);
 
-      vtx[offset3 + 0] = vtx[j * 3 + 0];
-      vtx[offset3 + 1] = vtx[j * 3 + 1];
-      vtx[offset3 + 2] = vtx[j * 3 + 2];
+      m_Vertex[offset3 + 0] = m_Vertex[j * 3 + 0];
+      m_Vertex[offset3 + 1] = m_Vertex[j * 3 + 1];
+      m_Vertex[offset3 + 2] = m_Vertex[j * 3 + 2];
 
-      normal[offset3 + 0] = normal[j * 3 + 0];
-      normal[offset3 + 1] = normal[j * 3 + 1];
-      normal[offset3 + 2] = normal[j * 3 + 2];
+      m_Normal[offset3 + 0] = m_Normal[j * 3 + 0];
+      m_Normal[offset3 + 1] = m_Normal[j * 3 + 1];
+      m_Normal[offset3 + 2] = m_Normal[j * 3 + 2];
 
-      texcoord[offset2 + 0] = texcoord[j * 2 + 0];
-      texcoord[offset2 + 1] = m_vScale;
+      m_texcoords[offset2 + 0] = m_texcoords[j * 2 + 0];
+      m_texcoords[offset2 + 1] = m_vScale;
     }
   // finally, there's one vertex that needs to be duplicated due to both U and V coordinate.
   int offsetSF3 = 3 * (m_steps * (m_facets + 1) + m_facets);
   int offsetSF2 = 2 * (m_steps * (m_facets + 1) + m_facets);
 
-  vtx[offsetSF3 + 0] = vtx[0];
-  vtx[offsetSF3 + 1] = vtx[1];
-  vtx[offsetSF3 + 2] = vtx[2];
+  m_Vertex[offsetSF3 + 0] = m_Vertex[0];
+  m_Vertex[offsetSF3 + 1] = m_Vertex[1];
+  m_Vertex[offsetSF3 + 2] = m_Vertex[2];
 
-  normal[offsetSF3 + 0] = normal[0];
-  normal[offsetSF3 + 1] = normal[1];
-  normal[offsetSF3 + 2] = normal[2];
+  m_Normal[offsetSF3 + 0] = m_Normal[0];
+  m_Normal[offsetSF3 + 1] = m_Normal[1];
+  m_Normal[offsetSF3 + 2] = m_Normal[2];
 
-  texcoord[offsetSF2 + 0] = m_uScale;
-  texcoord[offsetSF2 + 1] = m_vScale;
+  m_texcoords[offsetSF2 + 0] = m_uScale;
+  m_texcoords[offsetSF2 + 1] = m_vScale;
+}
 
+
+////////////////////////////////////////////////////////
+// render
+//
+/////////////////////////////////////////////////////////
+void pqtorusknots :: render(GemState *state)
+{
+  if(m_modified)genVert();
+  if(!m_Index)return;
+  
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
 
   glVertexPointer(3, GL_FLOAT, 0, m_Vertex);            
-  glNormalPointer(GL_FLOAT, 0, m_normal);
+  glNormalPointer(GL_FLOAT, 0, m_Normal);
 
   if (state->texture && state->numTexCoords)
     {
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
       for (int i = 0; i < 4; i++)
         {
-          if (&texcoord[i])
+          if (m_Texcoord[i])
             {
               glClientActiveTextureARB(GL_TEXTURE0_ARB + i);
-              glTexCoordPointer(2, GL_FLOAT, 0, &texcoord[i]);
+              glTexCoordPointer(2, GL_FLOAT, 0, m_Texcoord[i]);
             }
         }
       //glClientActiveTextureARB(GL_TEXTURE0_ARB);
     }
   glDrawElements(m_PrimitiveType,m_Indices,GL_UNSIGNED_INT,m_Index);
-
-  delete[] m_Vertex;
-  m_Vertex = NULL;
-
-  delete[] m_normal;
-  m_normal = NULL;
-
-  delete[] m_Index;
-  m_Index = NULL;
-	
-  delete[] texcoord;
-  texcoord = NULL;
 }
 void pqtorusknots :: postrender(GemState *state)
 {
@@ -353,19 +350,16 @@ void pqtorusknots :: pqMess(float p, float q)
 /////////////////////////////////////////////////////////
 void pqtorusknots :: typeMess(t_symbol *type)
 {
-  if (gensym("line")==type) 
-    m_drawType = GL_LINE_LOOP;
-  else if (gensym("fill")==type) 
-    m_drawType = GL_QUADS;
-  else if (gensym("point")==type)
-    m_drawType = GL_POINTS;
-  else if (gensym("default")==type)
-    m_drawType = GL_TRIANGLE_STRIP;
-  else
-    {
-      error ("GEM: pqtorusknots draw style %s", type->s_name);
-      return;
-    }
+  char c=*type->s_name;
+  switch(c){
+  case 'l': case 'L':   m_drawType = GL_LINE_LOOP; break;
+  case 'f': case 'F':   //m_drawType = GL_QUADS; break;
+  case 'd': case 'D':   m_drawType = GL_TRIANGLE_STRIP; break;// default
+  case 'p': case 'P':   m_drawType = GL_POINTS; break;
+  default:
+    error ("GEM: square draw style");
+    return;
+  }
   setModified();
 }
 
