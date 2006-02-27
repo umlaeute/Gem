@@ -65,12 +65,26 @@ glsl_program :: ~glsl_program()
   if (m_length) free(m_length);
   if (m_name) free(m_name);
   if (m_symname) free(m_symname);
+//  if (m_param) free(m_param);
   if (m_param)
   {
 	for (int i = 0; i < m_uniformCount; i++)
 	  free(m_param[i]);
 	free(m_param);
   }
+/*  if (m_name)
+  {
+	  for (int i = 0; i < m_uniformCount; i++)
+	    free(m_name[i]);
+	  free(m_name);
+  }
+  if (m_symname)
+  {
+	  for (int i = 0; i < m_uniformCount; i++)
+	    free(m_symname[i]);
+	  free(m_symname);
+  }
+*/
   if (m_flag) free(m_flag);
 #endif
 }
@@ -162,7 +176,7 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 #ifdef GL_ARB_shader_objects
   int i=0;
   if (m_program){
-  for(i=0; i<=m_uniformCount; i++){
+  for(i=0; i<m_uniformCount; i++){
     if(s==m_symname[i]){
 //      post("uniform parameters #%d", i);
       // don't know what to do with that...
@@ -304,16 +318,7 @@ void glsl_program :: getVariables()
 {
 #ifdef GL_ARB_shader_objects
   if(m_linked)
-  {
-	//
-    // Get the number of uniforms, and the length of the longest name.
-    //
-    glGetObjectParameterivARB( m_program,
-			      GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB,
-			      &m_maxLength);
-    glGetObjectParameterivARB( m_program, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
-			      &m_uniformCount); 
-
+  { 
     //
     // Allocate arrays to store the answers in. For simplicity, the return
     // from malloc is not checked for NULL.
@@ -323,13 +328,23 @@ void glsl_program :: getVariables()
     if (m_length) free(m_length);
     if (m_name) free(m_name);
     if (m_symname) free(m_symname);
+//    if (m_param) free(m_param);
 	if (m_param)
 	{
-	  for (int i = 0; i < m_uniformCount; i++)
-	    free(m_param[i]);
-	  free(m_param);
+		for (int i = 0; i < m_uniformCount; i++)
+			free(m_param[i]);
+		free(m_param);
 	}
 	if (m_flag) free(m_flag);
+
+	//
+    // Get the number of uniforms, and the length of the longest name.
+    //
+    glGetObjectParameterivARB( m_program,
+			      GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB,
+			      &m_maxLength);
+    glGetObjectParameterivARB( m_program, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
+			      &m_uniformCount);
 
     m_size   = (GLint *) malloc(m_uniformCount * sizeof(GLint));
     m_type   = (GLenum *) malloc(m_uniformCount * sizeof(GLenum));
