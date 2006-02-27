@@ -241,7 +241,7 @@ AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup st
 
 gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $PKG_LIBS"
-AC_CHECK_FUNCS(lqt_add_video_track)
+AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_add_video_track])], AC_DEFINE(HAVE_LQT_ADD_VIDEO_TRACK))
 LIBS="$gem_tmp_lqt_libs"
 
 
