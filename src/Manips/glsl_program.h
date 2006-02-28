@@ -102,9 +102,7 @@ class GEM_EXTERN glsl_program : public GemBase
   //////////
   // Variables for the, uh, variables
   GLint				m_uniformCount;
-  GLcharARB			**m_name;
   t_symbol          **m_symname;
-  GLsizei			*m_length;
   GLint				*m_size;
   GLenum			*m_type;
   float				**m_param;

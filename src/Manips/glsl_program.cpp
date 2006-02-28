@@ -38,7 +38,7 @@ glsl_program :: glsl_program()
   :
 m_program(0), 
 m_maxLength(0), m_infoLength(0), m_uniformCount(0),
-m_symname(NULL), m_length(NULL), m_size(NULL), m_type(NULL),
+m_symname(NULL), m_size(NULL), m_type(NULL),
 m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
 m_infoLog(NULL), m_num(0)
 #endif
