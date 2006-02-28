@@ -86,6 +86,9 @@ class GEM_EXTERN glsl_program : public GemBase
   //////////
   // What can we play with?
   virtual void 	getVariables();
+
+  void createArrays();
+  void destroyArrays();
   
   //////////
   // Print Info about Hardware limits
@@ -94,7 +97,7 @@ class GEM_EXTERN glsl_program : public GemBase
 #ifdef GL_ARB_shader_objects
   GLhandleARB		m_program;
   t_GLshaderObj		m_shaderObj[MAX_NUM_SHADERS];
-  GLint				m_maxLength;
+  GLint				m_maxLength, m_infoLength;
   
   //////////
   // Variables for the, uh, variables
@@ -108,6 +111,7 @@ class GEM_EXTERN glsl_program : public GemBase
   int				*m_flag;
   
   GLint				m_linked;
+  bool                  m_wantLink;
   GLcharARB*		m_infoLog;
   int				m_num;
 #endif
