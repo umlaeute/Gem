@@ -104,23 +104,18 @@ void pix_snap :: snapMess()
 		m_originalImage = new imageStruct;
 		m_originalImage->xsize = m_width;
 		m_originalImage->ysize = m_height;
-		m_originalImage->csize = 4;
-                #ifndef __APPLE__
-		m_originalImage->type  = GL_UNSIGNED_BYTE;
-		m_originalImage->format = GL_RGBA;
-                #else
-                m_originalImage->type  = GL_UNSIGNED_INT_8_8_8_8_REV;
-		m_originalImage->format = GL_BGRA_EXT;
-                #endif
+                /* magic: on __APPLE__ this could actually set to GL_BGRA_EXT ! */
+                m_originalImage->setCsizeByFormat(GL_RGBA);
+                m_originalImage->upsidedown = 0;
+
 		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
 	}
-#ifdef __APPLE__
+
     glFinish();
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
     glPixelStorei(GL_PACK_ROW_LENGTH, 0);
     glPixelStorei(GL_PACK_SKIP_ROWS, 0);
     glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
-#endif
 
     glReadPixels(m_x, m_y, m_width, m_height,
     	    	 m_originalImage->format, m_originalImage->type, m_originalImage->data);    
