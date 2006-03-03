@@ -115,6 +115,12 @@ class GEM_EXTERN pix_texture : public GemBase
 		int             m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 		bool            m_normalized;  // whether the image is power of 2
         int				m_mode; //rectangle or power of 2
+		
+		//////////
+		// texture envirnoment mode
+		void			envMess(int num);
+		GLint			m_env; // GL_TEXTURE_ENV_MODE
+		
         int				m_clientStorage; //for Apple's client storage extension
         GLenum			m_internalFormat;
         int				m_yuv; // try to texture YUV-images directly when gxf-card says it is possible to do so
@@ -128,6 +134,7 @@ class GEM_EXTERN pix_texture : public GemBase
 	static void 	floatMessCallback(void *data, float n);
 	static void 	textureMessCallback(void *data, t_floatarg n);
 	static void 	modeCallback(void *data, t_floatarg n);
+	static void     envMessCallback(void *data, t_floatarg n);
 	static void 	repeatMessCallback(void *data, t_floatarg n);
 	static void 	clientStorageCallback(void *data, t_floatarg n);
 	static void 	yuvCallback(void *data, t_floatarg n);

@@ -9,7 +9,7 @@
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    Copyright (c) 2002-2003 James Tittle & Chris Clepper
+//    Copyright (c) 2002-2006 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -47,7 +47,7 @@ pix_texture :: pix_texture()
   : m_textureOnOff(1), 
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
     m_rebuildList(0), m_textureObj(0),m_textureType( GL_TEXTURE_2D ),
-    m_mode(0),
+    m_mode(0), m_env(GL_MODULATE),
     m_clientStorage(0), //have to do this due to texture corruption issues
     m_yuv(1)
 {
@@ -58,6 +58,7 @@ pix_texture :: pix_texture()
   #if defined(GL_TEXTURE_RECTANGLE_EXT) 
   //|| defined(GL_NV_TEXTURE_RECTANGLE)
   m_mode = 1;  //default to the fastest mode for systems that support it
+  m_textureType = GL_TEXTURE_RECTANGLE_EXT;
   #endif
   
   // create an outlet to send texture ID
@@ -79,11 +80,17 @@ void pix_texture :: setUpTextureState() {
 #ifdef GL_TEXTURE_RECTANGLE_EXT
   if (m_mode && GemMan::texture_rectangle_supported){
     if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)
+	{
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
     // JMZ: disabled the following, as rectangle-textures are clamped anyhow
-    // JMZ: and normalized ones, lose their setting 
-	//  m_repeat = GL_CLAMP_TO_EDGE;
+    // JMZ: and normalized ones, lose their setting
+	// TIGITAL: this is necessary on osx, at least with non-powerof2 textures!
+	//			otherwise, weird texturing occurs (looks similar to pix_refraction)
+	// NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
+	// POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
+	  m_repeat = GL_CLAMP_TO_EDGE;
       debug("pix_texture: using rectangle texture");
+	}
   }
 #endif // GL_TEXTURE_RECTANGLE_EXT
 
@@ -91,9 +98,7 @@ void pix_texture :: setUpTextureState() {
   if (GemMan::client_storage_supported && m_clientStorage){
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
     debug("pix_texture: using client storage");
-  }
-
-  else {
+  } else {
     glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
     debug("pix_texture: not using client storage");
@@ -105,22 +110,27 @@ void pix_texture :: setUpTextureState() {
   
 #endif // CLIENT_STORAGE
     
-
   glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
   glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
   
-
+/*
 #ifdef GL_TEXTURE_RECTANGLE_EXT
   if (m_mode)
     if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
 #endif //GL_TEXTURE_RECTANGLE_EXT
-      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+*/
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
 }
 
+/////////////////////////////////////////////////////////
+// setTexCoords
+//
 // upsidedown is derived from the imageStruct.upsidedown
 // use this when loading images...
+//
+/////////////////////////////////////////////////////////
 inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean upsidedown=false){
   if(!upsidedown){
       coords[0].s = 0.f;
@@ -170,46 +180,48 @@ void pix_texture :: render(GemState *state) {
   debug("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize, x_2, m_imagebuf.ysize, y_2);
 
 #ifdef GL_VERSION_1_1
-    int texType = m_textureType;
+  int texType = m_textureType;
 
 
 #ifdef GL_TEXTURE_RECTANGLE_EXT
-    if (m_mode){
+  if (m_mode){
 	if (/*!normalized &&*/ GemMan::texture_rectangle_supported ){
 	    m_textureType = GL_TEXTURE_RECTANGLE_EXT;
 	    debug("pix_texture:  using GL_TEXTURE_RECTANGLE_EXT");
 	    normalized = 0;
 	}
-    } else 
+  } else 
 #endif // GL_TEXTURE_RECTANGLE_EXT
-    {
-	m_textureType = GL_TEXTURE_2D;
+  {
+    m_textureType = GL_TEXTURE_2D;
 	debug("pix_texture:  using GL_TEXTURE_2D");
 	normalized = 0;
-    }
-    if (m_textureType!=texType){
+  }
+  if (m_textureType!=texType){
 	debug("pix_texture:  texType != m_textureType");
 	stopRendering();startRendering();
-    }
+  }
     
-    glEnable(m_textureType);
-    glBindTexture(m_textureType, m_textureObj);
+  glEnable(m_textureType);
+  glBindTexture(m_textureType, m_textureObj);
     
 #ifdef GL_APPLE_texture_range
-    if (state->image->newfilm ){
-	if ( GemMan::texture_range_supported && GemMan::texture_rectangle_supported && m_mode){
-	    glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_EXT, 
+  if (state->image->newfilm ){
+    //  tigital:  shouldn't we also allow TEXTURE_2D here?
+	if ( GemMan::texture_range_supported ){
+//	if ( GemMan::texture_range_supported && GemMan::texture_rectangle_supported && m_mode){
+	    glTextureRangeAPPLE( m_textureType, 
 			    m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 
 			    m_imagebuf.data );
 	    debug("pix_texture:  using glTextureRangeAPPLE()");
 	}else{
-	    glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_EXT, 0, NULL );
+	    glTextureRangeAPPLE( m_textureType, 0, NULL );
 	}
-	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+	glTexParameteri( m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
 	// GL_STORAGE_SHARED_APPLE -  AGP texture path
 	// GL_STORAGE_CACHED_APPLE - VRAM texture path
 	// GL_STORAGE_PRIVATE_APPLE - normal texture path
-    }
+  }
 #endif // GL_APPLE_texture_range
 
 #elif GL_EXT_texture_object
@@ -371,8 +383,6 @@ void pix_texture :: render(GemState *state) {
   outlet_float(m_outTexID, (t_float)m_textureObj);
 }
 
-
-
 /////////////////////////////////////////////////////////
 // postrender
 //
@@ -462,7 +472,7 @@ void pix_texture :: textureQuality(int type)
   setModified();
 }
 /////////////////////////////////////////////////////////
-// textureQuality
+// texture repeat message
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: repeatMess(int type)
@@ -490,7 +500,34 @@ void pix_texture :: repeatMess(int type)
   }
   setModified();
 }
-
+/////////////////////////////////////////////////////////
+// texture environment mode
+//
+/////////////////////////////////////////////////////////
+void pix_texture :: envMess(int num)
+{
+  switch (num) {
+	case 0:
+	  m_env = GL_REPLACE;
+	  break;
+	case 1:
+	  m_env = GL_DECAL;
+	  break;
+	case 2:
+	  m_env = GL_BLEND;
+	  break;
+	case 3:
+	  m_env = GL_ADD;
+	  break;
+	case 4:
+	  m_env = GL_COMBINE;
+	  break;
+	default:
+	  m_env = GL_MODULATE;
+  }
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
+  setModified();
+}
 /////////////////////////////////////////////////////////
 // static member functions
 //
@@ -502,6 +539,8 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("quality"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::repeatMessCallback,
 		  gensym("repeat"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_texture::envMessCallback,
+		  gensym("env"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::modeCallback,
 		  gensym("mode"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::clientStorageCallback,
@@ -522,12 +561,14 @@ void pix_texture :: repeatMessCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->repeatMess((int)quality);
 }
-
+void pix_texture :: envMessCallback(void *data, t_floatarg num )
+{
+  GetMyClass(data)->envMess((int) num);
+}
 void pix_texture :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_mode=((int)quality);
   GetMyClass(data)->m_rebuildList=1;
-
 }
 
 void pix_texture :: clientStorageCallback(void *data, t_floatarg quality)
@@ -539,4 +580,3 @@ void pix_texture :: yuvCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_yuv=((int)quality);
 }
-
