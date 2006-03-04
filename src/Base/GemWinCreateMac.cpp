@@ -357,12 +357,12 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         glWInfo.aglAttributes [i++] = AGL_PIXEL_SIZE;
         glWInfo.aglAttributes [i++] = 32;
         glWInfo.aglAttributes [i++] = AGL_DEPTH_SIZE; // 0, 16, 24, or 32
-        glWInfo.aglAttributes [i++] = 32;
-/*		glWInfo.aglAttributes [i++] = AGL_AUX_BUFFERS;
-		glWInfo.aglAttributes [i++] = 3;
-//		glWInfo.aglAttributes [i++] = AGL_STENCIL_SIZE; // 0 or 8
+        glWInfo.aglAttributes [i++] = 24;
+//		glWInfo.aglAttributes [i++] = AGL_AUX_BUFFERS;
+//		glWInfo.aglAttributes [i++] = 3;
+		glWInfo.aglAttributes [i++] = AGL_STENCIL_SIZE; // 0 or 8
 		glWInfo.aglAttributes [i++] = 8;
-		glWInfo.aglAttributes [i++] = AGL_ACCUM_RED_SIZE; // 8 or 16
+/*		glWInfo.aglAttributes [i++] = AGL_ACCUM_RED_SIZE; // 8 or 16
 		glWInfo.aglAttributes [i++] = 8;
 		glWInfo.aglAttributes [i++] = AGL_ACCUM_GREEN_SIZE;
 		glWInfo.aglAttributes [i++] = 8;
