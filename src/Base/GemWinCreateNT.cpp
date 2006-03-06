@@ -47,12 +47,12 @@ BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
     pfd.dwLayerMask = PFD_MAIN_PLANE;
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 24;
-	pfd.cRedBits = 8;
-	pfd.cBlueBits = 8;
-	pfd.cGreenBits = 8;
+    pfd.cRedBits = 8;
+    pfd.cBlueBits = 8;
+    pfd.cGreenBits = 8;
     pfd.cDepthBits = 16;
     pfd.cAccumBits = 0;
-    pfd.cStencilBits = 0;
+    pfd.cStencilBits = 8;
 
     int pixelformat;
     if ( (pixelformat = ChoosePixelFormat(hdc, &pfd)) == 0 )

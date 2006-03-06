@@ -28,8 +28,8 @@
 
 
 // window creation variables
-static int snglBuf24[] = {GLX_RGBA, GLX_RED_SIZE, 8, GLX_GREEN_SIZE, 8, GLX_BLUE_SIZE, 8, GLX_DEPTH_SIZE, 16, None};
-static int dblBuf24[] = {GLX_RGBA, GLX_RED_SIZE, 4, GLX_GREEN_SIZE, 4, GLX_BLUE_SIZE, 4, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+static int snglBuf24[] = {GLX_RGBA, GLX_RED_SIZE, 8, GLX_GREEN_SIZE, 8, GLX_BLUE_SIZE, 8, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, None};
+static int dblBuf24[] = {GLX_RGBA, GLX_RED_SIZE, 4, GLX_GREEN_SIZE, 4, GLX_BLUE_SIZE, 4, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, GLX_DOUBLEBUFFER, None};
 static int snglBuf8[] = {GLX_RGBA, GLX_RED_SIZE, 3, GLX_GREEN_SIZE, 3, GLX_BLUE_SIZE, 2, GLX_DEPTH_SIZE, 16, None};
 static int dblBuf8[] = {GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 2, GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 
@@ -38,6 +38,7 @@ int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
   // we don't really care about the error
   // let's hope for the best
+  printf("error handler: please report to the Gem-dev's!!\n");
   if ( event->error_code != BadWindow ) {
     char buf[256];
     XGetErrorText (dpy, event->error_code, buf, sizeof(buf));
@@ -262,14 +263,17 @@ int topmostGemWindow(WindowInfo &info, int state){
   return 1;
 }
 
-
 void destroyGemWindow(WindowInfo &info)
 {
+  /* both glXMakeCurrent() and XCloseDisplay() will crash the application
+   * if the handler of the display (info.dpy) is invalid, e.g. because
+   * somebody closed the Gem-window with xkill or by clicking on the "x" of the window
+   */
   if (info.dpy)
     {
       int err=0;
-      /* patch by cesare marilungo to prevent the crash below */
-      glXMakeCurrent(info.dpy, None, NULL);
+      /* patch by cesare marilungo to prevent the crash "on my laptop" */
+      glXMakeCurrent(info.dpy, None, NULL); /* this crashes if no window is there! */
 
       if (info.win)
 	err=XDestroyWindow(info.dpy, info.win);
@@ -279,6 +283,7 @@ void destroyGemWindow(WindowInfo &info)
       }
       if (info.cmap)
 	err=XFreeColormap(info.dpy, info.cmap);
+
 #ifdef HAVE_LIBXXF86VM
       if (info.fs){
 	XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
@@ -286,25 +291,8 @@ void destroyGemWindow(WindowInfo &info)
 	info.fs=0;
       }
 #endif
-#if 0
-/*
- * JMZ: disabled XCloseDisplay() because it likes to freeze the screen
- * the problem seems to be the event-handler which starts to send
- * to nowhere when we stop the display
- * probably it is just sending the "close" message which is 
- * caught by Gem which in turn sends a "close" message,....
- *
- * the problem with disabling the XCloseDisplay() is, 
- * that the ressource is not freed at all, resulting in
- * a memory leak _and_ the X-server is going to refuse
- * connections after a certain number of creations
- */
-      error("[gemwin]: not really closing X-Display");
-      error("[gemwin]:   this is just a temporary workaround to avoid freezes");
-      error("[gemwin]:   this should be fixed properly!!!");
-#else
-      err=XCloseDisplay(info.dpy);
-#endif
+
+      err=XCloseDisplay(info.dpy); /* this crashes if no window is there */
     }
   info.dpy = NULL;
   info.win = 0;
