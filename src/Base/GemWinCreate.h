@@ -77,6 +77,7 @@ class GEM_EXTERN WindowInfo
   int         screen;             // X Screen
   Colormap    cmap;               // X color map
   GLXContext  context;            // OpenGL context
+  Atom        delete_atom;
 
 #ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop

@@ -24,7 +24,7 @@
 
 #define EVENT_MASK  \
  ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
- ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | ResizeRedirectMask
+ ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | ResizeRedirectMask | DestroyNotify
 
 
 // window creation variables
@@ -216,6 +216,15 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     }
 
   XSelectInput(info.dpy, info.win, EVENT_MASK);
+
+  /* found a bit at
+   * http://biology.ncsa.uiuc.edu/library/SGI_bookshelves/SGI_Developer/books/OpenGL_Porting/sgi_html/apf.html
+   * LATER think about reacting on this event...
+   */
+
+  if ((info.delete_atom = XInternAtom(info.dpy, "WM_DELETE_WINDOW",
+                              True)) != None)
+    XSetWMProtocols(info.dpy, info.win, &info.delete_atom,1);
 
   XSetStandardProperties(info.dpy, info.win,
 			 hints.title, "gem", 
