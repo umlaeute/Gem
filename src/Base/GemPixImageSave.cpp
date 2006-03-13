@@ -414,14 +414,15 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
   jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
   jpeg_start_compress(&cinfo, TRUE);
 
-  row_stride = image->xsize * 3;	/* JSAMPLEs per row in image_buffer */
+  row_stride = image->xsize * image->csize;	/* JSAMPLEs per row in image_buffer */
 
   while (cinfo.next_scanline < cinfo.image_height) {
     /* jpeg_write_scanlines expects an array of pointers to scanlines.
      * Here the array is only one element long, but you could pass
      * more than one scanline at a time if that's more convenient.
      */
-    row_pointer[0] = & image_buffer[cinfo.next_scanline * row_stride];
+    int rowindex=(image->upsidedown)?(cinfo.next_scanline * row_stride):((cinfo.image_height-cinfo.next_scanline) * row_stride);
+    row_pointer[0] = & image_buffer[rowindex];
     if(jpeg_write_scanlines(&cinfo, row_pointer, 1) < 0){
       error("GEM: could not write line %d to image %s", cinfo.next_scanline, filename);
       jpeg_finish_compress(&cinfo);
