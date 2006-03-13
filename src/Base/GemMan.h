@@ -181,6 +181,7 @@ class GEM_EXTERN GemMan
 	static int	   texture_yuv_supported;
         static float	   fps;
         static int	   fsaa;
+	static bool        pleaseDestroy;
 #ifdef __APPLE__
 		static AGLContext masterContext;
 #endif

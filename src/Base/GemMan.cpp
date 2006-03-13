@@ -96,6 +96,7 @@ int GemMan::texture_range_supported = 0;
 int GemMan::texture_yuv_supported = 0;
 float GemMan::fps;
 int GemMan::fsaa = 0;
+bool GemMan::pleaseDestroy=false;
 
 #ifdef __APPLE__
 AGLContext GemMan::masterContext = NULL;
@@ -232,8 +233,13 @@ static void dispatchGemWindowMessages()
 	  break; 
 	}
     }
+  
+  if (XCheckTypedEvent(win.dpy,  ClientMessage, &event)) {
+    GemMan::pleaseDestroy=true;
+  }
+  
   clock_delay(s_windowClock, s_windowDelTime);  
-} 
+}
 #elif __APPLE__
 static pascal OSStatus dispatchGemWindowMessages()
 {
@@ -716,6 +722,8 @@ void GemMan :: render(void *)
 
   if (!m_windowState)
     return;
+
+  if(GemMan::pleaseDestroy)GemMan::destroyWindow();
 
   // are we profiling?
 #ifdef __WIN32__
@@ -1210,6 +1218,7 @@ int GemMan :: createWindow(char* disp)
 /////////////////////////////////////////////////////////
 void GemMan :: destroyWindow()
 {
+  GemMan::pleaseDestroy=false;
 #ifdef __WIN32__
   // don't want to get rid of this
   if (s_singleContext)

@@ -307,6 +307,7 @@ void destroyGemWindow(WindowInfo &info)
   info.win = 0;
   info.cmap = 0;
   info.context = NULL;
+  if(info.delete_atom)info.delete_atom=0; /* not very sophisticated destruction...*/
 }
 
 #endif // unix

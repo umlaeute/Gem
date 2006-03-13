@@ -60,7 +60,7 @@ class GEM_EXTERN WindowInfo
   WindowInfo() :
     fs(0), 
 #ifdef __unix__
-    dpy(NULL), win(0), cmap(0), context(NULL)
+    dpy(NULL), win(0), cmap(0), context(NULL), delete_atom(0)
 #elif __WIN32__
     win(NULL), dc(NULL), context(NULL)
 #elif __APPLE__
