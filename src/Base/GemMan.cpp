@@ -45,10 +45,6 @@
 # include <GL/glext.h>
 #endif
 
-#ifdef __APPLE__
-extern bool HaveValidContext (void);
-#endif // __APPLE__
-
 static WindowInfo gfxInfo;
 static WindowInfo constInfo;
 
@@ -634,10 +630,7 @@ void GemMan :: resetState()
   m_clear_color[1] = 0.0;
   m_clear_color[2] = 0.0;
   m_clear_color[3] = 0.0;
-#ifdef __APPLE__
-  if (HaveValidContext ())
-#endif
-    glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
+  glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
 
   m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
   m_mat_ambient[0] = 0.1f;
@@ -970,12 +963,12 @@ void GemMan :: render(void *)
   }
 #elif __APPLE__
     {
-        UnsignedWide endTime;
-        ::Microseconds(&endTime);
-        float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
-        GemMan::fps = (1 / (seconds * 1000)) * 1000;
-    //   m_fps = (1 / (seconds * 1000)) * 1000;
-      //  post("GEM: time: %f", seconds);
+	  UnsignedWide endTime;
+	  ::Microseconds(&endTime);
+	  float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+	  GemMan::fps = (1 / (seconds * 1000)) * 1000;
+	  //m_fps = (1 / (seconds * 1000)) * 1000;
+	  post("GEM: time: %f", seconds);
     }
 #else
 #error Define OS specific profiling

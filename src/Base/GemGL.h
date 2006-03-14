@@ -30,6 +30,7 @@
 # include <OpenGL/gl.h>
 # include <OpenGL/glu.h>
 # include <OpenGL/glext.h>
+# include <OpenGL/OpenGL.h>
 #else
 
 // on mesa, GL_GLEXT_LEGACY automatically includes glext.h from within gl.h

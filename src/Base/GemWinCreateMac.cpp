@@ -67,22 +67,17 @@ const short kWindowType = kWindowDocumentProc;
 
 // GL stuff
 Boolean gfHasPackedPixels = false;
-//structGLInfo		glInfo;
 structGLWindowInfo	glWInfo;
 AGLDrawable 		gaglDraw = NULL;
-//Rect 			grectWin;
-AGLContext 		gaglContext = 0;
-GLuint 			gFontList = 0;
-char 			gInfoString [512] = "";
-static bool 		haveContext = false;
+AGLContext			gaglContext = 0;
+GLuint				gFontList = 0;
+char				gInfoString [512] = "";
 
 EventHandlerUPP		gEvtHandler;
 EventHandlerRef		ref;
 ProcessSerialNumber	psn = {0, kCurrentProcess };
 static pascal OSStatus evtHandler(EventHandlerCallRef myHandler, EventRef event, void* userData);
 
-void SetContextValid (bool val);
-bool HaveValidContext (void);
 AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight);
 
 // Prototypes
@@ -398,7 +393,6 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         post("MAC:  no info.context");
         return (0);
     }
-    SetContextValid (true);
     hints.real_w = hints.width;
     hints.real_h = hints.height;
     info.fs = 0;//hints.fullscreen;
@@ -1375,19 +1369,6 @@ OSStatus aglReportError (void)
 		return noErr;
 	else
 		return (OSStatus) err;
-}
-
-void SetContextValid (bool val)
-{
-	haveContext = val;
-}
-
-bool HaveValidContext (void)
-{
-//	if (haveContext)
-		return true;
-//	else
-//		return false;
 }
 
 static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event, void* userData)

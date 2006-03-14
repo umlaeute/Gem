@@ -18,10 +18,6 @@
 
 #include "Base/GemMan.h"
 
-#ifdef __APPLE__
-extern bool HaveValidContext (void);
-#endif
-
 CPPEXTERN_NEW_WITH_ONE_ARG(world_light, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
@@ -61,13 +57,6 @@ world_light :: world_light(t_floatarg lightNum)
 ////////////////////////////////////////////////////////
 world_light :: ~world_light()
 {
-#ifdef __APPLE__
-  if ( !HaveValidContext () ){
-    if (m_light)
-      GemMan::freeLight(m_light);
-    return;
-  }
-#endif
   stopRendering();
   if (m_light)
     GemMan::freeLight(m_light);
@@ -128,12 +117,6 @@ void world_light :: startRendering()
 ////////////////////////////////////////////////////////
 void world_light :: stopRendering()
 {
-#ifdef __APPLE__
-  if (!HaveValidContext ()) {
-    post("GEM: world_light: need context to call glDisable");
-    return;
-  }
-#endif
   if (m_thing)gluDeleteQuadric(m_thing);
 
   m_thing = NULL;

@@ -38,11 +38,6 @@
 # define FONT_SCALE 1.0
 #endif
 
-#ifdef __APPLE__
-# include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
-
 using std::string;
 using std::vector;
 
