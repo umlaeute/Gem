@@ -17,10 +17,6 @@
 #include "Base/GemMan.h"
 #include "Base/GemPixUtil.h"
 
-#ifdef __APPLE__
-extern bool HaveValidContext (void);
-#endif // __APPLE__
-
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
@@ -50,6 +46,34 @@ pix_multitexture :: ~pix_multitexture()
 { }
 
 /////////////////////////////////////////////////////////
+// setTexCoords
+// upsidedown is derived from the imageStruct.upsidedown
+// use this when loading images...
+//
+/////////////////////////////////////////////////////////
+inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean upsidedown=false){
+  if(!upsidedown){
+      coords[0].s = 0.f;
+      coords[0].t = 0.f;
+      coords[1].s = xRatio;
+      coords[1].t = 0.f;
+      coords[2].s = xRatio;
+      coords[2].t = yRatio;
+      coords[3].s = 0.f;
+      coords[3].t = yRatio;
+  } else {
+      coords[3].s = 0.f;
+      coords[3].t = 0.f;
+      coords[2].s = xRatio;
+      coords[2].t = 0.f;
+      coords[1].s = xRatio;
+      coords[1].t = yRatio;
+      coords[0].s = 0.f;
+      coords[0].t = yRatio;
+  }
+}
+
+/////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
@@ -60,13 +84,21 @@ void pix_multitexture :: render(GemState *state)
 		m_textureType = GL_TEXTURE_2D;
 	else
 		m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-		
+	
+	setTexCoords(m_coords, m_xRatio, m_yRatio, upsidedown);
+	state->texCoords = m_coords;
+	state->numTexCoords = 4;
+	
 	for ( int i=0; i< m_reqTexUnits; i++ )
 	{
 		glActiveTextureARB( GL_TEXTURE0_ARB + i );
 		glEnable( m_textureType );
 		glBindTexture( m_textureType, m_texID[i] );
 	}
+	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+	glEnable(GL_TEXTURE_GEN_S);
+	glEnable(GL_TEXTURE_GEN_T);
 #endif
 }
 
@@ -84,6 +116,8 @@ void pix_multitexture :: postrender(GemState *state)
     glDisable( m_textureType );
   }
   glActiveTextureARB( GL_TEXTURE0_ARB );
+  glDisable(GL_TEXTURE_GEN_S);
+  glDisable(GL_TEXTURE_GEN_T);
 #endif
 }
 
@@ -93,15 +127,9 @@ void pix_multitexture :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_multitexture :: startRendering()
 {
-#ifdef __APPLE__
-  if (!HaveValidContext ()) {
-	post("GEM: pix_multitexture - need window/context to start");
-	return;
-  }
-#endif
 #ifdef GL_MAX_TEXTURE_UNITS_ARB
   glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &m_max );
-  post("[pix_multitexture]: MAX_TEXTURE_UNITS for current context = %d", m_max);
+  post("[%s]: MAX_TEXTURE_UNITS for current context = %d", m_objectname->s_name, m_max);
 #endif
 }
 

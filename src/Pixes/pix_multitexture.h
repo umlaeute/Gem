@@ -66,6 +66,13 @@ class GEM_EXTERN pix_multitexture : public GemBase
 		GLint			m_texID[32];
 		GLint			m_textureType;
 		int				m_mode; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D
+		
+		//////////
+		// The texture coordinates
+		TexCoord    	m_coords[4];
+		float			m_xRatio;
+		float			m_yRatio;
+		GLboolean		upsidedown;
         
 	
 
