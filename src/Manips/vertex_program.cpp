@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #ifdef __APPLE__
 #include <AGL/agl.h>
@@ -39,7 +40,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM)
 vertex_program :: vertex_program() :
   m_programType(GEM_PROGRAM_none), 
   m_programID(0), 
-  m_programString(NULL), m_size(0)
+  m_programString(NULL), m_size(0),
+  m_envNum(-1)
 {
 }
 vertex_program :: vertex_program(t_symbol *filename) :
@@ -114,7 +116,10 @@ GLint vertex_program :: queryProgramtype(char*program)
 
 void vertex_program :: openMess(t_symbol *filename)
 {
-  if(NULL==filename || NULL==filename->s_name)return;
+  char buf2[MAXPDSTRING];
+  char *bufptr=NULL;
+
+  if(NULL==filename || NULL==filename->s_name || &s_==filename || 0==*filename->s_name)return;
 #ifdef __APPLE__
   if (!HaveValidContext ()) {
     post("GEM: [%s] - need window/context to load program", m_objectname->s_name);
@@ -122,12 +127,17 @@ void vertex_program :: openMess(t_symbol *filename)
   }
 #endif
 
-  canvas_makefilename(getCanvas(), filename->s_name, m_buf, MAXPDSTRING);
-
   // Clean up any open files
   closeMess();
 
-  //char *data;
+  int fd=-1;
+  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, filename->s_name, "", 
+                        buf2, &bufptr, MAXPDSTRING, 1))>=0){
+    close(fd);
+    sprintf(m_buf, "%s/%s", buf2, bufptr);
+  } else
+    canvas_makefilename(getCanvas(), filename->s_name, m_buf, MAXPDSTRING);
+
   FILE *file = fopen(m_buf,"r");
   if(file) {
     fseek(file,0,SEEK_END);
@@ -279,7 +289,9 @@ void vertex_program :: render(GemState *state)
 {
 #if defined GL_ARB_vertex_program || defined GL_NV_vertex_program
   LoadProgram();
-  glProgramEnvParameter4fvARB(m_programTarget, m_envNum, m_param);
+  if(m_programID&&(m_envNum>=0)){
+    glProgramEnvParameter4fvARB(m_programTarget, m_envNum, m_param);
+  }
 #endif
 } 
 
@@ -289,12 +301,14 @@ void vertex_program :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_program :: postrender(GemState *state)
 {
-  switch(m_programType){
-  case  GEM_PROGRAM_NV:  case  GEM_PROGRAM_ARB:
-    glDisable( m_programTarget );
-    break;
-  default:
-    break;
+  if(m_programID){
+    switch(m_programType){
+    case  GEM_PROGRAM_NV:  case  GEM_PROGRAM_ARB:
+      glDisable( m_programTarget );
+      break;
+    default:
+      break;
+    }
   }
 }
 

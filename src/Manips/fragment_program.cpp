@@ -107,7 +107,7 @@ void fragment_program :: printInfo()
 #endif
 	GLint bitnum = 0;
 	post("fragment_Program Hardware Info");
-	post("============================");
+	post("==============================");
 	
 #ifdef GL_MAX_PROGRAM_MATRICES_ARB
 	glGetIntegerv( GL_MAX_PROGRAM_MATRICES_ARB, &bitnum );
