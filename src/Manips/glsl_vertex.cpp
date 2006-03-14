@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #ifdef __APPLE__
 #include <AGL/agl.h>
@@ -117,10 +118,19 @@ void glsl_vertex :: openMess(t_symbol *filename)
 # endif
 
   char buf[MAXPDSTRING];
-  canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
+  char buf2[MAXPDSTRING];
+  char *bufptr=NULL;
 
   // Clean up any open files
   closeMess();
+
+  int fd=-1;
+  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, filename->s_name, "", 
+                        buf2, &bufptr, MAXPDSTRING, 1))>=0){
+    close(fd);
+    sprintf(buf, "%s/%s", buf2, bufptr);
+  } else
+    canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
 
   FILE *file = fopen(buf,"r");
   if(file) {

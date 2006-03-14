@@ -1,9 +1,12 @@
+What is on the TODO-list for release 0.91
+=========================================
+
 How to read this document
 : pending
 :+ will likely be resolved for gem-0.91
 :- will unlikely be resolved for gem-0.91
 + resolved
-- will not be resolved for gem-0.91
+- will NOT be resolved for gem-0.91
 
 
 General Rendering Issues
@@ -11,15 +14,14 @@ General Rendering Issues
 : stencil buffer
 
 Missing help-patches
-:+ glsl_*
-:+ arb-shaders
++ glsl_* (DONE)
++ arb-shaders (DONE)
 :+ pix_record
 + pix_share_{read,write} (DONE)
-
+:+ gemframebuffer
 
 Untested objects
 : gemframebuffer
-: gempbuffer
 + pix_share_{read,write} (DONE, works now on linux; has to be tested on OSX again)
 
 
