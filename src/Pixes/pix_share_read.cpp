@@ -96,7 +96,13 @@ CPPEXTERN_NEW_WITH_GIMME(pix_share_read)
 
 pix_share_read :: ~pix_share_read()
 {
-
+#ifndef __WIN32__
+  if(shm_id>0){
+    if (shmdt(shm_addr) == -1) post("shmdt failed");
+	
+    if (shmctl(shm_id,IPC_RMID, &shm_desc) == -1) post("shmctl failed");
+  }
+#endif
 }
 
 void pix_share_read :: render(GemState *state)

@@ -11,16 +11,16 @@ General Rendering Issues
 : stencil buffer
 
 Missing help-patches
-: glsl_*
-: arb-shaders
-: pix_record
-: pix_share_{read,write}
+:+ glsl_*
+:+ arb-shaders
+:+ pix_record
++ pix_share_{read,write} (DONE)
 
 
 Untested objects
 : gemframebuffer
 : gempbuffer
-: pix_share_{read,write}
++ pix_share_{read,write} (DONE, works now on linux; has to be tested on OSX again)
 
 
 Object specific bugs
