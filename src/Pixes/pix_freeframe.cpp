@@ -278,7 +278,7 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
   } else {
     error("pix_freeframe: no instance of plugin available");
   }
-
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
