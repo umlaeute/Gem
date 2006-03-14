@@ -22,11 +22,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#ifdef __APPLE__
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
-
 CPPEXTERN_NEW_WITH_ONE_ARG(glsl_vertex, t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
@@ -110,12 +105,6 @@ void glsl_vertex :: openMess(t_symbol *filename)
 {
 #ifdef GL_ARB_shader_objects
   if(NULL==filename || NULL==filename->s_name)return;
-# ifdef __APPLE__
-  if (!HaveValidContext ()) {
-    post("GEM: [%s] - need window/context to load shader", m_objectname->s_name);
-    return;
-  }
-# endif
 
   char buf[MAXPDSTRING];
   char buf2[MAXPDSTRING];
@@ -222,12 +211,6 @@ void glsl_vertex :: postrender(GemState *state)
 void glsl_vertex :: printInfo()
 {
 #ifdef GL_ARB_vertex_shader
-# ifdef __APPLE__
-	if (!HaveValidContext ()) {
-		post("GEM: vertex_shader - need window/context to load shader");
-		return;
-	}
-# endif
 	GLint bitnum = 0;
 	post("Vertex_shader Hardware Info");
 	post("============================");

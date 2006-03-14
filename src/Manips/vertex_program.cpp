@@ -3,7 +3,7 @@
 // GEM - Graphics Environment for Multimedia
 //
 // Created by tigital on 10/16/04.
-// Copyright 2004 James Tittle
+// Copyright 2004-2006 James Tittle
 //
 // Implementation file
 //
@@ -21,11 +21,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
-
-#ifdef __APPLE__
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
 
 CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM)
 
@@ -120,12 +115,6 @@ void vertex_program :: openMess(t_symbol *filename)
   char *bufptr=NULL;
 
   if(NULL==filename || NULL==filename->s_name || &s_==filename || 0==*filename->s_name)return;
-#ifdef __APPLE__
-  if (!HaveValidContext ()) {
-    post("GEM: [%s] - need window/context to load program", m_objectname->s_name);
-    return;
-  }
-#endif
 
   // Clean up any open files
   closeMess();
@@ -273,7 +262,6 @@ void vertex_program :: LoadProgram(void)
 #endif
 }
 
-
 void vertex_program :: startRendering()
 {
   if (m_programString == NULL)
@@ -318,12 +306,6 @@ void vertex_program :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_program :: printInfo()
 {
-#ifdef __APPLE__
-	if (!HaveValidContext ()) {
-		post("GEM: vertex_program - need window/context to load program");
-		return;
-	}
-#endif
 #ifdef GL_ARB_vertex_program
 	GLint bitnum = 0;
 	post("Vertex_Program Hardware Info");

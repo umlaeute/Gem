@@ -16,12 +16,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#ifdef __APPLE__
-#include <OpenGL/OpenGL.h>
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
-
 
 CPPEXTERN_NEW(glsl_program)
 
@@ -229,12 +223,7 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
 {
 #ifdef GL_ARB_shader_objects
   int i;
-# ifdef __APPLE__
-  if (!HaveValidContext ()) {
-    post("GEM: glsl_program - need window/context to load program");
-    return;
-  }
-# endif
+
   if (!argc)
     {
       error("GEM: [%s]: can't link non-existent shaders", m_objectname->s_name);
@@ -381,12 +370,6 @@ void glsl_program :: printInfo()
 {
 #ifdef GL_ARB_shader_objects
   int i;
-# ifdef __APPLE__
-  if (!HaveValidContext ()) {
-    post("GEM: glsl_program - need window/context to load program");
-    return;
-  }
-# endif
 
   if(!m_linked) 
     {

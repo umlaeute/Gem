@@ -18,11 +18,6 @@
 
 #include "fragment_program.h"
 #include "string.h"
-#ifdef __APPLE__
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
-
 
 CPPEXTERN_NEW_WITH_ONE_ARG(fragment_program, t_symbol *, A_DEFSYM)
 
@@ -99,12 +94,6 @@ void fragment_program :: paramMess(t_float envNum, t_float param1, t_float param
 /////////////////////////////////////////////////////////
 void fragment_program :: printInfo()
 {
-#ifdef __APPLE__
-	if (!HaveValidContext ()) {
-		post("GEM: fragment_program - need window/context to load program");
-		return;
-	}
-#endif
 	GLint bitnum = 0;
 	post("fragment_Program Hardware Info");
 	post("==============================");

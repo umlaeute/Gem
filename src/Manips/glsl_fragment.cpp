@@ -20,11 +20,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifdef __APPLE__
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
-
 CPPEXTERN_NEW_WITH_ONE_ARG(glsl_fragment, t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
@@ -61,12 +56,6 @@ glsl_fragment :: ~glsl_fragment()
 void glsl_fragment :: printInfo()
 {
 #ifdef GL_ARB_fragment_shader
-# ifdef __APPLE__
-	if (!HaveValidContext ()) {
-		post("GEM:[%s] needs window/context to load shader", m_objectname->s_name);
-		return;
-	}
-# endif
 	GLint bitnum = 0;
 	post("glsl_fragment Hardware Info");
 	post("============================");
