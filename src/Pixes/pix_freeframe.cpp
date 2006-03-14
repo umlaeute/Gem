@@ -118,8 +118,6 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
 
   m_plugin=ff_loadplugin(buf, &can_rgba);
 
-  post("plugin @ %X", m_plugin);
-
   m_image.setCsizeByFormat(can_rgba?GL_RGBA:GL_RGB);
 
   if(!m_plugin)throw(GemException("couldn't load FreeFrame-plugin"));
@@ -136,25 +134,23 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     error("plugin %s: numparameters failed",  pluginname);
     throw(GemException("reading numparameters failed"));
   }
-
   m_inlet=new t_inlet*[numparams];
 
   int parmType=0;
-  char tempVt[2];
+  char tempVt[5];
   t_symbol *s_inletType=0;
   char *p_name;
   post("pix_freeframe[%s]:", pluginname);
-
   for(unsigned int i=0;i<numparams; i++){
-    sprintf(tempVt, "#%d", i);
+    sprintf(tempVt, "#%d\0", i);
     // display
     //   ParameterName:
     //   ParameterDisplayValue:
     // use
     //   ParameterType
-
     parmType=FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, (LPVOID)i, 0));
     p_name=  FF_PLUGMAIN_STR(m_plugin(FF_GETPARAMETERNAME, (LPVOID)i, 0));
+
     post("\tparam%s: %s", tempVt, p_name);
 
     switch(parmType){
