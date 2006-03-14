@@ -19,21 +19,21 @@
 
 class GEM_EXTERN pix_share_write : public GemBase
 {
-CPPEXTERN_HEADER(pix_share_write, GemBase)
+  CPPEXTERN_HEADER(pix_share_write, GemBase)
 
-	public:
-		pix_share_write(t_float name, t_float width, t_float height, t_float color);
+    public:
+  pix_share_write(int, t_atom*);
 		
-	protected:
-		~pix_share_write();
+ protected:
+  ~pix_share_write();
 		
-		virtual void render(GemState *state);
+  virtual void render(GemState *state);
 #ifndef __WIN32__
-		int	shm_id;
-		unsigned char *shm_addr;
-		struct shmid_ds shm_desc;
+  int	shm_id;
+  unsigned char *shm_addr;
+  struct shmid_ds shm_desc;
 #endif
-		int	m_height, m_width, m_color, m_size;
+  int	m_height, m_width, m_color, m_size;
 		
 
 };

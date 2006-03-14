@@ -24,7 +24,7 @@ class GEM_EXTERN pix_share_read : public GemBase
 CPPEXTERN_HEADER(pix_share_read, GemBase)
 
 	public:
-		pix_share_read(t_float f1,t_float width ,t_float height, t_float color);
+  pix_share_read(int,t_atom*);
 		
 	protected:
 		~pix_share_read();
@@ -36,7 +36,7 @@ CPPEXTERN_HEADER(pix_share_read, GemBase)
 		unsigned char *shm_addr;
 		struct shmid_ds shm_desc;
 #endif
-		int	m_height, m_width, m_color, m_size;
+		int	m_size;
 		
 		pixBlock	pix;
 
