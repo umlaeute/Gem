@@ -59,10 +59,10 @@ class GEM_EXTERN rubber : public GemShape
   //////////
   // The height of the object
   float		ctrX, ctrY;
-  void	    	heightMess(float height);
+  void		heightMess(float height);
   void		ctrXMess(float center);
   void		ctrYMess(float center);
-  //void		otherMess(float other);        
+         
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
@@ -85,7 +85,6 @@ class GEM_EXTERN rubber : public GemShape
   t_inlet         *m_inletH;
   t_inlet		*inletcX;
   t_inlet		*inletcY;
-  //t_inlet		*inletOt;
   
   //////////
   // Stuff

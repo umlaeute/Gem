@@ -16,9 +16,6 @@
 #define GRID_SIZE_X  32
 #define GRID_SIZE_Y  32
 
-#define CLIP_NEAR  0.0
-#define CLIP_FAR   1000.0
-
 typedef struct {
   float x[3];
   float v[3];
@@ -55,14 +52,11 @@ rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
   m_grid_sizeX = (gridX>0.)?(int)gridX:GRID_SIZE_X;
   m_grid_sizeY = (gridY>0.)?(int)gridY:GRID_SIZE_Y;
 
-  //  if (m_height == 0.f)m_height = 1.f;
-
   // the height inlet
   m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
   inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cX"));
   inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
-  //inletOt = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ot"));
-  //m_drawType = GL_LINE_LOOP;
+
   m_drawType = GL_POLYGON;
   alreadyInit = 0;
   m_blend = 0;
@@ -77,7 +71,6 @@ rubber :: ~rubber()
   inlet_free(m_inletH);
   inlet_free(inletcX);
   inlet_free(inletcY);
-  //inlet_free(inletOt);
   alreadyInit = 0;
 }
 
@@ -103,18 +96,18 @@ void rubber :: rubber_init()
   mass = new MASS[m_grid_sizeX*m_grid_sizeY];
   if (mass == NULL)    {
     post("rubber: Can't allocate memory.\n");	
-    exit(-1);
+    return;
   }
 
   k = 0;
   for (i = 0; i < m_grid_sizeX; i++)
     for (j = 0; j < m_grid_sizeY; j++)
       {
-        mass[k].nail = (i == 0 || j == 0 || i == m_grid_sizeX - 1
-                        || j == m_grid_sizeY - 1);
-        mass[k].x[0] = i/(m_grid_sizeX - 1.0);
-        mass[k].x[1] = j/(m_grid_sizeY - 1.0);
-        mass[k].x[2] = -(CLIP_FAR - CLIP_NEAR)/2.0;
+        mass[k].nail = (i == 0 || j == 0 || i == m_grid_sizeX -1
+                        || j == m_grid_sizeY - 1 );
+        mass[k].x[0] = ((i/(m_grid_sizeX-1.0)) - 0.5);
+        mass[k].x[1] = ((j/(m_grid_sizeY-1.0)) - 0.5);
+		mass[k].x[2] = 0;
         /*
           post("mass[%d].nail = %d",k,mass[k].nail);
           post("mass[%d].x[0] = %f",k,mass[k].x[0]);
@@ -137,12 +130,11 @@ void rubber :: rubber_init()
   if (spring != NULL)delete[]spring;
   spring_count = (m_grid_sizeX - 1)*(m_grid_sizeY - 2)
     + (m_grid_sizeY - 1)*(m_grid_sizeX - 2);
-    
-  //spring = (SPRING *) malloc(sizeof(SPRING)*spring_count);
+
   spring=new SPRING[spring_count];
   if (spring == NULL)    {
     post("rubber: Can't allocate memory.\n");	
-    exit(-1);
+    return;
   }
   
   k = 0;
@@ -176,16 +168,6 @@ void rubber :: render(GemState *state)
   int k, i, j;
   if (m_drawType == GL_LINE_LOOP)glLineWidth(m_linewidth);
     
-  glMatrixMode(GL_MODELVIEW);
-  //	glLoadIdentity();
-  glPushMatrix();
-
-  glScalef(m_size, m_size, m_size);
-  glTranslatef(-1.0, -1.0, 0.0);
-
-  glOrtho(-0.5, 0.5, -0.5, 0.5, CLIP_NEAR, CLIP_FAR);
-  //glOrtho(0.5, GemMan::m_width - 0.5, 0.5, GemMan::m_height - 0.5, CLIP_NEAR, CLIP_FAR);
-    
   if (m_blend) {
     glEnable(GL_POLYGON_SMOOTH);
     glEnable(GL_BLEND);
@@ -193,7 +175,7 @@ void rubber :: render(GemState *state)
     glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
   }
     
-  glNormal3f(0.0f, 0.0f, 1.0f);
+//  glNormal3f(0.0f, 0.0f, 1.0f);
      
   if (state->texture && state->numTexCoords>=3) {
 
@@ -215,14 +197,29 @@ void rubber :: render(GemState *state)
     for (i = 0; i < m_grid_sizeX - 1; i++)  {
       for (j = 0; j < m_grid_sizeY - 1; j++){
         glBegin(GL_POLYGON);
+#if 0
         glTexCoord2fv(mass[k].t);
-        glVertex3fv(mass[k].x);
+		glVertex3fv(mass[k].x);
         glTexCoord2fv(mass[k + 1].t);
-        glVertex3fv(mass[k + 1].x);
+		glVertex3fv(mass[k + 1].x);
         glTexCoord2fv(mass[k + m_grid_sizeY + 1].t);
-        glVertex3fv(mass[k + m_grid_sizeY + 1].x);
+		glVertex3fv(mass[k + m_grid_sizeY + 1].x);
         glTexCoord2fv(mass[k + m_grid_sizeY].t);
-        glVertex3fv(mass[k + m_grid_sizeY].x);
+		glVertex3fv(mass[k + m_grid_sizeY].x);
+#else
+        glTexCoord2fv(mass[k].t);
+        glVertex3f(mass[k].x[0]*m_size,mass[k].x[1]*m_size,mass[k].x[2]);
+        glTexCoord2fv(mass[k + 1].t);
+        glVertex3f(mass[k + 1].x[0]*m_size,mass[k + 1].x[1]*m_size,mass[k + 1].x[2]);
+        glTexCoord2fv(mass[k + m_grid_sizeY + 1].t);
+        glVertex3f( mass[k + m_grid_sizeY + 1].x[0]*m_size,
+					 mass[k + m_grid_sizeY + 1].x[1]*m_size,
+					 mass[k + m_grid_sizeY + 1].x[2]);
+        glTexCoord2fv(mass[k + m_grid_sizeY].t);
+        glVertex3f( mass[k + m_grid_sizeY].x[0]*m_size,
+					mass[k + m_grid_sizeY].x[1]*m_size,
+					mass[k + m_grid_sizeY].x[2] );
+#endif
         glEnd();
         k++;
       }
@@ -239,14 +236,29 @@ void rubber :: render(GemState *state)
     for (i = 0; i < m_grid_sizeX - 1; i++)  {
       for (j = 0; j < m_grid_sizeY - 1; j++){
         glBegin(m_drawType);
+#if 0
         glTexCoord2fv(mass[k].t);
-        glVertex3fv(mass[k].x);
+		glVertex3fv(mass[k].x);
         glTexCoord2fv(mass[k + 1].t);
-        glVertex3fv(mass[k + 1].x);
+		glVertex3fv(mass[k + 1].x);
         glTexCoord2fv(mass[k + m_grid_sizeY + 1].t);
-        glVertex3fv(mass[k + m_grid_sizeY + 1].x);
+		glVertex3fv(mass[k + m_grid_sizeY + 1].x);
         glTexCoord2fv(mass[k + m_grid_sizeY].t);
-        glVertex3fv(mass[k + m_grid_sizeY].x);
+		glVertex3fv(mass[k + m_grid_sizeY].x);
+#else
+        glTexCoord2fv(mass[k].t);
+        glVertex3f(mass[k].x[0]*m_size,mass[k].x[1]*m_size,mass[k].x[2]);
+        glTexCoord2fv(mass[k + 1].t);
+        glVertex3f(mass[k + 1].x[0]*m_size,mass[k + 1].x[1]*m_size,mass[k + 1].x[2]);
+        glTexCoord2fv(mass[k + m_grid_sizeY + 1].t);
+        glVertex3f( mass[k + m_grid_sizeY + 1].x[0]*m_size,
+					 mass[k + m_grid_sizeY + 1].x[1]*m_size,
+					 mass[k + m_grid_sizeY + 1].x[2]);
+        glTexCoord2fv(mass[k + m_grid_sizeY].t);
+        glVertex3f( mass[k + m_grid_sizeY].x[0]*m_size,
+					mass[k + m_grid_sizeY].x[1]*m_size,
+					mass[k + m_grid_sizeY].x[2] );
+#endif
         glEnd();
         k++;
       }
@@ -263,8 +275,6 @@ void rubber :: render(GemState *state)
             }
     */
   }
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
 }
 /*
   Do the dynamics simulation for the next frame.
@@ -320,9 +330,6 @@ void rubber :: rubber_dynamics()
         mass[k].v[0] *= (1.0 - m_drag);
         mass[k].v[1] *= (1.0 - m_drag);
         mass[k].v[2] *= (1.0 - m_drag);
-
-        if (mass[k].x[2] > -CLIP_NEAR - 0.01)mass[k].x[2] = -CLIP_NEAR - 0.01;
-        if (mass[k].x[2] < -CLIP_FAR + 0.01) mass[k].x[2] = -CLIP_FAR  + 0.01;
       }
 
   /* if a mass point is grabbed, attach it to the mouse */
@@ -331,7 +338,7 @@ void rubber :: rubber_dynamics()
     {
       mass[grab].x[0] = ctrX;
       mass[grab].x[1] = ctrY;
-      mass[grab].x[2] = (CLIP_FAR - CLIP_NEAR)/4.0*m_height; /* jmz: added height */
+	  mass[grab].x[2] = m_height;
     }
 }
 
