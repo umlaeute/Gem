@@ -66,7 +66,6 @@
 #X text 13 76 Description: set the ARB vertex shader;
 #X text 24 95 [vertex_program] loads and applies an ARB (or NV) vertex
 shader.;
-#X obj 451 206 vertex_program;
 #X obj 520 164 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
 #N canvas 0 0 450 300 open 0;
@@ -165,14 +164,15 @@ to load;
 #X obj 451 296 teapot;
 #X obj 453 422 fragment_program;
 #X text 451 405 see also:;
+#X obj 451 206 vertex_program toon.vp;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 16 0;
 #X connect 15 0 16 1;
 #X connect 16 0 22 0;
-#X connect 22 0 28 0;
-#X connect 28 0 33 0;
+#X connect 22 0 40 0;
+#X connect 28 0 29 0;
 #X connect 29 0 30 0;
-#X connect 30 0 31 0;
-#X connect 31 0 28 0;
-#X connect 33 0 38 0;
+#X connect 30 0 40 0;
+#X connect 32 0 37 0;
+#X connect 40 0 32 0;
