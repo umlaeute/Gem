@@ -40,7 +40,6 @@ public:
 	
 	void enable();
 	void disable();
-	void bindTexture(GLuint tex);
 	
 	int width;
 	int height;

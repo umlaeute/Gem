@@ -16,7 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
+ 
+#if 0
+# define debug post
+#else
+# define debug
+#endif
 
 #ifdef __unix__
 /* linux
@@ -314,8 +319,8 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 
 /*
  */
-PBuffer::~PBuffer() {
-  //
+PBuffer::~PBuffer()
+{  
   if(data->context) CGLDestroyContext( data->context );
   if(data->pbuffer) CGLDestroyPBuffer( data->pbuffer );
   if(data->pixfmt) CGLDestroyPixelFormat( data->pixfmt );
@@ -326,30 +331,17 @@ PBuffer::~PBuffer() {
 
 /*
  */
-void PBuffer::enable() {
+void PBuffer::enable()
+{
   OSErr   err;
   GLint vs;
-  //
-  //data->old_context = CGLGetCurrentContext();
+
   cglReportError (CGLSetCurrentContext (data->context));
   cglReportError (CGLGetVirtualScreen ( data->old_context, &vs ));
   cglReportError( CGLSetPBuffer( data->context, data->pbuffer, 0, 0, vs) );
-  //printf ("enable Context (0x%X) Renderer: %s\n",CGLGetCurrentContext(), glGetString (GL_RENDERER));
-  //printf ("pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
-  //
-  return;
-}
-
-void PBuffer::bindTexture(GLuint tex) {
-  //glBindTexture(GL_TEXTURE_2D, tex);
-#ifndef __APPLE__
-  glCopyTexSubImage2D(GL_TEXTURE_2D,0,0,0,0,0,pbuffer->width,pbuffer->height);
-#else
-  //cglReportError( CGLSetCurrentContext( data->old_context ) );
-  //printf ("bind Context (0x%X) Renderer: %s\n",CGLGetCurrentContext(), glGetString (GL_RENDERER));
-  cglReportError( CGLTexImagePBuffer( data->old_context, data->pbuffer, GL_FRONT) );
-  //cglReportError( CGLTexImagePBuffer( data->context, data->pbuffer, GL_BACK) );
-#endif
+  debug ("enable Context (0x%X) Renderer: %s\n",CGLGetCurrentContext(), glGetString (GL_RENDERER));
+  debug ("pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
+  
   return;
 }
 
