@@ -1,0 +1,36 @@
+General Rendering Issues
+: alpha in gemwindow?
+: stencil buffer
+
+Missing help-patches
+: glsl_*
+: arb-shaders
+: pix_record
+: pix_share_{read,write}
+
+
+Untested objects
+: gemframebuffer
+: gempbuffer
+: pix_share_{read,write}
+
+
+Object specific bugs
+: [pix_write] upside down when using jpg
+: [pix_image] sometimes crashes when loading non-existant image (or image which is neither jpeg nor tiff)
+: [separator] memleak
+
+
+OS specific bugs
+linux:
+: sometimes window freezes on "destroy"
+: when the window is closed from "outside", destroying it (and sometimes even rendering to it) will destroy the window
+: pix_record still not compiling
+
+
+
+osx:
+: autoconf buildsystem non-functional
+: remove checks for valid openGL-context
+: SequenceGrabber long-term stability (keeps logging you out)
+
