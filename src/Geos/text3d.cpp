@@ -57,9 +57,6 @@ text3d :: text3d(int argc, t_atom *argv)
   : TextBase(argc, argv)
     , m_font(NULL)
 {
-#ifdef __APPLE__
-  if (!HaveValidContext ()) {post("GEM: geo: text3d - need window to load font");return;}
-#endif
    fontNameMess(DEFAULT_FONT);
  }
 

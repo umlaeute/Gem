@@ -55,9 +55,6 @@ textoutline :: textoutline(int argc, t_atom *argv)
   : TextBase(argc, argv)
     , m_font(NULL)
 {
-#ifdef __APPLE__
-  if (!HaveValidContext ()) {post("GEM: geo: textoutline - need window to load font");return;}
-#endif
    fontNameMess(DEFAULT_FONT);
  }
 

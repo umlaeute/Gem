@@ -15,11 +15,6 @@
 /////////////////////////////////////////////////////////
 
 #include "model.h"
-
-#ifdef __APPLE__
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
  
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM)
 
@@ -146,12 +141,6 @@ void model :: groupMess(int state)
 /////////////////////////////////////////////////////////
 void model :: openMess(t_symbol *filename)
 {
-#ifdef __APPLE__
-  if (!HaveValidContext ()) {
-    post("GEM: geo: model - need window to load model");
-    return;
-  }
-#endif
   cleanModel();
     
   char buf[MAXPDSTRING];
@@ -212,7 +201,7 @@ void model :: render(GemState *state)
         if(m_model)glmLinearTexture(m_model,currentH,currentW);
 	//        post("model: resizing texcoords");
         buildList();
-        }
+	}
         
   if (!m_dispList)return;
   glCallList(m_dispList);

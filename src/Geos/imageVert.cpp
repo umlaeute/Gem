@@ -17,11 +17,6 @@
 
 #include "imageVert.h"
 
-#ifdef __APPLE__
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
-#endif
-
 CPPEXTERN_NEW(imageVert)
 
   /////////////////////////////////////////////////////////
