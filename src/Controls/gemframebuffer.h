@@ -40,7 +40,7 @@ class GEM_EXTERN gemframebuffer : public GemBase
 
 	    //////////
 	    // Constructor
-    	gemframebuffer();
+    	gemframebuffer(t_symbol *colorspace);
 
     protected:
     	
@@ -67,6 +67,12 @@ class GEM_EXTERN gemframebuffer : public GemBase
     	//////////
     	// change the size dimensions
     	void	    	dimMess(int width, int height);
+		
+		////////// 
+		// colorspace-message
+		virtual void	csMess(char* format);
+		t_symbol *colorspace;
+		int m_colorspace;
     	
 	private:
 
@@ -77,6 +83,9 @@ class GEM_EXTERN gemframebuffer : public GemBase
 		GLuint			m_texTarget;
 		int				m_width, m_height;
 		int				m_mode; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D
+		int				m_internalformat;
+		int				m_format;
+		int				m_type;
 		t_outlet		*m_outTexInfo;
 		
 		void			CheckErrorsGL( const char* location = NULL, 
@@ -90,6 +99,7 @@ class GEM_EXTERN gemframebuffer : public GemBase
 		static void		modeCallback(void *data, t_floatarg quality);
 		static void 	dimMessCallback(void *data, t_floatarg width, t_floatarg height );
 		static void		texTargetCallback(void *data, t_floatarg tt);
+		static void		csMessCallback(void *data, t_symbol *colorspace);
 };
 
 #endif	// for header file
