@@ -123,7 +123,7 @@ class GEM_EXTERN glsl_program : public GemBase
   static void paramMessCallback (void *data, t_symbol *, int, t_atom*);
   static void shaderMessCallback (void *data, t_symbol *, int, t_atom*);
   static void openMessCallback   (void *data, t_symbol *filename);
-  static void linkCallback  (void *);
+  static void linkCallback  (void *, t_symbol*, int, t_atom*);
   static void printMessCallback  (void *);
 };
 

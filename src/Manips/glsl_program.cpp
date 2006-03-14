@@ -476,8 +476,10 @@ void glsl_program :: shaderMessCallback(void *data, t_symbol *, int argc, t_atom
 {
   GetMyClass(data)->shaderMess(argc, argv);
 }
-void glsl_program :: linkCallback(void *data)
+void glsl_program :: linkCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
+  if(argc)
+    GetMyClass(data)->shaderMess(argc, argv);
   GetMyClass(data)->m_wantLink=1;
   //  GetMyClass(data)->LinkProgram();
 }
