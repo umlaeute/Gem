@@ -18,11 +18,12 @@ Missing help-patches
 + arb-shaders (DONE)
 + pix_record
 + pix_share_{read,write} (DONE)
-:+ gemframebuffer
+:+ gemframebuffer/gempbuffer
 
 Untested objects
-: gemframebuffer
+:+ gemframebuffer/gempbuffer
 + pix_share_{read,write} (DONE, works now on linux; has to be tested on OSX again)
+: vertex_* ?
 
 
 Object specific bugs
@@ -40,7 +41,7 @@ linux:
 
 
 osx:
-: autoconf buildsystem non-functional
-: remove checks for valid openGL-context
+:+ autoconf buildsystem non-functional
++ remove checks for valid openGL-context (DONE)
 : SequenceGrabber long-term stability (keeps logging you out)
 
