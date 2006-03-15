@@ -16,7 +16,7 @@ General Rendering Issues
 Missing help-patches
 + glsl_* (DONE)
 + arb-shaders (DONE)
-:+ pix_record
++ pix_record
 + pix_share_{read,write} (DONE)
 :+ gemframebuffer
 
