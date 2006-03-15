@@ -24,35 +24,29 @@ pix_record :: pix_record(int argc, t_atom *argv):
   m_currentFrame(-1),
   m_handle(NULL)
 {
-  int m_xoff = 0, m_yoff = 0;
-  int m_width = 0, m_height = 0;
+  int xoff = 0, yoff = 0;
+  int width = 0, height = 0;
   if (argc == 4) {
-    m_xoff = (int)atom_getfloat(&argv[0]);
-    m_yoff = (int)atom_getfloat(&argv[1]);
-    m_width = (int)atom_getfloat(&argv[2]);
-    m_height = (int)atom_getfloat(&argv[3]);
+    xoff = (int)atom_getfloat(&argv[0]);
+    yoff = (int)atom_getfloat(&argv[1]);
+    width = (int)atom_getfloat(&argv[2]);
+    height = (int)atom_getfloat(&argv[3]);
   } else if (argc == 2) {
-    m_width = (int)atom_getfloat(&argv[0]);
-    m_height = (int)atom_getfloat(&argv[1]);
+    width = (int)atom_getfloat(&argv[0]);
+    height = (int)atom_getfloat(&argv[1]);
   } else if (argc != 0){
     error("GEM: pix_record: needs 0, 2, or 4 values");
-    m_xoff = m_yoff = 0;
-    m_width = m_height = 128;
+    xoff = yoff = 0;
+    width = height = 128;
 	 
   }
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("size"));
-  
   m_outNumFrames = outlet_new(this->x_obj, 0);
 
-  m_automatic = false;
-  m_banged = false;
-
 #ifdef HAVE_QUICKTIME
-  m_handle=new recordQT(m_xoff, m_yoff, m_width, m_height);
+  m_handle=new recordQT(xoff, yoff, width, height);
 #elif defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
-  m_handle=new recordQT4L(m_xoff, m_yoff, m_width, m_height);
+  m_handle=new recordQT4L(xoff, yoff, width, height);
 #else
   post("[pix_record]: Gem has been compiled without pix-recording capabilities!");
 #endif
@@ -174,7 +168,6 @@ void pix_record :: codecMess(t_atom *argv)
 {
   if(m_handle){
     int err=0;
-    post("codec-mess");
     if    (A_SYMBOL==argv->a_type)err=m_handle->setCodec(atom_getsymbol(argv)->s_name);
     else if(A_FLOAT==argv->a_type)err=m_handle->setCodec(atom_getint(argv));
 
@@ -211,12 +204,18 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
 		  gensym("auto"), A_FLOAT, A_NULL);
   class_addbang(classPtr, (t_method)&pix_record::bangMessCallback);
 
-  class_addmethod(classPtr, (t_method)&pix_record::sizeMessCallback,
-		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_record::posMessCallback,
-		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_record::recordMessCallback,
 		  gensym("record"), A_FLOAT, A_NULL);
+
+  class_addmethod(classPtr, (t_method)&pix_record::sizeMessCallback,
+		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_record::sizeMessCallback,
+		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_record::posMessCallback,
+		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_record::posMessCallback,
+		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
+
   class_addmethod(classPtr, (t_method)&pix_record::dialogMessCallback,
 		  gensym("dialog"),  A_NULL);
   class_addmethod(classPtr, (t_method)&pix_record::codeclistMessCallback,
