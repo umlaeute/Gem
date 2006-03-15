@@ -242,31 +242,23 @@ void gemframebuffer :: csMess(char* format)
     if (!strcmp(format, "RGB")){
       m_colorspace = GL_RGB;
       post("[gemframebuffer]: colorspace is GL_RGB %d",m_colorspace);
-#ifdef __APPLE__
-//	  m_format = GL_BGR; m_pixBlock.image.type = GL_UNSIGNED_BYTE_2_3_3_REV;
-#else
-      m_format = GL_RGB; m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-#endif
       destroyFBO();
-	  initFBO();
+      initFBO();
       return;
     } else
     
     if (!strcmp(format, "RGBA")){
 	// colorspace will equal RGBA
-      m_colorspace = GL_RGBA;
       post("[gemframebuffer]: colorspace is GL_RGBA %d",m_colorspace);
 #ifdef __APPLE__
       m_colorspace = GL_BGRA;
       m_format = GL_BGRA;
-//      m_pixBlock.image.format = GL_UNSIGNED_BYTE;
-      //m_pixBlock.image.format = GL_UNSIGNED_INT_8_8_8_8_REV;
-      //m_pixBlock.image.format = GL_UNSIGNED_SHORT_1_5_5_5_REV;
 #else 
-      m_format = GL_RGBA; m_pixBlock.image.format = GL_UNSIGNED_BYTE;
+      m_colorspace = GL_RGBA;
+      m_format = GL_RGBA;
 #endif
       destroyFBO();
-	  initFBO();
+      initFBO();
       return;
 	} else
 	if (!strcmp(format, "FLOAT")){
@@ -276,13 +268,8 @@ void gemframebuffer :: csMess(char* format)
     } else {
       m_colorspace = GL_YUV422_GEM;
       m_format = GL_YUV422_GEM;
-#ifdef __APPLE__
-//      m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-#else
-      m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-#endif
       destroyFBO();
-	  initFBO();
+      initFBO();
     }
 }
 /////////////////////////////////////////////////////////
