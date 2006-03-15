@@ -11,35 +11,21 @@
 #ifndef INCLUDE_PIX_SHARE_READ_H
 #define INCLUDE_PIX_SHARE_READ_H
 
-#include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
-#include <sys/types.h>
-#ifndef __WIN32__
-# include <sys/ipc.h>
-# include <sys/shm.h>
-#endif
+#include "pix_share_write.h"
 
-class GEM_EXTERN pix_share_read : public GemBase
+class GEM_EXTERN pix_share_read : public pix_share_write
 {
-CPPEXTERN_HEADER(pix_share_read, GemBase)
+  CPPEXTERN_HEADER(pix_share_read, pix_share_write)
 
-	public:
+    public:
   pix_share_read(int,t_atom*);
 		
-	protected:
-		~pix_share_read();
+ protected:
+  ~pix_share_read();
 		
-		virtual void render(GemState *state);
+  virtual void render(GemState *state);
 		
-		int	shm_id;
-#ifndef __WIN32__
-		unsigned char *shm_addr;
-		struct shmid_ds shm_desc;
-#endif
-		int	m_size;
-		
-		pixBlock	pix;
-
+  pixBlock	pix;
 };
 
 #endif
