@@ -95,15 +95,15 @@ void pix_texture :: setUpTextureState() {
 #endif // GL_TEXTURE_RECTANGLE_EXT
 
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
-  if (GemMan::client_storage_supported && m_clientStorage){
-    glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-    debug("pix_texture: using client storage");
-  } else {
-    glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
-    glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
-    debug("pix_texture: not using client storage");
+  if (GemMan::client_storage_supported){
+    if(m_clientStorage){
+      glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
+      debug("pix_texture: using client storage");
+    } else {
+      glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
+      debug("pix_texture: not using client storage");
+    }
   }
-
 #else
   
   glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
