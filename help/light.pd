@@ -1,4 +1,4 @@
-#N canvas 19 264 710 507 10;
+#N canvas 19 261 710 507 10;
 #X text 475 49 Example:;
 #X obj 7 64 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -37,7 +37,7 @@
 #X connect 7 0 0 0;
 #X connect 8 0 0 0;
 #X restore 479 360 pd gemwin;
-#X msg 479 341 destroy;
+#X msg 479 341 create;
 #X text 475 320 Create window:;
 #X obj 475 160 cnv 15 150 100 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -53,7 +53,7 @@ if you don't mind parallet light rays.;
 #X text 28 382 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X obj 483 235 light;
 #X msg 570 213 1 1 1;
-#X obj 497 168 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X obj 497 168 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X msg 497 189 debug \$1;
 #X text 19 219 Keep in mind that the attributes have to be set before
@@ -69,7 +69,7 @@ of the values of the light get set first.;
 #X obj 549 261 cnv 15 85 50 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X msg 551 288 lighting \$1;
-#X obj 551 266 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X obj 551 266 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X text 17 155 You can place the light with [rotate] and [translate].
 If you are lost use "debug" to display the light source as a small

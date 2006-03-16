@@ -1,4 +1,4 @@
-#N canvas 237 36 705 650 10;
+#N canvas 237 36 705 634 10;
 #X text 65 336 If you did not use a separator in the example \, then
 one of the chains would have an extra rotation (it is basically random).
 ;
@@ -30,7 +30,7 @@ make separate [pix_*]-chains independent \, use:;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 547 439 pd gemwin;
-#X msg 547 420 destroy;
+#X msg 547 420 create;
 #X text 543 399 Create window:;
 #X obj 59 199 cnv 15 210 40 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -44,18 +44,18 @@ make separate [pix_*]-chains independent \, use:;
 #X obj 66 289 square;
 #X obj 66 98 gemhead;
 #X obj 66 125 color 1 0 0;
-#X obj 66 79 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+#X obj 66 79 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1 1
 ;
 #X obj 421 171 translateXYZ 2 0 0;
 #X obj 421 287 square;
 #X obj 421 99 gemhead;
-#X obj 421 80 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1 1
+#X obj 421 80 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
 ;
 #X obj 66 243 rotateXYZ 45 0 0;
 #X obj 187 243 rotateXYZ 0 45 0;
 #X obj 547 241 rotateXYZ 0 45 0;
 #X obj 421 241 rotateXYZ 45 0 0;
-#X obj 268 25 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+#X obj 268 25 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1 1
 ;
 #X obj 268 43 t f f;
 #X obj 297 64 == 0;

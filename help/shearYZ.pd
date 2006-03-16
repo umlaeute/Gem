@@ -1,4 +1,4 @@
-#N canvas 380 249 667 351 10;
+#N canvas 357 249 667 351 10;
 #X text 452 8 GEM object;
 #X obj 8 226 cnv 15 430 90 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -44,16 +44,18 @@ matrix by the specified shear;
 #X restore 519 288 pd gemwin;
 #X msg 519 269 create;
 #X text 515 248 Create window:;
-#X obj 450 108 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 450 148 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
-#X obj 451 179 square;
-#X floatatom 500 117 3 -4 4 0 - - -;
-#X obj 451 138 shearYZ 1;
+#X floatatom 500 157 3 -4 4 0 - - -;
+#X obj 451 178 shearYZ 1;
 #X text 36 122 the Y translation depend on Z position and the shear
 factor (float).;
+#X obj 451 217 cube;
+#X obj 451 120 rotateXYZ 0 45 0;
 #X connect 18 0 19 0;
 #X connect 19 0 18 0;
-#X connect 22 0 25 0;
-#X connect 24 0 25 1;
-#X connect 25 0 23 0;
+#X connect 22 0 27 0;
+#X connect 23 0 24 1;
+#X connect 24 0 26 0;
+#X connect 27 0 24 0;

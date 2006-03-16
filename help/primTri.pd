@@ -23,7 +23,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 499 323 pd gemwin;
-#X msg 499 304 destroy;
+#X msg 499 304 create;
 #X text 495 283 Create window:;
 #X obj 7 65 cnv 15 450 80 empty empty empty 20 12 0 14 -233017 -66577
 0;

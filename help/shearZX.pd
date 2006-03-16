@@ -47,13 +47,13 @@ matrix by the specified shear;
 #X obj 450 108 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
-#X obj 451 179 square;
 #X floatatom 500 117 3 -4 4 0 - - -;
 #X obj 451 138 shearZX 1;
 #X text 36 122 the Z translation depend on X position and the shear
 factor (float).;
+#X obj 451 179 teapot;
 #X connect 18 0 19 0;
 #X connect 19 0 18 0;
-#X connect 22 0 25 0;
-#X connect 24 0 25 1;
-#X connect 25 0 23 0;
+#X connect 22 0 24 0;
+#X connect 23 0 24 1;
+#X connect 24 0 26 0;
