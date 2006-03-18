@@ -69,6 +69,12 @@ class GEM_EXTERN pix_coordinate : public GemBase
     	// The number
     	int 	    	m_numCoords;
 
+
+	//////////
+	// this is what we get from upstream
+	TexCoord        *m_oldTexCoords;
+	int             m_oldNumCoords;
+
     	//////////
     	// Set the texture coordinates
     	void	    	coordsMess(int argc, t_atom *argv);

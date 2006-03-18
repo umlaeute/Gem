@@ -46,7 +46,9 @@ CPPEXTERN_NEW(pix_texture)
 pix_texture :: pix_texture()
   : m_textureOnOff(1), 
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
-    m_rebuildList(0), m_textureObj(0),m_textureType( GL_TEXTURE_2D ),
+    m_didTexture(false), m_rebuildList(0), m_textureObj(0),
+    m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), 
+    m_textureType( GL_TEXTURE_2D ),
     m_mode(0), m_env(GL_MODULATE),
     m_clientStorage(0), //have to do this due to texture corruption issues
     m_yuv(1)
@@ -158,8 +160,17 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: render(GemState *state) {
-  if (!state->image        || !m_textureOnOff          )return;
-  if(!&state->image->image || !state->image->image.data)return;
+  m_didTexture=0;
+
+  m_oldTexCoords=state->texCoords;
+  m_oldNumCoords=state->numTexCoords;
+  m_oldTexture  =state->texture;
+
+  if(!m_textureOnOff)return;
+
+  if (!state->image || !state->image->image.data)return;
+
+
   GLboolean upsidedown = state->image->image.upsidedown;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
@@ -378,6 +389,8 @@ void pix_texture :: render(GemState *state) {
   // (this is important for things like [pix_coordinate]
   if(m_textureType==GL_TEXTURE_RECTANGLE_EXT)state->texture=2;
 #endif
+
+  m_didTexture=1;
   
   // send textureID to outlet
   outlet_float(m_outTexID, (t_float)m_textureObj);
@@ -388,10 +401,13 @@ void pix_texture :: render(GemState *state) {
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: postrender(GemState *state){
-  if (!m_textureOnOff) return;
-  
-  state->texture = 0;
-  glDisable(m_textureType);
+  state->texCoords   = m_oldTexCoords;
+  state->numTexCoords= m_oldNumCoords;
+  state->texture     = m_oldTexture;
+
+  if (m_didTexture){
+    glDisable(m_textureType);
+  }
 }
 
 /////////////////////////////////////////////////////////

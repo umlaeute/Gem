@@ -39,6 +39,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 pix_film :: pix_film(t_symbol *filename) :
+  m_oldImage(NULL),
   m_haveMovie(0), m_auto(0), 
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
   m_numTracks(0), m_track(0), m_frame(NULL), m_data(NULL), m_film(true),
@@ -173,8 +174,9 @@ void pix_film :: startRendering()
 }
 void pix_film :: render(GemState *state)
 {
+  m_oldImage = state->image;
+
   /* get the current frame from the file */
-  
   newImage = 0;
   if (!m_haveMovie || !m_pixBlock.image.data)return;
   // do we actually need to get a new frame from the movie ?
@@ -215,8 +217,9 @@ void pix_film :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_film :: postrender(GemState *state)
 {
+  state->image=m_oldImage;
     
-    m_pixBlock.newimage = 0;
+  m_pixBlock.newimage = 0;
   if (m_numFrames>0 && m_reqFrame>m_numFrames){
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);

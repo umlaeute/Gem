@@ -107,6 +107,12 @@ class GEM_EXTERN pix_movieYUV : public pix_filmDarwinYUV
   float		m_xRatio;
   float		m_yRatio;
 
+  //////////
+  // this is what we get from upstream
+  TexCoord       *m_oldTexCoords;
+  int             m_oldNumCoords;
+  int             m_oldTexture;
+
  protected:
 	
   //////////

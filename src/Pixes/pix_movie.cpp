@@ -42,6 +42,9 @@ pix_movie :: pix_movie(t_symbol *filename) :
 #else
 #error define pix_film for your OS
 #endif
+  , 
+   m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), 
+   m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f)
 {
   m_film=false;
 }
@@ -154,6 +157,10 @@ void pix_movie :: prepareTexture()
 /////////////////////////////////////////////////////////
 void pix_movie :: texFrame(GemState *state, int doit)
 {
+  m_oldTexCoords=state->texCoords;
+  m_oldNumCoords=state->numTexCoords;
+  m_oldTexture  =state->texture;
+
   state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
@@ -247,14 +254,15 @@ void pix_movie :: texFrame(GemState *state, int doit)
 /////////////////////////////////////////////////////////
 void pix_movie :: postrender(GemState *state)
 {
-//  post("pix_movie: postrender");
+  state->texCoords   = m_oldTexCoords;
+  state->numTexCoords= m_oldNumCoords;
+  state->texture     = m_oldTexture;
+
+  state->image       = m_oldImage;
+  
+  //  post("pix_movie: postrender");
   m_pixBlock.newimage = 0;
-  state->image = NULL;
-  state->texture = 0;
-  if (m_numFrames>0 && m_reqFrame>m_numFrames){
-    m_reqFrame = m_numFrames;
-    outlet_bang(m_outEnd);
-  }
+
 #ifdef GL_TEXTURE_RECTANGLE_EXT
   if ( !GemMan::texture_rectangle_supported)
     glDisable(GL_TEXTURE_2D);
@@ -263,6 +271,11 @@ void pix_movie :: postrender(GemState *state)
 #else
     glDisable(GL_TEXTURE_2D);
 #endif
+
+  if (m_numFrames>0 && m_reqFrame>m_numFrames){
+    m_reqFrame = m_numFrames;
+    outlet_bang(m_outEnd);
+  }
 }
 
 

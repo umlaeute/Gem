@@ -30,18 +30,21 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieDarwin, t_symbol *, A_DEFSYM)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_movieDarwin :: pix_movieDarwin(t_symbol *filename) 
-
+pix_movieDarwin :: pix_movieDarwin(t_symbol *filename) :
+  m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), m_oldImage(NULL),
+  m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f),
+  x_filename(NULL), 
+  m_frame(NULL), m_data(NULL), 
+  m_haveMovie(0), m_auto(0), 
+  m_numFrames(0), m_reqFrame(0), m_curFrame(0), m_track(0),
+  m_xsize(0), m_ysize(0), m_csize(0), 
+  m_film(false), m_newFilm(0), newImage(0), 
+  m_colorspace(GL_YCBCR_422_GEM), m_format(0), m_rectangle(1),
+  m_hiquality(1),
+  m_play(0), m_rate(1.f)
 {
- // m_film=false;
- m_colorspace = GL_YCBCR_422_GEM;
-  m_hiquality = 1;
-  m_play = 0;
-  m_rate = 1;
   prevTime = 0;
   curTime = 0; 
-  m_rectangle = 1;
-  m_haveMovie = 0;
   
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
   
@@ -455,15 +458,12 @@ void pix_movieDarwin :: getFrame()
 
 void pix_movieDarwin :: render(GemState *state)
 {
+  m_oldImage     = state->image;
 
-  //  m_rate = 1;
-    //m_auto = 1;
-   // getFrame();
-    
-    texFrame(state,1);
-    getFrame();
-   // MoviesTask(m_movie,0);
-    //post("pix__movieDarwin: this render function is being called");
+  texFrame(state,1);
+  getFrame();
+  // MoviesTask(m_movie,0);
+  //post("pix__movieDarwin: this render function is being called");
 
 }
 
@@ -616,6 +616,10 @@ void pix_movieDarwin :: setUpTextureState()
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: texFrame(GemState *state, int doit)
 {
+  m_oldTexCoords = state->texCoords;
+  m_oldNumCoords = state->numTexCoords;
+  m_oldTexture   = state->texture;
+
   state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
@@ -777,13 +781,14 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: postrender(GemState *state)
 {
+  state->texCoords   = m_oldTexCoords;
+  state->numTexCoords= m_oldNumCoords;
+  state->texture     = m_oldTexture;
+
+  state->image = m_oldImage;
+
+
   m_pixBlock.newimage = 0;
-  state->image = NULL;
-  state->texture = 0;
-  if (m_numFrames>0 && m_reqFrame>m_numFrames){
-    m_reqFrame = m_numFrames;
-    //outlet_bang(m_outEnd);
-  }
 #ifdef GL_TEXTURE_RECTANGLE_EXT
   if ( !GemMan::texture_rectangle_supported )
     glDisable(GL_TEXTURE_2D);
@@ -792,6 +797,11 @@ void pix_movieDarwin :: postrender(GemState *state)
 #else
     glDisable(GL_TEXTURE_2D);
 #endif
+
+  if (m_numFrames>0 && m_reqFrame>m_numFrames){
+    m_reqFrame = m_numFrames;
+    //outlet_bang(m_outEnd);
+  }
 }
 
 

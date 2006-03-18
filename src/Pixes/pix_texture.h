@@ -90,6 +90,11 @@ class GEM_EXTERN pix_texture : public GemBase
 		GLuint        m_repeat;
 
 		//////////
+		// did we really do texturing in render() ??
+		// good to know in the postrender()...
+		bool          m_didTexture;
+
+		//////////
 		// Do we need to rebuild the display List
 		int           m_rebuildList;
 
@@ -112,20 +117,28 @@ class GEM_EXTERN pix_texture : public GemBase
 		// The texture coordinates
 		TexCoord    	m_coords[4];
 
+	
+		//////////
+		// this is what we get from upstream
+		TexCoord       *m_oldTexCoords;
+		int             m_oldNumCoords;
+		int             m_oldTexture;
+	
+
 		int             m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 		bool            m_normalized;  // whether the image is power of 2
-        int				m_mode; //rectangle or power of 2
+		int		m_mode; //rectangle or power of 2
 		
 		//////////
 		// texture envirnoment mode
-		void			envMess(int num);
-		GLint			m_env; // GL_TEXTURE_ENV_MODE
+		void		envMess(int num);
+		GLint		m_env; // GL_TEXTURE_ENV_MODE
 		
-        int				m_clientStorage; //for Apple's client storage extension
-        GLenum			m_internalFormat;
-        int				m_yuv; // try to texture YUV-images directly when gxf-card says it is possible to do so
+		int		m_clientStorage; //for Apple's client storage extension
+		GLenum		m_internalFormat;
+		int		m_yuv; // try to texture YUV-images directly when gxf-card says it is possible to do so
         
-		t_outlet		*m_outTexID;
+		t_outlet	*m_outTexID;
 
  private:
 

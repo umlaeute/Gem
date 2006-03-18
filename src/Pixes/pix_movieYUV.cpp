@@ -32,14 +32,16 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieYUV, t_symbol *, A_DEFSYM)
 /////////////////////////////////////////////////////////
 pix_movieYUV :: pix_movieYUV(t_symbol *filename) :
 #ifdef __WIN32__
-  pix_filmNT(filename)
+  pix_filmNT(filename),
 #elif __linux__
-  pix_filmLinux(filename)
+  pix_filmLinux(filename),
 #elif __APPLE__
-  pix_filmDarwinYUV(filename)
+  pix_filmDarwinYUV(filename),
 #else
 #error define pix_film for your OS
 #endif
+  m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f),
+  m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0)
 {
   m_film=false;
 }
@@ -152,6 +154,10 @@ void pix_movieYUV :: prepareTexture()
 /////////////////////////////////////////////////////////
 void pix_movieYUV :: texFrame(GemState *state, int doit)
 {
+  m_oldTexCoords=state->texCoords;
+  m_oldNumCoords=state->numTexCoords;
+  m_oldTexture  =state->texture;
+
   state->texture = 1;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
@@ -225,13 +231,14 @@ void pix_movieYUV :: texFrame(GemState *state, int doit)
 /////////////////////////////////////////////////////////
 void pix_movieYUV :: postrender(GemState *state)
 {
+  state->texCoords   = m_oldTexCoords;
+  state->numTexCoords= m_oldNumCoords;
+  state->texture     = m_oldTexture;
+  
+  state->image = m_oldImage;
+  
   m_pixBlock.newimage = 0;
-  state->image = NULL;
-  state->texture = 0;
-  if (m_numFrames>0 && m_reqFrame>m_numFrames){
-    m_reqFrame = m_numFrames;
-    outlet_bang(m_outEnd);
-  }
+
 #ifdef GL_TEXTURE_RECTANGLE_EXT
   if ( !GemMan::texture_rectangle_supported )
     glDisable(GL_TEXTURE_2D);
@@ -240,6 +247,11 @@ void pix_movieYUV :: postrender(GemState *state)
 #else
   glDisable(GL_TEXTURE_2D);
 #endif
+
+  if (m_numFrames>0 && m_reqFrame>m_numFrames){
+    m_reqFrame = m_numFrames;
+    outlet_bang(m_outEnd);
+  }
 }
 
 

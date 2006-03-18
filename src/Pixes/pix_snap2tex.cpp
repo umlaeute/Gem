@@ -36,7 +36,9 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
     m_textureType(GL_TEXTURE_2D), m_repeat(GL_REPEAT),
     m_texWidth(-1), m_texHeight(-1),
     m_oldWidth(-1), m_oldHeight(-1),
-	m_textureObj(0)
+    m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
+    m_textureObj(0),
+    m_didTexture(false)
 {
   if (argc == 4)
     {
@@ -196,6 +198,12 @@ void pix_snap2tex :: snapMess()
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: render(GemState *state)
 {
+  m_didTexture=false;
+
+  m_oldTexCoords=state->texCoords;
+  m_oldNumCoords=state->numTexCoords;
+  m_oldTexture  =state->texture;
+
   if (!m_textureOnOff) return;
 
   state->texture = 1;
@@ -210,7 +218,9 @@ void pix_snap2tex :: render(GemState *state)
   glBindTextureEXT(m_textureType, m_textureObj);
 #else
   glCallList(m_textureObj)
-#endif    
+#endif
+
+    m_didTexture=true;
 
   t_atom ap[4];
   SETFLOAT(ap, (t_float)m_textureObj);
@@ -228,13 +238,13 @@ void pix_snap2tex :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: postrender(GemState *state)
 {
-  if (!m_textureOnOff) return;
+  state->texCoords= m_oldTexCoords;
+  state->numTexCoords=  m_oldNumCoords;
+  state->texture     = m_oldTexture;
 
-  state->texture = 0;
-  state->numTexCoords = 0;	
-  state->texCoords = NULL;	
-
-  glDisable(m_textureType);
+  if (m_didTexture){
+    glDisable(m_textureType);
+  }
 }
 
 /////////////////////////////////////////////////////////

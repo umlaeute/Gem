@@ -30,7 +30,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmYUV, t_symbol *, A_DEFSYM)
 pix_filmYUV :: pix_filmYUV(t_symbol *filename) :
   m_haveMovie(0), m_auto(0), 
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
-  m_numTracks(0), m_track(0), m_frame(NULL), m_data(NULL), m_film(true)
+  m_numTracks(0), m_track(0), m_frame(NULL), m_data(NULL), m_film(true),
+  m_oldImage(NULL)
 {
  // setting the current frame
  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
@@ -163,10 +164,11 @@ void pix_filmYUV :: startRendering()
 }
 void pix_filmYUV :: render(GemState *state)
 {
+  m_oldImage = state->image;
   /* get the current frame from the file */
   int newImage = 0;
- // state->image->newfilm = 0;
- if (!m_haveMovie || !m_pixBlock.image.data)return;
+  // state->image->newfilm = 0;
+  if (!m_haveMovie || !m_pixBlock.image.data)return;
   // do we actually need to get a new frame from the movie ?
 
   if (m_reqFrame != m_curFrame) {
@@ -203,6 +205,8 @@ void pix_filmYUV :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_filmYUV :: postrender(GemState *state)
 {
+  state->image=m_oldImage;
+
   m_pixBlock.newimage = 0;
   if (m_numFrames>0 && m_reqFrame>m_numFrames){
     m_reqFrame = m_numFrames;

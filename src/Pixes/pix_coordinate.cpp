@@ -30,7 +30,8 @@ CPPEXTERN_NEW(pix_coordinate)
 //
 /////////////////////////////////////////////////////////
 pix_coordinate :: pix_coordinate()
-  : m_coords(NULL), m_rectcoords(NULL), m_numCoords(0)
+  : m_coords(NULL), m_rectcoords(NULL), m_numCoords(0),
+    m_oldTexCoords(NULL), m_oldNumCoords(0)
 {
     // the size inlet
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("coords"));
@@ -52,6 +53,9 @@ pix_coordinate :: ~pix_coordinate()
 /////////////////////////////////////////////////////////
 void pix_coordinate :: render(GemState *state)
 {
+  m_oldTexCoords=state->texCoords;
+  m_oldNumCoords=state->numTexCoords;
+
     if (state->texture && m_numCoords){
         state->numTexCoords = m_numCoords;
 
@@ -79,8 +83,8 @@ void pix_coordinate :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_coordinate :: postrender(GemState *state)
 {
-   // state->numTexCoords = 0;
-   // state->texCoords = NULL;
+  state->texCoords= m_oldTexCoords;
+  state->numTexCoords=  m_oldNumCoords;
 }
 
 /////////////////////////////////////////////////////////

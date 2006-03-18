@@ -121,6 +121,13 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   // The size of the texture (so we can use sub image)
   int		m_dataSize[3];
 
+  //////////
+  // this is what we get from upstream
+  TexCoord       *m_oldTexCoords;
+  int             m_oldNumCoords;
+  int             m_oldTexture;
+  pixBLock       *m_oldImage;
+
   GLuint	m_textureObj;	
   float		m_xRatio;
   float		m_yRatio;

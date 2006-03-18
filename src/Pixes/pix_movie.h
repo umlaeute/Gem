@@ -101,6 +101,13 @@ class GEM_EXTERN pix_movie : public pix_filmDarwin
   //////////
   // The texture coordinates
   TexCoord    	m_coords[4];
+	
+  //////////
+  // this is what we get from upstream
+  TexCoord       *m_oldTexCoords;
+  int             m_oldNumCoords;
+  int             m_oldTexture;
+
   //////////
   // The size of the texture (so we can use sub image)
   int		m_dataSize[3];

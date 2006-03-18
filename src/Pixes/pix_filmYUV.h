@@ -147,6 +147,8 @@ class GEM_EXTERN pix_filmYUV : public GemBase
   float		m_fps;
   int		m_newFilm;
 
+  pixStruct    *m_oldImage;
+
   //////////
   // a outlet for information like #frames and "reached end"
   t_outlet     *m_outNumFrames;

@@ -113,6 +113,10 @@ class GEM_EXTERN pix_film : public GemBase
   //-----------------------------------
 
   //////////
+  // what we got from upstream
+  pixBlock* m_oldImage;
+
+  //////////
   // the current file
   t_symbol *x_filename;
 	
