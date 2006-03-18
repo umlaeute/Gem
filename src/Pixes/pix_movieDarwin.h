@@ -19,7 +19,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #elif __linux__
 #include "Pixes/pix_filmLinux.h"
 #elif __APPLE__
-#include "pix_filmDarwinYUV.h"
+#include "pix_filmDarwin.h"
 #else
 #error Define pix_film for this OS
 #endif
@@ -126,7 +126,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   TexCoord       *m_oldTexCoords;
   int             m_oldNumCoords;
   int             m_oldTexture;
-  pixBLock       *m_oldImage;
+  pixBlock       *m_oldImage;
 
   GLuint	m_textureObj;	
   float		m_xRatio;
