@@ -2,10 +2,11 @@
  *  GEM - Graphics Environment for Multimedia
  *
  *  rubber.h
+ *  based on SGI opengl democode
  *  gem_darwin
  *
  *  Created by Jamie Tittle on Sun Jan 19 2003.
- *  Copyright (c) 2003 tigital. All rights reserved.
+ *  Copyright (c) 2003-2006 tigital. All rights reserved.
  *    For information on usage and redistribution, and for a DISCLAIMER OF ALL
  *    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  *
@@ -26,6 +27,18 @@
 #undef sqrt
 #define sqrt fast_sqrtf
 #endif
+
+typedef struct {
+  float x[3];
+  float v[3];
+  float t[2];
+  int nail;
+} MASS;
+
+typedef struct {
+  int i, j;
+  float r;
+} SPRING;
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -82,22 +95,27 @@ class GEM_EXTERN rubber : public GemShape
 
   //////////
   // The height inlet
-  t_inlet         *m_inletH;
+  t_inlet       *m_inletH;
   t_inlet		*inletcX;
   t_inlet		*inletcY;
   
   //////////
-  // Stuff
+  // member variables
   
   int		m_speed;
   int		m_blend;
-  int		alreadyInit;
+  // index of grabbed mass point
+  int		m_grab;
+  int		m_alreadyInit;
   float		m_springKS;
   float		m_drag;
   float 	xsize, ysize, ysize0;
 
   // number of grid-segments in X/Y direction (defaults: 32);
   int           m_grid_sizeX,m_grid_sizeY;
+  MASS		*m_mass;
+  SPRING	*m_spring;
+  int		m_spring_count;
     
  private:
 
