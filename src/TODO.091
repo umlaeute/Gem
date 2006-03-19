@@ -29,7 +29,7 @@ Untested objects
 Object specific bugs
 + [pix_write] upside down when using jpg (WORKSFORME - confirmed by cyrille henry) 
 + [pix_image] sometimes crashes when loading non-existant image (or image which is neither jpeg nor tiff) (WORKSFORME - confirmed by cyrille henry) 
-: [separator] memleak
+:+ [separator] memleak (fix needs TESTing)
 
 
 OS specific bugs
