@@ -78,6 +78,7 @@ void glsl_program :: destroyArrays() {
 #endif
 }
 void glsl_program :: createArrays() {
+#ifdef GL_ARB_shader_objects
   int i;
 
   m_size   = new GLint     [m_uniformCount];
@@ -98,6 +99,7 @@ void glsl_program :: createArrays() {
     m_flag   [i] = 0;
     for(j=0; j<16; j++)m_param[i][j]=0;
   }
+#endif
 }
 /////////////////////////////////////////////////////////
 // render
