@@ -17,6 +17,7 @@ LOG
 #ifndef INCLUDE_GEMPIXCONVERT_SIMD_H_
 #define INCLUDE_GEMPIXCONVERT_SIMD_H_
 
+#include "GemPixUtil.h"
 #include "GemSIMD.h"
 
 // use formulae from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
@@ -100,7 +101,6 @@ LOG
 
 #endif /* POYNTON */
 
-
 /* AltiVec */
 #ifdef __VEC__
   void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size, 
@@ -112,8 +112,11 @@ LOG
   void BGRA_to_YCbCr_altivec(unsigned char *bgradata, size_t BGRA_size, 
 							 unsigned char *pixels);
   void YUV422_to_BGRA_altivec(unsigned char *yuvdata, size_t pixelnum,
-                             unsigned char *pixels);
-  void YV12_to_YUV422_altivec(short*Y, short*U, short*V, size_t pixelnum);
+                              unsigned char *pixels);
+  void YV12_to_YUV422_altivec(short*Y, short*U, short*V,
+							  unsigned char *data, int xsize, int ysize);
+  void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
+							  unsigned char *gem_image, int xsize, int ysize);
 #endif /* AltiVec */
 
 /* SSE2 */
