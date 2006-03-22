@@ -25,7 +25,6 @@
 
 #include "m_pd.h"
 #include "GemPixUtil.h"
-#include "GemPixConvert.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -85,7 +84,6 @@ GEM_EXTERN unsigned char* imageStruct::allocate()
 
 GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
 {
-  
   if (size>datasize){
       return allocate(size);
   }
@@ -1088,7 +1086,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 	  Microseconds(&start);
 #endif
 #ifdef __VEC__
-	YV12_to_YUV422_altivec(Y, U, V, pixelnum);
+	YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
 #else
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
@@ -1182,6 +1180,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
     break;
   case GL_RGBA:
   case GL_BGRA: /* ==GL_BGRA_EXT */
+    {
 #ifdef __TIMING__
 	  UnsignedWide start, end;
 	  Microseconds(&start);
@@ -1189,7 +1188,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 #if 0
 	  YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
 #elif defined __SSE2__
-          UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
+	  UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
 #else
       unsigned char *pixels=data;
       int y, u, v;
@@ -1225,10 +1224,10 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 	  float seconds = (float)(end.lo - start.lo) / 1000000.f;
 	  post("UYVYtoRGBA/BGRA frame time = %f\n", seconds);
 #endif
+    }
     break;
   }
 }
-
 
 GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
   if(!yuvdata)return;
@@ -1468,5 +1467,4 @@ GEM_EXTERN void imageStruct::swapRedBlue() {
     }
     break;
   }
-
 }
