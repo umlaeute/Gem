@@ -19,7 +19,7 @@
 #include "Base/GemGL.h"
  
 #ifdef __APPLE__
-# include <Carbon/carbon.h>
+# include <Carbon/Carbon.h>
 # include <AvailabilityMacros.h>
 #endif // __APPLE__
 
