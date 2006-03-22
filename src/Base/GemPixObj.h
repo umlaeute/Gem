@@ -96,6 +96,11 @@ class GEM_EXTERN GemPixObj : public GemBase
   //////////
   // Turn on/off processing
   void            processOnOff(int on);
+    
+  //////////
+  // the pixBlock-cache
+  pixBlock    cachedPixBlock;
+  pixBlock    *orgPixBlock;
 
   //////////
   int             m_processOnOff;
@@ -121,12 +126,6 @@ class GEM_EXTERN GemPixObj : public GemBase
     //post("start rendering");
     setPixModified();
   }
-  
-  //////////
-  // the pixBlock-cache
-  pixBlock    cachedPixBlock;
-  pixBlock    *orgPixBlock;
-
 
  private:
 
