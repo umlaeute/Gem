@@ -8,17 +8,27 @@
 //
 // Implementation file for SSE2-optimized color-conversion routines
 //
-//    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute
+//    Copyright (c) 2006 IOhannes m zmoelnig. forum::für::umläute
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
 
+/* darned: it seems like i just cannot get SIMD-code right!
+ * to my eye, there appear to me WAY too much shuffle's down there
+ * if somebody would want to have a look i'd be grateful
+ */
+
+
 #include "Base/GemPixConvert.h"
 #include "Base/GemPixUtil.h"
+
+
+#define RGB2YUV_14 0
+#define RGB2YUV_24 0
+#define RGB2YUV_34 0
+
 
 /* for post() */
 #include "m_pd.h"
@@ -62,12 +72,8 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
 {
   __m128i *rgba_p = (__m128i*)rgbadata; /*  4 RGBA pixels */
   __m128i *yuv_p  = (__m128i*)yuvdata;  /* 4*2 YUV pixels */
-  
-  const __m128i zero = _mm_setzero_si128();
 
-#define RGB2YUV_14 0
-#define RGB2YUV_24 0
-#define RGB2YUV_34 0
+  const __m128i zero = _mm_setzero_si128();
 
   const __m128i RG2Y=_mm_set_epi16(RGB2YUV_12, RGB2YUV_11, RGB2YUV_12, RGB2YUV_11, 
                                    RGB2YUV_12, RGB2YUV_11, RGB2YUV_12, RGB2YUV_11);
@@ -101,9 +107,6 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
 
   const int shuffle =  _MM_SHUFFLE(3, 1, 2, 0);
 
-  static int toggle=0;
-  toggle=!toggle;
-
   int i=size/8; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
   while(i-->0){
     rgba0=*rgba_p++; /* r0 g0 b0 a0 r1 g1 ... b3 a3 */
@@ -125,7 +128,6 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
     Y0    = _mm_add_epi32(_mm_madd_epi16(RGRG0, RG2Y), _mm_madd_epi16(BABA0, BA2Y));
     Y0    = _mm_shuffle_epi32(Y0, shuffle);
     //startpost("Y0: "); print_int(Y0); /* Y0, Y1, Y2, Y3 */
-
 
     /* 2nd 4 pixels */
     RGBA0 = _mm_unpacklo_epi8(rgba1, zero);     /* R4 G4 B4 A4 R5 G5 B5 A5 */
@@ -195,4 +197,116 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
     *yuv_p++ = _mm_packus_epi16(UY, VY);
   }
 }
+
+/* convert RGBA to YUV422 */
+void UYVY_to_RGBA_SSE2(unsigned char *yuvdata, 
+                       size_t size, 
+                       unsigned char *rgbadata)
+{
+  __m128i *rgba_p = (__m128i*)rgbadata; /*  4 RGBA pixels */
+  __m128i *yuv_p  = (__m128i*)yuvdata;  /* 4*2 YUV pixels */
+  
+  const __m128i zero  = _mm_setzero_si128();
+  const __m128i Y2RGB = _mm_set_epi16(YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0);
+  const __m128i UV2R  = _mm_set_epi16(YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12, 
+                                      YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12);
+  const __m128i UV2G  = _mm_set_epi16(YUV2RGB_23, YUV2RGB_22, YUV2RGB_23, YUV2RGB_22, 
+                                      YUV2RGB_23, YUV2RGB_22, YUV2RGB_23, YUV2RGB_22);
+  const __m128i UV2B  = _mm_set_epi16(YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32, 
+                                      YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32);
+  const __m128i offset= _mm_set_epi16(Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET, 
+                                      Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET);
+
+  const __m128i    A  = _mm_set_epi32(255, 255, 255, 255);
+
+  /* nomenclatura:
+   *   lower-case letters denote  8bit values (like "r" is red, 8bit)
+   *   upper-case letters denote 16bit (or 32bit) values (like "G" is green, 16bit)
+   */
+
+  __m128i uyvy, UYVY0, UYVY1;
+  __m128i UV, YZ, Y, Z;
+  __m128i UV_R, UV_G, UV_B;
+  __m128i R, G, B, RG, BA, RB, GA;
+  __m128i rgba0, rgba1;
+
+  const int shuffle =  _MM_SHUFFLE(3, 1, 2, 0);
+
+  int i=size/8; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
+  while(i-->0){
+    uyvy=*yuv_p++; /* u0 y0 v0 z0 u1 y1 v1 z1 u2 y2 v2 z2 u3 y3 v3 z3 */
+
+    //uyvy = _mm_set_epi8(44, 43, 42, 41, 34, 33, 32, 31, 24, 23, 22, 21, 14, 13, 12, 11);
+    UYVY0 = _mm_unpacklo_epi8(uyvy, zero); /* U0 Y0 V0 Z0 U1 Y1 V1 Z1 */
+    UYVY1 = _mm_unpackhi_epi8(uyvy, zero); /* U2 Y2 V2 Z2 U3 Y3 V3 Z3 */
+
+    UYVY0 = _mm_sub_epi16(UYVY0, offset);
+    UYVY1 = _mm_sub_epi16(UYVY1, offset);
+
+    UYVY0 = _mm_shufflelo_epi16(UYVY0, shuffle);
+    UYVY0 = _mm_shufflehi_epi16(UYVY0, shuffle);
+    UYVY0 = _mm_shuffle_epi32  (UYVY0, shuffle); /* U0 V0 U1 V1 Y0 Z0 Y1 Z1 */
+
+    UYVY1 = _mm_shufflelo_epi16(UYVY1, shuffle);
+    UYVY1 = _mm_shufflehi_epi16(UYVY1, shuffle); 
+    UYVY1 = _mm_shuffle_epi32  (UYVY1, shuffle); /* U2 V2 U3 V3 Y2 Z2 Y3 Z3 */
+
+    UV = _mm_unpacklo_epi32(UYVY0, UYVY1); /* U0 V0 U2 V2 U1 V1 U3 V3 */
+    YZ = _mm_unpackhi_epi32(UYVY0, UYVY1); /* Y0 Z0 Y2 Z2 Y1 Z1 Y3 Z3 */
+
+    Z = _mm_madd_epi16(YZ, Y2RGB);                    /* Z0' Z2' Z1' Z3' */
+    Y = _mm_madd_epi16(YZ, _mm_srli_si128(Y2RGB, 2)); /* Y0' Y2' Y1' Y3' */
+
+    UV_R = _mm_madd_epi16(UV, UV2R);
+    UV_G = _mm_madd_epi16(UV, UV2G);
+    UV_B = _mm_madd_epi16(UV, UV2B);
+
+    R  = _mm_srai_epi32(_mm_add_epi32(Y, UV_R), 8);
+    G  = _mm_srai_epi32(_mm_add_epi32(Y, UV_G), 8);
+    B  = _mm_srai_epi32(_mm_add_epi32(Y, UV_B), 8);
+
+    RB = _mm_packs_epi32(R, B);
+    GA = _mm_packs_epi32(G, A);
+
+    RB = _mm_shuffle_epi32(RB, shuffle);
+    RB = _mm_shufflehi_epi16(RB, shuffle);
+    RB = _mm_shufflelo_epi16(RB, shuffle); 
+
+    GA = _mm_shuffle_epi32(GA, shuffle);
+    GA = _mm_shufflehi_epi16(GA, shuffle);
+    GA = _mm_shufflelo_epi16(GA, shuffle);
+
+    RG = _mm_unpacklo_epi16(RB, GA);
+    BA = _mm_unpackhi_epi16(RB, GA);
+
+    rgba0 = _mm_packus_epi16(RG, BA);
+    rgba0 = _mm_shuffle_epi32(rgba0, shuffle);    
+
+    R  = _mm_srai_epi32(_mm_add_epi32(Z, UV_R), 8);
+    G  = _mm_srai_epi32(_mm_add_epi32(Z, UV_G), 8);
+    B  = _mm_srai_epi32(_mm_add_epi32(Z, UV_B), 8);
+
+    RB = _mm_packs_epi32(R, B);
+    GA = _mm_packs_epi32(G, A);
+
+    RB = _mm_shuffle_epi32(RB, shuffle);
+    RB = _mm_shufflehi_epi16(RB, shuffle);
+    RB = _mm_shufflelo_epi16(RB, shuffle); 
+
+    GA = _mm_shuffle_epi32(GA, shuffle);
+    GA = _mm_shufflehi_epi16(GA, shuffle);
+    GA = _mm_shufflelo_epi16(GA, shuffle);
+
+    RG = _mm_unpacklo_epi16(RB, GA);
+    BA = _mm_unpackhi_epi16(RB, GA);
+
+    rgba1 = _mm_packus_epi16(RG, BA);
+    rgba1 = _mm_shuffle_epi32(rgba1, shuffle);    
+
+    *rgba_p++ = _mm_unpacklo_epi32(rgba0, rgba1);
+    *rgba_p++ = _mm_unpackhi_epi32(rgba0, rgba1);
+  }
+}
+
+
 #endif
