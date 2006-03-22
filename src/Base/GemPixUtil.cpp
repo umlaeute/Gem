@@ -72,7 +72,7 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
 
   int alignment = ((int)pdata)&(GEM_VECTORALIGNMENT/8-1);
   int offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
-  data = (unsigned char *)pdata+offset;
+  data = pdata+offset;
   datasize=array_size-offset;
   notowned=0;
   return data; 
@@ -85,10 +85,14 @@ GEM_EXTERN unsigned char* imageStruct::allocate()
 
 GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
 {
+  
   if (size>datasize){
       return allocate(size);
   }
-    return data;
+  int alignment = ((int)pdata)&(GEM_VECTORALIGNMENT/8-1);
+  int offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
+  data=pdata+offset;
+  return data;
 }
 GEM_EXTERN unsigned char* imageStruct::reallocate() 
 {  
@@ -1178,13 +1182,14 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
     break;
   case GL_RGBA:
   case GL_BGRA: /* ==GL_BGRA_EXT */
-    {
 #ifdef __TIMING__
 	  UnsignedWide start, end;
 	  Microseconds(&start);
 #endif
 #if 0
 	  YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
+#elif defined __SSE2__
+          UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
 #else
       unsigned char *pixels=data;
       int y, u, v;
@@ -1220,7 +1225,6 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 	  float seconds = (float)(end.lo - start.lo) / 1000000.f;
 	  post("UYVYtoRGBA/BGRA frame time = %f\n", seconds);
 #endif
-    }
     break;
   }
 }
