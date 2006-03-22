@@ -205,23 +205,6 @@ struct GEM_EXTERN imageStruct
   void fromYV12   (short* Y, short*U, short*V);
   void fromYV12   (short* orgdata);
   
-  /* altivec functions */
-#ifdef __VEC__
-  void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size, 
-							unsigned char *pixels);
-  void RGBA_to_YCbCr_altivec(unsigned char *rgbadata, size_t RGBA_size, 
-							 unsigned char *pixels);
-  void BGR_to_YCbCr_altivec(unsigned char *bgrdata, size_t BGR_size, 
-							unsigned char *pixels);
-  void BGRA_to_YCbCr_altivec(unsigned char *bgradata, size_t BGRA_size, 
-							 unsigned char *pixels);
-  void YUV422_to_BGRA_altivec(unsigned char *yuvdata, size_t pixelnum,
-                             unsigned char *pixels);
-  void YV12_to_RGB_altivec(short*Y, short*U, short*V, size_t pixelnum);
-  void YV12_to_RGBA_altivec(short*Y, short*U, short*V, size_t pixelnum);
-  void YV12_to_YUV422_altivec(short*Y, short*U, short*V, size_t pixelnum);
-#endif
-  
   /* aliases */
   void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
   void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
