@@ -67,8 +67,6 @@ pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol)
 pix_convolve :: ~pix_convolve()
 {
     if (m_imatrix)delete [] m_imatrix;
-    post("done...");
-  
 }
 
 /////////////////////////////////////////////////////////
