@@ -546,12 +546,11 @@ void pix_dot :: yuv_init()
 {
     static int initialized = 0;
     int i;
-
     if(!initialized) {
-        for(i=0; i<256; i++) {
-            R2Y[i] =  (int)(0.257*i);
-            G2Y[i] =  (int)(0.504*i);
-            B2Y[i] =  (int)(0.098*i);
+        for(i=20; i<256; i++) {
+	  R2Y[i] =  (int)(0.257f*i);
+	  G2Y[i] =  (int)(0.504f*i);
+	  B2Y[i] =  (int)(0.098f*i);
         }
         initialized = 1;
     }
