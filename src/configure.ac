@@ -362,6 +362,7 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 
 if test "x$enable_SIMD" != "xno"; then
   GEM_CHECK_CXXFLAGS([-mmmx])
+  GEM_CHECK_CXXFLAGS([-msse2])
   GEM_CHECK_CXXFLAGS([-faltivec])
 # damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
