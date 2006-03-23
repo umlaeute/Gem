@@ -87,11 +87,10 @@ imageStruct :: ~imageStruct()
   clear();
 }
 
-/* align the memory to 128bit
+/* align the memory to 128bit (GEM_VECTORALIGNMENT is in GemSIMD.h)
  * this code is taken from pd-devel (written by t.grill)
  * there used to be something in here written by g.geiger
  */
-#define GEM_VECTORALIGNMENT 128
 GEM_EXTERN unsigned char* imageStruct::allocate(size_t size) 
 {
   if (pdata){
@@ -1172,6 +1171,10 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
       unsigned char *pixels=data;
       int y, u, v;
       int uv_r, uv_g, uv_b;
+      START_TIMING;
+#ifdef __SSE2__
+      UYVY_to_RGB_SSE2(yuvdata, pixelnum, pixels);
+#else
       pixelnum>>=1;
 
       while(pixelnum--){
@@ -1196,6 +1199,8 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 
 	yuvdata+=4;
       }
+#endif
+      STOP_TIMING("YUV2RGB");
     }
     break;
   case GL_RGBA:

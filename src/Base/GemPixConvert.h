@@ -127,6 +127,9 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
 void UYVY_to_RGBA_SSE2(unsigned char *yuvdata, 
                        size_t size, 
                        unsigned char *rgbadata);
+void UYVY_to_RGB_SSE2(unsigned char *yuvdata, 
+                      size_t size, 
+                      unsigned char *rgbadata);
 #endif /* SSE2 */
 
 /* in case somebody has an old machine... */
