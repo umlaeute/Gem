@@ -29,6 +29,38 @@
 #include <string.h>
 #include <ctype.h>
 
+/* this is some magic for debugging:
+ * to time execution of a code-block use 
+ *   'START_TIMING;' at the beginning of the block and
+ *   'STOP_TIMING("something");' at the end of the block
+ */
+#ifdef __TIMING__
+# ifdef __linux__
+#  include <sys/time.h>
+
+#  define START_TIMING float mseconds=0.f; \
+                     timeval startTime, endTime; \
+                     gettimeofday(&startTime, 0)
+#  define STOP_TIMING(x) gettimeofday(&endTime, 0); \
+                         mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 +\
+                                    (endTime.tv_usec - startTime.tv_usec) * 0.001;\
+                         post("%s frame time = %f ms", x, mseconds)
+# elif defined __APPLE__
+#  define START_TIMING float mseconds=0.f; \
+                      UnsignedWide start, end;\
+	              Microseconds(&start)
+#  define STOP_TIMING(x) Microseconds(&end); \
+                         mseconds = (float)(end.lo - start.lo) / 1000.f; \
+                         post("%s frame time = %f ms", x, mseconds)
+# else
+#  define START_TIMING
+#  define STOP_TIMING(x)
+# endif /* timing for OS */
+#else
+# define START_TIMING
+# define STOP_TIMING(x)
+#endif /* __TIMING__ */
+
 pixBlock :: pixBlock()
   : newimage(0), newfilm(0)
 {}
@@ -493,6 +525,7 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     }
     break;
   case GL_YUV422_GEM:
+    START_TIMING;
 #ifdef __SSE2__
     RGBA_to_UYVY_SSE2(rgbadata, pixelnum, pixels);
 #else
@@ -513,6 +546,7 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
       rgbadata+=8;
     }
 #endif
+    STOP_TIMING("RGBA to UYVY");
     break;
   }
 }
@@ -628,10 +662,7 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     }
     break;
   case GL_YUV422_GEM:
-#ifdef __TIMING__
-	  UnsignedWide start, end;
-	  Microseconds(&start);
-#endif
+    START_TIMING;
 #ifdef __VEC__
 	BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
 #else
@@ -652,11 +683,7 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
       bgradata+=8;
     }
 #endif
-#ifdef __TIMING__
-	  Microseconds(&end);
-	  float seconds = (float)(end.lo - start.lo) / 1000000.f;
-	  post("BGRAtoUYVY frame time = %f", seconds);
-#endif
+    STOP_TIMING("BGRA_to_YCbCr");
     break;
   }
 }
@@ -1081,10 +1108,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
     break;
   case GL_YUV422_GEM:
     {
-#ifdef __TIMING__
-	  UnsignedWide start, end;
-	  Microseconds(&start);
-#endif
+      START_TIMING;
 #ifdef __VEC__
 	YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
 #else
@@ -1116,11 +1140,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 		py1+=xsize*1;	py2+=xsize*1;
       }
 #endif
-#ifdef __TIMING__
-	  Microseconds(&end);
-	  float seconds = (float)(end.lo - start.lo) / 1000000.f;
-	  post("YV12toUYVY frame time = %f\n", seconds);
-#endif
+      STOP_TIMING("YV12_to_YUV422");
     }
     break;
   }
@@ -1181,10 +1201,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
   case GL_RGBA:
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
-#ifdef __TIMING__
-	  UnsignedWide start, end;
-	  Microseconds(&start);
-#endif
+      START_TIMING;
 #if 0
 	  YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
 #elif defined __SSE2__
@@ -1219,11 +1236,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 		yuvdata+=4;
       }
 #endif
-#ifdef __TIMING__
-	  Microseconds(&end);
-	  float seconds = (float)(end.lo - start.lo) / 1000000.f;
-	  post("UYVYtoRGBA/BGRA frame time = %f\n", seconds);
-#endif
+      STOP_TIMING("UYVY_to_RGBA/BGRA");
     }
     break;
   }
