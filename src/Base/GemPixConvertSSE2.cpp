@@ -107,7 +107,7 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
 
   const int shuffle =  _MM_SHUFFLE(3, 1, 2, 0);
 
-  int i=size/8; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
+  int i=size>>3; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
   while(i-->0){
     rgba0=*rgba_p++; /* r0 g0 b0 a0 r1 g1 ... b3 a3 */
     rgba1=*rgba_p++; /* r4 g4 b4 a4 r5 g5 ... b7 a7 */
@@ -162,6 +162,8 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
     //V_BA32 = _mm_madd_epi16(BABA, AB2V); /* B4*c+A4*d B6*c+A6*d B5*c+A5*d B7*c+A7*d */
     V      = _mm_add_epi32 (_mm_madd_epi16(RGRG, RG2V), _mm_madd_epi16(BABA, BA2V));
 
+    // 32 instructions so far
+
     // so now we have (all values in 32bit)
     /*
      *  U  U  U  U
@@ -194,7 +196,8 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
     UY = _mm_adds_epi16(UY, OFFSET);
     VY = _mm_adds_epi16(VY, OFFSET);
 
-    *yuv_p++ = _mm_packus_epi16(UY, VY);
+    _mm_stream_si128(yuv_p++,  _mm_packus_epi16(UY, VY));
+    // 32+15 instructions
   }
 }
 
@@ -206,7 +209,6 @@ void UYVY_to_RGBA_SSE2(unsigned char *yuvdata,
   __m128i *rgba_p = (__m128i*)rgbadata; /*  4 RGBA pixels */
   __m128i *yuv_p  = (__m128i*)yuvdata;  /* 4*2 YUV pixels */
   
-  const __m128i zero  = _mm_setzero_si128();
   const __m128i Y2RGB = _mm_set_epi16(YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0);
   const __m128i UV2R  = _mm_set_epi16(YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12, 
                                       YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12);
@@ -216,8 +218,7 @@ void UYVY_to_RGBA_SSE2(unsigned char *yuvdata,
                                       YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32);
   const __m128i offset= _mm_set_epi16(Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET, 
                                       Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET);
-
-  const __m128i    A  = _mm_set_epi32(255, 255, 255, 255);
+  const __m128i  A32  = _mm_set_epi32(255, 255, 255, 255);
 
   /* nomenclatura:
    *   lower-case letters denote  8bit values (like "r" is red, 8bit)
@@ -227,18 +228,17 @@ void UYVY_to_RGBA_SSE2(unsigned char *yuvdata,
   __m128i uyvy, UYVY0, UYVY1;
   __m128i UV, YZ, Y, Z;
   __m128i UV_R, UV_G, UV_B;
-  __m128i R, G, B, RG, BA, RB, GA;
-  __m128i rgba0, rgba1;
+  __m128i R, G, B, A;
+  __m128i RB0, RB1, GA0, GA1;
 
   const int shuffle =  _MM_SHUFFLE(3, 1, 2, 0);
 
-  int i=size/8; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
+  int i=size>>3; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
   while(i-->0){
     uyvy=*yuv_p++; /* u0 y0 v0 z0 u1 y1 v1 z1 u2 y2 v2 z2 u3 y3 v3 z3 */
 
-    //uyvy = _mm_set_epi8(44, 43, 42, 41, 34, 33, 32, 31, 24, 23, 22, 21, 14, 13, 12, 11);
-    UYVY0 = _mm_unpacklo_epi8(uyvy, zero); /* U0 Y0 V0 Z0 U1 Y1 V1 Z1 */
-    UYVY1 = _mm_unpackhi_epi8(uyvy, zero); /* U2 Y2 V2 Z2 U3 Y3 V3 Z3 */
+    UYVY0 = _mm_unpacklo_epi8(uyvy, _mm_setzero_si128()); /* U0 Y0 V0 Z0 U1 Y1 V1 Z1 */
+    UYVY1 = _mm_unpackhi_epi8(uyvy, _mm_setzero_si128()); /* U2 Y2 V2 Z2 U3 Y3 V3 Z3 */
 
     UYVY0 = _mm_sub_epi16(UYVY0, offset);
     UYVY1 = _mm_sub_epi16(UYVY1, offset);
@@ -265,46 +265,34 @@ void UYVY_to_RGBA_SSE2(unsigned char *yuvdata,
     G  = _mm_srai_epi32(_mm_add_epi32(Y, UV_G), 8);
     B  = _mm_srai_epi32(_mm_add_epi32(Y, UV_B), 8);
 
-    RB = _mm_packs_epi32(R, B);
-    GA = _mm_packs_epi32(G, A);
-
-    RB = _mm_shuffle_epi32(RB, shuffle);
-    RB = _mm_shufflehi_epi16(RB, shuffle);
-    RB = _mm_shufflelo_epi16(RB, shuffle); 
-
-    GA = _mm_shuffle_epi32(GA, shuffle);
-    GA = _mm_shufflehi_epi16(GA, shuffle);
-    GA = _mm_shufflelo_epi16(GA, shuffle);
-
-    RG = _mm_unpacklo_epi16(RB, GA);
-    BA = _mm_unpackhi_epi16(RB, GA);
-
-    rgba0 = _mm_packus_epi16(RG, BA);
-    rgba0 = _mm_shuffle_epi32(rgba0, shuffle);    
+    RB0 = _mm_packs_epi32(R, B);
+    GA0 = _mm_packs_epi32(G, A32);
 
     R  = _mm_srai_epi32(_mm_add_epi32(Z, UV_R), 8);
     G  = _mm_srai_epi32(_mm_add_epi32(Z, UV_G), 8);
     B  = _mm_srai_epi32(_mm_add_epi32(Z, UV_B), 8);
 
-    RB = _mm_packs_epi32(R, B);
-    GA = _mm_packs_epi32(G, A);
+    RB1 = _mm_packs_epi32(R, B);
+    GA1 = _mm_packs_epi32(G, A32);
 
-    RB = _mm_shuffle_epi32(RB, shuffle);
-    RB = _mm_shufflehi_epi16(RB, shuffle);
-    RB = _mm_shufflelo_epi16(RB, shuffle); 
+    R  = _mm_unpacklo_epi16(RB0, RB1);  /* R0 R1 R4 R5 R2 R3 R6 R7 */
+    R  = _mm_shuffle_epi32 (R, shuffle);/* R0 R1 R2 R3 R4 R5 R6 R7 */
+    B  = _mm_unpackhi_epi16(RB0, RB1);
+    B  = _mm_shuffle_epi32 (B, shuffle);
+    G  = _mm_unpacklo_epi16(GA0, GA1);
+    G  = _mm_shuffle_epi32 (G, shuffle);
+    A  = _mm_unpackhi_epi16(GA0, GA1); /* no need to shuffle, since A0=A1=...=255 */
 
-    GA = _mm_shuffle_epi32(GA, shuffle);
-    GA = _mm_shufflehi_epi16(GA, shuffle);
-    GA = _mm_shufflelo_epi16(GA, shuffle);
+    RB0= _mm_unpacklo_epi16(R, B);
+    RB1= _mm_unpackhi_epi16(R, B);
+    RB0= _mm_packus_epi16  (RB0, RB1); /* R0 B0 R1 B1 R2 B2 R3 B3 R4 B4 R5 B5 R6 B6 R7 B7 */
 
-    RG = _mm_unpacklo_epi16(RB, GA);
-    BA = _mm_unpackhi_epi16(RB, GA);
+    GA0= _mm_unpacklo_epi16(G, A);
+    GA1= _mm_unpackhi_epi16(G, A);
+    GA0= _mm_packus_epi16  (GA0, GA1);
 
-    rgba1 = _mm_packus_epi16(RG, BA);
-    rgba1 = _mm_shuffle_epi32(rgba1, shuffle);    
-
-    *rgba_p++ = _mm_unpacklo_epi32(rgba0, rgba1);
-    *rgba_p++ = _mm_unpackhi_epi32(rgba0, rgba1);
+    _mm_stream_si128(rgba_p++,  _mm_unpacklo_epi8(RB0, GA0));
+    _mm_stream_si128(rgba_p++,  _mm_unpackhi_epi8(RB0, GA0));
   }
 }
 
