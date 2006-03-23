@@ -27,6 +27,8 @@ LOG
 #ifndef INCLUDE_GEMSIMD_H_
 #define INCLUDE_GEMSIMD_H_
 
+#define GEM_VECTORALIGNMENT 128
+
 const int GEM_SIMD_NONE=0;
 const int GEM_SIMD_MMX=1;
 const int GEM_SIMD_SSE2=2;
