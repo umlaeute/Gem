@@ -61,6 +61,8 @@
 # define STOP_TIMING(x)
 #endif /* __TIMING__ */
 
+static int m_simd = GemSIMD::getCPU();
+
 pixBlock :: pixBlock()
   : newimage(0), newfilm(0)
 {}
@@ -525,11 +527,18 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     break;
   case GL_YUV422_GEM:
     START_TIMING;
+    switch(m_simd){
+#ifdef __VEC__
+    case GEM_SIMD_ALTIVEC:
+      BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
+#endif
 #ifdef __SSE2__
-    RGBA_to_UYVY_SSE2(rgbadata, pixelnum, pixels);
-#else
-    pixelnum>>=1;
-    while(pixelnum--){
+    case GEM_SIMD_SSE2:
+      RGBA_to_UYVY_SSE2(rgbadata,pixelnum,pixels);
+#endif
+    case GEM_SIMD_NONE: default:
+     pixelnum>>=1;
+     while(pixelnum--){
       *pixels++=((RGB2YUV_21*rgbadata[chRed]+
 		  RGB2YUV_22*rgbadata[chGreen]+
 		  RGB2YUV_23*rgbadata[chBlue])>>8)+UV_OFFSET; // U
@@ -543,8 +552,8 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
 		  RGB2YUV_12*rgbadata[4+chGreen]+
 		  RGB2YUV_13*rgbadata[4+chBlue])>>8)+ Y_OFFSET; // Y
       rgbadata+=8;
+     }
     }
-#endif
     STOP_TIMING("RGBA to UYVY");
     break;
   }
@@ -662,26 +671,29 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
     break;
   case GL_YUV422_GEM:
     START_TIMING;
+    switch(m_simd){
 #ifdef __VEC__
-	BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
-#else
-    pixelnum>>=1;
-    while(pixelnum--){
-      *pixels++=((RGB2YUV_21*bgradata[chRed]+
-		  RGB2YUV_22*bgradata[chGreen]+
-		  RGB2YUV_23*bgradata[chBlue])>>8)+UV_OFFSET; // U
-      *pixels++=((RGB2YUV_11*bgradata[chRed]+
-		  RGB2YUV_12*bgradata[chGreen]+
-		  RGB2YUV_13*bgradata[chBlue])>>8)+ Y_OFFSET; // Y
-      *pixels++=((RGB2YUV_31*bgradata[chRed]+
-		  RGB2YUV_32*bgradata[chGreen]+
-		  RGB2YUV_33*bgradata[chBlue])>>8)+UV_OFFSET; // V
-      *pixels++=((RGB2YUV_11*bgradata[4+chRed]+
-		  RGB2YUV_12*bgradata[4+chGreen]+
-		  RGB2YUV_13*bgradata[4+chBlue])>>8)+ Y_OFFSET; // Y
-      bgradata+=8;
-    }
+    case GEM_SIMD_ALTIVEC:
+      BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
 #endif
+    case GEM_SIMD_NONE: default:
+      pixelnum>>=1;
+      while(pixelnum--){
+	*pixels++=((RGB2YUV_21*bgradata[chRed]+
+		    RGB2YUV_22*bgradata[chGreen]+
+		    RGB2YUV_23*bgradata[chBlue])>>8)+UV_OFFSET; // U
+	*pixels++=((RGB2YUV_11*bgradata[chRed]+
+		    RGB2YUV_12*bgradata[chGreen]+
+		    RGB2YUV_13*bgradata[chBlue])>>8)+ Y_OFFSET; // Y
+	*pixels++=((RGB2YUV_31*bgradata[chRed]+
+		    RGB2YUV_32*bgradata[chGreen]+
+		    RGB2YUV_33*bgradata[chBlue])>>8)+UV_OFFSET; // V
+	*pixels++=((RGB2YUV_11*bgradata[4+chRed]+
+		    RGB2YUV_12*bgradata[4+chGreen]+
+		    RGB2YUV_13*bgradata[4+chBlue])>>8)+ Y_OFFSET; // Y
+	bgradata+=8;
+      }
+    }
     STOP_TIMING("BGRA_to_YCbCr");
     break;
   }
@@ -1108,9 +1120,12 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
   case GL_YUV422_GEM:
     {
       START_TIMING;
+      switch(m_simd){
 #ifdef __VEC__
-	YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
-#else
+      case GEM_SIMD_ALTIVEC:
+	BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
+#endif
+    case GEM_SIMD_NONE: default:
       unsigned char *pixels1=data;
       unsigned char *pixels2=data+xsize*csize;
       short*py1=Y;
@@ -1138,7 +1153,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 		pixels1+=xsize*csize;	pixels2+=xsize*csize;
 		py1+=xsize*1;	py2+=xsize*1;
       }
-#endif
+      }
       STOP_TIMING("YV12_to_YUV422");
     }
     break;
@@ -1172,9 +1187,12 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
       int y, u, v;
       int uv_r, uv_g, uv_b;
       START_TIMING;
+    switch(m_simd){
 #ifdef __SSE2__
+    case GEM_SIMD_SSE2:
       UYVY_to_RGB_SSE2(yuvdata, pixelnum, pixels);
-#else
+#endif
+    case GEM_SIMD_NONE: default:
       pixelnum>>=1;
 
       while(pixelnum--){
@@ -1199,19 +1217,26 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 
 	yuvdata+=4;
       }
-#endif
-      STOP_TIMING("YUV2RGB");
+    }
+    STOP_TIMING("YUV2RGB");
     }
     break;
   case GL_RGBA:
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
       START_TIMING;
-#if 0
-	  YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
-#elif defined __SSE2__
-	  UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
-#else
+    switch(m_simd){
+#ifdef __VEC__
+# if 0
+    case GEM_SIMD_ALTIVEC:
+      YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
+# endif
+#endif
+#ifdef __SSE2__
+    case GEM_SIMD_SSE2:
+      UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
+#endif
+    case GEM_SIMD_NONE: default:
       unsigned char *pixels=data;
       int y, u, v;
       int uv_r, uv_g, uv_b;
@@ -1240,8 +1265,8 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 
 		yuvdata+=4;
       }
-#endif
       STOP_TIMING("UYVY_to_RGBA/BGRA");
+    }
     }
     break;
   }

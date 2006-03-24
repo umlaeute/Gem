@@ -25,18 +25,12 @@
 /////////////////////////////////////////////////////////
 GemPixObj :: GemPixObj() : 
   orgPixBlock(NULL), m_processOnOff(1),
-#ifdef __MMX__
-  m_simd(GEM_SIMD_MMX)
-#elif defined __SSE2__
-  m_simd(GEM_SIMD_SSE2)
-#elif defined __VEC__
-  m_simd(GEM_SIMD_ALTIVEC)
-#else
   m_simd(GEM_SIMD_NONE)
-#endif
 {
     cachedPixBlock.newimage=0;
     cachedPixBlock.newfilm =0;
+
+    m_simd=GemSIMD::getCPU();
 }
 
 
@@ -223,5 +217,5 @@ void GemPixObj :: floatMessCallback(void *data, float n)
 }
 void GemPixObj :: simdMessCallback(void *data, float n)
 {
-    GetMyClass(data)->m_simd=(int)n;
+  GetMyClass(data)->m_simd=GemSIMD::requestCPU((int)n);
 }
