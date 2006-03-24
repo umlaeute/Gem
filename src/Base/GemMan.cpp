@@ -45,6 +45,8 @@
 # include <GL/glext.h>
 #endif
 
+#include "GemSIMD.h"
+
 static WindowInfo gfxInfo;
 static WindowInfo constInfo;
 
@@ -400,6 +402,8 @@ void GemMan :: initGem()
   post("GEM: \t\tDaniel Heckenberg (windows)");
   post("GEM: \t\tJames Tittle (macOS-X)");
   post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
+
+  GemSIMD simd_init;
 
   // setup the perspective values
   m_perspect[0] = -1.f;	// left
