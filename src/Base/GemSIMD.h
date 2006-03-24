@@ -69,6 +69,43 @@ typedef union{
 } vector128f;
 #endif
 
+#include "GemExportDef.h"
 
+
+/* this is a help-class to query the capabilities of the cpu
+ * whenever you want to use SIMD-optimized code, you should
+ * make sure you chose the code-block based on the "cpuid" value
+ * of this class and NOT simply on preprocessor defines.
+ *
+ * this class needs only be instantiated once (and it is done in GemMan)
+ * this sets the cpuid
+ */
+class GEM_EXTERN GemSIMD
+{
+ public:
+   GemSIMD();
+  ~GemSIMD();
+
+  /* this gets the "cpuid" (something like GEM_SIMD_NONE) */
+  static int getCPU();
+
+  /* change the cpuid returned by getCPU()
+   * you can only set the cpuid to something that is actually supported
+   * by your processor
+   */
+  static int requestCPU(int cpuid);
+
+  /* performs a runtime-check (if possible) to determine the capabilities
+   * of the CPU
+   * sets realcpuid appropriately and returns this  value
+   */
+  static int simd_runtime_check(void);
+
+ private:
+  /* this is the maximum capability of the CPU */
+  static int realcpuid;
+  /* this is the current choosen capability (normally this equals realcpuid) */
+  static int cpuid;
+};
 
 #endif /* INCLUDE_GEMSIMD_H_ */
