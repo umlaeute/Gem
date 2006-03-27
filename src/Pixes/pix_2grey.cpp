@@ -143,15 +143,37 @@ void pix_2grey :: processYUVMMX(imageStruct &image){
 
  register __m64 pixel;
  while(pixsize--) {
-   pixel = data_p[pixsize];
+   //pixel = data_p[pixsize];
    pixel = _mm_and_si64(pixel, mask_64);
    pixel = _mm_add_pi8 (pixel, offset_64);
-   data_p[pixsize]=pixel;
+   //data_p[pixsize]=pixel;
  }
  _mm_empty();
 }
 #endif
+#ifdef __SSE2__
+void pix_2grey :: processYUVSSE2(imageStruct &image){
+ register int pixsize = (image.ysize * image.xsize)>>3;
 
+ register __m128i mask_128   = _mm_set_epi8(0xFF, 0x00, 0xFF, 0x00,
+                                   0xFF, 0x00, 0xFF, 0x00,
+                                   0xFF, 0x00, 0xFF, 0x00,
+                                   0xFF, 0x00, 0xFF, 0x00);
+ register __m128i offset_128 = _mm_set_epi8(0x00, 0x80, 0x00, 0x80,
+                                   0x00, 0x80, 0x00, 0x80,
+                                   0x00, 0x80, 0x00, 0x80,
+                                   0x00, 0x80, 0x00, 0x80);
+ __m128i *data_p= (__m128i*)image.data;
+
+ register __m128i pixel;
+ while(pixsize--) {
+   pixel = *data_p;
+   pixel = _mm_and_si128(pixel, mask_128);
+   pixel = _mm_or_si128 (pixel, offset_128);
+   *data_p++=pixel;
+ }
+}
+#endif /* SSE2 */
 #ifdef __VEC__
 void pix_2grey :: processRGBAAltivec(imageStruct &image)
 {
