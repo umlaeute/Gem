@@ -29,12 +29,14 @@ Untested objects
 Object specific bugs
 + [pix_write] upside down when using jpg (WORKSFORME - confirmed by cyrille henry) 
 + [pix_image] sometimes crashes when loading non-existant image (or image which is neither jpeg nor tiff) (WORKSFORME - confirmed by cyrille henry) 
-:+ [separator] memleak (fix needs TESTing)
++ [separator] memleak (fixed, needs TESTing)
+:+ [separator]: yields a stack-overflow error when more [separators] are chained (due to limited stack-size of color-matrix,... on some implementations); fix: keep track of the used stacks and only push/pop when possible
+: there is some openGL-error (invalid enum, iirc) when using [vertex_program]; i only experienced this when testing the vertex_program patch in examples/02 AFTER having used the glsl patch in examples/02; so i think it is rather a cleanup-problem with the glsl-objects, but this has to be investigated
 
 
 OS specific bugs
 linux:
-:- sometimes window freezes on "destroy"
+:- sometimes window freezes on "destroy"; (JMZ: i experience this sometimes on improper shutdown, but after some (up to 30) seconds, the window finally gets destroyed and pd exits fine; if this is the same as the reported bug, than it is rather an inconvenience than a real bug)
 + when the window is closed from "outside", destroying it (and sometimes even rendering to it) will destroy the window (hopefully FIXED)
 + pix_record still not compiling with old libquicktime (FIXED)
 
@@ -45,3 +47,6 @@ osx:
 + remove checks for valid openGL-context (DONE)
 : SequenceGrabber long-term stability (keeps logging you out)
 
+w32:
+:- [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
+:+ objects are missing in the vs.net project: gemframebuffer gemtablet GemSplash pqtorusknots glsl_fragment glsl_program glsl_vertex part_sink pix_fiducialtrack pix_hit pix_multitexture pix_sig2pix~ pix_threshold_bernsen pix_vpaint  ([gemtablet] should probably be removed from Gem)
