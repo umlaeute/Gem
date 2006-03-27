@@ -132,17 +132,17 @@ void pix_subtract :: processYUV_MMX (imageStruct &image, imageStruct &right){
   __m64*rightPix = (__m64*)right.data;
 
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
-  __m64 nil = _mm_setzero_si64();
+  __m64 null64 = _mm_setzero_si64();
   __m64 offset = _mm_setr_pi16(0x80, 0x00, 0x80, 0x00);
   __m64 l0, l1, r0, r1;
   while (datasize--) {
     l1=leftPix[datasize];
     r1=rightPix[datasize];
 
-    l0=_mm_unpacklo_pi8 (l1, nil);
-    r0=_mm_unpacklo_pi8 (r1, nil);
-    l1=_mm_unpackhi_pi8 (l1, nil);
-    r1=_mm_unpackhi_pi8 (r1, nil);
+    l0=_mm_unpacklo_pi8 (l1, null64);
+    r0=_mm_unpacklo_pi8 (r1, null64);
+    l1=_mm_unpackhi_pi8 (l1, null64);
+    r1=_mm_unpackhi_pi8 (r1, null64);
 
     l0=_mm_adds_pu16(l0, offset);
     l1=_mm_adds_pu16(l1, offset);

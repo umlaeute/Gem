@@ -126,15 +126,15 @@ void pix_multiply :: processRGBA_MMX(imageStruct &image, imageStruct &right)
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
 
   __m64 l0, r0, l1, r1;
-  __m64 nil = _mm_setzero_si64();
+  __m64 null64 = _mm_setzero_si64();
   while(datasize--)    {
     l1=leftPix [datasize];
     r1=rightPix[datasize];
 
-    l0=_mm_unpacklo_pi8(l1, nil);
-    r0=_mm_unpacklo_pi8(r1, nil);
-    l1=_mm_unpackhi_pi8(l1, nil);
-    r1=_mm_unpackhi_pi8(r1, nil);
+    l0=_mm_unpacklo_pi8(l1, null64);
+    r0=_mm_unpacklo_pi8(r1, null64);
+    l1=_mm_unpackhi_pi8(l1, null64);
+    r1=_mm_unpackhi_pi8(r1, null64);
 
     l0=_mm_mullo_pi16  (l0, r0);
     l1=_mm_mullo_pi16  (l1, r1);
@@ -188,17 +188,17 @@ void pix_multiply :: processYUV_MMX(imageStruct &image, imageStruct &right)
 				 (unsigned char)0x00,
 				 (unsigned char)0x14);
 
-  __m64 nil = _mm_setzero_si64();
+  __m64 null64 = _mm_setzero_si64();
   while(datasize--)    {
     r1=rightPix[datasize];
     l1=leftPix [datasize];
 
     r1=_mm_or_si64(r1, mask);
 
-    l0=_mm_unpacklo_pi8(l1, nil);
-    r0=_mm_unpacklo_pi8(r1, nil);
-    l1=_mm_unpackhi_pi8(l1, nil);
-    r1=_mm_unpackhi_pi8(r1, nil);
+    l0=_mm_unpacklo_pi8(l1, null64);
+    r0=_mm_unpacklo_pi8(r1, null64);
+    l1=_mm_unpackhi_pi8(l1, null64);
+    r1=_mm_unpackhi_pi8(r1, null64);
 
     l0=_mm_mullo_pi16  (l0, r0);
     l1=_mm_mullo_pi16  (l1, r1);

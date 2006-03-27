@@ -129,7 +129,7 @@ void pix_composite :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 				  (unsigned char)0x00,
 				  (unsigned char)0x00,
 				  (unsigned char)0xFF);
-  const __m64 nil= _mm_setzero_si64();
+  const __m64 null64= _mm_setzero_si64();
   const __m64 one= _mm_set_pi16  ((short)0xFF,
 				  (short)0xFF,
 				  (short)0xFF,
@@ -150,12 +150,12 @@ void pix_composite :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 
     a0=_mm_xor_si64(a, one);
 
-    l1=_mm_unpackhi_pi8(l0, nil);
-    r1=_mm_unpackhi_pi8(r0, nil);
-    l0=_mm_unpacklo_pi8(l0, nil);
-    r0=_mm_unpacklo_pi8(r0, nil);
-    b =_mm_unpackhi_pi8(a , nil);
-    a =_mm_unpacklo_pi8(a , nil);
+    l1=_mm_unpackhi_pi8(l0, null64);
+    r1=_mm_unpackhi_pi8(r0, null64);
+    l0=_mm_unpacklo_pi8(l0, null64);
+    r0=_mm_unpacklo_pi8(r0, null64);
+    b =_mm_unpackhi_pi8(a , null64);
+    a =_mm_unpacklo_pi8(a , null64);
 
     l0=_mm_mullo_pi16  (l0, a);
     l1=_mm_mullo_pi16  (l1, b);

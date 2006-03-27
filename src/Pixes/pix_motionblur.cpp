@@ -267,7 +267,7 @@ void pix_motionblur :: processMMX(imageStruct &image)
 
   __m64 newGain = _mm_set1_pi16((short)m_blur0);
   __m64 oldGain = _mm_set1_pi16((short)m_blur1);
-  __m64 nil = _mm_setzero_si64();
+  __m64 null64 = _mm_setzero_si64();
 
   __m64 newpix1, newpix2, oldpix1, oldpix2;
 
@@ -275,10 +275,10 @@ void pix_motionblur :: processMMX(imageStruct &image)
     newpix1=pixels[pixsize];
     oldpix1=old[pixsize];
 
-    newpix2 = _mm_unpackhi_pi8(newpix1, nil);
-    newpix1 = _mm_unpacklo_pi8(newpix1, nil);
-    oldpix2 = _mm_unpackhi_pi8(oldpix1, nil);
-    oldpix1 = _mm_unpacklo_pi8(oldpix1, nil);
+    newpix2 = _mm_unpackhi_pi8(newpix1, null64);
+    newpix1 = _mm_unpacklo_pi8(newpix1, null64);
+    oldpix2 = _mm_unpackhi_pi8(oldpix1, null64);
+    oldpix1 = _mm_unpacklo_pi8(oldpix1, null64);
 
     newpix1 = _mm_mullo_pi16(newpix1, newGain);
     newpix2 = _mm_mullo_pi16(newpix2, newGain);

@@ -274,7 +274,7 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 			CLAMP(m_Vvalue - m_Vrange),
 			(unsigned char)0x00);
 
-  const __m64 nil=_mm_setzero_si64();
+  const __m64 null64=_mm_setzero_si64();
 
   __m64 r, l, b0, b1;
 
@@ -285,8 +285,8 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 
       b0=_mm_subs_pu8   (lo, l);
       b1=_mm_subs_pu8   (l, hi);
-      b0=_mm_cmpeq_pi32 (b0, nil);
-      b1=_mm_cmpeq_pi32 (b1, nil);
+      b0=_mm_cmpeq_pi32 (b0, null64);
+      b1=_mm_cmpeq_pi32 (b1, null64);
 
       b0=_mm_and_si64   (b0, b1);
 
@@ -302,8 +302,8 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 
       b0=_mm_subs_pu8   (lo, l);
       b1=_mm_subs_pu8   (l, hi);
-      b0=_mm_cmpeq_pi32 (b0, nil);
-      b1=_mm_cmpeq_pi32 (b1, nil);
+      b0=_mm_cmpeq_pi32 (b0, null64);
+      b1=_mm_cmpeq_pi32 (b1, null64);
 
       b0=_mm_and_si64   (b0, b1);
 
@@ -343,7 +343,7 @@ void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
 			      CLAMP(m_Vvalue - m_Vrange),
 			      CLAMP(m_Yvalue - m_Yrange));
 
-  const __m64 nil=_mm_setzero_si64();
+  const __m64 null64=_mm_setzero_si64();
 
   __m64 r, l, b0, b1;
 
@@ -354,8 +354,8 @@ void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
 
       b0=_mm_subs_pu8   (lo, l);
       b1=_mm_subs_pu8   (l, hi);
-      b0=_mm_cmpeq_pi32 (b0, nil);
-      b1=_mm_cmpeq_pi32 (b1, nil);
+      b0=_mm_cmpeq_pi32 (b0, null64);
+      b1=_mm_cmpeq_pi32 (b1, null64);
 
       b0=_mm_and_si64   (b0, b1);
 
@@ -371,8 +371,8 @@ void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
 
       b0=_mm_subs_pu8(lo, l);
       b1=_mm_subs_pu8(l, hi);
-      b0=_mm_cmpeq_pi32(b0, nil);
-      b1=_mm_cmpeq_pi32(b1, nil);
+      b0=_mm_cmpeq_pi32(b0, null64);
+      b1=_mm_cmpeq_pi32(b1, null64);
 
       b0=_mm_and_si64 (b0, b1);
 
@@ -412,7 +412,7 @@ void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
 			      CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Yvalue - m_Yrange));
 
-  const __m64 nil=_mm_setzero_si64();
+  const __m64 null64=_mm_setzero_si64();
 
   __m64 r, l, b0, b1;
 
@@ -423,8 +423,8 @@ void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
 
       b0=_mm_subs_pu8   (lo, l);
       b1=_mm_subs_pu8   (l, hi);
-      b0=_mm_cmpeq_pi32 (b0, nil);
-      b1=_mm_cmpeq_pi32 (b1, nil);
+      b0=_mm_cmpeq_pi32 (b0, null64);
+      b1=_mm_cmpeq_pi32 (b1, null64);
 
       b0=_mm_and_si64   (b0, b1);
 
@@ -440,8 +440,8 @@ void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
 
       b0=_mm_subs_pu8(lo, l);
       b1=_mm_subs_pu8(l, hi);
-      b0=_mm_cmpeq_pi32(b0, nil);
-      b1=_mm_cmpeq_pi32(b1, nil);
+      b0=_mm_cmpeq_pi32(b0, null64);
+      b1=_mm_cmpeq_pi32(b1, null64);
 
       b0=_mm_and_si64 (b0, b1);
 
