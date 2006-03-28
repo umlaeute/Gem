@@ -19,8 +19,15 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Pixes/record.h"
    
 #if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
-# include <lqt/lqt.h>
-# include <lqt/colormodels.h>
+/* don't add relative paths to the quicktime-headers here!
+ * they should be found by configure!
+ * if not, then rather give the full path by hand in Make.config
+ * or the command line!
+ * using things like "lqt/lqt.h" will break compilation on other 
+ * systems!
+ */
+# include <lqt.h>
+# include <colormodels.h>
 #endif
  
 /*---------------------------------------------------------------
