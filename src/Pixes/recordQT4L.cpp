@@ -19,10 +19,6 @@
 
 #include <stdlib.h>
 
-#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
-# include <colormodels.h>
-#endif
-
 /////////////////////////////////////////////////////////
 //
 // recordQT4L

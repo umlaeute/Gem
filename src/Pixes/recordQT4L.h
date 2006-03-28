@@ -19,7 +19,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Pixes/record.h"
    
 #if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
-# include <lqt.h>
+# include <lqt/lqt.h>
+# include <lqt/colormodels.h>
 #endif
  
 /*---------------------------------------------------------------
