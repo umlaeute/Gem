@@ -1,5 +1,0 @@
-
-
-cd src/Gnu; ./configure $@
-
-
