@@ -634,7 +634,6 @@ void GemMan :: resetState()
   m_clear_color[1] = 0.0;
   m_clear_color[2] = 0.0;
   m_clear_color[3] = 0.0;
-  glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
 
   m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
   m_mat_ambient[0] = 0.1f;
