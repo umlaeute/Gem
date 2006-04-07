@@ -17,6 +17,8 @@ LOG
 #ifndef INCLUDE_GEMPIXUTIL_H_
 #define INCLUDE_GEMPIXUTIL_H_
 
+#include "Base/GemGL.h"
+
 #ifdef __APPLE__
 # include <QuickTime/QuickTime.h>
 #endif // __APPLE__
@@ -24,8 +26,7 @@ LOG
 #include <string.h>
 #include <stdlib.h>
 
-#include "Base/GemGL.h"
-#include "Base/GemPixConvert.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Color component defines

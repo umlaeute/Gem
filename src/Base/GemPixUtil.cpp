@@ -25,6 +25,7 @@
 
 #include "m_pd.h"
 #include "GemPixUtil.h"
+#include "GemPixConvert.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -61,7 +62,11 @@
 # define STOP_TIMING(x)
 #endif /* __TIMING__ */
 
-static int m_simd = GemSIMD::getCPU();
+#ifdef __VEC__
+static int m_simd=3;
+#else
+static int m_simd=GemSIMD::getCPU();
+#endif
 
 pixBlock :: pixBlock()
   : newimage(0), newfilm(0)
@@ -530,11 +535,13 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     switch(m_simd){
 #ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
-      BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
+      BGRA_to_YCbCr_altivec(rgbadata,pixelnum,pixels);
+	  break;
 #endif
 #ifdef __SSE2__
     case GEM_SIMD_SSE2:
       RGBA_to_UYVY_SSE2(rgbadata,pixelnum,pixels);
+	  break;
 #endif
     case GEM_SIMD_NONE: default:
      pixelnum>>=1;
@@ -675,6 +682,7 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
 #ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
       BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
+	  break;
 #endif
     case GEM_SIMD_NONE: default:
       pixelnum>>=1;
@@ -1123,7 +1131,8 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
       switch(m_simd){
 #ifdef __VEC__
       case GEM_SIMD_ALTIVEC:
-	BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
+		YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
+		break;
 #endif
     case GEM_SIMD_NONE: default:
       unsigned char *pixels1=data;
@@ -1191,6 +1200,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 #ifdef __SSE2__
     case GEM_SIMD_SSE2:
       UYVY_to_RGB_SSE2(yuvdata, pixelnum, pixels);
+	  break;
 #endif
     case GEM_SIMD_NONE: default:
       pixelnum>>=1;
@@ -1227,14 +1237,14 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
       START_TIMING;
     switch(m_simd){
 #ifdef __VEC__
-# if 0
     case GEM_SIMD_ALTIVEC:
-      YUV422_to_BGRA_altivec( yuvdata, pixelnum, data);
-# endif
+      YUV422_to_BGRA_altivec( yuvdata, pixelnum*2, data);
+	  break;
 #endif
 #ifdef __SSE2__
     case GEM_SIMD_SSE2:
       UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
+	  break;
 #endif
     case GEM_SIMD_NONE: default:
       unsigned char *pixels=data;
@@ -1244,7 +1254,7 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
       while(pixelnum--){
 	    u=yuvdata[0]-UV_OFFSET;
 		v=yuvdata[2]-UV_OFFSET;
-		uv_r=YUV2RGB_12*v+YUV2RGB_13*v;
+		uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
 		uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
 		uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
