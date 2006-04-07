@@ -46,6 +46,7 @@ osx:
 :+ autoconf buildsystem non-functional
 + remove checks for valid openGL-context (DONE)
 : SequenceGrabber long-term stability (keeps logging you out)
++ uyvy/bgra/yv12 conversions altivec'd (DONE)
 
 w32:
 :- [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
