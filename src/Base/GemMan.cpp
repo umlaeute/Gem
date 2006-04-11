@@ -67,7 +67,7 @@ int GemMan::m_buffer = 2;
 int GemMan::m_profile = 0;
 int GemMan::m_rendering = 0;
 GLfloat GemMan::m_clear_color[4];
-GLbitfield GemMan::m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+GLbitfield GemMan::m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
 GLfloat GemMan::m_mat_ambient[4];
 GLfloat GemMan::m_mat_specular[4];
 GLfloat GemMan::m_mat_shininess;
@@ -266,7 +266,6 @@ static void resizeCallback(int xSize, int ySize, void *)
   GemMan::m_w = xSize;
   GemMan::m_height = ySize;
   GemMan::m_width = xSize;
-
   // setup the viewpoint
   glViewport(0, 0, xSize, ySize);
   // setup the matrices
@@ -279,7 +278,7 @@ static void resizeCallback(int xSize, int ySize, void *)
   glMatrixMode(GL_MODELVIEW);
 //  TODO:
 //    shouldn't this be called here?
-//  glLoadIdentity();
+  //  glLoadIdentity();
 }
 /*
  This is SGI sample code taken directly from OpenGL.org:
@@ -571,6 +570,7 @@ void GemMan :: resetValues()
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
+
   glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
 	    m_perspect[2], m_perspect[3],				// bottom, top
 	    m_perspect[4], m_perspect[5]);				// front, back
@@ -716,10 +716,10 @@ void GemMan :: render(void *)
   static float countFreq = 0;
 #endif
 
+  if(GemMan::pleaseDestroy)GemMan::destroyWindow();
+
   if (!m_windowState)
     return;
-
-  if(GemMan::pleaseDestroy)GemMan::destroyWindow();
 
   // are we profiling?
 #ifdef __WIN32__
@@ -853,6 +853,7 @@ void GemMan :: render(void *)
 
       glClear(GL_COLOR_BUFFER_BIT & m_clear_mask);
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
+      glClear(GL_STENCIL_BUFFER_BIT & m_clear_mask);
 
       // setup the left viewpoint
       switch (left_color){
