@@ -104,11 +104,11 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
     delete [] pdata;
     pdata=NULL;
   }
-  int array_size= size+(GEM_VECTORALIGNMENT/8-1);
+  size_t array_size= size+(GEM_VECTORALIGNMENT/8-1);
   pdata = new unsigned char[array_size];
 
-  int alignment = ((int)pdata)&(GEM_VECTORALIGNMENT/8-1);
-  int offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
+  size_t alignment = ((size_t)pdata)&(GEM_VECTORALIGNMENT/8-1);
+  size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
   data = pdata+offset;
   datasize=array_size-offset;
   notowned=0;
@@ -125,8 +125,8 @@ GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
   if (size>datasize){
       return allocate(size);
   }
-  int alignment = ((int)pdata)&(GEM_VECTORALIGNMENT/8-1);
-  int offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
+  size_t alignment = ((size_t)pdata)&(GEM_VECTORALIGNMENT/8-1);
+  size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
   data=pdata+offset;
   return data;
 }
