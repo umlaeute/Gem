@@ -15,6 +15,8 @@
 /////////////////////////////////////////////////////////
 
 #include "separator.h"
+#include "Base/GemMan.h"
+
 
 CPPEXTERN_NEW(separator)
 
@@ -47,13 +49,24 @@ separator :: ~separator()
 void separator :: render(GemState *state)
 {
     // push the current matrix stacks
+  if(state->stackDepth[1]<GemMan::maxStackDepth[1]){
     glMatrixMode(GL_COLOR);
     glPushMatrix();
+  }
+  state->stackDepth[1]++;
+
+  if(state->stackDepth[2]<GemMan::maxStackDepth[2]){
     glMatrixMode(GL_TEXTURE);
     glPushMatrix();
+  }
+  state->stackDepth[2]++;
+
+  if(state->stackDepth[0]<GemMan::maxStackDepth[0]){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    
+  }
+  state->stackDepth[0]++;
+
     m_state.lighting 	 = state->lighting;
     m_state.smooth   	 = state->smooth;
     m_state.texture  	 = state->texture;
@@ -80,12 +93,21 @@ void separator :: render(GemState *state)
 void separator :: postrender(GemState *state)
 {
     // pop the current matrix stacks
+  state->stackDepth[1]--;
+  if(state->stackDepth[1]<GemMan::maxStackDepth[1]){
     glMatrixMode(GL_COLOR);
     glPopMatrix();
+  }
+  state->stackDepth[2]--;
+  if(state->stackDepth[2]<GemMan::maxStackDepth[2]){
     glMatrixMode(GL_TEXTURE);
     glPopMatrix();
+  }
+  state->stackDepth[0]--;
+  if(state->stackDepth[0]<GemMan::maxStackDepth[0]){
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
+  }
 
     state->lighting 	= m_state.lighting;
     state->smooth   	= m_state.smooth;
