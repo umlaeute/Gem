@@ -31,7 +31,8 @@ Object specific bugs
 + [pix_image] sometimes crashes when loading non-existant image (or image which is neither jpeg nor tiff) (WORKSFORME - confirmed by cyrille henry) 
 + [separator] memleak (fixed, needs TESTing)
 + [separator]: yields a stack-overflow error when more [separators] are chained (due to limited stack-size of color-matrix,... on some implementations); fix: keep track of the used stacks and only push/pop when possible (hopefully FIXED)
-: there is some openGL-error (invalid enum, iirc) when using [vertex_program]; this seems to happen only if gemwindow was open first, then closed and then the [vertex_program] patch gets loaded
++ there is some openGL-error (invalid enum, iirc) when using [vertex_program]; this seems to happen only if gemwindow was open first, then closed and then the [vertex_program] patch gets loaded
+: pix_freeframe not supported on x86_64 architectures (needs discussion on the freeframe list)
 
 
 OS specific bugs
@@ -39,6 +40,7 @@ linux:
 :- sometimes window freezes on "destroy"; (JMZ: i experience this sometimes on improper shutdown, but after some (up to 30) seconds, the window finally gets destroyed and pd exits fine; if this is the same as the reported bug, than it is rather an inconvenience than a real bug)
 + when the window is closed from "outside", destroying it (and sometimes even rendering to it) will destroy the window (hopefully FIXED)
 + pix_record still not compiling with old libquicktime (FIXED)
+: resizing the window yields weird results
 
 
 
