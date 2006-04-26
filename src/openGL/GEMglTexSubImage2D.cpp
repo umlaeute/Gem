@@ -24,7 +24,9 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglTexSubImage2D )
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexSubImage2D :: GEMglTexSubImage2D	(int argc, t_atom*argv){
+GEMglTexSubImage2D :: GEMglTexSubImage2D	(int argc, t_atom*argv) :
+  target(0), level(0), xoffset(0), yoffset(0), width(0), height(0)
+{
 #ifndef GL_VERSION_1_1
         error("GEMglTexSubImage2D: GEM was compiled without GL_VERSION_1_1");
         error("GEMglTexSubImage2D: therefore this object will do nothing");
@@ -45,15 +47,11 @@ GEMglTexSubImage2D :: GEMglTexSubImage2D	(int argc, t_atom*argv){
 // Destructor
 //
 GEMglTexSubImage2D :: ~GEMglTexSubImage2D () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
-inlet_free(m_inlet[2]);
-inlet_free(m_inlet[3]);
-inlet_free(m_inlet[4]);
-inlet_free(m_inlet[5]);
-inlet_free(m_inlet[6]);
-inlet_free(m_inlet[7]);
-inlet_free(m_inlet[8]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[2]);
+  inlet_free(m_inlet[3]);
+  inlet_free(m_inlet[4]);
 }
 
 /////////////////////////////////////////////////////////

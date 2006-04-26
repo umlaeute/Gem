@@ -21,7 +21,9 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglGenProgramsARB)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGenProgramsARB :: GEMglGenProgramsARB	(int argc, t_atom*argv) {
+GEMglGenProgramsARB :: GEMglGenProgramsARB	(int argc, t_atom*argv) :
+  n(0), programs(NULL)
+{
 #ifndef GL_ARB_vertex_program
         error("GEMglGenProgramsARB: GEM was compiled without GL_ARB_vertex_program");
         error("GEMglGenProgramsARB: therefore this object will do nothing");

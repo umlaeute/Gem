@@ -23,7 +23,8 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglDeleteTextures )
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDeleteTextures :: GEMglDeleteTextures	(int argc, t_atom* argv)
+GEMglDeleteTextures :: GEMglDeleteTextures	(int argc, t_atom* argv) :
+  n(0), textures(NULL), m_inlet(NULL)
 {
 #ifndef GL_VERSION_1_1
         error("GEMglDeleteTextures: GEM was compiled without GL_VERSION_1_1");

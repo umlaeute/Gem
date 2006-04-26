@@ -24,13 +24,15 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglProgramStringARB , t_floatarg, A_DEFFLOAT, t
 GEMglProgramStringARB :: GEMglProgramStringARB	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_symbol* arg3=0) :
 		target((GLenum)arg0), 
 		format((GLenum)arg1), 
-		len((GLsizei)arg2)
+		len((GLsizei)arg2),
+                string(NULL)
 {
 #ifndef GL_ARB_vertex_program
         error("GEMglProgramStringARB: GEM was compiled without GL_ARB_vertex_program");
         error("GEMglProgramStringARB: therefore this object will do nothing");
 #endif
-    string = (GLvoid*)arg3->s_name;
+        if(arg3)
+          string = (GLvoid*)arg3->s_name;
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("format"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("len"));
