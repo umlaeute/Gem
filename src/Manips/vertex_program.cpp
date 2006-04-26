@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "Base/GemGLUtil.h"
+
 CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
@@ -42,7 +44,8 @@ vertex_program :: vertex_program() :
 vertex_program :: vertex_program(t_symbol *filename) :
   m_programType(GEM_PROGRAM_none), 
   m_programID(0), 
-  m_programString(NULL), m_size(0)
+  m_programString(NULL), m_size(0),
+  m_envNum(-1)
 {
   openMess(filename);
 }
@@ -264,6 +267,7 @@ void vertex_program :: LoadProgram(void)
 
 void vertex_program :: startRendering()
 {
+  post("startrendering");
   if (m_programString == NULL)
     {
       error("[%s]: need to load a program", m_objectname->s_name);
@@ -300,6 +304,20 @@ void vertex_program :: postrender(GemState *state)
   }
 }
 
+void vertex_program :: paramMess(int envNum, t_float param1, t_float param2, t_float param3, t_float param4)
+{
+  if(envNum>=0){
+	//float param[4] = {param1, param2, param3, param4};
+	
+	m_param[0] = param1;
+	m_param[1] = param2;
+	m_param[2] = param3;
+	m_param[3] = param4;
+
+	m_envNum = envNum;
+  } else 
+        m_envNum = -1;
+}
 /////////////////////////////////////////////////////////
 // printInfo
 //
@@ -376,6 +394,8 @@ void vertex_program :: obj_setupCallback(t_class *classPtr)
 		  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&vertex_program::printMessCallback,
 		  gensym("print"), A_NULL);
+  class_addmethod(classPtr, (t_method)&vertex_program::paramMessCallback,
+		  gensym("parameter"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
 }
 void vertex_program :: openMessCallback(void *data, t_symbol *filename)
 {
@@ -384,4 +404,9 @@ void vertex_program :: openMessCallback(void *data, t_symbol *filename)
 void vertex_program :: printMessCallback(void *data)
 {
 	GetMyClass(data)->printInfo();
+}
+
+void vertex_program :: paramMessCallback(void *data, t_float envNum, t_float param1, t_float param2, t_float param3, t_float param4)
+{
+  GetMyClass(data)->paramMess((int)envNum, param1, param2, param3, param4);
 }

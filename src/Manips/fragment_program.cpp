@@ -71,23 +71,6 @@ GLint fragment_program :: queryProgramtype(char*program)
   return GEM_PROGRAM_none;
 }
 
-void fragment_program :: paramMess(t_float envNum, t_float param1, t_float param2, t_float param3, t_float param4)
-{
-	//float param[4] = {param1, param2, param3, param4};
-	
-	m_param[0] = param1;
-	m_param[1] = param2;
-	m_param[2] = param3;
-	m_param[3] = param4;
-
-	m_envNum = (int)envNum;
-	if (m_envNum < 0) m_envNum = 0;
-
-	//glProgramEnvParameter4fvARB(GL_FRAGMENT_PROGRAM_ARB, (int)envNum, param);
-
-}
-
-
 /////////////////////////////////////////////////////////
 // printInfo
 //
@@ -278,9 +261,6 @@ void fragment_program :: obj_setupCallback(t_class *classPtr)
 		  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&fragment_program::printMessCallback,
 		  gensym("print"), A_NULL);
-  class_addmethod(classPtr, (t_method)&fragment_program::paramMessCallback,
-		  gensym("parameter"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
-
 }
 void fragment_program :: openMessCallback(void *data, t_symbol *filename)
 {
@@ -289,9 +269,4 @@ void fragment_program :: openMessCallback(void *data, t_symbol *filename)
 void fragment_program :: printMessCallback(void *data)
 {
 	GetMyClass(data)->printInfo();
-}
-
-void fragment_program :: paramMessCallback(void *data, t_float envNum, t_float param1, t_float param2, t_float param3, t_float param4)
-{
-	GetMyClass(data)->paramMess(envNum, param1, param2, param3, param4);
 }

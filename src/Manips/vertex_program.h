@@ -84,6 +84,10 @@ class GEM_EXTERN vertex_program : public GemBase
   virtual void startRendering();
 
   //////////
+  // set 1 parameter of the program
+  virtual void paramMess(int envNum, t_float param1, t_float param2, t_float param3, t_float param4);
+
+  //////////
   // Print Info about Hardware limits
   virtual void printInfo();
 
@@ -98,7 +102,7 @@ class GEM_EXTERN vertex_program : public GemBase
   char		m_buf[MAXPDSTRING];
   
   float		m_param[4];
-  int		m_envNum;
+  int	        m_envNum;
 
  protected:
 	
@@ -106,6 +110,7 @@ class GEM_EXTERN vertex_program : public GemBase
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);
   static void printMessCallback  (void *);
+  static void paramMessCallback	 (void *data, t_float envNum, t_float param1, t_float param2, t_float param3, t_float param4);
 };
 
 #endif	// for header file
