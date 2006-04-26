@@ -36,8 +36,14 @@ pix_dot :: pix_dot() :
   sharedbuffer(NULL), sharedbuffer_length(0),
   tail(0),
   alreadyInit(0),
+  DOTDEPTH(5), DOTMAX(1<<5),
   dots_width(64), dots_height(64),
-  m_scale(1), m_useScale(true)
+  dot_size(0), dot_hsize(0),
+  sampx(NULL), sampy(NULL),
+  state(0),
+  m_scale(1.0), m_useScale(true),
+  pattern(NULL), heart_pattern(NULL),
+  mode(0)
 {
   myImage.xsize=myImage.ysize=0;
   DOTDEPTH = 5;
