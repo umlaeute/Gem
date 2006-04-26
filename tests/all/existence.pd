@@ -23,9 +23,7 @@
 #X obj 299 354 t l s;
 #X obj 178 319 t l l;
 #X obj 65 48 t b b;
-#X msg 8 137 \; pd quit;
-#X obj 8 71 t b b;
-#X obj 15 99 print done;
+#X obj 65 85 print done;
 #X connect 1 0 6 0;
 #X connect 1 1 4 1;
 #X connect 2 0 1 0;
@@ -49,7 +47,5 @@
 #X connect 20 1 15 0;
 #X connect 21 0 19 0;
 #X connect 21 1 20 0;
-#X connect 22 0 24 0;
+#X connect 22 0 23 0;
 #X connect 22 1 5 0;
-#X connect 24 0 23 0;
-#X connect 24 1 25 0;
