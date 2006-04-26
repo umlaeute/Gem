@@ -396,6 +396,8 @@ void vertex_program :: obj_setupCallback(t_class *classPtr)
 		  gensym("print"), A_NULL);
   class_addmethod(classPtr, (t_method)&vertex_program::paramMessCallback,
 		  gensym("parameter"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
+  class_addmethod(classPtr, (t_method)&vertex_program::paramMessCallback,
+		  gensym("param"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
 }
 void vertex_program :: openMessCallback(void *data, t_symbol *filename)
 {
