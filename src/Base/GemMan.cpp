@@ -92,6 +92,8 @@ int GemMan::texture_rectangle_supported = 0;	//tigital
 int GemMan::client_storage_supported = 0;
 int GemMan::texture_range_supported = 0;
 int GemMan::texture_yuv_supported = 0;
+int GemMan::multisample_filter_hint = 0;
+int GemMan::maxStackDepth[4];
 float GemMan::fps;
 int GemMan::fsaa = 0;
 bool GemMan::pleaseDestroy=false;
@@ -429,6 +431,10 @@ void GemMan :: initGem()
   m_fogEnd	= 20.f;
   m_fog		= 0.5f;
   m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
+
+  maxStackDepth[0] = 16; // model
+  maxStackDepth[1] = maxStackDepth[2] = maxStackDepth[3] = 2; // color/texture/projection
+
 
   m_motionBlur = 0.f;
 #ifdef __APPLE__
@@ -1069,14 +1075,16 @@ void GemMan :: windowInit()
   #endif
 
   /* i am not really sure whether it is a good idea to enable FSAA by default
-   * this might slow down everything a lot
+   * this might slow down everything a lot;
+   * JMZ: additionally, we should not enable it, without checking first, 
+   * whether GL_NV_multisample_filter_hint is supported by the backend
    */
 
 #if defined GL_MULTISAMPLE_ARB && defined GL_MULTISAMPLE_FILTER_HINT_NV
   glEnable (GL_MULTISAMPLE_ARB);
-  glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+  if(multisample_filter_hint)
+    glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
 #endif
-
  
   resetValues();
 }
@@ -1130,7 +1138,7 @@ int GemMan :: createWindow(char* disp)
         power-of-two textures.  GL_EXT_texture_rectangle is available
         on the NVidia GeForce2MX and above, or the ATI Radeon and above.
     */
-  
+ 
   /* of course, nvidia choose their own extension... (jmz) */
   /* i have ifdef'ed these, because some code in [pix_texture]
    * depends on texture_rectangle_supported, without checking
@@ -1192,6 +1200,21 @@ int GemMan :: createWindow(char* disp)
 #else
   = 0;
 #endif
+
+  multisample_filter_hint =
+#ifdef GL_MULTISAMPLE_FILTER_HINT_NV
+    OpenGLExtensionIsSupported("GL_NV_multisample_filter_hint");
+#else
+    0;
+#endif
+
+
+
+  /* check the stackg-sizes */
+  glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH, maxStackDepth+0);
+  glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+1);
+  glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH, maxStackDepth+2);
+  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, maxStackDepth+3);
 
   m_w=myHints.real_w;
   m_h=myHints.real_h;

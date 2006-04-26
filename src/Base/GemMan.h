@@ -179,6 +179,8 @@ class GEM_EXTERN GemMan
 	static int	   client_storage_supported;
 	static int	   texture_range_supported;
 	static int	   texture_yuv_supported;
+	static int         multisample_filter_hint;
+	static GLint       maxStackDepth[4]; // for push/pop of matrix-stacks
         static float	   fps;
         static int	   fsaa;
 	static bool        pleaseDestroy;
