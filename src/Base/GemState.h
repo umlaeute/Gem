@@ -105,6 +105,11 @@ class GEM_EXTERN GemState
 	//		and right renderings
 	float				tickTime;
 
+
+	//////////
+	// how deep is the current stack
+	int stackDepth[4];
+
         //////////
         // Constructor
     	GemState();
