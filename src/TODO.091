@@ -30,8 +30,8 @@ Object specific bugs
 + [pix_write] upside down when using jpg (WORKSFORME - confirmed by cyrille henry) 
 + [pix_image] sometimes crashes when loading non-existant image (or image which is neither jpeg nor tiff) (WORKSFORME - confirmed by cyrille henry) 
 + [separator] memleak (fixed, needs TESTing)
-:+ [separator]: yields a stack-overflow error when more [separators] are chained (due to limited stack-size of color-matrix,... on some implementations); fix: keep track of the used stacks and only push/pop when possible
-: there is some openGL-error (invalid enum, iirc) when using [vertex_program]; i only experienced this when testing the vertex_program patch in examples/02 AFTER having used the glsl patch in examples/02; so i think it is rather a cleanup-problem with the glsl-objects, but this has to be investigated
++ [separator]: yields a stack-overflow error when more [separators] are chained (due to limited stack-size of color-matrix,... on some implementations); fix: keep track of the used stacks and only push/pop when possible (hopefully FIXED)
+: there is some openGL-error (invalid enum, iirc) when using [vertex_program]; this seems to happen only if gemwindow was open first, then closed and then the [vertex_program] patch gets loaded
 
 
 OS specific bugs

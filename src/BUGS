@@ -1,3 +1,7 @@
+helpfiles for glsl_*
+
+There is a very serious long term stability bug in the OSX SequenceGrabber code
+
 [pix_takealpha] crashes when a grey image is send to the right inlet (is this still true ?) -- FIXED
 
 under windows gem eats all of the cpu after switching rendering on/off sometimes

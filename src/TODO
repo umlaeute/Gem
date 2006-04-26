@@ -17,6 +17,5 @@ Nongeos:
 Particles:
 
 Pixes:
-	motion detection
 	MMX, SSE2
 	windows movie loader (have a look at guliverkli)
