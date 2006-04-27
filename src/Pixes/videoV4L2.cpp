@@ -98,7 +98,7 @@ static int xioctl(int                    fd,
 int videoV4L2::init_mmap (void)
 {
   struct v4l2_requestbuffers req;
-  char*devname=(m_devicename)?m_devicename:"device";
+  char*devname=(char*)((m_devicename)?m_devicename:"device");
 
   memset (&(req), 0, sizeof (req));
 
@@ -603,7 +603,7 @@ int videoV4L2 :: setDevice(int d)
   //  verbose(1, "new device set %d", m_devicenum);
   return 0;
 }
-int videoV4L2 :: setDevice(char*s)
+int videoV4L2 :: setDevice(char*name)
 {
   m_devicenum=-1;
   m_devicename=name;
