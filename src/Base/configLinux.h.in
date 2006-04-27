@@ -23,6 +23,7 @@
 
 /* video grabbing */
 #undef HAVE_VIDEO4LINUX
+#undef HAVE_VIDEO4LINUX2
 #undef HAVE_LIBDV
 
 /* posix threads */

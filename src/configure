@@ -1029,6 +1029,7 @@ Optional Packages:
   --with-ffmpeg-libs=/path/to/ffmpeg/lib/
                           library path for ffmpeg
   --without-v4l           disable v4l-lib (video input)
+  --with-v4l2             enable v4l2-lib (video input (might override v4l-1)
   --without-ieee1394
                           disable ieee1394 (video input)
   --with-ieee1394-includes=/path/to/ieee1394/include/
@@ -8463,7 +8464,6 @@ fi
 
 
 
-
 # Check whether --with-v4l or --without-v4l was given.
 if test "${with_v4l+set}" = set; then
   withval="$with_v4l"
@@ -8471,6 +8471,82 @@ if test "${with_v4l+set}" = set; then
 else
   with_v4l="yes"
 fi;
+
+
+# Check whether --with-v4l2 or --without-v4l2 was given.
+if test "${with_v4l2+set}" = set; then
+  withval="$with_v4l2"
+
+else
+  with_v4l2="no"
+fi;
+
+
+if test "x$with_v4l2" != "xno"; then
+  echo "$as_me:$LINENO: checking for linux/videodev2.h" >&5
+echo $ECHO_N "checking for linux/videodev2.h... $ECHO_C" >&6
+if test "${ac_cv_header_linux_videodev2_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+# include <asm/types.h>
+# include <sys/time.h>
+
+
+#include <linux/videodev2.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_header_linux_videodev2_h=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_header_linux_videodev2_h=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_linux_videodev2_h" >&5
+echo "${ECHO_T}$ac_cv_header_linux_videodev2_h" >&6
+if test $ac_cv_header_linux_videodev2_h = yes; then
+
+                    cat >>confdefs.h <<\_ACEOF
+#define HAVE_VIDEO4LINUX2 1
+_ACEOF
+
+                    have_v4l2="yes"
+
+else
+  have_v4l2="no"
+fi
+
+
+fi
 
 if test "x$with_v4l" != "xno"; then
   echo "$as_me:$LINENO: checking for egrep" >&5
@@ -8874,6 +8950,7 @@ fi
 
 
 fi
+
 
 
 
@@ -15241,6 +15318,11 @@ fi
 if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
 fi
+
+if test "x$have_v4l2" = "xyes"; then
+  have_v4l="yes (v4l-2)"
+fi
+
 
 echo "$as_me:$LINENO: result:
 Result:

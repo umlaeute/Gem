@@ -171,8 +171,21 @@ fi
 
 
 
-
 GEM_ARG_WITH(v4l, [video input])
+GEM_ARG_WITHOUT(v4l2, [video input (might override v4l-1])
+
+if test "x$with_v4l2" != "xno"; then
+  AC_CHECK_HEADER(linux/videodev2.h,
+                  [
+                    AC_DEFINE(HAVE_VIDEO4LINUX2)
+                    have_v4l2="yes"
+                  ],[have_v4l2="no"], 
+                  [
+# include <asm/types.h>
+# include <sys/time.h>
+                  ])
+fi
+
 if test "x$with_v4l" != "xno"; then
   AC_CHECK_HEADER(linux/videodev.h,
                   [
@@ -180,6 +193,7 @@ if test "x$with_v4l" != "xno"; then
                     have_v4l="yes"
                   ],[have_v4l="no"])
 fi
+
 GEM_CHECK_LIB(ieee1394,dv,main,,,,video input) 
 
 GEM_CHECK_LIB(ftgl,ftgl,main,
@@ -410,6 +424,11 @@ fi
 if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
 fi
+
+if test "x$have_v4l2" = "xyes"; then
+  have_v4l="yes (v4l-2)"
+fi
+
 
 AC_MSG_RESULT([
 Result:
