@@ -33,6 +33,7 @@ Object specific bugs
 + [separator]: yields a stack-overflow error when more [separators] are chained (due to limited stack-size of color-matrix,... on some implementations); fix: keep track of the used stacks and only push/pop when possible (hopefully FIXED)
 + there is some openGL-error (invalid enum, iirc) when using [vertex_program]; this seems to happen only if gemwindow was open first, then closed and then the [vertex_program] patch gets loaded
 : pix_freeframe not supported on x86_64 architectures (needs discussion on the freeframe list)
+:+ pix_video does not work with certain devices (like philips webcam)
 
 
 OS specific bugs
