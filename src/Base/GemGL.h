@@ -40,7 +40,7 @@
 # include <GL/gl.h>
 # include <GL/glu.h>
 
-# if  (!defined GL_GLEXT_VERSION) && (!defined DONT_INCLUDE_GLEXT)
+# if (!defined DONT_INCLUDE_GLEXT)
 /* windos is (again) a bit difficult:
  * by default, there are no GL/glext.h headers
  * but of course you can install nvidia's headers to get them.
@@ -49,8 +49,13 @@
  * so, if your system lacks GL/glext.h,
  * just undefine the appropriate line in Base/configNT.h
  */
+#  if  (!defined GL_GLEXT_VERSION)
+#   include <GL/glext.h>
+#  endif /* GL_GLEXT_VERSION */
 
-#  include <GL/glext.h>
+#ifdef __WIN32__
+# include <GL/wglext.h>
+#endif
 
 # endif /* GLEXT */ 
 
@@ -160,7 +165,6 @@
 #ifndef GL_TEXTURE_RECTANGLE_EXT
 # define GL_TEXTURE_RECTANGLE_EXT 0x84F5
 #endif
-
 
 /* default draw-style */
 #ifndef GL_DEFAULT_GEM
