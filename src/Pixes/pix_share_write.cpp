@@ -95,9 +95,9 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   GLenum color=GL_RGBA;
 
   if(argc<1)return 7;
-
+#ifndef __WIN32__
   if(shm_id>0)freeShm();
-
+#endif
   if(A_FLOAT==argv->a_type){
     fake=atom_getint(argv);
   } else if(A_SYMBOL==argv->a_type){
