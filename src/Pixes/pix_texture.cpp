@@ -90,7 +90,9 @@ void pix_texture :: setUpTextureState() {
 	//			otherwise, weird texturing occurs (looks similar to pix_refraction)
 	// NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
 	// POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
+#ifdef GL_CLAMP_TO_EDGE
 	  m_repeat = GL_CLAMP_TO_EDGE;
+#endif
       debug("pix_texture: using rectangle texture");
 	}
   }
@@ -535,9 +537,11 @@ void pix_texture :: envMess(int num)
 	case 3:
 	  m_env = GL_ADD;
 	  break;
+#ifdef GL_COMBINE
 	case 4:
 	  m_env = GL_COMBINE;
 	  break;
+#endif
 	default:
 	  m_env = GL_MODULATE;
   }
