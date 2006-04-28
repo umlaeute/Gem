@@ -20,7 +20,11 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <unistd.h>
+#ifdef __WIN32__
+# include <io.h>
+#else
+# include <unistd.h>
+#endif
 
 #include "Base/GemGLUtil.h"
 

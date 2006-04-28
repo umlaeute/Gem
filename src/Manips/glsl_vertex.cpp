@@ -20,7 +20,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
+#ifndef __WIN32__
+# include <unistd.h>
+#endif
 
 CPPEXTERN_NEW_WITH_ONE_ARG(glsl_vertex, t_symbol *, A_DEFSYM)
 
