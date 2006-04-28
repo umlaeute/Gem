@@ -2696,10 +2696,7 @@ GEM_EXTERN int getGLdefine(char *name)
 		else if (!strcmp(name, "WEIGHT_ARRAY_ARB")) return GL_WEIGHT_ARRAY_ARB;
 #endif
 #ifdef GL_WIN_specular_fog
-		else if (!strcmp(name, "WIN_SPECULAR_FOG")) return GL_WIN_specular_fog;
-#endif
-#ifdef WIN32_LEAN_AND_MEAN
-		else if (!strcmp(name, "WIN32_LEAN_AND_MEAN")) return WIN32_LEAN_AND_MEAN;
+		else if (!strcmp(name, "WIN_specular_fog")) return GL_WIN_specular_fog;
 #endif
 		else return _GL_UNDEFINED;
 #pragma mark *** 20 ***
