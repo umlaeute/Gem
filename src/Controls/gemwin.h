@@ -19,12 +19,6 @@
 # define HELPSYMBOL_BASE "Gem/"
 #endif
 
-#ifdef __WIN32__
-# pragma warning( disable : 4091 )
-#endif
-
-#include "Base/config.h"
-#include "m_pd.h"
 #include "Base/CPPExtern.h"
 
 /*-----------------------------------------------------------------
