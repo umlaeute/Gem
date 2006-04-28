@@ -20,7 +20,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#ifndef __WIN32__
+#ifdef __WIN32__
+# include <io.h>
+#else
 # include <unistd.h>
 #endif
 
