@@ -7,14 +7,13 @@
  *
  */
 
-/*
+
 #ifdef __APPLE__
 #define HAVE_QUICKTIME
 #endif
-*/
-//#ifdef HAVE_QUICKTIME
 
-#if defined (__WIN32__) || defined (__APPLE__)
+/* define HAVE_QUICKTIME in Base/configNT.h if you have quicktime-sdk installed */
+#if defined HAVE_QUICKTIME
 
 #include "pix_recordQT.h"
 #include "Base/GemMan.h"
@@ -922,4 +921,4 @@ void pix_recordQT :: colorspaceCallback(void *data, t_symbol *state)
   GetMyClass(data)->csMess(getPixFormat(state->s_name));
 }
 
-#endif // __APPLE__pix_recordQTQT
+#endif // HAVE_QUICKTIME
