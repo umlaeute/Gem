@@ -154,7 +154,7 @@ t_int* pix_sig2pix :: perform(t_int* w)
 void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 {
   if (m_width==0 && m_height==0){
-    int w = powerOfTwo((int)sqrt(sp[0]->s_n));
+    int w = powerOfTwo((int)sqrt((double)sp[0]->s_n));
     int h = (sp[0]->s_n / w);
     dimenMess(w, h);
     m_width = 0;

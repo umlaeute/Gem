@@ -258,8 +258,8 @@ inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_C
 		(nNextClosestDeltaGreen*nNextClosestDeltaGreen)+
 		(nNextClosestDeltaBlue*nNextClosestDeltaBlue);
 
-	const float ClosestDist=(float)sqrt(nClosestDistSqrd);
-	const float NextClosestDist=(float)sqrt(nNextClosestDistSqrd);
+	const float ClosestDist=(float)sqrt((double)nClosestDistSqrd);
+	const float NextClosestDist=(float)sqrt((double)nNextClosestDistSqrd);
 	const float TotalDist=(ClosestDist+NextClosestDist);
 
 	if (TotalDist==0.0f) {
