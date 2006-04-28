@@ -78,9 +78,9 @@ void pix_vpaint :: makepoints(void)
     for (i = 0; i < maxPoints; i++) {
 	points[i].x = rand() % m_w>>1;
 	points[i].y = rand() % m_h;
-	points[i].r = bi[4 * (points[i].y * m_w>>1 + points[i].x)];
-	points[i].g = bi[4 * (points[i].y * m_w>>1 + points[i].x) + 1];
-	points[i].b = bi[4 * (points[i].y * m_w>>1 + points[i].x) + 2];
+	points[i].r = bi[4 * (points[i].y * (m_w>>1) + points[i].x)];
+	points[i].g = bi[4 * (points[i].y * (m_w>>1) + points[i].x) + 1];
+	points[i].b = bi[4 * (points[i].y * (m_w>>1) + points[i].x) + 2];
 /*	points[i+1].x = rand() % m_w>>1;
 	points[i+1].y = rand() % m_h;
 	points[i+1].r = bi[2 * (points[i+1].y * m_w>>1 + points[i+1].x)];
@@ -292,8 +292,10 @@ void pix_vpaint :: processImage(imageStruct &image)
 	   * Blend in the edge lines 
 	   */
 	  glClear(GL_DEPTH_BUFFER_BIT);
+#ifdef GL_MIN_EXT
 	  glBlendEquationEXT(GL_MIN_EXT);
 	  glEnable(GL_BLEND);
+#endif
 	  glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
 	  glDisable(GL_BLEND);
     }
