@@ -1,9 +1,3 @@
-#include <stdlib.h>
-#ifdef __APPLE__
-#include "sgiimage.h"
-#else
-#include "Base/sgiimage.h"
-#endif // __APPLE__
 /*
  *    	fastimg -
  *		Faster reading and writing of image files.
@@ -25,19 +19,17 @@
  *				Mark Danks - 1998
  */
 
+#include "Base/config.h"
+#include <stdlib.h>
+#include "Base/sgiimage.h"
 
-/* LATER: look at the following lines; jmz */
+
 #ifndef __WIN32__
-#include <unistd.h>
-#ifdef __WIN32__
-#include <bstring.h>
-#else
-#include <string.h>
-#endif	// for !linux or !__APPLE__
+# include <unistd.h>
 #endif	// for !win32
+
+#include <string.h>
 #include <stdio.h>
-
-
 
 /*
  *	from image.h
@@ -115,15 +107,6 @@ static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int
  *		this is used to extract image data from core dumps.
  *
  */
-#ifdef WIN32
-static void bzero(void *ptr, int32 size)
-{
-	unsigned char *cptr = (unsigned char *) ptr;
-	for (; size != 0; size--)
-		*cptr++ = 0x0;
-}
-#endif
-
 unsigned int32 *
 getLongImage(char *textureFile, int32 *xsize, int32 *ysize, int32 *csize)
 {
@@ -183,7 +166,7 @@ static int putlong(FILE *outf, unsigned int32 val)
 
 static void readheader(FILE *inf, IMAGE *image)
 {
-    bzero(image, sizeof(IMAGE));
+    memset(image, 0, sizeof(IMAGE));
     image->imagic = getshort(inf);
     image->type = getshort(inf);
     image->dim = getshort(inf);
@@ -196,7 +179,7 @@ static int writeheader(FILE *outf, IMAGE *image)
 {
     IMAGE t;
 
-    bzero(&t, sizeof(IMAGE));
+    memset(&t, 0, sizeof(IMAGE));
     fwrite(&t,sizeof(IMAGE),1,outf);
     fseek(outf,0,SEEK_SET);
     putshort(outf,image->imagic);
@@ -574,7 +557,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, ch
     rlebuf = (unsigned char *)malloc(rlebuflen);
     lumbuf = (unsigned int32 *)malloc(xsize*sizeof(int32));
 
-    bzero(image,sizeof(IMAGE));
+    memset(image,0,sizeof(IMAGE));
     image->imagic = IMAGIC; 
     image->type = RLE(1);
     if(zsize>1)
