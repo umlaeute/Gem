@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_GEMEXPORTDEF_H_
 #define INCLUDE_GEMEXPORTDEF_H_
 
-#ifdef __WIN32__
+#ifdef _MSC_VER
 
 /* turn of some warnings on vc-compilers */
 # pragma warning( disable : 4244 )
