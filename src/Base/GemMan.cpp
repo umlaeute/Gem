@@ -22,12 +22,12 @@
 # include <sys/time.h>
 # include <GL/glx.h>
 # include <X11/Xlib.h>
-#elif __APPLE__
+#elif defined __APPLE__
 #include <stdlib.h>
 #include <string.h>
 #include <Quicktime/Quicktime.h>
 #include <time.h>
-#elif __WIN32__
+#elif defined __WIN32__
 # include <stdlib.h>
 // I hate Microsoft...I shouldn't have to do this!
 #endif
@@ -1212,7 +1212,11 @@ int GemMan :: createWindow(char* disp)
 
   /* check the stackg-sizes */
   glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH, maxStackDepth+0);
+#ifdef GL_MAX_COLOR_MATRIX_STACK_DEPTH
   glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+1);
+#else
+   maxStackDepth[1]=2;
+#endif
   glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH, maxStackDepth+2);
   glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, maxStackDepth+3);
 
@@ -1267,13 +1271,13 @@ void GemMan :: destroyWindow()
   if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
 
   glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
-#elif __WIN32__              // for Windows
+#elif defined __WIN32__              // for Windows
 
   if (!constInfo.dc && !constInfo.context)return; // do not crash ??
 
   wglMakeCurrent(constInfo.dc, constInfo.context);
   s_windowRun = 0;
-#elif __APPLE__		// for PPC Macintosh
+#elif defined __APPLE__		// for PPC Macintosh
     ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
     ::aglSetCurrentContext(constInfo.context);
 #else
@@ -1357,9 +1361,9 @@ void GemMan :: swapBuffers()
   if (GemMan::m_buffer == 2)
 #ifdef __unix__             // for Unix
     glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
-#elif __WIN32__          // for WinNT
+#elif defined __WIN32__          // for WinNT
     SwapBuffers(gfxInfo.dc);
-#elif __APPLE__		// for Macintosh
+#elif defined __APPLE__		// for Macintosh
     ::aglSwapBuffers(gfxInfo.context);
 #else                   // everyone else
 #error Define OS specific swap buffer

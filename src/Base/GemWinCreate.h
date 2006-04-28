@@ -21,9 +21,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # ifdef HAVE_LIBXXF86VM
 #  include <X11/extensions/xf86vmode.h>
 # endif
-#elif __WIN32__
+#elif defined __WIN32__
 # include <windows.h>
-#elif __APPLE__
+#elif defined __APPLE__
 # import <AGL/agl.h>
 #else
 # error Define OS specific window creation
@@ -61,9 +61,9 @@ class GEM_EXTERN WindowInfo
     fs(0), 
 #ifdef __unix__
     dpy(NULL), win(0), cmap(0), context(NULL), delete_atom(0)
-#elif __WIN32__
+#elif defined __WIN32__
     win(NULL), dc(NULL), context(NULL)
-#elif __APPLE__
+#elif defined __APPLE__
         pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
         pixMap(NULL), rowBytes(0), baseAddr(NULL)
 #endif
@@ -83,13 +83,13 @@ class GEM_EXTERN WindowInfo
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
 #endif
 
-#elif __WIN32__
+#elif defined __WIN32__
 
   HWND        win;                // Window handle
   HDC         dc;                 // Device context handle
   HGLRC       context;            // OpenGL context
 
-#elif __APPLE__
+#elif defined __APPLE__
 
     WindowPtr		pWind;		// GEM window reference for gemwin
     AGLContext		context;	// OpenGL context
@@ -173,9 +173,9 @@ class GEM_EXTERN WindowHints
   // The GLXcontext to share rendering with
 #ifdef __unix__
     GLXContext  shared;
-#elif __WIN32__
+#elif defined __WIN32__
     HGLRC       shared;
-#elif __APPLE__
+#elif defined __APPLE__
     AGLContext	shared;
 #else
 #error Define OS specific OpenGL context
