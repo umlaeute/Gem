@@ -257,7 +257,11 @@ void pqtorusknots :: render(GemState *state)
         {
           if (m_Texcoord[i])
             {
+#ifdef GL_TEXTURE0_ARB
               glClientActiveTextureARB(GL_TEXTURE0_ARB + i);
+#else
+				post("pqtorusknots: you hit a bug!");
+#endif
               glTexCoordPointer(2, GL_FLOAT, 0, m_Texcoord[i]);
             }
         }
