@@ -23,20 +23,29 @@
 # define debug
 #endif
 
-#ifdef __unix__
-/* linux
- */
+#ifdef __APPLE__
+# include <iostream>
+# include <Carbon/Carbon.h>
+#else
+# include <vector>
+#endif
 
-#include <vector>
-#include <GL/gl.h>
-#include <GL/glx.h>
+#include "Base/GemGL.h"
 #include "GemPBuffer.h"
 
+#ifdef __linux__
+# include <GL/glx.h>
+#elif defined __APPLE__
+# include <AGL/agl.h>
+#endif
+
+#ifdef __linux__
 /* darn: my crazy GL/glxext.h defines GLX_SGIX_fbconfig but 
  * _not_ the appropriate functions like glXChooseFBConfigSGIX()
  * LATER fix this (think glew)
  */
 #undef GLX_SGIX_fbconfig
+
 struct PBuffer_data {
   Display *display;
 	
@@ -49,8 +58,8 @@ struct PBuffer_data {
 
 /*
  */
-PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) {
-	
+PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height)
+{	
   Display *display = glXGetCurrentDisplay();
   int screen = DefaultScreen(display);
   GLXContext old_context = glXGetCurrentContext();
@@ -117,13 +126,13 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) 
       pattrib.push_back(0);
 			
       config = glXChooseFBConfigSGIX(display,screen,&attrib[0],&count);
-      if(!config) throw("glXChooseFBConfigSGIX() failed");
+      if(!config) throw(GemException("glXChooseFBConfigSGIX() failed"));
 			
       pbuffer = glXCreateGLXPbufferSGIX(display,config[0],width,height,&pattrib[0]);
-      if(!pbuffer) throw("glXCreateGLXPbufferSGIX() failed");
+      if(!pbuffer) throw(GemException("glXCreateGLXPbufferSGIX() failed"));
 			
       context = glXCreateContextWithConfigSGIX(display,config[0],GLX_RGBA_TYPE,old_context,true);
-      if(!context) throw("glXCreateContextWithConfigSGIX() failed");
+      if(!context) throw(GemException("glXCreateContextWithConfigSGIX() failed"));
 #endif	/* GLX_SGIX_fbconfig */
     } else {
       pattrib.push_back(GLX_PBUFFER_WIDTH);
@@ -192,14 +201,6 @@ void PBuffer::disable() {
 /*
   Apple OSX pBuffer Setup
 */
-#include <iostream>
-#include <Carbon/Carbon.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#include <OpenGL/opengl.h>
-#include <AGL/agl.h>
-#include "GemPBuffer.h"
 
 struct PBuffer_data {
   CGLPBufferObj		pbuffer;
@@ -261,7 +262,6 @@ OSStatus cglReportError (CGLError err)
 }
 
 // ---------------------------------
-//PBuffer::PBuffer() : width(width), height(height) , float_buffer( 0){
 PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 {
   OSStatus err = noErr;
@@ -362,19 +362,7 @@ void PBuffer::disable() {
   return;
 }
 #elif defined __WIN32__
-#pragma mark ------Win32Code------
-/* windows
- */
 
-#include <vector>
-#include <windows.h>
-#include <GL/gl.h>
-#include <GL/glext.h>
-#include <GL/wglext.h>
-#include "GemPBuffer.h"
-
-/*
- */
 struct PBuffer_data {
   HDC hdc;
   HPBUFFERARB pbuffer;
