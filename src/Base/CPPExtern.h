@@ -14,11 +14,10 @@ LOG
 #define INCLUDE_CPPEXTERN_H_
 
 #include "Base/config.h"
-#ifdef __WIN32__
-# pragma warning( disable : 4091 )
-#endif
-#include "m_pd.h"
 #include "Base/GemExportDef.h"
+
+#include "m_pd.h"
+
 
 #include <new>
 
