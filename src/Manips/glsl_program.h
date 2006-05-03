@@ -105,11 +105,12 @@ class GEM_EXTERN glsl_program : public GemBase
   t_symbol          **m_symname;
   GLint				*m_size;
   GLenum			*m_type;
+  GLint             *m_loc;
   float				**m_param;
   int				*m_flag;
   
   GLint				m_linked;
-  bool                  m_wantLink;
+  bool              m_wantLink;
   GLcharARB*		m_infoLog;
   int				m_num;
 #endif

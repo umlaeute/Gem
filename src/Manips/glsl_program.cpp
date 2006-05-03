@@ -32,7 +32,7 @@ glsl_program :: glsl_program()
   :
 m_program(0), 
 m_maxLength(0), m_infoLength(0), m_uniformCount(0),
-m_symname(NULL), m_size(NULL), m_type(NULL),
+m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
 m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
 m_infoLog(NULL), m_num(0)
 #endif
@@ -60,7 +60,6 @@ glsl_program :: ~glsl_program()
 void glsl_program :: destroyArrays() {
 #ifdef GL_ARB_shader_objects
   int i;
-  //  if (m_program) glDeleteObjectARB( m_program ); m_program=0;
 
   if (m_param)
     {
@@ -74,6 +73,7 @@ void glsl_program :: destroyArrays() {
   if (m_type)   delete[]m_type;   m_type   =NULL;
   if (m_symname)delete[]m_symname;m_symname=NULL;
   if (m_flag)   delete[]m_flag;   m_flag   =NULL;
+  if (m_loc)    delete[]m_loc;    m_loc    =NULL;
   if (m_param)  delete[]m_param;  m_param  =NULL;
 #endif
 }
@@ -86,6 +86,7 @@ void glsl_program :: createArrays() {
   m_symname= new t_symbol* [m_uniformCount];
   m_param  = new float*    [m_uniformCount];
   m_flag   = new int       [m_uniformCount];
+  m_loc    = new GLint     [m_uniformCount];
 
   // allocate maximum size for a param, which is a 4x4 matrix of floats
   // in the future, only allocate for specific type
@@ -95,6 +96,7 @@ void glsl_program :: createArrays() {
     m_size   [i] = 0;
     m_type   [i] = 0;
     m_symname[i] = 0;
+	m_loc    [i] = 0;
     m_param  [i] = new float[16];
     m_flag   [i] = 0;
     for(j=0; j<16; j++)m_param[i][j]=0;
@@ -121,42 +123,42 @@ void glsl_program :: render(GemState *state)
 	    switch (m_type[i])
               {
               case GL_INT:
-                glUniform1iARB( i, (GLint)m_param[i][0] );
+                glUniform1iARB( m_loc[i], (GLint)m_param[i][0] );
 		break;
               case GL_FLOAT:
-                glUniform1fARB( i, (GLfloat)m_param[i][0] );
+                glUniform1fARB( m_loc[i], (GLfloat)m_param[i][0] );
 		break;
               case GL_FLOAT_VEC2_ARB:
-                glUniform2fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1] );
+                glUniform2fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1] );
 		break;
               case GL_FLOAT_VEC3_ARB:
-                glUniform3fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
+                glUniform3fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
                                 (GLfloat)m_param[i][2] );
 		break;
               case GL_FLOAT_VEC4_ARB:
-                glUniform4fARB( i, (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
+                glUniform4fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
                                 (GLfloat)m_param[i][2], (GLfloat)m_param[i][3] );
 		break;
               case GL_INT_VEC2_ARB:
-                glUniform2iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1] );
+                glUniform2iARB( m_loc[i], (GLint)m_param[i][0], (GLint)m_param[i][1] );
 		break;
               case GL_INT_VEC3_ARB:
-                glUniform3iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1], 
+                glUniform3iARB( m_loc[i], (GLint)m_param[i][0], (GLint)m_param[i][1], 
                                 (GLint)m_param[i][2] );
 		break;
               case GL_INT_VEC4_ARB:
-                glUniform4iARB( i, (GLint)m_param[i][0], (GLint)m_param[i][1], 
+                glUniform4iARB( m_loc[i], (GLint)m_param[i][0], (GLint)m_param[i][1], 
                                 (GLint)m_param[i][2], (GLint)m_param[i][3] );
 		break;
               case GL_FLOAT_MAT2_ARB:
                 // GL_TRUE = row major order, GL_FALSE = column major
-                glUniformMatrix2fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix2fvARB( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
 		break;
               case GL_FLOAT_MAT3_ARB:
-                glUniformMatrix3fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix3fvARB( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
 		break;
               case GL_FLOAT_MAT4_ARB:
-                glUniformMatrix4fvARB( i, 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix4fvARB( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
 		break;
               default:
 		;
@@ -357,6 +359,7 @@ void glsl_program :: getVariables()
         &m_size[i], &m_type[i], name);
       */
       glGetActiveUniformARB(m_program, i, m_maxLength, &length, &m_size[i], &m_type[i], name);
+	  m_loc[i] = glGetUniformLocationARB( m_program, name );
       m_symname[i]=gensym(name);
       //	  post("[%s]: active uniform variable: %s", m_objectname->s_name, name);
     }
