@@ -125,21 +125,28 @@ void sphere3d :: setMess(int i, int j,
 /////////////////////////////////////////////////////////
 void sphere3d :: render(GemState *state)
 {
-  GLdouble radius=m_size;
   GLint slices=m_numSlices;
   GLint stacks=m_numStacks;
 
-  GLfloat rho, drho, dtheta;
   GLfloat s, t, ds, dt;
   GLint i, j;
-  GLboolean normals = (state->lighting)?GL_TRUE:GL_FALSE;
-  GLint texture = (state->texture);
+  int src=0;
+  
+  glPushMatrix();
+  glScalef(m_size, m_size, m_size);
 
-  int src;
-  src = 0;
+  /* i cannot remember right now why we don't want normals always to be build
+   * if lighting is off, they just won't be used
+   * i guess the original reason was somehow related to performance 
+   *
+   * GLboolean normals = (state->lighting)?GL_TRUE:GL_FALSE;
+   */
+  GLboolean normals = GL_TRUE;
+  GLint texture = (state->texture);
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
+
   if(texture && state->numTexCoords>=3){
     xsize0 = state->texCoords[0].s;
     xsize  = state->texCoords[1].s-xsize0;
@@ -147,9 +154,6 @@ void sphere3d :: render(GemState *state)
     ysize  = state->texCoords[2].t-ysize0;
   }
     
-  drho = M_PI / (GLfloat) stacks;
-  dtheta = 2.0 * M_PI / (GLfloat) slices;
-
   /* texturing: s goes from 0.0/0.25/0.5/0.75/1.0 at +y/+x/-y/-x/+y axis */
   /* t goes from -1.0/+1.0 at z = -radius/+radius (linear along longitudes) */
   /* cannot use triangle fan on texturing (s coord. at top/bottom tip varies) */
@@ -158,18 +162,17 @@ void sphere3d :: render(GemState *state)
   if (stacks != oldStacks || slices != oldSlices){
     //call the sphere3d creation function to fill the array
     createSphere3d();
-
+    
     oldStacks = stacks;
     oldSlices = slices;
   }
   if (m_drawType != oldDrawType || texture!=oldTexture)m_modified=true;
   oldDrawType = m_drawType;
   oldTexture = texture;
-
+  
   if(!m_displayList)m_modified=true;
-
+  
   if(m_modified){
-    normals=1;
 
     if(m_displayList)glDeleteLists(m_displayList, 1);
 
@@ -338,6 +341,8 @@ void sphere3d :: render(GemState *state)
     glEndList();
   } /* rebuild list */
   else glCallList(m_displayList);
+
+  glPopMatrix();
   m_modified=false;
 }
 /////////////////////////////////////////////////////////
