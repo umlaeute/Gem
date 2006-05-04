@@ -106,7 +106,9 @@ class GEM_EXTERN GemMan
         //////////
         // Destroy the window
     	static void 	    destroyWindow();
-    	
+        // Destroy the window after a minimal delay
+        static void 	    destroyWindowSoon();
+	
         //////////
         // Swap the buffers.
         // If single buffered, just clears the window

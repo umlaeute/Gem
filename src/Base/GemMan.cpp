@@ -209,7 +209,6 @@ static void dispatchGemWindowMessages()
 	  } else {
 	    triggerKeyboardEvent(keystring, kb->keycode, 1);
 	  }
-	  //triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 1);
 	  break;
 	case KeyRelease:
 	  if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
@@ -223,7 +222,6 @@ static void dispatchGemWindowMessages()
 	  } else {
 	    triggerKeyboardEvent(keystring, kb->keycode, 0);
 	  }
-	  //	  triggerKeyboardEvent(XKeysymToString(XKeycodeToKeysym(win.dpy, kb->keycode, 0)), kb->keycode, 0);
 	  break;
 	case ResizeRequest:
 	  triggerResizeEvent(res->width, res->height);
@@ -235,7 +233,7 @@ static void dispatchGemWindowMessages()
     }
   
   if (XCheckTypedEvent(win.dpy,  ClientMessage, &event)) {
-    GemMan::pleaseDestroy=true;
+    GemMan::destroyWindowSoon();
   }
   
   clock_delay(s_windowClock, s_windowDelTime);  
@@ -1240,6 +1238,12 @@ int GemMan :: createWindow(char* disp)
 // destroyWindow
 //
 /////////////////////////////////////////////////////////
+void GemMan :: destroyWindowSoon()
+{
+  GemMan::pleaseDestroy=true;
+  /* jump to the render() to destroy the window asap */
+  clock_delay(s_clock, 0.0);
+}
 void GemMan :: destroyWindow()
 {
   GemMan::pleaseDestroy=false;
