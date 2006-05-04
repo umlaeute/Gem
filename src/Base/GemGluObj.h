@@ -54,7 +54,7 @@ class GEM_EXTERN GemGluObj : public GemShape
     
 	    //////////
 	    // Constructor
-  GemGluObj(t_floatarg size, t_floatarg slices=10);
+  GemGluObj(t_floatarg size, t_floatarg slices=10.f, t_floatarg stacks=0.f);
     	
     protected:
     	
@@ -69,10 +69,11 @@ class GEM_EXTERN GemGluObj : public GemShape
     	//////////
     	// The number of slices in the quadric
     	void	    	numSlicesMess(int numSlices);
+    	void	    	numSlicesMess(int numSlices, int numStacks);
 
     	//////////
     	// The number of slices
-    	int 	    	m_numSlices;
+    	int 	    	m_numSlices, m_numStacks;
     	
         //////////
         t_inlet         *m_sliceInlet;
@@ -89,7 +90,7 @@ class GEM_EXTERN GemGluObj : public GemShape
     	//////////
     	// Static member functions
     	static void 	obj_setupCallback(t_class *classPtr);
-    	static void 	numSlicesMessCallback(void *data, t_floatarg numSlices);
+    	static void 	numSlicesMessCallback(void *data, t_symbol*, int, t_atom*);
 };
 
 #endif	// for header file
