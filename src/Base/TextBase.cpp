@@ -330,7 +330,7 @@ void TextBase :: breakLine(string line)
 {
   // split the string wherever there is a '\n'
   while(line.length()>0){
-    int pos=line.find('\n');
+    size_t pos=line.find('\n');
     if(pos<=0)break;
     m_theText.push_back(line.substr(0,pos));
     line=line.erase(0,pos+1);
@@ -391,8 +391,9 @@ void TextBase :: makeLineDist()
     {
       // now in the other direction:
       // [-n ... -2 -1 0]
-      for(i=m_theText.size()-1; i>=0; i--){
-        m_lineDist.push_back(-i);
+	  size_t j;
+      for(j=m_theText.size()-1; j>=0; j--){
+        m_lineDist.push_back(-j);
       }
       return;
     }
