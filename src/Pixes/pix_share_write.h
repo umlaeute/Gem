@@ -31,7 +31,7 @@ class GEM_EXTERN pix_share_write : public GemBase
   unsigned char *shm_addr;
   struct shmid_ds shm_desc;
 #endif
-  int	m_size;
+  size_t m_size;
 
   static void 	setMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
 
