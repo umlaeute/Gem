@@ -251,9 +251,9 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
     black_x = (double)ft->black_x_sum / (double)ft->black_leaf_count;
     black_y = (double)ft->black_y_sum / (double)ft->black_leaf_count;
 
-    f->x = all_x;
-    f->y = all_y;
-    f->angle = (M_PI * 2) - calculate_angle( all_x - black_x, all_y - black_y );
+    f->x = (float)all_x;
+    f->y = (float)all_y;
+    f->angle = (float)((M_PI * 2) - calculate_angle( all_x - black_x, all_y - black_y ));
 
 /*
     print_unordered_depth_string( r );
