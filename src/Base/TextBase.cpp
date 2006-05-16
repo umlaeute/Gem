@@ -330,8 +330,10 @@ void TextBase :: breakLine(string line)
 {
   // split the string wherever there is a '\n'
   while(line.length()>0){
-    size_t pos=line.find('\n');
-    if(pos<=0)break;
+    signed long pos=(signed long)line.find('\n');
+    if(pos<=0){
+      break;
+    }
     m_theText.push_back(line.substr(0,pos));
     line=line.erase(0,pos+1);
   }
