@@ -39,6 +39,7 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
     prevTime = 0;
     curTime = 0;
     m_Task = 0;
+	m_volume = 0.f;
 
 }
 
@@ -246,19 +247,41 @@ void pix_filmDarwin :: realOpen(char *filename)
 	if ((*desc)->cType == kDVCPROHD720pCodecType){
 	
 		post("pix_filmDarwin : kDVCPROHD720pCodecType");
+		
 		m_xsize = 960;
 		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
-				
+		SetMovieBox(m_movie, &m_srcRect);		
 		ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
 	
 		SetMovieMatrix(m_movie,&matrix);
 	}
+
+	
+	//DVCPRO 1080i60
+	if ((*desc)->cType == kDVCPROHD1080i60CodecType){
+	
+		post("pix_filmDarwin : kDVCPROHD1080i60CodecType");
+		m_hiquality = 0;
+		//SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+		//SetMoviePlayHints(m_movie, hintsDeinterlaceFields, 0);
+		
+		
+		m_xsize = 1280;
+		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
+			
+		ScaleMatrix(&matrix,FloatToFixed(2.f/3.f),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
+		SetMovieBox(m_movie, &m_srcRect);
+		SetMovieMatrix(m_movie,&matrix);
+		
+	}
+
 # endif
 	//DVCPRO 1080i
+
 	
 	//HDV
 	
-	post("pix_filmDarwin : image description width %d heigh %d hRes %d vRes %d",(*desc)->width,(*desc)->height,Fix2Long((*desc)->hRes),Fix2Long((*desc)->vRes));
+	//post("pix_filmDarwin : image description width %d heigh %d hRes %d vRes %d",(*desc)->width,(*desc)->height,Fix2Long((*desc)->hRes),Fix2Long((*desc)->vRes));
 	
 	// We will use a YUV GWorld/Texture to get the fastest performance
 	// 16 bits per pixel for 4:2:2
@@ -281,7 +304,11 @@ void pix_filmDarwin :: realOpen(char *filename)
     if (m_colorspace == GL_BGRA_EXT){
         m_csize = 4;
         m_format = GL_BGRA_EXT;
+		#ifdef __VEC__
         m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+		#else
+		m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8;
+		#endif
 
         createBuffer();
         prepareTexture();
@@ -299,12 +326,16 @@ void pix_filmDarwin :: realOpen(char *filename)
     }else{
         m_csize = 2;
         m_format = GL_YCBCR_422_APPLE;
+		#ifdef __VEC__
         m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-
+		#else
+		m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
+		
+		#endif
         createBuffer();
         // prepareTexture();
         m_rowBytes = m_xsize * 2;
-        if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+        if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
         err = QTNewGWorldFromPtr(	&m_srcGWorld,
                                   k422YpCbCr8CodecType,
                                   &m_srcRect,
@@ -333,11 +364,13 @@ void pix_filmDarwin :: realOpen(char *filename)
         //SetMovieRate(m_movie,playRate);
         SetMovieRate(m_movie,X2Fix(1.0));
         m_play = 1;
+		
     }
     else {
         SetMovieRate(m_movie,X2Fix(0.0));
     }
 
+	SetMovieVolume(m_movie,FloatToFixed(m_volume));
     ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
     curTime = GetMovieTime(m_movie,NULL);
     prevTime = 0;
@@ -379,10 +412,13 @@ void pix_filmDarwin :: getFrame()
     if (m_auto){
         //play the startmovie() way
         if (!m_play){
-			SetMovieRate(m_movie,X2Fix(m_rate));}
+			SetMovieRate(m_movie,X2Fix(m_rate));
 			m_play = 1;
+			newImage = 0;
+			return;
+		//	post("pix_filmDarwin : curTime %d prevTime %d",curTime,prevTime);
 		//	SetMovieVolume(m_movie, kFullVolume);
-		//	}
+			}
 
         if (m_rate > 0.f) {
             if (IsMovieDone(m_movie)) {
@@ -390,7 +426,7 @@ void pix_filmDarwin :: getFrame()
                 GoToBeginningOfMovie(m_movie);
                 prevTime = 0;
                 flags |= nextTimeEdgeOK;
-				
+				m_reqFrame = 0;
             }
 
             m_Task = 1;
@@ -399,17 +435,19 @@ void pix_filmDarwin :: getFrame()
 
             //check to see if the current position is past our next frame
             if (prevTime < curTime){
+			//if (prevTime != curTime){
                 newImage = 1;
                 prevTime = curTime;
-
+			
                 //find next frame bounds using GetMovieNextIntertestingTime()
                 GetMovieNextInterestingTime(m_movie,
                                             flags,
                                             1,
                                             &whichMediaType,
-                                            prevTime,
+                                            curTime,
                                             0,
                                             &prevTime,
+										 //  NULL,
                                             nil);
 
             }
@@ -474,9 +512,11 @@ void pix_filmDarwin :: getFrame()
         if (m_play) {
             SetMovieRate(m_movie,X2Fix(0.0));
             m_play = 0; //turn off play
+			newImage = 0;
+			m_movieTime = GetMovieTime(m_movie,NULL);
 		//	SetMovieVolume(m_movie, kNoVolume);
-           // return;  //not sure about this
-        }
+            return;  //not sure about this
+        }else{
 
         m_movieTime = m_reqFrame * duration;
         m_movieTime = (long)((float)m_reqFrame * durationf);
@@ -491,12 +531,14 @@ void pix_filmDarwin :: getFrame()
                                        &m_movieTime,
                                        NULL);
         // &durationf);
-
+		}
+		
         SetMovieTimeValue(m_movie, m_movieTime);
         m_Task = 1;
         newImage = 1;
         MoviesTask(m_movie, 0);
-        
+		curTime = GetMovieTime(m_movie,NULL);
+       // post("pix_filmDarwin : curTime %d prevTime %d m_reqFrame %d",curTime,prevTime, m_reqFrame);
     }
     //I suppose if you roll your own YUV->ARGB it would go here?
 }
@@ -511,13 +553,13 @@ void pix_filmDarwin :: postrender(GemState *state)
 void pix_filmDarwin :: startRendering()
 {
 	//bit of a hack related to stopRendering()
-	SetMovieVolume(m_movie, kFullVolume);
+	if (m_auto && m_haveMovie) SetMovieVolume(m_movie, (short)(m_volume * 255.f));
 }
 
 void pix_filmDarwin :: stopRendering()
 {
 	//bit of a hack to keep the sound from playing after rendering stops
-	SetMovieVolume(m_movie, kNoVolume);
+	if (m_auto && m_haveMovie) SetMovieVolume(m_movie, kNoVolume);
 }
 
 void pix_filmDarwin :: LoadRam()
@@ -540,10 +582,19 @@ void pix_filmDarwin :: LoadRam()
 void pix_filmDarwin :: MovRate(float rate)
 {
     m_rate = (float)rate;
-    if (m_auto) {
+    if (m_auto && m_haveMovie) {
         SetMovieRate(m_movie,X2Fix((double)m_rate));
     }
 }
+
+void pix_filmDarwin :: MovVolume(float volume)
+{
+    m_volume = (float)volume;
+    if (m_auto && m_haveMovie) {
+        SetMovieVolume(m_movie,(short)(m_volume * 255.f));
+    }
+}
+
 
 void pix_filmDarwin :: doDebug()
 {
@@ -583,6 +634,8 @@ pix_film::real_obj_setupCallback(classPtr);
                     gensym("rate"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_filmDarwin::debugCallback,
                     gensym("debug"),  A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_filmDarwin::volumeCallback,
+                    gensym("volume"), A_DEFFLOAT, A_NULL);
 
 }
 
@@ -614,6 +667,11 @@ void pix_filmDarwin :: hiqualityCallback(void *data, t_floatarg state)
 void pix_filmDarwin :: rateCallback(void *data, t_floatarg state)
 {
     GetMyClass(data)->MovRate((float)state);
+}
+
+void pix_filmDarwin :: volumeCallback(void *data, t_floatarg state)
+{
+    GetMyClass(data)->MovVolume((float)state);
 }
 
 void pix_filmDarwin :: debugCallback(void *data)
