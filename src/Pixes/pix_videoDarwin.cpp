@@ -115,8 +115,8 @@ void pix_videoDarwin :: stopRendering()
 void pix_videoDarwin :: render(GemState *state)
 {
     OSErr	err;
-	short	frameCount = 0;
-	Boolean	*done;
+//	short	frameCount = 0;
+//	Boolean	*done;
  
 	if (m_auto || m_banged) {
  
@@ -259,7 +259,7 @@ void pix_videoDarwin :: InitSeqGrabber()
 //	UserData 	*uD;
 	
 	
-	
+	/*
     int num_components = 0;
     Component c = 0;
 	ComponentDescription cd;
@@ -273,6 +273,7 @@ void pix_videoDarwin :: InitSeqGrabber()
      while((c = FindNextComponent(c, &cd)) != 0) {
        num_components++;  }                 // add component c to the list.
   //   post("pix_videoDarwin: number of SGcomponents: %d",num_components);
+  */
     m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
     if(m_sg==NULL){
         post("pix_videoDarwin: could not open default component");
@@ -315,7 +316,8 @@ void pix_videoDarwin :: InitSeqGrabber()
 		//we should have device names in big ass undocumented structs
 		
 		//walk through the list
-		for (i = 0; i < deviceCount; i++){			 
+		//for (i = 0; i < deviceCount; i++){	
+		for (i = 0; i < inputIndex; i++){		 
 			post("pix_videoDarwin: SG channnel Input Device List %d %s",i,(*theSGInputList)->entry[i].name);
 		}
 		
@@ -365,6 +367,11 @@ void pix_videoDarwin :: InitSeqGrabber()
     anErr = SGSetChannelBounds(m_vc, &m_srcRect);
     if(anErr!=noErr){
         post("pix_videoDarwin: could not set SG ChannelBounds ");
+    }
+	
+	anErr = SGSetVideoRect(m_vc, &m_srcRect);
+    if(anErr!=noErr){
+        post("pix_videoDarwin: could not set SG Rect ");
     }
         
     anErr = SGSetChannelUsage(m_vc, seqGrabPreview);
@@ -416,15 +423,21 @@ void pix_videoDarwin :: InitSeqGrabber()
             m_pixBlock.image.ysize = m_vidYSize;
             m_pixBlock.image.csize = 2;
             m_pixBlock.image.format = GL_YCBCR_422_APPLE;
+			#ifdef __VEC__
             m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+			#else
+			m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
+			#endif
             int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
                                                 * 2 * sizeof(unsigned char);
             m_pixBlock.image.data = new unsigned char[dataSize]; 
              m_rowBytes = m_vidXSize*2;
             anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                                   //  k422YpCbCr8CodecType,
-								 // k422YpCbCr8PixelFormat,
-								    '2vuy',
+
+								  k422YpCbCr8PixelFormat,
+								// '2vuy',
+
 								  // kComponentVideoUnsigned,
                                     &m_srcRect, 
                                     NULL, 
@@ -515,6 +528,36 @@ void pix_videoDarwin :: resetSeqGrabber()
 
     destroySeqGrabber();
     InitSeqGrabber();
+/*
+    switch (m_quality){
+    case 0:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayNormal);
+        post("pix_videoDarwin: set SG NormalQuality");
+        break;
+    case 1:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayHighQuality);
+        post("pix_videoDarwin: set SG HighQuality");
+        break;
+    case 2:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayFast);
+        post("pix_videoDarwin: set SG FastQuality");
+        break;
+    case 3:
+        anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
+        post("pix_videoDarwin: set SG PlayAlldata");
+        break;
+    
+    }
+  */  
+}
+
+void pix_videoDarwin :: qualityMess(int X)
+{
+    OSErr anErr;
+	
+	if (X < 0) X = 0;
+	if (X > 3) X = 3;
+	m_quality = X;
 
     switch (m_quality){
     case 0:
@@ -1062,7 +1105,7 @@ pix_video::real_obj_setupCallback(classPtr);
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
 {
-	GetMyClass(data)->m_quality=((int)X);
+	GetMyClass(data)->qualityMess((int)X);
 } 
 
 void pix_videoDarwin :: autoCallback(void *data, t_floatarg X)
