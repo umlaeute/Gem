@@ -124,6 +124,9 @@ void gemwin :: createMess(t_symbol* s)
 {
   char* disp = NULL;
 
+  /* just in case a "pleaseDestroy" is still pending... */
+  GemMan::pleaseDestroy=false;
+ 
   if (s != &s_) 
     disp = s->s_name;
 
