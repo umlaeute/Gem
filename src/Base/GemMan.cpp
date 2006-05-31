@@ -1451,6 +1451,12 @@ void GemMan :: topmostOnOff(int state)
 /////////////////////////////////////////////////////////
 void GemMan :: frameRate(float framespersecond)
 {
+  /* the new framerate will only take effect at the next render-cycle
+   * so if we are currently at at frame-rate=0,
+   * we have to reschedule rendering (else we would wait too long)
+   */
+  bool reschedule=(s_deltime<=0.f);
+
   if (framespersecond == 0.)
   {
 	  s_deltime = 0.;
@@ -1462,6 +1468,8 @@ void GemMan :: frameRate(float framespersecond)
       framespersecond = 20;
     }
   s_deltime = 1000. / framespersecond;
+
+  if(reschedule)render(NULL);
 }
 
 /////////////////////////////////////////////////////////
