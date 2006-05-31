@@ -77,7 +77,10 @@ void gemwin :: bangMess()
 {
   if ( GemMan::windowExists() )
     {
-      GemMan::swapBuffers();
+      if(1==GemMan::m_buffer)
+        GemMan::swapBuffers();
+      else /* double buffered mode */
+        GemMan::render(NULL);
     }
   else 
     error("GEM: no window");
