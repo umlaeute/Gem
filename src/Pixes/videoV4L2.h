@@ -37,9 +37,8 @@ Linux version by Miller Puckette. msp@ucsd.edu
 //#ifdef HAVE_PTHREADS
 # include <pthread.h>
 //#endif
-# define DEVICENO 0
-# define NBUF 4
-# define COMPOSITEIN 1
+# define V4L2_DEVICENO 0
+# define V4L2_NBUF 4
 
 
 struct t_v4l2_buffer {

@@ -64,7 +64,7 @@ videoV4L2 :: videoV4L2(int format) : video(format)
   if (!m_width)m_width=320;
   if (!m_height)m_height=240;
   m_capturing=false;
-  m_devicenum=DEVICENO;
+  m_devicenum=V4L2_DEVICENO;
   post("video4linux2");
 #else
 {
@@ -102,14 +102,13 @@ int videoV4L2::init_mmap (void)
 
   memset (&(req), 0, sizeof (req));
 
-  req.count               = NBUF;
+  req.count               = V4L2_NBUF;
   req.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   req.memory              = V4L2_MEMORY_MMAP;
 
   if (-1 == xioctl (m_tvfd, VIDIOC_REQBUFS, &req)) {
     if (EINVAL == errno) {
-      error("%s does not support "
-               "memory mapping\n", devname);
+      error("%s does not support memory mapping", devname);
       return 0;
     } else {
       error ("VIDIOC_REQBUFS");
@@ -117,7 +116,7 @@ int videoV4L2::init_mmap (void)
     }
   }
 
-  if (req.count < NBUF) {
+  if (req.count < V4L2_NBUF) {
     error("Insufficient buffer memory on %s", devname);
     return(0);
   }
@@ -137,6 +136,7 @@ int videoV4L2::init_mmap (void)
     buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory      = V4L2_MEMORY_MMAP;
     buf.index       = m_nbuffers;
+    post("buf.index==%d", buf.index);
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QUERYBUF, &buf)){
       error ("VIDIOC_QUERYBUF");
@@ -180,9 +180,6 @@ void *videoV4L2 :: capturing(void*you)
   int m_tvfd=me->m_tvfd;
   me->m_capturing=true;
 
-  FD_ZERO (&fds);
-  FD_SET (m_tvfd, &fds);
-
   depost("memset");
   memset(&(buf), 0, sizeof (buf));
   
@@ -190,36 +187,40 @@ void *videoV4L2 :: capturing(void*you)
   buf.memory = V4L2_MEMORY_MMAP;
 
   while(me->m_continue_thread){
+    FD_ZERO (&fds);
+    FD_SET (m_tvfd, &fds);
+
     depost("grab");
 
     me->m_frame++;
-    me->m_frame%=NBUF;
+    me->m_frame%=V4L2_NBUF;
 
     
-#if 1
     /* Timeout. */
-    tv.tv_sec = 2;
-    tv.tv_usec = 0;
+    tv.tv_sec = 0;
+    tv.tv_usec = 100;
 
-    tv.tv_sec = 2;
-    tv.tv_usec = 0;
-
-    depost("select");
     //    r = select (m_tvfd + 1, &fds, NULL, NULL, &tv);
-    r = select (m_tvfd + 1, &fds, NULL, NULL, &tv);
+    /*
+    if (0 == r) {
+      error("select timeout");
+      me->m_continue_thread=false;
+    }
+    */
+
+    r = select(0,0,0,0,&tv);
 
     if (-1 == r) {
       if (EINTR == errno)
         continue;
       error ("select");//exit
     }
-    if (0 == r) {
-      error("select timeout");
-      me->m_continue_thread=false;
-    }
-#endif
 
-    depost("dqbuf");
+    memset(&(buf), 0, sizeof (buf));
+  
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+
     if (-1 == xioctl (m_tvfd, VIDIOC_DQBUF, &buf)) {
       switch (errno) {
       case EAGAIN:
@@ -228,18 +229,17 @@ void *videoV4L2 :: capturing(void*you)
         /* Could ignore EIO, see spec. */
         /* fall through */
       default:
-        error ("VIDIOC_DQBUF");
+        perror ("VIDIOC_DQBUF");
       }
     }
 
-    //error("grabbed %d", buf.index);
+    error("grabbed %d", buf.index);
 
     me->m_currentBuffer=buffers[buf.index].start;
     //process_image (m_buffers[buf.index].start);
 
-    depost("qbuf");
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
-      error ("VIDIOC_QBUF");
+      perror ("VIDIOC_QBUF");
     }
     
     me->m_frame_ready = 1;
@@ -251,7 +251,7 @@ void *videoV4L2 :: capturing(void*you)
     enum v4l2_buf_type type;
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (-1 == xioctl (me->m_tvfd, VIDIOC_STREAMOFF, &type)){
-      error ("VIDIOC_STREAMOFF");
+      perror ("VIDIOC_STREAMOFF");
     }
   }
   me->m_capturing=false;
@@ -298,8 +298,11 @@ pixBlock *videoV4L2 :: getFrame(){
 void videoV4L2 :: restartTransfer()
 {
   bool rendering=m_rendering;
+  post("restart transfer");
   if(m_capturing)stopTransfer();
+  post("restart stopped");
   if (rendering)startTransfer();
+  post("restart started");
 }
 
 
@@ -344,20 +347,19 @@ int videoV4L2 :: startTransfer(int format)
   // try to open the device
   post("device: %s", dev_name);
   if (-1 == stat (dev_name, &st)) {
-    error("Cannot identify '%s': %d, %s\n", dev_name, errno, strerror (errno));
+    error("Cannot identify '%s': %d, %s", dev_name, errno, strerror (errno));
     goto closit;
   }
 
   if (!S_ISCHR (st.st_mode)) {
-    error("%s is no device\n", dev_name);
+    error("%s is no device", dev_name);
     goto closit;
   }
 
   m_tvfd = open (dev_name, O_RDWR /* required */ | O_NONBLOCK, 0);
 
   if (-1 == m_tvfd) {
-    error("Cannot open '%s': %d, %s\n",
-             dev_name, errno, strerror (errno));
+    error("Cannot open '%s': %d, %s", dev_name, errno, strerror (errno));
     goto closit;
   }
 
@@ -368,7 +370,7 @@ int videoV4L2 :: startTransfer(int format)
       error("%s is no V4L2 device",  dev_name);
       goto closit;
     } else {
-      error ("VIDIOC_QUERYCAP");//exit
+      perror ("VIDIOC_QUERYCAP");//exit
       goto closit;
     }
   }
@@ -391,42 +393,67 @@ int videoV4L2 :: startTransfer(int format)
     /* Errors ignored. */
   }
 
-  crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  crop.c = cropcap.defrect; /* reset to default */
+  memset(&(cropcap), 0, sizeof (cropcap));
+  cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
-  if (-1 == xioctl (m_tvfd, VIDIOC_S_CROP, &crop)) {
-    switch (errno) {
-    case EINVAL:
-      /* Cropping not supported. */
-      break;
-    default:
-      /* Errors ignored. */
-      break;
+  if (0 == xioctl (m_tvfd, VIDIOC_CROPCAP, &cropcap)) {
+    crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    crop.c = cropcap.defrect; /* reset to default */
+
+    if (-1 == xioctl (m_tvfd, VIDIOC_S_CROP, &crop)) {
+      perror("vidioc_s_crop");
+      switch (errno) {
+      case EINVAL:
+        /* Cropping not supported. */
+        break;
+      default:
+        /* Errors ignored. */
+        break;
+      }
     }
   }
+
+
+  if (-1 == xioctl (m_tvfd, VIDIOC_S_INPUT, &m_channel)) {
+    perror("VIDIOC_S_INPUT"); /* exit */
+  }
+
+
 
   memset (&(fmt), 0, sizeof (fmt));
 
   fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   fmt.fmt.pix.width       = m_width;
   fmt.fmt.pix.height      = m_height;
+
   switch(m_reqFormat){
-  case GL_YCBCR_422_GEM: fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_UYVY; break;
-  case GL_LUMINANCE: fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_GREY; break;
-  case GL_RGB: fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB24; break;
-  default: fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB32; m_reqFormat=GL_RGBA;
+  case GL_YCBCR_422_GEM: 
+    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_UYVY; 
+    break;
+  case GL_LUMINANCE: 
+    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_GREY; 
+    break;
+  case GL_RGB: 
+    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB24; 
+    break;
+  default: 
+    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB32; 
+    m_reqFormat=GL_RGBA;
+    break;
   }
   fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
   
-  startpost("wanted %d (%d)\tgot ", m_reqFormat, fmt.fmt.pix.pixelformat);
+  startpost("wanted %d \tgot (%d)", m_reqFormat, fmt.fmt.pix.pixelformat);
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
-    error ("VIDIOC_S_FMT");//exit
+    perror ("VIDIOC_S_FMT");//exit
+    error("should exit!");
   }
   
   // query back what we have set
   if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
-    error ("VIDIOC_G_FMT");//exit
+    perror ("VIDIOC_G_FMT");//exit
+    error("should exit!");
   }
 
   m_gotFormat=fmt.fmt.pix.pixelformat;
@@ -457,16 +484,17 @@ int videoV4L2 :: startTransfer(int format)
     buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory      = V4L2_MEMORY_MMAP;
     buf.index       = i;
+    post("i=%d", i);
     
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
-      error ("VIDIOC_QBUF");//exit
+      perror ("VIDIOC_QBUF");//exit
     }
   }
-		
+
   type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
   if (-1 == xioctl (m_tvfd, VIDIOC_STREAMON, &type)){
-    error ("VIDIOC_STREAMON");//exit
+    perror ("VIDIOC_STREAMON");//exit
   }
   
   /* fill in image specifics for Gem pixel object.  Could we have
@@ -499,7 +527,9 @@ int videoV4L2 :: startTransfer(int format)
   return(1);
   
  closit:
+  post("closing it!");
   stopTransfer();
+  post("closed it");
   return(0);
 }
 
@@ -520,11 +550,17 @@ int videoV4L2 :: stopTransfer()
   while(m_capturing){post("waiting for thread");}
 
   // unmap the mmap
-  for (i = 0; i < m_nbuffers; ++i)
-    if (-1 == munmap (m_buffers[i].start, m_buffers[i].length)){
-      // oops: couldn't unmap the memory
-    }
-  free (m_buffers);
+  post("unmapping %d buffers: %x", m_nbuffers, m_buffers);
+  if(m_buffers){
+    for (i = 0; i < m_nbuffers; ++i)
+      if (-1 == munmap (m_buffers[i].start, m_buffers[i].length)){
+        // oops: couldn't unmap the memory
+      }
+    post("freeing buffers: %x", m_buffers);
+    free (m_buffers);
+  }
+  m_buffers=NULL;
+  post("freed");
 
   // close the file-descriptor
   if (m_tvfd) close(m_tvfd);
@@ -571,13 +607,14 @@ int videoV4L2 :: setNorm(char*norm)
   int i_norm=-1;
 
   switch (c){
-  case 'p':
-  case 'P':
+  case 'p': case 'P':
     i_norm = V4L2_STD_PAL;
     break;
-  case 'n':
-  case 'N':
+  case 'n': case 'N':
     i_norm = V4L2_STD_NTSC;
+    break;
+  case 's': case 'S':
+    i_norm = V4L2_STD_SECAM;
     break;
   default:
     error("pix_video: unknown norm");
@@ -591,6 +628,12 @@ int videoV4L2 :: setNorm(char*norm)
 }
 
 int videoV4L2 :: setChannel(int c, t_float f){
+  post("oops, no channel selection! please report this as a bug!!!");
+  
+  m_channel=c;
+  
+  restartTransfer();
+
   return 0;
 }
 
