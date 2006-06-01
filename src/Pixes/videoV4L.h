@@ -37,9 +37,9 @@
 //#ifdef HAVE_PTHREADS
 # include <pthread.h>
 //#endif
-# define DEVICENO 0
-# define NBUF 2
-# define COMPOSITEIN 1
+# define V4L_DEVICENO 0
+# define V4L_NBUF 2
+# define V4L_COMPOSITEIN 1
 #endif
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -115,7 +115,7 @@ class GEM_EXTERN videoV4L : public video {
   struct video_channel vchannel;
   struct video_audio vaudio;
   struct video_mbuf vmbuf;
-  struct video_mmap vmmap[NBUF];
+  struct video_mmap vmmap[V4L_NBUF];
   int tvfd;
   int frame, last_frame;
   unsigned char *videobuf;

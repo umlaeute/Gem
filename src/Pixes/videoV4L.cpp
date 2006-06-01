@@ -70,9 +70,9 @@ videoV4L :: videoV4L(int format) : video(format)
   if (!m_height)m_height=64;
 
   m_capturing=false;
-  m_channel=COMPOSITEIN; 
+  m_channel=V4L_COMPOSITEIN; 
   m_norm=VIDEO_MODE_AUTO; 
-  m_devicenum=DEVICENO;
+  m_devicenum=V4L_DEVICENO;
 
   post("video4linux");
 #endif /* HAVE_VIDEO4LINUX */
@@ -103,7 +103,7 @@ void *videoV4L :: capturing(void*you)
 
     //  me->frame = !me->frame;
     me->frame++;
-    me->frame%=NBUF;
+    me->frame%=V4L_NBUF;
 
     me->vmmap[me->frame].width = me->m_image.image.xsize + 
       me->myleftmargin + me->myrightmargin;
@@ -194,9 +194,10 @@ int videoV4L :: startTransfer(int format)
       sprintf(buf, "/dev/video");
     } else sprintf(buf, "/dev/video%d", m_devicenum);
   }
-
+  
     if ((tvfd = open(buf, O_RDWR)) < 0)
     {
+      error("failed opening device: '%s'", buf);
 	perror(buf);
 	goto closit;
     }
@@ -272,7 +273,7 @@ int videoV4L :: startTransfer(int format)
     height = (height > vcap.maxheight) ? vcap.maxheight : height;
 
     //verbose(1, "wanted format is 0x%X", m_reqFormat);
-    for (i = 0; i < NBUF; i++)    {
+    for (i = 0; i < V4L_NBUF; i++)    {
       switch(m_reqFormat){
       case GL_LUMINANCE:
     	vmmap[i].format = VIDEO_PALETTE_GREY;
@@ -323,7 +324,7 @@ int videoV4L :: startTransfer(int format)
     //verbose(1, "setting cmcapture to %dx%d\t%d", vmmap[0].width,  vmmap[0].height, vmmap[0].format);
 
     if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
-      for (i = 0; i < NBUF; i++)vmmap[i].format = vpicture.palette;
+      for (i = 0; i < V4L_NBUF; i++)vmmap[i].format = vpicture.palette;
       //verbose(1, "now trying standard palette %d", vmmap[0].format);
       if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
 	if (errno == EAGAIN)
@@ -371,7 +372,7 @@ int videoV4L :: startTransfer(int format)
     return(1);
 
 closit:
-    post("closing video", tvfd);
+    post("closing video4linux %d", tvfd);
     if (tvfd >= 0)
     {
     	close(tvfd);
@@ -388,15 +389,18 @@ closit:
 /////////////////////////////////////////////////////////
 int videoV4L :: stopTransfer()
 {
-  /* close the v4l device and dealloc buffer */
-  /* terminate thread if there is one */
-  if(m_continue_thread){
-    void *dummy;
-    m_continue_thread = 0;
-    pthread_join (m_thread_id, &dummy);
+  if(m_haveVideo){ /* are we running ? */
+
+    /* close the v4l device and dealloc buffer */
+    /* terminate thread if there is one */
+    if(m_continue_thread){
+      void *dummy;
+      m_continue_thread = 0;
+      pthread_join (m_thread_id, &dummy);
+    }
+    while(m_capturing){post("waiting for thread");}
+    munmap(videobuf, vmbuf.size);
   }
-  while(m_capturing){post("waiting for thread");}
-  munmap(videobuf, vmbuf.size);
   if (tvfd) close(tvfd);
   tvfd = 0;
   m_haveVideo = 0;
