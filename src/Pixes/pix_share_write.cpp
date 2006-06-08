@@ -70,14 +70,14 @@ void pix_share_write :: freeShm()
 {
 #ifndef __WIN32__
   if(shm_addr){
-    if (shmdt(shm_addr) == -1) post("shmdt failed");
+    if (shmdt(shm_addr) == -1) error("shmdt failed at %x", shm_addr);
   }
   shm_addr=NULL;
 
   if(shm_id>0){
     if (shmctl(shm_id,IPC_STAT, &shm_desc) != -1){
       if(shm_desc.shm_nattch<=0){
-        if (shmctl(shm_id,IPC_RMID, &shm_desc) == -1) post("shmctl failed");
+        if (shmctl(shm_id,IPC_RMID, &shm_desc) == -1) error("shmctl remove failed for %d", shm_id);
       }
     }
   }
@@ -200,8 +200,11 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
 #ifdef __WIN32__
   error("pix_share_*: no shared memory on w32!");
 #else
+
   /* get a new segment with the size specified by the user
    * OR an old segment with the size specified in its header
+   * why: if somebody has already created the segment with our key
+   * we want to reuse it, even if its size is smaller than we requested
    */
   errno=0;
   shm_id = shmget(fake,m_size+sizeof(t_pixshare_header), IPC_CREAT | 0666);
@@ -213,15 +216,22 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     if(id>0){ /* yea, we got it! */
       t_pixshare_header*h=(t_pixshare_header*)shmat(id,NULL,0666);
       /* read the size of the blob from the shared segment */
-      if(h->size){
-        post("pix_share_*: someone was faster: only got %d bytes instead of %d",
-             h->size, m_size);
+      if(h&&h->size){
+        error("pix_share_*: someone was faster: only got %d bytes instead of %d",
+              h->size, m_size);
         m_size=h->size;
+
+        /* so free this shm-segment before we re-try with a smaller size */
+        shmdt(h);
+
+        /* now get the shm-segment with the correct size */
         shm_id = shmget(fake,m_size+sizeof(t_pixshare_header), IPC_CREAT | 0666);
       }
     }
   }
+
   if(shm_id>0){
+    /* now that we have a shm-segment, get the pointer to the data */
     shm_addr = (unsigned char*)shmat(shm_id,NULL,0666);
 
     if (!shm_addr) return 6;
@@ -250,7 +260,7 @@ void pix_share_write :: render(GemState *state)
     int size=pix->xsize*pix->ysize*pix->csize;
 	
     if (!shm_addr){
-      post("pix_share_write: no shmaddr");
+      error("pix_share_write: no shmaddr");
       return;
     }
 
@@ -264,7 +274,7 @@ void pix_share_write :: render(GemState *state)
       memcpy(shm_addr+sizeof(t_pixshare_header),pix->data,size);
     }
     else{
-      post("pix_share_write: input image too large: %dx%dx%d=%d>%d", 
+      error("pix_share_write: input image too large: %dx%dx%d=%d>%d", 
            pix->xsize, pix->ysize, pix->csize, 
            pix->xsize*pix->ysize*pix->csize, 
            m_size);
