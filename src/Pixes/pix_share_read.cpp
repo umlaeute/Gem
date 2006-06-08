@@ -20,7 +20,8 @@ CPPEXTERN_NEW_WITH_GIMME(pix_share_read)
 
 pix_share_read :: ~pix_share_read()
 {
-  freeShm();
+  /* the destructor of the parent class pix_free_write already frees the shm-segment */
+  //freeShm();
 }
 
 void pix_share_read :: render(GemState *state)
