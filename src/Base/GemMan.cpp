@@ -93,7 +93,7 @@ int GemMan::client_storage_supported = 0;
 int GemMan::texture_range_supported = 0;
 int GemMan::texture_yuv_supported = 0;
 int GemMan::multisample_filter_hint = 0;
-int GemMan::maxStackDepth[4];
+GLint GemMan::maxStackDepth[4];
 float GemMan::fps;
 int GemMan::fsaa = 0;
 bool GemMan::pleaseDestroy=false;
