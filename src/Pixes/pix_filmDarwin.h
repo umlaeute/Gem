@@ -72,6 +72,10 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   //////////
   // set the playback rate
   virtual void MovRate(float rate);
+  
+  //////////
+  // set the audio volume
+  virtual void MovVolume(float volume);
 	
   //////////
   // dumps debug info
@@ -97,6 +101,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_film
   TimeValue		curTime;
  // int 			newImage;
   int			m_Task;
+  float			m_volume;
 
 private:
   Movie			m_movie;
@@ -116,6 +121,7 @@ private:
   static void hiqualityCallback(void *data, t_floatarg state);
   static void rateCallback(void *data, t_floatarg state);
   static void debugCallback(void *data);
+  static void volumeCallback(void *data, t_floatarg state);
 
 };
 
