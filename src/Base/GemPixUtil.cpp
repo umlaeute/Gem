@@ -85,7 +85,7 @@ imageStruct :: imageStruct()
 #ifdef __APPLE__
     upsidedown(1)
 #else
-  upsidedown(0)
+    upsidedown(0)
 #endif
 {}
 
@@ -218,41 +218,62 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) {
 
 
 GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
+#ifdef __APPLE__
   switch(setformat){
-    case GL_LUMINANCE:  format=GL_LUMINANCE;  csize=1; type=GL_UNSIGNED_BYTE; break;
+  case GL_LUMINANCE:  
+    format=GL_LUMINANCE;  
+    type  =GL_UNSIGNED_BYTE; 
+    csize =1; 
+    break;
 
-#ifndef __APPLE__
-    case GL_RGB: format=GL_RGB;
-#else
-    case GL_RGB:
-    case GL_BGR_EXT: format=GL_BGR_EXT;
-#endif
-      type=GL_UNSIGNED_BYTE; csize =3; break;
+  case GL_YUV422_GEM:
+  default:
+    format=GL_YUV422_GEM; 
+    type  =GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+    csize =2; 
+    break;
+
+  case GL_RGB:  case GL_BGR_EXT: 
+    format=GL_BGR_EXT;    
+    type  =GL_UNSIGNED_BYTE; 
+    csize =3; 
+    break;
     
-	case GL_YUV422_GEM:
-#ifdef __APPLE__
-      type=GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-#else
-      type=GL_UNSIGNED_BYTE;
-#endif
-      format=GL_YUV422_GEM; csize=2; break;
-
-#ifndef __APPLE__
-    case GL_RGBA:       format=GL_RGBA;     type=GL_UNSIGNED_BYTE;
-#else
-    case GL_RGBA:
-    case GL_BGRA_EXT:   format=GL_BGRA_EXT; type = GL_UNSIGNED_INT_8_8_8_8_REV;
-#endif
-      csize=4; break;
-	  
-	default:
-#ifdef __APPLE__
-	  format=GL_YUV422_GEM; type=GL_UNSIGNED_SHORT_8_8_REV_APPLE; csize=2;
-#else
-	  format=GL_RGBA; type=GL_UNSIGNED_BYTE; csize=4;
-#endif
-	  break;
+  case GL_RGBA:  case GL_BGRA_EXT:   
+    format=GL_BGRA_EXT; 
+    type  =GL_UNSIGNED_INT_8_8_8_8_REV;
+    csize =4; 
+    break;
   }
+#else /* !__APPLE__ */
+  switch(setformat){
+  case GL_LUMINANCE:  
+    format=GL_LUMINANCE;  
+    type=GL_UNSIGNED_BYTE; 
+    csize=1; 
+    break;
+    
+  case GL_YUV422_GEM:
+    format=GL_YUV422_GEM; 
+    type=GL_UNSIGNED_BYTE;
+    csize=2;
+    break;
+    
+  case GL_RGB: 
+    format=GL_RGB;
+    type=GL_UNSIGNED_BYTE; 
+    csize=3;
+    break;
+
+  case GL_RGBA:
+  default:
+    format=GL_RGBA;
+    type=GL_UNSIGNED_BYTE;
+    csize=4; 
+    break;
+  }
+#endif /* __APPLE__ */
+
   return csize;
 }
 GEM_EXTERN int imageStruct::setCsizeByFormat() {
