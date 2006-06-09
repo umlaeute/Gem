@@ -107,6 +107,8 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         void DoVideoSettings();
         void dimenMess(int x, int y, int leftmargin, int rightmargin,
     	    	    	    int topmargin, int bottommargin);
+							
+		void	qualityMess(int X);
 
         //-----------------------------------
         // GROUP:	Video data
