@@ -12,6 +12,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#if 0
 #ifdef __APPLE__
 
 #include "pix_filmDarwinYUV.h"
@@ -352,3 +353,4 @@ void pix_filmDarwinYUV :: ramCallback(void *data)
 }
 
 #endif // __APPLE__
+#endif //0

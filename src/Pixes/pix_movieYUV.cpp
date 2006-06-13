@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#if 0
 #include "pix_movieYUV.h"
 
 #ifndef FILM_NEW
@@ -350,4 +350,4 @@ void pix_movieYUV :: autoCallback(void *data, t_floatarg state)
   GetMyClass(data)->m_auto=!(!(int)state);
 }
 #endif /* FILM_NEW */
-
+#endif //0
