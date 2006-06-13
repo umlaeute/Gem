@@ -20,7 +20,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_record)
 /////////////////////////////////////////////////////////
 pix_record :: pix_record(int argc, t_atom *argv):
   m_recordStart(0), m_recordStop(0), 
-  m_automatic(false), m_banged(false),
+  m_automatic(true), m_banged(false),
   m_currentFrame(-1),
   m_handle(NULL)
 {
@@ -89,6 +89,8 @@ void pix_record :: render(GemState *state)
   if(m_recordStart){
     m_recordStop=0;
     if(m_banged||m_automatic){
+	  m_handle->m_recordStart=m_recordStart;
+	  m_handle->m_recordStop=m_recordStop;
       m_currentFrame=m_handle->putFrame(&state->image->image);
       m_banged=false;
       if(m_currentFrame<0)m_recordStop=1;
@@ -182,8 +184,11 @@ void pix_record :: fileMess(int argc, t_atom *argv)
    * this would allow to use this object for streaming, virtual output devices,...
    */
   if(m_handle&&argc){
+  
     int err=0;
+#ifndef HAVE_QUICKTIME
     m_handle->close();
+#endif
     switch(argc){
     case 1:
       err=m_handle->open(atom_getsymbol(argv)->s_name);
