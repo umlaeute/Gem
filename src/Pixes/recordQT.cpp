@@ -131,25 +131,25 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   //probably should be a separate function
   //post("filename %s",m_filename);
 
+
   if (!m_filename[0]) {
     printf("recordQT:  no filename passed\n");
     return;
   }
 #ifdef __APPLE__
-  else {            
+  else {        
     err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
     if (err == fnfErr) {
       // if the file does not yet exist, then let's create the file
       int fd;
       fd = ::open(m_filename, O_CREAT | O_RDWR, 0600);
       if (fd < 0){
-	printf("recordQT : problem with fd\n");
-	return ;
-      }
+		printf("recordQT : problem with fd\n");
+		return ;
+		}
       ::write(fd, " ", 1);
       ::close(fd);
       err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
-      //printf("recordQT : made new file %s\n",m_filename);
     }
 
 
@@ -157,7 +157,6 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
       printf("GEM: recordQT: Unable to make file ref from filename %s", m_filename);
       return ;
     }
-			
     //err = ::FSsetCatalogInfo(&ref, kFSCatInfoSettableInfo, NULL);
     err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
 
@@ -165,7 +164,6 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
       printf("GEM: recordQT: error %d in FSGetCatalogInfo()", err);
       return ;
     }
-		
 		
     err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
 			
@@ -207,12 +205,10 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   m_srcRect.left = 0;
   m_srcRect.bottom = m_height;
   m_srcRect.right = m_width;
-	
 
 #ifdef __APPLE__
   //give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
   m_rowBytes = m_width * 2;
-	
   //m_srcGWorld = NULL;//probably a memory leak
   err = QTNewGWorldFromPtr(&m_srcGWorld,
 			   k422YpCbCr8CodecType,
@@ -375,8 +371,10 @@ void recordQT :: close()
 	
 	
   err = EndMediaEdits(media);
-  if (err != noErr) printf("recordQT : EndMediaEdits failed with error %d\n",err);
-	
+  if (err != noErr) {
+	printf("recordQT : EndMediaEdits failed with error %d\n",err);
+	return;  //no sense in crashing after this
+	}
   err = InsertMediaIntoTrack(track,0,0,GetMediaDuration(media),0x00010000);
   if (err != noErr) printf("recordQT : InsertMediaIntoTrack failed with error %d\n",err);
 
@@ -454,7 +452,6 @@ int recordQT :: putFrame(imageStruct*img)
   m_compressImage = img;
   m_height = img->ysize;
   m_width = img->xsize;
-
   //record
   if (m_recordStart) {
     //if setupQT() has not been run do that first
