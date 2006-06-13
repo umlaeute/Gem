@@ -89,6 +89,9 @@ class GEM_EXTERN record
   int     	m_width;
   int     	m_height;
 
+  bool			m_recordStart;
+  bool			m_recordStop;
+
   //////////
   // popup a dialog to set the codec interactively (interesting on os-x and w32)
   virtual bool dialog();
@@ -99,6 +102,8 @@ class GEM_EXTERN record
   virtual int getNumCodecs();
   virtual char*getCodecName(int n);
   virtual char*getCodecDescription(int n);
+  
+  
 };
 
 #endif	// for header file
