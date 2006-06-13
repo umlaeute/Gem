@@ -976,7 +976,7 @@ void GemMan :: render(void *)
 	  float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
 	  GemMan::fps = (1 / (seconds * 1000)) * 1000;
 	  //m_fps = (1 / (seconds * 1000)) * 1000;
-	  post("GEM: time: %f", seconds);
+	//  post("GEM: time: %f", seconds);
     }
 #else
 #error Define OS specific profiling
