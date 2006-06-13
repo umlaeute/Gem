@@ -108,6 +108,10 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   //////////
   // load film into RAM
   virtual void LoadRam();
+  
+  //////////
+  // set the audio volume
+  virtual void MovVolume(float volume);
 
 
   //-----------------------------------
@@ -199,6 +203,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   Fixed			playRate;
   TimeValue 		prevTime;
   TimeValue		curTime;
+  float			m_volume;
 
 private:
   Movie			m_movie;
@@ -214,6 +219,7 @@ private:
   static void ramCallback(void *data);
   static void hiqualityCallback(void *data, t_floatarg state);
   static void rectangleCallback(void *data, t_floatarg state);
+  static void volumeCallback(void *data, t_floatarg state);
 };
 
 #endif	// for header file
