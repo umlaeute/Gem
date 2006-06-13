@@ -7,7 +7,9 @@
  *
  */
 
+//original pix_record for Mac/Windows - very well tested (at least 100,000 recorded clips)
 
+#if 0
 #ifdef __APPLE__
 #define HAVE_QUICKTIME
 #endif
@@ -922,3 +924,4 @@ void pix_recordQT :: colorspaceCallback(void *data, t_symbol *state)
 }
 
 #endif // HAVE_QUICKTIME
+#endif
