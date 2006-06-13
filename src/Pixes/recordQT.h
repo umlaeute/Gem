@@ -78,8 +78,8 @@ class GEM_EXTERN recordQT : public record
   // call up compression dialog
   virtual bool	dialog();
   virtual int	getNumCodecs();
-  virtual char* getCodecName(int n);
-  virtual char* getCodecDescription(int n);
+  //virtual char* getCodecName(int n);
+  //virtual char* getCodecDescription(int n);
 
   virtual bool	setCodec(int num);
   virtual bool	setCodec(char*name);
@@ -92,11 +92,11 @@ class GEM_EXTERN recordQT : public record
 
   ////////
   // recording start
-  bool			m_recordStart;
+//  bool			m_recordStart;
 	
   ////////
   // recording start
-  bool			m_recordStop;
+//  bool			m_recordStop;
 	
   //////
   // is recording setup and ready to go?
