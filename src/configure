@@ -1388,7 +1388,7 @@ Optional Packages:
   --with-ffmpeg-libs=/path/to/ffmpeg/lib/
                           library path for ffmpeg
   --without-v4l           disable v4l-lib (video input)
-  --with-v4l2             enable v4l2-lib (video input (might override v4l-1)
+  --with-v4l2             enable v4l2-lib (video input (might override v4l-1))
   --without-ieee1394
                           disable ieee1394 (video input)
   --with-ieee1394-includes=/path/to/ieee1394/include/
@@ -3336,7 +3336,9 @@ fi
 if test "${enable_mmx+set}" = set; then
   enableval=$enable_mmx;
 else
-  enable_mmx="yes"
+
+                if test "x" != "x"; then enable_mmx="yes"; fi
+
 fi
 
 
@@ -3344,7 +3346,9 @@ fi
 if test "${enable_sse2+set}" = set; then
   enableval=$enable_sse2;
 else
-  enable_sse2="yes"
+
+                if test "x" != "x"; then enable_sse2="yes"; fi
+
 fi
 
 
@@ -3352,7 +3356,9 @@ fi
 if test "${enable_altivec+set}" = set; then
   enableval=$enable_altivec;
 else
-  enable_altivec="yes"
+
+                if test "x" != "x"; then enable_altivec="yes"; fi
+
 fi
 
 
@@ -3361,7 +3367,9 @@ fi
 if test "${enable_ARB+set}" = set; then
   enableval=$enable_ARB;
 else
-  enable_ARB="yes"
+
+                if test "xforce" != "x"; then enable_ARB="yes"; fi
+
 fi
 
 
@@ -3369,7 +3377,9 @@ fi
 if test "${enable_NV+set}" = set; then
   enableval=$enable_NV;
 else
-  enable_NV="yes"
+
+                if test "xforce" != "x"; then enable_NV="yes"; fi
+
 fi
 
 
@@ -3377,7 +3387,9 @@ fi
 if test "${enable_registerstruct+set}" = set; then
   enableval=$enable_registerstruct;
 else
-  enable_registerstruct="yes"
+
+                if test "xforce" != "x"; then enable_registerstruct="yes"; fi
+
 fi
 
 
@@ -3385,7 +3397,9 @@ fi
 if test "${enable_filmnew+set}" = set; then
   enableval=$enable_filmnew;
 else
-  enable_filmnew="yes"
+
+                if test "xforce" != "x"; then enable_filmnew="yes"; fi
+
 fi
 
 
@@ -6291,8 +6305,10 @@ else
     LIBS="-L$with_ImageMagick_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_Magickpp_main) >/dev/null 2>&1 && unset ac_cv_lib_Magickpp_main
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -6390,6 +6406,8 @@ fi
 
 
   if test "x$ac_cv_lib_Magickpp_main" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for ImageMagick++-config" >&5
 echo $ECHO_N "checking for ImageMagick++-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_IMAGEMAGICK__=""
@@ -6407,7 +6425,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_IMAGEMAGICK__" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_IMAGEMAGICK___CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_IMAGEMAGICK__ --cflags >/dev/null 2>&1; then
         PKG_IMAGEMAGICK___CFLAGS=$(${gem_check_lib_pkgconfig_IMAGEMAGICK__} --cflags)
@@ -6415,6 +6436,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_IMAGEMAGICK___LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_IMAGEMAGICK__ --plugin-libs >/dev/null 2>&1; then
         PKG_IMAGEMAGICK___LIBS=$(${gem_check_lib_pkgconfig_IMAGEMAGICK__} --plugin-libs)
@@ -6426,6 +6450,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_IMAGEMAGICK___LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for main in -lMagick++" >&5
@@ -6572,8 +6597,10 @@ else
     LIBS="-L$with_tiff_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_tiff_TIFFOpen) >/dev/null 2>&1 && unset ac_cv_lib_tiff_TIFFOpen
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -6671,6 +6698,8 @@ fi
 
 
   if test "x$ac_cv_lib_tiff_TIFFOpen" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for tiff-config" >&5
 echo $ECHO_N "checking for tiff-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_TIFF=""
@@ -6688,7 +6717,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_TIFF" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_TIFF_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_TIFF --cflags >/dev/null 2>&1; then
         PKG_TIFF_CFLAGS=$(${gem_check_lib_pkgconfig_TIFF} --cflags)
@@ -6696,6 +6728,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_TIFF_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_TIFF --plugin-libs >/dev/null 2>&1; then
         PKG_TIFF_LIBS=$(${gem_check_lib_pkgconfig_TIFF} --plugin-libs)
@@ -6707,6 +6742,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_TIFF_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for TIFFOpen in -ltiff" >&5
@@ -6856,8 +6892,10 @@ else
     LIBS="-L$with_jpeg_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_jpeg_jpeg_read_header) >/dev/null 2>&1 && unset ac_cv_lib_jpeg_jpeg_read_header
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -6955,6 +6993,8 @@ fi
 
 
   if test "x$ac_cv_lib_jpeg_jpeg_read_header" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for jpeg-config" >&5
 echo $ECHO_N "checking for jpeg-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_JPEG=""
@@ -6972,7 +7012,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_JPEG" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_JPEG_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_JPEG --cflags >/dev/null 2>&1; then
         PKG_JPEG_CFLAGS=$(${gem_check_lib_pkgconfig_JPEG} --cflags)
@@ -6980,6 +7023,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_JPEG_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_JPEG --plugin-libs >/dev/null 2>&1; then
         PKG_JPEG_LIBS=$(${gem_check_lib_pkgconfig_JPEG} --plugin-libs)
@@ -6991,6 +7037,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_JPEG_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for jpeg_read_header in -ljpeg" >&5
@@ -7141,8 +7188,10 @@ else
     LIBS="-L$with_libquicktime_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_quicktime_quicktime_init) >/dev/null 2>&1 && unset ac_cv_lib_quicktime_quicktime_init
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -7240,6 +7289,8 @@ fi
 
 
   if test "x$ac_cv_lib_quicktime_quicktime_init" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for libquicktime-config" >&5
 echo $ECHO_N "checking for libquicktime-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_LIBQUICKTIME=""
@@ -7257,7 +7308,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_LIBQUICKTIME" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_LIBQUICKTIME_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_LIBQUICKTIME --cflags >/dev/null 2>&1; then
         PKG_LIBQUICKTIME_CFLAGS=$(${gem_check_lib_pkgconfig_LIBQUICKTIME} --cflags)
@@ -7265,6 +7319,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_LIBQUICKTIME_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_LIBQUICKTIME --plugin-libs >/dev/null 2>&1; then
         PKG_LIBQUICKTIME_LIBS=$(${gem_check_lib_pkgconfig_LIBQUICKTIME} --plugin-libs)
@@ -7276,6 +7333,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_LIBQUICKTIME_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for quicktime_init in -lquicktime" >&5
@@ -7425,8 +7483,10 @@ else
     LIBS="-L$with_lqt_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_quicktime_quicktime_init) >/dev/null 2>&1 && unset ac_cv_lib_quicktime_quicktime_init
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -7524,6 +7584,8 @@ fi
 
 
   if test "x$ac_cv_lib_quicktime_quicktime_init" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for lqt-config" >&5
 echo $ECHO_N "checking for lqt-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_LQT=""
@@ -7541,7 +7603,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_LQT" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_LQT_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_LQT --cflags >/dev/null 2>&1; then
         PKG_LQT_CFLAGS=$(${gem_check_lib_pkgconfig_LQT} --cflags)
@@ -7549,6 +7614,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_LQT_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_LQT --plugin-libs >/dev/null 2>&1; then
         PKG_LQT_LIBS=$(${gem_check_lib_pkgconfig_LQT} --plugin-libs)
@@ -7560,6 +7628,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_LQT_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for quicktime_init in -lquicktime" >&5
@@ -7709,8 +7778,10 @@ else
     LIBS="-L$with_mpeg3_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_mpeg3_mpeg3_check_sig) >/dev/null 2>&1 && unset ac_cv_lib_mpeg3_mpeg3_check_sig
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -7808,6 +7879,8 @@ fi
 
 
   if test "x$ac_cv_lib_mpeg3_mpeg3_check_sig" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for mpeg3-config" >&5
 echo $ECHO_N "checking for mpeg3-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_MPEG3=""
@@ -7825,7 +7898,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_MPEG3" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_MPEG3_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_MPEG3 --cflags >/dev/null 2>&1; then
         PKG_MPEG3_CFLAGS=$(${gem_check_lib_pkgconfig_MPEG3} --cflags)
@@ -7833,6 +7909,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_MPEG3_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_MPEG3 --plugin-libs >/dev/null 2>&1; then
         PKG_MPEG3_LIBS=$(${gem_check_lib_pkgconfig_MPEG3} --plugin-libs)
@@ -7844,6 +7923,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_MPEG3_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for mpeg3_check_sig in -lmpeg3" >&5
@@ -7993,8 +8073,10 @@ else
     LIBS="-L$with_mpeg_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_mpeg_OpenMPEG) >/dev/null 2>&1 && unset ac_cv_lib_mpeg_OpenMPEG
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -8092,6 +8174,8 @@ fi
 
 
   if test "x$ac_cv_lib_mpeg_OpenMPEG" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for mpeg-config" >&5
 echo $ECHO_N "checking for mpeg-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_MPEG=""
@@ -8109,7 +8193,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_MPEG" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_MPEG_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_MPEG --cflags >/dev/null 2>&1; then
         PKG_MPEG_CFLAGS=$(${gem_check_lib_pkgconfig_MPEG} --cflags)
@@ -8117,6 +8204,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_MPEG_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_MPEG --plugin-libs >/dev/null 2>&1; then
         PKG_MPEG_LIBS=$(${gem_check_lib_pkgconfig_MPEG} --plugin-libs)
@@ -8128,6 +8218,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_MPEG_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for OpenMPEG in -lmpeg" >&5
@@ -8277,8 +8368,10 @@ else
     LIBS="-L$with_avifile_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_aviplay_CreateIAviReadFile) >/dev/null 2>&1 && unset ac_cv_lib_aviplay_CreateIAviReadFile
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -8376,6 +8469,8 @@ fi
 
 
   if test "x$ac_cv_lib_aviplay_CreateIAviReadFile" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for avifile-config" >&5
 echo $ECHO_N "checking for avifile-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_AVIFILE=""
@@ -8393,7 +8488,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_AVIFILE" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_AVIFILE_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_AVIFILE --cflags >/dev/null 2>&1; then
         PKG_AVIFILE_CFLAGS=$(${gem_check_lib_pkgconfig_AVIFILE} --cflags)
@@ -8401,6 +8499,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_AVIFILE_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_AVIFILE --plugin-libs >/dev/null 2>&1; then
         PKG_AVIFILE_LIBS=$(${gem_check_lib_pkgconfig_AVIFILE} --plugin-libs)
@@ -8412,6 +8513,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_AVIFILE_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for CreateIAviReadFile in -laviplay" >&5
@@ -8561,8 +8663,10 @@ else
     LIBS="-L$with_ffmpeg_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_avformat_av_open_input_file) >/dev/null 2>&1 && unset ac_cv_lib_avformat_av_open_input_file
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -8660,6 +8764,8 @@ fi
 
 
   if test "x$ac_cv_lib_avformat_av_open_input_file" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for ffmpeg-config" >&5
 echo $ECHO_N "checking for ffmpeg-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_FFMPEG=""
@@ -8677,7 +8783,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_FFMPEG" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_FFMPEG_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_FFMPEG --cflags >/dev/null 2>&1; then
         PKG_FFMPEG_CFLAGS=$(${gem_check_lib_pkgconfig_FFMPEG} --cflags)
@@ -8685,6 +8794,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_FFMPEG_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_FFMPEG --plugin-libs >/dev/null 2>&1; then
         PKG_FFMPEG_LIBS=$(${gem_check_lib_pkgconfig_FFMPEG} --plugin-libs)
@@ -8696,6 +8808,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_FFMPEG_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for av_open_input_file in -lavformat" >&5
@@ -8886,7 +8999,9 @@ fi
 if test "${with_v4l+set}" = set; then
   withval=$with_v4l;
 else
-  with_v4l="yes"
+
+                if test "xforce" != "x"; then with_v4l="yes"; fi
+
 fi
 
 
@@ -8895,7 +9010,9 @@ fi
 if test "${with_v4l2+set}" = set; then
   withval=$with_v4l2;
 else
-  with_v4l2="no"
+
+                if test "xforce" = "xforce"; then with_v4l2="no"; fi
+
 fi
 
 
@@ -9561,8 +9678,10 @@ else
     LIBS="-L$with_ieee1394_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_dv_main) >/dev/null 2>&1 && unset ac_cv_lib_dv_main
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -9660,6 +9779,8 @@ fi
 
 
   if test "x$ac_cv_lib_dv_main" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for ieee1394-config" >&5
 echo $ECHO_N "checking for ieee1394-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_IEEE1394=""
@@ -9677,7 +9798,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_IEEE1394" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_IEEE1394_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_IEEE1394 --cflags >/dev/null 2>&1; then
         PKG_IEEE1394_CFLAGS=$(${gem_check_lib_pkgconfig_IEEE1394} --cflags)
@@ -9685,6 +9809,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_IEEE1394_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_IEEE1394 --plugin-libs >/dev/null 2>&1; then
         PKG_IEEE1394_LIBS=$(${gem_check_lib_pkgconfig_IEEE1394} --plugin-libs)
@@ -9696,6 +9823,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_IEEE1394_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for main in -ldv" >&5
@@ -9840,8 +9968,10 @@ else
     LIBS="-L$with_ftgl_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_ftgl_main) >/dev/null 2>&1 && unset ac_cv_lib_ftgl_main
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -9939,6 +10069,8 @@ fi
 
 
   if test "x$ac_cv_lib_ftgl_main" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for ftgl-config" >&5
 echo $ECHO_N "checking for ftgl-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_FTGL=""
@@ -9956,7 +10088,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_FTGL" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_FTGL_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_FTGL --cflags >/dev/null 2>&1; then
         PKG_FTGL_CFLAGS=$(${gem_check_lib_pkgconfig_FTGL} --cflags)
@@ -9964,6 +10099,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_FTGL_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_FTGL --plugin-libs >/dev/null 2>&1; then
         PKG_FTGL_LIBS=$(${gem_check_lib_pkgconfig_FTGL} --plugin-libs)
@@ -9975,6 +10113,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_FTGL_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for main in -lftgl" >&5
@@ -10119,8 +10258,10 @@ else
     LIBS="-L$with_gltt_libs $LIBS"
   fi
 
+## unset ac_Lib is possible
   (unset ac_cv_lib_gltt_GLTTFont) >/dev/null 2>&1 && unset ac_cv_lib_gltt_GLTTFont
 
+## 1st we check, whether pkg-config knows something about this package
 
 
 
@@ -10218,6 +10359,8 @@ fi
 
 
   if test "x$ac_cv_lib_gltt_GLTTFont" != "xyes"; then
+## pkg-config has failed
+## check whether there is a ${1}-config lying around
    { echo "$as_me:$LINENO: checking for gltt-config" >&5
 echo $ECHO_N "checking for gltt-config... $ECHO_C" >&6; }
    gem_check_lib_pkgconfig_GLTT=""
@@ -10235,7 +10378,10 @@ echo "${ECHO_T}no" >&6; }
    fi
 
    if test "x$gem_check_lib_pkgconfig_GLTT" != "x"; then
+## fabulous, we have ${1}-config
+## lets see what it reveals
 
+## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_GLTT_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_GLTT --cflags >/dev/null 2>&1; then
         PKG_GLTT_CFLAGS=$(${gem_check_lib_pkgconfig_GLTT} --cflags)
@@ -10243,6 +10389,9 @@ echo "${ECHO_T}no" >&6; }
       fi
     fi
 
+## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
+## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
+## if that fails we try to get it via  "--libs"
     if test "x$PKG_GLTT_LIBS" = "x"; then
       if $gem_check_lib_pkgconfig_GLTT --plugin-libs >/dev/null 2>&1; then
         PKG_GLTT_LIBS=$(${gem_check_lib_pkgconfig_GLTT} --plugin-libs)
@@ -10254,6 +10403,7 @@ echo "${ECHO_T}no" >&6; }
     fi
    fi
 
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_GLTT_LIBS}" = "x"; then
 
 { echo "$as_me:$LINENO: checking for GLTTFont in -lgltt" >&5
@@ -14445,6 +14595,45 @@ echo "${ECHO_T}no" >&6; }
 
 fi
 
+
+
+## SIMD support
+# naive approach is to just check, which SIMD-flags the compiler takes
+# and use these
+# drawback: while the compiler might support compilation for a specific
+# SIMD instruction set, the hardware you are compiling for might not
+
+# proposal:
+# by default the configure-task should only enable flags that are known
+# to work on the machine we are compiling.
+# the user can override this by explicitely stating that they want the
+# flag to be enabled (if possible)
+# e.g. "./configure --enable-sse2" on a pentium-3 should
+# produce a binary that will only run on machines with SSE2 registers
+# whereas "./configure" will make a binary with only MMX enabled.
+#
+# but how do we test for the CPU-caps? on linux we could just read /proc/cpuinfo
+# but on other OSs?
+
+# we make it a bit complicated in order to allow people to enforce the
+# compilation with a specific SIMD-instruction set, even on platforms
+# that don't support it
+# why? think cross-compilation
+
+echo "AltiVec: ...${enable_altivec}..."
+read
+
+if test "x${ARCH}" = "xi386" || test "x${ARCH}" = "xi686"; then
+ if test "x$enable_altivec" != "xyes"; then enable_altivec="no"; fi
+fi
+
+if test "x${ARCH}" = "xPower Macintosh" || test "x${ARCH}" = "xpowerpc"; then
+ if test "x$enable_mmx"  != "xyes"; then enable_mmx="no" ; fi
+ if test "x$enable_sse2" != "xyes"; then enable_sse2="no"; fi
+fi
+
+echo "AltiVec: ...${enable_altivec}..."
+read
 
 if test "x$enable_mmx" != "xno"; then
 
