@@ -38,7 +38,10 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
-GEM_ARG_ENABLE([SIMD], [SIMD-support])
+GEM_ARG_ENABLE([mmx],     [MMX-support])
+GEM_ARG_ENABLE([sse2],    [SSE2-support])
+GEM_ARG_ENABLE([altivec], [AltiVec-support])
+
 GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support])
 GEM_ARG_ENABLE([NV], [openGL-NV-extension support])
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)])
@@ -374,13 +377,18 @@ GEM_CHECK_CXXFLAGS([-fno-builtin])
 GEM_CHECK_CXXFLAGS([-falign-loops=16 -funroll-loops])
 GEM_CHECK_CXXFLAGS([-ffast-math])
 
-if test "x$enable_SIMD" != "xno"; then
+if test "x$enable_mmx" != "xno"; then
   GEM_CHECK_CXXFLAGS([-mmmx])
+fi
+if test "x$enable_sse2" != "xno"; then
   GEM_CHECK_CXXFLAGS([-msse2])
+fi
+if test "x$enable_altivec" != "xno"; then
   GEM_CHECK_CXXFLAGS([-faltivec])
+fi
+
 # damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
-fi
 
 
 GEM_CHECK_LDFLAGS([-shared -Wl,-export-dynamic])
