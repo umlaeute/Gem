@@ -42,10 +42,10 @@ GEM_ARG_ENABLE([mmx],     [MMX-support])
 GEM_ARG_ENABLE([sse2],    [SSE2-support])
 GEM_ARG_ENABLE([altivec], [AltiVec-support])
 
-GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support])
-GEM_ARG_ENABLE([NV], [openGL-NV-extension support])
-GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)])
-GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video])
+GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support], [force])
+GEM_ARG_ENABLE([NV], [openGL-NV-extension support], [force])
+GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)], [force])
+GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video], [force])
 
 AC_ARG_WITH([pdversion], 
 		AC_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
@@ -174,8 +174,8 @@ fi
 
 
 
-GEM_ARG_WITH(v4l, [video input])
-GEM_ARG_WITHOUT(v4l2, [video input (might override v4l-1])
+GEM_ARG_WITH(v4l, [video input], [force])
+GEM_ARG_WITHOUT(v4l2, [video input (might override v4l-1)], [force])
 
 if test "x$with_v4l2" != "xno"; then
   AC_CHECK_HEADER(linux/videodev2.h,
@@ -376,6 +376,45 @@ GEM_CHECK_CXXFLAGS([-O3])
 GEM_CHECK_CXXFLAGS([-fno-builtin])
 GEM_CHECK_CXXFLAGS([-falign-loops=16 -funroll-loops])
 GEM_CHECK_CXXFLAGS([-ffast-math])
+
+
+## SIMD support
+# naive approach is to just check, which SIMD-flags the compiler takes
+# and use these
+# drawback: while the compiler might support compilation for a specific
+# SIMD instruction set, the hardware you are compiling for might not
+
+# proposal:
+# by default the configure-task should only enable flags that are known
+# to work on the machine we are compiling.
+# the user can override this by explicitely stating that they want the
+# flag to be enabled (if possible)
+# e.g. "./configure --enable-sse2" on a pentium-3 should
+# produce a binary that will only run on machines with SSE2 registers
+# whereas "./configure" will make a binary with only MMX enabled.
+#
+# but how do we test for the CPU-caps? on linux we could just read /proc/cpuinfo
+# but on other OSs?
+
+# we make it a bit complicated in order to allow people to enforce the
+# compilation with a specific SIMD-instruction set, even on platforms
+# that don't support it
+# why? think cross-compilation
+
+echo "AltiVec: ...${enable_altivec}..."
+read
+
+if test "x${ARCH}" = "xi386" || test "x${ARCH}" = "xi686"; then
+ if test "x$enable_altivec" != "xyes"; then enable_altivec="no"; fi
+fi
+
+if test "x${ARCH}" = "xPower Macintosh" || test "x${ARCH}" = "xpowerpc"; then
+ if test "x$enable_mmx"  != "xyes"; then enable_mmx="no" ; fi
+ if test "x$enable_sse2" != "xyes"; then enable_sse2="no"; fi
+fi
+
+echo "AltiVec: ...${enable_altivec}..."
+read
 
 if test "x$enable_mmx" != "xno"; then
   GEM_CHECK_CXXFLAGS([-mmmx])
