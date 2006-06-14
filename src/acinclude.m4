@@ -949,25 +949,36 @@ dnl Copyright (C) 2005 IOhannes m zmölnig
 dnl This file is free software; IOhannes m zmölnig
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
-
+# GEM_ARG_WITH(WITHARG, [TEXT], [FORCE])
+# enables the "--with-WITHARG" flag; if FORCE is non-empty and no value is
+# set by the user, the default value "yes" is assigned to with_WITHARG
 # --------------------------------------------------------------
 AC_DEFUN([GEM_ARG_WITH],
 [AC_ARG_WITH([$1],
-             AC_HELP_STRING([--without-$1], [disable $1-lib ($2)]),,with_$1="yes")
+             AC_HELP_STRING([--without-$1], [disable $1-lib ($2)]),,[
+                if test "x$3" != "x"; then with_$1="yes"; fi
+           ])
 ])# GEM_ARG_WITH
+# inverse of GEM_ARG_WITH
 AC_DEFUN([GEM_ARG_WITHOUT],
 [AC_ARG_WITH([$1],
-             AC_HELP_STRING([--with-$1], [enable $1-lib ($2)]),,with_$1="no")
+             AC_HELP_STRING([--with-$1], [enable $1-lib ($2)]),,[
+                if test "x$3" = "xforce"; then with_$1="no"; fi
+           ])
 ])# GEM_ARG_WITHOUT
-
+# same as GEM_ARG_WITH but with "enable"
 AC_DEFUN([GEM_ARG_ENABLE],
 [AC_ARG_ENABLE([$1],
-             AC_HELP_STRING([--disable-$1], [disable $1 ($2)]),,enable_$1="yes")
+             AC_HELP_STRING([--disable-$1], [disable $1 ($2)]),,[
+                if test "x$3" != "x"; then enable_$1="yes"; fi
+             ])
 ])# GEM_ARG_ENABLE
+# inverse of GEM_ARG_ENABLE
 AC_DEFUN([GEM_ARG_DISABLE],
 [AC_ARG_ENABLE([$1],
-             AC_HELP_STRING([--enable-$1], [enable $1-lib ($2)]),,enable_$1="no"
-)
+             AC_HELP_STRING([--enable-$1], [enable $1-lib ($2)]),,[
+                if test "x$3" != "x"; then enable_$1="no"; fi
+             ])
 ])# GEM_ARG_DISABLE
 
 
