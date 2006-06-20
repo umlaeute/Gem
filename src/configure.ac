@@ -401,9 +401,6 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 # that don't support it
 # why? think cross-compilation
 
-echo "AltiVec: ...${enable_altivec}..."
-read
-
 if test "x${ARCH}" = "xi386" || test "x${ARCH}" = "xi686"; then
  if test "x$enable_altivec" != "xyes"; then enable_altivec="no"; fi
 fi
@@ -412,9 +409,6 @@ if test "x${ARCH}" = "xPower Macintosh" || test "x${ARCH}" = "xpowerpc"; then
  if test "x$enable_mmx"  != "xyes"; then enable_mmx="no" ; fi
  if test "x$enable_sse2" != "xyes"; then enable_sse2="no"; fi
 fi
-
-echo "AltiVec: ...${enable_altivec}..."
-read
 
 if test "x$enable_mmx" != "xno"; then
   GEM_CHECK_CXXFLAGS([-mmmx])
