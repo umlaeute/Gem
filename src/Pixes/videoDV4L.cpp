@@ -172,7 +172,6 @@ pixBlock *videoDV4L :: getFrame(){
 /////////////////////////////////////////////////////////
 int videoDV4L :: openDevice(int format){
   int fd = -1;
-  char buf[255];
   struct dv1394_init init = {
     DV1394_API_VERSION, // api version 
     0x63,              // isochronous transmission channel
@@ -180,17 +179,20 @@ int videoDV4L :: openDevice(int format){
     (m_norm==NTSC)?DV1394_NTSC:DV1394_PAL,         // PAL or NTSC
     0, 0 , 0                // default packet rate
   };
+
   m_framesize=(m_norm==NTSC)?DV1394_NTSC_FRAME_SIZE:DV1394_PAL_FRAME_SIZE;
 
   if(m_devicename){
     if ((fd = open(m_devicename, O_RDWR)) < 0) {
-        perror(buf);
+        perror(m_devicename);
         return -1;
     }
   } else {
-    int devnum=(m_devicenum<0)?0:m_devicenum;
+    signed char devnum=(m_devicenum<0)?0:(signed char)m_devicenum;
+    char buf[256];
+    buf[255]=0;buf[32]=0;buf[33]=0;
     if (devnum<0)devnum=0;
-    sprintf(buf, "/dev/ieee1394/dv/host%d/%s/in", devnum, (m_norm==NTSC)?"NTSC":"PAL");
+    snprintf(buf, 32, "/dev/ieee1394/dv/host%d/%s/in", devnum, (m_norm==NTSC)?"NTSC":"PAL");
     if ((fd = open(buf, O_RDWR)) < 0)    {
       if ((fd=open("/dev/dv1394", O_RDWR)) < 0)    {
         perror(buf);
@@ -281,7 +283,12 @@ int videoDV4L :: stopTransfer()
   m_continue_thread=false;
   int i=0;
   if(m_haveVideo){
-    while(m_capturing){usleep(10);i++;}
+    while(m_capturing){
+      struct timeval sleep;
+      sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+      select(0,0,0,0,&sleep);
+      i++;
+    }
     post("DV4L: shutting down dv1394 after %d usec", i*10);
     ioctl(dvfd, DV1394_SHUTDOWN);
   }
