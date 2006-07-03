@@ -17,6 +17,7 @@
 
 #ifdef HAVE_LIBAVIPLAY
 # include <unistd.h>
+# include <time.h>
 #endif
 
 /////////////////////////////////////////////////////////
@@ -70,7 +71,12 @@ bool filmAVIPLAY :: open(char *filename, int format)
   if (format>0)m_wantedFormat=format;
   // how do we close the avifile ??? automagically ?
   if (!(m_avifile = CreateIAviReadFile(filename)))goto unsupported;
-  while(!(*m_avifile).IsOpened())usleep(500);
+  while(!(*m_avifile).IsOpened()){
+    struct timeval sleep;
+    sleep.tv_sec=0;
+    sleep.tv_usec=500;/*500us*/
+    select(0,0,0,0,&sleep);
+  }
   if (!(*m_avifile).IsValid())goto unsupported;
   m_numTracks = (*m_avifile).VideoStreamCount();
   if (m_numTracks<1)return false;
