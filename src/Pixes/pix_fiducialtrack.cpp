@@ -110,7 +110,8 @@ void pix_fiducialtrack :: treeMess(t_symbol*s)
   if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, 
                         s->s_name, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
-    sprintf(m_treefile, "%s/%s", buf, bufptr);
+    snprintf(m_treefile, MAXPDSTRING-1, "%s/%s", buf, bufptr);
+    m_treefile[MAXPDSTRING-1]=0;
   } else
     canvas_makefilename(getCanvas(), s->s_name, m_treefile, MAXPDSTRING);
 

@@ -25,6 +25,7 @@
 # ifdef __WIN32__
 #  include <io.h>
 #  include <windows.h>
+#  define snprintf _snprintf
 # else
 #  ifdef __APPLE__
 #   include <mach-o/dyld.h> 
@@ -100,7 +101,8 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
 
 #ifdef __APPLE__
   char buf3[MAXPDSTRING];
-  sprintf(buf3, "%s.frf/%s", pluginname, pluginname);
+  snprintf(buf3, MAXPDSTRING, "%s.frf/%s", pluginname, pluginname);
+  buf3[MAXPDSTRING-1]=0;
   pluginname=buf3;
 #endif
 
@@ -108,10 +110,11 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
 #ifndef __APPLE__
-    sprintf(buf, "%s/%s", buf2, bufptr);
+    snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
 #else
-	sprintf(buf, "%s", buf2);
+    snprintf(buf, MAXPDSTRING, "%s", buf2);
 #endif
+    buf[MAXPDSTRING-1]=0;
   } else
     canvas_makefilename(getCanvas(), pluginname, buf, MAXPDSTRING);
   post("trying to load %s", buf);
@@ -120,6 +123,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
 
   m_image.setCsizeByFormat(can_rgba?GL_RGBA:GL_RGB);
 
+  throw(12);
   if(!m_plugin)throw(GemException("couldn't load FreeFrame-plugin"));
 
   PlugInfoStruct *pis = FF_PLUGMAIN_PIS(m_plugin(FF_GETINFO, NULL, 0));
@@ -142,7 +146,8 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char *p_name;
   post("pix_freeframe[%s]:", pluginname);
   for(unsigned int i=0;i<numparams; i++){
-    sprintf(tempVt, "#%d\0", i);
+    snprintf(tempVt, 5, "#%d\0", i);
+    tempVt[4]=0;
     // display
     //   ParameterName:
     //   ParameterDisplayValue:
