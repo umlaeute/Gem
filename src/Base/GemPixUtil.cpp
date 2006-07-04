@@ -331,14 +331,18 @@ GEM_EXTERN void imageStruct::setWhite() {
     break;
   }
 }
-GEM_EXTERN void imageStruct::convertFrom(imageStruct *from, GLenum to_format=0) {
+GEM_EXTERN void imageStruct::convertFrom(imageStruct *from, GLenum to_format) {
   if (!from || !this || !from->data) {
     error("GEM: Someone sent a bogus pointer to convert");
     return;
   }
   xsize=from->xsize;
   ysize=from->ysize;
-  setCsizeByFormat(to_format);
+
+  if(to_format>0)
+    setCsizeByFormat(to_format);
+  else setCsizeByFormat();
+
   switch (from->format){
   case GL_RGBA: 
     fromRGBA(from->data);
@@ -361,7 +365,7 @@ GEM_EXTERN void imageStruct::convertFrom(imageStruct *from, GLenum to_format=0) 
   }
 }
 
-GEM_EXTERN void imageStruct::convertTo(imageStruct *to, GLenum fmt=0) {
+GEM_EXTERN void imageStruct::convertTo(imageStruct *to, GLenum fmt) {
   if (!to || !this || !this->data) {
     error("GEM: Someone sent a bogus pointer to convert");
     if (to) to->data = NULL;
@@ -369,7 +373,11 @@ GEM_EXTERN void imageStruct::convertTo(imageStruct *to, GLenum fmt=0) {
   }
   to->xsize=xsize;
   to->ysize=ysize;
-  to->setCsizeByFormat(fmt);
+  if(fmt>0)
+    to->setCsizeByFormat(fmt);
+  else
+    to->setCsizeByFormat();
+
   switch (format){
   case GL_RGBA: 
     to->fromRGBA(data);
