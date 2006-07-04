@@ -16,6 +16,8 @@
 #include <string.h>
 #include "Pixes/filmQT4L.h"
 
+#include <colormodels.h>
+
 /////////////////////////////////////////////////////////
 //
 // filmQT4L
@@ -60,8 +62,17 @@ void filmQT4L :: close(void)
 /////////////////////////////////////////////////////////
 bool filmQT4L :: open(char *filename, int format)
 {
-  if (format>0)m_wantedFormat=format;
-  int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
+  int wantedFormat=GL_RGBA;
+  switch(format){
+  default:
+    break;
+  case GL_RGBA:
+  case GL_YCBCR_422_GEM:
+  case GL_LUMINANCE:
+    m_wantedFormat=format;
+    break;
+  }
+
   if (quicktime_check_sig(filename)){ /* ok, this is quicktime */
     if (!(m_quickfile = quicktime_open(filename, 1, 0))){
 //      post("GEM: pix_film: Unable to open file: %s", filename);
@@ -82,31 +93,18 @@ bool filmQT4L :: open(char *filename, int format)
       //    char *codec = quicktime_video_compressor(m_quickfile, m_curTrack);
       //    post("GEM: pix_film: unsupported CODEC '%s'!", codec);
       quicktime_close(m_quickfile);
-	  m_quickfile=0;
+      m_quickfile=0;
       return false;
-    } 
-    switch (wantedFormat){
-    default:
-    case GL_RGBA:
-      m_image.image.csize=4;
-      break;
-    case GL_YCBCR_422_GEM:
-      m_image.image.csize=2;
-      break;
-    case GL_LUMINANCE:
-      m_image.image.csize=1;
-      break;
     }
-    m_image.image.format=wantedFormat;
+    m_image.image.setCsizeByFormat(wantedFormat);
     m_image.image.reallocate();
 
     m_qtimage.xsize=m_image.image.xsize;
     m_qtimage.ysize=m_image.image.ysize;
-    m_qtimage.csize=3; m_qtimage.format=GL_RGB;
+    m_qtimage.setCsizeByFormat(GL_RGB);
     m_qtimage.reallocate();
 
     m_newfilm = true;
-
    return true;
   }
   goto unsupported;
@@ -137,10 +135,11 @@ pixBlock* filmQT4L :: getFrame(){
   while(i--)rows[i]=m_qtimage.data+m_qtimage.xsize*m_qtimage.csize*(m_qtimage.ysize-i-1);
 
   m_lastFrame=m_curFrame;
+
   if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
     post("GEM: pix_film:: couldn't decode video !");
   }else {
-    m_image.image.fromRGB(m_qtimage.data);
+    m_image.image.convertFrom(&m_qtimage);
     m_image.newimage=1; m_image.image.upsidedown=false;
     pimage = &m_image;
     if(m_newfilm)m_image.newfilm=1; 
