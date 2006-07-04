@@ -182,13 +182,15 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   while(i--)m_handles[i]=0;
   m_numHandles=0;
 
-  m_handles[m_numHandles]=new filmAVI();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmQT();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmQT4L();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmMPEG3();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmAVIPLAY();  debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmFFMPEG();   debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
-  m_handles[m_numHandles]=new filmMPEG1();    debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles]);m_numHandles++;
+#define DEBUG_HANDLE debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles])
+
+  m_handles[m_numHandles]=new filmAVI();      DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=new filmQT();       DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=new filmQT4L();     DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=new filmMPEG3();    DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=new filmAVIPLAY();  DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=new filmFFMPEG();   DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=new filmMPEG1();    DEBUG_HANDLE; m_numHandles++;
 
   //openMess(filename);
 }
@@ -315,6 +317,7 @@ void pix_filmNEW :: closeMess(void){
       m_reqFrame=0;
       m_curFrame=-1;
       pthread_create(&m_thread_id, 0, grabThread, this);
+      post("thread created");
     }
   }
 #endif
