@@ -6,7 +6,7 @@ LOG
 	
 	created 11/27/2005
 	
-	Copyright (c) 2005 James Tittle II, tigital AT mac DOT com
+	Copyright (c) 2005-2006 James Tittle II, tigital AT mac DOT com
 	For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -17,8 +17,6 @@ LOG
 
 #include "Base/GemBase.h"
 #include <iostream>
-using namespace std;
-
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -40,7 +38,8 @@ class GEM_EXTERN gemframebuffer : public GemBase
 
 	    //////////
 	    // Constructor
-    	gemframebuffer(t_symbol *colorspace);
+    	gemframebuffer( void );
+		gemframebuffer(t_symbol *format, t_symbol *type);
 
     protected:
     	
@@ -69,10 +68,9 @@ class GEM_EXTERN gemframebuffer : public GemBase
     	void	    	dimMess(int width, int height);
 		
 		////////// 
-		// colorspace-message
-		virtual void	csMess(char* format);
-		t_symbol *colorspace;
-		int m_colorspace;
+		// format-message
+		virtual void	formatMess(char* format);
+		virtual void	typeMess(char* type);
     	
 	private:
 
@@ -86,10 +84,9 @@ class GEM_EXTERN gemframebuffer : public GemBase
 		int				m_internalformat;
 		int				m_format;
 		int				m_type;
+		GLint			m_vp[4];
+		GLfloat			m_color[4];
 		t_outlet		*m_outTexInfo;
-		
-		void			CheckErrorsGL( const char* location = NULL, 
-										std::ostream& ostr = std::cerr );
 		
     	void	    	bangMess();
     	
@@ -99,7 +96,8 @@ class GEM_EXTERN gemframebuffer : public GemBase
 		static void		modeCallback(void *data, t_floatarg quality);
 		static void 	dimMessCallback(void *data, t_floatarg width, t_floatarg height );
 		static void		texTargetCallback(void *data, t_floatarg tt);
-		static void		csMessCallback(void *data, t_symbol *colorspace);
+		static void		formatMessCallback(void *data, t_symbol *format);
+		static void		typeMessCallback(void *data, t_symbol *type);
 };
 
 #endif	// for header file
