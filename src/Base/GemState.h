@@ -16,6 +16,16 @@ LOG
 #define INCLUDE_GEMSTATE_H_
 
 #include "Base/GemExportDef.h"
+#ifdef __APPLE__
+# include "OpenGL/gl.h"
+#else
+// I hate Microsoft...I shouldn't have to do this!
+# ifdef __WIN32__
+#  include <windows.h>
+# endif
+
+# include "GL/gl.h"
+#endif
 
 struct pixBlock;
 class TexCoord;
@@ -71,9 +81,9 @@ class GEM_EXTERN GemState
     	
     	//////////
     	// Texture mapping on?
-	// 0..off
-	// 1..normalized texture
-	// 2..rectangle texture
+		// 0..off
+		// 1..normalized texture
+		// 2..rectangle texture
     	int 	    	    texture;
     	
     	//////////
@@ -89,26 +99,43 @@ class GEM_EXTERN GemState
     	// The number of TexCoords
     	int 	    	    numTexCoords;
 
-	float**             vertexColors;
-	int 	    	    numVertexColors;
-
     	//////////
     	// Stereoscopic rendering?
-	// 0 - no
-	// 1 - left
-	// 2 - right
+		// 0 - no
+		// 1 - left
+		// 2 - right
     	int					stereo;
-    	
-	//////////
-	// Milliseconds since last frame
-	// If in Stereoscopic mode, then it is the same number for both left
-	//		and right renderings
-	float				tickTime;
 
+		//////////
+		// Milliseconds since last frame
+		// If in Stereoscopic mode, then it is the same number for both left
+		//		and right renderings
+		float				tickTime;
 
-	//////////
-	// how deep is the current stack
-	int stackDepth[4];
+		//////////////////
+		// the default draw-type (might be overriden within a Geo)
+        GLenum				drawType;
+
+		//////////
+		// how deep is the current stack
+		int stackDepth[4];
+	
+		////////////
+        //vertex-array data
+		int                 VertexDirty; // the vertex-arrays has changed
+
+        GLfloat				*VertexArray;
+        int					VertexArraySize;
+        int					VertexArrayStride;
+
+        GLfloat				*ColorArray;
+        int					HaveColorArray;
+
+        GLfloat				*NormalArray;
+        int					HaveNormalArray;
+
+        GLfloat				*TexCoordArray;
+        int					HaveTexCoordArray;
 
         //////////
         // Constructor
@@ -126,7 +153,6 @@ class GEM_EXTERN GemState
 	  else return 0.;
 	}
 
-	void setColor(int num);
 };
     	
 #endif	// for header file

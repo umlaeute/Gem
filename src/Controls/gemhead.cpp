@@ -16,8 +16,8 @@
 
 #include "gemhead.h"
 
-#ifdef MACOSX
-#import <Carbon/Carbon.h>
+#ifdef __APPLE__
+#include <Carbon/Carbon.h>
 #endif
 
 #include "Base/GemMan.h"
@@ -73,41 +73,53 @@ void gemhead :: renderGL(GemState *state)
   static const GLfloat s_color[]={0.0,0.0,0.0,1};
   static const GLfloat shininess[]={0.0};
 
-    if (!m_cache || !m_renderOn) return;
+  if (!m_cache || !m_renderOn) return;
 
-    // set the default color and transformation matrix
-    glColor4f(1.f, 1.f, 1.f, 1.f);
+  // set the default color and transformation matrix
+  glColor4f(1.f, 1.f, 1.f, 1.f);
 
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  a_color);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  d_color);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, e_color);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, s_color);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  a_color);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  d_color);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, e_color);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, s_color);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
-    glPushMatrix();
-    if(state)
-      {
+  glPushMatrix();
+  if(state)
+  {
 	// set the state dirty flag
 	state->dirty = m_cache->dirty;
 
 	// clear the state->image (might be still there from previous [gemhead]s)
 	state->image = 0;
-      }
 
-    // are we profiling and need to send new images?
-    if (GemMan::m_profile >= 2)
-      m_cache->resendImage = 1;
+	state->VertexDirty=m_cache->vertexDirty;
+	state->VertexArray = 0;
+	state->VertexArraySize = 0;
+	state->ColorArray = 0;
+	state->NormalArray = 0;
+	state->TexCoordArray = 0;
+	state->HaveColorArray = 0;
+	state->HaveNormalArray = 0;
+	state->HaveTexCoordArray = 0;
+	state->drawType = 0;
+  }
 
-    t_atom ap[2];
-    ap->a_type=A_POINTER;
-    ap->a_w.w_gpointer=(t_gpointer *)m_cache;  // the cache ?
-    (ap+1)->a_type=A_POINTER;
-    (ap+1)->a_w.w_gpointer=(t_gpointer *)state;
-   outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
+  // are we profiling and need to send new images?
+  if (GemMan::m_profile >= 2)
+	m_cache->resendImage = 1;
 
-    m_cache->dirty = 0;
+  t_atom ap[2];
+  ap->a_type=A_POINTER;
+  ap->a_w.w_gpointer=(t_gpointer *)m_cache;  // the cache ?
+  (ap+1)->a_type=A_POINTER;
+  (ap+1)->a_w.w_gpointer=(t_gpointer *)state;
+  outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
 
-    glPopMatrix();
+  m_cache->dirty = 0;
+  m_cache->vertexDirty=0;
+
+  glPopMatrix();
 }
 
 
