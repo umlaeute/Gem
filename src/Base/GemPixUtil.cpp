@@ -240,8 +240,12 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
     break;
     
   case GL_RGBA:  case GL_BGRA_EXT:   
-    format=GL_BGRA_EXT; 
+    format=GL_BGRA_EXT;
+#ifdef __BIG_ENDIAN__
     type  =GL_UNSIGNED_INT_8_8_8_8_REV;
+#else
+    type  =GL_UNSIGNED_INT_8_8_8_8;
+#endif
     csize =4; 
     break;
   }
