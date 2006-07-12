@@ -87,6 +87,25 @@ int GemSIMD :: simd_runtime_check(void)
      * therefore we rely on the compile-time setting (preprocessor)
      * see also http://lists.debian.org/debian-powerpc/2004/01/msg00106.html
      */
+/*
+unsigned int OGPProcessorHasAltivec(void)
+{
+    static int _OGPProcessorHasAltivec = -1;
+
+    if (_OGPProcessorHasAltivec < 0) {
+        int name[] = {CTL_HW, HW_VECTORUNIT};
+        size_t size;
+
+        size = sizeof(_OGPProcessorHasAltivec);
+        if (sysctl(name, 2, &_OGPProcessorHasAltivec, &size, NULL, 0) < 0) {
+            perror("sysctl");
+            _OGPProcessorHasAltivec = 0;
+        }
+    }
+
+    return _OGPProcessorHasAltivec;
+}
+*/
 # if defined __VEC__
     realcpuid=GEM_SIMD_ALTIVEC;
     return realcpuid;
