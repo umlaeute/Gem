@@ -28,11 +28,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
-  : m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(0), m_mode(1),
+  : m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(GL_TEXTURE_2D), m_mode(0),
     m_xRatio(1.f), m_yRatio(1.f), upsidedown(false),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0)
 {
-#ifndef GL_TEXTURE0_ARB
+#if !defined(GL_VERSION_1_3) && !defined(GL_ARB_multitexture)
   post("[pix_multitexture]: GEM has been compiled without ARB-multitexture support");
 #endif
   if (m_reqTexUnits==0) {
@@ -81,15 +81,9 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
 /////////////////////////////////////////////////////////
 void pix_multitexture :: render(GemState *state)
 {
-#ifdef GL_TEXTURE0_ARB
-        m_oldTexCoords=state->texCoords;
+	m_oldTexCoords=state->texCoords;
 	m_oldNumCoords=state->numTexCoords;
 	m_oldTexture  =state->texture;
-
-	if ( !m_mode )
-		m_textureType = GL_TEXTURE_2D;
-	else
-		m_textureType = GL_TEXTURE_RECTANGLE_EXT;
 	
 	setTexCoords(m_coords, m_xRatio, m_yRatio, upsidedown);
 	state->texCoords = m_coords;
@@ -97,15 +91,22 @@ void pix_multitexture :: render(GemState *state)
 	
 	for ( int i=0; i< m_reqTexUnits; i++ )
 	{
+#if defined(GL_VERSION_1_3)
+        glActiveTexture( GL_TEXTURE0 + i );
+#elif defined(GL_ARB_multitexture) && !defined(GL_VERSION_1_3)
 		glActiveTextureARB( GL_TEXTURE0_ARB + i );
+#endif
 		glEnable( m_textureType );
 		glBindTexture( m_textureType, m_texID[i] );
+		glTexParameteri( m_textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+		glTexParameteri( m_textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+		glTexParameteri( m_textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+		glTexParameteri( m_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	}
-	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glEnable(GL_TEXTURE_GEN_S);
-	glEnable(GL_TEXTURE_GEN_T);
-#endif
+//	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+//	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+//	glEnable(GL_TEXTURE_GEN_S);
+//	glEnable(GL_TEXTURE_GEN_T);
 }
 
 /////////////////////////////////////////////////////////
@@ -114,20 +115,28 @@ void pix_multitexture :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_multitexture :: postrender(GemState *state)
 {
-#ifdef GL_TEXTURE0_ARB
   state->texCoords   = m_oldTexCoords;
   state->numTexCoords= m_oldNumCoords;
   state->texture     = m_oldTexture;
-
+  
+#if defined(GL_VERSION_1_3)
+  for ( int i = m_reqTexUnits; i>0; i--)
+  {
+    glActiveTexture( GL_TEXTURE0 + i);
+    glDisable( m_textureType );
+  }
+  glActiveTexture( GL_TEXTURE0 );
+#elif defined(GL_ARB_multitexture) && !defined(GL_VERSION_1_3)
   for ( int i = m_reqTexUnits; i>0; i--)
   {
     glActiveTextureARB( GL_TEXTURE0_ARB + i);
     glDisable( m_textureType );
   }
   glActiveTextureARB( GL_TEXTURE0_ARB );
-  glDisable(GL_TEXTURE_GEN_S);
-  glDisable(GL_TEXTURE_GEN_T);
 #endif
+
+//  glDisable(GL_TEXTURE_GEN_S);
+//  glDisable(GL_TEXTURE_GEN_T);
 }
 
 /////////////////////////////////////////////////////////
@@ -166,7 +175,16 @@ void pix_multitexture :: texUnitMessCallback(void *data, float n, float texture)
 {
   GetMyClass(data)->m_texID[(int)n] = (GLint)texture;
 }
-void pix_multitexture :: modeCallback(void *data, t_floatarg quality)
+void pix_multitexture :: modeCallback(void *data, t_floatarg textype)
 {
-  GetMyClass(data)->m_mode=((int)quality);
+  GetMyClass(data)->m_mode=((int)textype);
+  if (textype)
+  {
+//    GetMyClass(data)->m_oldType = GetMyClass(data)->m_textureType;
+    GetMyClass(data)->m_textureType = GL_TEXTURE_RECTANGLE_EXT;
+    post("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", GetMyClass(data)->m_objectname->s_name);
+  }else{
+    GetMyClass(data)->m_textureType = GL_TEXTURE_2D;
+	post("[%s]:  using mode 0:GL_TEXTURE_2D", GetMyClass(data)->m_objectname->s_name);
+  }
 }
