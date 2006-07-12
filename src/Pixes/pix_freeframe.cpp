@@ -340,9 +340,9 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
     post("%s: couldn't load", libname);
     return 0;
   }
-  CFRelease( bundleURL );
-  CFRelease( theBundle );
-  CFRelease( plugin );
+  if(bundleURL != NULL) CFRelease( bundleURL );
+  if(theBundle != NULL) CFRelease( theBundle );
+  if(plugin != NULL)    CFRelease( plugin );
 #elif defined __WIN32__
   HINSTANCE ntdll;
 
