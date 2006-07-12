@@ -30,15 +30,15 @@ KEYWORDS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN vertex_draw : public GemBase
+class GEM_EXTERN vertex_draw : public GemVertex
 {
-    CPPEXTERN_HEADER(vertex_draw, GemBase)
+    CPPEXTERN_HEADER(vertex_draw, GemVertex)
 
     public:
 
         //////////
         // Constructor
-    	vertex_draw(t_floatarg size);
+    	vertex_draw();
     	
     protected:
     	
@@ -46,26 +46,41 @@ class GEM_EXTERN vertex_draw : public GemBase
     	// Destructor
     	virtual ~vertex_draw();
         
-        int	m_vao, m_color, m_texcoord;
-        int	*m_index;
-        float *vertices;
-        int	m_oldsize;
-        int	m_init;
-        int 	m_defaultDraw;
+	////////////
+	// use VertexArrayObjects
+        int m_vao;
 
+	////////
+	// do we want to use the colorArray if it exists ?
+	int m_color;
+
+	////////
+	// do we want to use the texCoordArray if it exists ?
+	int m_texcoord;
+
+	//////////
+	// VertexBufferObjects
+	// these are only used if "__VBO" is defined
+		GLuint	m_nVBOVertices, m_nVBOColor, m_nVBOTexCoords, m_nVBONormals;
         
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
 
+	//////////
+	// our own draw-style
 	virtual void    typeMess(t_symbol*s);
 	GLint m_drawType;
 
+	////////
+	// do we want to use the default draw-style (from GemState) or our own ?
+	int 	m_defaultDraw;
+
  private:
-        static void 	blendMessCallback(void *data, t_floatarg size);
         static void 	colorMessCallback(void *data, t_floatarg size);
         static void 	texcoordMessCallback(void *data, t_floatarg t);
+        static void 	defaultMessCallback(void *data, t_floatarg size);
         static void 	typeMessCallback(void *data, t_symbol*s);
 
 };

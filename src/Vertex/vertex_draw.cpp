@@ -17,8 +17,26 @@
 #include "vertex_draw.h"
 
 #include "Base/GemState.h"
+#include "Base/GemCache.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(vertex_draw, t_floatarg, A_DEFFLOAT)
+//#ifdef __APPLE__
+# define __VBO
+//#endif
+
+// this is a hack for VBO header defines that were available before 10.4,
+//  but not included in the earlier OpenGL.framework:  not necessary >10.4
+#ifdef __VBO
+#ifdef __APPLE__
+#include <AvailabilityMacros.h>
+#if !defined (MAC_OS_X_VERSION_10_4) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+# include "glVBO_ext.h"
+#endif
+#endif // __APPLE__
+#else
+#include "glVBO_ext.h"
+#endif
+
+CPPEXTERN_NEW(vertex_draw)
 
 /////////////////////////////////////////////////////////
 //
@@ -28,18 +46,14 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_draw, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_draw :: vertex_draw(t_floatarg size)
+vertex_draw :: vertex_draw():
+  m_vao(1), m_color(1), m_texcoord(0),
+  m_nVBOVertices(0), m_nVBOColor(0), m_nVBOTexCoords(0), m_nVBONormals(0),
+  m_drawType(GL_TRIANGLES), m_defaultDraw(1)
 {
-   // m_drawType = GL_QUADS;
-   m_drawType = GL_TRIANGLES;
-   m_defaultDraw = 1;
-    m_vao=1;
-    m_color=1;
-    m_index = 0;
-    vertices = new float [4];
-    m_oldsize = 0;
-    m_init = 1;
-    m_texcoord = 0;
+#ifdef __VBO
+  post("vertex_draw: using VBO");
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -47,7 +61,18 @@ vertex_draw :: vertex_draw(t_floatarg size)
 //
 /////////////////////////////////////////////////////////
 vertex_draw :: ~vertex_draw()
-{ }
+{ 
+#ifdef __VBO
+	if (m_nVBOVertices)
+		glDeleteBuffersARB( 1, &m_nVBOVertices );
+	if (m_nVBOColor)
+		glDeleteBuffersARB( 1, &m_nVBOColor );
+	if (m_nVBOTexCoords)
+		glDeleteBuffersARB( 1, &m_nVBOTexCoords );
+	if (m_nVBONormals)
+		glDeleteBuffersARB( 1, &m_nVBONormals );
+#endif
+}
 
 /////////////////////////////////////////////////////////
 // render
@@ -55,109 +80,185 @@ vertex_draw :: ~vertex_draw()
 /////////////////////////////////////////////////////////
 void vertex_draw :: render(GemState *state)
 {
-   
-    int size,stride;
-   // int	index,vindex;
-    GLuint vao;
-    GLuint fences[2];
+  bool rebuild=(state->VertexDirty);
+  //if(rebuild)post("rebuild");
     
-    if (state->VertexArray == NULL || state->VertexArraySize <= 0){
+  if (state->VertexArray == NULL || state->VertexArraySize <= 0){
       //  post("vertex_draw: no vertex array!");
         return;
-    }
-    if (state->ColorArray == NULL || state->HaveColorArray == 0){
-     //   post("vertex_draw: no Color array!");
-       // m_color = 0;
-    }
-    if (state->TexCoordArray == NULL || state->HaveTexCoordArray == 0){
-        post("vertex_draw: no Texture Coordinate array!");
-        m_texcoord = 0;
-    }
-    
-    if (state->drawType  && m_defaultDraw){
-        m_drawType = state->drawType;
-    }
-    
-    size = state->VertexArraySize;
-    stride = state->VertexArrayStride;
-    glShadeModel( GL_SMOOTH );
-   
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+  }
+  int size = state->VertexArraySize;
 
-#ifdef __APPLE__
-# error please replace __APPLE__ by something more specific; JMZ    
-    glGenVertexArraysAPPLE(2, fences);
-#endif
+  int color=m_color;
+  if (state->ColorArray == NULL || state->HaveColorArray == 0)
+  {
+    //color = 0;
+  }
+  
+  bool texcoord=m_texcoord;
+  if (texcoord && (state->TexCoordArray == NULL || state->HaveTexCoordArray == 0))
+  {
+	post("vertex_draw: no Texture Coordinate array!");
+    texcoord = 0;
+  }
     
-    vao = fences[0];
-   //works but is slow
- //  post("vertex draw: VAO %d",vao);
-   /*
-   if (glIsVertexArrayAPPLE(vao)) 
-        glBindVertexArrayAPPLE(vao);
-        post("vertex draw: using VAO");
-        }
-    else{
-        post("vertex draw: not using VAO");
-    }*/
+  GLint drawType=m_drawType;
+  if (state->drawType && m_defaultDraw)
+  {
+    drawType = state->drawType;
+  }
+
+  glShadeModel( GL_SMOOTH );
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+#ifndef __VBO
+///////////////////////////////////////////  
+// vertex_array_object   
+
+# ifdef __APPLE__
+  if (m_vao){
+	if (!glIsVertexArrayAPPLE(1)) post("vertex draw: not using VAO");
+	glBindVertexArrayAPPLE(1);
+  }
+# endif
+
+  glDisableClientState(GL_INDEX_ARRAY);
     
-  //  glGenVertexArraysAPPLE(2, fences);
-    
-    vao = fences[0];
-#ifdef __APPLE__
-# error please replace __APPLE__ by something more specific; JMZ
-    if (m_vao){
-      if (!glIsVertexArrayAPPLE(1)) post("vertex draw: not using VAO");
-      glBindVertexArrayAPPLE(1);
-     }
-#endif
-    glDisableClientState(GL_INDEX_ARRAY);
-    
-    if(m_color && (state->ColorArray != NULL || state->HaveColorArray == 0) ){
-        glEnableClientState(GL_COLOR_ARRAY);
-        glColorPointer(4,GL_FLOAT,0,state->ColorArray);
-        }else{
-        glDisableClientState(GL_COLOR_ARRAY);
-        }
+  if(color && (state->ColorArray != NULL || state->HaveColorArray == 0) )
+  {
+	glEnableClientState(GL_COLOR_ARRAY);
+	glColorPointer(4,GL_FLOAT,0,state->ColorArray);
+  }else{
+	glDisableClientState(GL_COLOR_ARRAY);
+  }
      
-   //if(m_texcoord){
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glTexCoordPointer(2,GL_FLOAT,0,state->TexCoordArray);
-    //   }else{
-    //   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    //   }
+  if(texcoord)
+  {
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexCoordPointer(2,GL_FLOAT,0,state->TexCoordArray);
+//    glTexCoordPointer(2,GL_FLOAT,16,state->TexCoordArray);
+  }else{
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
     
+  if(state->HaveNormalArray || state->NormalArray!=NULL)
+  {
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glNormalPointer(GL_FLOAT,0,state->NormalArray);
+//      glNormalPointer(GL_FLOAT,16,state->NormalArray);
+  }
 
-    if(state->HaveNormalArray || state->NormalArray!=NULL){
-      glEnableClientState(GL_NORMAL_ARRAY);
-      glNormalPointer(GL_FLOAT,0,state->NormalArray);    
-    }
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glVertexPointer(4,GL_FLOAT,0,(GLfloat *)state->VertexArray);
 
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(4,GL_FLOAT,0,(GLfloat *)state->VertexArray);
-
-#ifdef  GL_VERTEX_ARRAY_RANGE_APPLE
-    glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
-    glVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
-    glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
-    glFlushVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
+# ifdef  GL_VERTEX_ARRAY_RANGE_APPLE
+  glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
+  glVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
+  glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
+  glFlushVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
 #endif
   
-    glDrawArrays(m_drawType,0,size);
-    glDisableClientState(GL_VERTEX_ARRAY);
+  glDrawArrays(m_drawType,0,size);
+  glDisableClientState(GL_VERTEX_ARRAY);
 
 #ifdef  GL_VERTEX_ARRAY_RANGE_APPLE   
-    glDisableClientState(GL_VERTEX_ARRAY_RANGE_APPLE);
-        glVertexArrayRangeAPPLE(0,0);
-#endif
-    if(m_color)glDisableClientState(GL_COLOR_ARRAY);
+  glDisableClientState(GL_VERTEX_ARRAY_RANGE_APPLE);
+  glVertexArrayRangeAPPLE(0,0);
+# endif
+
+  if(color) glDisableClientState(GL_COLOR_ARRAY);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  glDisableClientState(GL_NORMAL_ARRAY);
+  
+  glDisable(GL_BLEND);
+
+#else	/* YES, we want VBO ! */
+
+  // set-up the VertexArray
+  if (m_vao)
+  {
+    if (rebuild || !m_nVBOVertices )
+	{
+	  if(!m_nVBOVertices) glGenBuffersARB( 1, &m_nVBOVertices );
+        
+	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
+	  glBufferDataARB( GL_ARRAY_BUFFER_ARB, 
+						size * state->VertexArrayStride * sizeof(float),
+						state->VertexArray, GL_DYNAMIC_DRAW_ARB );
+	  glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, (char*) NULL);
+	}else{
+	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
+	  glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, (char*) NULL);
+	}
+	glEnableClientState( GL_VERTEX_ARRAY );
+  }
     
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-   // if(m_texcoord)glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisable(GL_BLEND);
-  //  glDeleteVertexArraysAPPLE(2, fences);   
+  // setup the ColorArray
+  if( state->HaveColorArray || state->ColorArray != NULL )
+  {
+    glEnableClientState(GL_COLOR_ARRAY);
+    if (rebuild || !m_nVBOColor )
+	{
+      if(!m_nVBOColor) glGenBuffersARB( 1, &m_nVBOColor );
+      
+	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
+      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*4*sizeof(float),
+						state->ColorArray, GL_DYNAMIC_DRAW_ARB );
+	  glColorPointer(4,GL_FLOAT,0,(char*) NULL);
+	}else{
+	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
+	  glColorPointer(4,GL_FLOAT,0,(char*) NULL);
+	}
+  }else{
+	glDisableClientState(GL_COLOR_ARRAY);
+  }
+
+  // setup the TexCoordArray
+  if ( state->HaveTexCoordArray || state->TexCoordArray != NULL )
+  {
+    if (rebuild || !m_nVBOTexCoords )
+	{
+      if(!m_nVBOTexCoords) glGenBuffersARB( 1, &m_nVBOTexCoords );
+      glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
+      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*2*sizeof(float),
+						state->TexCoordArray, GL_DYNAMIC_DRAW_ARB );
+	  glTexCoordPointer(2, GL_FLOAT, 0, (char *) NULL);
+	}else{
+	  glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
+	  glTexCoordPointer(2, GL_FLOAT, 0, (char *) NULL);
+	}
+  }
+
+  // setup the NormalArray
+  if(state->HaveNormalArray || state->NormalArray!=NULL)
+  {
+    glEnableClientState(GL_NORMAL_ARRAY);
+    if (rebuild || !m_nVBONormals )
+	{
+      if(!m_nVBONormals) glGenBuffersARB( 1, &m_nVBONormals );
+      glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
+      glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*1*sizeof(float),
+						state->NormalArray, GL_DYNAMIC_DRAW_ARB );
+	  glNormalPointer(GL_FLOAT,0, (char *) NULL);
+	}else{
+	  glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
+	  glNormalPointer(GL_FLOAT,0, (char *) NULL);
+	}
+  }
+
+//  glEnableClientState(GL_VERTEX_ARRAY);
+//  glVertexPointer( 4, GL_FLOAT,0, (char*) NULL);
+ 
+  glDrawArrays(drawType,0,size);
+  glDisableClientState(GL_VERTEX_ARRAY);
+  if(color)glDisableClientState(GL_COLOR_ARRAY);
+  
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  glDisableClientState(GL_NORMAL_ARRAY);
+  // if(texcoord)glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  glDisable(GL_BLEND);
+# endif /* VBO */
 }
 
 /////////////////////////////////////////////////////////
@@ -200,7 +301,8 @@ void vertex_draw :: typeMess(t_symbol *type)
 //
 /////////////////////////////////////////////////////////
 void vertex_draw :: obj_setupCallback(t_class *classPtr)
-{     class_addmethod(classPtr, (t_method)&vertex_draw::blendMessCallback,
+{
+	class_addmethod(classPtr, (t_method)&vertex_draw::defaultMessCallback,
     	    gensym("default"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&vertex_draw::colorMessCallback,
     	    gensym("color"), A_FLOAT, A_NULL);
@@ -210,7 +312,7 @@ void vertex_draw :: obj_setupCallback(t_class *classPtr)
     	    gensym("draw"), A_SYMBOL, A_NULL);  
 }
 
-void vertex_draw :: blendMessCallback(void *data, t_floatarg size)
+void vertex_draw :: defaultMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->m_defaultDraw=((int)size);
 }
