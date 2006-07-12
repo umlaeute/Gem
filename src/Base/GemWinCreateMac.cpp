@@ -380,6 +380,12 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         glWInfo.aglAttributes [i++] = AGL_ACCELERATED;
         glWInfo.aglAttributes [i++] = AGL_NO_RECOVERY; 	// should be used whenever packed pixels is used to 
                                                         //	disable software back up textures
+/*		glWInfo.aglAttributes [i++] = AGL_RENDERER_ID;
+		glWInfo.aglAttributes [i++] = 0x00020400; // AGL_RENDERER_GENERIC_FLOAT_ID;
+		glWInfo.aglAttributes [i++] = AGL_DOUBLEBUFFER;
+		glWInfo.aglAttributes [i++] = AGL_DEPTH_SIZE;
+		glWInfo.aglAttributes [i++] = 24;
+*/
         glWInfo.aglAttributes [i++] = AGL_NONE;
 /*        
         info.pWind = ::GetWindowFromPort(gaglDraw);
