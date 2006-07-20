@@ -228,9 +228,6 @@ void gemframebuffer :: initFBO()
   case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
 		post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT", m_objectname->s_name);
     break;
-  case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
-		 post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT", m_objectname->s_name);
-    break;
   case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
 		post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT", m_objectname->s_name);
     break;
