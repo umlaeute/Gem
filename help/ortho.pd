@@ -1,7 +1,7 @@
 #N canvas 29 453 710 345 10;
 #X obj 544 274 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -25,7 +25,7 @@
 #X text 485 29 Example:;
 #X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 216 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 216 cnv 15 450 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 9 221 Inlets:;
 #X obj 8 176 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
@@ -33,16 +33,16 @@
 #X text 17 175 Arguments:;
 #X text 452 8 GEM object;
 #X text 27 233 Inlet 1: gemlist;
-#X text 9 287 Outlets:;
-#X text 21 300 Outlet 1: gemlist;
-#X obj 542 150 cnv 15 100 60 empty empty empty 20 12 0 14 -24198 -66577
+#X text 9 304 Outlets:;
+#X text 21 316 Outlet 1: gemlist;
+#X obj 529 143 cnv 15 150 90 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 553 54 gemhead;
 #X obj 553 239 cylinder;
 #X obj 553 75 t a b;
 #X obj 583 94 i;
 #X obj 553 186 ortho;
-#X obj 581 160 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X obj 533 169 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
 #X obj 628 73 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
 ;
@@ -58,6 +58,11 @@ or OFF;
 "perspective" (objects that are fare away appear smaller than objects
 thta are near) to "orthographic" (parallels appear parallel) for all
 subsequent shapes.;
+#X msg 584 166 compat \$1;
+#X obj 584 146 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X text 27 274 Inlet 1: compat 0|1 : switch aspect ratio default: 1
+= 1 \, 0 = window width/height;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 15 0 17 0;
@@ -72,3 +77,5 @@ subsequent shapes.;
 #X connect 21 0 22 1;
 #X connect 22 0 18 1;
 #X connect 23 0 19 0;
+#X connect 30 0 19 0;
+#X connect 31 0 30 0;
