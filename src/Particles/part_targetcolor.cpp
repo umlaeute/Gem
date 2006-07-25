@@ -65,8 +65,7 @@ part_targetcolor :: ~part_targetcolor()
 /////////////////////////////////////////////////////////
 void part_targetcolor :: render(GemState *state)
 {
-	if (state->stereo == 0 ||
-		state->stereo == 1)
+  if (state->tickTime > 0.f)
 	{
 		pTargetColor(m_color[0], m_color[1], m_color[2], m_color[3], m_scale);
 	}

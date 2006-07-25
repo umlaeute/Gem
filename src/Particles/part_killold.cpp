@@ -47,8 +47,7 @@ part_killold :: ~part_killold()
 /////////////////////////////////////////////////////////
 void part_killold :: render(GemState *state)
 {
-	if (state->stereo == 0 ||
-		state->stereo == 1)
+	if (state->tickTime > 0.f)
 	{
 		pKillOld(m_killAge);
 	}

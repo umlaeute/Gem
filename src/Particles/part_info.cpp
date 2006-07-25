@@ -71,8 +71,7 @@ part_info :: ~part_info()
 /////////////////////////////////////////////////////////
 void part_info :: render(GemState *state)
 {
-  if (state->stereo == 0 ||
-      state->stereo == 1)    {
+  if (state->tickTime > 0.f)    {
     pMove();
   }
   //	pDrawGroupp();

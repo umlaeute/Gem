@@ -50,8 +50,7 @@ void part_draw :: render(GemState *state)
 	{
 		glDisable(GL_LIGHTING);
 	}
-	if (state->stereo == 0 ||
-		state->stereo == 1)
+	if (state->tickTime > 0.f)
 	{
 		pMove();
 	}

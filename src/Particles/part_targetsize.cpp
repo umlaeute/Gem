@@ -56,8 +56,7 @@ part_targetsize :: ~part_targetsize()
 /////////////////////////////////////////////////////////
 void part_targetsize :: render(GemState *state)
 {
-	if (state->stereo == 0 ||
-		state->stereo == 1)
+  if (state->tickTime > 0.f)
 	{
 		pTargetSize(m_size[0], m_size[1], m_size[2],
 			    m_scale[0], m_scale[1], m_scale[2]);

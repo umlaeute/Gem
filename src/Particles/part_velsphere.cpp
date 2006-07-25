@@ -52,11 +52,10 @@ part_velsphere :: ~part_velsphere()
 /////////////////////////////////////////////////////////
 void part_velsphere :: render(GemState *state)
 {
-  if (state->stereo == 0 ||
-      state->stereo == 1)
+  if (state->tickTime > 0.f)
     {
       pVelocityD(PDSphere, m_pos[0], m_pos[1], m_pos[2], m_radius);
-    }	
+    }
 }
 
 /////////////////////////////////////////////////////////

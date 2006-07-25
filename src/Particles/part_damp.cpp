@@ -48,8 +48,7 @@ part_damp :: ~part_damp()
 /////////////////////////////////////////////////////////
 void part_damp :: render(GemState *state)
 {
-	if (state->stereo == 0 ||
-		state->stereo == 1)
+	if (state->tickTime > 0.f)
 	{
 		pDamping(m_vector[0], m_vector[1], m_vector[2]);
 	}

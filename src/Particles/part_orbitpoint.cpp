@@ -52,8 +52,7 @@ part_orbitpoint :: ~part_orbitpoint()
 /////////////////////////////////////////////////////////
 void part_orbitpoint :: render(GemState *state)
 {
-	if (state->stereo == 0 ||
-		state->stereo == 1)
+	if (state->tickTime > 0.f)
 	{
 		pOrbitPoint(m_pos[0], m_pos[1], m_pos[2], m_grav);
 	}

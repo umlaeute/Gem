@@ -56,7 +56,7 @@ part_velocity :: ~part_velocity()
 /////////////////////////////////////////////////////////
 void part_velocity :: render(GemState *state)
 {
-  if (state->stereo == 0 || state->stereo == 1)
+  if (state->tickTime > 0.f)
     pVelocityD(m_domain,
 	       m_arg[0],m_arg[1],m_arg[2],m_arg[3],m_arg[4],m_arg[5],m_arg[6],m_arg[7],m_arg[8]);
 }
