@@ -788,7 +788,6 @@ void GemMan :: render(void *)
 
       // render left view
       fillGemState(currentState);
-      currentState.stereo = 1;
 
       renderChain(s_linkHead, &currentState);
 
@@ -813,7 +812,7 @@ void GemMan :: render(void *)
 
       // render right view
       fillGemState(currentState);
-      currentState.stereo = 2;
+      currentState.tickTime=0.f;
       renderChain(s_linkHead, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
@@ -886,7 +885,6 @@ void GemMan :: render(void *)
 
       // render left view
       fillGemState(currentState);
-      currentState.stereo = 1;
       renderChain(s_linkHead, &currentState);
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
@@ -921,7 +919,7 @@ void GemMan :: render(void *)
 
       // render right view
       fillGemState(currentState);
-      currentState.stereo = 2;
+      currentState.tickTime=0.f;
       renderChain(s_linkHead, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
