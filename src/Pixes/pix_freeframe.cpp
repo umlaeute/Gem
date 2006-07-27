@@ -123,7 +123,6 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
 
   m_image.setCsizeByFormat(can_rgba?GL_RGBA:GL_RGB);
 
-  throw(12);
   if(!m_plugin)throw(GemException("couldn't load FreeFrame-plugin"));
 
   PlugInfoStruct *pis = FF_PLUGMAIN_PIS(m_plugin(FF_GETINFO, NULL, 0));
