@@ -87,22 +87,11 @@ void gemhead :: renderGL(GemState *state)
   glPushMatrix();
   if(state)
   {
-	// set the state dirty flag
-	state->dirty = m_cache->dirty;
+    state->reset();
 
-	// clear the state->image (might be still there from previous [gemhead]s)
-	state->image = 0;
-
-	state->VertexDirty=m_cache->vertexDirty;
-	state->VertexArray = 0;
-	state->VertexArraySize = 0;
-	state->ColorArray = 0;
-	state->NormalArray = 0;
-	state->TexCoordArray = 0;
-	state->HaveColorArray = 0;
-	state->HaveNormalArray = 0;
-	state->HaveTexCoordArray = 0;
-	state->drawType = 0;
+    // set the state dirty flag
+    state->dirty = m_cache->dirty;
+    state->VertexDirty=m_cache->vertexDirty;
   }
 
   // are we profiling and need to send new images?
