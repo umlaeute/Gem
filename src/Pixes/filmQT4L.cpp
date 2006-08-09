@@ -16,7 +16,9 @@
 #include <string.h>
 #include "Pixes/filmQT4L.h"
 
-#include <colormodels.h>
+#ifdef HAVE_LIBQUICKTIME
+# include <colormodels.h>
+#endif
 
 /////////////////////////////////////////////////////////
 //
