@@ -1335,6 +1335,8 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-pd=<path/to/pd>  where to find pd-binary (./bin/pd.exe) and
+                          pd-sources
   --with-pdversion=<ver>  enforce a certain pd-version (e.g. 0.37)
   --with-extension=<ext>  enforce a certain file-extension (e.g. pd_linux)
   --with-x                use the X Window System
@@ -1404,8 +1406,6 @@ Optional Packages:
                           include path for gltt
   --with-gltt-libs=/path/to/gltt/lib/
                           library path for gltt
-  --with-pd=<path/to/pd>  where to find pd-binary (./bin/pd.exe) and
-                          pd-sources
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -3584,6 +3584,12 @@ else
 fi
 
 
+
+
+# Check whether --with-pd was given.
+if test "${with_pd+set}" = set; then
+  withval=$with_pd;
+fi
 
 
 # Check whether --with-pdversion was given.
@@ -15547,16 +15553,9 @@ else
  fi
 fi
 
-
-
-# Check whether --with-pd was given.
-if test "${with_pd+set}" = set; then
-  withval=$with_pd;
-fi
-
 if test "x$with_pd" != "x"; then
    INCLUDES="$INCLUDES -I${with_pd}/src"
-   LIBS="$LIBS -L${with_pd}/src"
+   LIBS="$LIBS -L${with_pd}/bin"
 fi
 
 #pd version

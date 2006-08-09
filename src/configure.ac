@@ -47,6 +47,8 @@ GEM_ARG_ENABLE([NV], [openGL-NV-extension support], [force])
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)], [force])
 GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video], [force])
 
+AC_ARG_WITH([pd], 
+	        AC_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
 AC_ARG_WITH([pdversion], 
 		AC_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
 AC_ARG_WITH([extension], 
@@ -310,9 +312,6 @@ else
  fi
 fi
 
-
-AC_ARG_WITH([pd], 
-	        AC_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
 if test "x$with_pd" != "x"; then
    INCLUDES="$INCLUDES -I${with_pd}/src"
    LIBS="$LIBS -L${with_pd}/bin"
