@@ -52,17 +52,6 @@ AC_ARG_WITH([pdversion],
 AC_ARG_WITH([extension], 
 		AC_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
 
-
-AC_ARG_WITH([pd], 
-		AC_HELP_STRING([--with-pd=<path/to/pd>],[pd-binary]))
-if test "x$with_pd" != "x"; then
- PD_BINARY=$with_pd
-else
- if test "x$PD_BINARY" = "x"; then
-  PD_BINARY=$(which pd)
- fi
-fi
-
 GEM_TARGETS=Base
 GEM_TARGET(Controls)
 GEM_TARGET(Geos)
@@ -321,6 +310,14 @@ else
  fi
 fi
 
+
+AC_ARG_WITH([pd], 
+	        AC_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
+if test "x$with_pd" != "x"; then
+   INCLUDES="$INCLUDES -I${with_pd}/src"
+   LIBS="$LIBS -L${with_pd}/bin"
+fi
+
 #pd version
 AC_CHECK_HEADERS(m_pd.h)
 # this is mainly interesting for the documentation
@@ -423,9 +420,10 @@ fi
 # damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 
-
+#linking on linux
 GEM_CHECK_LDFLAGS([-shared -Wl,-export-dynamic])
-GEM_CHECK_LDFLAGS([-bundle -bundle_loader $(which pd)])
+# linking on os-X
+GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
 
 dnl if we don't have $STRIP set, we set it to ${host}-strip or strip
 AC_CHECK_TOOL([STRIP], [strip], [true])
