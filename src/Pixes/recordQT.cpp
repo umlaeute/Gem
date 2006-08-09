@@ -13,6 +13,9 @@
 
 #include <stdio.h>
 
+/* for post() and error() */
+#include "m_pd.h"
+
 #ifdef __WIN32__
 # define snprintf _snprintf
 #endif
@@ -33,7 +36,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
     m_prevHeight(0), m_prevWidth(0), 
     m_compressImage(NULL)
 {
-  m_filename[0] = NULL;
+  m_filename[0] = 0;
 
 # ifdef __WIN32__
   // Initialize QuickTime Media Layer
