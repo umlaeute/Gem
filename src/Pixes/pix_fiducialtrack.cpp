@@ -19,6 +19,8 @@
 # include <io.h>
 #endif
 
+#include <string.h>
+
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_fiducialtrack,  t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
@@ -38,9 +40,16 @@ pix_fiducialtrack :: pix_fiducialtrack(t_symbol*s) :
     post("[pix_fiducialtrack]\n\tbased on fidtrack-library (c) R.Bencina\n\tbased on reacTIVision (c) M.Kaltenbrunner, R.Bencina\n\tsee http://www.iua.upf.es/mtg/reacTable/");
   }
   m_infoOut = outlet_new(this->x_obj, &s_list);
+
+  /* so terminate_treeidmap() knows that this is kind of uninitialized */
+  memset(&treeidmap, 0, sizeof(treeidmap));
+
   if((NULL!=s) && (&s_!=s) && (NULL!=s->s_name)){
     treeMess(s);
-  } else treeMess(gensym("all.trees"));
+  } else {
+    treeMess(gensym("all.trees"));
+  }
+  post("fidumido");
 }
 
 ////////////////////////////////////////////////////////
