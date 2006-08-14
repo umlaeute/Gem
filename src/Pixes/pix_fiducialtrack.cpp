@@ -49,7 +49,6 @@ pix_fiducialtrack :: pix_fiducialtrack(t_symbol*s) :
   } else {
     treeMess(gensym("all.trees"));
   }
-  post("fidumido");
 }
 
 ////////////////////////////////////////////////////////
