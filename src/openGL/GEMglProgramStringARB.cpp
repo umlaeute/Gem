@@ -12,7 +12,7 @@
 
 #include "GEMglProgramStringARB.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglProgramStringARB , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_symbol*, A_DEFSYMBOL)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglProgramStringARB )
 
 /////////////////////////////////////////////////////////
 //
@@ -21,18 +21,31 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglProgramStringARB , t_floatarg, A_DEFFLOAT, t
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglProgramStringARB :: GEMglProgramStringARB	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_symbol* arg3=0) :
-		target((GLenum)arg0), 
-		format((GLenum)arg1), 
-		len((GLsizei)arg2),
+GEMglProgramStringARB :: GEMglProgramStringARB	(int argc, t_atom*argv) :
+		target((GLenum)0), 
+		format((GLenum)0), 
+		len((GLsizei)0),
                 string(NULL)
 {
 #ifndef GL_ARB_vertex_program
         error("GEMglProgramStringARB: GEM was compiled without GL_ARB_vertex_program");
         error("GEMglProgramStringARB: therefore this object will do nothing");
 #endif
-        if(arg3)
-          string = (GLvoid*)arg3->s_name;
+
+        switch (argc) {
+        default:
+        case 4:
+          string = (GLvoid*)atom_getsymbol(argv+3)->s_name;
+        case 3:
+          len=atom_getint(argv+2);
+        case 2:
+          format=atom_getint(argv+1);
+        case 1:
+          target=atom_getint(argv+0);
+        case 0:
+          break;
+        }
+
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("format"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("len"));

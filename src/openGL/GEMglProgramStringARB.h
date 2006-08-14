@@ -30,7 +30,7 @@ class GEM_EXTERN GEMglProgramStringARB : public GemBase
 
 	public:
 	  // Constructor
-	  GEMglProgramStringARB (t_float, t_float, t_float, t_symbol*);	// CON
+          GEMglProgramStringARB (int, t_atom*);	// CON
 
 	protected:
 	  // Destructor
