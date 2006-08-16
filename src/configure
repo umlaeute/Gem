@@ -1326,11 +1326,11 @@ Optional Features:
   --disable-Controls      disable Controls-objects
   --disable-Geos          disable Geos-objects
   --disable-Manips        disable Manips-objects
-  --disable-MarkEx        disable MarkEx-objects
   --disable-Nongeos       disable Nongeos-objects
   --disable-Particles     disable Particles-objects
   --disable-Pixes         disable Pixes-objects
   --disable-openGL        disable openGL-objects
+  --disable-Vertex        disable Vertex-objects
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -3653,22 +3653,6 @@ else
 fi
 
 
-# Check whether --enable-MarkEx was given.
-if test "${enable_MarkEx+set}" = set; then
-  enableval=$enable_MarkEx;
-                if test "x$enableval" != "xno"; then
-                  GEM_TARGETS="$GEM_TARGETS MarkEx"
-                else
-                  echo not building MarkEx-objects
-                fi
-
-else
-
-                  GEM_TARGETS="$GEM_TARGETS MarkEx"
-
-fi
-
-
 # Check whether --enable-Nongeos was given.
 if test "${enable_Nongeos+set}" = set; then
   enableval=$enable_Nongeos;
@@ -3729,6 +3713,22 @@ if test "${enable_openGL+set}" = set; then
 else
 
                   GEM_TARGETS="$GEM_TARGETS openGL"
+
+fi
+
+
+# Check whether --enable-Vertex was given.
+if test "${enable_Vertex+set}" = set; then
+  enableval=$enable_Vertex;
+                if test "x$enableval" != "xno"; then
+                  GEM_TARGETS="$GEM_TARGETS Vertex"
+                else
+                  echo not building Vertex-objects
+                fi
+
+else
+
+                  GEM_TARGETS="$GEM_TARGETS Vertex"
 
 fi
 

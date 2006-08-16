@@ -58,11 +58,11 @@ GEM_TARGETS=Base
 GEM_TARGET(Controls)
 GEM_TARGET(Geos)
 GEM_TARGET(Manips)
-GEM_TARGET(MarkEx)
 GEM_TARGET(Nongeos)
 GEM_TARGET(Particles)
 GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
+GEM_TARGET(Vertex)
 
 
 AC_CHECK_LIB(m,sin)
