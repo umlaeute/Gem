@@ -17,12 +17,20 @@
 GEM_EXTERN void *operator new(size_t, void *location, void *) {return(location);}
 
 
-GemException::GemException(char *error){
-  ErrorString=error;
-}
-GemException::GemException():ErrorString(NULL){}
+GemException::GemException(char *error) throw()
+  : ErrorString(error)
+{}
 
-void GemException::report(){
+GemException::GemException() throw() 
+  : ErrorString(NULL) 
+{}
+GemException::~GemException() throw() 
+{}
+const char *GemException::what() const throw() {
+  return ErrorString;
+}
+
+void GemException::report() const throw() {
   if(ErrorString!=NULL)
     error("GemException: %s", ErrorString);
 }

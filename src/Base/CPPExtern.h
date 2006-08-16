@@ -20,6 +20,7 @@ LOG
 
 
 #include <new>
+#include <exception>
 
 
 /*-----------------------------------------------------------------
@@ -37,15 +38,17 @@ DESCRIPTION
 
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN GemException
+class GEM_EXTERN GemException : public std::exception
 {
  public:
-  GemException();
-  GemException(char*error);
+  GemException() throw();
+  GemException(char*error) throw();
+  ~GemException() throw();
   
-  void report();
+  const char *what() const throw();
+  void report() const throw();
  private:
-  char*ErrorString;
+  const char*ErrorString;
 };
 
 class CPPExtern;
