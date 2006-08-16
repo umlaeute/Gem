@@ -46,7 +46,7 @@ linux:
 
 
 osx:
-:+ autoconf buildsystem non-functional
++ autoconf buildsystem non-functional
 + remove checks for valid openGL-context (DONE)
 : SequenceGrabber long-term stability (keeps logging you out)
 + uyvy/bgra/yv12 conversions altivec'd (DONE)
