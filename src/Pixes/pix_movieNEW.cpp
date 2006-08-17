@@ -33,7 +33,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieNEW, t_symbol *, A_DEFSYM)
 pix_movieNEW :: pix_movieNEW(t_symbol *filename) :
   pix_filmNEW(filename)
 {
-  // we don't want the additional outlet of [pix_texture]
+  // we don't want the additional in/outlet of [pix_texture]
+  inlet_free(m_pixtexture.m_inTexID);m_pixtexture.m_inTexID=NULL;
   outlet_free(m_pixtexture.m_out1);  m_pixtexture.m_out1=NULL;
 }
 
