@@ -46,7 +46,8 @@ CPPEXTERN_NEW(pix_texture)
 pix_texture :: pix_texture()
   : m_textureOnOff(1), 
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
-    m_didTexture(false), m_rebuildList(0), m_textureObj(0),
+    m_didTexture(false), m_rebuildList(0), 
+    m_textureObj(0), m_extTextureObj(0), m_realTextureObj(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), 
     m_textureType( GL_TEXTURE_2D ),
     m_mode(0), m_env(GL_MODULATE),
@@ -62,7 +63,10 @@ pix_texture :: pix_texture()
   m_mode = 1;  //default to the fastest mode for systems that support it
   m_textureType = GL_TEXTURE_RECTANGLE_EXT;
   #endif
-  
+
+  // create an inlet to receive external texture IDs
+  m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("extTexture"));
+
   // create an outlet to send texture ID
   m_outTexID = outlet_new(this->x_obj, &s_float);
 }
@@ -72,7 +76,13 @@ pix_texture :: pix_texture()
 //
 /////////////////////////////////////////////////////////
 pix_texture :: ~pix_texture()
-{ }
+{
+  if(m_inTexID) inlet_free (m_inTexID);
+  if(m_outTexID)outlet_free(m_outTexID);
+
+  m_inTexID=NULL;
+  m_outTexID=NULL;
+}
 
 /////////////////////////////////////////////////////////
 // setUpTextureState
@@ -170,77 +180,91 @@ void pix_texture :: render(GemState *state) {
 
   if(!m_textureOnOff)return;
 
-  if (!state->image || !state->image->image.data)return;
+  GLboolean upsidedown=false;
+  GLboolean normalized=true;
+  int texType = m_textureType;
+  int x_2, y_2;
+  GLboolean useExternalTexture=false;
 
+  if (!state->image || !state->image->image.data){
+    if(m_extTextureObj>0) {
+      useExternalTexture= true;
+      m_rebuildList     = false;
+      m_textureObj      = m_extTextureObj;
+      setTexCoords(m_coords, 1.f, 1.f);
+    }  else
+      return;
+  }
 
-  GLboolean upsidedown = state->image->image.upsidedown;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
-  if (state->image->newimage) m_rebuildList = 1;
 
-  m_imagebuf.xsize =state->image->image.xsize;
-  m_imagebuf.ysize =state->image->image.ysize;
-  m_imagebuf.csize =state->image->image.csize;
-  m_imagebuf.format=state->image->image.format;
-  m_imagebuf.type  =state->image->image.type;
-  m_imagebuf.data  =state->image->image.data;
+  if(!useExternalTexture){
+    upsidedown = state->image->image.upsidedown;
+    if (state->image->newimage) m_rebuildList = 1;
 
-  int x_2 = powerOfTwo(m_imagebuf.xsize);
-  int y_2 = powerOfTwo(m_imagebuf.ysize);
+    m_imagebuf.xsize =state->image->image.xsize;
+    m_imagebuf.ysize =state->image->image.ysize;
+    m_imagebuf.csize =state->image->image.csize;
+    m_imagebuf.format=state->image->image.format;
+    m_imagebuf.type  =state->image->image.type;
+    m_imagebuf.data  =state->image->image.data;
+    
+    x_2 = powerOfTwo(m_imagebuf.xsize);
+    y_2 = powerOfTwo(m_imagebuf.ysize);
 
-  bool normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
+    normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
 
-  debug("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize, x_2, m_imagebuf.ysize, y_2);
+    debug("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize, x_2, m_imagebuf.ysize, y_2);
+  }
 
 #ifdef GL_VERSION_1_1
-  int texType = m_textureType;
-
-
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+# ifdef GL_TEXTURE_RECTANGLE_EXT
   if (m_mode){
-	if (/*!normalized &&*/ GemMan::texture_rectangle_supported ){
-	    m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-	    debug("pix_texture:  using GL_TEXTURE_RECTANGLE_EXT");
-	    normalized = 0;
-	}
+    if (GemMan::texture_rectangle_supported ){
+      m_textureType = GL_TEXTURE_RECTANGLE_EXT;
+      debug("pix_texture:  using GL_TEXTURE_RECTANGLE_EXT");
+      normalized = 0;
+    }
   } else 
-#endif // GL_TEXTURE_RECTANGLE_EXT
-  {
-    m_textureType = GL_TEXTURE_2D;
-	debug("pix_texture:  using GL_TEXTURE_2D");
-	normalized = 0;
-  }
+# endif // GL_TEXTURE_RECTANGLE_EXT
+    {
+      m_textureType = GL_TEXTURE_2D;
+      debug("pix_texture:  using GL_TEXTURE_2D");
+      normalized = 0;
+    }
+
   if (m_textureType!=texType){
-	debug("pix_texture:  texType != m_textureType");
-	stopRendering();startRendering();
-  }
-    
+    debug("pix_texture:  texType != m_textureType");
+    stopRendering();startRendering();
+  }   
+
   glEnable(m_textureType);
   glBindTexture(m_textureType, m_textureObj);
-    
-#ifdef GL_APPLE_texture_range
-  if (state->image->newfilm ){
-    //  tigital:  shouldn't we also allow TEXTURE_2D here?
-	if ( GemMan::texture_range_supported ){
-//	if ( GemMan::texture_range_supported && GemMan::texture_rectangle_supported && m_mode){
-	    glTextureRangeAPPLE( m_textureType, 
-			    m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 
-			    m_imagebuf.data );
-	    debug("pix_texture:  using glTextureRangeAPPLE()");
-	}else{
-	    glTextureRangeAPPLE( m_textureType, 0, NULL );
-	}
-	glTexParameteri( m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
-	// GL_STORAGE_SHARED_APPLE -  AGP texture path
-	// GL_STORAGE_CACHED_APPLE - VRAM texture path
-	// GL_STORAGE_PRIVATE_APPLE - normal texture path
+  
+# ifdef GL_APPLE_texture_range
+  if ((!useExternalTexture)&&state->image->newfilm ){
+      //  tigital:  shouldn't we also allow TEXTURE_2D here?
+      if ( GemMan::texture_range_supported ){
+        //	if ( GemMan::texture_range_supported && GemMan::texture_rectangle_supported && m_mode){
+        glTextureRangeAPPLE( m_textureType, 
+                             m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 
+                             m_imagebuf.data );
+        debug("pix_texture:  using glTextureRangeAPPLE()");
+      }else{
+        glTextureRangeAPPLE( m_textureType, 0, NULL );
+      }
+      glTexParameteri( m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+      // GL_STORAGE_SHARED_APPLE -  AGP texture path
+      // GL_STORAGE_CACHED_APPLE - VRAM texture path
+      // GL_STORAGE_PRIVATE_APPLE - normal texture path
   }
-#endif // GL_APPLE_texture_range
-
+# endif // GL_APPLE_texture_range
+    
 #elif GL_EXT_texture_object
   glEnable(m_textureType);
   glBindTextureEXT(m_textureType, m_textureObj);
-#else
+#else /* !GL_VERSION_1_1 && !GL_EXT_texture_object */
   // can we build a display list?
   int creatingDispList = 0;
   if (!state->inDisplayList && m_rebuildList) {
@@ -250,7 +274,7 @@ void pix_texture :: render(GemState *state) {
   setUpTextureState();
 #endif //GL_VERSION_1_1
 
-    if (m_rebuildList) {
+if (m_rebuildList) {
 	// if YUV is not supported on this platform, we have to convert it to RGB
 	//(skip Alpha since it isnt used)
 	const bool do_yuv = m_yuv && GemMan::texture_yuv_supported;
@@ -329,10 +353,10 @@ void pix_texture :: render(GemState *state) {
 				m_buffer.data);
      
 		debug("pix_texture: TexImage2D non rectangle");
-        }
-        else //this deals with rectangle textures that are h*w
-        { 
-            glTexImage2D(m_textureType, 0,
+            }
+            else //this deals with rectangle textures that are h*w
+              { 
+                glTexImage2D(m_textureType, 0,
 			 //  m_buffer.csize,
 			 GL_RGBA,
 			 m_imagebuf.xsize,
@@ -340,17 +364,17 @@ void pix_texture :: render(GemState *state) {
 			 m_imagebuf.format,
 			 m_imagebuf.type,
 			 m_imagebuf.data); 
-	    debug("pix_texture: TexImage2D  rectangle");
-        }
+                debug("pix_texture: TexImage2D  rectangle");
+              }
         
-      } //end of loop if size has changed
+            } //end of loop if size has changed
       
-      // okay, load in the actual pixel data
+            // okay, load in the actual pixel data
       
-      //when doing rectangle textures the buffer changes after every film is loaded this call makes sure the 
-      //texturing is updated as well to prevent crashes
-      if (state->image->newfilm ){
-            glTexImage2D(m_textureType, 0,
+            //when doing rectangle textures the buffer changes after every film is loaded this call makes sure the 
+            //texturing is updated as well to prevent crashes
+            if (state->image->newfilm ){
+              glTexImage2D(m_textureType, 0,
 			 //  m_buffer.csize,  //this is completely wrong btw
 			 GL_RGBA, 		//this is the correct internal format for YUV
 			 m_imagebuf.xsize,
@@ -358,17 +382,17 @@ void pix_texture :: render(GemState *state) {
 			 m_imagebuf.format,
 			 m_imagebuf.type,
 			 m_imagebuf.data);
-	    debug("pix_texture: new film");
-            state->image->newfilm = 0; //just to be sure
-      } 
-      glTexSubImage2D(m_textureType, 0,
+              debug("pix_texture: new film");
+              state->image->newfilm = 0; //just to be sure
+            }
+            glTexSubImage2D(m_textureType, 0,
 		      0, 0,				// position
 		      m_imagebuf.xsize,
 		      m_imagebuf.ysize,
 		      m_imagebuf.format,
 		      m_imagebuf.type,
 		      m_imagebuf.data);
-    }
+        }
     
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
@@ -380,10 +404,12 @@ void pix_texture :: render(GemState *state) {
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
 #else
-  else glCallList(m_textureObj);
+  else /* !m_rebuildList */
+    glCallList(m_textureObj);
 #endif
+
   m_rebuildList = 0;
-  
+ 
   state->texture = 1;
 
 #ifdef GL_TEXTURE_RECTANGLE_EXT
@@ -419,20 +445,23 @@ void pix_texture :: postrender(GemState *state){
 void pix_texture :: startRendering()
 {
 #ifdef GL_VERSION_1_1
-  glGenTextures(1, &m_textureObj); // this crashes sometimes!!!! (jmz)
-  glBindTexture(m_textureType, m_textureObj);
+  glGenTextures(1, &m_realTextureObj); // this crashes sometimes!!!! (jmz)
+  glBindTexture(m_textureType, m_realTextureObj);
+  m_textureObj=m_realTextureObj;
   setUpTextureState();
 #elif GL_EXT_texture_object
-  glGenTexturesEXT(1, &m_textureObj);
-  glBindTextureEXT(m_textureType, m_textureObj);
+  glGenTexturesEXT(1, &m_realTextureObj);
+  glBindTextureEXT(m_textureType, m_realTextureObj);
+  m_textureObj=m_realTextureObj;
   setUpTextureState();
 #else
-  m_textureObj = glGenLists(1);
-  m_rebuildList = 1;
+  m_realTextureObj = glGenLists(1);
+  m_textureObj     = m_realTextureObj;
+  m_rebuildList    = 1;
 #endif
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 
-  if (!m_textureObj)	{
+  if (!m_realTextureObj)	{
     error("GEM: pix_texture: Unable to allocate texture object");
     return;
   }
@@ -445,13 +474,13 @@ void pix_texture :: startRendering()
 void pix_texture :: stopRendering()
 {
 #ifdef GL_VERSION_1_1
-  if (m_textureObj) glDeleteTextures(1, &m_textureObj);
+  if (m_realTextureObj) glDeleteTextures(1, &m_realTextureObj);
 #elif GL_EXT_texture_object
-  if (m_textureObj) glDeleteTexturesEXT(1, &m_textureObj);
+  if (m_realTextureObj) glDeleteTexturesEXT(1, &m_realTextureObj);
 #else
-  if (m_textureObj) glDeleteLists(m_textureObj, 1);
+  if (m_realTextureObj) glDeleteLists(m_realTextureObj, 1);
 #endif
-  m_textureObj = 0;
+  m_realTextureObj = 0;
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 }
 
@@ -567,6 +596,8 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("client_storage"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::yuvCallback,
 		  gensym("yuv"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_texture::extTextureCallback,
+		  gensym("extTexture"), A_FLOAT, A_NULL);
   class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
 }
 void pix_texture :: floatMessCallback(void *data, float n)
@@ -599,4 +630,9 @@ void pix_texture :: clientStorageCallback(void *data, t_floatarg quality)
 void pix_texture :: yuvCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_yuv=((int)quality);
+}
+
+void pix_texture :: extTextureCallback(void *data, t_floatarg texid)
+{
+  GetMyClass(data)->m_extTextureObj=(int)texid;
 }

@@ -106,6 +106,17 @@ class GEM_EXTERN pix_texture : public GemBase
 		// The texture object number
 		GLuint	    m_textureObj;
 
+                ////////
+                // an external texture (as emitted through the 2nd outlet)
+                // if this is present and no image is upstream,
+                // we use it as our texture
+		GLuint	    m_extTextureObj;
+
+                ////////
+                // the texture object we are creating and destroying
+                // we use it as our texture
+		GLuint	    m_realTextureObj;
+
 		//////////
 		// The resizing buffer
 		imageStruct   m_buffer;
@@ -139,6 +150,7 @@ class GEM_EXTERN pix_texture : public GemBase
 		int		m_yuv; // try to texture YUV-images directly when gxf-card says it is possible to do so
         
 		t_outlet	*m_outTexID;
+                t_inlet         *m_inTexID;
 
  private:
 
@@ -151,6 +163,7 @@ class GEM_EXTERN pix_texture : public GemBase
 	static void 	repeatMessCallback(void *data, t_floatarg n);
 	static void 	clientStorageCallback(void *data, t_floatarg n);
 	static void 	yuvCallback(void *data, t_floatarg n);
+	static void 	extTextureCallback(void *data, t_floatarg n);
 };
 
 #endif	// for header file
