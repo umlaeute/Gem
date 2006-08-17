@@ -106,8 +106,8 @@ void pix_snap2tex :: snapMess()
 {
   if ( !GemMan::windowExists() ) return;
 
-  int width =(m_width <0)?GemMan::m_width :m_width;
-  int height=(m_height<0)?GemMan::m_height:m_height;
+  int width =(m_width <=0)?GemMan::m_width :m_width;
+  int height=(m_height<=0)?GemMan::m_height:m_height;
 
   if (width <= 0 || height <= 0)
     {
@@ -137,7 +137,7 @@ void pix_snap2tex :: snapMess()
     {
       m_oldWidth = width;
       m_oldHeight = height;
-
+      
       float m_xRatio = (float)width / (float)x_2;
       float m_yRatio = (float)height / (float)y_2;
 		
@@ -152,33 +152,27 @@ void pix_snap2tex :: snapMess()
 		
       m_coords[3].s = 0.f;
       m_coords[3].t = m_yRatio;
-//    }
 
-/*  if (x_2 != m_texWidth || y_2 != m_texHeight)	{ */
-    m_texWidth = x_2;
-    m_texHeight = y_2;
+      m_texWidth = x_2;
+      m_texHeight = y_2;
 		
-    glCopyTexImage2D(	m_textureType, 0,
+      glCopyTexImage2D(	m_textureType, 0,
 			GL_RGB,
 			m_x, m_y,
 			m_texWidth, m_texHeight, 
 			0);
-
-  } else
-  m_texHeight = m_height;
-  m_texWidth = m_width;
+      
+    } else {
+    m_texHeight = m_height;
+    m_texWidth = m_width;
+  }
   
-    {
-      glCopyTexSubImage2D(m_textureType, 0,
-			  0, 0,
-			  m_x, m_y,		// position
-			  m_texWidth,
-			  m_texHeight);		
-    }
-
-//post("pix_snap2tex: m_x %d m_y %d m_texWidth %d m_texHeight %d",m_x,m_y,m_texWidth,m_texHeight);
-
-
+  glCopyTexSubImage2D(m_textureType, 0,
+                      0, 0,
+                      m_x, m_y,		// position
+                      m_texWidth,
+                      m_texHeight);		
+  
 #ifdef GL_VERSION_1_1
 #elif GL_EXT_texture_object
 #else
