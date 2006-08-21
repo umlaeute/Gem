@@ -39,14 +39,17 @@ inlet_free(m_inlet[0]);
 // Render
 //
 void GEMglClearDepth :: render(GemState *state) {
-	glClearDepth (depth);
+
+	glClearDepth ((GLclampd)depth);
+
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglClearDepth :: depthMess (GLclampd arg1) {	// FUN
-	depth = (GLclampd)arg1;
+void GEMglClearDepth :: depthMess (float arg1) {	// FUN
+
+	depth = (float)arg1;
 	setModified();
 }
 
@@ -59,6 +62,6 @@ void GEMglClearDepth :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, (t_method)&GEMglClearDepth::depthMessCallback,  	gensym("depth"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglClearDepth :: depthMessCallback (void* data, GLclampd arg0){
-	GetMyClass(data)->depthMess ( (GLclampd)    arg0);
+void GEMglClearDepth :: depthMessCallback (void* data, float arg0){
+	GetMyClass(data)->depthMess ( (float)    arg0);
 }

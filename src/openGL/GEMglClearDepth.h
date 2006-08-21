@@ -42,7 +42,7 @@ class GEM_EXTERN GEMglClearDepth : public GemBase
 
 	// variables
 	  GLclampd	depth;		// VAR
-	  virtual void	depthMess(GLclampd);	// FUN
+	  virtual void	depthMess(float);	// FUN
 
 
 	private:
@@ -51,6 +51,6 @@ class GEM_EXTERN GEMglClearDepth : public GemBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 depthMessCallback (void*, GLclampd);
+	  static void	 depthMessCallback (void*, float);
 };
 #endif // for header file
