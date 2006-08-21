@@ -21,7 +21,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include <dshow.h>
 #include <qedit.h>
 
-class CSampleGrabber;
+//#define	DIRECTSHOW_LOGGING	1
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -48,7 +48,7 @@ class pix_videoDS : public pix_video
 
   //////////
   //  Accept new sample buffer
-  void			copyBuffer(IMediaSample* pSample);
+  void			copyBuffer();
 
  protected:
 
@@ -92,6 +92,10 @@ class pix_videoDS : public pix_video
 
   // Close the video device
   void	    	closeMess();
+  
+  void			recordMess(int state);
+  
+  void			fileMess(t_symbol *filename);
 
   // Set live capturing
   void		captureOnOff(int n);
@@ -108,6 +112,14 @@ class pix_videoDS : public pix_video
   // Stop the video device
   // [out] int - returns 0 if bad
   int	    	stopTransfer();
+
+  //////////
+  // Start up the video capture
+  void			startCapture();
+  
+  //////////
+  // Stop the video capture
+  void			stopCapture();
 
   //-----------------------------------
   // GROUP:	Video data
@@ -148,29 +160,31 @@ class pix_videoDS : public pix_video
   int		m_rendering;
   int		m_capturing;
   int		m_captureOnOff;
+  int		m_recording;
+  char		m_filename[MAXPDSTRING];
 
-  //  filmds parameters
+  //  filmAVI parameters
   int		m_xsize;
   int		m_ysize;
   int		m_csize;
-
-  unsigned char*m_RawBuffer;
-  int		m_nRawBuffSize;
 
   // DirectShow Interfaces that we may need
   IGraphBuilder*	m_pGB;
   IMediaControl*	m_pMC;
   IMediaEvent*		m_pME;
   IMediaFilter*		m_pMF;
-  IVideoWindow*		m_pVW;
   IBasicAudio*		m_pBA;
   IBasicVideo*		m_pBV;
   IMediaSeeking*	m_pMS;
   IMediaPosition*	m_pMP;
-  CSampleGrabber*	m_pSG;
+	IBaseFilter		*SampleFilter;		// Sample filter
+	IBaseFilter		*NullFilter;		// Null render base Filter for video
+	IBaseFilter		*FileFilter;		// File filter for writing video
+	ISampleGrabber	*SampleGrabber;		// Sample grabber
+#ifdef DIRECTSHOW_LOGGING
+	HFILE			LogFileHandle;
+#endif
 
-  IAMVideoControl*	m_pVC;
-  IFilterGraph*		m_pFG;
   IBaseFilter*		m_pCDbase;
   ICaptureGraphBuilder2*m_pCG;
 
@@ -187,6 +201,8 @@ class pix_videoDS : public pix_video
   static void setupMessCallback(void *data);
   static void floatMessCallback(void *data, float n);
   static void dvMessCallback(void *data, t_symbol *type, int argc, t_atom *argv);
+  static void recordMessCallback(void *data, t_floatarg state);
+  static void fileMessCallback(void *data, t_symbol *filename);
 
   //	static void videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr);
 };

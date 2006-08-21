@@ -34,7 +34,7 @@
 #include "DSgrabber.h"
 
 #define COMRELEASE(x) { if (x) x->Release(); x = NULL; }
-#define REGISTER_FILTERGRAPH 1
+//#define REGISTER_FILTERGRAPH 1
 
 // Utility functions
 void SetupCaptureDevice(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase);
@@ -43,22 +43,8 @@ HRESULT ConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *
 void GetBitmapInfoHdr(AM_MEDIA_TYPE* pmt, BITMAPINFOHEADER** ppbmih);
 HRESULT GetPin(IBaseFilter *, PIN_DIRECTION, IPin **);
 HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister);
+HRESULT SetAviOptions(IBaseFilter *ppf, InterleavingMode INTERLEAVE_MODE);
 void RemoveGraphFromRot(DWORD pdwRegister);
-
-///////////////////////////////////////////////////////////
-//
-// Callback for SampleGrabber filter
-//
-/////////////////////////////////////////////////////////
-static HRESULT Callback(void* pUser, IMediaSample* pSample, REFERENCE_TIME* StartTime,
-			REFERENCE_TIME* StopTime, BOOL TypeChanged)
-{
-  ((pix_videoDS*)pUser)->copyBuffer(pSample);
-
-  return NOERROR; /* jmz: why should we stop delivering ? */
-  // Tell the source to stop delivering samples.
-  return S_FALSE; 
-}
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_videoDS, t_floatarg, A_DEFFLOAT)
 
@@ -75,26 +61,27 @@ pix_videoDS :: pix_videoDS(t_floatarg num)
     m_colorSwap(0),
     m_hWndC(NULL),
     m_newFrame(0),
-    m_RawBuffer(NULL),
-    m_nRawBuffSize(0),
     m_pGB(NULL),
     m_pMC(NULL),
     m_pME(NULL),
     m_pMF(NULL),
-    m_pVW(NULL),
     m_pBA(NULL),
     m_pBV(NULL),
     m_pMS(NULL),
     m_pMP(NULL),
-    m_pSG(NULL),
-    m_pFG(NULL),
+	SampleFilter(NULL),
+	NullFilter(NULL),
+	FileFilter(NULL),
     m_pCDbase(NULL),
     m_pCG(NULL),
-    m_pVC(NULL),
     m_GraphRegister(0),
     m_rendering(0),
     m_capturing(0),
+	m_recording(1),
     m_captureOnOff(1),
+#ifdef DIRECTSHOW_LOGGING
+	LogFileHandle(NULL),
+#endif
     m_bInitCOM(false)
 {
   // Initialize COM
@@ -115,6 +102,8 @@ pix_videoDS :: pix_videoDS(t_floatarg num)
     }
 
   m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+  
+  memset(m_filename, 0, MAXPDSTRING);
 
   openMess(num);
 }
@@ -145,9 +134,8 @@ pix_videoDS :: ~pix_videoDS()
 /////////////////////////////////////////////////////////
 void pix_videoDS :: openMess(int device)
 {
-  HRESULT hr;
-  IBaseFilter		*pSGbase = NULL;
-  IBaseFilter		*pNRbase = NULL;
+	HRESULT			hr;
+	AM_MEDIA_TYPE	MediaType;
 
   if (!m_bInitCOM)
     {
@@ -164,7 +152,18 @@ void pix_videoDS :: openMess(int device)
       break;
     }
 
-    // Get the interface for DirectShow's CaptureGraphBuilder2
+#ifdef DIRECTSHOW_LOGGING
+	OFSTRUCT	OFStruct;
+	
+	LogFileHandle	= OpenFile("DirectShow.log", &OFStruct, OF_CREATE);
+	
+	if (LogFileHandle != NULL)
+	{
+		m_pGB->SetLogFile(LogFileHandle);
+	}
+#endif
+
+    // Get the interface for DirectShow's CaptureGraphBuilder2 which allows the use of capture devices instead of file sources
     if (	FAILED(hr = (CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void **)&m_pCG)))
 		||	FAILED(hr = m_pCG->SetFiltergraph(m_pGB))){
       error("pix_videoDS: Could not get DShow GraphBuilder, hr 0x%X", hr);
@@ -172,77 +171,128 @@ void pix_videoDS :: openMess(int device)
     }
 
     // Create the capture device.
-    if (FAILED(hr = FindCaptureDevice(device, &m_pCDbase))){
+    if (FAILED(hr = FindCaptureDevice(device, &m_pCDbase)))
+    {
       error("pix_videoDS: Could not open device: %d\n", device);
       break;
     }
+
+	// Create the SampleGrabber filter
+	hr	= CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER,
+		IID_IBaseFilter, (void**)&SampleFilter);
+    
+	if (hr != S_OK || NULL == SampleFilter)
+	{
+		error("Unable to create SampleFilter interface %d", hr);
 		
-    // Create an instance of our local sample grabber object.
-    if (!(m_pSG = new CSampleGrabber(NULL, &hr, FALSE))) {
-      error("pix_videoDS: Could not create a Sample Grabber filter, hr 0x%X", hr);
-      break;
-    }
-    m_pSG->AddRef();
+		return;
+	}
+
+	// Query for the SampleGrabber interface in the SampleGrabber filter
+	// Needed to grab the buffer using GetCurrentBuffer()
+	hr	= SampleFilter->QueryInterface(IID_ISampleGrabber, (void **)&SampleGrabber);
+
+	if (hr != S_OK || NULL == SampleGrabber)
+	{
+		error("Unable to create SampleGrabber interface %d", hr);
 		
-    // Set the grabber's media type
-    CMediaType mtSG;
-    mtSG.SetType(&MEDIATYPE_Video);
-    mtSG.SetSubtype(&MEDIASUBTYPE_RGB24);
-    if (FAILED(hr = m_pSG->SetAcceptedMediaType(&mtSG))){
-      error("pix_videoDS: Could not set the MediaType of the Sample Grabber, hr 0x%X", hr);
-      break;
-    }
+		return;
+	}
 
-    // Set the Sample Grabber callback.
-    if (FAILED(hr = m_pSG->SetCallback(&Callback, this))){	
-      error("pix_videoDS: Could not set the callback of the Sample Grabber, hr 0x%X", hr);
-      break;
-    }
+	// Set the media type that the SampleGrabber wants.
+	// MEDIATYPE_Video selects only video and not interleaved audio and video
+	// MEDIASUBTYPE_RGB24 is the colorspace and format to deliver frames
+	// MediaType.formattype is GUID_NULLsince it is handled later to get file info
+	memset(&MediaType, 0, sizeof(AM_MEDIA_TYPE));
+	MediaType.majortype		= MEDIATYPE_Video;
+	MediaType.subtype		= MEDIASUBTYPE_RGB24;
+	MediaType.formattype	= GUID_NULL;
+	hr						= SampleGrabber->SetMediaType(&MediaType);
+	
+	// Set the SampleGrabber to return continuous frames
+	hr	= SampleGrabber->SetOneShot(FALSE);
+	
+	if (hr != S_OK)
+	{
+		error("Unable to setup sample grabber %d", hr);
+		
+		return;
+	}
 
-    // Create the Null Renderer.
-    if (FAILED(hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,IID_IBaseFilter, reinterpret_cast<void**>(&pNRbase)))) {
-      error("pix_videoDS: Could not create the Null Renderer, hr 0x%X", hr);
-      break;
-    }
+	// Set the SampleGrabber to copy the data to a buffer. This only set to FALSE when a 
+	// callback is used.
+	hr	= SampleGrabber->SetBufferSamples(TRUE);
+	
+	if (hr != S_OK)
+	{
+		error("Unable to setup sample grabber %d", hr);
+		
+		return;
+	}
 
-    // get the base interface so we can connect the graph
-    if (FAILED(hr = m_pSG->QueryInterface(IID_IBaseFilter, reinterpret_cast<void**>(&pSGbase)))){
-      error("pix_videoDS: Could not get the Sample Grabber's base interface, hr 0x%X", hr);
-      break;
-    }
+	// Create the Null Renderer
+	hr	= CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
+		IID_IBaseFilter, (void**)&NullFilter);
+    
+	if (hr != S_OK || NULL == NullFilter)
+	{
+		error("Unable to create NullFilter interface %d", hr);
+		
+		return;
+	}
 
     // add the filters to the graph
-    if (	FAILED(hr = m_pGB->AddFilter(m_pCDbase, L"CaptureDevice"))
-		||	FAILED(hr = m_pGB->AddFilter(pNRbase, L"NullRenderer"))
-		||	FAILED(hr = m_pGB->AddFilter(pSGbase, L"GrabberSample"))){
+    if (FAILED(hr = m_pGB->AddFilter(m_pCDbase, L"Capture Device")) || 
+		FAILED(hr = m_pGB->AddFilter(SampleFilter, L"Sample Grabber")) ||
+		FAILED(hr = m_pGB->AddFilter(NullFilter, L"Null Renderer")))
+	{
       error("pix_videoDS: Could not add the filters to the graph, hr 0x%X", hr);
       break;
     }
 
-    // Connect the modules
-    if (	FAILED(hr = ConnectFilters(m_pGB, m_pCDbase, pSGbase))
-		||	FAILED(hr = ConnectFilters(m_pGB, pSGbase, pNRbase)))	{
-      error("pix_videoDS: Could not connect the filters in the graph, hr 0x%X", hr);
+	// Automatically connect the Device filter to the NullFilter through the SampleFilter.
+	// Additional filters may be added.
+	// Try Interleaved Audio and Video first for DV input
+	if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Interleaved, 
+		m_pCDbase, SampleFilter, NullFilter)))
+	{
+		//try Video only for devices with no audio
+		if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, 
+			m_pCDbase, SampleFilter, NullFilter)))
+		{
+			error("Unable to connect to SampleGrabber.");
+	
+			return;
+		}
+	}
+
+    // QueryInterface for DirectShow interfaces
+    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaFilter, (void **)&m_pMF))))
+    {
+      error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
       break;
     }
 
-    // QueryInterface for DirectShow interfaces
-    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaFilter, (void **)&m_pMF))))     {
+	//MediaControl is used for Run, Stop, Pause and running state queries
+    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaControl, (void **)&m_pMC))))
+    {
       error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
       break;
     }
-    if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaControl, (void **)&m_pMC)))){
-      error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
-      break;
-    }
+
+	//not used right now
     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaEvent, (void **)&m_pME))))	{
       error("pix_videoDS: Could not get media event interface, hr 0x%X", hr);
       break;
     }
+
+	//MediaSeeking for the end of a clip.  not really used here
     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaSeeking, (void **)&m_pMS)))){
       error("pix_videoDS: Could not get media seeking interface, hr 0x%X", hr);
       break;
     }
+
+	//for the position of a clip.  not really used for device capture
     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaPosition, (void **)&m_pMP)))){
       error("pix_videoDS: Could not get media position interface, hr 0x%X", hr);
       break;
@@ -255,19 +305,22 @@ void pix_videoDS :: openMess(int device)
       m_GraphRegister = 0;
     }
 #endif
-    // Turn off the reference clock.
-    if (FAILED(hr = m_pMF->SetSyncSource(NULL))){
-      error("pix_videoDS: failed to turn off the reference clock  hr=0x%X", hr);
-      break;
-    }
+    // THIS KIILS FILE WRITING!! May improve latency on video preview/playback.
+    // Turn off the reference clock. 
+//	if (FAILED(hr = m_pMF->SetSyncSource(NULL)))
+//	{
+//		error("pix_videoDS: failed to turn off the reference clock  hr=0x%X", hr);
+//		break;
+//	}
 
+	// Indicate that the video is ready.
     m_haveVideo = 1;
+
+	stopCapture();
+	
     startTransfer();
 
   } while (0);
-
-  COMRELEASE(pSGbase);
-  COMRELEASE(pNRbase);
 
   if (!m_haveVideo)closeMess();
 
@@ -282,20 +335,26 @@ void pix_videoDS :: closeMess()
 {
   m_haveVideo = 0;
 
+#ifdef DIRECTSHOW_LOGGING
+	m_pGB->SetLogFile(NULL);
+	
+	CloseHandle((HANDLE)LogFileHandle);
+#endif
+
+	// Release the DirectShow interfaces
   COMRELEASE(m_pGB);
   COMRELEASE(m_pMC);
   COMRELEASE(m_pME);
   COMRELEASE(m_pMF);
-  COMRELEASE(m_pVW);
   COMRELEASE(m_pBA);
   COMRELEASE(m_pBV);
   COMRELEASE(m_pMS);
   COMRELEASE(m_pMP);
-  COMRELEASE(m_pSG);
-  COMRELEASE(m_pFG);
+  COMRELEASE(SampleFilter);
+  COMRELEASE(NullFilter);
+  COMRELEASE(FileFilter);
   COMRELEASE(m_pCDbase);
   COMRELEASE(m_pCG);
-  COMRELEASE(m_pVC);
 
 #ifdef REGISTER_FILTERGRAPH
   if (m_GraphRegister)
@@ -418,6 +477,9 @@ void pix_videoDS :: render(GemState *state)
     return;
   }
 
+	// Copy the buffer from the camera buffer to the texture buffer
+	copyBuffer();
+	
   m_readIdx = m_lastwriteIdx;
   if (m_nPixDataSize[m_readIdx]){
     m_pixBlock.newimage=m_pixBlockBuf[m_readIdx].newimage;
@@ -487,9 +549,9 @@ int pix_videoDS :: startTransfer()
       m_lastwriteIdx = 0;
 
       // Get the stream characteristics
-      CMediaType mt;
+      AM_MEDIA_TYPE mt;
       BITMAPINFOHEADER* pbmih;
-      if (FAILED(hr = m_pSG->GetConnectedMediaType(&mt)))
+      if (NULL == SampleGrabber || FAILED(hr = SampleGrabber->GetConnectedMediaType(&mt)))
 	{
 	  error("pix_videoDS: Could not get connect media type, hr 0x%X", hr);
 	  return 0;
@@ -500,6 +562,7 @@ int pix_videoDS :: startTransfer()
       m_csize = 3;
       m_format = GL_BGR_EXT;
 
+	  //starts the graph rendering
       if (FAILED(hr = m_pMC->Run()))
 	{
 	  error("pix_videoDS: Could not start graph playback, hr 0x%X", hr);
@@ -529,7 +592,93 @@ int pix_videoDS :: stopTransfer()
   return !(!m_capturing);
 }
 
+void pix_videoDS :: startCapture()
+{
+	HRESULT	hr;
+	WCHAR	WideFileName[MAXPDSTRING];
+	
+	if (m_filename[0] == 0)
+	{
+		error("No filename passed");
+		return;
+	}
+	
+	if (FALSE == m_recording && m_pCG != NULL && m_haveVideo)
+	{
+		// Convert filename to wide chars
+		memset(&WideFileName, 0, MAXPDSTRING * 2);
+	
+		if (0 == MultiByteToWideChar(CP_ACP, 0, m_filename, strlen(m_filename), WideFileName, 
+			MAXPDSTRING))
+		{
+			error("Unable to capture to %s", m_filename);
+		
+			return;
+		}
 
+		// Set filename of output AVI. Returns pointer to a File Writer filter.
+		if (FAILED(hr = m_pCG->SetOutputFileName(&MEDIASUBTYPE_Avi, WideFileName, 
+			&FileFilter, NULL)))
+		{
+			error("Unable to set output filename.");
+		
+			return;
+		}
+	
+		// Set AVI output option for interleaving.
+		if (FAILED(hr = SetAviOptions(FileFilter, INTERLEAVE_NONE)))
+		{
+			error("Unable to set avi options.");
+		
+			return;
+		}
+
+		// Connect the Capture Device filter to the File Writer filter. Try using 
+		//	MEDIATYPE_Interleaved first, else default to MEDIATYPE_Video.
+		if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Interleaved, 
+			m_pCDbase, NULL, FileFilter)))
+		{
+			if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, 
+				m_pCDbase, NULL, FileFilter)))
+			{
+				error("Unable to record to avi.");
+	
+				return;
+			}
+		}
+
+		m_recording	= TRUE;
+	}
+}
+
+void pix_videoDS :: stopCapture()
+{
+	HRESULT	RetVal;
+	
+	if (TRUE == m_recording && m_haveVideo)
+	{
+		IBaseFilter	*Filter;
+		
+		// Remove the File Writer filter, if available.
+		//This is probably where DS releases the written AVI file
+		RetVal	= m_pGB->FindFilterByName(L"File Writer", &Filter);
+		
+		if (S_OK == RetVal)
+		{
+			m_pGB->RemoveFilter(Filter);
+		}
+		
+		// Remove the AVI Mux filter, if available.
+		RetVal	= m_pGB->FindFilterByName(L"Mux", &Filter);
+		
+		if (S_OK == RetVal)
+		{
+			m_pGB->RemoveFilter(Filter);
+		}
+		
+		m_recording	= FALSE;
+	}
+}
 /////////////////////////////////////////////////////////
     // captureOnOff
     //
@@ -544,6 +693,27 @@ int pix_videoDS :: stopTransfer()
     stopTransfer();
 }
 
+void pix_videoDS :: fileMess(t_symbol *filename)
+{
+	canvas_makefilename(getCanvas(), filename->s_name, m_filename, MAXPDSTRING);
+}
+
+void pix_videoDS :: recordMess(int state)
+{
+	stopTransfer();
+	
+	if (state)
+	{
+		startCapture();
+	}
+	
+	else
+	{
+		stopCapture();
+	}
+		
+	startTransfer();
+}
 
 ////////////////////////////////////////////////////////
 // dvMess
@@ -576,7 +746,7 @@ void pix_videoDS :: dvMess(int argc, t_atom *argv)
 	{
 	  const char* szRes = atom_getsymbolarg(1, argc, argv)->s_name;
 
-	  IIPDVDec* pDV;
+	  IIPDVDec	*pDV;
 	  if (SUCCEEDED(hr = (m_pCG->FindInterface(NULL, NULL, m_pCDbase, IID_IIPDVDec, (void **)&pDV))))
 	    {
 	      if (!strcmp(szRes, "full"))
@@ -788,22 +958,31 @@ void pix_videoDS :: dialogMess(int argc, t_atom*argv)
     }
 }
 
-void pix_videoDS :: copyBuffer(IMediaSample* pSample)
+void pix_videoDS :: copyBuffer()
 {
-  HRESULT hr;
-  unsigned char* pBuffer;
+	HRESULT	hr;
+	long	SampleSize;	
 	
   // Get the media type
-  AM_MEDIA_TYPE* pmt;
+  AM_MEDIA_TYPE	pmt;
   int readIdx = m_readIdx;
 
   if ((m_writeIdx = (m_lastwriteIdx + 1) % 3) == readIdx)
     m_writeIdx = (readIdx + 1) % 3;
 
-  int nRawBuffSize = pSample->GetSize();
+	// Get the current buffer size from the SampleGrabber.
+	if (SampleGrabber != NULL)
+	{
+		hr	= SampleGrabber->GetCurrentBuffer(&SampleSize, NULL);
+	
+		if (hr != S_OK)
+		{
+			return;
+		}
+	}		
 
   // Check for a format change.
-  if (FAILED(hr = pSample->GetMediaType(&pmt)))
+  if (NULL == SampleGrabber || FAILED(hr = SampleGrabber->GetConnectedMediaType(&pmt)))
     {
       error("pix_videoDS : could not get sample media type.");
       closeMess();
@@ -813,15 +992,15 @@ void pix_videoDS :: copyBuffer(IMediaSample* pSample)
   if (S_OK == hr)
     {
       BITMAPINFOHEADER* pbmih;
-      GetBitmapInfoHdr(pmt, &pbmih);
+      GetBitmapInfoHdr(&pmt, &pbmih);
       m_xsize = pbmih->biWidth;
       m_ysize = pbmih->biHeight;
       m_csize = 3;
       m_format = GL_BGR_EXT;
-      DeleteMediaType(pmt);	// is this necessary?!	
+      FreeMediaType(pmt);	// is this necessary?!	
     }
 
-  if (m_nPixDataSize[m_writeIdx] != nRawBuffSize)
+  if (m_nPixDataSize[m_writeIdx] != SampleSize)
     {
       m_pixBlockBuf[m_writeIdx].image.xsize = m_xsize;
       m_pixBlockBuf[m_writeIdx].image.ysize = m_ysize;
@@ -834,13 +1013,21 @@ void pix_videoDS :: copyBuffer(IMediaSample* pSample)
 	{
 	  delete[] m_pixBlockBuf[m_writeIdx].image.data;
 	}
-      m_pixBlockBuf[m_writeIdx].image.data = new unsigned char[nRawBuffSize];
-      m_nPixDataSize[m_writeIdx] = nRawBuffSize;
+      m_pixBlockBuf[m_writeIdx].image.data = new unsigned char[SampleSize];
+      m_nPixDataSize[m_writeIdx] = SampleSize;
     }
 
-  pSample->GetPointer(&pBuffer);
-
-  memcpy(m_pixBlockBuf[m_writeIdx].image.data, pBuffer, nRawBuffSize);
+	// Get the current buffer from the SampleGrabber.
+	if (SampleGrabber != NULL)
+	{
+		hr	= SampleGrabber->GetCurrentBuffer(&SampleSize, 
+			(long *)m_pixBlockBuf[m_readIdx].image.data);
+	
+		if (hr != S_OK)
+		{
+			return;
+		}
+	}		
 
   m_pixBlockBuf[m_writeIdx].newimage = 1;
   m_lastwriteIdx = m_writeIdx;
@@ -869,6 +1056,12 @@ void pix_videoDS :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&pix_videoDS::dvMessCallback,
 		  gensym("dv"), A_GIMME, A_NULL);
   class_addfloat(classPtr, (t_method)&pix_videoDS::floatMessCallback);
+  
+  class_addmethod(classPtr, (t_method)&pix_videoDS::recordMessCallback,
+		  gensym("record"), A_DEFFLOAT, A_NULL);
+		  
+   class_addmethod(classPtr, (t_method)&pix_videoDS::fileMessCallback,
+		  gensym("file"), A_SYMBOL, A_NULL);
 
   //  pix_video::real_obj_setupCallback(classPtr);
 } 
@@ -892,6 +1085,16 @@ void pix_videoDS :: floatMessCallback(void *data, float n)
 void pix_videoDS :: dvMessCallback(void *data, t_symbol *type, int argc, t_atom *argv)
 {
   GetMyClass(data)->dvMess(argc, argv);
+}
+
+void pix_videoDS :: recordMessCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->recordMess(!(!(int)state));
+}
+
+void pix_videoDS :: fileMessCallback(void *data, t_symbol *filename)
+{
+  GetMyClass(data)->fileMess(filename);
 }
 
 // From Microsoft sample:
@@ -1243,6 +1446,7 @@ HRESULT GetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
   while(pEnum->Next(1, &pPin, 0) == S_OK)
     {
       PIN_DIRECTION PinDirThis;
+      
       pPin->QueryDirection(&PinDirThis);
       if (PinDir == PinDirThis)
         {
@@ -1257,6 +1461,41 @@ HRESULT GetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
 }
 
 
+HRESULT SetAviOptions(IBaseFilter *ppf, InterleavingMode INTERLEAVE_MODE)
+{
+    HRESULT hr;
+    CComPtr<IConfigAviMux>        pMux           = NULL;
+    CComPtr<IConfigInterleaving>  pInterleaving  = NULL;
+
+    ASSERT(ppf);
+    if (!ppf)
+        return E_POINTER;
+
+    // QI for interface AVI Muxer
+    if (FAILED(hr = ppf->QueryInterface(IID_IConfigAviMux, reinterpret_cast<PVOID *>(&pMux))))
+    {
+		error("IConfigAviMux failed.");
+	}
+	
+    if (FAILED(hr = pMux->SetOutputCompatibilityIndex(TRUE)))
+    {
+		error("SetOutputCompatibilityIndex failed.");
+    }
+    
+    // QI for interface Interleaving
+    if (FAILED(hr = ppf->QueryInterface(IID_IConfigInterleaving, reinterpret_cast<PVOID *>(&pInterleaving))))
+    {
+		error("IConfigInterleaving failed.");
+	}
+
+    // put the interleaving mode (full, none, half)
+    if (FAILED(pInterleaving->put_Mode(INTERLEAVE_MODE)))
+    {
+		error("put_Mode failed.");
+    }
+       
+    return hr;
+} 
 
 HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) 
 {
@@ -1268,8 +1507,8 @@ HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister)
     }
 
   WCHAR wsz[128];
-  wsprintfW(wsz, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph, 
-	    GetCurrentProcessId());
+	StringCchPrintfW(wsz, 128, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph, 
+		GetCurrentProcessId());
 
   HRESULT hr = CreateItemMoniker(L"!", wsz, &pMoniker);
   if (SUCCEEDED(hr)) 
