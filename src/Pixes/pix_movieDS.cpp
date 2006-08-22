@@ -1,3 +1,7 @@
+#include "Base/config.h"
+
+#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+
 #include <atlbase.h>
 #include <atlconv.h>
 #include <streams.h>
@@ -273,7 +277,7 @@ void pix_movieDS::realOpen(char *filename)
 		return;
 	}
 
-	// Add sample grabber filter to the filter graph.
+ 	// Add sample grabber filter to the filter graph.
 	RetVal	= FilterGraph->AddFilter(SampleFilter, L"Sample Grabber");
 
 	if (RetVal != S_OK)
@@ -934,3 +938,6 @@ HRESULT movieConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFil
 	
 	return	RetVal;
 }
+
+
+#endif /* HAVE_DIRECTSHOW */

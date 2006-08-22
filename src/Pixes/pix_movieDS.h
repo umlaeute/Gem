@@ -21,8 +21,6 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	//////////
 	// Constructor
 	pix_movieDS(t_symbol *filename);
-  
-  
 	~pix_movieDS(void);
 	
   protected:
