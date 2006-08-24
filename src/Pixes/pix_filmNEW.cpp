@@ -21,6 +21,7 @@
 
 #include "Pixes/filmQT4L.h"
 #include "Pixes/filmAVI.h"
+#include "Pixes/filmDS.h"
 #include "Pixes/filmAVIPLAY.h"
 #include "Pixes/filmFFMPEG.h"
 #include "Pixes/filmMPEG1.h"
@@ -109,7 +110,7 @@
 #if 0
 # define debug post
 #else
-# define debug
+# define debug post
 #endif
 
 
@@ -123,7 +124,7 @@ void *pix_filmNEW :: grabThread(void*you)
   pthread_mutex_t *mutex=me->m_mutex;
   struct timeval timout;
   me->m_thread_running=true;
-
+  post("pix_filmNEW : using pthreads");
   while(me->m_thread_continue){
     int reqFrame=(int)me->m_reqFrame;
     int reqTrack=(int)me->m_reqTrack;
@@ -182,15 +183,22 @@ pix_filmNEW :: pix_filmNEW(t_symbol *filename) :
   while(i--)m_handles[i]=0;
   m_numHandles=0;
 
-#define DEBUG_HANDLE debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles])
 
+
+
+#define DEBUG_HANDLE debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles])
+#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+	m_handles[m_numHandles]=new filmDS();      DEBUG_HANDLE; m_numHandles++;
+#else
   m_handles[m_numHandles]=new filmAVI();      DEBUG_HANDLE; m_numHandles++;
+#endif
   m_handles[m_numHandles]=new filmQT();       DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmQT4L();     DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG3();    DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmAVIPLAY();  DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmFFMPEG();   DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG1();    DEBUG_HANDLE; m_numHandles++;
+
 
   //openMess(filename);
 }
@@ -274,7 +282,7 @@ void pix_filmNEW :: closeMess(void){
   }
   if(!m_handle && m_handles){
     int i=-1;
-    //post("opening %s with format %X", buf, format);
+    post("opening %s with format %X", buf, format);
     while(i++<m_numHandles){
       debug("trying handle %d: %X", i, m_handles[i]);
       if (m_handles[i] && m_handles[i]->open(buf, format ))      {
@@ -297,13 +305,13 @@ void pix_filmNEW :: closeMess(void){
   SETFLOAT(ap, m_handle->getFrameNum());
   SETFLOAT(ap+1, m_handle->getWidth());
   SETFLOAT(ap+2, m_handle->getHeight());
-  SETFLOAT(ap+3, m_handle->getFPS());
+  SETFLOAT(ap+3, (float)m_handle->getFPS());
   m_numFrames=m_handle->getFrameNum();
   post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d) at %f fps", 
        buf, 
        m_handle->getFrameNum(), 
        m_handle->getWidth(), 
-       m_handle->getHeight(), m_handle->getFPS());
+       m_handle->getHeight(), (float)m_handle->getFPS());
   outlet_list(m_outNumFrames, 0, 4, ap);
 
 #ifdef HAVE_PTHREADS
@@ -489,7 +497,7 @@ void pix_filmNEW :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*arg
       codec=atom_getint(argv+1);  
     }
   }
-  
+  post("pix_filmNEW : openMessCallback");
   GetMyClass(data)->openMess(atom_getsymbol(argv), 0, codec);
 
   return;
