@@ -15,6 +15,8 @@
 /////////////////////////////////////////////////////////
 
 #include "Pixes/filmDS.h"
+
+#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
 #include <atlbase.h>
 #include <atlconv.h>
 #include <streams.h>
@@ -25,6 +27,7 @@ HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin);
 HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond);
 HRESULT filmAddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) ;
 void filmRemoveGraphFromRot(DWORD pdwRegister);
+#endif
 /////////////////////////////////////////////////////////
 //
 // filmDS
@@ -37,9 +40,9 @@ void filmRemoveGraphFromRot(DWORD pdwRegister);
 filmDS :: filmDS(int format) : film(format) {
   static bool first_time=true;
   if (first_time) {
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
     post("pix_film:: directshow support");
-#endif
+
     first_time = false;
   }
   
@@ -100,6 +103,7 @@ filmDS :: filmDS(int format) : film(format) {
 		
 		return;
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -108,17 +112,53 @@ filmDS :: filmDS(int format) : film(format) {
 /////////////////////////////////////////////////////////
 filmDS :: ~filmDS()
 {
-  close();
-#ifdef __WIN32__
- 
+#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW) 
+	
+	close();
+	
+	// Release IMediaControl interface
+	if (MediaControl != NULL)
+	{
+		MediaControl->Release();
+		
+		MediaControl	= NULL;
+	}
+	
+	// Release IMediaSeeking interface
+	if (MediaSeeking != NULL)
+	{
+		MediaSeeking->Release();
+		
+		MediaSeeking	= NULL;
+	}
+	
+	// Release IMediaPosition interface
+	if (MediaPosition != NULL)
+	{
+		MediaPosition->Release();
+		
+		MediaPosition	= NULL;
+	}
+	
+	// Release base FilterGraph
+	if (FilterGraph != NULL)
+	{
+		FilterGraph->Release();
+		
+		FilterGraph	= NULL;
+	}
+	
+	// Release COM
+	CoUninitialize();
 #endif
 }
 
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
 void filmDS :: close(void)
 {
-  // Stop the video. Filters cannot be remove until video is stopped
+  
+	// Stop the video. Filters cannot be remove until video is stopped
 	if (MediaControl != NULL)
 	{
 		MediaControl->Stop();
@@ -176,6 +216,7 @@ void filmDS :: close(void)
       m_GraphRegister = 0;
     }
 #endif
+
 }
 
 /////////////////////////////////////////////////////////
@@ -189,7 +230,9 @@ bool filmDS :: open(char *filename, int format)
 	AM_MEDIA_TYPE	MediaType;
 	BOOL			bFrameTime	= TRUE;
 	GUID			Guid;
-			
+		
+	post("Trying DirectShow");
+
 	// Convert c-string to Wide string.
 	memset(&WideFileName, 0, MAXPDSTRING * 2);
 	
