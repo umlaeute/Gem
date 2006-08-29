@@ -2,7 +2,7 @@ default: all
 SRCDIR=.
 include Make.include
 
-BUILDDIR = ../
+BUILDDIR = ..
 
 # all objects that have been build
 OBJECTS = $(GEM_TARGETS:%=%/*.o)
