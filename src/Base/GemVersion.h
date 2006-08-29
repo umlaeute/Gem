@@ -1,1 +1,1 @@
-static const char *GEM_VERSION = "0.90";
+static const char *GEM_VERSION = "0.91-cvs";
