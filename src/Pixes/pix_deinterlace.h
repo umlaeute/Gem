@@ -60,10 +60,14 @@ class GEM_EXTERN pix_deinterlace : public GemPixObj
         virtual void 	processGrayImage(imageStruct &image);
 		
 		int	m_mode;
+		int	m_adaptive;
+
+		imageStruct		m_savedImage;
 		
 	private:
 	
 		static void 	modeMessCallback(void *data, t_floatarg contrast);
+		static void 	adaptiveMessCallback(void *data, t_floatarg contrast);
 };
 
 

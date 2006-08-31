@@ -20,8 +20,14 @@ CPPEXTERN_NEW(pix_deinterlace)
 //
 /////////////////////////////////////////////////////////
 pix_deinterlace :: pix_deinterlace() : 
-  m_mode(1)
+  m_mode(1),
+  m_adaptive(10)
 {
+	m_savedImage.xsize=320;
+	m_savedImage.ysize=240;
+	 m_savedImage.setCsizeByFormat(GL_RGBA);
+	 m_savedImage.reallocate();
+	 m_savedImage.setBlack();
 }
 
 /////////////////////////////////////////////////////////
@@ -35,13 +41,23 @@ void pix_deinterlace :: processRGBAImage(imageStruct &image)
 {
 int	row, col,field1,field2,field3;
 	int temp1, temp2,temp3;
+	int	diff1, diff2, diff3;
 	
 	unsigned char *pixels=image.data;
-	
+	unsigned char *saved = m_savedImage.data;
+
 	field1 = 0;
 	field2 = image.xsize*4;
 	field3 = image.xsize*8;
-	
+
+	if ((m_savedImage.xsize != image.xsize) || (m_savedImage.ysize != image.ysize)){
+		m_savedImage.xsize=image.xsize;
+		m_savedImage.ysize=image.ysize;
+		m_savedImage.setCsizeByFormat(image.format);
+		m_savedImage.reallocate();
+	}
+//	if(saved!=m_savedImage.data)m_savedImage.setBlack();saved=m_savedImage.data;
+		
 	if (m_mode){
 	
 	for (row = 0; row < (image.ysize/2)-1; row++){
@@ -70,30 +86,56 @@ int	row, col,field1,field2,field3;
 		
 		for (col = 0; col < image.xsize; col++){
 			
+				//temp1 = abs((int)m_savedImage.data[field2 + chRed] - (int)pixels[field2 + chRed]);
+				//temp2 = abs((int)m_savedImage.data[field2 + chGreen] - (int)pixels[field2 + chGreen]);
+				//temp3 = abs((int)m_savedImage.data[field2 + chBlue] - (int)pixels[field2 + chBlue]);
+				temp1 = abs(pixels[field1 + chRed] - pixels[field2 + chRed]);
+				temp2 = abs(pixels[field1 + chGreen] - pixels[field2 + chGreen]);
+				temp3 = abs(pixels[field1 + chRed] - pixels[field2 + chRed]);
 				
-				temp1 = abs(pixels[field1] - pixels[field2]);
+				if ((temp1 > m_adaptive) && (temp2 > m_adaptive) && (temp3 > m_adaptive)) {
 				
-				if (temp1 > 10) pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
+					
+			//		diff1 = abs(m_savedImage.data[field1 + chRed] - pixels[field1 + chRed]);
+			//		diff2 = abs(m_savedImage.data[field1 + chGreen] - pixels[field1 + chGreen]);
+			//		diff3 = abs(m_savedImage.data[field1 + chBlue] - pixels[field1 + chBlue]);
+//
+			//		if ((diff1 > m_adaptive) && (diff2 > m_adaptive) && (diff3 > m_adaptive)) {
+					//	pixels[field2 + chRed] = 255;
+					//	pixels[field2 + chGreen] = 255;
+					//	pixels[field2 + chBlue] = 255;
+						pixels[field2 + chRed] = (	(pixels[field1 + chRed] * 85 + pixels[field3 + chRed] * 85) +
+													(pixels[field1 - 4 + chRed] * 85 + pixels[field3 -4 + chRed] * 85)+
+													(pixels[field1 + 4 + chRed] * 85 + pixels[field3 + 4 + chRed] * 85)
+													) / 512;
+
+						pixels[field2 + chGreen] = ((pixels[field1 + chGreen] * 85 + pixels[field3 + chGreen] * 85) +
+													(pixels[field1 - 4 + chGreen] * 85 + pixels[field3 -4 + chGreen] * 85) +
+													(pixels[field1 + 4 + chGreen] * 85 + pixels[field3 + 4 + chGreen] * 85)
+													) / 512;
+
+						pixels[field2 + chBlue] = (	(pixels[field1 + chBlue] * 85 + pixels[field3 + chBlue] * 85) +
+													(pixels[field1 - 4 + chBlue] * 85 + pixels[field3 -4 + chBlue] * 85) +
+													(pixels[field1 + 4 + chBlue] * 85 + pixels[field3 + 4 + chBlue] * 85)
+													) / 512;
+						//pixels[field2 + chGreen] = (pixels[field1 + chGreen] + pixels[field3 + chGreen]) / 2;
+						//pixels[field2 + chBlue] = (pixels[field1 + chBlue] + pixels[field3 + chBlue]) / 2;
 				
-				field1++;
-				field2++; 
-				field3++;
+				//	}
+				}
+				m_savedImage.data[field1 + chRed] = pixels[field1 + chRed];
+				m_savedImage.data[field1 + chGreen] = pixels[field1 + chGreen];
+				m_savedImage.data[field1 + chBlue] = pixels[field1 + chBlue];
+				field1+=4;
+				field2+=4; 
+				field3+=4;
 				
 				
-				temp1 = abs(pixels[field1] - pixels[field2]);
-				
-				if (temp1 > 10) pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
-				
-				field1++;
-				field2++;
-				field3++;
 		}
-		field1+=image.xsize;
-		field2+=image.xsize;
-		field1+=image.xsize;
-		field2+=image.xsize;
-		field3+=image.xsize;
-		field3+=image.xsize;
+		field1+=image.xsize*4;
+		field2+=image.xsize*4;
+		field3+=image.xsize*4;
+	
 	}	
 	}
 
@@ -307,11 +349,18 @@ void pix_deinterlace :: processYUVAltivec(imageStruct &image)
 void pix_deinterlace :: obj_setupCallback(t_class *classPtr)
 { 
 	class_addmethod(classPtr, (t_method)&pix_deinterlace::modeMessCallback, gensym("mode"),A_FLOAT,A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_deinterlace::adaptiveMessCallback, gensym("adaptive"),A_FLOAT,A_NULL);
 }
 
 void pix_deinterlace :: modeMessCallback(void *data,t_floatarg mode)
 {
 	
 	GetMyClass(data)->m_mode = (int)mode;
+	
+}
+void pix_deinterlace :: adaptiveMessCallback(void *data,t_floatarg mode)
+{
+	
+	GetMyClass(data)->m_adaptive = (int)mode;
 	
 }
