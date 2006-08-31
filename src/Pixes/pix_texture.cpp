@@ -52,7 +52,8 @@ pix_texture :: pix_texture()
     m_textureType( GL_TEXTURE_2D ),
     m_mode(0), m_env(GL_MODULATE),
     m_clientStorage(0), //have to do this due to texture corruption issues
-    m_yuv(1)
+    m_yuv(1),
+	m_texunit(0)
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
@@ -63,6 +64,9 @@ pix_texture :: pix_texture()
   m_mode = 1;  //default to the fastest mode for systems that support it
   m_textureType = GL_TEXTURE_RECTANGLE_EXT;
   #endif
+  
+ // m_texUnit = 0;
+  
 
   // create an inlet to receive external texture IDs
   m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("extTexture"));
@@ -95,6 +99,7 @@ void pix_texture :: setUpTextureState() {
 	{
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
     // JMZ: disabled the following, as rectangle-textures are clamped anyhow
+
     // JMZ: and normalized ones, lose their setting
 	// TIGITAL: this is necessary on osx, at least with non-powerof2 textures!
 	//			otherwise, weird texturing occurs (looks similar to pix_refraction)
@@ -102,7 +107,9 @@ void pix_texture :: setUpTextureState() {
 	// POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
 #ifdef GL_CLAMP_TO_EDGE
 	  m_repeat = GL_CLAMP_TO_EDGE;
+
 #endif
+
       debug("pix_texture: using rectangle texture");
 	}
   }
@@ -239,9 +246,10 @@ void pix_texture :: render(GemState *state) {
     stopRendering();startRendering();
   }   
 
+  glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
   glEnable(m_textureType);
   glBindTexture(m_textureType, m_textureObj);
-  
+
 # ifdef GL_APPLE_texture_range
   if ((!useExternalTexture)&&state->image->newfilm ){
       //  tigital:  shouldn't we also allow TEXTURE_2D here?
@@ -429,13 +437,16 @@ if (m_rebuildList) {
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: postrender(GemState *state){
+
   state->texCoords   = m_oldTexCoords;
   state->numTexCoords= m_oldNumCoords;
   state->texture     = m_oldTexture;
 
   if (m_didTexture){
+    glActiveTexture(GL_TEXTURE0_ARB + m_texunit);  //needed?
     glDisable(m_textureType);
   }
+
 }
 
 /////////////////////////////////////////////////////////
@@ -446,6 +457,7 @@ void pix_texture :: startRendering()
 {
 #ifdef GL_VERSION_1_1
   glGenTextures(1, &m_realTextureObj); // this crashes sometimes!!!! (jmz)
+  glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
   glBindTexture(m_textureType, m_realTextureObj);
   m_textureObj=m_realTextureObj;
   setUpTextureState();
@@ -506,6 +518,7 @@ void pix_texture :: textureQuality(int type)
     m_textureQuality = GL_NEAREST;
   if (m_textureObj) {
 #ifdef GL_VERSION_1_1
+    glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
     glBindTexture(m_textureType, m_textureObj);
     glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
     glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
@@ -596,8 +609,11 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("client_storage"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::yuvCallback,
 		  gensym("yuv"), A_FLOAT, A_NULL);
+
   class_addmethod(classPtr, (t_method)&pix_texture::extTextureCallback,
 		  gensym("extTexture"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_texture::texunitCallback,
+		  gensym("texunit"), A_FLOAT, A_NULL);
   class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
 }
 void pix_texture :: floatMessCallback(void *data, float n)
@@ -635,4 +651,8 @@ void pix_texture :: yuvCallback(void *data, t_floatarg quality)
 void pix_texture :: extTextureCallback(void *data, t_floatarg texid)
 {
   GetMyClass(data)->m_extTextureObj=(int)texid;
+}
+void pix_texture :: texunitCallback(void *data, t_floatarg unit)
+{
+  GetMyClass(data)->m_texunit=(int)unit;
 }
