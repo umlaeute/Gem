@@ -39,8 +39,12 @@ distclean:
 	-rm -f Gem.$(EXT) *~
 	-rm -f config.cache config.log config.status Make.config
 
-install: installdocs
-	$(INSTALL_DATA) -D Gem.$(EXT) $(DESTDIR)/$(PDLIBDIR)/extra/Gem.$(EXT)
+install: installdocs installabs
+	$(INSTALL_DATA) -D Gem.$(EXT) $(DESTDIR)/$(PDLIBDIR)/extra/Gem/Gem.$(EXT)
+
+installabs:
+	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/extra/Gem
+	$(INSTALL_DATA) ./../abstractions/*.pd $(DESTDIR)/$(PDLIBDIR)/extra/Gem
 
 installdocs:
 	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
