@@ -16,12 +16,16 @@
 
 #include "pix_image.h"
 
-#ifdef __unix__
-#include <unistd.h>
-#include <strings.h>
+#ifdef __WIN32__
+# include <io.h>
 #endif
 
+#ifdef __unix__
+# include <unistd.h>
+# include <strings.h>
+#endif
 
+#include <stdio.h>
 #include "Base/GemCache.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM)
@@ -188,7 +192,15 @@ void *pix_image :: openThread(void*you)
 void pix_image :: openMess(t_symbol *filename)
 {
   if(NULL==filename || NULL==filename->s_name || 0==*filename->s_name)return;
-  canvas_makefilename(getCanvas(), filename->s_name, m_filename, MAXPDSTRING);
+  char buf[MAXPDSTRING];
+  char *bufptr=NULL;
+  int fd=-1;
+
+  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, filename->s_name, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
+    close(fd);
+    sprintf(m_filename, "%s/%s", buf, bufptr);
+  } else
+    canvas_makefilename(getCanvas(), filename->s_name, m_filename, MAXPDSTRING);
 
   m_threadloaded=false;
 
