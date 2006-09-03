@@ -18,9 +18,7 @@ LOG
 
 #include "m_pd.h"
 
-
 #include <new>
-#include <exception>
 
 
 /*-----------------------------------------------------------------
@@ -38,15 +36,15 @@ DESCRIPTION
 
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN GemException : public std::exception
+class GEM_EXTERN GemException
 {
  public:
   GemException() throw();
   GemException(char*error) throw();
   ~GemException() throw();
   
-  const char *what() const throw();
-  void report() const throw();
+  virtual const char *what() const throw();
+  virtual void report() const throw();
  private:
   const char*ErrorString;
 };
