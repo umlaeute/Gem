@@ -230,17 +230,16 @@ void pix_texture :: render(GemState *state) {
   if (m_mode){
     if (GemMan::texture_rectangle_supported ){
       m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-      debug("pix_texture:  using GL_TEXTURE_RECTANGLE_EXT");
+      debug("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", m_objectname->s_name);
       normalized = 0;
     }
   } else 
-# endif // GL_TEXTURE_RECTANGLE_EXT
-    {
-      m_textureType = GL_TEXTURE_2D;
-      debug("pix_texture:  using GL_TEXTURE_2D");
-      normalized = 0;
-    }
-
+#endif // GL_TEXTURE_RECTANGLE_EXT
+  {
+    m_textureType = GL_TEXTURE_2D;
+	debug("[%s]:  using mode 0:GL_TEXTURE_2D", m_objectname->s_name);
+	normalized = 0;
+  }
   if (m_textureType!=texType){
     debug("pix_texture:  texType != m_textureType");
     stopRendering();startRendering();
@@ -268,7 +267,7 @@ void pix_texture :: render(GemState *state) {
       // GL_STORAGE_PRIVATE_APPLE - normal texture path
   }
 # endif // GL_APPLE_texture_range
-    
+
 #elif GL_EXT_texture_object
   glEnable(m_textureType);
   glBindTextureEXT(m_textureType, m_textureObj);
@@ -635,6 +634,10 @@ void pix_texture :: envMessCallback(void *data, t_floatarg num )
 void pix_texture :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_mode=((int)quality);
+  if (quality)
+    post("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", GetMyClass(data)->m_objectname->s_name);
+  else
+    post("[%s]:  using mode 0:GL_TEXTURE_2D", GetMyClass(data)->m_objectname->s_name);
   GetMyClass(data)->m_rebuildList=1;
 }
 
