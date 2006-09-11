@@ -121,6 +121,7 @@ class GEM_EXTERN film
   // get ysize of the frame
   virtual int getHeight() {return m_image.image.ysize;}
 
+  t_float m_auto;
 
   /* some error codes */
 #define FILM_ERROR_SUCCESS 0 /* no error */
@@ -160,6 +161,7 @@ class GEM_EXTERN film
    * if so m_readNext should be FALSE
    */
   bool m_readNext;
+
 
   //////////////////////
   // the frame-rate
