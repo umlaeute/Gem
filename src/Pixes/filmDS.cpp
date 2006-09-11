@@ -45,6 +45,7 @@ filmDS :: filmDS(int format) : film(format) {
     first_time = false;
   }
   HRESULT RetVal;
+  m_reqFrame = 1;
   m_frame = NULL;
   m_csize=0;
   m_xsize=0;
@@ -563,6 +564,8 @@ pixBlock* filmDS :: getFrame(){
   long			frameSize	= m_ysize * m_xsize * m_csize;
   HRESULT			RetVal;
   OAFilterState	State;	
+ // LONGLONG	CurrentPosition;
+ // LONGLONG	Current	= 0;
 	
   // Initially set the image as unchanged
   m_image.newimage	= FALSE;
@@ -576,6 +579,19 @@ pixBlock* filmDS :: getFrame(){
   // Ensure the video is running
   RetVal	= MediaControl->GetState(0, &State);
 
+ if (m_auto > 0.f){
+
+	 //if the video is paused then start it running again
+	 if (State != State_Running) 
+	 {
+		 RetVal	= MediaControl->Run();
+		RetVal	= MediaControl->GetState(0, &State);
+	 }
+
+	 //set the rate of the clip
+	 RetVal	= MediaSeeking->SetRate(m_auto);
+  
+  
   if (SampleGrabber != NULL && State == State_Running)
     {
       // Get the current position of the video
@@ -591,8 +607,8 @@ pixBlock* filmDS :: getFrame(){
               // beginning
               if (CurrentPosition >= m_Duration)
                 {
-                  LONGLONG	Current	= 0;
-
+                  
+				LONGLONG	Current	= 0;
                   // Set the start position to 0, do not change the end position.
                   RetVal	= MediaSeeking->SetPositions(&Current, 
                                                              AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush, 
@@ -626,10 +642,58 @@ pixBlock* filmDS :: getFrame(){
             }
         }
     }
+
+  }else{ 
+	  
+	    LONGLONG frameSeek;
+
+		frameSeek = (LONGLONG) m_reqFrame;
+		
+		if (State == State_Running) RetVal	= MediaControl->Pause();
+
+		//check if the playback is 'Paused' and don't keep asking for the same frame
+		if (m_reqFrame == m_LastFrame)
+		{
+			m_image.newimage	= FALSE;
+			return &m_image;
+		}
+
+
+		RetVal	= MediaSeeking->SetPositions(&frameSeek, 
+                                                AM_SEEKING_AbsolutePositioning, 
+                                                NULL, AM_SEEKING_NoPositioning);
+		
+		if (RetVal != S_OK)
+		{
+			post("filmDS: SetPositions failed");
+		}
+
+		RetVal	= SampleGrabber->GetCurrentBuffer(&frameSize, (long *)m_frame);
+
+		if (RetVal != S_OK)
+            {
+              m_image.image.data	= NULL;
+			  post("filmDS: GetCurrentBuffer failed");
+            }
+
+        else
+            {
+              m_image.image.data	= m_frame;
+			  m_image.newimage	= TRUE;
+              //m_image.image.fromBGR(m_frame);
+			  m_LastFrame = m_reqFrame;
+            }
+
+  }
+
   return &m_image;
 }
 
 int filmDS :: changeImage(int imgNum, int trackNum){
+
+	m_reqFrame = imgNum;
+
+	if (m_reqFrame > m_Duration) return FILM_ERROR_FAILURE;
   
   return FILM_ERROR_SUCCESS;
 }
