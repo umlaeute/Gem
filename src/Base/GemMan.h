@@ -30,6 +30,11 @@ GLIContext agl_rend;
 */
 #endif // __APPLE__
 
+#ifdef __WIN32__
+#include <QTML.h>
+#include <Movies.h>
+#endif
+
 #include "Base/GemExportDef.h"
 
 class gemhead;

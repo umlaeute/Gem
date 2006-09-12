@@ -323,6 +323,9 @@ void GemMan :: createContext(char* disp)
       m_width = 640;
       m_height = 480;
     }
+
+	
+
 #elif __APPLE__
     // Check QuickTime installed
     long	QDfeature;
@@ -435,6 +438,31 @@ void GemMan :: initGem()
 
 
   m_motionBlur = 0.f;
+
+
+#ifdef __WIN32__
+	OSErr		err = noErr;
+
+	// Initialize QuickTime Media Layer
+	err = InitializeQTML(0);
+	if (err)
+	{
+		error("GEM Man: Could not initialize quicktime: error %d\n", err);
+		return;
+	}	
+	
+	// Initialize QuickTime
+	EnterMovies();
+	if (err)
+	{
+		error("GEM Man: Could not initialize quicktime: error %d\n", err);
+		return;
+	}	
+	post("Gem Man: QT init OK");
+
+#endif
+
+
 #ifdef __APPLE__
 
   // This is to create a "master context" on Gem initialization, with
@@ -461,6 +489,7 @@ void GemMan :: initGem()
   aglDestroyPixelFormat( aglPixFmt );
   
 #endif
+
 }
 
 /////////////////////////////////////////////////////////
@@ -954,9 +983,10 @@ void GemMan :: render(void *)
       LARGE_INTEGER endTime;
       QueryPerformanceCounter(&endTime);
       if (countFreq)
-	post("GEM: time: %f",
-	     (float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-      else
+	//post("GEM: time: %f",
+	//     (float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+	GemMan::fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+	  else
 	error("GEM: unable to profile");
     }
 #elif __unix__
@@ -1378,7 +1408,7 @@ void GemMan :: swapBuffers()
 //  seems like it'd ruin single buffer rendering...
   glClear(m_clear_mask);
 // why is this called here?
-  glColor3f(1.0, 1.0, 1.0);
+ // glColor3f(1.0, 1.0, 1.0);
 // why is this called here?
 //  not clear what glMatrixMode() we're loading...probably GL_MODELVIEW?
   glLoadIdentity();
