@@ -115,6 +115,21 @@ class GEM_EXTERN recordQT : public record
 
   imageStruct	*m_compressImage;
 
+
+#ifdef __APPLE__
+		UnsignedWide startTime, endTime;
+#endif
+
+#ifdef __WIN32__
+		LARGE_INTEGER freq, startTime, endTime;
+		float seconds;
+#endif
+
+		//number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
+		int					m_ticks;
+		
+		bool	m_firstRun;
+
   //////////
   // QT stuff
 

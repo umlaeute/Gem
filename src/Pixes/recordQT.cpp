@@ -10,15 +10,15 @@
 # include <unistd.h>
 # include <fcntl.h>
 #endif
-
+#ifdef __WIN32__
+# define snprintf _snprintf
+#endif
 #include <stdio.h>
 
 /* for post() and error() */
 #include "m_pd.h"
 
-#ifdef __WIN32__
-# define snprintf _snprintf
-#endif
+
 /////////////////////////////////////////////////////////
 //
 // recordQT
@@ -42,13 +42,15 @@ recordQT :: recordQT(int x, int y, int w, int h)
   // Initialize QuickTime Media Layer
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {
-    error("filmQT: Could not initialize quicktime: error %d", err);
+
+    post("recordQT: Could not initialize quicktime: error %d", err);
+
     return;
   }
 	
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    error("filmQT: Could not initialize quicktime: error %d", err);
+    error("recordQT: Could not initialize quicktime: error %d", err);
     return;
   }
   post("pix_video: QT init done");
@@ -115,7 +117,6 @@ recordQT :: ~recordQT()
   post("recordQT: deconstructor");
   if (stdComponent != NULL){
     compErr = CloseComponent(stdComponent);
-    
     if (compErr != noErr) error("recordQT : CloseComponent failed with error %d",compErr);
   }
 }
@@ -150,12 +151,17 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
       int fd;
       fd = ::open(m_filename, O_CREAT | O_RDWR, 0600);
       if (fd < 0){
+
 		post("recordQT : problem with fd");
 		return ;
 		}
+
       ::write(fd, " ", 1);
       ::close(fd);
       err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
+
+      //post("recordQT : made new file %s",m_filename);
+
     }
 
 
@@ -203,6 +209,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 
   if (err != noErr) {
     error("recordQT : CreateMovieFile failed with error %d",err);
+
     return;
   }
 	
@@ -244,10 +251,19 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 #endif
   if (err != noErr){
     error("recordQT : QTNewGWorldFromPtr failed with error %d",err);
+
     return;
   }
 	
   SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
+
+#ifdef __WIN32__
+	MatrixRecord	aMatrix;
+	GetMovieMatrix(m_movie,&aMatrix);
+	//RotateMatrix(&aMatrix,Long2Fix(180),0,0);//should be ScaleMatrix
+	ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
+	SetMovieMatrix(m_movie,&aMatrix);
+#endif
 	
   track = NewMovieTrack(m_movie,FixRatio(m_srcRect.right, 1),FixRatio(m_srcRect.bottom, 1),kNoVolume);
 	
@@ -269,7 +285,9 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     //close the component if already open
     if (stdComponent) compErr = CloseComponent(stdComponent);
 	
+
     if (compErr != noErr) error("recordQT : CloseComponent failed with error %d",compErr);
+
 		
     //open a new component from scratch
     stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
@@ -282,12 +300,16 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     post("recordQT : opening settings Dialog");
     compErr = SCRequestSequenceSettings(stdComponent);
 	
+
     if (compErr != noErr) error("recordQT : SCRequestSequenceSettings failed with error %d",compErr);
+
 	
     compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
     compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 	
+
     if (compErr != noErr) error("recordQT : SCGetInfo failed with error %d",compErr);
+
 		
     m_codecType = SpatialSettings.codecType;
     m_depth = SpatialSettings.depth;
@@ -334,7 +356,9 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   compErr = SCSetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
   compErr = SCSetInfo(stdComponent, scDataRateSettingsType, &datarate);
 	
+
   if (compErr != noErr) error("recordQT : SCSetInfo failed with error %d",compErr);
+
 	
 #ifdef __APPLE__
   compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),&m_srcRect,&hImageDesc);
@@ -342,13 +366,17 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   compErr = SCCompressSequenceBegin(stdComponent,m_srcGWorld->portPixMap,&m_srcRect,&hImageDesc);
 #endif
   if (compErr != noErr) {
+
     error("recordQT : SCCompressSequenceBegin failed with error %d",compErr);
+
     return;
   }
 	
   err = BeginMediaEdits(media);
   if (err != noErr) {
+
     error("recordQT : BeginMediaEdits failed with error %d",err);
+
     return;
   }
 	
@@ -377,18 +405,25 @@ void recordQT :: close()
 	
 	
   err = EndMediaEdits(media);
+
   if (err != noErr) {
 	error("recordQT : EndMediaEdits failed with error %d",err);
 	return;  //no sense in crashing after this
 	}
+
   err = InsertMediaIntoTrack(track,0,0,GetMediaDuration(media),0x00010000);
+
   if (err != noErr) error("recordQT : InsertMediaIntoTrack failed with error %d",err);
 
+
   err = AddMovieResource(m_movie,nFileRefNum,&nResID,NULL);
+
   if (err != noErr) error("recordQT : AddMovieResource failed with error %d",err);
 	
   err = CloseMovieFile(nFileRefNum);
+
   if (err != noErr) error("recordQT : CloseMovieFile failed with error %d",err);
+
 	
   DisposeMovie(m_movie);
   DisposeGWorld(m_srcGWorld);
@@ -419,6 +454,53 @@ void recordQT :: compressFrame()
   ComponentResult	compErr = noErr;
   short			syncFlag; //flag for keyframes
 
+
+#ifdef __APPLE__
+	//fakes the first run time
+	if (m_firstRun){
+	
+	  ::Microseconds(&startTime);
+		m_firstRun = 0;
+	
+	}
+	::Microseconds(&endTime);
+	
+	seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+	
+	m_ticks = (int)(600 * seconds);
+	
+	if (m_ticks < 20) m_ticks = 20;
+	
+#endif //timers
+	
+
+#ifdef __WIN32__
+	static int firstTime = 1;
+	static float countFreq = 0;
+	if (m_firstRun)
+	{
+		// LARGE_INTEGER freq;
+		if (!QueryPerformanceFrequency(&freq))
+			countFreq = 0;
+		else
+			countFreq = (float)(freq.QuadPart);
+		QueryPerformanceCounter(&startTime);//fakes the time of the first frame
+		m_ticks = 20;
+		m_firstRun = 0;
+	}else{
+
+		QueryPerformanceCounter(&endTime);
+		float fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+		seconds = ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
+		// post("pix_recordQT: freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,(int)startTime.QuadPart,(int)endTime.QuadPart,fps,seconds);
+
+		m_ticks = (int)(600 * seconds);
+
+		if (m_ticks < 20) m_ticks = 20;
+	}
+#endif
+
+
   //post("recordQT: compressing frame");
   //apparently on OSX there is no member portPixMap in a GWorld so a function is used instead
   compErr = SCCompressSequenceFrame(	stdComponent,
@@ -427,6 +509,7 @@ void recordQT :: compressFrame()
 					&compressedData,
 					&dataSize,
 					&syncFlag);
+
 
   if (compErr != noErr) error("recordQT : SCCompressSequenceFrame failed with error %d",compErr);
 										
@@ -440,8 +523,21 @@ void recordQT :: compressFrame()
 		       syncFlag,
 		       NULL);
 							
+
   if (err != noErr) error("recordQT : AddMediaSample failed with error %d",err);
-							
+
+  	#ifdef __APPLE__
+	::Microseconds(&startTime);
+					
+	#endif //timer		
+
+#ifdef __WIN32__
+
+      QueryPerformanceCounter(&startTime);
+//	  post("startTime %d",startTime.QuadPart);
+
+#endif
+				
   m_currentFrame++;
 }
 
@@ -588,9 +684,11 @@ bool recordQT :: open(char*filename)
   //but it will give the wrong message at the end if recording
   if (m_recordStart) return false;
 
+
   snprintf(m_filename, 80, "%s\0", filename);
   m_filename[79]=0;
   post("recordQT : filename %s",m_filename);
+
   return true;
 }
 
