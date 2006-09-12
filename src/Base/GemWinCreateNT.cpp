@@ -25,8 +25,10 @@
 #include "pktdef.h"
 
 #include "GemEvent.h"
+#include "GemGL.h"
 
 GEM_EXTERN void gemAbortRendering();
+
 
 /////////////////////////////////////////////////////////
 // bSetupPixelFormat
@@ -393,6 +395,8 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
       wndclass.lpszMenuName  = NULL;
       wndclass.lpszClassName = "GEM";
 
+		
+
       if (!RegisterClass(&wndclass) )
         {
 	  error("GEM: Unable to register window class");
@@ -536,6 +540,13 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
   } else  ShowWindow(info.win, SW_SHOWNORMAL);
 
   UpdateWindow(info.win);
+
+#ifdef USE_GLEW
+  GLenum err = glewInit();
+
+  if (GLEW_OK != err) error("failed to init GLEW");
+  else post("GLEW version %s",glewGetString(GLEW_VERSION));
+#endif
 
   return(1);
 }
