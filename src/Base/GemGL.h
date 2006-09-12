@@ -37,8 +37,12 @@
 # define GL_GLEXT_LEGACY
 # define GL_GLEXT_PROTOTYPES   1
 
+#ifndef USE_GLEW
 # include <GL/gl.h>
 # include <GL/glu.h>
+#else
+#include <GL/glew.h>
+#endif
 
 # if (!defined DONT_INCLUDE_GLEXT)
 /* windos is (again) a bit difficult:
