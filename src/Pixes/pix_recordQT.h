@@ -11,10 +11,31 @@
 #ifndef INCLUDE_pix_recordQT_H_
 #define INCLUDE_pix_recordQT_H_
 
-#ifdef __APPLE__
+#if 1
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include "Base/GemPixImageSave.h"
+
+#ifdef __WIN32__
+#include <io.h>
+#include <stdio.h>
+#include <QTML.h>
+#include <Movies.h>
+#include <QuicktimeComponents.h>
+#include <Files.h>
+#endif
+
+#ifdef __APPLE__
+#include <Quicktime/Quicktime.h>
+#include <Carbon/Carbon.h>
+
+#include <unistd.h> //needed for Unix file open() type functions
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h> 
+
+#endif
+
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -223,7 +244,12 @@ class GEM_EXTERN pix_recordQT : public GemBase
 		int					m_ticks;
 		
 		bool	m_firstRun;
+#ifdef __APPLE__
 		UnsignedWide startTime, endTime;
+#endif
+#ifdef __WIN32__
+		LARGE_INTEGER freq, startTime, endTime;
+#endif
 		float seconds;
 		
 		Component			aComponent;

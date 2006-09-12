@@ -14,35 +14,18 @@
 #define HAVE_QUICKTIME
 #endif
 
+
 /* define HAVE_QUICKTIME in Base/configNT.h if you have quicktime-sdk installed */
 #if defined HAVE_QUICKTIME
+
 
 #include "pix_recordQT.h"
 #include "Base/GemMan.h"
 #include "Base/GemCache.h"
 
-#ifdef __WIN32__
-#include <io.h>
-#include <stdio.h>
-#include <QTML.h>
-#include <Movies.h>
-#include <QuicktimeComponents.h>
-#include <Files.h>
-#endif
-
-#ifdef __APPLE__
-#include <Quicktime/Quicktime.h>
-#include <Carbon/Carbon.h>
-
-#include <unistd.h> //needed for Unix file open() type functions
-#include <stdio.h>
-#include <string.h>
-#include <fcntl.h> 
-
-#endif
 
 CPPEXTERN_NEW_WITH_GIMME(pix_recordQT)
-
+ 
   /////////////////////////////////////////////////////////
 //
 // pix_recordQT
@@ -295,6 +278,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 
 	if (err != noErr) {
 		post("pix_recordQT : CreateMovieFile failed with error %d",err);
+		m_recordSetup = -1;
 		return;
 		}
 	
@@ -361,6 +345,14 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		}
 	
 	SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
+
+#ifdef __WIN32__
+	MatrixRecord	aMatrix;
+	GetMovieMatrix(m_movie,&aMatrix);
+	//RotateMatrix(&aMatrix,Long2Fix(180),0,0);//should be ScaleMatrix
+	ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
+	SetMovieMatrix(m_movie,&aMatrix);
+#endif
 	
 	track = NewMovieTrack(m_movie,FixRatio(m_srcRect.right, 1),FixRatio(m_srcRect.bottom, 1),kNoVolume);
 	
@@ -581,6 +573,33 @@ void pix_recordQT :: compressFrame()
 	
 	#endif //timers
 	
+
+#ifdef __WIN32__
+  static int firstTime = 1;
+  static float countFreq = 0;
+  if (m_firstRun)
+    {
+     // LARGE_INTEGER freq;
+      if (!QueryPerformanceFrequency(&freq))
+	countFreq = 0;
+      else
+	countFreq = (float)(freq.QuadPart);
+	QueryPerformanceCounter(&startTime);//fakes the time of the first frame
+	m_ticks = 20;
+      m_firstRun = 0;
+	}else{
+
+  QueryPerformanceCounter(&endTime);
+	float fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+	seconds = ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
+ // post("pix_recordQT: freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,(int)startTime.QuadPart,(int)endTime.QuadPart,fps,seconds);
+
+	m_ticks = (int)(600 * seconds);
+	
+	if (m_ticks < 20) m_ticks = 20;
+	}
+#endif
+
 	//post("pix_recordQT : frame compression took %f seconds %d ticks", seconds, m_ticks );
 	
 
@@ -595,8 +614,13 @@ void pix_recordQT :: compressFrame()
 										&dataSize,
 										&syncFlag);
 #else //Windows
+
+	PixMapHandle mPixMap;
+	mPixMap = GetGWorldPixMap(m_srcGWorld);
+
 	compErr = SCCompressSequenceFrame(	stdComponent,
-										m_srcGWorld->portPixMap,
+										//m_srcGWorld->portPixMap,
+										mPixMap,
 										&m_srcRect,
 										&compressedData,
 										&dataSize,
@@ -619,7 +643,14 @@ void pix_recordQT :: compressFrame()
 	#ifdef __APPLE__
 	::Microseconds(&startTime);
 					
-	#endif //timer																		
+	#endif //timer		
+
+#ifdef __WIN32__
+
+      QueryPerformanceCounter(&startTime);
+//	  post("startTime %d",startTime.QuadPart);
+
+#endif
 																																															
 	m_currentFrame++;
 	
@@ -658,7 +689,7 @@ void pix_recordQT :: render(GemState *state)
 		//should check if the size has changed or else we will freak the compressor's trip out
 		if (m_width == m_prevWidth && m_height == m_prevHeight) {
 			//go ahead and grab a frame if everything is ready to go
-			if (m_recordSetup) 
+			if (m_recordSetup == 1) 
 				if (m_automatic && state->image->newimage) {
 					compressFrame();
 					}
