@@ -395,15 +395,12 @@ void GemMan :: initGem()
   post("GEM: Graphics Environment for Multimedia");
   post("GEM: ver: %s", GEM_VERSION);
   post("GEM: compiled: " __DATE__);
-  post("GEM: maintained by IOhannes m zmoelnig");
-  post("GEM: Authors :\tMark Danks (original version on irix/windows)");
-  post("GEM: \t\tChris Clepper (macOS-X)");
-#ifdef INCLUDE_GEIGER
-  post("GEM: \t\tGuenter Geiger (linux)");
-#endif
-  post("GEM: \t\tDaniel Heckenberg (windows)");
-  post("GEM: \t\tJames Tittle (macOS-X)");
-  post("GEM: \t\tIOhannes m zmoelnig (linux/windows)");
+  post("GEM: maintained by %s", GEM_MAINTAINER);
+  post("GEM: Authors :\tMark Danks (original version)");
+  for(int i=0; i<sizeof(GEM_AUTHORS)/sizeof(*GEM_AUTHORS); i++) {
+    post("GEM:\t\t%s", GEM_AUTHORS[i]);
+  }  
+  post("GEM: with help by %s", GEM_OTHERAUTHORS);
 
   GemSIMD simd_init;
 
@@ -886,6 +883,7 @@ void GemMan :: render(void *)
       glClear(GL_COLOR_BUFFER_BIT & m_clear_mask);
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
       glClear(GL_STENCIL_BUFFER_BIT & m_clear_mask);
+      glClear(GL_ACCUM_BUFFER_BIT & m_clear_mask);
 
       // setup the left viewpoint
       switch (left_color){
@@ -921,7 +919,7 @@ void GemMan :: render(void *)
       renderChain(s_linkHead_2, &currentState);
 
       // setup the right viewpoint
-  glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
+      glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
       switch (right_color){
       case 0:
 	glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
@@ -1390,7 +1388,7 @@ void destroyConstWindow()
 void GemMan :: swapBuffers()
 {
   if (!m_windowState) return;
-  if (GemMan::m_buffer == 2)
+  if (GemMan::m_buffer == 2) {
 #ifdef __unix__             // for Unix
     glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
 #elif defined __WIN32__          // for WinNT
@@ -1400,11 +1398,12 @@ void GemMan :: swapBuffers()
 #else                   // everyone else
 #error Define OS specific swap buffer
 #endif
-  else glFlush();
+  } else {
+    glFlush();
+  }
 
 //  TODO:
 //  why is this called here?
-//		also called in resetState()
 //  seems like it'd ruin single buffer rendering...
   glClear(m_clear_mask);
 // why is this called here?
