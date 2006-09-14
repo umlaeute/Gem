@@ -19,22 +19,31 @@
 #include "Base/GemState.h"
 #include "Base/GemCache.h"
 
-//#ifdef __APPLE__
-# define __VBO
-//#endif
+#define __VBO
+
 
 // this is a hack for VBO header defines that were available before 10.4,
 //  but not included in the earlier OpenGL.framework:  not necessary >10.4
 #ifdef __VBO
-#ifdef __APPLE__
-#include <AvailabilityMacros.h>
-#if !defined (MAC_OS_X_VERSION_10_4) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-# include "glVBO_ext.h"
+# ifdef __APPLE__
+#  include <AvailabilityMacros.h>
+#  if !defined (MAC_OS_X_VERSION_10_4) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+#   include "glVBO_ext.h"
+#  endif
+# else
+#  ifndef GL_ARB_vertex_buffer_object
+#   include "glVBO_ext.h"
+#  endif
+# endif // __APPLE__
 #endif
-#endif // __APPLE__
-#else
-#include "glVBO_ext.h"
+
+#if defined GL_VERTEX_ARRAY_RANGE_APPLE && !defined __APPLE__
+/* this is a hack, since on linux GL_VERTEX_ARRAY_RANGE_APPLE is defined in glext.h
+ * but not glVertexArrayRangeAPPLE()!!
+ */
+# undef GL_VERTEX_ARRAY_RANGE_APPLE
 #endif
+
 
 CPPEXTERN_NEW(vertex_draw)
 
@@ -152,7 +161,7 @@ void vertex_draw :: render(GemState *state)
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(4,GL_FLOAT,0,(GLfloat *)state->VertexArray);
 
-# ifdef  GL_VERTEX_ARRAY_RANGE_APPLE
+#if defined GL_VERTEX_ARRAY_RANGE_APPLE
   glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
   glVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
   glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
@@ -162,7 +171,7 @@ void vertex_draw :: render(GemState *state)
   glDrawArrays(m_drawType,0,size);
   glDisableClientState(GL_VERTEX_ARRAY);
 
-#ifdef  GL_VERTEX_ARRAY_RANGE_APPLE   
+#if defined GL_VERTEX_ARRAY_RANGE_APPLE
   glDisableClientState(GL_VERTEX_ARRAY_RANGE_APPLE);
   glVertexArrayRangeAPPLE(0,0);
 # endif
