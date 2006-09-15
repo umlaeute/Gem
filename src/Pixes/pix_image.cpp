@@ -20,7 +20,7 @@
 # include <io.h>
 #endif
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__) 
 # include <unistd.h>
 # include <strings.h>
 #endif
