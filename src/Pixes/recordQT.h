@@ -122,8 +122,8 @@ class GEM_EXTERN recordQT : public record
 
 #ifdef __WIN32__
 		LARGE_INTEGER freq, startTime, endTime;
-		float seconds;
 #endif
+		float seconds;
 
 		//number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
 		int					m_ticks;
