@@ -109,6 +109,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
 {
 #ifdef GL_ARB_shader_objects
   if(NULL==filename || NULL==filename->s_name)return;
+  if(&s_==filename)return;
 
   char buf[MAXPDSTRING];
   char buf2[MAXPDSTRING];
