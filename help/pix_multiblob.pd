@@ -1,4 +1,4 @@
-#N canvas 263 0 690 473 10;
+#N canvas 47 378 690 473 10;
 #X text 452 8 GEM object;
 #X obj 9 265 cnv 15 430 145 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -33,7 +33,7 @@
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
 #X restore 455 378 pd gemwin;
-#X msg 455 359 destroy;
+#X msg 455 359 create;
 #X text 451 338 Create window:;
 #X obj 451 133 cnv 15 185 120 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -120,41 +120,37 @@ blob as follows: centerX(weighted) \, centerY(weighted) \, size(weighted)
 #X obj 215 69 unpack 0 0 0 0;
 #X obj 215 94 +;
 #X obj 254 95 +;
-#X obj 215 115 pack;
-#X obj 215 136 v- 1;
 #X text 248 125 0..2;
 #X text 250 145 -1..+1;
-#X obj 215 157 v* 4;
-#X obj 98 207 unpack;
 #X obj 340 148 -;
 #X obj 377 149 -;
-#X obj 340 171 pack;
-#X obj 340 214 unpack;
-#X obj 340 194 v* -4;
+#X obj 193 124 - 1;
+#X obj 193 147 * 4;
+#X obj 222 123 - 1;
+#X obj 222 146 * 4;
+#X obj 340 180 * -4;
+#X obj 377 180 * -4;
 #X connect 0 0 3 0;
 #X connect 1 0 4 0;
 #X connect 3 0 2 0;
 #X connect 4 0 5 0;
-#X connect 4 0 13 0;
+#X connect 4 0 9 0;
 #X connect 4 1 5 1;
-#X connect 4 1 13 1;
+#X connect 4 1 9 1;
 #X connect 4 2 6 0;
-#X connect 4 2 14 0;
+#X connect 4 2 10 0;
 #X connect 4 3 6 1;
-#X connect 4 3 14 1;
-#X connect 5 0 7 0;
-#X connect 6 0 7 1;
-#X connect 7 0 8 0;
-#X connect 8 0 11 0;
+#X connect 4 3 10 1;
+#X connect 5 0 11 0;
+#X connect 6 0 13 0;
+#X connect 9 0 15 0;
+#X connect 10 0 16 0;
 #X connect 11 0 12 0;
 #X connect 12 0 3 1;
-#X connect 12 1 3 2;
-#X connect 13 0 15 0;
-#X connect 14 0 15 1;
-#X connect 15 0 17 0;
-#X connect 16 0 2 1;
-#X connect 16 1 2 2;
-#X connect 17 0 16 0;
+#X connect 13 0 14 0;
+#X connect 14 0 3 2;
+#X connect 15 0 2 1;
+#X connect 16 0 2 2;
 #X restore 346 188 pd rectangle;
 #X obj 346 117 color 1 1 1 0.5;
 #X obj 346 96 gemhead 70;
@@ -177,7 +173,7 @@ blob as follows: centerX(weighted) \, centerY(weighted) \, size(weighted)
 #X connect 16 0 12 1;
 #X restore 541 261 pd showblob 1;
 #X msg 543 112 auto \$1;
-#X obj 604 114 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X obj 604 114 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X obj 451 222 pix_multiblob 6;
 #X obj 225 109 +;
