@@ -31,6 +31,7 @@ gemframebuffer :: gemframebuffer()
     	 : m_init(0), m_frameBufferIndex(0), m_depthBufferIndex(0),
 		 m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
 		 m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
+	
 {
   // create an outlet to send out texture info:
   //  - ID
@@ -38,6 +39,10 @@ gemframebuffer :: gemframebuffer()
   //  - format/type (ie. GL_TEXTURE_RECTANGLE or GL_TEXTURE_2D)
   //  - anything else?
   m_outTexInfo = outlet_new(this->x_obj, 0);
+  m_color[0] = 0.f;
+  m_color[1] = 0.f;
+  m_color[2] = 0.f;
+  m_color[3] = 0.f;
 }
 gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
     	 : m_init(0), m_frameBufferIndex(0), m_depthBufferIndex(0),
@@ -50,6 +55,11 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   //  - format/type (ie. GL_TEXTURE_RECTANGLE or GL_TEXTURE_2D)
   //  - anything else?
   m_outTexInfo = outlet_new(this->x_obj, 0);
+  
+  m_color[0] = 0.f;
+  m_color[1] = 0.f;
+  m_color[2] = 0.f;
+  m_color[3] = 0.f;
   
   formatMess(format->s_name);
   typeMess(type->s_name);
@@ -98,7 +108,8 @@ void gemframebuffer :: render(GemState *state)
   glViewport(0,0, m_width, m_height);
 
   // debug yellow color
-  glClearColor( 1,1,0,0);
+ // glClearColor( 1,1,0,0);
+  glClearColor( m_FBOcolor[0], m_FBOcolor[1], m_FBOcolor[2], m_FBOcolor[3] );
 /*
   glShadeModel( GL_SMOOTH );
   glEnable( GL_LIGHTING );
@@ -316,6 +327,18 @@ void gemframebuffer :: dimMess(int width, int height)
   }
 }
 
+void gemframebuffer :: colorMess(float red, float green, float blue, float alpha)
+{
+  
+    m_FBOcolor[0] = red;
+	m_FBOcolor[1] = green;
+	m_FBOcolor[2] = blue;
+	m_FBOcolor[3] = alpha;
+	
+	setModified();
+  
+}
+
 void gemframebuffer :: formatMess(char* format)
 {
     if (!strcmp(format, "YUV"))
@@ -394,6 +417,8 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
 	gensym("format"), A_DEFSYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::typeMessCallback,
 	gensym("type"), A_DEFSYMBOL, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemframebuffer::colorMessCallback,
+	gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void gemframebuffer :: bangMessCallback(void *data)
 {
@@ -421,4 +446,9 @@ void gemframebuffer :: typeMessCallback (void *data, t_symbol *type)
   GetMyClass(data)->typeMess((char*)type->s_name);
   GetMyClass(data)->destroyFBO();
   GetMyClass(data)->initFBO();
+}
+
+void gemframebuffer :: colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue, t_floatarg alpha)
+{
+  GetMyClass(data)->colorMess(red, green, blue, alpha);
 }
