@@ -39,10 +39,10 @@ gemframebuffer :: gemframebuffer()
   //  - format/type (ie. GL_TEXTURE_RECTANGLE or GL_TEXTURE_2D)
   //  - anything else?
   m_outTexInfo = outlet_new(this->x_obj, 0);
-  m_color[0] = 0.f;
-  m_color[1] = 0.f;
-  m_color[2] = 0.f;
-  m_color[3] = 0.f;
+  m_FBOcolor[0] = 0.f;
+  m_FBOcolor[1] = 0.f;
+  m_FBOcolor[2] = 0.f;
+  m_FBOcolor[3] = 0.f;
 }
 gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
     	 : m_init(0), m_frameBufferIndex(0), m_depthBufferIndex(0),
@@ -56,10 +56,10 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   //  - anything else?
   m_outTexInfo = outlet_new(this->x_obj, 0);
   
-  m_color[0] = 0.f;
-  m_color[1] = 0.f;
-  m_color[2] = 0.f;
-  m_color[3] = 0.f;
+  m_FBOcolor[0] = 0.f;
+  m_FBOcolor[1] = 0.f;
+  m_FBOcolor[2] = 0.f;
+  m_FBOcolor[3] = 0.f;
   
   formatMess(format->s_name);
   typeMess(type->s_name);
