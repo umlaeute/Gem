@@ -5,6 +5,8 @@
 AC_PREREQ(2.57)
 AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
 
+AC_LANG(C++)
+
 ARCH=$(uname -m)
 KERN=$(uname -s)
 
@@ -38,8 +40,13 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
+GEM_CHECK_CXXFLAGS([-fPIC])
+
+
 GEM_ARG_ENABLE([mmx],     [MMX-support])
-GEM_ARG_ENABLE([sse2],    [SSE2-support])
+dnl disabled SSE2 by default, since there are still few chips around that fully support it
+dnl unlike MMX or SSE
+GEM_ARG_DISABLE([sse2],    [SSE2-support])
 GEM_ARG_ENABLE([altivec], [AltiVec-support])
 
 GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support], [force])
@@ -62,7 +69,7 @@ GEM_TARGET(Nongeos)
 GEM_TARGET(Particles)
 GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
-GEM_TARGET(Vertex)
+GEM_TARGET_DISABLED(Vertex)
 
 
 AC_CHECK_LIB(m,sin)
@@ -188,7 +195,7 @@ if test "x$with_v4l" != "xno"; then
                   ],[have_v4l="no"])
 fi
 
-GEM_CHECK_LIB(ieee1394,dv,main,,,,video input) 
+GEM_CHECK_LIB(ieee1394,dv,main,,,,video input)
 
 GEM_CHECK_LIB(ftgl,ftgl,main,
   [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetpye], font support)
@@ -351,7 +358,7 @@ fi
 if test "x$enable_filmnew" != "xno"; then
  AC_DEFINE_UNQUOTED(NEW_VIDEOFILM)
 else
- echo "using deprecated video-loader"
+ AC_MSG_RESULT([using deprecated video-loader])
 fi
 
 # enabling "-freg-struct-return" (for FreeFrame)
@@ -409,7 +416,7 @@ fi
 if test "x$enable_mmx" != "xno"; then
   GEM_CHECK_CXXFLAGS([-mmmx])
 fi
-if test "x$enable_sse2" != "xno"; then
+if test "x$enable_sse2" = "xyes"; then
   GEM_CHECK_CXXFLAGS([-msse2])
 fi
 if test "x$enable_altivec" != "xno"; then

@@ -966,6 +966,7 @@ AC_DEFUN([GEM_ARG_WITHOUT],
                 if test "x$3" = "xforce"; then with_$1="no"; fi
            ])
 ])# GEM_ARG_WITHOUT
+
 # same as GEM_ARG_WITH but with "enable"
 AC_DEFUN([GEM_ARG_ENABLE],
 [AC_ARG_ENABLE([$1],
@@ -973,10 +974,11 @@ AC_DEFUN([GEM_ARG_ENABLE],
                 if test "x$3" != "x"; then enable_$1="yes"; fi
              ])
 ])# GEM_ARG_ENABLE
+
 # inverse of GEM_ARG_ENABLE
 AC_DEFUN([GEM_ARG_DISABLE],
 [AC_ARG_ENABLE([$1],
-             AC_HELP_STRING([--enable-$1], [enable $1-lib ($2)]),,[
+             AC_HELP_STRING([--enable-$1], [enable $1 ($2)]),,[
                 if test "x$3" != "x"; then enable_$1="no"; fi
              ])
 ])# GEM_ARG_DISABLE
@@ -988,14 +990,33 @@ AC_DEFUN([GEM_TARGET],
              [
                 if test "x$enableval" != "xno"; then
                   GEM_TARGETS=["$GEM_TARGETS $1"]
+                  AC_MSG_RESULT([building Gem with $1-objects])
                 else
-                  echo not building $1-objects
+                   AC_MSG_RESULT([building Gem without $1-objects])
                 fi
              ],
              [
                   GEM_TARGETS=["$GEM_TARGETS $1"]
+                  AC_MSG_RESULT([building Gem with $1-objects])
              ])
 ])# GEM_WITH_TARGET
+
+AC_DEFUN([GEM_TARGET_DISABLED],
+[AC_ARG_ENABLE([$1],
+             AC_HELP_STRING([--enable-$1], [enable $1-objects]),
+             [
+                if test "x$enableval" != "xyes"; then
+                   AC_MSG_RESULT([building Gem without $1-objects])
+                else
+                  GEM_TARGETS=["$GEM_TARGETS $1"]
+                  AC_MSG_RESULT([building Gem with $1-objects])
+                fi
+             ],
+             [
+                   AC_MSG_RESULT([building Gem without $1-objects])
+             ])
+])# GEM_WITH_TARGET
+
 
 
 # GEM_CHECK_LIB(NAME, LIBRARY, FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ADDITIONAL_LIBS], [HELP-TEXT])
