@@ -37,12 +37,12 @@
 # define GL_GLEXT_LEGACY
 # define GL_GLEXT_PROTOTYPES   1
 
-#ifndef USE_GLEW
-# include <GL/gl.h>
-# include <GL/glu.h>
-#else
-#include <GL/glew.h>
-#endif
+# ifndef USE_GLEW
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+# else
+#  include <GL/glew.h>
+# endif
 
 # if (!defined DONT_INCLUDE_GLEXT)
 /* windos is (again) a bit difficult:
@@ -57,9 +57,9 @@
 #   include <GL/glext.h>
 #  endif /* GL_GLEXT_VERSION */
 
-#ifdef __WIN32__
-# include <GL/wglext.h>
-#endif
+#  ifdef __WIN32__
+#   include <GL/wglext.h>
+#  endif
 
 # endif /* GLEXT */ 
 
