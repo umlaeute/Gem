@@ -18,9 +18,9 @@
 
 #include "Base/GemState.h"
 #include "string.h"
+
 #ifdef __APPLE__
-#include <AGL/agl.h>
-extern bool HaveValidContext (void);
+# include <AGL/agl.h>
 #endif
 
 #define T(x) (m_model->triangles[(x)])
@@ -68,21 +68,15 @@ vertex_model :: ~vertex_model()
 /////////////////////////////////////////////////////////
 void vertex_model :: openMess(t_symbol *filename)
 {
-
-GLMgroup*  	group;
-GLMtriangle*  	triangle;
-float*	tritext;  //texture coords for a triangle
-float*	trivert;  //vertices of one point in a triangle
-float*  trinorm;
+ GLMgroup*  	group;
+ GLMtriangle*  	triangle;
+ float*	tritext;  //texture coords for a triangle
+ float*	trivert;  //vertices of one point in a triangle
+ float*  trinorm;
  int src2,src3, src4,numvertices;
  unsigned int i;
-m_haveModel = 0;
-#ifdef __APPLE__
-  if (!HaveValidContext ()) {
-    post("GEM: geo: model - need window to load model");
-    return;
-  }
-#endif
+
+ m_haveModel = 0;
   //cleanModel();
  
   char buf[MAXPDSTRING];
