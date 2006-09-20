@@ -120,10 +120,11 @@ void gemframebuffer :: render(GemState *state)
   
   // Clear the buffers and reset the model view matrix.
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//  glPushMatrix();
+  glPushMatrix();
 //  glEnable(GL_DEPTH_TEST);
-//  glMatrixMode(GL_PROJECTION);
-//  glLoadIdentity();
+ glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glFrustum(-1,1,-1,1,1,25);
 //  gluOrtho2D(-1, 1, -1, 1);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -161,7 +162,7 @@ void gemframebuffer :: postrender(GemState *state)
   glBindTexture( m_texTarget, m_offScreenID );
 //  glDisable(GL_DEPTH_TEST);
 #endif
-//  glPopMatrix();
+  glPopMatrix();
   // reset to visible window's clear color
   glClearColor( m_color[0], m_color[1], m_color[2], m_color[3] );
   // reset to original viewport dimensions
