@@ -404,7 +404,7 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 # that don't support it
 # why? think cross-compilation
 
-if test "x${ARCH}" = "xi386" || test "x${ARCH}" = "xi686"; then
+if test "x${ARCH}" = "xi386" || test "x${ARCH}" = "xi686" || test "x${ARCH}" = "xx86_64"; then
  if test "x$enable_altivec" != "xyes"; then enable_altivec="no"; fi
 fi
 
@@ -429,7 +429,10 @@ dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 #linking on linux
 GEM_CHECK_LDFLAGS([-shared -Wl,-export-dynamic])
 # linking on os-X
-GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
+GEM_CHECK_LDFLAGS([-dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup],
+                  ,
+	          GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
+                 )
 
 dnl if we don't have $STRIP set, we set it to ${host}-strip or strip
 AC_CHECK_TOOL([STRIP], [strip], [true])
