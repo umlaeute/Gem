@@ -148,6 +148,9 @@ class GEM_EXTERN CPPExtern
         // The canvas that the object is in
         t_canvas            *m_canvas;
 
+ public:
+        // an error message attached to this object
+        void            PDerror(const char*format, ...);
 };
 
 // This has a dummy arg so that NT won't complain

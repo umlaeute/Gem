@@ -14,6 +14,11 @@
 
 #include "CPPExtern.h"
 
+
+#include <stdio.h>
+#include <stdarg.h>
+
+
 GEM_EXTERN void *operator new(size_t, void *location, void *) {return(location);}
 
 
@@ -61,3 +66,18 @@ CPPExtern :: CPPExtern()
 CPPExtern :: ~CPPExtern()
 { }
 
+
+void CPPExtern :: PDerror(const char*fmt,...)
+{
+  char buf[MAXPDSTRING];
+  va_list ap;
+  va_start(ap, fmt);
+  vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
+  va_end(ap);
+  if(x_obj)
+    pd_error(x_obj, "%s", buf);
+  else if (m_holder)
+    pd_error(m_holder, "%s", buf);
+  else
+    error("%s", buf);    
+}
