@@ -17,6 +17,13 @@
 #include "Base/GemMan.h"
 #include "Base/GemPixUtil.h"
 
+#include <stdio.h>
+#ifdef __WIN32__
+# include <io.h>
+# include <windows.h>
+# define snprintf _snprintf
+#endif
+
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
@@ -28,15 +35,23 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
-  : m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(GL_TEXTURE_2D), m_mode(0),
+  : m_inlet(NULL),
+    m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(GL_TEXTURE_2D), m_mode(0),
     m_xRatio(1.f), m_yRatio(1.f), upsidedown(false),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0)
 {
 #if !defined(GL_VERSION_1_3) && !defined(GL_ARB_multitexture)
   post("[pix_multitexture]: GEM has been compiled without ARB-multitexture support");
 #endif
-  if (m_reqTexUnits==0) {
+  if (m_reqTexUnits<=0) {
     throw (GemException("[pix_multitexture]: Please specify more than 0 texture units"));
+  }
+
+  m_inlet=new t_inlet*[m_reqTexUnits]; 
+  char tempVt[5];
+  for(unsigned int i=0;i<m_reqTexUnits; i++){
+    snprintf(tempVt, 5, "#%d\0", i);
+    m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym(tempVt));
   }
 }
 
@@ -45,7 +60,14 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
 //
 /////////////////////////////////////////////////////////
 pix_multitexture :: ~pix_multitexture()
-{ }
+{ 
+  if(m_inlet){
+    for(unsigned int i=0;i<m_reqTexUnits; i++){
+      inlet_free(m_inlet[i]);
+    }
+    delete[]m_inlet;
+  }
+}
 
 /////////////////////////////////////////////////////////
 // setTexCoords
@@ -170,6 +192,8 @@ void pix_multitexture :: obj_setupCallback(t_class *classPtr)
                   gensym("texUnit"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_multitexture::modeCallback,
 		gensym("mode"), A_FLOAT, A_NULL);
+  // generic inlets for texUnit
+  class_addanything(classPtr, (t_method)&pix_multitexture::parmCallback);
 }
 void pix_multitexture :: texUnitMessCallback(void *data, float n, float texture)
 {
@@ -186,5 +210,14 @@ void pix_multitexture :: modeCallback(void *data, t_floatarg textype)
   }else{
     GetMyClass(data)->m_textureType = GL_TEXTURE_2D;
 	post("[%s]:  using mode 0:GL_TEXTURE_2D", GetMyClass(data)->m_objectname->s_name);
+  }
+}
+
+void pix_multitexture :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
+  if(argc>0&&argv->a_type==A_FLOAT&&('#'==*s->s_name)){
+    int i = atoi(s->s_name+1);
+    GetMyClass(data)->m_texID[i]=(GLint)atom_getint(argv);
+  } else {
+     GetMyClass(data)->PDerror("invalid texUnit specified!");
   }
 }

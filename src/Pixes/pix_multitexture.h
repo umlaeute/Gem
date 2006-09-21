@@ -61,6 +61,8 @@ class GEM_EXTERN pix_multitexture : public GemBase
     	// Delete texture object
     	virtual void	stopRendering();
 
+        t_inlet**m_inlet;
+
 	int			m_reqTexUnits; // requested # of texture Units, defaults to m_max
 	GLint			m_max; // maximum # of texture units suppport by the specific card
 	GLint			m_texID[32];
@@ -81,7 +83,6 @@ class GEM_EXTERN pix_multitexture : public GemBase
 	TexCoord       *m_oldTexCoords;
 	int             m_oldNumCoords;
 	int             m_oldTexture;	       
-	
 
  private:
 
@@ -89,6 +90,7 @@ class GEM_EXTERN pix_multitexture : public GemBase
 	// static member functions
 	static void 	texUnitMessCallback(void *data, float n, float texture);
 	static void		modeCallback(void *data, t_floatarg quality);
+	static void		parmCallback(void *data, t_symbol*,int , t_atom*);
 };
 
 #endif	// for header file
