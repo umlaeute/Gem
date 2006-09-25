@@ -1,7 +1,7 @@
 /*
 ** The OpenGL Extension Wrangler Library
-** Copyright (C) 2002-2005, Milan Ikits <milan ikits[]ieee org>
-** Copyright (C) 2002-2005, Marcelo E. Magallon <mmagallo[]debian org>
+** Copyright (C) 2002-2006, Milan Ikits <milan ikits[]ieee org>
+** Copyright (C) 2002-2006, Marcelo E. Magallon <mmagallo[]debian org>
 ** Copyright (C) 2002, Lev Povalahev
 ** All rights reserved.
 ** 
@@ -40,7 +40,9 @@
 #define __wglext_h_
 
 #if !defined(APIENTRY) && !defined(__CYGWIN__)
-#define WIN32_LEAN_AND_MEAN 1
+#  ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN 1
+#  endif
 #include <windows.h>
 #endif
 

@@ -1,7 +1,9 @@
+#include "Base/config.h"
+#ifdef USE_GLEW
 /*
 ** The OpenGL Extension Wrangler Library
-** Copyright (C) 2002-2005, Milan Ikits <milan ikits[]ieee org>
-** Copyright (C) 2002-2005, Marcelo E. Magallon <mmagallo[]debian org>
+** Copyright (C) 2002-2006, Milan Ikits <milan ikits[]ieee org>
+** Copyright (C) 2002-2006, Marcelo E. Magallon <mmagallo[]debian org>
 ** Copyright (C) 2002, Lev Povalahev
 ** All rights reserved.
 ** 
@@ -28,9 +30,6 @@
 ** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ** THE POSSIBILITY OF SUCH DAMAGE.
 */
-
-#include "Base/config.h"
-#ifdef USE_GLEW
 
 #include "Base/glew.h"
 #if defined(_WIN32)
@@ -2115,6 +2114,7 @@ static GLboolean _glewInit_GL_ARB_imaging (GLEW_CONTEXT_ARG_DEF_INIT)
 {
   GLboolean r = GL_FALSE;
 
+  r = ((glBlendEquation = (PFNGLBLENDEQUATIONPROC)glewGetProcAddress((const GLubyte*)"glBlendEquation")) == NULL) || r;
   r = ((glColorSubTable = (PFNGLCOLORSUBTABLEPROC)glewGetProcAddress((const GLubyte*)"glColorSubTable")) == NULL) || r;
   r = ((glColorTable = (PFNGLCOLORTABLEPROC)glewGetProcAddress((const GLubyte*)"glColorTable")) == NULL) || r;
   r = ((glColorTableParameterfv = (PFNGLCOLORTABLEPARAMETERFVPROC)glewGetProcAddress((const GLubyte*)"glColorTableParameterfv")) == NULL) || r;
@@ -7160,7 +7160,7 @@ const GLubyte* glewGetString (GLenum name)
   static const GLubyte* _glewString[] =
   {
     (const GLubyte*)NULL,
-    (const GLubyte*)"1.3.3"
+    (const GLubyte*)"1.3.4"
   };
   const int max_string = sizeof(_glewString)/sizeof(*_glewString) - 1;
   return _glewString[(int)name > max_string ? 0 : (int)name];
@@ -9752,6 +9752,4 @@ GLboolean glxewIsSupported (const char* name)
 }
 
 #endif /* _WIN32 */
-
-
 #endif /* USE_GLEW */

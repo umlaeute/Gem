@@ -44,7 +44,10 @@ test_glew_path
 # rebuild glew
 remake_glew
 
-gemify_glew ${GLEW_DIR}/src/glew.c > ${OUTPUT_DIR}/glew.cpp
+echo '#include "Base/config.h"' > ${OUTPUT_DIR}/glew.cpp
+echo '#ifdef USE_GLEW' >> ${OUTPUT_DIR}/glew.cpp
+gemify_glew ${GLEW_DIR}/src/glew.c >> ${OUTPUT_DIR}/glew.cpp
+echo '#endif /* USE_GLEW */' >> ${OUTPUT_DIR}/glew.cpp
 
 for f in glew.h glxew.h wglew.h
 do

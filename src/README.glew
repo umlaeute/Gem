@@ -34,7 +34,7 @@ how to update these files:
 
 case study:
  ~/src/Gem/src$ cd /tmp
- /tmp$ wget http://puzzle.dl.sourceforge.net/sourceforge/glew/glew-1.3.3-src.tgz
+ /tmp$ wget http://belnet.dl.sourceforge.net/sourceforge/glew/glew-1.3.4-src.tgz
  /tmp$ tar xvzf glew-1.3.3-src.tgz
  /tmp$ cd ~/src/Gem/src
  ~/src/Gem/src$ ./importGLEW.sh /tmp/glew/
