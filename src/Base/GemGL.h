@@ -41,7 +41,7 @@
 #  include <GL/gl.h>
 #  include <GL/glu.h>
 # else
-#  include <GL/glew.h>
+#  include "Base/glew.h"
 # endif
 
 # if (!defined DONT_INCLUDE_GLEXT)
