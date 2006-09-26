@@ -36,7 +36,7 @@ AC_SUBST(HAVE_GLSIZEIPTRARB)
 
 # Checks for programs.
 AC_PROG_CXX
-AC_PROG_CC
+#AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
@@ -376,7 +376,9 @@ fi
 
 GEM_CHECK_CXXFLAGS([-O3])
 
-GEM_CHECK_CXXFLAGS([-fno-builtin])
+dnl this is only useful for debugging and might break things on older compilers
+dnl GEM_CHECK_CXXFLAGS([-fno-builtin])
+
 GEM_CHECK_CXXFLAGS([-falign-loops=16 -funroll-loops])
 GEM_CHECK_CXXFLAGS([-ffast-math])
 
