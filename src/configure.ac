@@ -147,7 +147,18 @@ GEM_CHECK_LIB(lqt,quicktime, quicktime_init,,,,[movie loader])
 GEM_CHECK_LIB(mpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
 GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
 GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
+
 dnl GEM_CHECK_LIB(avcodec, avcodec_pic, avcodec_close,,,,[movie loader])
+
+# this is rather experimental...
+if test "x$with_ffmpeg" != "xno" && \
+        test "x${PKG_FFMPEG_CFLAGS}x${PKG_FFMPEG_LIBS}x" = "xxx" && \
+        which ffmpeg-config > /dev/null
+then
+ PKG_FFMPEG_CFLAGS=$(ffmpeg-config --cflags)
+ PKG_FFMPEG_LIBS=$(ffmpeg-config --plugin-libs avformat)
+fi
+
 GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,[PKG_CFLAGS="-I/usr/include/ffmpeg $PKG_CFLAGS"],,,[movie loader])
 
 dnl checking whether (AVStream)->codec is "AVCodecContext" or "*AVCodecContext"
@@ -197,6 +208,26 @@ fi
 
 GEM_CHECK_LIB(ieee1394,dv,main,,,,video input)
 
+# this is rather experimental...and magic...uähh
+if test "x$with_ftgl" != "xno" && \
+        test "x${PKG_FTGL_CFLAGS}x${PKG_FTGL_LIBS}x" = "xxx" && \
+        which pkg-config > /dev/null && \
+        pkg-config --exists ftgl > /dev/null
+then
+ have_ftgl="no"
+ PKG_FTGL_CFLAGS=$(pkg-config --cflags ftgl)
+ PKG_FTGL_LIBS=$(pkg-config --libs ftgl | sed 's/-lftgl/-lftgl_pic/g')
+ GEM_CHECK_LDFLAGS([${PKG_FTGL_LIBS}], [have_ftgl="yes"])
+
+ if test "x$have_ftgl" = "xyes"
+ then
+  ac_cv_env_PKG_FTGL_CFLAGS_set="set"
+  ac_cv_env_PKG_FTGL_CFLAGS_value=${PKG_FTGL_CFLAGS}
+  ac_cv_env_PKG_FTGL_LIBS_set="set"
+  ac_cv_env_PKG_FTGL_LIBS_value=${PKG_FTGL_LIBS}
+ fi
+
+fi
 GEM_CHECK_LIB(ftgl,ftgl,main,
   [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetpye], font support)
 
