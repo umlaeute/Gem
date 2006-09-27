@@ -36,7 +36,6 @@ AC_SUBST(HAVE_GLSIZEIPTRARB)
 
 # Checks for programs.
 AC_PROG_CXX
-#AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
@@ -290,7 +289,6 @@ AC_CHECK_SIZEOF(void *)
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_FORK
-AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr])
