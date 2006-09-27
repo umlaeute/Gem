@@ -157,6 +157,16 @@ if test "x$with_ffmpeg" != "xno" && \
 then
  PKG_FFMPEG_CFLAGS=$(ffmpeg-config --cflags)
  PKG_FFMPEG_LIBS=$(ffmpeg-config --plugin-libs avformat)
+ if test "x$PKG_FFMPEG_CFLAGS" != "x"
+ then
+  ac_cv_env_PKG_FFMPEG_CFLAGS_set="set"
+  ac_cv_env_PKG_FFMPEG_CFLAGS_value=${PKG_FFMPEG_CFLAGS}
+ fi
+ if test "x$PKG_FFMPEG_LIBS" != "x"
+ then
+  ac_cv_env_PKG_FFMPEG_LIBS_set="set"
+  ac_cv_env_PKG_FFMPEG_LIBS_value="${PKG_FFMPEG_LIBS}"
+ fi
 fi
 
 GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,[PKG_CFLAGS="-I/usr/include/ffmpeg $PKG_CFLAGS"],,,[movie loader])
@@ -164,8 +174,8 @@ GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,[PKG_CFLAGS="-I/usr/include/f
 dnl checking whether (AVStream)->codec is "AVCodecContext" or "*AVCodecContext"
 if test "x$have_ffmpeg" = "xyes"; then
  AC_MSG_CHECKING([whether (AVStream)->codec is of type \"*AVCodecContext\"])
- cflags_temp="$CFLAGS"
- CFLAGS="$CFLAGS $PKG_CFLAGS"
+ cflags_temp="$CXXFLAGS"
+ CXXFLAGS="$CXXFLAGS $PKG_CFLAGS $PKG_FFMPEG_CFLAGS"
  AC_COMPILE_IFELSE(
  AC_LANG_PROGRAM([[
 #include "avformat.h"
@@ -178,7 +188,7 @@ AC_DEFINE(GEM_AVSTREAM_CODECPOINTER)
 AC_MSG_RESULT(yes),
 AC_MSG_RESULT(no)
 )
- CFLAGS=$cflags_temp
+ CXXFLAGS=$cflags_temp
 fi
 
 

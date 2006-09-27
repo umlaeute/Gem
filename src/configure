@@ -8571,6 +8571,16 @@ if test "x$with_ffmpeg" != "xno" && \
 then
  PKG_FFMPEG_CFLAGS=$(ffmpeg-config --cflags)
  PKG_FFMPEG_LIBS=$(ffmpeg-config --plugin-libs avformat)
+ if test "x$PKG_FFMPEG_CFLAGS" != "x"
+ then
+  ac_cv_env_PKG_FFMPEG_CFLAGS_set="set"
+  ac_cv_env_PKG_FFMPEG_CFLAGS_value=${PKG_FFMPEG_CFLAGS}
+ fi
+ if test "x$PKG_FFMPEG_LIBS" != "x"
+ then
+  ac_cv_env_PKG_FFMPEG_LIBS_set="set"
+  ac_cv_env_PKG_FFMPEG_LIBS_value="${PKG_FFMPEG_LIBS}"
+ fi
 fi
 
 
@@ -8884,8 +8894,8 @@ fi
 if test "x$have_ffmpeg" = "xyes"; then
  { echo "$as_me:$LINENO: checking whether (AVStream)->codec is of type \"*AVCodecContext\"" >&5
 echo $ECHO_N "checking whether (AVStream)->codec is of type \"*AVCodecContext\"... $ECHO_C" >&6; }
- cflags_temp="$CFLAGS"
- CFLAGS="$CFLAGS $PKG_CFLAGS"
+ cflags_temp="$CXXFLAGS"
+ CXXFLAGS="$CXXFLAGS $PKG_CFLAGS $PKG_FFMPEG_CFLAGS"
  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -8957,7 +8967,7 @@ echo "${ECHO_T}no" >&6; }
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
- CFLAGS=$cflags_temp
+ CXXFLAGS=$cflags_temp
 fi
 
 
@@ -13808,7 +13818,7 @@ _ACEOF
 
 fi
 
-if test "x$ac_cv_c_compiler_gnu" = "yes"; then
+if test $ac_cv_c_compiler_gnu = yes; then
     { echo "$as_me:$LINENO: checking whether $CC needs -traditional" >&5
 echo $ECHO_N "checking whether $CC needs -traditional... $ECHO_C" >&6; }
 if test "${ac_cv_prog_gcc_traditional+set}" = set; then
@@ -13833,7 +13843,7 @@ fi
 rm -f conftest*
 
 
-  if test "x$ac_cv_prog_gcc_traditional" = "xno"; then
+  if test $ac_cv_prog_gcc_traditional = no; then
     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -13853,7 +13863,7 @@ rm -f conftest*
 fi
 { echo "$as_me:$LINENO: result: $ac_cv_prog_gcc_traditional" >&5
 echo "${ECHO_T}$ac_cv_prog_gcc_traditional" >&6; }
-  if test "x$ac_cv_prog_gcc_traditional" = "xyes"; then
+  if test $ac_cv_prog_gcc_traditional = yes; then
     CC="$CC -traditional"
   fi
 fi
