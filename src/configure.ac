@@ -99,19 +99,22 @@ fi
 have_gl="no"
 have_glu="no"
 
-AC_CHECK_LIB(GL,glInitNames)
-if test "x$ac_cv_lib_GL_glInitNames" = "xyes"; then
-  have_gl="yes"
-fi
 
-AC_CHECK_LIB(GLU,gluLookAt)
-if test "x$ac_cv_lib_GLU_gluLookAt" = "xyes"; then
-  have_glu="yes"
-fi
+GEM_CHECK_FRAMEWORK(OpenGL,
+        [have_opengl_framework="yes", have_gl="yes"],
+        [have_opengl_framework="no", have_gl="no"])
 
-GEM_CHECK_FRAMEWORK(OpenGL)
-if test "x$gem_check_ldflags_success" = "xyes"; then
-  have_gl="yes"
+# don't need libGL if we have the OpenGL framework
+if test "x$have_opengl_framework" != "xyes"; then
+ AC_CHECK_LIB(GL,glInitNames)
+ if test "x$ac_cv_lib_GL_glInitNames" = "xyes"; then
+   have_gl="yes"
+ fi
+
+ AC_CHECK_LIB(GLU,gluLookAt)
+ if test "x$ac_cv_lib_GLU_gluLookAt" = "xyes"; then
+   have_glu="yes"
+ fi
 fi
 
 GEM_CHECK_FRAMEWORK(AGL)
