@@ -127,6 +127,17 @@ GEM_CHECK_FRAMEWORK(QuickTime,
                         [have_quicktime_framework="yes"], 
                         [have_quicktime_framework="no"])
 
+
+# when using QuickTime framework, we don't want/need libquicktime
+if test "x$have_quicktime_framework" = "xyes"; then
+ if test "x$with_lqt" = "x"; then
+   with_lqt="no"
+ fi
+ if test "x$with_libquicktime" = "x"; then
+   with_libquicktime="no"
+ fi
+fi
+
 #fallback to imagemagick if people are too lazy to type ImageMagick
 if test "x$with_ImageMagick" = "x"; then
  with_ImageMagick="$with_imagemagick"
