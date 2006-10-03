@@ -101,8 +101,8 @@ have_glu="no"
 
 
 GEM_CHECK_FRAMEWORK(OpenGL,
-        [have_opengl_framework="yes", have_gl="yes"],
-        [have_opengl_framework="no", have_gl="no"])
+        [have_opengl_framework="yes" have_gl="yes"],
+        [have_opengl_framework="no" have_gl="no"])
 
 # don't need libGL if we have the OpenGL framework
 if test "x$have_opengl_framework" != "xyes"; then
