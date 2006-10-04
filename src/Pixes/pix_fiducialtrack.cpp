@@ -42,7 +42,8 @@ pix_fiducialtrack :: pix_fiducialtrack(t_symbol*s) :
   m_infoOut = outlet_new(this->x_obj, &s_list);
 
   /* so terminate_treeidmap() knows that this is kind of uninitialized */
-  memset(&treeidmap, 0, sizeof(treeidmap));
+  memset(&fidtrackerx, 0, sizeof(fidtrackerx));
+  memset(&treeidmap,   0, sizeof(treeidmap));
 
   if((NULL!=s) && (&s_!=s) && (NULL!=s->s_name)){
     treeMess(s);
@@ -126,8 +127,7 @@ void pix_fiducialtrack :: treeMess(t_symbol*s)
   terminate_fidtrackerX(&fidtrackerx);
   terminate_treeidmap  (&treeidmap);
   deinit_segmenter();
-
-
+  
   initialize_treeidmap_from_file( &treeidmap, m_treefile );
   initialize_fidtrackerX( &fidtrackerx, &treeidmap, NULL);
   if(treeidmap.max_adjacencies<=0){
