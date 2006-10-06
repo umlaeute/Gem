@@ -223,7 +223,11 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	image_block->xsize	= (*imageDescH)->width;
 	image_block->ysize	= (*imageDescH)->height;
 	//image_block->type	= GL_UNSIGNED_BYTE;
+	#ifdef PPC
         image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
+	#else
+	image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
+	#endif
         //image_block->type	= GL_UNSIGNED_INT_8_8_8_8;
 	if ((*imageDescH)->depth <= 32) {
 		image_block->csize = 4;
@@ -243,13 +247,24 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 #endif
         GWorldPtr	gw = NULL;
 
-	OSErr err = QTNewGWorldFromPtr(&gw, 
+
+#ifdef i386
+	OSErr err = QTNewGWorldFromPtr(&gw,
+                                    k32BGRAPixelFormat,
+                                    &r, NULL, NULL, 0,
+                                   // keepLocal,	
+                                    //useDistantHdwrMem, 
+                                    image_block->data, 
+                                    (long)(image_block->xsize * image_block->csize));
+#else
+	OSErr err = QTNewGWorldFromPtr(&gw,
                                     k32ARGBPixelFormat,
                                     &r, NULL, NULL, 0,
                                    // keepLocal,	
                                     //useDistantHdwrMem, 
                                     image_block->data, 
                                     (long)(image_block->xsize * image_block->csize));
+#endif
 	if (image_block->data == NULL || err) {
 		error("Can't allocate memory for an image.");
 	}
