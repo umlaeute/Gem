@@ -92,7 +92,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     OSErr		err = noErr;
     FSRef		ref;
 	
-	Track		movieTrack;
+	Track		movieTrack, audioTrack;
 	Media		trackMedia;
 	
 	long		sampleCount;
@@ -159,6 +159,10 @@ void pix_filmDarwin :: realOpen(char *filename)
 	sampleCount = GetMediaSampleCount(trackMedia);
 	
 	m_numFrames = sampleCount;
+	
+	audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,movieTrackMediaType);
+	
+	SetTrackEnabled(audioTrack, FALSE);
 	
 	//post("pix_filmDarwin : MediaSampleCount %d",sampleCount);
 
@@ -307,7 +311,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 		#ifdef __VEC__
         m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
 		#else
-		m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8;
+		m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
 		#endif
 
         createBuffer();
@@ -315,8 +319,12 @@ void pix_filmDarwin :: realOpen(char *filename)
         m_rowBytes = m_xsize * 4;
         if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
         err = QTNewGWorldFromPtr(	&m_srcGWorld,
+#ifndef i386
                                   k32ARGBPixelFormat,	// gives noErr
-                                  &m_srcRect,
+#else
+								k32BGRAPixelFormat,
+#endif
+								                        &m_srcRect,
                                   NULL,
                                   NULL,
                                   0,
