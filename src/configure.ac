@@ -32,6 +32,13 @@ AC_SUBST(prefix)
 AC_SUBST(REFERENCEPATH)
 AC_SUBST(NEW_VIDEOFILM)
 AC_SUBST(HAVE_GLSIZEIPTRARB)
+AC_SUBST(CONFIGUREFLAGS)
+
+## store the flags passed to us
+## is there no way to get the flags without quotes?
+#CONFIGUREFLAGS=${ac_configure_args}
+## and is this solution portable? time will show....
+CONFIGUREFLAGS=$(echo ${ac_configure_args} | sed "s/'//g")
 
 
 # Checks for programs.
@@ -581,5 +588,4 @@ Configuration:
     using reg-struct-ret : ${enable_registerstruct}
 
 Now run make ...
-
 ])

@@ -55,7 +55,7 @@ installdocs:
 
 ifeq (,$(findstring clean, $(MAKECMDGOALS)))
 Make.config: Make.config.in configure $(GEM_CONFIGFILE)
-	./configure
+	./configure ${CONFIGUREFLAGS}
 
 configure: configure.ac aclocal.m4
 	autoconf
