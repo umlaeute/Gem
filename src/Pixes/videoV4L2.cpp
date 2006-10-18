@@ -13,32 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-/*
-    this is an attempt at a Linux version of pix_video by Miller Puckette.
-    Anyone conversant in c++ will probably howl at this.  I'm uncertain of
-    several things.
-    
-    First, the #includes I threw in pix_video.h may not all be necessary; I
-    notice that far fewer are needed for the other OSes.
-    
-    Second, shouldn't the os-dependent state variables be "private"?  I
-    followed the lead of the other os-dependent state variables.  Also,
-    I think the indentation is goofy but perhaps there's some reason for it.
 
-    Third, I probably shouldn't be using sprintf to generate filenames; I
-    don't know the "modern" c++ way to do this.
-    
-    Fourth, I don't know why some state variables 
-    show up as "arguments" in the pix_video :: pix_video().
-     
-    This code is written with the "bttv" device in mind, which memory mapes
-    images up to 24 bits per pixel.  So we request the whole 24 and don't
-    settle for anything of lower quality (nor do we offer anything of higher
-    quality; it seems that Gem is limited to 32 bits per pixel including
-    alpha.)  We take all video images to be opaque by setting the alpha
-    channel to 255.
-
-*/
 #include "videoV4L2.h"
 
 /////////////////////////////////////////////////////////
@@ -71,14 +46,14 @@ videoV4L2 :: videoV4L2(int format) : video(format)
 #endif /* HAVE_VIDEO4LINUX2 */
 }
   
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 videoV4L2 :: ~videoV4L2()
 {
 #ifdef HAVE_VIDEO4LINUX2
-    if (m_haveVideo)stopTransfer();
+  if (m_haveVideo)stopTransfer();
 #endif /* HAVE_VIDEO4LINUX2 */
 }
 
@@ -88,13 +63,13 @@ static int xioctl(int                    fd,
                   void *                 arg)
 {
   int r;
-
+     
   do r = ioctl (fd, request, arg);
   while (-1 == r && EINTR == errno);
-
+     
   return r;
 }
-
+ 
 int videoV4L2::init_mmap (void)
 {
   struct v4l2_requestbuffers req;
@@ -200,16 +175,15 @@ void *videoV4L2 :: capturing(void*you)
     tv.tv_sec = 0;
     tv.tv_usec = 100;
 
-    //    r = select (m_tvfd + 1, &fds, NULL, NULL, &tv);
-    /*
-    if (0 == r) {
+#if 1
+    r = select (m_tvfd + 1, &fds, NULL, NULL, &tv);
+      if (0 == r) {
       error("select timeout");
       me->m_continue_thread=false;
-    }
-    */
-
+      }
+#else
     r = select(0,0,0,0,&tv);
-
+#endif
     if (-1 == r) {
       if (EINTR == errno)
         continue;
@@ -277,8 +251,8 @@ pixBlock *videoV4L2 :: getFrame(){
       case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
 
       default: // ? what should we do ?
-	m_image.image.data=data;
-	m_image.image.notowned = true;
+        m_image.image.data=data;
+        m_image.image.notowned = true;
       }
     } else {
       m_image.image.data=data;
@@ -577,28 +551,28 @@ int videoV4L2 :: stopTransfer()
 //
 /////////////////////////////////////////////////////////
 int videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
-    int topmargin, int bottommargin)
+                          int topmargin, int bottommargin)
 {
-    int xtotal = x + leftmargin + rightmargin;
-    int ytotal = y + topmargin + bottommargin;
-    if (xtotal > m_maxwidth) /* 844 */
-      error("x dimensions too great");
-    else if (xtotal < m_minwidth || x < 1 || leftmargin < 0 || rightmargin < 0)
-      error("x dimensions too small");
-    if (ytotal > m_maxheight)
-      error("y dimensions too great");
-    else if (ytotal < m_minheight || y < 1 ||
-	     topmargin < 0 || bottommargin < 0)
-      error("y dimensions too small");
+  int xtotal = x + leftmargin + rightmargin;
+  int ytotal = y + topmargin + bottommargin;
+  if (xtotal > m_maxwidth) /* 844 */
+    error("x dimensions too great");
+  else if (xtotal < m_minwidth || x < 1 || leftmargin < 0 || rightmargin < 0)
+    error("x dimensions too small");
+  if (ytotal > m_maxheight)
+    error("y dimensions too great");
+  else if (ytotal < m_minheight || y < 1 ||
+           topmargin < 0 || bottommargin < 0)
+    error("y dimensions too small");
 
-    m_width=x;
-    m_height=y;
-    m_image.image.xsize = x;
-    m_image.image.ysize = y;
+  m_width=x;
+  m_height=y;
+  m_image.image.xsize = x;
+  m_image.image.ysize = y;
 
-    m_image.image.reallocate();
-    restartTransfer();
-    return 0;
+  m_image.image.reallocate();
+  restartTransfer();
+  return 0;
 }
 
 int videoV4L2 :: setNorm(char*norm)
