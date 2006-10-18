@@ -28,10 +28,40 @@
 
 
 // window creation variables
-static int snglBuf24[] = {GLX_RGBA, GLX_RED_SIZE, 8, GLX_GREEN_SIZE, 8, GLX_BLUE_SIZE, 8, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, None};
-static int dblBuf24[] = {GLX_RGBA, GLX_RED_SIZE, 4, GLX_GREEN_SIZE, 4, GLX_BLUE_SIZE, 4, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, GLX_DOUBLEBUFFER, None};
-static int snglBuf8[] = {GLX_RGBA, GLX_RED_SIZE, 3, GLX_GREEN_SIZE, 3, GLX_BLUE_SIZE, 2, GLX_DEPTH_SIZE, 16, None};
-static int dblBuf8[] = {GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 2, GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+static int snglBuf24[] = {GLX_RGBA, 
+                          GLX_RED_SIZE, 8, 
+                          GLX_GREEN_SIZE, 8, 
+                          GLX_BLUE_SIZE, 8, 
+                          GLX_DEPTH_SIZE, 16, 
+                          GLX_STENCIL_SIZE, 8, 
+                          GLX_ACCUM_RED_SIZE, 8,
+                          GLX_ACCUM_GREEN_SIZE, 8,
+                          GLX_ACCUM_BLUE_SIZE, 8,
+                          None};
+static int dblBuf24[] =  {GLX_RGBA, 
+                          GLX_RED_SIZE, 4, 
+                          GLX_GREEN_SIZE, 4, 
+                          GLX_BLUE_SIZE, 4, 
+                          GLX_DEPTH_SIZE, 16, 
+                          GLX_STENCIL_SIZE, 8, 
+                          GLX_ACCUM_RED_SIZE, 8,
+                          GLX_ACCUM_GREEN_SIZE, 8,
+                          GLX_ACCUM_BLUE_SIZE, 8,
+                          GLX_DOUBLEBUFFER, 
+                          None};
+static int snglBuf8[] =  {GLX_RGBA, 
+                          GLX_RED_SIZE, 3, 
+                          GLX_GREEN_SIZE, 3, 
+                          GLX_BLUE_SIZE, 2, 
+                          GLX_DEPTH_SIZE, 16, 
+                          None};
+static int dblBuf8[] =   {GLX_RGBA, 
+                          GLX_RED_SIZE, 1, 
+                          GLX_GREEN_SIZE, 2, 
+                          GLX_BLUE_SIZE, 1, 
+                          GLX_DEPTH_SIZE, 16, 
+                          GLX_DOUBLEBUFFER, 
+                          None};
 
 
 int ErrorHandler (Display *dpy, XErrorEvent *event)
