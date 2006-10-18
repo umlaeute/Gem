@@ -295,12 +295,12 @@ void pix_videoNEW :: modeMessCallback(void *data, t_symbol* nop, int argc, t_ato
 {
   switch (argc){
   case 1:
-    if (argv->a_type==A_FLOAT)GetMyClass(data)->channelMess(atom_getint(argv));
-    else if (argv->a_type==A_FLOAT)GetMyClass(data)->normMess(atom_getsymbol(argv));
+    if      (A_FLOAT ==argv->a_type)GetMyClass(data)->channelMess(atom_getint(argv));
+    else if (A_SYMBOL==argv->a_type)GetMyClass(data)->normMess(atom_getsymbol(argv));
     else goto mode_error;
     break;
   case 2:
-    if (argv->a_type==A_SYMBOL && (argv+1)->a_type==A_FLOAT){
+    if (A_SYMBOL==argv->a_type && A_FLOAT==(argv+1)->a_type){
       GetMyClass(data)->normMess(atom_getsymbol(argv));
       GetMyClass(data)->channelMess(atom_getint(argv+1));
     } else goto mode_error;  
