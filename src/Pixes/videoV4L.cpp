@@ -121,7 +121,7 @@ void *videoV4L :: capturing(void*you)
      if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
       {
     	if (errno == EAGAIN)
-	  fprintf(stderr, "can't sync (no video source?)\n");
+	  error("can't sync (no video source?)");
     	else 
 	  perror("VIDIOCMCAPTURE1");
 	if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
@@ -332,7 +332,7 @@ int videoV4L :: startTransfer(int format)
       //verbose(1, "now trying standard palette %d", vmmap[0].format);
       if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
 	if (errno == EAGAIN)
-	  fprintf(stderr, "can't sync (no video source?)\n");
+	  error("can't sync (no video source?)");
 	else 
 	  perror("VIDIOCMCAPTURE");
 	goto closit;
@@ -473,7 +473,8 @@ int videoV4L :: setNorm(char*norm)
     stopTransfer();
     m_norm=i_norm;
     startTransfer();
-  }
+  }  
+  m_norm=i_norm;
   return 0;
 }
 
