@@ -172,6 +172,7 @@ void glsl_program :: render(GemState *state)
     //post("GEM: [%s]:  no program linked", m_objectname->s_name);
   }
   // send program ID to outlet
+  /* JMZ: shouldn't this be only done, when we have a linked program? */
   outlet_float(m_outProgramID, (t_float)(int)m_program);
 #endif
 }
@@ -183,7 +184,8 @@ void glsl_program :: render(GemState *state)
 void glsl_program :: postrender(GemState *state)
 {
 #ifdef GL_ARB_shader_objects
-  glUseProgramObjectARB(0);
+  if(m_linked)
+    glUseProgramObjectARB(0);
 #endif
 }
 /////////////////////////////////////////////////////////
