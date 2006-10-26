@@ -361,7 +361,7 @@ void BGRA_to_YCbCr_altivec(unsigned char *bgradata, size_t BGRA_size,
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
   vector signed short t0, t1, t2, t3, t4, t5;
   vector signed short u1, u2, uAvg, v1, v2, vAvg, out1, out2, out3, out4, uv1, uv2;
-  int i;
+  unsigned int i;
   
   vector unsigned char	*BGRA_ptr = (vector unsigned char*) bgradata;
   vector unsigned char	*UYVY_ptr = (vector unsigned char*) pixels;
@@ -493,6 +493,8 @@ void BGRA_to_YCbCr_altivec(unsigned char *bgradata, size_t BGRA_size,
 void YV12_to_YUV422_altivec(short*Y, short*U, short*V, 
 							unsigned char *data, int xsize, int ysize)
 {
+  // from geowar@apple.com, 3/15/2005
+  // #1. Don't use the pointers. Use vec_ld with an index that you increment (by 16) instead.
   vector unsigned char *pixels1=(vector unsigned char *)data;
   vector unsigned char *pixels2=(vector unsigned char *)(data+(xsize*2));
   vector unsigned short *py1 = (vector unsigned short *)Y;
@@ -584,8 +586,8 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
   vector signed short *pCb = (vector signed short *)pV;
   vector signed short uvSub = (vector signed short)( 128, 128, 128, 128,
 													 128, 128, 128, 128 );
-  vector signed short yShift = (vector signed short)( 7, 7, 7, 7, 7, 7, 7, 7 );
-  vector signed short uvShift = (vector signed short)( 8, 8, 8, 8, 8, 8, 8, 8 );
+  vector unsigned short yShift = (vector unsigned short)( 7, 7, 7, 7, 7, 7, 7, 7 );
+  vector unsigned short uvShift = (vector unsigned short)( 8, 8, 8, 8, 8, 8, 8, 8 );
   
   vector signed short tempY1, tempY2, tempY3, tempY4,
 		tempUV1, tempUV2, tempUV3, tempUV4, tempUV5, tempUV6;
@@ -664,7 +666,7 @@ void YUV422_to_BGRA_altivec( unsigned char *yuvdata,
   vector unsigned char zero;
   vector signed short t0, t1, t2, tempGB1, tempGB2, tempRA1, tempRA2;
   vector signed short vU_G, vV_G, vU_B, vU_R, y0, hiImage, loImage;
-  vector signed int   uv_rEven, uv_rOdd, uv_rHi, uv_rLo,
+  vector unsigned int   uv_rEven, uv_rOdd, uv_rHi, uv_rLo,
 					  uv_gUEven, uv_gVEven, uv_gUOdd, uv_gVOdd, uv_gHi, uv_gLo,
 					  uv_bEven, uv_bOdd, tempUhi, tempUlo, tempVhi, tempVlo,
 					  yEven, yOdd;
@@ -714,7 +716,7 @@ void YUV422_to_BGRA_altivec( unsigned char *yuvdata,
   v16    = vec_splat( vConst, 3 ); //  16
   v128   = vec_splat( vConst, 4 ); // 128
 
-  for ( int i = 0; i < (pixelnum/sizeof(vector unsigned char)); i++ ) {
+  for ( unsigned int i = 0; i < (pixelnum/sizeof(vector unsigned char)); i++ ) {
 
     // Load UYUV input vector
 	vector unsigned char *vec1 = UYVY_ptr++;
