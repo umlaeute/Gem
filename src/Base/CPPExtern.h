@@ -41,7 +41,7 @@ class GEM_EXTERN GemException
  public:
   GemException() throw();
   GemException(char*error) throw();
-  ~GemException() throw();
+  virtual ~GemException() throw();
   
   virtual const char *what() const throw();
   virtual void report() const throw();
