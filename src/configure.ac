@@ -54,7 +54,9 @@ dnl disabled SSE2 by default, since there are still few chips around that fully 
 dnl unlike MMX or SSE
 GEM_ARG_DISABLE([sse2],    [SSE2-support])
 GEM_ARG_ENABLE([altivec], [AltiVec-support])
-GEM_ARG_ENABLE([pascalstrings], [Pascal strings (containing '\p')])
+GEM_ARG_DISABLE([powerpc], [PowerPC specific optimizations])
+
+GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
 
 GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support], [force])
 GEM_ARG_ENABLE([NV], [openGL-NV-extension support], [force])
@@ -440,7 +442,9 @@ GEM_CHECK_CXXFLAGS([-O3])
 dnl this is only useful for debugging and might break things on older compilers
 dnl GEM_CHECK_CXXFLAGS([-fno-builtin])
 
-GEM_CHECK_CXXFLAGS([-falign-loops=16 -funroll-loops])
+GEM_CHECK_CXXFLAGS([-falign-loops=32 -falign-functions=32 -falign-jumps=32 -funroll-loops],,
+        GEM_CHECK_CXXFLAGS([-falign-loops=16 -funroll-loops])
+        )
 GEM_CHECK_CXXFLAGS([-ffast-math])
 
 
@@ -484,6 +488,9 @@ if test "x$enable_sse2" = "xyes"; then
 fi
 if test "x$enable_altivec" != "xno"; then
   GEM_CHECK_CXXFLAGS([-faltivec])
+fi
+if test "x$enable_powerpc" = "xyes"; then
+  GEM_CHECK_CXXFLAGS([-mpowerpc-gfxopt])
 fi
 
 # on os-x we might come across "pascal strings" containing "\p"...
