@@ -54,6 +54,7 @@ dnl disabled SSE2 by default, since there are still few chips around that fully 
 dnl unlike MMX or SSE
 GEM_ARG_DISABLE([sse2],    [SSE2-support])
 GEM_ARG_ENABLE([altivec], [AltiVec-support])
+GEM_ARG_ENABLE([pascal strings], [Pascal strings (containing '\p')])
 
 GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support], [force])
 GEM_ARG_ENABLE([NV], [openGL-NV-extension support], [force])
@@ -484,6 +485,12 @@ fi
 if test "x$enable_altivec" != "xno"; then
   GEM_CHECK_CXXFLAGS([-faltivec])
 fi
+
+# on os-x we might come across "pascal strings" containing "\p"...
+if test "x$enable_pascalstrings" != "xno"; then
+  GEM_CHECK_CXXFLAGS([-fpascal-strings])
+fi
+
 
 # damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
