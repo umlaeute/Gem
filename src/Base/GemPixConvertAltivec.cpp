@@ -668,8 +668,9 @@ void YUV422_to_BGRA_altivec( unsigned char *yuvdata,
   vector signed short vU_G, vV_G, vU_B, vU_R, y0, hiImage, loImage;
   vector unsigned int   uv_rEven, uv_rOdd, uv_rHi, uv_rLo,
 					  uv_gUEven, uv_gVEven, uv_gUOdd, uv_gVOdd, uv_gHi, uv_gLo,
-					  uv_bEven, uv_bOdd, tempUhi, tempUlo, tempVhi, tempVlo,
-					  yEven, yOdd;
+					  uv_bEven, uv_bOdd;
+  vector signed int	tempUhi, tempUlo, tempVhi, tempVlo;
+  vector signed int yEven, yOdd;
 
   vector unsigned int t0Even, t0Odd, t1Even, t1Odd, t2Even, t2Odd;
   
@@ -736,7 +737,13 @@ void YUV422_to_BGRA_altivec( unsigned char *yuvdata,
 	// expand to UUUU UUUU and VVVV VVVV
 	tempU = vec_perm(tempUV, tempUV, vPermU);
 	tempV = vec_perm(tempUV, tempUV, vPermV);
+	//below:
+	// 
+	//error: cannot convert `vector int' to `vector unsigned int' in assignment
 	tempUhi = vec_mule( tempU, one );
+	// unsigned int = vec_mule( signed short, signed short )
+	// should be
+	// signed int = vec_mule( signed short, signed short )
 	tempUlo = vec_mulo( tempU, one );
 	tempVhi = vec_mule( tempV, one );
 	tempVlo = vec_mulo( tempV, one );
