@@ -666,8 +666,7 @@ void YUV422_to_BGRA_altivec( unsigned char *yuvdata,
   vector unsigned char zero;
   vector signed short t0, t1, t2, tempGB1, tempGB2, tempRA1, tempRA2;
   vector signed short vU_G, vV_G, vU_B, vU_R, y0, hiImage, loImage;
-  /* JMZ: changed the following from "vector unsigned int" */
-  vector signed int   uv_rEven, uv_rOdd, uv_rHi, uv_rLo,
+  vector unsigned int   uv_rEven, uv_rOdd, uv_rHi, uv_rLo,
 					  uv_gUEven, uv_gVEven, uv_gUOdd, uv_gVOdd, uv_gHi, uv_gLo,
 					  uv_bEven, uv_bOdd, tempUhi, tempUlo, tempVhi, tempVlo,
 					  yEven, yOdd;
