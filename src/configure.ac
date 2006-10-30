@@ -46,8 +46,11 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
-GEM_CHECK_CXXFLAGS([-fPIC])
+GEM_ARG_ENABLE([PIC],     [PositionIndependentCode (potentially slower)])
 
+if test "x$enable_PIC" != "xno"; then
+ GEM_CHECK_CXXFLAGS([-fPIC])
+fi
 
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
