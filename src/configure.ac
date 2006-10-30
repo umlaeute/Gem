@@ -437,7 +437,11 @@ if test "x$enable_registerstruct" = "xyes"; then
 fi
 fi
 
-GEM_CHECK_CXXFLAGS([-O3])
+if test "x$KERN" = "xDarwin"; then
+ GEM_CHECK_CXXFLAGS([-Os],,GEM_CHECK_CXXFLAGS([-O3]))
+else
+ GEM_CHECK_CXXFLAGS([-O3])
+fi
 
 dnl this is only useful for debugging and might break things on older compilers
 dnl GEM_CHECK_CXXFLAGS([-fno-builtin])
