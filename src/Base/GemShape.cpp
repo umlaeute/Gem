@@ -54,10 +54,21 @@ GemShape :: ~GemShape()
 /////////////////////////////////////////////////////////
 void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, float ty,int curCoord)
 {
-    if (state->numTexCoords) 
+	int i;
+	if (state->multiTexUnits)
+		if (state->numTexCoords)
+			for( i=0; i<state->multiTexUnits; i++)
+				glMultiTexCoord2fARB(GL_TEXTURE0+i, state->texCoordX(curCoord), state->texCoordY(curCoord));
+		else
+			for( i=0; i<state->multiTexUnits; i++)
+				glMultiTexCoord2fARB(GL_TEXTURE0+i, tx, ty);
+	else // no multitexturing!
+	
+	if (state->numTexCoords) 
       glTexCoord2f(state->texCoordX(curCoord), state->texCoordY(curCoord));
     else glTexCoord2f(tx, ty);
-    glVertex3f( x,  y, z);
+	
+    glVertex3f( x, y, z );
 }
 
 /////////////////////////////////////////////////////////

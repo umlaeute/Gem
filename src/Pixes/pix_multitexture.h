@@ -75,8 +75,8 @@ class GEM_EXTERN pix_multitexture : public GemBase
 	float			m_xRatio;
 	float			m_yRatio;
 	GLboolean		upsidedown;
-
-	
+	int				m_texSizeX;
+	int				m_texSizeY;
  	
 	//////////
 	// this is what we get from upstream
@@ -88,7 +88,8 @@ class GEM_EXTERN pix_multitexture : public GemBase
 
 	//////////
 	// static member functions
-	static void 	texUnitMessCallback(void *data, float n, float texture);
+	static void 	texUnitMessCallback(void *data, float n, float texID);
+	static void		dimenMessCallback(void *data, float sizeX, float sizeY);
 	static void		modeCallback(void *data, t_floatarg quality);
 	static void		parmCallback(void *data, t_symbol*,int , t_atom*);
 };

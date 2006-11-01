@@ -89,6 +89,11 @@ class GEM_EXTERN GemState
   //////////
   // The number of TexCoords
   int 	    	    numTexCoords;
+  
+  //////////
+  // The number of multiTexUnits
+  //   default = 0, max = 7
+  int 	    	    multiTexUnits;
 
   //////////
   // Milliseconds since last frame

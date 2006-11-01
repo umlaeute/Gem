@@ -37,7 +37,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT)
 pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   : m_inlet(NULL),
     m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(GL_TEXTURE_2D), m_mode(0),
-    m_xRatio(1.f), m_yRatio(1.f), upsidedown(false),
+    m_xRatio(1.f), m_yRatio(1.f), upsidedown(false), m_texSizeX(0), m_texSizeY(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0)
 {
 #if !defined(GL_VERSION_1_3) && !defined(GL_ARB_multitexture)
@@ -47,9 +47,15 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
     throw (GemException("[pix_multitexture]: Please specify more than 0 texture units"));
   }
 
+#if defined(GL_TEXTURE_RECTANGLE_EXT) 
+  //|| defined(GL_NV_TEXTURE_RECTANGLE)
+  m_mode = 1;  //default to the fastest mode for systems that support it
+  m_textureType = GL_TEXTURE_RECTANGLE_EXT;
+#endif
+  
   m_inlet=new t_inlet*[m_reqTexUnits]; 
   char tempVt[5];
-  for(unsigned int i=0;i<m_reqTexUnits; i++){
+  for(int i=0;i<m_reqTexUnits; i++){
     snprintf(tempVt, 5, "#%d\0", i);
     m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym(tempVt));
   }
@@ -62,7 +68,7 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
 pix_multitexture :: ~pix_multitexture()
 { 
   if(m_inlet){
-    for(unsigned int i=0;i<m_reqTexUnits; i++){
+    for(int i=0;i<m_reqTexUnits; i++){
       inlet_free(m_inlet[i]);
     }
     delete[]m_inlet;
@@ -103,11 +109,28 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
 /////////////////////////////////////////////////////////
 void pix_multitexture :: render(GemState *state)
 {
+	int x_2, y_2;
+	
 	m_oldTexCoords=state->texCoords;
 	m_oldNumCoords=state->numTexCoords;
 	m_oldTexture  =state->texture;
 	
-	setTexCoords(m_coords, m_xRatio, m_yRatio, upsidedown);
+	state->multiTexUnits = m_reqTexUnits;
+	if (m_textureType == GL_TEXTURE_2D)
+	{
+//	  x_2 = powerOfTwo(m_texSizeX);
+//	  y_2 = powerOfTwo(m_texSizeY);
+//	  normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
+//	  setTexCoords(m_coords, 1.f, 1.f, true);
+	  m_xRatio = 1.0;
+	  m_yRatio = 1.0;
+	  state->texture = 1;
+	}else{
+	  m_xRatio = m_texSizeX;
+	  m_yRatio = m_texSizeY;
+	  state->texture = 2;
+	}
+	setTexCoords(m_coords, m_xRatio, m_yRatio, true);
 	state->texCoords = m_coords;
 	state->numTexCoords = 4;
 	
@@ -125,10 +148,6 @@ void pix_multitexture :: render(GemState *state)
 		glTexParameteri( m_textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 		glTexParameteri( m_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	}
-//	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-//	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-//	glEnable(GL_TEXTURE_GEN_S);
-//	glEnable(GL_TEXTURE_GEN_T);
 }
 
 /////////////////////////////////////////////////////////
@@ -157,8 +176,10 @@ void pix_multitexture :: postrender(GemState *state)
   glActiveTextureARB( GL_TEXTURE0_ARB );
 #endif
 
-//  glDisable(GL_TEXTURE_GEN_S);
-//  glDisable(GL_TEXTURE_GEN_T);
+/*  test code to auto-generate texture coords:  doesn't work :-(
+  glDisable(GL_TEXTURE_GEN_S);
+  glDisable(GL_TEXTURE_GEN_T);
+*/
 }
 
 /////////////////////////////////////////////////////////
@@ -190,15 +211,24 @@ void pix_multitexture :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&pix_multitexture::texUnitMessCallback,
                   gensym("texUnit"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_multitexture::dimenMessCallback,
+                  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_multitexture::modeCallback,
 		gensym("mode"), A_FLOAT, A_NULL);
   // generic inlets for texUnit
   class_addanything(classPtr, (t_method)&pix_multitexture::parmCallback);
 }
-void pix_multitexture :: texUnitMessCallback(void *data, float n, float texture)
+void pix_multitexture :: texUnitMessCallback(void *data, float n, float texID)
 {
-  GetMyClass(data)->m_texID[(int)n] = (GLint)texture;
+  GetMyClass(data)->m_texID[(int)n] = (GLint)texID;
 }
+
+void pix_multitexture :: dimenMessCallback(void *data, float sizeX, float sizeY)
+{
+  GetMyClass(data)->m_texSizeX = (int)sizeX;
+  GetMyClass(data)->m_texSizeY = (int)sizeY;
+}
+
 void pix_multitexture :: modeCallback(void *data, t_floatarg textype)
 {
   GetMyClass(data)->m_mode=((int)textype);
