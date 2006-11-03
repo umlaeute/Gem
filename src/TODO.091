@@ -32,8 +32,8 @@ Object specific bugs
 + [separator] memleak (fixed, needs TESTing)
 + [separator]: yields a stack-overflow error when more [separators] are chained (due to limited stack-size of color-matrix,... on some implementations); fix: keep track of the used stacks and only push/pop when possible (hopefully FIXED)
 + there is some openGL-error (invalid enum, iirc) when using [vertex_program]; this seems to happen only if gemwindow was open first, then closed and then the [vertex_program] patch gets loaded
-: pix_freeframe not supported on x86_64 architectures (needs discussion on the freeframe list)
-:+ pix_video does not work with certain devices (like philips webcam)
+- pix_freeframe not supported on x86_64 architectures (needs discussion on the freeframe list: people there are a bit reluctant to change the specs (like enforcing 32bit pointers)
++ pix_video does not work with certain devices (like philips webcam) (seems to be FIXED; check back with normal capture cards; v4l-2 seems to work too...)
 
 
 OS specific bugs
@@ -53,4 +53,4 @@ osx:
 
 w32:
 :- [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
-:+ objects are missing in the vs.net project: gemframebuffer gemtablet GemSplash pqtorusknots glsl_fragment glsl_program glsl_vertex part_sink pix_fiducialtrack pix_hit pix_multitexture pix_sig2pix~ pix_threshold_bernsen pix_vpaint  ([gemtablet] should probably be removed from Gem)
++ objects are missing in the vs.net project: gemframebuffer GemSplash part_sink pix_fiducialtrack pix_hit (seems tobe FIXED in recent cc builds; check again)

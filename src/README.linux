@@ -6,6 +6,9 @@ VERY SHORT INSTRUCTION:
 
 #> autoconf && ./configure && make
 
+if you don't need any special flags for configure, you could even try just:
+#> make
+
 =============================================
 
 DETAILED INSTRUCTIONS:
@@ -105,7 +108,6 @@ the location of the pd header file "m_pd.h".
 ------------------------------
 CONFIGURE
 ~~~~~~~~~
-!! you really should remove any existing config.cache from the src/Gnu directory when running ./configure for the "first" time !!
 you can give various options to configure, try "./configure --help" to see them.
 
 configure tries to find which (needed) packages are installed on your system (in default places)
@@ -119,7 +121,7 @@ you can change turn on/off certain features of Gem via the "--enable"-options:
 
 configure tries using pkg-config for configuration of packages that support it: you can help this process by defining environment variables
 
-
+example: TODO...
 
 
 -------------------------------
@@ -179,6 +181,7 @@ KNOWN ISSUES
 	on some architectures (namely x86_64) Gem MUST link against 
 	the PIC-versions of certain libraries (ffmpeg, ftgl);
 	on other architectures i think it doesn't hurt to do so either
+	(to be precise: it might hurt, since PIC-code is usually a bit slower)
 
 	unfortunately Gem's configure uses "pkg-config" which 
 	does not provide a mechanism (yet?) for getting the 
@@ -191,9 +194,16 @@ KNOWN ISSUES
 	%>export PKG_FTGL_LIBS=`pkg-config --libs ftgl | sed 's/-lftgl/-lftgl_pic/g'`
 	%>./configure
 
+	btw, usually this is already handled by configure...
+
+make returns an error (but does not tell you, what went wrong):
+	this usually only occurs when there are still traces of old
+	builds lying around; try the followin:
+	1. try "make distclean" before "make"
+	2. delete all "*/*.d" files (in ...Gem/src)
+	3. delete all "*/*.o" files (in ...Gem/src)
 
 
-
-Report any failures to <zmoelnig@iem.at>
+Report any failures to <zmoelnig [@] iem.at>
 
 IOhannes

@@ -1,4 +1,4 @@
-helpfiles for glsl_*
+helpfiles for glsl_* -- FIXED
 
 There is a very serious long term stability bug in the OSX SequenceGrabber code
 
