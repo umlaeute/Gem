@@ -42,6 +42,12 @@
 
 #include "videoV4L.h"
 
+#if 1
+# define debug ::post
+#else
+# define debug
+#endif
+
 /////////////////////////////////////////////////////////
 //
 // videoV4L
@@ -74,7 +80,7 @@ videoV4L :: videoV4L(int format) : video(format)
   m_norm=VIDEO_MODE_AUTO; 
   m_devicenum=V4L_DEVICENO;
 
-  post("video4linux");
+  ::post("video4linux");
 #endif /* HAVE_VIDEO4LINUX */
 }
 
@@ -98,8 +104,9 @@ void *videoV4L :: capturing(void*you)
 {
   videoV4L *me=(videoV4L *)you;
   me->m_capturing=true;
+  debug("starting capture thread");
   while(me->m_continue_thread){
-    //post("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
+    //debug("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
 
     //  me->frame = !me->frame;
     me->frame++;
@@ -136,12 +143,12 @@ void *videoV4L :: capturing(void*you)
     me->m_frame_ready = 1;
     me->last_frame=me->frame;
   }
+  debug("exiting thread");
   me->m_capturing=false;
   return NULL;
 }
 pixBlock *videoV4L :: getFrame(){
   if(!m_haveVideo)return NULL;
-  //  post("getting frame %d", m_frame_ready);
   m_image.newfilm=0;
   if (!m_frame_ready) m_image.newimage = 0;
   else {
@@ -176,6 +183,7 @@ pixBlock *videoV4L :: getFrame(){
 /////////////////////////////////////////////////////////
 int videoV4L :: startTransfer(int format)
 {
+  if(m_capturing)stopTransfer(); // just in case we are already running!
   m_rendering=true;
   if (format>1)m_reqFormat=format;
   //  verbose(1, "starting transfer");
@@ -371,12 +379,12 @@ int videoV4L :: startTransfer(int format)
     m_frame_ready = 0;
     pthread_create(&m_thread_id, 0, capturing, this);
 
-    post("GEM: pix_video: Opened video connection %X", tvfd);
+    verbose(1, "opened video connection %X", tvfd);
 
     return(1);
 
 closit:
-    post("closing video4linux %d", tvfd);
+    verbose(1, "closing video4linux %d", tvfd);
     if (tvfd >= 0)
     {
     	close(tvfd);
@@ -394,7 +402,6 @@ closit:
 int videoV4L :: stopTransfer()
 {
   if(m_haveVideo){ /* are we running ? */
-
     /* close the v4l device and dealloc buffer */
     /* terminate thread if there is one */
     if(m_continue_thread){
@@ -402,7 +409,7 @@ int videoV4L :: stopTransfer()
       m_continue_thread = 0;
       pthread_join (m_thread_id, &dummy);
     }
-    while(m_capturing){post("waiting for thread");}
+    while(m_capturing){verbose(1, "waiting for thread");}
     munmap(videobuf, vmbuf.size);
   }
   if (tvfd) close(tvfd);
@@ -469,7 +476,7 @@ int videoV4L :: setNorm(char*norm)
   }
   //  if (i_norm==m_norm)return 0;
   if(m_capturing){
-    post("restarting transfer");
+    debug("restarting transfer");
     stopTransfer();
     m_norm=i_norm;
     startTransfer();
@@ -487,7 +494,7 @@ int videoV4L :: setChannel(int c, t_float f){
       error("Error setting frequency -- no tuner");
       return -1;
     }
-    post("setting freq: %d", freq);
+    verbose(1, "setting freq: %d", freq);
     if (ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
       error("Error setting frequency");
       return -1;

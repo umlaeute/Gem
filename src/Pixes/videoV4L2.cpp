@@ -92,14 +92,14 @@ int videoV4L2::init_mmap (void)
   }
 
   if (req.count < V4L2_NBUF) {
-    error("Insufficient buffer memory on %s", devname);
-    return(0);
+    //error("Insufficient buffer memory on %s: %d", devname, req.count);
+    //return(0);
   }
 
   m_buffers = (t_v4l2_buffer*)calloc (req.count, sizeof (*m_buffers));
 
   if (!m_buffers) {
-    error("Out of memory");
+    error("out of memory");
     return(0);
   }
 
@@ -152,6 +152,7 @@ void *videoV4L2 :: capturing(void*you)
   struct timeval tv;
   int r;
 
+  int nbuf=me->m_nbuffers;
   int m_tvfd=me->m_tvfd;
   me->m_capturing=true;
 
@@ -168,14 +169,14 @@ void *videoV4L2 :: capturing(void*you)
     depost("grab");
 
     me->m_frame++;
-    me->m_frame%=V4L2_NBUF;
+    me->m_frame%=nbuf;
 
     
     /* Timeout. */
     tv.tv_sec = 0;
     tv.tv_usec = 100;
 
-#if 1
+#if 0
     r = select (m_tvfd + 1, &fds, NULL, NULL, &tv);
       if (0 == r) {
       error("select timeout");
@@ -207,7 +208,7 @@ void *videoV4L2 :: capturing(void*you)
       }
     }
 
-    error("grabbed %d", buf.index);
+    //post("grabbed %d", buf.index);
 
     me->m_currentBuffer=buffers[buf.index].start;
     //process_image (m_buffers[buf.index].start);
@@ -229,6 +230,7 @@ void *videoV4L2 :: capturing(void*you)
     }
   }
   me->m_capturing=false;
+  post("thread finished");
   return NULL;
 }
 
@@ -249,6 +251,8 @@ pixBlock *videoV4L2 :: getFrame(){
       case V4L2_PIX_FMT_RGB32: m_image.image.fromRGBA  (data); break;
       case V4L2_PIX_FMT_GREY : m_image.image.fromGray  (data); break;
       case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
+      case V4L2_PIX_FMT_YUV420:m_image.image.fromYU12(data); break;
+
 
       default: // ? what should we do ?
         m_image.image.data=data;
@@ -286,6 +290,9 @@ void videoV4L2 :: restartTransfer()
 /////////////////////////////////////////////////////////
 int videoV4L2 :: startTransfer(int format)
 {
+  post("startTransfer: %d", m_capturing);
+  if(m_capturing)stopTransfer(); // just in case we are already running!
+  post("start transfer");
   m_rendering=true;
   if (format>1)m_reqFormat=format;
   //  verbose(1, "starting transfer");
@@ -392,8 +399,6 @@ int videoV4L2 :: startTransfer(int format)
     perror("VIDIOC_S_INPUT"); /* exit */
   }
 
-
-
   memset (&(fmt), 0, sizeof (fmt));
 
   fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -417,7 +422,11 @@ int videoV4L2 :: startTransfer(int format)
   }
   fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
   
-  startpost("wanted %d \tgot (%d)", m_reqFormat, fmt.fmt.pix.pixelformat);
+  post("wanted %d, got '%c%c%c%c' ", m_reqFormat, 
+	    (char)(fmt.fmt.pix.pixelformat),
+	    (char)(fmt.fmt.pix.pixelformat>>8),
+	    (char)(fmt.fmt.pix.pixelformat>>16),
+	    (char)(fmt.fmt.pix.pixelformat>>24));
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
     perror ("VIDIOC_S_FMT");//exit
@@ -435,10 +444,23 @@ int videoV4L2 :: startTransfer(int format)
   case V4L2_PIX_FMT_RGB32: post("RGBA");break;
   case V4L2_PIX_FMT_UYVY: post("YUV ");break;
   case V4L2_PIX_FMT_GREY: post("gray");break;
-  default: post("unknown %d",fmt.fmt.pix.pixelformat );
+  case V4L2_PIX_FMT_YUV420: post("YUV 4:2:0");break;
+  default: error("unknown format '%c%c%c%c'",
+		(char)(fmt.fmt.pix.pixelformat),
+		(char)(fmt.fmt.pix.pixelformat>>8),
+		(char)(fmt.fmt.pix.pixelformat>>16),
+		(char)(fmt.fmt.pix.pixelformat>>24));
+
   }
 
   /* Note VIDIOC_S_FMT may change width and height. */
+  if(m_width!=fmt.fmt.pix.width||m_height!=fmt.fmt.pix.height){
+    post("changed size from %dx%d to %dx%d", 
+	 m_width, m_height,
+	 fmt.fmt.pix.width,fmt.fmt.pix.height);
+  }
+  m_width =fmt.fmt.pix.width;
+  m_height=fmt.fmt.pix.height;
 
   /* Buggy driver paranoia. */
   min = fmt.fmt.pix.width * 2;
@@ -458,7 +480,6 @@ int videoV4L2 :: startTransfer(int format)
     buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory      = V4L2_MEMORY_MMAP;
     buf.index       = i;
-    post("i=%d", i);
     
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
       perror ("VIDIOC_QBUF");//exit
@@ -478,12 +499,18 @@ int videoV4L2 :: startTransfer(int format)
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
   
-  post("format: %d -> %d", m_gotFormat, m_reqFormat);
+  post("format: %c%c%c%c -> %d", 
+       (char)(m_gotFormat),
+       (char)(m_gotFormat>>8),
+       (char)(m_gotFormat>>16),
+       (char)(m_gotFormat>>24),
+       m_reqFormat);
   switch(m_gotFormat){
   case V4L2_PIX_FMT_GREY  : m_colorConvert=(m_reqFormat!=GL_LUMINANCE); break;
   case V4L2_PIX_FMT_RGB24 : m_colorConvert=(m_reqFormat!=GL_RGB); break;
   case V4L2_PIX_FMT_RGB32 : m_colorConvert=(m_reqFormat!=GL_RGBA); break;//RGB32!=RGBA; is it ARGB or ABGR?
   case V4L2_PIX_FMT_UYVY  : m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM); break;
+  case V4L2_PIX_FMT_YUV420: m_colorConvert=1; break;
   default: m_colorConvert=true;
   }
   
@@ -495,6 +522,12 @@ int videoV4L2 :: startTransfer(int format)
   m_continue_thread = 1;
   m_frame_ready = 0;
   pthread_create(&m_thread_id, 0, capturing, this);
+  while(!m_capturing){
+    struct timeval sleep;
+    sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+    select(0,0,0,0,&sleep);
+    post("waiting for thread to come up");
+  }
   
   post("GEM: pix_video: Opened video connection 0x%X", m_tvfd);
   
@@ -513,6 +546,7 @@ int videoV4L2 :: startTransfer(int format)
 /////////////////////////////////////////////////////////
 int videoV4L2 :: stopTransfer()
 {
+  post("stoptransfer");
   int i=0;
   /* close the v4l2 device and dealloc buffer */
   /* terminate thread if there is one */
@@ -521,7 +555,12 @@ int videoV4L2 :: stopTransfer()
     m_continue_thread = 0;
     pthread_join (m_thread_id, &dummy);
   }
-  while(m_capturing){post("waiting for thread");}
+  while(m_capturing){
+    struct timeval sleep;
+    sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+    select(0,0,0,0,&sleep);
+    post("waiting for thread to finish");
+  }
 
   // unmap the mmap
   post("unmapping %d buffers: %x", m_nbuffers, m_buffers);

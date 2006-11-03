@@ -6,11 +6,9 @@ Load an video into a pix block
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+Copyright (c) 2001-2006 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-Linux version by Miller Puckette. msp@ucsd.edu
 	
 -----------------------------------------------------------------*/
 
@@ -34,10 +32,15 @@ Linux version by Miller Puckette. msp@ucsd.edu
 # include <asm/types.h>
 # include <linux/videodev2.h>
 # include <sys/mman.h>
-//#ifdef HAVE_PTHREADS
+#ifdef HAVE_PTHREADS
+/* the bad thing is, that we currently don't have any alternative to using PTHREADS 
+ * LATER: make threading optional
+ *        (or at least disabled capturing when no pthreads are available)
+ */
 # include <pthread.h>
-//#endif
+#endif
 # define V4L2_DEVICENO 0
+/* request 4 buffers (but if less are available, it's fine too... */
 # define V4L2_NBUF 4
 
 
