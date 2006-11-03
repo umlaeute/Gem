@@ -1138,7 +1138,7 @@ void pix_videoDarwin ::dialogCallback(void *data)
 void pix_videoDarwin :: csMessCallback(void *data, t_symbol*s)
 {
    // GetMyClass(data)->csMess(getPixFormat(s->s_name));
-    post("pix_video: Am I even being called??????????????");
+    GetMyClass(data)->post("Am I even being called??????????????");
     int format=0;
     char c =*s->s_name;
     switch (c){
@@ -1146,11 +1146,11 @@ void pix_videoDarwin :: csMessCallback(void *data, t_symbol*s)
         case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
         case 'r': case 'R': format=GL_RGBA; break;
         default:
-            post("pix_video: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+            GetMyClass(data)->post("colorspace must be 'RGBA', 'YUV' or 'Gray'");
     }
 
     if(format==GL_LUMINANCE){
-        post("pix_video: 'Gray' not yet supported...using YUV");
+        GetMyClass(data)->post("'Gray' not yet supported...using YUV");
         format=GL_YCBCR_422_GEM;
     }
     if(format)GetMyClass(data)->csMess(format);
@@ -1166,11 +1166,11 @@ void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
   case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
   case 'r': case 'R': format=GL_RGBA; break;
   default:
-    post("pix_video: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+    GetMyClass(data)->post("colorspace must be 'RGBA', 'YUV' or 'Gray'");
   }
 
   if(format==GL_LUMINANCE){
-    post("pix_video: 'Gray' not yet supported...using YUV");
+    GetMyClass(data)->post("'Gray' not yet supported...using YUV");
     format=GL_YCBCR_422_GEM;
   }
   if(format)
