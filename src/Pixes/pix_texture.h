@@ -111,6 +111,10 @@ class GEM_EXTERN pix_texture : public GemBase
                 // if this is present and no image is upstream,
                 // we use it as our texture
 		GLuint	    m_extTextureObj;
+		GLfloat     m_extWidth, m_extHeight;
+		GLuint      m_extType;
+		GLboolean   m_extUpsidedown;
+		
 
                 ////////
                 // the texture object we are creating and destroying
@@ -138,6 +142,8 @@ class GEM_EXTERN pix_texture : public GemBase
 
 		int             m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 		bool            m_normalized;  // whether the image is power of 2
+
+		GLfloat         m_xRatio, m_yRatio; // x- and y-size if texture
 
 		int		m_mode; //rectangle or power of 2
 		
@@ -167,7 +173,7 @@ class GEM_EXTERN pix_texture : public GemBase
 	static void 	clientStorageCallback(void *data, t_floatarg n);
 	static void 	yuvCallback(void *data, t_floatarg n);
     static void		texunitCallback(void *data, t_floatarg unit);
-	static void 	extTextureCallback(void *data, t_floatarg n);
+    static void 	extTextureCallback(void *data, t_symbol*,int,t_atom*);
 };
 
 #endif	// for header file

@@ -47,7 +47,10 @@ pix_texture :: pix_texture()
   : m_textureOnOff(1), 
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
     m_didTexture(false), m_rebuildList(0), 
-    m_textureObj(0), m_extTextureObj(0), m_realTextureObj(0),
+    m_textureObj(0), 
+    m_extTextureObj(0), m_extWidth(1.), m_extHeight(1.), m_extType(GL_TEXTURE_2D),
+    m_extUpsidedown(false),
+    m_realTextureObj(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), 
     m_textureType( GL_TEXTURE_2D ),
     m_mode(0), m_env(GL_MODULATE),
@@ -192,14 +195,21 @@ void pix_texture :: render(GemState *state) {
   int texType = m_textureType;
   int x_2, y_2;
   GLboolean useExternalTexture=false;
+  GLfloat xTex=1., yTex=1.;
 
   if (!state->image || !state->image->image.data){
     if(m_extTextureObj>0) {
       useExternalTexture= true;
       m_rebuildList     = false;
       m_textureObj      = m_extTextureObj;
-      setTexCoords(m_coords, 1.f, 1.f);
-    }  else
+      if(m_extType)m_textureType=m_extType;
+      texType=m_textureType;
+      upsidedown=m_extUpsidedown;
+      m_xRatio=m_extWidth;
+      m_yRatio=m_extHeight;
+      setTexCoords(m_coords, m_xRatio, m_yRatio, upsidedown);
+    } else
+      /* neither do we have an image nor an external texture */
       return;
   }
 
@@ -226,19 +236,21 @@ void pix_texture :: render(GemState *state) {
   }
 
 #ifdef GL_VERSION_1_1
+  if(!useExternalTexture){
 # ifdef GL_TEXTURE_RECTANGLE_EXT
-  if (m_mode){
-    if (GemMan::texture_rectangle_supported ){
-      m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-      debug("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", m_objectname->s_name);
-      normalized = 0;
-    }
-  } else 
+    if (m_mode){
+      if (GemMan::texture_rectangle_supported ){
+	m_textureType = GL_TEXTURE_RECTANGLE_EXT;
+	debug("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", m_objectname->s_name);
+	normalized = 0;
+      }
+    } else 
 #endif // GL_TEXTURE_RECTANGLE_EXT
-  {
-    m_textureType = GL_TEXTURE_2D;
+      {
+	m_textureType = GL_TEXTURE_2D;
 	debug("[%s]:  using mode 0:GL_TEXTURE_2D", m_objectname->s_name);
 	normalized = 0;
+      }
   }
   if (m_textureType!=texType){
     debug("pix_texture:  texType != m_textureType");
@@ -298,6 +310,7 @@ if (m_rebuildList) {
 	    m_buffer.format = m_imagebuf.format;
 	    m_buffer.type   = m_imagebuf.type;
 	    m_buffer.reallocate();
+	    m_xRatio=m_yRatio=1.0;
 	    setTexCoords(m_coords, 1.0, 1.0, upsidedown);
 	    state->texCoords = m_coords;
 	    state->numTexCoords = 4;
@@ -319,8 +332,8 @@ if (m_rebuildList) {
 		     m_imagebuf.data);
                      
 	} else { // !normalized
-	    float m_xRatio = (float)m_imagebuf.xsize;
-	    float m_yRatio = (float)m_imagebuf.ysize;
+	    m_xRatio = (float)m_imagebuf.xsize;
+	    m_yRatio = (float)m_imagebuf.ysize;
 	    if ( !GemMan::texture_rectangle_supported || !m_mode ) {
 		m_xRatio /= (float)x_2;
 		m_yRatio /= (float)y_2;
@@ -428,7 +441,15 @@ if (m_rebuildList) {
   m_didTexture=1;
   
   // send textureID to outlet
-  outlet_float(m_outTexID, (t_float)m_textureObj);
+  if(m_textureObj){
+    t_atom ap[5];
+    SETFLOAT(ap, (t_float)m_textureObj);
+    SETFLOAT(ap+1, (t_float)m_xRatio);
+    SETFLOAT(ap+2, (t_float)m_yRatio);
+    SETFLOAT(ap+3, (t_float)m_textureType);
+    SETFLOAT(ap+4, (t_float)upsidedown);
+    outlet_list(m_outTexID, &s_list, 5, ap);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -610,7 +631,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("yuv"), A_FLOAT, A_NULL);
 
   class_addmethod(classPtr, (t_method)&pix_texture::extTextureCallback,
-		  gensym("extTexture"), A_FLOAT, A_NULL);
+		  gensym("extTexture"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::texunitCallback,
 		  gensym("texunit"), A_FLOAT, A_NULL);
   class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
@@ -635,9 +656,9 @@ void pix_texture :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_mode=((int)quality);
   if (quality)
-    post("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", GetMyClass(data)->m_objectname->s_name);
+    GetMyClass(data)->post("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
   else
-    post("[%s]:  using mode 0:GL_TEXTURE_2D", GetMyClass(data)->m_objectname->s_name);
+    GetMyClass(data)->post("using mode 0:GL_TEXTURE_2D");
   GetMyClass(data)->m_rebuildList=1;
 }
 
@@ -651,9 +672,38 @@ void pix_texture :: yuvCallback(void *data, t_floatarg quality)
   GetMyClass(data)->m_yuv=((int)quality);
 }
 
-void pix_texture :: extTextureCallback(void *data, t_floatarg texid)
+void pix_texture :: extTextureCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-  GetMyClass(data)->m_extTextureObj=(int)texid;
+  int index=5;
+  switch(argc){
+  case 5:
+    if(A_FLOAT!=argv[4].a_type)break;
+    GetMyClass(data)->m_extUpsidedown=atom_getint(argv+4);
+  case 4:
+    index=4;
+    if(A_FLOAT!=argv[3].a_type)break;
+    GetMyClass(data)->m_extType=atom_getint(argv+3);
+  case 3:
+    index=3;
+    if(A_FLOAT!=argv[2].a_type)break;
+    index=2;
+    if(A_FLOAT!=argv[1].a_type)break;
+    GetMyClass(data)->m_extWidth =atom_getfloat(argv+1);
+    GetMyClass(data)->m_extHeight=atom_getfloat(argv+2);
+  case 1:
+    index=1;
+    if(A_FLOAT!=argv[0].a_type)break;
+    GetMyClass(data)->m_extTextureObj=atom_getint(argv+0);
+    index=0;
+    return;
+  default:
+    GetMyClass(data)->error("arguments: <texId> [<width> <height> [<type> [<upsidedown>]]]");
+    return;
+  }
+  if(index)
+    GetMyClass(data)->error("invalid type of argument #%d", index);
+
+
 }
 void pix_texture :: texunitCallback(void *data, t_floatarg unit)
 {
