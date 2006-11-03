@@ -149,8 +149,10 @@ class GEM_EXTERN CPPExtern
         t_canvas            *m_canvas;
 
  public:
-        // an error message attached to this object
-        void            PDerror(const char*format, ...);
+        // these call pd's print-functions, and eventually prepend the object's name
+	void            post(const char*format, ...);
+	void            verbose(const int level, const char*format, ...);
+        void            error(const char*format, ...); /* internally uses pd_error() */
 };
 
 // This has a dummy arg so that NT won't complain

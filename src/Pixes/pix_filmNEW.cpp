@@ -107,8 +107,8 @@
  ***************************************/
 
 
-#if 0
-# define debug post
+#if 1
+# define debug
 #else
 # define debug post
 #endif
@@ -124,7 +124,7 @@ void *pix_filmNEW :: grabThread(void*you)
   pthread_mutex_t *mutex=me->m_mutex;
   struct timeval timout;
   me->m_thread_running=true;
-  post("pix_filmNEW : using pthreads");
+  //me->post("using pthreads");
   while(me->m_thread_continue){
     int reqFrame=(int)me->m_reqFrame;
     int reqTrack=(int)me->m_reqTrack;
@@ -297,7 +297,7 @@ void pix_filmNEW :: closeMess(void){
 
   if (!m_handle){
     post(" ... giving up!");
-    error("GEM: pix_film: Unable to open file: %s", filename->s_name);
+    error("unable to open file: %s", filename->s_name);
 	return;
   }
 
@@ -307,7 +307,7 @@ void pix_filmNEW :: closeMess(void){
   SETFLOAT(ap+2, m_handle->getHeight());
   SETFLOAT(ap+3, (float)m_handle->getFPS());
   m_numFrames=m_handle->getFrameNum();
-  post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d) at %f fps", 
+  post("loaded file: %s with %d frames (%dx%d) at %f fps", 
        buf, 
        m_handle->getFrameNum(), 
        m_handle->getWidth(), 
@@ -316,7 +316,7 @@ void pix_filmNEW :: closeMess(void){
 
 #ifdef HAVE_PTHREADS
   if(m_wantThread){
-    post("creating thread");
+    debug("creating thread");
     m_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
     if ( pthread_mutex_init(m_mutex, NULL) < 0 ) {
       perror("pix_film : couldn't create mutex");
@@ -325,7 +325,7 @@ void pix_filmNEW :: closeMess(void){
       m_reqFrame=0;
       m_curFrame=-1;
       pthread_create(&m_thread_id, 0, grabThread, this);
-      post("thread created");
+      debug("thread created");
     }
   }
 #endif
@@ -439,7 +439,7 @@ void pix_filmNEW :: csMess(t_symbol *s, bool immediately)
       m_format=GL_RGBA; 
     break;
   default:
-    error("pix_film: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+    error("colorspace must be 'RGBA', 'YUV' or 'Gray'");
   }
   if(immediately && m_handle)m_handle->requestColor(m_format);
 }
@@ -451,9 +451,9 @@ void pix_filmNEW :: threadMess(int state)
 {
   m_wantThread=!(!state);
 #ifdef HAVE_PTHREADS
-  post("[pix_film]: thread settings will have an effect on next open!");
+  post("thread settings will have an effect on next open!");
 #else
-  post("[pix_film]: no thread support");
+  post("no thread support");
 #endif
 }
 
@@ -498,12 +498,11 @@ void pix_filmNEW :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*arg
       codec=atom_getint(argv+1);  
     }
   }
-  post("pix_filmNEW : openMessCallback");
   GetMyClass(data)->openMess(atom_getsymbol(argv), 0, codec);
 
   return;
  illegal_openmess:
-  error("pix_film: \"open <filename> [<format>] [<preferred codec#>]\"");
+  GetMyClass(data)->error("open <filename> [<format>] [<preferred codec#>]");
   return;
   
 }

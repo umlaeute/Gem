@@ -364,7 +364,7 @@ void pix_rds :: methMessCallback(void *data, t_floatarg state)
 void pix_rds :: strideMessCallback(void *data, t_floatarg state)
 {
   if(state<0.f){
-    error("pix_rds: stride must be > 0!");
+    GetMyClass(data)->error("stride must be > 0!");
     return;
   }
   GetMyClass(data)->stride=((int)state);

@@ -37,9 +37,11 @@ pix_videoNEW :: pix_videoNEW() :
   int i = MAX_VIDEO_HANDLES;
   while(i--)m_videoHandles[i]=NULL;
   i=0;
+  /* LATER: think whether v4l-1 and v4l-2 should be exclusive... */
 #ifdef HAVE_VIDEO4LINUX2
   startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L2(GL_RGBA);  i++;
-#elif defined HAVE_VIDEO4LINUX
+#endif /* V4L2 */
+#ifdef HAVE_VIDEO4LINUX
   startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L(GL_RGBA);  i++;
 #endif /* V4L */
 #ifdef HAVE_LIBDV
@@ -63,6 +65,16 @@ pix_videoNEW :: ~pix_videoNEW(){
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: render(GemState *state){
    if (m_videoHandle)state->image=m_videoHandle->getFrame();
+#if 0
+   /* DEBUG for missed frames */
+   if(!state->image->newimage){
+     static int i=0;
+     post("video: missed frame %d", i);
+     i++;
+   }
+   else
+     post("video: got frame");
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -71,10 +83,10 @@ void pix_videoNEW :: render(GemState *state){
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: startRendering(){
   if (!m_videoHandle) {
-    post("GEM: pix_video: do video for this OS");
+    post("do video for this OS");
     return;
   }
-  post("pix_videoNEW: starting transfer");
+  post("starting transfer");
   m_videoHandle->startTransfer();
 }
 
@@ -165,7 +177,7 @@ void pix_videoNEW :: driverMess(int dev)
 {
   //  post("driver: %d", dev);
   if(dev>=m_numVideoHandles){
-    post("driverID (%d) must not exceed %d", dev, m_numVideoHandles);
+    error("driverID (%d) must not exceed %d", dev, m_numVideoHandles);
     return;
   }
   if((dev!=m_driver) && (m_videoHandle!=m_videoHandles[dev])){
@@ -307,12 +319,12 @@ void pix_videoNEW :: modeMessCallback(void *data, t_symbol* nop, int argc, t_ato
     break;
   default:
   mode_error:
-    post("invalid arguments for message \"mode [<norm>] [<channel>]\"");
+    ::post("invalid arguments for message \"mode [<norm>] [<channel>]\"");
   }
 }
 void pix_videoNEW :: colorMessCallback(void *data, t_symbol* nop, int argc, t_atom *argv){
   if (argc==1)GetMyClass(data)->colorMess(argv);
-  else post("pix_video: invalid number of arguments (must be 1)");
+  else GetMyClass(data)->error("invalid number of arguments (must be 1)");
 }
 void pix_videoNEW :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*argv)
 {
@@ -325,10 +337,10 @@ void pix_videoNEW :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*a
       GetMyClass(data)->deviceMess(atom_getsymbol(argv));
       break;
     default:
-      error("pix_video: device must be integer or symbol");
+      GetMyClass(data)->error("device must be integer or symbol");
     }
   } else {
-    error("pix_video: can only set to 1 device at a time");
+    GetMyClass(data)->error("can only set to 1 device at a time");
   }
 }
 void pix_videoNEW :: driverMessCallback(void *data, t_floatarg state)

@@ -65,19 +65,63 @@ CPPExtern :: CPPExtern()
 /////////////////////////////////////////////////////////
 CPPExtern :: ~CPPExtern()
 { }
-
-
-void CPPExtern :: PDerror(const char*fmt,...)
+void CPPExtern :: post(const char*fmt,...)
 {
   char buf[MAXPDSTRING];
   va_list ap;
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(x_obj)
-    pd_error(x_obj, "%s", buf);
-  else if (m_holder)
-    pd_error(m_holder, "%s", buf);
-  else
-    error("%s", buf);    
+  if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+    ::post("[%s]: %s", m_objectname->s_name, buf);
+  } else {
+    ::post("%s", buf);
+  }
+}
+void CPPExtern :: verbose(const int level, const char*fmt,...)
+{
+  char buf[MAXPDSTRING];
+  va_list ap;
+  va_start(ap, fmt);
+  vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
+  va_end(ap);
+  /* only pd>=0.39(?) supports ::verbose() */
+#if defined PD_MINOR_VERSION && (PD_MAJOR_VERSION > 1 || PD_MINOR_VERSION > 38)
+  if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+    ::verbose(level, "[%s]: %s", m_objectname->s_name, buf);
+  } else {
+    ::verbose(level, "%s", buf);
+  }
+#else
+    if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+    ::post("[%s]: %s", m_objectname->s_name, buf);
+  } else {
+    ::post("%s", buf);
+  }
+#endif
+}
+
+void CPPExtern :: error(const char*fmt,...)
+{
+  char buf[MAXPDSTRING];
+  va_list ap;
+  va_start(ap, fmt);
+  vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
+  va_end(ap);
+  if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+    char*objname=m_objectname->s_name;
+    if(x_obj)
+      pd_error(x_obj, "[%s]: %s", objname, buf);
+    else if (m_holder)
+      pd_error(m_holder, "[%s]: %s", objname, buf);
+    else
+      ::error("[%s]: %s", objname, buf);
+  } else {
+    if(x_obj)
+      pd_error(x_obj, "%s", buf);
+    else if (m_holder)
+      pd_error(m_holder, "%s", buf);
+    else
+      ::error("%s", buf);
+  }
 }

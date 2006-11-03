@@ -201,6 +201,8 @@ struct GEM_EXTERN imageStruct
   void fromYV12   (unsigned char* Y, unsigned char*U, unsigned char*V);
   /* assume that the planes are near each other: YVU */
   void fromYV12   (unsigned char* orgdata);
+  /* assume that the planes are near each other: YVU */
+  void fromYU12   (unsigned char* orgdata);
   /* overloading the above two in order to accept pdp YV12 packets */
   void fromYV12   (short* Y, short*U, short*V);
   void fromYV12   (short* orgdata);

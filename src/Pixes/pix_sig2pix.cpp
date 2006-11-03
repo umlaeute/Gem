@@ -196,5 +196,5 @@ void pix_sig2pix ::csMessCallback(void *data, t_symbol*s)
 {
   int cs = getPixFormat(s->s_name);
   if(cs>0)GetMyClass(data)->csMess(cs);
-  else post("pix_sig2pix: colorspace must be Grey, YUV or RGBA");
+  else GetMyClass(data)->error("pix_sig2pix: colorspace must be Grey, YUV or RGBA");
 }

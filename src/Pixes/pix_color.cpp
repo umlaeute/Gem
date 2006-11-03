@@ -117,7 +117,7 @@ void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc, t_atom*ar
     b=atom_getfloat(argv+2);
     break;
   default:
-    error("pix_color: color must be 1, 3 or 4 values");
+    GetMyClass(data)->error("\"color\" must be 1, 3 or 4 values");
     return;
   }
    

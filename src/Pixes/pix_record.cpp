@@ -144,6 +144,21 @@ void pix_record :: dialogMess()
     }
   }
 }
+/////////////////////////////////////////////////////////
+// dialogMess
+//
+/////////////////////////////////////////////////////////
+void pix_record :: recordMess(bool on)
+{
+  if (on) {
+    m_recordStart=1;
+    m_recordStop=0;
+    post("pix_record: recording on!");
+  }else{
+    m_recordStart=0;
+    m_recordStop=1;
+  }
+}
 
 /////////////////////////////////////////////////////////
 // spits out a list of installed codecs and stores them
@@ -253,14 +268,7 @@ void pix_record :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
 
 void pix_record :: recordMessCallback(void *data, t_floatarg on)
 {
-  if (!(!(int)on)) {
-    GetMyClass(data)->m_recordStart=1;
-    GetMyClass(data)->m_recordStop=0;
-    post("pix_record: recording on!");
-  }else{
-    GetMyClass(data)->m_recordStart=0;
-    GetMyClass(data)->m_recordStop=1;
-  }
+  GetMyClass(data)->recordMess(!(!(int)on));
 }
 
 void pix_record :: dialogMessCallback(void *data)

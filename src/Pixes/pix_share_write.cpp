@@ -295,7 +295,7 @@ void pix_share_write :: setMessCallback(void *data, t_symbol *s, int argc, t_ato
     int err  = 0;
     //GetMyClass(data)->freeShm();
     err = GetMyClass(data)->getShm(argc, argv);
-    if(err)error("pix_share_*: couldn't get new shared memory block! %d", err);
+    if(err)GetMyClass(data)->error("couldn't get new shared memory block! %d", err);
   } else
-    error("pix_share_*:no args given!");
+    GetMyClass(data)->error("no args given!");
 }

@@ -218,5 +218,5 @@ void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
     GetMyClass(data)->m_cacheRight = (GemCache*)argv->a_w.w_gpointer;
     GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
-  } else error("GEM: [%s] wrong righthand arguments....", GetMyClass(data)->m_objectname->s_name);
+  } else GetMyClass(data)->error("wrong righthand arguments....", GetMyClass(data)->m_objectname->s_name);
 }

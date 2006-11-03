@@ -103,7 +103,7 @@ void part_color :: color1MessCallback(void *data, t_symbol*s, int argc, t_atom*a
 				 atom_getfloat(argv+2),
 				 (argc==4)?atom_getfloat(argv+3):1.0f);
   else {
-    error("GEM: part_color:: only 3 or 4 arguments are accepted as colours");
+    GetMyClass(data)->error("only 3 or 4 arguments are accepted as colours");
   }
 }
 void part_color :: color2MessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
@@ -114,6 +114,6 @@ void part_color :: color2MessCallback(void *data, t_symbol*s, int argc, t_atom*a
 				 atom_getfloat(argv+2),
 				 (argc==4)?atom_getfloat(argv+3):1.0f);
   else {
-    error("GEM: part_color:: only 3 or 4 arguments are accepted as colours");
+    GetMyClass(data)->error("only 3 or 4 arguments are accepted as colours");
   }
 }

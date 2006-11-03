@@ -185,7 +185,7 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
 void pix_buffer :: allocateMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg c=4)
 {
   if (x<1 || y<1 || c<0){
-    error("pix_buffer: init-specs out of range");
+    GetMyClass(data)->error("init-specs out of range");
     return;
   }
   if (c==0)c=4;

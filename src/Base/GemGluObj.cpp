@@ -111,6 +111,6 @@ void GemGluObj :: numSlicesMessCallback(void *data, t_symbol*, int argc, t_atom*
     GetMyClass(data)->numSlicesMess(atom_getint(argv), atom_getint(argv+1));
     break;
   default:
-    error("only 1 or 2 arguments for \"slices [stacks]\" allowed!");
+    GetMyClass(data)->error("only 1 or 2 arguments for \"slices [stacks]\" allowed!");
   }
 }

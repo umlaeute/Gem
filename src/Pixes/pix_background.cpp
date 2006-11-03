@@ -568,6 +568,6 @@ void pix_background :: rangeNCallback(void *data, t_symbol*,int argc, t_atom*arg
     GetMyClass(data)->m_Vrange=v;
     break;
   default:
-    error("pix_background: only 1 or 3 values are allowed as ranges (%d)", argc);
+    GetMyClass(data)->error("only 1 or 3 values are allowed as ranges (not %d)", argc);
   }
 }

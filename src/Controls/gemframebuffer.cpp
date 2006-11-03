@@ -195,7 +195,6 @@ void gemframebuffer :: initFBO()
 	m_texTarget = GL_TEXTURE_RECTANGLE_EXT;
 	post("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", m_objectname->s_name);
   }
-	
 #ifdef GL_EXT_framebuffer_object
   // Generate frame buffer object then bind it.
   glGenFramebuffersEXT(1, &m_frameBufferIndex);
@@ -235,33 +234,33 @@ void gemframebuffer :: initFBO()
   {
 	  switch(status) {                                          
   case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-		 post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT", m_objectname->s_name);
+		 post("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-		post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT", m_objectname->s_name);
+		post("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-		post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT", m_objectname->s_name);
+		post("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-		 post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT", m_objectname->s_name);
+		 post("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-		post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT", m_objectname->s_name);
+		post("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-		 post("[%s]:  GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT", m_objectname->s_name);
+		 post("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
     break;
   case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-		 post("[%s]:  GL_FRAMEBUFFER_UNSUPPORTED_EXT", m_objectname->s_name);
+		 post("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
     break;
   case GL_INVALID_FRAMEBUFFER_OPERATION_EXT:
-		 post("[%s]:  GL_INVALID_FRAMEBUFFER_OPERATION_EXT", m_objectname->s_name);
+		 post("GL_INVALID_FRAMEBUFFER_OPERATION_EXT");
     break;
   default:
-		 post("[%s]:  Unknown ERROR", m_objectname->s_name);
+    post("Unknown ERROR %d", status);
   }
-	return;
+	  return;
   }
 
   // Return out of the frame buffer.

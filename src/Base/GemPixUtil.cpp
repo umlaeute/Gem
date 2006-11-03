@@ -828,6 +828,11 @@ GEM_EXTERN void imageStruct::fromGray(short *greydata) {
   }
 }
 
+GEM_EXTERN void imageStruct::fromYU12(unsigned char*yuvdata) {
+  if(!yuvdata)return;
+  size_t pixelnum=xsize*ysize;
+  fromYV12((yuvdata), yuvdata+(pixelnum), yuvdata+(pixelnum+(pixelnum>>2)));
+}
 GEM_EXTERN void imageStruct::fromYV12(unsigned char*yuvdata) {
   if(!yuvdata)return;
   size_t pixelnum=xsize*ysize;

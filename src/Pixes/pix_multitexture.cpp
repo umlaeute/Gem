@@ -236,10 +236,10 @@ void pix_multitexture :: modeCallback(void *data, t_floatarg textype)
   {
 //    GetMyClass(data)->m_oldType = GetMyClass(data)->m_textureType;
     GetMyClass(data)->m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-    post("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", GetMyClass(data)->m_objectname->s_name);
+    GetMyClass(data)->post("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
   }else{
     GetMyClass(data)->m_textureType = GL_TEXTURE_2D;
-	post("[%s]:  using mode 0:GL_TEXTURE_2D", GetMyClass(data)->m_objectname->s_name);
+    GetMyClass(data)->post("using mode 0:GL_TEXTURE_2D");
   }
 }
 
@@ -248,6 +248,6 @@ void pix_multitexture :: parmCallback(void *data, t_symbol*s, int argc, t_atom*a
     int i = atoi(s->s_name+1);
     GetMyClass(data)->m_texID[i]=(GLint)atom_getint(argv);
   } else {
-     GetMyClass(data)->PDerror("invalid texUnit specified!");
+     GetMyClass(data)->error("invalid texUnit specified!");
   }
 }

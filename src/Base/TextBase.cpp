@@ -502,7 +502,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 's': case 'S': dType = BASED; break;
     case 'l': case 'L': case 'n': case 'N': dType = HALFWAY; break;
     default:
-      error("GEM: TextBase: invalid depth justification: %s (must be: front|back|halfway|base)", 
+      GetMyClass(data)->error("invalid depth justification: %s (must be: front|back|halfway|base)", 
 	    atom_getsymbol(argv+2)->s_name);
       return;
     }
@@ -514,7 +514,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 'd': case 'D': case 'n': case 'N': hType = MIDDLE; break;
     case 's': case 'S': hType = BASEH; break;
     default:
-      error("GEM: TextBase: invalid height justification: %s (must be bottom|top|middle|base)", 
+      GetMyClass(data)->error("invalid height justification: %s (must be bottom|top|middle|base)", 
 	    atom_getsymbol(argv+1)->s_name);
       return;
     }
@@ -526,13 +526,13 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 'n': case 'N': wType = CENTER; break;
     case 's': case 'S': wType = BASEW; break;
     default:
-      error("GEM: TextBase: invalid width justification: %s (must be left|right|center|base)",
+      GetMyClass(data)->error("invalid width justification: %s (must be left|right|center|base)",
 	    atom_getsymbol(argv+0)->s_name);
       return;
     }
     break;
   default:
-    error("GEM: TextBase: justification most be \"width [height [depth]]\"");
+    GetMyClass(data)->error("justification most be \"width [height [depth]]\"");
     return;
   }
   

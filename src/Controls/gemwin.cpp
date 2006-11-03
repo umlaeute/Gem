@@ -542,16 +542,12 @@ void gemwin :: fogMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
       GetMyClass(data)->fogRangeMess(atom_getfloat(&argv[0]),atom_getfloat(&argv[1]));
       break;
     default:
-      error("GEM : fog message needs 1 or 2 arguments");
+      GetMyClass(data)->error("fog message needs 1 or 2 arguments");
     }
 }
 void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
   float red, green, blue, alpha=1.f;
-  if(argc<3){
-    error("gemwin: \"color\" expects 3 or 4 values");
-    return;
-  }
   switch(argc){
   case 4:
     alpha=atom_getfloat(argv+3);
@@ -562,18 +558,18 @@ void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
     GetMyClass(data)->fogColorMess((float)red, (float)green, (float)blue, (float)alpha);
     break;
   default:
-    error("gemwin: \"color\" expects 3 or 4 values");
+    GetMyClass(data)->error("\"fogcolor\" expects 3 or 4 values");
   }
 }
 void gemwin :: fogModeMessCallback(void *data, t_float val)
 {
   GetMyClass(data)->fogModeMess((int)val);
 }
-void gemwin :: stereoMessCallback(void *, t_floatarg state)
+void gemwin :: stereoMessCallback(void *data, t_floatarg state)
 {
   int mode = (int)state;
   if (mode<0 || mode>2){
-    error("GEM: possible stereo-modes are: 0, 1, 2");
+    GetMyClass(data)->error("possible stereo-modes are: 0, 1, 2");
     return;
   }
   GemMan::m_stereo = mode;
@@ -606,11 +602,11 @@ void gemwin :: frameMessCallback(void *, t_floatarg rate)
 {
   GemMan::frameRate((float)rate);
 }
-void gemwin :: perspectiveMessCallback(void *, t_symbol *, int argc, t_atom *argv)
+void gemwin :: perspectiveMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   if (argc != 6)
     {
-      error("GEM: perspec message needs 6 arguments");
+      GetMyClass(data)->error("perspec message needs 6 arguments");
       return;
     }
   GemMan::m_perspect[0] = atom_getfloat(&argv[0]);	// left
@@ -620,7 +616,7 @@ void gemwin :: perspectiveMessCallback(void *, t_symbol *, int argc, t_atom *arg
   GemMan::m_perspect[4] = atom_getfloat(&argv[4]);	// front
   GemMan::m_perspect[5] = atom_getfloat(&argv[5]);	// back
 }
-void gemwin :: viewMessCallback(void *, t_symbol *, int argc, t_atom *argv)
+void gemwin :: viewMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   const float DEG2RAD = 0.01745329251994f;
   float azimuth = 0.f;
@@ -673,7 +669,7 @@ void gemwin :: viewMessCallback(void *, t_symbol *, int argc, t_atom *argv)
       break;
 
     default:
-      error("GEM: view message needs 3, 4, 5 or 9 arguments");
+      GetMyClass(data)->error("view message needs 3, 4, 5 or 9 arguments");
 
       // note :: LATER set the StereoView ...
     }
@@ -701,8 +697,8 @@ void gemwin :: createMessCallback(void *data, t_symbol* disp)
 }
 void gemwin :: createStereoMessCallback(void *data)
 {
-  error("GEM: 'createStereo' is deprecated and does not work any more");
-  error("GEM:   use 'stereo 1' + 'create' instead");
+  GetMyClass(data)->error("'createStereo' is deprecated and does not work any more");
+  GetMyClass(data)->error("use 'stereo 1' + 'create' instead");
 
 }
 void gemwin :: bufferMessCallback(void *data, t_floatarg buf)
@@ -742,7 +738,7 @@ void gemwin :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
     GetMyClass(data)->colorMess((float)red, (float)green, (float)blue, (float)alpha);
     break;
   default:
-    error("gemwin: \"color\" expects 3 or 4 values");
+    GetMyClass(data)->error("\"color\" expects 3 or 4 values");
   }
 }
 void gemwin :: clearmaskMessCallback(void *data, t_floatarg bitmask)
@@ -762,7 +758,7 @@ void gemwin :: ambientMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
     GetMyClass(data)->ambientMess((float)red, (float)green, (float)blue, (float)alpha);
     break;
   default:
-    error("gemwin: \"ambient\" expects 3 or 4 values");
+    GetMyClass(data)->error("\"ambient\" expects 3 or 4 values");
   }
 }
 void gemwin :: specularMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
@@ -778,7 +774,7 @@ void gemwin :: specularMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
     GetMyClass(data)->specularMess((float)red, (float)green, (float)blue, (float)alpha);
     break;
   default:
-    error("gemwin: \"specular\" expects 3 or 4 values");
+    GetMyClass(data)->error("\"specular\" expects 3 or 4 values");
   }
 }
 void gemwin :: shininessMessCallback(void *data, t_floatarg val)

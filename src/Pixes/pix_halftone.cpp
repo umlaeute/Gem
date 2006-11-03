@@ -1233,11 +1233,11 @@ void pix_halftone :: sizeCallback(void *data, t_floatarg m_CellSize)
 {
   int size=(int)m_CellSize;
   if(size<1){
-    error("pix_halftone: size must not be < 0");
+    GetMyClass(data)->error("size must not be < 0");
     size=1;
   }
   if(size>nMaxCellSize){
-    error("pix_halftone: size must not be > %d", nMaxCellSize);
+    GetMyClass(data)->error("size must not be > %d", nMaxCellSize);
     size=nMaxCellSize;
   }
   GetMyClass(data)->m_CellSize=size;
@@ -1248,7 +1248,7 @@ void pix_halftone :: styleCallback(void *data, t_floatarg m_Style)
 {
   int style=(int)m_Style;
   if(style<0||style>4){
-    error("pix_halftone: style must be 0, 1, 2, 3 or 4");
+    GetMyClass(data)->error("style must be 0, 1, 2, 3 or 4");
     return;
   }
   GetMyClass(data)->m_Style=style;

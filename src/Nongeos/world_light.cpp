@@ -193,7 +193,7 @@ void world_light :: lightColorMessCallback(void *data, t_symbol*,int argc, t_ato
     GetMyClass(data)->lightColorMess(red, green, blue, alpha);
     break;
   default:
-    error("GEM: light: needs 3 or 4 parameters");
+    GetMyClass(data)->error("\"color\" must be 3 or 4 parameters");
   }
 }
 void world_light :: lightOnOffMessCallback(void *data, t_floatarg n)

@@ -78,6 +78,10 @@ class GEM_EXTERN pix_record : public GemBase
     	// When a position message is received
     	virtual void	posMess(int x, int y);
 		
+	//////////
+	// turn recording on/off
+	virtual void	recordMess(bool on);
+
 	////////
 	// call up compression dialog
 	virtual void	dialogMess();

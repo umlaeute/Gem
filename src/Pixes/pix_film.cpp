@@ -310,7 +310,7 @@ void pix_film :: openMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 	    GetMyClass(data)->openMess(atom_getsymbol(argv), format);
 		break;
 	default:
-		error("pix_film: open <filename> [<format>]");
+	  GetMyClass(data)->error("open <filename> [<format>]");
 	}
 }
 
