@@ -312,7 +312,7 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
 #ifdef DL_OPEN
   plugin_handle=dlopen(libname, RTLD_NOW);
   if(!plugin_handle){
-    error("pix_freeframe[%s]: %s", libname, dlerror());
+    ::error("pix_freeframe[%s]: %s", libname, dlerror());
     return NULL;
   }
   dlerror();
@@ -336,7 +336,7 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
 	plugmain = (T_FFPLUGMAIN)CFBundleGetFunctionPointerForName(
             theBundle, CFSTR("plugMain") );
   }else{
-    post("%s: couldn't load", libname);
+    ::post("%s: couldn't load", libname);
     return 0;
   }
   if(bundleURL != NULL) CFRelease( bundleURL );
@@ -348,7 +348,7 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   sys_bashfilename(libname, libname);
   ntdll = LoadLibrary(libname);
   if (!ntdll) {
-    post("%s: couldn't load", libname);
+    ::post("%s: couldn't load", libname);
     return NULL;
   }
   plugmain = (T_FFPLUGMAIN)GetProcAddress(ntdll, hookname);
@@ -362,13 +362,13 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   PlugInfoStruct *pis = FF_PLUGMAIN_PIS(plugmain(FF_GETINFO, NULL, 0));
   if(pis){
     if (pis->APIMajorVersion < 1){
-      error("plugin %s: old api version", name);
+      ::error("plugin %s: old api version", name);
       return NULL;
     }
   }
 
   if (FF_PLUGMAIN_INT(plugmain(FF_INITIALISE, NULL, 0)) == FF_FAIL){
-    error("plugin %s: init failed", name);
+    ::error("plugin %s: init failed", name);
     return NULL;
   }
 
@@ -385,7 +385,7 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   } else {
     if(can_rgba)*can_rgba=0;
     if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_24BITVIDEO, 0)) != FF_TRUE){
-      error("plugin %s: neither RGB32 nor RGB24 support!", name);
+      ::error("plugin %s: neither RGB32 nor RGB24 support!", name);
 
       plugmain(FF_DEINITIALISE, NULL, 0);
       return NULL;
