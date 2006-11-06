@@ -253,6 +253,15 @@ pixBlock* filmFFMPEG :: getFrame(){
 				 &gotit,
 				 ptr,
 				 len);
+      if (ret < 0 ) { // TODO recover gracefully 
+        for(i=0;i<4;i++){
+          m_Picture.data[i]=NULL;
+          m_Picture.linesize[i]=0;
+        }
+	error("ffmpeg-error while decoding: %d", ret);
+        av_free_packet(&m_Pkt);
+        return &m_image;
+      }      
       for(i=0;i<4;i++){
 	m_Picture.data[i]=m_avFrame.data[i];
 	m_Picture.linesize[i]=m_avFrame.linesize[i];
@@ -265,8 +274,9 @@ pixBlock* filmFFMPEG :: getFrame(){
 				 len);
 #endif
       if (ret < 0 ) { // TODO recover gracefully 
-	post("error while decoding");
-	break;
+	error("ffmpeg-error %d while decoding", ret);
+        av_free_packet(&m_Pkt);
+        return &m_image;
       }
       len-=ret;
       ptr+=ret;
@@ -291,7 +301,7 @@ pixBlock* filmFFMPEG :: getFrame(){
 	avpicture_fill(&rgba,m_image.image.data,dstfmt,width,height);
 	// cannot convert yuv420 to yuv422
 	if (img_convert(&rgba,dstfmt,&m_Picture,fmt,width,height)<0)
-	  post("pix_film: image conversion failed (%d->%d)", fmt, dstfmt);
+	  error("ffmpeg-conversion failed (%d->%d)", fmt, dstfmt);
 	if(m_wantedFormat==GL_RGBA){
 	  m_image.image.swapRedBlue();
 	}	
