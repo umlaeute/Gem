@@ -349,10 +349,9 @@ void pix_filmNEW :: render(GemState *state)
   } else
 #endif /* PTHREADS */
     state->image=m_handle->getFrame();
-
-  m_handle->m_auto = m_auto;
+  m_handle->setAuto(m_auto);
   frame=(int)m_reqFrame;
-  if (state->image==0){
+  if (NULL==state->image){
     outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
 
     if(frame!=(int)m_reqFrame){

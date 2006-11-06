@@ -114,6 +114,10 @@ double film :: getFPS() {
   return m_fps;
 }
 
+void film :: setAuto(t_float incr) {
+  m_auto = incr;
+}
+
 int film :: changeImage(int imgNum, int trackNum){
   return FILM_ERROR_DONTKNOW;
 }
