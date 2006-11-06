@@ -130,6 +130,8 @@ bool filmFFMPEG :: open(char *filename, int format)
   // Get the length and the fps of the movie
   //AVStream*stream=m_Format->streams[i];
 
+  state=4;
+
 #ifdef AV_TIME_BASE_Q
   /*
     the AV_TIME_BASE_Q is rather a guess than something i could prove
@@ -143,6 +145,9 @@ bool filmFFMPEG :: open(char *filename, int format)
   if(0!=(int)stream->duration){
     int frames=(int)((((t_float)(stream->duration))/AV_TIME_BASE)*
                 (m_fps));
+    if(frames==0){
+      goto unsupported;
+    }
     m_numFrames=(frames<0)?-frames:frames;
   } else
     m_numFrames = -1;
@@ -190,6 +195,9 @@ bool filmFFMPEG :: open(char *filename, int format)
   case(3):
     startpost(" at CoDec");
     break;
+  case(4):
+    startpost(" at FPS");
+    break;
   default:;
   }
   switch(err){
@@ -200,6 +208,7 @@ bool filmFFMPEG :: open(char *filename, int format)
   case(AVERROR_NOMEM):startpost(" [not enough memory]"); break;
   case(AVERROR_NOFMT):startpost(" [unknown format]"); break;
   case(AVERROR_NOTSUPP):startpost(" [operation not supported]"); break;
+  case 0: break;
   default:startpost(" [%d]", err);
      }
   close();
