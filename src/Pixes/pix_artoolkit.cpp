@@ -11,7 +11,6 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#define HAVE_ARTOOLKIT
 
 #include "pix_artoolkit.h"
 #include <stdlib.h>
