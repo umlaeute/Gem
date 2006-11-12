@@ -26,6 +26,9 @@
 #undef HAVE_VIDEO4LINUX2
 #undef HAVE_LIBDV
 
+/* image analysis */
+#undef HAVE_ARTOOLKIT
+
 /* posix threads */
 #undef HAVE_PTHREADS
 

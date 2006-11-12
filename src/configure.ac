@@ -270,6 +270,8 @@ GEM_CHECK_LIB(ftgl,ftgl,main,
 GEM_CHECK_LIB(gltt,gltt, GLTTFont,,,,font support (deprecated))
 
 
+GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)
+
 dnl Checking for `pthread_create' function in -pthread
 AC_CHECK_LIB(pthread, pthread_create,[
                                       AC_DEFINE(HAVE_PTHREADS)
