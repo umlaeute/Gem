@@ -41,13 +41,18 @@ pix_artoolkit :: pix_artoolkit()
 #ifdef GEM4MAX
   m_outMarker = ::listout(this->x_obj);
   m_out1 = ::outlet_new(this->x_obj, 0);
-  DEBUG1("allocated m_outMarker's addrss: 0x%08X", m_outMarker);
 #else
   m_outMarker = outlet_new(this->x_obj, 0);
 #endif
 
 
 #ifdef HAVE_ARTOOLKIT
+  static bool firsttime = true;
+  if(firsttime) {
+    post("ARToolKit support by Shigeyuki Hirai");
+    firsttime = false;
+  }
+
   for (int i=0; i<MAX_OBJECTS; i++) {
     m_object[i].patt_name = NULL;
     m_object[i].patt_id = -1;
@@ -381,7 +386,6 @@ void pix_artoolkit :: obj_setupCallback(void *)
   ::addmess((method)&pix_artoolkit::loadcparaMessCallback, "loadcpara", A_DEFSYM, 0);
   ::addmess((method)&pix_artoolkit::resetMessCallback, "reset", 0);
   ::addmess((method)&pix_artoolkit::clearMessCallback, "clear", 0);
-  ::post("gem.pix_artoolkit by Shigeyuki Hirai");
 }
 void pix_artoolkit :: loadmarkerMessCallback(void *data, t_int n, t_symbol *filename)
 {
@@ -423,8 +427,6 @@ void pix_artoolkit :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&pix_artoolkit::thresholdMessCallback, gensym("threshold"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::loadcparaMessCallback, gensym("loadcpara"), A_DEFSYM, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::clearMessCallback, gensym("clear"), A_NULL);
-  ::post("pix_artoolkit by Shigeyuki Hirai");
-
 }
 void pix_artoolkit :: loadmarkerMessCallback(void *data, t_floatarg n, t_symbol *filename)
 {
