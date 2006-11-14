@@ -103,6 +103,24 @@ LOG
 
 /* AltiVec */
 #ifdef __VEC__
+
+/* there are problems on OSX10.3 with older versions of gcc, since the intrinsic code
+ * below freely changes between signed and unsigned short vectors
+ * newer versions of gcc accept this...
+ * LATER: fix the code (GemPixConvertAltivec:750..800)
+ */
+# if defined __GNUC___
+/* according to hcs it does NOT work with gcc-3.3
+ * for simplicity, i disable everything below gcc4
+ * JMZ: 20061114
+ */
+#  if __GNUC__ < 4
+#   warning disabling AltiVec for older gcc: please fix me
+#   define NO_VECTORINT_TO_VECTORUNSIGNEDINT
+#  endif
+# endif /* GNUC */
+
+
   void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size, 
 							unsigned char *pixels);
   void RGBA_to_YCbCr_altivec(unsigned char *rgbadata, size_t RGBA_size, 
@@ -114,9 +132,11 @@ LOG
   void YUV422_to_BGRA_altivec(unsigned char *yuvdata, size_t pixelnum,
                               unsigned char *pixels);
   void YV12_to_YUV422_altivec(short*Y, short*U, short*V,
-							  unsigned char *data, int xsize, int ysize);
+                              unsigned char *data, int xsize, int ysize);
+# ifndef NO_VECTORINT_TO_VECTORUNSIGNEDINT
   void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
-							  unsigned char *gem_image, int xsize, int ysize);
+                              unsigned char *gem_image, int xsize, int ysize);
+# endif
 #endif /* AltiVec */
 
 /* SSE2 */

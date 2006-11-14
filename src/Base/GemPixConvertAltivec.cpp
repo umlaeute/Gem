@@ -1,18 +1,3 @@
-#if defined __GNUC__ && defined __VEC__
-/* there are problems on OSX10.3 with older versions of gcc, since the intrinsic code
- * below freely changes between signed and unsigned short vectors
- * newer versions of gcc accept this...
- * LATER: fix the code (lines 750-800)
- */
-/* according to hcs it does NOT work with gcc-3.3
- * for simplicity, disable everything below gcc4
- */
-# if __GNUC__ < 4
-#  warning disabling AltiVec for older gcc: please fix me
-#  undef __VEC__
-# endif
-#endif /* GNUC && VEC */
-
 #ifdef __VEC__
 /////////////////////////////////////////////////////////
 //
@@ -668,6 +653,9 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
   }
 }
 
+#ifdef NO_VECTORINT_TO_VECTORUNSIGNEDINT
+# warning disabling AltiVec for older gcc: please fix me
+#else
 void YUV422_to_BGRA_altivec( unsigned char *yuvdata, 
                              size_t pixelnum, unsigned char *output)
 {
@@ -833,5 +821,6 @@ void YUV422_to_BGRA_altivec( unsigned char *yuvdata,
 	BGRA_ptr++;
   }
 }
+#endif /* NO_VECTORINT_TO_VECTORUNSIGNEDINT */
 
 #endif /*  __VEC__ */
