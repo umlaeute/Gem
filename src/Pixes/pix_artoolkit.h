@@ -142,7 +142,7 @@ class GEM_EXTERN pix_artoolkit : public GemPixObj
   static void	continuousMessCallback(void *data, t_int continuousmode);
   static void	thresholdMessCallback(void *data, t_int threshold);
 # else
-  static void 	loadmarkerMessCallback(void *data, t_float n, t_symbol *filename);
+  static void 	loadmarkerMessCallback(void *data, t_symbol*,int,t_atom*);
   static void	objectSizeMessCallback(void *data, t_float n, t_floatarg f);
   static void	outputmodeMessCallback(void *data, t_floatarg outputmode);
   static void	continuousMessCallback(void *data, t_floatarg continuousmode);

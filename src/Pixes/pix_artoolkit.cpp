@@ -171,11 +171,13 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
 
 #define NUM_PARAM 8	//ID, positions[3], quaternion[4]
       t_atom ap[MAX_OBJECTS * NUM_PARAM];
+
 #ifdef GEM4MAX
       SETLONG(&ap[NUM_PARAM * i + 0], i + 1);	//ID
 #else
       SETFLOAT(&ap[NUM_PARAM * i + 0], i + 1); //ID
 #endif
+
       SETFLOAT(&ap[NUM_PARAM * i + 1], p[0]);	//positoin.x
       SETFLOAT(&ap[NUM_PARAM * i + 2], p[1]);	//position.y
       SETFLOAT(&ap[NUM_PARAM * i + 3], p[2]);	//position.z
@@ -420,18 +422,19 @@ void pix_artoolkit :: thresholdMessCallback(void *data, t_int threshold)
 #else
 void pix_artoolkit :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_artoolkit::loadmarkerMessCallback, gensym("loadmarker"), A_FLOAT, A_SYMBOL, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_artoolkit::loadmarkerMessCallback, gensym("loadmarker"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::objectSizeMessCallback, gensym("objectsize"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::outputmodeMessCallback, gensym("outputmode"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::continuousMessCallback, gensym("continuous"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::thresholdMessCallback, gensym("threshold"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_artoolkit::loadcparaMessCallback, gensym("loadcpara"), A_DEFSYM, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_artoolkit::loadcparaMessCallback, gensym("loadcpara"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::clearMessCallback, gensym("clear"), A_NULL);
 }
-void pix_artoolkit :: loadmarkerMessCallback(void *data, t_floatarg n, t_symbol *filename)
+void pix_artoolkit :: loadmarkerMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
 # ifdef HAVE_ARTOOLKIT
-  GetMyClass(data)->loadmarkerMess((t_int)n, filename);
+  if(argc==2)
+    GetMyClass(data)->loadmarkerMess(atom_getint(argv), atom_getsymbol(argv+1));
 # endif /* HAVE_ARTOOLKIT */
 }
 void pix_artoolkit :: objectSizeMessCallback(void *data, t_floatarg n, t_floatarg f)
