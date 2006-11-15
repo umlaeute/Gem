@@ -109,11 +109,13 @@ LOG
  * newer versions of gcc accept this...
  * LATER: fix the code (GemPixConvertAltivec:750..800)
  */
-# if defined __GNUC___
+# warning checking whether we use GNUC
+# ifdef __GNUC___
 /* according to hcs it does NOT work with gcc-3.3
  * for simplicity, i disable everything below gcc4
  * JMZ: 20061114
  */
+#  warning checking for gnuc version __GNUC__
 #  if __GNUC__ < 4
 #   warning disabling AltiVec for older gcc: please fix me
 #   define NO_VECTORINT_TO_VECTORUNSIGNEDINT
