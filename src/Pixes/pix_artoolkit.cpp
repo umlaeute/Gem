@@ -435,6 +435,9 @@ void pix_artoolkit :: loadmarkerMessCallback(void *data, t_symbol*, int argc, t_
 # ifdef HAVE_ARTOOLKIT
   if(argc==2)
     GetMyClass(data)->loadmarkerMess(atom_getint(argv), atom_getsymbol(argv+1));
+  else
+    GetMyClass(data)->error("invalide arguments to loadmarker <#id> <filename>");
+
 # endif /* HAVE_ARTOOLKIT */
 }
 void pix_artoolkit :: objectSizeMessCallback(void *data, t_floatarg n, t_floatarg f)
