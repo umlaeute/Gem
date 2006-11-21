@@ -4,15 +4,11 @@ You can get the current distribution from:
 http://gem.iem.at
 ftp://iem.at/pd/Externals/GEM
 
-assumption:
-throughout this document, references of DOS actually means the OS from Redmont (known as Windoze)
-
-
 =============================================
 NEW:::
 ------
 
-Gem is now supported by DOS, linux and macOS
+Gem is now supported by W32, linux and macOS-X
 the IRIX version might work (but most probably will not): if you want to use Gem under IRIX,feel free to make it work and report failure and success to me, so i can incorporate any needed changes into the main Gem-trunk.
 
 for installation instructions see below
@@ -25,8 +21,8 @@ NEW (gem-0.87):::
 As with GEM-0.87, i have broken the distribution into various packages
 gem-<gemver>.tgz :: quite everything (except binaries and auxiliary libraries)
 gem-doc-<gemver>.tgz :: example-patches, manual, ...
-gem-bin-<gemver>.zip :: DOS-binary (containing a single file "Gem.dll")
-gem-bin-doc-<gemver>.zip :: DOS-binary + documentation
+gem-bin-<gemver>.zip :: W32-binary (containing a single file "Gem.dll")
+gem-bin-doc-<gemver>.zip :: W32-binary + documentation
 
 GemLibs-<OS>-<libver>.tgz :: auxiliary libraries (used to be "AuxLibs")
 
@@ -56,7 +52,7 @@ PD 	>= 0.34
 INSTALLATION:
 =============
 
-To install GEM on DOS:
+To install GEM on W32:
 
 a) use the script
 
@@ -116,9 +112,10 @@ you cannot create any Gem-objects without having loaded the Gem-library into pd 
 
 make sure you have the proper binary for you OS
   - windows: Gem.dll
-  - macOS  : Gem.pd_darwin
+  - macOS-X: Gem.pd_darwin
   - linux  : Gem.pd_linux
   - irix   : Gem.pd_irix
+  - ...
 
 when starting pd, tell it to load Gem with the "-lib" flag
 if your Gem-binary lives in pd/extra/, you could just try "pd -lib Gem"
