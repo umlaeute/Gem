@@ -27,7 +27,7 @@ GEMglBlendEquation :: GEMglBlendEquation	(t_floatarg arg0=0) :
   mode((GLenum)arg0)
 {
 #ifdef DONT_HAVE_GLBLENDEQUATION
-  post("[%s]: has been compiled without glBlendEquation", m_objectname);
+  error("Gem has been compiled without glBlendEquation");
 #endif /* DONT_HAVE_GLBLENDEQUATION */
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }

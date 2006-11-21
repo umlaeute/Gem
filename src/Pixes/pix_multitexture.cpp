@@ -190,7 +190,7 @@ void pix_multitexture :: startRendering()
 {
 #ifdef GL_MAX_TEXTURE_UNITS_ARB
   glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &m_max );
-  post("[%s]: MAX_TEXTURE_UNITS for current context = %d", m_objectname->s_name, m_max);
+  post("MAX_TEXTURE_UNITS for current context = %d", m_max);
 #endif
 }
 

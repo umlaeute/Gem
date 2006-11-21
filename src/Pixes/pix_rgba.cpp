@@ -79,7 +79,7 @@ void pix_rgba :: processImage(imageStruct &image)
     m_image.fromUYVY(image.data);
     break;
   default:
-    error("[%s] has no method for this format !!!", m_objectname);
+    error("no method for this format !!!");
     error("if you know how to convert this format (%X),\n"
 	 "please contact the authors of this software", image.format);
     return;

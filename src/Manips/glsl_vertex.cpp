@@ -148,7 +148,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
   }
   if (!m_shader)
   {
-	post("[%s]: could not create shader object", m_objectname->s_name);
+	error("could not create shader object");
 	return;
   }
   const char * vs = m_shaderString;
@@ -161,13 +161,13 @@ void glsl_vertex :: openMess(t_symbol *filename)
 	glGetObjectParameterivARB( m_shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length );
 	log = (GLcharARB*)malloc( length * sizeof(GLcharARB) );
 	glGetInfoLogARB( m_shader, length, NULL, log );
-	post("[%s]: compile Info_log:", m_objectname->s_name );
+	post("compile Info_log:");
 	post("%s", log );
-	post("[%s]: shader not loaded", m_objectname->s_name );
+	error("shader not loaded");
 	free(log);
 	return;
   }
-  post("[%s]: Loaded file: %s", m_objectname->s_name, buf);
+  verbose(1, "Loaded file: %s", buf);
 #endif
 }
 
@@ -180,7 +180,7 @@ void glsl_vertex :: startRendering()
 #ifdef GL_ARB_shader_objects
   if (m_shaderString == NULL)
     {
-      error("[%s]: need to load a shader", m_objectname->s_name);
+      error("need to load a shader");
       return;
     }
 #endif

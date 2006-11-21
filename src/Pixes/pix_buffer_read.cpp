@@ -46,7 +46,9 @@ pix_buffer_read :: pix_buffer_read(t_symbol *s) :
   m_haveImage(false),
   m_bindname(NULL)
 {
-  setMess(s);
+  if ((s)&&(&s_!=s)){
+    setMess(s);
+  }
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
 }
 
@@ -109,14 +111,14 @@ void pix_buffer_read :: update_image()
   
   if(m_bindname==NULL || m_bindname->s_name==NULL)
     {
-      post("pix_buffer_read: you must set a buffer name!");
+      error("you must set a buffer name!");
       return;
     }
   
   ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
   if(ohead==NULL)
     {
-      post("pix_buffer_read: couldn't find pix_buffer '%s'", m_bindname->s_name);
+      error("couldn't find pix_buffer '%s'", m_bindname->s_name);
       return;
     }
   buffer=(pix_buffer *)(ohead)->data;

@@ -113,7 +113,7 @@ void pix_texture :: setUpTextureState() {
 
 #endif
 
-      debug("pix_texture: using rectangle texture");
+      debug("using rectangle texture");
 	}
   }
 #endif // GL_TEXTURE_RECTANGLE_EXT
@@ -122,10 +122,10 @@ void pix_texture :: setUpTextureState() {
   if (GemMan::client_storage_supported){
     if(m_clientStorage){
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-      debug("pix_texture: using client storage");
+      debug("using client storage");
     } else {
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
-      debug("pix_texture: not using client storage");
+      debug("not using client storage");
     }
   }
 #else
@@ -241,19 +241,19 @@ void pix_texture :: render(GemState *state) {
     if (m_mode){
       if (GemMan::texture_rectangle_supported ){
 	m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-	debug("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", m_objectname->s_name);
+	debug("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
 	normalized = 0;
       }
     } else 
 #endif // GL_TEXTURE_RECTANGLE_EXT
       {
 	m_textureType = GL_TEXTURE_2D;
-	debug("[%s]:  using mode 0:GL_TEXTURE_2D", m_objectname->s_name);
+	debug("using mode 0:GL_TEXTURE_2D");
 	normalized = 0;
       }
   }
   if (m_textureType!=texType){
-    debug("pix_texture:  texType != m_textureType");
+    debug("texType != m_textureType");
     stopRendering();startRendering();
   }   
 
@@ -269,7 +269,7 @@ void pix_texture :: render(GemState *state) {
         glTextureRangeAPPLE( m_textureType, 
                              m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 
                              m_imagebuf.data );
-        debug("pix_texture:  using glTextureRangeAPPLE()");
+        debug("using glTextureRangeAPPLE()");
       }else{
         glTextureRangeAPPLE( m_textureType, 0, NULL );
       }
@@ -372,7 +372,7 @@ if (m_rebuildList) {
 				m_buffer.type,
 				m_buffer.data);
      
-		debug("pix_texture: TexImage2D non rectangle");
+		debug("TexImage2D non rectangle");
             }
             else //this deals with rectangle textures that are h*w
               { 
@@ -384,7 +384,7 @@ if (m_rebuildList) {
 			 m_imagebuf.format,
 			 m_imagebuf.type,
 			 m_imagebuf.data); 
-                debug("pix_texture: TexImage2D  rectangle");
+                debug("TexImage2D  rectangle");
               }
         
             } //end of loop if size has changed
@@ -402,7 +402,7 @@ if (m_rebuildList) {
 			 m_imagebuf.format,
 			 m_imagebuf.type,
 			 m_imagebuf.data);
-              debug("pix_texture: new film");
+              debug("new film");
               state->image->newfilm = 0; //just to be sure
             }
             glTexSubImage2D(m_textureType, 0,

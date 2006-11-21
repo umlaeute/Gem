@@ -37,7 +37,7 @@ pix_fiducialtrack :: pix_fiducialtrack(t_symbol*s) :
   static bool first_time=true;
   if(first_time){
     first_time=false;
-    post("[pix_fiducialtrack]\n\tbased on fidtrack-library (c) R.Bencina\n\tbased on reacTIVision (c) M.Kaltenbrunner, R.Bencina\n\tsee http://www.iua.upf.es/mtg/reacTable/");
+    post("\tbased on fidtrack-library (c) R.Bencina\n\tbased on reacTIVision (c) M.Kaltenbrunner, R.Bencina\n\tsee http://www.iua.upf.es/mtg/reacTable/");
   }
   m_infoOut = outlet_new(this->x_obj, &s_list);
 
@@ -131,7 +131,7 @@ void pix_fiducialtrack :: treeMess(t_symbol*s)
   initialize_treeidmap_from_file( &treeidmap, m_treefile );
   initialize_fidtrackerX( &fidtrackerx, &treeidmap, NULL);
   if(treeidmap.max_adjacencies<=0){
-    error("[pix_fiducialtrack] could not load TreeIdMap from '%s'", s->s_name);
+    error("could not load TreeIdMap from '%s'", s->s_name);
   }
 }
 void pix_fiducialtrack :: addMess(t_symbol*s)

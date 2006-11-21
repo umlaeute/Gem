@@ -190,15 +190,15 @@ void gemframebuffer :: initFBO()
   if ( !m_mode )
   {
 	m_texTarget = GL_TEXTURE_2D;
-	post("[%s]:  using mode 0:GL_TEXTURE_2D", m_objectname->s_name);
+	post("using mode 0:GL_TEXTURE_2D");
   }else{
 	m_texTarget = GL_TEXTURE_RECTANGLE_EXT;
-	post("[%s]:  using mode 1:GL_TEXTURE_RECTANGLE_EXT", m_objectname->s_name);
+	post("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
   }
 #ifdef GL_EXT_framebuffer_object
   // Generate frame buffer object then bind it.
   glGenFramebuffersEXT(1, &m_frameBufferIndex);
-//  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
+  //  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
   glGenRenderbuffersEXT(1, &m_depthBufferIndex);
 
   // Create the texture we will be using to render to.
@@ -349,21 +349,21 @@ void gemframebuffer :: formatMess(char* format)
 #else
       m_type = GL_UNSIGNED_BYTE;
 #endif
-	  post("[gemframebuffer]: format is GL_RGB, %d",m_format);
+	  post("format is GL_RGB, %d",m_format);
       return;
     } else
     
     if (!strcmp(format, "RGB")){
 	  m_internalformat = GL_RGB;
       m_format = GL_RGB;
-      post("[gemframebuffer]: format is GL_RGB, %d",m_format);
+      post("format is GL_RGB, %d",m_format);
 
       return;
     } else
     
     if (!strcmp(format, "RGBA")){
 	// colorspace will equal RGBA
-      post("[gemframebuffer]: format is GL_RGBA, %d",m_format);
+      post("format is GL_RGBA, %d",m_format);
 	  m_internalformat = GL_RGBA;
 #ifdef __APPLE__
       m_format = GL_BGRA;
@@ -373,7 +373,7 @@ void gemframebuffer :: formatMess(char* format)
       return;
 	} else {
 	//default
-	  post("[gemframebuffer]: default format is GL_RGB, %d",m_format);
+	  post("default format is GL_RGB, %d",m_format);
 	  m_internalformat = GL_RGB;
       m_format = GL_RGB;
     }
@@ -383,22 +383,22 @@ void gemframebuffer :: typeMess(char* type)
 {
     if (!strcmp(type, "BYTE")){
       m_type = GL_UNSIGNED_BYTE;
-      post("[gemframebuffer]: type is BYTE, %d",m_type);
+      post("type is BYTE, %d",m_type);
       return;
     } 
 	else if (!strcmp(type, "INT")){
 	  m_type = GL_UNSIGNED_BYTE;
-      post("[gemframebuffer]: type is INT, %d",m_type);
+      post("type is INT, %d",m_type);
       return;
     }
 	else if (!strcmp(type, "FLOAT")){
-	  post("[gemframebuffer]: type is GL_FLOAT, %d",m_type);
+	  post("type is GL_FLOAT, %d",m_type);
 	  m_type = GL_FLOAT;
 	  return;
     } else {
 	//default
 	  m_type = GL_UNSIGNED_BYTE;
-	  post("[gemframebuffer]: default type is BYTE, %d",m_type);
+	  post("default type is BYTE, %d",m_type);
     }
 }
 

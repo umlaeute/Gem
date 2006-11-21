@@ -154,16 +154,16 @@ void vertex_program :: openMess(t_symbol *filename)
     char *s = m_programString;
     while(*s && *s != '\n') s++;
     *s = '\0';
-    post("[%s]: unknown program header \"%s\" or error open \"%s\" file\n",
-	 m_objectname->s_name,
-	 m_programString,filename->s_name);
+    post("unknown program header \"%s\" or error open \"%s\" file\n",
+	 m_programString,
+	 filename->s_name);
     
     delete m_programString; m_programString=NULL;
     m_size=0;
     return;
   }
 
-  post("[%s]: Loaded file: %s\n", m_objectname->s_name, m_buf);
+  post("Loaded file: %s\n", m_buf);
 }
 
 /////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ void vertex_program :: openMess(t_symbol *filename)
 void vertex_program :: LoadProgram(void)
 {
   if(NULL==m_programString)return;
-  GLint error=-1;
+  GLint err=-1;
 
   switch(m_programType){
 #ifdef GL_NV_vertex_program
@@ -184,7 +184,7 @@ void vertex_program :: LoadProgram(void)
 	glGenProgramsNV(1, &m_programID);
 	glBindProgramNV(m_programTarget, m_programID);
 	glLoadProgramNV(m_programTarget, m_programID, m_size, (GLubyte*)m_programString);
-	glGetIntegerv(GL_PROGRAM_ERROR_POSITION_NV, &error);
+	glGetIntegerv(GL_PROGRAM_ERROR_POSITION_NV, &err);
       } else {
         glEnable(m_programTarget);
 	glBindProgramNV(m_programTarget, m_programID);
@@ -200,7 +200,7 @@ void vertex_program :: LoadProgram(void)
 	glGenProgramsARB(1, &m_programID);
 	glBindProgramARB( m_programTarget, m_programID);
 	glProgramStringARB( m_programTarget, GL_PROGRAM_FORMAT_ASCII_ARB, m_size, m_programString);
-        glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &error);
+        glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &err);
       } else {
         glEnable(m_programTarget);
 	glBindProgramARB(m_programTarget, m_programID);
@@ -212,17 +212,17 @@ void vertex_program :: LoadProgram(void)
     return;
   }
 
-  if(error != -1) {
+  if(err != -1) {
     int line = 0;
     char *s = m_programString;
-    while(error-- && *s) if(*s++ == '\n') line++;
+    while(err-- && *s) if(*s++ == '\n') line++;
     while(s >= m_programString && *s != '\n') s--;
     char *e = ++s;
     while(*e != '\n' && *e != '\0') e++;
     *e = '\0';
-    post("[%s]:  program error at line %d:\n\"%s\"\n",m_objectname->s_name,line,s);
+    error("program error at line %d:\n\"%s\"\n",line,s);
 #ifdef GL_PROGRAM_ERROR_STRING_ARB
-    post("[%s]:  %s\n", m_objectname->s_name, glGetString(GL_PROGRAM_ERROR_STRING_ARB));
+    post("%s\n", glGetString(GL_PROGRAM_ERROR_STRING_ARB));
 #endif /* GL_PROGRAM_ERROR_STRING_ARB */
   }
 
@@ -234,7 +234,7 @@ void vertex_program :: LoadProgram(void)
   if (isUnderNativeLimits!=1)
   {
 		// Go through the most common limits that are exceeded
-    post("[%s]:  is beyond hardware limits", m_objectname->s_name);
+    error("is beyond hardware limits");
 
 		GLint aluInstructions, maxAluInstructions;
 		glGetProgramivARB(m_programTarget, GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &aluInstructions);
@@ -271,10 +271,9 @@ void vertex_program :: LoadProgram(void)
 
 void vertex_program :: startRendering()
 {
-  post("startrendering");
   if (m_programString == NULL)
     {
-      error("[%s]: need to load a program", m_objectname->s_name);
+      error("need to load a program");
       return;
     }
 

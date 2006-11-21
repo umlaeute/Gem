@@ -169,7 +169,7 @@ void glsl_program :: render(GemState *state)
       }
   } else {
     /* JMZ: this is really annoying... */
-    //post("GEM: [%s]:  no program linked", m_objectname->s_name);
+    //error("no program linked");
   }
   // send program ID to outlet
   /* JMZ: shouldn't this be only done, when we have a linked program? */
@@ -232,14 +232,14 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
 
   if (!argc)
     {
-      error("GEM: [%s]: can't link non-existent shaders", m_objectname->s_name);
+      error("can't link non-existent shaders");
       return;
     }
 
   if(argc>MAX_NUM_SHADERS)
     {
       argc=MAX_NUM_SHADERS;
-      post("[%s]: only %d shaders supported; skipping the rest", MAX_NUM_SHADERS);
+      post("only %d shaders supported; skipping the rest", MAX_NUM_SHADERS);
     }
   for (i = 0; i < argc; i++)
     {
@@ -264,7 +264,7 @@ void glsl_program :: LinkProgram()
   GLsizei length=0;
   if (!m_num)
     {
-      error("GEM: [%s]: can't link zero shaders", m_objectname->s_name);
+      error("can't link zero shaders");
       return;
     }
 
@@ -287,7 +287,7 @@ void glsl_program :: LinkProgram()
   glGetInfoLogARB( m_program, m_infoLength, &length, m_infoLog );
   if (length)
     {
-      post("GEM: [%s]: Info_log:", m_objectname->s_name);
+      post("Info_log:");
       post("%s", m_infoLog);
     }
   //post("freeing log");
@@ -301,7 +301,7 @@ void glsl_program :: LinkProgram()
     glUseProgramObjectARB( m_program );
   } else {
     glUseProgramObjectARB( 0 );
-    post("GEM: [%s]:  Link failed!", m_objectname->s_name);
+    post("Link failed!");
     return;
   }
   //post("getting variables");
@@ -312,15 +312,8 @@ void glsl_program :: LinkProgram()
   CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUVertexProcessing, &vertexGPUProcessing);
   CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUFragmentProcessing, &fragmentGPUProcessing);
   
-  if (vertexGPUProcessing)
-    post("[%s]: vertex shader running in hardware", m_objectname->s_name);
-  else
-    post("[%s]: vertex shader running in software", m_objectname->s_name);
-  
-  if (fragmentGPUProcessing)
-    post("[%s]: fragment shader running in hardware", m_objectname->s_name);
-  else
-    post("[%s]: fragment shader running in software", m_objectname->s_name);	
+  post("vertex shader running in %sware", vertexGPUProcessing?"hard":"soft");
+  post("fragment shader running in %sware", fragmentGPUProcessing?"hard":"soft");
 # endif //__APPLE__
 #endif
 }
@@ -363,7 +356,7 @@ void glsl_program :: getVariables()
       glGetActiveUniformARB(m_program, i, m_maxLength, &length, &m_size[i], &m_type[i], name);
 	  m_loc[i] = glGetUniformLocationARB( m_program, name );
       m_symname[i]=gensym(name);
-      //	  post("[%s]: active uniform variable: %s", m_objectname->s_name, name);
+      //	  post("active uniform variable: %s", name);
     }
   delete[]name;
 #endif
@@ -380,7 +373,7 @@ void glsl_program :: printInfo()
 
   if(!m_linked) 
     {
-      pd_error(x_obj, "no GLSL-program linked");
+      error("no GLSL-program linked");
       return;
     }
 
