@@ -45,7 +45,7 @@ class GEM_EXTERN pix_gain : public GemPixObj
 
 	    //////////
 	    // Constructor
-    	pix_gain();
+  pix_gain(int,t_atom*);
     	
     protected:
     	
@@ -79,6 +79,13 @@ class GEM_EXTERN pix_gain : public GemPixObj
     	//////////
     	// The new gain
     	float		  	m_gain[4];
+
+   	//////////
+    	// Set the new gain
+    	void	    	saturateMess(int sat);
+
+	//////////
+	bool  m_saturate;
     
     private:
     
@@ -86,6 +93,7 @@ class GEM_EXTERN pix_gain : public GemPixObj
     	// Static member functions
     	static void 	vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
     	static void 	floatGainMessCallback(void *data, t_floatarg gain);
+    	static void 	saturateMessCallback(void *data, t_floatarg saturate);
 };
 
 #endif	// for header file
