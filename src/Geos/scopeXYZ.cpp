@@ -108,10 +108,14 @@ void scopeXYZ :: render(GemState *state)
     }
   else
     {
-      float maxVal[2];
-      maxVal[0] = maxVal[1] = 0;
       if (state->texture)
 	{
+	  float maxVal[2];
+	  maxVal[0] = maxVal[1] = 0.f;
+
+	  if(maxVal[0]<0)maxVal[0]*=-1.f;
+	  if(maxVal[1]<0)maxVal[1]*=-1.f;
+
 	  for (int i = 0; i < m_length; i++)
     	    {
 	      for (int j = 0; j < 2; j++)
@@ -128,16 +132,24 @@ void scopeXYZ :: render(GemState *state)
 		    }
 		}
     	    }
+	  glBegin(m_drawType);
+	  for(int n=0; n < m_length; n++)
+	    {
+	      glTexCoord2f(m_vert[n][0] / maxVal[0],
+			   m_vert[n][1] / maxVal[1]);
+	      glVertex3fv(m_vert[n]);
+	    }
+	  glEnd();
 	}
-      glBegin(m_drawType);
-      for(int n=0; n < m_length; n++)
+      else
 	{
-	  if (state->texture)
-	    glTexCoord2f(m_vert[n][0] / maxVal[0],
-			 m_vert[n][1] / maxVal[1]);
-	  glVertex3fv(m_vert[n]);
+	  glBegin(m_drawType);
+	  for(int n=0; n < m_length; n++)
+	    {
+	      glVertex3fv(m_vert[(n+m_position)%m_length]);
+	    }
+	  glEnd();
 	}
-      glEnd();
     }
   glLineWidth(1.0);
 }
@@ -173,7 +185,10 @@ void scopeXYZ :: typeMess(t_symbol *type)
       char c2=s[4];
       switch(c2){
       case 's':
-	m_drawType = GL_LINE_STRIP;
+	if(s[5])
+	  m_drawType = GL_LINE_STRIP;
+	else
+	  m_drawType = GL_LINES;
 	break;
       default:
 	m_drawType = GL_LINE_LOOP;
@@ -211,10 +226,10 @@ void scopeXYZ :: typeMess(t_symbol *type)
     }
     break;
   default:
-    error ("GEM: scopeXYZ: draw style");
+    error ("draw style");
     return;
   }
-    setModified();
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -294,8 +309,7 @@ t_int* scopeXYZ :: perform(t_int* w)
       *vert++=*in_Y++;
       *vert++=*in_Z++;
     }
-  }
-    
+  }    
 
   x->setModified();
   return (w+index);
