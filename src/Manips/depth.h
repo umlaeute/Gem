@@ -39,7 +39,7 @@ class GEM_EXTERN depth : public GemBase
 
 	    //////////
 	    // Constructor
-    	depth();
+  depth(int, t_atom*);
     	
     protected:
     	
