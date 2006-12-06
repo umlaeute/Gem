@@ -14,6 +14,8 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#ifndef __APPLE__
+
 #define HELPSYMBOL "pix_film"
 
 #include "pix_filmNEW.h"
@@ -523,3 +525,4 @@ void pix_filmNEW :: threadCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->threadMess((int)state);
 }
+#endif /*__APPLE__*/
