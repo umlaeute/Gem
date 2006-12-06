@@ -20,6 +20,8 @@
 
 #include "pix_movieNEW.h"
 
+#ifndef __APPLE__
+
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieNEW, t_symbol *, A_DEFSYM)
 
 /////////////////////////////////////////////////////////
@@ -186,4 +188,4 @@ void pix_movieNEW :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->modeMess((int)quality);
 }
-
+#endif /*__APPLE__*/
