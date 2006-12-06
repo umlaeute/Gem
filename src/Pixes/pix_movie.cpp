@@ -18,6 +18,8 @@
 
 #include "pix_movie.h"
 
+#ifndef __APPLE__
+
 #ifndef FILM_NEW
 
 #include "Base/GemMan.h"
@@ -47,6 +49,7 @@ pix_movie :: pix_movie(t_symbol *filename) :
    m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f)
 {
   m_film=false;
+  post("I should never be called on a Mac");
 }
 
 /////////////////////////////////////////////////////////
@@ -381,4 +384,4 @@ void pix_movie :: autoCallback(void *data, t_floatarg state)
 }
 
 #endif /* FILM_NEW */
-
+#endif /*__APPLE__*/
