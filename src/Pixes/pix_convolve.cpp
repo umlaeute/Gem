@@ -233,10 +233,14 @@ void pix_convolve :: processYUVImage(imageStruct &image)
     int initOffset = initY * xTimesc + initX * tempImg.csize;
     
  //   calculate3x3YUV(image,tempImg);
+ 
+//quick fix for Intel 3x3YUV problems
+#ifdef PPC
     if (m_rows == 3 && m_cols == 3) {
       calculate3x3YUV(image,tempImg);
       return;
     }
+#endif
     if (m_chroma) {
     for (int y = initY; y < maxY; y++)   {
         int realY = y * xTimesc;
@@ -339,6 +343,7 @@ return;
 if (m_chroma){
   i = xsize;
  
+#ifdef i386
   register unsigned char val1 = 0;  
   register unsigned char val2 = src[i-xsize+1]; 
   register unsigned char val3 = src[i-xsize+3];
@@ -348,11 +353,25 @@ if (m_chroma){
   register unsigned char val7 = src[i+xsize-1];
   register unsigned char val8 = src[i+xsize+1];
   register unsigned char val9 = src[i+xsize+3];
-  
-length = size /2;
+#else 
+  register unsigned char val1 = 0;  
+  register unsigned char val2 = src[i-xsize+1]; 
+  register unsigned char val3 = src[i-xsize+3];
+  register unsigned char val4 = src[i-1];
+  register unsigned char val5 = src[i+1];
+  register unsigned char val6 = src[i+3];
+  register unsigned char val7 = src[i+xsize-1];
+  register unsigned char val8 = src[i+xsize+1];
+  register unsigned char val9 = src[i+xsize+3];
+#endif  
+
   //unroll this 2x to fill the registers? (matrix*y1*y2= 9*9*9 =27)
-i=xsize+1;
-    for (k=1;k<ysize;k++) {
+  //messed up looking on x86
+i=xsize+2;
+
+length = size /2;
+
+	  for (k=1;k<ysize;k++) {
         for (j=1;j<xsize;j++) {
   //load furthest value first...the rest should be in cache
     
