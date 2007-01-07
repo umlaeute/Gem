@@ -188,7 +188,7 @@ void vertex_combine :: gem_rightMessCallback(void *data, t_symbol *s, int argc, 
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
     GetMyClass(data)->m_cacheRight = (GemCache*)argv->a_w.w_gpointer;
     GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
-  } else error("GEM: wrong righthand arguments....");
+  } else GetMyClass(data)->error("wrong righthand arguments....");
 }
 
 void vertex_combine :: blendCallback(void *data, t_floatarg x)

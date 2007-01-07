@@ -187,7 +187,7 @@ void vertex_add :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_at
   if (argc==1 && argv->a_type==A_FLOAT){
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
     GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
-  } else error("GEM: wrong righthand arguments....");
+  } else GetMyClass(data)->error("wrong righthand arguments....");
 }
 void vertex_add :: typeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
