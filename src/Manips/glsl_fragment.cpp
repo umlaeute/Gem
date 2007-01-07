@@ -34,8 +34,12 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_fragment, t_symbol *, A_DEFSYM)
 glsl_fragment :: glsl_fragment(t_symbol *filename) :
   glsl_vertex()
 {
-#ifdef GL_ARB_shader_objects
+#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
+#ifdef GL_VERSION_2_0
+  m_shaderTarget = GL_FRAGMENT_SHADER;
+#else
   m_shaderTarget = GL_FRAGMENT_SHADER_ARB;
+#endif
   openMess(filename);
 #endif
 }
@@ -55,10 +59,18 @@ glsl_fragment :: ~glsl_fragment()
 /////////////////////////////////////////////////////////
 void glsl_fragment :: printInfo()
 {
-#ifdef GL_ARB_fragment_shader
+#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
 	GLint bitnum = 0;
 	post("glsl_fragment Hardware Info");
 	post("============================");
+#ifdef GL_VERSION_2_0
+	glGetIntegerv( GL_MAX_FRAGMENT_UNIFORM_COMPONENTS, &bitnum );
+	post("MAX_FRAGMENT_UNIFORM_COMPONENTS: %d", bitnum);
+	glGetIntegerv( GL_MAX_TEXTURE_COORDS, &bitnum );
+	post("MAX_TEXTURE_COORDS: %d", bitnum);
+	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &bitnum );
+	post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
+#elif defined GL_ARB_fragment_shader
 # ifdef GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB
 	glGetIntegerv( GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB, &bitnum );
 	post("MAX_FRAGMENT_UNIFORM_COMPONENTS: %d", bitnum);
@@ -72,6 +84,7 @@ void glsl_fragment :: printInfo()
 	post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
 # endif
 #endif /* GL_ARB_fragment_shader */
+#endif /* defined GL_VERSION_2_0 || defined GL_ARB_shader_objects */
 }
 
 /////////////////////////////////////////////////////////

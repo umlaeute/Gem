@@ -25,11 +25,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # undef GL_ARB_shader_objects
 #endif
 
+#ifndef GL_VERSION_2_0
 #ifdef __APPLE__
 # define t_GLshaderObj GLhandleARB*
 #else
 # define t_GLshaderObj GLhandleARB
-#endif
+#endif // __APPLE__
+#endif // GL_VERSION_2_0
 
 #define MAX_NUM_SHADERS 32
 
@@ -94,9 +96,15 @@ class GEM_EXTERN glsl_program : public GemBase
   // Print Info about Hardware limits
   virtual void printInfo();
   
-#ifdef GL_ARB_shader_objects
+#ifdef GL_VERSION_2_0
+  GLuint			m_program;
+  GLuint			m_shaderObj[MAX_NUM_SHADERS];
+  GLchar*			m_infoLog;
+#elif defined(GL_ARB_shader_objects)
   GLhandleARB		m_program;
   t_GLshaderObj		m_shaderObj[MAX_NUM_SHADERS];
+  GLcharARB*		m_infoLog;
+#endif
   GLint				m_maxLength, m_infoLength;
   
   //////////
@@ -111,9 +119,7 @@ class GEM_EXTERN glsl_program : public GemBase
   
   GLint				m_linked;
   bool              m_wantLink;
-  GLcharARB*		m_infoLog;
   int				m_num;
-#endif
   
   t_outlet		*m_outProgramID;
 

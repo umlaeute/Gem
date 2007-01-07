@@ -36,14 +36,18 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_vertex, t_symbol *, A_DEFSYM)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-#ifdef GL_ARB_shader_objects
+#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
 glsl_vertex :: glsl_vertex() :
   m_shaderType(GEM_shader_none), 
   m_shader(0),
   m_compiled(0), m_size(0),
   m_shaderString(NULL), m_shaderID(0)
 {
+#ifdef GL_VERSION_2_0
+  m_shaderTarget = GL_VERTEX_SHADER;
+#else
   m_shaderTarget = GL_VERTEX_SHADER_ARB;
+#endif //GL_VERSION_2_0
   // create an outlet to send shader object ID
   m_outShaderID = outlet_new(this->x_obj, &s_float);
 }
@@ -53,7 +57,11 @@ glsl_vertex :: glsl_vertex(t_symbol *filename) :
   m_compiled(0), m_size(0), 
   m_shaderString(NULL), m_shaderID(0)
 {
+#ifdef GL_VERSION_2_0
+  m_shaderTarget = GL_VERTEX_SHADER;
+#else
   m_shaderTarget = GL_VERTEX_SHADER_ARB;
+#endif //GL_VERSION_2_0
   openMess(filename);
 
   // create an outlet to send shader object ID
@@ -88,12 +96,16 @@ glsl_vertex :: ~glsl_vertex()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: closeMess(void)
 {
-#ifdef GL_ARB_shader_objects
+#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   if(m_shaderString)delete [] m_shaderString;
   m_shaderString=NULL;
   m_size=0;
   if(m_shader){
+#ifdef GL_VERSION_2_0
+	glDeleteShader( m_shader );
+#else
 	glDeleteObjectARB( m_shader );
+#endif //GL_VERSION_2_0
   }
   m_shader=0;
   m_compiled=0;
@@ -107,7 +119,7 @@ void glsl_vertex :: closeMess(void)
 /////////////////////////////////////////////////////////
 void glsl_vertex :: openMess(t_symbol *filename)
 {
-#ifdef GL_ARB_shader_objects
+#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   if(NULL==filename || NULL==filename->s_name)return;
   if(&s_==filename)return;
 
@@ -140,6 +152,36 @@ void glsl_vertex :: openMess(t_symbol *filename)
     strcpy(m_shaderString,buf);
   }
   m_size=strlen(m_shaderString);
+  
+#ifdef GL_VERSION_2_0
+  if (!m_shader) m_shader = glCreateShader( m_shaderTarget );
+  else
+  {
+    glDeleteShader( m_shader );
+	m_shader = glCreateShader( m_shaderTarget );
+  }
+  if (!m_shader)
+  {
+	error("could not create shader object");
+	return;
+  }
+  const char * vs = m_shaderString;
+  glShaderSource( m_shader, 1, &vs, NULL );
+  glCompileShader( m_shader );
+  glGetShaderiv( m_shader, GL_COMPILE_STATUS, &m_compiled );
+  if (!m_compiled) {
+	GLint	length;
+	GLchar* log;
+	glGetShaderiv( m_shader, GL_INFO_LOG_LENGTH, &length );
+	log = (GLchar*)malloc( length * sizeof(GLchar) );
+	glGetShaderInfoLog( m_shader, length, NULL, log );
+	post("compile Info_log:");
+	post("%s", log );
+	error("shader not loaded");
+	free(log);
+	return;
+  }
+#else
   if (!m_shader) m_shader = glCreateShaderObjectARB( m_shaderTarget );
   else
   {
@@ -167,6 +209,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
 	free(log);
 	return;
   }
+#endif // GL_VERSION_2_0
   verbose(1, "Loaded file: %s", buf);
 #endif
 }
@@ -177,7 +220,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
 /////////////////////////////////////////////////////////
 void glsl_vertex :: startRendering()
 {
-#ifdef GL_ARB_shader_objects
+#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   if (m_shaderString == NULL)
     {
       error("need to load a shader");
@@ -192,7 +235,7 @@ void glsl_vertex :: startRendering()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: render(GemState *state)
 {
-#ifdef GL_ARB_shader_objects
+#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   if (m_shader)
   {
     // send textureID to outlet
@@ -215,10 +258,26 @@ void glsl_vertex :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_vertex :: printInfo()
 {
-#ifdef GL_ARB_vertex_shader
+#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
 	GLint bitnum = 0;
 	post("Vertex_shader Hardware Info");
 	post("============================");
+#ifdef GL_VERSION_2_0
+	glGetIntegerv( GL_MAX_VERTEX_ATTRIBS, &bitnum );
+	post("MAX_VERTEX_ATTRIBS: %d", bitnum);
+	glGetIntegerv( GL_MAX_VERTEX_UNIFORM_COMPONENTS, &bitnum );
+	post("MAX_VERTEX_UNIFORM_COMPONENTS_ARB: %d", bitnum);
+	glGetIntegerv( GL_MAX_VARYING_FLOATS, &bitnum );
+	post("MAX_VARYING_FLOATS: %d", bitnum);
+	glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &bitnum );
+	post("MAX_COMBINED_TEXTURE_IMAGE_UNITS: %d", bitnum);
+	glGetIntegerv( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &bitnum );
+	post("MAX_VERTEX_TEXTURE_IMAGE_UNITS: %d", bitnum);
+	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &bitnum );
+	post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
+	glGetIntegerv( GL_MAX_TEXTURE_COORDS, &bitnum );
+	post("MAX_TEXTURE_COORDS: %d", bitnum);
+#elif defined GL_ARB_vertex_shader
 	glGetIntegerv( GL_MAX_VERTEX_ATTRIBS_ARB, &bitnum );
 	post("MAX_VERTEX_ATTRIBS: %d", bitnum);
 	glGetIntegerv( GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &bitnum );
@@ -234,6 +293,7 @@ void glsl_vertex :: printInfo()
 	glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
 	post("MAX_TEXTURE_COORDS: %d", bitnum);
 #endif /* GL_ARB_vertex_shader */
+#endif /* defined GL_VERSION_2_0 || defined GL_ARB_shader_objects */
 }
 
 /////////////////////////////////////////////////////////
