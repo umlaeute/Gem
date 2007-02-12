@@ -77,7 +77,12 @@ imageStruct :: imageStruct()
   : xsize (0),ysize(0),csize(0),
 #ifdef GL_UNSIGNED_SHORT_8_8_REV_APPLE
     // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
-    type(GL_UNSIGNED_SHORT_8_8_REV_APPLE), format(GL_YCBCR_422_GEM),
+    #ifdef __BIG_ENDIAN__
+	type(GL_UNSIGNED_SHORT_8_8_REV_APPLE),
+	#else
+	type(GL_UNSIGNED_SHORT_8_8_APPLE),
+	#endif
+	format(GL_YCBCR_422_GEM),
 #else
     type(GL_UNSIGNED_BYTE), format(GL_RGBA),
 #endif
@@ -229,7 +234,12 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
   case GL_YUV422_GEM:
   default:
     format=GL_YUV422_GEM; 
-    type  =GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+    type  =
+	#ifdef __BIG_ENDIAN__
+	GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+	#else
+	GL_UNSIGNED_SHORT_8_8_APPLE;
+	#endif
     csize =2; 
     break;
 
