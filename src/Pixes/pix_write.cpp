@@ -114,8 +114,12 @@ void pix_write :: doWrite()
       m_originalImage->csize = 3;
       m_originalImage->format = GL_RGB;
       #else
-      m_originalImage->type  = GL_UNSIGNED_INT_8_8_8_8_REV;
-
+	  m_originalImage->type  = 
+	  #ifdef __PPC__
+      GL_UNSIGNED_INT_8_8_8_8_REV;
+	  #else
+	  GL_UNSIGNED_INT_8_8_8_8;
+	  #endif // __PPC__
       m_originalImage->csize = 4;
       m_originalImage->format = GL_BGRA; //or BGRA_EXT?
       #endif
@@ -148,6 +152,22 @@ void pix_write :: doWrite()
   
   glReadPixels(m_xoff, m_yoff, width, height,
 	       m_originalImage->format, m_originalImage->type, m_originalImage->data);
+#endif
+
+#if 0 // asynchronous texture fetching idea sketch
+/* Enable AGP storage hints */
+	glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
+	glTextureRangeAPPLE(...);
+	glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+	
+	/* Copy from Frame Buffer */
+	glCopyTexSubImage2d(...);
+	
+	/* Flush into AGP */
+	glFlush(...);
+	
+	/* Pull out of AGP */
+	glGetTexImage(...);
 #endif
   mem2image(m_originalImage, m_filename, m_filetype);
 }
