@@ -25,7 +25,7 @@
 #elif defined __APPLE__
 #include <stdlib.h>
 #include <string.h>
-#include <Quicktime/Quicktime.h>
+#include <QuickTime/QuickTime.h>
 #include <time.h>
 #elif defined __WIN32__
 # include <stdlib.h>

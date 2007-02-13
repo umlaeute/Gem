@@ -12,7 +12,7 @@
 #define INCLUDE_PIX_VIDEODARWIN_H_
 
 #include <Carbon/Carbon.h>
-#include <QuickTime/Quicktime.h>
+#include <QuickTime/QuickTime.h>
 
 #include "pix_video.h"
  

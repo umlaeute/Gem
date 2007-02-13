@@ -16,8 +16,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "pix_film.h"
 
-#include <Carbon/carbon.h>
-#include <QuickTime/quicktime.h>
+#include <Carbon/Carbon.h>
+#include <QuickTime/QuickTime.h>
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

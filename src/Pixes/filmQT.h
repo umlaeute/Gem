@@ -22,8 +22,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifdef HAVE_QUICKTIME
 # ifdef __APPLE__
-#  include <Carbon/carbon.h>
-#  include <QuickTime/quicktime.h>
+#  include <Carbon/Carbon.h>
+#  include <QuickTime/QuickTime.h>
 # elif defined __WIN32__
 #  include <QTML.h>
 #  include <Movies.h>

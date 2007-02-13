@@ -22,7 +22,7 @@
 #include "m_pd.h"
 
 #ifdef __APPLE__
-# include <Carbon/carbon.h>
+# include <Carbon/Carbon.h>
 # include <QuickTime/QuickTime.h>
 #endif // __APPLE__
 

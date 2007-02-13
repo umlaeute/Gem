@@ -18,8 +18,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 
 #ifdef __APPLE__
-#include <Carbon/carbon.h>
-#include <QuickTime/quicktime.h>
+#include <Carbon/Carbon.h>
+#include <QuickTime/QuickTime.h>
 #else 
 #ifdef __WIN32__
 #include <QTML.h>
