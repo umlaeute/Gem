@@ -57,6 +57,14 @@ pix_videoNEW :: pix_videoNEW() :
 //
 /////////////////////////////////////////////////////////
 pix_videoNEW :: ~pix_videoNEW(){
+  /* clean up all video handles;
+   * the video-handles have to stop the transfer themselves
+   */
+  int i=MAX_VIDEO_HANDLES;
+  while(i--) {
+    if(m_videoHandles[i]!=NULL)
+      delete m_videoHandles[i];
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -83,10 +91,10 @@ void pix_videoNEW :: render(GemState *state){
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: startRendering(){
   if (!m_videoHandle) {
-    post("do video for this OS");
+    error("do video for this OS");
     return;
   }
-  post("starting transfer");
+  verbose(1, "starting transfer");
   m_videoHandle->startTransfer();
 }
 
@@ -199,13 +207,15 @@ void pix_videoNEW :: deviceMess(t_symbol*s)
 {
   int err=0;
   if (m_videoHandle)err=m_videoHandle->setDevice(s->s_name);
-  post("device-err: %d", err);
+  
+  verbose(1, "device-err: %d", err);
   if(!err){
     int d=0;
     if(m_videoHandle)m_videoHandle->stopTransfer();
     for(d=0; d<m_numVideoHandles; d++){
       if(m_videoHandles[d]->setDevice(s->s_name)){
         m_videoHandle=m_videoHandles[d];
+        post("switched to driver #%d", d);
         break;
       }
     }

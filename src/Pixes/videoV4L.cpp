@@ -104,7 +104,7 @@ void *videoV4L :: capturing(void*you)
 {
   videoV4L *me=(videoV4L *)you;
   me->m_capturing=true;
-  debug("starting capture thread");
+  debug("v4l::thread starting");
   while(me->m_continue_thread){
     //debug("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
 
@@ -128,7 +128,7 @@ void *videoV4L :: capturing(void*you)
      if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
       {
     	if (errno == EAGAIN)
-	  error("can't sync (no video source?)");
+	  error("can't sync (no v4l source?)");
     	else 
 	  perror("VIDIOCMCAPTURE1");
 	if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
@@ -143,7 +143,7 @@ void *videoV4L :: capturing(void*you)
     me->m_frame_ready = 1;
     me->last_frame=me->frame;
   }
-  debug("exiting thread");
+  debug("v4l::thread exiting");
   me->m_capturing=false;
   return NULL;
 }
@@ -379,12 +379,12 @@ int videoV4L :: startTransfer(int format)
     m_frame_ready = 0;
     pthread_create(&m_thread_id, 0, capturing, this);
 
-    verbose(1, "opened video connection %X", tvfd);
+    verbose(1, "v4l::startTransfer opened video connection %X", tvfd);
 
     return(1);
 
 closit:
-    verbose(1, "closing video4linux %d", tvfd);
+    verbose(1, "v4l::startTransfer closing %d", tvfd);
     if (tvfd >= 0)
     {
     	close(tvfd);

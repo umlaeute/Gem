@@ -100,7 +100,7 @@ void *videoDV4L :: capturing(void*you)
       dvst.dropped_frames
     */	
     if (dvst.dropped_frames > 0) {
-      post("dv1394: dropped at least %d frames.", dvst.dropped_frames);
+      fprintf(stderr,"dv1394: dropped at least %d frames.", dvst.dropped_frames);
     }
     /*
       memcpy( g_current_frame->data, 
@@ -171,7 +171,25 @@ pixBlock *videoDV4L :: getFrame(){
 //
 /////////////////////////////////////////////////////////
 int videoDV4L :: openDevice(int format){
-  int fd = -1;
+  /*
+  If video feed is already open and "device <something>" message is passed
+  this will segfault Pd. Hence, we need to check if the device is already open
+  before trying to open it again.
+
+  Ico Bukvic ico@vt.edu 2-18-07
+  */
+  if(m_haveVideo){
+    verbose(1, "Stream already going on. Doing some clean-up...");
+    stopTransfer();
+  }
+
+  /*
+  All of the errors in this method return -1 anyhow, so fd should be 0 to allow
+  successful open if everything goes ok.
+
+  Ico Bukvic ico@vt.edu 2-18-07
+  */
+  int fd = 0; 
   struct dv1394_init init = {
     DV1394_API_VERSION, // api version 
     0x63,              // isochronous transmission channel
@@ -219,6 +237,11 @@ int videoDV4L :: openDevice(int format){
     close(fd);
     return -1;
   }
+  /*Extra verbosity never hurt anyone...
+
+  Ico Bukvic ico@vt.edu 2-18-07
+  */
+  verbose(1, "DV4L: Successfully opened...");
   return(fd);
 }
 /////////////////////////////////////////////////////////
@@ -245,7 +268,7 @@ void videoDV4L :: closeDevice(void){
 int videoDV4L :: startTransfer(int format)
 {
   if ((dvfd=openDevice(format))<0){
-    post("DV4L: closed");
+    verbose(1, "DV4L: closed");
     return(0);
   }
   m_image.newimage=0;
@@ -260,12 +283,12 @@ int videoDV4L :: startTransfer(int format)
 
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);
   if (!(m_decoder=dv_decoder_new(true, true, true))){
-    post("DV4L: unable to create DV-decoder...closing");
+    error("DV4L: unable to create DV-decoder...closing");
     closeDevice();
     return(0);
   }
   m_decoder->quality=m_quality;
-  post("DV4L: DV decoding quality %d ", m_decoder->quality);
+  verbose(1, "DV4L: DV decoding quality %d ", m_decoder->quality);
 
   m_continue_thread = true;
   pthread_create(&m_thread_id, 0, capturing, this);
@@ -289,7 +312,7 @@ int videoDV4L :: stopTransfer()
       select(0,0,0,0,&sleep);
       i++;
     }
-    post("DV4L: shutting down dv1394 after %d usec", i*10);
+    verbose(1, "DV4L: shutting down dv1394 after %d usec", i*10);
     ioctl(dvfd, DV1394_SHUTDOWN);
   }
   closeDevice();
