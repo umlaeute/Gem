@@ -31,9 +31,9 @@ GEMglBlendEquation :: GEMglBlendEquation	(t_floatarg arg0=0) :
 #endif /* DONT_HAVE_GLBLENDEQUATION */
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
-/////////////////////////////////////////////////////////
-                                                // Destructor
-                                                //
+////////////////////////////////////////////////////////
+// Destructor
+//
 GEMglBlendEquation :: ~GEMglBlendEquation () {
   inlet_free(m_inlet[0]);
 }
@@ -42,7 +42,7 @@ GEMglBlendEquation :: ~GEMglBlendEquation () {
 // Render
 //
 void GEMglBlendEquation :: render(GemState *state) {
-#ifndef DONT_HAVE_GLBLENDEQUATION
+#if defined GL_VERSION_1_2 && !defined DONT_HAVE_GLBLENDEQUATION
   glBlendEquation (mode);
 #endif /* DONT_HAVE_GLBLENDEQUATION */
 }
