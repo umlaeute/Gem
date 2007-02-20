@@ -33,6 +33,7 @@ AC_SUBST(REFERENCEPATH)
 AC_SUBST(NEW_VIDEOFILM)
 AC_SUBST(HAVE_GLSIZEIPTRARB)
 AC_SUBST(CONFIGUREFLAGS)
+AC_SUBST(GEM_OPENGL_VERSION_MAX)
 
 ## store the flags passed to us
 ## is there no way to get the flags without quotes?
@@ -72,6 +73,9 @@ AC_ARG_WITH([pdversion],
 		AC_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
 AC_ARG_WITH([extension], 
 		AC_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
+AC_ARG_WITH([glversion],
+		AC_HELP_STRING([--with-glversion=<ver>],[enforce a certain openGL-version (e.g. 1.5)]))
+
 
 GEM_TARGETS=Base
 GEM_TARGET(Controls)
@@ -134,6 +138,17 @@ GEM_CHECK_FRAMEWORK(AGL)
 if test "x$gem_check_ldflags_success" = "xyes"; then
   have_glu="yes"
 fi
+
+if test "x$with_glversion" != "x"; then
+ GEM_OPENGL_VERSION_MAX=0
+ for gl_subversion in $(echo ${with_glversion} | sed -e 's|\.| |g'); do let GEM_OPENGL_VERSION_MAX=GEM_OPENGL_VERSION_MAX*1000+gl_subversion; done
+ AC_DEFINE_UNQUOTED(GEM_OPENGL_VERSION_MAX, ${GEM_OPENGL_VERSION_MAX})
+else
+ GEM_OPENGL_VERSION_MAX="(default)"
+fi
+
+  
+
 
 dnl some checks for osX
 GEM_CHECK_FRAMEWORK(Carbon, 
@@ -587,6 +602,11 @@ Configuration:
  pure-data:
   version                : ${PD_MAJORVERSION}.${PD_MINORVERSION}
 
+ openGL   :
+  using version          : ${GEM_OPENGL_VERSION_MAX}
+  using ARB-extensions   : ${enable_ARB}
+  using NV-extensions    : ${enable_NV}
+
  used optional libraries:
 
   font-rendering         : ${have_font}
@@ -607,8 +627,6 @@ Configuration:
 
   misc
     using ARB-extensions : ${enable_ARB}
-    using NV-extensions  : ${enable_NV}
-    using reg-struct-ret : ${enable_registerstruct}
 
 Now run make ...
 ])

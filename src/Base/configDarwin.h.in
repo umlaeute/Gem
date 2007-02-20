@@ -1,3 +1,11 @@
+
+
+/* the maximum openGL-version to use 
+ * overrides the version found in the openGL-headers
+ */
+#undef GEM_OPENGL_VERSION_MAX
+
+
 /* font rendering */
 #undef HAVE_LIBFTGL
 

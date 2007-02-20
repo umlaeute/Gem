@@ -21,6 +21,49 @@
 
 #include "config.h"
 
+
+#ifdef GEM_OPENGL_VERSION_MAX
+/* this is a mechanism to make only parts of the openGL-headers visible 
+ * that do not exceed a special version number
+ *
+ * this is needed for broken openGL implementations where the headers do not match the libraries
+ * (notable: proprietary ATI drivers on linux)
+ *
+ * to enable this, set the GEM_OPENGL_VERSION_MAX to a value (majorversion + 1000*minorversion)
+ * of the wanted maximum openGL version.
+ * e.g. "105" means, that we only want support for openGL up to (and including!) 1.5
+ */
+
+/* we first define the GL_VERSION_x_y constants, so that the preprocessor thinks 
+ * that they are already present when it parses the openGL header files
+ *
+ * according to http://www.opengl.org/registry/ABI/#app (Section 5.2)
+ * this version string should not be used for testing for the existence of extensions
+ * therefore we leave it defined
+ */
+# if GEM_OPENGL_VERSION_MAX < 2001
+#  define GL_VERSION_2_1
+# endif
+# if GEM_OPENGL_VERSION_MAX < 2000
+#  define GL_VERSION_2_0
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1005
+#  define GL_VERSION_1_5
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1004
+#  define GL_VERSION_1_4
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1003
+#  define GL_VERSION_1_3
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1002
+#  define GL_VERSION_1_2
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1001
+#  define GL_VERSION_1_1
+# endif
+#endif /* GEM_OPENGL_VERSION_MAX */
+
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef __WIN32__
 # include <windows.h>
@@ -174,5 +217,39 @@
 #ifndef GL_DEFAULT_GEM
 # define GL_DEFAULT_GEM 0xFFFF
 #endif
+
+
+#ifdef GEM_OPENGL_VERSION_MAX
+/* this is the second part of the "max openGL version" mechanism (see above)
+ *
+ * we undefine all the manually defined GL_VERSION_x_y items, in order to
+ * avoid Gem thinking that they are really present
+ *
+ * according to http://www.opengl.org/registry/ABI/#app (Section 5.2)
+ * this version string should not be used for testing for the existence of extensions
+ * LATER remove these tests from the code and remove the undef's here
+ */
+# if GEM_OPENGL_VERSION_MAX < 2001
+#  undef GL_VERSION_2_1
+# endif
+# if GEM_OPENGL_VERSION_MAX < 2000
+#  undef GL_VERSION_2_0
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1005
+#  undef GL_VERSION_1_5
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1004
+#  undef GL_VERSION_1_4
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1003
+#  undef GL_VERSION_1_3
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1002
+#  undef GL_VERSION_1_2
+# endif
+# if GEM_OPENGL_VERSION_MAX < 1001
+#  undef GL_VERSION_1_1
+# endif
+#endif /* GEM_OPENGL_VERSION_MAX */
 
 #endif /* INCLUDE_GEMGL_H_ */

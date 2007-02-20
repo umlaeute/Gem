@@ -1,3 +1,10 @@
+
+
+/* the maximum openGL-version to use 
+ * overrides the version found in the openGL-headers
+ */
+#undef GEM_OPENGL_VERSION_MAX
+
 /* fullscreen: querying via libXxf86vm */
 #undef HAVE_LIBXXF86VM
 
