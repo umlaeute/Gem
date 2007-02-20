@@ -37,8 +37,7 @@
 /* we first define the GL_VERSION_x_y constants, so that the preprocessor thinks 
  * that they are already present when it parses the openGL header files
  *
- * at the end of this file we und this definitions, even though this is deprecated
- * (see below)
+ * at the end of this file we undo this definitions (see below)
  */
 # if GEM_OPENGL_VERSION_MAX < 2001
 #  define GL_VERSION_2_1
