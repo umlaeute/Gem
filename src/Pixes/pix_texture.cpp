@@ -245,7 +245,7 @@ void pix_texture :: render(GemState *state) {
 	normalized = 0;
       }
     } else 
-#endif // GL_TEXTURE_RECTANGLE_EXT
+# endif // GL_TEXTURE_RECTANGLE_EXT
       {
 	m_textureType = GL_TEXTURE_2D;
 	debug("using mode 0:GL_TEXTURE_2D");
@@ -463,7 +463,9 @@ void pix_texture :: postrender(GemState *state){
   state->texture     = m_oldTexture;
 
   if (m_didTexture){
+#ifdef GL_VERSION_1_1
     glActiveTexture(GL_TEXTURE0_ARB + m_texunit);  //needed?
+#endif
     glDisable(m_textureType);
   }
 
