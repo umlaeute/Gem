@@ -81,8 +81,13 @@ class GEM_EXTERN pix_offset : public GemPixObj
     	
     	//////////
     	// The new offset
-    	unsigned char 	m_offset[4];
+    	unsigned char	m_offset[4];
         short Y,U,V;
+
+   	//////////
+    	// whether we want saturated logic
+    	void	    	saturateMess(int sat);
+	bool  m_saturate;
 
     private:
     
@@ -90,6 +95,7 @@ class GEM_EXTERN pix_offset : public GemPixObj
     	// Static member functions
     	static void 	vecOffsetMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
     	static void 	floatOffsetMessCallback(void *data, t_floatarg offset);
+    	static void 	saturateMessCallback(void *data, t_floatarg saturate);
 };
 
 #endif	// for header file
