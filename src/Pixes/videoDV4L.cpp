@@ -100,7 +100,7 @@ void *videoDV4L :: capturing(void*you)
       dvst.dropped_frames
     */	
     if (dvst.dropped_frames > 0) {
-      fprintf(stderr,"dv1394: dropped at least %d frames.", dvst.dropped_frames);
+      verbose(1,"dv1394: dropped at least %d frames", dvst.dropped_frames);
     }
     /*
       memcpy( g_current_frame->data, 
