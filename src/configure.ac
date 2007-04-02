@@ -282,8 +282,6 @@ fi
 GEM_CHECK_LIB(ftgl,ftgl,main,
   [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetpye], font support)
 
-GEM_CHECK_LIB(gltt,gltt, GLTTFont,,,,font support (deprecated))
-
 
 GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)
 
@@ -565,8 +563,6 @@ fi
 
 if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL
-elif test "x$have_gltt" = "xyes"; then
-  have_font=GLTT
 fi
 
 if test "x$have_quicktime_framework" = "xyes"; then
