@@ -49,7 +49,16 @@ pix_videoNEW :: pix_videoNEW() :
 #endif /* DV4L */
 
   m_numVideoHandles=i;
+#if 0
   driverMess(0);
+#else
+  /*
+   * calling driverMess() would immediately startTransfer(); 
+   * we probably don't want this in initialization phase
+   */
+  m_driver=0;
+  m_videoHandle=m_videoHandles[m_driver];
+#endif
 }
 
 /////////////////////////////////////////////////////////
