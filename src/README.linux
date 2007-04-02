@@ -27,20 +27,13 @@ jpeg       ftp://ftp.uu.net/graphics/jpeg/
  platforms: linux, windows
  level    : optional, suggested
 
-for font rendering you need (beside the freetype-package)
+for font rendering you need
  FTGL      http://homepages.paradise.net.nz/henryj/code/
     platforms: ALL
     level    : optional, suggested
   freetype2   http://freetype.sourceforge.net/index2.html
     platforms: ALL
     level    : needed for FTGL
-  OR
- gltt       http://gltt.sourceforge.net/
-    platforms: linux, windows (deprecated!!!)
-    level    : optional, deprecated
-  freetype1   http://freetype.sourceforge.net/index2.html
-    platforms: linux, windows (deprecated)
-    level    : needed for GLTT
 
 To enable movie-loading you might want to install one (or all) of the following:
 quicktime4linux	http://heroinewarrior.com/quicktime.php3
@@ -60,9 +53,9 @@ Debian-users:
 =============
 On a Debian system (most of) these library are already in your distribution.
 Some packages, that are not in the official Debian-release (esp. libmpeg3(-dev)), can be found at
- http://marillat.free.fr
+ http://www.debian-multimedia.org
 you might have to put a line like
- deb http://marillat.free.fr/ stable main
+ deb deb http://www.debian-multimedia.org stable main
 into your /etc/apt/sources.list
 
 #> apt-get install libgl-dev ftgl-dev libtiff3g-dev libjpeg62-dev libmpeg3-dev libavifile-0.7-dev libquicktime-dev libdv4-dev
