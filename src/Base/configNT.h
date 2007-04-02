@@ -12,7 +12,7 @@
  *       see http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclang/html/_predir_comment.asp
  */
 
-/* use FTGL instead of GLTT for font-rendering */
+/* use FTGL for font-rendering */
 #define FTGL
 
 /* use the "new" film-objects, to allow the use of multiple APIs */

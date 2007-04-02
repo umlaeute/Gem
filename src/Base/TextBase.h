@@ -31,15 +31,12 @@
 #ifdef FTGL
 # define FONT_SCALE 0.2/3.0
 # include "FTFont.h"
-#elif defined GLTT
-# define FONT_SCALE 0.05
-# include "FTFace.h"
 #else
 # define FONT_SCALE 1.0
 #endif
 
-using std::string;
 using std::vector;
+using std::wstring;
 
 
 /*-----------------------------------------------------------------
@@ -74,16 +71,11 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // Do the rendering
-#ifdef GLTT
-  // when we are in GLTT, we have to define the rendering function again and again...
-  virtual void	render(GemState*)=0;
-#else
   virtual void	render(GemState*);
-#endif
 
   //////////
   // break a string according to '\n'
-  virtual void  breakLine(string line);
+  virtual void  breakLine(wstring line);
 
   //-- moocow
   //////////
@@ -139,7 +131,7 @@ class GEM_EXTERN TextBase : public GemBase
   //////////
   // The text to display
   // (one entry for each line)
-  vector<string> m_theText;
+  vector<wstring> m_theText;
 
   //////////
   // distance between the lines
@@ -204,22 +196,10 @@ class GEM_EXTERN TextBase : public GemBase
      * this rids us of having to reload the font by hand everytime the rendering is restarted
      */
     virtual  void startRendering(void){if(m_fontname)fontNameMess(m_fontname);}
-#elif defined GLTT
-    FTFace 		*m_face;
 
-    //////////
-    // make the actual font
-    /* return values: 1==success; 0==failure
-     * the actual fonts (members are declared in child-classes) are created
-     * if creation fails, the fonts should be cleaned-up and
-     * 0 is returned (for historic reasons)
-     */
-    virtual int makeFontFromFace() = 0;
-
-    ////////
-    // destroy the current font.
-    /* this has to be done before(!) destroying the face */
-    virtual void destroyFont() = 0;
+    /* render one line of the text */
+    virtual void renderLine(const char*line,float dist);
+    virtual void renderLine(const wchar_t*line,float dist);
 #endif
   
  private:

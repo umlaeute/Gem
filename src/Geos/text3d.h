@@ -18,9 +18,6 @@ LOG
 
 #include "Base/TextBase.h"
 
-#ifdef GLTT
-#include "GLTTFont.h"
-#endif
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -50,16 +47,6 @@ class GEM_EXTERN text3d : public TextBase
 
 #ifdef FTGL
 	virtual FTFont*makeFont(const char*fontname);
-#elif defined GLTT
-	virtual int     makeFontFromFace();
-	virtual void    destroyFont();
-	//////////
-    	// The font structure
-    	GLTTFont		*m_font;
-
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
 #endif
 };
 

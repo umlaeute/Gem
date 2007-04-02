@@ -53,8 +53,6 @@
 
 #ifdef HAVE_LIBFTGL
 #  define FTGL
-#elif defined HAVE_LIBGLTT
-#  define GLTT
 #endif
 
 #ifdef HAVE_FFMPEG

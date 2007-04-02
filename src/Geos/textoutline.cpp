@@ -49,71 +49,8 @@ FTFont *textoutline :: makeFont(const char*fontfile){
   return m_font;
 }
 
-#elif defined GLTT
 
-textoutline :: textoutline(int argc, t_atom *argv)
-  : TextBase(argc, argv)
-    , m_font(NULL)
-{
-   fontNameMess(DEFAULT_FONT);
- }
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-textoutline :: ~textoutline()
-{
-  if(m_font)delete m_font;m_font=NULL;
-  if(m_face)delete m_face;m_face=NULL;
-}
-
-/////////////////////////////////////////////////////////
-// makeFontFromFace
-//
-/////////////////////////////////////////////////////////
-void textoutline :: destroyFont() {
-  if(m_font)delete m_font; m_font=NULL;
-}
-int textoutline :: makeFontFromFace()
-{
-  if(m_font)delete m_font;m_font=NULL;
-  if (!m_face)    {
-    error("GEM: textoutline: True type font doesn't exist");
-    return(0);
-  }
-  m_font = new GLTTOutlineFont(m_face);
-  m_font->setPrecision((double)m_precision);
-  if( ! m_font->create((int)m_fontSize) ) {
-    error("GEM: textoutline: unable to create outlined font");
-    delete m_font; m_font = NULL;
-    return(0);
-  }
-  return(1);
-}
-
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void textoutline :: render(GemState *)
-{
-  if (m_valid && !m_theText.empty()) 
-  {
-    // compute the offset due to the justification
-    float x=0, y=0;
-
-    x=m_font->getWidth (m_theText[0]);
-    y=m_font->getHeight();
-    glPushMatrix();
-    justifyFont(0, 0, 0, x, y, 0, y);
-    m_font->output(m_theText[0]);
-    glPopMatrix();
-  }
-}
-
-
-#else /* !FTGL && !GLTT */
+#else /* !FTGL */
 
 textoutline :: textoutline(int argc, t_atom *argv)
   : TextBase(argc, argv)
@@ -126,7 +63,7 @@ textoutline :: textoutline(int argc, t_atom *argv)
 textoutline :: ~textoutline()
 {}
 
-#endif /* !GLTT && !FTGL */
+#endif /* FTGL */
 
 /////////////////////////////////////////////////////////
 // static member function

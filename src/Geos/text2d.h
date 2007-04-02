@@ -18,13 +18,6 @@ LOG
 
 #include "Base/TextBase.h"
 
-#ifdef GLTT
-#include "GLTTBitmapFont.h"
-//# if defined __linux__ || defined __APPLE__
-# include "GLTTPixmapFont.h"
-//# endif
-#endif
-
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -65,15 +58,6 @@ class GEM_EXTERN text2d : public TextBase
 
 	virtual FTFont*	makeFont(const char*fontname);
 	FTFont                  *m_afont;
-#elif defined GLTT
-	virtual void    destroyFont();
-	virtual int     makeFontFromFace();
-	//////////
-    	// The font structure
-    	GLTTBitmapFont		*m_font;
-#if defined __linux__ || defined __APPLE__
-    	GLTTPixmapFont		*m_afont;
-#endif
 #endif
 
  private:

@@ -26,6 +26,8 @@
 # include <unistd.h>
 #endif
 
+#include <iostream>
+
 char *TextBase::DEFAULT_FONT = "vera.ttf";
 
 /////////////////////////////////////////////////////////
@@ -42,7 +44,7 @@ TextBase :: TextBase(int argc, t_atom *argv)
     m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL), m_fontname(NULL)
 {
   // initial text
-  m_theText.push_back("gem");
+  m_theText.push_back(L"gem");
   makeLineDist();
   if(argc)textMess(argc, argv);
 
@@ -53,25 +55,36 @@ TextBase :: TextBase(int argc, t_atom *argv)
 // render
 //
 /////////////////////////////////////////////////////////
+void TextBase :: renderLine(const char*line, float dist) {
+  float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
+  m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
+
+  glPushMatrix();
+  glNormal3f(0.0, 0.0, 1.0);
+  justifyFont(x1, y1, z1, x2, y2, z2, dist);
+  m_font->Render(line);
+  glPopMatrix();
+}
+
+void TextBase :: renderLine(const wchar_t*line, float dist) {
+  float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
+  m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
+
+  glPushMatrix();
+  glNormal3f(0.0, 0.0, 1.0);
+  justifyFont(x1, y1, z1, x2, y2, z2, dist);
+  m_font->Render(line);
+  glPopMatrix();
+}
+
 void TextBase :: render(GemState *)
 {
-  if (m_theText.empty() || !m_font)return;
-
-  float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-  float y_offset;
   unsigned int i=0;
-
+  if (m_theText.empty() || !m_font)return;
   // step through the lines
   for(i=0; i<m_theText.size(); i++)
     {
-      m_font->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
-      y_offset = m_lineDist[i]*m_fontSize;
-
-      glPushMatrix();
-      glNormal3f(0.0, 0.0, 1.0);
-      justifyFont(x1, y1, z1, x2, y2, z2, y_offset);
-      m_font->Render(m_theText[i].c_str());
-      glPopMatrix();
+      renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize);
     }
 }
 
@@ -83,7 +96,7 @@ void TextBase :: setFontSize(t_float size){
   m_fontSize = size;
   if (!m_font)return;
   if (! m_font->FaceSize((int)m_fontSize) ) {
-    error("GEMtext: unable set fontsize !");
+    error("unable set fontsize !");
   }
   setModified();
 }
@@ -94,7 +107,7 @@ void TextBase :: setFontSize(t_float size){
 void TextBase :: setPrecision(float prec)
 {
   m_precision = prec;
-  error("GEMtext: no settable precision for FTGL !");
+  error("no settable precision for FTGL !");
 }
 
 ////////////////////////////////////////////////////////
@@ -121,7 +134,7 @@ void TextBase :: fontNameMess(const char *filename){
 
 
   if (makeFont(buf)==NULL){
-    error("GEMtext: unable to open font %s", buf);
+    error("unable to open font %s", buf);
     return;
   }
   if(m_fontname!=filename){
@@ -130,80 +143,11 @@ void TextBase :: fontNameMess(const char *filename){
   }
   setFontSize(m_fontSize);
   m_font->Depth(m_fontDepth);
-  
+  m_font->CharMap(ft_encoding_unicode);
   setModified();
 }
 
-
-#elif defined GLTT
-TextBase :: TextBase(int argc, t_atom *argv)
-  : m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
-    m_face(NULL), m_widthJus(CENTER), m_heightJus(MIDDLE),
-    m_depthJus(HALFWAY), m_dist(1)
-{
-  static bool first_time=true;
-  if (first_time){
-    post("Gem has been compiled with GLTT !");
-    first_time=false;
-  }
-
-  // initial text
-  m_theText.push_back("gem");
-  makeLineDist();
-  if (argc)textMess(argc, argv);
-
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-  m_face = new FTFace;
-}
-
-// implement !!!
-TextBase :: TextBase()
-{ }
-
-/////////////////////////////////////////////////////////
-// setFontSize
-//
-/////////////////////////////////////////////////////////
-void TextBase :: setFontSize(t_float size)
-{
-  m_fontSize = size;
-  m_valid = makeFontFromFace();
-  setModified();
-}
-/////////////////////////////////////////////////////////
-// setPrecision
-//
-/////////////////////////////////////////////////////////
-void TextBase :: setPrecision(float prec)
-{
-  m_precision = prec;
-  m_valid = makeFontFromFace();
-  setModified();
-}
-
-/////////////////////////////////////////////////////////
-// fontNameMess
-//
-/////////////////////////////////////////////////////////
-void TextBase :: fontNameMess(const char *filename)
-{
-  m_valid = 0;
-  char buf[MAXPDSTRING];
-  canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
-
-  destroyFont();
-  if(m_face)delete m_face;m_face=NULL;
-  m_face = new FTFace;
-
-  if( ! m_face->open(buf) ) {
-    error("GEMtext: unable to open font: %s", buf);
-    return;
-  }
-  m_valid = makeFontFromFace();
-  setModified();
-}
-
-#else /* !FTGL && !GLTT */
+#else /* !FTGL */
 
 TextBase :: TextBase(int argc, t_atom *argv){
   static bool first_time=true;
@@ -241,7 +185,7 @@ void TextBase :: fontNameMess(const char *filename)
 void TextBase :: render(GemState*)
 {/* a no-op */ }
 
-#endif /* FTGL/GLTT/none */
+#endif /* FTGL */
 /////////////////////////////////////////////////////////
 // Destructor
 //
@@ -326,7 +270,7 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
 // textMess
 //
 /////////////////////////////////////////////////////////
-void TextBase :: breakLine(string line)
+void TextBase :: breakLine(wstring line)
 {
   // split the string wherever there is a '\n'
   while(line.length()>0){
@@ -345,30 +289,36 @@ void TextBase :: breakLine(string line)
   setModified();
 }
 
-
 void TextBase :: textMess(int argc, t_atom *argv)
 {
   m_theText.clear();
-  char tmp_char[MAXPDSTRING];
-
   if ( argc < 1 ) {return; }
 
-  string line = "";
+  char tmp_char[MAXPDSTRING];
+  unsigned char*uch=(unsigned char*)tmp_char;
+
+  wstring line = L"";
   int i=0;
 
   // convert the atom-list into 1 string
   for (i = 0; i < argc; ++i)
     {
       string newtext;
+      int j;
       if (A_FLOAT == argv[i].a_type) {
         atom_string(&argv[i], tmp_char, MAXPDSTRING);
-        newtext = tmp_char; 
+        newtext = tmp_char;
       } else {
         newtext = atom_getsymbol(&argv[i])->s_name;
       }
-      line += newtext;
-      if(argc-1>i)line += " ";
+      //line += newtext;
+      for(j=0; j<newtext.length(); j++) {
+        unsigned char c=newtext[j];
+        line += c;
+      }
+      if(argc-1>i)line += L' ';
     }
+
   breakLine(line);
 }
 
@@ -433,12 +383,12 @@ void TextBase :: stringMess(int argc, t_atom *argv)
   if ( argc < 1 ) { return; }
 
   int i;
-  string line = "";
+  wstring line = L"";
 
   for (i = 0; i < argc; i++)    {
-    line += (char)(atom_getint(argv+i));
+    line += (wchar_t)(atom_getint(argv+i));
   }
-  line += '\0';
+  line += (wchar_t)'\0';
 
   breakLine(line);
 }

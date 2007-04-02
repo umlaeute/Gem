@@ -18,10 +18,6 @@ LOG
 
 #include "Base/TextBase.h"
 
-#ifdef GLTT
-#include "GLTTOutlineFont.h"
-#endif
-
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -50,16 +46,6 @@ class GEM_EXTERN textoutline : public TextBase
 
 #ifdef FTGL
 	virtual FTFont*makeFont(const char*fontname);
-#elif defined GLTT
-	virtual void    destroyFont();
-	virtual int     makeFontFromFace();
-	//////////
-    	// The font structure
-    	GLTTOutlineFont		*m_font;
-
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
 #endif
 };
 

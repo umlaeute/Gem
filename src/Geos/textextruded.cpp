@@ -82,7 +82,7 @@ textextruded :: ~textextruded()
 /////////////////////////////////////////////////////////
 void textextruded :: setDepth(float prec)
 {}
-#endif /* !GLTT && !FTGL */
+#endif /* FTGL */
 
 /////////////////////////////////////////////////////////
 // static member function

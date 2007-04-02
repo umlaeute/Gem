@@ -4,8 +4,6 @@
 
 /* font rendering */
 #undef HAVE_LIBFTGL
-/* gltt has been deprecated in favour of FTGL */
-#undef HAVE_LIBGLTT
 
 /* image loading / saving */
 #undef HAVE_LIBTIFF

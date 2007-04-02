@@ -149,141 +149,8 @@ void text2d :: render(GemState *)
 }
 }
 
-#elif defined GLTT
-text2d :: text2d(int argc, t_atom *argv)
-  : TextBase(argc, argv)
-  , m_font(NULL)
-#if defined __linux__ || defined __APPLE__
-  , m_afont(NULL)
-#endif
-{
-  fontNameMess(DEFAULT_FONT);
-}
 
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-text2d :: ~text2d()
-{
-  if(m_font)delete m_font;m_font=NULL;
-#if defined __linux__ || defined __APPLE__
-  if(m_afont)delete m_afont;m_afont=NULL;
-#endif
-  if(m_face)delete m_face;m_face=NULL;
-}
-
-/////////////////////////////////////////////////////////
-// makeFontFromFace
-//
-/////////////////////////////////////////////////////////
-void text2d :: destroyFont() { // fonts have to be destroyed before face
-  if(m_font)delete m_font; m_font=NULL;
-  if(m_afont)delete m_afont; m_afont=NULL;
-}
-int text2d :: makeFontFromFace()
-{
-  if(m_font)delete m_font;m_font=NULL;
-#if defined __linux__ || defined __APPLE__
-  if(m_afont)delete m_afont;m_afont=NULL;
-#endif
-
-  if (!m_face)    {
-    error("GEM: text2d: True type font doesn't exist");
-    return(0);
-  }
-  m_font = new GLTTBitmapFont(m_face);
-  //m_font->setPrecision((double)m_precision);
-  if( ! m_font->create((int)m_fontSize) ) {
-    error("GEM: text2d: unable to create bitmap'ed font");
-    delete m_font; m_font = NULL;
-    //    return(0);
-  }
-#if defined __linux__ || defined __APPLE__
-  m_afont = new GLTTPixmapFont(m_face);
-  //  m_afont->setPrecision((double)m_precision);
-  if( ! m_afont->create((int)m_fontSize) ) {
-    error("GEM: text2d: unable to create pixmap'ed font");
-    delete m_afont; m_afont = NULL;
-    //    return(0);
-  }
-  if (!m_font && !m_afont)return 0;
-#else
-  if (!m_font)return 0;
-#endif
-  return(1);
-}
-
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void text2d :: render(GemState *)
-{
-  if (m_valid && m_theText) {
-    glPushMatrix();
-
-    // compute the offset due to the justification
-    float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-
-#if defined __linux__ || defined __APPLE__
-    if (m_antialias && !m_afont)m_antialias=0;
-    if (!m_antialias && !m_font)m_antialias=1;
-    // pixmap'ed fonts are not supported under GLTT/NT
-    if (m_antialias){
-      if(!m_afont)return;
-      x2=m_afont->getWidth (m_theText);
-      y2=m_afont->getHeight();
-
-      float width  = 0.f;
-      float height = 0.f;
-      float depth  = 0.f;
-
-      if (m_widthJus == LEFT)       width = x1;
-      else if (m_widthJus == RIGHT) width = x2-x1;
-      else if (m_widthJus == CENTER)width = x2 / 2.f;
-
-      if (m_heightJus == BOTTOM)     height = y1;
-      else if (m_heightJus == TOP)   height = y2-y1;
-      else if (m_heightJus == MIDDLE)height = y2 / 2.f;
-    
-      if (m_depthJus == FRONT)       depth = z1;
-      else if (m_depthJus == BACK)   depth = z2-z1;
-      else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
-
-      m_afont->output((int)-width, (int)-height, m_theText);
-    }else
-#endif
-      {
-	if(!m_font)return;
-
-	x2=m_font->getWidth (m_theText);
-	y2=m_font->getHeight();
-
-	float width  = 0.f;
-	float height = 0.f;
-	float depth  = 0.f;
-
-	if (m_widthJus == LEFT)       width = x1;
-	else if (m_widthJus == RIGHT) width = x2-x1;
-	else if (m_widthJus == CENTER)width = x2 / 2.f;
-
-	if (m_heightJus == BOTTOM)     height = y1;
-	else if (m_heightJus == TOP)   height = y2-y1;
-	else if (m_heightJus == MIDDLE)height = y2 / 2.f;
-	
-	if (m_depthJus == FRONT)       depth = z1;
-	else if (m_depthJus == BACK)   depth = z2-z1;
-	else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
-
-	m_font->output((int)-width, (int)-height, m_theText);
-      }
-    glPopMatrix();
-  }
-}
-
-
-#else /* !FTGL && !GLTT */
+#else /* !FTGL */
 
 text2d :: text2d(int argc, t_atom *argv)
   : TextBase(argc, argv)
@@ -298,7 +165,7 @@ text2d :: ~text2d()
 
 void text2d :: render(GemState*){}
 
-#endif /* !GLTT && !FTGL */
+#endif /* FTGL */
 
 /////////////////////////////////////////////////////////
 // static member function
