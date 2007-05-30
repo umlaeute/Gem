@@ -78,6 +78,37 @@ void pix_buffer :: allocateMess(int x, int y, int c)
   }    
 }
 /////////////////////////////////////////////////////////
+// allocateMess
+//   allocate memory for m_numframes images of size x*y (with pixelsize=c)
+//
+/////////////////////////////////////////////////////////
+void pix_buffer :: resizeMess(int newsize)
+{
+  int size=m_numframes;
+  int i;
+
+  if(newsize<0) {
+    error("refusing to resize to <0 frames!");
+    return;
+  }
+
+  imageStruct*buffer = new imageStruct[newsize];
+  if(size>newsize)
+    size=newsize;
+
+  for(i=0; i<size; i++) {
+    m_buffer[i].copy2Image(buffer+i);
+  }
+
+  delete[]m_buffer;
+  m_buffer=buffer;
+  m_numframes=newsize;
+
+  bangMess();
+}
+
+
+/////////////////////////////////////////////////////////
 // query the number of frames in the buffer
 //
 /////////////////////////////////////////////////////////
@@ -176,6 +207,8 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
   class_addcreator((t_newmethod)_classpix_buffer,gensym("pix_depot"),A_DEFSYM,A_DEFFLOAT,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer::allocateMessCallback,
   		  gensym("allocate"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_buffer::resizeMessCallback,
+  		  gensym("resize"), A_FLOAT, A_NULL);
   class_addbang(classPtr, (t_method)&pix_buffer::bangMessCallback);
   class_addmethod(classPtr, (t_method)&pix_buffer::openMessCallback,
   		  gensym("open"), A_SYMBOL, A_FLOAT, A_NULL);
@@ -202,4 +235,8 @@ void pix_buffer :: openMessCallback(void *data, t_symbol *filename, t_floatarg p
 void pix_buffer :: saveMessCallback(void *data, t_symbol *filename, t_floatarg pos)
 {
   GetMyClass(data)->saveMess(filename, (int)pos);
+}
+void pix_buffer :: resizeMessCallback(void *data, t_floatarg size)
+{
+  GetMyClass(data)->resizeMess((int)size);
 }
