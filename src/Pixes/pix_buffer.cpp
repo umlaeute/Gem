@@ -29,7 +29,7 @@
 //
 /////////////////////////////////////////////////////////
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYM,t_float,A_FLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYM,t_float,A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 // Constructor
@@ -69,13 +69,33 @@ pix_buffer :: ~pix_buffer()
 void pix_buffer :: allocateMess(int x, int y, int c)
 {
   int i = m_numframes;
+  int format=0;
+
+  switch (c) {
+  case 1:
+    format=GL_LUMINANCE;
+    break;
+  case 2:
+    format=GL_YUV422_GEM;
+    break;
+  case 3:
+    format=GL_RGB;
+    break;
+  case 4:
+    format=GL_RGBA;
+    break;
+  default:
+    format=0;
+  }
+
   while(i--){
     m_buffer[i].xsize=x;
     m_buffer[i].ysize=y;
     m_buffer[i].csize=c;
-    m_buffer[i].format=0;
+    m_buffer[i].format=format;
     m_buffer[i].reallocate();
-  }    
+    m_buffer[i].setBlack();
+  }
 }
 /////////////////////////////////////////////////////////
 // allocateMess
@@ -86,24 +106,25 @@ void pix_buffer :: resizeMess(int newsize)
 {
   int size=m_numframes;
   int i;
-
+  
   if(newsize<0) {
     error("refusing to resize to <0 frames!");
     return;
   }
-
+  
   imageStruct*buffer = new imageStruct[newsize];
   if(size>newsize)
     size=newsize;
-
+  
   for(i=0; i<size; i++) {
-    m_buffer[i].copy2Image(buffer+i);
+    if(0!=m_buffer[i].data)
+      m_buffer[i].copy2Image(buffer+i);
   }
-
+  
   delete[]m_buffer;
   m_buffer=buffer;
   m_numframes=newsize;
-
+  
   bangMess();
 }
 
@@ -135,7 +156,15 @@ bool pix_buffer :: putMess(imageStruct*img,int pos){
 //
 /////////////////////////////////////////////////////////
 imageStruct*pix_buffer :: getMess(int pos){
+
+  //post("getting frame: %d", pos);
+
   if (pos<0 || pos>=m_numframes)return 0;
+
+  /* just allocated but no image */
+  if(0==m_buffer[pos].format)
+    return 0;
+
   return (m_buffer+pos);
 }
 
@@ -155,7 +184,7 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
   // some checks
   if (pos<0 || pos>=m_numframes)
   {
-    post("pix_buffer: index %d out of range (0..%d)!", pos, m_numframes);
+    error("pix_buffer: index %d out of range (0..%d)!", pos, m_numframes);
     return;
   }
 
@@ -163,7 +192,7 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
   image = image2mem(buf);
   if(!image)
   {
-    post("pix_buffer: no valid image!");
+    error("pix_buffer: no valid image!");
     return;
   }
 
@@ -206,7 +235,7 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)_classpix_buffer,gensym("pix_depot"),A_DEFSYM,A_DEFFLOAT,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer::allocateMessCallback,
-  		  gensym("allocate"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  		  gensym("allocate"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer::resizeMessCallback,
   		  gensym("resize"), A_FLOAT, A_NULL);
   class_addbang(classPtr, (t_method)&pix_buffer::bangMessCallback);
@@ -215,13 +244,66 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&pix_buffer::saveMessCallback,
   		  gensym("save"), A_SYMBOL, A_FLOAT, A_NULL);
 }
-void pix_buffer :: allocateMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg c=4)
+void pix_buffer :: allocateMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
+  int x=0;
+  int y=0;
+  int c=0;
+
+  t_atom*ap=0;
+
+  switch(argc) {
+  case 3:
+    ap=argv+2;
+    if(A_SYMBOL==ap->a_type) {
+      char c0 =*atom_getsymbol(ap)->s_name;
+
+      switch (c0){
+      case 'g': case 'G': c=1; break;
+      case 'y': case 'Y': c=2; break;
+      case 'r': case 'R': c=4; break;
+      default:
+	GetMyClass(data)->error("invalid format %s!", atom_getsymbol(ap)->s_name);
+	return;
+      }
+    } else if(A_FLOAT==ap->a_type) {
+
+      c=atom_getint(ap);
+
+    } else {
+      GetMyClass(data)->error("invalid format!");
+      return;
+    }
+  case 2:
+    if((A_FLOAT==argv->a_type) && (A_FLOAT==(argv+1)->a_type)) {
+      x=atom_getint(argv);
+      y=atom_getint(argv+1);
+    } else {
+      GetMyClass(data)->error("invalid dimensions!");
+      return;
+    }
+    break;
+  case 1:
+    if(A_FLOAT==argv->a_type) {
+      x=atom_getint(argv);
+      y=1;
+      c=1;
+    } else {
+      GetMyClass(data)->error("invalid dimension!");
+      return;
+    }
+    break;
+  default:
+    GetMyClass(data)->error("usage: allocate <width> <height> <format>");
+    return;
+  }
+
   if (x<1 || y<1 || c<0){
     GetMyClass(data)->error("init-specs out of range");
     return;
   }
   if (c==0)c=4;
+
   GetMyClass(data)->allocateMess((int)x, (int)y, (int)c);
 }
 void pix_buffer :: bangMessCallback(void *data)

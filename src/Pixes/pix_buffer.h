@@ -76,7 +76,7 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   
   //////////
   // static member functions
-  static void allocateMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg c);
+  static void allocateMessCallback(void *data,t_symbol*,int,t_atom*);
   static void bangMessCallback(void *data);
   static void openMessCallback(void *data, t_symbol*, t_floatarg);
   static void saveMessCallback(void *data, t_symbol*, t_floatarg);
