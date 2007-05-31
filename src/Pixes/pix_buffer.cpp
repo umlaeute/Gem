@@ -117,8 +117,14 @@ void pix_buffer :: resizeMess(int newsize)
     size=newsize;
   
   for(i=0; i<size; i++) {
-    if(0!=m_buffer[i].data)
+    if(0!=m_buffer[i].data) {
+      // copy the image
       m_buffer[i].copy2Image(buffer+i);
+      m_buffer[i].xsize=1;
+      m_buffer[i].ysize=1;
+      // "free" the old image
+      m_buffer[i].allocate();
+    }
   }
   
   delete[]m_buffer;
