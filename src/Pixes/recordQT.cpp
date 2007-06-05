@@ -9,6 +9,7 @@
 # include <sys/types.h>
 # include <unistd.h>
 # include <fcntl.h>
+#include "m_pd.h"
 #endif
 #ifdef __WIN32__
 # define snprintf _snprintf
@@ -37,6 +38,8 @@ recordQT :: recordQT(int x, int y, int w, int h)
     m_compressImage(NULL)
 {
   m_filename[0] = 0;
+
+post("using recordQT");
 
 # ifdef __WIN32__
   // Initialize QuickTime Media Layer
@@ -95,6 +98,9 @@ recordQT :: recordQT(int x, int y, int w, int h)
   m_dialog = 0;
   m_currentFrame = 0;
   
+  m_firstRun = 1;
+  
+  m_ticks = 20;
   
   // post("recordQT : anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
   stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
@@ -129,6 +135,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   FSSpec	theFSSpec;
   OSErr		err = noErr;
   FSRef		ref;
+  OSType		colorspace;
 	
   ComponentResult			compErr = noErr;
 
@@ -219,12 +226,25 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   m_srcRect.bottom = m_height;
   m_srcRect.right = m_width;
 
+	
+	if (m_compressImage->format == GL_YUV422_GEM){
+	    m_rowBytes = m_width * 2;
+		colorspace = k422YpCbCr8CodecType;
+		post("recordQT: using YUV");
+		}
+	if (m_compressImage->format == GL_BGRA){
+	    colorspace = k32BGRAPixelFormat;// k32RGBAPixelFormat;
+		m_rowBytes = m_width * 4;
+		post("recordQT: using BGRA");
+	}
+
 #ifdef __APPLE__
   //give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
-  m_rowBytes = m_width * 2;
+  
   //m_srcGWorld = NULL;//probably a memory leak
   err = QTNewGWorldFromPtr(&m_srcGWorld,
-			   k422YpCbCr8CodecType,
+				colorspace,
+			  // k422YpCbCr8CodecType,
 			   //k32ARGBPixelFormat,
 			   &m_srcRect,
 			   NULL,
@@ -256,6 +276,21 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   }
 	
   SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
+
+#ifdef __APPLE__
+//there is a discrepency between what is really upside down and not.
+//since QT has flipped Y compared to GL it is upside down to GL but not to itself
+//so while the upsidedown flag is set for QT images sent to GL it is not correct for pix_ processing.
+//this is a hack on OSX since the native is YUV for pix_ and the only BGRA will usually be from pix_snap
+	if (m_compressImage->upsidedown && m_compressImage->format == GL_BGRA) {
+		MatrixRecord	aMatrix;
+		GetMovieMatrix(m_movie,&aMatrix);
+		post("upside down");
+		ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
+		SetMovieMatrix(m_movie,&aMatrix);
+	}
+
+#endif
 
 #ifdef __WIN32__
 	MatrixRecord	aMatrix;
@@ -517,7 +552,7 @@ void recordQT :: compressFrame()
 		       compressedData,
 		       0,
 		       dataSize,
-		       20, //this should not be a fixed value but vary with framerate
+		       m_ticks, //this should not be a fixed value but vary with framerate
 		       (SampleDescriptionHandle)hImageDesc,
 		       1,
 		       syncFlag,
