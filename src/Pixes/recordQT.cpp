@@ -692,23 +692,53 @@ bool recordQT :: setCodec(int num)
 }
 bool recordQT :: setCodec(char*codecName)
 {
-  if (!strncmp(codecName,"jpeg",4)) {
-    //have to put the right things in here
-    m_codecType = kJPEGCodecType;
-    m_codec = (CodecComponent)65719;//65708; //this is pjpeg?!? 
-    post("recordQT : kJPEGCodecType");
-    return true;
-  }
-  //do the same for these
-  if (!strcmp(codecName,"animation")) post("recordQT : kAnimationCodecType");
-  if (!strncmp(codecName,"yuv2",4)) post("recordQT : kComponentVideoCodecType");
-  if (!strncmp(codecName,"yuvu",4)) post("recordQT : kComponentVideoSigned");
-  if (!strncmp(codecName,"raw",3)) post("recordQT : kRawCodecType");
-  if (!strncmp(codecName,"dvc",3)) post("recordQT : kDVCNTSCCodecType");
-  if (!strncmp(codecName,"dvcp",4)) post("recordQT : kDVCPALCodecType");
-  if (!strncmp(codecName,"y420",4)) post("recordQT : kYUV420CodecType");
-  post("recordQT : codecName %s",codecName);
-  return false;
+
+	int	i;
+
+	post("recordQT %s",codecName);
+	
+	
+	for(i=0; i < 64; i++)
+	{
+		if (codecContainer[i].ctype == kJPEGCodecType  && !(strncmp(codecName,"pjpeg",5))){
+			post("pix_recordQT found Photo Jpeg");
+			m_codecType = kJPEGCodecType;
+			m_codec = codecContainer[i].codec;
+			return true;
+		 }
+		 
+		if ((int)codecContainer[i].ctype == 'icod' && !(strncmp(codecName,"aic",3))) {
+			post("pix_recordQT found Apple Intermediate Codec");
+			m_codecType = 'icod';
+			m_codec = codecContainer[i].codec;
+			return true;
+		}
+		
+		if (codecContainer[i].ctype == kAnimationCodecType  && !(strncmp(codecName,"anim",4))){
+			post("pix_recordQT found Animation");
+			m_codecType = kAnimationCodecType;
+			m_codec = codecContainer[i].codec;
+			return true;
+		 }
+		 
+		 if (codecContainer[i].ctype == kDVCNTSCCodecType  && !(strncmp(codecName,"dvntsc",6))){
+			post("pix_recordQT found DV NTSC");
+			m_codecType = kDVCNTSCCodecType;
+			m_codec = codecContainer[i].codec;
+			return true;
+		 }
+		
+		if (codecContainer[i].ctype == kDVCPALCodecType  && !(strncmp(codecName,"dvpal",5))){
+			post("pix_recordQT found DV PAL");
+			m_codecType = kDVCPALCodecType;
+			m_codec = codecContainer[i].codec;
+			return true;
+		 }
+		
+	}
+	
+	//no codec found
+	return false;
 }
 
 
