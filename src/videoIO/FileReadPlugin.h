@@ -2,9 +2,9 @@
 //
 //   VideoIO-Framework for GEM/PD
 //
-//   Loads a digital video (like AVI, Mpeg, Quicktime) into a VIOFrame.
+//   The base class of the FileRead plugins.
 //
-//   FileRead
+//   FileReadPlugin
 //   header file
 //
 //   copyright            : (C) 2007 by Thomas Holzmann
@@ -18,27 +18,16 @@
 ///////////////////////////////////////////////////////////////////////////
 
     
-#infdef INCLUDE_FILEREAD_H_
-#define INCLUDE_FILEREAD_H_
+#ifndef FILE_READ_PLUGIN_
+#define FILE_READ_PLUGIN_
 
-#include "VIOUtils.h"
+using namespace::std;
 
-class VIOFrame;
-class FReadPlugin;
-
-/*!
- * \class FileRead
- * 
- * \brief class for reading files
- * 
- * This class loads the plugins needed for decoding and ...
-*/
-class FileRead
+class FileReadPlugin
 {
-  public:
-    
+  
   /// constructor
-  FileRead();
+  virtual FileRead();
   
   /// destructor
   virtual ~FileRead();
@@ -47,18 +36,18 @@ class FileRead
    * opens the file at the given path
    * @param filename the path of the file
    */
-  void openFile(t_symbol *filename);
+  virtual void openFile(t_symbol *filename) = 0;
   
   /*!
    * closes the file
    */
-  void closeFile();
+  virtual void closeFile();
   
   /*!
    * @return the current frame of the video
    */
-  VIOFrame *getFrame();
-  
+  virtual VIOFrame *getFrame();
+
   /*!
    * changes which frame to display
    * you can select the frame number and the track number,
@@ -66,17 +55,16 @@ class FileRead
    * @param frame the number of the desired frame
    * @param track the number of the desired track
    */
-  void setPosition(int frame, int track = -1);
+  virtual void setPosition(int frame, int track = -1);
   
   /*!
    * if this function called, getFrame will automatically
    * increment the frame number with incr
    * @param incr the desired incrementation value
    */
-  void setAutoIncrement(t_float incr);
-
+  virtual void setAutoIncrement(t_float incr);
   
-  //////////////////////
+    //////////////////////
   // Utility methods
   /////////////////////
   
@@ -104,31 +92,9 @@ class FileRead
    * @return true if a video is loaded
    */
   bool hasVideo();
-  
-  
-  protected:
-  
-  bool hasVideo;
-  t_float autoIncrement;
-  int csFormat;
-  
-  // frame information
-  int nrOfFrames;
-  t_float reqFrame;
-  int curFrame;
-  
-  // track information
-  int nrOfTracks
-  int reqTrack
-  int curTrack
 
-  /// the video file
-  FReadPlugin *video;
   
-  /// stores the current frame
-  VIOFrame *frame;
-};
+  
+}
 
 #endif
-  
-  
