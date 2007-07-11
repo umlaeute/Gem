@@ -13,6 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include <errno.h>
 #include "Pixes/filmFFMPEG.h"
 
 /* 
@@ -204,7 +205,9 @@ bool filmFFMPEG :: open(char *filename, int format)
   case(AVERROR_UNKNOWN):startpost(" [unknown error]"); break;
   case(AVERROR_IO):startpost(" [i/o error]"); break;
   case(AVERROR_NUMEXPECTED): startpost(" [number syntax expected in filename]"); break;
+#if AVERROR_UNKNOWN != AVERROR_INVALIDDATA
   case(AVERROR_INVALIDDATA): startpost(" [invalid data found]"); break;
+#endif
   case(AVERROR_NOMEM):startpost(" [not enough memory]"); break;
   case(AVERROR_NOFMT):startpost(" [unknown format]"); break;
   case(AVERROR_NOTSUPP):startpost(" [operation not supported]"); break;
