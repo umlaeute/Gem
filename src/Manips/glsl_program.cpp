@@ -164,13 +164,23 @@ void glsl_program :: render(GemState *state)
               case GL_FLOAT_MAT4:
                 glUniformMatrix4fv( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
 		break;
+			case GL_SAMPLER_2D_RECT_ARB:
+				//post("sampler %s param %d",m_symname[i]->s_name, (GLint)m_param[i][0]);
+				//glUniform1i(glGetUniformLocation(m_program, (GLchar*)m_symname[i]->s_name), (GLint)m_param[i][0]);
+				glUniform1i(m_loc[1], (GLint)m_param[i][0]);
+		break;
+		case GL_SAMPLER_2D_ARB:
+				glUniform1i(m_loc[i], m_param[i][0]);
+		break;
               default:
 		;
               }
             // remove flag because the value is in GL's state now...
             m_flag[i]=0;
+			
 	  }
       }
+	 // glUniform1i(glGetUniformLocation(m_program, "MyTex1"), 1);
   } else {
     /* JMZ: this is really annoying... */
     //error("no program linked");
@@ -222,13 +232,22 @@ void glsl_program :: render(GemState *state)
               case GL_FLOAT_MAT4_ARB:
                 glUniformMatrix4fvARB( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
 		break;
+			case GL_SAMPLER_2D_RECT_ARB:
+				glUniform1iARB(m_loc[i], m_param[i][0]);
+		break;
+			case GL_SAMPLER_2D_ARB:
+				glUniform1iARB(m_loc[i], m_param[i][0]);
+		break;
+		
               default:
 		;
               }
             // remove flag because the value is in GL's state now...
             m_flag[i]=0;
+			
 	  }
       }
+	//  glUniform1iARB(glGetUniformLocationARB(program_object, "MyTex1"), 1);
   } else {
     /* JMZ: this is really annoying... */
     //error("no program linked");
@@ -548,6 +567,9 @@ void glsl_program :: printInfo()
           break;
         case 0x8B5C:
           post("GL_FLOAT_MAT4_ARB");
+          break;
+		case 0x8B63:
+          post("GL_SAMPLER_2D_RECT_ARB");
           break;
         default:
           post("unknown (0x%X)", m_type[i]);
