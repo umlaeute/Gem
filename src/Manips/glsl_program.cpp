@@ -167,7 +167,7 @@ void glsl_program :: render(GemState *state)
 			case GL_SAMPLER_2D_RECT_ARB:
 				//post("sampler %s param %d",m_symname[i]->s_name, (GLint)m_param[i][0]);
 				//glUniform1i(glGetUniformLocation(m_program, (GLchar*)m_symname[i]->s_name), (GLint)m_param[i][0]);
-				glUniform1i(m_loc[1], (GLint)m_param[i][0]);
+				glUniform1i(m_loc[i], (GLint)m_param[i][0]);
 		break;
 		case GL_SAMPLER_2D_ARB:
 				glUniform1i(m_loc[i], m_param[i][0]);
