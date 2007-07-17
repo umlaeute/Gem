@@ -20,41 +20,49 @@
 #ifndef FILE_READ_SERVER_H_
 #define FILE_READ_SERVER_H_
     
+#include "FileRead.h"
+
 using namespace std;  
 
-/*!
- * \class FileReadServer
- * 
- * This is the server of the file read plugins.
- */
-class FileReadServer
-{
-  
-  /// constructor
-  FileReadServer();
-  
-  /// destructor
-  virtual ~FileReadServer();
-  
-  /*!
-   * adds a file read plugin
-  
-   */
-  void addFileReadPlugin( auto_ptr <FileReadPlugin> frp); 
-  
-  /// @return the plugin counter
-  int getPluginCount();
-  
-  /*!
-   * @param index the index of the plugin
-   * @return the plugin with the choosen index
-   */
-  FileReadPlugin &getPlugin(int index);
-  
-  typedef vector <FileReadPlugin *> FileReadPluginVector;
-  
-  /// the vector which holds all the file read plugins
-  FileReadPluginVector file_read_plugins_;
+#include <vector>
 
+namespace VideoIO_
+{
+  /*!
+  * \class FileReadServer
+  * 
+  * This is the server of the file read plugins.
+  */
+  class FileReadServer
+  {
+    public:
+    
+    /// constructor
+    FileReadServer(){};
+    
+    /// destructor
+    virtual ~FileReadServer();
+    
+    /*!
+    * adds a file read plugin
+    
+    */
+    void addFileReadPlugin( auto_ptr <FileRead> frp); 
+    
+    /// @return the plugin counter
+    int getPluginCount();
+    
+    /*!
+    * @param index the index of the plugin
+    * @return the plugin with the choosen index
+    */
+    FileRead &getPlugin(int index=0);
+    
+    typedef vector <FileRead *> FileReadVector;
+    
+    /// the vector which holds all the file read plugins
+    FileReadVector file_read_plugins_;
+  
+  };
 }
 #endif

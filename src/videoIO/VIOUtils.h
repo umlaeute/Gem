@@ -28,7 +28,10 @@
  */
 
 #include "m_pd.h"
+
     
+namespace VideoIO_
+{
 
 // color spaces defines:
 const int RGB = 0;       //! RGB colorspace
@@ -52,6 +55,6 @@ const int chY1 = 3;      //! channel Y1
 
 // Gray
 const int chGray = 0;    //! channel Gray
-
+}
 
 #endif

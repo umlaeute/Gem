@@ -2,7 +2,7 @@
 //
 //   VideoIO-Framework for GEM/PD
 //
-//   Loads a digital video (like AVI, Mpeg, Quicktime) into a VIOFrame.
+//   The base class of the FileRead plugins.
 //
 //   FileRead
 //   header file
@@ -18,117 +18,112 @@
 ///////////////////////////////////////////////////////////////////////////
 
     
-#infdef INCLUDE_FILEREAD_H_
-#define INCLUDE_FILEREAD_H_
+#ifndef FILE_READ_PLUGIN_
+#define FILE_READ_PLUGIN_
+
+using namespace std;
 
 #include "VIOUtils.h"
+#include "VIOFrame.h"
 
-class VIOFrame;
-class FReadPlugin;
-
-/*!
- * \class FileRead
- * 
- * \brief class for reading files
- * 
- * This class loads the plugins needed for decoding and ...
-*/
-class FileRead
+namespace VideoIO_
 {
-  public:
+  class FileRead
+  {
+    public:
+    /// constructor
+    FileRead();
     
-  /// constructor
-  FileRead();
+    /// destructor
+    virtual ~FileRead(){};
+    
+    /*!
+    * opens the file at the given path
+    * @param filename the path of the file
+    */
+    virtual void openFile(const string &filename) = 0;
+    
+    /*!
+    * closes the file
+    */
+    virtual void closeFile() {};
+    
+//    /*!
+//    * @return the current frame of the video
+//    */
+//     virtual VIOFrame *getFrame();
+    
+    /// @return the frame data of VIOFrame
+    inline virtual unsigned char *getFrameData() {return frame_.getFrameData();}
   
-  /// destructor
-  virtual ~FileRead();
+    /*!
+    * changes which frame to display
+    * you can select the frame number and the track number,
+    * if track is -1 that means the same track as before
+    * @param frame the number of the desired frame
+    * @param track the number of the desired track
+    */
+    virtual int setPosition(int frame, int track = -1) {return 1;};
+    
+    /*!
+    * if this function called, getFrame will automatically
+    * increment the frame number with incr
+    * @param incr the desired incrementation value
+    */
+    virtual void setAutoIncrement(t_float incr) {};
+    
+      //////////////////////
+    // Utility methods
+    /////////////////////
+    
+    /*!
+    * @return the number of frames
+    */
+    int getNrOfFrames () {return 5;};
+    
+    /*!
+    * @return the frames per second
+    */
+    double getFPS() {return 5;};
+    
+    /*!
+    * @return the width of the video
+    */
+    int getWidth() {return 5;};
+    
+    /*!
+    * @return the height of the video
+    */
+    int getHeight() {return 5;};
+    
+    /*!
+    * @return true if a video is loaded
+    */
+    bool hasVideo() {return has_video_file_;};
   
-  /*!
-   * opens the file at the given path
-   * @param filename the path of the file
-   */
-  void openFile(t_symbol *filename);
+    protected:
+    
+      bool has_video_file_;
+      t_float auto_increment_;
+      int cs_format_;
+    
+    // frame information
+      int nr_of_frames_;
+      t_float req_frame_;
+      int cur_frame_;
+    
+    // track information
+      int nr_of_tracks_;
+      int req_track_;
+      int cur_track_;
   
-  /*!
-   * closes the file
-   */
-  void closeFile();
-  
-  /*!
-   * @return the current frame of the video
-   */
-  VIOFrame *getFrame();
-  
-  /*!
-   * changes which frame to display
-   * you can select the frame number and the track number,
-   * if track is -1 that means the same track as before
-   * @param frame the number of the desired frame
-   * @param track the number of the desired track
-   */
-  void setPosition(int frame, int track = -1);
-  
-  /*!
-   * if this function called, getFrame will automatically
-   * increment the frame number with incr
-   * @param incr the desired incrementation value
-   */
-  void setAutoIncrement(t_float incr);
-
-  
-  //////////////////////
-  // Utility methods
-  /////////////////////
-  
-  /*!
-   * @return the number of frames
-   */
-  int getNrOfFrames ();
-  
-  /*!
-   * @return the frames per second
-   */
-  double getFPS();
-  
-  /*!
-   * @return the width of the video
-   */
-  int getWidth();
-  
-  /*!
-   * @return the height of the video
-   */
-  int getHeight();
-  
-  /*!
-   * @return true if a video is loaded
-   */
-  bool hasVideo();
-  
-  
-  protected:
-  
-  bool hasVideo;
-  t_float autoIncrement;
-  int csFormat;
-  
-  // frame information
-  int nrOfFrames;
-  t_float reqFrame;
-  int curFrame;
-  
-  // track information
-  int nrOfTracks
-  int reqTrack
-  int curTrack
-
-  /// the video file
-  FReadPlugin *video;
-  
-  /// stores the current frame
-  VIOFrame *frame;
-};
-
+    /// the video file
+      //FReadPlugin *video;
+    
+    /// stores the current frame
+      VIOFrame frame_ ;
+    
+    
+  };
+}
 #endif
-  
-  

@@ -1,0 +1,73 @@
+//////////////////////////////////////////////////////////////////////////
+//
+//   VideoIO-Framework for GEM/PD
+//
+//   
+//
+//   VIOPlugin
+//   header file
+//
+//   copyright            : (C) 2007 by Thomas Holzmann
+//   email                : holzi1@gmx.at
+//
+//   This program is free software; you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation; either version 3 of the License, or
+//   (at your option) any later version.
+//
+///////////////////////////////////////////////////////////////////////////
+
+#ifndef VIOPLUGIN_H_
+#define VIOPLUGIN_H_
+
+#include <string>
+#include <dlfcn.h> /// TODO Achtung, nur fü Linux, d.h. je nach
+                   ///      Plattform dann unterschiedlich handeln
+#include "VIOUtils.h"
+
+using namespace std;
+
+
+
+namespace VideoIO_
+{
+  class VIOKernel;
+  
+  /// Representation of a plugin
+  class VIOPlugin {
+    public:
+      /// Initialize and load plugin
+      VIOPlugin(const string &filename);
+      /// Copy existing plugin instance
+      VIOPlugin(const VIOPlugin &other);
+      /// Unload a plugin
+      virtual ~VIOPlugin();
+  
+    //
+    // Plugin implementation
+    //
+    public:
+      /// Query the plugin for its expected engine version
+      int getEngineVersion();
+  
+      /// Register the plugin to a kernel
+      void registerPlugin(VIOKernel &K);
+      
+    private:
+      /// Too lazy to this now...
+      VIOPlugin &operator =(const VIOPlugin &Other) {};
+  
+      /// Signature for the version query function
+      typedef int  fnGetEngineVersion();
+      /// Signature for the plugin's registration function
+      typedef void fnRegisterPlugin(VIOKernel &);
+  
+      void *handle_; /// TODO nur Linux
+      
+      //HMODULE             h_dll_;                ///< Win32 DLL handle
+      size_t             *dll_ref_count_;        ///< Number of references to the DLL
+      fnGetEngineVersion *pfn_get_engine_version_; ///< Version query function
+      fnRegisterPlugin   *pfn_register_plugin_;   ///< Plugin registration function
+  };
+}
+#endif
