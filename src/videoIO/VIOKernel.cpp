@@ -28,8 +28,8 @@ namespace VideoIO_
     post("in the kernel");
     if( loaded_plugins_.find(name) == loaded_plugins_.end() )
     {
-      loaded_plugins_.insert(make_pair(name, VIOPlugin(name))
-                            ).first->second.registerPlugin(*this);
+      loaded_plugins_.insert(make_pair(name, VIOPlugin(name))).first->second.registerPlugin(*this);
     }
+    post("at the end of the kernen");
   }
 }

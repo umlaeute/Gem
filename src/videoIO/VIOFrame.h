@@ -62,7 +62,7 @@ namespace VideoIO_
     * @return the pixel data
     */
     inline unsigned char getPixel(int x, int y, int color)
-    { return(data_[x * x_size_ * colorspace_ + y * colorspace_ + color]); }
+    { return data_[x * x_size_ * colorspace_ + y * colorspace_ + color]; }
     
     /*!
     * sets a pixel
@@ -75,22 +75,34 @@ namespace VideoIO_
     { data_[x * x_size_ * colorspace_ + y * colorspace_ + color] = value; }
     
     /// @return the x size
-    inline int getXSize(){return x_size_;};
-    /// @return the y size
-    inline int getYSize(){return y_size_;};
-    /// @return the colorspace
-    inline int getColorspace() {return colorspace_;};
+    inline int getXSize()
+    { return x_size_; }
     
-    /// @return the frame data
-    inline unsigned char *getFrameData() {printf("----------------------- in VIOFrame::getFrameData -------------------\n");
-      return data_;};
+    /// @return the y size
+    inline int getYSize()
+    { return y_size_; }
+    
+    /// @return the colorspace
+    inline int getColorspace()
+    { return colorspace_; }
+    
+    /// NOTE data_ must be deleted by the client afterwards
+    ///      VIOFrame won't free the memory !!!
+    /// @return a pointer to the frame data
+    inline unsigned char *getFrameData()
+    { 
+      free_data_ = false;
+      return data_;
+    }
     
     
   protected:
     
     /// the frame data
     unsigned char *data_;
-    //auto_ptr <char> data_;
+    
+    /// is false if we are not responsible to free data_
+    bool free_data_;
     
     int x_size_;
     int y_size_;
@@ -98,4 +110,5 @@ namespace VideoIO_
     
   };
 }
+
 #endif

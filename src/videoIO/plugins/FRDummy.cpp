@@ -33,6 +33,8 @@ void FRDummy::openFile(const string &filename)
   int y = frame_.getYSize();
   int c = frame_.getColorspace();
   
+  post("x= %d, y= %d, c= %d",x,y,c);
+  
   for (int i=0; i < x; i++)
     for (int j=0; j < y; j++)
       for (int k=0; k < c; k++)
@@ -40,7 +42,7 @@ void FRDummy::openFile(const string &filename)
     
     has_video_file_ = true;
   
-  
+  post("sind wieder raus aus der dll");
 }
 
   /// Tells us to register our functionality to an engine kernel
@@ -50,5 +52,7 @@ void registerPlugin(VIOKernel &K)
   
   K.getFileReadServer().addFileReadPlugin(
     auto_ptr<FileRead>(new FRDummy()));
+  
+  post("und schon wieder draußen");
 }
 

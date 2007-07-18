@@ -20,14 +20,13 @@
 #include "VIOFrame.h"
 
 
-#include <string.h>
-#include <ctype.h>
 #include "VIOUtils.h"
 
 
 namespace VideoIO_
 {
-  VIOFrame::VIOFrame(int x_size, int y_size, int colorspace)
+  VIOFrame::VIOFrame(int x_size, int y_size, int colorspace) :
+      data_(0), free_data_(true)
   {
     x_size_ = x_size;
     y_size_ = y_size;
@@ -36,20 +35,22 @@ namespace VideoIO_
     allocate(x_size_, y_size_, colorspace_);
   }
   
-  VIOFrame::VIOFrame() : x_size_(0), y_size_(0), colorspace_(0)
+  VIOFrame::VIOFrame() : x_size_(0), y_size_(0), colorspace_(0),
+                     data_(0), free_data_(true)
   {
-    //VIOFrame(x_size_, y_size_, colorspace_);
-    
+    allocate(x_size_, y_size_, colorspace_);
   } 
   
   VIOFrame::~VIOFrame()
   {
-    //delete data_;
+    if(data_ && free_data_) delete [] data_;
   }
   
   void VIOFrame::allocate(int x_size, int y_size, int colorspace)
   {
-    data_ = new unsigned char;
+    if(data_ && free_data_) delete [] data_;
+    
+    data_ = new unsigned char[x_size*y_size*colorspace];
+    free_data_ = true;
   }
 }
-

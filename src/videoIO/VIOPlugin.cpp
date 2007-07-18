@@ -32,6 +32,7 @@ namespace VideoIO_
     
     handle_ = dlopen("videoIO/plugins/FRDummy.so", RTLD_LAZY);
     
+        
     if(handle_ == NULL)
     {
       post("ERROR im lib laden:");
@@ -42,6 +43,9 @@ namespace VideoIO_
                            dlsym(handle_, "registerPlugin") );
     
     post("after: %d, handle: %d", pfn_register_plugin_, handle_);
+    
+    // Initialize a new DLL reference counter
+    dll_ref_count_ = new size_t(1);
   }
   
   VIOPlugin::VIOPlugin(const VIOPlugin &other) :
@@ -50,7 +54,9 @@ namespace VideoIO_
       pfn_register_plugin_(other.pfn_register_plugin_),
       handle_(other.handle_)
   {
+    post("In the copy constructor");
     ++*dll_ref_count_;
+    post("end of copy constructor");
   }
   
   VIOPlugin::~VIOPlugin()
@@ -76,7 +82,7 @@ namespace VideoIO_
   
   void VIOPlugin::registerPlugin(VIOKernel &K)
   {
-    post("before pfn_register_plugin_");
+    post("at VIOPlugin::registerPlugin");
     //pfn_register_plugin_(K);
     post("a");
     

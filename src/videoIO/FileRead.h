@@ -46,7 +46,7 @@ namespace VideoIO_
     /*!
     * closes the file
     */
-    virtual void closeFile() {};
+    virtual void closeFile() {post("closeFile in FileRead");};
     
 //    /*!
 //    * @return the current frame of the video
