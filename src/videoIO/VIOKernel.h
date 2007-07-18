@@ -43,8 +43,12 @@ namespace VideoIO_
   * The VIOKernel has the different plugin server and the
   * different plugins.
   */    
-  class VIOKernel
+  class VIOKernel 
   {
+    /// TODO manage the kernel with a singleton design pattern,
+    ///      so that there is always only one kernel object !
+    
+    
     public:
     /// constructor
     VIOKernel()

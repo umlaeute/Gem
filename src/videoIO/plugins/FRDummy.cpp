@@ -24,10 +24,7 @@ void FRDummy::openFile(const string &filename)
   
   post("sind im open file vom dummy");
   
-  frame_ = VIOFrame(20, 20, 1);
-  
-  unsigned char *dummy = frame_.getFrameData();
-  int i = frame_.getXSize()*frame_.getYSize()*frame_.getColorspace();
+  frame_.allocate(20, 20, 1);
   
   int x = frame_.getXSize();
   int y = frame_.getYSize();
@@ -38,7 +35,11 @@ void FRDummy::openFile(const string &filename)
   for (int i=0; i < x; i++)
     for (int j=0; j < y; j++)
       for (int k=0; k < c; k++)
-        frame_.setPixel(i, j, k, (unsigned char) rand()%256);
+  {
+    unsigned char a = (unsigned char) rand()%256;
+    frame_.setPixel(i, j, k, a);
+    post("pixel gesetzt auf: %d - sollte sein %d", frame_.getPixel(i,j,k), a );
+  }
     
     has_video_file_ = true;
   

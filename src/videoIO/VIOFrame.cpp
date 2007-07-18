@@ -26,31 +26,32 @@
 namespace VideoIO_
 {
   VIOFrame::VIOFrame(int x_size, int y_size, int colorspace) :
-      data_(0), free_data_(true)
+      data_(0)
   {
-    x_size_ = x_size;
-    y_size_ = y_size;
-    colorspace_ = colorspace;
-    
-    allocate(x_size_, y_size_, colorspace_);
+    allocate(x_size, y_size, colorspace);
   }
   
   VIOFrame::VIOFrame() : x_size_(0), y_size_(0), colorspace_(0),
-                     data_(0), free_data_(true)
+                     data_(0)
   {
     allocate(x_size_, y_size_, colorspace_);
   } 
   
   VIOFrame::~VIOFrame()
   {
-    if(data_ && free_data_) delete [] data_;
+    if(data_) delete [] data_;
+    data_=0;
   }
   
   void VIOFrame::allocate(int x_size, int y_size, int colorspace)
   {
-    if(data_ && free_data_) delete [] data_;
+    if(data_) delete [] data_;
+    data_=0;
+    
+    x_size_ = x_size;
+    y_size_ = y_size;
+    colorspace_ = colorspace;
     
     data_ = new unsigned char[x_size*y_size*colorspace];
-    free_data_ = true;
   }
 }

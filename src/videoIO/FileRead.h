@@ -46,13 +46,11 @@ namespace VideoIO_
     /*!
     * closes the file
     */
-    virtual void closeFile() {post("closeFile in FileRead");};
-    
-//    /*!
-//    * @return the current frame of the video
-//    */
-//     virtual VIOFrame *getFrame();
-    
+    virtual void closeFile() {
+      /// TODO das implementieren bitte bzw in den abgeleiteten klassen !
+      post("closeFile in FileRead");
+    };
+
     /// @return the frame data of VIOFrame
     inline virtual unsigned char *getFrameData() {return frame_.getFrameData();}
   
@@ -63,6 +61,7 @@ namespace VideoIO_
     * @param frame the number of the desired frame
     * @param track the number of the desired track
     */
+    /// TODO return value gescheit definieren !!!
     virtual int setPosition(int frame, int track = -1) {return 1;};
     
     /*!
@@ -71,6 +70,9 @@ namespace VideoIO_
     * @param incr the desired incrementation value
     */
     virtual void setAutoIncrement(t_float incr) {};
+    
+    /// TODO mit der auto variable richtig handlen, d.h. bei getFrame MUSS
+    ///      immer auto auch erhöht werde (wenn aktiviert) !!!!!
     
       //////////////////////
     // Utility methods

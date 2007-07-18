@@ -48,7 +48,7 @@ namespace VideoIO_
     
     /*!
     * allocates the memory and then also frees
-    * the memory
+    * the memory but only if needed !
     * @param x_size the horizontal size of the frame
     * @param y_size the vertical size of the frame
     * @param colorspace the colorspace of the frame
@@ -72,26 +72,27 @@ namespace VideoIO_
     * @param value the value to set
     */
     inline void setPixel(int x, int y, int color, unsigned char value)
-    { data_[x * x_size_ * colorspace_ + y * colorspace_ + color] = value; }
+    { // printf("----------------setPixel called---------------\n");
+      data_[x * x_size_ * colorspace_ + y * colorspace_ + color] = value; }
     
     /// @return the x size
     inline int getXSize()
-    { return x_size_; }
+    { printf("----------------getXSize called-------------------\n");
+      return x_size_; }
     
     /// @return the y size
     inline int getYSize()
-    { return y_size_; }
+    { printf("----------------getYSize called-------------------\n");
+      return y_size_; }
     
     /// @return the colorspace
     inline int getColorspace()
-    { return colorspace_; }
+    { printf("----------------getColorspace called-------------------\n");
+      return colorspace_; }
     
-    /// NOTE data_ must be deleted by the client afterwards
-    ///      VIOFrame won't free the memory !!!
     /// @return a pointer to the frame data
     inline unsigned char *getFrameData()
     { 
-      free_data_ = false;
       return data_;
     }
     
@@ -100,9 +101,6 @@ namespace VideoIO_
     
     /// the frame data
     unsigned char *data_;
-    
-    /// is false if we are not responsible to free data_
-    bool free_data_;
     
     int x_size_;
     int y_size_;

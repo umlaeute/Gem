@@ -28,7 +28,6 @@ namespace VideoIO_
     nr_of_frames_(0), req_frame_(0), cur_frame_(0),
     nr_of_tracks_(0), req_track_(0), cur_track_(0)
   {
-    frame_ = VIOFrame();
   }
   
 
