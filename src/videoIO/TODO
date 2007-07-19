@@ -6,5 +6,52 @@
 
 
 Hannes schreiben:
-- link vom Design pattern
-- wegen YUV Formate fragen
+- link vom Design pattern (OK)
+- wegen YUV Formate fragen (OK)
+
+
+PLUGIN-FACTORY:
+	(read+write)
+	factory.getPlugin() needs argument, to decide which plugin to use
+		arguments include: 	"filename" (connection string)
+					"colorspace"
+					"preferred_plugin" (esp. important when writing; but might also be of interested when reading)
+					...
+		use argument map (id<->value);
+		
+
+	think about PRIORITIES: several plugins can decode the same "file", but some might do a better job; these should be used!
+				therefore a plugin returns a value on "how good" it is at decoding the specified thing
+						a return value of "-1" would mean: i CANNOT do this
+
+
+colorspaces:
+	request at plugin-instantiation a certain colorspace in FourCC code (string? hex-value?)
+	for now we do not offer any automatic converision:
+		either the decoding-libraries offer the requested format, or we get some "native" format
+	if we don't care, set the FourCC to <null>
+
+	what about "writing"?  conversion in the host (if plugin does not know how to handle the requested cs)
+
+
+error checking:
+	exceptions
+
+
+// on parameter maps
+class VIOPluginParameter {
+	/* this is bad as it needs re-compilation of plugins and hosts! */
+	setFilename(String s);
+	setColorspace(int);
+
+	/* this is good, as neither plugins nor hosts need to be recompiled */
+	setParameter(String id, String parm); // id=="filename" or id="colorspace";
+	setParameter(String id, int parm);
+
+	Map<>map;
+
+	getParameter();
+
+}
+
+setParameter("mysuperaparm", huhu);
