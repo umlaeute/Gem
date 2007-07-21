@@ -37,14 +37,36 @@ class FRDummy : public FileRead
   * opens the file at the given path
   * @param filename the path of the file
   */
-  void openFile(const string &filename);
+  bool openFile(char *filename);
   
   /*!
   * @return the current frame of the video
   */
-  unsigned char *getFrameData(){printf("----------------------- in FRDummy::getFrameData -------------------\n");
+  unsigned char *getFrameData()
+  {//printf("----------------------- in FRDummy::getFrameData -------------------\n");
     return frame_.getFrameData();};
   
+      /*!
+    * @return the number of frames
+    */
+    int getNrOfFrames () {};;
+    
+    /*!
+    * @return the frames per second
+    */
+    double getFPS() {};;
+    
+    /*!
+    * @return the width of the video
+    */
+    int getWidth() {};;
+    
+    /*!
+    * @return the height of the video
+    */
+    int getHeight() {};
+
+    
 };
 
 /// Tells us to register our functionality to an engine kernel

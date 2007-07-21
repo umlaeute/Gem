@@ -74,20 +74,27 @@ namespace VideoIO_
     inline void setPixel(int x, int y, int color, unsigned char value)
     { // printf("----------------setPixel called---------------\n");
       data_[x * x_size_ * colorspace_ + y * colorspace_ + color] = value; }
+      
+    /*!
+    * sets the colorspace_ variable
+    * @param format the colorspace format
+    */
+    void setColorSize (int format);
+      
     
     /// @return the x size
     inline int getXSize()
-    { printf("----------------getXSize called-------------------\n");
+    { //printf("----------------getXSize called-------------------\n");
       return x_size_; }
     
     /// @return the y size
     inline int getYSize()
-    { printf("----------------getYSize called-------------------\n");
+    { //printf("----------------getYSize called-------------------\n");
       return y_size_; }
     
     /// @return the colorspace
     inline int getColorspace()
-    { printf("----------------getColorspace called-------------------\n");
+    { //printf("----------------getColorspace called-------------------\n");
       return colorspace_; }
     
     /// @return a pointer to the frame data
@@ -104,7 +111,7 @@ namespace VideoIO_
     
     int x_size_;
     int y_size_;
-    int colorspace_;
+    int colorspace_; ///TODO verwirrender Name, da colorspace-größe
     
   };
 }

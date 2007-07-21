@@ -40,8 +40,9 @@ namespace VideoIO_
     /*!
     * opens the file at the given path
     * @param filename the path of the file
+    * @return true if open worked
     */
-    virtual void openFile(const string &filename) = 0;
+    virtual bool openFile(char *filename) = 0; ///TODO string?? 
     
     /*!
     * closes the file
@@ -60,9 +61,9 @@ namespace VideoIO_
     * if track is -1 that means the same track as before
     * @param frame the number of the desired frame
     * @param track the number of the desired track
+    * @return true if this is the last frame
     */
-    /// TODO return value gescheit definieren !!!
-    virtual int setPosition(int frame, int track = -1) {return 1;};
+    virtual bool setPosition(int frame, int track = -1);
     
     /*!
     * if this function called, getFrame will automatically
@@ -81,22 +82,22 @@ namespace VideoIO_
     /*!
     * @return the number of frames
     */
-    int getNrOfFrames () {return 5;};
+    virtual int getNrOfFrames () = 0;
     
     /*!
     * @return the frames per second
     */
-    double getFPS() {return 5;};
+    virtual double getFPS() = 0;
     
     /*!
     * @return the width of the video
     */
-    int getWidth() {return 5;};
+    virtual int getWidth() = 0;
     
     /*!
     * @return the height of the video
     */
-    int getHeight() {return 5;};
+    virtual int getHeight() = 0;
     
     /*!
     * @return true if a video is loaded
@@ -111,7 +112,7 @@ namespace VideoIO_
     
     // frame information
       int nr_of_frames_;
-      t_float req_frame_;
+      int req_frame_;
       int cur_frame_;
     
     // track information

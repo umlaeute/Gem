@@ -27,9 +27,20 @@ namespace VideoIO_
     auto_increment_(0), cs_format_(0),
     nr_of_frames_(0), req_frame_(0), cur_frame_(0),
     nr_of_tracks_(0), req_track_(0), cur_track_(0)
-  {
-  }
+  {}
   
+  
+  bool FileRead::setPosition(int frame, int track)
+  {
+   /// TODO was wenn kein frame mehr
+   req_frame_ = frame; 
+    
+    if(frame == nr_of_frames_)
+      return true;
+    else
+      return false;
+  }
+   
 
 }
     

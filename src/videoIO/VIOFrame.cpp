@@ -50,8 +50,31 @@ namespace VideoIO_
     
     x_size_ = x_size;
     y_size_ = y_size;
-    colorspace_ = colorspace;
+    setColorSize(colorspace);
     
-    data_ = new unsigned char[x_size*y_size*colorspace];
+    data_ = new unsigned char[x_size_*y_size_*colorspace_];
+  }
+  
+  void VIOFrame::setColorSize (int format)
+  {
+    switch(format)
+    {
+      case GRAY:  
+        colorspace_ = 1; 
+        break;
+        
+      case YUV422:
+        colorspace_ = 2;
+        break;
+        
+      case RGB: 
+        colorspace_ = 3;
+        break;
+    
+      case RGBA:
+      default:
+        colorspace_ = 4; 
+        break;
+    }
   }
 }

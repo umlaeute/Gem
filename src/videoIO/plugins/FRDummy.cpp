@@ -19,10 +19,12 @@
 
 #include "FRDummy.h"
 
-void FRDummy::openFile(const string &filename)
+bool FRDummy::openFile(char *filename)
 {
   
   post("sind im open file vom dummy");
+  
+  nr_of_frames_ = 5; // just to look if bang works
   
   frame_.allocate(20, 20, 1);
   
@@ -38,12 +40,13 @@ void FRDummy::openFile(const string &filename)
   {
     unsigned char a = (unsigned char) rand()%256;
     frame_.setPixel(i, j, k, a);
-    post("pixel gesetzt auf: %d - sollte sein %d", frame_.getPixel(i,j,k), a );
+    //post("pixel gesetzt auf: %d - sollte sein %d", frame_.getPixel(i,j,k), a );
   }
     
     has_video_file_ = true;
   
   post("sind wieder raus aus der dll");
+  return true;
 }
 
   /// Tells us to register our functionality to an engine kernel
