@@ -22,6 +22,7 @@
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include "../videoIO/VIOKernel.h"
+#include "../videoIO/VIOException.h"
 
   /* some error codes */
 #define FILM_ERROR_SUCCESS 0 /* no error */
