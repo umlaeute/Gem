@@ -85,6 +85,7 @@ GEM_TARGET(Nongeos)
 GEM_TARGET(Particles)
 GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
+GEM_TARGET(videoIO)
 GEM_TARGET_DISABLED(Vertex)
 
 
