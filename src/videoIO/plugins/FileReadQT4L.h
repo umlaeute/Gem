@@ -46,7 +46,8 @@ class FileReadQT4L : public FileRead
   * @param filename the path of the file
   * @return true if open worked
   */
-  bool openFile(char *filename);
+  bool openFile(string filename)
+      throw (VIOException);
   
   /*!
   * closes the file

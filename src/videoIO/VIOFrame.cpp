@@ -31,10 +31,12 @@ namespace VideoIO_
     allocate(x_size, y_size, colorspace);
   }
   
-  VIOFrame::VIOFrame() : x_size_(0), y_size_(0), colorspace_(0),
+  VIOFrame::VIOFrame() : x_size_(0), y_size_(0), color_size_(0),
                      data_(0)
   {
-    allocate(x_size_, y_size_, colorspace_);
+    allocate(x_size_, y_size_, color_size_); /// TODO alloziert nicht richtig, da hier
+                                             /// colorspace und nicht color_size übergeben
+                                             /// werden sollte
   } 
   
   VIOFrame::~VIOFrame()
@@ -52,7 +54,7 @@ namespace VideoIO_
     y_size_ = y_size;
     setColorSize(colorspace);
     
-    data_ = new unsigned char[x_size_*y_size_*colorspace_];
+    data_ = new unsigned char[x_size_*y_size_*color_size_];
   }
   
   void VIOFrame::setColorSize (int format)
@@ -60,20 +62,20 @@ namespace VideoIO_
     switch(format)
     {
       case GRAY:  
-        colorspace_ = 1; 
+        color_size_ = 1; 
         break;
         
       case YUV422:
-        colorspace_ = 2;
+        color_size_ = 2;
         break;
         
       case RGB: 
-        colorspace_ = 3;
+        color_size_ = 3;
         break;
     
       case RGBA:
       default:
-        colorspace_ = 4; 
+        color_size_ = 4; 
         break;
     }
   }

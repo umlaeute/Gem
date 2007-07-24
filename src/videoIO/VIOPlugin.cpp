@@ -30,7 +30,7 @@ namespace VideoIO_
   {
     post("before: %d, handle: %d", pfn_register_plugin_, handle_);
     
-    handle_ = dlopen("videoIO/plugins/FileReadQT4L.so", RTLD_LAZY);
+    handle_ = dlopen("videoIO/plugins/FileReadQT4L.so", RTLD_LAZY | RTLD_GLOBAL);
     
         
     if(handle_ == NULL)

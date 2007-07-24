@@ -25,6 +25,7 @@ using namespace std;
 
 #include "VIOUtils.h"
 #include "VIOFrame.h"
+#include "VIOException.h"
 
 namespace VideoIO_
 {
@@ -42,7 +43,7 @@ namespace VideoIO_
     * @param filename the path of the file
     * @return true if open worked
     */
-    virtual bool openFile(char *filename) = 0; ///TODO string?? 
+    virtual bool openFile(string filename) = 0; ///TODO string?? 
     
     /*!
     * closes the file

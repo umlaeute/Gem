@@ -37,7 +37,7 @@ class FRDummy : public FileRead
   * opens the file at the given path
   * @param filename the path of the file
   */
-  bool openFile(char *filename);
+  bool openFile(string filename);
   
   /*!
   * @return the current frame of the video

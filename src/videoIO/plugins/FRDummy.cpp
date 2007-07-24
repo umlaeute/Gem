@@ -19,7 +19,7 @@
 
 #include "FRDummy.h"
 
-bool FRDummy::openFile(char *filename)
+bool FRDummy::openFile(string filename)
 {
   
   post("sind im open file vom dummy");
@@ -30,7 +30,7 @@ bool FRDummy::openFile(char *filename)
   
   int x = frame_.getXSize();
   int y = frame_.getYSize();
-  int c = frame_.getColorspace();
+  int c = frame_.getColorSize();
   
   post("x= %d, y= %d, c= %d",x,y,c);
   

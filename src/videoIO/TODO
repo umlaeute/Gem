@@ -1,11 +1,28 @@
  TODO:
+- FileReadQT4l funktioniert noch nicht richtig
+- Exceptions in dynamic libraries
 
-- VIOFrame dokumentieren
-- Design Pattern durchlesen
+
+Georg schreiben
+
 
 
 
 Hannes schreiben:
+<<<<<<< TODO
+
+
+
+CVS:
+- auschecken mit cvs -z9 -d:ext:holzi1@cvs.gem.iem.at:/cvsroot/pd-gem co -r videoIO Gem
+- Teile auscheckehn cvs update
+- einchecken: immer cvs commit -r videoIO *.h TODO (alle Datein angeben)
+- beim ersten mal adden: cvs add *.h
+    
+    
+    
+Fragen:
+- Error handling?? >>>>> Exception exits???
 - link vom Design pattern (OK)
 - wegen YUV Formate fragen (OK)
 
@@ -55,3 +72,4 @@ class VIOPluginParameter {
 }
 
 setParameter("mysuperaparm", huhu);
+>>>>>>> 1.1.2.2
