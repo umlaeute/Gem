@@ -326,23 +326,7 @@ void GemMan :: createContext(char* disp)
 
 	
 
-#elif __APPLE__
-    // Check QuickTime installed
-    long	QDfeature;
-    if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
-            error ("GEM: QuickTime is not installed : %d", err);
-            return;
-    } else {
-            if (OSErr err = ::EnterMovies()) {
-                error("GEM: Couldn't initialize QuickTime : %d", err);
-                return;
-            }
-    }
-    // check existence of OpenGL libraries
-    if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
-            error ("GEM : OpenGL is not installed");
-            return;
-    }
+
 #endif
   s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
 
@@ -456,6 +440,24 @@ void GemMan :: initGem()
 		return;
 	}	
 	post("Gem Man: QT init OK");
+	
+#elif __APPLE__
+    // Check QuickTime installed
+    long	QDfeature;
+    if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
+            error ("GEM: QuickTime is not installed : %d", err);
+            return;
+    } else {
+            if (OSErr err = ::EnterMovies()) {
+                error("GEM: Couldn't initialize QuickTime : %d", err);
+                return;
+            }
+    }
+    // check existence of OpenGL libraries
+    if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
+            error ("GEM : OpenGL is not installed");
+            return;
+    }
 
 #endif
 
@@ -955,7 +957,7 @@ void GemMan :: render(void *)
       renderChain(s_linkHead_2, &currentState);
     
       glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-    }
+    } 
     break;
   default: // normal rendering
     {
@@ -971,7 +973,7 @@ void GemMan :: render(void *)
   }
 
   // only want to swap if we are in double buffer mode
-  if (GemMan::m_buffer == 2)
+//  if (GemMan::m_buffer == 2)
     swapBuffers();
 
   // are we profiling?
