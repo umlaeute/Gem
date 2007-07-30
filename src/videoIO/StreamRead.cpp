@@ -20,7 +20,19 @@
 #include "StreamRead.h"
 
 
-namespace VideoIO
+namespace VideoIO_
 {
-
+  
+  StreamRead::StreamRead() : 
+      capturing_(false), has_video_(false), 
+      width_(0), height_(0), channel_(0), device_number_(0),
+      tv_norm_(0), req_format_(0), quality_(0)
+  {}
+  
+  StreamRead::~StreamRead()
+  {
+    if(has_video_)
+      closeDevice();
+  }
+  
 }

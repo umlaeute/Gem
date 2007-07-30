@@ -30,7 +30,7 @@ namespace VideoIO_
   {
     post("before: %d, handle: %d", pfn_register_plugin_, handle_);
     
-    handle_ = dlopen("videoIO/plugins/FileReadQT4L.so", RTLD_LAZY | RTLD_GLOBAL);
+    handle_ = dlopen("videoIO/plugins/FileReadGst.so", RTLD_LAZY | RTLD_GLOBAL);
     
         
     if(handle_ == NULL)
@@ -84,13 +84,13 @@ namespace VideoIO_
   {
     post("at VIOPlugin::registerPlugin");
     //pfn_register_plugin_(K);
-    post("a");
+    post("at VIOPlugin, a");
     
     post("schauma mal: %d, handle: %d", pfn_register_plugin_, handle_);
     
     pfn_register_plugin_ = reinterpret_cast<fnRegisterPlugin *>(
                            dlsym(handle_, "registerPlugin") );
-    post("b");
+    post("at VIOPlugin, b");
     pfn_register_plugin_(K);
     
     post("after pfn_register_plugin_");

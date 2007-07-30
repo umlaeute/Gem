@@ -26,71 +26,63 @@ using namespace std;
 #include "VIOFrame.h"
 #include "VIOException.h"
 
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-	video
-    
-	a OS-indendent parent-class for retrieving video-frames
-	
-KEYWORDS
-	pix
-    
-DESCRIPTION
-
-    "dimen" (int, int) - set the x,y dimensions
-    "zoom" (int, int) - the zoom factor (1.0 is nominal) (num / denom)
-    "bright" (int) - the brightnes
-    "contrast" (int) - the contrast
-    "hue" (int) - the hue
-    "sat" (int) - the saturation
-    
------------------------------------------------------------------*/
 namespace VideoIO_
 {
   class StreamRead{
   public:
     
-    //////////
-    // Constructor
-    StreamRead(){};
+    /// constructor
+    StreamRead();
     
-    //////////
-    // Destructor
-    virtual ~StreamRead(){};
+    /// destructor
+    virtual ~StreamRead();
   
-    ////////
-    // open the video-device
-    virtual void  openDevice(int devnum, int format=0){};
+    /*!
+     * opens the V4L device
+     * @param device_number the number of the device
+     * @param format the requested format
+     * @return true if the device was successfully opened
+     */
+    virtual bool  openDevice(int device_number, int format=0){return false;};
+    
+
+    /// closes the device
     virtual void  closeDevice(void){};
-    virtual void  resetDevice(void){};
+    
+    /*!
+     * resets the device
+     * @return true if the device was successfully reset
+     */
+    virtual bool  resetDevice(void){return false;};
   
-    //////////
-    // Start up the video device (called on startRendering)
-    // [out] int - returns 0 if bad
-    virtual void  startTransfer(int format = 0){};
-    //////////
-    // Stop the video device (called on stopRendering)
-    // [out] int - returns 0 if bad
-    virtual int  stopTransfer(){};
+    /*!
+     * Start up the video device (called on startRendering)
+     * @param format the requested format
+     * @return false if transfer doesn't work
+     */
+    virtual bool  startTransfer(int format = 0){return false;};
+    
+    /*!
+     * Stops the transfer
+     * @return true if successful
+     */
+    virtual bool  stopTransfer(){return false;};
   
-    //////////
-    // get the next frame (called when rendering)
+    /// @return a VIOFrame of the video stream
     virtual VIOFrame *getFrame(){};
   
-    //////////
-    // Set the video dimensions
-    virtual int setDimen(int x, int y, int left_margin=0, int right_margin=0,
-                                  int top_margin=0, int bottom_margin=0){};
+    /// sets the video dimensions
+    virtual bool setDimen(int x_size, int y_size, int left_margin=0, int right_margin=0,
+                                  int top_margin=0, int bottom_margin=0){return false;};
     /// TODO wird das benötigt ??
     /// virtual int setOffset(int x, int y);
-    virtual int setSwap(int state){};
-    virtual int setChannel(int channel, float f=0){};
-    virtual int setTVNorm(string tv_norm){};
-    virtual int setDevice(int device_number){};
-    virtual int setDevice(string device_name){};
-    virtual int setColor(int){};
-    virtual int setQuality(int){};
+    virtual bool setSwap(int state){return false;}; /// Was ist das?
+    virtual bool setChannel(int channel, float f=0){return false;};
+    virtual bool setTVNorm(string tv_norm){return false;};
+    virtual bool setDevice(int device_number){return false;};
+    virtual bool setDevice(string device_name){return false;};
+    virtual bool setColorspace(int){return false;};
+    virtual bool setQuality(int){return false;};
   
   protected:
     bool capturing_;
@@ -102,13 +94,14 @@ namespace VideoIO_
     int channel_;
     int tv_norm_;
     int req_format_;
-  
+    int quality_;
+    
     /* specify either devicename XOR devicenum */  
     string device_name_;
     int device_number_;
   
   
-    int quality_;
+    
   };
 }
-#endif	// for header file
+#endif
