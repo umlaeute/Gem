@@ -62,10 +62,10 @@ pix_texture :: pix_texture()
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
   m_buffer.data = NULL;
   
-  #if defined(GL_TEXTURE_RECTANGLE_EXT) 
+  #if defined(GL_TEXTURE_RECTANGLE_ARB) 
   //|| defined(GL_NV_TEXTURE_RECTANGLE)
   m_mode = 1;  //default to the fastest mode for systems that support it
-  m_textureType = GL_TEXTURE_RECTANGLE_EXT;
+  m_textureType = GL_TEXTURE_RECTANGLE_ARB;
   #endif
   
  // m_texUnit = 0;
@@ -96,9 +96,9 @@ pix_texture :: ~pix_texture()
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState() {
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+#ifdef GL_TEXTURE_RECTANGLE_ARB
   if (m_mode && GemMan::texture_rectangle_supported){
-    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_EXT)
+    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB)
 	{
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
     // JMZ: disabled the following, as rectangle-textures are clamped anyhow
@@ -116,7 +116,7 @@ void pix_texture :: setUpTextureState() {
       debug("using rectangle texture");
 	}
   }
-#endif // GL_TEXTURE_RECTANGLE_EXT
+#endif // GL_TEXTURE_RECTANGLE_ARB
 
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
   if (GemMan::client_storage_supported){
@@ -140,10 +140,10 @@ void pix_texture :: setUpTextureState() {
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
   
 /*
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+#ifdef GL_TEXTURE_RECTANGLE_ARB
   if (m_mode)
-    if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
-#endif //GL_TEXTURE_RECTANGLE_EXT
+    if ( m_textureType !=  GL_TEXTURE_RECTANGLE_ARB)
+#endif //GL_TEXTURE_RECTANGLE_ARB
 */
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
 }
@@ -237,15 +237,17 @@ void pix_texture :: render(GemState *state) {
 
 #ifdef GL_VERSION_1_1
   if(!useExternalTexture){
-# ifdef GL_TEXTURE_RECTANGLE_EXT
+# ifdef GL_TEXTURE_RECTANGLE_ARB
     if (m_mode){
       if (GemMan::texture_rectangle_supported ){
-	m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-	debug("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
+	m_textureType = GL_TEXTURE_RECTANGLE_ARB;
+	debug("using mode 1:GL_TEXTURE_RECTANGLE_ARB");
 	normalized = 0;
       }
     } else 
-# endif // GL_TEXTURE_RECTANGLE_EXT
+
+#endif // GL_TEXTURE_RECTANGLE_ARB
+
       {
 	m_textureType = GL_TEXTURE_2D;
 	debug("using mode 0:GL_TEXTURE_2D");
@@ -277,6 +279,11 @@ void pix_texture :: render(GemState *state) {
       // GL_STORAGE_SHARED_APPLE -  AGP texture path
       // GL_STORAGE_CACHED_APPLE - VRAM texture path
       // GL_STORAGE_PRIVATE_APPLE - normal texture path
+
+#ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
+	  if(m_clientStorage) glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
+#endif
+	  
   }
 # endif // GL_APPLE_texture_range
 
@@ -432,10 +439,10 @@ if (m_rebuildList) {
  
   state->texture = 1;
 
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+#ifdef GL_TEXTURE_RECTANGLE_ARB
   // if we are using rectangle textures, this is a way to inform the downstream objects 
   // (this is important for things like [pix_coordinate]
-  if(m_textureType==GL_TEXTURE_RECTANGLE_EXT)state->texture=2;
+  if(m_textureType==GL_TEXTURE_RECTANGLE_ARB)state->texture=2;
 #endif
 
   m_didTexture=1;
@@ -658,7 +665,7 @@ void pix_texture :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_mode=((int)quality);
   if (quality)
-    GetMyClass(data)->post("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
+    GetMyClass(data)->post("using mode 1:GL_TEXTURE_RECTANGLE_ARB");
   else
     GetMyClass(data)->post("using mode 0:GL_TEXTURE_2D");
   GetMyClass(data)->m_rebuildList=1;
