@@ -655,14 +655,14 @@ void pix_movieDarwin :: setUpTextureState()
 {
     if (m_rectangle) {
         post("pix__movieDarwin: using rectangle textures");
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0f);
+        glTexParameterf(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_PRIORITY, 0.0f);
 
         glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
         
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
     else
     {
@@ -745,18 +745,20 @@ state->texture = 2;
   }
   else{
   
-  glEnable(GL_TEXTURE_RECTANGLE_EXT);
-  glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+  glEnable(GL_TEXTURE_RECTANGLE_ARB);
+  glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textureObj);
  
 
 	if (m_newFilm ){
-		glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_EXT, 
+		glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_ARB, 
 			    m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize, 
 			    m_pixBlock.image.data );
 				
-			glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+			glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
 			
-			glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+			glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
+			
+			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
 		     GL_RGBA,
 		     m_pixBlock.image.xsize,
 		     m_pixBlock.image.ysize, 0,
@@ -778,7 +780,7 @@ state->texture = 2;
         m_dataSize[0] = m_pixBlock.image.csize;
         m_dataSize[1] = m_pixBlock.image.xsize;
         m_dataSize[2] = m_pixBlock.image.ysize;
-	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+	glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
 		     GL_RGBA,
 		     m_pixBlock.image.xsize,
 		     m_pixBlock.image.ysize, 0,
@@ -795,7 +797,7 @@ state->texture = 2;
 		 
 		 
             
-			glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
 		     GL_RGBA,
 		     m_pixBlock.image.xsize,
 		     m_pixBlock.image.ysize, 0,
@@ -810,7 +812,7 @@ state->texture = 2;
 	  
 	
 
-    glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+    glTexSubImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
 		    0, 0,			// position
 		    m_xsize,			// the x size of the data
 		    m_ysize,			// the y size of the data
@@ -843,11 +845,11 @@ void pix_movieDarwin :: postrender(GemState *state)
   
   glActiveTexture(GL_TEXTURE0_ARB);
   
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+#ifdef GL_TEXTURE_RECTANGLE_ARB
   if ( !GemMan::texture_rectangle_supported )
     glDisable(GL_TEXTURE_2D);
   else
-    glDisable(GL_TEXTURE_RECTANGLE_EXT);
+    glDisable(GL_TEXTURE_RECTANGLE_ARB);
 #else
     glDisable(GL_TEXTURE_2D);
 #endif
@@ -870,7 +872,7 @@ void pix_movieDarwin :: startRendering()
     if ( ! m_rectangle )
         glBindTexture(GL_TEXTURE_2D, m_textureObj);
     else
-        glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textureObj);
 
 //    glBindTexture(GL_TEXTURE_2D, m_textureObj);
 
