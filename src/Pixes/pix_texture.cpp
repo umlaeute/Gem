@@ -62,7 +62,8 @@ pix_texture :: pix_texture()
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
   m_buffer.data = NULL;
   
-  #if defined(GL_TEXTURE_RECTANGLE_ARB) 
+  //rectangle textures by default only for OSX since there are too many busted drivers in use on Windows and Linux
+  #if defined(GL_TEXTURE_RECTANGLE_ARB) && __APPLE__
   //|| defined(GL_NV_TEXTURE_RECTANGLE)
   m_mode = 1;  //default to the fastest mode for systems that support it
   m_textureType = GL_TEXTURE_RECTANGLE_ARB;
