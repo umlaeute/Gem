@@ -199,7 +199,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
 /// Tells us to register our functionality to an engine kernel
 void registerPlugin(VIOKernel &K)
 {
-  K.getFileReadServer().addFileReadPlugin(
+  K.getFileReadServer().addPlugin(
     auto_ptr<FileRead>(new FileReadGst()));
   
   post("VideoIO: registerd FileReadGst Plugin");
