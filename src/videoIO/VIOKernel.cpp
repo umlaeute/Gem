@@ -26,8 +26,8 @@ namespace VideoIO_
 {
   // init static variables
   PluginMap VIOKernel::loaded_plugins_;
-  FileReadServer VIOKernel::file_read_server_;
-  FileWriteServer VIOKernel::file_write_server_;
+  PluginServer<FileRead> VIOKernel::file_read_server_;
+  PluginServer<FileWrite> VIOKernel::file_write_server_;
   PathList VIOKernel::search_path_;
   bool VIOKernel::first_time_ = true;
 

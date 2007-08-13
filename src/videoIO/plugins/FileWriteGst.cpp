@@ -123,7 +123,7 @@ bool FileWriteGst::openFile(string filename)
 /// Tells us to register our functionality to an engine kernel
 void registerPlugin(VIOKernel &K)
 {
-  K.getFileWriteServer().addFileWritePlugin(
+  K.getFileWriteServer().addPlugin(
     auto_ptr<FileWrite>(new FileWriteGst()));
   
   post("VideoIO: registerd FileWriteGst Plugin");

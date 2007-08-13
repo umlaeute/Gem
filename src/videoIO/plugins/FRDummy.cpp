@@ -44,7 +44,7 @@ unsigned char *FRDummy::getFrameData()
   /// Tells us to register our functionality to an engine kernel
 void registerPlugin(VIOKernel &K)
 {
-  K.getFileReadServer().addFileReadPlugin(
+  K.getFileReadServer().addPlugin(
     auto_ptr<FileRead>(new FRDummy()));
   
   post("VideoIO: registered Dummy FileRead Plugin");

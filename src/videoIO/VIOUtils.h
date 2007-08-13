@@ -33,6 +33,11 @@
 namespace VideoIO_
 {
 
+/// file extension used by the plugins
+/// TODO auf windows anders machen (mac gleich ?)
+const std::string PLUGIN_FILE_EXTENSION = ".so";
+
+
 // color spaces defines:
 const int RGB = 0;       //! RGB colorspace
 const int RGBA = 1;      //! RGBA colorspace

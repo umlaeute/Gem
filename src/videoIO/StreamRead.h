@@ -24,7 +24,6 @@ using namespace std;
 
 #include "VIOUtils.h"
 #include "VIOFrame.h"
-#include "VIOException.h"
 
 namespace VideoIO_
 {

@@ -25,21 +25,15 @@
 #include <map>
 #include <set>
 
-#include "FileReadServer.h"
-#include "FileWriteServer.h"
-// #include "StreamReadServer.h"
-// #include "StreamWriteServer.h"
-
+#include "PluginServer.h"
+#include "FileRead.h"
+#include "FileWrite.h"
 #include "VIOPlugin.h"
 
 using namespace std;
 
 namespace VideoIO_
 {
-  /// file extension used by the plugins
-  /// TODO auf windows anders machen (mac gleich ?)
-  const string PLUGIN_FILE_EXTENSION = ".so";
-
   typedef map<string, VIOPlugin> PluginMap;
   typedef set<string> PathList;
 
@@ -72,13 +66,9 @@ namespace VideoIO_
     static void addSearchPath(const string &path);
     
     /// @return the file read server
-    static FileReadServer &getFileReadServer() {return file_read_server_;};
+    static PluginServer<FileRead> &getFileReadServer() {return file_read_server_;};
     /// @return the file write server
-    static FileWriteServer &getFileWriteServer() {return file_write_server_;};
-    /// @return the stream read server
-//    static StreamReadServer &getStreamReadServer() {return stream_read_server_;};
-    /// @return the stream write server
-//    static StreamWriteServer &getStreamWriteServer() {return stream_write_server_;};
+    static PluginServer<FileWrite> &getFileWriteServer() {return file_write_server_;};
 
    protected:
 
@@ -95,10 +85,8 @@ namespace VideoIO_
     static PluginMap loaded_plugins_;
     
     // the plugin servers
-    static FileReadServer file_read_server_;
-    static FileWriteServer file_write_server_;
-  //   static StreamReadServer stream_read_server_;
-  //   static StreamWriteServer stream_write_server_;
+    static PluginServer<FileRead> file_read_server_;
+    static PluginServer<FileWrite> file_write_server_;
   
     /// path list where to search for plugins
     static PathList search_path_;
