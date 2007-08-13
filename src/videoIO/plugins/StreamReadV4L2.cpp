@@ -2,9 +2,9 @@
 //
 //   VideoIO-Framework for GEM/PD
 //
-//   The kernel of the plugin loader.
+//   Plugin for Video 4 Linux 2
 //
-//   VIOKernel
+//   StreamReadV4L2
 //   implementation file
 //
 //   copyright            : (C) 2007 by Thomas Holzmann
@@ -17,17 +17,15 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "VIOKernel.h"
+#include "StreamReadV4L2.h"
 
-using namespace std;
 
 namespace VideoIO_
 {
-  void VIOKernel::loadPlugin(const string &name)
-  {
-     if( loaded_plugins_.find(name) == loaded_plugins_.end() )
-    {
-      loaded_plugins_.insert(make_pair(name, VIOPlugin(name))).first->second.registerPlugin(*this);
-    }
-  }
-}
+  StreamReadV4L2::StreamReadV4L2 :
+      v4l2_format_(0), color_convert_(false), buffers_(NULL),
+      nr_of_buffers_(0), current_buffer_(NULL), frame_(0), 
+      last_frame_(0), max_width_(0), min_width_(0),
+      max_height_(0), min_height_(0), rendering_(false)
+  {}
+      

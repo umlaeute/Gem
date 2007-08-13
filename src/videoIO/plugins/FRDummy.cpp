@@ -21,42 +21,32 @@
 
 bool FRDummy::openFile(string filename)
 {
-  
-  post("sind im open file vom dummy");
-  
   nr_of_frames_ = 5; // just to look if bang works
   
-  frame_.allocate(20, 20, 1);
+  frame_.allocate(20, 20, RGB);
+
+  has_video_file_ = true;
   
-  int x = frame_.getXSize();
-  int y = frame_.getYSize();
-  int c = frame_.getColorSize();
-  
-  post("x= %d, y= %d, c= %d",x,y,c);
-  
-  for (int i=0; i < x; i++)
-    for (int j=0; j < y; j++)
-      for (int k=0; k < c; k++)
-  {
-    unsigned char a = (unsigned char) rand()%256;
-    frame_.setPixel(i, j, k, a);
-    //post("pixel gesetzt auf: %d - sollte sein %d", frame_.getPixel(i,j,k), a );
-  }
-    
-    has_video_file_ = true;
-  
-  post("sind wieder raus aus der dll");
   return true;
+}
+
+unsigned char *FRDummy::getFrameData()
+{
+  int size = frame_.getXSize() * frame_.getYSize() * frame_.getColorSize();
+  unsigned char *data = frame_.getFrameData();
+  
+  while(size--)
+    *data++ = (unsigned char) rand() % 256;
+
+  return frame_.getFrameData();
 }
 
   /// Tells us to register our functionality to an engine kernel
 void registerPlugin(VIOKernel &K)
 {
-  post("hurra - wir sind in der Library da !!!!");
-  
   K.getFileReadServer().addFileReadPlugin(
     auto_ptr<FileRead>(new FRDummy()));
   
-  post("und schon wieder draußen");
+  post("VideoIO: registered Dummy FileRead Plugin");
 }
 

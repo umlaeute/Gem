@@ -28,21 +28,16 @@ namespace VideoIO_
       pfn_register_plugin_(0),
       handle_(0)
   {
-    post("before: %d, handle: %d", pfn_register_plugin_, handle_);
-    
-    handle_ = dlopen("videoIO/plugins/FileReadGst.so", RTLD_LAZY | RTLD_GLOBAL);
-    
+    handle_ = dlopen("videoIO/plugins/FileWriteGst.so", RTLD_LAZY | RTLD_GLOBAL);
         
     if(handle_ == NULL)
     {
-      post("ERROR im lib laden:");
+      post("ERROR in loading videoIO Plugin:");
       error("Error: open/load error of dynamic.so failed: %sn", dlerror());
     }
     
     pfn_register_plugin_ = reinterpret_cast<fnRegisterPlugin *>(
                            dlsym(handle_, "registerPlugin") );
-    
-    post("after: %d, handle: %d", pfn_register_plugin_, handle_);
     
     // Initialize a new DLL reference counter
     dll_ref_count_ = new size_t(1);
@@ -54,9 +49,7 @@ namespace VideoIO_
       pfn_register_plugin_(other.pfn_register_plugin_),
       handle_(other.handle_)
   {
-    post("In the copy constructor");
     ++*dll_ref_count_;
-    post("end of copy constructor");
   }
   
   VIOPlugin::~VIOPlugin()
@@ -77,23 +70,16 @@ namespace VideoIO_
   
   int VIOPlugin::getEngineVersion()
   {
-    post("get engine version"); /// TODO machen
+      /// TODO machen
   }
   
   void VIOPlugin::registerPlugin(VIOKernel &K)
   {
-    post("at VIOPlugin::registerPlugin");
     //pfn_register_plugin_(K);
-    post("at VIOPlugin, a");
-    
-    post("schauma mal: %d, handle: %d", pfn_register_plugin_, handle_);
     
     pfn_register_plugin_ = reinterpret_cast<fnRegisterPlugin *>(
                            dlsym(handle_, "registerPlugin") );
-    post("at VIOPlugin, b");
     pfn_register_plugin_(K);
-    
-    post("after pfn_register_plugin_");
   }
   
 }

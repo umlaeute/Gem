@@ -23,6 +23,8 @@
 #include "../FileRead.h"
 #include "../VIOKernel.h"
 #include "gst/gst.h"
+#include "gst/app/gstappsink.h"
+#include "gst/app/gstappbuffer.h"
 
 #include <string>
 
@@ -34,43 +36,52 @@ class FileReadGst : public FileRead
   public:
   FileReadGst();
   
-  ~FileReadGst()
-  {
-      /* also clean up */
-  gst_element_set_state (play_, GST_STATE_NULL);
-  gst_object_unref (GST_OBJECT (play_));
-  }
+  ~FileReadGst();
   
   bool openFile(string filename);
   
-  unsigned char *getFrameData(){};
-  
+  /// @return the frame data of VIOFrame
+  virtual unsigned char *getFrameData();
   
   /*!
   * @return the number of frames
   */
-  virtual int getNrOfFrames () {};
+  inline int getNrOfFrames () {return 1;};
   
   /*!
   * @return the frames per second
   */
-  virtual double getFPS() {};
+  inline double getFPS() {return 2;};
   
   /*!
   * @return the width of the video
   */
-  virtual int getWidth() {};
+  inline int getWidth() {return x_size_;};
   
   /*!
   * @return the height of the video
   */
-  virtual int getHeight() {};
+  inline int getHeight() {return y_size_;};
+  
+  void setVideoProperties( int x_size, int y_size, double fps);
   
   protected:
-    GstElement *play_;
+    GstElement *source_;
+    GstElement *decode_;
+    GstElement *colorspace_;
+    GstElement *sink_;
+    GstElement *file_decode_;
+    GstElement *video_bin_;
+    GstBus *bus_;
     
+    int x_size_;
+    int y_size_;
+    double fps_;
+    
+
     static bool is_initialized_;
-  
+    
+    static void cbNewpad(GstElement *decodebin, GstPad *pad, gboolean last, gpointer data);
 };
 
 

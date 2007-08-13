@@ -58,7 +58,7 @@ namespace VideoIO_
     /*!
     * @param x the x coordinate
     * @param y the y coordinate
-    * @param color the colorspace
+    * @param color the colorspace (e.g. GRAY, RGB, YUV422, ...)
     * @return the pixel data
     */
     inline unsigned char getPixel(int x, int y, int color)

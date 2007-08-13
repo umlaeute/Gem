@@ -28,7 +28,7 @@
  */
 
 #include "m_pd.h"
-
+#include <string>
     
 namespace VideoIO_
 {

@@ -22,12 +22,6 @@
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 #include "../videoIO/VIOKernel.h"
-#include "../videoIO/VIOException.h"
-
-  /* some error codes */
-#define FILM_ERROR_SUCCESS 0 /* no error */
-#define FILM_ERROR_FAILURE 1
-#define FILM_ERROR_DONTKNOW 2
 
 /*-----------------------------------------------------------------
     
@@ -65,10 +59,6 @@ class GEM_EXTERN pix_file_read : public GemBase
     //////////
     // open a movie up (with a given format and a preferred codec)
     virtual void openMess(t_symbol *filename, int format=0, int codec=-1);
-
-    //////////
-    // prepare for texturing (on open)
-    virtual void prepareTexture() {}
 
     //////////
     // Do the rendering
@@ -110,6 +100,10 @@ class GEM_EXTERN pix_file_read : public GemBase
     bool m_newfilm;
  
   protected:
+    
+    // reallocate frame data
+    void reallocate_m_image();
+    
     //////////
     // static member functions
     static void openMessCallback   (void *data, t_symbol*,int,t_atom*);

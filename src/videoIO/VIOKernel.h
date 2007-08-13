@@ -25,12 +25,11 @@
 #include <map>
 
 #include "FileReadServer.h"
-// #include "FileWriteServer.h"
+#include "FileWriteServer.h"
 // #include "StreamReadServer.h"
 // #include "StreamWriteServer.h"
 
 #include "VIOPlugin.h"
-#include "FileRead.h"
 
 
 using namespace std; 
@@ -62,7 +61,7 @@ namespace VideoIO_
     /// @return the file read server
     FileReadServer &getFileReadServer() {return file_read_server_;};
     /// @return the file write server
-//    FileWriteServer &getWriteReadServer() {return file_write_server_;};
+    FileWriteServer &getFileWriteServer() {return file_write_server_;};
     /// @return the stream read server
 //    StreamReadServer &getStreamReadServer() {return stream_read_server_;};
     /// @return the stream write server
@@ -81,9 +80,8 @@ namespace VideoIO_
     /// the plugin map
     PluginMap loaded_plugins_;
     
-    
     FileReadServer file_read_server_;
-  //   FileWriteServer file_write_server_;
+    FileWriteServer file_write_server_;
   //   StreamReadServer stream_read_server_;
   //   StreamWriteServer stream_write_server_;
   

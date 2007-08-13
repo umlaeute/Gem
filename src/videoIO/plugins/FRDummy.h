@@ -23,7 +23,7 @@
 
 #include "FRDummy.h"
 #include "../FileRead.h"
-#include "../VIOKernel.h"  /// TODO forward deklarieren !!!
+#include "../VIOKernel.h"
 
 #include <string>
 
@@ -42,31 +42,23 @@ class FRDummy : public FileRead
   /*!
   * @return the current frame of the video
   */
-  unsigned char *getFrameData()
-  {//printf("----------------------- in FRDummy::getFrameData -------------------\n");
-    return frame_.getFrameData();};
-  
-      /*!
-    * @return the number of frames
-    */
-    int getNrOfFrames () {};;
-    
-    /*!
-    * @return the frames per second
-    */
-    double getFPS() {};;
-    
-    /*!
-    * @return the width of the video
-    */
-    int getWidth() {};;
-    
-    /*!
-    * @return the height of the video
-    */
-    int getHeight() {};
+  unsigned char *getFrameData();
 
-    
+  /*!
+  * @return the frames per second
+  */
+  double getFPS() { return 20.; };
+  
+  /*!
+  * @return the width of the video
+  */
+  int getWidth() { return 20; };
+  
+  /*!
+  * @return the height of the video
+  */
+  int getHeight() { return 20; };
+
 };
 
 /// Tells us to register our functionality to an engine kernel

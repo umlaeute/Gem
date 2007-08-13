@@ -2,9 +2,9 @@
 //
 //   VideoIO-Framework for GEM/PD
 //
-//   The kernel of the plugin loader.
+//   The server of the FileWrite plugins.
 //
-//   VIOKernel
+//   FileWriteServer
 //   implementation file
 //
 //   copyright            : (C) 2007 by Thomas Holzmann
@@ -17,17 +17,30 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "VIOKernel.h"
-
-using namespace std;
+#include "FileWriteServer.h"
 
 namespace VideoIO_
 {
-  void VIOKernel::loadPlugin(const string &name)
+  FileWriteServer::~FileWriteServer()
   {
-     if( loaded_plugins_.find(name) == loaded_plugins_.end() )
-    {
-      loaded_plugins_.insert(make_pair(name, VIOPlugin(name))).first->second.registerPlugin(*this);
-    }
+    for(FileWriteVector::reverse_iterator It = file_write_plugins_.rbegin();
+      It != file_write_plugins_.rend(); ++It)
+        delete *It;
+  }
+  
+  void FileWriteServer::addFileWritePlugin( auto_ptr <FileWrite> frp)
+  {
+    file_write_plugins_.push_back(frp.release());
+  }
+  
+  int FileWriteServer::getPluginCount()
+  {
+    return file_write_plugins_.size();
+  }
+  
+  FileWrite &FileWriteServer::getPlugin(int index)
+  {
+    return *file_write_plugins_.at(index);
   }
 }
+

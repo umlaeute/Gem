@@ -25,7 +25,6 @@ using namespace std;
 
 #include "VIOUtils.h"
 #include "VIOFrame.h"
-#include "VIOException.h"
 
 namespace VideoIO_
 {
@@ -43,14 +42,13 @@ namespace VideoIO_
     * @param filename the path of the file
     * @return true if open worked
     */
-    virtual bool openFile(string filename) = 0; ///TODO string?? 
+    virtual bool openFile(string filename) = 0; 
     
     /*!
     * closes the file
     */
     virtual void closeFile() {
       /// TODO das implementieren bitte bzw in den abgeleiteten klassen !
-      post("closeFile in FileRead");
     };
 
     /// @return the frame data of VIOFrame
@@ -83,7 +81,7 @@ namespace VideoIO_
     /*!
     * @return the number of frames
     */
-    virtual int getNrOfFrames () = 0;
+    virtual int getNrOfFrames() { return nr_of_frames_; }
     
     /*!
     * @return the frames per second
@@ -103,7 +101,7 @@ namespace VideoIO_
     /*!
     * @return true if a video is loaded
     */
-    bool hasVideo() {return has_video_file_;};
+    bool hasVideo() {return has_video_file_;}
   
     protected:
     
@@ -120,9 +118,6 @@ namespace VideoIO_
       int nr_of_tracks_;
       int req_track_;
       int cur_track_;
-  
-    /// the video file
-      //FReadPlugin *video;
     
     /// stores the current frame
       VIOFrame frame_ ;

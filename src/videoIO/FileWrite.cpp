@@ -2,10 +2,10 @@
 //
 //   VideoIO-Framework for GEM/PD
 //
-//   The kernel of the plugin loader.
+//   Writes a digital video (like AVI, Mpeg, Quicktime) to the harddisc.
 //
-//   VIOKernel
-//   implementation file
+//   FileWrite
+//   header file
 //
 //   copyright            : (C) 2007 by Thomas Holzmann
 //   email                : holzi1@gmx.at
@@ -17,17 +17,19 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "VIOKernel.h"
-
-using namespace std;
+#include "FileWrite.h"
 
 namespace VideoIO_
 {
-  void VIOKernel::loadPlugin(const string &name)
+
+  FileWrite::FileWrite() :
+    x_size_(0), y_size_(0)
+  {}
+  
+  void FileWrite::setSize(int width, int height)
   {
-     if( loaded_plugins_.find(name) == loaded_plugins_.end() )
-    {
-      loaded_plugins_.insert(make_pair(name, VIOPlugin(name))).first->second.registerPlugin(*this);
-    }
+    /// TODO range auf richtigen Bereich abchecken (keine minus oder riesigen zahlen)
+    x_size_ = width;
+    y_size_ = height;
   }
 }

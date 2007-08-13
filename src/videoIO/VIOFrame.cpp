@@ -34,9 +34,7 @@ namespace VideoIO_
   VIOFrame::VIOFrame() : x_size_(0), y_size_(0), color_size_(0),
                      data_(0)
   {
-    allocate(x_size_, y_size_, color_size_); /// TODO alloziert nicht richtig, da hier
-                                             /// colorspace und nicht color_size übergeben
-                                             /// werden sollte
+
   } 
   
   VIOFrame::~VIOFrame()

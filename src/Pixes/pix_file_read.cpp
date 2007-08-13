@@ -39,10 +39,7 @@ pix_file_read :: pix_file_read(t_symbol *filename) :
   m_outEnd       = outlet_new(this->x_obj, 0);
   
   /// TODO checken ob filename übergeben, wenn ja öffnen mit openMess
-  if(filename)
-    post("einer uebergeben");
-  else
-    post("keiner uebergeben");
+  //if(filename)
   //openMess(filename);
 }
 
@@ -71,7 +68,7 @@ void pix_file_read :: closeMess(void)
 /////////////////////////////////////////////////////////
 void pix_file_read :: openMess(t_symbol *filename, int format, int codec)
 {
-  post("---------------------pix_file_read :: openMess---------------------");
+  error("begin pix_file_read::open");
   
   closeMess();
   
@@ -84,60 +81,17 @@ void pix_file_read :: openMess(t_symbol *filename, int format, int codec)
    if (FILE*fd=fopen(tmp_buff, "r")) fclose(fd);
     else path=filename->s_name;
   
-  post("------------------------- before getFIleReadServer.getPlugin ------------------------");
+  // get plugin and open file
+  fileReader = &m_kernel.getFileReadServer().getPlugin();
   
-  try
+  if(!(fileReader->openFile(path)))
   {
-    fileReader = &m_kernel.getFileReadServer().getPlugin();
-    
-    post("------------------------- before fileReader->openFile ------------------------");
-    
-    if(!(fileReader->openFile(path)))
-    {
-      error("GEM: pix_file_read: file cannot be loaded");
-      return;
-    }
-    /// TODO error wenn file open nicht funktioniert hat -> dann dementsprechend reagieren
-    
-    post("------------------------- after fileReader->openFile ------------------------");
-    
-    // allocate memory for m_image
-    m_image.image.xsize = fileReader->getWidth();
-    m_image.image.ysize = fileReader->getHeight();
-    m_image.image.type = GL_UNSIGNED_BYTE; /// TODO schaun ob auf alle OS gleich ?
-    m_image.image.csize = 1; /// TODO für alle colorspaces machen
-    m_image.image.format = GL_RGBA;
-    m_image.image.reallocate();
-    m_newfilm = true;
-    
-    t_atom ap[4];
-    SETFLOAT(ap, fileReader->getNrOfFrames() );
-    SETFLOAT(ap+1, fileReader->getWidth() );
-    SETFLOAT(ap+2, fileReader->getHeight() );
-    SETFLOAT(ap+3, (float)fileReader->getFPS() );
-  
-    //printf("------------------------- after fileReader get functions ------------------------\n");
-  
-    post("loaded file with %d frames (%dx%d) at %f fps", 
-        fileReader->getNrOfFrames(), 
-        fileReader->getWidth(), 
-        fileReader->getHeight(), (float)fileReader->getFPS());
-    outlet_list(m_outNumFrames, 0, 4, ap);
+    error("GEM: pix_file_read: file cannot be loaded");
+    return;
   }
+  /// TODO error wenn file open nicht funktioniert hat -> dann dementsprechend reagieren
   
-  catch(VideoIO_::VIOException &e)
-  {
-    post("Im catch Block");
-    e.postError();
-  }
-  
-  catch(...)
-  {
-    post ("catch all called");
-  }
-   
-   
-  post("--- ende ---");
+  error("end pix_file_read::open");
 }
 
 /////////////////////////////////////////////////////////
@@ -146,34 +100,30 @@ void pix_file_read :: openMess(t_symbol *filename, int format, int codec)
 /////////////////////////////////////////////////////////
 void pix_file_read :: render(GemState *state)
 {
-  //printf("-------------------- at the beginning of render----------\n");
+  error("begin pix_file_read::render");
+  
+  // check if image size changed
+  if(m_image.image.xsize != fileReader->getWidth() ||
+     m_image.image.ysize != fileReader->getHeight())
+    reallocate_m_image();
+  
   int frame=-1;
-  
-  
   
   if(!fileReader)
     return;
   
-  //printf("------------------------- after !fileReader ---------------\n");
-  
   if (fileReader->hasVideo() == false)
     return;
   
-  
-  
-  if(m_newfilm) m_image.newfilm=1;
-  m_newfilm=false;
-  m_image.newimage = 1;
-  
-  printf("------------------------- before getFrameData ------------------------\n");
-  
+  if(m_newfilm) m_image.newfilm = true;
+  m_newfilm = false;
+  m_image.newimage = true;
+
   // get pointer to the frame data
   unsigned char *vioframe_ptr = fileReader->getFrameData();
   
   if( vioframe_ptr == NULL)
     return;
-  
-  printf("------------------------- after getFrameData ------------------------\n");
   
   // read frame data into m_image
   unsigned char *image_ptr = m_image.image.data;
@@ -181,13 +131,11 @@ void pix_file_read :: render(GemState *state)
   while(i--)
   {
     *(image_ptr++) = *(vioframe_ptr++);
-  } 
-  printf("------------------------- after pointer things ------------------------\n");
-   
+  }
+  
   state->image = &m_image;
   
-  
-  printf("-------------------- after state->image = &m_image ---------------\n");
+  error("end pix_file_read::render");
 }
 
 /////////////////////////////////////////////////////////
@@ -196,16 +144,14 @@ void pix_file_read :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_file_read :: postrender(GemState *state)
 {
-  post("post a");
   if(!fileReader)
     return;
-  post("post b");
+  
   if(fileReader->hasVideo() == false)
     return;
-  post("post c");
+  
   if (state && state->image)
     state->image->newimage = 0;
-  post("post d");
 }
 
 /////////////////////////////////////////////////////////
@@ -239,6 +185,30 @@ void pix_file_read :: autoMess(t_floatarg state)
   if(!fileReader) return;
   
   fileReader->setAutoIncrement((float)state);
+}
+
+void pix_file_read :: reallocate_m_image()
+{
+  // allocate memory for m_image
+  m_image.image.xsize = fileReader->getWidth();
+  m_image.image.ysize = fileReader->getHeight();
+  m_image.image.type = GL_UNSIGNED_BYTE; /// TODO schaun ob auf alle OS gleich ?
+  m_image.image.csize = 3; /// TODO für alle colorspaces machen
+  m_image.image.format = GL_RGB;
+  m_image.image.reallocate();
+  m_newfilm = true;
+  
+  t_atom ap[4];
+  SETFLOAT(ap, fileReader->getNrOfFrames() );
+  SETFLOAT(ap+1, fileReader->getWidth() );
+  SETFLOAT(ap+2, fileReader->getHeight() );
+  SETFLOAT(ap+3, (float)fileReader->getFPS() );
+
+  post("pix_file_read: loaded file with %d frames (%dx%d) at %f fps", 
+      fileReader->getNrOfFrames(), 
+      fileReader->getWidth(), 
+      fileReader->getHeight(), (float)fileReader->getFPS());
+  outlet_list(m_outNumFrames, 0, 4, ap);
 }
 
 /////////////////////////////////////////////////////////
@@ -288,8 +258,6 @@ void pix_file_read :: obj_setupCallback(t_class *classPtr)
 
 void pix_file_read :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
-  printf("a - openmess\n");
-  
   int codec=-1;
   if (!argc || argc>3)goto illegal_openmess;
   if (argv[0].a_type != A_SYMBOL)goto illegal_openmess;
@@ -309,12 +277,7 @@ void pix_file_read :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*a
     }
   }
   
-  printf("b -openmess\n");
-  
   GetMyClass(data)->openMess(atom_getsymbol(argv), 0, codec);
-  
-  printf("c - openmess\n");
-
   return;
  
 illegal_openmess:
