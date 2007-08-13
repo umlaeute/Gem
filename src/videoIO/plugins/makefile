@@ -1,7 +1,7 @@
 
 # ATTENTION: ld must not be used for linking ! use g++, otherwise we get errors
 
-INCLUDE=-I/usr/include/gstreamer-0.10 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include/ -I/usr/include/libxml2/
+INCLUDE=-I/usr/local/include/gstreamer-0.10 -I/usr/include/gstreamer-0.10 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include/ -I/usr/include/libxml2/
 LDPATH=-L/usr/local/lib
 
 all: FRDummy FileReadGst FileWriteGst
