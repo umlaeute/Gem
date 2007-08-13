@@ -28,19 +28,21 @@ namespace VideoIO_
       pfn_register_plugin_(0),
       handle_(0)
   {
-    handle_ = dlopen("videoIO/plugins/FileWriteGst.so", RTLD_LAZY | RTLD_GLOBAL);
+    handle_ = dlopen(filename.c_str(), RTLD_LAZY | RTLD_GLOBAL);
         
     if(handle_ == NULL)
     {
-      post("ERROR in loading videoIO Plugin:");
-      error("Error: open/load error of dynamic.so failed: %sn", dlerror());
+      error("VideoIO Plugin Error: open/load error of dynamic.so failed: %s", dlerror());
+      throw "error in initialization";
     }
-    
-    pfn_register_plugin_ = reinterpret_cast<fnRegisterPlugin *>(
+    else
+    {
+      pfn_register_plugin_ = reinterpret_cast<fnRegisterPlugin *>(
                            dlsym(handle_, "registerPlugin") );
     
-    // Initialize a new DLL reference counter
-    dll_ref_count_ = new size_t(1);
+      // Initialize a new DLL reference counter
+      dll_ref_count_ = new size_t(1);
+    }
   }
   
   VIOPlugin::VIOPlugin(const VIOPlugin &other) :

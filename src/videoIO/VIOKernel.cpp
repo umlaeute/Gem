@@ -18,16 +18,94 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "VIOKernel.h"
+#include <fstream>
 
 using namespace std;
 
 namespace VideoIO_
 {
-  void VIOKernel::loadPlugin(const string &name)
+  // init static variables
+  PluginMap VIOKernel::loaded_plugins_;
+  FileReadServer VIOKernel::file_read_server_;
+  FileWriteServer VIOKernel::file_write_server_;
+  PathList VIOKernel::search_path_;
+  bool VIOKernel::first_time_ = true;
+
+
+  VIOKernel::VIOKernel()
   {
-     if( loaded_plugins_.find(name) == loaded_plugins_.end() )
+    if(first_time_)
     {
-      loaded_plugins_.insert(make_pair(name, VIOPlugin(name))).first->second.registerPlugin(*this);
+      // add standard relative path
+      addSearchPath(".");
+      /// TODO naechster pfad jetzt nur zum Testen, dann wieder wegtun,
+      /// weil sie e eher im gleichen pfad wie gem sein sollen ?
+      addSearchPath("videoIO/plugins");
+
+      // add standard system path
+      /// TODO schauen ob man diese Standard Systempfade
+      /// ueberhaupt hinzufügen soll
+      /// TODO unter Windows/OSX sind die natürlich auch anders
+      addSearchPath("/usr/lib");
+      addSearchPath("/usr/local/lib");
+
+      // load plugins
+      loadPlugins();
     }
+    else first_time_ = false;
   }
+
+  void VIOKernel::loadPlugins()
+  {
+    // try to load all possible plugins
+    registerPlugin("FileReadGst");
+    registerPlugin("FileWriteGst");
+  }
+
+  void VIOKernel::addSearchPath(const string &path)
+  {
+    search_path_.insert(path);
+  }
+
+  void VIOKernel::registerPlugin(const string &name)
+  {
+    PathList::iterator iter;
+    string filename;
+    fstream tmp;
+    bool file_exists;
+
+    for( iter = search_path_.begin(); iter != search_path_.end(); iter++ )
+    {
+      filename = *iter + "/" + name + PLUGIN_FILE_EXTENSION;
+
+      // check if file exists
+      tmp.open(filename.c_str());
+      file_exists = tmp.is_open();
+      tmp.close();
+
+      // DEBUG
+//       post("testfile: %s - exists: %d", filename.c_str(), file_exists);
+
+      if(!file_exists) continue;
+
+      // now try to open plugin
+      if( loaded_plugins_.find(name) == loaded_plugins_.end() )
+      {
+        // exception are the only way to get a error message
+        // from the VIOPlugin Constructor
+        try
+        {
+          loaded_plugins_.insert(
+              make_pair( name, VIOPlugin(filename) )
+             ).first->second.registerPlugin(*this);
+        }
+        catch(const char*)
+        {
+          error("could not load %s", filename.c_str() );
+        }
+      }
+    } // for loop
+
+  }
+
 }

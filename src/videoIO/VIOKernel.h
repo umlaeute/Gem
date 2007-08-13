@@ -23,6 +23,7 @@
     
 #include <string>
 #include <map>
+#include <set>
 
 #include "FileReadServer.h"
 #include "FileWriteServer.h"
@@ -31,60 +32,80 @@
 
 #include "VIOPlugin.h"
 
-
-using namespace std; 
+using namespace std;
 
 namespace VideoIO_
 {
+  /// file extension used by the plugins
+  /// TODO auf windows anders machen (mac gleich ?)
+  const string PLUGIN_FILE_EXTENSION = ".so";
+
+  typedef map<string, VIOPlugin> PluginMap;
+  typedef set<string> PathList;
+
   /*!
   * \class VIOKernel
   * 
   * The VIOKernel has the different plugin server and the
   * different plugins.
   */    
-  class VIOKernel 
+  class VIOKernel
   {
-    /// TODO manage the kernel with a singleton design pattern,
-    ///      so that there is always only one kernel object !
-    
-    
-    public:
+
+   public:
+
     /// constructor
-    VIOKernel()
-    { loadPlugin("dummy"); };
-    
+    VIOKernel();
+
     /// destructor
     virtual ~VIOKernel()
     {};
-    
+
+    /// searches for plugins and loads them
+    /// here all theoretical available plugins are listed
+    void loadPlugins();
+
+    /*!
+     * adds a search path, where loadPlugin() will search
+     * @param path a path which will be added to the search list
+     */
+    static void addSearchPath(const string &path);
     
     /// @return the file read server
-    FileReadServer &getFileReadServer() {return file_read_server_;};
+    static FileReadServer &getFileReadServer() {return file_read_server_;};
     /// @return the file write server
-    FileWriteServer &getFileWriteServer() {return file_write_server_;};
+    static FileWriteServer &getFileWriteServer() {return file_write_server_;};
     /// @return the stream read server
-//    StreamReadServer &getStreamReadServer() {return stream_read_server_;};
+//    static StreamReadServer &getStreamReadServer() {return stream_read_server_;};
     /// @return the stream write server
-//    StreamWriteServer &getStreamWriteServer() {return stream_write_server_;};
-    
+//    static StreamWriteServer &getStreamWriteServer() {return stream_write_server_;};
+
+   protected:
+
     /*!
-    * loads a plugin
-    * @param filename the filename of the plugin
+    * tries to register a plugin if it is found in the
+    * search path
+    * @param name the name of the plugin (e.g. FileReadGst)
     */
-    void loadPlugin(const string &name);
+    void registerPlugin(const string &name);
     
-    private:
-      
-    typedef map <string, VIOPlugin> PluginMap;
-    
+   private:
+
     /// the plugin map
-    PluginMap loaded_plugins_;
+    static PluginMap loaded_plugins_;
     
-    FileReadServer file_read_server_;
-    FileWriteServer file_write_server_;
-  //   StreamReadServer stream_read_server_;
-  //   StreamWriteServer stream_write_server_;
+    // the plugin servers
+    static FileReadServer file_read_server_;
+    static FileWriteServer file_write_server_;
+  //   static StreamReadServer stream_read_server_;
+  //   static StreamWriteServer stream_write_server_;
   
+    /// path list where to search for plugins
+    static PathList search_path_;
+
+    // helper
+    static bool first_time_;
   };
 }
+
 #endif
