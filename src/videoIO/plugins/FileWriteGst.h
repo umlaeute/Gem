@@ -74,6 +74,10 @@ class FileWriteGst : public FileWrite
      GstBus *bus_;
     
     static bool is_initialized_;
+
+    /// callback to free our buffer
+    static void freeRecBuffer(void *data);
+
 };
 
 

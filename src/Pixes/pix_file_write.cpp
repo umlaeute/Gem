@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_file_write)
 pix_file_write :: pix_file_write(int argc, t_atom *argv):
     m_filewriter(NULL), m_recording(false), m_first_time(false)
 {
-  /// TODO filenamen als init argument lesen, Hoehe/width auch dazu
+  /// TODO filenamen als init argument lesen
 }
 
 pix_file_write :: ~pix_file_write()
@@ -37,24 +37,68 @@ void pix_file_write :: render(GemState *state)
   if(!m_filewriter) return;
   if(!m_recording) return;
   
+  imageStruct *im = &state->image->image;
+
   if( m_first_time )
   {
-    // initialize format
+    // get format data from GEM
+    int xsize = im->xsize;
+    int ysize = im->ysize;
+    int csize = im->csize;
+    //int type = im->type; /// TODO type noch richtig handeln
+    int format;
+
+    switch(im->format)
+    {
+      case GL_LUMINANCE:
+        format = VideoIO_::GRAY;
+        break;
+
+      case GL_YCBCR_422_GEM:
+      /// TODO fuer apple gibts da noch ein anderes define
+      ///      siehe GemPixUtils.h
+        format = VideoIO_::YUV422;
+        break;
+        
+      case GL_RGB:
+        format = VideoIO_::RGB;
+        break;
     
-    /// TODO colorspace, format, etc aus pixImage lesen
-    ///      und an filewriter schicken
-    /// TODO Methoden im Filewriter machen, um colorspace usw. zu setzen
-    ///      und auch die compression properties usw.
-    
-    m_filewriter->setSize(720,576);
+      case GL_RGBA:
+      default:
+        format = VideoIO_::RGBA;
+        break;
+    }
+
+    post("-------------------------------------");
+    post("writing to video file:");
+    post("xsize: %d", xsize);
+    post("ysize: %d", ysize);
+    post("csize: %d", csize);
+    post("format: %d", format);
+
+    // allocate m_frame
+    m_frame.allocate(xsize, ysize, format);
+
+    /// TODO Methoden im Filewriter machen fuer
+    ///      compression properties usw.
+
+    // init recording data
+    m_filewriter->setSize(xsize,ysize);
+    m_filewriter->setColorspace(format);
     m_filewriter->initRecording();
-    
-    //m_frame richtig allozieren (auch aus pixImage lesen)
-    
+
     m_first_time = false;
   }
   
-  // daten aus pixImage rauslesen und in m_frame schreiben
+  // copy data into our m_frame
+  unsigned char *m_frame_data = m_frame.getFrameData();
+  unsigned char *image_data = im->data;
+  int i = m_frame.getXSize() * m_frame.getYSize() * m_frame.getColorSize() ;
+  while(i--)
+  {
+    *(m_frame_data++) = *(image_data++);
+  }
   
   m_filewriter->pushFrame(m_frame);
 }
@@ -103,7 +147,6 @@ void pix_file_write :: fileMessCallback(void *data, t_symbol *s, int argc, t_ato
   return;
  
 illegal_openmess:
-     /// TODO mehrere Argumente beim open noch übergeben (höhe, breite, compression, ...)
      GetMyClass(data)->error("open <filename>");
  return;
 }

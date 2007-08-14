@@ -61,15 +61,17 @@ namespace VideoIO_
     */
     virtual bool openFile(string filename) = 0;
     
-    /*!
-     * set size of the video
-     */
+    /// set size of the video
     virtual void setSize(int width, int height);
+
+    /// set colorspace
+    virtual void setColorspace(int cs);
     
   protected:
     
     int x_size_;
     int y_size_;
+    int cspace_;
   };
 }
 

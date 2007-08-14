@@ -32,4 +32,9 @@ namespace VideoIO_
     x_size_ = width;
     y_size_ = height;
   }
+
+  void FileWrite::setColorspace(int cs)
+  {
+    cspace_ = cs;
+  }
 }

@@ -34,32 +34,82 @@ FileWriteGst::~FileWriteGst()
 
 bool FileWriteGst::initRecording()
 {
-  /// TODO Auflösung, CS, ... automatisch erkennen (vom pixImage aus pix_file_write::render)
-  gst_app_src_set_caps ( GST_APP_SRC(source_),
+  switch(cspace_)
+  {
+    case GRAY:  
+      /// TODO fuer gray machen
+      break;
+
+    case YUV422:
+      /// TODO machen
+      break;
+
+    case RGBA:
+      gst_app_src_set_caps ( GST_APP_SRC(source_),
                        gst_caps_new_simple ("video/x-raw-rgb",
 				     "width", G_TYPE_INT, x_size_,
 				     "height", G_TYPE_INT, y_size_,
-				     "framerate", GST_TYPE_FRACTION, 20, 1,
-				     "bpp", G_TYPE_INT, 24,
-				     "endianness", G_TYPE_INT, G_BYTE_ORDER,
+				     "bpp", G_TYPE_INT, 32,
+				     "depth", G_TYPE_INT, 24,
 				     NULL)
                        );
-  
+      break;
+
+    case RGB:
+    default:
+      gst_app_src_set_caps ( GST_APP_SRC(source_),
+                       gst_caps_new_simple ("video/x-raw-rgb",
+				     "width", G_TYPE_INT, x_size_,
+				     "height", G_TYPE_INT, y_size_,
+				     "bpp", G_TYPE_INT, 24,
+				     "depth", G_TYPE_INT, 24,
+				     NULL)
+                       );
+      break;
+  }
+
+  // set playing state
+  if(!gst_element_set_state (file_encode_, GST_STATE_PLAYING))
+  {
+    post("The state could not be set to playing.");
+    return false;
+  }
+
+  post("FileWriteGst: started recording");
+
   return true;
 }
 
 bool FileWriteGst::stopRecording()
 {
   gst_app_src_end_of_stream ( GST_APP_SRC(source_) );
+  gst_element_set_state (file_encode_, GST_STATE_NULL);
+
+  post("FileWriteGst: stopped recording");
   
   return true;
 }
 
 void FileWriteGst::pushFrame(VIOFrame &frame)
 {
-//   GstBuffer *buf;
-//   buf = gst_app_buffer_new (data, 100, dont_eat_my_chicken_wings, data);
-//   gst_app_src_push_buffer (GST_APP_SRC (source_), buf);
+  GstBuffer *buf;
+  int size = frame.getXSize() * frame.getYSize() * frame.getColorSize();
+  unsigned char *data = frame.getFrameData();
+
+  /// TODO einmal weniger kopieren mache (im Prinzip braucht man
+  /// den m_frame ja gar net, könnte gleich Datenpointer und
+  /// Groesze übergeben
+
+  unsigned char *rec_data = new unsigned char[size];
+  unsigned char *tmp = rec_data;
+  int i = size;
+  while(i--)
+  {
+    *(tmp++) = *(data++);
+  }
+
+  buf = gst_app_buffer_new (rec_data, size, freeRecBuffer, (void*)rec_data);
+  gst_app_src_push_buffer (GST_APP_SRC (source_), buf);
 }
 
 bool FileWriteGst::openFile(string filename)
@@ -84,20 +134,20 @@ bool FileWriteGst::openFile(string filename)
   file_encode_ = gst_pipeline_new( "file_encode_");
   
   // creating video input
-  video_bin_ = gst_bin_new ("video_bin_");
-  g_assert(video_bin_);
+//   video_bin_ = gst_bin_new ("video_bin_");
+//   g_assert(video_bin_);
   
   source_ = gst_element_factory_make ("appsrc", "source_");
   g_assert(source_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
   
-  GstPad *video_pad = gst_element_get_pad (colorspace_, "source");
-  
-  gst_bin_add_many (GST_BIN (video_bin_), source_, colorspace_, NULL);
-  gst_element_link(source_, colorspace_);
-  gst_element_add_pad (video_bin_, gst_ghost_pad_new ("source", video_pad));
-  gst_object_unref(video_pad);
+//   GstPad *video_pad = gst_element_get_pad (colorspace_, "source");
+//   
+//   gst_bin_add_many (GST_BIN (video_bin_), source_, colorspace_, NULL);
+//   gst_element_link(source_, colorspace_);
+//   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("source", video_pad));
+//   gst_object_unref(video_pad);
   
   encode_ = gst_element_factory_make ("theoraenc", "encode_");
   g_assert(encode_);
@@ -106,10 +156,13 @@ bool FileWriteGst::openFile(string filename)
   
   g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
   
-  gst_bin_add_many (GST_BIN (file_encode_), video_bin_, encode_, sink_, NULL);
-  gst_element_link_many (video_bin_, encode_, sink_, NULL);
+//   gst_bin_add_many (GST_BIN (file_encode_), video_bin_, encode_, sink_, NULL);
+//   gst_element_link_many (video_bin_, encode_, sink_, NULL);
+
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, sink_, NULL);
+  gst_element_link_many (source_, colorspace_, encode_, sink_, NULL);
   
-    // set playing state
+  // set ready state
   if(!gst_element_set_state (file_encode_, GST_STATE_READY))
   {
     post("The state could not be set to ready.");
@@ -117,6 +170,11 @@ bool FileWriteGst::openFile(string filename)
   }
 
   return true;
+}
+
+void FileWriteGst::freeRecBuffer(void *data)
+{
+  delete[] (unsigned char*)data;
 }
 
 
