@@ -32,7 +32,9 @@ namespace VideoIO_
   {
     public:
     /// constructor
-    FileRead();
+    FileRead() : has_video_file_(false), cspace_(-1),
+                 nr_of_frames_(0), framerate_(0)
+    {};
     
     /// destructor
     virtual ~FileRead(){};
@@ -42,87 +44,101 @@ namespace VideoIO_
     * @param filename the path of the file
     * @return true if open worked
     */
-    virtual bool openFile(string filename) = 0; 
+    virtual bool openFile(string filename) = 0;
     
     /*!
     * closes the file
     */
-    virtual void closeFile() {
-      /// TODO das implementieren bitte bzw in den abgeleiteten klassen !
-    };
+    virtual void closeFile() = 0;
 
-    /// @return the frame data of VIOFrame
-    inline virtual unsigned char *getFrameData() {return frame_.getFrameData();}
-  
     /*!
-    * changes which frame to display
+    * starts playing the video asynchronus to pd
+    */
+    virtual void startVideo() = 0;
+
+    /*!
+    * stops playing the video
+    */
+    virtual void stopVideo() = 0;
+
+    /*!
+    * changes the current frame
     * you can select the frame number and the track number,
     * if track is -1 that means the same track as before
     * @param frame the number of the desired frame
     * @param track the number of the desired track
-    * @return true if this is the last frame
+    * @return false if the frame/track does not exist
     */
     virtual bool setPosition(int frame, int track = -1);
-    
+
     /*!
-    * if this function called, getFrame will automatically
-    * increment the frame number with incr
-    * @param incr the desired incrementation value
+    * force a specific colorspace
+    * normally the native colorspace of the movie is used,
+    * here one can force a conversion to an other colorspace
+    * @param cs one of the colorspace defines, if this is
+    *           < 0 then the native movie format will be used
     */
-    virtual void setAutoIncrement(t_float incr) {};
-    
-    /// TODO mit der auto variable richtig handlen, d.h. bei getFrame MUSS
-    ///      immer auto auch erhöht werde (wenn aktiviert) !!!!!
-    
-      //////////////////////
+    virtual void forceColorspace(int cs)
+    { cspace_ = cs; }
+
+    /*!
+     * returns the data of the current frame
+     * @return the frame data of VIOFrame
+     */
+    inline virtual unsigned char *getFrameData()
+    { return frame_.getFrameData(); }
+
+    //////////////////////
     // Utility methods
     /////////////////////
     
     /*!
     * @return the number of frames
     */
-    virtual int getNrOfFrames() { return nr_of_frames_; }
+    virtual int getNrOfFrames()
+    { return nr_of_frames_; }
     
     /*!
     * @return the frames per second
     */
-    virtual double getFPS() = 0;
+    virtual double getFPS()
+    { return framerate_; }
     
     /*!
     * @return the width of the video
     */
-    virtual int getWidth() = 0;
+    virtual int getWidth()
+    { return frame_.getXSize(); }
     
     /*!
     * @return the height of the video
     */
-    virtual int getHeight() = 0;
+    virtual int getHeight()
+    { return frame_.getYSize(); }
+
+    /*!
+    * @return the colorspace
+    */
+    virtual int getColorspace()
+    { return frame_.getColorspace(); }
     
     /*!
-    * @return true if a video is loaded
+    * @return the colorsize in bytes
     */
-    bool hasVideo() {return has_video_file_;}
+    virtual int getColorSize()
+    { return frame_.getColorSize(); }
   
-    protected:
+   protected:
     
-      bool has_video_file_;
-      t_float auto_increment_;
-      int cs_format_;
+    // force a specific colorspace
+    int cspace_;
     
     // frame information
-      int nr_of_frames_;
-      int req_frame_;
-      int cur_frame_;
-    
-    // track information
-      int nr_of_tracks_;
-      int req_track_;
-      int cur_track_;
+    int nr_of_frames_;
+    float framerate_;
     
     /// stores the current frame
-      VIOFrame frame_ ;
-    
-    
+    VIOFrame frame_ ;
   };
 }
 #endif
