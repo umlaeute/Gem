@@ -72,46 +72,43 @@ namespace VideoIO_
     * @param value the value to set
     */
     inline void setPixel(int x, int y, int color, unsigned char value)
-    { // printf("----------------setPixel called---------------\n");
-      data_[x * x_size_ * color_size_ + y * color_size_ + color] = value; }
+    { data_[x * x_size_ * color_size_ + y * color_size_ + color] = value; }
       
+    /// @return the x size
+    inline int getXSize()
+    { return x_size_; }
+    
+    /// @return the y size
+    inline int getYSize()
+    { return y_size_; }
+    
+    /// @return the colorsize
+    inline int getColorSize()
+    { return color_size_; }
+
+    /// @return the colorspace define
+    inline int getColorspace()
+    { return color_space_; }
+    
+    /// @return a pointer to the frame data
+    inline unsigned char *getFrameData()
+    { return data_; }
+    
+  protected:
+
     /*!
     * sets the color_size_ variable
     * @param format the colorspace format
     */
-    void setColorSize (int format);
-      
-    
-    /// @return the x size
-    inline int getXSize()
-    { //printf("----------------getXSize called-------------------\n");
-      return x_size_; }
-    
-    /// @return the y size
-    inline int getYSize()
-    { //printf("----------------getYSize called-------------------\n");
-      return y_size_; }
-    
-    /// @return the colorspace
-    inline int getColorSize()
-    { //printf("----------------getColorspace called-------------------\n");
-      return color_size_; }
-    
-    /// @return a pointer to the frame data
-    inline unsigned char *getFrameData()
-    { 
-      return data_;
-    }
-    
-    
-  protected:
+    void setColorSize(int format);
     
     /// the frame data
     unsigned char *data_;
     
     int x_size_;
     int y_size_;
-    int color_size_; 
+    int color_size_;
+    int color_space_;
     
   };
 }

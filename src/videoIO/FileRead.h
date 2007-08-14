@@ -32,8 +32,7 @@ namespace VideoIO_
   {
     public:
     /// constructor
-    FileRead() : has_video_file_(false), cspace_(-1),
-                 nr_of_frames_(0), framerate_(0)
+    FileRead() : cspace_(-1), nr_of_frames_(0), framerate_(0)
     {};
     
     /// destructor

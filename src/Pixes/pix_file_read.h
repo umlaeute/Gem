@@ -70,7 +70,7 @@ class GEM_EXTERN pix_file_read : public GemBase
 
     //////////
     // force a specific colorspace
-    virtual void forceColorspace(t_symbol *cs)
+    virtual void forceColorspace(t_symbol *cs);
 
   //-----------------------------------
   // GROUP:	Movie data

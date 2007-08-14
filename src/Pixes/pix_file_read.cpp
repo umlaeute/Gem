@@ -148,7 +148,7 @@ void pix_file_read :: forceColorspace(t_symbol *cs)
       fileReader->forceColorspace(VideoIO_::YUV422);
       break;
     case 'r': case 'R': 
-      if(gensym("RGB")==s||gensym("rgb")==s)
+      if(gensym("RGB")==cs||gensym("rgb")==cs)
         fileReader->forceColorspace(VideoIO_::RGB);
       else
         fileReader->forceColorspace(VideoIO_::RGBA);
@@ -247,8 +247,7 @@ void pix_file_read :: stopCallback(void *data, t_floatarg stop)
 
 void pix_file_read :: seekCallback(void *data, t_floatarg seek)
 {
-  if( !GetMyClass(data)->fileReader->setPosition( (int)seek ) )
-    post("pix_file_read: frame index out of range !");
+  GetMyClass(data)->fileReader->setPosition( (int)seek );
 }
 
 void pix_file_read :: csCallback(void *data, t_symbol *s)

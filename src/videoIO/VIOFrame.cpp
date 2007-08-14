@@ -50,11 +50,12 @@ namespace VideoIO_
     
     x_size_ = x_size;
     y_size_ = y_size;
+    color_space_ = colorspace;
     setColorSize(colorspace);
     
     data_ = new unsigned char[x_size_*y_size_*color_size_];
   }
-  
+
   void VIOFrame::setColorSize (int format)
   {
     switch(format)
