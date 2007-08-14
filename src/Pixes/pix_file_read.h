@@ -28,7 +28,7 @@
   CLASS
     pix_file_read
     
-    Loads in a movie
+    Loads in a movie with the videoIO framework
     
     KEYWORDS
     pix
@@ -54,11 +54,11 @@ class GEM_EXTERN pix_file_read : public GemBase
 
     //////////
     // close the movie file
-    virtual void closeMess(void);
+    virtual void closeFile(void);
     
     //////////
-    // open a movie up (with a given format and a preferred codec)
-    virtual void openMess(t_symbol *filename, int format=0, int codec=-1);
+    // open a movie up
+    virtual void openFile(t_symbol *filename);
 
     //////////
     // Do the rendering
@@ -69,16 +69,8 @@ class GEM_EXTERN pix_file_read : public GemBase
     virtual void postrender(GemState *state);
 
     //////////
-    // Change which image to display
-    virtual void changeImage(int imgNum, int trackNum);
-	
-    //////////
-    // Change the colorspace
-    virtual void csMess(t_symbol*s);
-    
-    /////////
-    // changes the autoincrement of the video
-    virtual void autoMess(t_floatarg state);
+    // force a specific colorspace
+    virtual void forceColorspace(t_symbol *cs)
 
   //-----------------------------------
   // GROUP:	Movie data
@@ -91,7 +83,6 @@ class GEM_EXTERN pix_file_read : public GemBase
 
     // the file reader
     VideoIO_::FileRead *fileReader;
-    /// TODO kernel should be used only once
     VideoIO_::VIOKernel m_kernel;
     
     // here the frame is stored
@@ -106,10 +97,11 @@ class GEM_EXTERN pix_file_read : public GemBase
     
     //////////
     // static member functions
-    static void openMessCallback   (void *data, t_symbol*,int,t_atom*);
-    static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    static void autoCallback       (void *data, t_floatarg state);
-    static void csCallback         (void *data, t_symbol*s);
+    static void openMessCallback(void *data, t_symbol *s);
+    static void startCallback(void *data, t_floatarg start);
+    static void stopCallback(void *data, t_floatarg stop);
+    static void seekCallback(void *data, t_floatarg seek);
+    static void csCallback(void *data, t_symbol *s);
 };
 
 #endif	// for header file
