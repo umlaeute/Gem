@@ -4,7 +4,7 @@
 INCLUDE=-I/usr/local/include/gstreamer-0.10 -I/usr/include/gstreamer-0.10 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include/ -I/usr/include/libxml2/
 LDPATH=-L/usr/local/lib
 
-all: FRDummy FileReadGst FileWriteGst
+all: FileReadGst FileWriteGst
 
 FRDummy: FRDummy.h FRDummy.cpp
 	g++ -fPIC -c FRDummy.cpp

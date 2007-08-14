@@ -24,40 +24,30 @@ bool FileReadGst::is_initialized_ = false;
 
 FileReadGst::FileReadGst() :
     source_(NULL), decode_(NULL), colorspace_(NULL), sink_(NULL),
-    file_decode_(NULL), video_bin_(NULL), bus_(NULL), x_size_(0),
-    y_size_(0), fps_(0.)
+    file_decode_(NULL), video_bin_(NULL), bus_(NULL),
+    have_pipeline_(false)
 {
 
 }
 
-FileReadGst::~FileReadGst() ///TODO funktioniert nicht richtig
+FileReadGst::~FileReadGst()
 {
-  // Gstreamer clean up 
+  if(!have_pipeline_) return;
+
+  // Gstreamer clean up
   gst_element_set_state (file_decode_, GST_STATE_NULL);
   gst_object_unref (GST_OBJECT (file_decode_));
 }
 
 bool FileReadGst::openFile(string filename)
 {
-  /// TODO: in den konstruktor bzw statische methode geben !!!
-  if(!is_initialized_)
-  {
-    if(gst_init_check (NULL, NULL, NULL))  
-    {
-      is_initialized_ = true;
-    }
-    else
-    {
-      post("Gstreamer could not be initialised. is_initialised: %d", is_initialized_);
-      return false;
-    }
-  }
-  
-  post ("This program is linked against %s", gst_version_string());
-  
-  // setup pipeline
+  initGstreamer();
+
+  // pipeline
   file_decode_ = gst_pipeline_new( "file_decode_");
-  source_ = gst_element_factory_make ("filesrc", "source_");
+
+  // source+decode
+  source_ = gst_element_factory_make("filesrc", "source_");
   g_assert(source_);
   decode_ = gst_element_factory_make ("decodebin", "decode_");
   g_assert(decode_);
@@ -79,45 +69,70 @@ bool FileReadGst::openFile(string filename)
   GstPad *video_pad = gst_element_get_pad (colorspace_, "sink");
   
   gst_bin_add_many (GST_BIN (video_bin_), colorspace_, sink_, NULL);
+  /// TODO forceColorspace hier einbauen !?
   gst_element_link_filtered(colorspace_, sink_, gst_caps_new_simple ("video/x-raw-rgb", NULL));
   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
   gst_object_unref(video_pad);
   gst_bin_add (GST_BIN (file_decode_), video_bin_);
-  
-  
-  
-  // set playing state
-  if(!gst_element_set_state (file_decode_, GST_STATE_PLAYING))
-  {
-    post("The state could not be set to ready.");
-    return false;
-  }
 
-  has_video_file_=true;
-  return true;
+  have_pipeline_=true;
   
+
+  // set paused state
+  gst_element_set_state (file_decode_, GST_STATE_PLAYING);
+
+  return true;
+}
+
+void FileReadGst::closeFile()
+{
+  if(!have_pipeline_) return;
+
+  gst_element_set_state (file_decode_, GST_STATE_NULL);
+  gst_object_unref (GST_OBJECT (file_decode_));
+}
+
+void FileReadGst::startVideo()
+{
+  if(have_pipeline_)
+    gst_element_set_state (file_decode_, GST_STATE_PLAYING);
+}
+
+void FileReadGst::stopVideo()
+{
+  if(!have_pipeline_) return;
+
+  gst_element_set_state (file_decode_, GST_STATE_PAUSED);
+}
+
+bool FileReadGst::setPosition(int frame, int track)
+{
+  //if(have_pipeline_)
+  /// TODO seeken implementieren
 }
 
 unsigned char *FileReadGst::getFrameData()
 {
-#ifdef DEBUG
-  error("FileReadGst::getFrameData begin");
-#endif
-  
+  if(!have_pipeline_) return 0;
+
+  if( GST_STATE (file_decode_) != GST_STATE_PLAYING )
+    return 0;
+
   if(!gst_app_sink_end_of_stream (GST_APP_SINK (sink_)))
   {
-    GstBuffer *buf = gst_app_sink_pull_buffer (GST_APP_SINK (sink_));
+    // ATTENTION: this will result in a deadlock of the gstreamer
+    //            state is not playing !
+    GstBuffer *buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
     guint8 *data = GST_BUFFER_DATA( buf );
     guint size = GST_BUFFER_SIZE( buf );
     
-//    post("Caps: %s", gst_caps_to_string (gst_buffer_get_caps (buf)));
+    post("Caps: %s", gst_caps_to_string (gst_buffer_get_caps (buf)));
         
     unsigned char *frame = frame_.getFrameData();
-    
 
-    
+    // copy and swap data for gstreamer
     while(size--)
-      frame[size] = *data++;
+      *frame++ = *data++;
 
     gst_buffer_unref (buf);
   }
@@ -125,13 +140,13 @@ unsigned char *FileReadGst::getFrameData()
   return frame_.getFrameData();
 }
 
-void FileReadGst::setVideoProperties(int x_size, int y_size, double fps)
+void FileReadGst::initGstreamer()
 {
-  x_size_ = x_size;
-  y_size_ = y_size;
-  fps_ = fps;
-}
+  if(is_initialized_) return;
 
+  gst_init(NULL,NULL);
+  is_initialized_=true;
+}
 
 void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, 
                            gboolean last, gpointer data)
@@ -142,7 +157,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
   
   FileReadGst *tmp = (FileReadGst *)data;
 
-  /* only link once */
+  // only link once
   videopad = gst_element_get_pad (tmp->video_bin_, "sink");
   g_assert(videopad);
   
@@ -150,8 +165,8 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
     g_object_unref (videopad);
     return;
   }
- 
-  /* check media type */
+
+  // check if we have a video
   caps = gst_pad_get_caps (pad);
   str = gst_caps_get_structure (caps, 0);
   if (!g_strrstr (gst_structure_get_name (str), "video")) 
@@ -161,39 +176,23 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
     return;
   }
   
-  // getting width and height
-  int x_size, y_size;
+  // getting fomrat options
+  int x_size, y_size, bpp, depth;
   double fps;
-  if (!gst_structure_get_int (str, "width", &x_size) ||
-      !gst_structure_get_int (str, "height", &y_size)) 
-  {
-    y_size =576; ///TODO weil get y_size nicht richtig funktioniert
-    //return;
-  }
-//   int bpp = 0;
-//   
-//   post("The bpp: %d", gst_structure_get_int (str, "bpp", &bpp));
+  //g_assert( gst_structure_get_int(str, "width", &x_size) );
+//   g_assert( gst_structure_get_int(str, "height", &y_size) );
+//   g_assert( gst_structure_get_int(str, "bpp", &bpp) );
+//   g_assert( gst_structure_get_int(str, "depth", &depth) );
+//   g_assert( gst_structure_get_double (str, "framerate", &fps) );
 
+  /// TODO mimetype noch kriegen und vom frame dann die
+  ///      properties setzen
+  tmp->frame_.allocate(320, 240, RGB);
 
-  if(!gst_structure_get_double (str, "framerate", &fps))
-    post ("Could not get framerate.");
-  
-  fps = 25.;  ///TODO how to get framerate??
-  
-  tmp->setVideoProperties (x_size, y_size, fps);
-  post("FileReadGst: Video with width: %d, height: %d and framerate: %f loaded", x_size, y_size, fps);
-  
-  
   gst_caps_unref (caps);
 
-  /* link'n'play */
+  // link the pads
   gst_pad_link (pad, videopad);
-  
-  
-  
-  // allocate frame data
-  /// TODO check the colorspace and allocate the right size
-  tmp->frame_.allocate(x_size, y_size, RGB);
 }
 
 /// Tells us to register our functionality to an engine kernel
@@ -204,4 +203,3 @@ void registerPlugin(VIOKernel &K)
   
   post("VideoIO: registerd FileReadGst Plugin");
 }
-
