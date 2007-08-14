@@ -29,7 +29,7 @@ namespace VideoIO_
       handle_(0)
   {
     handle_ = dlopen(filename.c_str(), RTLD_LAZY | RTLD_GLOBAL);
-        
+    
     if(handle_ == NULL)
     {
       error("VideoIO Plugin Error: open/load error of dynamic.so failed: %s", dlerror());
