@@ -62,7 +62,7 @@ namespace VideoIO_
     * @return the pixel data
     */
     inline unsigned char getPixel(int x, int y, int color)
-    { return data_[x * x_size_ * color_size_ + y * color_size_ + color]; }
+    { return data_[y * x_size_ * color_size_ + x * color_size_ + color]; }
     
     /*!
     * sets a pixel
@@ -72,7 +72,7 @@ namespace VideoIO_
     * @param value the value to set
     */
     inline void setPixel(int x, int y, int color, unsigned char value)
-    { data_[x * x_size_ * color_size_ + y * color_size_ + color] = value; }
+    { data_[y * x_size_ * color_size_ + x * color_size_ + color] = value; }
       
     /// @return the x size
     inline int getXSize()

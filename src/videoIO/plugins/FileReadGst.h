@@ -90,6 +90,8 @@ class FileReadGst : public FileRead
   GstBus *bus_;
 
   bool have_pipeline_;
+  bool playing_;
+  bool new_video_;
 
   static void initGstreamer();
   static bool is_initialized_;

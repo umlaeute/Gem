@@ -37,11 +37,21 @@ bool FileWriteGst::initRecording()
   switch(cspace_)
   {
     case GRAY:  
-      /// TODO fuer gray machen
+      gst_app_src_set_caps ( GST_APP_SRC(source_),
+                       gst_caps_new_simple ("video/x-raw-gray",
+				     "width", G_TYPE_INT, x_size_,
+				     "height", G_TYPE_INT, y_size_,
+				     NULL)
+                       );
       break;
 
     case YUV422:
-      /// TODO machen
+      gst_app_src_set_caps ( GST_APP_SRC(source_),
+                       gst_caps_new_simple ("video/x-raw-yuv",
+				     "width", G_TYPE_INT, x_size_,
+				     "height", G_TYPE_INT, y_size_,
+				     NULL)
+                       );
       break;
 
     case RGBA:

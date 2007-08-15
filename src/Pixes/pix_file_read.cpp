@@ -32,14 +32,16 @@ pix_file_read :: pix_file_read(t_symbol *filename) :
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
 
+  /// TODO bang am ende des videos noch nicht implementiert
+  /// schauen wie man das im gstreamer am besten macht, am
+  /// einfachsten einfach wenn nach einem start kein neues frame
+  /// in der render methode mehr kommt, dann ein bang ausgeben
+
   // get the FileRead plugin
   // NOTE: in future this could also go into openFile
   //       (if there are more plugins and we have to
   //        make priorities for types)
   fileReader = &m_kernel.getFileReadServer().getPlugin();
-  
-  if(filename)
-    openFile(filename);
 }
 
 /////////////////////////////////////////////////////////

@@ -1,3 +1,107 @@
+
+verschiedene mimetypen:
+
++        case PGM_IMAGE_RGB:
++          caps = gst_caps_new_simple
++            ("video/x-raw-rgb",
++             "bpp", G_TYPE_INT, 24, "depth", G_TYPE_INT, 24,
++             "red_mask",   G_TYPE_INT, 0x00ff0000,
++             "green_mask", G_TYPE_INT, 0x0000ff00,
++             "blue_mask",  G_TYPE_INT, 0x000000ff,
++             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
++             NULL);
++          break;
++
++        case PGM_IMAGE_BGR:
++          caps = gst_caps_new_simple
++            ("video/x-raw-rgb",
++             "bpp", G_TYPE_INT, 24, "depth", G_TYPE_INT, 24,
++             "red_mask",   G_TYPE_INT, 0x000000ff,
++             "green_mask", G_TYPE_INT, 0x0000ff00,
++             "blue_mask",  G_TYPE_INT, 0x00ff0000,
++             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
++             NULL);
++          break;
++
++        case PGM_IMAGE_RGBA:
++          caps = gst_caps_new_simple
++            ("video/x-raw-rgb",
++             "bpp", G_TYPE_INT, 32, "depth", G_TYPE_INT, 32,
++             "red_mask",   G_TYPE_INT, 0xff000000,
++             "green_mask", G_TYPE_INT, 0x00ff0000,
++             "blue_mask",  G_TYPE_INT, 0x0000ff00,
++             "alpha_mask", G_TYPE_INT, 0x000000ff,
++             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
++             NULL);
++          break;
++
++        case PGM_IMAGE_BGRA:
++          caps = gst_caps_new_simple
++            ("video/x-raw-rgb",
++             "bpp", G_TYPE_INT, 32, "depth", G_TYPE_INT, 32,
++             "red_mask",   G_TYPE_INT, 0x0000ff00,
++             "green_mask", G_TYPE_INT, 0x00ff0000,
++             "blue_mask",  G_TYPE_INT, 0xff000000,
++             "alpha_mask", G_TYPE_INT, 0x000000ff,
++             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
++             NULL);
++          break;
++
++        case PGM_IMAGE_I420:
++          caps = gst_caps_new_simple
++            ("video/x-raw-yuv",
++             "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC ('I', '4', '2', '0'),
++             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
++             NULL);
++          break;
++
++        case PGM_IMAGE_YV12:
++          caps = gst_caps_new_simple
++            ("video/x-raw-yuv",
++             "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC ('Y', 'V', '1', '2'),
++             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
++             NULL);
++          break;
++
++        case PGM_IMAGE_UYVY:
++          caps = gst_caps_new_simple
++            ("video/x-raw-yuv",
++             "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC ('U', 'Y', 'V', 'Y'),
++             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
++             NULL);
++          break;
++
++        case PGM_IMAGE_YUYV:
++          caps = gst_caps_new_simple
++            ("video/x-raw-yuv",
++             "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC ('Y', 'U', 'Y', 'V'),
++             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
++             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
++             NULL);
++          break;
++
+
+
+
+
+
+
+
  TODO:
 - FileReadQT4l funktioniert noch nicht richtig
 - Exceptions in dynamic libraries
