@@ -96,7 +96,7 @@ class GEM_EXTERN pix_device_read : public GemBase
  private:
    
   // reallocate frame data
-  void reallocate_m_image();
+  void reallocate_m_image() {}
     	
   //////////
   // static member functions

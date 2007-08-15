@@ -60,7 +60,7 @@ class DeviceReadGst : public DeviceRead
   bool closeDevice(){};
   
   /// @return the data of the current VIOFrame
-  unsigned char *getFrameData();
+  unsigned char *getFrameData(){};
   
   /*!
     * sets the channel of the device 
@@ -110,5 +110,8 @@ class DeviceReadGst : public DeviceRead
   static bool is_initialized_;
   
 };
+
+/// Tells us to register our functionality to an engine kernel
+extern "C" void registerPlugin(VIOKernel &K);
 
 #endif

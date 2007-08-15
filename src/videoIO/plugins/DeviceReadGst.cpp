@@ -64,3 +64,12 @@ bool DeviceReadGst::openDevice(string device_name)
   return true;
   
 }
+
+/// Tells us to register our functionality to an engine kernel
+void registerPlugin(VIOKernel &K)
+{
+  K.getDeviceReadServer().addPlugin(
+    auto_ptr<DeviceRead>(new DeviceReadGst()) );
+  
+  post("VideoIO: registerd DeviceReadGst Plugin");
+}

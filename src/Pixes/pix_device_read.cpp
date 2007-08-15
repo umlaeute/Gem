@@ -10,9 +10,6 @@
 //
 /////////////////////////////////////////////////////////
 
-// we set the help-symbol ourselfs
-#define HELPSYMBOL "pix_video"
-
 #include "pix_device_read.h"
 
 CPPEXTERN_NEW(pix_device_read)

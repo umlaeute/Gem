@@ -28,7 +28,7 @@
 #include "PluginServer.h"
 #include "FileRead.h"
 #include "FileWrite.h"
-//#include "DeviceRead.h"
+#include "DeviceRead.h"
 #include "VIOPlugin.h"
 
 using namespace std;
@@ -71,7 +71,7 @@ namespace VideoIO_
     /// @return the file write server
     static PluginServer<FileWrite> &getFileWriteServer() {return file_write_server_;};
     /// @return the device read server
-     //static PluginServer<DeviceRead> &getDeviceReadServer() {return device_read_server_;};
+    static PluginServer<DeviceRead> &getDeviceReadServer() {return device_read_server_;};
 
    protected:
 
@@ -90,7 +90,7 @@ namespace VideoIO_
     // the plugin servers
     static PluginServer<FileRead> file_read_server_;
     static PluginServer<FileWrite> file_write_server_;
-     //static PluginServer<DeviceRead> device_read_server_;
+    static PluginServer<DeviceRead> device_read_server_;
   
     /// path list where to search for plugins
     static PathList search_path_;

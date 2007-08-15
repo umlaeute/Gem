@@ -32,8 +32,7 @@ namespace VideoIO_
   {
     public:
     /// constructor
-    FileRead() : cspace_(-1), nr_of_frames_(0), framerate_(0)
-    {};
+    FileRead();
     
     /// destructor
     virtual ~FileRead(){};
@@ -68,7 +67,7 @@ namespace VideoIO_
     * @param track the number of the desired track
     * @return false if the frame/track does not exist
     */
-    virtual bool setPosition(int frame, int track = -1);
+    virtual bool setPosition(int frame, int track = -1) = 0;
 
     /*!
     * force a specific colorspace
