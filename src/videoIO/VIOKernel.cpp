@@ -28,6 +28,7 @@ namespace VideoIO_
   PluginMap VIOKernel::loaded_plugins_;
   PluginServer<FileRead> VIOKernel::file_read_server_;
   PluginServer<FileWrite> VIOKernel::file_write_server_;
+//  PluginServer<DeviceRead> VIOKernel::device_read_server_;
   PathList VIOKernel::search_path_;
   bool VIOKernel::first_time_ = true;
 
@@ -60,6 +61,7 @@ namespace VideoIO_
     // try to load all possible plugins
     registerPlugin("FileReadGst");
     registerPlugin("FileWriteGst");
+//     registerPlugin("DeviceReadGst");
   }
 
   void VIOKernel::addSearchPath(const string &path)
