@@ -37,6 +37,8 @@ using namespace VideoIO_;
  * file reader with gstreamer
  * NOTE you can debug gstreamer based applications
  * with "GST_DEBUG=3 pd -lib Gem ..."
+ * to debug one single plugin, e.g.:
+ * "GST_DEBUG=appsink:5 pd -lib Gem ..."
  */
 class FileReadGst : public FileRead
 {
@@ -90,7 +92,6 @@ class FileReadGst : public FileRead
   GstBus *bus_;
 
   bool have_pipeline_;
-  bool playing_;
   bool new_video_;
 
   static void initGstreamer();

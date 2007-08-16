@@ -25,7 +25,7 @@ bool FileReadGst::is_initialized_ = false;
 FileReadGst::FileReadGst() :
     source_(NULL), decode_(NULL), colorspace_(NULL), sink_(NULL),
     file_decode_(NULL), video_bin_(NULL), bus_(NULL),
-    have_pipeline_(false), playing_(false), new_video_(false)
+    have_pipeline_(false), new_video_(false)
 {
 
 }
@@ -83,7 +83,6 @@ bool FileReadGst::openFile(string filename)
 
   // set paused state
   gst_element_set_state (file_decode_, GST_STATE_PAUSED);
-  playing_=false;
   new_video_=true;
   
   return true;
@@ -93,7 +92,6 @@ void FileReadGst::closeFile()
 {
   if(!have_pipeline_) return;
 
-  playing_=false;
   gst_element_set_state (file_decode_, GST_STATE_NULL);
   gst_object_unref (GST_OBJECT (file_decode_));
 }
@@ -103,7 +101,6 @@ void FileReadGst::startVideo()
   if(!have_pipeline_) return;
 
   gst_element_set_state (file_decode_, GST_STATE_PLAYING);
-  playing_=true;
 }
 
 void FileReadGst::stopVideo()
@@ -111,7 +108,6 @@ void FileReadGst::stopVideo()
   if(!have_pipeline_) return;
 
   gst_element_set_state (file_decode_, GST_STATE_PAUSED);
-  playing_=false;
 }
 
 bool FileReadGst::setPosition(int frame, int track)
@@ -131,7 +127,8 @@ bool FileReadGst::setPosition(int frame, int track)
 //                  GST_SEEK_FLAG_NONE, GST_SEEK_TYPE_SET, frame,
 //                  GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
   
-  if(!gst_element_seek_simple(file_decode_, GST_FORMAT_BUFFERS, GST_SEEK_FLAG_NONE, frame))
+  if(!gst_element_seek_simple(file_decode_, GST_FORMAT_BUFFERS,
+  GST_SEEK_FLAG_NONE, frame))
   {
     post("videoIO: the position could not be set");
     return false;
@@ -148,17 +145,25 @@ unsigned char *FileReadGst::getFrameData()
 
   GstBuffer *buf = 0;
   
-  // get preroll buffer in pause state, otherwise we produce
-  // a deadlock in gst_app_sink_pull_buffer
-  if( playing_ )
-    buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
-  else
+//   post("GST_STATE: %d, GST_STATE_PENDING: %d",
+//         GST_STATE(file_decode_), GST_STATE_PENDING(file_decode_));
+
+  // get the buffer in PLAYING state
+  if( GST_STATE(file_decode_)==GST_STATE_PLAYING &&
+      GST_STATE_PENDING(file_decode_)==GST_STATE_VOID_PENDING )
   {
-    return 0;
-    /// TODO neue app_sink richtig implementieren
+    buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
+  }
+
+  // in PAUSED state get the preroll buffer
+  if( (GST_STATE(file_decode_)==GST_STATE_PAUSED &&
+       GST_STATE_PENDING(file_decode_)==GST_STATE_VOID_PENDING) ||
+      (GST_STATE(file_decode_)==GST_STATE_PLAYING &&
+       GST_STATE_PENDING(file_decode_)==GST_STATE_PAUSED) )
+  {
     buf = gst_app_sink_pull_preroll(GST_APP_SINK (sink_));
   }
-  
+
   if( !buf ) return 0;
 
   guint8 *data = GST_BUFFER_DATA( buf );
