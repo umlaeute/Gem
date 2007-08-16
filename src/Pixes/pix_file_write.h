@@ -16,8 +16,7 @@
 //   (at your option) any later version.
 //
 ///////////////////////////////////////////////////////////////////////////
- 
- //this will record QT movies
+
 #ifndef INCLUDE_PIX_FILE_WRITE_H_
 #define INCLUDE_PIX_FILE_WRITE_H_
 
@@ -42,35 +41,26 @@ class GEM_EXTERN pix_file_write : public GemBase
 
         //////////
         // Constructor
-    	pix_file_write(int argc, t_atom *argv);
+    	pix_file_write(t_symbol *filename);
     	
     protected:
     	
     	//////////
     	// Destructor
     	virtual ~pix_file_write();
-		
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-
-    	//////////
-    	// Clear the dirty flag on the pixBlock
-    	virtual void 	postrender(GemState *state) {};
 
     	//////////
     	// Set the filename and filetype
-    	virtual void	openFile(t_symbol *filename);
- 
-	//////////
-	// a outlet for information like #frames
-	t_outlet     *m_outNumFrames;
+    	virtual void openFile(t_symbol *filename);
+		
+    	//////////
+    	// Do the rendering
+    	virtual void render(GemState *state);
 		
     private:
       
         // the file reader
-        VideoIO_::FileWrite *m_filewriter;
-        /// TODO kernel should be used only once ?
+        VideoIO_::FileWrite *fileWriter;
         VideoIO_::VIOKernel m_kernel;
     	
         //////////////
@@ -87,9 +77,10 @@ class GEM_EXTERN pix_file_write : public GemBase
         bool m_first_time;
         
     	//////////
-    	// static member functions
-    	static void 	fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
-	static void 	recordMessCallback(void *data, t_floatarg on);
-
+    	// static member callback functions
+        static void openMessCallback(void *data, t_symbol *s);
+        static void startCallback(void *data, t_floatarg start);
+        static void stopCallback(void *data, t_floatarg stop);
 };
-#endif	// for header file
+
+#endif  // for header file

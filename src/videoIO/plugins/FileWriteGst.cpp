@@ -19,158 +19,90 @@
 
 #include "FileWriteGst.h"
 
-
 bool FileWriteGst::is_initialized_ = false;
 
-FileWriteGst::FileWriteGst()
+FileWriteGst::FileWriteGst() : new_video_(false), have_pipeline_(false)
 {
 
 }
 
 FileWriteGst::~FileWriteGst()
 {
-
-}
-
-bool FileWriteGst::initRecording()
-{
-  switch(cspace_)
-  {
-    case GRAY:  
-      gst_app_src_set_caps ( GST_APP_SRC(source_),
-                       gst_caps_new_simple ("video/x-raw-gray",
-				     "width", G_TYPE_INT, x_size_,
-				     "height", G_TYPE_INT, y_size_,
-				     NULL)
-                       );
-      break;
-
-    case YUV422:
-      gst_app_src_set_caps ( GST_APP_SRC(source_),
-                       gst_caps_new_simple ("video/x-raw-yuv",
-				     "width", G_TYPE_INT, x_size_,
-				     "height", G_TYPE_INT, y_size_,
-				     NULL)
-                       );
-      break;
-
-    case RGBA:
-      gst_app_src_set_caps ( GST_APP_SRC(source_),
-                       gst_caps_new_simple ("video/x-raw-rgb",
-				     "width", G_TYPE_INT, x_size_,
-				     "height", G_TYPE_INT, y_size_,
-				     "bpp", G_TYPE_INT, 32,
-				     "depth", G_TYPE_INT, 24,
-				     NULL)
-                       );
-      break;
-
-    case RGB:
-    default:
-      gst_app_src_set_caps ( GST_APP_SRC(source_),
-                       gst_caps_new_simple ("video/x-raw-rgb",
-				     "width", G_TYPE_INT, x_size_,
-				     "height", G_TYPE_INT, y_size_,
-				     "bpp", G_TYPE_INT, 24,
-				     "depth", G_TYPE_INT, 24,
-				     NULL)
-                       );
-      break;
-  }
-
-  // set playing state
-  if(!gst_element_set_state (file_encode_, GST_STATE_PLAYING))
-  {
-    post("The state could not be set to playing.");
-    return false;
-  }
-
-  post("FileWriteGst: started recording");
-
-  return true;
-}
-
-bool FileWriteGst::stopRecording()
-{
-  gst_app_src_end_of_stream ( GST_APP_SRC(source_) );
-  gst_element_set_state (file_encode_, GST_STATE_NULL);
-
-  post("FileWriteGst: stopped recording");
-  
-  return true;
+  if(have_pipeline_)
+    freePipeline();
 }
 
 void FileWriteGst::pushFrame(VIOFrame &frame)
 {
-  GstBuffer *buf;
-  int size = frame.getXSize() * frame.getYSize() * frame.getColorSize();
-  unsigned char *data = frame.getFrameData();
+  if(!have_pipeline_) return;
+
+  if(new_video_)
+  {
+    initRecording( frame.getXSize(), frame.getYSize(), 
+                   frame.getColorspace() );
+    new_video_=false;
+  }
+
 
   /// TODO einmal weniger kopieren mache (im Prinzip braucht man
   /// den m_frame ja gar net, könnte gleich Datenpointer und
   /// Groesze übergeben
 
+  int cs = frame.getColorSize();
+  int xs = frame.getXSize();
+  int ys = frame.getYSize();
+  int size = xs * ys * cs;
+
+//   post("cs: %d, size: %d", cs, size);
+
+  unsigned char *data = frame.getFrameData();
   unsigned char *rec_data = new unsigned char[size];
   unsigned char *tmp = rec_data;
-  int i = size;
-  while(i--)
-  {
-    *(tmp++) = *(data++);
-  }
 
+  // copy data
+  for(int x=0; x<xs; ++x) {
+  for(int y=0; y<ys; ++y) {
+  for(int c=0; c<cs; ++c) {
+    // swap y axis
+    tmp[y*xs*cs + x*cs + c] =
+    data[(ys-y-1)*xs*cs + x*cs + c];
+  } } }
+
+  GstBuffer *buf;
   buf = gst_app_buffer_new (rec_data, size, freeRecBuffer, (void*)rec_data);
   gst_app_src_push_buffer (GST_APP_SRC (source_), buf);
 }
 
 bool FileWriteGst::openFile(string filename)
 {
-  /// TODO: in den konstruktor bzw statische methode geben !!!
-  if(!is_initialized_)
-  {
-    if(gst_init_check (NULL, NULL, NULL))  
-    {
-      is_initialized_ = true;
-    }
-    else
-    {
-      post("Gstreamer could not be initialised. is_initialised: %d", is_initialized_);
-      return false;
-    }
-  }
-  
-   post ("This program is linked against %s", gst_version_string());
-  
+  initGstreamer();
+
+  if(have_pipeline_)
+    freePipeline();
+
+  // Test-Pipeline for gst-launch:
+  // gst-launch filesrc location=input.avi ! decodebin !
+  // ffmpegcolorspace ! theoraenc ! oggmux ! filesink location=output.ogg
+
   // setup pipeline
   file_encode_ = gst_pipeline_new( "file_encode_");
-  
-  // creating video input
-//   video_bin_ = gst_bin_new ("video_bin_");
-//   g_assert(video_bin_);
-  
+
   source_ = gst_element_factory_make ("appsrc", "source_");
   g_assert(source_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
-  
-//   GstPad *video_pad = gst_element_get_pad (colorspace_, "source");
-//   
-//   gst_bin_add_many (GST_BIN (video_bin_), source_, colorspace_, NULL);
-//   gst_element_link(source_, colorspace_);
-//   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("source", video_pad));
-//   gst_object_unref(video_pad);
-  
+
   encode_ = gst_element_factory_make ("theoraenc", "encode_");
   g_assert(encode_);
+  mux_ = gst_element_factory_make("oggmux", "mux_");
+  g_assert(mux_);
   sink_ = gst_element_factory_make ("filesink", "sink_");
   g_assert(sink_);
   
   g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
-  
-//   gst_bin_add_many (GST_BIN (file_encode_), video_bin_, encode_, sink_, NULL);
-//   gst_element_link_many (video_bin_, encode_, sink_, NULL);
 
-  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, sink_, NULL);
-  gst_element_link_many (source_, colorspace_, encode_, sink_, NULL);
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, sink_, NULL);
+  gst_element_link_many (source_, colorspace_, encode_, mux_, sink_, NULL);
   
   // set ready state
   if(!gst_element_set_state (file_encode_, GST_STATE_READY))
@@ -179,12 +111,114 @@ bool FileWriteGst::openFile(string filename)
     return false;
   }
 
+  have_pipeline_=true;
+  new_video_=true;
   return true;
+}
+
+bool FileWriteGst::stopRecording()
+{
+  if(!have_pipeline_) return false;
+
+  gst_app_src_end_of_stream ( GST_APP_SRC(source_) );
+  gst_element_set_state (file_encode_, GST_STATE_NULL);
+
+  post("FileWriteGst: stopped recording");
+  
+  return true;
+}
+
+void FileWriteGst::initRecording(int xsize, int ysize, int cs)
+{
+  /// TODO framerate richtig umrechnen
+  int fr1 = (int) framerate_;
+  int fr2 = 1;
+
+  switch(cs)
+  {
+    case GRAY:
+      gst_app_src_set_caps ( GST_APP_SRC(source_),
+                       gst_caps_new_simple ("video/x-raw-gray",
+				     "width", G_TYPE_INT, xsize,
+				     "height", G_TYPE_INT, ysize,
+				     "bpp", G_TYPE_INT, 8,
+				     "depth", G_TYPE_INT, 8,
+			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
+				     NULL)
+                       );
+      break;
+
+    case YUV422:
+      gst_app_src_set_caps ( GST_APP_SRC(source_),
+                       gst_caps_new_simple ("video/x-raw-yuv",
+				     "width", G_TYPE_INT, xsize,
+				     "height", G_TYPE_INT, ysize,
+                                     "format", GST_TYPE_FOURCC,
+                                     GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
+				     NULL)
+                       );
+
+    case RGB:
+      gst_app_src_set_caps ( GST_APP_SRC(source_),
+                       gst_caps_new_simple ("video/x-raw-rgb",
+				     "width", G_TYPE_INT, xsize,
+				     "height", G_TYPE_INT, ysize,
+				     "bpp", G_TYPE_INT, 24,
+				     "depth", G_TYPE_INT, 24,
+				     "red_mask",   G_TYPE_INT, 0x00ff0000,
+				     "green_mask", G_TYPE_INT, 0x0000ff00,
+				     "blue_mask",  G_TYPE_INT, 0x000000ff,
+			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
+				     NULL)
+                       );
+      break;
+
+    case RGBA:
+    default:
+      gst_app_src_set_caps ( GST_APP_SRC(source_),
+                       gst_caps_new_simple ("video/x-raw-rgb",
+				     "width", G_TYPE_INT, xsize,
+				     "height", G_TYPE_INT, ysize,
+				     "bpp", G_TYPE_INT, 32,
+				     "depth", G_TYPE_INT, 32,
+				     "red_mask",   G_TYPE_INT, 0xff000000,
+				     "green_mask", G_TYPE_INT, 0x00ff0000,
+				     "blue_mask",  G_TYPE_INT, 0x0000ff00,
+				     "alpha_mask", G_TYPE_INT, 0x000000ff,
+			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
+				     NULL)
+                       );
+      break;
+  }
+
+  // set playing state
+  if(!gst_element_set_state (file_encode_, GST_STATE_PLAYING))
+    error("FileWriteGst: recording could not be started!");
+  else post("FileWriteGst: started recording");
+}
+
+void FileWriteGst::initGstreamer()
+{
+  if(is_initialized_) return;
+
+  gst_init(NULL,NULL);
+  is_initialized_=true;
+}
+
+void FileWriteGst::freePipeline()
+{
+  if(!have_pipeline_) return;
+
+  // Gstreamer clean up
+  gst_element_set_state (file_encode_, GST_STATE_NULL);
+  gst_object_unref (GST_OBJECT (file_encode_));
+  have_pipeline_ = false;
 }
 
 void FileWriteGst::freeRecBuffer(void *data)
 {
-  delete[] (unsigned char*)data;
+  if(data) delete[] (unsigned char*)data;
 }
 
 
@@ -196,4 +230,3 @@ void registerPlugin(VIOKernel &K)
   
   post("VideoIO: registerd FileWriteGst Plugin");
 }
-

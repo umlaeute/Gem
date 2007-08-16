@@ -38,19 +38,7 @@ class FileWriteGst : public FileWrite
    FileWriteGst();
   
   ~FileWriteGst();
-  
-  /*!
-   * initializes recording in the previously opened file
-   * @return false if not successful
-   */
-  virtual bool initRecording();
-  
-  /*!
-   * stops recording
-   * @return false if file was written
-   */
-  virtual bool stopRecording();
-  
+
   /*!
    * writes one frame in the video file
    * @param frame written in video file
@@ -64,22 +52,34 @@ class FileWriteGst : public FileWrite
    */
   virtual bool openFile(string filename);
 
+  /*!
+   * stops recording
+   * @return false if file was written
+   */
+  virtual bool stopRecording();
+
  protected:
-     GstElement *source_;
-     GstElement *colorspace_; 
-     GstElement *encode_;
-     GstElement *sink_;
-     GstElement *file_encode_;
-     GstElement *video_bin_;
-     GstBus *bus_;
-    
-    static bool is_initialized_;
+  GstElement *source_;
+  GstElement *colorspace_; 
+  GstElement *encode_;
+  GstElement *mux_;
+  GstElement *sink_;
+  GstElement *file_encode_;
+  GstBus *bus_;
 
-    /// callback to free our buffer
-    static void freeRecBuffer(void *data);
+  /// inits video file
+  void initRecording(int xsize, int ysize, int cs);
+  void freePipeline();
 
+  bool new_video_;
+  bool have_pipeline_;
+
+  static void initGstreamer();
+  static bool is_initialized_;
+
+  /// callback to free our buffer
+  static void freeRecBuffer(void *data);
 };
-
 
 /// Tells us to register our functionality to an engine kernel
 extern "C" void registerPlugin(VIOKernel &K);

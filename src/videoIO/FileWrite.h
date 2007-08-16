@@ -35,13 +35,7 @@ namespace VideoIO_
     
     /// destructor
     virtual ~FileWrite(){};
-    
-    /*!
-     * initializes recording in the previously opened file
-     * @return false if not successful
-     */
-    virtual bool initRecording() = 0;
-    
+
     /*!
      * stops recording
      * @return false if file was written
@@ -55,23 +49,18 @@ namespace VideoIO_
     virtual void pushFrame(VIOFrame &frame) = 0;
     
     /*!
-    * opens the file at the given path
-    * @param filename the path of the file
-    * @return true if open worked
-    */
+     * opens the file at the given path
+     * @param filename the path of the file
+     * @return true if open worked
+     */
     virtual bool openFile(string filename) = 0;
-    
-    /// set size of the video
-    virtual void setSize(int width, int height);
 
-    /// set colorspace
-    virtual void setColorspace(int cs);
-    
+    /// set framerate of the video
+    virtual void setFramerate(float fr);
+
   protected:
     
-    int x_size_;
-    int y_size_;
-    int cspace_;
+    float framerate_;
   };
 }
 

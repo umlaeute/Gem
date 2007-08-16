@@ -19,22 +19,18 @@
 
 #include "FileWrite.h"
 
+// NOTE: don't remove this (small) cpp file, because
+// we need an object generated out of the cpp
+
 namespace VideoIO_
 {
 
   FileWrite::FileWrite() :
-    x_size_(0), y_size_(0)
+    framerate_(0)
   {}
-  
-  void FileWrite::setSize(int width, int height)
-  {
-    /// TODO range auf richtigen Bereich abchecken (keine minus oder riesigen zahlen)
-    x_size_ = width;
-    y_size_ = height;
-  }
 
-  void FileWrite::setColorspace(int cs)
+  void FileWrite::setFramerate(float fr)
   {
-    cspace_ = cs;
+    framerate_ = fr;
   }
 }
