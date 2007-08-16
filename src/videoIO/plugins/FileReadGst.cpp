@@ -85,7 +85,7 @@ bool FileReadGst::openFile(string filename)
   gst_element_set_state (file_decode_, GST_STATE_PAUSED);
   playing_=false;
   new_video_=true;
-
+  
   return true;
 }
 
@@ -127,104 +127,116 @@ bool FileReadGst::setPosition(int frame, int track)
   /// die man dann von PD aus auch schön ansprechen kann
   /// z.B. mit einer message [speed 2.0(
 
-  return gst_element_seek(file_decode_, 1.0, GST_FORMAT_DEFAULT,
-                 GST_SEEK_FLAG_NONE, GST_SEEK_TYPE_SET, frame,
-                 GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
+//   if(! gst_element_seek(file_decode_, 1.0, GST_FORMAT_BUFFERS,
+//                  GST_SEEK_FLAG_NONE, GST_SEEK_TYPE_SET, frame,
+//                  GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
+  
+  if(!gst_element_seek_simple(file_decode_, GST_FORMAT_BUFFERS, GST_SEEK_FLAG_NONE, frame))
+  {
+    post("videoIO: the position could not be set");
+    return false;
+  }
+  else
+    return true;
 }
 
 unsigned char *FileReadGst::getFrameData()
 {
   if(!have_pipeline_) return 0;
 
-  // ATTENTION: calling gst_app_sink_pull_buffer will result in
-  // a deadlock if the state is not playing, therefore we
-  // have to use this playing_ variable as a hack
-  /// TODO Author von appsink nochmal fragen, der hat gesagt
-  ///      er macht support für GST_STATE_PAUSED auch dazu !
-  if( !playing_ )
-    return 0;
+  if( gst_app_sink_end_of_stream(GST_APP_SINK (sink_)) ) return 0;
 
-  if(!gst_app_sink_end_of_stream (GST_APP_SINK (sink_)))
+  GstBuffer *buf = 0;
+  
+  // get preroll buffer in pause state, otherwise we produce
+  // a deadlock in gst_app_sink_pull_buffer
+  if( playing_ )
+    buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
+  else
   {
-    // ATTENTION: this will result in a deadlock of the gstreamer
-    //            state is not playing !
-    GstBuffer *buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
-    guint8 *data = GST_BUFFER_DATA( buf );
-    guint size = GST_BUFFER_SIZE( buf );
-
-    if( new_video_ )
-    {
-      GstCaps *caps = gst_buffer_get_caps (buf);
-      GstStructure *str = gst_caps_get_structure (caps, 0);
-
-      post("FileReadGst loaded video: %s",
-            gst_caps_to_string (caps) );
-
-      // getting fomrat options
-      int x_size, y_size, bpp, depth;
-      int fps_numerator, fps_denominator;
-      g_assert( gst_structure_get_int(str, "width", &x_size) );
-      g_assert( gst_structure_get_int(str, "height", &y_size) );
-      g_assert( gst_structure_get_fraction (str, "framerate",
-              &fps_numerator, &fps_denominator) );
-
-      int format=-1;
-      gst_structure_get_int(str, "bpp", &bpp);
-      gst_structure_get_int(str, "depth", &depth);
-      format = YUV422; // for YUV there's no bpp and depth
-      if( bpp==24 && depth==24 ) format=RGB;
-      if( bpp==8 && depth==8 ) format=GRAY;
-      if( bpp==32 ) format=RGBA;
-
-      // allocate frame
-      frame_.allocate(x_size, y_size, format);
-
-      // set framerate
-      framerate_ = fps_numerator / fps_denominator;
-
-      /// TODO Frameanzahl bekommt man so nicht -> das könnte man
-      /// bei filesrc irgendwie abfragen: bei gst-inspect filesrc
-      /// gibts ein "num-buffers" property -> is das nr of frames ?
-
-      new_video_=false;
-      gst_caps_unref(caps);
-    }
-    
-   unsigned char *frame = frame_.getFrameData();
-
-   int xs = frame_.getXSize();
-   int ys = frame_.getYSize();
-   int cs = frame_.getColorSize();
-
-   /// TODO maybe these conversions could be done more efficient !?
-   switch( frame_.getColorspace() )
-   {
-     case YUV422:
-     case RGB:
-     case GRAY:
-       for(int x=0; x<xs; ++x) {
-       for(int y=0; y<ys; ++y) {
-       for(int c=0; c<cs; ++c) {
-         // swap y axis
-         frame[y*xs*cs + x*cs + c] =
-         data[(ys-y-1)*xs*cs + x*cs + c];
-       } } }
-       break;
-
-     case RGBA:
-       for(int x=0; x<xs; ++x) {
-       for(int y=0; y<ys; ++y) {
-       for(int c=0; c<cs; ++c) {
-         // swap y axis, exchange red and blue
-         int c_rgba = (c==0) ? 2 :( (c==2) ? 0 : c );
-         frame[y*xs*cs + x*cs + c] =
-         data[(ys-y-1)*xs*cs + x*cs + c_rgba];
-       } } }
-       break;
-   }
-
-   gst_buffer_unref (buf);
+    return 0;
+    /// TODO neue app_sink richtig implementieren
+    buf = gst_app_sink_pull_preroll(GST_APP_SINK (sink_));
   }
+  
+  if( !buf ) return 0;
+
+  guint8 *data = GST_BUFFER_DATA( buf );
+  guint size = GST_BUFFER_SIZE( buf );
+
+  if( new_video_ )
+  {
+    GstCaps *caps = gst_buffer_get_caps (buf);
+    GstStructure *str = gst_caps_get_structure (caps, 0);
+
+    post("FileReadGst loaded video: %s",
+          gst_caps_to_string (caps) );
+
+    // getting fomrat options
+    int x_size, y_size, bpp, depth;
+    int fps_numerator, fps_denominator;
+    g_assert( gst_structure_get_int(str, "width", &x_size) );
+    g_assert( gst_structure_get_int(str, "height", &y_size) );
+    g_assert( gst_structure_get_fraction (str, "framerate",
+            &fps_numerator, &fps_denominator) );
+
+    int format=-1;
+    gst_structure_get_int(str, "bpp", &bpp);
+    gst_structure_get_int(str, "depth", &depth);
+    format = YUV422; // for YUV there's no bpp and depth
+    if( bpp==24 && depth==24 ) format=RGB;
+    if( bpp==8 && depth==8 ) format=GRAY;
+    if( bpp==32 ) format=RGBA;
+
+    // allocate frame
+    frame_.allocate(x_size, y_size, format);
+
+    // set framerate
+    framerate_ = fps_numerator / fps_denominator;
+
+    /// TODO Frameanzahl bekommt man so nicht -> das könnte man
+    /// bei filesrc irgendwie abfragen: bei gst-inspect filesrc
+    /// gibts ein "num-buffers" property -> is das nr of frames ?
+    /// gst_element_query_duration möglich?
+
+    new_video_=false;
+    gst_caps_unref(caps);
+  }
+    
+  unsigned char *frame = frame_.getFrameData();
+
+  int xs = frame_.getXSize();
+  int ys = frame_.getYSize();
+  int cs = frame_.getColorSize();
+
+  /// TODO maybe these conversions could be done more efficient !?
+  switch( frame_.getColorspace() )
+  {
+    case YUV422:
+    case RGB:
+    case GRAY:
+      for(int x=0; x<xs; ++x) {
+      for(int y=0; y<ys; ++y) {
+      for(int c=0; c<cs; ++c) {
+        // swap y axis
+        frame[y*xs*cs + x*cs + c] =
+        data[(ys-y-1)*xs*cs + x*cs + c];
+      } } }
+      break;
+
+    case RGBA:
+      for(int x=0; x<xs; ++x) {
+      for(int y=0; y<ys; ++y) {
+      for(int c=0; c<cs; ++c) {
+        // swap y axis, exchange red and blue
+        int c_rgba = (c==0) ? 2 :( (c==2) ? 0 : c );
+        frame[y*xs*cs + x*cs + c] =
+        data[(ys-y-1)*xs*cs + x*cs + c_rgba];
+      } } }
+      break;
+  }
+
+  gst_buffer_unref (buf);
   
   return frame_.getFrameData();
 }
