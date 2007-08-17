@@ -33,79 +33,37 @@ using namespace VideoIO_;
 
 class DeviceReadGst : public DeviceRead
 {
-  public:
+ public:
       
   /// constructor
   DeviceReadGst();
   
   /// destructor
-  ~DeviceReadGst(){};
-  
+  ~DeviceReadGst();
+
   /*!
-    * opens the device
-    * @param device_number the number of the device to open
-    * @return true if successfully opened
-    */
-  bool openDevice(int device_number){};
-  
-  /*!
-    * opens the device
-    * @param device_name the name of the device to open
-    * @return true if successfully opened
-    */
-  bool openDevice(string device_name);
+   * opens the device
+   * @param name can be "video" (capture card, webcam, etc.)
+   *             or "dv" (dv input)
+   * @param device the device (e.g. /dev/video0), optional
+   * @return true if successfully opened
+   */
+  virtual bool openDevice(const string &name, const string &device="");
   
   /// closes the device
   /// @return true if successfully closed
-  bool closeDevice(){};
+  virtual bool closeDevice();
   
-  void startDevice();
+  /// starts grabbing data from the device
+  virtual void startDevice();
   
-  void stopDevice();
-  
+  /// stops grabbing data from the device
+  virtual void stopDevice();
+
   /// @return the data of the current VIOFrame
-  unsigned char *getFrameData();
-  
-  /*!
-    * sets the channel of the device 
-    * (e.g switch between tuner, COMPOSITE)
-    * @param channel the desired channel
-    * @return true if succsessful
-    */
-  bool setChannel(int channel){};
-  
-  /*!
-    * sets the frequency of the device (e.g for a TV device)
-    * @param channel the desired channel
-    * @return true if succsessful
-    */
-  bool setFrequency(float frequency){};
-  
-  /*!
-    * sets the TV norm (PAL, NTSC or SECAM)
-    * @param norm the TV norm
-    * @return true if sccsessful in setting
-    */
-  bool setTVNorm (char *norm){};
-  
-  /*!
-    * sets the output to the desired color model
-    * @param colorspace the desired color model
-    * @return true if succsessful
-    */
-  bool forceColorspace (int colorspace){};
-  
-  
-  /// @return the frames per second
-  double getFPS(){};
-  
-  /// @return the width of the video
-  int getWidth(){};
-  
-  /// @return the height of the video
-  int getHeight(){};
-  
-  protected:
+  virtual unsigned char *getFrameData();
+
+ protected:
   GstElement *source_;
   GstElement *demux_;
   GstElement *decode_;
@@ -115,10 +73,16 @@ class DeviceReadGst : public DeviceRead
   
   bool have_pipeline_;
   bool new_device_;
+
+  void setupDVPipeline();
+  void setupV4LPipeline(const string &device);
+  void freePipeline();
   
+  static void initGstreamer();
   static bool is_initialized_;
   
-  static void cbNewpad(GstElement *element, GstPad *pad, gboolean last, gpointer data);
+  static void cbNewpad(GstElement *element, GstPad *pad, gpointer data);
+  static void cbFrameDropped(GstElement *element, gpointer data);
 };
 
 /// Tells us to register our functionality to an engine kernel

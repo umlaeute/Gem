@@ -23,7 +23,7 @@
 using namespace std;
 
 #include <string>
-             
+
 #include "VIOUtils.h"
 #include "VIOFrame.h"
 
@@ -38,69 +38,47 @@ namespace VideoIO_
     
     /// destructor
     virtual ~DeviceRead();
-    
+
     /*!
      * opens the device
-     * @param device_number the number of the device to open
+     * @param name can be "video" (capture card, webcam, etc.)
+     *             or "dv" (dv input)
+     * @param device the device (e.g. /dev/video0), optional
      * @return true if successfully opened
      */
-    virtual bool openDevice(int device_number) = 0;
-    
-    /*!
-     * opens the device
-     * @param device_name the name of the device to open
-     * @return true if successfully opened
-     */
-    virtual bool openDevice(string device_name) = 0;
+    virtual bool openDevice(const string &name, const string &device="") = 0;
     
     /// closes the device
     /// @return true if successfully closed
     virtual bool closeDevice() = 0;
     
-    virtual void startDevice() {};
+    /// starts grabbing data from the device
+    virtual void startDevice() = 0;
     
-    virtual void stopDevice() {};
+    /// stops grabbing data from the device
+    virtual void stopDevice() = 0;
     
-    virtual void seekDevice() {};
+    /// seeking: e.g. a DV cam
+    virtual void seekDevice(int seek);
     
     /// @return the data of the current VIOFrame
-    virtual unsigned char *getFrameData() 
-      {return frame_.getFrameData();}
+    virtual unsigned char *getFrameData() = 0;
     
     /*!
-     * sets the channel of the device 
-     * (e.g switch between tuner, COMPOSITE)
-     * @param channel the desired channel
-     * @return true if succsessful
+     * sets the DV decoding quality
+     * @param quality between 0 (fastest) and 5 (best)
      */
-    virtual bool setChannel(int channel);
-    
-    /*!
-     * sets the frequency of the device (e.g for a TV device)
-     * @param channel the desired channel
-     * @return true if succsessful
-     */
-    virtual bool setFrequency(float frequency);
-    
-    /*!
-     * sets the TV norm (PAL, NTSC or SECAM)
-     * @param norm the TV norm
-     * @return true if sccsessful in setting
-     */
-    virtual bool setTVNorm (char *norm);
-    
+    virtual void setDVQuality(int quality);
+
     /*!
      * sets the output to the desired color model
      * @param colorspace the desired color model
      * @return true if succsessful
      */
-    virtual bool forceColorspace (int colorspace) = 0;
-    
-    
-    /// @return the frames per second
-    virtual double getFPS()
-    {return framerate_;}
-    
+    virtual bool forceColorspace(int cs)
+    { cspace_ = cs; }
+
+
     /// @return the width of the video
     virtual int getWidth()
     {return frame_.getXSize();}
@@ -121,9 +99,9 @@ namespace VideoIO_
     
     ///force a specific colorspace
     int cspace_;
-    
-    double framerate_;
-    
+    /// DV quality
+    int dv_quality_;
+
     /// stores the current frame
     VIOFrame frame_ ;
   };

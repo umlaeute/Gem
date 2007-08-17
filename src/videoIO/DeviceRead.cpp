@@ -21,30 +21,22 @@
 
 namespace VideoIO_
 {
-  DeviceRead::DeviceRead() : cspace_(0), framerate_(0)
+  DeviceRead::DeviceRead() : cspace_(-1), dv_quality_(5)
   {
   }
   
   DeviceRead::~DeviceRead()
   {
   }
-  
-  bool DeviceRead::setChannel(int channel)
+
+  void DeviceRead::seekDevice(int seek)
   {
-    post("videoIO: Sorry, setting the channel is not supported.");
-    return false;
+    post("videoIO: Sorry, seeking is not supported for your device!");
   }
-  
-  bool DeviceRead::setFrequency(float frequency)
+
+  void DeviceRead::setDVQuality(int quality)
   {
-    post("videoIO: Sorry, setting the channel is not supported.");
-    return false;
+    dv_quality_ =   (quality<0) ? 0 :
+                  ( (quality>5) ? 5 : quality );
   }
-  
-  bool DeviceRead::setTVNorm(char *norm)
-  {
-    post("videoIO: Sorry, setting the TV norm is not supported.");
-    return false;
-  }
-  
 }

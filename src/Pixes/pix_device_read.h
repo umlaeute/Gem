@@ -18,38 +18,26 @@
 #include "../videoIO/VIOKernel.h"
 #include "../videoIO/VIOFrame.h"
 
-
 /*-----------------------------------------------------------------
-  -------------------------------------------------------------------
   CLASS
   pix_device_read
     
-  Loads in an video
+  reads video stream from a device (dv camera, web camera, ...)
     
   KEYWORDS
   pix
-    
-  DESCRIPTION
-
-  "dimen" (int, int) - set the x,y dimensions
-  "zoom" (int, int) - the zoom factor (1.0 is nominal) (num / denom)
-  "bright" (int) - the brightnes
-  "contrast" (int) - the contrast
-  "hue" (int) - the hue
-  "sat" (int) - the saturation
-    
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_device_read : public GemBase
 {
   CPPEXTERN_HEADER(pix_device_read, GemBase)
     
-  public:
+ public:
 
   //////////
   // Constructor
   pix_device_read();
   
-  protected:
+ protected:
     	
   //////////
   // Destructor
@@ -58,61 +46,48 @@ class GEM_EXTERN pix_device_read : public GemBase
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
+
   //////////
   // Clear the dirty flag on the pixBlock
   virtual void 	postrender(GemState *state);
+
   //////////
   // Opens the specified device
-  virtual void	openDevice(t_symbol *dev);
-  virtual void	openDevice(int dev);
+  virtual void	openDevice(t_symbol *name, t_symbol *dev);
+
   //////////
   // If you care about the stop of rendering
   virtual void	closeDevice();
-  // Set the channel of the capturing device 
-  virtual void	channelMess(int channel, t_float freq=0);
-  // Set the color norm of the capturing device (e.g. PAL or NTSC) 
-  virtual void	normMess(t_symbol *s);
-  // Set the color-space
-  virtual void	forceColorspace(t_symbol *cs);
 
+  //////////
+  // force a specific colorspace
+  virtual void forceColorspace(t_symbol *cs);
 
-  // List the available devices
-  virtual void 	enumerateMess();
-
-  // Set the quality for DV decoding
-  virtual void	qualityMess(int dev);
-        
   //-----------------------------------
   // GROUP:	Video data
   //-----------------------------------
     
   pixBlock m_image;
   
-   // the device reader
+  // the device reader
   VideoIO_::DeviceRead *m_deviceReader;
-  /// TODO kernel should be used only once
   VideoIO_::VIOKernel m_kernel;
   
  private:
    
   // reallocate frame data
-  void reallocate_m_image() {}
-    	
+  void reallocate_m_image();
+  // true if we loaded a new device
+  bool m_newfilm;
+
   //////////
   // static member functions
-
-  static void openMessCallback(void *data, t_symbol *s);
+  static void openMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
   static void startCallback(void *data, t_floatarg start);
   static void stopCallback(void *data, t_floatarg stop);
   static void seekCallback(void *data, t_floatarg seek);
-  static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
-  static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void normMessCallback(void *data, t_symbol*format);
   static void csCallback(void *data, t_symbol*cs);
-  static void deviceMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void enumerateMessCallback(void *data);
-  static void qualityMessCallback(void *data, t_floatarg dev);
-
+  static void setDVQualityCallback(void *data, t_floatarg qual);
 };
 
 #endif	// for header file

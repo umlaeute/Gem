@@ -26,58 +26,42 @@ DeviceReadGst::DeviceReadGst() :
     sink_(NULL), device_decode_(NULL), have_pipeline_(false),new_device_(false)
 {}
 
-bool DeviceReadGst::openDevice(string device_name)
+DeviceReadGst::~DeviceReadGst()
 {
-  /// TODO: in den konstruktor bzw statische methode geben !!!
-  if(!is_initialized_)
+  if(have_pipeline_)
+    freePipeline();
+}
+
+bool DeviceReadGst::openDevice(const string &name, const string &device)
+{
+  initGstreamer();
+  closeDevice();
+
+  if(name == "dv" || name == "DV")
   {
-    if(gst_init_check (NULL, NULL, NULL))  
-    {
-      is_initialized_ = true;
-    }
-    else
-    {
-      post("Gstreamer could not be initialised. is_initialised: %d", is_initialized_);
-      return false;
-    }
+    post("opening DV device");
+    setupDVPipeline();
   }
-  
-  post ("This program is linked against %s", gst_version_string());
-  
-  /// The pipeline to implement DV: gst-launch dv1394src ! dvdemux ! dvdec ! ffmpegcolorspace ! theoraenc ! oggmux ! filesink location=/home/holzi/Desktop/test.ogg 
-  
-  // setup pipeline
-  device_decode_ = gst_pipeline_new( "device_decode_");
-  source_ = gst_element_factory_make ("dv1394src", "source_");
-  g_assert(source_);
-  demux_ = gst_element_factory_make ("dvdemux", "demux_");
-  g_assert(demux_);
-  decode_ = gst_element_factory_make ("dvdec", "decode_");
-  g_assert(decode_);
-  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
-  g_assert(colorspace_);
-  sink_ = gst_element_factory_make ("appsink", "sink_");
-  g_assert(sink_);
-  
-  gst_bin_add_many (GST_BIN(device_decode_), source_, demux_, decode_, colorspace_, sink_, NULL);
-  
-  gst_element_link (source_, demux_);
-  gst_element_link (decode_, colorspace_);
-  
-  g_signal_connect (demux_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
-  
-  have_pipeline_ = true;
-  
-  // set playing state
-  if(!gst_element_set_state (device_decode_, GST_STATE_PAUSED))
+  else if( name == "video" || name == "VIDEO" )
   {
-    post("The state could not be set to pause.");
+    post("opening VIDEO device");
+    setupV4LPipeline(device);
+  }
+  else
+  {
+    post("unknown input device");
     return false;
   }
+  
+  // set READY state
+  if(!gst_element_set_state (device_decode_, GST_STATE_READY))
+  {
+    post("The state could not be set to READY");
+    return false;
+  }
+
   new_device_ = true;
-  
   return true;
-  
 }
 
 void DeviceReadGst::startDevice()
@@ -92,39 +76,39 @@ void DeviceReadGst::stopDevice()
     post("could not set state paused");
 }
 
+bool DeviceReadGst::closeDevice()
+{
+  if(have_pipeline_)
+    freePipeline();
+
+  return true;
+}
+
 unsigned char *DeviceReadGst::getFrameData()
 {
-
   if(!have_pipeline_) 
     return 0;
 
   if( gst_app_sink_end_of_stream(GST_APP_SINK (sink_)) ) 
     return 0;
 
+//   post("GST_STATE: %d, GST_STATE_PENDING: %d",
+//         GST_STATE(device_decode_), GST_STATE_PENDING(device_decode_));
+
   GstBuffer *buf = 0;
   
-  post("GST_STATE: %d", GST_STATE(device_decode_));
-  post( "GST_STATE_PENDING: %d", GST_STATE_PENDING(device_decode_));
-  
-  // get preroll buffer in pause state, otherwise we produce
-  // a deadlock in gst_app_sink_pull_buffer
-  if( GST_STATE(device_decode_) == GST_STATE_PLAYING )
+  if( GST_STATE(device_decode_)==GST_STATE_PLAYING &&
+      GST_STATE_PENDING(device_decode_)==GST_STATE_VOID_PENDING )
   {
     buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
   }
-  else
-  {
-    return 0;
-    /// TODO neue app_sink richtig implementieren
-    //buf = gst_app_sink_pull_preroll(GST_APP_SINK (sink_));
-  }
-    
+
   if( !buf ) return 0;
 
   guint8 *data = GST_BUFFER_DATA( buf );
   guint size = GST_BUFFER_SIZE( buf );
 
-  if( new_device_)
+  if( new_device_ )
   {
     GstCaps *caps = gst_buffer_get_caps (buf);
     GstStructure *str = gst_caps_get_structure (caps, 0);
@@ -137,8 +121,6 @@ unsigned char *DeviceReadGst::getFrameData()
     int fps_numerator, fps_denominator;
     g_assert( gst_structure_get_int(str, "width", &x_size) );
     g_assert( gst_structure_get_int(str, "height", &y_size) );
-    g_assert( gst_structure_get_fraction (str, "framerate",
-            &fps_numerator, &fps_denominator) );
 
     int format=-1;
     gst_structure_get_int(str, "bpp", &bpp);
@@ -151,14 +133,6 @@ unsigned char *DeviceReadGst::getFrameData()
     // allocate frame
     frame_.allocate(x_size, y_size, format);
 
-    // set framerate
-    framerate_ = fps_numerator / fps_denominator;
-
-    /// TODO Frameanzahl bekommt man so nicht -> das könnte man
-    /// bei filesrc irgendwie abfragen: bei gst-inspect filesrc
-    /// gibts ein "num-buffers" property -> is das nr of frames ?
-    /// gst_element_query_duration möglich?
-
     new_device_=false;
     gst_caps_unref(caps);
   }
@@ -169,52 +143,33 @@ unsigned char *DeviceReadGst::getFrameData()
   int ys = frame_.getYSize();
   int cs = frame_.getColorSize();
 
-  /// TODO maybe these conversions could be done more efficient !?
-  switch( frame_.getColorspace() )
-  {
-    case YUV422:
-    case RGB:
-    case GRAY:
-      for(int x=0; x<xs; ++x) {
-      for(int y=0; y<ys; ++y) {
-      for(int c=0; c<cs; ++c) {
-        // swap y axis
-        frame[y*xs*cs + x*cs + c] =
-        data[(ys-y-1)*xs*cs + x*cs + c];
-      } } }
-      break;
+//   post("xs: %d, ys: %d, cs: %d", xs, ys, cs);
 
-    case RGBA:
-      for(int x=0; x<xs; ++x) {
-      for(int y=0; y<ys; ++y) {
-      for(int c=0; c<cs; ++c) {
-        // swap y axis, exchange red and blue
-        int c_rgba = (c==0) ? 2 :( (c==2) ? 0 : c );
-        frame[y*xs*cs + x*cs + c] =
-        data[(ys-y-1)*xs*cs + x*cs + c_rgba];
-      } } }
-      break;
-  }
+  for(int x=0; x<xs; ++x) {
+  for(int y=0; y<ys; ++y) {
+  for(int c=0; c<cs; ++c) {
+    // swap y axis
+    frame[y*xs*cs + x*cs + c] =
+    data[(ys-y-1)*xs*cs + x*cs + c];
+  } } }
 
   gst_buffer_unref (buf);
   
   return frame_.getFrameData();
 }
 
-void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad, 
-                           gboolean last, gpointer data)
+void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad, gpointer data)
 {
   GstCaps *caps;
   GstStructure *str;
   GstPad *videopad;
-  post("in the callback");
-  
-  DeviceReadGst *tmp = (DeviceReadGst *)data;
+
+  DeviceReadGst *tmp = (DeviceReadGst *) data;
 
   // only link once
   videopad = gst_element_get_pad (tmp->decode_, "sink");
   g_assert(videopad);
-  
+
   if (GST_PAD_IS_LINKED (videopad)) {
     g_object_unref (videopad);
     return;
@@ -231,7 +186,7 @@ void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad,
   }
 
 //   post("Callback Caps: %s", gst_caps_to_string (caps) );
-  post("before cs convertion");
+
   // force a colorspace conversion if requested
   switch(tmp->cspace_)
   {
@@ -240,6 +195,10 @@ void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad,
            gst_caps_new_simple ("video/x-raw-rgb", 
                                 "bpp", G_TYPE_INT, 32,
                                 "depth", G_TYPE_INT, 32,
+				"red_mask",   G_TYPE_INT, 0xff000000,
+				"green_mask", G_TYPE_INT, 0x00ff0000,
+				"blue_mask",  G_TYPE_INT, 0x0000ff00,
+				"alpha_mask", G_TYPE_INT, 0x000000ff,
                                 NULL) );
       break;
 
@@ -248,6 +207,9 @@ void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad,
            gst_caps_new_simple ("video/x-raw-rgb", 
                                 "bpp", G_TYPE_INT, 24,
                                 "depth", G_TYPE_INT, 24,
+				"red_mask",   G_TYPE_INT, 0x00ff0000,
+				"green_mask", G_TYPE_INT, 0x0000ff00,
+				"blue_mask",  G_TYPE_INT, 0x000000ff,
                                 NULL) );
       break;
 
@@ -272,7 +234,6 @@ void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad,
       // if we not have a "bpp" property we should have YUV
       /// TODO maybe find a better way to see if its YUV
       int bpp;
-      if( true)
       if( !gst_structure_get_int(str, "bpp", &bpp) )
       {
         gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
@@ -289,6 +250,136 @@ void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad,
   // link the pads
   gst_pad_link (pad, videopad);
 }
+
+void DeviceReadGst::cbFrameDropped(GstElement *element, gpointer data)
+{
+  post("FileReadGst: dropped frame");
+}
+
+void DeviceReadGst::initGstreamer()
+{
+  if(is_initialized_) return;
+
+  gst_init(NULL,NULL);
+  is_initialized_=true;
+}
+
+void DeviceReadGst::setupDVPipeline()
+{
+  /// Test-pipeline for DV with GStreamer:
+  /// gst-launch dv1394src ! dvdemux ! dvdec ! ffmpegcolorspace !
+  /// theoraenc ! oggmux ! filesink location=test.ogg
+
+  device_decode_ = gst_pipeline_new( "device_decode_");
+
+  source_ = gst_element_factory_make ("dv1394src", "source_");
+  g_assert(source_);
+  g_object_set (G_OBJECT(source_), "use-avc", false, NULL);
+  /// TODO control of the DV camera would also be quite easy
+  /// to implement: set "use-avc" to true
+  /// then GST_STATE_PLAYING starts and GST_STATE_READY stops
+  /// the camera, seeking is done with usual gstreamer seeking
+  g_signal_connect (source_, "frame-dropped", G_CALLBACK (cbFrameDropped), (gpointer)this);
+
+  demux_ = gst_element_factory_make ("dvdemux", "demux_");
+  g_assert(demux_);
+
+  decode_ = gst_element_factory_make ("dvdec", "decode_");
+  g_assert(decode_);
+  g_object_set (G_OBJECT(decode_), "quality", dv_quality_, NULL);
+
+  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+  g_assert(colorspace_);
+  sink_ = gst_element_factory_make ("appsink", "sink_");
+  g_assert(sink_);
+  
+  gst_bin_add_many (GST_BIN(device_decode_), source_, demux_, decode_, colorspace_, sink_, NULL);
+  
+  gst_element_link (source_, demux_);
+  gst_element_link (decode_, colorspace_);
+  
+  g_signal_connect (demux_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
+  
+  have_pipeline_ = true;
+}
+
+void DeviceReadGst::setupV4LPipeline(const string &device)
+{
+  /// Test-pipeline for v4l with GStreamer:
+  /// gst-launch v4lsrc ! ffmpegcolorspace !
+  /// theoraenc ! oggmux ! filesink location=test.ogg
+
+  device_decode_ = gst_pipeline_new( "device_decode_");
+
+  source_ = gst_element_factory_make ("v4lsrc", "source_");
+  g_assert(source_);
+  if( device.size() != 0 )
+    g_object_set (G_OBJECT(source_), "device", device.c_str(), NULL);
+
+  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+  g_assert(colorspace_);
+  sink_ = gst_element_factory_make ("appsink", "sink_");
+  g_assert(sink_);
+
+  gst_bin_add_many (GST_BIN(device_decode_), source_, colorspace_, sink_, NULL);
+  gst_element_link (source_, colorspace_);
+
+  // force a colorspace conversion if requested
+  switch( cspace_ )
+  {
+    case RGBA:
+      gst_element_link_filtered(colorspace_, sink_,
+           gst_caps_new_simple ("video/x-raw-rgb", 
+                                "bpp", G_TYPE_INT, 32,
+                                "depth", G_TYPE_INT, 32,
+				"red_mask",   G_TYPE_INT, 0xff000000,
+				"green_mask", G_TYPE_INT, 0x00ff0000,
+				"blue_mask",  G_TYPE_INT, 0x0000ff00,
+				"alpha_mask", G_TYPE_INT, 0x000000ff,
+                                NULL) );
+      break;
+
+    case RGB:
+      gst_element_link_filtered(colorspace_, sink_,
+           gst_caps_new_simple ("video/x-raw-rgb", 
+                                "bpp", G_TYPE_INT, 24,
+                                "depth", G_TYPE_INT, 24,
+				"red_mask",   G_TYPE_INT, 0x00ff0000,
+				"green_mask", G_TYPE_INT, 0x0000ff00,
+				"blue_mask",  G_TYPE_INT, 0x000000ff,
+                                NULL) );
+      break;
+
+    case GRAY:
+      gst_element_link_filtered(colorspace_, sink_,
+           gst_caps_new_simple ("video/x-raw-gray", NULL) );
+      break;
+
+    // also set default to the GEM YUV format, because
+    // usually CAMs use a different YUV format
+    default:
+    case YUV422:
+      gst_element_link_filtered(colorspace_, sink_,
+           gst_caps_new_simple ("video/x-raw-yuv", 
+                                "format", GST_TYPE_FOURCC,
+                                GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+                                NULL) );
+      break;
+  }
+
+  have_pipeline_ = true;
+}
+
+void DeviceReadGst::freePipeline()
+{
+  if(!have_pipeline_) return;
+
+  // Gstreamer clean up
+  gst_element_set_state (device_decode_, GST_STATE_NULL);
+  gst_object_unref (GST_OBJECT (device_decode_));
+  have_pipeline_ = false;
+}
+
 
 /// Tells us to register our functionality to an engine kernel
 void registerPlugin(VIOKernel &K)

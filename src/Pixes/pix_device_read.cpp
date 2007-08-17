@@ -15,10 +15,9 @@
 CPPEXTERN_NEW(pix_device_read)
 
 pix_device_read :: pix_device_read() : 
-  m_deviceReader(NULL)
+  m_newfilm(false), m_deviceReader(NULL)
 {
   m_deviceReader = &m_kernel.getDeviceReadServer().getPlugin();
-  
 }
 
 pix_device_read :: ~pix_device_read()
@@ -31,63 +30,47 @@ void pix_device_read :: render(GemState *state)
   // get pointer to the frame data
   unsigned char *vioframe_ptr = m_deviceReader->getFrameData();
   
-  
-  if( vioframe_ptr == NULL)
-  {
-    post("Could not get frame data.");
-    return;
-  }
-  else
-    post("Got frame data.");
-    
+  if( !vioframe_ptr ) return;
+
   // check if image size changed
   if( m_image.image.xsize != m_deviceReader->getWidth() ||
       m_image.image.ysize != m_deviceReader->getHeight() ||
       m_image.image.csize != m_deviceReader->getColorSize() )
     reallocate_m_image();
-  
+
   // read frame data into m_image
   unsigned char *image_ptr = m_image.image.data;
-  int i = m_image.image.xsize * m_image.image.ysize * m_image.image.csize ;
+  int i = m_image.image.xsize * m_image.image.ysize * m_image.image.csize;
   while(i--)
   {
     *(image_ptr++) = *(vioframe_ptr++);
   }
   
-//   // set flag if we have a new film
-//   if(m_newfilm)
-//   {
-//     m_image.newfilm = true;
-//     m_newfilm = false;
-//   }
-//   m_image.newimage = true;
+  // set flag if we have a new film
+  if(m_newfilm)
+  {
+    m_image.newfilm = true;
+    m_newfilm = false;
+  }
+  m_image.newimage = true;
 
   m_image.newimage = true;
   state->image = &m_image;
 }
 
-void pix_device_read :: openDevice(t_symbol *dev)
+void pix_device_read :: openDevice(t_symbol *name, t_symbol *dev)
 {
   closeDevice();
-  
-  // open device
-  if(!(m_deviceReader->openDevice(dev->s_name)))
-  {
-    error("pix_device_read: could not open device %s", dev->s_name);
-    return;
-  }
-}
 
-void pix_device_read :: openDevice(int dev)
-{
-  closeDevice();
-  
+  bool suc=false;
+
   // open device
-  if(!(m_deviceReader->openDevice(dev)))
-  {
-    error("pix_device_read: could not open device %d", dev);
-    return;
-  }
+  if( dev )
+    suc = m_deviceReader->openDevice(name->s_name, dev->s_name);
+  else
+    suc = m_deviceReader->openDevice(name->s_name);
+
+  if( !suc ) error("could not open device %s", dev->s_name);
 }
 
 void pix_device_read :: closeDevice()
@@ -99,18 +82,6 @@ void pix_device_read :: postrender(GemState *state)
 {
   if (state && state->image)
     state->image->newimage = 0;
-}
-
-void pix_device_read :: channelMess(int channel, t_float freq)
-{
-  if(m_deviceReader)
-    m_deviceReader->setChannel(channel);  ///TODO auch noch freq setting
-}
-
-void pix_device_read :: normMess(t_symbol *s)
-{
-  if(m_deviceReader)
-    m_deviceReader->setTVNorm(s->s_name);
 }
 
 void pix_device_read :: forceColorspace(t_symbol *cs)
@@ -135,46 +106,75 @@ void pix_device_read :: forceColorspace(t_symbol *cs)
   }
 }
 
-void pix_device_read :: enumerateMess()
+void pix_device_read :: reallocate_m_image()
 {
-  error("enumerate not supported on this OS");
+  // allocate memory for m_image
+  m_image.image.xsize = m_deviceReader->getWidth();
+  m_image.image.ysize = m_deviceReader->getHeight();
+  m_image.image.type = GL_UNSIGNED_BYTE; /// TODO under OSX ?
+  m_image.image.csize = m_deviceReader->getColorSize();
+
+  switch( m_deviceReader->getColorspace() )
+  {
+    case VideoIO_::GRAY:
+      m_image.image.format = GL_LUMINANCE;
+      break;
+    case VideoIO_::YUV422:
+      m_image.image.format = GL_YCBCR_422_GEM;
+      break;
+    case VideoIO_::RGB:
+      m_image.image.format = GL_RGB;
+      break;
+    case VideoIO_::RGBA:
+      m_image.image.format = GL_RGBA;
+      break;
+    default:
+      error("error in reallocate_m_image");
+  }
+
+  m_image.image.reallocate();
+  m_newfilm = true;
 }
 
-void pix_device_read :: qualityMess(int dev) 
-{
-//   if (m_deviceReader)
-//     m_deviceReader->setQuality(dev);
-}
 
+/////////////////////////////////////////////////////////
+// static member function
+//
+/////////////////////////////////////////////////////////
 void pix_device_read :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_device_read,gensym("pix_video"),A_NULL);
+  class_addcreator((t_newmethod)_classpix_device_read,
+                    gensym("pix_device_read"),A_NULL);
 
-   class_addmethod(classPtr, (t_method)&pix_device_read::openMessCallback,
-              gensym("open"), A_DEFSYM, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_device_read::openMessCallback,
+              gensym("open"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_device_read::startCallback,
-                  gensym("start"), A_DEFFLOAT, A_NULL);
+              gensym("start"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_device_read::stopCallback,
-                  gensym("stop"), A_DEFFLOAT, A_NULL);
+              gensym("stop"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_device_read::seekCallback,
-                  gensym("seek"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_device_read::csCallback,
-                  gensym("forceColorspace"), A_DEFSYM, A_NULL);
+              gensym("seek"), A_DEFFLOAT, A_NULL);
 
-  
-    class_addmethod(classPtr, (t_method)&pix_device_read::normMessCallback,
-    	    gensym("norm"), A_SYMBOL, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_device_read::channelMessCallback,
-    	    gensym("channel"), A_GIMME, A_NULL);
-     class_addmethod(classPtr, (t_method)&pix_device_read::enumerateMessCallback,
-    	    gensym("enumerate"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_device_read::qualityMessCallback,
-	    gensym("quality"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_device_read::csCallback,
+              gensym("forceColorspace"), A_DEFSYM, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_device_read::setDVQualityCallback,
+              gensym("quality"), A_FLOAT, A_NULL);
 }
 
-void pix_device_read :: openMessCallback(void *data, t_symbol*s)
+void pix_device_read :: openMessCallback(void *data, t_symbol *s, int argc, t_atom*argv)
 {
-  GetMyClass(data)->openDevice(s);
+  switch(argc)
+  {
+    case 2:
+      GetMyClass(data)->openDevice( atom_getsymbol(argv),
+                                    atom_getsymbol(argv+1) );
+      break;
+    case 1:
+      GetMyClass(data)->openDevice( atom_getsymbol(argv), 0 );
+      break;
+    default:
+      GetMyClass(data)->error("openDevice name [device]");
+  }
 }
 
 void pix_device_read :: startCallback(void *data, t_floatarg start)
@@ -189,7 +189,7 @@ void pix_device_read :: stopCallback(void *data, t_floatarg stop)
 
 void pix_device_read :: seekCallback(void *data, t_floatarg seek)
 {
-  GetMyClass(data)->m_deviceReader->seekDevice();
+  GetMyClass(data)->m_deviceReader->seekDevice( (int)seek );
 }
 
 void pix_device_read :: csCallback(void *data, t_symbol *s)
@@ -197,23 +197,7 @@ void pix_device_read :: csCallback(void *data, t_symbol *s)
   GetMyClass(data)->forceColorspace(s);
 }
 
-void pix_device_read :: normMessCallback(void *data, t_symbol*s)
+void pix_device_read :: setDVQualityCallback(void *data, t_floatarg qual)
 {
-  GetMyClass(data)->normMess(s);
-}
-void pix_device_read :: channelMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
-{
-  if (argc!=1&&argc!=2)return;
-  int chan = atom_getint(argv);
-  t_float freq = (argc==1)?0:atom_getfloat(argv+1);
-  GetMyClass(data)->channelMess((int)chan, freq);
-}
-
-void pix_device_read :: enumerateMessCallback(void *data)
-{
-  GetMyClass(data)->enumerateMess();
-}
-void pix_device_read :: qualityMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->qualityMess((int)state);
+  GetMyClass(data)->m_deviceReader->setDVQuality( (int)qual );
 }
