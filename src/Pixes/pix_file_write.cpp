@@ -142,6 +142,10 @@ void pix_file_write :: obj_setupCallback(t_class *classPtr)
                   gensym("start"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_file_write::stopCallback,
                   gensym("stop"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_file_write::setCodecCallback,
+		  gensym("codec"), A_DEFSYM, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_file_write::getCodecCallback,
+		  gensym("getCodec"), A_NULL);
 }
 
 void pix_file_write :: openMessCallback(void *data, t_symbol*s)
@@ -159,4 +163,14 @@ void pix_file_write :: stopCallback(void *data, t_floatarg stop)
 {
   GetMyClass(data)->m_recording = false;
   GetMyClass(data)->fileWriter->stopRecording();
+}
+
+void pix_file_write :: setCodecCallback(void *data, t_symbol*s)
+{
+  GetMyClass(data)->fileWriter->setCodec(s->s_name); 
+}
+
+void pix_file_write :: getCodecCallback(void *data)
+{
+  GetMyClass(data)->fileWriter->getCodec(); 
 }

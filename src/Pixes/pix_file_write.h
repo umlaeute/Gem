@@ -81,6 +81,8 @@ class GEM_EXTERN pix_file_write : public GemBase
         static void openMessCallback(void *data, t_symbol *s);
         static void startCallback(void *data, t_floatarg start);
         static void stopCallback(void *data, t_floatarg stop);
+        static void setCodecCallback(void *data, t_symbol *s);
+        static void getCodecCallback(void *data);
 };
 
 #endif  // for header file

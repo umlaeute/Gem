@@ -79,6 +79,9 @@ class FileWriteGst : public FileWrite
 
   /// callback to free our buffer
   static void freeRecBuffer(void *data);
+  
+  /// prints the avaliable codecs
+  void getCodec();
 };
 
 /// Tells us to register our functionality to an engine kernel

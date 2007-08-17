@@ -33,4 +33,14 @@ namespace VideoIO_
   {
     framerate_ = fr;
   }
+  
+  void FileWrite::setCodec(string codec)
+  {
+    codec_ = codec;
+  }
+  
+  void FileWrite::getCodec()
+  {
+    post("videoIO: Sorry, no plugins for file writing avaliable");
+  }
 }

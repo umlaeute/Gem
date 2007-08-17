@@ -84,6 +84,7 @@ bool FileWriteGst::openFile(string filename)
   // gst-launch filesrc location=input.avi ! decodebin !
   // ffmpegcolorspace ! theoraenc ! oggmux ! filesink location=output.ogg
 
+  
   // setup pipeline
   file_encode_ = gst_pipeline_new( "file_encode_");
 
@@ -91,18 +92,28 @@ bool FileWriteGst::openFile(string filename)
   g_assert(source_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
-
-  encode_ = gst_element_factory_make ("theoraenc", "encode_");
-  g_assert(encode_);
-  mux_ = gst_element_factory_make("oggmux", "mux_");
-  g_assert(mux_);
   sink_ = gst_element_factory_make ("filesink", "sink_");
   g_assert(sink_);
-  
+
   g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
 
-  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, sink_, NULL);
-  gst_element_link_many (source_, colorspace_, encode_, mux_, sink_, NULL);
+  
+  if (codec_ == "ogg" || codec_ == "theora")
+  {
+    encode_ = gst_element_factory_make ("theoraenc", "encode_");
+    g_assert(encode_);
+    mux_ = gst_element_factory_make("oggmux", "mux_");
+    g_assert(mux_);
+    gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, sink_, NULL);
+    gst_element_link_many (source_, colorspace_, encode_, mux_, sink_, NULL);
+  } 
+  else  // this pipeline is for raw recording
+  {
+    mux_ = gst_element_factory_make("avimux", "mux_");
+    g_assert(mux_);
+    gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, mux_, sink_, NULL);
+    gst_element_link_many (source_, colorspace_, mux_, sink_, NULL);
+  }
   
   // set ready state
   if(!gst_element_set_state (file_encode_, GST_STATE_READY))
@@ -225,6 +236,10 @@ void FileWriteGst::freeRecBuffer(void *data)
   if(data) delete[] (unsigned char*)data;
 }
 
+void FileWriteGst::getCodec()
+{
+  post("FileWriteGst: Avaliable codecs: theora, raw");
+}
 
 /// Tells us to register our functionality to an engine kernel
 void registerPlugin(VIOKernel &K)

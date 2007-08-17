@@ -57,10 +57,17 @@ namespace VideoIO_
 
     /// set framerate of the video
     virtual void setFramerate(float fr);
+    
+    /// sets the desired codec
+    void setCodec(string codec);
+    
+    /// prints the avaliable codecs
+    virtual void getCodec();
 
   protected:
     
     float framerate_;
+    string codec_;
   };
 }
 
