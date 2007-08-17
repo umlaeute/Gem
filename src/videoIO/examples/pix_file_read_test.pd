@@ -44,12 +44,14 @@
 #X msg 358 339 forceColorspace RGB;
 #X text 424 317 try RGB;
 #X msg 99 96 open /home/holzi/Desktop/schritte.avi;
+#X obj 196 335 print VIDEO_END;
 #X connect 2 0 3 0;
 #X connect 3 0 2 0;
 #X connect 5 0 8 0;
 #X connect 6 0 7 0;
 #X connect 8 0 6 0;
 #X connect 8 1 18 0;
+#X connect 8 2 26 0;
 #X connect 9 0 8 0;
 #X connect 10 0 8 0;
 #X connect 11 0 8 0;
