@@ -1,7 +1,7 @@
 #N canvas 0 0 724 565 10;
 #X obj 15 28 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 805 346 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -10,6 +10,7 @@
 #X msg 198 112 destroy;
 #X msg 156 71 set create;
 #X obj 67 41 route create;
+#X msg 174 186 profile 1;
 #X connect 2 0 7 0;
 #X connect 3 0 1 0;
 #X connect 4 0 0 0;
@@ -19,6 +20,7 @@
 #X connect 7 0 4 0;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
+#X connect 8 0 0 0;
 #X restore 20 67 pd gemwin;
 #X msg 20 48 destroy;
 #X text 16 27 Create window:;
@@ -35,9 +37,10 @@
 #X msg 211 95 start;
 #X msg 227 125 stop;
 #X msg 195 58 open /home/holzi/Desktop/yuv-test.mov;
-#X msg 239 161 forceColorspace RGB;
-#X msg 260 181 forceColorspace RGBA;
-#X msg 287 133 forceColorspace GRAY;
+#X msg 286 156 forceColorspace RGB;
+#X msg 307 176 forceColorspace RGBA;
+#X msg 334 128 forceColorspace GRAY;
+#X msg 327 104 forceColorspace YUV;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 13 0;
@@ -55,3 +58,4 @@
 #X connect 17 0 13 0;
 #X connect 18 0 13 0;
 #X connect 19 0 13 0;
+#X connect 20 0 13 0;

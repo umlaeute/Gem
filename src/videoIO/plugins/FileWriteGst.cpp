@@ -134,6 +134,7 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
   int fr1 = (int) framerate_;
   int fr2 = 1;
 
+  /// TODO add endianness for OSX
   switch(cs)
   {
     case GRAY:
@@ -144,6 +145,7 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
 				     "bpp", G_TYPE_INT, 8,
 				     "depth", G_TYPE_INT, 8,
 			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
+				     "endianness", G_TYPE_INT, G_BIG_ENDIAN,
 				     NULL)
                        );
       break;
@@ -151,11 +153,11 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
     case YUV422:
       gst_app_src_set_caps ( GST_APP_SRC(source_),
                        gst_caps_new_simple ("video/x-raw-yuv",
+			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
 				     "width", G_TYPE_INT, xsize,
 				     "height", G_TYPE_INT, ysize,
                                      "format", GST_TYPE_FOURCC,
                                      GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
-			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
 				     NULL)
                        );
 
@@ -166,10 +168,11 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
 				     "height", G_TYPE_INT, ysize,
 				     "bpp", G_TYPE_INT, 24,
 				     "depth", G_TYPE_INT, 24,
-				     "red_mask",   G_TYPE_INT, 0x00ff0000,
-				     "green_mask", G_TYPE_INT, 0x0000ff00,
-				     "blue_mask",  G_TYPE_INT, 0x000000ff,
+				     "red_mask",   G_TYPE_INT, 16711680,
+				     "green_mask", G_TYPE_INT, 65280,
+				     "blue_mask",  G_TYPE_INT, 255,
 			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
+				     "endianness", G_TYPE_INT, G_BIG_ENDIAN,
 				     NULL)
                        );
       break;
@@ -182,11 +185,12 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
 				     "height", G_TYPE_INT, ysize,
 				     "bpp", G_TYPE_INT, 32,
 				     "depth", G_TYPE_INT, 32,
-				     "red_mask",   G_TYPE_INT, 0xff000000,
-				     "green_mask", G_TYPE_INT, 0x00ff0000,
-				     "blue_mask",  G_TYPE_INT, 0x0000ff00,
-				     "alpha_mask", G_TYPE_INT, 0x000000ff,
+				     "red_mask",   G_TYPE_INT, -16777216,
+				     "green_mask", G_TYPE_INT, 16711680,
+				     "blue_mask",  G_TYPE_INT, 65280,
+				     "alpha_mask", G_TYPE_INT, 255,
 			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
+				     "endianness", G_TYPE_INT, G_BIG_ENDIAN,
 				     NULL)
                        );
       break;
