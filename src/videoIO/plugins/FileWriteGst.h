@@ -58,6 +58,9 @@ class FileWriteGst : public FileWrite
    */
   virtual bool stopRecording();
 
+  /// prints the avaliable codecs
+  void getCodec();
+
  protected:
   GstElement *source_;
   GstElement *colorspace_; 
@@ -79,9 +82,6 @@ class FileWriteGst : public FileWrite
 
   /// callback to free our buffer
   static void freeRecBuffer(void *data);
-  
-  /// prints the avaliable codecs
-  void getCodec();
 };
 
 /// Tells us to register our functionality to an engine kernel

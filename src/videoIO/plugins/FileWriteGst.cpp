@@ -43,7 +43,6 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
     new_video_=false;
   }
 
-
   /// TODO einmal weniger kopieren mache (im Prinzip braucht man
   /// den m_frame ja gar net, könnte gleich Datenpointer und
   /// Groesze übergeben
@@ -51,9 +50,7 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
   int cs = frame.getColorSize();
   int xs = frame.getXSize();
   int ys = frame.getYSize();
-  int size = xs * ys * cs;
-
-//   post("cs: %d, size: %d", cs, size);
+  int size = ys * GST_ROUND_UP_4( xs * cs ); // for gstreamer buffers
 
   unsigned char *data = frame.getFrameData();
   unsigned char *rec_data = new unsigned char[size];
@@ -145,7 +142,8 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
   int fr1 = (int) framerate_;
   int fr2 = 1;
 
-  /// TODO add endianness for OSX
+  /// NOTE endianess is set to G_BIG_ENDIAN because this is needed
+  /// for some internal reasons (also for Intels !)
   switch(cs)
   {
     case GRAY:
@@ -171,6 +169,7 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
                                      GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
 				     NULL)
                        );
+      break;
 
     case RGB:
       gst_app_src_set_caps ( GST_APP_SRC(source_),
@@ -179,9 +178,9 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
 				     "height", G_TYPE_INT, ysize,
 				     "bpp", G_TYPE_INT, 24,
 				     "depth", G_TYPE_INT, 24,
-				     "red_mask",   G_TYPE_INT, 16711680,
-				     "green_mask", G_TYPE_INT, 65280,
-				     "blue_mask",  G_TYPE_INT, 255,
+				     "red_mask",   G_TYPE_INT, 0x00ff0000,
+				     "green_mask", G_TYPE_INT, 0x0000ff00,
+				     "blue_mask",  G_TYPE_INT, 0x000000ff,
 			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
 				     "endianness", G_TYPE_INT, G_BIG_ENDIAN,
 				     NULL)
@@ -196,10 +195,10 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
 				     "height", G_TYPE_INT, ysize,
 				     "bpp", G_TYPE_INT, 32,
 				     "depth", G_TYPE_INT, 32,
-				     "red_mask",   G_TYPE_INT, -16777216,
-				     "green_mask", G_TYPE_INT, 16711680,
-				     "blue_mask",  G_TYPE_INT, 65280,
-				     "alpha_mask", G_TYPE_INT, 255,
+				     "red_mask",   G_TYPE_INT, 0xff000000,
+				     "green_mask", G_TYPE_INT, 0x00ff0000,
+				     "blue_mask",  G_TYPE_INT, 0x0000ff00,
+				     "alpha_mask", G_TYPE_INT, 0x000000ff,
 			             "framerate", GST_TYPE_FRACTION, fr1, fr2,
 				     "endianness", G_TYPE_INT, G_BIG_ENDIAN,
 				     NULL)
@@ -238,7 +237,9 @@ void FileWriteGst::freeRecBuffer(void *data)
 
 void FileWriteGst::getCodec()
 {
-  post("FileWriteGst: Avaliable codecs: theora, raw");
+  post("FileWriteGst available codecs:");
+  post("raw");
+  post("theora");
 }
 
 /// Tells us to register our functionality to an engine kernel

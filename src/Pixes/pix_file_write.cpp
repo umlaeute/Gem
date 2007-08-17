@@ -69,8 +69,6 @@ void pix_file_write :: render(GemState *state)
     int xsize = im->xsize;
     int ysize = im->ysize;
     int csize = im->csize;
-    /// TODO handle type correct for OSX
-    //int type = im->type;
     int format;
 
     switch(im->format)
@@ -93,19 +91,10 @@ void pix_file_write :: render(GemState *state)
         break;
     }
 
-    post("-------------------------------------");
-    post("writing to video file:");
-    post("xsize: %d", xsize);
-    post("ysize: %d", ysize);
-    post("csize: %d", csize);
-    post("format: %d", format);
+    post("writing to video file ...");
 
     // allocate m_frame
     m_frame.allocate(xsize, ysize, format);
-
-    /// TODO Methoden im Filewriter machen fuer
-    ///      compression properties usw.
-
 
     /// TODO framerate von GEM muss man bekommen und auch
     ///      angeben für den fileWriter
