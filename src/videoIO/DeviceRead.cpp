@@ -21,7 +21,7 @@
 
 namespace VideoIO_
 {
-  DeviceRead::DeviceRead()
+  DeviceRead::DeviceRead() : cspace_(0), framerate_(0)
   {
   }
   

@@ -57,6 +57,12 @@ namespace VideoIO_
     /// @return true if successfully closed
     virtual bool closeDevice() = 0;
     
+    virtual void startDevice() {};
+    
+    virtual void stopDevice() {};
+    
+    virtual void seekDevice() {};
+    
     /// @return the data of the current VIOFrame
     virtual unsigned char *getFrameData() 
       {return frame_.getFrameData();}
@@ -112,6 +118,9 @@ namespace VideoIO_
     {return frame_.getColorSize();}
         
     protected:
+    
+    ///force a specific colorspace
+    int cspace_;
     
     double framerate_;
     

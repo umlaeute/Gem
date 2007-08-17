@@ -31,9 +31,15 @@ void pix_device_read :: render(GemState *state)
   // get pointer to the frame data
   unsigned char *vioframe_ptr = m_deviceReader->getFrameData();
   
+  
   if( vioframe_ptr == NULL)
+  {
+    post("Could not get frame data.");
     return;
-
+  }
+  else
+    post("Got frame data.");
+    
   // check if image size changed
   if( m_image.image.xsize != m_deviceReader->getWidth() ||
       m_image.image.ysize != m_deviceReader->getHeight() ||
@@ -144,18 +150,51 @@ void pix_device_read :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)_classpix_device_read,gensym("pix_video"),A_NULL);
 
+   class_addmethod(classPtr, (t_method)&pix_device_read::openMessCallback,
+              gensym("open"), A_DEFSYM, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_device_read::startCallback,
+                  gensym("start"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_device_read::stopCallback,
+                  gensym("stop"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_device_read::seekCallback,
+                  gensym("seek"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_device_read::csCallback,
+                  gensym("forceColorspace"), A_DEFSYM, A_NULL);
+
+  
     class_addmethod(classPtr, (t_method)&pix_device_read::normMessCallback,
     	    gensym("norm"), A_SYMBOL, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_device_read::channelMessCallback,
     	    gensym("channel"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_device_read::csCallback,
-    	    gensym("color"), A_DEFSYM, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_device_read::csCallback,
-    	    gensym("colorspace"), A_DEFSYM, A_NULL);
      class_addmethod(classPtr, (t_method)&pix_device_read::enumerateMessCallback,
     	    gensym("enumerate"), A_NULL);
     class_addmethod(classPtr, (t_method)&pix_device_read::qualityMessCallback,
 	    gensym("quality"), A_FLOAT, A_NULL);
+}
+
+void pix_device_read :: openMessCallback(void *data, t_symbol*s)
+{
+  GetMyClass(data)->openDevice(s);
+}
+
+void pix_device_read :: startCallback(void *data, t_floatarg start)
+{
+  GetMyClass(data)->m_deviceReader->startDevice();
+}
+
+void pix_device_read :: stopCallback(void *data, t_floatarg stop)
+{
+  GetMyClass(data)->m_deviceReader->stopDevice();
+}
+
+void pix_device_read :: seekCallback(void *data, t_floatarg seek)
+{
+  GetMyClass(data)->m_deviceReader->seekDevice();
+}
+
+void pix_device_read :: csCallback(void *data, t_symbol *s)
+{
+  GetMyClass(data)->forceColorspace(s);
 }
 
 void pix_device_read :: normMessCallback(void *data, t_symbol*s)
@@ -169,10 +208,7 @@ void pix_device_read :: channelMessCallback(void *data, t_symbol*s, int argc, t_
   t_float freq = (argc==1)?0:atom_getfloat(argv+1);
   GetMyClass(data)->channelMess((int)chan, freq);
 }
-void pix_device_read :: csCallback(void *data, t_symbol* s)
-{
-  GetMyClass(data)->forceColorspace(s);
-}
+
 void pix_device_read :: enumerateMessCallback(void *data)
 {
   GetMyClass(data)->enumerateMess();

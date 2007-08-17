@@ -101,6 +101,10 @@ class GEM_EXTERN pix_device_read : public GemBase
   //////////
   // static member functions
 
+  static void openMessCallback(void *data, t_symbol *s);
+  static void startCallback(void *data, t_floatarg start);
+  static void stopCallback(void *data, t_floatarg stop);
+  static void seekCallback(void *data, t_floatarg seek);
   static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
   static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
   static void normMessCallback(void *data, t_symbol*format);

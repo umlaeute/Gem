@@ -36,7 +36,7 @@ class DeviceReadGst : public DeviceRead
   public:
       
   /// constructor
-  DeviceReadGst(){};
+  DeviceReadGst();
   
   /// destructor
   ~DeviceReadGst(){};
@@ -59,8 +59,12 @@ class DeviceReadGst : public DeviceRead
   /// @return true if successfully closed
   bool closeDevice(){};
   
+  void startDevice();
+  
+  void stopDevice();
+  
   /// @return the data of the current VIOFrame
-  unsigned char *getFrameData(){};
+  unsigned char *getFrameData();
   
   /*!
     * sets the channel of the device 
@@ -103,12 +107,18 @@ class DeviceReadGst : public DeviceRead
   
   protected:
   GstElement *source_;
+  GstElement *demux_;
+  GstElement *decode_;
   GstElement *colorspace_;
   GstElement *sink_;
   GstElement *device_decode_;
   
+  bool have_pipeline_;
+  bool new_device_;
+  
   static bool is_initialized_;
   
+  static void cbNewpad(GstElement *element, GstPad *pad, gboolean last, gpointer data);
 };
 
 /// Tells us to register our functionality to an engine kernel
