@@ -123,12 +123,11 @@ bool FileReadGst::setPosition(int frame, int track)
   /// die man dann von PD aus auch schön ansprechen kann
   /// z.B. mit einer message [speed 2.0(
 
-//   if(! gst_element_seek(file_decode_, 1.0, GST_FORMAT_BUFFERS,
-//                  GST_SEEK_FLAG_NONE, GST_SEEK_TYPE_SET, frame,
-//                  GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
-  
-  if(!gst_element_seek_simple(file_decode_, GST_FORMAT_BUFFERS,
-  GST_SEEK_FLAG_NONE, frame))
+  if(! gst_element_seek(file_decode_, 1.0, GST_FORMAT_PERCENT,
+                 GST_SEEK_FLAG_NONE, GST_SEEK_TYPE_SET, frame,
+                 GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
+//   if(!gst_element_seek_simple(file_decode_, GST_FORMAT_BUFFERS,
+//   GST_SEEK_FLAG_NONE, frame))
   {
     post("videoIO: the position could not be set");
     return false;
@@ -185,6 +184,23 @@ unsigned char *FileReadGst::getFrameData()
     g_assert( gst_structure_get_fraction (str, "framerate",
             &fps_numerator, &fps_denominator) );
 
+///     // getting the number of frames TODO is not completely exact now I think
+//     GstQuery *query = gst_query_new_duration (GST_FORMAT_TIME);
+//     bool res = gst_element_query (file_decode_, query);
+//     if (res) 
+//     {
+//       gint64 duration;
+//       gst_query_parse_duration (query, NULL, &duration);
+//       int frames = ( duration / 1000000000 ) * ( fps_numerator / fps_denominator );
+//       post ("duration = %"GST_TIME_FORMAT, GST_TIME_ARGS (duration));
+//       post ("frames = %d", frames);
+//       nr_of_frames_ = frames;
+//     }
+//     else {
+//       post ("duration query failed...");
+//     }
+//     gst_query_unref (query);
+    
     int format=-1;
     gst_structure_get_int(str, "bpp", &bpp);
     gst_structure_get_int(str, "depth", &depth);
@@ -199,11 +215,6 @@ unsigned char *FileReadGst::getFrameData()
     // set framerate
     framerate_ = fps_numerator / fps_denominator;
 
-    /// TODO Frameanzahl bekommt man so nicht -> das könnte man
-    /// bei filesrc irgendwie abfragen: bei gst-inspect filesrc
-    /// gibts ein "num-buffers" property -> is das nr of frames ?
-    /// gst_element_query_duration möglich?
-
     new_video_=false;
     gst_caps_unref(caps);
   }
@@ -215,30 +226,12 @@ unsigned char *FileReadGst::getFrameData()
   int cs = frame_.getColorSize();
 
   /// TODO maybe these conversions could be done more efficient !?
-  switch( frame_.getColorspace() )
-  {
-    case YUV422:
-    case RGB:
-    case GRAY:
-      for(int x=0; x<xs; ++x) {
-      for(int y=0; y<ys; ++y) {
-      for(int c=0; c<cs; ++c) {
-        // swap y axis
-        frame[y*xs*cs + x*cs + c] =
-        data[(ys-y-1)*xs*cs + x*cs + c];
-      } } }
-      break;
-
-    case RGBA:
-      for(int x=0; x<xs; ++x) {
-      for(int y=0; y<ys; ++y) {
-      for(int c=0; c<cs; ++c) {
-        // swap y axis, exchange red and blue
-        int c_rgba = (c==0) ? 2 :( (c==2) ? 0 : c );
-        frame[y*xs*cs + x*cs + c] =
-        data[(ys-y-1)*xs*cs + x*cs + c_rgba];
-      } } }
-      break;
+  for(int x=0; x<xs; ++x)
+  for(int y=0; y<ys; ++y)
+  for(int c=0; c<cs; ++c) {
+    // swap y axis
+    frame[y*xs*cs + x*cs + c] =
+    data[(ys-y-1)*xs*cs + x*cs + c];
   }
 
   gst_buffer_unref (buf);
@@ -292,6 +285,10 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
            gst_caps_new_simple ("video/x-raw-rgb", 
                                 "bpp", G_TYPE_INT, 32,
                                 "depth", G_TYPE_INT, 32,
+				"red_mask",   G_TYPE_INT, 0xff000000,
+				"green_mask", G_TYPE_INT, 0x00ff0000,
+				"blue_mask",  G_TYPE_INT, 0x0000ff00,
+				"alpha_mask", G_TYPE_INT, 0x000000ff,
                                 NULL) );
       break;
 
@@ -300,6 +297,9 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
            gst_caps_new_simple ("video/x-raw-rgb", 
                                 "bpp", G_TYPE_INT, 24,
                                 "depth", G_TYPE_INT, 24,
+				"red_mask",   G_TYPE_INT, 0x00ff0000,
+				"green_mask", G_TYPE_INT, 0x0000ff00,
+				"blue_mask",  G_TYPE_INT, 0x000000ff,
                                 NULL) );
       break;
 
@@ -324,7 +324,6 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
       // if we not have a "bpp" property we should have YUV
       /// TODO maybe find a better way to see if its YUV
       int bpp;
-      if( true)
       if( !gst_structure_get_int(str, "bpp", &bpp) )
       {
         gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
