@@ -89,6 +89,7 @@ class GEM_EXTERN pix_file_read : public GemBase
     pixBlock m_image;
     // true if we loaded a new film
     bool m_newfilm;
+    bool m_already_banged;
  
   protected:
     

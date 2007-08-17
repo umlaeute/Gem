@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_file_read, t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 pix_file_read :: pix_file_read(t_symbol *filename) :
-    m_newfilm(false), fileReader(0)
+    m_newfilm(false), m_already_banged(false), fileReader(0)
 {
   // create outlet for frame data and bang at the end
   m_outNumFrames = outlet_new(this->x_obj, 0);
@@ -70,6 +70,7 @@ void pix_file_read :: closeFile(void)
 void pix_file_read :: openFile(t_symbol *filename)
 {
   closeFile();
+  m_already_banged = false;
   
   // make the right filename
   char tmp_buff[MAXPDSTRING];
@@ -96,7 +97,14 @@ void pix_file_read :: render(GemState *state)
   unsigned char *vioframe_ptr = fileReader->getFrameData();
   
   if( vioframe_ptr == NULL)
+  {
+    if(!m_already_banged)
+    {
+      outlet_bang(m_outEnd);
+      m_already_banged = true;
+    }
     return;
+  }
 
   // check if image size changed
   if( m_image.image.xsize != fileReader->getWidth() ||
