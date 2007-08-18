@@ -25,6 +25,6 @@
 namespace VideoIO_
 {
     FileRead::FileRead() :
-      cspace_(-1), nr_of_frames_(0), framerate_(0)
+      cspace_(-1), duration_(0), framerate_(0)
     {}
 }
