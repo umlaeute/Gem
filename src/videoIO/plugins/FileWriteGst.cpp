@@ -105,9 +105,8 @@ bool FileWriteGst::stopRecording()
 
 void FileWriteGst::initRecording(int xsize, int ysize, int cs)
 {
-  /// TODO framerate richtig umrechnen
-  int fr1 = (int) framerate_;
-  int fr2 = 1;
+  int fr1 = (int) framerate_ * 10000;
+  int fr2 = 10000;
 
   /// NOTE endianess is set to G_BIG_ENDIAN because this is needed
   /// for some internal reasons (also for Intels !)

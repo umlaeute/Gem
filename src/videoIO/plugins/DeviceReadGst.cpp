@@ -23,7 +23,8 @@ bool DeviceReadGst::is_initialized_ = false;
 
 DeviceReadGst::DeviceReadGst() : 
     source_(NULL), demux_(NULL), decode_(NULL), colorspace_(NULL),
-    sink_(NULL), device_decode_(NULL), have_pipeline_(false),new_device_(false)
+    sink_(NULL), device_decode_(NULL), videorate_(NULL),
+    have_pipeline_(false),new_device_(false)
 {}
 
 DeviceReadGst::~DeviceReadGst()
@@ -67,13 +68,13 @@ bool DeviceReadGst::openDevice(const string &name, const string &device)
 void DeviceReadGst::startDevice()
 {
   if(!gst_element_set_state (device_decode_, GST_STATE_PLAYING))
-    post("could not set state playing");
+    post("could not set state PLAYING");
 }
 
 void DeviceReadGst::stopDevice()
 {
   if(!gst_element_set_state (device_decode_, GST_STATE_PAUSED))
-    post("could not set state paused");
+    post("could not set state PAUSED");
 }
 
 bool DeviceReadGst::closeDevice()
@@ -188,6 +189,8 @@ void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad, gpointer data)
 //   post("Callback Caps: %s", gst_caps_to_string (caps) );
 
   // force a colorspace conversion if requested
+  int frate1 = (int) tmp->framerate_ * 10000;
+  int frate2 = 10000;
   switch(tmp->cspace_)
   {
     case RGBA:
@@ -199,6 +202,7 @@ void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad, gpointer data)
 				"green_mask", G_TYPE_INT, 0x00ff0000,
 				"blue_mask",  G_TYPE_INT, 0x0000ff00,
 				"alpha_mask", G_TYPE_INT, 0x000000ff,
+                                "framerate", GST_TYPE_FRACTION, frate1, frate2,
                                 NULL) );
       break;
 
@@ -210,39 +214,25 @@ void DeviceReadGst::cbNewpad(GstElement *element, GstPad *pad, gpointer data)
 				"red_mask",   G_TYPE_INT, 0x00ff0000,
 				"green_mask", G_TYPE_INT, 0x0000ff00,
 				"blue_mask",  G_TYPE_INT, 0x000000ff,
-                                NULL) );
-      break;
-
-    case YUV422:
-      gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-yuv", 
-                                "format", GST_TYPE_FOURCC,
-                                GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+                                "framerate", GST_TYPE_FRACTION, frate1, frate2,
                                 NULL) );
       break;
 
     case GRAY:
       gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-gray", NULL) );
+           gst_caps_new_simple ("video/x-raw-gray", 
+                                "framerate", GST_TYPE_FRACTION, frate1, frate2,
+                                NULL) );
       break;
 
+    case YUV422:
     default:
-      // see if we have YUV, then we have to convert to
-      // GEMs YUV format
-      GstStructure *str = gst_caps_get_structure (caps, 0);
-
-      // if we not have a "bpp" property we should have YUV
-      /// TODO maybe find a better way to see if its YUV
-      int bpp;
-      if( !gst_structure_get_int(str, "bpp", &bpp) )
-      {
         gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
            gst_caps_new_simple ("video/x-raw-yuv", 
                                 "format", GST_TYPE_FOURCC,
                                 GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+                                "framerate", GST_TYPE_FRACTION, frate1, frate2,
                                 NULL) );
-      }
-      else gst_element_link(tmp->colorspace_, tmp->sink_);
   }
 
   gst_caps_unref (caps);
@@ -288,15 +278,19 @@ void DeviceReadGst::setupDVPipeline()
   g_assert(decode_);
   g_object_set (G_OBJECT(decode_), "quality", dv_quality_, NULL);
 
+  // convert between different framerates
+  videorate_ = gst_element_factory_make ("videorate", "videorate_");
+
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
   sink_ = gst_element_factory_make ("appsink", "sink_");
   g_assert(sink_);
   
-  gst_bin_add_many (GST_BIN(device_decode_), source_, demux_, decode_, colorspace_, sink_, NULL);
+  gst_bin_add_many (GST_BIN(device_decode_), source_, demux_, decode_, videorate_, colorspace_, sink_, NULL);
   
   gst_element_link (source_, demux_);
-  gst_element_link (decode_, colorspace_);
+  gst_element_link (decode_, videorate_);
+  gst_element_link (videorate_, colorspace_);
   
   g_signal_connect (demux_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
   
@@ -316,15 +310,21 @@ void DeviceReadGst::setupV4LPipeline(const string &device)
   if( device.size() != 0 )
     g_object_set (G_OBJECT(source_), "device", device.c_str(), NULL);
 
+  // convert between different framerates
+  videorate_ = gst_element_factory_make ("videorate", "videorate_");
+
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
   sink_ = gst_element_factory_make ("appsink", "sink_");
   g_assert(sink_);
 
-  gst_bin_add_many (GST_BIN(device_decode_), source_, colorspace_, sink_, NULL);
-  gst_element_link (source_, colorspace_);
+  gst_bin_add_many (GST_BIN(device_decode_), source_, videorate_, colorspace_, sink_, NULL);
+  gst_element_link (source_, videorate_);
+  gst_element_link (videorate_, colorspace_);
 
   // force a colorspace conversion if requested
+  int fr1 = (int) framerate_ * 10000;
+  int fr2 = 10000;
   switch( cspace_ )
   {
     case RGBA:
@@ -336,6 +336,7 @@ void DeviceReadGst::setupV4LPipeline(const string &device)
 				"green_mask", G_TYPE_INT, 0x00ff0000,
 				"blue_mask",  G_TYPE_INT, 0x0000ff00,
 				"alpha_mask", G_TYPE_INT, 0x000000ff,
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
                                 NULL) );
       break;
 
@@ -347,12 +348,15 @@ void DeviceReadGst::setupV4LPipeline(const string &device)
 				"red_mask",   G_TYPE_INT, 0x00ff0000,
 				"green_mask", G_TYPE_INT, 0x0000ff00,
 				"blue_mask",  G_TYPE_INT, 0x000000ff,
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
                                 NULL) );
       break;
 
     case GRAY:
       gst_element_link_filtered(colorspace_, sink_,
-           gst_caps_new_simple ("video/x-raw-gray", NULL) );
+           gst_caps_new_simple ("video/x-raw-gray",
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
+                                NULL) );
       break;
 
     // also set default to the GEM YUV format, because
@@ -363,8 +367,8 @@ void DeviceReadGst::setupV4LPipeline(const string &device)
            gst_caps_new_simple ("video/x-raw-yuv", 
                                 "format", GST_TYPE_FOURCC,
                                 GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
                                 NULL) );
-      break;
   }
 
   have_pipeline_ = true;

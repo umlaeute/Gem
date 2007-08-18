@@ -23,7 +23,7 @@
 bool FileReadGst::is_initialized_ = false;
 
 FileReadGst::FileReadGst() :
-    source_(NULL), decode_(NULL), colorspace_(NULL), sink_(NULL),
+    source_(NULL), videorate_(NULL), colorspace_(NULL), sink_(NULL),
     file_decode_(NULL), video_bin_(NULL), bus_(NULL),
     have_pipeline_(false), new_video_(false)
 {
@@ -43,37 +43,36 @@ bool FileReadGst::openFile(string filename)
 {
   initGstreamer();
 
-  /// TODO diesen URI Handler noch dazutun, dass man auch streams
-  ///      und dvds usw öffnen kann
+  string uri = getURIFromFilename(filename);
 
   // pipeline
   file_decode_ = gst_pipeline_new( "file_decode_");
 
   // source+decode
-  source_ = gst_element_factory_make("filesrc", "source_");
+  source_ = gst_element_factory_make("uridecodebin", "source_");
   g_assert(source_);
-  decode_ = gst_element_factory_make ("decodebin", "decode_");
-  g_assert(decode_);
-  
-  g_object_set (G_OBJECT(source_), "location", filename.c_str(), NULL);
-  gst_bin_add_many (GST_BIN (file_decode_), source_, decode_, NULL);
-  gst_element_link (source_, decode_);
+
+  g_object_set (G_OBJECT(source_), "uri", uri.c_str(), NULL);
+  gst_bin_add (GST_BIN (file_decode_), source_);
       
-  g_signal_connect (decode_, "new-decoded-pad", G_CALLBACK (cbNewpad), (gpointer)this);
+  g_signal_connect (source_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
   
   // creating video output
   video_bin_ = gst_bin_new ("video_bin_");
   g_assert(video_bin_);
+  videorate_ = gst_element_factory_make("videorate", "videorate_");
+  g_assert(source_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
   sink_ = gst_element_factory_make ("appsink", "sink_");
   g_assert(sink_);
   
-  GstPad *video_pad = gst_element_get_pad (colorspace_, "sink");
+  GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
   
-  gst_bin_add_many (GST_BIN (video_bin_), colorspace_, sink_, NULL);
+  gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, sink_, NULL);
 
   // NOTE colorspace_ and sink_ are linked in the callback
+  gst_element_link(videorate_, colorspace_);
 
   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
   gst_object_unref(video_pad);
@@ -114,7 +113,7 @@ bool FileReadGst::setPosition(float sec)
 {
   if(!have_pipeline_) return false;
 
-  if( sec<0 || sec>duration_ )
+  if( sec<0 || sec>(duration_-0.1) )
   {
     post("seek position out of range");
     return false;
@@ -181,11 +180,8 @@ unsigned char *FileReadGst::getFrameData()
 
     // getting fomrat options
     int x_size, y_size, bpp, depth;
-    int fps_numerator, fps_denominator;
     g_assert( gst_structure_get_int(str, "width", &x_size) );
     g_assert( gst_structure_get_int(str, "height", &y_size) );
-    g_assert( gst_structure_get_fraction (str, "framerate",
-            &fps_numerator, &fps_denominator) );
 
     int format=-1;
     gst_structure_get_int(str, "bpp", &bpp);
@@ -194,12 +190,15 @@ unsigned char *FileReadGst::getFrameData()
     if( bpp==24 && depth==24 ) format=RGB;
     if( bpp==8 && depth==8 ) format=GRAY;
     if( bpp==32 ) format=RGBA;
+    gst_caps_unref(caps);
 
     // allocate frame
     frame_.allocate(x_size, y_size, format);
 
     // set framerate
-    framerate_ = fps_numerator / fps_denominator;
+    /// TODO try to find a way in gstreamer how to query
+    ///      the original framerate of the movie here
+    framerate_ = fr_host_;
 
     // get duration of the video
     GstQuery *query = gst_query_new_duration (GST_FORMAT_TIME);
@@ -209,13 +208,11 @@ unsigned char *FileReadGst::getFrameData()
       gint64 duration;
       gst_query_parse_duration (query, NULL, &duration);
       duration_ = duration / GST_SECOND;
-      post ("duration = %f", duration_);
     }
     else post("videoIO: duration query failed");
     gst_query_unref (query);
 
     new_video_=false;
-    gst_caps_unref(caps);
   }
     
   unsigned char *frame = frame_.getFrameData();
@@ -237,6 +234,21 @@ unsigned char *FileReadGst::getFrameData()
   return frame_.getFrameData();
 }
 
+string FileReadGst::getURIFromFilename(const string &filename)
+{
+  string str;
+
+  /// TODO how to handle this correct for gstreamer on windows ?
+
+  // prepend "file://" to a file-system path
+  if( filename.compare(0, 1, "/") == 0 )
+    str = "file://" + filename;
+  else
+    str = filename;
+  
+  return str;
+}
+
 void FileReadGst::initGstreamer()
 {
   if(is_initialized_) return;
@@ -245,8 +257,7 @@ void FileReadGst::initGstreamer()
   is_initialized_=true;
 }
 
-void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, 
-                           gboolean last, gpointer data)
+void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 {
   GstCaps *caps;
   GstStructure *str;
@@ -276,6 +287,8 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
 //   post("Callback Caps: %s", gst_caps_to_string (caps) );
 
   // force a colorspace conversion if requested
+  int fr1 = (int) tmp->fr_host_ * 10000;
+  int fr2 = 10000;
   switch(tmp->cspace_)
   {
     case RGBA:
@@ -287,6 +300,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
 				"green_mask", G_TYPE_INT, 0x00ff0000,
 				"blue_mask",  G_TYPE_INT, 0x0000ff00,
 				"alpha_mask", G_TYPE_INT, 0x000000ff,
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
                                 NULL) );
       break;
 
@@ -298,6 +312,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
 				"red_mask",   G_TYPE_INT, 0x00ff0000,
 				"green_mask", G_TYPE_INT, 0x0000ff00,
 				"blue_mask",  G_TYPE_INT, 0x000000ff,
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
                                 NULL) );
       break;
 
@@ -306,12 +321,15 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
            gst_caps_new_simple ("video/x-raw-yuv", 
                                 "format", GST_TYPE_FOURCC,
                                 GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
                                 NULL) );
       break;
 
     case GRAY:
       gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-gray", NULL) );
+           gst_caps_new_simple ("video/x-raw-gray",
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
+                                NULL) );
       break;
 
     default:
@@ -328,9 +346,16 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad,
            gst_caps_new_simple ("video/x-raw-yuv", 
                                 "format", GST_TYPE_FOURCC,
                                 GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
                                 NULL) );
       }
-      else gst_element_link(tmp->colorspace_, tmp->sink_);
+      else // make framerate conversion
+      {
+        gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
+           gst_caps_new_simple ("video/x-raw-rgb",
+                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
+                                NULL) );
+      }
   }
 
   gst_caps_unref (caps);

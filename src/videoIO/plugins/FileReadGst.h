@@ -81,7 +81,7 @@ class FileReadGst : public FileRead
 
  protected:
   GstElement *source_;
-  GstElement *decode_;
+  GstElement *videorate_;
   GstElement *colorspace_;
   GstElement *sink_;
   GstElement *file_decode_;
@@ -91,10 +91,12 @@ class FileReadGst : public FileRead
   bool have_pipeline_;
   bool new_video_;
 
+  string getURIFromFilename(const string &filename);
+
   static void initGstreamer();
   static bool is_initialized_;
     
-  static void cbNewpad(GstElement *decodebin, GstPad *pad, gboolean last, gpointer data);
+  static void cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data);
 };
 
 /// Tells us to register our functionality to an engine kernel

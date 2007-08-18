@@ -12,6 +12,8 @@
 
 #include "pix_device_read.h"
 
+#include "Base/GemMan.h"
+
 CPPEXTERN_NEW(pix_device_read)
 
 pix_device_read :: pix_device_read() : 
@@ -36,7 +38,9 @@ void pix_device_read :: render(GemState *state)
   if( m_image.image.xsize != m_deviceReader->getWidth() ||
       m_image.image.ysize != m_deviceReader->getHeight() ||
       m_image.image.csize != m_deviceReader->getColorSize() )
+  {
     reallocate_m_image();
+  }
 
   // read frame data into m_image
   unsigned char *image_ptr = m_image.image.data;
@@ -63,6 +67,9 @@ void pix_device_read :: openDevice(t_symbol *name, t_symbol *dev)
   closeDevice();
 
   bool suc=false;
+
+  // get GEM framerate
+  m_deviceReader->setFramerate( GemMan::getFramerate() );
 
   // open device
   if( dev )

@@ -76,6 +76,10 @@ namespace VideoIO_
     virtual void forceColorspace(int cs)
     { cspace_ = cs; }
 
+    /// set framerate of the host application (PD)
+    virtual void setHostFramerate(float fr)
+    { fr_host_ = fr; }
+
     /*!
      * returns the data of the current frame
      * @return the frame data of VIOFrame
@@ -94,7 +98,7 @@ namespace VideoIO_
     { return duration_; }
     
     /*!
-    * @return the frames per second
+    * @return framerate of loaded video
     */
     virtual double getFPS()
     { return framerate_; }
@@ -131,6 +135,7 @@ namespace VideoIO_
     // frame information
     float duration_;
     float framerate_;
+    float fr_host_;
     
     /// stores the current frame
     VIOFrame frame_ ;

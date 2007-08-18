@@ -13,6 +13,8 @@
 #include "pix_file_read.h"
 #include <ctype.h>
 
+#include "Base/GemMan.h"
+
 #include <stdio.h>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_file_read, t_symbol *, A_DEFSYM)
@@ -65,14 +67,16 @@ void pix_file_read :: closeFile(void)
 void pix_file_read :: openFile(t_symbol *filename)
 {
   closeFile();
-  m_already_banged = false;
-  
+
   // make the right filename
   char tmp_buff[MAXPDSTRING];
   char *path=tmp_buff;
   canvas_makefilename(getCanvas(), filename->s_name, tmp_buff, MAXPDSTRING);
   if (FILE*fd=fopen(tmp_buff, "r")) fclose(fd);
   else path=filename->s_name;
+
+  // get GEM framerate
+  fileReader->setHostFramerate( GemMan::getFramerate() );
 
   // open file
   if(!(fileReader->openFile(path)))

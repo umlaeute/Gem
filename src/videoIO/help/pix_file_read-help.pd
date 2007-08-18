@@ -1,4 +1,4 @@
-#N canvas 17 0 841 704 10;
+#N canvas 16 0 841 704 10;
 #X obj 532 550 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
@@ -26,8 +26,8 @@
 #X obj 533 478 pix_texture;
 #X obj 533 500 rectangle 4 3;
 #X obj 533 255 pix_file_read;
-#X msg 52 340 start;
-#X msg 108 340 stop;
+#X msg 52 360 start;
+#X msg 108 360 stop;
 #X msg 49 591 forceColorspace GRAY;
 #X msg 49 569 forceColorspace YUV;
 #X msg 49 635 forceColorspace RGBA;
@@ -40,24 +40,24 @@
 #X obj 619 290 print VIDEO_END;
 #X text 285 78 part ot the videoIO framework for pd;
 #X text 297 62 reads a video or internet stream;
-#X obj 54 254 s fileread;
+#X obj 54 284 s fileread;
 #X obj 552 225 r fileread;
 #X text 618 308 bang at the end of the video;
-#X obj 54 180 openpanel;
-#X obj 54 162 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#X obj 54 210 openpanel;
+#X obj 54 192 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X msg 54 201 set open \$1;
-#X msg 54 232 open /home/holzi/Desktop/yuv-test.mov;
-#X text 53 137 Open a file or stream:;
-#X text 52 312 Play control:;
-#X obj 52 372 s fileread;
-#X obj 184 386 s fileread;
-#X msg 255 361 seek 0;
-#X msg 184 360 seek \$1;
-#X floatatom 184 340 5 0 0 0 - - -;
-#X text 183 313 Seek to position (in sec):;
-#X text 254 342 start position;
-#X text 230 430 will output single frames;
+#X msg 54 231 set open \$1;
+#X msg 54 262 open /home/holzi/Desktop/yuv-test.mov;
+#X text 51 133 Open a file or stream:;
+#X text 52 332 Play control:;
+#X obj 52 392 s fileread;
+#X obj 184 406 s fileread;
+#X msg 255 381 seek 0;
+#X msg 184 380 seek \$1;
+#X floatatom 184 360 5 0 0 0 - - -;
+#X text 183 333 Seek to position (in sec):;
+#X text 254 362 start position;
+#X text 230 450 will output single frames;
 #X obj 49 663 s fileread;
 #X text 48 483 Force a colorspace conversion:;
 #X text 49 507 Without this messages videos are played in the colorspace
@@ -65,8 +65,10 @@ they are. By sending a forceColorspace message they will be converted
 to the desired colorspace. NOTE: one has to reopen the file when changing
 forceColorspace !;
 #X text 333 37 ::: PIX_FILE_READ :::;
-#X text 186 415 NOTE: in non-playing mode seeks;
+#X text 186 435 NOTE: in non-playing mode seeks;
 #X text 548 670 videoIO: created 2007 \, Thomas Holzmann;
+#X text 51 155 General URIs are specified like http://host/path/file
+\, mms://host/path/file and so on.;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 7 0;

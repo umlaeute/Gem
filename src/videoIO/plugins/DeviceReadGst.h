@@ -67,6 +67,7 @@ class DeviceReadGst : public DeviceRead
   GstElement *source_;
   GstElement *demux_;
   GstElement *decode_;
+  GstElement *videorate_;
   GstElement *colorspace_;
   GstElement *sink_;
   GstElement *device_decode_;

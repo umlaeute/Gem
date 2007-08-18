@@ -1,4 +1,4 @@
-#N canvas 210 198 918 623 10;
+#N canvas 11 0 918 623 10;
 #X obj 785 501 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
@@ -51,7 +51,6 @@ webcam \, ...);
 #X msg 481 212 forceColorspace YUV;
 #X msg 481 278 forceColorspace RGBA;
 #X msg 481 256 forceColorspace RGB;
-#X obj 481 306 s fileread;
 #X text 479 126 Force a colorspace conversion:;
 #X text 480 150 Without this messages streams are played in the colorspace
 they are. By sending a forceColorspace message they will be converted
@@ -59,11 +58,12 @@ to the desired colorspace. NOTE: one has to reopen the device when
 changing forceColorspace !;
 #X text 31 454 Set the quality of the DV decoder:;
 #X text 31 470 (for DV cams only);
-#X obj 33 584 s fileread;
 #X text 32 493 A values from 0 (monochrome \, fastest) to 5 (highest
 quality color decoding \, slowest) \, standard is 5 NOTE: one has to
 reopen the device after setting the decoding quality !;
 #X text 620 587 videoIO: created 2007 \, Thomas Holzmann;
+#X obj 481 306 s deviceread;
+#X obj 33 584 s deviceread;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 9 0;
@@ -71,13 +71,13 @@ reopen the device after setting the decoding quality !;
 #X connect 7 0 25 0;
 #X connect 8 0 25 0;
 #X connect 9 0 5 0;
-#X connect 10 0 36 0;
+#X connect 10 0 38 0;
 #X connect 11 0 10 0;
 #X connect 12 0 20 0;
 #X connect 13 0 20 0;
 #X connect 14 0 20 0;
 #X connect 18 0 9 0;
-#X connect 27 0 31 0;
-#X connect 28 0 31 0;
-#X connect 29 0 31 0;
-#X connect 30 0 31 0;
+#X connect 27 0 37 0;
+#X connect 28 0 37 0;
+#X connect 29 0 37 0;
+#X connect 30 0 37 0;

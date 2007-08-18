@@ -78,6 +78,10 @@ namespace VideoIO_
     virtual bool forceColorspace(int cs)
     { cspace_ = cs; }
 
+    /// set framerate of the host application
+    virtual void setFramerate(float fr)
+    { framerate_ = fr; }
+
 
     /// @return the width of the video
     virtual int getWidth()
@@ -101,6 +105,8 @@ namespace VideoIO_
     int cspace_;
     /// DV quality
     int dv_quality_;
+    /// framerate of the host
+    float framerate_;
 
     /// stores the current frame
     VIOFrame frame_ ;

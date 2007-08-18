@@ -26,7 +26,7 @@ namespace VideoIO_
 {
 
   FileWrite::FileWrite() :
-    framerate_(0)
+    framerate_(1)
   {}
 
   void FileWrite::setFramerate(float fr)
