@@ -183,7 +183,9 @@ void FileWriteGst::getCodec()
   post("-----------------------------------------");
   post("FileWriteGst available codecs:");
   post("raw");
-  post("theora");
+  post("theora:");
+  post("  quality: 0 - 63, default: 16");
+  post("  bitrate: 0 - 2000");
   post("-----------------------------------------");
 }
 
@@ -195,13 +197,13 @@ bool FileWriteGst::setupRawPipeline(const string &filename)
   g_assert(source_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
+  mux_ = gst_element_factory_make("avimux", "mux_");
+  g_assert(mux_);
+
   sink_ = gst_element_factory_make ("filesink", "sink_");
   g_assert(sink_);
 
   g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
-
-  mux_ = gst_element_factory_make("avimux", "mux_");
-  g_assert(mux_);
 
   gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, mux_, sink_, NULL);
   gst_element_link_many (source_, colorspace_, mux_, sink_, NULL);
@@ -228,6 +230,12 @@ bool FileWriteGst::setupOggPipeline(const string &filename)
   g_assert(encode_);
   mux_ = gst_element_factory_make("oggmux", "mux_");
   g_assert(mux_);
+
+  // set theora parameter
+  if( cparameters_.find("quality") != cparameters_.end() )
+    g_object_set (G_OBJECT(encode_), "quality", cparameters_["quality"], NULL);
+  if( cparameters_.find("bitrate") != cparameters_.end() )
+    g_object_set (G_OBJECT(encode_), "bitrate", cparameters_["bitrate"], NULL);
 
   gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, sink_, NULL);
   gst_element_link_many (source_, colorspace_, encode_, mux_, sink_, NULL);

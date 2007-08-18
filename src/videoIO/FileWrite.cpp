@@ -34,9 +34,47 @@ namespace VideoIO_
     framerate_ = fr;
   }
   
-  void FileWrite::setCodec(const string &codec)
+  void FileWrite::setCodec(int argc, t_atom *argv)
   {
-    codec_ = codec;
+    // get codec
+    codec_ = atom_getsymbol(argv)->s_name;
+    argc -= 1; argv += 1;
+    bool par=false;
+
+    // clear current parameters
+    cparameters_.clear();
+
+    // parse codec parameters
+    while ( argc > 0 &&
+            argv->a_type == A_SYMBOL &&
+            argv[1].a_type == A_FLOAT )
+    {
+      cparameters_[atom_getsymbol(argv)->s_name] =
+      (int) argv[1].a_w.w_float;
+      argc -= 2; argv += 2;
+      par=true;
+    }
+
+    // give feedback about the current parameters
+
+    if(!par )
+    {
+      post("");
+      post("set %s codec", codec_.c_str());
+      post("");
+      return;
+    }
+
+    map<string, int>::iterator iter;
+    iter = cparameters_.begin();
+    post("");
+    post("set %s codec with parameters:", codec_.c_str());
+    while( iter != cparameters_.end() ) 
+    {
+      post("\t%s: %d", (*iter).first.c_str(), (*iter).second );
+      iter++;
+    }
+    post("");
   }
   
   void FileWrite::getCodec()

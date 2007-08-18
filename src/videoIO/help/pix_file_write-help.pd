@@ -1,4 +1,4 @@
-#N canvas 143 208 884 577 10;
+#N canvas 16 0 884 577 10;
 #X obj 544 472 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 805 346 450 300 gemwin 0;
@@ -22,7 +22,7 @@
 #X connect 7 1 5 0;
 #X connect 8 0 0 0;
 #X restore 549 511 pd gemwin;
-#X msg 549 492 create;
+#X msg 549 492 destroy;
 #X text 545 471 Create window:;
 #X obj 545 139 gemhead;
 #X obj 545 411 pix_texture;
@@ -35,9 +35,8 @@
 #X obj 545 339 pix_file_read;
 #X msg 577 306 start;
 #X msg 625 306 stop;
-#X msg 332 447 getCodec;
-#X msg 66 419 codec theora;
-#X msg 66 441 codec raw;
+#X msg 66 497 getCodec;
+#X msg 66 461 codec raw;
 #X text 308 69 part ot the videoIO framework for pd;
 #X text 348 31 ::: PIX_FILE_WRITE :::;
 #X text 303 54 writes a video stream to the harddisk;
@@ -57,36 +56,38 @@
 #X text 61 141 Set the filename:;
 #X obj 294 210 s filewrite;
 #X text 293 143 Start/Stop recording:;
-#X text 64 340 If you set nothing raw files will be written. For a
+#X text 64 344 If you set nothing raw files will be written. For a
 list of available codecs and its parameters send the getCodec message.
 NOTE: files have to be reopened before the new codec parameters are
 set!;
-#X obj 66 472 s filewrite;
-#X obj 332 470 s filewrite;
-#X text 248 422 list available codecs/parameters:;
-#X text 64 316 Set codec:;
+#X obj 66 522 s filewrite;
 #X text 597 550 videoIO: created 2007 \, Thomas Holzmann;
+#X msg 66 440 codec theora;
+#X text 137 498 <- list available codecs and parameters;
+#X text 64 320 Set codec and parameters:;
+#X msg 66 419 codec theora quality 16 bitrate 200;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 12 0;
 #X connect 5 0 6 0;
 #X connect 7 0 5 0;
 #X connect 8 0 9 0;
-#X connect 10 0 33 0;
-#X connect 11 0 33 0;
+#X connect 10 0 32 0;
+#X connect 11 0 32 0;
 #X connect 12 0 7 0;
 #X connect 12 0 8 0;
 #X connect 13 0 12 0;
 #X connect 14 0 12 0;
-#X connect 15 0 37 0;
-#X connect 16 0 36 0;
-#X connect 17 0 36 0;
-#X connect 21 0 23 0;
-#X connect 22 0 21 0;
-#X connect 23 0 24 0;
-#X connect 24 0 12 0;
-#X connect 26 0 9 0;
+#X connect 15 0 35 0;
+#X connect 16 0 35 0;
+#X connect 20 0 22 0;
+#X connect 21 0 20 0;
+#X connect 22 0 23 0;
+#X connect 23 0 12 0;
+#X connect 25 0 9 0;
+#X connect 26 0 28 0;
 #X connect 27 0 29 0;
-#X connect 28 0 30 0;
-#X connect 29 0 28 0;
-#X connect 30 0 31 0;
+#X connect 28 0 27 0;
+#X connect 29 0 30 0;
+#X connect 37 0 35 0;
+#X connect 40 0 35 0;

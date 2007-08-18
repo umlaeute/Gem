@@ -25,6 +25,8 @@ using namespace std;
 #include "VIOUtils.h"
 #include "VIOFrame.h"
 
+#include <map>
+
 namespace VideoIO_
 {
   class FileWrite
@@ -59,7 +61,7 @@ namespace VideoIO_
     virtual void setFramerate(float fr);
     
     /// sets the desired codec
-    void setCodec(const string &codec);
+    void setCodec(int argc, t_atom *argv);
     
     /// prints the avaliable codecs
     virtual void getCodec();
@@ -68,6 +70,9 @@ namespace VideoIO_
     
     float framerate_;
     string codec_;
+
+    /// map with codec parameters
+    map<string, int> cparameters_;
   };
 }
 

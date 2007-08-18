@@ -1,4 +1,4 @@
-#N canvas 16 0 841 704 10;
+#N canvas 24 17 841 704 10;
 #X obj 532 550 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
@@ -40,15 +40,15 @@
 #X obj 619 290 print VIDEO_END;
 #X text 285 78 part ot the videoIO framework for pd;
 #X text 297 62 reads a video or internet stream;
-#X obj 54 284 s fileread;
+#X obj 53 287 s fileread;
 #X obj 552 225 r fileread;
 #X text 618 308 bang at the end of the video;
-#X obj 54 210 openpanel;
-#X obj 54 192 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#X obj 53 213 openpanel;
+#X obj 53 195 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X msg 54 231 set open \$1;
-#X msg 54 262 open /home/holzi/Desktop/yuv-test.mov;
-#X text 51 133 Open a file or stream:;
+#X msg 53 234 set open \$1;
+#X msg 53 265 open /home/holzi/Desktop/yuv-test.mov;
+#X text 51 127 Open a file or stream:;
 #X text 52 332 Play control:;
 #X obj 52 392 s fileread;
 #X obj 184 406 s fileread;
@@ -67,8 +67,32 @@ forceColorspace !;
 #X text 333 37 ::: PIX_FILE_READ :::;
 #X text 186 435 NOTE: in non-playing mode seeks;
 #X text 548 670 videoIO: created 2007 \, Thomas Holzmann;
-#X text 51 155 General URIs are specified like http://host/path/file
-\, mms://host/path/file and so on.;
+#X text 51 149 General URIs are specified like /local/file/ \, dvd://chapter
+\, http://host/path/file \, mms://host/path/file and so on.;
+#X text 221 196 more URI examples:;
+#N canvas 27 511 450 391 URI-examples 0;
+#X text 11 17 Files on the local filesystem can be read with the usual
+path:;
+#X obj 13 79 s fileread;
+#X msg 13 58 open /home/holzi/Desktop/yuv-test.mov;
+#X text 12 123 HTTP-stream example:;
+#X obj 12 166 s fileread;
+#X msg 12 145 open http://stream.sbg.ac.at/unitv/image/image_01_v3.rmvb
+;
+#X obj 12 259 s fileread;
+#X text 12 204 MMS-stream example:;
+#X msg 12 226 open mms://ms.mdcs.dtag.de/zdf/zdf/07/08/070802_geritzt_37g_h.wmv
+;
+#X text 12 300 DVD example;
+#X msg 13 323 open dvd://01;
+#X obj 13 345 s fileread;
+#X text 124 324 this will open the first title of the DVD;
+#X text 125 339 you can use the usual seek commands;
+#X connect 2 0 1 0;
+#X connect 5 0 4 0;
+#X connect 8 0 6 0;
+#X connect 10 0 11 0;
+#X restore 228 214 pd URI-examples;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 7 0;
