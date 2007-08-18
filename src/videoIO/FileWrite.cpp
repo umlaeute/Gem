@@ -34,7 +34,7 @@ namespace VideoIO_
     framerate_ = fr;
   }
   
-  void FileWrite::setCodec(string codec)
+  void FileWrite::setCodec(const string &codec)
   {
     codec_ = codec;
   }

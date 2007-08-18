@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute
+//    Copyright (c) Gï¿½nther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fï¿½r::umlï¿½ute
 //    Copyright (c) 2002 tigital
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -97,6 +97,7 @@ GLint GemMan::maxStackDepth[4];
 float GemMan::fps;
 int GemMan::fsaa = 0;
 bool GemMan::pleaseDestroy=false;
+double GemMan::s_deltime = 50.;
 
 #ifdef __APPLE__
 AGLContext GemMan::masterContext = NULL;
@@ -108,7 +109,6 @@ static int s_lightState = 0;        // is lighting on or off
 static int s_lights[NUM_LIGHTS];    // the lighting array
 
 static t_clock *s_clock = NULL;
-static double s_deltime = 50.;
 static int s_hit = 0;
 
 static gemheadLink *s_linkHead = NULL;
@@ -1500,6 +1500,15 @@ void GemMan :: frameRate(float framespersecond)
 }
 
 /////////////////////////////////////////////////////////
+// get Framerate
+//
+/////////////////////////////////////////////////////////
+float GemMan :: getFramerate()
+{
+  return (s_deltime != 0.0) ? (1000. / s_deltime) : 0.0;
+}
+
+/////////////////////////////////////////////////////////
 // requestLight
 //
 /////////////////////////////////////////////////////////
@@ -1633,7 +1642,7 @@ void GemMan :: printInfo()
   post("full screen: %d", m_fullscreen);
   post("width: %d, height %d", m_width, m_height);
   post("offset: %d+%d", m_xoffset, m_yoffset);
-  post("frame rate: %f", (0.0 != s_deltime) ? 1000. / s_deltime : 0.0);
+  post("frame rate: %f", getFramerate() );
 
   GLint bitnum = 0;
   glGetIntegerv(GL_RED_BITS, &bitnum);

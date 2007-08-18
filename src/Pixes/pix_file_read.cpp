@@ -26,16 +26,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_file_read, t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 pix_file_read :: pix_file_read(t_symbol *filename) :
-    m_newfilm(false), m_already_banged(false), fileReader(0)
+    m_newfilm(false), m_already_banged(true), fileReader(0)
 {
   // create outlet for frame data and bang at the end
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
-
-  /// TODO bang am ende des videos noch nicht implementiert
-  /// schauen wie man das im gstreamer am besten macht, am
-  /// einfachsten einfach wenn nach einem start kein neues frame
-  /// in der render methode mehr kommt, dann ein bang ausgeben
 
   // get the FileRead plugin
   // NOTE: in future this could also go into openFile
@@ -98,8 +93,11 @@ void pix_file_read :: render(GemState *state)
   
   if( vioframe_ptr == NULL)
   {
+    // output end of video bang in playing mode
+    // and stop video
     if(!m_already_banged)
     {
+      fileReader->stopVideo();
       outlet_bang(m_outEnd);
       m_already_banged = true;
     }
@@ -202,13 +200,13 @@ void pix_file_read :: reallocate_m_image()
   m_newfilm = true;
   
   t_atom ap[4];
-  SETFLOAT(ap, fileReader->getNrOfFrames() );
+  SETFLOAT(ap, fileReader->getDuration() );
   SETFLOAT(ap+1, fileReader->getWidth() );
   SETFLOAT(ap+2, fileReader->getHeight() );
   SETFLOAT(ap+3, (float)fileReader->getFPS() );
 
-  post("pix_file_read: loaded file with %d frames (%dx%d) at %f fps", 
-      fileReader->getNrOfFrames(), 
+  post("pix_file_read: loaded file with %f sec (%dx%d) at %f fps", 
+      fileReader->getDuration(), 
       fileReader->getWidth(), 
       fileReader->getHeight(), (float)fileReader->getFPS());
   outlet_list(m_outNumFrames, 0, 4, ap);
@@ -233,9 +231,6 @@ void pix_file_read :: obj_setupCallback(t_class *classPtr)
 
   class_addmethod(classPtr, (t_method)&pix_file_read::seekCallback,
                   gensym("seek"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_file_read::seekCallback,
-                  gensym("getFrame"), A_DEFFLOAT, A_NULL);
-
   class_addmethod(classPtr, (t_method)&pix_file_read::csCallback,
                   gensym("forceColorspace"), A_DEFSYM, A_NULL);
 }
@@ -248,16 +243,18 @@ void pix_file_read :: openMessCallback(void *data, t_symbol*s)
 void pix_file_read :: startCallback(void *data, t_floatarg start)
 {
   GetMyClass(data)->fileReader->startVideo();
+  GetMyClass(data)->m_already_banged=false;
 }
 
 void pix_file_read :: stopCallback(void *data, t_floatarg stop)
 {
   GetMyClass(data)->fileReader->stopVideo();
+  GetMyClass(data)->m_already_banged=true;
 }
 
 void pix_file_read :: seekCallback(void *data, t_floatarg seek)
 {
-  GetMyClass(data)->fileReader->setPosition( (int)seek );
+  GetMyClass(data)->fileReader->setPosition( seek );
 }
 
 void pix_file_read :: csCallback(void *data, t_symbol *s)

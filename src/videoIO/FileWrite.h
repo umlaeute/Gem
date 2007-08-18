@@ -53,13 +53,13 @@ namespace VideoIO_
      * @param filename the path of the file
      * @return true if open worked
      */
-    virtual bool openFile(string filename) = 0;
+    virtual bool openFile(const string &filename) = 0;
 
     /// set framerate of the video
     virtual void setFramerate(float fr);
     
     /// sets the desired codec
-    void setCodec(string codec);
+    void setCodec(const string &codec);
     
     /// prints the avaliable codecs
     virtual void getCodec();

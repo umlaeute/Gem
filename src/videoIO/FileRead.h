@@ -60,14 +60,11 @@ namespace VideoIO_
     virtual void stopVideo() = 0;
 
     /*!
-    * changes the current frame
-    * you can select the frame number and the track number,
-    * if track is -1 that means the same track as before
-    * @param frame the number of the desired frame
-    * @param track the number of the desired track
-    * @return false if the frame/track does not exist
+    * changes the position in the video
+    * @param sec desired position in the stream in sec
+    * @return false if there was a problem
     */
-    virtual bool setPosition(int frame, int track = -1) = 0;
+    virtual bool setPosition(float sec) = 0;
 
     /*!
     * force a specific colorspace
@@ -91,10 +88,10 @@ namespace VideoIO_
     /////////////////////
     
     /*!
-    * @return the number of frames
+    * @return duration of the movie in sec
     */
-    virtual int getNrOfFrames()
-    { return nr_of_frames_; }
+    virtual float getDuration()
+    { return duration_; }
     
     /*!
     * @return the frames per second
@@ -132,7 +129,7 @@ namespace VideoIO_
     int cspace_;
     
     // frame information
-    int nr_of_frames_;
+    float duration_;
     float framerate_;
     
     /// stores the current frame

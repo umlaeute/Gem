@@ -43,10 +43,6 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
     new_video_=false;
   }
 
-  /// TODO einmal weniger kopieren mache (im Prinzip braucht man
-  /// den m_frame ja gar net, könnte gleich Datenpointer und
-  /// Groesze übergeben
-
   int cs = frame.getColorSize();
   int xs = frame.getXSize();
   int ys = frame.getYSize();
@@ -70,52 +66,23 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
   gst_app_src_push_buffer (GST_APP_SRC (source_), buf);
 }
 
-bool FileWriteGst::openFile(string filename)
+bool FileWriteGst::openFile(const string &filename)
 {
   initGstreamer();
 
   if(have_pipeline_)
     freePipeline();
 
-  // Test-Pipeline for gst-launch:
-  // gst-launch filesrc location=input.avi ! decodebin !
-  // ffmpegcolorspace ! theoraenc ! oggmux ! filesink location=output.ogg
-
-  
-  // setup pipeline
-  file_encode_ = gst_pipeline_new( "file_encode_");
-
-  source_ = gst_element_factory_make ("appsrc", "source_");
-  g_assert(source_);
-  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
-  g_assert(colorspace_);
-  sink_ = gst_element_factory_make ("filesink", "sink_");
-  g_assert(sink_);
-
-  g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
-
-  
   if (codec_ == "ogg" || codec_ == "theora")
-  {
-    encode_ = gst_element_factory_make ("theoraenc", "encode_");
-    g_assert(encode_);
-    mux_ = gst_element_factory_make("oggmux", "mux_");
-    g_assert(mux_);
-    gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, sink_, NULL);
-    gst_element_link_many (source_, colorspace_, encode_, mux_, sink_, NULL);
-  } 
-  else  // this pipeline is for raw recording
-  {
-    mux_ = gst_element_factory_make("avimux", "mux_");
-    g_assert(mux_);
-    gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, mux_, sink_, NULL);
-    gst_element_link_many (source_, colorspace_, mux_, sink_, NULL);
-  }
+    setupOggPipeline(filename);
+  else
+    setupRawPipeline(filename);
+
   
   // set ready state
   if(!gst_element_set_state (file_encode_, GST_STATE_READY))
   {
-    post("The state could not be set to ready.");
+    post("The state could not be set to READY");
     return false;
   }
 
@@ -212,6 +179,63 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
   else post("FileWriteGst: started recording");
 }
 
+void FileWriteGst::getCodec()
+{
+  post("-----------------------------------------");
+  post("FileWriteGst available codecs:");
+  post("raw");
+  post("theora");
+  post("-----------------------------------------");
+}
+
+bool FileWriteGst::setupRawPipeline(const string &filename)
+{
+  file_encode_ = gst_pipeline_new( "file_encode_");
+
+  source_ = gst_element_factory_make ("appsrc", "source_");
+  g_assert(source_);
+  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+  g_assert(colorspace_);
+  sink_ = gst_element_factory_make ("filesink", "sink_");
+  g_assert(sink_);
+
+  g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+
+  mux_ = gst_element_factory_make("avimux", "mux_");
+  g_assert(mux_);
+
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, mux_, sink_, NULL);
+  gst_element_link_many (source_, colorspace_, mux_, sink_, NULL);
+}
+
+bool FileWriteGst::setupOggPipeline(const string &filename)
+{
+  /// Test-Pipeline for gst-launch:
+  /// gst-launch filesrc location=input.avi ! decodebin !
+  /// ffmpegcolorspace ! theoraenc ! oggmux ! filesink location=output.ogg
+
+  file_encode_ = gst_pipeline_new( "file_encode_");
+
+  source_ = gst_element_factory_make ("appsrc", "source_");
+  g_assert(source_);
+  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+  g_assert(colorspace_);
+  sink_ = gst_element_factory_make ("filesink", "sink_");
+  g_assert(sink_);
+
+  g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+
+  encode_ = gst_element_factory_make ("theoraenc", "encode_");
+  g_assert(encode_);
+  mux_ = gst_element_factory_make("oggmux", "mux_");
+  g_assert(mux_);
+
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, sink_, NULL);
+  gst_element_link_many (source_, colorspace_, encode_, mux_, sink_, NULL);
+
+  return true;
+}
+
 void FileWriteGst::initGstreamer()
 {
   if(is_initialized_) return;
@@ -235,12 +259,6 @@ void FileWriteGst::freeRecBuffer(void *data)
   if(data) delete[] (unsigned char*)data;
 }
 
-void FileWriteGst::getCodec()
-{
-  post("FileWriteGst available codecs:");
-  post("raw");
-  post("theora");
-}
 
 /// Tells us to register our functionality to an engine kernel
 void registerPlugin(VIOKernel &K)

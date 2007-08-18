@@ -6,8 +6,8 @@ LOG
     Also includes gemwin header file
 
     Copyright (c) 1997-2000 Mark Danks.mark@danks.org
-    Copyright (c) Günther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) Gï¿½nther Geiger. geiger@epy.co.at
+    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fï¿½r::umlï¿½ute. IEM. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -124,6 +124,10 @@ class GEM_EXTERN GemMan
     	static void 	    frameRate(float framespersecond);
 
     	//////////
+    	// Get the frame rate
+    	static float 	    getFramerate();
+
+    	//////////
     	// Turn on/off lighting
     	static void 	    lightingOnOff(int state);
     	
@@ -237,6 +241,8 @@ class GEM_EXTERN GemMan
     	static void 	    windowInit();
     	static void 	    windowCleanup();
     	static void 	    resetValues();
+
+        static double s_deltime;
 };
 
 #endif

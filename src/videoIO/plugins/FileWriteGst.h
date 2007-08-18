@@ -50,7 +50,7 @@ class FileWriteGst : public FileWrite
    * @param filename the path of the file
    * @return true if open worked
    */
-  virtual bool openFile(string filename);
+  virtual bool openFile(const string &filename);
 
   /*!
    * stops recording
@@ -59,7 +59,7 @@ class FileWriteGst : public FileWrite
   virtual bool stopRecording();
 
   /// prints the avaliable codecs
-  void getCodec();
+  virtual void getCodec();
 
  protected:
   GstElement *source_;
@@ -72,6 +72,9 @@ class FileWriteGst : public FileWrite
 
   /// inits video file
   void initRecording(int xsize, int ysize, int cs);
+
+  bool setupRawPipeline(const string &filename);
+  bool setupOggPipeline(const string &filename);
   void freePipeline();
 
   bool new_video_;

@@ -110,11 +110,27 @@ void FileReadGst::stopVideo()
   gst_element_set_state (file_decode_, GST_STATE_PAUSED);
 }
 
-bool FileReadGst::setPosition(int frame, int track)
+bool FileReadGst::setPosition(float sec)
 {
   if(!have_pipeline_) return false;
 
-  /// TODO schauen warum das nicht funktioniert ???
+  if( sec<0 || sec>duration_ )
+  {
+    post("seek position out of range");
+    return false;
+  }
+
+  int seek_flags = GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_FLUSH;
+  gint64 seek_pos = (gint64) (sec * GST_SECOND);
+
+  if( !gst_element_seek_simple( file_decode_, GST_FORMAT_TIME,
+      (GstSeekFlags) seek_flags, seek_pos ) )
+  {
+    post("videoIO: seek not possible");
+    return false;
+  }
+
+  return true;
 
   /// TODO dann ein schneller/langsamer Spielen auch implementiern
   /// theoretisch muss man dann hier nur den 2. Parameter von 1.0
@@ -122,18 +138,6 @@ bool FileReadGst::setPosition(int frame, int track)
   /// aber dann auch eine eigene Methode für diese Geschw machen,
   /// die man dann von PD aus auch schön ansprechen kann
   /// z.B. mit einer message [speed 2.0(
-
-  if(! gst_element_seek(file_decode_, 1.0, GST_FORMAT_PERCENT,
-                 GST_SEEK_FLAG_NONE, GST_SEEK_TYPE_SET, frame,
-                 GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
-//   if(!gst_element_seek_simple(file_decode_, GST_FORMAT_BUFFERS,
-//   GST_SEEK_FLAG_NONE, frame))
-  {
-    post("videoIO: the position could not be set");
-    return false;
-  }
-  else
-    return true;
 }
 
 unsigned char *FileReadGst::getFrameData()
@@ -155,8 +159,7 @@ unsigned char *FileReadGst::getFrameData()
   }
 
   // in PAUSED state get the preroll buffer
-  if( (GST_STATE(file_decode_)==GST_STATE_PAUSED &&
-       GST_STATE_PENDING(file_decode_)==GST_STATE_VOID_PENDING) ||
+  if( GST_STATE(file_decode_)==GST_STATE_PAUSED ||
       (GST_STATE(file_decode_)==GST_STATE_PLAYING &&
        GST_STATE_PENDING(file_decode_)==GST_STATE_PAUSED) )
   {
@@ -184,23 +187,6 @@ unsigned char *FileReadGst::getFrameData()
     g_assert( gst_structure_get_fraction (str, "framerate",
             &fps_numerator, &fps_denominator) );
 
-///     // getting the number of frames TODO is not completely exact now I think
-//     GstQuery *query = gst_query_new_duration (GST_FORMAT_TIME);
-//     bool res = gst_element_query (file_decode_, query);
-//     if (res) 
-//     {
-//       gint64 duration;
-//       gst_query_parse_duration (query, NULL, &duration);
-//       int frames = ( duration / 1000000000 ) * ( fps_numerator / fps_denominator );
-//       post ("duration = %"GST_TIME_FORMAT, GST_TIME_ARGS (duration));
-//       post ("frames = %d", frames);
-//       nr_of_frames_ = frames;
-//     }
-//     else {
-//       post ("duration query failed...");
-//     }
-//     gst_query_unref (query);
-    
     int format=-1;
     gst_structure_get_int(str, "bpp", &bpp);
     gst_structure_get_int(str, "depth", &depth);
@@ -215,6 +201,19 @@ unsigned char *FileReadGst::getFrameData()
     // set framerate
     framerate_ = fps_numerator / fps_denominator;
 
+    // get duration of the video
+    GstQuery *query = gst_query_new_duration (GST_FORMAT_TIME);
+    bool res = gst_element_query (file_decode_, query);
+    if (res)
+    {
+      gint64 duration;
+      gst_query_parse_duration (query, NULL, &duration);
+      duration_ = duration / GST_SECOND;
+      post ("duration = %f", duration_);
+    }
+    else post("videoIO: duration query failed");
+    gst_query_unref (query);
+
     new_video_=false;
     gst_caps_unref(caps);
   }
@@ -225,7 +224,6 @@ unsigned char *FileReadGst::getFrameData()
   int ys = frame_.getYSize();
   int cs = frame_.getColorSize();
 
-  /// TODO maybe these conversions could be done more efficient !?
   for(int x=0; x<xs; ++x)
   for(int y=0; y<ys; ++y)
   for(int c=0; c<cs; ++c) {

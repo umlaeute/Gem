@@ -96,13 +96,9 @@ void pix_file_write :: render(GemState *state)
     // allocate m_frame
     m_frame.allocate(xsize, ysize, format);
 
-    /// TODO framerate von GEM muss man bekommen und auch
-    ///      angeben für den fileWriter
-    // schauen wie das pix_record macht !
-//     float framerate = ( 0.0 != s_deltime) ?
-//                         (1000. / s_deltime) : 0.0 );
-//     post("-------- framerate: %f", GemMan::fps);
-    fileWriter->setFramerate( 20. );
+    /// TODO get the new GemMan code into the main Gem Branch
+    float framerate = GemMan::getFramerate();
+    fileWriter->setFramerate( framerate );
 
     m_first_time = false;
   }

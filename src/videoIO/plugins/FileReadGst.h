@@ -70,14 +70,11 @@ class FileReadGst : public FileRead
   virtual void stopVideo();
 
   /*!
-   * changes the current frame
-   * you can select the frame number and the track number,
-   * if track is -1 that means the same track as before
-   * @param frame the number of the desired frame
-   * @param track the number of the desired track
-   * @return false if the frame/track does not exist
+   * changes the position in the video
+   * @param sec desired position in the stream in sec
+   * @return false if there was a problem
    */
-  virtual bool setPosition(int frame, int track = -1);
+  virtual bool setPosition(float sec);
 
   /// @return the frame data of VIOFrame
   virtual unsigned char *getFrameData();

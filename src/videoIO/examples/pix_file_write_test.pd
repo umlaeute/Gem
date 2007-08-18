@@ -29,7 +29,7 @@
 #X obj 44 344 rectangle 4 3;
 #X obj 44 265 pix_separator;
 #X obj 320 248 pix_separator;
-#X obj 320 425 pix_file_write;
+#X obj 320 445 pix_file_write;
 #X msg 339 287 start;
 #X msg 346 319 stop;
 #X obj 170 203 pix_file_read;
@@ -40,11 +40,13 @@
 #X msg 307 176 forceColorspace RGBA;
 #X msg 334 128 forceColorspace GRAY;
 #X msg 327 104 forceColorspace YUV;
-#X msg 434 384 open /home/holzi/Desktop/test.avi;
 #X msg 438 342 getCodec;
 #X msg 438 250 codec ogg;
 #X msg 436 283 codec theora;
 #X msg 437 311 codec raw;
+#X obj 439 224 loadbang;
+#X msg 434 384 open /home/holzi/Desktop/test.ogg;
+#X msg 434 405 open /home/holzi/Desktop/test.avi;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 12 0;
@@ -66,4 +68,6 @@
 #X connect 21 0 9 0;
 #X connect 22 0 9 0;
 #X connect 23 0 9 0;
-#X connect 24 0 9 0;
+#X connect 24 0 21 0;
+#X connect 25 0 9 0;
+#X connect 26 0 9 0;
