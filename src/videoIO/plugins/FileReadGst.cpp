@@ -99,6 +99,7 @@ bool FileReadGst::openFile(string filename)
                          "rate", G_TYPE_INT, 44100,
                          "channels", G_TYPE_INT, 2,
                          "width", G_TYPE_INT, 32,
+//                          "endianness", G_TYPE_INT, G_BIG_ENDIAN,
                          NULL) );
 
   GstPad *audio_pad = gst_element_get_pad (aconvert_, "sink");
@@ -289,7 +290,6 @@ void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
     return;
   }
 
-
   GstBuffer *buf = 0;
 
   //samples*channels*bytesperdata
@@ -301,6 +301,10 @@ void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
   {
     buf = gst_app_sink_pull_buffer(GST_APP_SINK (asink_));
     if( !buf ) post("------------------");
+
+//     GstCaps *caps = gst_buffer_get_caps (buf);
+//     post("FileReadGst loaded audioframe: %s",
+//           gst_caps_to_string (caps) );
 
     gst_adapter_push (adapter_, buf);
   }

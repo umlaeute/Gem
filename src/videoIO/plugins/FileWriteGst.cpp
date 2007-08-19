@@ -195,6 +195,8 @@ bool FileWriteGst::setupRawPipeline(const string &filename)
 
   source_ = gst_element_factory_make ("appsrc", "source_");
   g_assert(source_);
+  videorate_ = gst_element_factory_make ("videorate", "videorate_");
+  g_assert(videorate_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
   mux_ = gst_element_factory_make("avimux", "mux_");
@@ -205,8 +207,17 @@ bool FileWriteGst::setupRawPipeline(const string &filename)
 
   g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
 
-  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, mux_, sink_, NULL);
-  gst_element_link_many (source_, colorspace_, mux_, sink_, NULL);
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, videorate_, mux_, sink_, NULL);
+  gst_element_link_many(source_, colorspace_, videorate_, NULL);
+
+  gst_element_link_filtered(videorate_, mux_,
+    gst_caps_new_simple ("video/x-raw-yuv",
+                         "format", GST_TYPE_FOURCC,
+                         GST_MAKE_FOURCC('I', '4', '2', '0'),
+                         "framerate", GST_TYPE_FRACTION, 25, 1,
+                         NULL) );
+
+  gst_element_link(mux_, sink_);
 }
 
 bool FileWriteGst::setupOggPipeline(const string &filename)
