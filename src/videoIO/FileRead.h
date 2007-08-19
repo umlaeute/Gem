@@ -87,6 +87,16 @@ namespace VideoIO_
     inline virtual unsigned char *getFrameData()
     { return frame_.getFrameData(); }
 
+    /*!
+     * writes stereo audio data for one block to pointers
+     * each pointer is responsible to allocate memory of
+     * size n before !
+     * @param left pointer to channel left audio samples
+     * @param right pointer to channel right audio samples
+     * @param n blocksize, nr of sample to grab for each channel
+     */
+    virtual void getAudioBlock(t_float *left, t_float *right, int n) = 0;
+
     //////////////////////
     // Utility methods
     /////////////////////

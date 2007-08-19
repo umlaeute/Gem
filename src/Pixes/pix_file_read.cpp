@@ -30,6 +30,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_file_read, t_symbol *, A_DEFSYM)
 pix_file_read :: pix_file_read(t_symbol *filename) :
     m_newfilm(false), m_already_banged(true), fileReader(0)
 {
+  // create audio outlets
+  m_outAudio[0]=outlet_new(this->x_obj, &s_signal);
+  m_outAudio[1]=outlet_new(this->x_obj, &s_signal);
+
   // create outlet for frame data and bang at the end
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
@@ -49,6 +53,11 @@ pix_file_read :: ~pix_file_read()
 {
   // Clean up the movie
   closeFile();
+
+  outlet_free(m_outAudio[0]);
+  outlet_free(m_outAudio[1]);
+  outlet_free(m_outNumFrames);
+  outlet_free(m_outEnd);
 }
 
 /////////////////////////////////////////////////////////
@@ -84,6 +93,33 @@ void pix_file_read :: openFile(t_symbol *filename)
     error("pix_file_read: could not open file %s", path);
     return;
   }
+}
+
+/////////////////////////////////////////////////////////
+// DSP Message
+//
+/////////////////////////////////////////////////////////
+void pix_file_read :: dspMess(void *data, t_signal** sp)
+{
+  dsp_add(perform, 4, data, sp[0]->s_vec, sp[1]->s_vec, sp[0]->s_n);
+}
+
+/////////////////////////////////////////////////////////
+// DSP Loop
+//
+/////////////////////////////////////////////////////////
+t_int* pix_file_read :: perform(t_int* w)
+{
+  pix_file_read *x = GetMyClass((void*)w[1]);
+
+  // stereo only for now
+  t_float* left = (t_float*)(w[2]);
+  t_float* right = (t_float*)(w[3]);
+  int N = (t_int)(w[4]);
+
+  x->fileReader->getAudioBlock(left, right, N);
+
+  return (w+5);
 }
 
 /////////////////////////////////////////////////////////
@@ -237,6 +273,9 @@ void pix_file_read :: obj_setupCallback(t_class *classPtr)
                   gensym("seek"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_file_read::csCallback,
                   gensym("forceColorspace"), A_DEFSYM, A_NULL);
+
+  class_addmethod(classPtr, (t_method)&pix_file_read::dspMessCallback,
+		  gensym("dsp"), A_NULL);
 }
 
 void pix_file_read :: openMessCallback(void *data, t_symbol*s)
@@ -264,4 +303,9 @@ void pix_file_read :: seekCallback(void *data, t_floatarg seek)
 void pix_file_read :: csCallback(void *data, t_symbol *s)
 {
   GetMyClass(data)->forceColorspace(s);
+}
+
+void pix_file_read :: dspMessCallback(void *data, t_signal **sp)
+{
+  GetMyClass(data)->dspMess(data, sp);
 }

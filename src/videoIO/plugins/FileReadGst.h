@@ -25,6 +25,7 @@
 #include "gst/gst.h"
 #include "gst/app/gstappsink.h"
 #include "gst/app/gstappbuffer.h"
+#include "gst/base/gstadapter.h"
 
 #include <string>
 
@@ -79,13 +80,28 @@ class FileReadGst : public FileRead
   /// @return the frame data of VIOFrame
   virtual unsigned char *getFrameData();
 
+  /*!
+   * writes stereo audio data for one block to pointers
+   * each pointer is responsible to allocate memory of
+   * size n before !
+   * @param left pointer to channel left audio samples
+   * @param right pointer to channel right audio samples
+   * @param n blocksize, nr of sample to grab for each channel
+   */
+  virtual void getAudioBlock(t_float *left, t_float *right, int n);
+
  protected:
   GstElement *source_;
   GstElement *videorate_;
   GstElement *colorspace_;
-  GstElement *sink_;
+  GstElement *vsink_;
+  GstElement *aconvert_;
+  GstElement *aresample_;
+  GstElement *asink_;
   GstElement *file_decode_;
   GstElement *video_bin_;
+  GstElement *audio_bin_;
+  GstAdapter *adapter_;
   GstBus *bus_;
 
   bool have_pipeline_;

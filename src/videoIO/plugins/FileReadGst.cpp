@@ -19,15 +19,13 @@
 
 #include "FileReadGst.h"
 
-
 bool FileReadGst::is_initialized_ = false;
 
 FileReadGst::FileReadGst() :
-    source_(NULL), videorate_(NULL), colorspace_(NULL), sink_(NULL),
-    file_decode_(NULL), video_bin_(NULL), bus_(NULL),
+    source_(NULL), videorate_(NULL), colorspace_(NULL), vsink_(NULL),
+    file_decode_(NULL), video_bin_(NULL), bus_(NULL), adapter_(NULL),
     have_pipeline_(false), new_video_(false)
 {
-
 }
 
 FileReadGst::~FileReadGst()
@@ -37,11 +35,16 @@ FileReadGst::~FileReadGst()
   // Gstreamer clean up
   gst_element_set_state (file_decode_, GST_STATE_NULL);
   gst_object_unref (GST_OBJECT (file_decode_));
+  g_object_unref( adapter_ );
 }
 
 bool FileReadGst::openFile(string filename)
 {
   initGstreamer();
+
+  // make new adapter
+  if( adapter_ ) g_object_unref( adapter_ );
+  adapter_ = gst_adapter_new();
 
   string uri = getURIFromFilename(filename);
 
@@ -57,26 +60,52 @@ bool FileReadGst::openFile(string filename)
       
   g_signal_connect (source_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
   
-  // creating video output
+
+  // creating video output bin
   video_bin_ = gst_bin_new ("video_bin_");
   g_assert(video_bin_);
   videorate_ = gst_element_factory_make("videorate", "videorate_");
-  g_assert(source_);
+  g_assert(videorate_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
-  sink_ = gst_element_factory_make ("appsink", "sink_");
-  g_assert(sink_);
-  
-  GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
-  
-  gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, sink_, NULL);
+  vsink_ = gst_element_factory_make ("appsink", "vsink_");
+  g_assert(vsink_);
 
-  // NOTE colorspace_ and sink_ are linked in the callback
+  gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vsink_, NULL);
+  // NOTE colorspace_ and vsink_ are linked in the callback
   gst_element_link(videorate_, colorspace_);
 
+  GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
   gst_object_unref(video_pad);
   gst_bin_add (GST_BIN (file_decode_), video_bin_);
+
+
+  // creating audio output bin
+  audio_bin_ = gst_bin_new ("audio_bin_");
+  g_assert(audio_bin_);
+  aconvert_ = gst_element_factory_make("audioconvert", "aconvert_");
+  g_assert(aconvert_);
+  aresample_ = gst_element_factory_make ("audioresample", "aresample_");
+  g_assert(aresample_);
+  asink_ = gst_element_factory_make ("appsink", "asink_");
+  g_assert(asink_);
+
+  gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, asink_, NULL);
+  gst_element_link(aconvert_, aresample_);
+  /// TODO get framerate of pd
+  gst_element_link_filtered(aresample_, asink_,
+    gst_caps_new_simple ("audio/x-raw-float",
+                         "rate", G_TYPE_INT, 44100,
+                         "channels", G_TYPE_INT, 2,
+                         "width", G_TYPE_INT, 32,
+                         NULL) );
+
+  GstPad *audio_pad = gst_element_get_pad (aconvert_, "sink");
+  gst_element_add_pad (audio_bin_, gst_ghost_pad_new ("sink", audio_pad));
+  gst_object_unref(audio_pad);
+  gst_bin_add (GST_BIN (file_decode_), audio_bin_);
+
 
   have_pipeline_=true;
 
@@ -119,7 +148,7 @@ bool FileReadGst::setPosition(float sec)
     return false;
   }
 
-  int seek_flags = GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_FLUSH;
+  int seek_flags = GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
   gint64 seek_pos = (gint64) (sec * GST_SECOND);
 
   if( !gst_element_seek_simple( file_decode_, GST_FORMAT_TIME,
@@ -143,7 +172,7 @@ unsigned char *FileReadGst::getFrameData()
 {
   if(!have_pipeline_) return 0;
 
-  if( gst_app_sink_end_of_stream(GST_APP_SINK (sink_)) ) return 0;
+  if( gst_app_sink_end_of_stream( GST_APP_SINK (vsink_) ) ) return 0;
 
   GstBuffer *buf = 0;
   
@@ -154,7 +183,7 @@ unsigned char *FileReadGst::getFrameData()
   if( GST_STATE(file_decode_)==GST_STATE_PLAYING &&
       GST_STATE_PENDING(file_decode_)==GST_STATE_VOID_PENDING )
   {
-    buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
+    buf = gst_app_sink_pull_buffer(GST_APP_SINK (vsink_));
   }
 
   // in PAUSED state get the preroll buffer
@@ -162,7 +191,7 @@ unsigned char *FileReadGst::getFrameData()
       (GST_STATE(file_decode_)==GST_STATE_PLAYING &&
        GST_STATE_PENDING(file_decode_)==GST_STATE_PAUSED) )
   {
-    buf = gst_app_sink_pull_preroll(GST_APP_SINK (sink_));
+    buf = gst_app_sink_pull_preroll(GST_APP_SINK (vsink_));
   }
 
   if( !buf ) return 0;
@@ -234,6 +263,75 @@ unsigned char *FileReadGst::getFrameData()
   return frame_.getFrameData();
 }
 
+void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
+{
+  if(!have_pipeline_)
+  {
+    // write zero samples in audio block
+    while(n--)
+    {
+      *left++ = 0;
+      *right++ = 0;
+    }
+    return;
+  }
+
+  // if we are not in playing or have end of stream send zero samples
+  if( !(GST_STATE(file_decode_)==GST_STATE_PLAYING &&
+        GST_STATE_PENDING(file_decode_)==GST_STATE_VOID_PENDING) &&
+        !gst_app_sink_end_of_stream( GST_APP_SINK (asink_) ) )
+  {
+    while(n--)
+    {
+      *left++ = 0;
+      *right++ = 0;
+    }
+    return;
+  }
+
+
+  GstBuffer *buf = 0;
+
+  //samples*channels*bytesperdata
+  // (we have converted to 32 bit data = 4 bytes)
+  int buffersize = n * 2 * 4;
+
+  // check if we need to get a new buffer
+  if( gst_adapter_available(adapter_) < buffersize )
+  {
+    buf = gst_app_sink_pull_buffer(GST_APP_SINK (asink_));
+    if( !buf ) post("------------------");
+
+    gst_adapter_push (adapter_, buf);
+  }
+
+  if( gst_adapter_available(adapter_) >= buffersize )
+  {
+    t_float *data = (t_float*) gst_adapter_peek (adapter_, buffersize);
+
+//     post("data123: %f %f %f", data[0], data[2], data[4]);
+
+    for(int i=0; i<n; ++i)
+    {
+      left[i] = data[i*2];
+      right[i] = data[i*2+1];
+    }
+
+    gst_adapter_flush (adapter_, buffersize);
+  }
+  else
+  {
+    post("FileReadGst audio dropout");
+
+    // write zero samples in audio block
+    while(n--)
+    {
+      *left++ = 0;
+      *right++ = 0;
+    }
+  }
+}
+
 string FileReadGst::getURIFromFilename(const string &filename)
 {
   string str;
@@ -260,108 +358,130 @@ void FileReadGst::initGstreamer()
 void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 {
   GstCaps *caps;
-  GstStructure *str;
-  GstPad *videopad;
+  GstStructure *vstr;
+  GstPad *videopad, *audiopad;
   
   FileReadGst *tmp = (FileReadGst *)data;
 
-  // only link once
   videopad = gst_element_get_pad (tmp->video_bin_, "sink");
   g_assert(videopad);
+
+  audiopad = gst_element_get_pad (tmp->audio_bin_, "sink");
+  g_assert(audiopad);
+
+  bool link_audio = true, link_video = true;
   
-  if (GST_PAD_IS_LINKED (videopad)) {
+  // check if the pads are already linked
+  if( GST_PAD_IS_LINKED (videopad) )
+  {
     g_object_unref (videopad);
-    return;
+    link_video = false;
+  }
+  if ( GST_PAD_IS_LINKED (audiopad) )
+  {
+    g_object_unref (audiopad);
+    link_audio = false;
   }
 
-  // check if we have a video
+  // check if we have a video and/or audio
   caps = gst_pad_get_caps (pad);
-  str = gst_caps_get_structure (caps, 0);
-  if (!g_strrstr (gst_structure_get_name (str), "video")) 
+  vstr = gst_caps_get_structure (caps, 0);
+  if (!g_strrstr (gst_structure_get_name (vstr), "video"))
+    link_video = false;
+  if (!g_strrstr (gst_structure_get_name (vstr), "audio")) 
+    link_audio = false;
+
+  post("Callback Caps: %s", gst_caps_to_string (caps) );
+
+  if( link_video )
   {
-    gst_caps_unref (caps);
-    gst_object_unref (videopad);
-    return;
+	// force a colorspace conversion if requested
+	int fr1 = (int) tmp->fr_host_ * 10000;
+	int fr2 = 10000;
+	switch(tmp->cspace_)
+	{
+	case RGBA:
+	gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+		gst_caps_new_simple ("video/x-raw-rgb", 
+					"bpp", G_TYPE_INT, 32,
+					"depth", G_TYPE_INT, 32,
+					"red_mask",   G_TYPE_INT, 0xff000000,
+					"green_mask", G_TYPE_INT, 0x00ff0000,
+					"blue_mask",  G_TYPE_INT, 0x0000ff00,
+					"alpha_mask", G_TYPE_INT, 0x000000ff,
+					"framerate", GST_TYPE_FRACTION, fr1, fr2,
+					NULL) );
+	break;
+	
+	case RGB:
+	gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+		gst_caps_new_simple ("video/x-raw-rgb", 
+					"bpp", G_TYPE_INT, 24,
+					"depth", G_TYPE_INT, 24,
+					"red_mask",   G_TYPE_INT, 0x00ff0000,
+					"green_mask", G_TYPE_INT, 0x0000ff00,
+					"blue_mask",  G_TYPE_INT, 0x000000ff,
+					"framerate", GST_TYPE_FRACTION, fr1, fr2,
+					NULL) );
+	break;
+	
+	case YUV422:
+	gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+		gst_caps_new_simple ("video/x-raw-yuv", 
+					"format", GST_TYPE_FOURCC,
+					GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+					"framerate", GST_TYPE_FRACTION, fr1, fr2,
+					NULL) );
+	break;
+	
+	case GRAY:
+	gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+		gst_caps_new_simple ("video/x-raw-gray",
+					"framerate", GST_TYPE_FRACTION, fr1, fr2,
+					NULL) );
+	break;
+	
+	default:
+	// see if we have YUV, then we have to convert to
+	// GEMs YUV format
+	GstStructure *vstr = gst_caps_get_structure (caps, 0);
+	
+	// if we not have a "bpp" property we should have YUV
+	/// TODO maybe find a better way to see if its YUV
+	int bpp;
+	if( !gst_structure_get_int(vstr, "bpp", &bpp) )
+	{
+		gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+		gst_caps_new_simple ("video/x-raw-yuv", 
+					"format", GST_TYPE_FOURCC,
+					GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+					"framerate", GST_TYPE_FRACTION, fr1, fr2,
+					NULL) );
+	}
+	else // make framerate conversion
+	{
+		gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+		gst_caps_new_simple ("video/x-raw-rgb",
+					"framerate", GST_TYPE_FRACTION, fr1, fr2,
+					NULL) );
+	}
+	}
+	
+	// link the pads
+	gst_pad_link (pad, videopad);
   }
 
-//   post("Callback Caps: %s", gst_caps_to_string (caps) );
-
-  // force a colorspace conversion if requested
-  int fr1 = (int) tmp->fr_host_ * 10000;
-  int fr2 = 10000;
-  switch(tmp->cspace_)
+  if( link_audio )
   {
-    case RGBA:
-      gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-rgb", 
-                                "bpp", G_TYPE_INT, 32,
-                                "depth", G_TYPE_INT, 32,
-				"red_mask",   G_TYPE_INT, 0xff000000,
-				"green_mask", G_TYPE_INT, 0x00ff0000,
-				"blue_mask",  G_TYPE_INT, 0x0000ff00,
-				"alpha_mask", G_TYPE_INT, 0x000000ff,
-                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
-                                NULL) );
-      break;
-
-    case RGB:
-      gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-rgb", 
-                                "bpp", G_TYPE_INT, 24,
-                                "depth", G_TYPE_INT, 24,
-				"red_mask",   G_TYPE_INT, 0x00ff0000,
-				"green_mask", G_TYPE_INT, 0x0000ff00,
-				"blue_mask",  G_TYPE_INT, 0x000000ff,
-                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
-                                NULL) );
-      break;
-
-    case YUV422:
-      gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-yuv", 
-                                "format", GST_TYPE_FOURCC,
-                                GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
-                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
-                                NULL) );
-      break;
-
-    case GRAY:
-      gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-gray",
-                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
-                                NULL) );
-      break;
-
-    default:
-      // see if we have YUV, then we have to convert to
-      // GEMs YUV format
-      GstStructure *str = gst_caps_get_structure (caps, 0);
-
-      // if we not have a "bpp" property we should have YUV
-      /// TODO maybe find a better way to see if its YUV
-      int bpp;
-      if( !gst_structure_get_int(str, "bpp", &bpp) )
-      {
-        gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-yuv", 
-                                "format", GST_TYPE_FOURCC,
-                                GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
-                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
-                                NULL) );
-      }
-      else // make framerate conversion
-      {
-        gst_element_link_filtered(tmp->colorspace_, tmp->sink_,
-           gst_caps_new_simple ("video/x-raw-rgb",
-                                "framerate", GST_TYPE_FRACTION, fr1, fr2,
-                                NULL) );
-      }
+    gst_pad_link (pad, audiopad);
   }
 
+
+  // CLEANUP
   gst_caps_unref (caps);
-
-  // link the pads
-  gst_pad_link (pad, videopad);
+  gst_object_unref (videopad);
+  gst_object_unref (audiopad);
+  return;
 }
 
 /// Tells us to register our functionality to an engine kernel

@@ -61,6 +61,14 @@ class GEM_EXTERN pix_file_read : public GemBase
     virtual void openFile(t_symbol *filename);
 
     //////////
+    // DSP-Message
+    virtual void dspMess(void *data, t_signal** sp);
+
+    //////////
+    // DSP perform
+    static t_int* perform(t_int* w);
+
+    //////////
     // Do the rendering
     virtual void render(GemState *state);
 
@@ -80,6 +88,8 @@ class GEM_EXTERN pix_file_read : public GemBase
     // a outlet for information like #frames and "reached end"
     t_outlet     *m_outNumFrames;
     t_outlet     *m_outEnd;
+    // the audio outlets~
+    t_outlet *m_outAudio[2];
 
     // the file reader
     VideoIO_::FileRead *fileReader;
@@ -103,6 +113,9 @@ class GEM_EXTERN pix_file_read : public GemBase
     static void stopCallback(void *data, t_floatarg stop);
     static void seekCallback(void *data, t_floatarg seek);
     static void csCallback(void *data, t_symbol *s);
+
+    // audio callback
+    static void dspMessCallback(void *data,t_signal **sp);
 };
 
 #endif	// for header file
