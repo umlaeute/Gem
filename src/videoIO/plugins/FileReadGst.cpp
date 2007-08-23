@@ -41,6 +41,7 @@ FileReadGst::~FileReadGst()
 bool FileReadGst::openFile(string filename)
 {
   initGstreamer();
+  closeFile();
 
   // make new adapter
   if( adapter_ ) g_object_unref( adapter_ );
@@ -90,6 +91,11 @@ bool FileReadGst::openFile(string filename)
   g_assert(aresample_);
   asink_ = gst_element_factory_make ("appsink", "asink_");
   g_assert(asink_);
+  
+  gint64 late = 100;
+  
+  g_object_set (G_OBJECT(asink_), "max-lateness", &late, NULL);
+  g_object_set (G_OBJECT(asink_), "sync", true, NULL);
 
   gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, asink_, NULL);
   gst_element_link(aconvert_, aresample_);
@@ -149,11 +155,19 @@ bool FileReadGst::setPosition(float sec)
     return false;
   }
 
-  int seek_flags = GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
+//  int seek_flags = GST_SEEK_FLAG_KEY_UNIT;
+  int seek_flags =  GST_SEEK_FLAG_KEY_UNIT;        ///TODO seeken funktioniert mit audio nicht
   gint64 seek_pos = (gint64) (sec * GST_SECOND);
+  post ("Seek flags: %d", seek_flags);
 
   if( !gst_element_seek_simple( file_decode_, GST_FORMAT_TIME,
       (GstSeekFlags) seek_flags, seek_pos ) )
+  
+//   if(!gst_element_seek( file_decode_, 1.0, GST_FORMAT_TIME, 
+//                         (GstSeekFlags) seek_flags,
+//                         GST_SEEK_TYPE_SET, seek_pos, 
+//                         GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
+  
   {
     post("videoIO: seek not possible");
     return false;
