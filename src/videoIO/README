@@ -1,0 +1,49 @@
+This is the videoIO framework for PD
+====================================
+
+This framework should provide a general videoIO framework with which
+IO plugins can be loaded at runtime.
+At the moment there are only Gstreamer plugins avaliable, which should
+work on very much platforms, but for now it's only tested on Linux.
+
+
+Dependencies
+============
+
+The core
+--------
+PD >= 0.34                                                                 # wie GEM???
+
+The Gstreamer plugins
+---------------------
+Gstreamer >= 0.10.13
+Gstreamer Base Plugins >= 0.10.13
+Gstreamer Good Plugins >= 0.10.6
+Gstreamer Bad Plugins >= 0.10.5 (CVS)
+  - You will need the CVS version to get the Gstreamer appsrc and
+    appsink elements.
+Gstreamer Ugly Plugins >= 0.10.6
+  - You will need the ugly plugins only if you want to play DVDs or
+    some other non-free things.
+    
+
+Compilation
+===========
+
+The core will be compiled with the GEM buildsystem.
+The plugins will be build with the makefile in videoIO/plugins.                 #dependencies??
+
+...
+
+
+Writing new plugins
+===================
+
+If you want to write a new plugin you can simply derive from the base
+classes (i.e FileRead, FileWrite and DeviceRead). You then also need
+to have a registerPlugin(VIOKernel &) method which registers the plugin
+to the kernel. It would be good to look at an existing plugin
+(e.g. FileReadGst) to see how this works.
+In VIOKernel::loadPlugins() you then also have to add a 
+registerPlugin("YourPluginName") call. Then the kernel will try to
+load the plugin.
