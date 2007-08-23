@@ -63,10 +63,11 @@ class FileWriteGst : public FileWrite
 
  protected:
   GstElement *source_;
+  GstElement *videorate_;
   GstElement *colorspace_; 
   GstElement *encode_;
-  GstElement *videorate_;
   GstElement *mux_;
+  GstElement *queue_;
   GstElement *sink_;
   GstElement *file_encode_;
   GstBus *bus_;
@@ -76,10 +77,14 @@ class FileWriteGst : public FileWrite
 
   bool setupRawPipeline(const string &filename);
   bool setupOggPipeline(const string &filename);
+  bool setupMpeg4Pipeline(const string &filename);
+  bool setupUdpPipeline(const string &filename);
   void freePipeline();
 
   bool new_video_;
   bool have_pipeline_;
+  
+  int frame_number_;
 
   static void initGstreamer();
   static bool is_initialized_;

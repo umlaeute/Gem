@@ -21,9 +21,8 @@
 
 bool FileWriteGst::is_initialized_ = false;
 
-FileWriteGst::FileWriteGst() : new_video_(false), have_pipeline_(false)
+FileWriteGst::FileWriteGst() : new_video_(false), have_pipeline_(false), frame_number_(0)
 {
-
 }
 
 FileWriteGst::~FileWriteGst()
@@ -53,17 +52,37 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
   unsigned char *tmp = rec_data;
 
   // copy data
-  for(int x=0; x<xs; ++x) {
-  for(int y=0; y<ys; ++y) {
-  for(int c=0; c<cs; ++c) {
-    // swap y axis
-    tmp[y*xs*cs + x*cs + c] =
-    data[(ys-y-1)*xs*cs + x*cs + c];
-  } } }
+  for(int x=0; x<xs; ++x)
+    for(int y=0; y<ys; ++y)
+      for(int c=0; c<cs; ++c) {
+        // swap y axis
+        tmp[y*xs*cs + x*cs + c] =
+        data[(ys-y-1)*xs*cs + x*cs + c];
+      }
 
   GstBuffer *buf;
   buf = gst_app_buffer_new (rec_data, size, freeRecBuffer, (void*)rec_data);
+
+/// TODO müssen wir timestamp und buffer setzen? bei mir hats mit timestamp nicht funktioniert
+//   // adding the timestamp to the buffer
+//   GstClock *clock = gst_pipeline_get_clock(GST_PIPELINE(file_encode_));
+//   GstClockTime time = gst_clock_get_time(clock);
+//   buf->timestamp = time;
+  
+//   // setting the framenumber of this buffer
+//   buf->offset = frame_number_;
+  
+//   // adding caps to the buffer
+//   GstCaps *caps = gst_caps_new_simple ("video/x-raw-yuv",
+//                                        "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
+//                                        "framerate", GST_TYPE_FRACTION, 20, 1,
+//                                        "width", G_TYPE_INT, xs,
+//                                        "height", G_TYPE_INT, ys,
+//                                        NULL);
+//   gst_buffer_set_caps (buf, caps);
+  
   gst_app_src_push_buffer (GST_APP_SRC (source_), buf);
+  frame_number_++;
 }
 
 bool FileWriteGst::openFile(const string &filename)
@@ -75,9 +94,13 @@ bool FileWriteGst::openFile(const string &filename)
 
   if (codec_ == "ogg" || codec_ == "theora")
     setupOggPipeline(filename);
+  else if (codec_ == "mpeg4")   
+    setupMpeg4Pipeline(filename);
   else
     setupRawPipeline(filename);
-
+  
+  ///TODO I only succeeded in playing the mpeg4 and raw files with mplayer, 
+  /// vlc doesn't play it. But gstreamer (playbin) can also play it
   
   // set ready state
   if(!gst_element_set_state (file_encode_, GST_STATE_READY))
@@ -99,6 +122,8 @@ bool FileWriteGst::stopRecording()
   gst_element_set_state (file_encode_, GST_STATE_NULL);
 
   post("FileWriteGst: stopped recording");
+  
+  frame_number_ = 0;
   
   return true;
 }
@@ -186,6 +211,8 @@ void FileWriteGst::getCodec()
   post("theora:");
   post("  quality: 0 - 63, default: 16");
   post("  bitrate: 0 - 2000");
+  post("mpeg4: ");
+  post("  bitrate: 0 - 4294967295, default: 300000");
   post("-----------------------------------------");
 }
 
@@ -195,29 +222,23 @@ bool FileWriteGst::setupRawPipeline(const string &filename)
 
   source_ = gst_element_factory_make ("appsrc", "source_");
   g_assert(source_);
-  videorate_ = gst_element_factory_make ("videorate", "videorate_");
-  g_assert(videorate_);
+//   videorate_ = gst_element_factory_make ("videorate", "videorate_");
+//   g_assert(videorate_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
   mux_ = gst_element_factory_make("avimux", "mux_");
   g_assert(mux_);
-
+  queue_ = gst_element_factory_make("queue", "queue_");
+  g_assert(queue_);
   sink_ = gst_element_factory_make ("filesink", "sink_");
   g_assert(sink_);
 
   g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+  g_object_set (G_OBJECT(sink_), "sync", true, NULL);
 
-  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, videorate_, mux_, sink_, NULL);
-  gst_element_link_many(source_, colorspace_, videorate_, NULL);
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, mux_, queue_, sink_, NULL);
+  gst_element_link_many (source_, colorspace_, mux_, queue_, sink_, NULL);
 
-  gst_element_link_filtered(videorate_, mux_,
-    gst_caps_new_simple ("video/x-raw-yuv",
-                         "format", GST_TYPE_FOURCC,
-                         GST_MAKE_FOURCC('I', '4', '2', '0'),
-                         "framerate", GST_TYPE_FRACTION, 25, 1,
-                         NULL) );
-
-  gst_element_link(mux_, sink_);
 }
 
 bool FileWriteGst::setupOggPipeline(const string &filename)
@@ -250,6 +271,49 @@ bool FileWriteGst::setupOggPipeline(const string &filename)
 
   gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, sink_, NULL);
   gst_element_link_many (source_, colorspace_, encode_, mux_, sink_, NULL);
+
+  return true;
+}
+
+bool FileWriteGst::setupMpeg4Pipeline(const string &filename)
+{
+  file_encode_ = gst_pipeline_new( "file_encode_");
+
+  source_ = gst_element_factory_make ("appsrc", "source_");
+  g_assert(source_);
+  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+  g_assert(colorspace_);
+  encode_ = gst_element_factory_make ("ffenc_mpeg4", "encode_");
+  g_assert(encode_);
+  mux_ = gst_element_factory_make("avimux", "mux_");
+  g_assert(mux_);
+  sink_ = gst_element_factory_make ("filesink", "sink_");
+  g_assert(sink_);
+
+  g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+
+  // set mpeg4 parameter
+  if( cparameters_.find("bitrate") != cparameters_.end() )
+    g_object_set (G_OBJECT(encode_), "bitrate", cparameters_["bitrate"], NULL);
+
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, sink_, NULL);
+  gst_element_link_many (source_, colorspace_, encode_, mux_, sink_, NULL);
+
+  return true;
+}
+
+bool FileWriteGst::setupUdpPipeline(const string &filename)
+{
+  file_encode_ = gst_pipeline_new( "file_encode_");
+
+  source_ = gst_element_factory_make ("appsrc", "source_");
+  g_assert(source_);
+  sink_ = gst_element_factory_make ("udpsink", "sink_");
+  g_assert(sink_);
+
+
+  gst_bin_add_many (GST_BIN (file_encode_), source_, sink_, NULL);
+  gst_element_link_many (source_, sink_, NULL);
 
   return true;
 }
