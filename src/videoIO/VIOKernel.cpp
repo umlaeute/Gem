@@ -60,6 +60,7 @@ namespace VideoIO_
   {
     // try to load all possible plugins
     registerPlugin("FileReadGst");
+    registerPlugin("FileReadDummy");
     registerPlugin("FileWriteGst");
     registerPlugin("DeviceReadGst");
   }
