@@ -17,20 +17,20 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "FRDummy.h"
+#include "FileReadDummy.h"
 
-bool FRDummy::openFile(string filename)
+bool FileReadDummy::openFile(string filename)
 {
-  nr_of_frames_ = 5; // just to look if bang works
+  duration_ = 5; // just to look if bang works
   
   frame_.allocate(20, 20, RGB);
 
-  has_video_file_ = true;
+ // has_video_file_ = true;
   
   return true;
 }
 
-unsigned char *FRDummy::getFrameData()
+unsigned char *FileReadDummy::getFrameData()
 {
   int size = frame_.getXSize() * frame_.getYSize() * frame_.getColorSize();
   unsigned char *data = frame_.getFrameData();
@@ -45,8 +45,8 @@ unsigned char *FRDummy::getFrameData()
 void registerPlugin(VIOKernel &K)
 {
   K.getFileReadServer().addPlugin(
-    auto_ptr<FileRead>(new FRDummy()));
+    auto_ptr<FileRead>(new FileReadDummy()));
   
-  post("VideoIO: registered Dummy FileRead Plugin");
+  post("VideoIO: registered FileReadDummy Plugin");
 }
 

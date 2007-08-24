@@ -10,7 +10,11 @@
 # the include paths may be different on your system
 INCLUDE=-I/usr/local/include/gstreamer-0.10 -I/usr/include/gstreamer-0.10 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include/ -I/usr/include/libxml2/
 
-all: FileReadGst FileWriteGst DeviceReadGst
+all: FileReadDummy FileReadGst FileWriteGst DeviceReadGst
+
+FileReadDummy: FileReadDummy.h FileReadDummy.cpp
+	g++ -fPIC -c FileReadDummy.cpp
+	g++ -shared -o FileReadDummy.so FileReadDummy.o
 
 FileReadGst: FileReadGst.h FileReadGst.cpp
 	g++ -DDEBUG -fPIC ${INCLUDE} -c FileReadGst.cpp

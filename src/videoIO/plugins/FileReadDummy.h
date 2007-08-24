@@ -18,10 +18,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 
-#ifndef FRDUMMY_
-#define FRDUMMY_
+#ifndef FILE_READ_DUMMY_
+#define FILE_READ_DUMMY_
 
-#include "FRDummy.h"
 #include "../FileRead.h"
 #include "../VIOKernel.h"
 
@@ -30,34 +29,35 @@
 using namespace std;
 using namespace VideoIO_;
 
-class FRDummy : public FileRead
+class FileReadDummy : public FileRead
 {
   public:
-  /*!
-  * opens the file at the given path
-  * @param filename the path of the file
-  */
+
+  /// opens the file at the given path
+  /// @param filename the path of the file
   bool openFile(string filename);
   
-  /*!
-  * @return the current frame of the video
-  */
+  void closeFile(){};
+  
+  void startVideo(){};
+  
+  void stopVideo(){};
+  
+  bool setPosition(float sec){};
+  
+  /// @return the current frame of the video
   unsigned char *getFrameData();
 
-  /*!
-  * @return the frames per second
-  */
+  /// @return the frames per second
   double getFPS() { return 20.; };
   
-  /*!
-  * @return the width of the video
-  */
+  /// @return the width of the video
   int getWidth() { return 20; };
   
-  /*!
-  * @return the height of the video
-  */
+  /// @return the height of the video
   int getHeight() { return 20; };
+  
+  void getAudioBlock(t_float *left, t_float *right, int n){};
 
 };
 
