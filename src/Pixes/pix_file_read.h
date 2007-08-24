@@ -112,6 +112,7 @@ class GEM_EXTERN pix_file_read : public GemBase
     static void startCallback(void *data, t_floatarg start);
     static void stopCallback(void *data, t_floatarg stop);
     static void seekCallback(void *data, t_floatarg seek);
+    static void speedCallback(void *data, t_floatarg speed);
     static void csCallback(void *data, t_symbol *s);
 
     // audio callback

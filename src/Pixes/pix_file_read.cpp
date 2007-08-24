@@ -271,6 +271,8 @@ void pix_file_read :: obj_setupCallback(t_class *classPtr)
 
   class_addmethod(classPtr, (t_method)&pix_file_read::seekCallback,
                   gensym("seek"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_file_read::speedCallback,
+                  gensym("speed"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_file_read::csCallback,
                   gensym("forceColorspace"), A_DEFSYM, A_NULL);
 
@@ -298,6 +300,11 @@ void pix_file_read :: stopCallback(void *data, t_floatarg stop)
 void pix_file_read :: seekCallback(void *data, t_floatarg seek)
 {
   GetMyClass(data)->fileReader->setPosition( seek );
+}
+
+void pix_file_read :: speedCallback(void *data, t_floatarg speed)
+{
+  GetMyClass(data)->fileReader->setSpeed(speed);
 }
 
 void pix_file_read :: csCallback(void *data, t_symbol *s)
