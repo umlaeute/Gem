@@ -69,12 +69,15 @@ bool FileReadGst::openFile(string filename)
   g_assert(videorate_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
+  vqueue_ = gst_element_factory_make ("queue", "vqueue_");
+  g_assert(vqueue_);
   vsink_ = gst_element_factory_make ("appsink", "vsink_");
   g_assert(vsink_);
 
-  gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vsink_, NULL);
-  // NOTE colorspace_ and vsink_ are linked in the callback
+  gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
+  // NOTE colorspace_ and vqueue_ are linked in the callback
   gst_element_link(videorate_, colorspace_);
+  gst_element_link(vqueue_, vsink_);
 
   GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
@@ -89,18 +92,15 @@ bool FileReadGst::openFile(string filename)
   g_assert(aconvert_);
   aresample_ = gst_element_factory_make ("audioresample", "aresample_");
   g_assert(aresample_);
+  aqueue_ = gst_element_factory_make ("queue", "aqueue_");
+  g_assert(aqueue_);
   asink_ = gst_element_factory_make ("appsink", "asink_");
   g_assert(asink_);
   
-  gint64 late = 100;
-  
-  g_object_set (G_OBJECT(asink_), "max-lateness", &late, NULL);
-  g_object_set (G_OBJECT(asink_), "sync", true, NULL);
-
-  gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, asink_, NULL);
-  gst_element_link(aconvert_, aresample_);
+  gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, aqueue_, asink_, NULL);
+  gst_element_link_many(aconvert_, aresample_, aqueue_, NULL);
   /// TODO get framerate of pd
-  gst_element_link_filtered(aresample_, asink_,
+  gst_element_link_filtered(aqueue_, asink_,
     gst_caps_new_simple ("audio/x-raw-float",
                          "rate", G_TYPE_INT, 44100,
                          "channels", G_TYPE_INT, 2,
@@ -113,9 +113,8 @@ bool FileReadGst::openFile(string filename)
   gst_object_unref(audio_pad);
   gst_bin_add (GST_BIN (file_decode_), audio_bin_);
 
-
   have_pipeline_=true;
-
+  
   // set paused state
   gst_element_set_state (file_decode_, GST_STATE_PAUSED);
   new_video_=true;
@@ -156,7 +155,7 @@ bool FileReadGst::setPosition(float sec)
   }
 
 //  int seek_flags = GST_SEEK_FLAG_KEY_UNIT;
-  int seek_flags =  GST_SEEK_FLAG_KEY_UNIT;        ///TODO seeken funktioniert mit audio nicht
+  int seek_flags =  GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;        ///TODO seeken funktioniert mit audio nicht
   gint64 seek_pos = (gint64) (sec * GST_SECOND);
   post ("Seek flags: %d", seek_flags);
 
@@ -419,7 +418,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 	switch(tmp->cspace_)
 	{
 	case RGBA:
-	gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+	gst_element_link_filtered(tmp->colorspace_, tmp->vqueue_,
 		gst_caps_new_simple ("video/x-raw-rgb", 
 					"bpp", G_TYPE_INT, 32,
 					"depth", G_TYPE_INT, 32,
@@ -432,7 +431,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 	break;
 	
 	case RGB:
-	gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+	gst_element_link_filtered(tmp->colorspace_, tmp->vqueue_,
 		gst_caps_new_simple ("video/x-raw-rgb", 
 					"bpp", G_TYPE_INT, 24,
 					"depth", G_TYPE_INT, 24,
@@ -444,7 +443,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 	break;
 	
 	case YUV422:
-	gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+	gst_element_link_filtered(tmp->colorspace_, tmp->vqueue_,
 		gst_caps_new_simple ("video/x-raw-yuv", 
 					"format", GST_TYPE_FOURCC,
 					GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
@@ -453,7 +452,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 	break;
 	
 	case GRAY:
-	gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+	gst_element_link_filtered(tmp->colorspace_, tmp->vqueue_,
 		gst_caps_new_simple ("video/x-raw-gray",
 					"framerate", GST_TYPE_FRACTION, fr1, fr2,
 					NULL) );
@@ -469,7 +468,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 	int bpp;
 	if( !gst_structure_get_int(vstr, "bpp", &bpp) )
 	{
-		gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+		gst_element_link_filtered(tmp->colorspace_, tmp->vqueue_,
 		gst_caps_new_simple ("video/x-raw-yuv", 
 					"format", GST_TYPE_FOURCC,
 					GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
@@ -478,7 +477,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 	}
 	else // make framerate conversion
 	{
-		gst_element_link_filtered(tmp->colorspace_, tmp->vsink_,
+		gst_element_link_filtered(tmp->colorspace_, tmp->vqueue_,
 		gst_caps_new_simple ("video/x-raw-rgb",
 					"framerate", GST_TYPE_FRACTION, fr1, fr2,
 					NULL) );

@@ -53,32 +53,32 @@ class FileReadGst : public FileRead
    * @param filename the path of the file
    * @return true if open worked
    */
-  virtual bool openFile(string filename);
+  bool openFile(string filename);
   
   /*!
    * closes the file
    */
-  virtual void closeFile();
+  void closeFile();
 
   /*!
    * starts playing the video asynchronus to pd
    */
-  virtual void startVideo();
+  void startVideo();
 
   /*!
    * stops playing the video
    */
-  virtual void stopVideo();
+  void stopVideo();
 
   /*!
    * changes the position in the video
    * @param sec desired position in the stream in sec
    * @return false if there was a problem
    */
-  virtual bool setPosition(float sec);
+  bool setPosition(float sec);
 
   /// @return the frame data of VIOFrame
-  virtual unsigned char *getFrameData();
+  unsigned char *getFrameData();
 
   /*!
    * writes stereo audio data for one block to pointers
@@ -88,15 +88,17 @@ class FileReadGst : public FileRead
    * @param right pointer to channel right audio samples
    * @param n blocksize, nr of sample to grab for each channel
    */
-  virtual void getAudioBlock(t_float *left, t_float *right, int n);
+  void getAudioBlock(t_float *left, t_float *right, int n);
 
  protected:
   GstElement *source_;
   GstElement *videorate_;
   GstElement *colorspace_;
+  GstElement *vqueue_;
   GstElement *vsink_;
   GstElement *aconvert_;
   GstElement *aresample_;
+  GstElement *aqueue_;
   GstElement *asink_;
   GstElement *file_decode_;
   GstElement *video_bin_;
