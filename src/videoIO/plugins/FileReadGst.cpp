@@ -24,6 +24,7 @@ bool FileReadGst::is_initialized_ = false;
 FileReadGst::FileReadGst() :
     source_(NULL), videorate_(NULL), colorspace_(NULL), vsink_(NULL),
     file_decode_(NULL), video_bin_(NULL), bus_(NULL), adapter_(NULL),
+    audio_bin_(NULL),
     have_pipeline_(false), new_video_(false)
 {
 }
@@ -84,7 +85,17 @@ bool FileReadGst::openFile(string filename)
   gst_object_unref(video_pad);
   gst_bin_add (GST_BIN (file_decode_), video_bin_);
 
+  have_pipeline_=true;
+  
+  // set paused state
+  gst_element_set_state (file_decode_, GST_STATE_PAUSED);
+  new_video_=true;
+  
+  return true;
+}
 
+bool FileReadGst::createAudioBin()
+{
   // creating audio output bin
   audio_bin_ = gst_bin_new ("audio_bin_");
   g_assert(audio_bin_);
@@ -112,12 +123,8 @@ bool FileReadGst::openFile(string filename)
   gst_element_add_pad (audio_bin_, gst_ghost_pad_new ("sink", audio_pad));
   gst_object_unref(audio_pad);
   gst_bin_add (GST_BIN (file_decode_), audio_bin_);
-
-  have_pipeline_=true;
   
-  // set paused state
-  gst_element_set_state (file_decode_, GST_STATE_PAUSED);
-  new_video_=true;
+  gst_element_set_state (audio_bin_, GST_STATE_PAUSED);
   
   return true;
 }
@@ -132,9 +139,14 @@ void FileReadGst::closeFile()
 
 void FileReadGst::startVideo()
 {
-  if(!have_pipeline_) return;
+  if(!have_pipeline_) 
+  {
+    post("no working pipeline.");
+    return;
+  }
 
-  gst_element_set_state (file_decode_, GST_STATE_PLAYING);
+  if(!gst_element_set_state (file_decode_, GST_STATE_PLAYING))
+    post("The state could not be set to playing.");
 }
 
 void FileReadGst::stopVideo()
@@ -175,8 +187,10 @@ void FileReadGst::setSpeed(float speed)
     return;
   }
   
+  int seek_flags =  GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
+  
   if (!gst_element_seek(GST_ELEMENT(file_decode_), speed,
-                       GST_FORMAT_UNDEFINED, GST_SEEK_FLAG_NONE,
+                       GST_FORMAT_UNDEFINED, (GstSeekFlags)seek_flags,
                        GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE,
                        GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
     post("videoIO: speed could not be set.");
@@ -279,7 +293,7 @@ unsigned char *FileReadGst::getFrameData()
 
 void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
 {
-  if(!have_pipeline_)
+  if(!audio_bin_)
   {
     // write zero samples in audio block
     while(n--)
@@ -376,37 +390,49 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
 {
   GstCaps *caps;
   GstStructure *vstr;
-  GstPad *videopad, *audiopad;
+  GstPad *videopad = NULL, *audiopad = NULL;
   
-  FileReadGst *tmp = (FileReadGst *)data;
-
-  videopad = gst_element_get_pad (tmp->video_bin_, "sink");
-  g_assert(videopad);
-
-  audiopad = gst_element_get_pad (tmp->audio_bin_, "sink");
-  g_assert(audiopad);
-
-  bool link_audio = true, link_video = true;
+  bool link_audio = false, link_video = false;
   
-  // check if the pads are already linked
-  if( GST_PAD_IS_LINKED (videopad) )
-  {
-    g_object_unref (videopad);
-    link_video = false;
-  }
-  if ( GST_PAD_IS_LINKED (audiopad) )
-  {
-    g_object_unref (audiopad);
-    link_audio = false;
-  }
-
   // check if we have a video and/or audio
   caps = gst_pad_get_caps (pad);
   vstr = gst_caps_get_structure (caps, 0);
-  if (!g_strrstr (gst_structure_get_name (vstr), "video"))
-    link_video = false;
-  if (!g_strrstr (gst_structure_get_name (vstr), "audio")) 
-    link_audio = false;
+  if (g_strrstr (gst_structure_get_name (vstr), "video"))
+    link_video = true;
+  if (g_strrstr (gst_structure_get_name (vstr), "audio")) 
+    link_audio = true;
+  
+  FileReadGst *tmp = (FileReadGst *)data;
+
+  if(link_video)
+  {
+    videopad = gst_element_get_pad (tmp->video_bin_, "sink");
+    g_assert(videopad);
+    
+     // check if the pads are already linked
+    if( GST_PAD_IS_LINKED (videopad) )
+    {
+      g_object_unref (videopad);
+      link_video = false;
+    }
+  }
+  
+  if(link_audio)
+  {
+    // the audio bin will only be created if needed
+    if(!tmp->createAudioBin())
+      post("The audio bin could not be created");
+    
+    audiopad = gst_element_get_pad (tmp->audio_bin_, "sink");
+    g_assert(audiopad);
+    
+    if ( GST_PAD_IS_LINKED (audiopad) )
+    {
+      g_object_unref (audiopad);
+      link_audio = false;
+    }
+  }
+  
 
   post("Callback Caps: %s", gst_caps_to_string (caps) );
 

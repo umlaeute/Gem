@@ -55,6 +55,10 @@ class FileReadGst : public FileRead
    */
   bool openFile(string filename);
   
+  /// creates the audio bin on demand
+  /// @return true if successful
+  bool createAudioBin();
+  
   /*!
    * closes the file
    */
