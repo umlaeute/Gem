@@ -76,6 +76,12 @@ class FileReadGst : public FileRead
    * @return false if there was a problem
    */
   bool setPosition(float sec);
+  
+  /*!
+   * sets the playing speed of the video
+   * @param speed the desired speed (e.g. 2.0 for double speed)
+   */
+  void setSpeed(float speed);
 
   /// @return the frame data of VIOFrame
   unsigned char *getFrameData();

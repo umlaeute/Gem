@@ -73,7 +73,7 @@ bool FileReadGst::openFile(string filename)
   g_assert(vqueue_);
   vsink_ = gst_element_factory_make ("appsink", "vsink_");
   g_assert(vsink_);
-
+  
   gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
   // NOTE colorspace_ and vqueue_ are linked in the callback
   gst_element_link(videorate_, colorspace_);
@@ -153,33 +153,33 @@ bool FileReadGst::setPosition(float sec)
     post("seek position out of range");
     return false;
   }
-
-//  int seek_flags = GST_SEEK_FLAG_KEY_UNIT;
-  int seek_flags =  GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;        ///TODO seeken funktioniert mit audio nicht
+  
+  int seek_flags =  GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;        
   gint64 seek_pos = (gint64) (sec * GST_SECOND);
-  post ("Seek flags: %d", seek_flags);
 
   if( !gst_element_seek_simple( file_decode_, GST_FORMAT_TIME,
       (GstSeekFlags) seek_flags, seek_pos ) )
-  
-//   if(!gst_element_seek( file_decode_, 1.0, GST_FORMAT_TIME, 
-//                         (GstSeekFlags) seek_flags,
-//                         GST_SEEK_TYPE_SET, seek_pos, 
-//                         GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
-  
   {
     post("videoIO: seek not possible");
     return false;
   }
 
   return true;
+}
 
-  /// TODO dann ein schneller/langsamer Spielen auch implementiern
-  /// theoretisch muss man dann hier nur den 2. Parameter von 1.0
-  /// auf z.B. 2.0 setzen, dann is doppelt so schnell
-  /// aber dann auch eine eigene Methode für diese Geschw machen,
-  /// die man dann von PD aus auch schön ansprechen kann
-  /// z.B. mit einer message [speed 2.0(
+void FileReadGst::setSpeed(float speed)
+{
+  if (speed == 0)
+  {
+    post("videoIO: 0 is an invalid speed.");
+    return;
+  }
+  
+  if (!gst_element_seek(GST_ELEMENT(file_decode_), speed,
+                       GST_FORMAT_UNDEFINED, GST_SEEK_FLAG_NONE,
+                       GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE,
+                       GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
+    post("videoIO: speed could not be set.");
 }
 
 unsigned char *FileReadGst::getFrameData()

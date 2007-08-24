@@ -65,6 +65,12 @@ namespace VideoIO_
     * @return false if there was a problem
     */
     virtual bool setPosition(float sec) = 0;
+    
+    /*!
+     * sets the playing speed of the video
+     * @param speed the desired speed (e.g. 2.0 for double speed)
+     */
+    virtual void setSpeed(float speed) = 0;
 
     /*!
     * force a specific colorspace

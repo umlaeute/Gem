@@ -45,6 +45,8 @@ class FileReadDummy : public FileRead
   
   bool setPosition(float sec){};
   
+  void setSpeed(float speed){};
+  
   /// @return the current frame of the video
   unsigned char *getFrameData();
 
