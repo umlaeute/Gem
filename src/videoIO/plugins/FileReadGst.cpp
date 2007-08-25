@@ -24,7 +24,7 @@ bool FileReadGst::is_initialized_ = false;
 FileReadGst::FileReadGst() :
     source_(NULL), videorate_(NULL), colorspace_(NULL), vsink_(NULL),
     file_decode_(NULL), video_bin_(NULL), bus_(NULL), adapter_(NULL),
-    audio_bin_(NULL),
+    audio_bin_(NULL), 
     have_pipeline_(false), new_video_(false)
 {
 }
@@ -62,7 +62,8 @@ bool FileReadGst::openFile(string filename)
       
   g_signal_connect (source_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
   
-
+  have_pipeline_=true;
+  
   // creating video output bin
   video_bin_ = gst_bin_new ("video_bin_");
   g_assert(video_bin_);
@@ -84,47 +85,10 @@ bool FileReadGst::openFile(string filename)
   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
   gst_object_unref(video_pad);
   gst_bin_add (GST_BIN (file_decode_), video_bin_);
-
-  have_pipeline_=true;
   
   // set paused state
   gst_element_set_state (file_decode_, GST_STATE_PAUSED);
   new_video_=true;
-  
-  return true;
-}
-
-bool FileReadGst::createAudioBin()
-{
-  // creating audio output bin
-  audio_bin_ = gst_bin_new ("audio_bin_");
-  g_assert(audio_bin_);
-  aconvert_ = gst_element_factory_make("audioconvert", "aconvert_");
-  g_assert(aconvert_);
-  aresample_ = gst_element_factory_make ("audioresample", "aresample_");
-  g_assert(aresample_);
-  aqueue_ = gst_element_factory_make ("queue", "aqueue_");
-  g_assert(aqueue_);
-  asink_ = gst_element_factory_make ("appsink", "asink_");
-  g_assert(asink_);
-  
-  gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, aqueue_, asink_, NULL);
-  gst_element_link_many(aconvert_, aresample_, aqueue_, NULL);
-  /// TODO get framerate of pd
-  gst_element_link_filtered(aqueue_, asink_,
-    gst_caps_new_simple ("audio/x-raw-float",
-                         "rate", G_TYPE_INT, 44100,
-                         "channels", G_TYPE_INT, 2,
-                         "width", G_TYPE_INT, 32,
-//                          "endianness", G_TYPE_INT, G_BIG_ENDIAN,
-                         NULL) );
-
-  GstPad *audio_pad = gst_element_get_pad (aconvert_, "sink");
-  gst_element_add_pad (audio_bin_, gst_ghost_pad_new ("sink", audio_pad));
-  gst_object_unref(audio_pad);
-  gst_bin_add (GST_BIN (file_decode_), audio_bin_);
-  
-  gst_element_set_state (audio_bin_, GST_STATE_PAUSED);
   
   return true;
 }
@@ -166,8 +130,8 @@ bool FileReadGst::setPosition(float sec)
     return false;
   }
   
-  int seek_flags =  GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;        
-  gint64 seek_pos = (gint64) (sec * GST_SECOND);
+  int seek_flags =  GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
+  gint64 seek_pos = (gint64) (sec * GST_MSECOND);
 
   if( !gst_element_seek_simple( file_decode_, GST_FORMAT_TIME,
       (GstSeekFlags) seek_flags, seek_pos ) )
@@ -293,7 +257,9 @@ unsigned char *FileReadGst::getFrameData()
 
 void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
 {
-  if(!audio_bin_)
+  // if there is no audio bin or the pipeline isn't in playing state
+  if(!audio_bin_ || !(GST_STATE(file_decode_)==GST_STATE_PLAYING &&
+                      GST_STATE_PENDING(file_decode_)==GST_STATE_VOID_PENDING))
   {
     // write zero samples in audio block
     while(n--)
@@ -304,10 +270,8 @@ void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
     return;
   }
 
-  // if we are not in playing or have end of stream send zero samples
-  if( !(GST_STATE(file_decode_)==GST_STATE_PLAYING &&
-        GST_STATE_PENDING(file_decode_)==GST_STATE_VOID_PENDING) &&
-        !gst_app_sink_end_of_stream( GST_APP_SINK (asink_) ) )
+  // if we have end of stream send zero samples
+  if(gst_app_sink_end_of_stream( GST_APP_SINK (asink_)))  ///TODO scheint nicht richtig zu funktionieren
   {
     while(n--)
     {
@@ -363,6 +327,70 @@ void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
   }
 }
 
+bool FileReadGst::createAudioBin()
+{
+  // creating audio output bin
+  audio_bin_ = gst_bin_new ("audio_bin_");
+  g_assert(audio_bin_);
+  aconvert_ = gst_element_factory_make("audioconvert", "aconvert_");
+  g_assert(aconvert_);
+  aresample_ = gst_element_factory_make ("audioresample", "aresample_");
+  g_assert(aresample_);
+  aqueue_ = gst_element_factory_make ("queue", "aqueue_");
+  g_assert(aqueue_);
+  asink_ = gst_element_factory_make ("appsink", "asink_");
+  g_assert(asink_);
+  
+  gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, aqueue_, asink_, NULL);
+  gst_element_link_many(aconvert_, aresample_, aqueue_, NULL);
+  /// TODO get framerate of pd
+  gst_element_link_filtered(aqueue_, asink_,
+    gst_caps_new_simple ("audio/x-raw-float",
+                         "rate", G_TYPE_INT, 44100,
+                         "channels", G_TYPE_INT, 2,
+                         "width", G_TYPE_INT, 32,
+//                          "endianness", G_TYPE_INT, G_BIG_ENDIAN,
+                         NULL) );
+
+  GstPad *audio_pad = gst_element_get_pad (aconvert_, "sink");
+  gst_element_add_pad (audio_bin_, gst_ghost_pad_new ("sink", audio_pad));
+  gst_object_unref(audio_pad);
+  gst_bin_add (GST_BIN (file_decode_), audio_bin_);
+  
+  gst_element_set_state (audio_bin_, GST_STATE_PAUSED);
+  
+  return true;
+}
+
+bool FileReadGst::createVideoBin()  ///TODO funktioniert im Moment nicht
+{
+//   // creating video output bin
+//   video_bin_ = gst_bin_new ("video_bin_");
+//   g_assert(video_bin_);
+//   videorate_ = gst_element_factory_make("videorate", "videorate_");
+//   g_assert(videorate_);
+//   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+//   g_assert(colorspace_);
+//   vqueue_ = gst_element_factory_make ("queue", "vqueue_");
+//   g_assert(vqueue_);
+//   vsink_ = gst_element_factory_make ("appsink", "vsink_");
+//   g_assert(vsink_);
+//   
+//   gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
+//   // NOTE colorspace_ and vqueue_ are linked in the callback
+//   gst_element_link(videorate_, colorspace_);
+//   gst_element_link(vqueue_, vsink_);
+// 
+//   GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
+//   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
+//   gst_object_unref(video_pad);
+//   gst_bin_add (GST_BIN (file_decode_), video_bin_);
+//   
+//   gst_element_set_state (audio_bin_, GST_STATE_PAUSED);
+//   
+  return true;
+}
+
 string FileReadGst::getURIFromFilename(const string &filename)
 {
   string str;
@@ -394,6 +422,8 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
   
   bool link_audio = false, link_video = false;
   
+  FileReadGst *tmp = (FileReadGst *)data;
+    
   // check if we have a video and/or audio
   caps = gst_pad_get_caps (pad);
   vstr = gst_caps_get_structure (caps, 0);
@@ -402,10 +432,11 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
   if (g_strrstr (gst_structure_get_name (vstr), "audio")) 
     link_audio = true;
   
-  FileReadGst *tmp = (FileReadGst *)data;
-
   if(link_video)
   {
+//     if(!tmp->createVideoBin())
+//       post("FileReadGst: The video bin could not be created");
+    
     videopad = gst_element_get_pad (tmp->video_bin_, "sink");
     g_assert(videopad);
     
@@ -413,7 +444,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
     if( GST_PAD_IS_LINKED (videopad) )
     {
       g_object_unref (videopad);
-      link_video = false;
+      link_video = false;            ///TODO warum auf false setzen??
     }
   }
   
@@ -421,7 +452,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
   {
     // the audio bin will only be created if needed
     if(!tmp->createAudioBin())
-      post("The audio bin could not be created");
+      post("FileReadGst: The audio bin could not be created");
     
     audiopad = gst_element_get_pad (tmp->audio_bin_, "sink");
     g_assert(audiopad);

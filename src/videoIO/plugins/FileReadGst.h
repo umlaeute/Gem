@@ -55,10 +55,6 @@ class FileReadGst : public FileRead
    */
   bool openFile(string filename);
   
-  /// creates the audio bin on demand
-  /// @return true if successful
-  bool createAudioBin();
-  
   /*!
    * closes the file
    */
@@ -101,6 +97,16 @@ class FileReadGst : public FileRead
   void getAudioBlock(t_float *left, t_float *right, int n);
 
  protected:
+   
+  /// creates the audio bin on demand
+  /// @return true if successful
+  bool createAudioBin();
+  
+  /// creates the video bin on demand
+  /// @return true if successful
+  bool createVideoBin();
+  
+  
   GstElement *source_;
   GstElement *videorate_;
   GstElement *colorspace_;
@@ -115,7 +121,7 @@ class FileReadGst : public FileRead
   GstElement *audio_bin_;
   GstAdapter *adapter_;
   GstBus *bus_;
-
+  
   bool have_pipeline_;
   bool new_video_;
 
