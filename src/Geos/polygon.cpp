@@ -22,7 +22,7 @@
 
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_FLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -38,9 +38,14 @@ polygon :: polygon(t_floatarg numInputs)
   int i;
   int realNum = (int)numInputs;
 
+  if(realNum==0){
+    post("no number of points specified; using 4 as default!");
+    realNum=4;
+  }
+
   // configure the inlets
   if (realNum <= 0)   {
-    error("GEM: polygon: illegal number of points");
+    error("illegal number of points");
     return;
   }
   m_numInputs = realNum;
@@ -186,7 +191,7 @@ void polygon :: typeMess(t_symbol *type)
 
     else
     {
-	    error ("GEM: polygon: draw style");
+	    error ("draw style");
 	    return;
     }
     setModified();
