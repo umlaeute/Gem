@@ -1,20 +1,20 @@
-#N canvas 277 205 724 627 10;
+#N canvas 126 22 714 683 10;
 #X text 452 8 GEM object;
-#X obj 9 322 cnv 15 430 280 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 9 322 cnv 15 430 345 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 40 324 Inlets:;
-#X text 39 491 Outlets:;
+#X text 40 547 Outlets:;
 #X obj 9 289 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 18 288 Arguments:;
 #X obj 8 56 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 57 cnv 15 250 350 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 57 cnv 15 250 450 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 40 Example:;
-#X obj 594 340 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 594 440 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -32,31 +32,30 @@
 #X connect 7 0 4 0;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
-#X restore 599 379 pd gemwin;
-#X msg 599 360 create;
-#X text 595 339 Create window:;
+#X restore 599 479 pd gemwin;
+#X msg 599 460 create;
+#X text 595 439 Create window:;
 #X obj 451 88 cnv 15 155 250 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 63 gemhead;
-#X text 17 505 Outlet 1: gemlist;
+#X text 18 561 Outlet 1: gemlist;
 #X text 24 338 Inlet 1: gemlist;
 #X obj 463 93 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
 #X text 505 57 open a supported;
 #X text 506 68 movie-clip;
-#X obj 480 287 unpack 0 0 0;
-#X floatatom 466 310 5 0 0 3 length - -;
-#X floatatom 515 310 5 0 0 3 width - -;
-#X floatatom 565 310 5 0 0 3 height - -;
-#X obj 520 268 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
+#X obj 480 377 unpack 0 0 0;
+#X floatatom 466 400 5 0 0 3 length - -;
+#X floatatom 515 400 5 0 0 3 width - -;
+#X floatatom 565 400 5 0 0 3 height - -;
+#X obj 520 358 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
 -1 -1;
-#X floatatom 509 233 5 0 10000 1 frame# - -;
+#X floatatom 509 323 5 0 10000 1 frame# - -;
 #X text 71 31 Class: pix object (pix source);
 #X text 29 57 Description: load in a movie-file;
 #X obj 463 122 openpanel;
 #X msg 463 142 open \$1;
-#X obj 451 382 rectangle 4 3;
-#X text 50 12 Synopsis: [pix_film];
+#X obj 451 482 rectangle 4 3;
 #X text 15 78 [pix_film] loads in a preproducecd digital-video to be
 used aas a texture \, bitblit or something else.;
 #X text 13 104 You can open a specified film via the "open" message
@@ -70,9 +69,9 @@ the movie <filename> and decodes it into the specified color-space.
 the current film into the specified colorspace.;
 #X text 24 425 Inlet 1: message : auto 1|0 : starts/stops automatic
 playback.;
-#X text 22 457 Inlet 2: float: <frame#> changes the frame to be decoded
+#X text 23 513 Inlet 2: float: <frame#> changes the frame to be decoded
 on rendering.;
-#X text 17 574 Outlet 3: bang: indicates that the last frame has been
+#X text 18 630 Outlet 3: bang: indicates that the last frame has been
 reached. (or: an illegal frame would have been decoded);
 #X msg 469 185 auto \$1;
 #X obj 469 167 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
@@ -81,7 +80,7 @@ reached. (or: an illegal frame would have been decoded);
 #X text 13 104 You can open a specified film via the "open" message
 \, which takes an optional argument for the colorspace \, to which
 the movie should be decoded (RGBA \, YUV or Grey).;
-#X text 17 521 Outlet 2: list: <length> <width> <height>: gets the
+#X text 18 577 Outlet 2: list: <length> <width> <height>: gets the
 dimensions (in fps and pixels) of a film when it gets loaded. if length
 is not available (video-streams) -1 is returned.;
 #X text 14 144 Normally \, you will only get one specified (via the
@@ -111,27 +110,42 @@ not support quicktime decoding. There is also some ruddy ffmpeg support
 (apart from the one supplied by libaviplay).;
 #X text 36 351 although one wouldn't believe it \, but i have found
 that iunder linux i could play most formats...;
-#X restore 485 464 pd :: FORMATS;
+#X restore 505 554 pd :: FORMATS;
 #X obj 18 248 cnv 15 410 20 empty empty empty 20 12 0 14 -260818 -66577
 0;
 #X text 24 250 You need NO [pix_texture] to texture the image somewhere.
 ;
-#X obj 451 251 pix_movie;
-#X text 469 535 see also:;
-#X obj 546 535 pix_film;
+#X obj 451 341 pix_movie;
+#X text 489 615 see also:;
+#X obj 566 615 pix_film;
+#X text 50 12 Synopsis: [pix_movie];
+#X text 24 456 Inlet 1: mode 0|1 : use rectangle-texturing when available
+(default=1);
+#X text 24 484 Inlet 1: client_storage 0|1 : use client-storage when
+available (default=1);
+#X obj 492 275 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+1;
+#X msg 492 294 mode \$1;
+#X obj 489 230 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+1;
+#X msg 489 249 client_storage \$1;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
-#X connect 14 0 49 0;
+#X connect 14 0 48 0;
 #X connect 17 0 28 0;
 #X connect 20 0 21 0;
 #X connect 20 1 22 0;
 #X connect 20 2 23 0;
-#X connect 25 0 49 1;
+#X connect 25 0 48 1;
 #X connect 28 0 29 0;
-#X connect 29 0 49 0;
-#X connect 40 0 49 0;
-#X connect 41 0 40 0;
-#X connect 42 0 49 0;
-#X connect 49 0 30 0;
-#X connect 49 1 20 0;
-#X connect 49 2 24 0;
+#X connect 29 0 48 0;
+#X connect 39 0 48 0;
+#X connect 40 0 39 0;
+#X connect 41 0 48 0;
+#X connect 48 0 30 0;
+#X connect 48 1 20 0;
+#X connect 48 2 24 0;
+#X connect 54 0 55 0;
+#X connect 55 0 48 0;
+#X connect 56 0 57 0;
+#X connect 57 0 48 0;

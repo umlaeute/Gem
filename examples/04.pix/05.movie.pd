@@ -1,39 +1,39 @@
-#N canvas 196 59 720 554 12;
+#N canvas 191 104 724 558 12;
 #X obj 42 157 gemwin;
 #X msg 51 32 1;
 #X msg 59 68 0;
 #X msg 101 41 create;
 #X msg 102 87 destroy;
 #X obj 223 139 gemhead;
-#X floatatom 458 133 0 0 0 0 - - -;
-#X obj 223 351 rotateXYZ;
-#X obj 223 403 cube;
-#X floatatom 290 325 0 0 0 0 - - -;
-#X obj 290 276 metro 50;
-#X obj 269 378 translateXYZ 2 1 0;
-#X obj 269 404 cube;
-#X obj 223 167 pix_movie;
-#X text 499 133 control which frame;
-#X text 322 402 automatically textures;
-#X obj 296 196 print frames;
+#X floatatom 462 173 0 0 0 0 - - -;
+#X obj 223 391 rotateXYZ;
+#X obj 223 443 cube;
+#X floatatom 290 365 0 0 0 0 - - -;
+#X obj 290 316 metro 50;
+#X obj 269 418 translateXYZ 2 1 0;
+#X obj 269 444 cube;
+#X obj 223 207 pix_movie;
+#X text 503 173 control which frame;
+#X text 322 442 automatically textures;
+#X obj 296 236 print frames;
 #X msg 223 15 open ../data/homer.avi;
-#X obj 290 256 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0
+#X obj 290 296 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0
 1;
-#X obj 450 241 print done;
+#X obj 450 281 print done;
 #X msg 462 101 auto \$1;
 #X obj 462 82 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0 1
 ;
-#X text 43 446 the texturing is done automatically: there is no need
+#X text 43 486 the texturing is done automatically: there is no need
 to care for the image-size (it doesn't have to be a power of 2). on
 the other hand \, you cannot do image-processing !! use [pix_film]
 for this;
-#X msg 450 218 reached the end !!!;
-#X obj 410 193 t f b;
-#X text 352 16 Win32;
-#X text 363 69 linux;
+#X msg 450 258 reached the end !!!;
+#X obj 410 233 t f b;
+#X text 385 -1 Win32;
+#X text 405 86 linux;
 #X msg 233 58 open ../data/anim-1.mov;
-#X msg 243 84 open ../data/alea.mpg;
-#X text 5 228 notice: you don't need pix_texture;
+#X msg 243 104 open ../data/alea.mpg;
+#X text 5 268 notice: you don't need pix_texture;
 #X text 532 97 play the movie !;
 #N canvas 87 154 247 179 Gem.init 0;
 #X obj 118 46 loadbang;
@@ -42,9 +42,14 @@ for this;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X restore 83 133 pd Gem.init;
-#X obj 290 301 i;
-#X obj 325 301 + 1;
-#X obj 361 301 % 360;
+#X obj 290 341 i;
+#X obj 325 341 + 1;
+#X obj 361 341 % 360;
+#X text 406 41 apple;
+#X obj 462 125 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+1;
+#X msg 462 144 mode \$1;
+#X text 524 138 change texture mode;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 0 0;
@@ -74,3 +79,5 @@ for this;
 #X connect 32 0 9 0;
 #X connect 33 0 34 0;
 #X connect 34 0 32 1;
+#X connect 36 0 37 0;
+#X connect 37 0 13 0;
