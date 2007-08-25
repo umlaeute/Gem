@@ -67,6 +67,7 @@ class FileWriteGst : public FileWrite
   GstElement *colorspace_; 
   GstElement *encode_;
   GstElement *mux_;
+  GstElement *parse_;
   GstElement *queue_;
   GstElement *sink_;
   GstElement *file_encode_;

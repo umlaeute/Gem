@@ -24,7 +24,7 @@ bool FileReadGst::is_initialized_ = false;
 FileReadGst::FileReadGst() :
     source_(NULL), videorate_(NULL), colorspace_(NULL), vsink_(NULL),
     file_decode_(NULL), video_bin_(NULL), bus_(NULL), adapter_(NULL),
-    audio_bin_(NULL), 
+    audio_bin_(NULL), decode_(NULL), is_udp_(false),
     have_pipeline_(false), new_video_(false)
 {
 }
@@ -53,16 +53,35 @@ bool FileReadGst::openFile(string filename)
   // pipeline
   file_decode_ = gst_pipeline_new( "file_decode_");
 
-  // source+decode
-  source_ = gst_element_factory_make("uridecodebin", "source_");
-  g_assert(source_);
-
-  g_object_set (G_OBJECT(source_), "uri", uri.c_str(), NULL);
-  gst_bin_add (GST_BIN (file_decode_), source_);
-      
-  g_signal_connect (source_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
+  if(is_udp_)
+  {
+    // create udp source
+    source_ = gst_element_factory_make("udpsrc", "source_");
+    g_assert(source_);
+    decode_ = gst_element_factory_make("decodebin", "decode_");
+    g_assert(decode_);
+    
+//     g_object_set (G_OBJECT(source_), "uri", uri.c_str(), NULL);
+    gst_bin_add_many (GST_BIN (file_decode_), source_, decode_, NULL);
+    gst_element_link (source_, decode_);
+        
+    g_signal_connect (decode_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
+    
+    have_pipeline_=true;
+  }
+  else
+  {
+    // source+decode
+    source_ = gst_element_factory_make("uridecodebin", "source_");
+    g_assert(source_);
   
-  have_pipeline_=true;
+    g_object_set (G_OBJECT(source_), "uri", uri.c_str(), NULL);
+    gst_bin_add (GST_BIN (file_decode_), source_);
+        
+    g_signal_connect (source_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
+    
+    have_pipeline_=true;
+  }
   
   // creating video output bin
   video_bin_ = gst_bin_new ("video_bin_");
@@ -87,7 +106,9 @@ bool FileReadGst::openFile(string filename)
   gst_bin_add (GST_BIN (file_decode_), video_bin_);
   
   // set paused state
-  gst_element_set_state (file_decode_, GST_STATE_PAUSED);
+  if(!gst_element_set_state (file_decode_, GST_STATE_PAUSED))
+    return false;
+  
   new_video_=true;
   
   return true;
@@ -341,6 +362,9 @@ bool FileReadGst::createAudioBin()
   asink_ = gst_element_factory_make ("appsink", "asink_");
   g_assert(asink_);
   
+//   g_object_set (G_OBJECT(aqueue_), "max-size-time", 100, NULL);  TODO funktioniert noch nicht richtig
+//   g_object_set (G_OBJECT(aqueue_), "leaky", 2, NULL);
+  
   gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, aqueue_, asink_, NULL);
   gst_element_link_many(aconvert_, aresample_, aqueue_, NULL);
   /// TODO get framerate of pd
@@ -400,6 +424,11 @@ string FileReadGst::getURIFromFilename(const string &filename)
   // prepend "file://" to a file-system path
   if( filename.compare(0, 1, "/") == 0 )
     str = "file://" + filename;
+  else if(filename.compare(0, 3, "udp") == 0)
+  {
+    is_udp_ = true;
+    str = filename;
+  }
   else
     str = filename;
   

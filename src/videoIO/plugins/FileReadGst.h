@@ -108,6 +108,7 @@ class FileReadGst : public FileRead
   
   
   GstElement *source_;
+  GstElement *decode_;
   GstElement *videorate_;
   GstElement *colorspace_;
   GstElement *vqueue_;
@@ -124,6 +125,7 @@ class FileReadGst : public FileRead
   
   bool have_pipeline_;
   bool new_video_;
+  bool is_udp_;
 
   string getURIFromFilename(const string &filename);
 

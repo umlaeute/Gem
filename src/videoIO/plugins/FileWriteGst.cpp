@@ -96,6 +96,8 @@ bool FileWriteGst::openFile(const string &filename)
     setupOggPipeline(filename);
   else if (codec_ == "mpeg4")   
     setupMpeg4Pipeline(filename);
+  else if (codec_ == "udp")
+    setupUdpPipeline(filename);
   else
     setupRawPipeline(filename);
   
@@ -308,12 +310,18 @@ bool FileWriteGst::setupUdpPipeline(const string &filename)
 
   source_ = gst_element_factory_make ("appsrc", "source_");
   g_assert(source_);
+  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+  g_assert(colorspace_);
+  encode_ = gst_element_factory_make ("ffenc_mpeg2video", "encode_");
+  g_assert(encode_);
+  parse_ = gst_element_factory_make ("mpegparse", "parse_");
+  g_assert(parse_);
   sink_ = gst_element_factory_make ("udpsink", "sink_");
   g_assert(sink_);
 
 
-  gst_bin_add_many (GST_BIN (file_encode_), source_, sink_, NULL);
-  gst_element_link_many (source_, sink_, NULL);
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, parse_, sink_, NULL);
+  gst_element_link_many (source_, colorspace_, encode_, parse_, sink_, NULL);
 
   return true;
 }
