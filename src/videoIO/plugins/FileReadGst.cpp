@@ -228,7 +228,7 @@ unsigned char *FileReadGst::getFrameData()
     {
       gint64 duration;
       gst_query_parse_duration (query, NULL, &duration);
-      duration_ = duration / GST_SECOND;
+      duration_ = duration / GST_MSECOND;
     }
     else post("videoIO: duration query failed");
     gst_query_unref (query);
