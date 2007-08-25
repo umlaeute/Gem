@@ -38,11 +38,6 @@ polygon :: polygon(t_floatarg numInputs)
   int i;
   int realNum = (int)numInputs;
 
-  if(realNum==0){
-    post("no number of points specified; using 4 as default!");
-    realNum=4;
-  }
-
   // configure the inlets
   if (realNum <= 0)   {
     error("illegal number of points");
