@@ -15,7 +15,9 @@
 /////////////////////////////////////////////////////////
  
 #ifdef __APPLE__
-/* i think this is APPLE only...JMZ */
+
+// as long as there is no special help-file, fallback to the [pix_movie]
+#define HELPSYMBOL "pix_movie"
 
 #include "pix_movieDarwin.h"
 #include "Base/GemMan.h"
