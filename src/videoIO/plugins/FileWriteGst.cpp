@@ -24,6 +24,7 @@ bool FileWriteGst::is_initialized_ = false;
 
 FileWriteGst::FileWriteGst() : new_video_(false), have_pipeline_(false), frame_number_(0)
 {
+  initGstreamer();
 }
 
 FileWriteGst::~FileWriteGst()
@@ -88,7 +89,7 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
 
 bool FileWriteGst::openFile(const string &filename)
 {
-  initGstreamer();
+
 
   if(have_pipeline_)
     freePipeline();

@@ -28,6 +28,7 @@ FileReadGst::FileReadGst() :
     audio_bin_(NULL), decode_(NULL), is_udp_(false),
     have_pipeline_(false), new_video_(false)
 {
+  initGstreamer();
 }
 
 FileReadGst::~FileReadGst()
@@ -42,7 +43,6 @@ FileReadGst::~FileReadGst()
 
 bool FileReadGst::openFile(string filename)
 {
-  initGstreamer();
   closeFile();
 
   // make new adapter
@@ -56,6 +56,7 @@ bool FileReadGst::openFile(string filename)
 
   if(is_udp_)
   {
+    post ("in udp");
     // create udp source
     source_ = gst_element_factory_make("udpsrc", "source_");
     g_assert(source_);

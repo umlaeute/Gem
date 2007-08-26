@@ -26,7 +26,9 @@ DeviceReadGst::DeviceReadGst() :
     source_(NULL), demux_(NULL), decode_(NULL), colorspace_(NULL),
     sink_(NULL), device_decode_(NULL), videorate_(NULL),
     have_pipeline_(false),new_device_(false)
-{}
+{
+  initGstreamer();
+}
 
 DeviceReadGst::~DeviceReadGst()
 {
@@ -36,7 +38,7 @@ DeviceReadGst::~DeviceReadGst()
 
 bool DeviceReadGst::openDevice(const string &name, const string &device)
 {
-  initGstreamer();
+
   closeDevice();
 
   if(name == "dv" || name == "DV")
