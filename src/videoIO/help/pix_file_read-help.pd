@@ -68,7 +68,7 @@ forceColorspace !;
 #X text 51 149 General URIs are specified like /local/file/ \, dvd://chapter
 \, http://host/path/file \, mms://host/path/file and so on.;
 #X text 221 196 more URI examples:;
-#N canvas 27 511 450 391 URI-examples 0;
+#N canvas 312 70 617 493 URI-examples 1;
 #X text 11 17 Files on the local filesystem can be read with the usual
 path:;
 #X obj 13 79 s fileread;
@@ -86,10 +86,17 @@ path:;
 #X obj 13 345 s fileread;
 #X text 124 324 this will open the first title of the DVD;
 #X text 125 339 you can use the usual seek commands;
+#X msg 15 398 open udp://0.0.0.0:4951;
+#X obj 15 419 s fileread;
+#X text 12 379 UDP-stream example:;
+#X text 206 401 this will open an udp stream streamed with the standard
+configurations of this gstreamer pipeline: gst-launch filesrc location=test_mpeg2.mpeg
+! mpegparse ! udpsink;
 #X connect 2 0 1 0;
 #X connect 5 0 4 0;
 #X connect 8 0 6 0;
 #X connect 10 0 11 0;
+#X connect 14 0 15 0;
 #X restore 228 214 pd URI-examples;
 #X msg 643 578 \; pd dsp 1;
 #X msg 710 578 \; pd dsp 0;
@@ -101,7 +108,7 @@ path:;
 #X text 393 348 double speed;
 #X text 167 332 Seek to position (in msec):;
 #X msg 403 364 speed 2;
-#X msg 53 265 open /home/holzi/Desktop/test_mpeg4.avi;
+#X msg 53 265 open /home/holzi/Desktop/yuv-test.mov;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 7 0;

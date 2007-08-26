@@ -63,7 +63,7 @@ bool FileReadGst::openFile(string filename)
     decode_ = gst_element_factory_make("decodebin", "decode_");
     g_assert(decode_);
     
-//     g_object_set (G_OBJECT(source_), "uri", uri.c_str(), NULL);
+    g_object_set (G_OBJECT(source_), "uri", uri.c_str(), NULL);
     gst_bin_add_many (GST_BIN (file_decode_), source_, decode_, NULL);
     gst_element_link (source_, decode_);
         
