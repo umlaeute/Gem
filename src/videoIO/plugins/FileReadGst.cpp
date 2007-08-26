@@ -56,7 +56,6 @@ bool FileReadGst::openFile(string filename)
 
   if(is_udp_)
   {
-    post ("in udp");
     // create udp source
     source_ = gst_element_factory_make("udpsrc", "source_");
     g_assert(source_);
@@ -85,27 +84,31 @@ bool FileReadGst::openFile(string filename)
     have_pipeline_=true;
   }
   
-  // creating video output bin
-  video_bin_ = gst_bin_new ("video_bin_");
-  g_assert(video_bin_);
-  videorate_ = gst_element_factory_make("videorate", "videorate_");
-  g_assert(videorate_);
-  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
-  g_assert(colorspace_);
-  vqueue_ = gst_element_factory_make ("queue", "vqueue_");
-  g_assert(vqueue_);
-  vsink_ = gst_element_factory_make ("appsink", "vsink_");
-  g_assert(vsink_);
+//   vsink_ = gst_element_factory_make("fakesink", "vsink_");
+//   g_assert (vsink_);
+//   gst_bin_add (GST_BIN (file_decode_), vsink_);
   
-  gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
-  // NOTE colorspace_ and vqueue_ are linked in the callback
-  gst_element_link(videorate_, colorspace_);
-  gst_element_link(vqueue_, vsink_);
-
-  GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
-  gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
-  gst_object_unref(video_pad);
-  gst_bin_add (GST_BIN (file_decode_), video_bin_);
+//   // creating video output bin
+//   video_bin_ = gst_bin_new ("video_bin_");
+//   g_assert(video_bin_);
+//   videorate_ = gst_element_factory_make("videorate", "videorate_");
+//   g_assert(videorate_);
+//   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+//   g_assert(colorspace_);
+//   vqueue_ = gst_element_factory_make ("queue", "vqueue_");
+//   g_assert(vqueue_);
+//   vsink_ = gst_element_factory_make ("appsink", "vsink_");
+//   g_assert(vsink_);
+//   
+//   gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
+//   // NOTE colorspace_ and vqueue_ are linked in the callback
+//   gst_element_link(videorate_, colorspace_);
+//   gst_element_link(vqueue_, vsink_);
+// 
+//   GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
+//   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
+//   gst_object_unref(video_pad);
+//   gst_bin_add (GST_BIN (file_decode_), video_bin_);
   
   // set paused state
   if(!gst_element_set_state (file_decode_, GST_STATE_PAUSED))
@@ -145,18 +148,18 @@ void FileReadGst::stopVideo()
   gst_element_set_state (file_decode_, GST_STATE_PAUSED);
 }
 
-bool FileReadGst::setPosition(float sec)
+bool FileReadGst::setPosition(float msec)
 {
   if(!have_pipeline_) return false;
 
-  if( sec<0 || sec>(duration_-0.1) )
+  if( msec<0 || msec>(duration_-0.1) )
   {
-    post("seek position out of range");
+    post("videoIO: seek position out of range");
     return false;
   }
   
   int seek_flags =  GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
-  gint64 seek_pos = (gint64) (sec * GST_MSECOND);
+  gint64 seek_pos = (gint64) (msec * GST_MSECOND);
 
   if( !gst_element_seek_simple( file_decode_, GST_FORMAT_TIME,
       (GstSeekFlags) seek_flags, seek_pos ) )
@@ -392,30 +395,33 @@ bool FileReadGst::createAudioBin()
 
 bool FileReadGst::createVideoBin()  ///TODO funktioniert im Moment nicht
 {
-//   // creating video output bin
-//   video_bin_ = gst_bin_new ("video_bin_");
-//   g_assert(video_bin_);
-//   videorate_ = gst_element_factory_make("videorate", "videorate_");
-//   g_assert(videorate_);
-//   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
-//   g_assert(colorspace_);
-//   vqueue_ = gst_element_factory_make ("queue", "vqueue_");
-//   g_assert(vqueue_);
-//   vsink_ = gst_element_factory_make ("appsink", "vsink_");
-//   g_assert(vsink_);
-//   
-//   gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
-//   // NOTE colorspace_ and vqueue_ are linked in the callback
-//   gst_element_link(videorate_, colorspace_);
-//   gst_element_link(vqueue_, vsink_);
-// 
-//   GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
-//   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
-//   gst_object_unref(video_pad);
-//   gst_bin_add (GST_BIN (file_decode_), video_bin_);
-//   
-//   gst_element_set_state (audio_bin_, GST_STATE_PAUSED);
-//   
+//   if(vsink_)
+//     gst_bin_remove (GST_BIN (file_decode_), vsink_);
+  
+  // creating video output bin
+  video_bin_ = gst_bin_new ("video_bin_");
+  g_assert(video_bin_);
+  videorate_ = gst_element_factory_make("videorate", "videorate_");
+  g_assert(videorate_);
+  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
+  g_assert(colorspace_);
+  vqueue_ = gst_element_factory_make ("queue", "vqueue_");
+  g_assert(vqueue_);
+  vsink_ = gst_element_factory_make ("appsink", "vsink_");
+  g_assert(vsink_);
+  
+  gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
+  // NOTE colorspace_ and vqueue_ are linked in the callback
+  gst_element_link(videorate_, colorspace_);
+  gst_element_link(vqueue_, vsink_);
+
+  GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
+  gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
+  gst_object_unref(video_pad);
+  gst_bin_add (GST_BIN (file_decode_), video_bin_);
+  
+  gst_element_set_state (video_bin_, GST_STATE_PAUSED);
+  
   return true;
 }
 
@@ -469,8 +475,8 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
   
   if(link_video)
   {
-//     if(!tmp->createVideoBin())
-//       post("FileReadGst: The video bin could not be created");
+    if(!tmp->createVideoBin())
+      post("FileReadGst: The video bin could not be created");
     
     videopad = gst_element_get_pad (tmp->video_bin_, "sink");
     g_assert(videopad);

@@ -72,10 +72,10 @@ class FileReadGst : public FileRead
 
   /*!
    * changes the position in the video
-   * @param sec desired position in the stream in sec
+   * @param msec desired position in the stream in milliseconds
    * @return false if there was a problem
    */
-  bool setPosition(float sec);
+  bool setPosition(float msec);
   
   /*!
    * sets the playing speed of the video
