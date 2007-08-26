@@ -18,6 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "FileReadGst.h"
+#include <locale.h>
 
 bool FileReadGst::is_initialized_ = false;
 
@@ -110,6 +111,8 @@ bool FileReadGst::openFile(string filename)
     return false;
   
   new_video_=true;
+  
+  setlocale(LC_NUMERIC, "C"); 
   
   return true;
 }
@@ -441,6 +444,8 @@ void FileReadGst::initGstreamer()
 
   gst_init(NULL,NULL);
   is_initialized_=true;
+  
+  setlocale(LC_NUMERIC, "C"); 
 }
 
 void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)

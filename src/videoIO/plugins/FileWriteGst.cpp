@@ -18,6 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "FileWriteGst.h"
+#include <locale.h>
 
 bool FileWriteGst::is_initialized_ = false;
 
@@ -113,6 +114,9 @@ bool FileWriteGst::openFile(const string &filename)
 
   have_pipeline_=true;
   new_video_=true;
+  
+  setlocale(LC_NUMERIC, "C"); 
+  
   return true;
 }
 
@@ -332,6 +336,8 @@ void FileWriteGst::initGstreamer()
 
   gst_init(NULL,NULL);
   is_initialized_=true;
+  
+  setlocale(LC_NUMERIC, "C"); 
 }
 
 void FileWriteGst::freePipeline()

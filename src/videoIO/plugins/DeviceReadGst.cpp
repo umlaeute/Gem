@@ -18,6 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "DeviceReadGst.h"
+#include <locale.h>
 
 bool DeviceReadGst::is_initialized_ = false;
 
@@ -62,6 +63,9 @@ bool DeviceReadGst::openDevice(const string &name, const string &device)
   }
 
   new_device_ = true;
+  
+  setlocale(LC_NUMERIC, "C"); 
+  
   return true;
 }
 
@@ -87,12 +91,16 @@ bool DeviceReadGst::closeDevice()
 
 unsigned char *DeviceReadGst::getFrameData()
 {
+  post("in getFrameData");
   if(!have_pipeline_) 
     return 0;
+  
+  post("after have_pipeline");
 
   if( gst_app_sink_end_of_stream(GST_APP_SINK (sink_)) ) 
     return 0;
 
+  post("after end of stream");
 //   post("GST_STATE: %d, GST_STATE_PENDING: %d",
 //         GST_STATE(device_decode_), GST_STATE_PENDING(device_decode_));
 
@@ -101,7 +109,9 @@ unsigned char *DeviceReadGst::getFrameData()
   if( GST_STATE(device_decode_)==GST_STATE_PLAYING &&
       GST_STATE_PENDING(device_decode_)==GST_STATE_VOID_PENDING )
   {
+    post("buffer being pulled");
     buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
+    post("after pull");
   }
 
   if( !buf ) return 0;
@@ -109,6 +119,8 @@ unsigned char *DeviceReadGst::getFrameData()
   guint8 *data = GST_BUFFER_DATA( buf );
   guint size = GST_BUFFER_SIZE( buf );
 
+  post("before new device");
+  
   if( new_device_ )
   {
     GstCaps *caps = gst_buffer_get_caps (buf);
@@ -252,6 +264,8 @@ void DeviceReadGst::initGstreamer()
 
   gst_init(NULL,NULL);
   is_initialized_=true;
+  
+  setlocale(LC_NUMERIC, "C");
 }
 
 void DeviceReadGst::setupDVPipeline()
@@ -263,8 +277,11 @@ void DeviceReadGst::setupDVPipeline()
   device_decode_ = gst_pipeline_new( "device_decode_");
 
   source_ = gst_element_factory_make ("dv1394src", "source_");
-  g_assert(source_);
-  g_object_set (G_OBJECT(source_), "use-avc", false, NULL);
+//  g_assert(source_);
+  if(!source_)
+    post("couldn't create dv1394src");
+  
+//  g_object_set (G_OBJECT(source_), "use-avc", false, NULL);
   /// TODO control of the DV camera would also be quite easy
   /// to implement: set "use-avc" to true
   /// then GST_STATE_PLAYING starts and GST_STATE_READY stops
