@@ -84,32 +84,6 @@ bool FileReadGst::openFile(string filename)
     have_pipeline_=true;
   }
   
-//   vsink_ = gst_element_factory_make("fakesink", "vsink_");
-//   g_assert (vsink_);
-//   gst_bin_add (GST_BIN (file_decode_), vsink_);
-  
-//   // creating video output bin
-//   video_bin_ = gst_bin_new ("video_bin_");
-//   g_assert(video_bin_);
-//   videorate_ = gst_element_factory_make("videorate", "videorate_");
-//   g_assert(videorate_);
-//   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
-//   g_assert(colorspace_);
-//   vqueue_ = gst_element_factory_make ("queue", "vqueue_");
-//   g_assert(vqueue_);
-//   vsink_ = gst_element_factory_make ("appsink", "vsink_");
-//   g_assert(vsink_);
-//   
-//   gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
-//   // NOTE colorspace_ and vqueue_ are linked in the callback
-//   gst_element_link(videorate_, colorspace_);
-//   gst_element_link(vqueue_, vsink_);
-// 
-//   GstPad *video_pad = gst_element_get_pad (videorate_, "sink");
-//   gst_element_add_pad (video_bin_, gst_ghost_pad_new ("sink", video_pad));
-//   gst_object_unref(video_pad);
-//   gst_bin_add (GST_BIN (file_decode_), video_bin_);
-  
   // set paused state
   if(!gst_element_set_state (file_decode_, GST_STATE_PAUSED))
     return false;
@@ -393,11 +367,8 @@ bool FileReadGst::createAudioBin()
   return true;
 }
 
-bool FileReadGst::createVideoBin()  ///TODO funktioniert im Moment nicht
+bool FileReadGst::createVideoBin() 
 {
-//   if(vsink_)
-//     gst_bin_remove (GST_BIN (file_decode_), vsink_);
-  
   // creating video output bin
   video_bin_ = gst_bin_new ("video_bin_");
   g_assert(video_bin_);

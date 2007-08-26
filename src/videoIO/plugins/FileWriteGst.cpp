@@ -65,6 +65,7 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
   GstBuffer *buf;
   buf = gst_app_buffer_new (rec_data, size, freeRecBuffer, (void*)rec_data);
 
+
 /// TODO müssen wir timestamp und buffer setzen? bei mir hats mit timestamp nicht funktioniert
 //   // adding the timestamp to the buffer
 //   GstClock *clock = gst_pipeline_get_clock(GST_PIPELINE(file_encode_));
@@ -85,6 +86,7 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
   
   gst_app_src_push_buffer (GST_APP_SRC (source_), buf);
   frame_number_++;
+
 }
 
 bool FileWriteGst::openFile(const string &filename)
@@ -206,7 +208,7 @@ void FileWriteGst::initRecording(int xsize, int ysize, int cs)
 
   // set playing state
   if(!gst_element_set_state (file_encode_, GST_STATE_PLAYING))
-    error("FileWriteGst: recording could not be started!");
+    post("FileWriteGst: recording could not be started!");
   else post("FileWriteGst: started recording");
 }
 
@@ -317,16 +319,23 @@ bool FileWriteGst::setupUdpPipeline(const string &filename)
   g_assert(source_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
-  encode_ = gst_element_factory_make ("ffenc_mpeg2video", "encode_");
+  encode_ = gst_element_factory_make ("theoraenc", "encode_");
   g_assert(encode_);
-  parse_ = gst_element_factory_make ("mpegparse", "parse_");
+  mux_ = gst_element_factory_make ("oggmux", "mux_");
+  g_assert(mux_);
+  parse_ = gst_element_factory_make ("oggparse", "parse_");
   g_assert(parse_);
   sink_ = gst_element_factory_make ("udpsink", "sink_");
   g_assert(sink_);
 
+  // set the host
+  g_object_set (G_OBJECT(sink_), "host", filename.c_str(), NULL);
+  // set the port
+  if( cparameters_.find("port") != cparameters_.end() )
+    g_object_set (G_OBJECT(sink_), "port", cparameters_["port"], NULL);
 
-  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, parse_, sink_, NULL);
-  gst_element_link_many (source_, colorspace_, encode_, parse_, sink_, NULL);
+  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, parse_, sink_, NULL);
+  gst_element_link_many (source_, colorspace_, encode_, mux_, parse_, sink_, NULL);
 
   return true;
 }

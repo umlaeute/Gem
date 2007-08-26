@@ -245,7 +245,7 @@ void pix_file_read :: reallocate_m_image()
   SETFLOAT(ap+2, fileReader->getHeight() );
   SETFLOAT(ap+3, (float)fileReader->getFPS() );
 
-  post("pix_file_read: loaded file with %f sec (%dx%d) at %f fps", 
+  post("loaded file with %f msec (%dx%d) at %f fps", 
       fileReader->getDuration(), 
       fileReader->getWidth(), 
       fileReader->getHeight(), (float)fileReader->getFPS());
