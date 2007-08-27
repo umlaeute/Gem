@@ -1,4 +1,4 @@
-#N canvas 186 0 884 577 10;
+#N canvas 279 0 884 577 10;
 #X obj 544 472 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 805 346 450 300 gemwin 0;
@@ -30,8 +30,8 @@
 #X obj 545 389 pix_separator;
 #X obj 677 375 pix_separator;
 #X obj 677 433 pix_file_write;
-#X msg 294 173 start;
-#X msg 358 173 stop;
+#X msg 356 170 start;
+#X msg 420 170 stop;
 #X obj 545 339 pix_file_read;
 #X msg 577 306 start;
 #X msg 625 306 stop;
@@ -51,10 +51,10 @@
 -1;
 #X msg 65 205 set open \$1;
 #X obj 65 184 savepanel;
-#X obj 65 263 s filewrite;
+#X obj 65 274 s filewrite;
 #X text 61 141 Set the filename:;
-#X obj 294 210 s filewrite;
-#X text 293 143 Start/Stop recording:;
+#X obj 356 207 s filewrite;
+#X text 355 140 Start/Stop recording:;
 #X text 63 316 If you set nothing raw files will be written. For a
 list of available codecs and its parameters send the getCodec message.
 NOTE: files have to be reopened before the new codec parameters are
@@ -70,11 +70,10 @@ set!;
 #X msg 721 319 forceColorspace YUV;
 #X msg 721 338 forceColorspace Grey;
 #X msg 66 377 codec mpeg4 bitrate 500000;
-#X msg 186 440 codec udp;
-#X msg 65 240 open localhost;
-#X msg 186 460 codec udp port 4951;
-#X text 263 440 you must specify the host with the open message (default:
-localhost);
+#X msg 65 230 open udp://localhost:493;
+#X msg 79 252 open udp://localhost;
+#X text 231 253 You can set the udp parameters like this:;
+#X text 231 267 open udp://host:port where port is optional;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 12 0;
@@ -95,7 +94,7 @@ localhost);
 #X connect 23 0 12 0;
 #X connect 25 0 9 0;
 #X connect 26 0 28 0;
-#X connect 27 0 46 0;
+#X connect 27 0 45 0;
 #X connect 28 0 27 0;
 #X connect 36 0 34 0;
 #X connect 39 0 34 0;
@@ -104,5 +103,5 @@ localhost);
 #X connect 42 0 12 0;
 #X connect 43 0 12 0;
 #X connect 44 0 34 0;
-#X connect 45 0 34 0;
+#X connect 45 0 29 0;
 #X connect 46 0 29 0;

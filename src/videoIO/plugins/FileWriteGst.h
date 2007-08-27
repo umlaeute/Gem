@@ -50,7 +50,7 @@ class FileWriteGst : public FileWrite
    * @param filename the path of the file
    * @return true if open worked
    */
-  virtual bool openFile(const string &filename);
+  virtual bool openFile(const string &uri);
 
   /*!
    * stops recording
@@ -81,9 +81,13 @@ class FileWriteGst : public FileWrite
   bool setupMpeg4Pipeline(const string &filename);
   bool setupUdpPipeline(const string &filename);
   void freePipeline();
+  string getSettingsFromURI(const string &filename);
 
   bool new_video_;
   bool have_pipeline_;
+  
+  int port_;
+  string sink_element_;
   
   int frame_number_;
 

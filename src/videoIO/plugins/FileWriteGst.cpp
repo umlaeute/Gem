@@ -19,6 +19,7 @@
 
 #include "FileWriteGst.h"
 #include <locale.h>
+#include <iostream>
 
 bool FileWriteGst::is_initialized_ = false;
 
@@ -89,9 +90,9 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
 
 }
 
-bool FileWriteGst::openFile(const string &filename)
+bool FileWriteGst::openFile(const string &uri)
 {
-
+  string filename = getSettingsFromURI( uri);
 
   if(have_pipeline_)
     freePipeline();
@@ -100,8 +101,6 @@ bool FileWriteGst::openFile(const string &filename)
     setupOggPipeline(filename);
   else if (codec_ == "mpeg4")   
     setupMpeg4Pipeline(filename);
-  else if (codec_ == "udp")
-    setupUdpPipeline(filename);
   else
     setupRawPipeline(filename);
   
@@ -239,11 +238,24 @@ bool FileWriteGst::setupRawPipeline(const string &filename)
   g_assert(mux_);
   queue_ = gst_element_factory_make("queue", "queue_");
   g_assert(queue_);
-  sink_ = gst_element_factory_make ("filesink", "sink_");
+  sink_ = gst_element_factory_make (sink_element_.c_str(), "sink_");
   g_assert(sink_);
 
-  g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
-  g_object_set (G_OBJECT(sink_), "sync", true, NULL);
+  if (sink_element_ == "filesink")
+  {
+    g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+    g_object_set (G_OBJECT(sink_), "sync", true, NULL);
+  }
+  
+  else if (sink_element_ == "udpsink")
+  {
+    // set the host
+    g_object_set (G_OBJECT(sink_), "host", filename.c_str(), NULL);
+
+    // set the port
+    if (port_ != 0)
+      g_object_set (G_OBJECT(sink_), "port", port_, NULL);
+  }
 
   gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, mux_, queue_, sink_, NULL);
   gst_element_link_many (source_, colorspace_, mux_, queue_, sink_, NULL);
@@ -262,10 +274,20 @@ bool FileWriteGst::setupOggPipeline(const string &filename)
   g_assert(source_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
-  sink_ = gst_element_factory_make ("filesink", "sink_");
+  sink_ = gst_element_factory_make (sink_element_.c_str(), "sink_");
   g_assert(sink_);
 
-  g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+  if (sink_element_ == "filesink")
+    g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+  
+  else if (sink_element_ == "udpsink")
+  {
+    // set the host
+    g_object_set (G_OBJECT(sink_), "host", filename.c_str(), NULL);
+    // set the port
+    if (port_ != 0)
+      g_object_set (G_OBJECT(sink_), "port", port_, NULL);
+  }
 
   encode_ = gst_element_factory_make ("theoraenc", "encode_");
   g_assert(encode_);
@@ -296,10 +318,20 @@ bool FileWriteGst::setupMpeg4Pipeline(const string &filename)
   g_assert(encode_);
   mux_ = gst_element_factory_make("avimux", "mux_");
   g_assert(mux_);
-  sink_ = gst_element_factory_make ("filesink", "sink_");
+  sink_ = gst_element_factory_make (sink_element_.c_str(), "sink_");
   g_assert(sink_);
 
-  g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+  if (sink_element_ == "filesink")
+    g_object_set (G_OBJECT(sink_), "location", filename.c_str(), NULL);
+  
+  else if (sink_element_ == "udpsink")
+  {
+    // set the host
+    g_object_set (G_OBJECT(sink_), "host", filename.c_str(), NULL);
+    // set the port
+    if (port_ != 0)
+      g_object_set (G_OBJECT(sink_), "port", port_, NULL);
+  }
 
   // set mpeg4 parameter
   if( cparameters_.find("bitrate") != cparameters_.end() )
@@ -340,6 +372,52 @@ bool FileWriteGst::setupUdpPipeline(const string &filename)
   return true;
 }
 
+void FileWriteGst::freePipeline()
+{
+  if(!have_pipeline_) return;
+
+  // Gstreamer clean up
+  gst_element_set_state (file_encode_, GST_STATE_NULL);
+  gst_object_unref (GST_OBJECT (file_encode_));
+  have_pipeline_ = false;
+}
+
+string FileWriteGst::getSettingsFromURI(const string &uri)
+{
+  if(uri.compare(0, 6, "udp://") == 0)
+  {
+    sink_element_ = "udpsink";
+    
+    string str = uri;
+    str.erase(0, 6);
+    
+    string host = str;
+    
+    int index = str.find_first_of( ':', 0 );
+    post ("The index of : is : %d", index);
+    
+    if (index != -1)
+    {
+      str.erase(0, index + 1);
+      cout << "the port is: " << str << endl;
+      
+      port_ = atoi(str.c_str());
+      
+      host = host.erase(index);
+    }
+    
+    cout << "the host is: " << host << " and the port: " << port_ << endl;
+    
+    return host;    
+  }
+  else
+  {
+    sink_element_ = "filesink";
+    return uri;
+  }
+
+}
+
 void FileWriteGst::initGstreamer()
 {
   if(is_initialized_) return;
@@ -350,15 +428,6 @@ void FileWriteGst::initGstreamer()
   setlocale(LC_NUMERIC, "C"); 
 }
 
-void FileWriteGst::freePipeline()
-{
-  if(!have_pipeline_) return;
-
-  // Gstreamer clean up
-  gst_element_set_state (file_encode_, GST_STATE_NULL);
-  gst_object_unref (GST_OBJECT (file_encode_));
-  have_pipeline_ = false;
-}
 
 void FileWriteGst::freeRecBuffer(void *data)
 {
