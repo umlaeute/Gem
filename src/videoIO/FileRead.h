@@ -85,7 +85,13 @@ namespace VideoIO_
     /// set framerate of the host application (PD)
     virtual void setHostFramerate(float fr)
     { fr_host_ = fr; }
+    
+    virtual void setAudioTrack(int track)
+    { atrack_ = track; }
 
+    virtual void setVideoTrack(int track)
+    { vtrack_ = track; } 
+   
     /*!
      * returns the data of the current frame
      * @return the frame data of VIOFrame
@@ -147,6 +153,10 @@ namespace VideoIO_
     
     // force a specific colorspace
     int cspace_;
+    // the desired videotrack
+    int vtrack_;
+    //the desired audiotrack
+    int atrack_;
     
     // frame information
     float duration_;

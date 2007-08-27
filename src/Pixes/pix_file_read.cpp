@@ -275,6 +275,10 @@ void pix_file_read :: obj_setupCallback(t_class *classPtr)
                   gensym("speed"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_file_read::csCallback,
                   gensym("forceColorspace"), A_DEFSYM, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_file_read::atrackCallback,
+                  gensym("audioTrack"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_file_read::vtrackCallback,
+                  gensym("videoTrack"), A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, (t_method)&pix_file_read::dspMessCallback,
 		  gensym("dsp"), A_NULL);
@@ -310,6 +314,16 @@ void pix_file_read :: speedCallback(void *data, t_floatarg speed)
 void pix_file_read :: csCallback(void *data, t_symbol *s)
 {
   GetMyClass(data)->forceColorspace(s);
+}
+
+void pix_file_read :: atrackCallback(void *data, t_floatarg track)
+{
+  GetMyClass(data)->fileReader->setAudioTrack((int)track);
+}
+
+void pix_file_read :: vtrackCallback(void *data, t_floatarg track)
+{
+  GetMyClass(data)->fileReader->setVideoTrack((int)track);
 }
 
 void pix_file_read :: dspMessCallback(void *data, t_signal **sp)

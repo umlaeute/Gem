@@ -114,6 +114,8 @@ class GEM_EXTERN pix_file_read : public GemBase
     static void seekCallback(void *data, t_floatarg seek);
     static void speedCallback(void *data, t_floatarg speed);
     static void csCallback(void *data, t_symbol *s);
+    static void atrackCallback(void *data, t_floatarg track);
+    static void vtrackCallback(void *data, t_floatarg track);
 
     // audio callback
     static void dspMessCallback(void *data,t_signal **sp);

@@ -68,7 +68,7 @@ forceColorspace !;
 #X text 51 149 General URIs are specified like /local/file/ \, dvd://chapter
 \, http://host/path/file \, mms://host/path/file and so on.;
 #X text 221 196 more URI examples:;
-#N canvas 312 70 617 493 URI-examples 1;
+#N canvas 312 70 617 493 URI-examples 0;
 #X text 11 17 Files on the local filesystem can be read with the usual
 path:;
 #X obj 13 79 s fileread;
@@ -109,6 +109,10 @@ configurations of this gstreamer pipeline: gst-launch filesrc location=test_mpeg
 #X text 167 332 Seek to position (in msec):;
 #X msg 403 364 speed 2;
 #X msg 53 265 open /home/holzi/Desktop/yuv-test.mov;
+#X obj 271 651 s fileread;
+#X msg 271 622 videoTrack 1;
+#X msg 271 600 audioTrack 1;
+#X text 268 568 Set the tracks to play: The default track is 1;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 7 0;
@@ -137,3 +141,5 @@ configurations of this gstreamer pipeline: gst-launch filesrc location=test_mpeg
 #X connect 34 0 33 0;
 #X connect 55 0 51 0;
 #X connect 56 0 22 0;
+#X connect 58 0 57 0;
+#X connect 59 0 57 0;

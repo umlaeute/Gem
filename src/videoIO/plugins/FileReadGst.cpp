@@ -25,8 +25,8 @@ bool FileReadGst::is_initialized_ = false;
 FileReadGst::FileReadGst() :
     source_(NULL), videorate_(NULL), colorspace_(NULL), vsink_(NULL),
     file_decode_(NULL), video_bin_(NULL), bus_(NULL), adapter_(NULL),
-    audio_bin_(NULL), decode_(NULL), is_udp_(false),
-    have_pipeline_(false), new_video_(false)
+    audio_bin_(NULL), decode_(NULL), is_udp_(false), atrack_count_(1),
+    vtrack_count_(1), have_pipeline_(false), new_video_(false)
 {
   initGstreamer();
 }
@@ -101,6 +101,10 @@ void FileReadGst::closeFile()
 
   gst_element_set_state (file_decode_, GST_STATE_NULL);
   gst_object_unref (GST_OBJECT (file_decode_));
+  video_bin_ = NULL;
+  audio_bin_ = NULL;
+  atrack_count_ = 1;
+  vtrack_count_ = 1;
 }
 
 void FileReadGst::startVideo()
@@ -331,6 +335,9 @@ void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
 
 bool FileReadGst::createAudioBin()
 {
+  // bin will only be created if we have the desired track
+  if(atrack_count_++ != atrack_) return false;
+  
   // creating audio output bin
   audio_bin_ = gst_bin_new ("audio_bin_");
   g_assert(audio_bin_);
@@ -369,6 +376,9 @@ bool FileReadGst::createAudioBin()
 
 bool FileReadGst::createVideoBin() 
 {
+  // bin will only be created if we have the desired track
+  if(vtrack_count_++ != vtrack_) return false;
+  
   // creating video output bin
   video_bin_ = gst_bin_new ("video_bin_");
   g_assert(video_bin_);
@@ -449,14 +459,17 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
     if(!tmp->createVideoBin())
       post("FileReadGst: The video bin could not be created");
     
-    videopad = gst_element_get_pad (tmp->video_bin_, "sink");
-    g_assert(videopad);
-    
-     // check if the pads are already linked
-    if( GST_PAD_IS_LINKED (videopad) )
+    else
     {
-      g_object_unref (videopad);
-      link_video = false;            ///TODO warum auf false setzen??
+      videopad = gst_element_get_pad (tmp->video_bin_, "sink");
+      g_assert(videopad);
+      
+      // check if the pads are already linked
+      if( GST_PAD_IS_LINKED (videopad) )
+      {
+        g_object_unref (videopad);
+        link_video = false;            ///TODO warum auf false setzen??
+      }
     }
   }
   
@@ -465,14 +478,16 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
     // the audio bin will only be created if needed
     if(!tmp->createAudioBin())
       post("FileReadGst: The audio bin could not be created");
-    
-    audiopad = gst_element_get_pad (tmp->audio_bin_, "sink");
-    g_assert(audiopad);
-    
-    if ( GST_PAD_IS_LINKED (audiopad) )
+    else
     {
-      g_object_unref (audiopad);
-      link_audio = false;
+      audiopad = gst_element_get_pad (tmp->audio_bin_, "sink");
+      g_assert(audiopad);
+      
+      if ( GST_PAD_IS_LINKED (audiopad) )
+      {
+        g_object_unref (audiopad);
+        link_audio = false;
+      }
     }
   }
   

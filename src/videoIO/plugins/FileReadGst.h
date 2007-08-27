@@ -126,6 +126,9 @@ class FileReadGst : public FileRead
   bool have_pipeline_;
   bool new_video_;
   bool is_udp_;
+  
+  int vtrack_count_;
+  int atrack_count_;
 
   string getURIFromFilename(const string &filename);
 
