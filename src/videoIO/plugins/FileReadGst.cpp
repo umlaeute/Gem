@@ -20,8 +20,6 @@
 #include "FileReadGst.h"
 #include <locale.h>
 
-#include <iostream>    ///TODO dann wieder rausnehmen
-
 bool FileReadGst::is_initialized_ = false;
 
 FileReadGst::FileReadGst() :
@@ -172,9 +170,13 @@ void FileReadGst::setSpeed(float speed)
 
 unsigned char *FileReadGst::getFrameData()
 {
-  if(!have_pipeline_) return 0;
+  if(!have_pipeline_ || !video_bin_) return 0;
 
-  if( gst_app_sink_end_of_stream( GST_APP_SINK (vsink_) ) ) return 0;
+  if( gst_app_sink_end_of_stream( GST_APP_SINK (vsink_) ) ) 
+  {
+    stopVideo();
+    return 0;
+  }
 
   GstBuffer *buf = 0;
   
@@ -344,8 +346,8 @@ bool FileReadGst::createAudioBin()
   asink_ = gst_element_factory_make ("appsink", "asink_");
   g_assert(asink_);
   
-//   g_object_set (G_OBJECT(aqueue_), "max-size-time", 100, NULL);  TODO funktioniert noch nicht richtig
-//   g_object_set (G_OBJECT(aqueue_), "leaky", 2, NULL);
+//    g_object_set (G_OBJECT(aqueue_), "max-size-time", 100, NULL);  //TODO funktioniert nicht richtig
+//    g_object_set (G_OBJECT(aqueue_), "leaky", 2, NULL);
   
   gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, aqueue_, asink_, NULL);
   gst_element_link_many(aconvert_, aresample_, aqueue_, NULL);

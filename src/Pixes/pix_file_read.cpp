@@ -137,7 +137,6 @@ void pix_file_read :: render(GemState *state)
     // and stop video
     if(!m_already_banged)
     {
-      fileReader->stopVideo();
       outlet_bang(m_outEnd);
       m_already_banged = true;
     }

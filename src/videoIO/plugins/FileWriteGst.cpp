@@ -19,7 +19,6 @@
 
 #include "FileWriteGst.h"
 #include <locale.h>
-#include <iostream>      ///TODO dann wieder rausnehmen
 
 bool FileWriteGst::is_initialized_ = false;
 
