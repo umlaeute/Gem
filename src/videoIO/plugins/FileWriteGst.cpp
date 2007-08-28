@@ -23,7 +23,11 @@
 
 bool FileWriteGst::is_initialized_ = false;
 
-FileWriteGst::FileWriteGst() : new_video_(false), have_pipeline_(false), frame_number_(0)
+FileWriteGst::FileWriteGst() : 
+    source_(NULL), videorate_(NULL), colorspace_(NULL), encode_(NULL),
+    mux_(NULL), parse_(NULL), queue_(NULL), sink_(NULL),
+    file_encode_(NULL), bus_(NULL), port_(0),
+    new_video_(false), have_pipeline_(false), frame_number_(0)
 {
   initGstreamer();
 }
@@ -104,8 +108,8 @@ bool FileWriteGst::openFile(const string &uri)
   else
     setupRawPipeline(filename);
   
-  ///TODO I only succeeded in playing the mpeg4 and raw files with mplayer, 
-  /// vlc doesn't play it. But gstreamer (playbin) can also play it
+  ///NOTE I only succeeded in playing the mpeg4 and raw files with mplayer, 
+  /// vlc doesn't play it. But gstreamer (playbin, videoIO) can also play it
   
   // set ready state
   if(!gst_element_set_state (file_encode_, GST_STATE_READY))
@@ -264,16 +268,16 @@ bool FileWriteGst::setupRawPipeline(const string &filename)
 
 bool FileWriteGst::setupOggPipeline(const string &filename)
 {
-  /// Test-Pipeline for gst-launch:
-  /// gst-launch filesrc location=input.avi ! decodebin !
-  /// ffmpegcolorspace ! theoraenc ! oggmux ! filesink location=output.ogg
-
   file_encode_ = gst_pipeline_new( "file_encode_");
 
   source_ = gst_element_factory_make ("appsrc", "source_");
   g_assert(source_);
   colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
   g_assert(colorspace_);
+  encode_ = gst_element_factory_make ("theoraenc", "encode_");
+  g_assert(encode_);
+  mux_ = gst_element_factory_make("oggmux", "mux_");
+  g_assert(mux_);
   sink_ = gst_element_factory_make (sink_element_.c_str(), "sink_");
   g_assert(sink_);
 
@@ -288,11 +292,6 @@ bool FileWriteGst::setupOggPipeline(const string &filename)
     if (port_ != 0)
       g_object_set (G_OBJECT(sink_), "port", port_, NULL);
   }
-
-  encode_ = gst_element_factory_make ("theoraenc", "encode_");
-  g_assert(encode_);
-  mux_ = gst_element_factory_make("oggmux", "mux_");
-  g_assert(mux_);
 
   // set theora parameter
   if( cparameters_.find("quality") != cparameters_.end() )
@@ -343,35 +342,6 @@ bool FileWriteGst::setupMpeg4Pipeline(const string &filename)
   return true;
 }
 
-bool FileWriteGst::setupUdpPipeline(const string &filename)
-{
-  file_encode_ = gst_pipeline_new( "file_encode_");
-
-  source_ = gst_element_factory_make ("appsrc", "source_");
-  g_assert(source_);
-  colorspace_ = gst_element_factory_make ("ffmpegcolorspace", "colorspace_");
-  g_assert(colorspace_);
-  encode_ = gst_element_factory_make ("theoraenc", "encode_");
-  g_assert(encode_);
-  mux_ = gst_element_factory_make ("oggmux", "mux_");
-  g_assert(mux_);
-  parse_ = gst_element_factory_make ("oggparse", "parse_");
-  g_assert(parse_);
-  sink_ = gst_element_factory_make ("udpsink", "sink_");
-  g_assert(sink_);
-
-  // set the host
-  g_object_set (G_OBJECT(sink_), "host", filename.c_str(), NULL);
-  // set the port
-  if( cparameters_.find("port") != cparameters_.end() )
-    g_object_set (G_OBJECT(sink_), "port", cparameters_["port"], NULL);
-
-  gst_bin_add_many (GST_BIN (file_encode_), source_, colorspace_, encode_, mux_, parse_, sink_, NULL);
-  gst_element_link_many (source_, colorspace_, encode_, mux_, parse_, sink_, NULL);
-
-  return true;
-}
-
 void FileWriteGst::freePipeline()
 {
   if(!have_pipeline_) return;
@@ -390,25 +360,17 @@ string FileWriteGst::getSettingsFromURI(const string &uri)
     
     string str = uri;
     str.erase(0, 6);
-    
     string host = str;
     
     int index = str.find_first_of( ':', 0 );
-    post ("The index of : is : %d", index);
-    
     if (index != -1)
     {
       str.erase(0, index + 1);
-      cout << "the port is: " << str << endl;
-      
       port_ = atoi(str.c_str());
-      
       host = host.erase(index);
     }
-    
-    cout << "the host is: " << host << " and the port: " << port_ << endl;
-    
-    return host;    
+
+    return host;
   }
   else
   {

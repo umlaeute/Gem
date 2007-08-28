@@ -25,6 +25,7 @@ Gstreamer Bad Plugins >= 0.10.5 (CVS)
 Gstreamer Ugly Plugins >= 0.10.6
   - You will need the ugly plugins only if you want to play DVDs or
     some other non-free things.
+Gstreamer FFmpeg Plugins >= 0.10.2
     
 
 Compilation

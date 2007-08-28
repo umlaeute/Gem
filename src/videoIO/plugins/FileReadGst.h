@@ -106,7 +106,11 @@ class FileReadGst : public FileRead
   /// @return true if successful
   bool createVideoBin();
   
+  /// @param filename the filename string from pd
+  /// @return the uri made from the filename
+  string getURIFromFilename(const string &filename);
   
+  // the gsreamer elements
   GstElement *source_;
   GstElement *decode_;
   GstElement *videorate_;
@@ -125,16 +129,19 @@ class FileReadGst : public FileRead
   
   bool have_pipeline_;
   bool new_video_;
+  
+  // true if we want to write a udp stream
   bool is_udp_;
   
+  // is needed to get the right track
   int vtrack_count_;
   int atrack_count_;
 
-  string getURIFromFilename(const string &filename);
-
+  /// initializes gstreamer
   static void initGstreamer();
   static bool is_initialized_;
-    
+  
+  /// the callback to connect dynamically to a newly created pad
   static void cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data);
 };
 

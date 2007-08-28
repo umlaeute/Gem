@@ -62,12 +62,12 @@ void pix_file_write :: render(GemState *state)
   if(!m_recording) return;
   
   imageStruct *im = &state->image->image;
-
+  
   if( m_first_time )
   {
     // get format data from GEM
-    int xsize = im->xsize;
-    int ysize = im->ysize;
+    int xsize = im->xsize;   ///TODO if no movie is loaded to play and you start recording
+    int ysize = im->ysize;   /// and create the gemwin it gets segmentation fault here
     int csize = im->csize;
     int format;
 

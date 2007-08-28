@@ -43,25 +43,53 @@ class FileWriteGst : public FileWrite
    * writes one frame in the video file
    * @param frame written in video file
    */
-  virtual void pushFrame(VIOFrame &frame);
+  void pushFrame(VIOFrame &frame);
   
   /*!
    * opens the file at the given path
    * @param filename the path of the file
    * @return true if open worked
    */
-  virtual bool openFile(const string &uri);
+  bool openFile(const string &uri);
 
   /*!
    * stops recording
    * @return false if file was written
    */
-  virtual bool stopRecording();
+  bool stopRecording();
 
   /// prints the avaliable codecs
-  virtual void getCodec();
+  void getCodec();
 
  protected:
+   
+  /// inits video file
+  void initRecording(int xsize, int ysize, int cs);
+  
+  /// sets up a pipeline for raw video
+  /// @param filename the name of the file/destination to write to
+  /// @return true if successful
+  bool setupRawPipeline(const string &filename);
+  
+  /// sets up a pipeline for ogg theora encoding
+  /// @param filename the name of the file/destination to write to
+  /// @return true if successful
+  bool setupOggPipeline(const string &filename);
+  
+  /// sets up a pipeline for mpeg4 encoding
+  /// @param filename the name of the file/destination to write to
+  /// @return true if successful
+  bool setupMpeg4Pipeline(const string &filename);
+
+  /// cleans up the memory allocated by the pipeline
+  void freePipeline();
+  
+  /// reads the settings needed to write out of the uri
+  /// @param uri the uri commited from pd
+  /// @return the filename/destination to write to
+  string getSettingsFromURI(const string &uri);
+   
+  // the Gstreamer elements
   GstElement *source_;
   GstElement *videorate_;
   GstElement *colorspace_; 
@@ -73,24 +101,17 @@ class FileWriteGst : public FileWrite
   GstElement *file_encode_;
   GstBus *bus_;
 
-  /// inits video file
-  void initRecording(int xsize, int ysize, int cs);
-
-  bool setupRawPipeline(const string &filename);
-  bool setupOggPipeline(const string &filename);
-  bool setupMpeg4Pipeline(const string &filename);
-  bool setupUdpPipeline(const string &filename);
-  void freePipeline();
-  string getSettingsFromURI(const string &filename);
-
   bool new_video_;
   bool have_pipeline_;
+  int frame_number_;
   
+  /// the desired port (for stream writing)
   int port_;
+  
+  /// the desired sink element (e.g.filesink or udpsink)
   string sink_element_;
   
-  int frame_number_;
-
+  /// initializes gstreamer
   static void initGstreamer();
   static bool is_initialized_;
 

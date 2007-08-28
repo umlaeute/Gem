@@ -58,7 +58,7 @@ namespace VideoIO_
     virtual bool openFile(const string &filename) = 0;
 
     /// set framerate of the video
-    virtual void setFramerate(float fr);
+    void setFramerate(float fr);
     
     /// sets the desired codec
     void setCodec(int argc, t_atom *argv);

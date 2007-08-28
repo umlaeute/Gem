@@ -83,13 +83,13 @@ namespace VideoIO_
     { cspace_ = cs; }
 
     /// set framerate of the host application (PD)
-    virtual void setHostFramerate(float fr)
+    void setHostFramerate(float fr)
     { fr_host_ = fr; }
     
-    virtual void setAudioTrack(int track)
+    void setAudioTrack(int track)
     { atrack_ = track; }
 
-    virtual void setVideoTrack(int track)
+    void setVideoTrack(int track)
     { vtrack_ = track; } 
    
     /*!

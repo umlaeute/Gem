@@ -23,10 +23,12 @@
 bool FileReadGst::is_initialized_ = false;
 
 FileReadGst::FileReadGst() :
-    source_(NULL), videorate_(NULL), colorspace_(NULL), vsink_(NULL),
-    file_decode_(NULL), video_bin_(NULL), bus_(NULL), adapter_(NULL),
-    audio_bin_(NULL), decode_(NULL), is_udp_(false), atrack_count_(1),
-    vtrack_count_(1), have_pipeline_(false), new_video_(false)
+    source_(NULL), decode_(NULL), videorate_(NULL), colorspace_(NULL), 
+    vqueue_(NULL), vsink_(NULL), aconvert_(NULL), aresample_(NULL), 
+    aqueue_(NULL), asink_(NULL), file_decode_(NULL), video_bin_(NULL), 
+    audio_bin_(NULL), bus_(NULL), adapter_(NULL),
+    have_pipeline_(false), new_video_(false), is_udp_(false), 
+    atrack_count_(1), vtrack_count_(1)
 {
   initGstreamer();
 }
@@ -64,7 +66,7 @@ bool FileReadGst::openFile(string filename)
     
     g_object_set (G_OBJECT(source_), "uri", uri.c_str(), NULL);
     gst_bin_add_many (GST_BIN (file_decode_), source_, decode_, NULL);
-    gst_element_link (source_, decode_);
+    gst_element_link_many (source_, decode_, NULL);
         
     g_signal_connect (decode_, "pad-added", G_CALLBACK (cbNewpad), (gpointer)this);
     
@@ -178,7 +180,7 @@ unsigned char *FileReadGst::getFrameData()
 //         GST_STATE(file_decode_), GST_STATE_PENDING(file_decode_));
 
   // get the buffer in PLAYING state
-  if( GST_STATE(file_decode_)==GST_STATE_PLAYING &&
+  if( GST_STATE(file_decode_)== GST_STATE_PLAYING &&
       GST_STATE_PENDING(file_decode_)==GST_STATE_VOID_PENDING )
   {
     buf = gst_app_sink_pull_buffer(GST_APP_SINK (vsink_));
@@ -207,8 +209,8 @@ unsigned char *FileReadGst::getFrameData()
 
     // getting fomrat options
     int x_size, y_size, bpp, depth;
-    g_assert( gst_structure_get_int(str, "width", &x_size) );
-    g_assert( gst_structure_get_int(str, "height", &y_size) );
+    gst_structure_get_int(str, "width", &x_size);
+    gst_structure_get_int(str, "height", &y_size);
 
     int format=-1;
     gst_structure_get_int(str, "bpp", &bpp);
@@ -298,32 +300,22 @@ void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
   {
     buf = gst_app_sink_pull_buffer(GST_APP_SINK (asink_));
     if( !buf ) post("------------------");
-
-//     GstCaps *caps = gst_buffer_get_caps (buf);
-//     post("FileReadGst loaded audioframe: %s",
-//           gst_caps_to_string (caps) );
-
     gst_adapter_push (adapter_, buf);
   }
 
   if( gst_adapter_available(adapter_) >= buffersize )
   {
     t_float *data = (t_float*) gst_adapter_peek (adapter_, buffersize);
-
-//     post("data123: %f %f %f", data[0], data[2], data[4]);
-
     for(int i=0; i<n; ++i)
     {
       left[i] = data[i*2];
       right[i] = data[i*2+1];
     }
-
     gst_adapter_flush (adapter_, buffersize);
   }
   else
   {
-    post("FileReadGst audio dropout");
-
+ //   post("FileReadGst: audio dropout");
     // write zero samples in audio block
     while(n--)
     {
@@ -577,11 +569,15 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
     gst_pad_link (pad, audiopad);
   }
 
+  if(!link_video && !link_audio)
+    error("The file is no valid audio or video file.");
 
   // CLEANUP
   gst_caps_unref (caps);
-  gst_object_unref (videopad);
-  gst_object_unref (audiopad);
+  if(link_video)
+    gst_object_unref (videopad);
+  if(link_audio)
+    gst_object_unref (audiopad);
   return;
 }
 
