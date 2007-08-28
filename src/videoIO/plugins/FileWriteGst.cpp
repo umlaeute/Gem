@@ -19,7 +19,7 @@
 
 #include "FileWriteGst.h"
 #include <locale.h>
-#include <iostream>
+#include <iostream>      ///TODO dann wieder rausnehmen
 
 bool FileWriteGst::is_initialized_ = false;
 
@@ -27,7 +27,7 @@ FileWriteGst::FileWriteGst() :
     source_(NULL), videorate_(NULL), colorspace_(NULL), encode_(NULL),
     mux_(NULL), parse_(NULL), queue_(NULL), sink_(NULL),
     file_encode_(NULL), bus_(NULL), port_(0),
-    new_video_(false), have_pipeline_(false), frame_number_(0)
+    new_video_(false), have_pipeline_(false)
 {
   initGstreamer();
 }
@@ -69,29 +69,8 @@ void FileWriteGst::pushFrame(VIOFrame &frame)
 
   GstBuffer *buf;
   buf = gst_app_buffer_new (rec_data, size, freeRecBuffer, (void*)rec_data);
-
-
-/// TODO müssen wir timestamp und buffer setzen? bei mir hats mit timestamp nicht funktioniert
-//   // adding the timestamp to the buffer
-//   GstClock *clock = gst_pipeline_get_clock(GST_PIPELINE(file_encode_));
-//   GstClockTime time = gst_clock_get_time(clock);
-//   buf->timestamp = time;
-  
-//   // setting the framenumber of this buffer
-//   buf->offset = frame_number_;
-  
-//   // adding caps to the buffer
-//   GstCaps *caps = gst_caps_new_simple ("video/x-raw-yuv",
-//                                        "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC('U', 'Y', 'V', 'Y'),
-//                                        "framerate", GST_TYPE_FRACTION, 20, 1,
-//                                        "width", G_TYPE_INT, xs,
-//                                        "height", G_TYPE_INT, ys,
-//                                        NULL);
-//   gst_buffer_set_caps (buf, caps);
-  
+ 
   gst_app_src_push_buffer (GST_APP_SRC (source_), buf);
-  frame_number_++;
-
 }
 
 bool FileWriteGst::openFile(const string &uri)
@@ -134,8 +113,6 @@ bool FileWriteGst::stopRecording()
   gst_element_set_state (file_encode_, GST_STATE_NULL);
 
   post("FileWriteGst: stopped recording");
-  
-  frame_number_ = 0;
   
   return true;
 }

@@ -20,6 +20,8 @@
 #include "FileReadGst.h"
 #include <locale.h>
 
+#include <iostream>    ///TODO dann wieder rausnehmen
+
 bool FileReadGst::is_initialized_ = false;
 
 FileReadGst::FileReadGst() :
@@ -208,10 +210,10 @@ unsigned char *FileReadGst::getFrameData()
           gst_caps_to_string (caps) );
 
     // getting fomrat options
-    int x_size, y_size, bpp, depth;
+    int x_size, y_size, bpp, depth, fr_numerator, fr_denominator;
     gst_structure_get_int(str, "width", &x_size);
     gst_structure_get_int(str, "height", &y_size);
-
+    
     int format=-1;
     gst_structure_get_int(str, "bpp", &bpp);
     gst_structure_get_int(str, "depth", &depth);

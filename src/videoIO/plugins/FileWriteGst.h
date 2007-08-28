@@ -103,7 +103,6 @@ class FileWriteGst : public FileWrite
 
   bool new_video_;
   bool have_pipeline_;
-  int frame_number_;
   
   /// the desired port (for stream writing)
   int port_;

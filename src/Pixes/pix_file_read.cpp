@@ -239,17 +239,16 @@ void pix_file_read :: reallocate_m_image()
   m_image.image.reallocate();
   m_newfilm = true;
   
-  t_atom ap[4];
+  t_atom ap[3];
   SETFLOAT(ap, fileReader->getDuration() );
   SETFLOAT(ap+1, fileReader->getWidth() );
   SETFLOAT(ap+2, fileReader->getHeight() );
-  SETFLOAT(ap+3, (float)fileReader->getFPS() );
 
   post("loaded file with %f msec (%dx%d) at %f fps", 
       fileReader->getDuration(), 
       fileReader->getWidth(), 
       fileReader->getHeight(), (float)fileReader->getFPS());
-  outlet_list(m_outNumFrames, 0, 4, ap);
+  outlet_list(m_outNumFrames, 0, 3, ap);
 }
 
 
