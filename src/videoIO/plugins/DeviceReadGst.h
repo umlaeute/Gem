@@ -48,22 +48,34 @@ class DeviceReadGst : public DeviceRead
    * @param device the device (e.g. /dev/video0), optional
    * @return true if successfully opened
    */
-  virtual bool openDevice(const string &name, const string &device="");
+  bool openDevice(const string &name, const string &device="");
   
   /// closes the device
   /// @return true if successfully closed
-  virtual bool closeDevice();
+  bool closeDevice();
   
   /// starts grabbing data from the device
-  virtual void startDevice();
+  void startDevice();
   
   /// stops grabbing data from the device
-  virtual void stopDevice();
+  void stopDevice();
 
   /// @return the data of the current VIOFrame
-  virtual unsigned char *getFrameData();
+  unsigned char *getFrameData();
 
  protected:
+  
+  /// sets up the pipeline for a DV device
+  void setupDVPipeline();
+  
+  /// sets up the pipeline for a V4L device
+  /// @param device the device name
+  void setupV4LPipeline(const string &device);
+  
+  /// frees the pipeline
+  void freePipeline();
+  
+  // the gstreamer elements
   GstElement *source_;
   GstElement *demux_;
   GstElement *decode_;
@@ -75,14 +87,14 @@ class DeviceReadGst : public DeviceRead
   bool have_pipeline_;
   bool new_device_;
 
-  void setupDVPipeline();
-  void setupV4LPipeline(const string &device);
-  void freePipeline();
-  
+  /// initializes gstreamer
   static void initGstreamer();
   static bool is_initialized_;
   
+  /// the callback to connect dynamically to a newly created pad
   static void cbNewpad(GstElement *element, GstPad *pad, gpointer data);
+  
+  /// the callback for dropped frames
   static void cbFrameDropped(GstElement *element, gpointer data);
 };
 

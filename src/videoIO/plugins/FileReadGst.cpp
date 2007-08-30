@@ -229,8 +229,6 @@ unsigned char *FileReadGst::getFrameData()
     frame_.allocate(x_size, y_size, format);
 
     // set framerate
-    /// TODO try to find a way in gstreamer how to query
-    ///      the original framerate of the movie here
     framerate_ = fr_host_;
 
     // get duration of the video
@@ -283,7 +281,7 @@ void FileReadGst::getAudioBlock(t_float *left, t_float *right, int n)
   }
 
   // if we have end of stream send zero samples
-  if(gst_app_sink_end_of_stream( GST_APP_SINK (asink_)))  ///TODO scheint nicht richtig zu funktionieren
+  if(gst_app_sink_end_of_stream( GST_APP_SINK (asink_)))
   {
     while(n--)
     {
@@ -346,9 +344,6 @@ bool FileReadGst::createAudioBin()
   asink_ = gst_element_factory_make ("appsink", "asink_");
   g_assert(asink_);
   
-//     g_object_set (G_OBJECT(aqueue_), "max-size-buffers", 10, NULL);  //TODO funktioniert nicht richtig
-//     g_object_set (G_OBJECT(aqueue_), "leaky", 2, NULL);
-  
   gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, aqueue_, asink_, NULL);
   gst_element_link_many(aconvert_, aresample_, aqueue_, NULL);
   /// TODO get framerate of pd
@@ -386,9 +381,6 @@ bool FileReadGst::createVideoBin()
   g_assert(vqueue_);
   vsink_ = gst_element_factory_make ("appsink", "vsink_");
   g_assert(vsink_);
-  
-  g_object_set (G_OBJECT(vqueue_), "max-size-buffers", 10, NULL);  //TODO funktioniert nicht richtig
-  g_object_set (G_OBJECT(vqueue_), "leaky", 2, NULL);
   
   gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
   // NOTE colorspace_ and vqueue_ are linked in the callback
@@ -467,7 +459,7 @@ void FileReadGst::cbNewpad(GstElement *decodebin, GstPad *pad, gpointer data)
       if( GST_PAD_IS_LINKED (videopad) )
       {
         g_object_unref (videopad);
-        link_video = false;            ///TODO warum auf false setzen??
+        link_video = false;           
       }
     }
   }

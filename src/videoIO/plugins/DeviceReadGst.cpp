@@ -93,16 +93,12 @@ bool DeviceReadGst::closeDevice()
 
 unsigned char *DeviceReadGst::getFrameData()
 {
-  post("in getFrameData");
   if(!have_pipeline_) 
     return 0;
-  
-  post("after have_pipeline");
 
   if( gst_app_sink_end_of_stream(GST_APP_SINK (sink_)) ) 
     return 0;
 
-  post("after end of stream");
 //   post("GST_STATE: %d, GST_STATE_PENDING: %d",
 //         GST_STATE(device_decode_), GST_STATE_PENDING(device_decode_));
 
@@ -111,9 +107,7 @@ unsigned char *DeviceReadGst::getFrameData()
   if( GST_STATE(device_decode_)==GST_STATE_PLAYING &&
       GST_STATE_PENDING(device_decode_)==GST_STATE_VOID_PENDING )
   {
-    post("buffer being pulled");
     buf = gst_app_sink_pull_buffer(GST_APP_SINK (sink_));
-    post("after pull");
   }
 
   if( !buf ) return 0;
@@ -121,8 +115,6 @@ unsigned char *DeviceReadGst::getFrameData()
   guint8 *data = GST_BUFFER_DATA( buf );
   guint size = GST_BUFFER_SIZE( buf );
 
-  post("before new device");
-  
   if( new_device_ )
   {
     GstCaps *caps = gst_buffer_get_caps (buf);
