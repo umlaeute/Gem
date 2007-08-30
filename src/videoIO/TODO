@@ -1,134 +1,21 @@
 
-verschiedene mimetypen:
+TODO:
 
-+        case PGM_IMAGE_RGB:
-+          caps = gst_caps_new_simple
-+            ("video/x-raw-rgb",
-+             "bpp", G_TYPE_INT, 24, "depth", G_TYPE_INT, 24,
-+             "red_mask",   G_TYPE_INT, 0x00ff0000,
-+             "green_mask", G_TYPE_INT, 0x0000ff00,
-+             "blue_mask",  G_TYPE_INT, 0x000000ff,
-+             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
-+             NULL);
-+          break;
-+
-+        case PGM_IMAGE_BGR:
-+          caps = gst_caps_new_simple
-+            ("video/x-raw-rgb",
-+             "bpp", G_TYPE_INT, 24, "depth", G_TYPE_INT, 24,
-+             "red_mask",   G_TYPE_INT, 0x000000ff,
-+             "green_mask", G_TYPE_INT, 0x0000ff00,
-+             "blue_mask",  G_TYPE_INT, 0x00ff0000,
-+             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
-+             NULL);
-+          break;
-+
-+        case PGM_IMAGE_RGBA:
-+          caps = gst_caps_new_simple
-+            ("video/x-raw-rgb",
-+             "bpp", G_TYPE_INT, 32, "depth", G_TYPE_INT, 32,
-+             "red_mask",   G_TYPE_INT, 0xff000000,
-+             "green_mask", G_TYPE_INT, 0x00ff0000,
-+             "blue_mask",  G_TYPE_INT, 0x0000ff00,
-+             "alpha_mask", G_TYPE_INT, 0x000000ff,
-+             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
-+             NULL);
-+          break;
-+
-+        case PGM_IMAGE_BGRA:
-+          caps = gst_caps_new_simple
-+            ("video/x-raw-rgb",
-+             "bpp", G_TYPE_INT, 32, "depth", G_TYPE_INT, 32,
-+             "red_mask",   G_TYPE_INT, 0x0000ff00,
-+             "green_mask", G_TYPE_INT, 0x00ff0000,
-+             "blue_mask",  G_TYPE_INT, 0xff000000,
-+             "alpha_mask", G_TYPE_INT, 0x000000ff,
-+             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
-+             NULL);
-+          break;
-+
-+        case PGM_IMAGE_I420:
-+          caps = gst_caps_new_simple
-+            ("video/x-raw-yuv",
-+             "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC ('I', '4', '2', '0'),
-+             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
-+             NULL);
-+          break;
-+
-+        case PGM_IMAGE_YV12:
-+          caps = gst_caps_new_simple
-+            ("video/x-raw-yuv",
-+             "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC ('Y', 'V', '1', '2'),
-+             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
-+             NULL);
-+          break;
-+
-+        case PGM_IMAGE_UYVY:
-+          caps = gst_caps_new_simple
-+            ("video/x-raw-yuv",
-+             "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC ('U', 'Y', 'V', 'Y'),
-+             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
-+             NULL);
-+          break;
-+
-+        case PGM_IMAGE_YUYV:
-+          caps = gst_caps_new_simple
-+            ("video/x-raw-yuv",
-+             "format", GST_TYPE_FOURCC, GST_MAKE_FOURCC ('Y', 'U', 'Y', 'V'),
-+             "width",  GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "height", GST_TYPE_INT_RANGE, 1, G_MAXINT,
-+             "framerate", GST_TYPE_FRACTION_RANGE, 0, 1, G_MAXINT, 1,
-+             NULL);
-+          break;
-+
-
-
-
-
-
-
-
- TODO:
-- FileReadQT4l funktioniert noch nicht richtig
-- Exceptions in dynamic libraries
-
-
-Georg schreiben
-
-
-
-
-Hannes schreiben:
-<<<<<<< TODO
-
-
-
-CVS:
-- auschecken mit cvs -z9 -d:ext:holzi1@cvs.gem.iem.at:/cvsroot/pd-gem co -r videoIO Gem
-- Teile auscheckehn cvs update
-- einchecken: immer cvs commit -r videoIO *.h TODO (alle Datein angeben)
-- beim ersten mal adden: cvs add *.h
+KNOWN BUGS:
+- UDP end-of-stream bug (FileReadGst): When you read an UDP stream and the stream is finished and you
+    have not sent the stop message before this, the application freezes untilthere is a new stream to read.
     
+- audio_bin_ gets no end-of-stream (FileReadGst): When you play a file with audio and video tracks and
+    you turn on audio and video playback, then with some video files the application freezes at the end
+    of the video file. It seems that then only the video_bin_ gets the EOS signal and the audio_bin_ 
+    then tries to pull a buffer but cannot get one.
     
+- audio/video synchronisation (FileReadGst): If play only the video track of a file and later start playing
+    the audio track, the audio track starts at the beginning, though the video is somewhere else
     
-Fragen:
-- Error handling?? >>>>> Exception exits???
-- link vom Design pattern (OK)
-- wegen YUV Formate fragen (OK)
+- writing an empty gemwin (FileWriteGst): If you open a file to record, start recording and then open
+    an empty gemwin, it gets segmentation fault (this seems to be a bug in pix_file_read::render)
+
 
 
 PLUGIN-FACTORY:
@@ -153,10 +40,6 @@ colorspaces:
 	if we don't care, set the FourCC to <null>
 
 	what about "writing"?  conversion in the host (if plugin does not know how to handle the requested cs)
-
-
-error checking:
-	exceptions
 
 
 // on parameter maps

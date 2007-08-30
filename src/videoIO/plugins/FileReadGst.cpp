@@ -346,8 +346,8 @@ bool FileReadGst::createAudioBin()
   asink_ = gst_element_factory_make ("appsink", "asink_");
   g_assert(asink_);
   
-//    g_object_set (G_OBJECT(aqueue_), "max-size-time", 100, NULL);  //TODO funktioniert nicht richtig
-//    g_object_set (G_OBJECT(aqueue_), "leaky", 2, NULL);
+//     g_object_set (G_OBJECT(aqueue_), "max-size-buffers", 10, NULL);  //TODO funktioniert nicht richtig
+//     g_object_set (G_OBJECT(aqueue_), "leaky", 2, NULL);
   
   gst_bin_add_many (GST_BIN (audio_bin_), aconvert_, aresample_, aqueue_, asink_, NULL);
   gst_element_link_many(aconvert_, aresample_, aqueue_, NULL);
@@ -386,6 +386,9 @@ bool FileReadGst::createVideoBin()
   g_assert(vqueue_);
   vsink_ = gst_element_factory_make ("appsink", "vsink_");
   g_assert(vsink_);
+  
+  g_object_set (G_OBJECT(vqueue_), "max-size-buffers", 10, NULL);  //TODO funktioniert nicht richtig
+  g_object_set (G_OBJECT(vqueue_), "leaky", 2, NULL);
   
   gst_bin_add_many (GST_BIN (video_bin_), videorate_, colorspace_, vqueue_, vsink_, NULL);
   // NOTE colorspace_ and vqueue_ are linked in the callback

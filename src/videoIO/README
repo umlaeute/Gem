@@ -32,9 +32,7 @@ Compilation
 ===========
 
 The core will be compiled with the GEM buildsystem.
-The plugins will be build with the makefile in videoIO/plugins.                 #dependencies??
-
-...
+The plugins will be build with the makefile in videoIO/plugins.
 
 
 Writing new plugins
