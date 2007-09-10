@@ -440,7 +440,7 @@ pix_freeframe;
 pix_gain;
 pix_grey;
 pix_halftone;
-pix_histo;
+pix_histo bla;
 pix_hit;
 pix_hsv2rgb;
 pix_image;
