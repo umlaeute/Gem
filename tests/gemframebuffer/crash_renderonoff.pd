@@ -14,12 +14,17 @@
 #X obj 236 266 t a a;
 #X obj 236 337 gemwin;
 #X obj 261 283 print 2gemwin;
-#X obj 210 51 r \$1;
+#X obj 210 34 r \$1-send;
+#X obj 149 333 s \$1-receive;
+#X msg 149 316 1;
+#X msg 177 316 -1;
+#X obj 210 51 t b b;
 #X connect 0 0 3 0;
 #X connect 1 0 12 0;
 #X connect 2 0 12 0;
 #X connect 4 0 12 0;
 #X connect 5 0 12 0;
+#X connect 6 0 17 0;
 #X connect 6 1 5 0;
 #X connect 7 0 9 0;
 #X connect 7 1 10 0;
@@ -31,4 +36,8 @@
 #X connect 11 0 7 0;
 #X connect 12 0 13 0;
 #X connect 12 1 14 0;
-#X connect 15 0 7 0;
+#X connect 15 0 19 0;
+#X connect 17 0 16 0;
+#X connect 18 0 16 0;
+#X connect 19 0 7 0;
+#X connect 19 1 18 0;
