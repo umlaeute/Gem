@@ -68,15 +68,16 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
 
     if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
       m_cache=NULL;   
-
+    /*
     if (!topImage)
     {
-    	post("GEM: pix_multiimage: requires an int for number of images");
+    	error("requires an int for number of images");
         return;
     }
+    */
     if (baseImage > topImage)
     {
-        post("GEM: pix_multiimage: Top range less than base image");
+        error("Top range less than base image");
         return;
     }
     if (skipRate < 1) skipRate = 1;
@@ -121,7 +122,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     
     if (!strPtr[i])
     {
-    	post("GEM: pix_multiimage: Unable to find * in file name");
+    	error("Unable to find * in file name");
     	return;
     }
 
@@ -179,7 +180,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
         ptr->next = newCache;
     }
 
-    post("GEM: loaded images: %s %s from %d to %d skipping %d",
+    post("loaded images: %s %s from %d to %d skipping %d",
                 bufName, postName, baseImage, topImage, skipRate);
 }
 
@@ -236,12 +237,12 @@ void pix_multiimage :: changeImage(int imgNum)
 
     if (imgNum >= m_numImages)
     {
-    	error("GEM: pix_multiimage: selection number too high: %d (max num is %d)", imgNum, m_numImages);
+    	error("selection number too high: %d (max num is %d)", imgNum, m_numImages);
     	return;
     }
     else if (imgNum < 0)
     {
-        error("GEM: pix_multiimage: selection number must be > 0");
+        error("selection number must be > 0");
         return;
     }
     m_curImage = imgNum;
@@ -274,7 +275,7 @@ void pix_multiimage :: cleanImages()
             else
             {
                 while (ptr && ptr->next != m_loadedCache) ptr = ptr->next;
-                if (!ptr) error("GEM: pix_multiimage: Unable to find image cache!");
+                if (!ptr) error("Unable to find image cache!");
                 else
                 {
                     ptr->next = m_loadedCache->next;
