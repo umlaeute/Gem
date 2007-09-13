@@ -76,7 +76,7 @@ class GEM_EXTERN gemframebuffer : public GemBase
     	
 	private:
 
-		int             m_init;
+		GLboolean             m_haveinit, m_wantinit;
 		GLuint			m_frameBufferIndex;
 		GLuint			m_depthBufferIndex;
 		GLuint			m_offScreenID;

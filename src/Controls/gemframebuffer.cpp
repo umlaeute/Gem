@@ -28,7 +28,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *,
 //
 /////////////////////////////////////////////////////////
 gemframebuffer :: gemframebuffer()
-    	 : m_init(0), m_frameBufferIndex(0), m_depthBufferIndex(0),
+  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
 		 m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
 		 m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
 	
@@ -45,7 +45,7 @@ gemframebuffer :: gemframebuffer()
   m_FBOcolor[3] = 0.f;
 }
 gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
-    	 : m_init(0), m_frameBufferIndex(0), m_depthBufferIndex(0),
+  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
 		 m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
 		 m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
 {
@@ -71,8 +71,8 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
 /////////////////////////////////////////////////////////
 gemframebuffer :: ~gemframebuffer()
 {
-	destroyFBO();
-    outlet_free(m_outTexInfo);
+  destroyFBO();
+  outlet_free(m_outTexInfo);
 }
 
 /////////////////////////////////////////////////////////
@@ -80,10 +80,13 @@ gemframebuffer :: ~gemframebuffer()
 //
 /////////////////////////////////////////////////////////
 void gemframebuffer :: render(GemState *state)
-{	
-  if (!m_init && m_width && m_height)
+{
+  if(!m_width || !m_height) {
+    error("width and height must be present!");
+  }
+  if (m_wantinit)
     initFBO();
-	
+  
   // store the window viewport dimensions so we can reset them,
   // and set the viewport to the dimensions of our texture
   glGetIntegerv(GL_VIEWPORT, m_vp);
@@ -184,7 +187,7 @@ void gemframebuffer :: postrender(GemState *state)
 void gemframebuffer :: initFBO()
 {
   // clean up any existing FBO before creating a new one
-  if(m_init)
+  if(m_haveinit)
 	destroyFBO();
 	
   if ( !m_mode )
@@ -266,7 +269,8 @@ void gemframebuffer :: initFBO()
   // Return out of the frame buffer.
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 #endif
-  m_init = 1;
+  m_haveinit = true;
+  m_wantinit = false;
 }
 
 /////////////////////////////////////////////////////////
@@ -281,7 +285,7 @@ void gemframebuffer :: destroyFBO()
   if(m_frameBufferIndex) glDeleteFramebuffersEXT(1, &m_frameBufferIndex);
   if(m_offScreenID) glDeleteTextures(1, &m_offScreenID);
 #endif
-  m_init = 0;
+  m_haveinit = false;
 }
 
 /////////////////////////////////////////////////////////
@@ -299,7 +303,7 @@ void gemframebuffer :: bangMess()
 /////////////////////////////////////////////////////////
 void gemframebuffer :: startRendering()
 {
-
+  m_wantinit = true;
 }
 
 /////////////////////////////////////////////////////////
@@ -308,7 +312,7 @@ void gemframebuffer :: startRendering()
 /////////////////////////////////////////////////////////
 void gemframebuffer :: stopRendering()
 {
-
+  destroyFBO();
 }
 /////////////////////////////////////////////////////////
 // dimMess
@@ -320,10 +324,8 @@ void gemframebuffer :: dimMess(int width, int height)
   {
     m_width = width;
     m_height = height;
-
-	destroyFBO();
-	initFBO();
-	setModified();
+    m_wantinit=true;
+    setModified();
   }
 }
 
@@ -331,11 +333,11 @@ void gemframebuffer :: colorMess(float red, float green, float blue, float alpha
 {
   
     m_FBOcolor[0] = red;
-	m_FBOcolor[1] = green;
-	m_FBOcolor[2] = blue;
-	m_FBOcolor[3] = alpha;
-	
-	setModified();
+    m_FBOcolor[1] = green;
+    m_FBOcolor[2] = blue;
+    m_FBOcolor[3] = alpha;
+    
+    setModified();
   
 }
 
@@ -377,6 +379,8 @@ void gemframebuffer :: formatMess(char* format)
 	  m_internalformat = GL_RGB;
       m_format = GL_RGB;
     }
+    // changed format, so we need to rebuild the FBO
+    m_wantinit=true;
 }
 
 void gemframebuffer :: typeMess(char* type)
@@ -400,6 +404,8 @@ void gemframebuffer :: typeMess(char* type)
 	  m_type = GL_UNSIGNED_BYTE;
 	  post("default type is BYTE, %d",m_type);
     }
+    // changed type, so we need to rebuild the FBO
+    m_wantinit=true;
 }
 
 /////////////////////////////////////////////////////////
@@ -428,8 +434,7 @@ void gemframebuffer :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->m_mode=((int)quality);
   // changed mode, so we need to rebuild the FBO
-  GetMyClass(data)->destroyFBO();
-  GetMyClass(data)->initFBO();
+  GetMyClass(data)->m_wantinit=true;
 }
 void gemframebuffer :: dimMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
@@ -438,14 +443,10 @@ void gemframebuffer :: dimMessCallback(void *data, t_floatarg width, t_floatarg 
 void gemframebuffer :: formatMessCallback (void *data, t_symbol *format)
 {
   GetMyClass(data)->formatMess((char*)format->s_name);
-  GetMyClass(data)->destroyFBO();
-  GetMyClass(data)->initFBO();
 }
 void gemframebuffer :: typeMessCallback (void *data, t_symbol *type)
 {
   GetMyClass(data)->typeMess((char*)type->s_name);
-  GetMyClass(data)->destroyFBO();
-  GetMyClass(data)->initFBO();
 }
 
 void gemframebuffer :: colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue, t_floatarg alpha)
