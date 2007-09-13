@@ -57,6 +57,15 @@ TextBase :: TextBase(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void TextBase :: renderLine(const char*line, float dist) {
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
+
+  startpost("renderline: "); {
+    char*c=(char*)line;
+    while(c) {
+      startpost("%c (%x)", c, c);
+      c++;
+    }
+  }
+
   m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
 
   glPushMatrix();
@@ -144,6 +153,7 @@ void TextBase :: fontNameMess(const char *filename){
   setFontSize(m_fontSize);
   m_font->Depth(m_fontDepth);
   m_font->CharMap(ft_encoding_unicode);
+
   setModified();
 }
 
@@ -386,7 +396,19 @@ void TextBase :: stringMess(int argc, t_atom *argv)
   wstring line = L"";
 
   for (i = 0; i < argc; i++)    {
-    line += (wchar_t)(atom_getint(argv+i));
+    int v=atom_getint(argv+i);
+    /* 
+     * i experienced crashes in FTGL with indices>65535;
+     * since TrueType fonts cannot hold more than 65536 entries
+     * we just clamp it...
+     * note: at least wikipedia claims that TTF can only hold 2^16 glyphs
+     *       i have seen ttf-fonts with (seemingly) more
+     */
+    if(v<0||v>65535) {
+      verbose(1, "invalid character %d: using ' ' instead", v);
+      v=32;
+    }
+    line += (wchar_t)(v);
   }
   line += (wchar_t)'\0';
 
