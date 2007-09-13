@@ -11,12 +11,12 @@
 #X text 377 167 control which frame;
 #X text 256 436 automatically textures;
 #X obj 177 238 print frames;
-#X msg 287 29 open ../data/homer.avi;
+#X msg 287 25 open ../data/homer.avi;
 #X obj 224 290 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0
 1;
 #X obj 325 282 print done;
 #X msg 336 135 auto \$1;
-#X obj 336 116 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 1
+#X obj 336 116 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0
 1;
 #X text 43 486 the texturing is done automatically: there is no need
 to care for the image-size (it doesn't have to be a power of 2). on
@@ -24,16 +24,16 @@ the other hand \, you cannot do image-processing !! use [pix_film]
 for this;
 #X msg 325 259 reached the end !!!;
 #X obj 293 235 t f b;
-#X text 449 28 Win32;
-#X text 461 84 linux;
+#X text 449 13 Win32;
+#X text 461 73 linux;
 #X msg 297 56 open ../data/anim-1.mov;
-#X msg 307 82 open ../data/alea.mpg;
+#X msg 307 87 open ../data/alea.mpg;
 #X text 8 264 notice: you don't need pix_texture;
 #X text 406 131 play the movie !;
 #X obj 224 335 i;
 #X obj 259 335 + 1;
 #X obj 295 335 % 360;
-#X text 468 54 apple;
+#X text 471 42 apple;
 #X obj 505 415 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 454 304 gemwin 0;
