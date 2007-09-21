@@ -18,6 +18,7 @@
 #include "TextBase.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifdef __WIN32__
@@ -47,6 +48,12 @@ TextBase :: TextBase(int argc, t_atom *argv)
   m_theText.push_back(L"gem");
   makeLineDist();
   if(argc)textMess(argc, argv);
+  
+  if (getenv("GEM_DEFAULT_FONT"))
+    {
+      DEFAULT_FONT = getenv("GEM_DEFAULT_FONT");
+    }
+  
 
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
