@@ -212,9 +212,12 @@ int videoDV4L :: openDevice(int format){
     if (devnum<0)devnum=0;
     snprintf(buf, 32, "/dev/ieee1394/dv/host%d/%s/in", devnum, (m_norm==NTSC)?"NTSC":"PAL");
     if ((fd = open(buf, O_RDWR)) < 0)    {
-      if ((fd=open("/dev/dv1394", O_RDWR)) < 0)    {
-        perror(buf);
-        return -1;
+      snprintf(buf, 32, "/dev/dv1394/%d", devnum);
+      if ((fd = open(buf, O_RDWR)) < 0) {
+	if ((fd=open("/dev/dv1394", O_RDWR)) < 0)    {
+	  perror(buf);
+	  return -1;
+	}
       }
     }
   }
