@@ -1,5 +1,5 @@
-default: all
-.PHONY: default all clean distclean
+default: objects
+.PHONY: default objects all clean distclean depend
 
 include ../Make.include
 
@@ -9,7 +9,7 @@ SOURCES=$(sort $(filter %.cpp, $(wildcard *.cpp)))
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-all: $(OBJECTS)
+objects: $(OBJECTS)
 
 ## dependencies: as proposed by the GNU-make documentation
 ## see http://www.gnu.org/software/make/manual/html_node/make_47.html#SEC51
