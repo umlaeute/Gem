@@ -1,5 +1,4 @@
-default: objects
-.PHONY: default objects all clean distclean depend
+.PHONY: default o_objects all clean distclean depend
 
 include ../Make.include
 
@@ -7,9 +6,9 @@ include ../Make.include
 ## with whitespaces in it, and removes duplicates (e.g. because of whitespaces)
 SOURCES=$(sort $(filter %.cpp, $(wildcard *.cpp)))
 
-OBJECTS = $(SOURCES:.cpp=.o)
+O_OBJECTS = $(SOURCES:.cpp=.o)
 
-objects: $(OBJECTS)
+o_objects: $(O_OBJECTS)
 
 ## dependencies: as proposed by the GNU-make documentation
 ## see http://www.gnu.org/software/make/manual/html_node/make_47.html#SEC51
@@ -25,7 +24,7 @@ endif
 	 rm -f $@.$$$$
 
 clean:
-	-rm -f $(OBJECTS) 
+	-rm -f $(O_OBJECTS) 
 	-rm -f $(SOURCES:.cpp=.d) 
 	-rm -f *~
 
@@ -33,7 +32,7 @@ distclean:
 	-rm -f *.o *.d *~
 	$(DOS2UNIX) *.cpp *.h
 
-$(OBJECTS): %.o : %.cpp
+$(O_OBJECTS): %.o : %.cpp
 	$(CXX) -c $(GEM_CXXFLAGS) $*.cpp -o $*.o
 
 depend: $(SOURCES:.cpp=.d)
