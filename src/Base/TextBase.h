@@ -191,11 +191,11 @@ class GEM_EXTERN TextBase : public GemBase
     virtual FTFont* makeFont(const char*fontname)=0;
 
     /* this is just handy to reload a font */
-    char* m_fontname;
+    t_symbol* m_fontname;
     /* on starting to render, we reload the font, to make sure it is there 
      * this rids us of having to reload the font by hand everytime the rendering is restarted
      */
-    virtual  void startRendering(void){if(m_fontname)fontNameMess(m_fontname);}
+    virtual  void startRendering(void);
 
     /* render one line of the text */
     virtual void renderLine(const char*line,float dist);

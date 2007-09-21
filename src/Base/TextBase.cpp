@@ -51,6 +51,12 @@ TextBase :: TextBase(int argc, t_atom *argv)
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
 
+void TextBase :: startRendering(void) {
+  if(m_fontname)
+    fontNameMess(m_fontname->s_name);
+}
+
+
 ////////////////////////////////////////////////////////
 // render
 //
@@ -134,22 +140,18 @@ void TextBase :: fontNameMess(const char *filename){
     error("no font-file specified");
     return;
   }
-
   if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, (char*)filename, "", buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
     sprintf(buf, "%s/%s", buf2, bufptr);
   } else
     canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
 
-
   if (makeFont(buf)==NULL){
-    error("unable to open font %s", buf);
+    error("unable to open font '%s'", buf);
     return;
   }
-  if(m_fontname!=filename){
-    if(m_fontname)delete[]m_fontname;m_fontname=NULL;
-    m_fontname=new char[strlen(buf)];sprintf(m_fontname, "%s", filename);
-  }
+  m_fontname=gensym((char*)filename);
+
   setFontSize(m_fontSize);
   m_font->Depth(m_fontDepth);
   m_font->CharMap(ft_encoding_unicode);
