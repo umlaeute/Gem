@@ -22,19 +22,19 @@ strip:
 subdirs: $(GEM_TARGETS)
 
 $(GEM_TARGETS):
-	${MAKE} -C $@ -f $(BUILDDIR)/Makefile.subdir -j4
+	${MAKE} -C $@ -j4
 
 clean:
 	@for d in ${GEM_TARGETS}; do \
 	    echo "----------$$d----------"; \
-	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir clean; \
+	    ${MAKE} -C $$d clean; \
 	done
 	-rm -f Gem.$(EXT) *~
 
 distclean:
 	@for d in ${GEM_TARGETS}; do \
 	    echo "----------$$d----------"; \
-	    ${MAKE} -C $$d -f $(BUILDDIR)/Makefile.subdir distclean; \
+	    ${MAKE} -C $$d distclean; \
 	done
 	-rm -f Gem.$(EXT) *~
 	-rm -f config.cache config.log config.status Make.config
