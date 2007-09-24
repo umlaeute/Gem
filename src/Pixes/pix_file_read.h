@@ -5,7 +5,7 @@
     Interface to the VideoIO framework
     this object is for video file reading
     
-    Copyright (c) 2007 Thomas Holzmann
+    Copyright (c) 2007 Thomas Holzmann, Georg Holzmann
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

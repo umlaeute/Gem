@@ -1,4 +1,4 @@
-#N canvas 408 0 841 683 10;
+#N canvas 408 0 846 702 10;
 #X obj 532 550 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
@@ -62,7 +62,6 @@ to the desired colorspace. NOTE: one has to reopen the file when changing
 forceColorspace !;
 #X text 333 37 ::: PIX_FILE_READ :::;
 #X text 175 435 NOTE: in non-playing mode seeks;
-#X text 548 670 videoIO: created 2007 \, Thomas Holzmann;
 #X text 51 149 General URIs are specified like /local/file/ \, dvd://chapter
 \, http://host/path/file \, mms://host/path/file and so on.;
 #X text 221 196 more URI examples:;
@@ -113,14 +112,16 @@ configurations of this gstreamer pipeline: gst-launch filesrc location=test_mpeg
 #X text 266 581 The default track is 1;
 #X msg 53 265 open /home/holzi/Desktop/schritte.avi;
 #X obj 597 342 unpack f f f;
+#X text 605 648 videoIO: created 2007 \, by;
+#X text 564 662 Thomas Holzmann \, Georg Holzmann;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 4 0 7 0;
 #X connect 5 0 6 0;
 #X connect 7 0 5 0;
-#X connect 7 1 47 0;
-#X connect 7 2 47 1;
-#X connect 7 3 60 0;
+#X connect 7 1 46 0;
+#X connect 7 2 46 1;
+#X connect 7 3 59 0;
 #X connect 7 4 17 0;
 #X connect 8 0 28 0;
 #X connect 9 0 28 0;
@@ -131,14 +132,14 @@ configurations of this gstreamer pipeline: gst-launch filesrc location=test_mpeg
 #X connect 21 0 7 0;
 #X connect 23 0 25 0;
 #X connect 24 0 23 0;
-#X connect 25 0 59 0;
+#X connect 25 0 58 0;
 #X connect 30 0 29 0;
 #X connect 31 0 29 0;
 #X connect 32 0 31 0;
-#X connect 53 0 49 0;
-#X connect 55 0 54 0;
-#X connect 56 0 54 0;
-#X connect 59 0 20 0;
-#X connect 60 0 13 0;
-#X connect 60 1 14 0;
-#X connect 60 2 15 0;
+#X connect 52 0 48 0;
+#X connect 54 0 53 0;
+#X connect 55 0 53 0;
+#X connect 58 0 20 0;
+#X connect 59 0 13 0;
+#X connect 59 1 14 0;
+#X connect 59 2 15 0;

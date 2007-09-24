@@ -7,8 +7,8 @@
 //   VIOPlugin
 //   header file
 //
-//   copyright            : (C) 2007 by Thomas Holzmann
-//   email                : holzi1@gmx.at
+//   copyright            : (C) 2007 by Thomas Holzmann, Georg Holzmann
+//   email                : holzi1@gmx.at, grh _at_ mut _dot_ at
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as published by
