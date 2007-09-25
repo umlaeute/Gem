@@ -301,7 +301,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
   data->old_context = CGLGetCurrentContext();
   err = CGLGetVirtualScreen(data->old_context, &vs);
   printf ("Target Context (0x%X) Renderer: %s\n",data->old_context, glGetString (GL_RENDERER));
-  cglReportError(CGLChoosePixelFormat (attrib, &data->pixfmt, &npf));
+  cglReportError(CGLChoosePixelFormat (attrib, &data->pixfmt, &(GLint)npf));
 	
   cglReportError(CGLCreateContext (data->pixfmt, data->old_context, &(data->context)));
   printf ("pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
