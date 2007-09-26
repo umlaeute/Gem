@@ -265,9 +265,9 @@ OSStatus cglReportError (CGLError err)
 PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 {
   OSStatus err = noErr;
-  long						npf,args[4],*arg;
+  long						args[4],*arg;
   CGLPixelFormatAttribute		*att,attrib[64], attrib_float[64];
-  GLint vs;
+  GLint vs, npf;
 
   // setup offscreen context
   att=attrib;
@@ -301,7 +301,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
   data->old_context = CGLGetCurrentContext();
   err = CGLGetVirtualScreen(data->old_context, &vs);
   printf ("Target Context (0x%X) Renderer: %s\n",data->old_context, glGetString (GL_RENDERER));
-  cglReportError(CGLChoosePixelFormat (attrib, &data->pixfmt, &(GLint)npf));
+  cglReportError(CGLChoosePixelFormat (attrib, &data->pixfmt, &npf));
 	
   cglReportError(CGLCreateContext (data->pixfmt, data->old_context, &(data->context)));
   printf ("pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
