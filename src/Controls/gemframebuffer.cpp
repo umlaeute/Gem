@@ -141,6 +141,18 @@ void gemframebuffer :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void gemframebuffer :: postrender(GemState *state)
 {
+  t_float w, h;
+
+  if(m_texTarget== GL_TEXTURE_2D) {
+    w=(t_float)1.f;
+    h=(t_float)1.f;
+  } else {
+    w=(t_float)m_width;
+    h=(t_float)m_height;
+  }
+
+  
+
   // GPGPU CONCEPT 4: Viewport-Sized Quad = Data Stream Generator.
   // In order to execute fragment programs, we need to generate pixels.
   // Drawing a quad the size of our viewport (see above) generates a
@@ -150,16 +162,7 @@ void gemframebuffer :: postrender(GemState *state)
   // orthographic, and the frustum dimensions to [-1,1].  Thus, our
   // viewport-sized quad vertices are at [-1,-1], [1,-1], [1,1], and
   // [-1,1]: the corners of the viewport.
-/*
-  glBegin(GL_QUADS);
-  {
-	glTexCoord2f(0, 0); glVertex3f(-1, -1, -0.5f);
-	glTexCoord2f(1, 0); glVertex3f( 1, -1, -0.5f);
-	glTexCoord2f(1, 1); glVertex3f( 1,  1, -0.5f);
-	glTexCoord2f(0, 1); glVertex3f(-1,  1, -0.5f);
-  }
-  glEnd();
-*/		
+
 #ifdef GL_EXT_framebuffer_object
   glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
   glBindTexture( m_texTarget, m_offScreenID );
@@ -174,8 +177,9 @@ void gemframebuffer :: postrender(GemState *state)
   // send textureID, w, h, textureTarget to outlet
   t_atom ap[4];
   SETFLOAT(ap, (t_float)m_offScreenID);
-  SETFLOAT(ap+1, m_width);
-  SETFLOAT(ap+2, m_height);
+  
+  SETFLOAT(ap+1, w);
+  SETFLOAT(ap+2, h);
   SETFLOAT(ap+3, m_texTarget);
   outlet_list(m_outTexInfo, 0, 4, ap);
 }
@@ -196,7 +200,7 @@ void gemframebuffer :: initFBO()
 	post("using mode 0:GL_TEXTURE_2D");
   }else{
 	m_texTarget = GL_TEXTURE_RECTANGLE_EXT;
-	post("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
+	post("using mode 1:GL_TEXTURE_RECTANGLE");
   }
 #ifdef GL_EXT_framebuffer_object
   // Generate frame buffer object then bind it.
@@ -237,31 +241,31 @@ void gemframebuffer :: initFBO()
   {
 	  switch(status) {                                          
   case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-		 post("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
+		 error("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-		post("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
+		error("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-		post("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
+		error("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-		 post("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
+		 error("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-		post("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
+		error("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
     break;
   case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-		 post("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
+		 error("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
     break;
   case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-		 post("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
+		 error("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
     break;
   case GL_INVALID_FRAMEBUFFER_OPERATION_EXT:
-		 post("GL_INVALID_FRAMEBUFFER_OPERATION_EXT");
+		 error("GL_INVALID_FRAMEBUFFER_OPERATION_EXT");
     break;
   default:
-    post("Unknown ERROR %d", status);
+    error("Unknown ERROR %d", status);
   }
 	  return;
   }
@@ -351,7 +355,7 @@ void gemframebuffer :: formatMess(char* format)
 #else
       m_type = GL_UNSIGNED_BYTE;
 #endif
-	  post("format is GL_RGB, %d",m_format);
+      post("format is GL_RGB, %d",m_format);
       return;
     } else
     
