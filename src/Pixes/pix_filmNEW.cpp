@@ -526,3 +526,4 @@ void pix_filmNEW :: threadCallback(void *data, t_floatarg state)
   GetMyClass(data)->threadMess((int)state);
 }
 #endif /*__APPLE__*/
+
