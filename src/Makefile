@@ -14,7 +14,7 @@ all: subdirs Gem.$(EXT) strip
 Gem.$(EXT): subdirs
 	$(CXXLINK) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
 
-strip:
+strip: Gem.$(EXT)
 	-$(STRIP) $(STRIP_UNNEEDED) Gem.$(EXT)
 
 ## handling of subdirs as proposed by the GNU-make documentation
@@ -22,7 +22,7 @@ strip:
 subdirs: $(GEM_TARGETS)
 
 $(GEM_TARGETS):
-	${MAKE} -C $@ -j4
+	${MAKE} -C $@ 
 
 clean:
 	@for d in ${GEM_TARGETS}; do \
