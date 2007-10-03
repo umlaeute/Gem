@@ -1,3 +1,4 @@
+
 /*
  *  pix_record.cpp
  *
@@ -69,7 +70,7 @@ void pix_record :: stopRecording()
   if(m_handle){
     m_handle->close();
     m_currentFrame = 0; //reset the frame counter?
-    //outlet_float(m_outNumFrames,m_currentFrame);
+    outlet_float(m_outNumFrames,m_currentFrame);
     post("pix_record : movie written");
   }
 
@@ -91,6 +92,10 @@ void pix_record :: render(GemState *state)
     if(m_banged||m_automatic){
 	  m_handle->m_recordStart=m_recordStart;
 	  m_handle->m_recordStop=m_recordStop;
+	  m_handle->m_maxFrames = m_maxFrames;
+	  m_handle->m_minFrames = m_minFrames;
+	  
+	  if(m_maxFrames != 0 && m_currentFrame >= m_maxFrames) m_recordStop = 1;
       m_currentFrame=m_handle->putFrame(&state->image->image);
       m_banged=false;
       if(m_currentFrame<0)m_recordStop=1;
@@ -242,6 +247,10 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
 		  gensym("codeclist"),  A_NULL);
   class_addmethod(classPtr, (t_method)&pix_record::codecMessCallback,
 		  gensym("codec"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_record::minMessCallback,
+		  gensym("min_frames"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_record::maxMessCallback,
+		  gensym("max_frames"), A_FLOAT, A_NULL);
 }
 
 void pix_record :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
@@ -285,4 +294,14 @@ void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom *
 {
   if(argc)
     GetMyClass(data)->codecMess(argv);
+}
+
+void pix_record :: minMessCallback(void *data, t_floatarg min)
+{
+  GetMyClass(data)->m_minFrames=((int)min);
+}
+
+void pix_record :: maxMessCallback(void *data, t_floatarg max)
+{
+  GetMyClass(data)->m_maxFrames=((int)max);
 }
