@@ -89,8 +89,11 @@ class GEM_EXTERN record
   int     	m_width;
   int     	m_height;
 
-  bool			m_recordStart;
-  bool			m_recordStop;
+  bool		m_recordStart;
+  bool		m_recordStop;
+
+  int           m_minFrames;
+  int           m_maxFrames;
 
   //////////
   // popup a dialog to set the codec interactively (interesting on os-x and w32)

@@ -111,6 +111,10 @@ class GEM_EXTERN pix_record : public GemBase
 	t_outlet     *m_outNumFrames;
 		
 	int           m_currentFrame; //keep track of the number of frames
+
+        //////////
+        //
+        int           m_minFrames, m_maxFrames;
 		
 	int                     m_numCodecs;
 	//	codecListStorage	codecContainer[64];//anyone with more than 64 codecs can change this
@@ -132,6 +136,8 @@ class GEM_EXTERN pix_record : public GemBase
 	static void 	codeclistMessCallback(void *data);
 	static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
 
+	static void 	minMessCallback(void *data, t_floatarg min);
+	static void 	maxMessCallback(void *data, t_floatarg max);
 
 };
 #endif	// for header file
