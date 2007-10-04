@@ -6,7 +6,8 @@
  *  Copyright 2005. All rights reserved.
  *
  */
- 
+
+#if 1
  //this will record QT movies
 #ifndef INCLUDE_PIX_RECORD_H_
 #define INCLUDE_PIX_RECORD_H_
@@ -86,9 +87,11 @@ class GEM_EXTERN pix_record : public GemBase
 	// call up compression dialog
 	virtual void	dialogMess();
 		
+
 	virtual void	getCodecList();
 	
 	virtual void	codecMess(t_atom *argv);
+
 
 	//////////
 	// Manual writing
@@ -120,6 +123,9 @@ class GEM_EXTERN pix_record : public GemBase
 	//	codecListStorage	codecContainer[64];//anyone with more than 64 codecs can change this
 
 	record        *m_handle;
+	
+	
+   int			m_maxFrames, m_minFrames;
 		
     private:
     	
@@ -131,13 +137,18 @@ class GEM_EXTERN pix_record : public GemBase
 
     	static void 	sizeMessCallback(void *data, t_floatarg width, t_floatarg height );
     	static void 	posMessCallback(void *data, t_floatarg x, t_floatarg y);
-	static void 	recordMessCallback(void *data, t_floatarg on);
-	static void 	dialogMessCallback(void *data);
-	static void 	codeclistMessCallback(void *data);
-	static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+
+		static void 	recordMessCallback(void *data, t_floatarg on);
+		static void 	dialogMessCallback(void *data);
+		static void 	codeclistMessCallback(void *data);
+		static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+		static void 	minMessCallback(void *data, t_floatarg min);
+		static void 	maxMessCallback(void *data, t_floatarg max);
+
 
 	static void 	minMessCallback(void *data, t_floatarg min);
 	static void 	maxMessCallback(void *data, t_floatarg max);
 
 };
 #endif	// for header file
+#endif //removes pix_record
