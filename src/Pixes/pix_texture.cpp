@@ -263,6 +263,8 @@ void pix_texture :: render(GemState *state) {
   glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
   glEnable(m_textureType);
   glBindTexture(m_textureType, m_textureObj);
+  
+  state->multiTexUnits = 8;
 
 # ifdef GL_APPLE_texture_range
   if ((!useExternalTexture)&&state->image->newfilm ){
