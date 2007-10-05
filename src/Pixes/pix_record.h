@@ -125,8 +125,6 @@ class GEM_EXTERN pix_record : public GemBase
 	record        *m_handle;
 	
 	
-   int			m_maxFrames, m_minFrames;
-		
     private:
     	
     	//////////
@@ -142,9 +140,6 @@ class GEM_EXTERN pix_record : public GemBase
 		static void 	dialogMessCallback(void *data);
 		static void 	codeclistMessCallback(void *data);
 		static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
-		static void 	minMessCallback(void *data, t_floatarg min);
-		static void 	maxMessCallback(void *data, t_floatarg max);
-
 
 	static void 	minMessCallback(void *data, t_floatarg min);
 	static void 	maxMessCallback(void *data, t_floatarg max);
