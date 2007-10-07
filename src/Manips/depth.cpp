@@ -57,6 +57,7 @@ depth :: ~depth()
 void depth :: render(GemState *)
 {
     if (m_state) glDisable(GL_DEPTH_TEST);
+    else         glEnable (GL_DEPTH_TEST);
 }
 
 /////////////////////////////////////////////////////////
