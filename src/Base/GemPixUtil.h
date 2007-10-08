@@ -35,17 +35,19 @@ LOG
 ///////////////////////////////////////////////////////////////////////////////
 
 /* RGBA */
-#ifdef __APPLE__				//tigital
-const int chAlpha	= 0;
-const int chRed		= 1;
-const int chGreen	= 2;
-const int chBlue	= 3;
-#else
+
+#if GL_RGBA_GEM == GL_RGBA
 const int chRed		= 0;
 const int chGreen	= 1;
 const int chBlue	= 2;
 const int chAlpha	= 3;
+#else
+const int chAlpha	= 0;
+const int chRed		= 1;
+const int chGreen	= 2;
+const int chBlue	= 3;
 #endif
+
 
 /* Gray */
 const int chGray	= 0;

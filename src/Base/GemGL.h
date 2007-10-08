@@ -207,6 +207,15 @@
 # define GL_YUV422_GEM GL_YCBCR_422_GEM
 #endif /* GL_YUV422_GEM */
 
+
+#ifndef GL_RGBA_GEM
+# ifdef __APPLE__
+#  define GL_RGBA_GEM GL_BGRA_EXT
+# else
+#  define GL_RGBA_GEM GL_RGBA
+# endif
+#endif /* GL_RGBA_GEM */
+
 #ifndef GL_TEXTURE_RECTANGLE_EXT
 # define GL_TEXTURE_RECTANGLE_EXT 0x84F5
 #endif
