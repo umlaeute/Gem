@@ -16,7 +16,7 @@
 
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_ONE_ARG(curve, t_floatarg, A_FLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(curve, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -51,6 +51,9 @@ curve :: ~curve()
 /////////////////////////////////////////////////////////
 void curve :: render(GemState *state)
 {
+  if(m_numInputs<1)
+    return;
+
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
     glNormal3f(0.0f, 0.0f, 1.0f);
     glLineWidth(m_linewidth);

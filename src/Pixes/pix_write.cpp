@@ -115,14 +115,15 @@ void pix_write :: doWrite()
       m_originalImage->format = GL_RGB;
       #else
 	  m_originalImage->type  = 
-	  #ifdef __PPC__
+	  #ifdef __ppc__
       GL_UNSIGNED_INT_8_8_8_8_REV;
 	  #else
 	  GL_UNSIGNED_INT_8_8_8_8;
-	  #endif // __PPC__
-      m_originalImage->csize = 4;
-      m_originalImage->format = GL_BGRA; //or BGRA_EXT?
+	  #endif // __ppc__
+      m_originalImage->csize = 4;  
+      m_originalImage->format = GL_BGRA; //RGBA or BGRA or BGRA_EXT?
       #endif
+
 
       m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
     }

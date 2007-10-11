@@ -109,6 +109,14 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
     delete [] pdata;
     pdata=NULL;
   }
+
+#ifdef __APPLE__ 
+  data = pdata =  new unsigned char [size];
+
+  datasize=size;  
+
+#else
+  
   size_t array_size= size+(GEM_VECTORALIGNMENT/8-1);
   pdata = new unsigned char[array_size];
 
@@ -116,6 +124,7 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
   size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
   data = pdata+offset;
   datasize=array_size-offset;
+#endif
   notowned=0;
   return data; 
 }

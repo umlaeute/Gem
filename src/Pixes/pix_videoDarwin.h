@@ -79,6 +79,8 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 
         virtual void csMess(int format);
 
+		virtual void qualityMess(int X);
+
         //////////
         // property-dialog
         virtual void	dialogMess(int,t_atom*);
@@ -108,7 +110,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         void dimenMess(int x, int y, int leftmargin, int rightmargin,
     	    	    	    int topmargin, int bottommargin);
 							
-		void	qualityMess(int X);
+		//void	qualityMess(int X);
 
         //-----------------------------------
         // GROUP:	Video data
@@ -136,6 +138,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
         int					m_colorspace;
 		
 		int					m_inputDevice;
+		int					m_inputDeviceChannel;
 		VideoDigitizerComponent			m_vdig; //gotta have the vdig
 		VideoDigitizerError	vdigErr;
 		DigitizerInfo       m_vdigInfo; //the info about the VDIG
@@ -178,6 +181,7 @@ class GEM_EXTERN pix_videoDarwin : public pix_video
 		static void autoCallback(void *data, t_floatarg X);
 		static void fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
 		static void recordCallback(void *data, t_floatarg X);
+		static void inputCallback(void *data, t_floatarg X);
 };
 
 #endif

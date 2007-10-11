@@ -15,7 +15,9 @@
 /////////////////////////////////////////////////////////
  
 #ifdef __APPLE__
-/* i think this is APPLE only...JMZ */
+
+// as long as there is no special help-file, fallback to the [pix_movie]
+#define HELPSYMBOL "pix_movie"
 
 #include "pix_movieDarwin.h"
 #include "Base/GemMan.h"
@@ -183,7 +185,7 @@ void pix_movieDarwin :: realOpen(char *filename)
     OSErr		err = noErr;
     FSRef		ref;
     
-   Track		movieTrack;
+   Track		movieTrack, audioTrack;
 	Media		trackMedia;
 	
 	long		sampleCount;
@@ -229,6 +231,10 @@ void pix_movieDarwin :: realOpen(char *filename)
 	sampleCount = GetMediaSampleCount(trackMedia);
 	
 	m_numFrames = sampleCount;
+	
+	audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,movieTrackMediaType);
+	
+	SetTrackEnabled(audioTrack, FALSE);
         
 	movieDur = (long)GetMovieDuration(m_movie);
 	movieScale = (long)GetMovieTimeScale(m_movie);
@@ -299,6 +305,11 @@ void pix_movieDarwin :: realOpen(char *filename)
 		//SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
 		//SetMoviePlayHints(m_movie, hintsDeinterlaceFields, 0);
 		
+		//kICMImageDescriptionPropertyID_CleanApertureClipRect
+		
+		SInt32 clap;
+		ICMImageDescriptionGetProperty(desc,kQTPropertyClass_ImageDescription,kICMImageDescriptionPropertyID_CleanAperture,
+											sizeof(clap),&clap,NULL);
 		
 		m_xsize = 1280;
 		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
@@ -347,7 +358,7 @@ void pix_movieDarwin :: realOpen(char *filename)
         }else{
             m_csize = 2;
             m_format = GL_YCBCR_422_APPLE;
-			#ifdef __VEC__
+			#ifndef i386
             m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
 			#else
 			m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
@@ -646,14 +657,14 @@ void pix_movieDarwin :: setUpTextureState()
 {
     if (m_rectangle) {
         post("pix__movieDarwin: using rectangle textures");
-        glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0f);
+        glTexParameterf(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_PRIORITY, 0.0f);
 
         glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
         
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
     else
     {
@@ -682,9 +693,21 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
   m_oldNumCoords = state->numTexCoords;
   m_oldTexture   = state->texture;
 
-  state->texture = 1;
+state->texture = 2;
+ /*
+   if (!m_rectangle){
+	state->texture = 1;
+  }
+  else{
+	state->texture = 2;
+  }
+  */
   state->texCoords = m_coords;
   state->numTexCoords = 4;
+  
+  state->image = &m_pixBlock;
+  
+  glActiveTexture(GL_TEXTURE0_ARB);
   
   if (!m_rectangle){
         glEnable(GL_TEXTURE_2D);
@@ -724,18 +747,20 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
   }
   else{
   
-  glEnable(GL_TEXTURE_RECTANGLE_EXT);
-  glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+  glEnable(GL_TEXTURE_RECTANGLE_ARB);
+  glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textureObj);
  
 
 	if (m_newFilm ){
-		glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_EXT, 
+		glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_ARB, 
 			    m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize, 
 			    m_pixBlock.image.data );
 				
-			glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+			glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
 			
-			glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+			glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
+			
+			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
 		     GL_RGBA,
 		     m_pixBlock.image.xsize,
 		     m_pixBlock.image.ysize, 0,
@@ -757,7 +782,7 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
         m_dataSize[0] = m_pixBlock.image.csize;
         m_dataSize[1] = m_pixBlock.image.xsize;
         m_dataSize[2] = m_pixBlock.image.ysize;
-	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+	glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
 		     GL_RGBA,
 		     m_pixBlock.image.xsize,
 		     m_pixBlock.image.ysize, 0,
@@ -774,7 +799,7 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
 		 
 		 
             
-			glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
 		     GL_RGBA,
 		     m_pixBlock.image.xsize,
 		     m_pixBlock.image.ysize, 0,
@@ -789,7 +814,7 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
 	  
 	
 
-    glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
+    glTexSubImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
 		    0, 0,			// position
 		    m_xsize,			// the x size of the data
 		    m_ysize,			// the y size of the data
@@ -819,11 +844,14 @@ void pix_movieDarwin :: postrender(GemState *state)
 
 
   m_pixBlock.newimage = 0;
-#ifdef GL_TEXTURE_RECTANGLE_EXT
+  
+  glActiveTexture(GL_TEXTURE0_ARB);
+  
+#ifdef GL_TEXTURE_RECTANGLE_ARB
   if ( !GemMan::texture_rectangle_supported )
     glDisable(GL_TEXTURE_2D);
   else
-    glDisable(GL_TEXTURE_RECTANGLE_EXT);
+    glDisable(GL_TEXTURE_RECTANGLE_ARB);
 #else
     glDisable(GL_TEXTURE_2D);
 #endif
@@ -846,7 +874,7 @@ void pix_movieDarwin :: startRendering()
     if ( ! m_rectangle )
         glBindTexture(GL_TEXTURE_2D, m_textureObj);
     else
-        glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textureObj);
 
 //    glBindTexture(GL_TEXTURE_2D, m_textureObj);
 

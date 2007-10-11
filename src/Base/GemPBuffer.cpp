@@ -265,9 +265,9 @@ OSStatus cglReportError (CGLError err)
 PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 {
   OSStatus err = noErr;
-  long						npf,args[4],*arg;
+  long						args[4],*arg;
   CGLPixelFormatAttribute		*att,attrib[64], attrib_float[64];
-  GLint vs;
+  GLint vs, npf;
 
   // setup offscreen context
   att=attrib;

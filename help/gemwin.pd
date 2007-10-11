@@ -1,40 +1,213 @@
-#N canvas 0 0 1114 726 12;
-#X obj 285 51 gemwin 20;
-#X text 222 25 access to the window manager;
-#X text 183 144 The initial argument is the number of frames per second
-to render. The default value is 20 frames per second.;
-#X text 568 354 1/0 : turn rendering on/off;
-#X text 70 442 create : create the graphics window;
-#X text 70 463 destroy : destroy the graphics window;
-#X text 70 489 buffer 1/2 : single or double buffering;
-#X text 566 431 frame num : the number of frames per second to render
-at;
-#X text 46 656 reset : reset the graphics manager to the default values
-;
-#X text 184 175 Editing at the same time as rendering is not encouraged
+#N canvas 85 109 781 436 10;
+#X text 63 9 access to the window manager;
+#X text 129 343 1/0 : turn rendering on/off;
+#X text 16 100 Editing at the same time as rendering is not encouraged
 and is a good way to generate a segmentation fault or core dump!;
-#X text 570 399 bang : clear the buffer (single buffer mode);
-#X text 569 382 bang : swap the buffers (double buffer mode);
-#X text 182 231 It is EXTREMELEY IMPORTANT that you turn on rendering
+#X text 14 140 It is EXTREMELEY IMPORTANT that you turn on rendering
 before trying to draw anything \, including in single buffer mode.
 When rendering is turned on \, the gem objects establish a rendering
 network. When rendering is turned off \, they remove this network.
 ;
-#X text 599 309 after window-creation::;
-#X text 124 393 before/during window-creation::;
-#N canvas 10 74 575 310 lighting 0;
-#X text 47 96 lighting 1/0 : turn lighting on/off;
-#X text 45 143 ambient R G B : the ambient lighting color;
-#X text 44 164 specular R G B : the specular lighting color;
-#X text 45 184 shininess num : the shininess value;
-#X text 47 120 color R G B : the background color of the window;
-#X text 45 213 fogmode 0/1/2/3 : set the fog mode (OFF/LINEAR/EXP/EXP^2)
+#X text 82 283 after window-creation::;
+#N canvas 10 74 656 573 lighting 0;
+#X text 261 175 lighting 1/0 : turn lighting on/off;
+#X text 334 229 ambient R G B : the ambient lighting color;
+#X text 340 283 specular R G B : the specular lighting color;
+#X text 268 320 shininess num : the shininess value;
+#X text 303 126 color R G B : the background color of the window;
+#X text 203 369 fogmode 0/1/2/3 : set the fog mode (OFF/LINEAR/EXP/EXP^2)
 ;
-#X text 45 256 fogcolor R G B : the color of the fog;
-#X text 44 234 fog num : the fog density;
-#X text 64 25 messages to the [gemwin] regarding lighting effects;
-#X restore 580 520 pd lighting and fog;
-#N canvas 236 183 746 676 viewing 0;
+#X text 369 490 fogcolor R G B : the color of the fog;
+#X text 290 410 fog num : the fog density;
+#X text 64 15 messages to the [gemwin] regarding lighting effects;
+#X obj 61 537 gemwin;
+#X msg 61 68 destroy;
+#X msg 14 68 create;
+#X obj 94 159 tgl 15 1 empty empty empty 0 -6 0 10 -262144 -1 -1 1
+1;
+#X msg 16 496 reset;
+#X text 164 43 All of these messages must be sent to [gemwin] before
+the window is created in order to take effect.;
+#X msg 95 177 lighting \$1;
+#N canvas 889 134 562 454 color 0;
+#X obj 103 100 hsl 128 15 0 1 0 1 empty empty R 12 8 1 12 -261689 -1
+-1 0 1;
+#X obj 236 100 hsl 128 15 0 1 0 1 empty empty G 12 8 1 12 -225271 -1
+-1 0 1;
+#X obj 370 100 hsl 128 15 0 1 0 1 empty empty B 12 8 1 12 -228992 -1
+-1 0 1;
+#X obj 64 379 outlet;
+#X obj 64 251 pack float float float;
+#X obj 96 194 trigger bang 0;
+#X obj 196 194 trigger bang 0;
+#X obj 64 280 trigger bang anything;
+#X obj 187 303 list;
+#X msg 187 323 set color \$1 \$2 \$3;
+#X connect 0 0 4 0;
+#X connect 1 0 5 0;
+#X connect 2 0 6 0;
+#X connect 4 0 7 0;
+#X connect 5 0 4 0;
+#X connect 5 1 4 1;
+#X connect 6 0 4 0;
+#X connect 6 1 4 2;
+#X connect 7 0 3 0;
+#X connect 7 1 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 3 0;
+#X coords 0 -1 1 1 400 13 1 100 100;
+#X restore 86 103 pd color sliders;
+#X msg 86 125 color 0 0 0;
+#X obj 22 529 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+1;
+#N canvas 889 134 566 458 color 0;
+#X obj 103 100 hsl 128 15 0 1 0 1 empty empty R 12 8 1 12 -261689 -1
+-1 0 1;
+#X obj 236 100 hsl 128 15 0 1 0 1 empty empty G 12 8 1 12 -225271 -1
+-1 0 1;
+#X obj 370 100 hsl 128 15 0 1 0 1 empty empty B 12 8 1 12 -228992 -1
+-1 0 1;
+#X obj 64 379 outlet;
+#X obj 64 251 pack float float float;
+#X obj 96 194 trigger bang 0;
+#X obj 196 194 trigger bang 0;
+#X obj 64 280 trigger bang anything;
+#X obj 187 303 list;
+#X msg 187 323 set ambient \$1 \$2 \$3;
+#X connect 0 0 4 0;
+#X connect 1 0 5 0;
+#X connect 2 0 6 0;
+#X connect 4 0 7 0;
+#X connect 5 0 4 0;
+#X connect 5 1 4 1;
+#X connect 6 0 4 0;
+#X connect 6 1 4 2;
+#X connect 7 0 3 0;
+#X connect 7 1 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 3 0;
+#X coords 0 -1 1 1 400 13 1 100 100;
+#X restore 106 208 pd color sliders;
+#X msg 106 230 ambient 0 0 0;
+#N canvas 889 134 566 458 color 0;
+#X obj 103 100 hsl 128 15 0 1 0 1 empty empty R 12 8 1 12 -261689 -1
+-1 0 1;
+#X obj 236 100 hsl 128 15 0 1 0 1 empty empty G 12 8 1 12 -225271 -1
+-1 0 1;
+#X obj 370 100 hsl 128 15 0 1 0 1 empty empty B 12 8 1 12 -228992 -1
+-1 0 1;
+#X obj 64 379 outlet;
+#X obj 64 251 pack float float float;
+#X obj 96 194 trigger bang 0;
+#X obj 196 194 trigger bang 0;
+#X obj 64 280 trigger bang anything;
+#X obj 187 303 list;
+#X msg 187 322 set specular \$1 \$2 \$3;
+#X connect 0 0 4 0;
+#X connect 1 0 5 0;
+#X connect 2 0 6 0;
+#X connect 4 0 7 0;
+#X connect 5 0 4 0;
+#X connect 5 1 4 1;
+#X connect 6 0 4 0;
+#X connect 6 1 4 2;
+#X connect 7 0 3 0;
+#X connect 7 1 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 3 0;
+#X coords 0 -1 1 1 400 13 1 100 100;
+#X restore 113 262 pd color sliders;
+#X msg 113 284 specular 0 0 0;
+#N canvas 889 134 570 462 color 0;
+#X obj 103 100 hsl 128 15 0 1 0 1 empty empty R 12 8 1 12 -261689 -1
+-1 0 1;
+#X obj 236 100 hsl 128 15 0 1 0 1 empty empty G 12 8 1 12 -225271 -1
+-1 0 1;
+#X obj 370 100 hsl 128 15 0 1 0 1 empty empty B 12 8 1 12 -228992 -1
+-1 0 1;
+#X obj 64 379 outlet;
+#X obj 64 251 pack float float float;
+#X obj 96 194 trigger bang 0;
+#X obj 196 194 trigger bang 0;
+#X obj 64 280 trigger bang anything;
+#X obj 187 303 list;
+#X msg 187 322 set fogcolor \$1 \$2 \$3;
+#X connect 0 0 4 0;
+#X connect 1 0 5 0;
+#X connect 2 0 6 0;
+#X connect 4 0 7 0;
+#X connect 5 0 4 0;
+#X connect 5 1 4 1;
+#X connect 6 0 4 0;
+#X connect 6 1 4 2;
+#X connect 7 0 3 0;
+#X connect 7 1 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 3 0;
+#X coords 0 -1 1 1 400 13 1 100 100;
+#X restore 125 469 pd color sliders;
+#X msg 125 491 fogcolor 0 0 0;
+#X msg 130 381 fogmode 0;
+#N canvas 889 134 348 479 fog 0;
+#X obj 84 239 outlet;
+#X obj 100 101 hradio 15 1 1 4 empty empty empty 0 -6 0 10 -262144
+-1 -1 0;
+#X msg 207 182 set fogmode \$1;
+#X obj 84 140 trigger bang float;
+#X connect 1 0 3 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
+#X connect 3 1 2 0;
+#X coords 0 -1 1 1 60 13 1 100 100;
+#X restore 130 359 pd fog;
+#X msg 121 331 shininess 0;
+#N canvas 889 134 356 487 fog 0;
+#X obj 84 239 outlet;
+#X obj 84 140 trigger bang float;
+#X msg 207 182 set shininess \$1;
+#X obj 103 101 hsl 128 15 0 1 0 1 empty empty empty -2 -6 0 10 -262144
+-1 -1 0 1;
+#X connect 1 0 0 0;
+#X connect 1 1 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 1 0;
+#X coords 0 -1 1 1 133 13 1 100 100;
+#X restore 121 309 pd fog;
+#X msg 131 431 fog 0;
+#N canvas 889 134 364 495 fog 0;
+#X obj 84 239 outlet;
+#X obj 84 140 trigger bang float;
+#X obj 103 101 hsl 128 15 0 1 0 1 empty empty empty -2 -6 0 10 -262144
+-1 -1 0 1;
+#X msg 207 182 set fog \$1;
+#X connect 1 0 0 0;
+#X connect 1 1 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 0 0;
+#X coords 0 -1 1 1 133 13 1 100 100;
+#X restore 131 409 pd fog;
+#X connect 10 0 9 0;
+#X connect 11 0 9 0;
+#X connect 12 0 15 0;
+#X connect 13 0 9 0;
+#X connect 15 0 9 0;
+#X connect 16 0 17 0;
+#X connect 17 0 9 0;
+#X connect 18 0 9 0;
+#X connect 19 0 20 0;
+#X connect 20 0 9 0;
+#X connect 21 0 22 0;
+#X connect 22 0 9 0;
+#X connect 23 0 24 0;
+#X connect 24 0 9 0;
+#X connect 25 0 9 0;
+#X connect 26 0 25 0;
+#X connect 27 0 9 0;
+#X connect 28 0 27 0;
+#X connect 29 0 9 0;
+#X connect 30 0 29 0;
+#X restore 429 224 pd lighting and fog;
+#N canvas 236 174 766 696 viewing 0;
 #X text 43 31 messages to [gemwin] regarding the view-point ("camera")
 ;
 #X text 37 129 perspec <left> <right> <bottom> <top> <front> <back>::
@@ -60,21 +233,8 @@ look at the target-point (target_X \, target_Y \, target_Z). "up" is
 defined via the vector (up_X \, up_Y \, up_Z);
 #X text 61 522 default: 0 0 4 0 0;
 #X text 54 650 default: 0 0 4 0 0 0 0 1 0;
-#X restore 578 582 pd viewing;
-#X text 566 465 cursor 0/1: turn the cursor on/off;
-#X text 47 682 print : show some information on the stderr.;
-#X text 137 610 misc::;
-#N canvas 185 171 594 382 window 0;
-#X text 28 188 dimen x y : the x and y dimensions of the window;
-#X text 27 144 offset x y : the x and y offset of the window (might
-not work under certain window-managers when borders are on);
-#X text 27 117 border 0/1: create a window with/out borders;
-#X text 26 216 fullscreen 0/1: make fullscreen-window (if possible
-with the dimensions passed via "dimen");
-#X text 44 31 messages to [gemwin] regarding the window;
-#X text 26 275 title <title_symbol>: set the title for the window;
-#X restore 138 526 pd window propoerties;
-#N canvas 4 20 600 400 stereoscopic 0;
+#X restore 429 272 pd viewing;
+#N canvas 4 22 616 416 stereoscopic 0;
 #X text 36 142 stereo 0/1/2 : set stereo-mode to off(0) \, 2-screen-mode(1)
 \, Red/Green-mode(2);
 #X text 35 176 stereoSep val : set the stereo-separation (default:
@@ -84,11 +244,135 @@ with the dimensions passed via "dimen");
 2 screens in stereo-mode 1 on/off;
 #X text 71 56 messages to [gemwin] regarding stereoscopic appearance:
 ;
-#X restore 580 548 pd stereoscopic display;
-#X text 596 657 createStereo:: do not use this!! use 'create'+'stereo
-1';
-#X text 617 631 deprecated::;
-#X text 285 5 [gemwin];
-#X text 186 92 [gemwin] controls the window manager. It passes various
+#X restore 569 224 pd stereoscopic display;
+#X text 378 321 deprecated::;
+#X text 14 47 [gemwin] controls the window manager. It passes various
 messages to the manager \, controlling the attributes of the window.
 ;
+#N canvas 185 171 613 508 window 0;
+#X text 226 210 dimen x y : the x and y dimensions of the window;
+#X text 225 136 offset x y : the x and y offset of the window (might
+not work under certain window-managers when borders are on);
+#X text 225 89 border 0/1: create a window with/out borders;
+#X text 224 250 fullscreen 0/1: make fullscreen-window (if possible
+with the dimensions passed via "dimen");
+#X text 31 4 messages to [gemwin] regarding the window;
+#X text 224 447 title <title_symbol>: set the title for the window
+;
+#X obj 61 477 gemwin;
+#X msg 61 58 destroy;
+#X msg 14 58 create;
+#X msg 85 101 border \$1;
+#X obj 84 83 tgl 15 1 empty empty empty 0 -6 0 10 -262144 -1 -1 1 1
+;
+#X msg 109 199 dimen 320 240;
+#X msg 116 219 dimen 200 200;
+#X msg 97 133 offset 10 10;
+#X msg 103 155 offset 300 300;
+#X msg 125 447 title my_window;
+#X obj 124 245 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+1;
+#X msg 125 263 fullscreen \$1;
+#X obj 129 347 tgl 15 1 empty empty empty 0 -6 0 10 -262144 -1 -1 1
+1;
+#X msg 130 365 menubar \$1;
+#X msg 16 436 reset;
+#X msg 149 345 -1;
+#X text 224 358 menubar -1/0/1: hide or show the Mac OS X menubar \,
+1 shows \, 0 hides \, and -1 hides by default and shows on mouseover
+;
+#X text 164 33 All of these messages must be sent to [gemwin] before
+the window is created in order to take effect.;
+#X msg 128 306 cursor \$1;
+#X obj 128 287 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+1;
+#X text 223 305 cursor 0/1: turn the cursor on/off;
+#X obj 128 397 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+1;
+#X msg 128 416 topmost \$1;
+#X text 223 405 topmost 0/1: make the gemwin the top most window \,
+on top of everything else (Windows only?);
+#X connect 7 0 6 0;
+#X connect 8 0 6 0;
+#X connect 9 0 6 0;
+#X connect 10 0 9 0;
+#X connect 11 0 6 0;
+#X connect 12 0 6 0;
+#X connect 13 0 6 0;
+#X connect 14 0 6 0;
+#X connect 15 0 6 0;
+#X connect 16 0 17 0;
+#X connect 17 0 6 0;
+#X connect 18 0 19 0;
+#X connect 19 0 6 0;
+#X connect 20 0 6 0;
+#X connect 21 0 19 0;
+#X connect 24 0 6 0;
+#X connect 25 0 24 0;
+#X connect 27 0 28 0;
+#X connect 28 0 6 0;
+#X restore 569 177 pd window properties;
+#X obj 415 115 gemwin;
+#X text 465 49 reset the graphics manager to the default values;
+#X msg 421 51 reset;
+#X text 481 73 show some information on the stderr.;
+#X msg 437 73 print;
+#X obj 56 396 gemwin;
+#X msg 76 255 destroy;
+#X msg 60 232 create;
+#X text 140 255 destroy the graphics window;
+#X text 113 231 create the graphics window;
+#X msg 91 301 1;
+#X text 126 301 turn on rendering;
+#X msg 100 321 0;
+#X text 135 323 turn off rendering;
+#X obj 17 9 gemwin;
+#N canvas 177 282 480 345 frame 0;
+#X text 25 64 The initial argument is the number of frames per second
+to render. The default value is 20 frames per second.;
+#X text 85 242 frame num : the number of frames per second to render
+at;
+#X text 25 30 You can change the frame rate in Gem using both an argument
+and/or a message.;
+#X obj 26 109 gemwin 20;
+#X obj 25 160 gemwin 60;
+#X text 21 140 This gemwin will have a frame rate of 60 fps:;
+#X msg 25 226 frame 80;
+#X obj 25 255 gemwin;
+#X text 21 190 You can also change the frame rate using a message:
+;
+#X connect 6 0 7 0;
+#X restore 429 177 pd frame rate;
+#N canvas 0 22 492 390 buffering 0;
+#X obj 139 256 gemwin;
+#X msg 181 130 buffer 1;
+#X msg 185 155 buffer 2;
+#X msg 110 82 destroy;
+#X msg 63 82 create;
+#X obj 168 83 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+1;
+#X text 252 133 single buffering;
+#X text 252 153 double buffering;
+#X msg 184 203 bang;
+#X text 224 193 swap the buffers (double buffer mode);
+#X text 225 210 clear the buffer (single buffer mode);
+#X connect 1 0 0 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 0 0;
+#X connect 8 0 0 0;
+#X restore 569 272 pd buffering;
+#X obj 106 343 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+1;
+#X text 404 347 createStereo:: do not use this!! use;
+#X msg 631 347 stereo 1;
+#X text 693 346 +;
+#X msg 711 347 create;
+#X connect 13 0 11 0;
+#X connect 15 0 11 0;
+#X connect 17 0 16 0;
+#X connect 18 0 16 0;
+#X connect 21 0 16 0;
+#X connect 23 0 16 0;
+#X connect 28 0 16 0;

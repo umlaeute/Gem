@@ -8,6 +8,8 @@
  */
 #ifdef __APPLE__
 
+#define HELPSYMBOL "pix_video"
+
 #include "pix_videoDarwin.h"
 #include "Base/GemCache.h"
 #include <Carbon/Carbon.h>
@@ -326,10 +328,15 @@ void pix_videoDarwin :: InitSeqGrabber()
 	
 	//this call sets the input device
 	if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
-		anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice); 
-	if(anErr!=noErr){
-        post("pix_videoDarwin: SGSetChannelDeviceInputNames returned error %d",anErr);
-    }
+		//anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice); 
+		post("pix_videoDarwin: SGSetChannelDevice trying %s", (*devices)->entry[m_inputDevice].name);
+		anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
+		
+		if(anErr!=noErr) post("pix_videoDarwin: SGSetChannelDevice returned error %d",anErr);
+		
+		anErr = SGSetChannelDeviceInput(m_vc,m_inputDeviceChannel); 
+    
+		if(anErr!=noErr) post("pix_videoDarwin: SGSetChannelDeviceInput returned error %d",anErr);
 	
 	/*  //attempt to save SG settings to disk
 	NewUserData(uD);
@@ -1069,8 +1076,8 @@ void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
 
 void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
-class_addcreator((t_newmethod)_classpix_videoDarwin,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
-pix_video::real_obj_setupCallback(classPtr);
+	class_addcreator((t_newmethod)_classpix_videoDarwin,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
+	pix_video::real_obj_setupCallback(classPtr);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::qualityCallback,
 		  gensym("quality"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
@@ -1099,6 +1106,8 @@ pix_video::real_obj_setupCallback(classPtr);
 		  gensym("file"), A_GIMME, A_NULL);
 	class_addmethod(classPtr, (t_method)&pix_videoDarwin::recordCallback,
 		  gensym("record"), A_DEFFLOAT, A_NULL);
+	class_addmethod(classPtr, (t_method)&pix_videoDarwin::inputCallback,
+		  gensym("input"), A_DEFFLOAT, A_NULL);
 							  
 	class_addbang(classPtr,(t_method)&pix_videoDarwin::bangMessCallback);
 }
@@ -1185,6 +1194,11 @@ void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
 void pix_videoDarwin :: deviceCallback(void *data, t_floatarg X)
 {
   GetMyClass(data)->m_inputDevice=((int)X);  
+} 
+
+void pix_videoDarwin :: inputCallback(void *data, t_floatarg X)
+{
+  GetMyClass(data)->m_inputDeviceChannel=((int)X);  
 } 
 
 void pix_videoDarwin :: brightnessCallback(void *data, t_floatarg X)
