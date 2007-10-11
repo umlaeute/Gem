@@ -27,7 +27,8 @@ endif
 	 rm -f $@.$$$$
 
 clean:
-	-rm -f $(O_OBJECTS:%=$(OBJDIR)%) 
+	-rm -f $(O_OBJECTS:%=$(OBJDIR)%)
+	-rm -f $(O_OBJECTS)
 	-rm -f $(SOURCES:.cpp=.d) 
 	-rm -f *~
 
