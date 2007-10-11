@@ -5,21 +5,24 @@ include Make.include
 BUILDDIR = ..
 
 # all objects that have been build
-OBJECTS = $(GEM_TARGETS:%=%/*.o)
+#OBJECTS = $(GEM_TARGETS:%=%/*.o)
+OBJECTS = $(OBJDIR)*.o
 
-.PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs
+.PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs installabs strip
 
-all: subdirs Gem.$(EXT) strip
+all: subdirs strip
 
-Gem.$(EXT): subdirs
+Gem.$(EXT):
 	$(CXXLINK) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
 
 strip: Gem.$(EXT)
 	-$(STRIP) $(STRIP_UNNEEDED) Gem.$(EXT)
 
-## handling of subdirs as proposed by the GNU-make documentation
+Objects:
+	mkdir Objects
 
-subdirs: $(GEM_TARGETS)
+## handling of subdirs as proposed by the GNU-make documentation
+subdirs: Objects $(GEM_TARGETS)
 
 $(GEM_TARGETS):
 	${MAKE} -C $@ 
@@ -30,6 +33,7 @@ clean:
 	    ${MAKE} -C $$d clean; \
 	done
 	-rm -f Gem.$(EXT) *~
+	-rm -f $(OBJDIR)*.o
 
 distclean:
 	@for d in ${GEM_TARGETS}; do \

@@ -8,7 +8,10 @@ SOURCES=$(sort $(filter %.cpp, $(wildcard *.cpp)))
 
 O_OBJECTS = $(SOURCES:.cpp=.o)
 
-o_objects: $(O_OBJECTS)
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+o_objects: $(OBJDIR) $(O_OBJECTS)
 
 ## dependencies: as proposed by the GNU-make documentation
 ## see http://www.gnu.org/software/make/manual/html_node/make_47.html#SEC51
@@ -24,15 +27,16 @@ endif
 	 rm -f $@.$$$$
 
 clean:
-	-rm -f $(O_OBJECTS) 
+	-rm -f $(O_OBJECTS:%=$(OBJDIR)%) 
 	-rm -f $(SOURCES:.cpp=.d) 
 	-rm -f *~
 
-distclean:
+distclean: clean
 	-rm -f *.o *.d *~
 	$(DOS2UNIX) *.cpp *.h
 
 $(O_OBJECTS): %.o : %.cpp
-	$(CXX) -c $(GEM_CXXFLAGS) $*.cpp -o $*.o
+	$(CXX) -c $(GEM_CXXFLAGS) $*.cpp -o $(OBJDIR)$*.o
 
 depend: $(SOURCES:.cpp=.d)
+
