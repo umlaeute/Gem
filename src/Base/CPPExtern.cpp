@@ -22,7 +22,7 @@
 GEM_EXTERN void *operator new(size_t, void *location, void *) {return(location);}
 
 
-GemException::GemException(char *error) throw()
+GemException::GemException(const char *error) throw()
   : ErrorString(error)
 {}
 

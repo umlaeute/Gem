@@ -309,7 +309,7 @@ int mem2tiffImage(imageStruct *image, const char *filename)
   short bits=8, samps=image->csize;
   int npixels = width * height;
   //int planar_conf = PLANARCONFIG_CONTIG;
-  char *gemstring = "PD/GEM";
+  const char *gemstring = "PD/GEM";
 
 
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, width);

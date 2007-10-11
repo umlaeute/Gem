@@ -90,7 +90,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char buf2[MAXPDSTRING];
   char *bufptr=NULL;
 
-  char *extension=
+  const char *extension=
 #ifdef __WIN32__
     ".dll";
 #elif defined __APPLE__

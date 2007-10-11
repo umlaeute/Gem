@@ -140,11 +140,11 @@ void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
   switch (left.format) {
   case GL_RGBA:
   case GL_BGRA_EXT:
-    lformat ="RGBA";break;
+    lformat =(char*)"RGBA";break;
   case GL_LUMINANCE:
-    lformat ="Gray";break;
+    lformat =(char*)"Gray";break;
   case GL_YCBCR_422_GEM:
-    lformat ="YUV";break;
+    lformat =(char*)"YUV";break;
   default:
     lformat = new char[6];
     sprintf(lformat,"0x%04X", (unsigned int)left.format);
@@ -152,11 +152,11 @@ void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
   switch (right.format) {
   case GL_RGBA:
   case GL_BGRA_EXT:
-    rformat ="RGBA";break;
+    rformat =(char*)"RGBA";break;
   case GL_LUMINANCE:
-    rformat ="Gray";break;
+    rformat =(char*)"Gray";break;
   case GL_YCBCR_422_GEM:
-    rformat ="YUV";break;
+    rformat =(char*)"YUV";break;
   default:
     rformat = new char[6];
     sprintf(rformat, "0x%04X", (unsigned int)left.format);

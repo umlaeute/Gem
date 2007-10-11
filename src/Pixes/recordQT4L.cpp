@@ -160,7 +160,7 @@ int recordQT4L :: putFrame(imageStruct*img)
   if(m_width!=img->xsize || m_height!=img->ysize)restart=true;
 
   if(!m_codec){
-    if (!setCodec("raw"))return(-1);
+    if (!setCodec((char*)"raw"))return(-1);
     restart=true;
   }
 

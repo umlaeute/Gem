@@ -1,4 +1,4 @@
-default: o_objects
+default: pd_objects
 
 include ../Makefile.subdir
 

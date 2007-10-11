@@ -29,7 +29,7 @@
 
 #include <iostream>
 
-char *TextBase::DEFAULT_FONT = "vera.ttf";
+char *TextBase::DEFAULT_FONT = (char*)"vera.ttf";
 
 /////////////////////////////////////////////////////////
 //

@@ -182,14 +182,14 @@ void pix_write :: render(GemState *state)
   if (m_automatic || m_banged) {
     char *extension;
     if (m_filetype<0)m_filetype=0;
-    if (m_filetype==0) extension="tif";
+    if (m_filetype==0) extension=(char*)"tif";
     else {
 #if 0
       post("pix_write: you can only write TIFF-files ! (forcing to TIFF)");
       m_filetype=0;
-      extension="tif";
+      extension=(char*)"tif";
 #else
-      extension="jpg";
+      extension=(char*)"jpg";
 #endif
     }
     
@@ -225,7 +225,7 @@ void pix_write :: posMess(int x, int y)
 
 void pix_write :: fileMess(int argc, t_atom *argv)
 {
-  char *extension = ".tif";
+  char *extension = (char*)".tif";
   if (argc) {
     if (argv->a_type == A_SYMBOL) {
       atom_string(argv++, m_pathname, 80);

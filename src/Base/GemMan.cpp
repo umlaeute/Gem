@@ -51,7 +51,7 @@ static WindowInfo gfxInfo;
 static WindowInfo constInfo;
 
 // static member data
-char* GemMan::m_title = "GEM";
+char* GemMan::m_title = (char*)"GEM";
 int GemMan::m_xoffset = 0;
 int GemMan::m_yoffset = 0;
 int GemMan::m_fullscreen = 0;
@@ -688,7 +688,7 @@ void GemMan :: resetState()
   m_xoffset = 0;
   m_yoffset = 0;
   m_fullscreen = 0;
-  m_title = "GEM";
+  m_title = (char*)"GEM";
 
   m_buffer = 2;
 
