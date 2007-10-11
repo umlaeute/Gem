@@ -44,6 +44,10 @@
 # endif
 # if GEM_OPENGL_VERSION_MAX < 2000
 #  define GL_VERSION_2_0
+/* argh: this becomes more and more hackier */
+
+   typedef char GLchar;			/* native character */
+
 # endif
 # if GEM_OPENGL_VERSION_MAX < 1005
 #  define GL_VERSION_1_5
@@ -73,17 +77,11 @@
 # include <OpenGL/glext.h>
 # include <OpenGL/OpenGL.h>
 #else
-
-// on mesa, GL_GLEXT_LEGACY automatically includes glext.h from within gl.h
-# define GL_GLEXT_LEGACY
+/* linux, w32,... */
 # define GL_GLEXT_PROTOTYPES   1
 
-# ifndef USE_GLEW
 #  include <GL/gl.h>
 #  include <GL/glu.h>
-# else
-#  include "Base/glew.h"
-# endif
 
 # if (!defined DONT_INCLUDE_GLEXT)
 /* windos is (again) a bit difficult:
