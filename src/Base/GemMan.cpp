@@ -32,7 +32,6 @@
 // I hate Microsoft...I shouldn't have to do this!
 #endif
 
-#include "GemVersion.h"
 #include "GemState.h"
 #include "GemWinCreate.h"
 #include "GemEvent.h"
@@ -375,16 +374,6 @@ void GemMan :: initGem()
   m_mat_shininess = 100.0;
 
   s_clock = clock_new(NULL, (t_method)&GemMan::render);
-
-  post("GEM: Graphics Environment for Multimedia");
-  post("GEM: ver: %s", GEM_VERSION);
-  post("GEM: compiled: " __DATE__);
-  post("GEM: maintained by %s", GEM_MAINTAINER);
-  post("GEM: Authors :\tMark Danks (original version)");
-  for(int i=0; i<sizeof(GEM_AUTHORS)/sizeof(*GEM_AUTHORS); i++) {
-    post("GEM:\t\t%s", GEM_AUTHORS[i]);
-  }  
-  post("GEM: with help by %s", GEM_OTHERAUTHORS);
 
   GemSIMD simd_init;
 
