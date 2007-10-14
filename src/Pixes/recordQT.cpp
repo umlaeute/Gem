@@ -3,6 +3,8 @@
  *  GEM_darwin
  *
  */
+
+//#if 0
 #include "recordQT.h"
 
 #ifdef __APPLE__
@@ -59,7 +61,6 @@ post("using recordQT");
   post("pix_video: QT init done");
 # endif // WINDOWS
 
-  /* */
   //get list of codecs installed  -- useful later
   CodecNameSpecListPtr codecList;
   CodecNameSpec	codecName;
@@ -305,13 +306,13 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   media = NewTrackMedia(track,VideoMediaType,600,NULL,0);
 	
   //moved to constructor
-  /*
-    stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
+  
+ //   stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
-    if (stdComponent == NULL){
-    post("recordQT failed to open compressor component");
-    return;
-    }*/
+ //   if (stdComponent == NULL){
+//post("recordQT failed to open compressor component");
+ //   return;
+//}
 	
   //if the settings aren't already set then go ahead and do them
   //if (!m_spatialQuality || !m_codecType || m_dialog ){
@@ -373,15 +374,15 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     TemporalSettings.frameRate = 0;
     TemporalSettings.keyFrameRate = 0;
 		
-    /*
-      post("recordQT : manual returned SpatialSettings.codecType %d",SpatialSettings.codecType);
-      post("recordQT : manual returned SpatialSettings.codec %d",SpatialSettings.codec);
-      post("recordQT : manual returned SpatialSettings.depth %d",SpatialSettings.depth);
-      post("recordQT : manual returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
-      post("recordQT : manual returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
-      post("recordQT : manual returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
-      post("recordQT : manual returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
-    */
+    
+   //   post("recordQT : manual returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+   //   post("recordQT : manual returned SpatialSettings.codec %d",SpatialSettings.codec);
+   //   post("recordQT : manual returned SpatialSettings.depth %d",SpatialSettings.depth);
+   //   post("recordQT : manual returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
+   //   post("recordQT : manual returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
+  //    post("recordQT : manual returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
+  //    post("recordQT : manual returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+    
 		
   }
 	
@@ -473,6 +474,8 @@ void recordQT :: close()
   m_recordStart = 0; //just to be sure
 	
   m_currentFrame = 0; //reset the frame counter?
+  
+  m_firstRun = 1;
 
   post("recordQT : movie written to %s",m_filename);
 
@@ -758,3 +761,4 @@ bool recordQT :: open(char*filename)
 }
 
 #endif // HAVE_QUICKTIME
+//#endif //0
