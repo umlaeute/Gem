@@ -12,7 +12,7 @@ OBJECTS = $(OBJDIR)*.o
 
 all: subdirs strip
 
-Gem.$(EXT): subdirs $(OBJECTS)
+Gem.$(EXT): subdirs 
 	$(CXXLINK) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
 
 strip: Gem.$(EXT)
