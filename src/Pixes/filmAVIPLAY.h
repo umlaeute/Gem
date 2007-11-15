@@ -29,7 +29,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     * so we now find the correct path via "configure"
     */
 #include "avifile.h"
-#include "StreamInfo.h"
+#include "infotypes.h"
 
    // some version checking...
 #ifndef IMG_FMT_RGB24
