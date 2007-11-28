@@ -30,6 +30,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     */
 # include "avifile.h"
 # include "infotypes.h"
+# include "image.h"
 
    // some version checking...
 # ifndef IMG_FMT_RGB24
