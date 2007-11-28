@@ -28,13 +28,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     * but on my system it changed to <avifile-0.7/avifile.h>
     * so we now find the correct path via "configure"
     */
-#include "avifile.h"
-#include "infotypes.h"
+# include "avifile.h"
+# include "infotypes.h"
 
    // some version checking...
-#ifndef IMG_FMT_RGB24
-#undef HAVE_LIBAVIPLAY
-#endif // IMG_FMT_RGB24
+# ifndef IMG_FMT_RGB24
+#  undef HAVE_LIBAVIPLAY
+# endif // IMG_FMT_RGB24
+
 #endif
 
 /*-----------------------------------------------------------------
@@ -80,7 +81,13 @@ class GEM_EXTERN filmAVIPLAY : public film {
  protected:
   IAviReadFile *m_avifile;
   IAviReadStream  *m_avistream;
+
+
+# ifdef AVM_BEGIN_NAMESPACE
+  avm::CImage *m_aviimage;
+# else
   CImage *m_aviimage;
+# endif
 #endif //AVIPLAY
   unsigned char *m_rawdata;
   long           m_rawlength;
