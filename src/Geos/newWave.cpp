@@ -139,7 +139,8 @@ void newWave :: render(GemState *state)
 
     //    post("m_size=%f", m_size);
 
-    GLfloat size = 2.*m_size / (GLfloat)gridX;
+    GLfloat sizeX = 2.*m_size / (GLfloat)(gridX-1);
+    GLfloat sizeY = 2.*m_size / (GLfloat)(gridY-1);
 
     if (m_drawType == GL_LINE_STRIP)
         glLineWidth(m_linewidth);
@@ -188,14 +189,14 @@ void newWave :: render(GemState *state)
             {
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
-                glVertex3f( (i-gridX/2)*size, (j-gridY/2)*size, posit[i][j]*m_height);
+                glVertex3f( i*sizeX - 1, j*sizeY -1 , posit[i][j]*m_height);
 		/*
 		  post("(%f\t%f)\t(%f\t%f)", (i-grid/2)*size, (j-grid/2)*size, (i+1-grid/2)*size, (j-grid/2)*size);
 		*/
 
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
-                glVertex3f( (i+1-gridX/2)*size, (j-gridY/2)*size, posit[i+1][j]*m_height);
+                glVertex3f(  (i+1)*sizeX - 1, j*sizeY -1 , posit[i+1][j]*m_height);
             }
             glEnd();
         }
@@ -222,11 +223,11 @@ void newWave :: render(GemState *state)
             {
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
-                glVertex3f( (i-gridX/2)*size, (j-gridY/2)*size, posit[i][j]*m_height );
+                glVertex3f( i*sizeX -1, j*sizeY -1, posit[i][j]*m_height );
             
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
-                glVertex3f( (i+1-gridX/2)*size, (j-gridY/2)*size, posit[i+1][j]*m_height );
+                glVertex3f( (i+1)*sizeX -1, j*sizeY -1, posit[i+1][j]*m_height );
             }
             glEnd();
         }
