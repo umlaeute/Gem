@@ -112,6 +112,8 @@ class GEM_EXTERN pix_record : public GemBase
 	//////////
 	// a outlet for information like #frames
 	t_outlet     *m_outNumFrames;
+  // another outlet for extra information (like list of codecs...)
+	t_outlet     *m_outInfo;
 		
 	int           m_currentFrame; //keep track of the number of frames
 

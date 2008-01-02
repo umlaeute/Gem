@@ -43,6 +43,7 @@ pix_record :: pix_record(int argc, t_atom *argv):
   }
 
   m_outNumFrames = outlet_new(this->x_obj, 0);
+  m_outInfo      = outlet_new(this->x_obj, 0);
 
 #ifdef HAVE_QUICKTIME
   m_handle=new recordQT(xoff, yoff, width, height);
@@ -60,6 +61,8 @@ pix_record :: pix_record(int argc, t_atom *argv):
 pix_record :: ~pix_record()
 {
   if(m_handle)delete m_handle;
+  outlet_free(m_outNumFrames);
+  outlet_free(m_outInfo);
 }
 
 //
@@ -176,7 +179,11 @@ void pix_record :: getCodecList()
     int i=0;
     int count=m_handle->getNumCodecs();
     for(i=0; i<count; i++){
+      t_atom ap[2];
+      SETFLOAT (ap+0, (t_float)i);
+      SETSYMBOL(ap+1, gensym(m_handle->getCodecName(i)));
       post("[pix_record]: codec%d: '%s': %s", i, m_handle->getCodecName(i), m_handle->getCodecDescription(i));
+      outlet_anything(m_outInfo, gensym("codec"), 2, ap);
     }
   }
 }
@@ -188,6 +195,7 @@ void pix_record :: getCodecList()
 /////////////////////////////////////////////////////////
 void pix_record :: codecMess(t_atom *argv)
 {
+
   if(m_handle){
     int err=0;
     if    (A_SYMBOL==argv->a_type)err=m_handle->setCodec(atom_getsymbol(argv)->s_name);
