@@ -1,4 +1,4 @@
-#N canvas 130 96 1126 659 10;
+#N canvas 10 10 1126 659 10;
 #X msg 137 222 type FLOAT;
 #X obj 9 470 translateXYZ 0 0 -4;
 #X obj 9 234 ortho;
@@ -297,16 +297,15 @@
 #X msg 838 279 texture1 2;
 #X msg 849 302 texture2 3;
 #X msg 865 215 111;
-#X text 33 612 This shader is rendered in a framebuffer \, in order
-to use it for next frame for a simple physical modeling simulation
+#X text 33 612 This shader is rendered into a framebuffer \, in order
+to use it in the next frame for a simple physical modeling simulation
 ;
-#X text 345 168 This put the shaders output as a texture (texunit 3)
-;
-#X text 437 386 this load a texture (texunit 2);
+#X text 345 168 This creates a texture (texunit 3) from the shaders' output;
+#X text 437 386 this loads a texture (texunit 2);
 #X text 691 411 not used \, just to set texture coordinate;
-#X text 633 594 This used the 2 texture (texunit 2 and 3) in oder to
+#X text 633 594 This uses the two textures (texunit 2 and 3) in order to
 render the final images;
-#X text 201 9 This is an exemple of render to texture (using framebuffer)
+#X text 201 9 This is an example of rendering to texture (using framebuffer)
 and multitextures;
 #X obj 402 497 t a a a a a;
 #X connect 0 0 22 0;

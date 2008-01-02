@@ -1,4 +1,4 @@
-#N canvas 873 66 930 699 10;
+#N canvas 10 10 930 699 10;
 #X obj 76 5 gemhead;
 #X obj 75 429 glsl_program;
 #X obj 149 268 pack 0 0;
@@ -90,7 +90,7 @@
 #X obj 75 613 pix_image img1.jpg;
 #X obj 148 98 change;
 #X text 343 127 This is an example of multitexturing \, this shader
-mix 2 textures;
+mixes 2 textures;
 #X connect 0 0 13 0;
 #X connect 1 0 65 0;
 #X connect 1 1 48 0;

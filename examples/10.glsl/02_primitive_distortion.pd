@@ -1,4 +1,4 @@
-#N canvas 310 27 520 726 10;
+#N canvas 10 10 520 726 10;
 #X obj 74 -1 gemhead;
 #X msg 29 80 print;
 #X obj 74 372 glsl_program;
@@ -58,7 +58,7 @@
 #X msg 88 80 open P_distord.vert;
 #X msg 85 166 open P_distord.frag;
 #X text 69 637 this shader create a dirty pseudo random value \, and
-move all vertex separatly;
+move all vertices separatly;
 #X connect 0 0 17 0;
 #X connect 1 0 14 0;
 #X connect 2 0 36 0;

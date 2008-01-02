@@ -1,4 +1,4 @@
-#N canvas 614 36 599 681 10;
+#N canvas 10 10 599 681 10;
 #X obj 316 488 pix_snap2tex;
 #X msg 356 461 0 0;
 #X msg 402 460 500 500;
@@ -48,7 +48,7 @@
 #X floatatom 124 363 5 0 0 0 - - -;
 #X obj 69 381 / 100;
 #X obj 124 384 / 100;
-#X text 13 634 This is an exemple of iterative process : the output
+#X text 13 634 This is an example of iterative process : the output
 of the shader is used for next frame input;
 #X connect 0 0 4 0;
 #X connect 1 0 0 1;

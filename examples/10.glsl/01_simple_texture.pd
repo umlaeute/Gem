@@ -1,4 +1,4 @@
-#N canvas 243 80 520 689 10;
+#N canvas 10 10 520 689 10;
 #X obj 76 22 gemhead;
 #X msg 31 57 print;
 #X obj 76 347 glsl_program;
@@ -35,7 +35,7 @@
 1;
 #X msg 103 440 open img1.jpg;
 #X obj 76 469 pix_image img1.jpg;
-#X text 93 599 This shader will just hange the color of a texture;
+#X text 93 599 This shader will just change the color of a texture;
 #X text 91 615 (it should be a bit darker);
 #X connect 0 0 26 0;
 #X connect 1 0 26 0;

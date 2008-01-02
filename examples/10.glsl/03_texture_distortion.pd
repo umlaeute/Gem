@@ -1,4 +1,4 @@
-#N canvas 794 75 552 698 10;
+#N canvas 10 10 552 698 10;
 #X obj 317 88 gemwin 30;
 #X msg 317 31 create \, 1;
 #X text 393 31 <- 1;
@@ -59,7 +59,7 @@
 #X obj 74 458 pix_image img3.jpg;
 #X obj 74 596 rectangle 4 4;
 #X text 73 627 This shader compute a dirty pseudo random number \,
-and distord the texture this with value;
+and distort the texture this with value;
 #X connect 1 0 0 0;
 #X connect 3 0 0 0;
 #X connect 5 0 22 0;
