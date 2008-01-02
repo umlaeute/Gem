@@ -179,16 +179,13 @@ int recordQT4L :: putFrame(imageStruct*img)
      * on debian i still have 0.9.7
      * the real bad thing is, that i cannot handle this via preprocessor
      */
-#if 0
+#if 1
     int supported_cm[]={BC_RGBA8888, BC_YUV422, BC_RGB888, LQT_COLORMODEL_NONE};
-    int cm=lqt_get_cmodel(m_qtfile, m_track);
-    m_colormodel=lqt_get_best_cmodel(m_qtfile, m_track, supported_cm);
+    m_colormodel=lqt_get_best_colormodel(m_qtfile, m_track, supported_cm);
 #else
-    if(gensym("raw")==gensym(m_codec->name))
-      m_colormodel=BC_RGBA8888;
-    else
-      m_colormodel=BC_RGB888;
+    m_colormodel=BC_RGB888;
 #endif
+
     lqt_set_cmodel(m_qtfile, m_track, m_colormodel);
 
     m_restart=false;
@@ -205,6 +202,7 @@ int recordQT4L :: putFrame(imageStruct*img)
     m_image.convertFrom(img, GL_YUV422_GEM);
     break;
   default:
+    post("record: unsupported colormodel...");
     return (-1);
   }
 
