@@ -52,10 +52,17 @@ static bool StillHaveGemWin(bool up) {
 /////////////////////////////////////////////////////////
 gemwin :: gemwin(t_floatarg framespersecond)
 {
-  if (framespersecond <= 0.)
-    framespersecond = 20.;
-  GemMan::frameRate((float)framespersecond);
-  if(!StillHaveGemWin(true))GemMan::resetState();
+  if(!StillHaveGemWin(true)) {
+    /* this is the only [gemwin] */
+    GemMan::resetState();
+    if (framespersecond <= 0.)
+      framespersecond = 20.;
+    GemMan::frameRate((float)framespersecond);
+  } else {
+    if(framespersecond>0.)
+      GemMan::frameRate((float)framespersecond);
+  }
+
   m_FrameRate       = outlet_new(this->x_obj, 0);
 }
 
