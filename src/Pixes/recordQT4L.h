@@ -100,6 +100,10 @@ class GEM_EXTERN recordQT4L : public record {
 
   int m_track;
   int m_colormodel;
+
+
+  /* re-initialize the recorder */
+  bool m_restart;
 #endif
 };
 

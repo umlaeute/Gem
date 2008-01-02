@@ -30,13 +30,14 @@
 
 recordQT4L :: recordQT4L(int x, int y, int width, int height): record(x,y,width,height)
 #if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
-							     , m_qtfile(NULL),
-							       m_codec(NULL), m_codecs(NULL),
-							       m_track(-1), m_colormodel(0)
+                                                             , m_qtfile(NULL),
+                                                               m_codec(NULL), m_codecs(NULL),
+                                                               m_track(-1), m_colormodel(0),
+                                                               m_restart(true)
+                                                       
 {
   //  strcpy(m_compressor, QUICKTIME_DV);
   lqt_registry_init ();
-
 }
 #else
 {}
@@ -71,6 +72,7 @@ bool recordQT4L :: open(char *filename)
   }
   m_currentFrame=0;
   m_track=-1;
+  m_restart=true;
   return (true);
 }
 
@@ -145,6 +147,7 @@ bool recordQT4L :: setCodec(char*name)
   m_codecs=codec;
   m_codec=codec[0];
   m_width=m_height=-1;
+  m_restart=true;
   return true;
 
 }
@@ -155,17 +158,15 @@ int recordQT4L :: putFrame(imageStruct*img)
   unsigned char**rowpointers;
   int row, row_stride;
   int err;
-  bool restart=false;
 
-  if(m_width!=img->xsize || m_height!=img->ysize)restart=true;
+  if(m_width!=img->xsize || m_height!=img->ysize)m_restart=true;
 
   if(!m_codec){
     if (!setCodec((char*)"raw"))return(-1);
-    restart=true;
+    m_restart=true;
   }
 
-
-  if(restart){
+  if(m_restart){
     err=lqt_add_video_track(m_qtfile, img->xsize, img->ysize, 1000, 20000, m_codec);
     if(err!=0)return -1;
     m_width =img->xsize;
@@ -189,6 +190,8 @@ int recordQT4L :: putFrame(imageStruct*img)
       m_colormodel=BC_RGB888;
 #endif
     lqt_set_cmodel(m_qtfile, m_track, m_colormodel);
+
+    m_restart=false;
   }
 
   switch(m_colormodel){
