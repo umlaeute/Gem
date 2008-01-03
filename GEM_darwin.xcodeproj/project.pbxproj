@@ -9,15 +9,8 @@
 /* Begin PBXBuildFile section */
 		FD0399D10942A19100B4FCF2 /* GEMglUseProgramObjectARB.h in Headers */ = {isa = PBXBuildFile; fileRef = FD0399D00942A19000B4FCF2 /* GEMglUseProgramObjectARB.h */; };
 		FD0399DA0942A22200B4FCF2 /* GEMglUseProgramObjectARB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD0399D90942A22200B4FCF2 /* GEMglUseProgramObjectARB.cpp */; };
-		FD0B2756087B158400A90557 /* vertex_pqtorusknots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD0B2746087B158400A90557 /* vertex_pqtorusknots.cpp */; };
-		FD0B2757087B158400A90557 /* vertex_pqtorusknots.h in Headers */ = {isa = PBXBuildFile; fileRef = FD0B2747087B158400A90557 /* vertex_pqtorusknots.h */; };
 		FD0B2758087B158400A90557 /* vertex_tabread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD0B2748087B158400A90557 /* vertex_tabread.cpp */; };
 		FD0B2759087B158400A90557 /* vertex_tabread.h in Headers */ = {isa = PBXBuildFile; fileRef = FD0B2749087B158400A90557 /* vertex_tabread.h */; };
-		FD0B275A087B158400A90557 /* vertex_tabwrite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD0B274A087B158400A90557 /* vertex_tabwrite.cpp */; };
-		FD0B275B087B158400A90557 /* vertex_tabwrite.h in Headers */ = {isa = PBXBuildFile; fileRef = FD0B274B087B158400A90557 /* vertex_tabwrite.h */; };
-		FD0B275C087B158400A90557 /* vertex_VBR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD0B274C087B158400A90557 /* vertex_VBR.cpp */; };
-		FD0B275D087B158400A90557 /* vertex_VBR.h in Headers */ = {isa = PBXBuildFile; fileRef = FD0B274D087B158400A90557 /* vertex_VBR.h */; };
-		FD0B2BBC0888457100A90557 /* GEMglCreateShaderObject.h in Headers */ = {isa = PBXBuildFile; fileRef = FD0B2BBA0888457100A90557 /* GEMglCreateShaderObject.h */; };
 		FD2F4E8208F2F8AA008F3CED /* pix_share_read.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD2F4E7E08F2F8AA008F3CED /* pix_share_read.cpp */; };
 		FD2F4E8308F2F8AA008F3CED /* pix_share_read.h in Headers */ = {isa = PBXBuildFile; fileRef = FD2F4E7F08F2F8AA008F3CED /* pix_share_read.h */; };
 		FD2F4E8408F2F8AA008F3CED /* pix_share_write.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD2F4E8008F2F8AA008F3CED /* pix_share_write.cpp */; };
@@ -417,7 +410,6 @@
 		FD50491F0856672000AF77DC /* part_source.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE748A070EEF2C001F121C /* part_source.h */; };
 		FD5049200856672000AF77DC /* part_targetcolor.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE748C070EEF2C001F121C /* part_targetcolor.h */; };
 		FD5049210856672000AF77DC /* part_targetsize.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE748E070EEF2C001F121C /* part_targetsize.h */; };
-		FD5049220856672000AF77DC /* part_vector.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE748F070EEF2C001F121C /* part_vector.h */; };
 		FD5049230856672000AF77DC /* part_velcone.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7491070EEF2C001F121C /* part_velcone.h */; };
 		FD5049240856672000AF77DC /* part_velocity.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7493070EEF2C001F121C /* part_velocity.h */; };
 		FD5049250856672000AF77DC /* part_velsphere.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7495070EEF2C001F121C /* part_velsphere.h */; };
@@ -508,7 +500,6 @@
 		FD50497D0856672000AF77DC /* pix_texture.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7579070EEFD4001F121C /* pix_texture.h */; };
 		FD50497E0856672000AF77DC /* pix_threshold.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE757B070EEFD4001F121C /* pix_threshold.h */; };
 		FD50497F0856672000AF77DC /* pix_tIIR.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE757D070EEFD4001F121C /* pix_tIIR.h */; };
-		FD5049800856672000AF77DC /* pix_timeblur.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE757F070EEFD4001F121C /* pix_timeblur.h */; };
 		FD5049810856672000AF77DC /* pix_video.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7581070EEFD4001F121C /* pix_video.h */; };
 		FD5049820856672000AF77DC /* pix_videoDarwin.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7583070EEFD4001F121C /* pix_videoDarwin.h */; };
 		FD5049830856672000AF77DC /* pix_write.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7585070EEFD4001F121C /* pix_write.h */; };
@@ -518,14 +509,12 @@
 		FD5049870856672000AF77DC /* colorSquare.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EDD0717CEA60070FE2C /* colorSquare.h */; };
 		FD5049880856672000AF77DC /* cone.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EDF0717CEA60070FE2C /* cone.h */; };
 		FD5049890856672000AF77DC /* cube.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EE10717CEA60070FE2C /* cube.h */; };
-		FD50498A0856672000AF77DC /* cubeArray.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EE30717CEA60070FE2C /* cubeArray.h */; };
 		FD50498B0856672000AF77DC /* cuboid.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EE50717CEA60070FE2C /* cuboid.h */; };
 		FD50498C0856672000AF77DC /* curve.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EE70717CEA60070FE2C /* curve.h */; };
 		FD50498D0856672000AF77DC /* curve3d.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EE90717CEA60070FE2C /* curve3d.h */; };
 		FD50498E0856672000AF77DC /* cylinder.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EEA0717CEA60070FE2C /* cylinder.h */; };
 		FD50498F0856672000AF77DC /* disk.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EEC0717CEA60070FE2C /* disk.h */; };
 		FD5049900856672000AF77DC /* imageVert.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EEE0717CEA60070FE2C /* imageVert.h */; };
-		FD5049910856672000AF77DC /* kasser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EEF0717CEA60070FE2C /* kasser.h */; };
 		FD5049920856672000AF77DC /* model_loader.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EF10717CEA60070FE2C /* model_loader.h */; };
 		FD5049930856672000AF77DC /* model.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EF30717CEA60070FE2C /* model.h */; };
 		FD5049940856672000AF77DC /* multimodel.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191EF50717CEA60070FE2C /* multimodel.h */; };
@@ -546,7 +535,6 @@
 		FD5049A30856672000AF77DC /* textoutline.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191F120717CEA60070FE2C /* textoutline.h */; };
 		FD5049A40856672000AF77DC /* triangle.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191F140717CEA60070FE2C /* triangle.h */; };
 		FD5049A50856672000AF77DC /* tube.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191F160717CEA60070FE2C /* tube.h */; };
-		FD5049A60856672000AF77DC /* tunnel.h in Headers */ = {isa = PBXBuildFile; fileRef = FD191F180717CEA60070FE2C /* tunnel.h */; };
 		FD5049A70856672000AF77DC /* GemVertex.h in Headers */ = {isa = PBXBuildFile; fileRef = FD1920090717D6510070FE2C /* GemVertex.h */; };
 		FD5049A80856672000AF77DC /* glVBO_ext.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7648070EEFFF001F121C /* glVBO_ext.h */; };
 		FD5049A90856672000AF77DC /* vertex_add.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE764A070EEFFF001F121C /* vertex_add.h */; };
@@ -554,15 +542,12 @@
 		FD5049AB0856672000AF77DC /* vertex_draw.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE764C070EEFFF001F121C /* vertex_draw.h */; };
 		FD5049AC0856672000AF77DC /* vertex_grid.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE764E070EEFFF001F121C /* vertex_grid.h */; };
 		FD5049AD0856672000AF77DC /* vertex_info.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7650070EEFFF001F121C /* vertex_info.h */; };
-		FD5049AE0856672000AF77DC /* vertex_matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7651070EEFFF001F121C /* vertex_matrix.h */; };
 		FD5049AF0856672000AF77DC /* vertex_model.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7653070EEFFF001F121C /* vertex_model.h */; };
 		FD5049B00856672000AF77DC /* vertex_mul.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7654070EEFFF001F121C /* vertex_mul.h */; };
 		FD5049B10856672000AF77DC /* vertex_offset.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7655070EEFFF001F121C /* vertex_offset.h */; };
 		FD5049B20856672000AF77DC /* vertex_quad.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7656070EEFFF001F121C /* vertex_quad.h */; };
-		FD5049B30856672000AF77DC /* vertex_resize.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7657070EEFFF001F121C /* vertex_resize.h */; };
 		FD5049B40856672000AF77DC /* vertex_scale.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7658070EEFFF001F121C /* vertex_scale.h */; };
 		FD5049B50856672000AF77DC /* vertex_set.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE7659070EEFFF001F121C /* vertex_set.h */; };
-		FD5049B60856672000AF77DC /* vertex_sub.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCE765B070EEFFF001F121C /* vertex_sub.h */; };
 		FD5049B70856672000AF77DC /* GemModelData.h in Headers */ = {isa = PBXBuildFile; fileRef = F521B41E03898BE2019165F0 /* GemModelData.h */; };
 		FD5049B80856672000AF77DC /* sgiimage.h in Headers */ = {isa = PBXBuildFile; fileRef = F521B43903898BE2019165F0 /* sgiimage.h */; };
 		FD5049B90856672000AF77DC /* GEMglBindProgramARB.h in Headers */ = {isa = PBXBuildFile; fileRef = FD53916106FCED160009EE9E /* GEMglBindProgramARB.h */; };
@@ -631,7 +616,6 @@
 		FD5049FC0856672000AF77DC /* colorSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191EDC0717CEA60070FE2C /* colorSquare.cpp */; };
 		FD5049FD0856672000AF77DC /* cone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191EDE0717CEA60070FE2C /* cone.cpp */; };
 		FD5049FE0856672000AF77DC /* cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191EE00717CEA60070FE2C /* cube.cpp */; };
-		FD5049FF0856672000AF77DC /* cubeArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191EE20717CEA60070FE2C /* cubeArray.cpp */; };
 		FD504A000856672000AF77DC /* cuboid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191EE40717CEA60070FE2C /* cuboid.cpp */; };
 		FD504A010856672000AF77DC /* curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191EE60717CEA60070FE2C /* curve.cpp */; };
 		FD504A020856672000AF77DC /* curve3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191EE80717CEA60070FE2C /* curve3d.cpp */; };
@@ -655,10 +639,8 @@
 		FD504A140856672000AF77DC /* textoutline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191F110717CEA60070FE2C /* textoutline.cpp */; };
 		FD504A150856672000AF77DC /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191F130717CEA60070FE2C /* triangle.cpp */; };
 		FD504A160856672000AF77DC /* tube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191F150717CEA60070FE2C /* tube.cpp */; };
-		FD504A170856672000AF77DC /* tunnel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191F170717CEA60070FE2C /* tunnel.cpp */; };
 		FD504A180856672000AF77DC /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191F5C0717CEE80070FE2C /* sphere.cpp */; };
 		FD504A190856672000AF77DC /* cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191F620717CEFF0070FE2C /* cylinder.cpp */; };
-		FD504A1A0856672000AF77DC /* kasser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD191F680717CF0F0070FE2C /* kasser.cpp */; };
 		FD504A1B0856672000AF77DC /* accumrotate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE73BF070EEE7F001F121C /* accumrotate.cpp */; };
 		FD504A1C0856672000AF77DC /* alpha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE73C1070EEE7F001F121C /* alpha.cpp */; };
 		FD504A1D0856672000AF77DC /* ambient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE73C3070EEE7F001F121C /* ambient.cpp */; };
@@ -691,18 +673,6 @@
 		FD504A380856672000AF77DC /* spline_path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE73FA070EEE7F001F121C /* spline_path.cpp */; };
 		FD504A390856672000AF77DC /* translate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE73FC070EEE7F001F121C /* translate.cpp */; };
 		FD504A3A0856672000AF77DC /* translateXYZ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE73FE070EEE7F001F121C /* translateXYZ.cpp */; };
-		FD504A3B0856672000AF77DC /* abs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F75070EECD3001F121C /* abs.cpp */; };
-		FD504A3C0856672000AF77DC /* average.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F76070EECD3001F121C /* average.cpp */; };
-		FD504A3D0856672000AF77DC /* counter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F77070EECD3001F121C /* counter.cpp */; };
-		FD504A3E0856672000AF77DC /* hsvrgb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F78070EECD3001F121C /* hsvrgb.cpp */; };
-		FD504A3F0856672000AF77DC /* m_control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F79070EECD3001F121C /* m_control.cpp */; };
-		FD504A400856672000AF77DC /* MarkExSetup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F7A070EECD3001F121C /* MarkExSetup.cpp */; };
-		FD504A410856672000AF77DC /* multiselect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F7B070EECD3001F121C /* multiselect.cpp */; };
-		FD504A420856672000AF77DC /* randomF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F7C070EECD3001F121C /* randomF.cpp */; };
-		FD504A430856672000AF77DC /* reson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F7D070EECD3001F121C /* reson.cpp */; };
-		FD504A440856672000AF77DC /* strcat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F7E070EECD3001F121C /* strcat.cpp */; };
-		FD504A450856672000AF77DC /* tripleLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F7F070EECD3001F121C /* tripleLine.cpp */; };
-		FD504A460856672000AF77DC /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE746E070EEEFB001F121C /* vector.cpp */; };
 		FD504A470856672000AF77DC /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F71070EECB4001F121C /* light.cpp */; };
 		FD504A480856672000AF77DC /* world_light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F72070EECB4001F121C /* world_light.cpp */; };
 		FD504A490856672000AF77DC /* GEMglAccum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE6F8B070EEDB1001F121C /* GEMglAccum.cpp */; };
@@ -1069,7 +1039,6 @@
 		FD504BB50856672000AF77DC /* pix_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7577070EEFD4001F121C /* pix_test.cpp */; };
 		FD504BB60856672000AF77DC /* pix_threshold.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE757A070EEFD4001F121C /* pix_threshold.cpp */; };
 		FD504BB70856672000AF77DC /* pix_tIIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE757C070EEFD4001F121C /* pix_tIIR.cpp */; };
-		FD504BB80856672000AF77DC /* pix_timeblur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE757E070EEFD4001F121C /* pix_timeblur.cpp */; };
 		FD504BB90856672000AF77DC /* pix_videoDarwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7582070EEFD4001F121C /* pix_videoDarwin.cpp */; };
 		FD504BBA0856672000AF77DC /* pix_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7580070EEFD4001F121C /* pix_video.cpp */; };
 		FD504BBB0856672000AF77DC /* pix_write.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7584070EEFD4001F121C /* pix_write.cpp */; };
@@ -1081,15 +1050,12 @@
 		FD504BC10856672000AF77DC /* vertex_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7679070EF053001F121C /* vertex_draw.cpp */; };
 		FD504BC20856672000AF77DC /* vertex_grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE764D070EEFFF001F121C /* vertex_grid.cpp */; };
 		FD504BC30856672000AF77DC /* vertex_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE764F070EEFFF001F121C /* vertex_info.cpp */; };
-		FD504BC40856672000AF77DC /* vertex_matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE767B070EF053001F121C /* vertex_matrix.cpp */; };
 		FD504BC50856672000AF77DC /* vertex_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7652070EEFFF001F121C /* vertex_model.cpp */; };
 		FD504BC60856672000AF77DC /* vertex_mul.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE767C070EF053001F121C /* vertex_mul.cpp */; };
 		FD504BC70856672000AF77DC /* vertex_offset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE767D070EF053001F121C /* vertex_offset.cpp */; };
 		FD504BC80856672000AF77DC /* vertex_quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE767E070EF053001F121C /* vertex_quad.cpp */; };
-		FD504BC90856672000AF77DC /* vertex_resize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE767F070EF053001F121C /* vertex_resize.cpp */; };
 		FD504BCA0856672000AF77DC /* vertex_scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7680070EF053001F121C /* vertex_scale.cpp */; };
 		FD504BCB0856672000AF77DC /* vertex_set.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7681070EF053001F121C /* vertex_set.cpp */; };
-		FD504BCC0856672000AF77DC /* vertex_sub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDCE7682070EF053001F121C /* vertex_sub.cpp */; };
 		FD504BCE0856672000AF77DC /* GEMglBindProgramARB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD53916506FCED3D0009EE9E /* GEMglBindProgramARB.cpp */; };
 		FD504BCF0856672000AF77DC /* GEMglGenProgramsARB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD53927E06FCF0CD0009EE9E /* GEMglGenProgramsARB.cpp */; };
 		FD504BD00856672000AF77DC /* GEMglLoadMatrixf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD53927606FCF0930009EE9E /* GEMglLoadMatrixf.cpp */; };
@@ -1216,10 +1182,6 @@
 		F521B44003898BE2019165F0 /* gemkeyboard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gemkeyboard.h; sourceTree = "<group>"; };
 		F521B44203898BE2019165F0 /* gemkeyname.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gemkeyname.h; sourceTree = "<group>"; };
 		F521B44403898BE2019165F0 /* gemmouse.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gemmouse.h; sourceTree = "<group>"; };
-		F521B44503898BE2019165F0 /* gemorb.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gemorb.cpp; sourceTree = "<group>"; };
-		F521B44603898BE2019165F0 /* gemorb.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gemorb.h; sourceTree = "<group>"; };
-		F521B44703898BE2019165F0 /* gemtablet.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gemtablet.cpp; sourceTree = "<group>"; };
-		F521B44803898BE2019165F0 /* gemtablet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gemtablet.h; sourceTree = "<group>"; };
 		F521B44A03898BE2019165F0 /* gemwin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gemwin.h; sourceTree = "<group>"; };
 		F521B44D03898BE2019165F0 /* render_trigger.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = render_trigger.h; sourceTree = "<group>"; };
 		F521B4C003898BE2019165F0 /* light.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = light.h; sourceTree = "<group>"; };
@@ -1270,15 +1232,8 @@
 		FD0399D00942A19000B4FCF2 /* GEMglUseProgramObjectARB.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GEMglUseProgramObjectARB.h; sourceTree = "<group>"; };
 		FD0399D90942A22200B4FCF2 /* GEMglUseProgramObjectARB.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GEMglUseProgramObjectARB.cpp; sourceTree = "<group>"; };
 		FD05177D0405A47900A80164 /* 01.primQuad.pd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 01.primQuad.pd; sourceTree = "<group>"; };
-		FD0B2746087B158400A90557 /* vertex_pqtorusknots.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vertex_pqtorusknots.cpp; sourceTree = "<group>"; };
-		FD0B2747087B158400A90557 /* vertex_pqtorusknots.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vertex_pqtorusknots.h; sourceTree = "<group>"; };
 		FD0B2748087B158400A90557 /* vertex_tabread.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vertex_tabread.cpp; sourceTree = "<group>"; };
 		FD0B2749087B158400A90557 /* vertex_tabread.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vertex_tabread.h; sourceTree = "<group>"; };
-		FD0B274A087B158400A90557 /* vertex_tabwrite.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vertex_tabwrite.cpp; sourceTree = "<group>"; };
-		FD0B274B087B158400A90557 /* vertex_tabwrite.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vertex_tabwrite.h; sourceTree = "<group>"; };
-		FD0B274C087B158400A90557 /* vertex_VBR.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vertex_VBR.cpp; sourceTree = "<group>"; };
-		FD0B274D087B158400A90557 /* vertex_VBR.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vertex_VBR.h; sourceTree = "<group>"; };
-		FD0B2BBA0888457100A90557 /* GEMglCreateShaderObject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GEMglCreateShaderObject.h; path = src/openGL/GEMglCreateShaderObject.h; sourceTree = SOURCE_ROOT; };
 		FD13827B05A9074700B04CF5 /* cMatrix.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; path = cMatrix.html; sourceTree = "<group>"; };
 		FD13827C05A9074700B04CF5 /* gem.known_bugs.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = gem.known_bugs.txt; sourceTree = "<group>"; };
 		FD13827D05A9074700B04CF5 /* gem.release_notes.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = gem.release_notes.txt; sourceTree = "<group>"; };
@@ -1292,8 +1247,6 @@
 		FD191EDF0717CEA60070FE2C /* cone.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cone.h; path = src/Geos/cone.h; sourceTree = SOURCE_ROOT; };
 		FD191EE00717CEA60070FE2C /* cube.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = cube.cpp; path = src/Geos/cube.cpp; sourceTree = SOURCE_ROOT; };
 		FD191EE10717CEA60070FE2C /* cube.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cube.h; path = src/Geos/cube.h; sourceTree = SOURCE_ROOT; };
-		FD191EE20717CEA60070FE2C /* cubeArray.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = cubeArray.cpp; path = src/Geos/cubeArray.cpp; sourceTree = SOURCE_ROOT; };
-		FD191EE30717CEA60070FE2C /* cubeArray.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cubeArray.h; path = src/Geos/cubeArray.h; sourceTree = SOURCE_ROOT; };
 		FD191EE40717CEA60070FE2C /* cuboid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = cuboid.cpp; path = src/Geos/cuboid.cpp; sourceTree = SOURCE_ROOT; };
 		FD191EE50717CEA60070FE2C /* cuboid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cuboid.h; path = src/Geos/cuboid.h; sourceTree = SOURCE_ROOT; };
 		FD191EE60717CEA60070FE2C /* curve.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = curve.cpp; path = src/Geos/curve.cpp; sourceTree = SOURCE_ROOT; };
@@ -1305,7 +1258,6 @@
 		FD191EEC0717CEA60070FE2C /* disk.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = disk.h; path = src/Geos/disk.h; sourceTree = SOURCE_ROOT; };
 		FD191EED0717CEA60070FE2C /* imageVert.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = imageVert.cpp; path = src/Geos/imageVert.cpp; sourceTree = SOURCE_ROOT; };
 		FD191EEE0717CEA60070FE2C /* imageVert.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = imageVert.h; path = src/Geos/imageVert.h; sourceTree = SOURCE_ROOT; };
-		FD191EEF0717CEA60070FE2C /* kasser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = kasser.h; path = src/Geos/kasser.h; sourceTree = SOURCE_ROOT; };
 		FD191EF00717CEA60070FE2C /* model_loader.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = model_loader.cpp; path = src/Geos/model_loader.cpp; sourceTree = SOURCE_ROOT; };
 		FD191EF10717CEA60070FE2C /* model_loader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = model_loader.h; path = src/Geos/model_loader.h; sourceTree = SOURCE_ROOT; };
 		FD191EF20717CEA60070FE2C /* model.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = model.cpp; path = src/Geos/model.cpp; sourceTree = SOURCE_ROOT; };
@@ -1344,11 +1296,8 @@
 		FD191F140717CEA60070FE2C /* triangle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = triangle.h; path = src/Geos/triangle.h; sourceTree = SOURCE_ROOT; };
 		FD191F150717CEA60070FE2C /* tube.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = tube.cpp; path = src/Geos/tube.cpp; sourceTree = SOURCE_ROOT; };
 		FD191F160717CEA60070FE2C /* tube.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = tube.h; path = src/Geos/tube.h; sourceTree = SOURCE_ROOT; };
-		FD191F170717CEA60070FE2C /* tunnel.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = tunnel.cpp; path = src/Geos/tunnel.cpp; sourceTree = SOURCE_ROOT; };
-		FD191F180717CEA60070FE2C /* tunnel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = tunnel.h; path = src/Geos/tunnel.h; sourceTree = SOURCE_ROOT; };
 		FD191F5C0717CEE80070FE2C /* sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = sphere.cpp; path = src/Geos/sphere.cpp; sourceTree = SOURCE_ROOT; };
 		FD191F620717CEFF0070FE2C /* cylinder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = cylinder.cpp; path = src/Geos/cylinder.cpp; sourceTree = SOURCE_ROOT; };
-		FD191F680717CF0F0070FE2C /* kasser.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = kasser.cpp; path = src/Geos/kasser.cpp; sourceTree = SOURCE_ROOT; };
 		FD1920080717D6510070FE2C /* GemVertex.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GemVertex.cpp; path = src/Base/GemVertex.cpp; sourceTree = SOURCE_ROOT; };
 		FD1920090717D6510070FE2C /* GemVertex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GemVertex.h; path = src/Base/GemVertex.h; sourceTree = SOURCE_ROOT; };
 		FD2F4E6A08F2F4E7008F3CED /* glsl_vertex.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = glsl_vertex.cpp; sourceTree = "<group>"; };
@@ -1408,8 +1357,6 @@
 		FD53929606FCF8030009EE9E /* GEMglMultTransposeMatrixd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEMglMultTransposeMatrixd.cpp; sourceTree = "<group>"; };
 		FD53930A06FD00400009EE9E /* GEMglProgramLocalParameter4fvARB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEMglProgramLocalParameter4fvARB.h; sourceTree = "<group>"; };
 		FD53930B06FD00400009EE9E /* GEMglProgramLocalParameter4fvARB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEMglProgramLocalParameter4fvARB.cpp; sourceTree = "<group>"; };
-		FD53933B06FD03240009EE9E /* GEMglGetProgramStringARB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEMglGetProgramStringARB.h; sourceTree = "<group>"; };
-		FD53933C06FD03240009EE9E /* GEMglGetProgramStringARB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEMglGetProgramStringARB.cpp; sourceTree = "<group>"; };
 		FD56B2AB098AB10200C6DCD5 /* glew.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = glew.cpp; path = src/Base/glew.cpp; sourceTree = SOURCE_ROOT; };
 		FD56B2AC098AB10200C6DCD5 /* glew.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = glew.h; path = src/Base/glew.h; sourceTree = SOURCE_ROOT; };
 		FD598BE40927E5B5005DF59A /* glsl_program.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = glsl_program.h; sourceTree = "<group>"; };
@@ -1447,7 +1394,6 @@
 		FD86910E0917FCFE0079421E /* GemPBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GemPBuffer.cpp; path = src/Base/GemPBuffer.cpp; sourceTree = SOURCE_ROOT; };
 		FD89459605866C1D0014FA36 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		FD89459705866C1D0014FA36 /* configDarwin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = configDarwin.h; sourceTree = "<group>"; };
-		FD8945A305866D390014FA36 /* undocumented_objects */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = undocumented_objects; sourceTree = "<group>"; };
 		FD8E016E04C4CB9900DF3958 /* FTBBox.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FTBBox.h; path = ../GemLibs/FTGL/include/FTBBox.h; sourceTree = SOURCE_ROOT; };
 		FD8E016F04C4CB9900DF3958 /* FTBitmapGlyph.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FTBitmapGlyph.h; path = ../GemLibs/FTGL/include/FTBitmapGlyph.h; sourceTree = SOURCE_ROOT; };
 		FD8E017004C4CB9900DF3958 /* FTCharmap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FTCharmap.h; path = ../GemLibs/FTGL/include/FTCharmap.h; sourceTree = SOURCE_ROOT; };
@@ -1500,10 +1446,6 @@
 		FD978EA2089427470096419F /* pix_vpaint.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_vpaint.cpp; path = src/Pixes/pix_vpaint.cpp; sourceTree = SOURCE_ROOT; };
 		FD9934450937BBB200F29905 /* GEMglUniform1fARB.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GEMglUniform1fARB.h; path = src/openGL/GEMglUniform1fARB.h; sourceTree = SOURCE_ROOT; };
 		FD99344C0937BC1C00F29905 /* GEMglUniform1fARB.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GEMglUniform1fARB.cpp; path = src/openGL/GEMglUniform1fARB.cpp; sourceTree = SOURCE_ROOT; };
-		FD99350A0937CEE700F29905 /* GEMglUniform3fvARB.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GEMglUniform3fvARB.h; sourceTree = "<group>"; };
-		FD9935110937CF1B00F29905 /* GEMglUniform3fvARB.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GEMglUniform3fvARB.cpp; sourceTree = "<group>"; };
-		FD9935200937D6D000F29905 /* GEMglUniform2fvARB.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GEMglUniform2fvARB.h; path = src/openGL/GEMglUniform2fvARB.h; sourceTree = SOURCE_ROOT; };
-		FD9935260937D78400F29905 /* GEMglUniform2fvARB.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GEMglUniform2fvARB.cpp; path = src/openGL/GEMglUniform2fvARB.cpp; sourceTree = SOURCE_ROOT; };
 		FDA81E4709D1A95C00D0E190 /* GemPixConvert.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GemPixConvert.h; path = src/Base/GemPixConvert.h; sourceTree = SOURCE_ROOT; };
 		FDA81E4809D1A95C00D0E190 /* GemPixConvertAltivec.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GemPixConvertAltivec.cpp; path = src/Base/GemPixConvertAltivec.cpp; sourceTree = SOURCE_ROOT; };
 		FDA81E4909D1A95C00D0E190 /* GemPixConvertSSE2.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GemPixConvertSSE2.cpp; path = src/Base/GemPixConvertSSE2.cpp; sourceTree = SOURCE_ROOT; };
@@ -1719,18 +1661,6 @@
 		FDC379990764044200079862 /* pqtorusknots.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pqtorusknots.cpp; sourceTree = "<group>"; };
 		FDC7F58C03F7268D007E9592 /* 05.newWave.pd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 05.newWave.pd; sourceTree = "<group>"; };
 		FDC7F58D03F7268D007E9592 /* 06.ripple.pd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 06.ripple.pd; sourceTree = "<group>"; };
-		FDC882A5040C10A1007E4817 /* configure */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
-		FDC882A6040C10A1007E4817 /* configure.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = configure.in; sourceTree = "<group>"; };
-		FDC882A7040C10A1007E4817 /* install-sh */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = "install-sh"; sourceTree = "<group>"; };
-		FDC882A8040C10A1007E4817 /* makeauxlibs */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = makeauxlibs; sourceTree = "<group>"; };
-		FDC882AA040C10A1007E4817 /* Makefile.clean */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.clean; sourceTree = "<group>"; };
-		FDC882AB040C10A1007E4817 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
-		FDC882AC040C10A1007E4817 /* Makefile.subdir */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.subdir; sourceTree = "<group>"; };
-		FDC882AD040C10A1007E4817 /* makesource */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = makesource; sourceTree = "<group>"; };
-		FDC882AE040C10A1007E4817 /* missing */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = missing; sourceTree = "<group>"; };
-		FDC882AF040C10A1007E4817 /* mkinstalldirs */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = mkinstalldirs; sourceTree = "<group>"; };
-		FDC882B0040C10A1007E4817 /* README.build */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = README.build; sourceTree = "<group>"; };
-		FDC882B1040C10A1007E4817 /* WHATSNEW */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = WHATSNEW; sourceTree = "<group>"; };
 		FDCAC55E03F1F19D00A80164 /* README */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		FDCAC5F403F1F6D600A80164 /* 01.redSquare.pd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 01.redSquare.pd; sourceTree = "<group>"; };
 		FDCAC5F503F1F6D600A80164 /* 02.blueRectangle.pd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 02.blueRectangle.pd; sourceTree = "<group>"; };
@@ -1847,17 +1777,6 @@
 		FDCE6E21070DBC8F001F121C /* TextBase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TextBase.cpp; sourceTree = "<group>"; };
 		FDCE6F71070EECB4001F121C /* light.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = light.cpp; path = src/Nongeos/light.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE6F72070EECB4001F121C /* world_light.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = world_light.cpp; path = src/Nongeos/world_light.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F75070EECD3001F121C /* abs.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = abs.cpp; path = src/MarkEx/abs.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F76070EECD3001F121C /* average.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = average.cpp; path = src/MarkEx/average.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F77070EECD3001F121C /* counter.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = counter.cpp; path = src/MarkEx/counter.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F78070EECD3001F121C /* hsvrgb.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = hsvrgb.cpp; path = src/MarkEx/hsvrgb.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F79070EECD3001F121C /* m_control.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = m_control.cpp; path = src/MarkEx/m_control.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F7A070EECD3001F121C /* MarkExSetup.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = MarkExSetup.cpp; path = src/MarkEx/MarkExSetup.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F7B070EECD3001F121C /* multiselect.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = multiselect.cpp; path = src/MarkEx/multiselect.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F7C070EECD3001F121C /* randomF.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = randomF.cpp; path = src/MarkEx/randomF.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F7D070EECD3001F121C /* reson.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = reson.cpp; path = src/MarkEx/reson.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F7E070EECD3001F121C /* strcat.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = strcat.cpp; path = src/MarkEx/strcat.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE6F7F070EECD3001F121C /* tripleLine.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = tripleLine.cpp; path = src/MarkEx/tripleLine.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE6F8B070EEDB1001F121C /* GEMglAccum.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GEMglAccum.cpp; path = src/openGL/GEMglAccum.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE6F8C070EEDB1001F121C /* GEMglAccum.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GEMglAccum.h; path = src/openGL/GEMglAccum.h; sourceTree = SOURCE_ROOT; };
 		FDCE6F8D070EEDB1001F121C /* GEMglAlphaFunc.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GEMglAlphaFunc.cpp; path = src/openGL/GEMglAlphaFunc.cpp; sourceTree = SOURCE_ROOT; };
@@ -2458,7 +2377,6 @@
 		FDCE73FE070EEE7F001F121C /* translateXYZ.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = translateXYZ.cpp; path = src/Manips/translateXYZ.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE73FF070EEE7F001F121C /* translateXYZ.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = translateXYZ.h; path = src/Manips/translateXYZ.h; sourceTree = SOURCE_ROOT; };
 		FDCE7466070EEEB5001F121C /* depth.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = depth.cpp; path = src/Manips/depth.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE746E070EEEFB001F121C /* vector.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vector.cpp; path = src/MarkEx/vector.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7470070EEF2B001F121C /* papi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = papi.h; path = src/Particles/papi.h; sourceTree = SOURCE_ROOT; };
 		FDCE7471070EEF2B001F121C /* part_color.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = part_color.cpp; path = src/Particles/part_color.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7472070EEF2B001F121C /* part_color.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = part_color.h; path = src/Particles/part_color.h; sourceTree = SOURCE_ROOT; };
@@ -2490,7 +2408,6 @@
 		FDCE748C070EEF2C001F121C /* part_targetcolor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = part_targetcolor.h; path = src/Particles/part_targetcolor.h; sourceTree = SOURCE_ROOT; };
 		FDCE748D070EEF2C001F121C /* part_targetsize.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = part_targetsize.cpp; path = src/Particles/part_targetsize.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE748E070EEF2C001F121C /* part_targetsize.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = part_targetsize.h; path = src/Particles/part_targetsize.h; sourceTree = SOURCE_ROOT; };
-		FDCE748F070EEF2C001F121C /* part_vector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = part_vector.h; path = src/Particles/part_vector.h; sourceTree = SOURCE_ROOT; };
 		FDCE7490070EEF2C001F121C /* part_velcone.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = part_velcone.cpp; path = src/Particles/part_velcone.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7491070EEF2C001F121C /* part_velcone.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = part_velcone.h; path = src/Particles/part_velcone.h; sourceTree = SOURCE_ROOT; };
 		FDCE7492070EEF2C001F121C /* part_velocity.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = part_velocity.cpp; path = src/Particles/part_velocity.cpp; sourceTree = SOURCE_ROOT; };
@@ -2622,8 +2539,6 @@
 		FDCE7546070EEFD3001F121C /* pix_movie.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pix_movie.h; path = src/Pixes/pix_movie.h; sourceTree = SOURCE_ROOT; };
 		FDCE7547070EEFD3001F121C /* pix_movieDarwin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_movieDarwin.cpp; path = src/Pixes/pix_movieDarwin.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7548070EEFD3001F121C /* pix_movieDarwin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pix_movieDarwin.h; path = src/Pixes/pix_movieDarwin.h; sourceTree = SOURCE_ROOT; };
-		FDCE7549070EEFD3001F121C /* pix_movieYUV.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_movieYUV.cpp; path = src/Pixes/pix_movieYUV.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE754A070EEFD3001F121C /* pix_movieYUV.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pix_movieYUV.h; path = src/Pixes/pix_movieYUV.h; sourceTree = SOURCE_ROOT; };
 		FDCE754B070EEFD3001F121C /* pix_multiimage.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_multiimage.cpp; path = src/Pixes/pix_multiimage.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE754C070EEFD3001F121C /* pix_multiimage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pix_multiimage.h; path = src/Pixes/pix_multiimage.h; sourceTree = SOURCE_ROOT; };
 		FDCE754D070EEFD3001F121C /* pix_multiply.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_multiply.cpp; path = src/Pixes/pix_multiply.cpp; sourceTree = SOURCE_ROOT; };
@@ -2675,8 +2590,6 @@
 		FDCE757B070EEFD4001F121C /* pix_threshold.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pix_threshold.h; path = src/Pixes/pix_threshold.h; sourceTree = SOURCE_ROOT; };
 		FDCE757C070EEFD4001F121C /* pix_tIIR.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_tIIR.cpp; path = src/Pixes/pix_tIIR.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE757D070EEFD4001F121C /* pix_tIIR.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pix_tIIR.h; path = src/Pixes/pix_tIIR.h; sourceTree = SOURCE_ROOT; };
-		FDCE757E070EEFD4001F121C /* pix_timeblur.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_timeblur.cpp; path = src/Pixes/pix_timeblur.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE757F070EEFD4001F121C /* pix_timeblur.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pix_timeblur.h; path = src/Pixes/pix_timeblur.h; sourceTree = SOURCE_ROOT; };
 		FDCE7580070EEFD4001F121C /* pix_video.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_video.cpp; path = src/Pixes/pix_video.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7581070EEFD4001F121C /* pix_video.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pix_video.h; path = src/Pixes/pix_video.h; sourceTree = SOURCE_ROOT; };
 		FDCE7582070EEFD4001F121C /* pix_videoDarwin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_videoDarwin.cpp; path = src/Pixes/pix_videoDarwin.cpp; sourceTree = SOURCE_ROOT; };
@@ -2696,27 +2609,20 @@
 		FDCE764E070EEFFF001F121C /* vertex_grid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_grid.h; path = src/Vertex/vertex_grid.h; sourceTree = SOURCE_ROOT; };
 		FDCE764F070EEFFF001F121C /* vertex_info.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_info.cpp; path = src/Vertex/vertex_info.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7650070EEFFF001F121C /* vertex_info.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_info.h; path = src/Vertex/vertex_info.h; sourceTree = SOURCE_ROOT; };
-		FDCE7651070EEFFF001F121C /* vertex_matrix.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_matrix.h; path = src/Vertex/vertex_matrix.h; sourceTree = SOURCE_ROOT; };
 		FDCE7652070EEFFF001F121C /* vertex_model.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_model.cpp; path = src/Vertex/vertex_model.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7653070EEFFF001F121C /* vertex_model.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_model.h; path = src/Vertex/vertex_model.h; sourceTree = SOURCE_ROOT; };
 		FDCE7654070EEFFF001F121C /* vertex_mul.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_mul.h; path = src/Vertex/vertex_mul.h; sourceTree = SOURCE_ROOT; };
 		FDCE7655070EEFFF001F121C /* vertex_offset.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_offset.h; path = src/Vertex/vertex_offset.h; sourceTree = SOURCE_ROOT; };
 		FDCE7656070EEFFF001F121C /* vertex_quad.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_quad.h; path = src/Vertex/vertex_quad.h; sourceTree = SOURCE_ROOT; };
-		FDCE7657070EEFFF001F121C /* vertex_resize.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_resize.h; path = src/Vertex/vertex_resize.h; sourceTree = SOURCE_ROOT; };
 		FDCE7658070EEFFF001F121C /* vertex_scale.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_scale.h; path = src/Vertex/vertex_scale.h; sourceTree = SOURCE_ROOT; };
 		FDCE7659070EEFFF001F121C /* vertex_set.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_set.h; path = src/Vertex/vertex_set.h; sourceTree = SOURCE_ROOT; };
-		FDCE765A070EEFFF001F121C /* vertex_sink.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_sink.cpp; path = src/Vertex/vertex_sink.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE765B070EEFFF001F121C /* vertex_sub.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vertex_sub.h; path = src/Vertex/vertex_sub.h; sourceTree = SOURCE_ROOT; };
 		FDCE7678070EF053001F121C /* vertex_combine.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_combine.cpp; path = src/Vertex/vertex_combine.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7679070EF053001F121C /* vertex_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_draw.cpp; path = src/Vertex/vertex_draw.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE767B070EF053001F121C /* vertex_matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_matrix.cpp; path = src/Vertex/vertex_matrix.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE767C070EF053001F121C /* vertex_mul.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_mul.cpp; path = src/Vertex/vertex_mul.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE767D070EF053001F121C /* vertex_offset.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_offset.cpp; path = src/Vertex/vertex_offset.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE767E070EF053001F121C /* vertex_quad.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_quad.cpp; path = src/Vertex/vertex_quad.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE767F070EF053001F121C /* vertex_resize.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_resize.cpp; path = src/Vertex/vertex_resize.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7680070EF053001F121C /* vertex_scale.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_scale.cpp; path = src/Vertex/vertex_scale.cpp; sourceTree = SOURCE_ROOT; };
 		FDCE7681070EF053001F121C /* vertex_set.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_set.cpp; path = src/Vertex/vertex_set.cpp; sourceTree = SOURCE_ROOT; };
-		FDCE7682070EF053001F121C /* vertex_sub.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_sub.cpp; path = src/Vertex/vertex_sub.cpp; sourceTree = SOURCE_ROOT; };
 		FDD0596A07B837A9007B9C47 /* GemVector.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GemVector.cpp; path = src/Base/GemVector.cpp; sourceTree = SOURCE_ROOT; };
 		FDD0596B07B837A9007B9C47 /* GemVector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GemVector.h; path = src/Base/GemVector.h; sourceTree = SOURCE_ROOT; };
 		FDD5D4A2097E916D005CE85B /* pix_hit.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = pix_hit.cpp; path = src/Pixes/pix_hit.cpp; sourceTree = SOURCE_ROOT; };
@@ -2925,10 +2831,6 @@
 				FDCE73B7070EEE08001F121C /* gemwin.cpp */,
 				F521B44D03898BE2019165F0 /* render_trigger.h */,
 				FDCE73B8070EEE08001F121C /* render_trigger.cpp */,
-				F521B44603898BE2019165F0 /* gemorb.h */,
-				F521B44503898BE2019165F0 /* gemorb.cpp */,
-				F521B44803898BE2019165F0 /* gemtablet.h */,
-				F521B44703898BE2019165F0 /* gemtablet.cpp */,
 			);
 			name = Controls;
 			path = src/Controls;
@@ -2955,8 +2857,6 @@
 				FD191EDF0717CEA60070FE2C /* cone.h */,
 				FD191EE00717CEA60070FE2C /* cube.cpp */,
 				FD191EE10717CEA60070FE2C /* cube.h */,
-				FD191EE20717CEA60070FE2C /* cubeArray.cpp */,
-				FD191EE30717CEA60070FE2C /* cubeArray.h */,
 				FD191EE40717CEA60070FE2C /* cuboid.cpp */,
 				FD191EE50717CEA60070FE2C /* cuboid.h */,
 				FD191EE60717CEA60070FE2C /* curve.cpp */,
@@ -2969,8 +2869,6 @@
 				FD191EEC0717CEA60070FE2C /* disk.h */,
 				FD191EED0717CEA60070FE2C /* imageVert.cpp */,
 				FD191EEE0717CEA60070FE2C /* imageVert.h */,
-				FD191F680717CF0F0070FE2C /* kasser.cpp */,
-				FD191EEF0717CEA60070FE2C /* kasser.h */,
 				FD191EF00717CEA60070FE2C /* model_loader.cpp */,
 				FD191EF10717CEA60070FE2C /* model_loader.h */,
 				FD191EF20717CEA60070FE2C /* model.cpp */,
@@ -3010,8 +2908,6 @@
 				FD191F140717CEA60070FE2C /* triangle.h */,
 				FD191F150717CEA60070FE2C /* tube.cpp */,
 				FD191F160717CEA60070FE2C /* tube.h */,
-				FD191F170717CEA60070FE2C /* tunnel.cpp */,
-				FD191F180717CEA60070FE2C /* tunnel.h */,
 			);
 			name = Geos;
 			path = src/Geos;
@@ -3099,26 +2995,6 @@
 			path = src/Manips;
 			sourceTree = SOURCE_ROOT;
 		};
-		F521B4B003898BE2019165F0 /* MarkEx */ = {
-			isa = PBXGroup;
-			children = (
-				FDCE6F75070EECD3001F121C /* abs.cpp */,
-				FDCE6F76070EECD3001F121C /* average.cpp */,
-				FDCE6F77070EECD3001F121C /* counter.cpp */,
-				FDCE6F78070EECD3001F121C /* hsvrgb.cpp */,
-				FDCE6F79070EECD3001F121C /* m_control.cpp */,
-				FDCE6F7A070EECD3001F121C /* MarkExSetup.cpp */,
-				FDCE6F7B070EECD3001F121C /* multiselect.cpp */,
-				FDCE6F7C070EECD3001F121C /* randomF.cpp */,
-				FDCE6F7D070EECD3001F121C /* reson.cpp */,
-				FDCE6F7E070EECD3001F121C /* strcat.cpp */,
-				FDCE6F7F070EECD3001F121C /* tripleLine.cpp */,
-				FDCE746E070EEEFB001F121C /* vector.cpp */,
-			);
-			name = MarkEx;
-			path = src/MarkEx;
-			sourceTree = SOURCE_ROOT;
-		};
 		F521B4BE03898BE2019165F0 /* Nongeos */ = {
 			isa = PBXGroup;
 			children = (
@@ -3169,7 +3045,6 @@
 				FDCE748C070EEF2C001F121C /* part_targetcolor.h */,
 				FDCE748D070EEF2C001F121C /* part_targetsize.cpp */,
 				FDCE748E070EEF2C001F121C /* part_targetsize.h */,
-				FDCE748F070EEF2C001F121C /* part_vector.h */,
 				FDCE7490070EEF2C001F121C /* part_velcone.cpp */,
 				FDCE7491070EEF2C001F121C /* part_velcone.h */,
 				FDCE7492070EEF2C001F121C /* part_velocity.cpp */,
@@ -3351,8 +3226,6 @@
 				FDCE7546070EEFD3001F121C /* pix_movie.h */,
 				FDCE7547070EEFD3001F121C /* pix_movieDarwin.cpp */,
 				FDCE7548070EEFD3001F121C /* pix_movieDarwin.h */,
-				FDCE7549070EEFD3001F121C /* pix_movieYUV.cpp */,
-				FDCE754A070EEFD3001F121C /* pix_movieYUV.h */,
 				FDCE754B070EEFD3001F121C /* pix_multiimage.cpp */,
 				FDCE754C070EEFD3001F121C /* pix_multiimage.h */,
 				FDCE754D070EEFD3001F121C /* pix_multiply.cpp */,
@@ -3405,8 +3278,6 @@
 				FDCE757B070EEFD4001F121C /* pix_threshold.h */,
 				FDCE757C070EEFD4001F121C /* pix_tIIR.cpp */,
 				FDCE757D070EEFD4001F121C /* pix_tIIR.h */,
-				FDCE757E070EEFD4001F121C /* pix_timeblur.cpp */,
-				FDCE757F070EEFD4001F121C /* pix_timeblur.h */,
 				FDCE7580070EEFD4001F121C /* pix_video.cpp */,
 				FDCE7581070EEFD4001F121C /* pix_video.h */,
 				FDCE7582070EEFD4001F121C /* pix_videoDarwin.cpp */,
@@ -3442,9 +3313,6 @@
 				FD92DCCE0736C4F500C94A91 /* GEMglMultiTexCoord2fARB.h */,
 				FD92DCC90736C4BC00C94A91 /* GEMglActiveTextureARB.cpp */,
 				FD92DCC80736C4BC00C94A91 /* GEMglActiveTextureARB.h */,
-				FD53933C06FD03240009EE9E /* GEMglGetProgramStringARB.cpp */,
-				FD53933B06FD03240009EE9E /* GEMglGetProgramStringARB.h */,
-				FD0B2BBA0888457100A90557 /* GEMglCreateShaderObject.h */,
 				FDCAC55E03F1F19D00A80164 /* README */,
 				FDF37DC70721908100BCCC3B /* GLdefine.cpp */,
 				FDCE719D070EEDB2001F121C /* GLdefine.h */,
@@ -3969,10 +3837,6 @@
 				FDCE716A070EEDB2001F121C /* GEMglTranslatef.h */,
 				FD99344C0937BC1C00F29905 /* GEMglUniform1fARB.cpp */,
 				FD9934450937BBB200F29905 /* GEMglUniform1fARB.h */,
-				FD9935260937D78400F29905 /* GEMglUniform2fvARB.cpp */,
-				FD9935200937D6D000F29905 /* GEMglUniform2fvARB.h */,
-				FD9935110937CF1B00F29905 /* GEMglUniform3fvARB.cpp */,
-				FD99350A0937CEE700F29905 /* GEMglUniform3fvARB.h */,
 				FD0399D90942A22200B4FCF2 /* GEMglUseProgramObjectARB.cpp */,
 				FD0399D00942A19000B4FCF2 /* GEMglUseProgramObjectARB.h */,
 				FDCE716B070EEDB2001F121C /* GEMglVertex2d.cpp */,
@@ -4328,9 +4192,7 @@
 				F521B40303898BE2019165F0 /* Base */,
 				F521B43C03898BE2019165F0 /* Controls */,
 				F521B44E03898BE2019165F0 /* Geos */,
-				FDC882A0040C10A1007E4817 /* Gnu */,
 				F521B47E03898BE2019165F0 /* Manips */,
-				F521B4B003898BE2019165F0 /* MarkEx */,
 				F521B4BE03898BE2019165F0 /* Nongeos */,
 				F52F0E84039FEEA801A80164 /* openGL */,
 				FD53934106FD033E0009EE9E /* Output */,
@@ -4365,14 +4227,8 @@
 		FD23C78D06DFC01A005D1182 /* Vertex */ = {
 			isa = PBXGroup;
 			children = (
-				FD0B2746087B158400A90557 /* vertex_pqtorusknots.cpp */,
-				FD0B2747087B158400A90557 /* vertex_pqtorusknots.h */,
 				FD0B2748087B158400A90557 /* vertex_tabread.cpp */,
 				FD0B2749087B158400A90557 /* vertex_tabread.h */,
-				FD0B274A087B158400A90557 /* vertex_tabwrite.cpp */,
-				FD0B274B087B158400A90557 /* vertex_tabwrite.h */,
-				FD0B274C087B158400A90557 /* vertex_VBR.cpp */,
-				FD0B274D087B158400A90557 /* vertex_VBR.h */,
 				FDCE7648070EEFFF001F121C /* glVBO_ext.h */,
 				FDCE7649070EEFFF001F121C /* vertex_add.cpp */,
 				FDCE764A070EEFFF001F121C /* vertex_add.h */,
@@ -4384,8 +4240,6 @@
 				FDCE764E070EEFFF001F121C /* vertex_grid.h */,
 				FDCE764F070EEFFF001F121C /* vertex_info.cpp */,
 				FDCE7650070EEFFF001F121C /* vertex_info.h */,
-				FDCE767B070EF053001F121C /* vertex_matrix.cpp */,
-				FDCE7651070EEFFF001F121C /* vertex_matrix.h */,
 				FDCE7652070EEFFF001F121C /* vertex_model.cpp */,
 				FDCE7653070EEFFF001F121C /* vertex_model.h */,
 				FDCE767C070EF053001F121C /* vertex_mul.cpp */,
@@ -4394,15 +4248,10 @@
 				FDCE7655070EEFFF001F121C /* vertex_offset.h */,
 				FDCE767E070EF053001F121C /* vertex_quad.cpp */,
 				FDCE7656070EEFFF001F121C /* vertex_quad.h */,
-				FDCE767F070EF053001F121C /* vertex_resize.cpp */,
-				FDCE7657070EEFFF001F121C /* vertex_resize.h */,
 				FDCE7680070EF053001F121C /* vertex_scale.cpp */,
 				FDCE7658070EEFFF001F121C /* vertex_scale.h */,
 				FDCE7681070EF053001F121C /* vertex_set.cpp */,
 				FDCE7659070EEFFF001F121C /* vertex_set.h */,
-				FDCE765A070EEFFF001F121C /* vertex_sink.cpp */,
-				FDCE7682070EF053001F121C /* vertex_sub.cpp */,
-				FDCE765B070EEFFF001F121C /* vertex_sub.h */,
 			);
 			name = Vertex;
 			path = src/Vertex;
@@ -4460,27 +4309,6 @@
 			includeInIndex = 0;
 			name = FTGL;
 			path = ../GemLibs/FTGL;
-			sourceTree = SOURCE_ROOT;
-		};
-		FDC882A0040C10A1007E4817 /* Gnu */ = {
-			isa = PBXGroup;
-			children = (
-				FDC882A5040C10A1007E4817 /* configure */,
-				FDC882A6040C10A1007E4817 /* configure.in */,
-				FDC882A7040C10A1007E4817 /* install-sh */,
-				FDC882A8040C10A1007E4817 /* makeauxlibs */,
-				FDC882AA040C10A1007E4817 /* Makefile.clean */,
-				FDC882AB040C10A1007E4817 /* Makefile.in */,
-				FDC882AC040C10A1007E4817 /* Makefile.subdir */,
-				FDC882AD040C10A1007E4817 /* makesource */,
-				FDC882AE040C10A1007E4817 /* missing */,
-				FDC882AF040C10A1007E4817 /* mkinstalldirs */,
-				FDC882B0040C10A1007E4817 /* README.build */,
-				FDC882B1040C10A1007E4817 /* WHATSNEW */,
-				FD8945A305866D390014FA36 /* undocumented_objects */,
-			);
-			name = Gnu;
-			path = src/Gnu;
 			sourceTree = SOURCE_ROOT;
 		};
 		FDCAC5F303F1F6D600A80164 /* 01.basic */ = {
@@ -5071,7 +4899,6 @@
 				FD50491F0856672000AF77DC /* part_source.h in Headers */,
 				FD5049200856672000AF77DC /* part_targetcolor.h in Headers */,
 				FD5049210856672000AF77DC /* part_targetsize.h in Headers */,
-				FD5049220856672000AF77DC /* part_vector.h in Headers */,
 				FD5049230856672000AF77DC /* part_velcone.h in Headers */,
 				FD5049240856672000AF77DC /* part_velocity.h in Headers */,
 				FD5049250856672000AF77DC /* part_velsphere.h in Headers */,
@@ -5162,7 +4989,6 @@
 				FD50497D0856672000AF77DC /* pix_texture.h in Headers */,
 				FD50497E0856672000AF77DC /* pix_threshold.h in Headers */,
 				FD50497F0856672000AF77DC /* pix_tIIR.h in Headers */,
-				FD5049800856672000AF77DC /* pix_timeblur.h in Headers */,
 				FD5049810856672000AF77DC /* pix_video.h in Headers */,
 				FD5049820856672000AF77DC /* pix_videoDarwin.h in Headers */,
 				FD5049830856672000AF77DC /* pix_write.h in Headers */,
@@ -5172,14 +4998,12 @@
 				FD5049870856672000AF77DC /* colorSquare.h in Headers */,
 				FD5049880856672000AF77DC /* cone.h in Headers */,
 				FD5049890856672000AF77DC /* cube.h in Headers */,
-				FD50498A0856672000AF77DC /* cubeArray.h in Headers */,
 				FD50498B0856672000AF77DC /* cuboid.h in Headers */,
 				FD50498C0856672000AF77DC /* curve.h in Headers */,
 				FD50498D0856672000AF77DC /* curve3d.h in Headers */,
 				FD50498E0856672000AF77DC /* cylinder.h in Headers */,
 				FD50498F0856672000AF77DC /* disk.h in Headers */,
 				FD5049900856672000AF77DC /* imageVert.h in Headers */,
-				FD5049910856672000AF77DC /* kasser.h in Headers */,
 				FD5049920856672000AF77DC /* model_loader.h in Headers */,
 				FD5049930856672000AF77DC /* model.h in Headers */,
 				FD5049940856672000AF77DC /* multimodel.h in Headers */,
@@ -5200,7 +5024,6 @@
 				FD5049A30856672000AF77DC /* textoutline.h in Headers */,
 				FD5049A40856672000AF77DC /* triangle.h in Headers */,
 				FD5049A50856672000AF77DC /* tube.h in Headers */,
-				FD5049A60856672000AF77DC /* tunnel.h in Headers */,
 				FD5049A70856672000AF77DC /* GemVertex.h in Headers */,
 				FD5049A80856672000AF77DC /* glVBO_ext.h in Headers */,
 				FD5049A90856672000AF77DC /* vertex_add.h in Headers */,
@@ -5208,15 +5031,12 @@
 				FD5049AB0856672000AF77DC /* vertex_draw.h in Headers */,
 				FD5049AC0856672000AF77DC /* vertex_grid.h in Headers */,
 				FD5049AD0856672000AF77DC /* vertex_info.h in Headers */,
-				FD5049AE0856672000AF77DC /* vertex_matrix.h in Headers */,
 				FD5049AF0856672000AF77DC /* vertex_model.h in Headers */,
 				FD5049B00856672000AF77DC /* vertex_mul.h in Headers */,
 				FD5049B10856672000AF77DC /* vertex_offset.h in Headers */,
 				FD5049B20856672000AF77DC /* vertex_quad.h in Headers */,
-				FD5049B30856672000AF77DC /* vertex_resize.h in Headers */,
 				FD5049B40856672000AF77DC /* vertex_scale.h in Headers */,
 				FD5049B50856672000AF77DC /* vertex_set.h in Headers */,
-				FD5049B60856672000AF77DC /* vertex_sub.h in Headers */,
 				FD5049B70856672000AF77DC /* GemModelData.h in Headers */,
 				FD5049B80856672000AF77DC /* sgiimage.h in Headers */,
 				FD5049B90856672000AF77DC /* GEMglBindProgramARB.h in Headers */,
@@ -5251,11 +5071,7 @@
 				FD5049D90856672000AF77DC /* pix_freeframe.h in Headers */,
 				FD5049DA0856672000AF77DC /* spot_light.h in Headers */,
 				FD5049DB0856672000AF77DC /* FreeFrame.h in Headers */,
-				FD0B2757087B158400A90557 /* vertex_pqtorusknots.h in Headers */,
 				FD0B2759087B158400A90557 /* vertex_tabread.h in Headers */,
-				FD0B275B087B158400A90557 /* vertex_tabwrite.h in Headers */,
-				FD0B275D087B158400A90557 /* vertex_VBR.h in Headers */,
-				FD0B2BBC0888457100A90557 /* GEMglCreateShaderObject.h in Headers */,
 				FD96556308EC6C7E009B9317 /* fragment_program.h in Headers */,
 				FD96556508EC6C7E009B9317 /* vertex_program.h in Headers */,
 				FD96556F08EC6CD5009B9317 /* GemMath.h in Headers */,
@@ -5377,7 +5193,6 @@
 				FD5049FC0856672000AF77DC /* colorSquare.cpp in Sources */,
 				FD5049FD0856672000AF77DC /* cone.cpp in Sources */,
 				FD5049FE0856672000AF77DC /* cube.cpp in Sources */,
-				FD5049FF0856672000AF77DC /* cubeArray.cpp in Sources */,
 				FD504A000856672000AF77DC /* cuboid.cpp in Sources */,
 				FD504A010856672000AF77DC /* curve.cpp in Sources */,
 				FD504A020856672000AF77DC /* curve3d.cpp in Sources */,
@@ -5401,10 +5216,8 @@
 				FD504A140856672000AF77DC /* textoutline.cpp in Sources */,
 				FD504A150856672000AF77DC /* triangle.cpp in Sources */,
 				FD504A160856672000AF77DC /* tube.cpp in Sources */,
-				FD504A170856672000AF77DC /* tunnel.cpp in Sources */,
 				FD504A180856672000AF77DC /* sphere.cpp in Sources */,
 				FD504A190856672000AF77DC /* cylinder.cpp in Sources */,
-				FD504A1A0856672000AF77DC /* kasser.cpp in Sources */,
 				FD504A1B0856672000AF77DC /* accumrotate.cpp in Sources */,
 				FD504A1C0856672000AF77DC /* alpha.cpp in Sources */,
 				FD504A1D0856672000AF77DC /* ambient.cpp in Sources */,
@@ -5437,18 +5250,6 @@
 				FD504A380856672000AF77DC /* spline_path.cpp in Sources */,
 				FD504A390856672000AF77DC /* translate.cpp in Sources */,
 				FD504A3A0856672000AF77DC /* translateXYZ.cpp in Sources */,
-				FD504A3B0856672000AF77DC /* abs.cpp in Sources */,
-				FD504A3C0856672000AF77DC /* average.cpp in Sources */,
-				FD504A3D0856672000AF77DC /* counter.cpp in Sources */,
-				FD504A3E0856672000AF77DC /* hsvrgb.cpp in Sources */,
-				FD504A3F0856672000AF77DC /* m_control.cpp in Sources */,
-				FD504A400856672000AF77DC /* MarkExSetup.cpp in Sources */,
-				FD504A410856672000AF77DC /* multiselect.cpp in Sources */,
-				FD504A420856672000AF77DC /* randomF.cpp in Sources */,
-				FD504A430856672000AF77DC /* reson.cpp in Sources */,
-				FD504A440856672000AF77DC /* strcat.cpp in Sources */,
-				FD504A450856672000AF77DC /* tripleLine.cpp in Sources */,
-				FD504A460856672000AF77DC /* vector.cpp in Sources */,
 				FD504A470856672000AF77DC /* light.cpp in Sources */,
 				FD504A480856672000AF77DC /* world_light.cpp in Sources */,
 				FD504A490856672000AF77DC /* GEMglAccum.cpp in Sources */,
@@ -5815,7 +5616,6 @@
 				FD504BB50856672000AF77DC /* pix_test.cpp in Sources */,
 				FD504BB60856672000AF77DC /* pix_threshold.cpp in Sources */,
 				FD504BB70856672000AF77DC /* pix_tIIR.cpp in Sources */,
-				FD504BB80856672000AF77DC /* pix_timeblur.cpp in Sources */,
 				FD504BB90856672000AF77DC /* pix_videoDarwin.cpp in Sources */,
 				FD504BBA0856672000AF77DC /* pix_video.cpp in Sources */,
 				FD504BBB0856672000AF77DC /* pix_write.cpp in Sources */,
@@ -5827,15 +5627,12 @@
 				FD504BC10856672000AF77DC /* vertex_draw.cpp in Sources */,
 				FD504BC20856672000AF77DC /* vertex_grid.cpp in Sources */,
 				FD504BC30856672000AF77DC /* vertex_info.cpp in Sources */,
-				FD504BC40856672000AF77DC /* vertex_matrix.cpp in Sources */,
 				FD504BC50856672000AF77DC /* vertex_model.cpp in Sources */,
 				FD504BC60856672000AF77DC /* vertex_mul.cpp in Sources */,
 				FD504BC70856672000AF77DC /* vertex_offset.cpp in Sources */,
 				FD504BC80856672000AF77DC /* vertex_quad.cpp in Sources */,
-				FD504BC90856672000AF77DC /* vertex_resize.cpp in Sources */,
 				FD504BCA0856672000AF77DC /* vertex_scale.cpp in Sources */,
 				FD504BCB0856672000AF77DC /* vertex_set.cpp in Sources */,
-				FD504BCC0856672000AF77DC /* vertex_sub.cpp in Sources */,
 				FD504BCE0856672000AF77DC /* GEMglBindProgramARB.cpp in Sources */,
 				FD504BCF0856672000AF77DC /* GEMglGenProgramsARB.cpp in Sources */,
 				FD504BD00856672000AF77DC /* GEMglLoadMatrixf.cpp in Sources */,
@@ -5877,10 +5674,7 @@
 				FD504BF60856672000AF77DC /* pix_movement2.cpp in Sources */,
 				FD504BF70856672000AF77DC /* pix_freeframe.cpp in Sources */,
 				FD504BF80856672000AF77DC /* spot_light.cpp in Sources */,
-				FD0B2756087B158400A90557 /* vertex_pqtorusknots.cpp in Sources */,
 				FD0B2758087B158400A90557 /* vertex_tabread.cpp in Sources */,
-				FD0B275A087B158400A90557 /* vertex_tabwrite.cpp in Sources */,
-				FD0B275C087B158400A90557 /* vertex_VBR.cpp in Sources */,
 				FD978E8A0890A9AF0096419F /* pix_buffer_read.cpp in Sources */,
 				FD978E8B0890A9AF0096419F /* pix_buffer_write.cpp in Sources */,
 				FD96556208EC6C7E009B9317 /* fragment_program.cpp in Sources */,
