@@ -68,7 +68,7 @@ static t_class *Gem_setup_class;
     post("GEM: compiled: " __DATE__);
     post("GEM: maintained by %s", GEM_MAINTAINER);
     post("GEM: Authors :\tMark Danks (original version)");
-    for(int i=0; i<sizeof(GEM_AUTHORS)/sizeof(*GEM_AUTHORS); i++) {
+    for(unsigned int i=0; i<sizeof(GEM_AUTHORS)/sizeof(*GEM_AUTHORS); i++) {
       post("GEM:\t\t%s", GEM_AUTHORS[i]);
     }  
     post("GEM: with help by %s", GEM_OTHERAUTHORS);

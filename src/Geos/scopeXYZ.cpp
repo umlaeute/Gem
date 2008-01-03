@@ -34,9 +34,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 scopeXYZ :: scopeXYZ(t_floatarg len)
   : GemShape(), 
+	m_drawType(GL_LINE_STRIP),
     m_length(0), m_position(0),
-    m_vertarray(NULL), m_vert(NULL),
-    m_drawType(GL_LINE_STRIP)
+    m_vertarray(NULL), m_vert(NULL)
 {
   lengthMess((int)len);
 

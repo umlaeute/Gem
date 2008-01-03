@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS(sphere3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DE
 sphere3d :: sphere3d(t_floatarg size, t_floatarg slize, t_floatarg stack)
   : GemGluObj(size, slize, stack), 
     m_x(NULL), m_y(NULL), m_z(NULL),
-    oldStacks(-1), oldSlices(-1), oldTexture(-1), oldDrawType(0),
+    oldStacks(-1), oldSlices(-1), oldDrawType(0), oldTexture(-1),
     m_displayList(0)
 {
 }
@@ -216,7 +216,7 @@ void sphere3d :: render(GemState *state)
       /* draw intermediate stacks as quad strips */
       src=1;
       for (i = 0; i < stacks-2; i++) {
-        int src2;
+        int src2=0;
         s = 0.0;
         glBegin(GL_QUAD_STRIP);
         for (j = 0; j < slices; j++) {

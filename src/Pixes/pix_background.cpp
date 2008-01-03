@@ -23,8 +23,7 @@ CPPEXTERN_NEW(pix_background)
 pix_background :: pix_background() :
   m_Yrange(0), m_Urange(0), m_Vrange(0), m_Arange(0), m_reset(1)
 {
-  long size,src,i;
-  inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
+	inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
 
     m_savedImage.xsize=320;
     m_savedImage.ysize=240;

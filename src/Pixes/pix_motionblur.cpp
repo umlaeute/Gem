@@ -22,9 +22,7 @@ CPPEXTERN_NEW(pix_motionblur)
 //
 /////////////////////////////////////////////////////////
 pix_motionblur :: pix_motionblur()
-{
-  long size,src,i;
-    
+{    
   inletmotionblur = inlet_new(this->x_obj, &this->x_obj->ob_pd, 
 			      &s_float,
 			      gensym("motionblur"));

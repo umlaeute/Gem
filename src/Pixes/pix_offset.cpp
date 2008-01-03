@@ -28,8 +28,8 @@ CPPEXTERN_NEW(pix_offset)
 //
 /////////////////////////////////////////////////////////
 pix_offset :: pix_offset()
-  : m_saturate(true),
-    Y(0), U(0), V(0)
+  : Y(0), U(0), V(0),
+	m_saturate(true)
 {
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_offset"));

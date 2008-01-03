@@ -314,10 +314,9 @@ void TextBase :: textMess(int argc, t_atom *argv)
   if ( argc < 1 ) {return; }
 
   char tmp_char[MAXPDSTRING];
-  unsigned char*uch=(unsigned char*)tmp_char;
 
   wstring line = L"";
-  int i=0;
+  unsigned int i=0;
 
   // convert the atom-list into 1 string
   for (i = 0; i < argc; ++i)
@@ -347,7 +346,7 @@ void TextBase :: textMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void TextBase :: makeLineDist()
 {
-  int i=0;
+  unsigned int i=0;
   m_lineDist.clear();
   if (m_heightJus == BOTTOM || m_heightJus == BASEH)
     {

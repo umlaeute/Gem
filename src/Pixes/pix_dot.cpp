@@ -41,9 +41,11 @@ pix_dot :: pix_dot() :
   dot_size(0), dot_hsize(0),
   sampx(NULL), sampy(NULL),
   state(0),
-  m_scale(1.0), m_useScale(true),
-  pattern(NULL), heart_pattern(NULL),
-  mode(0)
+  m_scale(1.0), 
+  pattern(NULL), 
+  heart_pattern(NULL),
+  mode(0),
+  m_useScale(true)
 {
   myImage.xsize=myImage.ysize=0;
   DOTDEPTH = 5;

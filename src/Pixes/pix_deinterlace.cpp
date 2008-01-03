@@ -41,10 +41,8 @@ void pix_deinterlace :: processRGBAImage(imageStruct &image)
 {
 int	row, col,field1,field2,field3;
 	int temp1, temp2,temp3;
-	int	diff1, diff2, diff3;
 	
 	unsigned char *pixels=image.data;
-	unsigned char *saved = m_savedImage.data;
 
 	field1 = 0;
 	field2 = image.xsize*4;

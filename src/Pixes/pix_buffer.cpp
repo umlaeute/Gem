@@ -215,8 +215,6 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
 void pix_buffer :: saveMess(t_symbol *filename, int pos)
 {
   // load an image into mem
-  char buf[MAXPDSTRING];
-
   imageStruct*img=NULL;
 
   if(NULL==filename||NULL==filename->s_name||gensym("")==filename){
