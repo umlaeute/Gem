@@ -163,7 +163,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 #endif
     EventTypeSpec	list[] = {		//{ kEventClassWindow, kEventWindowActivated },
 									//{ kEventClassWindow, kEventWindowGetClickActivation },
-                                    //{ kEventClassWindow, kEventWindowClose },
+                                    { kEventClassWindow, kEventWindowClosed },
                                     { kEventClassMouse, kEventMouseDown },
                                     { kEventClassMouse, kEventMouseUp },
                                     { kEventClassMouse, kEventMouseMoved },
@@ -1417,10 +1417,12 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
                         SelectWindow(winRef);
                         result = noErr;
                         break;
+						*/
                     case kEventWindowClosed:
-                        //destroyGemWindow(
+                        //destroyGemWindow()
+						GemMan::destroyWindowSoon();
                         break;
-*/                }
+                }
                 break;
             case kEventClassKeyboard:
                 switch (kind)
