@@ -66,7 +66,7 @@ class GEM_EXTERN pix_movieNEW : public pix_filmNEW
   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
   void          textureQuality(int type){m_pixtexture.textureQuality(type);}
   void          repeatMess(int type){m_pixtexture.repeatMess(type);}
-  void          modeMess(int mode){m_pixtexture.m_mode=mode;}
+  void          modeMess(int mode){m_pixtexture.m_rectangle=mode;}
 
  protected:
 	
