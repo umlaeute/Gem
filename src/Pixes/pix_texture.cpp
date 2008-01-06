@@ -53,7 +53,7 @@ pix_texture :: pix_texture()
     m_realTextureObj(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), 
     m_textureType( GL_TEXTURE_2D ),
-    m_mode(0), m_env(GL_MODULATE),
+    m_rectangle(0), m_env(GL_MODULATE),
     m_clientStorage(0), //have to do this due to texture corruption issues
     m_yuv(1),
 	m_texunit(0)
@@ -64,8 +64,7 @@ pix_texture :: pix_texture()
   
   //rectangle textures by default only for OSX since there are too many busted drivers in use on Windows and Linux
   #if defined(GL_TEXTURE_RECTANGLE_ARB) && __APPLE__
-  //|| defined(GL_NV_TEXTURE_RECTANGLE)
-  m_mode = 1;  //default to the fastest mode for systems that support it
+  m_rectangle = 1;  //default to the fastest mode for systems that support it
   m_textureType = GL_TEXTURE_RECTANGLE_ARB;
   #endif
   
@@ -98,23 +97,20 @@ pix_texture :: ~pix_texture()
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState() {
 #ifdef GL_TEXTURE_RECTANGLE_ARB
-  if (m_mode && GemMan::texture_rectangle_supported){
-    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB)
+  if (m_rectangle && GemMan::texture_rectangle_supported){
+    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT)
 	{
-      glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
-    // JMZ: disabled the following, as rectangle-textures are clamped anyhow
-
-    // JMZ: and normalized ones, lose their setting
-	// TIGITAL: this is necessary on osx, at least with non-powerof2 textures!
-	//			otherwise, weird texturing occurs (looks similar to pix_refraction)
-	// NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
-	// POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
+	  glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
+	  // JMZ: disabled the following, as rectangle-textures are clamped anyhow
+	  // JMZ: and normalized ones, lose their setting
+	  // TIGITAL: this is necessary on osx, at least with non-powerof2 textures!
+	  //			otherwise, weird texturing occurs (looks similar to pix_refraction)
+	  // NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
+	  // POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
 #ifdef GL_CLAMP_TO_EDGE
 	  m_repeat = GL_CLAMP_TO_EDGE;
-
 #endif
-
-      debug("using rectangle texture");
+	  debug("using rectangle texture");
 	}
   }
 #endif // GL_TEXTURE_RECTANGLE_ARB
@@ -139,13 +135,7 @@ void pix_texture :: setUpTextureState() {
   glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
-  
-/*
-#ifdef GL_TEXTURE_RECTANGLE_ARB
-  if (m_mode)
-    if ( m_textureType !=  GL_TEXTURE_RECTANGLE_ARB)
-#endif //GL_TEXTURE_RECTANGLE_ARB
-*/
+
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
 }
 
@@ -197,6 +187,7 @@ void pix_texture :: render(GemState *state) {
   int x_2, y_2;
   GLboolean useExternalTexture=false;
   GLfloat xTex=1., yTex=1.;
+  int do_rectangle = (m_rectangle)?GemMan::texture_rectangle_supported:0;
 
   if (!state->image || !state->image->image.data){
     if(m_extTextureObj>0) {
@@ -238,22 +229,27 @@ void pix_texture :: render(GemState *state) {
 
 #ifdef GL_VERSION_1_1
   if(!useExternalTexture){
+    switch(do_rectangle) {
 # ifdef GL_TEXTURE_RECTANGLE_ARB
-    if (m_mode){
-      if (GemMan::texture_rectangle_supported ){
-	m_textureType = GL_TEXTURE_RECTANGLE_ARB;
-	debug("using mode 1:GL_TEXTURE_RECTANGLE_ARB");
-	normalized = 0;
-      }
-    } else 
-
-#endif // GL_TEXTURE_RECTANGLE_ARB
-
-      {
-	m_textureType = GL_TEXTURE_2D;
-	debug("using mode 0:GL_TEXTURE_2D");
-	normalized = 0;
-      }
+    case 2:
+      m_textureType = GL_TEXTURE_RECTANGLE_ARB;
+      debug("using mode 1:GL_TEXTURE_RECTANGLE_ARB");
+      normalized = 0;
+      break;
+# endif
+# ifdef GL_TEXTURE_RECTANGLE_EXT
+    case 1:
+      m_textureType = GL_TEXTURE_RECTANGLE_EXT;
+      debug("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
+      normalized = 0;
+      break;
+# endif
+    default:
+      m_textureType = GL_TEXTURE_2D;
+      debug("using mode 0:GL_TEXTURE_2D");
+      normalized = 0;
+      break;
+    }
   }
   if (m_textureType!=texType){
     debug("texType != m_textureType");
@@ -270,7 +266,6 @@ void pix_texture :: render(GemState *state) {
   if ((!useExternalTexture)&&state->image->newfilm ){
       //  tigital:  shouldn't we also allow TEXTURE_2D here?
       if ( GemMan::texture_range_supported ){
-        //	if ( GemMan::texture_range_supported && GemMan::texture_rectangle_supported && m_mode){
         glTextureRangeAPPLE( m_textureType, 
                              m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 
                              m_imagebuf.data );
@@ -344,7 +339,7 @@ if (m_rebuildList) {
 	} else { // !normalized
 	    m_xRatio = (float)m_imagebuf.xsize;
 	    m_yRatio = (float)m_imagebuf.ysize;
-	    if ( !GemMan::texture_rectangle_supported || !m_mode ) {
+	    if ( !do_rectangle ) {
 		m_xRatio /= (float)x_2;
 		m_yRatio /= (float)y_2;
 		m_buffer.xsize = x_2;
@@ -369,10 +364,10 @@ if (m_rebuildList) {
 		m_dataSize[2] = m_buffer.ysize; 
      
             
-		if (m_buffer.format == GL_YUV422_GEM && !m_mode)m_buffer.setBlack();
+		if (m_buffer.format == GL_YUV422_GEM && !m_rectangle)m_buffer.setBlack();
 
 	    //this is for dealing with power of 2 textures which need a buffer that's 2^n
-	    if ( !GemMan::texture_rectangle_supported || !m_mode ) {            
+	    if ( !do_rectangle ) {            
 		glTexImage2D(	m_textureType, 0,
 				//m_buffer.csize,
 				GL_RGBA,
@@ -446,6 +441,11 @@ if (m_rebuildList) {
   // if we are using rectangle textures, this is a way to inform the downstream objects 
   // (this is important for things like [pix_coordinate]
   if(m_textureType==GL_TEXTURE_RECTANGLE_ARB)state->texture=2;
+#endif
+#ifdef GL_TEXTURE_RECTANGLE_EXT
+  // if we are using rectangle textures, this is a way to inform the downstream objects 
+  // (this is important for things like [pix_coordinate]
+  if(m_textureType==GL_TEXTURE_RECTANGLE_EXT)state->texture=2;
 #endif
 
   m_didTexture=1;
@@ -563,6 +563,21 @@ void pix_texture :: textureQuality(int type)
   }
   setModified();
 }
+
+/////////////////////////////////////////////////////////
+// textureQuality
+//
+/////////////////////////////////////////////////////////
+void pix_texture :: textureRectangle(int rect)
+{
+  m_rectangle=rect;
+  if (m_rectangle)
+    post("using mode 1: TEXTURE_RECTANGLE");
+  else
+    post("using mode 0: TEXTURE_2D");
+  m_rebuildList=1;
+}
+
 /////////////////////////////////////////////////////////
 // texture repeat message
 //
@@ -637,6 +652,8 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 		  gensym("env"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::modeCallback,
 		  gensym("mode"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_texture::modeCallback,
+		  gensym("rectangle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::clientStorageCallback,
 		  gensym("client_storage"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::yuvCallback,
@@ -664,14 +681,9 @@ void pix_texture :: envMessCallback(void *data, t_floatarg num )
 {
   GetMyClass(data)->envMess((int) num);
 }
-void pix_texture :: modeCallback(void *data, t_floatarg quality)
+void pix_texture :: modeCallback(void *data, t_floatarg rectangle)
 {
-  GetMyClass(data)->m_mode=((int)quality);
-  if (quality)
-    GetMyClass(data)->post("using mode 1:GL_TEXTURE_RECTANGLE_ARB");
-  else
-    GetMyClass(data)->post("using mode 0:GL_TEXTURE_2D");
-  GetMyClass(data)->m_rebuildList=1;
+  GetMyClass(data)->textureRectangle((int)rectangle);
 }
 
 void pix_texture :: clientStorageCallback(void *data, t_floatarg quality)

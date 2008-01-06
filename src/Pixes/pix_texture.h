@@ -138,14 +138,14 @@ class GEM_EXTERN pix_texture : public GemBase
 		TexCoord       *m_oldTexCoords;
 		int             m_oldNumCoords;
 		int             m_oldTexture;
-	
 
 		int             m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 		bool            m_normalized;  // whether the image is power of 2
 
 		GLfloat         m_xRatio, m_yRatio; // x- and y-size if texture
 
-		int		m_mode; //rectangle or power of 2
+		void            textureRectangle(int mode);
+		int		m_rectangle; //rectangle or power of 2
 		
 		//////////
 		// texture envirnoment mode
