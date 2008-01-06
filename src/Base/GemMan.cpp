@@ -18,18 +18,16 @@
 
 #include "GemMan.h"
 
+#include <stdlib.h>
+
 #ifdef __unix__
 # include <sys/time.h>
 # include <GL/glx.h>
 # include <X11/Xlib.h>
 #elif defined __APPLE__
-#include <stdlib.h>
-#include <string.h>
-#include <QuickTime/QuickTime.h>
-#include <time.h>
-#elif defined __WIN32__
-# include <stdlib.h>
-// I hate Microsoft...I shouldn't have to do this!
+# include <string.h>
+# include <QuickTime/QuickTime.h>
+# include <time.h>
 #endif
 
 #include "GemState.h"
@@ -322,11 +320,8 @@ void GemMan :: createContext(char* disp)
       m_width = 640;
       m_height = 480;
     }
-
-	
-
-
 #endif
+
   s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
 
   if (!m_windowContext && !createConstWindow(disp))
@@ -1163,18 +1158,26 @@ int GemMan :: createWindow(char* disp)
    * however, when it was run with nvidia-drivers, the openGL-extension was present
    * resulting in doing a lot of stupid things (like texturing black!)
    */
+#ifdef GL_ARB_texture_rectangle
+  if (OpenGLExtensionIsSupported("GL_ARB_texture_rectangle"))
+    {
+      texture_rectangle_supported=2;
+    } else
+#endif
 #ifdef GL_EXT_texture_rectangle
-  if (texture_rectangle_supported
-      = OpenGLExtensionIsSupported("GL_EXT_texture_rectangle")){}
-  else
+  if (OpenGLExtensionIsSupported("GL_EXT_texture_rectangle"))
+    {
+      texture_rectangle_supported=1;
+    } else
 #endif
-#ifdef GL_TEXTURE_RECTANGLE_NV
-    if ((texture_rectangle_supported
-	 =  OpenGLExtensionIsSupported("GL_NV_texture_rectangle"))){}
-    else
-#endif
+    texture_rectangle_supported = 0;
+  
+  if (getenv("GEM_RECTANGLE_TEXTURE") &&
+      !strcmp("0", getenv("GEM_RECTANGLE_TEXTURE")))
+    {
       texture_rectangle_supported = 0;
-
+    }
+  
     /*
         GL_APPLE_client_storage allows better performance when modifying
         a texture image extensively:  under normal circumstances, a
@@ -1185,7 +1188,6 @@ int GemMan :: createWindow(char* disp)
         needs it.  GL_APPLE_client_storage is supported on all video
         cards under __APPLE__ 10.1 and above.
     */
-
   client_storage_supported
 #ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
     = OpenGLExtensionIsSupported("GL_APPLE_client_storage");
