@@ -251,7 +251,7 @@ static void obj_setupCallback(t_class *classPtr);
 #else
 // for debugging we can show the which classes are auto-registering
 # if 0
-#  define POST_AUTOREGISTER(NEW_CLASS) post("auto-registering: "#NEW_CLASS);
+#  define POST_AUTOREGISTER(NEW_CLASS) post("auto-registering: "#NEW_CLASS)
 # else
 #  define POST_AUTOREGISTER(NEW_CLASS)
 # endif
@@ -272,10 +272,10 @@ static void obj_setupCallback(t_class *classPtr);
 
 #ifdef HELPSYMBOL
 # define SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME)				\
-  class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym(HELPSYMBOL_BASE HELPSYMBOL));
+  class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym(HELPSYMBOL_BASE HELPSYMBOL))
 #else 
 # define SET_HELPSYMBOL(NEW_CLASS, EXTERN_NAME)			\
-  class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym(HELPSYMBOL_BASE#NEW_CLASS));
+  class_sethelpsymbol(NEW_CLASS ## EXTERN_NAME, gensym(HELPSYMBOL_BASE#NEW_CLASS))
 #endif /* HELPSYMBOL */
 
 
