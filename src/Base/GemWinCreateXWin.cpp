@@ -273,6 +273,16 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   XEvent report;
   XIfEvent(info.dpy, &report, WaitForNotify, (char*)info.win);
   if (glXIsDirect(info.dpy, info.context))post("Direct Rendering enabled!");
+
+#ifdef USE_GLEW
+  if(1) {
+    GLenum err = glewInit();
+    if (GLEW_OK != err) error("failed to init GLEW");
+    else post("GLEW version %s",glewGetString(GLEW_VERSION));
+  }
+#endif
+
+
   return(1);
 }
 
