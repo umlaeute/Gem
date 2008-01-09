@@ -361,7 +361,7 @@ void TextBase :: makeLineDist()
     {
       // now in the other direction:
       // [-n ... -2 -1 0]
-	  signed long long j;
+      signed long j;
       for(j=m_theText.size()-1; j>=0; j--){
         m_lineDist.push_back(-j);
       }
