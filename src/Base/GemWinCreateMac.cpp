@@ -336,6 +336,10 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
         
     }//end of conditional for fullscreen vs windowed
     
+		ProcessSerialNumber psn;
+		GetCurrentProcess(&psn);
+		TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+		
         gEvtHandler = NewEventHandlerUPP( evtHandler );
         InstallEventHandler( GetApplicationEventTarget(), gEvtHandler,
                                         GetEventTypeCount( list ), list,
@@ -618,11 +622,14 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructG
             if (pcontextInfo->fAcceleratedMust)
             {
 #ifdef DEBUG
-                post("MAC: BuildGLonWindow: Unable to accelerate window that spans multiple devices");
+                post("MAC: BuildGLonWindow: trying to accelerate window that spans multiple devices");
 #endif
-//                return err;
+
+             //   return err;
+
+
             }
-        }
+        } 
         else // not draggable on single device
         {
 #ifdef DEBUG
@@ -1228,10 +1235,11 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext,
 		return aglReportError ();
 		
 	// set swap interval to sync with vbl
+	/*
 	GLint	swapinterval = 1;
 	if (!aglSetInteger(*paglContext, AGL_SWAP_INTERVAL, &swapinterval))
 		return aglReportError();
-		
+		*/
 	return err;
 }
 /////////////////////////////////////////////////////////////////////////////
