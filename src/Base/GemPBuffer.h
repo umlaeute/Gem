@@ -32,7 +32,7 @@ public:
 		STENCIL = 1 << 3,
 		FLOAT = 1 << 4,
 		MULTISAMPLE_2 = 1 << 5,
-		MULTISAMPLE_4 = 1 << 6,
+		MULTISAMPLE_4 = 1 << 6
 	};
 	
 	PBuffer(int width,int height,int flags = RGBA | DEPTH | STENCIL);
