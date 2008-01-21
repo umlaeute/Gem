@@ -80,7 +80,7 @@ void GEMglFogfv :: obj_setupCallback(t_class *classPtr) {
 void GEMglFogfv :: pnameMessCallback (void* data, t_floatarg arg0) {
 	GetMyClass(data)->pnameMess (arg0);
 }
-void GEMglFogfv :: paramsMessCallback (void* data, int argc, t_atom* argv) {
+void GEMglFogfv :: paramsMessCallback (void* data, t_symbol*, int argc, t_atom* argv) {
 	GetMyClass(data)->paramsMess (argc, argv);
 }
 

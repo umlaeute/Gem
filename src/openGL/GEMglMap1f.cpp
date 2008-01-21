@@ -132,6 +132,6 @@ void GEMglMap1f :: strideMessCallback (void* data, t_floatarg arg0){
 void GEMglMap1f :: orderMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->orderMess (arg0);
 }
-void GEMglMap1f :: pointsMessCallback (void* data, int argc, t_atom*argv){
+void GEMglMap1f :: pointsMessCallback (void* data, t_symbol*s, int argc, t_atom*argv){
 	GetMyClass(data)->pointsMess (argc, argv);
 }

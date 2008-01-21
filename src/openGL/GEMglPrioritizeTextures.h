@@ -60,7 +60,7 @@ class GEM_EXTERN GEMglPrioritizeTextures : public GemBase
 
 	// static member functions
 	  static void	 nMessCallback (void*, t_floatarg);
-	  static void	 texturesMessCallback (void*, int, t_atom*);
-	  static void	 prioritiesMessCallback (void*, int,t_atom*);
+	  static void	 texturesMessCallback (void*, t_symbol*, int, t_atom*);
+	  static void	 prioritiesMessCallback (void*, t_symbol*, int,t_atom*);
 };
 #endif // for header file

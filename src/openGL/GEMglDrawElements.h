@@ -67,6 +67,6 @@ class GEM_EXTERN GEMglDrawElements : public GemBase
 	  static void	 modeMessCallback (void*, t_floatarg);
 	  static void	 countMessCallback (void*, t_floatarg);
 	  static void	 typeMessCallback (void*, t_floatarg);
-	  static void	 indicesMessCallback (void*, int, t_atom*);
+	  static void	 indicesMessCallback (void*, t_symbol*, int, t_atom*);
 };
 #endif // for header file

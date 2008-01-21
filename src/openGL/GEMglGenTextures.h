@@ -52,6 +52,6 @@ class GEM_EXTERN GEMglGenTextures : public GemBase
 	  t_inlet *m_inlet;
 
 	// static member functions
-	  static void	 texturesMessCallback (void*, int, t_atom*);
+	  static void	 texturesMessCallback (void*, t_symbol*, int, t_atom*);
 };
 #endif // for header file

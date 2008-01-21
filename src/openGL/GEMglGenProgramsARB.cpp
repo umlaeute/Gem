@@ -72,6 +72,6 @@ void GEMglGenProgramsARB :: programsMess (int argc, t_atom*argv) {	// FUN
 void GEMglGenProgramsARB :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, (t_method)&GEMglGenProgramsARB::programsMessCallback,  	gensym("programs"), A_GIMME, A_NULL);
 }
-void GEMglGenProgramsARB :: programsMessCallback (void* data, int argc, t_atom*argv){
+void GEMglGenProgramsARB :: programsMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
 	GetMyClass(data)->programsMess (argc,argv);
 }

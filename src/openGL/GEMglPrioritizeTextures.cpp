@@ -102,9 +102,9 @@ void GEMglPrioritizeTextures :: obj_setupCallback(t_class *classPtr) {
 void GEMglPrioritizeTextures :: nMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->nMess (arg0);
 }
-void GEMglPrioritizeTextures :: texturesMessCallback (void* data, int argc, t_atom*argv){
+void GEMglPrioritizeTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
 	GetMyClass(data)->texturesMess (argc,argv);
 }
-void GEMglPrioritizeTextures :: prioritiesMessCallback (void* data, int argc, t_atom*argv){
+void GEMglPrioritizeTextures :: prioritiesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
 	GetMyClass(data)->prioritiesMess (argc,argv);
 }

@@ -88,6 +88,6 @@ class GEM_EXTERN GEMglMap2f : public GemBase
 	  static void	 v2MessCallback (void*, t_floatarg);
 	  static void	 vstrideMessCallback (void*, t_floatarg);
 	  static void	 vorderMessCallback (void*, t_floatarg);
-	  static void	 pointsMessCallback (void*, int,t_atom*);
+	  static void	 pointsMessCallback (void*, t_symbol*, int,t_atom*);
 };
 #endif // for header file

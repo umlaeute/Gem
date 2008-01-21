@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglGenProgramsARB : public GemBase
 	  t_inlet *m_inlet;
 
 	// static member functions
-	  static void	 programsMessCallback (void*, int, t_atom*);
+	  static void	 programsMessCallback (void*, t_symbol*, int, t_atom*);
 };
 #endif // for header file

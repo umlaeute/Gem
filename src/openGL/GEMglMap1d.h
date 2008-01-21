@@ -72,6 +72,6 @@ class GEM_EXTERN GEMglMap1d : public GemBase
 	  static void	 u2MessCallback (void*, t_floatarg);
 	  static void	 strideMessCallback (void*, t_floatarg);
 	  static void	 orderMessCallback (void*, t_floatarg);
-	  static void	 pointsMessCallback (void*, int,t_atom*);
+	  static void	 pointsMessCallback (void*, t_symbol*, int,t_atom*);
 };
 #endif // for header file

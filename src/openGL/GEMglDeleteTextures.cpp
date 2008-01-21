@@ -71,6 +71,6 @@ void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv) {	// FUN
 void GEMglDeleteTextures :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, (t_method)&GEMglDeleteTextures::texturesMessCallback,  	gensym("textures"), A_GIMME, A_NULL);
 }
-void GEMglDeleteTextures :: texturesMessCallback (void* data, int argc, t_atom*argv){
+void GEMglDeleteTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
 	GetMyClass(data)->texturesMess (argc, argv);
 }

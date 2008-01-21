@@ -72,6 +72,6 @@ void GEMglGenTextures :: texturesMess (int argc, t_atom*argv) {	// FUN
 void GEMglGenTextures :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, (t_method)&GEMglGenTextures::texturesMessCallback,  	gensym("textures"), A_GIMME, A_NULL);
 }
-void GEMglGenTextures :: texturesMessCallback (void* data, int argc, t_atom*argv){
+void GEMglGenTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
 	GetMyClass(data)->texturesMess (argc,argv);
 }

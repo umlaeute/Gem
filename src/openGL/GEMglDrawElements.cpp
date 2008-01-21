@@ -129,6 +129,6 @@ void GEMglDrawElements :: countMessCallback (void* data, t_floatarg arg0){
 void GEMglDrawElements :: typeMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->typeMess (arg0);
 }
-void GEMglDrawElements :: indicesMessCallback (void* data, int argc, t_atom*argv){
+void GEMglDrawElements :: indicesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
 	GetMyClass(data)->indicesMess ( argc, argv );
 }

@@ -56,6 +56,6 @@ class GEM_EXTERN GEMglFogiv : public GemBase
 
 	// static member functions
          static void    pnameMessCallback (void*, t_float);
-         static void    paramsMessCallback (void*, int, t_atom*);
+         static void    paramsMessCallback (void*, t_symbol*, int, t_atom*);
 };
 #endif // for header file

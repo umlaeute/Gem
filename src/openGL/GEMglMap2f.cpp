@@ -179,6 +179,6 @@ void GEMglMap2f :: vstrideMessCallback (void* data, t_floatarg arg0){
 void GEMglMap2f :: vorderMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->vorderMess ( (t_float)    arg0);
 }
-void GEMglMap2f :: pointsMessCallback (void* data, int argc, t_atom*argv){
+void GEMglMap2f :: pointsMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
 	GetMyClass(data)->pointsMess (argc, argv);
 }
