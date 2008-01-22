@@ -93,43 +93,42 @@ void pix_write :: doWrite()
   if (m_originalImage)
     {
       if (m_originalImage->xsize != width ||
-	  m_originalImage->ysize != height)
-	{
-	  delete m_originalImage;
-	  m_originalImage = NULL;
-	  makeNew = 1;
-	}
+          m_originalImage->ysize != height)
+        {
+          delete m_originalImage;
+          m_originalImage = NULL;
+          makeNew = 1;
+        }
     }
   else
     makeNew = 1;
-  
+
   if (makeNew)
     {
       m_originalImage = new imageStruct;
       m_originalImage->xsize = width;
       m_originalImage->ysize = height;
-      #ifndef __APPLE__
+#ifndef __APPLE__
       m_originalImage->type  = GL_UNSIGNED_BYTE;
 
       m_originalImage->csize = 3;
       m_originalImage->format = GL_RGB;
-      #else
-	  m_originalImage->type  = 
-	  #ifdef __ppc__
-      GL_UNSIGNED_INT_8_8_8_8_REV;
-	  #else
-	  GL_UNSIGNED_INT_8_8_8_8;
-	  #endif // __ppc__
+#else
+      m_originalImage->type  = 
+# ifdef __ppc__
+        GL_UNSIGNED_INT_8_8_8_8_REV;
+# else
+      GL_UNSIGNED_INT_8_8_8_8;
+# endif // __ppc__
       m_originalImage->csize = 4;  
       m_originalImage->format = GL_BGRA; //RGBA or BGRA or BGRA_EXT?
-      #endif
+#endif /* APPLE */
 
 
       m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
     }
 
 #ifdef __APPLE__
-
   unsigned char *dummy;
   int imageSize, rowBytes;
   long i, j;
@@ -150,7 +149,6 @@ void pix_write :: doWrite()
   delete dummy;
 
 #else
-  
   glReadPixels(m_xoff, m_yoff, width, height,
 	       m_originalImage->format, m_originalImage->type, m_originalImage->data);
 #endif
