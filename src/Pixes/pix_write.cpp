@@ -60,9 +60,15 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_autocount = 0;
   m_filetype=0;
   sprintf(m_pathname, "gem");
-    
+
   m_banged = false;
-     
+
+
+  m_originalImage = new imageStruct();
+  m_originalImage->xsize=m_width;
+  m_originalImage->ysize=m_height;
+  m_originalImage->setCsizeByFormat(GL_RGBA);
+  m_originalImage->allocate();
 }
 
 /////////////////////////////////////////////////////////
@@ -86,47 +92,19 @@ void pix_write :: doWrite()
   int width  = (m_width > 0)?m_width :GemMan::m_width;
   int height = (m_height> 0)?m_height:GemMan::m_height;
 
-  // do we need to remake the data?
-  int makeNew = 0;
-  
-  // release previous data
-  if (m_originalImage)
-    {
-      if (m_originalImage->xsize != width ||
-          m_originalImage->ysize != height)
-        {
-          delete m_originalImage;
-          m_originalImage = NULL;
-          makeNew = 1;
-        }
-    }
-  else
-    makeNew = 1;
+  m_originalImage->xsize = width;
+  m_originalImage->ysize = height;
 
-  if (makeNew)
-    {
-      m_originalImage = new imageStruct;
-      m_originalImage->xsize = width;
-      m_originalImage->ysize = height;
 #ifndef __APPLE__
-      m_originalImage->type  = GL_UNSIGNED_BYTE;
-
-      m_originalImage->csize = 3;
-      m_originalImage->format = GL_RGB;
+  m_originalImage->setCsizeByFormat(GL_RGB);
 #else
-      m_originalImage->type  = 
-# ifdef __ppc__
-        GL_UNSIGNED_INT_8_8_8_8_REV;
-# else
-      GL_UNSIGNED_INT_8_8_8_8;
-# endif // __ppc__
-      m_originalImage->csize = 4;  
-      m_originalImage->format = GL_BGRA; //RGBA or BGRA or BGRA_EXT?
+  m_originalImage->setCsizeByFormat(GL_RGBA);
 #endif /* APPLE */
 
+  m_originalImage->reallocate();
 
-      m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
-    }
+
+
 
 #ifdef __APPLE__
   unsigned char *dummy;
