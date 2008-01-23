@@ -228,7 +228,8 @@ struct GEM_EXTERN imageStruct
   
   public:
   //////////
-  // true if the image is flipped horizontally
+  // true if the image is flipped horizontally (origin is upper-left)
+  // false if the image is openGL-conformant (origin is lower-left)
   GLboolean       upsidedown;
 
 };

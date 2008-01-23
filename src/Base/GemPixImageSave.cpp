@@ -121,6 +121,17 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
     FSSpec			spec;
     FSRef			ref;
 
+    unsigned char *data = NULL;
+
+
+    if(!image->upsidedown) { // the image is openGL-oriented, not quicktime-oriented! flip it!
+      int rowBytes = image->xsize * image->csize;
+      int imageSize = image->ysize * rowBytes;
+
+      data = new unsigned char[imageSize];
+      
+      InvertGLImage(image->data, data, imageSize, rowBytes);
+    }
 
     switch (type){
 
@@ -186,15 +197,19 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
                                     //k32RGBAPixelFormat,
                                     k32ARGBPixelFormat,
                                     &r, NULL, NULL, 0,
-                                   // keepLocal,	
+                                    // keepLocal,	
                                     //useDistantHdwrMem, 
-                                    image->data, 
+                                    (data?data:image->data),
                                     (long)(image->xsize * image->csize));
+
+     // is this the right place to free the "data" buffer (if used)?
+     // i don't know, whether quicktime still needs the buffer...
                 
     if (err != noErr)
     {
-	error("ERROR: %d in QTNewGWorldFromPtr()", err);
-	return 0; // FIXME:
+      error("ERROR: %d in QTNewGWorldFromPtr()", err);
+      if(data)delete[]data;
+      return 0; // FIXME:
     }
     
     
@@ -203,6 +218,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 	if (cErr != noErr)
 	{
 	    error("ERROR: %d in GraphicsExportSetInputGWorld()", cErr);
+      if(data)delete[]data;
 	    return 0; // FIXME:
 	}
     
@@ -211,6 +227,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 	if (cErr != noErr)
 	{
 	    error("ERROR: %i in GraphicsExportSetOutputFile()", cErr);
+      if(data)delete[]data;
 	    return 0; // FIXME:
 	}
         
@@ -222,6 +239,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
             if (cErr != noErr)
             {
                 error("ERROR: %i in GraphicsExportSetCompressionQuality()", cErr);
+                if(data)delete[]data;
                 return 0; // FIXME:
             }
          }
@@ -231,15 +249,17 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 	if (cErr != noErr)
 	{
 	    error("ERROR: %i in GraphicsExportDoExport()", cErr);
+      if(data)delete[]data;
 	    return 0; // FIXME:
 	}
         
-        // finally, close the component
-        if (geComp != NULL)
-	    CloseComponent(geComp);
+  // finally, close the component
+  if (geComp != NULL)
+    CloseComponent(geComp);
 
-    return 1;
+  if(data)delete[]data;
 
+  return 1;
 }
 
 #else
