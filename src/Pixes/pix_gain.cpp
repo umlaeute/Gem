@@ -182,6 +182,7 @@ void pix_gain :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_gain :: processRGBAMMX(imageStruct &image)
 {
+  _mm_empty();
 
   short  R = (int)(256 * m_gain[chRed]);
   short  G = (int)(256 * m_gain[chGreen]);
@@ -199,6 +200,7 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
     processRGBAImage(image);
     return;
   }
+
   register int pixsize = (image.ysize * image.xsize)>>1;
 
   register __m64 gain_64 = _mm_setr_pi16(R, G, B, A);
@@ -221,6 +223,7 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
       data_p[0]=_mm_packs_pi16(a0, a1);
       data_p++;      
     } 
+
     _mm_empty();
 }
 #endif /* __MMX__ */
