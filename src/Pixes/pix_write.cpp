@@ -24,6 +24,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
+# define snprintf sprintf_s
+#endif
+
+
 CPPEXTERN_NEW_WITH_GIMME(pix_write)
 
   /////////////////////////////////////////////////////////
@@ -59,7 +64,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_automatic = false;
   m_autocount = 0;
   m_filetype=0;
-  sprintf(m_pathname, "gem");
+  snprintf(m_pathname, MAXPDSTRING, "gem");
 
   m_banged = false;
 
@@ -103,33 +108,13 @@ void pix_write :: doWrite()
 
   m_originalImage->reallocate();
 
+  /* the orientation is always correct, since we get it from openGL */
+  /* if we do need flipping, this must be handled in mem2image() */
+  m_originalImage->upsidedown=false;
 
-
-
-#ifdef __APPLE__
-  unsigned char *dummy;
-  int imageSize, rowBytes;
-  long i, j;
-
-  imageSize = m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize;
-  rowBytes = m_originalImage->xsize * m_originalImage->csize;
-  
-  dummy = new unsigned char[imageSize];
 
   glReadPixels(m_xoff, m_yoff, width, height,
-               m_originalImage->format, m_originalImage->type, dummy);
-
-  //flips the image for QT
-  for (i = 0, j = imageSize - rowBytes; i < imageSize; i += rowBytes, j -= rowBytes) {
-      memcpy( &m_originalImage->data[j], &dummy[i], (size_t) rowBytes );
-  }
-  
-  delete dummy;
-
-#else
-  glReadPixels(m_xoff, m_yoff, width, height,
-	       m_originalImage->format, m_originalImage->type, m_originalImage->data);
-#endif
+               m_originalImage->format, m_originalImage->type, m_originalImage->data);
 
 #if 0 // asynchronous texture fetching idea sketch
 /* Enable AGP storage hints */
@@ -146,6 +131,8 @@ void pix_write :: doWrite()
 	/* Pull out of AGP */
 	glGetTexImage(...);
 #endif
+
+
   mem2image(m_originalImage, m_filename, m_filetype);
 }
 
@@ -158,19 +145,13 @@ void pix_write :: render(GemState *state)
   if (m_automatic || m_banged) {
     char *extension;
     if (m_filetype<0)m_filetype=0;
-    if (m_filetype==0) extension=(char*)"tif";
-    else {
-#if 0
-      post("pix_write: you can only write TIFF-files ! (forcing to TIFF)");
-      m_filetype=0;
+    if (m_filetype==0) {
       extension=(char*)"tif";
-#else
+    } else {
       extension=(char*)"jpg";
-#endif
     }
     
-    sprintf(m_filename, "%s%d.%s", m_pathname, m_autocount+10000, extension);
-    m_filename[strlen(m_pathname)]-=1;
+    snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s%05d.%s", m_pathname, m_autocount, extension);
     
     m_autocount++;
     m_banged = false;
@@ -204,9 +185,9 @@ void pix_write :: fileMess(int argc, t_atom *argv)
   char *extension = (char*)".tif";
   if (argc) {
     if (argv->a_type == A_SYMBOL) {
-      atom_string(argv++, m_pathname, 80);
+      atom_string(argv++, m_pathname, MAXPDSTRING);
       argc--;
-      sprintf(m_filename, "%s.%s", m_pathname, extension);
+      snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s.%s", m_pathname, extension);
     }
     if (argc>0)
       m_filetype = atom_getint(argv);
