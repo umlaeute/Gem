@@ -66,10 +66,10 @@ void pix_gain :: processRGBAImage(imageStruct &image)
   unsigned char *pixels = image.data;
   short R,G,B,A;
   int red,green,blue,alpha;
-  R = int(256 * m_gain[chRed]);
-  G = int(256 * m_gain[chGreen]);
-  B = int(256 * m_gain[chBlue]);
-  A = int(256 * m_gain[chAlpha]);
+  R = (int)(256 * m_gain[chRed]);
+  G = (int)(256 * m_gain[chGreen]);
+  B = (int)(256 * m_gain[chBlue]);
+  A = (int)(256 * m_gain[chAlpha]);
 
   if(m_saturate) {
     while(datasize--)
@@ -183,10 +183,10 @@ void pix_gain :: processYUVImage(imageStruct &image)
 void pix_gain :: processRGBAMMX(imageStruct &image)
 {
 
-  short  R = int(256 * m_gain[chRed]);
-  short  G = int(256 * m_gain[chGreen]);
-  short  B = int(256 * m_gain[chBlue]);
-  short  A = int(256 * m_gain[chAlpha]);
+  short  R = (int)(256 * m_gain[chRed]);
+  short  G = (int)(256 * m_gain[chGreen]);
+  short  B = (int)(256 * m_gain[chBlue]);
+  short  A = (int)(256 * m_gain[chAlpha]);
 
   if((R==256)&&(G==256)&&(B==256)&&(B==256)){
     // nothing to do!
@@ -221,7 +221,7 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
       data_p[0]=_mm_packs_pi16(a0, a1);
       data_p++;      
     } 
-  _mm_empty();
+    _mm_empty();
 }
 #endif /* __MMX__ */
 
