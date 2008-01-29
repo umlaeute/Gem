@@ -3,7 +3,7 @@
 #X obj 39 100 gemwin;
 #X obj 93 174 gemhead;
 #X obj 93 197 b;
-#X obj 93 154 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 93 154 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X obj 93 336 gemhead;
 #X msg 25 305 0;
@@ -13,11 +13,11 @@
 #X obj 93 385 translateXYZ 0 -2 0;
 #X msg 93 225 0 -2 0 \, 0 2 0;
 #X text 203 225 two messages in one;
-#X text 151 174 gemhead-"metro";
+#X text 151 174 [gemhead]-"metro";
 #X obj 93 426 circle 0.2;
-#X text 40 25 The Double [gemhead] Idiom vs. [repeat];
+#X text 40 25 the "double [gemhead] idiom" vs. [repeat];
 #X obj 438 163 gemhead;
-#X obj 438 143 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 438 143 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 479 375 unpack 0 0 0;
 #X text 525 186 two messages in one;
@@ -38,7 +38,7 @@
 #X text 258 65 The gemhead object resets the states for OpenGL and
 also some pix_ settings. Anything after it is starts as a clean state
 similar to combining [separator] and [pix_separator]. (cc);
-#N canvas 525 182 701 555 more_on_the_"repeat"_technics 0;
+#N canvas 220 0 701 555 more_on_the_"repeat"_technics 0;
 #X obj 21 54 gemhead;
 #X obj 21 281 separator;
 #X obj 21 128 t a b;
@@ -58,7 +58,7 @@ similar to combining [separator] and [pix_separator]. (cc);
 #X obj 278 276 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X text 311 274 <- if you reset the random at the begining of each
-frame \, then all frame look the same.;
+frame \, then all frames look the same.;
 #X obj 21 101 scaleXYZ 1 1 1;
 #X floatatom 52 80 5 0 0 0 - - -;
 #X floatatom 95 80 5 0 0 0 - - -;
@@ -66,11 +66,9 @@ frame \, then all frame look the same.;
 #X obj 21 208 until;
 #X msg 21 184 100;
 #X obj 21 162 t b a;
-#X text 23 504 This patch show how to draw many time the same primitive
-with the same gemhead.;
-#X msg 21 34 0;
-#X obj 21 13 loadbang;
-#X obj 57 36 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+#X text 23 504 This patch shows how to draw the same primitive
+with the a single [gemhead] many times;
+#X obj 21 35 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X connect 0 0 18 0;
 #X connect 1 0 13 0;
@@ -102,8 +100,6 @@ with the same gemhead.;
 #X connect 24 0 23 0;
 #X connect 24 1 21 1;
 #X connect 26 0 0 0;
-#X connect 27 0 26 0;
-#X connect 28 0 0 0;
 #X restore 370 469 pd more_on_the_"repeat"_technics;
 #X connect 0 0 1 0;
 #X connect 2 0 3 0;

@@ -30,15 +30,15 @@ F;
 #X msg 353 479 10;
 #X obj 353 456 loadbang;
 #X text 243 485 <- try this;
-#X text 115 310 <- create the primitive according to the Lsystem;
-#X text 270 276 The rules creates a Lsystem;
-#X text 152 381 <- Store the pointer send by gemhead and distribut
-it to the coresponding primitives;
+#X text 125 310 <- create the primitive according to the Lsystem;
+#X text 270 276 These rules create an Lsystem;
+#X text 152 381 <- Store the current state sent by [gemhead] and distribute
+it to the corresponding primitives;
 #X text 397 502 <- size of the system;
 #X msg 15 164 F \, [ \, - \, F \, ] \, F \, [ \, + \, F \, ] \, F;
 #X text 12 640 This is a basic implementation of Lindenmayer System
 (LSystem) in GEM. Wikipedia is a good place for informations about
-Lsystem.;
+Lsystems;
 #X obj 15 351 gemlist;
 #X obj 47 110 s \$0-gemlist;
 #X obj 35 372 gemlist;
