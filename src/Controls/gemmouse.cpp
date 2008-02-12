@@ -31,7 +31,8 @@ CPPEXTERN_NEW_WITH_GIMME(gemmouse)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemmouse :: gemmouse(int argc, t_atom*argv)
+gemmouse :: gemmouse(int argc, t_atom*argv) :
+  m_scaleX(1.0), m_scaleY(1.0), m_scaleMode(NONE)
 {
     m_outXPos = outlet_new(this->x_obj, 0);
     m_outYPos = outlet_new(this->x_obj, 0);
@@ -39,19 +40,18 @@ gemmouse :: gemmouse(int argc, t_atom*argv)
     m_outMBut = outlet_new(this->x_obj, 0);
     m_outRBut = outlet_new(this->x_obj, 0);
 
-    m_doY=true;
-
     switch(argc){
     case 0:
       m_scaleX = m_scaleY = 0.f;
       break;
     case 1:
       m_scaleX = m_scaleY = atom_getfloat(argv);
-      m_doY =false;
+      m_scaleMode =HEIGHT;
       break;
     default:
       m_scaleX=atom_getfloat(argv);
       m_scaleY=atom_getfloat(argv+1);
+      m_scaleMode =BOTH;
     }
 
     // register event callback
@@ -85,8 +85,24 @@ gemmouse :: ~gemmouse()
 /////////////////////////////////////////////////////////
 void gemmouse :: mouseMotion(int x, int y)
 {
-  t_float scalex = (m_scaleX==0.f)?1:m_scaleX/GemMan::m_w;
-  t_float scaley = (m_doY)?((m_scaleY==0.f)?1:m_scaleY/GemMan::m_h):scalex;
+  t_float scalex = 1., scaley=1.;
+
+  switch(m_scaleMode) {
+  case NONE:
+    break;
+  case BOTH:
+    scalex=m_scaleX/GemMan::m_w;
+    scaley=m_scaleY/GemMan::m_h;
+    break;
+  case WIDTH:
+    scalex=m_scaleX/GemMan::m_w;
+    scaley=scalex;
+    break;
+  case HEIGHT:
+    scaley=m_scaleY/GemMan::m_h;
+    scalex=scaley;
+    break;
+  }
 
   outlet_float(m_outYPos, (t_float)(y*scaley));
   outlet_float(m_outXPos, (t_float)(x*scalex));

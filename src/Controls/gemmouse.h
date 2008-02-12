@@ -32,6 +32,9 @@ DESCRIPTION
     
     
 -----------------------------------------------------------------*/
+
+enum t_mousescale { NONE, WIDTH, HEIGHT, BOTH };
+
 class GEM_EXTERN gemmouse : public CPPExtern
 {
     CPPEXTERN_HEADER(gemmouse, CPPExtern)
@@ -80,15 +83,15 @@ class GEM_EXTERN gemmouse : public CPPExtern
         // The right outlet
         t_outlet    	*m_outRBut;
 
-	//////////
-	// coordinate-scales
-	// if !=0, the mouse-coordinate is scaled to 0..m_scale
-	// if ==0, the mouse-coordinate is scaled to 0..windowsize
-	t_float m_scaleX, m_scaleY;
-
-	//////////
-	// should Y we scaled separately or like X ?
-	bool m_doY;
+        //////////
+        // coordinate-scales
+        // if !=0, the mouse-coordinate is scaled to 0..m_scale
+        // if ==0, the mouse-coordinate is scaled to 0..windowsize
+        t_float m_scaleX, m_scaleY;
+        
+        //////////
+        // should Y we scaled separately or like X ?
+        t_mousescale m_scaleMode;
 
     private:
 
