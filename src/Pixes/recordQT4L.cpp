@@ -180,13 +180,17 @@ int recordQT4L :: putFrame(imageStruct*img)
      * the real bad thing is, that i cannot handle this via preprocessor
      */
 #if 1
-    int supported_cm[]={BC_RGBA8888, BC_YUV422, BC_RGB888, LQT_COLORMODEL_NONE};
+    // BC_YUV422 is really YUY2, so we don't want it...
+
+    int supported_cm[]={BC_RGBA8888, /* BC_YUV422, */ BC_RGB888, LQT_COLORMODEL_NONE};
     m_colormodel=lqt_get_best_colormodel(m_qtfile, m_track, supported_cm);
 #else
     m_colormodel=BC_RGB888;
 #endif
 
     lqt_set_cmodel(m_qtfile, m_track, m_colormodel);
+
+    //post("set_cmodel: 0x%08x", m_colormodel);
 
     m_restart=false;
   }
