@@ -18,17 +18,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_GLSL_VERTEX_H_
 #define INCLUDE_GLSL_VERTEX_H_
 
-#include "Base/GemBase.h"
+#include "Manips/glsl_program.h"
 
 #define GEM_shader_none  0
 #define GEM_shader_GLSL  1
 #define GEM_shader_CG    2
-
-
-#if defined GL_ARB_shader_objects && !defined GL_ARB_shading_language_100
-/* i am not sure whether this can ever happen... */
-# undef GL_ARB_shader_objects
-#endif
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -38,8 +32,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   Loads in a vertex shader
     
   KEYWORDS
-  
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -70,7 +63,6 @@ class GEM_EXTERN glsl_vertex : public GemBase
   //////////
   // Do the rendering
   virtual void render(GemState *state);
-
 
   //////////
   // Clear the dirty flag on the pixBlock

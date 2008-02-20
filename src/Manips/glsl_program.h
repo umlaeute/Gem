@@ -36,6 +36,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define MAX_NUM_SHADERS 32
 
 
+typedef union {
+  GLuint  i;
+  t_float f;
+} t_floatuint;
+
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -110,18 +116,18 @@ class GEM_EXTERN glsl_program : public GemBase
   //////////
   // Variables for the, uh, variables
   GLint				m_uniformCount;
-  t_symbol          **m_symname;
+  t_symbol  **m_symname;
   GLint				*m_size;
   GLenum			*m_type;
-  GLint             *m_loc;
-  float				**m_param;
-  int				*m_flag;
+  GLint       *m_loc;
+  float			 **m_param;
+  int				 *m_flag;
   
   GLint				m_linked;
-  bool              m_wantLink;
-  int				m_num;
+  bool        m_wantLink;
+  int				  m_num;
   
-  t_outlet		*m_outProgramID;
+  t_outlet	 *m_outProgramID;
 
  private:
 	

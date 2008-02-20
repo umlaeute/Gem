@@ -112,6 +112,7 @@ void glsl_program :: createArrays() {
 /////////////////////////////////////////////////////////
 void glsl_program :: render(GemState *state)
 {
+  t_floatuint fi_id;
 #if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   if(m_wantLink){
     m_wantLink=0;
@@ -255,7 +256,8 @@ void glsl_program :: render(GemState *state)
 #endif
   // send program ID to outlet
   /* JMZ: shouldn't this be only done, when we have a linked program? */
-  outlet_float(m_outProgramID, (t_float)(int)m_program);
+  fi_id.i=m_program;
+  outlet_float(m_outProgramID, (t_float)fi_id.f);
 #endif
 }
 
@@ -274,7 +276,7 @@ void glsl_program :: postrender(GemState *state)
 #endif
 }
 /////////////////////////////////////////////////////////
-// shaderMess
+// paramMess
 //
 /////////////////////////////////////////////////////////
 void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
@@ -328,10 +330,12 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     }
   for (i = 0; i < argc; i++)
     {
+      t_floatuint fi;
+      fi.f=atom_getfloat(&argv[i]);
 #ifdef GL_VERSION_2_0
-	  m_shaderObj[i] = (GLuint)(atom_getint(&argv[i]));
+      m_shaderObj[i] = (GLuint)(fi.i);
 #else
-      m_shaderObj[i] = (t_GLshaderObj)(atom_getint(&argv[i]));
+      m_shaderObj[i] = (t_GLshaderObj)(fi.i);
 #endif
     }
   

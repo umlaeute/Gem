@@ -237,10 +237,13 @@ void glsl_vertex :: render(GemState *state)
 {
 #if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   if (m_shader)
-  {
-    // send textureID to outlet
-	outlet_float(m_outShaderID, (t_float)(unsigned int)m_shader);
-  }
+    {
+      t_floatuint fi;   
+      // send textureID to outlet
+      fi.i=m_shader;
+
+      outlet_float(m_outShaderID, fi.f);
+    }
 #endif
 }
 
@@ -309,7 +312,7 @@ void glsl_vertex :: obj_setupCallback(t_class *classPtr)
 }
 void glsl_vertex :: openMessCallback(void *data, t_symbol *filename)
 {
-	    GetMyClass(data)->openMess(filename);
+  GetMyClass(data)->openMess(filename);
 }
 void glsl_vertex :: printMessCallback(void *data)
 {
