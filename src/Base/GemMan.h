@@ -123,6 +123,10 @@ class GEM_EXTERN GemMan
     	// Set the frame rate
     	static void 	    frameRate(float framespersecond);
 
+     	//////////
+     	// Get the frame rate
+     	static float 	    getFramerate();
+      
     	//////////
     	// Turn on/off lighting
     	static void 	    lightingOnOff(int state);
