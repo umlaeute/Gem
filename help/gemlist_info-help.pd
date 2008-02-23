@@ -12,7 +12,7 @@
 #X obj 8 76 cnv 15 430 70 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 453 60 Example:;
-#X obj 9 385 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 9 415 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 454 304 gemwin 0;
 #X obj 132 160 gemwin;
@@ -35,9 +35,9 @@
 #X connect 6 0 0 0;
 #X connect 8 0 7 0;
 #X connect 9 0 0 0;
-#X restore 14 424 pd gemwin;
-#X msg 14 405 create;
-#X text 10 384 Create window:;
+#X restore 14 454 pd gemwin;
+#X msg 14 435 create;
+#X text 10 414 Create window:;
 #X text 50 12 Synopsis: [gemlist_info];
 #X text 71 31 Class: information object;
 #X text 29 77 Description: get curent transformation of a gemlist;
@@ -49,7 +49,7 @@ matrix in basic transformation (translation \, scale \, shear \, rotation)
 #X text 62 265 Outlet 2: 3 float list : RotationX \, Y and Z;
 #X text 62 277 Outlet 3: 3 float list : shear YX \, YZ and ZX;
 #X text 62 288 Outlet 4: 3 float list : scale X \, Y and Z;
-#X obj 9 336 cnv 15 430 40 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 9 336 cnv 15 430 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 452 890 more 0;
 #X obj 30 122 gemhead;
@@ -258,6 +258,8 @@ transformation matrix decomposed with gemlist_info;
 #X text 498 580 orientation;
 #X text 514 504 shear (YX \, ZX \, ZY);
 #X text 76 349 <- more about gemlist_info;
+#X text 18 375 see also :;
+#X obj 100 375 gemlist_matrix;
 #X connect 11 0 12 0;
 #X connect 12 0 11 0;
 #X connect 27 0 56 0;
