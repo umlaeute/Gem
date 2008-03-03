@@ -64,6 +64,9 @@ GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
 
 GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support], [force])
 GEM_ARG_ENABLE([NV], [openGL-NV-extension support], [force])
+GEM_ARG_DISABLE([glew],    [GLEW (runtime OpenGL extension checks) - experimental])
+
+
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)], [force])
 GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video], [force])
 
@@ -373,6 +376,14 @@ AC_MSG_RESULT([disabling NV-extensions])
  AC_DEFINE_UNQUOTED(DONT_USE_NV)
 fi
 
+if test "x$enable_glew" = "xyes"; then
+   AC_DEFINE_UNQUOTED(USE_GLEW)
+else
+  enable_glew="no"
+fi
+
+
+
 ### make-depend flags
 if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
     AC_SUBST(MAKEDEP_FLAGS, "-MM")
@@ -602,6 +613,7 @@ Configuration:
   using version          : ${GEM_OPENGL_VERSION_MAX}
   using ARB-extensions   : ${enable_ARB}
   using NV-extensions    : ${enable_NV}
+  using GLEW             : ${enable_glew}
 
  used optional libraries:
 
