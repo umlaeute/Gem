@@ -61,7 +61,6 @@ static t_class *Gem_setup_class;
 #endif
 
     // startup GEM
-    GemMan::initGem();
 
     post("GEM: Graphics Environment for Multimedia");
     post("GEM: ver: %s", GEM_VERSION);
@@ -72,6 +71,8 @@ static t_class *Gem_setup_class;
       post("GEM:\t\t%s", GEM_AUTHORS[i]);
     }  
     post("GEM: with help by %s", GEM_OTHERAUTHORS);
+
+    GemMan::initGem();
   }
 
   GEM_EXTERN void gem_setup()
