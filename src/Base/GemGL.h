@@ -71,6 +71,11 @@
 # include <windows.h>
 #endif
 
+
+#ifdef USE_GLEW
+# include "Base/glew.h"
+#endif
+
 #ifdef __APPLE__
 # include <OpenGL/gl.h>
 # include <OpenGL/glu.h>
