@@ -27,7 +27,8 @@
 //
 /////////////////////////////////////////////////////////
 GemBase :: GemBase()
-  : gem_amRendering(false), m_cache(NULL), m_modified(true)
+  : gem_amRendering(false), m_cache(NULL), m_modified(true),
+    m_enabled(true)
 {
   m_out1 = outlet_new(this->x_obj, 0);
 }
@@ -53,10 +54,19 @@ GemBase :: ~GemBase()
 /////////////////////////////////////////////////////////
 void GemBase :: gem_startstopMess(int state)
 {
-  if (state && !gem_amRendering)startRendering();
-  else if (!state && gem_amRendering)stopRendering();
+  if (state && !gem_amRendering){
+    m_enabled = isRunnable();
+    if(m_enabled)
+      startRendering();
+  }
+  else if (!state && gem_amRendering){
+    if(m_enabled)
+      stopRendering();
+  }
 
   gem_amRendering=(state!=0);
+
+
   // continue sending out the cache message
   t_atom ap[1];
   SETFLOAT(ap, state);
@@ -74,12 +84,21 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
     m_cache=NULL;
 
   if (!gem_amRendering){ // init Rendering if not done yet
-    startRendering();
+    m_enabled=isRunnable();
+
+    if(m_enabled)
+      startRendering();
+
     gem_amRendering=true;
   }
-  if(state)render(state);
-  continueRender(state);
-  if(state)postrender(state);
+  if(m_enabled) {
+    if(state)render(state);
+    continueRender(state);
+    if(state)postrender(state);
+  } else {
+    continueRender(state);
+  }
+
   m_modified=false;
 }
 
@@ -115,6 +134,20 @@ void GemBase :: realStopRendering()
     stopRendering();
     m_cache = NULL;
 }
+
+
+
+/////////////////////////////////////////////////////////
+// disabling the rendering of this object
+//
+/////////////////////////////////////////////////////////
+bool GemBase :: isRunnable()
+{
+  return true;
+}
+
+
+
 
 /////////////////////////////////////////////////////////
 // static member function
