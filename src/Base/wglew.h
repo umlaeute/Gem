@@ -1,7 +1,7 @@
 /*
 ** The OpenGL Extension Wrangler Library
-** Copyright (C) 2002-2006, Milan Ikits <milan ikits[]ieee org>
-** Copyright (C) 2002-2006, Marcelo E. Magallon <mmagallo[]debian org>
+** Copyright (C) 2002-2008, Milan Ikits <milan ikits[]ieee org>
+** Copyright (C) 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>
 ** Copyright (C) 2002, Lev Povalahev
 ** All rights reserved.
 ** 
@@ -27,6 +27,29 @@
 ** CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ** THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/*
+** Copyright (c) 2007 The Khronos Group Inc.
+** 
+** Permission is hereby granted, free of charge, to any person obtaining a
+** copy of this software and/or associated documentation files (the
+** "Materials"), to deal in the Materials without restriction, including
+** without limitation the rights to use, copy, modify, merge, publish,
+** distribute, sublicense, and/or sell copies of the Materials, and to
+** permit persons to whom the Materials are furnished to do so, subject to
+** the following conditions:
+** 
+** The above copyright notice and this permission notice shall be included
+** in all copies or substantial portions of the Materials.
+** 
+** THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+** IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+** CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+** TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+** MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
 */
 
 #ifndef __wglew_h__
@@ -135,6 +158,9 @@ typedef const char* (WINAPI * PFNWGLGETEXTENSIONSSTRINGARBPROC) (HDC hdc);
 
 #ifndef WGL_ARB_make_current_read
 #define WGL_ARB_make_current_read 1
+
+#define ERROR_INVALID_PIXEL_TYPE_ARB 0x2043
+#define ERROR_INCOMPATIBLE_DEVICE_CONTEXTS_ARB 0x2054
 
 typedef HDC (WINAPI * PFNWGLGETCURRENTREADDCARBPROC) (VOID);
 typedef BOOL (WINAPI * PFNWGLMAKECONTEXTCURRENTARBPROC) (HDC hDrawDC, HDC hReadDC, HGLRC hglrc);
@@ -386,10 +412,23 @@ typedef const char* (WINAPI * PFNWGLGETEXTENSIONSSTRINGEXTPROC) (void);
 
 #endif /* WGL_EXT_extensions_string */
 
+/* ------------------------ WGL_EXT_framebuffer_sRGB ----------------------- */
+
+#ifndef WGL_EXT_framebuffer_sRGB
+#define WGL_EXT_framebuffer_sRGB 1
+
+#define WGL_FRAMEBUFFER_SRGB_CAPABLE_EXT 0x20A9
+
+#define WGLEW_EXT_framebuffer_sRGB WGLEW_GET_VAR(__WGLEW_EXT_framebuffer_sRGB)
+
+#endif /* WGL_EXT_framebuffer_sRGB */
+
 /* ----------------------- WGL_EXT_make_current_read ----------------------- */
 
 #ifndef WGL_EXT_make_current_read
 #define WGL_EXT_make_current_read 1
+
+#define ERROR_INVALID_PIXEL_TYPE_EXT 0x2043
 
 typedef HDC (WINAPI * PFNWGLGETCURRENTREADDCEXTPROC) (VOID);
 typedef BOOL (WINAPI * PFNWGLMAKECONTEXTCURRENTEXTPROC) (HDC hDrawDC, HDC hReadDC, HGLRC hglrc);
@@ -508,6 +547,17 @@ typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBIVEXTPROC) (HDC hdc, int iPixel
 #define WGLEW_EXT_pixel_format WGLEW_GET_VAR(__WGLEW_EXT_pixel_format)
 
 #endif /* WGL_EXT_pixel_format */
+
+/* ------------------- WGL_EXT_pixel_format_packed_float ------------------- */
+
+#ifndef WGL_EXT_pixel_format_packed_float
+#define WGL_EXT_pixel_format_packed_float 1
+
+#define WGL_TYPE_RGBA_UNSIGNED_FLOAT_EXT 0x20A8
+
+#define WGLEW_EXT_pixel_format_packed_float WGLEW_GET_VAR(__WGLEW_EXT_pixel_format_packed_float)
+
+#endif /* WGL_EXT_pixel_format_packed_float */
 
 /* -------------------------- WGL_EXT_swap_control ------------------------- */
 
@@ -690,6 +740,39 @@ typedef BOOL (WINAPI * PFNWGLQUERYFRAMETRACKINGI3DPROC) (DWORD* pFrameCount, DWO
 
 #endif /* WGL_NV_float_buffer */
 
+/* -------------------------- WGL_NV_gpu_affinity -------------------------- */
+
+#ifndef WGL_NV_gpu_affinity
+#define WGL_NV_gpu_affinity 1
+
+#define WGL_ERROR_INCOMPATIBLE_AFFINITY_MASKS_NV 0x20D0
+#define WGL_ERROR_MISSING_AFFINITY_MASK_NV 0x20D1
+
+DECLARE_HANDLE(HGPUNV);
+typedef struct _GPU_DEVICE {
+  DWORD cb; 
+  CHAR DeviceName[32]; 
+  CHAR DeviceString[128]; 
+  DWORD Flags; 
+  RECT rcVirtualScreen; 
+} GPU_DEVICE, *PGPU_DEVICE;
+
+typedef HDC (WINAPI * PFNWGLCREATEAFFINITYDCNVPROC) (const HGPUNV *phGpuList);
+typedef BOOL (WINAPI * PFNWGLDELETEDCNVPROC) (HDC hdc);
+typedef BOOL (WINAPI * PFNWGLENUMGPUDEVICESNVPROC) (HGPUNV hGpu, UINT iDeviceIndex, PGPU_DEVICE lpGpuDevice);
+typedef BOOL (WINAPI * PFNWGLENUMGPUSFROMAFFINITYDCNVPROC) (HDC hAffinityDC, UINT iGpuIndex, HGPUNV *hGpu);
+typedef BOOL (WINAPI * PFNWGLENUMGPUSNVPROC) (UINT iGpuIndex, HGPUNV *phGpu);
+
+#define wglCreateAffinityDCNV WGLEW_GET_FUN(__wglewCreateAffinityDCNV)
+#define wglDeleteDCNV WGLEW_GET_FUN(__wglewDeleteDCNV)
+#define wglEnumGpuDevicesNV WGLEW_GET_FUN(__wglewEnumGpuDevicesNV)
+#define wglEnumGpusFromAffinityDCNV WGLEW_GET_FUN(__wglewEnumGpusFromAffinityDCNV)
+#define wglEnumGpusNV WGLEW_GET_FUN(__wglewEnumGpusNV)
+
+#define WGLEW_NV_gpu_affinity WGLEW_GET_VAR(__WGLEW_NV_gpu_affinity)
+
+#endif /* WGL_NV_gpu_affinity */
+
 /* ---------------------- WGL_NV_render_depth_texture ---------------------- */
 
 #ifndef WGL_NV_render_depth_texture
@@ -855,6 +938,12 @@ WGLEW_EXPORT PFNWGLENDFRAMETRACKINGI3DPROC __wglewEndFrameTrackingI3D;
 WGLEW_EXPORT PFNWGLGETFRAMEUSAGEI3DPROC __wglewGetFrameUsageI3D;
 WGLEW_EXPORT PFNWGLQUERYFRAMETRACKINGI3DPROC __wglewQueryFrameTrackingI3D;
 
+WGLEW_EXPORT PFNWGLCREATEAFFINITYDCNVPROC __wglewCreateAffinityDCNV;
+WGLEW_EXPORT PFNWGLDELETEDCNVPROC __wglewDeleteDCNV;
+WGLEW_EXPORT PFNWGLENUMGPUDEVICESNVPROC __wglewEnumGpuDevicesNV;
+WGLEW_EXPORT PFNWGLENUMGPUSFROMAFFINITYDCNVPROC __wglewEnumGpusFromAffinityDCNV;
+WGLEW_EXPORT PFNWGLENUMGPUSNVPROC __wglewEnumGpusNV;
+
 WGLEW_EXPORT PFNWGLALLOCATEMEMORYNVPROC __wglewAllocateMemoryNV;
 WGLEW_EXPORT PFNWGLFREEMEMORYNVPROC __wglewFreeMemoryNV;
 
@@ -879,10 +968,12 @@ WGLEW_EXPORT GLboolean __WGLEW_ATI_render_texture_rectangle;
 WGLEW_EXPORT GLboolean __WGLEW_EXT_depth_float;
 WGLEW_EXPORT GLboolean __WGLEW_EXT_display_color_table;
 WGLEW_EXPORT GLboolean __WGLEW_EXT_extensions_string;
+WGLEW_EXPORT GLboolean __WGLEW_EXT_framebuffer_sRGB;
 WGLEW_EXPORT GLboolean __WGLEW_EXT_make_current_read;
 WGLEW_EXPORT GLboolean __WGLEW_EXT_multisample;
 WGLEW_EXPORT GLboolean __WGLEW_EXT_pbuffer;
 WGLEW_EXPORT GLboolean __WGLEW_EXT_pixel_format;
+WGLEW_EXPORT GLboolean __WGLEW_EXT_pixel_format_packed_float;
 WGLEW_EXPORT GLboolean __WGLEW_EXT_swap_control;
 WGLEW_EXPORT GLboolean __WGLEW_I3D_digital_video_control;
 WGLEW_EXPORT GLboolean __WGLEW_I3D_gamma;
@@ -891,6 +982,7 @@ WGLEW_EXPORT GLboolean __WGLEW_I3D_image_buffer;
 WGLEW_EXPORT GLboolean __WGLEW_I3D_swap_frame_lock;
 WGLEW_EXPORT GLboolean __WGLEW_I3D_swap_frame_usage;
 WGLEW_EXPORT GLboolean __WGLEW_NV_float_buffer;
+WGLEW_EXPORT GLboolean __WGLEW_NV_gpu_affinity;
 WGLEW_EXPORT GLboolean __WGLEW_NV_render_depth_texture;
 WGLEW_EXPORT GLboolean __WGLEW_NV_render_texture_rectangle;
 WGLEW_EXPORT GLboolean __WGLEW_NV_vertex_array_range;
@@ -911,12 +1003,12 @@ GLEWAPI GLboolean wglewContextIsSupported (WGLEWContext* ctx, const char* name);
 #define wglewInit() wglewContextInit(wglewGetContext())
 #define wglewIsSupported(x) wglewContextIsSupported(wglewGetContext(), x)
 
-#define WGLEW_GET_VAR(x) wglewGetContext()->x
+#define WGLEW_GET_VAR(x) (*(const GLboolean*)&(wglewGetContext()->x))
 #define WGLEW_GET_FUN(x) wglewGetContext()->x
 
 #else /* GLEW_MX */
 
-#define WGLEW_GET_VAR(x) x
+#define WGLEW_GET_VAR(x) (*(const GLboolean*)&x)
 #define WGLEW_GET_FUN(x) x
 
 GLEWAPI GLboolean wglewIsSupported (const char* name);

@@ -1,7 +1,7 @@
 /*
 ** The OpenGL Extension Wrangler Library
-** Copyright (C) 2002-2006, Milan Ikits <milan ikits[]ieee org>
-** Copyright (C) 2002-2006, Marcelo E. Magallon <mmagallo[]debian org>
+** Copyright (C) 2002-2008, Milan Ikits <milan ikits[]ieee org>
+** Copyright (C) 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>
 ** Copyright (C) 2002, Lev Povalahev
 ** All rights reserved.
 ** 
@@ -30,22 +30,50 @@
 */
 
 /*
-** The contents of this file are subject to the GLX Public License Version 1.0
-** (the "License"). You may not use this file except in compliance with the
-** License. You may obtain a copy of the License at Silicon Graphics, Inc.,
-** attn: Legal Services, 2011 N. Shoreline Blvd., Mountain View, CA 94043
-** or at http://www.sgi.com/software/opensource/glx/license.html.
-**
-** Software distributed under the License is distributed on an "AS IS"
-** basis. ALL WARRANTIES ARE DISCLAIMED, INCLUDING, WITHOUT LIMITATION, ANY
-** IMPLIED WARRANTIES OF MERCHANTABILITY, OF FITNESS FOR A PARTICULAR
-** PURPOSE OR OF NON- INFRINGEMENT. See the License for the specific
-** language governing rights and limitations under the License.
-**
-** The Original Software is GLX version 1.2 source code, released February,
-** 1999. The developer of the Original Software is Silicon Graphics, Inc.
-** Those portions of the Subject Software created by Silicon Graphics, Inc.
-** are Copyright (c) 1991-9 Silicon Graphics, Inc. All Rights Reserved.
+ * Mesa 3-D graphics library
+ * Version:  7.0
+ *
+ * Copyright (C) 1999-2007  Brian Paul   All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ * BRIAN PAUL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+ * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
+** Copyright (c) 2007 The Khronos Group Inc.
+** 
+** Permission is hereby granted, free of charge, to any person obtaining a
+** copy of this software and/or associated documentation files (the
+** "Materials"), to deal in the Materials without restriction, including
+** without limitation the rights to use, copy, modify, merge, publish,
+** distribute, sublicense, and/or sell copies of the Materials, and to
+** permit persons to whom the Materials are furnished to do so, subject to
+** the following conditions:
+** 
+** The above copyright notice and this permission notice shall be included
+** in all copies or substantial portions of the Materials.
+** 
+** THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+** IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+** CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+** TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+** MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
 */
 
 #ifndef __glxew_h__
@@ -55,9 +83,13 @@
 #ifdef __glxext_h_
 #error glxext.h included before glxew.h
 #endif
+#ifdef GLX_H
+#error glx.h included before glxew.h
+#endif
 
 #define __glxext_h_
 #define __GLX_glx_h__
+#define GLX_H
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -100,7 +132,11 @@ extern "C" {
 
 typedef XID GLXDrawable;
 typedef XID GLXPixmap;
+#ifdef __sun
+typedef struct __glXContextRec *GLXContext;
+#else
 typedef struct __GLXcontextRec *GLXContext;
+#endif
 
 extern Bool glXQueryExtension (Display *dpy, int *errorBase, int *eventBase);
 extern Bool glXQueryVersion (Display *dpy, int *major, int *minor);
@@ -111,7 +147,7 @@ extern void glXDestroyGLXPixmap (Display *dpy, GLXPixmap pix);
 extern GLXContext glXCreateContext (Display *dpy, XVisualInfo *vis, GLXContext shareList, Bool direct);
 extern void glXDestroyContext (Display *dpy, GLXContext ctx);
 extern Bool glXIsDirect (Display *dpy, GLXContext ctx);
-extern void glXCopyContext (Display *dpy, GLXContext src, GLXContext dst, GLuint mask);
+extern void glXCopyContext (Display *dpy, GLXContext src, GLXContext dst, GLulong mask);
 extern Bool glXMakeCurrent (Display *dpy, GLXDrawable drawable, GLXContext ctx);
 extern GLXContext glXGetCurrentContext (void);
 extern GLXDrawable glXGetCurrentDrawable (void);
@@ -220,8 +256,24 @@ typedef XID GLXFBConfigID;
 typedef XID GLXWindow;
 typedef XID GLXPbuffer;
 typedef struct __GLXFBConfigRec *GLXFBConfig;
-typedef struct { int event_type; int draw_type; unsigned long serial; Bool send_event; Display *display; GLXDrawable drawable; unsigned int buffer_mask; unsigned int aux_buffer; int x, y; int width, height; int count; } GLXPbufferClobberEvent;
-typedef union __GLXEvent { GLXPbufferClobberEvent glxpbufferclobber; long pad[24]; } GLXEvent;
+
+typedef struct {
+  int event_type; 
+  int draw_type; 
+  unsigned long serial; 
+  Bool send_event; 
+  Display *display; 
+  GLXDrawable drawable; 
+  unsigned int buffer_mask; 
+  unsigned int aux_buffer; 
+  int x, y; 
+  int width, height; 
+  int count; 
+} GLXPbufferClobberEvent;
+typedef union __GLXEvent {
+  GLXPbufferClobberEvent glxpbufferclobber; 
+  long pad[24]; 
+} GLXEvent;
 
 typedef GLXFBConfig* ( * PFNGLXCHOOSEFBCONFIGPROC) (Display *dpy, int screen, const int *attrib_list, int *nelements);
 typedef GLXContext ( * PFNGLXCREATENEWCONTEXTPROC) (Display *dpy, GLXFBConfig config, int render_type, GLXContext share_list, Bool direct);
@@ -388,6 +440,29 @@ typedef void ( * PFNGLXRELEASETEXIMAGEATIPROC) (Display *dpy, GLXPbuffer pbuf, i
 
 #endif /* GLX_ATI_render_texture */
 
+/* --------------------- GLX_EXT_fbconfig_packed_float --------------------- */
+
+#ifndef GLX_EXT_fbconfig_packed_float
+#define GLX_EXT_fbconfig_packed_float 1
+
+#define GLX_RGBA_UNSIGNED_FLOAT_BIT_EXT 0x00000008
+#define GLX_RGBA_UNSIGNED_FLOAT_TYPE_EXT 0x20B1
+
+#define GLXEW_EXT_fbconfig_packed_float GLXEW_GET_VAR(__GLXEW_EXT_fbconfig_packed_float)
+
+#endif /* GLX_EXT_fbconfig_packed_float */
+
+/* ------------------------ GLX_EXT_framebuffer_sRGB ----------------------- */
+
+#ifndef GLX_EXT_framebuffer_sRGB
+#define GLX_EXT_framebuffer_sRGB 1
+
+#define GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT 0x20B2
+
+#define GLXEW_EXT_framebuffer_sRGB GLXEW_GET_VAR(__GLXEW_EXT_framebuffer_sRGB)
+
+#endif /* GLX_EXT_framebuffer_sRGB */
+
 /* ------------------------- GLX_EXT_import_context ------------------------ */
 
 #ifndef GLX_EXT_import_context
@@ -421,6 +496,53 @@ typedef int ( * PFNGLXQUERYCONTEXTINFOEXTPROC) (Display* dpy, GLXContext context
 #define GLXEW_EXT_scene_marker GLXEW_GET_VAR(__GLXEW_EXT_scene_marker)
 
 #endif /* GLX_EXT_scene_marker */
+
+/* ---------------------- GLX_EXT_texture_from_pixmap ---------------------- */
+
+#ifndef GLX_EXT_texture_from_pixmap
+#define GLX_EXT_texture_from_pixmap 1
+
+#define GLX_TEXTURE_1D_BIT_EXT 0x00000001
+#define GLX_TEXTURE_2D_BIT_EXT 0x00000002
+#define GLX_TEXTURE_RECTANGLE_BIT_EXT 0x00000004
+#define GLX_BIND_TO_TEXTURE_RGB_EXT 0x20D0
+#define GLX_BIND_TO_TEXTURE_RGBA_EXT 0x20D1
+#define GLX_BIND_TO_MIPMAP_TEXTURE_EXT 0x20D2
+#define GLX_BIND_TO_TEXTURE_TARGETS_EXT 0x20D3
+#define GLX_Y_INVERTED_EXT 0x20D4
+#define GLX_TEXTURE_FORMAT_EXT 0x20D5
+#define GLX_TEXTURE_TARGET_EXT 0x20D6
+#define GLX_MIPMAP_TEXTURE_EXT 0x20D7
+#define GLX_TEXTURE_FORMAT_NONE_EXT 0x20D8
+#define GLX_TEXTURE_FORMAT_RGB_EXT 0x20D9
+#define GLX_TEXTURE_FORMAT_RGBA_EXT 0x20DA
+#define GLX_TEXTURE_1D_EXT 0x20DB
+#define GLX_TEXTURE_2D_EXT 0x20DC
+#define GLX_TEXTURE_RECTANGLE_EXT 0x20DD
+#define GLX_FRONT_LEFT_EXT 0x20DE
+#define GLX_FRONT_RIGHT_EXT 0x20DF
+#define GLX_BACK_LEFT_EXT 0x20E0
+#define GLX_BACK_RIGHT_EXT 0x20E1
+#define GLX_AUX0_EXT 0x20E2
+#define GLX_AUX1_EXT 0x20E3
+#define GLX_AUX2_EXT 0x20E4
+#define GLX_AUX3_EXT 0x20E5
+#define GLX_AUX4_EXT 0x20E6
+#define GLX_AUX5_EXT 0x20E7
+#define GLX_AUX6_EXT 0x20E8
+#define GLX_AUX7_EXT 0x20E9
+#define GLX_AUX8_EXT 0x20EA
+#define GLX_AUX9_EXT 0x20EB
+
+typedef void ( * PFNGLXBINDTEXIMAGEEXTPROC) (Display* display, GLXDrawable drawable, int buffer, const int *attrib_list);
+typedef void ( * PFNGLXRELEASETEXIMAGEEXTPROC) (Display* display, GLXDrawable drawable, int buffer);
+
+#define glXBindTexImageEXT GLXEW_GET_FUN(__glewXBindTexImageEXT)
+#define glXReleaseTexImageEXT GLXEW_GET_FUN(__glewXReleaseTexImageEXT)
+
+#define GLXEW_EXT_texture_from_pixmap GLXEW_GET_VAR(__GLXEW_EXT_texture_from_pixmap)
+
+#endif /* GLX_EXT_texture_from_pixmap */
 
 /* -------------------------- GLX_EXT_visual_info -------------------------- */
 
@@ -683,6 +805,73 @@ typedef XVisualInfo* ( * PFNGLXGETVISUALFROMFBCONFIGSGIXPROC) (Display *dpy, GLX
 
 #endif /* GLX_SGIX_fbconfig */
 
+/* --------------------------- GLX_SGIX_hyperpipe -------------------------- */
+
+#ifndef GLX_SGIX_hyperpipe
+#define GLX_SGIX_hyperpipe 1
+
+#define GLX_HYPERPIPE_DISPLAY_PIPE_SGIX 0x00000001
+#define GLX_PIPE_RECT_SGIX 0x00000001
+#define GLX_PIPE_RECT_LIMITS_SGIX 0x00000002
+#define GLX_HYPERPIPE_RENDER_PIPE_SGIX 0x00000002
+#define GLX_HYPERPIPE_STEREO_SGIX 0x00000003
+#define GLX_HYPERPIPE_PIXEL_AVERAGE_SGIX 0x00000004
+#define GLX_HYPERPIPE_PIPE_NAME_LENGTH_SGIX 80
+#define GLX_BAD_HYPERPIPE_CONFIG_SGIX 91
+#define GLX_BAD_HYPERPIPE_SGIX 92
+#define GLX_HYPERPIPE_ID_SGIX 0x8030
+
+typedef struct {
+  char pipeName[GLX_HYPERPIPE_PIPE_NAME_LENGTH_SGIX]; 
+  int  networkId; 
+} GLXHyperpipeNetworkSGIX;
+typedef struct {
+  char pipeName[GLX_HYPERPIPE_PIPE_NAME_LENGTH_SGIX]; 
+  int XOrigin; 
+  int YOrigin; 
+  int maxHeight; 
+  int maxWidth; 
+} GLXPipeRectLimits;
+typedef struct {
+  char pipeName[GLX_HYPERPIPE_PIPE_NAME_LENGTH_SGIX]; 
+  int channel; 
+  unsigned int participationType; 
+  int timeSlice; 
+} GLXHyperpipeConfigSGIX;
+typedef struct {
+  char pipeName[GLX_HYPERPIPE_PIPE_NAME_LENGTH_SGIX]; 
+  int srcXOrigin; 
+  int srcYOrigin; 
+  int srcWidth; 
+  int srcHeight; 
+  int destXOrigin; 
+  int destYOrigin; 
+  int destWidth; 
+  int destHeight; 
+} GLXPipeRect;
+
+typedef int ( * PFNGLXBINDHYPERPIPESGIXPROC) (Display *dpy, int hpId);
+typedef int ( * PFNGLXDESTROYHYPERPIPECONFIGSGIXPROC) (Display *dpy, int hpId);
+typedef int ( * PFNGLXHYPERPIPEATTRIBSGIXPROC) (Display *dpy, int timeSlice, int attrib, int size, void *attribList);
+typedef int ( * PFNGLXHYPERPIPECONFIGSGIXPROC) (Display *dpy, int networkId, int npipes, GLXHyperpipeConfigSGIX *cfg, int *hpId);
+typedef int ( * PFNGLXQUERYHYPERPIPEATTRIBSGIXPROC) (Display *dpy, int timeSlice, int attrib, int size, void *returnAttribList);
+typedef int ( * PFNGLXQUERYHYPERPIPEBESTATTRIBSGIXPROC) (Display *dpy, int timeSlice, int attrib, int size, void *attribList, void *returnAttribList);
+typedef GLXHyperpipeConfigSGIX * ( * PFNGLXQUERYHYPERPIPECONFIGSGIXPROC) (Display *dpy, int hpId, int *npipes);
+typedef GLXHyperpipeNetworkSGIX * ( * PFNGLXQUERYHYPERPIPENETWORKSGIXPROC) (Display *dpy, int *npipes);
+
+#define glXBindHyperpipeSGIX GLXEW_GET_FUN(__glewXBindHyperpipeSGIX)
+#define glXDestroyHyperpipeConfigSGIX GLXEW_GET_FUN(__glewXDestroyHyperpipeConfigSGIX)
+#define glXHyperpipeAttribSGIX GLXEW_GET_FUN(__glewXHyperpipeAttribSGIX)
+#define glXHyperpipeConfigSGIX GLXEW_GET_FUN(__glewXHyperpipeConfigSGIX)
+#define glXQueryHyperpipeAttribSGIX GLXEW_GET_FUN(__glewXQueryHyperpipeAttribSGIX)
+#define glXQueryHyperpipeBestAttribSGIX GLXEW_GET_FUN(__glewXQueryHyperpipeBestAttribSGIX)
+#define glXQueryHyperpipeConfigSGIX GLXEW_GET_FUN(__glewXQueryHyperpipeConfigSGIX)
+#define glXQueryHyperpipeNetworkSGIX GLXEW_GET_FUN(__glewXQueryHyperpipeNetworkSGIX)
+
+#define GLXEW_SGIX_hyperpipe GLXEW_GET_VAR(__GLXEW_SGIX_hyperpipe)
+
+#endif /* GLX_SGIX_hyperpipe */
+
 /* ---------------------------- GLX_SGIX_pbuffer --------------------------- */
 
 #ifndef GLX_SGIX_pbuffer
@@ -920,6 +1109,9 @@ extern PFNGLXGETCONTEXTIDEXTPROC __glewXGetContextIDEXT;
 extern PFNGLXIMPORTCONTEXTEXTPROC __glewXImportContextEXT;
 extern PFNGLXQUERYCONTEXTINFOEXTPROC __glewXQueryContextInfoEXT;
 
+extern PFNGLXBINDTEXIMAGEEXTPROC __glewXBindTexImageEXT;
+extern PFNGLXRELEASETEXIMAGEEXTPROC __glewXReleaseTexImageEXT;
+
 extern PFNGLXGETAGPOFFSETMESAPROC __glewXGetAGPOffsetMESA;
 
 extern PFNGLXCOPYSUBBUFFERMESAPROC __glewXCopySubBufferMESA;
@@ -947,6 +1139,15 @@ extern PFNGLXCREATEGLXPIXMAPWITHCONFIGSGIXPROC __glewXCreateGLXPixmapWithConfigS
 extern PFNGLXGETFBCONFIGATTRIBSGIXPROC __glewXGetFBConfigAttribSGIX;
 extern PFNGLXGETFBCONFIGFROMVISUALSGIXPROC __glewXGetFBConfigFromVisualSGIX;
 extern PFNGLXGETVISUALFROMFBCONFIGSGIXPROC __glewXGetVisualFromFBConfigSGIX;
+
+extern PFNGLXBINDHYPERPIPESGIXPROC __glewXBindHyperpipeSGIX;
+extern PFNGLXDESTROYHYPERPIPECONFIGSGIXPROC __glewXDestroyHyperpipeConfigSGIX;
+extern PFNGLXHYPERPIPEATTRIBSGIXPROC __glewXHyperpipeAttribSGIX;
+extern PFNGLXHYPERPIPECONFIGSGIXPROC __glewXHyperpipeConfigSGIX;
+extern PFNGLXQUERYHYPERPIPEATTRIBSGIXPROC __glewXQueryHyperpipeAttribSGIX;
+extern PFNGLXQUERYHYPERPIPEBESTATTRIBSGIXPROC __glewXQueryHyperpipeBestAttribSGIX;
+extern PFNGLXQUERYHYPERPIPECONFIGSGIXPROC __glewXQueryHyperpipeConfigSGIX;
+extern PFNGLXQUERYHYPERPIPENETWORKSGIXPROC __glewXQueryHyperpipeNetworkSGIX;
 
 extern PFNGLXCREATEGLXPBUFFERSGIXPROC __glewXCreateGLXPbufferSGIX;
 extern PFNGLXDESTROYGLXPBUFFERSGIXPROC __glewXDestroyGLXPbufferSGIX;
@@ -996,8 +1197,11 @@ GLXEW_EXPORT GLboolean __GLXEW_ARB_get_proc_address;
 GLXEW_EXPORT GLboolean __GLXEW_ARB_multisample;
 GLXEW_EXPORT GLboolean __GLXEW_ATI_pixel_format_float;
 GLXEW_EXPORT GLboolean __GLXEW_ATI_render_texture;
+GLXEW_EXPORT GLboolean __GLXEW_EXT_fbconfig_packed_float;
+GLXEW_EXPORT GLboolean __GLXEW_EXT_framebuffer_sRGB;
 GLXEW_EXPORT GLboolean __GLXEW_EXT_import_context;
 GLXEW_EXPORT GLboolean __GLXEW_EXT_scene_marker;
+GLXEW_EXPORT GLboolean __GLXEW_EXT_texture_from_pixmap;
 GLXEW_EXPORT GLboolean __GLXEW_EXT_visual_info;
 GLXEW_EXPORT GLboolean __GLXEW_EXT_visual_rating;
 GLXEW_EXPORT GLboolean __GLXEW_MESA_agp_offset;
@@ -1014,6 +1218,7 @@ GLXEW_EXPORT GLboolean __GLXEW_SGIS_color_range;
 GLXEW_EXPORT GLboolean __GLXEW_SGIS_multisample;
 GLXEW_EXPORT GLboolean __GLXEW_SGIS_shared_multisample;
 GLXEW_EXPORT GLboolean __GLXEW_SGIX_fbconfig;
+GLXEW_EXPORT GLboolean __GLXEW_SGIX_hyperpipe;
 GLXEW_EXPORT GLboolean __GLXEW_SGIX_pbuffer;
 GLXEW_EXPORT GLboolean __GLXEW_SGIX_swap_barrier;
 GLXEW_EXPORT GLboolean __GLXEW_SGIX_swap_group;
@@ -1041,12 +1246,12 @@ extern GLboolean glxewContextIsSupported (GLXEWContext* ctx, const char* name);
 #define glxewInit() glxewContextInit(glxewGetContext())
 #define glxewIsSupported(x) glxewContextIsSupported(glxewGetContext(), x)
 
-#define GLXEW_GET_VAR(x) glxewGetContext()->x
+#define GLXEW_GET_VAR(x) (*(const GLboolean*)&(glxewGetContext()->x))
 #define GLXEW_GET_FUN(x) x
 
 #else /* GLEW_MX */
 
-#define GLXEW_GET_VAR(x) x
+#define GLXEW_GET_VAR(x) (*(const GLboolean*)&x)
 #define GLXEW_GET_FUN(x) x
 
 extern GLboolean glxewIsSupported (const char* name);
