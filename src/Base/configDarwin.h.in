@@ -19,6 +19,9 @@
 /* disable the use of openGL-nvidia extensions */
 #undef DONT_USE_NV
 
+/* wanna use the OpenGL Extension Wrangler for runtime extension checking ? */
+#undef USE_GLEW
+
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
 #undef SIZEOF_UNSIGNED_INT
