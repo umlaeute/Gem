@@ -22,12 +22,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #define MAX_NUM_SHADERS 32
 
-#ifdef __APPLE__
-# define t_GLshaderObj GLhandleARB*
-#else
-# define t_GLshaderObj GLhandleARB
-#endif
-
 typedef union {
   GLuint  i;
   t_float f;
@@ -108,7 +102,7 @@ class GEM_EXTERN glsl_program : public GemBase
   GLuint			m_shaderObj[MAX_NUM_SHADERS];
 
   GLhandleARB		m_programARB;
-  t_GLshaderObj		m_shaderObjARB[MAX_NUM_SHADERS];
+  GLhandleARB		m_shaderObjARB[MAX_NUM_SHADERS];
 
   GLint				m_maxLength;
   

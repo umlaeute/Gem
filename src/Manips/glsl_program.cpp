@@ -348,7 +348,7 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
       t_floatuint fi;
       fi.f=atom_getfloat(&argv[i]);
       m_shaderObj[i] = (GLuint)(fi.i);
-      m_shaderObjARB[i] = (t_GLshaderObj)(fi.i);
+      m_shaderObjARB[i] = (GLhandleARB)(fi.i);
     }
   
   //  not sure what to do here:  we don't want to link & re-link every render cycle,
