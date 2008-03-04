@@ -65,6 +65,7 @@ GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
 GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support], [force])
 GEM_ARG_ENABLE([NV], [openGL-NV-extension support], [force])
 GEM_ARG_DISABLE([glew],    [GLEW (runtime OpenGL extension checks) - experimental])
+enable_glew="yes"
 
 
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)], [force])
@@ -376,14 +377,6 @@ AC_MSG_RESULT([disabling NV-extensions])
  AC_DEFINE_UNQUOTED(DONT_USE_NV)
 fi
 
-if test "x$enable_glew" = "xyes"; then
-   AC_DEFINE_UNQUOTED(USE_GLEW)
-else
-  enable_glew="no"
-fi
-
-
-
 ### make-depend flags
 if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
     AC_SUBST(MAKEDEP_FLAGS, "-MM")
@@ -568,9 +561,6 @@ dnl GEM compilation options:
 dnl =======================================
 dnl
 dnl give some feedback about the configuration
-if test "x$have_gl" != "xyes"; then
- AC_MSG_ERROR([GL not found! you need openGL!!!])
-fi
 
 if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL
@@ -632,9 +622,16 @@ Configuration:
   input-support
     use v4l              : ${have_v4l}
     use ieee1394         : ${have_ieee1394}
-
-  misc
-    using ARB-extensions : ${enable_ARB}
-
-Now run make ...
 ])
+
+if test "x$PD_VERSION" = "x"; then
+  AC_MSG_ERROR([Pd (header) is mandatory and seems to be missing!])
+fi
+
+if test "x$have_gl" != "xyes"; then
+ AC_MSG_ERROR([GL (headers) not found! you need openGL!!!])
+fi
+
+AC_MSG_RESULT([Now run make ...])
+
+

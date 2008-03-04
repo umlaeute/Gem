@@ -51,6 +51,3 @@
 #undef SIZEOF_UNSIGNED_INT
 #undef HAVE_GLSIZEIPTRARB
 
-
-/* wanna use the OpenGL Extension Wrangler for runtime extension checking ? */
-#undef USE_GLEW

@@ -32,11 +32,6 @@
 #define DONT_INCLUDE_GLEXT
 
 
-/* wanna use the OpenGL Extension Wrangler for runtime extension checking ? */
-/* #define USE_GLEW */
-
-
-
 /*
  * we want libjpeg and libtiff for reading/writing images
  */
