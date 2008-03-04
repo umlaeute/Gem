@@ -52,6 +52,11 @@ class GEM_EXTERN pix_texture : public GemBase
     	// Destructor
     	virtual ~pix_texture();
 
+
+      ////////
+      // extension check
+      virtual bool isRunnable(void);
+
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);

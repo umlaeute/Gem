@@ -35,10 +35,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_info , t_floatarg, A_DEFFLOAT )
 // Constructor
 //
 gemlist_info :: gemlist_info	(t_floatarg arg0=0) {
-#ifndef GL_VERSION_1_1
-  error("gemlist_info: GEM was compiled without GL_VERSION_1_1");
-  error("gemlist_info: therefore this object will do nothing");
-#endif
   m_outletRotation = outlet_new(this->x_obj, 0);
   m_outletShear = outlet_new(this->x_obj, 0);
   m_outletScale = outlet_new(this->x_obj, 0);
@@ -56,10 +52,21 @@ gemlist_info :: ~gemlist_info () {
 }
 
 /////////////////////////////////////////////////////////
+// extension check
+//
+bool gemlist_info :: isRunnable() {
+  if(GLEW_VERSION_1_1)
+    return true;
+
+  error("your system does not support openGL-1.0 needed for operation");
+  return false;
+}
+
+
+/////////////////////////////////////////////////////////
 // Render
 //
 void gemlist_info :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
   float mi[16]={0};
   t_atom alist[12];
 
@@ -147,7 +154,6 @@ void gemlist_info :: render(GemState *state) {
   outlet_list (m_outletScale, &s_list, 3, alist+0);
   outlet_list (m_outletShear, &s_list, 3, alist+9);
   outlet_list (m_outletRotation, &s_list, 3, alist+3);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

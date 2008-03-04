@@ -29,8 +29,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *,
 /////////////////////////////////////////////////////////
 gemframebuffer :: gemframebuffer()
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
-		 m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
-		 m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
+    m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
+    m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
 	
 {
   // create an outlet to send out texture info:
@@ -46,8 +46,8 @@ gemframebuffer :: gemframebuffer()
 }
 gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
-		 m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
-		 m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
+    m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
+    m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
 {
   // create an outlet to send out texture info:
   //  - ID
@@ -65,7 +65,7 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   typeMess(type->s_name);
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
@@ -75,7 +75,21 @@ gemframebuffer :: ~gemframebuffer()
   outlet_free(m_outTexInfo);
 }
 
+////////////////////////////////////////////////////////
+// extension check
+//
 /////////////////////////////////////////////////////////
+bool gemframebuffer :: isRunnable() {
+  if(GLEW_EXT_framebuffer_object)
+    return true;
+
+  error("openGL framebuffer extension is not supported by this system");
+
+  return false;
+}
+
+
+////////////////////////////////////////////////////////
 // renderGL
 //
 /////////////////////////////////////////////////////////
@@ -92,17 +106,14 @@ void gemframebuffer :: render(GemState *state)
   glGetIntegerv(GL_VIEWPORT, m_vp);
   glGetFloatv( GL_COLOR_CLEAR_VALUE, m_color );
   
-#ifdef GL_EXT_framebuffer_object
   glBindTexture( m_texTarget, 0 );
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
-    // Bind the texture to the frame buffer.
+  // Bind the texture to the frame buffer.
   glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                             m_texTarget, m_offScreenID, 0);
+                            m_texTarget, m_offScreenID, 0);
   glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                                GL_RENDERBUFFER_EXT, m_depthBufferIndex);
+                               GL_RENDERBUFFER_EXT, m_depthBufferIndex);
   
-//  glPushMatrix();
-
   // We need a one-to-one mapping of pixels to texels in order to
   // ensure every element of our texture is processed. By setting our
   // viewport to the dimensions of our destination texture and drawing
@@ -111,31 +122,20 @@ void gemframebuffer :: render(GemState *state)
   glViewport(0,0, m_width, m_height);
 
   // debug yellow color
- // glClearColor( 1,1,0,0);
+  // glClearColor( 1,1,0,0);
   glClearColor( m_FBOcolor[0], m_FBOcolor[1], m_FBOcolor[2], m_FBOcolor[3] );
-/*
-  glShadeModel( GL_SMOOTH );
-  glEnable( GL_LIGHTING );
-  glEnable( GL_LIGHT0 );
-*/
-//  glEnable(GL_DEPTH_TEST);
-//  glDepthFunc( GL_LESS );
   
   // Clear the buffers and reset the model view matrix.
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
-//  glEnable(GL_DEPTH_TEST);
- glMatrixMode(GL_PROJECTION);
+  glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glFrustum(-1,1,-1,1,1,25);
-//  gluOrtho2D(-1, 1, -1, 1);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  
-#endif
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // postRender
 //
 /////////////////////////////////////////////////////////
@@ -151,8 +151,6 @@ void gemframebuffer :: postrender(GemState *state)
     h=(t_float)m_height;
   }
 
-  
-
   // GPGPU CONCEPT 4: Viewport-Sized Quad = Data Stream Generator.
   // In order to execute fragment programs, we need to generate pixels.
   // Drawing a quad the size of our viewport (see above) generates a
@@ -163,17 +161,15 @@ void gemframebuffer :: postrender(GemState *state)
   // viewport-sized quad vertices are at [-1,-1], [1,-1], [1,1], and
   // [-1,1]: the corners of the viewport.
 
-#ifdef GL_EXT_framebuffer_object
   glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
   glBindTexture( m_texTarget, m_offScreenID );
-//  glDisable(GL_DEPTH_TEST);
-#endif
   glPopMatrix();
   // reset to visible window's clear color
   glClearColor( m_color[0], m_color[1], m_color[2], m_color[3] );
   // reset to original viewport dimensions
   glViewport( m_vp[0], m_vp[1], m_vp[2], m_vp[3] );
   // now that the render is done,
+
   // send textureID, w, h, textureTarget to outlet
   t_atom ap[4];
   SETFLOAT(ap, (t_float)m_offScreenID);
@@ -192,20 +188,19 @@ void gemframebuffer :: initFBO()
 {
   // clean up any existing FBO before creating a new one
   if(m_haveinit)
-	destroyFBO();
+    destroyFBO();
 	
   if ( !m_mode )
-  {
-	m_texTarget = GL_TEXTURE_2D;
-	post("using mode 0:GL_TEXTURE_2D");
-  }else{
-	m_texTarget = GL_TEXTURE_RECTANGLE_EXT;
-	post("using mode 1:GL_TEXTURE_RECTANGLE");
+    {
+      m_texTarget = GL_TEXTURE_2D;
+      post("using mode 0:GL_TEXTURE_2D");
+    }else{
+    m_texTarget = GL_TEXTURE_RECTANGLE_EXT;
+    post("using mode 1:GL_TEXTURE_RECTANGLE");
   }
-#ifdef GL_EXT_framebuffer_object
+
   // Generate frame buffer object then bind it.
   glGenFramebuffersEXT(1, &m_frameBufferIndex);
-  //  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
   glGenRenderbuffersEXT(1, &m_depthBufferIndex);
 
   // Create the texture we will be using to render to.
@@ -213,11 +208,6 @@ void gemframebuffer :: initFBO()
   glBindTexture(m_texTarget, m_offScreenID);
 
   glTexImage2D( m_texTarget, 0, m_internalformat, m_width, m_height, 0, m_format, m_type, NULL );
-//  glTexImage2D(m_texTarget, 0, GL_RGB_FLOAT32_APPLE, m_width, m_height, 0,
-//                GL_RGB, GL_FLOAT, NULL);
-				//GL_RGB, GL_BYTE, NULL);
-				//GL_RGBA, GL_RGBA_FLOAT32_APPLE, NULL);
-				//GL_RGB, GL_RGB_FLOAT32_APPLE, NULL); // What's correct for here?
   // 2.13.2006
   // GL_LINEAR causes fallback to software shader
   // so switching back to GL_NEAREST
@@ -226,73 +216,69 @@ void gemframebuffer :: initFBO()
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_S, GL_CLAMP);
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_T, GL_CLAMP);
   
-  // Bind the texture to the frame buffer.
-//  glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-//                             m_texTarget, m_offScreenID, 0);
-
   // Initialize the render buffer.
   glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_depthBufferIndex);
   glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, m_width, m_height);
-//  glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-//                                GL_RENDERBUFFER_EXT, m_depthBufferIndex);
+
   // Make sure we have not errors.
   GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT) ;
   if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
-  {
-	  switch(status) {                                          
-  case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-		 error("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
-    break;
-  case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-		error("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
-    break;
-  case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-		error("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
-    break;
-  case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-		 error("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
-    break;
-  case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-		error("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
-    break;
-  case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-		 error("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
-    break;
-  case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-		 error("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
-    break;
-  case GL_INVALID_FRAMEBUFFER_OPERATION_EXT:
-		 error("GL_INVALID_FRAMEBUFFER_OPERATION_EXT");
-    break;
-  default:
-    error("Unknown ERROR %d", status);
-  }
-	  return;
-  }
+    {
+      switch(status) {                                          
+      case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+        error("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+        error("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+        error("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+        error("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+        error("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+        error("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
+        break;
+      case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+        error("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
+        break;
+      case GL_INVALID_FRAMEBUFFER_OPERATION_EXT:
+        error("GL_INVALID_FRAMEBUFFER_OPERATION_EXT");
+        break;
+      default:
+        error("Unknown ERROR %d", status);
+      }
+      return;
+    }
 
   // Return out of the frame buffer.
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-#endif
+
   m_haveinit = true;
   m_wantinit = false;
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // destroyFBO
 //
 /////////////////////////////////////////////////////////
 void gemframebuffer :: destroyFBO()
 {
-#ifdef GL_EXT_framebuffer_object
+  if(!GLEW_EXT_framebuffer_object)
+    return;
   // Release all resources.
   if(m_depthBufferIndex) glDeleteRenderbuffersEXT(1, &m_depthBufferIndex);
   if(m_frameBufferIndex) glDeleteFramebuffersEXT(1, &m_frameBufferIndex);
   if(m_offScreenID) glDeleteTextures(1, &m_offScreenID);
-#endif
+
   m_haveinit = false;
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // bangMess
 //
 /////////////////////////////////////////////////////////
@@ -301,7 +287,7 @@ void gemframebuffer :: bangMess()
 
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // startRendering
 //
 /////////////////////////////////////////////////////////
@@ -310,7 +296,7 @@ void gemframebuffer :: startRendering()
   m_wantinit = true;
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // stopRendering
 //
 /////////////////////////////////////////////////////////
@@ -318,37 +304,37 @@ void gemframebuffer :: stopRendering()
 {
   destroyFBO();
 }
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // dimMess
 //
 /////////////////////////////////////////////////////////
 void gemframebuffer :: dimMess(int width, int height)
 {
   if (width != m_width || height != m_height)
-  {
-    m_width = width;
-    m_height = height;
-    m_wantinit=true;
-    setModified();
-  }
+    {
+      m_width = width;
+      m_height = height;
+      m_wantinit=true;
+      setModified();
+    }
 }
 
 void gemframebuffer :: colorMess(float red, float green, float blue, float alpha)
 {
   
-    m_FBOcolor[0] = red;
-    m_FBOcolor[1] = green;
-    m_FBOcolor[2] = blue;
-    m_FBOcolor[3] = alpha;
+  m_FBOcolor[0] = red;
+  m_FBOcolor[1] = green;
+  m_FBOcolor[2] = blue;
+  m_FBOcolor[3] = alpha;
     
-    setModified();
+  setModified();
   
 }
 
 void gemframebuffer :: formatMess(char* format)
 {
-    if (!strcmp(format, "YUV"))
-	{
+  if (!strcmp(format, "YUV"))
+    {
       m_format = GL_YUV422_GEM;
 #ifdef __APPLE__
       m_type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
@@ -360,75 +346,75 @@ void gemframebuffer :: formatMess(char* format)
     } else
     
     if (!strcmp(format, "RGB")){
-	  m_internalformat = GL_RGB;
+      m_internalformat = GL_RGB;
       m_format = GL_RGB;
       post("format is GL_RGB, %d",m_format);
 
       return;
     } else
     
-    if (!strcmp(format, "RGBA")){
-	// colorspace will equal RGBA
-      post("format is GL_RGBA, %d",m_format);
-	  m_internalformat = GL_RGBA;
+      if (!strcmp(format, "RGBA")){
+        // colorspace will equal RGBA
+        post("format is GL_RGBA, %d",m_format);
+        m_internalformat = GL_RGBA;
 #ifdef __APPLE__
-      m_format = GL_BGRA;
+        m_format = GL_BGRA;
 #else 
-      m_format = GL_RGBA;
+        m_format = GL_RGBA;
 #endif
-      return;
-	} else {
-	//default
-	  post("default format is GL_RGB, %d",m_format);
-	  m_internalformat = GL_RGB;
-      m_format = GL_RGB;
-    }
-    // changed format, so we need to rebuild the FBO
-    m_wantinit=true;
+        return;
+      } else {
+        //default
+        post("default format is GL_RGB, %d",m_format);
+        m_internalformat = GL_RGB;
+        m_format = GL_RGB;
+      }
+  // changed format, so we need to rebuild the FBO
+  m_wantinit=true;
 }
 
 void gemframebuffer :: typeMess(char* type)
 {
-    if (!strcmp(type, "BYTE")){
-      m_type = GL_UNSIGNED_BYTE;
-      post("type is BYTE, %d",m_type);
-      return;
-    } 
+  if (!strcmp(type, "BYTE")){
+    m_type = GL_UNSIGNED_BYTE;
+    post("type is BYTE, %d",m_type);
+    return;
+  } 
 	else if (!strcmp(type, "INT")){
 	  m_type = GL_UNSIGNED_BYTE;
-      post("type is INT, %d",m_type);
-      return;
-    }
+    post("type is INT, %d",m_type);
+    return;
+  }
 	else if (!strcmp(type, "FLOAT")){
 	  post("type is GL_FLOAT, %d",m_type);
 	  m_type = GL_FLOAT;
 	  return;
-    } else {
-	//default
+  } else {
+    //default
 	  m_type = GL_UNSIGNED_BYTE;
 	  post("default type is BYTE, %d",m_type);
-    }
-    // changed type, so we need to rebuild the FBO
-    m_wantinit=true;
+  }
+  // changed type, so we need to rebuild the FBO
+  m_wantinit=true;
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // static member function
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 void gemframebuffer :: obj_setupCallback(t_class *classPtr)
 {
   class_addbang(classPtr, (t_method)&gemframebuffer::bangMessCallback);
   class_addmethod(classPtr, (t_method)&gemframebuffer::modeCallback,
-	gensym("mode"), A_FLOAT, A_NULL);
+                  gensym("mode"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::dimMessCallback,
-	gensym("dim"), A_FLOAT, A_FLOAT, A_NULL);
+                  gensym("dim"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::formatMessCallback,
-	gensym("format"), A_DEFSYMBOL, A_NULL);
+                  gensym("format"), A_DEFSYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::typeMessCallback,
-	gensym("type"), A_DEFSYMBOL, A_NULL);
+                  gensym("type"), A_DEFSYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::colorMessCallback,
-	gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+                  gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void gemframebuffer :: bangMessCallback(void *data)
 {

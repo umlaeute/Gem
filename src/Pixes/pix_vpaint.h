@@ -51,6 +51,9 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
     	//////////
     	// Destructor
     	virtual ~pix_vpaint();
+
+      // extension check
+      bool isRunnable(void);
     	
     	//////////
     	// Do the processing

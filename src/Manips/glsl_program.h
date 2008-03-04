@@ -20,21 +20,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "Base/GemBase.h"
 
-#if defined GL_ARB_shader_objects && !defined GL_ARB_shading_language_100
-/* i am not sure whether this can ever happen... */
-# undef GL_ARB_shader_objects
-#endif
+#define MAX_NUM_SHADERS 32
 
-#ifndef GL_VERSION_2_0
 #ifdef __APPLE__
 # define t_GLshaderObj GLhandleARB*
 #else
 # define t_GLshaderObj GLhandleARB
-#endif // __APPLE__
-#endif // GL_VERSION_2_0
-
-#define MAX_NUM_SHADERS 32
-
+#endif
 
 typedef union {
   GLuint  i;
@@ -63,16 +55,23 @@ class GEM_EXTERN glsl_program : public GemBase
   
   //////////
   // Constructor
-  glsl_program();
+  glsl_program(void);
 
  protected:
     
   //////////
   // Destructor
-  virtual ~glsl_program();
+  virtual ~glsl_program(void);
+
+
+  //////////
+  // check openGL-extensions
+  virtual bool 	isRunnable(void);
     	
   //////////
   // Do the rendering
+  virtual void 	renderGL2(void);
+  virtual void 	renderARB(void);
   virtual void 	render(GemState *state);
   
   //////////
@@ -89,29 +88,29 @@ class GEM_EXTERN glsl_program : public GemBase
   
   //////////
   // Do the linking
-  virtual void 	LinkProgram();
+  virtual bool 	LinkGL2(void);
+  virtual bool 	LinkARB(void);
+  virtual void 	LinkProgram(void);
   
   //////////
   // What can we play with?
-  virtual void 	getVariables();
+  virtual void 	getVariables(void);
 
-  void createArrays();
-  void destroyArrays();
+  void createArrays(void);
+  void destroyArrays(void);
   
   //////////
   // Print Info about Hardware limits
-  virtual void printInfo();
+  virtual void printInfo(void);
   
-#ifdef GL_VERSION_2_0
+
   GLuint			m_program;
   GLuint			m_shaderObj[MAX_NUM_SHADERS];
-  GLchar*			m_infoLog;
-#elif defined(GL_ARB_shader_objects)
-  GLhandleARB		m_program;
-  t_GLshaderObj		m_shaderObj[MAX_NUM_SHADERS];
-  GLcharARB*		m_infoLog;
-#endif
-  GLint				m_maxLength, m_infoLength;
+
+  GLhandleARB		m_programARB;
+  t_GLshaderObj		m_shaderObjARB[MAX_NUM_SHADERS];
+
+  GLint				m_maxLength;
   
   //////////
   // Variables for the, uh, variables

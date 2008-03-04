@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
 //
@@ -91,12 +91,24 @@ void pix_snap2tex :: setUpTextureState()
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
   glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
   glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-#ifdef GL_TEXTURE_RECTANGLE_EXT
-  if (m_mode)
-    if ( m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
-#endif //GL_TEXTURE_RECTANGLE_EXT
-  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+  if (m_mode && m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
+
+
+/////////////////////////////////////////////////////////
+// extension checks
+//
+/////////////////////////////////////////////////////////
+bool pix_snap2tex :: isRunnable(void) {
+  if(GLEW_VERSION_1_1 || GLEW_EXT_texture_object)
+    return true;
+
+  error("your system lacks texture support");
+  return false;
+}
+
 
 /////////////////////////////////////////////////////////
 // snapMess
@@ -105,6 +117,7 @@ void pix_snap2tex :: setUpTextureState()
 void pix_snap2tex :: snapMess()
 {
   if ( !GemMan::windowExists() ) return;
+  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
 
   int width =(m_width <=0)?GemMan::m_width :m_width;
   int height=(m_height<=0)?GemMan::m_height:m_height;
@@ -117,17 +130,11 @@ void pix_snap2tex :: snapMess()
 
   glEnable(m_textureType);
 
-#ifdef GL_VERSION_1_1
-  glBindTexture(m_textureType, m_textureObj);
-#elif GL_EXT_texture_object
-  glBindTextureEXT(m_textureType, m_textureObj);
-#else
-  // can we build a display list?
-  int creatingDispList = 0;
-  glNewList(m_textureObj, GL_COMPILE_AND_EXECUTE);
-  creatingDispList = 1;
-  setUpTextureState();
-#endif    
+  if(GLEW_VERSION_1_1) {
+    glBindTexture(m_textureType, m_textureObj);
+  } else {
+    glBindTextureEXT(m_textureType, m_textureObj);
+  }
 
   // if the size changed, then reset the texture
   int x_2 = powerOfTwo(width);
@@ -173,15 +180,6 @@ void pix_snap2tex :: snapMess()
                       m_texWidth,
                       m_texHeight);		
   
-#ifdef GL_VERSION_1_1
-#elif GL_EXT_texture_object
-#else
-  if (creatingDispList)
-    {
-      glEndList();
-    }
-#endif
-
   glDisable(m_textureType);
 
 }
@@ -206,15 +204,13 @@ void pix_snap2tex :: render(GemState *state)
 
   glEnable(m_textureType);
 
-#ifdef GL_VERSION_1_1
-  glBindTexture(m_textureType, m_textureObj);
-#elif GL_EXT_texture_object
-  glBindTextureEXT(m_textureType, m_textureObj);
-#else
-  glCallList(m_textureObj)
-#endif
+  if(GLEW_VERSION_1_1) {
+    glBindTexture(m_textureType, m_textureObj);
+  } else {
+    glBindTextureEXT(m_textureType, m_textureObj);
+  }
 
-    m_didTexture=true;
+  m_didTexture=true;
 
   t_atom ap[4];
   SETFLOAT(ap, (t_float)m_textureObj);
@@ -247,18 +243,16 @@ void pix_snap2tex :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: startRendering()
 {
-#ifdef GL_VERSION_1_1
-  glGenTextures(1, &m_textureObj);
-  glBindTexture(m_textureType, m_textureObj);
-  setUpTextureState();
-#elif GL_EXT_texture_object
-  glGenTexturesEXT(1, &m_textureObj);
-  glBindTextureEXT(m_textureType, m_textureObj);    
-  setUpTextureState();
-#else
-  m_textureObj = glGenLists(1);
-  m_rebuildList = 1;
-#endif
+  if(GLEW_VERSION_1_1) {
+    glGenTextures(1, &m_textureObj);
+    glBindTexture(m_textureType, m_textureObj);
+    setUpTextureState();
+  } else {
+    glGenTexturesEXT(1, &m_textureObj);
+    glBindTextureEXT(m_textureType, m_textureObj);    
+    setUpTextureState();
+  }
+
   m_oldWidth = m_oldHeight = m_texWidth = m_texHeight = -1;
   if (!m_textureObj)	{
     error("Gem: pix_snap2tex: Unable to allocate texture object");
@@ -273,13 +267,13 @@ void pix_snap2tex :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: stopRendering()
 {
-#ifdef GL_VERSION_1_1
-  if (m_textureObj) glDeleteTextures(1, &m_textureObj);
-#elif GL_EXT_texture_object
-  if (m_textureObj) glDeleteTexturesEXT(1, &m_textureObj);
-#else
-  if (m_textureObj) glDeleteLists(m_textureObj, 1);
-#endif
+  if(m_textureObj) {
+    if(GLEW_VERSION_1_1) {
+      glDeleteTextures(1, &m_textureObj);
+    } else {
+      glDeleteTexturesEXT(1, &m_textureObj);
+    }
+  }
   m_textureObj = 0;
   m_oldWidth = m_oldHeight = m_texWidth = m_texHeight = -1;
 }
@@ -340,16 +334,15 @@ void pix_snap2tex :: textureQuality(int type)
     m_textureQuality = GL_NEAREST;
   if (m_textureObj)
     {
-#ifdef GL_VERSION_1_1
-      glBindTexture(m_textureType, m_textureObj);
-      glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-      glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-#elif GL_EXT_texture_object
-      glBindTextureEXT(m_textureType, m_textureObj);
-      glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-      glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-#else
-#endif
+      if(GLEW_VERSION_1_1) {
+        glBindTexture(m_textureType, m_textureObj);
+        glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+        glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+      } else if (GLEW_EXT_texture_object) {
+        glBindTextureEXT(m_textureType, m_textureObj);
+        glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+        glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+      }
     }
   setModified();
 }
@@ -363,23 +356,18 @@ void pix_snap2tex :: repeatMess(int type)
   if (type)
     m_repeat = GL_REPEAT;
   else
-#ifdef GL_CLAMP_TO_EDGE
     m_repeat = GL_CLAMP_TO_EDGE;
-#else
-    m_repeat = GL_CLAMP;
-#endif
 
   if (m_textureObj) {
-#ifdef GL_VERSION_1_1
-    glBindTexture(m_textureType, m_textureObj);
-    glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
-    glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
-#elif GL_EXT_texture_object
-    glBindTextureEXT(m_textureType, m_textureObj);
-    glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
-    glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
-#else
-#endif
+    if(GLEW_VERSION_1_1) {
+      glBindTexture(m_textureType, m_textureObj);
+      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
+      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
+    } else if (GLEW_EXT_texture_object) {
+      glBindTextureEXT(m_textureType, m_textureObj);
+      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
+      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
+    }
   }
   setModified();
 }

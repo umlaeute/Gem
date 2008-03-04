@@ -47,7 +47,7 @@ class GEM_EXTERN fragment_program : public vertex_program
     
   //////////
   // Destructor
-  virtual ~fragment_program();
+  virtual ~fragment_program(void);
 
   //////////
   // which Program do we have (ARB, NV,...)
@@ -55,8 +55,12 @@ class GEM_EXTERN fragment_program : public vertex_program
 
   //////////
   // Print Info about Hardware limits
-  virtual void printInfo();
+  virtual void printInfo(void);
  
+  //////////
+  // extension check
+  virtual bool isRunnable(void);
+
  protected:
 	
   //////////

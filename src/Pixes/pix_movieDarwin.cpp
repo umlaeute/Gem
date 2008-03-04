@@ -321,8 +321,7 @@ void pix_movieDarwin :: realOpen(char *filename)
 	}
 	
 	//HDV
-	//I have no idea what to test for HDV
-	
+	//I have no idea what to test for HDV	
 	
 	int bpp;
 	if (m_colorspace == GL_BGRA_EXT)
@@ -358,11 +357,11 @@ void pix_movieDarwin :: realOpen(char *filename)
         }else{
             m_csize = 2;
             m_format = GL_YCBCR_422_APPLE;
-			#ifndef i386
+#ifndef i386
             m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-			#else
-			m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
-			#endif
+#else
+            m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
+#endif
             
 			
             createBuffer();
@@ -609,44 +608,6 @@ void pix_movieDarwin :: prepareTexture()
         m_coords[0].s = 0.f;
         m_coords[0].t = yratio;
     }
-
-/*
-    if (!GemMan::texture_rectangle_supported)
-    {
-        int neededXSize = m_pixBlock.image.xsize;
-        int neededYSize = m_pixBlock.image.ysize;
-        post("pix_movie: prepareTexture: x : %d, y : %d", neededXSize, neededYSize );
-
-        // ratio for the texture map coordinates
-        m_xRatio = (float)m_xsize / (float)neededXSize;
-        m_yRatio = (float)m_ysize / (float)neededYSize;
-
-        m_coords[3].s = 0.f;
-        m_coords[3].t = 0.f;
-    
-        m_coords[2].s = m_xRatio;
-        m_coords[2].t = 0.f;
-    
-        m_coords[1].s = m_xRatio;
-        m_coords[1].t = m_yRatio;
-    
-        m_coords[0].s = 0.f;
-        m_coords[0].t = m_yRatio;
-    } else {
-
-        m_coords[3].s = 0.f;
-        m_coords[3].t = 0.f;
-    
-        m_coords[2].s = m_pixBlock.image.xsize;
-        m_coords[2].t = 0.f;
-    
-        m_coords[1].s = m_pixBlock.image.xsize;
-        m_coords[1].t = m_pixBlock.image.ysize;
-    
-        m_coords[0].s = 0.f;
-        m_coords[0].t = m_pixBlock.image.ysize;
-    }
-    */
 }
 
 /////////////////////////////////////////////////////////
@@ -694,14 +655,6 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
   m_oldTexture   = state->texture;
 
 state->texture = 2;
- /*
-   if (!m_rectangle){
-	state->texture = 1;
-  }
-  else{
-	state->texture = 2;
-  }
-  */
   state->texCoords = m_coords;
   state->numTexCoords = 4;
   
@@ -719,14 +672,12 @@ state->texture = 2;
         m_dataSize[0] = m_pixBlock.image.csize;
         m_dataSize[1] = m_pixBlock.image.xsize;
         m_dataSize[2] = m_pixBlock.image.ysize;
-	glTexImage2D(GL_TEXTURE_2D, 0,
+        glTexImage2D(GL_TEXTURE_2D, 0,
 		     GL_RGBA,
 		     m_pixBlock.image.xsize,
 		     m_pixBlock.image.ysize, 0,
-		     m_pixBlock.image.format,
-		     m_pixBlock.image.type,
-              //       GL_YCBCR_422_APPLE,
-              //       GL_UNSIGNED_SHORT_8_8_REV_APPLE,
+		     m_pixBlock.image.format,//       GL_YCBCR_422_APPLE,
+		     m_pixBlock.image.type,//       GL_YCBCR_422_APPLE,
 		     m_pixBlock.image.data);
             
     post("pix__movieDarwin: new power-of-two texture size - glTexImage2D");
@@ -735,15 +686,12 @@ state->texture = 2;
     
 
     glTexSubImage2D(GL_TEXTURE_2D, 0,
-		    0, 0,			// position
-		    m_xsize,			// the x size of the data
-		    m_ysize,			// the y size of the data
-               //     GL_YCBCR_422_APPLE,
-               //     GL_UNSIGNED_SHORT_8_8_REV_APPLE,
-		    m_pixBlock.image.format,	// the format
-		   m_pixBlock.image.type,	// the type
-                   //  m_pixBlock.image.data);
-		    m_frame);		
+                    0, 0,			// position
+                    m_xsize,			// the x size of the data
+                    m_ysize,			// the y size of the data
+                    m_pixBlock.image.format,	// the format, e.g.  GL_YCBCR_422_APPLE,
+                    m_pixBlock.image.type,	// the type, e.g.  GL_UNSIGNED_SHORT_8_8_REV_APPLE,
+                    m_frame);		//  m_pixBlock.image.data);
   }
   else{
   
@@ -764,67 +712,21 @@ state->texture = 2;
 		     GL_RGBA,
 		     m_pixBlock.image.xsize,
 		     m_pixBlock.image.ysize, 0,
-		     m_pixBlock.image.format,
-		     m_pixBlock.image.type,
-              //       GL_YCBCR_422_APPLE,
-               //      GL_UNSIGNED_SHORT_8_8_REV_APPLE,
-				 //GL_UNSIGNED_SHORT_8_8_APPLE,
+		     m_pixBlock.image.format, //       GL_YCBCR_422_APPLE,
+		     m_pixBlock.image.type,   //      GL_UNSIGNED_SHORT_8_8_REV_APPLE, //GL_UNSIGNED_SHORT_8_8_APPLE,
 		     m_pixBlock.image.data);
 			 
 			post("pix_movieDarwin: new film");
 			m_newFilm = 0; //just to be sure
-		 } 
- 
-/* 
-  if (m_pixBlock.image.csize != m_dataSize[0] ||
-	m_pixBlock.image.xsize != m_dataSize[1] ||
-	m_pixBlock.image.ysize != m_dataSize[2]) {
-        m_dataSize[0] = m_pixBlock.image.csize;
-        m_dataSize[1] = m_pixBlock.image.xsize;
-        m_dataSize[2] = m_pixBlock.image.ysize;
-	glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
-		     GL_RGBA,
-		     m_pixBlock.image.xsize,
-		     m_pixBlock.image.ysize, 0,
-		     //m_pixBlock.image.format,
-		     //m_pixBlock.image.type,
-                     GL_YCBCR_422_APPLE,
-                     GL_UNSIGNED_SHORT_8_8_REV_APPLE,
-				   //GL_UNSIGNED_SHORT_8_8_APPLE,
-		     m_pixBlock.image.data);
-            
-    post("pix__movieDarwin: new rectangle texture size - glTexImage2D");
-    }
-		
-		 
-		 
-            
-			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
-		     GL_RGBA,
-		     m_pixBlock.image.xsize,
-		     m_pixBlock.image.ysize, 0,
-		     //m_pixBlock.image.format,
-		     //m_pixBlock.image.type,
-                     GL_YCBCR_422_APPLE,
-                     GL_UNSIGNED_SHORT_8_8_REV_APPLE,
-				 //GL_UNSIGNED_SHORT_8_8_APPLE,
-		     m_pixBlock.image.data);
-	   
-    */  
-	  
-	
+		 }	
 
     glTexSubImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
-		    0, 0,			// position
-		    m_xsize,			// the x size of the data
-		    m_ysize,			// the y size of the data
-                    GL_YCBCR_422_APPLE,
-                    GL_UNSIGNED_SHORT_8_8_REV_APPLE,
-		  //  m_pixBlock.image.format,	// the format
-		  //  m_pixBlock.image.type,	// the type
-                     m_pixBlock.image.data);
-		 //   m_frame);		// the data + header offset
-
+                    0, 0,			// position
+                    m_xsize,			// the x size of the data
+                    m_ysize,			// the y size of the data
+                    GL_YCBCR_422_APPLE,               //  m_pixBlock.image.format,	// the format
+                    GL_UNSIGNED_SHORT_8_8_REV_APPLE,  //  m_pixBlock.image.type,	// the type
+                    m_pixBlock.image.data);           //   m_frame);		// the data + header offset
     }
 	
 
@@ -847,14 +749,10 @@ void pix_movieDarwin :: postrender(GemState *state)
   
   glActiveTexture(GL_TEXTURE0_ARB);
   
-#ifdef GL_TEXTURE_RECTANGLE_ARB
   if ( !GemMan::texture_rectangle_supported )
     glDisable(GL_TEXTURE_2D);
   else
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
-#else
-    glDisable(GL_TEXTURE_2D);
-#endif
 
   if (m_numFrames>0 && m_reqFrame>m_numFrames){
     m_reqFrame = m_numFrames;
@@ -942,30 +840,6 @@ void pix_movieDarwin :: changeImage(int imgNum, int trackNum)
             return;
         } else m_reqFrame = imgNum;
   }
-
-/*
-  switch (m_haveMovie){
-  case GEM_MOVIE_MPG:
-#ifdef HAVE_LIBMPEG3
-#else
-#ifdef HAVE_LIBMPEG
-    m_reqFrame=(imgNum)?(m_curFrame==1)?2:1:0;
-    break;
-#endif
-#endif
-  case GEM_MOVIE_MOV:
-    if (trackNum > m_numTracks-1) error("GEM: pix_film: track %d number too high (max %d) ", trackNum, m_numTracks-1);
-    else m_track = trackNum;
-  case GEM_MOVIE_AVI:
-  default:
-    if (imgNum > m_numFrames) {
-      if (m_numFrames<0) m_reqFrame = imgNum;
-      else m_reqFrame=m_numFrames;
-      //      else error("GEM: pix_film: frame %d exceeds max (%d)", imgNum, m_numFrames);
-      //m_reqFrame = imgNum;
-      return;
-    } else m_reqFrame = imgNum;
-  }*/
 }
 
 void pix_movieDarwin :: LoadRam()

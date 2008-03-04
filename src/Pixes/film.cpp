@@ -60,9 +60,7 @@ bool film :: open(char *filename, int format)
 
   switch (wantedFormat){
   case GL_RGB:
-#ifdef GL_BGR
   case GL_BGR:
-#endif
     m_image.image.csize=3;
     m_image.image.format=wantedFormat;
     break;
@@ -73,9 +71,7 @@ bool film :: open(char *filename, int format)
   default:
     wantedFormat=GL_RGBA;
   case GL_RGBA:    
-#ifdef GL_BGRA
   case GL_BGRA:
-#endif
     m_image.image.csize=4;
     m_image.image.format=wantedFormat;
   }

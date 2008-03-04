@@ -35,6 +35,8 @@ class GEM_EXTERN gemlist_matrix : public GemBase
   virtual ~gemlist_matrix ();
   // Do the rendering
   virtual void	render (GemState *state);
+  // extension checks
+  virtual bool isRunnable();
 
  private:
   // The outlets

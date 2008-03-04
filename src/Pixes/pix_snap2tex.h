@@ -57,6 +57,10 @@ class pix_snap2tex : public GemBase
     	// Destructor
     	virtual ~pix_snap2tex();
 
+      ////////
+      // extension check
+      virtual bool isRunnable(void);
+
     	//////////
     	// When a snap is received
     	virtual void	snapMess();

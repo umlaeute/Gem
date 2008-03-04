@@ -58,7 +58,14 @@ class GEM_EXTERN glsl_vertex : public GemBase
   virtual void closeMess(void);
   //////////
   // open a shader up
+  virtual bool openMessGL2(void);
+  virtual bool openMessARB(void);
   virtual void openMess(t_symbol *filename);
+
+
+  ////////
+  // extension check
+  virtual bool isRunnable(void);
 
   //////////
   // Do the rendering
@@ -77,21 +84,17 @@ class GEM_EXTERN glsl_vertex : public GemBase
 
   //////////
   //
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
-  GLuint		m_shaderType;
-
   GLuint		m_shaderTarget;
-#ifdef GL_VERSION_2_0
   GLuint		m_shader;
-#else
-  GLhandleARB   m_shader;
-#endif // GL_VERSION_2_0
+  GLhandleARB   m_shaderARB;
   GLint			m_compiled;
-  int			m_size;
+  int			  m_size;
   char*			m_shaderString;
+  t_symbol* m_shaderFilename;
   
   GLint			m_shaderID;
-#endif
+
+
   t_outlet		*m_outShaderID;
 
  protected:

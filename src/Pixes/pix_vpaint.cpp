@@ -60,6 +60,35 @@ pix_vpaint :: ~pix_vpaint()
 	}
 }
 
+
+/////////////////////////////////////////////////////////
+// extension checks
+//
+/////////////////////////////////////////////////////////
+bool pix_vpaint :: isRunnable(void) {
+  /*
+   * Test for the required features 
+   */
+  /*    colorMatrixExtension = isExtensionSupported("GL_SGI_color_matrix");
+        blendMinMaxExtension = isExtensionSupported("GL_EXT_blend_minmax");
+        canDrawEdges = (colorMatrixExtension && blendMinMaxExtension) ||
+        (strncmp((const char *) glGetString(GL_VERSION), "1.2", 3) == 0);
+  */
+  if(!GLEW_VERSION_1_2) {
+    error("openGL-1.2 support missing");
+    return false;
+  }
+
+  if(!GLEW_EXT_blend_minmax && !GLEW_SGI_color_matrix) {
+    error("both color_matrix and blend_minmax extension missing");
+    return false;
+  }
+  
+  return true;
+}
+
+
+
 /////////////////////////////////////////////////////////
 // makePoints
 //
@@ -76,25 +105,20 @@ void pix_vpaint :: makepoints(void)
   numPoints = maxPoints;
   if (m_imageStruct.format == GL_YCBCR_422_GEM){
     for (i = 0; i < maxPoints; i++) {
-	points[i].x = rand() % m_w>>1;
-	points[i].y = rand() % m_h;
-	points[i].r = bi[4 * (points[i].y * (m_w>>1) + points[i].x)];
-	points[i].g = bi[4 * (points[i].y * (m_w>>1) + points[i].x) + 1];
-	points[i].b = bi[4 * (points[i].y * (m_w>>1) + points[i].x) + 2];
-/*	points[i+1].x = rand() % m_w>>1;
-	points[i+1].y = rand() % m_h;
-	points[i+1].r = bi[2 * (points[i+1].y * m_w>>1 + points[i+1].x)];
-	points[i+1].g = bi[2 * (points[i+1].y * m_w>>1 + points[i+1].x) + 1];
-	points[i+1].b = bi[2 * (points[i+1].y * m_w>>1 + points[i+1].x) + 2];
-*/  }
+      points[i].x = rand() % m_w>>1;
+      points[i].y = rand() % m_h;
+      points[i].r = bi[4 * (points[i].y * (m_w>>1) + points[i].x)];
+      points[i].g = bi[4 * (points[i].y * (m_w>>1) + points[i].x) + 1];
+      points[i].b = bi[4 * (points[i].y * (m_w>>1) + points[i].x) + 2];
+    }
   }else{
-  for (i = 0; i < maxPoints; i++) {
-	points[i].x = rand() % m_w;
-	points[i].y = rand() % m_h;
-	points[i].r = bi[4 * (points[i].y * m_w + points[i].x) + chRed];
-	points[i].g = bi[4 * (points[i].y * m_w + points[i].x) + chGreen];
-	points[i].b = bi[4 * (points[i].y * m_w + points[i].x) + chBlue];
-  }
+    for (i = 0; i < maxPoints; i++) {
+      points[i].x = rand() % m_w;
+      points[i].y = rand() % m_h;
+      points[i].r = bi[4 * (points[i].y * m_w + points[i].x) + chRed];
+      points[i].g = bi[4 * (points[i].y * m_w + points[i].x) + chGreen];
+      points[i].b = bi[4 * (points[i].y * m_w + points[i].x) + chBlue];
+    }
   }
 }
 
@@ -156,34 +180,34 @@ void pix_vpaint :: init()
     /*
      * Test for the required features 
      */
-/*    colorMatrixExtension = isExtensionSupported("GL_SGI_color_matrix");
-    blendMinMaxExtension = isExtensionSupported("GL_EXT_blend_minmax");
-    canDrawEdges = (colorMatrixExtension && blendMinMaxExtension) ||
-	(strncmp((const char *) glGetString(GL_VERSION), "1.2", 3) == 0);
-*/
-	canDrawEdges = 1;
+    /*    colorMatrixExtension = isExtensionSupported("GL_SGI_color_matrix");
+          blendMinMaxExtension = isExtensionSupported("GL_EXT_blend_minmax");
+          canDrawEdges = (colorMatrixExtension && blendMinMaxExtension) ||
+          (strncmp((const char *) glGetString(GL_VERSION), "1.2", 3) == 0);
+    */
+    canDrawEdges = 1;
     /*
      * Test for blend extension 
      */
   if (canDrawEdges) {
-	GLfloat table[256];
-	int i;
+    GLfloat table[256];
+    int i;
 
-	/*
-	 * Pixel transfer parameters 
-	 */
-	table[0] = 1.0;
-	for (i = 1; i < 256; i++)
+    /*
+     * Pixel transfer parameters 
+     */
+    table[0] = 1.0;
+    for (i = 1; i < 256; i++)
 	    table[i] = 0.0;
-	glPixelMapfv(GL_PIXEL_MAP_R_TO_R, 256, table);
-	glPixelMapfv(GL_PIXEL_MAP_G_TO_G, 256, table);
-	glPixelMapfv(GL_PIXEL_MAP_B_TO_B, 256, table);
-    } else {
-	error("This OpenGL implementation does not support the color matrix and/or\n");
-	error("the min/max blending equations, therefore the option to draw the\n");
-	error("Voronoi region edges is unavailable.\n\n");
-	error("The required features are available with OpenGL 1.2 or the GL_EXT_blend_minmax\n");
-	error("and GL_SGI_color_matrix extensions.\n");
+    glPixelMapfv(GL_PIXEL_MAP_R_TO_R, 256, table);
+    glPixelMapfv(GL_PIXEL_MAP_G_TO_G, 256, table);
+    glPixelMapfv(GL_PIXEL_MAP_B_TO_B, 256, table);
+  } else {
+    error("This OpenGL implementation does not support the color matrix and/or\n");
+    error("the min/max blending equations, therefore the option to draw the\n");
+    error("Voronoi region edges is unavailable.\n\n");
+    error("The required features are available with OpenGL 1.2 or the GL_EXT_blend_minmax\n");
+    error("and GL_SGI_color_matrix extensions.\n");
   }
   m_initialized = 1;
   m_pbuffer->disable();
@@ -292,10 +316,12 @@ void pix_vpaint :: processImage(imageStruct &image)
 	   * Blend in the edge lines 
 	   */
 	  glClear(GL_DEPTH_BUFFER_BIT);
-#ifdef GL_MIN_EXT
-	  glBlendEquationEXT(GL_MIN_EXT);
+
+    if(GL_EXT_blend_minmax)
+      glBlendEquationEXT(GL_MIN_EXT);
+
 	  glEnable(GL_BLEND);
-#endif
+
 	  glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
 	  glDisable(GL_BLEND);
     }

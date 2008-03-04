@@ -54,7 +54,7 @@ vertex_program :: vertex_program(t_symbol *filename) :
   openMess(filename);
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
@@ -65,6 +65,18 @@ vertex_program :: ~vertex_program()
 
 
 /////////////////////////////////////////////////////////
+// extension check
+//
+bool vertex_program :: isRunnable() {
+  if(GLEW_ARB_vertex_program || GLEW_NV_vertex_program)
+    return true;
+
+  error("need ARB (or NV) vertex_program extension for shaders");
+  return false;
+}
+
+
+////////////////////////////////////////////////////////
 // closeMess
 //
 /////////////////////////////////////////////////////////
@@ -75,16 +87,12 @@ void vertex_program :: closeMess(void)
   m_size=0;
   if(m_programID){
     switch(m_programType){
-#ifdef GL_NV_vertex_program
     case(GEM_PROGRAM_NV):
       glDeleteProgramsNV(1,&m_programID);
       break;
-#endif
-#ifdef GL_ARB_vertex_program
     case(GEM_PROGRAM_ARB):
       glDeleteProgramsARB(1,&m_programID);
       break;
-#endif
     default:
       break;
     }
@@ -93,25 +101,20 @@ void vertex_program :: closeMess(void)
   m_programID=0;
   m_programType=GEM_PROGRAM_none;
 }
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // openMess
 //
 /////////////////////////////////////////////////////////
 GLint vertex_program :: queryProgramtype(char*program)
 {
-#ifdef GL_VERTEX_PROGRAM_ARB
   if(!strncmp(program,"!!ARBvp1.0",10)){
     m_programTarget=GL_VERTEX_PROGRAM_ARB;
     return(GEM_PROGRAM_ARB);
   }
-#endif /* GL_VERTEX_PROGRAM_ARB */
-#ifdef GL_VERTEX_PROGRAM_NV
   if(!strncmp(program,"!!VP1.0",7)){
     m_programTarget=GL_VERTEX_PROGRAM_NV;
     return(GEM_PROGRAM_NV);
   }
-#endif /* GL_VERTEX_PROGRAM_NV */
-
   return GEM_PROGRAM_none;
 }
 
@@ -155,8 +158,8 @@ void vertex_program :: openMess(t_symbol *filename)
     while(*s && *s != '\n') s++;
     *s = '\0';
     post("unknown program header \"%s\" or error open \"%s\" file\n",
-	 m_programString,
-	 filename->s_name);
+         m_programString,
+         filename->s_name);
     
     delete m_programString; m_programString=NULL;
     m_size=0;
@@ -175,39 +178,45 @@ void vertex_program :: LoadProgram(void)
   if(NULL==m_programString)return;
   GLint err=-1;
 
+  if((GEM_PROGRAM_NV == m_programType) && (!GLEW_NV_vertex_program)) {
+    error("NV vertex programs not supported by this system");
+    return;
+  }
+
+  if((GEM_PROGRAM_ARB == m_programType) && (!GLEW_ARB_vertex_program)) {
+    error("ARB vertex programs not supported by this system");
+    return;
+  }
+
   switch(m_programType){
-#ifdef GL_NV_vertex_program
   case  GEM_PROGRAM_NV:
     if (m_programID==0)
       {
-	glEnable(m_programTarget);
-	glGenProgramsNV(1, &m_programID);
-	glBindProgramNV(m_programTarget, m_programID);
-	glLoadProgramNV(m_programTarget, m_programID, m_size, (GLubyte*)m_programString);
-	glGetIntegerv(GL_PROGRAM_ERROR_POSITION_NV, &err);
-      } else {
         glEnable(m_programTarget);
-	glBindProgramNV(m_programTarget, m_programID);
-	return;
+        glGenProgramsNV(1, &m_programID);
+        glBindProgramNV(m_programTarget, m_programID);
+        glLoadProgramNV(m_programTarget, m_programID, m_size, (GLubyte*)m_programString);
+        glGetIntegerv(GL_PROGRAM_ERROR_POSITION_NV, &err);
+      } else {
+      glEnable(m_programTarget);
+      glBindProgramNV(m_programTarget, m_programID);
+      return;
     }
     break;
-#endif /* GL_NV_vertex_program */
-#ifdef GL_ARB_vertex_program
   case  GEM_PROGRAM_ARB:
     if (m_programID==0)
       {
-	glEnable(m_programTarget);
-	glGenProgramsARB(1, &m_programID);
-	glBindProgramARB( m_programTarget, m_programID);
-	glProgramStringARB( m_programTarget, GL_PROGRAM_FORMAT_ASCII_ARB, m_size, m_programString);
+        glEnable(m_programTarget);
+        glGenProgramsARB(1, &m_programID);
+        glBindProgramARB( m_programTarget, m_programID);
+        glProgramStringARB( m_programTarget, GL_PROGRAM_FORMAT_ASCII_ARB, m_size, m_programString);
         glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &err);
       } else {
-        glEnable(m_programTarget);
-	glBindProgramARB(m_programTarget, m_programID);
-	return;
+      glEnable(m_programTarget);
+      glBindProgramARB(m_programTarget, m_programID);
+      return;
     }
     break;
-#endif /* GL_ARB_vertex_program */
   default:
     return;
   }
@@ -221,52 +230,50 @@ void vertex_program :: LoadProgram(void)
     while(*e != '\n' && *e != '\0') e++;
     *e = '\0';
     error("program error at line %d:\n\"%s\"\n",line,s);
-#ifdef GL_PROGRAM_ERROR_STRING_ARB
     post("%s\n", glGetString(GL_PROGRAM_ERROR_STRING_ARB));
-#endif /* GL_PROGRAM_ERROR_STRING_ARB */
   }
 
-#if defined GL_ARB_vertex_program && defined GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB
-  GLint isUnderNativeLimits;
-  glGetProgramivARB( m_programTarget, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isUnderNativeLimits);
+  if(GLEW_ARB_vertex_program) {
+    GLint isUnderNativeLimits;
+    glGetProgramivARB( m_programTarget, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isUnderNativeLimits);
   
-// If the program is over the hardware's limits, print out some information
-  if (isUnderNativeLimits!=1)
-  {
-		// Go through the most common limits that are exceeded
-    error("is beyond hardware limits");
+    // If the program is over the hardware's limits, print out some information
+    if (isUnderNativeLimits!=1)
+      {
+        // Go through the most common limits that are exceeded
+        error("is beyond hardware limits");
 
-		GLint aluInstructions, maxAluInstructions;
-		glGetProgramivARB(m_programTarget, GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &aluInstructions);
-		glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB, &maxAluInstructions);
-		if (aluInstructions>maxAluInstructions)
-			post("[%s]: Compiles to too many ALU instructions (%d, limit is %d)\n", m_buf, aluInstructions, maxAluInstructions);
+        GLint aluInstructions, maxAluInstructions;
+        glGetProgramivARB(m_programTarget, GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &aluInstructions);
+        glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB, &maxAluInstructions);
+        if (aluInstructions>maxAluInstructions)
+          post("[%s]: Compiles to too many ALU instructions (%d, limit is %d)\n", m_buf, aluInstructions, maxAluInstructions);
 
-		GLint textureInstructions, maxTextureInstructions;
-		glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INSTRUCTIONS_ARB, &textureInstructions);
-		glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB, &maxTextureInstructions);
-		if (textureInstructions>maxTextureInstructions)
-			post("[%s]: Compiles to too many texture instructions (%d, limit is %d)\n", m_buf, textureInstructions, maxTextureInstructions);
+        GLint textureInstructions, maxTextureInstructions;
+        glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INSTRUCTIONS_ARB, &textureInstructions);
+        glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB, &maxTextureInstructions);
+        if (textureInstructions>maxTextureInstructions)
+          post("[%s]: Compiles to too many texture instructions (%d, limit is %d)\n", m_buf, textureInstructions, maxTextureInstructions);
 
-		GLint textureIndirections, maxTextureIndirections;
-		glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INDIRECTIONS_ARB, &textureIndirections);
-		glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB, &maxTextureIndirections);
-		if (textureIndirections>maxTextureIndirections)
-			post("[%s]: Compiles to too many texture indirections (%d, limit is %d)\n", m_buf, textureIndirections, maxTextureIndirections);
+        GLint textureIndirections, maxTextureIndirections;
+        glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INDIRECTIONS_ARB, &textureIndirections);
+        glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB, &maxTextureIndirections);
+        if (textureIndirections>maxTextureIndirections)
+          post("[%s]: Compiles to too many texture indirections (%d, limit is %d)\n", m_buf, textureIndirections, maxTextureIndirections);
 
-		GLint nativeTextureIndirections, maxNativeTextureIndirections;
-		glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &nativeTextureIndirections);
-		glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &maxNativeTextureIndirections);
-		if (nativeTextureIndirections>maxNativeTextureIndirections)
-			post("[%s]: Compiles to too many native texture indirections (%d, limit is %d)\n", m_buf, nativeTextureIndirections, maxNativeTextureIndirections);
+        GLint nativeTextureIndirections, maxNativeTextureIndirections;
+        glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &nativeTextureIndirections);
+        glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &maxNativeTextureIndirections);
+        if (nativeTextureIndirections>maxNativeTextureIndirections)
+          post("[%s]: Compiles to too many native texture indirections (%d, limit is %d)\n", m_buf, nativeTextureIndirections, maxNativeTextureIndirections);
 
-		GLint nativeAluInstructions, maxNativeAluInstructions;
-		glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &nativeAluInstructions);
-		glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &maxNativeAluInstructions);
-		if (nativeAluInstructions>maxNativeAluInstructions)
-			post("[%s]: Compiles to too many native ALU instructions (%d, limit is %d)\n", m_buf, nativeAluInstructions, maxNativeAluInstructions);
+        GLint nativeAluInstructions, maxNativeAluInstructions;
+        glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &nativeAluInstructions);
+        glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &maxNativeAluInstructions);
+        if (nativeAluInstructions>maxNativeAluInstructions)
+          post("[%s]: Compiles to too many native ALU instructions (%d, limit is %d)\n", m_buf, nativeAluInstructions, maxNativeAluInstructions);
+      }
   }
-#endif
 }
 
 void vertex_program :: startRendering()
@@ -282,16 +289,15 @@ void vertex_program :: startRendering()
 
 void vertex_program :: render(GemState *state)
 {
-#if defined GL_ARB_vertex_program
-  // || defined GL_NV_vertex_program
   /* actually glProgramEnvParameter4fvARB really depends on GL_ARB_vertex_program
    * and cannot be used with _only_ GL_NV_vertex_program
    */
   LoadProgram();
-  if(m_programID&&(m_envNum>=0)){
-    glProgramEnvParameter4fvARB(m_programTarget, m_envNum, m_param);
+  if(GLEW_ARB_vertex_program) {
+    if(m_programID&&(m_envNum>=0)){
+      glProgramEnvParameter4fvARB(m_programTarget, m_envNum, m_param);
+    }
   }
-#endif
 } 
 
 /////////////////////////////////////////////////////////
@@ -314,16 +320,16 @@ void vertex_program :: postrender(GemState *state)
 void vertex_program :: paramMess(int envNum, t_float param1, t_float param2, t_float param3, t_float param4)
 {
   if(envNum>=0){
-	//float param[4] = {param1, param2, param3, param4};
+    //float param[4] = {param1, param2, param3, param4};
 	
-	m_param[0] = param1;
-	m_param[1] = param2;
-	m_param[2] = param3;
-	m_param[3] = param4;
+    m_param[0] = param1;
+    m_param[1] = param2;
+    m_param[2] = param3;
+    m_param[3] = param4;
 
-	m_envNum = envNum;
+    m_envNum = envNum;
   } else 
-        m_envNum = -1;
+    m_envNum = -1;
 }
 /////////////////////////////////////////////////////////
 // printInfo
@@ -331,8 +337,11 @@ void vertex_program :: paramMess(int envNum, t_float param1, t_float param2, t_f
 /////////////////////////////////////////////////////////
 void vertex_program :: printInfo()
 {
-#ifdef GL_ARB_vertex_program
 	GLint bitnum = 0;
+
+  if(!GLEW_ARB_vertex_program)
+    return;
+
 	post("Vertex_Program Hardware Info");
 	post("============================");
 	glGetIntegerv( GL_MAX_VERTEX_ATTRIBS_ARB, &bitnum );
@@ -385,10 +394,9 @@ void vertex_program :: printInfo()
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_ATTRIBS: %d", bitnum);
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
-	post("PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
+  post("PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
 	post("PROGRAM_NATIVE_ADDRESS_REGISTERS: %d", bitnum);
-#endif /* GL_ARB_vertex_program */
 }
 
 /////////////////////////////////////////////////////////
@@ -398,17 +406,17 @@ void vertex_program :: printInfo()
 void vertex_program :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&vertex_program::openMessCallback,
-		  gensym("open"), A_SYMBOL, A_NULL);
+                  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&vertex_program::printMessCallback,
-		  gensym("print"), A_NULL);
+                  gensym("print"), A_NULL);
   class_addmethod(classPtr, (t_method)&vertex_program::paramMessCallback,
-		  gensym("parameter"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
+                  gensym("parameter"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
   class_addmethod(classPtr, (t_method)&vertex_program::paramMessCallback,
-		  gensym("param"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
+                  gensym("param"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
 }
 void vertex_program :: openMessCallback(void *data, t_symbol *filename)
 {
-	    GetMyClass(data)->openMess(filename);
+  GetMyClass(data)->openMess(filename);
 }
 void vertex_program :: printMessCallback(void *data)
 {

@@ -36,6 +36,9 @@ class GEM_EXTERN gemlist_info : public GemBase
   // Do the rendering
   virtual void	render (GemState *state);
 
+  // extension checks
+  virtual bool isRunnable();
+
  private:
   // The outlets
   t_outlet    	*m_outletScale;

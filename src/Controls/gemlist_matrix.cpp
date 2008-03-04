@@ -35,10 +35,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_matrix , t_floatarg, A_DEFFLOAT )
 // Constructor
 //
 gemlist_matrix :: gemlist_matrix	(t_floatarg arg0=0) {
-#ifndef GL_VERSION_1_1
-  error("gemlist_matrix: GEM was compiled without GL_VERSION_1_1");
-  error("gemlist_matrix: therefore this object will do nothing");
-#endif
   m_outletMatrice = outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
@@ -48,11 +44,23 @@ gemlist_matrix :: ~gemlist_matrix () {
   outlet_free(m_outletMatrice);
 }
 
+
+/////////////////////////////////////////////////////////
+// extension check
+//
+bool gemlist_matrix :: isRunnable() {
+  if(GLEW_VERSION_1_1)
+    return true;
+
+  error("your system does not support openGL-1.0 needed for operation");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void gemlist_matrix :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
   float mi[16]={0};
   int i;
   t_atom alist[16];
@@ -64,7 +72,6 @@ void gemlist_matrix :: render(GemState *state) {
     SETFLOAT(alist+i, mi[i]);
   }
   outlet_list (m_outletMatrice, &s_list, 16, alist);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

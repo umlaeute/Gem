@@ -48,6 +48,10 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
     	// Destructor
     	virtual ~pix_imageInPlace();
 
+      ////////
+      // extension check
+      virtual bool isRunnable(void);
+
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);

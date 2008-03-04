@@ -57,7 +57,7 @@
 #  define START_TIMING
 #  define STOP_TIMING(x)
 # endif /* timing for OS */
-#else
+#else /* !__TIMING__ */
 # define START_TIMING
 # define STOP_TIMING(x)
 #endif /* __TIMING__ */
@@ -75,23 +75,23 @@ pixBlock :: pixBlock()
 
 imageStruct :: imageStruct() 
   : xsize (0),ysize(0),csize(0),
-#ifdef GL_UNSIGNED_SHORT_8_8_REV_APPLE
+#ifdef __APPLE__
     // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
-    #ifdef __BIG_ENDIAN__
+# ifdef __BIG_ENDIAN__
 	type(GL_UNSIGNED_SHORT_8_8_REV_APPLE),
-	#else
+# else 
 	type(GL_UNSIGNED_SHORT_8_8_APPLE),
-	#endif
+# endif /* __BIG_ENDIAN__ */
 	format(GL_YCBCR_422_GEM),
-#else
+#else /* !__APPLE__ */
     type(GL_UNSIGNED_BYTE), format(GL_RGBA),
-#endif
+#endif /* __APPLE__ */
     notowned(0),data(NULL),pdata(NULL),datasize(0),
 #ifdef __APPLE__
     upsidedown(1)
-#else
+#else /* !__APPLE__ */
     upsidedown(0)
-#endif
+#endif /* __APPLE__ */
 {}
 
 imageStruct :: ~imageStruct()

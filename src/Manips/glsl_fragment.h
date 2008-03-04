@@ -55,6 +55,10 @@ class GEM_EXTERN glsl_fragment : public glsl_vertex
   // Destructor
   virtual ~glsl_fragment();
 
+  ////////
+  // extension check
+  virtual bool isRunnable(void);
+
   //////////
   // Print Info about Hardware limits
   virtual void printInfo();

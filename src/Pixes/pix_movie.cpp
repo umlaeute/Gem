@@ -160,6 +160,8 @@ void pix_movie :: prepareTexture()
 /////////////////////////////////////////////////////////
 void pix_movie :: texFrame(GemState *state, int doit)
 {
+  GLenum target = GL_TEXTURE_2D;
+
   m_oldTexCoords=state->texCoords;
   m_oldNumCoords=state->numTexCoords;
   m_oldTexture  =state->texture;
@@ -168,7 +170,6 @@ void pix_movie :: texFrame(GemState *state, int doit)
   state->texCoords = m_coords;
   state->numTexCoords = 4;
   // enable to texture binding
-#ifdef GL_TEXTURE_RECTANGLE_EXT
   if (!GemMan::texture_rectangle_supported)	//tigital
   {
     glEnable(GL_TEXTURE_2D);
@@ -176,78 +177,34 @@ void pix_movie :: texFrame(GemState *state, int doit)
   }else{
     glEnable(GL_TEXTURE_RECTANGLE_EXT);
     glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+
+    target = GL_TEXTURE_RECTANGLE_EXT;
   }
-#else
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_textureObj);
-#endif
   
   if (doit) {
     // if the size changed, then reset the texture
     if (m_pixBlock.image.csize != m_dataSize[0] ||
-	m_pixBlock.image.xsize != m_dataSize[1] ||
-	m_pixBlock.image.ysize != m_dataSize[2]) {
+        m_pixBlock.image.xsize != m_dataSize[1] ||
+        m_pixBlock.image.ysize != m_dataSize[2]) {
       m_dataSize[0] = m_pixBlock.image.csize;
       m_dataSize[1] = m_pixBlock.image.xsize;
       m_dataSize[2] = m_pixBlock.image.ysize;
-#ifdef GL_TEXTURE_RECTANGLE_EXT
-        if (!GemMan::texture_rectangle_supported)	//tigital
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0,
-		   m_pixBlock.image.csize,
-		   m_pixBlock.image.xsize,
-		   m_pixBlock.image.ysize, 0,
-		   m_pixBlock.image.format,
-		   m_pixBlock.image.type,
-		   m_pixBlock.image.data);
-        }else{
-            glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
-		   m_pixBlock.image.csize,
-		   m_pixBlock.image.xsize,
-		   m_pixBlock.image.ysize, 0,
-		   m_pixBlock.image.format,
-		   m_pixBlock.image.type,
-		   m_pixBlock.image.data);
-        }
-#else
-	glTexImage2D(GL_TEXTURE_2D, 0,
-		     m_pixBlock.image.csize,
-		     m_pixBlock.image.xsize,
-		     m_pixBlock.image.ysize, 0,
-		     m_pixBlock.image.format,
-		     m_pixBlock.image.type,
-		     m_pixBlock.image.data);
-#endif // __APPLE__
+      glTexImage2D(target, 0,
+                   m_pixBlock.image.csize,
+                   m_pixBlock.image.xsize,
+                   m_pixBlock.image.ysize, 0,
+                   m_pixBlock.image.format,
+                   m_pixBlock.image.type,
+                   m_pixBlock.image.data);
     }
-   // okay, load in the actual pixel data
-#ifdef GL_TEXTURE_RECTANGLE_EXT
-    if ( !GemMan::texture_rectangle_supported) // tigital
-    {
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
-		    0, 0,			// position
-		    m_xsize,			// the x size of the data
-		    m_ysize,			// the y size of the data
-		    m_pixBlock.image.format,	// the format
-		    m_pixBlock.image.type,	// the type
-		    m_frame);		// the data + header offset
-    }else{
-        glTexSubImage2D(GL_TEXTURE_RECTANGLE_EXT, 0,
-		    0, 0,			// position
-		    m_xsize,			// the x size of the data
-		    m_ysize,			// the y size of the data
-		    m_pixBlock.image.format,	// the format
-		    m_pixBlock.image.type,	// the type
-		    m_frame);		// the data + header offset
-    }
-#else
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
-		    0, 0,			// position
-		    m_xsize,			// the x size of the data
-		    m_ysize,			// the y size of the data
-		    m_pixBlock.image.format,	// the format
-		    m_pixBlock.image.type,	// the type
-		    m_frame);		// the data + header offset
-#endif // __APPLE__
+    // okay, load in the actual pixel data
+    glTexSubImage2D(target, 0,
+                    0, 0,			// position
+                    m_xsize,			// the x size of the data
+                    m_ysize,			// the y size of the data
+                    m_pixBlock.image.format,	// the format
+                    m_pixBlock.image.type,	// the type
+                    m_frame);		// the data + header offset
   }
 }
 
@@ -266,15 +223,11 @@ void pix_movie :: postrender(GemState *state)
   //  post("pix_movie: postrender");
   m_pixBlock.newimage = 0;
 
-#ifdef GL_TEXTURE_RECTANGLE_EXT
   if ( !GemMan::texture_rectangle_supported)
     glDisable(GL_TEXTURE_2D);
   else
     glDisable(GL_TEXTURE_RECTANGLE_EXT);
-#else
-    glDisable(GL_TEXTURE_2D);
-#endif
-
+  
   if (m_numFrames>0 && m_reqFrame>m_numFrames){
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
@@ -289,14 +242,10 @@ void pix_movie :: postrender(GemState *state)
 void pix_movie :: startRendering()
 {
     glGenTextures(1, &m_textureObj);
-#ifdef GL_TEXTURE_RECTANGLE_EXT
     if ( ! GemMan::texture_rectangle_supported )
         glBindTexture(GL_TEXTURE_2D, m_textureObj);
     else
         glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
-#else
-    glBindTexture(GL_TEXTURE_2D, m_textureObj);
-#endif
   
     setUpTextureState();
     
@@ -321,7 +270,6 @@ void pix_movie :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_movie :: setUpTextureState()
 {
-#ifdef GL_TEXTURE_RECTANGLE_EXT
     if ( !GemMan::texture_rectangle_supported )				//tigital
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -332,25 +280,16 @@ void pix_movie :: setUpTextureState()
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     } else {
         glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
-#ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
         if (GemMan::client_storage_supported)
             glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
         else
-#endif
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
-#else
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-#endif // __APPLE__
 }
 
 /////////////////////////////////////////////////////////

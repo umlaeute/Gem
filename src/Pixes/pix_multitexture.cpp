@@ -40,15 +40,11 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
     m_xRatio(1.f), m_yRatio(1.f), upsidedown(false), m_texSizeX(0), m_texSizeY(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0)
 {
-#if !defined(GL_VERSION_1_3) && !defined(GL_ARB_multitexture)
-  post("[pix_multitexture]: GEM has been compiled without ARB-multitexture support");
-#endif
   if (m_reqTexUnits<=0) {
     throw (GemException("[pix_multitexture]: Please specify more than 0 texture units"));
   }
 
-#if defined(GL_TEXTURE_RECTANGLE_EXT) 
-  //|| defined(GL_NV_TEXTURE_RECTANGLE)
+#ifdef __APPLE__
   m_mode = 1;  //default to the fastest mode for systems that support it
   m_textureType = GL_TEXTURE_RECTANGLE_EXT;
 #endif
@@ -73,6 +69,17 @@ pix_multitexture :: ~pix_multitexture()
     }
     delete[]m_inlet;
   }
+}
+
+/////////////////////////////////////////////////////////
+// extension checks
+//
+/////////////////////////////////////////////////////////
+bool pix_multitexture :: isRunnable(void) {
+  if(GLEW_VERSION_1_3 && GLEW_ARB_multitexture)return true;
+
+  error("your system lacks multitexture support");
+  return false;
 }
 
 /////////////////////////////////////////////////////////
@@ -118,10 +125,6 @@ void pix_multitexture :: render(GemState *state)
 	state->multiTexUnits = m_reqTexUnits;
 	if (m_textureType == GL_TEXTURE_2D)
 	{
-//	  x_2 = powerOfTwo(m_texSizeX);
-//	  y_2 = powerOfTwo(m_texSizeY);
-//	  normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
-//	  setTexCoords(m_coords, 1.f, 1.f, true);
 	  m_xRatio = 1.0;
 	  m_yRatio = 1.0;
 	  state->texture = 1;
@@ -136,11 +139,12 @@ void pix_multitexture :: render(GemState *state)
 	
 	for ( int i=0; i< m_reqTexUnits; i++ )
 	{
-#if defined(GL_VERSION_1_3)
-        glActiveTexture( GL_TEXTURE0 + i );
-#elif defined(GL_ARB_multitexture) && !defined(GL_VERSION_1_3)
-		glActiveTextureARB( GL_TEXTURE0_ARB + i );
-#endif
+    if(GLEW_VERSION_1_3) {
+      glActiveTexture( GL_TEXTURE0 + i );
+    } else {
+      glActiveTextureARB( GL_TEXTURE0_ARB + i );
+    }
+
 		glEnable( m_textureType );
 		glBindTexture( m_textureType, m_texID[i] );
 		glTexParameteri( m_textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
@@ -160,26 +164,22 @@ void pix_multitexture :: postrender(GemState *state)
   state->numTexCoords= m_oldNumCoords;
   state->texture     = m_oldTexture;
   
-#if defined(GL_VERSION_1_3)
-  for ( int i = m_reqTexUnits; i>0; i--)
-  {
-    glActiveTexture( GL_TEXTURE0 + i);
-    glDisable( m_textureType );
-  }
-  glActiveTexture( GL_TEXTURE0 );
-#elif defined(GL_ARB_multitexture) && !defined(GL_VERSION_1_3)
-  for ( int i = m_reqTexUnits; i>0; i--)
-  {
-    glActiveTextureARB( GL_TEXTURE0_ARB + i);
-    glDisable( m_textureType );
-  }
-  glActiveTextureARB( GL_TEXTURE0_ARB );
-#endif
 
-/*  test code to auto-generate texture coords:  doesn't work :-(
-  glDisable(GL_TEXTURE_GEN_S);
-  glDisable(GL_TEXTURE_GEN_T);
-*/
+  if(GLEW_VERSION_1_3) {
+    for ( int i = m_reqTexUnits; i>0; i--)
+      {
+        glActiveTexture( GL_TEXTURE0 + i);
+        glDisable( m_textureType );
+      }
+    glActiveTexture( GL_TEXTURE0 );
+  } else {
+    for ( int i = m_reqTexUnits; i>0; i--)
+      {
+        glActiveTextureARB( GL_TEXTURE0_ARB + i);
+        glDisable( m_textureType );
+      }
+    glActiveTextureARB( GL_TEXTURE0_ARB );
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -188,10 +188,8 @@ void pix_multitexture :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_multitexture :: startRendering()
 {
-#ifdef GL_MAX_TEXTURE_UNITS_ARB
   glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &m_max );
   post("MAX_TEXTURE_UNITS for current context = %d", m_max);
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -234,7 +232,7 @@ void pix_multitexture :: modeCallback(void *data, t_floatarg textype)
   GetMyClass(data)->m_mode=((int)textype);
   if (textype)
   {
-//    GetMyClass(data)->m_oldType = GetMyClass(data)->m_textureType;
+    //    GetMyClass(data)->m_oldType = GetMyClass(data)->m_textureType;
     GetMyClass(data)->m_textureType = GL_TEXTURE_RECTANGLE_EXT;
     GetMyClass(data)->post("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
   }else{

@@ -310,8 +310,6 @@ int OpenGLExtensionIsSupported(const char* extension) {
 
 void GemMan :: checkOpenGLExtensions(void)
 {
-#ifdef USE_GLEW
-
 #if 0
   post("texture-rectangle: %d %d", GLEW_ARB_texture_rectangle, GLEW_EXT_texture_rectangle);
   post("client-storage: %d", GLEW_APPLE_client_storage);
@@ -347,89 +345,6 @@ void GemMan :: checkOpenGLExtensions(void)
 
   /* multisample filter */
   multisample_filter_hint = GLEW_NV_multisample_filter_hint;
-
-
-#else /* USE_GLEW */
-
- 
-  /* of course, nvidia choose their own extension... (jmz) */
-  /* i have ifdef'ed these, because some code in [pix_texture]
-   * depends on texture_rectangle_supported, without checking
-   * whether it was compiled with rectangle support or not (depending on the GL-headers)
-   * so, if Gem was compiled with the original (non-nvidia) GL-headers,
-   * there was no rectangle-support from within Gem.
-   * however, when it was run with nvidia-drivers, the openGL-extension was present
-   * resulting in doing a lot of stupid things (like texturing black!)
-   */
-#ifdef GL_ARB_texture_rectangle
-  if (OpenGLExtensionIsSupported("GL_ARB_texture_rectangle"))
-    {
-      texture_rectangle_supported=2;
-    } else
-#endif
-#ifdef GL_EXT_texture_rectangle
-  if (OpenGLExtensionIsSupported("GL_EXT_texture_rectangle"))
-    {
-      texture_rectangle_supported=1;
-    } else
-#endif
-    texture_rectangle_supported = 0;
-  
-  if (getenv("GEM_RECTANGLE_TEXTURE") &&
-      !strcmp("0", getenv("GEM_RECTANGLE_TEXTURE")))
-    {
-      texture_rectangle_supported = 0;
-    }
-  
-    /*
-        GL_APPLE_client_storage allows better performance when modifying
-        a texture image extensively:  under normal circumstances, a
-        texture image is passed from the application to the driver and
-        then to the graphics card.  GL_APPLE_client_storage allows you
-        to avoid the application -> driver copy as long as you agree to
-        keep your copy of the texture image around for when the driver
-        needs it.  GL_APPLE_client_storage is supported on all video
-        cards under __APPLE__ 10.1 and above.
-    */
-  client_storage_supported
-#ifdef GL_UNPACK_CLIENT_STORAGE_APPLE
-    = OpenGLExtensionIsSupported("GL_APPLE_client_storage");
-#else
-    = 0;
-#endif
-
-  texture_range_supported
-#ifdef GL_APPLE_texture_range
-    = OpenGLExtensionIsSupported("GL_APPLE_texture_range");
-#else
-    = 0;
-#endif
-
-
-    /*
-        GL_APPLE_ycbcr_422 allows for direct texturing of YUV-textures
-	we want to check this at runtime, since modern implementations 
-	of Mesa support this feature while nvidia's drivers still don't.
-	checks at pre-processer-stage will eventually lead to no texturing
-	as the header files support YUV while the drivers don't
-    */
-
-  texture_yuv_supported
-#ifdef GL_YCBCR_422_APPLE
-    = OpenGLExtensionIsSupported("GL_APPLE_ycbcr_422");
-#else
-  = 0;
-#endif
-
-  multisample_filter_hint =
-#ifdef GL_MULTISAMPLE_FILTER_HINT_NV
-    OpenGLExtensionIsSupported("GL_NV_multisample_filter_hint");
-#else
-    0;
-#endif
-
-
-#endif /* !USE_GLEW */
 }
 
 void GemMan :: createContext(char* disp)
@@ -1273,7 +1188,6 @@ int GemMan :: createWindow(char* disp)
     on the NVidia GeForce2MX and above, or the ATI Radeon and above.
   */
 
-#ifdef USE_GLEW
   GLenum err = glewInit();
 
   if (GLEW_OK != err) {
@@ -1281,11 +1195,10 @@ int GemMan :: createWindow(char* disp)
     return(0);
   }
   else post("GLEW version %s",glewGetString(GLEW_VERSION));
-#endif
 
   checkOpenGLExtensions();
 
-  /* check the stackg-sizes */
+  /* check the stack-sizes */
   glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH, maxStackDepth+0);
 #ifdef GL_MAX_COLOR_MATRIX_STACK_DEPTH
   glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+1);

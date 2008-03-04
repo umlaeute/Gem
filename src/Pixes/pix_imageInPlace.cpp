@@ -42,6 +42,19 @@ pix_imageInPlace :: ~pix_imageInPlace()
 { }
 
 /////////////////////////////////////////////////////////
+// extension checks
+//
+/////////////////////////////////////////////////////////
+bool pix_imageInPlace :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  if(GLEW_EXT_texture_object)return true;
+
+  error("your system lacks texture support");
+  return false;
+}
+
+
+/////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
@@ -59,13 +72,11 @@ void pix_imageInPlace :: render(GemState *state)
     
   glEnable(GL_TEXTURE_2D);
 
-#ifdef GL_VERSION_1_1
-  glBindTexture   (GL_TEXTURE_2D, m_loadedCache->textBind[m_curImage]);
-#elif GL_EXT_texture_object
-  glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[m_curImage]);
-#else
-#error No OpenGL bind mechanism
-#endif
+  if(GLEW_VERSION_1_1) {
+    glBindTexture   (GL_TEXTURE_2D, m_loadedCache->textBind[m_curImage]);
+  } else {
+    glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[m_curImage]);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -118,6 +129,10 @@ void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage, int topI
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: downloadMess()
 {
+  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object){
+    error("cannot download now: do you have a window");
+  }
+
   if (!mInPreload)return;
   if (!m_loadedCache->textBind[0])
     {
@@ -125,13 +140,11 @@ void pix_imageInPlace :: downloadMess()
 		
       for (int i = 0; i < m_numImages; ++i)
 	{
-#ifdef GL_VERSION_1_1
+    if(GLEW_VERSION_1_1) {
 	  glBindTexture(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
-#elif GL_EXT_texture_object
+    } else {
 	  glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
-#else
-#error No OpenGL bind mechanism
-#endif
+    }
 
 	  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 

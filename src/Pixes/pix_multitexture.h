@@ -45,6 +45,11 @@ class GEM_EXTERN pix_multitexture : public GemBase
     	// Destructor
     	virtual ~pix_multitexture();
 
+      //////////
+      // extension checks
+      //
+      virtual bool isRunnable(void);
+
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);

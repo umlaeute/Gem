@@ -257,15 +257,13 @@ void pqtorusknots :: render(GemState *state)
         {
           if (m_Texcoord[i])
             {
-#ifdef GL_TEXTURE0_ARB
-              glClientActiveTextureARB(GL_TEXTURE0_ARB + i);
-#else
-				post("pqtorusknots: you hit a bug!");
-#endif
+              if(GLEW_ARB_multitexture) {
+                glClientActiveTextureARB(GL_TEXTURE0_ARB + i);
+              }
               glTexCoordPointer(2, GL_FLOAT, 0, m_Texcoord[i]);
+
             }
         }
-      //glClientActiveTextureARB(GL_TEXTURE0_ARB);
     }
   glDrawElements(m_PrimitiveType,m_Indices,GL_UNSIGNED_INT,m_Index);
 }

@@ -75,6 +75,9 @@ class GEM_EXTERN vertex_program : public GemBase
   // Do the rendering
   virtual void render(GemState *state);
 
+  //////////
+  // extension check
+  virtual bool isRunnable(void);
 
   //////////
   // Clear the dirty flag on the pixBlock

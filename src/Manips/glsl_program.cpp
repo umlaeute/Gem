@@ -27,20 +27,20 @@ CPPEXTERN_NEW(glsl_program)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-glsl_program :: glsl_program()
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
-  :
-m_program(0), 
-m_maxLength(0), m_infoLength(0), m_uniformCount(0),
-m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
-m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
-m_infoLog(NULL), m_num(0)
-#endif
+glsl_program :: glsl_program()  :
+  m_program(0),
+  m_programARB(0),
+  m_maxLength(0), m_uniformCount(0),
+  m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
+  m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
+  m_num(0)
 {
-#if !defined GL_ARB_shader_objects && !defined GL_VERSION_2_0
-  post("GEM has been compiled without GLSL support");
-  return;
-#endif
+  int i=0;
+  for(i=0; i<MAX_NUM_SHADERS; i++) {
+    m_shaderObj[i]=0;
+    m_shaderObjARB[i]=0;
+  }
+
   // create an outlet to send texture ID
   m_outProgramID = outlet_new(this->x_obj, &s_float);
 }
@@ -51,21 +51,18 @@ m_infoLog(NULL), m_num(0)
 /////////////////////////////////////////////////////////
 glsl_program :: ~glsl_program()
 {
-#ifdef GL_VERSION_2_0
-  if (m_program)glDeleteProgram( m_program ); m_program=0;
+  if(GLEW_VERSION_2_0 && m_program)
+    glDeleteProgram( m_program ); m_program=0;
+  if(GLEW_ARB_shader_objects && m_programARB)
+    glDeleteObjectARB( m_programARB ); m_programARB=0;
+
   destroyArrays();
-#elif defined GL_ARB_shader_objects
-  if (m_program)glDeleteObjectARB( m_program ); m_program=0;
-  destroyArrays();
-#endif
 }
 
 void glsl_program :: destroyArrays() {
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
-  int i;
-
   if (m_param)
     {
+      int i;
       for (i = 0; i < m_uniformCount; i++){
         if(m_param[i])delete[]m_param[i];
         m_param[i]=NULL;
@@ -78,10 +75,8 @@ void glsl_program :: destroyArrays() {
   if (m_flag)   delete[]m_flag;   m_flag   =NULL;
   if (m_loc)    delete[]m_loc;    m_loc    =NULL;
   if (m_param)  delete[]m_param;  m_param  =NULL;
-#endif
 }
 void glsl_program :: createArrays() {
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   int i;
 
   m_size   = new GLint     [m_uniformCount];
@@ -99,26 +94,29 @@ void glsl_program :: createArrays() {
     m_size   [i] = 0;
     m_type   [i] = 0;
     m_symname[i] = 0;
-	m_loc    [i] = 0;
+    m_loc    [i] = 0;
     m_param  [i] = new float[16];
     m_flag   [i] = 0;
     for(j=0; j<16; j++)m_param[i][j]=0;
   }
-#endif
 }
+
+bool glsl_program :: isRunnable()
+{
+  if (GLEW_VERSION_2_0 || GLEW_ARB_shader_objects)
+    return true;
+
+  error("openGL-2.0 (or at least ARB shader extensions) needed for GLSL");
+
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void glsl_program :: render(GemState *state)
+void glsl_program :: renderGL2()
 {
-  t_floatuint fi_id;
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
-  if(m_wantLink){
-    m_wantLink=0;
-    LinkProgram();
-  }
-#ifdef GL_VERSION_2_0
   if (m_linked) {
     glUseProgram( m_program );
     for(int i=0; i<m_uniformCount; i++)
@@ -186,9 +184,12 @@ void glsl_program :: render(GemState *state)
     /* JMZ: this is really annoying... */
     //error("no program linked");
   }
-#elif defined GL_ARB_shader_objects
+}
+
+void glsl_program :: renderARB()
+{
   if (m_linked) {
-    glUseProgramObjectARB( m_program );
+    glUseProgramObjectARB( m_programARB );
     for(int i=0; i<m_uniformCount; i++)
       {
         if(m_flag[i])
@@ -253,12 +254,30 @@ void glsl_program :: render(GemState *state)
     /* JMZ: this is really annoying... */
     //error("no program linked");
   }
-#endif
+}
+
+
+void glsl_program :: render(GemState *state)
+{
+  t_floatuint fi_id;
+  if(m_wantLink){
+    m_wantLink=0;
+    LinkProgram();
+  }
+
+  if(GLEW_VERSION_2_0)
+    renderGL2();
+  else 
+    renderARB();
+
   // send program ID to outlet
   /* JMZ: shouldn't this be only done, when we have a linked program? */
-  fi_id.i=m_program;
+  if(GLEW_VERSION_2_0)
+    fi_id.i=m_program;
+  else
+    fi_id.i=m_programARB;
+
   outlet_float(m_outProgramID, (t_float)fi_id.f);
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -267,13 +286,12 @@ void glsl_program :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_program :: postrender(GemState *state)
 {
-#ifdef GL_VERSION_2_0
-  if(m_linked)
-    glUseProgram(0);
-#elif defined GL_ARB_shader_objects
-  if(m_linked)
-    glUseProgramObjectARB(0);
-#endif
+  if(m_linked) {
+    if(GLEW_VERSION_2_0)
+      glUseProgram(0);
+    else 
+      glUseProgramObjectARB(0);
+  }
 }
 /////////////////////////////////////////////////////////
 // paramMess
@@ -281,9 +299,8 @@ void glsl_program :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 {
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   int i=0, j=0;
-  if (m_program){
+  if (m_program || m_programARB){
     for(i=0; i<m_uniformCount; i++){
       if(s==m_symname[i]){
         //      post("uniform parameters #%d", i);
@@ -305,7 +322,6 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
     // if we reach this, then no param-name was matching!
     if(i>m_num)error("glsl_program: no method for '%s' (it's not uniform variable)", s->s_name);
   }
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -314,7 +330,6 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void glsl_program :: shaderMess(int argc, t_atom *argv)
 {
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   int i;
 
   if (!argc)
@@ -332,35 +347,26 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     {
       t_floatuint fi;
       fi.f=atom_getfloat(&argv[i]);
-#ifdef GL_VERSION_2_0
       m_shaderObj[i] = (GLuint)(fi.i);
-#else
-      m_shaderObj[i] = (t_GLshaderObj)(fi.i);
-#endif
+      m_shaderObjARB[i] = (t_GLshaderObj)(fi.i);
     }
   
   //  not sure what to do here:  we don't want to link & re-link every render cycle,
   //  but we do want to link when there are new shaders to link...so I made a seperate
   //  link message
   m_num = argc;
-#endif
 }
 
 /////////////////////////////////////////////////////////
 // LinkProgram
 //
 /////////////////////////////////////////////////////////
-void glsl_program :: LinkProgram()
+bool glsl_program :: LinkGL2()
 {
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
-  int i;
+  GLint infoLength;
   GLsizei length=0;
-  if (!m_num)
-    {
-      error("can't link zero shaders");
-      return;
-    }
-#ifdef GL_VERSION_2_0
+  int i;
+
   if(m_program) {
     glDeleteProgram( m_program );
     m_program = 0;
@@ -373,62 +379,101 @@ void glsl_program :: LinkProgram()
   glLinkProgram( m_program );
   glGetProgramiv( m_program, GL_LINK_STATUS, &m_linked );
 
-  glGetProgramiv( m_program, GL_INFO_LOG_LENGTH, &m_infoLength );
-  if(m_infoLog)delete[]m_infoLog;m_infoLog=NULL;
-  m_infoLog = new GLchar[m_infoLength];
+  glGetProgramiv( m_program, GL_INFO_LOG_LENGTH, &infoLength );
+  GLchar *infoLog = new GLchar[infoLength];
 
-  glGetProgramInfoLog( m_program, m_infoLength, &length, m_infoLog );
-#elif defined GL_ARB_shader_objects
-  if(m_program) {
-    glDeleteObjectARB( m_program );
-    m_program = 0;
-  }
-  m_program = glCreateProgramObjectARB();
-  for (i = 0; i < m_num; i++)
-    {
-      glAttachObjectARB( m_program, m_shaderObj[i] );
-    }
-  glLinkProgramARB( m_program );
-  glGetObjectParameterivARB( m_program, GL_OBJECT_LINK_STATUS_ARB, &m_linked );
+  glGetProgramInfoLog( m_program, infoLength, &length, infoLog );
 
-  glGetObjectParameterivARB( m_program, GL_OBJECT_INFO_LOG_LENGTH_ARB, &m_infoLength );
-  if(m_infoLog)delete[]m_infoLog;m_infoLog=NULL;
-  m_infoLog = new GLcharARB[m_infoLength];
-
-  glGetInfoLogARB( m_program, m_infoLength, &length, m_infoLog );
-#endif
   if (length)
     {
       post("Info_log:");
-      post("%s", m_infoLog);
+      post("%s", infoLog);
     }
-  //post("freeing log");
-  if(m_infoLog)delete[]m_infoLog;m_infoLog=NULL;
+
+  if(infoLog)delete[]infoLog;infoLog=NULL;
   
   //
   // If all went well, make the ProgramObject part of the current state
   //
   //post("did we link?");
-#ifdef GL_VERSION_2_0
   if (m_linked) {
     glUseProgram( m_program );
   } else {
     glUseProgram( 0 );
     post("Link failed!");
-    return;
+    return false;
   }
-#elif defined GL_ARB_shader_objects
+  return true;
+}
+/////////////////////////////////////////////////////////
+// LinkProgram
+//
+/////////////////////////////////////////////////////////
+bool glsl_program :: LinkARB()
+{
+  int i;
+  GLsizei length=0;
+  GLint infoLength;
+
+  if(m_programARB) {
+    glDeleteObjectARB( m_programARB );
+    m_programARB = 0;
+  }
+  m_programARB = glCreateProgramObjectARB();
+  for (i = 0; i < m_num; i++)
+    {
+      glAttachObjectARB( m_programARB, m_shaderObjARB[i] );
+    }
+  glLinkProgramARB( m_programARB );
+  glGetObjectParameterivARB( m_programARB, GL_OBJECT_LINK_STATUS_ARB, &m_linked );
+
+  glGetObjectParameterivARB( m_programARB, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infoLength );
+
+  GLcharARB*infoLogARB = new GLcharARB[infoLength];
+
+  glGetInfoLogARB( m_programARB, infoLength, &length, infoLogARB );
+
+  if (length)
+    {
+      post("Info_log:");
+      post("%s", infoLogARB);
+    }
+  //post("freeing log");
+  if(infoLogARB)delete[]infoLogARB;infoLogARB=NULL;
+  
+  //
+  // If all went well, make the ProgramObject part of the current state
+  //
+  //post("did we link?");
   if (m_linked) {
-    glUseProgramObjectARB( m_program );
+    glUseProgramObjectARB( m_programARB );
   } else {
     glUseProgramObjectARB( 0 );
-    post("Link failed!");
-    return;
+    post("ARB Link failed!");
+    return false;
   }
-#endif
+  return true;
+}
+
+void glsl_program :: LinkProgram()
+{
+  if (!m_num)
+    {
+      error("can't link zero shaders");
+      return;
+    }
+
+  if(GLEW_VERSION_2_0)
+    LinkGL2();
+  else
+    LinkARB();
+
   //post("getting variables");
   getVariables();
-# ifdef __APPLE__
+
+
+
+#ifdef __APPLE__
   // call API to check if linked program is running on hardware or in software emulation
   GLint vertexGPUProcessing, fragmentGPUProcessing;
   CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUVertexProcessing, &vertexGPUProcessing);
@@ -436,8 +481,7 @@ void glsl_program :: LinkProgram()
   
   post("vertex shader running in %sware", vertexGPUProcessing?"hard":"soft");
   post("fragment shader running in %sware", fragmentGPUProcessing?"hard":"soft");
-# endif //__APPLE__
-#endif
+#endif //__APPLE__
 }
 
 /////////////////////////////////////////////////////////
@@ -446,7 +490,6 @@ void glsl_program :: LinkProgram()
 /////////////////////////////////////////////////////////
 void glsl_program :: getVariables()
 {
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   if(!m_linked)return;
   int i;
   //
@@ -457,48 +500,41 @@ void glsl_program :: getVariables()
   //
   // Get the number of uniforms, and the length of the longest name.
   //
-#ifdef GL_VERSION_2_0
-  glGetProgramiv( m_program,
-					GL_ACTIVE_UNIFORM_MAX_LENGTH,
-					&m_maxLength);
-  glGetProgramiv( m_program, GL_ACTIVE_UNIFORMS,
-					&m_uniformCount);
-#elif defined GL_ARB_shader_objects
-  glGetObjectParameterivARB( m_program,
-                             GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB,
-                             &m_maxLength);
-  glGetObjectParameterivARB( m_program, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
-                             &m_uniformCount);
-#endif
+  if(GLEW_VERSION_2_0) {
+    glGetProgramiv( m_program,
+                    GL_ACTIVE_UNIFORM_MAX_LENGTH,
+                    &m_maxLength);
+    glGetProgramiv( m_program, GL_ACTIVE_UNIFORMS,
+                    &m_uniformCount);
+  } else if (GLEW_ARB_shader_objects) {
+    glGetObjectParameterivARB( m_programARB,
+                               GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB,
+                               &m_maxLength);
+    glGetObjectParameterivARB( m_programARB, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
+                               &m_uniformCount);
+  }
   createArrays();
   
   //
   // Loop over the ActiveUniform's and store the results away.
   //
-#ifdef GL_VERSION_2_0
   GLchar *name=new GLchar[m_maxLength];
-#else
-  GLcharARB *name=new GLcharARB[m_maxLength];
-#endif
+  GLcharARB *nameARB=new GLcharARB[m_maxLength];
   GLsizei    length=0;
   for (i = 0; i < m_uniformCount; i++) 
     {
-      /*
-        glGetActiveUniformARB(m_program, i, m_maxLength, &length,
-        &m_size[i], &m_type[i], name);
-      */
-#ifdef GL_VERSION_2_0
-      glGetActiveUniform(m_program, i, m_maxLength, &length, &m_size[i], &m_type[i], name);
-	  m_loc[i] = glGetUniformLocation( m_program, name );
-#elif defined GL_ARB_shader_objects
-      glGetActiveUniformARB(m_program, i, m_maxLength, &length, &m_size[i], &m_type[i], name);
-	  m_loc[i] = glGetUniformLocationARB( m_program, name );
-#endif
-      m_symname[i]=gensym(name);
-      //	  post("active uniform variable: %s", name);
+      if(GLEW_VERSION_2_0) {
+        glGetActiveUniform(m_program, i, m_maxLength, &length, &m_size[i], &m_type[i], name);
+        m_loc[i] = glGetUniformLocation( m_program, name );
+        m_symname[i]=gensym(name);
+      } else if (GLEW_ARB_shader_objects) {
+        glGetActiveUniformARB(m_programARB, i, m_maxLength, &length, &m_size[i], &m_type[i], nameARB);
+        m_loc[i] = glGetUniformLocationARB( m_programARB, nameARB );
+        m_symname[i]=gensym(nameARB);      
+      }
     }
   delete[]name;
-#endif
+  delete[]nameARB;
 }
 
 /////////////////////////////////////////////////////////
@@ -507,7 +543,6 @@ void glsl_program :: getVariables()
 /////////////////////////////////////////////////////////
 void glsl_program :: printInfo()
 {
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   int i;
 
   if(!m_linked) 
@@ -580,7 +615,6 @@ void glsl_program :: printInfo()
           break;
         }
     }
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -605,9 +639,7 @@ void glsl_program :: linkCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
   if(argc)
     GetMyClass(data)->shaderMess(argc, argv);
-#if defined GL_VERSION_2_0 || defined GL_ARB_shader_objects
   GetMyClass(data)->m_wantLink=1;
-#endif
 }
 void glsl_program :: printMessCallback(void *data)
 {
