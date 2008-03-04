@@ -14,6 +14,7 @@
 /////////////////////////////////////////////////////////
 
 #ifdef __APPLE__
+#include "Base/GemGL.h"
 #include <Carbon/Carbon.h>
 #include "GemWinCreate.h"
 #include "Base/GemBase.h"

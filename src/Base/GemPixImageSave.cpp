@@ -26,6 +26,8 @@
 #include <unistd.h>
 #endif
 
+#include "Base/GemGL.h"
+
 #ifdef __APPLE__
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
