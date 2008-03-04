@@ -30,6 +30,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include<new> 
+
 /* this is some magic for debugging:
  * to time execution of a code-block use 
  *   'START_TIMING;' at the beginning of the block and
@@ -111,14 +113,26 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
   }
 
 #ifdef __APPLE__ 
-  data = pdata =  new unsigned char [size];
+  try {
+    data = pdata =  new unsigned char [size];
+  } catch ( const std::bad_alloc & e) {
+    error("out of memory!");
+    data=pdata=NULL;
+    datasize=0;
+    return NULL;
+  }
 
   datasize=size;  
-
 #else
-  
   size_t array_size= size+(GEM_VECTORALIGNMENT/8-1);
-  pdata = new unsigned char[array_size];
+  try {
+    pdata = new unsigned char[array_size];
+  } catch ( const std::bad_alloc & e) {
+    error("out of memory!");
+    data=pdata=NULL;
+    datasize=0;
+    return NULL;
+  }
 
   size_t alignment = ((size_t)pdata)&(GEM_VECTORALIGNMENT/8-1);
   size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
