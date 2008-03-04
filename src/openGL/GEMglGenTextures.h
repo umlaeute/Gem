@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglGenTextures : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglGenTextures ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

@@ -22,14 +22,8 @@ CPPEXTERN_NEW ( GEMglUseProgramObjectARB )
 // Constructor
 //
 GEMglUseProgramObjectARB :: GEMglUseProgramObjectARB()
-#ifdef GL_ARB_shader_objects
   : m_program(0)
-#endif
 {
-#ifndef GL_ARB_shader_objects
-        error("GEMglUseProgramObjectARB: GEM was compiled without GL_ARB_shader_objects");
-        error("GEMglUseProgramObjectARB: therefore this object will do nothing");
-#endif
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
 }
 /////////////////////////////////////////////////////////
@@ -39,31 +33,34 @@ GEMglUseProgramObjectARB :: ~GEMglUseProgramObjectARB () {
 	inlet_free(m_inlet);
 }
 
+//////////////////
+// extension check
+bool GEMglUseProgramObjectARB :: isRunnable(void) {
+  if(GLEW_ARB_shader_objects)return true;
+  error("ARB shader_objects not supported by this system");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglUseProgramObjectARB :: render(GemState *state) {
-#ifdef GL_ARB_shader_objects
 	glUseProgramObjectARB ( m_program );
-#endif // GL_ARB_shader_objects
 }
 
 /////////////////////////////////////////////////////////
 // postrender
 //
 void GEMglUseProgramObjectARB :: postrender(GemState *state) {
-#ifdef GL_ARB_shader_objects
 	glUseProgramObjectARB (0);
-#endif // GL_ARB_shader_objects
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglUseProgramObjectARB :: programMess (int program) {	// FUN
-#ifdef GL_ARB_shader_objects
-	m_program = (t_GLshaderObj)program;
-#endif
+	m_program = (GLhandleARB)program;
 	setModified();
 }
 

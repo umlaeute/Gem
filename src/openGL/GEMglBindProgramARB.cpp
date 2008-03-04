@@ -25,10 +25,6 @@ GEMglBindProgramARB :: GEMglBindProgramARB	(t_floatarg arg0=0, t_floatarg arg1=0
 		target((GLenum)arg0), 
 		program((GLuint)arg1)
 {
-#ifndef GL_ARB_vertex_program
-        error("GEMglBindProgramARB: GEM was compiled without GL_ARB_vertex_program");
-        error("GEMglBindProgramARB: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
 }
@@ -39,14 +35,18 @@ GEMglBindProgramARB :: ~GEMglBindProgramARB () {
 inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 }
-
+//////////////////
+// extension check
+bool GEMglBindProgramARB :: isRunnable(void) {
+  if(GLEW_ARB_vertex_program)return true;
+  error("your system does not support the ARB vertex_program extension");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglBindProgramARB :: render(GemState *state) {
-#ifdef GL_ARB_vertex_program
 	glBindProgramARB (target, program);
-#endif // GL_ARB_vertex_program
 }
 
 /////////////////////////////////////////////////////////

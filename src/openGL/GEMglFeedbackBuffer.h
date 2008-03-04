@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglFeedbackBuffer : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglFeedbackBuffer ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

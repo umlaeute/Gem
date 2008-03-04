@@ -36,6 +36,9 @@ class GEM_EXTERN GEMglGetMapfv : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglGetMapfv ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

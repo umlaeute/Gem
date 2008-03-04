@@ -26,10 +26,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglDeleteTextures )
 GEMglDeleteTextures :: GEMglDeleteTextures	(int argc, t_atom* argv) :
   n(0), textures(NULL), m_inlet(NULL)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglDeleteTextures: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglDeleteTextures: therefore this object will do nothing");
-#endif
 	texturesMess(argc, argv);
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
 }
@@ -39,14 +35,18 @@ GEMglDeleteTextures :: GEMglDeleteTextures	(int argc, t_atom* argv) :
 GEMglDeleteTextures :: ~GEMglDeleteTextures () {
 inlet_free(m_inlet);
 }
-
+//////////////////
+// extension check
+bool GEMglDeleteTextures :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglDeleteTextures :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glDeleteTextures (n, textures);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

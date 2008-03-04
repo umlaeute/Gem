@@ -29,11 +29,8 @@ GEMglTexSubImage1D :: GEMglTexSubImage1D(t_floatarg arg0=0,
 					 t_floatarg arg2=0) :
   level((GLint)arg0), 
   xoffset((GLint)arg1), 
-  width((GLsizei)arg2) {
-#ifndef GL_VERSION_1_1
-  error("GEMglTexSubImage1D: GEM was compiled without GL_VERSION_1_1");
-  error("GEMglTexSubImage1D: therefore this object will do nothing");
-#endif
+  width((GLsizei)arg2) 
+{
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("level"));
   m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xoffset"));
   m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("width"));
@@ -47,18 +44,25 @@ GEMglTexSubImage1D :: ~GEMglTexSubImage1D () {
   inlet_free(m_inlet[2]);
 }
 
+//////////////////
+// extension check
+bool GEMglTexSubImage1D :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglTexSubImage1D :: render(GemState *state) {
   if(!state||!state->image||!&state->image->image)return;
-#ifdef GL_VERSION_1_1
   target=GL_TEXTURE_1D;
   glTexSubImage1D (target, level, xoffset, width,
 		   state->image->image.format, 
 		   state->image->image.type, 
 		   state->image->image.data);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

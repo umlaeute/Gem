@@ -37,13 +37,19 @@ inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 }
 
+//////////////////
+// extension check
+bool GEMglUniform1fARB :: isRunnable(void) {
+  if(GLEW_ARB_shader_objects)return true;
+  error("ARB shader_objects not supported by this system");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglUniform1fARB :: render(GemState *state) {
-#ifdef GL_ARB_shader_objects
 	glUniform1fARB (location, val);
-#endif
 }
 
 /////////////////////////////////////////////////////////

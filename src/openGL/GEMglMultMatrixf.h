@@ -35,6 +35,9 @@ class GEM_EXTERN GEMglMultMatrixf : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglMultMatrixf ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

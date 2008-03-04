@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglIndexub : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglIndexub ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

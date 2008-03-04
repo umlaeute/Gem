@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglIsEnabled : public GemBase
  protected:
   // Destructor
   virtual ~GEMglIsEnabled ();
+          // check extensions
+          virtual bool isRunnable(void);
+
   // Do the rendering
   virtual void	render (GemState *state);
 

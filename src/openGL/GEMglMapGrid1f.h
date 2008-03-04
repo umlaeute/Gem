@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglMapGrid1f : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglMapGrid1f ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

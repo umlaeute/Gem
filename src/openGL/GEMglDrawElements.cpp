@@ -28,10 +28,6 @@ GEMglDrawElements :: GEMglDrawElements	(t_floatarg arg0=0, t_floatarg arg1=0, t_
   count((GLsizei)arg1), 
   type((GLenum)arg2)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglDrawElements: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglDrawElements: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("count"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("type"));
@@ -53,12 +49,17 @@ inlet_free(m_inlet[1]);
 inlet_free(m_inlet[2]);
 inlet_free(m_inlet[3]);
 }
-
+//////////////////
+// extension check
+bool GEMglDrawElements :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglDrawElements :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
   GLvoid *indix;
   switch(type){
   case GL_UNSIGNED_INT:
@@ -71,7 +72,6 @@ void GEMglDrawElements :: render(GemState *state) {
     return;
   }
   glDrawElements (mode, count, type, indix);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

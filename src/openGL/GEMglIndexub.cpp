@@ -26,10 +26,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexub , t_floatarg, A_DEFFLOAT)
 GEMglIndexub :: GEMglIndexub	(t_floatarg arg0=0) :
 		c((GLubyte)arg0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglIndexub: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglIndexub: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("c"));
 }
 /////////////////////////////////////////////////////////
@@ -39,13 +35,19 @@ GEMglIndexub :: ~GEMglIndexub () {
 inlet_free(m_inlet[0]);
 }
 
+//////////////////
+// extension check
+bool GEMglIndexub :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglIndexub :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glIndexub (c);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

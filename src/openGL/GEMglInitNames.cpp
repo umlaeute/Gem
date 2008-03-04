@@ -24,23 +24,25 @@ CPPEXTERN_NEW( GEMglInitNames)
 // Constructor
 //
 GEMglInitNames :: GEMglInitNames(){
-#ifndef GL_VERSION_1_1
-        error("GEMglInitNames: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglInitNames: therefore this object will do nothing");
-#endif
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglInitNames :: ~GEMglInitNames () {}
 
+//////////////////
+// extension check
+bool GEMglInitNames :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglInitNames :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glInitNames ();
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

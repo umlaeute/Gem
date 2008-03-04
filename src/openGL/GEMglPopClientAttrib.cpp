@@ -24,23 +24,26 @@ CPPEXTERN_NEW ( GEMglPopClientAttrib)
 // Constructor
 //
 GEMglPopClientAttrib :: GEMglPopClientAttrib	(){
-#ifndef GL_VERSION_1_1
-        error("GEMglPopClientAttrib: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglPopClientAttrib: therefore this object will do nothing");
-#endif
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglPopClientAttrib :: ~GEMglPopClientAttrib () {}
 
+//////////////////
+// extension check
+bool GEMglPopClientAttrib :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglPopClientAttrib :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glPopClientAttrib ();
-#endif // GL_VERSION_1_1
 }
 
 

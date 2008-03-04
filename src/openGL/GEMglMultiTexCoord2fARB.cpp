@@ -39,13 +39,20 @@ GEMglMultiTexCoord2fARB :: ~GEMglMultiTexCoord2fARB () {
 	inlet_free(m_inlet[2]);
 }
 
+//////////////////
+// extension check
+bool GEMglMultiTexCoord2fARB :: isRunnable(void) {
+  if(GLEW_ARB_multitexture)return true;
+  error("your system does not support the ARB multitexture extension");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglMultiTexCoord2fARB :: render(GemState *state) {
-#ifdef GL_ARB_multitexture
 	glMultiTexCoord2fARB (texUnit, s, t);
-#endif
 }
 
 /////////////////////////////////////////////////////////

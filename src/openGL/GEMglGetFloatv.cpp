@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetFloatv , t_floatarg, A_DEFFLOAT )
 // Constructor
 //
 GEMglGetFloatv :: GEMglGetFloatv	(t_floatarg arg0=0) {
-#ifndef GL_VERSION_1_1
-  error("GEMglGetFloatv: GEM was compiled without GL_VERSION_1_1");
-  error("GEMglGetFloatv: therefore this object will do nothing");
-#endif
   pnameMess(arg0);
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
   m_outlet = outlet_new(this->x_obj, 0);
@@ -41,11 +37,18 @@ GEMglGetFloatv :: ~GEMglGetFloatv () {
   outlet_free(m_outlet);
 }
 
+//////////////////
+// extension check
+bool GEMglGetFloatv :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglGetFloatv :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
   float mi[16]={0};
 
   glGetFloatv(pname,mi);
@@ -68,7 +71,6 @@ void GEMglGetFloatv :: render(GemState *state) {
   SETFLOAT(m_alist+15, mi[15]);
 
   outlet_list(m_outlet, gensym("list"), 16, m_alist);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

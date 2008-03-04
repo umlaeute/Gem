@@ -27,10 +27,6 @@ GEMglEvalPoint2 :: GEMglEvalPoint2	(t_floatarg arg0=0, t_floatarg arg1=0) :
 		i((GLint)arg0), 
 		j((GLint)arg1)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglEvalPoint2: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglEvalPoint2: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("j"));
 }
@@ -41,14 +37,18 @@ GEMglEvalPoint2 :: ~GEMglEvalPoint2 () {
 inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 }
-
+//////////////////
+// extension check
+bool GEMglEvalPoint2 :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglEvalPoint2 :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glEvalPoint2 (i, j);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

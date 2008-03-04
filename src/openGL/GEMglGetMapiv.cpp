@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglGetMapiv, t_floatarg, A_DEFFLOAT, t_floatarg,
 // Constructor
 //
 GEMglGetMapiv :: GEMglGetMapiv	(t_floatarg arg0=0, t_floatarg arg1=0) {
-#ifndef GL_VERSION_1_1
-        error("GEMglGetMapiv: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglGetMapiv: therefore this object will do nothing");
-#endif
 	targetMess(arg0);
 	queryMess(arg1);
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
@@ -41,14 +37,20 @@ GEMglGetMapiv :: ~GEMglGetMapiv () {
 	inlet_free(m_inlet[1]);
 }
 
+//////////////////
+// extension check
+bool GEMglGetMapiv :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglGetMapiv :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
   glGetMapiv (target, query, v);
   post("glGetMapiv: not really implemented:: got data @ %X, what should i do with it", v);
-#endif // GL_VERSION_1_1
 }
 
 

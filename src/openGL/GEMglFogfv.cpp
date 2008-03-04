@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglFogfv )
 // Constructor
 //
 GEMglFogfv :: GEMglFogfv	(int argc, t_atom *argv) {
-#ifndef GL_VERSION_1_1
-        error("GEMglFogfv: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglFogfv: therefore this object will do nothing");
-#endif
 	int i=FOG_ARRAY_LENGTH;
 	while(i--)params[i]=0.0;
 
@@ -45,13 +41,19 @@ GEMglFogfv :: ~GEMglFogfv () {
 	inlet_free(m_inlet[1]);
 }
 
+//////////////////
+// extension check
+bool GEMglFogfv :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglFogfv :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glFogfv (pname, params);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

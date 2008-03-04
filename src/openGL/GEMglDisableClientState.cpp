@@ -26,10 +26,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDisableClientState , t_floatarg, A_DEFFLOAT)
 GEMglDisableClientState :: GEMglDisableClientState	(t_floatarg arg0=0) :
 		array((GLenum)arg0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglDisableClientState: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglDisableClientState: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("array"));
 }
 /////////////////////////////////////////////////////////
@@ -38,14 +34,18 @@ GEMglDisableClientState :: GEMglDisableClientState	(t_floatarg arg0=0) :
 GEMglDisableClientState :: ~GEMglDisableClientState () {
 inlet_free(m_inlet[0]);
 }
-
+//////////////////
+// extension check
+bool GEMglDisableClientState :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglDisableClientState :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glDisableClientState (array);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

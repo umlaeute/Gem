@@ -25,10 +25,6 @@ GEMglProgramEnvParameter4dARB :: GEMglProgramEnvParameter4dARB	(int argc, t_atom
 		target(0), index(0), 
 		m_x(0), m_y(0), m_z(0), m_w(0)
 {
-#ifndef GL_ARB_vertex_program
-        error("GEMglProgramEnvParameter4dARB: GEM was compiled without GL_ARB_vertex_program");
-        error("GEMglProgramEnvParameter4dARB: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("index"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
@@ -48,13 +44,19 @@ inlet_free(m_inlet[4]);
 inlet_free(m_inlet[5]);
 }
 
+//////////////////
+// extension check
+bool GEMglProgramEnvParameter4dARB :: isRunnable(void) {
+  if(GLEW_ARB_vertex_program)return true;
+  error("your system does not the ARB vertex_program extension");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglProgramEnvParameter4dARB :: render(GemState *state) {
-#ifdef GL_ARB_vertex_program
 	glProgramEnvParameter4dARB (target, index, m_x, m_y, m_z, m_w);
-#endif
 }
 
 /////////////////////////////////////////////////////////

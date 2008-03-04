@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglBindTexture : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglBindTexture ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglArrayElement : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglArrayElement ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

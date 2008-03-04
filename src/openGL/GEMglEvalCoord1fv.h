@@ -36,6 +36,9 @@ class GEM_EXTERN GEMglEvalCoord1fv : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglEvalCoord1fv ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

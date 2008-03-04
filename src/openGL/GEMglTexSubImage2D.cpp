@@ -27,10 +27,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglTexSubImage2D )
 GEMglTexSubImage2D :: GEMglTexSubImage2D	(int argc, t_atom*argv) :
   target(0), level(0), xoffset(0), yoffset(0), width(0), height(0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglTexSubImage2D: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglTexSubImage2D: therefore this object will do nothing");
-#endif
 	if (argc>0)level  =atom_getint(argv+0);
 	if (argc>1)xoffset=atom_getint(argv+1);
 	if (argc>2)yoffset=atom_getint(argv+2);
@@ -54,18 +50,25 @@ GEMglTexSubImage2D :: ~GEMglTexSubImage2D () {
   inlet_free(m_inlet[4]);
 }
 
+//////////////////
+// extension check
+bool GEMglTexSubImage2D :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("you system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglTexSubImage2D :: render(GemState *state) {
   if (!state||!state->image||!&state->image->image)return;
-#ifdef GL_VERSION_1_1
   target=GL_TEXTURE_2D;
   glTexSubImage2D (target, level, xoffset, yoffset, width, height, 
 		   state->image->image.format, 
 		   state->image->image.type, 
 		   state->image->image.data);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

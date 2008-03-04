@@ -35,6 +35,9 @@ class GEM_EXTERN GEMglMultTransposeMatrixd : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglMultTransposeMatrixd ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

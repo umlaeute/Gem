@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglBlendEquation : public GemBase
  protected:
   // Destructor
   virtual ~GEMglBlendEquation ();
+          // check extensions
+          virtual bool isRunnable(void);
+
   // Do the rendering
   virtual void	render (GemState *state);
 

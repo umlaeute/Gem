@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglPassThrough : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglPassThrough ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

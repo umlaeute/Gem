@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglSelectBuffer : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglSelectBuffer ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

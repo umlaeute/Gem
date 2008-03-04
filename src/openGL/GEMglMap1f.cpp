@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMap1f )
 // Constructor
 //
 GEMglMap1f :: GEMglMap1f	(int argc, t_atom*argv){
-#ifndef GL_VERSION_1_1
-        error("GEMglMap1f: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglMap1f: therefore this object will do nothing");
-#endif
 	if (argc>0)target=(GLenum  )atom_getint(argv+0);
 	if (argc>1)u1    =(GLfloat)atom_getint(argv+1);
 	if (argc>2)u2    =(GLfloat)atom_getint(argv+2);
@@ -56,13 +52,20 @@ inlet_free(m_inlet[4]);
 inlet_free(m_inlet[5]);
 }
 
+//////////////////
+// extension check
+bool GEMglMap1f :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglMap1f :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glMap1f (target, u1, u2, stride, order, points);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglEvalMesh2 : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglEvalMesh2 ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

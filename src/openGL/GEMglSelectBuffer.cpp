@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglSelectBuffer , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglSelectBuffer :: GEMglSelectBuffer	(t_floatarg arg0=16){
-#ifndef GL_VERSION_1_1
-        error("GEMglSelectBuffer: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglSelectBuffer: therefore this object will do nothing");
-#endif
 	len=-1;
 	buffer=0;
 	sizeMess(arg0);
@@ -40,13 +36,19 @@ GEMglSelectBuffer :: ~GEMglSelectBuffer () {
 inlet_free(m_inlet);
 }
 
+//////////////////
+// extension check
+bool GEMglSelectBuffer :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglSelectBuffer :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glSelectBuffer (size, buffer);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

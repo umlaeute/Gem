@@ -23,10 +23,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultTransposeMatrixd , t_floatarg, A_DEFFLOAT 
 //
 GEMglMultTransposeMatrixd :: GEMglMultTransposeMatrixd	(t_floatarg arg0=0)
 {
-#ifndef GL_VERSION_1_3
-        error("GEMglMultTransposeMatrixd: GEM was compiled without GL_VERSION_1_3");
-        error("GEMglMultTransposeMatrixd: therefore this object will do nothing");
-#endif
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("matrix"));
 }
 /////////////////////////////////////////////////////////
@@ -36,13 +32,20 @@ GEMglMultTransposeMatrixd :: ~GEMglMultTransposeMatrixd () {
 	inlet_free(m_inlet);
 }
 
+//////////////////
+// extension check
+bool GEMglMultTransposeMatrixd :: isRunnable(void) {
+  if(GLEW_VERSION_1_3)return true;
+  error("your system does not support OpenGL-1.3");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglMultTransposeMatrixd :: render(GemState *state) {
-#ifdef GL_VERSION_1_3
 	glMultTransposeMatrixd (m_matrix);
-#endif // GL_VERSION_1_3
 }
 
 /////////////////////////////////////////////////////////
@@ -50,7 +53,7 @@ void GEMglMultTransposeMatrixd :: render(GemState *state) {
 //
 void GEMglMultTransposeMatrixd :: matrixMess (int argc, t_atom* argv) {	// FUN
 	if(argc!=16){
-		post("GEMglMultTransposeMatrixd: need 16 (4x4) elements");
+		error("need 16 (4x4) elements");
 		return;
 		}
 	int i;

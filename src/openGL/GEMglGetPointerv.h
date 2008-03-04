@@ -36,6 +36,9 @@ class GEM_EXTERN GEMglGetPointerv : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglGetPointerv ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

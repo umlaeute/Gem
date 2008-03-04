@@ -26,9 +26,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBlendEquation , t_floatarg, A_DEFFLOAT)
 GEMglBlendEquation :: GEMglBlendEquation	(t_floatarg arg0=0) :
   mode((GLenum)arg0)
 {
-#ifdef DONT_HAVE_GLBLENDEQUATION
-  error("Gem has been compiled without glBlendEquation");
-#endif /* DONT_HAVE_GLBLENDEQUATION */
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
 ////////////////////////////////////////////////////////
@@ -37,14 +34,18 @@ GEMglBlendEquation :: GEMglBlendEquation	(t_floatarg arg0=0) :
 GEMglBlendEquation :: ~GEMglBlendEquation () {
   inlet_free(m_inlet[0]);
 }
-
+//////////////////
+// extension check
+bool GEMglBlendEquation :: isRunnable(void) {
+  if(GLEW_VERSION_1_4)return true;
+  error("your system does not support OpenGL-1.4");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglBlendEquation :: render(GemState *state) {
-#if defined GL_VERSION_1_2 && !defined DONT_HAVE_GLBLENDEQUATION
   glBlendEquation (mode);
-#endif /* DONT_HAVE_GLBLENDEQUATION */
 }
 
 /////////////////////////////////////////////////////////

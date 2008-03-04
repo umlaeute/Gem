@@ -23,10 +23,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultMatrixd , t_floatarg, A_DEFFLOAT )
 //
 GEMglMultMatrixd :: GEMglMultMatrixd	(t_floatarg arg0=0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglMultMatrixd: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglMultMatrixd: therefore this object will do nothing");
-#endif
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("list"));
 }
 /////////////////////////////////////////////////////////
@@ -36,13 +32,20 @@ GEMglMultMatrixd :: ~GEMglMultMatrixd () {
 	inlet_free(m_inlet);
 }
 
+//////////////////
+// extension check
+bool GEMglMultMatrixd :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglMultMatrixd :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glMultMatrixd (m_matrix);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////
@@ -50,7 +53,7 @@ void GEMglMultMatrixd :: render(GemState *state) {
 //
 void GEMglMultMatrixd :: matrixMess (int argc, t_atom*argv) {	// FUN
 	if(argc!=16){
-		post("GEMglMultMatrixd: need 16 (4x4) elements");
+		error("need 16 (4x4) elements");
 		return;
 		}
 	int i;

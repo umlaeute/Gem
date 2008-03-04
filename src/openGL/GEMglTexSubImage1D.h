@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglTexSubImage1D : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglTexSubImage1D ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

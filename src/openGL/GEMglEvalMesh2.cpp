@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglEvalMesh2 )
 // Constructor
 //
 GEMglEvalMesh2 :: GEMglEvalMesh2	(int argc, t_atom*argv){
-#ifndef GL_VERSION_1_1
-        error("GEMglEvalMesh2: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglEvalMesh2: therefore this object will do nothing");
-#endif
 	mode=0;
 	i1=i2=j1=j2=0;
 	if (argc>0)mode=atom_getint(argv+0);
@@ -52,14 +48,18 @@ inlet_free(m_inlet[2]);
 inlet_free(m_inlet[3]);
 inlet_free(m_inlet[4]);
 }
-
+//////////////////
+// extension check
+bool GEMglEvalMesh2 :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglEvalMesh2 :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glEvalMesh2 (mode, i1, i2, j1, j2);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

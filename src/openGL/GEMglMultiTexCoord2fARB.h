@@ -35,6 +35,9 @@ class GEM_EXTERN GEMglMultiTexCoord2fARB : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglMultiTexCoord2fARB ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

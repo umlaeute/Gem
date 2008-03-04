@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglDeleteTextures : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglDeleteTextures ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

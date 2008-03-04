@@ -27,10 +27,6 @@ GEMglFogi :: GEMglFogi	(t_floatarg arg0=0, t_floatarg arg1=0) :
 		pname((GLenum)arg0), 
 		param((GLint)arg1)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglFogi: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglFogi: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
 }
@@ -42,13 +38,19 @@ inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 }
 
+//////////////////
+// extension check
+bool GEMglFogi :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglFogi :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glFogi (pname, param);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

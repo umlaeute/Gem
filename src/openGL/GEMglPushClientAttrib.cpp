@@ -26,10 +26,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushClientAttrib , t_floatarg, A_DEFFLOAT)
 GEMglPushClientAttrib :: GEMglPushClientAttrib	(t_floatarg arg0=0) :
 		mask((GLbitfield)arg0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglPushClientAttrib: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglPushClientAttrib: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mask"));
 }
 /////////////////////////////////////////////////////////
@@ -39,13 +35,20 @@ GEMglPushClientAttrib :: ~GEMglPushClientAttrib () {
 inlet_free(m_inlet[0]);
 }
 
+//////////////////
+// extension check
+bool GEMglPushClientAttrib :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglPushClientAttrib :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glPushClientAttrib (mask);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

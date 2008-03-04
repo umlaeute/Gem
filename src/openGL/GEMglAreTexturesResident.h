@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglAreTexturesResident : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglAreTexturesResident ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

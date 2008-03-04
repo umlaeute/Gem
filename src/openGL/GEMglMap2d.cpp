@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMap2d )
 // Constructor
 //
 GEMglMap2d :: GEMglMap2d	(int argc, t_atom *argv){
-#ifndef GL_VERSION_1_1
-        error("GEMglMap2d: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglMap2d: therefore this object will do nothing");
-#endif
 	if (argc>0)target =(GLenum  )atom_getint(argv+0);
 	if (argc>1)u1     =(GLdouble)atom_getint(argv+1);
 	if (argc>2)u2     =(GLdouble)atom_getint(argv+2);
@@ -68,13 +64,20 @@ inlet_free(m_inlet[8]);
 inlet_free(m_inlet[9]);
 }
 
+//////////////////
+// extension check
+bool GEMglMap2d :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglMap2d :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glMap2d (target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, points);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

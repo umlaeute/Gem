@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglDrawElements : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglDrawElements ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

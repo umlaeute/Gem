@@ -28,10 +28,6 @@ GEMglEvalMesh1 :: GEMglEvalMesh1	(t_floatarg arg0=0, t_floatarg arg1=0, t_floata
 		i1((GLint)arg1), 
 		i2((GLint)arg2)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglEvalMesh1: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglEvalMesh1: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i1"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i2"));
@@ -44,14 +40,18 @@ inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 inlet_free(m_inlet[2]);
 }
-
+//////////////////
+// extension check
+bool GEMglEvalMesh1 :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglEvalMesh1 :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glEvalMesh1 (mode, i1, i2);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

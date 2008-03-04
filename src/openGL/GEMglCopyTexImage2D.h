@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglCopyTexImage2D : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglCopyTexImage2D ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

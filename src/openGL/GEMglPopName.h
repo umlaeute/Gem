@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglPopName : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglPopName ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 };

@@ -26,10 +26,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalCoord1d , t_floatarg, A_DEFFLOAT)
 GEMglEvalCoord1d :: GEMglEvalCoord1d	(t_floatarg arg0=0) :
 		u((GLdouble)arg0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglEvalCoord1d: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglEvalCoord1d: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u"));
 }
 /////////////////////////////////////////////////////////
@@ -38,14 +34,18 @@ GEMglEvalCoord1d :: GEMglEvalCoord1d	(t_floatarg arg0=0) :
 GEMglEvalCoord1d :: ~GEMglEvalCoord1d () {
 inlet_free(m_inlet[0]);
 }
-
+//////////////////
+// extension check
+bool GEMglEvalCoord1d :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglEvalCoord1d :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glEvalCoord1d (u);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

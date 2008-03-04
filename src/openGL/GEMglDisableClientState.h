@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglDisableClientState : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglDisableClientState ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

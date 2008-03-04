@@ -26,10 +26,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushName , t_floatarg, A_DEFFLOAT)
 GEMglPushName :: GEMglPushName	(t_floatarg arg0=0) :
 		name((GLuint)arg0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglPushName: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglPushName: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("name"));
 }
 /////////////////////////////////////////////////////////
@@ -39,13 +35,20 @@ GEMglPushName :: ~GEMglPushName () {
 inlet_free(m_inlet[0]);
 }
 
+//////////////////
+// extension check
+bool GEMglPushName :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglPushName :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glPushName (name);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

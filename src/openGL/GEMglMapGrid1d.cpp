@@ -28,10 +28,6 @@ GEMglMapGrid1d :: GEMglMapGrid1d	(t_floatarg arg0=0, t_floatarg arg1=0, t_floata
 		u1((GLdouble)arg1), 
 		u2((GLdouble)arg2)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglMapGrid1d: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglMapGrid1d: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("un"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u1"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u2"));
@@ -45,13 +41,20 @@ inlet_free(m_inlet[1]);
 inlet_free(m_inlet[2]);
 }
 
+//////////////////
+// extension check
+bool GEMglMapGrid1d :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglMapGrid1d :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glMapGrid1d (un, u1, u2);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

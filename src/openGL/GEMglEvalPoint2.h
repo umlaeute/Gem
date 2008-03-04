@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglEvalPoint2 : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglEvalPoint2 ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

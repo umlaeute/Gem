@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglPopClientAttrib : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglPopClientAttrib ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 };

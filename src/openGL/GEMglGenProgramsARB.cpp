@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglGenProgramsARB)
 GEMglGenProgramsARB :: GEMglGenProgramsARB	(int argc, t_atom*argv) :
   n(0), programs(NULL)
 {
-#ifndef GL_ARB_vertex_program
-        error("GEMglGenProgramsARB: GEM was compiled without GL_ARB_vertex_program");
-        error("GEMglGenProgramsARB: therefore this object will do nothing");
-#endif
 	programsMess(argc, argv);
 	
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("programs"));
@@ -39,14 +35,18 @@ GEMglGenProgramsARB :: GEMglGenProgramsARB	(int argc, t_atom*argv) :
 GEMglGenProgramsARB :: ~GEMglGenProgramsARB () {
 inlet_free(m_inlet);
 }
-
+//////////////////
+// extension check
+bool GEMglGenProgramsARB :: isRunnable(void) {
+  if(GLEW_ARB_vertex_program)return true;
+  error("your system does not support the ARB vertex_program extension");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglGenProgramsARB :: render(GemState *state) {
-#ifdef GL_ARB_vertex_program
 	glGenProgramsARB (n, programs);
-#endif // GL_ARB_vertex_program
 }
 
 /////////////////////////////////////////////////////////

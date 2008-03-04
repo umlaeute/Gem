@@ -39,6 +39,9 @@ class GEM_EXTERN GEMglFogfv : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglFogfv ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglPrioritizeTextures : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglPrioritizeTextures ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMapGrid2f )
 // Constructor
 //
 GEMglMapGrid2f :: GEMglMapGrid2f	(int argc, t_atom *argv){
-#ifndef GL_VERSION_1_1
-        error("GEMglMapGrid2f: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglMapGrid2f: therefore this object will do nothing");
-#endif
 	if (argc>0)un=atom_getint (argv+0);
 	if (argc>1)u1=atom_getfloat(argv+1);
 	if (argc>2)u2=atom_getfloat(argv+2);
@@ -55,13 +51,20 @@ inlet_free(m_inlet[4]);
 inlet_free(m_inlet[5]);
 }
 
+//////////////////
+// extension check
+bool GEMglMapGrid2f :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglMapGrid2f :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glMapGrid2f (un, u1, u2, vn, v1, v2);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

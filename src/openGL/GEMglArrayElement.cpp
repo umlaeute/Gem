@@ -26,10 +26,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglArrayElement , t_floatarg, A_DEFFLOAT)
 GEMglArrayElement :: GEMglArrayElement	(t_floatarg arg0=0) :
 		i((GLint)arg0)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglArrayElement: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglArrayElement: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));
 }
 /////////////////////////////////////////////////////////
@@ -38,14 +34,18 @@ GEMglArrayElement :: GEMglArrayElement	(t_floatarg arg0=0) :
 GEMglArrayElement :: ~GEMglArrayElement () {
 inlet_free(m_inlet[0]);
 }
-
+//////////////////
+// extension check
+bool GEMglArrayElement :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglArrayElement :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glArrayElement (i);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

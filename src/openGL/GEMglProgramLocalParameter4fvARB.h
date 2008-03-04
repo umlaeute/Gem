@@ -35,6 +35,9 @@ class GEM_EXTERN GEMglProgramLocalParameter4fvARB : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglProgramLocalParameter4fvARB ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

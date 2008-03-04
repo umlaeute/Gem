@@ -27,11 +27,6 @@ GEMglProgramStringARB :: GEMglProgramStringARB	(int argc, t_atom*argv) :
 		len((GLsizei)0),
                 string(NULL)
 {
-#ifndef GL_ARB_vertex_program
-        error("GEMglProgramStringARB: GEM was compiled without GL_ARB_vertex_program");
-        error("GEMglProgramStringARB: therefore this object will do nothing");
-#endif
-
         switch (argc) {
         default:
         case 4:
@@ -61,15 +56,20 @@ GEMglProgramStringARB :: ~GEMglProgramStringARB ()
 	inlet_free(m_inlet[2]);
 	inlet_free(m_inlet[3]);
 }
+//////////////////
+// extension check
+bool GEMglProgramStringARB :: isRunnable(void) {
+  if(GLEW_ARB_vertex_program)return true;
+  error("your system does not support the ARB vertex_program extension");
+  return false;
+}
 
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglProgramStringARB :: render(GemState *state) 
 {
-#ifdef GL_ARB_vertex_program
 	glProgramStringARB (target, format, len, string);
-#endif
 }
 
 /////////////////////////////////////////////////////////

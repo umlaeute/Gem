@@ -13,13 +13,6 @@
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-/* LATER check this in configure */
-#ifdef __APPLE__
-# define t_GLshaderObj GLhandleARB*
-#else
-# define t_GLshaderObj GLhandleARB
-#endif
-
 /*
  CLASS
 	GEMglUseProgramObjectARB
@@ -42,16 +35,17 @@ class GEM_EXTERN GEMglUseProgramObjectARB : public GemBase
 	  // Destructor
 	  virtual ~GEMglUseProgramObjectARB ();
 	  
+    // check extensions
+    virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 	  
 	  // clean up the postrendering
 	  virtual void	postrender (GemState *state);
 
-	// variables
-#ifdef GL_ARB_shader_objects
-	  t_GLshaderObj	m_program;		// VAR
-#endif
+    // variables
+	  GLhandleARB	m_program;		// VAR
 	  virtual void	programMess(int);
 
 	private:

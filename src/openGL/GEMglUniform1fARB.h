@@ -37,6 +37,9 @@ class GEM_EXTERN GEMglUniform1fARB : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglUniform1fARB ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

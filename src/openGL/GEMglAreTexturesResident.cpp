@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglAreTexturesResident )
 // Constructor
 //
 GEMglAreTexturesResident :: GEMglAreTexturesResident	(int argc, t_atom*argv) {
-#ifndef GL_VERSION_1_1
-        error("GEMglAreTexturesResident: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglAreTexturesResident: therefore this object will do nothing");
-#endif
 	len=32;
 	textures  =new GLuint   [len];
 	residences=new GLboolean[len];
@@ -46,12 +42,17 @@ GEMglAreTexturesResident :: ~GEMglAreTexturesResident () {
   outlet_free(m_out1);
   outlet_free(m_out2);
 }
-
+//////////////////
+// extension check
+bool GEMglAreTexturesResident :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglAreTexturesResident :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
   GLboolean ok = glAreTexturesResident (n, textures, residences);
   int i=n;
   while(i--){
@@ -60,7 +61,6 @@ void GEMglAreTexturesResident :: render(GemState *state) {
   }
   outlet_list(m_out2, &s_list, n, m_buffer);
   outlet_float(m_out1, (ok?1.0:0.0));
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

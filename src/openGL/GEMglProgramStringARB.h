@@ -35,6 +35,9 @@ class GEM_EXTERN GEMglProgramStringARB : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglProgramStringARB ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

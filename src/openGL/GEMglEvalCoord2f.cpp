@@ -27,10 +27,6 @@ GEMglEvalCoord2f :: GEMglEvalCoord2f	(t_floatarg arg0=0, t_floatarg arg1=0) :
 		u((GLfloat)arg0), 
 		v((GLfloat)arg1)
 {
-#ifndef GL_VERSION_1_1
-        error("GEMglEvalCoord2f: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglEvalCoord2f: therefore this object will do nothing");
-#endif
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
@@ -41,14 +37,18 @@ GEMglEvalCoord2f :: ~GEMglEvalCoord2f () {
 inlet_free(m_inlet[0]);
 inlet_free(m_inlet[1]);
 }
-
+//////////////////
+// extension check
+bool GEMglEvalCoord2f :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglEvalCoord2f :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glEvalCoord2f (u, v);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

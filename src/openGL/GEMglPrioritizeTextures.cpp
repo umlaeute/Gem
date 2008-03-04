@@ -25,10 +25,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPrioritizeTextures , t_floatarg, A_DEFFLOAT)
 //
 GEMglPrioritizeTextures :: GEMglPrioritizeTextures	(t_floatarg arg0=16) :
 		n((GLsizei)arg0) {
-#ifndef GL_VERSION_1_1
-        error("GEMglPrioritizeTextures: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglPrioritizeTextures: therefore this object will do nothing");
-#endif
 	if (n>0) t_len=p_len=n;
 	else t_len=p_len=16;
 
@@ -48,16 +44,22 @@ inlet_free(m_inlet[1]);
 inlet_free(m_inlet[2]);
 }
 
+//////////////////
+// extension check
+bool GEMglPrioritizeTextures :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
+
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglPrioritizeTextures :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
   int N=n;
   if (t_len<N)N=t_len;
   if (p_len<N)N=p_len;
   glPrioritizeTextures (N, textures, priorities);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////

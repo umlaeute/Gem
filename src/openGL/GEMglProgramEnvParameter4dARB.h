@@ -36,6 +36,9 @@ class GEM_EXTERN GEMglProgramEnvParameter4dARB : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglProgramEnvParameter4dARB ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

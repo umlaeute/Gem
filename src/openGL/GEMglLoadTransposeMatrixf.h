@@ -35,6 +35,9 @@ class GEM_EXTERN GEMglLoadTransposeMatrixf : public GemBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglLoadTransposeMatrixf ();
+          // check extensions
+          virtual bool isRunnable(void);
+
 	  // Do the rendering
 	  virtual void	render (GemState *state);
 

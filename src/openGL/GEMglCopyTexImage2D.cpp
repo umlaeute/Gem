@@ -24,10 +24,6 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglCopyTexImage2D )
 // Constructor
 //
 GEMglCopyTexImage2D :: GEMglCopyTexImage2D	(int argc,t_atom*argv){
-#ifndef GL_VERSION_1_1
-        error("GEMglCopyTexImage2D: GEM was compiled without GL_VERSION_1_1");
-        error("GEMglCopyTexImage2D: therefore this object will do nothing");
-#endif
 	target=0;
 	level=0;
 	internalFormat=0;
@@ -65,14 +61,18 @@ inlet_free(m_inlet[5]);
 inlet_free(m_inlet[6]);
 inlet_free(m_inlet[7]);
 }
-
+//////////////////
+// extension check
+bool GEMglCopyTexImage2D :: isRunnable(void) {
+  if(GLEW_VERSION_1_1)return true;
+  error("your system does not support OpenGL-1.1");
+  return false;
+}
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglCopyTexImage2D :: render(GemState *state) {
-#ifdef GL_VERSION_1_1
 	glCopyTexImage2D (target, level, internalFormat, x, y, width, height, border);
-#endif // GL_VERSION_1_1
 }
 
 /////////////////////////////////////////////////////////
