@@ -489,7 +489,14 @@ int mem2magickImage(imageStruct *image, const char *filename)
   // LATER: think about writing RGBA
   try{
     Magick::Image mimage(image->xsize, image->ysize, cs, Magick::CharPixel, image->data);
-    mimage.flip(); // since openGL is upside down
+    // since openGL is upside down
+    if(!image->upsidedown) {
+      mimage.flip();
+    }
+    // 8 bits per channel are enough!
+    // LATER make this dependent on the image->type
+    mimage.depth(8); 
+    // finally convert and export
     mimage.write(filename);
   } catch (Magick::Exception e){
     error("%s", e.what());
