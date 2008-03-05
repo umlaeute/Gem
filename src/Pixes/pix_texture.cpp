@@ -339,8 +339,6 @@ void pix_texture :: render(GemState *state) {
         m_yRatio /= (float)y_2;
         m_buffer.xsize = x_2;
         m_buffer.ysize = y_2;
-        m_xRatio = 1.0;
-        m_yRatio = 1.0;
       } else {
         m_buffer.xsize = m_imagebuf.xsize;
         m_buffer.ysize = m_imagebuf.ysize;
