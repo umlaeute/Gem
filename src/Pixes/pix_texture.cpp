@@ -191,6 +191,10 @@ void pix_texture :: render(GemState *state) {
   GLfloat xTex=1., yTex=1.;
   int do_rectangle = (m_rectangle)?GemMan::texture_rectangle_supported:0;
 
+  int newfilm = 0;
+  if(state && state->image)
+    newfilm = state->image->newfilm;
+
   if (!state->image || !state->image->image.data){
     if(m_extTextureObj>0) {
       useExternalTexture= true;
@@ -261,7 +265,7 @@ void pix_texture :: render(GemState *state) {
   
   state->multiTexUnits = 8;
 
-  if ((!useExternalTexture)&&state->image->newfilm ){
+  if ((!useExternalTexture)&&newfilm ){
     //  tigital:  shouldn't we also allow TEXTURE_2D here?
     if(NULL!=glTextureRangeAPPLE) {
       if ( GLEW_APPLE_texture_range ){
@@ -361,6 +365,15 @@ void pix_texture :: render(GemState *state) {
             
         if (m_buffer.format == GL_YUV422_GEM && !m_rectangle)m_buffer.setBlack();
 
+        newfilm = 1;
+        
+      } //end of loop if size has changed
+      
+      // okay, load in the actual pixel data
+      
+      //when doing rectangle textures the buffer changes after every film is loaded this call makes sure the 
+      //texturing is updated as well to prevent crashes
+      if(newfilm) {
         //this is for dealing with power of 2 textures which need a buffer that's 2^n
         if ( !do_rectangle ) {            
           glTexImage2D(	m_textureType, 0,
@@ -386,25 +399,11 @@ void pix_texture :: render(GemState *state) {
                          m_imagebuf.data); 
             debug("TexImage2D  rectangle");
           }
-        
-      } //end of loop if size has changed
-      
-      // okay, load in the actual pixel data
-      
-      //when doing rectangle textures the buffer changes after every film is loaded this call makes sure the 
-      //texturing is updated as well to prevent crashes
-      if (state->image->newfilm ){
-        glTexImage2D(m_textureType, 0,
-                     //  m_buffer.csize,  //this is completely wrong btw
-                     GL_RGBA, 		//this is the correct internal format for YUV
-                     m_imagebuf.xsize,
-                     m_imagebuf.ysize, 0,
-                     m_imagebuf.format,
-                     m_imagebuf.type,
-                     m_imagebuf.data);
-        debug("new film");
-        state->image->newfilm = 0; //just to be sure
+
+        // just to make sure...
+        state->image->newfilm = 0;
       }
+
       glTexSubImage2D(m_textureType, 0,
                       0, 0,				// position
                       m_imagebuf.xsize,
