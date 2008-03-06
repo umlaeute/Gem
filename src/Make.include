@@ -5,7 +5,7 @@ vpath %.cpp .
 vpath %.h   .:$(SRCDIR)/Base/
 vpath %.o $(OBJDIR)
 
-include $(SRCDIR)/Make.config
+-include $(SRCDIR)/Make.config
 
 vpath %.$(EXT) $(SRCDIR):$(OBJDIR):.
 

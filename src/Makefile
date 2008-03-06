@@ -8,7 +8,7 @@ BUILDDIR = ..
 #OBJECTS = $(GEM_TARGETS:%=%/*.o)
 OBJECTS = $(OBJDIR)*.o
 
-.PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs installabs strip
+.PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs installabs strip config
 
 all: subdirs strip
 
@@ -58,8 +58,15 @@ installdocs:
 
 
 ifeq (,$(findstring clean, $(MAKECMDGOALS)))
+## hacks again!
+ifeq (,$(findstring configure, $(MAKECMDGOALS)))
+ifeq (,$(findstring aclocal.m4, $(MAKECMDGOALS)))
 Make.config: Make.config.in configure $(GEM_CONFIGFILE)
 	./configure ${CONFIGUREFLAGS}
+endif
+endif
+
+config: Make.config
 
 configure: configure.ac aclocal.m4
 	autoconf
