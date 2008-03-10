@@ -47,9 +47,9 @@
 #X obj 420 258 symbol;
 #X obj 420 234 del 500;
 #X obj 301 188 spigot;
-#X obj 338 165 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 338 165 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
-#X floatatom 301 238 5 0 0;
+#X floatatom 301 238 5 0 0 0 - - -;
 #X obj 301 216 i;
 #X obj 548 134 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
@@ -60,6 +60,9 @@ current output window and writes it not into a texture but into a file
 #X text 492 364 mind the 99: [pix_write] has to be called late \, to
 ensure that all that you want is already rendered onto the screen.
 ;
+#X msg 789 285 auto \$1;
+#X obj 793 263 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
 #X connect 0 0 1 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
@@ -98,3 +101,5 @@ ensure that all that you want is already rendered onto the screen.
 #X connect 32 0 31 0;
 #X connect 33 0 15 0;
 #X connect 34 0 30 0;
+#X connect 37 0 5 0;
+#X connect 38 0 37 0;
