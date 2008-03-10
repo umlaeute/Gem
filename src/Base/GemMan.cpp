@@ -44,6 +44,12 @@
 
 #include "GemSIMD.h"
 
+#ifdef DEBUG
+# define debug_post post
+#else
+# define debug_post
+#endif
+
 static WindowInfo gfxInfo;
 static WindowInfo constInfo;
 
@@ -682,9 +688,8 @@ void GemMan :: fillGemState(GemState &state)
 /////////////////////////////////////////////////////////
 void GemMan :: resetState()
 {
-#ifdef DEBUG
-  post("MAN::resetState entered");
-#endif
+  debug_post("GemMan::resetState entered");
+
   m_clear_color[0] = 0.0;
   m_clear_color[1] = 0.0;
   m_clear_color[2] = 0.0;
@@ -1229,9 +1234,7 @@ void GemMan :: windowCleanup()
 int GemMan :: createWindow(char* disp)
 {
   if ( m_windowState ) return(0);
-#ifdef DEBUG
-  post("GemMan: create window");
-#endif
+  debug_post("GemMan: create window");
 
   WindowHints myHints;
   myHints.border = m_border;
@@ -1344,17 +1347,14 @@ void GemMan :: destroyWindow()
     
   windowCleanup();
 
+  // this should really go into the GemWinCreate<OS> files::
+
   // reestablish the const glxContext
 #ifdef __unix__                 // for Unix
-  //post("dpy=%x\twin=%x\tcontext=%x", constInfo.dpy, constInfo.win, constInfo.context);
-
   if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
-
   glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
 #elif defined __WIN32__              // for Windows
-
   if (!constInfo.dc && !constInfo.context)return; // do not crash ??
-
   wglMakeCurrent(constInfo.dc, constInfo.context);
   s_windowRun = 0;
 #elif defined __APPLE__		// for PPC Macintosh
