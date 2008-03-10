@@ -198,4 +198,15 @@ GEM_EXTERN extern int cursorGemWindow(WindowInfo &info, int state);
 // Set the topmost position
 GEM_EXTERN extern int topmostGemWindow(WindowInfo &info, int state);
 
+//////////
+// swap the buffers (get's called in double-buffered mode)
+GEM_EXTERN extern void gemWinSwapBuffers(WindowInfo &nfo);
+/////////
+// reestablish a context
+GEM_EXTERN extern void gemWinMakeCurrent(WindowInfo &nfo);
+
+/////////
+// init OS-specific stuff
+GEM_EXTERN extern bool initGemWin(void);
+
 #endif  // for header file

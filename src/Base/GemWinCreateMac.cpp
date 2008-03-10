@@ -1510,4 +1510,36 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
     }
     return result;
 }
+
+void gemWinSwapBuffers(WindowInfo nfo)
+{
+  ::aglSwapBuffers(nfo.context);
+}
+
+void gemWinMakeCurrent(WindowInfo nfo) 
+{
+  ::aglSetDrawable( nfo.context, GetWindowPort(nfo.pWind) );
+  ::aglSetCurrentContext(nfo.context);
+}
+
+bool initGemWin(void) {
+  // Check QuickTime installed
+  long	QDfeature;
+  if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
+    error ("GEM: QuickTime is not installed : %d", err);
+    return 0;
+  } else {
+    if (OSErr err = ::EnterMovies()) {
+      error("GEM: Couldn't initialize QuickTime : %d", err);
+      return 0;
+    }
+  }
+  // check existence of OpenGL libraries
+  if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
+    error ("GEM : OpenGL is not installed");
+    return 0;
+  }
+  return 1;
+}
+
 #endif

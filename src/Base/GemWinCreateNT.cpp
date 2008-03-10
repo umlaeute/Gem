@@ -597,4 +597,38 @@ int topmostGemWindow(WindowInfo &info, int state)
   return topmost_state;
 }
 
+
+void gemWinSwapBuffers(WindowInfo nfo)
+{
+  SwapBuffers(nfo.dc);
+}
+
+void gemWinMakeCurrent(WindowInfo nfo) 
+{
+  if (!nfo.dc && !nfo.context)return; // do not crash ??
+  wglMakeCurrent(nfo.dc, nfo.context); 
+}
+
+bool initGemWin(void) {
+	OSErr		err = noErr;
+
+	// Initialize QuickTime Media Layer
+	err = InitializeQTML(0);
+	if (err)
+    {
+      error("GEM Man: Could not initialize quicktime: error %d\n", err);
+      return 0;
+    }	
+	
+	// Initialize QuickTime
+	EnterMovies();
+	if (err)
+    {
+      error("GEM Man: Could not initialize quicktime: error %d\n", err);
+      return 0;
+    }	
+	post("Gem Man: QT init OK");
+  return 1;
+}
+
 #endif

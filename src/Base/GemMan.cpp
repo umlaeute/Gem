@@ -148,18 +148,17 @@ GEM_EXTERN void gemAbortRendering()
 static t_clock *s_windowClock = NULL;
 static int s_windowDelTime = 10;
 
-#ifdef __WIN32__
+
 static int s_windowRun = 0;
 static int s_singleContext = 0;
-
+#ifdef __WIN32__
 /////////////////////////////////////////////////////////
 // dispatchGemWindowMessages
 //
 /////////////////////////////////////////////////////////
 static void dispatchGemWindowMessages()
 {
-  if (!s_windowRun)
-    return;
+  if (!s_windowRun)return;
 
   MSG msg;
   while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE)
@@ -446,53 +445,12 @@ void GemMan :: initGem()
   maxStackDepth[0] = 16; // model
   maxStackDepth[1] = maxStackDepth[2] = maxStackDepth[3] = 2; // color/texture/projection
 
-
   m_motionBlur = 0.f;
 
 
-#ifdef __WIN32__
-	OSErr		err = noErr;
-
-	// Initialize QuickTime Media Layer
-	err = InitializeQTML(0);
-	if (err)
-    {
-      error("GEM Man: Could not initialize quicktime: error %d\n", err);
-      return;
-    }	
-	
-	// Initialize QuickTime
-	EnterMovies();
-	if (err)
-    {
-      error("GEM Man: Could not initialize quicktime: error %d\n", err);
-      return;
-    }	
-	post("Gem Man: QT init OK");
-	
-#elif __APPLE__
-  // Check QuickTime installed
-  long	QDfeature;
-  if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
-    error ("GEM: QuickTime is not installed : %d", err);
-    return;
-  } else {
-    if (OSErr err = ::EnterMovies()) {
-      error("GEM: Couldn't initialize QuickTime : %d", err);
-      return;
-    }
-  }
-  // check existence of OpenGL libraries
-  if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
-    error ("GEM : OpenGL is not installed");
-    return;
-  }
-
-#endif
-
+  initGemWin();
 
 #ifdef __APPLE__
-
   // This is to create a "master context" on Gem initialization, with
   //  the hope that we can then share it with later context's created
   //  when opening new rendering windows, and thereby share resources
@@ -515,7 +473,6 @@ void GemMan :: initGem()
   //  AGL_MACRO_DECLARE_VARIABLES()
 
   aglDestroyPixelFormat( aglPixFmt );
-  
 #endif
 
 }
@@ -1306,9 +1263,8 @@ int GemMan :: createWindow(char* disp)
   m_windowNumber++;
   windowInit();
   clock_delay(s_windowClock, s_windowDelTime);
-#ifdef __WIN32__
+
   s_windowRun = 1;
-#endif
 
   return(1);
 }
@@ -1326,12 +1282,11 @@ void GemMan :: destroyWindowSoon()
 void GemMan :: destroyWindow()
 {
   GemMan::pleaseDestroy=false;
-#ifdef __WIN32__
-  // don't want to get rid of this
-  if (s_singleContext)
-    return;
-#endif
 
+  // don't want to get rid of this
+  if (s_singleContext) return;
+
+  // nothing to destroy...
   if (!m_windowState) return;
 
   stopRendering();
@@ -1350,19 +1305,8 @@ void GemMan :: destroyWindow()
   // this should really go into the GemWinCreate<OS> files::
 
   // reestablish the const glxContext
-#ifdef __unix__                 // for Unix
-  if (!constInfo.dpy && !constInfo.win && !constInfo.context)return; // do not crash
-  glXMakeCurrent(constInfo.dpy, constInfo.win, constInfo.context);   
-#elif defined __WIN32__              // for Windows
-  if (!constInfo.dc && !constInfo.context)return; // do not crash ??
-  wglMakeCurrent(constInfo.dc, constInfo.context);
+  gemWinMakeCurrent(constInfo);
   s_windowRun = 0;
-#elif defined __APPLE__		// for PPC Macintosh
-  ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
-  ::aglSetCurrentContext(constInfo.context);
-#else
-#error Define OS specific OpenGL context make current
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -1371,13 +1315,9 @@ void GemMan :: destroyWindow()
 /////////////////////////////////////////////////////////
 int createConstWindow(char* disp)
 {
-#ifdef __WIN32__
   // can we only have one context?
-  if (s_singleContext)
-    {
-      return(GemMan::createWindow(disp));		
-    }
-#endif
+  if (s_singleContext) 
+    return(GemMan::createWindow(disp));		
 
   WindowHints myHints;
   myHints.title = GemMan::m_title;
@@ -1422,12 +1362,7 @@ int createConstWindow(char* disp)
 /////////////////////////////////////////////////////////
 void destroyConstWindow()
 {
-#ifdef __WIN32__
-  if (s_singleContext)
-    {
-    }
-  else
-#endif
+  if (!s_singleContext)
     destroyGemWindow(constInfo);
 }
 
@@ -1439,15 +1374,7 @@ void GemMan :: swapBuffers()
 {
   if (!m_windowState) return;
   if (GemMan::m_buffer == 2) {
-#ifdef __unix__             // for Unix
-    glXSwapBuffers(gfxInfo.dpy, gfxInfo.win);
-#elif defined __WIN32__          // for WinNT
-    SwapBuffers(gfxInfo.dc);
-#elif defined __APPLE__		// for Macintosh
-    ::aglSwapBuffers(gfxInfo.context);
-#else                   // everyone else
-#error Define OS specific swap buffer
-#endif
+    gemWinSwapBuffers(gfxInfo);
   } else {
     glFlush();
   }
