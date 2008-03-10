@@ -1436,15 +1436,8 @@ void GemMan :: cursorOnOff(int state)
 /////////////////////////////////////////////////////////
 void GemMan :: topmostOnOff(int state)
 {
-#ifdef __WIN32__
   if (m_windowState)
     topmostGemWindow(gfxInfo,state);
-#else
-  /* we don't care for this warning, since only windows has problems with
-   * the Gem-window being not automatically on top (?) (jmz)
-   */
-  //  post("gemwin: \"topmost\" message not supported on this platform");
-#endif
   m_topmost = state;
 }
 

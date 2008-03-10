@@ -489,6 +489,13 @@ int cursorGemWindow(WindowInfo &info, int state)
 
   return state;
 }
+
+
+int topmostGemWindow(WindowInfo &info, int state){
+  /* we don't give a warning to not be annoying */
+  return 1;
+}
+
 //-----------------------------------------------------------------------------------------------------------------------
 // SetupAGLFullScreen, for 2nd monitor
 //-----------------------------------------------------------------------------------------------------------------------

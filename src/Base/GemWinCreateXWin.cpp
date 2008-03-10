@@ -346,6 +346,7 @@ int cursorGemWindow(WindowInfo &info, int state)
 }
 
 int topmostGemWindow(WindowInfo &info, int state){
+  /* we don't give a warning to not be annoying */
   return 1;
 }
 
