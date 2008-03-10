@@ -1265,9 +1265,6 @@ int GemMan :: createWindow(char* disp)
     on the NVidia GeForce2MX and above, or the ATI Radeon and above.
   */
 
-  post("glXGetCurrentDisplay== %x", glXGetProcAddressARB((const GLubyte*)"glXGetCurrentDisplay"));
-  post("%x ...", &glXGetCurrentDisplay);
-
   GLenum err = glewInit();
 
   if (GLEW_OK != err) {
