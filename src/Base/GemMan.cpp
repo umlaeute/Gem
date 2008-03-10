@@ -176,57 +176,57 @@ static void dispatchGemWindowMessages()
   win = GemMan::getWindowInfo(); 
 
   while (XCheckWindowEvent(win.dpy,win.win,
-			   ResizeRedirectMask | 
-			   KeyPressMask | KeyReleaseMask |
-			   PointerMotionMask | 
-			   ButtonMotionMask |
-			   ButtonPressMask | 
-			   ButtonReleaseMask,
-			   &event))
+                           ResizeRedirectMask | 
+                           KeyPressMask | KeyReleaseMask |
+                           PointerMotionMask | 
+                           ButtonMotionMask |
+                           ButtonPressMask | 
+                           ButtonReleaseMask,
+                           &event))
     {
       switch (event.type)
-	{
-	case ButtonPress: 
-	  triggerButtonEvent(eb->button-1, 1, eb->x, eb->y); 
-	  break; 
-	case ButtonRelease: 
-	  triggerButtonEvent(eb->button-1, 0, eb->x, eb->y); 
-	  break; 
-	case MotionNotify: 
-	  triggerMotionEvent(eb->x, eb->y); 
-	  break; 
-	case KeyPress:
-	  if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
-	    //modifier key:use keysym
-	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
-	  }
-	  if ( (keysym_return & 0xff00)== 0xff00 ) {
-	    //non alphanumeric key: use keysym
-	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
-	  } else {
-	    triggerKeyboardEvent(keystring, kb->keycode, 1);
-	  }
-	  break;
-	case KeyRelease:
-	  if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
-	    //modifier key:use keysym
-	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
-	  }
+        {
+        case ButtonPress: 
+          triggerButtonEvent(eb->button-1, 1, eb->x, eb->y); 
+          break; 
+        case ButtonRelease: 
+          triggerButtonEvent(eb->button-1, 0, eb->x, eb->y); 
+          break; 
+        case MotionNotify: 
+          triggerMotionEvent(eb->x, eb->y); 
+          break; 
+        case KeyPress:
+          if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
+            //modifier key:use keysym
+            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+          }
+          if ( (keysym_return & 0xff00)== 0xff00 ) {
+            //non alphanumeric key: use keysym
+            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+          } else {
+            triggerKeyboardEvent(keystring, kb->keycode, 1);
+          }
+          break;
+        case KeyRelease:
+          if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
+            //modifier key:use keysym
+            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
+          }
 
-	  if ( (keysym_return & 0xff00)== 0xff00 ) {
-	    //non alphanumeric key: use keysym
-	    triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
-	  } else {
-	    triggerKeyboardEvent(keystring, kb->keycode, 0);
-	  }
-	  break;
-	case ResizeRequest:
-	  triggerResizeEvent(res->width, res->height);
-	  XResizeWindow(win.dpy, win.win, res->width, res->height);
-	  break;
-	default:
-	  break; 
-	}
+          if ( (keysym_return & 0xff00)== 0xff00 ) {
+            //non alphanumeric key: use keysym
+            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
+          } else {
+            triggerKeyboardEvent(keystring, kb->keycode, 0);
+          }
+          break;
+        case ResizeRequest:
+          triggerResizeEvent(res->width, res->height);
+          XResizeWindow(win.dpy, win.win, res->width, res->height);
+          break;
+        default:
+          break; 
+        }
     }
   
   if (XCheckTypedEvent(win.dpy,  ClientMessage, &event)) {
@@ -238,19 +238,19 @@ static void dispatchGemWindowMessages()
 #elif __APPLE__
 static pascal OSStatus dispatchGemWindowMessages()
 {
-    EventRef	theEvent;
-    EventTargetRef theTarget;
+  EventRef	theEvent;
+  EventTargetRef theTarget;
     
-    theTarget = GetEventDispatcherTarget();
-// TODO:
-//   this only gets one event per frame, so there's gotta be a better way, right?
-    ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true, &theEvent );
-    {
-        SendEventToEventTarget( theEvent, theTarget);
-        ReleaseEvent( theEvent );
-    }
-    clock_delay(s_windowClock, s_windowDelTime);
-    return noErr;
+  theTarget = GetEventDispatcherTarget();
+  // TODO:
+  //   this only gets one event per frame, so there's gotta be a better way, right?
+  ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true, &theEvent );
+  {
+    SendEventToEventTarget( theEvent, theTarget);
+    ReleaseEvent( theEvent );
+  }
+  clock_delay(s_windowClock, s_windowDelTime);
+  return noErr;
 }
 #endif // for Unix
 
@@ -269,18 +269,18 @@ static void resizeCallback(int xSize, int ySize, void *)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-	    GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-	    GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+            GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
+            GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
 
   glMatrixMode(GL_MODELVIEW);
-//  TODO:
-//    shouldn't this be called here?
+  //  TODO:
+  //    shouldn't this be called here?
   //  glLoadIdentity();
 }
 /*
- This is SGI sample code taken directly from OpenGL.org:
- http://www.opengl.org/developers/code/features/OGLextensions/OGLextensions.html
- */
+  This is SGI sample code taken directly from OpenGL.org:
+  http://www.opengl.org/developers/code/features/OGLextensions/OGLextensions.html
+*/
 int OpenGLExtensionIsSupported(const char* extension) {
   const GLubyte *extensions = NULL;
   const GLubyte *start;
@@ -369,7 +369,7 @@ void GemMan :: createContext(char* disp)
       error("GEM: Continue at your own risk!");
       m_windowContext = 0;
     } else 
-      m_windowContext = 1;
+    m_windowContext = 1;
   setResizeCallback(resizeCallback, NULL);
 }
 
@@ -450,37 +450,37 @@ void GemMan :: initGem()
 	// Initialize QuickTime Media Layer
 	err = InitializeQTML(0);
 	if (err)
-	{
-		error("GEM Man: Could not initialize quicktime: error %d\n", err);
-		return;
-	}	
+    {
+      error("GEM Man: Could not initialize quicktime: error %d\n", err);
+      return;
+    }	
 	
 	// Initialize QuickTime
 	EnterMovies();
 	if (err)
-	{
-		error("GEM Man: Could not initialize quicktime: error %d\n", err);
-		return;
-	}	
+    {
+      error("GEM Man: Could not initialize quicktime: error %d\n", err);
+      return;
+    }	
 	post("Gem Man: QT init OK");
 	
 #elif __APPLE__
-    // Check QuickTime installed
-    long	QDfeature;
-    if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
-            error ("GEM: QuickTime is not installed : %d", err);
-            return;
-    } else {
-            if (OSErr err = ::EnterMovies()) {
-                error("GEM: Couldn't initialize QuickTime : %d", err);
-                return;
-            }
+  // Check QuickTime installed
+  long	QDfeature;
+  if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
+    error ("GEM: QuickTime is not installed : %d", err);
+    return;
+  } else {
+    if (OSErr err = ::EnterMovies()) {
+      error("GEM: Couldn't initialize QuickTime : %d", err);
+      return;
     }
-    // check existence of OpenGL libraries
-    if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
-            error ("GEM : OpenGL is not installed");
-            return;
-    }
+  }
+  // check existence of OpenGL libraries
+  if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
+    error ("GEM : OpenGL is not installed");
+    return;
+  }
 
 #endif
 
@@ -494,8 +494,8 @@ void GemMan :: initGem()
   //  - should remove the need for GemMan::HaveValidContext()
   GLint attrib[] = {AGL_RGBA, AGL_DOUBLEBUFFER, AGL_NO_RECOVERY, AGL_NONE};
   
-//  GDHandle display = GetMainDevice();
-//  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( &display, 1, attrib );
+  //  GDHandle display = GetMainDevice();
+  //  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( &display, 1, attrib );
   AGLPixelFormat aglPixFmt = aglChoosePixelFormat( NULL, 0, attrib );
 	GLenum err = aglGetError();
 	if (AGL_NO_ERROR != err)
@@ -506,7 +506,7 @@ void GemMan :: initGem()
 		post((char *)aglErrorString(err));
   aglSetCurrentContext( masterContext);
   
-//  AGL_MACRO_DECLARE_VARIABLES()
+  //  AGL_MACRO_DECLARE_VARIABLES()
 
   aglDestroyPixelFormat( aglPixFmt );
   
@@ -569,11 +569,11 @@ void GemMan :: removeObj(gemhead *obj, int priority=50)
     {
       gemheadLink *nextPtr = linkPtr->next;
       if (priority<0){
-	delete s_linkHead_2;
-	s_linkHead_2 = nextPtr;
+        delete s_linkHead_2;
+        s_linkHead_2 = nextPtr;
       } else {
-	delete s_linkHead;
-	s_linkHead = nextPtr;
+        delete s_linkHead;
+        s_linkHead = nextPtr;
       }
       return;
     }
@@ -610,8 +610,8 @@ void GemMan :: resetValues()
     }
   else
     {
-// TODO:
-//   this should be cached, & only disabled if it was enabled
+      // TODO:
+      //   this should be cached, & only disabled if it was enabled
       glDisable(GL_LIGHTING);
       glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
       glDisable(GL_COLOR_MATERIAL);
@@ -627,19 +627,19 @@ void GemMan :: resetValues()
   glLoadIdentity();
 
   glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
-	    m_perspect[2], m_perspect[3],				// bottom, top
-	    m_perspect[4], m_perspect[5]);				// front, back
+            m_perspect[2], m_perspect[3],				// bottom, top
+            m_perspect[4], m_perspect[5]);				// front, back
     
   glMatrixMode(GL_MODELVIEW);
-// TODO:
-//   shouldn't this be called here?
-//  glLoadIdentity();
+  // TODO:
+  //   shouldn't this be called here?
+  //  glLoadIdentity();
   gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-	    m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
+            m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
 
   if (m_fogMode == FOG_OFF) {
-//  TODO:
-//    this should be cached, & only disabled if it was enabled  
+    //  TODO:
+    //    this should be cached, & only disabled if it was enabled  
     glDisable(GL_FOG);
   } else {
     glEnable(GL_FOG);
@@ -654,8 +654,8 @@ void GemMan :: resetValues()
       glFogf(GL_FOG_MODE, GL_EXP2);
       break;
     case (FOG_OFF):
-        glDisable(GL_FOG);
-        break;
+      glDisable(GL_FOG);
+      break;
     }
     glFogf(GL_FOG_DENSITY, GemMan::m_fog);
     glFogf(GL_FOG_START, GemMan::m_fogStart);
@@ -782,9 +782,9 @@ void GemMan :: render(void *)
     {
       LARGE_INTEGER freq;
       if (!QueryPerformanceFrequency(&freq))
-	countFreq = 0;
+        countFreq = 0;
       else
-	countFreq = (float)(freq.QuadPart);
+        countFreq = (float)(freq.QuadPart);
       firstTime = 0;
     }
   LARGE_INTEGER startTime;
@@ -797,8 +797,8 @@ void GemMan :: render(void *)
     gettimeofday(&startTime, 0);
   }
 #elif __APPLE__
-    UnsignedWide startTime;
-    ::Microseconds(&startTime);
+  UnsignedWide startTime;
+  ::Microseconds(&startTime);
 #else
 #error Define OS specific profiling
 #endif
@@ -815,6 +815,21 @@ void GemMan :: render(void *)
     currentState.tickTime = (float)(clock_gettimesince(m_lastRenderTime));
   m_lastRenderTime = clock_getsystime();
 
+  //test to see if stereo is supported
+  //XXX maybe there is a better place to do this?
+  GLboolean stereoWindowTest;
+  glGetBooleanv (GL_STEREO, &stereoWindowTest);
+  //if we're trying to do crystal glasses stereo but don't have a stereo window
+  //disable stereo and post a warning
+  if(m_stereo == 3 && !stereoWindowTest){
+    error("you've selected Crystal Glasses Stereo but your graphics card isn't set up for stereo, setting stereo=0");
+    m_stereo = GemMan::m_stereo = 0;
+  } else if(stereoWindowTest) {
+    //if we're not doing crystal eyes stereo but our window is enabled to do stereo
+    //select the back buffer for drawing
+    glDrawBuffer(GL_BACK);
+  }
+
   // if stereoscopic rendering
   switch (m_stereo) {
   case 1: // 2-screen stereo
@@ -829,13 +844,13 @@ void GemMan :: render(void *)
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-		GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-		GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+                GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
  
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
       // render left view
       fillGemState(currentState);
@@ -853,13 +868,13 @@ void GemMan :: render(void *)
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-		GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-		GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+                GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
  
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
       // render right view
       fillGemState(currentState);
@@ -873,26 +888,26 @@ void GemMan :: render(void *)
 
 
       if (GemMan::m_stereoLine){
-	// draw a line between the views
-	glDisable(GL_LIGHTING);
+        // draw a line between the views
+        glDisable(GL_LIGHTING);
 
-	glViewport(0, 0, m_w, m_h);
-	xDivy = (float)m_w / (float)ySize;
-	// setup the matrices
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glFrustum(-1, 1, -1, 1, 1, 20);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
+        glViewport(0, 0, m_w, m_h);
+        xDivy = (float)m_w / (float)ySize;
+        // setup the matrices
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glFrustum(-1, 1, -1, 1, 1, 20);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
 
-	glLineWidth(2.f);
-	glColor3f(1.f, 1.f, 1.f);
-	glBegin(GL_LINES);
-	glVertex2f(0.f, -6.f);
-	glVertex2f(0.f, 6.f);
-	glEnd();
-	glLineWidth(1.0f);
+        glLineWidth(2.f);
+        glColor3f(1.f, 1.f, 1.f);
+        glBegin(GL_LINES);
+        glVertex2f(0.f, -6.f);
+        glVertex2f(0.f, 6.f);
+        glEnd();
+        glLineWidth(1.0f);
       }
     }
     break;
@@ -913,27 +928,27 @@ void GemMan :: render(void *)
       // setup the left viewpoint
       switch (left_color){
       case 1:
-	glColorMask(GL_FALSE,GL_TRUE,GL_FALSE,GL_TRUE);
-	break;
+        glColorMask(GL_FALSE,GL_TRUE,GL_FALSE,GL_TRUE);
+        break;
       case 2:
-	glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
-	break;
+        glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
+        break;
       case 0:
       default:
-	glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
+        glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
       }
 
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-		GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-		GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+                GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
  
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
       // render left view
       fillGemState(currentState);
@@ -947,27 +962,27 @@ void GemMan :: render(void *)
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
       switch (right_color){
       case 0:
-	glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
-	break;
+        glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
+        break;
       case 1:
       default:
-	glColorMask(GL_FALSE,GL_TRUE,GL_FALSE, GL_TRUE);
-	break;
+        glColorMask(GL_FALSE,GL_TRUE,GL_FALSE, GL_TRUE);
+        break;
       case 2:
-	glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
+        glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
       }
 
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-		GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-		GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+                GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
  
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
       // render right view
       fillGemState(currentState);
@@ -981,6 +996,68 @@ void GemMan :: render(void *)
     
       glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
     } 
+    break;
+  case 3: // Crystal Eyes Stereo
+    {
+      int xSize = m_w;
+      int ySize = m_h;
+      float xDivy = (float)xSize / (float)ySize;
+
+      // setup the left viewpoint
+
+      // setup the matrices
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy, // left, right
+                GemMan::m_perspect[2], GemMan::m_perspect[3],     // bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);      // front, back
+         
+      glMatrixMode(GL_MODELVIEW);
+      glDrawBuffer(GL_BACK_LEFT);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+         
+      glLoadIdentity();
+      gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+                m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+         
+      // render left view
+      fillGemState(currentState);
+      renderChain(s_linkHead, &currentState);
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+      renderChain(s_linkHead_2, &currentState);
+
+      // setup the right viewpoint
+      glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
+
+      // setup the matrices
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy, // left, right
+                GemMan::m_perspect[2], GemMan::m_perspect[3],     // bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);      // front, back
+
+      glMatrixMode(GL_MODELVIEW);
+      glDrawBuffer(GL_BACK_RIGHT);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      glLoadIdentity();
+      gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+                m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+
+      // render right view
+      fillGemState(currentState);
+      currentState.tickTime=0.f;
+      renderChain(s_linkHead, &currentState);
+
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+      renderChain(s_linkHead_2, &currentState);
+
+      glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+    }
     break;
   default: // normal rendering
     {
@@ -996,8 +1073,8 @@ void GemMan :: render(void *)
   }
 
   // only want to swap if we are in double buffer mode
-//  if (GemMan::m_buffer == 2)
-    swapBuffers();
+  //  if (GemMan::m_buffer == 2)
+  swapBuffers();
 
   // are we profiling?
   if (m_profile == 1 || m_profile == 2)
@@ -1006,11 +1083,11 @@ void GemMan :: render(void *)
       LARGE_INTEGER endTime;
       QueryPerformanceCounter(&endTime);
       if (countFreq)
-	//post("GEM: time: %f",
-	//     (float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-	GemMan::fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-	  else
-	error("GEM: unable to profile");
+        //post("GEM: time: %f",
+        //     (float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+        GemMan::fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+      else
+        error("GEM: unable to profile");
     }
 #elif __unix__
   {
@@ -1021,14 +1098,14 @@ void GemMan :: render(void *)
     post("GEM: time: %f", seconds);
   }
 #elif __APPLE__
-    {
+  {
 	  UnsignedWide endTime;
 	  ::Microseconds(&endTime);
 	  float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
 	  GemMan::fps = (1 / (seconds * 1000)) * 1000;
 	  //m_fps = (1 / (seconds * 1000)) * 1000;
-	//  post("GEM: time: %f", seconds);
-    }
+    //  post("GEM: time: %f", seconds);
+  }
 #else
 #error Define OS specific profiling
 #endif
@@ -1118,10 +1195,10 @@ void GemMan :: windowInit()
   glClearDepth(1.0);    
   glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
  
-  #ifdef __APPLE__
+#ifdef __APPLE__
   GLint swapInt = 1;
   aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
-  #endif
+#endif
 
   /* i am not really sure whether it is a good idea to enable FSAA by default
    * this might slow down everything a lot;
@@ -1204,7 +1281,7 @@ int GemMan :: createWindow(char* disp)
 #ifdef GL_MAX_COLOR_MATRIX_STACK_DEPTH
   glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+1);
 #else
-   maxStackDepth[1]=2;
+  maxStackDepth[1]=2;
 #endif
   glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH, maxStackDepth+2);
   glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, maxStackDepth+3);
@@ -1273,8 +1350,8 @@ void GemMan :: destroyWindow()
   wglMakeCurrent(constInfo.dc, constInfo.context);
   s_windowRun = 0;
 #elif defined __APPLE__		// for PPC Macintosh
-    ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
-    ::aglSetCurrentContext(constInfo.context);
+  ::aglSetDrawable( constInfo.context, GetWindowPort(constInfo.pWind) );
+  ::aglSetCurrentContext(constInfo.context);
 #else
 #error Define OS specific OpenGL context make current
 #endif
@@ -1303,12 +1380,12 @@ int createConstWindow(char* disp)
   myHints.width = GemMan::m_width;
   myHints.height = GemMan::m_height;
 
-// TODO:
-//    masterContext for all platforms?
+  // TODO:
+  //    masterContext for all platforms?
 #ifndef __APPLE__
   myHints.shared = NULL;
 #else
-//  myHints.shared = constInfo.context;
+  //  myHints.shared = constInfo.context;
   constInfo.context = GemMan::masterContext;
   myHints.shared = GemMan::masterContext;
 #endif
@@ -1321,12 +1398,12 @@ int createConstWindow(char* disp)
     {
       error("GEM: Error creating const context");
       constInfo.have_constContext=0;
-        gfxInfo.have_constContext=0;
+      gfxInfo.have_constContext=0;
       return(0);
     } else{
-      constInfo.have_constContext=1;
-        gfxInfo.have_constContext=1;
-    }
+    constInfo.have_constContext=1;
+    gfxInfo.have_constContext=1;
+  }
 
   return(1);
 }
@@ -1367,14 +1444,14 @@ void GemMan :: swapBuffers()
     glFlush();
   }
 
-//  TODO:
-//  why is this called here?
-//  seems like it'd ruin single buffer rendering...
+  //  TODO:
+  //  why is this called here?
+  //  seems like it'd ruin single buffer rendering...
   glClear(m_clear_mask);
-// why is this called here?
- // glColor3f(1.0, 1.0, 1.0);
-// why is this called here?
-//  not clear what glMatrixMode() we're loading...probably GL_MODELVIEW?
+  // why is this called here?
+  // glColor3f(1.0, 1.0, 1.0);
+  // why is this called here?
+  //  not clear what glMatrixMode() we're loading...probably GL_MODELVIEW?
   glLoadIdentity();
 
   if (GemMan::m_buffer == 1)
@@ -1386,15 +1463,15 @@ void GemMan :: swapBuffers()
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
       glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
-		m_perspect[2], m_perspect[3],			// bottom, top
-		m_perspect[4], m_perspect[5]);			// front, back
+                m_perspect[2], m_perspect[3],			// bottom, top
+                m_perspect[4], m_perspect[5]);			// front, back
     
       glMatrixMode(GL_MODELVIEW);
-// TODO:
-// shouldn't this be called here?
-//	  glLoadIdentity();
+      // TODO:
+      // shouldn't this be called here?
+      //	  glLoadIdentity();
       gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-		m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
+                m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
     }
 }
 
@@ -1450,10 +1527,10 @@ void GemMan :: frameRate(float framespersecond)
   bool reschedule=(s_deltime<=0.f);
 
   if (framespersecond == 0.)
-  {
-	  s_deltime = 0.;
-	  return;
-  }
+    {
+      s_deltime = 0.;
+      return;
+    }
   if (framespersecond < 0.)
     {
       error("GEM: Invalid frame rate: %f", framespersecond);
@@ -1485,14 +1562,14 @@ GLenum GemMan :: requestLight(int specific)
   else
     {
       while(s_lights[i])
-	{
-	  i++;
-	  if (i >= NUM_LIGHTS)
-	    {
-	      error("GEM: Unable to allocate light");
-	      return((GLenum)0);
-	    }
-	}
+        {
+          i++;
+          if (i >= NUM_LIGHTS)
+            {
+              error("GEM: Unable to allocate light");
+              return((GLenum)0);
+            }
+        }
     }
   s_lights[i]++;
   GLenum retLight;

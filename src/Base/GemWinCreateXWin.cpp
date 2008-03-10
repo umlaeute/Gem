@@ -38,6 +38,17 @@ static int snglBuf24[] = {GLX_RGBA,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
                           None};
+static int snglBuf24Stereo[] = {GLX_RGBA, 
+                          GLX_RED_SIZE, 8, 
+                          GLX_GREEN_SIZE, 8, 
+                          GLX_BLUE_SIZE, 8, 
+                          GLX_DEPTH_SIZE, 16, 
+                          GLX_STENCIL_SIZE, 8, 
+                          GLX_ACCUM_RED_SIZE, 8,
+                          GLX_ACCUM_GREEN_SIZE, 8,
+                          GLX_ACCUM_BLUE_SIZE, 8,
+								  GLX_STEREO,
+                          None};
 static int dblBuf24[] =  {GLX_RGBA, 
                           GLX_RED_SIZE, 4, 
                           GLX_GREEN_SIZE, 4, 
@@ -49,11 +60,30 @@ static int dblBuf24[] =  {GLX_RGBA,
                           GLX_ACCUM_BLUE_SIZE, 8,
                           GLX_DOUBLEBUFFER, 
                           None};
+static int dblBuf24Stereo[] =  {GLX_RGBA, 
+                          GLX_RED_SIZE, 4, 
+                          GLX_GREEN_SIZE, 4, 
+                          GLX_BLUE_SIZE, 4, 
+                          GLX_DEPTH_SIZE, 16, 
+                          GLX_STENCIL_SIZE, 8, 
+                          GLX_ACCUM_RED_SIZE, 8,
+                          GLX_ACCUM_GREEN_SIZE, 8,
+                          GLX_ACCUM_BLUE_SIZE, 8,
+                          GLX_DOUBLEBUFFER, 
+								  GLX_STEREO,
+                          None};
 static int snglBuf8[] =  {GLX_RGBA, 
                           GLX_RED_SIZE, 3, 
                           GLX_GREEN_SIZE, 3, 
                           GLX_BLUE_SIZE, 2, 
                           GLX_DEPTH_SIZE, 16, 
+                          None};
+static int snglBuf8Stereo[] =  {GLX_RGBA, 
+                          GLX_RED_SIZE, 3, 
+                          GLX_GREEN_SIZE, 3, 
+                          GLX_BLUE_SIZE, 2, 
+                          GLX_DEPTH_SIZE, 16, 
+								  GLX_STEREO,
                           None};
 static int dblBuf8[] =   {GLX_RGBA, 
                           GLX_RED_SIZE, 1, 
@@ -63,6 +93,14 @@ static int dblBuf8[] =   {GLX_RGBA,
                           GLX_DOUBLEBUFFER, 
                           None};
 
+static int dblBuf8Stereo[] =   {GLX_RGBA, 
+                          GLX_RED_SIZE, 1, 
+                          GLX_GREEN_SIZE, 2, 
+                          GLX_BLUE_SIZE, 1, 
+                          GLX_DEPTH_SIZE, 16, 
+                          GLX_DOUBLEBUFFER, 
+								  GLX_STEREO,
+                          None};
 
 int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
@@ -136,11 +174,15 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   XVisualInfo *vi;
   // the user wants double buffer
   if (hints.buffer == 2) {
-    // try for a double-buffered on 24bit machine
-    vi = glXChooseVisual(info.dpy, info.screen, dblBuf24);
+    // try for a double-buffered on 24bit machine (try stereo first)
+    vi = glXChooseVisual(info.dpy, info.screen, dblBuf24Stereo);
+	 if (vi == NULL)
+		 vi = glXChooseVisual(info.dpy, info.screen, dblBuf24);
     if (vi == NULL) {
-      // try for a double buffered on a 8bit machine
-      vi = glXChooseVisual(info.dpy, info.screen, dblBuf8);
+      // try for a double buffered on a 8bit machine (try stereo first)
+      vi = glXChooseVisual(info.dpy, info.screen, dblBuf8Stereo);
+		if(vi == NULL)
+			vi = glXChooseVisual(info.dpy, info.screen, dblBuf8);
       if (vi == NULL) {
 	error("GEM: Unable to create double buffer window");
 	destroyGemWindow(info);
@@ -151,11 +193,15 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   }
   // the user wants single buffer
   else {
-    // try for a single buffered on a 24bit machine
-    vi = glXChooseVisual(info.dpy, info.screen, snglBuf24);
+    // try for a single buffered on a 24bit machine (try stereo first)
+    vi = glXChooseVisual(info.dpy, info.screen, snglBuf24Stereo);
+	 if (vi == NULL)
+		 vi = glXChooseVisual(info.dpy, info.screen, snglBuf24);
     if (vi == NULL) {
-      // try for a single buffered on a 8bit machine
-      vi = glXChooseVisual(info.dpy, info.screen, snglBuf8);
+      // try for a single buffered on a 8bit machine (try stereo first)
+      vi = glXChooseVisual(info.dpy, info.screen, snglBuf8Stereo);
+		if (vi == NULL)
+			vi = glXChooseVisual(info.dpy, info.screen, snglBuf8);
       if (vi == NULL) {
 	error("GEM: Unable to create single buffer window");
 	destroyGemWindow(info);

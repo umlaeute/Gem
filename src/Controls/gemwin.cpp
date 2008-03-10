@@ -575,10 +575,11 @@ void gemwin :: fogModeMessCallback(void *data, t_float val)
 void gemwin :: stereoMessCallback(void *data, t_floatarg state)
 {
   int mode = (int)state;
-  if (mode<0 || mode>2){
-    GetMyClass(data)->error("possible stereo-modes are: 0, 1, 2");
+  if (mode<0 || mode>3){
+    GetMyClass(data)->error("possible stereo-modes are: 0, 1, 2, 3");
     return;
   }
+
   GemMan::m_stereo = mode;
 }
 void gemwin :: stereoSepMessCallback(void *, t_floatarg state)
