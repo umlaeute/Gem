@@ -26,7 +26,6 @@
 # include <X11/Xlib.h>
 #elif defined __APPLE__
 # include <string.h>
-# include <QuickTime/QuickTime.h>
 # include <time.h>
 #endif
 
