@@ -1192,7 +1192,8 @@ int GemMan :: createWindow(char* disp)
 
   if (GLEW_OK != err) {
     error("failed to init GLEW");
-    return(0);
+    error("continuing anyhow - please report any problems to the gem-dev mailinglist!");
+    //return(0);
   }
   else post("GLEW version %s",glewGetString(GLEW_VERSION));
 
