@@ -1265,14 +1265,25 @@ int GemMan :: createWindow(char* disp)
     on the NVidia GeForce2MX and above, or the ATI Radeon and above.
   */
 
+  post("glXGetCurrentDisplay== %x", glXGetProcAddressARB((const GLubyte*)"glXGetCurrentDisplay"));
+  post("%x ...", &glXGetCurrentDisplay);
+
   GLenum err = glewInit();
 
   if (GLEW_OK != err) {
-    error("failed to init GLEW");
-    error("continuing anyhow - please report any problems to the gem-dev mailinglist!");
-    //return(0);
+    if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
+      error("failed to init GLEW (glx)");
+      error("continuing anyhow - please report any problems to the gem-dev mailinglist!");
+    } else if (GLEW_ERROR_GL_VERSION_10_ONLY) {
+      error("failed to init GLEW");
+      error("your system only supports openGL-1.0");
+      return(0);
+    } else {
+      error("failed to init GLEW");
+      return(0);
+    }
   }
-  else post("GLEW version %s",glewGetString(GLEW_VERSION));
+  post("GLEW version %s",glewGetString(GLEW_VERSION));
 
   checkOpenGLExtensions();
 
