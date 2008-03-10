@@ -1511,12 +1511,12 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
     return result;
 }
 
-void gemWinSwapBuffers(WindowInfo nfo)
+void gemWinSwapBuffers(WindowInfo&nfo)
 {
   ::aglSwapBuffers(nfo.context);
 }
 
-void gemWinMakeCurrent(WindowInfo nfo) 
+void gemWinMakeCurrent(WindowInfo&nfo) 
 {
   ::aglSetDrawable( nfo.context, GetWindowPort(nfo.pWind) );
   ::aglSetCurrentContext(nfo.context);

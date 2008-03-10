@@ -387,12 +387,12 @@ void destroyGemWindow(WindowInfo &info)
   if(info.delete_atom)info.delete_atom=0; /* not very sophisticated destruction...*/
 }
 
-void gemWinSwapBuffers(WindowInfo nfo)
+void gemWinSwapBuffers(WindowInfo&nfo)
 {
   glXSwapBuffers(nfo.dpy, nfo.win);
 }
 
-void gemWinMakeCurrent(WindowInfo nfo) 
+void gemWinMakeCurrent(WindowInfo&nfo) 
 {
   if (!nfo.dpy && !nfo.win && !nfo.context)return; // do not crash
   glXMakeCurrent(nfo.dpy, nfo.win, nfo.context);   

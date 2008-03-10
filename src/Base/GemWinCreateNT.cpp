@@ -598,12 +598,12 @@ int topmostGemWindow(WindowInfo &info, int state)
 }
 
 
-void gemWinSwapBuffers(WindowInfo nfo)
+void gemWinSwapBuffers(WindowInfo&nfo)
 {
   SwapBuffers(nfo.dc);
 }
 
-void gemWinMakeCurrent(WindowInfo nfo) 
+void gemWinMakeCurrent(WindowInfo&nfo) 
 {
   if (!nfo.dc && !nfo.context)return; // do not crash ??
   wglMakeCurrent(nfo.dc, nfo.context); 
