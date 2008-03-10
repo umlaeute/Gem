@@ -5,9 +5,9 @@
 #X obj 66 154 gemwin;
 #X obj 235 497 rotateXYZ;
 #X obj 106 467 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
--262144 -1 -1 522 256;
+-262144 -1 -1 0 256;
 #X obj 167 467 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
--262144 -1 -1 -33 256;
+-262144 -1 -1 0 256;
 #X msg 188 136 print;
 #X msg 77 66 0 \, destroy;
 #X text 343 123 open a vertex-program;
@@ -41,7 +41,7 @@
 #X restore 377 494 pd open;
 #X msg 377 514 open ../data/venus.obj;
 #X obj 44 467 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
--262144 -1 -1 -21 256;
+-262144 -1 -1 0 256;
 #X msg 66 313 bang;
 #X text 60 294 2nd click me;
 #X obj 143 330 t b b b;
@@ -55,6 +55,9 @@
 #X obj 235 178 fragment_program ../data/random.fp;
 #X text 362 48 play me;
 #X msg 66 40 create \, 1 \, lighting 1;
+#X obj 380 390 gemhead;
+#X obj 380 412 translateXYZ -2 0 0;
+#X obj 235 416 translateXYZ 2 0 0;
 #X connect 0 0 11 0;
 #X connect 1 0 23 0;
 #X connect 3 0 10 0;
@@ -74,5 +77,8 @@
 #X connect 22 0 23 2;
 #X connect 23 0 26 0;
 #X connect 25 0 24 0;
-#X connect 26 0 3 0;
+#X connect 26 0 31 0;
 #X connect 28 0 2 0;
+#X connect 29 0 30 0;
+#X connect 30 0 3 0;
+#X connect 31 0 3 0;
