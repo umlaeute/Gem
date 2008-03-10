@@ -100,10 +100,6 @@ float GemMan::fps;
 int GemMan::fsaa = 0;
 bool GemMan::pleaseDestroy=false;
 
-#ifdef __APPLE__
-AGLContext GemMan::masterContext = NULL;
-#endif
-
 // static data
 static const int NUM_LIGHTS = 8;   	// the maximum number of lights
 static int s_lightState = 0;        // is lighting on or off
@@ -366,7 +362,6 @@ void GemMan :: createContext(char* disp)
 #endif
 
   s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
-
   if (!m_windowContext && !createConstWindow(disp))
     {
       error("GEM: A serious error occured creating const Context");
@@ -446,34 +441,7 @@ void GemMan :: initGem()
 
   m_motionBlur = 0.f;
 
-
   initGemWin();
-
-#ifdef __APPLE__
-  // This is to create a "master context" on Gem initialization, with
-  //  the hope that we can then share it with later context's created
-  //  when opening new rendering windows, and thereby share resources
-  //  - no window will be directly associate with this context!
-  //  - should remove the need for GemMan::HaveValidContext()
-  GLint attrib[] = {AGL_RGBA, AGL_DOUBLEBUFFER, AGL_NO_RECOVERY, AGL_NONE};
-  
-  //  GDHandle display = GetMainDevice();
-  //  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( &display, 1, attrib );
-  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( NULL, 0, attrib );
-	GLenum err = aglGetError();
-	if (AGL_NO_ERROR != err)
-		post((char *)aglErrorString(err));
-  GemMan::masterContext = aglCreateContext( aglPixFmt, NULL );
-	err = aglGetError();
-	if (AGL_NO_ERROR != err)
-		post((char *)aglErrorString(err));
-  aglSetCurrentContext( masterContext);
-  
-  //  AGL_MACRO_DECLARE_VARIABLES()
-
-  aglDestroyPixelFormat( aglPixFmt );
-#endif
-
 }
 
 /////////////////////////////////////////////////////////
@@ -1327,15 +1295,8 @@ int createConstWindow(char* disp)
   myHints.width = GemMan::m_width;
   myHints.height = GemMan::m_height;
 
-  // TODO:
-  //    masterContext for all platforms?
-#ifndef __APPLE__
-  myHints.shared = NULL;
-#else
-  //  myHints.shared = constInfo.context;
-  constInfo.context = GemMan::masterContext;
-  myHints.shared = GemMan::masterContext;
-#endif
+  initWin_sharedContext(constInfo, myHints);
+
   myHints.actuallyDisplay = 0;
   myHints.fullscreen = 0;
   myHints.display = disp;

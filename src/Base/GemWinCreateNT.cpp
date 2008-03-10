@@ -631,4 +631,12 @@ bool initGemWin(void) {
   return 1;
 }
 
+
+GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
+{
+  //  myHints.shared = constInfo.context;
+  hints.shared = NULL;
+}
+
+
 #endif

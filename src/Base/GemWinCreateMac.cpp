@@ -61,6 +61,9 @@ struct structGLWindowInfo // storage for setup info
 typedef struct structGLWindowInfo structGLWindowInfo;
 typedef struct structGLWindowInfo * pstructGLWindowInfo;
 
+// the master context associated with no window and shared by all other contexts
+AGLContext masterContext = NULL;
+
 // globals (internal/private) -----------------------------------------------
 
 const RGBColor		rgbBlack = { 0x0000, 0x0000, 0x0000 };
@@ -1547,7 +1550,37 @@ bool initGemWin(void) {
     error ("GEM : OpenGL is not installed");
     return 0;
   }
+  // This is to create a "master context" on Gem initialization, with
+  //  the hope that we can then share it with later context's created
+  //  when opening new rendering windows, and thereby share resources
+  //  - no window will be directly associate with this context!
+  //  - should remove the need for GemMan::HaveValidContext()
+  GLint attrib[] = {AGL_RGBA, AGL_DOUBLEBUFFER, AGL_NO_RECOVERY, AGL_NONE};
+  
+  //  GDHandle display = GetMainDevice();
+  //  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( &display, 1, attrib );
+  AGLPixelFormat aglPixFmt = aglChoosePixelFormat( NULL, 0, attrib );
+	GLenum err = aglGetError();
+	if (AGL_NO_ERROR != err)
+		post((char *)aglErrorString(err));
+  masterContext = aglCreateContext( aglPixFmt, NULL );
+	err = aglGetError();
+	if (AGL_NO_ERROR != err)
+		post((char *)aglErrorString(err));
+  aglSetCurrentContext( masterContext);
+  
+  //  AGL_MACRO_DECLARE_VARIABLES()
+
+  aglDestroyPixelFormat( aglPixFmt );
+
   return 1;
+}
+
+GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
+{
+  //  myHints.shared = constInfo.context;
+  info.context = masterContext;
+  hints.shared = masterContext;
 }
 
 #endif

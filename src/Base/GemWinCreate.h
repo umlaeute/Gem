@@ -209,4 +209,8 @@ GEM_EXTERN extern void gemWinMakeCurrent(WindowInfo &nfo);
 // init OS-specific stuff
 GEM_EXTERN extern bool initGemWin(void);
 
+/////////
+// prepare a WindowInfo for context-sharing
+GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints);
+
 #endif  // for header file
