@@ -1,10 +1,10 @@
-#N canvas -13 38 600 504 10;
+#N canvas 631 50 600 504 10;
 #X obj 59 259 gemwin;
 #X obj 426 54 gemhead;
 #X msg 120 159 destroy;
 #X msg 117 72 1;
 #X msg 118 102 0;
-#X floatatom 464 134 0 0 0;
+#X floatatom 464 134 0 0 0 0 - - -;
 #X obj 464 307 gemhead 1;
 #X obj 464 332 world_light;
 #X obj 426 181 model ../data/venus.obj;
@@ -14,8 +14,8 @@
 #X text 149 40 and display it stereoscopically;
 #X msg 221 130 stereoSep \$1;
 #X msg 318 129 stereoFoc \$1;
-#X floatatom 221 92 0 0 0;
-#X floatatom 318 87 0 0 0;
+#X floatatom 221 92 0 0 0 0 - - -;
+#X floatatom 318 87 0 0 0 0 - - -;
 #X text 23 295 The default stereoSep is -15;
 #X text 23 315 The model may appear inside out depending on what viewing
 method you use.;
@@ -38,10 +38,14 @@ method you use.;
 #X msg 117 132 create;
 #X msg 271 206 stereo 1;
 #X msg 271 228 stereo 2;
-#X msg 271 251 stereo 0;
+#X msg 271 271 stereo 0;
 #X text 335 207 2 separate images;
 #X text 338 230 red/green stereo;
-#X text 336 253 no stereo;
+#X text 336 273 no stereo;
+#X msg 271 248 stereo 3;
+#X text 338 250 crystal eyes stereo;
+#X text 32 402 NOTE: you need special hardware to use "crystal eyes
+stereo";
 #X connect 1 0 10 0;
 #X connect 2 0 0 0;
 #X connect 3 0 0 0;
@@ -59,3 +63,4 @@ method you use.;
 #X connect 22 0 0 0;
 #X connect 23 0 0 0;
 #X connect 24 0 0 0;
+#X connect 28 0 0 0;

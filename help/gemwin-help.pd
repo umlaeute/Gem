@@ -1,4 +1,4 @@
-#N canvas 85 109 781 436 10;
+#N canvas 85 109 840 433 10;
 #X text 63 9 access to the window manager;
 #X text 129 343 1/0 : turn rendering on/off;
 #X text 16 100 Editing at the same time as rendering is not encouraged
@@ -235,7 +235,7 @@ defined via the vector (up_X \, up_Y \, up_Z);
 #X text 54 650 default: 0 0 4 0 0 0 0 1 0;
 #X restore 429 272 pd viewing;
 #N canvas 4 22 616 416 stereoscopic 0;
-#X text 36 142 stereo 0/1/2 : set stereo-mode to off(0) \, 2-screen-mode(1)
+#X text 36 142 stereo 0/1/2/3 : set stereo-mode to off(0) \, 2-screen-mode(1)
 \, Red/Green-mode(2);
 #X text 35 176 stereoSep val : set the stereo-separation (default:
 -15);
@@ -312,11 +312,11 @@ on top of everything else (Windows only?);
 #X connect 27 0 28 0;
 #X connect 28 0 6 0;
 #X restore 569 177 pd window properties;
-#X obj 415 115 gemwin;
-#X text 465 49 reset the graphics manager to the default values;
-#X msg 421 51 reset;
-#X text 481 73 show some information on the stderr.;
-#X msg 437 73 print;
+#X obj 455 115 gemwin;
+#X text 505 49 reset the graphics manager to the default values;
+#X msg 461 51 reset;
+#X text 521 73 show some information on the stderr.;
+#X msg 477 73 print;
 #X obj 56 396 gemwin;
 #X msg 76 255 destroy;
 #X msg 60 232 create;
@@ -366,9 +366,9 @@ and/or a message.;
 #X obj 106 343 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
 1;
 #X text 404 347 createStereo:: do not use this!! use;
-#X msg 631 347 stereo 1;
-#X text 693 346 +;
-#X msg 711 347 create;
+#X msg 661 347 stereo 1;
+#X text 723 346 +;
+#X msg 741 347 create;
 #X connect 13 0 11 0;
 #X connect 15 0 11 0;
 #X connect 17 0 16 0;
