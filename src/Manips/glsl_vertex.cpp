@@ -205,8 +205,13 @@ void glsl_vertex :: openMess(t_symbol *filename)
     fread(m_shaderString,1,size,file);
     fclose(file);
   } else {
-    m_shaderString = new char[strlen(buf) + 1];
-    strcpy(m_shaderString,buf);
+    error("could not find shader-file: '%s'", buf);
+    return;
+    /*
+      // assuming that the "filename" is actually a shader-program per se
+      m_shaderString = new char[strlen(buf) + 1];
+      strcpy(m_shaderString,buf);
+    */
   }
   m_size=strlen(m_shaderString);
 
