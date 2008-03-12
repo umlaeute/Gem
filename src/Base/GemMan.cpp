@@ -1271,7 +1271,8 @@ void GemMan :: destroyWindow()
 
   // this should really go into the GemWinCreate<OS> files::
 
-  // reestablish the const glxContext
+  // reestablish the const glxContext 
+  /* this crashes on linux with intel cards */
   gemWinMakeCurrent(constInfo);
   s_windowRun = 0;
 }
