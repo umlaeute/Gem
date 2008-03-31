@@ -29,7 +29,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *,
 /////////////////////////////////////////////////////////
 gemframebuffer :: gemframebuffer()
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
-    m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
+    m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
+    m_width(256), m_height(256),
     m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
 	
 {
@@ -46,7 +47,8 @@ gemframebuffer :: gemframebuffer()
 }
 gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
-    m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_width(256), m_height(256),
+    m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
+    m_width(256), m_height(256),
     m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
 {
   // create an outlet to send out texture info:
@@ -80,6 +82,11 @@ gemframebuffer :: ~gemframebuffer()
 //
 /////////////////////////////////////////////////////////
 bool gemframebuffer :: isRunnable() {
+  if(!GLEW_VERSION_1_3) {
+    error("openGL version 1.3 needed");
+    return false;
+  }
+
   if(GLEW_EXT_framebuffer_object)
     return true;
 
@@ -98,6 +105,9 @@ void gemframebuffer :: render(GemState *state)
   if(!m_width || !m_height) {
     error("width and height must be present!");
   }
+ 
+  glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
+
   if (m_wantinit)
     initFBO();
   
@@ -143,6 +153,8 @@ void gemframebuffer :: postrender(GemState *state)
 {
   t_float w, h;
 
+  glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
+
   if(m_texTarget== GL_TEXTURE_2D) {
     w=(t_float)1.f;
     h=(t_float)1.f;
@@ -180,6 +192,28 @@ void gemframebuffer :: postrender(GemState *state)
   outlet_list(m_outTexInfo, 0, 5, ap);
 }
 
+void gemframebuffer :: printInfo()
+{
+  if(m_mode)
+    post("using rectmode 1:GL_TEXTURE_RECTANGLE");
+  else post("using rectmode 0:GL_TEXTURE_2D");
+
+  switch(m_type) {
+  case GL_UNSIGNED_BYTE: post("using type: BYTE"); break;
+  case GL_FLOAT: post("using type: FLOAT"); break;
+  default: post("using type: unknown(%d)", m_type);
+  }
+
+  switch(m_format) {
+  case GL_YUV422_GEM: post("using color: YUV"); break;
+  case GL_RGB: post("using color: RGB"); break;
+  case GL_RGBA: post("using color: RGBA"); break;
+  case GL_BGRA: post("using color: BGRA"); break;
+  }
+
+  post("using texunit: %d", m_texunit);
+}
+
 /////////////////////////////////////////////////////////
 // initFBO
 //
@@ -191,13 +225,9 @@ void gemframebuffer :: initFBO()
     destroyFBO();
 	
   if ( !m_mode )
-    {
-      m_texTarget = GL_TEXTURE_2D;
-      post("using mode 0:GL_TEXTURE_2D");
-    }else{
+    m_texTarget = GL_TEXTURE_2D;
+  else
     m_texTarget = GL_TEXTURE_RECTANGLE_EXT;
-    post("using mode 1:GL_TEXTURE_RECTANGLE");
-  }
 
   // Generate frame buffer object then bind it.
   glGenFramebuffersEXT(1, &m_frameBufferIndex);
@@ -260,6 +290,8 @@ void gemframebuffer :: initFBO()
 
   m_haveinit = true;
   m_wantinit = false;
+
+  printInfo();
 }
 
 ////////////////////////////////////////////////////////
@@ -341,7 +373,7 @@ void gemframebuffer :: formatMess(char* format)
 #else
       m_type = GL_UNSIGNED_BYTE;
 #endif
-      post("format is GL_RGB, %d",m_format);
+      post("format is GL_YUV, %d",m_format);
       return;
     } else
     
@@ -419,6 +451,9 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
                   gensym("type"), A_DEFSYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::colorMessCallback,
                   gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+
+  class_addmethod(classPtr, (t_method)&gemframebuffer::texunitCallback,
+                  gensym("texunit"), A_FLOAT, A_NULL);
 }
 void gemframebuffer :: bangMessCallback(void *data)
 {
@@ -446,4 +481,9 @@ void gemframebuffer :: typeMessCallback (void *data, t_symbol *type)
 void gemframebuffer :: colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue, t_floatarg alpha)
 {
   GetMyClass(data)->colorMess(red, green, blue, alpha);
+}
+
+void gemframebuffer :: texunitCallback(void *data, t_floatarg unit)
+{
+  GetMyClass(data)->m_texunit=(GLuint)unit;
 }
