@@ -171,13 +171,13 @@ void gemframebuffer :: postrender(GemState *state)
   // now that the render is done,
 
   // send textureID, w, h, textureTarget to outlet
-  t_atom ap[4];
-  SETFLOAT(ap, (t_float)m_offScreenID);
-  
+  t_atom ap[5];
+  SETFLOAT(ap+0, (t_float)m_offScreenID);
   SETFLOAT(ap+1, w);
   SETFLOAT(ap+2, h);
   SETFLOAT(ap+3, m_texTarget);
-  outlet_list(m_outTexInfo, 0, 4, ap);
+  SETFLOAT(ap+4, (t_float)0);
+  outlet_list(m_outTexInfo, 0, 5, ap);
 }
 
 /////////////////////////////////////////////////////////
@@ -407,6 +407,10 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
   class_addbang(classPtr, (t_method)&gemframebuffer::bangMessCallback);
   class_addmethod(classPtr, (t_method)&gemframebuffer::modeCallback,
                   gensym("mode"), A_FLOAT, A_NULL);
+ class_addmethod(classPtr, (t_method)&gemframebuffer::modeCallback,
+                  gensym("rectangle"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemframebuffer::dimMessCallback,
+                  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::dimMessCallback,
                   gensym("dim"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::formatMessCallback,
