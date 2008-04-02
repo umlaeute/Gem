@@ -281,7 +281,7 @@
 #X restore 220 157 pd init;
 #X obj 410 34 gemhead 16;
 #X msg 478 333 quality 1;
-#X msg 146 244 dim 1024 1024;
+#X msg 146 244 dimen 1024 1024;
 #X obj 198 335 gemhead 12;
 #X obj 442 214 gemhead 17;
 #X obj 9 177 gemhead 10;
