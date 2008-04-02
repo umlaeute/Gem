@@ -51,10 +51,11 @@ installabs:
 	$(INSTALL_DATA) ./../abstractions/*.pd $(DESTDIR)/$(PDLIBDIR)/extra/Gem
 
 installdocs:
-	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
-	cp -r ./../examples $(DESTDIR)/$(PDLIBDIR)/doc/gem
 	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
 	$(INSTALL_DATA) ./../help/*.* $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
+	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
+	cp -r ./../examples $(DESTDIR)/$(PDLIBDIR)/doc/gem
+
 
 
 ifeq (,$(findstring clean, $(MAKECMDGOALS)))
