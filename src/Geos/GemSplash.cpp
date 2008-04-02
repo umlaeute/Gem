@@ -58,5 +58,5 @@ void GemSplash :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void GemSplash :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classGemSplash, gensym("Gem"), A_NULL); 
+  class_addcreator((t_newmethod)create_GemSplash, gensym("Gem"), A_NULL); 
 }

@@ -144,7 +144,7 @@ void pix_movieNEW :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_movieNEW :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_movieNEW, gensym("pix_movie"), A_DEFSYM, A_NULL);
+  class_addcreator((t_newmethod)create_pix_movieNEW, gensym("pix_movie"), A_DEFSYM, A_NULL);
 
   class_addmethod(classPtr, (t_method)&pix_movieNEW::openMessCallback,
 		  gensym("open"), A_SYMBOL, A_NULL);

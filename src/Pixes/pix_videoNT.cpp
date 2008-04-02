@@ -340,7 +340,7 @@ void pix_videoNT :: csMess(int format)
 /////////////////////////////////////////////////////////
 void pix_videoNT :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_videoNT, gensym("pix_video"), A_DEFFLOAT, A_NULL);
+  class_addcreator((t_newmethod)create_pix_videoNT, gensym("pix_video"), A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, (t_method)&pix_videoNT::dimenMessCallback,
 		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);

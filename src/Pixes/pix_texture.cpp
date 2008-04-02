@@ -626,7 +626,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
                   gensym("extTexture"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::texunitCallback,
                   gensym("texunit"), A_FLOAT, A_NULL);
-  class_addcreator(_classpix_texture,gensym("pix_texture2"),A_NULL); 
+  class_addcreator((t_newmethod)create_pix_texture,gensym("pix_texture2"),A_NULL); 
 }
 void pix_texture :: floatMessCallback(void *data, float n)
 {

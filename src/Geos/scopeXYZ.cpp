@@ -238,7 +238,7 @@ void scopeXYZ :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classscopeXYZ, gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
+  class_addcreator((t_newmethod)create_scopeXYZ, gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
 
     class_addmethod(classPtr, (t_method)&scopeXYZ::linewidthMessCallback,
     	    gensym("linewidth"), A_FLOAT, A_NULL);

@@ -171,7 +171,7 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 
 void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_sig2pix, gensym("pix_sig2pix~"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addcreator((t_newmethod)create_pix_sig2pix, gensym("pix_sig2pix~"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
   class_addmethod(classPtr, (t_method)pix_sig2pix::dspMessCallback, 
@@ -196,5 +196,5 @@ void pix_sig2pix ::csMessCallback(void *data, t_symbol*s)
 {
   int cs = getPixFormat(s->s_name);
   if(cs>0)GetMyClass(data)->csMess(cs);
-  else GetMyClass(data)->error("pix_sig2pix: colorspace must be Grey, YUV or RGBA");
+  else GetMyClass(data)->error("colorspace must be Grey, YUV or RGBA");
 }

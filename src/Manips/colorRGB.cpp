@@ -127,7 +127,7 @@ void colorRGB :: aMess(float val)
 /////////////////////////////////////////////////////////
 void colorRGB :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classcolorRGB, 
+  class_addcreator((t_newmethod)create_colorRGB, 
 		   gensym("colourRGB"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&colorRGB::rMessCallback,
     	    gensym("rVal"), A_FLOAT, A_NULL); 

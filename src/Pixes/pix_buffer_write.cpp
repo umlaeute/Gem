@@ -104,7 +104,7 @@ void pix_buffer_write :: render(GemState*state){
 /////////////////////////////////////////////////////////
 void pix_buffer_write :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_buffer_write,gensym("pix_put"),A_DEFSYM,A_NULL);
+  class_addcreator((t_newmethod)create_pix_buffer_write,gensym("pix_put"),A_DEFSYM,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer_write::setMessCallback,
   		  gensym("set"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer_write::frameMessCallback,

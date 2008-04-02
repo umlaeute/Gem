@@ -875,7 +875,7 @@ void pix_recordQT :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_recordQT :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_recordQT,gensym("pix_record"),A_DEFSYM,A_NULL);
+  class_addcreator((t_newmethod)create_pix_recordQT,gensym("pix_record"),A_DEFSYM,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_recordQT::fileMessCallback,
 		  gensym("file"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_recordQT::autoMessCallback,

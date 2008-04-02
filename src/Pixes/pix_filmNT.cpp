@@ -303,7 +303,7 @@ void pix_filmNT :: getFrame()
 /////////////////////////////////////////////////////////
 void pix_filmNT :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_filmNT, gensym("pix_film"), A_DEFSYM, A_NULL);
+  class_addcreator((t_newmethod)create_pix_filmNT, gensym("pix_film"), A_DEFSYM, A_NULL);
   pix_film::real_obj_setupCallback(classPtr);
 
   class_addmethod(classPtr, (t_method)&pix_filmNT::changeImageCallback,

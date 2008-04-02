@@ -865,7 +865,7 @@ void pix_movieDarwin :: LoadRam()
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_movieDarwin,gensym("pix_movie"),A_DEFSYM,A_NULL);
+  class_addcreator((t_newmethod)create_pix_movieDarwin,gensym("pix_movie"),A_DEFSYM,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::openMessCallback,
 		  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::changeImageCallback,

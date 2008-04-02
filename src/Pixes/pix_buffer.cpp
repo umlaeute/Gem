@@ -237,7 +237,7 @@ void pix_buffer :: saveMess(t_symbol *filename, int pos)
 /////////////////////////////////////////////////////////
 void pix_buffer :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_buffer,gensym("pix_depot"),A_DEFSYM,A_DEFFLOAT,A_NULL);
+  class_addcreator((t_newmethod)create_pix_buffer,gensym("pix_depot"),A_DEFSYM,A_DEFFLOAT,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer::allocateMessCallback,
   		  gensym("allocate"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer::resizeMessCallback,

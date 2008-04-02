@@ -392,7 +392,7 @@ void pix_filmQT :: LoadRam()
 /////////////////////////////////////////////////////////
 void pix_filmQT :: obj_setupCallback(t_class *classPtr)
 {
- class_addcreator((t_newmethod)_classpix_filmQT, gensym("pix_film"), A_DEFSYM, A_NULL);
+ class_addcreator((t_newmethod)create_pix_filmQT, gensym("pix_film"), A_DEFSYM, A_NULL);
   pix_film::real_obj_setupCallback(classPtr);
 
   class_addmethod(classPtr, (t_method)&pix_filmQT::openMessCallback,

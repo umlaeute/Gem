@@ -262,7 +262,7 @@ void pix_videoNEW :: qualityMess(int dev) {
 /////////////////////////////////////////////////////////
 void pix_videoNEW :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_videoNEW,gensym("pix_video"),A_NULL);
+  class_addcreator((t_newmethod)create_pix_videoNEW,gensym("pix_video"),A_NULL);
 
     class_addmethod(classPtr, (t_method)&pix_videoNEW::dimenMessCallback,
     	    gensym("dimen"), A_GIMME, A_NULL);

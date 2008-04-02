@@ -465,8 +465,8 @@ void pix_filmNEW :: threadMess(int state)
 /////////////////////////////////////////////////////////
 void pix_filmNEW :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_filmNEW, gensym("pix_film"), A_DEFSYM, A_NULL);
-  class_addcreator((t_newmethod)_classpix_filmNEW, gensym("pix_filmQT"), A_DEFSYM, A_NULL);
+  class_addcreator((t_newmethod)create_pix_filmNEW, gensym("pix_film"), A_DEFSYM, A_NULL);
+  class_addcreator((t_newmethod)create_pix_filmNEW, gensym("pix_filmQT"), A_DEFSYM, A_NULL);
 
   class_addmethod(classPtr, (t_method)&pix_filmNEW::openMessCallback,
 		  gensym("open"), A_GIMME, A_NULL);

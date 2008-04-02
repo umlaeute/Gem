@@ -78,7 +78,7 @@ void color :: colorMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void color :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classcolor, 
+  class_addcreator((t_newmethod)create_color, 
 		   gensym("colour"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&color::colorMessCallback,
     	    gensym("color"), A_GIMME, A_NULL); 

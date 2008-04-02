@@ -97,7 +97,7 @@ void pix_color :: vecGainMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void pix_color :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)_classpix_color, 
+  class_addcreator((t_newmethod)create_pix_color, 
 		   gensym("pix_colour"), A_NULL);
     class_addmethod(classPtr, (t_method)&pix_color::vecGainMessCallback,
     	    gensym("vec_gain"), A_GIMME, A_NULL);
