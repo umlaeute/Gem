@@ -14,6 +14,8 @@
 //
 /////////////////////////////////////////////////////////
 
+#define HELPSYMBOL "pix_sig2pix~"
+
 #include "pix_sig2pix.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)

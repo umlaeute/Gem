@@ -14,6 +14,8 @@
 /////////////////////////////////////////////////////////
 #ifdef __APPLE__
 
+#define HELPSYMBOL "pix_film"
+
 #include "pix_filmDarwin.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmDarwin, t_symbol *, A_DEFSYM)
