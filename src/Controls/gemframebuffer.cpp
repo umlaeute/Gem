@@ -395,6 +395,18 @@ void gemframebuffer :: formatMess(char* format)
         m_format = GL_RGBA;
 #endif
         return;
+      } else
+    
+      if (!strcmp(format, "RGB32")){
+        // colorspace will equal RGB32
+        post("format is GL_RGB_FLOAT32_ATI, %d",m_format);
+        m_internalformat = GL_RGB_FLOAT32_ATI;
+#ifdef __APPLE__
+        m_format = GL_BGR;
+#else 
+        m_format = GL_RGB;
+#endif
+        return;
       } else {
         //default
         post("default format is GL_RGB, %d",m_format);
