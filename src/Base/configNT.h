@@ -35,8 +35,8 @@
 /*
  * we want libjpeg and libtiff for reading/writing images
  */
-//#define HAVE_LIBTIFF
-//#define HAVE_LIBJPEG
+#define HAVE_LIBTIFF
+#define HAVE_LIBJPEG
 
 
 /* **********************************************************************

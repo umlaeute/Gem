@@ -102,11 +102,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="msvcrtD.lib msvcprtD.lib OLDNAMES.lib pd.lib opengl32.lib glu32.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbasD.lib atlsD.lib winmm.lib"
+				AdditionalDependencies="msvcrtD.lib msvcprtD.lib OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbasD.lib atlsD.lib winmm.lib"
 				OutputFile="../gem.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Debug&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
