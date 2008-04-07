@@ -168,6 +168,7 @@ bool pix_texture :: isRunnable(void) {
     return true;
 
   error("need at least openGL-1.1 for texturing! refusing to work");
+  return false;
 }
 
 ////////////////////////////////////////////////////////
