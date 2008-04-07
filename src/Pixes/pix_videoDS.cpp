@@ -31,7 +31,10 @@
 #include <qedit.h>
 #include <Dvdmedia.h>
 #include <streams.h>
+#include <atlbase.h>
 #include "DSgrabber.h"
+
+#include <strsafe.h>
 
 #define COMRELEASE(x) { if (x) x->Release(); x = NULL; }
 //#define REGISTER_FILTERGRAPH 1
