@@ -1132,6 +1132,12 @@
 				RelativePath="..\..\src\Pixes\pix_film.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Pixes\pix_filmDarwin.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_filmDarwin.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Pixes\pix_filmNEW.cpp">
 			</File>
 			<File
@@ -1519,6 +1525,18 @@
 				RelativePath="..\..\src\Pixes\pix_video.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Pixes\pix_videoDarwin.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_videoDarwin.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_videoDS.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_videoDS.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Pixes\pix_videoNEW.cpp">
 			</File>
 			<File
@@ -1529,6 +1547,15 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_videoNT.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_videoSGI.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_videoSGI.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_vpaint.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_write.cpp">
