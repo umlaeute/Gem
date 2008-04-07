@@ -22,7 +22,7 @@
 #define HAVE_QUICKTIME
 
 /* use direct-show for video-in (e.g. for firewire,...) */
-//#define HAVE_DIRECTSHOW
+#define HAVE_DIRECTSHOW
 
 
 /*
