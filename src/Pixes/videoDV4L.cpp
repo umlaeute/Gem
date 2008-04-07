@@ -13,8 +13,6 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
-#ifdef __linux__
     
 #include "videoDV4L.h"
 
@@ -387,4 +385,3 @@ int videoDV4L :: setQuality(int quality){
 }
 
 #endif // HAVE_DV
-#endif // linux
