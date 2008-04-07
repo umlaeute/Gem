@@ -13,7 +13,7 @@
  */
 
 /* use FTGL for font-rendering */
-//#define FTGL
+#define FTGL
 
 /* use the "new" film-objects, to allow the use of multiple APIs */
 #define FILM_NEW

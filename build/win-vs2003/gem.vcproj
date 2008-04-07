@@ -86,7 +86,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\tiff\libtiff;&quot;$(ProgramFiles)\QuickTime SDK\CIncludes&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
+				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\tiff\libtiff;..\..\..\GemLibs\FTGL\include;..\..\..\GemLibs\freetype2\include\;&quot;$(ProgramFiles)\QuickTime SDK\CIncludes&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;_DEBUG;DEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL"
 				RuntimeLibrary="1"
 				PrecompiledHeaderFile=".\Objects/gem.pch"
@@ -102,11 +102,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="msvcrtD.lib msvcprtD.lib OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbasD.lib atlsD.lib winmm.lib"
+				AdditionalDependencies="msvcrtD.lib msvcprtD.lib OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mtD.lib freetype214mt_D.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbasD.lib atlsD.lib winmm.lib"
 				OutputFile="../gem.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Debug&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
