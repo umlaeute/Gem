@@ -13,7 +13,7 @@
  */
 
 /* use FTGL for font-rendering */
-#define FTGL
+//#define FTGL
 
 /* use the "new" film-objects, to allow the use of multiple APIs */
 #define FILM_NEW
@@ -22,7 +22,7 @@
 #define HAVE_QUICKTIME
 
 /* use direct-show for video-in (e.g. for firewire,...) */
-#define HAVE_DIRECTSHOW
+//#define HAVE_DIRECTSHOW
 
 
 /*
@@ -35,22 +35,8 @@
 /*
  * we want libjpeg and libtiff for reading/writing images
  */
-#define HAVE_LIBTIFF
-#define HAVE_LIBJPEG
-
-
-
-/*
- * seems like the glBlendEquation is non-existing on my w32-machine
- */
-#define DONT_HAVE_GLBLENDEQUATION
-
-
-
-
-
-
-
+//#define HAVE_LIBTIFF
+//#define HAVE_LIBJPEG
 
 
 /* **********************************************************************
@@ -62,4 +48,9 @@
 
 #ifdef FTGL
 # define FTGL_LIBRARY_STATIC
+#endif
+
+#ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
+# define snprintf _snprintf
+# define vsnprintf _vsnprintf
 #endif

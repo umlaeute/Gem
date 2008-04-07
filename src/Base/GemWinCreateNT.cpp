@@ -19,16 +19,22 @@
 
 #include <stdlib.h>
 
-#include "wintab.h"
-#define PACKETDATA	(PK_X | PK_Y | PK_BUTTONS | PK_NORMAL_PRESSURE | PK_ORIENTATION)
-#define PACKETMODE	PK_BUTTONS
-#include "pktdef.h"
+#ifdef HAVE_QUICKTIME
+# include <QTML.h>
+# include <Movies.h>
+#endif /* HAVE_QUICKTIME */
+
+#ifdef HAVE_WINTAB
+# include "wintab.h"
+# define PACKETDATA	(PK_X | PK_Y | PK_BUTTONS | PK_NORMAL_PRESSURE | PK_ORIENTATION)
+# define PACKETMODE	PK_BUTTONS
+# include "pktdef.h"
+#endif
 
 #include "GemEvent.h"
 #include "GemGL.h"
 
 GEM_EXTERN void gemAbortRendering();
-
 
 /////////////////////////////////////////////////////////
 // bSetupPixelFormat
@@ -72,6 +78,7 @@ BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
 
 //////////
 // wintab32 calls
+#ifdef HAVE_WINTAB
 typedef UINT (API *WTINFO_FUNC)(UINT, UINT, LPVOID);
 typedef HCTX (API *WTOPEN_FUNC)(HWND, LPLOGCONTEXTA, BOOL);
 typedef BOOL (API *WTCLOSE_FUNC)(HCTX);
@@ -205,6 +212,7 @@ dummyTabletKill:: ~dummyTabletKill()
 	}
 }
 static dummyTabletKill myDumb;
+#endif /* HAVE_WINTAB */
 
 /////////////////////////////////////////////////////////
 // MainWndProc
@@ -254,7 +262,7 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_RBUTTONDOWN:
             triggerButtonEvent(2, 1, LOWORD(lParam), HIWORD(lParam));
             break;
-
+#ifdef HAVE_WINTAB
         // tablet
 		case WT_PACKET:
             {
@@ -307,7 +315,7 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			    }
             }
             break;
-
+#endif /* HAVE_WINTAB */
         // keyboard action
         case WM_KEYUP:
 			if ((int)wParam == VK_CONTROL)
@@ -341,6 +349,7 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         // try to initialize the tablet driver
 	    case WM_CREATE:
             {
+#ifdef HAVE_WINTAB
                 static int s_wintabLoaded = 0;
                 static int s_tabletCreated = 0;
                 if (!s_wintabLoaded)
@@ -355,7 +364,8 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					else
 						TabletFunctionResolve(hWnd);					
                 }
-		    }
+#endif /* HAVE_WINTAB */
+			}
             break;
 
         // pass all unhandled messages to DefWindowProc
@@ -394,8 +404,6 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
       wndclass.hbrBackground = NULL;
       wndclass.lpszMenuName  = NULL;
       wndclass.lpszClassName = "GEM";
-
-		
 
       if (!RegisterClass(&wndclass) )
         {
@@ -610,6 +618,7 @@ void gemWinMakeCurrent(WindowInfo&nfo)
 }
 
 bool initGemWin(void) {
+#ifdef HAVE_QUICKTIME
 	OSErr		err = noErr;
 
 	// Initialize QuickTime Media Layer
@@ -619,7 +628,6 @@ bool initGemWin(void) {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);
       return 0;
     }	
-	
 	// Initialize QuickTime
 	EnterMovies();
 	if (err)
@@ -628,6 +636,7 @@ bool initGemWin(void) {
       return 0;
     }	
 	post("Gem Man: QT init OK");
+#endif /* HAVE_QUICKTIME */
   return 1;
 }
 
