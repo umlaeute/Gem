@@ -360,7 +360,7 @@ void pix_videoNT :: csMessCallback(void *data, t_symbol *s)
   case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
   case 'r': case 'R': format=GL_RGBA; break;
   default:
-    post("pix_video: colorspace must be 'RGBA', 'YUV' or 'Gray'");
+    GetMyClass(data)->post("colorspace must be 'RGBA', 'YUV' or 'Gray'");
   }
   GetMyClass(data)->csMess(format);
 }
