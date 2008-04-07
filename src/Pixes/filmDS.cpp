@@ -23,6 +23,8 @@
 # include <dvdmedia.h>
 # define REGISTER_FILTERGRAPH 1
 
+#include <strsafe.h>
+
 HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin);
 HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond);
 HRESULT filmAddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) ;
