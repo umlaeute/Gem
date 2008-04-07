@@ -101,12 +101,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="pd.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib quartz.lib QTMLClient.lib ddraw.lib winmm.lib vfw32.lib libcmtd.lib shlwapi.lib OLDNAMES.lib msvcprtd.lib"
+				AdditionalDependencies="msvcrtD.lib msvcprtD.lib OLDNAMES.lib pd.lib opengl32.lib glu32.lib vfw32.lib QTMLClient.lib"
 				OutputFile="../gem.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\debug"
 				IgnoreAllDefaultLibraries="TRUE"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\./gem.pdb"
 				SubSystem="2"
@@ -1124,12 +1125,6 @@
 				RelativePath="..\..\src\Pixes\pix_emboss.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Pixes\pix_fiducialtrack.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_fiducialtrack.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Pixes\pix_film.cpp">
 			</File>
 			<File
@@ -1576,28 +1571,6 @@
 			<File
 				RelativePath="..\..\src\Pixes\pix_zoom.h">
 			</File>
-			<Filter
-				Name="libfidtrack"
-				Filter="">
-				<File
-					RelativePath="..\..\src\Pixes\libfidtrack_fidtrackX.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\libfidtrack_fidtrackX.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\libfidtrack_segment.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\libfidtrack_segment.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\libfidtrack_treeidmap.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\libfidtrack_treeidmap.h">
-				</File>
-			</Filter>
 			<Filter
 				Name="filmvideo"
 				Filter="">
