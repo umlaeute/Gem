@@ -23,8 +23,10 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglGenTextures)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGenTextures :: GEMglGenTextures	(int argc, t_atom*argv) {
-	texturesMess(argc, argv);
+GEMglGenTextures :: GEMglGenTextures	(int argc, t_atom*argv) :
+  n(0), textures(NULL)
+{
+	if(argc)texturesMess(argc, argv);
 	
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
 
@@ -55,8 +57,12 @@ void GEMglGenTextures :: render(GemState *state) {
 // Variables
 //
 void GEMglGenTextures :: texturesMess (int argc, t_atom*argv) {	// FUN
+  if(!argc) {
+    error("no textures specified!");
+    return;
+  }
   n=0;
-  delete [] textures;
+  if(textures) delete [] textures;
   textures = new GLuint[argc];
   while(argc--){
     if(argv->a_type == A_FLOAT)textures[n++] = (GLuint)atom_getint(argv);
