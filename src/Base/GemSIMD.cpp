@@ -9,8 +9,26 @@ int GemSIMD::realcpuid = GEM_SIMD_NONE;
 
 GemSIMD :: GemSIMD()
 {
+ int dummy=0;
  cpuid=simd_runtime_check();
- 
+
+ startpost("GEM: compiled for SIMD architecture: ");
+#ifdef __SSE2__
+ startpost("SSE2 ");
+ dummy=1;
+#endif
+#ifdef __MMX__
+ startpost("MMX ");
+ dummy=1;
+#endif
+#ifdef __VEC__
+ startpost("AltiVec ");
+ dummy=1;
+#endif
+ if(0==dummy)
+	 startpost("none");
+ endpost();
+
   if(cpuid){
     startpost("GEM: using ");
     switch (cpuid){
