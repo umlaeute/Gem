@@ -20,13 +20,17 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
+				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
-				OptimizeForProcessor="1"
-				AdditionalIncludeDirectories="../src,../../GemLibs/glut,../../GemLibs/glm,../../src,../../GemLibs/Jpeg,../../GemLibs/tiff/libtiff,../../GemLibs/gltt,../../GemLibs/wintab/include,../../GemLibs/particle,../../GemLibs/liborb,C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;NT;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;HAVE_DIRECTSHOW"
+				FavorSizeOrSpeed="1"
+				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\tiff\libtiff;..\..\..\GemLibs\FTGL\include;..\..\..\GemLibs\freetype2\include\;&quot;$(ProgramFiles)\QuickTime SDK\CIncludes&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;__SSE2__;__MMX__"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
+				EnableEnhancedInstructionSet="0"
+				DefaultCharIsUnsigned="FALSE"
 				PrecompiledHeaderFile=".\Objects/gem.pch"
 				AssemblerListingLocation=".\Objects/"
 				ObjectFile=".\Objects/"
@@ -39,14 +43,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="../../GemLibs\tiff\libtiff.lib ../../GemLibs\gltt\freetype\lib\libttf.lib ../../GemLibs\gltt\gltt.lib ../../GemLibs\Jpeg\libjpeg.lib ../../GemLibs\particle\particle.lib ../../GemLibs\liborb\liborb.lib ../../GemLibs\glut\glut32.lib ../../GemLibs\glut\glut.lib ../../GemLibs/glm/glm.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib pd.lib quartz.lib ddraw.lib winmm.lib vfw32.lib libcmt.lib shlwapi.lib OLDNAMES.lib strmbase.lib"
-				OutputFile="../gem.dll"
+				AdditionalDependencies="msvcrt.lib msvcprt.lib OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mt.lib freetype214mt.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbase.lib atls.lib winmm.lib"
+				OutputFile="Gem.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\bin\,C:\DXSDK\samples\Multimedia\DirectShow\BaseClasses\Release"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Release&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
 				SubSystem="2"
-				ImportLibrary=".\./gem.lib"/>
+				ImportLibrary=".\gem.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -103,7 +107,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="msvcrtD.lib msvcprtD.lib OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mtD.lib freetype214mt_D.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbasD.lib atlsD.lib winmm.lib"
-				OutputFile="../gem.dll"
+				OutputFile="Gem.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Debug&quot;"
