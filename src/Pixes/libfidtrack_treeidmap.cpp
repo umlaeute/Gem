@@ -1,16 +1,12 @@
-
 #define NDEBUG
-#include "libfidtrack_treeidmap.h"
 
-#include <string.h>
-#include <assert.h>
+#include "libfidtrack_treeidmap.h"
+#include <m_pd.h>
+
 #include <map>
 #include <vector>
 #include <string>
 #include <fstream>
-#include <iostream>
-
-
 
 static int find_maximum_tree_depth( const std::string& s )
 {
@@ -92,7 +88,7 @@ public:
         int id = 0;
 
         if( !is.good() ){
-            std::cout << "error opening configuration file\n";
+            error("error opening configuration file");
         }else{
 
             minNodeCount = 0x7FFF;
@@ -104,7 +100,7 @@ public:
             maxAdjacencies = 0;
             
             while( !is.eof() ){
-#ifdef _MSC_VER
+#if 0 /*def _MSC_VER*/
 	      std::string s;
 #else
                 s.clear();
@@ -148,10 +144,8 @@ public:
                         maxAdjacencies = maxNodeAdjacencies;
                         
                 }else{
-                    std::cout << "error inserting tree '" << s << "' into map\n";
+					error("error inserting tree '%s' into map", s.c_str() );
                 }
-
-
             }
         }
 
