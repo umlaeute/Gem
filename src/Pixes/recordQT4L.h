@@ -63,16 +63,28 @@ class GEM_EXTERN recordQT4L : public record {
   virtual ~recordQT4L();
 
 #if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
-  //////////
-  // open a movie up
-  /* open the recordQT4L "filename" (think better about URIs ?)
-   */
-  /* returns TRUE if opening was successfull, FALSE otherwise */
-  virtual bool open(char *filename);
+
   //////////
   // close the movie file
-  /* stop recording, close the file and clean up temporary things */
+  // stop recording, close the file and clean up temporary things
   virtual void close(void);
+
+  //////////
+  // open a movie up
+  // open the recordQT4L "filename" (think better about URIs ?)
+  // returns TRUE if opening was successfull, FALSE otherwise 
+  virtual bool open(char *filename);
+
+
+  
+  //////////
+  // initialize the encoder
+  // dummyImage provides meta-information (e.g. size) that must not change during the encoding cycle
+  // (if it does, abort the recording session)
+  // framedur is the duration of one frame in [ms]
+  //   
+  // returns TRUE if init was successfull, FALSE otherwise 
+  virtual bool init(const imageStruct* dummyImage, const float framedur);
 
 
   //////////
@@ -86,7 +98,7 @@ class GEM_EXTERN recordQT4L : public record {
   virtual bool setCodec(char*name);
   virtual bool setCodec(int  num);
 
-  virtual int getNumCodecs();
+  virtual int getNumCodecs(void);
   virtual char*getCodecName(int n);
   virtual char*getCodecDescription(int n);
 
@@ -95,12 +107,17 @@ class GEM_EXTERN recordQT4L : public record {
 
   imageStruct m_image;
 
+  /* the selected codec */
+  bool setCodec(lqt_codec_info_t**codec, int num);
   lqt_codec_info_t*m_codec;
   lqt_codec_info_t**m_codecs;
 
-  int m_track;
-  int m_colormodel;
 
+  /* a buffer for the quicktime encoder */
+  unsigned char ** m_qtbuffer;
+
+  /* in which colormodel do we have to present the data to lqt? */
+  int m_colormodel;
 
   /* re-initialize the recorder */
   bool m_restart;
