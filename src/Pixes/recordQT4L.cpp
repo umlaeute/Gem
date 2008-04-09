@@ -35,6 +35,7 @@ recordQT4L :: recordQT4L(int x, int y, int width, int height):
   ,
   m_qtfile(NULL),
   m_codec(NULL), m_codecs(NULL),
+  m_codecname(NULL), m_codecnum(-1),
   m_qtbuffer(NULL),
   m_colormodel(0),
   m_restart(true)
@@ -116,11 +117,14 @@ static lqt_file_type_t guess_qtformat(const char* filename)
 bool recordQT4L :: open(char *filename)
 {
   close();
+
   lqt_file_type_t type =  guess_qtformat(filename);
+
   m_qtfile = lqt_open_write(filename, type);
   if(m_qtfile==NULL){
     return false;
   }
+
   m_currentFrame=0;
   m_restart=true;
   return (true);
@@ -132,42 +136,60 @@ bool recordQT4L :: open(char *filename)
 /////////////////////////////////////////////////////////
 bool recordQT4L :: init(const imageStruct*img, float framedur)
 {
-  int rowspan, rowspan_uv;
-  lqt_codec_info_t*codec=m_codec;
+  int rowspan=0, rowspan_uv=0;
+  lqt_codec_info_t*codec=NULL;
 
   if(!m_qtfile || !img || framedur < 0)
     return false;
 
   /* do we have a codec specified? */
-  if(!codec) {
-    /* LATER figure out automatically which codec to use */ 
-    char*defaultcodecname=NULL;
-    lqt_file_type_t type = lqt_get_file_type(m_qtfile);
-    int i=0;
-    for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
-      if(type == qtformats[i].type)
-        {
-          defaultcodecname = (char*)(qtformats[i].default_video_codec);
-        }
-      }
-
-    if(NULL==defaultcodecname) {
-      error("couldn't find default codec for this format");
+  char*codecname = m_codecname;
+  if(m_codecnum>=0) {
+    lqt_codec_info_t**codecs = lqt_query_registry(0,1,1,0);
+    if(!setCodec(codecs, m_codecnum)) {
+      error("couldn't initialize codec#%d", m_codecnum);
       return false;
     }
-    lqt_codec_info_t**codecs = (lqt_codec_info_t**)lqt_find_video_codec_by_name(defaultcodecname);
-
-    if(!setCodec(codecs, 0)){
-      error("couldn't initialize default codec: %s", defaultcodecname);
-      return false;
-    }
-
-    verbose(1, "using default codec: %s", defaultcodecname);
 
     codec=m_codec;
     m_codec=NULL; /* next time we init, we want to get the default codec again */
   }
 
+  if(NULL==codec){
+    if(NULL==codecname) {
+      /* LATER figure out automatically which codec to use */ 
+      lqt_file_type_t type = lqt_get_file_type(m_qtfile);
+      int i=0;
+      for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
+        if(type == qtformats[i].type)
+          {
+            codecname = (char*)(qtformats[i].default_video_codec);
+          }
+      }
+      if(NULL==codecname) {
+        error("couldn't find default codec for this format");
+        return false;
+      }
+    }
+  
+    lqt_codec_info_t**codecs = (lqt_codec_info_t**)lqt_find_video_codec_by_name(codecname);
+  
+    if(!setCodec(codecs, 0)){
+      error("couldn't initialize default codec: %s", codecname);
+      return false;
+    }
+    
+    verbose(1, "using codec: %s", codecname);
+  
+    codec=m_codec;
+    m_codec=NULL; /* next time we init, we want to get the default codec again */
+  }
+
+  if(NULL==codec) {
+    error("couldn't initialize codec");
+    return false;
+  }
+  
   /* fps = time_scale / frame_duration */
   lqt_set_video(m_qtfile,
                 1, 
@@ -180,9 +202,12 @@ bool recordQT4L :: init(const imageStruct*img, float framedur)
   /* set the colormodel */
   m_colormodel=BC_RGB888; /* LATER do this more dynamically */
 
-  /* hmm, isn't this a memleak? 
-   * but it sure crashes if i try to lqt_rows_free() the qtbuffer */
-  m_qtbuffer = lqt_rows_alloc(img->xsize, img->ysize, m_colormodel, &rowspan, &rowspan_uv);
+  /* make sure to allocate enough buffer; it sometimes crashes when i allocate the "right" size, 
+     so we just grab a multiple of what we actually want... 
+  */
+  /* but isn't this a memleak? it sure crashes if i try to lqt_rows_free() the qtbuffer */
+  m_qtbuffer = lqt_rows_alloc(2*img->xsize, 2*img->ysize, m_colormodel, &rowspan, &rowspan_uv);
+
   quicktime_set_cmodel(m_qtfile, m_colormodel);
 
   m_width =img->xsize;
@@ -243,7 +268,6 @@ int recordQT4L :: putFrame(imageStruct*img)
   }
 
   lqt_encode_video(m_qtfile, rowpointers, 0, framerate);
-
 
   m_currentFrame++;
   return m_currentFrame;
@@ -317,6 +341,7 @@ bool recordQT4L :: setCodec(lqt_codec_info_t**codec, int num)
 
   return true;
 }
+#if 0
 /////////////////////////////////////////////////////////
 // set codec by number
 //
@@ -341,4 +366,29 @@ bool recordQT4L :: setCodec(char*name)
   if(res)close();
   return res;
 }
+#else
+/////////////////////////////////////////////////////////
+// set codec by number
+//
+/////////////////////////////////////////////////////////
+bool recordQT4L :: setCodec(int num)
+{
+  m_codecname=NULL;
+  m_codecnum=num;
+  return true;
+}
+/////////////////////////////////////////////////////////
+// set codec by name
+//
+/////////////////////////////////////////////////////////
+bool recordQT4L :: setCodec(char*name)
+{
+  m_codecname=name;
+  m_codecnum=-1;
+  return true;
+}
+#endif
+
+
+
 #endif

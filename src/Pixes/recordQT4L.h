@@ -111,6 +111,8 @@ class GEM_EXTERN recordQT4L : public record {
   bool setCodec(lqt_codec_info_t**codec, int num);
   lqt_codec_info_t*m_codec;
   lqt_codec_info_t**m_codecs;
+  char*m_codecname;
+  int m_codecnum;
 
 
   /* a buffer for the quicktime encoder */
