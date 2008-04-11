@@ -342,9 +342,9 @@ AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup st
 # enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $PKG_LIBS"
-AC_MSG_CHECKING(for lqt_add_video_track)
-AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_add_video_track])], 
-        AC_DEFINE(HAVE_LQT_ADD_VIDEO_TRACK)
+AC_MSG_CHECKING(for lqt_open_write)
+AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])], 
+        AC_DEFINE(HAVE_LQT_OPEN_WRITE)
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"

@@ -31,7 +31,7 @@
 
 recordQT4L :: recordQT4L(int x, int y, int width, int height): 
   record(x,y,width,height)
-#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_OPEN_WRITE
   ,
   m_qtfile(NULL),
   m_codec(NULL), m_codecs(NULL),
@@ -56,7 +56,7 @@ recordQT4L :: ~recordQT4L()
   close();
 }
 
-#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_OPEN_WRITE
 void recordQT4L :: close(void)
 {
   if(m_qtfile){

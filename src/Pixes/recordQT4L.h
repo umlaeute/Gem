@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
    
 #include "Pixes/record.h"
    
-#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_OPEN_WRITE
 /* don't add relative paths to the quicktime-headers here!
  * they should be found by configure!
  * if not, then rather give the full path by hand in Make.config
@@ -62,7 +62,7 @@ class GEM_EXTERN recordQT4L : public record {
   /* free what is apropriate */
   virtual ~recordQT4L();
 
-#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_ADD_VIDEO_TRACK
+#if defined HAVE_LIBQUICKTIME && defined HAVE_LQT_OPEN_WRITE
 
   //////////
   // close the movie file
