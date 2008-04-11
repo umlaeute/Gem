@@ -1559,9 +1559,6 @@
 				RelativePath="..\..\src\Pixes\pix_videoSGI.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Pixes\pix_vpaint.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Pixes\pix_write.cpp">
 			</File>
 			<File
@@ -1692,6 +1689,22 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\videoV4L2.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="fiducialtrack"
+				Filter="">
+				<File
+					RelativePath="..\..\src\Pixes\libfidtrack_fidtrackX.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\libfidtrack_segment.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\libfidtrack_segment.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\libfidtrack_treeidmap.h">
 				</File>
 			</Filter>
 		</Filter>
