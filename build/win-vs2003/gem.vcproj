@@ -1695,6 +1695,9 @@
 				Name="fiducialtrack"
 				Filter="">
 				<File
+					RelativePath="..\..\src\Pixes\libfidtrack_fidtrackX.cpp">
+				</File>
+				<File
 					RelativePath="..\..\src\Pixes\libfidtrack_fidtrackX.h">
 				</File>
 				<File
@@ -1704,7 +1707,16 @@
 					RelativePath="..\..\src\Pixes\libfidtrack_segment.h">
 				</File>
 				<File
+					RelativePath="..\..\src\Pixes\libfidtrack_treeidmap.cpp">
+				</File>
+				<File
 					RelativePath="..\..\src\Pixes\libfidtrack_treeidmap.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_fiducialtrack.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_fiducialtrack.h">
 				</File>
 			</Filter>
 		</Filter>
