@@ -26,35 +26,17 @@
 # include <windows.h>
 #endif
 
+#define GLEW_STATIC
 #include "Base/glew.h"
 
 #ifdef __APPLE__
 # include <OpenGL/glext.h>
 # include <OpenGL/OpenGL.h>
-#else
-/* linux, w32,... */
-# define GL_GLEXT_PROTOTYPES   1
+#elif defined __WIN32__
+# include "Base/wglew.h"
+#elif defined __linux__
 
-# if (!defined DONT_INCLUDE_GLEXT)
-/* windos is (again) a bit difficult:
- * by default, there are no GL/glext.h headers
- * but of course you can install nvidia's headers to get them.
- * since i don't know, whether the system has this headers,
- * we define DONT_INCLUDE_GLEXT in Base/configNT.h on demand
- * so, if your system lacks GL/glext.h,
- * just undefine the appropriate line in Base/configNT.h
- */
-#  if  (!defined GL_GLEXT_VERSION)
-#   include <GL/glext.h>
-#  endif /* GL_GLEXT_VERSION */
-
-#  ifdef __WIN32__
-#   include <GL/wglext.h>
-#  endif
-
-# endif /* GLEXT */ 
-
-#endif // __APPLE__
+#endif /* OS */
 
 #ifndef GL_YUV422_GEM
 # define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE

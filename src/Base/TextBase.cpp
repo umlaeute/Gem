@@ -316,13 +316,13 @@ void TextBase :: textMess(int argc, t_atom *argv)
   char tmp_char[MAXPDSTRING];
 
   wstring line = L"";
-  unsigned int i=0;
+  int i=0;
 
   // convert the atom-list into 1 string
   for (i = 0; i < argc; ++i)
     {
       string newtext;
-      int j;
+      unsigned int j;
       if (A_FLOAT == argv[i].a_type) {
         atom_string(&argv[i], tmp_char, MAXPDSTRING);
         newtext = tmp_char;
