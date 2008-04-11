@@ -10,8 +10,6 @@
 
 #include "Base/GemGL.h"
 
-// XXX #include <iostream.h>
-
 // Emit OpenGL calls to draw the particles. These are drawn with
 // whatever primitive type the user specified(GL_POINTS, for
 // example). The color and radius are set per primitive, by default.

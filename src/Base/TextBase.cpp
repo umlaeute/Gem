@@ -27,8 +27,6 @@
 # include <unistd.h>
 #endif
 
-#include <iostream>
-
 char *TextBase::DEFAULT_FONT = (char*)"vera.ttf";
 
 /////////////////////////////////////////////////////////
