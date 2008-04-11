@@ -177,11 +177,7 @@ public:
 
 void initialize_treeidmap_from_file( TreeIdMap* treeidmap, const char *file_name )
 {
-#ifdef _MSC_VER
-	error("initializing treeIDmap currently impossible on W32...sorry");
-#else
     treeidmap->implementation_ = new TreeIdMapImplementation( treeidmap, file_name );
-#endif
 }
 
 
