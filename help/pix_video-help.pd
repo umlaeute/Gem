@@ -1,4 +1,4 @@
-#N canvas 45 25 750 597 12;
+#N canvas 45 25 871 597 12;
 #X text 50 557 NOTE: not all messages might currently work on your
 operating-system.;
 #N canvas 54 138 989 623 Linux 0;
@@ -37,25 +37,25 @@ at start) with major number 171 \, so it is an ieee1394 device.;
 #X text 52 257 If you do not know the name of your camera device \,
 then the following might help you find it in the /dev heirarchy.;
 #X text 97 337 comment;
-#X restore 433 564 pd Linux Notes;
+#X restore 533 564 pd Linux Notes;
 #N canvas 0 0 450 300 SGI 0;
 #X text 24 61 SGI only:;
 #X text 50 84 swap 1/0 : swap upside down;
 #X text 49 101 offset x y : set the x y offset of the captured frame
 ;
-#X restore 542 564 pd SGI Notes;
+#X restore 682 564 pd SGI Notes;
 #X text 451 6 GEM object;
-#X obj 8 46 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 46 cnv 15 540 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 47 cnv 15 280 500 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 559 47 cnv 15 280 500 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 71 21 Class: pix object (pix source);
 #X text 453 27 Example:;
 #X text 50 2 Synopsis: [pix_video];
 #X text 29 47 Description: open a camera and get input;
-#X obj 9 182 cnv 15 430 365 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 9 182 cnv 15 540 365 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 9 149 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 9 149 cnv 15 540 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 18 148 Arguments:;
 #X text 17 526 Outlet 1: gemlist;
@@ -65,7 +65,7 @@ film into the specified colorspace.;
 #X text 64 159 none;
 #X text 33 184 Inlet:;
 #X text 33 512 Outlet:;
-#X obj 604 460 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 714 460 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -85,23 +85,23 @@ film into the specified colorspace.;
 #X connect 7 0 4 0;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
-#X restore 609 499 pd gemwin;
-#X msg 609 477 create;
-#X text 605 456 Create window:;
-#X obj 453 86 cnv 15 230 280 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 719 499 pd gemwin;
+#X msg 719 477 create;
+#X text 715 456 Create window:;
+#X obj 563 86 cnv 15 230 280 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 454 53 gemhead;
-#X msg 483 124 dimen 64 64;
-#X obj 454 506 rectangle 4 3;
-#X msg 473 99 dimen 256 128;
-#X obj 454 482 pix_texture;
-#X msg 522 271 enumerate;
-#X msg 528 303 dialog;
-#X msg 491 153 colorspace RGBA;
-#X obj 454 456 pix_video;
-#X msg 512 235 device /dev/dv1394/0;
-#X msg 606 338 driver 1;
-#X msg 532 338 driver 0;
+#X obj 564 53 gemhead;
+#X msg 593 124 dimen 64 64;
+#X obj 564 506 rectangle 4 3;
+#X msg 583 99 dimen 256 128;
+#X obj 564 482 pix_texture;
+#X msg 632 271 enumerate;
+#X msg 638 303 dialog;
+#X msg 601 153 colorspace RGBA;
+#X obj 564 456 pix_video;
+#X msg 622 235 device /dev/dv1394/0;
+#X msg 716 338 driver 1;
+#X msg 642 338 driver 0;
 #X text 17 414 Inlet 1: channel <number>: depending on your capture
 device \, you can switch between sources \, e.g. Tuner \, S-VHS \,
 Composite \, etc.;
@@ -111,7 +111,7 @@ Composite \, etc.;
 Tuner;
 #X text 17 216 Inlet 1: device <spec>: the number or file path to the
 input device;
-#X msg 496 211 device 0;
+#X msg 606 211 device 0;
 #N canvas 162 133 570 420 serin 0;
 #X obj 205 60 cnv 20 20 20 empty \$0-open-canvas 0 4 10 0 16 -233017
 -1 0;
@@ -139,11 +139,9 @@ input device;
 #X connect 9 0 7 0;
 #X connect 11 0 8 0;
 #X coords 0 -1 1 1 165 20 1 60 60;
-#X restore 496 187 pd serin;
+#X restore 606 187 pd serin;
 #X text 17 307 Inlet 1: dimen <number> <number>: set various dimensions
 for the image (does not work on all capture devices);
-#X text 17 361 Inlet 1: dialog: open a dialog to configure the input
-device (Mac OS X and Windows only);
 #X text 17 341 Inlet 1: quality <number>: compression quality;
 #X text 17 393 Inlet 1: enumerate: list all devices to the console
 ;
@@ -152,6 +150,8 @@ to FireWire to capture cards \, as long as the camera is supported
 by your operating system.;
 #X text 17 245 Inlet 1: driver <number>: switch between different drivers
 \, e.g. v4l \, ieee1394 \, etc.;
+#X text 17 361 Inlet 1: dialog: open a dialog to configure the input
+device (Mac OS X and Windows);
 #X connect 20 0 21 0;
 #X connect 21 0 20 0;
 #X connect 24 0 32 0;
