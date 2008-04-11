@@ -234,6 +234,12 @@
 				RelativePath="..\..\src\Base\GemPathBase.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GemPBuffer.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemPBuffer.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\GemPixConvert.h">
 			</File>
 			<File
@@ -1557,6 +1563,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_videoSGI.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_vpaint.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_vpaint.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_write.cpp">
