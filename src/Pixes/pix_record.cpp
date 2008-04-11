@@ -47,7 +47,7 @@ pix_record :: pix_record(int argc, t_atom *argv):
 
 #ifdef HAVE_QUICKTIME
   m_handle=new recordQT(xoff, yoff, width, height);
-#elif defined HAVE_LIBQUICKTIME && defined HAVE_LQT_OPEN_WRITE
+#elif defined GEM_USE_RECORDQT4L
   m_handle=new recordQT4L(xoff, yoff, width, height);
 #else
   post("[pix_record]: Gem has been compiled without pix-recording capabilities!");
