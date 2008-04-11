@@ -226,12 +226,12 @@ int recordQT4L :: putFrame(imageStruct*img)
   unsigned char**rowpointers;
   int row, row_stride;
   int err;
-  int framerate = GemMan::getFramerate();
+  float framerate = GemMan::getFramerate();
 
   if(m_width!=img->xsize || m_height!=img->ysize)m_restart=true;
 
   if(m_restart){
-    if(!init(img, framerate)) {
+    if(!init(img, (int)framerate)) {
       /* something went wrong! */
       close();
       return -1;
@@ -267,7 +267,7 @@ int recordQT4L :: putFrame(imageStruct*img)
     }
   }
 
-  lqt_encode_video(m_qtfile, rowpointers, 0, framerate);
+  lqt_encode_video(m_qtfile, rowpointers, 0, (int)framerate);
 
   m_currentFrame++;
   return m_currentFrame;
