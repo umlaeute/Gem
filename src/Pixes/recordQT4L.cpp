@@ -134,7 +134,7 @@ bool recordQT4L :: open(char *filename)
 // initialize the encoder
 //
 /////////////////////////////////////////////////////////
-bool recordQT4L :: init(const imageStruct*img, float framedur)
+bool recordQT4L :: init(const imageStruct*img, const int framedur)
 {
   int rowspan=0, rowspan_uv=0;
   lqt_codec_info_t*codec=NULL;
@@ -226,7 +226,7 @@ int recordQT4L :: putFrame(imageStruct*img)
   unsigned char**rowpointers;
   int row, row_stride;
   int err;
-  float framerate = GemMan::getFramerate();
+  int framerate = GemMan::getFramerate();
 
   if(m_width!=img->xsize || m_height!=img->ysize)m_restart=true;
 

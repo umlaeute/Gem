@@ -86,7 +86,7 @@ class GEM_EXTERN recordQT4L : public record {
   // framedur is the duration of one frame in [ms]
   //   
   // returns TRUE if init was successfull, FALSE otherwise 
-  virtual bool init(const imageStruct* dummyImage, const float framedur);
+  virtual bool init(const imageStruct* dummyImage, const int framedur);
 
 
   //////////
