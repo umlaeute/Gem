@@ -1,8 +1,9 @@
 mkdir gem-release
 
+xcopy Gem.dll gem-release\
+
 cd ..\..\
 
-xcopy build\Gem.dll build\win-vs2003\gem-release\
 xcopy /E /I abstractions build\win-vs2003\gem-release\abstractions
 
 xcopy /E /I help build\win-vs2003\gem-release\help

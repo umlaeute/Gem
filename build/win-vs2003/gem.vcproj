@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="msvcrt.lib msvcprt.lib OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mt.lib freetype214mt.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbase.lib atls.lib winmm.lib"
+				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mt.lib freetype214mt.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbase.lib atls.lib winmm.lib libcpmt.lib msvcrt.lib msvcprt.lib"
 				OutputFile="Gem.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
