@@ -46,7 +46,7 @@
 #X connect 7 0 0 0;
 #X connect 8 0 0 0;
 #X restore 46 186 pd gemwin;
-#X msg 46 162 destroy;
+#X msg 46 162 create;
 #X text 42 142 Create window and render;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
