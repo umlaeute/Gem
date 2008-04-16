@@ -461,6 +461,10 @@ fi
 
 if test "x$KERN" = "xDarwin"; then
  GEM_CHECK_CXXFLAGS([-Os],,GEM_CHECK_CXXFLAGS([-O3]))
+
+# shall we built FAT-binaries
+ GEM_CHECK_CXXFLAGS([-arch i386 -arch ppc], GEM_CHECK_LDFLAGS([-arch i386 -arch ppc], [EXT="d_fat"]))
+
 else
  GEM_CHECK_CXXFLAGS([-O3])
 fi
@@ -472,7 +476,6 @@ GEM_CHECK_CXXFLAGS([-falign-loops=32 -falign-functions=32 -falign-jumps=32 -funr
         GEM_CHECK_CXXFLAGS([-falign-loops=16 -funroll-loops])
         )
 GEM_CHECK_CXXFLAGS([-ffast-math])
-
 
 ## SIMD support
 # naive approach is to just check, which SIMD-flags the compiler takes
@@ -598,12 +601,7 @@ Configuration:
 
  pure-data:
   version                : ${PD_MAJORVERSION}.${PD_MINORVERSION}
-
- openGL   :
-  using version          : ${GEM_OPENGL_VERSION_MAX}
-  using ARB-extensions   : ${enable_ARB}
-  using NV-extensions    : ${enable_NV}
-  using GLEW             : ${enable_glew}
+  extension              : ${EXT}
 
  used optional libraries:
 
