@@ -1609,9 +1609,9 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
     blue=pixels[2];
     break;
   case GL_BGR_EXT:
-    red=pixels[2];
+    red=pixels[0];
     green=pixels[1];
-    blue=pixels[0];
+    blue=pixels[2];
     break;
   case GL_RGBA:
     red=pixels[0];
@@ -1619,9 +1619,9 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
     blue=pixels[2];
     break;
   case GL_BGRA_EXT:
-    red=pixels[2];
-    green=pixels[1];
-    blue=pixels[0];
+    red=pixels[chRed];
+    green=pixels[chGreen];
+    blue=pixels[chBlue];
     break;
   case GL_YUV422_GEM:
     {
