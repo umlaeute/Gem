@@ -62,58 +62,23 @@ void pix_data :: trigger()
 
 	int xPos = (int)(m_position[0] * (float)m_pixRight->image.xsize);
 	int yPos = (int)(m_position[1] * (float)m_pixRight->image.ysize);
-	int position = yPos * m_pixRight->image.xsize * m_pixRight->image.csize +
-					xPos * m_pixRight->image.csize;
+  float red, green, blue, grey;
+  unsigned char r, g, b, G;
 
-	unsigned char *data = &m_pixRight->image.data[position];
-	float color[3];
+  m_pixRight->image.getRGB(xPos, yPos, &r, &g, &b);
+  m_pixRight->image.getGrey(xPos, yPos, &G);
 
-	// is this a gray8 or RGBA?
-	switch(m_pixRight->image.csize)
-	{
-		// Gray scale
-		case(1):
-			color[0] = color[1] = color[2] = data[chGray] / 256.f;
-			break;
-        // YUV
-        case(2):
-
-           if ( xPos % 2) { //odd
-        color[0] = data[1];
-        color[1] = data[-2];
-        color[2] = data[0];
-    }else{
-        color[0] = data[1];
-        color[1] = data[0];
-        color[2] = data[2];
-    }
-            break;
-		// RGB
-		case(3):
-			color[0] = data[chRed] / 256.f;
-			color[1] = data[chGreen] / 256.f;
-			color[2] = data[chBlue] / 256.f;
-			break;
-		// RGBA
-		case(4):
-			color[0] = data[chRed] / 256.f;
-			color[1] = data[chGreen] / 256.f;
-			color[2] = data[chBlue] / 256.f;
-			break;
-		default :
-			error("GEM: pix_data: unknown image format");
-			return;
-//			break;
-	}
-
-	float grayVal = (color[0] + color[1] + color[2]) / 3.f;
+  red   = r / 256.f;
+  green = g / 256.f;
+  blue  = b / 256.f;
+  grey  = G / 256.f;
+  
 	t_atom atom[3];
-
 	// send out the color information
-	outlet_float(m_grayOut, (t_float)grayVal);
-	SETFLOAT(&atom[0], (t_float)color[0]);
-	SETFLOAT(&atom[1], (t_float)color[1]);
-	SETFLOAT(&atom[2], (t_float)color[2]);
+	outlet_float(m_grayOut, (t_float)grey);
+	SETFLOAT(&atom[0], (t_float)red);
+	SETFLOAT(&atom[1], (t_float)green);
+	SETFLOAT(&atom[2], (t_float)blue);
 	outlet_list(m_colorOut, gensym("list"), 3, atom);	
 }
 

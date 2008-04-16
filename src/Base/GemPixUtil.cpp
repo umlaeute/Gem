@@ -1592,3 +1592,120 @@ GEM_EXTERN void imageStruct::swapRedBlue() {
     break;
   }
 }
+
+
+GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b) {
+  unsigned char red=0, green=0, blue=0;
+  int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
+  unsigned char*pixels=data+position*csize;
+    
+  switch(format) {
+  case GL_LUMINANCE:
+    red=green=blue=pixels[0];
+    break;
+  case GL_RGB:
+    red=pixels[0];
+    green=pixels[1];
+    blue=pixels[2];
+    break;
+  case GL_BGR_EXT:
+    red=pixels[2];
+    green=pixels[1];
+    blue=pixels[0];
+    break;
+  case GL_RGBA:
+    red=pixels[0];
+    green=pixels[1];
+    blue=pixels[2];
+    break;
+  case GL_BGRA_EXT:
+    red=pixels[2];
+    green=pixels[1];
+    blue=pixels[0];
+    break;
+  case GL_YUV422_GEM:
+    {
+      position = (((X+(upsidedown?(ysize-Y):Y)*xsize)>>1)<<1);
+      pixels=data+position*csize;
+      int y=YUV2RGB_11*(pixels[(X%2)?chY1:chY0]-Y_OFFSET);
+      int u=pixels[chU] - UV_OFFSET;
+      int v=pixels[chV] - UV_OFFSET;
+      int uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+      int uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+      int uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+
+      red =   CLAMP((y + uv_r) >> 8);
+      green = CLAMP((y + uv_g) >> 8);
+      blue =  CLAMP((y + uv_b) >> 8);
+    }
+    break;
+  default:
+    break;
+  }
+  if(r)*r=red;
+  if(g)*g=green;
+  if(b)*b=blue;
+}
+GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) {
+  unsigned char grey=0;
+  int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
+  unsigned char*pixels=data+position*csize;
+  switch(format) {
+  case GL_LUMINANCE:
+    grey=pixels[0];
+    break;
+  case GL_RGB:
+    grey=(pixels[0]*79+pixels[1]*156+pixels[2]*21)>>8;
+    break;
+  case GL_BGR_EXT:
+    grey=(pixels[2]*79+pixels[1]*156+pixels[0]*21)>>8;
+    break;
+  case GL_RGBA:
+    grey=(pixels[0]*79+pixels[1]*156+pixels[2]*21)>>8;
+    break;
+  case GL_BGRA_EXT:
+    grey=(pixels[2]*79+pixels[1]*156+pixels[0]*21)>>8;
+    break;
+  case GL_YUV422_GEM:
+    {
+      int grey_i=0;
+      position = (((X+(upsidedown?(ysize-Y):Y)*xsize)>>1)<<1);
+      pixels=data+position*csize;
+      grey = CLAMP(pixels[((X%2)?chY1:chY0)]-Y_OFFSET);
+    }
+    break;
+  default:
+    break;
+  }
+  if(g)*g=grey;
+}
+GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) {
+  unsigned char luma=0, chromaU=128, chromaV=128;
+  int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
+  unsigned char*pixels=data+position*csize;
+  switch(format) {
+  case GL_LUMINANCE:
+    luma=pixels[0];
+    break;
+  case GL_RGB:
+  case GL_BGR_EXT:
+    error("getYUV not implemented for RGB");
+    break;
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    error("getYUV not implemented for RGBA");
+    break;
+  case GL_YUV422_GEM:
+    position = (((X+(upsidedown?(ysize-Y):Y)*xsize)>>1)<<1);
+    pixels=data+position*csize;
+    luma=pixels[((X%2)?chY1:chY0)];
+    chromaU=pixels[chU];
+    chromaV=pixels[chV];
+    break;
+  default:
+    break;
+  }
+  if(y)*y=luma;
+  if(u)*u=chromaU;
+  if(v)*v=chromaV;
+}

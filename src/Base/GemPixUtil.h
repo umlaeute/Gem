@@ -137,6 +137,13 @@ struct GEM_EXTERN imageStruct
   inline void SetPixel(int Y, int X, int C, unsigned char VAL)
   { data[Y * xsize * csize + X * csize + C] = VAL; }
 
+
+  /////////
+  // gets the color of a pixel
+  void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b);
+  void getGrey(int X, int Y, unsigned char*g);
+  void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v);
+  
   /* following will set the whole image-data to either black or white
    * the size of the image-data is NOT xsize*ysize*csize but datasize
    * this is mostly slower
