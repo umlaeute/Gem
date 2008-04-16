@@ -22,7 +22,7 @@ endif
 
 %.d: %.cpp
 	@set -e; rm -f $@; \
-	 $(CXX) $(MAKEDEP_FLAGS) $(GEM_EXTRA_CXXFLAGS) $(GEM_CXXFLAGS) $< > $@.$$$$; \
+	 $(CXX) $(MAKEDEP_FLAGS) $(GEM_EXTRA_CPPFLAGS) $(GEM_CXXFLAGS) $< > $@.$$$$; \
 	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	 rm -f $@.$$$$
 

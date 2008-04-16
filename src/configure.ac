@@ -462,8 +462,10 @@ fi
 if test "x$KERN" = "xDarwin"; then
  GEM_CHECK_CXXFLAGS([-Os],,GEM_CHECK_CXXFLAGS([-O3]))
 
-# shall we built FAT-binaries
- GEM_CHECK_CXXFLAGS([-arch i386 -arch ppc], GEM_CHECK_LDFLAGS([-arch i386 -arch ppc], [EXT="d_fat"]))
+# shall we built FAT-binaries ?
+## this needs more thinking! running just the preprocessor does not like these flags
+## for now we could live with just adding these manually with GEM_EXTRA_CXXFLAGS and GEM_EXTRA_LDFLAGS
+dnl GEM_CHECK_CXXFLAGS([-arch i386 -arch ppc], GEM_CHECK_LDFLAGS([-arch i386 -arch ppc], [EXT="d_fat"]))
 
 else
  GEM_CHECK_CXXFLAGS([-O3])
