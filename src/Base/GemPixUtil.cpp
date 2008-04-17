@@ -140,6 +140,7 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
   datasize=array_size-offset;
 #endif
   notowned=0;
+  //post("created data [%d] @ %x: [%d]@%x", array_size, pdata, datasize, data);
   return data; 
 }
 
@@ -1619,9 +1620,15 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
     blue=pixels[2];
     break;
   case GL_BGRA_EXT:
-    red=pixels[chRed];
-    green=pixels[chGreen];
-    blue=pixels[chBlue];
+#if defined __APPLE__ && defined BYTE_ORDER && defined BIG_ENDIAN && (BYTE_ORDER == BIG_ENDIAN)
+    red=pixels[1];
+    green=pixels[2];
+    blue=pixels[3];
+#else
+    red=pixels[2];
+    green=pixels[1];
+    blue=pixels[0];
+#endif
     break;
   case GL_YUV422_GEM:
     {
