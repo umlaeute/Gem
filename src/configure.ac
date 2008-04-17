@@ -25,15 +25,14 @@ AC_SUBST(LIBS)
 AC_SUBST(X_LIBS)
 AC_SUBST(X_CFLAGS)
 AC_SUBST(CXXFLAGS)
+AC_SUBST(CPPFLAGS)
 AC_SUBST(DEFINES)
 AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
 AC_SUBST(REFERENCEPATH)
 AC_SUBST(NEW_VIDEOFILM)
-AC_SUBST(HAVE_GLSIZEIPTRARB)
 AC_SUBST(CONFIGUREFLAGS)
-AC_SUBST(GEM_OPENGL_VERSION_MAX)
 
 ## store the flags passed to us
 ## is there no way to get the flags without quotes?
@@ -62,12 +61,6 @@ GEM_ARG_DISABLE([powerpc], [PowerPC specific optimizations])
 
 GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
 
-GEM_ARG_ENABLE([ARB], [openGL-ARB-extension support], [force])
-GEM_ARG_ENABLE([NV], [openGL-NV-extension support], [force])
-GEM_ARG_DISABLE([glew],    [GLEW (runtime OpenGL extension checks) - experimental])
-enable_glew="yes"
-
-
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)], [force])
 GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video], [force])
 
@@ -77,9 +70,6 @@ AC_ARG_WITH([pdversion],
 		AC_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
 AC_ARG_WITH([extension], 
 		AC_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
-AC_ARG_WITH([glversion],
-		AC_HELP_STRING([--with-glversion=<ver>],[enforce a certain openGL-version (e.g. 1.5)]))
-
 
 GEM_TARGETS=Base
 GEM_TARGET(Controls)
@@ -142,16 +132,6 @@ GEM_CHECK_FRAMEWORK(AGL)
 if test "x$gem_check_ldflags_success" = "xyes"; then
   have_glu="yes"
 fi
-
-if test "x$with_glversion" != "x"; then
- GEM_OPENGL_VERSION_MAX=0
- for gl_subversion in $(echo ${with_glversion} | sed -e 's|\.| |g'); do let GEM_OPENGL_VERSION_MAX=GEM_OPENGL_VERSION_MAX*1000+gl_subversion; done
- AC_DEFINE_UNQUOTED(GEM_OPENGL_VERSION_MAX, ${GEM_OPENGL_VERSION_MAX})
-else
- GEM_OPENGL_VERSION_MAX="(default)"
-fi
-
-  
 
 
 dnl some checks for osX
@@ -311,22 +291,6 @@ AC_C_INLINE
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
 
-## check for GLsizeiptrARB
-## uäh! isn't there something more cross-platform???
-AC_CHECK_TYPES([GLsizeiptrARB],,
-        ,[
-#ifdef __APPLE__
-# include <OpenGL/gl.h>
-# include <OpenGL/glu.h>
-# include <OpenGL/glext.h>
-#else
-# include <GL/gl.h>
-# include <GL/glu.h>
-# include <GL/glext.h>
-#endif
-]
-        )
-
 
 AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(void *)
@@ -348,34 +312,6 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
-
-# disabling ARB-extensions
-if test "x$enable_ARB" != "xno"; then
-dnl AC_CHECK_FUNC(glBindProgramARB, enable_ARB="yes",enable_ARB="no")
-AC_MSG_CHECKING(for glBindProgramARB)
-AC_LINK_IFELSE([AC_LANG_CALL([], [glBindProgramARB])], 
-        enable_ARB="yes", enable_ARB="no")
-AC_MSG_RESULT([$enable_ARB])
-fi
-
-if test "x$enable_ARB" = "xno"; then
-AC_MSG_RESULT([disabling ARB-extensions])
- AC_DEFINE_UNQUOTED(DONT_USE_ARB)
-fi
-
-# disabling NV-extensions
-if test "x$enable_NV" != "xno"; then
-dnl AC_CHECK_FUNC(glBindProgramNV, enable_NV="yes",enable_NV="no")
-AC_MSG_CHECKING(for glBindProgramNV)
-AC_LINK_IFELSE([AC_LANG_CALL([], [glBindProgramNV])], 
-        enable_NV="yes", enable_NV="no")
-AC_MSG_RESULT([$enable_NV])
-fi
-
-if test "x$enable_NV" = "xno"; then
-AC_MSG_RESULT([disabling NV-extensions])
- AC_DEFINE_UNQUOTED(DONT_USE_NV)
-fi
 
 ### make-depend flags
 if test "x$ac_cv_c_compiler_gnu" = "xyes"; then

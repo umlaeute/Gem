@@ -1,26 +1,11 @@
 
-
-/* the maximum openGL-version to use 
- * overrides the version found in the openGL-headers
- */
-#undef GEM_OPENGL_VERSION_MAX
-
-
 /* font rendering */
 #undef HAVE_LIBFTGL
 
 /* image loading / saving */
 #undef HAVE_LIBMAGICKPLUSPLUS
 
-
-/* disable the use of openGL-ARB extensions */
-#undef DONT_USE_ARB
-
-/* disable the use of openGL-nvidia extensions */
-#undef DONT_USE_NV
-
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
 #undef SIZEOF_UNSIGNED_INT
 
-#undef HAVE_GLSIZEIPTRARB

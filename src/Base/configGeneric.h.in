@@ -1,7 +1,6 @@
 /* fullscreen: querying via libXxf86vm */
 #undef HAVE_LIBXXF86VM
 
-
 /* font rendering */
 #undef HAVE_LIBFTGL
 
@@ -26,16 +25,9 @@
 /* posix threads */
 #undef HAVE_PTHREADS
 
-/* disable the use of openGL-ARB extensions */
-#undef DONT_USE_ARB
-
-/* disable the use of openGL-nvidia extensions */
-#undef DONT_USE_NV
-
 /* enable the use of the all-in-one video/movie objects */
 #undef NEW_VIDEOFILM
 
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
 #undef SIZEOF_UNSIGNED_INT
-#undef HAVE_GLSIZEIPTRARB

@@ -24,14 +24,6 @@
 /* use direct-show for video-in (e.g. for firewire,...) */
 #define HAVE_DIRECTSHOW
 
-
-/*
- * if we use nvidia's headers, we will most likely want to include gl/glext.h
- * if you don't have gl/glext.h, enable the following...
- */
-#define DONT_INCLUDE_GLEXT
-
-
 /*
  * we want libjpeg and libtiff for reading/writing images
  */
@@ -54,3 +46,4 @@
 # define snprintf _snprintf
 # define vsnprintf _vsnprintf
 #endif
+
