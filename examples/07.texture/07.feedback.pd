@@ -4,11 +4,11 @@
 #X obj 39 64 gemhead 10;
 #X obj 39 126 scaleXYZ 6 0.1 6;
 #X obj 55 95 hsl 128 15 0.02 1.53 0 0 empty empty empty -2 -6 0 8 -262139
--1 -1 500 1;
+-1 -1 0 1;
 #X obj 39 259 cube 0.34;
 #X obj 320 260 rotateXYZ;
 #X obj 357 237 hsl 128 15 -34 34 0 0 empty empty empty -2 -6 0 8 -261879
--1 -1 6500 1;
+-1 -1 6350 1;
 #X obj 40 364 light;
 #X obj 40 341 translateXYZ 0 0 4;
 #X obj 320 154 pix_snap2tex 0 0 512 512;
@@ -48,7 +48,7 @@
 #X connect 8 0 0 0;
 #X connect 9 0 0 0;
 #X restore 486 365 pd gemwin;
-#X msg 486 346 destroy;
+#X msg 486 346 create;
 #X text 482 325 Create window:;
 #X obj 320 92 trigger bang anything;
 #X connect 0 0 10 0;

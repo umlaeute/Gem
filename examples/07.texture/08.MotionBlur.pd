@@ -1,5 +1,5 @@
 #N canvas 13 0 1023 406 10;
-#X obj 32 260 world_light;
+#X obj 33 260 world_light;
 #X msg 282 164 bang;
 #X obj 282 144 metro 500;
 #X obj 282 126 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
@@ -14,7 +14,7 @@
 #X floatatom 766 262 5 0 0 0 - - -;
 #X obj 593 340 square 4;
 #X obj 771 114 vsl 15 128 0 1 0 0 empty empty empty 0 -8 0 8 -262144
--1 -1 11300 1;
+-1 -1 0 1;
 #X msg 63 118 frame \$1;
 #X floatatom 63 100 5 0 0 0 - - -;
 #X obj 593 296 colorRGB 1 1 1 0.888;
