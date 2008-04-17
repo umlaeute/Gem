@@ -33,7 +33,7 @@
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
 #X restore 455 392 pd gemwin;
-#X msg 455 373 destroy;
+#X msg 455 373 create;
 #X text 451 352 Create window:;
 #X obj 451 133 cnv 15 315 120 empty empty empty 20 12 0 14 -24198 -66577
 0;
