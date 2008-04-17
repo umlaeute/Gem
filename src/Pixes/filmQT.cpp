@@ -17,7 +17,7 @@
 
 #ifdef HAVE_QUICKTIME
 # ifdef __APPLE__
-#  include "OpenGL/glext.h"
+
 # else
 /* TextUtils.h is from QTdev */
 #  include "TextUtils.h"

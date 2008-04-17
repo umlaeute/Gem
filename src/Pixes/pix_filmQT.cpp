@@ -18,8 +18,8 @@
 
 #include "pix_filmQT.h"
 #ifdef __APPLE__
-#	include "OpenGL/glext.h"
-#else
+
+#else /* w32 */
 #	include "TextUtils.h"
 #endif
 

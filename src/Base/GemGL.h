@@ -30,7 +30,6 @@
 #include "Base/glew.h"
 
 #ifdef __APPLE__
-# include <OpenGL/glext.h>
 # include <OpenGL/OpenGL.h>
 #elif defined __WIN32__
 # include "Base/wglew.h"
