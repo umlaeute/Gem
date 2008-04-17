@@ -226,7 +226,8 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	#ifdef PPC
         image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
 	#else
-	image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
+	//image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
+	image_block->type	= GL_UNSIGNED_INT_8_8_8_8;
 	#endif
         //image_block->type	= GL_UNSIGNED_INT_8_8_8_8;
 	if ((*imageDescH)->depth <= 32) {
@@ -250,7 +251,8 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 
 #ifdef i386
 	OSErr err = QTNewGWorldFromPtr(&gw,
-                                    k32BGRAPixelFormat,
+                                   // k32BGRAPixelFormat,
+								   k32ARGBPixelFormat,
                                     &r, NULL, NULL, 0,
                                    // keepLocal,	
                                     //useDistantHdwrMem, 
