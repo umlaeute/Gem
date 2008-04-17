@@ -202,8 +202,12 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
   }
 
   register int pixsize = (image.ysize * image.xsize)>>1;
-
+#if defined __APPLE__ && defined BYTE_ORDER && defined LITTLE_ENDIAN && (BYTE_ORDER == LITTLE_ENDIAN)
+# warning this should be fixed in chRed,...
+  register __m64 gain_64 = _mm_setr_pi16(A, R, G, B);
+#else
   register __m64 gain_64 = _mm_setr_pi16(R, G, B, A);
+#endif
   register __m64*data_p= (__m64*)image.data;
   register __m64 null_64 = _mm_setzero_si64();
   register __m64 a0,a1;
