@@ -11,18 +11,15 @@
 # include <sys/types.h>
 # include <unistd.h>
 # include <fcntl.h>
-#include "m_pd.h"
-#endif
-#ifdef __WIN32__
-# define snprintf _snprintf
+#elif defined __WIN32__
 //apparently on OSX there is no member portPixMap in a GWorld so a function is used instead
 # define GetPortPixMap(x) (x)->portPixMap
 #endif
+
 #include <stdio.h>
 
 /* for post() and error() */
 #include "m_pd.h"
-
 
 /////////////////////////////////////////////////////////
 //
@@ -79,7 +76,14 @@ recordQT :: recordQT(int x, int y, int w, int h)
     codecContainer[i].ctype = codecName.cType;
     codecContainer[i].codec = codecName.codec;
     if(codecName.typeName) {
-      codecContainer[i].name = gensym(codecName.typeName)->s_name;
+	  int namelength=*(codecName.typeName);
+	  char*name=new char[namelength+1];
+	  strncpy(name, ((char*)codecName.typeName)+1, namelength);
+	  name[namelength]=0;
+	  t_symbol*s=gensym(name);
+      codecContainer[i].name = s->s_name;
+	  //post("codec: '%s' %d", name, namelength);
+	  free(name);
     } else {
       codecContainer[i].name = NULL;
     }
@@ -540,13 +544,14 @@ bool recordQT :: position(int x, int y)
 /////////////////////////////////////////////////////////
 bool recordQT :: dialog()
 {
-  //if recording is going do not open the dialog
+  //if recording is going, do not open the dialog
   if (!m_recordStart) {
     post("recordQT : opening compression dialog");
     m_dialog = true;
     setupQT();
     return(true);
   }else{
+    error("recordQT: recording is running do not show up dialog...!");
     return(false);
   }
 }
@@ -560,6 +565,12 @@ int recordQT :: getNumCodecs()
   //get list of codecs installed  -- useful later
   return(numCodecContainer);
 }
+char*recordQT :: getCodecName(int i)
+{
+  if(i<0 || i>numCodecContainer)return NULL;
+  return (codecContainer[i].name);
+}
+
 
 /////////////////////////////////////////////////////////
 // deals with the name of a codec
@@ -569,8 +580,8 @@ bool recordQT :: setCodec(int num)
 {
   if(num<0 || num>numCodecContainer)return false;
 
-  m_codecType = codecContainer[i].ctype;
-  m_codec     = codecContainer[i].codec;
+  m_codecType = codecContainer[num].ctype;
+  m_codec     = codecContainer[num].codec;
   return true;
 }
 bool recordQT :: setCodec(char*codecName)
@@ -629,7 +640,7 @@ bool recordQT :: setCodec(char*codecName)
       break;
     default:
       /* hmmm... */
-      if(gensym(codecName)==codecContainer[i].name) {
+      if(gensym(codecName)==gensym(codecContainer[i].name)) {
         post("recordQT found '%s'", codecName);
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
@@ -652,7 +663,7 @@ bool recordQT :: open(char*filename)
 
   snprintf(m_filename, 80, "%s\0", filename);
   m_filename[79]=0;
-  post("recordQT : filename %s", m_filename);
+  post("recordQT : filename '%s'", m_filename);
 
   return true;
 }

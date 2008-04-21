@@ -183,7 +183,7 @@ void pix_record :: getCodecList()
 	  char*codecname=m_handle->getCodecName(i);
 	  char*descr=m_handle->getCodecDescription(i);
 	  if(codecname) {
-	   post("[pix_record]: codec%d: '%s': %s", i, codecname, descr);
+		  post("[pix_record]: codec%d: '%s': %s", i, codecname, (descr?descr:""));
        SETFLOAT (ap+0, (t_float)i);
        SETSYMBOL(ap+1, gensym(codecname));
        outlet_anything(m_outInfo, gensym("codec"), 2, ap);

@@ -75,7 +75,7 @@ class GEM_EXTERN recordQT : public record
   // call up compression dialog
   virtual bool	dialog();
   virtual int	getNumCodecs();
-  //virtual char* getCodecName(int n);
+  virtual char* getCodecName(int n);
   //virtual char* getCodecDescription(int n);
 
   virtual bool	setCodec(int num);
