@@ -159,6 +159,7 @@ class GEM_EXTERN recordQT : public record
   typedef struct codecListStorage{
     int		position;
     int		ctype;
+    char* name;
     CodecComponent		codec;
   };
   

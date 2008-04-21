@@ -78,6 +78,11 @@ recordQT :: recordQT(int x, int y, int w, int h)
     codecContainer[i].position = i;
     codecContainer[i].ctype = codecName.cType;
     codecContainer[i].codec = codecName.codec;
+    if(codecName.typeName) {
+      codecContainer[i].name = gensym(codecName.typeName)->s_name;
+    } else {
+      codecContainer[i].name = NULL;
+    }
   }
 
   //initialize member variables
@@ -553,21 +558,7 @@ bool recordQT :: dialog()
 int recordQT :: getNumCodecs()
 {
   //get list of codecs installed  -- useful later
-  CodecNameSpecListPtr codecList;
-  CodecNameSpec	codecName;
-  int	i;
-  int count;
-	
-  GetCodecNameList(&codecList,1);
-  post("recordQT : %i codecs installed",codecList->count);
-  if (codecList->count < 64) count = codecList->count; else count = 64;
-  for (i = 0; i < count; i++){
-    codecName = codecList->list[i];
-    post("recordQT: codec %i '%s' %i ctype %d",i,codecName.typeName+1, codecName.cType,codecName.codec);
-    codecContainer[i].position = i;
-    codecContainer[i].ctype = codecName.cType;
-  }
-  return codecList->count;
+  return(numCodecContainer);
 }
 
 /////////////////////////////////////////////////////////
@@ -576,52 +567,77 @@ int recordQT :: getNumCodecs()
 /////////////////////////////////////////////////////////
 bool recordQT :: setCodec(int num)
 {
-  // not yet implemented
-  return false;
+  if(num<0 || num>numCodecContainer)return false;
+
+  m_codecType = codecContainer[i].ctype;
+  m_codec     = codecContainer[i].codec;
+  return true;
 }
 bool recordQT :: setCodec(char*codecName)
 {
 	int	i;
+  int requestedCodec=0;
+  if (!(strncmp(codecName,"pjpeg",5)))       requestedCodec=1;
+  else if (!(strncmp(codecName,"aic",3)))    requestedCodec=2;
+  else if (!(strncmp(codecName,"anim",4)))   requestedCodec=3;
+  else if (!(strncmp(codecName,"dvntsc",6))) requestedCodec=4;
+  else if (!(strncmp(codecName,"dvpal",5)))  requestedCodec=5;
 
 	post("recordQT set %s",codecName);
-		
-	for(i=0; i < 64; i++)
-    {
-      if (codecContainer[i].ctype == kJPEGCodecType  && !(strncmp(codecName,"pjpeg",5))){
-        post("pix_recordQT found Photo Jpeg");
-        m_codecType = kJPEGCodecType;
-        m_codec = codecContainer[i].codec;
-        return true;
-      }
 
-      if ((int)codecContainer[i].ctype == 'icod' && !(strncmp(codecName,"aic",3))) {
-        post("pix_recordQT found Apple Intermediate Codec");
-        m_codecType = 'icod';
-        m_codec = codecContainer[i].codec;
+	for(i=0; i < numCodecContainer; i++)  {
+    switch(requestedCodec) {
+    case 1: /* PJPEG */
+      if (codecContainer[i].ctype == kJPEGCodecType) {
+        post("recordQT found Photo Jpeg");
+        m_codecType = codecContainer[i].ctype;
+        m_codec     = codecContainer[i].codec;
         return true;
       }
-
-      if (codecContainer[i].ctype == kAnimationCodecType  && !(strncmp(codecName,"anim",4))){
-        post("pix_recordQT found Animation");
-        m_codecType = kAnimationCodecType;
-        m_codec = codecContainer[i].codec;
+      break;
+    case 2: /* AIC */
+      if ((int)codecContainer[i].ctype == 'icod') {
+        post("recordQT found Apple Intermediate Codec");
+        m_codecType = codecContainer[i].ctype;
+        m_codec     = codecContainer[i].codec;
         return true;
       }
-
-      if (codecContainer[i].ctype == kDVCNTSCCodecType  && !(strncmp(codecName,"dvntsc",6))){
-        post("pix_recordQT found DV NTSC");
-        m_codecType = kDVCNTSCCodecType;
-        m_codec = codecContainer[i].codec;
+      break;
+    case 3: /* Animation */
+      if (codecContainer[i].ctype == kAnimationCodecType) {
+        post("recordQT found Animation");
+        m_codecType = codecContainer[i].ctype;
+        m_codec     = codecContainer[i].codec;
         return true;
       }
-
-      if (codecContainer[i].ctype == kDVCPALCodecType  && !(strncmp(codecName,"dvpal",5))){
-        post("pix_recordQT found DV PAL");
-        m_codecType = kDVCPALCodecType;
-        m_codec = codecContainer[i].codec;
+      break;
+    case 4: /* DV NTSC */
+      if (codecContainer[i].ctype == kDVCNTSCCodecType) {
+        post("recordQT found DV NTSC");
+        m_codecType = codecContainer[i].ctype;
+        m_codec     = codecContainer[i].codec;
         return true;
       }
+      break;
+    case 5: /* DV PAL */
+      if (codecContainer[i].ctype == kDVCPALCodecType) {
+        post("recordQT found DV PAL");
+        m_codecType = codecContainer[i].ctype;
+        m_codec     = codecContainer[i].codec;
+        return true;
+      }
+      break;
+    default:
+      /* hmmm... */
+      if(gensym(codecName)==codecContainer[i].name) {
+        post("recordQT found '%s'", codecName);
+        m_codecType = codecContainer[i].ctype;
+        m_codec     = codecContainer[i].codec;
+        return true;
+      }
+      break;
     }
+  }
 	
 	//no codec found
 	return false;
