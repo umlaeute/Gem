@@ -239,7 +239,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 #endif
   //give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
   err = QTNewGWorldFromPtr(&m_srcGWorld,
-                           k32RGBAPixelFormat,
+                           colorspace,
                            &m_srcRect,
                            NULL,
                            NULL,
@@ -491,7 +491,14 @@ int recordQT :: putFrame(imageStruct*img)
   //record
   if (m_recordStart) {
     //if setupQT() has not been run do that first
-    if (!m_recordSetup) setupQT();
+      if (!m_recordSetup) {
+          setupQT();
+          if(!m_recordSetup) {
+            /* failed! */
+            m_recordStop = 1;
+            return -1;
+          }
+      }
 		
     //should check if the size has changed or else we will freak the compressor's trip out
     if (m_width == m_prevWidth && m_height == m_prevHeight) {
