@@ -13,9 +13,6 @@
 
 #include "Pixes/record.h"
 
-//#if defined (__WIN32__) || defined(__APPLE__)
-
-
 #if defined HAVE_QUICKTIME && defined __WIN32__ 
 # include <QTML.h>
 # include <Movies.h>
@@ -92,11 +89,11 @@ class GEM_EXTERN recordQT : public record
 
   ////////
   // recording start
-//  bool			m_recordStart;
+  //  bool			m_recordStart;
 	
   ////////
   // recording start
-//  bool			m_recordStop;
+  //  bool			m_recordStop;
 	
   //////
   // is recording setup and ready to go?
@@ -116,19 +113,19 @@ class GEM_EXTERN recordQT : public record
   imageStruct	*m_compressImage;
 
 
-#ifdef __APPLE__
-		UnsignedWide startTime, endTime;
-#endif
+# ifdef __APPLE__
+  UnsignedWide startTime, endTime;
+# endif
 
-#ifdef __WIN32__
-		LARGE_INTEGER freq, startTime, endTime;
-#endif
-		float seconds;
+# ifdef __WIN32__
+  LARGE_INTEGER freq, startTime, endTime;
+# endif
+  float seconds;
 
-		//number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
-		int					m_ticks;
+  //number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
+  int					m_ticks;
 		
-		bool	m_firstRun;
+  bool	m_firstRun;
 
   //////////
   // QT stuff
@@ -165,7 +162,8 @@ class GEM_EXTERN recordQT : public record
     CodecComponent		codec;
   };
   
-  codecListStorage	codecContainer[64];//anyone with more than 64 codecs can change this
-#endif
+  codecListStorage *codecContainer;
+  int numCodecContainer;
+#endif /* QT */
 };
 #endif	// for header file
