@@ -36,11 +36,6 @@
 #include "Controls/gemhead.h"
 
 #include "Base/config.h"
-
-#if !defined __APPLE__ && !defined DONT_INCLUDE_GLEXT
-# include <GL/glext.h>
-#endif
-
 #include "GemSIMD.h"
 
 #ifdef DEBUG
