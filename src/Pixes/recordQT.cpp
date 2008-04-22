@@ -278,7 +278,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   if (m_dialog ){	
     //close the component if already open
     if (stdComponent) compErr = CloseComponent(stdComponent);
-    if (compErr != noErr) error("recordQT : CloseComponent failed with error %d",compErr);		
+    if (compErr != noErr) error("recordQT : CloseComponent failed with error %d",compErr);
 
     //open a new component from scratch
     stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
@@ -363,6 +363,7 @@ void recordQT :: close()
 {
   ComponentResult			compErr = noErr;
   OSErr					err;
+  m_recordStart = 0; //just to be sure
 	
   err = EndMediaEdits(media);
 
@@ -390,7 +391,6 @@ void recordQT :: close()
 
   m_recordStop = 0;
   m_recordSetup = 0;
-  m_recordStart = 0; //just to be sure
 	
   m_currentFrame = 0; //reset the frame counter?
 
@@ -558,7 +558,7 @@ bool recordQT :: dialog()
     setupQT();
     return(true);
   }else{
-    error("recordQT: recording is running do not show up dialog...!");
+    error("recordQT: recording is running; refusing to show up dialog...!");
     return(false);
   }
 }
@@ -666,7 +666,10 @@ bool recordQT :: open(char*filename)
   // if recording is going, do not accept a new file name
   // on OSX changing the name while recording won't have any effect
   // but it will give the wrong message at the end if recording
-  if (m_recordStart) return false;
+    if (m_recordStart) {
+        error("recordQT: cannot set filename while recording is running!");
+        return false;
+    }
 
   snprintf(m_filename, 80, "%s\0", filename);
   m_filename[79]=0;
