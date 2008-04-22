@@ -38,11 +38,6 @@ recordQT :: recordQT(int x, int y, int w, int h)
     m_dialog(false),
     m_prevHeight(0), m_prevWidth(0),
     m_compressImage(NULL),
-#ifdef __APPLE__
-    startTime(0), endTime(0),
-#elif __WIN32__
-    freq(0), startTime(0), endTime(0),
-#endif
     seconds(0.f),
     m_ticks(20),
     m_firstRun(true),
@@ -51,7 +46,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
     m_depth(0),
     m_codecSet(false),
     m_codecQualitySet(false),
-    nFileRefNum(0), mResID(0),
+    nFileRefNum(0), nResID(0),
     codecContainer(NULL), numCodecContainer(0)
 {
   post("using recordQT");
@@ -563,6 +558,7 @@ bool recordQT :: dialog()
 {
   //if recording is going, do not open the dialog
   if (!m_recordStart) {
+    ComponentResult			compErr = noErr;
     post("recordQT: opening compression dialog");
     m_dialog = true;
     setupQT();
