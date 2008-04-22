@@ -1,9 +1,18 @@
+set ZIP=%ProgramFiles%\7-Zip\7z.exe
+rem set ZIP=echo
+
 set GEMDIR=gem-%DATE:~6,4%%DATE:~3,2%%DATE:~0,2%
+
+set GEMARC=gem-CVS%DATE:~6,4%%DATE:~3,2%%DATE:~0,2%-W32-i686
 
 mkdir %GEMDIR%
 
 xcopy Gem.dll %GEMDIR%\
 copy README_W32.txt.template %GEMDIR%\README_W32.txt
+
+%ZIP% a %GEMARC%-bin.zip %GEMDIR%
+
+read
 
 cd ..\..\
 
@@ -25,3 +34,5 @@ copy GnuGPL.LICENSE build\win-vs2003\%GEMDIR%
 
 
 cd build\win-vs2003
+
+%ZIP% a %GEMARC%-bin-doc.zip %GEMDIR%
