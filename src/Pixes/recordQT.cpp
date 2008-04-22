@@ -198,11 +198,15 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 #elif defined __WIN32__
   else {
       /* just create this file, in case it isn't there already...weird hack */
-    FILE*fil=fopen(m_filename, "a");
-    fclose(fil);
+    char filename[QT_MAX_FILENAMELENGTH];
+    FILE*fil=NULL;
+    
+    fil=fopen(m_filename, "a");
+    if(NULL!=fil)fclose(fil);
 
-    c2pstr(m_filename);
-    FSMakeFSSpec (0, 0L, (UInt8*)m_filename, &theFSSpec);
+    snprintf(filename, QT_MAX_FILENAMELENGTH, m_filename);
+    c2pstr(filename);
+    FSMakeFSSpec (0, 0L, (UInt8*)filename, &theFSSpec);
     if (err != noErr && err != -37){
       error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
       return;
@@ -404,10 +408,8 @@ void recordQT :: close()
   m_currentFrame = 0; //reset the frame counter?
   m_firstRun = 1;
 
-  m_filename[0]=0;
-
   post("recordQT: movie written to %s",m_filename);
-  
+  m_filename[0]=0;
 }
 
 void recordQT :: compressFrame()
@@ -689,8 +691,8 @@ bool recordQT :: open(char*filename)
         return false;
     }
 
-  snprintf(m_filename, 80, "%s\0", filename);
-  m_filename[79]=0;
+  snprintf(m_filename, QT_MAX_FILENAMELENGTH, "%s\0", filename);
+  m_filename[QT_MAX_FILENAMELENGTH-1]=0;
   post("recordQT: filename '%s'", m_filename);
 
   return true;

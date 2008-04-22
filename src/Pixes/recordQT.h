@@ -11,6 +11,8 @@
 #ifndef INCLUDE_PIXES_RECORDQT_H_
 #define INCLUDE_PIXES_RECORDQT_H_
 
+#define QT_MAX_FILENAMELENGTH 256
+
 #include "Pixes/record.h"
 
 #if defined HAVE_QUICKTIME && defined __WIN32__ 
@@ -103,7 +105,7 @@ class GEM_EXTERN recordQT : public record
     	
   //////////
   // current file to write to
-  char	    	m_filename[80];
+  char	    	m_filename[QT_MAX_FILENAMELENGTH];
 
   //////////
   // previous dimensions to check
