@@ -498,7 +498,7 @@ bool filmDS :: open(char *filename, int format)
       DVFilter->Release();
     }
 	 
-  post("pix_movieDS: xsize %d ysize %d csize %",m_xsize, m_ysize, m_csize);
+  post("filmDS: xsize %d ysize %d csize %",m_xsize, m_ysize, m_csize);
 
   // Setup the pixBlock data based on the media type.
   // this is a guess at the fast past for pixels on Windows
@@ -551,7 +551,7 @@ bool filmDS :: open(char *filename, int format)
 
 #ifdef REGISTER_FILTERGRAPH
   if (FAILED(RetVal = filmAddGraphToRot(FilterGraph, &m_GraphRegister))){
-    error("pix_videoDS: failed to register filter graph with ROT!  hr=0x%X", RetVal);
+    error("filmDS: failed to register filter graph with ROT!  hr=0x%X", RetVal);
     m_GraphRegister = 0;
   }
 #endif

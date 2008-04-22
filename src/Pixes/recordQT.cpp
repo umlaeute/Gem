@@ -4,7 +4,6 @@
  *
  */
 
-//#if 0
 #include "recordQT.h"
 
 #ifdef __APPLE__
@@ -35,8 +34,25 @@ recordQT :: ~recordQT(){}
 #else
 recordQT :: recordQT(int x, int y, int w, int h)
   : record(x, y, w, h),
+    m_recordSetup(false),
+    m_dialog(false),
     m_prevHeight(0), m_prevWidth(0),
-    m_compressImage(NULL)
+    m_compressImage(NULL),
+#ifdef __APPLE__
+    startTime(0), endTime(0),
+#elif __WIN32__
+    freq(0), startTime(0), endTime(0),
+#endif
+    seconds(0.f),
+    m_ticks(20),
+    m_firstRun(true),
+    m_rowBytes(0),
+    dataSize(0),
+    m_depth(0),
+    m_codecSet(false),
+    m_codecQualitySet(false),
+    nFileRefNum(0), mResID(0),
+    codecContainer(NULL), numCodecContainer(0)
 {
   post("using recordQT");
 
@@ -56,7 +72,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
     error("recordQT: Could not initialize quicktime: error %d", err);
     return;
   }
-  post("pix_video: QT init done");
+  post("recordQT: QT init done");
 # endif // WINDOWS
 
   //get list of codecs installed  -- useful later
@@ -69,7 +85,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
   count=codecList->count;
   codecContainer=new codecListStorage[count];
   numCodecContainer=count;
-  post("recordQT : %i codecs installed",codecList->count);
+  post("recordQT: %i codecs installed",codecList->count);
   for (i = 0; i < count; i++){
     codecName = codecList->list[i];
     codecContainer[i].position = i;
@@ -92,17 +108,15 @@ recordQT :: recordQT(int x, int y, int w, int h)
   //initialize member variables
   stdComponent = NULL;
   hImageDesc = NULL;
-  nFileRefNum = 0;
   nResID = movieInDataForkResID;
   m_recordStart = 0;
   m_recordStop = 0;
-  m_recordSetup = 0;
   m_codecType = kJPEGCodecType;
 
   for(i = 0; i < count; i++){
     if (codecContainer[i].ctype == kJPEGCodecType) {
       m_codec = codecContainer[i].codec;
-      post("recordQT : pjpeg codec %i %i %i ctype", i, m_codecType, m_codec);
+      post("recordQT: found pjpeg codec %i %i %i ctype", i, m_codecType, m_codec);
       break;
     }
   }
@@ -110,11 +124,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
   m_codecSet = true;
   m_spatialQuality = codecNormalQuality; //codecHighQuality;
   m_codecQualitySet = true;
-  m_dialog = 0;
   m_currentFrame = 0;
-
-  m_firstRun = 1;
-  m_ticks = 20;
 
   stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
   if (stdComponent == NULL){
@@ -132,7 +142,7 @@ recordQT :: ~recordQT()
   ComponentResult			compErr = noErr;
   if (stdComponent != NULL){
     compErr = CloseComponent(stdComponent);
-    if (compErr != noErr) error("recordQT : CloseComponent failed with error %d",compErr);
+    if (compErr != noErr) error("recordQT: CloseComponent failed with error %d",compErr);
   }
 }
 
@@ -171,7 +181,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
       int fd;
       fd = ::open(m_filename, O_CREAT | O_RDWR, 0600);
       if (fd < 0){
-        error("recordQT : problem with fd");
+        error("recordQT: problem with fd");
         return ;
       }
       ::write(fd, " ", 1);
@@ -213,7 +223,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
                           &nFileRefNum,
                           &m_movie);
   if (err != noErr) {
-    error("recordQT : CreateMovieFile failed with error %d",err);
+    error("recordQT: CreateMovieFile failed with error %d",err);
     return;
   }
 
@@ -248,7 +258,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
                            m_rowBytes);
 
   if (err != noErr){
-    error("recordQT : QTNewGWorldFromPtr failed with error %d",err);
+    error("recordQT: QTNewGWorldFromPtr failed with error %d",err);
     return;
   }
   SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
@@ -278,38 +288,38 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   if (m_dialog ){	
     //close the component if already open
     if (stdComponent) compErr = CloseComponent(stdComponent);
-    if (compErr != noErr) error("recordQT : CloseComponent failed with error %d",compErr);
+    if (compErr != noErr) error("recordQT: CloseComponent failed with error %d",compErr);		
 
     //open a new component from scratch
     stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
     if (stdComponent == NULL){
-      error("recordQT failed to open compressor component");
+      error("recordQT: failed to open compressor component");
       return;
     }
 
-    post("recordQT : opening settings Dialog");
+    post("recordQT: opening settings Dialog");
     compErr = SCRequestSequenceSettings(stdComponent);
 
-    if (compErr != noErr) error("recordQT : SCRequestSequenceSettings failed with error %d",compErr);
+    if (compErr != noErr) error("recordQT: SCRequestSequenceSettings failed with error %d",compErr);
 
     compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
     compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 
-    if (compErr != noErr) error("recordQT : SCGetInfo failed with error %d",compErr);
+    if (compErr != noErr) error("recordQT: SCGetInfo failed with error %d",compErr);
 
     m_codecType = SpatialSettings.codecType;
     m_depth = SpatialSettings.depth;
     m_spatialQuality = SpatialSettings.spatialQuality;
     m_codec = SpatialSettings.codec;
 
-    post("recordQT : Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
-    post("recordQT : Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
-    post("recordQT : Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
-    post("recordQT : Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
-    post("recordQT : Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
-    post("recordQT : Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
-    post("recordQT : Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+    post("recordQT: Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+    post("recordQT: Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
+    post("recordQT: Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
+    post("recordQT: Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
+    post("recordQT: Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
+    post("recordQT: Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
+    post("recordQT: Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
 
     m_dialog = false; //don't keep doing it again
   }else{
@@ -330,17 +340,17 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   compErr = SCSetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
   compErr = SCSetInfo(stdComponent, scDataRateSettingsType, &datarate);
 
-  if (compErr != noErr) error("recordQT : SCSetInfo failed with error %d",compErr);
+  if (compErr != noErr) error("recordQT: SCSetInfo failed with error %d",compErr);
 
   compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),&m_srcRect,&hImageDesc);
   if (compErr != noErr) {
-    error("recordQT : SCCompressSequenceBegin failed with error %d",compErr);
+    error("recordQT: SCCompressSequenceBegin failed with error %d",compErr);
     return;
   }
 	
   err = BeginMediaEdits(media);
   if (err != noErr) {
-    error("recordQT : BeginMediaEdits failed with error %d",err);
+    error("recordQT: BeginMediaEdits failed with error %d",err);
     return;
   }
 
@@ -368,18 +378,18 @@ void recordQT :: close()
   err = EndMediaEdits(media);
 
   if (err != noErr) {
-    error("recordQT : EndMediaEdits failed with error %d",err);
+    error("recordQT: EndMediaEdits failed with error %d",err);
     return;  //no sense in crashing after this
 	}
 
   err = InsertMediaIntoTrack(track,0,0,GetMediaDuration(media),0x00010000);
-  if (err != noErr) error("recordQT : InsertMediaIntoTrack failed with error %d",err);
+  if (err != noErr) error("recordQT: InsertMediaIntoTrack failed with error %d",err);
 
   err = AddMovieResource(m_movie,nFileRefNum,&nResID,NULL);
-  if (err != noErr) error("recordQT : AddMovieResource failed with error %d",err);
+  if (err != noErr) error("recordQT: AddMovieResource failed with error %d",err);
 
   err = CloseMovieFile(nFileRefNum);
-  if (err != noErr) error("recordQT : CloseMovieFile failed with error %d",err);
+  if (err != noErr) error("recordQT: CloseMovieFile failed with error %d",err);
 
   DisposeMovie(m_movie);
   DisposeGWorld(m_srcGWorld);
@@ -387,7 +397,7 @@ void recordQT :: close()
 		
   compErr = SCCompressSequenceEnd(stdComponent);
 	
-  if (compErr != noErr) error("recordQT : SCCompressSequenceEnd failed with error %d",compErr);
+  if (compErr != noErr) error("recordQT: SCCompressSequenceEnd failed with error %d",compErr);
 
   m_recordStop = 0;
   m_recordSetup = 0;
@@ -396,7 +406,7 @@ void recordQT :: close()
 
   m_firstRun = 1;
 
-  post("recordQT : movie written to %s",m_filename);
+  post("recordQT: movie written to %s",m_filename);
 }
 
 void recordQT :: compressFrame()
@@ -452,7 +462,7 @@ void recordQT :: compressFrame()
                                     &dataSize,
                                     &syncFlag);
 
-  if (compErr != noErr) error("recordQT : SCCompressSequenceFrame failed with error %d",compErr);
+  if (compErr != noErr) error("recordQT: SCCompressSequenceFrame failed with error %d",compErr);
 										
   err = AddMediaSample(media,
                        compressedData,
@@ -464,7 +474,7 @@ void recordQT :: compressFrame()
                        syncFlag,
                        NULL);
 							
-  if (err != noErr) error("recordQT : AddMediaSample failed with error %d",err);
+  if (err != noErr) error("recordQT: AddMediaSample failed with error %d",err);
 
 #ifdef __APPLE__
 	::Microseconds(&startTime);					
@@ -553,7 +563,7 @@ bool recordQT :: dialog()
 {
   //if recording is going, do not open the dialog
   if (!m_recordStart) {
-    post("recordQT : opening compression dialog");
+    post("recordQT: opening compression dialog");
     m_dialog = true;
     setupQT();
     return(true);
@@ -673,10 +683,9 @@ bool recordQT :: open(char*filename)
 
   snprintf(m_filename, 80, "%s\0", filename);
   m_filename[79]=0;
-  post("recordQT : filename '%s'", m_filename);
+  post("recordQT: filename '%s'", m_filename);
 
   return true;
 }
 
 #endif // HAVE_QUICKTIME
-//#endif //0
