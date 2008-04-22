@@ -148,12 +148,13 @@ class GEM_EXTERN recordQT : public record
   CodecType				m_codecType;
   CodecComponent			m_codec;
   short					m_depth;
+  float m_frameRate;
+  float m_keyFrameRate;
   CodecQ					m_spatialQuality;
-  //set these to reflect if the codec settings are good or not
-  bool				m_codecSet;
-  bool				m_codecQualitySet;
   short		nFileRefNum;
   short		nResID;
+
+  void resetCodecSettings(void);
 		
   //this will hold the ctype value of the codecs listed by getCodecList()
   typedef struct codecListStorage{

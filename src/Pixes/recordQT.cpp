@@ -44,8 +44,8 @@ recordQT :: recordQT(int x, int y, int w, int h)
     m_rowBytes(0),
     dataSize(0),
     m_depth(0),
-    m_codecSet(false),
-    m_codecQualitySet(false),
+    m_frameRate(0), m_keyFrameRate(0),
+    m_spatialQuality(codecNormalQuality),
     nFileRefNum(0), nResID(0),
     codecContainer(NULL), numCodecContainer(0)
 {
@@ -116,9 +116,6 @@ recordQT :: recordQT(int x, int y, int w, int h)
     }
   }
 
-  m_codecSet = true;
-  m_spatialQuality = codecNormalQuality; //codecHighQuality;
-  m_codecQualitySet = true;
   m_currentFrame = 0;
 
   stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
@@ -200,6 +197,10 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   }
 #elif defined __WIN32__
   else {
+      /* just create this file, in case it isn't there already...weird hack */
+    FILE*fil=fopen(m_filename, "a");
+    fclose(fil);
+
     c2pstr(m_filename);
     FSMakeFSSpec (0, 0L, (UInt8*)m_filename, &theFSSpec);
     if (err != noErr && err != -37){
@@ -278,7 +279,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 #endif
 
   track = NewMovieTrack(m_movie,FixRatio(m_srcRect.right, 1),FixRatio(m_srcRect.bottom, 1),kNoVolume);
-  media = NewTrackMedia(track,VideoMediaType,600,NULL,0);
+  media = NewTrackMedia(track,VideoMediaType,600,nil,0);
 
   if (m_dialog ){	
     //close the component if already open
@@ -307,6 +308,8 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     m_depth = SpatialSettings.depth;
     m_spatialQuality = SpatialSettings.spatialQuality;
     m_codec = SpatialSettings.codec;
+    m_frameRate = TemporalSettings.frameRate;
+    m_keyFrameRate = TemporalSettings.keyFrameRate;
 
     post("recordQT: Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
     post("recordQT: Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
@@ -321,12 +324,14 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     //fill in manually
     SpatialSettings.codecType = m_codecType;
     SpatialSettings.codec = m_codec;
-    SpatialSettings.depth = 0; //should choose best depth
+    SpatialSettings.depth = m_depth; //should choose best depth
     SpatialSettings.spatialQuality = m_spatialQuality;
 		
     TemporalSettings.temporalQuality = m_spatialQuality;
-    TemporalSettings.frameRate = 0;
-    TemporalSettings.keyFrameRate = 0;
+    TemporalSettings.frameRate = m_frameRate;
+    TemporalSettings.keyFrameRate = m_keyFrameRate;
+
+    post("depth=%d\tframerate=%f\t%f", m_depth, m_frameRate, m_keyFrameRate);
   }
 
   datarate.frameDuration = 33;
@@ -342,7 +347,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     error("recordQT: SCCompressSequenceBegin failed with error %d",compErr);
     return;
   }
-	
+
   err = BeginMediaEdits(media);
   if (err != noErr) {
     error("recordQT: BeginMediaEdits failed with error %d",err);
@@ -396,12 +401,13 @@ void recordQT :: close()
 
   m_recordStop = 0;
   m_recordSetup = 0;
-	
   m_currentFrame = 0; //reset the frame counter?
-
   m_firstRun = 1;
 
+  m_filename[0]=0;
+
   post("recordQT: movie written to %s",m_filename);
+  
 }
 
 void recordQT :: compressFrame()
@@ -592,7 +598,7 @@ char*recordQT :: getCodecName(int i)
 bool recordQT :: setCodec(int num)
 {
   if(num<0 || num>numCodecContainer)return false;
-
+  resetCodecSettings();
   m_codecType = codecContainer[num].ctype;
   m_codec     = codecContainer[num].codec;
   return true;
@@ -614,6 +620,7 @@ bool recordQT :: setCodec(char*codecName)
     case 1: /* PJPEG */
       if (codecContainer[i].ctype == kJPEGCodecType) {
         post("recordQT found Photo Jpeg");
+        resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
         return true;
@@ -622,6 +629,7 @@ bool recordQT :: setCodec(char*codecName)
     case 2: /* AIC */
       if ((int)codecContainer[i].ctype == 'icod') {
         post("recordQT found Apple Intermediate Codec");
+        resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
         return true;
@@ -630,6 +638,7 @@ bool recordQT :: setCodec(char*codecName)
     case 3: /* Animation */
       if (codecContainer[i].ctype == kAnimationCodecType) {
         post("recordQT found Animation");
+        resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
         return true;
@@ -638,6 +647,7 @@ bool recordQT :: setCodec(char*codecName)
     case 4: /* DV NTSC */
       if (codecContainer[i].ctype == kDVCNTSCCodecType) {
         post("recordQT found DV NTSC");
+        resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
         return true;
@@ -646,6 +656,7 @@ bool recordQT :: setCodec(char*codecName)
     case 5: /* DV PAL */
       if (codecContainer[i].ctype == kDVCPALCodecType) {
         post("recordQT found DV PAL");
+        resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
         return true;
@@ -655,6 +666,7 @@ bool recordQT :: setCodec(char*codecName)
       /* hmmm... */
       if(gensym(codecName)==gensym(codecContainer[i].name)) {
         post("recordQT found '%s'", codecName);
+        resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
         return true;
@@ -663,8 +675,8 @@ bool recordQT :: setCodec(char*codecName)
     }
   }
 	
-	//no codec found
-	return false;
+    //no codec found
+    return false;
 }
 
 bool recordQT :: open(char*filename)
@@ -682,6 +694,16 @@ bool recordQT :: open(char*filename)
   post("recordQT: filename '%s'", m_filename);
 
   return true;
+}
+
+void recordQT :: resetCodecSettings(void) {
+    m_codecType = 0;
+    m_codec = 0;
+
+    m_depth = 0;
+    m_spatialQuality = codecNormalQuality;
+    m_frameRate = 0;
+    m_keyFrameRate = 0;
 }
 
 #endif // HAVE_QUICKTIME
