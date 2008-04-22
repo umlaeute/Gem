@@ -324,7 +324,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 	
   //reset frame counter for new movie file
   m_currentFrame = 0;
-  post("recordQT: setup end");
+  post("recordQT: setup done");
 }
 
 //
@@ -395,7 +395,7 @@ void recordQT :: compressFrame()
 	static float countFreq = 0;
 	if (m_firstRun)
     {
-      // LARGE_INTEGER freq;
+      /d/ LARGE_INTEGER freq;
       if (!QueryPerformanceFrequency(&freq))
         countFreq = 0;
       else
