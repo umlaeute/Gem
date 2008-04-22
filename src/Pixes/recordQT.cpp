@@ -395,7 +395,7 @@ void recordQT :: compressFrame()
 	static float countFreq = 0;
 	if (m_firstRun)
     {
-      /d/ LARGE_INTEGER freq;
+      // LARGE_INTEGER freq;
       if (!QueryPerformanceFrequency(&freq))
         countFreq = 0;
       else
