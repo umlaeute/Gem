@@ -88,20 +88,10 @@ class GEM_EXTERN recordQT : public record
   virtual void	setupQT();
 		
   virtual void	compressFrame();
-
-  ////////
-  // recording start
-  //  bool			m_recordStart;
-	
-  ////////
-  // recording start
-  //  bool			m_recordStop;
 	
   //////
   // is recording setup and ready to go?
   bool			m_recordSetup;
-	
-  bool			m_dialog;
     	
   //////////
   // current file to write to

@@ -35,7 +35,6 @@ recordQT :: ~recordQT(){}
 recordQT :: recordQT(int x, int y, int w, int h)
   : record(x, y, w, h),
     m_recordSetup(false),
-    m_dialog(false),
     m_prevHeight(0), m_prevWidth(0),
     m_compressImage(NULL),
     seconds(0.f),
@@ -285,58 +284,16 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   track = NewMovieTrack(m_movie,FixRatio(m_srcRect.right, 1),FixRatio(m_srcRect.bottom, 1),kNoVolume);
   media = NewTrackMedia(track,VideoMediaType,600,nil,0);
 
-  if (m_dialog ){	
-    //close the component if already open
-    if (stdComponent) compErr = CloseComponent(stdComponent);
-    if (compErr != noErr) error("recordQT: CloseComponent failed with error %d",compErr);		
-
-    //open a new component from scratch
-    stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
-	
-    if (stdComponent == NULL){
-      error("recordQT: failed to open compressor component");
-      return;
-    }
-
-    post("recordQT: opening settings Dialog");
-    compErr = SCRequestSequenceSettings(stdComponent);
-
-    if (compErr != noErr) error("recordQT: SCRequestSequenceSettings failed with error %d",compErr);
-
-    compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
-    compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
-
-    if (compErr != noErr) error("recordQT: SCGetInfo failed with error %d",compErr);
-
-    m_codecType = SpatialSettings.codecType;
-    m_depth = SpatialSettings.depth;
-    m_spatialQuality = SpatialSettings.spatialQuality;
-    m_codec = SpatialSettings.codec;
-    m_frameRate = TemporalSettings.frameRate;
-    m_keyFrameRate = TemporalSettings.keyFrameRate;
-
-    post("recordQT: Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
-    post("recordQT: Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
-    post("recordQT: Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
-    post("recordQT: Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
-    post("recordQT: Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
-    post("recordQT: Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
-    post("recordQT: Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
-
-    m_dialog = false; //don't keep doing it again
-  }else{
-    //fill in manually
-    SpatialSettings.codecType = m_codecType;
-    SpatialSettings.codec = m_codec;
-    SpatialSettings.depth = m_depth; //should choose best depth
-    SpatialSettings.spatialQuality = m_spatialQuality;
+  SpatialSettings.codecType = m_codecType;
+  SpatialSettings.codec = m_codec;
+  SpatialSettings.depth = m_depth;
+  SpatialSettings.spatialQuality = m_spatialQuality;
 		
-    TemporalSettings.temporalQuality = m_spatialQuality;
-    TemporalSettings.frameRate = m_frameRate;
-    TemporalSettings.keyFrameRate = m_keyFrameRate;
+  TemporalSettings.temporalQuality = m_spatialQuality;
+  TemporalSettings.frameRate = m_frameRate;
+  TemporalSettings.keyFrameRate = m_keyFrameRate;
 
-    post("depth=%d\tframerate=%f\t%f", m_depth, m_frameRate, m_keyFrameRate);
-  }
+  //post("depth=%d\tframerate=%f\t%f", m_depth, m_frameRate, m_keyFrameRate);
 
   datarate.frameDuration = 33;
 
@@ -567,9 +524,45 @@ bool recordQT :: dialog()
   //if recording is going, do not open the dialog
   if (!m_recordStart) {
     ComponentResult			compErr = noErr;
+
+    //close the component if already open
+    if (stdComponent) compErr = CloseComponent(stdComponent);
+    if (compErr != noErr) error("recordQT: CloseComponent failed with error %d",compErr);
+
     post("recordQT: opening compression dialog");
-    m_dialog = true;
-    setupQT();
+
+    //open a new component from scratch
+    stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
+	
+    if (stdComponent == NULL){
+      error("recordQT: failed to open compressor component");
+      return false;
+    }
+
+    post("recordQT: opening settings Dialog");
+    compErr = SCRequestSequenceSettings(stdComponent);
+
+    if (compErr != noErr) error("recordQT: SCRequestSequenceSettings failed with error %d",compErr);
+
+    compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
+    compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
+
+    if (compErr != noErr) error("recordQT: SCGetInfo failed with error %d",compErr);
+
+    m_codecType = SpatialSettings.codecType;
+    m_depth = SpatialSettings.depth;
+    m_spatialQuality = SpatialSettings.spatialQuality;
+    m_codec = SpatialSettings.codec;
+    m_frameRate = TemporalSettings.frameRate;
+    m_keyFrameRate = TemporalSettings.keyFrameRate;
+
+    post("recordQT: Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+    post("recordQT: Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
+    post("recordQT: Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
+    post("recordQT: Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
+    post("recordQT: Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
+    post("recordQT: Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
+    post("recordQT: Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
     return(true);
   }else{
     error("recordQT: recording is running; refusing to show up dialog...!");
