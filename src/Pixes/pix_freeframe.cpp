@@ -317,7 +317,7 @@ T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
   }
   dlerror();
 
-  plugmain = (T_FFPLUGMAIN)(unsigned)dlsym(plugin_handle, hookname);
+  plugmain = (T_FFPLUGMAIN)dlsym(plugin_handle, hookname);
 
 #elif defined __APPLE__
   CFURLRef bundleURL = NULL;
