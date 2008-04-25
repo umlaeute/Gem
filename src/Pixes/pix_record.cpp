@@ -211,7 +211,7 @@ void pix_record :: codecMess(t_atom *argv)
 
 void pix_record :: fileMess(int argc, t_atom *argv)
 {
-  /* LATER let the record()-handles chose whether they accept a handle
+  /* LATER let the record()-handles chose whether they accept an open request
    * and then try other handles (if available)
    * this would allow to use this object for streaming, virtual output devices,...
    */
@@ -219,6 +219,7 @@ void pix_record :: fileMess(int argc, t_atom *argv)
   
     int err=0;
 #ifndef HAVE_QUICKTIME
+    // ??? but why:
     m_handle->close();
 #endif
     switch(argc){
