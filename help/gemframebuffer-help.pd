@@ -7,15 +7,15 @@
 0;
 #X obj 477 41 gemhead 20;
 #X obj 664 306 gemhead;
-#X msg 615 98 dim 320 240;
+#X msg 615 98 dimen 320 240;
 #X obj 477 468 rotateXYZ;
 #X floatatom 794 427 5 0 0 0 - - -;
 #X msg 744 101 color 0 0 1 0;
-#X msg 602 79 dim 1024 1024;
+#X msg 602 79 dimen 1024 1024;
 #X msg 733 61 color 0 0 0 0;
 #X obj 477 422 t a b;
 #X floatatom 717 469 5 0 0 0 - - -;
-#X msg 549 232 mode \$1;
+#X msg 549 232 rectangle \$1;
 #X obj 549 214 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X msg 509 101 type FLOAT;
@@ -119,7 +119,7 @@
 #X connect 7 2 0 0;
 #X connect 8 0 9 0;
 #X restore 473 554 pd gemwin;
-#X msg 473 529 destroy;
+#X msg 473 529 create;
 #X text 471 513 Create window:;
 #X obj 637 552 t a;
 #X text 476 22 Example:;
@@ -145,13 +145,13 @@ use.;
 #X text 13 135 you need framebuffer support (and its driver) on your
 gfx-card;
 #X text 28 269 Inlet 1: message: type [BYTE | INT | FLOAT];
-#X text 27 337 Inlet 1: message: dim <x> <y>;
+#X text 27 337 Inlet 1: message: dimen <x> <y>;
 #X text 27 371 Inlet 1: message: color <r> <g> <b> <a>;
 #X text 26 452 Inlet 1: message: texunit <f>;
 #X text 27 302 Inlet 1: message: format [RGB|RGBA|RGB32|YUV];
-#X text 26 407 Inlet 1: message: mode [0|1];
+#X text 26 407 Inlet 1: message: rectangle [0|1];
 #X text 103 284 (type of the framebuffer data);
-#X text 102 352 (dimention of the framebuffer texture);
+#X text 102 352 (dimension of the framebuffer texture);
 #X text 106 487 (usefull only with shader);
 #X text 106 470 (change texunit of the texture);
 #X text 28 548 Outlet 2: texture Id;
