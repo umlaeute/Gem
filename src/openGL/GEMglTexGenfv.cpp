@@ -61,7 +61,7 @@ void GEMglTexGenfv :: pnameMess (t_float arg1) {	// FUN
 
 void GEMglTexGenfv :: paramsMess (int argc, t_atom*argv) {	// FUN
 	if(argc!=4){
-		post("GEMglTexGenfv:  needs 4 elements");
+		error("needs 4 elements");
 		return;
 	}
 	int i;
