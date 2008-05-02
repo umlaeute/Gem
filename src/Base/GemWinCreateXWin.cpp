@@ -102,16 +102,22 @@ static int dblBuf8Stereo[] =   {GLX_RGBA,
 								  GLX_STEREO,
                           None};
 
+static int xerr=0;
 int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
   // we don't really care about the error
   // let's hope for the best
-  printf("error handler: please report to the Gem-dev's!!\n");
+  if(event)
+    xerr=event->error_code;  
+
   if ( event->error_code != BadWindow ) {
     char buf[256];
     XGetErrorText (dpy, event->error_code, buf, sizeof(buf));
     error("GEM-Xwin: %s", buf);
   }
+  error("GEM-XWin: please report error#%d to the gem-dev's !!\n\thttp://lists.puredata.info/listinfo/gem-dev/", xerr);
+
+  printf("GEM-XWin: please report error#%d to the gem-dev's !!\n\thttp://lists.puredata.info/listinfo/gem-dev/\n", xerr);
   return (0);
 }
 
@@ -297,16 +303,25 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
    * http://biology.ncsa.uiuc.edu/library/SGI_bookshelves/SGI_Developer/books/OpenGL_Porting/sgi_html/apf.html
    * LATER think about reacting on this event...
    */
-
-  if ((info.delete_atom = XInternAtom(info.dpy, "WM_DELETE_WINDOW",
-                              True)) != None)
+  info.delete_atom = XInternAtom(info.dpy, "WM_DELETE_WINDOW", True);
+  if (info.delete_atom != None)
     XSetWMProtocols(info.dpy, info.win, &info.delete_atom,1);
 
   XSetStandardProperties(info.dpy, info.win,
 			 hints.title, "gem", 
 			 None, 0, 0, NULL);
   try{
-    glXMakeCurrent(info.dpy, info.win, info.context);   
+    xerr=0;
+    glXMakeCurrent(info.dpy, info.win, info.context);
+
+    /* seems like the error-handler was called; so something did not work the way it should
+     * should we really prevent window-creation in this case?
+     * LATER re-think the entire dual-context thing
+     */
+    if(xerr!=0) {
+      destroyGemWindow(info);
+      return(0);
+    }
   }catch(void*e){
     error("GEM: Could not make glX-context current");
     destroyGemWindow(info);
