@@ -90,7 +90,7 @@ void gemwin :: bangMess()
         GemMan::render(NULL);
     }
   else 
-    error("GEM: no window");
+    error("no window");
 }
 
 /////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ void gemwin :: renderMess()
 	if (GemMan::getRenderState())
 		GemMan::render(NULL);
 	else
-		error("GEM: not in render mode");
+		error("not in render mode");
 }
 /////////////////////////////////////////////////////////
 // titleMess
@@ -140,13 +140,13 @@ void gemwin :: createMess(t_symbol* s)
   if ( !GemMan::windowExists() )  {
     GemMan::createContext(disp);
     if ( !GemMan::createWindow(disp) )  {
-      error("GEM: gemwin: no window made");
+      error("no window made");
       return;
     }
     GemMan::swapBuffers();	
     GemMan::swapBuffers();	
   } else
-    error("GEM: gemwin: window already made");
+    error("window already made");
 }
 
 /////////////////////////////////////////////////////////
@@ -169,11 +169,11 @@ void gemwin :: bufferMess(int buf)
 void gemwin :: stereoMess(int mode)
 {
   if (mode<0){
-    error("GEM: stereo-mode must not be %d", mode);
+    error("stereo-mode must not be %d", mode);
     return;
   }
   if (mode>1) {
-    error("GEM: only stereo-modes 1/0 are allowed!!!");
+    error("only stereo-modes 1/0 are allowed!!!");
     return;
   }
 
@@ -226,12 +226,12 @@ void gemwin :: secondscreenMess(int on)
 void gemwin :: dimensionsMess(int width, int height)
 {
   if (width <= 0) {
-    error("GEM: gemwin: width must be greater than 0");
+    error("width must be greater than 0");
     return;
   }
     
   if (height <= 0 ) {
-    error ("GEM: gemwin: height must be greater than 0");
+    error ("height must be greater than 0");
     return;
   }
   GemMan::m_width = width;
@@ -252,17 +252,17 @@ void gemwin :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 void gemwin :: colorMess(float red, float green, float blue, float alpha)
 {
-#ifdef __APPLE__
-  if ( !GemMan::windowExists() )  {
-    post("GEM: gemwin: !windowExists");
-    return;
-  }
-#endif
-  glClearColor(red, green, blue, alpha);
   GemMan::m_clear_color[0] = red;
   GemMan::m_clear_color[1] = green;
   GemMan::m_clear_color[2] = blue;
   GemMan::m_clear_color[3] = alpha;
+#ifdef __APPLE__
+  if ( !GemMan::windowExists() )  {
+    error("window does not exist yet!");
+    return;
+  }
+#endif
+  glClearColor(red, green, blue, alpha);
 }
 /////////////////////////////////////////////////////////
 // clearmaskMess
@@ -373,7 +373,7 @@ void gemwin :: fogModeMess(int mode)
       break;
 
     default :
-      error("GEM : fogmode must be 0, 1, 2 or 3");
+      error("fogmode must be 0, 1, 2 or 3");
       break;
     }
 }
@@ -413,8 +413,6 @@ void gemwin :: blurMess(float setting)
 /////////////////////////////////////////////////////////
 void gemwin :: fpsMess()
 {
-//GemMan::m_fps = 0;
- // post("gemwin: fps %d",GemMan::fps);
     outlet_float(m_FrameRate,GemMan :: fps);
 }
 
