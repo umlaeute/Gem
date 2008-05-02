@@ -95,7 +95,7 @@ void pix_coordinate :: coordsMess(int argc, t_atom *argv)
 {
     if (argc % 2)
     {
-    	post("GEM: pix_coordinate must have a even number of coordinates");
+    	error("must have a even number of coordinates");
     	return;
     }
     

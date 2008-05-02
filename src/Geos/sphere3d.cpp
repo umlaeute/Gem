@@ -50,7 +50,7 @@ void sphere3d :: createSphere3d()
   GLfloat rho=90.f, drho=0.f, theta=0.f, dtheta=0.f;
   GLint i, j;
 
-  post("creating sphere %d %d", slices, stacks);
+  //  post("creating sphere %d %d", slices, stacks);
 
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_FILL;
 
@@ -98,14 +98,12 @@ void sphere3d :: setMess(int i, int j,
                          GLfloat x, GLfloat y, GLfloat z)
 {
   int index=0;
-  post("setmess @ %d %d", i, j);
-
   if(i<0||i>=m_numSlices){
-    error("[sphere3d]: slice-index must be within 0..%d", m_numSlices-1);
+    error("slice-index must be within 0..%d", m_numSlices-1);
     return;
   }
   if(j<0||j>m_numStacks){
-    error("[sphere3d]: stack-index must be within 0..%d", m_numStacks);
+    error("stack-index must be within 0..%d", m_numStacks);
     return;
   }
 

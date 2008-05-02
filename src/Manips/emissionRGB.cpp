@@ -53,7 +53,7 @@ emissionRGB :: emissionRGB(int argc, t_atom *argv)
     }
     else
     {
-        error("GEM: emissionRGB: needs 0 or 3 arguments");
+        error("needs 0 or 3 arguments");
         m_vector[0] = 0.f;
         m_vector[1] = 0.f;
         m_vector[2] = 0.f;

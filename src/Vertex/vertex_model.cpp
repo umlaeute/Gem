@@ -95,11 +95,11 @@ void vertex_model :: openMess(t_symbol *filename)
   glmVertexNormals(m_model, 90);
   glmLinearTexture(m_model);
  
-  post("vertex_model: model->numtriangles %d",m_model->numtriangles);
-  post("vertex_model: model->numgroups %d",m_model->numgroups);
-  post("vertex_model: model->numvertices %d",m_model->numvertices);
-  post("vertex_model: model->numnormals %d",m_model->numnormals);
-  post("vertex_model: model->numtexcoords %d",m_model->numtexcoords);
+  post("model->numtriangles %d",m_model->numtriangles);
+  post("model->numgroups %d",m_model->numgroups);
+  post("model->numvertices %d",m_model->numvertices);
+  post("model->numnormals %d",m_model->numnormals);
+  post("model->numtexcoords %d",m_model->numtexcoords);
  
   numvertices = (int)(m_model->numtriangles * m_model->numgroups * 3);
   m_vertcount = numvertices;
@@ -195,9 +195,9 @@ void vertex_model :: openMess(t_symbol *filename)
   
   src4 = src4/4;
   src2 = src2/4;
-  post("vertex_model: i %d",i);
-  post("vertex_model: src2 %d",src2);
-  post("vertex_model: src4 %d",src4);
+  post("i %d",i);
+  post("src2 %d",src2);
+  post("src4 %d",src4);
 
   m_haveModel = 1;
   this->setModified();
@@ -220,7 +220,7 @@ void vertex_model :: render(GemState *state)
     
         
     size = m_vertcount * 4 * 4;
-   // post("vertex_model: m_vertcount %d",m_vertcount);
+   // post("m_vertcount %d",m_vertcount);
     memcpy(m_tempVA, m_VertexArray, size);
     memcpy(m_tempCA, m_ColorArray, size); 
     size = m_vertcount * 4 * 3;
@@ -229,31 +229,31 @@ void vertex_model :: render(GemState *state)
     if (state->numTexCoords) {
     
         if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
-            post("vertex_model: changing texcoords");
+            post("changing texcoords");
             
-            post("vertex_model: state->texCoordX(1) %f",state->texCoordX(1));
-            post("vertex_model: state->texCoordY(1) %f",state->texCoordY(1));
+            post("state->texCoordX(1) %f",state->texCoordX(1));
+            post("state->texCoordY(1) %f",state->texCoordY(1));
             maxX = state->texCoordX(1);
             maxY = state->texCoordY(1);
-            post("vertex_model: maxX %f",maxX);
-            post("vertex_model: maxY %f",maxY);
+            post("maxX %f",maxX);
+            post("maxY %f",maxY);
             //resize the texcoords
             //length = sizeof(m_TexCoordArray)/2;
             length = m_vertcount;
-            post("vertex_model: length %d",length);
-            post("vertex_model: m_tempTA[0] start %f",m_TexCoordArray[0]);
-            post("vertex_model: m_tempTA[1] start %f",m_TexCoordArray[1]);
-            post("vertex_model: m_tempTA[2] start %f",m_TexCoordArray[2]);
-            post("vertex_model: m_tempTA[length] start %f",m_TexCoordArray[length]);
+            post("length %d",length);
+            post("m_tempTA[0] start %f",m_TexCoordArray[0]);
+            post("m_tempTA[1] start %f",m_TexCoordArray[1]);
+            post("m_tempTA[2] start %f",m_TexCoordArray[2]);
+            post("m_tempTA[length] start %f",m_TexCoordArray[length]);
             for(i=0; i < length; i++){
                 m_TexCoordArray[src] = m_TexCoordArray[src] * maxX;
                 m_TexCoordArray[src+1] = m_TexCoordArray[src+1] * maxY;
                 src+=2;
                 }
-            post("vertex_model: src %d",src);
-            post("vertex_model: m_tempTA[0] end %f",m_TexCoordArray[0]);
-            post("vertex_model: m_tempTA[1] end %f",m_TexCoordArray[1]);
-            post("vertex_model: m_tempTA[src] end %f",m_TexCoordArray[src]);
+            post("src %d",src);
+            post("m_tempTA[0] end %f",m_TexCoordArray[0]);
+            post("m_tempTA[1] end %f",m_TexCoordArray[1]);
+            post("m_tempTA[src] end %f",m_TexCoordArray[src]);
             }
         } */
     
@@ -263,32 +263,32 @@ void vertex_model :: render(GemState *state)
      if (state->numTexCoords) {
     
         if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
-         //   post("vertex_model: changing texcoords");
+         //   post("changing texcoords");
             
-         //   post("vertex_model: state->texCoordX(1) %f",state->texCoordX(1));
-        //    post("vertex_model: state->texCoordY(1) %f",state->texCoordY(1));
+         //   post("state->texCoordX(1) %f",state->texCoordX(1));
+        //    post("state->texCoordY(1) %f",state->texCoordY(1));
             maxX = state->texCoordX(1);
             maxY = state->texCoordY(1);
-        //    post("vertex_model: maxX %f",maxX);
-        //    post("vertex_model: maxY %f",maxY);
+        //    post("maxX %f",maxX);
+        //    post("maxY %f",maxY);
             //resize the texcoords
             //length = sizeof(m_TexCoordArray)/2;
             length = m_vertcount;
-        //    post("vertex_model: length %d",length);
-        //    post("vertex_model: m_tempTA[0] start %f",m_tempTA[0]);
-        //    post("vertex_model: m_tempTA[1] start %f",m_tempTA[1]);
-        //    post("vertex_model: m_tempTA[2] start %f",m_tempTA[2]);
-        //    post("vertex_model: m_tempTA[length] start %f",m_tempTA[length]);
+        //    post("length %d",length);
+        //    post("m_tempTA[0] start %f",m_tempTA[0]);
+        //    post("m_tempTA[1] start %f",m_tempTA[1]);
+        //    post("m_tempTA[2] start %f",m_tempTA[2]);
+        //    post("m_tempTA[length] start %f",m_tempTA[length]);
         //can this be unrolled??
             for(i=0; i < length; i++){
                 m_tempTA[src] = m_TexCoordArray[src] * maxX;
                 m_tempTA[src+1] = m_TexCoordArray[src+1] * maxY;
                 src+=2;
                 }
-        //    post("vertex_model: src %d",src);
-        //    post("vertex_model: m_tempTA[0] end %f",m_tempTA[0]);
-        //    post("vertex_model: m_tempTA[1] end %f",m_tempTA[1]);
-        //    post("vertex_model: m_tempTA[src] end %f",m_tempTA[src]);
+        //    post("src %d",src);
+        //    post("m_tempTA[0] end %f",m_tempTA[0]);
+        //    post("m_tempTA[1] end %f",m_tempTA[1]);
+        //    post("m_tempTA[src] end %f",m_tempTA[src]);
         //    }
         }
         }else{

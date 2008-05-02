@@ -48,7 +48,7 @@ scaleXYZ :: scaleXYZ(int argc, t_atom *argv)
     }
     else
     {
-        error("GEM: scaleXYZ: needs 0, 1, or 3 arguments");
+        error("needs 0, 1, or 3 arguments");
         m_vector[0] = 1.f;
         m_vector[1] = 1.f;
         m_vector[2] = 1.f;

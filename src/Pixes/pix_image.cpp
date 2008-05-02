@@ -94,7 +94,7 @@ void pix_image :: threadMess(int onoff)
         if((err=pthread_create(&m_thread_id, 0, openThread, this)))
           {
             /* ack! thread creation failed! fall back to unthreaded loading */
-            //post("pix_image: couldn't create thread! %d", err);
+            //post("couldn't create thread! %d", err);
           } else {
 	  int counter=0;
 	  // wait until the thread is up and running
@@ -102,7 +102,7 @@ void pix_image :: threadMess(int onoff)
 	  pthread_mutex_unlock(m_mutex);
 	  // now m_thread_running has been set by the child thread */
 
-          //post("pix_image: created thread %x", m_thread_id);
+          //post("created thread %x", m_thread_id);
           return;
         }
       }
@@ -218,7 +218,7 @@ void pix_image :: openMess(t_symbol *filename)
     }
   m_loadedImage->copy2Image(&m_pixBlock.image);
   m_pixBlock.newimage = 1;
-  post("GEM: loaded image: %s", m_filename);
+  post("loaded image: %s", m_filename);
 }
 
 /////////////////////////////////////////////////////////
@@ -242,7 +242,7 @@ void pix_image :: render(GemState *state)
           if(m_loadedImage){
             m_loadedImage->copy2Image(&m_pixBlock.image);
             m_pixBlock.newimage = 1;
-            post("GEM: thread loaded image: %s", m_filename);
+            post("thread loaded image: %s", m_filename);
           }
           m_threadloaded=false;
           *m_filename=0;

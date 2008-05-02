@@ -320,7 +320,7 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
       }
     }
     // if we reach this, then no param-name was matching!
-    if(i>m_num)error("glsl_program: no method for '%s' (it's not uniform variable)", s->s_name);
+    if(i>m_num)error("no method for '%s' (it's not uniform variable)", s->s_name);
   }
 }
 

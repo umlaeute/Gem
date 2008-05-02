@@ -50,14 +50,14 @@ void pix_indycam :: zoomMess(int num, int denom)
 {
     if (!m_haveVideo)
     {
-    	error("GEM: pix_indycam: Connect to video first");
+    	error("Connect to video first");
     	return;
     }
     VLControlValue value;
     value.fractVal.numerator = num;
     value.fractVal.denominator = denom;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_ZOOM, &value) )
-    	error("GEM: pix_indycam: zoom error");
+    	error("zoom error");
 }
 
 /////////////////////////////////////////////////////////
@@ -68,13 +68,13 @@ void pix_indycam :: brightMess(int val)
 {
     if (!m_haveVideo)
     {
-    	error("GEM: pix_indycam: Connect to video first");
+    	error("Connect to video first");
     	return;
     }
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_BRIGHTNESS, &value) )
-    	error("GEM: pix_indycam: problem setting brightness");
+    	error("problem setting brightness");
 }
 
 /////////////////////////////////////////////////////////
@@ -85,13 +85,13 @@ void pix_indycam :: contrastMess(int val)
 {
     if (!m_haveVideo)
     {
-    	error("GEM: pix_indycam: Connect to video first");
+    	error("Connect to video first");
     	return;
     }
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_CONTRAST, &value) )
-    	error("GEM: pix_indycam: problem setting contrast");
+    	error("problem setting contrast");
 }
 
 /////////////////////////////////////////////////////////
@@ -102,13 +102,13 @@ void pix_indycam :: hueMess(int val)
 {
     if (!m_haveVideo)
     {
-    	error("GEM: pix_indycam: Connect to video first");
+    	error("Connect to video first");
     	return;
     }
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_HUE, &value) )
-    	error("GEM: pix_indycam: problem setting hue");
+    	error("problem setting hue");
 }
 
 /////////////////////////////////////////////////////////
@@ -119,13 +119,13 @@ void pix_indycam :: satMess(int val)
 {
     if (!m_haveVideo)
     {
-    	error("GEM: pix_indycam: Connect to video first");
+    	error("Connect to video first");
     	return;
     }
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_src, VL_VINO_INDYCAM_SATURATION, &value) )
-    	error("GEM: pix_indycam: problem setting saturation");
+    	error("problem setting saturation");
 }
 
 /////////////////////////////////////////////////////////

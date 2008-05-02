@@ -35,13 +35,13 @@ pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol)
 
     if (!row || !col )
     {
-    	error("GEM: pix_convolve: matrix must have some dimension");
+    	error("matrix must have some dimension");
     	return;
     }
     
     if (!(row % 2) || !(col % 2) )
     {
-    	error("GEM: pix_convolve: matrix must have odd dimensions");
+    	error("matrix must have odd dimensions");
     	return;
     }
     
@@ -711,7 +711,7 @@ void pix_convolve :: matrixMess(int argc, t_atom *argv)
 {
     if (argc != m_cols * m_rows)
     {
-    	error("GEM: pix_convolve: matrix size not correct");
+    	error("matrix size not correct");
     	return;
     }
 

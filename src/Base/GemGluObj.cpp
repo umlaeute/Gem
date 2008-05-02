@@ -86,7 +86,7 @@ void GemGluObj :: typeMess(t_symbol *type)
     m_drawType = GL_POINT;
     break;
   default:
-    error ("GEM: GemGluObj draw style");
+    error ("unknown draw style");
     return;
   }
   setModified();

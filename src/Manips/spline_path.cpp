@@ -47,7 +47,7 @@ void spline_path :: floatMess(float val)
 {
     if (!m_array)
     {
-        error("GEM: spline_path: no array");
+        error("no array");
         return;
     }
 
@@ -58,7 +58,7 @@ void spline_path :: floatMess(float val)
 
     if (size % m_numDimens)
     {
-        error("GEM: spline_path: size is not a mod of dimensions");
+        error("size is not a mod of dimensions");
         return;
     }
 

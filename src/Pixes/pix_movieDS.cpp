@@ -505,7 +505,7 @@ void pix_movieDS::realOpen(char *filename)
 		DVFilter->Release();
 	}
 	
-	post("pix_movieDS: xsize %d ysize %d csize %",m_xsize, m_ysize, m_csize);
+	post("xsize %d ysize %d csize %",m_xsize, m_ysize, m_csize);
 
 	// Setup the pixBlock data based on the media type.
 	// this is a guess at the fast past for pixels on Windows
@@ -706,7 +706,7 @@ void pix_movieDS::texFrame(GemState *state, int doit)
 			m_pixBlock.image.type,
 			m_pixBlock.image.data);
             
-		post("pix__movieDS: new rectangle texture size - glTexImage2D");
+		post("new rectangle texture size - glTexImage2D");
     }
 /*
     if
@@ -720,7 +720,7 @@ void pix_movieDS::texFrame(GemState *state, int doit)
                      GL_YCBCR_422_APPLE,
                      GL_UNSIGNED_SHORT_8_8_REV_APPLE,
 		     m_pixBlock.image.data);
-	    post("pix_texture: new film");
+	    post("new film");
             m_newFilm = 0; //just to be sure
       } 
 */

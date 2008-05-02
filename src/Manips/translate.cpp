@@ -40,7 +40,7 @@ translate :: translate(int argc, t_atom *argv)
     else if (argc == 0) vectorMess(1, 0, 0);
     else
     {
-        error("GEM: translate: needs 0, 3, or 4 arguments");
+        error("needs 0, 3, or 4 arguments");
         vectorMess(1, 0, 0);
     }
 

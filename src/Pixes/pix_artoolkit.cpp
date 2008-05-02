@@ -219,7 +219,7 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_artoolkit :: processGrayImage(imageStruct &image)
 {
-  error("pix_artoolkit requires RGBA images"); return;
+  error("requires RGBA images"); return;
   m_image.xsize = image.xsize;
   m_image.ysize = image.ysize;
   m_image.fromGray(image.data);
@@ -234,7 +234,7 @@ void pix_artoolkit :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_artoolkit :: processYUVImage(imageStruct &image)
 {
-  error("pix_artoolkit requires RGBA images"); return;
+  error("requires RGBA images"); return;
   m_image.xsize = image.xsize;
   m_image.ysize = image.ysize;
   m_image.fromUYVY(image.data);

@@ -35,7 +35,7 @@ ambient :: ambient(int argc, t_atom *argv)
     else if (argc == 0) ambientMess(0.2f, 0.2f, 0.2f, 1.f);
     else
     {
-        error("GEM: ambient: needs 0, 3, or 4 arguments");
+        error("needs 0, 3, or 4 arguments");
         ambientMess(0.2f, 0.2f, 0.2f, 1.f);
     }
 

@@ -82,12 +82,12 @@ void pix_buffer_write :: render(GemState*state){
   if (state && state->image && &state->image->image){
     if (state->image->newimage || m_frame!=m_lastframe){
       if(m_bindname==NULL || m_bindname->s_name==NULL){
-	post("pix_buffer_write: cowardly refusing to write to no pix_buffer");
+	error("cowardly refusing to write to no pix_buffer");
 	m_frame=-1; return;
       }
       Obj_header*ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
       if(ohead==NULL){
-	post("pix_buffer_write: couldn't find pix_buffer '%s'", m_bindname->s_name);
+	error("couldn't find pix_buffer '%s'", m_bindname->s_name);
 	m_frame=-1; return;
       }
       pix_buffer *buffer=(pix_buffer *)(ohead)->data;

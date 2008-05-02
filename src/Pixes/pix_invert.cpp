@@ -178,7 +178,6 @@ void pix_invert :: processYUVImage(imageStruct &image)
 void pix_invert :: processYUVAltivec(imageStruct &image)
 {
 int h,w,width;
-//post("pix_invert: Altivec");
    width = image.xsize/8;
 
     union{

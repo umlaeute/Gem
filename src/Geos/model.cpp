@@ -178,12 +178,10 @@ void model :: buildList()
 
   //  m_flags = GLM_SMOOTH | GLM_MATERIAL;
   if (!m_group){
-    //    post("model: drawing all groups");
     m_dispList = glmList(m_model, m_flags);
   }
   else
   {
-    //    post("model: drawing group %d",m_group);
     m_dispList = glmListGroup(m_model, m_flags,m_group);
     }
 }
@@ -199,7 +197,6 @@ void model :: render(GemState *state)
         currentW = state->texCoordY(1);
         
         if(m_model)glmLinearTexture(m_model,currentH,currentW);
-	//        post("model: resizing texcoords");
         buildList();
 	}
         

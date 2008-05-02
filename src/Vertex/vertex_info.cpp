@@ -55,12 +55,12 @@ void vertex_info :: render(GemState *state)
     
     VertexArray =state->VertexArray;
     if (state->VertexArray == NULL || state->VertexArraySize <= 0){
-        post("vertex_info: no vertex array!");
+        error("no vertex array!");
         return;
     }
     
     if (state->VertexArray == NULL ){
-        post("vertex_info: no color array!");
+        error("no color array!");
         return;
     }
     

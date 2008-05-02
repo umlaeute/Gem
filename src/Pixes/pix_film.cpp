@@ -158,7 +158,7 @@ void pix_film :: openMess(t_symbol *filename, int format)
 
     m_newFilm = 1;
   //outlet_float(m_outNumFrames, (float)m_numFrames);
-  post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
+  post("loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
 }
 
@@ -195,7 +195,7 @@ void pix_film :: render(GemState *state)
   if (m_newFilm){
     m_pixBlock.newfilm = 1;
     m_newFilm = 0;
-   // post("pix_film: new film set");
+   // post("new film set");
   }
   state->image = &m_pixBlock;
   
@@ -236,11 +236,11 @@ void pix_film :: postrender(GemState *state)
 void pix_film :: changeImage(int imgNum, int trackNum)
 {
   if (imgNum < 0){
-    error("GEM: pix_film: selection number must be > 0");
+    error("selection number must be > 0");
     imgNum=0;
   }
   if (trackNum < 0){
-    error("GEM: pix_film: track number must be > 0");
+    error("track number must be > 0");
     trackNum=0;
   }
 
@@ -255,14 +255,14 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 #endif
 #endif
   case GEM_MOVIE_MOV:
-    if (trackNum > m_numTracks-1) error("GEM: pix_film: track %d number too high (max %d) ", trackNum, m_numTracks-1);
+    if (trackNum > m_numTracks-1) error("track %d number too high (max %d) ", trackNum, m_numTracks-1);
     else m_track = trackNum;
   case GEM_MOVIE_AVI:
   default:
     if (imgNum > m_numFrames) {
       if (m_numFrames<0) m_reqFrame = imgNum;
       else m_reqFrame=m_numFrames;
-      //      else error("GEM: pix_film: frame %d exceeds max (%d)", imgNum, m_numFrames);
+      //      else error("frame %d exceeds max (%d)", imgNum, m_numFrames);
       //m_reqFrame = imgNum;
       return;
     } else m_reqFrame = imgNum;
@@ -276,7 +276,7 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 void pix_film :: csMess(int format){
 	if(format && format != m_colorspace){
 		m_colorspace=format;
-		post("pix_film: colorspace change will take effect the next time you load a film");
+		post("colorspace change will take effect the next time you load a film");
 	}
 }
 

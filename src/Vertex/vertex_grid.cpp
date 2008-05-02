@@ -83,17 +83,17 @@ void vertex_grid :: render(GemState *state)
         //make a ratio between the max and number of vertices on each axis for interpolation
         ratioX = maxX / m_x;
         ratioY = maxY / m_y;
-        post("vertex_grid: maxX %f",maxX);
-        post("vertex_grid: maxY %f",maxY);
-        post("vertex_grid: ratioX %f",ratioX);
-        post("vertex_grid: ratioY %f",ratioY);
+        post("maxX %f",maxX);
+        post("maxY %f",maxY);
+        post("ratioX %f",ratioX);
+        post("ratioY %f",ratioY);
         }
       
     ratioX = maxX / m_x;
     ratioY = maxY / m_y;
    if (m_x != m_oldx || m_y != m_oldy){
         
-        post("vertex_grid : resizing arrays");
+        post("resizing arrays");
         m_x += 1; //to give the correct number of columns;
         delete [] m_VertexArray;
         delete [] m_ColorArray;
@@ -104,7 +104,7 @@ void vertex_grid :: render(GemState *state)
         
         m_oldx = m_x;
         m_oldy = m_y;
-        post("vertex_grid : resizing arrays done");
+        post("resizing arrays done");
    }
     
     //this has to do two rows at once for TRIANGLE_STRIPS to draw correctly
@@ -140,15 +140,15 @@ void vertex_grid :: render(GemState *state)
             m_TexCoordArray[t+1] = (maxY - (h * ratioY));
             m_TexCoordArray[t+2] = (w * ratioX);
             m_TexCoordArray[t+3] = ((maxY - (h * ratioY)) - ratioY);
-           // post("vertex_grid:  %f %f",m_TexCoordArray[t],m_TexCoordArray[t+1]);
-           // post("vertex_grid:  %f %f",m_TexCoordArray[t+2],m_TexCoordArray[t+3]);
+           // post(" %f %f",m_TexCoordArray[t],m_TexCoordArray[t+1]);
+           // post(" %f %f",m_TexCoordArray[t+2],m_TexCoordArray[t+3]);
             
             t+=4;
         }
         
     }
     //post("");
-   //post("vertex_grid: m_TexCoordArray[t] %f",m_TexCoordArray[t]);
+   //post("m_TexCoordArray[t] %f",m_TexCoordArray[t]);
     state->VertexArray = m_VertexArray;
     state->ColorArray = m_ColorArray;
     state->TexCoordArray = m_TexCoordArray;

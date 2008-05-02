@@ -49,7 +49,7 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
     m_width = (int)atom_getfloat(&argv[0]);
     m_height = (int)atom_getfloat(&argv[1]);
   } else if (argc != 0){
-    error("GEM: pix_recordQT: needs 0, 2, or 4 values");
+    error("needs 0, 2, or 4 values");
     m_xoff = m_yoff = 0;
     m_width = m_height = 128;
 	 
@@ -76,16 +76,16 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {
-    error("filmQT: Could not initialize quicktime: error %d\n", err);
+    error("Could not initialize quicktime: error %d\n", err);
     return;
   }
 	
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    error("filmQT: Could not initialize quicktime: error %d\n", err);
+    error("Could not initialize quicktime: error %d\n", err);
     return;
   }
-  post("pix_video: QT init done");
+  post("QT init done");
 # endif // WINDOWS
 
   /* */
@@ -96,11 +96,11 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
 	int count;
 	
 	GetCodecNameList(&codecList,1);
-	post("pix_recordQT : %i codecs installed",codecList->count);
+	post("%i codecs installed",codecList->count);
 	if (codecList->count < 64) count = codecList->count; else count = 64;
 	for (i = 0; i < count; i++){
 		codecName = codecList->list[i];
-	//	post("pix_recordQT : codec %i %s %i ctype",i,codecName.typeName, codecName.cType);
+	//	post("codec %i %s %i ctype",i,codecName.typeName, codecName.cType);
 		codecContainer[i].position = i;
 		codecContainer[i].ctype = codecName.cType;
 		codecContainer[i].codec = codecName.codec;
@@ -119,7 +119,7 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   for(i = 0; i < count; i++){
 		if (codecContainer[i].ctype == kJPEGCodecType) m_codec = codecContainer[i].codec;
   }
-  post("pix_recordQT : pjpeg codec %i %i %i ctype",i,m_codecType, m_codec);
+  post("pjpeg codec %i %i %i ctype",i,m_codecType, m_codec);
  // m_codec = (CodecComponent)65731;//65719;//65708; //this is pjpeg????
   m_codecSet = true;
   m_spatialQuality = codecNormalQuality; //codecHighQuality;
@@ -137,11 +137,11 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   
   m_ticks = 20;
   
- // post("pix_recordQT : anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
+ // post("anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
    stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
 	if (stdComponent == NULL){
-		post("pix_recordQT failed to open compressor component");
+		post("failed to open compressor component");
 		return;
 	}
 	   
@@ -155,11 +155,11 @@ pix_recordQT :: ~pix_recordQT()
 {
 	ComponentResult			compErr = noErr;
 
-	post("pix_recordQT: deconstructor");
+	post("deconstructor");
 	if (stdComponent != NULL){
 	compErr = CloseComponent(stdComponent);
 	
-	if (compErr != noErr) post("pix_recordQT : CloseComponent failed with error %d",compErr);
+	if (compErr != noErr) post("CloseComponent failed with error %d",compErr);
 
 	}
 //most likely a dumb thing to do
@@ -167,7 +167,7 @@ pix_recordQT :: ~pix_recordQT()
 	#ifdef HAVE_QUICKTIME
 # ifdef __WIN32__
 	
-	post("pix_video: exiting QT");
+	post("exiting QT");
   // Initialize QuickTime
   ExitMovies();
   
@@ -199,7 +199,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	//post("filename %s",m_filename);
 
 	if (!m_filename[0]) {
-        post("pix_recordQT:  no filename passed");
+        error("no filename passed");
 		return;
 #ifdef __APPLE__
 		} else {            
@@ -209,13 +209,13 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 				int fd;
                 fd = open(m_filename, O_CREAT | O_RDWR, 0600);
                 if (fd < 0){
-                    post("pix_recordQT : problem with fd");
+                    error("problem with fd");
 					return ;
 					}
                         write(fd, " ", 1);
                         close(fd);
 						err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
-						//post("pix_recordQT : made new file %s",m_filename);
+						//post("made new file %s",m_filename);
 			}
 
     
@@ -223,7 +223,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 			
 
 			if (err) {
-				error("GEM: pix_recordQT: Unable to make file ref from filename %s", m_filename);
+				error("Unable to make file ref from filename %s", m_filename);
 				return;
 			}
 			
@@ -231,7 +231,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 			err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
 
 			if (err != noErr){
-					error("GEM: pix_recordQT: error %d in FSGetCatalogInfo()", err);
+					error("error %d in FSGetCatalogInfo()", err);
 					return;
 				}
 		
@@ -239,7 +239,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 			err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
 			
 			if (err != noErr && err != -37){
-					error("GEM: pix_recordQT: error %d in FSMakeFSSpec()", err);
+					error("error %d in FSMakeFSSpec()", err);
 					return;
 				}
 
@@ -259,7 +259,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		FSMakeFSSpec (0, 0L, (UInt8*)m_filename, &theFSSpec);
 	//err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
 	if (err != noErr && err != -37){
-					error("GEM: pix_recordQT: error %d in FSMakeFSSpec()", err);
+					error("error %d in FSMakeFSSpec()", err);
 					return;
 				}
 	
@@ -277,7 +277,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 							&m_movie);
 
 	if (err != noErr) {
-		post("pix_recordQT : CreateMovieFile failed with error %d",err);
+		error("CreateMovieFile failed with error %d",err);
 		m_recordSetup = -1;
 		return;
 		}
@@ -340,7 +340,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	}
 	
 	if (err != noErr){
-		post("pix_recordQT : QTNewGWorldFromPtr failed with error %d",err);
+		error("QTNewGWorldFromPtr failed with error %d",err);
 		return;
 		}
 	
@@ -363,7 +363,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
 	if (stdComponent == NULL){
-		post("pix_recordQT failed to open compressor component");
+		error("failed to open compressor component");
 		return;
 	}*/
 	
@@ -374,38 +374,38 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		//close the component if already open
 		if (stdComponent) compErr = CloseComponent(stdComponent);
 	
-		if (compErr != noErr) post("pix_recordQT : CloseComponent failed with error %d",compErr);
+		if (compErr != noErr) error("CloseComponent failed with error %d",compErr);
 		
 		//open a new component from scratch
 		stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
 	
 		if (stdComponent == NULL){
-			post("pix_recordQT failed to open compressor component");
+			error("failed to open compressor component");
 			return;
 		}
 		
-		post("pix_recordQT : opening settings Dialog");
+		post("opening settings Dialog");
 		compErr = SCRequestSequenceSettings(stdComponent);
 	
-		if (compErr != noErr) post("pix_recordQT : SCRequestSequenceSettings failed with error %d",compErr);
+		if (compErr != noErr) error("SCRequestSequenceSettings failed with error %d",compErr);
 	
 		compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
 		compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 	
-		if (compErr != noErr) post("pix_recordQT : SCGetInfo failed with error %d",compErr);
+		if (compErr != noErr) error("SCGetInfo failed with error %d",compErr);
 		
 		m_codecType = SpatialSettings.codecType;
 		m_depth = SpatialSettings.depth;
 		m_spatialQuality = SpatialSettings.spatialQuality;
 		m_codec = SpatialSettings.codec;
 		
-		post("pix_recordQT : Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
-		post("pix_recordQT : Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
-		post("pix_recordQT : Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
-		post("pix_recordQT : Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
-		post("pix_recordQT : Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
-		post("pix_recordQT : Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
-		post("pix_recordQT : Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+		post("Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+		post("Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
+		post("Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
+		post("Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
+		post("Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
+		post("Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
+		post("Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
 		
 		m_dialog = false; //don't keep doing it again
 		
@@ -416,9 +416,9 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 		compErr = SCGetInfo(stdComponent, scDataRateSettingsType, &datarate);
 	
-		if (compErr != noErr) post("pix_recordQT : SCGetInfo failed with error %d",compErr);
+		if (compErr != noErr) error("SCGetInfo failed with error %d",compErr);
 	*/	
-		//post("pix_recordQT : manually filling in codec info");
+		//post("manually filling in codec info");
 		//fill in manually
 		SpatialSettings.codecType = m_codecType;
 		SpatialSettings.codec = m_codec;
@@ -430,25 +430,25 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		TemporalSettings.keyFrameRate = 0;
 		
 		/*
-		post("pix_recordQT : manual returned SpatialSettings.codecType %d",SpatialSettings.codecType);
-		post("pix_recordQT : manual returned SpatialSettings.codec %d",SpatialSettings.codec);
-		post("pix_recordQT : manual returned SpatialSettings.depth %d",SpatialSettings.depth);
-		post("pix_recordQT : manual returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
-		post("pix_recordQT : manual returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
-		post("pix_recordQT : manual returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
-		post("pix_recordQT : manual returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+		post("manual returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+		post("manual returned SpatialSettings.codec %d",SpatialSettings.codec);
+		post("manual returned SpatialSettings.depth %d",SpatialSettings.depth);
+		post("manual returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
+		post("manual returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
+		post("manual returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
+		post("manual returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
 		*/
 		
 	}
 	
 	//if (m_codecType == kJPEGCodecType)
-	//post("pix_recordQT : SCSpatialSettings CodecType %d is p-jpeg",m_codecType);
+	//post("SCSpatialSettings CodecType %d is p-jpeg",m_codecType);
 	//m_codec = SpatialSettings.codec;
-	//post("pix_recordQT : SCSpatialSettings Codec %s",m_codec);
+	//post("SCSpatialSettings Codec %s",m_codec);
 	
-	//post("pix_recordQT : SCSpatialSettings depth %d",m_depth);
+	//post("SCSpatialSettings depth %d",m_depth);
 	
-	//if (m_spatialQuality == codecHighQuality) post("pix_recordQT : SCSpatialSettings SpatialQuality codecHighQuality");
+	//if (m_spatialQuality == codecHighQuality) post("SCSpatialSettings SpatialQuality codecHighQuality");
 	
 	datarate.frameDuration = 33;
 	
@@ -456,7 +456,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	compErr = SCSetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 	compErr = SCSetInfo(stdComponent, scDataRateSettingsType, &datarate);
 	
-	if (compErr != noErr) post("pix_recordQT : SCSetInfo failed with error %d",compErr);
+	if (compErr != noErr) error("SCSetInfo failed with error %d",compErr);
 	
 #ifdef __APPLE__
 	compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),&m_srcRect,&hImageDesc);
@@ -464,13 +464,13 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	compErr = SCCompressSequenceBegin(stdComponent,m_srcGWorld->portPixMap,&m_srcRect,&hImageDesc);
 #endif
 	if (compErr != noErr) {
-		post("pix_recordQT : SCCompressSequenceBegin failed with error %d",compErr);
+		error("SCCompressSequenceBegin failed with error %d",compErr);
 		return;
 		}
 	
 	err = BeginMediaEdits(media);
 	if (err != noErr) {
-		post("pix_recordQT : BeginMediaEdits failed with error %d",err);
+		error("BeginMediaEdits failed with error %d",err);
 		return;
 		}
 	
@@ -485,8 +485,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	//reset frame counter for new movie file
 	m_currentFrame = 0;
 
-	post("pix_recordQT: setup end");
-
+	post("setup done");
 }
 
 
@@ -501,16 +500,16 @@ void pix_recordQT :: stopRecording()
 	
 	
 	err = EndMediaEdits(media);
-	if (err != noErr) post("pix_recordQT : EndMediaEdits failed with error %d",err);
+	if (err != noErr) error("EndMediaEdits failed with error %d",err);
 	
 	err = InsertMediaIntoTrack(track,0,0,GetMediaDuration(media),0x00010000);
-	if (err != noErr) post("pix_recordQT : InsertMediaIntoTrack failed with error %d",err);
+	if (err != noErr) error("InsertMediaIntoTrack failed with error %d",err);
 
 	err = AddMovieResource(m_movie,nFileRefNum,&nResID,NULL);
-	if (err != noErr) post("pix_recordQT : AddMovieResource failed with error %d",err);
+	if (err != noErr) error("AddMovieResource failed with error %d",err);
 	
 	err = CloseMovieFile(nFileRefNum);
-	if (err != noErr) post("pix_recordQT : CloseMovieFile failed with error %d",err);
+	if (err != noErr) error("CloseMovieFile failed with error %d",err);
 	
 	DisposeMovie(m_movie);
 	DisposeGWorld(m_srcGWorld);
@@ -518,12 +517,12 @@ void pix_recordQT :: stopRecording()
 		
 	compErr = SCCompressSequenceEnd(stdComponent);
 	
-	if (compErr != noErr) post("pix_recordQT : SCCompressSequenceEnd failed with error %d",compErr);
+	if (compErr != noErr) error("SCCompressSequenceEnd failed with error %d",compErr);
 	
 	/*moved to destructor
 	compErr = CloseComponent(stdComponent);
 	
-	if (compErr != noErr) post("pix_recordQT : CloseComponent failed with error %d",compErr);
+	if (compErr != noErr) error("CloseComponent failed with error %d",compErr);
 	
 	*/
 	m_recordStop = 0;
@@ -536,7 +535,7 @@ void pix_recordQT :: stopRecording()
 	
 	outlet_float(m_outNumFrames,m_currentFrame);
 	
-	post("pix_recordQT : movie written to %s",m_filename);
+	post("movie written to %s",m_filename);
 
 }
 
@@ -592,7 +591,7 @@ void pix_recordQT :: compressFrame()
   QueryPerformanceCounter(&endTime);
 	float fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
 	seconds = ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
- // post("pix_recordQT: freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,(int)startTime.QuadPart,(int)endTime.QuadPart,fps,seconds);
+ // post("freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,(int)startTime.QuadPart,(int)endTime.QuadPart,fps,seconds);
 
 	m_ticks = (int)(600 * seconds);
 	
@@ -600,10 +599,10 @@ void pix_recordQT :: compressFrame()
 	}
 #endif
 
-	//post("pix_recordQT : frame compression took %f seconds %d ticks", seconds, m_ticks );
+	//post("frame compression took %f seconds %d ticks", seconds, m_ticks );
 	
 
-	//post("pix_recordQT: compressing frame");
+	//post("compressing frame");
 //apparently on OSX there is no member portPixMap in a GWorld so a function is used instead
 #ifdef __APPLE__
 
@@ -626,7 +625,7 @@ void pix_recordQT :: compressFrame()
 										&dataSize,
 										&syncFlag);
 #endif
-	if (compErr != noErr) post("pix_recordQT : SCCompressSequenceFrame failed with error %d",compErr);
+	if (compErr != noErr) error("SCCompressSequenceFrame failed with error %d",compErr);
 										 
 	err = AddMediaSample(media,
 							compressedData,
@@ -638,7 +637,7 @@ void pix_recordQT :: compressFrame()
 							syncFlag,
 							NULL);
 							
-	if (err != noErr) post("pix_recordQT : AddMediaSample failed with error %d",err);
+	if (err != noErr) error("AddMediaSample failed with error %d",err);
 	
 	#ifdef __APPLE__
 	::Microseconds(&startTime);
@@ -702,7 +701,7 @@ void pix_recordQT :: render(GemState *state)
 			//	post("grabbing frame");
 
 			}else{
-				post("pix_recordQT: movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
+				post("movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
 				m_recordStop = 1;
 				m_prevWidth = m_width;
 				m_prevHeight = m_height; //go ahead and change dimensions
@@ -750,11 +749,11 @@ void pix_recordQT :: dialogMess()
 {
 	//if recording is going do not open the dialog
   if (!m_recordStart) {
-		post("pix_recordQT : opening compression dialog");
+		post("opening compression dialog");
 		m_dialog = true;
 		setupQT();
   }else{
-		post("pix_recordQT : cannot open compression dialog while recording");
+		error("cannot open compression dialog while recording");
   }
 }
 
@@ -771,11 +770,11 @@ void pix_recordQT :: getCodecList()
 	int count;
 	
 	GetCodecNameList(&codecList,1);
-	post("pix_recordQT : %i codecs installed",codecList->count);
+	post("%i codecs installed",codecList->count);
 	if (codecList->count < 64) count = codecList->count; else count = 64;
 	for (i = 0; i < count; i++){
 		codecName = codecList->list[i];
-		post("pix_recordQT : codec %i %s %i ctype %d",i,codecName.typeName, codecName.cType,codecName.codec);
+		post("codec %i %s %i ctype %d",i,codecName.typeName, codecName.cType,codecName.codec);
 		codecContainer[i].position = i;
 		codecContainer[i].ctype = codecName.cType;
 		
@@ -804,17 +803,17 @@ void pix_recordQT :: codecMess(int argc, t_atom *argv)
 		//have to put the right things in here
 		m_codecType = kJPEGCodecType;
 		m_codec = (CodecComponent)65719;//65708; //this is pjpeg?!? 
-		post("pix_recordQT : kJPEGCodecType");
+		post("kJPEGCodecType");
 	}
 	//do the same for these
-	if (!strcmp(codecName,"animation")) post("pix_recordQT : kAnimationCodecType");
-	if (!strncmp(codecName,"yuv2",4)) post("pix_recordQT : kComponentVideoCodecType");
-	if (!strncmp(codecName,"yuvu",4)) post("pix_recordQT : kComponentVideoSigned");
-	if (!strncmp(codecName,"raw",3)) post("pix_recordQT : kRawCodecType");
-	if (!strncmp(codecName,"dvc",3)) post("pix_recordQT : kDVCNTSCCodecType");
-	if (!strncmp(codecName,"dvcp",4)) post("pix_recordQT : kDVCPALCodecType");
-	if (!strncmp(codecName,"y420",4)) post("pix_recordQT : kYUV420CodecType");
-	post("pix_recordQT : codecName %s",codecName);
+	if (!strcmp(codecName,"animation")) post("kAnimationCodecType");
+	if (!strncmp(codecName,"yuv2",4)) post("kComponentVideoCodecType");
+	if (!strncmp(codecName,"yuvu",4)) post("kComponentVideoSigned");
+	if (!strncmp(codecName,"raw",3)) post("kRawCodecType");
+	if (!strncmp(codecName,"dvc",3)) post("kDVCNTSCCodecType");
+	if (!strncmp(codecName,"dvcp",4)) post("kDVCPALCodecType");
+	if (!strncmp(codecName,"y420",4)) post("kYUV420CodecType");
+	post("codecName %s",codecName);
 
 }
 
@@ -841,14 +840,14 @@ if (m_recordStart) return;
   m_autocount = 0;
   setModified();
 
-post("pix_recordQT : filename %s",m_filename);
+post("filename %s",m_filename);
 
 }
 
 void pix_recordQT :: csMess(int format){
 	if(format && format != m_colorspace){
 		m_colorspace=format;
-		post("pix_film: colorspace change will take effect the next time you load a film");
+		post("colorspace change will take effect the next time you load a film");
 	}
 }
 
@@ -925,7 +924,7 @@ void pix_recordQT :: recordMessCallback(void *data, t_floatarg on)
 	if (!(!(int)on)) {
 		GetMyClass(data)->m_recordStart=1;
 		GetMyClass(data)->m_recordStop=0;
-		post("pix_video: recording on!");
+		GetMyClass(data)->post("recording on!");
 	}else{
 		GetMyClass(data)->m_recordStart=0;
 		GetMyClass(data)->m_recordStop=1;
@@ -946,7 +945,7 @@ void pix_recordQT :: codeclistMessCallback(void *data)
 void pix_recordQT :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   GetMyClass(data)->codecMess(argc, argv);
- // if (s->s_name == kJPEGCodecType) post("pix_recordQT : photo-jpeg codec"); else post("pix_recordQT : not photo-jpeg");
+ // if (s->s_name == kJPEGCodecType) post("photo-jpeg codec"); else post("not photo-jpeg");
 }
 
 void pix_recordQT :: colorspaceCallback(void *data, t_symbol *state)

@@ -48,7 +48,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
     m_width = (int)atom_getfloat(&argv[0]);
     m_height = (int)atom_getfloat(&argv[1]);
   } else if (argc != 0){
-    error("GEM: pix_write: needs 0, 2, or 4 values");
+    error("needs 0, 2, or 4 values");
     m_xoff = m_yoff = 0;
     m_width = m_height = 128;
   }

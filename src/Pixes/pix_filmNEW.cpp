@@ -406,11 +406,11 @@ void pix_filmNEW :: postrender(GemState *state)
 void pix_filmNEW :: changeImage(int imgNum, int trackNum)
 {
   if (imgNum < 0){
-    error("GEM: pix_filmNEW: selection number must be > 0");
+    error("selection number must be > 0");
     imgNum=0;
   }
   if (trackNum < 0){
-    error("GEM: pix_filmNEW: track number must be > 0");
+    error("track number must be > 0");
     trackNum=0;
   }
   if (m_handle){

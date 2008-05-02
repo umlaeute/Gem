@@ -135,7 +135,7 @@ void primTri :: typeMess(t_symbol *type)
 	    m_drawType = GL_POINTS;
     else
     {
-	    error ("GEM: primTri: draw style");
+	    error ("unknown draw style");
 	    return;
     }
     setModified();

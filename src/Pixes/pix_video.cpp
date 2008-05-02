@@ -84,7 +84,7 @@ void pix_video :: render(GemState *state)
 {
     if (!m_haveVideo)
     {
-	post("GEM: pix_video: do video for this OS");
+	post("no video for this OS");
 	return;
     }
 }
@@ -120,7 +120,7 @@ void pix_video :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 int pix_video :: startTransfer()
 {
-     post("no video available for this OS");
+  post("no video available for this OS");
     if (!m_haveVideo)
     	return(0);
 

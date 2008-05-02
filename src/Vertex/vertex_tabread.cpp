@@ -134,31 +134,31 @@ void vertex_tabread :: tableMess(int argc, t_atom*argv){
   switch(argc){
   case 4:
     if((argv+3)->a_type!=A_SYMBOL){
-      error("vertex_tabread: only symbolic table-names are accepted");
+      error("only symbolic table-names are accepted");
       return;
     }
     Ttable=atom_getsymbol(argv+3);
   case 3:
     if((argv+2)->a_type!=A_SYMBOL){
-      error("vertex_tabread: only symbolic table-names are accepted");
+      error("only symbolic table-names are accepted");
       return;
     }
     Ntable=atom_getsymbol(argv+2);
   case 2:
     if((argv+1)->a_type!=A_SYMBOL){
-      error("vertex_tabread: only symbolic table-names are accepted");
+      error("only symbolic table-names are accepted");
       return;
     }
     Ctable=atom_getsymbol(argv+1);
   case 1:
     if((argv+0)->a_type!=A_SYMBOL){
-      error("vertex_tabread: only symbolic table-names are accepted");
+      error("only symbolic table-names are accepted");
       return;
     }
     Vtable=atom_getsymbol(argv+0);
     break;
   default:
-    error("vertex_tabread: table must have 1, 2, 3 or 4 arguments");
+    error("table must have 1, 2, 3 or 4 arguments");
     return;
   }
 

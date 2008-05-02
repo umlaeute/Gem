@@ -154,7 +154,6 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
  int h,w,width;
    width = image.xsize/8;
    //format is U Y V Y
-//   post("pix_add : altivec test");
     union
     {
         //unsigned int	i;
@@ -292,7 +291,7 @@ void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
 
 void pix_add :: processDualImage(imageStruct &image, imageStruct &right){
   if (image.format!=right.format){
-    error("pix_add: no method to combine (0x%X) and (0x%X)", image.format, right.format);
+    error("no method to combine (0x%X) and (0x%X)", image.format, right.format);
     return;
   }
   int datasize = (image.xsize * image.ysize * image.csize)>>5;

@@ -160,7 +160,7 @@ void pix_rectangle :: vecColorMess(int argc, t_atom *argv)
   if (argc >= 4)alpha = atom_getfloat(&argv[3]);
   else if (argc == 3)	alpha = 1.f;
   else    {
-    error("GEM: pix_rectangle: not enough color values");
+    error("not enough color values");
     return;
   }
   red   = atom_getfloat(&argv[0]);
@@ -184,7 +184,7 @@ void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
   int X1, Y1, X2, Y2;
 
   if (argc < 4)    {
-    error("GEM: pix_rectangle: not enough coordinates");
+    error("not enough coordinates");
     return;
   }
   X1 = (int)atom_getfloat(&argv[0]);

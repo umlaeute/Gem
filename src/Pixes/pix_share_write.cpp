@@ -194,11 +194,11 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
 
   m_size = (size)?(size):(xsize * ysize * dummy.csize);
 	
-  post("pix_share_*: %dx%dx%d: %d",
+  post("%dx%dx%d: %d",
        xsize,ysize,dummy.csize, m_size);
 
 #ifdef __WIN32__
-  error("pix_share_*: no shared memory on w32!");
+  error("no shared memory on w32!");
 #else
 
   /* get a new segment with the size specified by the user
@@ -217,7 +217,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
       t_pixshare_header*h=(t_pixshare_header*)shmat(id,NULL,0666);
       /* read the size of the blob from the shared segment */
       if(h&&h->size){
-        error("pix_share_*: someone was faster: only got %d bytes instead of %d",
+        error("someone was faster: only got %d bytes instead of %d",
               h->size, m_size);
         m_size=h->size;
 
@@ -240,10 +240,10 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     t_pixshare_header *h=(t_pixshare_header *)shm_addr;
     h->size = (shm_desc.shm_segsz-sizeof(t_pixshare_header));
     
-    post("pix_share_*: shm:: id(%d) segsz(%d) cpid (%d) mem(0x%X)",
+    post("shm:: id(%d) segsz(%d) cpid (%d) mem(0x%X)",
          shm_id,shm_desc.shm_segsz,shm_desc.shm_cpid, shm_addr);
   } else {
-    error("pix_share_*: couldn't get shm_id: error %d", errno);
+    error("couldn't get shm_id: error %d", errno);
   }
 #endif /* __WIN32__ */
   return 0;
@@ -260,7 +260,7 @@ void pix_share_write :: render(GemState *state)
     int size=pix->xsize*pix->ysize*pix->csize;
 	
     if (!shm_addr){
-      error("pix_share_write: no shmaddr");
+      error("no shmaddr");
       return;
     }
 
@@ -274,7 +274,7 @@ void pix_share_write :: render(GemState *state)
       memcpy(shm_addr+sizeof(t_pixshare_header),pix->data,size);
     }
     else{
-      error("pix_share_write: input image too large: %dx%dx%d=%d>%d", 
+      error("input image too large: %dx%dx%d=%d>%d", 
            pix->xsize, pix->ysize, pix->csize, 
            pix->xsize*pix->ysize*pix->csize, 
            m_size);

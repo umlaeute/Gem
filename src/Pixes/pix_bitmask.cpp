@@ -148,7 +148,7 @@ void pix_bitmask :: vecMaskMess(int argc, t_atom *argv)
     else if (argc == 3) m_mask[chAlpha] = 255;
     else
     {
-    	error("GEM: pix_bitmask: not enough mask values");
+    	error("not enough mask values");
     	return;
     }
     m_mask[chRed] = atom_getint(&argv[0]);

@@ -79,7 +79,7 @@ void multimodel :: cleanMultimodel()
       }
       else {
 	while (ptr && ptr->next != m_loadedCache) ptr = ptr->next;
-	if (!ptr) error("GEM: multimodel: Unable to find model cache!");
+	if (!ptr) error("unable to find model cache!");
 	else {
 	  ptr->next = m_loadedCache->next;
 	  delete m_loadedCache;
@@ -101,11 +101,11 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
   cleanMultimodel();
     
   if (!topModel) {
-    post("GEM: multimodel: requires an int for number of models");
+    error("requires an int for number of models");
     return;
   }
   if (baseModel > topModel) {
-    post("GEM: multimodel: Top range less than base model");
+    error("top range less than base model");
     return;
   }
   if (skipRate < 1) skipRate = 1;
@@ -127,7 +127,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
     m_loadedCache->refCount++;
     m_curModel = 0;
     m_numModels = m_loadedCache->numModels;
-    post("GEM: multimodel: loaded models: %s from %d to %d skipping %d",
+    post("loaded models: %s from %d to %d skipping %d",
 	 filename->s_name, baseModel, topModel, skipRate);
     return;
   }
@@ -145,7 +145,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
   }
     
   if (!strPtr[i]) {
-    post("GEM: multimodel: Unable to find * in file name");
+    error("unable to find * in file name");
     return;
   }
 
@@ -209,7 +209,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
     ptr->next = newCache;
   }
 
-  post("GEM: multimodel: loaded models: %s %s from %d to %d skipping %d",
+  post("loaded models: %s %s from %d to %d skipping %d",
        bufName, postName, baseModel, topModel, skipRate);
   this->setModified();
 }
@@ -262,12 +262,12 @@ void multimodel :: changeModel(int modelNum)
 {
   if (modelNum >= m_numModels)
     {
-      error("GEM: multimodel: selection number too high: %d (max num is %d)", modelNum, m_numModels-1);
+      error("selection number too high: %d (max num is %d)", modelNum, m_numModels-1);
       return;
     }
   else if (modelNum < 0)
     {
-      error("GEM: multimodel: selection number must be > 0");
+      error("selection number must be > 0");
       return;
     }
   m_curModel = modelNum;

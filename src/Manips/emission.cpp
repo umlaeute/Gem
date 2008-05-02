@@ -37,7 +37,7 @@ emission :: emission(int argc, t_atom *argv)
     else if (argc == 0) emissionMess(0.f, 0.f, 0.f, 1.f);
     else
     {
-        error("GEM: emission: needs 0, 3, or 4 arguments");
+        error("needs 0, 3, or 4 arguments");
         emissionMess(0.f, 0.f, 0.f, 1.f);
     }
 

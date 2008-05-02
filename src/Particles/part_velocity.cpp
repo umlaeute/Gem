@@ -74,7 +74,7 @@ void part_velocity :: domainMess(t_symbol*s){
   else if (!strcmp(str,"blob"     ))m_domain=PDBlob;
   else if (!strcmp(str,"disc"     ))m_domain=PDDisc;
   else if (!strcmp(str,"rectangle"))m_domain=PDRectangle;
-  else error("GEM: part_velocity: unknown domain");
+  else error("unknown domain");
 }
 
 void part_velocity :: vectorMess(int argc, t_atom*argv){

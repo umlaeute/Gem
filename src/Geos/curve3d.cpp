@@ -152,7 +152,7 @@ void curve3d :: typeMess(t_symbol *type){
   else if (!strcmp(type->s_name, "default"))
     m_drawType = 1;
   else    {
-    error ("GEM : invalid draw style for curve3d?");
+    error ("unknown draw style");
     return;
   }
   setModified();

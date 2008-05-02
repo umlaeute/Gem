@@ -40,7 +40,7 @@ accumrotate :: accumrotate(int argc, t_atom *argv)
     { }
   else
     {
-      error("GEM: accumrotate: needs 0 or 3 arguments");
+      error("needs 0 or 3 arguments");
     }
 
   // create the new inlets

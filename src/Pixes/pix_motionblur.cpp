@@ -500,7 +500,7 @@ void pix_motionblur :: motionblurMessage(int argc, t_atom*argv){
     if(m_blur0<0)m_blur0=0;if(m_blur0>256)m_blur0=256;
     break;
   default:
-    error("pix_motionblur: specify 1 or 2 values");
+    error("specify 1 or 2 values");
   }
 }
 

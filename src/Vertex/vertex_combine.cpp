@@ -56,12 +56,12 @@ void vertex_combine :: render(GemState *state)
     
     VertexArray =state->VertexArray;
     if (state->VertexArray == NULL || state->VertexArraySize <= 0){
-        post("vertex_combine: no vertex array!");
+        post("no vertex array!");
         return;
     }
     
     if (state->ColorArray == NULL ){
-        post("vertex_combine: no color array!");
+        post("no color array!");
         return;
     }
     
@@ -153,20 +153,20 @@ void vertex_combine :: postrender(GemState *state)
 void vertex_combine :: rightRender(GemState *state)
 {
 if (state->VertexArray == NULL || state->VertexArraySize <= 0){
-        post("vertex_combine: no right vertex array!");
+        post("no right vertex array!");
         return;
     }
     
     if (state->ColorArray == NULL ){
-        post("vertex_combine: no right color array!");
+        post("no right color array!");
     }
 
     m_vertCountR = state->VertexArraySize;
     m_rightVertexArray = state->VertexArray;
     m_rightColorArray = state->ColorArray;
 
-    //post("vertex_combine: state->VertexArraySize %d", state->VertexArraySize);
-    //post("vertex_combine: rightRender");
+    //post("state->VertexArraySize %d", state->VertexArraySize);
+    //post("rightRender");
 } 
  
  

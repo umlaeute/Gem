@@ -288,9 +288,9 @@ void pix_dot :: drawDotGray(int xx, int yy, unsigned char c, unsigned char *dest
 void pix_dot :: sizeMess(int width, int height)
 {
   if(width>0)dots_width=width;
-  else  error("pix_dot: width must be > 0!");
+  else  error("width must be > 0!");
   if(height>0)dots_height=height;
-  else  error("pix_dot: height must be > 0!");
+  else  error("height must be > 0!");
   m_useScale=false;
   alreadyInit=0;
   myImage.setBlack();
@@ -343,7 +343,7 @@ void pix_dot :: processRGBAImage(imageStruct &image)
   
         pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
         if (pattern == NULL) {
-            post("pix_dot couldn't make pattern");
+            error("couldn't make RGBA pattern");
             return;
         }
        
@@ -408,7 +408,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
   
         pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
         if (pattern == NULL) {
-            post("pix_dot couldn't make pattern");
+            error("couldn't make YUV pattern");
             return;
         }
         
@@ -477,7 +477,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
   
         pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
         if (pattern == NULL) {
-            post("pix_dot couldn't make pattern");
+            error("couldn't make luma pattern");
             return;
         }
         
@@ -520,7 +520,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
 void pix_dot :: scaleMess(float state)
 {
   if(state<=0.f){
-    error("pix_dot: scale-Factor must not be < 0!");
+    error("scale-factor must not be < 0!");
     return;
   }
   m_scale=state; /* used to be as (int)cast, but i have removed this...*/

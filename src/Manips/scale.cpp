@@ -47,7 +47,7 @@ scale :: scale(int argc, t_atom *argv)
 	else if (argc == 0) vectorMess(1.f, 1.f, 1.f);
     else
     {
-        error("GEM: scale: needs 0, 1, 3, or 4 arguments");
+        error("needs 0, 1, 3, or 4 arguments");
         vectorMess(1.f, 1.f, 1.f);
     }
 

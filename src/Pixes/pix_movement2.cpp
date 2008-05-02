@@ -115,7 +115,7 @@ void pix_movement2 :: processImage(imageStruct &image){
   case GL_BGRA_EXT:     m_frame[m_frameIndex].fromBGRA(image.data); break;
   case GL_YCBCR_422_GEM:m_frame[m_frameIndex].fromUYVY(image.data); break;
   case GL_LUMINANCE:    m_frame[m_frameIndex].fromGray(image.data); break;
-  default: error("pix_movement2: no method for this kind of color"); return;
+  default: error("no method for this kind of color"); return;
   }
 
   // 2. if this is the first time, copy the current frame to the other frames as well
@@ -164,7 +164,7 @@ void pix_movement2 :: processImage(imageStruct &image){
   ------------------------------------------------------------*/
 void pix_movement2 :: treshMess(int tresh){
   if(tresh < (int)m_lowtresh){
-    post("[pix_movement2]: high treshold (%d) must not be less than low treshold(%d)", tresh, m_lowtresh);
+    error("high treshold (%d) must not be less than low treshold(%d)", tresh, m_lowtresh);
     return;
   }
   m_tresh = CLAMP(tresh);
@@ -176,7 +176,7 @@ void pix_movement2 :: treshMess(int tresh){
   ------------------------------------------------------------*/
 void pix_movement2 :: lowTreshMess(int tresh){
   if(tresh > (int)m_tresh){
-    post("[pix_movement2]: low treshold (%d) must not be be greater than high treshold(%d)", tresh, m_tresh);
+    error("low treshold (%d) must not be be greater than high treshold(%d)", tresh, m_tresh);
     return;
   }
   m_lowtresh = CLAMP(tresh);

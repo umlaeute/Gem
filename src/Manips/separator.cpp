@@ -124,7 +124,7 @@ void separator :: postrender(GemState *state)
    if (state->numTexCoords != m_state.numTexCoords){
 		if (state->texCoords) state->texCoords = NULL;
 		state->texCoords = new TexCoord[m_state.numTexCoords];
-		post("separator : state->numTexCoords %d != m_state.numTexCoords %d",state->numTexCoords,m_state.numTexCoords);
+		post("state->numTexCoords %d != m_state.numTexCoords %d",state->numTexCoords,m_state.numTexCoords);
 		state->numTexCoords = m_state.numTexCoords;
    }
    

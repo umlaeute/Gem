@@ -37,7 +37,7 @@ GemPathBase :: GemPathBase(int argc, t_atom *argv)
       if (m_numDimens < 1) m_numDimens = 1;
       if (m_numDimens > 64)
 	{
-	  error("GEM: GemPathBase: Too many dimensions, must be below 64");
+	  error("too many dimensions, must be below 64");
 	  m_numDimens = 64;
 	}
     }
@@ -61,7 +61,7 @@ void GemPathBase :: openMess(t_symbol *arrayname)
   m_array = (t_garray *)pd_findbyclass(arrayname, garray_class);
   if (!m_array)
     {
-      error("GEM: GemPathBase: unable to find array %s", arrayname->s_name);
+      error("unable to find array %s", arrayname->s_name);
       return;
     }
 }

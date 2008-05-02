@@ -34,7 +34,7 @@ shininess :: shininess(int argc, t_atom *argv)
     else if (argc == 0)  shininessMess(0.f);
 	else
     {
-        error("GEM: shininess: needs 0 or 1 arguments");
+        error("needs 0 or 1 arguments");
         shininessMess(0.f);
     }
 

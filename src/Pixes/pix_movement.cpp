@@ -105,7 +105,6 @@ void pix_movement :: processYUVImage(imageStruct &image)
   buffer.ysize = image.ysize;
   buffer.reallocate();
   if(doclear) buffer.setWhite();
-  if(doclear) post("pix_movement: doclear");
   
   int pixsize = image.ysize * image.xsize;
 

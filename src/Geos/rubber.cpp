@@ -74,7 +74,7 @@ void rubber :: rubber_init()
     
   m_mass = new MASS[m_grid_sizeX*m_grid_sizeY];
   if (m_mass == NULL)    {
-    post("rubber: Can't allocate memory for masses.\n");	
+    error("can't allocate memory for masses.\n");	
     return;
   }
 
@@ -104,7 +104,7 @@ void rubber :: rubber_init()
 
   m_spring=new SPRING[m_spring_count];
   if (m_spring == NULL)    {
-    post("rubber: Can't allocate memory for springs.\n");	
+    error("can't allocate memory for springs.\n");	
     return;
   }
   
@@ -350,7 +350,7 @@ void rubber :: typeMess(t_symbol *type)
   case 'f': case 'F':   m_drawType = GL_POLYGON; break;
   case 'p': case 'P':   m_drawType = GL_POINTS; break;
   default:
-    error ("GEM: square draw style");
+    error ("unknown draw style");
     return;
   }
   setModified();

@@ -110,13 +110,13 @@ void pix_filmDarwin :: realOpen(char *filename)
 	//::Microseconds(&startTime);
 
     if (!filename[0]) {
-        post("pix_filmDarwin:  no filename passed");
+        error("no filename passed");
     } else {
         err = ::FSPathMakeRef((UInt8*)filename, &ref, NULL);
         err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
 
         if (err) {
-            error("GEM: pix_movie: Unable to find file: %#s", theFSSpec.name);
+            error("unable to find file: %#s", theFSSpec.name);
             return;
         }
         m_haveMovie = GEM_MOVIE_MOV;
@@ -126,14 +126,14 @@ void pix_filmDarwin :: realOpen(char *filename)
 	::Microseconds(&endTime);
         seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
 	
-	post("pix_filmDarwin : OFS functions took %f", seconds );
+	post("OFS functions took %f", seconds );
 	*/
 	//::Microseconds(&startTime);
 
     short	refnum = 0;
     err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
     if (err) {
-        error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+        error("couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
         if (refnum) ::CloseMovieFile(refnum);
         return;
     }
@@ -146,7 +146,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 	::Microseconds(&endTime);
         seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
 	
-	post("pix_filmDarwin : OpenMovie and NewMovie calls took %f", seconds );
+	post("OpenMovie and NewMovie calls took %f", seconds );
 	*/
 
     m_reqFrame = 0;
@@ -166,7 +166,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 	
 	SetTrackEnabled(audioTrack, FALSE);
 	
-	//post("pix_filmDarwin : MediaSampleCount %d",sampleCount);
+	//post("MediaSampleCount %d",sampleCount);
 
     // Get the length of the movie
 
@@ -220,23 +220,23 @@ void pix_filmDarwin :: realOpen(char *filename)
 	
 	GetMovieMatrix(m_movie,&matrix);
 	
-	post("pix_filmDarwin : track dimensions width %d height %d",Fix2Long(w),Fix2Long(h));
-	post("pix_filmDarwin : movie matrix %d %d %d",Fix2Long(matrix.matrix[0][0]),Fix2Long(matrix.matrix[0][1]),Fix2Long(matrix.matrix[0][2]));
-	post("pix_filmDarwin : movie matrix %d %d %d",Fix2Long(matrix.matrix[1][0]),Fix2Long(matrix.matrix[1][1]),Fix2Long(matrix.matrix[1][2]));
-	post("pix_filmDarwin : movie matrix %d %d %d",Fix2Long(matrix.matrix[2][0]),Fix2Long(matrix.matrix[2][1]),Fix2Long(matrix.matrix[2][2]));
+	post("track dimensions width %d height %d",Fix2Long(w),Fix2Long(h));
+	post("movie matrix %d %d %d",Fix2Long(matrix.matrix[0][0]),Fix2Long(matrix.matrix[0][1]),Fix2Long(matrix.matrix[0][2]));
+	post("movie matrix %d %d %d",Fix2Long(matrix.matrix[1][0]),Fix2Long(matrix.matrix[1][1]),Fix2Long(matrix.matrix[1][2]));
+	post("movie matrix %d %d %d",Fix2Long(matrix.matrix[2][0]),Fix2Long(matrix.matrix[2][1]),Fix2Long(matrix.matrix[2][2]));
 
 	GetTrackDisplayMatrix(movieTrack,&matrix);
 	
-	post("pix_filmDarwin : track matrix %f %d %d",Fix2X(matrix.matrix[0][0]),Fix2Long(matrix.matrix[0][1]),Fix2Long(matrix.matrix[0][2]));
-	post("pix_filmDarwin : track matrix %d %d %d",Fix2Long(matrix.matrix[1][0]),Fix2Long(matrix.matrix[1][1]),Fix2Long(matrix.matrix[1][2]));
-	post("pix_filmDarwin : track matrix %d %d %f",Fix2Long(matrix.matrix[2][0]),Fix2Long(matrix.matrix[2][1]),Fix2X(matrix.matrix[2][2]));
+	post("track matrix %f %d %d",Fix2X(matrix.matrix[0][0]),Fix2Long(matrix.matrix[0][1]),Fix2Long(matrix.matrix[0][2]));
+	post("track matrix %d %d %d",Fix2Long(matrix.matrix[1][0]),Fix2Long(matrix.matrix[1][1]),Fix2Long(matrix.matrix[1][2]));
+	post("track matrix %d %d %f",Fix2Long(matrix.matrix[2][0]),Fix2Long(matrix.matrix[2][1]),Fix2X(matrix.matrix[2][2]));
 	
 	
 	
 	Rect	arect;
 	GetMovieNaturalBoundsRect(m_movie,&arect);
 	
-	post("pix filmDarwin : movie natural bounds top %d bottom %d left %d right %d",arect.top,arect.bottom,arect.left,arect.right);
+	post("movie natural bounds top %d bottom %d left %d right %d",arect.top,arect.bottom,arect.left,arect.right);
 	*/
 	//long	index;
 	
@@ -252,7 +252,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 	//DVCPRO720p
 	if ((*desc)->cType == kDVCPROHD720pCodecType){
 	
-		post("pix_filmDarwin : kDVCPROHD720pCodecType");
+		post("kDVCPROHD720pCodecType");
 		
 		m_xsize = 960;
 		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
@@ -266,7 +266,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 	//DVCPRO 1080i60
 	if ((*desc)->cType == kDVCPROHD1080i60CodecType){
 	
-		post("pix_filmDarwin : kDVCPROHD1080i60CodecType");
+		post("kDVCPROHD1080i60CodecType");
 		m_hiquality = 0;
 		//SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
 		//SetMoviePlayHints(m_movie, hintsDeinterlaceFields, 0);
@@ -287,7 +287,7 @@ void pix_filmDarwin :: realOpen(char *filename)
 	
 	//HDV
 	
-	//post("pix_filmDarwin : image description width %d heigh %d hRes %d vRes %d",(*desc)->width,(*desc)->height,Fix2Long((*desc)->hRes),Fix2Long((*desc)->vRes));
+	//post("image description width %d heigh %d hRes %d vRes %d",(*desc)->width,(*desc)->height,Fix2Long((*desc)->hRes),Fix2Long((*desc)->vRes));
 	
 	// We will use a YUV GWorld/Texture to get the fastest performance
 	// 16 bits per pixel for 4:2:2
@@ -356,7 +356,7 @@ void pix_filmDarwin :: realOpen(char *filename)
                                   m_rowBytes);
     }
     if (err) {
-        error("GEM: pix_filmDarwin: Couldn't make QTNewGWorldFromPtr %d", err);
+        error("couldn't make QTNewGWorldFromPtr %d", err);
         m_haveMovie = 0;
         return;
     }
@@ -426,7 +426,7 @@ void pix_filmDarwin :: getFrame()
 			m_play = 1;
 			newImage = 0;
 			return;
-		//	post("pix_filmDarwin : curTime %d prevTime %d",curTime,prevTime);
+		//	post("curTime %d prevTime %d",curTime,prevTime);
 		//	SetMovieVolume(m_movie, kFullVolume);
 			}
 
@@ -548,7 +548,7 @@ void pix_filmDarwin :: getFrame()
         newImage = 1;
         MoviesTask(m_movie, 0);
 		curTime = GetMovieTime(m_movie,NULL);
-       // post("pix_filmDarwin : curTime %d prevTime %d m_reqFrame %d",curTime,prevTime, m_reqFrame);
+       // post("curTime %d prevTime %d m_reqFrame %d",curTime,prevTime, m_reqFrame);
     }
     //I suppose if you roll your own YUV->ARGB it would go here?
 }
@@ -557,7 +557,7 @@ void pix_filmDarwin :: postrender(GemState *state)
 {
     //if(m_Task)
     // MoviesTask(m_movie, 0);
-    // post("pix_filmDarwin postrender called");
+    // post("postrender called");
 }
 
 void pix_filmDarwin :: startRendering()
@@ -582,10 +582,10 @@ void pix_filmDarwin :: LoadRam()
         err = LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
         if (err)
         {
-            post("pix_film: LoadMovieIntoRam failed miserably");
+            error("LoadMovieIntoRam failed miserably");
         }
     }else{
-        post("pix_film: no movie to load into RAM!");
+        error("no movie to load into RAM!");
     }
 }
 
@@ -609,14 +609,14 @@ void pix_filmDarwin :: MovVolume(float volume)
 void pix_filmDarwin :: doDebug()
 {
     post("---------- pix_filmDarwin doDebug start----------");
-    post("GEM: pix_filmDarwin:  m_numTracks = %d",m_numTracks);
+    post("m_numTracks = %d",m_numTracks);
     post("Movie duration = %d timescale = %d timebase = %d", movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
-    post("pix_filmDarwin: rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
-    post("pix_filmDarwin: rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
-    post("pix_filmDarwin: movie size x:%d y:%d", m_xsize, m_ysize);
-    if (m_colorspace == GL_BGRA_EXT) post("pix_filmDarwin: color space ARGB");
-    else  post("pix_filmDarwin: color space YUV");
-    post("pix_filmDarwin: Preferred rate fixed: %d int: %d float %f", playRate, Fix2Long(playRate),(float) Fix2X(playRate));
+    post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
+    post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
+    post("movie size x:%d y:%d", m_xsize, m_ysize);
+    if (m_colorspace == GL_BGRA_EXT) post("color space ARGB");
+    else  post("color space YUV");
+    post("Preferred rate fixed: %d int: %d float %f", playRate, Fix2Long(playRate),(float) Fix2X(playRate));
 
     post("---------- pix_filmDarwin doDebug end----------");
 }

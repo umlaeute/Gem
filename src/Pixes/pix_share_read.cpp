@@ -46,7 +46,7 @@ void pix_share_read :: render(GemState *state)
       }
     }
     else{
-      post("pix_share_read: no shmaddr");
+      error("no shmaddr");
     }
   }
 #endif

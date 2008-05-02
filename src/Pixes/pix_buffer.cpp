@@ -190,7 +190,7 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
   // some checks
   if (pos<0 || pos>=m_numframes)
   {
-    error("pix_buffer: index %d out of range (0..%d)!", pos, m_numframes);
+    error("index %d out of range (0..%d)!", pos, m_numframes);
     return;
   }
 
@@ -198,7 +198,7 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
   image = image2mem(buf);
   if(!image)
   {
-    error("pix_buffer: no valid image!");
+    error("no valid image!");
     return;
   }
 
@@ -218,7 +218,7 @@ void pix_buffer :: saveMess(t_symbol *filename, int pos)
   imageStruct*img=NULL;
 
   if(NULL==filename||NULL==filename->s_name||gensym("")==filename){
-    error("pix_buffer: no filename given!");
+    error("no filename given!");
     return;
   }
   img=getMess(pos);
@@ -226,7 +226,7 @@ void pix_buffer :: saveMess(t_symbol *filename, int pos)
   if(img && img->data){
     mem2image(img, filename->s_name, 0);
   } else {
-    error("pix_buffer: index %d out of range (0..%d) or slot empty!", pos, m_numframes);
+    error("index %d out of range (0..%d) or slot empty!", pos, m_numframes);
     return;
   }
 }

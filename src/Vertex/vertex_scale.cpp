@@ -66,7 +66,7 @@ void vertex_scale :: modeMess(int argc, t_atom*argv){
     case 'n': case 'N': m_normal =true; break;
     case 't': case 'T': m_texture=true; break;
     default:
-      error("vertex_operator: invalid operand '%s'! skipping", atom_getsymbol(argv+i)->s_name);
+      error("invalid operand '%s'! skipping", atom_getsymbol(argv+i)->s_name);
       break;
     }
   }

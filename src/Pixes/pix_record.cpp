@@ -36,7 +36,7 @@ pix_record :: pix_record(int argc, t_atom *argv):
     width = (int)atom_getfloat(&argv[0]);
     height = (int)atom_getfloat(&argv[1]);
   } else if (argc != 0){
-    error("GEM: pix_record: needs 0, 2, or 4 values");
+    error("needs 0, 2, or 4 values");
     xoff = yoff = 0;
     width = height = 128;
 	 
@@ -50,7 +50,7 @@ pix_record :: pix_record(int argc, t_atom *argv):
 #elif defined GEM_USE_RECORDQT4L
   m_handle=new recordQT4L(xoff, yoff, width, height);
 #else
-  post("[pix_record]: Gem has been compiled without pix-recording capabilities!");
+  post("Gem has been compiled without pix-recording capabilities!");
 #endif
 }
 
@@ -74,7 +74,7 @@ void pix_record :: stopRecording()
     m_handle->close();
     m_currentFrame = 0; //reset the frame counter?
     outlet_float(m_outNumFrames,m_currentFrame);
-    post("pix_record : movie written");
+    post("movie written");
   }
 
 }
@@ -122,7 +122,7 @@ void pix_record :: sizeMess(int width, int height)
 {
   if(m_handle){
     if(!m_handle->size(width, height)){
-      error("[pix_record]: could not set new dimensions");
+      error("could not set new dimensions");
     }
   }
 }
@@ -135,7 +135,7 @@ void pix_record :: posMess(int x, int y)
 {
   if(m_handle){
     if(!m_handle->position(x, y)){
-      error("[pix_record]: could not set offset");
+      error("could not set offset");
     }
   }
 }
@@ -148,7 +148,7 @@ void pix_record :: dialogMess()
 {
   if(m_handle){
     if(!m_handle->dialog()){
-      error("[pix_record]: unable to open settings dialog");
+      error("unable to open settings dialog");
     }
   }
 }
@@ -161,7 +161,7 @@ void pix_record :: recordMess(bool on)
   if (on) {
     m_recordStart=1;
     m_recordStop=0;
-    post("pix_record: recording on!");
+    post("recording on!");
   }else{
     m_recordStart=0;
     m_recordStop=1;
@@ -183,7 +183,7 @@ void pix_record :: getCodecList()
 	  char*codecname=m_handle->getCodecName(i);
 	  char*descr=m_handle->getCodecDescription(i);
 	  if(codecname) {
-		  post("[pix_record]: codec%d: '%s': %s", i, codecname, (descr?descr:""));
+		  post("codec%d: '%s': %s", i, codecname, (descr?descr:""));
        SETFLOAT (ap+0, (t_float)i);
        SETSYMBOL(ap+1, gensym(codecname));
        outlet_anything(m_outInfo, gensym("codec"), 2, ap);
@@ -205,7 +205,7 @@ void pix_record :: codecMess(t_atom *argv)
     if    (A_SYMBOL==argv->a_type)err=m_handle->setCodec(atom_getsymbol(argv)->s_name);
     else if(A_FLOAT==argv->a_type)err=m_handle->setCodec(atom_getint(argv));
 
-    if(!err)error("[pix_record]: unable to set the codec");
+    if(!err)error("unable to set the codec");
   }
 }
 

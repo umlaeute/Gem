@@ -47,7 +47,7 @@ pix_snap :: pix_snap(int argc, t_atom *argv)
     m_x = m_y = 0;
     m_width = m_height = 128;
   } else {
-    error("GEM: pix_snap: needs 0, 2, or 4 values");
+    error("needs 0, 2, or 4 values");
     m_x = m_y = 0;
     m_width = m_height = 128;
   }
@@ -78,7 +78,7 @@ void pix_snap :: snapMess()
         
 	if (m_width <= 0 || m_height <= 0)
 	{
-		error("GEM: pix_snap: Illegal size");
+		error("Illegal size");
 		return;
 	}
 	// do we need to remake the data?
@@ -123,7 +123,7 @@ void pix_snap :: snapMess()
     if (m_cache)
 		m_cache->resendImage = 1;
 
-    //post("GEM: pix_snap: snapped image"); 
+    //post("snapped image"); 
 }
 
 /////////////////////////////////////////////////////////

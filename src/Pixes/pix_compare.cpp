@@ -236,7 +236,7 @@ register int h,w,i,j,width;
     
     //check to see if the buffer isn't 16byte aligned (highly unlikely)
     if (image.ysize*image.xsize % 16 != 0){
-        post("pix_compare: image not properly aligned for Altivec");
+        error("image not properly aligned for Altivec");
         return;
         }
 

@@ -65,14 +65,14 @@ void pix_histo :: setMess(int argc, t_atom *argv)
   int n=argc;
 
   if (!(argc==1 || argc==3 || argc==4)) {
-    error("pix_histo: only 1, 3 or 4 arguments are allowed");
+    error("only 1, 3 or 4 arguments are allowed");
     m_mode=0;
     return;
   }
 
   while(n--){
     if (ap->a_type != A_SYMBOL) {
-      error("pix_histo: only symbolic table-names are accepted");
+      error("only symbolic table-names are accepted");
       return;
     }
     ap++;
@@ -110,7 +110,7 @@ t_float* pix_histo :: checkarray(t_symbol *s, int *length)
 
     if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
     {
-    	if (*s->s_name) error("pix_histo: %s: no such array", s->s_name);
+    	if (*s->s_name) error("%s: no such array", s->s_name);
     	fp = 0;
     }
     else if (!garray_getfloatarray(a, length, &fp))
@@ -120,7 +120,7 @@ t_float* pix_histo :: checkarray(t_symbol *s, int *length)
     }
 
     if (*length==0){
-      error("pix_histo: table %s is zero-lengthed", s->s_name);
+      error("table %s is zero-lengthed", s->s_name);
       fp=0;
     }
     return fp;

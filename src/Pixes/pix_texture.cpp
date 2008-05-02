@@ -477,7 +477,7 @@ void pix_texture :: startRendering()
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 
   if (!m_realTextureObj)	{
-    error("GEM: pix_texture: Unable to allocate texture object");
+    error("Unable to allocate texture object");
     return;
   }
 }

@@ -35,7 +35,7 @@ color :: color(int argc, t_atom *argv)
     else if (argc == 0) colorMess(1.f, 1.f, 1.f, 1.f);
     else
     {
-        error("GEM: color: needs 0, 3, or 4 arguments");
+        error("needs 0, 3, or 4 arguments");
         colorMess(1.f, 1.f, 1.f, 1.f);
     }
 

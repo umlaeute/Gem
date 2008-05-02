@@ -61,7 +61,7 @@ vertex_draw :: vertex_draw():
   m_drawType(GL_TRIANGLES), m_defaultDraw(1)
 {
 #ifdef __VBO
-  post("vertex_draw: using VBO");
+  post("using VBO");
 #endif
 }
 
@@ -93,7 +93,7 @@ void vertex_draw :: render(GemState *state)
   //if(rebuild)post("rebuild");
     
   if (state->VertexArray == NULL || state->VertexArraySize <= 0){
-      //  post("vertex_draw: no vertex array!");
+      //  post("no vertex array!");
         return;
   }
   int size = state->VertexArraySize;
@@ -107,7 +107,7 @@ void vertex_draw :: render(GemState *state)
   bool texcoord=m_texcoord;
   if (texcoord && (state->TexCoordArray == NULL || state->HaveTexCoordArray == 0))
   {
-	post("vertex_draw: no Texture Coordinate array!");
+	post("no Texture Coordinate array!");
     texcoord = 0;
   }
     

@@ -353,7 +353,7 @@ int pixsize = image.xsize * image.ysize * image.csize;
     
     //check to see if the buffer isn't 16byte aligned (highly unlikely)
     if (image.ysize*image.xsize % 16 != 0){
-        post("pix_background: image not properly aligned for Altivec - try something SD or HD maybe?");
+        error("image not properly aligned for Altivec - try something SD or HD maybe?");
         return;
         }
     

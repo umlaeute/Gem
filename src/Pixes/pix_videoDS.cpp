@@ -90,7 +90,7 @@ pix_videoDS :: pix_videoDS(t_floatarg num)
   // Initialize COM
   if(FAILED(CoInitialize(NULL)))
     {
-      error("pix_video: could not initialise COM.");
+      error("could not initialise COM.");
       return;
     }
 
@@ -142,7 +142,7 @@ void pix_videoDS :: openMess(int device)
 
   if (!m_bInitCOM)
     {
-      error("pix_videoDS: COM has not been initialized.");
+      error("COM has not been initialized.");
       return;
     }
 
@@ -151,7 +151,7 @@ void pix_videoDS :: openMess(int device)
   do  {
     // Get the interface for DirectShow's GraphBuilder
     if (FAILED(hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void **)&m_pGB)))  {
-      error("pix_videoDS: Could not get DShow GraphBuilder, hr 0x%X", hr);
+      error("Could not get DShow GraphBuilder, hr 0x%X", hr);
       break;
     }
 
@@ -169,14 +169,14 @@ void pix_videoDS :: openMess(int device)
     // Get the interface for DirectShow's CaptureGraphBuilder2 which allows the use of capture devices instead of file sources
     if (	FAILED(hr = (CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void **)&m_pCG)))
 		||	FAILED(hr = m_pCG->SetFiltergraph(m_pGB))){
-      error("pix_videoDS: Could not get DShow GraphBuilder, hr 0x%X", hr);
+      error("Could not get DShow GraphBuilder, hr 0x%X", hr);
       break;
     }
 
     // Create the capture device.
     if (FAILED(hr = FindCaptureDevice(device, &m_pCDbase)))
     {
-      error("pix_videoDS: Could not open device: %d\n", device);
+      error("Could not open device: %d\n", device);
       break;
     }
 
@@ -249,7 +249,7 @@ void pix_videoDS :: openMess(int device)
 		FAILED(hr = m_pGB->AddFilter(SampleFilter, L"Sample Grabber")) ||
 		FAILED(hr = m_pGB->AddFilter(NullFilter, L"Null Renderer")))
 	{
-      error("pix_videoDS: Could not add the filters to the graph, hr 0x%X", hr);
+      error("Could not add the filters to the graph, hr 0x%X", hr);
       break;
     }
 
@@ -272,39 +272,39 @@ void pix_videoDS :: openMess(int device)
     // QueryInterface for DirectShow interfaces
     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaFilter, (void **)&m_pMF))))
     {
-      error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
+      error("Could not get media control interface, hr 0x%X", hr);
       break;
     }
 
 	//MediaControl is used for Run, Stop, Pause and running state queries
     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaControl, (void **)&m_pMC))))
     {
-      error("pix_videoDS: Could not get media control interface, hr 0x%X", hr);
+      error("Could not get media control interface, hr 0x%X", hr);
       break;
     }
 
 	//not used right now
     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaEvent, (void **)&m_pME))))	{
-      error("pix_videoDS: Could not get media event interface, hr 0x%X", hr);
+      error("Could not get media event interface, hr 0x%X", hr);
       break;
     }
 
 	//MediaSeeking for the end of a clip.  not really used here
     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaSeeking, (void **)&m_pMS)))){
-      error("pix_videoDS: Could not get media seeking interface, hr 0x%X", hr);
+      error("Could not get media seeking interface, hr 0x%X", hr);
       break;
     }
 
 	//for the position of a clip.  not really used for device capture
     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaPosition, (void **)&m_pMP)))){
-      error("pix_videoDS: Could not get media position interface, hr 0x%X", hr);
+      error("Could not get media position interface, hr 0x%X", hr);
       break;
     }
 
     // Expose the filter graph so we can view it using GraphEdit
 #ifdef REGISTER_FILTERGRAPH
     if (FAILED(hr = AddGraphToRot(m_pGB, &m_GraphRegister))){
-      error("pix_videoDS: failed to register filter graph with ROT!  hr=0x%X", hr);
+      error("failed to register filter graph with ROT!  hr=0x%X", hr);
       m_GraphRegister = 0;
     }
 #endif
@@ -312,7 +312,7 @@ void pix_videoDS :: openMess(int device)
     // Turn off the reference clock. 
 //	if (FAILED(hr = m_pMF->SetSyncSource(NULL)))
 //	{
-//		error("pix_videoDS: failed to turn off the reference clock  hr=0x%X", hr);
+//		error("failed to turn off the reference clock  hr=0x%X", hr);
 //		break;
 //	}
 
@@ -392,7 +392,7 @@ void pix_videoDS :: enumerateMess()
 			     IID_ICreateDevEnum, (void ** ) &pDevEnum);
       if (FAILED(hr))
 	{
-	  error("pix_videoDS: Couldn't create system enumerator!");
+	  error("Couldn't create system enumerator!");
 	  break;
 	}
 
@@ -400,7 +400,7 @@ void pix_videoDS :: enumerateMess()
       hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
       if (FAILED(hr))
 	{
-	  error("pix_videoDS: Couldn't create class enumerator!");
+	  error("Couldn't create class enumerator!");
 	  break;
 	}
 
@@ -408,7 +408,7 @@ void pix_videoDS :: enumerateMess()
       // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
       if (pClassEnum == NULL)
 	{
-	  error("pix_videoDS: No video capture devices found!");
+	  error("No video capture devices found!");
 	  break;
 	}
 
@@ -454,7 +454,7 @@ void pix_videoDS :: setupMess()
 {
   if (!m_haveVideo)
     {
-      error("pix_videoDS: No open video device.");
+      error("No open video device.");
       return;
     }
 	
@@ -475,7 +475,7 @@ void pix_videoDS :: csMess(int format)
 void pix_videoDS :: render(GemState *state)
 {
   if (!m_haveVideo || !m_capturing)  {
-    //      error("pix_videoDS: Video not active");
+    //      error("Video not active");
     state->image = NULL;	
     return;
   }
@@ -556,7 +556,7 @@ int pix_videoDS :: startTransfer()
       BITMAPINFOHEADER* pbmih;
       if (NULL == SampleGrabber || FAILED(hr = SampleGrabber->GetConnectedMediaType(&mt)))
 	{
-	  error("pix_videoDS: Could not get connect media type, hr 0x%X", hr);
+	  error("Could not get connect media type, hr 0x%X", hr);
 	  return 0;
 	}
       GetBitmapInfoHdr(&mt, &pbmih);
@@ -568,7 +568,7 @@ int pix_videoDS :: startTransfer()
 	  //starts the graph rendering
       if (FAILED(hr = m_pMC->Run()))
 	{
-	  error("pix_videoDS: Could not start graph playback, hr 0x%X", hr);
+	  error("Could not start graph playback, hr 0x%X", hr);
 	} else
 	m_capturing = 1;
     }
@@ -587,7 +587,7 @@ int pix_videoDS :: stopTransfer()
       HRESULT hr;
       if (FAILED(hr = m_pMC->Stop()))
 	{
-	  error("pix_videoDS: Could not stop graph playback, hr 0x%X", hr);
+	  error("Could not stop graph playback, hr 0x%X", hr);
 	} else
 	m_capturing = 0;
     }
@@ -766,20 +766,20 @@ void pix_videoDS :: dvMess(int argc, t_atom *argv)
 		  hr = pDV->put_IPDisplay(DVRESOLUTION_DC);
 		} else
 		{
-		  error("pix_videoDS: unknown DV decoder setting");
+		  error("unknown DV decoder setting");
 		}
 	      if (FAILED(hr))
 		{
-		  error("pix_videoDS: Could not set decoder resolution.");
+		  error("Could not set decoder resolution.");
 		}
 	      pDV->Release();
 	    } else
 	    {
-	      error("pix_videoDS: Device does not have DV decoder interface");
+	      error("Device does not have DV decoder interface");
 	    }
 	} else
 	{
-	  error("pix_videoDS: 'dv' Missing required argument(s)");
+	  error("'dv' Missing required argument(s)");
 	}
     }
 
@@ -798,7 +798,7 @@ void pix_videoDS :: dialogMess(int argc, t_atom*argv)
 
   if (!m_haveVideo)
     {
-      error("pix_video: No open video device.");
+      error("No open video device.");
       return;
     }
 
@@ -819,7 +819,7 @@ void pix_videoDS :: dialogMess(int argc, t_atom*argv)
 	    {
 	      if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL)))
 		{
-		  error("pix_videoDS: Could not show VFW Capture Source Dialog");
+		  error("Could not show VFW Capture Source Dialog");
 		}
 	    }
 	} else
@@ -845,7 +845,7 @@ void pix_videoDS :: dialogMess(int argc, t_atom*argv)
 	  if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
 	    if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL)))
 	      {
-		error("pix_videoDS: Could not show VFW Capture Format Dialog");
+		error("Could not show VFW Capture Format Dialog");
 	      }
 	  
 	} else
@@ -882,10 +882,10 @@ void pix_videoDS :: dialogMess(int argc, t_atom*argv)
 	    {
 	      if FAILED((hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))
 	      {
-		error("pix_videoDS: Could not show VFW Capture Display Dialog");
+		error("Could not show VFW Capture Display Dialog");
 	      }
 	    } else
-	    post("pix_videoDS: No display dialog for this device");
+	    error("No display dialog for this device");
 	} 
     } else if(!strcmp(type->s_name, "crossbar")) 
     {
@@ -936,7 +936,7 @@ void pix_videoDS :: dialogMess(int argc, t_atom*argv)
       }
     } else
     {
-      error ("pix_videoDS: dialog not known");
+      error ("dialog not known");
     }
   setModified();
   startTransfer();
@@ -987,7 +987,7 @@ void pix_videoDS :: copyBuffer()
   // Check for a format change.
   if (NULL == SampleGrabber || FAILED(hr = SampleGrabber->GetConnectedMediaType(&pmt)))
     {
-      error("pix_videoDS : could not get sample media type.");
+      error("could not get sample media type.");
       closeMess();
       return;
     }
@@ -1165,13 +1165,13 @@ void SetupCaptureDevice(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase)
     {
       if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source)))
 	if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL)))
-	  error("pix_videoDS: Could not show VFW Capture Source Dialog");
+	  error("Could not show VFW Capture Source Dialog");
       if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
 	if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL)))
-	  error("pix_videoDS: Could not show VFW Capture Format Dialog");
+	  error("Could not show VFW Capture Format Dialog");
       if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display)))
 	if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))
-	  error("pix_videoDS: Could not show VFW Capture Display Dialog");
+	  error("Could not show VFW Capture Display Dialog");
       pDlg->Release();
     }	
 	
@@ -1346,7 +1346,7 @@ FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter)
 			     IID_ICreateDevEnum, (void ** ) &pDevEnum);
       if (FAILED(hr))
 	{
-	  error("GEM: Couldn't create system enumerator!");
+	  error("Couldn't create system enumerator!");
 	  break;
 	}
 
@@ -1355,7 +1355,7 @@ FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter)
       hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
       if (FAILED(hr))
 	{
-	  error("pix_videoDS: Couldn't create class enumerator!");
+	  error("Couldn't create class enumerator!");
 	  break;
 	}
 
@@ -1363,7 +1363,7 @@ FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter)
       // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
       if (pClassEnum == NULL)
 	{
-	  error("pix_videoDS: No video capture devices found!");
+	  error("No video capture devices found!");
 	  hr = E_FAIL;
 	  break;
 	}
@@ -1382,7 +1382,7 @@ FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter)
 	      hr = pMoniker->BindToObject(0,0,IID_IBaseFilter, (void**)&pSrc);
 	      if (FAILED(hr))
 		{
-		  error("pix_videoDS: Couldn't bind moniker to filter object!");
+		  error("Couldn't bind moniker to filter object!");
 		}
 	    }
 	  COMRELEASE(pMoniker);
@@ -1436,7 +1436,7 @@ void GetBitmapInfoHdr(AM_MEDIA_TYPE* pmt, BITMAPINFOHEADER** ppbmih)
     }
   else
     {
-      error("pix_videoDS: Unknown media format");
+      error("Unknown media format");
       return;
     }
 }

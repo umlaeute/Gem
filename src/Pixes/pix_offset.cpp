@@ -316,7 +316,7 @@ void pix_offset :: vecOffsetMess(int argc, t_atom *argv)
   else if (argc == 3) m_offset[chAlpha] = 0;
   else
     {
-      error("GEM: pix_offset: not enough offset values");
+      error("not enough offset values");
       return;
     }
   m_offset[chRed]   = (int)(255*atom_getfloat(&argv[0]));

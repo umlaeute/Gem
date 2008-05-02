@@ -40,7 +40,7 @@ translateXYZ :: translateXYZ(int argc, t_atom *argv)
     }
     else
     {
-        error("GEM: translateXYZ: needs 0 or 3 arguments");
+        error("needs 0 or 3 arguments");
         m_vector[0] = m_vector[1] = m_vector[2] = 0;
     }
 

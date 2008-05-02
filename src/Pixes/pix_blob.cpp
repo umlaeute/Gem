@@ -95,7 +95,7 @@ void pix_blob :: processRGBAImage(imageStruct &image)
     channel = chAlpha;
     break;
   default:
-    error("pix_blob: no method %d:: using GREY", m_method);
+    error("no method %d: using GREY", m_method);
   case 0:
     gain_r = 0.3086; gain_g = 0.6094; gain_b = 0.082; gain_a = 0.0;
     break;
@@ -195,7 +195,7 @@ void pix_blob :: processYUVImage(imageStruct &image)
 void pix_blob :: ChannelMess(int  channel)
 {
   if (channel<0 || channel>4) {
-    error("pix_blob: channel out of range");
+    error("channel out of range");
     return;
   }
   m_method = channel;
@@ -220,7 +220,7 @@ void pix_blob :: GainMess(int argc, t_atom *argv)
     }
     break;
   default:
-    error("pix_blob: only 1, 3 or 4 gains are allowed");
+    error("only 1, 3 or 4 gains are allowed");
     return;
   }
 

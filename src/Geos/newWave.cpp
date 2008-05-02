@@ -52,7 +52,7 @@ newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY
 
   switch(argc){
   default:
-    post("newWave: ignoring some arguments");
+    error("ignoring extra arguments");
   case 3:
     m_height=atom_getfloat(argv+2);
   case 2:
@@ -119,7 +119,7 @@ void newWave :: forceMess(float posX, float posY, float valforce)
 void newWave :: textureMess(int mode)
 {
   if(mode<0){
-    error("newWave: textureMode must be >= 0");
+    error("textureMode must be >= 0");
     return;
   }
   m_textureMode = mode;
@@ -136,8 +136,6 @@ void newWave :: render(GemState *state)
 {
     int i, j;
     if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
-
-    //    post("m_size=%f", m_size);
 
     GLfloat sizeX = 2.*m_size / (GLfloat)(gridX-1);
     GLfloat sizeY = 2.*m_size / (GLfloat)(gridY-1);
@@ -161,14 +159,6 @@ void newWave :: render(GemState *state)
 	  (ysize != state->texCoords[2].t-ysize0))
 	alreadyInit = 0;
 
-      /*
-      post("S\t%f=%f\t%f=%f", xsize0,state->texCoords[0].s,   xsize,state->texCoords[1].s-xsize0);
-      post("T\t%f=%f\t%f=%f", ysize0,state->texCoords[1].t,   ysize,state->texCoords[2].t-ysize0);
-      */
-
-      // for (int II=0; II<4; II++)post("%d: %fx%f", II, state->texCoords[II].s, state->texCoords[II].t);
-
-
         if (!alreadyInit)
         {
 	    xsize0 = state->texCoords[0].s;
@@ -190,9 +180,6 @@ void newWave :: render(GemState *state)
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
                 glVertex3f( i*sizeX - 1, j*sizeY -1 , posit[i][j]*m_height);
-		/*
-		  post("(%f\t%f)\t(%f\t%f)", (i-grid/2)*size, (j-grid/2)*size, (i+1-grid/2)*size, (j-grid/2)*size);
-		*/
 
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
@@ -214,8 +201,6 @@ void newWave :: render(GemState *state)
             alreadyInit = 1;
         }
  
-        
-// post("size=%f", size);
         for ( i = 0; i<gridX -1; ++i)
         {
             glBegin(m_drawType);
@@ -260,7 +245,7 @@ void newWave :: typeMess(t_symbol *type)
   case 'f': case 'F': m_drawType = GL_TRIANGLE_STRIP; break;
   case 'p': case 'P': m_drawType = GL_POINTS; break;
   default:
-    error ("GEM: newWave draw style");
+    error ("unknown draw style");
     return;
   }
   setModified();
@@ -472,14 +457,12 @@ void newWave :: getposition()
 /////////////////////////////////////////////////////////
 void newWave :: getTexCoords(void)
 {
-  //  post("getTexCoords: x=%f\ty=%f %f", xsize, ysize0, ysize);
     for ( int i = 0; i < gridX; ++i)
     {
         for ( int j = 0; j < gridY; ++j)
         {
             texCoords[i][j][0] = ((xsize*(float)i/(float)(gridX-1)) + xsize0 );
 	    texCoords[i][j][1] = ((ysize*(float)j/(float)(gridY-1)) + ysize0 );
-            //post("texCoords[%d][%d] = %f\t%f",i,j,texCoords[i][j][0],texCoords[i][j][1]);
         }
     }
 }

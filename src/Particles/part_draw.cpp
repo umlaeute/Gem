@@ -74,7 +74,7 @@ void part_draw :: typeMess(int ac,t_atom* av)
 
   if (0)
     {
-	    error("GEM: part_draw: draw style");
+      error("unknown draw style");
     }
 }
 

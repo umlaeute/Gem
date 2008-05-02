@@ -53,7 +53,7 @@ pix_movieDarwin :: pix_movieDarwin(t_symbol *filename) :
   
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
-  post("pix_movieDarwin constructor");
+  post("constructor");
   
 }
 
@@ -171,7 +171,7 @@ void pix_movieDarwin :: openMess(t_symbol *filename, int format)
 
     m_newFilm = 1;
   //outlet_float(m_outNumFrames, (float)m_numFrames);
-  post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
+  post("Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
 }
 
@@ -195,13 +195,13 @@ void pix_movieDarwin :: realOpen(char *filename)
 	MatrixRecord	matrix;
 	
     if (!filename[0]) {
-        post("pix_filmDarwin:  no filename passed");
+        error("no filename passed");
     } else {            
         err = ::FSPathMakeRef((UInt8*)filename, &ref, NULL);
         err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
             
         if (err) {
-            error("GEM: pix_movie: Unable to find file: %#s", theFSSpec.name);
+            error("Unable to find file: %#s", theFSSpec.name);
             return;
         }
         m_haveMovie = GEM_MOVIE_MOV;
@@ -210,7 +210,7 @@ void pix_movieDarwin :: realOpen(char *filename)
     short	refnum = 0;
     err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
     if (err) {
-        error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+        error("Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
         if (refnum) ::CloseMovieFile(refnum);
         return;
     }
@@ -280,7 +280,7 @@ void pix_movieDarwin :: realOpen(char *filename)
 	//DVCPRO 720p
 	if ((*desc)->cType == kDVCPROHD720pCodecType){
 	
-		post("pix_filmDarwin : kDVCPROHD720pCodecType");
+		post("kDVCPROHD720pCodecType");
 		m_hiquality = 0;
 		//SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
 		//SetMoviePlayHints(m_movie, hintsDeinterlaceFields, 0);
@@ -300,7 +300,7 @@ void pix_movieDarwin :: realOpen(char *filename)
 	//DVCPRO 1080i60
 	if ((*desc)->cType == kDVCPROHD1080i60CodecType){
 	
-		post("pix_filmDarwin : kDVCPROHD1080i60CodecType");
+		post("kDVCPROHD1080i60CodecType");
 		m_hiquality = 0;
 		//SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
 		//SetMoviePlayHints(m_movie, hintsDeinterlaceFields, 0);
@@ -379,7 +379,7 @@ void pix_movieDarwin :: realOpen(char *filename)
                                             m_rowBytes);
         }
 	if (err) {
-		error("GEM: pix_filmDarwin: Couldn't make QTNewGWorldFromPtr %d", err);
+		error("Couldn't make QTNewGWorldFromPtr %d", err);
 		m_haveMovie = 0;
 		return;
 	}
@@ -560,7 +560,7 @@ void pix_movieDarwin :: render(GemState *state)
   texFrame(state,1);
   getFrame();
   // MoviesTask(m_movie,0);
-  //post("pix__movieDarwin: this render function is being called");
+  //post("this render function is being called");
 
 }
 
@@ -617,7 +617,7 @@ void pix_movieDarwin :: prepareTexture()
 void pix_movieDarwin :: setUpTextureState()
 {
     if (m_rectangle) {
-        post("pix__movieDarwin: using rectangle textures");
+        post("using rectangle textures");
         glTexParameterf(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_PRIORITY, 0.0f);
 
         glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
@@ -629,7 +629,7 @@ void pix_movieDarwin :: setUpTextureState()
     }
     else
     {
-        post("pix__movieDarwin: using power of two textures");
+        post("using power of two textures");
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, 0.0);
 
         glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
@@ -680,7 +680,7 @@ state->texture = 2;
 		     m_pixBlock.image.type,//       GL_YCBCR_422_APPLE,
 		     m_pixBlock.image.data);
             
-    post("pix__movieDarwin: new power-of-two texture size - glTexImage2D");
+    post("new power-of-two texture size - glTexImage2D");
     }
 
     
@@ -716,7 +716,7 @@ state->texture = 2;
 		     m_pixBlock.image.type,   //      GL_UNSIGNED_SHORT_8_8_REV_APPLE, //GL_UNSIGNED_SHORT_8_8_APPLE,
 		     m_pixBlock.image.data);
 			 
-			post("pix_movieDarwin: new film");
+			post("new film");
 			m_newFilm = 0; //just to be sure
 		 }	
 
@@ -823,11 +823,11 @@ void pix_movieDarwin :: MovVolume(float volume)
 void pix_movieDarwin :: changeImage(int imgNum, int trackNum)
 {
   if (imgNum < 0){
-   // error("GEM: pix_film: selection number must be > 0");
+   // error("selection number must be > 0");
     imgNum=0;
   }
   if (trackNum < 0){
-    error("GEM: pix_film: track number must be > 0");
+    error("track number must be > 0");
     trackNum=0;
   }
 
@@ -835,7 +835,7 @@ void pix_movieDarwin :: changeImage(int imgNum, int trackNum)
         if (imgNum > m_numFrames) {
             if (m_numFrames<0) m_reqFrame = imgNum;
                 else m_reqFrame=m_numFrames;
-      //      else error("GEM: pix_film: frame %d exceeds max (%d)", imgNum, m_numFrames);
+      //      else error("frame %d exceeds max (%d)", imgNum, m_numFrames);
       //m_reqFrame = imgNum;
             return;
         } else m_reqFrame = imgNum;
@@ -852,10 +852,10 @@ void pix_movieDarwin :: LoadRam()
         err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
         if (err)
         {
-            post("pix_movie: LoadMovieIntoRam failed miserably");
+            post("LoadMovieIntoRam failed miserably");
         }
     }else{
-        post("pix_movie: no movie to load into RAM!");
+        post("no movie to load into RAM!");
     }
 }
 

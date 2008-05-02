@@ -298,7 +298,7 @@ void tube :: rotY2Mess(float rotY2){
 void tube :: slicesMess(int slices){
 #ifndef __GNUC__
   if(slices>TUBE_NUMPTS){
-    error("tube: number of slices (%d) clamped to %d", slices, TUBE_NUMPTS);
+    error("number of slices (%d) clamped to %d", slices, TUBE_NUMPTS);
     slices=TUBE_NUMPTS;
   }
 #endif
@@ -341,7 +341,7 @@ void tube :: typeMess(t_symbol *type){
   case 'f': case 'F': m_drawType = GL_TRIANGLE_STRIP; break;
   case 'p': case 'P': m_drawType = GL_POINTS; break;
   default:
-    error("GEM: tube draw style");
+    error("unknown draw style");
     return;
   }
   setModified();

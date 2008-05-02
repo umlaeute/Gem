@@ -51,7 +51,7 @@ ambientRGB :: ambientRGB(int argc, t_atom *argv)
     }
     else
     {
-        error("GEM: ambientRGB: needs 0 or 3 arguments");
+        error("needs 0 or 3 arguments");
         m_vector[0] = 0.2f;
         m_vector[1] = 0.2f;
         m_vector[2] = 0.2f;

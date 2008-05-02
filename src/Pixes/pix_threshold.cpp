@@ -164,7 +164,7 @@ void pix_threshold :: vecThreshMess(int argc, t_atom *argv)
     else if (argc == 3) m_thresh[3] = 0;
     else
     {
-    	error("GEM: pix_threshold: not enough threshold values");
+    	error("not enough threshold values");
     	return;
     }
     

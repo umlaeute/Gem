@@ -210,7 +210,7 @@ void slideSquares :: typeMess(t_symbol *type)
 	    m_drawType = GL_POINTS;
     else
     {
-	    error ("GEM: slideSquares draw style");
+	    error ("unknown draw style");
 	    return;
     }
     setModified();

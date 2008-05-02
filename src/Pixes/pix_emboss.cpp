@@ -75,9 +75,9 @@ void pix_emboss :: processYUVImage(imageStruct &image)
                                       src+=2;
 		}
 	}*/
-   //post("pix_emboss: chars:%d",src);
-   //post("pix_emboss: r:%d",r);
-   //post("pix_emboss: c:%d",c);
+   //post("chars:%d",src);
+   //post("r:%d",r);
+   //post("c:%d",c);
 }
 
 /////////////////////////////////////////////////////////

@@ -390,7 +390,7 @@ void ripple :: ripple_bang()
 {
     if ( grab == -1 ){ 
         //grab = ripple_grab();
-      //        post("ripple: grab = %d\n",grab);
+      //        post("grab = %d\n",grab);
     }else{
         grab = -1;
     }
@@ -440,7 +440,7 @@ void ripple :: typeMess(t_symbol *type)
 	    m_drawType = GL_POLYGON;
     else
     {
-	    error ("GEM: no ripple draw style?");
+	    error ("unknown draw style?");
 	    return;
     }
     setModified();

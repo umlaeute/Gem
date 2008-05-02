@@ -58,18 +58,18 @@ pix_videoNT :: pix_videoNT(t_floatarg num)
 				    0, 0, m_vidXSize, m_vidYSize,// window position and dimensions
 				    GetDesktopWindow(), 0);
   if (!m_hWndC) {
-    error("GEM: pix_videoNT: Unable to create capture window");
+    error("Unable to create capture window");
     return;
   } 
 
   if (!capDriverConnect(m_hWndC, 0)) {
-    error("GEM: pix_videoNT: Unable to connect to video driver");
+    error("Unable to connect to video driver");
     return;
   }
 
   CAPTUREPARMS params;
   if (!capCaptureGetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS))) {
-    error("GEM: pix_videoNT: Unable to get capture parameters");
+    error("Unable to get capture parameters");
     return;
   }
   params.fYield = TRUE;
@@ -82,25 +82,25 @@ pix_videoNT :: pix_videoNT(t_floatarg num)
   params.fAbortRightMouse = FALSE;
   if (!capCaptureSetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS)))
     {
-      error("GEM: pix_videoNT: Unable to set capture parameters");
+      error("Unable to set capture parameters");
       return;
     }
 
   if (!capSetCallbackOnVideoStream(m_hWndC, pix_videoNT::videoFrameCallback))
     {
-      error("GEM: pix_videoNT: Unable to set frame callback");
+      error("Unable to set frame callback");
       return;
     }
   if (!capSetUserData(m_hWndC, this))
     {
-      error("GEM: pix_videoNT: Unable to set user data");
+      error("Unable to set user data");
       return;
     }
   DWORD formSize = capGetVideoFormat(m_hWndC, NULL, 0);
   BITMAPINFO *videoFormat = (BITMAPINFO *)(new char[formSize]);
   if (!capGetVideoFormat(m_hWndC, videoFormat, formSize))
     {
-      error("GEM: pix_videoNT: Unable to get video format");
+      error("Unable to get video format");
       return;
     }
 
@@ -113,10 +113,10 @@ pix_videoNT :: pix_videoNT(t_floatarg num)
   videoFormat->bmiHeader.biSizeImage = 0;
   if (!capSetVideoFormat(m_hWndC, videoFormat, formSize))
     {
-      error("GEM: pix_video: Unable to set video format");
+      error("Unable to set video format");
       return;
     }
-  post("GEM: pix_video: Connected at x: %d, y: %d, c: %d",
+  post("Connected at x: %d, y: %d, c: %d",
        (int)(videoFormat->bmiHeader.biWidth),
        (int)(videoFormat->bmiHeader.biHeight),
        (int)(videoFormat->bmiHeader.biBitCount));
@@ -151,7 +151,7 @@ pix_videoNT :: ~pix_videoNT()
   // Clean up the video
   if (m_haveVideo)
     {
-      post("GEM: pix_video: Closed video connection");
+      post("Closed video connection");
     }
   cleanPixBlock();
 }
@@ -169,7 +169,7 @@ void pix_videoNT :: videoFrame(LPVIDEOHDR lpVHdr)
 	
   if (count < dataSize)
     {
-      error("GEM: pix_videoNT: not enough pixels captured");
+      error("not enough pixels captured");
       return;
     }
 
@@ -211,7 +211,7 @@ void pix_videoNT :: render(GemState *state)
 {
   if (!m_haveVideo)
     {
-      error("GEM: pix_videoNT: Video not active");
+      error("Video not active");
       return;
     }
 
@@ -228,7 +228,7 @@ void pix_videoNT :: startRendering()
 {
   if (!capCaptureSequenceNoFile(m_hWndC))
     {
-      error("GEM: pix_videoNT: Unable to start capture");
+      error("Unable to start capture");
       return;
     }
 
@@ -288,14 +288,14 @@ void pix_videoNT :: dimenMess(int x, int y)
 {
   if (!m_haveVideo)
     {
-      error("GEM: pix_videoNT: Connect to video first");
+      error("Connect to video first");
       return;
     }
     
   // stop the transfer and destroy the buffer
   if ( !stopTransfer() ) 
     {
-      error("GEM: pix_videoNT: error stopping transfer");
+      error("error stopping transfer");
       return;
     }
 
@@ -311,7 +311,7 @@ void pix_videoNT :: dimenMess(int x, int y)
   // start the transfer and rebuild the buffer
   if ( !startTransfer() ) 
     {
-      error("GEM: pix_videoNT: error starting transfer");
+      error("error starting transfer");
       return;
     }
 }

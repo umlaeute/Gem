@@ -43,7 +43,7 @@ part_targetcolor :: part_targetcolor(int argc, t_atom *argv)
     else if (argc == 0) colorMess(1.f, 1.f, 1.f, 1.f);
     else
     {
-        error("GEM: part_targetcolor: needs 0, 3, 4, or 5 arguments");
+        error("needs 0, 3, 4, or 5 arguments");
         colorMess(1.f, 1.f, 1.f, 1.f);
     }
 

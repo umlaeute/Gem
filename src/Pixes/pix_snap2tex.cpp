@@ -60,7 +60,7 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
     }
   else
     {
-      error("GEM: pix_snap2tex: needs 0, 2, or 4 values");
+      error("needs 0, 2, or 4 values");
       m_x = m_y = 0;
       m_width = m_height = 128;
     }
@@ -124,7 +124,7 @@ void pix_snap2tex :: snapMess()
 
   if (width <= 0 || height <= 0)
     {
-      error("GEM: pix_snap2tex: Illegal size");
+      error("Illegal size");
       return;
     }
 
@@ -255,7 +255,7 @@ void pix_snap2tex :: startRendering()
 
   m_oldWidth = m_oldHeight = m_texWidth = m_texHeight = -1;
   if (!m_textureObj)	{
-    error("Gem: pix_snap2tex: Unable to allocate texture object");
+    error("Unable to allocate texture object");
     return;
   }
 
@@ -308,7 +308,7 @@ void pix_snap2tex :: posMess(int x, int y)
 void pix_snap2tex :: cleanImage()
 {
   // release previous data
-  post("pix_snap2tex2tex: clean is unimplemented.");
+  error("clean is unimplemented.");
   setModified();
 }
 

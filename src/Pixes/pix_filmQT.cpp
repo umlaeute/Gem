@@ -46,7 +46,7 @@ pix_filmQT :: pix_filmQT(t_symbol *filename) :
 	err = InitializeQTML(0);
 	if (err)
 	{
-		error("pix_filmQT: Could not initialize quicktime: error %d\n", err);
+		error("Could not initialize quicktime: error %d\n", err);
 		return;
 	}	
 	
@@ -54,7 +54,7 @@ pix_filmQT :: pix_filmQT(t_symbol *filename) :
 	EnterMovies();
 	if (err)
 	{
-		error("pix_filmQT: Could not initialize quicktime: error %d\n", err);
+		error("Could not initialize quicktime: error %d\n", err);
 		return;
 	}	
 #endif
@@ -126,7 +126,7 @@ void pix_filmQT :: openMess(t_symbol *filename)
 {
 	if (!m_bInit)
 	{
-		error("pix_filmQT: object not correctly initialized\n");
+		error("object not correctly initialized\n");
 		return;
 	}
   //  if (filename==x_filename)return;
@@ -154,7 +154,7 @@ void pix_filmQT :: openMess(t_symbol *filename)
 
 
   //outlet_float(m_outNumFrames, (float)m_numFrames);
-  post("GEM: pix_film: Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
+  post("loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
 }
 
@@ -171,7 +171,7 @@ void pix_filmQT :: realOpen(char *filename)
 	long		m_rowBytes;
 
     if (!filename[0]) {
-        post("pix_filmQT:  no filename passed");
+        error("no filename passed");
     } else {  
 		Str255	pstrFilename;
         CopyCStringToPascal(filename, pstrFilename);                          // Convert to Pascal string
@@ -182,7 +182,7 @@ void pix_filmQT :: realOpen(char *filename)
 //        err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
             
         if (err) {
-            error("GEM: pix_movie: Unable to find file: %s", filename);
+            error("Unable to find file: %s", filename);
             return;
         }
         m_haveMovie = GEM_MOVIE_MOV;
@@ -191,7 +191,7 @@ void pix_filmQT :: realOpen(char *filename)
     short	refnum = 0;
     err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
     if (err) {
-        error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+        error("Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
         if (refnum) ::CloseMovieFile(refnum);
         return;
     }
@@ -202,7 +202,7 @@ void pix_filmQT :: realOpen(char *filename)
 	m_reqFrame = 0;
 	m_curFrame = -1;
         m_numTracks = (int)GetMovieTrackCount(m_movie);
-        post("GEM: pix_filmQT:  m_numTracks = %d",m_numTracks);
+        post("m_numTracks = %d",m_numTracks);
 
 	// Get the length of the movie
         long	movieDur, movieScale;
@@ -259,7 +259,7 @@ void pix_filmQT :: realOpen(char *filename)
 					m_pixBlock.image.data, 
 					m_rowBytes);
 	if (err) {
-		error("GEM: pix_filmQT: Couldn't make QTNewGWorldFromPtr %d", err);
+		error("Couldn't make QTNewGWorldFromPtr %d", err);
 		m_haveMovie = 0;
 		return;
 	}
@@ -379,10 +379,10 @@ void pix_filmQT :: LoadRam()
         err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
         if (err)
         {
-            post("pix_film: LoadMovieIntoRam failed miserably");
+            post("LoadMovieIntoRam failed miserably");
         }
     }else{
-        post("pix_film: no movie to load into RAM!");
+        post("no movie to load into RAM!");
     }
 }
 

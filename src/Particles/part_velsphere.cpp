@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(part_velsphere, t_floatarg, A_DEFFLOAT, t_floatarg,
 part_velsphere :: part_velsphere(t_floatarg xpos, t_floatarg ypos, t_floatarg zpos, t_floatarg rad)
   : m_radius(rad)
 {
-  post("part_velsphere: this is obsolete, use [part_velocity sphere <x> <y> <z> <r>] instead");
+  error("this is obsolete, use [part_velocity sphere <x> <y> <z> <r>] instead");
 
   m_pos[0] = xpos;
   m_pos[1] = ypos;

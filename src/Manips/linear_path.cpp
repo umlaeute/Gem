@@ -47,7 +47,7 @@ void linear_path :: floatMess(float val)
 {
     if (!m_array)
     {
-        error("GEM: linear_path: no array");
+        error("no array");
         return;
     }
 
@@ -58,7 +58,7 @@ void linear_path :: floatMess(float val)
 
     if (size % m_numDimens)
     {
-        error("GEM: linear_path: size is not a mod of dimensions");
+        error("size is not a mod of dimensions");
         return;
     }
 

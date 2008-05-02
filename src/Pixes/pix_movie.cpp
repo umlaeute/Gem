@@ -95,7 +95,7 @@ void pix_movie :: prepareTexture()
     {
         int neededXSize = m_pixBlock.image.xsize;
         int neededYSize = m_pixBlock.image.ysize;
-        post("pix_movie: prepareTexture: x : %d, y : %d", neededXSize, neededYSize );
+        post("prepareTexture: x : %d, y : %d", neededXSize, neededYSize );
 
         // ratio for the texture map coordinates
         m_xRatio = (float)m_xsize / (float)neededXSize;
@@ -220,7 +220,7 @@ void pix_movie :: postrender(GemState *state)
 
   state->image       = m_oldImage;
   
-  //  post("pix_movie: postrender");
+  //  post("postrender");
   m_pixBlock.newimage = 0;
 
   if ( !GemMan::texture_rectangle_supported)
