@@ -68,7 +68,7 @@ void TextBase :: startRendering(void) {
 /////////////////////////////////////////////////////////
 void TextBase :: renderLine(const char*line, float dist) {
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-
+#if 0
   startpost("renderline: "); {
     char*c=(char*)line;
     while(c) {
@@ -76,7 +76,7 @@ void TextBase :: renderLine(const char*line, float dist) {
       c++;
     }
   }
-
+#endif
   m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
 
   glPushMatrix();
@@ -116,7 +116,7 @@ void TextBase :: setFontSize(t_float size){
   m_fontSize = size;
   if (!m_font)return;
   if (! m_font->FaceSize((int)m_fontSize) ) {
-    error("unable set fontsize !");
+    error("unable to set fontsize !");
   }
   setModified();
 }

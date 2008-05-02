@@ -122,7 +122,7 @@ void GemShape :: typeMess(t_symbol *type)
     break;  
     
   default:
-    error ("GEM: square draw style");
+    error ("unknown draw style");
     return;
   }
   setModified();

@@ -990,7 +990,7 @@ static Boolean CheckRenderer (GDHandle hGD, long* pVRAM, long* pTextureRAM, GLin
 	aglReportError ();
 	if(!head_info)
 	{
-		post("aglQueryRendererInfo error");
+		error("aglQueryRendererInfo error");
 		return false;
 	}
 	else
@@ -1075,7 +1075,7 @@ static Boolean CheckAllDeviceRenderers (long* pVRAM, long* pTextureRAM, GLint* p
         aglReportError ();
         if(!head_info)
         {
-            post("aglQueryRendererInfo error");
+            error("aglQueryRendererInfo error");
             return false;
         }
         else
@@ -1537,7 +1537,7 @@ bool initGemWin(void) {
   // Check QuickTime installed
   long	QDfeature;
   if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
-    error ("GEM: QuickTime is not installed : %d", err);
+    error("GEM: QuickTime is not installed : %d", err);
     return 0;
   } else {
     if (OSErr err = ::EnterMovies()) {
@@ -1547,7 +1547,7 @@ bool initGemWin(void) {
   }
   // check existence of OpenGL libraries
   if ((Ptr)kUnresolvedCFragSymbolAddress == (Ptr)aglChoosePixelFormat) {
-    error ("GEM : OpenGL is not installed");
+    error("GEM: OpenGL is not installed");
     return 0;
   }
   // This is to create a "master context" on Gem initialization, with

@@ -319,6 +319,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
      * LATER re-think the entire dual-context thing
      */
     if(xerr!=0) {
+      error("GEM: problems making glX-context current: refusing to continue");
       destroyGemWindow(info);
       return(0);
     }
@@ -333,7 +334,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   //  XMapWindow(info.dpy, info.win);
   XEvent report;
   XIfEvent(info.dpy, &report, WaitForNotify, (char*)info.win);
-  if (glXIsDirect(info.dpy, info.context))post("Direct Rendering enabled!");
+  if (glXIsDirect(info.dpy, info.context))post("GEM: Direct Rendering enabled!");
 
   return(1);
 }

@@ -746,7 +746,7 @@ void GemMan :: render(void *)
   //if we're trying to do crystal glasses stereo but don't have a stereo window
   //disable stereo and post a warning
   if(m_stereo == 3 && !stereoWindowTest){
-    error("you've selected Crystal Glasses Stereo but your graphics card isn't set up for stereo, setting stereo=0");
+    error("GEM: you've selected Crystal Glasses Stereo but your graphics card isn't set up for stereo, setting stereo=0");
     m_stereo = GemMan::m_stereo = 0;
   } else if(stereoWindowTest) {
     //if we're not doing crystal eyes stereo but our window is enabled to do stereo
@@ -1191,18 +1191,16 @@ int GemMan :: createWindow(char* disp)
 
   if (GLEW_OK != err) {
     if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
-      error("failed to init GLEW (glx)");
-      error("continuing anyhow - please report any problems to the gem-dev mailinglist!");
+      error("GEM: failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!");
     } else if (GLEW_ERROR_GL_VERSION_10_ONLY) {
-      error("failed to init GLEW");
-      error("your system only supports openGL-1.0");
+      error("GEM: failed to init GLEW: your system only supports openGL-1.0");
       return(0);
     } else {
-      error("failed to init GLEW");
+      error("GEM: failed to init GLEW");
       return(0);
     }
   }
-  post("GLEW version %s",glewGetString(GLEW_VERSION));
+  post("GEM: GLEW version %s",glewGetString(GLEW_VERSION));
 
   checkOpenGLExtensions();
 
