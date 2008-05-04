@@ -212,15 +212,6 @@ int OpenGLExtensionIsSupported(const char* extension) {
 
 void GemMan :: checkOpenGLExtensions(void)
 {
-#if 0
-  post("texture-rectangle: %d %d", GLEW_ARB_texture_rectangle, GLEW_EXT_texture_rectangle);
-  post("client-storage: %d", GLEW_APPLE_client_storage);
-  post("texture-range: %d", GLEW_APPLE_texture_range);
-  post("YUV: %d", GLEW_APPLE_ycbcr_422);
-  post("multisample: %d", GLEW_NV_multisample_filter_hint);
-#endif
-
-
   /* rectangle textures */
   texture_rectangle_supported = 0;
 
@@ -251,7 +242,6 @@ void GemMan :: checkOpenGLExtensions(void)
 
 void GemMan :: createContext(char* disp)
 {
-#ifdef __WIN32__
   // can we only have one context?
   if (getenv("GEM_SINGLE_CONTEXT") &&
       !strcmp("1", getenv("GEM_SINGLE_CONTEXT")))
@@ -261,7 +251,6 @@ void GemMan :: createContext(char* disp)
       m_width = 640;
       m_height = 480;
     }
-#endif
 
   s_windowClock = clock_new(NULL, (t_method)GemMan::dispatchWinmessCallback);
   if (!m_windowContext && !createConstWindow(disp))
@@ -600,10 +589,8 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
 
 void GemMan :: render(void *)
 {
-#ifdef __WIN32__
   static int firstTime = 1;
   static float countFreq = 0;
-#endif
 
   if(GemMan::pleaseDestroy)GemMan::destroyWindow();
 
@@ -619,22 +606,17 @@ void GemMan :: render(void *)
         countFreq = 0;
       else
         countFreq = (float)(freq.QuadPart);
-      firstTime = 0;
     }
   LARGE_INTEGER startTime;
-  //	if (m_profile == 1 || m_profile == 2)
   QueryPerformanceCounter(&startTime);
 #elif __unix__
   timeval startTime;
-  //	if (m_profile == 1 || m_profile == 2)
-  {
-    gettimeofday(&startTime, 0);
-  }
+  gettimeofday(&startTime, 0);
 #elif __APPLE__
   UnsignedWide startTime;
   ::Microseconds(&startTime);
 #else
-#error Define OS specific profiling
+# error Define OS specific profiling
 #endif
     
   s_hit = 0;
@@ -911,38 +893,38 @@ void GemMan :: render(void *)
   swapBuffers();
 
   // are we profiling?
-  if (m_profile == 1 || m_profile == 2)
+  if (m_profile>0) {
+    float seconds = 0.f;
 #ifdef __WIN32__
     {
       LARGE_INTEGER endTime;
       QueryPerformanceCounter(&endTime);
       if (countFreq)
-        //post("GEM: time: %f",
-        //     (float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-        GemMan::fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-      else
-        error("GEM: unable to profile");
+	seconds=(float)(endTime.QuadPart - startTime.QuadPart)/countFreq;
     }
 #elif __unix__
-  {
-    timeval endTime;
-    gettimeofday(&endTime, 0);
-    float seconds = (endTime.tv_sec - startTime.tv_sec) +
-      (endTime.tv_usec - startTime.tv_usec) * 0.000001;
-    post("GEM: time: %f", seconds);
-  }
+    {
+      timeval endTime;
+      gettimeofday(&endTime, 0);
+      seconds = (endTime.tv_sec - startTime.tv_sec) +
+	(endTime.tv_usec - startTime.tv_usec) * 0.000001;
+    }
 #elif __APPLE__
-  {
-	  UnsignedWide endTime;
-	  ::Microseconds(&endTime);
-	  float seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
-	  GemMan::fps = (1 / (seconds * 1000)) * 1000;
-	  //m_fps = (1 / (seconds * 1000)) * 1000;
-    //  post("GEM: time: %f", seconds);
-  }
+    {
+      UnsignedWide endTime;
+      ::Microseconds(&endTime);
+      seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+    }
 #else
-#error Define OS specific profiling
+# error Define OS specific profiling
 #endif
+    if(seconds>0.f) {
+      GemMan::fps = (1 / (seconds * 1000.f)) * 1000.f;
+      post("seconds: %f", seconds);
+    } else {
+      error("GEM: unable to profile");
+    }
+  }
 
   // only keep going if no one set the s_hit (could be hit if scheduler gets
   //	    ahold of a stopRendering command)
@@ -950,6 +932,7 @@ void GemMan :: render(void *)
     clock_delay(s_clock, s_deltime);
 	
   glReportError();
+  firstTime = 0;
 }
 
 /////////////////////////////////////////////////////////
