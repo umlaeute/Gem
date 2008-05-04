@@ -89,8 +89,11 @@ void pix_write :: doWrite()
   if ( !GemMan::windowExists() )
     return;
   
-  int width  = (m_width > 0)?m_width :GemMan::m_width;
-  int height = (m_height> 0)?m_height:GemMan::m_height;
+  int width  = m_width;
+  int height = m_height;
+
+  GemMan::getDimen(((m_width >0)?NULL:&width ),
+		   ((m_height>0)?NULL:&height));
 
   m_originalImage->xsize = width;
   m_originalImage->ysize = height;

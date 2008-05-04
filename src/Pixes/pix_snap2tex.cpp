@@ -119,8 +119,12 @@ void pix_snap2tex :: snapMess()
   if ( !GemMan::windowExists() ) return;
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
 
-  int width =(m_width <=0)?GemMan::m_width :m_width;
-  int height=(m_height<=0)?GemMan::m_height:m_height;
+  
+  int width  = m_width;
+  int height = m_height;
+
+  GemMan::getDimen(((m_width >0)?NULL:&width ),
+		   ((m_height>0)?NULL:&height));
 
   if (width <= 0 || height <= 0)
     {

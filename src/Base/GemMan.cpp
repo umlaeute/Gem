@@ -249,7 +249,7 @@ static pascal OSStatus dispatchGemWindowMessages()
 }
 #endif // for Unix
 
-static void resizeCallback(int xSize, int ySize, void *)
+void GemMan::resizeCallback(int xSize, int ySize, void *)
 {
   if (ySize==0)ySize=1;
 
@@ -364,7 +364,7 @@ void GemMan :: createContext(char* disp)
       m_windowContext = 0;
     } else 
     m_windowContext = 1;
-  setResizeCallback(resizeCallback, NULL);
+  setResizeCallback(GemMan::resizeCallback, NULL);
 }
 
 int GemMan :: contextExists(void) {
@@ -1293,7 +1293,7 @@ int GemMan :: windowNumber(void) {
 // createConstWindow
 //
 /////////////////////////////////////////////////////////
-int createConstWindow(char* disp)
+int GemMan::createConstWindow(char* disp)
 {
   // can we only have one context?
   if (s_singleContext) 
@@ -1450,6 +1450,34 @@ float GemMan :: getFramerate()
 {
   return (s_deltime != 0.0) ? (1000. / s_deltime) : 0.0;
 }
+
+
+/////////////////////////////////////////////////////////
+// get window dimensions
+//
+/////////////////////////////////////////////////////////
+void GemMan :: getDimen(int*width, int*height)
+{
+  if(NULL!=width )*width =m_width;
+  if(NULL!=height)*height=m_height;
+}
+
+/////////////////////////////////////////////////////////
+// get real window dimensions (as reported by the window creator)
+//
+/////////////////////////////////////////////////////////
+void GemMan :: getRealDimen(int*width, int*height)
+{
+  if(NULL!=width )*width =m_w;
+  if(NULL!=height)*height=m_h;
+}
+
+//
+int GemMan :: getProfileLevel() {
+  return m_profile;
+}
+
+
 
 /////////////////////////////////////////////////////////
 // requestLight

@@ -95,7 +95,7 @@ void gemhead :: renderGL(GemState *state)
   }
 
   // are we profiling and need to send new images?
-  if (GemMan::m_profile >= 2)
+  if (GemMan::getProfileLevel() >= 2)
 	m_cache->resendImage = 1;
 
   t_atom ap[2];

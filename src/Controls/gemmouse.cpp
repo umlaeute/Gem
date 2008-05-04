@@ -87,19 +87,22 @@ void gemmouse :: mouseMotion(int x, int y)
 {
   t_float scalex = 1., scaley=1.;
 
+  int width, height;
+  GemMan::getRealDimen(&width, &height);
+
   switch(m_scaleMode) {
   case NONE:
     break;
   case BOTH:
-    scalex=m_scaleX/GemMan::m_w;
-    scaley=m_scaleY/GemMan::m_h;
+    scalex=m_scaleX/width;
+    scaley=m_scaleY/height;
     break;
   case WIDTH:
-    scalex=m_scaleX/GemMan::m_w;
+    scalex=m_scaleX/width;
     scaley=scalex;
     break;
   case HEIGHT:
-    scaley=m_scaleY/GemMan::m_h;
+    scaley=m_scaleY/height;
     scalex=scaley;
     break;
   }
