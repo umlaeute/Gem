@@ -648,4 +648,15 @@ GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
 }
 
 
+GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
+{
+  MSG msg;
+  while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE)
+    {
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);
+    }
+}
+
+
 #endif

@@ -70,7 +70,7 @@ class GEM_EXTERN GemMan
 
   //////////
   // is there a context (has its meaning under X)
-  static void       createContext(char* disp);
+  static void         createContext(char* disp);
   static int  	    contextExists(void);
     	
   //////////
@@ -164,16 +164,6 @@ class GEM_EXTERN GemMan
   static float	   m_perspect[6];	// values for the perspective matrix	
   static float	   m_lookat[9];	// values for the lookat matrix
 
-
-	
-  //////////
-  // Changing these variables is likely to crash GEM
-  // This is current rendering window information
-  // The window is created and destroyed by the user, so
-  //		if there is no window, this will contain NULL pointers.
-  /* LATER make this private */
-  static WindowInfo   &getWindowInfo(void);
-
  private:
     	
   //////////
@@ -215,12 +205,18 @@ class GEM_EXTERN GemMan
 	
   //////////
   // Changing these variables is likely to crash GEM
+  // This is current rendering window information
+  // The window is created and destroyed by the user, so
+  //		if there is no window, this will contain NULL pointers.
+  static WindowInfo   &getWindowInfo(void);
+	
+  //////////
+  // Changing these variables is likely to crash GEM
   // This is constant rendering window information
   // This window is always avaliable (although not visible)
   static WindowInfo   &getConstWindowInfo(void);
   static int 	    createConstWindow(char* disp = 0);
 
- private:
   // gemwin is allowed to modifying "global" window attributes
   friend class gemwin;
     	
@@ -248,6 +244,7 @@ class GEM_EXTERN GemMan
   static void 	    resetValues(void);
 
   static void resizeCallback(int xsize, int ysize, void*);
+  static void dispatchWinmessCallback(void);
 
   //////////
   // check for supported openGL extensions we might need

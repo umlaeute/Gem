@@ -141,113 +141,20 @@ static int s_windowDelTime = 10;
 
 static int s_windowRun = 0;
 static int s_singleContext = 0;
-#ifdef __WIN32__
+
 /////////////////////////////////////////////////////////
 // dispatchGemWindowMessages
 //
 /////////////////////////////////////////////////////////
-static void dispatchGemWindowMessages()
+void GemMan::dispatchWinmessCallback()
 {
   if (!s_windowRun)return;
 
-  MSG msg;
-  while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE)
-    {
-      TranslateMessage(&msg);
-      DispatchMessage(&msg);
-    }
+  dispatchGemWindowMessages(GemMan::getWindowInfo());
+
   clock_delay(s_windowClock, s_windowDelTime);
 }
-#elif __unix__ 
-static void dispatchGemWindowMessages()
-{
-  WindowInfo win; 
-  XEvent event; 
-  XButtonEvent* eb = (XButtonEvent*)&event; 
-  XKeyEvent* kb  = (XKeyEvent*)&event; 
-  XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
-  char keystring[2];
-  KeySym keysym_return;
-  win = GemMan::getWindowInfo(); 
 
-  while (XCheckWindowEvent(win.dpy,win.win,
-                           ResizeRedirectMask | 
-                           KeyPressMask | KeyReleaseMask |
-                           PointerMotionMask | 
-                           ButtonMotionMask |
-                           ButtonPressMask | 
-                           ButtonReleaseMask,
-                           &event))
-    {
-      switch (event.type)
-        {
-        case ButtonPress: 
-          triggerButtonEvent(eb->button-1, 1, eb->x, eb->y); 
-          break; 
-        case ButtonRelease: 
-          triggerButtonEvent(eb->button-1, 0, eb->x, eb->y); 
-          break; 
-        case MotionNotify: 
-          triggerMotionEvent(eb->x, eb->y); 
-          break; 
-        case KeyPress:
-          if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
-            //modifier key:use keysym
-            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
-          }
-          if ( (keysym_return & 0xff00)== 0xff00 ) {
-            //non alphanumeric key: use keysym
-            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
-          } else {
-            triggerKeyboardEvent(keystring, kb->keycode, 1);
-          }
-          break;
-        case KeyRelease:
-          if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
-            //modifier key:use keysym
-            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
-          }
-
-          if ( (keysym_return & 0xff00)== 0xff00 ) {
-            //non alphanumeric key: use keysym
-            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
-          } else {
-            triggerKeyboardEvent(keystring, kb->keycode, 0);
-          }
-          break;
-        case ResizeRequest:
-          triggerResizeEvent(res->width, res->height);
-          XResizeWindow(win.dpy, win.win, res->width, res->height);
-          break;
-        default:
-          break; 
-        }
-    }
-  
-  if (XCheckTypedEvent(win.dpy,  ClientMessage, &event)) {
-    GemMan::destroyWindowSoon();
-  }
-  
-  clock_delay(s_windowClock, s_windowDelTime);  
-}
-#elif __APPLE__
-static pascal OSStatus dispatchGemWindowMessages()
-{
-  EventRef	theEvent;
-  EventTargetRef theTarget;
-    
-  theTarget = GetEventDispatcherTarget();
-  // TODO:
-  //   this only gets one event per frame, so there's gotta be a better way, right?
-  ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true, &theEvent );
-  {
-    SendEventToEventTarget( theEvent, theTarget);
-    ReleaseEvent( theEvent );
-  }
-  clock_delay(s_windowClock, s_windowDelTime);
-  return noErr;
-}
-#endif // for Unix
 
 void GemMan::resizeCallback(int xSize, int ySize, void *)
 {
@@ -356,7 +263,7 @@ void GemMan :: createContext(char* disp)
     }
 #endif
 
-  s_windowClock = clock_new(NULL, (t_method)dispatchGemWindowMessages);
+  s_windowClock = clock_new(NULL, (t_method)GemMan::dispatchWinmessCallback);
   if (!m_windowContext && !createConstWindow(disp))
     {
       error("GEM: A serious error occured creating const Context");

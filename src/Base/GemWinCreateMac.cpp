@@ -1583,4 +1583,20 @@ GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
   hints.shared = masterContext;
 }
 
+
+GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
+{
+  EventRef	theEvent;
+  EventTargetRef theTarget;
+    
+  theTarget = GetEventDispatcherTarget();
+  // TODO:
+  //   this only gets one event per frame, so there's gotta be a better way, right?
+  ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true, &theEvent );
+  {
+    SendEventToEventTarget( theEvent, theTarget);
+    ReleaseEvent( theEvent );
+  }
+}
+
 #endif

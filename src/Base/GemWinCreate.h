@@ -64,8 +64,8 @@ class GEM_EXTERN WindowInfo
 #elif defined __WIN32__
     win(NULL), dc(NULL), context(NULL)
 #elif defined __APPLE__
-        pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
-        pixMap(NULL), rowBytes(0), baseAddr(NULL)
+    pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
+    pixMap(NULL), rowBytes(0), baseAddr(NULL)
 #endif
     {}
   int         fs;                 // FullScreen
@@ -212,5 +212,13 @@ GEM_EXTERN extern bool initGemWin(void);
 /////////
 // prepare a WindowInfo for context-sharing
 GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints);
+
+
+
+/////////
+// 
+GEM_EXTERN extern void dispatchGemWindowMessages(WindowInfo &nfo);
+
+
 
 #endif  // for header file
