@@ -68,21 +68,21 @@ class GEM_EXTERN GemMan
 
   //////////
   // Is there a window.
-  static int  	    windowExists(void)  	    { return(m_windowState); }
+  static int  	    windowExists(void);
 
   //////////
   // Are we rendering.
-  static int  	    getRenderState(void)  	    { return(m_rendering); }
+  static int  	    getRenderState(void);
 
   //////////
   // is there a context (has its meaning under X)
   static void         createContext(char* disp);
-  static int  	    contextExists(void)  	    { return(m_windowContext); }
+  static int  	    contextExists(void);
     	
   //////////
   // If an object needs to know if the window changed.
   // This is important for display lists.
-  static int  	    windowNumber(void)  	    { return(m_windowNumber); }
+  static int  	    windowNumber(void);
     	
   //////////
   // reset to the initial state

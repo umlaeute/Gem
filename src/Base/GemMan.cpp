@@ -367,6 +367,9 @@ void GemMan :: createContext(char* disp)
   setResizeCallback(resizeCallback, NULL);
 }
 
+int GemMan :: contextExists(void) {
+  return(m_windowContext);
+}
 
 /////////////////////////////////////////////////////////
 //
@@ -1105,6 +1108,12 @@ void GemMan :: stopRendering()
   post("GEM: Stop rendering");
 }
 
+
+int GemMan :: getRenderState(void) {
+  return(m_rendering);
+}
+
+
 /////////////////////////////////////////////////////////
 // windowInit
 //
@@ -1145,6 +1154,10 @@ void GemMan :: windowInit()
 /////////////////////////////////////////////////////////
 void GemMan :: windowCleanup()
 { }
+
+int GemMan :: windowExists(void) {
+  return(m_windowState);
+}
 
 /////////////////////////////////////////////////////////
 // createWindow
@@ -1269,6 +1282,12 @@ void GemMan :: destroyWindow()
   gemWinMakeCurrent(constInfo);
   s_windowRun = 0;
 }
+
+
+int GemMan :: windowNumber(void) {
+  return(m_windowNumber);
+}
+
 
 /////////////////////////////////////////////////////////
 // createConstWindow
