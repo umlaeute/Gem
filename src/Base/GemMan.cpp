@@ -920,7 +920,6 @@ void GemMan :: render(void *)
 #endif
     if(seconds>0.f) {
       GemMan::fps = (1 / (seconds * 1000.f)) * 1000.f;
-      post("seconds: %f", seconds);
     } else {
       error("GEM: unable to profile");
     }
