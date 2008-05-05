@@ -99,8 +99,6 @@ void glsl_vertex :: closeMess(void)
 /////////////////////////////////////////////////////////
 bool glsl_vertex :: openMessGL2(void)
 {
-  post("m_shader: %d\t%d", m_shader, m_shaderTarget);
-
   if (m_shader) {
     glDeleteShader( m_shader );
   }
