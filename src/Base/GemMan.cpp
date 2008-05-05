@@ -248,8 +248,10 @@ void GemMan :: createContext(char* disp)
     {
       post("GEM: using GEM_SINGLE_CONTEXT");
       s_singleContext = 1;
+      /*
       m_width = 640;
       m_height = 480;
+      */
     }
 
   s_windowClock = clock_new(NULL, (t_method)GemMan::dispatchWinmessCallback);
@@ -1094,7 +1096,7 @@ void GemMan :: destroyWindow()
   GemMan::pleaseDestroy=false;
 
   // don't want to get rid of this
-  if (s_singleContext) return;
+  //  if (s_singleContext) return;
 
   // nothing to destroy...
   if (!m_windowState) return;
