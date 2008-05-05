@@ -151,6 +151,15 @@ void TextBase :: fontNameMess(const char *filename){
   } else
     canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
 
+  /* try to open the file */
+  FILE*file = fopen(buf, "r");
+  if (!file) {
+    error("cannot find font-file '%s'", buf);
+    return;
+  }
+  fclose(file);
+
+  /* now read font */
   if (makeFont(buf)==NULL){
     error("unable to open font '%s'", buf);
     return;
