@@ -591,33 +591,13 @@ void GemMan :: render(void *)
 {
   static int firstTime = 1;
   static float countFreq = 0;
+  int profiling=m_profile;
 
   if(GemMan::pleaseDestroy)GemMan::destroyWindow();
-
-  if (!m_windowState)
-    return;
+  if (!m_windowState)return;
 
   // are we profiling?
-#ifdef __WIN32__
-  if (firstTime)
-    {
-      LARGE_INTEGER freq;
-      if (!QueryPerformanceFrequency(&freq))
-        countFreq = 0;
-      else
-        countFreq = (float)(freq.QuadPart);
-    }
-  LARGE_INTEGER startTime;
-  QueryPerformanceCounter(&startTime);
-#elif __unix__
-  timeval startTime;
-  gettimeofday(&startTime, 0);
-#elif __APPLE__
-  UnsignedWide startTime;
-  ::Microseconds(&startTime);
-#else
-# error Define OS specific profiling
-#endif
+  double starttime=sys_getrealtime();
     
   s_hit = 0;
   resetValues();
@@ -887,37 +867,11 @@ void GemMan :: render(void *)
       renderChain(s_linkHead_2, &currentState);
     }
   }
-
-  // only want to swap if we are in double buffer mode
-  //  if (GemMan::m_buffer == 2)
   swapBuffers();
 
   // are we profiling?
-  if (m_profile>0) {
-    float seconds = 0.f;
-#ifdef __WIN32__
-    {
-      LARGE_INTEGER endTime;
-      QueryPerformanceCounter(&endTime);
-      if (countFreq)
-	seconds=(float)(endTime.QuadPart - startTime.QuadPart)/countFreq;
-    }
-#elif __unix__
-    {
-      timeval endTime;
-      gettimeofday(&endTime, 0);
-      seconds = (endTime.tv_sec - startTime.tv_sec) +
-	(endTime.tv_usec - startTime.tv_usec) * 0.000001;
-    }
-#elif __APPLE__
-    {
-      UnsignedWide endTime;
-      ::Microseconds(&endTime);
-      seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
-    }
-#else
-# error Define OS specific profiling
-#endif
+  if (profiling>0) {
+    float seconds =  sys_getrealtime()-starttime;
     if(seconds>0.f) {
       GemMan::fps = (1 / (seconds * 1000.f)) * 1000.f;
     } else {
@@ -1027,12 +981,10 @@ void GemMan :: windowInit()
    * JMZ: additionally, we should not enable it, without checking first, 
    * whether GL_NV_multisample_filter_hint is supported by the backend
    */
-
-#if defined GL_MULTISAMPLE_ARB && defined GL_MULTISAMPLE_FILTER_HINT_NV
-  glEnable (GL_MULTISAMPLE_ARB);
+  if(GLEW_ARB_multisample)
+    glEnable (GL_MULTISAMPLE_ARB);
   if(multisample_filter_hint)
     glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
-#endif
  
   resetValues();
 }
@@ -1108,11 +1060,7 @@ int GemMan :: createWindow(char* disp)
 
   /* check the stack-sizes */
   glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH, maxStackDepth+0);
-#ifdef GL_MAX_COLOR_MATRIX_STACK_DEPTH
   glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+1);
-#else
-  maxStackDepth[1]=2;
-#endif
   glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH, maxStackDepth+2);
   glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, maxStackDepth+3);
 
