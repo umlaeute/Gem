@@ -122,6 +122,7 @@ class GEM_EXTERN GemMan
 
   static void getDimen(int*width, int*height);
   static void getRealDimen(int*width, int*height);
+  static void getOffset(int*x, int*y);
       
   //////////
   // Turn on/off lighting
@@ -164,6 +165,9 @@ class GEM_EXTERN GemMan
   static float	   m_perspect[6];	// values for the perspective matrix	
   static float	   m_lookat[9];	// values for the lookat matrix
 
+  // LATER make this private (right now it is needed in gem2pdp)
+  static int	   m_buffer;		// single(1) or double(2)
+
  private:
     	
   //////////
@@ -180,7 +184,6 @@ class GEM_EXTERN GemMan
   static int	   m_yoffset;		// window offset (y)
 
   static int	   m_border;		// window border
-  static int	   m_buffer;		// single(1) or double(2)
   static int	   m_stereo;		// stereoscopic
 
   static int	   m_profile;		// off(0), on(1), w/o image caching(2)

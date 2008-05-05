@@ -1361,6 +1361,19 @@ void GemMan :: getRealDimen(int*width, int*height)
   if(NULL!=height)*height=m_h;
 }
 
+
+/////////////////////////////////////////////////////////
+// get window position
+//
+/////////////////////////////////////////////////////////
+void GemMan :: getOffset(int*x, int*y)
+{
+  if(NULL!=x)*x=m_xoffset;
+  if(NULL!=y)*y=m_yoffset;
+}
+
+
+
 //
 int GemMan :: getProfileLevel() {
   return m_profile;
