@@ -118,11 +118,9 @@ int ErrorHandler (Display *dpy, XErrorEvent *event)
   if ( event->error_code != BadWindow ) {
     char buf[256];
     XGetErrorText (dpy, event->error_code, buf, sizeof(buf));
-    error("GEM-Xwin: %s", buf);
-  }
-  error("GEM-XWin: please report error#%d to the gem-dev's !!\n\thttp://lists.puredata.info/listinfo/gem-dev/", xerr);
-
-  printf("GEM-XWin: please report error#%d to the gem-dev's !!\n\thttp://lists.puredata.info/listinfo/gem-dev/\n", xerr);
+    fprintf(stderr, "GEM-Xwin: %s\n", buf);
+  } else
+    fprintf(stderr, "GEM-Xwin: BadWindow (%d)\n", xerr);
   return (0);
 }
 
@@ -325,6 +323,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
      */
     if(xerr!=0) {
       error("GEM: problems making glX-context current: refusing to continue");
+      error("GEM: try setting the environment variable GEM_SINGLE_CONTEXT=1");
       destroyGemWindow(info);
       return(0);
     }

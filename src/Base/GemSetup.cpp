@@ -71,6 +71,10 @@ static t_class *Gem_setup_class;
       post("GEM:\t\t%s", GEM_AUTHORS[i]);
     }  
     post("GEM: with help by %s", GEM_OTHERAUTHORS);
+    post("GEM: found a bug? miss a feature? please report it:");
+    post("GEM: \thomepage http://gem.iem.at/");
+    post("GEM: \tbug-tracker http://sourceforge.net/projects/pd-gem/");
+    post("GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
 
     GemMan::initGem();
   }
