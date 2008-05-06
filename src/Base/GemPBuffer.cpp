@@ -34,7 +34,7 @@
 #include "GemPBuffer.h"
 
 #ifdef __linux__
-# include <GL/glx.h>
+# include <Base/glxew.h>
 #elif defined __APPLE__
 # include <AGL/agl.h>
 #endif
@@ -44,6 +44,7 @@
  * _not_ the appropriate functions like glXChooseFBConfigSGIX()
  * LATER fix this (think glew)
  */
+#warning undef GLX_SGIX_fbconfig
 #undef GLX_SGIX_fbconfig
 
 struct PBuffer_data {
@@ -141,6 +142,7 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height)
       pattrib.push_back(height);
       pattrib.push_back(0);
 			
+#warning glXChooseFBConfig might crash - use glxew
       config = glXChooseFBConfig(display,screen,&attrib[0],&count);	
       if(!config) throw("glXChooseFBConfig() failed");
 			
