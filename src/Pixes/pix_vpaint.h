@@ -33,7 +33,6 @@ KEYWORDS
 DESCRIPTION
 
     Inlet for a list - "vert_size"
-    Inlet for a list - "vert_pos"
     
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_vpaint : public GemPixObj
@@ -58,17 +57,11 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processImage(imageStruct &image);
-//		virtual void 	processRGBAImage(imageStruct &image);
-//      virtual void 	processGrayImage(imageStruct &image);
-//    	virtual void 	processYUVImage(imageStruct &image);
 
     	//////////
     	// When a size message is received
     	virtual void	sizeMess(int width, int height);
     	
-    	//////////
-    	// When a position message is received
-    	virtual void	posMess(int x, int y);
 		
 		//////////
 		//
@@ -115,13 +108,13 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
 		bool		m_banged;
     	
     private:
+
+    t_inlet *m_sizinlet;
     	
-    	//////////
-    	// static member functions
-    	static void 	vpaintCallback(void *data);
+    //////////
+    // static member functions
 		static void 	bangMessCallback(void *data);
-    	static void 	sizeMessCallback(void *data, t_floatarg width, t_floatarg height );
-    	static void 	posMessCallback(void *data, t_floatarg x, t_floatarg y);
+    static void 	sizeMessCallback(void *data, t_floatarg width, t_floatarg height );
 };
 
 #endif	// for header file

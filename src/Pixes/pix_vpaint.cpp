@@ -42,10 +42,9 @@ pix_vpaint :: pix_vpaint()
     	  : m_initialized(0), maxPoints(2048), numPoints(0),
 		    viewImage(0), useStrokes(1), drawEdges(0), moving(0), m_banged(false)
 {
-  m_x = m_y = 0;
   m_w = m_h = 128;
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("mouse"));
+  m_sizinlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
 }
 
 /////////////////////////////////////////////////////////
@@ -58,6 +57,7 @@ pix_vpaint :: ~pix_vpaint()
 	{
 	  free(points);
 	}
+  if(m_sizinlet)inlet_free(m_sizinlet);
 }
 
 
@@ -97,7 +97,6 @@ void pix_vpaint :: makepoints(void)
 {
   GLubyte *bi = (GLubyte *) m_imageStruct.data;
   int i;
-
   //free(points);
   if (!m_initialized)
     points = (cPoint *) malloc(maxPoints * sizeof(cPoint));
@@ -222,14 +221,14 @@ void pix_vpaint :: processImage(imageStruct &image)
   m_imageStruct = image;
   m_w = m_imageStruct.xsize;
   m_h = m_imageStruct.ysize;
-  
+
   if (!m_initialized){
     init();
   }
   if ( (m_banged) || ((m_w != m_imageStruct.xsize) && (m_h != m_imageStruct.ysize)) )
   {
-	makepoints();
-	m_banged=false;
+    makepoints();
+    m_banged=false;
   }
   m_pbuffer->enable();
     
@@ -238,7 +237,6 @@ void pix_vpaint :: processImage(imageStruct &image)
 	glDrawBuffer(GL_FRONT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//	glDrawPixels(m_w, m_h, GL_RGBA, GL_UNSIGNED_BYTE, (GLubyte *) m_imageStruct.data);
 	glDrawPixels(m_w, m_h, image.format, GL_UNSIGNED_BYTE, (GLubyte *) m_imageStruct.data);
   } else if (!drawEdges) {
 	glDrawBuffer(useStrokes ? GL_BACK : GL_FRONT);
@@ -338,17 +336,7 @@ void pix_vpaint :: processImage(imageStruct &image)
 void pix_vpaint :: sizeMess(int width, int height)
 {
 	m_w = width;
-    m_h = height;
-}
-
-/////////////////////////////////////////////////////////
-// posMess
-//
-/////////////////////////////////////////////////////////
-void pix_vpaint :: posMess(int x, int y)
-{
-    m_x = x;
-    m_y = y;
+  m_h = height;
 }
 
 /////////////////////////////////////////////////////////
@@ -357,25 +345,13 @@ void pix_vpaint :: posMess(int x, int y)
 /////////////////////////////////////////////////////////
 void pix_vpaint :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_vpaint::vpaintCallback,
-    	    gensym("vpaint"), A_NULL);
-	class_addbang(classPtr, (t_method)&pix_vpaint::bangMessCallback);
+    class_addbang(classPtr, (t_method)&pix_vpaint::bangMessCallback);
     class_addmethod(classPtr, (t_method)&pix_vpaint::sizeMessCallback,
     	    gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_vpaint::posMessCallback,
-    	    gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
-}
-void pix_vpaint :: vpaintCallback(void *data)
-{
-//    GetMyClass(data)->vpaintMess();
 }
 void pix_vpaint :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
     GetMyClass(data)->sizeMess((int)width, (int)height);
-}
-void pix_vpaint :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-    GetMyClass(data)->posMess((int)x, (int)y);
 }
 void pix_vpaint :: bangMessCallback(void *data)
 {
