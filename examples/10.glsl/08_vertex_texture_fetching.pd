@@ -1,4 +1,4 @@
-#N canvas 593 73 785 688 10;
+#N canvas 495 73 785 688 10;
 #X obj 504 69 gemhead;
 #X obj 576 346 pack 0 0;
 #X obj 597 326 t b f;
@@ -45,19 +45,19 @@
 #X obj 504 551 scaleXYZ 3 3 1;
 #X obj 28 388 pix_image img1.jpg;
 #X msg 46 363 open img2.jpg;
-#X text 126 12 This patch need a glsl 3 hardware complient.;
-#X text 127 29 Only good graphic card in 2007 are able to run this
-patch.;
+#X text 117 11 This patch need a glsl 3 compliant hardware;
 #X text 26 535 draw an image in a frambuffer;
 #X text 49 274 this configuration is very important to have full hardware
-suport for vertex texture fetching;
-#X text 306 603 this exemple use the framebuffer image in the vertex
+support for vertex texture fetching;
+#X text 306 603 this example uses the framebuffer image in the vertex
 shader in the same way you can do in the pixel shader. This is only
 possible in this specific configuration (it's a hardware limitation)
 ;
-#X text 126 47 (nvidia 7000 and 8000 serie should work \, ati X1000
-serie does not \, but latter should);
+#X text 117 56 (nvidia 7000 and 8000 serie should work \, ati X1000
+serie does not \, but later should);
 #X obj 504 579 mesh_square 200;
+#X text 118 28 As in 2007 \, only good (and new) graphic cards are
+able to run this patch.;
 #X connect 0 0 17 0;
 #X connect 1 0 3 0;
 #X connect 2 0 1 0;
@@ -94,6 +94,6 @@ serie does not \, but latter should);
 #X connect 30 0 16 0;
 #X connect 31 0 17 0;
 #X connect 32 0 33 0;
-#X connect 33 0 42 0;
+#X connect 33 0 41 0;
 #X connect 34 0 13 0;
 #X connect 35 0 34 0;
