@@ -39,10 +39,7 @@
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
-				Name="VCCustomBuildTool"
-				CommandLine="xcopy Gem.dll ..\win-nsis\Gem.dll"
-				AdditionalDependencies="Gem.dll"
-				Outputs="..\win-nsis\Gem.dll"/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
@@ -62,7 +59,9 @@
 				TargetEnvironment="1"
 				TypeLibraryName=".\./gem.tlb"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				Description="build the installer"
+				CommandLine="postbuild.bat"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool

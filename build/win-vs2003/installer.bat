@@ -1,4 +1,10 @@
+set _=%CD%
+
 set NSISDIR=..\win-nsis\
 
-xcopy Gem.dll %NSISDIR%
+xcopy /y Gem.dll %NSISDIR%\
 cd %NSISDIR%
+
+buildinstaller.bat %1
+
+cd %_%
