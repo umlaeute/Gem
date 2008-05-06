@@ -18,7 +18,7 @@
  */
  
 #if 0
-# define debug post
+# define debug printf
 #else
 # define debug
 #endif
@@ -40,13 +40,6 @@
 #endif
 
 #ifdef __linux__
-/* darn: my crazy GL/glxext.h defines GLX_SGIX_fbconfig but 
- * _not_ the appropriate functions like glXChooseFBConfigSGIX()
- * LATER fix this (think glew)
- */
-#warning undef GLX_SGIX_fbconfig
-#undef GLX_SGIX_fbconfig
-
 struct PBuffer_data {
   Display *display;
 	
@@ -58,6 +51,7 @@ struct PBuffer_data {
 };
 
 /*
+ * constructor (linux specific)
  */
 PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height)
 {	
@@ -113,45 +107,43 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height)
   GLXContext context;
 	
   try {
-		
     int count;
     GLXFBConfig *config;
 		
     const char *extensions = glXQueryExtensionsString(display,screen);
-    if(0){;
-#ifdef GLX_SGIX_fbconfig
-    } else 
-      if(strstr(extensions,"GLX_SGIX_pbuffer") && strstr(extensions,"GLX_SGIX_fbconfig")) {
+    if(GLXEW_SGIX_fbconfig && GLXEW_SGIX_pbuffer) {
+      debug("using SGIX pbuffers\n");
       pattrib.push_back(0);
 			
       config = glXChooseFBConfigSGIX(display,screen,&attrib[0],&count);
-      if(!config) throw(GemException("glXChooseFBConfigSGIX() failed"));
+      if(!config) throw("glXChooseFBConfigSGIX() failed");
 			
       pbuffer = glXCreateGLXPbufferSGIX(display,config[0],width,height,&pattrib[0]);
-      if(!pbuffer) throw(GemException("glXCreateGLXPbufferSGIX() failed"));
+      if(!pbuffer) throw("glXCreateGLXPbufferSGIX() failed");
 			
       context = glXCreateContextWithConfigSGIX(display,config[0],GLX_RGBA_TYPE,old_context,true);
-      if(!context) throw(GemException("glXCreateContextWithConfigSGIX() failed"));
-#endif	/* GLX_SGIX_fbconfig */
+      if(!context) throw("glXCreateContextWithConfigSGIX() failed");
+    } else if (NULL!=glXChooseFBConfig) { /* LATER make a better check! */
+      debug("using GLX pbuffers");
+        pattrib.push_back(GLX_PBUFFER_WIDTH);
+        pattrib.push_back(width);
+        pattrib.push_back(GLX_PBUFFER_HEIGHT);
+        pattrib.push_back(height);
+        pattrib.push_back(0);
+     
+        config = glXChooseFBConfig(display,screen,&attrib[0],&count);	
+        if(!config) throw("glXChooseFBConfig() failed");
+        
+        pbuffer = glXCreatePbuffer(display,config[0],&pattrib[0]);
+        if(!pbuffer) throw("glXCreatePbuffer() failed");
+			
+        XVisualInfo *visual = glXGetVisualFromFBConfig(display,config[0]);
+        if(!visual) throw("glXGetVisualFromFBConfig() failed");
+			
+        context = glXCreateContext(display,visual,old_context,true);
+        if(!context) throw("glXCreateContext() failed");
     } else {
-      pattrib.push_back(GLX_PBUFFER_WIDTH);
-      pattrib.push_back(width);
-      pattrib.push_back(GLX_PBUFFER_HEIGHT);
-      pattrib.push_back(height);
-      pattrib.push_back(0);
-			
-#warning glXChooseFBConfig might crash - use glxew
-      config = glXChooseFBConfig(display,screen,&attrib[0],&count);	
-      if(!config) throw("glXChooseFBConfig() failed");
-			
-      pbuffer = glXCreatePbuffer(display,config[0],&pattrib[0]);
-      if(!pbuffer) throw("glXCreatePbuffer() failed");
-			
-      XVisualInfo *visual = glXGetVisualFromFBConfig(display,config[0]);
-      if(!visual) throw("glXGetVisualFromFBConfig() failed");
-			
-      context = glXCreateContext(display,visual,old_context,true);
-      if(!context) throw("glXCreateContext() failed");
+      throw("your system lacks PBuffer support!");
     }
   }
   catch(const char *error) {
@@ -261,7 +253,9 @@ OSStatus cglReportError (CGLError err)
   return err;
 }
 
-// ---------------------------------
+/*
+ * constructor (APPLE specific)
+ */
 PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 {
   OSStatus err = noErr;
@@ -278,16 +272,16 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
   *att++=kCGLPFAColorSize;
   *att++=(CGLPixelFormatAttribute)32;
 		
-  if (flag & DEPTH){
+  if (flag & GEM_PBUFLAG_DEPTH){
     *att++=kCGLPFADepthSize;
     //*att++=(CGLPixelFormatAttribute)24;
     *att++=(CGLPixelFormatAttribute)16;
   }
-  if (flag & STENCIL){
+  if (flag & GEM_PBUFLAG_STENCIL){
     *att++=kCGLPFADepthSize;
     *att++=(CGLPixelFormatAttribute)8;
   }
-  if (flag & FLOAT){
+  if (flag & GEM_PBUFLAG_FLOAT){
     //		*att++=kCGLPFADepthSize;
     //		*att++=(CGLPixelFormatAttribute)8;
   }
@@ -379,6 +373,7 @@ static PFNWGLRELEASEPBUFFERDCARBPROC wglReleasePbufferDCARB = NULL;
 static PFNWGLDESTROYPBUFFERARBPROC wglDestroyPbufferARB = NULL;
 
 /*
+ * constructor (w32 specific)
  */
 PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) {
 	
@@ -392,35 +387,35 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) 
   attrib.push_back(true);
   attrib.push_back(WGL_SUPPORT_OPENGL_ARB);
   attrib.push_back(true);
-  if(flags & RGB || flags & RGBA) {
+  if(flags & 	GEM_PBUFLAG_RGB || flags & GEM_PBUFLAG_RGBA) {
     attrib.push_back(WGL_RED_BITS_ARB);
-    attrib.push_back(flags & FLOAT ? 32 : 8);
+    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
     attrib.push_back(WGL_GREEN_BITS_ARB);
-    attrib.push_back(flags & FLOAT ? 32 : 8);
+    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
     attrib.push_back(WGL_BLUE_BITS_ARB);
-    attrib.push_back(flags & FLOAT ? 32 : 8);
-    if(flags & RGBA) {
+    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
+    if(flags & 	GEM_PBUFLAG_RGBA) {
       attrib.push_back(WGL_ALPHA_BITS_ARB);
-      attrib.push_back(flags & FLOAT ? 32 : 8);
+      attrib.push_back(flags & 	GEM_PBUFLAG_FLOAT ? 32 : 8);
     }
   }
-  if(flags & DEPTH) {
+  if(flags & 	GEM_PBUFLAG_DEPTH) {
     attrib.push_back(WGL_DEPTH_BITS_ARB);
     attrib.push_back(24);
   }
-  if(flags & STENCIL) {
+  if(flags & 	GEM_PBUFLAG_STENCIL) {
     attrib.push_back(WGL_STENCIL_BITS_ARB);
     attrib.push_back(8);
   }
-  if(flags & FLOAT) {
+  if(flags & 	GEM_PBUFLAG_FLOAT) {
     attrib.push_back(WGL_FLOAT_COMPONENTS_NV);
     attrib.push_back(true);
   }
-  if(flags & MULTISAMPLE_2 || flags & MULTISAMPLE_4) {
+  if(flags & 	GEM_PBUFLAG_MULTISAMPLE_2 || flags & GEM_PBUFLAG_MULTISAMPLE_4) {
     attrib.push_back(WGL_SAMPLE_BUFFERS_ARB);
     attrib.push_back(true);
     attrib.push_back(WGL_SAMPLES_ARB);
-    attrib.push_back(flags & MULTISAMPLE_2 ? 2 : 4);
+    attrib.push_back(flags & 	GEM_PBUFLAG_MULTISAMPLE_2 ? 2 : 4);
   }
   attrib.push_back(0);
 	
