@@ -1008,7 +1008,7 @@ int GemMan :: windowExists(void) {
 /////////////////////////////////////////////////////////
 int GemMan :: createWindow(char* disp)
 {
-  if ( m_windowState ) return(0);
+  if ( m_windowState ) return(s_singleContext);
   debug_post("GemMan: create window");
 
   WindowHints myHints;
