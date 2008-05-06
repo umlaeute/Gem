@@ -150,7 +150,7 @@ void pix_vpaint :: makecone(void)
 /////////////////////////////////////////////////////////
 void pix_vpaint :: init()
 {
-	m_pbuffer = new PBuffer( m_w, m_h, PBuffer::RGBA | PBuffer::DEPTH );
+	m_pbuffer = new PBuffer( m_w, m_h, PBuffer::GEM_PBUFLAG_RGBA | PBuffer::GEM_PBUFLAG_DEPTH );
 	m_pbuffer->enable();
 
     /*
