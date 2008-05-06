@@ -39,7 +39,10 @@
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+				CommandLine="xcopy Gem.dll ..\win-nsis\Gem.dll"
+				AdditionalDependencies="Gem.dll"
+				Outputs="..\win-nsis\Gem.dll"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
