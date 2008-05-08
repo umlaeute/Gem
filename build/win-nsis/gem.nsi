@@ -65,17 +65,6 @@ InstallDir "$PROGRAMFILES\pd\extra\Gem"
 ShowInstDetails show
 ShowUnInstDetails show
 
-
-Function un.onUninstSuccess
-  HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) has been successfully uninstalled."
-FunctionEnd
-
-Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you really want to uninstall $(^Name) and all it's components?" IDYES +2
-  Abort
-FunctionEnd
-
 ; the sections for the library itself (binary+abstractions)
 
 SectionGroup "Gem" SEC_Gem
@@ -121,6 +110,27 @@ SectionGroup "Documentation" SEC_documentation
   File /r /x CVS "..\..\doc\*.*"
  SectionEnd
 SectionGroupEnd
+
+
+Function .onInit
+ ; prevent multiple instances running at the same time
+ System::Call 'kernel32::CreateMutexA(i 0, i 0, t "gemInstallerMutex") i .r1 ?e'
+ Pop $R0
+ StrCmp $R0 0 +3
+  MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
+  Abort
+FunctionEnd
+
+
+Function un.onUninstSuccess
+  HideWindow
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) has been successfully uninstalled."
+FunctionEnd
+
+Function un.onInit
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you really want to uninstall $(^Name) and all it's components?" IDYES +2
+  Abort
+FunctionEnd
 
 ; uäh: isn't there a way to only delete the files we actually installed?
 ; that is: without having to enumerate them here
