@@ -20,8 +20,9 @@
 #  define FILMQT_DEFAULT_PIXELFORMAT k32ARGBPixelFormat
 
 static bool filmQT_initQT(void) { return true; }
+static bool filmQT_deinitQT(void) { return true; }
 
-# else /* __APPLE__ */
+# else /* !__APPLE__ */
 
 /* TextUtils.h is from QTdev */
 #  include "TextUtils.h"
@@ -41,6 +42,15 @@ static bool filmQT_initQT(void) {
     error("filmQT: Could not initialize quicktime: error %d\n", err);
     return false;
   }
+  return true;
+}
+
+static bool filmQT_deinitQT(void) { 
+  // Deinitialize QuickTime Media Layer
+  ExitMovies();
+  // Deinitialize QuickTime Media Layer
+  TerminateQTML();
+
   return true;
 }
 
@@ -84,10 +94,7 @@ filmQT :: ~filmQT()
   /* i'd rather have "#ifdef QTML" (jmz) */
   /* but now, i don't know why anymore... (jmz) */
 #if defined HAVE_QUICKTIME
-  // Deinitialize QuickTime Media Layer
-  ExitMovies();
-  // Deinitialize QuickTime Media Layer
-  TerminateQTML();
+  filmQT_deinitQT();
 #endif // HAVE_QT
 }
 
