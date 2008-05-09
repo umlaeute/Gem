@@ -498,8 +498,6 @@ bool filmDS :: open(char *filename, int format)
       DVFilter->Release();
     }
 	 
-  post("filmDS: xsize %d ysize %d csize %",m_xsize, m_ysize, m_csize);
-
   // Setup the pixBlock data based on the media type.
   // this is a guess at the fast past for pixels on Windows
   m_image.image.xsize	= m_xsize;
