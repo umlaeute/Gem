@@ -16,13 +16,13 @@ LOG
 #define INCLUDE_PIX_FREEFRAME_H_
 
 #include "Base/GemPixObj.h"
-
+/*
 #if defined SIZEOF_VOID_P && defined SIZEOF_UNSIGNED_INT
 # if SIZEOF_VOID_P != SIZEOF_UNSIGNED_INT
 #  define DONT_WANT_FREEFRAME
 # endif
 #endif
-
+*/
 #ifndef DONT_WANT_FREEFRAME
 
 #if defined __WIN32__ && !defined WIN32
