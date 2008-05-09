@@ -176,7 +176,11 @@ bool filmQT :: open(char*filename, int format) {
   m_image.image.allocate();
 
   m_rowBytes = m_image.image.xsize * 4;
- // SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+  // SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+  err = SetMovieAudioMute(m_movie, true, 0);
+  if(noErr!=err) {
+    error("GEM: filmQT: unable to mute movie...");
+  }
 
   err = QTNewGWorldFromPtr(	&m_srcGWorld,
 				FILMQT_DEFAULT_PIXELFORMAT,
