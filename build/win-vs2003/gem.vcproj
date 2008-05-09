@@ -3158,6 +3158,12 @@
 				RelativePath="..\..\src\openGL\GEMglRenderMode.h">
 			</File>
 			<File
+				RelativePath="..\..\src\openGL\GEMglReportError.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GEMglReportError.h">
+			</File>
+			<File
 				RelativePath="..\..\src\openGL\GEMglRotated.cpp">
 			</File>
 			<File
