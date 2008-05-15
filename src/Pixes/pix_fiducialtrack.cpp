@@ -17,8 +17,11 @@
 
 #ifdef __WIN32__
 # include <io.h>
+#else
+# include <unistd.h>
 #endif
 
+#include <stdio.h>
 #include <string.h>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_fiducialtrack,  t_symbol *, A_DEFSYM)

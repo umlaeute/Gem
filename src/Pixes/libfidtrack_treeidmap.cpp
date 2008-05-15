@@ -8,6 +8,8 @@
 #include <string>
 #include <fstream>
 
+#include <string.h>
+
 static int find_maximum_tree_depth( const std::string& s )
 {
     int result = 0;

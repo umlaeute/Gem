@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "gemframebuffer.h"
+#include <string.h>
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL)
 

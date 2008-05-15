@@ -39,6 +39,8 @@
 # include <AGL/agl.h>
 #endif
 
+#include <stdio.h>
+
 #ifdef __linux__
 struct PBuffer_data {
   Display *display;
