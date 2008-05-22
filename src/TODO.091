@@ -10,20 +10,20 @@ How to read this document
 
 
 General Rendering Issues
-: alpha in gemwindow?
-: stencil buffer
+- alpha in gemwindow?
++ stencil buffer
 
 Missing help-patches
 + glsl_* (DONE)
 + arb-shaders (DONE)
 + pix_record
 + pix_share_{read,write} (DONE)
-:+ gemframebuffer/gempbuffer
++ gemframebuffer/gempbuffer
 
 Untested objects
-:+ gemframebuffer/gempbuffer
++ gemframebuffer/gempbuffer
 + pix_share_{read,write} (DONE, works now on linux; has to be tested on OSX again)
-: vertex_* ?
+- vertex_* ?
 
 
 Object specific bugs
@@ -38,19 +38,19 @@ Object specific bugs
 
 OS specific bugs
 linux:
-:- sometimes window freezes on "destroy"; (JMZ: i experience this sometimes on improper shutdown, but after some (up to 30) seconds, the window finally gets destroyed and pd exits fine; if this is the same as the reported bug, than it is rather an inconvenience than a real bug)
+- sometimes window freezes on "destroy"; (JMZ: i experience this sometimes on improper shutdown, but after some (up to 30) seconds, the window finally gets destroyed and pd exits fine; if this is the same as the reported bug, than it is rather an inconvenience than a real bug)
 + when the window is closed from "outside", destroying it (and sometimes even rendering to it) will destroy the window (hopefully FIXED)
 + pix_record still not compiling with old libquicktime (FIXED)
-: resizing the window yields weird results
+- resizing the window yields weird results
 
 
 
 osx:
 + autoconf buildsystem non-functional
 + remove checks for valid openGL-context (DONE)
-: SequenceGrabber long-term stability (keeps logging you out)
+? SequenceGrabber long-term stability (keeps logging you out)
 + uyvy/bgra/yv12 conversions altivec'd (DONE)
 
 w32:
-:- [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
+- [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
 + objects are missing in the vs.net project: gemframebuffer GemSplash part_sink pix_fiducialtrack pix_hit (seems tobe FIXED in recent cc builds; check again)

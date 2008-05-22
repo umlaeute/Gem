@@ -1,6 +1,59 @@
 GEM ONLINE DOCUMENTATION CHAPTER 5: RELEASE NOTES
 
 ---------------------------------------------------------------
+---------------------------- 0.91 -----------------------------
+this is the first release for 3 years, codename 'tigital'
+it includes many changes, so probably i have forgotten most...
+
+openGL runtime checks: GEM now uses GLEW to detect openGL-features 
+	at runtime this allows you to use all the cool features of 
+	your brand-new graphics card with the same binary as you 
+	used for your old gfx-card...cool
+
+w32-installer: there is now a w32 installer (based on NSIS) to 
+	ease the installation of GEM on windows.
+
+single vs dual context: GEM uses a dual context approach to establish
+	a valid openGL-context at startup;
+	you can now turn this OFF by setting the environmental
+	variable "GEM_SINGLE_CONTEXT=1"
+	this should allow you to work if GEM crashes otherwise
+
+SIMD: better MMX/SSE2 handling
+
+pixes:	fiducial tracking, artoolkit,
+	multitexture, texture sharing
+	recording streams of images into movies,
+	better movie reading support, better video in support,
+	more sophisticated pix_buffer handling
+	shared memory objects
+
+text:	allow unicode characters
+	use vera.ttf as default font instead of the
+	copyrighted arial.ttf
+	allow to override the default font with the environment
+	variable "GEM_DEFAULT_FONT"
+
+
+bugfixes: like always we have removed (and introduced) numerous
+	bugs, so all in all GEM should now run more stable
+	for an incomplete list of fixed bug see the bug-tracker
+	at http://sourceforge.net/projects/pd-gem
+
+openGL: generally use openGL-2.0 (if available)
+	vertex/fragment shaders (GLSL and ARB/NV)
+	framebuffers
+
+
+deletion:
+	MarkEX has been removed from GEM and is now available as
+	a separate library;
+	hardware-interfacing objects like [gemorb] and [gemtablet]
+	have been removed
+
+
+
+
 ---------------------------- 0.90 -----------------------------
 this is the same as 0.888
 just a naming issue
