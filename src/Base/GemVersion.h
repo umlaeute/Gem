@@ -1,6 +1,6 @@
 #ifndef GEM_VERSION_H
 #define GEM_VERSION_H
-static const char *GEM_VERSION = "0.91-cvs";
+static const char *GEM_VERSION = "0.91 'tigital'";
 
 static const char *GEM_MAINTAINER = "IOhannes m zmoelnig";
 
