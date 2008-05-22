@@ -1,4 +1,4 @@
-This is GEM 0.90
+This is GEM 0.91
 ===================
 You can get the current distribution from:
 http://gem.iem.at
@@ -40,9 +40,9 @@ the GemLibs have their own version numbering, starting with 1.
 You can get the newest GemLib from the place mentioned above
 
 
-DEPENDENCIES:
-=============
-current version: GEM-0.90
+COMPILING DEPENDENCIES:
+=======================
+current version: GEM-0.91
 GemLibs	>= 1
 PD 	>= 0.34
 
@@ -53,6 +53,9 @@ INSTALLATION:
 =============
 
 To install GEM on W32:
+
+0) (preferred method)
+  use the installer executable to install Gem into ...\pd\extra
 
 a) use the script
 
