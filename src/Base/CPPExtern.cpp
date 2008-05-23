@@ -125,3 +125,11 @@ void CPPExtern :: error(const char*fmt,...)
       ::error("%s", buf);
   }
 }
+
+bool CPPExtern :: checkGemVersion(int major, int minor) {
+  if((major != GEM_VERSION_MAJOR) && (minor != GEM_VERSION_MINOR)) {
+    ::error("GEM version mismatch: compiled for %d.%d but we are running %s", 
+	    major, minor,
+	    GEM_VERSION);
+  }
+}

@@ -17,6 +17,7 @@ LOG
 #include "Base/GemExportDef.h"
 
 #include "m_pd.h"
+#include "Base/GemVersion.h"
 
 #include <new>
 
@@ -153,6 +154,9 @@ class GEM_EXTERN CPPExtern
 	void            post(const char*format, ...);
 	void            verbose(const int level, const char*format, ...);
         void            error(const char*format, ...); /* internally uses pd_error() */
+
+ private:
+	static bool checkGemVersion(int major, int minor);
 };
 
 // This has a dummy arg so that NT won't complain
@@ -498,6 +502,9 @@ static void* create_ ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_
 extern "C" {	    	    	    	    	    	    	\
 void NEW_CLASS ## _setup()    	    	    	    	\
 {   	    	    	    	    	    	    	    	\
+  if(!checkGemVersion(GEM_VERSION_MAJOR, GEM_VERSION_MINOR)) { \
+    ::error("[%s] will not be available", #NEW_CLASS);	       \
+    return;}						       \
     NEW_CLASS ## _class = class_new(                       \
     	     	gensym(#NEW_CLASS), 	    	    	    	\
     	    	(t_newmethod)create_ ## NEW_CLASS,	    	\
