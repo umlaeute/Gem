@@ -125,13 +125,6 @@ void gemframebuffer :: render(GemState *state)
   glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
                                GL_RENDERBUFFER_EXT, m_depthBufferIndex);
   
-  // We need a one-to-one mapping of pixels to texels in order to
-  // ensure every element of our texture is processed. By setting our
-  // viewport to the dimensions of our destination texture and drawing
-  // a screen-sized quad (see below), we ensure that every pixel of our
-  // texel is generated and processed in the fragment program.		
-  glViewport(0,0, m_width, m_height);
-
   // debug yellow color
   // glClearColor( 1,1,0,0);
   glClearColor( m_FBOcolor[0], m_FBOcolor[1], m_FBOcolor[2], m_FBOcolor[3] );
@@ -139,7 +132,14 @@ void gemframebuffer :: render(GemState *state)
   // Clear the buffers and reset the model view matrix.
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
+  // We need a one-to-one mapping of pixels to texels in order to
+  // ensure every element of our texture is processed. By setting our
+  // viewport to the dimensions of our destination texture and drawing
+  // a screen-sized quad (see below), we ensure that every pixel of our
+  // texel is generated and processed in the fragment program.		
+  glViewport(0,0, m_width, m_height);
   glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
   glLoadIdentity();
   glFrustum(-1,1,-1,1,1,25);
   glMatrixMode(GL_MODELVIEW);
@@ -176,6 +176,10 @@ void gemframebuffer :: postrender(GemState *state)
 
   glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
   glBindTexture( m_texTarget, m_offScreenID );
+
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
   // reset to visible window's clear color
   glClearColor( m_color[0], m_color[1], m_color[2], m_color[3] );
