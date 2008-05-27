@@ -1,3 +1,82 @@
+2008-05-27 09:49  zmoelnig
+
+	* removed the legacy defines
+
+2008-05-27 09:46  zmoelnig
+
+	* removed (almost) all the HELPSYMBOL_PATH stuff
+
+2008-05-26 18:50  nusmuk
+
+	* adjust somes parametters for a better looking exemple.
+
+2008-05-26 18:23  zmoelnig
+
+	* oops, forgot to return values...
+
+2008-05-26 18:17  nusmuk
+
+	* fix bug : framebuffer change scenne perspective.
+
+2008-05-26 15:27  zmoelnig
+
+	* code cleanup; do NOT use "PPC" preprocessr-define
+
+2008-05-26 15:10  zmoelnig
+
+	* use functions in GemPixUtil to handle endianess..
+
+2008-05-23 10:28  zmoelnig
+
+	* added automatic version checks from TRUNK
+
+2008-05-23 10:19  zmoelnig
+
+	* added a runtime check to find out, whether this object is
+	  compiled against the right version of Gem and refuse to register
+	  the class otherwise
+
+2008-05-23 10:00  zmoelnig
+
+	* a bit of version magic for easier compatibility (so externals can
+	  refer to a certain version)
+
+2008-05-22 17:38  zmoelnig
+
+	* updated to 0.91
+
+2008-05-22 11:49  zmoelnig
+
+	* removed void files and updated doc accordingly
+
+2008-05-22 11:48  zmoelnig
+
+	* removed void files
+
+2008-05-22 11:46  zmoelnig
+
+	* updated version number to 0.91 codename 'tigital'
+
+2008-05-22 11:44  zmoelnig
+
+	* oops, branchin is complicated...retry
+
+2008-05-22 11:38  zmoelnig
+
+	* updated
+
+2008-05-22 11:38  zmoelnig
+
+	* updated to resolve all unresolved
+
+2008-05-22 11:37  zmoelnig
+
+	* updated for 0.91
+
+2008-05-22 10:55  zmoelnig
+
+	* regenerated ChangeLog with 'cvs2cl --hide-filenames'
+
 2008-05-22 10:39  zmoelnig
 
 	* renamed 10.glsl-patches to match the standard naming scheme:
@@ -920,10 +999,6 @@
 	  ubuntu/gutsy the both are not included automatically by
 	  "avifile.h"
 
-2007-10-16 16:46  zmoelnig
-
-	* removed MarkEx
-
 2007-10-15 10:06  zmoelnig
 
 	* removed dependency off Gem.$(EXT) on $(OBJECTS)
@@ -979,10 +1054,6 @@
 2007-10-07 11:02  zmoelnig
 
 	* added cyrille's suggestion for actively enabling the depth test
-
-2007-10-06 13:48  zmoelnig
-
-	* remove Gnu/
 
 2007-10-05 15:43  zmoelnig
 
@@ -1041,14 +1112,6 @@
 	* silly Nvidia headers want a cast to GLint.
 
 2007-09-24 21:03  holzi1
-
-	* some credits
-
-2007-09-24 21:00  holzi1
-
-	* some credits
-
-2007-09-24 20:55  holzi1
 
 	* some credits
 
@@ -1151,10 +1214,6 @@
 
 	* added argument to call of [pix_histo]
 
-2007-09-06 17:42  holzi1
-
-	* some more BUGs and TODOs documented
-
 2007-09-03 16:18  zmoelnig
 
 	* fixed crasher bug when [curve] was created without arguments
@@ -1168,14 +1227,6 @@
 	* updated example patches a bit (according to Gijon) to use more
 	  gui-elements
 
-2007-08-30 14:00  holzi1
-
-	* Documentation changes...
-
-2007-08-30 13:47  holzi1
-
-	* Some minor changes.
-
 2007-08-29 16:54  cclepper
 
 	* Help class should now open pix_video help file.
@@ -1184,14 +1235,6 @@
 
 	*
 	  fixed bugs
-
-2007-08-28 23:48  holzi1
-
-	* removing unnecessary files
-
-2007-08-28 23:42  holzi1
-
-	* removing unnecessary files
 
 2007-08-28 16:39  holzi1
 
@@ -1203,10 +1246,6 @@
 	*
 	  Some bugfixes and corrections.
 
-2007-08-27 20:05  holzi1
-
-	* changed the udp interface
-
 2007-08-27 11:52  holzi1
 
 	* Added track selection.
@@ -1214,24 +1253,6 @@
 2007-08-26 23:03  holzi1
 
 	* Now writing to udp works!!
-
-2007-08-26 19:47  holzi1
-
-	* video_bin_ now will only be created if needed. So you can also
-	  play audio files now!
-
-2007-08-26 18:36  holzi1
-
-	*
-	  added udp read support.
-
-2007-08-26 17:21  holzi1
-
-	* Moved gstreamer init() to the constructor.
-
-2007-08-26 13:22  holzi1
-
-	* Fixed gui bug.
 
 2007-08-25 21:47  zmoelnig
 
@@ -1251,62 +1272,13 @@
 	* accepted hans's changes to the documentation (this is: add the
 	  "mode" message)
 
-2007-08-25 18:51  holzi1
-
-	* Initial support for udp (but unfinished)
-
-2007-08-25 16:24  holzi1
-
-	* Fixed a seeking bug and updated help files.
-
-2007-08-25 12:00  holzi1
-
-	* changed seek unit to milliseconds
-
-2007-08-24 19:15  holzi1
-
-	* Fixed the bug that video without audio didn't play.
-
 2007-08-24 18:09  holzi1
 
 	* added support for setting speed
 
-2007-08-24 17:58  holzi1
-
-	* Adding functionality for setting speed.
-
-2007-08-24 16:05  holzi1
-
-	* Hurra!! Now seeking works with FileReadGst!!
-
-2007-08-24 10:54  holzi1
-
-	* added FileReadDummy to the list of plugins
-
-2007-08-24 10:52  holzi1
-
-	* removed the old FRDummy and added the FileReadDummy, modified the
-	  makefile for the dummy
-
-2007-08-23 13:57  holzi1
-
-	* Added mpeg4 support and raw may also work now somehow...
-
-2007-08-23 13:38  holzi1
-
-	* Added README file and cleaned up the makefile.
-
-2007-08-23 13:36  holzi1
-
-	* Some fixes.
-
 2007-08-20 23:23  cclepper
 
 	* added input selection for devices.
-
-2007-08-19 17:34  holzi1
-
-	* tried to fix some problems ...
 
 2007-08-19 11:41  holzi1
 
@@ -1323,10 +1295,6 @@
 	  conversion in FileReadGst and DeviceReadGst - some more minor
 	  fixes
 
-2007-08-18 12:28  holzi1
-
-	* made some fancy help patches
-
 2007-08-18 10:49  holzi1
 
 	* - rework of FileRead so that seeking works now - added
@@ -1341,21 +1309,9 @@
 
 	* device read works now for DV and V4L
 
-2007-08-17 21:46  holzi1
-
-	* Updated test patch.
-
-2007-08-17 21:45  holzi1
-
-	* Added EOS bang and some other small features.
-
 2007-08-17 14:55  holzi1
 
 	* fixed bug with YUV in FileWriteGst, some cleanup
-
-2007-08-17 12:14  holzi1
-
-	* Added test patch for device read.
 
 2007-08-17 12:12  holzi1
 
@@ -1373,26 +1329,9 @@
 
 	* FileRead reworked
 
-2007-08-16 19:52  holzi1
-
-	* incorporated new changes in appsink, now getFrame should be
-	  possible
-
-2007-08-16 16:48  holzi1
-
-	* changes for appsink
-
-2007-08-15 21:35  holzi1
-
-	* this file is needed to generate the FileRead.o object file
-
 2007-08-15 21:33  holzi1
 
 	* fixed bug in dynamic library loading
-
-2007-08-15 20:07  holzi1
-
-	* modified kernel
 
 2007-08-15 19:53  holzi1
 
@@ -1403,26 +1342,9 @@
 
 	* added a device reader
 
-2007-08-14 17:27  holzi1
-
-	*
-	  rework of the fileread plugin
-
-2007-08-14 15:09  holzi1
-
-	* removing old file
-
-2007-08-14 15:05  holzi1
-
-	* [no log message]
-
 2007-08-14 15:04  holzi1
 
 	* again file read restructuring (now it compiles)
-
-2007-08-14 14:50  holzi1
-
-	* restructuring FileRead
 
 2007-08-14 14:49  holzi1
 
@@ -1431,38 +1353,6 @@
 2007-08-14 08:45  holzi1
 
 	* initial version of pix_file_write
-
-2007-08-13 17:19  holzi1
-
-	* Removing unnecessary files
-
-2007-08-13 17:11  holzi1
-
-	* new PluginServer template class
-
-2007-08-13 17:08  holzi1
-
-	* [no log message]
-
-2007-08-13 17:00  holzi1
-
-	* Now with colorspace convertion in RGB.
-
-2007-08-13 13:25  holzi1
-
-	* the makefile with /usr/local and /usr
-
-2007-08-13 13:19  holzi1
-
-	* reworked the kernel to handle multiple search path
-
-2007-08-13 10:38  holzi1
-
-	* add GEM examples directory
-
-2007-08-13 10:32  holzi1
-
-	* [no log message]
 
 2007-08-13 09:53  holzi1
 
@@ -1481,10 +1371,6 @@
 
 	* changed GL_TEXTURE_RECTANGLE_EXT to _ARB which seems to be
 	  required for DMA uploads on Intel now.
-
-2007-07-30 20:26  holzi1
-
-	* Version for testing gstreamer.
 
 2007-07-27 23:47  cclepper
 
@@ -1512,36 +1398,14 @@
 
 	* [no log message]
 
-2007-07-24 10:29  holzi1
-
-	* [no log message]
-
-2007-07-21 11:08  holzi1
-
-	* Now pix_file_read works with an QT4L example plugin, but not
-	  correctly yet...
-
-2007-07-19 16:46  zmoelnig
-
-	* updated todo after a meeting with thomas and georg
-
 2007-07-18 15:15  holzi1
 
 	* Test plugin working!!
-
-2007-07-18 09:01  holzi1
-
-	* The next version with a little less bugs.
 
 2007-07-17 14:17  holzi1
 
 	* I've forgotten to add the pd object files the last time.  So here
 	  they are!
-
-2007-07-17 13:34  holzi1
-
-	* First implementation of the plugin architecture (not really
-	  working)
 
 2007-07-14 02:00  cclepper
 
@@ -1554,14 +1418,6 @@
 2007-07-11 17:19  zmoelnig
 
 	* made it compile again under debian/lenny
-
-2007-07-11 15:47  holzi1
-
-	* Initial check in with the new factory design.
-
-2007-07-06 10:27  holzi1
-
-	* initial commit
 
 2007-06-07 23:31  cclepper
 
@@ -2287,10 +2143,6 @@
 2006-08-16 14:31  zmoelnig
 
 	* removed MarkEx from Gem; added Vertex-branch to configure
-
-2006-08-16 14:27  zmoelnig
-
-	* removed MarkEx from Gem
 
 2006-08-16 12:03  zmoelnig
 
@@ -4099,11 +3951,6 @@
 	* check whether ffmpeg's (AVStream)->codec is of type
 	  "AVCodecContext" or "*AVCodecContext"
 
-2005-10-21 10:03  zmoelnig
-
-	* removed contents of src/Gnu (since people keep building Gem from
-	  there)
-
 2005-10-20 18:03  zmoelnig
 
 	* check for posix-threads removed HAVE_SIMD things (as we should
@@ -5145,16 +4992,6 @@
 	  (probably something similar will reappear once we have threaded
 	  rendering to multiple windows)
 
-2005-06-03 11:10  zmoelnig
-
-	* removed: people should (well, now they "must") run autoconf in
-	  order to generate their own configure-script
-
-2005-06-03 11:09  zmoelnig
-
-	* added a note that tells people to run "autoconf" before
-	  "./configure"
-
 2005-06-03 10:57  zmoelnig
 
 	* colors can now be RGB or (new:) RGBA
@@ -5263,31 +5100,11 @@
 
 	* needed for proper Darwin configure-ing
 
-2005-06-01 16:56  tigital
-
-	* added Darwin configure stuff
-
-2005-06-01 16:54  tigital
-
-	* replaced ".pd_linux" with $(TARGET) so that we can use this on
-	  more than one platform
-
-2005-05-30 21:54  zmoelnig
-
-	* use "ffmpeg-config --plugin-libs" instead of "ffmpeg-config
-	  --libs" this allows us to link on x86_64 without problems
-
 2005-05-25 20:44  zmoelnig
 
 	* looked at the ugly #define-hacks and got some things right note:
 	  these classes should vanish altogether on all platforms and be
 	  replaced by the NEW-thingie.
-
-2005-05-23 17:03  zmoelnig
-
-	* made libjpeg and libtiff OPTIONAL libraries (which are used by
-	  default if available) so platforms that dont have these libs
-	  (like OSX) don't fail to configure any more
 
 2005-05-23 17:01  zmoelnig
 
@@ -5300,46 +5117,11 @@
 	  the _hard_ dependency on libjpeg and libtiff, which should make
 	  the configure easier on platforms that don't need libjpeg/libtiff
 
-2005-05-23 14:11  zmoelnig
-
-	* enforcing of the presence of libtiff, libjpeg and libpng is only
-	  need on linux (btw, it shouldn't be enforced here too!)
-
 2005-05-23 13:59  zmoelnig
 
 	* better detection for FFMPEG (now we also have autodetection; i
 	  hope ffmpeg has stabilized the API enough, so this won't break
 	  for some months)
-
-2005-05-23 13:56  zmoelnig
-
-	* added preprocessor-flags CPPFLAGS to the compiler-flags
-
-2005-05-23 11:29  zmoelnig
-
-	* enforce X only on Linux (Darwin can do without)
-
-2005-05-23 11:02  zmoelnig
-
-	* on "distclean" remove ALL .o (and .obj) files, even those that
-	  are not in Make.source
-
-2005-05-21 04:34  tigital
-
-	* corrected spelling
-
-2005-05-19 13:41  zmoelnig
-
-	* did better quoting, this should fix the issues with autoconf>2.53
-
-2005-05-17 16:00  zmoelnig
-
-	* changed uname-flags "--machine" and "--kernel-name" to "-m" and
-	  "-s" (which should work on osX too
-
-2005-05-17 02:24  tigital
-
-	* updates for config system that identify darwin 10.4
 
 2005-05-13 21:48  zmoelnig
 
@@ -5375,17 +5157,6 @@
 2005-05-03 19:32  zmoelnig
 
 	* entry for DONT_USE_ARB
-
-2005-05-03 19:31  zmoelnig
-
-	* added runtime-checking for glBindProgramARB the results are
-	  displayed in Base/configLinux.h rather than via command-line args
-	  to the compiler
-
-2005-05-03 17:47  zmoelnig
-
-	* added some verbose output at the end of configuration, so the
-	  user will know what is going on
 
 2005-05-03 13:35  zmoelnig
 
@@ -5454,18 +5225,6 @@
 	* initial support for loading plugins un windows and osX (still not
 	  tested)
 
-2005-04-21 14:05  zmoelnig
-
-	* fixed...
-
-2005-04-21 13:46  zmoelnig
-
-	* added an enable-flag for --freg-struct-return (for
-	  FreeFrame-plugins) since i am not sure what this will break it is
-	  disabled by default; if you want to use the FreeFrame-plugins,
-	  the option is either to compile Gem with  this flag or to
-	  recompile the plugins without...
-
 2005-04-21 11:42  zmoelnig
 
 	* fixed bug that crashed pd/Gem when an exception was thrown (wrong
@@ -5480,25 +5239,9 @@
 
 	* usage of the "--disable-ARB" to disable ARB-vertex-shaders
 
-2005-04-18 19:02  zmoelnig
-
-	* adding a "--disable-ARB" flag for disabling the build of
-	  ARB-vertex-programs
-
-2005-04-18 17:59  zmoelnig
-
-	* added feed-back when checking for avifile (before, there was
-	  nothing indicating that libavifile will be used if (and only if)
-	  it was found)
-
 2005-04-18 17:52  zmoelnig
 
 	* added support for ImageMagick++ (used here for loading and saving
-	  images)
-
-2005-04-18 17:51  zmoelnig
-
-	* added support for ImageMagick (currently used for loading/writing
 	  images)
 
 2005-04-18 16:08  zmoelnig
@@ -5506,19 +5249,6 @@
 	* fixed a bug that crashed Gem when using this object with
 	  [pix_imageInPlace]: the texcoord-array was accessed without
 	  checking the size of it first!!
-
-2005-04-18 15:17  zmoelnig
-
-	* regrouped things even more (put type-checks before
-	  library-checks)
-
-2005-04-18 14:52  zmoelnig
-
-	* cleaned up autoconf a bit  + prelaminary support for icc  +
-	  grouped header/library search together  + FIRST search whether
-	  headers are present, THEN look for matching libraries  +
-	  hopefully fixed bug, where compile stopped when no
-	  font-rendering-libs where installed
 
 2005-04-13 19:33  zmoelnig
 
@@ -5640,12 +5370,6 @@
 	* added a new drawType "GL_DEFAULT_GEM" (since using "-1" was a bad
 	  idea for GLenum)
 
-2005-03-31 16:40  zmoelnig
-
-	* changed LIBS="-Wl,-shared -Wl,-export-dynamic $LIBS" to
-	  LIBS="-shared -Wl,-export-dynamic $LIBS" this should fix the
-	  problem with FC3
-
 2005-03-31 08:42  zmoelnig
 
 	* there are even better conversions (at least you can control all
@@ -5711,10 +5435,6 @@
 2005-03-07 10:19  zmoelnig
 
 	* include <new> to enable the use of real C++ constructors
-
-2005-03-06 12:21  zmoelnig
-
-	* removed [change] (is in pd for some times)
 
 2005-02-28 02:15  tigital
 
@@ -5782,10 +5502,6 @@
 
 	* [pix_dv] is covered by [pix_video]
 
-2005-02-07 13:43  zmoelnig
-
-	* updated a bit
-
 2005-02-07 13:04  zmoelnig
 
 	* hopefully really fixed the including of GL/glext.h: use
@@ -5847,28 +5563,7 @@
 
 	* updated to my setup
 
-2005-01-14 09:54  zmoelnig
-
-	* added the missing " to the NEW_VIDEOFILM definition
-
-2005-01-14 09:53  zmoelnig
-
-	* ./configure does not call "makesource" but includes it; thus the
-	  "$@" is not as expected an (empty) list of directories for which
-	  we should generate Make.source but rather "dummy sh"; now we
-	  check, whether the running script ($0) is "*configure", and if
-	  so, we assume that the "passed" list is 0.
-
-2005-01-12 20:20  zmoelnig
-
-	* oops again; forgot a "
-
-2005-01-12 19:12  zmoelnig
-
-	* oops; should run again (note: this is just rev1.27 with __NEW__
-	  replaced by NEW_VIDEOFILM)
-
-2005-01-11 12:44  zmoelnig
+2005-01-11 12:45  zmoelnig
 
 	* who the f**k used "__NEW__" to enable/disable different
 	  film/movie-objects ??? preprocessor-defines starting with "__"
@@ -6025,11 +5720,6 @@
 
 	* made all arrays have 4 components; this enables us to use the
 	  color-array as vertex-array and so on; thus is make any sense ?
-
-2004-12-06 10:38  zmoelnig
-
-	* merged in the changes from HEAD that allows to give the
-	  subdirectories for which we want Make.source to be created
 
 2004-12-06 10:34  zmoelnig
 
@@ -6425,10 +6115,6 @@
 
 	* merged with HEAD
 
-2004-08-17 16:45  zmoelnig
-
-	* src/yuv is deprecated
-
 2004-08-17 16:11  zmoelnig
 
 	* this shouldn't have been in the SIMD branch
@@ -6438,22 +6124,9 @@
 	* a wrapper around [gemcontrol] and [gemwindow] to provide
 	  compatibility with older patches
 
-2004-08-17 15:04  zmoelnig
-
-	* updated version
-
 2004-08-17 14:59  zmoelnig
 
 	* [gemwin] is replaced by [gemcontrol]+[gemwindow]
-
-2004-08-17 14:55  zmoelnig
-
-	* fixed a bug when no directory-list is given at command-line
-	  (merged from HEAD)
-
-2004-08-17 14:53  zmoelnig
-
-	* fixed a bug when no directory-list is given at command-line
 
 2004-08-17 14:45  zmoelnig
 
@@ -6676,12 +6349,6 @@
 2004-08-04 08:35  zmoelnig
 
 	* fixed typos which prevented vc6 to succeed
-
-2004-08-04 08:32  zmoelnig
-
-	* now you can give a list of directories on the command-line to
-	  override the default directories where we want the
-	  Make.source,... to be built
 
 2004-08-04 08:29  zmoelnig
 
@@ -7443,10 +7110,6 @@
 
 	* i guess we should release rather sooner than later
 
-2004-03-29 20:48  zmoelnig
-
-	* finally removed the YUV-stuff (should have been done for ages)
-
 2004-03-29 20:45  zmoelnig
 
 	* fixed line-breaks
@@ -7673,10 +7336,6 @@
 	* added a method "width" for the linewidth (compatibility with
 	  other geos)
 
-2004-03-19 15:58  zmoelnig
-
-	* changed the helpsymbol
-
 2004-03-19 15:54  zmoelnig
 
 	* got the mapping from mac-buttons to gem-buttons right (hopefully)
@@ -7718,12 +7377,6 @@
 2004-03-13 10:10  cclepper
 
 	* fixed #ifdefs
-
-2004-03-10 18:32  zmoelnig
-
-	* changed the configure-process GemLibs can now be specified with
-	  "--gemlibs" additional search-paths for ALL libraries can be
-	  specified with "--libdir"
 
 2004-03-10 18:07  zmoelnig
 
@@ -7991,11 +7644,6 @@
 	  RGBA, but at least it is functional and not crashing any more),
 	  Grayscale works great
 
-2004-01-08 20:03  zmoelnig
-
-	* i think, all objects are documented (somehow: some help-patches
-	  are rather crude)
-
 2004-01-08 20:02  zmoelnig
 
 	* several BUG-fixes (esp: put the pivot-point of rubber/ripple into
@@ -8034,10 +7682,6 @@
 
 	  ASK: why is this "blend" function in there ?
 
-2004-01-05 12:08  zmoelnig
-
-	* better checks for pd-version
-
 2004-01-05 11:18  zmoelnig
 
 	* glu-objects (like sphere) have a bit of a problem with
@@ -8067,11 +7711,6 @@
 
 	* bugfix (videoV4L crashed when you tried to open a non-existant
 	  device)
-
-2004-01-04 19:53  zmoelnig
-
-	* added checks for the pd-version (because of reference
-	  install-paths)
 
 2004-01-04 19:51  zmoelnig
 
@@ -8112,10 +7751,6 @@
 
 	* added Cyrille's changes:  now it's more controllable (and
 	  useful):  see examples/07.texture/05.newWave.pd
-
-2003-12-12 19:21  zmoelnig
-
-	* dos2unix -- linebreaks
 
 2003-12-10 03:18  cclepper
 
@@ -8243,14 +7878,6 @@
 
 	* another bug fixed for NT
 
-2003-12-01 15:19  zmoelnig
-
-	* rebuilt configure to add the "-l" flags
-
-2003-12-01 15:05  zmoelnig
-
-	* rebuilt it with another version of "aclocal"
-
 2003-12-01 14:55  zmoelnig
 
 	* another bugfix (pix_videoDS) reported
@@ -8259,11 +7886,6 @@
 
 	* updated bugfixes ("create" on remote X-servers works for most but
 	  my machine)
-
-2003-12-01 14:48  zmoelnig
-
-	* bugfix: configure wouldn't add "-l" flags for "standard"
-	  libraries found with AC_FIND_LIB
 
 2003-12-01 11:09  zmoelnig
 
@@ -8312,13 +7934,6 @@
 	* removed offsetMess() and swapMess(); should be handled by the
 	  parent-class use fromBGR() rather than doing it by hand. this
 	  enables other color-spaces too! added a colorspace-message
-
-2003-12-01 10:50  zmoelnig
-
-	* changed the configure a bit to make more intelligent searches in
-	  the search-paths, for both libs and headers we now search
-	  /usr/local/src and /usr/local/include instead of whole /usr/local
-	  (at least for headers)
 
 2003-11-28 19:19  ggeiger
 
@@ -8427,12 +8042,6 @@
 
 	* include "Base/config.h" for all OS (since the config.h will
 	  separate the sysdependent things)
-
-2003-11-25 15:51  zmoelnig
-
-	* added "--disable-new" for "old" behaviour with pix_film/pix_video
-	  and friends under linux this the config.h.in for linux-autoconf
-	  has moved to configLinux.h.in
 
 2003-11-25 15:48  zmoelnig
 
@@ -8575,10 +8184,6 @@
 
 	* changed processRGB_Altivec to processRGBA_Altivec
 
-2003-11-12 18:55  zmoelnig
-
-	* fixed linefeed
-
 2003-11-11 08:31  cclepper
 
 	* added RGB Altivec
@@ -8616,10 +8221,6 @@
 	* changed (bool) to (int), since vc6 doesn't like assigning a
 	  boolean-value to an integer.
 
-2003-11-03 13:14  zmoelnig
-
-	* added no-warn-flags for vc6
-
 2003-11-03 13:13  zmoelnig
 
 	* made it compile with ffmpeg-0.4.8 (however i wasn't yet able to
@@ -8634,10 +8235,6 @@
 
 	* fixed some BUGS...
 
-2003-10-24 20:32  zmoelnig
-
-	* added "--with-aviplay" as an alias for "--with-avi"
-
 2003-10-24 20:31  zmoelnig
 
 	* added some comment to the render() for neither FTGL/GLTT support
@@ -8646,11 +8243,6 @@
 2003-10-23 10:10  zmoelnig
 
 	* fixed another possible bug (check for NULL-images)
-
-2003-10-22 13:01  zmoelnig
-
-	* added the self-registering code, so that MarkEx will stay
-	  available
 
 2003-10-22 11:06  zmoelnig
 
@@ -8715,11 +8307,6 @@
 	  gone when i really have access to a machine where quicktime4win
 	  is installed
 
-2003-10-15 21:04  zmoelnig
-
-	* fixed a bug when searching for the linker/compiler flags for
-	  libavifile: not "avifile-config" is used if available
-
 2003-10-15 21:03  zmoelnig
 
 	* new bugs (pix_buffer, libavifile, remote display)
@@ -8743,11 +8330,6 @@
 2003-10-10 13:14  zmoelnig
 
 	* disabled warnings on vc6
-
-2003-10-10 13:13  zmoelnig
-
-	* search for libavifile-headers rather than assuming they are in
-	  /usr/include/avifile
 
 2003-10-10 13:11  zmoelnig
 
@@ -9070,14 +8652,6 @@
 2003-09-17 15:09  zmoelnig
 
 	* more bugs to come
-
-2003-09-17 15:08  zmoelnig
-
-	* fixed install on linux
-
-2003-09-17 15:08  zmoelnig
-
-	* documented a lot ;-)
 
 2003-09-17 15:07  zmoelnig
 
@@ -9419,10 +8993,6 @@
 
 	* added a comment
 
-2003-09-11 12:06  zmoelnig
-
-	* hopefully fixed a bit on installing the examples for linux
-
 2003-07-27 01:14  ggeiger
 
 	* disable depth test for alpha blended render chains.  I think this
@@ -9617,10 +9187,6 @@
 
 	* help for the resp. object
 
-2003-07-15 09:39  zmoelnig
-
-	* added checks for FTGL
-
 2003-07-15 09:39  cclepper
 
 	* now does color-space switching
@@ -9703,10 +9269,6 @@
 	* got some problems with the cvs-update on another machine.  hope
 	  it's ok now
 
-2003-07-11 16:06  zmoelnig
-
-	* added checks for mmx-extension of gcc
-
 2003-07-11 15:58  zmoelnig
 
 	* filedescriptors may also be 0! i only closed the device, if the
@@ -9719,18 +9281,6 @@
 	  my laptop (with an ati mobility l6) crashed when destroying a
 	  non-constant context.  also changed the line "do not continue" to
 	  "continue at your own risk"
-
-2003-07-09 14:07  zmoelnig
-
-	* added some advice for video1394 under linux
-
-2003-07-09 13:17  zmoelnig
-
-	* oops, i'm getting tired. another typo
-
-2003-07-09 13:10  zmoelnig
-
-	* oops, made a type "libdv" instead of "dv"
 
 2003-07-09 13:05  zmoelnig
 
@@ -9757,11 +9307,6 @@
 2003-07-09 12:51  zmoelnig
 
 	* changed the error-message (like for setting the device) slightly
-
-2003-07-09 12:42  zmoelnig
-
-	* fixed the dv-checking.  force the headers to be there, when the
-	  library is found too
 
 2003-07-09 12:41  zmoelnig
 
@@ -9955,30 +9500,12 @@
 
 2003-05-16 20:57  zmoelnig
 
-	* moved BUGS to Gem/src (../)
-
-2003-05-16 20:57  zmoelnig
-
 	* file bugs under BUGS, and things that have to be done under TODO
-
-2003-05-16 20:53  zmoelnig
-
-	* added a BUGS file
 
 2003-05-16 16:58  zmoelnig
 
 	* #ifdef'ed everything with HAVE_DV (so it won't compile if there
 	  are no libdv/dv.h headers)
-
-2003-05-16 16:40  zmoelnig
-
-	* fixed a typo that searched in "search_libs" instead of expanding
-	  $search_libs
-
-2003-05-16 16:38  zmoelnig
-
-	* fixed a typo that searched for "searchlibs" instead of
-	  "$searchlibs"
 
 2003-05-16 14:36  zmoelnig
 
@@ -10288,15 +9815,6 @@
 	* nothing, but made the constructor virtual (since the class is
 	  virtual too)
 
-2003-04-28 19:22  zmoelnig
-
-	* ???
-
-2003-04-28 19:21  zmoelnig
-
-	* a new flag "--with-ieee1394" for linux-compiles (doesn't do
-	  anything yet...)
-
 2003-04-28 19:19  zmoelnig
 
 	* cursorMessage should return something. it does so now.
@@ -10346,10 +9864,6 @@
 2003-04-28 19:06  zmoelnig
 
 	* (nothing)
-
-2003-04-28 19:05  zmoelnig
-
-	* initialized some values (gcc-3.2 would complain)
 
 2003-04-28 18:20  zmoelnig
 
@@ -10422,10 +9936,6 @@
 2003-04-10 16:53  zmoelnig
 
 	* oh i think pix_videoNEW is really buggy.
-
-2003-04-10 10:34  zmoelnig
-
-	* added a dos2unix on make distclean
 
 2003-04-10 10:32  zmoelnig
 
@@ -10702,10 +10212,6 @@
 	  provide more robust error handling and to support recent CVS
 	  change in pix_film frame loading behaviour
 
-2003-04-04 16:58  ggeiger
-
-	* moved orb into Gem
-
 2003-04-04 16:56  ggeiger
 
 	* Moved from GemLibs
@@ -10813,10 +10319,6 @@
 
 	* added #ifdef for OpenGL/gl.h on OSX
 
-2003-03-08 00:07  tigital
-
-	* added #ifdef DEBUG to post() in processYUV_YUV()
-
 2003-03-08 00:05  tigital
 
 	* is "Base/config.h" used by anyone anymore?  #ifdef'd for linux
@@ -10830,14 +10332,6 @@
 2003-03-07 23:55  tigital
 
 	* is "Base/config.h" used by anyone anymore?
-
-2003-03-07 18:23  ggeiger
-
-	* fixed avcodec check bug
-
-2003-03-07 17:43  ggeiger
-
-	* added FFMPEG library checks
 
 2003-03-07 17:41  ggeiger
 
@@ -10859,14 +10353,6 @@
 
 	* added new FFMPEG version of pix_film
 
-2003-03-07 10:58  ggeiger
-
-	* removed search for particle and glm
-
-2003-03-07 10:57  ggeiger
-
-	* particle and glm are in Gem now
-
 2003-03-07 10:55  ggeiger
 
 	* included particle library stuff
@@ -10878,10 +10364,6 @@
 2003-03-07 10:43  ggeiger
 
 	* config.h will be autogenerated from config.in
-
-2003-03-07 06:23  cclepper
-
-	* added quality modes
 
 2003-03-07 05:28  cclepper
 
@@ -10918,14 +10400,6 @@
 
 	* some bug-fixes; esp [pix_buf]
 
-2003-03-06 18:22  zmoelnig
-
-	* checked in Makefile again...
-
-2003-03-06 18:19  zmoelnig
-
-	* updated configure....
-
 2003-03-03 23:44  dheck
 
 	* Reverted GL_BGR[A] to GL_BGR[A]_EXT to allow compilation on
@@ -10938,15 +10412,6 @@
 2003-03-03 17:59  zmoelnig
 
 	* the object file for venus was missing...
-
-2003-03-01 19:16  zmoelnig
-
-	* fixed a bug with SYSTEMDOCS and made pd/extra the default
-	  installation-dir (not pd/externs)
-
-2003-03-01 11:18  zmoelnig
-
-	* added avifile support
 
 2003-03-01 11:18  zmoelnig
 
@@ -11016,10 +10481,6 @@
 
 	* moved from tv_* to pix_*
 
-2003-02-24 19:53  zmoelnig
-
-	* updated a link
-
 2003-02-24 19:41  zmoelnig
 
 	* now the alpha-blending function can be set by hand: 0 ..
@@ -11030,17 +10491,9 @@
 	* polygon_smooth enables GL-polygon-smoothing (like it has been
 	  proposed by the mac-people)
 
-2003-02-24 14:12  zmoelnig
-
-	* removing TV
-
 2003-02-24 14:10  zmoelnig
 
 	* removed TV-class
-
-2003-02-24 14:09  zmoelnig
-
-	* removing TV-class
 
 2003-02-24 13:47  zmoelnig
 
@@ -11062,10 +10515,6 @@
 	  allocate memory, if the previous buffer is smaller than the
 	  needed one.  there is a "int datasize" that describes the length
 	  of the buffer.
-
-2003-02-19 21:28  zmoelnig
-
-	* updated the README.build (for the new configure)
 
 2003-02-19 19:41  zmoelnig
 
@@ -11091,10 +10540,6 @@
 2003-02-17 09:18  cclepper
 
 	* added YUV
-
-2003-02-15 05:44  cclepper
-
-	* added altivec function
 
 2003-02-15 05:16  cclepper
 
@@ -11174,23 +10619,6 @@
 
 	* removed redundant m_linewidth call
 
-2003-02-08 06:56  cclepper
-
-	* added altivec code
-
-2003-02-08 06:53  cclepper
-
-	* added altivec code
-
-2003-02-06 23:38  tigital
-
-	* updated to current "IMAGE_CLASS" memory functions (ie.
-	  buffer.clear() & buffer.allocate( dataSize)
-
-2003-02-06 23:36  tigital
-
-	* added tv_delay_setup
-
 2003-02-06 05:55  cclepper
 
 	* added blending
@@ -11207,7 +10635,7 @@
 
 	* added pix_blur
 
-2003-02-05 09:40  cclepper
+2003-02-05 09:41  cclepper
 
 	* improved quicktime performance and DV quality
 
@@ -11218,20 +10646,6 @@
 2003-02-05 09:01  cclepper
 
 	* optimized pix_gain RGBA code
-
-2003-02-04 05:46  cclepper
-
-	* added missing yuv objects
-
-2003-02-04 01:32  zmoelnig
-
-	* added optimization to the Makefiles: "-O3 -funroll-loops
-	  -ffast-math"
-
-2003-02-04 01:16  zmoelnig
-
-	* changed the behaviour of $(CXXFLAGS): you can now set CXXFLAGS
-	  via the command-line and it it added to the c++-flags $(cxxflags)
 
 2003-02-03 17:55  zmoelnig
 
@@ -11274,10 +10688,6 @@
 
 	* rewrote the configure-thing hopefully it works now...
 
-2003-02-03 17:32  zmoelnig
-
-	* rewrote the configure-thing hopefully it will work now...
-
 2003-02-03 17:29  zmoelnig
 
 	* added openGL-wrapper objects (mainly openGL-1.1)
@@ -11319,18 +10729,6 @@
 
 	* fixed/added some yuv stuff
 
-2003-01-25 23:35  cclepper
-
-	* fixed/added some yuv stuff
-
-2003-01-25 23:31  cclepper
-
-	* fixed/added some yuv stuff
-
-2003-01-25 21:34  cclepper
-
-	* test for yuv update
-
 2003-01-13 15:50  tigital
 
 	* added gl.h & glext.h to allow compile on OS X
@@ -11351,11 +10749,6 @@
 2003-01-07 19:59  zmoelnig
 
 	* added some examples for 04.pix; they were missing?
-
-2002-12-16 18:59  zmoelnig
-
-	* yuv_*: (think) i changed these to the new process*Image()
-	  functions
 
 2002-12-16 18:54  zmoelnig
 
@@ -11378,10 +10771,6 @@
 	  copying imageStruct-information GemGlutObj: if !HAVE_GLUT, we
 	  only throw an error at object-creation
 
-2002-12-14 05:43  tigital
-
-	* corrected rangeMess inputs
-
 2002-12-14 05:40  tigital
 
 	* fixed a coupla possible leaks
@@ -11390,17 +10779,9 @@
 
 	* added processYUVImage(), so it works with yuv now!
 
-2002-12-12 08:30  tigital
-
-	* added yuv video input for MacOSX; cleanup unused variables
-
 2002-12-12 08:27  tigital
 
 	* cleanup unused variables
-
-2002-12-10 06:55  tigital
-
-	* removed unused variable "count"
 
 2002-12-10 06:52  tigital
 
@@ -11428,10 +10809,6 @@
 
 	* reordered variables to shutup gcc3.1
 
-2002-12-08 21:10  zmoelnig
-
-	* added framewise delay!
-
 2002-12-04 06:19  tigital
 
 	* GL_EXTENSIONS formatting same for all platforms
@@ -11456,29 +10833,13 @@
 
 	* made CVS compile under linux again
 
-2002-11-27 21:00  zmoelnig
+2002-11-27 21:01  zmoelnig
 
 	* made the CVS compile under linux again
 
 2002-11-27 02:28  tigital
 
 	* [no log message]
-
-2002-11-27 02:19  tigital
-
-	* added MACOSX support; initial YUV support
-
-2002-11-27 02:16  tigital
-
-	* added MACOSX support; initial YUV support
-
-2002-11-27 02:10  tigital
-
-	* added MACOSX support; initial YUV support
-
-2002-11-27 02:00  tigital
-
-	* removed unused variables
 
 2002-11-27 01:57  tigital
 
@@ -11656,10 +11017,6 @@
 
 	* [no log message]
 
-2002-11-05 16:32  zmoelnig
-
-	* Makefiles should be distclean on CVS ...?
-
 2002-11-04 18:12  zmoelnig
 
 	* added erich's [cuboid] object, so he doesn't have to worry any
@@ -11691,10 +11048,6 @@
 2002-10-21 11:29  zmoelnig
 
 	* applied Daniel Heckenberg's patch for DualPix-Objects
-
-2002-10-21 10:35  zmoelnig
-
-	* fixed the install-things
 
 2002-10-21 09:45  zmoelnig
 
