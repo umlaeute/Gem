@@ -44,11 +44,7 @@ pix_film :: pix_film(t_symbol *filename) :
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
   m_numTracks(0), m_track(0), m_frame(NULL), m_data(NULL), m_film(true),
   m_newFilm(0),
-#ifdef __APPLE__
-  m_colorspace(GL_BGRA_EXT), m_format(GL_BGRA_EXT)
-#else
-  m_colorspace(GL_RGBA), m_format(GL_RGBA)
-#endif
+  m_colorspace(GL_RGBA_GEM), m_format(GL_RGBA_GEM)
 {
  // setting the current frame
  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
@@ -94,35 +90,28 @@ void pix_film :: createBuffer()
   const int neededYSize = m_ysize;
   int	oldx, oldy;
   
-oldx = 0;
-oldy = 0;
+  oldx = 0;
+  oldy = 0;
 
     if (neededXSize != oldx || neededYSize != oldy)
     {
-deleteBuffer();
+      m_pixBlock.image.setCsizeByFormat(m_format);
+      m_pixBlock.image.xsize = neededXSize;
+      m_pixBlock.image.ysize = neededYSize;
 
-  m_pixBlock.image.xsize = neededXSize;
-  m_pixBlock.image.ysize = neededYSize;
-  m_pixBlock.image.csize = m_csize;
-  m_pixBlock.image.format= m_format;
-#ifdef __APPLE__
-  int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize;
-#else
-  int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize+4; /* +4 from MPEG */
-#endif
-  m_data = new unsigned char[dataSize];
- // memset(m_data, 0, dataSize);
+      int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize+4; /* +4 from MPEG */
 
-  m_pixBlock.image.data = m_data;
-  m_frame =  m_data;
-
-  m_pixBlock.image.csize = m_csize;
-  m_pixBlock.image.format= m_format;
-
-    oldx = m_pixBlock.image.xsize;
-    oldy = m_pixBlock.image.ysize;
-}
-  //post("created buffer @ %x", m_data);
+      m_data = new unsigned char[dataSize];
+      // memset(m_data, 0, dataSize);
+      
+      m_pixBlock.image.data = m_data;
+      m_pixBlock.image.notowned = 1;
+      m_frame =  m_data;
+      
+      oldx = m_pixBlock.image.xsize;
+      oldy = m_pixBlock.image.ysize;
+    }
+    //post("created buffer @ %x", m_data);
 }
 
 /////////////////////////////////////////////////////////
@@ -195,15 +184,21 @@ void pix_film :: render(GemState *state)
   if (m_newFilm){
     m_pixBlock.newfilm = 1;
     m_newFilm = 0;
-   // post("new film set");
   }
   state->image = &m_pixBlock;
+
+
+
+  // whoa: the following construct seems to be a bug
+  // i don't dare to "fix" it now
   
 #ifdef __APPLE__
   if (m_reqFrame == m_curFrame)
         
       //  ::MoviesTask(NULL, 0);
 #endif
+
+
   /* texture it, if needed */
   texFrame(state, newImage);
   m_pixBlock.newimage = newImage;
