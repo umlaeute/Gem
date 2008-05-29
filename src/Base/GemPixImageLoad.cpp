@@ -239,11 +239,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 
 	OSErr err = QTNewGWorldFromPtr(&gw,
                                  /* taken from pix_filmDarwin */
-#ifndef i386
                                  k32ARGBPixelFormat,	// gives noErr
-#else
-                                 k32BGRAPixelFormat,
-#endif
                                  &r, NULL, NULL, 0,
                                  // keepLocal,	
                                  //useDistantHdwrMem, 

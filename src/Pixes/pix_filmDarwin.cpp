@@ -253,11 +253,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     m_rowBytes = m_xsize * 4;
     if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
     err = QTNewGWorldFromPtr(	&m_srcGWorld,
-#ifndef i386
                               k32ARGBPixelFormat,	// gives noErr
-#else
-                              k32BGRAPixelFormat,
-#endif
                               &m_srcRect,
                               NULL,
                               NULL,
