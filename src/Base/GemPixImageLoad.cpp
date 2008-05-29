@@ -223,7 +223,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	image_block->xsize	= (*imageDescH)->width;
 	image_block->ysize	= (*imageDescH)->height;
 	if ((*imageDescH)->depth <= 32) {
-	    image_block->setCsizeByFormat(GL_BGRA_EXT);
+	    image_block->setCsizeByFormat(GL_RGBA_GEM);
 	} else {
 	    image_block->setCsizeByFormat(GL_LUMINANCE);
 	}
@@ -237,15 +237,18 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 #endif
         GWorldPtr	gw = NULL;
 
-
 	OSErr err = QTNewGWorldFromPtr(&gw,
-									//k32BGRAPixelFormat,
-                                    k32ARGBPixelFormat,
-                                    &r, NULL, NULL, 0,
-                                   // keepLocal,	
-                                    //useDistantHdwrMem, 
-                                    image_block->data, 
-                                    (long)(image_block->xsize * image_block->csize));
+                                 /* taken from pix_filmDarwin */
+#ifndef i386
+                                 k32ARGBPixelFormat,	// gives noErr
+#else
+                                 k32BGRAPixelFormat,
+#endif
+                                 &r, NULL, NULL, 0,
+                                 // keepLocal,	
+                                 //useDistantHdwrMem, 
+                                 image_block->data, 
+                                 (long)(image_block->xsize * image_block->csize));
 	if (image_block->data == NULL || err) {
 		error("Can't allocate memory for an image.");
 	}
