@@ -222,21 +222,10 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	imageStruct *image_block = new imageStruct;
 	image_block->xsize	= (*imageDescH)->width;
 	image_block->ysize	= (*imageDescH)->height;
-	//image_block->type	= GL_UNSIGNED_BYTE;
-	#ifdef PPC
-        image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
-	#else
-	//image_block->type	= GL_UNSIGNED_INT_8_8_8_8_REV;
-	image_block->type	= GL_UNSIGNED_INT_8_8_8_8;
-	#endif
-        //image_block->type	= GL_UNSIGNED_INT_8_8_8_8;
 	if ((*imageDescH)->depth <= 32) {
-		image_block->csize = 4;
-		//image_block->format = GL_RGBA;
-                image_block->format = GL_BGRA_EXT;
+	    image_block->setCsizeByFormat(GL_RGBA_GEM);
 	} else {
-		image_block->csize = 1;
-		image_block->format = GL_LUMINANCE;
+	    image_block->setCsizeByFormat(GL_LUMINANCE);
 	}
 	::DisposeHandle((Handle)imageDescH);
 	imageDescH = NULL;
@@ -248,32 +237,17 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 #endif
         GWorldPtr	gw = NULL;
 
-
-#ifdef i386
 	OSErr err = QTNewGWorldFromPtr(&gw,
-                                   // k32BGRAPixelFormat,
-								   k32ARGBPixelFormat,
-                                    &r, NULL, NULL, 0,
-                                   // keepLocal,	
-                                    //useDistantHdwrMem, 
-                                    image_block->data, 
-                                    (long)(image_block->xsize * image_block->csize));
-#else
-	OSErr err = QTNewGWorldFromPtr(&gw,
-                                    k32ARGBPixelFormat,
-                                    &r, NULL, NULL, 0,
-                                   // keepLocal,	
-                                    //useDistantHdwrMem, 
-                                    image_block->data, 
-                                    (long)(image_block->xsize * image_block->csize));
-#endif
+                                 /* taken from pix_filmDarwin */
+                                 k32ARGBPixelFormat,	// gives noErr
+                                 &r, NULL, NULL, 0,
+                                 // keepLocal,	
+                                 //useDistantHdwrMem, 
+                                 image_block->data, 
+                                 (long)(image_block->xsize * image_block->csize));
 	if (image_block->data == NULL || err) {
 		error("Can't allocate memory for an image.");
 	}
-	//image_block->pixelFormat = k32RGBAPixelFormat;
-        //image_block->pixelFormat = k32ARGBPixelFormat;
-	//image_block->pixMapH = GetGWorldPixMap(image_block->gw);
-	//::LockPixels(image_block->pixMapH);
 	::GraphicsImportSetGWorld(inImporter, gw, NULL);
 	::GraphicsImportDraw(inImporter);
         ::DisposeGWorld(gw);			//dispose the offscreen

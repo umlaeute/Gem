@@ -15,10 +15,6 @@
 #ifndef INCLUDE_GEMEXTWIN_H_
 #define INCLUDE_GEMEXTWIN_H_
 
-#ifndef HELPSYMBOL_BASE
-# define HELPSYMBOL_BASE "Gem/"
-#endif
-
 #include "Base/GemOutput.h"
 #include "GemExtContext.h"
 

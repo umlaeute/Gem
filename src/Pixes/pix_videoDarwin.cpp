@@ -408,9 +408,7 @@ void pix_videoDarwin :: InitSeqGrabber()
     if (m_colorspace==GL_BGRA_EXT){
         m_pixBlock.image.xsize = m_vidXSize;
         m_pixBlock.image.ysize = m_vidYSize;
-        m_pixBlock.image.csize = 4;
-        m_pixBlock.image.format = GL_BGRA_EXT;
-        m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+		m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
         int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
                                             * 4 * sizeof(unsigned char);
         m_pixBlock.image.data = new unsigned char[dataSize]; 

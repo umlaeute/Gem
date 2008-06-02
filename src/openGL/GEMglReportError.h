@@ -13,10 +13,6 @@
 #ifndef INCLUDE_GEM_GLREPORTERROR_H_
 #define INCLUDE_GEM_GLREPORTERROR_H_
 
-#ifndef HELPSYMBOL_BASE
-# define HELPSYMBOL_BASE "Gem/"
-#endif
-
 #include "Base/GemBase.h"
 
 /*

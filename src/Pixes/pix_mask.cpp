@@ -48,10 +48,9 @@ void pix_mask :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   unsigned char *mask = right.data;
 
   while (datasize--)	{
-    // do we use the alpha value
-    pixels[chAlpha] = (mask[chRed  ] * 79  + 
-		       mask[chGreen] * 156 +
-		       mask[chBlue ] * 21)>>8;
+    // calculate the alpha value
+	unsigned short grey=(mask[chRed  ] * 79  + mask[chGreen] * 156 + mask[chBlue ] * 21);
+    pixels[chAlpha] = grey>>8;
     pixels += 4;
     mask += 4;
   }

@@ -15,11 +15,6 @@
 #ifndef INCLUDE_GEMBASE_H_
 #define INCLUDE_GEMBASE_H_
 
-#ifndef HELPSYMBOL_BASE
-/* this must be defined before including CPPExtern.h (see below) */
-# define HELPSYMBOL_BASE "Gem/"
-#endif
-
 #include "Base/GemGL.h"
 
 #include "Base/CPPExtern.h"

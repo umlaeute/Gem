@@ -1549,12 +1549,7 @@ GEM_EXTERN extern int getPixFormat(char*cformat){
   switch(c){
   case 'g': return GL_LUMINANCE;
   case 'y': return GL_YUV422_GEM;
-  case 'r': 
-#ifndef __APPLE__
-    return GL_RGBA;
-#else
-    return GL_BGRA_EXT;
-#endif
+  case 'r': return GL_RGBA_GEM;
   }
   return 0;
 }

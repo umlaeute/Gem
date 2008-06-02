@@ -235,7 +235,7 @@ void pix_convolve :: processYUVImage(imageStruct &image)
  //   calculate3x3YUV(image,tempImg);
  
 //quick fix for Intel 3x3YUV problems
-#ifdef PPC
+#ifdef __BIG_ENDIAN__
     if (m_rows == 3 && m_cols == 3) {
       calculate3x3YUV(image,tempImg);
       return;

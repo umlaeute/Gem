@@ -133,3 +133,13 @@ bool CPPExtern :: checkGemVersion(int major, int minor) {
 	    GEM_VERSION);
   }
 }
+
+bool CPPExtern :: checkGemVersion(int major, int minor) {
+  if((major != GEM_VERSION_MAJOR) && (minor != GEM_VERSION_MINOR)) {
+    ::error("GEM version mismatch: compiled for %d.%d but we are running %s", 
+	    major, minor,
+	    GEM_VERSION);
+        return false;
+  }
+  return true;
+}

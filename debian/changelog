@@ -1,8 +1,14 @@
+gem (0.91) unstable; urgency=low
+
+  * new upstream
+
+ -- IOhannes m zmoelnig <zmoelnig@iem.at>  Thu, 22 May 2008 17:35:51 +0200
+
 gem (0.90.cvs14122005-1) unstable; urgency=low
 
   * new upstream release
 
- -- Johannes M Zmoelnig <zmoelnig@ferrari.iemnet>  Wed, 14 Dec 2005 18:50:09 +0100
+ -- IOhannes M zmoelnig <zmoelnig@iem.at>  Wed, 14 Dec 2005 18:50:09 +0100
 
 gem (0.87.cvs14042003-1) unstable; urgency=low
 

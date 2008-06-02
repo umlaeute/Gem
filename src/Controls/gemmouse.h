@@ -15,10 +15,6 @@ LOG
 #ifndef INCLUDE_GEMMOUSE_H_
 #define INCLUDE_GEMMOUSE_H_
 
-#ifndef HELPSYMBOL_BASE
-# define HELPSYMBOL_BASE "Gem/"
-#endif
-
 #include "Base/CPPExtern.h"
 
 /*-----------------------------------------------------------------

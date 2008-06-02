@@ -1,4 +1,4 @@
-This is GEM 0.90
+This is GEM 0.91
 ===================
 You can get the current distribution from:
 http://gem.iem.at
@@ -28,7 +28,7 @@ GemLibs-<OS>-<libver>.tgz :: auxiliary libraries (used to be "AuxLibs")
 
 1) the core Gem-packages:
 the core Gem-packages all extract into the same directory gem-<gemver>/
-there are install-scripts for windoze (and probably IRIX) like GEM_INSTALL.bat
+there are install-scripts for windoze (and probably IRIX)
 these will install the documentation...
 
 
@@ -40,9 +40,9 @@ the GemLibs have their own version numbering, starting with 1.
 You can get the newest GemLib from the place mentioned above
 
 
-DEPENDENCIES:
-=============
-current version: GEM-0.90
+COMPILING DEPENDENCIES:
+=======================
+current version: GEM-0.91
 GemLibs	>= 1
 PD 	>= 0.34
 
@@ -54,21 +54,10 @@ INSTALLATION:
 
 To install GEM on W32:
 
-a) use the script
-
-	1) unzip the GEM package so that it is located at pd/gem
-
-	2) edit line 3&6 of the GEM_INSTALL.bat file to match your installation of pd
-
-	3) run GEM_INSTALL.bat
-	    - this will put everything where it should be
-
-	4) Read the FAQ for instructions to run Pd and GEM
-
-	5) Check the release notes for changes and usage information
-
-	6) Use the manual html files to learn how to use GEM
-
+a) (preferred method)
+  use the installer executable to install Gem into ...\pd\extra
+  to build the installer you will have to have NSIS installed
+  see build/win-nsis for details
 
 b) do it by hand
 
