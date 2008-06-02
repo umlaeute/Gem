@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## TODO:
-##  find zexy (either in ../src or ../)
+##  find Gem (either in ../src or ../)
 ##  if it is not there, assume it is split into externals
 
 if [ "x${PD}" = "x" ]
@@ -16,7 +16,7 @@ SUFFIX=$(date +%y%m%d-%H%M%S)
 RUNTESTS_TXT=runtests.txt
 RUNTESTS_LOG=log-runtests.${SUFFIX}
 
-LIBFLAGS="-path ../src:../ -lib zexy -path ../abs/"
+LIBFLAGS="-path ../src:../ -lib Gem -path ../abstractions/"
 
 function list_tests() {
 #  find . -mindepth 2  -name "*.pd" | sed 's|\.pd$|;|' 
