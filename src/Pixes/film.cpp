@@ -28,8 +28,12 @@
 
 film :: film(GLenum format) : 
   m_wantedFormat(format), 
+  m_numFrames(0), m_numTracks(0),
   m_curFrame(0), m_curTrack(0),
-  m_fps(-1.0)
+  m_readNext(false),
+  m_auto(0.f),
+  m_fps(-1.0),
+  m_newfilm(false)
 {}
 
 /////////////////////////////////////////////////////////
@@ -51,35 +55,6 @@ void film :: close(void)
 bool film :: open(char *filename, int format)
 {
   return false;
-  if (format!=0)m_wantedFormat=format;
-  int wantedFormat = (m_wantedFormat)?m_wantedFormat:GL_RGBA;
-  m_numFrames=0;
-  m_image.image.xsize=64;
-  m_image.image.ysize=64;
-  m_image.image.type=GL_UNSIGNED_BYTE;
-
-  switch (wantedFormat){
-  case GL_RGB:
-  case GL_BGR:
-    m_image.image.csize=3;
-    m_image.image.format=wantedFormat;
-    break;
-  case GL_LUMINANCE:
-    m_image.image.csize=1;
-    m_image.image.format=wantedFormat;
-    break;
-  default:
-    wantedFormat=GL_RGBA;
-  case GL_RGBA:    
-  case GL_BGRA:
-    m_image.image.csize=4;
-    m_image.image.format=wantedFormat;
-  }
-  m_image.image.allocate();
-
-  m_newfilm = true;
-
-  return true;
 }
 
 /////////////////////////////////////////////////////////
