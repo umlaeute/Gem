@@ -40,7 +40,10 @@ pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
   if (s==&s_){
     static int buffercounter=0;
     char cbuf[16];
-    sprintf(cbuf, "pix_buffer_%6d", buffercounter++);
+    buffercounter++;
+    sprintf(cbuf, "pix_buffer_%04d", buffercounter);
+    cbuf[15]=0;
+    post("defaulting to namne '%s'", cbuf);
     s=gensym(cbuf);
   }
 
