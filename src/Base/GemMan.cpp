@@ -221,7 +221,7 @@ void GemMan :: checkOpenGLExtensions(void)
     texture_rectangle_supported=1;
 
   if (getenv("GEM_RECTANGLE_TEXTURE") &&
-      !strcmp("0", getenv("GEM_RECTANGLE_TEXTURE")))
+      !strncmp("0", getenv("GEM_RECTANGLE_TEXTURE"),1))
     {
       texture_rectangle_supported = 0;
     }
@@ -244,7 +244,7 @@ void GemMan :: createContext(char* disp)
 {
   // can we only have one context?
   if (getenv("GEM_SINGLE_CONTEXT") &&
-      !strcmp("1", getenv("GEM_SINGLE_CONTEXT")))
+      !strncmp("1", getenv("GEM_SINGLE_CONTEXT"),1))
     {
       post("GEM: using GEM_SINGLE_CONTEXT");
       s_singleContext = 1;

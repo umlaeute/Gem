@@ -341,10 +341,18 @@ int videoV4L2 :: startTransfer(int format)
     }
     dev_name=buf;
   }
-  
+
   // try to open the device
   debugPost("v4l2: device: %s", dev_name);
-  if (-1 == stat (dev_name, &st)) {
+  
+  m_tvfd = open (dev_name, O_RDWR /* required */ | O_NONBLOCK, 0);
+
+  if (-1 == m_tvfd) {
+    error("Cannot open '%s': %d, %s", dev_name, errno, strerror (errno));
+    goto closit;
+  }
+
+  if (-1 == fstat (m_tvfd, &st)) {
     error("Cannot identify '%s': %d, %s", dev_name, errno, strerror (errno));
     goto closit;
   }
@@ -354,12 +362,8 @@ int videoV4L2 :: startTransfer(int format)
     goto closit;
   }
 
-  m_tvfd = open (dev_name, O_RDWR /* required */ | O_NONBLOCK, 0);
 
-  if (-1 == m_tvfd) {
-    error("Cannot open '%s': %d, %s", dev_name, errno, strerror (errno));
-    goto closit;
-  }
+
 
   // by now, we have an open file-descriptor
   // check whether this is really a v4l2-device
