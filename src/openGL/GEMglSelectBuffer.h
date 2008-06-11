@@ -42,6 +42,7 @@ class GEM_EXTERN GEMglSelectBuffer : public GemBase
 
 	  // Do the rendering
 	  virtual void	render (GemState *state);
+	  virtual void	postrender (GemState *state);
 
 	// variables
 	  GLsizei	size;		// VAR
@@ -52,8 +53,9 @@ class GEM_EXTERN GEMglSelectBuffer : public GemBase
 
 	private:
 
-	// we need some inlets
+	  // we need some inlets
 	  t_inlet *m_inlet;
+	  t_outlet*m_bufout;
 
 	// static member functions
 	  static void	 sizeMessCallback (void*, t_floatarg);
