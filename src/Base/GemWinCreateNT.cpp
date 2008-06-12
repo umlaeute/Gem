@@ -357,7 +357,7 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     s_wintabLoaded = 1;
 					// is the no tablet environment variable set?
 					if (getenv("GEM_NO_TABLET") &&
-						!strcmp("1", getenv("GEM_NO_TABLET")))
+              !strncmp("1", getenv("GEM_NO_TABLET"),1))
 					{
 						post("GEM: NO_TABLET environment variable set");
 					}
