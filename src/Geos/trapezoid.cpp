@@ -61,36 +61,32 @@ void trapezoid :: render(GemState *state)
   int drawType = m_drawType;
   if(drawType==GL_DEFAULT_GEM)drawType=GL_QUADS;
 
-  if (drawType == GL_LINE_LOOP)glLineWidth(m_linewidth);
-
+  if (drawType == GL_LINE_LOOP)
+    glLineWidth(m_linewidth);
+  if (m_top<0)
+    top*=-1;
 
   glNormal3f(0.0f, 0.0f, 1.0f);
 
   glBegin(drawType);
-  if(m_top>=0.f) {
-    SetVertex(state,-m_size, -m_size, 0.0f,    0.f, 0.f,         0);
-    SetVertex(state, m_size, -m_size, 0.0f,    1.f, 0.f,         1);
-    SetVertex(state,  top,  m_size, 0.0f,    tx, tx, 0., tx,   2);
-    SetVertex(state, -top,  m_size, 0.0f,    0., tx, 0., tx,   3);
-  } else {
-    SetVertex(state,-m_size, -m_size, 0.0f,    0.f, 0.f,         0);
-    SetVertex(state, m_size, -m_size, 0.0f,    1.f, 0.f,         1);
-    SetVertex(state, -top,  m_size, 0.0f,    tx, tx, 0., tx,   2);
-    SetVertex(state,  top,  m_size, 0.0f,    0., tx, 0., tx,   3);
-  }
+
+  SetVertex(state,-m_size, -m_size, 0.0f,  0., 0.,         0);
+  SetVertex(state, m_size, -m_size, 0.0f,  1., 0.,         1);
+  SetVertex(state,    top,  m_size, 0.0f,  tx, tx, 0., tx, 2);
+  SetVertex(state,   -top,  m_size, 0.0f,  0., tx, 0., tx, 3);
 
 #if 0
-    glTexCoord2f( 0,  0);
-    glVertex2f  (-1, -1);
+  glTexCoord2f( 0,  0);
+  glVertex2f  (-1, -1);
 
-		glTexCoord2f( 256,  0);
-		glVertex2f  ( 1, -1);
+  glTexCoord2f( 256,  0);
+  glVertex2f  ( 1, -1);
 
-		glTexCoord4f( 256*tx,  256*tx, 0, tx);
-		glVertex2f  ( m_size,  1);
+  glTexCoord4f( 256*tx,  256*tx, 0, tx);
+  glVertex2f  ( m_size,  1);
 
-		glTexCoord4f(  0,  256*tx, 0, tx);
-		glVertex2f  (-m_size,  1);
+  glTexCoord4f(  0,  256*tx, 0, tx);
+  glVertex2f  (-m_size,  1);
 #endif
 
   glEnd();
