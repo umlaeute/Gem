@@ -36,7 +36,6 @@ trapezoid :: trapezoid(t_floatarg size, t_floatarg top)
   if(m_top==0.f)m_top=m_size;
 
   m_topinlet=floatinlet_new(this->x_obj, &m_top);
-  m_scaleinlet=floatinlet_new(this->x_obj, &m_scale_texcoord);
 }
 
 /////////////////////////////////////////////////////////
@@ -46,7 +45,6 @@ trapezoid :: trapezoid(t_floatarg size, t_floatarg top)
 trapezoid :: ~trapezoid()
 { 
   inlet_free(m_topinlet);
-  inlet_free(m_scaleinlet);
 }
 
 /////////////////////////////////////////////////////////
@@ -90,8 +88,29 @@ void trapezoid :: render(GemState *state)
 #endif
 
   glEnd();
-
 }
+
+/////////////////////////////////////////////////////////
+// toplengthMess
+//
+/////////////////////////////////////////////////////////
+void trapezoid :: toplengthMess(float top)
+{
+  m_top = top;
+  setModified();
+}
+
+
+/////////////////////////////////////////////////////////
+// texscaleMess
+//
+/////////////////////////////////////////////////////////
+void trapezoid :: texscaleMess(float scale)
+{
+  m_scale_texcoord=scale;
+  setModified();
+}
+
  
 /////////////////////////////////////////////////////////
 // static member function
@@ -102,15 +121,15 @@ void trapezoid :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, (t_method)&trapezoid::topMessCallback,
                   gensym("top"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&trapezoid::scaleMessCallback,
-                  gensym("scale"), A_FLOAT, A_NULL);
+                  gensym("texscale"), A_FLOAT, A_NULL);
 }
 
 void trapezoid :: scaleMessCallback(void *data, t_floatarg scale)
 {
-    GetMyClass(data)->m_scale_texcoord=(scale);
+  GetMyClass(data)->texscaleMess(scale);
 }
 
 void trapezoid :: topMessCallback(void *data, t_floatarg top)
 {
-    GetMyClass(data)->m_top=top;
+  GetMyClass(data)->toplengthMess(top);
 }

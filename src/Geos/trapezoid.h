@@ -45,12 +45,19 @@ class GEM_EXTERN trapezoid : public GemShape
     	//////////
     	// Destructor
     	virtual ~trapezoid();
-        
+
+
+
+      //////////
+      // length of the upper side of the trapezoid
       t_inlet *m_topinlet;
       t_float	m_top;
+      void    toplengthMess(t_float len);
 
-      t_inlet *m_scaleinlet;
+      //////////
+      // a texture scale factor
       t_float	m_scale_texcoord;
+      void    texscaleMess(t_float scale);
 
     	//////////
     	// Do the rendering
