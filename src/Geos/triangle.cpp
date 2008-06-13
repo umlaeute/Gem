@@ -43,10 +43,10 @@ triangle :: ~triangle()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void triangle :: render(GemState *state)
+void triangle :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLES;
     glNormal3f(0.0f, 0.0f, 1.0f);

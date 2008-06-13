@@ -43,9 +43,6 @@ cuboid :: cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez)
 
   m_inletY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
   m_inletZ = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft3"));
-
-  m_drawType = GL_QUADS;
-  m_blend = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -59,10 +56,10 @@ cuboid :: ~cuboid()
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void cuboid :: render(GemState *state)
+void cuboid :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
 
@@ -81,15 +78,8 @@ void cuboid :: render(GemState *state)
 	{ 0, 1, 2, 3 }, { 1, 4, 7, 2 }, { 4, 5, 6, 7 },
 	{ 5, 0, 3, 6 }, { 3, 2, 7, 6 }, { 1, 0, 5, 4 }
     };
-    if (m_blend) {
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
-    }
     if (m_drawType == GL_LINE_LOOP)
     {
-	    glLineWidth(m_linewidth);
 	        for (int i = 0; i < 6; i++)
 	        {
 	            glBegin(m_drawType);
@@ -150,10 +140,6 @@ void cuboid :: render(GemState *state)
 	        }
 	    glEnd();
     }
-	if (m_blend) {
-        glDisable(GL_POLYGON_SMOOTH);
-        glDisable(GL_BLEND);
-    }
 }
 /////////////////////////////////////////////////////////
 // heightMess
@@ -184,8 +170,6 @@ void cuboid :: obj_setupCallback(t_class *classPtr)
     	    gensym("ft2"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&cuboid::widthMessCallback,
 	    gensym("ft3"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&cuboid::blendMessCallback,
-    	    gensym("blend"), A_FLOAT, A_NULL);
 }
 
 void cuboid :: heightMessCallback(void *data, t_floatarg size)
@@ -196,8 +180,4 @@ void cuboid :: heightMessCallback(void *data, t_floatarg size)
 void cuboid :: widthMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->widthMess((float)size);  
-}
-void cuboid :: blendMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->m_blend=((int)size);
 }

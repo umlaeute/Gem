@@ -52,7 +52,7 @@ class GEM_EXTERN slideSquares : public GemShape
 
     	//////////
     	// Do the rendering
-    	virtual void 	render(GemState *state);
+    	virtual void 	renderShape(GemState *state);
 
     	//////////
     	// How the object should be drawn
@@ -70,14 +70,12 @@ class GEM_EXTERN slideSquares : public GemShape
         GLvoid 	Slide( int i );
         void	slide_init();
         float	xsize, ysize;
-        int	m_blend;
 
 	private:
 
 		//////////
 		// Static member functions
     	static void 	heightMessCallback(void *data, t_floatarg size);
-        static void 	blendMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file

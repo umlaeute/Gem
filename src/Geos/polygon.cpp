@@ -33,7 +33,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 polygon :: polygon(t_floatarg numInputs)
-    	 : m_numInputs(0), m_drawType(GL_POLYGON)
+  : GemShape(), m_numInputs(0)
 {
   int i;
   int realNum = (int)numInputs;
@@ -78,25 +78,24 @@ polygon :: ~polygon()
 // render
 //
 /////////////////////////////////////////////////////////
-void polygon :: render(GemState *state)
+void polygon :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_POLYGON;
 
   glNormal3f(0.0f, 0.0f, 1.0f);
-  glLineWidth(m_linewidth);
   if (state->texture && state->numTexCoords)
     {
       glBegin(m_drawType);
       for (int i = 0; i < m_numInputs; i++)
-	{
-	  if (state->numTexCoords < i)
-	    glTexCoord2f(state->texCoords[state->numTexCoords - 1].s,
-			 state->texCoords[state->numTexCoords - 1].t);
-	  else
-	    glTexCoord2f(state->texCoords[i].s,
-			 state->texCoords[i].t);
-	  glVertex3fv(m_vert[i]);
-	}
+        {
+          if (state->numTexCoords < i)
+            glTexCoord2f(state->texCoords[state->numTexCoords - 1].s,
+                         state->texCoords[state->numTexCoords - 1].t);
+          else
+            glTexCoord2f(state->texCoords[i].s,
+                         state->texCoords[i].t);
+          glVertex3fv(m_vert[i]);
+        }
       glEnd();
     }
   else
@@ -104,45 +103,34 @@ void polygon :: render(GemState *state)
       float maxVal[2];
       maxVal[0] = maxVal[1] = 0;
       if (state->texture)
-	{
-	  for (int i = 0; i < m_numInputs; i++)
-    	    {
-	      for (int j = 0; j < 2; j++)
-		{
-		  if (m_vert[i][j] < 0)
-		    {
-		      if (-m_vert[i][j] > maxVal[j])
-			maxVal[j] = -m_vert[i][j];
-		    }
-		  else
-		    {
-		      if (m_vert[i][j] > maxVal[j])
-			maxVal[j] = m_vert[i][j];
-		    }
-		}
-    	    }
-	}
+        {
+          for (int i = 0; i < m_numInputs; i++)
+            {
+              for (int j = 0; j < 2; j++)
+                {
+                  if (m_vert[i][j] < 0)
+                    {
+                      if (-m_vert[i][j] > maxVal[j])
+                        maxVal[j] = -m_vert[i][j];
+                    }
+                  else
+                    {
+                      if (m_vert[i][j] > maxVal[j])
+                        maxVal[j] = m_vert[i][j];
+                    }
+                }
+            }
+        }
       glBegin(m_drawType);
       for(int n=0; n < m_numInputs; n++)
-	{
-	  if (state->texture)
-	    glTexCoord2f(m_vert[n][0] / maxVal[0],
-			 m_vert[n][1] / maxVal[1]);
-	  glVertex3fv(m_vert[n]);
-	}
+        {
+          if (state->texture)
+            glTexCoord2f(m_vert[n][0] / maxVal[0],
+                         m_vert[n][1] / maxVal[1]);
+          glVertex3fv(m_vert[n]);
+        }
       glEnd();
     }
-  glLineWidth(1.0);
-}
-
-/////////////////////////////////////////////////////////
-// linewidthMess
-//
-/////////////////////////////////////////////////////////
-void polygon :: linewidthMess(float linewidth)
-{
-    m_linewidth = (linewidth < 0.0f) ? 0.0f : linewidth;
-    setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -163,7 +151,9 @@ void polygon :: setVert(int whichOne, float x, float y, float z)
 /////////////////////////////////////////////////////////
 void polygon :: typeMess(t_symbol *type)
 {
-    if (!strcmp(type->s_name, "line")) 
+    if (!strcmp(type->s_name, "default")) 
+	    m_drawType = GL_DEFAULT_GEM;
+    else if (!strcmp(type->s_name, "line")) 
 	    m_drawType = GL_LINE_LOOP;
     else if (!strcmp(type->s_name, "fill")) 
 	    m_drawType = GL_POLYGON;
@@ -181,12 +171,9 @@ void polygon :: typeMess(t_symbol *type)
 	    m_drawType = GL_QUADS;
     else if (!strcmp(type->s_name, "quadstrip")) 
 	    m_drawType = GL_QUAD_STRIP;
-    
-        
-
     else
     {
-	    error ("draw style");
+	    error ("unknown draw style");
 	    return;
     }
     setModified();
@@ -198,22 +185,7 @@ void polygon :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void polygon :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&polygon::linewidthMessCallback,
-    	    gensym("linewidth"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::linewidthMessCallback,
-    	    gensym("width"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&polygon::typeMessCallback,
-    	    gensym("draw"), A_SYMBOL, A_NULL);
-
     class_addanything(classPtr, (t_method)&polygon::vertCallback);
-}
-void polygon :: linewidthMessCallback(void *data, t_floatarg linewidth)
-{
-    GetMyClass(data)->linewidthMess((float)linewidth);
-}
-void polygon :: typeMessCallback(void *data, t_symbol *type)
-{
-    GetMyClass(data)->typeMess(type);
 }
 
 void polygon :: vertCallback(void *data, t_symbol*s, int argc, t_atom*argv)

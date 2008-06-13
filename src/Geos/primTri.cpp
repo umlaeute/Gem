@@ -31,9 +31,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(primTri, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 primTri :: primTri(t_floatarg size)
+  : GemShape()
 {
-    m_drawType = GL_TRIANGLES;
-
 	mVectors[0][0] = 0.f;
 	mVectors[0][1] = 1.f;
 
@@ -50,13 +49,13 @@ primTri :: primTri(t_floatarg size)
 	mColors[0][2] = mColors[1][2] = mColors[2][2] = 1.f;
 	mColors[0][3] = mColors[1][3] = mColors[2][3] = 1.f;
 
-    // create the new inlets
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect1"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect2"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect3"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col1"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col2"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col3"));
+  // create the new inlets
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect2"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect3"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col2"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col3"));
 }
 
 /////////////////////////////////////////////////////////
@@ -70,7 +69,7 @@ primTri :: ~primTri()
 // render
 //
 /////////////////////////////////////////////////////////
-void primTri :: render(GemState *state)
+void primTri :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLES;
 	float norm[3];

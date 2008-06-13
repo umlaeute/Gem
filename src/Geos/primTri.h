@@ -48,8 +48,8 @@ class GEM_EXTERN primTri : public GemShape
     	virtual ~primTri();
 
     	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+    	// Do the renderShapeing
+    	virtual void 	renderShape(GemState *state);
 
     	//////////
     	// How the object should be drawn
@@ -64,10 +64,6 @@ class GEM_EXTERN primTri : public GemShape
     	// Color changed
     	void	    	colMess(int which, float r, float g, float b, float a)
 			{ mColors[which][0] = r; mColors[which][1] = g; mColors[which][2] = b; mColors[which][3] = a; }
-
-        //////////
-        // The drawing style (GL_LINE, GL_POLYGON, etc)
-        GLenum	    	m_drawType;
 
 		//////////
 		// Vertex vectors

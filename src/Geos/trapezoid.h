@@ -60,8 +60,8 @@ class GEM_EXTERN trapezoid : public GemShape
       void    texscaleMess(t_float scale);
 
     	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+    	// Do the renderShapeing
+    	virtual void 	renderShape(GemState *state);
       static void 	scaleMessCallback(void *data, t_floatarg size);
       static void 	topMessCallback(void *data, t_floatarg size);
 };

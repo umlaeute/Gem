@@ -47,8 +47,8 @@ class GEM_EXTERN triangle : public GemShape
     	virtual ~triangle();
 
     	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+    	// Do the renderShapeing
+    	virtual void 	renderShape(GemState *state);
 };
 
 #endif	// for header file

@@ -159,10 +159,10 @@ void curve3d :: typeMess(t_symbol *type){
 }
 
 //////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void curve3d :: render(GemState *state){
+void curve3d :: renderShape(GemState *state){
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=1;
   float norm[3];
   int n, m;

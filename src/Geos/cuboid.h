@@ -1,15 +1,15 @@
 /*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
+  LOG
+  GEM - Graphics Environment for Multimedia
 
-    A cuboid
+  A cuboid
 
-    Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+  Copyright (c) 1997-1999 Mark Danks. mark@danks.org
+  For information on usage and redistribution, and for a DISCLAIMER OF ALL
+  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
-    modified cube geos into cuboid by erich berger 2001 rat@telecoma.net
------------------------------------------------------------------*/
+  modified cube geos into cuboid by erich berger 2001 rat@telecoma.net
+  -----------------------------------------------------------------*/
 
 #ifndef INCLUDE_CUBOID_H_
 #define INCLUDE_CUBOID_H_
@@ -17,78 +17,68 @@ LOG
 #include "Base/GemShape.h"
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    cuboid
+  -------------------------------------------------------------------
+  CLASS
+  cuboid
     
-    Creates a cuboid
+  Creates a cuboid
 
-KEYWORDS
-    geo
+  KEYWORDS
+  geo
 
-DESCRIPTION
+  DESCRIPTION
     
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 class GEM_EXTERN cuboid : public GemShape
 {
-    CPPEXTERN_HEADER(cuboid, GemShape)
+  CPPEXTERN_HEADER(cuboid, GemShape)
 
     public:
 
-	    //////////
-	    // Constructor
-            cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez);
-    protected:
+  //////////
+  // Constructor
+  cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez);
+ protected:
     	
-    	//////////
-    	// Destructor
-    	virtual ~cuboid();
+  //////////
+  // Destructor
+  virtual ~cuboid();
 
 
 	//////////
-    	// The height of the object
-      	void	    	heightMess(float sizey);
+  // The height of the object
+  void	    	heightMess(float sizey);
 
 	//////////
-    	// The widht of the object
-    	void	    	widthMess(float sizez);
+  // The widht of the object
+  void	    	widthMess(float sizez);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void 	renderShape(GemState *state);
 
-#if 0
-    	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-#endif
+  //////////
+  // The height of the object
+  GLfloat	    	m_sizey;
 
-	//////////
-    	// The height of the object
-        GLfloat	    	m_sizey;
-
-        //////////
-        // The height inlet
-        t_inlet         *m_inletY;
+  //////////
+  // The height inlet
+  t_inlet         *m_inletY;
 
 	//////////
-    	// The height of the object
-        GLfloat	    	m_sizez;
+  // The height of the object
+  GLfloat	    	m_sizez;
 
-        //////////
-        // The height inlet
-        t_inlet         *m_inletZ;
+  //////////
+  // The height inlet
+  t_inlet         *m_inletZ;
 		
-		int		m_blend;
+ private:
 
-		private:
-
-       	//////////
-       	// Static member functions
-    	static void 	heightMessCallback(void *data, t_floatarg sizey);
-    	static void 	widthMessCallback(void *data, t_floatarg sizez);
-		static void 	blendMessCallback(void *data, t_floatarg size);
-
+  //////////
+  // Static member functions
+  static void 	heightMessCallback(void *data, t_floatarg sizey);
+  static void 	widthMessCallback(void *data, t_floatarg sizez);
 };
 
 #endif	// for header file

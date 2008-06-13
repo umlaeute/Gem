@@ -47,8 +47,8 @@ class GEM_EXTERN circle : public GemShape
         virtual ~circle();
 
         //////////
-        // Do the rendering
-        virtual void 	render(GemState *state);
+        // Do the renderShapeing
+        virtual void 	renderShape(GemState *state);
 
         //////////
         // cos lookup table

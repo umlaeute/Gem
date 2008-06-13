@@ -58,14 +58,10 @@ class GEM_EXTERN polygon : public GemShape
     	virtual ~polygon();
 
     	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+    	// Do the renderShapeing
+    	virtual void 	renderShape(GemState *state);
 
-    	//////////
-    	// The width of the lines in line draw mode
-    	void	    	linewidthMess(float linewidth);
-    	
-    	//////////
+     	//////////
     	// How the object should be drawn
     	virtual void	typeMess(t_symbol *type);
 
@@ -83,18 +79,12 @@ class GEM_EXTERN polygon : public GemShape
     	
     	//////////
     	// The vertices
-	float  *m_vertarray;
+      float  *m_vertarray;
     	float **m_vert;
 
-        //////////
-        // The drawing style (GL_LINE, GL_POLYGON, etc)
-        GLenum	    	m_drawType;
-
     private:
-    	    
     	//////////
     	// Static member functions
-    	static void 	linewidthMessCallback(void *data, t_floatarg linewidth);
     	static void 	typeMessCallback(void *data, t_symbol *type);
     	static void 	vertCallback(void *data, t_symbol *type, int argc, t_atom*argv);
 };

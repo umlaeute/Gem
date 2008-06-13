@@ -37,7 +37,6 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
     inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
 
     m_drawType = GL_POLYGON;
-    m_blend = 0;
     alreadyInit = 0;
     xsize = 0.f;
     ysize = 0.f;
@@ -60,22 +59,12 @@ ripple :: ~ripple()
          alreadyInit = 0;
 }
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void ripple :: render(GemState *state)
+void ripple :: renderShape(GemState *state)
 {
     int i, j;
-    if (m_drawType == GL_LINE_LOOP)
-        glLineWidth(m_linewidth);
-        
-    if (m_blend) {
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
-    }
-    
     glNormal3f(0.0f, 0.0f, 1.0f);
 
     glScalef(2.*m_size, 2.*m_size, 2.*m_size);
@@ -142,11 +131,6 @@ void ripple :: render(GemState *state)
     }
 
     glScalef(.5/m_size, .5/m_size, .5/m_size);
-
-    if (m_blend) {
-        glDisable(GL_POLYGON_SMOOTH);
-        glDisable(GL_BLEND);
-    }
 }
 /////////////////////////////////////////////////////////
 //
@@ -458,8 +442,6 @@ void ripple :: obj_setupCallback(t_class *classPtr)
     	    gensym("cX"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&ripple::ctrYMessCallback,
     	    gensym("cY"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&ripple::blendMessCallback,
-    	    gensym("blend"), A_FLOAT, A_NULL);
 }
 
 void ripple :: bangMessCallback(void *data)
@@ -477,8 +459,4 @@ void ripple :: ctrXMessCallback(void *data, t_floatarg center)
 void ripple :: ctrYMessCallback(void *data, t_floatarg center)
 {
     GetMyClass(data)->ctrYMess((float)center);
-}
-void ripple :: blendMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->m_blend=((int)size);
 }

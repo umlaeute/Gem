@@ -29,10 +29,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(cube, t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 cube :: cube(t_floatarg size)
       : GemShape(size)
-{
-    m_drawType = GL_QUADS;
-    m_blend = 0;
-}
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor
@@ -42,10 +39,10 @@ cube :: ~cube()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void cube :: render(GemState *state)
+void cube :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
     static GLfloat n[6][3] =
@@ -63,15 +60,8 @@ void cube :: render(GemState *state)
 	{ 0, 1, 2, 3 }, { 1, 4, 7, 2 }, { 4, 5, 6, 7 },
 	{ 5, 0, 3, 6 }, { 3, 2, 7, 6 }, { 1, 0, 5, 4 }
     };
-    if (m_blend) {
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
-    }
     if (m_drawType == GL_LINE_LOOP)
     {
-	    glLineWidth(m_linewidth);
 	        for (int i = 0; i < 6; i++)
 	        {
 	            glBegin(m_drawType);
@@ -132,10 +122,6 @@ void cube :: render(GemState *state)
 	        }
 	    glEnd();
     }
-    if (m_blend) {
-        glDisable(GL_POLYGON_SMOOTH);
-        glDisable(GL_BLEND);
-    }
 }
 
 /////////////////////////////////////////////////////////
@@ -143,13 +129,4 @@ void cube :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 void cube :: obj_setupCallback(t_class *classPtr)
-{ 
-    class_addmethod(classPtr, (t_method)&cube::blendMessCallback,
-    	    gensym("blend"), A_FLOAT, A_NULL);
-}
-
-void cube :: blendMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->m_blend=((int)size);
-}
-
+{ }

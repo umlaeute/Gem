@@ -47,12 +47,12 @@ class GEM_EXTERN colorSquare : public GemShape
     	virtual ~colorSquare();
 
     	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+    	// Do the renderShapeing
+    	virtual void 	renderShape(GemState *state);
 
     	//////////
-    	// After rendering
-    	virtual void 	postrender(GemState *state);
+    	// After renderShapeing
+    	virtual void 	postrenderShape(GemState *state);
 
     	//////////
     	// Set the individual color vertices

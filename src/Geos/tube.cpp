@@ -101,10 +101,10 @@ tube :: ~tube(){
 }
 
 //////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void tube :: render(GemState *state){
+void tube :: renderShape(GemState *state){
 #ifdef __GNUC__
   GLfloat vectors1[order+3][3];
   GLfloat vectors2[order+3][3];

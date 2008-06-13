@@ -49,16 +49,13 @@ class GEM_EXTERN mesh_square : public GemShape
     	// Destructor
     	virtual ~mesh_square();
         
-        int	m_blend;
-
 
     	//////////
     	// Do the rendering
-    	virtual void 	render(GemState *state);
-        static void 	blendMessCallback(void *data, t_floatarg size);
-        static void 	gridMessCallback(void *data, t_floatarg size);
-        static void 	gridXMessCallback(void *data, t_floatarg size);
-        static void 	gridYMessCallback(void *data, t_floatarg size);
+    	virtual void 	renderShape(GemState *state);
+      static void 	gridMessCallback(void *data, t_floatarg size);
+      static void 	gridXMessCallback(void *data, t_floatarg size);
+      static void 	gridYMessCallback(void *data, t_floatarg size);
 
 
 		//////////

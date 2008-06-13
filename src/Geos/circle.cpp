@@ -48,10 +48,10 @@ circle :: ~circle()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void circle :: render(GemState *state)
+void circle :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_POLYGON;
     glNormal3f(0.0f, 0.0f, 1.0f);

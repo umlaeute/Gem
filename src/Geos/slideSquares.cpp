@@ -59,8 +59,6 @@ slideSquares :: slideSquares(t_floatarg width, t_floatarg height)
 
     // the height inlet
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
-    m_drawType = GL_QUADS;
-    m_blend = 0;
     slide_init();
 }
 
@@ -74,10 +72,10 @@ slideSquares :: ~slideSquares()
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void slideSquares :: render(GemState *state)
+void slideSquares :: renderShape(GemState *state)
 {
     int i;
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
@@ -87,15 +85,6 @@ void slideSquares :: render(GemState *state)
     glColor4f( 0.5f, 0.5f, 0.5f, 0.75f );
     glNormal3f(0.0f, 0.0f, 1.0f);
     //glScalef( 1.f, 0.8f, 1.f );
-    if (m_drawType == GL_LINE_LOOP)
-        glLineWidth(m_linewidth);
-
-    if (m_blend) {
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
-    }
     int curCoord = 0;
     if (state->texture && state->numTexCoords)
     {
@@ -142,10 +131,6 @@ void slideSquares :: render(GemState *state)
                 Slide( i );
             }
         glEnd();
-    }
-    if (m_blend) {
-        glDisable(GL_POLYGON_SMOOTH);
-        glDisable(GL_BLEND);
     }
 }
 void slideSquares :: slide_init()
@@ -224,15 +209,10 @@ void slideSquares :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&slideSquares::heightMessCallback,
     	    gensym("Ht"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&slideSquares::blendMessCallback,
-    	    gensym("blend"), A_FLOAT, A_NULL);
 }
 
 void slideSquares :: heightMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->heightMess((float)size);
 }
-void slideSquares :: blendMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->m_blend=((int)size);
-}
+

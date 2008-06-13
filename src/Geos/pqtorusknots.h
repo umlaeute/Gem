@@ -67,9 +67,9 @@ class GEM_EXTERN pqtorusknots : public GemShape
   virtual void genVert();
 
   //////////
-  // Do the rendering
-  virtual void 	render(GemState *state);
-  virtual void 	postrender(GemState *state);
+  // Do the renderShapeing
+  virtual void 	renderShape(GemState *state);
+  virtual void 	postrenderShape(GemState *state);
 
   //////////
   // Number of steps in the torus knot

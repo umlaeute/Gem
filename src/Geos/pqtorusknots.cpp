@@ -79,7 +79,7 @@ void pqtorusknots :: genVert(){
 
   int i, j;
   /* formerly this was "m_thickness*=m_scale" 
-     which diminuished m_thickness each render-cycle */
+     which diminuished m_thickness each renderShape-cycle */
   GLfloat thickness = m_thickness * m_scale;
 
   m_Vertex   = new GLfloat[((m_steps + 1) * (m_facets + 1) + 1) * 3];
@@ -236,10 +236,10 @@ void pqtorusknots :: genVert(){
 
 
 ////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void pqtorusknots :: render(GemState *state)
+void pqtorusknots :: renderShape(GemState *state)
 {
   if(m_modified)genVert();
   if(!m_Index)return;
@@ -267,7 +267,7 @@ void pqtorusknots :: render(GemState *state)
     }
   glDrawElements(m_PrimitiveType,m_Indices,GL_UNSIGNED_INT,m_Index);
 }
-void pqtorusknots :: postrender(GemState *state)
+void pqtorusknots :: postrenderShape(GemState *state)
 {
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);

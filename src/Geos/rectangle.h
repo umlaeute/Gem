@@ -52,7 +52,7 @@ class GEM_EXTERN rectangle : public GemShape
 
     	//////////
     	// Do the rendering
-    	virtual void 	render(GemState *state);
+    	virtual void 	renderShape(GemState *state);
 
     	//////////
     	// How the object should be drawn
@@ -61,7 +61,6 @@ class GEM_EXTERN rectangle : public GemShape
     	//////////
     	// The height of the object
         GLfloat	    	m_height;
-        int		m_blend;
 
         //////////
         // The height inlet
@@ -69,10 +68,9 @@ class GEM_EXTERN rectangle : public GemShape
 
 	private:
 
-		//////////
-		// Static member functions
-    	static void 	heightMessCallback(void *data, t_floatarg size);
-        static void 	blendMessCallback(void *data, t_floatarg size);
+        //////////
+        // Static member functions
+        static void 	heightMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file

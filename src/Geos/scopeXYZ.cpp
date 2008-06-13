@@ -83,10 +83,10 @@ void scopeXYZ :: lengthMess(int l)
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void scopeXYZ :: render(GemState *state)
+void scopeXYZ :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
   glNormal3f(0.0f, 0.0f, 1.0f);

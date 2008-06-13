@@ -31,9 +31,6 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(mesh_square, t_floatarg, A_DEFFLOAT, t_floatarg, A_D
 mesh_square :: mesh_square(t_floatarg sizeX, t_floatarg sizeY)
         : GemShape(1)
 {
-    m_linewidth=1.0;
-//    m_drawType = GL_QUADS;
-    m_blend=0;
 	setSize((int)sizeX,(int)sizeY);
 }
 
@@ -79,35 +76,24 @@ void mesh_square :: setSize( int valueX, int valueY )
 
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void mesh_square :: render(GemState *state)
+void mesh_square :: renderShape(GemState *state)
 {
 	int i,j;
     GLfloat sizeX = 2. / (GLfloat)(gridX-1);
     GLfloat sizeY = 2. / (GLfloat)(gridY-1);
 
    if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
-//m_drawType=GL_LINES;
 
-    glNormal3f(0.0f, 0.0f, 1.0f);
-	if (m_drawType == GL_LINE_LOOP)
-		m_drawType = GL_LINES;
+   glNormal3f(0.0f, 0.0f, 1.0f);
+   if (m_drawType == GL_LINE_LOOP)
+     m_drawType = GL_LINES;
 
-    if (m_drawType == GL_LINES)
-        glLineWidth(m_linewidth);
+   glNormal3f( 0.0f, 0.0f, 1.0f);
 
-    if (m_blend) {
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE); 
-    }
-
-    glNormal3f( 0.0f, 0.0f, 1.0f);
-
-	if (state->texture && state->numTexCoords>=3)
+   if (state->texture && state->numTexCoords>=3)
     {
 		if ((xsize0!= state->texCoords[0].s) ||
 		(xsize != state->texCoords[1].s-xsize0) ||
@@ -166,11 +152,6 @@ void mesh_square :: render(GemState *state)
             glEnd();
         }
     }
-
-    if (m_blend) {
-        glDisable(GL_POLYGON_SMOOTH);
-        glDisable(GL_BLEND);
-    }
 }
 
 
@@ -179,19 +160,13 @@ void mesh_square :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 void mesh_square :: obj_setupCallback(t_class *classPtr)
-{     class_addmethod(classPtr, (t_method)&mesh_square::blendMessCallback,
-    	    gensym("blend"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&mesh_square::gridMessCallback,
-    	    gensym("grid"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&mesh_square::gridXMessCallback,
-    	    gensym("gridX"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&mesh_square::gridYMessCallback,
-    	    gensym("gridY"), A_FLOAT, A_NULL);
-}
-
-void mesh_square :: blendMessCallback(void *data, t_floatarg blend)
 {
-    GetMyClass(data)->m_blend=((int)blend);
+	class_addmethod(classPtr, (t_method)&mesh_square::gridMessCallback,
+                  gensym("grid"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&mesh_square::gridXMessCallback,
+                  gensym("gridX"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&mesh_square::gridYMessCallback,
+                  gensym("gridY"), A_FLOAT, A_NULL);
 }
 
 /////////////////////////////////////////////////////////

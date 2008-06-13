@@ -72,8 +72,6 @@ newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY
     gridY = MAX ( 3, gridY);
 
 
-    m_blend = 0;
-    m_drawType = GL_TRIANGLE_STRIP;
     alreadyInit = 0;
 
     // the height inlet
@@ -129,10 +127,10 @@ void newWave :: textureMess(int mode)
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void newWave :: render(GemState *state)
+void newWave :: renderShape(GemState *state)
 {
     int i, j;
     if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
@@ -140,38 +138,29 @@ void newWave :: render(GemState *state)
     GLfloat sizeX = 2.*m_size / (GLfloat)(gridX-1);
     GLfloat sizeY = 2.*m_size / (GLfloat)(gridY-1);
 
-    if (m_drawType == GL_LINE_STRIP)
-        glLineWidth(m_linewidth);
-        
-    if (m_blend) {
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
-    }
     glNormal3f( 0.0f, 0.0f, 1.0f);
 
     if (state->texture && state->numTexCoords>=3)
-    {
-      if ((xsize0!= state->texCoords[0].s) ||
-	  (xsize != state->texCoords[1].s-xsize0) ||
-	  (ysize0!= state->texCoords[1].t) ||
-	  (ysize != state->texCoords[2].t-ysize0))
-	alreadyInit = 0;
+      {
+        if ((xsize0!= state->texCoords[0].s) ||
+            (xsize != state->texCoords[1].s-xsize0) ||
+            (ysize0!= state->texCoords[1].t) ||
+            (ysize != state->texCoords[2].t-ysize0))
+          alreadyInit = 0;
 
         if (!alreadyInit)
-        {
-	    xsize0 = state->texCoords[0].s;
-	    xsize  = state->texCoords[1].s-xsize0;
-	    ysize0 = state->texCoords[1].t;
-	    ysize  = state->texCoords[2].t-ysize0;
-
+          {
+            xsize0 = state->texCoords[0].s;
+            xsize  = state->texCoords[1].s-xsize0;
+            ysize0 = state->texCoords[1].t;
+            ysize  = state->texCoords[2].t-ysize0;
+            
             setSize( gridX, gridY );
             setOther(m_textureMode);
             reset( resetMode );
             alreadyInit = 1;
-        }
-
+          }
+        
         for (int i=0; i<gridX -1; ++i)
         {
             glBegin(m_drawType);
@@ -216,10 +205,6 @@ void newWave :: render(GemState *state)
             }
             glEnd();
         }
-    }
-    if (m_blend) {
-        glDisable(GL_POLYGON_SMOOTH);
-        glDisable(GL_BLEND);
     }
 }
 
@@ -747,8 +732,6 @@ void newWave :: obj_setupCallback(t_class *classPtr)
     	    gensym("height"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&newWave::modeMessCallback,
     	    gensym("mode"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&newWave::blendMessCallback,
-    	    gensym("blend"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&newWave::textureMessCallback,
     	    gensym("texture"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, (t_method)&newWave::setK1MessCallback,
@@ -792,11 +775,6 @@ void newWave :: positionMessCallback(void *data, t_floatarg posX, t_floatarg pos
 void newWave :: modeMessCallback(void *data, t_floatarg mode)
 {
     GetMyClass(data)->modeMess((float)mode);
-}
-
-void newWave :: blendMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->m_blend=((int)size);
 }
 
 void newWave :: setK1MessCallback(void *data, t_floatarg K)

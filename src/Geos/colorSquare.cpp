@@ -54,17 +54,16 @@ colorSquare :: ~colorSquare()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void colorSquare :: render(GemState *state)
+void colorSquare :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
 
-    if (!state->lighting) glShadeModel(GL_SMOOTH);
+  if (!state->lighting) glShadeModel(GL_SMOOTH);
 
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    if (m_drawType == GL_LINE_LOOP) glLineWidth(m_linewidth);
+  glNormal3f(0.0f, 0.0f, 1.0f);
     if (state->texture && state->numTexCoords)
     {
         int curCoord = 0;
@@ -107,15 +106,13 @@ void colorSquare :: render(GemState *state)
                 glVertex3f(-m_size,  m_size, 0.0f);
 	    glEnd();
     }
-    if (m_drawType == GL_LINE_LOOP)
-        glLineWidth(1.0);
 }
 
 /////////////////////////////////////////////////////////
-// postrender
+// postrenderShape
 //
 /////////////////////////////////////////////////////////
-void colorSquare :: postrender(GemState *state)
+void colorSquare :: postrenderShape(GemState *state)
 {
     if (!state->lighting) glShadeModel(GL_FLAT);
 }

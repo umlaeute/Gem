@@ -84,8 +84,8 @@ class GEM_EXTERN tube : public GemShape
 
 
   //////////
-  // Do the rendering
-  virtual void 	render(GemState *state);
+  // Do the renderShapeing
+  virtual void 	renderShape(GemState *state);
 
   //////////
   // How the object should be drawn

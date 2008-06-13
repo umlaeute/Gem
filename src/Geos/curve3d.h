@@ -49,8 +49,8 @@ class GEM_EXTERN curve3d : public GemShape
   virtual ~curve3d();
 
   //////////
-  // Do the rendering
-  virtual void 	render(GemState *state);
+  // Do the renderShapeing
+  virtual void 	renderShape(GemState *state);
 
 
   typedef struct {

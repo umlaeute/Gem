@@ -51,8 +51,8 @@ class GEM_EXTERN scopeXYZ : public GemShape
     	virtual ~scopeXYZ();
 
     	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+    	// Do the renderShapeing
+    	virtual void 	renderShape(GemState *state);
 
     	//////////
     	// The width of the lines in line draw mode

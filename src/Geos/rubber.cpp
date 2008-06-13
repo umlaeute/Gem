@@ -27,7 +27,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(rubber, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLO
 //
 /////////////////////////////////////////////////////////
 rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
-  : GemShape(1.0), m_height(0.0), m_speed(0), m_blend(0), m_grab(-1),
+  : GemShape(1.0), m_height(0.0), m_speed(0), m_grab(-1),
     m_alreadyInit(0), m_springKS(0.3), m_drag(0.5), m_mass(NULL), m_spring(NULL)
 {
   m_grid_sizeX = (gridX>0.)?(int)gridX:GRID_SIZE_X;
@@ -131,20 +131,12 @@ void rubber :: rubber_init()
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void rubber :: render(GemState *state)
+void rubber :: renderShape(GemState *state)
 {
   int k, i, j;
-  if (m_drawType == GL_LINE_LOOP)glLineWidth(m_linewidth);
-    
-  if (m_blend) {
-    glEnable(GL_POLYGON_SMOOTH);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-    glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
-  }
      
   if (state->texture && state->numTexCoords>=3) {
 
@@ -368,8 +360,6 @@ void rubber :: obj_setupCallback(t_class *classPtr)
                   gensym("cX"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&rubber::ctrYMessCallback,
                   gensym("cY"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&rubber::blendMessCallback,
-                  gensym("blend"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&rubber::dragMessCallback,
                   gensym("drag"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&rubber::springMessCallback,
@@ -390,10 +380,6 @@ void rubber :: ctrXMessCallback(void *data, t_floatarg center)
 void rubber :: ctrYMessCallback(void *data, t_floatarg center)
 {
   GetMyClass(data)->ctrYMess((float)center);
-}
-void rubber :: blendMessCallback(void *data, t_floatarg blend)
-{
-  GetMyClass(data)->m_blend=((int)blend);
 }
 void rubber :: dragMessCallback(void *data, t_floatarg drag)
 {

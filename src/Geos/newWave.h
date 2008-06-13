@@ -65,20 +65,20 @@ class GEM_EXTERN newWave : public GemShape
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void 	renderShape(GemState *state);
   
-    	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
+  //////////
+  // How the object should be drawn
+  virtual void	typeMess(t_symbol *type);
 		
-    	//////////
-    	// The height of the object
-        GLfloat	    	m_height;
+  //////////
+  // The height of the object
+  GLfloat	    	m_height;
 
-        //////////
-        // The height inlet
-        t_inlet         *m_inletH;
-        t_inlet		*m_inletM;
+  //////////
+  // The height inlet
+  t_inlet         *m_inletH;
+  t_inlet		*m_inletM;
   
   //////////
   // getStuff
@@ -110,7 +110,6 @@ class GEM_EXTERN newWave : public GemShape
   void getVertNorms( void );
   void getFaceNormSegs( void );
 
-  int		m_blend;
   float		xsize, xsize0, ysize, ysize0;
   float		K1, D1, K2, D2, K3, D3;
 
@@ -136,7 +135,6 @@ class GEM_EXTERN newWave : public GemShape
   // static member functions
   static void 	heightMessCallback(void *data, t_floatarg size);
   static void 	modeMessCallback(void *data, t_floatarg mode); 
-  static void 	blendMessCallback(void *data, t_floatarg size);
   static void 	setK1MessCallback(void *data, t_floatarg K);
   static void 	setD1MessCallback(void *data, t_floatarg D);
   static void 	setK2MessCallback(void *data, t_floatarg K);

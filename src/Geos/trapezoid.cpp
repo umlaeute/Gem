@@ -48,10 +48,10 @@ trapezoid :: ~trapezoid()
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void trapezoid :: render(GemState *state)
+void trapezoid :: renderShape(GemState *state)
 {
   float top=m_size*m_top;
   float tx = m_scale_texcoord * m_top;

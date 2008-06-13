@@ -78,7 +78,7 @@ class GEM_EXTERN rubber : public GemShape
          
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void 	renderShape(GemState *state);
   
   //////////
   // How the object should be drawn
@@ -103,7 +103,6 @@ class GEM_EXTERN rubber : public GemShape
   // member variables
   
   int		m_speed;
-  int		m_blend;
   // index of grabbed mass point
   int		m_grab;
   int		m_alreadyInit;
@@ -125,7 +124,6 @@ class GEM_EXTERN rubber : public GemShape
   static void 	heightMessCallback(void *data, t_floatarg height);
   static void 	ctrXMessCallback(void *data, t_floatarg center);
   static void 	ctrYMessCallback(void *data, t_floatarg center);
-  static void 	blendMessCallback(void *data, t_floatarg blend);
   static void 	dragMessCallback(void *data, t_floatarg drag);
   static void 	springMessCallback(void *data, t_floatarg spring);
 };

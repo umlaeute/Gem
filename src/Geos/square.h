@@ -46,12 +46,9 @@ class GEM_EXTERN square : public GemShape
     	// Destructor
     	virtual ~square();
         
-        int	m_blend;
-
     	//////////
     	// Do the rendering
-    	virtual void 	render(GemState *state);
-        static void 	blendMessCallback(void *data, t_floatarg size);
+    	virtual void 	renderShape(GemState *state);
 
 };
 

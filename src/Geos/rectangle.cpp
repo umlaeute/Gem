@@ -37,8 +37,6 @@ rectangle :: rectangle(t_floatarg width, t_floatarg height)
 
     // the height inlet
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
-    m_drawType = GL_QUADS;
-    m_blend = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -51,25 +49,17 @@ rectangle :: ~rectangle()
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderShape
 //
 /////////////////////////////////////////////////////////
-void rectangle :: render(GemState *state)
+void rectangle :: renderShape(GemState *state)
 {
+#warning rectangle: look at SetVertex
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
 
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    if (m_drawType == GL_LINE_LOOP)
-        glLineWidth(m_linewidth);
-        
-    if (m_blend) {
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-        glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
-    }
+  glNormal3f(0.0f, 0.0f, 1.0f);
 
-    if (state->texture && state->numTexCoords)
+  if (state->texture && state->numTexCoords)
 		{
 			glBegin(m_drawType);
 			SetVertex(state, -m_size,  -m_height, 0.0f,0.,0.,0);
@@ -78,30 +68,7 @@ void rectangle :: render(GemState *state)
 			SetVertex(state, -m_size,  m_height, 0.0f,0.,1.,3);
 			glEnd();
 		}
-		
-	
-/*    {
-        int curCoord = 0;
-
-	    glBegin(m_drawType);
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
-                glVertex3f(-m_size, -m_height, 0.0f);
-
-	        if (state->numTexCoords > 1) curCoord = 1;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
-                glVertex3f( m_size, -m_height, 0.0f);
-
-	        if (state->numTexCoords > 2) curCoord = 2;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
-                glVertex3f( m_size,  m_height, 0.0f);
-
-	        if (state->numTexCoords > 3) curCoord = 3;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
-                glVertex3f(-m_size,  m_height, 0.0f);
-                
-	    glEnd();
-    }*/
-    else
+  else
     {
 	    glBegin(m_drawType);
 	        glTexCoord2f(0.0f, 0.0f);
@@ -113,11 +80,6 @@ void rectangle :: render(GemState *state)
 	        glTexCoord2f(0.0f, 1.0f);
                 glVertex3f(-m_size,  m_height, 0.0f);
 	    glEnd();
-    }
-
-    if (m_blend) {
-        glDisable(GL_POLYGON_SMOOTH);
-        glDisable(GL_BLEND);
     }
 }
 
@@ -159,15 +121,9 @@ void rectangle :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&rectangle::heightMessCallback,
     	    gensym("ft2"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&rectangle::blendMessCallback,
-    	    gensym("blend"), A_FLOAT, A_NULL);
 }
 
 void rectangle :: heightMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->heightMess((float)size);
-}
-void rectangle :: blendMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->m_blend=((int)size);
 }
