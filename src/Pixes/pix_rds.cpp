@@ -20,7 +20,7 @@
 
 CPPEXTERN_NEW(pix_rds)
 
-#define inline_fastrand() (fastrand_val=rand()*1103515245+12345)
+#define inline_fastrand() (fastrand_val=fastrand_val*1103515245+12345)
 
 /////////////////////////////////////////////////////////
 //
@@ -354,6 +354,8 @@ void pix_rds :: obj_setupCallback(t_class *classPtr)
 		  gensym("method"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_rds::strideMessCallback,
 		  gensym("stride"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_rds::seedMessCallback,
+		  gensym("seed"), A_FLOAT, A_NULL);
 }
 
 void pix_rds :: methMessCallback(void *data, t_floatarg state)
@@ -368,5 +370,10 @@ void pix_rds :: strideMessCallback(void *data, t_floatarg state)
     return;
   }
   GetMyClass(data)->stride=((int)state);
+  GetMyClass(data)->setPixModified();
+}
+void pix_rds :: seedMessCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->fastrand_val=((int)state);
   GetMyClass(data)->setPixModified();
 }

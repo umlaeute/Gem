@@ -70,6 +70,7 @@ class GEM_EXTERN pix_rds : public GemPixObj
   // static member functions
   static void methMessCallback(void *data, t_floatarg state);
   static void strideMessCallback(void *data, t_floatarg state);
+  static void seedMessCallback(void *data, t_floatarg state);
 };
 
 #endif	// for header file
