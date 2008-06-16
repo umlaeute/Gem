@@ -26,7 +26,8 @@
 //
 /////////////////////////////////////////////////////////
 GemShape :: GemShape(t_floatarg size)
-  : m_linewidth(1.0f), m_size((float)size), m_drawType(GL_DEFAULT_GEM), m_inlet(NULL)
+  : m_linewidth(1.0f), m_size((float)size), m_drawType(GL_DEFAULT_GEM), m_blend(0),
+    m_inlet(NULL)
 {
   if (m_size == 0.f)m_size = 1.f;
 
@@ -34,7 +35,8 @@ GemShape :: GemShape(t_floatarg size)
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
 }
 GemShape :: GemShape()
-  : m_linewidth(1.0f), m_size(1.0f), m_inlet(NULL)
+  : m_linewidth(1.0f), m_size(1.0f), m_drawType(GL_DEFAULT_GEM), m_blend(0), 
+    m_inlet(NULL)
 {
   // no size inlet
 }
@@ -150,6 +152,40 @@ void GemShape :: typeMess(t_symbol *type)
 }
 
 /////////////////////////////////////////////////////////
+// blendMess
+//
+/////////////////////////////////////////////////////////
+void GemShape :: blendMess(float blend)
+{
+  m_blend = (blend>0);
+  setModified();
+}
+
+void GemShape :: render(GemState *state)
+{
+  if (m_drawType == GL_LINE_LOOP)
+    glLineWidth(m_linewidth);
+
+  if (m_blend) {
+    glEnable(GL_POLYGON_SMOOTH);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+    glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE); 
+  }
+
+  renderShape(state);
+
+  // LATER try to restore the original state
+  if (m_blend) {
+    glDisable(GL_POLYGON_SMOOTH);
+    glDisable(GL_BLEND);
+  }
+
+  if (m_drawType == GL_LINE_LOOP)
+    glLineWidth(1.0);
+}
+
+/////////////////////////////////////////////////////////
 // static member functions
 //
 /////////////////////////////////////////////////////////
@@ -159,6 +195,8 @@ void GemShape :: obj_setupCallback(t_class *classPtr)
     	    gensym("width"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&GemShape::typeMessCallback,
     	    gensym("draw"), A_SYMBOL, A_NULL);
+    class_addmethod(classPtr, (t_method)&GemShape::blendMessCallback,
+    	    gensym("blend"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&GemShape::sizeMessCallback,
     	    gensym("ft1"), A_FLOAT, A_NULL);
 }
@@ -173,5 +211,9 @@ void GemShape :: typeMessCallback(void *data, t_symbol *type)
 void GemShape :: sizeMessCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->sizeMess((float)size);
+}
+void GemShape :: blendMessCallback(void *data, t_floatarg blend)
+{
+    GetMyClass(data)->blendMess((float)blend);
 }
 

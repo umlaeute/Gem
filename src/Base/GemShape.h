@@ -81,30 +81,45 @@ class GEM_EXTERN GemShape : public GemBase
 	    // GROUP:	Member variables
 	    //-----------------------------------
     
-    	//////////
-    	// The line width for GL_LINE mode
-        GLfloat	    	m_linewidth;
+    //////////
+    // The line width for GL_LINE mode
+    GLfloat	    	m_linewidth;
 
-    	//////////
-    	// The size of the object
-        GLfloat	    	m_size;
+    //////////
+    // The size of the object
+    GLfloat	    	m_size;
 	
-        //////////
-        // The drawing style (GL_LINE, GL_POLYGON, etc)
-        GLenum	    	m_drawType;
+    //////////
+    // The drawing style (GL_LINE, GL_POLYGON, etc)
+    GLenum	    	m_drawType;
 
-        //////////
-        // The size inlet
-        t_inlet         *m_inlet;
+    //////////
+    // do we want blending?
+    GLboolean	    	m_blend;
+    void  blendMess(float blend);
 
-	//-----------------------------------
-	// GROUP:	Setup functions
-	//-----------------------------------
+
+    ////////
+    // override this memberfunction to automatically enable softblended rendering,...
+    virtual void renderShape(GemState *state) {;}
+
+    // OR
+    // override this memberfunction if you don't want softblending
+    virtual void render(GemState *state);
+
+        
+    //////////
+    // The size inlet
+    t_inlet         *m_inlet;
+
+    //-----------------------------------
+    // GROUP:	Setup functions
+    //-----------------------------------
     
     	//////////
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr)
-	  { GemBase::real_obj_setupCallback(classPtr); GemShape::obj_setupCallback(classPtr); }
+        { GemBase::real_obj_setupCallback(classPtr); GemShape::obj_setupCallback(classPtr); }
     	
     private:
     
@@ -116,6 +131,7 @@ class GEM_EXTERN GemShape : public GemBase
     	static void 	linewidthMessCallback(void *data, t_floatarg linewidth);
     	static void 	typeMessCallback(void *data, t_symbol *type);
     	static void 	sizeMessCallback(void *data, t_floatarg size);
+    	static void 	blendMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file
