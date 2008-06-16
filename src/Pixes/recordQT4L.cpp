@@ -222,7 +222,9 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
 /////////////////////////////////////////////////////////
 int recordQT4L :: putFrame(imageStruct*img)
 {
-  if(!m_qtfile || !img)return (-1);
+  if(!m_qtfile || !img){
+    return (-1);
+  }
   unsigned char**rowpointers;
   int row, row_stride;
   int err;
@@ -234,6 +236,7 @@ int recordQT4L :: putFrame(imageStruct*img)
     if(!init(img, (int)framerate)) {
       /* something went wrong! */
       close();
+      error("unable to initialize QT4L");
       return -1;
     }
     m_restart=false;
