@@ -20,9 +20,12 @@ CPPEXTERN_NEW_WITH_GIMME(pix_record)
 //
 /////////////////////////////////////////////////////////
 pix_record :: pix_record(int argc, t_atom *argv):
+  m_banged(false), m_automatic(true),
   m_recordStart(0), m_recordStop(0), 
-  m_automatic(true), m_banged(false),
+  m_outNumFrames(NULL), m_outInfo(NULL),
   m_currentFrame(-1),
+  m_minFrames(0), m_maxFrames(0),
+  m_numCodecs(0),
   m_handle(NULL)
 {
   int xoff = 0, yoff = 0;
@@ -50,7 +53,7 @@ pix_record :: pix_record(int argc, t_atom *argv):
 #elif defined GEM_USE_RECORDQT4L
   m_handle=new recordQT4L(xoff, yoff, width, height);
 #else
-  post("Gem has been compiled without pix-recording capabilities!");
+  error("Gem has been compiled without pix-recording capabilities!");
 #endif
 }
 
@@ -74,7 +77,7 @@ void pix_record :: stopRecording()
     m_handle->close();
     m_currentFrame = 0; //reset the frame counter?
     outlet_float(m_outNumFrames,m_currentFrame);
-    post("movie written");
+    verbose(1, "movie written");
   }
 
 }
@@ -105,7 +108,6 @@ void pix_record :: render(GemState *state)
       outlet_float(m_outNumFrames,m_currentFrame);
     }
   }
-
   if(m_recordStop){
     m_recordStart=0;
     stopRecording();
@@ -161,7 +163,7 @@ void pix_record :: recordMess(bool on)
   if (on) {
     m_recordStart=1;
     m_recordStop=0;
-    post("recording on!");
+    verbose(1, "recording on!");
   }else{
     m_recordStart=0;
     m_recordStop=1;
