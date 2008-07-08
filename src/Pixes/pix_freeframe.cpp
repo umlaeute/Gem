@@ -21,6 +21,20 @@
 
 #ifndef DONT_WANT_FREEFRAME
 
+#if (defined PD_MAJOR_VERSION) && ((PD_MAJOR_VERSION > 0) || (PD_MINOR_VERSION >= 40))
+/* disabled for now... wait till the sys_register_loader()-API get's exposed in Pd? */
+//# define SYSLOADER_FREEFRAME
+#endif
+
+#ifdef SYSLOADER_FREEFRAME
+# include "s_stuff.h"
+# include "g_canvas.h"
+extern "C" {
+  typedef int (*loader_t)(t_canvas *canvas, char *classname);
+  void sys_register_loader(loader_t loader);
+}
+#endif
+
 # include <stdio.h>
 # ifdef __WIN32__
 #  include <io.h>
@@ -62,6 +76,147 @@
 #  define FF_PLUGMAIN_PIS(x) (PlugInfoStruct*)(x)
 # endif
 
+
+
+/////////////////////////////////////////////////////////
+// plugin-loader
+//
+// LATER: check whether we already have loaded THIS plugin
+//
+// note: on linux we can load the same dll multiple times, so we don't need this check
+// LATER check the other OS's
+//
+/////////////////////////////////////////////////////////
+static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba)
+{
+  const char*hookname="plugMain";
+
+  if(pluginname==NULL)return NULL;
+  
+  void *plugin_handle = NULL;
+  T_FFPLUGMAIN plugmain = NULL;
+
+  char buf[MAXPDSTRING];
+  char buf2[MAXPDSTRING];
+  char *bufptr=NULL;
+
+  const char *extension=
+#ifdef __WIN32__
+    ".dll";
+#elif defined __APPLE__
+    "";
+#else
+    ".so";
+#endif
+
+#ifdef __APPLE__
+  char buf3[MAXPDSTRING];
+  snprintf(buf3, MAXPDSTRING, "%s.frf/%s", pluginname, pluginname);
+  buf3[MAXPDSTRING-1]=0;
+  pluginname=buf3;
+#endif
+
+  int fd=-1;
+  if ((fd=open_via_path(canvas_getdir(canvas)->s_name, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
+    close(fd);
+#ifndef __APPLE__
+    snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
+#else
+    snprintf(buf, MAXPDSTRING, "%s", buf2);
+#endif
+    buf[MAXPDSTRING-1]=0;
+  } else
+    canvas_makefilename(canvas, pluginname, buf, MAXPDSTRING);
+  char*name=buf;
+  char*libname=name;
+
+  ::post("trying to load %s", buf);
+  
+#ifdef DL_OPEN
+  plugin_handle=dlopen(libname, RTLD_NOW);
+  if(!plugin_handle){
+    ::error("pix_freeframe[%s]: %s", libname, dlerror());
+    return NULL;
+  }
+  dlerror();
+
+  plugmain = (T_FFPLUGMAIN)dlsym(plugin_handle, hookname);
+
+#elif defined __APPLE__
+  CFURLRef bundleURL = NULL;
+  CFBundleRef theBundle = NULL;
+  CFStringRef plugin = CFStringCreateWithCString(NULL, 
+											 libname, kCFStringEncodingMacRoman);
+  
+  bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
+											 plugin,
+											 kCFURLPOSIXPathStyle,
+											 true );
+  theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
+  
+  // Get a pointer to the function.
+  if (theBundle){
+	plugmain = (T_FFPLUGMAIN)CFBundleGetFunctionPointerForName(
+            theBundle, CFSTR("plugMain") );
+  }else{
+    ::post("%s: couldn't load", libname);
+    return 0;
+  }
+  if(bundleURL != NULL) CFRelease( bundleURL );
+  if(theBundle != NULL) CFRelease( theBundle );
+  if(plugin != NULL)    CFRelease( plugin );
+#elif defined __WIN32__
+  HINSTANCE ntdll;
+
+  sys_bashfilename(libname, libname);
+  ntdll = LoadLibrary(libname);
+  if (!ntdll) {
+    ::post("%s: couldn't load", libname);
+    return NULL;
+  }
+  plugmain = (T_FFPLUGMAIN)GetProcAddress(ntdll, hookname);
+#else
+# error no way to load dynamic linked libraries on this OS
+#endif
+  if(plugmain == NULL){
+    return NULL;
+  }
+
+  PlugInfoStruct *pis = FF_PLUGMAIN_PIS(plugmain(FF_GETINFO, NULL, 0));
+  if(pis){
+    if (pis->APIMajorVersion < 1){
+      ::error("plugin %s: old api version", name);
+      return NULL;
+    }
+  }
+
+  if (FF_PLUGMAIN_INT(plugmain(FF_INITIALISE, NULL, 0)) == FF_FAIL){
+    ::error("plugin %s: init failed", name);
+    return NULL;
+  }
+
+  /*
+   * check which formats are supported:
+   * currently we cannot handle RGB16 as we don't have any conversion routines implemented
+   * the other options are RGB==RGB24 and RGBA=RGB32
+   * we prefer RGB32, as this is one of our native formats (and YUV2RGBA conversion is likely to be faster)
+   * so we check whether the plugin knows how to do RGB32
+   * if it doesn't, we try RGB24
+   */
+  if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_32BITVIDEO, 0)) == FF_TRUE){
+    if(can_rgba)*can_rgba=1;
+  } else {
+    if(can_rgba)*can_rgba=0;
+    if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_24BITVIDEO, 0)) != FF_TRUE){
+      ::error("plugin %s: neither RGB32 nor RGB24 support!", name);
+
+      plugmain(FF_DEINITIALISE, NULL, 0);
+      return NULL;
+    }
+  }
+
+  return plugmain;
+}
 #endif /* DONT_WANT_FREEFRAME */
 
 
@@ -86,40 +241,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
 #else
   int can_rgba=0;
   char *pluginname = s->s_name;
-  char buf[MAXPDSTRING];
-  char buf2[MAXPDSTRING];
-  char *bufptr=NULL;
-
-  const char *extension=
-#ifdef __WIN32__
-    ".dll";
-#elif defined __APPLE__
-    "";
-#else
-    ".so";
-#endif
-
-#ifdef __APPLE__
-  char buf3[MAXPDSTRING];
-  snprintf(buf3, MAXPDSTRING, "%s.frf/%s", pluginname, pluginname);
-  buf3[MAXPDSTRING-1]=0;
-  pluginname=buf3;
-#endif
-
-  int fd=-1;
-  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
-    close(fd);
-#ifndef __APPLE__
-    snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
-#else
-    snprintf(buf, MAXPDSTRING, "%s", buf2);
-#endif
-    buf[MAXPDSTRING-1]=0;
-  } else
-    canvas_makefilename(getCanvas(), pluginname, buf, MAXPDSTRING);
-  post("trying to load %s", buf);
-
-  m_plugin=ff_loadplugin(buf, &can_rgba);
+  m_plugin=ff_loadplugin(getCanvas(), pluginname, &can_rgba);
 
   m_image.setCsizeByFormat(can_rgba?GL_RGBA:GL_RGB);
 
@@ -143,7 +265,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char tempVt[5];
   t_symbol *s_inletType=0;
   char *p_name;
-  post("pix_freeframe[%s]:", pluginname);
+  post("parameters for '%s':", pluginname);
   for(unsigned int i=0;i<numparams; i++){
     snprintf(tempVt, 5, "#%d\0", i);
     tempVt[4]=0;
@@ -285,120 +407,54 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
   setModified();
 }
 
+
+# ifdef SYSLOADER_FREEFRAME
+static const int offset_pix_=strlen("pix_");
+
+static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
+  ::post("freeframe_loader: %s",(s?(s->s_name):"<none>"));
+  try{	    	    	    	    	    	    	    	\
+    Obj_header *obj = new (pd_new(pix_freeframe_class),(void *)NULL) Obj_header;
+    char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
+    CPPExtern::m_holder = &obj->pd_obj;
+    CPPExtern::m_holdname=s->s_name;
+    obj->data = new pix_freeframe(gensym(realname));
+    CPPExtern::m_holder = NULL;
+    CPPExtern::m_holdname=NULL;
+    return(obj);
+  } catch (GemException e) {e.report(); return NULL;}
+  return 0;
+}
+
+static int freeframe_loader(t_canvas *canvas, char *classname) {
+  int dummy;
+
+  if(strncmp("pix_", classname, offset_pix_))
+    return 0;
+  char*pluginname=classname+offset_pix_;
+
+  T_FFPLUGMAIN plugin = ff_loadplugin(canvas, pluginname, &dummy);
+  if(plugin!=NULL) {
+    plugin(FF_DEINITIALISE, NULL, 0);
+    class_addcreator((t_newmethod)freeframe_loader_new, gensym(classname), A_GIMME, 0);
+    return 1;
+  }
+  return 0;
+}  
+# endif
+
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////
-// plugin-loader
-//
-// LATER: check whether we already have loaded THIS plugin
-//
-// note: on linux we can load the same dll multiple times, so we don't need this check
-// LATER check the other OS's
-//
-/////////////////////////////////////////////////////////
-T_FFPLUGMAIN pix_freeframe :: ff_loadplugin(char*name, int*can_rgba)
-{
-  const char*hookname="plugMain";
-  char*libname=name;
-
-  if(name==NULL)return NULL;
-  
-  void *plugin_handle = NULL;
-  T_FFPLUGMAIN plugmain = NULL;
-  
-#ifdef DL_OPEN
-  plugin_handle=dlopen(libname, RTLD_NOW);
-  if(!plugin_handle){
-    ::error("pix_freeframe[%s]: %s", libname, dlerror());
-    return NULL;
-  }
-  dlerror();
-
-  plugmain = (T_FFPLUGMAIN)dlsym(plugin_handle, hookname);
-
-#elif defined __APPLE__
-  CFURLRef bundleURL = NULL;
-  CFBundleRef theBundle = NULL;
-  CFStringRef plugin = CFStringCreateWithCString(NULL, 
-											 libname, kCFStringEncodingMacRoman);
-  
-  bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
-											 plugin,
-											 kCFURLPOSIXPathStyle,
-											 true );
-  theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
-  
-  // Get a pointer to the function.
-  if (theBundle){
-	plugmain = (T_FFPLUGMAIN)CFBundleGetFunctionPointerForName(
-            theBundle, CFSTR("plugMain") );
-  }else{
-    ::post("%s: couldn't load", libname);
-    return 0;
-  }
-  if(bundleURL != NULL) CFRelease( bundleURL );
-  if(theBundle != NULL) CFRelease( theBundle );
-  if(plugin != NULL)    CFRelease( plugin );
-#elif defined __WIN32__
-  HINSTANCE ntdll;
-
-  sys_bashfilename(libname, libname);
-  ntdll = LoadLibrary(libname);
-  if (!ntdll) {
-    ::post("%s: couldn't load", libname);
-    return NULL;
-  }
-  plugmain = (T_FFPLUGMAIN)GetProcAddress(ntdll, hookname);
-#else
-# error no way to load dynamic linked libraries on this OS
-#endif
-  if(plugmain == NULL){
-    return NULL;
-  }
-
-  PlugInfoStruct *pis = FF_PLUGMAIN_PIS(plugmain(FF_GETINFO, NULL, 0));
-  if(pis){
-    if (pis->APIMajorVersion < 1){
-      ::error("plugin %s: old api version", name);
-      return NULL;
-    }
-  }
-
-  if (FF_PLUGMAIN_INT(plugmain(FF_INITIALISE, NULL, 0)) == FF_FAIL){
-    ::error("plugin %s: init failed", name);
-    return NULL;
-  }
-
-  /*
-   * check which formats are supported:
-   * currently we cannot handle RGB16 as we don't have any conversion routines implemented
-   * the other options are RGB==RGB24 and RGBA=RGB32
-   * we prefer RGB32, as this is one of our native formats (and YUV2RGBA conversion is likely to be faster)
-   * so we check whether the plugin knows how to do RGB32
-   * if it doesn't, we try RGB24
-   */
-  if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_32BITVIDEO, 0)) == FF_TRUE){
-    if(can_rgba)*can_rgba=1;
-  } else {
-    if(can_rgba)*can_rgba=0;
-    if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_24BITVIDEO, 0)) != FF_TRUE){
-      ::error("plugin %s: neither RGB32 nor RGB24 support!", name);
-
-      plugmain(FF_DEINITIALISE, NULL, 0);
-      return NULL;
-    }
-  }
-
-  return plugmain;
-}
 #endif /* DONT_WANT_FREEFRAME */
 
 void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 {
   class_addanything(classPtr, (t_method)&pix_freeframe::parmCallback);
+#ifdef SYSLOADER_FREEFRAME
+  sys_register_loader(freeframe_loader);
+#endif
 }
 
 void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
