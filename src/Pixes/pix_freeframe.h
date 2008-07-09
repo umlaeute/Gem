@@ -84,8 +84,6 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     char	 m_pluginId[5];
     unsigned int m_numparameters;
 
-    static T_FFPLUGMAIN ff_loadplugin(char*name, int*can_rgba);
-
     t_inlet**m_inlet;
 
     void parmMess(int param, t_atom*value);

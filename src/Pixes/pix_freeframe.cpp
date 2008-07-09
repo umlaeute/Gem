@@ -19,21 +19,9 @@
 
 #include "pix_freeframe.h"
 
+#include "Base/GemLoaders.h"
+
 #ifndef DONT_WANT_FREEFRAME
-
-#if (defined PD_MAJOR_VERSION) && ((PD_MAJOR_VERSION > 0) || (PD_MINOR_VERSION >= 40))
-/* disabled for now... wait till the sys_register_loader()-API get's exposed in Pd? */
-//# define SYSLOADER_FREEFRAME
-#endif
-
-#ifdef SYSLOADER_FREEFRAME
-# include "s_stuff.h"
-# include "g_canvas.h"
-extern "C" {
-  typedef int (*loader_t)(t_canvas *canvas, char *classname);
-  void sys_register_loader(loader_t loader);
-}
-#endif
 
 # include <stdio.h>
 # ifdef __WIN32__
@@ -408,7 +396,6 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
 }
 
 
-# ifdef SYSLOADER_FREEFRAME
 static const int offset_pix_=strlen("pix_");
 
 static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
@@ -441,7 +428,6 @@ static int freeframe_loader(t_canvas *canvas, char *classname) {
   }
   return 0;
 }  
-# endif
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -452,9 +438,7 @@ static int freeframe_loader(t_canvas *canvas, char *classname) {
 void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 {
   class_addanything(classPtr, (t_method)&pix_freeframe::parmCallback);
-#ifdef SYSLOADER_FREEFRAME
-  sys_register_loader(freeframe_loader);
-#endif
+  gem_register_loader(freeframe_loader);
 }
 
 void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
