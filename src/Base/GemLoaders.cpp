@@ -18,21 +18,47 @@
 
 #include "GemLoaders.h"
 
-#if (defined PD_MAJOR_VERSION) && ((PD_MAJOR_VERSION > 0) || (PD_MINOR_VERSION >= 40))
-# define GEM_LOADERS
+#if defined __linux__ || defined __APPLE__
+# define DL_OPEN
 #endif
 
+#ifdef DL_OPEN
+# include <dlfcn.h>
+#endif
 
-#ifdef GEM_LOADERS
+#if defined __WIN32__
+# include <io.h>
+# include <windows.h>
+#elif defined __APPLE__
+//# include <mach-o/dyld.h> 
+#endif
+
 extern "C" {
-  void sys_register_loader(gem_loader_t loader);
+  typedef void (*loader_registrar_t)(gem_loader_t loader);
 }
-#endif
+static loader_registrar_t pd_register_loader = NULL;
 
-void gem_register_loader(gem_loader_t loader) {
-#ifdef GEM_LOADERS
-  sys_register_loader(loader);
+static int find_pd_loader(void) {
+  if(pd_register_loader)return 1;
+
+#ifdef DL_OPEN
+  pd_register_loader=(loader_registrar_t)dlsym(RTLD_DEFAULT, "sys_register_loader");
+#elif defined __WIN32__
+  /* no idea whether this actually works... */
+  pd_register_loader = (loader_registrar_t)GetProcAddress( GetModuleHandle(NULL), "sys_register_loader");  
 #else
   // no loader for older Pd's....
 #endif
+
+  return(NULL!=pd_register_loader);
+}
+
+
+
+
+
+void gem_register_loader(gem_loader_t loader) {
+  if(find_pd_loader()) {
+    pd_register_loader(loader);
+  }
 }
