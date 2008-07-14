@@ -266,13 +266,19 @@ static void obj_setupCallback(t_class *classPtr);
 ///////////////////////////////////////////////////////////////////////////////
 // setting the help-symbol
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef HELPSYMBOL_BASE
-# define HELPSYMBOL_BASE ""
-#endif
+#if defined HELPSYMBOL_BASE || defined HELPSYMBOL
+# ifndef HELPSYMBOL_BASE
+#  define HELPSYMBOL_BASE ""
+# endif
 
-#ifdef HELPSYMBOL
-# define SET_HELPSYMBOL(NEW_CLASS)				\
-  class_sethelpsymbol(NEW_CLASS ## _class, gensym(HELPSYMBOL_BASE HELPSYMBOL))
+# ifndef HELPSYMBOL
+#  define SET_HELPSYMBOL(NEW_CLASS)                                     \
+  class_sethelpsymbol(NEW_CLASS ## _class, gensym(HELPSYMBOL_BASE #NEW_CLASS))
+# else
+#  define SET_HELPSYMBOL(NEW_CLASS)				\
+    class_sethelpsymbol(NEW_CLASS ## _class, gensym(HELPSYMBOL_BASE HELPSYMBOL))
+# endif
+
 #else 
 # define SET_HELPSYMBOL(NEW_CLASS)
 #endif /* HELPSYMBOL */
