@@ -87,10 +87,10 @@ class GEM_EXTERN pix_colorreduce : public GemPixObj
 	int cnGridCellHalfWidth;//=(cnGridCellWidth/2);
 	int cnBiggestSignedInt;
 	
-	typedef struct SPete_ColorReduce_InverseMapEntry {
+	typedef struct _SPete_ColorReduce_InverseMapEntry {
 	    U32	ClosestColor;
 	    U32	NextClosestColor;
-	};
+	} SPete_ColorReduce_InverseMapEntry;
 	SPete_ColorReduce_InverseMapEntry*	pInvColorMapEntry;
 
 	int Pete_ColorReduce_Init();

@@ -24,11 +24,11 @@ LOG
 
 #define PETE_KALEIDOSCOPE_HALFLINE_BIT		(1<<0)
 
-typedef struct SPete_Kaleidoscope_Line {
+typedef struct _SPete_Kaleidoscope_Line {
 		float X;
 		float Y;
 		U32 Flags;
-};
+} SPete_Kaleidoscope_Line;
 extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void* pElem2);
 
 #ifdef __WIN32__
