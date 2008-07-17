@@ -221,7 +221,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_freeframe,  t_symbol *, A_DEFSYM)
 
 pix_freeframe :: pix_freeframe(t_symbol*s)
 #ifndef DONT_WANT_FREEFRAME
-  : m_plugin(NULL),m_instance(FF_FAIL)
+  : m_plugin(NULL),m_instance(FF_FAIL),
+    m_numparameters(0),
+    m_inlet(NULL)
 #endif /* DONT_WANT_FREEFRAME */
 {
 #ifdef DONT_WANT_FREEFRAME
@@ -248,6 +250,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     throw(GemException("reading numparameters failed"));
   }
   m_inlet=new t_inlet*[numparams];
+  m_numparameters=numparams;
 
   int parmType=0;
   char tempVt[5];
@@ -292,15 +295,51 @@ pix_freeframe :: ~pix_freeframe()
   if(m_inlet){
     delete[]m_inlet;
   }
+  closeMess();
+#endif /* DONT_WANT_FREEFRAME */
+}
+
+#ifndef DONT_WANT_FREEFRAME
+void pix_freeframe :: closeMess()
+{
   if(m_plugin){
     if(m_instance!=FF_FAIL)m_plugin(FF_DEINSTANTIATE, NULL, m_instance);
     m_plugin(FF_DEINITIALISE, NULL, 0);
     m_plugin=NULL;
   }
-#endif /* DONT_WANT_FREEFRAME */
 }
 
-#ifndef DONT_WANT_FREEFRAME
+void pix_freeframe :: openMess(t_symbol*s)
+{
+  int can_rgba=0;
+  char *pluginname = s->s_name;
+  T_FFPLUGMAIN plugin=ff_loadplugin(getCanvas(), pluginname, &can_rgba);
+  if(NULL==plugin) {
+    error("unable to open '%s'", pluginname);
+    return;
+  }
+  unsigned int numparams = FF_PLUGMAIN_INT(plugin(FF_GETNUMPARAMETERS, NULL, 0));
+  if (numparams == FF_FAIL) {
+    error("unable to query numparameters of '%s'", pluginname);
+    return;
+  }
+
+
+  closeMess();
+  m_plugin=plugin;
+
+  PlugInfoStruct *pis = FF_PLUGMAIN_PIS(m_plugin(FF_GETINFO, NULL, 0));
+
+  strncpy(m_pluginName, (char *)(pis->pluginName), 16);
+  strncpy(m_pluginId, (char *)(pis->uniqueID), 4);
+  m_pluginName[16] = 0;
+  m_pluginId[4] = 0;
+
+  m_numparameters=numparams;
+}
+
+
+
 /////////////////////////////////////////////////////////
 // processImage
 //
@@ -445,5 +484,12 @@ void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv
 #ifndef DONT_WANT_FREEFRAME
   int i = atoi(s->s_name+1);
   GetMyClass(data)->parmMess(i, (argc>0)?argv:NULL);
+#endif /* DONT_WANT_FREEFRAME */
+}
+
+
+void pix_freeframe :: openCallback(void *data, t_symbol*name){
+#ifndef DONT_WANT_FREEFRAME
+  GetMyClass(data)->openMess(name);
 #endif /* DONT_WANT_FREEFRAME */
 }

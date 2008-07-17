@@ -87,11 +87,14 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     t_inlet**m_inlet;
 
     void parmMess(int param, t_atom*value);
+
+    void openMess(t_symbol*name);
+    void closeMess(void);
 #endif /* DONT_WANT_FREEFRAME */
 
  private:
     static void parmCallback(void *data, t_symbol*s, int argc, t_atom*argv);
-
+    static void openCallback(void *data, t_symbol*s);
 };
 
 #endif	// for header file
