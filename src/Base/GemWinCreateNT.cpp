@@ -15,24 +15,18 @@
 /////////////////////////////////////////////////////////
 
 #ifdef __WIN32__
-#include "GemWinCreate.h"
 
-#include <stdlib.h>
+# include "GemWinCreate.h"
 
-#ifdef HAVE_QUICKTIME
-# include <QTML.h>
-# include <Movies.h>
-#endif /* HAVE_QUICKTIME */
+# include <stdlib.h>
 
-#ifdef HAVE_WINTAB
-# include "wintab.h"
-# define PACKETDATA	(PK_X | PK_Y | PK_BUTTONS | PK_NORMAL_PRESSURE | PK_ORIENTATION)
-# define PACKETMODE	PK_BUTTONS
-# include "pktdef.h"
-#endif
+# ifdef HAVE_QUICKTIME
+#  include <QTML.h>
+#  include <Movies.h>
+# endif /* HAVE_QUICKTIME */
 
-#include "GemEvent.h"
-#include "GemGL.h"
+# include "GemEvent.h"
+# include "GemGL.h"
 
 GEM_EXTERN void gemAbortRendering();
 
@@ -75,144 +69,6 @@ BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
     }
     return(TRUE);
 }
-
-//////////
-// wintab32 calls
-#ifdef HAVE_WINTAB
-typedef UINT (API *WTINFO_FUNC)(UINT, UINT, LPVOID);
-typedef HCTX (API *WTOPEN_FUNC)(HWND, LPLOGCONTEXTA, BOOL);
-typedef BOOL (API *WTCLOSE_FUNC)(HCTX);
-typedef BOOL (API *WTPACKET_FUNC)(HCTX, UINT, LPVOID);
-
-static WTINFO_FUNC WTInfoPtr = NULL;
-static WTOPEN_FUNC WTOpenPtr = NULL;
-static WTCLOSE_FUNC WTClosePtr = NULL;
-static WTPACKET_FUNC WTPacketPtr = NULL;
-
-static const int tabletXRes = 10000;
-static const int tabletYRes = 10000;
-
-static HCTX TabletContext = NULL;
-static HINSTANCE s_winTabLib = NULL;
-
-/////////////////////////////////////////////////////////
-// TabletInit
-//
-// Initialize a tablet
-//
-/////////////////////////////////////////////////////////
-static HCTX TabletInit(HWND hWnd)
-{
-	LOGCONTEXT lcMine;
-
-	// get default region
-	if (!(*WTInfoPtr)(WTI_DEFCONTEXT, 0, &lcMine))
-	{
-		error("GEM: Unable to get tablet info");
-		return(NULL);
-	}
-
-	// modify the digitizing region
-	strcpy(lcMine.lcName, "GEM Tablet");
-	lcMine.lcOptions |= CXO_MESSAGES;
-	lcMine.lcPktData = PACKETDATA;
-	lcMine.lcPktMode = PACKETMODE;
-	lcMine.lcMoveMask = PACKETDATA;
-	lcMine.lcBtnUpMask = lcMine.lcBtnDnMask;
-
-	// output in XRes x YRes grid
-	lcMine.lcOutOrgX = lcMine.lcOutOrgY = 0;
-	lcMine.lcOutExtX = tabletXRes;
-	lcMine.lcOutExtY = tabletYRes;
-
-	// open the region
-	return((*WTOpenPtr)(hWnd, &lcMine, TRUE));
-}
-
-/////////////////////////////////////////////////////////
-// Cleanup all of the tablet functions and free the library
-//
-/////////////////////////////////////////////////////////
-static void TabletCleanup()
-{
-	if (s_winTabLib)
-		FreeLibrary(s_winTabLib);
-	WTInfoPtr = NULL;
-	WTOpenPtr = NULL;
-	WTClosePtr = NULL;
-	WTPacketPtr = NULL;
-	s_winTabLib = NULL;                            
-	TabletContext = NULL;
-}
-static int TabletFunctionResolve(HWND hWnd)
-{
-	// see if the user has the wintab library installed on their machine
-	s_winTabLib = LoadLibrary("wintab32.dll");
-	if (!s_winTabLib)
-		return(0);
-
-	// dynamically load all of the functions that we care about
-	WTInfoPtr = (WTINFO_FUNC)GetProcAddress(s_winTabLib, (const char *)ORD_WTInfoA);
-	if (!WTInfoPtr)
-	{
-		error("GEM: Unable to find WinTab32 WTInfo()");
-		TabletCleanup();
-		return(0);
-	}
-	WTOpenPtr = (WTOPEN_FUNC)GetProcAddress(s_winTabLib, (const char *)ORD_WTOpen);
-	if (!WTOpenPtr)
-	{
-		error("GEM: Unable to find WinTab32 WTOpen()");
-		TabletCleanup();
-		return(0);
-	}
-	WTClosePtr = (WTCLOSE_FUNC)GetProcAddress(s_winTabLib, (const char *)ORD_WTClose);
-	if (!WTOpenPtr)
-	{
-		error("GEM: Unable to find WinTab32 WTClose()");
-		TabletCleanup();
-		return(0);
-	}
-	WTPacketPtr = (WTPACKET_FUNC)GetProcAddress(s_winTabLib, (const char *)ORD_WTPacket);
-	if (!WTPacketPtr)
-	{
-		error("GEM: Unable to find WinTab32 WTPacket()");
-		TabletCleanup();
-		return(0);
-	}
-
-	// initialize the tablet
-	TabletContext = TabletInit(hWnd);
-	if (TabletContext)
-		post("GEM: connected to tablet");
-	else
-	{
-		error("GEM: unable to connect to tablet");
-		TabletCleanup();
-		return(0);
-	}
-	return(1);
-}
-
-/////////////////////////////////////////////////////////
-// Class to clean up the tablet
-//
-/////////////////////////////////////////////////////////
-class dummyTabletKill
-{
-    public:
-        ~dummyTabletKill();
-};
-dummyTabletKill:: ~dummyTabletKill()
-{
-	if (s_winTabLib)
-	{
-		WTClosePtr(TabletContext);
-		FreeLibrary(s_winTabLib);
-	}
-}
-static dummyTabletKill myDumb;
-#endif /* HAVE_WINTAB */
 
 /////////////////////////////////////////////////////////
 // MainWndProc
@@ -262,60 +118,6 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_RBUTTONDOWN:
             triggerButtonEvent(2, 1, LOWORD(lParam), HIWORD(lParam));
             break;
-#ifdef HAVE_WINTAB
-        // tablet
-		case WT_PACKET:
-            {
-                static POINT ptNew, ptOld;
-                static float prsNew, prsOld;
-                static UINT oldAz, oldAlt, oldTw, newAz, newAlt, newTw;
-                PACKET pkt;
-
-                // make sure the dll was actually loaded in
-                if (!WTPacketPtr)
-                    return(lRet);
-
-			    if ((*WTPacketPtr)((HCTX)lParam, wParam, &pkt))
-                {
-                    ptOld = ptNew;
-				    prsOld = prsNew;
-                    oldAz = newAz;
-                    oldAlt = newAlt;
-                    oldTw = newTw;
-	    			ptNew.x = MulDiv((UINT)pkt.pkX, rcClient.right, tabletXRes);
-    				ptNew.y = MulDiv((UINT)pkt.pkY, rcClient.bottom, tabletYRes);
-                    // get to same orientation as mouse
-                    ptNew.y = rcClient.bottom - ptNew.y;
-				    prsNew = pkt.pkNormalPressure / 128.f;
-			    	if (ptNew.x != ptOld.x ||
-		    			ptNew.y != ptOld.y ||
-	    				prsNew != prsOld)
-                    {
-                        triggerTabletMotionEvent(ptNew.x, ptNew.y, prsNew);
-				    }
-                    newAz = pkt.pkOrientation.orAzimuth;
-                    newAlt = pkt.pkOrientation.orAltitude;
-                    newTw = pkt.pkOrientation.orTwist;
-                    if (newAz != oldAz ||
-                        newAlt != oldAlt ||
-                        newTw != oldTw)
-                    {
-                        triggerTabletRotationEvent(newAz, newAlt, newTw);
-                    }
-	    			if (HIWORD(pkt.pkButtons) == TBN_DOWN)
-					{
-						WORD which = LOWORD(pkt.pkButtons);
-                        triggerTabletButtonEvent(which, 1, ptNew.x, ptNew.y);
-                    }
-					else if (HIWORD(pkt.pkButtons) == TBN_UP)
-					{
-						WORD which = LOWORD(pkt.pkButtons);
-                        triggerTabletButtonEvent(which, 0, ptNew.x, ptNew.y);
-					}
-			    }
-            }
-            break;
-#endif /* HAVE_WINTAB */
         // keyboard action
         case WM_KEYUP:
 			if ((int)wParam == VK_CONTROL)
@@ -324,54 +126,38 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             triggerKeyboardEvent((char*)&wParam, (int)wParam, 1);
             break;
 
-        // keyboard action
-        case WM_KEYDOWN:
+            // keyboard action
+    case WM_KEYDOWN:
 			if ((int)wParam == VK_CONTROL)
 				ctrlKeyDown = 1;
 			else if (ctrlKeyDown && (int)wParam == 'R')
-					gemAbortRendering();
+        gemAbortRendering();
 			else
 				triggerKeyboardEvent((char*)&wParam, (int)wParam, 0);
-            break;
-
-        // resize event
-        case WM_SIZE:
-            triggerResizeEvent(LOWORD(lParam), HIWORD(lParam));
-            GetClientRect(hWnd, &rcClient);
-            break;
-
-		// we want to override these messages
-        // and not do anything
-   	    case WM_DESTROY:
-       	case WM_CLOSE:
-            break;
-
-        // try to initialize the tablet driver
-	    case WM_CREATE:
-            {
-#ifdef HAVE_WINTAB
-                static int s_wintabLoaded = 0;
-                static int s_tabletCreated = 0;
-                if (!s_wintabLoaded)
-                {
-                    s_wintabLoaded = 1;
-					// is the no tablet environment variable set?
-					if (getenv("GEM_NO_TABLET") &&
-              !strncmp("1", getenv("GEM_NO_TABLET"),1))
-					{
-						post("GEM: NO_TABLET environment variable set");
-					}
-					else
-						TabletFunctionResolve(hWnd);					
-                }
-#endif /* HAVE_WINTAB */
-			}
-            break;
-
-        // pass all unhandled messages to DefWindowProc
-        default:
-            lRet = DefWindowProc (hWnd, uMsg, wParam, lParam);
-            break;
+      break;
+      
+      // resize event
+    case WM_SIZE:
+      triggerResizeEvent(LOWORD(lParam), HIWORD(lParam));
+      GetClientRect(hWnd, &rcClient);
+      break;
+      
+      // we want to override these messages
+      // and not do anything
+    case WM_DESTROY:
+    case WM_CLOSE:
+      break;
+      
+      // try to initialize the tablet driver
+    case WM_CREATE:
+      {
+      }
+      break;
+      
+      // pass all unhandled messages to DefWindowProc
+    default:
+      lRet = DefWindowProc (hWnd, uMsg, wParam, lParam);
+      break;
     }
     return(lRet);
 }
@@ -618,7 +404,7 @@ void gemWinMakeCurrent(WindowInfo&nfo)
 }
 
 bool initGemWin(void) {
-#ifdef HAVE_QUICKTIME
+# ifdef HAVE_QUICKTIME
 	OSErr		err = noErr;
 
 	// Initialize QuickTime Media Layer
@@ -636,7 +422,7 @@ bool initGemWin(void) {
       return 0;
     }	
 	post("Gem Man: QT init OK");
-#endif /* HAVE_QUICKTIME */
+# endif /* HAVE_QUICKTIME */
   return 1;
 }
 
@@ -658,5 +444,4 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
     }
 }
 
-
-#endif
+#endif /* WIN32 */
