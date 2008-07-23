@@ -503,9 +503,6 @@
 				RelativePath="..\..\src\Geos\scopeXYZ.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Geos\setup.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Geos\slideSquares.cpp">
 			</File>
 			<File
@@ -589,9 +586,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Nongeos\light.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Nongeos\setup.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Nongeos\spot_light.cpp">
@@ -754,9 +748,6 @@
 				RelativePath="..\..\src\Manips\separator.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Manips\setup.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Manips\shearXY.cpp">
 			</File>
 			<File
@@ -897,9 +888,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Controls\render_trigger.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Controls\setup.h">
 			</File>
 		</Filter>
 		<Filter
