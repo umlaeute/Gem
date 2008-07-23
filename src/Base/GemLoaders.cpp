@@ -15,6 +15,10 @@
 // a wrapper for calling Pd's sys_register_loader()
 //
 /////////////////////////////////////////////////////////
+#ifdef _MSC_VER
+# pragma warning( disable: 4091)
+#endif /* _MSC_VER */
+
 
 #include "GemLoaders.h"
 
@@ -45,17 +49,13 @@ static int find_pd_loader(void) {
   pd_register_loader=(loader_registrar_t)dlsym(RTLD_DEFAULT, "sys_register_loader");
 #elif defined __WIN32__
   /* no idea whether this actually works... */
-  pd_register_loader = (loader_registrar_t)GetProcAddress( GetModuleHandle(NULL), "sys_register_loader");  
+  pd_register_loader = (loader_registrar_t)GetProcAddress( GetModuleHandle("pd.dll"), "sys_register_loader");  
 #else
   // no loader for older Pd's....
 #endif
 
   return(NULL!=pd_register_loader);
 }
-
-
-
-
 
 void gem_register_loader(gem_loader_t loader) {
   if(find_pd_loader()) {

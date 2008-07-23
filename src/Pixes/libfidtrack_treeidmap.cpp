@@ -1,6 +1,12 @@
-#define NDEBUG
+#ifndef NDEBUG
+# define NDEBUG
+#endif
 
 #include "libfidtrack_treeidmap.h"
+#ifdef _MSC_VER
+# pragma warning( disable: 4091)
+#endif /* _MSC_VER */
+
 #include <m_pd.h>
 
 #include <map>

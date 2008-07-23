@@ -155,14 +155,16 @@ void pix_2grey :: processYUVMMX(imageStruct &image){
 void pix_2grey :: processYUVSSE2(imageStruct &image){
  register int pixsize = (image.ysize * image.xsize)>>3;
 
- register __m128i mask_128   = _mm_set_epi8(0xFF, 0x00, 0xFF, 0x00,
-                                   0xFF, 0x00, 0xFF, 0x00,
-                                   0xFF, 0x00, 0xFF, 0x00,
-                                   0xFF, 0x00, 0xFF, 0x00);
- register __m128i offset_128 = _mm_set_epi8(0x00, 0x80, 0x00, 0x80,
-                                   0x00, 0x80, 0x00, 0x80,
-                                   0x00, 0x80, 0x00, 0x80,
-                                   0x00, 0x80, 0x00, 0x80);
+ register __m128i mask_128   = _mm_set_epi8(
+                                   (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                   (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                   (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                   (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00);
+ register __m128i offset_128 = _mm_set_epi8(
+                                   (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                   (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                   (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                   (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80);
  __m128i *data_p= (__m128i*)image.data;
 
  register __m128i pixel;

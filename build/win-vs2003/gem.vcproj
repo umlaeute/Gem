@@ -208,6 +208,12 @@
 				RelativePath="..\..\src\Base\GemGLUtil.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GemLoaders.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemLoaders.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\GemLoadObj.cpp">
 			</File>
 			<File

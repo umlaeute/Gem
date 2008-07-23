@@ -54,7 +54,10 @@ rectangle :: ~rectangle()
 /////////////////////////////////////////////////////////
 void rectangle :: renderShape(GemState *state)
 {
-#warning rectangle: look at SetVertex
+#ifdef __GNUC__
+# warning rectangle: look at SetVertex
+#endif /* __GNUC__ */
+
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
 
   glNormal3f(0.0f, 0.0f, 1.0f);
