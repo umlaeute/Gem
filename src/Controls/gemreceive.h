@@ -2,10 +2,9 @@
   LOG
   GEM - Graphics Environment for Multimedia
 
-  Respond to mouse events
+  ordered receive
     
-  Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-  Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+  Copyright (c) 2008 IOhannes m zmoelnig. forum::für::umläute. IEM/KUG. zmoelnig@iem.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -21,10 +20,16 @@
   CLASS
   gemreceive
     
-  Respond to keyboard events
+  [receive] with explicit order
 
   DESCRIPTION
-    
+
+  this object is really totally unrelated to Gem.
+  however, it is included here, in order to replace the current
+  (integrated) implementation of [gemhead] with an abstraction that makes use
+  of an ordered [receive]
+
+  the original object was [oreceive] in the iemguts library
     
   -----------------------------------------------------------------*/
 
