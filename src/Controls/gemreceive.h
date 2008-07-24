@@ -28,22 +28,12 @@
     
   -----------------------------------------------------------------*/
 
+EXTERN_STRUCT _bind_element;
+EXTERN_STRUCT _gemreceive_proxy;
 
-class gemreceive;
+typedef struct _bind_element t_bind_element;
+typedef struct _gemreceive_proxy t_gemreceive_proxy;
 
-typedef struct _bind_element {
-  gemreceive *object;
-  t_float priority;
-  struct _bind_element*next;
-} t_bind_element;
-
-typedef struct _gemreceive_proxy {
-  t_object p_obj;
-
-  t_symbol*key;
-  t_bind_element*elements;
-  struct _gemreceive_proxy*next;
-} t_gemreceive_proxy;
 
 class GEM_EXTERN gemreceive : public CPPExtern
 {

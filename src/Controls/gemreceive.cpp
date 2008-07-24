@@ -24,6 +24,24 @@
 
 static t_class *gemreceive_proxy_class;
 
+struct _bind_element {
+  gemreceive *object;
+  t_float priority;
+  struct _bind_element*next;
+};
+
+struct _gemreceive_proxy {
+  t_object p_obj;
+
+  t_symbol*key;
+  t_bind_element*elements;
+  struct _gemreceive_proxy*next;
+};
+
+
+
+
+
 t_gemreceive_proxy*gemreceive :: proxy_list = NULL;
 
 t_gemreceive_proxy* gemreceive::find_key(t_symbol*key)
