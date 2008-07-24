@@ -29,8 +29,10 @@
   -----------------------------------------------------------------*/
 
 
+class gemreceive;
+
 typedef struct _bind_element {
-  t_pd   *object;
+  gemreceive *object;
   t_float priority;
   struct _bind_element*next;
 } t_bind_element;
@@ -86,8 +88,7 @@ class GEM_EXTERN gemreceive : public CPPExtern
 
   //////////
   // Static member functions
-  static void     receiveCallback(void*data, t_symbol*s, int argc, t_atom*argv);
-  static void     proxyCallback(void*data, t_symbol*s, int argc, t_atom*argv);
+  static void     proxyCallback(t_gemreceive_proxy*, t_symbol*s, int argc, t_atom*argv);
 
   //////////
   static void     nameCallback(void *data, t_symbol*s);
@@ -101,8 +102,8 @@ class GEM_EXTERN gemreceive : public CPPExtern
 
 
  public:
-  static void bind(t_pd*x, t_symbol*name, t_float priority);
-  static void unbind(t_pd*x, t_symbol*name);
+  static void bind(gemreceive*x, t_symbol*name, t_float priority);
+  static void unbind(gemreceive*x, t_symbol*name);
 
 
 };
