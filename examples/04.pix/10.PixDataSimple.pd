@@ -50,7 +50,6 @@
 #X obj 419 253 random 1000;
 #X obj 419 270 / 1000;
 #X obj 419 288 t f f;
-#X obj 273 268 pix_yuv;
 #X connect 1 0 27 0;
 #X connect 2 1 13 1;
 #X connect 3 0 0 0;
@@ -79,7 +78,7 @@
 #X connect 20 0 23 0;
 #X connect 22 0 21 0;
 #X connect 23 0 14 0;
-#X connect 27 0 37 0;
+#X connect 27 0 2 1;
 #X connect 28 0 0 0;
 #X connect 31 0 32 0;
 #X connect 32 0 33 0;
@@ -89,4 +88,3 @@
 #X connect 35 0 36 0;
 #X connect 36 0 2 3;
 #X connect 36 1 16 0;
-#X connect 37 0 2 1;
