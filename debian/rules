@@ -25,7 +25,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
-	cd src; ./configure \
+	cd src; aclocal && autoconf && ./configure \
 		--prefix=/usr   \
 		--without-avi   \
 		--without-mpeg  \
