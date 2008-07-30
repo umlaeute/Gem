@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
 #include "Pixes/film.h"
 #include "Pixes/pix_filmNEW.h"
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <Carbon/carbon.h>
 #include <QuickTime/quicktime.h>
 #endif
@@ -63,7 +63,7 @@ class GEM_EXTERN filmDarwin : public film {
   virtual int changeImage(int imgNum, int trackNum=-1);
 
  protected:
-#ifdef MACOSX
+#ifdef __APPLE__
   Movie			m_movie; 
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
@@ -71,7 +71,7 @@ class GEM_EXTERN filmDarwin : public film {
   Media			m_movieMedia;
   TimeValue		m_timeScale;
   TimeValue		duration;
-#endif //MACOSX
+#endif //__APPLE__
 
   //////////
   // frame data

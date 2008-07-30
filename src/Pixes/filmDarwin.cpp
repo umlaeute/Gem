@@ -28,7 +28,7 @@
 filmDarwin :: filmDarwin(int format) : film(format) {
   static bool first_time=true;
   if (first_time) {
-#ifdef MACOSX
+#ifdef __APPLE__
     post("pix_film:: Darwin support");
 #endif
     first_time = false;
@@ -46,7 +46,7 @@ filmDarwin :: ~filmDarwin()
 
 void filmDarwin :: close(void)
 {
-#ifdef MACOSX
+#ifdef __APPLE__
   if(m_srcGWorld){
     ::DisposeMovie(m_movie);
     ::DisposeGWorld(m_srcGWorld);
@@ -62,7 +62,7 @@ void filmDarwin :: close(void)
 bool filmDarwin :: open(char *filename, int format)
 {
   if (format>0)m_wantedFormat=format;
-#ifdef MACOSX
+#ifdef __APPLE__
   FSSpec		theFSSpec;
   OSErr		err = noErr;
   FSRef		ref;
@@ -206,7 +206,7 @@ bool filmDarwin :: open(char *filename, int format)
 //
 /////////////////////////////////////////////////////////
 pixBlock* filmDarwin :: getFrame(){
-#ifdef MACOSX
+#ifdef __APPLE__
     CGrafPtr	 	savedPort;
     GDHandle     	savedDevice;
     Rect		m_srcRect;
