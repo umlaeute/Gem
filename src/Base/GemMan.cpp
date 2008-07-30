@@ -126,10 +126,6 @@ private:
   gemheadLink();
 };
 
-static int createConstWindow(char *disp);
-
-// static int destroyConstWindow();
-
 GEM_EXTERN void gemAbortRendering()
 {
   GemMan::stopRendering();

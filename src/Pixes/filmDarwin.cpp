@@ -98,7 +98,7 @@ bool filmDarwin :: open(char *filename, int format)
   post("GEM: pix_film:  m_numTracks = %d",m_numTracks);
 
   // Get the length of the movie
-  long	movieDur, movieScale, mediaDur, mediaScale;
+  long	movieDur, movieScale;
   movieDur = (long)GetMovieDuration(m_movie);
   movieScale = (long)GetMovieTimeScale(m_movie);
         
@@ -219,8 +219,6 @@ pixBlock* filmDarwin :: getFrame(){
     
     m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
     m_baseAddr = ::GetPixBaseAddr(m_pixMap);
-
-    int num;
 
     // get the next frame of the source movie
     short 	flags = nextTimeStep;

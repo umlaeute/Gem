@@ -50,7 +50,7 @@ vertex_info :: ~vertex_info()
 /////////////////////////////////////////////////////////
 void vertex_info :: render(GemState *state)
 {
-    int i,size,src,count;
+    int size;
     GLfloat *VertexArray;
     
     VertexArray =state->VertexArray;

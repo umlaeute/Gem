@@ -62,7 +62,7 @@ vertex_grid :: ~vertex_grid()
 void vertex_grid :: render(GemState *state)
 {
   
-   int h,w,src,x,y,t;
+   int h,w,src,y,t;
    
   // m_x = 4;
   // m_y = 4;

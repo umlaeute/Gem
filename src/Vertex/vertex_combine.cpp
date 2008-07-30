@@ -49,9 +49,8 @@ vertex_combine :: ~vertex_combine()
 /////////////////////////////////////////////////////////
 void vertex_combine :: render(GemState *state)
 {
-  int i,size,srcL,srcS,count,sizeR,end,ratio,remainder;
+  int i,size,srcL,srcS,count,sizeR,ratio,remainder;
     GLfloat *VertexArray;
-    GLfloat *Temp;
     float blendL, blendR, ratiof,countf;
     
     VertexArray =state->VertexArray;

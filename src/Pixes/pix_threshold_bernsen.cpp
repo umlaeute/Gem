@@ -111,7 +111,6 @@ void pix_threshold_bernsen :: processGrayImage(imageStruct &image)
 
   int x, y;
 
-
   // get the minimum & maximum of each quarter-sized tile
   for (y=0; y<m_ytiles*2; y++){
     int fromY=image.ysize*y/(m_ytiles*2);
@@ -126,11 +125,13 @@ void pix_threshold_bernsen :: processGrayImage(imageStruct &image)
     }
   }
   // get the thresholds for each tile (based on 16 quarter-sized tiles)
+#if 0
   for (y=0; y<m_ytiles*2; y++){
     for (x=0; x<m_xtiles*2; x++){
       int offset=(2*m_xtiles)*y+x;
     }
   }
+#endif
 
 
   for(y=0; y<m_ytiles; y++){
