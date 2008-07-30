@@ -4,7 +4,7 @@
 #include "Base/GemExportDef.h"
 
 #define GEM_VERSION_MAJOR 0
-#define GEM_VERSION_MINOR 91
+#define GEM_VERSION_MINOR 92
 #define GEM_VERSION_BUGFIX CVS
 #define GEM_VERSION_CODENAME 
 
