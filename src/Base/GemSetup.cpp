@@ -26,8 +26,8 @@ static const char GEM_MAINTAINER[] = "IOhannes m zmoelnig";
 static const char *GEM_AUTHORS[] = {
   "Chris Clepper",
   "James Tittle",
-  "IOhannes m zmoelnig",
-  0};
+  "IOhannes m zmoelnig"
+};
 
 static const char GEM_OTHERAUTHORS[] =
   "Guenter Geiger, Daniel Heckenberg, Cyrille Henry, et al.";

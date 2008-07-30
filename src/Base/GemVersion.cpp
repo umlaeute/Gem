@@ -13,13 +13,9 @@
 
 #include "GemVersion.h"
 
-char* GemVersion :: versionString() {
-#if 0
-return gensym( "" STRINGIFY(GEM_VERSION_MAJOR) "." STRINGIFY(GEM_VERSION_MINOR) "." STRINGIFY(GEM_VERSION_BUGFIX) \
-               " " STRINGFY(GEM_VERSION_CODENAME) )->s_name;
-#else
- return 0;
-#endif
+const char* GemVersion :: versionString() {
+return ( "" STRINGIFY(GEM_VERSION_MAJOR) "." STRINGIFY(GEM_VERSION_MINOR) "." STRINGIFY(GEM_VERSION_BUGFIX) \
+               " " STRINGIFY(GEM_VERSION_CODENAME) );
 }
 
 bool GemVersion :: versionCheck(int major, int minor) {
