@@ -1,6 +1,8 @@
 #ifndef GEM_VERSION_H
 #define GEM_VERSION_H
 
+#include "Base/GemExportDef.h"
+
 #define GEM_VERSION_MAJOR 0
 #define GEM_VERSION_MINOR 91
 #define GEM_VERSION_BUGFIX CVS
