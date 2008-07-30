@@ -143,7 +143,7 @@ void pix_deinterlace :: processYUVImage(imageStruct &image)
 {
 
 int	row, col,field1,field2,field3;
-	int temp1, temp2,temp3;
+	int temp1;
 	
 	unsigned char *pixels=image.data;
 	
@@ -218,7 +218,7 @@ void pix_deinterlace :: processGrayImage(imageStruct &image)
 {
 
   int	row, col,field1,field2,field3;
-  int temp1, temp2,temp3;
+  int temp1;
   unsigned char *pixels=image.data;
   field1 = 0;
   field2 = image.xsize;

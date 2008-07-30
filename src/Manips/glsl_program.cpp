@@ -551,7 +551,6 @@ void glsl_program :: printInfo()
       return;
     }
 
-  GLint bitnum = 0;
   post("glsl_Program Hardware Info");
   post("============================");
 	

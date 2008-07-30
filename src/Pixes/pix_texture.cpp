@@ -189,7 +189,6 @@ void pix_texture :: render(GemState *state) {
   int texType = m_textureType;
   int x_2, y_2;
   GLboolean useExternalTexture=false;
-  GLfloat xTex=1., yTex=1.;
   int do_rectangle = (m_rectangle)?GemMan::texture_rectangle_supported:0;
 
   int newfilm = 0;

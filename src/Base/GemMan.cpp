@@ -592,7 +592,6 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
 void GemMan :: render(void *)
 {
   static int firstTime = 1;
-  static float countFreq = 0;
   int profiling=m_profile;
 
   if(GemMan::pleaseDestroy)GemMan::destroyWindow();
@@ -621,7 +620,7 @@ void GemMan :: render(void *)
   //disable stereo and post a warning
   if(m_stereo == 3 && !stereoWindowTest){
     error("GEM: you've selected Crystal Glasses Stereo but your graphics card isn't set up for stereo, setting stereo=0");
-    m_stereo = GemMan::m_stereo = 0;
+    m_stereo = 0;
   } else if(stereoWindowTest) {
     //if we're not doing crystal eyes stereo but our window is enabled to do stereo
     //select the back buffer for drawing

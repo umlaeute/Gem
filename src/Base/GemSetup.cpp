@@ -20,6 +20,20 @@
 #include "GemMan.h"
 #include "GemVersion.h"
 
+
+static const char GEM_MAINTAINER[] = "IOhannes m zmoelnig";
+
+static const char *GEM_AUTHORS[] = {
+  "Chris Clepper",
+  "James Tittle",
+  "IOhannes m zmoelnig",
+  0};
+
+static const char GEM_OTHERAUTHORS[] =
+  "Guenter Geiger, Daniel Heckenberg, Cyrille Henry, et al.";
+
+
+
 extern "C" {
   //#define GEM_ADDOWNPATH
 #ifdef GEM_ADDOWNPATH
@@ -63,7 +77,7 @@ static t_class *Gem_setup_class;
     // startup GEM
 
     post("GEM: Graphics Environment for Multimedia");
-    post("GEM: ver: %s", GEM_VERSION);
+    post("GEM: ver: %s", GemVersion::versionString());
     post("GEM: compiled: " __DATE__);
     post("GEM: maintained by %s", GEM_MAINTAINER);
     post("GEM: Authors :\tMark Danks (original version)");

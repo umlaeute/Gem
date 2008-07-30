@@ -73,8 +73,8 @@ bool filmDarwin :: open(char *filename, int format)
   
   if (!filename[0]) {
     post("pix_film:  no filename passed");
-  } else {            
-    err = ::FSPathMakeRef((Str255)filename, &ref, NULL);
+  } else { 
+    err = ::FSPathMakeRef((const UInt8*)filename, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
     if (err) {
       error("GEM: pix_film: Unable to find file: %#s", theFSSpec.name);

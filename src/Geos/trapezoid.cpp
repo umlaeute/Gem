@@ -55,7 +55,7 @@ void trapezoid :: renderShape(GemState *state)
 {
   float top=m_size*m_top;
   float tx = m_scale_texcoord * m_top;
-  int type=1;
+
   int drawType = m_drawType;
   if(drawType==GL_DEFAULT_GEM)drawType=GL_QUADS;
 

@@ -68,7 +68,14 @@ static bool filmQT_deinitQT(void) {
 
 filmQT :: filmQT(int format) : film(format)
 #ifdef HAVE_QUICKTIME
-			     , m_bInit(false), m_srcGWorld(NULL), m_movie(NULL)
+                ,
+				m_movie(NULL),
+				m_srcGWorld(NULL),
+				m_movieTime(0),
+				m_movieTrack(0),
+				m_timeScale(1), 
+				duration(0),
+				m_bInit(false)
 {
   static bool first_time=true;
   if (first_time) {

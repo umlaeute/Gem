@@ -116,8 +116,6 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
 /////////////////////////////////////////////////////////
 void pix_multitexture :: render(GemState *state)
 {
-	int x_2, y_2;
-	
 	m_oldTexCoords=state->texCoords;
 	m_oldNumCoords=state->numTexCoords;
 	m_oldTexture  =state->texture;
