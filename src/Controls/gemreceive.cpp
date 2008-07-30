@@ -190,7 +190,7 @@ void gemreceive::unbind(gemreceive*x, t_symbol*key) {
 
 
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(gemreceive, t_symbol*, A_SYMBOL, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(gemreceive, t_symbol*, A_DEFSYMBOL, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
