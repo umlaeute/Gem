@@ -174,7 +174,8 @@ GEM_EXTERN void imageStruct::clear()
 }
 
 
-GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to){
+GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to) const
+{
     if (!to || !this || !this->data) {
       error("GEM: Someone sent a bogus pointer to copy2ImageStruct");
       if (to) to->data = NULL;
@@ -203,7 +204,8 @@ GEM_EXTERN void imageStruct::info() {
        format, type, notowned);
 }
 
-GEM_EXTERN void imageStruct::copy2Image(imageStruct *to) {
+GEM_EXTERN void imageStruct::copy2Image(imageStruct *to) const
+{
     if (!to || !this || !this->data)
     {
         error("GEM: Someone sent a bogus pointer to copy2Image");
@@ -1590,7 +1592,8 @@ GEM_EXTERN void imageStruct::swapRedBlue() {
 }
 
 
-GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b) {
+GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b) const
+{
   unsigned char red=0, green=0, blue=0;
   int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
   unsigned char*pixels=data+position*csize;
@@ -1648,7 +1651,8 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
   if(g)*g=green;
   if(b)*b=blue;
 }
-GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) {
+GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
+{
   unsigned char grey=0;
   int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
   unsigned char*pixels=data+position*csize;
@@ -1681,7 +1685,8 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) {
   }
   if(g)*g=grey;
 }
-GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) {
+GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const
+{
   unsigned char luma=0, chromaU=128, chromaV=128;
   int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
   unsigned char*pixels=data+position*csize;

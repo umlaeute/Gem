@@ -130,13 +130,13 @@ class GEM_EXTERN GemState
   // Constructor
   GemState();
 
-  float texCoordX(int num) {
+  float texCoordX(int num) const {
     if (texture && numTexCoords > num)
       return texCoords[num].s;
     else return 0.;
   }
 
-  float texCoordY(int num) {
+  float texCoordY(int num) const {
     if (texture && numTexCoords > num)
       return texCoords[num].t;
     else return 0.;

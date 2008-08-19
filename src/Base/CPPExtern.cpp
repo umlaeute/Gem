@@ -65,7 +65,7 @@ CPPExtern :: CPPExtern()
 /////////////////////////////////////////////////////////
 CPPExtern :: ~CPPExtern()
 { }
-void CPPExtern :: post(const char*fmt,...)
+void CPPExtern :: post(const char*fmt,...) const
 {
   char buf[MAXPDSTRING];
   va_list ap;
@@ -78,7 +78,7 @@ void CPPExtern :: post(const char*fmt,...)
     ::post("%s", buf);
   }
 }
-void CPPExtern :: verbose(const int level, const char*fmt,...)
+void CPPExtern :: verbose(const int level, const char*fmt,...) const
 {
   char buf[MAXPDSTRING];
   va_list ap;
@@ -101,7 +101,7 @@ void CPPExtern :: verbose(const int level, const char*fmt,...)
 #endif
 }
 
-void CPPExtern :: error(const char*fmt,...)
+void CPPExtern :: error(const char*fmt,...) const
 {
   char buf[MAXPDSTRING];
   va_list ap;

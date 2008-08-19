@@ -38,38 +38,38 @@ public:
     CVector3(float X, float Y, float Z);
 
     // Here we overload the + operator so we can add vectors together 
-    CVector3 operator+(CVector3 vVector);
+    CVector3 operator+(CVector3 vVector) const;
 
     // Here we overload the - operator so we can subtract vectors 
-    CVector3 operator-(CVector3 vVector);
+    CVector3 operator-(CVector3 vVector) const;
 
     // Here we overload the - operator so we can negate the vector
-    CVector3 operator-();
+    CVector3 operator-() const;
 
     // Here we overload the * operator so we can multiply by scalars
-    CVector3 operator*(float num);
+    CVector3 operator*(float num) const;
 
     // Here we overload the * operator so we can dot-multiply 
-    float    operator*(CVector3 vVector);
+    float    operator*(CVector3 vVector) const;
 
      // cross-multiplication
-    CVector3 cross(CVector3 vVector);
+    CVector3 cross(CVector3 vVector) const;
 
     // Here we overload the / operator so we can divide by a scalar
-    CVector3 operator/(float num);
+    CVector3 operator/(float num) const;
 
 
     // here we calculate the absolute-value of the vector
-    float abs();
+    float abs() const;
 
     // here we calculate the square of the absolute-value of the vector
-    float abs2();
+    float abs2() const;
 
     // here we normalize the vector
-    CVector3 normalize();
+    CVector3 normalize() const;
 
     // here we compare 2 vectors on approx. equality
-    bool equals(CVector3 vVector, float epsilon);
+    bool equals(CVector3 vVector, float epsilon) const;
 
     
 };

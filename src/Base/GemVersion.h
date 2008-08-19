@@ -10,7 +10,7 @@
 
 class GEM_EXTERN GemVersion {
   public:
-	const static char* versionString(void);
+	const static char* const versionString(void);
 	static bool versionCheck(int major, int minor);
 };
 

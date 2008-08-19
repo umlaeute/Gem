@@ -125,7 +125,7 @@ struct GEM_EXTERN imageStruct
    * you should use chRed instead of 0 (because it might not be 0)
    */
   // heck, why are X&Y swapped ?? (JMZ)
-  inline unsigned char GetPixel(int Y, int X, int C)
+  inline unsigned char GetPixel(int Y, int X, int C) const
   { return(data[Y * xsize * csize + X * csize + C]); }
   
   //////////
@@ -140,9 +140,9 @@ struct GEM_EXTERN imageStruct
 
   /////////
   // gets the color of a pixel
-  void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b);
-  void getGrey(int X, int Y, unsigned char*g);
-  void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v);
+  void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b) const;
+  void getGrey(int X, int Y, unsigned char*g) const;
+  void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const;
   
   /* following will set the whole image-data to either black or white
    * the size of the image-data is NOT xsize*ysize*csize but datasize
@@ -168,8 +168,8 @@ struct GEM_EXTERN imageStruct
    * but often it is enough to just copy the meta-data (without pixel-data)
    * into a new imageStruct
    */
-  void copy2Image(imageStruct *to);
-  void copy2ImageStruct(imageStruct *to); // copy the imageStruct (but not the actual data)
+  void copy2Image(imageStruct *to) const;
+  void copy2ImageStruct(imageStruct *to) const; // copy the imageStruct (but not the actual data)
   /* this is a sort of better copy2Image, 
    * which only copies the imageStruct-data if it is needed
    */
