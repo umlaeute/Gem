@@ -49,7 +49,9 @@ separator :: ~separator()
 void separator :: render(GemState *state)
 {
     // push the current matrix stacks
-  if(state->stackDepth[1]<GemMan::maxStackDepth[1]){
+
+  /* GL_COLOR is only accepted if GL_ARB_imaging is present */
+  if(GLEW_ARB_imaging && state->stackDepth[1]<GemMan::maxStackDepth[1]){
     glMatrixMode(GL_COLOR);
     glPushMatrix();
   }
@@ -94,7 +96,7 @@ void separator :: postrender(GemState *state)
 {
     // pop the current matrix stacks
   state->stackDepth[1]--;
-  if(state->stackDepth[1]<GemMan::maxStackDepth[1]){
+  if(GLEW_ARB_imaging && state->stackDepth[1]<GemMan::maxStackDepth[1]){
     glMatrixMode(GL_COLOR);
     glPopMatrix();
   }
