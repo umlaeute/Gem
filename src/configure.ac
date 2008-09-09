@@ -568,6 +568,10 @@ if test "x$have_gl" != "xyes"; then
  AC_MSG_ERROR([GL (headers) not found! you need openGL!!!])
 fi
 
+if test "x$have_glu" != "xyes"; then
+ AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])
+fi
+
 AC_MSG_RESULT([Now run make ...])
 
 
