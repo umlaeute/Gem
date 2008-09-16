@@ -75,7 +75,7 @@ let i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "	  ${fun_argtypes[${i}]} m_${fun_argnames[${i}]}; // VAR"
-  echo "	  virtual void ${fun_argnames[${i}]}Mess( $(type2pd ${fun_argtypes[${i}]}) ) }; // VAR"
+  echo "	  virtual void ${fun_argnames[${i}]}Mess( $(type2pd ${fun_argtypes[${i}]}) ); // VAR"
 
   echo ""
   let i+=1
@@ -108,7 +108,7 @@ echo "// Implementation file"
 echo "//"
 echo "// Copyright (c) 2008 zmoelnig@iem.at"
 echo "//  For information on usage and redistribution, and for a DISCLAIMER"
-echo "//  *  OF ALL WARRANTIES, see the file, \"GEM.LICENSE.TERMS\""
+echo "//  OF ALL WARRANTIES, see the file \"GEM.LICENSE.TERMS\""
 echo "//"
 echo ""
 echo "#include \"${header_file}\""
@@ -122,7 +122,17 @@ echo "/////////////////////////////////////////////////////////"
 echo "// Constructor"
 echo "//"
 echo -n "${gem_name} :: ${gem_name}	("
-echo -n "t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0"
+let i=0
+while [ ${i} -lt ${fun_argcount} ]
+do
+  echo -n "$(type2pdarg ${fun_argtypes[${i}]}) arg${i}=0"
+  let i+=1
+  if [ ${i} -lt  ${fun_argcount} ]
+  then
+    echo -n ", "
+  fi
+  echo ""
+done
 echo ") :"
 let i=0
 while [ ${i} -lt ${fun_argcount} ]
@@ -184,7 +194,7 @@ while [ ${i} -lt ${fun_argcount} ]
 do
   echo "void ${gem_name} :: ${fun_argnames[${i}]}Mess($(type2pd ${fun_argtypes[${i}]}) arg1) {"
   echo "	  m_${fun_argnames[${i}]}=(${fun_argtypes[${i}]})arg1;"
-  echo "	  setModified()"
+  echo "	  setModified();"
   echo "}"
   echo ""
   let i+=1
@@ -209,7 +219,7 @@ let i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "void ${gem_name} :: ${fun_argnames[${i}]}MessCallback (void*data, $(type2pdarg ${fun_argtypes[${i}]}) arg0) {"
-  echo "	GemMyClass(data)->${fun_argnames[${i}]}Mess( ($(type2pd ${fun_argtypes[${i}]})) arg0);"
+  echo "	GetMyClass(data)->${fun_argnames[${i}]}Mess( ($(type2pd ${fun_argtypes[${i}]})) arg0);"
   echo "}"
   let i+=1
 done
