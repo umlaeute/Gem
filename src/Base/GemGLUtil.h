@@ -21,9 +21,9 @@ LOG
 #include "Base/GemExportDef.h"
 
 GEM_EXTERN extern GLenum		glReportError (void);
-GEM_EXTERN extern int           getGLdefine(char *name);
-GEM_EXTERN extern int           getGLdefine(t_symbol *name);
-GEM_EXTERN extern int           getGLdefine(t_atom *name);
+GEM_EXTERN extern int           getGLdefine(const char *name);
+GEM_EXTERN extern int           getGLdefine(const t_symbol *name);
+GEM_EXTERN extern int           getGLdefine(const t_atom *name);
 GEM_EXTERN extern int           getGLbitfield(int argc, t_atom *argv);
 #endif  // for header file
 

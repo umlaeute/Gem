@@ -72,30 +72,35 @@ GEM_EXTERN int getGLbitfield(int argc, t_atom *argv){
 
 }
 
-GEM_EXTERN int getGLdefine(t_atom *ap)
+GEM_EXTERN int getGLdefine(const t_atom *ap)
 {
   if (!ap)return _GL_UNDEFINED;
   if (ap->a_type == A_SYMBOL)return getGLdefine(ap->a_w.w_symbol);
-  if (ap->a_type == A_FLOAT)return atom_getint(ap);
+  if (ap->a_type == A_FLOAT)return atom_getint((t_atom*)ap);
   return _GL_UNDEFINED;
 }
 
-GEM_EXTERN int getGLdefine(t_symbol *s)
+GEM_EXTERN int getGLdefine(const t_symbol *s)
 {
   if (s && s->s_name)return getGLdefine(s->s_name);
   else return _GL_UNDEFINED;
 }
 
-GEM_EXTERN int getGLdefine(char *name)
+GEM_EXTERN int getGLdefine(const char *fixname)
 {
-    char *c=name;
-    int count=0;
-    while (*c){
-      *c=toupper(*c);
-      c++;
-      count++;
-    }
-    if (count<4)return _GL_UNDEFINED;
+  char namearray[MAXPDSTRING];
+  char*name=namearray;
+  char *c=name;
+  const char *fc=fixname;
+  int count=0;
+
+  while (*fc&&(count<MAXPDSTRING)){
+    *c=toupper(*fc);
+    c++;
+    fc++;
+    count++;
+  }
+  if (count<4)return _GL_UNDEFINED;
     if (!(name[0]=='G' && name[1]=='L' && name[2]=='_'))return _GL_UNDEFINED;
     name+=3;
     switch (count){
