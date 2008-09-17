@@ -14,7 +14,7 @@
 
 #include "GEMglDepthFunc.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDepthFunc , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglDepthFunc )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,9 +23,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDepthFunc , t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDepthFunc :: GEMglDepthFunc	(t_floatarg arg0=0) :
-		func((GLenum)arg0)
+GEMglDepthFunc :: GEMglDepthFunc (int argc, t_atom*argv) :
+		func(0)
 {
+  if(1==argc)funcMess(argv[0]); else if(argc) GemException("invalid number of arguments");
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("func"));
 }
 /////////////////////////////////////////////////////////
@@ -45,8 +46,8 @@ void GEMglDepthFunc :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglDepthFunc :: funcMess (t_float arg1) {	// FUN
-	func = (GLenum)arg1;
+void GEMglDepthFunc :: funcMess (t_atom arg) {	// FUN
+	func = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -56,9 +57,9 @@ void GEMglDepthFunc :: funcMess (t_float arg1) {	// FUN
 //
 
 void GEMglDepthFunc :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglDepthFunc::funcMessCallback,  	gensym("func"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglDepthFunc::funcMessCallback,  	gensym("func"), A_GIMME, A_NULL);
 };
 
-void GEMglDepthFunc :: funcMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->funcMess ( (t_float)    arg0);
+void GEMglDepthFunc :: funcMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->funcMess ( argv[0]);
 }

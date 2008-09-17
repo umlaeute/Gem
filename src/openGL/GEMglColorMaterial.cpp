@@ -14,7 +14,7 @@
 
 #include "GEMglColorMaterial.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglColorMaterial , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglColorMaterial )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,10 +23,12 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglColorMaterial , t_floatarg, A_DEFFLOAT, t_flo
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglColorMaterial :: GEMglColorMaterial	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		face((GLenum)arg0), 
-		mode((GLenum)arg1)
+GEMglColorMaterial :: GEMglColorMaterial (int argc, t_atom*argv) :
+		face(0), 
+		mode(0)
 {
+  if(2==argc){faceMess(argv[0]); modeMess(argv[1]);} else if (argc) GemException("invalid number of arguments");
+
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("face"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
@@ -48,13 +50,13 @@ void GEMglColorMaterial :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglColorMaterial :: faceMess (t_float arg1) {	// FUN
-	face = (GLenum)arg1;
+void GEMglColorMaterial :: faceMess (t_atom arg) {	// FUN
+	face = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
-void GEMglColorMaterial :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+void GEMglColorMaterial :: modeMess (t_atom arg) {	// FUN
+	mode = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -64,13 +66,13 @@ void GEMglColorMaterial :: modeMess (t_float arg1) {	// FUN
 //
 
 void GEMglColorMaterial :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglColorMaterial::faceMessCallback,  	gensym("face"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglColorMaterial::modeMessCallback,  	gensym("mode"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColorMaterial::faceMessCallback,  	gensym("face"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglColorMaterial::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
 };
 
-void GEMglColorMaterial :: faceMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->faceMess ( (t_float)    arg0);
+void GEMglColorMaterial :: faceMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->faceMess ( argv[0]);
 }
-void GEMglColorMaterial :: modeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->modeMess ( (t_float)    arg0);
+void GEMglColorMaterial :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->modeMess ( argv[0]);
 }

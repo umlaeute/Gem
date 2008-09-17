@@ -31,7 +31,7 @@ class GEM_EXTERN GEMglDrawBuffer : public GemGLBase
 
 	public:
 	  // Constructor
-	  GEMglDrawBuffer (t_float);	// CON
+	  GEMglDrawBuffer (int, t_atom*); // CON
 
 	protected:
 	  // Destructor
@@ -41,7 +41,7 @@ class GEM_EXTERN GEMglDrawBuffer : public GemGLBase
 
 	// variables
 	  GLenum	mode;		// VAR
-	  virtual void	modeMess(t_float);	// FUN
+	  virtual void	modeMess(t_atom);	// FUN
 
 
 	private:
@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglDrawBuffer : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 modeMessCallback (void*, t_floatarg);
+	  static void	 modeMessCallback (void*,t_symbol*,int,t_atom*);
 };
 #endif // for header file

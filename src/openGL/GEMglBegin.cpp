@@ -14,7 +14,7 @@
 
 #include "GEMglBegin.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBegin , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglBegin )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,9 +23,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBegin , t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglBegin :: GEMglBegin	(t_floatarg arg0=0) :
-		mode((GLenum)arg0)
+GEMglBegin :: GEMglBegin (int argc, t_atom*argv) :
+		mode(0)
 {
+  if(1==argc)modeMess(argv[0]); else if(argc) GemException("invalid number of arguments");
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
 /////////////////////////////////////////////////////////
@@ -45,8 +46,8 @@ void GEMglBegin :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglBegin :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+void GEMglBegin :: modeMess (t_atom arg) {	// FUN
+	mode = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -56,9 +57,9 @@ void GEMglBegin :: modeMess (t_float arg1) {	// FUN
 //
 
 void GEMglBegin :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglBegin::modeMessCallback,  	gensym("mode"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglBegin::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
 };
 
-void GEMglBegin :: modeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->modeMess ( (t_float)    arg0);
+void GEMglBegin :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->modeMess ( argv[0]);
 }

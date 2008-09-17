@@ -31,7 +31,7 @@ class GEM_EXTERN GEMglBlendFunc : public GemGLBase
 
 	public:
 	  // Constructor
-	  GEMglBlendFunc (t_float, t_float);	// CON
+	  GEMglBlendFunc (int, t_atom*); // CON
 
 	protected:
 	  // Destructor
@@ -41,10 +41,10 @@ class GEM_EXTERN GEMglBlendFunc : public GemGLBase
 
 	// variables
 	  GLenum	sfactor;		// VAR
-	  virtual void	sfactorMess(t_float);	// FUN
+	  virtual void	sfactorMess(t_atom);	// FUN
 
 	  GLenum	dfactor;		// VAR
-	  virtual void	dfactorMess(t_float);	// FUN
+	  virtual void	dfactorMess(t_atom);	// FUN
 
 
 	private:
@@ -53,7 +53,7 @@ class GEM_EXTERN GEMglBlendFunc : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 sfactorMessCallback (void*, t_floatarg);
-	  static void	 dfactorMessCallback (void*, t_floatarg);
+	  static void	 sfactorMessCallback (void*,t_symbol*,int,t_atom*);
+	  static void	 dfactorMessCallback (void*,t_symbol*,int,t_atom*);
 };
 #endif // for header file

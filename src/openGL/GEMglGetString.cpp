@@ -47,8 +47,8 @@ void GEMglGetString :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglGetString :: nameMess (t_float arg1) {	// FUN
-  name = (GLenum)arg1;
+void GEMglGetString :: nameMess (t_atom arg) {	// FUN
+  name = (GLenum)getGLdefine(&arg);
   setModified();
 }
 
@@ -56,9 +56,9 @@ void GEMglGetString :: nameMess (t_float arg1) {	// FUN
 // static member functions
 //
 void GEMglGetString :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, (t_method)&GEMglGetString::nameMessCallback, gensym("name"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&GEMglGetString::nameMessCallback, gensym("name"), A_GIMME, A_NULL);
 }
 
-void GEMglGetString :: nameMessCallback (void* data, t_floatarg arg0){
-  GetMyClass(data)->nameMess (arg0);
+void GEMglGetString :: nameMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+  if(argc==1)GetMyClass(data)->nameMess ( argv[0]);
 }

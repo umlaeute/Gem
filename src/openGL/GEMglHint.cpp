@@ -14,7 +14,7 @@
 
 #include "GEMglHint.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglHint , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglHint )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,10 +23,11 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglHint , t_floatarg, A_DEFFLOAT, t_floatarg, A_
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglHint :: GEMglHint	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		target((GLenum)arg0), 
-		mode((GLenum)arg1)
+GEMglHint :: GEMglHint (int argc, t_atom*argv) :
+		target(0), 
+		mode(0)
 {
+  if(2==argc){targetMess(argv[0]); modeMess(argv[1]);} else if (argc) GemException("invalid number of arguments");
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
@@ -48,13 +49,13 @@ void GEMglHint :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglHint :: targetMess (t_float arg1) {	// FUN
-	target = (GLenum)arg1;
+void GEMglHint :: targetMess (t_atom arg) {	// FUN
+	target = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
-void GEMglHint :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+void GEMglHint :: modeMess (t_atom arg) {	// FUN
+	mode = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -64,13 +65,13 @@ void GEMglHint :: modeMess (t_float arg1) {	// FUN
 //
 
 void GEMglHint :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglHint::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglHint::modeMessCallback,  	gensym("mode"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglHint::targetMessCallback,  	gensym("target"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglHint::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
 };
 
-void GEMglHint :: targetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->targetMess ( (t_float)    arg0);
+void GEMglHint :: targetMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->targetMess ( argv[0]);
 }
-void GEMglHint :: modeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->modeMess ( (t_float)    arg0);
+void GEMglHint :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->modeMess ( argv[0]);
 }

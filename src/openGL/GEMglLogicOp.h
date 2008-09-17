@@ -31,7 +31,7 @@ class GEM_EXTERN GEMglLogicOp : public GemGLBase
 
 	public:
 	  // Constructor
-	  GEMglLogicOp (t_float);	// CON
+  GEMglLogicOp (int, t_atom*); // CON
 
 	protected:
 	  // Destructor
@@ -41,7 +41,7 @@ class GEM_EXTERN GEMglLogicOp : public GemGLBase
 
 	// variables
 	  GLenum	opcode;		// VAR
-	  virtual void	opcodeMess(t_float);	// FUN
+	  virtual void	opcodeMess(t_atom);	// FUN
 
 
 	private:
@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglLogicOp : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 opcodeMessCallback (void*, t_floatarg);
+	  static void	 opcodeMessCallback (void*, t_symbol*,int,t_atom*);
 };
 #endif // for header file

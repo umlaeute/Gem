@@ -32,16 +32,19 @@ class GEM_EXTERN GLdefine : public CPPExtern
 
 	public:
 	  // Constructor
-	  GLdefine (t_symbol*);	// CON
+  GLdefine (int, t_atom*);	// CON
 
 	protected:
 	  // Destructor
 	  virtual ~GLdefine ();
 	  // Do the rendering
 
-	  t_symbol *m_symbol	;		// VAR
+    int     m_argc;
+	  t_atom *m_argv;
+
 	  virtual void	symMess(t_symbol*);	// FUN
-	  virtual void bangMess();	// FUN
+	  virtual void bangMess(void);	// FUN
+	  virtual void listMess(int,t_atom*);	// FUN
 
 
 	private:
@@ -51,5 +54,6 @@ class GEM_EXTERN GLdefine : public CPPExtern
 	  static void	 symMessCallback (void*, t_symbol*);
 	  static void	 anyMessCallback (void*, t_symbol*, int, t_atom*);
 	  static void	 bangMessCallback (void*);
+	  static void	 listMessCallback (void*, t_symbol*, int, t_atom*);
 };
 #endif // for header file

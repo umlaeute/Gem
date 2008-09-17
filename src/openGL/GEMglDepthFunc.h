@@ -31,7 +31,7 @@ class GEM_EXTERN GEMglDepthFunc : public GemGLBase
 
 	public:
 	  // Constructor
-	  GEMglDepthFunc (t_float);	// CON
+	  GEMglDepthFunc (int, t_atom*); // CON
 
 	protected:
 	  // Destructor
@@ -41,7 +41,7 @@ class GEM_EXTERN GEMglDepthFunc : public GemGLBase
 
 	// variables
 	  GLenum	func;		// VAR
-	  virtual void	funcMess(t_float);	// FUN
+	  virtual void	funcMess(t_atom);	// FUN
 
 
 	private:
@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglDepthFunc : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 funcMessCallback (void*, t_floatarg);
+	  static void	 funcMessCallback (void*,t_symbol*,int,t_atom*);
 };
 #endif // for header file

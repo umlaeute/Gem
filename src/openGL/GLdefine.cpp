@@ -14,7 +14,7 @@
 
 #include "GLdefine.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GLdefine , t_symbol*, A_DEFSYM)
+CPPEXTERN_NEW_WITH_GIMME ( GLdefine )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,8 +23,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GLdefine , t_symbol*, A_DEFSYM)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GLdefine :: GLdefine	(t_symbol *s) {
-  m_symbol = s;
+GLdefine :: GLdefine	(int argc, t_atom*argv) :
+  m_argc(0), m_argv(NULL),
+  m_outlet(NULL)
+{
+  listMess(argc, argv);
   m_outlet = outlet_new(this->x_obj, &s_float);
 }
 /////////////////////////////////////////////////////////
@@ -38,12 +41,43 @@ GLdefine :: ~GLdefine () {
 // Variables
 //
 void GLdefine :: symMess (t_symbol *s) {	// FUN
-  m_symbol = s;
-  bangMess();
+  t_atom ap;
+  SETSYMBOL(&ap, s);
+  listMess(1, &ap);
 }
 void GLdefine :: bangMess () {
-  t_float x = getGLdefine(m_symbol);
-  outlet_float(m_outlet, x);
+  if(m_outlet) {
+    switch (m_argc) {
+    case 0:
+      outlet_bang(m_outlet);
+      break;
+    case 1:
+      outlet_float(m_outlet, atom_getfloat(m_argv));
+      break;
+    default:
+      outlet_list(m_outlet, 0, m_argc, m_argv);
+      break;
+    }
+  }
+}
+
+void GLdefine :: listMess (int argc, t_atom*argv) {
+  int i=0;
+
+  if(m_argc) {
+    if(m_argv)freebytes(m_argv, sizeof(t_atom)*m_argc);
+    m_argv=NULL;
+    m_argc=0;
+  }
+  m_argc=argc;
+  m_argv=(t_atom*)getbytes(sizeof(t_atom)*m_argc);
+
+  for(i=0; i<argc; i++) {
+    t_float x = getGLdefine(argv+i);
+    SETFLOAT(m_argv+i, x);
+  }
+
+  bangMess();
 }
 
 
@@ -54,8 +88,8 @@ void GLdefine :: bangMess () {
 void GLdefine :: obj_setupCallback(t_class *classPtr) {
 	 class_addsymbol(classPtr, GLdefine::symMessCallback);
 	 class_addbang(classPtr, GLdefine::bangMessCallback);
+	 class_addlist(classPtr, GLdefine::listMessCallback);
 	 class_addanything(classPtr, GLdefine::anyMessCallback);
-
 };
 
 void GLdefine :: symMessCallback (void* data, t_symbol *arg0){
@@ -66,4 +100,7 @@ void GLdefine :: anyMessCallback (void* data, t_symbol *arg0, int argc, t_atom*a
 }
 void GLdefine :: bangMessCallback (void* data){
 	GetMyClass(data)->bangMess ();
+}
+void GLdefine :: listMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv){
+	GetMyClass(data)->listMess (argc, argv);
 }

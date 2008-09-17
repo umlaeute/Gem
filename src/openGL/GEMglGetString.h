@@ -41,7 +41,7 @@ class GEM_EXTERN GEMglGetString : public GemGLBase
   
   // variables
   GLenum name;		// VAR
-  virtual void	nameMess(t_float);	// FUN
+  virtual void	nameMess(t_atom);	// FUN
   
   // we need some inl/outets
   t_inlet *m_inlet;
@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglGetString : public GemGLBase
  private:
 
   // static member functions
-  static void	 nameMessCallback (void*, t_floatarg);
+  static void	 nameMessCallback (void*, t_symbol*,int,t_atom*);
 };
 #endif // for header file

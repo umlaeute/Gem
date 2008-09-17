@@ -14,7 +14,7 @@
 
 #include "GEMglStencilOp.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglStencilOp , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglStencilOp )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,11 +23,13 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglStencilOp , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglStencilOp :: GEMglStencilOp	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		fail((GLenum)arg0), 
-		zfail((GLenum)arg1), 
-		zpass((GLenum)arg2)
+GEMglStencilOp :: GEMglStencilOp	(int argc, t_atom*argv) :
+		fail(0), 
+		zfail(0), 
+		zpass(0)
 {
+  if(3==argc){failMess(argv[0]); zfailMess(argv[1]); zpassMess(argv[2]);}else if(argc) GemException("invalid number of arguments");
+
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("fail"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zfail"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zpass"));
@@ -51,18 +53,18 @@ void GEMglStencilOp :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglStencilOp :: failMess (t_float arg1) {	// FUN
-	fail = (GLenum)arg1;
+void GEMglStencilOp :: failMess (t_atom arg) {	// FUN
+	fail = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
-void GEMglStencilOp :: zfailMess (t_float arg1) {	// FUN
-	zfail = (GLenum)arg1;
+void GEMglStencilOp :: zfailMess (t_atom arg) {	// FUN
+	zfail = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
-void GEMglStencilOp :: zpassMess (t_float arg1) {	// FUN
-	zpass = (GLenum)arg1;
+void GEMglStencilOp :: zpassMess (t_atom arg) {	// FUN
+	zpass = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -72,17 +74,17 @@ void GEMglStencilOp :: zpassMess (t_float arg1) {	// FUN
 //
 
 void GEMglStencilOp :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::failMessCallback,  	gensym("fail"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::zfailMessCallback,  	gensym("zfail"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::zpassMessCallback,  	gensym("zpass"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::failMessCallback,  	gensym("fail"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::zfailMessCallback,  	gensym("zfail"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::zpassMessCallback,  	gensym("zpass"), A_GIMME, A_NULL);
 };
 
-void GEMglStencilOp :: failMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->failMess ( (t_float)    arg0);
+void GEMglStencilOp :: failMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->failMess ( argv[0]);
 }
-void GEMglStencilOp :: zfailMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->zfailMess ( (t_float)    arg0);
+void GEMglStencilOp :: zfailMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->zfailMess ( argv[0]);
 }
-void GEMglStencilOp :: zpassMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->zpassMess ( (t_float)    arg0);
+void GEMglStencilOp :: zpassMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->zpassMess ( argv[0]);
 }

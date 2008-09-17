@@ -94,12 +94,14 @@ GEM_EXTERN int getGLdefine(const char *fixname)
   const char *fc=fixname;
   int count=0;
 
-  while (*fc&&(count<MAXPDSTRING)){
+  while (*fc&&(count<MAXPDSTRING-1)){
     *c=toupper(*fc);
     c++;
     fc++;
     count++;
   }
+  *c=0;
+
   if (count<4)return _GL_UNDEFINED;
     if (!(name[0]=='G' && name[1]=='L' && name[2]=='_'))return _GL_UNDEFINED;
     name+=3;

@@ -14,7 +14,7 @@
 
 #include "GEMglDisableClientState.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDisableClientState , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglDisableClientState )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,9 +23,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDisableClientState , t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDisableClientState :: GEMglDisableClientState	(t_floatarg arg0=0) :
-		array((GLenum)arg0)
+GEMglDisableClientState :: GEMglDisableClientState (int argc, t_atom*argv) :
+		array(0)
 {
+  if(1==argc)arrayMess(argv[0]); else if(argc) GemException("invalid number of arguments");
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("array"));
 }
 /////////////////////////////////////////////////////////
@@ -51,8 +52,8 @@ void GEMglDisableClientState :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglDisableClientState :: arrayMess (t_float arg1) {	// FUN
-	array = (GLenum)arg1;
+void GEMglDisableClientState :: arrayMess (t_atom arg) {	// FUN
+	array = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -62,9 +63,9 @@ void GEMglDisableClientState :: arrayMess (t_float arg1) {	// FUN
 //
 
 void GEMglDisableClientState :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglDisableClientState::arrayMessCallback,  	gensym("array"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglDisableClientState::arrayMessCallback,  	gensym("array"), A_GIMME, A_NULL);
 }
 
-void GEMglDisableClientState :: arrayMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->arrayMess ( (t_float)    arg0);
+void GEMglDisableClientState :: arrayMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->arrayMess ( argv[0]);
 }

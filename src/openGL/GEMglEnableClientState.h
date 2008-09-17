@@ -31,7 +31,7 @@ class GEM_EXTERN GEMglEnableClientState : public GemGLBase
 
 	public:
 	  // Constructor
-	  GEMglEnableClientState (t_float);	// CON
+	  GEMglEnableClientState (int, t_atom*); // CON
 
 	protected:
 	  // Destructor
@@ -44,7 +44,7 @@ class GEM_EXTERN GEMglEnableClientState : public GemGLBase
 
 	// variables
 	  GLenum	array;		// VAR
-	  virtual void	arrayMess(t_float);	// FUN
+	  virtual void	arrayMess(t_atom);	// FUN
 
 
 	private:
@@ -53,6 +53,6 @@ class GEM_EXTERN GEMglEnableClientState : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 arrayMessCallback (void*, t_floatarg);
+	  static void	 arrayMessCallback (void*,t_symbol*,int,t_atom*);
 };
 #endif // for header file

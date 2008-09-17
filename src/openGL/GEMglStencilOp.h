@@ -31,7 +31,7 @@ class GEM_EXTERN GEMglStencilOp : public GemGLBase
 
 	public:
 	  // Constructor
-	  GEMglStencilOp (t_float, t_float, t_float);	// CON
+	  GEMglStencilOp (int, t_atom*); // CON
 
 	protected:
 	  // Destructor
@@ -41,13 +41,13 @@ class GEM_EXTERN GEMglStencilOp : public GemGLBase
 
 	// variables
 	  GLenum	fail;		// VAR
-	  virtual void	failMess(t_float);	// FUN
+	  virtual void	failMess(t_atom);	// FUN
 
 	  GLenum	zfail;		// VAR
-	  virtual void	zfailMess(t_float);	// FUN
+	  virtual void	zfailMess(t_atom);	// FUN
 
 	  GLenum	zpass;		// VAR
-	  virtual void	zpassMess(t_float);	// FUN
+	  virtual void	zpassMess(t_atom);	// FUN
 
 
 	private:
@@ -56,8 +56,8 @@ class GEM_EXTERN GEMglStencilOp : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 failMessCallback (void*, t_floatarg);
-	  static void	 zfailMessCallback (void*, t_floatarg);
-	  static void	 zpassMessCallback (void*, t_floatarg);
+	  static void	 failMessCallback (void*,t_symbol*,int,t_atom*);
+	  static void	 zfailMessCallback (void*,t_symbol*,int,t_atom*);
+	  static void	 zpassMessCallback (void*,t_symbol*,int,t_atom*);
 };
 #endif // for header file

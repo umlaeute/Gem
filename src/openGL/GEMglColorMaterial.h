@@ -31,7 +31,7 @@ class GEM_EXTERN GEMglColorMaterial : public GemGLBase
 
 	public:
 	  // Constructor
-	  GEMglColorMaterial (t_float, t_float);	// CON
+	  GEMglColorMaterial (int, t_atom*); // CON
 
 	protected:
 	  // Destructor
@@ -41,10 +41,10 @@ class GEM_EXTERN GEMglColorMaterial : public GemGLBase
 
 	// variables
 	  GLenum	face;		// VAR
-	  virtual void	faceMess(t_float);	// FUN
+	  virtual void	faceMess(t_atom);	// FUN
 
 	  GLenum	mode;		// VAR
-	  virtual void	modeMess(t_float);	// FUN
+	  virtual void	modeMess(t_atom);	// FUN
 
 
 	private:
@@ -53,7 +53,7 @@ class GEM_EXTERN GEMglColorMaterial : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 faceMessCallback (void*, t_floatarg);
-	  static void	 modeMessCallback (void*, t_floatarg);
+	  static void	 faceMessCallback (void*,t_symbol*,int,t_atom*);
+	  static void	 modeMessCallback (void*,t_symbol*,int,t_atom*);
 };
 #endif // for header file

@@ -14,7 +14,7 @@
 
 #include "GEMglFrontFace.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglFrontFace , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglFrontFace )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,9 +23,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglFrontFace , t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglFrontFace :: GEMglFrontFace	(t_floatarg arg0=0) :
-		mode((GLenum)arg0)
+GEMglFrontFace :: GEMglFrontFace (int argc, t_atom*argv) :
+		mode(0)
 {
+  if(1==argc)modeMess(argv[0]); else if(argc) GemException("invalid number of arguments");
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
 /////////////////////////////////////////////////////////
@@ -45,8 +46,8 @@ void GEMglFrontFace :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglFrontFace :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+void GEMglFrontFace :: modeMess (t_atom arg) {	// FUN
+	mode = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -56,9 +57,9 @@ void GEMglFrontFace :: modeMess (t_float arg1) {	// FUN
 //
 
 void GEMglFrontFace :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglFrontFace::modeMessCallback,  	gensym("mode"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglFrontFace::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
 };
 
-void GEMglFrontFace :: modeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->modeMess ( (t_float)    arg0);
+void GEMglFrontFace :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->modeMess ( argv[0]);
 }

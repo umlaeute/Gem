@@ -31,7 +31,7 @@ class GEM_EXTERN GEMglIsEnabled : public GemGLBase
 
     public:
   // Constructor
-  GEMglIsEnabled (t_floatarg);	// CON
+  GEMglIsEnabled (int, t_atom*); // CON
 
  protected:
   // Destructor
@@ -44,7 +44,7 @@ class GEM_EXTERN GEMglIsEnabled : public GemGLBase
 
   // variables
   GLenum cap;		// VAR
-  virtual void	capMess(t_float);	// FUN
+  virtual void	capMess(t_atom);	// FUN
 
   // we need some inlets
   t_inlet *m_inlet;
@@ -53,6 +53,6 @@ class GEM_EXTERN GEMglIsEnabled : public GemGLBase
  private:
 
   // static member functions
-  static void	 capMessCallback (void*, t_floatarg);
+  static void	 capMessCallback (void*,t_symbol*,int,t_atom*);
 };
 #endif // for header file

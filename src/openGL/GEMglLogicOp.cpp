@@ -14,7 +14,7 @@
 
 #include "GEMglLogicOp.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglLogicOp , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglLogicOp)
 
 /////////////////////////////////////////////////////////
 //
@@ -23,9 +23,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglLogicOp , t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglLogicOp :: GEMglLogicOp	(t_floatarg arg0=0) :
-		opcode((GLenum)arg0)
+GEMglLogicOp :: GEMglLogicOp	(int argc, t_atom*argv) :
+		opcode(0)
 {
+  if(1==argc)opcodeMess(argv[0]); else if(argc) GemException("invalid number of arguments");
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("opcode"));
 }
 /////////////////////////////////////////////////////////
@@ -45,8 +46,8 @@ void GEMglLogicOp :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglLogicOp :: opcodeMess (t_float arg1) {	// FUN
-	opcode = (GLenum)arg1;
+void GEMglLogicOp :: opcodeMess (t_atom arg) {	// FUN
+	opcode = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -56,9 +57,9 @@ void GEMglLogicOp :: opcodeMess (t_float arg1) {	// FUN
 //
 
 void GEMglLogicOp :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglLogicOp::opcodeMessCallback,  	gensym("opcode"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglLogicOp::opcodeMessCallback,  	gensym("opcode"), A_GIMME, A_NULL);
 };
 
-void GEMglLogicOp :: opcodeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->opcodeMess ( (t_float)    arg0);
+void GEMglLogicOp :: opcodeMessCallback (void* data, t_symbol*,int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->opcodeMess ( argv[0]);
 }

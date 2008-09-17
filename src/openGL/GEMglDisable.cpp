@@ -14,7 +14,7 @@
 
 #include "GEMglDisable.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDisable , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglDisable )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,9 +23,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDisable , t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDisable :: GEMglDisable	(t_floatarg arg0=0) :
-		cap((GLenum)arg0)
+GEMglDisable :: GEMglDisable (int argc, t_atom*argv) :
+		cap(0)
 {
+  if(1==argc)capMess(argv[0]); else if(argc) GemException("invalid number of arguments");
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cap"));
 }
 /////////////////////////////////////////////////////////
@@ -45,8 +46,8 @@ void GEMglDisable :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglDisable :: capMess (t_float arg1) {	// FUN
-	cap = (GLenum)arg1;
+void GEMglDisable :: capMess (t_atom arg) {	// FUN
+	cap = (GLenum)getGLdefine(&arg);
 	setModified();
 }
 
@@ -56,9 +57,9 @@ void GEMglDisable :: capMess (t_float arg1) {	// FUN
 //
 
 void GEMglDisable :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglDisable::capMessCallback,  	gensym("cap"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglDisable::capMessCallback,  	gensym("cap"), A_GIMME, A_NULL);
 };
 
-void GEMglDisable :: capMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->capMess ( (t_float)    arg0);
+void GEMglDisable :: capMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+	if(argc==1)GetMyClass(data)->capMess ( argv[0]);
 }
