@@ -28,7 +28,7 @@ GEMglStencilOp :: GEMglStencilOp	(int argc, t_atom*argv) :
 		zfail(0), 
 		zpass(0)
 {
-  if(3==argc){failMess(argv[0]); zfailMess(argv[1]); zpassMess(argv[2]);}else if(argc) GemException("invalid number of arguments");
+  if(3==argc){failMess(argv[0]); zfailMess(argv[1]); zpassMess(argv[2]);}else if(argc) throw(GemException("invalid number of arguments"));
 
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("fail"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zfail"));

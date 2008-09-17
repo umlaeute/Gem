@@ -27,7 +27,7 @@ GEMglBlendFunc :: GEMglBlendFunc (int argc, t_atom*argv) :
 		sfactor(0), 
 		dfactor(0)
 {
-  if(2==argc){sfactorMess(argv[0]); dfactorMess(argv[1]);} else if (argc) GemException("invalid number of arguments");
+  if(2==argc){sfactorMess(argv[0]); dfactorMess(argv[1]);} else if (argc) throw(GemException("invalid number of arguments"));
 
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("sfactor"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("dfactor"));

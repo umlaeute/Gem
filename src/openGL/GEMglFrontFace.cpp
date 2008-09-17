@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglFrontFace )
 GEMglFrontFace :: GEMglFrontFace (int argc, t_atom*argv) :
 		mode(0)
 {
-  if(1==argc)modeMess(argv[0]); else if(argc) GemException("invalid number of arguments");
+  if(1==argc)modeMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
 /////////////////////////////////////////////////////////

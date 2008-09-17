@@ -27,7 +27,7 @@ GEMglPolygonMode :: GEMglPolygonMode	(int argc, t_atom*argv) :
 		face(0), 
 		mode(0)
 {
-  if(2==argc){faceMess(argv[0]); modeMess(argv[1]);} else if (argc) GemException("invalid number of arguments");
+  if(2==argc){faceMess(argv[0]); modeMess(argv[1]);} else if (argc) throw(GemException("invalid number of arguments"));
 
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("face"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
