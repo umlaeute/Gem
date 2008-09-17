@@ -10,8 +10,7 @@
 #ifndef INCLUDE_GEM_GLUSEPROGRAMOBJECTARB_H_
 #define INCLUDE_GEM_GLUSEPROGRAMOBJECTARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -23,9 +22,9 @@
 	"glUseProgramObjectARB( GLenum program )"
  */
 
-class GEM_EXTERN GEMglUseProgramObjectARB : public GemBase
+class GEM_EXTERN GEMglUseProgramObjectARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglUseProgramObjectARB, GemBase)
+	CPPEXTERN_HEADER(GEMglUseProgramObjectARB, GemGLBase)
 
 	public:
 	  // Constructor

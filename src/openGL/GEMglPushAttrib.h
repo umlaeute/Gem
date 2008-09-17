@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPUSHATTRIB_H_
 #define INCLUDE_GEM_GLPUSHATTRIB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPushAttrib( GLbitfield mask)"
  */
 
-class GEM_EXTERN GEMglPushAttrib : public GemBase
+class GEM_EXTERN GEMglPushAttrib : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPushAttrib, GemBase)
+	CPPEXTERN_HEADER(GEMglPushAttrib, GemGLBase)
 
 	public:
 	  // Constructor

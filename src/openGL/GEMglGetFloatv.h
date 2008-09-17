@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLGETPOINTERV_H_
 #define INCLUDE_GEM_GLGETPOINTERV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
   CLASS
@@ -26,9 +25,9 @@
   "glGetFloatv( GLenum pname, GLfloat *params)"
 */
 
-class GEM_EXTERN GEMglGetFloatv : public GemBase
+class GEM_EXTERN GEMglGetFloatv : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglGetFloatv, GemBase)
+  CPPEXTERN_HEADER(GEMglGetFloatv, GemGLBase)
 
     public:
   // Constructor

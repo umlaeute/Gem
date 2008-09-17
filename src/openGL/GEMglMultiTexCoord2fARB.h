@@ -11,8 +11,7 @@
 #ifndef INCLUDE_GEM_GLMULTITEXCOORD2FARB_H_
 #define INCLUDE_GEM_GLMULTITEXCOORD2FARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -24,9 +23,9 @@
 	"glMultiTexCoord2fARB( GLenum texUnit, GLfloat s, GLfloat t )"
  */
 
-class GEM_EXTERN GEMglMultiTexCoord2fARB : public GemBase
+class GEM_EXTERN GEMglMultiTexCoord2fARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMultiTexCoord2fARB, GemBase)
+	CPPEXTERN_HEADER(GEMglMultiTexCoord2fARB, GemGLBase)
 
 	public:
 	  // Constructor

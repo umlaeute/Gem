@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLLINESTIPPLE_H_
 #define INCLUDE_GEM_GLLINESTIPPLE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glLineStipple( GLint factor, GLushort pattern)"
  */
 
-class GEM_EXTERN GEMglLineStipple : public GemBase
+class GEM_EXTERN GEMglLineStipple : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLineStipple, GemBase)
+	CPPEXTERN_HEADER(GEMglLineStipple, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLLOGICOP_H_
 #define INCLUDE_GEM_GLLOGICOP_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glLogicOp( GLenum opcode)"
  */
 
-class GEM_EXTERN GEMglLogicOp : public GemBase
+class GEM_EXTERN GEMglLogicOp : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLogicOp, GemBase)
+	CPPEXTERN_HEADER(GEMglLogicOp, GemGLBase)
 
 	public:
 	  // Constructor

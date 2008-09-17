@@ -11,8 +11,7 @@
 #ifndef INCLUDE_GEM_GLPROGRAMENVPARAMETER4FVARB_H_
 #define INCLUDE_GEM_GLPROGRAMENVPARAMETER4FVARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -24,9 +23,9 @@
 	"glProgramLocalParameter4fvARB( GLenum target, GLuint index, GLfloat *params)"
  */
 
-class GEM_EXTERN GEMglProgramLocalParameter4fvARB : public GemBase
+class GEM_EXTERN GEMglProgramLocalParameter4fvARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglProgramLocalParameter4fvARB, GemBase)
+	CPPEXTERN_HEADER(GEMglProgramLocalParameter4fvARB, GemGLBase)
 
 	public:
 	  // Constructor

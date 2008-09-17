@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLRECTI_H_
 #define INCLUDE_GEM_GLRECTI_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glRecti( GLint x1, GLint y1, GLint x2, GLint y2)"
  */
 
-class GEM_EXTERN GEMglRecti : public GemBase
+class GEM_EXTERN GEMglRecti : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglRecti, GemBase)
+	CPPEXTERN_HEADER(GEMglRecti, GemGLBase)
 
 	public:
 	  // Constructor

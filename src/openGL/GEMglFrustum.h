@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLFRUSTUM_H_
 #define INCLUDE_GEM_GLFRUSTUM_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar)"
  */
 
-class GEM_EXTERN GEMglFrustum : public GemBase
+class GEM_EXTERN GEMglFrustum : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFrustum, GemBase)
+	CPPEXTERN_HEADER(GEMglFrustum, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCULLFACE_H_
 #define INCLUDE_GEM_GLCULLFACE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glCullFace( GLenum mode)"
  */
 
-class GEM_EXTERN GEMglCullFace : public GemBase
+class GEM_EXTERN GEMglCullFace : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglCullFace, GemBase)
+	CPPEXTERN_HEADER(GEMglCullFace, GemGLBase)
 
 	public:
 	  // Constructor

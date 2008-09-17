@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPASSTHROUGH_H_
 #define INCLUDE_GEM_GLPASSTHROUGH_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPassThrough( GLfloat token)"
  */
 
-class GEM_EXTERN GEMglPassThrough : public GemBase
+class GEM_EXTERN GEMglPassThrough : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPassThrough, GemBase)
+	CPPEXTERN_HEADER(GEMglPassThrough, GemGLBase)
 
 	public:
 	  // Constructor

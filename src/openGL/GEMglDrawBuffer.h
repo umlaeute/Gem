@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLDRAWBUFFER_H_
 #define INCLUDE_GEM_GLDRAWBUFFER_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glDrawBuffer( GLenum mode)"
  */
 
-class GEM_EXTERN GEMglDrawBuffer : public GemBase
+class GEM_EXTERN GEMglDrawBuffer : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDrawBuffer, GemBase)
+	CPPEXTERN_HEADER(GEMglDrawBuffer, GemGLBase)
 
 	public:
 	  // Constructor

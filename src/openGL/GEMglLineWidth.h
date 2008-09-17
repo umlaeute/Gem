@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLLINEWIDTH_H_
 #define INCLUDE_GEM_GLLINEWIDTH_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glLineWidth( GLfloat width)"
  */
 
-class GEM_EXTERN GEMglLineWidth : public GemBase
+class GEM_EXTERN GEMglLineWidth : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLineWidth, GemBase)
+	CPPEXTERN_HEADER(GEMglLineWidth, GemGLBase)
 
 	public:
 	  // Constructor

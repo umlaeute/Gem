@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLMAPGRID2F_H_
 #define INCLUDE_GEM_GLMAPGRID2F_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glMapGrid2f( GLint un, GLfloat u1, GLfloat u2, GLint vn, GLfloat v1, GLfloat v2)"
  */
 
-class GEM_EXTERN GEMglMapGrid2f : public GemBase
+class GEM_EXTERN GEMglMapGrid2f : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMapGrid2f, GemBase)
+	CPPEXTERN_HEADER(GEMglMapGrid2f, GemGLBase)
 
 	public:
 	  // Constructor

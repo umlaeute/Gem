@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCLEARINDEX_H_
 #define INCLUDE_GEM_GLCLEARINDEX_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glClearIndex( GLfloat c)"
  */
 
-class GEM_EXTERN GEMglClearIndex : public GemBase
+class GEM_EXTERN GEMglClearIndex : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglClearIndex, GemBase)
+	CPPEXTERN_HEADER(GEMglClearIndex, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLALPHAFUNC_H_
 #define INCLUDE_GEM_GLALPHAFUNC_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glAlphaFunc( GLenum func, GLclampf ref)"
  */
 
-class GEM_EXTERN GEMglAlphaFunc : public GemBase
+class GEM_EXTERN GEMglAlphaFunc : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglAlphaFunc, GemBase)
+	CPPEXTERN_HEADER(GEMglAlphaFunc, GemGLBase)
 
 	public:
 	  // Constructor

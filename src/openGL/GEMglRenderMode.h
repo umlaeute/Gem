@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLRENDERMODE_H_
 #define INCLUDE_GEM_GLRENDERMODE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glRenderMode( GLenum mode )"
  */
 
-class GEM_EXTERN GEMglRenderMode : public GemBase
+class GEM_EXTERN GEMglRenderMode : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglRenderMode, GemBase)
+	CPPEXTERN_HEADER(GEMglRenderMode, GemGLBase)
 
 	public:
 	// Constructor

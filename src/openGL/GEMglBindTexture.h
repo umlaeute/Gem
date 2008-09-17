@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLBINDTEXTURE_H_
 #define INCLUDE_GEM_GLBINDTEXTURE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glBindTexture( GLenum target, GLuint texture)"
  */
 
-class GEM_EXTERN GEMglBindTexture : public GemBase
+class GEM_EXTERN GEMglBindTexture : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglBindTexture, GemBase)
+	CPPEXTERN_HEADER(GEMglBindTexture, GemGLBase)
 
 	public:
 	  // Constructor

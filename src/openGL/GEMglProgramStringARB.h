@@ -11,8 +11,7 @@
 #ifndef INCLUDE_GEM_GLPROGRAMSTRINGARB_H_
 #define INCLUDE_GEM_GLPROGRAMSTRINGARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -24,9 +23,9 @@
 	"glProgramStringARB( GLenum target, GLenum format, GLsizei len, GLvoid *string)"
  */
 
-class GEM_EXTERN GEMglProgramStringARB : public GemBase
+class GEM_EXTERN GEMglProgramStringARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglProgramStringARB, GemBase)
+	CPPEXTERN_HEADER(GEMglProgramStringARB, GemGLBase)
 
 	public:
 	  // Constructor

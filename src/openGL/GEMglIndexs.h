@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLINDEXS_H_
 #define INCLUDE_GEM_GLINDEXS_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glIndexs( GLshort c)"
  */
 
-class GEM_EXTERN GEMglIndexs : public GemBase
+class GEM_EXTERN GEMglIndexs : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglIndexs, GemBase)
+	CPPEXTERN_HEADER(GEMglIndexs, GemGLBase)
 
 	public:
 	  // Constructor

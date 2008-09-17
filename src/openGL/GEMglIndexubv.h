@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLINDEXUBV_H_
 #define INCLUDE_GEM_GLINDEXUBV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glIndexubv( GLubyte *c )"
  */
 
-class GEM_EXTERN GEMglIndexubv : public GemBase
+class GEM_EXTERN GEMglIndexubv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglIndexubv, GemBase)
+	CPPEXTERN_HEADER(GEMglIndexubv, GemGLBase)
 
 	public:
 	  // Constructor

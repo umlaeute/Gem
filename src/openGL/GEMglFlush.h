@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLFLUSH_H_
 #define INCLUDE_GEM_GLFLUSH_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glFlush()"
  */
 
-class GEM_EXTERN GEMglFlush : public GemBase
+class GEM_EXTERN GEMglFlush : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFlush, GemBase)
+	CPPEXTERN_HEADER(GEMglFlush, GemGLBase)
 
 	public:
 	  // Constructor

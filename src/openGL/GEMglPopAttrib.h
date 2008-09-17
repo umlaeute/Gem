@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPOPATTRIB_H_
 #define INCLUDE_GEM_GLPOPATTRIB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPopAttrib()"
  */
 
-class GEM_EXTERN GEMglPopAttrib : public GemBase
+class GEM_EXTERN GEMglPopAttrib : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPopAttrib, GemBase)
+	CPPEXTERN_HEADER(GEMglPopAttrib, GemGLBase)
 
 	public:
 	  // Constructor

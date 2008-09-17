@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLDRAWELEMENTS_H_
 #define INCLUDE_GEM_GLDRAWELEMENTS_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glDrawElements( GLenum mode, GLsizei count, GLenum type, GLvoid *indices)"
  */
 
-class GEM_EXTERN GEMglDrawElements : public GemBase
+class GEM_EXTERN GEMglDrawElements : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDrawElements, GemBase)
+	CPPEXTERN_HEADER(GEMglDrawElements, GemGLBase)
 
 	public:
 	  // Constructor

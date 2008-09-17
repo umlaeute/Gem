@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLGETMAPIV_H_
 #define INCLUDE_GEM_GLGETMAPIV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glGetMapiv( GLenum target, GLenum query, GLfloat *v)"
  */
 
-class GEM_EXTERN GEMglGetMapiv : public GemBase
+class GEM_EXTERN GEMglGetMapiv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGetMapiv, GemBase)
+	CPPEXTERN_HEADER(GEMglGetMapiv, GemGLBase)
 
 	public:
 	  // Constructor

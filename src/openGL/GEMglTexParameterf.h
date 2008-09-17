@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLTEXPARAMETERF_H_
 #define INCLUDE_GEM_GLTEXPARAMETERF_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glTexParameterf( GLenum target, GLenum pname, GLfloat param)"
  */
 
-class GEM_EXTERN GEMglTexParameterf : public GemBase
+class GEM_EXTERN GEMglTexParameterf : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglTexParameterf, GemBase)
+	CPPEXTERN_HEADER(GEMglTexParameterf, GemGLBase)
 
 	public:
 	  // Constructor

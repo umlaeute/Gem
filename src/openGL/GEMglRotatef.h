@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLROTATEF_H_
 #define INCLUDE_GEM_GLROTATEF_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glRotatef( GLfloat angle, GLfloat x, GLfloat y, GLfloat z)"
  */
 
-class GEM_EXTERN GEMglRotatef : public GemBase
+class GEM_EXTERN GEMglRotatef : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglRotatef, GemBase)
+	CPPEXTERN_HEADER(GEMglRotatef, GemGLBase)
 
 	public:
 	  // Constructor

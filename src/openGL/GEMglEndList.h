@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLEND_H_
 #define INCLUDE_GEM_GLEND_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glEndList()"
  */
 
-class GEM_EXTERN GEMglEndList : public GemBase
+class GEM_EXTERN GEMglEndList : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEndList, GemBase)
+	CPPEXTERN_HEADER(GEMglEndList, GemGLBase)
 
 	public:
 	  // Constructor

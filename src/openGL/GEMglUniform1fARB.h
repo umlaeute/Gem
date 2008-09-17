@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLUNIFORM1FARB_H_
 #define INCLUDE_GEM_GLUNIFORM1FARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glUniform1fARB( GLint location, GLfloat val)"
  */
 
-class GEM_EXTERN GEMglUniform1fARB : public GemBase
+class GEM_EXTERN GEMglUniform1fARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglUniform1fARB, GemBase)
+	CPPEXTERN_HEADER(GEMglUniform1fARB, GemGLBase)
 
 	public:
 	  // Constructor

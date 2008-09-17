@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLTRANSLATEF_H_
 #define INCLUDE_GEM_GLTRANSLATEF_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glTranslatef( GLfloat x, GLfloat y, GLfloat z)"
  */
 
-class GEM_EXTERN GEMglTranslatef : public GemBase
+class GEM_EXTERN GEMglTranslatef : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglTranslatef, GemBase)
+	CPPEXTERN_HEADER(GEMglTranslatef, GemGLBase)
 
 	public:
 	  // Constructor

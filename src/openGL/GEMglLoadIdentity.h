@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLLOADIDENTITY_H_
 #define INCLUDE_GEM_GLLOADIDENTITY_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glLoadIdentity()"
  */
 
-class GEM_EXTERN GEMglLoadIdentity : public GemBase
+class GEM_EXTERN GEMglLoadIdentity : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLoadIdentity, GemBase)
+	CPPEXTERN_HEADER(GEMglLoadIdentity, GemGLBase)
 
 	public:
 	  // Constructor

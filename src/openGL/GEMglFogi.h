@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLFOGI_H_
 #define INCLUDE_GEM_GLFOGI_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glFogi( GLenum pname, GLint param)"
  */
 
-class GEM_EXTERN GEMglFogi : public GemBase
+class GEM_EXTERN GEMglFogi : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFogi, GemBase)
+	CPPEXTERN_HEADER(GEMglFogi, GemGLBase)
 
 	public:
 	  // Constructor

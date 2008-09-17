@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOPYTEXIMAGE2D_H_
 #define INCLUDE_GEM_GLCOPYTEXIMAGE2D_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glCopyTexImage2D( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border)"
  */
 
-class GEM_EXTERN GEMglCopyTexImage2D : public GemBase
+class GEM_EXTERN GEMglCopyTexImage2D : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglCopyTexImage2D, GemBase)
+	CPPEXTERN_HEADER(GEMglCopyTexImage2D, GemGLBase)
 
 	public:
 	  // Constructor

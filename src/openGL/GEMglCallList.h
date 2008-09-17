@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCALLLIST_H_
 #define INCLUDE_GEM_GLCALLLIST_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glCallList( GLuint list )"
  */
 
-class GEM_EXTERN GEMglCallList : public GemBase
+class GEM_EXTERN GEMglCallList : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglCallList, GemBase)
+	CPPEXTERN_HEADER(GEMglCallList, GemGLBase)
 
 	public:
 	  // Constructor

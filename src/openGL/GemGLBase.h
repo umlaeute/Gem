@@ -14,7 +14,7 @@
 #include "Base/GemGLUtil.h"
 #include "Base/GemBase.h"
 
-class GEM_EXTERN GEMglBase : public GemBase
+class GEM_EXTERN GemGLBase : public GemBase
 {
 
 };

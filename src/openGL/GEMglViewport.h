@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLVIEWPORT_H_
 #define INCLUDE_GEM_GLVIEWPORT_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glViewport( GLint x, GLint y, GLsizei width, GLsizei height)"
  */
 
-class GEM_EXTERN GEMglViewport : public GemBase
+class GEM_EXTERN GEMglViewport : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglViewport, GemBase)
+	CPPEXTERN_HEADER(GEMglViewport, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPIXELSTOREI_H_
 #define INCLUDE_GEM_GLPIXELSTOREI_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPixelStorei( GLenum pname, GLint param)"
  */
 
-class GEM_EXTERN GEMglPixelStorei : public GemBase
+class GEM_EXTERN GEMglPixelStorei : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPixelStorei, GemBase)
+	CPPEXTERN_HEADER(GEMglPixelStorei, GemGLBase)
 
 	public:
 	  // Constructor

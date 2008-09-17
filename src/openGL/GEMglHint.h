@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLHINT_H_
 #define INCLUDE_GEM_GLHINT_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glHint( GLenum target, GLenum mode)"
  */
 
-class GEM_EXTERN GEMglHint : public GemBase
+class GEM_EXTERN GEMglHint : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglHint, GemBase)
+	CPPEXTERN_HEADER(GEMglHint, GemGLBase)
 
 	public:
 	  // Constructor

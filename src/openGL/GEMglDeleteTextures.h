@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLDELETETEXTURES_H_
 #define INCLUDE_GEM_GLDELETETEXTURES_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glDeleteTextures( GLsizei n, GLuint *textures)"
  */
 
-class GEM_EXTERN GEMglDeleteTextures : public GemBase
+class GEM_EXTERN GEMglDeleteTextures : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDeleteTextures, GemBase)
+	CPPEXTERN_HEADER(GEMglDeleteTextures, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLFINISH_H_
 #define INCLUDE_GEM_GLFINISH_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glFinish()"
  */
 
-class GEM_EXTERN GEMglFinish : public GemBase
+class GEM_EXTERN GEMglFinish : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFinish, GemBase)
+	CPPEXTERN_HEADER(GEMglFinish, GemGLBase)
 
 	public:
 	  // Constructor

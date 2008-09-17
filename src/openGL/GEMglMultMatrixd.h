@@ -11,8 +11,7 @@
 #ifndef INCLUDE_GEM_GLMULTMATRIXF_H_
 #define INCLUDE_GEM_GLMULTMATRIXF_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -24,9 +23,9 @@
 	"glMultMatrixd( GLfloat matrix)"
  */
 
-class GEM_EXTERN GEMglMultMatrixd : public GemBase
+class GEM_EXTERN GEMglMultMatrixd : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMultMatrixd, GemBase)
+	CPPEXTERN_HEADER(GEMglMultMatrixd, GemGLBase)
 
 	public:
 	  // Constructor

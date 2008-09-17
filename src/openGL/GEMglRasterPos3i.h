@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLRASTERPOS3I_H_
 #define INCLUDE_GEM_GLRASTERPOS3I_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glRasterPos3i( GLint x, GLint y, GLint z)"
  */
 
-class GEM_EXTERN GEMglRasterPos3i : public GemBase
+class GEM_EXTERN GEMglRasterPos3i : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglRasterPos3i, GemBase)
+	CPPEXTERN_HEADER(GEMglRasterPos3i, GemGLBase)
 
 	public:
 	  // Constructor

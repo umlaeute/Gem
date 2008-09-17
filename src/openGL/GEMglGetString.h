@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLGETSTRING_H_
 #define INCLUDE_GEM_GLGETSTRING_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glGetString( glGetString  GLenum name )"
  */
 
-class GEM_EXTERN GEMglGetString : public GemBase
+class GEM_EXTERN GEMglGetString : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglGetString, GemBase)
+  CPPEXTERN_HEADER(GEMglGetString, GemGLBase)
 
     public:
   // Constructor

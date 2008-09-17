@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCLEARDEPTH_H_
 #define INCLUDE_GEM_GLCLEARDEPTH_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glClearDepth( GLclampd depth)"
  */
 
-class GEM_EXTERN GEMglClearDepth : public GemBase
+class GEM_EXTERN GEMglClearDepth : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglClearDepth, GemBase)
+	CPPEXTERN_HEADER(GEMglClearDepth, GemGLBase)
 
 	public:
 	  // Constructor

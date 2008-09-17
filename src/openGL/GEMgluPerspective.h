@@ -12,8 +12,7 @@
 #ifndef INCLUDE_GEM_GLUPERSPECTIVE_H_
 #define INCLUDE_GEM_GLUPERSPECTIVE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -25,9 +24,9 @@
 	"gluPerspective( GLdouble fovy, GLdouble aspect, GLdouble near, GLdouble far)"
  */
 
-class GEM_EXTERN GEMgluPerspective : public GemBase
+class GEM_EXTERN GEMgluPerspective : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMgluPerspective, GemBase)
+	CPPEXTERN_HEADER(GEMgluPerspective, GemGLBase)
 
 	public:
 	  // Constructor

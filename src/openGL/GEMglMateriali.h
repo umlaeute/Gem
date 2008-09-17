@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLMATERIALI_H_
 #define INCLUDE_GEM_GLMATERIALI_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glMateriali( GLenum face, GLenum pname, GLint param)"
  */
 
-class GEM_EXTERN GEMglMateriali : public GemBase
+class GEM_EXTERN GEMglMateriali : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMateriali, GemBase)
+	CPPEXTERN_HEADER(GEMglMateriali, GemGLBase)
 
 	public:
 	  // Constructor

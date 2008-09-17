@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPOPCLIENTATTRIB_H_
 #define INCLUDE_GEM_GLPOPCLIENTATTRIB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPopClientAttrib( void)"
  */
 
-class GEM_EXTERN GEMglPopClientAttrib : public GemBase
+class GEM_EXTERN GEMglPopClientAttrib : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPopClientAttrib, GemBase)
+	CPPEXTERN_HEADER(GEMglPopClientAttrib, GemGLBase)
 
 	public:
 	  // Constructor

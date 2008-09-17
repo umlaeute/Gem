@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLEVALPOINT1_H_
 #define INCLUDE_GEM_GLEVALPOINT1_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glEvalPoint1( GLint i)"
  */
 
-class GEM_EXTERN GEMglEvalPoint1 : public GemBase
+class GEM_EXTERN GEMglEvalPoint1 : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEvalPoint1, GemBase)
+	CPPEXTERN_HEADER(GEMglEvalPoint1, GemGLBase)
 
 	public:
 	  // Constructor

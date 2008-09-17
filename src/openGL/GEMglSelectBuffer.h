@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLSELECTBUFFER_H_
 #define INCLUDE_GEM_GLSELECTBUFFER_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glSelectBuffer( GLsizei size, GLuint *buffer)"
  */
 
-class GEM_EXTERN GEMglSelectBuffer : public GemBase
+class GEM_EXTERN GEMglSelectBuffer : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglSelectBuffer, GemBase)
+	CPPEXTERN_HEADER(GEMglSelectBuffer, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLEVALMESH2_H_
 #define INCLUDE_GEM_GLEVALMESH2_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glEvalMesh2( GLenum mode, GLint i1, GLint i2, GLint j1, GLint j2)"
  */
 
-class GEM_EXTERN GEMglEvalMesh2 : public GemBase
+class GEM_EXTERN GEMglEvalMesh2 : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEvalMesh2, GemBase)
+	CPPEXTERN_HEADER(GEMglEvalMesh2, GemGLBase)
 
 	public:
 	  // Constructor

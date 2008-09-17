@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPOPNAME_H_
 #define INCLUDE_GEM_GLPOPNAME_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPopName( void)"
  */
 
-class GEM_EXTERN GEMglPopName : public GemBase
+class GEM_EXTERN GEMglPopName : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPopName, GemBase)
+	CPPEXTERN_HEADER(GEMglPopName, GemGLBase)
 
 	public:
 	  // Constructor

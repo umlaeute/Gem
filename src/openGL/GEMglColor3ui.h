@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOLOR3UI_H_
 #define INCLUDE_GEM_GLCOLOR3UI_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glColor3ui( GLuint red, GLuint green, GLuint blue)"
  */
 
-class GEM_EXTERN GEMglColor3ui : public GemBase
+class GEM_EXTERN GEMglColor3ui : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglColor3ui, GemBase)
+	CPPEXTERN_HEADER(GEMglColor3ui, GemGLBase)
 
 	public:
 	  // Constructor

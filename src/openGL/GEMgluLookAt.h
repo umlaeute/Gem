@@ -12,7 +12,7 @@
 #ifndef INCLUDE_GEM_GLULOOKAT_H_
 #define INCLUDE_GEM_GLULOOKAT_H_
 
-#include "GEMglBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -24,9 +24,9 @@
 	"void gluLookAt (GLdouble eyeX, GLdouble eyeY, GLdouble eyeZ, GLdouble centerX, GLdouble centerY, GLdouble centerZ, GLdouble upX, GLdouble upY, GLdouble upZ);"
  */
 
-class GEM_EXTERN GEMgluLookAt : public GEMglBase
+class GEM_EXTERN GEMgluLookAt : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMgluLookAt, GEMglBase)
+	CPPEXTERN_HEADER(GEMgluLookAt, GemGLBase)
 
 	public:
 	  // Constructor

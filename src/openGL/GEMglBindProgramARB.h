@@ -10,8 +10,7 @@
 #ifndef INCLUDE_GEM_GLBINDPROGRAMARB_H_
 #define INCLUDE_GEM_GLBINDPROGRAMARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -23,9 +22,9 @@
 	"glBindProgramARB( GLenum target, GLuint program)"
  */
 
-class GEM_EXTERN GEMglBindProgramARB : public GemBase
+class GEM_EXTERN GEMglBindProgramARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglBindProgramARB, GemBase)
+	CPPEXTERN_HEADER(GEMglBindProgramARB, GemGLBase)
 
 	public:
 	  // Constructor

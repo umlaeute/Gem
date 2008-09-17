@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPUSHNAME_H_
 #define INCLUDE_GEM_GLPUSHNAME_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPushName( GLuint name)"
  */
 
-class GEM_EXTERN GEMglPushName : public GemBase
+class GEM_EXTERN GEMglPushName : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPushName, GemBase)
+	CPPEXTERN_HEADER(GEMglPushName, GemGLBase)
 
 	public:
 	  // Constructor

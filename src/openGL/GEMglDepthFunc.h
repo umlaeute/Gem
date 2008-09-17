@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLDEPTHFUNC_H_
 #define INCLUDE_GEM_GLDEPTHFUNC_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glDepthFunc( GLenum func)"
  */
 
-class GEM_EXTERN GEMglDepthFunc : public GemBase
+class GEM_EXTERN GEMglDepthFunc : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDepthFunc, GemBase)
+	CPPEXTERN_HEADER(GEMglDepthFunc, GemGLBase)
 
 	public:
 	  // Constructor

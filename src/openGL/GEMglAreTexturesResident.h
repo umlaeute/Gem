@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLARETEXTURESRESIDENT_H_
 #define INCLUDE_GEM_GLARETEXTURESRESIDENT_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glAreTexturesResident( glAreTexturesResident  GLsizei n, GLuint *textures, GLboolean *residences )"
  */
 
-class GEM_EXTERN GEMglAreTexturesResident : public GemBase
+class GEM_EXTERN GEMglAreTexturesResident : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglAreTexturesResident, GemBase)
+	CPPEXTERN_HEADER(GEMglAreTexturesResident, GemGLBase)
 
 	public:
 	  // Constructor

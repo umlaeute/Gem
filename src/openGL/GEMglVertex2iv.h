@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLVERTEX2IV_H_
 #define INCLUDE_GEM_GLVERTEX2IV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glVertex2iv( GLint* v)"
  */
 
-class GEM_EXTERN GEMglVertex2iv : public GemBase
+class GEM_EXTERN GEMglVertex2iv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglVertex2iv, GemBase)
+	CPPEXTERN_HEADER(GEMglVertex2iv, GemGLBase)
 
 	public:
 	  // Constructor

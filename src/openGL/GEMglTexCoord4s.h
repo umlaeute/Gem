@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLTEXCOORD4S_H_
 #define INCLUDE_GEM_GLTEXCOORD4S_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glTexCoord4s( GLshort s, GLshort t, GLshort r, GLshort q)"
  */
 
-class GEM_EXTERN GEMglTexCoord4s : public GemBase
+class GEM_EXTERN GEMglTexCoord4s : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglTexCoord4s, GemBase)
+	CPPEXTERN_HEADER(GEMglTexCoord4s, GemGLBase)
 
 	public:
 	  // Constructor

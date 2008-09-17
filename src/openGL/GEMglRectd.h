@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLRECTD_H_
 #define INCLUDE_GEM_GLRECTD_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glRectd( GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2)"
  */
 
-class GEM_EXTERN GEMglRectd : public GemBase
+class GEM_EXTERN GEMglRectd : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglRectd, GemBase)
+	CPPEXTERN_HEADER(GEMglRectd, GemGLBase)
 
 	public:
 	  // Constructor

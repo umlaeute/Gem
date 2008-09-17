@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLGETMAPFV_H_
 #define INCLUDE_GEM_GLGETMAPFV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glGetMapfv( GLenum target, GLenum query, GLfloat *v)"
  */
 
-class GEM_EXTERN GEMglGetMapfv : public GemBase
+class GEM_EXTERN GEMglGetMapfv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGetMapfv, GemBase)
+	CPPEXTERN_HEADER(GEMglGetMapfv, GemGLBase)
 
 	public:
 	  // Constructor

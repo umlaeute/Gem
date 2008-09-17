@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOLOR4USV_H_
 #define INCLUDE_GEM_GLCOLOR4USV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glColor4usv( GLushort* v)"
  */
 
-class GEM_EXTERN GEMglColor4usv : public GemBase
+class GEM_EXTERN GEMglColor4usv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglColor4usv, GemBase)
+	CPPEXTERN_HEADER(GEMglColor4usv, GemGLBase)
 
 	public:
 	  // Constructor

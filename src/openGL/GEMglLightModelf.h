@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLLIGHTMODELF_H_
 #define INCLUDE_GEM_GLLIGHTMODELF_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glLightModelf( GLenum pname, GLfloat param)"
  */
 
-class GEM_EXTERN GEMglLightModelf : public GemBase
+class GEM_EXTERN GEMglLightModelf : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLightModelf, GemBase)
+	CPPEXTERN_HEADER(GEMglLightModelf, GemGLBase)
 
 	public:
 	  // Constructor

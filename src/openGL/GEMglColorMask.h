@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOLORMASK_H_
 #define INCLUDE_GEM_GLCOLORMASK_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glColorMask( GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)"
  */
 
-class GEM_EXTERN GEMglColorMask : public GemBase
+class GEM_EXTERN GEMglColorMask : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglColorMask, GemBase)
+	CPPEXTERN_HEADER(GEMglColorMask, GemGLBase)
 
 	public:
 	  // Constructor

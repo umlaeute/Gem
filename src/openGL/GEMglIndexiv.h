@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLINDEXUBV_H_
 #define INCLUDE_GEM_GLINDEXUBV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glIndexiv( GLint *c )"
  */
 
-class GEM_EXTERN GEMglIndexiv : public GemBase
+class GEM_EXTERN GEMglIndexiv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglIndexiv, GemBase)
+	CPPEXTERN_HEADER(GEMglIndexiv, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCLEARACCUM_H_
 #define INCLUDE_GEM_GLCLEARACCUM_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glClearAccum( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)"
  */
 
-class GEM_EXTERN GEMglClearAccum : public GemBase
+class GEM_EXTERN GEMglClearAccum : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglClearAccum, GemBase)
+	CPPEXTERN_HEADER(GEMglClearAccum, GemGLBase)
 
 	public:
 	  // Constructor

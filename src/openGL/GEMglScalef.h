@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLSCALEF_H_
 #define INCLUDE_GEM_GLSCALEF_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glScalef( GLfloat x, GLfloat y, GLfloat z)"
  */
 
-class GEM_EXTERN GEMglScalef : public GemBase
+class GEM_EXTERN GEMglScalef : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglScalef, GemBase)
+	CPPEXTERN_HEADER(GEMglScalef, GemGLBase)
 
 	public:
 	  // Constructor

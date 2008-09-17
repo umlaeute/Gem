@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLGETERROR_H_
 #define INCLUDE_GEM_GLGETERROR_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glGetError( void )"
  */
 
-class GEM_EXTERN GEMglGetError : public GemBase
+class GEM_EXTERN GEMglGetError : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGetError, GemBase)
+	CPPEXTERN_HEADER(GEMglGetError, GemGLBase)
 
 	public:
 	// Constructor

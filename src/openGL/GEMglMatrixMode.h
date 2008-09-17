@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLMATRIXMODE_H_
 #define INCLUDE_GEM_GLMATRIXMODE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glMatrixMode( GLenum mode)"
  */
 
-class GEM_EXTERN GEMglMatrixMode : public GemBase
+class GEM_EXTERN GEMglMatrixMode : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMatrixMode, GemBase)
+	CPPEXTERN_HEADER(GEMglMatrixMode, GemGLBase)
 
 	public:
 	  // Constructor

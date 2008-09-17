@@ -11,8 +11,7 @@
 #ifndef INCLUDE_GEM_GLGENPROGRAMSARB_H_
 #define INCLUDE_GEM_GLGENPROGRAMSARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -24,9 +23,9 @@
 	"glGenProgramsARB( GLsizei n, GLuint *programs)"
  */
 
-class GEM_EXTERN GEMglGenProgramsARB : public GemBase
+class GEM_EXTERN GEMglGenProgramsARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGenProgramsARB, GemBase)
+	CPPEXTERN_HEADER(GEMglGenProgramsARB, GemGLBase)
 
 	public:
 	  // Constructor

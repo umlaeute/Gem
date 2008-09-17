@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOPYPIXELS_H_
 #define INCLUDE_GEM_GLCOPYPIXELS_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glCopyPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum type)"
  */
 
-class GEM_EXTERN GEMglCopyPixels : public GemBase
+class GEM_EXTERN GEMglCopyPixels : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglCopyPixels, GemBase)
+	CPPEXTERN_HEADER(GEMglCopyPixels, GemGLBase)
 
 	public:
 	  // Constructor

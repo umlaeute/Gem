@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOPYTEXSUBIMAGE1D_H_
 #define INCLUDE_GEM_GLCOPYTEXSUBIMAGE1D_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glCopyTexSubImage1D( GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width)"
  */
 
-class GEM_EXTERN GEMglCopyTexSubImage1D : public GemBase
+class GEM_EXTERN GEMglCopyTexSubImage1D : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglCopyTexSubImage1D, GemBase)
+	CPPEXTERN_HEADER(GEMglCopyTexSubImage1D, GemGLBase)
 
 	public:
 	  // Constructor

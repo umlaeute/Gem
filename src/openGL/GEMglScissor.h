@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLSCISSOR_H_
 #define INCLUDE_GEM_GLSCISSOR_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glScissor( GLint x, GLint y, GLsizei width, GLsizei height)"
  */
 
-class GEM_EXTERN GEMglScissor : public GemBase
+class GEM_EXTERN GEMglScissor : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglScissor, GemBase)
+	CPPEXTERN_HEADER(GEMglScissor, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLSHADEMODEL_H_
 #define INCLUDE_GEM_GLSHADEMODEL_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glShadeModel( GLenum mode)"
  */
 
-class GEM_EXTERN GEMglShadeModel : public GemBase
+class GEM_EXTERN GEMglShadeModel : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglShadeModel, GemBase)
+	CPPEXTERN_HEADER(GEMglShadeModel, GemGLBase)
 
 	public:
 	  // Constructor

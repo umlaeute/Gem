@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOLORMATERIAL_H_
 #define INCLUDE_GEM_GLCOLORMATERIAL_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glColorMaterial( GLenum face, GLenum mode)"
  */
 
-class GEM_EXTERN GEMglColorMaterial : public GemBase
+class GEM_EXTERN GEMglColorMaterial : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglColorMaterial, GemBase)
+	CPPEXTERN_HEADER(GEMglColorMaterial, GemGLBase)
 
 	public:
 	  // Constructor

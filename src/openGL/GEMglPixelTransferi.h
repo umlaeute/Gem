@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPIXELTRANSFERI_H_
 #define INCLUDE_GEM_GLPIXELTRANSFERI_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPixelTransferi( GLenum pname, GLint param)"
  */
 
-class GEM_EXTERN GEMglPixelTransferi : public GemBase
+class GEM_EXTERN GEMglPixelTransferi : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPixelTransferi, GemBase)
+	CPPEXTERN_HEADER(GEMglPixelTransferi, GemGLBase)
 
 	public:
 	  // Constructor

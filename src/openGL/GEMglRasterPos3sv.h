@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLRASTERPOS3SV_H_
 #define INCLUDE_GEM_GLRASTERPOS3SV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glRasterPos3sv( GLshort* v)"
  */
 
-class GEM_EXTERN GEMglRasterPos3sv : public GemBase
+class GEM_EXTERN GEMglRasterPos3sv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglRasterPos3sv, GemBase)
+	CPPEXTERN_HEADER(GEMglRasterPos3sv, GemGLBase)
 
 	public:
 	  // Constructor

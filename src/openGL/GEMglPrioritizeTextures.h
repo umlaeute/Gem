@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPRIORITIZETEXTURES_H_
 #define INCLUDE_GEM_GLPRIORITIZETEXTURES_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPrioritizeTextures( GLsizei n, GLuint *textures, GLclampf *priorities)"
  */
 
-class GEM_EXTERN GEMglPrioritizeTextures : public GemBase
+class GEM_EXTERN GEMglPrioritizeTextures : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPrioritizeTextures, GemBase)
+	CPPEXTERN_HEADER(GEMglPrioritizeTextures, GemGLBase)
 
 	public:
 	  // Constructor

@@ -10,8 +10,7 @@
 #ifndef INCLUDE_GEM_GLACTIVETEXTUREARB_H_
 #define INCLUDE_GEM_GLACTIVETEXTUREARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -23,9 +22,9 @@
 	"glActiveTextureARB( GLenum target )"
  */
 
-class GEM_EXTERN GEMglActiveTextureARB : public GemBase
+class GEM_EXTERN GEMglActiveTextureARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglActiveTextureARB, GemBase)
+	CPPEXTERN_HEADER(GEMglActiveTextureARB, GemGLBase)
 
 	public:
 	  // Constructor

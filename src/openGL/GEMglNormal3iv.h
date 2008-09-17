@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLNORMAL3IV_H_
 #define INCLUDE_GEM_GLNORMAL3IV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glNormal3iv( GLint* v)"
  */
 
-class GEM_EXTERN GEMglNormal3iv : public GemBase
+class GEM_EXTERN GEMglNormal3iv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglNormal3iv, GemBase)
+	CPPEXTERN_HEADER(GEMglNormal3iv, GemGLBase)
 
 	public:
 	  // Constructor

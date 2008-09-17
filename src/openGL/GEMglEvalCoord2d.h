@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLEVALCOORD2D_H_
 #define INCLUDE_GEM_GLEVALCOORD2D_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glEvalCoord2d( GLdouble u, GLdouble v)"
  */
 
-class GEM_EXTERN GEMglEvalCoord2d : public GemBase
+class GEM_EXTERN GEMglEvalCoord2d : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEvalCoord2d, GemBase)
+	CPPEXTERN_HEADER(GEMglEvalCoord2d, GemGLBase)
 
 	public:
 	  // Constructor

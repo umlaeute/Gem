@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLBEGIN_H_
 #define INCLUDE_GEM_GLBEGIN_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glNewList( GLenum mode)"
  */
 
-class GEM_EXTERN GEMglNewList : public GemBase
+class GEM_EXTERN GEMglNewList : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglNewList, GemBase)
+	CPPEXTERN_HEADER(GEMglNewList, GemGLBase)
 
 	public:
 	  // Constructor

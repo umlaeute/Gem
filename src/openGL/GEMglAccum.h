@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLACCUM_H_
 #define INCLUDE_GEM_GLACCUM_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glAccum( GLenum op, GLfloat value)"
  */
 
-class GEM_EXTERN GEMglAccum : public GemBase
+class GEM_EXTERN GEMglAccum : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglAccum, GemBase)
+	CPPEXTERN_HEADER(GEMglAccum, GemGLBase)
 
 	public:
 	  // Constructor

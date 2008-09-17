@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPOLYGONOFFSET_H_
 #define INCLUDE_GEM_GLPOLYGONOFFSET_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPolygonOffset( GLfloat factor, GLfloat units)"
  */
 
-class GEM_EXTERN GEMglPolygonOffset : public GemBase
+class GEM_EXTERN GEMglPolygonOffset : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPolygonOffset, GemBase)
+	CPPEXTERN_HEADER(GEMglPolygonOffset, GemGLBase)
 
 	public:
 	  // Constructor

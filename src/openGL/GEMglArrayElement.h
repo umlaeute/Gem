@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLARRAYELEMENT_H_
 #define INCLUDE_GEM_GLARRAYELEMENT_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glArrayElement( GLint i)"
  */
 
-class GEM_EXTERN GEMglArrayElement : public GemBase
+class GEM_EXTERN GEMglArrayElement : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglArrayElement, GemBase)
+	CPPEXTERN_HEADER(GEMglArrayElement, GemGLBase)
 
 	public:
 	  // Constructor

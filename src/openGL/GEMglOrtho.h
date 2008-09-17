@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLORTHO_H_
 #define INCLUDE_GEM_GLORTHO_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar)"
  */
 
-class GEM_EXTERN GEMglOrtho : public GemBase
+class GEM_EXTERN GEMglOrtho : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglOrtho, GemBase)
+	CPPEXTERN_HEADER(GEMglOrtho, GemGLBase)
 
 	public:
 	  // Constructor

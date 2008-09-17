@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCLEARSTENCIL_H_
 #define INCLUDE_GEM_GLCLEARSTENCIL_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glClearStencil( GLint s)"
  */
 
-class GEM_EXTERN GEMglClearStencil : public GemBase
+class GEM_EXTERN GEMglClearStencil : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglClearStencil, GemBase)
+	CPPEXTERN_HEADER(GEMglClearStencil, GemGLBase)
 
 	public:
 	  // Constructor

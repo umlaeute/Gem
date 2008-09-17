@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLClipPlane_H_
 #define INCLUDE_GEM_GLClipPlane_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
   CLASS
@@ -26,9 +25,9 @@
   "glClipPlane( GLfloat* v)"
 */
 
-class GEM_EXTERN GEMglClipPlane : public GemBase
+class GEM_EXTERN GEMglClipPlane : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglClipPlane, GemBase)
+  CPPEXTERN_HEADER(GEMglClipPlane, GemGLBase)
 
     public:
   // Constructor

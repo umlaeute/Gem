@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPUSHMATRIX_H_
 #define INCLUDE_GEM_GLPUSHMATRIX_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPushMatrix()"
  */
 
-class GEM_EXTERN GEMglPushMatrix : public GemBase
+class GEM_EXTERN GEMglPushMatrix : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPushMatrix, GemBase)
+	CPPEXTERN_HEADER(GEMglPushMatrix, GemGLBase)
 
 	public:
 	  // Constructor

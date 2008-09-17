@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLISENABLED_H_
 #define INCLUDE_GEM_GLISENABLED_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glIsEnabled( glIsEnabled  GLenum cap )"
  */
 
-class GEM_EXTERN GEMglIsEnabled : public GemBase
+class GEM_EXTERN GEMglIsEnabled : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglIsEnabled, GemBase)
+  CPPEXTERN_HEADER(GEMglIsEnabled, GemGLBase)
 
     public:
   // Constructor

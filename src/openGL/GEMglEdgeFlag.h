@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLEDGEFLAG_H_
 #define INCLUDE_GEM_GLEDGEFLAG_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glEdgeFlag( GLboolean flag)"
  */
 
-class GEM_EXTERN GEMglEdgeFlag : public GemBase
+class GEM_EXTERN GEMglEdgeFlag : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEdgeFlag, GemBase)
+	CPPEXTERN_HEADER(GEMglEdgeFlag, GemGLBase)
 
 	public:
 	  // Constructor

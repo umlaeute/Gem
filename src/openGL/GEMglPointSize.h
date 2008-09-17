@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPOINTSIZE_H_
 #define INCLUDE_GEM_GLPOINTSIZE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPointSize( GLfloat size)"
  */
 
-class GEM_EXTERN GEMglPointSize : public GemBase
+class GEM_EXTERN GEMglPointSize : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPointSize, GemBase)
+	CPPEXTERN_HEADER(GEMglPointSize, GemGLBase)
 
 	public:
 	  // Constructor

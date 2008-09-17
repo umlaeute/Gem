@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLDEPTHMASK_H_
 #define INCLUDE_GEM_GLDEPTHMASK_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glDepthMask( GLboolean flag)"
  */
 
-class GEM_EXTERN GEMglDepthMask : public GemBase
+class GEM_EXTERN GEMglDepthMask : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDepthMask, GemBase)
+	CPPEXTERN_HEADER(GEMglDepthMask, GemGLBase)
 
 	public:
 	  // Constructor

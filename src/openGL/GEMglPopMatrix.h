@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPOPMATRIX_H_
 #define INCLUDE_GEM_GLPOPMATRIX_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPopMatrix()"
  */
 
-class GEM_EXTERN GEMglPopMatrix : public GemBase
+class GEM_EXTERN GEMglPopMatrix : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPopMatrix, GemBase)
+	CPPEXTERN_HEADER(GEMglPopMatrix, GemGLBase)
 
 	public:
 	  // Constructor

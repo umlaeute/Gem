@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLDISABLECLIENTSTATE_H_
 #define INCLUDE_GEM_GLDISABLECLIENTSTATE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glDisableClientState( GLenum array)"
  */
 
-class GEM_EXTERN GEMglDisableClientState : public GemBase
+class GEM_EXTERN GEMglDisableClientState : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDisableClientState, GemBase)
+	CPPEXTERN_HEADER(GEMglDisableClientState, GemGLBase)
 
 	public:
 	  // Constructor

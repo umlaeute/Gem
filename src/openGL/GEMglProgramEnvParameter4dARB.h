@@ -11,8 +11,7 @@
 #ifndef INCLUDE_GEM_GLPROGRAMENVPARAMETER4DARB_H_
 #define INCLUDE_GEM_GLPROGRAMENVPARAMETER4DARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -25,9 +24,9 @@
 									GLdouble y, GLdouble z, GLdouble w)"
  */
 
-class GEM_EXTERN GEMglProgramEnvParameter4dARB : public GemBase
+class GEM_EXTERN GEMglProgramEnvParameter4dARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglProgramEnvParameter4dARB, GemBase)
+	CPPEXTERN_HEADER(GEMglProgramEnvParameter4dARB, GemGLBase)
 
 	public:
 	  // Constructor

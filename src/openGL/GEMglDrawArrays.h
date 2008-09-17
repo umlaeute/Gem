@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLDRAWARRAYS_H_
 #define INCLUDE_GEM_GLDRAWARRAYS_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glDrawArrays( GLenum mode, GLint first, GLsizei count)"
  */
 
-class GEM_EXTERN GEMglDrawArrays : public GemBase
+class GEM_EXTERN GEMglDrawArrays : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDrawArrays, GemBase)
+	CPPEXTERN_HEADER(GEMglDrawArrays, GemGLBase)
 
 	public:
 	  // Constructor

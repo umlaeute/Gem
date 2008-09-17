@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLINDEXMASK_H_
 #define INCLUDE_GEM_GLINDEXMASK_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glIndexMask( GLuint mask)"
  */
 
-class GEM_EXTERN GEMglIndexMask : public GemBase
+class GEM_EXTERN GEMglIndexMask : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglIndexMask, GemBase)
+	CPPEXTERN_HEADER(GEMglIndexMask, GemGLBase)
 
 	public:
 	  // Constructor

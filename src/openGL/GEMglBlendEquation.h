@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLBlendEquation_H_
 #define INCLUDE_GEM_GLBlendEquation_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
   CLASS
@@ -26,9 +25,9 @@
   "glBlendEquation( GLenum mode)"
 */
 
-class GEM_EXTERN GEMglBlendEquation : public GemBase
+class GEM_EXTERN GEMglBlendEquation : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglBlendEquation, GemBase)
+  CPPEXTERN_HEADER(GEMglBlendEquation, GemGLBase)
 
     public:
   // Constructor

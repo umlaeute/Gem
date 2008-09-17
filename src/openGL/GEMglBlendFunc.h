@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLBLENDFUNC_H_
 #define INCLUDE_GEM_GLBLENDFUNC_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glBlendFunc( GLenum sfactor, GLenum dfactor)"
  */
 
-class GEM_EXTERN GEMglBlendFunc : public GemBase
+class GEM_EXTERN GEMglBlendFunc : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglBlendFunc, GemBase)
+	CPPEXTERN_HEADER(GEMglBlendFunc, GemGLBase)
 
 	public:
 	  // Constructor

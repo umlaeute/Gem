@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLGENLISTS_H_
 #define INCLUDE_GEM_GLGENLISTS_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glGenLists( GLsizei range )"
  */
 
-class GEM_EXTERN GEMglGenLists : public GemBase
+class GEM_EXTERN GEMglGenLists : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGenLists, GemBase)
+	CPPEXTERN_HEADER(GEMglGenLists, GemGLBase)
 
 	public:
 	  // Constructor

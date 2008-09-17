@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCLEAR_H_
 #define INCLUDE_GEM_GLCLEAR_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glClear( GLbitfield mask)"
  */
 
-class GEM_EXTERN GEMglClear : public GemBase
+class GEM_EXTERN GEMglClear : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglClear, GemBase)
+	CPPEXTERN_HEADER(GEMglClear, GemGLBase)
 
 	public:
 	  // Constructor

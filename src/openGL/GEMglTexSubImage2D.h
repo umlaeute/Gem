@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLTEXSUBIMAGE2D_H_
 #define INCLUDE_GEM_GLTEXSUBIMAGE2D_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glTexSubImage2D( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid *pixels)"
  */
 
-class GEM_EXTERN GEMglTexSubImage2D : public GemBase
+class GEM_EXTERN GEMglTexSubImage2D : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglTexSubImage2D, GemBase)
+	CPPEXTERN_HEADER(GEMglTexSubImage2D, GemGLBase)
 
 	public:
 	  // Constructor

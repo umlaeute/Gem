@@ -13,7 +13,7 @@
 #ifndef INCLUDE_GEM_GLREPORTERROR_H_
 #define INCLUDE_GEM_GLREPORTERROR_H_
 
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -24,9 +24,9 @@
 	wrapper for the openGL defines
  */
 
-class GEM_EXTERN GEMglReportError : public GemBase
+class GEM_EXTERN GEMglReportError : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglReportError, GemBase)
+	CPPEXTERN_HEADER(GEMglReportError, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLFOGFV_H_
 #define INCLUDE_GEM_GLFOGFV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -29,9 +28,9 @@
 #define FOG_ARRAY_LENGTH 4
 
 
-class GEM_EXTERN GEMglFogfv : public GemBase
+class GEM_EXTERN GEMglFogfv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFogfv, GemBase)
+	CPPEXTERN_HEADER(GEMglFogfv, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLGETPOINTERV_H_
 #define INCLUDE_GEM_GLGETPOINTERV_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glGetPointerv( GLenum pname, GLvoid* *params)"
  */
 
-class GEM_EXTERN GEMglGetPointerv : public GemBase
+class GEM_EXTERN GEMglGetPointerv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGetPointerv, GemBase)
+	CPPEXTERN_HEADER(GEMglGetPointerv, GemGLBase)
 
 	public:
 	  // Constructor

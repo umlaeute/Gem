@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLSTENCILFUNC_H_
 #define INCLUDE_GEM_GLSTENCILFUNC_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glStencilFunc( GLenum func, GLint ref, GLuint mask)"
  */
 
-class GEM_EXTERN GEMglStencilFunc : public GemBase
+class GEM_EXTERN GEMglStencilFunc : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglStencilFunc, GemBase)
+	CPPEXTERN_HEADER(GEMglStencilFunc, GemGLBase)
 
 	public:
 	  // Constructor

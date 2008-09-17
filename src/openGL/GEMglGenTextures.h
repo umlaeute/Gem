@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLGENTEXTURES_H_
 #define INCLUDE_GEM_GLGENTEXTURES_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glGenTextures( GLsizei n, GLuint *textures)"
  */
 
-class GEM_EXTERN GEMglGenTextures : public GemBase
+class GEM_EXTERN GEMglGenTextures : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGenTextures, GemBase)
+	CPPEXTERN_HEADER(GEMglGenTextures, GemGLBase)
 
 	public:
 	  // Constructor

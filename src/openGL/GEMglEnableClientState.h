@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLENABLECLIENTSTATE_H_
 #define INCLUDE_GEM_GLENABLECLIENTSTATE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glEnableClientState( GLenum array)"
  */
 
-class GEM_EXTERN GEMglEnableClientState : public GemBase
+class GEM_EXTERN GEMglEnableClientState : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEnableClientState, GemBase)
+	CPPEXTERN_HEADER(GEMglEnableClientState, GemGLBase)
 
 	public:
 	  // Constructor

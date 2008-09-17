@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLDEPTHRANGE_H_
 #define INCLUDE_GEM_GLDEPTHRANGE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glDepthRange( GLclampd near_val, GLclampd far_val)"
  */
 
-class GEM_EXTERN GEMglDepthRange : public GemBase
+class GEM_EXTERN GEMglDepthRange : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDepthRange, GemBase)
+	CPPEXTERN_HEADER(GEMglDepthRange, GemGLBase)
 
 	public:
 	  // Constructor

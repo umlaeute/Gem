@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLBITMAP_H_
 #define INCLUDE_GEM_GLBITMAP_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glBitmap( GLsizei width, GLsizei height, GLfloat xorig, GLfloat yorig, GLfloat xmove, GLfloat ymove, GLubyte* bitmap)"
  */
 
-class GEM_EXTERN GEMglBitmap : public GemBase
+class GEM_EXTERN GEMglBitmap : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglBitmap, GemBase)
+	CPPEXTERN_HEADER(GEMglBitmap, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPIXELZOOM_H_
 #define INCLUDE_GEM_GLPIXELZOOM_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPixelZoom( GLfloat xfactor, GLfloat yfactor)"
  */
 
-class GEM_EXTERN GEMglPixelZoom : public GemBase
+class GEM_EXTERN GEMglPixelZoom : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPixelZoom, GemBase)
+	CPPEXTERN_HEADER(GEMglPixelZoom, GemGLBase)
 
 	public:
 	  // Constructor

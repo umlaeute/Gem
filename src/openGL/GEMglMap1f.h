@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLMAP1F_H_
 #define INCLUDE_GEM_GLMAP1F_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glMap1f( GLenum target, GLfloat u1, GLfloat u2, GLint stride, GLint order, GLfloat *points)"
  */
 
-class GEM_EXTERN GEMglMap1f : public GemBase
+class GEM_EXTERN GEMglMap1f : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMap1f, GemBase)
+	CPPEXTERN_HEADER(GEMglMap1f, GemGLBase)
 
 	public:
 	  // Constructor

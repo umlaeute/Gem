@@ -11,8 +11,7 @@
 #ifndef INCLUDE_GEM_GLPROGRAMENVPARAMETER4FVARB_H_
 #define INCLUDE_GEM_GLPROGRAMENVPARAMETER4FVARB_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -27,9 +26,9 @@
 		params = vector of 4 floats
  */
 
-class GEM_EXTERN GEMglProgramEnvParameter4fvARB : public GemBase
+class GEM_EXTERN GEMglProgramEnvParameter4fvARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglProgramEnvParameter4fvARB, GemBase)
+	CPPEXTERN_HEADER(GEMglProgramEnvParameter4fvARB, GemGLBase)
 
 	public:
 	  // Constructor

@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCLEARCOLOR_H_
 #define INCLUDE_GEM_GLCLEARCOLOR_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glClearColor( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)"
  */
 
-class GEM_EXTERN GEMglClearColor : public GemBase
+class GEM_EXTERN GEMglClearColor : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglClearColor, GemBase)
+	CPPEXTERN_HEADER(GEMglClearColor, GemGLBase)
 
 	public:
 	  // Constructor

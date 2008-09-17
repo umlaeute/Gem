@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLFEEDBACKBUFFER_H_
 #define INCLUDE_GEM_GLFEEDBACKBUFFER_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glFeedbackBuffer( GLsizei size, GLenum type, GLfloat *buffer)"
  */
 
-class GEM_EXTERN GEMglFeedbackBuffer : public GemBase
+class GEM_EXTERN GEMglFeedbackBuffer : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFeedbackBuffer, GemBase)
+	CPPEXTERN_HEADER(GEMglFeedbackBuffer, GemGLBase)
 
 	public:
 	  // Constructor

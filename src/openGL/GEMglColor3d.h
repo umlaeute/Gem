@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOLOR3D_H_
 #define INCLUDE_GEM_GLCOLOR3D_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glColor3d( GLdouble red, GLdouble green, GLdouble blue)"
  */
 
-class GEM_EXTERN GEMglColor3d : public GemBase
+class GEM_EXTERN GEMglColor3d : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglColor3d, GemBase)
+	CPPEXTERN_HEADER(GEMglColor3d, GemGLBase)
 
 	public:
 	  // Constructor

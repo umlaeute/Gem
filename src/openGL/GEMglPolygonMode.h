@@ -13,8 +13,7 @@
 #ifndef INCLUDE_GEM_GLPOLYGONMODE_H_
 #define INCLUDE_GEM_GLPOLYGONMODE_H_
 
-#include "Base/GemGLUtil.h"
-#include "Base/GemBase.h"
+#include "GemGLBase.h"
 
 /*
  CLASS
@@ -26,9 +25,9 @@
 	"glPolygonMode( GLenum face, GLenum mode)"
  */
 
-class GEM_EXTERN GEMglPolygonMode : public GemBase
+class GEM_EXTERN GEMglPolygonMode : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPolygonMode, GemBase)
+	CPPEXTERN_HEADER(GEMglPolygonMode, GemGLBase)
 
 	public:
 	  // Constructor
