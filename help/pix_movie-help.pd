@@ -1,18 +1,18 @@
-#N canvas 126 22 714 683 10;
-#X text 452 8 GEM object;
-#X obj 9 322 cnv 15 430 345 empty empty empty 20 12 0 14 -233017 -66577
+#N canvas 86 22 708 639 10;
+#X text 452 -2 GEM object;
+#X obj 9 312 cnv 15 430 320 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 40 324 Inlets:;
-#X text 40 547 Outlets:;
-#X obj 9 289 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X text 10 314 Inlets:;
+#X text 10 484 Outlets:;
+#X obj 9 279 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 18 288 Arguments:;
-#X obj 8 56 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
+#X text 18 278 Arguments:;
+#X obj 8 46 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 57 cnv 15 250 450 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 47 cnv 15 250 450 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X text 453 40 Example:;
-#X obj 594 440 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X text 453 30 Example:;
+#X obj 594 430 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -32,120 +32,138 @@
 #X connect 7 0 4 0;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
-#X restore 599 479 pd gemwin;
-#X msg 599 460 create;
-#X text 595 439 Create window:;
-#X obj 451 88 cnv 15 155 250 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 599 469 pd gemwin;
+#X msg 599 450 create;
+#X text 595 429 Create window:;
+#X obj 451 78 cnv 15 155 200 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 451 63 gemhead;
-#X text 18 561 Outlet 1: gemlist;
-#X text 24 338 Inlet 1: gemlist;
-#X obj 463 93 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 451 53 gemhead;
+#X text 18 498 Outlet 1: gemlist;
+#X text 24 328 Inlet 1: gemlist;
+#X obj 462 83 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X text 505 57 open a supported;
-#X text 506 68 movie-clip;
-#X obj 480 377 unpack 0 0 0;
-#X floatatom 466 400 5 0 0 3 length - -;
-#X floatatom 515 400 5 0 0 3 width - -;
-#X floatatom 565 400 5 0 0 3 height - -;
-#X obj 520 358 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
+#X text 505 47 open a supported;
+#X text 506 58 movie-clip;
+#X obj 480 367 unpack 0 0 0;
+#X floatatom 466 390 5 0 0 3 length - -;
+#X floatatom 515 390 5 0 0 3 width - -;
+#X floatatom 565 390 5 0 0 3 height - -;
+#X obj 520 348 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
 -1 -1;
-#X floatatom 509 323 5 0 10000 1 frame# - -;
-#X text 71 31 Class: pix object (pix source);
-#X text 29 57 Description: load in a movie-file;
-#X obj 463 122 openpanel;
-#X msg 463 142 open \$1;
-#X obj 451 482 rectangle 4 3;
-#X text 15 78 [pix_film] loads in a preproducecd digital-video to be
-used aas a texture \, bitblit or something else.;
-#X text 13 104 You can open a specified film via the "open" message
+#X text 71 21 Class: pix object (pix source);
+#X text 29 47 Description: load in a movie-file;
+#X obj 462 112 openpanel;
+#X msg 462 132 open \$1;
+#X obj 451 472 rectangle 4 3;
+#X text 15 68 [pix_movie] loads in a preproduced digital-video to be
+used as a texture \, bitblit or something else.;
+#X text 13 94 You can open a specified film via the "open" message
 \, which takes an optional argument for the colorspace \, to which
 the movie should be decoded (RGBA \, YUV or Grey).;
-#X text 64 299 symbol: file to load initially;
-#X text 24 353 Inlet 1: message: open <filename> [RGBA|YUV|Grey]: opens
-the movie <filename> and decodes it into the specified color-space.
-;
-#X text 24 396 Inlet 1: message: colorspace "RGBA|YUV|Grey": decodes
-the current film into the specified colorspace.;
-#X text 24 425 Inlet 1: message : auto 1|0 : starts/stops automatic
-playback.;
-#X text 23 513 Inlet 2: float: <frame#> changes the frame to be decoded
-on rendering.;
-#X text 18 630 Outlet 3: bang: indicates that the last frame has been
-reached. (or: an illegal frame would have been decoded);
-#X msg 469 185 auto \$1;
-#X obj 469 167 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X text 64 289 symbol: file to load initially;
+#X text 18 567 Outlet 3: bang: indicates that the last frame has been
+reached;
+#X msg 490 189 auto \$1;
+#X obj 490 171 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 480 209 colorspace Grey;
-#X text 13 104 You can open a specified film via the "open" message
+#X msg 501 213 colorspace Grey;
+#X text 13 94 You can open a specified film via the "open" message
 \, which takes an optional argument for the colorspace \, to which
 the movie should be decoded (RGBA \, YUV or Grey).;
-#X text 18 577 Outlet 2: list: <length> <width> <height>: gets the
+#X text 18 514 Outlet 2: list: <length> <width> <height>: gets the
 dimensions (in fps and pixels) of a film when it gets loaded. if length
 is not available (video-streams) -1 is returned.;
-#X text 14 144 Normally \, you will only get one specified (via the
+#X text 14 134 Normally \, you will only get one specified (via the
 second inlet) frame of the film \, To play back a complete film \,
 you have to change the frame accordingly \, OR use the "auto" message
 \, to automatically proceed to the next frame each rendering-cycle.
 In auto-mode \, the film is NOT looped. Instead you can reset the current-frame
 to zero when the end of the film is reached.;
 #N canvas 67 224 450 432 :: 0;
-#X text 24 16 the format [pix_film] is able to decode depends on the
+#X text 24 16 the format [pix_movie] is able to decode depends on the
 system you are running Gem.;
-#X text 30 101 Win32: [pix_film] should be able to decode AVIs (all
-installed codecs). If you are lucky and your version of Gem is compiled
-with quicktime-support and you have quicktime installed on your machine
-\, you might be able to play back quicktime MOVs.;
-#X text 31 63 macOS-X: [pix_film] should be ablte to decode quicktime
+#X text 30 101 Win32: [pix_movie] should be able to decode AVIs (all
+installed codecs). If your version of Gem is compiled with Quicktime
+support and you have Quicktime installed on your machine \, you should
+be able to play Quicktime MOVs.;
+#X text 31 63 Mac OS X: [pix_movie] should be ablte to decode quicktime
 MOVs.;
-#X text 32 175 linux: that's a bit tricky. Since there is no "native"
-video-format for linux it heavily depends on what you have installed
-on your machine and how Gem has been compiled. If your system supports
-it \, [pix_film] is able to use quicktime4linux/libquicktime to decode
-quicktime-MOVs \, libmpeg1/libmpeg3 to decode MPEG2-videos and libaviplay
-which opens a wide range of supported formats (with the possibility
-to install additional codec-plugins) \, from AVI via MPEG2 to DivX
-\, although i have found MPEG support rather unstable. libaviplay does
-not support quicktime decoding. There is also some ruddy ffmpeg support
-(apart from the one supplied by libaviplay).;
-#X text 36 351 although one wouldn't believe it \, but i have found
-that iunder linux i could play most formats...;
-#X restore 505 554 pd :: FORMATS;
-#X obj 18 248 cnv 15 410 20 empty empty empty 20 12 0 14 -260818 -66577
+#X text 32 350 When GNU/Linux is properly setup \, you can play just
+about any format.;
+#X text 32 175 GNU/Linux: Since there is no "native" video format for
+linux it heavily depends on what you have installed on your machine
+and how Gem has been compiled. If your system supports it \, [pix_movie]
+is able to use quicktime4linux/libquicktime to decode Quicktime MOVs
+\, libmpeg1/libmpeg3 to decode MPEG2-videos and libaviplay which opens
+a wide range of supported formats (with the possibility to install
+additional codec-plugins) \, from AVI via MPEG2 to DivX \, although
+i have found MPEG support rather unstable. libaviplay does not support
+quicktime decoding. There is also some ffmpeg support (apart from the
+one supplied by libaviplay).;
+#X restore 581 543 pd :: FORMATS;
+#X obj 18 238 cnv 15 410 20 empty empty empty 20 12 0 14 -260818 -66577
 0;
-#X text 24 250 You need NO [pix_texture] to texture the image somewhere.
+#X text 24 240 You need NO [pix_texture] to texture the image somewhere.
 ;
-#X obj 451 341 pix_movie;
-#X text 489 615 see also:;
-#X obj 566 615 pix_film;
-#X text 50 12 Synopsis: [pix_movie];
-#X text 24 456 Inlet 1: mode 0|1 : use rectangle-texturing when available
+#X obj 451 331 pix_movie;
+#X text 489 605 see also:;
+#X obj 566 605 pix_film;
+#X text 50 2 Synopsis: [pix_movie];
+#X text 24 426 Inlet 1: mode 0|1 : use rectangle-texturing when available
 (default=1);
-#X text 24 484 Inlet 1: client_storage 0|1 : use client-storage when
-available (default=1);
-#X obj 492 275 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 513 237 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 492 294 mode \$1;
-#X obj 489 230 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
-#X msg 489 249 client_storage \$1;
+#X msg 513 256 mode \$1;
+#X obj 505 290 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X floatatom 502 310 5 0 0 1 frame_number - -;
+#N canvas 910 50 450 300 demo 0;
+#X obj 23 26 inlet;
+#X text 126 127 win32:;
+#X text 116 190 linux \, os-X:;
+#X obj 79 257 outlet;
+#X obj 20 50 bng 17 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 38 51 cnv 15 81 15 empty empty demo_movie 4 8 0 10 -262144 -1
+0;
+#X msg 29 102 open ../../doc/examples/Gem/data/alea.mpg;
+#X msg 151 147 open ../../doc/examples/Gem/data/homer.avi;
+#X msg 144 210 open ../../doc/examples/Gem/data/anim-1.mov;
+#X connect 0 0 4 0;
+#X connect 4 0 6 0;
+#X connect 6 0 3 0;
+#X connect 7 0 3 0;
+#X connect 8 0 3 0;
+#X coords 0 -1 1 1 100 17 1 20 50;
+#X restore 474 152 pd demo movie;
+#X text 18 597 Outlet 4: bang: indicates that the last frame has been
+reached (Windows and GNU/Linux);
+#X text 454 542 for more info \, open:;
+#X text 23 460 Inlet 2: float: <frame number> sets the frame to output
+;
+#X text 24 407 Inlet 1: auto 1|0 : starts/stops automatic playback.
+;
+#X text 24 376 Inlet 1: colorspace "RGBA|YUV|Grey": decodes the current
+film into the specified colorspace.;
+#X text 24 343 Inlet 1: open <filename> [RGBA|YUV|Grey]: opens the
+movie <filename> and decodes it into the specified color-space.;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
-#X connect 14 0 48 0;
-#X connect 17 0 28 0;
+#X connect 14 0 43 0;
+#X connect 17 0 27 0;
 #X connect 20 0 21 0;
 #X connect 20 1 22 0;
 #X connect 20 2 23 0;
-#X connect 25 0 48 1;
-#X connect 28 0 29 0;
-#X connect 29 0 48 0;
-#X connect 39 0 48 0;
-#X connect 40 0 39 0;
-#X connect 41 0 48 0;
-#X connect 48 0 30 0;
-#X connect 48 1 20 0;
-#X connect 48 2 24 0;
-#X connect 54 0 55 0;
-#X connect 55 0 48 0;
-#X connect 56 0 57 0;
-#X connect 57 0 48 0;
+#X connect 27 0 28 0;
+#X connect 28 0 43 0;
+#X connect 34 0 43 0;
+#X connect 35 0 34 0;
+#X connect 36 0 43 0;
+#X connect 43 0 29 0;
+#X connect 43 1 20 0;
+#X connect 43 2 24 0;
+#X connect 48 0 49 0;
+#X connect 49 0 43 0;
+#X connect 50 0 51 0;
+#X connect 51 0 43 1;
+#X connect 52 0 43 0;
