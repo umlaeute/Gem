@@ -100,7 +100,7 @@ additional codec-plugins) \, from AVI via MPEG2 to DivX \, although
 i have found MPEG support rather unstable. libaviplay does not support
 quicktime decoding. There is also some ffmpeg support (apart from the
 one supplied by libaviplay).;
-#X restore 581 533 pd :: FORMATS;
+#X restore 601 533 pd :: FORMATS;
 #X obj 8 229 cnv 15 430 40 empty empty empty 20 12 0 14 -260818 -66577
 0;
 #X obj 451 331 pix_movie;
@@ -143,11 +143,11 @@ one supplied by libaviplay).;
 film into the specified colorspace.;
 #X text 23 336 Inlet 1: open <filename> [RGBA|YUV|Grey]: opens the
 movie <filename> and decodes it into the specified color-space.;
-#X text 17 590 Outlet 4: list: the texture id \, same as Outlet 2 of
-[pix_texture] (Windows and GNU/Linux only);
 #X obj 596 575 pix_texture;
 #X text 14 231 You don't need [pix_texture] to texture the image. [pix_movie]
 is a combination of [pix_film] and [pix_texture];
+#X text 17 590 Outlet 4: list: the texture id \, same as Outlet 2 of
+[pix_texture];
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 42 0;
