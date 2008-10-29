@@ -17,6 +17,9 @@
 #include "gemlist.h"
 #include "Base/GemState.h"
 
+#include "Base/GemCache.h"
+#include "Base/GemMan.h"
+
 CPPEXTERN_NEW(gemlist)
 
 /////////////////////////////////////////////////////////
@@ -49,7 +52,7 @@ gemlist :: ~gemlist()
 /////////////////////////////////////////////////////////
 void gemlist :: render(GemState *state)
 {
-	m_curent_state=state; //copy curent state for later use
+	m_current_state=state; //copy current state for later use
 	m_valide_state=true;
 }
 
@@ -66,6 +69,25 @@ void gemlist :: postrender(GemState *)
 // TODO : fix this.
 }
 
+void gemlist :: sendCacheState(GemCache *cache, GemState*state)
+{
+  if  ( !GemMan::windowExists() ) {
+    // LATER: shouldn't this test for a valid context rather than an existing window??
+		error("you should not bang the gemlist now");
+    return;
+  }
+
+  if(cache && state) {
+		t_atom ap[2];
+		ap->a_type=A_POINTER;
+		ap->a_w.w_gpointer=(t_gpointer *)cache;
+		(ap+1)->a_type=A_POINTER;
+		(ap+1)->a_w.w_gpointer=(t_gpointer *)state;
+		outlet_anything(m_out1, gensym("gem_state"), 2, ap);
+  }
+}
+
+
 /////////////////////////////////////////////////////////
 // bang
 //
@@ -73,16 +95,15 @@ void gemlist :: postrender(GemState *)
 void gemlist :: trigger()
 {
 	if(m_valide_state)
-	{   // outlet the curent state when banged
-		t_atom ap[2];
-		ap->a_type=A_POINTER;
-		ap->a_w.w_gpointer=(t_gpointer *)m_cache;
-		(ap+1)->a_type=A_POINTER;
-		(ap+1)->a_w.w_gpointer=(t_gpointer *)m_curent_state;
-		outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
-	}
-	else 
-		error("you should not bang the gemlist now");
+	{   // outlet the current state when banged
+    sendCacheState(m_cache, m_current_state);
+	} else {
+	  // fill in out own state and output
+    GemCache tempCache(NULL);
+    GemState tempState;
+    GemMan::fillGemState(tempState);
+    sendCacheState(&tempCache, &tempState);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -91,9 +112,9 @@ void gemlist :: trigger()
 /////////////////////////////////////////////////////////
 void gemlist :: rightRender(GemState *state)
 {
-	m_curent_state=state;
+	m_current_state=state;
 	m_valide_state=true;
-	// get the curent state on the right inlet
+	// get the current state on the right inlet
 }
 
 /////////////////////////////////////////////////////////
