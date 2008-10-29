@@ -135,6 +135,8 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   GLuint	m_textureObj;	
   float		m_xRatio;
   float		m_yRatio;
+  bool    upsidedown;
+  GLint   m_textureType;
   
    //////////
   // the current file
@@ -144,6 +146,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   // a outlet for information like #frames and "reached end"
   t_outlet     *m_outNumFrames;
   t_outlet     *m_outEnd;
+  t_outlet     *m_outTex; /* for texture sharing */
         
   //////////
   // frame data

@@ -34,7 +34,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieDarwin, t_symbol *, A_DEFSYM)
 /////////////////////////////////////////////////////////
 pix_movieDarwin :: pix_movieDarwin(t_symbol *filename) :
   m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), m_oldImage(NULL),
-  m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f),
+  m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f), upsidedown(true), m_textureType(GL_TEXTURE_RECTANGLE_EXT),
   x_filename(NULL), 
   m_frame(NULL), m_data(NULL), 
   m_haveMovie(0), m_auto(0), 
@@ -53,11 +53,11 @@ pix_movieDarwin :: pix_movieDarwin(t_symbol *filename) :
   
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
-  post("constructor");
+  m_outTex       = outlet_new(this->x_obj, 0);
   
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
@@ -66,14 +66,23 @@ pix_movieDarwin :: ~pix_movieDarwin()
   // Clean up the movie
   closeMess();
   deleteBuffer();
+
+  if(m_outNumFrames)
+    outlet_free(m_outNumFrames);
+  if(m_outEnd)
+    outlet_free(m_outEnd);
+  if(m_outTex)
+    outlet_free(m_outTex);
+
+  m_outNumFrames = NULL;
+  m_outEnd       = NULL;
+  m_outTex       = NULL;
 }
 
 void pix_movieDarwin :: deleteBuffer()
 {
-  //post("deleting buffer %x", m_data);
   if (m_data){
     delete [] m_data;
-    //post("deleted");
   }
   
   m_pixBlock.image.data=NULL;
@@ -87,59 +96,58 @@ void pix_movieDarwin :: createBuffer()
   const int neededYSize = m_ysize;
   int	oldx, oldy;
   
-oldx = 0;
-oldy = 0;
+  oldx = 0;
+  oldy = 0;
 
-    if (neededXSize != oldx || neededYSize != oldy)
+  if (neededXSize != oldx || neededYSize != oldy)
     {
-deleteBuffer();
+      deleteBuffer();
 
-  m_pixBlock.image.xsize = neededXSize;
-  m_pixBlock.image.ysize = neededYSize;
-  m_pixBlock.image.csize = m_csize;
-  m_pixBlock.image.format= m_format;
+      m_pixBlock.image.xsize = neededXSize;
+      m_pixBlock.image.ysize = neededYSize;
+      m_pixBlock.image.csize = m_csize;
+      m_pixBlock.image.format= m_format;
   
-  int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize;
+      int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize;
 
-  m_data = new unsigned char[dataSize];
+      m_data = new unsigned char[dataSize];
 
-  m_pixBlock.image.data = m_data;
-  m_frame =  m_data;
+      m_pixBlock.image.data = m_data;
+      m_frame =  m_data;
 
-  m_pixBlock.image.csize = m_csize;
-  m_pixBlock.image.format= m_format;
+      m_pixBlock.image.csize = m_csize;
+      m_pixBlock.image.format= m_format;
 
-    oldx = m_pixBlock.image.xsize;
-    oldy = m_pixBlock.image.ysize;
-}
-  //post("created buffer @ %x", m_data);
+      oldx = m_pixBlock.image.xsize;
+      oldy = m_pixBlock.image.ysize;
+    }
 }
 
 
 void pix_movieDarwin :: closeMess(void)
 {
-    switch (m_haveMovie) {
-        case GEM_MOVIE_MOV:
-            ::DisposeMovie(m_movie);
-            ::DisposeGWorld(m_srcGWorld);
-            m_srcGWorld = NULL;
-            m_haveMovie = GEM_MOVIE_NONE;
-            break;
-        case GEM_MOVIE_AVI:
-            ::DisposeMovie(m_movie);
-            ::DisposeGWorld(m_srcGWorld);
-            m_srcGWorld = NULL;
-            m_haveMovie = GEM_MOVIE_NONE;
-            break;
-        case GEM_MOVIE_MPG:
-            ::DisposeMovie(m_movie);
-            ::DisposeGWorld(m_srcGWorld);
-            m_srcGWorld = NULL;
-            m_haveMovie = GEM_MOVIE_NONE;
-            break;
-        case GEM_MOVIE_NONE:
-        default:
-            break;
+  switch (m_haveMovie) {
+  case GEM_MOVIE_MOV:
+    ::DisposeMovie(m_movie);
+    ::DisposeGWorld(m_srcGWorld);
+    m_srcGWorld = NULL;
+    m_haveMovie = GEM_MOVIE_NONE;
+    break;
+  case GEM_MOVIE_AVI:
+    ::DisposeMovie(m_movie);
+    ::DisposeGWorld(m_srcGWorld);
+    m_srcGWorld = NULL;
+    m_haveMovie = GEM_MOVIE_NONE;
+    break;
+  case GEM_MOVIE_MPG:
+    ::DisposeMovie(m_movie);
+    ::DisposeGWorld(m_srcGWorld);
+    m_srcGWorld = NULL;
+    m_haveMovie = GEM_MOVIE_NONE;
+    break;
+  case GEM_MOVIE_NONE:
+  default:
+    break;
   }
 }
 
@@ -169,7 +177,7 @@ void pix_movieDarwin :: openMess(t_symbol *filename, int format)
   SETFLOAT(ap+1, m_xsize);
   SETFLOAT(ap+2, m_ysize);
 
-    m_newFilm = 1;
+  m_newFilm = 1;
   //outlet_float(m_outNumFrames, (float)m_numFrames);
   post("Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
@@ -181,46 +189,46 @@ void pix_movieDarwin :: openMess(t_symbol *filename, int format)
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: realOpen(char *filename)
 {
-    FSSpec		theFSSpec;
-    OSErr		err = noErr;
-    FSRef		ref;
+  FSSpec		theFSSpec;
+  OSErr		err = noErr;
+  FSRef		ref;
     
-   Track		movieTrack, audioTrack;
+  Track		movieTrack, audioTrack;
 	Media		trackMedia;
 	
 	long		sampleCount;
 
-    long		m_rowBytes;
+  long		m_rowBytes;
 	
 	MatrixRecord	matrix;
 	
-    if (!filename[0]) {
-        error("no filename passed");
-    } else {            
-        err = ::FSPathMakeRef((UInt8*)filename, &ref, NULL);
-        err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
+  if (!filename[0]) {
+    error("no filename passed");
+  } else {            
+    err = ::FSPathMakeRef((UInt8*)filename, &ref, NULL);
+    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
             
-        if (err) {
-            error("Unable to find file: %#s", theFSSpec.name);
-            return;
-        }
-        m_haveMovie = GEM_MOVIE_MOV;
-    }
-    
-    short	refnum = 0;
-    err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
     if (err) {
-        error("Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
-        if (refnum) ::CloseMovieFile(refnum);
-        return;
+      error("Unable to find file: %#s", theFSSpec.name);
+      return;
     }
+    m_haveMovie = GEM_MOVIE_MOV;
+  }
+    
+  short	refnum = 0;
+  err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
+  if (err) {
+    error("Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    if (refnum) ::CloseMovieFile(refnum);
+    return;
+  }
 
 	::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
 	if (refnum) ::CloseMovieFile(refnum);
 
 	m_reqFrame = 0;
 	m_curFrame = -1;
-        m_numTracks = (int)GetMovieTrackCount(m_movie);
+  m_numTracks = (int)GetMovieTrackCount(m_movie);
 
 	// Get the length of the movie
 	
@@ -239,33 +247,33 @@ void pix_movieDarwin :: realOpen(char *filename)
 	movieDur = (long)GetMovieDuration(m_movie);
 	movieScale = (long)GetMovieTimeScale(m_movie);
         
-    /*  //old method for getting length                                      
-	OSType		whichMediaType = VisualMediaCharacteristic;
-	short		flags = nextTimeMediaSample + nextTimeEdgeOK;
+  /*  //old method for getting length                                      
+      OSType		whichMediaType = VisualMediaCharacteristic;
+      short		flags = nextTimeMediaSample + nextTimeEdgeOK;
         
-        TimeValue	theTime = 0;
+      TimeValue	theTime = 0;
 	
-	m_numFrames = -1;
-	while (theTime >= 0) {
-		m_numFrames++;
-		::GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                            1,
-                                            &whichMediaType,
-                                            theTime,
-                                            0,
-                                            &theTime,
-                                            &duration);
-		// after the first interesting time, don't include the time we
-		//  are currently at.
-		flags = nextTimeMediaSample;
-	}
-*/
-        durationf = (float)movieDur/(float)m_numFrames;
+      m_numFrames = -1;
+      while (theTime >= 0) {
+      m_numFrames++;
+      ::GetMovieNextInterestingTime(m_movie,
+      flags,
+      1,
+      &whichMediaType,
+      theTime,
+      0,
+      &theTime,
+      &duration);
+      // after the first interesting time, don't include the time we
+      //  are currently at.
+      flags = nextTimeMediaSample;
+      }
+  */
+  durationf = (float)movieDur/(float)m_numFrames;
 
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
-        OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
+  OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
 	SetMovieBox(m_movie, &m_srcRect);	
 	m_xsize = m_srcRect.right - m_srcRect.left;
 	m_ysize = m_srcRect.bottom - m_srcRect.top;
@@ -309,7 +317,7 @@ void pix_movieDarwin :: realOpen(char *filename)
 		
 		SInt32 clap;
 		ICMImageDescriptionGetProperty(desc,kQTPropertyClass_ImageDescription,kICMImageDescriptionPropertyID_CleanAperture,
-											sizeof(clap),&clap,NULL);
+                                   sizeof(clap),&clap,NULL);
 		
 		m_xsize = 1280;
 		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
@@ -330,83 +338,83 @@ void pix_movieDarwin :: realOpen(char *filename)
 		bpp = 16;
 	UInt32 thePadOffset = m_xsize % bpp;
 	if( thePadOffset != 0 )
-	{
-		m_xsize += (bpp - thePadOffset);
-		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
-	}
+    {
+      m_xsize += (bpp - thePadOffset);
+      SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
+    }
 	
        
-        if (m_colorspace == GL_BGRA_EXT){
-			m_csize = 4;
-            m_format = GL_BGRA_EXT;
-            m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+  if (m_colorspace == GL_BGRA_EXT){
+    m_csize = 4;
+    m_format = GL_BGRA_EXT;
+    m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
             
-            createBuffer();
-            prepareTexture();
-            m_rowBytes = m_xsize * 4;
-            if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
-            err = QTNewGWorldFromPtr(	&m_srcGWorld, 
-                                            k32ARGBPixelFormat,	
-                                            &m_srcRect, 
-                                            NULL, 
-                                            NULL, 
-                                            0, 
-                                            m_pixBlock.image.data, 
-                                            m_rowBytes);
+    createBuffer();
+    prepareTexture();
+    m_rowBytes = m_xsize * 4;
+    if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
+    err = QTNewGWorldFromPtr(	&m_srcGWorld, 
+                              k32ARGBPixelFormat,	
+                              &m_srcRect, 
+                              NULL, 
+                              NULL, 
+                              0, 
+                              m_pixBlock.image.data, 
+                              m_rowBytes);
                                         
-        }else{
-            m_csize = 2;
-            m_format = GL_YCBCR_422_APPLE;
+  }else{
+    m_csize = 2;
+    m_format = GL_YCBCR_422_APPLE;
 #ifndef i386
-            m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+    m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
 #else
-            m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
+    m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
 #endif
             
 			
-            createBuffer();
-            prepareTexture();
-            m_rowBytes = m_xsize * 2;
-            if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
-            err = QTNewGWorldFromPtr(	&m_srcGWorld, 
-                                            k422YpCbCr8CodecType,	
-										 // kComponentVideoUnsigned,
-                                            &m_srcRect, 
-                                            NULL, 
-                                            NULL, 
-                                            0, 
-                                            m_pixBlock.image.data, 
-                                            m_rowBytes);
-        }
+    createBuffer();
+    prepareTexture();
+    m_rowBytes = m_xsize * 2;
+    if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
+    err = QTNewGWorldFromPtr(	&m_srcGWorld, 
+                              k422YpCbCr8CodecType,	
+                              // kComponentVideoUnsigned,
+                              &m_srcRect, 
+                              NULL, 
+                              NULL, 
+                              0, 
+                              m_pixBlock.image.data, 
+                              m_rowBytes);
+  }
 	if (err) {
 		error("Couldn't make QTNewGWorldFromPtr %d", err);
 		m_haveMovie = 0;
 		return;
 	}
              
-        /* movies task method */
-        m_movieTime = GetMovieTime(m_movie,nil);
-        playRate = GetMoviePreferredRate(m_movie);
+  /* movies task method */
+  m_movieTime = GetMovieTime(m_movie,nil);
+  playRate = GetMoviePreferredRate(m_movie);
     
 	// *** set the graphics world for displaying the movie ***
 	::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
         
-        if (m_auto) { 
-           // SetMovieRate(m_movie,X2Fix(m_rate));
-            SetMovieRate(m_movie,X2Fix(1.0));
-            m_play = 1;
-        }
-        else {
-            SetMovieRate(m_movie,X2Fix(0.0));
-        }
+  if (m_auto) { 
+    // SetMovieRate(m_movie,X2Fix(m_rate));
+    SetMovieRate(m_movie,X2Fix(1.0));
+    m_play = 1;
+  }
+  else {
+    SetMovieRate(m_movie,X2Fix(0.0));
+  }
         
-		SetMovieVolume(m_movie,FloatToFixed(m_volume));
-		::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-        curTime = GetMovieTime(m_movie,NULL);
-        prevTime = 0;
-        newImage = 1;
-        m_newFilm = 1;
-        //StartMovie(m_movie);
+  SetMovieVolume(m_movie,FloatToFixed(m_volume));
+  ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+  curTime = GetMovieTime(m_movie,NULL);
+  prevTime = 0;
+  newImage = 1;
+  m_newFilm = 1;
+  //StartMovie(m_movie);
         
 }
 
@@ -416,138 +424,138 @@ void pix_movieDarwin :: realOpen(char *filename)
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: getFrame()
 {	
-    short 	flags = nextTimeStep;
-    OSType	whichMediaType = VisualMediaCharacteristic;
-    if (!m_haveMovie) return;
+  short 	flags = nextTimeStep;
+  OSType	whichMediaType = VisualMediaCharacteristic;
+  if (!m_haveMovie) return;
 
-    if (m_curFrame >= m_numFrames) m_curFrame = 0;
+  if (m_curFrame >= m_numFrames) m_curFrame = 0;
     
-    //************************************
-    //
-    //what follows is some of the worst hack work i've ever done to get QT to 'work'
-    //
-    //the problem is that QT is very good a playing media if it manages everything itself internally.
-    //however, that doesn't fit well with GEM because GEM has it's own internal tasking callbacks, so
-    //in order to get the two to play nice, a bunch of ugly, shit code has to be done.   below is a way to
-    //track the internal state of QT MoviesTask() and figure out which frame it is currently processing.
-    //this avoids the frame being processed twice by the GEM render chain by managing the newImage flag
-    //
-    //note all of the crap to check for the direction of the playback and loop points.
-    //
-    // THERE MUST BE A BETTER WAY!!!!!!!!!!!!!!
-    //
-    //************************************
-    if (m_auto){
-        //play the startmovie() way
-        if (!m_play) SetMovieRate(m_movie,X2Fix(m_rate));
-        m_play = 1;
-        
-        if (m_rate > 0.f) {
-            if (IsMovieDone(m_movie)) {
-				outlet_bang(m_outEnd);
-                GoToBeginningOfMovie(m_movie);
-				prevTime = 0;
-                flags |= nextTimeEdgeOK;
-                }
-                
-			MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
-			curTime = GetMovieTime(m_movie,NULL);
-                
-                //check to see if the current position is past our next frame
-                if (prevTime < curTime){
-                    newImage = 1;
-                    prevTime = curTime;
-                    
-                    //find next frame bounds using GetMovieNextIntertestingTime()
-                    GetMovieNextInterestingTime(m_movie,
-                                        flags,
-                                        1,
-                                        &whichMediaType,
-                                        prevTime,
-                                        0,
-                                        &prevTime,
-                                         nil);
+  // **********************************
+  //
+  // what follows is some of the worst hack work i've ever done to get QT to 'work'
+  //
+  // the problem is that QT is very good a playing media if it manages everything itself internally.
+  // however, that doesn't fit well with GEM because GEM has it's own internal tasking callbacks, so
+  // in order to get the two to play nice, a bunch of ugly, shit code has to be done.   below is a way to
+  // track the internal state of QT MoviesTask() and figure out which frame it is currently processing.
+  // this avoids the frame being processed twice by the GEM render chain by managing the newImage flag
+  //
+  // note all of the crap to check for the direction of the playback and loop points.
+  //
+  // THERE MUST BE A BETTER WAY!!!!!!!!!!!!!!
+  //
+  // ************************************
+  if (m_auto){
+    //play the startmovie() way
+    if (!m_play) SetMovieRate(m_movie,X2Fix(m_rate));
+    m_play = 1;
     
-                }
-                else{
-                    //if it's still the same frame then don't process
-                    newImage = 0;
-                    }
-                
-            }
-        else {
-                
-                if (GetMovieTime(m_movie,nil) <= 0) {
-                    GoToEndOfMovie(m_movie);
-                    prevTime = GetMovieTime(m_movie,NULL);
-                    curTime = prevTime;
-                   // get the frame prior to the last frame
-                    GetMovieNextInterestingTime(m_movie,
-                                        flags,
-                                        1,
-                                        &whichMediaType,
-                                        prevTime,
-                                        -1,
-                                        &prevTime,
-                                         NULL);
-                                         
+    if (m_rate > 0.f) {
+      if (IsMovieDone(m_movie)) {
+        outlet_bang(m_outEnd);
+        GoToBeginningOfMovie(m_movie);
+        prevTime = 0;
+        flags |= nextTimeEdgeOK;
+      }
+      
+      MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
+      curTime = GetMovieTime(m_movie,NULL);
+      
+      //check to see if the current position is past our next frame
+      if (prevTime < curTime){
+        newImage = 1;
+        prevTime = curTime;
                     
-                    }else{
-                    
-                    MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
-                    curTime = GetMovieTime(m_movie,NULL);
-                    
-                    if (prevTime >= curTime){
-                        newImage = 1;
-                        prevTime = curTime;
-                        //find next frame bounds using GetMovieNextIntertestingTime()
-                        GetMovieNextInterestingTime(m_movie,
-                                            flags,
-                                            1,
-                                        &whichMediaType,
-                                        prevTime,
-                                        -1,
-                                        &prevTime,
-                                         NULL);
+        //find next frame bounds using GetMovieNextIntertestingTime()
+        GetMovieNextInterestingTime(m_movie,
+                                    flags,
+                                    1,
+                                    &whichMediaType,
+                                    prevTime,
+                                    0,
+                                    &prevTime,
+                                    nil);
     
-                    }
-                    else{
-                        newImage = 0;
-                        }
-                }
-                }
-            if (m_newFilm){
-                        newImage = 1;
-                        //MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
-                       // curTime = GetMovieTime(m_movie,NULL);
-                    }
-                            
+      }
+      else{
+        //if it's still the same frame then don't process
+        newImage = 0;
+      }
+                
     }
-    else
-    {
-    //play the manual way
-        if (m_play) {
-            SetMovieRate(m_movie,X2Fix(0.0));
-            m_play = 0; //turn off play
-            return;
-            }
-        
-        //m_movieTime = m_reqFrame * duration;
-        m_movieTime = (long)((float)m_reqFrame * durationf);
-        
-         m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
-        ::GetMovieNextInterestingTime(	m_movie,
-                                        flags,
-                                        1,
-                                        &whichMediaType,
-                                        m_movieTime,
-                                        0,
-                                        &m_movieTime,
-                                         NULL);
-                                       // &durationf);
+    else {
+                
+      if (GetMovieTime(m_movie,nil) <= 0) {
+        GoToEndOfMovie(m_movie);
+        prevTime = GetMovieTime(m_movie,NULL);
+        curTime = prevTime;
+        // get the frame prior to the last frame
+        GetMovieNextInterestingTime(m_movie,
+                                    flags,
+                                    1,
+                                    &whichMediaType,
+                                    prevTime,
+                                    -1,
+                                    &prevTime,
+                                    NULL);
                                          
-        SetMovieTimeValue(m_movie, m_movieTime);
-        MoviesTask(m_movie, 0);
+                    
+      }else{
+                    
+        MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
+        curTime = GetMovieTime(m_movie,NULL);
+                    
+        if (prevTime >= curTime){
+          newImage = 1;
+          prevTime = curTime;
+          //find next frame bounds using GetMovieNextIntertestingTime()
+          GetMovieNextInterestingTime(m_movie,
+                                      flags,
+                                      1,
+                                      &whichMediaType,
+                                      prevTime,
+                                      -1,
+                                      &prevTime,
+                                      NULL);
+    
+        }
+        else{
+          newImage = 0;
+        }
+      }
+    }
+    if (m_newFilm){
+      newImage = 1;
+      //MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld *** 
+      // curTime = GetMovieTime(m_movie,NULL);
+    }
+                            
+  }
+  else
+    {
+      //play the manual way
+      if (m_play) {
+        SetMovieRate(m_movie,X2Fix(0.0));
+        m_play = 0; //turn off play
+        return;
+      }
+        
+      //m_movieTime = m_reqFrame * duration;
+      m_movieTime = (long)((float)m_reqFrame * durationf);
+        
+      m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
+      ::GetMovieNextInterestingTime(	m_movie,
+                                      flags,
+                                      1,
+                                      &whichMediaType,
+                                      m_movieTime,
+                                      0,
+                                      &m_movieTime,
+                                      NULL);
+      // &durationf);
+                                         
+      SetMovieTimeValue(m_movie, m_movieTime);
+      MoviesTask(m_movie, 0);
         
     }
 
@@ -560,8 +568,16 @@ void pix_movieDarwin :: render(GemState *state)
   texFrame(state,1);
   getFrame();
   // MoviesTask(m_movie,0);
-  //post("this render function is being called");
 
+  if (m_textureObj)  {
+    t_atom ap[5];
+    SETFLOAT(ap, (t_float)m_textureObj); // OK
+    SETFLOAT(ap+1, (t_float)m_xRatio);   // constructor
+    SETFLOAT(ap+2, (t_float)m_yRatio);   // constructor
+    SETFLOAT(ap+3, (t_float)m_textureType);
+    SETFLOAT(ap+4, (t_float)upsidedown);    // always TRUE on Darwin (with QT backend)
+    outlet_list(m_outTex, &s_list, 5, ap);
+  }
 }
 
 
@@ -571,42 +587,42 @@ void pix_movieDarwin :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: prepareTexture()
 {
-    float x2,y2;
-    float xratio, yratio;
+  float x2,y2;
+  float xratio, yratio;
     
-    x2 = powerOfTwo(m_pixBlock.image.xsize);
-    y2 = powerOfTwo(m_pixBlock.image.ysize);
-    xratio = x2 / m_pixBlock.image.xsize;
-    yratio = y2 / m_pixBlock.image.ysize;
+  x2 = powerOfTwo(m_pixBlock.image.xsize);
+  y2 = powerOfTwo(m_pixBlock.image.ysize);
+  xratio = x2 / m_pixBlock.image.xsize;
+  yratio = y2 / m_pixBlock.image.ysize;
     
-    if (m_rectangle) {
+  if (m_rectangle) {
     
-        m_coords[3].s = 0.f;
-        m_coords[3].t = 0.f;
+    m_coords[3].s = 0.f;
+    m_coords[3].t = 0.f;
     
-        m_coords[2].s = m_pixBlock.image.xsize;
-        m_coords[2].t = 0.f;
+    m_coords[2].s = m_pixBlock.image.xsize;
+    m_coords[2].t = 0.f;
     
-        m_coords[1].s = m_pixBlock.image.xsize;
-        m_coords[1].t = m_pixBlock.image.ysize;
+    m_coords[1].s = m_pixBlock.image.xsize;
+    m_coords[1].t = m_pixBlock.image.ysize;
     
-        m_coords[0].s = 0.f;
-        m_coords[0].t = m_pixBlock.image.ysize;
+    m_coords[0].s = 0.f;
+    m_coords[0].t = m_pixBlock.image.ysize;
         
-    }
-    else
+  }
+  else
     {
-        m_coords[3].s = 0.f;
-        m_coords[3].t = 0.f;
+      m_coords[3].s = 0.f;
+      m_coords[3].t = 0.f;
     
-        m_coords[2].s = xratio;
-        m_coords[2].t = 0.f;
+      m_coords[2].s = xratio;
+      m_coords[2].t = 0.f;
     
-        m_coords[1].s = xratio;
-        m_coords[1].t = yratio;
+      m_coords[1].s = xratio;
+      m_coords[1].t = yratio;
     
-        m_coords[0].s = 0.f;
-        m_coords[0].t = yratio;
+      m_coords[0].s = 0.f;
+      m_coords[0].t = yratio;
     }
 }
 
@@ -616,29 +632,23 @@ void pix_movieDarwin :: prepareTexture()
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: setUpTextureState()
 {
-    if (m_rectangle) {
-        post("using rectangle textures");
-        glTexParameterf(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_PRIORITY, 0.0f);
+  if (m_rectangle && GemMan::texture_rectangle_supported) {
+    verbose(1, "using rectangle textures");
+    m_textureType = GL_TEXTURE_RECTANGLE_ARB;
+  }
+  else  {
+    m_textureType = GL_TEXTURE_2D;
+    verbose(1,"using power of two textures");
+  }
 
-        glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-        
-        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    }
-    else
-    {
-        post("using power of two textures");
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, 0.0);
+  glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0);
 
-        glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
-        
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    }
+  glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
+     
+  glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 }
 
@@ -654,7 +664,7 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
   m_oldNumCoords = state->numTexCoords;
   m_oldTexture   = state->texture;
 
-state->texture = 2;
+  state->texture = 2;
   state->texCoords = m_coords;
   state->numTexCoords = 4;
   
@@ -662,74 +672,72 @@ state->texture = 2;
   
   glActiveTexture(GL_TEXTURE0_ARB);
   
-  if (!m_rectangle){
-        glEnable(GL_TEXTURE_2D);
-  glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  if (GL_TEXTURE_2D == m_textureType){
+    glEnable(m_textureType);
+    glBindTexture(m_textureType, m_textureObj);
  
-  if (m_pixBlock.image.csize != m_dataSize[0] ||
-	m_pixBlock.image.xsize != m_dataSize[1] ||
-	m_pixBlock.image.ysize != m_dataSize[2]) {
-        m_dataSize[0] = m_pixBlock.image.csize;
-        m_dataSize[1] = m_pixBlock.image.xsize;
-        m_dataSize[2] = m_pixBlock.image.ysize;
-        glTexImage2D(GL_TEXTURE_2D, 0,
-		     GL_RGBA,
-		     m_pixBlock.image.xsize,
-		     m_pixBlock.image.ysize, 0,
-		     m_pixBlock.image.format,//       GL_YCBCR_422_APPLE,
-		     m_pixBlock.image.type,//       GL_YCBCR_422_APPLE,
-		     m_pixBlock.image.data);
+    if (m_pixBlock.image.csize != m_dataSize[0] ||
+        m_pixBlock.image.xsize != m_dataSize[1] ||
+        m_pixBlock.image.ysize != m_dataSize[2]) {
+      m_dataSize[0] = m_pixBlock.image.csize;
+      m_dataSize[1] = m_pixBlock.image.xsize;
+      m_dataSize[2] = m_pixBlock.image.ysize;
+      glTexImage2D(m_textureType, 0,
+                   GL_RGBA,
+                   m_pixBlock.image.xsize,
+                   m_pixBlock.image.ysize, 0,
+                   m_pixBlock.image.format,//       GL_YCBCR_422_APPLE,
+                   m_pixBlock.image.type,//       GL_YCBCR_422_APPLE,
+                   m_pixBlock.image.data);
             
-    post("new power-of-two texture size - glTexImage2D");
+      verbose(1, "new power-of-two texture size - glTexImage2D");
     }
+    m_xRatio = 1.0;
+    m_yRatio = 1.0;
 
-    
-
-    glTexSubImage2D(GL_TEXTURE_2D, 0,
+    glTexSubImage2D(m_textureType, 0,
                     0, 0,			// position
                     m_xsize,			// the x size of the data
                     m_ysize,			// the y size of the data
                     m_pixBlock.image.format,	// the format, e.g.  GL_YCBCR_422_APPLE,
                     m_pixBlock.image.type,	// the type, e.g.  GL_UNSIGNED_SHORT_8_8_REV_APPLE,
                     m_frame);		//  m_pixBlock.image.data);
-  }
-  else{
-  
-  glEnable(GL_TEXTURE_RECTANGLE_ARB);
-  glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textureObj);
- 
+  } else if (GL_TEXTURE_RECTANGLE_ARB == m_textureType) {
+    glEnable(m_textureType);
+    glBindTexture(m_textureType, m_textureObj);
 
-	if (m_newFilm ){
-		glTextureRangeAPPLE( GL_TEXTURE_RECTANGLE_ARB, 
-			    m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize, 
-			    m_pixBlock.image.data );
+    if (m_newFilm ){
+      glTextureRangeAPPLE( m_textureType, 
+                           m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize, 
+                           m_pixBlock.image.data );
 				
-			glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+			glTexParameteri(m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
 			
 			glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
 			
-			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
-		     GL_RGBA,
-		     m_pixBlock.image.xsize,
-		     m_pixBlock.image.ysize, 0,
-		     m_pixBlock.image.format, //       GL_YCBCR_422_APPLE,
-		     m_pixBlock.image.type,   //      GL_UNSIGNED_SHORT_8_8_REV_APPLE, //GL_UNSIGNED_SHORT_8_8_APPLE,
-		     m_pixBlock.image.data);
+			glTexImage2D(m_textureType, 0,
+                   GL_RGBA,
+                   m_pixBlock.image.xsize,
+                   m_pixBlock.image.ysize, 0,
+                   m_pixBlock.image.format, //       GL_YCBCR_422_APPLE,
+                   m_pixBlock.image.type,   //      GL_UNSIGNED_SHORT_8_8_REV_APPLE, //GL_UNSIGNED_SHORT_8_8_APPLE,
+                   m_pixBlock.image.data);
 			 
-			post("new film");
+			verbose(1, "new film");
 			m_newFilm = 0; //just to be sure
-		 }	
+    }	
 
-    glTexSubImage2D(GL_TEXTURE_RECTANGLE_ARB, 0,
+    m_xRatio = m_xsize;
+    m_yRatio = m_ysize;
+
+    glTexSubImage2D(m_textureType, 0,
                     0, 0,			// position
                     m_xsize,			// the x size of the data
                     m_ysize,			// the y size of the data
                     GL_YCBCR_422_APPLE,               //  m_pixBlock.image.format,	// the format
                     GL_UNSIGNED_SHORT_8_8_REV_APPLE,  //  m_pixBlock.image.type,	// the type
                     m_pixBlock.image.data);           //   m_frame);		// the data + header offset
-    }
-	
-
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -748,11 +756,8 @@ void pix_movieDarwin :: postrender(GemState *state)
   m_pixBlock.newimage = 0;
   
   glActiveTexture(GL_TEXTURE0_ARB);
-  
-  if ( !GemMan::texture_rectangle_supported )
-    glDisable(GL_TEXTURE_2D);
-  else
-    glDisable(GL_TEXTURE_RECTANGLE_ARB);
+
+  glDisable(m_textureType);
 
   if (m_numFrames>0 && m_reqFrame>m_numFrames){
     m_reqFrame = m_numFrames;
@@ -767,21 +772,18 @@ void pix_movieDarwin :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: startRendering()
 {
-    glGenTextures(1, &m_textureObj);
+  glGenTextures(1, &m_textureObj);
 
-    if ( ! m_rectangle )
-        glBindTexture(GL_TEXTURE_2D, m_textureObj);
-    else
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textureObj);
+  if ( ! m_rectangle )
+    glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  else
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textureObj);
 
-//    glBindTexture(GL_TEXTURE_2D, m_textureObj);
-
-  
-    setUpTextureState();
+  setUpTextureState();
     
-    m_pixBlock.newimage = 1;
+  m_pixBlock.newimage = 1;
 	m_newFilm = 1;
-    m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
+  m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 	
 	if (m_auto && m_haveMovie) SetMovieVolume(m_movie, (short)(m_volume * 255.f));
 }
@@ -802,18 +804,18 @@ void pix_movieDarwin :: stopRendering()
 
 void pix_movieDarwin :: MovRate(float rate)
 {
-    m_rate = (float)rate;
-    if (m_auto && m_haveMovie) {
+  m_rate = (float)rate;
+  if (m_auto && m_haveMovie) {
 		SetMovieRate(m_movie,X2Fix((double)m_rate));
-    }
+  }
 }
 
 void pix_movieDarwin :: MovVolume(float volume)
 {
-    m_volume = (float)volume;
-    if (m_auto && m_haveMovie) {
-        SetMovieVolume(m_movie,(short)(m_volume * 255.f));
-    }
+  m_volume = (float)volume;
+  if (m_auto && m_haveMovie) {
+    SetMovieVolume(m_movie,(short)(m_volume * 255.f));
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -823,7 +825,7 @@ void pix_movieDarwin :: MovVolume(float volume)
 void pix_movieDarwin :: changeImage(int imgNum, int trackNum)
 {
   if (imgNum < 0){
-   // error("selection number must be > 0");
+    // error("selection number must be > 0");
     imgNum=0;
   }
   if (trackNum < 0){
@@ -832,31 +834,31 @@ void pix_movieDarwin :: changeImage(int imgNum, int trackNum)
   }
 
   if (m_haveMovie){
-        if (imgNum > m_numFrames) {
-            if (m_numFrames<0) m_reqFrame = imgNum;
-                else m_reqFrame=m_numFrames;
+    if (imgNum > m_numFrames) {
+      if (m_numFrames<0) m_reqFrame = imgNum;
+      else m_reqFrame=m_numFrames;
       //      else error("frame %d exceeds max (%d)", imgNum, m_numFrames);
       //m_reqFrame = imgNum;
-            return;
-        } else m_reqFrame = imgNum;
+      return;
+    } else m_reqFrame = imgNum;
   }
 }
 
 void pix_movieDarwin :: LoadRam()
 {
-    TimeValue	length;
-    OSErr err;
-    if (m_haveMovie){      
-        m_movieTime = 0;
-        length = GetMovieDuration(m_movie);
-        err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
-        if (err)
-        {
-            post("LoadMovieIntoRam failed miserably");
-        }
-    }else{
-        post("no movie to load into RAM!");
-    }
+  TimeValue	length;
+  OSErr err;
+  if (m_haveMovie){      
+    m_movieTime = 0;
+    length = GetMovieDuration(m_movie);
+    err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
+    if (err)
+      {
+        error("LoadMovieIntoRam failed miserably");
+      }
+  }else{
+    error("no movie to load into RAM!");
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -867,32 +869,32 @@ void pix_movieDarwin :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)create_pix_movieDarwin,gensym("pix_movie"),A_DEFSYM,A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::openMessCallback,
-		  gensym("open"), A_SYMBOL, A_NULL);
+                  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::changeImageCallback,
-		  gensym("img_num"), A_GIMME, A_NULL);
+                  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::autoCallback,
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
+                  gensym("auto"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::rateCallback,
-		  gensym("rate"), A_DEFFLOAT, A_NULL);
+                  gensym("rate"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::ramCallback,
-		  gensym("ram"),  A_NULL);
+                  gensym("ram"),  A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::hiqualityCallback,
-		  gensym("hiquality"), A_DEFFLOAT, A_NULL);
+                  gensym("hiquality"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::rectangleCallback,
-		  gensym("rectangle"), A_DEFFLOAT, A_NULL);
+                  gensym("rectangle"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movieDarwin::volumeCallback,
-                    gensym("volume"), A_DEFFLOAT, A_NULL);
+                  gensym("volume"), A_DEFFLOAT, A_NULL);
 }
 
 void pix_movieDarwin :: openMessCallback(void *data, t_symbol *filename)
 {
-    GetMyClass(data)->openMess(filename,0);
+  GetMyClass(data)->openMess(filename,0);
 }
 
 void pix_movieDarwin :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   //  GetMyClass(data)->changeImage((int)imgNum);
-    GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_movieDarwin :: autoCallback(void *data, t_floatarg state)
@@ -907,7 +909,7 @@ void pix_movieDarwin :: rateCallback(void *data, t_floatarg state)
 
 void pix_movieDarwin :: volumeCallback(void *data, t_floatarg state)
 {
-    GetMyClass(data)->MovVolume((float)state);
+  GetMyClass(data)->MovVolume((float)state);
 }
 
 void pix_movieDarwin :: ramCallback(void *data)
