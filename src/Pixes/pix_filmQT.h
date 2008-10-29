@@ -14,7 +14,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_FILMQT_H_
 #define INCLUDE_PIX_FILMQT_H_
 
-#include "pix_film.h"
+#include "pix_filmOS.h"
 
 
 #ifdef __APPLE__
@@ -40,7 +40,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_filmQT : public pix_film
+class GEM_EXTERN pix_filmQT : public pix_filmOS
 {
   CPPEXTERN_HEADER(pix_filmQT, GemBase)
 

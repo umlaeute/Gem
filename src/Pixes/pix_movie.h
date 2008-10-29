@@ -16,18 +16,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_MOVIE_H_
 #define INCLUDE_PIX_MOVIE_H_
 
-#include "Base/config.h"
-#ifndef FILM_NEW
-
-#ifdef __WIN32__
-#include "Pixes/pix_filmNT.h"
-#elif __linux__
-#include "Pixes/pix_filmLinux.h"
-#elif __APPLE__
-#include "pix_filmDarwin.h"
-#else
-#error Define pix_film for this OS
-#endif
+#include "Pixes/pix_film.h"
+#include "Pixes/pix_texture.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -42,22 +32,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-#ifdef __WIN32__
-class GEM_EXTERN pix_movie : public pix_filmNT
+class GEM_EXTERN pix_movie : public pix_film
 {
-  CPPEXTERN_HEADER(pix_movie, pix_filmNT)
-#elif __linux__
-class GEM_EXTERN pix_movie : public pix_filmLinux
-{
-  CPPEXTERN_HEADER(pix_movie, pix_filmLinux)
-#elif __APPLE__
-class GEM_EXTERN pix_movie : public pix_filmDarwin
-{
-    CPPEXTERN_HEADER(pix_movie, pix_filmDarwin)
-#endif
-   
-    public:
+  CPPEXTERN_HEADER(pix_movie, pix_film)
   
+    public:
+
   //////////
   // Constructor
   pix_movie(t_symbol *filename);
@@ -69,52 +49,24 @@ class GEM_EXTERN pix_movie : public pix_filmDarwin
   virtual ~pix_movie();
 
   //////////
-  // create and delete buffers
-  virtual void createBuffer();
-
-  //////////
-  // prepare for texturing (on open)
-  virtual void prepareTexture();
-
-  //////////
   // Do the rendering
-  virtual void texFrame(GemState *state, int doit);
-
+  virtual void render(GemState *state);
   //////////
   // Clear the dirty flag on the pixBlock
   virtual void postrender(GemState *state);
-
   //////////
   virtual void startRendering();
-
   //////////
   // Delete texture object
   virtual void stopRendering();
-    	
-  //////////
-  virtual void setUpTextureState();
 
-  //-----------------------------------
-  // GROUP:	Texture data
-  //-----------------------------------
-
+  pix_texture    m_pixtexture;
   //////////
-  // The texture coordinates
-  TexCoord    	m_coords[4];
-	
-  //////////
-  // this is what we get from upstream
-  TexCoord       *m_oldTexCoords;
-  int             m_oldNumCoords;
-  int             m_oldTexture;
-
-  //////////
-  // The size of the texture (so we can use sub image)
-  int		m_dataSize[3];
-
-  GLuint	m_textureObj;	
-  float		m_xRatio;
-  float		m_yRatio;
+  // Set the texture quality
+  // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
+  void          textureQuality(int type){m_pixtexture.textureQuality(type);}
+  void          repeatMess(int type){m_pixtexture.repeatMess(type);}
+  void          modeMess(int mode){m_pixtexture.m_rectangle=mode;}
 
  protected:
 	
@@ -123,8 +75,11 @@ class GEM_EXTERN pix_movie : public pix_filmDarwin
   static void openMessCallback   (void *data, t_symbol *filename);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback       (void *data, t_floatarg state);
-};
 
-#endif /* FILM_NEW */
+  static void 	textureMessCallback(void *data, t_floatarg n);
+  static void 	modeCallback(void *data, t_floatarg n);
+  static void 	repeatMessCallback(void *data, t_floatarg n);
+
+};
 
 #endif	// for header file

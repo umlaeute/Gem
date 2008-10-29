@@ -30,7 +30,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmDarwin, t_symbol *, A_DEFSYM)
 /////////////////////////////////////////////////////////
 
 pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
-	pix_film(filename), m_srcGWorld(NULL), m_movie(NULL)
+	pix_filmOS(filename), m_srcGWorld(NULL), m_movie(NULL)
 {
   // make sure that there are some characters
   if (filename->s_name[0]) openMess(filename);

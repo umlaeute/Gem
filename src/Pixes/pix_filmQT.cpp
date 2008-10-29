@@ -35,7 +35,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmQT, t_symbol *, A_DEFSYM)
 /////////////////////////////////////////////////////////
 
 pix_filmQT :: pix_filmQT(t_symbol *filename) :
-  pix_film(filename)
+  pix_filmOS(filename)
 , m_bInit(false)
 {
 

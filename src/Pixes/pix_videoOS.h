@@ -10,27 +10,27 @@ Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
-Linux version by Millier Puckette. msp@ucsd.edu
+Linux version by Miller Puckette. msp@ucsd.edu
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_VIDEONEW_H_
-#define INCLUDE_PIX_VIDEONEW_H_
+#ifndef INCLUDE_PIX_VIDEOOS_H_
+#define INCLUDE_PIX_VIDEOOS_H_
 #include "Base/config.h"
 
-#define MAX_VIDEO_HANDLES 4
-
-#ifdef VIDEO_NEW
-# define DO_AUTO_REGISTER_CLASS
+#if defined VIDEO_NEW  || defined HAVE_DIRECTSHOW
+# ifndef DO_AUTO_REGISTER_CLASS
+#  define NO_AUTO_REGISTER_CLASS
+# endif
 #endif
 
 #include "Base/GemBase.h"
-#include "Pixes/video.h"
+#include "Base/GemPixUtil.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  pix_videoNEW
+  pix_videoOS
     
   Loads in an video
     
@@ -47,74 +47,95 @@ Linux version by Millier Puckette. msp@ucsd.edu
   "sat" (int) - the saturation
     
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_videoNEW : public GemBase
+class GEM_EXTERN pix_videoOS : public GemBase
 {
-  CPPEXTERN_HEADER(pix_videoNEW, GemBase)
-    
+  CPPEXTERN_HEADER(pix_videoOS, GemBase)
+
     public:
 
   //////////
   // Constructor
-  pix_videoNEW();
-  
+  pix_videoOS(t_floatarg num = 0);
+    	
  protected:
     	
   //////////
   // Destructor
-  virtual ~pix_videoNEW();
+  virtual ~pix_videoOS();
 
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
+
   //////////
   // Clear the dirty flag on the pixBlock
   virtual void 	postrender(GemState *state);
+
   //////////
   virtual void	startRendering();
+
   //////////
   // If you care about the stop of rendering
   virtual void	stopRendering();
-  
+    	
+  //////////
+  // Clean up the pixBlock
+  void	    	cleanPixBlock();
+    
   //////////
   // Set the video dimensions
   virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
-			  int topmargin = 0 , int bottommargin = 0);
+			  int topmargin = 0 , int bottommargin = 0) {}
+
   //////////
   // Set the video offset
   virtual void	offsetMess(int x, int y);
-  // should the video-data be swapped ?
+    
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  virtual int	startTransfer();
+    
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  virtual int	stopTransfer();
+    
+  ////////// 
+  // swap the image (upside down ?)
   virtual void	swapMess(int state);
-  // Set the channel of the capturing device 
-  virtual void	channelMess(int channel, t_float freq=0);
-  // Set the channel of the capturing device 
-  virtual void	normMess(t_symbol *s);
-  // Set the color-space
-  virtual void	colorMess(t_atom*);
-  // Set the device
-  virtual void	deviceMess(t_symbol*dev);
-  virtual void	deviceMess(int dev);
-  // Set the driver architecture; (probably this makes only sense under linux right now: you can choose between video4linux(0) and video1394(1))
-  virtual void	driverMess(int dev);
 
-  // List the available devices
-  virtual void 	enumerateMess();
-
-  // fire the format dialogs
+  ////////// 
+  // enumerate the devices
+  virtual void	enumerateMess();
+  ////////// 
+  // colorspace-message
+  virtual void	csMess(int format);
+  ////////// 
+  // property-dialog
   virtual void	dialogMess(int,t_atom*);
 
-  // Set the quality for DV decoding
-  virtual void	qualityMess(int dev);
-        
   //-----------------------------------
   // GROUP:	Video data
   //-----------------------------------
     
-  video *m_videoHandle;
-  video *m_videoHandles[MAX_VIDEO_HANDLES];
-  int    m_numVideoHandles;
-
-  int    m_driver;
-
+  //////////
+  // If video is connected
+  int 	    	m_haveVideo;
+    	
+  //////////
+  // The pixBlock with the current image
+  pixBlock    	m_pixBlock;
+  imageStruct   m_imageStruct;
+    	
+  //////////
+  // Should swap the pixels?
+  int 	    	m_swap;
+    	 
+  //////////
+  // Do we have to color swap?
+  int 	    	m_colorSwap;
+    	
  private:
     	
   //////////
@@ -123,16 +144,11 @@ class GEM_EXTERN pix_videoNEW : public GemBase
   static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
   static void offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
   static void swapMessCallback(void *data, t_floatarg state);
-  static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void normMessCallback(void *data, t_symbol*format);
-  static void modeMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void colorMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void deviceMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void driverMessCallback(void *data, t_floatarg dev);
+
+  /* dummy callbacks; won't do anything, but are here for future compatibility */
   static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
   static void enumerateMessCallback(void *data);
-  static void qualityMessCallback(void *data, t_floatarg dev);
-
+  static void csMessCallback(void *data, t_symbol*colorspace);
 };
 
 #endif	// for header file

@@ -13,45 +13,12 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-/*
-    this is an attempt at a Linux version of pix_video by Miller Puckette.
-    Anyone conversant in c++ will probably howl at this.  I'm uncertain of
-    several things.
-    
-    First, the #includes I threw in pix_video.h may not all be necessary; I
-    notice that far fewer are needed for the other OSes.
-    
-    Second, shouldn't the os-dependent state variables be "private"?  I
-    followed the lead of the other os-dependent state variables.  Also,
-    I think the indentation is goofy but perhaps there's some reason for it.
-
-    Third, I probably shouldn't be using sprintf to generate filenames; I
-    don't know the "modern" c++ way to do this.
-    
-    Fourth, I don't know why some state variables 
-    show up as "arguments" in the pix_video :: pix_video().
-     
-    This code is written with the "bttv" device in mind, which memory mapes
-    images up to 24 bits per pixel.  So we request the whole 24 and don't
-    settle for anything of lower quality (nor do we offer anything of higher
-    quality; it seems that Gem is limited to 32 bits per pixel including
-    alpha.)  We take all video images to be opaque by setting the alpha
-    channel to 255.
-
-*/
-
-#if defined __WIN32__ || defined __APPLE__ || defined __linux__
-// on this OSs we surely have child-classes for the real function
-// so we don't want pix_video.cpp to reserve [pix_video]
-# define NO_AUTO_REGISTER_CLASS
-#endif
 
 #include "pix_video.h"
-#include "Base/GemCache.h"
-
+#include "Pixes/videoV4L.h"
+#include "Pixes/videoV4L2.h"
+#include "Pixes/videoDV4L.h"
 CPPEXTERN_NEW(pix_video)
-
-#define BYTESIN 3
 
 /////////////////////////////////////////////////////////
 //
@@ -61,82 +28,105 @@ CPPEXTERN_NEW(pix_video)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_video :: pix_video(t_floatarg num)
-    	   : m_haveVideo(0), m_swap(1), m_colorSwap(0)
+pix_video :: pix_video() : 
+  m_videoHandle(NULL), m_driver(-1)
 {
-  m_pixBlock.image = m_imageStruct;
-  m_haveVideo = 0;
+  int i = MAX_VIDEO_HANDLES;
+  while(i--)m_videoHandles[i]=NULL;
+  i=0;
+  /* LATER: think whether v4l-1 and v4l-2 should be exclusive... */
+#ifdef HAVE_VIDEO4LINUX2
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L2(GL_RGBA);  i++;
+#endif /* V4L2 */
+#ifdef HAVE_VIDEO4LINUX
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L(GL_RGBA);  i++;
+#endif /* V4L */
+#ifdef HAVE_LIBDV
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoDV4L(GL_RGBA);  i++;
+#endif /* DV4L */
+
+  m_numVideoHandles=i;
+#if 0
+  driverMess(0);
+#else
+  /*
+   * calling driverMess() would immediately startTransfer(); 
+   * we probably don't want this in initialization phase
+   */
+  m_driver=0;
+  m_videoHandle=m_videoHandles[m_driver];
+#endif
 }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_video :: ~pix_video()
-{
+pix_video :: ~pix_video(){
+  /* clean up all video handles;
+   * the video-handles have to stop the transfer themselves
+   */
+  int i=MAX_VIDEO_HANDLES;
+  while(i--) {
+    if(m_videoHandles[i]!=NULL)
+      delete m_videoHandles[i];
+  }
 }
 
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_video :: render(GemState *state)
-{
-    if (!m_haveVideo)
-    {
-	post("no video for this OS");
-	return;
-    }
+void pix_video :: render(GemState *state){
+   if (m_videoHandle)state->image=m_videoHandle->getFrame();
+#if 0
+   /* DEBUG for missed frames */
+   if(!state->image->newimage){
+     static int i=0;
+     post("video: missed frame %d", i);
+     i++;
+   }
+   else
+     post("video: got frame");
+#endif
 }
 
 /////////////////////////////////////////////////////////
 // startRendering
 //
 /////////////////////////////////////////////////////////
-void pix_video :: startRendering()
-{
+void pix_video :: startRendering(){
+  if (!m_videoHandle) {
+    error("do video for this OS");
+    return;
+  }
+  verbose(1, "starting transfer");
+  m_videoHandle->startTransfer();
 }
 
 /////////////////////////////////////////////////////////
 // stopRendering
 //
 /////////////////////////////////////////////////////////
-void pix_video :: stopRendering()
-{
-    // this is a no-op
+void pix_video :: stopRendering(){
+  if (m_videoHandle)m_videoHandle->stopTransfer();
 }
 
 /////////////////////////////////////////////////////////
 // postrender
 //
 /////////////////////////////////////////////////////////
-void pix_video :: postrender(GemState *state)
-{
+void pix_video :: postrender(GemState *state){
+  state->image = NULL;
 }
-
 /////////////////////////////////////////////////////////
-// startTransfer
+// dimenMess
 //
 /////////////////////////////////////////////////////////
-int pix_video :: startTransfer()
+void pix_video :: dimenMess(int x, int y, int leftmargin, int rightmargin,
+			       int topmargin, int bottommargin)
 {
-  post("no video available for this OS");
-    if (!m_haveVideo)
-    	return(0);
-
-    return(1);
-}
-
-/////////////////////////////////////////////////////////
-// stopTransfer
-//
-/////////////////////////////////////////////////////////
-int pix_video :: stopTransfer()
-{
-    if ( !m_haveVideo )
-    	return(0);
-    
-    return(1);
+  if (m_videoHandle)m_videoHandle->setDimen(x,y,leftmargin,rightmargin,topmargin,bottommargin);
 }
 
 /////////////////////////////////////////////////////////
@@ -145,32 +135,98 @@ int pix_video :: stopTransfer()
 /////////////////////////////////////////////////////////
 void pix_video :: offsetMess(int x, int y)
 {
-  error("offset not supported on this OS");
+  if (m_videoHandle)m_videoHandle->setOffset(x,y);
 }
-
-/////////////////////////////////////////////////////////
-// cleanPixBlock -- free the pixel buffer memory
-//
-/////////////////////////////////////////////////////////
-void pix_video :: cleanPixBlock()
-{
-}
-
 /////////////////////////////////////////////////////////
 // swapMess
 //
 /////////////////////////////////////////////////////////
 void pix_video :: swapMess(int state)
 {
-  error("swap not supported on this OS");
+  if (m_videoHandle)m_videoHandle->setSwap(state);
 }
 /////////////////////////////////////////////////////////
-// colorspaceMess
+// channelMess
 //
 /////////////////////////////////////////////////////////
-void pix_video :: csMess(int format)
+void pix_video :: channelMess(int channel, t_float freq)
 {
-  error("colorspace not supported on this OS");
+  if(m_videoHandle)m_videoHandle->setChannel(channel, freq);
+}
+/////////////////////////////////////////////////////////
+// normMess
+//
+/////////////////////////////////////////////////////////
+void pix_video :: normMess(t_symbol *s)
+{
+  if(m_videoHandle)m_videoHandle->setNorm(s->s_name);
+}
+/////////////////////////////////////////////////////////
+// colorMess
+//
+/////////////////////////////////////////////////////////
+void pix_video :: colorMess(t_atom*a)
+{
+  int format=0;
+  if (a->a_type==A_SYMBOL){
+      char c =*atom_getsymbol(a)->s_name;
+      // we only have 3 colour-spaces: monochrome (GL_LUMINANCE), yuv (GL_YCBCR_422_GEM), and rgba (GL_RGBA)
+      // if you don't need colour, i suggest, take monochrome
+      // if you don't need alpha,  i suggest, take yuv
+      // else take rgba
+      switch (c){
+      case 'g': case 'G': format=GL_LUMINANCE; break;
+      case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
+      case 'r': case 'R':
+      default: format=GL_RGBA;
+      }
+  } else format=atom_getint(a);
+  if(m_videoHandle)m_videoHandle->setColor(format);
+}
+/////////////////////////////////////////////////////////
+// driverMess
+//
+/////////////////////////////////////////////////////////
+void pix_video :: driverMess(int dev)
+{
+  //  post("driver: %d", dev);
+  if(dev>=m_numVideoHandles){
+    error("driverID (%d) must not exceed %d", dev, m_numVideoHandles);
+    return;
+  }
+  if((dev!=m_driver) && (m_videoHandle!=m_videoHandles[dev])){
+    if(m_videoHandle)m_videoHandle->stopTransfer();
+    m_videoHandle=m_videoHandles[dev];
+    if(m_videoHandle)m_videoHandle->startTransfer();
+    m_driver=dev;
+  }
+}
+/////////////////////////////////////////////////////////
+// deviceMess
+//
+/////////////////////////////////////////////////////////
+void pix_video :: deviceMess(int dev)
+{
+  if (m_videoHandle)m_videoHandle->setDevice(dev);
+}
+void pix_video :: deviceMess(t_symbol*s)
+{
+  int err=0;
+  if (m_videoHandle)err=m_videoHandle->setDevice(s->s_name);
+  
+  verbose(1, "device-err: %d", err);
+  if(!err){
+    int d=0;
+    if(m_videoHandle)m_videoHandle->stopTransfer();
+    for(d=0; d<m_numVideoHandles; d++){
+      if(m_videoHandles[d]->setDevice(s->s_name)){
+        m_videoHandle=m_videoHandles[d];
+        post("switched to driver #%d", d);
+        break;
+      }
+    }
+  }
+  if(m_videoHandle)m_videoHandle->startTransfer();  
 }
 /////////////////////////////////////////////////////////
 // enumerate devices
@@ -189,8 +245,13 @@ void pix_video :: dialogMess(int argc, t_atom*argv)
   error("dialog not supported on this OS");
 }
 
-
-
+/////////////////////////////////////////////////////////
+// qualityMess
+//
+/////////////////////////////////////////////////////////
+void pix_video :: qualityMess(int dev) {
+  if (m_videoHandle)m_videoHandle->setQuality(dev);
+}
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -204,12 +265,28 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_video::swapMessCallback,
     	    gensym("swap"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::normMessCallback,
+    	    gensym("norm"), A_SYMBOL, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::channelMessCallback,
+    	    gensym("channel"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::modeMessCallback,
+    	    gensym("mode"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::colorMessCallback,
+    	    gensym("color"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::colorMessCallback,
+    	    gensym("colorspace"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::deviceMessCallback,
+    	    gensym("device"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::driverMessCallback,
+    	    gensym("driver"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::driverMessCallback,
+    	    gensym("open"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_video::enumerateMessCallback,
     	    gensym("enumerate"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::csMessCallback,
-    	    gensym("colorspace"), A_DEFSYMBOL, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_video::dialogMessCallback,
     	    gensym("dialog"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, (t_method)&pix_video::qualityMessCallback,
+	    gensym("quality"), A_FLOAT, A_NULL);
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -228,9 +305,61 @@ void pix_video :: swapMessCallback(void *data, t_floatarg state)
 {
     GetMyClass(data)->swapMess((int)state);
 }
-void pix_video :: csMessCallback(void *data, t_symbol*s)
+void pix_video :: channelMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-  GetMyClass(data)->csMess(getPixFormat(s->s_name));
+  if (argc!=1&&argc!=2)return;
+  int chan = atom_getint(argv);
+  t_float freq = (argc==1)?0:atom_getfloat(argv+1);
+  GetMyClass(data)->channelMess((int)chan, freq);
+
+}
+void pix_video :: normMessCallback(void *data, t_symbol*s)
+{
+  GetMyClass(data)->normMess(s);
+}
+void pix_video :: modeMessCallback(void *data, t_symbol* nop, int argc, t_atom *argv)
+{
+  switch (argc){
+  case 1:
+    if      (A_FLOAT ==argv->a_type)GetMyClass(data)->channelMess(atom_getint(argv));
+    else if (A_SYMBOL==argv->a_type)GetMyClass(data)->normMess(atom_getsymbol(argv));
+    else goto mode_error;
+    break;
+  case 2:
+    if (A_SYMBOL==argv->a_type && A_FLOAT==(argv+1)->a_type){
+      GetMyClass(data)->normMess(atom_getsymbol(argv));
+      GetMyClass(data)->channelMess(atom_getint(argv+1));
+    } else goto mode_error;  
+    break;
+  default:
+  mode_error:
+    ::post("invalid arguments for message \"mode [<norm>] [<channel>]\"");
+  }
+}
+void pix_video :: colorMessCallback(void *data, t_symbol* nop, int argc, t_atom *argv){
+  if (argc==1)GetMyClass(data)->colorMess(argv);
+  else GetMyClass(data)->error("invalid number of arguments (must be 1)");
+}
+void pix_video :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*argv)
+{
+  if(argc==1){
+    switch(argv->a_type){
+    case A_FLOAT:
+      GetMyClass(data)->deviceMess(atom_getint(argv));
+      break;
+    case A_SYMBOL:
+      GetMyClass(data)->deviceMess(atom_getsymbol(argv));
+      break;
+    default:
+      GetMyClass(data)->error("device must be integer or symbol");
+    }
+  } else {
+    GetMyClass(data)->error("can only set to 1 device at a time");
+  }
+}
+void pix_video :: driverMessCallback(void *data, t_floatarg state)
+{
+    GetMyClass(data)->driverMess((int)state);
 }
 void pix_video :: enumerateMessCallback(void *data)
 {
@@ -239,4 +368,8 @@ void pix_video :: enumerateMessCallback(void *data)
 void pix_video :: dialogMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
   GetMyClass(data)->dialogMess(argc, argv);
+}
+void pix_video :: qualityMessCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->qualityMess((int)state);
 }

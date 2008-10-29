@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_PIX_INDYCAM_H_
 #define INCLUDE_PIX_INDYCAM_H_
 
-#include "Pixes/pix_video.h"
+#include "Pixes/pix_videoOS.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -36,9 +36,9 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-class pix_indycam : public pix_video
+class pix_indycam : public pix_videoOS
 {
-    CPPEXTERN_HEADER(pix_indycam, pix_video)
+    CPPEXTERN_HEADER(pix_indycam, pix_videoOS)
 
     public:
 

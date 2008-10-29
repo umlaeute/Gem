@@ -31,7 +31,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmNT, t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 pix_filmNT :: pix_filmNT(t_symbol *filename)  : 
-  pix_film(filename),
+  pix_filmOS(filename),
   m_streamVid(NULL),
   m_hic(NULL),
   m_pbmihRaw(NULL),

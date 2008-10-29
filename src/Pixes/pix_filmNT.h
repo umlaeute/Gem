@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_FILMNT_H_
 #define INCLUDE_PIX_FILMNT_H_
 
-#include "Pixes/pix_film.h"
+#include "Pixes/pix_filmOS.h"
 #ifndef FILM_NEW
 
 #include <vfw.h>
@@ -32,7 +32,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_filmNT : public pix_film
+class GEM_EXTERN pix_filmNT : public pix_filmOS
 {
   CPPEXTERN_HEADER(pix_filmNT, GemBase)
 

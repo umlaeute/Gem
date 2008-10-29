@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load a digital video (like AVI, Mpeg, Quicktime) into a pix block 
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -17,7 +17,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_FILMDARWIN_H_
   
 #include "Pixes/film.h"
-#include "Pixes/pix_filmNEW.h"
+   //#include "Pixes/pix_film.h"
 #ifdef __APPLE__
 #include <Carbon/carbon.h>
 #include <QuickTime/quicktime.h>

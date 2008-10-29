@@ -16,7 +16,7 @@
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 
-#include "pix_video.h"
+#include "pix_videoOS.h"
  
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -38,7 +38,7 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_videoDarwin : public pix_video
+class GEM_EXTERN pix_videoDarwin : public pix_videoOS
 {
     CPPEXTERN_HEADER(pix_videoDarwin, GemBase)
 

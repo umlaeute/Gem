@@ -15,7 +15,7 @@
 #ifndef INCLUDE_PIX_VIDEONT_H_
 #define INCLUDE_PIX_VIDEONT_H_
 
-#include "Pixes/pix_video.h"
+#include "Pixes/pix_videoOS.h"
 #include <vfw.h>
 
 /*-----------------------------------------------------------------
@@ -38,7 +38,7 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_videoNT : public pix_video
+class GEM_EXTERN pix_videoNT : public pix_videoOS
 {
     CPPEXTERN_HEADER(pix_videoNT, GemBase)
 

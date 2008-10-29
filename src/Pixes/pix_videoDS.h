@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_VIDEODS_H_
 #define INCLUDE_PIX_VIDEODS_H_
 
-#include <Pixes/pix_video.h>
+#include <Pixes/pix_videoOS.h>
 
 #include <dshow.h>
 #include <qedit.h>
@@ -36,9 +36,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class pix_videoDS : public pix_video
+class pix_videoDS : public pix_videoOS
 {
-  CPPEXTERN_HEADER(pix_videoDS, pix_video)
+  CPPEXTERN_HEADER(pix_videoDS, pix_videoOS)
 
     public:
 

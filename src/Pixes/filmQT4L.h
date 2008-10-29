@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (quicktime4linux) for linux
+Load a digital video (quicktime4linux) for linux
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
