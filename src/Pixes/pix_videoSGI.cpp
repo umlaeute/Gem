@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #ifdef __sgi
-#include "pix_video.h"
+#include "pix_videoSGI.h"
 
 #include <unistd.h>
 #include <dmedia/vl_vino.h>
