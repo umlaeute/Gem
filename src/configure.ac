@@ -176,6 +176,8 @@ GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
 dnl GEM_CHECK_LIB(avcodec, avcodec_pic, avcodec_close,,,,[movie loader])
 
 # this is rather experimental...
+if test "x$with_ffmpeg" = "xyes"
+then
 if test "x$with_ffmpeg" != "xno" && \
         test "x${PKG_FFMPEG_CFLAGS}x${PKG_FFMPEG_LIBS}x" = "xxx" && \
         which ffmpeg-config > /dev/null
@@ -215,7 +217,7 @@ AC_MSG_RESULT(no)
 )
  CXXFLAGS=$cflags_temp
 fi
-
+fi
 
 
 GEM_ARG_WITH(v4l, [video input], [force])
