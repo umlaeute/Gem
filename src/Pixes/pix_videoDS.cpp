@@ -1066,7 +1066,7 @@ void pix_videoDS :: obj_setupCallback(t_class *classPtr)
    class_addmethod(classPtr, (t_method)&pix_videoDS::fileMessCallback,
 		  gensym("file"), A_SYMBOL, A_NULL);
 
-  //  pix_video::real_obj_setupCallback(classPtr);
+  //  pix_videoOS::real_obj_setupCallback(classPtr);
 } 
 
 void pix_videoDS :: openMessCallback(void *data, t_floatarg device)

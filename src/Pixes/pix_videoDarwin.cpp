@@ -1073,7 +1073,8 @@ void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
 void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
 	class_addcreator((t_newmethod)create_pix_videoDarwin,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
-	pix_video::real_obj_setupCallback(classPtr);
+	pix_videoOS::real_obj_setupCallback(classPtr);
+
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::qualityCallback,
 		  gensym("quality"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
