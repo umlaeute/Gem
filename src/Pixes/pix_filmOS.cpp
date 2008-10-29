@@ -58,7 +58,6 @@ pix_filmOS :: pix_filmOS(t_symbol *filename) :
 
  // make sure that there are some characters
  x_filename=gensym("");
- post("pix_filmOS");
 }
 
 /////////////////////////////////////////////////////////

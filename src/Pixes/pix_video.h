@@ -22,7 +22,10 @@ Linux version by Millier Puckette. msp@ucsd.edu
 
 #ifdef VIDEO_NEW
 # define DO_AUTO_REGISTER_CLASS
+#else
+# define NO_AUTO_REGISTER_CLASS
 #endif
+
 
 #include "Base/GemBase.h"
 #include "Pixes/video.h"
