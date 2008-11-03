@@ -823,8 +823,6 @@
 		3A2DD6A90E4097D500767D22 /* pix_film.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5950E4097D400767D22 /* pix_film.h */; };
 		3A2DD6AA0E4097D500767D22 /* pix_filmDarwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5960E4097D400767D22 /* pix_filmDarwin.cpp */; };
 		3A2DD6AB0E4097D500767D22 /* pix_filmDarwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5970E4097D400767D22 /* pix_filmDarwin.h */; };
-		3A2DD6AC0E4097D500767D22 /* pix_filmNEW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5980E4097D400767D22 /* pix_filmNEW.cpp */; };
-		3A2DD6AD0E4097D500767D22 /* pix_filmNEW.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5990E4097D400767D22 /* pix_filmNEW.h */; };
 		3A2DD6AE0E4097D500767D22 /* pix_filmNT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59A0E4097D400767D22 /* pix_filmNT.cpp */; };
 		3A2DD6AF0E4097D500767D22 /* pix_filmNT.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59B0E4097D400767D22 /* pix_filmNT.h */; };
 		3A2DD6B00E4097D500767D22 /* pix_filmQT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59C0E4097D400767D22 /* pix_filmQT.cpp */; };
@@ -946,8 +944,6 @@
 		3A2DD7280E4097D500767D22 /* pix_threshold.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6140E4097D500767D22 /* pix_threshold.h */; };
 		3A2DD7290E4097D500767D22 /* pix_tIIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6150E4097D500767D22 /* pix_tIIR.cpp */; };
 		3A2DD72A0E4097D500767D22 /* pix_tIIR.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6160E4097D500767D22 /* pix_tIIR.h */; };
-		3A2DD72B0E4097D500767D22 /* pix_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6170E4097D500767D22 /* pix_video.cpp */; };
-		3A2DD72C0E4097D500767D22 /* pix_video.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6180E4097D500767D22 /* pix_video.h */; };
 		3A2DD72D0E4097D500767D22 /* pix_videoDarwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6190E4097D500767D22 /* pix_videoDarwin.cpp */; };
 		3A2DD72E0E4097D500767D22 /* pix_videoDarwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD61A0E4097D500767D22 /* pix_videoDarwin.h */; };
 		3A2DD7370E4097D500767D22 /* pix_vpaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6230E4097D500767D22 /* pix_vpaint.cpp */; };
@@ -1613,7 +1609,6 @@
 		3ACEE10D0E40B9E800FC2E4B /* pix_fiducialtrack.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5930E4097D400767D22 /* pix_fiducialtrack.h */; };
 		3ACEE10E0E40B9E800FC2E4B /* pix_film.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5950E4097D400767D22 /* pix_film.h */; };
 		3ACEE10F0E40B9E800FC2E4B /* pix_filmDarwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5970E4097D400767D22 /* pix_filmDarwin.h */; };
-		3ACEE1100E40B9E800FC2E4B /* pix_filmNEW.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5990E4097D400767D22 /* pix_filmNEW.h */; };
 		3ACEE1110E40B9E800FC2E4B /* pix_filmNT.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59B0E4097D400767D22 /* pix_filmNT.h */; };
 		3ACEE1120E40B9E800FC2E4B /* pix_filmQT.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59D0E4097D400767D22 /* pix_filmQT.h */; };
 		3ACEE1130E40B9E800FC2E4B /* pix_flip.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59F0E4097D400767D22 /* pix_flip.h */; };
@@ -1675,7 +1670,6 @@
 		3ACEE14B0E40B9E800FC2E4B /* pix_threshold_bernsen.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6120E4097D500767D22 /* pix_threshold_bernsen.h */; };
 		3ACEE14C0E40B9E800FC2E4B /* pix_threshold.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6140E4097D500767D22 /* pix_threshold.h */; };
 		3ACEE14D0E40B9E800FC2E4B /* pix_tIIR.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6160E4097D500767D22 /* pix_tIIR.h */; };
-		3ACEE14E0E40B9E800FC2E4B /* pix_video.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6180E4097D500767D22 /* pix_video.h */; };
 		3ACEE14F0E40B9E800FC2E4B /* pix_videoDarwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD61A0E4097D500767D22 /* pix_videoDarwin.h */; };
 		3ACEE1500E40B9E800FC2E4B /* pix_vpaint.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6240E4097D500767D22 /* pix_vpaint.h */; };
 		3ACEE1510E40B9E800FC2E4B /* pix_write.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD6260E4097D500767D22 /* pix_write.h */; };
@@ -2181,7 +2175,6 @@
 		3ACEE3460E40B9E800FC2E4B /* pix_fiducialtrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5920E4097D400767D22 /* pix_fiducialtrack.cpp */; };
 		3ACEE3470E40B9E800FC2E4B /* pix_film.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5940E4097D400767D22 /* pix_film.cpp */; };
 		3ACEE3480E40B9E800FC2E4B /* pix_filmDarwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5960E4097D400767D22 /* pix_filmDarwin.cpp */; };
-		3ACEE3490E40B9E800FC2E4B /* pix_filmNEW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5980E4097D400767D22 /* pix_filmNEW.cpp */; };
 		3ACEE34A0E40B9E800FC2E4B /* pix_filmNT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59A0E4097D400767D22 /* pix_filmNT.cpp */; };
 		3ACEE34B0E40B9E800FC2E4B /* pix_filmQT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59C0E4097D400767D22 /* pix_filmQT.cpp */; };
 		3ACEE34C0E40B9E800FC2E4B /* pix_flip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59E0E4097D400767D22 /* pix_flip.cpp */; };
@@ -2242,7 +2235,6 @@
 		3ACEE3830E40B9E800FC2E4B /* pix_threshold_bernsen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6110E4097D500767D22 /* pix_threshold_bernsen.cpp */; };
 		3ACEE3840E40B9E800FC2E4B /* pix_threshold.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6130E4097D500767D22 /* pix_threshold.cpp */; };
 		3ACEE3850E40B9E800FC2E4B /* pix_tIIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6150E4097D500767D22 /* pix_tIIR.cpp */; };
-		3ACEE3860E40B9E800FC2E4B /* pix_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6170E4097D500767D22 /* pix_video.cpp */; };
 		3ACEE3870E40B9E800FC2E4B /* pix_videoDarwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6190E4097D500767D22 /* pix_videoDarwin.cpp */; };
 		3ACEE3880E40B9E800FC2E4B /* pix_vpaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6230E4097D500767D22 /* pix_vpaint.cpp */; };
 		3ACEE3890E40B9E800FC2E4B /* pix_write.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD6250E4097D500767D22 /* pix_write.cpp */; };
@@ -2270,6 +2262,18 @@
 		3ACEE3A00E40B9E800FC2E4B /* libftgl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD8EFC7404C4715B00DF3958 /* libftgl.a */; };
 		3ACEE3D80E40C8A800FC2E4B /* GemVersion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3ACEE3D70E40C8A800FC2E4B /* GemVersion.cpp */; };
 		3ACEE3D90E40C8A800FC2E4B /* GemVersion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3ACEE3D70E40C8A800FC2E4B /* GemVersion.cpp */; };
+		3AE073920EB8A2CA00223BA6 /* pix_filmOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3AE073900EB8A2CA00223BA6 /* pix_filmOS.cpp */; };
+		3AE073930EB8A2CA00223BA6 /* pix_filmOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AE073910EB8A2CA00223BA6 /* pix_filmOS.h */; };
+		3AE073940EB8A2CA00223BA6 /* pix_filmOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3AE073900EB8A2CA00223BA6 /* pix_filmOS.cpp */; };
+		3AE073950EB8A2CA00223BA6 /* pix_filmOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AE073910EB8A2CA00223BA6 /* pix_filmOS.h */; };
+		3AE073980EB8A31300223BA6 /* pix_movieOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3AE073960EB8A31300223BA6 /* pix_movieOS.cpp */; };
+		3AE073990EB8A31300223BA6 /* pix_movieOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AE073970EB8A31300223BA6 /* pix_movieOS.h */; };
+		3AE0739A0EB8A31300223BA6 /* pix_movieOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3AE073960EB8A31300223BA6 /* pix_movieOS.cpp */; };
+		3AE0739B0EB8A31300223BA6 /* pix_movieOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AE073970EB8A31300223BA6 /* pix_movieOS.h */; };
+		3AE0739E0EB8A34600223BA6 /* pix_videoOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3AE0739C0EB8A34600223BA6 /* pix_videoOS.cpp */; };
+		3AE0739F0EB8A34600223BA6 /* pix_videoOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AE0739D0EB8A34600223BA6 /* pix_videoOS.h */; };
+		3AE073A00EB8A34600223BA6 /* pix_videoOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3AE0739C0EB8A34600223BA6 /* pix_videoOS.cpp */; };
+		3AE073A10EB8A34600223BA6 /* pix_videoOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AE0739D0EB8A34600223BA6 /* pix_videoOS.h */; };
 		FD2F4EAA08F458E2008F3CED /* GemGL.h in Headers */ = {isa = PBXBuildFile; fileRef = FD2F4EA908F458E2008F3CED /* GemGL.h */; };
 		FD5047A40856671F00AF77DC /* CPPExtern.h in Headers */ = {isa = PBXBuildFile; fileRef = F521B40703898BE2019165F0 /* CPPExtern.h */; };
 		FD5047A50856671F00AF77DC /* GemBase.h in Headers */ = {isa = PBXBuildFile; fileRef = F521B40903898BE2019165F0 /* GemBase.h */; };
@@ -3176,8 +3180,6 @@
 		3A2DD5950E4097D400767D22 /* pix_film.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_film.h; sourceTree = "<group>"; };
 		3A2DD5960E4097D400767D22 /* pix_filmDarwin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_filmDarwin.cpp; sourceTree = "<group>"; };
 		3A2DD5970E4097D400767D22 /* pix_filmDarwin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_filmDarwin.h; sourceTree = "<group>"; };
-		3A2DD5980E4097D400767D22 /* pix_filmNEW.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_filmNEW.cpp; sourceTree = "<group>"; };
-		3A2DD5990E4097D400767D22 /* pix_filmNEW.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_filmNEW.h; sourceTree = "<group>"; };
 		3A2DD59A0E4097D400767D22 /* pix_filmNT.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_filmNT.cpp; sourceTree = "<group>"; };
 		3A2DD59B0E4097D400767D22 /* pix_filmNT.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_filmNT.h; sourceTree = "<group>"; };
 		3A2DD59C0E4097D400767D22 /* pix_filmQT.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_filmQT.cpp; sourceTree = "<group>"; };
@@ -3299,8 +3301,6 @@
 		3A2DD6140E4097D500767D22 /* pix_threshold.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_threshold.h; sourceTree = "<group>"; };
 		3A2DD6150E4097D500767D22 /* pix_tIIR.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_tIIR.cpp; sourceTree = "<group>"; };
 		3A2DD6160E4097D500767D22 /* pix_tIIR.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_tIIR.h; sourceTree = "<group>"; };
-		3A2DD6170E4097D500767D22 /* pix_video.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_video.cpp; sourceTree = "<group>"; };
-		3A2DD6180E4097D500767D22 /* pix_video.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_video.h; sourceTree = "<group>"; };
 		3A2DD6190E4097D500767D22 /* pix_videoDarwin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_videoDarwin.cpp; sourceTree = "<group>"; };
 		3A2DD61A0E4097D500767D22 /* pix_videoDarwin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_videoDarwin.h; sourceTree = "<group>"; };
 		3A2DD6230E4097D500767D22 /* pix_vpaint.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_vpaint.cpp; sourceTree = "<group>"; };
@@ -3684,6 +3684,12 @@
 		3AB0D8EC0E4096A300AF570A /* tube.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tube.h; sourceTree = "<group>"; };
 		3ACEE3A60E40B9E800FC2E4B /* Gem.d_fat */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = Gem.d_fat; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ACEE3D70E40C8A800FC2E4B /* GemVersion.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GemVersion.cpp; sourceTree = "<group>"; };
+		3AE073900EB8A2CA00223BA6 /* pix_filmOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pix_filmOS.cpp; sourceTree = "<group>"; };
+		3AE073910EB8A2CA00223BA6 /* pix_filmOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pix_filmOS.h; sourceTree = "<group>"; };
+		3AE073960EB8A31300223BA6 /* pix_movieOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pix_movieOS.cpp; sourceTree = "<group>"; };
+		3AE073970EB8A31300223BA6 /* pix_movieOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pix_movieOS.h; sourceTree = "<group>"; };
+		3AE0739C0EB8A34600223BA6 /* pix_videoOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pix_videoOS.cpp; sourceTree = "<group>"; };
+		3AE0739D0EB8A34600223BA6 /* pix_videoOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pix_videoOS.h; sourceTree = "<group>"; };
 		F521B40703898BE2019165F0 /* CPPExtern.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CPPExtern.h; sourceTree = "<group>"; };
 		F521B40903898BE2019165F0 /* GemBase.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GemBase.h; sourceTree = "<group>"; };
 		F521B40B03898BE2019165F0 /* GemCache.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GemCache.h; sourceTree = "<group>"; };
@@ -3770,7 +3776,6 @@
 		FD2F4E9608F2FAC6008F3CED /* random.fp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = random.fp; sourceTree = "<group>"; };
 		FD2F4E9708F2FAC6008F3CED /* toon.vp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = toon.vp; sourceTree = "<group>"; };
 		FD2F4EA908F458E2008F3CED /* GemGL.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GemGL.h; sourceTree = "<group>"; };
-		FD3A12880838DB91003FA473 /* Gem-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Gem-Info.plist"; sourceTree = "<group>"; };
 		FD504C050856672500AF77DC /* Gem.pd_darwin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = Gem.pd_darwin; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD7A25EA07551CFE0034FA5B /* gemlist_info.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gemlist_info.cpp; sourceTree = "<group>"; };
 		FD85B4E806B1A62C00C4B065 /* GemPixPete.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GemPixPete.h; sourceTree = "<group>"; };
@@ -3811,7 +3816,6 @@
 		FD8EFB4E04C46CFC00DF3958 /* 07.render.pd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 07.render.pd; sourceTree = "<group>"; };
 		FD8EFB4F04C46CFC00DF3958 /* 08.info.pd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 08.info.pd; sourceTree = "<group>"; };
 		FD8EFC7404C4715B00DF3958 /* libftgl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libftgl.a; path = mac/build/Deployment/libftgl.a; sourceTree = "<group>"; };
-		FDAA0997070AC568008FF144 /* GEM_darwin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "GEM_darwin-Info.plist"; path = "/Users/tigital/puredataDev/Gem/GEM_darwin-Info.plist"; sourceTree = "<absolute>"; };
 		FDAE03BC09C8A5F500201A91 /* TODO */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		FDB7B8960477359D00A80164 /* blob0.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = blob0.tif; sourceTree = "<group>"; };
 		FDB7B8970477359D00A80164 /* blob1.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = blob1.tif; sourceTree = "<group>"; };
@@ -3928,8 +3932,6 @@
 		FDCE6E1F070DBC8F001F121C /* GemWinCreateMac.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GemWinCreateMac.cpp; sourceTree = "<group>"; };
 		FDCE6E20070DBC8F001F121C /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
 		FDCE6E21070DBC8F001F121C /* TextBase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TextBase.cpp; sourceTree = "<group>"; };
-		FDDFEB93070C6F5B006B3D59 /* gem-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "gem-Info.plist"; path = "/Users/tigital/puredataDev/Gem/gem-Info.plist"; sourceTree = "<absolute>"; };
-		FDF382D60724BBE700BCCC3B /* Cg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cg.framework; path = ../../Library/Frameworks/Cg.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4004,9 +4006,6 @@
 				F521B40203898BB7019165F0 /* GemLibs */,
 				F521B40003898A71019165F0 /* Products */,
 				F5BDD20A0389F0EC0175848A /* frameworks */,
-				FDAA0997070AC568008FF144 /* GEM_darwin-Info.plist */,
-				FDDFEB93070C6F5B006B3D59 /* gem-Info.plist */,
-				FD3A12880838DB91003FA473 /* Gem-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -4376,6 +4375,12 @@
 		F521B4E403898BE2019165F0 /* Pixes */ = {
 			isa = PBXGroup;
 			children = (
+				3AE0739C0EB8A34600223BA6 /* pix_videoOS.cpp */,
+				3AE0739D0EB8A34600223BA6 /* pix_videoOS.h */,
+				3AE073960EB8A31300223BA6 /* pix_movieOS.cpp */,
+				3AE073970EB8A31300223BA6 /* pix_movieOS.h */,
+				3AE073900EB8A2CA00223BA6 /* pix_filmOS.cpp */,
+				3AE073910EB8A2CA00223BA6 /* pix_filmOS.h */,
 				3A2DD5280E4097D300767D22 /* film.cpp */,
 				3A2DD5290E4097D300767D22 /* film.h */,
 				3A2DD52E0E4097D300767D22 /* filmDarwin.cpp */,
@@ -4473,8 +4478,6 @@
 				3A2DD5950E4097D400767D22 /* pix_film.h */,
 				3A2DD5960E4097D400767D22 /* pix_filmDarwin.cpp */,
 				3A2DD5970E4097D400767D22 /* pix_filmDarwin.h */,
-				3A2DD5980E4097D400767D22 /* pix_filmNEW.cpp */,
-				3A2DD5990E4097D400767D22 /* pix_filmNEW.h */,
 				3A2DD59A0E4097D400767D22 /* pix_filmNT.cpp */,
 				3A2DD59B0E4097D400767D22 /* pix_filmNT.h */,
 				3A2DD59C0E4097D400767D22 /* pix_filmQT.cpp */,
@@ -4596,8 +4599,6 @@
 				3A2DD6140E4097D500767D22 /* pix_threshold.h */,
 				3A2DD6150E4097D500767D22 /* pix_tIIR.cpp */,
 				3A2DD6160E4097D500767D22 /* pix_tIIR.h */,
-				3A2DD6170E4097D500767D22 /* pix_video.cpp */,
-				3A2DD6180E4097D500767D22 /* pix_video.h */,
 				3A2DD6190E4097D500767D22 /* pix_videoDarwin.cpp */,
 				3A2DD61A0E4097D500767D22 /* pix_videoDarwin.h */,
 				3A2DD6230E4097D500767D22 /* pix_vpaint.cpp */,
@@ -5218,7 +5219,6 @@
 		F5BDD20A0389F0EC0175848A /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FDF382D60724BBE700BCCC3B /* Cg.framework */,
 				F5BDD20B0389F11F0175848A /* AGL.framework */,
 				F5BDD20C0389F11F0175848A /* Carbon.framework */,
 				F5BDD20D0389F11F0175848A /* GLUT.framework */,
@@ -6343,7 +6343,6 @@
 				3ACEE10D0E40B9E800FC2E4B /* pix_fiducialtrack.h in Headers */,
 				3ACEE10E0E40B9E800FC2E4B /* pix_film.h in Headers */,
 				3ACEE10F0E40B9E800FC2E4B /* pix_filmDarwin.h in Headers */,
-				3ACEE1100E40B9E800FC2E4B /* pix_filmNEW.h in Headers */,
 				3ACEE1110E40B9E800FC2E4B /* pix_filmNT.h in Headers */,
 				3ACEE1120E40B9E800FC2E4B /* pix_filmQT.h in Headers */,
 				3ACEE1130E40B9E800FC2E4B /* pix_flip.h in Headers */,
@@ -6405,7 +6404,6 @@
 				3ACEE14B0E40B9E800FC2E4B /* pix_threshold_bernsen.h in Headers */,
 				3ACEE14C0E40B9E800FC2E4B /* pix_threshold.h in Headers */,
 				3ACEE14D0E40B9E800FC2E4B /* pix_tIIR.h in Headers */,
-				3ACEE14E0E40B9E800FC2E4B /* pix_video.h in Headers */,
 				3ACEE14F0E40B9E800FC2E4B /* pix_videoDarwin.h in Headers */,
 				3ACEE1500E40B9E800FC2E4B /* pix_vpaint.h in Headers */,
 				3ACEE1510E40B9E800FC2E4B /* pix_write.h in Headers */,
@@ -6426,6 +6424,9 @@
 				3ACEE1600E40B9E800FC2E4B /* vertex_scale.h in Headers */,
 				3ACEE1610E40B9E800FC2E4B /* vertex_set.h in Headers */,
 				3ACEE1620E40B9E800FC2E4B /* vertex_tabread.h in Headers */,
+				3AE073950EB8A2CA00223BA6 /* pix_filmOS.h in Headers */,
+				3AE0739B0EB8A31300223BA6 /* pix_movieOS.h in Headers */,
+				3AE073A10EB8A34600223BA6 /* pix_videoOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6952,7 +6953,6 @@
 				3A2DD6A70E4097D500767D22 /* pix_fiducialtrack.h in Headers */,
 				3A2DD6A90E4097D500767D22 /* pix_film.h in Headers */,
 				3A2DD6AB0E4097D500767D22 /* pix_filmDarwin.h in Headers */,
-				3A2DD6AD0E4097D500767D22 /* pix_filmNEW.h in Headers */,
 				3A2DD6AF0E4097D500767D22 /* pix_filmNT.h in Headers */,
 				3A2DD6B10E4097D500767D22 /* pix_filmQT.h in Headers */,
 				3A2DD6B30E4097D500767D22 /* pix_flip.h in Headers */,
@@ -7014,7 +7014,6 @@
 				3A2DD7260E4097D500767D22 /* pix_threshold_bernsen.h in Headers */,
 				3A2DD7280E4097D500767D22 /* pix_threshold.h in Headers */,
 				3A2DD72A0E4097D500767D22 /* pix_tIIR.h in Headers */,
-				3A2DD72C0E4097D500767D22 /* pix_video.h in Headers */,
 				3A2DD72E0E4097D500767D22 /* pix_videoDarwin.h in Headers */,
 				3A2DD7380E4097D500767D22 /* pix_vpaint.h in Headers */,
 				3A2DD73A0E4097D500767D22 /* pix_write.h in Headers */,
@@ -7035,6 +7034,9 @@
 				3A2DD77C0E4097EA00767D22 /* vertex_scale.h in Headers */,
 				3A2DD77E0E4097EA00767D22 /* vertex_set.h in Headers */,
 				3A2DD7800E4097EA00767D22 /* vertex_tabread.h in Headers */,
+				3AE073930EB8A2CA00223BA6 /* pix_filmOS.h in Headers */,
+				3AE073990EB8A31300223BA6 /* pix_movieOS.h in Headers */,
+				3AE0739F0EB8A34600223BA6 /* pix_videoOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7086,10 +7088,12 @@
 		F521B3F903898A4A019165F0 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = FD50478D085666BB00AF77DC /* Build configuration list for PBXProject "Gem" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = F521B3F503898A4A019165F0;
 			productRefGroup = F521B40003898A71019165F0 /* Products */;
 			projectDirPath = "";
+			projectRoot = ../..;
 			targets = (
 				FD5047A20856671F00AF77DC /* Gem.pd_darwin */,
 				3ACEDF070E40B9E800FC2E4B /* Gem.d_fat */,
@@ -7604,7 +7608,6 @@
 				3ACEE3460E40B9E800FC2E4B /* pix_fiducialtrack.cpp in Sources */,
 				3ACEE3470E40B9E800FC2E4B /* pix_film.cpp in Sources */,
 				3ACEE3480E40B9E800FC2E4B /* pix_filmDarwin.cpp in Sources */,
-				3ACEE3490E40B9E800FC2E4B /* pix_filmNEW.cpp in Sources */,
 				3ACEE34A0E40B9E800FC2E4B /* pix_filmNT.cpp in Sources */,
 				3ACEE34B0E40B9E800FC2E4B /* pix_filmQT.cpp in Sources */,
 				3ACEE34C0E40B9E800FC2E4B /* pix_flip.cpp in Sources */,
@@ -7665,7 +7668,6 @@
 				3ACEE3830E40B9E800FC2E4B /* pix_threshold_bernsen.cpp in Sources */,
 				3ACEE3840E40B9E800FC2E4B /* pix_threshold.cpp in Sources */,
 				3ACEE3850E40B9E800FC2E4B /* pix_tIIR.cpp in Sources */,
-				3ACEE3860E40B9E800FC2E4B /* pix_video.cpp in Sources */,
 				3ACEE3870E40B9E800FC2E4B /* pix_videoDarwin.cpp in Sources */,
 				3ACEE3880E40B9E800FC2E4B /* pix_vpaint.cpp in Sources */,
 				3ACEE3890E40B9E800FC2E4B /* pix_write.cpp in Sources */,
@@ -7686,6 +7688,9 @@
 				3ACEE3980E40B9E800FC2E4B /* vertex_set.cpp in Sources */,
 				3ACEE3990E40B9E800FC2E4B /* vertex_tabread.cpp in Sources */,
 				3ACEE3D90E40C8A800FC2E4B /* GemVersion.cpp in Sources */,
+				3AE073940EB8A2CA00223BA6 /* pix_filmOS.cpp in Sources */,
+				3AE0739A0EB8A31300223BA6 /* pix_movieOS.cpp in Sources */,
+				3AE073A00EB8A34600223BA6 /* pix_videoOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8178,7 +8183,6 @@
 				3A2DD6A60E4097D500767D22 /* pix_fiducialtrack.cpp in Sources */,
 				3A2DD6A80E4097D500767D22 /* pix_film.cpp in Sources */,
 				3A2DD6AA0E4097D500767D22 /* pix_filmDarwin.cpp in Sources */,
-				3A2DD6AC0E4097D500767D22 /* pix_filmNEW.cpp in Sources */,
 				3A2DD6AE0E4097D500767D22 /* pix_filmNT.cpp in Sources */,
 				3A2DD6B00E4097D500767D22 /* pix_filmQT.cpp in Sources */,
 				3A2DD6B20E4097D500767D22 /* pix_flip.cpp in Sources */,
@@ -8239,7 +8243,6 @@
 				3A2DD7250E4097D500767D22 /* pix_threshold_bernsen.cpp in Sources */,
 				3A2DD7270E4097D500767D22 /* pix_threshold.cpp in Sources */,
 				3A2DD7290E4097D500767D22 /* pix_tIIR.cpp in Sources */,
-				3A2DD72B0E4097D500767D22 /* pix_video.cpp in Sources */,
 				3A2DD72D0E4097D500767D22 /* pix_videoDarwin.cpp in Sources */,
 				3A2DD7370E4097D500767D22 /* pix_vpaint.cpp in Sources */,
 				3A2DD7390E4097D500767D22 /* pix_write.cpp in Sources */,
@@ -8260,6 +8263,9 @@
 				3A2DD77D0E4097EA00767D22 /* vertex_set.cpp in Sources */,
 				3A2DD77F0E4097EA00767D22 /* vertex_tabread.cpp in Sources */,
 				3ACEE3D80E40C8A800FC2E4B /* GemVersion.cpp in Sources */,
+				3AE073920EB8A2CA00223BA6 /* pix_filmOS.cpp in Sources */,
+				3AE073980EB8A31300223BA6 /* pix_movieOS.cpp in Sources */,
+				3AE0739E0EB8A34600223BA6 /* pix_videoOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
