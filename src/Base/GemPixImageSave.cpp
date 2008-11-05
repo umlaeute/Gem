@@ -333,13 +333,16 @@ int mem2tiffImage(imageStruct *image, const char *filename)
   //int planar_conf = PLANARCONFIG_CONTIG;
   const char *gemstring = "PD/GEM";
 
-
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, width);
   TIFFSetField(tif, TIFFTAG_IMAGELENGTH, height);
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bits);
   TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, samps);
   TIFFSetField(tif, TIFFTAG_PLANARCONFIG, 1);
   TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+
+  TIFFSetField(tif, TIFFTAG_XRESOLUTION, 72);
+  TIFFSetField(tif, TIFFTAG_YRESOLUTION, 72);
+  TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH);
 
   TIFFSetField(tif, TIFFTAG_SOFTWARE, gemstring);
 
