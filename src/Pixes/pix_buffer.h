@@ -63,6 +63,8 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   virtual void  openMess(t_symbol*,int);
   virtual void  saveMess(t_symbol*,int);
 
+  virtual void  copyMess(int,int);
+
   virtual void  resizeMess(int);
 
   int m_numframes;
@@ -78,6 +80,7 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   static void openMessCallback(void *data, t_symbol*, t_floatarg);
   static void saveMessCallback(void *data, t_symbol*, t_floatarg);
   static void resizeMessCallback(void *data, t_floatarg);
+  static void copyMessCallback(void *data, t_floatarg, t_floatarg);
 };
 
 #endif	// for header file

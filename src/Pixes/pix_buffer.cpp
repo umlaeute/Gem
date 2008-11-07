@@ -212,7 +212,7 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
 }
 
 /////////////////////////////////////////////////////////
-// openMess
+// saveMess
 //
 /////////////////////////////////////////////////////////
 void pix_buffer :: saveMess(t_symbol *filename, int pos)
@@ -235,6 +235,25 @@ void pix_buffer :: saveMess(t_symbol *filename, int pos)
 }
 
 /////////////////////////////////////////////////////////
+// copyMess
+//
+/////////////////////////////////////////////////////////
+void pix_buffer :: copyMess(int src, int dst)
+{
+  if(src==dst) {
+    //    error("refusing to do void copying within a slot");
+    return;
+  }
+  // copy an image from one slot to another
+  if(putMess(getMess(src), dst)) {
+    // fine
+  } else {
+    error("unable to copy image from slot:%d to slot:%d", src, dst);
+    return;
+  }
+}
+
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -248,8 +267,12 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
   class_addbang(classPtr, (t_method)&pix_buffer::bangMessCallback);
   class_addmethod(classPtr, (t_method)&pix_buffer::openMessCallback,
   		  gensym("open"), A_SYMBOL, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_buffer::openMessCallback,
+  		  gensym("load"), A_SYMBOL, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_buffer::saveMessCallback,
   		  gensym("save"), A_SYMBOL, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_buffer::copyMessCallback,
+  		  gensym("copy"), A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_buffer :: allocateMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
@@ -328,4 +351,8 @@ void pix_buffer :: saveMessCallback(void *data, t_symbol *filename, t_floatarg p
 void pix_buffer :: resizeMessCallback(void *data, t_floatarg size)
 {
   GetMyClass(data)->resizeMess((int)size);
+}
+void pix_buffer :: copyMessCallback(void *data, t_floatarg src, t_floatarg dst)
+{
+  GetMyClass(data)->copyMess((int)src, (int)dst);
 }
