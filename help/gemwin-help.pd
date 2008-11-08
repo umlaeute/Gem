@@ -249,49 +249,53 @@ defined via the vector (up_X \, up_Y \, up_Z);
 #X text 14 47 [gemwin] controls the window manager. It passes various
 messages to the manager \, controlling the attributes of the window.
 ;
-#N canvas 185 171 613 508 window 0;
-#X text 226 210 dimen x y : the x and y dimensions of the window;
-#X text 225 136 offset x y : the x and y offset of the window (might
+#N canvas 185 171 613 613 window 0;
+#X text 226 280 dimen x y : the x and y dimensions of the window;
+#X text 225 206 offset x y : the x and y offset of the window (might
 not work under certain window-managers when borders are on);
-#X text 225 89 border 0/1: create a window with/out borders;
-#X text 224 250 fullscreen 0/1: make fullscreen-window (if possible
+#X text 225 159 border 0/1: create a window with/out borders;
+#X text 224 320 fullscreen 0/1: make fullscreen-window (if possible
 with the dimensions passed via "dimen");
 #X text 31 4 messages to [gemwin] regarding the window;
-#X text 224 447 title <title_symbol>: set the title for the window
+#X text 234 517 title <title_symbol>: set the title for the window
 ;
-#X obj 61 477 gemwin;
-#X msg 61 58 destroy;
-#X msg 14 58 create;
-#X msg 85 101 border \$1;
-#X obj 84 83 tgl 15 1 empty empty empty 0 -6 0 10 -262144 -1 -1 1 1
-;
-#X msg 109 199 dimen 320 240;
-#X msg 116 219 dimen 200 200;
-#X msg 97 133 offset 10 10;
-#X msg 103 155 offset 300 300;
-#X msg 125 447 title my_window;
-#X obj 124 245 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+#X obj 61 547 gemwin;
+#X msg 71 38 destroy;
+#X msg 14 38 create;
+#X msg 85 171 border \$1;
+#X obj 84 153 tgl 15 1 empty empty empty 0 -6 0 10 -262144 -1 -1 1
 1;
-#X msg 125 263 fullscreen \$1;
-#X obj 129 347 tgl 15 1 empty empty empty 0 -6 0 10 -262144 -1 -1 1
+#X msg 109 269 dimen 320 240;
+#X msg 116 289 dimen 200 200;
+#X msg 97 203 offset 10 10;
+#X msg 103 225 offset 300 300;
+#X msg 125 517 title my_window;
+#X obj 124 315 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
 1;
-#X msg 130 365 menubar \$1;
-#X msg 16 436 reset;
-#X msg 149 345 -1;
-#X text 224 358 menubar -1/0/1: hide or show the Mac OS X menubar \,
+#X msg 125 333 fullscreen \$1;
+#X obj 129 417 tgl 15 1 empty empty empty 0 -6 0 10 -262144 -1 -1 1
+1;
+#X msg 130 435 menubar \$1;
+#X msg 16 506 reset;
+#X msg 149 415 -1;
+#X text 224 428 menubar -1/0/1: hide or show the Mac OS X menubar \,
 1 shows \, 0 hides \, and -1 hides by default and shows on mouseover
 ;
-#X text 164 33 All of these messages must be sent to [gemwin] before
+#X text 145 113 All of these messages must be sent to [gemwin] before
 the window is created in order to take effect.;
-#X msg 128 306 cursor \$1;
-#X obj 128 287 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+#X msg 128 376 cursor \$1;
+#X obj 128 357 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
 1;
-#X text 223 305 cursor 0/1: turn the cursor on/off;
-#X obj 128 397 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+#X text 223 375 cursor 0/1: turn the cursor on/off;
+#X obj 128 467 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
 1;
-#X msg 128 416 topmost \$1;
-#X text 223 405 topmost 0/1: make the gemwin the top most window \,
+#X msg 128 486 topmost \$1;
+#X text 223 475 topmost 0/1: make the gemwin the top most window \,
 on top of everything else (Windows only?);
+#X text 157 40 create and destroy the window;
+#X msg 43 71 create remotehost:8.0;
+#X text 200 64 when using X-windows \, you can also create a window
+on a remote display!;
 #X connect 7 0 6 0;
 #X connect 8 0 6 0;
 #X connect 9 0 6 0;
@@ -311,6 +315,7 @@ on top of everything else (Windows only?);
 #X connect 25 0 24 0;
 #X connect 27 0 28 0;
 #X connect 28 0 6 0;
+#X connect 31 0 6 0;
 #X restore 569 177 pd window properties;
 #X obj 455 115 gemwin;
 #X text 505 49 reset the graphics manager to the default values;
