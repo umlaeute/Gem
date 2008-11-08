@@ -83,7 +83,6 @@ void* MemAlloc(unsigned long memsize)
 	return (malloc(memsize));
 }
 
-
 unsigned char* CStringToPString(char *string)
 {
     unsigned char *newString = (unsigned char*)MemAlloc(strlen(string) + 1);
@@ -107,7 +106,6 @@ void InvertGLImage( unsigned char *imageData, unsigned char * outData, long imag
     for (i = 0, j = imageSize - rowBytes; i < imageSize; i += rowBytes, j -= rowBytes) {
         memcpy( &outData[j], &imageData[i], (size_t) rowBytes );
     }
-
 }
 
 GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int type)
@@ -322,7 +320,14 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
  ***************************************************************************/
 int mem2tiffImage(imageStruct *image, const char *filename)
 {
-  TIFF *tif = TIFFOpen(filename, "w");
+  TIFF *tif = NULL;
+
+  if(GL_YUV422_GEM==image->format) {
+    error("don't know how to write YUV-images with libTIFF");
+    return 0;
+  }
+
+  tif=TIFFOpen(filename, "w");
   if (tif == NULL) {
     return(0);
   }
@@ -418,6 +423,10 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
   JSAMPLE *image_buffer = image->data;
   int row_stride;		/* physical row width in image buffer */
 
+  if(GL_YUV422_GEM==image->format) {
+    error("don't know how to write YUV-images with libJPEG");
+    return 0;
+  }
 
   cinfo.err = jpeg_std_error(&jerr);
 
@@ -475,21 +484,26 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
 int mem2magickImage(imageStruct *image, const char *filename)
 {
   char*cs=0;
-  if(image->format==GL_LUMINANCE)
+  imageStruct*newImage=NULL;
+  switch(image->format) {
+  case GL_LUMINANCE:
     cs=gensym("K")->s_name;
-  else if(image->format==GL_RGBA)
+    break;
+  case GL_RGBA:
     cs=gensym("RGBA")->s_name;
-  else if(image->format==GL_RGB)
+    break;
+  default:
+    newImage=new imageStruct();
+    newImage->convertFrom(image, GL_RGB);
+    image=newImage;
+  case GL_RGB:
     cs=gensym("RGB")->s_name;
-  else if(image->format==GL_BGRA_EXT)
+    break;
+  case GL_BGRA_EXT:
     cs=gensym("BGRA")->s_name;
-  else if(image->format==GL_YUV422_GEM) {
-    error("don't know how to write YUV-data...");
+    break;
   }
 
-
-
-  // LATER: think about writing RGBA
   try{
     Magick::Image mimage(image->xsize, image->ysize, cs, Magick::CharPixel, image->data);
     // since openGL is upside down
