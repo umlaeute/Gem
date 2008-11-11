@@ -59,6 +59,7 @@ you might have to put a line like
 into your /etc/apt/sources.list
 
 #> aptitude install libgl-dev libglu-dev
+#> aptitude install libxxf86vm-dev
 #> aptitude install ftgl-dev 
 #> aptitude install libtiff3g-dev libjpeg62-dev libmagick++9-dev
 #> aptitude install libmpeg3-dev libavifile-0.7-dev libquicktime-dev libdv4-dev
