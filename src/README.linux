@@ -58,7 +58,10 @@ you might have to put a line like
  deb deb http://www.debian-multimedia.org stable main
 into your /etc/apt/sources.list
 
-#> apt-get install libgl-dev ftgl-dev libtiff3g-dev libjpeg62-dev libmpeg3-dev libavifile-0.7-dev libquicktime-dev libdv4-dev
+#> aptitude install libgl-dev libglu-dev
+#> aptitude install ftgl-dev 
+#> aptitude install libtiff3g-dev libjpeg62-dev libmagick++9-dev
+#> aptitude install libmpeg3-dev libavifile-0.7-dev libquicktime-dev libdv4-dev
 
 RedHat-users:
 =============
