@@ -75,7 +75,7 @@
 // LATER check the other OS's
 //
 /////////////////////////////////////////////////////////
-static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba)
+static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba, bool loud=true)
 {
   const char*hookname="plugMain";
 
@@ -118,12 +118,12 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba)
   char*name=buf;
   char*libname=name;
 
-  ::post("trying to load %s", buf);
+  if(loud)::post("trying to load %s", buf);
   
 #ifdef DL_OPEN
   plugin_handle=dlopen(libname, RTLD_NOW);
   if(!plugin_handle){
-    ::error("pix_freeframe[%s]: %s", libname, dlerror());
+    if(loud)::error("pix_freeframe[%s]: %s", libname, dlerror());
     return NULL;
   }
   dlerror();
@@ -147,7 +147,7 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba)
 	plugmain = (T_FFPLUGMAIN)CFBundleGetFunctionPointerForName(
             theBundle, CFSTR("plugMain") );
   }else{
-    ::post("%s: couldn't load", libname);
+    if(loud)::post("%s: couldn't load", libname);
     return 0;
   }
   if(bundleURL != NULL) CFRelease( bundleURL );
@@ -159,7 +159,7 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba)
   sys_bashfilename(libname, libname);
   ntdll = LoadLibrary(libname);
   if (!ntdll) {
-    ::post("%s: couldn't load", libname);
+    if(loud)::post("%s: couldn't load", libname);
     return NULL;
   }
   plugmain = (T_FFPLUGMAIN)GetProcAddress(ntdll, hookname);
@@ -438,7 +438,7 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
 static const int offset_pix_=strlen("pix_");
 
 static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
-  ::post("freeframe_loader: %s",(s?(s->s_name):"<none>"));
+  ::verbose(2, "freeframe_loader: %s",(s?(s->s_name):"<none>"));
   try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(pix_freeframe_class),(void *)NULL) Obj_header;
     char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
@@ -448,7 +448,11 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
     CPPExtern::m_holder = NULL;
     CPPExtern::m_holdname=NULL;
     return(obj);
-  } catch (GemException e) {e.report(); return NULL;}
+  } catch (GemException e) {
+    ::verbose(2, "freeframe_loader: failed!");
+    //e.report(); 
+    return NULL;
+  }
   return 0;
 }
 
@@ -459,7 +463,7 @@ static int freeframe_loader(t_canvas *canvas, char *classname) {
     return 0;
   char*pluginname=classname+offset_pix_;
 
-  T_FFPLUGMAIN plugin = ff_loadplugin(canvas, pluginname, &dummy);
+  T_FFPLUGMAIN plugin = ff_loadplugin(canvas, pluginname, &dummy, false);
   if(plugin!=NULL) {
     plugin(FF_DEINITIALISE, NULL, 0);
     class_addcreator((t_newmethod)freeframe_loader_new, gensym(classname), A_GIMME, 0);
