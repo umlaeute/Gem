@@ -175,6 +175,7 @@ struct GEM_EXTERN imageStruct
    */
   void refreshImage(imageStruct *to);
 
+
   /* inplace swapping Red and Blue channel */
   void swapRedBlue    ();
 
@@ -238,6 +239,9 @@ struct GEM_EXTERN imageStruct
   // true if the image is flipped horizontally (origin is upper-left)
   // false if the image is openGL-conformant (origin is lower-left)
   GLboolean       upsidedown;
+
+  /* swap the Red and Blue channel _in-place_ */
+  void fixUpDown(void);
 
 };
 

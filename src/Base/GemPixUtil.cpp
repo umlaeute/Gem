@@ -1556,6 +1556,28 @@ GEM_EXTERN extern int getPixFormat(char*cformat){
   return 0;
 }
 
+
+/* flip the image if it is upside down */
+GEM_EXTERN void imageStruct::fixUpDown() {
+  if(!upsidedown)return; /* everything's fine! */
+
+  int linewidth = xsize*csize;
+  unsigned char*line = new unsigned char[linewidth];
+  unsigned char*line0, *line1;
+
+
+  int y0=0, y1=ysize-1;
+  for(y0=0; y0<ysize/2; y0++, y1--) {
+    line0=data+y0*linewidth;
+    line1=data+y1*linewidth;
+    memcpy(line , line0, linewidth);
+    memcpy(line0, line1, linewidth);
+    memcpy(line1, line , linewidth);
+  }
+
+  upsidedown=false;
+}
+
 /* swap the Red and Blue channel _in-place_ */
 GEM_EXTERN void imageStruct::swapRedBlue() {
   size_t pixelnum=xsize*ysize;
