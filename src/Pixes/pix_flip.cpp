@@ -50,7 +50,6 @@ void pix_flip :: processRGBAImage(imageStruct &image)
     imageStruct tempImg;
     if (image.data==0)return;
     image.copy2Image(&tempImg);
-
     int ySrcStride = image.xsize * image.csize;
     int yDstStride = image.xsize * image.csize;
     int xSrcStride = image.csize;
@@ -58,7 +57,19 @@ void pix_flip :: processRGBAImage(imageStruct &image)
     unsigned char *srcLine = tempImg.data;
     unsigned char *dstLine = image.data;
 
-    switch(m_flip)
+    FlipType flip=m_flip;
+    if(image.upsidedown) {
+      switch(flip) {
+      case(HORIZONTAL) : flip=BOTH;break;
+      case(VERTICAL)   : flip=NONE;break;
+      case(BOTH)       : flip=HORIZONTAL;break;
+      case(NONE)       : flip=VERTICAL  ;break;
+      default   :break;
+      }
+    }
+    image.upsidedown=false;
+
+    switch(flip)
     {
     	case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
@@ -95,7 +106,7 @@ void pix_flip :: processRGBAImage(imageStruct &image)
       }
       dstLine += yDstStride;
       srcLine += ySrcStride;
-    }   
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -116,7 +127,19 @@ void pix_flip :: processYUVImage(imageStruct &image)
     unsigned char *srcLine = tempImg.data;
     unsigned char *dstLine = image.data;
 
-    switch(m_flip)
+    FlipType flip=m_flip;
+    if(image.upsidedown) {
+      switch(flip) {
+      case(HORIZONTAL) : flip=BOTH;break;
+      case(VERTICAL)   : flip=NONE;break;
+      case(BOTH)       : flip=HORIZONTAL;break;
+      case(NONE)       : flip=VERTICAL  ;break;
+      default   :break;
+      }
+    }
+    image.upsidedown=false;
+
+    switch(flip)
     {
     	case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
@@ -171,7 +194,19 @@ void pix_flip :: processGrayImage(imageStruct &image)
     unsigned char *srcLine = tempImg.data;
     unsigned char *dstLine = image.data;
 
-    switch(m_flip)
+    FlipType flip=m_flip;
+    if(image.upsidedown) {
+      switch(flip) {
+      case(HORIZONTAL) : flip=BOTH;break;
+      case(VERTICAL)   : flip=NONE;break;
+      case(BOTH)       : flip=HORIZONTAL;break;
+      case(NONE)       : flip=VERTICAL  ;break;
+      default   :break;
+      }
+    }
+    image.upsidedown=false;
+
+    switch(flip)
     {
     	case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
