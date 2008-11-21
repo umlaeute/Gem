@@ -332,6 +332,8 @@ int mem2tiffImage(imageStruct *image, const char *filename)
     return(0);
   }
 
+  image->fixUpDown();
+
   uint32 width=image->xsize, height = image->ysize;
   short bits=8, samps=image->csize;
   int npixels = width * height;
@@ -383,7 +385,7 @@ int mem2tiffImage(imageStruct *image, const char *filename)
 
 /*****************************
  *
- *	Here is the error handler
+ * Here is the error handler
  *
  *****************************/
 struct my_error_mgr
@@ -438,6 +440,8 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
     return (0);
   }
   jpeg_stdio_dest(&cinfo, outfile);
+
+  image->fixUpDown();
 
   cinfo.image_width = image->xsize; 	/* image width and height, in pixels */
   cinfo.image_height = image->ysize;
