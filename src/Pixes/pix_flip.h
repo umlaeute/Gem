@@ -59,7 +59,7 @@ class GEM_EXTERN pix_flip : public GemPixObj
     	virtual void 	processYUVImage(imageStruct &image);
 
     	//////////
-    	enum FlipType	{ HOR, VERT, BOTH, NONE };
+    	enum FlipType	{ HORIZONTAL, VERTICAL, BOTH, NONE };
     	
     	//////////
     	void	    	flipMess(FlipType type);

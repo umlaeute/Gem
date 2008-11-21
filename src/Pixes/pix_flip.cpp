@@ -60,11 +60,11 @@ void pix_flip :: processRGBAImage(imageStruct &image)
 
     switch(m_flip)
     {
-    	case(HOR):
+    	case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
             xSrcStride = -xSrcStride;
     	    break;
-    	case(VERT):
+    	case(VERTICAL):
             srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
             ySrcStride = -ySrcStride;
     	    break;
@@ -118,11 +118,11 @@ void pix_flip :: processYUVImage(imageStruct &image)
 
     switch(m_flip)
     {
-    	case(HOR):
+    	case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
             xSrcStride = -xSrcStride;
     	    break;
-    	case(VERT):
+    	case(VERTICAL):
             srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
             ySrcStride = -ySrcStride;
     	    break;
@@ -138,8 +138,8 @@ void pix_flip :: processYUVImage(imageStruct &image)
     int ySize = image.ysize;
     int xHold = image.xsize/2;
 
-    const int chY0x=(m_flip==VERT)?chY0:chY1;
-    const int chY1x=(m_flip==VERT)?chY1:chY0;
+    const int chY0x=(m_flip==VERTICAL)?chY0:chY1;
+    const int chY1x=(m_flip==VERTICAL)?chY1:chY0;
 
     while(ySize--)    {
       unsigned char *srcPixels = srcLine;
@@ -173,11 +173,11 @@ void pix_flip :: processGrayImage(imageStruct &image)
 
     switch(m_flip)
     {
-    	case(HOR):
+    	case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
             xSrcStride = -xSrcStride;
     	    break;
-    	case(VERT):
+    	case(VERTICAL):
             srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
             ySrcStride = -ySrcStride;
     	    break;
@@ -236,11 +236,11 @@ void pix_flip :: obj_setupCallback(t_class *classPtr)
 }
 void pix_flip :: horMessCallback(void *data)
 {
-    GetMyClass(data)->flipMess(HOR);
+    GetMyClass(data)->flipMess(HORIZONTAL);
 }
 void pix_flip :: vertMessCallback(void *data)
 {
-    GetMyClass(data)->flipMess(VERT);
+    GetMyClass(data)->flipMess(VERTICAL);
 }
 void pix_flip :: bothMessCallback(void *data)
 {
@@ -254,8 +254,8 @@ void pix_flip :: flipMessCallback(void *data, t_symbol*s)
 {
   char c=*s->s_name;
   switch(c){
-  case 'v': case 'V':  GetMyClass(data)->flipMess(VERT); break;
-  case 'h': case 'H':  GetMyClass(data)->flipMess(HOR); break;
+  case 'v': case 'V':  GetMyClass(data)->flipMess(VERTICAL); break;
+  case 'h': case 'H':  GetMyClass(data)->flipMess(HORIZONTAL); break;
   case 'b': case 'B':  GetMyClass(data)->flipMess(BOTH); break;
   default:  GetMyClass(data)->flipMess(NONE);
   }
