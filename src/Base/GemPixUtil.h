@@ -240,7 +240,7 @@ struct GEM_EXTERN imageStruct
   // false if the image is openGL-conformant (origin is lower-left)
   GLboolean       upsidedown;
 
-  /* swap the Red and Blue channel _in-place_ */
+  /* make the image orientation openGL-conformant */
   void fixUpDown(void);
 
 };
