@@ -19,6 +19,7 @@
 #include "pix_film.h"
 #include <ctype.h>
 
+#include "Pixes/filmGMERLIN.h"
 #include "Pixes/filmQT4L.h"
 #include "Pixes/filmAVI.h"
 #include "Pixes/filmDS.h"
@@ -192,6 +193,7 @@ pix_film :: pix_film(t_symbol *filename) :
 #else
   m_handles[m_numHandles]=new filmAVI();      DEBUG_HANDLE; m_numHandles++;
 #endif
+  m_handles[m_numHandles]=new filmGMERLIN();  DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmQT();       DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmQT4L();     DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG3();    DEBUG_HANDLE; m_numHandles++;
