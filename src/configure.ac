@@ -164,6 +164,8 @@ dnl  LIBS="-lMagick++ $LIBS")
 GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
 GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
 
+GEM_CHECK_LIB(gmerlin_avdec, gmerlin_avdec, gavl_start,,,,[movie loader])
+
 GEM_CHECK_LIB(libquicktime,quicktime, quicktime_init,,,,[movie loader])
 dnl lqt is the same as libquicktime
 dnl this is double because there exists "lqt-config" and "pkg-config libquicktime"
@@ -557,6 +559,7 @@ Configuration:
     use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
     use ffmpeg           : ${have_ffmpeg}
+    use gmerlin          : ${have_gmerlin_avdec}
   input-support
     use v4l              : ${have_v4l}
     use ieee1394         : ${have_ieee1394}
@@ -575,5 +578,3 @@ if test "x$have_glu" != "xyes"; then
 fi
 
 AC_MSG_RESULT([Now run make ...])
-
-

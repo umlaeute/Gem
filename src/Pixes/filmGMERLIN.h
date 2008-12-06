@@ -18,8 +18,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Pixes/film.h"
 #include <stdio.h>
 
+#ifdef HAVE_LIBGMERLIN_AVDEC
+# define HAVE_GMERLIN
+#endif
+
 #ifdef HAVE_GMERLIN
-#include <gmerlin/avdec.h>
+# include <gmerlin/avdec.h>
 #endif // GMERLIN
 
 /*-----------------------------------------------------------------

@@ -18,6 +18,7 @@
 #undef HAVE_LIBAVIPLAY
 #undef HAVE_FFMPEG
 #undef GEM_AVSTREAM_CODECPOINTER
+#undef HAVE_LIBGMERLIN_AVDEC
 
 /* video grabbing */
 #undef HAVE_VIDEO4LINUX
