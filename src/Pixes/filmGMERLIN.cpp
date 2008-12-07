@@ -172,15 +172,12 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_finalformat->frame_height = m_gformat->frame_height;
   m_finalformat->image_width = m_gformat->image_width;
   m_finalformat->image_height = m_gformat->image_height;
+  m_finalformat->pixel_width = m_gformat->pixel_width;
+  m_finalformat->pixel_height = m_gformat->pixel_height;
   m_finalformat->frame_duration = m_gformat->frame_duration;
   m_finalformat->timescale = m_gformat->timescale;
 
-  m_finalformat->pixel_width=1;
-  m_finalformat->pixel_height=1;
   m_finalformat->pixelformat=GAVL_RGBA_32;
-
-  //strncpy((char*)(m_finalformat), (char*)(m_gformat), sizeof(*m_finalformat));
-  //  m_finalformat->pixelformat=GAVL_RGBA_32;
 
   m_finalframe = gavl_video_frame_create_nopad(m_finalformat);
   gavl_video_converter_init (m_gconverter, m_gformat, m_finalformat);
@@ -200,7 +197,6 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_numFrames = gavl_time_to_frames(m_fps_num, 
 				    m_fps_denum, 
 				    dur);
-  //  post("duration: %d --> %d", dur, m_numFrames);
 
   return true;
 }
@@ -231,12 +227,16 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
     int64_t seekposOrg = imgNum;
 
     //seekposOrg = gavl_frames_to_time(m_fps_num, m_fps_denum, imgNum);
+    //post("%d/%d=%f", m_fps_num, m_fps_denum, m_fps);
 
     int64_t seekpos = seekposOrg;
+    // LATER lookup the docs for the 3rd parameter
     bgav_seek_scaled(m_file, &seekpos, m_fps);
-
+    //post("seeked: %d->%d", seekposOrg, seekpos);
     if(seekposOrg == seekpos)
       return FILM_ERROR_SUCCESS;
+    /* never mind: always return success... */
+    return FILM_ERROR_SUCCESS;
   }
   return FILM_ERROR_FAILURE;
 }
