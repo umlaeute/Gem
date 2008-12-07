@@ -76,6 +76,31 @@ void filmGMERLIN :: close(void)
 
 }
 
+void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain, const char *message)
+{
+  switch(level) {
+  case BGAV_LOG_DEBUG:
+    verbose(2, "[pix_film:%s] %s", log_domain, message);
+    break;
+  case BGAV_LOG_INFO:
+    verbose(1, "[pix_film:%s] %s", log_domain, message);
+    break;
+  case BGAV_LOG_WARNING:
+    post("[pix_film:%s] %s", log_domain, message);
+    break;
+  case BGAV_LOG_ERROR:
+    error("[pix_film:%s!] %s", log_domain, message);
+    break;
+  default:break;
+  }
+}
+
+void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *log_domain, const char *message)
+{
+  //  post("gmerlin[%d:%s] %s", level, log_domain, message);
+  ((filmGMERLIN*)(data))->log(level, log_domain, message);
+}
+
 /////////////////////////////////////////////////////////
 // really open the file ! (OS dependent)
 //
@@ -95,6 +120,11 @@ bool filmGMERLIN :: open(char *filename, int format)
   */
   bgav_options_set_seek_subtitles(m_opt, 0);
   bgav_options_set_sample_accurate(m_opt, 1);
+
+  bgav_options_set_log_callback(m_opt,
+				log_callback,
+				this); 	
+
 
 
   if(!strncmp(filename, "vcd://", 6))
@@ -218,6 +248,7 @@ pixBlock* filmGMERLIN :: getFrame(){
 }
 
 int filmGMERLIN :: changeImage(int imgNum, int trackNum){
+  // LATER implement track-switching
   if(!m_file)return FILM_ERROR_FAILURE;
   if(imgNum>m_numFrames || imgNum<0)return FILM_ERROR_FAILURE;
   if  (imgNum>0)m_curFrame=imgNum;
@@ -225,14 +256,10 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
 
   if(bgav_can_seek(m_file)) {
     int64_t seekposOrg = imgNum;
-
-    //seekposOrg = gavl_frames_to_time(m_fps_num, m_fps_denum, imgNum);
-    //post("%d/%d=%f", m_fps_num, m_fps_denum, m_fps);
-
     int64_t seekpos = seekposOrg;
-    // LATER lookup the docs for the 3rd parameter
+    // LATER lookup the docs for the 3rd parameter:
+    // it should be the same "timebase" as the original source in order to get frame-accurate seeking
     bgav_seek_scaled(m_file, &seekpos, m_fps);
-    //post("seeked: %d->%d", seekposOrg, seekpos);
     if(seekposOrg == seekpos)
       return FILM_ERROR_SUCCESS;
     /* never mind: always return success... */

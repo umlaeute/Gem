@@ -85,6 +85,12 @@ class GEM_EXTERN filmGMERLIN : public film {
   gavl_video_converter_s*m_gconverter;
 
   int m_fps_num, m_fps_denum;
+
+
+  static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
+  virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);
+
+
 #endif
   int m_lastFrame;
 
