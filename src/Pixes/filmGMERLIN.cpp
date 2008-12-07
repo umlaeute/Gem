@@ -35,7 +35,10 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format)
 					 m_gformat(NULL),
 					 m_track(0),
 					 m_stream(0),
-					 m_gframe(NULL)
+					 m_gframe(NULL),
+					 m_finalframe(NULL),
+					 m_gconverter(NULL),
+					 m_fps_num(0), m_fps_denum(1)
 #endif /* GMERLIN */
 {
   static bool first_time=true;
@@ -46,15 +49,8 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format)
     first_time = false;
   }
 #ifdef HAVE_GMERLIN
-  m_file = bgav_create();
-  m_opt = bgav_get_options(m_file);
-  /*
-  bgav_options_set_connect_timeout(m_opt,   connect_timeout);
-  bgav_options_set_read_timeout(m_opt,      read_timeout);
-  bgav_options_set_network_bandwidth(m_opt, network_bandwidth);
-  */
-  bgav_options_set_seek_subtitles(m_opt, 0);
-  bgav_options_set_sample_accurate(m_opt, 1);
+  m_gconverter=gavl_video_converter_create ();
+  m_finalformat = new gavl_video_format_t[1];
 
 #endif
 }
@@ -66,13 +62,18 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format)
 filmGMERLIN :: ~filmGMERLIN()
 {
   close();
+#ifdef HAVE_GMERLIN
+  if(m_gconverter)gavl_video_converter_destroy(m_gconverter);m_gconverter=NULL;
+#endif
 }
 
 #ifdef HAVE_GMERLIN
 void filmGMERLIN :: close(void)
 {
-  if(m_file)bgav_close(m_file);
-  m_file=NULL;
+  if(m_file)bgav_close(m_file);m_file=NULL;
+
+  /* LATER: free frame buffers */
+
 }
 
 /////////////////////////////////////////////////////////
@@ -82,7 +83,19 @@ void filmGMERLIN :: close(void)
 bool filmGMERLIN :: open(char *filename, int format)
 {
   close();
+
   m_track=0;
+
+  m_file = bgav_create();
+  m_opt = bgav_get_options(m_file);
+  /*
+  bgav_options_set_connect_timeout(m_opt,   connect_timeout);
+  bgav_options_set_read_timeout(m_opt,      read_timeout);
+  bgav_options_set_network_bandwidth(m_opt, network_bandwidth);
+  */
+  bgav_options_set_seek_subtitles(m_opt, 0);
+  bgav_options_set_sample_accurate(m_opt, 1);
+
 
   if(!strncmp(filename, "vcd://", 6))
     {
@@ -111,14 +124,14 @@ bool filmGMERLIN :: open(char *filename, int format)
       return false;
       }
     }
-  else if(!bgav_open(m_file, filename))
-    {
+  else {
+    if(!bgav_open(m_file, filename)) {
       error("Could not open file %s",
             filename);
       close();
       return false;
     }
-
+  }
   if(bgav_is_redirector(m_file))
     {
       int i=0;
@@ -135,11 +148,11 @@ bool filmGMERLIN :: open(char *filename, int format)
       }
     }
 
+
   /*
    * ok, we have been able to open the "file"
    * now get some information from it...
    */
-  
   m_numTracks = bgav_num_tracks(m_file);
   // LATER: check whether this track has a video-stream...
   bgav_select_track(m_file, m_track);
@@ -153,14 +166,41 @@ bool filmGMERLIN :: open(char *filename, int format)
   }
 
   m_gformat = (gavl_video_format_t*)bgav_get_video_format (m_file, m_stream);
-  m_gformat->pixelformat=GAVL_RGBA_32;
   m_gframe = gavl_video_frame_create_nopad(m_gformat);
 
+  m_finalformat->frame_width = m_gformat->frame_width;
+  m_finalformat->frame_height = m_gformat->frame_height;
+  m_finalformat->image_width = m_gformat->image_width;
+  m_finalformat->image_height = m_gformat->image_height;
+  m_finalformat->frame_duration = m_gformat->frame_duration;
+  m_finalformat->timescale = m_gformat->timescale;
+
+  m_finalformat->pixel_width=1;
+  m_finalformat->pixel_height=1;
+  m_finalformat->pixelformat=GAVL_RGBA_32;
+
+  //strncpy((char*)(m_finalformat), (char*)(m_gformat), sizeof(*m_finalformat));
+  //  m_finalformat->pixelformat=GAVL_RGBA_32;
+
+  m_finalframe = gavl_video_frame_create_nopad(m_finalformat);
+  gavl_video_converter_init (m_gconverter, m_gformat, m_finalformat);
   m_image.image.xsize=m_gformat->frame_width;
   m_image.image.ysize=m_gformat->frame_height;
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_image.image.notowned=true;
+  m_image.image.upsidedown=true;
   m_image.newfilm=true;
+
+  m_fps = m_gformat->timescale / m_gformat->frame_duration;
+
+  m_fps_num=m_gformat->timescale;
+  m_fps_denum=m_gformat->frame_duration;
+
+  gavl_time_t dur=bgav_get_duration (m_file, m_track);
+  m_numFrames = gavl_time_to_frames(m_fps_num, 
+				    m_fps_denum, 
+				    dur);
+  //  post("duration: %d --> %d", dur, m_numFrames);
 
   return true;
 }
@@ -173,8 +213,11 @@ pixBlock* filmGMERLIN :: getFrame(){
   if(!m_file)return NULL;
 
   bgav_read_video(m_file, m_gframe, m_stream);
+  gavl_video_convert (m_gconverter, m_gframe, m_finalframe);
+
+
   m_image.newimage=true;
-  m_image.image.data=m_gframe->planes[0];
+  m_image.image.data=m_finalframe->planes[0];
   return &m_image;
 }
 
@@ -184,12 +227,16 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
   if  (imgNum>0)m_curFrame=imgNum;
   if(trackNum>0)m_curTrack=trackNum;
 
-  int i=-1;
-  //  if ((i=gmerlin_set_video_position(m_quickfile, m_curFrame, m_curTrack))){  }
   if(bgav_can_seek(m_file)) {
-    int64_t seekpos = imgNum;
-    bgav_seek_scaled(m_file, &seekpos, m_gformat->timescale);
-    return FILM_ERROR_SUCCESS;
+    int64_t seekposOrg = imgNum;
+
+    //seekposOrg = gavl_frames_to_time(m_fps_num, m_fps_denum, imgNum);
+
+    int64_t seekpos = seekposOrg;
+    bgav_seek_scaled(m_file, &seekpos, m_fps);
+
+    if(seekposOrg == seekpos)
+      return FILM_ERROR_SUCCESS;
   }
   return FILM_ERROR_FAILURE;
 }

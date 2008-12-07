@@ -23,7 +23,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #endif
 
 #ifdef HAVE_GMERLIN
+# ifdef __cplusplus
+extern "C" {
+# endif
 # include <gmerlin/avdec.h>
+# ifdef __cplusplus
+}
+# endif
 #endif // GMERLIN
 
 /*-----------------------------------------------------------------
@@ -73,11 +79,12 @@ class GEM_EXTERN filmGMERLIN : public film {
   bgav_t*   	 m_file;
   bgav_options_t * m_opt;
   bool           m_seekable; /* the track can be seeked */
-  gavl_video_format_t*m_gformat;
-  int m_track;
-  int m_stream;
-  gavl_video_frame_t*m_gframe;
+  gavl_video_format_t*m_gformat,*m_finalformat;
+  int m_track, m_stream;
+  gavl_video_frame_t*m_gframe,*m_finalframe;
+  gavl_video_converter_s*m_gconverter;
 
+  int m_fps_num, m_fps_denum;
 #endif
   int m_lastFrame;
 
