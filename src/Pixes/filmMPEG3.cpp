@@ -62,6 +62,10 @@ bool filmMPEG3 :: open(char *filename, int format)
 {
   if (mpeg3_check_sig(filename)){/* ok, this is mpeg(3) */
     mpeg_file= mpeg3_open(filename);
+    if(!mpeg_file) {
+      //post("GEM: pix_film: this file %s does not seem to hold any video data", filename);
+      goto unsupported;
+    }
     if (!mpeg3_has_video(mpeg_file)){
       post("GEM: pix_film: this file %s does not seem to hold any video data", filename);
       goto unsupported;
