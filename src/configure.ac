@@ -171,56 +171,10 @@ dnl lqt is the same as libquicktime
 dnl this is double because there exists "lqt-config" and "pkg-config libquicktime"
 dnl another option would have been to introduce aliases for packages
 GEM_CHECK_LIB(lqt,quicktime, quicktime_init,,,,[movie loader])
-GEM_CHECK_LIB(mpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
+
+GEM_CHECK_LIB(libmpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
 GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
 GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
-
-dnl GEM_CHECK_LIB(avcodec, avcodec_pic, avcodec_close,,,,[movie loader])
-
-# this is rather experimental...
-if test "x$with_ffmpeg" = "xyes"
-then
-if test "x$with_ffmpeg" != "xno" && \
-        test "x${PKG_FFMPEG_CFLAGS}x${PKG_FFMPEG_LIBS}x" = "xxx" && \
-        which ffmpeg-config > /dev/null
-then
- PKG_FFMPEG_CFLAGS=$(ffmpeg-config --cflags)
- PKG_FFMPEG_LIBS=$(ffmpeg-config --plugin-libs avformat)
- if test "x$PKG_FFMPEG_CFLAGS" != "x"
- then
-  ac_cv_env_PKG_FFMPEG_CFLAGS_set="set"
-  ac_cv_env_PKG_FFMPEG_CFLAGS_value=${PKG_FFMPEG_CFLAGS}
- fi
- if test "x$PKG_FFMPEG_LIBS" != "x"
- then
-  ac_cv_env_PKG_FFMPEG_LIBS_set="set"
-  ac_cv_env_PKG_FFMPEG_LIBS_value="${PKG_FFMPEG_LIBS}"
- fi
-fi
-
-GEM_CHECK_LIB(ffmpeg, avformat, av_open_input_file,[PKG_CFLAGS="-I/usr/include/ffmpeg $PKG_CFLAGS"],,,[movie loader])
-
-dnl checking whether (AVStream)->codec is "AVCodecContext" or "*AVCodecContext"
-if test "x$have_ffmpeg" = "xyes"; then
- AC_MSG_CHECKING([whether (AVStream)->codec is of type \"*AVCodecContext\"])
- cflags_temp="$CXXFLAGS"
- CXXFLAGS="$CXXFLAGS $PKG_CFLAGS $PKG_FFMPEG_CFLAGS"
- AC_COMPILE_IFELSE(
- AC_LANG_PROGRAM([[
-#include "avformat.h"
-#include "avcodec.h"
-]],[[
-AVStream*stream;
-stream->codec->codec_id;
-]]),
-AC_DEFINE(GEM_AVSTREAM_CODECPOINTER)
-AC_MSG_RESULT(yes),
-AC_MSG_RESULT(no)
-)
- CXXFLAGS=$cflags_temp
-fi
-fi
-
 
 GEM_ARG_WITH(v4l, [video input], [force])
 GEM_ARG_WITHOUT(v4l2, [video input (might override v4l-1)], [force])
@@ -555,10 +509,9 @@ Configuration:
     use JPEG             : ${have_jpeg}
   video-support
     use mpeg             : ${have_mpeg}
-    use mpeg-3           : ${have_mpeg3}
+    use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
-    use ffmpeg           : ${have_ffmpeg}
     use gmerlin          : ${have_gmerlin_avdec}
   input-support
     use v4l              : ${have_v4l}
