@@ -29,16 +29,16 @@
 
 filmGMERLIN :: filmGMERLIN(int format) : film(format)
 #ifdef HAVE_GMERLIN
-				       ,
-					 m_file(NULL),
-					 m_opt(NULL),
-					 m_gformat(NULL),
-					 m_track(0),
-					 m_stream(0),
-					 m_gframe(NULL),
-					 m_finalframe(NULL),
-					 m_gconverter(NULL),
-					 m_fps_num(0), m_fps_denum(1)
+                                       ,
+                                         m_file(NULL),
+                                         m_opt(NULL),
+                                         m_gformat(NULL),
+                                         m_track(0),
+                                         m_stream(0),
+                                         m_gframe(NULL),
+                                         m_finalframe(NULL),
+                                         m_gconverter(NULL),
+                                         m_fps_num(0), m_fps_denum(1)
 #endif /* GMERLIN */
 {
   static bool first_time=true;
@@ -55,7 +55,7 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format)
 #endif
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
@@ -76,6 +76,10 @@ void filmGMERLIN :: close(void)
 
 }
 
+/////////////////////////////////////////////////////////
+// logging
+//
+/////////////////////////////////////////////////////////
 void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain, const char *message)
 {
   switch(level) {
@@ -94,7 +98,6 @@ void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain, const char
   default:break;
   }
 }
-
 void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *log_domain, const char *message)
 {
   //  post("gmerlin[%d:%s] %s", level, log_domain, message);
@@ -102,7 +105,7 @@ void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *
 }
 
 /////////////////////////////////////////////////////////
-// really open the file ! (OS dependent)
+// really open the file !
 //
 /////////////////////////////////////////////////////////
 bool filmGMERLIN :: open(char *filename, int format)
@@ -112,53 +115,50 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_track=0;
 
   m_file = bgav_create();
+  if(!m_file) return false;
   m_opt = bgav_get_options(m_file);
+  if(!m_opt) return false;
   /*
-  bgav_options_set_connect_timeout(m_opt,   connect_timeout);
-  bgav_options_set_read_timeout(m_opt,      read_timeout);
-  bgav_options_set_network_bandwidth(m_opt, network_bandwidth);
+    bgav_options_set_connect_timeout(m_opt,   connect_timeout);
+    bgav_options_set_read_timeout(m_opt,      read_timeout);
+    bgav_options_set_network_bandwidth(m_opt, network_bandwidth);
   */
   bgav_options_set_seek_subtitles(m_opt, 0);
   bgav_options_set_sample_accurate(m_opt, 1);
 
   bgav_options_set_log_callback(m_opt,
-				log_callback,
-				this); 	
-
-
+                                log_callback,
+                                this);
 
   if(!strncmp(filename, "vcd://", 6))
     {
-    if(!bgav_open_vcd(m_file, filename + 5))
-      {
-	error("Could not open VCD Device %s",
-              filename + 5);
-      return false;
-      }
+      if(!bgav_open_vcd(m_file, filename + 5))
+        {
+          //error("Could not open VCD Device %s",  filename + 5);
+          return false;
+        }
     }
   else if(!strncmp(filename, "dvd://", 6))
     {
-    if(!bgav_open_dvd(m_file, filename + 5))
-      {
-	error("Could not open DVD Device %s",
-              filename + 5);
-      return false;
-      }
+      if(!bgav_open_dvd(m_file, filename + 5))
+        {
+          //error("Could not open DVD Device %s", filename + 5);
+          return false;
+        }
     }
   else if(!strncmp(filename, "dvb://", 6))
     {
-    if(!bgav_open_dvb(m_file, filename + 6))
-      {
-	error("Could not open DVB Device %s",
-              filename + 6);
-      return false;
-      }
+      if(!bgav_open_dvb(m_file, filename + 6))
+        {
+          //error("Could not open DVB Device %s", filename + 6);
+          return false;
+        }
     }
   else {
     if(!bgav_open(m_file, filename)) {
-      error("Could not open file %s",
-            filename);
+      //error("Could not open file %s", filename);
       close();
+
       return false;
     }
   }
@@ -168,16 +168,19 @@ bool filmGMERLIN :: open(char *filename, int format)
       int num_urls=bgav_redirector_get_num_urls(m_file);
       post("Found redirector:");
       for(i = 0; i < num_urls; i++)
-      {
-	post("#%d: '%s' -> %s", i, bgav_redirector_get_name(m_file, i), bgav_redirector_get_url(m_file, i));
+        {
+          post("#%d: '%s' -> %s", i, bgav_redirector_get_name(m_file, i), bgav_redirector_get_url(m_file, i));
+        }
+      for(i = 0; i < num_urls; i++) {
+        filename=(char*)bgav_redirector_get_url(m_file, i);
+        close();
+        if (open(filename)) {
+          return true;
+        }
       }
-      if(true){
-	filename=(char*)bgav_redirector_get_url(m_file, 0);
-	close();
-	return open(filename);
-      }
+      /* couldn't open a redirected stream */
+      return false;
     }
-
 
   /*
    * ok, we have been able to open the "file"
@@ -225,8 +228,8 @@ bool filmGMERLIN :: open(char *filename, int format)
 
   gavl_time_t dur=bgav_get_duration (m_file, m_track);
   m_numFrames = gavl_time_to_frames(m_fps_num, 
-				    m_fps_denum, 
-				    dur);
+                                    m_fps_denum, 
+                                    dur);
 
   return true;
 }
@@ -247,6 +250,11 @@ pixBlock* filmGMERLIN :: getFrame(){
   return &m_image;
 }
 
+
+/////////////////////////////////////////////////////////
+// changeFrame
+//
+/////////////////////////////////////////////////////////
 int filmGMERLIN :: changeImage(int imgNum, int trackNum){
   // LATER implement track-switching
   if(!m_file)return FILM_ERROR_FAILURE;
