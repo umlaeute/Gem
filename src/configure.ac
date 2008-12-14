@@ -177,13 +177,11 @@ GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
 GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
 
 GEM_ARG_WITH(v4l, [video input], [force])
-GEM_ARG_WITHOUT(v4l2, [video input (might override v4l-1)], [force])
 
 if test "x$with_v4l" != "xno"; then
-  GEM_CHECK_LIB(libv4l1, libv4l1, v4l1_open,,,,[video input])
-fi
-if test "x$with_v4l2" != "xno"; then
-  GEM_CHECK_LIB(libv4l2, libv4l2, v4l2_open,,,,[video input])
+# these two are quite the same...
+ GEM_CHECK_LIB(libv4l1, libv4l1, v4l1_open,,,,[video input])
+ GEM_CHECK_LIB(libv4l2, libv4l2, v4l2_open,,,,[video input])
 fi
 
 # this is rather experimental...and magic...uähh
@@ -454,8 +452,8 @@ if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
 fi
 
-if test "x$have_v4l2" = "xyes"; then
-  have_v4l="yes (v4l-2)"
+if test "x$have_libv4l1" = "xyes" || test "x$have_libv4l2" = "xyes"; then
+  have_v4l="yes (libv4l)"
 fi
 
 
