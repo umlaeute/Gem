@@ -42,6 +42,16 @@
 
 #include "videoV4L.h"
 
+#ifndef HAVE_LIBV4L1
+# define v4l1_open open
+# define v4l1_close close
+# define v4l1_dup dup
+# define v4l1_ioctl ioctl
+# define v4l1_read read
+# define v4l1_mmap mmap
+# define v4l1_munmap munmap
+#endif /* libv4l-1 */
+
 #if 1
 # define debug ::post
 #else
@@ -118,20 +128,20 @@ void *videoV4L :: capturing(void*you)
       me->mytopmargin + me->mybottommargin;
     
    /* syncing */
-     if (ioctl(me->tvfd, VIDIOCSYNC, &me->vmmap[me->frame].frame) < 0)
+     if (v4l1_ioctl(me->tvfd, VIDIOCSYNC, &me->vmmap[me->frame].frame) < 0)
     {
 	perror("VIDIOCSYNC");
 	//me->m_haveVideo = 0;me->stopTransfer();
     }
 
     /* capturing */
-     if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
+     if (v4l1_ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
       {
     	if (errno == EAGAIN)
 	  error("can't sync (no v4l source?)");
     	else 
 	  perror("VIDIOCMCAPTURE1");
-	if (ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
+	if (v4l1_ioctl(me->tvfd, VIDIOCMCAPTURE, &me->vmmap[me->frame]) < 0)
 	  perror("VIDIOCMCAPTURE2");
         /*
 	verbose(1, "frame %d %d, format %d, width %d, height %d\n",
@@ -207,13 +217,13 @@ int videoV4L :: startTransfer(int format)
     }
   }
   
-    if ((tvfd = open(buf, O_RDWR)) < 0)
+    if ((tvfd = v4l1_open(buf, O_RDWR)) < 0)
     {
       error("failed opening device: '%s'", buf);
 	perror(buf);
 	goto closit;
     }
-    if (ioctl(tvfd, VIDIOCGCAP, &vcap) < 0)
+    if (v4l1_ioctl(tvfd, VIDIOCGCAP, &vcap) < 0)
     {
 	perror("get capabilities");
 	goto closit;
@@ -223,7 +233,7 @@ int videoV4L :: startTransfer(int format)
     	vcap.name, vcap.type,  vcap.channels,  vcap.maxwidth,  vcap.maxheight,
 	    vcap.minwidth,  vcap.minheight);
     */
-    if (ioctl(tvfd, VIDIOCGPICT, &vpicture) < 0)
+    if (v4l1_ioctl(tvfd, VIDIOCGPICT, &vpicture) < 0)
     {
 	perror("VIDIOCGPICT");
 	goto closit;
@@ -235,7 +245,7 @@ int videoV4L :: startTransfer(int format)
     for (i = 0; i < vcap.channels; i++)
     {
 	vchannel.channel = i;
-	if (ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
+	if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
 	{
 	    perror("VDIOCGCHAN");
 	    goto closit;
@@ -248,14 +258,14 @@ int videoV4L :: startTransfer(int format)
     }
     vchannel.channel = ((vcap.channels-1)<m_channel)?(vcap.channels-1):m_channel;
     //verbose(1, "setting to channel %d", vchannel.channel);
-    if (ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
+    if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
     {
 	perror("VDIOCGCHAN");
 	goto closit;
     }
 
     vchannel.norm = m_norm;
-    if (ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0)
+    if (v4l1_ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0)
     {
 	perror("VDIOCSCHAN");
 	goto closit;
@@ -263,7 +273,7 @@ int videoV4L :: startTransfer(int format)
 
 
     	/* get mmap numbers */
-    if (ioctl(tvfd, VIDIOCGMBUF, &vmbuf) < 0)
+    if (v4l1_ioctl(tvfd, VIDIOCGMBUF, &vmbuf) < 0)
     {
 	perror("VIDIOCGMBUF");
 	goto closit;
@@ -273,7 +283,7 @@ int videoV4L :: startTransfer(int format)
     	vmbuf.frames, vmbuf.offsets[0], vmbuf.offsets[1]);
     */
     if (!(videobuf = (unsigned char *)
-    	mmap(0, vmbuf.size, PROT_READ|PROT_WRITE, MAP_SHARED, tvfd, 0)))
+    	v4l1_mmap(0, vmbuf.size, PROT_READ|PROT_WRITE, MAP_SHARED, tvfd, 0)))
     {
 	perror("mmap");
 	goto closit;
@@ -335,10 +345,10 @@ int videoV4L :: startTransfer(int format)
 
     //verbose(1, "setting cmcapture to %dx%d\t%d", vmmap[0].width,  vmmap[0].height, vmmap[0].format);
 
-    if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
+    if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
       for (i = 0; i < V4L_NBUF; i++)vmmap[i].format = vpicture.palette;
       //verbose(1, "now trying standard palette %d", vmmap[0].format);
-      if (ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
+      if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
 	if (errno == EAGAIN)
 	  error("can't sync (no video source?)");
 	else 
@@ -387,7 +397,7 @@ closit:
     verbose(1, "v4l::startTransfer closing %d", tvfd);
     if (tvfd >= 0)
     {
-    	close(tvfd);
+    	v4l1_close(tvfd);
 	tvfd = -1;
     }
     m_haveVideo = 0;
@@ -410,9 +420,9 @@ int videoV4L :: stopTransfer()
       pthread_join (m_thread_id, &dummy);
     }
     while(m_capturing){verbose(1, "waiting for thread");}
-    munmap(videobuf, vmbuf.size);
+    v4l1_munmap(videobuf, vmbuf.size);
   }
-  if (tvfd) close(tvfd);
+  if (tvfd) v4l1_close(tvfd);
   tvfd = 0;
   m_haveVideo = 0;
   m_frame_ready = 0;
@@ -480,6 +490,7 @@ int videoV4L :: setNorm(char*norm)
     stopTransfer();
     m_norm=i_norm;
     startTransfer();
+
   }  
   m_norm=i_norm;
   return 0;
@@ -490,12 +501,12 @@ int videoV4L :: setChannel(int c, t_float f){
   if (freq>0){
     if (c>-1)m_channel=c;
     vtuner.tuner = m_channel;
-    if (ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
+    if (v4l1_ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
       error("Error setting frequency -- no tuner");
       return -1;
     }
     verbose(1, "setting freq: %d", freq);
-    if (ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
+    if (v4l1_ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
       error("Error setting frequency");
       return -1;
     }

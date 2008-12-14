@@ -19,7 +19,15 @@
 
 #include "Pixes/video.h"
 
+#if defined HAVE_LIBV4L1 && !defined HAVE_VIDEO4LINUX
+# define HAVE_VIDEO4LINUX
+#endif
+
 #ifdef HAVE_VIDEO4LINUX
+# ifdef HAVE_LIBV4L1
+#  include <libv4l1.h> 
+# endif /* HAVE_LIBV4L1 */
+
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdarg.h>

@@ -16,6 +16,17 @@
 
 #include "videoV4L2.h"
 
+
+#ifndef HAVE_LIBV4L2
+# define v4l2_open open
+# define v4l2_close close
+# define v4l2_dup dup
+# define v4l2_ioctl ioctl
+# define v4l2_read read
+# define v4l2_mmap mmap
+# define v4l2_munmap munmap
+#endif /* libv4l-2 */
+
 #if 0
 # define debugPost post
 # define debugThread post
@@ -73,7 +84,7 @@ static int xioctl(int                    fd,
   int r;
      
   do {
-    r = ioctl (fd, request, arg);
+    r = v4l2_ioctl (fd, request, arg);
     debugThread("V4L2: xioctl %d->%d\n", r, errno);
   }
   while (-1 == r && EINTR == errno);
@@ -133,7 +144,7 @@ int videoV4L2::init_mmap (void)
 
     m_buffers[m_nbuffers].length = buf.length;
     m_buffers[m_nbuffers].start =
-      mmap (NULL /* start anywhere */,
+      v4l2_mmap (NULL /* start anywhere */,
             buf.length,
             PROT_READ | PROT_WRITE /* required */,
             MAP_SHARED /* recommended */,
@@ -345,7 +356,7 @@ int videoV4L2 :: startTransfer(int format)
   // try to open the device
   debugPost("v4l2: device: %s", dev_name);
   
-  m_tvfd = open (dev_name, O_RDWR /* required */, 0);
+  m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
 
   if (-1 == m_tvfd) {
     error("Cannot open '%s': %d, %s", dev_name, errno, strerror (errno));
@@ -587,7 +598,7 @@ int videoV4L2 :: stopTransfer()
   debugPost("v4l2: unmapping %d buffers: %x", m_nbuffers, m_buffers);
   if(m_buffers){
     for (i = 0; i < m_nbuffers; ++i)
-      if (-1 == munmap (m_buffers[i].start, m_buffers[i].length)){
+      if (-1 == v4l2_munmap (m_buffers[i].start, m_buffers[i].length)){
         // oops: couldn't unmap the memory
       }
     debugPost("v4l2: freeing buffers: %x", m_buffers);
@@ -597,7 +608,7 @@ int videoV4L2 :: stopTransfer()
   debugPost("v4l2: freed");
 
   // close the file-descriptor
-  if (m_tvfd) close(m_tvfd);
+  if (m_tvfd) v4l2_close(m_tvfd);
 
   m_tvfd = 0;
   m_haveVideo = 0;
