@@ -179,27 +179,12 @@ GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
 GEM_ARG_WITH(v4l, [video input], [force])
 GEM_ARG_WITHOUT(v4l2, [video input (might override v4l-1)], [force])
 
-if test "x$with_v4l2" != "xno"; then
-  AC_CHECK_HEADER(linux/videodev2.h,
-                  [
-                    AC_DEFINE(HAVE_VIDEO4LINUX2)
-                    have_v4l2="yes"
-                  ],[have_v4l2="no"], 
-                  [
-# include <asm/types.h>
-# include <sys/time.h>
-                  ])
-fi
-
 if test "x$with_v4l" != "xno"; then
-  AC_CHECK_HEADER(linux/videodev.h,
-                  [
-                    AC_DEFINE(HAVE_VIDEO4LINUX)
-                    have_v4l="yes"
-                  ],[have_v4l="no"])
+  GEM_CHECK_LIB(libv4l1, libv4l1, v4l1_open,,,,[video input])
 fi
-
-GEM_CHECK_LIB(ieee1394,dv,main,,,,video input)
+if test "x$with_v4l2" != "xno"; then
+  GEM_CHECK_LIB(libv4l2, libv4l2, v4l2_open,,,,[video input])
+fi
 
 # this is rather experimental...and magic...uähh
 if test "x$with_ftgl" != "xno" && \

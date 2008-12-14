@@ -24,6 +24,8 @@
 #undef HAVE_VIDEO4LINUX
 #undef HAVE_VIDEO4LINUX2
 #undef HAVE_LIBDV
+#undef HAVE_LIBV4L1
+#undef HAVE_LIBV4L2
 
 /* image analysis */
 #undef HAVE_ARTOOLKIT
