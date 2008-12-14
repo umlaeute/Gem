@@ -454,7 +454,7 @@ int videoV4L2 :: startTransfer(int format)
   }
   fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
   
-  post("v4l2: wanted %d, got '%c%c%c%c' ", m_reqFormat, 
+  verbose(1, "v4l2: want %d == '%c%c%c%c' ", m_reqFormat, 
 	    (char)(fmt.fmt.pix.pixelformat),
 	    (char)(fmt.fmt.pix.pixelformat>>8),
 	    (char)(fmt.fmt.pix.pixelformat>>16),
@@ -470,6 +470,12 @@ int videoV4L2 :: startTransfer(int format)
     perror ("VIDIOC_G_FMT");//exit
     error("should exit!");
   }
+
+  verbose(1, "v4l2: got %d == '%c%c%c%c' ", fmt.ftm.pix.pixelformat;
+	    (char)(fmt.fmt.pix.pixelformat),
+	    (char)(fmt.fmt.pix.pixelformat>>8),
+	    (char)(fmt.fmt.pix.pixelformat>>16),
+	    (char)(fmt.fmt.pix.pixelformat>>24));
 
   m_gotFormat=fmt.fmt.pix.pixelformat;
   switch(m_gotFormat){
