@@ -471,7 +471,7 @@ int videoV4L2 :: startTransfer(int format)
     error("should exit!");
   }
 
-  verbose(1, "v4l2: got %d == '%c%c%c%c' ", fmt.ftm.pix.pixelformat;
+  verbose(1, "v4l2: got %d == '%c%c%c%c' ", fmt.fmt.pix.pixelformat,
 	    (char)(fmt.fmt.pix.pixelformat),
 	    (char)(fmt.fmt.pix.pixelformat>>8),
 	    (char)(fmt.fmt.pix.pixelformat>>16),
