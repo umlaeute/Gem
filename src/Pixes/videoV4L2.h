@@ -171,7 +171,11 @@ class GEM_EXTERN videoV4L2 : public video {
   // when we try to open /dev/video1 we fail, and m_capturing is set to 0
   // now when rendering is turned on and we want to switch back to /dev/video0 we should reconnect to the good device
   bool      m_rendering; // "true" when rendering is on, false otherwise
-  
+
+
+
+  /* use this in the capture-thread to cleanup */
+  bool      m_stopTransfer;  
 #endif /* HAVE_VIDEO4LINUX2 */
 
 };

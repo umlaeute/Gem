@@ -53,7 +53,8 @@ videoV4L2 :: videoV4L2(int format) : video(format)
                                      m_maxwidth(844), m_minwidth(32),
                                      m_maxheight(650), m_minheight(32),
                                      m_thread_id(0), m_continue_thread(false), m_frame_ready(false),
-                                     m_rendering(false)
+                                     m_rendering(false),
+                                     m_stopTransfer(false)
 {
   if (!m_width)m_width=320;
   if (!m_height)m_height=240;
@@ -170,6 +171,7 @@ void *videoV4L2::capturing_(void*you)
 }
 void *videoV4L2 :: capturing(void)
 {
+  int errorcount=0;
   t_v4l2_buffer*buffers=m_buffers;
 
   struct v4l2_buffer buf;
@@ -189,6 +191,7 @@ void *videoV4L2 :: capturing(void)
   buf.memory = V4L2_MEMORY_MMAP;
 
   while(m_continue_thread){
+    bool captureerror=false;
     FD_ZERO (&fds);
     FD_SET (m_tvfd, &fds);
 
@@ -221,11 +224,13 @@ void *videoV4L2 :: capturing(void)
       switch (errno) {
       case EAGAIN:
         perror("VIDIOC_DQBUF: stopping capture thread!");
-        goto stop_capturethread;
+        m_stopTransfer=true;
+        m_continue_thread=false;
       case EIO:
         /* Could ignore EIO, see spec. */
         /* fall through */
       default:
+        captureerror=true;
         perror ("VIDIOC_DQBUF");
       }
     }
@@ -237,22 +242,27 @@ void *videoV4L2 :: capturing(void)
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
       perror ("VIDIOC_QBUF");
+      captureerror=true;
     }
 
     debugThread("V4L2: dequeueueeud");
     
     m_frame_ready = 1;
     m_last_frame=m_frame;
-  }
- stop_capturethread:
-  // stop capturing
-  if(m_tvfd){
-    enum v4l2_buf_type type;
-    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    if (-1 == xioctl (m_tvfd, VIDIOC_STREAMOFF, &type)){
-      perror ("VIDIOC_STREAMOFF");
+
+    if(captureerror) {
+      errorcount++;
+      if(errorcount>1000) {
+        error("v4L2: %d capture errors in a row... I think I better stop now...", errorcount);
+        m_continue_thread=false;
+        m_stopTransfer=true;
+      }
+    } else {
+      errorcount=0;
     }
   }
+
+  // stop capturing
   m_capturing=false;
   debugThread("V4L2: thread finished");
   return NULL;
@@ -262,6 +272,10 @@ void *videoV4L2 :: capturing(void)
 // this reads the data that was captured by capturing() and returns it within a pixBlock
 pixBlock *videoV4L2 :: getFrame(){
   if(!m_haveVideo)return NULL;
+  if(m_stopTransfer) {
+    stopTransfer();
+    return NULL;
+  }
   //debugPost("v4l2: getting frame %d", m_frame_ready);
   m_image.newfilm=0;
   if (!m_frame_ready) m_image.newimage = 0;
@@ -317,6 +331,7 @@ int videoV4L2 :: startTransfer(int format)
   debugPost("v4l2: startTransfer: %d", m_capturing);
   if(m_capturing)stopTransfer(); // just in case we are already running!
   debugPost("v4l2: start transfer");
+  m_stopTransfer=false;
   m_rendering=true;
   if (format>1)m_reqFormat=format;
   //  verbose(1, "starting transfer");
@@ -458,16 +473,14 @@ int videoV4L2 :: startTransfer(int format)
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
     perror ("VIDIOC_S_FMT");//exit
-    error("should exit!");
   }
   
   // query back what we have set
   if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
     perror ("VIDIOC_G_FMT");//exit
-    error("should exit!");
   }
 
-  verbose(1, "v4l2: got %d == '%c%c%c%c' ", fmt.fmt.pix.pixelformat,
+  verbose(1, "v4l2: got'%c%c%c%c' ", 
 	    (char)(fmt.fmt.pix.pixelformat),
 	    (char)(fmt.fmt.pix.pixelformat>>8),
 	    (char)(fmt.fmt.pix.pixelformat>>16),
@@ -608,6 +621,15 @@ int videoV4L2 :: stopTransfer()
   }
   m_buffers=NULL;
   debugPost("v4l2: freed");
+
+  // stop streaming
+  if(m_tvfd){
+    enum v4l2_buf_type type;
+    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    if (-1 == xioctl (m_tvfd, VIDIOC_STREAMOFF, &type)){
+      perror ("VIDIOC_STREAMOFF");
+    }
+  }
 
   // close the file-descriptor
   if (m_tvfd) v4l2_close(m_tvfd);
