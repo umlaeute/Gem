@@ -28,8 +28,8 @@
 #endif /* libv4l-2 */
 
 #if 0
-# define debugPost post
-# define debugThread post
+# define debugPost ::post
+# define debugThread ::post
 #else
 # define debugPost
 # define debugThread
@@ -111,7 +111,7 @@ int videoV4L2::init_mmap (void)
       error("%s does not support memory mapping", devname);
       return 0;
     } else {
-      error ("VIDIOC_REQBUFS");
+      perror("v4l2: VIDIOC_REQBUFS");
       return 0;
     }
   }
@@ -124,7 +124,7 @@ int videoV4L2::init_mmap (void)
   m_buffers = (t_v4l2_buffer*)calloc (req.count, sizeof (*m_buffers));
 
   if (!m_buffers) {
-    error("out of memory");
+    perror("v4l2: out of memory");
     return(0);
   }
 
@@ -139,7 +139,7 @@ int videoV4L2::init_mmap (void)
     debugPost("v4l2: buf.index==%d", buf.index);
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QUERYBUF, &buf)){
-      error ("VIDIOC_QUERYBUF");
+      perror("v4l2: VIDIOC_QUERYBUF");
       return(0);
     }
 
@@ -152,7 +152,7 @@ int videoV4L2::init_mmap (void)
             m_tvfd, buf.m.offset);
 
     if (MAP_FAILED == m_buffers[m_nbuffers].start){
-      error ("mmap");
+      perror("v4l2: mmap");
       return 0;
     }
   }
@@ -211,7 +211,7 @@ void *videoV4L2 :: capturing(void)
     if (-1 == r) {
       if (EINTR == errno)
         continue;
-      error ("select");//exit
+      perror("v4l2: select");//exit
     }
 
     memset(&(buf), 0, sizeof (buf));
@@ -223,7 +223,7 @@ void *videoV4L2 :: capturing(void)
     if (-1 == xioctl (m_tvfd, VIDIOC_DQBUF, &buf)) {
       switch (errno) {
       case EAGAIN:
-        perror("VIDIOC_DQBUF: stopping capture thread!");
+        perror("v4l2: VIDIOC_DQBUF: stopping capture thread!");
         m_stopTransfer=true;
         m_continue_thread=false;
       case EIO:
@@ -231,7 +231,7 @@ void *videoV4L2 :: capturing(void)
         /* fall through */
       default:
         captureerror=true;
-        perror ("VIDIOC_DQBUF");
+        perror("v4l2: VIDIOC_DQBUF");
       }
     }
 
@@ -241,7 +241,7 @@ void *videoV4L2 :: capturing(void)
     //process_image (m_buffers[buf.index].start);
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
-      perror ("VIDIOC_QBUF");
+      perror("v4l2: VIDIOC_QBUF");
       captureerror=true;
     }
 
@@ -273,7 +273,9 @@ void *videoV4L2 :: capturing(void)
 pixBlock *videoV4L2 :: getFrame(){
   if(!m_haveVideo)return NULL;
   if(m_stopTransfer) {
+    bool rendering=m_rendering;
     stopTransfer();
+    m_rendering=rendering;
     return NULL;
   }
   //debugPost("v4l2: getting frame %d", m_frame_ready);
@@ -394,7 +396,7 @@ int videoV4L2 :: startTransfer(int format)
       error("%s is no V4L2 device",  dev_name);
       goto closit;
     } else {
-      perror ("VIDIOC_QUERYCAP");//exit
+      perror("v4l2: VIDIOC_QUERYCAP");//exit
       goto closit;
     }
   }
@@ -425,7 +427,7 @@ int videoV4L2 :: startTransfer(int format)
     crop.c = cropcap.defrect; /* reset to default */
 
     if (-1 == xioctl (m_tvfd, VIDIOC_S_CROP, &crop)) {
-      perror("vidioc_s_crop");
+      perror("v4l2: vidioc_s_crop");
       switch (errno) {
       case EINVAL:
         /* Cropping not supported. */
@@ -439,7 +441,7 @@ int videoV4L2 :: startTransfer(int format)
 
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_INPUT, &m_channel)) {
-    perror("VIDIOC_S_INPUT"); /* exit */
+    perror("v4l2: VIDIOC_S_INPUT"); /* exit */
   }
 
   memset (&(fmt), 0, sizeof (fmt));
@@ -472,33 +474,65 @@ int videoV4L2 :: startTransfer(int format)
 	    (char)(fmt.fmt.pix.pixelformat>>24));
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
-    perror ("VIDIOC_S_FMT");//exit
+    perror("v4l2: VIDIOC_S_FMT");//exit
   }
   
   // query back what we have set
   if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
-    perror ("VIDIOC_G_FMT");//exit
+    perror("v4l2: VIDIOC_G_FMT");//exit
   }
-
-  verbose(1, "v4l2: got'%c%c%c%c' ", 
-	    (char)(fmt.fmt.pix.pixelformat),
-	    (char)(fmt.fmt.pix.pixelformat>>8),
-	    (char)(fmt.fmt.pix.pixelformat>>16),
-	    (char)(fmt.fmt.pix.pixelformat>>24));
 
   m_gotFormat=fmt.fmt.pix.pixelformat;
   switch(m_gotFormat){
   case V4L2_PIX_FMT_RGB32: debugPost("v4l2: RGBA");break;
+  case V4L2_PIX_FMT_RGB24: debugPost("v4l2: RGB");break;
   case V4L2_PIX_FMT_UYVY: debugPost("v4l2: YUV ");break;
   case V4L2_PIX_FMT_GREY: debugPost("v4l2: gray");break;
   case V4L2_PIX_FMT_YUV420: debugPost("v4l2: YUV 4:2:0");break;
-  default: error("unknown format '%c%c%c%c'",
-		(char)(fmt.fmt.pix.pixelformat),
-		(char)(fmt.fmt.pix.pixelformat>>8),
-		(char)(fmt.fmt.pix.pixelformat>>16),
-		(char)(fmt.fmt.pix.pixelformat>>24));
-
+  default: 
+    /* hmm, we don't know how to handle this 
+     * let's try formats that should be always supported by libv4l2
+     */
+    switch(m_reqFormat){
+    case GL_YCBCR_422_GEM: 
+    case GL_LUMINANCE: 
+      fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUV420; 
+      break;
+    default: 
+      fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB24; 
+      break;
+    }
+    if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
+      perror("v4l2: VIDIOC_S_FMT2");
+    }
+    // query back what we have set
+    if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
+      perror("v4l2: VIDIOC_G_FMT2");
+    }
+    m_gotFormat=fmt.fmt.pix.pixelformat;
   }
+
+  switch(m_gotFormat){
+  case V4L2_PIX_FMT_RGB32: case V4L2_PIX_FMT_RGB24:
+  case V4L2_PIX_FMT_UYVY: case V4L2_PIX_FMT_YUV420:
+  case V4L2_PIX_FMT_GREY: 
+    break;
+  default: 
+    error("unknown format '%c%c%c%c'",
+          (char)(m_gotFormat),
+          (char)(m_gotFormat>>8),
+          (char)(m_gotFormat>>16),
+          (char)(m_gotFormat>>24));
+    /* we should really return here! */
+  }
+
+
+
+  verbose(1, "v4l2: got'%c%c%c%c'", 
+	    (char)(m_gotFormat),
+	    (char)(m_gotFormat>>8),
+	    (char)(m_gotFormat>>16),
+	    (char)(m_gotFormat>>24));
 
   /* Note VIDIOC_S_FMT may change width and height. */
   if(m_width!=fmt.fmt.pix.width||m_height!=fmt.fmt.pix.height){
@@ -529,14 +563,14 @@ int videoV4L2 :: startTransfer(int format)
     buf.index       = i;
     
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
-      perror ("VIDIOC_QBUF");//exit
+      perror("v4l2: VIDIOC_QBUF");//exit
     }
   }
 
   type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
   if (-1 == xioctl (m_tvfd, VIDIOC_STREAMON, &type)){
-    perror ("VIDIOC_STREAMON");//exit
+    perror("v4l2: VIDIOC_STREAMON");//exit
   }
   
   /* fill in image specifics for Gem pixel object.  Could we have
@@ -627,17 +661,19 @@ int videoV4L2 :: stopTransfer()
     enum v4l2_buf_type type;
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (-1 == xioctl (m_tvfd, VIDIOC_STREAMOFF, &type)){
-      perror ("VIDIOC_STREAMOFF");
+      perror("v4l2: VIDIOC_STREAMOFF");
     }
   }
 
   // close the file-descriptor
+  debugPost("v4l2: closing %d", m_tvfd);
   if (m_tvfd) v4l2_close(m_tvfd);
 
   m_tvfd = 0;
   m_haveVideo = 0;
   m_frame_ready = 0;
   m_rendering=false;
+  debugPost("v4l2: stoppedtransfer");
   return(1);
 }
 

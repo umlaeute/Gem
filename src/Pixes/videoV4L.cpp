@@ -52,7 +52,7 @@
 # define v4l1_munmap munmap
 #endif /* libv4l-1 */
 
-#if 1
+#if 0
 # define debug ::post
 #else
 # define debug
@@ -146,7 +146,7 @@ void *videoV4L :: capturing()
     /* syncing */
     if (v4l1_ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
       {
-        perror("VIDIOCSYNC");
+        perror("v4l: VIDIOCSYNC");
         noerror=false;
         //m_haveVideo = 0;stopTransfer();
       }
@@ -155,13 +155,13 @@ void *videoV4L :: capturing()
     if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
       {
         if (errno == EAGAIN)
-          error("can't sync (no v4l source?)");
+          error("v4l: can't sync (no v4l source?)");
         else 
-          perror("VIDIOCMCAPTURE1");
+          perror("v4l: VIDIOCMCAPTURE1");
 
         /* let's try again... */
         if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0) {
-          perror("VIDIOCMCAPTURE2");
+          perror("v4l: VIDIOCMCAPTURE2");
           noerror=false;
         }
         /*
@@ -193,7 +193,12 @@ void *videoV4L :: capturing()
 pixBlock *videoV4L :: getFrame(){
   if(!m_haveVideo)return NULL;
   if(m_stopTransfer) {
+    /* transfer has been stopped dues to errors in the thread
+     * it should be resumed whenever possible 
+     */
+    bool rendering=m_rendering;
     stopTransfer();
+    m_rendering=rendering;
     return NULL;
   }
   m_image.newfilm=0;
@@ -257,13 +262,13 @@ int videoV4L :: startTransfer(int format)
   
   if ((tvfd = v4l1_open(buf, O_RDWR)) < 0)
     {
-      error("failed opening device: '%s'", buf);
+      error("v4l: failed opening device: '%s'", buf);
       perror(buf);
       goto closit;
     }
   if (v4l1_ioctl(tvfd, VIDIOCGCAP, &vcap) < 0)
     {
-      perror("get capabilities");
+      perror("v4l: get capabilities");
       goto closit;
     }
   /*
@@ -273,7 +278,7 @@ int videoV4L :: startTransfer(int format)
   */
   if (v4l1_ioctl(tvfd, VIDIOCGPICT, &vpicture) < 0)
     {
-      perror("VIDIOCGPICT");
+      perror("v4l: VIDIOCGPICT");
       goto closit;
     }
   /*
@@ -285,7 +290,7 @@ int videoV4L :: startTransfer(int format)
       vchannel.channel = i;
       if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
         {
-          perror("VDIOCGCHAN");
+          perror("v4l: VDIOCGCHAN");
           goto closit;
         }
       /*
@@ -298,14 +303,14 @@ int videoV4L :: startTransfer(int format)
   //verbose(1, "setting to channel %d", vchannel.channel);
   if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
     {
-      perror("VDIOCGCHAN");
+      perror("v4l: VDIOCGCHAN");
       goto closit;
     }
 
   vchannel.norm = m_norm;
   if (v4l1_ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0)
     {
-      perror("VDIOCSCHAN");
+      perror("v4l: VDIOCSCHAN");
       goto closit;
     }
 
@@ -313,7 +318,7 @@ int videoV4L :: startTransfer(int format)
   /* get mmap numbers */
   if (v4l1_ioctl(tvfd, VIDIOCGMBUF, &vmbuf) < 0)
     {
-      perror("VIDIOCGMBUF");
+      perror("v4l: VIDIOCGMBUF");
       goto closit;
     }
   /*
@@ -323,7 +328,7 @@ int videoV4L :: startTransfer(int format)
   if (!(videobuf = (unsigned char *)
         v4l1_mmap(0, vmbuf.size, PROT_READ|PROT_WRITE, MAP_SHARED, tvfd, 0)))
     {
-      perror("mmap");
+      perror("v4l: mmap");
       goto closit;
     }
 
@@ -388,9 +393,9 @@ int videoV4L :: startTransfer(int format)
     //verbose(1, "now trying standard palette %d", vmmap[0].format);
     if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
       if (errno == EAGAIN)
-        error("can't sync (no video source?)");
+        error("v4l: can't sync (no video source?)");
       else 
-        perror("VIDIOCMCAPTURE");
+        perror("v4l: VIDIOCMCAPTURE");
       //goto closit;
     }
   }
@@ -402,8 +407,8 @@ int videoV4L :: startTransfer(int format)
     
   /* fill in image specifics for Gem pixel object.  Could we have
      just used RGB, I wonder? */
-  m_image.image.xsize = width;
-  m_image.image.ysize = height;
+  m_image.image.xsize = vmmap[frame].width;
+  m_image.image.ysize = vmmap[frame].height;
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
 
@@ -449,11 +454,9 @@ int videoV4L :: startTransfer(int format)
 /////////////////////////////////////////////////////////
 int videoV4L :: stopTransfer()
 {
-  post("stopping transfer");
   if(m_haveVideo){ /* are we running ? */
     /* close the v4l device and dealloc buffer */
     /* terminate thread if there is one */
-    post("continue_thread: %d", m_continue_thread);
     if(m_continue_thread){
       void *dummy;
       m_continue_thread = 0;
@@ -467,6 +470,7 @@ int videoV4L :: stopTransfer()
   m_haveVideo = 0;
   m_frame_ready = 0;
   m_rendering=false;
+  post("v4l: stopped Transfer");
   return(1);
 }
 
@@ -481,14 +485,14 @@ int videoV4L :: setDimen(int x, int y, int leftmargin, int rightmargin,
   int xtotal = x + leftmargin + rightmargin;
   int ytotal = y + topmargin + bottommargin;
   if (xtotal > vcap.maxwidth) /* 844 */
-    error("x dimensions too great");
+    error("v4l: x dimensions too great");
   else if (xtotal < vcap.minwidth || x < 1 || leftmargin < 0 || rightmargin < 0)
-    error("x dimensions too small");
+    error("v4l: x dimensions too small");
   if (ytotal > vcap.maxheight)
-    error("y dimensions too great");
+    error("v4l: y dimensions too great");
   else if (ytotal < vcap.minheight || y < 1 ||
            topmargin < 0 || bottommargin < 0)
-    error("y dimensions too small");
+    error("v4l: y dimensions too small");
 
   myleftmargin = leftmargin;
   myrightmargin = rightmargin;
@@ -520,13 +524,13 @@ int videoV4L :: setNorm(char*norm)
     i_norm = VIDEO_MODE_NTSC;
     break;
   default:
-    error("pix_video: unknown norm");
+    error("pix_video[v4l]: unknown norm");
     return -1;
     break;
   }
   //  if (i_norm==m_norm)return 0;
   if(m_capturing){
-    debug("restarting transfer");
+    debug("v4l: restarting transfer");
     stopTransfer();
     m_norm=i_norm;
     startTransfer();
@@ -542,12 +546,12 @@ int videoV4L :: setChannel(int c, t_float f){
     if (c>-1)m_channel=c;
     vtuner.tuner = m_channel;
     if (v4l1_ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
-      error("Error setting frequency -- no tuner");
+      error("pix_video[v4l]: error setting frequency -- no tuner");
       return -1;
     }
     verbose(1, "setting freq: %d", freq);
     if (v4l1_ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
-      error("Error setting frequency");
+      error("pix_video[v4l]: error setting frequency");
       return -1;
     }
   } else {

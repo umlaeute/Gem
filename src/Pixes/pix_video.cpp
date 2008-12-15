@@ -194,12 +194,13 @@ void pix_video :: driverMess(int dev)
     error("driverID (%d) must not exceed %d", dev, m_numVideoHandles);
     return;
   }
-  if((dev!=m_driver) && (m_videoHandle!=m_videoHandles[dev])){
-    if(m_videoHandle)m_videoHandle->stopTransfer();
-    m_videoHandle=m_videoHandles[dev];
-    if(m_videoHandle)m_videoHandle->startTransfer();
-    m_driver=dev;
-  }
+  //  if((dev!=m_driver) && (m_videoHandle!=m_videoHandles[dev]))
+    { 
+      if(m_videoHandle)m_videoHandle->stopTransfer();
+      m_videoHandle=m_videoHandles[dev];
+      if(m_videoHandle)m_videoHandle->startTransfer();
+      m_driver=dev;
+    }
 }
 /////////////////////////////////////////////////////////
 // deviceMess
