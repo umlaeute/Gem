@@ -163,10 +163,14 @@ int videoV4L2::init_mmap (void)
 // a thread that does the capturing
 //
 /////////////////////////////////////////////////////////
-void *videoV4L2 :: capturing(void*you)
+void *videoV4L2::capturing_(void*you)
 {
   videoV4L2 *me=(videoV4L2 *)you;
-  t_v4l2_buffer*buffers=me->m_buffers;
+  return me->capturing();
+}
+void *videoV4L2 :: capturing(void)
+{
+  t_v4l2_buffer*buffers=m_buffers;
 
   struct v4l2_buffer buf;
   unsigned int i;
@@ -175,9 +179,8 @@ void *videoV4L2 :: capturing(void*you)
   struct timeval tv;
   int r;
 
-  int nbuf=me->m_nbuffers;
-  int m_tvfd=me->m_tvfd;
-  me->m_capturing=true;
+  int nbuf=m_nbuffers;
+  m_capturing=true;
 
   debugThread("V4L2: memset");
   memset(&(buf), 0, sizeof (buf));
@@ -185,30 +188,23 @@ void *videoV4L2 :: capturing(void*you)
   buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   buf.memory = V4L2_MEMORY_MMAP;
 
-  while(me->m_continue_thread){
+  while(m_continue_thread){
     FD_ZERO (&fds);
     FD_SET (m_tvfd, &fds);
 
     debugThread("V4L2: grab");
 
-    me->m_frame++;
-    me->m_frame%=nbuf;
+    m_frame++;
+    m_frame%=nbuf;
 
     
     /* Timeout. */
     tv.tv_sec = 0;
     tv.tv_usec = 100;
-
-#if 0
-    r = select (m_tvfd + 1, &fds, NULL, NULL, &tv);
-      if (0 == r) {
-      error("select timeout");
-      me->m_continue_thread=false;
-      }
-#else
     r = select(0,0,0,0,&tv);
-#endif
     debugThread("V4L2: waited...");
+
+
     if (-1 == r) {
       if (EINTR == errno)
         continue;
@@ -236,7 +232,7 @@ void *videoV4L2 :: capturing(void*you)
 
     debugThread("V4L2: grabbed %d", buf.index);
 
-    me->m_currentBuffer=buffers[buf.index].start;
+    m_currentBuffer=buffers[buf.index].start;
     //process_image (m_buffers[buf.index].start);
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
@@ -245,19 +241,19 @@ void *videoV4L2 :: capturing(void*you)
 
     debugThread("V4L2: dequeueueeud");
     
-    me->m_frame_ready = 1;
-    me->m_last_frame=me->m_frame;
+    m_frame_ready = 1;
+    m_last_frame=m_frame;
   }
  stop_capturethread:
   // stop capturing
-  if(me->m_tvfd){
+  if(m_tvfd){
     enum v4l2_buf_type type;
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    if (-1 == xioctl (me->m_tvfd, VIDIOC_STREAMOFF, &type)){
+    if (-1 == xioctl (m_tvfd, VIDIOC_STREAMOFF, &type)){
       perror ("VIDIOC_STREAMOFF");
     }
   }
-  me->m_capturing=false;
+  m_capturing=false;
   debugThread("V4L2: thread finished");
   return NULL;
 }
@@ -559,7 +555,7 @@ int videoV4L2 :: startTransfer(int format)
   /* create thread */
   m_continue_thread = 1;
   m_frame_ready = 0;
-  pthread_create(&m_thread_id, 0, capturing, this);
+  pthread_create(&m_thread_id, 0, capturing_, this);
   while(!m_capturing){
     struct timeval sleep;
     sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */

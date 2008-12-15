@@ -139,7 +139,11 @@ class GEM_EXTERN videoV4L : public video {
   pthread_t m_thread_id;
   bool      m_continue_thread;
   bool      m_frame_ready;
-  static void*capturing(void*);
+
+  /* capture frames (in a separate thread! */
+  void*capturing(void); 
+  /* static callback for pthread_create: calls capturing() */
+  static void*capturing_(void*);
 
   // rendering might be needed when we are currently not capturing because we cannot (e.g: couldn't open device)
   // although we should. when reopening another device, we might be able to render again...
@@ -147,7 +151,10 @@ class GEM_EXTERN videoV4L : public video {
   // when we try to open /dev/video1 we fail, and m_capturing is set to 0
   // now when rendering is turned on and we want to switch back to /dev/video0 we should reconnect to the good device
   bool      m_rendering; // "true" when rendering is on, false otherwise
-  
+
+
+  /* use this in the capture-thread to cleanup */
+  bool      m_stopTransfer;
 #endif /* HAVE_VIDEO4LINUX */
 
 };

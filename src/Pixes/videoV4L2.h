@@ -157,7 +157,12 @@ class GEM_EXTERN videoV4L2 : public video {
   pthread_t m_thread_id;
   bool      m_continue_thread;
   bool      m_frame_ready;
-  static void*capturing(void*);
+
+  /* capture frames (in a separate thread! */
+  void*capturing(void); 
+  /* static callback for pthread_create: calls capturing() */
+  static void*capturing_(void*);
+
   int       init_mmap(void);
 
   // rendering might be needed when we are currently not capturing because we cannot (e.g: couldn't open device)
