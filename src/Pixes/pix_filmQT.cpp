@@ -14,13 +14,12 @@
 /////////////////////////////////////////////////////////
 #if defined(__APPLE__) || defined(HAVE_QUICKTIME)
 
-#define DO_AUTO_REGISTER_CLASS
-
 #include "pix_filmQT.h"
-#ifdef __APPLE__
 
-#else /* w32 */
-#	include "TextUtils.h"
+#ifdef __APPLE__
+// nothing here
+#elif defined __W32__
+# include "TextUtils.h"
 #endif
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmQT, t_symbol *, A_DEFSYM)
@@ -417,4 +416,4 @@ void pix_filmQT :: autoCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }
-#endif // __APPLE__
+#endif // __QUICKTIME__
