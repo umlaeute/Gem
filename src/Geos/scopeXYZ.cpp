@@ -244,8 +244,6 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
     	    gensym("linewidth"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&scopeXYZ::linewidthMessCallback,
     	    gensym("width"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&scopeXYZ::typeMessCallback,
-    	    gensym("draw"), A_SYMBOL, A_NULL);
     class_addmethod(classPtr, (t_method)&scopeXYZ::lengthMessCallback,
     	    gensym("length"), A_FLOAT, A_NULL);
 
@@ -261,11 +259,6 @@ void scopeXYZ :: lengthMessCallback(void *data, t_floatarg l)
 {
     GetMyClass(data)->lengthMess((int)l);
 }
-void scopeXYZ :: typeMessCallback(void *data, t_symbol *type)
-{
-    GetMyClass(data)->typeMess(type);
-}
-
 void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 {
   if(GetMyClass(data)->m_length==0)GetMyClass(data)->lengthMess(sp[1]->s_n);

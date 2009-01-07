@@ -90,7 +90,6 @@ class GEM_EXTERN scopeXYZ : public GemShape
     	//////////
     	// Static member functions
     	static void 	linewidthMessCallback(void *data, t_floatarg linewidth);
-    	static void 	typeMessCallback(void *data, t_symbol *type);
     	static void 	lengthMessCallback(void *data, t_floatarg linewidth);
 
     	static void 	dspCallback(void *data, t_signal** sp);
