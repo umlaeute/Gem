@@ -16,15 +16,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "pix_filmOS.h"
 
-
 #ifdef __APPLE__
-#include <Carbon/Carbon.h>
-#include <QuickTime/QuickTime.h>
-#else 
-#ifdef __WIN32__
-#include <QTML.h>
-#include <Movies.h>
-#endif
+# include <Carbon/Carbon.h>
+# include <QuickTime/QuickTime.h>
+#elif defined __WIN32__
+# include <QTML.h>
+# include <Movies.h>
 #endif
 
 /*-----------------------------------------------------------------
