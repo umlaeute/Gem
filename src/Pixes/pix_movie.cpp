@@ -144,11 +144,7 @@ void pix_movie :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&pix_movie::openMessCallback,
 		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movie::changeImageCallback,
-		  gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movie::autoCallback,
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
- class_addmethod(classPtr, (t_method)&pix_movie::textureMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_movie::textureMessCallback,
 		  gensym("quality"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movie::repeatMessCallback,
 		  gensym("repeat"), A_FLOAT, A_NULL);
@@ -161,16 +157,6 @@ void pix_movie :: openMessCallback(void *data, t_symbol *filename)
     GetMyClass(data)->openMess(filename);
 }
 
-void pix_movie :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-  //  GetMyClass(data)->changeImage((int)imgNum);
-    GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
-}
-
-void pix_movie :: autoCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->m_auto=!(!(int)state);
-}
 void pix_movie :: textureMessCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->textureQuality((int)quality);
