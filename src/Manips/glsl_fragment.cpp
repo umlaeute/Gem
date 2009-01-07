@@ -89,7 +89,7 @@ void glsl_fragment :: printInfo()
       glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
       post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
     }
-  }
+  } else post("no GLSL support");
 }
 
 /////////////////////////////////////////////////////////
@@ -98,16 +98,5 @@ void glsl_fragment :: printInfo()
 /////////////////////////////////////////////////////////
 void glsl_fragment :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&glsl_fragment::openMessCallback,
-		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&glsl_fragment::printMessCallback,
-		  gensym("print"), A_NULL);
 }
-void glsl_fragment :: openMessCallback(void *data, t_symbol *filename)
-{
-  GetMyClass(data)->openMess(filename);
-}
-void glsl_fragment :: printMessCallback(void *data)
-{
-	GetMyClass(data)->printInfo();
-}
+

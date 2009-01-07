@@ -323,7 +323,7 @@ void glsl_vertex :: printInfo()
       glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
       post("MAX_TEXTURE_COORDS: %d", bitnum);
     }
-  }
+  } else post("no GLSL support");
 }
 
 ////////////////////////////////////////////////////////

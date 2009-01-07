@@ -62,14 +62,6 @@ class GEM_EXTERN glsl_fragment : public glsl_vertex
   //////////
   // Print Info about Hardware limits
   virtual void printInfo();
-
-
- protected:
-	
-  //////////
-  // static member functions
-  static void openMessCallback   (void *data, t_symbol *filename);
-  static void printMessCallback  (void *);
 };
 
 #endif	// for header file

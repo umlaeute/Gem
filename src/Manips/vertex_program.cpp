@@ -337,10 +337,12 @@ void vertex_program :: paramMess(int envNum, t_float param1, t_float param2, t_f
 /////////////////////////////////////////////////////////
 void vertex_program :: printInfo()
 {
-	GLint bitnum = 0;
+  GLint bitnum = 0;
 
-  if(!GLEW_ARB_vertex_program)
+  if(!GLEW_ARB_vertex_program) {
+    post("no ARB vertex support!");
     return;
+  }
 
 	post("Vertex_Program Hardware Info");
 	post("============================");

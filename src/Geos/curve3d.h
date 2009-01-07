@@ -75,7 +75,6 @@ class GEM_EXTERN curve3d : public GemShape
   static void		resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY );
   static void		gridMessCallback(void *data, t_floatarg gridX, t_floatarg gridY );
   static void		setMessCallback(void *data, t_floatarg X,t_floatarg Y,t_floatarg posX,t_floatarg posY,t_floatarg posZ);
-  static void 	typeMessCallback(void *data, t_symbol *type);
 };
 
 #endif	// for header file

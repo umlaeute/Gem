@@ -80,24 +80,26 @@ bool fragment_program :: isRunnable() {
 /////////////////////////////////////////////////////////
 void fragment_program :: printInfo()
 {
-	GLint bitnum = 0;
+  GLint bitnum = 0;
 
 
-  if(!GLEW_ARB_fragment_program)
+  if(!GLEW_ARB_fragment_program) {
+    post("no ARB fragment support!");
     return;
+  }
 
 
-	post("Hardware Info");
-	post("=============");
-	
-	glGetIntegerv( GL_MAX_PROGRAM_MATRICES_ARB, &bitnum );
-	post("MAX_PROGRAM_MATRICES: %d", bitnum);
-	glGetIntegerv( GL_MAX_PROGRAM_MATRIX_STACK_DEPTH_ARB, &bitnum );
-	post("MAX_PROGRAM_MATRIX_STACK_DEPTH: %d", bitnum);
-	glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
-	post("MAX_TEXTURE_COORDS: %d", bitnum);
-	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
-	post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
+  post("Hardware Info");
+  post("=============");
+  
+  glGetIntegerv( GL_MAX_PROGRAM_MATRICES_ARB, &bitnum );
+  post("MAX_PROGRAM_MATRICES: %d", bitnum);
+  glGetIntegerv( GL_MAX_PROGRAM_MATRIX_STACK_DEPTH_ARB, &bitnum );
+  post("MAX_PROGRAM_MATRIX_STACK_DEPTH: %d", bitnum);
+  glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
+  post("MAX_TEXTURE_COORDS: %d", bitnum);
+  glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
+  post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
 
   glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_INSTRUCTIONS: %d", bitnum);
@@ -219,16 +221,4 @@ void fragment_program :: printInfo()
 /////////////////////////////////////////////////////////
 void fragment_program :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&fragment_program::openMessCallback,
-		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&fragment_program::printMessCallback,
-		  gensym("print"), A_NULL);
-}
-void fragment_program :: openMessCallback(void *data, t_symbol *filename)
-{
-	    GetMyClass(data)->openMess(filename);
-}
-void fragment_program :: printMessCallback(void *data)
-{
-	GetMyClass(data)->printInfo();
 }

@@ -77,7 +77,6 @@ class GEM_EXTERN primTri : public GemShape
 
        	//////////
     	// static member functions
-    	static void 	typeMessCallback(void *data, t_symbol *type);
     	static void 	vect1MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
     	static void 	vect2MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
     	static void 	vect3MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);

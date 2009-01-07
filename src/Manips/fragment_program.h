@@ -60,13 +60,6 @@ class GEM_EXTERN fragment_program : public vertex_program
   //////////
   // extension check
   virtual bool isRunnable(void);
-
- protected:
-	
-  //////////
-  // static member functions
-  static void openMessCallback   (void *data, t_symbol *filename);
-  static void printMessCallback  (void *);
 };
 
 #endif	// for header file

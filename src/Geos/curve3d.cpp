@@ -552,8 +552,6 @@ void curve3d :: obj_setupCallback(t_class *classPtr){
 		  gensym("grid"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&curve3d::setMessCallback,
 		  gensym("set"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&curve3d::typeMessCallback,
-		  gensym("draw"), A_SYMBOL, A_NULL);
 }
 
 void curve3d :: resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY)
@@ -568,7 +566,4 @@ void curve3d :: setMessCallback(void *data, float X, float Y, float posX, float 
 {
   GetMyClass(data)->setMess((int)X, (int)Y, posX, posY, posZ);
 }
-void curve3d :: typeMessCallback(void *data, t_symbol *type)
-{
-  GetMyClass(data)->typeMess(type);
-}
+

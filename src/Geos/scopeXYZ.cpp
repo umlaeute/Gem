@@ -242,8 +242,6 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 
     class_addmethod(classPtr, (t_method)&scopeXYZ::linewidthMessCallback,
     	    gensym("linewidth"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&scopeXYZ::linewidthMessCallback,
-    	    gensym("width"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&scopeXYZ::lengthMessCallback,
     	    gensym("length"), A_FLOAT, A_NULL);
 

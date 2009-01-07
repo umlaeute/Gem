@@ -146,9 +146,6 @@ void primTri :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void primTri :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&primTri::typeMessCallback,
-    	    gensym("draw"), A_SYMBOL, A_NULL);
-
     class_addmethod(classPtr, (t_method)&primTri::vect1MessCallback,
     	    gensym("vect1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
     class_addmethod(classPtr, (t_method)&primTri::vect2MessCallback,
@@ -161,10 +158,6 @@ void primTri :: obj_setupCallback(t_class *classPtr)
     	    gensym("col2"), A_GIMME, A_NULL); 
     class_addmethod(classPtr, (t_method)&primTri::col3MessCallback,
     	    gensym("col3"), A_GIMME, A_NULL); 
-}
-void primTri :: typeMessCallback(void *data, t_symbol *type)
-{
-    GetMyClass(data)->typeMess(type);
 }
 
 void primTri :: vect1MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
