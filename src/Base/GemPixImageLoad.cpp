@@ -222,11 +222,26 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 	imageStruct *image_block = new imageStruct;
 	image_block->xsize	= (*imageDescH)->width;
 	image_block->ysize	= (*imageDescH)->height;
+
+        OSType pixelformat = 0;
+
+       /* afaik, there is no 8bit grayscale format....
+        * and even if it was, k8GrayPixelFormat would not be a define...
+        */
+#ifdef k8GrayPixelFormat
+       /* from the docs on "depth": what depth is this data (1-32) or ( 33-40 grayscale ) */
 	if ((*imageDescH)->depth <= 32) {
 	    image_block->setCsizeByFormat(GL_RGBA_GEM);
+            pixelformat = k32ARGBPixelFormat;
 	} else {
 	    image_block->setCsizeByFormat(GL_LUMINANCE);
+            pixelformat = k8GrayPixelFormat;
 	}
+#else
+	image_block->setCsizeByFormat(GL_RGBA_GEM);
+        pixelformat = k32ARGBPixelFormat;
+#endif
+
 	::DisposeHandle((Handle)imageDescH);
 	imageDescH = NULL;
 	const int dataSize = image_block->ysize * image_block->xsize * image_block->csize;
@@ -239,7 +254,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 
 	OSErr err = QTNewGWorldFromPtr(&gw,
                                  /* taken from pix_filmDarwin */
-                                 k32ARGBPixelFormat,	// gives noErr
+                                 pixelformat,	// gives noErr
                                  &r, NULL, NULL, 0,
                                  // keepLocal,	
                                  //useDistantHdwrMem, 
