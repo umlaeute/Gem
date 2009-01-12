@@ -99,7 +99,7 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
 
 #ifdef __APPLE__
   char buf3[MAXPDSTRING];
-  snprintf(buf3, MAXPDSTRING, "%s.frf/%s", pluginname, pluginname);
+  snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", pluginname, pluginname);
   buf3[MAXPDSTRING-1]=0;
   pluginname=buf3;
 #endif
