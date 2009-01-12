@@ -23,20 +23,26 @@
 
 #ifndef DONT_WANT_FREEFRAME
 
-# include <stdio.h>
-# ifdef __WIN32__
-#  include <io.h>
-#  include <windows.h>
-#  define snprintf _snprintf
-# else
-#  ifdef __APPLE__
-#   include <mach-o/dyld.h> 
-#  else
-#   define DL_OPEN
-#   include <dlfcn.h>
-#  endif /* __APPLE__ */
-#  include <unistd.h>
-# endif
+#include <stdio.h>
+#ifdef __WIN32__
+# include <io.h>
+# include <windows.h>
+# define snprintf _snprintf
+
+/*
+ * Apple used to use CFBundle's to load FF plugins
+ * currently this only crashes (on OSX-10.4 and OSX-10.5)
+ * we therefore use dlopen() on OSX as well
+ */
+
+#elif defined __APPLE__ && 0
+# include <mach-o/dyld.h> 
+# include <unistd.h>
+#else
+# define DL_OPEN
+# include <dlfcn.h>
+# include <unistd.h>
+#endif /* __APPLE__ */
 
 /*
  * here comes some magic:
@@ -99,7 +105,12 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
 
 #ifdef __APPLE__
   char buf3[MAXPDSTRING];
+#ifdef DL_OPEN
   snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", pluginname, pluginname);
+#else
+  // this can never work...
+  snprintf(buf3, MAXPDSTRING, "%s.frf/%s", pluginname, pluginname);
+#endif
   buf3[MAXPDSTRING-1]=0;
   pluginname=buf3;
 #endif
@@ -107,10 +118,11 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
   int fd=-1;
   if ((fd=open_via_path(canvas_getdir(canvas)->s_name, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
-#ifndef __APPLE__
-    snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
-#else
+#if defined __APPLE__ && 0
     snprintf(buf, MAXPDSTRING, "%s", buf2);
+#else
+    snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
+post("path: %s", buf);
 #endif
     buf[MAXPDSTRING-1]=0;
   } else
