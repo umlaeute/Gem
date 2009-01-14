@@ -247,6 +247,7 @@ pixBlock* filmGMERLIN :: getFrame(){
 
   m_image.newimage=true;
   m_image.image.data=m_finalframe->planes[0];
+  m_image.image.upsidedown=true;
   return &m_image;
 }
 
