@@ -41,7 +41,7 @@ GemPixObj :: GemPixObj() :
 void GemPixObj :: setPixModified()
 {
   if(m_cache && m_cache->m_magic!=GEMCACHE_MAGIC)m_cache=NULL;
-  if (m_cache)m_cache->resendImage = 1;
+  if(m_cache)m_cache->resendImage = 1;
 }
 
 /////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ void GemPixObj :: render(GemState *state){
 	  processGrayImage(state->image->image);
 	}
 	break;
-      case GL_YCBCR_422_GEM: //GL_YCBCR_422_APPLE
+      case GL_YCBCR_422_GEM:
 	switch(m_simd){
 	case(GEM_SIMD_MMX):
 	  processYUVMMX(state->image->image);
@@ -114,9 +114,9 @@ void GemPixObj :: render(GemState *state){
 	default:
 	  processYUVImage(state->image->image);
 	}
-      	break;
+  break;
       default:
-	processImage(state->image->image);
+        processImage(state->image->image);
       }
     }
   }

@@ -103,10 +103,15 @@ void GemPixDualObj :: processImage(imageStruct &image)
       error("two images do not have equal dimensions (%dx%d != %dx%d)", 
 	    image.xsize, image.ysize,
 	    m_pixRight->image.xsize, m_pixRight->image.ysize);
-      m_pixRightValid = 0;
-      
+      m_pixRightValid = 0;  
     	return;
     }
+
+    if(image.upsidedown != m_pixRight->image.upsidedown) {
+      image.fixUpDown();
+      m_pixRight->image.fixUpDown();
+    }
+
     bool found = false;
     switch (image.format) {
     case GL_RGBA:
