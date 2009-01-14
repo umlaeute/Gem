@@ -159,10 +159,14 @@ if test "x$with_ImageMagick" = "x"; then
 fi
 
 GEM_CHECK_LIB(ImageMagick++, Magick++, main,AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS),,,[image loader])
-dnl  [AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS)]
-dnl  LIBS="-lMagick++ $LIBS")
+if test "x${have_ImageMagick}" = "xyes"
+then
+ with_tiff=no
+ with_jpeg=no
+fi
 GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
 GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
+
 
 GEM_CHECK_LIB(gmerlin_avdec, gmerlin_avdec, gavl_start,,,,[movie loader])
 
