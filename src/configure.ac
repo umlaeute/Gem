@@ -339,6 +339,20 @@ else
  AC_MSG_RESULT([using deprecated video-loader])
 fi
 
+have_gl_headers="no"
+AC_CHECK_HEADER(GL/gl.h,have_gl_headers="yes")
+AC_CHECK_HEADER(OpenGL/gl.h,have_gl_headers="yes")
+if test "x$have_gl_headers" != "xyes"; then
+  have_gl="no"
+fi
+
+have_glu_headers="no"
+AC_CHECK_HEADER(GL/glu.h,have_glu_headers="yes")
+AC_CHECK_HEADER(OpenGL/glu.h,have_glu_headers="yes")
+if test "x$have_glu_headers" != "xyes"; then
+  have_glu="no"
+fi
+
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
 if test "x$enable_registerstruct" != "xno"; then
