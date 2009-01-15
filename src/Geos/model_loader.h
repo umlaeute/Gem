@@ -43,6 +43,16 @@ extern "C" {
 #define GLM_COLOR    (1 << 3)       /* render with colors */
 #define GLM_MATERIAL (1 << 4)       /* render with materials */
 
+typedef enum
+{
+  GLM_DEFAULT,
+  GLM_UV,
+  GLM_LINEAR,
+  GLM_SPHEREMAP
+}  glmtexture_t;
+
+
+
 
 /* GLMmaterial: Structure that defines a material in a model. 
  */
@@ -61,7 +71,8 @@ typedef struct _GLMmaterial
 typedef struct _GLMtriangle {
   GLuint vindices[3];           /* array of triangle vertex indices */
   GLuint nindices[3];           /* array of triangle normal indices */
-  GLuint tindices[3];           /* array of triangle texcoord indices*/
+  GLuint tindices[3];           /* array of (generated) triangle texcoord indices*/
+  GLuint uvtindices[3];         /* array of triangle texcoord indices*/
   GLuint findex;                /* index of triangle facet normal */
 } GLMtriangle;
 
@@ -208,6 +219,15 @@ glmLinearTexture(GLMmodel* model, float h=1.0, float w=1.0);
  */
 GLvoid
  glmSpheremapTexture(GLMmodel* model, float h=1.0, float w=1.0);
+
+/* glmTexture: setup texture coordinates according to the specified type
+ * some types (like UV) are read from files, whereas others might be generated
+ * a "default" type will try to use saved texcoords and fallback to generated
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLvoid
+glmTexture(GLMmodel* model, glmtexture_t type, float h=1.0, float w=1.0);
 
 /* glmDelete: Deletes a GLMmodel structure.
  *

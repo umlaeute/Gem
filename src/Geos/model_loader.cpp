@@ -667,27 +667,27 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                 } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
                     /* v/t/n */
                     T(numtriangles).vindices[0] = v;
-                    T(numtriangles).tindices[0] = t;
+                    T(numtriangles).uvtindices[0] = t;
                     T(numtriangles).nindices[0] = n;
                     fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n);
                     T(numtriangles).vindices[1] = v;
-                    T(numtriangles).tindices[1] = t;
+                    T(numtriangles).uvtindices[1] = t;
                     T(numtriangles).nindices[1] = n;
                     fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n);
                     T(numtriangles).vindices[2] = v;
-                    T(numtriangles).tindices[2] = t;
+                    T(numtriangles).uvtindices[2] = t;
                     T(numtriangles).nindices[2] = n;
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
                     while(fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n) > 0) {
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
-                        T(numtriangles).tindices[0] = T(numtriangles-1).tindices[0];
+                        T(numtriangles).uvtindices[0] = T(numtriangles-1).uvtindices[0];
                         T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
                         T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
-                        T(numtriangles).tindices[1] = T(numtriangles-1).tindices[2];
+                        T(numtriangles).uvtindices[1] = T(numtriangles-1).uvtindices[2];
                         T(numtriangles).nindices[1] = T(numtriangles-1).nindices[2];
                         T(numtriangles).vindices[2] = v;
-                        T(numtriangles).tindices[2] = t;
+                        T(numtriangles).uvtindices[2] = t;
                         T(numtriangles).nindices[2] = n;
                         group->triangles[group->numtriangles++] = numtriangles;
                         numtriangles++;
@@ -695,22 +695,22 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                 } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
                     /* v/t */
                     T(numtriangles).vindices[0] = v;
-                    T(numtriangles).tindices[0] = t;
+                    T(numtriangles).uvtindices[0] = t;
                     fscanf(file, "%d/%d", (int*)&v, (int*)&t);
                     T(numtriangles).vindices[1] = v;
-                    T(numtriangles).tindices[1] = t;
+                    T(numtriangles).uvtindices[1] = t;
                     fscanf(file, "%d/%d", (int*)&v, (int*)&t);
                     T(numtriangles).vindices[2] = v;
-                    T(numtriangles).tindices[2] = t;
+                    T(numtriangles).uvtindices[2] = t;
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
                     while(fscanf(file, "%d/%d", (int*)&v, (int*)&t) > 0) {
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
-                        T(numtriangles).tindices[0] = T(numtriangles-1).tindices[0];
+                        T(numtriangles).uvtindices[0] = T(numtriangles-1).uvtindices[0];
                         T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
-                        T(numtriangles).tindices[1] = T(numtriangles-1).tindices[2];
+                        T(numtriangles).uvtindices[1] = T(numtriangles-1).uvtindices[2];
                         T(numtriangles).vindices[2] = v;
-                        T(numtriangles).tindices[2] = t;
+                        T(numtriangles).uvtindices[2] = t;
                         group->triangles[group->numtriangles++] = numtriangles;
                         numtriangles++;
                     }
@@ -1159,11 +1159,11 @@ glmUVTexture(GLMmodel* model, float h, float w)
     model->texcoords=(GLfloat*)malloc(sizeof(GLfloat)*2*(model->numuvtexcoords+1));
     
     /* do the calculations */
-    for(i = 1; i <= model->numvertices; i++) {
+    for(i = 1; i <= model->numtexcoords; i++) {
       model->texcoords[2*i+0] = model->uvtexcoords[2*i+0]*w;
       model->texcoords[2*i+1] = model->uvtexcoords[2*i+1]*h;
     }
-#if 0
+
     /* go through and put texture coordinate indices in all the triangles */
     group = model->groups;
     while(group) {
@@ -1175,16 +1175,7 @@ glmUVTexture(GLMmodel* model, float h, float w)
         }    
         group = group->next;
     }
-
-    for(i=0; i<model->numtriangles; i++) {
-      T(i).tindices[0] =  T(i).uvtindices[0];
-      T(i).tindices[1] =  T(i).uvtindices[1];
-      T(i).tindices[2] =  T(i).uvtindices[2];
-    }
-#endif
 }
-
-
 
 /* glmLinearTexture: Generates texture coordinates according to a
  * linear projection of the texture map.  It generates these by
@@ -1300,6 +1291,20 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
     }
 }
 
+GLvoid glmTexture(GLMmodel* model, glmtexture_t typ, float h, float w)
+{
+  switch(typ) {
+  GLM_UV: glmUVTexture(model, h, w); break;
+  GLM_LINEAR: glmLinearTexture(model, h, w); break;
+  GLM_SPHEREMAP: glmSpheremapTexture(model, h, w); break;
+  default:
+    if(model->numuvtexcoords)
+      glmUVTexture(model, h, w);
+    else
+      glmLinearTexture(model, h, w);
+  }
+}
+
 /* glmDelete: Deletes a GLMmodel structure.
  *
  * model - initialized GLMmodel structure
@@ -1405,9 +1410,8 @@ glmReadOBJ(char* filename)
     /* close the file */
     fclose(file);
 
-    if(model->numuvtexcoords)
-      glmUVTexture(model, 1.0, 1.0);
-    
+    glmTexture(model, GLM_DEFAULT, 1.0, 1.0);
+
     return model;
 }
 
