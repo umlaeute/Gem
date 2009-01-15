@@ -26,13 +26,12 @@
 #  include <io.h>
 #  include <windows.h>
 #  define snprintf _snprintf
+# elif defined __APPLE__ && 0
+#  include <mach-o/dyld.h> 
+#  include <unistd.h>
 # else
-#  ifdef __APPLE__
-#   include <mach-o/dyld.h> 
-#  else
-#   define DL_OPEN
-#   include <dlfcn.h>
-#  endif /* __APPLE__ */
+#  define DL_OPEN
+#  include <dlfcn.h>
 #  include <unistd.h>
 # endif
 
@@ -99,9 +98,15 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     ".so";
 #endif
 
+
 #ifdef __APPLE__
   char buf3[MAXPDSTRING];
+#ifdef DL_OPEN
+  snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", pluginname, pluginname);
+#else
+  // this can never work...
   snprintf(buf3, MAXPDSTRING, "%s.frf/%s", pluginname, pluginname);
+#endif
   buf3[MAXPDSTRING-1]=0;
   pluginname=buf3;
 #endif
@@ -109,10 +114,10 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   int fd=-1;
   if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
-#ifndef __APPLE__
-    snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
-#else
+#if defined __APPLE__ && 0
     snprintf(buf, MAXPDSTRING, "%s", buf2);
+#else
+    snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
 #endif
     buf[MAXPDSTRING-1]=0;
   } else

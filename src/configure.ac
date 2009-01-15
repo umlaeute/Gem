@@ -159,6 +159,11 @@ if test "x$with_ImageMagick" = "x"; then
 fi
 
 GEM_CHECK_LIB(ImageMagick++, Magick++, main,AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS),,,[image loader])
+if test "x${have_ImageMagick}" = "xyes"
+then
+ with_tiff=no
+ with_jpeg=no
+fi
 dnl  [AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS)]
 dnl  LIBS="-lMagick++ $LIBS")
 GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
@@ -382,6 +387,21 @@ else
  AC_MSG_RESULT([using deprecated video-loader])
 fi
 
+have_gl_headers="no"
+AC_CHECK_HEADER(GL/gl.h,have_gl_headers="yes")
+AC_CHECK_HEADER(OpenGL/gl.h,have_gl_headers="yes")
+if test "x$have_gl_headers" != "xyes"; then
+  have_gl="no"
+fi
+
+have_glu_headers="no"
+AC_CHECK_HEADER(GL/glu.h,have_glu_headers="yes")
+AC_CHECK_HEADER(OpenGL/glu.h,have_glu_headers="yes")
+if test "x$have_glu_headers" != "xyes"; then
+  have_glu="no"
+fi
+
+
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
 if test "x$enable_registerstruct" != "xno"; then
@@ -566,6 +586,10 @@ fi
 
 if test "x$have_gl" != "xyes"; then
  AC_MSG_ERROR([GL (headers) not found! you need openGL!!!])
+fi
+
+if test "x$have_glu" != "xyes"; then
+ AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])
 fi
 
 AC_MSG_RESULT([Now run make ...])

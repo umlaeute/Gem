@@ -279,6 +279,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   } else
 #endif
   { // !fullscren
+    info.have_border = hints.border;
     if (hints.border){
       swa.override_redirect = False;
       flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
@@ -461,6 +462,9 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
           break; 
         case MotionNotify: 
           triggerMotionEvent(eb->x, eb->y); 
+          if(!win.have_border) {
+            int err=XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime);
+          }
           break; 
         case KeyPress:
           if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {

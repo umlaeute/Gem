@@ -60,7 +60,7 @@ class GEM_EXTERN WindowInfo
   WindowInfo() :
     fs(0), 
 #ifdef __unix__
-    dpy(NULL), win(0), cmap(0), context(NULL), delete_atom(0)
+    dpy(NULL), win(0), cmap(0), context(NULL), delete_atom(0), have_border(false)
 #elif defined __WIN32__
     win(NULL), dc(NULL), context(NULL)
 #elif defined __APPLE__
@@ -78,6 +78,8 @@ class GEM_EXTERN WindowInfo
   Colormap    cmap;               // X color map
   GLXContext  context;            // OpenGL context
   Atom        delete_atom;
+
+  bool        have_border;
 
 #ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
