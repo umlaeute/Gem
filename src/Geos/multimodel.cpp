@@ -40,9 +40,9 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
   if (filename->s_name[0]) { 
     if (skipRate == 0) {
       if (topModel == 0)
-	openMess(filename, 0, (int)baseModel, 1);
+        openMess(filename, 0, (int)baseModel, 1);
       else
-	openMess(filename, (int)baseModel, (int)topModel, 1);
+        openMess(filename, (int)baseModel, (int)topModel, 1);
     }
     else openMess(filename, (int)baseModel, (int)topModel, (int)skipRate);
   }
@@ -192,7 +192,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
     glmFacetNormals (m_model);
     glmVertexNormals(m_model, 90); /* SMOOTH */
     
-    glmLinearTexture(m_model,1,1);
+    glmTexture(m_model, GLM_TEX_LINEAR, 1, 1);
     newCache->realmodels[i]=m_model;
   }
   m_curModel = 0;

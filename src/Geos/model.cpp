@@ -27,14 +27,16 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 model :: model(t_symbol *filename)
-  : m_model(0), m_dispList(0), m_rescaleModel(1), m_smooth(90), m_flags(GLM_SMOOTH | GLM_TEXTURE)
+  : m_model(0), m_dispList(0), 
+    m_rescaleModel(1), m_smooth(90), m_material(0),
+    m_flags(GLM_SMOOTH | GLM_TEXTURE),
+    m_group(0),
+    m_rebuild(true),
+    m_currentH(1.f), m_currentW(1.f),
+    m_textype(GLM_TEX_DEFAULT)
 {
   // make sure that there are some characters
-  m_model = 0;
-  m_group = 0;
-  currentH = 1.f;
-  currentW = 1.f;
-  if (filename->s_name[0]) openMess(filename);
+  if (filename&&filename->s_name&&*filename->s_name) openMess(filename);
 }
 
 /////////////////////////////////////////////////////////
@@ -84,11 +86,20 @@ void model :: materialMess(int material)
 /////////////////////////////////////////////////////////
 void model :: textureMess(int state)
 {
-  if (!m_model) return;
-
-  if (state)glmSpheremapTexture(m_model,currentH,currentW);
-  else glmLinearTexture(m_model,currentH,currentW);
-  buildList();
+  switch(state) {
+  case 0: 
+    m_textype=GLM_TEX_LINEAR; 
+    break;
+  case 1: 
+    m_textype=GLM_TEX_SPHEREMAP; 
+    break;
+  case 2:
+    m_textype=GLM_TEX_UV; 
+    break;
+  default:
+    m_textype=GLM_TEX_DEFAULT; 
+  }
+  m_rebuild=true;
 }
 
 /////////////////////////////////////////////////////////
@@ -161,8 +172,7 @@ void model :: openMess(t_symbol *filename)
   glmFacetNormals (m_model);
   glmVertexNormals(m_model, m_smooth);
 
-  glmLinearTexture(m_model,currentH,currentW);
-
+  glmTexture(m_model, m_textype, m_currentH, m_currentW);
   buildList();
   this->setModified();
 }
@@ -183,7 +193,7 @@ void model :: buildList()
   else
   {
     m_dispList = glmListGroup(m_model, m_flags,m_group);
-    }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -192,14 +202,17 @@ void model :: buildList()
 /////////////////////////////////////////////////////////
 void model :: render(GemState *state)
 {
-    if (currentH != state->texCoordX(1) || currentW != state->texCoordY(1)){
-        currentH = state->texCoordX(1);
-        currentW = state->texCoordY(1);
-        
-        if(m_model)glmLinearTexture(m_model,currentH,currentW);
-        buildList();
-	}
-        
+  if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2)))
+    {
+      m_rebuild=true;
+    }
+  if(m_rebuild) {
+    m_currentH = state->texCoordX(2);
+    m_currentW = state->texCoordY(2);
+    glmTexture(m_model, m_textype, m_currentH, m_currentW);
+    buildList();
+    m_rebuild=false;
+  }
   if (!m_dispList)return;
   glCallList(m_dispList);
 }

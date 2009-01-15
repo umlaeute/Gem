@@ -98,21 +98,26 @@ class GEM_EXTERN model : public GemBase
 
 	int             m_flags;
         
-        int             m_group;
+  int             m_group;
     	
-        float		currentH, currentW;
+  bool    m_rebuild;
+  float		m_currentH, m_currentW;
+
+  //////////////
+  // how to texture
+  glmtexture_t m_textype; 
         
-    private:
+ private:
     
-    	//////////
-    	// static member functions
-    	static void 	openMessCallback(void *data, t_symbol *filename);
-    	static void	rescaleMessCallback(void *data, t_floatarg);
-    	static void	smoothMessCallback(void *data, t_floatarg);
+  //////////
+  // static member functions
+  static void 	openMessCallback(void *data, t_symbol *filename);
+  static void	rescaleMessCallback(void *data, t_floatarg);
+  static void	smoothMessCallback(void *data, t_floatarg);
 	static void     reverseMessCallback(void *data, t_floatarg);
 	static void     materialMessCallback(void *data, t_floatarg);
 	static void     textureMessCallback(void *data, t_floatarg);
-        static void     groupMessCallback(void *data, t_floatarg);
+  static void     groupMessCallback(void *data, t_floatarg);
 };
 
 #endif	// for header file

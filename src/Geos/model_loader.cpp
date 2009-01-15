@@ -1149,8 +1149,9 @@ glmUVTexture(GLMmodel* model, float h, float w)
     GLfloat dimensions[3];
     GLfloat x, y, scalefactor;
     GLuint i;
-    
+
     if(!model)return;
+    if(!(model->uvtexcoords))return;
     
     if (model->texcoords)
         free(model->texcoords);
@@ -1167,7 +1168,6 @@ glmUVTexture(GLMmodel* model, float h, float w)
     /* go through and put texture coordinate indices in all the triangles */
     group = model->groups;
     while(group) {
-      printf("next group: %d triangles\n", group->numtriangles);
         for(i = 0; i < group->numtriangles; i++) {
             T(group->triangles[i]).tindices[0] = T(group->triangles[i]).uvtindices[0];
             T(group->triangles[i]).tindices[1] = T(group->triangles[i]).uvtindices[1];
@@ -1190,7 +1190,7 @@ glmLinearTexture(GLMmodel* model, float h, float w)
     GLfloat dimensions[3];
     GLfloat x, y, scalefactor;
     GLuint i;
-    
+
     if (!(model))return;
     
     if (model->texcoords)
@@ -1244,7 +1244,7 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
     GLMgroup* group;
     GLfloat theta, phi, rho, x, y, z, r;
     GLuint i;
-    
+
     if (!(model))return;
     if (!(model->normals))return;
     
@@ -1293,10 +1293,11 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
 
 GLvoid glmTexture(GLMmodel* model, glmtexture_t typ, float h, float w)
 {
+  if(!model)return;
   switch(typ) {
-  GLM_UV: glmUVTexture(model, h, w); break;
-  GLM_LINEAR: glmLinearTexture(model, h, w); break;
-  GLM_SPHEREMAP: glmSpheremapTexture(model, h, w); break;
+  case GLM_TEX_UV: glmUVTexture(model, h, w); break;
+  case GLM_TEX_LINEAR: glmLinearTexture(model, h, w); break;
+  case GLM_TEX_SPHEREMAP: glmSpheremapTexture(model, h, w); break;
   default:
     if(model->numuvtexcoords)
       glmUVTexture(model, h, w);
@@ -1410,7 +1411,7 @@ glmReadOBJ(char* filename)
     /* close the file */
     fclose(file);
 
-    glmTexture(model, GLM_DEFAULT, 1.0, 1.0);
+    glmTexture(model, GLM_TEX_DEFAULT, 1.0, 1.0);
 
     return model;
 }

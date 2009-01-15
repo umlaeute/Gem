@@ -43,12 +43,15 @@ extern "C" {
 #define GLM_COLOR    (1 << 3)       /* render with colors */
 #define GLM_MATERIAL (1 << 4)       /* render with materials */
 
+  /*
+   * types of texturing the model
+   */
 typedef enum
 {
-  GLM_DEFAULT,
-  GLM_UV,
-  GLM_LINEAR,
-  GLM_SPHEREMAP
+  GLM_TEX_DEFAULT,
+  GLM_TEX_UV,
+  GLM_TEX_LINEAR,
+  GLM_TEX_SPHEREMAP
 }  glmtexture_t;
 
 
@@ -190,36 +193,6 @@ glmFacetNormals(GLMmodel* model);
 GLvoid
 glmVertexNormals(GLMmodel* model, GLfloat angle);
 
-/* glmUVTexture: uses the UV texture-coordinates stored with the model
- *
- * model - pointer to initialized GLMmodel structure
- */
-GLvoid
-glmUVTexture(GLMmodel* model, float h=1.0, float w=1.0);
-
-/* glmLinearTexture: Generates texture coordinates according to a
- * linear projection of the texture map.  It generates these by
- * linearly mapping the vertices onto a square.
- *
- * model - pointer to initialized GLMmodel structure
- */
-GLvoid
-glmLinearTexture(GLMmodel* model, float h=1.0, float w=1.0);
-
-/* glmSpheremapTexture: Generates texture coordinates according to a
- * spherical projection of the texture map.  Sometimes referred to as
- * spheremap, or reflection map texture coordinates.  It generates
- * these by using the normal to calculate where that vertex would map
- * onto a sphere.  Since it is impossible to map something flat
- * perfectly onto something spherical, there is distortion at the
- * poles.  This particular implementation causes the poles along the X
- * axis to be distorted.
- *
- * model - pointer to initialized GLMmodel structure
- */
-GLvoid
- glmSpheremapTexture(GLMmodel* model, float h=1.0, float w=1.0);
-
 /* glmTexture: setup texture coordinates according to the specified type
  * some types (like UV) are read from files, whereas others might be generated
  * a "default" type will try to use saved texcoords and fallback to generated
@@ -227,7 +200,7 @@ GLvoid
  * model - pointer to initialized GLMmodel structure
  */
 GLvoid
-glmTexture(GLMmodel* model, glmtexture_t type, float h=1.0, float w=1.0);
+glmTexture(GLMmodel* model, glmtexture_t type=GLM_TEX_DEFAULT, float h=1.0, float w=1.0);
 
 /* glmDelete: Deletes a GLMmodel structure.
  *
