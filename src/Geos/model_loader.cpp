@@ -49,7 +49,7 @@ _glmAbs(GLfloat f)
 static GLfloat
 _glmDot(GLfloat* u, GLfloat* v)
 {
-    assert(u); assert(v);
+  if (!(u) || !(v))return 0.f;
     
     return u[0]*v[0] + u[1]*v[1] + u[2]*v[2];
 }
@@ -63,7 +63,7 @@ _glmDot(GLfloat* u, GLfloat* v)
 static GLvoid
 _glmCross(GLfloat* u, GLfloat* v, GLfloat* n)
 {
-    assert(u); assert(v); assert(n);
+    if (!(u))return; if (!(v))return; if (!(n))return;
     
     n[0] = u[1]*v[2] - u[2]*v[1];
     n[1] = u[2]*v[0] - u[0]*v[2];
@@ -79,7 +79,7 @@ _glmNormalize(GLfloat* v)
 {
     GLfloat l;
     
-    assert(v);
+    if (!(v))return;
 
     l = (GLfloat)sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
     v[0] /= l;
@@ -155,7 +155,7 @@ _glmFindGroup(GLMmodel* model, char* name)
 {
     GLMgroup* group;
     
-    assert(model);
+    if (!(model))return NULL;
     
     group = model->groups;
     while(group) {
@@ -546,7 +546,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
   /* set the stats in the model structure */
   model->numvertices  = numvertices;
   model->numnormals   = numnormals;
-  model->numtexcoords = numtexcoords;
+  model->numuvtexcoords = numtexcoords;
   model->numtriangles = numtriangles;
   
   /* allocate memory for the triangles in each group */
@@ -583,7 +583,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
     /* set the pointer shortcuts */
     vertices       = model->vertices;
     normals    = model->normals;
-    texcoords    = model->texcoords;
+    texcoords    = model->uvtexcoords;
     group      = model->groups;
     
     /* on the second pass through the file, read all the data into the
@@ -769,8 +769,8 @@ glmUnitize(GLMmodel* model)
     GLfloat cx, cy, cz, w, h, d;
     GLfloat scale;
     
-    assert(model);
-    assert(model->vertices);
+    if (!(model))return 0.f;
+    if (!(model->vertices))return 0.f;
     
     /* get the max/mins */
     maxx = minx = model->vertices[3 + 0];
@@ -831,9 +831,9 @@ glmDimensions(GLMmodel* model, GLfloat* dimensions)
     GLuint i;
     GLfloat maxx, minx, maxy, miny, maxz, minz;
     
-    assert(model);
-    assert(model->vertices);
-    assert(dimensions);
+    if (!(model))return;
+    if (!(model->vertices))return;
+    if (!(dimensions))return;
     
     /* get the max/mins */
     maxx = minx = model->vertices[3 + 0];
@@ -890,7 +890,7 @@ glmReverseWinding(GLMmodel* model)
 {
     GLuint i, swap;
     
-    assert(model);
+    if (!(model))return;
     
     for (i = 0; i < model->numtriangles; i++) {
         swap = T(i).vindices[0];
@@ -938,8 +938,8 @@ glmFacetNormals(GLMmodel* model)
     GLfloat u[3];
     GLfloat v[3];
     
-    assert(model);
-    assert(model->vertices);
+    if (!(model))return;
+    if (!(model->vertices))return;
     
     /* clobber any old facetnormals */
     if (model->facetnorms)
@@ -1000,8 +1000,8 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
     GLfloat dot, cos_angle;
     GLuint  i, avg;
     
-    assert(model);
-    assert(model->facetnorms);
+    if (!(model))return;
+    if (!(model->facetnorms))return;
     
     /* calculate the cosine of the angle (in degrees) */
     cos_angle = (GLfloat)cos(angle * M_PI / 180.0f);
@@ -1137,6 +1137,54 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
     free(normals);
 }
 
+/* glmUVTexture: Generates texture coordinates according to a
+ * the texture coordinates stored in the .obj file
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLvoid
+glmUVTexture(GLMmodel* model, float h, float w)
+{
+    GLMgroup *group;
+    GLfloat dimensions[3];
+    GLfloat x, y, scalefactor;
+    GLuint i;
+    
+    if(!model)return;
+    
+    if (model->texcoords)
+        free(model->texcoords);
+
+    model->numtexcoords = model->numuvtexcoords;
+    model->texcoords=(GLfloat*)malloc(sizeof(GLfloat)*2*(model->numuvtexcoords+1));
+    
+    /* do the calculations */
+    for(i = 1; i <= model->numvertices; i++) {
+      model->texcoords[2*i+0] = model->uvtexcoords[2*i+0]*w;
+      model->texcoords[2*i+1] = model->uvtexcoords[2*i+1]*h;
+    }
+#if 0
+    /* go through and put texture coordinate indices in all the triangles */
+    group = model->groups;
+    while(group) {
+      printf("next group: %d triangles\n", group->numtriangles);
+        for(i = 0; i < group->numtriangles; i++) {
+            T(group->triangles[i]).tindices[0] = T(group->triangles[i]).uvtindices[0];
+            T(group->triangles[i]).tindices[1] = T(group->triangles[i]).uvtindices[1];
+            T(group->triangles[i]).tindices[2] = T(group->triangles[i]).uvtindices[2];
+        }    
+        group = group->next;
+    }
+
+    for(i=0; i<model->numtriangles; i++) {
+      T(i).tindices[0] =  T(i).uvtindices[0];
+      T(i).tindices[1] =  T(i).uvtindices[1];
+      T(i).tindices[2] =  T(i).uvtindices[2];
+    }
+#endif
+}
+
+
 
 /* glmLinearTexture: Generates texture coordinates according to a
  * linear projection of the texture map.  It generates these by
@@ -1145,7 +1193,6 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
  * model - pointer to initialized GLMmodel structure
  */
 GLvoid
-//glmLinearTexture(GLMmodel* model)
 glmLinearTexture(GLMmodel* model, float h, float w)
 {
     GLMgroup *group;
@@ -1153,7 +1200,7 @@ glmLinearTexture(GLMmodel* model, float h, float w)
     GLfloat x, y, scalefactor;
     GLuint i;
     
-    assert(model);
+    if (!(model))return;
     
     if (model->texcoords)
         free(model->texcoords);
@@ -1207,8 +1254,8 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
     GLfloat theta, phi, rho, x, y, z, r;
     GLuint i;
     
-    assert(model);
-    assert(model->normals);
+    if (!(model))return;
+    if (!(model->normals))return;
     
     if (model->texcoords)
         free(model->texcoords);
@@ -1263,7 +1310,7 @@ glmDelete(GLMmodel* model)
     GLMgroup* group;
     GLuint i;
     
-    assert(model);
+    if (!(model))return;
     
     if (model->pathname)     free(model->pathname);
     if (model->mtllibname) free(model->mtllibname);
@@ -1316,6 +1363,8 @@ glmReadOBJ(char* filename)
     model->vertices    = NULL;
     model->numnormals    = 0;
     model->normals     = NULL;
+    model->numuvtexcoords  = 0;
+    model->uvtexcoords       = NULL;
     model->numtexcoords  = 0;
     model->texcoords       = NULL;
     model->numfacetnorms = 0;
@@ -1343,9 +1392,9 @@ glmReadOBJ(char* filename)
         model->normals = (GLfloat*)malloc(sizeof(GLfloat) *
             3 * (model->numnormals + 1));
     }
-    if (model->numtexcoords) {
-        model->texcoords = (GLfloat*)malloc(sizeof(GLfloat) *
-            2 * (model->numtexcoords + 1));
+    if (model->numuvtexcoords) {
+        model->uvtexcoords = (GLfloat*)malloc(sizeof(GLfloat) *
+            2 * (model->numuvtexcoords + 1));
     }
     
     /* rewind to beginning of file and read in the data this pass */
@@ -1355,6 +1404,9 @@ glmReadOBJ(char* filename)
     
     /* close the file */
     fclose(file);
+
+    if(model->numuvtexcoords)
+      glmUVTexture(model, 1.0, 1.0);
     
     return model;
 }
@@ -1381,7 +1433,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
     FILE*   file;
     GLMgroup* group;
     
-    assert(model);
+    if (!(model))return -1;
     
     /* do a bit of warning */
     if (mode & GLM_FLAT && !model->facetnorms) {
@@ -1577,8 +1629,8 @@ glmDraw(GLMmodel* model, GLuint mode)
     static GLMtriangle* triangle;
     static GLMmaterial* material;
     
-    assert(model);
-    assert(model->vertices);
+    if (!(model))return;
+    if (!(model->vertices))return;
     
     /* do a bit of warning */
     if (mode & GLM_FLAT && !model->facetnorms) {
@@ -1711,8 +1763,8 @@ glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber)
     static GLMtriangle* triangle;
     static GLMmaterial* material;
     
-    assert(model);
-    assert(model->vertices);
+    if (!(model))return;
+    if (!(model->vertices))return;
     
     /* do a bit of warning */
     if (mode & GLM_FLAT && !model->facetnorms) {
@@ -1959,84 +2011,3 @@ glmReadPPM(char* filename, int* width, int* height)
     *height = h;
     return image;
 }
-
-#if 0
-/* normals */
-if (model->numnormals) {
-    numvectors = model->numnormals;
-    vectors  = model->normals;
-    copies = glmOptimizeVectors(vectors, &numvectors);
-    
-    printf("glmOptimize(): %d redundant normals.\n", 
-        model->numnormals - numvectors);
-    
-    for (i = 0; i < model->numtriangles; i++) {
-        T(i).nindices[0] = (GLuint)vectors[3 * T(i).nindices[0] + 0];
-        T(i).nindices[1] = (GLuint)vectors[3 * T(i).nindices[1] + 0];
-        T(i).nindices[2] = (GLuint)vectors[3 * T(i).nindices[2] + 0];
-    }
-    
-    /* free space for old normals */
-    free(vectors);
-    
-    /* allocate space for the new normals */
-    model->numnormals = numvectors;
-    model->normals = (GLfloat*)malloc(sizeof(GLfloat) * 
-        3 * (model->numnormals + 1));
-    
-    /* copy the optimized vertices into the actual vertex list */
-    for (i = 1; i <= model->numnormals; i++) {
-        model->normals[3 * i + 0] = copies[3 * i + 0];
-        model->normals[3 * i + 1] = copies[3 * i + 1];
-        model->normals[3 * i + 2] = copies[3 * i + 2];
-    }
-    
-    free(copies);
-}
-
-/* texcoords */
-if (model->numtexcoords) {
-    numvectors = model->numtexcoords;
-    vectors  = model->texcoords;
-    copies = glmOptimizeVectors(vectors, &numvectors);
-    
-    printf("glmOptimize(): %d redundant texcoords.\n", 
-        model->numtexcoords - numvectors);
-    
-    for (i = 0; i < model->numtriangles; i++) {
-        for (j = 0; j < 3; j++) {
-            T(i).tindices[j] = (GLuint)vectors[3 * T(i).tindices[j] + 0];
-        }
-    }
-    
-    /* free space for old texcoords */
-    free(vectors);
-    
-    /* allocate space for the new texcoords */
-    model->numtexcoords = numvectors;
-    model->texcoords = (GLfloat*)malloc(sizeof(GLfloat) * 
-        2 * (model->numtexcoords + 1));
-    
-    /* copy the optimized vertices into the actual vertex list */
-    for (i = 1; i <= model->numtexcoords; i++) {
-        model->texcoords[2 * i + 0] = copies[2 * i + 0];
-        model->texcoords[2 * i + 1] = copies[2 * i + 1];
-    }
-    
-    free(copies);
-}
-#endif
-
-#if 0
-/* look for unused vertices */
-/* look for unused normals */
-/* look for unused texcoords */
-for (i = 1; i <= model->numvertices; i++) {
-    for (j = 0; j < model->numtriangles; i++) {
-        if (T(j).vindices[0] == i || 
-            T(j).vindices[1] == i || 
-            T(j).vindices[1] == i)
-            break;
-    }
-}
-#endif

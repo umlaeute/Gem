@@ -87,6 +87,9 @@ typedef struct _GLMmodel {
   GLuint   numnormals;          /* number of normals in model */
   GLfloat* normals;             /* array of normals */
 
+  /* 
+   * generated texcoords
+   */
   GLuint   numtexcoords;        /* number of texcoords in model */
   GLfloat* texcoords;           /* array of texture coordinates */
 
@@ -104,6 +107,12 @@ typedef struct _GLMmodel {
 
   GLfloat position[3];          /* position of the model */
 
+  /* 
+   * texcoords as stored in the model;
+   * must never be modified
+   */
+  GLuint   numuvtexcoords;        /* number of texcoords in model */
+  GLfloat* uvtexcoords;           /* array of texture coordinates */
 } GLMmodel;
 
 
@@ -170,6 +179,13 @@ glmFacetNormals(GLMmodel* model);
 GLvoid
 glmVertexNormals(GLMmodel* model, GLfloat angle);
 
+/* glmUVTexture: uses the UV texture-coordinates stored with the model
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLvoid
+glmUVTexture(GLMmodel* model, float h=1.0, float w=1.0);
+
 /* glmLinearTexture: Generates texture coordinates according to a
  * linear projection of the texture map.  It generates these by
  * linearly mapping the vertices onto a square.
@@ -177,7 +193,6 @@ glmVertexNormals(GLMmodel* model, GLfloat angle);
  * model - pointer to initialized GLMmodel structure
  */
 GLvoid
-//glmLinearTexture(GLMmodel* model);
 glmLinearTexture(GLMmodel* model, float h=1.0, float w=1.0);
 
 /* glmSpheremapTexture: Generates texture coordinates according to a
