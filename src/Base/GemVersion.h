@@ -3,7 +3,7 @@
 
 #define GEM_VERSION_MAJOR 0
 #define GEM_VERSION_MINOR 91
-#define GEM_VERSION_BUGFIX 1
+#define GEM_VERSION_BUGFIX 2
 #define GEM_VERSION_CODENAME "'tigital'"
 
 
