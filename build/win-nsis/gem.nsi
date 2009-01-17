@@ -100,7 +100,7 @@ SectionGroup "Documentation" SEC_documentation
 
  Section "manual" SEC_manual
   SetOverwrite ifnewer
-  SetOutPath "$INSTDIR\manual"
+  SetOutPath "$INSTDIR\doc\manual"
   File /r /x .svn "..\..\doc\manual\*.*"
  SectionEnd
 
@@ -204,5 +204,5 @@ SectionEnd
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_ref} "reference patches for Gem-objects"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_examples} "a large number of patches showing what to do with GEM"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_manual} "HTML-manual"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_doc} "??"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_doc} "Gem primer,..."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
