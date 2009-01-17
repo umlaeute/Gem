@@ -1146,8 +1146,6 @@ GLvoid
 glmUVTexture(GLMmodel* model, float h, float w)
 {
     GLMgroup *group;
-    GLfloat dimensions[3];
-    GLfloat x, y, scalefactor;
     GLuint i;
 
     if(!model)return;
