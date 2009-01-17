@@ -101,7 +101,7 @@ SectionGroup "Documentation" SEC_documentation
  Section "manual" SEC_manual
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR\manual"
-  File /r /x .svn "..\..\manual\*.*"
+  File /r /x .svn "..\..\doc\manual\*.*"
  SectionEnd
 
  Section "doc" SEC_doc
@@ -140,11 +140,11 @@ Section Uninstall
   Delete "$INSTDIR\Gem.dll"
 
 
+  Delete "$INSTDIR\doc\manual\*.*"
+  RMDir "$INSTDIR\doc\manual"
+
   Delete "$INSTDIR\doc\*.*"
   RMDir "$INSTDIR\doc"
-
-  Delete "$INSTDIR\manual\*.*"
-  RMDir "$INSTDIR\manual"
 
   Delete "$INSTDIR\examples\data\*.*"
   Delete "$INSTDIR\examples\99.games\*.pd"
