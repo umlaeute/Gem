@@ -316,6 +316,9 @@
 				RelativePath="..\..\src\Base\GemVector.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GemVersion.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\GemVersion.h">
 			</File>
 			<File
@@ -564,6 +567,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Geos\torus.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Geos\trapezoid.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Geos\trapezoid.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Geos\triangle.cpp">
@@ -1149,12 +1158,6 @@
 				RelativePath="..\..\src\Pixes\pix_filmDarwin.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Pixes\pix_filmNEW.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_filmNEW.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Pixes\pix_filmNT.cpp">
 			</File>
 			<File
@@ -1321,12 +1324,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_movieDS.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_movieNEW.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_movieNEW.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_multiblob.cpp">
@@ -1548,12 +1545,6 @@
 				RelativePath="..\..\src\Pixes\pix_videoDS.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Pixes\pix_videoNEW.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_videoNEW.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Pixes\pix_videoNT.cpp">
 			</File>
 			<File
@@ -1638,6 +1629,12 @@
 					RelativePath="..\..\src\Pixes\filmFFMPEG.h">
 				</File>
 				<File
+					RelativePath="..\..\src\Pixes\filmGMERLIN.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\filmGMERLIN.h">
+				</File>
+				<File
 					RelativePath="..\..\src\Pixes\filmMPEG1.cpp">
 				</File>
 				<File
@@ -1660,6 +1657,24 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\filmQT4L.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_filmOS.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_filmOS.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_movieOS.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_movieOS.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_videoOS.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_videoOS.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\record.cpp">
@@ -1914,6 +1929,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\openGL\GEMglArrayElement.h">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GemGLBase.h">
 			</File>
 			<File
 				RelativePath="..\..\src\openGL\GEMglBegin.cpp">
@@ -3488,6 +3506,12 @@
 				RelativePath="..\..\src\openGL\GEMglTranslatef.h">
 			</File>
 			<File
+				RelativePath="..\..\src\openGL\GEMgluLookAt.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GEMgluLookAt.h">
+			</File>
+			<File
 				RelativePath="..\..\src\openGL\GEMglUniform1fARB.cpp">
 			</File>
 			<File
@@ -3661,6 +3685,10 @@
 			<File
 				RelativePath="..\..\src\openGL\GLdefine.h">
 			</File>
+		</Filter>
+		<Filter
+			Name="temp"
+			Filter="">
 		</Filter>
 	</Files>
 	<Globals>
