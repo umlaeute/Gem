@@ -41,7 +41,7 @@ OutFile "gem-${PRODUCT_VERSION}${PRODUCT_ARCH}.exe"
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "..\..\GnuGPL.LICENSE"
+!insertmacro MUI_PAGE_LICENSE "..\..\GnuGPL.LICENSE.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
@@ -73,7 +73,7 @@ SectionGroup "Gem" SEC_Gem
   SectionIn RO
   SetOutPath "$INSTDIR"
   File "..\win-vs2003\Gem.dll"
-  File "..\..\GnuGPL.LICENSE"
+  File "..\..\GnuGPL.LICENSE.txt"
  SectionEnd
  Section "Gem-abstractions" SEC_GemAbs
   SectionIn RO
