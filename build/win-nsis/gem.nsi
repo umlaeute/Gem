@@ -87,13 +87,13 @@ SectionGroup "Documentation" SEC_documentation
  Section "reference" SEC_ref
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR"
-  File /r /x CVS "..\..\help\*.pd"
+  File /r /x .svn "..\..\help\*.pd"
  SectionEnd
 
  Section "examples" SEC_examples
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR\examples\"
-  File /r /x CVS "..\..\examples\*.*"
+  File /r /x .svn "..\..\examples\*.*"
   ; this should only be set if there is no entry yet
   WriteRegStr HKCU "Environment" "GEM_DEFAULT_FONT" "$INSTDIR\examples\data\vera.ttf"
  SectionEnd
@@ -101,13 +101,13 @@ SectionGroup "Documentation" SEC_documentation
  Section "manual" SEC_manual
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR\manual"
-  File /r /x CVS "..\..\manual\*.*"
+  File /r /x .svn "..\..\manual\*.*"
  SectionEnd
 
  Section "doc" SEC_doc
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR\doc"
-  File /r /x CVS "..\..\doc\*.*"
+  File /r /x .svn "..\..\doc\*.*"
  SectionEnd
 SectionGroupEnd
 
