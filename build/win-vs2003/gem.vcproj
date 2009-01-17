@@ -878,6 +878,12 @@
 				RelativePath="..\..\src\Controls\gemmouse.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Controls\gemreceive.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Controls\gemreceive.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Controls\gemwin.cpp">
 			</File>
 			<File
