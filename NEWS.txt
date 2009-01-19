@@ -1,0 +1,16 @@
+NEWS for 0.91-2 (with respect to 0.91-1)
+
+- made [pix_freeframe] not crash on OSX (fixes #2476663)
+
+- do not use libTIFF/libJPEG is ImageMagick++ is present (fixes #2449674 & #2506838)
+
+- always use RGBA for image-loading on OS-X (fixes #2484087)
+
+- check for gl/glu headers (fixes #2032488)
+
+- force focus when drawing without borders on X (fixes #2192358)
+
+- only use multitexturing if hardware supports it
+
+- windows-installer adapted to new svn-layout
+
