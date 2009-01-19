@@ -50,7 +50,7 @@ bool GEMglGetMapiv :: isRunnable(void) {
 //
 void GEMglGetMapiv :: render(GemState *state) {
   glGetMapiv (target, query, v);
-  post("glGetMapiv: not really implemented:: got data @ %X, what should i do with it", v);
+  post("not really implemented:: got data @ %X, what should i do with it", v);
 }
 
 

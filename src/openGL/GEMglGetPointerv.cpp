@@ -47,8 +47,7 @@ bool GEMglGetPointerv :: isRunnable(void) {
 //
 void GEMglGetPointerv :: render(GemState *state) {
   glGetPointerv (pname,params);
-  post("glGetPointerv: not really implemented:: got data @ %X, what should i do with it?",
-       params);
+  post("not really implemented:: got data @ %X, what should i do with it?", params);
 }
 
 /////////////////////////////////////////////////////////

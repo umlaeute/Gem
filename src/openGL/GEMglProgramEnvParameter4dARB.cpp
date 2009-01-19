@@ -64,36 +64,30 @@ void GEMglProgramEnvParameter4dARB :: render(GemState *state) {
 //
 void GEMglProgramEnvParameter4dARB :: targetMess (t_float arg1) {	// FUN
 	target = (GLenum)arg1;
-	post("target = %i",target);
 	setModified();
 }
 
 void GEMglProgramEnvParameter4dARB :: indexMess (t_float arg2) {	// FUN
 	index = (GLenum)arg2;
-	post("index = %i",index);
 	setModified();
 }
 
 void GEMglProgramEnvParameter4dARB :: xMess (t_float arg2) {	// FUN
 	m_x = (GLdouble)arg2;
-	post("m_x = %d",m_x);
 	setModified();
 }
 
 void GEMglProgramEnvParameter4dARB :: yMess (t_float arg3) {	// FUN
 	m_y = (GLdouble)arg3;
-	post("m_y = %d",m_y);
 	setModified();
 }
 
 void GEMglProgramEnvParameter4dARB :: zMess (t_float arg4) {	// FUN
 	m_z = (GLdouble)arg4;
-	post("m_z = %d",m_z);
 	setModified();
 }
 void GEMglProgramEnvParameter4dARB :: wMess (t_float arg5) {	// FUN
 	m_w = (GLdouble)arg5;
-	post("m_w = %d",m_w);
 	setModified();
 }
 /////////////////////////////////////////////////////////

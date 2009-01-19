@@ -70,7 +70,7 @@ void GEMglProgramEnvParameter4fvARB :: indexMess (t_float arg1) {	// FUN
 
 void GEMglProgramEnvParameter4fvARB :: paramsMess (int argc, t_atom*argv) {	// FUN
 	if(argc!=4){
-		post("GEMglProgramEnvParameter4vARB:  needs 4 elements");
+		error("GEMglProgramEnvParameter4vARB:  needs 4 elements");
 		return;
 	}
 	int i;

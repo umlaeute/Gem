@@ -53,7 +53,7 @@ void GEMglMultTransposeMatrixf :: render(GemState *state) {
 //
 void GEMglMultTransposeMatrixf :: matrixMess (int argc, t_atom* argv) {	// FUN
 	if(argc!=16){
-		post("GEMglLoadMatrixd: need 16 (4x4) elements");
+		error("need 16 (4x4) elements");
 		return;
 		}
 	int i;

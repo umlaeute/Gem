@@ -69,7 +69,7 @@ void GEMglTexSubImage1D :: render(GemState *state) {
 // Variables
 //
 void GEMglTexSubImage1D :: targetMess (t_float arg1) {	// FUN
-  post("target has to be GL_TEXTURE_1D");
+  error("target has to be GL_TEXTURE_1D");
 }
 
 void GEMglTexSubImage1D :: levelMess (t_float arg1) {	// FUN

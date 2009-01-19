@@ -70,13 +70,13 @@ void GEMglProgramLocalParameter4fvARB :: indexMess (t_float arg1) {	// FUN
 
 void GEMglProgramLocalParameter4fvARB :: paramsMess (int argc, t_atom*argv) {	// FUN
 	if(argc!=4){
-		post("GEMglProgramLocalParamter4vARB:  needs 4 elements");
+		error("GEMglProgramLocalParamter4vARB:  needs 4 elements");
 		return;
 	}
 	int i;
 	for (i=0;i<4;i++){
 		params[i] = (GLfloat)atom_getfloat(argv+i);
-		post("params[%i] = %f\n",i,params[i]);
+		//post("params[%i] = %f\n",i,params[i]);
 	}
 	setModified();
 }

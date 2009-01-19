@@ -75,7 +75,7 @@ void GEMglTexSubImage2D :: render(GemState *state) {
 // Variables
 //
 void GEMglTexSubImage2D :: targetMess (t_float arg1) {	// FUN
-  post("target has to be GL_TEXTURE_2D");
+  error("target has to be GL_TEXTURE_2D");
 }
 
 void GEMglTexSubImage2D :: levelMess (t_float arg1) {	// FUN

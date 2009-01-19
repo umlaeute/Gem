@@ -51,12 +51,10 @@ void GEMglNewList :: render(GemState *state) {
 void GEMglNewList :: modeMess (t_float arg1) {	// FUN
 	mode = (GLenum)arg1;
 	setModified();
-	post("mode=%d", mode);
 }
 void GEMglNewList :: listMess (t_float arg1) {	// FUN
 	list = (GLuint)arg1;
 	setModified();
-	post("list=%d", list);
 }
 
 
