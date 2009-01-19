@@ -169,6 +169,26 @@ GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
 
 
 GEM_CHECK_LIB(gmerlin_avdec, gmerlin_avdec, gavl_start,,,,[movie loader])
+if test "x${have_gmerlin_avdec}" = "xyes"
+then
+ AC_MSG_RESULT([gmerlin was found...disabling other video-decoders by default])
+ if test "x${with_libquicktime}" = "x"; then
+   with_libquicktime="no"
+ fi
+ if test "x${with_lqt}" = "x"; then
+   with_lqt="no"
+ fi
+ if test "x${with_libmpeg3}" = "x"; then
+   with_libmpeg3="no"
+ fi
+ if test "x${with_mpeg}" = "x"; then
+   with_mpeg="no"
+ fi
+ if test "x${with_avifile}" = "x"; then
+   with_avifile="no"
+ fi
+fi
+
 
 GEM_CHECK_LIB(libquicktime,quicktime, quicktime_init,,,,[movie loader])
 dnl lqt is the same as libquicktime
