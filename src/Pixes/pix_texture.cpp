@@ -264,7 +264,10 @@ void pix_texture :: render(GemState *state) {
   glEnable(m_textureType);
   glBindTexture(m_textureType, m_textureObj);
   
-  state->multiTexUnits = 8;
+  if(GLEW_ARB_multitexture)
+    state->multiTexUnits = 8;
+  else
+    state->multiTexUnits = 0;
 
   if ((!useExternalTexture)&&newfilm ){
     //  tigital:  shouldn't we also allow TEXTURE_2D here?
