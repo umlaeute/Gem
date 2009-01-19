@@ -67,15 +67,18 @@ void part_draw :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_draw :: typeMess(int ac,t_atom* av)
 {
-
-  m_drawType = (int)atom_getfloatarg(0,ac,av);
-
-  post("type set to %d",m_drawType);
-
-  if (0)
-    {
+  if(ac&&A_SYMBOL==av->a_type) {
+    t_symbol*s=atom_getsymbolarg(0,ac,av);
+    switch(*(s->s_name)) {
+    case 'l': case 'L': m_drawType=GL_LINES; break;
+    case 'p': case 'P': m_drawType=GL_POINTS; break;
+    default: 
       error("unknown draw style");
+      return;
     }
+  } else {
+    m_drawType = (int)atom_getfloatarg(0,ac,av);
+  }
 }
 
 
