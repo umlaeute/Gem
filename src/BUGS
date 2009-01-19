@@ -1,33 +1,3 @@
-helpfiles for glsl_* -- FIXED
-
-There is a very serious long term stability bug in the OSX SequenceGrabber code
-
-[pix_takealpha] crashes when a grey image is send to the right inlet (is this still true ?) -- FIXED
-
-under windows gem eats all of the cpu after switching rendering on/off sometimes
-
-if a image-stream created by [pix_video] is processed by some fx, sometimes the fx seems to "not work" (framewise: some frames are processed others are not), i think this is a problem with thread-syncing and in-place manipulation. -- maybe all threaded pix-sources should copy the new data to a save place (where the thread has no access)
-
-rubber/ripple: shouldn't the coordinates ctrX/ctrY be normalized between 0..1 ? -- FIXED (rubber is normalized)
-ripple: what is the height for ? -- FIXED (its the amount of distortion)
-rubber/ripple: sizeMess obsolete -- FIXED (size is now used)
-
-release critical: [filmQT4L] produces RGB output if RGBA is not supported by the codec -- FIXED
-
-RC: the linker flags for libavifile could be obtained via `avifile-config`. these are more correct than just adding `-lavifile` (aka: i had big problems without these..) -- FIXED
-
-sending the gemwin to another machine makes Gem crash (at least on my configuration) -- FIXED (it works on other machines...)
-
-pix_buffer_read/write sometimes crashes -- FIXED
-
-the "--without-aviplay" flag doesn't really work -- FIXED
-
-Gem doesn't load if the no font-support AND "-Wl,-rpath,/usr/lib -laviplay" is specified (something with cannot resolve symbol "GemState" in TextBase::render() -- FIXED (didn't do anything, but it works)
-
-pix_filmDS produces BGR-output -- FIXED (now it produces RGBA, YUV and Grey on demand)
-
-pix_filmNT produces RGB-output -- FIXED (even with colorspace!)
-
-pix_kaleidoscope crashes with YUV -- FIXED (although YUV looks somehow squashed it is at least working; Greyscale images are fine)
-
+for a list of current (open, as well as fixed) BUGs, please see the bug-tracker at sourceforge:
+https://sourceforge.net/tracker2/?func=browse&group_id=64325&atid=507079
 
