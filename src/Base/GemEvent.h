@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-    get keyboard/mouse/tablet callbacks
+    get keyboard/mouse callbacks
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -65,54 +65,6 @@ GEM_EXTERN extern void setWheelCallback(WHEEL_CB callback, void *data);
 // Remove a wheel callback
 GEM_EXTERN extern void removeWheelCallback(WHEEL_CB callback, void *data);
 
-
-//////////////////////////////////////////////////////////////////
-//
-// Tablet motion callback
-//
-//////////////////////////////////////////////////////////////////
-typedef void (*TABMOTION_CB)(int, int, float, void *);
-//////////
-// Set a tablet motion callback
-GEM_EXTERN extern void setTabletMotionCallback(TABMOTION_CB callback, void *data);
-
-//////////
-// Remove a tablet motion callback
-GEM_EXTERN extern void removeTabletMotionCallback(TABMOTION_CB callback, void *data);
-
-
-//////////////////////////////////////////////////////////////////
-//
-// Tablet rotation callback
-//
-//////////////////////////////////////////////////////////////////
-typedef void (*TABROTATION_CB)(int, int, int, void *);
-//////////
-// Set a tablet rotation callback
-GEM_EXTERN extern void setTabletRotationCallback(TABROTATION_CB callback, void *data);
-
-//////////
-// Remove a tablet rotation callback
-GEM_EXTERN extern void removeTabletRotationCallback(TABROTATION_CB callback, void *data);
-
-
-//////////////////////////////////////////////////////////////////
-//
-// Tablet button callback
-//
-//////////////////////////////////////////////////////////////////
-typedef void (*TABBUTTON_CB)(int, int, int, int, void *);
-//////////
-// Set a tablet button callback
-// which == 0 == left
-// which == 1 == middle
-// which == 2 == right
-GEM_EXTERN extern void setTabletButtonCallback(TABBUTTON_CB callback, void *data);
-
-//////////
-// Remove a tablet button callback
-GEM_EXTERN extern void removeTabletButtonCallback(TABBUTTON_CB callback, void *data);
-
 //////////////////////////////////////////////////////////////////
 //
 // Keyboard callback
@@ -146,9 +98,6 @@ GEM_EXTERN extern void removeResizeCallback(RESIZE_CB callback, void *data);
 GEM_EXTERN extern void triggerMotionEvent(int x, int y);
 GEM_EXTERN extern void triggerButtonEvent(int which, int state, int x, int y);
 GEM_EXTERN extern void triggerWheelEvent(int axis, int value);
-GEM_EXTERN extern void triggerTabletMotionEvent(int x, int y, float pressure);
-GEM_EXTERN extern void triggerTabletRotationEvent(int az, int alt, int twist);
-GEM_EXTERN extern void triggerTabletButtonEvent(int which, int state, int x, int y);
 GEM_EXTERN extern void triggerKeyboardEvent(char *string, int value, int state);
 GEM_EXTERN extern void triggerResizeEvent(int xSize, int ySize);
 

@@ -147,8 +147,6 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
     case WM_CLOSE:
       break;
-      
-      // try to initialize the tablet driver
     case WM_CREATE:
       {
       }
