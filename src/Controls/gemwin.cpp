@@ -598,7 +598,7 @@ void gemwin :: borderMessCallback(void *, t_floatarg state)
 }
 void gemwin :: destroyMessCallback(void *)
 {
-  GemMan::destroyWindowSoon();
+  GemMan::destroyWindow();
 }
 void gemwin :: resetMessCallback(void *)
 {
