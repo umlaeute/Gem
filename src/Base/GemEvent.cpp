@@ -18,13 +18,13 @@
 #include "GemEvent.h"
 
 #include <stdlib.h>
+#include "m_pd.h"
 
 /////////////////////////////////////////////////////////
 // The callbacks
 //
 /////////////////////////////////////////////////////////
-struct CallbackList
-{
+struct CallbackList{
     CallbackList() : data(NULL), func(NULL), next(NULL) {}
     void *data;
     void *func;
@@ -278,56 +278,191 @@ GEM_EXTERN void removeResizeCallback(RESIZE_CB callback, void *data)
 }
 
 /////////////////////////////////////////////////////////
+// Trigger queue
+//
+/////////////////////////////////////////////////////////
+typedef enum {
+  NONE,
+  MOTION,
+  BUTTON,
+  WHEEL,
+  KEYBOARD,
+  RESIZE
+} gem_event_t;
+
+typedef struct _event_queue_item {
+  gem_event_t type;
+  struct _event_queue_item*next;
+  char*string;
+  int x;
+  int y;
+  int state;
+  int axis;
+  int value;
+  int which;
+} gem_event_queue_item_t;
+
+typedef struct _gem_event_queue_t{
+  gem_event_queue_item_t*first;
+  gem_event_queue_item_t*last;
+  t_clock *clock;
+
+}  gem_event_queue_t;
+
+gem_event_queue_t*event_queue = NULL;
+
+static gem_event_queue_item_t* createEvent(gem_event_t type, char*string, int x, int y, int state, int axis, int value, int which)
+{
+  gem_event_queue_item_t*ret=new gem_event_queue_item_t;
+  ret->type=type;
+  ret->next=NULL;
+  ret->string=string;
+  ret->x=x;
+  ret->y=y;
+  ret->state=state;
+  ret->axis=axis;
+  ret->value=value;
+  ret->which=which;
+
+  return ret;
+}
+static void deleteEvent( gem_event_queue_item_t* event) {
+  if(event == event_queue->first) {
+    event_queue->first=event->next;
+  }
+
+  if(event == event_queue->last) {
+    event_queue->last=NULL;
+  }
+
+  event->type=NONE;
+  event->next=NULL;
+  event->string=0;
+  event->x=0;
+  event->y=0;
+  event->state=0;
+  event->axis=0;
+  event->value=0;
+  event->which=0;
+
+  delete event;
+}
+
+static void eventClock(void *x);
+
+static void addEvent(gem_event_t type, char*string, int x, int y, int state, int axis, int value, int which) {
+  if (NULL==event_queue) {
+    event_queue=new gem_event_queue_t;
+    event_queue->first=NULL;
+    event_queue->last =NULL;
+    event_queue->clock=clock_new(NULL, (t_method)eventClock);
+  }
+  gem_event_queue_item_t*item=createEvent(type, string, x, y, state, axis, value, which);
+  if(NULL==event_queue->first) {
+    event_queue->first=item;
+  }
+  if(event_queue->last) {
+    event_queue->last->next=item;
+  }
+  event_queue->last=item;
+
+  clock_delay(event_queue->clock, 0);
+}
+
+static void dequeueEvents(void) {
+  CallbackList *theList=NULL;
+  if (NULL==event_queue) {
+    error("dequeue NULL queue");
+    return;
+  }
+  gem_event_queue_item_t*events = event_queue->first;
+  if(NULL==events) {
+    error("dequeue empty queue");
+    return;
+  }
+  while(events) {
+
+    switch(events->type) {
+    case( MOTION): 
+      theList = s_motionList;
+      while(theList)
+        {
+          MOTION_CB callback = (MOTION_CB)theList->func;
+          (*callback)(events->x, events->y, theList->data);
+          theList = theList->next;
+        }
+      break;
+    case( BUTTON):
+      theList = s_buttonList;
+      while(theList)
+        {
+          BUTTON_CB callback = (BUTTON_CB)theList->func;
+          (*callback)(events->which, events->state, events->x, events->y, theList->data);
+          theList = theList->next;
+        }
+      break;
+    case( WHEEL):
+      theList = s_wheelList;
+      while(theList)
+        {
+          WHEEL_CB callback = (WHEEL_CB)theList->func;
+          (*callback)(events->axis, events->value, theList->data);
+          theList = theList->next;
+        }
+      break;
+    case( KEYBOARD):
+      theList = s_keyboardList;
+      while(theList)
+        {
+          KEYBOARD_CB callback = (KEYBOARD_CB)theList->func;
+          (*callback)(events->string, events->value, events->state, theList->data);
+          theList = theList->next;
+        } 
+      break;
+    case( RESIZE):
+      theList = s_resizeList;
+      while(theList)
+        {
+          RESIZE_CB callback = (RESIZE_CB)theList->func;
+          (*callback)(events->x, events->y, theList->data);
+          theList = theList->next;
+        }
+      break;
+    }
+
+    gem_event_queue_item_t*old = events;
+    events=events->next;
+
+    deleteEvent(old);
+  }
+}
+
+static void eventClock(void *x)
+{
+  dequeueEvents();
+}
+
+/////////////////////////////////////////////////////////
 // Trigger events
 //
 /////////////////////////////////////////////////////////
 GEM_EXTERN void triggerMotionEvent(int x, int y)
 {
-    CallbackList *theList = s_motionList;
-    while(theList)
-    {
-        MOTION_CB callback = (MOTION_CB)theList->func;
-        (*callback)(x, y, theList->data);
-        theList = theList->next;
-    }
+  addEvent(MOTION, NULL, x, y, 0, 0, 0, 0);
 }
 GEM_EXTERN void triggerButtonEvent(int which, int state, int x, int y)
 {
-    CallbackList *theList = s_buttonList;
-    while(theList)
-    {
-        BUTTON_CB callback = (BUTTON_CB)theList->func;
-        (*callback)(which, state, x, y, theList->data);
-        theList = theList->next;
-    }
+  addEvent(BUTTON, NULL, x, y, state, 0, 0, which);
 }
 GEM_EXTERN void triggerWheelEvent(int axis, int value)
 {
-    CallbackList *theList = s_wheelList;
-    while(theList)
-    {
-        WHEEL_CB callback = (WHEEL_CB)theList->func;
-        (*callback)(axis, value, theList->data);
-        theList = theList->next;
-    }
+  addEvent(WHEEL, NULL, 0, 0, 0, axis, value, 0);
 }
 GEM_EXTERN void triggerKeyboardEvent(char *string, int value, int state)
 {
-    CallbackList *theList = s_keyboardList;
-    while(theList)
-    {
-        KEYBOARD_CB callback = (KEYBOARD_CB)theList->func;
-        (*callback)(string, value, state, theList->data);
-        theList = theList->next;
-    }
+  addEvent(KEYBOARD, gensym(string)->s_name, 0, 0, state, 0, value, 0);
 }
 GEM_EXTERN void triggerResizeEvent(int xSize, int ySize)
 {
-    CallbackList *theList = s_resizeList;
-    while(theList)
-    {
-        RESIZE_CB callback = (RESIZE_CB)theList->func;
-        (*callback)(xSize, ySize, theList->data);
-        theList = theList->next;
-    }
+  addEvent(RESIZE, NULL, xSize, ySize, 0, 0, 0, 0);
 }
