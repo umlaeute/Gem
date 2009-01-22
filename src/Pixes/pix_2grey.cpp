@@ -66,7 +66,7 @@ void pix_2grey :: processYUVImage(imageStruct &image)
   }
 }
 
-#ifdef __MMX__
+#if defined __MMX__ && !defined __APPLE__
 void pix_2grey :: processRGBAMMX(imageStruct &image){
   __m64*data      =(__m64*)image.data;
 
@@ -151,7 +151,7 @@ void pix_2grey :: processYUVMMX(imageStruct &image){
  _mm_empty();
 }
 #endif
-#ifdef __SSE2__
+#if defined __SSE2__
 void pix_2grey :: processYUVSSE2(imageStruct &image){
  register int pixsize = (image.ysize * image.xsize)>>3;
 
