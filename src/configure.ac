@@ -172,12 +172,15 @@ GEM_CHECK_LIB(gmerlin_avdec, gmerlin_avdec, gavl_start,,,,[movie loader])
 if test "x${have_gmerlin_avdec}" = "xyes"
 then
  AC_MSG_RESULT([gmerlin was found...disabling other video-decoders by default])
- if test "x${with_libquicktime}" = "x"; then
-   with_libquicktime="no"
- fi
- if test "x${with_lqt}" = "x"; then
-   with_lqt="no"
- fi
+
+## not disabling libquicktime, as this is needed for recording as well!
+# if test "x${with_libquicktime}" = "x"; then
+#   with_libquicktime="no"
+# fi
+# if test "x${with_lqt}" = "x"; then
+#   with_lqt="no"
+# fi
+
  if test "x${with_libmpeg3}" = "x"; then
    with_libmpeg3="no"
  fi
