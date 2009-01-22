@@ -344,32 +344,6 @@ bool recordQT4L :: setCodec(lqt_codec_info_t**codec, int num)
 
   return true;
 }
-#if 0
-/////////////////////////////////////////////////////////
-// set codec by number
-//
-/////////////////////////////////////////////////////////
-bool recordQT4L :: setCodec(int num)
-{
-  lqt_codec_info_t**codec = lqt_query_registry(0,1,1,0);
-  bool res = setCodec(codec, num);
-  /* user have to re-open a file for the change to take effect */
-  if(res)close();
-  return res;
-}
-/////////////////////////////////////////////////////////
-// set codec by name
-//
-/////////////////////////////////////////////////////////
-bool recordQT4L :: setCodec(char*name)
-{
-  lqt_codec_info_t**codec = (lqt_codec_info_t**)lqt_find_video_codec_by_name(name);
-  bool res = setCodec(codec, 0);
-  /* user have to re-open a file for the change to take effect */
-  if(res)close();
-  return res;
-}
-#else
 /////////////////////////////////////////////////////////
 // set codec by number
 //
@@ -390,8 +364,4 @@ bool recordQT4L :: setCodec(char*name)
   m_codecnum=-1;
   return true;
 }
-#endif
-
-
-
 #endif
