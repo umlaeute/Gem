@@ -245,7 +245,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char *pluginname = s->s_name;
   m_plugin=ff_loadplugin(getCanvas(), pluginname, &can_rgba);
 
-  m_image.setCsizeByFormat(can_rgba?GL_RGBA:GL_RGB);
+  m_image.setCsizeByFormat(can_rgba?GL_RGBA_GEM:GL_RGB);
 
   if(!m_plugin)throw(GemException("couldn't load FreeFrame-plugin"));
 
@@ -381,7 +381,7 @@ void pix_freeframe :: processImage(imageStruct &image)
     // this needs a bit more intelligence:
     // the plugin might support RGBA and/or RGB
     // what is fastest ???
-    vidinfo.bitDepth = (format==GL_RGBA)?FF_CAP_32BITVIDEO:FF_CAP_32BITVIDEO;
+    vidinfo.bitDepth = (format==GL_RGBA_GEM)?FF_CAP_32BITVIDEO:FF_CAP_32BITVIDEO;
     
     m_instance = FF_PLUGMAIN_INT(m_plugin(FF_INSTANTIATE, &vidinfo, 0));
     
@@ -413,13 +413,40 @@ void pix_freeframe :: processImage(imageStruct &image)
   // yeah, do it!
   m_plugin(FF_PROCESSFRAME, data,  m_instance);
   
+
+
+
   // check whether we have converted our image data
   if(image.data!=data)
     // it seems, like we did: convert it back
-    if(format==GL_RGBA)
+
+
+  // just copied the code from [pix_rgba]
+    switch(format) {
+    case GL_RGBA: 
       image.fromRGBA(m_image.data);
-    else
+      break;
+    case GL_RGB:  
       image.fromRGB(m_image.data);
+      break;
+    case GL_BGR_EXT:
+      image.fromBGR(m_image.data);
+      break;
+    case GL_BGRA_EXT: /* "RGBA" on apple */
+      image.fromBGRA(m_image.data);
+      break;
+    case GL_LUMINANCE:
+      image.fromGray(m_image.data);
+      break;
+    case GL_YCBCR_422_GEM: // YUV
+      image.fromUYVY(m_image.data);
+      break;
+    default:
+      error("no method for this format !!!");
+      error("if you know how to convert this format (%X),\n"
+            "please contact the authors of this software", image.format);
+      return;
+    }
 }
 
 

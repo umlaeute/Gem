@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_2grey.h"
+#include "Base/GemPixConvert.h"
 
 CPPEXTERN_NEW(pix_2grey)
 
@@ -47,9 +48,10 @@ void pix_2grey :: processRGBAImage(imageStruct &image)
   int count = image.ysize * image.xsize;
    
      while (count--)    {
-     int grey = (pixels[chRed  ] * 79  + 
-		 pixels[chGreen] * 156 +
-		 pixels[chBlue ] * 21)>>8;
+     int grey = (pixels[chRed  ] * RGB2GRAY_RED  + 
+                 pixels[chGreen] * RGB2GRAY_GREEN +
+                 pixels[chBlue ] * RGB2GRAY_BLUE
+                 ) >> 8;
      pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
      pixels += 4;
      }  
@@ -67,6 +69,8 @@ void pix_2grey :: processYUVImage(imageStruct &image)
 }
 
 #ifdef __MMX__
+# ifndef __APPLE__
+/* LATER: implement MMX code for GL_BGRA_EXT */
 void pix_2grey :: processRGBAMMX(imageStruct &image){
   __m64*data      =(__m64*)image.data;
 
@@ -78,7 +82,7 @@ void pix_2grey :: processRGBAMMX(imageStruct &image){
 					 (unsigned char)0x00,
 					 (unsigned char)0x00,
 					 (unsigned char)0xFF);
-  register __m64 rgb2Y     =_mm_setr_pi16(77, 150, 29, 0);
+  register __m64 rgb2Y     =_mm_setr_pi16(RGB2GRAY_RED, RGB2GRAY_GREEN, RGB2GRAY_BLUE, 0);
   register __m64 pixel, y1, y2, y1_2;
   register int pixsize = (image.ysize * image.xsize)>>1;
 
@@ -119,7 +123,7 @@ void pix_2grey :: processRGBAMMX(imageStruct &image){
   }
   _mm_empty();
 }
-
+# endif /* APPLE */
 void pix_2grey :: processYUVMMX(imageStruct &image){
  register int pixsize = (image.ysize * image.xsize)>>2;
 
@@ -203,21 +207,21 @@ void pix_2grey :: processRGBAAltivec(imageStruct &image)
   #endif
  
   charBuffer.c[0] = 1;
-  charBuffer.c[1] = 79;
-  charBuffer.c[2] = 155;
-  charBuffer.c[3] = 21;
+  charBuffer.c[1] = RGB2GRAY_RED;
+  charBuffer.c[2] = RGB2GRAY_GREEN;
+  charBuffer.c[3] = RGB2GRAY_BLUE;
   charBuffer.c[4] = 1;
-  charBuffer.c[5] = 79;
-  charBuffer.c[6] = 155;
-  charBuffer.c[7] = 21;
+  charBuffer.c[5] = RGB2GRAY_RED;
+  charBuffer.c[6] = RGB2GRAY_GREEN;
+  charBuffer.c[7] = RGB2GRAY_BLUE;
   charBuffer.c[8] = 1;
-  charBuffer.c[9] = 79;
-  charBuffer.c[10] = 155;
-  charBuffer.c[11] = 21;
+  charBuffer.c[9] = RGB2GRAY_RED;
+  charBuffer.c[10] = RGB2GRAY_GREEN;
+  charBuffer.c[11] = RGB2GRAY_BLUE;
   charBuffer.c[12] = 1;
-  charBuffer.c[13] = 79;
-  charBuffer.c[14] = 155;
-  charBuffer.c[15] = 21;
+  charBuffer.c[13] = RGB2GRAY_RED;
+  charBuffer.c[14] = RGB2GRAY_GREEN;
+  charBuffer.c[15] = RGB2GRAY_BLUE;
   
   factors = charBuffer.v;
   

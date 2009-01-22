@@ -26,6 +26,7 @@
 
 
 #include "pix_rectangle.h"
+#include "Base/GemPixConvert.h"
 
 CPPEXTERN_NEW(pix_rectangle)
 
@@ -95,9 +96,9 @@ void pix_rectangle :: processYUVImage(imageStruct &image)
   unsigned char *pixels = image.data;
   int col, row;
 
-  unsigned char u =((-43*m_color[chRed]- 85*m_color[chGreen]+128*m_color[chBlue])>>8)+128;
-  unsigned char y =(  77*m_color[chRed]+150*m_color[chGreen]+ 29*m_color[chBlue])>>8;
-  unsigned char v =((128*m_color[chRed]-107*m_color[chGreen]- 21*m_color[chBlue])>>8)+128;
+  unsigned char y =((RGB2YUV_11*m_color[chRed]+RGB2YUV_12*m_color[chGreen]+RGB2YUV_13*m_color[chBlue])>>8)+ Y_OFFSET;
+  unsigned char u =((RGB2YUV_21*m_color[chRed]+RGB2YUV_22*m_color[chGreen]+RGB2YUV_23*m_color[chBlue])>>8)+UV_OFFSET;
+  unsigned char v =((RGB2YUV_31*m_color[chRed]+RGB2YUV_32*m_color[chGreen]+RGB2YUV_33*m_color[chBlue])>>8)+UV_OFFSET;
 
   if (m_upper_right[0] > image.xsize)  m_upper_right[0] = image.xsize;
   if (m_lower_left[0]  > image.xsize)   m_lower_left[0] = image.xsize;
@@ -135,7 +136,7 @@ void pix_rectangle :: processGrayImage(imageStruct &image)
   if (m_upper_right[1] > image.ysize)m_upper_right[1] = image.ysize;
   if (m_lower_left[1]  > image.ysize)m_lower_left [1] = image.ysize;
 
-  unsigned char g=(m_color[chRed]*79+m_color[chGreen]*156+m_color[chBlue]*21)>>8;
+  unsigned char g=(m_color[chRed]*RGB2GRAY_RED+m_color[chGreen]*RGB2GRAY_GREEN+m_color[chBlue]*RGB2GRAY_BLUE)>>8;
 
   row = (m_upper_right[1] - m_lower_left[1]);
 

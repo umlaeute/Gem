@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_mask.h"
+#include "Base/GemPixConvert.h"
 
 CPPEXTERN_NEW(pix_mask)
 
@@ -49,7 +50,7 @@ void pix_mask :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 
   while (datasize--)	{
     // calculate the alpha value
-	unsigned short grey=(mask[chRed  ] * 79  + mask[chGreen] * 156 + mask[chBlue ] * 21);
+    unsigned short grey=(mask[chRed  ] * RGB2GRAY_RED  + mask[chGreen] * RGB2GRAY_GREEN + mask[chBlue ] * RGB2GRAY_BLUE);
     pixels[chAlpha] = grey>>8;
     pixels += 4;
     mask += 4;

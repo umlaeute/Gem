@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_a_2grey.h"
+#include "Base/GemPixConvert.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_a_2grey, t_floatarg, A_DEFFLOAT)
 
@@ -71,8 +72,7 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
     const int realVal = -m_mode;
     while (count--) {
       if (pixels[chAlpha] < realVal){
-	const int grey = (pixels[chRed] * 79 + pixels[chGreen] * 155
-	  + pixels[chBlue] * 21)>>8;
+	const int grey = (pixels[chRed] * RGB2GRAY_RED + pixels[chGreen] * RGB2GRAY_GREEN + pixels[chBlue] * RGB2GRAY_BLUE)>>8;
 	pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
       }
       pixels += 4;
@@ -80,9 +80,8 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
   }else{
     while (count--){
       if (pixels[chAlpha] > m_mode){
-	const int grey = (pixels[chRed] * 79 + pixels[chGreen] * 155
-	  + pixels[chBlue] * 21)>>8;
-	pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
+        const int grey = (pixels[chRed] * RGB2GRAY_RED + pixels[chGreen] * RGB2GRAY_GREEN + pixels[chBlue] * RGB2GRAY_BLUE)>>8;
+        pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
       }
       pixels += 4;
     }    

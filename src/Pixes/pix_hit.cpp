@@ -10,6 +10,8 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_hit.h"
+#include "Base/GemPixConvert.h"
+
 
 CPPEXTERN_NEW(pix_hit)
 
@@ -61,7 +63,7 @@ unsigned char pix_hit :: getGreyValue(GLenum format, unsigned char *data)
       break;
       // RGB, RGBA
     case(GL_RGB): case (GL_RGBA):
-      return (data[chRed]*79+data[chGreen]*156+data[chBlue]*21)>>8;
+      return (data[chRed]*RGB2GRAY_RED+data[chGreen]*RGB2GRAY_GREEN+data[chBlue]*RGB2GRAY_BLUE)>>8;
       break;
     default :
       error("GEM: pix_data: unknown image format");

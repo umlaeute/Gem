@@ -52,7 +52,9 @@ class GEM_EXTERN pix_2grey : public GemPixObj
     	virtual void 	processRGBAImage(imageStruct &image);
 	virtual void 	processYUVImage(imageStruct &image);
 #ifdef __MMX__
+# ifndef __APPLE__
         virtual void 	processRGBAMMX(imageStruct &image);
+# endif
         virtual void 	processYUVMMX(imageStruct &image);
 #endif
 #ifdef __SSE2__

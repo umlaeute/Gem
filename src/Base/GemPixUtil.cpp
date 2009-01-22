@@ -477,8 +477,7 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     break;
   case GL_LUMINANCE:
     while(pixelnum--){
-      //      *pixels++=(unsigned char)(rgbdata[0] * 0.3086f + rgbdata[1] * 0.06094f + rgbdata[2] * 0.0820f);
-      *pixels++=(rgbdata[0]*79+rgbdata[1]*156+rgbdata[2]*21)>>8;
+      *pixels++=(rgbdata[0]*RGB2GRAY_RED+rgbdata[1]*RGB2GRAY_GREEN+rgbdata[2]*RGB2GRAY_BLUE)>>8;
       rgbdata+=3;
     }
     break;
@@ -523,7 +522,7 @@ GEM_EXTERN void imageStruct::fromRGB16(unsigned char *rgb16data) {
   case GL_LUMINANCE:
     while(pixelnum--){
       rgb=*rgbdata++;
-      *pixels++=(((rgb>>8)&0xF8)*79+((rgb>>3)&0xFC)*156+((rgb<<3)&0xF8)*21)>>8;
+      *pixels++=(((rgb>>8)&0xF8)*RGB2GRAY_RED+((rgb>>3)&0xFC)*RGB2GRAY_GREEN+((rgb<<3)&0xF8)*RGB2GRAY_BLUE)>>8;
     }
     break;
   case GL_YUV422_GEM:
@@ -577,25 +576,25 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
     if(pixels==rgbadata){
       unsigned char dummy=0;
       while(pixelnum--){
-	dummy=pixels[2];
-	pixels[2]=pixels[0];
-	pixels[0]=dummy;
-	pixels+=4;
+        dummy=pixels[2];
+        pixels[2]=pixels[0];
+        pixels[0]=dummy;
+        pixels+=4;
       }
     } else {
       while(pixelnum--){
-	pixels[0]=rgbadata[2];
-	pixels[1]=rgbadata[1];
-	pixels[2]=rgbadata[0];
-	pixels[3]=rgbadata[3];
-	pixels+=4;rgbadata+=4;
+        pixels[0]=rgbadata[2];
+        pixels[1]=rgbadata[1];
+        pixels[2]=rgbadata[0];
+        pixels[3]=rgbadata[3];
+        pixels+=4;rgbadata+=4;
       }
     }
     break;
   case GL_LUMINANCE:
     while(pixelnum--){
-      //      *pixels++=(unsigned char)(rgbadata[0] * 0.3086f + rgbadata[1] * 0.6094f + rgbadata[2] * 0.0820f);
-      *pixels++=(rgbadata[0]*79+rgbadata[1]*156+rgbadata[2]*21)>>8;
+      *pixels++=(rgbadata[0]*RGB2GRAY_RED+rgbadata[1]*RGB2GRAY_GREEN+rgbadata[2]*RGB2GRAY_BLUE)>>8;
+
       rgbadata+=4;
     }
     break;
@@ -673,8 +672,7 @@ GEM_EXTERN void imageStruct::fromBGR(unsigned char *bgrdata) {
     break;
   case GL_LUMINANCE:
     while(pixelnum--){
-      //      *pixels++=(unsigned char)(bgrdata[2] * 0.3086f + bgrdata[1] * 0.06094f + bgrdata[0] * 0.0820f);
-      *pixels++=(bgrdata[2]*79+bgrdata[1]*156+bgrdata[0]*21)>>8;
+      *pixels++=(bgrdata[2]*RGB2GRAY_RED+bgrdata[1]*RGB2GRAY_GREEN+bgrdata[0]*RGB2GRAY_BLUE)>>8;
       bgrdata+=3;
     }
     break;
@@ -722,26 +720,33 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
       // in place conversion
       unsigned char dummy=0;
       while(pixelnum--){
-	dummy    =pixels[2];
-	pixels[2]=pixels[0];
-	pixels[0]=dummy;
-	pixels+=4;
+        dummy    =pixels[2];
+        pixels[2]=pixels[0];
+        pixels[0]=dummy;
+        pixels+=4;
       } 
     } else {
       while(pixelnum--){
-	pixels[0]=bgradata[2];
-	pixels[1]=bgradata[1];
-	pixels[2]=bgradata[0];
-	pixels[3]=bgradata[3];
-	pixels+=4;bgradata+=4;
+        pixels[0]=bgradata[2];
+        pixels[1]=bgradata[1];
+        pixels[2]=bgradata[0];
+        pixels[3]=bgradata[3];
+        pixels+=4;bgradata+=4;
       }
     }
     break;
   case GL_LUMINANCE:
     while(pixelnum--){
-      //      *pixels++=(unsigned char)(bgradata[2] * 0.3086f + bgradata[1] * 0.06094f + bgradata[0] * 0.0820f);
-      *pixels++=(bgradata[2]*79+bgradata[1]*156+bgradata[0]*21)>>8;
-
+#ifdef __APPLE__
+      const char R=1;
+      const char G=2;
+      const char B=3;
+#else
+      const char R=2;
+      const char G=1;
+      const char B=0;
+#endif
+      *pixels++=(bgradata[R]*RGB2GRAY_RED+bgradata[G]*RGB2GRAY_GREEN+bgradata[B]*RGB2GRAY_BLUE)>>8;
       bgradata+=4;
     }
     break;
@@ -1640,7 +1645,7 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
     blue=pixels[2];
     break;
   case GL_BGRA_EXT:
-#if defined __APPLE__ && defined BYTE_ORDER && defined BIG_ENDIAN && (BYTE_ORDER == BIG_ENDIAN)
+#ifdef __APPLE__
     red=pixels[1];
     green=pixels[2];
     blue=pixels[3];
@@ -1683,16 +1688,16 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
     grey=pixels[0];
     break;
   case GL_RGB:
-    grey=(pixels[0]*79+pixels[1]*156+pixels[2]*21)>>8;
+    grey=(pixels[0]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN+pixels[2]*RGB2GRAY_BLUE)>>8;
     break;
   case GL_BGR_EXT:
-    grey=(pixels[2]*79+pixels[1]*156+pixels[0]*21)>>8;
+    grey=(pixels[2]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN+pixels[0]*RGB2GRAY_BLUE)>>8;
     break;
   case GL_RGBA:
-    grey=(pixels[0]*79+pixels[1]*156+pixels[2]*21)>>8;
+    grey=(pixels[0]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN+pixels[2]*RGB2GRAY_BLUE)>>8;
     break;
   case GL_BGRA_EXT:
-    grey=(pixels[2]*79+pixels[1]*156+pixels[0]*21)>>8;
+    grey=(pixels[2]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN+pixels[0]*RGB2GRAY_BLUE)>>8;
     break;
   case GL_YUV422_GEM:
     {

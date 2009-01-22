@@ -30,6 +30,8 @@
 # include <Carbon/Carbon.h>
 #endif
 
+#include "Base/GemPixConvert.h"
+
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT)
 
   /////////////////////////////////////////////////////////
@@ -91,7 +93,7 @@ void pix_movement :: processRGBAImage(imageStruct &image)
   while(pixsize--) {
     //    unsigned char grey = (unsigned char)(rp[chRed] * 0.3086f + rp[chGreen] * 0.6094f + rp[chBlue] * 0.0820f);
     //   rp[chAlpha] = 255*(fabs((unsigned char)grey-*wp)>treshold);
-    unsigned char grey = (rp[chRed]*79+rp[chGreen]*156+rp[chBlue]*21)>>8;
+    unsigned char grey = (rp[chRed]*RGB2GRAY_RED+rp[chGreen]*RGB2GRAY_GREEN+rp[chBlue]*RGB2GRAY_BLUE)>>8;
     rp[chAlpha] = 255*(abs(grey-*wp)>treshold);
     *wp++=(unsigned char)grey;
     rp+=4;

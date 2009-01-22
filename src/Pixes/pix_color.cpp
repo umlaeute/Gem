@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_color.h"
+#include "Base/GemPixConvert.h"
 
 CPPEXTERN_NEW(pix_color)
 
@@ -60,16 +61,16 @@ void pix_color :: processRGBAImage(imageStruct &image)
 void pix_color :: processGrayImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize;
-  unsigned char grey=(m_color[0]*79+m_color[1]*156+m_color[2]*21)>>8;
+  unsigned char grey=(m_color[0]*RGB2GRAY_RED+m_color[1]*RGB2GRAY_GREEN+m_color[2]*RGB2GRAY_BLUE)>>8;
   unsigned char *base = image.data;
   while (i--)*base++=grey;
 }
 void pix_color :: processYUVImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize / 2;
-  unsigned char u =((-43*m_color[0]- 85*m_color[1]+128*m_color[2])>>8)+128;
-  unsigned char y =(  77*m_color[0]+150*m_color[1]+ 29*m_color[2])>>8;
-  unsigned char v =((128*m_color[0]-107*m_color[1]- 21*m_color[2])>>8)+128;
+  unsigned char y =(( RGB2YUV_11 * m_color[0] + RGB2YUV_12 * m_color[1] + RGB2YUV_13 * m_color[2])>>8) *  Y_OFFSET;
+  unsigned char u =(( RGB2YUV_21 * m_color[0] + RGB2YUV_22 * m_color[1] + RGB2YUV_23 * m_color[2])>>8) + UV_OFFSET;
+  unsigned char v =(( RGB2YUV_31 * m_color[0] + RGB2YUV_32 * m_color[1] + RGB2YUV_33 * m_color[2])>>8) + UV_OFFSET;
 
   unsigned char *base = image.data;
   while (i--){

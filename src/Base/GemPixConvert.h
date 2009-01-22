@@ -101,6 +101,10 @@ LOG
 
 #endif /* POYNTON */
 
+#define RGB2GRAY_RED  RGB2YUV_11
+#define RGB2GRAY_GREEN  RGB2YUV_12
+#define RGB2GRAY_BLUE  RGB2YUV_13
+
 /* AltiVec */
 #ifdef __VEC__
 
