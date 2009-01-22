@@ -66,7 +66,9 @@ void pix_2grey :: processYUVImage(imageStruct &image)
   }
 }
 
-#if defined __MMX__ && !defined __APPLE__
+#ifdef __MMX__ 
+# ifndef __APPLE__
+/* LATER write MMX code for BGRA_EXT */
 void pix_2grey :: processRGBAMMX(imageStruct &image){
   __m64*data      =(__m64*)image.data;
 
@@ -119,6 +121,7 @@ void pix_2grey :: processRGBAMMX(imageStruct &image){
   }
   _mm_empty();
 }
+# endif /*APPLE */
 
 void pix_2grey :: processYUVMMX(imageStruct &image){
  register int pixsize = (image.ysize * image.xsize)>>2;

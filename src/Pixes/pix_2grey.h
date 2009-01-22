@@ -51,11 +51,13 @@ class GEM_EXTERN pix_2grey : public GemPixObj
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
 	virtual void 	processYUVImage(imageStruct &image);
-#if defined __MMX__  && !defined __APPLE__ 
+#ifdef __MMX__  
+# ifndef __APPLE__ 
         virtual void 	processRGBAMMX(imageStruct &image);
+# endif
         virtual void 	processYUVMMX(imageStruct &image);
 #endif
-#if defined __SSE2__
+#ifdef __SSE2__
         virtual void 	processYUVSSE2(imageStruct &image);
 #endif
 #ifdef __VEC__
