@@ -738,8 +738,16 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   case GL_LUMINANCE:
     while(pixelnum--){
       //      *pixels++=(unsigned char)(bgradata[2] * 0.3086f + bgradata[1] * 0.06094f + bgradata[0] * 0.0820f);
-      *pixels++=(bgradata[2]*79+bgradata[1]*156+bgradata[0]*21)>>8;
-
+#ifdef __APPLE__
+	const char R=1;
+	const char G=2;
+	const char B=3;
+#else
+	const char R=2;
+	const char G=1;
+	const char B=0;
+#endif
+      *pixels++=(bgradata[R]*79+bgradata[G]*156+bgradata[B]*21)>>8;
       bgradata+=4;
     }
     break;
@@ -1615,7 +1623,7 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
     blue=pixels[2];
     break;
   case GL_BGRA_EXT:
-#if defined __APPLE__ && defined BYTE_ORDER && defined BIG_ENDIAN && (BYTE_ORDER == BIG_ENDIAN)
+#if defined __APPLE__
     red=pixels[1];
     green=pixels[2];
     blue=pixels[3];
