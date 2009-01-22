@@ -1,3 +1,9 @@
+NEWS for 0.91-3 (with respect to 0.91-2)
+
+- fix pix_2grey on OSX/intel
+
+- fix pix_data on OSX/intel
+
 NEWS for 0.91-2 (with respect to 0.91-1)
 
 - made [pix_freeframe] not crash on OSX (fixes #2476663)
