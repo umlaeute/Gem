@@ -38,8 +38,10 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format)
                                          m_gframe(NULL),
                                          m_finalframe(NULL),
                                          m_gconverter(NULL),
-                                         m_fps_num(0), m_fps_denum(1)
+                                         m_fps_num(0), m_fps_denum(1),
 #endif /* GMERLIN */
+                                         m_lastFrame(0),
+                                         m_doConvert(false)
 {
   static bool first_time=true;
   if (first_time) {
@@ -100,7 +102,6 @@ void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain, const char
 }
 void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *log_domain, const char *message)
 {
-  //  post("gmerlin[%d:%s] %s", level, log_domain, message);
   ((filmGMERLIN*)(data))->log(level, log_domain, message);
 }
 
@@ -213,7 +214,7 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_finalformat->pixelformat=GAVL_RGBA_32;
 
   m_finalframe = gavl_video_frame_create_nopad(m_finalformat);
-  gavl_video_converter_init (m_gconverter, m_gformat, m_finalformat);
+  m_doConvert= (gavl_video_converter_init (m_gconverter, m_gformat, m_finalformat)>0);
   m_image.image.xsize=m_gformat->frame_width;
   m_image.image.ysize=m_gformat->frame_height;
   m_image.image.setCsizeByFormat(GL_RGBA);
@@ -242,11 +243,13 @@ pixBlock* filmGMERLIN :: getFrame(){
   if(!m_file)return NULL;
 
   bgav_read_video(m_file, m_gframe, m_stream);
-  gavl_video_convert (m_gconverter, m_gframe, m_finalframe);
-
-
+  if(m_doConvert) {
+    gavl_video_convert (m_gconverter, m_gframe, m_finalframe);
+    m_image.image.data=m_finalframe->planes[0];
+  } else {
+    m_image.image.data=m_gframe->planes[0];
+  }
   m_image.newimage=true;
-  m_image.image.data=m_finalframe->planes[0];
   m_image.image.upsidedown=true;
   return &m_image;
 }

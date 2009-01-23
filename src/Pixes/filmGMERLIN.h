@@ -94,6 +94,9 @@ class GEM_EXTERN filmGMERLIN : public film {
 #endif
   int m_lastFrame;
 
+ private:
+  // whether we need to convert to use it in Gem
+  bool m_doConvert;
 };
 
 #endif	// for header file
