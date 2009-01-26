@@ -27,9 +27,8 @@
 //
 /////////////////////////////////////////////////////////
 
-filmGMERLIN :: filmGMERLIN(int format) : film(format)
+filmGMERLIN :: filmGMERLIN(int format) : film(format),
 #ifdef HAVE_GMERLIN
-                                       ,
                                          m_file(NULL),
                                          m_opt(NULL),
                                          m_gformat(NULL),
