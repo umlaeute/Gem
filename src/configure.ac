@@ -174,7 +174,7 @@ dnl lqt is the same as libquicktime
 dnl this is double because there exists "lqt-config" and "pkg-config libquicktime"
 dnl another option would have been to introduce aliases for packages
 GEM_CHECK_LIB(lqt,quicktime, quicktime_init,,,,[movie loader])
-GEM_CHECK_LIB(mpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
+GEM_CHECK_LIB(libmpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
 GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
 GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
 
@@ -571,7 +571,7 @@ Configuration:
     use JPEG             : ${have_jpeg}
   video-support
     use mpeg             : ${have_mpeg}
-    use mpeg-3           : ${have_mpeg3}
+    use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
     use ffmpeg           : ${have_ffmpeg}

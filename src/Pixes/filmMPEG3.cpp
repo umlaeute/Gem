@@ -15,6 +15,13 @@
 /////////////////////////////////////////////////////////
 #include "Pixes/filmMPEG3.h"
 
+/* take care of API changes */
+#ifdef MPEG3_MAJOR
+# if MPEG3_MINOR > 6
+#  define FILMMPEG3_OPEN17
+# endif
+#endif /* MPEG3 version defines */
+
 /////////////////////////////////////////////////////////
 //
 // filmMPEG3
@@ -61,7 +68,16 @@ void filmMPEG3 :: close(void)
 bool filmMPEG3 :: open(char *filename, int format)
 {
   if (mpeg3_check_sig(filename)){/* ok, this is mpeg(3) */
+#ifdef FILMMPEG3_OPEN17
+    // new API with more sophisticated error-feedback
+    mpeg_file= mpeg3_open(filename, 0);
+#else
+    // old API
     mpeg_file= mpeg3_open(filename);
+#endif
+    if(!mpeg_file) {
+      goto unsupported;
+    }
     if (!mpeg3_has_video(mpeg_file)){
       post("GEM: pix_film: this file %s does not seem to hold any video data", filename);
       goto unsupported;
