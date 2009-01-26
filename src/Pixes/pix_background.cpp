@@ -10,7 +10,7 @@
 #include "pix_background.h"
 #include <string.h>
 
-CPPEXTERN_NEW(pix_background)
+CPPEXTERN_NEW_WITH_GIMME(pix_background)
 
 /////////////////////////////////////////////////////////
 //
@@ -20,7 +20,7 @@ CPPEXTERN_NEW(pix_background)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_background :: pix_background() :
+pix_background :: pix_background(int argc, t_atom*argv) :
   m_Yrange(0), m_Urange(0), m_Vrange(0), m_Arange(0), m_reset(1)
 {
 	inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
@@ -29,6 +29,12 @@ pix_background :: pix_background() :
     m_savedImage.ysize=240;
     m_savedImage.setCsizeByFormat(GL_RGBA);
     m_savedImage.reallocate();
+    switch(argc) {
+    case 4: case 3: case 1:
+      rangeNMess(argc, argv);
+      break;
+    default: break;
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -70,7 +76,6 @@ void pix_background :: processRGBAImage(imageStruct &image)
 
   unsigned char*data =image.data;
   unsigned char*saved=m_savedImage.data;
-
 
   for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
@@ -519,6 +524,31 @@ int pixsize = image.xsize * image.ysize * image.csize;
 }
 #endif //ALTIVEC
 
+
+void pix_background :: rangeNMess(int argc, t_atom*argv){
+  /* normalized values (float)0..1 instead of (int)0..255 */
+  unsigned int v=0;
+  m_Arange=255;
+  switch(argc){
+  case 4:  
+    m_Arange=CLAMP((float)255.*atom_getfloat(argv+3));
+  case 3:
+    m_Yrange=CLAMP((float)255.*atom_getfloat(argv));
+    m_Urange=CLAMP((float)255.*atom_getfloat(argv+1));
+    m_Vrange=CLAMP((float)255.*atom_getfloat(argv+2));
+    break;
+  case 1:
+    v=CLAMP((float)255.*atom_getfloat(argv));
+    m_Yrange=v;
+    m_Urange=v;
+    m_Vrange=v;
+    break;
+  default:
+    error("only 1 or 3 values are allowed as ranges (not %d)", argc);
+  }
+}
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -550,23 +580,5 @@ void pix_background :: resetCallback(void *data)
 
 void pix_background :: rangeNCallback(void *data, t_symbol*,int argc, t_atom*argv){
   /* normalized values (float)0..1 instead of (int)0..255 */
-  unsigned int v=0;
-  GetMyClass(data)->m_Arange=255;
-  switch(argc){
-  case 4:  
-    GetMyClass(data)->m_Arange=CLAMP((float)255.*atom_getfloat(argv+3));
-  case 3:
-    GetMyClass(data)->m_Yrange=CLAMP((float)255.*atom_getfloat(argv));
-    GetMyClass(data)->m_Urange=CLAMP((float)255.*atom_getfloat(argv+1));
-    GetMyClass(data)->m_Vrange=CLAMP((float)255.*atom_getfloat(argv+2));
-    break;
-  case 1:
-    v=CLAMP((float)255.*atom_getfloat(argv));
-    GetMyClass(data)->m_Yrange=v;
-    GetMyClass(data)->m_Urange=v;
-    GetMyClass(data)->m_Vrange=v;
-    break;
-  default:
-    GetMyClass(data)->error("only 1 or 3 values are allowed as ranges (not %d)", argc);
-  }
+  GetMyClass(data)->rangeNMess(argc, argv);
 }

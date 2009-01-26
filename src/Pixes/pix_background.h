@@ -37,7 +37,7 @@ class GEM_EXTERN pix_background : public GemPixObj
 
   //////////
   // Constructor
-  pix_background();
+  pix_background(int argc, t_atom*argv);
     	
  protected:
     	
@@ -60,6 +60,8 @@ class GEM_EXTERN pix_background : public GemPixObj
   // Do the YUV Altivec processing
   virtual void 	processYUVAltivec(imageStruct &image);
 #endif
+
+  virtual void rangeNMess(int argc, t_atom*argv);
         
   imageStruct   m_savedImage;
   int		m_Yrange,m_Urange,m_Vrange, m_Arange;
