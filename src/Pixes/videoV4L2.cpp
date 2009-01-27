@@ -35,6 +35,14 @@
 # define debugThread
 #endif
 
+
+/*
+  V4L2_PIX_FMT_BGR24	--> BGR
+  V4L2_PIX_FMT_RGB24	--> RGB
+  V4L2_PIX_FMT_BGR32	--> BGRA
+  V4L2_PIX_FMT_RGB32  --> ARGB (!!)
+*/
+
 /////////////////////////////////////////////////////////
 //
 // videoV4L2
@@ -282,12 +290,12 @@ pixBlock *videoV4L2 :: getFrame(){
   m_image.newfilm=0;
   if (!m_frame_ready) m_image.newimage = 0;
   else {
-    int i=0; // FIXME
     unsigned char*data=(unsigned char*)m_currentBuffer;
     if (m_colorConvert){
       m_image.image.notowned = false;
       switch(m_gotFormat){
       case V4L2_PIX_FMT_RGB24: m_image.image.fromRGB   (data);break;
+#warning implement fromBGRA
       case V4L2_PIX_FMT_RGB32: m_image.image.fromRGBA  (data); break;
       case V4L2_PIX_FMT_GREY : m_image.image.fromGray  (data); break;
       case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
@@ -484,7 +492,7 @@ int videoV4L2 :: startTransfer(int format)
 
   m_gotFormat=fmt.fmt.pix.pixelformat;
   switch(m_gotFormat){
-  case V4L2_PIX_FMT_RGB32: debugPost("v4l2: RGBA");break;
+  case V4L2_PIX_FMT_RGB32: debugPost("v4l2: ARGB");break;
   case V4L2_PIX_FMT_RGB24: debugPost("v4l2: RGB");break;
   case V4L2_PIX_FMT_UYVY: debugPost("v4l2: YUV ");break;
   case V4L2_PIX_FMT_GREY: debugPost("v4l2: gray");break;
@@ -589,7 +597,8 @@ int videoV4L2 :: startTransfer(int format)
   switch(m_gotFormat){
   case V4L2_PIX_FMT_GREY  : m_colorConvert=(m_reqFormat!=GL_LUMINANCE); break;
   case V4L2_PIX_FMT_RGB24 : m_colorConvert=(m_reqFormat!=GL_BGR); break;
-  case V4L2_PIX_FMT_RGB32 : m_colorConvert=(m_reqFormat!=GL_BGRA); break;//RGB32!=RGBA; is it ARGB or ABGR?
+#warning RGB32 vs BGRA confusion
+  case V4L2_PIX_FMT_RGB32 : m_colorConvert=(m_reqFormat!=GL_BGRA); break;//RGB32!=RGBA; its ARGB
   case V4L2_PIX_FMT_UYVY  : m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM); break;
   case V4L2_PIX_FMT_YUV420: m_colorConvert=1; break;
   default: m_colorConvert=true;
