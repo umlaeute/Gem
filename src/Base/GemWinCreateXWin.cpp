@@ -141,7 +141,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   char svalue[3];
   int fsaa=(int)hints.fsaa;
   sprintf(svalue, "%d", fsaa);
-  setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
+  if (fsaa!=0) setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
 
   XSetErrorHandler (ErrorHandler);
 
