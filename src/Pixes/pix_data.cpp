@@ -68,10 +68,10 @@ void pix_data :: trigger()
   m_pixRight->image.getRGB(xPos, yPos, &r, &g, &b);
   m_pixRight->image.getGrey(xPos, yPos, &G);
 
-  red   = r / 256.f;
-  green = g / 256.f;
-  blue  = b / 256.f;
-  grey  = G / 256.f;
+  red   = r / 255.f;
+  green = g / 255.f;
+  blue  = b / 255.f;
+  grey  = G / 255.f;
   
 	t_atom atom[3];
 	// send out the color information

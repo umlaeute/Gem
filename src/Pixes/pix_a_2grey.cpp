@@ -52,7 +52,7 @@ void pix_a_2grey :: alphaMess(float alphaval)
 	if (alphaval < -1.f)
 		alphaval = -1.f;
 
-	m_mode = (int)(alphaval*256.f);
+	m_mode = (int)(alphaval*255.f);
 
 	setPixModified();
 }
