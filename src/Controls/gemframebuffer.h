@@ -74,6 +74,7 @@ class GEM_EXTERN gemframebuffer : public GemBase
   virtual void typeMess(char* type);
       
   virtual void colorMess(float red, float green, float blue, float alpha);
+virtual void perspectiveMess( float left, float right, float bottom, float top, float near, float far);
 
   virtual void printInfo(void);
        
@@ -94,7 +95,8 @@ class GEM_EXTERN gemframebuffer : public GemBase
   GLfloat     m_color[4];
   GLfloat     m_FBOcolor[4];
   t_outlet   *m_outTexInfo;
-      
+  GLfloat    m_perspect[6];
+    
   void        bangMess(void);
        
   //////////
@@ -107,6 +109,7 @@ class GEM_EXTERN gemframebuffer : public GemBase
   static void typeMessCallback  (void *data, t_symbol *type);
   static void colorMessCallback (void *data, t_floatarg red, t_floatarg green, t_floatarg blue, t_floatarg alpha);
   static void texunitCallback   (void *data, t_floatarg tu);
+  static void perspectiveMessCallback(void *data, t_symbol*s,int argc, t_atom*argv);
 };
 
 #endif   // for header file

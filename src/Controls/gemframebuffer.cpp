@@ -18,6 +18,7 @@
 #include "gemframebuffer.h"
 #include <string.h>
 
+
 CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL)
 
 /////////////////////////////////////////////////////////
@@ -32,7 +33,7 @@ gemframebuffer :: gemframebuffer()
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
     m_width(256), m_height(256),
-    m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
+m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
 	
 {
   // create an outlet to send out texture info:
@@ -41,11 +42,20 @@ gemframebuffer :: gemframebuffer()
   //  - format/type (ie. GL_TEXTURE_RECTANGLE or GL_TEXTURE_2D)
   //  - anything else?
   m_outTexInfo = outlet_new(this->x_obj, 0);
+
   m_FBOcolor[0] = 0.f;
   m_FBOcolor[1] = 0.f;
   m_FBOcolor[2] = 0.f;
   m_FBOcolor[3] = 0.f;
+	
+	m_perspect[0] = -1.f;
+ 	m_perspect[1] = 1.f;	
+	m_perspect[2] = -1.f;
+	m_perspect[3] = 1.f;	
+	m_perspect[4] = 1.f;
+	m_perspect[5] = 20.f;	
 }
+
 gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
@@ -63,8 +73,15 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   m_FBOcolor[1] = 0.f;
   m_FBOcolor[2] = 0.f;
   m_FBOcolor[3] = 0.f;
-  
-  formatMess(format->s_name);
+
+	m_perspect[0] = -1.f;
+ 	m_perspect[1] = 1.f;	
+	m_perspect[2] = -1.f;
+	m_perspect[3] = 1.f;	
+	m_perspect[4] = 1.f;
+	m_perspect[5] = 20.f;	
+	
+	formatMess(format->s_name);
   typeMess(type->s_name);
 }
 
@@ -116,7 +133,7 @@ void gemframebuffer :: render(GemState *state)
   // and set the viewport to the dimensions of our texture
   glGetIntegerv(GL_VIEWPORT, m_vp);
   glGetFloatv( GL_COLOR_CLEAR_VALUE, m_color );
-  
+	
   glBindTexture( m_texTarget, 0 );
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
   // Bind the texture to the frame buffer.
@@ -141,8 +158,8 @@ void gemframebuffer :: render(GemState *state)
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glFrustum(-1,1,-1,1,1,25);
-  glMatrixMode(GL_MODELVIEW);
+	glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3], m_perspect[4], m_perspect[5]);
+	glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
 
@@ -178,7 +195,7 @@ void gemframebuffer :: postrender(GemState *state)
   glBindTexture( m_texTarget, m_offScreenID );
 
   glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
+	glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
   // reset to visible window's clear color
@@ -365,7 +382,22 @@ void gemframebuffer :: colorMess(float red, float green, float blue, float alpha
   m_FBOcolor[3] = alpha;
     
   setModified();
+
   
+}
+
+void gemframebuffer :: perspectiveMess(float left, float right, float bottom, float top, float near, float far)
+{
+	
+	m_perspect[0] = left;
+	m_perspect[1] = right;
+	m_perspect[2] = bottom;
+	m_perspect[3] = top;
+	m_perspect[4] = near;
+	m_perspect[5] = far;
+    
+	setModified();
+
 }
 
 void gemframebuffer :: formatMess(char* format)
@@ -468,9 +500,10 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
                   gensym("type"), A_DEFSYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&gemframebuffer::colorMessCallback,
                   gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-
   class_addmethod(classPtr, (t_method)&gemframebuffer::texunitCallback,
                   gensym("texunit"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemframebuffer::perspectiveMessCallback,
+  				 gensym("perspec"), A_GIMME, A_NULL);
 }
 void gemframebuffer :: bangMessCallback(void *data)
 {
@@ -503,4 +536,22 @@ void gemframebuffer :: colorMessCallback(void *data, t_floatarg red, t_floatarg 
 void gemframebuffer :: texunitCallback(void *data, t_floatarg unit)
 {
   GetMyClass(data)->m_texunit=(GLuint)unit;
+}
+
+void gemframebuffer :: perspectiveMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
+{
+	float left, right, bottom, top, near, far;
+	switch(argc){
+		case 6:
+			left=  atom_getfloat(argv);
+			right=atom_getfloat(argv+1);
+			bottom= atom_getfloat(argv+2);
+			top=  atom_getfloat(argv+3);
+			near=atom_getfloat(argv+4);
+			far= atom_getfloat(argv+5);
+			GetMyClass(data)->perspectiveMess((float)left, (float)right, (float)bottom, (float)top, (float)near, (float)far);
+			break;
+		default:
+			GetMyClass(data)->error("\"perspec\" expects 6 values for frustum - left, right, bottom, top, near, far");
+	}
 }
