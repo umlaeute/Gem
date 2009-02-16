@@ -1,4 +1,4 @@
-#N canvas 293 86 893 597 10;
+#N canvas 433 108 893 597 10;
 #X obj 465 9 cnv 15 420 570 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 472 293 cnv 15 300 60 empty empty empty 20 12 0 14 -191407 -66577
@@ -7,12 +7,12 @@
 0;
 #X obj 477 41 gemhead 20;
 #X obj 664 306 gemhead;
-#X msg 615 98 dimen 320 240;
+#X msg 615 106 dimen 320 240;
 #X obj 477 468 rotateXYZ;
 #X floatatom 794 427 5 0 0 0 - - -;
-#X msg 744 101 color 0 0 1 0;
-#X msg 602 79 dimen 1024 1024;
-#X msg 733 61 color 0 0 0 0;
+#X msg 762 114 color 0 0 1 0;
+#X msg 602 87 dimen 1024 1024;
+#X msg 751 74 color 0 0 0 0;
 #X obj 477 422 t a b;
 #X floatatom 717 469 5 0 0 0 - - -;
 #X msg 549 232 rectangle \$1;
@@ -36,7 +36,7 @@
 #X obj 664 449 rotateXYZ -40 0 200;
 #X floatatom 707 429 5 0 0 0 - - -;
 #X obj 477 487 pqtorusknots;
-#N canvas 0 0 450 300 rotation 0;
+#N canvas 0 22 450 300 rotation 0;
 #X obj 33 19 inlet;
 #X obj 33 110 % 360;
 #X obj 33 62 i;
@@ -67,7 +67,7 @@
 #X connect 12 0 8 0;
 #X restore 509 443 pd rotation;
 #X floatatom 531 167 5 0 0 0 - - -;
-#N canvas 0 0 450 300 rotation 0;
+#N canvas 0 22 450 300 rotation 0;
 #X obj 33 19 inlet;
 #X obj 32 105 % 360;
 #X obj 32 57 i;
@@ -79,14 +79,14 @@
 #X connect 2 0 4 0;
 #X connect 4 0 1 0;
 #X restore 794 402 pd rotation;
-#X obj 744 80 loadbang;
+#X obj 762 93 loadbang;
 #X obj 477 402 color 1 0 0;
 #X obj 649 245 t a;
-#X obj 602 122 t a;
-#X obj 733 122 t a;
+#X obj 585 124 t a;
+#X obj 751 135 t a;
 #X obj 495 130 t a;
 #X floatatom 563 361 5 0 0 0 - - -;
-#X floatatom 607 361 5 0 0 0 - - -;
+#X floatatom 607 362 5 0 0 0 - - -;
 #X floatatom 520 361 5 0 0 0 - - -;
 #X obj 495 154 t a;
 #X obj 470 514 cnv 15 410 60 empty empty empty 20 12 0 14 -195568 -66577
@@ -96,7 +96,7 @@
 #X msg 637 525 lighting \$1;
 #X obj 615 526 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -119,23 +119,23 @@
 #X connect 7 2 0 0;
 #X connect 8 0 9 0;
 #X restore 473 554 pd gemwin;
-#X msg 473 529 create;
+#X msg 473 529 destroy;
 #X text 471 513 Create window:;
 #X obj 637 552 t a;
 #X text 476 22 Example:;
 #X text 379 -10 GEM object;
-#X obj 7 61 cnv 15 450 130 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 61 cnv 15 450 110 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 7 239 cnv 15 450 340 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 208 cnv 15 450 370 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 10 243 Inlets:;
-#X obj 7 200 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
+#X text 10 214 Inlets:;
+#X obj 7 175 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 16 199 Arguments:;
-#X text 28 255 Inlet 1: gemlist;
-#X text 16 513 Outlets:;
-#X text 28 530 Outlet 1: gemlist;
-#X text 62 212 <none>;
+#X text 14 174 Arguments:;
+#X text 28 233 Inlet 1: gemlist;
+#X text 15 523 Outlets:;
+#X text 31 539 Outlet 1: gemlist;
+#X text 60 187 <none>;
 #X text 102 19 Synopsis: [gemframebuffer];
 #X text 122 35 Class: framebuffer object;
 #X text 12 70 Description: Renders a scenne in a texture \, for later
@@ -144,21 +144,34 @@ use.;
 \, which is then used as a texture onto a square.;
 #X text 13 135 you need framebuffer support (and its driver) on your
 gfx-card;
-#X text 28 269 Inlet 1: message: type [BYTE | INT | FLOAT];
-#X text 27 337 Inlet 1: message: dimen <x> <y>;
-#X text 27 371 Inlet 1: message: color <r> <g> <b> <a>;
-#X text 26 452 Inlet 1: message: texunit <f>;
-#X text 27 302 Inlet 1: message: format [RGB|RGBA|RGB32|YUV];
-#X text 26 407 Inlet 1: message: rectangle [0|1];
-#X text 103 284 (type of the framebuffer data);
-#X text 102 352 (dimension of the framebuffer texture);
-#X text 106 487 (usefull only with shader);
-#X text 106 470 (change texunit of the texture);
-#X text 28 548 Outlet 2: texture Id;
-#X text 104 424 (texturing mode \; rectangle (1) or normalized (0))
+#X text 28 247 Inlet 1: message: type [BYTE | INT | FLOAT];
+#X text 27 315 Inlet 1: message: dimen <x> <y>;
+#X text 27 349 Inlet 1: message: color <r> <g> <b> <a>;
+#X text 26 430 Inlet 1: message: texunit <f>;
+#X text 27 280 Inlet 1: message: format [RGB|RGBA|RGB32|YUV];
+#X text 26 385 Inlet 1: message: rectangle [0|1];
+#X text 103 262 (type of the framebuffer data);
+#X text 102 330 (dimension of the framebuffer texture);
+#X text 106 465 (usefull only with shader);
+#X text 106 448 (change texunit of the texture);
+#X text 31 557 Outlet 2: texture Id;
+#X text 104 402 (texturing mode \; rectangle (1) or normalized (0))
 ;
-#X text 100 318 (color format of the framebuffer);
-#X text 102 387 (background color of the framebuffer);
+#X text 100 296 (color format of the framebuffer);
+#X text 102 365 (background color of the framebuffer);
+#X obj 556 41 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X floatatom 493 323 5 0 0 0 - - -;
+#X obj 477 342 scaleXYZ;
+#X floatatom 563 326 5 0 0 0 - - -;
+#X floatatom 528 325 5 0 0 0 - - -;
+#X msg 585 30 perspec -1 1 -1 1 1 20;
+#X msg 593 56 perspec -1 1 -1 1 3 75;
+#X text 23 481 Inlet 1: message: perspec <left> <right> <bottom> <top>
+;
+#X text 360 481 <near> <far>;
+#X text 98 497 (frustum of the framebuffer);
+#X text 722 29 default;
 #X connect 3 0 18 0;
 #X connect 4 0 19 0;
 #X connect 5 0 38 0;
@@ -175,7 +188,7 @@ gfx-card;
 #X connect 15 0 40 0;
 #X connect 16 0 4 0;
 #X connect 17 0 36 0;
-#X connect 18 0 17 0;
+#X connect 18 0 86 0;
 #X connect 18 1 19 1;
 #X connect 19 0 20 0;
 #X connect 20 0 29 0;
@@ -211,3 +224,10 @@ gfx-card;
 #X connect 50 0 51 0;
 #X connect 51 0 50 0;
 #X connect 53 0 50 0;
+#X connect 84 0 3 0;
+#X connect 85 0 86 1;
+#X connect 86 0 17 0;
+#X connect 87 0 86 3;
+#X connect 88 0 86 2;
+#X connect 89 0 38 0;
+#X connect 90 0 38 0;
