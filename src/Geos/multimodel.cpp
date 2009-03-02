@@ -32,7 +32,12 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEF
 /////////////////////////////////////////////////////////
 multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
 			 t_floatarg topModel, t_floatarg skipRate)
-  : m_loadedCache(NULL), m_numModels(0), m_curModel(-1), m_rescaleModel(1)
+  : m_loadedCache(NULL), 
+    m_numModels(0), m_curModel(-1), 
+    m_rescaleModel(1),
+    m_rebuild(true),
+    m_currentH(1.f), m_currentW(1.f),
+    m_textype(GLM_TEX_DEFAULT)
 {
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mdl_num"));
 
@@ -192,7 +197,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
     glmFacetNormals (m_model);
     glmVertexNormals(m_model, 90); /* SMOOTH */
     
-    glmTexture(m_model, GLM_TEX_LINEAR, 1, 1);
+    glmTexture(m_model, m_textype, 1, 1);
     newCache->realmodels[i]=m_model;
   }
   m_curModel = 0;
@@ -226,9 +231,34 @@ void multimodel :: buildList()
   i=0;
   while(i<m_numModels){
     m_loadedCache->models[i]=glmList( m_loadedCache->realmodels[i], GLM_SMOOTH | GLM_TEXTURE);
+    glmTexture(m_loadedCache->realmodels[i], m_textype, m_currentH, m_currentW);
+
     i++;
   }
 }
+
+/////////////////////////////////////////////////////////
+// materialMess
+//
+/////////////////////////////////////////////////////////
+void multimodel :: textureMess(int state)
+{
+  switch(state) {
+  case 0: 
+    m_textype=GLM_TEX_LINEAR; 
+    break;
+  case 1: 
+    m_textype=GLM_TEX_SPHEREMAP; 
+    break;
+  case 2:
+    m_textype=GLM_TEX_UV; 
+    break;
+  default:
+    m_textype=GLM_TEX_DEFAULT; 
+  }
+  m_rebuild=true;
+}
+
 
 void multimodel :: startRendering()
 {
@@ -239,9 +269,22 @@ void multimodel :: startRendering()
 // render
 //
 /////////////////////////////////////////////////////////
-void multimodel :: render(GemState *)
+void multimodel :: render(GemState *state)
 {
   if (!m_numModels || !m_loadedCache) return;
+  if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2)))
+    {
+      m_rebuild=true;
+    }
+  if(m_rebuild) {
+    m_currentH = state->texCoordX(2);
+    m_currentW = state->texCoordY(2);
+    buildList();
+    m_rebuild=false;
+  }
+  if (!m_loadedCache->models[m_curModel])return;
+
+
   glCallList(m_loadedCache->models[m_curModel]);
 }
 
@@ -286,6 +329,8 @@ void multimodel :: obj_setupCallback(t_class *classPtr)
 		  gensym("mdl_num"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&multimodel::rescaleMessCallback,
 		  gensym("rescale"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&multimodel::textureMessCallback,
+		  gensym("texture"), A_FLOAT, A_NULL);
 }
 void multimodel :: openMessCallback(void *data, t_symbol *filename, t_floatarg baseModel,
 				    t_floatarg topModel, t_floatarg skipRate)
@@ -308,5 +353,8 @@ void multimodel :: rescaleMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->rescaleMess((int)state);
 }
-
+void multimodel :: textureMessCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->textureMess((int)state);
+}
 #endif

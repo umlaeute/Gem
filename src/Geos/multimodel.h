@@ -48,27 +48,27 @@ class GEM_EXTERN multimodel : public GemBase
     public:
                 
       multiModelCache(const char *_modelName)
-	: refCount(0), next(NULL), models(NULL),
-	numModels(0), baseModel(0), topModel(0),
-	skipRate(0)
-	{ modelName = strdup(_modelName); }
-      ~multiModelCache()
-	{ delete modelName;
-	for (int i = 0; i < numModels; i++)
-	  glDeleteLists(models[i], 1);
-	delete [] models;
-	}
-      int                 refCount;
-      multiModelCache     *next;
-      GLint               *models;
-      GLMmodel            **realmodels;
-      int                 numModels;
-      char                *modelName;
-      int                 baseModel;
-      int                 topModel;
-      int                 skipRate;
+        : refCount(0), next(NULL), models(NULL),
+        numModels(0), baseModel(0), topModel(0),
+        skipRate(0)
+          { modelName = strdup(_modelName); }
+        ~multiModelCache()
+          { delete modelName;
+            for (int i = 0; i < numModels; i++)
+              glDeleteLists(models[i], 1);
+            delete [] models;
+          }
+        int                 refCount;
+        multiModelCache     *next;
+        GLint               *models;
+        GLMmodel            **realmodels;
+        int                 numModels;
+        char                *modelName;
+        int                 baseModel;
+        int                 topModel;
+        int                 skipRate;
     };
-    	
+  
   //////////
   static multiModelCache      *s_modelCache;
 
@@ -121,6 +121,15 @@ class GEM_EXTERN multimodel : public GemBase
   // Rescale the models when loaded?
   int 	    	m_rescaleModel;
 
+
+  //////////
+  // Which texture type (linear, spheric)
+  virtual void	textureMess(int state);
+  glmtexture_t m_textype; 
+
+  bool    m_rebuild;
+  float		m_currentH, m_currentW;
+
  private:
     
   //////////
@@ -128,6 +137,7 @@ class GEM_EXTERN multimodel : public GemBase
   static void 	openMessCallback(void *data, t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);
   static void 	changeModelCallback(void *data, t_floatarg modelNum);
   static void 	rescaleMessCallback(void *data, t_floatarg modelNum);
+	static void   textureMessCallback(void *data, t_floatarg);
 };
 
 #endif	// for header file
