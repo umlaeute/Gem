@@ -33,9 +33,6 @@ how to update these files:
  run the script ./importGLEW.sh which should do everything for you...
 
 case study:
- ~/src/Gem/src$ cd /tmp
- /tmp$ wget http://belnet.dl.sourceforge.net/sourceforge/glew/glew-1.3.4-src.tgz
- /tmp$ tar xvzf glew-1.3.3-src.tgz
- /tmp$ cd ~/src/Gem/src
+ ~/src/Gem/src$ svn co https://glew.svn.sourceforge.net/svnroot/glew/trunk/glew /tmp/glew
  ~/src/Gem/src$ ./importGLEW.sh /tmp/glew/
  
