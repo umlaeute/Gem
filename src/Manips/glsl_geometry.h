@@ -59,7 +59,6 @@ class GEM_EXTERN glsl_geometry : public GemBase
   //////////
   // open a shader up
   virtual bool openMessGL2(void);
-  virtual bool openMessEXT(void);
   virtual bool openMessARB(void);
   virtual void openMess(t_symbol *filename);
 
