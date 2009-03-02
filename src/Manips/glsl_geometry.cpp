@@ -234,7 +234,7 @@ bool glsl_geometry :: isRunnable() {
     return true;
   }
 
-  error("need OpenGL-2.0 (or at least the geometry-shader ARB-extension) to run GLSL");
+  error("need OpenGL-2.1 (or at least the geometry-shader ARB-extension) to run GLSL");
   return false;
 }
 
