@@ -40,7 +40,7 @@ accumrotate :: accumrotate(int argc, t_atom *argv)
     { }
   else
     {
-      error("needs 0 or 3 arguments");
+      throw(GemException("needs 0 or 3 arguments"));
     }
 
   // create the new inlets

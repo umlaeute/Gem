@@ -35,8 +35,7 @@ diffuse :: diffuse(int argc, t_atom *argv)
     else if (argc == 0) diffuseMess(0.8f, 0.8f, 0.8f, 1.f);
     else
     {
-        error("needs 0, 3, or 4 arguments");
-        diffuseMess(0.8f, 0.8f, 0.8f, 1.f);
+      throw(GemException("needs 0, 3, or 4 arguments"));
     }
 
     // create the new inlet

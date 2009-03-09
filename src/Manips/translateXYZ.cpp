@@ -40,8 +40,7 @@ translateXYZ :: translateXYZ(int argc, t_atom *argv)
     }
     else
     {
-        error("needs 0 or 3 arguments");
-        m_vector[0] = m_vector[1] = m_vector[2] = 0;
+      throw(GemException("needs 0 or 3 arguments"));
     }
 
     // create the new inlets

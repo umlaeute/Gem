@@ -51,11 +51,7 @@ colorRGB :: colorRGB(int argc, t_atom *argv)
     }
     else
     {
-        error("needs 0 or 3 arguments");
-        m_vector[0] = 1.f;
-        m_vector[1] = 1.f;
-        m_vector[2] = 1.f;
-        m_vector[3] = 1.f;
+      throw(GemException("needs 0, 3 or 4 arguments"));
     }
 
     // create the new inlets

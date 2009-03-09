@@ -54,7 +54,7 @@ torus :: torus(int argc, t_atom *argv)
   case 0:
     break;
   default:
-      error("needs 1, 2 or 3 arguments (%d)", argc);
+    throw(GemException("needs 0, 1, 2 or 3 arguments"));
   }
 	
   sizeMess(size);

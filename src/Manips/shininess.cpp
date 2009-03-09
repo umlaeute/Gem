@@ -34,8 +34,7 @@ shininess :: shininess(int argc, t_atom *argv)
     else if (argc == 0)  shininessMess(0.f);
 	else
     {
-        error("needs 0 or 1 arguments");
-        shininessMess(0.f);
+      throw(GemException("needs 0 or 1 arguments"));
     }
 
     // create the new inlet

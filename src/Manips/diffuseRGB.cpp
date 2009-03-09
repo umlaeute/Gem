@@ -50,13 +50,9 @@ diffuseRGB :: diffuseRGB(int argc, t_atom *argv)
         m_vector[3] = 1.0f;
     }
     else
-    {
-        error("needs 0 or 3 arguments");
-        m_vector[0] = 0.8f;
-        m_vector[1] = 0.8f;
-        m_vector[2] = 0.8f;
-        m_vector[3] = 1.f;
-    }
+      {
+        throw(GemException("needs 0, 3 or 4 arguments"));
+      }
 
     // create the new inlets
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("rVal"));

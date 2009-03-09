@@ -36,20 +36,19 @@ part_targetcolor :: part_targetcolor(int argc, t_atom *argv)
 				  atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
 		scaleMess(atom_getfloat(&argv[4]));
 	}
-    else if (argc == 4) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-    	    	    	     atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
-    else if (argc == 3) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-    	    	    	          atom_getfloat(&argv[2]), 1.f);
-    else if (argc == 0) colorMess(1.f, 1.f, 1.f, 1.f);
-    else
+  else if (argc == 4) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+                                atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+  else if (argc == 3) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+                                atom_getfloat(&argv[2]), 1.f);
+  else if (argc == 0) colorMess(1.f, 1.f, 1.f, 1.f);
+  else
     {
-        error("needs 0, 3, 4, or 5 arguments");
-        colorMess(1.f, 1.f, 1.f, 1.f);
+      throw(GemException("needs 0, 3, 4, or 5 arguments"));
     }
 
-    // create the new inlet
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("color"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
+  // create the new inlet
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("color"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
 }
 
 /////////////////////////////////////////////////////////

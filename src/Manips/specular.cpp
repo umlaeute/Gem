@@ -37,8 +37,7 @@ specular :: specular(int argc, t_atom *argv)
     else if (argc == 0) specularMess(0.f, 0.f, 0.f, 1.f);
     else
     {
-        error("needs 0, 3, or 4 arguments");
-        specularMess(0.f, 0.f, 0.f, 1.f);
+      throw(GemException("needs 0, 3, or 4 arguments"));
     }
 
     // create the new inlet

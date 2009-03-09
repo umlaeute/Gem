@@ -44,7 +44,7 @@ pix_gain :: pix_gain(int argc, t_atom *argv)
   case 0:
     break;
   default:
-    error("needs 0, 3, or 4 arguments");
+    throw(GemException("needs 0, 1, 3, or 4 arguments"));
     break;
   }
 }
