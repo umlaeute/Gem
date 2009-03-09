@@ -35,9 +35,13 @@ const char *GemException::what() const throw() {
   return ErrorString;
 }
 
-void GemException::report() const throw() {
-  if(ErrorString!=NULL)
-    error("GemException: %s", ErrorString);
+void GemException::report(const char*origin) const throw() {
+  if(ErrorString!=NULL) {
+    if (NULL==origin)
+      error("GemException: %s", ErrorString);
+    else
+      error("[%s]: %s", origin, ErrorString);
+  }
 }
 
 

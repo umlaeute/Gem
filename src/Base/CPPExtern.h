@@ -45,7 +45,7 @@ class GEM_EXTERN GemException
   virtual ~GemException() throw();
   
   virtual const char *what() const throw();
-  virtual void report() const throw();
+  virtual void report(const char*origin=NULL) const throw();
  private:
   const char*ErrorString;
 };
@@ -305,7 +305,7 @@ static void* create_ ## NEW_CLASS ()                              \
     CPPExtern::m_holder = NULL;                                 \
     CPPExtern::m_holdname=NULL;                                 \
     return(obj);                                                \
-  } catch (GemException e) {e.report(); return NULL;}           \
+  } catch (GemException e) {e.report(CPPExtern::m_holdname); return NULL;} \
 }                                                               \
   extern "C" {                                                  \
     void NEW_CLASS ## _setup()                          \
