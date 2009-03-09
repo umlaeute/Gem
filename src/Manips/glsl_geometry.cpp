@@ -212,7 +212,7 @@ void glsl_geometry :: openMess(t_symbol *filename)
   }
   m_size=strlen(m_shaderString);
 
-  if(GLEW_EXT_geometry_shader4)
+  if(GLEW_EXT_geometry_shader4) // GLEW_VERSION_2_1
     openMessGL2();
   else if (GLEW_ARB_geometry_shader4) 
     openMessARB();
@@ -226,7 +226,7 @@ void glsl_geometry :: openMess(t_symbol *filename)
 //
 /////////////////////////////////////////////////////////
 bool glsl_geometry :: isRunnable() {
-  if(GLEW_EXT_geometry_shader4) {
+  if(GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1 ??
     m_shaderTarget = GL_GEOMETRY_SHADER_EXT;
     return true;
   } else if (GLEW_ARB_geometry_shader4) {
