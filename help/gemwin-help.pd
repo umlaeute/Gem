@@ -1,4 +1,4 @@
-#N canvas 85 109 840 433 10;
+#N canvas 76 22 840 433 10;
 #X text 63 9 access to the window manager;
 #X text 129 343 1/0 : turn rendering on/off;
 #X text 16 100 Editing at the same time as rendering is not encouraged
@@ -31,11 +31,11 @@ the window is created in order to take effect.;
 #X msg 95 177 lighting \$1;
 #N canvas 889 134 562 454 color 0;
 #X obj 103 100 hsl 128 15 0 1 0 1 empty empty R 12 8 1 12 -261689 -1
--1 0 1;
+-1 3200 1;
 #X obj 236 100 hsl 128 15 0 1 0 1 empty empty G 12 8 1 12 -225271 -1
--1 0 1;
+-1 7800 1;
 #X obj 370 100 hsl 128 15 0 1 0 1 empty empty B 12 8 1 12 -228992 -1
--1 0 1;
+-1 11800 1;
 #X obj 64 379 outlet;
 #X obj 64 251 pack float float float;
 #X obj 96 194 trigger bang 0;
@@ -57,14 +57,14 @@ the window is created in order to take effect.;
 #X connect 9 0 3 0;
 #X coords 0 -1 1 1 400 13 1 100 100;
 #X restore 86 103 pd color sliders;
-#X msg 86 125 color 0 0 0;
+#X msg 86 125 color 0.251969 0.614173 0.929134;
 #X obj 22 529 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
 1;
 #N canvas 889 134 566 458 color 0;
 #X obj 103 100 hsl 128 15 0 1 0 1 empty empty R 12 8 1 12 -261689 -1
--1 0 1;
+-1 1300 1;
 #X obj 236 100 hsl 128 15 0 1 0 1 empty empty G 12 8 1 12 -225271 -1
--1 0 1;
+-1 12700 1;
 #X obj 370 100 hsl 128 15 0 1 0 1 empty empty B 12 8 1 12 -228992 -1
 -1 0 1;
 #X obj 64 379 outlet;
@@ -88,14 +88,14 @@ the window is created in order to take effect.;
 #X connect 9 0 3 0;
 #X coords 0 -1 1 1 400 13 1 100 100;
 #X restore 106 208 pd color sliders;
-#X msg 106 230 ambient 0 0 0;
+#X msg 106 230 ambient 0.102362 1 0;
 #N canvas 889 134 566 458 color 0;
 #X obj 103 100 hsl 128 15 0 1 0 1 empty empty R 12 8 1 12 -261689 -1
 -1 0 1;
 #X obj 236 100 hsl 128 15 0 1 0 1 empty empty G 12 8 1 12 -225271 -1
 -1 0 1;
 #X obj 370 100 hsl 128 15 0 1 0 1 empty empty B 12 8 1 12 -228992 -1
--1 0 1;
+-1 12700 1;
 #X obj 64 379 outlet;
 #X obj 64 251 pack float float float;
 #X obj 96 194 trigger bang 0;
@@ -117,14 +117,14 @@ the window is created in order to take effect.;
 #X connect 9 0 3 0;
 #X coords 0 -1 1 1 400 13 1 100 100;
 #X restore 113 262 pd color sliders;
-#X msg 113 284 specular 0 0 0;
+#X msg 113 284 specular 0 0 1;
 #N canvas 889 134 570 462 color 0;
 #X obj 103 100 hsl 128 15 0 1 0 1 empty empty R 12 8 1 12 -261689 -1
--1 0 1;
+-1 12700 1;
 #X obj 236 100 hsl 128 15 0 1 0 1 empty empty G 12 8 1 12 -225271 -1
--1 0 1;
+-1 12700 1;
 #X obj 370 100 hsl 128 15 0 1 0 1 empty empty B 12 8 1 12 -228992 -1
--1 0 1;
+-1 3400 1;
 #X obj 64 379 outlet;
 #X obj 64 251 pack float float float;
 #X obj 96 194 trigger bang 0;
@@ -146,7 +146,7 @@ the window is created in order to take effect.;
 #X connect 9 0 3 0;
 #X coords 0 -1 1 1 400 13 1 100 100;
 #X restore 125 469 pd color sliders;
-#X msg 125 491 fogcolor 0 0 0;
+#X msg 125 491 fogcolor 1 1 0.267717;
 #X msg 130 381 fogmode 0;
 #N canvas 889 134 348 479 fog 0;
 #X obj 84 239 outlet;
@@ -186,6 +186,8 @@ the window is created in order to take effect.;
 #X connect 3 0 0 0;
 #X coords 0 -1 1 1 133 13 1 100 100;
 #X restore 131 409 pd fog;
+#X obj 266 513 gemhead;
+#X obj 266 535 world_light;
 #X connect 10 0 9 0;
 #X connect 11 0 9 0;
 #X connect 12 0 15 0;
@@ -206,6 +208,7 @@ the window is created in order to take effect.;
 #X connect 28 0 27 0;
 #X connect 29 0 9 0;
 #X connect 30 0 29 0;
+#X connect 31 0 32 0;
 #X restore 429 224 pd lighting and fog;
 #N canvas 236 174 766 696 viewing 0;
 #X text 43 31 messages to [gemwin] regarding the view-point ("camera")
@@ -321,11 +324,11 @@ on Screen2;
 #X connect 28 0 6 0;
 #X connect 31 0 6 0;
 #X restore 569 177 pd window properties;
-#X obj 455 115 gemwin;
-#X text 505 49 reset the graphics manager to the default values;
-#X msg 461 51 reset;
-#X text 521 73 show some information on the stderr.;
-#X msg 477 73 print;
+#X obj 428 90 gemwin;
+#X text 478 24 reset the graphics manager to the default values;
+#X msg 434 26 reset;
+#X text 494 48 show some information on the stderr.;
+#X msg 450 48 print;
 #X obj 56 396 gemwin;
 #X msg 76 255 destroy;
 #X msg 60 232 create;
@@ -372,12 +375,47 @@ and/or a message.;
 #X connect 5 0 0 0;
 #X connect 8 0 0 0;
 #X restore 569 272 pd buffering;
-#X obj 106 343 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
+#X obj 106 343 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 1
 1;
 #X text 404 347 createStereo:: do not use this!! use;
 #X msg 661 347 stereo 1;
 #X text 723 346 +;
 #X msg 741 347 create;
+#N canvas 627 22 473 383 Full 0;
+#X obj 90 239 gemwin;
+#X obj 303 199 gemhead;
+#X msg 48 162 0;
+#X msg 79 162 2;
+#X msg 108 162 4;
+#X msg 139 162 8;
+#X text 54 89 2 - double resolution (4 times the pixel data);
+#X text 43 264 Full-scene anti-aliasing by supersampling usually means
+that each full frame is rendered at double (2x) or quadruple (4x) the
+display resolution \, and then down-sampled to match the display resolution.
+So a 4x FSAA would render 16 supersampled pixels for each single pixel
+of each frame.;
+#X text 54 129 8 - eight-times resolution (64 times the pixel data)
+;
+#X text 54 109 4 - quadruple resolution (16 times the pixel data);
+#X text 54 69 0 - turn off super sampling for anti-aliasing;
+#X text 41 346 http://en.wikipedia.org/wiki/Anti-aliasing#Full-scene_anti-aliasing
+;
+#X msg 90 192 FSAA \$1 \, create \, 1;
+#X msg 102 215 0 \, destroy;
+#X text 33 6 Gem provides Full Scene Anti-Aliasing for smoothing out
+the edges of all things drawn in the OpenGL scene. To enable it \,
+send the "FSAA" message to the [gemwin] before creating it. There are
+four levels of supersampling:;
+#X obj 303 224 sphere 2 40;
+#X text 170 160 <-- destroy gemwin between clicking these;
+#X connect 1 0 15 0;
+#X connect 2 0 12 0;
+#X connect 3 0 12 0;
+#X connect 4 0 12 0;
+#X connect 5 0 12 0;
+#X connect 12 0 0 0;
+#X connect 13 0 0 0;
+#X restore 429 135 pd Full Scene Anti-Aliasing;
 #X connect 13 0 11 0;
 #X connect 15 0 11 0;
 #X connect 17 0 16 0;
