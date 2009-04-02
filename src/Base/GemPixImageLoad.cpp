@@ -244,11 +244,10 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 
 	::DisposeHandle((Handle)imageDescH);
 	imageDescH = NULL;
-	const int dataSize = image_block->ysize * image_block->xsize * image_block->csize;
+  image_block->allocate();
 
-	image_block->data = new unsigned char[dataSize];
 #ifdef __DEBUG__
-	post("QTImage2mem() : allocate %d bytes", dataSize);
+	post("QTImage2mem() : allocate %d bytes", image_block->xsize*image_block->ysize*image_block->csize);
 #endif
         GWorldPtr	gw = NULL;
 
@@ -659,8 +658,7 @@ imageStruct *sgiImage2mem(const char *filename)
 		return(NULL);
 	}
 
-	const int dataSize = image_block->ysize * image_block->xsize * image_block->csize;
-	image_block->allocate(dataSize);
+	image_block->allocate();
 	unsigned char *src = (unsigned char *)readData;
 	unsigned char *dst = &(image_block->data[0]);
     const int yStride = image_block->xsize * image_block->csize;
