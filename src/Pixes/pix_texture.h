@@ -166,6 +166,8 @@ class GEM_EXTERN pix_texture : public GemBase
                 t_inlet         *m_inTexID;
 		GLint	m_texunit;
 
+		GLint	m_numTexUnits;
+
  private:
 
 	//////////
