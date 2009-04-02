@@ -12,6 +12,8 @@
 //
 /////////////////////////////////////////////////////////
 
+/* LATER: respect the available number of texunits as stored in m_max */
+
 #include "pix_multitexture.h"
 
 #include "Base/GemMan.h"
