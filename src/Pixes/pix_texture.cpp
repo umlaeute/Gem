@@ -56,7 +56,8 @@ pix_texture :: pix_texture()
     m_rectangle(0), m_env(GL_MODULATE),
     m_clientStorage(0), //have to do this due to texture corruption issues
     m_yuv(1),
-    m_texunit(0)
+    m_texunit(0),
+    m_numTexUnits(0)
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
@@ -164,11 +165,16 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
 /////////////////////////////////////////////////////////
 bool pix_texture :: isRunnable(void) {
   /* for simplicity's sake, i have dropped support for very old openGL-versions */
-  if(GLEW_VERSION_1_1)
-    return true;
+  if(!GLEW_VERSION_1_1) {
+    error("need at least openGL-1.1 for texturing! refusing to work");
+    return false;
+  }
 
-  error("need at least openGL-1.1 for texturing! refusing to work");
-  return false;
+  m_numTexUnits=0;
+  if(GLEW_ARB_multitexture)
+    glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &m_numTexUnits );
+
+  return true;
 }
 
 ////////////////////////////////////////////////////////
@@ -190,7 +196,6 @@ void pix_texture :: render(GemState *state) {
   int x_2, y_2;
   GLboolean useExternalTexture=false;
   int do_rectangle = (m_rectangle)?GemMan::texture_rectangle_supported:0;
-
   int newfilm = 0;
   if(state && state->image)
     newfilm = state->image->newfilm;
@@ -206,6 +211,9 @@ void pix_texture :: render(GemState *state) {
       m_xRatio=m_extWidth;
       m_yRatio=m_extHeight;
       setTexCoords(m_coords, m_xRatio, m_yRatio, upsidedown);
+
+      glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+      glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
     } else
       /* neither do we have an image nor an external texture */
       return;
@@ -263,10 +271,7 @@ void pix_texture :: render(GemState *state) {
   glEnable(m_textureType);
   glBindTexture(m_textureType, m_textureObj);
 
-  if(GLEW_ARB_multitexture)
-     state->multiTexUnits = 8;
-  else 
-     state->multiTexUnits = 0;
+  state->multiTexUnits = m_numTexUnits;
 
   if ((!useExternalTexture)&&newfilm ){
     //  tigital:  shouldn't we also allow TEXTURE_2D here?
@@ -639,9 +644,9 @@ void pix_texture :: textureMessCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->textureQuality((int)quality);
 }
-void pix_texture :: repeatMessCallback(void *data, t_floatarg quality)
+void pix_texture :: repeatMessCallback(void *data, t_floatarg repeat)
 {
-  GetMyClass(data)->repeatMess((int)quality);
+  GetMyClass(data)->repeatMess((int)repeat);
 }
 void pix_texture :: envMessCallback(void *data, t_floatarg num )
 {
@@ -652,14 +657,14 @@ void pix_texture :: modeCallback(void *data, t_floatarg rectangle)
   GetMyClass(data)->textureRectangle((int)rectangle);
 }
 
-void pix_texture :: clientStorageCallback(void *data, t_floatarg quality)
+void pix_texture :: clientStorageCallback(void *data, t_floatarg do_clientstorage)
 {
-  GetMyClass(data)->m_clientStorage=((int)quality);
+  GetMyClass(data)->m_clientStorage=((int)do_clientstorage);
 }
 
-void pix_texture :: yuvCallback(void *data, t_floatarg quality)
+void pix_texture :: yuvCallback(void *data, t_floatarg do_yuv)
 {
-  GetMyClass(data)->m_yuv=((int)quality);
+  GetMyClass(data)->m_yuv=((int)do_yuv);
 }
 
 void pix_texture :: extTextureCallback(void *data, t_symbol*s, int argc, t_atom*argv)
