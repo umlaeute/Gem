@@ -126,7 +126,8 @@ struct GEM_EXTERN imageStruct
    */
   // heck, why are X&Y swapped ?? (JMZ)
   inline unsigned char GetPixel(int Y, int X, int C) const
-  { return(data[Y * xsize * csize + X * csize + C]); }
+  { 
+    return(data[clampFunc(Y, 0, ysize-1) * xsize * csize + clampFunc(X, 0, xsize-1) * csize + C]); }
   
   //////////
   // sets a pixel
@@ -135,7 +136,7 @@ struct GEM_EXTERN imageStruct
    * VAL is the value to set.
    */
   inline void SetPixel(int Y, int X, int C, unsigned char VAL)
-  { data[Y * xsize * csize + X * csize + C] = VAL; }
+  { data[clampFunc(Y, 0, ysize-1) * xsize * csize + clampFunc(X, 0, xsize-1) * csize + C] = VAL; }
 
 
   /////////
