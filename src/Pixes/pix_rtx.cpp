@@ -117,12 +117,7 @@ void pix_rtx :: processImage(imageStruct &image)
   // assume that the pix_size does not change !
   if (image.xsize != buffer.xsize || image.ysize != buffer.ysize || image.csize != buffer.csize) {
     size_t dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char);
-#ifdef IMAGE_CLASS		//tigital
     buffer.reallocate( dataSize );
-#else
-    if (buffer.data)delete [] buffer.data;
-    buffer.data = new unsigned char[dataSize];
-#endif
     buffer.xsize = image.xsize;
     buffer.ysize = image.ysize;
     buffer.csize = image.csize;

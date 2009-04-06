@@ -28,11 +28,7 @@ pix_delay :: pix_delay(t_float &f)
 {
   m_maxframes=(f>0)?(int)f:DEFAULT_MAX_FRAMES;
   myImage.xsize=myImage.ysize=myImage.csize=1;
-#ifdef IMAGE_CLASS
   myImage.allocate(1*m_maxframes);
-#else
-  myImage.data = new unsigned char[1*m_maxframes];
-#endif
   m_curframe = m_frame = 0;
 
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("delay"));
@@ -44,12 +40,7 @@ pix_delay :: pix_delay(t_float &f)
 /////////////////////////////////////////////////////////
 pix_delay :: ~pix_delay()
 {
-#ifdef IMAGE_CLASS
   myImage.clear();
-#else
-  if(myImage.data)delete [] myImage.data;
-  myImage.data = NULL;
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -75,13 +66,7 @@ void pix_delay :: processImage(imageStruct &image)
   int readframe;
 
   if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
-#ifdef IMAGE_CLASS
     myImage.reallocate(dataSize*m_maxframes);
-#else
-    if(myImage.data)delete [] myImage.data;
-    myImage.data = new unsigned char[m_maxframes * dataSize];
-#endif
-
     m_curframe=0;
   }
 
