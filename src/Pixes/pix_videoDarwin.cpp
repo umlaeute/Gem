@@ -45,12 +45,16 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h ) :
   post("height %d width %d",m_vidXSize,m_vidYSize);  
   m_pixBlock.image.xsize = m_vidXSize;
   m_pixBlock.image.ysize = m_vidYSize;
+
   m_pixBlock.image.csize = 4;
   m_pixBlock.image.format = GL_BGRA_EXT;
+  /* shouldn't this be GL_UNSIGNED_INT_8_8_8_8 on macintel?
+   * LATER use setCsizeByFormat() instead 
+   */
   m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
-  int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-					* 4 * sizeof(unsigned char);
-  m_pixBlock.image.data = new unsigned char[dataSize];
+
+  m_pixBlock.image.allocate();
+
   m_quality = 0; //normal quality gives non-interlaced images from DV cams
   m_colorspace = GL_YCBCR_422_GEM; //default to YUV
   
@@ -403,71 +407,65 @@ void pix_videoDarwin :: InitSeqGrabber()
         anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
         post("set SG PlayAlldata");
         break;
-    
     }
     if (m_colorspace==GL_BGRA_EXT){
-        m_pixBlock.image.xsize = m_vidXSize;
-        m_pixBlock.image.ysize = m_vidYSize;
-		m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
-        int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-                                            * 4 * sizeof(unsigned char);
-        m_pixBlock.image.data = new unsigned char[dataSize]; 
-         m_rowBytes = m_vidXSize*4;
-        anErr = QTNewGWorldFromPtr (&m_srcGWorld,
-                                    k32ARGBPixelFormat,
-                                    &m_srcRect, 
-                                    NULL, 
-                                    NULL, 
-                                    0, 
-                                    m_pixBlock.image.data, 
-                                    m_rowBytes);
-                                    
-        post ("using RGB");                         
-        }else{
-            m_pixBlock.image.xsize = m_vidXSize;
-            m_pixBlock.image.ysize = m_vidYSize;
-            m_pixBlock.image.csize = 2;
-            m_pixBlock.image.format = GL_YCBCR_422_APPLE;
-			#ifdef __VEC__
-            m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-			#else
-			m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
-			#endif
-            int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-                                                * 2 * sizeof(unsigned char);
-            m_pixBlock.image.data = new unsigned char[dataSize]; 
-             m_rowBytes = m_vidXSize*2;
-            anErr = QTNewGWorldFromPtr (&m_srcGWorld,
+      m_pixBlock.image.xsize = m_vidXSize;
+      m_pixBlock.image.ysize = m_vidYSize;
+      m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+      m_pixBlock.image.reallocate();
+      m_rowBytes = m_vidXSize*4;
+      anErr = QTNewGWorldFromPtr (&m_srcGWorld,
+                                  k32ARGBPixelFormat,
+                                  &m_srcRect, 
+                                  NULL, 
+                                  NULL, 
+                                  0, 
+                                  m_pixBlock.image.data, 
+                                  m_rowBytes);
+      
+      post ("using RGB");                         
+    }else{
+      m_pixBlock.image.xsize = m_vidXSize;
+      m_pixBlock.image.ysize = m_vidYSize;
+      m_pixBlock.image.csize = 2;
+      m_pixBlock.image.format = GL_YCBCR_422_APPLE;
+#ifdef __VEC__
+      m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+#else
+      m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
+#endif
+      
+      m_pixBlock.image.reallocate();
+      
+      m_rowBytes = m_vidXSize*2;
+      anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                                   //  k422YpCbCr8CodecType,
-
-								  k422YpCbCr8PixelFormat,
-								// '2vuy',
-
-								  // kComponentVideoUnsigned,
-                                    &m_srcRect, 
-                                    NULL, 
-                                    NULL, 
-                                    0, 
-                                    m_pixBlock.image.data, 
-                                    m_rowBytes);
-            
-        post ("using YUV");
-        }
-        
-	if (anErr!= noErr)
+                                  
+                                  k422YpCbCr8PixelFormat,
+                                  // '2vuy',
+                                  // kComponentVideoUnsigned,
+                                  &m_srcRect, 
+                                  NULL, 
+                                  NULL, 
+                                  0, 
+                                  m_pixBlock.image.data, 
+                                  m_rowBytes);
+      post ("using YUV");
+    }
+    
+    if (anErr!= noErr)
   	{
-		error("%d error at QTNewGWorldFromPtr", anErr);
-		return;
-	}  
+      error("%d error at QTNewGWorldFromPtr", anErr);
+      return;
+    }  
     if (NULL == m_srcGWorld)
-	{
-		error("could not allocate off screen");
-		return;
-	}
+      {
+        error("could not allocate off screen");
+        return;
+      }
     SGSetGWorld(m_sg,(CGrafPtr)m_srcGWorld, NULL);
     SGStartPreview(m_sg); //moved to starttransfer?
     m_haveVideo = 1;
-    
 }
 
 void pix_videoDarwin :: setupCapture()
