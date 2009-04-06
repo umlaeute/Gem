@@ -123,142 +123,139 @@ void pix_filmNT :: realOpen(char *filename)
   if( AVIStreamInfo( m_streamVid, &streaminfo, sizeof(streaminfo)) ||
 	  AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid), NULL, &lSize))
   {
-	error("GEM: pix_film: Unable to read file format: %s", filename);
-  } else
-  {
-	m_pbmihRaw = (BITMAPINFOHEADER*) new char[lSize];
+    error("GEM: pix_film: Unable to read file format: %s", filename);
+  } else  {
+    m_pbmihRaw = (BITMAPINFOHEADER*) new char[lSize];
 
-	if(AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid), m_pbmihRaw, &lSize))
-	{
-		error("GEM: pix_film: Unable to read file format: %s", filename);
-	} else
-	{
-		if ((8 == m_pbmihRaw->biBitCount)
-			|| ((40 == m_pbmihRaw->biBitCount) && (mmioFOURCC('c','v','i','d') == m_pbmihRaw->biCompression)))
-		{	// HACK: attempt to decompress 8 bit films or BW cinepak films to greyscale
-			m_pbmihDst = (BITMAPINFOHEADER*) new char[sizeof(BITMAPINFOHEADER) + 256*3];
+    if(AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid), m_pbmihRaw, &lSize))
+      {
+        error("GEM: pix_film: Unable to read file format: %s", filename);
+      } else {
+      if ((8 == m_pbmihRaw->biBitCount)
+          || ((40 == m_pbmihRaw->biBitCount) && (mmioFOURCC('c','v','i','d') == m_pbmihRaw->biCompression)))
+        {	// HACK: attempt to decompress 8 bit films or BW cinepak films to greyscale
+          m_pbmihDst = (BITMAPINFOHEADER*) new char[sizeof(BITMAPINFOHEADER) + 256*3];
+          
+          post("GEM: pix_film: Loading as greyscale");
+
+          *m_pbmihDst = *m_pbmihRaw;
+          m_pbmihDst->biSize = sizeof(BITMAPINFOHEADER);
+
+          m_decodedFrame.setCsizeByFormat(GL_LUMINANCE);
+          
+          m_pbmihDst->biBitCount			= 8;
+          m_pbmihDst->biClrUsed			= 256;
+          m_pbmihDst->biClrImportant		= 256;
+
+          char* pClrPtr = ((char*)m_pbmihDst) + sizeof(BITMAPINFOHEADER);
+          for (int i = 0; i < 256; i++)
+            {
+              *pClrPtr++ = i;
+              *pClrPtr++ = i;
+              *pClrPtr++ = i;
+            }
+        } else {
+        m_pbmihDst = (BITMAPINFOHEADER*) new char[sizeof(BITMAPINFOHEADER)];
+
+        *m_pbmihDst = *m_pbmihRaw;
+
+        m_decodedFrame.setCsizeByFormat(GL_BGR_EXT);
 			
-			post("GEM: pix_film: Loading as greyscale");
+        m_pbmihDst->biBitCount			= 24;
+        m_pbmihDst->biClrUsed			= 0;
+        m_pbmihDst->biClrImportant		= 0;
+      }
 
-			*m_pbmihDst = *m_pbmihRaw;
-			m_pbmihDst->biSize = sizeof(BITMAPINFOHEADER);
+      m_pbmihDst->biCompression		= BI_RGB;
+      m_pbmihDst->biSizeImage			= 0;
 
-			m_decodedFrame.setCsizeByFormat(GL_LUMINANCE);
-			
-			m_pbmihDst->biBitCount			= 8;
-			m_pbmihDst->biClrUsed			= 256;
-			m_pbmihDst->biClrImportant		= 256;
+      // Get the length of the movie
+      m_numFrames = streaminfo.dwLength - 1;
 
-			char* pClrPtr = ((char*)m_pbmihDst) + sizeof(BITMAPINFOHEADER);
-			for (int i = 0; i < 256; i++)
-			{
-				*pClrPtr++ = i;
-				*pClrPtr++ = i;
-				*pClrPtr++ = i;
-			}
-		} else
-		{
-			m_pbmihDst = (BITMAPINFOHEADER*) new char[sizeof(BITMAPINFOHEADER)];
+      m_xsize = streaminfo.rcFrame.right - streaminfo.rcFrame.left;
+      m_ysize = streaminfo.rcFrame.bottom - streaminfo.rcFrame.top;
 
-			*m_pbmihDst = *m_pbmihRaw;
+      m_decodedFrame.xsize=m_xsize;
+      m_decodedFrame.ysize=m_ysize;
+      m_decodedFrame.reallocate();
 
-			m_decodedFrame.setCsizeByFormat(GL_BGR_EXT);
-			
-			m_pbmihDst->biBitCount			= 24;
-			m_pbmihDst->biClrUsed			= 0;
-			m_pbmihDst->biClrImportant		= 0;
-		}
-
-		m_pbmihDst->biCompression		= BI_RGB;
-		m_pbmihDst->biSizeImage			= 0;
-
-		// Get the length of the movie
-		m_numFrames = streaminfo.dwLength - 1;
-
-		m_xsize = streaminfo.rcFrame.right - streaminfo.rcFrame.left;
-		m_ysize = streaminfo.rcFrame.bottom - streaminfo.rcFrame.top;
-
-		m_decodedFrame.xsize=m_xsize;
-		m_decodedFrame.ysize=m_ysize;
-		m_decodedFrame.reallocate();
-
-		m_gemFrame.xsize=m_xsize;
-		m_gemFrame.ysize=m_ysize;
-		m_csize=m_gemFrame.setCsizeByFormat(m_format);
-		m_gemFrame.reallocate();
+      m_gemFrame.xsize=m_xsize;
+      m_gemFrame.ysize=m_ysize;
+      m_csize=m_gemFrame.setCsizeByFormat(m_format);
+      m_gemFrame.reallocate();
 		
-		if (!(m_hic = ICLocate(ICTYPE_VIDEO, 0, m_pbmihRaw, m_pbmihDst, ICMODE_DECOMPRESS)))
-		{
-			error("GEM: pix_film: Could not find decompressor: %s", filename);
-		} else
-		{
+      if (!(m_hic = ICLocate(ICTYPE_VIDEO, 0, m_pbmihRaw, m_pbmihDst, ICMODE_DECOMPRESS)))
+        {
+          error("GEM: pix_film: Could not find decompressor: %s", filename);
+        } else
+        {
 			
-			if (1 == m_csize)
-			{
-				if (ICERR_OK != ICDecompressSetPalette(m_hic, m_pbmihDst))
-				{
-					error("GEM: pix_film: Could not set palette: %s", filename);
-				}
-			}
+          if (1 == m_csize)
+            {
+              if (ICERR_OK != ICDecompressSetPalette(m_hic, m_pbmihDst))
+                {
+                  error("GEM: pix_film: Could not set palette: %s", filename);
+                }
+            }
 
-			if (ICERR_OK != ICDecompressBegin(m_hic, m_pbmihRaw, m_pbmihDst))
-			{
-				error("GEM: pix_film: Could not begin decompression: %s", filename);
-			} else
-			{
-				//if (!m_pbmihRaw->biSizeImage)
-				//	m_pbmihRaw->biSizeImage = m_xsize * m_ysize * m_csize;
+          if (ICERR_OK != ICDecompressBegin(m_hic, m_pbmihRaw, m_pbmihDst))
+            {
+              error("GEM: pix_film: Could not begin decompression: %s", filename);
+            } else
+            {
+              //if (!m_pbmihRaw->biSizeImage)
+              //	m_pbmihRaw->biSizeImage = m_xsize * m_ysize * m_csize;
 
-				//m_nRawBuffSize = min(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
-                          // JMZ: added "std::" in the next line as suggested by Thoralf Schulze
-                          // JMZ: please complain if it doesn't work with M$VC
-                          m_nRawBuffSize = std::max(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
-				if (!m_nRawBuffSize)
-					m_nRawBuffSize = m_xsize * m_ysize * m_csize;
+              //m_nRawBuffSize = min(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
+              // JMZ: added "std::" in the next line as suggested by Thoralf Schulze
+              // JMZ: please complain if it doesn't work with M$VC
+              m_nRawBuffSize = std::max(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
+              if (!m_nRawBuffSize)
+                m_nRawBuffSize = m_xsize * m_ysize * m_csize;
 
-				m_RawBuffer = new unsigned char[m_nRawBuffSize];
+              m_RawBuffer = new unsigned char[m_nRawBuffSize];
 
-				m_haveMovie = GEM_MOVIE_AVI;
-				m_reqFrame = 0;
-				m_curFrame = -1;
-			}
-		}
-	}
+              m_haveMovie = GEM_MOVIE_AVI;
+              m_reqFrame = 0;
+              m_curFrame = -1;
+            }
+        }
+    }
   }
 
   if (GEM_MOVIE_NONE == m_haveMovie)
-  {	// clean up if we failed to open the clip
-	if (m_streamVid)
-	{
-		AVIStreamRelease(m_streamVid);
-		m_streamVid = NULL;
-	}
+    {	// clean up if we failed to open the clip
+      if (m_streamVid)
+        {
+          AVIStreamRelease(m_streamVid);
+          m_streamVid = NULL;
+        }
 
-	if (m_pbmihRaw)
-	{
-		delete[] m_pbmihRaw;
-		m_pbmihRaw = NULL;
-	}
+      if (m_pbmihRaw)
+        {
+          delete[] m_pbmihRaw;
+          m_pbmihRaw = NULL;
+        }
 
-	if (m_pbmihDst)
-	{
-		delete[] m_pbmihDst;
-		m_pbmihDst = NULL;
-	} 
+      if (m_pbmihDst)
+        {
+          delete[] m_pbmihDst;
+          m_pbmihDst = NULL;
+        } 
 
-	if (m_hic)
-	{
-		ICClose(m_hic);
-		m_hic = NULL;
-	}
+      if (m_hic)
+        {
+          ICClose(m_hic);
+          m_hic = NULL;
+        }
 
-	if (m_RawBuffer)
-	{
-		delete[] m_RawBuffer;
-		m_RawBuffer = NULL;	
-		m_nRawBuffSize = 0;
-	}
-  }
+      if (m_RawBuffer)
+        {
+          delete[] m_RawBuffer;
+          m_RawBuffer = NULL;	
+          m_nRawBuffSize = 0;
+        }
+    }
 	
   return;
 }
