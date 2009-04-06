@@ -147,7 +147,7 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
     if (image.xsize*image.ysize != buffer.xsize*buffer.ysize){
         buffer.xsize = image.xsize;
         buffer.ysize = image.ysize;
-        buffer.data = new unsigned char [buffer.xsize*buffer.ysize*2];
+        buffer.reallocate(buffer.xsize*buffer.ysize*2);
     }
 
     
