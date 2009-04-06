@@ -1012,10 +1012,11 @@ void pix_videoDS :: copyBuffer()
       m_pixBlockBuf[m_writeIdx].image.type = GL_UNSIGNED_BYTE;
 
       // setup the buffer
+      //LATER check for memory leak and use allocate()!
       if (m_pixBlockBuf[m_writeIdx].image.data)
-	{
-	  delete[] m_pixBlockBuf[m_writeIdx].image.data;
-	}
+        {
+          delete[] m_pixBlockBuf[m_writeIdx].image.data;
+        }
       m_pixBlockBuf[m_writeIdx].image.data = new unsigned char[SampleSize];
       m_nPixDataSize[m_writeIdx] = SampleSize;
     }
