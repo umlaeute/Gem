@@ -271,7 +271,7 @@ int recordQT4L :: putFrame(imageStruct*img)
   }
 
   lqt_encode_video(m_qtfile, rowpointers, 0, (int)framerate);
-
+  delete[]rowpointers;
   m_currentFrame++;
   return m_currentFrame;
 }
