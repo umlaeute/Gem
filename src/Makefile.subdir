@@ -22,7 +22,7 @@ endif
 
 %.d: %.cpp
 	@set -e; rm -f $@; \
-	 $(CXX) $(MAKEDEP_FLAGS) $(GEM_EXTRA_CPPFLAGS) $(GEM_CXXFLAGS) $< > $@.$$$$; \
+	 $(CXX) $(MAKEDEP_FLAGS) $(GEM_EXTRA_CPPFLAGS)  $(GEM_ARCH_CPPFLAGS) $(GEM_CXXFLAGS) $< > $@.$$$$; \
 	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	 rm -f $@.$$$$
 
@@ -37,7 +37,7 @@ distclean: clean
 	$(DOS2UNIX) *.cpp *.h
 
 $(O_OBJECTS): %.o : %.cpp
-	$(CXX) -c  $(GEM_EXTRA_CXXFLAGS) $(GEM_CXXFLAGS) $*.cpp -o $(OBJDIR)$*.o
+	$(CXX) -c  $(GEM_EXTRA_CXXFLAGS) $(GEM_ARCH_CXXFLAGS) $(GEM_CXXFLAGS) $*.cpp -o $(OBJDIR)$*.o
 
 depend: $(SOURCES:.cpp=.d)
 

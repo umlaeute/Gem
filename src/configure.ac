@@ -432,6 +432,10 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 # that don't support it
 # why? think cross-compilation
 
+GEM_CHECK_FAT(ARCH_FLAGS)
+AC_MSG_RESULT($ARCH_FLAGS)
+AC_SUBST(ARCH_FLAGS)
+
 if test "x${ARCH}" = "xi386" || test "x${ARCH}" = "xi686" || test "x${ARCH}" = "xx86_64"; then
  if test "x$enable_altivec" != "xyes"; then enable_altivec="no"; fi
 fi
