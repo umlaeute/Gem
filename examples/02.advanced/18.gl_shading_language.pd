@@ -1,4 +1,4 @@
-#N canvas 597 88 896 842 10;
+#N canvas 54 22 842 789 10;
 #X obj 27 60 gemwin;
 #X msg 37 38 0 \, destroy;
 #X msg 26 18 create \, 1 \, lighting 1;
@@ -52,16 +52,16 @@
 #X text 164 244 open a fragment-program;
 #X msg 34 266 print;
 #X obj 171 373 t b f;
-#X msg 375 92 bang;
+#X msg 335 92 bang;
 #X obj 77 753 teapot;
 #X obj 171 328 change;
 #X obj 149 190 change;
 #X msg 150 433 link \$1 \$2;
 #X msg 33 486 print;
-#X msg 326 546 Phong \$1;
-#X obj 329 508 hsl 128 15 -1 1 0 0 empty empty empty -2 -6 0 8 -262144
+#X msg 266 546 Phong \$1;
+#X obj 269 508 hsl 128 15 -1 1 0 0 empty empty empty -2 -6 0 8 -262144
 -1 -1 0 1;
-#X floatatom 326 528 5 0 0 0 - - -;
+#X floatatom 266 528 5 0 0 0 - - -;
 #X obj 77 612 t a b;
 #X obj 107 632 spigot;
 #X obj 144 614 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
@@ -69,7 +69,7 @@
 #X obj 107 652 i;
 #X obj 135 652 + 1;
 #X obj 163 652 % 360;
-#X text 475 96 click here to load both the vertex- and the fragment-shader
+#X text 435 96 click here to load both the vertex- and the fragment-shader
 ;
 #X text 165 172 the vertex shader;
 #X obj 77 308 glsl_fragment;
@@ -82,16 +82,16 @@ ID has changed \, we trigger the linking of the 2 modules;
 #X text 264 441 order of module IDs does not matter...;
 #X text 96 487 after linking \, click "print" to get some info about
 the compiled shader program;
-#X text 390 550 the Toon-shader has a unifom variable "Phong" (see
+#X text 330 550 the Toon-shader has a unifom variable "Phong" (see
 "print") \, which we can change to modify the effect.;
 #X text 213 264 pd's search path is searched for the given filename
 \; just add the examples/data folder to your path options and this
 example should work;
-#X obj 375 133 t s s;
+#X obj 335 133 t s s;
 #X msg 91 150 open \$1.vert;
 #X msg 86 265 open \$1.frag;
-#X symbolatom 421 93 0 0 0 0 - - -;
-#X obj 375 114 symbol ../data/Toon;
+#X symbolatom 381 93 0 0 0 0 - - -;
+#X obj 335 114 symbol ../data/Toon;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 4 0;
