@@ -74,7 +74,7 @@ in your openGL implementation;
 #X obj 312 22 inlet;
 #X obj 37 57 loadbang;
 #X obj 37 152 outlet;
-#X msg 39 90 open ../../doc/examples/Gem/data/Toon.vert;
+#X msg 39 90 open ../../doc/gem/examples/data/Toon.vert;
 #X connect 0 0 2 0;
 #X connect 2 0 1 0;
 #X connect 2 1 3 0;

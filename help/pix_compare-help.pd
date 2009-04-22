@@ -1,4 +1,4 @@
-#N canvas 68 90 683 381 10;
+#N canvas 68 190 683 381 10;
 #X text 452 8 GEM object;
 #X obj 8 226 cnv 15 430 135 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -64,7 +64,7 @@
 #N canvas 0 0 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
-#X obj 77 205 pix_image ../../doc/gem/examples/data/fractal.JPG;
+#X obj 77 205 pix_image ../../doc/gem/examples/data/ducks.png;
 #X obj 223 55 inlet;
 #X msg 223 123 open \$1;
 #X obj 223 100 openpanel;
@@ -86,8 +86,8 @@
 #X text 53 254 Inlet 1: message: direction [0|1]: take lower or higher(default)
 valued pixel;
 #X text 449 77 open two different images;
-#X text 18 81 [pix_compare] compares two images pixle by pixel and
-outputs a composite image. pix_compare can do a greater than comparison
+#X text 18 81 [pix_compare] compares two images pixel by pixel and
+outputs a composite image. [pix_compare] can do a greater than comparison
 where a brighter pixel in the right stream will replace the corresponding
 pixel in the left stream or the comparison can be reversed and the
 dimmer pixel can be replaced. this operation works best using YUV but

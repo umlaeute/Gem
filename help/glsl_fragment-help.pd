@@ -74,7 +74,7 @@ in your openGL implementation;
 #X msg 332 94 set open \$1;
 #X obj 312 22 inlet;
 #X obj 37 57 loadbang;
-#X msg 38 91 open ../../doc/examples/Gem/data/Toon.frag;
+#X msg 38 91 open ../../doc/gem/examples/data/Toon.frag;
 #X obj 37 152 outlet;
 #X connect 0 0 2 0;
 #X connect 2 0 1 0;
