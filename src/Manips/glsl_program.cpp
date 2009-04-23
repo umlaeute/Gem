@@ -35,7 +35,7 @@ glsl_program :: glsl_program()  :
   m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
   m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
   m_num(0),
-  m_geoInType(GL_LINES), m_geoOutType(GL_LINE_STRIP),  m_geoOutVertices(-1),
+  m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP),  m_geoOutVertices(-1),
   m_outProgramID(NULL)
 
 {

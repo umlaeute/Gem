@@ -90,9 +90,9 @@ have to tell [glsl_program] about the input-type (depending on the
 geometry you feed to the glsl-program) \, the output-type (that you
 create by the shader) and the number of vertices generated;
 #X text 31 158 Inlet 1: "geometry_intype <inputtype>": input type of
-geometry (default: GL_LINES);
+geometry (default: GL_TRIANGLES);
 #X text 31 188 Inlet 1: "geometry_outtype <outputtype>": output type
-of geometry (default: GL_LINE_STRIP);
+of geometry (default: GL_TRIANGLE_STRIP);
 #X text 31 223 Inlet 1: "geometry_type <inputtype> <outputtype>": combination
 of "intype" and "outtype";
 #X text 31 262 Inlet 1: "geometry_outvertices <#vertices> <outputtype>":
