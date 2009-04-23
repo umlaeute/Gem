@@ -56,22 +56,3 @@ installdocs:
 	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
 	cp -r ./../examples $(DESTDIR)/$(PDLIBDIR)/doc/gem
 
-
-
-ifeq (,$(findstring clean, $(MAKECMDGOALS)))
-## hacks again!
-ifeq (,$(findstring configure, $(MAKECMDGOALS)))
-ifeq (,$(findstring aclocal.m4, $(MAKECMDGOALS)))
-Make.config: Make.config.in configure $(GEM_CONFIGFILE)
-	./configure ${CONFIGUREFLAGS}
-endif
-endif
-
-config: Make.config
-
-configure: configure.ac aclocal.m4
-	autoconf
-
-aclocal.m4: acinclude.m4
-	aclocal
-endif
