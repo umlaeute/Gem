@@ -20,7 +20,7 @@
 0;
 #X text 71 31 Class: shader object;
 #X text 451 325 see also:;
-#X obj 454 365 glsl_vertex;
+#X obj 453 362 glsl_vertex;
 #X text 14 157 IMPORTANT NOTE: your openGL-implementation (gfx-card
 driver \, ...) has to support the GLSL-standard (which is part of openGL-2.0)
 in order to make use of this object.;
@@ -85,6 +85,7 @@ in your openGL implementation;
 #X connect 6 0 7 0;
 #X restore 470 116 pd open;
 #X msg 509 136 open Toon.frag;
+#X obj 453 382 glsl_geometry;
 #X connect 18 1 17 0;
 #X connect 28 0 18 0;
 #X connect 29 0 18 0;

@@ -671,13 +671,13 @@ void glsl_program :: obj_setupCallback(t_class *classPtr)
                   gensym("print"), A_NULL);
 
   class_addmethod(classPtr, (t_method)&glsl_program::intypeMessCallback,
-                  gensym("intype"), A_GIMME, A_NULL);
+                  gensym("geometry_intype"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&glsl_program::outtypeMessCallback,
-                  gensym("outtype"), A_GIMME, A_NULL);
+                  gensym("geometry_outtype"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&glsl_program::typeMessCallback,
-                  gensym("type"), A_GIMME, A_NULL);
+                  gensym("geometry_type"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&glsl_program::outverticesMessCallback,
-                  gensym("outvertices"), A_FLOAT, A_NULL);
+                  gensym("geometry_outvertices"), A_FLOAT, A_NULL);
 
   class_addanything(classPtr, (t_method)&glsl_program::paramMessCallback);
 }

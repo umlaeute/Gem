@@ -20,21 +20,19 @@
 0;
 #X text 71 31 Class: shader object;
 #X text 451 325 see also:;
-#X text 14 157 IMPORTANT NOTE: your openGL-implementation (gfx-card
-driver \, ...) has to support the GLSL-standard (which is part of openGL-2.0)
-in order to make use of this object.;
 #X floatatom 546 219 0 0 0 0 ID - -;
-#X obj 460 196 glsl_vertex;
+#X obj 460 196 glsl_geometry;
 #X obj 453 342 glsl_program;
-#X text 50 12 Synopsis: [glsl_vertex];
-#X text 13 66 Description: load a GLSL vertex shader;
-#X text 14 85 [glsl_vertex] loads and compiles a GLSL vertex shader
+#X text 50 12 Synopsis: [glsl_geometry];
+#X text 13 66 Description: load a GLSL geometry shader;
+#X text 14 85 [glsl_geometry] loads and compiles a GLSL geometry shader
 into a module \, suitable for linking with [glsl_program];
 #X text 17 118 An ID of the generated module is sent to the 2nd outlet.
 Use this ID in the "shader" message to [glsl_program];
-#X text 63 233 <filename>: filename to load as GLSL vertex shader;
+#X text 63 233 <filename>: filename to load as GLSL geometry shader
+;
 #X text 21 284 Inlet 1: "open <filename>": filename to load as GLSL
-vertex shader module.;
+geometry shader module.;
 #X text 21 315 Inlet 1: "print": print info about the GLSL-support
 in your openGL implementation;
 #X text 14 376 Outlet 2: <float>: ID of the GLSL-module;
@@ -63,7 +61,7 @@ in your openGL implementation;
 #X restore 526 300 pd gemwin;
 #X msg 526 281 create;
 #X text 522 260 Create window:;
-#X obj 453 362 glsl_fragment;
+#X obj 453 363 glsl_fragment;
 #X obj 530 120 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
 #N canvas 0 22 450 300 open 0;
@@ -83,14 +81,17 @@ in your openGL implementation;
 #X connect 5 0 7 0;
 #X connect 7 0 6 0;
 #X restore 473 119 pd open;
-#X msg 512 139 open Toon.vert;
-#X obj 453 382 glsl_geometry;
-#X connect 17 1 16 0;
-#X connect 27 0 17 0;
-#X connect 28 0 17 0;
-#X connect 30 0 31 0;
-#X connect 31 0 30 0;
-#X connect 34 0 35 0;
-#X connect 35 0 17 0;
-#X connect 35 1 36 0;
-#X connect 36 0 17 0;
+#X obj 453 383 glsl_geometry;
+#X msg 512 139 open Toon.geom;
+#X text 14 157 IMPORTANT NOTE: your openGL-implementation (gfx-card
+driver \, ...) has to support the GLSL-standard (which is part of openGL-2.1)
+in order to make use of this object.;
+#X connect 16 1 15 0;
+#X connect 26 0 16 0;
+#X connect 27 0 16 0;
+#X connect 29 0 30 0;
+#X connect 30 0 29 0;
+#X connect 33 0 34 0;
+#X connect 34 0 16 0;
+#X connect 34 1 36 0;
+#X connect 36 0 16 0;
