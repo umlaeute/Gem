@@ -142,19 +142,12 @@ void pix_movie :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_movie :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_movie::openMessCallback,
-		  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movie::textureMessCallback,
 		  gensym("quality"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movie::repeatMessCallback,
 		  gensym("repeat"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_movie::modeCallback,
 		  gensym("mode"), A_FLOAT, A_NULL);
-}
-
-void pix_movie :: openMessCallback(void *data, t_symbol *filename)
-{
-    GetMyClass(data)->openMess(filename);
 }
 
 void pix_movie :: textureMessCallback(void *data, t_floatarg quality)

@@ -171,7 +171,6 @@ pix_film :: pix_film(t_symbol *filename) :
 #else
   m_thread_running(false), m_wantThread(false)
 #endif
-
 {
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
@@ -184,10 +183,7 @@ pix_film :: pix_film(t_symbol *filename) :
   while(i--)m_handles[i]=0;
   m_numHandles=0;
 
-
-
-
-#define DEBUG_HANDLE debug("handle %d\t%X", m_numHandles, m_handles[m_numHandles])
+#define DEBUG_HANDLE verbose(2, "handle %d\t%X", m_numHandles, m_handles[m_numHandles])
 #if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
 	m_handles[m_numHandles]=new filmDS();      DEBUG_HANDLE; m_numHandles++;
 #else
@@ -200,7 +196,6 @@ pix_film :: pix_film(t_symbol *filename) :
   m_handles[m_numHandles]=new filmAVIPLAY();  DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmFFMPEG();   DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG1();    DEBUG_HANDLE; m_numHandles++;
-
 
   //openMess(filename);
 }
@@ -465,8 +460,14 @@ void pix_film :: threadMess(int state)
 /////////////////////////////////////////////////////////
 void pix_film :: obj_setupCallback(t_class *classPtr)
 {
+#ifdef __GNUC__
+# warning the class_addcreator gets called twice: once by pix_film, once by pix_movie
+  /* but really: Pd shouldn't bail out,
+   * if a selector is bound to the same method of a class a 2nd time
+   */
+#endif
   class_addcreator((t_newmethod)create_pix_film, gensym("pix_filmQT"), A_DEFSYM, A_NULL);
-
+ 
   class_addmethod(classPtr, (t_method)&pix_film::openMessCallback,
 		  gensym("open"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_film::changeImageCallback,
@@ -481,6 +482,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
 void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
   int codec=-1;
+
   if (!argc || argc>3)goto illegal_openmess;
   if (argv[0].a_type != A_SYMBOL)goto illegal_openmess;
 
