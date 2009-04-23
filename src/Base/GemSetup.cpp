@@ -35,7 +35,7 @@ static const char GEM_OTHERAUTHORS[] =
 
 
 extern "C" {
-  //#define GEM_ADDOWNPATH
+//#define GEM_ADDOWNPATH
 #ifdef GEM_ADDOWNPATH
 # include "s_stuff.h"
 # include <string.h>
@@ -56,22 +56,13 @@ static t_class *Gem_setup_class;
   GEM_EXTERN void Gem_setup()
   {
 #ifdef GEM_ADDOWNPATH
-    int new_path=1;
     t_namelist*searchpath=sys_searchpath;
     char*mypath=0;
     t_gemclass *c = (t_gemclass*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
     mypath=c->c_externdir->s_name;
-    for(searchpath=sys_searchpath; searchpath; searchpath=sys_searchpath->nl_next) {
-      if(!strcmp(mypath, searchpath->nl_string)) {
-        new_path=0;
-        break;
-      }
-    }
 
-    if(new_path) {
-      verbose(1, "adding Gem path '%s' to search-paths", mypath);
-      sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
-    }
+    verbose(1, "eventually adding Gem path '%s' to search-paths", mypath);
+    sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
 #endif
 
     // startup GEM
