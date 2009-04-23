@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "glsl_program.h"
+#include "Base/GemGLUtil.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -33,7 +34,10 @@ glsl_program :: glsl_program()  :
   m_maxLength(0), m_uniformCount(0),
   m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
   m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
-  m_num(0)
+  m_num(0),
+  m_geoInType(GL_LINES), m_geoOutType(GL_LINE_STRIP),  m_geoOutVertices(-1),
+  m_outProgramID(NULL)
+
 {
   int i=0;
   for(i=0; i<MAX_NUM_SHADERS; i++) {
@@ -376,6 +380,19 @@ bool glsl_program :: LinkGL2()
     {
       glAttachShader( m_program, m_shaderObj[i] );
     }
+
+  /* setup geometry shader */
+  if(glProgramParameteriEXT) {
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_INPUT_TYPE_EXT,m_geoInType);
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_OUTPUT_TYPE_EXT,m_geoOutType);
+	
+    int temp=m_geoOutVertices;
+    if(temp<0)
+      glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT,&temp);
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_VERTICES_OUT_EXT,temp);
+  }
+
+
   glLinkProgram( m_program );
   glGetProgramiv( m_program, GL_LINK_STATUS, &m_linked );
 
@@ -616,6 +633,30 @@ void glsl_program :: printInfo()
     }
 }
 
+void glsl_program:: intypeMess(GLuint intype){
+  m_geoInType=intype;
+  if(m_program && glProgramParameteriEXT) {
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_INPUT_TYPE_EXT,m_geoInType);
+  }
+}
+void glsl_program:: outtypeMess(GLuint outtype) {
+  m_geoInType=outtype;
+  if(m_program && glProgramParameteriEXT) {
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_INPUT_TYPE_EXT,m_geoOutType);
+  }
+}
+void glsl_program:: outverticesMess(GLint vertices) {
+  m_geoOutVertices=vertices;
+  if(m_program && glProgramParameteriEXT) {
+    int temp=m_geoOutVertices;
+  
+    if(temp<0)
+      glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT,&temp);
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_VERTICES_OUT_EXT,temp);
+  }
+}
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -628,6 +669,16 @@ void glsl_program :: obj_setupCallback(t_class *classPtr)
                   gensym("link"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&glsl_program::printMessCallback,
                   gensym("print"), A_NULL);
+
+  class_addmethod(classPtr, (t_method)&glsl_program::intypeMessCallback,
+                  gensym("intype"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, (t_method)&glsl_program::outtypeMessCallback,
+                  gensym("outtype"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, (t_method)&glsl_program::typeMessCallback,
+                  gensym("type"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, (t_method)&glsl_program::outverticesMessCallback,
+                  gensym("outvertices"), A_FLOAT, A_NULL);
+
   class_addanything(classPtr, (t_method)&glsl_program::paramMessCallback);
 }
 void glsl_program :: shaderMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
@@ -647,4 +698,38 @@ void glsl_program :: printMessCallback(void *data)
 void glsl_program :: paramMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   GetMyClass(data)->paramMess(s, argc, argv);
+}
+
+
+void glsl_program :: intypeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+{
+  if(argc==1) {
+    GetMyClass(data)->intypeMess((GLenum)getGLdefine(argv));
+  } else {
+    GetMyClass(data)->error("input-type must be exactly one parameter");
+  }
+}
+
+void glsl_program :: outtypeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+{
+  if(argc==1) {
+    GetMyClass(data)->outtypeMess((GLenum)getGLdefine(argv));
+  } else {
+    GetMyClass(data)->error("output type must be exactly one parameter");
+  }
+}
+
+void glsl_program :: typeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+{
+  if(argc==2) {
+    GetMyClass(data)->intypeMess ((GLenum)getGLdefine(argv+0));
+    GetMyClass(data)->outtypeMess((GLenum)getGLdefine(argv+1));
+  } else {
+    GetMyClass(data)->error("type must have exactly two parameters (input-type & output-type)");
+  }
+}
+
+void glsl_program :: outverticesMessCallback(void *data, t_floatarg f)
+{
+  GetMyClass(data)->outverticesMess(f);
 }

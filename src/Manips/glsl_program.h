@@ -96,31 +96,40 @@ class GEM_EXTERN glsl_program : public GemBase
   //////////
   // Print Info about Hardware limits
   virtual void printInfo(void);
-  
 
-  GLuint			m_program;
-  GLuint			m_shaderObj[MAX_NUM_SHADERS];
+  GLuint		m_program;
+  GLuint		m_shaderObj[MAX_NUM_SHADERS];
 
   GLhandleARB		m_programARB;
   GLhandleARB		m_shaderObjARB[MAX_NUM_SHADERS];
 
-  GLint				m_maxLength;
+  GLint			m_maxLength;
   
   //////////
   // Variables for the, uh, variables
-  GLint				m_uniformCount;
+  GLint			m_uniformCount;
   t_symbol  **m_symname;
-  GLint				*m_size;
-  GLenum			*m_type;
+  GLint			*m_size;
+  GLenum		*m_type;
   GLint       *m_loc;
   float			 **m_param;
-  int				 *m_flag;
+  int			 *m_flag;
   
-  GLint				m_linked;
+  GLint		m_linked;
   bool        m_wantLink;
-  int				  m_num;
+  int		  m_num;
   
   t_outlet	 *m_outProgramID;
+
+  ////////
+  // for geometry shaders we need a bit more...
+  virtual void intypeMess(GLuint intype);
+  GLuint m_geoInType;
+  virtual void outtypeMess(GLuint outtype);
+  GLuint m_geoOutType;
+  virtual void outverticesMess(GLint);
+  GLint  m_geoOutVertices;
+ 
 
  private:
 	
@@ -131,6 +140,12 @@ class GEM_EXTERN glsl_program : public GemBase
   static void openMessCallback   (void *data, t_symbol *filename);
   static void linkCallback  (void *, t_symbol*, int, t_atom*);
   static void printMessCallback  (void *);
+
+  static void intypeMessCallback  (void *, t_symbol*, int, t_atom*);
+  static void outtypeMessCallback  (void *, t_symbol*, int, t_atom*);
+  static void typeMessCallback  (void *, t_symbol*, int, t_atom*);
+  static void outverticesMessCallback  (void *, t_floatarg);
+
 };
 
 #endif	// for header file
