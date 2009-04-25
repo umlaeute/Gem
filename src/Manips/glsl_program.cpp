@@ -640,7 +640,7 @@ void glsl_program:: intypeMess(GLuint intype){
   }
 }
 void glsl_program:: outtypeMess(GLuint outtype) {
-  m_geoInType=outtype;
+  m_geoOutType=outtype;
   if(m_program && glProgramParameteriEXT) {
     glProgramParameteriEXT(m_program,GL_GEOMETRY_INPUT_TYPE_EXT,m_geoOutType);
   }
