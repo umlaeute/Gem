@@ -441,6 +441,18 @@ bool glsl_program :: LinkARB()
     {
       glAttachObjectARB( m_programARB, m_shaderObjARB[i] );
     }
+
+  /* setup geometry shader */
+  if(glProgramParameteriEXT) {
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_INPUT_TYPE_EXT,m_geoInType);
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_OUTPUT_TYPE_EXT,m_geoOutType);
+
+    int temp=m_geoOutVertices;
+    if(temp<0)
+      glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT,&temp);
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_VERTICES_OUT_EXT,temp);
+  }
+
   glLinkProgramARB( m_programARB );
   glGetObjectParameterivARB( m_programARB, GL_OBJECT_LINK_STATUS_ARB, &m_linked );
 
