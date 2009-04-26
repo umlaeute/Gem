@@ -1,0 +1,66 @@
+#N canvas 39 70 764 536 10;
+#X obj 18 37 gemwin;
+#X msg 18 10 create \, 1;
+#X obj 108 279 cnv 15 300 80 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 112 112 cnv 15 300 60 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 116 50 gemhead;
+#X obj 112 440 translateXYZ 1 0 0;
+#X obj 260 443 translateXYZ -1 0 0;
+#X obj 260 483 circle;
+#X obj 116 239 rotateXYZ;
+#X floatatom 156 222 5 0 0 0 - - -;
+#X floatatom 194 423 5 0 0 0 - - -;
+#X floatatom 346 426 5 0 0 0 - - -;
+#X obj 322 50 gemhead;
+#X floatatom 342 71 5 0 0 0 - - -;
+#X obj 116 114 gemframebuffer;
+#X obj 112 483 triangle;
+#X obj 322 147 pix_texture;
+#X obj 116 197 translateXYZ 0 0 -4;
+#X obj 260 463 color 1 0 0;
+#X obj 322 89 rotateXYZ;
+#X obj 322 195 square 3;
+#X obj 148 282 s gemfbhead_trigger1;
+#X obj 116 259 t b b;
+#X obj 112 336 r gemfbhead_trigger1;
+#X obj 112 420 gemhead;
+#X msg 44 389 0;
+#X obj 44 366 loadbang;
+#X obj 260 423 gemhead;
+#X obj 260 336 r gemfbhead_trigger2;
+#X obj 116 306 s gemfbhead_trigger2;
+#X text 203 221 <- rotate all the render chain;
+#X text 201 238 (it change even after a new gemhead \, this is not
+very intuitive);
+#X text 323 283 <- continue the render chain. The gemhead did not start
+a new gemchain \, because it is banged during a frambuffer rendering
+;
+#X text 113 10 This example show how to draw multiples gemhead in a
+single framebuffer;
+#X connect 1 0 0 0;
+#X connect 4 0 14 0;
+#X connect 5 0 15 0;
+#X connect 6 0 18 0;
+#X connect 8 0 22 0;
+#X connect 9 0 8 2;
+#X connect 10 0 5 2;
+#X connect 11 0 6 2;
+#X connect 12 0 19 0;
+#X connect 13 0 19 1;
+#X connect 14 0 17 0;
+#X connect 14 1 16 1;
+#X connect 16 0 20 0;
+#X connect 17 0 8 0;
+#X connect 18 0 7 0;
+#X connect 19 0 16 0;
+#X connect 22 0 29 0;
+#X connect 22 1 21 0;
+#X connect 23 0 24 0;
+#X connect 24 0 5 0;
+#X connect 25 0 24 0;
+#X connect 25 0 27 0;
+#X connect 26 0 25 0;
+#X connect 27 0 6 0;
+#X connect 28 0 27 0;
