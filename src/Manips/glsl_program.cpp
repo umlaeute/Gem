@@ -654,7 +654,7 @@ void glsl_program:: intypeMess(GLuint intype){
 void glsl_program:: outtypeMess(GLuint outtype) {
   m_geoOutType=outtype;
   if(m_program && glProgramParameteriEXT) {
-    glProgramParameteriEXT(m_program,GL_GEOMETRY_INPUT_TYPE_EXT,m_geoOutType);
+    glProgramParameteriEXT(m_program,GL_GEOMETRY_OUTPUT_TYPE_EXT,m_geoOutType);
   }
 }
 void glsl_program:: outverticesMess(GLint vertices) {
