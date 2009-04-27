@@ -163,19 +163,15 @@ void glsl_geometry :: openMess(t_symbol *filename)
 {
   if(NULL==filename || NULL==filename->s_name)return;
   if(&s_==filename)return;
-
   if( !GemMan::windowExists() ) {
-    post("cannot load shader now! deferring till later...");
+    post("shader '%s' will be loaded when rendering is turned on (openGL context needed)", filename->s_name);
     m_shaderFilename=filename;
     return;
   }
 
-  if(!GLEW_VERSION_2_1 && !GLEW_ARB_geometry_shader4) {
-    post("cannot load shader now!");
+  if(!isRunnable()) {
     return;
   }
-
-  isRunnable();
 
   char buf[MAXPDSTRING];
   char buf2[MAXPDSTRING];
