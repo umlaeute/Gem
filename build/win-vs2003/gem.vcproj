@@ -697,6 +697,12 @@
 				RelativePath="..\..\src\Manips\glsl_fragment.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Manips\glsl_geometry.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Manips\glsl_geometry.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Manips\glsl_program.cpp">
 			</File>
 			<File
@@ -838,6 +844,12 @@
 		<Filter
 			Name="Controls"
 			Filter="">
+			<File
+				RelativePath="..\..\src\Controls\gem_state.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Controls\gem_state.h">
+			</File>
 			<File
 				RelativePath="..\..\src\Controls\gemframebuffer.cpp">
 			</File>
