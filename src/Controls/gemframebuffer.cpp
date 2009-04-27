@@ -386,15 +386,17 @@ void gemframebuffer :: colorMess(float red, float green, float blue, float alpha
   
 }
 
-void gemframebuffer :: perspectiveMess(float left, float right, float bottom, float top, float near, float far)
+void gemframebuffer :: perspectiveMess(float f_left, float f_right, 
+                                       float f_bottom, float f_top,
+                                       float f_near, float f_far)
 {
 	
-	m_perspect[0] = left;
-	m_perspect[1] = right;
-	m_perspect[2] = bottom;
-	m_perspect[3] = top;
-	m_perspect[4] = near;
-	m_perspect[5] = far;
+	m_perspect[0] = f_left;
+	m_perspect[1] = f_right;
+	m_perspect[2] = f_bottom;
+	m_perspect[3] = f_top;
+	m_perspect[4] = f_near;
+	m_perspect[5] = f_far;
     
 	setModified();
 
@@ -540,16 +542,17 @@ void gemframebuffer :: texunitCallback(void *data, t_floatarg unit)
 
 void gemframebuffer :: perspectiveMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
-	float left, right, bottom, top, near, far;
+	t_float f_left, f_right, f_bottom, f_top, f_near, f_far;
 	switch(argc){
 		case 6:
-			left=  atom_getfloat(argv);
-			right=atom_getfloat(argv+1);
-			bottom= atom_getfloat(argv+2);
-			top=  atom_getfloat(argv+3);
-			near=atom_getfloat(argv+4);
-			far= atom_getfloat(argv+5);
-			GetMyClass(data)->perspectiveMess((float)left, (float)right, (float)bottom, (float)top, (float)near, (float)far);
+			f_left=  atom_getfloat(argv);
+			f_right=atom_getfloat(argv+1);
+			f_bottom= atom_getfloat(argv+2);
+			f_top=  atom_getfloat(argv+3);
+			f_near=atom_getfloat(argv+4);
+			f_far= atom_getfloat(argv+5);
+			GetMyClass(data)->perspectiveMess((float)f_left, (float)f_right, 
+                         (float)f_bottom, (float)f_top, (float)f_near, (float)f_far);
 			break;
 		default:
 			GetMyClass(data)->error("\"perspec\" expects 6 values for frustum - left, right, bottom, top, near, far");
