@@ -173,8 +173,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 			int res = close(fd);
 			if (res == -1)
 			{
-				int foo;
-				foo = 1;
+                verbose(1, "GemImageLoad: Unable to close file-handle %d for '%s'", fd, filename);
 			}
 		}
 
