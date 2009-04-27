@@ -162,7 +162,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 		char realName[256];
 		char *realResult;
 
-		int fd = open_via_path(".", filename, "", realName, &realResult, 256, 0);
+		int fd = open_via_path(".", filename, "", realName, &realResult, 256, 1);
 		if (fd < 0)
 		{
 			error("GemImageLoad: Unable to find file: %s", filename);
