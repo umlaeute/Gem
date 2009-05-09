@@ -159,7 +159,7 @@ void model :: openMess(t_symbol *filename)
   // read the object in
   m_model = glmReadOBJ(buf);
 
-  if (!m_model) return;    
+  if (!m_model) return;
 
   // set the size to -1 to 1
   //
@@ -184,6 +184,11 @@ void model :: openMess(t_symbol *filename)
 void model :: buildList()
 {
   if (!m_model) return;
+  if(!GLEW_VERSION_1_1) {
+    verbose(1, "cannot build display-list now...do you have a window?");
+    return;
+  }
+
   if (m_dispList)glDeleteLists(m_dispList, 1);
 
   //  m_flags = GLM_SMOOTH | GLM_MATERIAL;
