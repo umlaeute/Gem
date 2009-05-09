@@ -1,27 +1,11 @@
-#N canvas 396 160 600 500 10;
-#X obj 198 50 gemhead;
-#X obj 198 82 part_head;
-#X obj 198 447 part_draw;
-#X obj 198 331 part_gravity 0 -0.01 0;
-#X obj 198 160 part_velocity sphere 0 0.2 0 0.2;
-#X text 310 269 set the number per frame;
-#X text 310 378 set the age to kill at;
-#X text 366 327 gravity to affect the particles;
-#X text 331 94 the velocity domain;
-#X text 329 111 a sphere at 0 \, 0.2 \, 0;
-#X obj 198 270 part_source 25;
-#X obj 198 381 part_killold 45;
-#X text 329 128 radius = 0.2;
-#X obj 198 116 part_size 0.1;
-#X obj 198 236 part_targetcolor 0 0 1;
-#X obj 198 201 part_targetsize 3;
-#N canvas 87 154 247 179 Gem.init 0;
-#X obj 118 46 loadbang;
-#X msg 118 81 reset;
-#X obj 118 113 outlet;
+#N canvas 0 0 725 412 10;
+#N canvas 95 194 290 179 Gem.init 0;
+#X obj 83 30 loadbang;
+#X msg 83 67 reset;
+#X obj 83 107 outlet;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
-#X restore 64 238 pd Gem.init;
+#X restore 100 115 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
 -1 -1 0 1;
@@ -61,14 +45,17 @@
 #X connect 15 0 16 0;
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
-#X restore 34 255 pd gemwin;
+#X restore 100 134 pd gemwin;
+#X text 249 114 for the sake of simplicity \, from now on the examples
+will use the right-hand subpatch to control the Gem-window.;
+#X text 247 146 just enable the toggle labeled "rendering" to create
+a window and start rendering \; switching the toggle off will destroy
+the window;
+#X text 260 60 by now we assume that you know how to control a Gem-window
+;
+#X text 252 268 apart from that \, the subpatch is really the same
+as [gemwin] itself \; e.g. you can send any message to it that [gemwin]
+understands.;
+#X text 249 204 thus you don't have to click on [create( and then [1(
+anymore...;
 #X connect 0 0 1 0;
-#X connect 1 0 13 0;
-#X connect 3 0 11 0;
-#X connect 4 0 15 0;
-#X connect 10 0 3 0;
-#X connect 11 0 2 0;
-#X connect 13 0 4 0;
-#X connect 14 0 10 0;
-#X connect 15 0 14 0;
-#X connect 16 0 17 0;
