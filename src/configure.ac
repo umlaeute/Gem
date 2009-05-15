@@ -244,7 +244,7 @@ then
 
 fi
 GEM_CHECK_LIB(ftgl,ftgl,main,
-  [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetpye], font support)
+  [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetype], font support)
 
 
 GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)
