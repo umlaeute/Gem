@@ -5,7 +5,11 @@
 /* image loading / saving */
 #undef HAVE_LIBMAGICKPLUSPLUS
 
+#undef HAVE_LIBGMERLIN_AVDEC
+
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
 #undef SIZEOF_UNSIGNED_INT
 
+/* image analysis */
+#undef HAVE_ARTOOLKIT
