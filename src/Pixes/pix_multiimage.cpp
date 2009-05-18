@@ -144,8 +144,8 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     char bufName[MAXPDSTRING];
     canvas_makefilename(getCanvas(), preName, bufName, MAXPDSTRING);
 
-	// allocate texture bindings for OpenGL
-	newCache->textBind = new unsigned int[m_numImages];
+    // allocate texture bindings for OpenGL
+    newCache->textBind = new unsigned int[m_numImages];
 
     for (i = 0; i < m_numImages; i++, realNum += skipRate)
     {
