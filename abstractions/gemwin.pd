@@ -1,0 +1,87 @@
+#N canvas 369 216 588 476 10;
+#X obj 309 416 s __gem;
+#X obj 223 417 s __gem_osd;
+#X obj 126 104 inlet;
+#X obj 119 438 outlet;
+#N canvas 0 0 450 300 viewpoint 0;
+#X obj 101 37 inlet;
+#X obj 112 258 outlet;
+#X restore 309 394 pd viewpoint;
+#X obj 223 360 t b b;
+#X obj 239 181 metro \$1;
+#N canvas 0 0 450 300 argument 0;
+#X obj 121 83 list append \$1;
+#X obj 121 104 route float;
+#X obj 121 63 inlet;
+#X obj 121 245 outlet;
+#X obj 121 126 * -1;
+#X obj 121 146 moses;
+#X obj 121 168 * -1;
+#X msg 195 173 20;
+#X obj 195 148 t b;
+#X obj 121 207 t f;
+#X connect 0 0 1 0;
+#X connect 1 0 4 0;
+#X connect 1 1 8 0;
+#X connect 2 0 0 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 5 1 7 0;
+#X connect 6 0 9 0;
+#X connect 7 0 9 0;
+#X connect 8 0 7 0;
+#X connect 9 0 3 0;
+#X restore 292 152 pd argument;
+#X obj 126 131 route create destroy title;
+#N canvas 1538 10 991 633 messages 0;
+#X text 94 19 bang float render title create createStereo createstereo
+buffer fullscreen menubar secondscreen dimen offset color clearmask
+perspec view fog fogcolor fogmode ambient specular shininess cursor
+blur reset destroy print profile lighting stereo stereoSep stereosep
+stereoFoc stereofoc stereoLine stereoline border frame fps topmost
+FSAA;
+#X text 66 132 window specific:;
+#X text 113 152 title create buffer fullscreen menubar secondscreen
+dimen offset cursor reset destroy print border topmost FSAA;
+#X text 121 217 createStereo createstereo stereo stereoSep stereosep
+stereoFoc stereofoc stereoLine stereoline;
+#X text 72 339 lighting/color:;
+#X text 128 293 view perspec;
+#X text 120 356 color clearmask ambient specular shininess lighting
+;
+#X text 106 413 fog fogcolor fogmode;
+#X text 73 390 fog:;
+#X text 70 275 viewpoint:;
+#X text 66 203 stereo:;
+#X text 80 471 bang float render buffer blur reset destroy print profile
+frame fps;
+#X text 72 452 misc:;
+#X text 66 524 multiple:;
+#X text 106 544 buffer reset print;
+#X text 71 589 unused:;
+#X text 112 604 blur;
+#X restore 230 59 pd messages;
+#N canvas 0 0 901 624 window 0;
+#X obj 124 340 t a;
+#X obj 124 389 t a;
+#X obj 124 361 gemwindow;
+#X obj 124 57 inlet;
+#X obj 124 444 outlet;
+#X obj 115 104 route create destroy;
+#X text 282 43 create destroy dimen offset secondscreen fullscreen
+cursor menubar border title topmost buffer reset print FSAA;
+#X obj 115 129 list prepend create;
+#X obj 136 150 list prepend destroy;
+#X connect 0 0 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 1 0;
+#X connect 5 0 7 0;
+#X connect 5 1 8 0;
+#X restore 115 250 pd window;
+#X text 55 19 meant as a modular replacement for the internal [gemwin]
+;
+#X text 53 38 TODO: quite everything;
+#X connect 4 0 0 0;
+#X connect 5 0 1 0;
+#X connect 5 1 4 0;
+#X connect 7 0 6 1;
