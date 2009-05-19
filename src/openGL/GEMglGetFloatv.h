@@ -31,18 +31,18 @@ class GEM_EXTERN GEMglGetFloatv : public GemGLBase
 
     public:
   // Constructor
-  GEMglGetFloatv (t_floatarg);	// CON
+  GEMglGetFloatv (int,t_atom*);	// CON
  protected:
   // Destructor
   virtual ~GEMglGetFloatv ();
-          // check extensions
-          virtual bool isRunnable(void);
+  // check extensions
+  virtual bool isRunnable(void);
 
   // Do the rendering
   virtual void	render (GemState *state);
   // variable
   GLenum pname;
-  virtual void	pnameMess(t_floatarg);	// FUN
+  virtual void	pnameMess(t_atom);	// FUN
 
   t_atom m_alist[16];
 
@@ -53,6 +53,6 @@ class GEM_EXTERN GEMglGetFloatv : public GemGLBase
   t_outlet    	*m_outlet;
 
   // static member functions
-  static void    pnameMessCallback (void*,t_floatarg);
+  static void    pnameMessCallback (void*,int,t_atom*);
 };
 #endif // for header file

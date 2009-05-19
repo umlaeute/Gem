@@ -14,7 +14,7 @@
 
 #include "GEMglGetFloatv.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetFloatv , t_floatarg, A_DEFFLOAT )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglGetFloatv )
 
 /////////////////////////////////////////////////////////
 //
@@ -23,8 +23,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetFloatv , t_floatarg, A_DEFFLOAT )
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetFloatv :: GEMglGetFloatv	(t_floatarg arg0=0) {
-  pnameMess(arg0);
+GEMglGetFloatv :: GEMglGetFloatv	(int argc, t_atom*argv) {
+  if(1==argc)pnameMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
+
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
   m_outlet = outlet_new(this->x_obj, 0);
 
@@ -76,8 +77,8 @@ void GEMglGetFloatv :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglGetFloatv :: pnameMess (t_float arg0) {	// FUN
-  pname=(GLenum)arg0;
+void GEMglGetFloatv :: pnameMess (t_atom arg) {	// FUN
+  pname=(GLenum)getGLdefine(&arg);
   setModified();
 }
 
@@ -86,9 +87,9 @@ void GEMglGetFloatv :: pnameMess (t_float arg0) {	// FUN
 //
 
 void GEMglGetFloatv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, (t_method)&GEMglGetFloatv::pnameMessCallback,  	gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&GEMglGetFloatv::pnameMessCallback,  	gensym("pname"), A_GIMME, A_NULL);
 }
 
-void GEMglGetFloatv :: pnameMessCallback (void* data, t_floatarg arg0) {
-  GetMyClass(data)->pnameMess ( arg0 );
+void GEMglGetFloatv :: pnameMessCallback (void* data, int argc, t_atom*argv) {
+	if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
 }
