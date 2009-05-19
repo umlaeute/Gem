@@ -36,13 +36,13 @@ class GEM_EXTERN gemlist : public GemBase
 
   //////////
   // Constructor
-  gemlist();
+  gemlist(void);
     	
  protected:
     	
   //////////
   // Destructor
-  virtual ~gemlist();
+  virtual ~gemlist(void);
 
   //////////
   // Push the current state
@@ -56,7 +56,7 @@ class GEM_EXTERN gemlist : public GemBase
   void sendCacheState(GemCache*cache, GemState*state);
 
   //////////
-  void			trigger();
+  void			trigger(void);
 
   //////////
   // curent state
@@ -70,12 +70,27 @@ class GEM_EXTERN gemlist : public GemBase
 
   virtual void   	rightRender(GemState *state);
 
+
+
+  virtual void ticktimeMess(t_float ticktime);
+  t_float m_tickTime;
+
+  virtual void lightingMess(bool state);
+  bool m_lightState;
+
+  virtual void drawMess(t_atom arg);
+  GLenum m_drawType;
+
  private:
 
-    //////////
-    // Static member callbacks
-		static void		triggerMessCallback(void *data);
-    static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
+  //////////
+  // Static member callbacks
+  static void		triggerMessCallback(void *data);
+  static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
+
+  static void 	ticktimeMessCallback(void *data, t_floatarg);
+  static void 	lightingMessCallback(void *data, t_floatarg);
+  static void 	drawMessCallback(void *data, int,t_atom*);
 };
 
 #endif	// for header file

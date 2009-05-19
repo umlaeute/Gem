@@ -30,11 +30,16 @@ CPPEXTERN_NEW(gemlist)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemlist :: gemlist()
+gemlist :: gemlist(void) 
+  : m_current_state(NULL),
+    m_valide_state(false),
+    m_inlet(NULL),
+    m_tickTime(-1.f),
+    m_lightState(false),
+    m_drawType(0)
 {
-    m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
 	// create the cold inlet
-	m_valide_state=false;
 }
 
 /////////////////////////////////////////////////////////
@@ -43,7 +48,7 @@ gemlist :: gemlist()
 /////////////////////////////////////////////////////////
 gemlist :: ~gemlist()
 {
-    inlet_free(m_inlet);
+  inlet_free(m_inlet);
 }
 
 /////////////////////////////////////////////////////////
@@ -62,18 +67,18 @@ void gemlist :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void gemlist :: postrender(GemState *)
 {
-//	m_valide_state=false;
+  //	m_valide_state=false;
 
-// this is to early to reset the m_valide_state
-// when should we call this???
-// TODO : fix this.
+  // this is to early to reset the m_valide_state
+  // when should we call this???
+  // TODO : fix this.
 }
 
 void gemlist :: sendCacheState(GemCache *cache, GemState*state)
 {
   if  ( !GemMan::windowExists() ) {
     // LATER: shouldn't this test for a valid context rather than an existing window??
-	//	error("you should not bang the gemlist now"); 
+    //	error("you should not bang the gemlist now"); 
     return;
   }
 
@@ -94,17 +99,69 @@ void gemlist :: sendCacheState(GemCache *cache, GemState*state)
 /////////////////////////////////////////////////////////
 void gemlist :: trigger()
 {
-	if(m_valide_state)
-	{   // outlet the current state when banged
+	if(m_valide_state) {
+    // outlet the current state when banged
     sendCacheState(m_cache, m_current_state);
-	} else {
+  } else {
 	  // fill in out own state and output
     GemCache tempCache(NULL);
-    GemState tempState;
-    GemMan::fillGemState(tempState);
-    sendCacheState(&tempCache, &tempState);
+    GemState state;
+
+    if(m_lightState) {
+      state.lighting=1;
+      state.smooth=1;
+    }
+    
+    if(m_drawType) {
+      state.drawType=m_drawType;
+    }
+
+    if(m_tickTime>=0.f) {
+      state.tickTime=m_tickTime;
+    }
+
+    //    GemMan::fillGemState(state);
+    sendCacheState(&tempCache, &state);
   }
 }
+
+
+///////////////////
+// here come some messages for setting up a manual GemState
+void gemlist :: ticktimeMess(t_float ticktime)
+{
+  m_tickTime=ticktime;
+}
+void gemlist :: lightingMess(bool light)
+{
+  m_lightState=light;
+}
+void gemlist :: drawMess(t_atom arg)
+{
+  if(A_SYMBOL==arg.a_type) {
+    t_symbol*type=atom_getsymbol(&arg);
+    char c=*type->s_name;
+    switch (c){
+    case 'D': case 'd': // default
+      m_drawType = GL_DEFAULT_GEM;
+      break;
+    case 'L': case 'l': // line
+      m_drawType = GL_LINE;
+      break;
+    case 'F': case 'f': // fill
+      m_drawType = GL_FILL;
+      break;
+    case 'P': case 'p': // point
+      m_drawType = GL_POINT;
+      break;
+    default:
+      m_drawType = (GLenum)getGLdefine(&arg);
+    }
+  } 
+  else m_drawType=atom_getint(&arg);
+}
+
+
 
 /////////////////////////////////////////////////////////
 // rightRender
@@ -123,14 +180,34 @@ void gemlist :: rightRender(GemState *state)
 /////////////////////////////////////////////////////////
 void gemlist :: obj_setupCallback(t_class *classPtr)
 {
-    class_addbang(classPtr, (t_method)&gemlist::triggerMessCallback);
+  class_addbang(classPtr, (t_method)&gemlist::triggerMessCallback);
 	class_addmethod(classPtr, (t_method)&gemlist::gem_rightMessCallback, gensym("gem_right"), A_GIMME, A_NULL);
+
+
+  class_addmethod(classPtr, (t_method)&gemlist::ticktimeMessCallback, gensym("ticktime"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemlist::lightingMessCallback, gensym("lighting"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&gemlist::drawMessCallback, gensym("draw"), A_GIMME, A_NULL);
 }
 
 void gemlist::triggerMessCallback(void *data)
 {
-    GetMyClass(data)->trigger();
+  GetMyClass(data)->trigger();
 }
+
+
+void gemlist :: ticktimeMessCallback(void *data, t_floatarg time)
+{
+    GetMyClass(data)->ticktimeMess(time);
+}
+void gemlist :: lightingMessCallback(void *data, t_floatarg light)
+{
+    GetMyClass(data)->lightingMess(light>0.f);
+}
+void gemlist :: drawMessCallback(void *data, int argc, t_atom*argv)
+{
+  if(argc==1)GetMyClass(data)->drawMess(argv[0]);
+}
+
 
 
 void gemlist::gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
