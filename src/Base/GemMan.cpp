@@ -587,7 +587,6 @@ void GemMan :: renderChain(gemheadLink *head, GemState *state){
 
 void GemMan :: render(void *)
 {
-  static int firstTime = 1;
   int profiling=m_profile;
 
   if(GemMan::pleaseDestroy)GemMan::destroyWindow();
@@ -882,7 +881,6 @@ void GemMan :: render(void *)
     clock_delay(s_clock, s_deltime);
 	
   glReportError();
-  firstTime = 0;
 }
 
 /////////////////////////////////////////////////////////
