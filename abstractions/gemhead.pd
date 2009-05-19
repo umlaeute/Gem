@@ -78,7 +78,7 @@
 #X obj 71 174 GEMglFlush;
 #X obj 71 122 gemlist;
 #X obj 71 144 t a a;
-#X obj 193 309 gem_state;
+#X obj 193 309 gemlist;
 #X connect 0 0 10 0;
 #X connect 1 0 2 0;
 #X connect 2 0 3 0;
