@@ -38,9 +38,6 @@ pix_writer :: pix_writer(int argc, t_atom *argv)
     m_automatic(false), m_autocount(0),
     m_filetype(0)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
-
   snprintf(m_pathname, MAXPDSTRING, "gem");
 }
 
