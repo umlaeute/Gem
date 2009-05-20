@@ -14,9 +14,6 @@
 #X obj 317 301 < 0;
 #X obj 269 365 spigot 0;
 #X obj 427 283 abs;
-#X obj 109 115 loadbang;
-#X obj 109 140 f \$1;
-#X obj 109 165 select 0;
 #X connect 0 0 5 0;
 #X connect 2 0 3 0;
 #X connect 3 0 4 0;
@@ -34,9 +31,6 @@
 #X connect 11 0 12 1;
 #X connect 12 0 6 0;
 #X connect 13 0 7 1;
-#X connect 14 0 15 0;
-#X connect 15 0 16 0;
-#X connect 16 0 4 0;
 #X restore 170 69 pd gemreceive;
 #X obj 170 155 gemlist;
 #N canvas 602 92 635 363 material 0;
@@ -63,7 +57,7 @@
 #X obj 170 221 t a a a;
 #X obj 216 242 GEMglPushMatrix;
 #X obj 170 282 GEMglPopMatrix;
-#X obj 193 333 outlet gemlist;
+#X obj 193 306 outlet gemlist;
 #X obj 130 18 inlet control;
 #X obj 130 40 route bang float set;
 #X obj 223 94 i;
@@ -78,12 +72,11 @@
 #X obj 71 174 GEMglFlush;
 #X obj 71 122 gemlist;
 #X obj 71 144 t a a;
-#X obj 193 309 gemlist;
 #X connect 0 0 10 0;
 #X connect 1 0 2 0;
 #X connect 2 0 3 0;
 #X connect 3 0 5 0;
-#X connect 3 1 15 0;
+#X connect 3 1 6 0;
 #X connect 3 2 4 0;
 #X connect 7 0 8 0;
 #X connect 8 0 13 0;
@@ -95,4 +88,3 @@
 #X connect 13 0 14 0;
 #X connect 14 0 12 0;
 #X connect 14 1 2 0;
-#X connect 15 0 6 0;
