@@ -19,13 +19,13 @@
   -------------------------------------------------------------------
   CLASS
   gemwindow
-    
+
   The window manager
 
   DESCRIPTION
-    
+
   Access to GemMan.
-    
+
   "bang"  - swap the buffers
   "render" - render a frame now
 
@@ -52,92 +52,92 @@
 class GEM_EXTERN gemwindow : public CPPExtern
 {
   CPPEXTERN_HEADER(gemwindow, CPPExtern)
-    
+
     public:
-    
+
   //////////
   // Constructor
   gemwindow(t_floatarg framespersecond);
-    	
+
  private:
 
   //////////
   // Destructor
-  virtual     	~gemwindow();
+  virtual         ~gemwindow();
 
   /* rendering */
-  void 	    	bangMess();
-  void			  renderMess();
+  void   bangMess();
+  void renderMess();
 
   /* render context (pre creation) */
-  void 	    	bufferMess(int buf);
+  void  bufferMess(int buf);
   int         m_buffer;
-  void        fsaaMess(int value);
+  void    fsaaMess(int value);
   int         m_fsaa;
 
   /* window decoration (pre creation) */
-  void 	    	titleMess(t_symbol* s);
-  char*       m_title;
-  void 	    	borderMess(int on);
-  bool        m_border;
+  void titleMess(t_symbol* s);
+  char*     m_title;
+  void borderMess(bool on);
+  bool       m_border;
 
   /* window position/dimension (pre creation) */
-  void 	    	dimensionsMess(int width, int height);
-  unsigned int m_width, m_height;
-  void 	    	fullscreenMess(int on);
-  bool        m_fullscreen;
-  void 	    	offsetMess(int x, int y);
-  unsigned int m_xoffset, m_yoffset;
-  void 	    	secondscreenMess(int on);
-  bool        m_secondscreen;
+  void    dimensionsMess(int width, int height);
+  unsigned int      m_width, m_height;
+  void    fullscreenMess(bool on);
+  bool              m_fullscreen;
+  void        offsetMess(int x, int y);
+  unsigned int      m_xoffset, m_yoffset;
+  void  secondscreenMess(bool on);
+  bool              m_secondscreen;
 
   /* creation/destruction */
-  void 	    	createMess(t_symbol* s);
-  void 	    	destroyMess(void);
+  void        createMess(t_symbol* s);
+  void       destroyMess(void);
 
   /* post creation */
-  void        cursorMess(int on);
-  void		    topmostMess(int on);
-  void			  menuBarMess(int on);
+  void        cursorMess(bool on);
+  void       topmostMess(bool on);
+  void       menuBarMess(int on);
 
   /* an outlet to send info to the patch */
-  t_outlet	*m_infoOut;
+  t_outlet    *m_infoOut;
  private:
-    
+
   //////////
   // Static member functions (rendering)
-  static void 	bangMessCallback(void *data);
-  static void 	renderMessCallback(void *data);
+  static void     bangMessCallback(void *data);
+  static void     renderMessCallback(void *data);
 
   //////////
   // Static member functions (window pre-creation)
-  static void 	bufferMessCallback(void *data, t_floatarg buf);
-  static void 	fsaaMessCallback(void *data,t_floatarg val);
+  static void     bufferMessCallback(void *data, t_floatarg buf);
+  static void     fsaaMessCallback(void *data,t_floatarg val);
 
-  static void 	titleMessCallback(void *data, t_symbol* s);
+  static void     titleMessCallback(void *data, t_symbol* s);
 
-  static void 	dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void 	offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
-  static void 	fullscreenMessCallback(void *data, t_floatarg on);
-  static void 	secondscreenMessCallback(void *data, t_floatarg on);
+  static void     dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
+  static void     offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
+  static void     fullscreenMessCallback(void *data, t_floatarg on);
+  static void     secondscreenMessCallback(void *data, t_floatarg on);
 
-  static void 	borderMessCallback(void *, t_floatarg state);
+  static void     borderMessCallback(void *, t_floatarg state);
 
 
   //////////
   // Static member functions (window creation)
-  static void 	createMessCallback(void *data, t_symbol* s);
-  static void 	destroyMessCallback(void *);
+  static void     createMessCallback(void *data, t_symbol* s);
+  static void     destroyMessCallback(void *);
 
   //////////
   // Static member functions (window post-creation)
-  static void 	cursorMessCallback(void *data, t_floatarg val);	
-  static void 	topmostMessCallback(void *data, t_floatarg val);	
-  static void 	menuBarMessCallback(void *data, t_floatarg on);
+  static void     cursorMessCallback(void *data, t_floatarg val);
+  static void     topmostMessCallback(void *data, t_floatarg val);
+  static void     menuBarMessCallback(void *data, t_floatarg on);
 
   //////////
   // Static member functions (misc)
-  static void 	printMessCallback(void *);
+  static void     printMessCallback(void *);
 };
 
-#endif	// for header file
+#endif    // for header file
