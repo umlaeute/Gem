@@ -80,15 +80,26 @@ pix_write :: ~pix_write()
   cleanImage();
 }
 
+
+/////////////////////////////////////////////////////////
+// extension checks
+//
+/////////////////////////////////////////////////////////
+bool pix_write :: isRunnable(void) {
+  if(GLEW_VERSION_1_1 || GLEW_EXT_texture_object)
+    return true;
+
+  error("your system lacks texture support");
+  return false;
+}
+
+
 /////////////////////////////////////////////////////////
 // writeMess
 //
 /////////////////////////////////////////////////////////
 void pix_write :: doWrite()
 {
-  if ( !GemMan::windowExists() )
-    return;
-  
   int width  = m_width;
   int height = m_height;
 
@@ -192,8 +203,6 @@ void pix_write :: fileMess(int argc, t_atom *argv)
   }
 
   m_autocount = 0;
-
-  //  GetMyClass(data)->doWrite();
 }
 
 /////////////////////////////////////////////////////////

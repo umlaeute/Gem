@@ -61,6 +61,9 @@ class GEM_EXTERN pix_write : public GemBase
     	//////////
     	// Write to the current filename
     	virtual void	doWrite();
+
+      // check extensions
+      virtual bool isRunnable(void);
     	
     	//////////
     	// Do the rendering

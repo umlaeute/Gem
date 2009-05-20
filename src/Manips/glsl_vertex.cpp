@@ -165,7 +165,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
   if(NULL==filename || NULL==filename->s_name)return;
   if(&s_==filename)return;
 
-  if( !GemMan::windowExists() ) {
+  if( !GLEW_VERSION_1_1 ) { /* stupid check whether we have a valid context */
     post("shader '%s' will be loaded when rendering is turned on (openGL context needed)", filename->s_name);
     m_shaderFilename=filename;
     return;

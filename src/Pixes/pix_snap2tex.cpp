@@ -116,9 +116,7 @@ bool pix_snap2tex :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: snapMess()
 {
-  if ( !GemMan::windowExists() ) return;
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
-
   
   int width  = m_width;
   int height = m_height;

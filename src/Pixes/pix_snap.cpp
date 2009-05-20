@@ -70,11 +70,10 @@ pix_snap :: ~pix_snap()
 /////////////////////////////////////////////////////////
 void pix_snap :: snapMess()
 {
+  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
+
   if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
     m_cache=NULL;
-
-    if ( !GemMan::windowExists() )
-		return;
         
 	if (m_width <= 0 || m_height <= 0)
 	{
