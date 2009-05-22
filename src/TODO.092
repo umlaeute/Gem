@@ -10,26 +10,29 @@ How to read this document
 
 
 General Rendering Issues
-- alpha in gemwindow?
+: alpha in gemwindow?
 
 Missing help-patches
 
 Untested objects
-- vertex_* ?
+: vertex_* ?
 
 
 Object specific bugs
-- pix_freeframe not supported on x86_64 architectures (needs discussion on the freeframe list: people there are a bit reluctant to change the specs (like enforcing 32bit pointers)
+: pix_freeframe not supported on x86_64 architectures (needs discussion on the freeframe list: people there are a bit reluctant to change the specs (like enforcing 32bit pointers)
+: incorporate new libparticle API
+: make [gemhead] an abstraction
 
 
 OS specific bugs
 linux:
-- sometimes window freezes on "destroy"; (JMZ: i experience this sometimes on improper shutdown, but after some (up to 30) seconds, the window finally gets destroyed and pd exits fine; if this is the same as the reported bug, than it is rather an inconvenience than a real bug)
-- resizing the window yields weird results
+: sometimes window freezes on "destroy"; (JMZ: i experience this sometimes on improper shutdown, but after some (up to 30) seconds, the window finally gets destroyed and pd exits fine; if this is the same as the reported bug, than it is rather an inconvenience than a real bug)
+: resizing the window yields weird results
 
 
 
 osx:
 
 w32:
-- [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
+: [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
+: crashes when texturing movies (related to GLEW?)
