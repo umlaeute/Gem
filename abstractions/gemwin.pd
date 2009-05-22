@@ -172,7 +172,7 @@ GEM \, buffer 2 \, cursor 1 \, topmost 0;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;
 #X restore 124 262 pd info;
-#X obj 282 361 gemwindow;
+#X obj 282 361 gemdefaultwindow;
 #X obj 282 424 route bang dimen;
 #X obj 336 447 s \$0-realdimen;
 #X obj 333 254 inlet;
