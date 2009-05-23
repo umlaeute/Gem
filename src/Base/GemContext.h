@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMCACHE_H_
-#define INCLUDE_GEMCACHE_H_
+#ifndef INCLUDE_GEMCONTEXT_H_
+#define INCLUDE_GEMCONTEXT_H_
 
 #include "Base/GemGL.h"
 #include "Base/CPPExtern.h"
@@ -21,7 +21,7 @@ LOG
 CLASS
     GemContext
     
-    The cache to pass among GEM objects
+    a rendering context
 
 DESCRIPTION
     
@@ -86,18 +86,22 @@ class GEM_EXTERN GemContext : public CPPExtern
  private:
   t_outlet*m_infoOut;
 
+  GLint m_maxStackDepth[4];
+
+
 #ifdef GLEW_MX
+# define glewGetContext GemContext::getGlewContext
+
+ public:
+  /* returns the last GemContext that called makeCurrent()
+   * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
+   */
+  static GLEWContext*getGlewContext(void);
+ private:
   GLEWContext*m_context;
 #endif
-
-  GLint m_maxStackDepth[4];
 };
 
-#ifdef GLEW_MX
-/* returns the last GemContext that called makeCurrent()
- * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
- */
-GEM_EXTERN GLEWContext*glewGetContext(void);
-#endif
+
 
 #endif	// for header file

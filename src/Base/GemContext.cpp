@@ -175,7 +175,7 @@ void GemContext::dimensionsMess(void){
 
 
 #ifdef GLEW_MX
-GLEWContext*glewGetContext(void) {
+GLEWContext*GemContext::getGlewContext(void) {
   if(NULL==s_glewcontext) {
     /* we should find another glew-context asap and make that one current! */
     return NULL;
