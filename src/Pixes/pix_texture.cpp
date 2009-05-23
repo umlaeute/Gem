@@ -110,7 +110,7 @@ void pix_texture :: setUpTextureState() {
   }
 
 
-  if (GemMan::client_storage_supported){
+  if (GLEW_APPLE_client_storage){
     if(m_clientStorage){
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
       debug("using client storage");
@@ -307,7 +307,7 @@ void pix_texture :: render(GemState *state) {
   if (m_rebuildList) {
     // if YUV is not supported on this platform, we have to convert it to RGB
     //(skip Alpha since it isnt used)
-    const bool do_yuv = m_yuv && GemMan::texture_yuv_supported;
+    const bool do_yuv = m_yuv && GLEW_APPLE_ycbcr_422;
     if (!do_yuv && m_imagebuf.format == GL_YUV422_GEM){
       m_imagebuf.format=GL_RGB;
       m_imagebuf.csize=3;

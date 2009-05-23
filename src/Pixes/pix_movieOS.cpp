@@ -280,7 +280,7 @@ void pix_movieOS :: setUpTextureState()
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     } else {
         glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
-        if (GemMan::client_storage_supported)
+        if (GLEW_APPLE_client_storage)
             glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
         else
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
