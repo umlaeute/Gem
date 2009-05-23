@@ -74,14 +74,20 @@ class GEM_EXTERN gemglutwindow : public CPPExtern
   static void list_add(gemglutwindow*obj,int win);
   static void list_del(int win);
 
-  static void displayCb(void);
-  static void visibleCb(int);
-
   //////////
   // Destructor
   virtual ~gemglutwindow(void);
 
   void doRender(void);
+
+  /* info */
+  void info(t_symbol*s, t_float value);
+  void info(t_symbol*s, int, t_atom*);
+
+  void motion(int x, int y);
+  void button(int id, int state);
+  void key(t_symbol*id, int state);
+
 
   /* rendering */
   void   bangMess(void);
@@ -114,6 +120,10 @@ class GEM_EXTERN gemglutwindow : public CPPExtern
   /* post creation */
   void        cursorMess(bool on);
   bool              m_cursor;
+
+
+  // check whether we have a window and if so, make it current
+  bool checkWindow(void);
 
   /* an outlet to send info to the patch */
   t_outlet    *m_infoOut;
@@ -152,6 +162,25 @@ class GEM_EXTERN gemglutwindow : public CPPExtern
   //////////
   // Static member functions (misc)
   static void     printMessCallback(void *);
+
+
+  //////////
+  // glut callbacks 
+  static void displayCb(void);
+  static void visibleCb(int);
+  static void keyboardCb(unsigned char, int, int);
+  static void specialCb(int, int, int);
+  static void reshapeCb(int, int);
+  static void mouseCb(int,int,int,int);
+  static void motionCb(int,int);
+  static void passivemotionCb(int, int);
+  static void entryCb(int);
+  static void keyboardupCb(unsigned char, int, int);
+  static void specialupCb(int, int, int);
+  static void joystickCb(unsigned int, int, int, int);
+  static void menustateCb(int);
+  static void menustatusCb(int, int, int);
+  static void windowstatusCb(int);
 };
 
 #endif    // for header file
