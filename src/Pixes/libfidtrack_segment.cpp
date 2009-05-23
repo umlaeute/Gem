@@ -28,13 +28,13 @@
 
 /* -------------------------------------------------------------------------- */
 
-void initialize_head_region( Region *r )
+void initialize_head_region( FidSegRegion *r )
 {
     r->next = r->previous = r;
 }
 
 
-void link_region( Region *head, Region* r )
+void link_region( FidSegRegion *head, FidSegRegion* r )
 {
     r->previous = head->previous;
     r->next = head;
@@ -44,7 +44,7 @@ void link_region( Region *head, Region* r )
 }
 
 
-void unlink_region( Region* r )
+void unlink_region( FidSegRegion* r )
 {
     r->previous->next = r->next;
     r->next->previous = r->previous;
@@ -54,10 +54,10 @@ void unlink_region( Region* r )
 /* -------------------------------------------------------------------------- */
 
 
-static RegionReference* new_region( Segmenter *s, int x, int y, int colour )
+static FidSegRegionReference* new_region( Segmenter *s, int x, int y, int colour )
 {
-    RegionReference *result;
-    Region *r;
+    FidSegRegionReference *result;
+    FidSegRegion *r;
 
     if( s->freed_regions_head ){
         r = s->freed_regions_head;
@@ -91,12 +91,12 @@ static RegionReference* new_region( Segmenter *s, int x, int y, int colour )
 
 
 #ifndef NDEBUG
-static int r1_adjacent_contains_r2( Region* r1, Region* r2 )
+static int r1_adjacent_contains_r2( FidSegRegion* r1, FidSegRegion* r2 )
 {
     int i;
 
     for( i=0; i < r1->adjacent_region_count; ++i ){
-        Region *adjacent = r1->adjacent_regions[i];
+        FidSegRegion *adjacent = r1->adjacent_regions[i];
         if( adjacent == r2 )
             return 1;
     }
@@ -105,11 +105,11 @@ static int r1_adjacent_contains_r2( Region* r1, Region* r2 )
 #endif
 
 
-static int is_adjacent( Region* r1, Region* r2 )
+static int is_adjacent( FidSegRegion* r1, FidSegRegion* r2 )
 {
 /*
     int i, adjacent_region_count;
-    Region **adjacent_regions, *r;
+    FidSegRegion **adjacent_regions, *r;
 
     if( r1->adjacent_region_count > r2->adjacent_region_count ){
         r = r2;
@@ -130,7 +130,7 @@ static int is_adjacent( Region* r1, Region* r2 )
     
     // choose the region with the shorter list for iteration
     if( r1->adjacent_region_count > r2->adjacent_region_count ){
-        Region *temp = r1;
+        FidSegRegion *temp = r1;
         r1 = r2;
         r2 = temp;
     }
@@ -143,7 +143,7 @@ static int is_adjacent( Region* r1, Region* r2 )
 }
 
 
-static void make_adjacent( Segmenter *s, Region* r1, Region* r2 )
+static void make_adjacent( Segmenter *s, FidSegRegion* r1, FidSegRegion* r2 )
 {
     if( !is_adjacent( r1, r2 ) ){
         if( r1->adjacent_region_count < s->max_adjacent_regions ){
@@ -178,7 +178,7 @@ void
 #else
 int
 #endif
-remove_adjacent_from( Region *r1, Region *r2 )
+remove_adjacent_from( FidSegRegion *r1, FidSegRegion *r2 )
 {
     int i;
     int found = 0;
@@ -202,7 +202,7 @@ remove_adjacent_from( Region *r1, Region *r2 )
 // merge r2 into r1 by first removing all common adjacencies from r2
 // then transferring the remainder of adjacencies to r1 after discarding
 // any excess adjacencies.
-static void merge_regions( Segmenter *s, Region* r1, Region* r2 )
+static void merge_regions( Segmenter *s, FidSegRegion* r1, FidSegRegion* r2 )
 {
     int i;
     int r2_adjacent_region_count = r2->adjacent_region_count; // cache value in local in an attempt to improve efficiency
@@ -212,7 +212,7 @@ static void merge_regions( Segmenter *s, Region* r1, Region* r2 )
     
     // remove adjacencies of r2 which are already in r1
     for( i = 0; i < r2_adjacent_region_count; ++i ){
-        Region *a = r2->adjacent_regions[i];
+        FidSegRegion *a = r2->adjacent_regions[i];
         if( is_adjacent( a, r1 ) ){
 #ifndef NDEBUG
             int found =
@@ -230,7 +230,7 @@ static void merge_regions( Segmenter *s, Region* r1, Region* r2 )
         int new_r2_count = s->max_adjacent_regions - r1->adjacent_region_count;
 
         while( r2_adjacent_region_count > new_r2_count ){
-            Region *a = r2->adjacent_regions[ --r2_adjacent_region_count ];
+            FidSegRegion *a = r2->adjacent_regions[ --r2_adjacent_region_count ];
 #ifndef NDEBUG
             int found =
 #endif
@@ -245,7 +245,7 @@ static void merge_regions( Segmenter *s, Region* r1, Region* r2 )
     // remove the remainder of adjacencies from r2 and add them to r1
 
     while( r2_adjacent_region_count > 0 ){
-        Region *a = r2->adjacent_regions[ --r2_adjacent_region_count ];
+        FidSegRegion *a = r2->adjacent_regions[ --r2_adjacent_region_count ];
         
 #ifndef NDEBUG
         int found =
@@ -279,7 +279,7 @@ static void merge_regions( Segmenter *s, Region* r1, Region* r2 )
 
 #ifndef NDEBUG
     for( i = 0; i < r1->adjacent_region_count; ++i ){
-        Region *a = r1->adjacent_regions[i];
+        FidSegRegion *a = r1->adjacent_regions[i];
         assert( r1_adjacent_contains_r2( r1, a ) );
     }
 #endif
@@ -289,8 +289,8 @@ static void merge_regions( Segmenter *s, Region* r1, Region* r2 )
 static void build_regions( Segmenter *s, const unsigned char *source, int width, int height )
 {
     int x, y, i;
-    RegionReference **current_row = &s->regions_under_construction[0];
-    RegionReference **previous_row = &s->regions_under_construction[width];
+    FidSegRegionReference **current_row = &s->regions_under_construction[0];
+    FidSegRegionReference **previous_row = &s->regions_under_construction[width];
     
     s->region_ref_count = 0;
     s->region_count = 0;
@@ -318,7 +318,7 @@ static void build_regions( Segmenter *s, const unsigned char *source, int width,
     for( y=1; y < height; ++y ){
 
         // swap previous and current rows
-        RegionReference **temp = previous_row;
+        FidSegRegionReference **temp = previous_row;
         previous_row = current_row;
         current_row = temp;
 
@@ -405,13 +405,13 @@ static void build_regions( Segmenter *s, const unsigned char *source, int width,
 void initialize_segmenter( Segmenter *s, int width, int height, int max_adjacent_regions )
 {
     s->max_adjacent_regions = max_adjacent_regions;
-    s->region_refs = (RegionReference*)malloc( sizeof(RegionReference) * width * height );
+    s->region_refs = (FidSegRegionReference*)malloc( sizeof(FidSegRegionReference) * width * height );
     s->region_ref_count = 0;
-    s->sizeof_region = sizeof(Region) + sizeof(Region*) * (max_adjacent_regions-1);
+    s->sizeof_region = sizeof(FidSegRegion) + sizeof(FidSegRegion*) * (max_adjacent_regions-1);
     s->regions = (unsigned char*)malloc( s->sizeof_region * width * height );
     s->region_count = 0;
 
-    s->regions_under_construction = (RegionReference**)malloc( sizeof(RegionReference*) * width * 2 );
+    s->regions_under_construction = (FidSegRegionReference**)malloc( sizeof(FidSegRegionReference*) * width * 2 );
 }
 
 

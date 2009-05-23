@@ -40,7 +40,7 @@ typedef struct FidtrackerX{
     int max_target_root_descendent_count;
     int min_depth, max_depth;
 
-    struct Region root_regions_head;
+    struct FidSegRegion root_regions_head;
     
     char *depth_strings;
     int depth_string_count;

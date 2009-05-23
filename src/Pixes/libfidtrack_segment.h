@@ -66,8 +66,8 @@ extern "C"
 
 #define UNKNOWN_REGION_LEVEL            (-1)
 
-typedef struct Region{
-    struct Region *previous, *next;
+typedef struct FidSegRegion{
+    struct FidSegRegion *previous, *next;
     int colour;
     short left, top, right, bottom;
 
@@ -81,15 +81,15 @@ typedef struct Region{
     char *depth_string;                     /* not initialized by segmenter */
     
     short adjacent_region_count;
-    struct Region *adjacent_regions[ 1 ];   /* variable length array of length max_adjacent_regions */
+    struct FidSegRegion *adjacent_regions[ 1 ];   /* variable length array of length max_adjacent_regions */
 
-} Region;
+} FidSegRegion;
 
 
-typedef struct RegionReference{
-    Region *region;
-    struct RegionReference *redirect;
-} RegionReference;
+typedef struct FidSegRegionReference{
+    FidSegRegion *region;
+    struct FidSegRegionReference *redirect;
+} FidSegRegionReference;
 
 
 
@@ -98,7 +98,7 @@ typedef struct RegionReference{
 #define RESOLVE_REGIONREF_REDIRECTS( x, r )                                    \
 {                                                                              \
     if( r->redirect != r ){                                                    \
-        RegionReference *result = r;                                           \
+        FidSegRegionReference *result = r;                                           \
         do{                                                                    \
             result = result->redirect;                                         \
         }while( result->redirect != result );                                  \
@@ -110,26 +110,26 @@ typedef struct RegionReference{
 }
                  
 
-void initialize_head_region( Region *r );
-void link_region( Region *head, Region* r );
-void unlink_region( Region* r );
+void initialize_head_region( FidSegRegion *r );
+void link_region( FidSegRegion *head, FidSegRegion* r );
+void unlink_region( FidSegRegion* r );
 
 
 typedef struct Segmenter{
-    RegionReference *region_refs;
+    FidSegRegionReference *region_refs;
     int region_ref_count;
     unsigned char *regions;     /* buffer containing raw region ptrs */
     int region_count;
-    Region *freed_regions_head;
+    FidSegRegion *freed_regions_head;
 
     int sizeof_region;
     int max_adjacent_regions;
 
-    RegionReference **regions_under_construction;
+    FidSegRegionReference **regions_under_construction;
 }Segmenter;
 
 #define LOOKUP_SEGMENTER_REGION( s, index )\
-    (Region*)(s->regions + (s->sizeof_region * (index)))
+    (FidSegRegion*)(s->regions + (s->sizeof_region * (index)))
 
 void initialize_segmenter( Segmenter *segments, int width, int height, int max_adjacent_regions );
 void terminate_segmenter( Segmenter *segments );

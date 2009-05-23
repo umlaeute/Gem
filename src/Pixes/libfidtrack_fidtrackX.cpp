@@ -41,7 +41,7 @@
 
 #define LEAF_GATE_SIZE      0
 
-static void set_depth( Region *r, short depth );
+static void set_depth( FidSegRegion *r, short depth );
 
 
 /* -------------------------------------------------------------------------- */
@@ -69,7 +69,7 @@ static double calculate_angle( double dx, double dy )
 }
 
 
-static void sum_leaf_centers( FidtrackerX *ft, Region *r, int width, int height )
+static void sum_leaf_centers( FidtrackerX *ft, FidSegRegion *r, int width, int height )
 {
     int i;
 
@@ -126,7 +126,7 @@ static void sum_leaf_centers( FidtrackerX *ft, Region *r, int width, int height 
         }
     }else{
         for( i=0; i < r->adjacent_region_count; ++i ){
-            Region *adjacent = r->adjacent_regions[i];
+            FidSegRegion *adjacent = r->adjacent_regions[i];
             if( adjacent->level == TRAVERSED
                     && adjacent->descendent_count < r->descendent_count )
                 sum_leaf_centers( ft, adjacent, width, height );
@@ -142,8 +142,8 @@ static void sum_leaf_centers( FidtrackerX *ft, Region *r, int width, int height 
 
 int _USERENTRY depth_string_cmp(const void *a, const void *b)
 {
-    Region **aa = (Region**)a;
-    Region **bb = (Region**)b;
+    FidSegRegion **aa = (FidSegRegion**)a;
+    FidSegRegion **bb = (FidSegRegion**)b;
 
     if( !(*aa)->depth_string ){
         if( !(*bb)->depth_string )
@@ -158,11 +158,11 @@ int _USERENTRY depth_string_cmp(const void *a, const void *b)
 }
 
 
-static char *build_left_heavy_depth_string( FidtrackerX *ft, Region *r )
+static char *build_left_heavy_depth_string( FidtrackerX *ft, FidSegRegion *r )
 {
     int i;
     char *result;
-    Region *adjacent;
+    FidSegRegion *adjacent;
     char *p, *p2;
     
     assert( ft->next_depth_string < ft->depth_string_count );
@@ -185,10 +185,10 @@ static char *build_left_heavy_depth_string( FidtrackerX *ft, Region *r )
             }
         }
 
-        qsort( r->adjacent_regions, r->adjacent_region_count, sizeof(Region*), depth_string_cmp ); 
+        qsort( r->adjacent_regions, r->adjacent_region_count, sizeof(FidSegRegion*), depth_string_cmp ); 
         
         for( i=0; i < r->adjacent_region_count; ++i ){
-            Region *adjacent = r->adjacent_regions[i];
+            FidSegRegion *adjacent = r->adjacent_regions[i];
             if( adjacent->depth_string ){
                 p2 = adjacent->depth_string;
                 while( *p2 )
@@ -205,10 +205,10 @@ static char *build_left_heavy_depth_string( FidtrackerX *ft, Region *r )
 }
 
 
-static void print_unordered_depth_string( Region *r )
+static void print_unordered_depth_string( FidSegRegion *r )
 {
     int i;
-    Region *adjacent;
+    FidSegRegion *adjacent;
 
     printf( "(%d", r->depth );
     if( r->adjacent_region_count != 1 ){
@@ -228,7 +228,7 @@ static void print_unordered_depth_string( Region *r )
 
 
 static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
-        Region *r, int width, int height )
+        FidSegRegion *r, int width, int height )
 {
     double all_x, all_y;
     double black_x, black_y;
@@ -291,7 +291,7 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
 // traverse downwards from r setting the depth value of each visited node
 // depends on all nodes having assigned adjacent->descendent_count values
 // to know which nodes to visit
-static void set_depth( Region *r, short depth )
+static void set_depth( FidSegRegion *r, short depth )
 {
     int i;
     short child_depth = (short)(depth + 1);
@@ -300,7 +300,7 @@ static void set_depth( Region *r, short depth )
     
     if( r->adjacent_region_count != 1 ){  // if not a leaf
         for( i=0; i < r->adjacent_region_count; ++i ){
-            Region *adjacent = r->adjacent_regions[i];
+            FidSegRegion *adjacent = r->adjacent_regions[i];
             if( adjacent->descendent_count < r->descendent_count )
                set_depth( adjacent, child_depth );
         }
@@ -309,12 +309,12 @@ static void set_depth( Region *r, short depth )
 
 
 #ifndef NDEBUG
-static int r1_adjacent_contains_r2( Region* r1, Region* r2 )
+static int r1_adjacent_contains_r2( FidSegRegion* r1, FidSegRegion* r2 )
 {
     int i;
 
     for( i=0; i < r1->adjacent_region_count; ++i ){
-        Region *adjacent = r1->adjacent_regions[i];
+        FidSegRegion *adjacent = r1->adjacent_regions[i];
         if( adjacent == r2 )
             return 1;
     }
@@ -339,10 +339,10 @@ static int r1_adjacent_contains_r2( Region* r1, Region* r2 )
 // during the calls to this function we store the maximum leaf-to-node depth
 // in r->depth, later this field has a different meaning
 static void propagate_descendent_count_and_max_depth_upwards(
-        Segmenter *s, Region *r, FidtrackerX *ft )
+        Segmenter *s, FidSegRegion *r, FidtrackerX *ft )
 {
     int i;
-    Region *parent = 0;
+    FidSegRegion *parent = 0;
     assert( r->level == NOT_TRAVERSED );
     assert( r->children_visited_count == (r->adjacent_region_count - 1) );
         
@@ -351,7 +351,7 @@ static void propagate_descendent_count_and_max_depth_upwards(
     r->level = TRAVERSING;
     
     for( i=0; i < r->adjacent_region_count; ++i ){
-        Region *adjacent = r->adjacent_regions[i];
+        FidSegRegion *adjacent = r->adjacent_regions[i];
         assert( r1_adjacent_contains_r2( adjacent, r ) );
         
         if( adjacent->level == TRAVERSED ){
@@ -430,7 +430,7 @@ void sanity_check_region_initial_values( Segmenter *s )
 {
     int i;
     for( i=0; i < s->region_count; ++i ){
-        Region *r = LOOKUP_SEGMENTER_REGION( s, i );
+        FidSegRegion *r = LOOKUP_SEGMENTER_REGION( s, i );
 
         assert( r->level == NOT_TRAVERSED );
         assert( r->children_visited_count == 0 );
@@ -453,7 +453,7 @@ static void find_roots( Segmenter *s, FidtrackerX *ft )
     // find fiducial roots beginning at leafs
     
     for( i=0; i < s->region_count; ++i ){
-        Region *r = LOOKUP_SEGMENTER_REGION( s, i );
+        FidSegRegion *r = LOOKUP_SEGMENTER_REGION( s, i );
 
         if( r->adjacent_region_count == 1
                 && !(r->flags & (   SATURATED_REGION_FLAG |
@@ -502,7 +502,7 @@ int find_fiducialsX( FiducialX *fiducials, int count,
         FidtrackerX *ft, Segmenter *segments, int width, int height )
 {
     int i = 0;
-    Region *next;
+    FidSegRegion *next;
 
     initialize_head_region( &ft->root_regions_head );
 
