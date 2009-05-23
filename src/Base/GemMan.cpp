@@ -22,7 +22,6 @@
 
 #ifdef __unix__
 # include <sys/time.h>
-# include <GL/glx.h>
 # include <X11/Xlib.h>
 #elif defined __APPLE__
 # include <string.h>

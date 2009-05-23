@@ -36,7 +36,7 @@
 #elif defined __WIN32__
 # include "Base/wglew.h"
 #elif defined __linux__
-
+#  include "Base/glxew.h"
 #endif /* OS */
 
 #ifdef GLEW_MX
@@ -45,7 +45,6 @@ GEM_EXTERN GLEWContext*glewGetContext(void);
 # elif defined __WIN32__
 GEM_EXTERN WGLEWContext*wglewGetContext(void);
 # elif defined __linux__
-#  include "Base/glxew.h"
 GEM_EXTERN GLXEWContext*glxewGetContext(void);
 # endif
 

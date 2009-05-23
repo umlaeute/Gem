@@ -16,13 +16,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_GEMWINCREATE_H_
 #include "Base/config.h"
 
+#include "GemGL.h"
 #ifdef __unix__
-# include <GL/glx.h>
 # ifdef HAVE_LIBXXF86VM
 #  include <X11/extensions/xf86vmode.h>
 # endif
-#elif defined __WIN32__
-# include <windows.h>
 #elif defined __APPLE__
 # import <AGL/agl.h>
 #else
