@@ -13,7 +13,7 @@
 #ifndef INCLUDE_GEMGLUTWINDOW_H_
 #define INCLUDE_GEMGLUTWINDOW_H_
 
-#include "Base/CPPExtern.h"
+#include "Base/GemContext.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -51,9 +51,9 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemglutwindow : public CPPExtern
+class GEM_EXTERN gemglutwindow : public GemContext
 {
-  CPPEXTERN_HEADER(gemglutwindow, CPPExtern)
+  CPPEXTERN_HEADER(gemglutwindow, GemContext)
 
     public:
 
@@ -80,15 +80,6 @@ class GEM_EXTERN gemglutwindow : public CPPExtern
 
   void doRender(void);
 
-  /* info */
-  void info(t_symbol*s, t_float value);
-  void info(t_symbol*s, int, t_atom*);
-
-  void motion(int x, int y);
-  void button(int id, int state);
-  void key(t_symbol*id, int state);
-
-
   /* rendering */
   void   bangMess(void);
   void renderMess(void);
@@ -106,8 +97,7 @@ class GEM_EXTERN gemglutwindow : public CPPExtern
   bool       m_border;
 
   /* window position/dimension (pre creation) */
-  void    dimensionsMess(int width, int height);
-  unsigned int      m_width, m_height;
+  virtual void    dimensionsMess(int width, int height);
   void    fullscreenMess(bool on);
   bool              m_fullscreen;
   void        offsetMess(int x, int y);
@@ -123,10 +113,8 @@ class GEM_EXTERN gemglutwindow : public CPPExtern
 
 
   // check whether we have a window and if so, make it current
-  bool checkWindow(void);
+  virtual bool makeCurrent(void);
 
-  /* an outlet to send info to the patch */
-  t_outlet    *m_infoOut;
  private:
 
   /* the GLUT window id */

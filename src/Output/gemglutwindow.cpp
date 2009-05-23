@@ -88,12 +88,11 @@ gemglutwindow :: gemglutwindow(void) :
   m_fsaa(0),
   m_title((char*)"GEM"),
   m_border(false),
-  m_width(500), m_height(500),
+  //  m_width(500), m_height(500),
   m_fullscreen(false),
   m_xoffset(-1), m_yoffset(-1),
   m_cursor(false)
 {
-  m_infoOut = outlet_new(this->x_obj, 0);
 }
 
 /////////////////////////////////////////////////////////
@@ -103,16 +102,16 @@ gemglutwindow :: gemglutwindow(void) :
 gemglutwindow :: ~gemglutwindow()
 {
   destroyMess();
-  outlet_free(m_infoOut); m_infoOut=NULL;
 }
 
 
-bool gemglutwindow :: checkWindow(void){
+bool gemglutwindow :: makeCurrent(void){
   if(m_window>0) {
     glutSetWindow(m_window);
+    return GemContext::makeCurrent();
   }
 
-  return(m_window>0);
+  return(false);
 }
 
 
@@ -122,7 +121,7 @@ bool gemglutwindow :: checkWindow(void){
 /////////////////////////////////////////////////////////
 void gemglutwindow :: bangMess()
 {
-  if(!checkWindow()){ 
+  if(!makeCurrent()){ 
     error("no window made, cannot render!");
     return;
   }
@@ -136,58 +135,20 @@ void gemglutwindow :: bangMess()
 /////////////////////////////////////////////////////////
 void gemglutwindow :: renderMess()
 {
-  if(!checkWindow()){ 
+  if(!makeCurrent()){ 
     error("no window made, cannot render!");
     return;
   }
   glutPostRedisplay();
   glutMainLoopEvent();
-  if(checkWindow())
+  if(makeCurrent())
     glutSwapBuffers();
 }
 void gemglutwindow :: doRender()
 {
-  outlet_bang(m_infoOut);
+  bang();
 }
 
-void gemglutwindow :: info(t_symbol*s, t_float value)
-{
-  t_atom atom;
-  SETFLOAT(&atom, value);
-  outlet_anything(m_infoOut, s, 1, &atom); 
-}
-void gemglutwindow :: info(t_symbol*s, int argc, t_atom*argv)
-{
-  outlet_anything(m_infoOut, s, argc, argv); 
-}
-
-void gemglutwindow :: motion(int x, int y)
-{
-  t_atom ap[3];
-  SETSYMBOL(ap+0, gensym("motion"));
-  SETFLOAT (ap+1, x);
-  SETFLOAT (ap+2, y);
-
-  info(gensym("mouse"), 3, ap);
-}
-void gemglutwindow :: button(int id, int state)
-{
-  t_atom ap[3];
-  SETSYMBOL(ap+0, gensym("button"));
-  SETFLOAT (ap+1, id);
-  SETFLOAT (ap+2, state);
-
-  info(gensym("mouse"), 3, ap);
-}
-void gemglutwindow :: key(t_symbol*id, int state)
-{
-  t_atom ap[3];
-  SETSYMBOL(ap+0, gensym("key"));
-  SETSYMBOL(ap+1, id);
-  SETFLOAT (ap+2, state);
-
-  info(gensym("keyboard"), 3, ap);
-}
 
 /////////////////////////////////////////////////////////
 // bufferMess
@@ -223,7 +184,7 @@ void gemglutwindow :: fsaaMess(int value)
 void gemglutwindow :: titleMess(t_symbol* s)
 {
   m_title = s->s_name;
-  if(checkWindow()){
+  if(makeCurrent()){
     glutSetWindowTitle(m_title);
     glutSetIconTitle(m_title);
   }
@@ -253,7 +214,7 @@ void gemglutwindow :: dimensionsMess(int width, int height)
   }
   m_width = width;
   m_height = height;
-  if(checkWindow()){
+  if(makeCurrent()){
     glutReshapeWindow(m_width, m_height);
   }
 }
@@ -264,7 +225,7 @@ void gemglutwindow :: dimensionsMess(int width, int height)
 void gemglutwindow :: fullscreenMess(bool on)
 {
   m_fullscreen = on;
-  if(checkWindow()){
+  if(makeCurrent()){
     if(m_fullscreen)
       glutFullScreen();
     else {
@@ -282,7 +243,7 @@ void gemglutwindow :: offsetMess(int x, int y)
 {
   m_xoffset = x;
   m_yoffset = y;
-  if(checkWindow()){
+  if(makeCurrent()){
     glutPositionWindow(x, y);
   }
 }
@@ -316,6 +277,11 @@ void gemglutwindow :: createMess(void)
   glutWindowStatusFunc(&gemglutwindow::windowstatusCb);
 
   //  glutNameFunc(&gemglutwindow::nameCb);
+
+
+  if(!create()) {
+    destroyMess();
+  }
 }
 /////////////////////////////////////////////////////////
 // destroy window
@@ -323,11 +289,12 @@ void gemglutwindow :: createMess(void)
 /////////////////////////////////////////////////////////
 void gemglutwindow :: destroyMess(void)
 {
-  if(checkWindow()) {
+  if(makeCurrent()) {
     list_del(m_window);
     glutDestroyWindow(m_window);
     glutMainLoopEvent();
   }
+  destroy();
   m_window=0;
 }
 
@@ -339,7 +306,7 @@ void gemglutwindow :: destroyMess(void)
 void gemglutwindow :: cursorMess(bool setting)
 {
   m_cursor=setting;
-  if(checkWindow()){
+  if(makeCurrent()){
     glutSetCursor(setting?GLUT_CURSOR_INHERIT:GLUT_CURSOR_NONE);
   }
 }
