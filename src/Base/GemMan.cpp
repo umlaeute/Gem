@@ -86,10 +86,6 @@ float GemMan::m_fogStart;
 float GemMan::m_fogEnd;
 float GemMan::m_motionBlur=0.f;
 int GemMan::texture_rectangle_supported = 0;	//tigital
-int GemMan::client_storage_supported = 0;
-int GemMan::texture_range_supported = 0;
-int GemMan::texture_yuv_supported = 0;
-int GemMan::multisample_filter_hint = 0;
 GLint GemMan::maxStackDepth[4];
 float GemMan::fps;
 int GemMan::fsaa = 0;
@@ -221,19 +217,6 @@ void GemMan :: checkOpenGLExtensions(void)
     {
       texture_rectangle_supported = 0;
     }
-
-
-  /* client storage */
-  client_storage_supported = GLEW_APPLE_client_storage;
-
-  /* texture range */
-  texture_range_supported = GLEW_APPLE_texture_range;
-  
-  /* YUV textures */
-  texture_yuv_supported = GLEW_APPLE_ycbcr_422;
-
-  /* multisample filter */
-  multisample_filter_hint = GLEW_NV_multisample_filter_hint;
 }
 
 void GemMan :: createContext(char* disp)
@@ -978,7 +961,7 @@ void GemMan :: windowInit()
    */
   if(GLEW_ARB_multisample)
     glEnable (GL_MULTISAMPLE_ARB);
-  if(multisample_filter_hint)
+  if(GLEW_NV_multisample_filter_hint)
     glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
  
   resetValues();
@@ -1477,7 +1460,7 @@ void GemMan :: printInfo()
   }
 
   post("rectangle texturing: %d", texture_rectangle_supported);
-  post("direct yuv texturing: %d", texture_yuv_supported);
+  post("direct yuv texturing: %d", GLEW_APPLE_ycbcr_422);
 
   post("");
 }
