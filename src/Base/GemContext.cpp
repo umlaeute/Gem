@@ -18,6 +18,7 @@
 
 #ifdef GLEW_MX
 GLEWContext*s_glewcontext=NULL;
+GemGlewXContext*s_glewxcontext=NULL;
 #endif
 
 /////////////////////////////////////////////////////////
@@ -32,7 +33,7 @@ GemContext :: GemContext()
   : m_width(0), m_height(0),
     m_infoOut(NULL)
 #ifdef GLEW_MX
-  , m_context(NULL)
+  , m_context(NULL), m_xcontext(NULL)
 #endif /* GLEW_MX */
 {
   m_infoOut = outlet_new(this->x_obj, 0);
@@ -102,7 +103,13 @@ bool GemContext::create(void){
   bool ret=true;
   static int firsttime=1;
 #ifdef GLEW_MX
+  GLEWContext*oldcontext=s_glewcontext;
+  GemGlewXContext*oldcontextx=s_glewxcontext;
   m_context = new GLEWContext;
+  m_xcontext = new GemGlewXContext;
+  s_glewcontext=m_context;
+  s_glewxcontext=m_xcontext;
+  
   firsttime=1;
 #endif
 
@@ -120,8 +127,11 @@ bool GemContext::create(void){
 	ret=false;
       }
     }
+    post("GLEW version %s",glewGetString(GLEW_VERSION));
+
+    
+
   }
-  post("GLEW version %s",glewGetString(GLEW_VERSION));
 
   /* check the stack-sizes */
   glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    m_maxStackDepth+0);
@@ -185,4 +195,19 @@ GLEWContext*GemContext::getGlewContext(void) {
 
   return NULL;
 }
+
+GemGlewXContext*GemContext::getGlewXContext(void) {
+  if(NULL==s_glewxcontext) {
+    /* we should find another glew-context asap and make that one current! */
+    return NULL;
+  } else {
+    return s_glewxcontext;
+  }
+
+  return NULL;
+}
+
+GLEWContext*glewGetContext(void){return  GemContext::getGlewContext();}
+GemGlewXContext*wglewGetContext(void){return  GemContext::getGlewXContext();}
+GemGlewXContext*glxewGetContext(void){return  GemContext::getGlewXContext();}
 #endif

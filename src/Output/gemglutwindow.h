@@ -81,7 +81,6 @@ class GEM_EXTERN gemglutwindow : public GemContext
   void doRender(void);
 
   /* rendering */
-  void   bangMess(void);
   void renderMess(void);
 
   /* render context (pre creation) */
@@ -122,7 +121,6 @@ class GEM_EXTERN gemglutwindow : public GemContext
 
   //////////
   // Static member functions (rendering)
-  static void     bangMessCallback(void *data);
   static void     renderMessCallback(void *data);
 
   //////////

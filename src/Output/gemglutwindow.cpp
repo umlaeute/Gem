@@ -91,7 +91,8 @@ gemglutwindow :: gemglutwindow(void) :
   //  m_width(500), m_height(500),
   m_fullscreen(false),
   m_xoffset(-1), m_yoffset(-1),
-  m_cursor(false)
+  m_cursor(false),
+  m_window(0)
 {
 }
 
@@ -112,21 +113,6 @@ bool gemglutwindow :: makeCurrent(void){
   }
 
   return(false);
-}
-
-
-/////////////////////////////////////////////////////////
-// bangMess
-//
-/////////////////////////////////////////////////////////
-void gemglutwindow :: bangMess()
-{
-  if(!makeCurrent()){ 
-    error("no window made, cannot render!");
-    return;
-  }
-  glutPostRedisplay();
-  glutSwapBuffers();
 }
 
 /////////////////////////////////////////////////////////
@@ -254,6 +240,11 @@ void gemglutwindow :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 void gemglutwindow :: createMess(void)
 {
+  if(m_window) {
+    error("window already made!");
+    return;
+  }
+
   m_window=glutCreateWindow(m_title);
   list_add(this, m_window);
 
@@ -279,9 +270,24 @@ void gemglutwindow :: createMess(void)
   //  glutNameFunc(&gemglutwindow::nameCb);
 
 
+  glutSetWindowTitle(m_title);
+  glutSetIconTitle(m_title);
+  if(m_fullscreen) {
+    glutFullScreen();
+  } else {
+    // this crashes...
+    //    glutReshapeWindow(m_width, m_height);
+    glutPositionWindow(m_xoffset, m_yoffset);
+  }
+
+
   if(!create()) {
     destroyMess();
+    return;
   }
+  glutPostRedisplay();
+  glutMainLoopEvent();
+
 }
 /////////////////////////////////////////////////////////
 // destroy window
@@ -323,9 +329,8 @@ void gemglutwindow :: obj_setupCallback(t_class *classPtr)
   glutInitWindowSize(500,500);
   glutInit(&argc,&argv);
 
-  class_addbang(classPtr, (t_method)&gemglutwindow::bangMessCallback);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::renderMessCallback, gensym("render"), A_NULL);
-
+  class_addbang(classPtr, (t_method)&gemglutwindow::renderMessCallback);
+  
   class_addmethod(classPtr, (t_method)&gemglutwindow::titleMessCallback,        gensym("title"), A_DEFSYM ,A_NULL);
   class_addmethod(classPtr, (t_method)&gemglutwindow::createMessCallback,       gensym("create") ,A_NULL);
   class_addmethod(classPtr, (t_method)&gemglutwindow::bufferMessCallback,       gensym("buffer"), A_FLOAT, A_NULL);
@@ -349,10 +354,6 @@ void gemglutwindow :: borderMessCallback(void *data, t_floatarg state)
 void gemglutwindow :: destroyMessCallback(void *data)
 {
   GetMyClass(data)->destroyMess();
-}
-void gemglutwindow :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->bangMess();
 }
 void gemglutwindow :: renderMessCallback(void *data)
 {
@@ -464,7 +465,6 @@ void gemglutwindow::specialupCb(int c, int x, int y) {
   ggw->key(key2symbol(c), 0);
 }
 
-
 void gemglutwindow::reshapeCb(int x, int y) {
   t_atom ap[2];
   SETFLOAT (ap+0, x);
@@ -474,7 +474,7 @@ void gemglutwindow::reshapeCb(int x, int y) {
 }
 void gemglutwindow::mouseCb(int button, int state, int x, int y) {
   CALLBACK4WIN->motion(x,y);
-  ggw->button(button, state);
+  ggw->button(button, !state);
 }
 void gemglutwindow::motionCb(int x, int y) {
   CALLBACK4WIN->motion(x,y);
