@@ -169,6 +169,11 @@ class GEM_EXTERN gemglutwindow : public GemContext
   static void menustateCb(int);
   static void menustatusCb(int, int, int);
   static void windowstatusCb(int);
+
+  t_clock*m_clock;
+  int m_polltime;
+  static void clockCallback(void*);
+  void clock(void);
 };
 
 #endif    // for header file

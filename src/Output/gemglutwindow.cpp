@@ -92,10 +92,14 @@ gemglutwindow :: gemglutwindow(void) :
   m_fullscreen(false),
   m_xoffset(-1), m_yoffset(-1),
   m_cursor(false),
-  m_window(0)
+  m_window(0),
+  m_clock(NULL),
+  m_polltime(5)
 {
   m_width =500;
   m_height=500;
+
+  m_clock=clock_new(this, (t_method)gemglutwindow::clockCallback);
 }
 
 /////////////////////////////////////////////////////////
@@ -105,6 +109,7 @@ gemglutwindow :: gemglutwindow(void) :
 gemglutwindow :: ~gemglutwindow()
 {
   destroyMess();
+  clock_free(m_clock);
 }
 
 
@@ -220,8 +225,10 @@ void gemglutwindow :: fullscreenMess(bool on)
     if(m_fullscreen)
       glutFullScreen();
     else {
-      glutReshapeWindow(m_width, m_height);
-      glutPositionWindow(m_xoffset, m_yoffset);
+      if(0<m_width&&0<m_height)
+        glutReshapeWindow(m_width, m_height);
+      if(0<m_xoffset&&0<m_yoffset)
+        glutPositionWindow(m_xoffset, m_yoffset);
     }  
   }
 }
@@ -249,13 +256,23 @@ void gemglutwindow :: createMess(void)
     error("window already made!");
     return;
   }
+  unsigned int mode=GLUT_RGB | GLUT_DEPTH;
+  if(2==m_buffer)
+    mode|=GLUT_DOUBLE;
+  else
+    mode|=GLUT_SINGLE;
+
+  glutInitDisplayMode(mode);
 
   m_window=glutCreateWindow(m_title);
   list_add(this, m_window);
 
   glutDisplayFunc   (&gemglutwindow::displayCb);
   glutVisibilityFunc(&gemglutwindow::visibleCb);
+
   glutCloseFunc     (&gemglutwindow::closeCb);
+  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+
 
   glutKeyboardFunc(&gemglutwindow::keyboardCb);
   glutSpecialFunc(&gemglutwindow::specialCb);
@@ -273,29 +290,21 @@ void gemglutwindow :: createMess(void)
 
   glutWindowStatusFunc(&gemglutwindow::windowstatusCb);
 
-  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-
-
   //  glutNameFunc(&gemglutwindow::nameCb);
-
-
-  glutSetWindowTitle(m_title);
-  glutSetIconTitle(m_title);
-  if(m_fullscreen) {
-    glutFullScreen();
-  } else {
-    // this crashes...
-    //    glutReshapeWindow(m_width, m_height);
-    glutPositionWindow(m_xoffset, m_yoffset);
-  }
-
 
   if(!create()) {
     destroyMess();
     return;
   }
+
+  titleMess(gensym(m_title));
+  fullscreenMess(m_fullscreen);
+
   glutPostRedisplay();
   glutMainLoopEvent();
+
+  if(m_polltime>0)
+    clock_delay(m_clock, m_polltime);
 
 }
 /////////////////////////////////////////////////////////
@@ -305,14 +314,15 @@ void gemglutwindow :: createMess(void)
 void gemglutwindow :: destroy(void)
 {
   GemContext::destroy();
+  clock_unset(m_clock);
   m_window=0;
 }
 void gemglutwindow :: destroyMess(void)
 {
   if(makeCurrent()) {
-    list_del(m_window);
     glutDestroyWindow(m_window);
     glutMainLoopEvent();
+    list_del(m_window);
   }
   destroy();
 }
@@ -408,6 +418,29 @@ void gemglutwindow :: cursorMessCallback(void *data, t_floatarg val)
 void gemglutwindow :: fsaaMessCallback(void *data, t_floatarg val)
 {
   GetMyClass(data)->fsaaMess((int) val);
+}
+
+/////////////////////////////////////////////////////////
+// renderMess
+//
+/////////////////////////////////////////////////////////
+void gemglutwindow :: clock(void)
+{
+  if(m_window<=0){ 
+    return;
+  }
+  glutSetWindow(m_window);
+  
+  glutMainLoopEvent();
+
+  if(m_polltime>0)
+    clock_delay(m_clock, m_polltime);
+}
+
+void gemglutwindow :: clockCallback(void *data)
+{
+  gemglutwindow*instance=(gemglutwindow*)data;
+  instance->clock();
 }
 
 #define CALLBACK4WIN gemglutwindow*ggw=list_find(glutGetWindow()); if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
