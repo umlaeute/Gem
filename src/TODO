@@ -19,3 +19,19 @@ Particles:
 Pixes:
 	MMX, SSE2
 	windows movie loader (have a look at guliverkli)
+
+
+
+dreaming:
+ Pd-callbacks:
+  remove the entire callback-stuff for Pd-messages from the obj_realSetup()
+  instead this should be handled centrally in CPPExtern
+	- each member function called <name>Mess() provides a method for "<name>"
+	- dispatching can be done by Pd or Gem (the latter being easier)
+  info/ideas
+    - http://www.codeproject.com/KB/winsdk/callback_adapter.aspx
+    - Qt slot concept (http://sigslot.sourceforge.net/)
+    - reflection/inspection
+    - function-name demangling: http://publib.boulder.ibm.com/infocenter/comphelp/v8v101/index.jsp?topic=/com.ibm.xlcpp8a.doc/proguide/ref/rkcxxflt.htm
+
+
