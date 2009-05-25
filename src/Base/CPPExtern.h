@@ -310,6 +310,7 @@ static void* create_ ## NEW_CLASS ()                              \
   extern "C" {                                                  \
     void NEW_CLASS ## _setup()                          \
     {                                                           \
+      static bool firsttime=true; if(!firsttime)return; firsttime=false; \
       NEW_CLASS ## _class = class_new(                     \
                                            gensym(#NEW_CLASS),  \
                                            (t_newmethod)create_ ## NEW_CLASS, \
