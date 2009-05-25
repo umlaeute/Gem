@@ -104,6 +104,7 @@ class GEM_EXTERN gemglutwindow : public GemContext
 
   /* creation/destruction */
   void        createMess(void);
+  virtual void destroy(void);
   void       destroyMess(void);
 
   /* post creation */
@@ -154,6 +155,7 @@ class GEM_EXTERN gemglutwindow : public GemContext
   // glut callbacks 
   static void displayCb(void);
   static void visibleCb(int);
+  static void closeCb(void);
   static void keyboardCb(unsigned char, int, int);
   static void specialCb(int, int, int);
   static void reshapeCb(int, int);

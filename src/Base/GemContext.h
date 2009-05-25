@@ -43,7 +43,10 @@ class GEM_EXTERN GemContext : public CPPExtern
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
   /* LATER think about detaching theoutput from the stack, so we can e.g. destroy a window from a mouse-callback */
   void info(t_symbol*s, int, t_atom*);  
-  void info(t_symbol*s, t_float);  
+  void info(t_symbol*s);
+  void info(t_symbol*s, t_float);
+  void info(t_symbol*s, int i);
+  void info(t_symbol*s, t_symbol*);  
 
   void bang(void);
 
@@ -88,9 +91,10 @@ class GEM_EXTERN GemContext : public CPPExtern
 
   GLint m_maxStackDepth[4];
 
+ public:
+  static unsigned int getContextId(void);
 
 #ifdef GLEW_MX
- public:
   /* returns the last GemContext that called makeCurrent()
    * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
    */
@@ -107,8 +111,9 @@ class GEM_EXTERN GemContext : public CPPExtern
  private:
   GLEWContext    *m_context;
   GemGlewXContext*m_xcontext;
-
 #endif
+
+  unsigned int m_contextid;
 };
 
 

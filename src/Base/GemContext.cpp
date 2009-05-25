@@ -17,9 +17,34 @@
 #include "GemMan.h"
 
 #ifdef GLEW_MX
-GLEWContext*s_glewcontext=NULL;
-GemGlewXContext*s_glewxcontext=NULL;
+static GLEWContext*s_glewcontext=NULL;
+static GemGlewXContext*s_glewxcontext=NULL;
 #endif
+static unsigned int s_contextid;
+
+
+static unsigned int GemContext_newid(void)
+{
+  unsigned int id=0;
+#ifdef GLEW_MX
+  /* LATER reuse freed ids */
+  static unsigned int nextid=0;
+  id=nextid;
+  nextid++;
+#endif
+  return id;
+}
+
+static void GemContext_freeid(unsigned int id)
+{
+  if(s_contextid==id) {
+    s_contextid=0;
+  }
+
+  /* LATER reuse freed ids */
+  id=0;
+}
+
 
 /////////////////////////////////////////////////////////
 //
@@ -31,10 +56,11 @@ GemGlewXContext*s_glewxcontext=NULL;
 /////////////////////////////////////////////////////////
 GemContext :: GemContext()
   : m_width(0), m_height(0),
-    m_infoOut(NULL)
+    m_infoOut(NULL),
 #ifdef GLEW_MX
-  , m_context(NULL), m_xcontext(NULL)
+    m_context(NULL), m_xcontext(NULL),
 #endif /* GLEW_MX */
+    m_contextid(0)
 {
   m_infoOut = outlet_new(this->x_obj, 0);
 }
@@ -53,10 +79,23 @@ void GemContext::info(t_symbol*s, int argc, t_atom*argv) {
     outlet_anything(m_infoOut, s, argc, argv); 
   }
 }
+void GemContext::info(t_symbol*s) { 
+  info(s, 0, NULL); 
+}
+void GemContext::info(t_symbol*s, int i) {
+  info(s, (t_float)i);
+}
+
 void GemContext :: info(t_symbol*s, t_float value)
 {
   t_atom atom;
   SETFLOAT(&atom, value);
+  info(s, 1, &atom); 
+}
+void GemContext :: info(t_symbol*s, t_symbol*value)
+{
+  t_atom atom;
+  SETSYMBOL(&atom, value);
   info(s, 1, &atom); 
 }
 
@@ -103,6 +142,7 @@ bool GemContext::create(void){
   bool ret=true;
   static int firsttime=1;
 #ifdef GLEW_MX
+  unsigned int oldcontextid=s_contextid;
   GLEWContext*oldcontext=s_glewcontext;
   GemGlewXContext*oldcontextx=s_glewxcontext;
   m_context = new GLEWContext;
@@ -113,6 +153,9 @@ bool GemContext::create(void){
   firsttime=1;
 #endif
 
+  m_contextid=GemContext_newid();
+  s_contextid=m_contextid;
+
   if(firsttime) {
     GLenum err = glewInit();
   
@@ -120,17 +163,14 @@ bool GemContext::create(void){
       if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
 	error("GEM: failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!");
       } else if (GLEW_ERROR_GL_VERSION_10_ONLY) {
-	error("GEM: failed to init GLEW: your system only supports openGL-1.0");
-	ret=false;
+        error("GEM: failed to init GLEW: your system only supports openGL-1.0");
+        ret=false;
       } else {
-	error("GEM: failed to init GLEW");
-	ret=false;
+        error("GEM: failed to init GLEW");
+        ret=false;
       }
     }
     post("GLEW version %s",glewGetString(GLEW_VERSION));
-
-    
-
   }
 
   /* check the stack-sizes */
@@ -140,6 +180,13 @@ bool GemContext::create(void){
   glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   m_maxStackDepth+3);
 
   firsttime=0;
+
+#if 0
+  s_contextid=oldcontextid;
+  s_glewcontext=oldcontext;
+  oldcontextx=s_glewxcontext=oldcontextx;
+#endif
+
   return true;
 }
 
@@ -154,6 +201,8 @@ void GemContext::destroy(void){
   }
   m_context=NULL;
 #endif
+  GemContext_freeid(m_contextid);
+  m_contextid=0;
 }
 
 bool GemContext::makeCurrent(void){
@@ -169,6 +218,7 @@ bool GemContext::makeCurrent(void){
   }
   s_glewcontext=m_context;
 #endif
+  s_contextid=m_contextid;
   return true;
 
 }
@@ -183,6 +233,9 @@ void GemContext::dimensionsMess(void){
 }
 
 
+unsigned int GemContext::getContextId(void) {
+  return s_contextid;
+}
 
 #ifdef GLEW_MX
 GLEWContext*GemContext::getGlewContext(void) {

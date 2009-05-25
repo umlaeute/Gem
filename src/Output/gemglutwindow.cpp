@@ -94,6 +94,8 @@ gemglutwindow :: gemglutwindow(void) :
   m_cursor(false),
   m_window(0)
 {
+  m_width =500;
+  m_height=500;
 }
 
 /////////////////////////////////////////////////////////
@@ -125,7 +127,10 @@ void gemglutwindow :: renderMess()
     error("no window made, cannot render!");
     return;
   }
+  // mark the render-buffer as dirty, so the displayCb() gets called
+  // other things that mark dirty are (e.g.) resizing, making (parts of) the window visible,...
   glutPostRedisplay();
+
   glutMainLoopEvent();
   if(makeCurrent())
     glutSwapBuffers();
@@ -250,6 +255,7 @@ void gemglutwindow :: createMess(void)
 
   glutDisplayFunc   (&gemglutwindow::displayCb);
   glutVisibilityFunc(&gemglutwindow::visibleCb);
+  glutCloseFunc     (&gemglutwindow::closeCb);
 
   glutKeyboardFunc(&gemglutwindow::keyboardCb);
   glutSpecialFunc(&gemglutwindow::specialCb);
@@ -266,6 +272,9 @@ void gemglutwindow :: createMess(void)
   glutMenuStatusFunc(&gemglutwindow::menustatusCb);
 
   glutWindowStatusFunc(&gemglutwindow::windowstatusCb);
+
+  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+
 
   //  glutNameFunc(&gemglutwindow::nameCb);
 
@@ -293,6 +302,11 @@ void gemglutwindow :: createMess(void)
 // destroy window
 //
 /////////////////////////////////////////////////////////
+void gemglutwindow :: destroy(void)
+{
+  GemContext::destroy();
+  m_window=0;
+}
 void gemglutwindow :: destroyMess(void)
 {
   if(makeCurrent()) {
@@ -301,7 +315,6 @@ void gemglutwindow :: destroyMess(void)
     glutMainLoopEvent();
   }
   destroy();
-  m_window=0;
 }
 
 
@@ -325,9 +338,14 @@ void gemglutwindow :: obj_setupCallback(t_class *classPtr)
   int argc=0;
   char*argv=NULL;
 
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowSize(500,500);
-  glutInit(&argc,&argv);
+  static bool firsttime=true;
+
+  if(firsttime) {
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(500,500);
+    glutInit(&argc,&argv);
+  }
+  firsttime=false;
 
   class_addbang(classPtr, (t_method)&gemglutwindow::renderMessCallback);
   
@@ -401,6 +419,11 @@ void gemglutwindow::displayCb(void) {
 
 void gemglutwindow::visibleCb(int state) {
   CALLBACK4WIN->info(gensym("visible"), state);
+}
+
+void gemglutwindow::closeCb(void) {
+  CALLBACK4WIN ->destroy();
+  ggw->info(gensym("window"), gensym("closed"));
 }
 
 
@@ -493,5 +516,16 @@ void gemglutwindow::menustateCb(int value) {
 void gemglutwindow::menustatusCb(int x, int y, int z) {
 }
 void gemglutwindow::windowstatusCb(int value) {
-  CALLBACK4WIN->info(gensym("window"), value);
+  t_symbol*s=NULL;
+
+  switch(value) {
+  case GLUT_HIDDEN: s=gensym("hidden"); break;
+  case GLUT_FULLY_RETAINED: s=gensym("full"); break;
+  case GLUT_PARTIALLY_RETAINED: s=gensym("partial"); break;
+  case GLUT_FULLY_COVERED: s=gensym("covered"); break;
+  default:
+    s=gensym("unknown");
+  }
+
+  CALLBACK4WIN->info(gensym("window"), s);
 }

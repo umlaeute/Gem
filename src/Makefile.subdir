@@ -13,6 +13,10 @@ $(OBJDIR):
 
 o_objects: $(OBJDIR) $(O_OBJECTS)
 
+PD_OBJECTS = $(SOURCES:.cpp=.$(EXT))
+
+pd_objects: $(PD_OBJECTS)
+
 ## dependencies: as proposed by the GNU-make documentation
 ## see http://www.gnu.org/software/make/manual/html_node/make_47.html#SEC51
 ifeq (,$(findstring clean, $(MAKECMDGOALS)))
