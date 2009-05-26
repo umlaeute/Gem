@@ -28,3 +28,6 @@ if test -n "$MY_ACDIRS"; then
  done
 fi
 
+
+echo "if everything above succeeded, you can now run './configure'"
+echo "for options see './configure --help'"
