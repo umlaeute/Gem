@@ -353,7 +353,7 @@ void sphere3d :: obj_setupCallback(t_class *classPtr)
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&sphere3d::setCartMessCallback, gensym("setCartesian"), 
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&sphere3d::setCartMessCallback, gensym("setSpherical"), 
+  class_addmethod(classPtr, (t_method)&sphere3d::setSphMessCallback, gensym("setSpherical"), 
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&sphere3d::setSphMessCallback, gensym("setSph"), 
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
