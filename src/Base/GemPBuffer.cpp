@@ -18,7 +18,7 @@
  */
  
 #if 0
-# define debug printf
+# define debug error
 #else
 # define debug
 #endif
@@ -39,7 +39,7 @@
 # include <AGL/agl.h>
 #endif
 
-#include <stdio.h>
+#include "m_pd.h"
 
 #ifdef __linux__
 struct PBuffer_data {
@@ -148,8 +148,8 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height)
       throw("your system lacks PBuffer support!");
     }
   }
-  catch(const char *error) {
-    fprintf(stderr,"PBuffer::PBuffer(): %s\n",error);
+  catch(const char *err) {
+    error("PBuffer::PBuffer(): %s",err);
     pbuffer = glXGetCurrentDrawable();
     context = old_context;
   }
@@ -179,7 +179,7 @@ void PBuffer::enable() {
   data->old_context = glXGetCurrentContext();
 	
   if(!glXMakeCurrent(data->display,data->pbuffer,data->context)) {
-    fprintf(stderr,"PBuffer::enable(): glXMakeCurrent() failed\n");
+    error("PBuffer::enable(): glXMakeCurrent() failed");
   }
 }
 
@@ -187,7 +187,7 @@ void PBuffer::enable() {
  */
 void PBuffer::disable() {
   if(!glXMakeCurrent(data->display,data->old_pbuffer,data->old_context)) {
-    fprintf(stderr,"PBuffer::disable(): glXMakeCurrent() failed\n");
+    error("PBuffer::disable(): glXMakeCurrent() failed");
   }
 }
 #elif defined __APPLE__
@@ -238,7 +238,7 @@ void reportError (char * strError)
 
   //gErrorTime = getElapsedTime ();
   //sprintf (gErrorMessage, "Error: %s (at time: %0.1f secs)", strError, gErrorTime);
-  printf ("Error: %s\n", strError);
+  error ("Error: %s", strError);
 	 
   // out as debug string
   //cstr2pstr (strErr, gErrorMessage);
@@ -296,11 +296,11 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
   data = new PBuffer_data;
   data->old_context = CGLGetCurrentContext();
   err = CGLGetVirtualScreen(data->old_context, &vs);
-  printf ("Target Context (0x%X) Renderer: %s\n",data->old_context, glGetString (GL_RENDERER));
+  verbose (2, "Target Context (0x%X) Renderer: %s\n",data->old_context, glGetString (GL_RENDERER));
   cglReportError(CGLChoosePixelFormat (attrib, &data->pixfmt, &npf));
 	
   cglReportError(CGLCreateContext (data->pixfmt, data->old_context, &(data->context)));
-  printf ("pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
+  verbose (2, "pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
 	
   /*	if (float_buffer)
     cglReportError( CGLCreatePBuffer ( width, height, GL_TEXTURE_2D, GL_FLOAT, 0, &(data->pbuffer) ) );
@@ -310,7 +310,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
     cglReportError( CGLSetCurrentContext( data->context ) );
     cglReportError( CGLGetVirtualScreen(data->old_context, &vs) );
     cglReportError( CGLSetPBuffer(data->context, data->pbuffer, 0, 0, vs) );
-    printf ("pbuffer (0x%X) Renderer: %s\n",data->pbuffer, glGetString (GL_RENDERER));
+    verbose (2, "pbuffer (0x%X) Renderer: %s\n",data->pbuffer, glGetString (GL_RENDERER));
 }
 
 /*
@@ -461,7 +461,7 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) 
     if(!wglShareLists(old_context,context)) throw("wglShareLists() failed");
   }
   catch(const char *error) {
-    fprintf(stderr,"PBuffer::PBuffer(): %s\n",error);
+    error("GemPBuffer: %s",error);
     hdc = old_hdc;
     context = old_context;
   }
@@ -491,7 +491,7 @@ void PBuffer::enable() {
   data->old_context = wglGetCurrentContext();
 	
   if(!wglMakeCurrent(data->hdc,data->context)) {
-    fprintf(stderr,"PBuffer::disable(): wglMakeCurrent() failed\n");
+    error("PBuffer::disable(): wglMakeCurrent() failed");
   }
 }
 
@@ -499,7 +499,7 @@ void PBuffer::enable() {
  */
 void PBuffer::disable() {
   if(!wglMakeCurrent(data->old_hdc,data->old_context)) {
-    fprintf(stderr,"PBuffer::disable(): wglMakeCurrent() failed\n");
+    error("PBuffer::disable(): wglMakeCurrent() failed");
   }
 }
 #else

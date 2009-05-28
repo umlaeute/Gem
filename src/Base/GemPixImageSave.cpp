@@ -436,7 +436,7 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
   jpeg_create_compress(&cinfo);
 
   if ((outfile = fopen(filename, "wb")) == NULL) {
-    fprintf(stderr, "can't open %s\n", filename);
+    error("can't open %s\n", filename);
     return (0);
   }
   jpeg_stdio_dest(&cinfo, outfile);

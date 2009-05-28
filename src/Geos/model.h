@@ -85,7 +85,7 @@ class GEM_EXTERN model : public GemBase
     	virtual void	startRendering();
 
     	//////////
-	GLMmodel       *m_model;
+      GLMmodel       *m_model;
     	GLint	    	m_dispList;
         
 	//////////
