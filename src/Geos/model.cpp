@@ -158,8 +158,10 @@ void model :: openMess(t_symbol *filename)
   canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
   // read the object in
   m_model = glmReadOBJ(buf);
-
-  if (!m_model) return;
+  if (!m_model){
+      error("unable to read model '%s'", buf);
+      return;
+  }
 
   // set the size to -1 to 1
   //

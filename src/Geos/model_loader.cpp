@@ -257,7 +257,7 @@ _glmReadMTL(GLMmodel* model, char* name)
     
     file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "_glmReadMTL() failed: can't open material file \"%s\".\n",
+        printf("_glmReadMTL() failed: can't open material file \"%s\".\n",
             filename);
     	return -1;
     }
@@ -386,7 +386,7 @@ _glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
     /* open the file */
     file = fopen(filename, "w");
     if (!file) {
-        fprintf(stderr, "_glmWriteMTL() failed: can't open file \"%s\".\n",
+        printf("_glmWriteMTL() failed: can't open file \"%s\".\n",
             filename);
         return -1;
     }
@@ -1045,7 +1045,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
         facet normal of every triangle this vertex is in */
         node = members[i];
         if (!node)
-            fprintf(stderr, "glmVertexNormals(): vertex w/o a triangle\n");
+            printf("glmVertexNormals(): vertex w/o a triangle\n");
         average[0] = 0.0; average[1] = 0.0; average[2] = 0.0;
         avg = 0;
         while (node) {
@@ -1350,11 +1350,11 @@ glmReadOBJ(char* filename)
 {
     GLMmodel* model;
     FILE*   file;
-    
+ 
     /* open the file */
     file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "glmReadOBJ() failed: can't open data file \"%s\".\n",
+        printf("glmReadOBJ() failed: can't open data file \"%s\".\n",
             filename);
     	return NULL;
     }
@@ -1479,7 +1479,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
     /* open the file */
     file = fopen(filename, "w");
     if (!file) {
-        fprintf(stderr, "glmWriteOBJ() failed: can't open file \"%s\" to write.\n",
+        printf("glmWriteOBJ() failed: can't open file \"%s\" to write.\n",
             filename);
     	return -1;
     }
@@ -1822,10 +1822,10 @@ glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber)
     
     numgroup = model->numgroups-1;
     
-    fprintf(stderr,"number of groups: %d\n",numgroup);
+    printf("number of groups: %d\n",numgroup);
     //groupNumber-=1;
     if ( (!(groupNumber > numgroup)) && (groupNumber > 0)){
-        fprintf(stderr,"model group requested is %d number of groups: %d\n",groupNumber,numgroup);
+        printf("model group requested is %d number of groups: %d\n",groupNumber,numgroup);
         
     
     while (count < groupNumber) {
@@ -1987,7 +1987,7 @@ glmReadPPM(char* filename, int* width, int* height)
        correct magic cookie for a raw PPM file. */
     fgets(head, 70, fp);
     if (strncmp(head, "P6", 2)) {
-        fprintf(stderr, "%s: Not a raw PPM file\n", filename);
+        printf("%s: Not a raw PPM file\n", filename);
         return NULL;
     }
     
