@@ -21,6 +21,8 @@ LOG
 # pragma warning( disable : 4244 )
 # pragma warning( disable : 4305 )
 # pragma warning( disable : 4091 )
+// f*cking M$DN and classes exporting STL members...
+# pragma warning( disable : 4251 )
 // "switch" without "case" (just "default")
 # pragma warning( disable : 4065 )
 

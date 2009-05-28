@@ -42,6 +42,7 @@ class GEM_EXTERN GemContextDataBase {
 };
 
 
+
 template<class T = int>
   class GEM_EXTERN GemContextData : GemContextDataBase
   {
@@ -80,6 +81,9 @@ template<class T = int>
     }
 
     private:
+
+    std::vector<T*>  m_ContextDataVector;
+
     /* Makes sure that the vector is at least requiredSize large */
     void checkSize(unsigned int requiredSize)
     {
@@ -92,8 +96,6 @@ template<class T = int>
             }
         }
     }
-
-    std::vector<T*>  m_ContextDataVector;
 
     /**
      * Returns a pointer to the correct data element in the current context.

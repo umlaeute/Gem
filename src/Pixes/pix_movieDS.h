@@ -50,21 +50,10 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	virtual void render(GemState *state);
 
 	//////////
-	virtual void startRendering();
-
-	//////////
-	// Delete texture object
-	virtual void stopRendering();
-
-	virtual void closeMess();
-
-	//////////
 	// open a movie up
 	virtual void openMess(t_symbol *filename, int format);
-
-	//////////
-	// open a movie up
 	virtual void realOpen(char *filename);
+	virtual void closeMess();
 
 	//////////
 	// Do the rendering

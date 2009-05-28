@@ -23,6 +23,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # endif
 #elif defined __APPLE__
 # import <AGL/agl.h>
+#elif defined __WIN32__
+# include <windows.h>
 #else
 # error Define OS specific window creation
 #endif

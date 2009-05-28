@@ -178,6 +178,18 @@
 				RelativePath="..\..\src\Base\GemCache.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GemContext.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemContext.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemContextData.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemContextData.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\GemEvent.cpp">
 			</File>
 			<File
@@ -206,6 +218,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Base\GemGLUtil.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemGLUtil_generated.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Base\GemLoaders.cpp">
@@ -844,12 +859,6 @@
 		<Filter
 			Name="Controls"
 			Filter="">
-			<File
-				RelativePath="..\..\src\Controls\gem_state.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Controls\gem_state.h">
-			</File>
 			<File
 				RelativePath="..\..\src\Controls\gemframebuffer.cpp">
 			</File>
@@ -1579,6 +1588,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_write.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_writer.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_writer.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_yuv.cpp">
@@ -2766,6 +2781,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\openGL\GEMglMaterialf.h">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GEMglMaterialfv.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GEMglMaterialfv.h">
 			</File>
 			<File
 				RelativePath="..\..\src\openGL\GEMglMateriali.cpp">
