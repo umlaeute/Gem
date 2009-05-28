@@ -130,7 +130,7 @@ void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage, int topI
 void pix_imageInPlace :: downloadMess()
 {
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object){
-    error("cannot download now: do you have a window");
+    error("cannot download now: do you have a window?");
   }
 
   if (!mInPreload)return;

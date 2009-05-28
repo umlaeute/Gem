@@ -126,7 +126,6 @@ class GEM_EXTERN pix_artoolkit : public GemPixObj
   bool		m_continuous;		// continuous mode (true:continuous, false:one shot)
   t_symbol	*m_cparam_name;		// camera parameter file name
   ARParam 	m_cparam;			// camera parameter
-  int		m_numObjects;		//
   OBJECT_T	m_object[MAX_OBJECTS];		//
   //		char                *config_name;	//"Data/multi/marker.dat"
   //		ARMultiMarkerInfoT  *config;		//

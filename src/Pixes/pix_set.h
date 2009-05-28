@@ -74,10 +74,6 @@ protected:
 	virtual void	startRendering();
 	
 	//////////
-	// If you care about the stop of rendering
-	virtual void	stopRendering() {};
-	
-	//////////
 	// Clean up the pixBlock
 	void	    	cleanPixBlock();
     

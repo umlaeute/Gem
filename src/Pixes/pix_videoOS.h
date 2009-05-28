@@ -68,17 +68,6 @@ class GEM_EXTERN pix_videoOS : public GemBase
   virtual void 	render(GemState *state);
 
   //////////
-  // Clear the dirty flag on the pixBlock
-  virtual void 	postrender(GemState *state);
-
-  //////////
-  virtual void	startRendering();
-
-  //////////
-  // If you care about the stop of rendering
-  virtual void	stopRendering();
-    	
-  //////////
   // Clean up the pixBlock
   void	    	cleanPixBlock();
     

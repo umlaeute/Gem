@@ -34,7 +34,7 @@ pix_artoolkit :: pix_artoolkit()
 # endif
   m_xsize(320), m_ysize(240), m_thresh(100), 
   m_count(0), m_outputMode(OUTPUT_QUATERNION), m_continuous(true), 
-  m_cparam_name(NULL), m_numObjects(0)
+  m_cparam_name(NULL)
 #endif
 {
   //	patt_center[0] = patt_center[1] = 0.0;
@@ -82,26 +82,6 @@ pix_artoolkit :: ~pix_artoolkit()
 }
 
 #ifdef HAVE_ARTOOLKIT
-///////////////////////////////////////////////////////
-// startRendering
-//
-/////////////////////////////////////////////////////////
-void pix_artoolkit :: startRendering()
-{
-  for (int i=0; i<m_numObjects; i++)
-    m_object[i].contFlag = false;
-}
-
-//////////////////////////////////////////////////////
-// stopRendering
-//
-//////////////////////////////////////////////////////
-void pix_artoolkit :: stopRendering()
-{
-  for (int i=0; i<m_numObjects; i++)
-    m_object[i].contFlag = false;
-}
-
 //////////////////////////////////////////////////////
 // processRGBAImage
 //

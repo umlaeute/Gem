@@ -58,14 +58,6 @@ class GEM_EXTERN pix_multitexture : public GemBase
     	// Turn back off texture mapping
     	virtual void 	postrender(GemState *state);
 
-    	//////////
-    	// Establish texture object
-    	virtual void	startRendering();
-
-    	//////////
-    	// Delete texture object
-    	virtual void	stopRendering();
-
         t_inlet**m_inlet;
 
 	int			m_reqTexUnits; // requested # of texture Units, defaults to m_max

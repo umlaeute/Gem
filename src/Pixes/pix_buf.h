@@ -61,12 +61,6 @@ class GEM_EXTERN pix_buf : public GemBase
     	virtual void 	postrender(GemState *state);
 
     	//////////
-    	virtual void	startRendering();
-    	
-    	//////////
-    	virtual void	stopRendering();
-    	
-    	//////////
     	// Clean everything up
     	void	    	cleanImage();
     	   	
