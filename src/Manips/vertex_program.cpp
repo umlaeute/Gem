@@ -289,10 +289,11 @@ void vertex_program :: startRendering()
 
 void vertex_program :: render(GemState *state)
 {
+  LoadProgram();
+
   /* actually glProgramEnvParameter4fvARB really depends on GL_ARB_vertex_program
    * and cannot be used with _only_ GL_NV_vertex_program
    */
-  LoadProgram();
   if(GLEW_ARB_vertex_program) {
     if(m_programID&&(m_envNum>=0)){
       glProgramEnvParameter4fvARB(m_programTarget, m_envNum, m_param);
