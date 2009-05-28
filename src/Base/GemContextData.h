@@ -42,14 +42,18 @@ class GEM_EXTERN GemContextDataBase {
 };
 
 
-template<class GemContextDataType = int>
+template<class T = int>
   class GEM_EXTERN GemContextData : GemContextDataBase
   {
     public:
-    
+   
     //////////
     // Constructor
     GemContextData(void) {;}
+
+    ~GemContextData() {
+      m_ContextDataVector.clear();
+    }
     	
     /**
      * Returns reference to user data for the current context.
@@ -58,7 +62,7 @@ template<class GemContextDataType = int>
      * @note Should only be called from the draw function.
      *        Results are un-defined for other functions.
      */
-    GemContextDataType& operator*()
+    T& operator*()
     {
       return (*getPtrToCur());
     }
@@ -70,48 +74,26 @@ template<class GemContextDataType = int>
      * @note Should only be called from the draw function.
      *       Results are un-defined for other functions.
      */
-    GemContextDataType* operator->()
+    T* operator->()
     {
       return getPtrToCur();
     }
 
-    /** Container for the thread-specific context-specific data. */
-    template<class DATA_TYPE>
-    struct ThreadContextData
+    private:
+    /* Makes sure that the vector is at least requiredSize large */
+    void checkSize(unsigned int requiredSize)
     {
-      public:
-      typedef std::vector<DATA_TYPE*> data_list_t;
+      if(requiredSize > m_ContextDataVector.size())
+        {
+          m_ContextDataVector.reserve(requiredSize);          // Resize smartly
+          while(m_ContextDataVector.size() < requiredSize)    // Add any new items needed
+            {
+              m_ContextDataVector.push_back(new T());
+            }
+        }
+    }
 
-      ThreadContextData()
-        : mContextDataVector()
-      {;}
-
-      ~ThreadContextData()
-      {
-        for (typename data_list_t::iterator itr = mContextDataVector.begin();
-             mContextDataVector.end() != itr; itr++)
-          {
-            delete *itr;
-            (*itr) = NULL;
-          }
-        mContextDataVector.clear();
-      }
-
-      /* Makes sure that the vector is at least requiredSize large */
-      void checkSize(unsigned int requiredSize)
-      {
-        if(requiredSize > mContextDataVector.size())
-          {
-            mContextDataVector.reserve(requiredSize);          // Resize smartly
-            while(mContextDataVector.size() < requiredSize)    // Add any new items needed
-              {
-                mContextDataVector.push_back(new DATA_TYPE());
-              }
-          }
-      }
-
-      data_list_t mContextDataVector;   /**< Vector of user data */
-    };
+    std::vector<T*>  m_ContextDataVector;
 
     /**
      * Returns a pointer to the correct data element in the current context.
@@ -120,19 +102,15 @@ template<class GemContextDataType = int>
      * @post Synchronized.
      * @note ASSERT: Same context is rendered by same thread each time.
      */
-    GemContextDataType* getPtrToCur(void)
+    T* getPtrToCur(void)
     {
       // Get current context
       int context_id = getCurContext();
       // Cache ref for better performance
-      ThreadContextData<GemContextDataType>* thread_specific_context_data = &(*mThreadSpecificContextData);
+      checkSize(context_id+1);     // Make sure we are large enough (+1 since we have index)
 
-      thread_specific_context_data->checkSize(context_id+1);     // Make sure we are large enough (+1 since we have index)
-
-      return thread_specific_context_data->mContextDataVector[context_id];
+      return m_ContextDataVector[context_id];
     }
-    private:
-    ThreadContextData<GemContextDataType>  mThreadSpecificContextData;
   };
 
 

@@ -28,6 +28,12 @@
 # include <windows.h>
 #endif
 
+
+
+#ifdef GEM_MULTICONTEXT
+# define GLEW_MX
+#endif /* GEM_MULTICONTEXT */
+
 #define GLEW_STATIC
 #include "Base/glew.h"
 
@@ -39,7 +45,7 @@
 #  include "Base/glxew.h"
 #endif /* OS */
 
-#ifdef GLEW_MX
+#ifdef GEM_MULTICONTEXT
 GEM_EXTERN GLEWContext*glewGetContext(void);
 # ifdef __APPLE__
 # elif defined __WIN32__
@@ -48,7 +54,7 @@ GEM_EXTERN WGLEWContext*wglewGetContext(void);
 GEM_EXTERN GLXEWContext*glxewGetContext(void);
 # endif
 
-#endif /* GLEW_MX */
+#endif /* GEM_MULTICONTEXT */
 
 
 

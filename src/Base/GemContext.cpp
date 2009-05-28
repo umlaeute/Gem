@@ -16,22 +16,24 @@
 #include "GemContext.h"
 #include "GemMan.h"
 
-#ifdef GLEW_MX
+#ifdef GEM_MULTICONTEXT
+# warning multicontext rendering currently under development
+
 static GLEWContext*s_glewcontext=NULL;
 static GemGlewXContext*s_glewxcontext=NULL;
-#endif
+#endif /* GEM_MULTICONTEXT */
 static unsigned int s_contextid;
 
 
 static unsigned int GemContext_newid(void)
 {
   unsigned int id=0;
-#ifdef GLEW_MX
+#ifdef GEM_MULTICONTEXT
   /* LATER reuse freed ids */
   static unsigned int nextid=0;
   id=nextid;
   nextid++;
-#endif
+#endif /* GEM_MULTICONTEXT */
   return id;
 }
 
@@ -57,9 +59,9 @@ static void GemContext_freeid(unsigned int id)
 GemContext :: GemContext()
   : m_width(0), m_height(0),
     m_infoOut(NULL),
-#ifdef GLEW_MX
+#ifdef GEM_MULTICONTEXT
     m_context(NULL), m_xcontext(NULL),
-#endif /* GLEW_MX */
+#endif /* GEM_MULTICONTEXT */
     m_contextid(0)
 {
   m_infoOut = outlet_new(this->x_obj, 0);
@@ -141,7 +143,7 @@ void GemContext::key(t_symbol*id, int state) {
 bool GemContext::create(void){
   bool ret=true;
   static int firsttime=1;
-#ifdef GLEW_MX
+#ifdef GEM_MULTICONTEXT
   unsigned int oldcontextid=s_contextid;
   GLEWContext*oldcontext=s_glewcontext;
   GemGlewXContext*oldcontextx=s_glewxcontext;
@@ -151,7 +153,7 @@ bool GemContext::create(void){
   s_glewxcontext=m_xcontext;
   
   firsttime=1;
-#endif
+#endif /* GEM_MULTICONTEXT */
 
   m_contextid=GemContext_newid();
   s_contextid=m_contextid;
@@ -181,18 +183,21 @@ bool GemContext::create(void){
 
   firsttime=0;
 
-#if 0
+#ifdef GEM_MULTICONTEXT
+# if 0
+  /* LATER think about whether it is a good idea to restore the original context... */
   s_contextid=oldcontextid;
   s_glewcontext=oldcontext;
   oldcontextx=s_glewxcontext=oldcontextx;
-#endif
+# endif
+#endif /* GEM_MULTICONTEXT */
 
   return true;
 }
 
 
 void GemContext::destroy(void){
-#ifdef GLEW_MX
+#ifdef GEM_MULTICONTEXT
   if(m_context) {
     if(m_context==s_glewcontext) {
       s_glewcontext=NULL;
@@ -200,7 +205,7 @@ void GemContext::destroy(void){
     delete m_context;
   }
   m_context=NULL;
-#endif
+#endif /* GEM_MULTICONTEXT */
   GemContext_freeid(m_contextid);
   m_contextid=0;
 }
@@ -211,13 +216,13 @@ bool GemContext::makeCurrent(void){
   GemMan::maxStackDepth[2]=m_maxStackDepth[2];
   GemMan::maxStackDepth[3]=m_maxStackDepth[3];
 
-#ifdef GLEW_MX
+#ifdef GEM_MULTICONTEXT
   if(!m_context) {
     return false;
     /* alternatively we could create a context on the fly... */
   }
   s_glewcontext=m_context;
-#endif
+#endif /* GEM_MULTICONTEXT */
   s_contextid=m_contextid;
   return true;
 
@@ -237,7 +242,7 @@ unsigned int GemContext::getContextId(void) {
   return s_contextid;
 }
 
-#ifdef GLEW_MX
+#ifdef GEM_MULTICONTEXT
 GLEWContext*GemContext::getGlewContext(void) {
   if(NULL==s_glewcontext) {
     /* we should find another glew-context asap and make that one current! */
@@ -263,4 +268,4 @@ GemGlewXContext*GemContext::getGlewXContext(void) {
 GLEWContext*glewGetContext(void){return  GemContext::getGlewContext();}
 GemGlewXContext*wglewGetContext(void){return  GemContext::getGlewXContext();}
 GemGlewXContext*glxewGetContext(void){return  GemContext::getGlewXContext();}
-#endif
+#endif /* GEM_MULTICONTEXT */

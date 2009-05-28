@@ -15,6 +15,55 @@
 //
 /////////////////////////////////////////////////////////
 
+
+/*
+ * m_state: context dependent initialization state
+ *
+ * states:
+ *
+ * INIT: a context has just been created; initialize the object for this context
+ * DISABLED: the object is not useable in this context
+ * ENABLED: the object can run in this context; however, no context-ressources have been allocated yet (needs startRendering())
+ * RENDERING: startRendering() has been called and we can render this object just fine...
+ * MODIFIED: the object has been modified, and need to free it's context-ressources (stopRendering()) and request new ones (startRendering())
+ *
+ * state-change triggers:
+ * reset(): -> INIT
+ * setModified(): -> MODIFIED
+ *
+ * state-changers:
+ * isRunnable(); INIT -> ENABLED|DISABLED
+ * startRendering(): ENABLED->RENDERING
+ * stopRendering(): MODIFIED->ENABLED
+ *
+ * 0..INIT ( => isRunnable() -> (startRendering() -> RENDERING) (-> DISABLED))
+ * 1..RENDERING ( stopRendering() -> STOPPED)
+ * 2..STOPPED ( -> INIT) (startRendering() -> RENDERING)
+ * 3..DISABLED ( -> INIT)
+ *
+ *---
+ * INIT -> isRunnable() -> (DISABLED) (ENABLED)
+ * reset(): DISABLED -> INIT
+ * ENABLED -> startRendering() -> RENDERING
+ * setModified(): ENABLED
+ * STOPPING -> stopRendering() -> ENABLED
+
+ * RENDERING: render()
+
+ * isRunnable() has to be called once for each (new) context
+ * startRendering() has to be called for each context when new IDs are to be generated
+ * stopRendering() has to be called for each context to free IDs
+
+ * we need a mechanism to reset a context (e.g. because a context is destroyed and it's ID might be reused)
+ */
+
+#define RENDERSTATE_DISABLED -1
+#define RENDERSTATE_INIT      0
+#define RENDERSTATE_ENABLED   1
+#define RENDERSTATE_RENDERING 2
+#define RENDERSTATE_MODIFIED  3
+
+
 #include "GemBase.h"
 #include "GemCache.h"
 
@@ -56,12 +105,14 @@ void GemBase :: gem_startstopMess(int state)
 {
   if (state && !gem_amRendering){
     m_enabled = isRunnable();
-    if(m_enabled)
+    if(m_enabled) {
       startRendering();
+    }
   }
   else if (!state && gem_amRendering){
-    if(m_enabled)
+    if(m_enabled) {
       stopRendering();
+    }
   }
 
   gem_amRendering=(state!=0);
@@ -82,7 +133,28 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   m_cache=cache;
   if(m_cache->m_magic!=GEMCACHE_MAGIC)
     m_cache=NULL;
-
+#ifdef GEM_MULTICONTEXT
+  if(RENDERSTATE_INIT==*m_state) {
+    if(isRunnable()) {
+      *m_state=RENDERSTATE_ENABLED;
+    } else {
+      *m_state=RENDERSTATE_DISABLED;
+    }
+  }
+  if(RENDERSTATE_MODIFIED==*m_state) {
+    stopRendering();
+    *m_state=RENDERSTATE_ENABLED;
+  }
+  if(RENDERSTATE_ENABLED==*m_state) {
+    startRendering();
+    *m_state=RENDERSTATE_RENDERING;
+  }
+  if(RENDERSTATE_RENDERING==*m_state) {
+    if(state)render(state);
+    continueRender(state);
+    if(state)postrender(state);
+  }
+#else
   if (!gem_amRendering){ // init Rendering if not done yet
     m_enabled=isRunnable();
 
@@ -100,6 +172,7 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   }
 
   m_modified=false;
+#endif
 }
 
 void GemBase :: continueRender(GemState*state){

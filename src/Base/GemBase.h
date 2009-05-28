@@ -20,6 +20,8 @@
 #include "Base/CPPExtern.h"
 #include "Base/GemState.h"
 
+#include "Base/GemContextData.h"
+
 class GemCache;
 
 /*-----------------------------------------------------------------
@@ -127,6 +129,7 @@ class GEM_EXTERN GemBase : public CPPExtern
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
    */
   bool  m_enabled;
+  GemContextData<int>m_state;
 
 };
 
