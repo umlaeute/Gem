@@ -185,18 +185,12 @@ void model :: openMess(t_symbol *filename)
 /////////////////////////////////////////////////////////
 void model :: buildList()
 {
-  post("...");
   if (!m_model) return;
-  post("have model");
   if(!(GLEW_VERSION_1_1)) {
     verbose(1, "cannot build display-list now...do you have a window?");
     return;
   }
-  post("...%d", m_dispList);
-
   if (m_dispList)glDeleteLists(m_dispList, 1);
-
-  post("rebuild");
   //  m_flags = GLM_SMOOTH | GLM_MATERIAL;
   if (!m_group){
     m_dispList = glmList(m_model, m_flags);
@@ -205,7 +199,6 @@ void model :: buildList()
   {
     m_dispList = glmListGroup(m_model, m_flags,m_group);
   }
-  post("...");
 }
 
 /////////////////////////////////////////////////////////

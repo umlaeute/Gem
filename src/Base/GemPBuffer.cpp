@@ -460,8 +460,8 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) 
 		
     if(!wglShareLists(old_context,context)) throw("wglShareLists() failed");
   }
-  catch(const char *error) {
-    error("GemPBuffer: %s",error);
+  catch(const char *err) {
+    error("GemPBuffer: %s",err);
     hdc = old_hdc;
     context = old_context;
   }
