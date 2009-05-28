@@ -113,22 +113,20 @@ GEM_EXTERN int getGLdefine(const char *fixname)
 
     /*
 
-     grep define glew.h				     \
-	  | grep "GL_" | awk '{print $2}'	     \
-	  | egrep "^GL_" | awk '{print length($1),$1}'	\
-	  | sort -n					\
-	  | sed -e 's|\([0-9]*\) \(.*\)$|\1 \2\n\1|'	\
-	  | sed -e :a -e '/^\([0-9]*\)$/N; s/\n/ /; ta'			\
-	  | awk '{if (3==NF){if ($1!=$2) print $2,$3; else print $3}else if (2==NF)print $1,$2}' \
-	  | awk '{if (2==NF){print "        else return _GL_UNDEFINED;\n    case "$1":\n        if (0) return _GL_UNDEFINED;"; $1=$2}; print "        else if (!strcmp(name, \""$1"\")) return "$1";"}'
-
+     grep define glew.h                              \
+          | grep "GL_" | awk '{print $2}'            \
+          | egrep "^GL_" | awk '{print length($1),$1}'  \
+          | sort -n                                     \
+          | sed -e 's|\([0-9]*\) \(.*\)$|\1 \2\n\1|'    \
+          | sed -e :a -e '/^\([0-9]*\)$/N; s/\n/ /; ta'                 \
+          | awk '{if (3==NF){if ($1!=$2) print $2,$3; else print $3}else if (2==NF)print $1,$2}' \
+          | awk '{if (2==NF){print "        return _GL_UNDEFINED;\n    case "$1":"; $1=$2}; print "        if (!strcmp(name, \""$1"\")) return "$1";"}'
       */
 
     switch (count){
     default: 
-        if (0) return _GL_UNDEFINED;
 #include "GemGLUtil_generated.h"
-        else return _GL_UNDEFINED;
+      return _GL_UNDEFINED;
 
     }
 

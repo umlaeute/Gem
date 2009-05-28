@@ -1,22 +1,19 @@
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 4:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_Q")) return GL_Q;
         if (!strcmp(name, "GL_R")) return GL_R;
         if (!strcmp(name, "GL_S")) return GL_S;
         if (!strcmp(name, "GL_T")) return GL_T;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 5:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_2D")) return GL_2D;
         if (!strcmp(name, "GL_3D")) return GL_3D;
         if (!strcmp(name, "GL_CW")) return GL_CW;
         if (!strcmp(name, "GL_OR")) return GL_OR;
         if (!strcmp(name, "GL_R8")) return GL_R8;
         if (!strcmp(name, "GL_RG")) return GL_RG;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 6:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ADD")) return GL_ADD;
         if (!strcmp(name, "GL_AND")) return GL_AND;
         if (!strcmp(name, "GL_BGR")) return GL_BGR;
@@ -38,9 +35,8 @@
         if (!strcmp(name, "GL_V2F")) return GL_V2F;
         if (!strcmp(name, "GL_V3F")) return GL_V3F;
         if (!strcmp(name, "GL_XOR")) return GL_XOR;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 7:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_AUX0")) return GL_AUX0;
         if (!strcmp(name, "GL_AUX1")) return GL_AUX1;
         if (!strcmp(name, "GL_AUX2")) return GL_AUX2;
@@ -82,9 +78,8 @@
         if (!strcmp(name, "GL_SRGB")) return GL_SRGB;
         if (!strcmp(name, "GL_TRUE")) return GL_TRUE;
         if (!strcmp(name, "GL_ZERO")) return GL_ZERO;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 8:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ACCUM")) return GL_ACCUM;
         if (!strcmp(name, "GL_ALPHA")) return GL_ALPHA;
         if (!strcmp(name, "GL_BLEND")) return GL_BLEND;
@@ -128,9 +123,8 @@
         if (!strcmp(name, "GL_X_EXT")) return GL_X_EXT;
         if (!strcmp(name, "GL_Y_EXT")) return GL_Y_EXT;
         if (!strcmp(name, "GL_Z_EXT")) return GL_Z_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 9:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ALPHA4")) return GL_ALPHA4;
         if (!strcmp(name, "GL_ALPHA8")) return GL_ALPHA8;
         if (!strcmp(name, "GL_ALWAYS")) return GL_ALWAYS;
@@ -173,9 +167,8 @@
         if (!strcmp(name, "GL_VENDOR")) return GL_VENDOR;
         if (!strcmp(name, "GL_ZOOM_X")) return GL_ZOOM_X;
         if (!strcmp(name, "GL_ZOOM_Y")) return GL_ZOOM_Y;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 10:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_2_BYTES")) return GL_2_BYTES;
         if (!strcmp(name, "GL_3_BYTES")) return GL_3_BYTES;
         if (!strcmp(name, "GL_422_EXT")) return GL_422_EXT;
@@ -225,9 +218,8 @@
         if (!strcmp(name, "GL_T4F_V4F")) return GL_T4F_V4F;
         if (!strcmp(name, "GL_TEXTURE")) return GL_TEXTURE;
         if (!strcmp(name, "GL_VERSION")) return GL_VERSION;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 11:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_3D_COLOR")) return GL_3D_COLOR;
         if (!strcmp(name, "GL_ABGR_EXT")) return GL_ABGR_EXT;
         if (!strcmp(name, "GL_BGRA_EXT")) return GL_BGRA_EXT;
@@ -263,8 +255,8 @@
         if (!strcmp(name, "GL_LIST_BIT")) return GL_LIST_BIT;
         if (!strcmp(name, "GL_LOGIC_OP")) return GL_LOGIC_OP;
         if (!strcmp(name, "GL_MODULATE")) return GL_MODULATE;
-        if (!strcmp(name, "GL_NOTEQUAL")) return GL_NOTEQUAL;
         if (!strcmp(name, "GL_NO_ERROR")) return GL_NO_ERROR;
+        if (!strcmp(name, "GL_NOTEQUAL")) return GL_NOTEQUAL;
         if (!strcmp(name, "GL_NV_fence")) return GL_NV_fence;
         if (!strcmp(name, "GL_POSITION")) return GL_POSITION;
         if (!strcmp(name, "GL_PREVIOUS")) return GL_PREVIOUS;
@@ -298,9 +290,8 @@
         if (!strcmp(name, "GL_TEXTURE9")) return GL_TEXTURE9;
         if (!strcmp(name, "GL_VIEWPORT")) return GL_VIEWPORT;
         if (!strcmp(name, "GL_ZERO_EXT")) return GL_ZERO_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 12:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_1PASS_EXT")) return GL_1PASS_EXT;
         if (!strcmp(name, "GL_BACK_LEFT")) return GL_BACK_LEFT;
         if (!strcmp(name, "GL_BLEND_DST")) return GL_BLEND_DST;
@@ -398,9 +389,8 @@
         if (!strcmp(name, "GL_TEXTURE30")) return GL_TEXTURE30;
         if (!strcmp(name, "GL_TEXTURE31")) return GL_TEXTURE31;
         if (!strcmp(name, "GL_TRIANGLES")) return GL_TRIANGLES;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 13:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_1PASS_SGIS")) return GL_1PASS_SGIS;
         if (!strcmp(name, "GL_2X_BIT_ATI")) return GL_2X_BIT_ATI;
         if (!strcmp(name, "GL_4X_BIT_ATI")) return GL_4X_BIT_ATI;
@@ -451,8 +441,8 @@
         if (!strcmp(name, "GL_LINE_TOKEN")) return GL_LINE_TOKEN;
         if (!strcmp(name, "GL_LINE_WIDTH")) return GL_LINE_WIDTH;
         if (!strcmp(name, "GL_LIST_INDEX")) return GL_LIST_INDEX;
-        if (!strcmp(name, "GL_LOWER_LEFT")) return GL_LOWER_LEFT;
         if (!strcmp(name, "GL_LO_BIAS_NV")) return GL_LO_BIAS_NV;
+        if (!strcmp(name, "GL_LOWER_LEFT")) return GL_LOWER_LEFT;
         if (!strcmp(name, "GL_LUMINANCE4")) return GL_LUMINANCE4;
         if (!strcmp(name, "GL_LUMINANCE8")) return GL_LUMINANCE8;
         if (!strcmp(name, "GL_MAP1_INDEX")) return GL_MAP1_INDEX;
@@ -515,9 +505,8 @@
         if (!strcmp(name, "GL_VECTOR_EXT")) return GL_VECTOR_EXT;
         if (!strcmp(name, "GL_WRITE_ONLY")) return GL_WRITE_ONLY;
         if (!strcmp(name, "GL_YCBCR_MESA")) return GL_YCBCR_MESA;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 14:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_2PASS_0_EXT")) return GL_2PASS_0_EXT;
         if (!strcmp(name, "GL_2PASS_1_EXT")) return GL_2PASS_1_EXT;
         if (!strcmp(name, "GL_422_REV_EXT")) return GL_422_REV_EXT;
@@ -630,8 +619,8 @@
         if (!strcmp(name, "GL_SCISSOR_BOX")) return GL_SCISSOR_BOX;
         if (!strcmp(name, "GL_SGIX_shadow")) return GL_SGIX_shadow;
         if (!strcmp(name, "GL_SGIX_sprite")) return GL_SGIX_sprite;
-        if (!strcmp(name, "GL_SHADER_TYPE")) return GL_SHADER_TYPE;
         if (!strcmp(name, "GL_SHADE_MODEL")) return GL_SHADE_MODEL;
+        if (!strcmp(name, "GL_SHADER_TYPE")) return GL_SHADER_TYPE;
         if (!strcmp(name, "GL_SLUMINANCE8")) return GL_SLUMINANCE8;
         if (!strcmp(name, "GL_SOURCE0_RGB")) return GL_SOURCE0_RGB;
         if (!strcmp(name, "GL_SOURCE1_RGB")) return GL_SOURCE1_RGB;
@@ -658,9 +647,8 @@
         if (!strcmp(name, "GL_VERSION_2_1")) return GL_VERSION_2_1;
         if (!strcmp(name, "GL_VERSION_3_0")) return GL_VERSION_3_0;
         if (!strcmp(name, "GL_WRAP_BORDER")) return GL_WRAP_BORDER;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 15:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_2PASS_0_SGIS")) return GL_2PASS_0_SGIS;
         if (!strcmp(name, "GL_2PASS_1_SGIS")) return GL_2PASS_1_SGIS;
         if (!strcmp(name, "GL_3DFX_tbuffer")) return GL_3DFX_tbuffer;
@@ -763,10 +751,10 @@
         if (!strcmp(name, "GL_NORMAL_ARRAY")) return GL_NORMAL_ARRAY;
         if (!strcmp(name, "GL_OBJECT_PLANE")) return GL_OBJECT_PLANE;
         if (!strcmp(name, "GL_OML_resample")) return GL_OML_resample;
+        if (!strcmp(name, "GL_OP_CLAMP_EXT")) return GL_OP_CLAMP_EXT;
         if (!strcmp(name, "GL_OPERAND0_RGB")) return GL_OPERAND0_RGB;
         if (!strcmp(name, "GL_OPERAND1_RGB")) return GL_OPERAND1_RGB;
         if (!strcmp(name, "GL_OPERAND2_RGB")) return GL_OPERAND2_RGB;
-        if (!strcmp(name, "GL_OP_CLAMP_EXT")) return GL_OP_CLAMP_EXT;
         if (!strcmp(name, "GL_OP_FLOOR_EXT")) return GL_OP_FLOOR_EXT;
         if (!strcmp(name, "GL_OP_INDEX_EXT")) return GL_OP_INDEX_EXT;
         if (!strcmp(name, "GL_OP_POWER_EXT")) return GL_OP_POWER_EXT;
@@ -816,9 +804,8 @@
         if (!strcmp(name, "GL_VERTEX_ARRAY")) return GL_VERTEX_ARRAY;
         if (!strcmp(name, "GL_VERTEX_ID_NV")) return GL_VERTEX_ID_NV;
         if (!strcmp(name, "GL_VIEWPORT_BIT")) return GL_VIEWPORT_BIT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 16:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ALPHA16UI_EXT")) return GL_ALPHA16UI_EXT;
         if (!strcmp(name, "GL_ALPHA32UI_EXT")) return GL_ALPHA32UI_EXT;
         if (!strcmp(name, "GL_ALPHA_INTEGER")) return GL_ALPHA_INTEGER;
@@ -887,9 +874,9 @@
         if (!strcmp(name, "GL_MAP2_VERTEX_4")) return GL_MAP2_VERTEX_4;
         if (!strcmp(name, "GL_MAP_WRITE_BIT")) return GL_MAP_WRITE_BIT;
         if (!strcmp(name, "GL_MAX_BLUE_SGIS")) return GL_MAX_BLUE_SGIS;
+        if (!strcmp(name, "GL_MIN_BLUE_SGIS")) return GL_MIN_BLUE_SGIS;
         if (!strcmp(name, "GL_MINMAX_FORMAT")) return GL_MINMAX_FORMAT;
         if (!strcmp(name, "GL_MINOR_VERSION")) return GL_MINOR_VERSION;
-        if (!strcmp(name, "GL_MIN_BLUE_SGIS")) return GL_MIN_BLUE_SGIS;
         if (!strcmp(name, "GL_NORMAL_MAP_NV")) return GL_NORMAL_MAP_NV;
         if (!strcmp(name, "GL_NV_evaluators")) return GL_NV_evaluators;
         if (!strcmp(name, "GL_NV_half_float")) return GL_NV_half_float;
@@ -956,9 +943,8 @@
         if (!strcmp(name, "GL_VARIABLE_G_NV")) return GL_VARIABLE_G_NV;
         if (!strcmp(name, "GL_VERTEX_SHADER")) return GL_VERTEX_SHADER;
         if (!strcmp(name, "GL_WIN_swap_hint")) return GL_WIN_swap_hint;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 17:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ACCUM_RED_BITS")) return GL_ACCUM_RED_BITS;
         if (!strcmp(name, "GL_ACTIVE_TEXTURE")) return GL_ACTIVE_TEXTURE;
         if (!strcmp(name, "GL_ADD_SIGNED_ARB")) return GL_ADD_SIGNED_ARB;
@@ -1068,12 +1054,12 @@
         if (!strcmp(name, "GL_REFLECTION_MAP")) return GL_REFLECTION_MAP;
         if (!strcmp(name, "GL_RESCALE_NORMAL")) return GL_RESCALE_NORMAL;
         if (!strcmp(name, "GL_RGBA_DXT5_S3TC")) return GL_RGBA_DXT5_S3TC;
+        if (!strcmp(name, "GL_SAMPLE_BUFFERS")) return GL_SAMPLE_BUFFERS;
+        if (!strcmp(name, "GL_SAMPLE_MASK_NV")) return GL_SAMPLE_MASK_NV;
         if (!strcmp(name, "GL_SAMPLER_1D_ARB")) return GL_SAMPLER_1D_ARB;
         if (!strcmp(name, "GL_SAMPLER_2D_ARB")) return GL_SAMPLER_2D_ARB;
         if (!strcmp(name, "GL_SAMPLER_3D_ARB")) return GL_SAMPLER_3D_ARB;
         if (!strcmp(name, "GL_SAMPLES_PASSED")) return GL_SAMPLES_PASSED;
-        if (!strcmp(name, "GL_SAMPLE_BUFFERS")) return GL_SAMPLE_BUFFERS;
-        if (!strcmp(name, "GL_SAMPLE_MASK_NV")) return GL_SAMPLE_MASK_NV;
         if (!strcmp(name, "GL_SGIS_texture4D")) return GL_SGIS_texture4D;
         if (!strcmp(name, "GL_SGIX_framezoom")) return GL_SGIX_framezoom;
         if (!strcmp(name, "GL_SGIX_interlace")) return GL_SGIX_interlace;
@@ -1104,9 +1090,8 @@
         if (!strcmp(name, "GL_TRIANGLE_STRIP")) return GL_TRIANGLE_STRIP;
         if (!strcmp(name, "GL_UNSIGNED_SHORT")) return GL_UNSIGNED_SHORT;
         if (!strcmp(name, "GL_WRITE_ONLY_ARB")) return GL_WRITE_ONLY_ARB;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 18:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_422_AVERAGE_EXT")) return GL_422_AVERAGE_EXT;
         if (!strcmp(name, "GL_ACCUM_BLUE_BITS")) return GL_ACCUM_BLUE_BITS;
         if (!strcmp(name, "GL_ACTIVE_UNIFORMS")) return GL_ACTIVE_UNIFORMS;
@@ -1230,8 +1215,8 @@
         if (!strcmp(name, "GL_SAMPLE_COVERAGE")) return GL_SAMPLE_COVERAGE;
         if (!strcmp(name, "GL_SAMPLE_MASK_EXT")) return GL_SAMPLE_MASK_EXT;
         if (!strcmp(name, "GL_SCALE_BY_TWO_NV")) return GL_SCALE_BY_TWO_NV;
-        if (!strcmp(name, "GL_SGIX_fog_offset")) return GL_SGIX_fog_offset;
         if (!strcmp(name, "GL_SGI_color_table")) return GL_SGI_color_table;
+        if (!strcmp(name, "GL_SGIX_fog_offset")) return GL_SGIX_fog_offset;
         if (!strcmp(name, "GL_SIGNED_ALPHA_NV")) return GL_SIGNED_ALPHA_NV;
         if (!strcmp(name, "GL_SIGNED_ALPHA_NV")) return GL_SIGNED_ALPHA_NV;
         if (!strcmp(name, "GL_SIGNED_HILO8_NV")) return GL_SIGNED_HILO8_NV;
@@ -1266,11 +1251,10 @@
         if (!strcmp(name, "GL_VERTEX4_BIT_PGI")) return GL_VERTEX4_BIT_PGI;
         if (!strcmp(name, "GL_WRAP_BORDER_SUN")) return GL_WRAP_BORDER_SUN;
         if (!strcmp(name, "GL_YCBCR_422_APPLE")) return GL_YCBCR_422_APPLE;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 19:
-        if (0) return _GL_UNDEFINED;
-        if (!strcmp(name, "GL_3DFX_multisample")) return GL_3DFX_multisample;
         if (!strcmp(name, "GL_3D_COLOR_TEXTURE")) return GL_3D_COLOR_TEXTURE;
+        if (!strcmp(name, "GL_3DFX_multisample")) return GL_3DFX_multisample;
         if (!strcmp(name, "GL_4D_COLOR_TEXTURE")) return GL_4D_COLOR_TEXTURE;
         if (!strcmp(name, "GL_ACCUM_ALPHA_BITS")) return GL_ACCUM_ALPHA_BITS;
         if (!strcmp(name, "GL_ACCUM_BUFFER_BIT")) return GL_ACCUM_BUFFER_BIT;
@@ -1432,20 +1416,20 @@
         if (!strcmp(name, "GL_RGBA_FLOAT32_ATI")) return GL_RGBA_FLOAT32_ATI;
         if (!strcmp(name, "GL_RGBA_INTEGER_EXT")) return GL_RGBA_INTEGER_EXT;
         if (!strcmp(name, "GL_RGBA_SIGNED_SGIX")) return GL_RGBA_SIGNED_SGIX;
+        if (!strcmp(name, "GL_SAMPLE_MASK_SGIS")) return GL_SAMPLE_MASK_SGIS;
         if (!strcmp(name, "GL_SAMPLER_1D_ARRAY")) return GL_SAMPLER_1D_ARRAY;
         if (!strcmp(name, "GL_SAMPLER_2D_ARRAY")) return GL_SAMPLER_2D_ARRAY;
         if (!strcmp(name, "GL_SAMPLER_CUBE_ARB")) return GL_SAMPLER_CUBE_ARB;
-        if (!strcmp(name, "GL_SAMPLE_MASK_SGIS")) return GL_SAMPLE_MASK_SGIS;
         if (!strcmp(name, "GL_SATURATE_BIT_ATI")) return GL_SATURATE_BIT_ATI;
         if (!strcmp(name, "GL_SCALE_BY_FOUR_NV")) return GL_SCALE_BY_FOUR_NV;
         if (!strcmp(name, "GL_SEPARABLE_2D_EXT")) return GL_SEPARABLE_2D_EXT;
         if (!strcmp(name, "GL_SEPARATE_ATTRIBS")) return GL_SEPARATE_ATTRIBS;
+        if (!strcmp(name, "GL_SGI_color_matrix")) return GL_SGI_color_matrix;
         if (!strcmp(name, "GL_SGIS_color_range")) return GL_SGIS_color_range;
         if (!strcmp(name, "GL_SGIS_multisample")) return GL_SGIS_multisample;
         if (!strcmp(name, "GL_SGIS_texture_lod")) return GL_SGIS_texture_lod;
         if (!strcmp(name, "GL_SGIX_async_pixel")) return GL_SGIX_async_pixel;
         if (!strcmp(name, "GL_SGIX_fog_texture")) return GL_SGIX_fog_texture;
-        if (!strcmp(name, "GL_SGI_color_matrix")) return GL_SGI_color_matrix;
         if (!strcmp(name, "GL_SIGNED_ALPHA8_NV")) return GL_SIGNED_ALPHA8_NV;
         if (!strcmp(name, "GL_SIGNED_ALPHA8_NV")) return GL_SIGNED_ALPHA8_NV;
         if (!strcmp(name, "GL_SIGNED_HILO16_NV")) return GL_SIGNED_HILO16_NV;
@@ -1481,9 +1465,8 @@
         if (!strcmp(name, "GL_VIBRANCE_BIAS_NV")) return GL_VIBRANCE_BIAS_NV;
         if (!strcmp(name, "GL_WEIGHT_ARRAY_ARB")) return GL_WEIGHT_ARRAY_ARB;
         if (!strcmp(name, "GL_WIN_specular_fog")) return GL_WIN_specular_fog;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 20:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ACCUM_CLEAR_VALUE")) return GL_ACCUM_CLEAR_VALUE;
         if (!strcmp(name, "GL_ACTIVE_ATTRIBUTES")) return GL_ACTIVE_ATTRIBUTES;
         if (!strcmp(name, "GL_ALPHA_FLOAT16_ATI")) return GL_ALPHA_FLOAT16_ATI;
@@ -1520,10 +1503,10 @@
         if (!strcmp(name, "GL_COLOR_INDEX16_EXT")) return GL_COLOR_INDEX16_EXT;
         if (!strcmp(name, "GL_COLOR_TABLE_SCALE")) return GL_COLOR_TABLE_SCALE;
         if (!strcmp(name, "GL_COLOR_TABLE_WIDTH")) return GL_COLOR_TABLE_WIDTH;
-        if (!strcmp(name, "GL_COMBINER_INPUT_NV")) return GL_COMBINER_INPUT_NV;
-        if (!strcmp(name, "GL_COMBINER_SCALE_NV")) return GL_COMBINER_SCALE_NV;
         if (!strcmp(name, "GL_COMBINE_ALPHA_ARB")) return GL_COMBINE_ALPHA_ARB;
         if (!strcmp(name, "GL_COMBINE_ALPHA_EXT")) return GL_COMBINE_ALPHA_EXT;
+        if (!strcmp(name, "GL_COMBINER_INPUT_NV")) return GL_COMBINER_INPUT_NV;
+        if (!strcmp(name, "GL_COMBINER_SCALE_NV")) return GL_COMBINER_SCALE_NV;
         if (!strcmp(name, "GL_CONVOLUTION_WIDTH")) return GL_CONVOLUTION_WIDTH;
         if (!strcmp(name, "GL_COORD_REPLACE_ARB")) return GL_COORD_REPLACE_ARB;
         if (!strcmp(name, "GL_COUNTER_RANGE_AMD")) return GL_COUNTER_RANGE_AMD;
@@ -1654,9 +1637,8 @@
         if (!strcmp(name, "GL_VERTEX_SOURCE_ATI")) return GL_VERTEX_SOURCE_ATI;
         if (!strcmp(name, "GL_VIBRANCE_SCALE_NV")) return GL_VIBRANCE_SCALE_NV;
         if (!strcmp(name, "GL_WIN_phong_shading")) return GL_WIN_phong_shading;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 21:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ACTIVE_TEXTURE_ARB")) return GL_ACTIVE_TEXTURE_ARB;
         if (!strcmp(name, "GL_ACTIVE_VARYINGS_NV")) return GL_ACTIVE_VARYINGS_NV;
         if (!strcmp(name, "GL_APPLE_float_pixels")) return GL_APPLE_float_pixels;
@@ -1666,9 +1648,9 @@
         if (!strcmp(name, "GL_ARB_shader_objects")) return GL_ARB_shader_objects;
         if (!strcmp(name, "GL_ARB_shadow_ambient")) return GL_ARB_shadow_ambient;
         if (!strcmp(name, "GL_ARB_vertex_program")) return GL_ARB_vertex_program;
-        if (!strcmp(name, "GL_ATIX_point_sprites")) return GL_ATIX_point_sprites;
         if (!strcmp(name, "GL_ATI_envmap_bumpmap")) return GL_ATI_envmap_bumpmap;
         if (!strcmp(name, "GL_ATI_vertex_streams")) return GL_ATI_vertex_streams;
+        if (!strcmp(name, "GL_ATIX_point_sprites")) return GL_ATIX_point_sprites;
         if (!strcmp(name, "GL_ATTRIB_STACK_DEPTH")) return GL_ATTRIB_STACK_DEPTH;
         if (!strcmp(name, "GL_BINORMAL_ARRAY_EXT")) return GL_BINORMAL_ARRAY_EXT;
         if (!strcmp(name, "GL_BLEND_EQUATION_EXT")) return GL_BLEND_EQUATION_EXT;
@@ -1789,12 +1771,12 @@
         if (!strcmp(name, "GL_RGBA16_SIGNED_SGIX")) return GL_RGBA16_SIGNED_SGIX;
         if (!strcmp(name, "GL_RGBA_FLOAT16_APPLE")) return GL_RGBA_FLOAT16_APPLE;
         if (!strcmp(name, "GL_RGBA_FLOAT32_APPLE")) return GL_RGBA_FLOAT32_APPLE;
-        if (!strcmp(name, "GL_SAMPLER_BUFFER_EXT")) return GL_SAMPLER_BUFFER_EXT;
-        if (!strcmp(name, "GL_SAMPLES_PASSED_ARB")) return GL_SAMPLES_PASSED_ARB;
         if (!strcmp(name, "GL_SAMPLE_BUFFERS_ARB")) return GL_SAMPLE_BUFFERS_ARB;
         if (!strcmp(name, "GL_SAMPLE_BUFFERS_EXT")) return GL_SAMPLE_BUFFERS_EXT;
         if (!strcmp(name, "GL_SAMPLE_PATTERN_EXT")) return GL_SAMPLE_PATTERN_EXT;
         if (!strcmp(name, "GL_SAMPLE_POSITION_NV")) return GL_SAMPLE_POSITION_NV;
+        if (!strcmp(name, "GL_SAMPLER_BUFFER_EXT")) return GL_SAMPLER_BUFFER_EXT;
+        if (!strcmp(name, "GL_SAMPLES_PASSED_ARB")) return GL_SAMPLES_PASSED_ARB;
         if (!strcmp(name, "GL_SECONDARY_COLOR_NV")) return GL_SECONDARY_COLOR_NV;
         if (!strcmp(name, "GL_SGIS_pixel_texture")) return GL_SGIS_pixel_texture;
         if (!strcmp(name, "GL_SGIX_depth_texture")) return GL_SGIX_depth_texture;
@@ -1850,9 +1832,8 @@
         if (!strcmp(name, "GL_VERTEX_STREAM6_ATI")) return GL_VERTEX_STREAM6_ATI;
         if (!strcmp(name, "GL_VERTEX_STREAM7_ATI")) return GL_VERTEX_STREAM7_ATI;
         if (!strcmp(name, "GL_WIDE_LINE_HINT_PGI")) return GL_WIDE_LINE_HINT_PGI;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 22:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_422_REV_AVERAGE_EXT")) return GL_422_REV_AVERAGE_EXT;
         if (!strcmp(name, "GL_ALL_STATIC_DATA_IBM")) return GL_ALL_STATIC_DATA_IBM;
         if (!strcmp(name, "GL_ALPHA16_SIGNED_SGIX")) return GL_ALPHA16_SIGNED_SGIX;
@@ -1921,8 +1902,8 @@
         if (!strcmp(name, "GL_MAX_3D_TEXTURE_SIZE")) return GL_MAX_3D_TEXTURE_SIZE;
         if (!strcmp(name, "GL_MAX_PIXEL_MAP_TABLE")) return GL_MAX_PIXEL_MAP_TABLE;
         if (!strcmp(name, "GL_MAX_VERTEX_HINT_PGI")) return GL_MAX_VERTEX_HINT_PGI;
-        if (!strcmp(name, "GL_MESAX_texture_stack")) return GL_MESAX_texture_stack;
         if (!strcmp(name, "GL_MESA_resize_buffers")) return GL_MESA_resize_buffers;
+        if (!strcmp(name, "GL_MESAX_texture_stack")) return GL_MESAX_texture_stack;
         if (!strcmp(name, "GL_MIRRORED_REPEAT_ARB")) return GL_MIRRORED_REPEAT_ARB;
         if (!strcmp(name, "GL_MIRRORED_REPEAT_IBM")) return GL_MIRRORED_REPEAT_IBM;
         if (!strcmp(name, "GL_MULTISAMPLE_BIT_ARB")) return GL_MULTISAMPLE_BIT_ARB;
@@ -1949,14 +1930,14 @@
         if (!strcmp(name, "GL_PROXY_HISTOGRAM_EXT")) return GL_PROXY_HISTOGRAM_EXT;
         if (!strcmp(name, "GL_RENDERBUFFER_HEIGHT")) return GL_RENDERBUFFER_HEIGHT;
         if (!strcmp(name, "GL_RGBA_FLOAT_MODE_ARB")) return GL_RGBA_FLOAT_MODE_ARB;
-        if (!strcmp(name, "GL_SAMPLER_2D_RECT_ARB")) return GL_SAMPLER_2D_RECT_ARB;
-        if (!strcmp(name, "GL_SAMPLER_2D_RECT_ARB")) return GL_SAMPLER_2D_RECT_ARB;
-        if (!strcmp(name, "GL_SAMPLER_CUBE_SHADOW")) return GL_SAMPLER_CUBE_SHADOW;
         if (!strcmp(name, "GL_SAMPLE_ALPHA_TO_ONE")) return GL_SAMPLE_ALPHA_TO_ONE;
         if (!strcmp(name, "GL_SAMPLE_BUFFERS_3DFX")) return GL_SAMPLE_BUFFERS_3DFX;
         if (!strcmp(name, "GL_SAMPLE_BUFFERS_SGIS")) return GL_SAMPLE_BUFFERS_SGIS;
         if (!strcmp(name, "GL_SAMPLE_COVERAGE_ARB")) return GL_SAMPLE_COVERAGE_ARB;
         if (!strcmp(name, "GL_SAMPLE_PATTERN_SGIS")) return GL_SAMPLE_PATTERN_SGIS;
+        if (!strcmp(name, "GL_SAMPLER_2D_RECT_ARB")) return GL_SAMPLER_2D_RECT_ARB;
+        if (!strcmp(name, "GL_SAMPLER_2D_RECT_ARB")) return GL_SAMPLER_2D_RECT_ARB;
+        if (!strcmp(name, "GL_SAMPLER_CUBE_SHADOW")) return GL_SAMPLER_CUBE_SHADOW;
         if (!strcmp(name, "GL_SEPARATE_ATTRIBS_NV")) return GL_SEPARATE_ATTRIBS_NV;
         if (!strcmp(name, "GL_SGIS_detail_texture")) return GL_SGIS_detail_texture;
         if (!strcmp(name, "GL_SGIS_texture_select")) return GL_SGIS_texture_select;
@@ -1985,9 +1966,8 @@
         if (!strcmp(name, "GL_VERTEX_ARRAY_STRIDE")) return GL_VERTEX_ARRAY_STRIDE;
         if (!strcmp(name, "GL_VERTEX_PRECLIP_SGIX")) return GL_VERTEX_PRECLIP_SGIX;
         if (!strcmp(name, "GL_VERTEX_PRECLIP_SGIX")) return GL_VERTEX_PRECLIP_SGIX;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 23:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ALPHA_MAX_CLAMP_INGR")) return GL_ALPHA_MAX_CLAMP_INGR;
         if (!strcmp(name, "GL_ALPHA_MIN_CLAMP_INGR")) return GL_ALPHA_MIN_CLAMP_INGR;
         if (!strcmp(name, "GL_ALWAYS_FAST_HINT_PGI")) return GL_ALWAYS_FAST_HINT_PGI;
@@ -2049,8 +2029,8 @@
         if (!strcmp(name, "GL_EXT_vertex_weighting")) return GL_EXT_vertex_weighting;
         if (!strcmp(name, "GL_FEEDBACK_BUFFER_SIZE")) return GL_FEEDBACK_BUFFER_SIZE;
         if (!strcmp(name, "GL_FEEDBACK_BUFFER_TYPE")) return GL_FEEDBACK_BUFFER_TYPE;
-        if (!strcmp(name, "GL_FOG_COORDINATE_ARRAY")) return GL_FOG_COORDINATE_ARRAY;
         if (!strcmp(name, "GL_FOG_COORD_ARRAY_TYPE")) return GL_FOG_COORD_ARRAY_TYPE;
+        if (!strcmp(name, "GL_FOG_COORDINATE_ARRAY")) return GL_FOG_COORDINATE_ARRAY;
         if (!strcmp(name, "GL_FOG_DISTANCE_MODE_NV")) return GL_FOG_DISTANCE_MODE_NV;
         if (!strcmp(name, "GL_FORCE_BLUE_TO_ONE_NV")) return GL_FORCE_BLUE_TO_ONE_NV;
         if (!strcmp(name, "GL_FRAGMENT_PROGRAM_ARB")) return GL_FRAGMENT_PROGRAM_ARB;
@@ -2091,8 +2071,8 @@
         if (!strcmp(name, "GL_MAX_TEXTURE_LOD_BIAS")) return GL_MAX_TEXTURE_LOD_BIAS;
         if (!strcmp(name, "GL_MAX_VERTEX_UNITS_ARB")) return GL_MAX_VERTEX_UNITS_ARB;
         if (!strcmp(name, "GL_MULTISAMPLE_BIT_3DFX")) return GL_MULTISAMPLE_BIT_3DFX;
-        if (!strcmp(name, "GL_NORMALIZED_RANGE_EXT")) return GL_NORMALIZED_RANGE_EXT;
         if (!strcmp(name, "GL_NORMAL_ARRAY_POINTER")) return GL_NORMAL_ARRAY_POINTER;
+        if (!strcmp(name, "GL_NORMALIZED_RANGE_EXT")) return GL_NORMALIZED_RANGE_EXT;
         if (!strcmp(name, "GL_NV_fragment_program2")) return GL_NV_fragment_program2;
         if (!strcmp(name, "GL_NV_fragment_program4")) return GL_NV_fragment_program4;
         if (!strcmp(name, "GL_NV_geometry_program4")) return GL_NV_geometry_program4;
@@ -2111,8 +2091,8 @@
         if (!strcmp(name, "GL_PIXEL_MIN_FILTER_EXT")) return GL_PIXEL_MIN_FILTER_EXT;
         if (!strcmp(name, "GL_POLYGON_OFFSET_POINT")) return GL_POLYGON_OFFSET_POINT;
         if (!strcmp(name, "GL_POLYGON_OFFSET_UNITS")) return GL_POLYGON_OFFSET_UNITS;
-        if (!strcmp(name, "GL_PRIMITIVES_GENERATED")) return GL_PRIMITIVES_GENERATED;
         if (!strcmp(name, "GL_PRIMITIVE_RESTART_NV")) return GL_PRIMITIVE_RESTART_NV;
+        if (!strcmp(name, "GL_PRIMITIVES_GENERATED")) return GL_PRIMITIVES_GENERATED;
         if (!strcmp(name, "GL_PROGRAM_PARAMETER_NV")) return GL_PROGRAM_PARAMETER_NV;
         if (!strcmp(name, "GL_PROXY_TEXTURE_1D_EXT")) return GL_PROXY_TEXTURE_1D_EXT;
         if (!strcmp(name, "GL_PROXY_TEXTURE_2D_EXT")) return GL_PROXY_TEXTURE_2D_EXT;
@@ -2126,10 +2106,10 @@
         if (!strcmp(name, "GL_RENDERBUFFER_SAMPLES")) return GL_RENDERBUFFER_SAMPLES;
         if (!strcmp(name, "GL_REPLACEMENT_CODE_SUN")) return GL_REPLACEMENT_CODE_SUN;
         if (!strcmp(name, "GL_RESAMPLE_AVERAGE_OML")) return GL_RESAMPLE_AVERAGE_OML;
-        if (!strcmp(name, "GL_SAMPLER_1D_ARRAY_EXT")) return GL_SAMPLER_1D_ARRAY_EXT;
-        if (!strcmp(name, "GL_SAMPLER_2D_ARRAY_EXT")) return GL_SAMPLER_2D_ARRAY_EXT;
         if (!strcmp(name, "GL_SAMPLE_COUNT_BITS_NV")) return GL_SAMPLE_COUNT_BITS_NV;
         if (!strcmp(name, "GL_SAMPLE_MASK_VALUE_NV")) return GL_SAMPLE_MASK_VALUE_NV;
+        if (!strcmp(name, "GL_SAMPLER_1D_ARRAY_EXT")) return GL_SAMPLER_1D_ARRAY_EXT;
+        if (!strcmp(name, "GL_SAMPLER_2D_ARRAY_EXT")) return GL_SAMPLER_2D_ARRAY_EXT;
         if (!strcmp(name, "GL_SCALE_BY_ONE_HALF_NV")) return GL_SCALE_BY_ONE_HALF_NV;
         if (!strcmp(name, "GL_SECONDARY_COLOR_ATIX")) return GL_SECONDARY_COLOR_ATIX;
         if (!strcmp(name, "GL_SEPARATE_ATTRIBS_EXT")) return GL_SEPARATE_ATTRIBS_EXT;
@@ -2182,9 +2162,8 @@
         if (!strcmp(name, "GL_VERTEX_DATA_HINT_PGI")) return GL_VERTEX_DATA_HINT_PGI;
         if (!strcmp(name, "GL_VERTEX_WEIGHTING_EXT")) return GL_VERTEX_WEIGHTING_EXT;
         if (!strcmp(name, "GL_WEIGHT_SUM_UNITY_ARB")) return GL_WEIGHT_SUM_UNITY_ARB;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 24:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_APPLE_specular_vector")) return GL_APPLE_specular_vector;
         if (!strcmp(name, "GL_ARB_half_float_vertex")) return GL_ARB_half_float_vertex;
         if (!strcmp(name, "GL_ARB_texture_rectangle")) return GL_ARB_texture_rectangle;
@@ -2217,8 +2196,8 @@
         if (!strcmp(name, "GL_DEPTH_BOUNDS_TEST_EXT")) return GL_DEPTH_BOUNDS_TEST_EXT;
         if (!strcmp(name, "GL_DEPTH_COMPONENT16_ARB")) return GL_DEPTH_COMPONENT16_ARB;
         if (!strcmp(name, "GL_DEPTH_COMPONENT24_ARB")) return GL_DEPTH_COMPONENT24_ARB;
-        if (!strcmp(name, "GL_DEPTH_COMPONENT32F_NV")) return GL_DEPTH_COMPONENT32F_NV;
         if (!strcmp(name, "GL_DEPTH_COMPONENT32_ARB")) return GL_DEPTH_COMPONENT32_ARB;
+        if (!strcmp(name, "GL_DEPTH_COMPONENT32F_NV")) return GL_DEPTH_COMPONENT32F_NV;
         if (!strcmp(name, "GL_DSDT_MAG_INTENSITY_NV")) return GL_DSDT_MAG_INTENSITY_NV;
         if (!strcmp(name, "GL_DSDT_MAG_INTENSITY_NV")) return GL_DSDT_MAG_INTENSITY_NV;
         if (!strcmp(name, "GL_ENV_REVERSE_BLEND_EXT")) return GL_ENV_REVERSE_BLEND_EXT;
@@ -2302,10 +2281,10 @@
         if (!strcmp(name, "GL_RENDERBUFFER_RED_SIZE")) return GL_RENDERBUFFER_RED_SIZE;
         if (!strcmp(name, "GL_RESAMPLE_DECIMATE_OML")) return GL_RESAMPLE_DECIMATE_OML;
         if (!strcmp(name, "GL_RGBA_INTEGER_MODE_EXT")) return GL_RGBA_INTEGER_MODE_EXT;
-        if (!strcmp(name, "GL_SAMPLER_1D_SHADOW_ARB")) return GL_SAMPLER_1D_SHADOW_ARB;
-        if (!strcmp(name, "GL_SAMPLER_2D_SHADOW_ARB")) return GL_SAMPLER_2D_SHADOW_ARB;
         if (!strcmp(name, "GL_SAMPLE_COVERAGE_VALUE")) return GL_SAMPLE_COVERAGE_VALUE;
         if (!strcmp(name, "GL_SAMPLE_MASK_VALUE_EXT")) return GL_SAMPLE_MASK_VALUE_EXT;
+        if (!strcmp(name, "GL_SAMPLER_1D_SHADOW_ARB")) return GL_SAMPLER_1D_SHADOW_ARB;
+        if (!strcmp(name, "GL_SAMPLER_2D_SHADOW_ARB")) return GL_SAMPLER_2D_SHADOW_ARB;
         if (!strcmp(name, "GL_SECONDARY_COLOR_ARRAY")) return GL_SECONDARY_COLOR_ARRAY;
         if (!strcmp(name, "GL_SELECTION_BUFFER_SIZE")) return GL_SELECTION_BUFFER_SIZE;
         if (!strcmp(name, "GL_SGIX_texture_lod_bias")) return GL_SGIX_texture_lod_bias;
@@ -2335,16 +2314,15 @@
         if (!strcmp(name, "GL_VERTEX_ARRAY_TYPE_EXT")) return GL_VERTEX_ARRAY_TYPE_EXT;
         if (!strcmp(name, "GL_WEIGHT_ARRAY_SIZE_ARB")) return GL_WEIGHT_ARRAY_SIZE_ARB;
         if (!strcmp(name, "GL_WEIGHT_ARRAY_TYPE_ARB")) return GL_WEIGHT_ARRAY_TYPE_ARB;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 25:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ARB_color_buffer_float")) return GL_ARB_color_buffer_float;
         if (!strcmp(name, "GL_ARB_depth_buffer_float")) return GL_ARB_depth_buffer_float;
         if (!strcmp(name, "GL_ARB_framebuffer_object")) return GL_ARB_framebuffer_object;
         if (!strcmp(name, "GL_ASYNC_DRAW_PIXELS_SGIX")) return GL_ASYNC_DRAW_PIXELS_SGIX;
         if (!strcmp(name, "GL_ASYNC_READ_PIXELS_SGIX")) return GL_ASYNC_READ_PIXELS_SGIX;
-        if (!strcmp(name, "GL_ATIX_texture_env_route")) return GL_ATIX_texture_env_route;
         if (!strcmp(name, "GL_ATI_shader_texture_lod")) return GL_ATI_shader_texture_lod;
+        if (!strcmp(name, "GL_ATIX_texture_env_route")) return GL_ATIX_texture_env_route;
         if (!strcmp(name, "GL_ATTRIB_ARRAY_STRIDE_NV")) return GL_ATTRIB_ARRAY_STRIDE_NV;
         if (!strcmp(name, "GL_BLEND_EQUATION_RGB_EXT")) return GL_BLEND_EQUATION_RGB_EXT;
         if (!strcmp(name, "GL_BUFFER_MAP_POINTER_ARB")) return GL_BUFFER_MAP_POINTER_ARB;
@@ -2483,9 +2461,8 @@
         if (!strcmp(name, "GL_UNSIGNED_SHORT_5_5_5_1")) return GL_UNSIGNED_SHORT_5_5_5_1;
         if (!strcmp(name, "GL_VARIANT_ARRAY_TYPE_EXT")) return GL_VARIANT_ARRAY_TYPE_EXT;
         if (!strcmp(name, "GL_VERTEX_ARRAY_COUNT_EXT")) return GL_VERTEX_ARRAY_COUNT_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 26:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ACTIVE_STENCIL_FACE_EXT")) return GL_ACTIVE_STENCIL_FACE_EXT;
         if (!strcmp(name, "GL_ACTIVE_VERTEX_UNITS_ARB")) return GL_ACTIVE_VERTEX_UNITS_ARB;
         if (!strcmp(name, "GL_ALLOW_DRAW_FRG_HINT_PGI")) return GL_ALLOW_DRAW_FRG_HINT_PGI;
@@ -2578,20 +2555,20 @@
         if (!strcmp(name, "GL_RESAMPLE_REPLICATE_SGIX")) return GL_RESAMPLE_REPLICATE_SGIX;
         if (!strcmp(name, "GL_RESAMPLE_ZERO_FILL_SGIX")) return GL_RESAMPLE_ZERO_FILL_SGIX;
         if (!strcmp(name, "GL_RGB_EXTENDED_RANGE_SGIX")) return GL_RGB_EXTENDED_RANGE_SGIX;
+        if (!strcmp(name, "GL_SAMPLE_ALPHA_TO_ONE_ARB")) return GL_SAMPLE_ALPHA_TO_ONE_ARB;
+        if (!strcmp(name, "GL_SAMPLE_ALPHA_TO_ONE_EXT")) return GL_SAMPLE_ALPHA_TO_ONE_EXT;
+        if (!strcmp(name, "GL_SAMPLE_MASK_INVERT_SGIS")) return GL_SAMPLE_MASK_INVERT_SGIS;
         if (!strcmp(name, "GL_SAMPLER_1D_ARRAY_SHADOW")) return GL_SAMPLER_1D_ARRAY_SHADOW;
         if (!strcmp(name, "GL_SAMPLER_2D_ARRAY_SHADOW")) return GL_SAMPLER_2D_ARRAY_SHADOW;
         if (!strcmp(name, "GL_SAMPLER_CUBE_SHADOW_EXT")) return GL_SAMPLER_CUBE_SHADOW_EXT;
         if (!strcmp(name, "GL_SAMPLER_RENDERBUFFER_NV")) return GL_SAMPLER_RENDERBUFFER_NV;
-        if (!strcmp(name, "GL_SAMPLE_ALPHA_TO_ONE_ARB")) return GL_SAMPLE_ALPHA_TO_ONE_ARB;
-        if (!strcmp(name, "GL_SAMPLE_ALPHA_TO_ONE_EXT")) return GL_SAMPLE_ALPHA_TO_ONE_EXT;
-        if (!strcmp(name, "GL_SAMPLE_MASK_INVERT_SGIS")) return GL_SAMPLE_MASK_INVERT_SGIS;
         if (!strcmp(name, "GL_SCREEN_COORDINATES_REND")) return GL_SCREEN_COORDINATES_REND;
         if (!strcmp(name, "GL_SEPARATE_SPECULAR_COLOR")) return GL_SEPARATE_SPECULAR_COLOR;
         if (!strcmp(name, "GL_SGIS_texture_edge_clamp")) return GL_SGIS_texture_edge_clamp;
+        if (!strcmp(name, "GL_SGI_texture_color_table")) return GL_SGI_texture_color_table;
         if (!strcmp(name, "GL_SGIX_blend_alpha_minmax")) return GL_SGIX_blend_alpha_minmax;
         if (!strcmp(name, "GL_SGIX_pixel_texture_bits")) return GL_SGIX_pixel_texture_bits;
         if (!strcmp(name, "GL_SGIX_texture_scale_bias")) return GL_SGIX_texture_scale_bias;
-        if (!strcmp(name, "GL_SGI_texture_color_table")) return GL_SGI_texture_color_table;
         if (!strcmp(name, "GL_SMOOTH_LINE_WIDTH_RANGE")) return GL_SMOOTH_LINE_WIDTH_RANGE;
         if (!strcmp(name, "GL_SMOOTH_POINT_SIZE_RANGE")) return GL_SMOOTH_POINT_SIZE_RANGE;
         if (!strcmp(name, "GL_STATIC_VERTEX_ARRAY_IBM")) return GL_STATIC_VERTEX_ARRAY_IBM;
@@ -2634,9 +2611,8 @@
         if (!strcmp(name, "GL_VERTEX_STATE_PROGRAM_NV")) return GL_VERTEX_STATE_PROGRAM_NV;
         if (!strcmp(name, "GL_VERTEX_WEIGHT_ARRAY_EXT")) return GL_VERTEX_WEIGHT_ARRAY_EXT;
         if (!strcmp(name, "GL_WEIGHT_ARRAY_STRIDE_ARB")) return GL_WEIGHT_ARRAY_STRIDE_ARB;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 27:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ALIASED_LINE_WIDTH_RANGE")) return GL_ALIASED_LINE_WIDTH_RANGE;
         if (!strcmp(name, "GL_ALIASED_POINT_SIZE_RANGE")) return GL_ALIASED_POINT_SIZE_RANGE;
         if (!strcmp(name, "GL_APPLE_flush_buffer_range")) return GL_APPLE_flush_buffer_range;
@@ -2753,6 +2729,7 @@
         if (!strcmp(name, "GL_SHADING_LANGUAGE_VERSION")) return GL_SHADING_LANGUAGE_VERSION;
         if (!strcmp(name, "GL_STRICT_LIGHTING_HINT_PGI")) return GL_STRICT_LIGHTING_HINT_PGI;
         if (!strcmp(name, "GL_TANGENT_ARRAY_STRIDE_EXT")) return GL_TANGENT_ARRAY_STRIDE_EXT;
+        if (!strcmp(name, "GL_TEXT_FRAGMENT_SHADER_ATI")) return GL_TEXT_FRAGMENT_SHADER_ATI;
         if (!strcmp(name, "GL_TEXTURE_BINDING_1D_ARRAY")) return GL_TEXTURE_BINDING_1D_ARRAY;
         if (!strcmp(name, "GL_TEXTURE_BINDING_2D_ARRAY")) return GL_TEXTURE_BINDING_2D_ARRAY;
         if (!strcmp(name, "GL_TEXTURE_BINDING_CUBE_MAP")) return GL_TEXTURE_BINDING_CUBE_MAP;
@@ -2767,7 +2744,6 @@
         if (!strcmp(name, "GL_TEXTURE_MAX_CLAMP_T_SGIX")) return GL_TEXTURE_MAX_CLAMP_T_SGIX;
         if (!strcmp(name, "GL_TEXTURE_STENCIL_SIZE_EXT")) return GL_TEXTURE_STENCIL_SIZE_EXT;
         if (!strcmp(name, "GL_TEXTURE_SWIZZLE_RGBA_EXT")) return GL_TEXTURE_SWIZZLE_RGBA_EXT;
-        if (!strcmp(name, "GL_TEXT_FRAGMENT_SHADER_ATI")) return GL_TEXT_FRAGMENT_SHADER_ATI;
         if (!strcmp(name, "GL_TRANSPOSE_TEXTURE_MATRIX")) return GL_TRANSPOSE_TEXTURE_MATRIX;
         if (!strcmp(name, "GL_UNSIGNED_INT_5_9_9_9_REV")) return GL_UNSIGNED_INT_5_9_9_9_REV;
         if (!strcmp(name, "GL_UNSIGNED_INT_8_8_8_8_EXT")) return GL_UNSIGNED_INT_8_8_8_8_EXT;
@@ -2789,9 +2765,8 @@
         if (!strcmp(name, "GL_VERTEX_PRECLIP_HINT_SGIX")) return GL_VERTEX_PRECLIP_HINT_SGIX;
         if (!strcmp(name, "GL_VERTEX_SHADER_LOCALS_EXT")) return GL_VERTEX_SHADER_LOCALS_EXT;
         if (!strcmp(name, "GL_WEIGHT_ARRAY_POINTER_ARB")) return GL_WEIGHT_ARRAY_POINTER_ARB;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 28:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ACTIVE_UNIFORM_MAX_LENGTH")) return GL_ACTIVE_UNIFORM_MAX_LENGTH;
         if (!strcmp(name, "GL_ALPHA_EXTENDED_RANGE_SGIX")) return GL_ALPHA_EXTENDED_RANGE_SGIX;
         if (!strcmp(name, "GL_APPLE_vertex_array_object")) return GL_APPLE_vertex_array_object;
@@ -2899,9 +2874,8 @@
         if (!strcmp(name, "GL_VERTEX_PROGRAM_POINT_SIZE")) return GL_VERTEX_PROGRAM_POINT_SIZE;
         if (!strcmp(name, "GL_VERTEX_SHADER_BINDING_EXT")) return GL_VERTEX_SHADER_BINDING_EXT;
         if (!strcmp(name, "GL_WRITE_PIXEL_DATA_RANGE_NV")) return GL_WRITE_PIXEL_DATA_RANGE_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 29:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_BINORMAL_ARRAY_POINTER_EXT")) return GL_BINORMAL_ARRAY_POINTER_EXT;
         if (!strcmp(name, "GL_COLOR_ARRAY_BUFFER_BINDING")) return GL_COLOR_ARRAY_BUFFER_BINDING;
         if (!strcmp(name, "GL_COLOR_TABLE_ALPHA_SIZE_EXT")) return GL_COLOR_TABLE_ALPHA_SIZE_EXT;
@@ -2993,9 +2967,9 @@
         if (!strcmp(name, "GL_REPLACEMENT_CODE_ARRAY_SUN")) return GL_REPLACEMENT_CODE_ARRAY_SUN;
         if (!strcmp(name, "GL_RGBA16_EXTENDED_RANGE_SGIX")) return GL_RGBA16_EXTENDED_RANGE_SGIX;
         if (!strcmp(name, "GL_RGBA_SIGNED_COMPONENTS_EXT")) return GL_RGBA_SIGNED_COMPONENTS_EXT;
-        if (!strcmp(name, "GL_SAMPLER_2D_RECT_SHADOW_ARB")) return GL_SAMPLER_2D_RECT_SHADOW_ARB;
-        if (!strcmp(name, "GL_SAMPLER_2D_RECT_SHADOW_ARB")) return GL_SAMPLER_2D_RECT_SHADOW_ARB;
         if (!strcmp(name, "GL_SAMPLE_COVERAGE_INVERT_ARB")) return GL_SAMPLE_COVERAGE_INVERT_ARB;
+        if (!strcmp(name, "GL_SAMPLER_2D_RECT_SHADOW_ARB")) return GL_SAMPLER_2D_RECT_SHADOW_ARB;
+        if (!strcmp(name, "GL_SAMPLER_2D_RECT_SHADOW_ARB")) return GL_SAMPLER_2D_RECT_SHADOW_ARB;
         if (!strcmp(name, "GL_SECONDARY_COLOR_ARRAY_SIZE")) return GL_SECONDARY_COLOR_ARRAY_SIZE;
         if (!strcmp(name, "GL_SECONDARY_COLOR_ARRAY_TYPE")) return GL_SECONDARY_COLOR_ARRAY_TYPE;
         if (!strcmp(name, "GL_SECONDARY_INTERPOLATOR_ATI")) return GL_SECONDARY_INTERPOLATOR_ATI;
@@ -3025,9 +2999,8 @@
         if (!strcmp(name, "GL_VERTEX_CONSISTENT_HINT_PGI")) return GL_VERTEX_CONSISTENT_HINT_PGI;
         if (!strcmp(name, "GL_VERTEX_PROGRAM_TWO_SIDE_NV")) return GL_VERTEX_PROGRAM_TWO_SIDE_NV;
         if (!strcmp(name, "GL_VERTEX_SHADER_VARIANTS_EXT")) return GL_VERTEX_SHADER_VARIANTS_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 30:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ACTIVE_ATTRIBUTE_MAX_LENGTH")) return GL_ACTIVE_ATTRIBUTE_MAX_LENGTH;
         if (!strcmp(name, "GL_ALPHA16_EXTENDED_RANGE_SGIX")) return GL_ALPHA16_EXTENDED_RANGE_SGIX;
         if (!strcmp(name, "GL_ARB_fragment_program_shadow")) return GL_ARB_fragment_program_shadow;
@@ -3122,9 +3095,8 @@
         if (!strcmp(name, "GL_VERTEX_PROGRAM_TWO_SIDE_ARB")) return GL_VERTEX_PROGRAM_TWO_SIDE_ARB;
         if (!strcmp(name, "GL_VERTEX_SHADER_OPTIMIZED_EXT")) return GL_VERTEX_SHADER_OPTIMIZED_EXT;
         if (!strcmp(name, "GL_WEIGHT_ARRAY_BUFFER_BINDING")) return GL_WEIGHT_ARRAY_BUFFER_BINDING;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 31:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ACTIVE_VARYING_MAX_LENGTH_NV")) return GL_ACTIVE_VARYING_MAX_LENGTH_NV;
         if (!strcmp(name, "GL_ARB_texture_compression_rgtc")) return GL_ARB_texture_compression_rgtc;
         if (!strcmp(name, "GL_ARB_texture_non_power_of_two")) return GL_ARB_texture_non_power_of_two;
@@ -3213,9 +3185,8 @@
         if (!strcmp(name, "GL_VERTEX_SHADER_INVARIANTS_EXT")) return GL_VERTEX_SHADER_INVARIANTS_EXT;
         if (!strcmp(name, "GL_VERTEX_WEIGHT_ARRAY_SIZE_EXT")) return GL_VERTEX_WEIGHT_ARRAY_SIZE_EXT;
         if (!strcmp(name, "GL_VERTEX_WEIGHT_ARRAY_TYPE_EXT")) return GL_VERTEX_WEIGHT_ARRAY_TYPE_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 32:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_3DFX_texture_compression_FXT1")) return GL_3DFX_texture_compression_FXT1;
         if (!strcmp(name, "GL_CLIP_VOLUME_CLIPPING_HINT_EXT")) return GL_CLIP_VOLUME_CLIPPING_HINT_EXT;
         if (!strcmp(name, "GL_COMPRESSED_RGBA_S3TC_DXT1_EXT")) return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
@@ -3282,9 +3253,8 @@
         if (!strcmp(name, "GL_UNSIGNED_INT_SAMPLER_CUBE_EXT")) return GL_UNSIGNED_INT_SAMPLER_CUBE_EXT;
         if (!strcmp(name, "GL_VERTEX_ARRAY_RANGE_POINTER_NV")) return GL_VERTEX_ARRAY_RANGE_POINTER_NV;
         if (!strcmp(name, "GL_VERTEX_PROGRAM_POINT_SIZE_ARB")) return GL_VERTEX_PROGRAM_POINT_SIZE_ARB;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 33:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ATI_vertex_attrib_array_object")) return GL_ATI_vertex_attrib_array_object;
         if (!strcmp(name, "GL_BUFFER_SERIALIZED_MODIFY_APPLE")) return GL_BUFFER_SERIALIZED_MODIFY_APPLE;
         if (!strcmp(name, "GL_COLOR_ARRAY_BUFFER_BINDING_ARB")) return GL_COLOR_ARRAY_BUFFER_BINDING_ARB;
@@ -3344,9 +3314,8 @@
         if (!strcmp(name, "GL_VERTEX_ATTRIB_ARRAY_STRIDE_ARB")) return GL_VERTEX_ATTRIB_ARRAY_STRIDE_ARB;
         if (!strcmp(name, "GL_VERTEX_SHADER_INSTRUCTIONS_EXT")) return GL_VERTEX_SHADER_INSTRUCTIONS_EXT;
         if (!strcmp(name, "GL_VERTEX_WEIGHT_ARRAY_STRIDE_EXT")) return GL_VERTEX_WEIGHT_ARRAY_STRIDE_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 34:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_COMPRESSED_SIGNED_RED_RGTC1_EXT")) return GL_COMPRESSED_SIGNED_RED_RGTC1_EXT;
         if (!strcmp(name, "GL_COMPRESSED_SLUMINANCE_ALPHA_EXT")) return GL_COMPRESSED_SLUMINANCE_ALPHA_EXT;
         if (!strcmp(name, "GL_DOT_PRODUCT_DIFFUSE_CUBE_MAP_NV")) return GL_DOT_PRODUCT_DIFFUSE_CUBE_MAP_NV;
@@ -3408,9 +3377,8 @@
         if (!strcmp(name, "GL_VERTEX_ATTRIB_ARRAY_POINTER_ARB")) return GL_VERTEX_ATTRIB_ARRAY_POINTER_ARB;
         if (!strcmp(name, "GL_VERTEX_WEIGHT_ARRAY_POINTER_EXT")) return GL_VERTEX_WEIGHT_ARRAY_POINTER_EXT;
         if (!strcmp(name, "GL_WEIGHT_ARRAY_BUFFER_BINDING_ARB")) return GL_WEIGHT_ARRAY_BUFFER_BINDING_ARB;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 35:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_COMPARE_REF_DEPTH_TO_TEXTURE_EXT")) return GL_COMPARE_REF_DEPTH_TO_TEXTURE_EXT;
         if (!strcmp(name, "GL_DOT_PRODUCT_TEXTURE_RECTANGLE_NV")) return GL_DOT_PRODUCT_TEXTURE_RECTANGLE_NV;
         if (!strcmp(name, "GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB")) return GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB;
@@ -3449,9 +3417,8 @@
         if (!strcmp(name, "GL_UNSIGNED_INT_SAMPLER_2D_RECT_EXT")) return GL_UNSIGNED_INT_SAMPLER_2D_RECT_EXT;
         if (!strcmp(name, "GL_VERTEX_ARRAY_RANGE_POINTER_APPLE")) return GL_VERTEX_ARRAY_RANGE_POINTER_APPLE;
         if (!strcmp(name, "GL_WRITE_PIXEL_DATA_RANGE_LENGTH_NV")) return GL_WRITE_PIXEL_DATA_RANGE_LENGTH_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 36:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_DEPENDENT_RGB_TEXTURE_CUBE_MAP_NV")) return GL_DEPENDENT_RGB_TEXTURE_CUBE_MAP_NV;
         if (!strcmp(name, "GL_FLOAT_32_UNSIGNED_INT_24_8_REV_NV")) return GL_FLOAT_32_UNSIGNED_INT_24_8_REV_NV;
         if (!strcmp(name, "GL_FRAGMENT_LIGHT_MODEL_TWO_SIDE_EXT")) return GL_FRAGMENT_LIGHT_MODEL_TWO_SIDE_EXT;
@@ -3483,9 +3450,8 @@
         if (!strcmp(name, "GL_UNSIGNED_INT_SAMPLER_2D_ARRAY_EXT")) return GL_UNSIGNED_INT_SAMPLER_2D_ARRAY_EXT;
         if (!strcmp(name, "GL_VERTEX_SHADER_LOCAL_CONSTANTS_EXT")) return GL_VERTEX_SHADER_LOCAL_CONSTANTS_EXT;
         if (!strcmp(name, "GL_WRITE_PIXEL_DATA_RANGE_POINTER_NV")) return GL_WRITE_PIXEL_DATA_RANGE_POINTER_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 37:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI")) return GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI;
         if (!strcmp(name, "GL_EDGE_FLAG_ARRAY_BUFFER_BINDING_ARB")) return GL_EDGE_FLAG_ARRAY_BUFFER_BINDING_ARB;
         if (!strcmp(name, "GL_FRAMEBUFFER_ATTACHMENT_LAYERED_ARB")) return GL_FRAMEBUFFER_ATTACHMENT_LAYERED_ARB;
@@ -3517,9 +3483,8 @@
         if (!strcmp(name, "GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING")) return GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING;
         if (!strcmp(name, "GL_VERTEX_ATTRIB_ARRAY_NORMALIZED_ARB")) return GL_VERTEX_ATTRIB_ARRAY_NORMALIZED_ARB;
         if (!strcmp(name, "GL_VERTEX_PROGRAM_PARAMETER_BUFFER_NV")) return GL_VERTEX_PROGRAM_PARAMETER_BUFFER_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 38:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_COLOR_ARRAY_PARALLEL_POINTERS_INTEL")) return GL_COLOR_ARRAY_PARALLEL_POINTERS_INTEL;
         if (!strcmp(name, "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT")) return GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT;
         if (!strcmp(name, "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT")) return GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT;
@@ -3548,9 +3513,8 @@
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_BUFFER_PAUSED_NV")) return GL_TRANSFORM_FEEDBACK_BUFFER_PAUSED_NV;
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_BUFFER_START_EXT")) return GL_TRANSFORM_FEEDBACK_BUFFER_START_EXT;
         if (!strcmp(name, "GL_VERTEX_ARRAY_RANGE_WITHOUT_FLUSH_NV")) return GL_VERTEX_ARRAY_RANGE_WITHOUT_FLUSH_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 39:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_ATIX_vertex_shader_output_point_size")) return GL_ATIX_vertex_shader_output_point_size;
         if (!strcmp(name, "GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT")) return GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT;
         if (!strcmp(name, "GL_FOG_COORDINATE_ARRAY_LIST_STRIDE_IBM")) return GL_FOG_COORDINATE_ARRAY_LIST_STRIDE_IBM;
@@ -3575,9 +3539,8 @@
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_BUFFER_BINDING_NV")) return GL_TRANSFORM_FEEDBACK_BUFFER_BINDING_NV;
         if (!strcmp(name, "GL_UNSIGNED_INT_SAMPLER_RENDERBUFFER_NV")) return GL_UNSIGNED_INT_SAMPLER_RENDERBUFFER_NV;
         if (!strcmp(name, "GL_VERTEX_ARRAY_PARALLEL_POINTERS_INTEL")) return GL_VERTEX_ARRAY_PARALLEL_POINTERS_INTEL;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 40:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT")) return GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT;
         if (!strcmp(name, "GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT")) return GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT;
         if (!strcmp(name, "GL_FRAGMENT_COLOR_MATERIAL_PARAMETER_EXT")) return GL_FRAGMENT_COLOR_MATERIAL_PARAMETER_EXT;
@@ -3595,9 +3558,8 @@
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_BUFFER_BINDING_EXT")) return GL_TRANSFORM_FEEDBACK_BUFFER_BINDING_EXT;
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN")) return GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN;
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH")) return GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 41:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME_EXT")) return GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME_EXT;
         if (!strcmp(name, "GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE_EXT")) return GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE_EXT;
         if (!strcmp(name, "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT")) return GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT;
@@ -3615,9 +3577,8 @@
         if (!strcmp(name, "GL_PROXY_POST_CONVOLUTION_COLOR_TABLE_SGI")) return GL_PROXY_POST_CONVOLUTION_COLOR_TABLE_SGI;
         if (!strcmp(name, "GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING_ARB")) return GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING_ARB;
         if (!strcmp(name, "GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING_ARB")) return GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING_ARB;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 42:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_FOG_COORDINATE_ARRAY_BUFFER_BINDING_ARB")) return GL_FOG_COORDINATE_ARRAY_BUFFER_BINDING_ARB;
         if (!strcmp(name, "GL_LUMINANCE16_ALPHA16_EXTENDED_RANGE_SGIX")) return GL_LUMINANCE16_ALPHA16_EXTENDED_RANGE_SGIX;
         if (!strcmp(name, "GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB")) return GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB;
@@ -3625,9 +3586,8 @@
         if (!strcmp(name, "GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB")) return GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS")) return GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS;
         if (!strcmp(name, "GL_PROXY_POST_COLOR_MATRIX_COLOR_TABLE_SGI")) return GL_PROXY_POST_COLOR_MATRIX_COLOR_TABLE_SGI;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 43:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER_EXT")) return GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER_EXT;
         if (!strcmp(name, "GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL_EXT")) return GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL_EXT;
         if (!strcmp(name, "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_ARB")) return GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_ARB;
@@ -3640,55 +3600,46 @@
         if (!strcmp(name, "GL_MAX_PROGRAM_PARAMETER_BUFFER_BINDINGS_NV")) return GL_MAX_PROGRAM_PARAMETER_BUFFER_BINDINGS_NV;
         if (!strcmp(name, "GL_SECONDARY_COLOR_ARRAY_BUFFER_BINDING_ARB")) return GL_SECONDARY_COLOR_ARRAY_BUFFER_BINDING_ARB;
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN_NV")) return GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 44:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_DOT_PRODUCT_CONST_EYE_REFLECT_CUBE_MAP_NV")) return GL_DOT_PRODUCT_CONST_EYE_REFLECT_CUBE_MAP_NV;
         if (!strcmp(name, "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT")) return GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT;
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN_EXT")) return GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN_EXT;
         if (!strcmp(name, "GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH_EXT")) return GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 45:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_MAX_OPTIMIZED_VERTEX_SHADER_INVARIANTS_EXT")) return GL_MAX_OPTIMIZED_VERTEX_SHADER_INVARIANTS_EXT;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS_NV")) return GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS_NV;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS")) return GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS;
         if (!strcmp(name, "GL_TEXTURE_RENDERBUFFER_DATA_STORE_BINDING_NV")) return GL_TEXTURE_RENDERBUFFER_DATA_STORE_BINDING_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 46:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT")) return GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS_EXT")) return GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS_EXT;
         if (!strcmp(name, "GL_OFFSET_HILO_PROJECTIVE_TEXTURE_RECTANGLE_NV")) return GL_OFFSET_HILO_PROJECTIVE_TEXTURE_RECTANGLE_NV;
         if (!strcmp(name, "GL_TEXTURE_COORD_ARRAY_PARALLEL_POINTERS_INTEL")) return GL_TEXTURE_COORD_ARRAY_PARALLEL_POINTERS_INTEL;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 47:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE")) return GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE;
         if (!strcmp(name, "GL_MAX_OPTIMIZED_VERTEX_SHADER_INSTRUCTIONS_EXT")) return GL_MAX_OPTIMIZED_VERTEX_SHADER_INSTRUCTIONS_EXT;
         if (!strcmp(name, "GL_OFFSET_PROJECTIVE_TEXTURE_RECTANGLE_SCALE_NV")) return GL_OFFSET_PROJECTIVE_TEXTURE_RECTANGLE_SCALE_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 48:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_FRAGMENT_LIGHT_MODEL_NORMAL_INTERPOLATION_EXT")) return GL_FRAGMENT_LIGHT_MODEL_NORMAL_INTERPOLATION_EXT;
         if (!strcmp(name, "GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_3D_ZOFFSET_EXT")) return GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_3D_ZOFFSET_EXT;
         if (!strcmp(name, "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT")) return GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS")) return GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS_NV")) return GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 49:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS_EXT")) return GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 50:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_MAX_OPTIMIZED_VERTEX_SHADER_LOCAL_CONSTANTS_EXT")) return GL_MAX_OPTIMIZED_VERTEX_SHADER_LOCAL_CONSTANTS_EXT;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 51:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE_EXT")) return GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE_EXT;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS_NV")) return GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS_NV;
-        else return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
     case 52:
-        if (0) return _GL_UNDEFINED;
         if (!strcmp(name, "GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS_EXT")) return GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS_EXT;
