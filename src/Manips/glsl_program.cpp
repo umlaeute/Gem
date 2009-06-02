@@ -35,9 +35,8 @@ glsl_program :: glsl_program()  :
   m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
   m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
   m_num(0),
-  m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP),  m_geoOutVertices(-1),
-  m_outProgramID(NULL)
-
+  m_outProgramID(NULL),
+  m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP),  m_geoOutVertices(-1)
 {
   int i=0;
   for(i=0; i<MAX_NUM_SHADERS; i++) {

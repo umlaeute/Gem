@@ -13,7 +13,6 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#if 1
 #include "multimodel.h"
 
 #include <stdio.h>
@@ -35,9 +34,9 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
   : m_loadedCache(NULL), 
     m_numModels(0), m_curModel(-1), 
     m_rescaleModel(1),
+    m_textype(GLM_TEX_DEFAULT),
     m_rebuild(true),
-    m_currentH(1.f), m_currentW(1.f),
-    m_textype(GLM_TEX_DEFAULT)
+	m_currentH(1.f), m_currentW(1.f)
 {
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mdl_num"));
 
@@ -357,4 +356,3 @@ void multimodel :: textureMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->textureMess((int)state);
 }
-#endif

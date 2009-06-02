@@ -93,7 +93,7 @@ void vertex_model :: openMess(t_symbol *filename)
   group = m_model->groups;
   glmFacetNormals (m_model);
   glmVertexNormals(m_model, 90);
-  glmLinearTexture(m_model);
+  glmTexture(m_model, GLM_TEX_DEFAULT, 1, 1);
  
   post("model->numtriangles %d",m_model->numtriangles);
   post("model->numgroups %d",m_model->numgroups);
