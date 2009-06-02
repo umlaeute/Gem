@@ -139,3 +139,21 @@ int video :: setQuality(int d){
   post("setting the quality is not supported by this OS/device");
   return -1;
 }
+
+/////////////////////////////////////////////////////////
+// query whether this backend provides a certain type of video decoding, e.g. "dv"
+bool video :: provides(const char*name) {
+  std::vector<const char*>::iterator it;
+  for ( it=m_providers.begin() ; it < m_providers.end(); it++ ) {
+    if(!strcmp(name, *it))return true;
+  }
+
+  return false;
+}
+
+/////////////////////////////////////////////////////////
+// remember that this backend provides a certain type of video decoding, e.g. "dv"
+void video :: provide(const char*name) {
+  if(!provides(name))
+    m_providers.push_back(name);
+}

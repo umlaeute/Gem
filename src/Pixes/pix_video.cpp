@@ -187,6 +187,17 @@ void pix_video :: colorMess(t_atom*a)
 // driverMess
 //
 /////////////////////////////////////////////////////////
+void pix_video :: driverMess(t_symbol*s)
+{
+  int dev;
+  for(dev=0; dev<m_numVideoHandles; dev++) {
+    if(m_videoHandles[dev]->provides(s->s_name)) {
+      driverMess(dev);
+      return;
+    }
+  }
+  error("could not find a backend for driver '%s'", s->s_name);
+}
 void pix_video :: driverMess(int dev)
 {
   //  post("driver: %d", dev);
@@ -279,9 +290,9 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, (t_method)&pix_video::deviceMessCallback,
     	    gensym("device"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_video::driverMessCallback,
-    	    gensym("driver"), A_FLOAT, A_NULL);
+    	    gensym("driver"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_video::driverMessCallback,
-    	    gensym("open"), A_FLOAT, A_NULL);
+    	    gensym("open"), A_GIMME, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_video::enumerateMessCallback,
     	    gensym("enumerate"), A_NULL);
     class_addmethod(classPtr, (t_method)&pix_video::dialogMessCallback,
@@ -358,9 +369,17 @@ void pix_video :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*argv
     GetMyClass(data)->error("can only set to 1 device at a time");
   }
 }
-void pix_video :: driverMessCallback(void *data, t_floatarg state)
+void pix_video :: driverMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-    GetMyClass(data)->driverMess((int)state);
+  if(argc!=1) {
+    GetMyClass(data)->error("'driver' takes a single numeric or symbolic driver ID");
+  } else if (argv->a_type == A_FLOAT) {
+    GetMyClass(data)->driverMess(atom_getint(argv));
+  } else if (argv->a_type == A_SYMBOL) {
+    GetMyClass(data)->driverMess(atom_getsymbol(argv));
+  } else {
+    GetMyClass(data)->error("'driver' takes a single numeric or symbolic driver ID");
+  }
 }
 void pix_video :: enumerateMessCallback(void *data)
 {

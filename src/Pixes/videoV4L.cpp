@@ -92,6 +92,11 @@ videoV4L :: videoV4L(int format) : video(format)
   m_devicenum=V4L_DEVICENO;
 
   ::post("video4linux");
+
+  provide("v4l");
+  provide("video4linux");
+  provide("default");
+ 
 #endif /* HAVE_VIDEO4LINUX */
 }
 

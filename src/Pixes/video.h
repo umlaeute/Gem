@@ -21,6 +21,7 @@
 # include "m_pd.h" /* for post() and friends */
 #endif
 
+#include <vector>
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -100,8 +101,18 @@ class GEM_EXTERN video {
   char*m_devicename;
   int m_devicenum;
 
-
   int m_quality;
+
+ public:
+  // for pix_video: query whether this backend provides access to this class of devices
+  // (e.g. "dv"
+  bool provides(const char*name);
+ protected:
+  // for child-implementations: remember that we provide access to this class of devices
+  void provide(const char*name);
+ private:
+  // for ourself: the list of provided device-classes
+  std::vector<const char*>m_providers;
 };
 
 #endif	// for header file

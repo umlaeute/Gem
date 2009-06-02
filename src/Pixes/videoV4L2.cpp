@@ -69,6 +69,11 @@ videoV4L2 :: videoV4L2(int format) : video(format)
   m_capturing=false;
   m_devicenum=V4L2_DEVICENO;
   post("video4linux2");
+
+  provide("v4l2");
+  provide("video4linux2");
+  provide("default");
+
 #else
 {
 #endif /* HAVE_VIDEO4LINUX2 */
