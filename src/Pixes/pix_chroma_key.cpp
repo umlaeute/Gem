@@ -703,14 +703,26 @@ void pix_chroma_key :: modeCallback(void *data, t_floatarg state)
 //make separate ranges for Y U V
 void pix_chroma_key :: rangeCallback(void *data, t_floatarg Yval, t_floatarg Uval,t_floatarg Vval)
 {
-  GetMyClass(data)->m_Yrange=((unsigned char)Yval);
-  GetMyClass(data)->m_Urange=((unsigned char)Uval);
-  GetMyClass(data)->m_Vrange=((unsigned char)Vval);
+  if(fabs(Yval)<=1.0 && fabs(Uval)<=1.0 && fabs(Vval)<=1.0) {
+    GetMyClass(data)->m_Yrange=((unsigned char)255*Yval);
+    GetMyClass(data)->m_Urange=((unsigned char)255*Uval);
+    GetMyClass(data)->m_Vrange=((unsigned char)255*Vval);
+  } else {
+    GetMyClass(data)->m_Yrange=((unsigned char)Yval);
+    GetMyClass(data)->m_Urange=((unsigned char)Uval);
+    GetMyClass(data)->m_Vrange=((unsigned char)Vval);
+  }
 }
 
 void pix_chroma_key :: valueCallback(void *data, t_floatarg Yval, t_floatarg Uval, t_floatarg Vval)
 {
-  GetMyClass(data)->m_Yvalue=((unsigned char)Yval);
-  GetMyClass(data)->m_Uvalue=((unsigned char)Uval);
-  GetMyClass(data)->m_Vvalue=((unsigned char)Vval);
+  if(fabs(Yval)<=1.0 && fabs(Uval)<=1.0 && fabs(Vval)<=1.0) {
+    GetMyClass(data)->m_Yvalue=((unsigned char)255*Yval);
+    GetMyClass(data)->m_Uvalue=((unsigned char)255*Uval);
+    GetMyClass(data)->m_Vvalue=((unsigned char)255*Vval);
+  } else {
+    GetMyClass(data)->m_Yvalue=((unsigned char)Yval);
+    GetMyClass(data)->m_Uvalue=((unsigned char)Uval);
+    GetMyClass(data)->m_Vvalue=((unsigned char)Vval);
+  }
 }
