@@ -118,7 +118,6 @@ void filmQT :: close(void)
 bool filmQT :: open(char*filename, int format) {
   FSSpec	theFSSpec;
   OSErr		err = noErr;
-  FSRef		ref;
   Rect		m_srcRect;
   long		m_rowBytes;
 
