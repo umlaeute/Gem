@@ -1,4 +1,4 @@
-#N canvas 45 25 871 597 12;
+#N canvas 45 25 871 629 12;
 #X text 50 557 NOTE: not all messages might currently work on your
 operating-system.;
 #N canvas 54 138 989 623 Linux 0;
@@ -60,7 +60,7 @@ then the following might help you find it in the /dev heirarchy.;
 #X text 18 148 Arguments:;
 #X text 17 526 Outlet 1: gemlist;
 #X text 17 198 Inlet 1: gemlist;
-#X text 17 275 Inlet 1: colorspace "RGBA|YUV|Grey": decodes the current
+#X text 16 308 Inlet 1: colorspace "RGBA|YUV|Grey": decodes the current
 film into the specified colorspace.;
 #X text 64 159 none;
 #X text 33 184 Inlet:;
@@ -95,19 +95,19 @@ film into the specified colorspace.;
 #X obj 564 506 rectangle 4 3;
 #X msg 583 99 dimen 256 128;
 #X obj 564 482 pix_texture;
-#X msg 632 271 enumerate;
-#X msg 638 303 dialog;
+#X msg 632 261 enumerate;
+#X msg 638 283 dialog;
 #X msg 601 153 colorspace RGBA;
 #X obj 564 456 pix_video;
 #X msg 622 235 device /dev/dv1394/0;
-#X msg 716 338 driver 1;
-#X msg 642 338 driver 0;
-#X text 17 414 Inlet 1: channel <number>: depending on your capture
+#X msg 726 308 driver 1;
+#X msg 642 308 driver 0;
+#X text 15 436 Inlet 1: channel <number>: depending on your capture
 device \, you can switch between sources \, e.g. Tuner \, S-VHS \,
 Composite \, etc.;
-#X text 17 485 Inlet 1: mode "PAL|NTSC": switch display modes (default=PAL)
+#X text 16 498 Inlet 1: mode "PAL|NTSC": switch display modes (default=PAL)
 ;
-#X text 17 459 Inlet 1: freq <number>: set the frequency for the TV
+#X text 16 481 Inlet 1: freq <number>: set the frequency for the TV
 Tuner;
 #X text 17 216 Inlet 1: device <spec>: the number or file path to the
 input device;
@@ -140,18 +140,21 @@ input device;
 #X connect 11 0 8 0;
 #X coords 0 -1 1 1 165 20 1 60 60;
 #X restore 606 187 pd serin;
-#X text 17 307 Inlet 1: dimen <number> <number>: set various dimensions
+#X text 16 339 Inlet 1: dimen <number> <number>: set various dimensions
 for the image (does not work on all capture devices);
-#X text 17 341 Inlet 1: quality <number>: compression quality;
-#X text 17 393 Inlet 1: enumerate: list all devices to the console
+#X text 15 370 Inlet 1: quality <number>: compression quality;
+#X text 14 419 Inlet 1: enumerate: list all devices to the console
 ;
 #X text 13 66 [pix_video] opens a wide array of camera \, from USB
 to FireWire to capture cards \, as long as the camera is supported
 by your operating system.;
 #X text 17 245 Inlet 1: driver <number>: switch between different drivers
 \, e.g. v4l \, ieee1394 \, etc.;
-#X text 17 361 Inlet 1: dialog: open a dialog to configure the input
+#X text 15 388 Inlet 1: dialog: open a dialog to configure the input
 device (Mac OS X and Windows);
+#X text 16 276 Inlet 1: driver <symbol>: switch between different drivers
+\, e.g. v4l \, v4l2 \, dv...;
+#X msg 649 334 driver dv;
 #X connect 20 0 21 0;
 #X connect 21 0 20 0;
 #X connect 24 0 32 0;
@@ -167,3 +170,4 @@ device (Mac OS X and Windows);
 #X connect 35 0 32 0;
 #X connect 40 0 32 0;
 #X connect 41 0 40 0;
+#X connect 49 0 32 0;
