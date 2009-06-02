@@ -145,8 +145,7 @@ void pix_filmOS :: openMess(t_symbol *filename, int format)
   SETFLOAT(ap+1, m_xsize);
   SETFLOAT(ap+2, m_ysize);
 
-    m_newFilm = 1;
-  //outlet_float(m_outNumFrames, (float)m_numFrames);
+  m_newFilm = 1;
   post("loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
 }
