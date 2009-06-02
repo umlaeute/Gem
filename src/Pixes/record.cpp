@@ -27,8 +27,8 @@
 /////////////////////////////////////////////////////////
 
 record :: record(int x, int y, int width, int height):
-  m_xoff(x), m_yoff(y), m_width(width), m_height(height),
-  m_currentFrame(0)
+  m_currentFrame(0),
+  m_xoff(x), m_yoff(y), m_width(width), m_height(height)
 {}
 
 /////////////////////////////////////////////////////////
