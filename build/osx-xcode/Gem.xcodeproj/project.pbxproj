@@ -983,6 +983,34 @@
 		3A2DD77E0E4097EA00767D22 /* vertex_set.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD7640E4097EA00767D22 /* vertex_set.h */; };
 		3A2DD77F0E4097EA00767D22 /* vertex_tabread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD7650E4097EA00767D22 /* vertex_tabread.cpp */; };
 		3A2DD7800E4097EA00767D22 /* vertex_tabread.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD7660E4097EA00767D22 /* vertex_tabread.h */; };
+		3A6DFE4C0FD528780019C977 /* GEMglMaterialfv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE4A0FD528780019C977 /* GEMglMaterialfv.cpp */; };
+		3A6DFE4D0FD528780019C977 /* GEMglMaterialfv.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE4B0FD528780019C977 /* GEMglMaterialfv.h */; };
+		3A6DFE4E0FD528780019C977 /* GEMglMaterialfv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE4A0FD528780019C977 /* GEMglMaterialfv.cpp */; };
+		3A6DFE4F0FD528780019C977 /* GEMglMaterialfv.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE4B0FD528780019C977 /* GEMglMaterialfv.h */; };
+		3A6DFE520FD528920019C977 /* GEMgluLookAt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE500FD528920019C977 /* GEMgluLookAt.cpp */; };
+		3A6DFE530FD528920019C977 /* GEMgluLookAt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE510FD528920019C977 /* GEMgluLookAt.h */; };
+		3A6DFE540FD528920019C977 /* GEMgluLookAt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE500FD528920019C977 /* GEMgluLookAt.cpp */; };
+		3A6DFE550FD528920019C977 /* GEMgluLookAt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE510FD528920019C977 /* GEMgluLookAt.h */; };
+		3A6DFE570FD528A30019C977 /* GemGLBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE560FD528A30019C977 /* GemGLBase.h */; };
+		3A6DFE580FD528A30019C977 /* GemGLBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE560FD528A30019C977 /* GemGLBase.h */; };
+		3A6DFE5D0FD528CF0019C977 /* GemContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE590FD528CF0019C977 /* GemContext.cpp */; };
+		3A6DFE5E0FD528CF0019C977 /* GemContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE5A0FD528CF0019C977 /* GemContext.h */; };
+		3A6DFE5F0FD528CF0019C977 /* GemContextData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE5B0FD528CF0019C977 /* GemContextData.cpp */; };
+		3A6DFE600FD528CF0019C977 /* GemContextData.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE5C0FD528CF0019C977 /* GemContextData.h */; };
+		3A6DFE610FD528CF0019C977 /* GemContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE590FD528CF0019C977 /* GemContext.cpp */; };
+		3A6DFE620FD528CF0019C977 /* GemContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE5A0FD528CF0019C977 /* GemContext.h */; };
+		3A6DFE630FD528CF0019C977 /* GemContextData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE5B0FD528CF0019C977 /* GemContextData.cpp */; };
+		3A6DFE640FD528CF0019C977 /* GemContextData.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE5C0FD528CF0019C977 /* GemContextData.h */; };
+		3A6DFE660FD528E80019C977 /* GemGLUtil_generated.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE650FD528E80019C977 /* GemGLUtil_generated.h */; };
+		3A6DFE670FD528E80019C977 /* GemGLUtil_generated.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE650FD528E80019C977 /* GemGLUtil_generated.h */; };
+		3A6DFE6A0FD5294F0019C977 /* glsl_geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE680FD5294F0019C977 /* glsl_geometry.cpp */; };
+		3A6DFE6B0FD5294F0019C977 /* glsl_geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE690FD5294F0019C977 /* glsl_geometry.h */; };
+		3A6DFE6C0FD5294F0019C977 /* glsl_geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE680FD5294F0019C977 /* glsl_geometry.cpp */; };
+		3A6DFE6D0FD5294F0019C977 /* glsl_geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE690FD5294F0019C977 /* glsl_geometry.h */; };
+		3A6DFE700FD529880019C977 /* pix_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE6E0FD529880019C977 /* pix_writer.cpp */; };
+		3A6DFE710FD529880019C977 /* pix_writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE6F0FD529880019C977 /* pix_writer.h */; };
+		3A6DFE720FD529880019C977 /* pix_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A6DFE6E0FD529880019C977 /* pix_writer.cpp */; };
+		3A6DFE730FD529880019C977 /* pix_writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6DFE6F0FD529880019C977 /* pix_writer.h */; };
 		3AB0D86C0E4095E700AF570A /* GemLoaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3AB0D85D0E4095E700AF570A /* GemLoaders.cpp */; };
 		3AB0D86D0E4095E700AF570A /* GemLoaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AB0D85E0E4095E700AF570A /* GemLoaders.h */; };
 		3AB0D86E0E4095E700AF570A /* GemMan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3AB0D85F0E4095E700AF570A /* GemMan.cpp */; };
@@ -3340,6 +3368,20 @@
 		3A2DD7640E4097EA00767D22 /* vertex_set.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vertex_set.h; sourceTree = "<group>"; };
 		3A2DD7650E4097EA00767D22 /* vertex_tabread.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vertex_tabread.cpp; sourceTree = "<group>"; };
 		3A2DD7660E4097EA00767D22 /* vertex_tabread.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vertex_tabread.h; sourceTree = "<group>"; };
+		3A6DFE4A0FD528780019C977 /* GEMglMaterialfv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEMglMaterialfv.cpp; sourceTree = "<group>"; };
+		3A6DFE4B0FD528780019C977 /* GEMglMaterialfv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEMglMaterialfv.h; sourceTree = "<group>"; };
+		3A6DFE500FD528920019C977 /* GEMgluLookAt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEMgluLookAt.cpp; sourceTree = "<group>"; };
+		3A6DFE510FD528920019C977 /* GEMgluLookAt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEMgluLookAt.h; sourceTree = "<group>"; };
+		3A6DFE560FD528A30019C977 /* GemGLBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemGLBase.h; sourceTree = "<group>"; };
+		3A6DFE590FD528CF0019C977 /* GemContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemContext.cpp; sourceTree = "<group>"; };
+		3A6DFE5A0FD528CF0019C977 /* GemContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemContext.h; sourceTree = "<group>"; };
+		3A6DFE5B0FD528CF0019C977 /* GemContextData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemContextData.cpp; sourceTree = "<group>"; };
+		3A6DFE5C0FD528CF0019C977 /* GemContextData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemContextData.h; sourceTree = "<group>"; };
+		3A6DFE650FD528E80019C977 /* GemGLUtil_generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemGLUtil_generated.h; sourceTree = "<group>"; };
+		3A6DFE680FD5294F0019C977 /* glsl_geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glsl_geometry.cpp; sourceTree = "<group>"; };
+		3A6DFE690FD5294F0019C977 /* glsl_geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glsl_geometry.h; sourceTree = "<group>"; };
+		3A6DFE6E0FD529880019C977 /* pix_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pix_writer.cpp; sourceTree = "<group>"; };
+		3A6DFE6F0FD529880019C977 /* pix_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pix_writer.h; sourceTree = "<group>"; };
 		3AB0D7690E40941000AF570A /* 03.stencilBuffer.pd */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 03.stencilBuffer.pd; sourceTree = "<group>"; };
 		3AB0D76E0E40945F00AF570A /* all.trees */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = all.trees; sourceTree = "<group>"; };
 		3AB0D76F0E40945F00AF570A /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
@@ -4042,6 +4084,11 @@
 		F521B40303898BE2019165F0 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				3A6DFE650FD528E80019C977 /* GemGLUtil_generated.h */,
+				3A6DFE590FD528CF0019C977 /* GemContext.cpp */,
+				3A6DFE5A0FD528CF0019C977 /* GemContext.h */,
+				3A6DFE5B0FD528CF0019C977 /* GemContextData.cpp */,
+				3A6DFE5C0FD528CF0019C977 /* GemContextData.h */,
 				3ACEE3D70E40C8A800FC2E4B /* GemVersion.cpp */,
 				3AB0D87B0E40963500AF570A /* glew.cpp */,
 				3AB0D87C0E40963500AF570A /* glew.h */,
@@ -4227,6 +4274,8 @@
 		F521B47E03898BE2019165F0 /* Manips */ = {
 			isa = PBXGroup;
 			children = (
+				3A6DFE680FD5294F0019C977 /* glsl_geometry.cpp */,
+				3A6DFE690FD5294F0019C977 /* glsl_geometry.h */,
 				3A2DCF7C0E40974100767D22 /* accumrotate.cpp */,
 				3A2DCF7D0E40974100767D22 /* accumrotate.h */,
 				3A2DCF7E0E40974100767D22 /* alpha.cpp */,
@@ -4375,6 +4424,8 @@
 		F521B4E403898BE2019165F0 /* Pixes */ = {
 			isa = PBXGroup;
 			children = (
+				3A6DFE6E0FD529880019C977 /* pix_writer.cpp */,
+				3A6DFE6F0FD529880019C977 /* pix_writer.h */,
 				3AE0739C0EB8A34600223BA6 /* pix_videoOS.cpp */,
 				3AE0739D0EB8A34600223BA6 /* pix_videoOS.h */,
 				3AE073960EB8A31300223BA6 /* pix_movieOS.cpp */,
@@ -4620,6 +4671,11 @@
 		F52F0E84039FEEA801A80164 /* openGL */ = {
 			isa = PBXGroup;
 			children = (
+				3A6DFE560FD528A30019C977 /* GemGLBase.h */,
+				3A6DFE500FD528920019C977 /* GEMgluLookAt.cpp */,
+				3A6DFE510FD528920019C977 /* GEMgluLookAt.h */,
+				3A6DFE4A0FD528780019C977 /* GEMglMaterialfv.cpp */,
+				3A6DFE4B0FD528780019C977 /* GEMglMaterialfv.h */,
 				3A2DD0200E40978500767D22 /* GEMglAccum.cpp */,
 				3A2DD0210E40978500767D22 /* GEMglAccum.h */,
 				3A2DD0220E40978500767D22 /* GEMglActiveTextureARB.cpp */,
@@ -6427,6 +6483,14 @@
 				3AE073950EB8A2CA00223BA6 /* pix_filmOS.h in Headers */,
 				3AE0739B0EB8A31300223BA6 /* pix_movieOS.h in Headers */,
 				3AE073A10EB8A34600223BA6 /* pix_videoOS.h in Headers */,
+				3A6DFE4F0FD528780019C977 /* GEMglMaterialfv.h in Headers */,
+				3A6DFE550FD528920019C977 /* GEMgluLookAt.h in Headers */,
+				3A6DFE580FD528A30019C977 /* GemGLBase.h in Headers */,
+				3A6DFE620FD528CF0019C977 /* GemContext.h in Headers */,
+				3A6DFE640FD528CF0019C977 /* GemContextData.h in Headers */,
+				3A6DFE670FD528E80019C977 /* GemGLUtil_generated.h in Headers */,
+				3A6DFE6D0FD5294F0019C977 /* glsl_geometry.h in Headers */,
+				3A6DFE730FD529880019C977 /* pix_writer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7037,6 +7101,14 @@
 				3AE073930EB8A2CA00223BA6 /* pix_filmOS.h in Headers */,
 				3AE073990EB8A31300223BA6 /* pix_movieOS.h in Headers */,
 				3AE0739F0EB8A34600223BA6 /* pix_videoOS.h in Headers */,
+				3A6DFE4D0FD528780019C977 /* GEMglMaterialfv.h in Headers */,
+				3A6DFE530FD528920019C977 /* GEMgluLookAt.h in Headers */,
+				3A6DFE570FD528A30019C977 /* GemGLBase.h in Headers */,
+				3A6DFE5E0FD528CF0019C977 /* GemContext.h in Headers */,
+				3A6DFE600FD528CF0019C977 /* GemContextData.h in Headers */,
+				3A6DFE660FD528E80019C977 /* GemGLUtil_generated.h in Headers */,
+				3A6DFE6B0FD5294F0019C977 /* glsl_geometry.h in Headers */,
+				3A6DFE710FD529880019C977 /* pix_writer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7691,6 +7763,12 @@
 				3AE073940EB8A2CA00223BA6 /* pix_filmOS.cpp in Sources */,
 				3AE0739A0EB8A31300223BA6 /* pix_movieOS.cpp in Sources */,
 				3AE073A00EB8A34600223BA6 /* pix_videoOS.cpp in Sources */,
+				3A6DFE4E0FD528780019C977 /* GEMglMaterialfv.cpp in Sources */,
+				3A6DFE540FD528920019C977 /* GEMgluLookAt.cpp in Sources */,
+				3A6DFE610FD528CF0019C977 /* GemContext.cpp in Sources */,
+				3A6DFE630FD528CF0019C977 /* GemContextData.cpp in Sources */,
+				3A6DFE6C0FD5294F0019C977 /* glsl_geometry.cpp in Sources */,
+				3A6DFE720FD529880019C977 /* pix_writer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8266,6 +8344,12 @@
 				3AE073920EB8A2CA00223BA6 /* pix_filmOS.cpp in Sources */,
 				3AE073980EB8A31300223BA6 /* pix_movieOS.cpp in Sources */,
 				3AE0739E0EB8A34600223BA6 /* pix_videoOS.cpp in Sources */,
+				3A6DFE4C0FD528780019C977 /* GEMglMaterialfv.cpp in Sources */,
+				3A6DFE520FD528920019C977 /* GEMgluLookAt.cpp in Sources */,
+				3A6DFE5D0FD528CF0019C977 /* GemContext.cpp in Sources */,
+				3A6DFE5F0FD528CF0019C977 /* GemContextData.cpp in Sources */,
+				3A6DFE6A0FD5294F0019C977 /* glsl_geometry.cpp in Sources */,
+				3A6DFE700FD529880019C977 /* pix_writer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
