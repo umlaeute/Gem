@@ -708,6 +708,7 @@ void pix_chroma_key :: rangeCallback(void *data, t_floatarg Yval, t_floatarg Uva
     GetMyClass(data)->m_Urange=((unsigned char)255*Uval);
     GetMyClass(data)->m_Vrange=((unsigned char)255*Vval);
   } else {
+    GetMyClass(data)->post("using deprecated un-normalized ranges (0..255): consider using (0..1) instead!");
     GetMyClass(data)->m_Yrange=((unsigned char)Yval);
     GetMyClass(data)->m_Urange=((unsigned char)Uval);
     GetMyClass(data)->m_Vrange=((unsigned char)Vval);
@@ -721,6 +722,7 @@ void pix_chroma_key :: valueCallback(void *data, t_floatarg Yval, t_floatarg Uva
     GetMyClass(data)->m_Uvalue=((unsigned char)255*Uval);
     GetMyClass(data)->m_Vvalue=((unsigned char)255*Vval);
   } else {
+    GetMyClass(data)->post("using deprecated un-normalized values (0..255): consider using (0..1) instead!");
     GetMyClass(data)->m_Yvalue=((unsigned char)Yval);
     GetMyClass(data)->m_Uvalue=((unsigned char)Uval);
     GetMyClass(data)->m_Vvalue=((unsigned char)Vval);
