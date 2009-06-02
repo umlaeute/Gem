@@ -548,10 +548,6 @@ void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
 
   class_addmethod(classPtr, (t_method)&pix_filmDarwin::openMessCallback,
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmDarwin::changeImageCallback,
-                  gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmDarwin::autoCallback,
-                  gensym("auto"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmDarwin::ramCallback,
                   gensym("ram"),  A_NULL);
   class_addmethod(classPtr, (t_method)&pix_filmDarwin::hiqualityCallback,
@@ -568,16 +564,6 @@ void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
 void pix_filmDarwin :: openMessCallback(void *data, t_symbol *filename)
 {
   GetMyClass(data)->openMess(filename);
-}
-
-void pix_filmDarwin :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
-}
-
-void pix_filmDarwin :: autoCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->m_auto=!(!(int)state);
 }
 
 void pix_filmDarwin :: ramCallback(void *data)

@@ -115,8 +115,6 @@ private:
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void autoCallback(void *data, t_floatarg state);
   static void ramCallback(void *data);
   static void hiqualityCallback(void *data, t_floatarg state);
   static void rateCallback(void *data, t_floatarg state);
