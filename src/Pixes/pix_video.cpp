@@ -36,13 +36,13 @@ pix_video :: pix_video() :
   i=0;
   /* LATER: think whether v4l-1 and v4l-2 should be exclusive... */
 #ifdef HAVE_VIDEO4LINUX2
-  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L2(GL_RGBA);  i++;
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L2(GL_RGBA);  i++; endpost();
 #endif /* V4L2 */
 #ifdef HAVE_VIDEO4LINUX
-  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L(GL_RGBA);  i++;
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L(GL_RGBA);  i++; endpost();
 #endif /* V4L */
 #ifdef HAVE_LIBDV
-  startpost("video driver %d: ", i); m_videoHandles[i]=new videoDV4L(GL_RGBA);  i++;
+  startpost("video driver %d: ", i); m_videoHandles[i]=new videoDV4L(GL_RGBA);  i++; endpost();
 #endif /* DV4L */
 
   m_numVideoHandles=i;

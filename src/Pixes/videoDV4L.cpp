@@ -31,7 +31,6 @@
 videoDV4L :: videoDV4L(int format) : video(format)
 {
 #ifdef HAVE_DV
-  post("ieee1394");
   m_channel = 0;//0x63;
   m_devicenum  = 0;
   m_norm = PAL;
@@ -43,7 +42,6 @@ videoDV4L :: videoDV4L(int format) : video(format)
   provide("ieee1394");
   provide("dv4l");
   provide("dv");
-  provide("default");
 #endif
   m_haveVideo=false;
 }

@@ -154,6 +154,8 @@ bool video :: provides(const char*name) {
 /////////////////////////////////////////////////////////
 // remember that this backend provides a certain type of video decoding, e.g. "dv"
 void video :: provide(const char*name) {
-  if(!provides(name))
+  if(!provides(name)) {
     m_providers.push_back(name);
+    startpost("%s ", name);
+  }
 }

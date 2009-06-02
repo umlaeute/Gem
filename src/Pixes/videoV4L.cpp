@@ -91,12 +91,8 @@ videoV4L :: videoV4L(int format) : video(format)
   m_norm=VIDEO_MODE_AUTO; 
   m_devicenum=V4L_DEVICENO;
 
-  ::post("video4linux");
-
-  provide("v4l");
   provide("video4linux");
-  provide("default");
- 
+  provide("v4l");
 #endif /* HAVE_VIDEO4LINUX */
 }
 
@@ -475,7 +471,7 @@ int videoV4L :: stopTransfer()
   m_haveVideo = 0;
   m_frame_ready = 0;
   m_rendering=false;
-  post("v4l: stopped Transfer");
+  verbose(0, "v4l: stopped Transfer");
   return(1);
 }
 
