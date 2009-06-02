@@ -34,9 +34,6 @@ struct CallbackList{
 static CallbackList *s_motionList = NULL;
 static CallbackList *s_buttonList = NULL;
 static CallbackList *s_wheelList = NULL;
-static CallbackList *s_tabmotionList = NULL;
-static CallbackList *s_tabrotationList = NULL;
-static CallbackList *s_tabbuttonList = NULL;
 static CallbackList *s_keyboardList = NULL;
 static CallbackList *s_resizeList = NULL;
 
@@ -428,6 +425,7 @@ static void dequeueEvents(void) {
           theList = theList->next;
         }
       break;
+	default: break;
     }
 
     gem_event_queue_item_t*old = events;

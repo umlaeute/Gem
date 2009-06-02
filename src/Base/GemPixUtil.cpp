@@ -1701,7 +1701,6 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
     break;
   case GL_YUV422_GEM:
     {
-      int grey_i=0;
       position = (((X+(upsidedown?(ysize-Y):Y)*xsize)>>1)<<1);
       pixels=data+position*csize;
       grey = CLAMP(pixels[((X%2)?chY1:chY0)]-Y_OFFSET);

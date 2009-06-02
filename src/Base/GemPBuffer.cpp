@@ -206,43 +206,16 @@ struct PBuffer_data {
 
 #pragma mark ---- Error Reporting ----
 
-// C string to Pascal string
-static void cstr2pstr (StringPtr outString, const char *inString)
-{	
-  unsigned short x = 0;
-  do {
-    outString [x + 1] = (unsigned char) inString [x];
-    x++;
-  } while ((inString [x] != 0)  && (x < 256));
-  outString [0] = x;									
-}
-
 // ---------------------------------
 float gErrorTime = 0.0;
 extern AbsoluteTime gStartTime;
 char gErrorMessage[256] = "";
-// return float elpased time in seconds since app start
-static float getElapsedTime (void)
-{	
-  float deltaTime = (float) AbsoluteDeltaToDuration (UpTime(), gStartTime);
-  if (0 > deltaTime)	// if negative microseconds
-    deltaTime /= -1000000.0;
-  else				// else milliseconds
-    deltaTime /= 1000.0;
-  return deltaTime;
-}
 // error reporting as both window message and debugger string
 void reportError (char * strError)
 {
-  Str255 strErr = "\p";
-
   //gErrorTime = getElapsedTime ();
   //sprintf (gErrorMessage, "Error: %s (at time: %0.1f secs)", strError, gErrorTime);
   error ("Error: %s", strError);
-	 
-  // out as debug string
-  //cstr2pstr (strErr, gErrorMessage);
-  //DebugStr (strErr);
 }
 
 // ---------------------------------
@@ -261,8 +234,7 @@ OSStatus cglReportError (CGLError err)
 PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 {
   OSStatus err = noErr;
-  long						args[4],*arg;
-  CGLPixelFormatAttribute		*att,attrib[64], attrib_float[64];
+  CGLPixelFormatAttribute		*att,attrib[64];
   GLint vs, npf;
 
   // setup offscreen context
@@ -329,7 +301,6 @@ PBuffer::~PBuffer()
  */
 void PBuffer::enable()
 {
-  OSErr   err;
   GLint vs;
 
   cglReportError (CGLSetCurrentContext (data->context));
@@ -344,17 +315,7 @@ void PBuffer::enable()
 /*
  */
 void PBuffer::disable() {
-  OSErr   err;
-  //glFlush();
-  //cglReportError( CGLFlushDrawable( data->old_context ));
-  //cglReportError( CGLClearDrawable( data->context ));
-  //printf ("before disable Context (0x%X) Renderer: %s\n",CGLGetCurrentContext(), glGetString (GL_RENDERER));
   cglReportError ( CGLSetCurrentContext( data->old_context) );
-  //cglReportError( CGLTexImagePBuffer(data->old_context, data->pbuffer, GL_FRONT) );
-  //aglSwapBuffers( data->context );
-  //glFlush();
-  //err = aglSetCurrentContext( data->old_context);
-  //printf ("disable Context (0x%X) Renderer: %s\n",CGLGetCurrentContext(), glGetString (GL_RENDERER));
   return;
 }
 #elif defined __WIN32__
