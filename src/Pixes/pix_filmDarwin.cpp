@@ -37,7 +37,7 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
   m_rate(1.0),
   prevTime(0), curTime(0),
   m_Task(0),
-  m_volume(0.f)
+  m_volume(0.f),
   m_movie(NULL)
 {
   m_colorspace = GL_YUV422_GEM;
