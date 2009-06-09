@@ -468,7 +468,7 @@ fi
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 
 #linking on linux
-GEM_CHECK_LDFLAGS([-shared -Wl,-export-dynamic])
+GEM_CHECK_LDFLAGS([-shared -Wl,--export-dynamic])
 # linking on os-X
 GEM_CHECK_LDFLAGS([-dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup],
                   ,
