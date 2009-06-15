@@ -78,10 +78,6 @@ class GEM_EXTERN pix_artoolkit : public GemPixObj
 
 #ifdef HAVE_ARTOOLKIT	
   //////////
-  virtual void	startRendering();
-  virtual void	stopRendering();
-
-  //////////
   // Do the processing
   virtual void 	processRGBAImage(imageStruct &image);
   virtual void  processYUVImage(imageStruct &image);
