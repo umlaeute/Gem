@@ -63,7 +63,7 @@ pix_image :: pix_image(t_symbol *filename) :
 
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
@@ -77,7 +77,6 @@ pix_image :: ~pix_image()
 #endif
 }
 
-
 void pix_image :: threadMess(int onoff)
 {
 #ifdef HAVE_PTHREADS
@@ -89,18 +88,18 @@ void pix_image :: threadMess(int onoff)
         m_thread_running=false;
         m_thread_continue=true;
        
-	pthread_mutex_lock(m_mutex);
+        pthread_mutex_lock(m_mutex);
 
         if((err=pthread_create(&m_thread_id, 0, openThread, this)))
           {
             /* ack! thread creation failed! fall back to unthreaded loading */
             //post("couldn't create thread! %d", err);
           } else {
-	  int counter=0;
-	  // wait until the thread is up and running
-	  pthread_mutex_lock(m_mutex);
-	  pthread_mutex_unlock(m_mutex);
-	  // now m_thread_running has been set by the child thread */
+          int counter=0;
+          // wait until the thread is up and running
+          pthread_mutex_lock(m_mutex);
+          pthread_mutex_unlock(m_mutex);
+          // now m_thread_running has been set by the child thread */
 
           //post("created thread %x", m_thread_id);
           return;
@@ -116,8 +115,6 @@ void pix_image :: threadMess(int onoff)
       }
       m_thread_id=0;
     }
-
-
   }
 #endif
 }
@@ -158,7 +155,7 @@ void *pix_image :: openThread(void*you)
        */
 
       pthread_mutex_lock(mutex);
-       strcpy(orgfilename, me->m_filename);
+      strcpy(orgfilename, me->m_filename);
       pthread_mutex_unlock(mutex);
 
       //post("loading in thread %s", orgfilename);
@@ -227,41 +224,41 @@ void pix_image :: openMess(t_symbol *filename)
 /////////////////////////////////////////////////////////
 void pix_image :: render(GemState *state)
 {
-    // if we don't have an image, just return
+  // if we don't have an image, just return
   if (!m_loadedImage){
     return;
   }
 
 #ifdef HAVE_PTHREADS
-    if(m_thread_running){
-      pthread_mutex_lock(m_mutex);
+  if(m_thread_running){
+    pthread_mutex_lock(m_mutex);
       
-      if(m_threadloaded)
-        {
-          /* yep, the thread might have something for us */
-          if(m_loadedImage){
-            m_loadedImage->copy2Image(&m_pixBlock.image);
-            m_pixBlock.newimage = 1;
-            post("thread loaded image: %s", m_filename);
-          }
-          m_threadloaded=false;
-          *m_filename=0;
-          
-          if (m_cache&&m_cache->resendImage){
-            // we just copied it, so we don't want to resend the image...
-            m_cache->resendImage=0;
-          }
+    if(m_threadloaded)
+      {
+        /* yep, the thread might have something for us */
+        if(m_loadedImage){
+          m_loadedImage->copy2Image(&m_pixBlock.image);
+          m_pixBlock.newimage = 1;
+          post("thread loaded image: %s", m_filename);
         }
-    }
+        m_threadloaded=false;
+        *m_filename=0;
+          
+        if (m_cache&&m_cache->resendImage){
+          // we just copied it, so we don't want to resend the image...
+          m_cache->resendImage=0;
+        }
+      }
+  }
 #endif
-    // do we need to reload the image?    
-    if (m_cache&&m_cache->resendImage)
+  // do we need to reload the image?    
+  if (m_cache&&m_cache->resendImage)
     {
       m_loadedImage->refreshImage(&m_pixBlock.image);
       m_pixBlock.newimage = 1;
       m_cache->resendImage = 0;
     }
-    state->image = &m_pixBlock;
+  state->image = &m_pixBlock;
 }
 
 /////////////////////////////////////////////////////////
@@ -274,8 +271,8 @@ void pix_image :: postrender(GemState *state)
   state->image = NULL;
 
 #ifdef HAVE_PTHREADS
-    if(m_mutex)
-      pthread_mutex_unlock(m_mutex);
+  if(m_mutex)
+    pthread_mutex_unlock(m_mutex);
 #endif /* HAVE_PTHREADS */
 }
 
@@ -285,9 +282,9 @@ void pix_image :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_image :: startRendering()
 {
-    if (!m_loadedImage) return;
-    m_loadedImage->refreshImage(&m_pixBlock.image);
-    m_pixBlock.newimage = 1;
+  if (!m_loadedImage) return;
+  m_loadedImage->refreshImage(&m_pixBlock.image);
+  m_pixBlock.newimage = 1;
 }
 
 /////////////////////////////////////////////////////////
@@ -296,8 +293,8 @@ void pix_image :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_image :: cleanImage()
 {
-    // release previous data
-    if (m_loadedImage)
+  // release previous data
+  if (m_loadedImage)
     {
       delete m_loadedImage;
       m_loadedImage = NULL;
@@ -310,7 +307,6 @@ void pix_image :: cleanImage()
 // static member function
 //
 /////////////////////////////////////////////////////////
-
 void pix_image :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, (t_method)&pix_image::openMessCallback,
@@ -320,7 +316,7 @@ void pix_image :: obj_setupCallback(t_class *classPtr)
 }
 void pix_image :: openMessCallback(void *data, t_symbol *filename)
 {
-    GetMyClass(data)->openMess(filename);
+  GetMyClass(data)->openMess(filename);
 }
 void pix_image :: threadMessCallback(void *data, t_floatarg f)
 {
