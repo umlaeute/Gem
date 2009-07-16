@@ -1,4 +1,4 @@
-#N canvas 146 148 700 386 10;
+#N canvas 443 181 661 405 10;
 #X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 8 216 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
@@ -20,11 +20,11 @@
 #X text 7 69 Description: Store a gemlist;
 #X text 16 86 The gemlist object stores a gemlist \, which may de output
 by sending it a "bang" message.;
-#X obj 467 47 cnv 15 170 300 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 467 47 cnv 15 170 340 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X obj 475 83 cnv 15 150 90 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 475 81 cnv 15 150 130 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 528 279 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 528 320 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -44,26 +44,30 @@ by sending it a "bang" message.;
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 533 318 pd gemwin;
-#X msg 533 299 destroy;
-#X text 529 278 Create window:;
-#X obj 484 59 gemhead;
-#X obj 484 153 gemlist;
-#X obj 484 130 until;
-#X obj 484 247 scaleXYZ 0.9 0.9 0.9;
-#X obj 484 202 translateXYZ 0.5 0 0;
-#X msg 484 108 30;
-#X obj 484 224 rotateXYZ 0 0 30;
-#X obj 484 180 circle 0.3 33;
-#X obj 484 86 t b a;
+#X restore 533 359 pd gemwin;
+#X msg 533 340 create;
+#X text 529 319 Create window:;
+#X obj 498 59 gemhead;
+#X obj 484 190 gemlist;
+#X obj 484 169 until;
+#X obj 484 288 scaleXYZ 0.9 0.9 0.9;
+#X obj 484 243 translateXYZ 0.5 0 0;
+#X msg 484 149 30;
+#X obj 484 265 rotateXYZ 0 0 30;
+#X obj 484 221 circle 0.3 33;
+#X obj 498 107 route gem_state;
+#X obj 498 127 route float;
+#X obj 498 86 t a a;
 #X connect 20 0 21 0;
 #X connect 21 0 20 0;
-#X connect 23 0 31 0;
+#X connect 23 0 33 0;
 #X connect 24 0 30 0;
 #X connect 25 0 24 0;
 #X connect 27 0 29 0;
 #X connect 28 0 25 0;
 #X connect 29 0 26 0;
 #X connect 30 0 27 0;
-#X connect 31 0 28 0;
-#X connect 31 1 24 1;
+#X connect 31 0 32 0;
+#X connect 32 1 28 0;
+#X connect 33 0 31 0;
+#X connect 33 1 24 1;
