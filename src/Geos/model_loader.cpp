@@ -1171,6 +1171,7 @@ glmUVTexture(GLMmodel* model, float h, float w)
     }    
     group = group->next;
   }
+  verbose(1, "glmUVTexture(): generated %d UV texture coordinates", model->numtexcoords);
 }
 
 /* glmLinearTexture: Generates texture coordinates according to a
@@ -1282,6 +1283,8 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
     }
     group = group->next;
   }
+
+  verbose(1, "glmSpheremapTexture(): generated %d spheremap texture coordinates", model->numtexcoords);
 }
 
 GLvoid glmTexture(GLMmodel* model, glmtexture_t typ, float h, float w)
