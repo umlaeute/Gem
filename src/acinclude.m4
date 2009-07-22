@@ -954,7 +954,11 @@ dnl with or without modifications, as long as this notice is preserved.
 # set by the user, the default value "yes" is assigned to with_WITHARG
 # --------------------------------------------------------------
 AC_DEFUN([GEM_ARG_WITH],
-[AC_ARG_WITH([$1],
+[
+  if test "x$with_ALL" = "xyes" && test "x${with_$1}" = "x"; then with_$1="yes"; fi 
+  if test "x$with_ALL" = "xno"  && test "x${with_$1}" = "x"; then with_$1="no"; fi
+
+  AC_ARG_WITH([$1],
              AC_HELP_STRING([--without-$1], [disable $1-lib ($2)]),,[
                 if test "x$3" != "x"; then with_$1="yes"; fi
            ])
@@ -999,7 +1003,7 @@ AC_DEFUN([GEM_TARGET],
                   GEM_TARGETS=["$GEM_TARGETS $1"]
                   AC_MSG_RESULT([building Gem with $1-objects])
              ])
-])# GEM_WITH_TARGET
+])# GEM_TARGET
 
 AC_DEFUN([GEM_TARGET_DISABLED],
 [AC_ARG_ENABLE([$1],
@@ -1015,7 +1019,7 @@ AC_DEFUN([GEM_TARGET_DISABLED],
              [
                    AC_MSG_RESULT([building Gem without $1-objects])
              ])
-])# GEM_WITH_TARGET
+])# GEM_TARGET_DISABLED
 
 
 
@@ -1037,6 +1041,10 @@ AC_ARG_WITH([]Name-includes,
              AC_HELP_STRING([--with-[]Name-includes=/path/to/[]Name/include/], [include path for []Name]))
 AC_ARG_WITH([]Name-libs,
              AC_HELP_STRING([--with-[]Name-libs=/path/to/[]Name/lib/], [library path for []Name]))
+
+  if test "x$with_ALL" = "xyes" && test "x$with_[]Name" = "x"; then with_[]Name="yes"; fi 
+  if test "x$with_ALL" = "xno"  && test "x$with_[]Name" = "x"; then with_[]Name="no"; fi
+
 if test x$with_[]Name = "xno"; then
   have_[]Name="no (forced)"
 else

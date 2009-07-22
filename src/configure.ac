@@ -46,6 +46,11 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
+
+AC_ARG_WITH([ALL],
+             AC_HELP_STRING([--without-ALL], [en/disable ALL libraries by default]))
+
+
 GEM_ARG_ENABLE([PIC],     [PositionIndependentCode (potentially slower)])
 
 if test "x$enable_PIC" != "xno"; then
