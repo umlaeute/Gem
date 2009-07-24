@@ -1,7 +1,7 @@
-#N canvas 410 27 685 486 10;
+#N canvas 685 40 685 486 10;
 #X obj 27 399 hradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144 -1
 -1 0;
-#X floatatom 185 282 5 0 0 0 - - -;
+#X floatatom 185 212 5 0 0 0 - - -;
 #N canvas 0 0 187 219 fps 0;
 #X obj 22 62 realtime;
 #X obj 22 41 t b b;
@@ -19,7 +19,7 @@
 #X connect 5 0 6 0;
 #X connect 6 0 7 0;
 #X connect 7 0 3 0;
-#X restore 185 262 pd fps;
+#X restore 185 192 pd fps;
 #N canvas 970 374 337 368 time_and_direction_Wind 0;
 #X obj 41 82 pack f f;
 #X msg 41 104 wind \$1 \$2;
@@ -57,9 +57,9 @@
 #X connect 15 0 5 0;
 #X restore 272 417 pd time_and_direction_Wind __;
 #X obj 272 171 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 0 1;
+-1 -1 3200 1;
 #X obj 365 172 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 0 1;
+-1 -1 6800 1;
 #N canvas 543 225 707 425 pos_wind 0;
 #X obj 323 265 pack 0 0;
 #X msg 323 286 \; pos_wind_canvas pos \$1 \$2;
@@ -78,7 +78,7 @@
 #X obj 270 382 s force_wind;
 #X obj 270 67 min 1;
 #X obj 270 88 max 0;
-#X obj 145 145 cnv 10 10 10 empty pos_wind_canvas empty 20 12 0 14
+#X obj 133 142 cnv 10 10 10 empty pos_wind_canvas empty 20 12 0 14
 -258113 -66577 0;
 #X obj 146 147 bng 8 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
@@ -785,6 +785,8 @@
 #X msg 461 258 draw line;
 #X msg 461 238 draw default;
 #X msg 462 279 draw point;
+#X floatatom 425 203 5 0 0 0 - - -;
+#X obj 433 28 inlet;
 #X connect 0 0 24 0;
 #X connect 1 0 3 0;
 #X connect 1 1 0 1;
@@ -822,6 +824,10 @@
 #X connect 30 0 24 0;
 #X connect 31 0 24 0;
 #X connect 32 0 24 0;
+#X connect 33 0 26 1;
+#X connect 33 0 26 2;
+#X connect 33 0 26 3;
+#X connect 34 0 33 0;
 #X restore 27 304 pd shader_render ______________;
 #X text 12 6 "Potential Flag" \, by Samuel Bianchini;
 #X text 28 20 Simple version for Gem exemples;
@@ -852,7 +858,7 @@ on a good GPU);
 #X restore 66 188 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 0 1;
+-1 -1 1 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -889,7 +895,9 @@ on a good GPU);
 #X connect 15 0 0 0;
 #X connect 17 0 8 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
-#X restore 45 205 pd gemwin 30;
+#X restore 47 209 pd gemwin 30;
+#X floatatom 206 282 5 0 0 0 - - -;
+#X text 126 281 scale ->;
 #X connect 0 0 13 0;
 #X connect 2 0 1 0;
 #X connect 4 0 6 0;
@@ -899,3 +907,4 @@ on a good GPU);
 #X connect 20 0 21 0;
 #X connect 21 0 19 0;
 #X connect 23 0 24 0;
+#X connect 25 0 15 1;
