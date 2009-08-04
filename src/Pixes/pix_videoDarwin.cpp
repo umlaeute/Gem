@@ -671,21 +671,42 @@ void pix_videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
 void pix_videoDarwin :: csMess(int format)
 {
     m_colorspace = format;
-    if (format == GL_RGBA) post("colorspace is GL_RGBA %d",m_colorspace);
-    else if (format == GL_BGRA_EXT) post("colorspace is GL_RGBA %d",m_colorspace);
-    else if (format == GL_YCBCR_422_GEM) post("colorspace is YUV %d",m_colorspace);
-    else error("colorspace is unknown %d",m_colorspace);
-	
+    if (format == GL_RGBA) {
+     post("colorspace is GL_RGBA %d",m_colorspace);
+    } else if (format == GL_BGRA_EXT) {
+      post("colorspace is GL_RGBA %d",m_colorspace);
+    } else if (format == GL_YCBCR_422_GEM) {
+      post("colorspace is YUV %d",m_colorspace);
+    } else if (format == GL_LUMINANCE) {
+        post("'Gray' not yet supported...using YUV");
+        format=GL_YCBCR_422_GEM;
+    } else {
+      error("colorspace is unknown %d", m_colorspace);
+      return;
+	}
+    
 	stopTransfer();
 	resetSeqGrabber();
 	startTransfer();
 }
+void pix_videoDarwin :: csMess(t_symbol*s)
+{
+  int format=0;
+  char c =*s->s_name;
+  switch (c) {
+  case 'g': case 'G': format=GL_LUMINANCE; break;
+  case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
+  case 'r': case 'R': format=GL_RGBA; break;
+  default:
+    post("colorspace must be 'RGBA', 'YUV' or 'Gray'");
+    return;
+  }
 
+  csMess(format);
+}
 
 void pix_videoDarwin :: fileMess(int argc, t_atom *argv)
 {
-
-	
     OSErr		err = noErr;
     FSRef		ref;
 
@@ -1079,10 +1100,6 @@ void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("reset"), A_NULL);
 	class_addmethod(classPtr, (t_method)&pix_videoDarwin::autoCallback,
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoDarwin::dialogCallback,
-		  gensym("dialog"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoDarwin::colorspaceCallback,
-		  gensym("colorspace"), A_SYMBOL, A_NULL);
     class_addmethod(classPtr, (t_method)&pix_videoDarwin::deviceCallback,
                     		  gensym("device"), A_DEFFLOAT, A_NULL);
 	class_addmethod(classPtr, (t_method)&pix_videoDarwin::brightnessCallback,
@@ -1132,58 +1149,6 @@ void pix_videoDarwin :: bangMessCallback(void *data)
 void pix_videoDarwin :: resetCallback(void *data)
 {
 	GetMyClass(data)->resetSeqGrabber();
-}
-
-void pix_videoDarwin ::dialogCallback(void *data)
-{
-	GetMyClass(data)->DoVideoSettings();
-}
- 
-void pix_videoDarwin :: csMessCallback(void *data, t_symbol*s)
-{
-   // GetMyClass(data)->csMess(getPixFormat(s->s_name));
-    GetMyClass(data)->post("Am I even being called??????????????");
-    int format=0;
-    char c =*s->s_name;
-    switch (c){
-        case 'g': case 'G': format=GL_LUMINANCE; break;
-        case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
-        case 'r': case 'R': format=GL_RGBA; break;
-        default:
-            GetMyClass(data)->post("colorspace must be 'RGBA', 'YUV' or 'Gray'");
-    }
-
-    if(format==GL_LUMINANCE){
-        GetMyClass(data)->post("'Gray' not yet supported...using YUV");
-        format=GL_YCBCR_422_GEM;
-    }
-    if(format)GetMyClass(data)->csMess(format);
-}
-
-
-void pix_videoDarwin :: colorspaceCallback(void *data, t_symbol *state)
-{
-  int format=0;
-  char c =*state->s_name;
-  switch (c){
-  case 'g': case 'G': format=GL_LUMINANCE; break;
-  case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
-  case 'r': case 'R': format=GL_RGBA; break;
-  default:
-    GetMyClass(data)->post("colorspace must be 'RGBA', 'YUV' or 'Gray'");
-  }
-
-  if(format==GL_LUMINANCE){
-    GetMyClass(data)->post("'Gray' not yet supported...using YUV");
-    format=GL_YCBCR_422_GEM;
-  }
-  if(format)
-  {
-	GetMyClass(data)->m_colorspace = format;
-  	GetMyClass(data)->stopTransfer();
-	GetMyClass(data)->resetSeqGrabber();
-	GetMyClass(data)->startTransfer();
-  }
 }
 
 void pix_videoDarwin :: deviceCallback(void *data, t_floatarg X)

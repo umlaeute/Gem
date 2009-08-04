@@ -100,6 +100,7 @@ class GEM_EXTERN pix_videoOS : public GemBase
   ////////// 
   // colorspace-message
   virtual void	csMess(int format);
+  virtual void	csMess(t_symbol*format);
   ////////// 
   // property-dialog
   virtual void	dialogMess(int,t_atom*);

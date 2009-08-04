@@ -147,6 +147,10 @@ void pix_videoOS :: csMess(int format)
 {
   error("colorspace not supported on this OS");
 }
+void pix_videoOS :: csMess(t_symbol*s)
+{
+  csMess(getPixFormat(s->s_name));
+}
 /////////////////////////////////////////////////////////
 // enumerate devices
 //
@@ -205,7 +209,7 @@ void pix_videoOS :: swapMessCallback(void *data, t_floatarg state)
 }
 void pix_videoOS :: csMessCallback(void *data, t_symbol*s)
 {
-  GetMyClass(data)->csMess(getPixFormat(s->s_name));
+  GetMyClass(data)->csMess(s);
 }
 void pix_videoOS :: enumerateMessCallback(void *data)
 {

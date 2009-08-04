@@ -80,6 +80,9 @@ class GEM_EXTERN pix_videoDarwin : public pix_videoOS
         virtual int	stopTransfer();
 
         virtual void csMess(int format);
+        virtual void csMess(t_symbol*format);
+
+
 
 		virtual void qualityMess(int X);
 
@@ -169,7 +172,6 @@ class GEM_EXTERN pix_videoDarwin : public pix_videoOS
     	// static member functions
         static void qualityCallback(void *data, t_floatarg X);
         static void resetCallback(void *data);
-        static void dialogCallback(void *data);
         static void colorspaceCallback(void *data, t_symbol *cs);
         static void csMessCallback(void *data, t_symbol *cs);
 		static void deviceCallback(void *data, t_floatarg X);
