@@ -12,10 +12,10 @@
 //  this file has been generated...
 ////////////////////////////////////////////////////////
 
-#include "GEMglTexSubImage2D.h"
+#include "GEMglTexImage2D.h"
 #include "Base/GemPixUtil.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglTexSubImage2D )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglTexImage2D )
 
 /////////////////////////////////////////////////////////
 //
@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglTexSubImage2D )
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexSubImage2D :: GEMglTexSubImage2D	(int argc, t_atom*argv) :
+GEMglTexImage2D :: GEMglTexImage2D	(int argc, t_atom*argv) :
   target(0), level(0), xoffset(0), yoffset(0), width(0), height(0)
 {
 	if (argc>0)level  =atom_getint(argv+0);
@@ -42,7 +42,7 @@ GEMglTexSubImage2D :: GEMglTexSubImage2D	(int argc, t_atom*argv) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglTexSubImage2D :: ~GEMglTexSubImage2D () {
+GEMglTexImage2D :: ~GEMglTexImage2D () {
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -52,7 +52,7 @@ GEMglTexSubImage2D :: ~GEMglTexSubImage2D () {
 
 //////////////////
 // extension check
-bool GEMglTexSubImage2D :: isRunnable(void) {
+bool GEMglTexImage2D :: isRunnable(void) {
   if(GLEW_VERSION_1_1)return true;
   error("your system does not support OpenGL-1.1");
   return false;
@@ -62,10 +62,10 @@ bool GEMglTexSubImage2D :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglTexSubImage2D :: render(GemState *state) {
+void GEMglTexImage2D :: render(GemState *state) {
   if (!state||!state->image||!&state->image->image)return;
   target=GL_TEXTURE_2D;
-  glTexSubImage2D (target, level, xoffset, yoffset, width, height, 
+  glTexImage2D (target, level, xoffset, yoffset, width, height, 
 		   state->image->image.format, 
 		   state->image->image.type, 
 		   state->image->image.data);
@@ -74,31 +74,31 @@ void GEMglTexSubImage2D :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglTexSubImage2D :: targetMess (t_float arg1) {	// FUN
+void GEMglTexImage2D :: targetMess (t_float arg1) {	// FUN
   error("target has to be GL_TEXTURE_2D");
 }
 
-void GEMglTexSubImage2D :: levelMess (t_float arg1) {	// FUN
+void GEMglTexImage2D :: levelMess (t_float arg1) {	// FUN
 	level = (GLint)arg1;
 	setModified();
 }
 
-void GEMglTexSubImage2D :: xoffsetMess (t_float arg1) {	// FUN
+void GEMglTexImage2D :: xoffsetMess (t_float arg1) {	// FUN
 	xoffset = (GLint)arg1;
 	setModified();
 }
 
-void GEMglTexSubImage2D :: yoffsetMess (t_float arg1) {	// FUN
+void GEMglTexImage2D :: yoffsetMess (t_float arg1) {	// FUN
 	yoffset = (GLint)arg1;
 	setModified();
 }
 
-void GEMglTexSubImage2D :: widthMess (t_float arg1) {	// FUN
+void GEMglTexImage2D :: widthMess (t_float arg1) {	// FUN
 	width = (GLsizei)arg1;
 	setModified();
 }
 
-void GEMglTexSubImage2D :: heightMess (t_float arg1) {	// FUN
+void GEMglTexImage2D :: heightMess (t_float arg1) {	// FUN
 	height = (GLsizei)arg1;
 	setModified();
 }
@@ -108,30 +108,30 @@ void GEMglTexSubImage2D :: heightMess (t_float arg1) {	// FUN
 // static member functions
 //
 
-void GEMglTexSubImage2D :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::levelMessCallback,  	gensym("level"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::xoffsetMessCallback,  	gensym("xoffset"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::yoffsetMessCallback,  	gensym("yoffset"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::widthMessCallback,  	gensym("width"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::heightMessCallback,  	gensym("height"), A_DEFFLOAT, A_NULL);
+void GEMglTexImage2D :: obj_setupCallback(t_class *classPtr) {
+	 class_addmethod(classPtr, (t_method)&GEMglTexImage2D::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglTexImage2D::levelMessCallback,  	gensym("level"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglTexImage2D::xoffsetMessCallback,  	gensym("xoffset"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglTexImage2D::yoffsetMessCallback,  	gensym("yoffset"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglTexImage2D::widthMessCallback,  	gensym("width"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, (t_method)&GEMglTexImage2D::heightMessCallback,  	gensym("height"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglTexSubImage2D :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglTexImage2D :: targetMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->targetMess ( (t_float)    arg0);
 }
-void GEMglTexSubImage2D :: levelMessCallback (void* data, t_floatarg arg0){
+void GEMglTexImage2D :: levelMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->levelMess ( (t_float)    arg0);
 }
-void GEMglTexSubImage2D :: xoffsetMessCallback (void* data, t_floatarg arg0){
+void GEMglTexImage2D :: xoffsetMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->xoffsetMess ( (t_float)    arg0);
 }
-void GEMglTexSubImage2D :: yoffsetMessCallback (void* data, t_floatarg arg0){
+void GEMglTexImage2D :: yoffsetMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->yoffsetMess ( (t_float)    arg0);
 }
-void GEMglTexSubImage2D :: widthMessCallback (void* data, t_floatarg arg0){
+void GEMglTexImage2D :: widthMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->widthMess ( (t_float)    arg0);
 }
-void GEMglTexSubImage2D :: heightMessCallback (void* data, t_floatarg arg0){
+void GEMglTexImage2D :: heightMessCallback (void* data, t_floatarg arg0){
 	GetMyClass(data)->heightMess ( (t_float)    arg0);
 }
