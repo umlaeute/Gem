@@ -151,11 +151,14 @@ class GEM_EXTERN CPPExtern
 
  public:
         // these call pd's print-functions, and eventually prepend the object's name
-	void            post(const char*format, ...) const;
-	void            verbose(const int level, const char*format, ...) const;
-  void            error(const char*format, ...) const; /* internally uses pd_error() */
+	void            startpost(const char*format, ...);
+	void            post(const char*format, ...);
+	void            endpost(void);
+	void            verbose(const int level, const char*format, ...);
+	void            error(const char*format, ...); /* internally uses pd_error() */
 
  private:
+	bool m_endpost; /* internal state for startpost/post/endpost */
 	static bool checkGemVersion(int major, int minor);
 };
 

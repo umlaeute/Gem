@@ -57,7 +57,10 @@ char* CPPExtern::m_holdname;
 //
 /////////////////////////////////////////////////////////
 CPPExtern :: CPPExtern()
-           : x_obj(m_holder) 
+  : x_obj(m_holder),
+    m_objectname(NULL),
+    m_canvas(NULL),
+    m_endpost(true)
 {
     m_canvas = canvas_getcurrent();
     m_objectname=gensym(m_holdname);
@@ -69,20 +72,40 @@ CPPExtern :: CPPExtern()
 /////////////////////////////////////////////////////////
 CPPExtern :: ~CPPExtern()
 { }
-void CPPExtern :: post(const char*fmt,...) const
+void CPPExtern :: post(const char*fmt,...)
 {
   char buf[MAXPDSTRING];
   va_list ap;
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
     ::post("[%s]: %s", m_objectname->s_name, buf);
   } else {
     ::post("%s", buf);
   }
+  m_endpost=true;
 }
-void CPPExtern :: verbose(const int level, const char*fmt,...) const
+void CPPExtern :: startpost(const char*fmt,...)
+{
+  char buf[MAXPDSTRING];
+  va_list ap;
+  va_start(ap, fmt);
+  vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
+  va_end(ap);
+  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+    ::startpost("[%s]: %s", m_objectname->s_name, buf);
+  } else {
+    ::startpost("%s", buf);
+  }
+  m_endpost=false;
+}
+void CPPExtern :: endpost(void)
+{
+  ::endpost();
+  m_endpost=true;
+}
+void CPPExtern :: verbose(const int level, const char*fmt,...)
 {
   char buf[MAXPDSTRING];
   va_list ap;
@@ -105,7 +128,7 @@ void CPPExtern :: verbose(const int level, const char*fmt,...) const
 #endif
 }
 
-void CPPExtern :: error(const char*fmt,...) const
+void CPPExtern :: error(const char*fmt,...)
 {
   char buf[MAXPDSTRING];
   va_list ap;
