@@ -538,7 +538,7 @@ int videoV4L2 :: startTransfer(int format)
 
 
 
-  verbose(1, "v4l2: got'%c%c%c%c'", 
+  verbose(1, "v4l2: got '%c%c%c%c'", 
 	    (char)(m_gotFormat),
 	    (char)(m_gotFormat>>8),
 	    (char)(m_gotFormat>>16),
