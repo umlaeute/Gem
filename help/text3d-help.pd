@@ -1,4 +1,4 @@
-#N canvas 26 90 733 630 10;
+#N canvas 108 62 733 630 10;
 #X text 54 30 Class: geometric object;
 #X obj 519 47 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -23,7 +23,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 549 403 pd gemwin;
-#X msg 549 384 create;
+#X msg 549 384 destroy;
 #X text 545 363 Create window:;
 #X obj 7 65 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -81,6 +81,7 @@ color \, and all 3D-transformation;
 0;
 #X text 43 547 Note: on some systems it might be necessary to turn
 rendering ON before loading a font.;
+#X msg 561 201 string 48 49 32 51 52;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 37 0;
@@ -94,3 +95,4 @@ rendering ON before loading a font.;
 #X connect 31 0 37 3;
 #X connect 32 0 37 1;
 #X connect 37 0 38 0;
+#X connect 44 0 38 0;
