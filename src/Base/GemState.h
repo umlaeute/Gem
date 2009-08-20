@@ -130,6 +130,10 @@ class GEM_EXTERN GemState
   // Constructor
   GemState();
 
+  //////////
+  // Destructor
+  ~GemState();
+
   float texCoordX(int num) const {
     if (texture && numTexCoords > num)
       return texCoords[num].s;
@@ -143,7 +147,7 @@ class GEM_EXTERN GemState
   }
 
   /* reset (parts of?) the GemState: to be called from [gemhead] */
-  void reset();
+  void reset(void);
 
 };
     	

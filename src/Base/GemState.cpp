@@ -16,7 +16,6 @@
 /////////////////////////////////////////////////////////
 
 #include "GemState.h"
-
 #include "Base/GemGL.h"
 
 
@@ -51,4 +50,8 @@ void GemState :: reset() {
   HaveNormalArray = 0;
   HaveTexCoordArray = 0;
   drawType = 0;
+}
+
+GemState :: ~GemState() {
+  reset();
 }
