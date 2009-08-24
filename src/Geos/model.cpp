@@ -207,7 +207,8 @@ void model :: buildList()
 /////////////////////////////////////////////////////////
 void model :: render(GemState *state)
 {
-  if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2)))
+  int texcoordindex=(state->texUpsideDown)?1:2;
+  if (state && (m_currentH != state->texCoordX(texcoordindex) || m_currentW != state->texCoordY(texcoordindex)))
     {
       m_rebuild=true;
     }
