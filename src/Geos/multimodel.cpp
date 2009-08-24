@@ -271,15 +271,18 @@ void multimodel :: startRendering()
 void multimodel :: render(GemState *state)
 {
   if (!m_numModels || !m_loadedCache) return;
-  if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2)))
-    {
-      m_rebuild=true;
+  int texcoordindex=(state->texUpsideDown)?1:2;
+  if(state) {
+    if (m_currentH != state->texCoordX(texcoordindex) || m_currentW != state->texCoordY(texcoordindex))
+      {
+        m_rebuild=true;
+      }
+    if(m_rebuild) {
+      m_currentH = state->texCoordX(texcoordindex);
+      m_currentW = state->texCoordY(texcoordindex);
+      buildList();
+      m_rebuild=false;
     }
-  if(m_rebuild) {
-    m_currentH = state->texCoordX(2);
-    m_currentW = state->texCoordY(2);
-    buildList();
-    m_rebuild=false;
   }
   if (!m_loadedCache->models[m_curModel])return;
 
