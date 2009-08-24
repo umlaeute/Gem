@@ -207,19 +207,16 @@ void model :: buildList()
 /////////////////////////////////////////////////////////
 void model :: render(GemState *state)
 {
-  if(state) {
-    int texcoordindex=(state->texUpsideDown)?1:2;
-    if (m_currentH != state->texCoordX(texcoordindex) || m_currentW != state->texCoordY(texcoordindex))
-      {
-        m_rebuild=true;
-      }
-    if(m_rebuild) {
-      m_currentH = state->texCoordX(texcoordindex);
-      m_currentW = state->texCoordY(texcoordindex);
-      glmTexture(m_model, m_textype, m_currentH, m_currentW);
-      buildList();
-      m_rebuild=false;
+  if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2)))
+    {
+      m_rebuild=true;
     }
+  if(m_rebuild) {
+    m_currentH = state->texCoordX(2);
+    m_currentW = state->texCoordY(2);
+    glmTexture(m_model, m_textype, m_currentH, m_currentW);
+    buildList();
+    m_rebuild=false;
   }
   if (!m_dispList)return;
   glCallList(m_dispList);

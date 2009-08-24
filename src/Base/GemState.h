@@ -76,7 +76,7 @@ class GEM_EXTERN GemState
   // 1..normalized texture
   // 2..rectangle texture
   int 	    	    texture;
-
+    	
   //////////
   // The image to texture map
   pixBlock	        *image;
@@ -94,9 +94,6 @@ class GEM_EXTERN GemState
   // The number of multiTexUnits
   //   default = 0, max = 7
   int 	    	    multiTexUnits;
-
-  // whether the texture is upside down or not
-  GLboolean texUpsideDown;
 
   //////////
   // Milliseconds since last frame

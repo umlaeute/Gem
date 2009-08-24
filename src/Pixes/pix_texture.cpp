@@ -425,7 +425,6 @@ void pix_texture :: render(GemState *state) {
   m_rebuildList = 0;
  
   state->texture = 1;
-  state->texUpsideDown = upsidedown;
 
   // if we are using rectangle textures, this is a way to inform the downstream objects 
   // (this is important for things like [pix_coordinate]
