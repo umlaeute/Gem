@@ -23,7 +23,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 549 403 pd gemwin;
-#X msg 549 384 destroy;
+#X msg 549 384 create;
 #X text 545 363 Create window:;
 #X obj 7 65 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -35,13 +35,13 @@
 #X text 17 294 Arguments:;
 #X text 452 8 GEM object;
 #X text 27 363 Inlet 1: gemlist;
-#X text 9 476 Outlets:;
-#X text 21 489 Outlet 1: gemlist;
+#X text 9 495 Outlets:;
+#X text 21 508 Outlet 1: gemlist;
 #X text 525 29 Example:;
 #X obj 522 94 cnv 15 150 220 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 533 50 gemhead;
-#X floatatom 570 269 5 0 100 1 size - -;
+#X floatatom 572 269 5 0 100 1 size - -;
 #X msg 543 134 font \$1;
 #X obj 543 115 openpanel;
 #X obj 543 98 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
@@ -69,19 +69,21 @@ aon the command-line and load fonts with just "font times.ttf".;
 ;
 #X text 27 404 Inlet 1: message: list [<blah>] : render the given text
 ;
-#X text 27 428 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
+#X text 27 447 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
 justification;
 #X obj 533 71 rotateXYZ;
 #X obj 533 290 text3d;
 #X text 10 94 [text3d] renders one line of a text with the current
 color \, and all 3D-transformation;
 #X text 33 14 Synopsis: [text3d];
-#X text 27 457 Inlet 2: float: size (in points). default: 20;
+#X text 27 476 Inlet 2: float: size (in points). default: 20;
 #X obj 30 543 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
 0;
 #X text 43 547 Note: on some systems it might be necessary to turn
 rendering ON before loading a font.;
 #X msg 561 201 string 48 49 32 51 52;
+#X text 27 416 Inlet 1: message: string [<blah>] : render the given
+text \, given as a list of unicode code points (similar to ASCII);
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 37 0;
