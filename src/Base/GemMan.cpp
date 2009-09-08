@@ -46,6 +46,9 @@
 static WindowInfo gfxInfo;
 static WindowInfo constInfo;
 
+
+static bool glewInitialized = false;
+
 // static member data
 char* GemMan::m_title = (char*)"GEM";
 int GemMan::m_xoffset = 0;
@@ -1018,6 +1021,7 @@ int GemMan :: createWindow(char* disp)
     on the NVidia GeForce2MX and above, or the ATI Radeon and above.
   */
 
+  glewInitialized=false;
   GLenum err = glewInit();
 
   if (GLEW_OK != err) {
@@ -1031,6 +1035,7 @@ int GemMan :: createWindow(char* disp)
       return(0);
     }
   }
+  glewInitialized=true;
   post("GEM: GLEW version %s",glewGetString(GLEW_VERSION));
 
   checkOpenGLExtensions();
@@ -1415,6 +1420,14 @@ void GemMan :: printInfo()
 {
   post("GEM information");
   post("---------------");
+  if(!glewInitialized) {
+    post("OpenGL has not been initialized yet!");
+    post("create a window first");
+    return;
+  }
+
+
+
   post("OpenGL info");
   post("Vendor: %s", glGetString(GL_VENDOR));
   post("Renderer: %s", glGetString(GL_RENDERER));
