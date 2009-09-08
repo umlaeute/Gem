@@ -31,8 +31,7 @@ CPPEXTERN_NEW(gemlist)
 //
 /////////////////////////////////////////////////////////
 gemlist :: gemlist(void) 
-  : m_current_state(NULL),
-    m_valide_state(false),
+  : m_valide_state(false),
     m_inlet(NULL),
     m_tickTime(-1.f),
     m_lightState(false),
@@ -57,7 +56,9 @@ gemlist :: ~gemlist()
 /////////////////////////////////////////////////////////
 void gemlist :: render(GemState *state)
 {
-	m_current_state=state; //copy current state for later use
+  m_current_state=*state; //copy current state for later use
+
+
 	m_valide_state=true;
 }
 
@@ -101,7 +102,7 @@ void gemlist :: trigger()
 {
 	if(m_valide_state) {
     // outlet the current state when banged
-    sendCacheState(m_cache, m_current_state);
+    sendCacheState(m_cache, &m_current_state);
   } else {
 	  // fill in out own state and output
     GemCache tempCache(NULL);
@@ -169,7 +170,7 @@ void gemlist :: drawMess(t_atom arg)
 /////////////////////////////////////////////////////////
 void gemlist :: rightRender(GemState *state)
 {
-	m_current_state=state;
+	m_current_state=*state;
 	m_valide_state=true;
 	// get the current state on the right inlet
 }

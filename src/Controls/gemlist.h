@@ -60,7 +60,7 @@ class GEM_EXTERN gemlist : public GemBase
 
   //////////
   // curent state
-  GemState* 	m_current_state;
+  GemState 	m_current_state;
 
   ////////
   bool		m_valide_state;
