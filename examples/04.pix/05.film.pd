@@ -11,20 +11,20 @@
 #X text 368 28 win32:;
 #X text 212 134 frame;
 #N canvas 243 65 604 505 README 0;
-#X text 79 38 the pix_film is the same as pix_movie but does not texture
+#X text 49 38 the pix_film is the same as pix_movie but does not texture
 the movie immediately onto a Geo.;
-#X text 80 77 therefore it is possible to manipulate the frames;
-#X text 78 106 the pix_film object will return the movie in it's (more
+#X text 50 77 therefore it is possible to manipulate the frames;
+#X text 48 106 the pix_film object will return the movie in it's (more
 or less) native color-space. most of the times \, this will probably
 be not RGBA but RGB or BGR (on windows machines).;
-#X text 78 153 do not worry about this. however \, most of the pix-manips
+#X text 48 153 do not worry about this. however \, most of the pix-manips
 will only work correctly on RGBA-pixes. if this is the case and you
 send it a non-RGBA pixture it will say something like "pix_object cannon
 handle gray image".;
-#X text 79 226 to avoid this \, you can convert your pix-buff to RGBA
+#X text 49 226 to avoid this \, you can convert your pix-buff to RGBA
 using "pix_rgba". this will be a no-cost operation if the pix_buf already
 is in RGBA.;
-#X text 66 334 you might notice a significant performance-enhancement
+#X text 36 334 you might notice a significant performance-enhancement
 by just turning the [pix_rgba] off (via the toggle). however \, not
 [pix_rgba] is expensive but the [pix_convolve] (which appears to do
 nothing when initialized with "0 0 0 0 1 0 0 0 0". When [pix_rgba]
@@ -86,6 +86,12 @@ very fast.;
 #X text 358 91 linux \, os-X:;
 #X text 363 140 linux \, ??:;
 #X obj 345 181 t a;
+#X msg 55 309 thread 0;
+#X msg 410 207 open \$1;
+#X obj 410 185 symbol;
+#X obj 471 185 openpanel;
+#X obj 563 185 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
 #X connect 0 0 12 0;
 #X connect 1 0 12 1;
 #X connect 2 0 12 0;
@@ -107,3 +113,8 @@ very fast.;
 #X connect 29 0 30 0;
 #X connect 30 0 29 0;
 #X connect 34 0 12 0;
+#X connect 35 0 12 0;
+#X connect 36 0 34 0;
+#X connect 37 0 36 0;
+#X connect 38 0 37 0;
+#X connect 39 0 38 0;
