@@ -16,7 +16,7 @@
 #X obj 595 288 gemlist;
 #X obj 595 223 gemhead;
 #X obj 595 250 t b b a;
-#X obj 37 202 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 37 202 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X obj 209 198 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
@@ -83,7 +83,7 @@ shown in example #2 can be more flexible...;
 #X obj 185 441 / 1000;
 #X obj 22 400 translateXYZ -0.5 0 0;
 #X obj 22 103 translateXYZ 3 0 0;
-#X obj 22 42 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+#X obj 22 42 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X text 343 233 <- change random;
 #X text 276 356 rotation angle is random;
@@ -137,7 +137,7 @@ means that the examples below are equivalent:;
 #X obj 445 431 teapot 1;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
