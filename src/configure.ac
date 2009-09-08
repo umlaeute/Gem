@@ -115,7 +115,6 @@ fi
 have_gl="no"
 have_glu="no"
 
-
 GEM_CHECK_FRAMEWORK(OpenGL,
         [have_opengl_framework="yes" have_gl="yes"],
         [have_opengl_framework="no" have_gl="no"])
@@ -138,6 +137,8 @@ if test "x$gem_check_ldflags_success" = "xyes"; then
   have_glu="yes"
 fi
 
+## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
+AC_CHECK_LIB(stdc++,main)
 
 dnl some checks for osX
 GEM_CHECK_FRAMEWORK(Carbon, 
