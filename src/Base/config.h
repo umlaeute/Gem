@@ -55,11 +55,4 @@
 #  define FTGL
 #endif
 
-#ifdef HAVE_FFMPEG
-# define HAVE_LIBAVCODEC
-# define HAVE_LIBAVFORMAT
-#elif defined (HAVE_LIBAVCODEC) && defined (HAVE_LIBAVFORMAT)
-# define HAVE_FFMPEG
-#endif
-
 #endif /* HAVE_BASE_CONFIG_H_ */

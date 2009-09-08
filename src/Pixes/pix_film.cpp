@@ -24,7 +24,6 @@
 #include "Pixes/filmAVI.h"
 #include "Pixes/filmDS.h"
 #include "Pixes/filmAVIPLAY.h"
-#include "Pixes/filmFFMPEG.h"
 #include "Pixes/filmMPEG1.h"
 #include "Pixes/filmMPEG3.h"
 #include "Pixes/filmQT.h"
@@ -57,11 +56,6 @@
  *      will decode pretty everything on osX and (i guess) it is rock stable there
  *      on w32 it might well crash (at least when fed with an mpeg)
  *      should therefore be one of the last libraries for w23
- * FFMPEG: linux only (although there are ports to w32/osX (?))
- *         should decode pretty much
- *         lacks seeking support for several formats (experienced problems with mjpeg MOVs)
- *         (still) likes to crash
- *         sometimes problems with decoding when keyframe cannot be found (eg: SVQ3)
  * MPEG1: linux only 
  *        no seeking support
  *        likely to crash
@@ -194,7 +188,6 @@ pix_film :: pix_film(t_symbol *filename) :
   m_handles[m_numHandles]=new filmQT4L();     DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG3();    DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmAVIPLAY();  DEBUG_HANDLE; m_numHandles++;
-  m_handles[m_numHandles]=new filmFFMPEG();   DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG1();    DEBUG_HANDLE; m_numHandles++;
 
   //openMess(filename);

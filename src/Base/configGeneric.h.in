@@ -1,3 +1,4 @@
+
 /* fullscreen: querying via libXxf86vm */
 #undef HAVE_LIBXXF86VM
 
@@ -13,10 +14,9 @@
 #undef HAVE_LIBMPEG
 #undef HAVE_LIBMPEG3
 #undef HAVE_LIBQUICKTIME
-#undef HAVE_LQT_ADD_VIDEO_TRACK
+#undef HAVE_LQT_OPEN_WRITE
 #undef HAVE_LIBAVIPLAY
-#undef HAVE_FFMPEG
-#undef GEM_AVSTREAM_CODECPOINTER
+#undef HAVE_LIBGMERLIN_AVDEC
 
 /* video grabbing */
 #undef HAVE_VIDEO4LINUX
