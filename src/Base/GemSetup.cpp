@@ -44,6 +44,8 @@ static const char *GEM_AUTHORS[] = {
 static const char GEM_OTHERAUTHORS[] =
   "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christop Steiner, et al.";
 
+static const char *GEM_TESTFILE = "hsv2rgb.pd";
+
 
 extern "C" {
 #define GEM_ADDOWNPATH
@@ -72,7 +74,7 @@ extern "C" {
 # endif
 
     /* check whether we can find the abstractions (because they are already in Pd's path) */
-    if ((fd=open_via_path(".", "hsv2rgb", ".pd", buf, &bufptr, MAXPDSTRING, 1))>=0){
+    if ((fd=open_via_path(".", GEM_TESTFILE, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
       close(fd);
       return;
     }
@@ -82,7 +84,7 @@ extern "C" {
     mypath=c->c_externdir->s_name;
 
     /* check whether we can find the abstractions in Gem's own path */
-    snprintf(buf, MAXPDSTRING-1, "%s/%s%s", mypath, "hsv2rgb", ".pd");
+    snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, GEM_TESTFILE);
     buf[MAXPDSTRING-1]=0;
     if (fd=open(buf, flags)>=0){
       close(fd);
