@@ -1,8 +1,7 @@
-This is GEM 0.91
+This is GEM 0.92
 ===================
 You can get the current distribution from:
 http://gem.iem.at
-ftp://iem.at/pd/Externals/GEM
 
 =============================================
 NEW:::
@@ -42,9 +41,9 @@ You can get the newest GemLib from the place mentioned above
 
 COMPILING DEPENDENCIES:
 =======================
-current version: GEM-0.91
-GemLibs	>= 1
-PD 	>= 0.34
+current version: GEM-0.92
+(GemLibs	>= 1)
+PD 	>= 0.34 (0.41 recommended)
 
 -------------------------------------
 -------------------------------------
@@ -61,25 +60,30 @@ a) (preferred method)
 
 b) do it by hand
 
+     I) installing the files
+
 	1) unzip the GEM package
 
-	2) put the Gem.dll-file somewhere pd can find it (e.g.: ...\pd\extra)
+	2) put the Gem.dll-file somewhere pd can find it (e.g.: ...\pd\extra\Gem)
 
-	3) when using pd>=0.37, copy the entire "help"-folder into the same place where the Gem.dll lies
-	   rename the "help"-folder to "help-Gem"
-	   you should now have following structure
-	     (...)\Gem.dll
-	     (...)\help-Gem\
-	     (...)\help-Gem\accumrotate.pd
-	     
-	4) when using pd<0.37, copy the entire "help"-folder into the pd's reference path ( ...\pd\doc\5.reference)
-	   rename the newly created "help"-folder to "Gem"
-	   you should have following structure
-	   (...)\pd\extra\Gem.dll
-	   (...)\pd\doc\5.reference\Gem\
-	   (...)\pd\doc\5.reference\Gem\accumrotate.pd
+        3) put all the abstractions besides the Gem.dll (e.g.: ...\pd\extra\Gem)
 
-note: in prior versions of Gem, GLUT was needed; this is obsolete
+	4) put all the helpfiles (*-help.pd) besides the Gem.dll (e.g.: ...\pd\extra\Gem)
+
+     II) making Pd aware of Gem
+
+        1) start Pd
+
+        2) add the path where you installed Gem to Pd's search paths
+
+           (go to File->Path... and enter the full path; e.g. C:\Programme\pd\extra\Gem\)
+
+        3) tell Pd to load Gem at startup
+
+           (go to File->Startup... and add "Gem" to the list of libraries to load)
+
+        4) don't forget to "Save all settings"
+
 
 
 -------------------------------------
@@ -91,7 +95,6 @@ read the README.<os> (like README.linux) etc...
 -------------------------------------
 
 
-
 RUNNING:
 ========
 
@@ -100,10 +103,11 @@ you will have to tell pd that it should load that library !!
 you cannot create any Gem-objects without having loaded the Gem-library into pd !!!
 
 make sure you have the proper binary for you OS
-  - windows: Gem.dll
-  - macOS-X: Gem.pd_darwin
-  - linux  : Gem.pd_linux
+  - windows: Gem.dll, Gem.m_i386
+  - macOS-X: Gem.pd_darwin, Gem.d_fat, Gem.d_ppc
+  - linux  : Gem.pd_linux, Gem.l_i386, Gem.l_ia64
   - irix   : Gem.pd_irix
+  - freeBSD: Gem.pd_freebsd, Gem.b_i386
   - ...
 
 when starting pd, tell it to load Gem with the "-lib" flag
