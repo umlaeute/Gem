@@ -3,10 +3,15 @@
 #X obj 125 183 outlet;
 #X obj 125 121 gemglutwindow;
 #X obj 137 145 t a a;
-#X obj 180 147 route bang;
-#X obj 226 168 print gemglutwin;
+#X obj 180 187 route bang;
+#X obj 226 208 print gemglutwin;
+#X obj 175 167 spigot;
+#X obj 206 143 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
 #X connect 0 0 2 0;
 #X connect 2 0 3 0;
 #X connect 3 0 1 0;
-#X connect 3 1 4 0;
+#X connect 3 1 6 0;
 #X connect 4 1 5 0;
+#X connect 6 0 4 0;
+#X connect 7 0 6 1;
