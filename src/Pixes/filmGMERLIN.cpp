@@ -37,7 +37,7 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format),
                                          m_gframe(NULL),
                                          m_finalframe(NULL),
                                          m_gconverter(NULL),
-                                         m_fps_num(0), m_fps_denum(1),
+                                         m_fps_num(1), m_fps_denum(1),
 #endif /* GMERLIN */
                                          m_lastFrame(0),
                                          m_doConvert(false)
@@ -188,7 +188,13 @@ bool filmGMERLIN :: open(char *filename, int format)
    */
   m_numTracks = bgav_num_tracks(m_file);
   // LATER: check whether this track has a video-stream...
-  bgav_select_track(m_file, m_track);
+  int numvstreams=bgav_num_video_streams (m_file, m_track);
+  post("track %d contains %d video streams", m_track, numvstreams);
+  if(numvstreams) {
+    bgav_select_track(m_file, m_track);
+  } else {
+    post("track %d does not contain a video-stream: skipping");
+  }
 
   m_seekable=bgav_can_seek_sample(m_file);
 
@@ -230,6 +236,7 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_numFrames = gavl_time_to_frames(m_fps_num, 
                                     m_fps_denum, 
                                     dur);
+  post("numframes = %d (%d %d %d)", m_numFrames, m_fps_num, m_fps_denum, dur);
 
   return true;
 }
@@ -259,23 +266,55 @@ pixBlock* filmGMERLIN :: getFrame(){
 //
 /////////////////////////////////////////////////////////
 int filmGMERLIN :: changeImage(int imgNum, int trackNum){
-  // LATER implement track-switching
+
   if(!m_file)return FILM_ERROR_FAILURE;
+
+#if 0
+  // LATER implement track-switching
+  // this really shares a lot of code with open() so it should go into a separate function
+  if(trackNum) {
+    if(m_numTracks>trackNum || trackNum<0) {
+      post("selected invalid track %d of %d", trackNum, m_numTracks);
+    } else {
+      int numvstreams=bgav_num_video_streams (m_file, m_track);
+      post("track %d contains %d video streams", m_track, numvstreams);
+      if(numvstreams) {
+        bgav_select_track(m_file, m_track);
+      } else {
+        post("track %d does not contain a video-stream: skipping");
+      }
+    }
+  }
+#endif
+
   if(imgNum>m_numFrames || imgNum<0)return FILM_ERROR_FAILURE;
   if  (imgNum>0)m_curFrame=imgNum;
-  if(trackNum>0)m_curTrack=trackNum;
+
+#if 0
+  if(m_seekable) {
+    // i thought it should be like this
+    int64_t seekPos = gavl_frames_to_time(m_fps_num, m_fps_denum, imgNum);
+    // but it's really like this?
+    seekPos=imgNum * m_fps_denum;
+
+    bgav_seek_video(m_file, m_stream, seekPos);
+    return FILM_ERROR_SUCCESS;
+  }
+#endif
+
 
   if(bgav_can_seek(m_file)) {
-    int64_t seekposOrg = imgNum;
+    int64_t seekposOrg = imgNum*m_fps_denum;
     int64_t seekpos = seekposOrg;
-    // LATER lookup the docs for the 3rd parameter:
-    // it should be the same "timebase" as the original source in order to get frame-accurate seeking
-    bgav_seek_scaled(m_file, &seekpos, m_fps);
+
+    bgav_seek_scaled(m_file, &seekpos, m_fps_num);
+
     if(seekposOrg == seekpos)
       return FILM_ERROR_SUCCESS;
     /* never mind: always return success... */
     return FILM_ERROR_SUCCESS;
   }
+
   return FILM_ERROR_FAILURE;
 }
 #endif // GMERLIN
