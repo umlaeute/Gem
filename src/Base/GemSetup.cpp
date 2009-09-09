@@ -44,9 +44,6 @@ static const char *GEM_AUTHORS[] = {
 static const char GEM_OTHERAUTHORS[] =
   "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christop Steiner, et al.";
 
-static const char *GEM_TESTFILE = "hsv2rgb.pd";
-
-
 extern "C" {
 #define GEM_ADDOWNPATH
 #ifdef GEM_ADDOWNPATH
@@ -63,7 +60,7 @@ extern "C" {
   };
 # define t_gemclass struct _gemclass
 
-  static void Gem_addownpath(void) {
+  static void Gem_addownpath(const char*filename) {
     char buf[MAXPDSTRING];
     char*bufptr=NULL;
     int fd=-1;
@@ -74,7 +71,7 @@ extern "C" {
 # endif
 
     /* check whether we can find the abstractions (because they are already in Pd's path) */
-    if ((fd=open_via_path(".", GEM_TESTFILE, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
+    if ((fd=canvas_open(NULL, filename, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
       close(fd);
       return;
     }
@@ -84,7 +81,7 @@ extern "C" {
     mypath=c->c_externdir->s_name;
 
     /* check whether we can find the abstractions in Gem's own path */
-    snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, GEM_TESTFILE);
+    snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
     buf[MAXPDSTRING-1]=0;
     if (fd=open(buf, flags)>=0){
       close(fd);
@@ -94,17 +91,18 @@ extern "C" {
     }
 
     verbose(1, "eventually adding Gem path '%s' to search-paths", mypath);
-# ifndef _WIN32
+# ifndef _MSC_VER
+    /* MSVC cannot really handle these non-exported symbols */
     sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
 # endif
   }
 #else
-  static void Gem_addownpath(void) {  }
+  static void Gem_addownpath(const char*filename) {  }
 #endif
 
   GEM_EXTERN void Gem_setup()
   {
-    Gem_addownpath();
+    Gem_addownpath("hsv2rgb.pd");
     
     // startup GEM
 
