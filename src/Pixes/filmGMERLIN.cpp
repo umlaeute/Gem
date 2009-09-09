@@ -189,7 +189,6 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_numTracks = bgav_num_tracks(m_file);
   // LATER: check whether this track has a video-stream...
   int numvstreams=bgav_num_video_streams (m_file, m_track);
-  post("track %d contains %d video streams", m_track, numvstreams);
   if(numvstreams) {
     bgav_select_track(m_file, m_track);
   } else {
@@ -240,8 +239,6 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_numFrames = gavl_time_to_frames(m_fps_num, 
                                     m_fps_denum, 
                                     dur);
-  post("numframes = %d (%d %d %d)", m_numFrames, m_fps_num, m_fps_denum, dur);
-
   return true;
 }
 
