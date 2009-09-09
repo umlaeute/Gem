@@ -227,7 +227,11 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_image.image.upsidedown=true;
   m_image.newfilm=true;
 
-  m_fps = m_gformat->timescale / m_gformat->frame_duration;
+  if(m_gformat->frame_duration) {
+    m_fps = m_gformat->timescale / m_gformat->frame_duration;
+  } else {
+    m_fps = m_gformat->timescale;
+  }
 
   m_fps_num=m_gformat->timescale;
   m_fps_denum=m_gformat->frame_duration;
