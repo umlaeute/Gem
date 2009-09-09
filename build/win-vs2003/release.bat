@@ -1,9 +1,11 @@
 set ZIP=%ProgramFiles%\7-Zip\7z.exe
 rem set ZIP=echo
 
-set GEMDIR=gem-%DATE:~6,4%%DATE:~3,2%%DATE:~0,2%
+set GEMVERSION=%DATE:~6,4%%DATE:~3,2%%DATE:~0,2%
 
-set GEMARC=gem-CVS%DATE:~6,4%%DATE:~3,2%%DATE:~0,2%-W32-i686
+set GEMDIR=gem-%GEMVERSION%
+
+set GEMARC=gem-CVS%GEMVERSION%-W32-i686
 
 mkdir %GEMDIR%
 
