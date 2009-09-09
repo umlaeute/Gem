@@ -1650,12 +1650,6 @@
 					RelativePath="..\..\src\Pixes\filmDS.h">
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\filmFFMPEG.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmFFMPEG.h">
-				</File>
-				<File
 					RelativePath="..\..\src\Pixes\filmGMERLIN.cpp">
 				</File>
 				<File
@@ -3501,6 +3495,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\openGL\GEMglTexGeni.h">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GEMglTexImage2D.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GEMglTexImage2D.h">
 			</File>
 			<File
 				RelativePath="..\..\src\openGL\GEMglTexParameterf.cpp">
