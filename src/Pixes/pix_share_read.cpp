@@ -26,7 +26,7 @@ pix_share_read :: ~pix_share_read()
 
 void pix_share_read :: render(GemState *state)
 {	
-#ifndef __WIN32__
+#ifndef _WIN32
   if(shm_id>0){
     if (shm_addr) {
       t_pixshare_header *h=(t_pixshare_header *)shm_addr;

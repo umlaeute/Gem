@@ -184,7 +184,7 @@ pix_film :: pix_film(t_symbol *filename) :
   m_numHandles=0;
 
 #define DEBUG_HANDLE verbose(2, "handle %d\t%X", m_numHandles, m_handles[m_numHandles])
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 	m_handles[m_numHandles]=new filmDS();      DEBUG_HANDLE; m_numHandles++;
 #else
   m_handles[m_numHandles]=new filmAVI();      DEBUG_HANDLE; m_numHandles++;

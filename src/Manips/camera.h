@@ -22,7 +22,7 @@ LOG
 
 #define PI	3.1415926535897932384626433832795
 
-#ifndef __WIN32__
+#ifndef _WIN32
 using namespace std;
 #endif
 

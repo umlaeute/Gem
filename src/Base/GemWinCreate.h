@@ -23,7 +23,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # endif
 #elif defined __APPLE__
 # import <AGL/agl.h>
-#elif defined __WIN32__
+#elif defined _WIN32
 # include <windows.h>
 #else
 # error Define OS specific window creation
@@ -32,7 +32,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Base/GemExportDef.h"
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
+#ifdef _WIN32
 # pragma warning( disable : 4244 )
 # pragma warning( disable : 4305 )
 # pragma warning( disable : 4091 )
@@ -61,7 +61,7 @@ class GEM_EXTERN WindowInfo
     fs(0), 
 #ifdef __unix__
     dpy(NULL), win(0), cmap(0), context(NULL), delete_atom(0), have_border(false)
-#elif defined __WIN32__
+#elif defined _WIN32
     win(NULL), dc(NULL), context(NULL)
 #elif defined __APPLE__
     pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
@@ -85,7 +85,7 @@ class GEM_EXTERN WindowInfo
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
 #endif
 
-#elif defined __WIN32__
+#elif defined _WIN32
 
   HWND        win;                // Window handle
   HDC         dc;                 // Device context handle
@@ -175,7 +175,7 @@ class GEM_EXTERN WindowHints
   // The GLXcontext to share rendering with
 #ifdef __unix__
     GLXContext  shared;
-#elif defined __WIN32__
+#elif defined _WIN32
     HGLRC       shared;
 #elif defined __APPLE__
     AGLContext	shared;

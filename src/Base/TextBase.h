@@ -17,7 +17,7 @@
 #define INCLUDE_TEXTBASE_H_
 
 
-#ifdef __WIN32__
+#ifdef _WIN32
 # pragma warning( disable : 4786 )
 # pragma warning( disable : 4788 )
 #endif

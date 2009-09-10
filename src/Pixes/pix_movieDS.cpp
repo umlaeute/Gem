@@ -1,6 +1,6 @@
 #include "Base/config.h"
 
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 
 #include <atlbase.h>
 #include <atlconv.h>

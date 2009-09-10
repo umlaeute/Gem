@@ -21,7 +21,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <io.h>
 #else
 # include <unistd.h>

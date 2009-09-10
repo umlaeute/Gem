@@ -78,7 +78,7 @@ inline float fast_sqrtf(float x)
 }
 #endif /* __ppc__ */
 
-#ifdef __WIN32__
+#ifdef _WIN32
 /* seems like there is no drand48() on w32 */
 /* JMZ: this should really return "double" instead of "float",
  * but we need only float... */

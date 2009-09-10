@@ -19,7 +19,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Base/config.h"
 #ifndef FILM_NEW
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include "Pixes/pix_filmNT.h"
 #elif __linux__
 #include "Pixes/pix_filmLinux.h"
@@ -42,7 +42,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-#ifdef __WIN32__
+#ifdef _WIN32
 class GEM_EXTERN pix_movieOS : public pix_filmNT
 {
   CPPEXTERN_HEADER(pix_movieOS, pix_filmNT)

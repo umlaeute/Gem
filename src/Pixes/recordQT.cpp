@@ -10,7 +10,7 @@
 # include <sys/types.h>
 # include <unistd.h>
 # include <fcntl.h>
-#elif defined __WIN32__
+#elif defined _WIN32
 //apparently on OSX there is no member portPixMap in a GWorld so a function is used instead
 # define GetPortPixMap(x) (x)->portPixMap
 #endif
@@ -52,7 +52,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
 
   m_filename[0] = 0;
 
-# ifdef __WIN32__
+# ifdef _WIN32
   // Initialize QuickTime Media Layer
   /* isn't this done in GemMan/GemWinCreateNT already? */
   OSErr		err = noErr;
@@ -194,7 +194,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
       return;
     }
   }
-#elif defined __WIN32__
+#elif defined _WIN32
   else {
       /* just create this file, in case it isn't there already...weird hack */
     char filename[QT_MAX_FILENAMELENGTH];
@@ -242,7 +242,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 		m_rowBytes = m_width * 4;
 		post("recordQT: using BGRA");
 	}
-#ifdef __WIN32__
+#ifdef _WIN32
 	colorspace = k32RGBAPixelFormat;
 	m_rowBytes = m_width*4;
 #endif
@@ -274,7 +274,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 		ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
 		SetMovieMatrix(m_movie,&aMatrix);
 	}
-#elif defined __WIN32__
+#elif defined _WIN32
 	MatrixRecord	aMatrix;
 	GetMovieMatrix(m_movie,&aMatrix);
 	ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
@@ -390,7 +390,7 @@ void recordQT :: compressFrame()
 	
 #endif //timers
 	
-#ifdef __WIN32__
+#ifdef _WIN32
 	static int firstTime = 1;
 	static float countFreq = 0;
 	if (m_firstRun)
@@ -440,7 +440,7 @@ void recordQT :: compressFrame()
 	::Microseconds(&startTime);					
 #endif //timer		
 
-#ifdef __WIN32__
+#ifdef _WIN32
   QueryPerformanceCounter(&startTime);
 #endif
 

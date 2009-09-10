@@ -18,7 +18,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_share_write)
 //
 /////////////////////////////////////////////////////////
 pix_share_write :: pix_share_write(int argc, t_atom*argv)
-#ifndef __WIN32__
+#ifndef _WIN32
   : shm_id(0), shm_addr(NULL)
 #endif
 {
@@ -68,7 +68,7 @@ pix_share_write :: ~pix_share_write()
 
 void pix_share_write :: freeShm()
 {
-#ifndef __WIN32__
+#ifndef _WIN32
   if(shm_addr){
     if (shmdt(shm_addr) == -1) error("shmdt failed at %x", shm_addr);
   }
@@ -95,7 +95,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   GLenum color=GL_RGBA;
 
   if(argc<1)return 7;
-#ifndef __WIN32__
+#ifndef _WIN32
   if(shm_id>0)freeShm();
 #endif
   if(A_FLOAT==argv->a_type){
@@ -197,7 +197,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   post("%dx%dx%d: %d",
        xsize,ysize,dummy.csize, m_size);
 
-#ifdef __WIN32__
+#ifdef _WIN32
   error("no shared memory on w32!");
 #else
 
@@ -245,7 +245,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   } else {
     error("couldn't get shm_id: error %d", errno);
   }
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
   return 0;
 }
 
@@ -254,7 +254,7 @@ void pix_share_write :: render(GemState *state)
 {
   if (!state || !state->image) return;
 
-#ifndef __WIN32__
+#ifndef _WIN32
   if(shm_id>0){
     imageStruct *pix = &state->image->image;
     int size=pix->xsize*pix->ysize*pix->csize;

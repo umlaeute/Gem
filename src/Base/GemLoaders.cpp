@@ -30,7 +30,7 @@
 # include <dlfcn.h>
 #endif
 
-#if defined __WIN32__
+#if defined _WIN32
 # include <io.h>
 # include <windows.h>
 #elif defined __APPLE__
@@ -47,7 +47,7 @@ static int find_pd_loader(void) {
 
 #ifdef DL_OPEN
   pd_register_loader=(loader_registrar_t)dlsym(RTLD_DEFAULT, "sys_register_loader");
-#elif defined __WIN32__
+#elif defined _WIN32
   /* no idea whether this actually works... */
   pd_register_loader = (loader_registrar_t)GetProcAddress( GetModuleHandle("pd.dll"), "sys_register_loader");  
 #else

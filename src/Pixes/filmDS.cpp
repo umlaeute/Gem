@@ -16,7 +16,7 @@
 
 #include "Pixes/filmDS.h"
 
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 # include <atlbase.h>
 # include <atlconv.h>
 # include <streams.h>
@@ -40,7 +40,7 @@ void filmRemoveGraphFromRot(DWORD pdwRegister);
 /////////////////////////////////////////////////////////
 
 filmDS :: filmDS(int format) : film(format) {
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
   static bool first_time=true;
   if (first_time) {
     post("pix_film:: directshow support");
@@ -113,7 +113,7 @@ filmDS :: filmDS(int format) : film(format) {
 ////////////////////////////////////////////////////////
 filmDS :: ~filmDS()
 {
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW) 
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW) 
 	
   close();
 	
@@ -155,7 +155,7 @@ filmDS :: ~filmDS()
 }
 
 
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 void filmDS :: close(void)
 {
   

@@ -26,7 +26,7 @@
 # include <QuickTime/QuickTime.h>
 #endif // __APPLE__
 
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <io.h>
 #else
 # include <unistd.h>
@@ -46,7 +46,7 @@ extern "C"
 
 #undef EXTERN
 
-#ifdef __WIN32__
+#ifdef _WIN32
 # undef FAR
 #endif
 

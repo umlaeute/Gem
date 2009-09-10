@@ -3,12 +3,12 @@
 #define HAVE_BASE_CONFIG_H_
 
 #ifdef _MSC_VER
-# ifndef __WIN32__
-#  define __WIN32__
+# ifndef _WIN32
+#  define _WIN32
 # endif
 #endif
 
-#ifdef __WIN32__
+#ifdef _WIN32
 # ifndef NT
 #  define NT
 # endif
@@ -37,7 +37,7 @@
 #  define HAVE_QUICKTIME
 # endif
 
-# ifdef __WIN32__
+# ifdef _WIN32
 #  include "Base/configNT.h"
 # endif
 #endif

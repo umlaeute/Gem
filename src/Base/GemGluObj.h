@@ -16,7 +16,7 @@ LOG
 #define INCLUDE_GEMGLUOBJ_H_
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 

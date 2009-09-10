@@ -16,7 +16,7 @@
 #include "Base/GemPixUtil.h"
 #include "Base/GemPixImageSave.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include <io.h>
 #include <stdio.h>
 #include <QTML.h>
@@ -247,7 +247,7 @@ class GEM_EXTERN pix_recordQT : public GemBase
 #ifdef __APPLE__
 		UnsignedWide startTime, endTime;
 #endif
-#ifdef __WIN32__
+#ifdef _WIN32
 		LARGE_INTEGER freq, startTime, endTime;
 #endif
 		float seconds;

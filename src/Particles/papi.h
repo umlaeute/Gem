@@ -16,7 +16,7 @@
 // This is the major and minor version number of this release of the API.
 #define P_VERSION 120
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include <windows.h>
 #define PARTICLEDLL_API
 #else

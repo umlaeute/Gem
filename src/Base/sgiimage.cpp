@@ -24,7 +24,7 @@
 #include "Base/sgiimage.h"
 
 
-#ifndef __WIN32__
+#ifndef _WIN32
 # include <unistd.h>
 #endif	// for !win32
 

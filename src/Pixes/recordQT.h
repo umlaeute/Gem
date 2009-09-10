@@ -15,7 +15,7 @@
 
 #include "Pixes/record.h"
 
-#if defined HAVE_QUICKTIME && defined __WIN32__ 
+#if defined HAVE_QUICKTIME && defined _WIN32 
 # include <QTML.h>
 # include <Movies.h>
 # include <QuicktimeComponents.h>
@@ -109,7 +109,7 @@ class GEM_EXTERN recordQT : public record
   UnsignedWide startTime, endTime;
 # endif
 
-# ifdef __WIN32__
+# ifdef _WIN32
   LARGE_INTEGER freq, startTime, endTime;
 # endif
   float seconds;

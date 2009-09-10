@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifdef __WIN32__
+#ifdef _WIN32
 
 #include "Pixes/pix_filmNT.h"
 #ifndef FILM_NEW
@@ -319,4 +319,4 @@ void pix_filmNT :: autoCallback(void *data, t_floatarg state)
 }
 
 #endif /* FILM_NEW */
-#endif // __WIN32__
+#endif // _WIN32

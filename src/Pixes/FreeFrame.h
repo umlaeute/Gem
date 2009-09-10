@@ -51,7 +51,7 @@ extern "C" {
  *	includes
  */
 
-#if defined(WIN32) || defined (__WIN32__) || defined (_MSC_VER)
+#if defined(WIN32) || defined (_WIN32) || defined (_MSC_VER)
 
 # if _MSC_VER > 1000
 #  pragma once

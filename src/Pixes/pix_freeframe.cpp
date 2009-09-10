@@ -24,7 +24,7 @@
 #ifndef DONT_WANT_FREEFRAME
 
 #include <stdio.h>
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <io.h>
 # include <windows.h>
 # define snprintf _snprintf
@@ -95,7 +95,7 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
   char *bufptr=NULL;
 
   const char *extension=
-#ifdef __WIN32__
+#ifdef _WIN32
     ".dll";
 #elif defined __APPLE__
     "";
@@ -165,7 +165,7 @@ post("path: %s", buf);
   if(bundleURL != NULL) CFRelease( bundleURL );
   if(theBundle != NULL) CFRelease( theBundle );
   if(plugin != NULL)    CFRelease( plugin );
-#elif defined __WIN32__
+#elif defined _WIN32
   HINSTANCE ntdll;
 
   sys_bashfilename(libname, libname);

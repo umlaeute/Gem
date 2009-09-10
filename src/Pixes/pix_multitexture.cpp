@@ -20,7 +20,7 @@
 #include "Base/GemPixUtil.h"
 
 #include <stdio.h>
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <io.h>
 # include <windows.h>
 # define snprintf _snprintf

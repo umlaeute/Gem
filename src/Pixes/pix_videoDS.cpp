@@ -23,7 +23,7 @@
 #define HELPSYMBOL "pix_video"
 */
 
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 
 #include "pix_videoDS.h"
 #include <memory>

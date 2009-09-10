@@ -16,7 +16,7 @@
 
 #include "pix_image.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <io.h>
 #endif
 

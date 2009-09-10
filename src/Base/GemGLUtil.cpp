@@ -20,7 +20,7 @@
 #include <string.h>
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
+#ifdef _WIN32
 /* disable warnings about unknown pragmas */
 # pragma warning( disable : 4068 )
 #endif

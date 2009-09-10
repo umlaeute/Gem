@@ -318,7 +318,7 @@ void PBuffer::disable() {
   cglReportError ( CGLSetCurrentContext( data->old_context) );
   return;
 }
-#elif defined __WIN32__
+#elif defined _WIN32
 
 struct PBuffer_data {
   HDC hdc;

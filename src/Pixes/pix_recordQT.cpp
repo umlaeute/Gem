@@ -70,7 +70,7 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   m_banged = false;
   
 
-# ifdef __WIN32__
+# ifdef _WIN32
   // Initialize QuickTime Media Layer
 
   
@@ -165,7 +165,7 @@ pix_recordQT :: ~pix_recordQT()
 //most likely a dumb thing to do
 	/*
 	#ifdef HAVE_QUICKTIME
-# ifdef __WIN32__
+# ifdef _WIN32
 	
 	post("exiting QT");
   // Initialize QuickTime
@@ -346,7 +346,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	
 	SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
 
-#ifdef __WIN32__
+#ifdef _WIN32
 	MatrixRecord	aMatrix;
 	GetMovieMatrix(m_movie,&aMatrix);
 	//RotateMatrix(&aMatrix,Long2Fix(180),0,0);//should be ScaleMatrix
@@ -573,7 +573,7 @@ void pix_recordQT :: compressFrame()
 	#endif //timers
 	
 
-#ifdef __WIN32__
+#ifdef _WIN32
   static int firstTime = 1;
   static float countFreq = 0;
   if (m_firstRun)
@@ -644,7 +644,7 @@ void pix_recordQT :: compressFrame()
 					
 	#endif //timer		
 
-#ifdef __WIN32__
+#ifdef _WIN32
 
       QueryPerformanceCounter(&startTime);
 //	  post("startTime %d",startTime.QuadPart);

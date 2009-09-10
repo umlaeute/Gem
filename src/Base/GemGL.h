@@ -24,7 +24,7 @@
 #include "Base/GemExportDef.h"
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <windows.h>
 #endif
 
@@ -39,7 +39,7 @@
 
 #ifdef __APPLE__
 # include <OpenGL/OpenGL.h>
-#elif defined __WIN32__
+#elif defined _WIN32
 # include "Base/wglew.h"
 #elif defined __linux__
 #  include "Base/glxew.h"
@@ -48,7 +48,7 @@
 #ifdef GEM_MULTICONTEXT
 GEM_EXTERN GLEWContext*glewGetContext(void);
 # ifdef __APPLE__
-# elif defined __WIN32__
+# elif defined _WIN32
 GEM_EXTERN WGLEWContext*wglewGetContext(void);
 # elif defined __linux__
 GEM_EXTERN GLXEWContext*glxewGetContext(void);

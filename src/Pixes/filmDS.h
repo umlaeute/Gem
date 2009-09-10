@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
 #include "Pixes/film.h"
 
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 # include <dshow.h>
 # include <qedit.h>
 #endif
@@ -47,7 +47,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      // Destructor
      virtual ~filmDS();
 
-#if defined(__WIN32__) && defined(HAVE_DIRECTSHOW)
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
      //////////
      // open a movie up
      virtual bool open(char *filename, int format=0);

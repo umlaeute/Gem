@@ -101,7 +101,7 @@ class GEM_EXTERN GemContext : public CPPExtern
   static GLEWContext*getGlewContext(void);
 # ifdef __APPLE__
 #  define GemGlewXContext void
-# elif defined __WIN32__
+# elif defined _WIN32
 #  define GemGlewXContext WGLEWContext
 # elif defined __linux__
 #  define GemGlewXContext GLXEWContext

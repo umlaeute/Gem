@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
 #include "Pixes/film.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include <vfw.h>
 #endif
 
@@ -46,7 +46,7 @@ class GEM_EXTERN filmAVI : public film {
   // Destructor
   virtual ~filmAVI();
 
-#ifdef __WIN32__
+#ifdef _WIN32
   //////////
   // open a movie up
   virtual bool open(char *filename, int format=0);

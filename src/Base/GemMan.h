@@ -24,7 +24,7 @@
 # include <AGL/agl.h>
 #endif // __APPLE__
 
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <QTML.h>
 # include <Movies.h>
 #endif

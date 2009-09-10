@@ -12,7 +12,7 @@
 
 #include "Base/GemBase.h"
 #include <sys/types.h>
-#ifndef __WIN32__
+#ifndef _WIN32
 # include <sys/ipc.h>
 # include <sys/shm.h>
 #endif

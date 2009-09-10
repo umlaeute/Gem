@@ -15,7 +15,7 @@
 
 #include "pix_fiducialtrack.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <io.h>
 #else
 # include <unistd.h>

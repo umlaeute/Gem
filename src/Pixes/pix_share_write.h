@@ -26,7 +26,7 @@ class GEM_EXTERN pix_share_write : public GemBase
   int getShm(int,t_atom*);
 
   virtual void render(GemState *state);
-#ifndef __WIN32__
+#ifndef _WIN32
   int	shm_id;
   unsigned char *shm_addr;
   struct shmid_ds shm_desc;

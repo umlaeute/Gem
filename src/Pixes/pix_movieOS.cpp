@@ -35,7 +35,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieOS, t_symbol *, A_DEFSYM)
 //
 /////////////////////////////////////////////////////////
 pix_movieOS :: pix_movieOS(t_symbol *filename) :
-#ifdef __WIN32__
+#ifdef _WIN32
   pix_filmNT(filename)
 #elif __linux__
   pix_filmLinux(filename)

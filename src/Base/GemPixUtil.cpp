@@ -17,7 +17,7 @@
 #include "Base/config.h"
 
 // I hate Microsoft...I shouldn't have to do this!
-#ifdef __WIN32__
+#ifdef _WIN32
 # pragma warning( disable : 4244 )
 # pragma warning( disable : 4305 )
 # pragma warning( disable : 4091 )
