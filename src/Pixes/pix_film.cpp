@@ -24,7 +24,6 @@
 #include "Pixes/filmAVI.h"
 #include "Pixes/filmDS.h"
 #include "Pixes/filmAVIPLAY.h"
-#include "Pixes/filmFFMPEG.h"
 #include "Pixes/filmMPEG1.h"
 #include "Pixes/filmMPEG3.h"
 #include "Pixes/filmQT.h"
@@ -57,11 +56,10 @@
  *      will decode pretty everything on osX and (i guess) it is rock stable there
  *      on w32 it might well crash (at least when fed with an mpeg)
  *      should therefore be one of the last libraries for w23
- * FFMPEG: linux only (although there are ports to w32/osX (?))
+ * gmerlin: linux only (although there are ports to w32/osX (?))
  *         should decode pretty much
- *         lacks seeking support for several formats (experienced problems with mjpeg MOVs)
- *         (still) likes to crash
- *         sometimes problems with decoding when keyframe cannot be found (eg: SVQ3)
+ *         API for a bunch of other decoding libraries (e.g. FFMPEG)
+ *         probems with mpeg files
  * MPEG1: linux only 
  *        no seeking support
  *        likely to crash
@@ -76,9 +74,6 @@
  *          stable (?)
  *          API for a bunch of other decoding libraries (e.g. FFMPEG)
  *          slow (?? but if it uses FFMPEG then it should be as fast as FFMPEG)
- *          FFMPEG support is better than the "native" one (see above)
- *             the keyframe-problem i had with the LOTR-trailer (SVQ3) did not appear 
- *             here, even though FFMPEG was used
  *
  * libraries which might be worth done:
  * 
@@ -89,7 +84,7 @@
  * *************************
  * proposed order:
  *
- * AVI, QT, QT4L, MPEG3, AVIPLAY, FFMPEG, MPEG1
+ * GMERLIN, AVI, QT, QT4L, MPEG3, AVIPLAY, MPEG1
  *
  * W32:
  *  the few movies that AVI can decode it will handle fine
@@ -100,10 +95,14 @@
  *  everything is handled by QT
  *
  * linux:
- *  few movies will be devoded by QT4L (but those are OK: seekable, stable)
+ *  most movies will be decoded by GMERLIN
+ *  few movies will be decoded by QT4L (but those are OK: seekable, stable)
  *  mpegs will be decoded by MPEG3 in a stable way
  *  everything else should be handled by AVIPLAY or FFMPEG (aviplay including ffmpeg)
  *  if there is no MPEG3 available at compile time, we have MPEG1 as a last fallback (unstable)
+ *
+ * LATER:
+ *   think about the gmerlin+mpeg problem
  *
  ***************************************/
 
@@ -194,7 +193,6 @@ pix_film :: pix_film(t_symbol *filename) :
   m_handles[m_numHandles]=new filmQT4L();     DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG3();    DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmAVIPLAY();  DEBUG_HANDLE; m_numHandles++;
-  m_handles[m_numHandles]=new filmFFMPEG();   DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG1();    DEBUG_HANDLE; m_numHandles++;
 
   //openMess(filename);

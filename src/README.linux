@@ -212,7 +212,6 @@ glUniform2i:
 	running configure to override the detected values
 
 	something like the following should do the trick:
-	%>export PKG_FFMPEG_LIBS=`ffmpeg-config --plugin-libs avformat`
 	%>export PKG_FTGL_LIBS=`pkg-config --libs ftgl | sed 's/-lftgl/-lftgl_pic/g'`
 	%>./configure
 
