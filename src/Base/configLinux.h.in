@@ -31,6 +31,10 @@
 /* posix threads */
 #undef HAVE_PTHREADS
 
+
+/* Pd header files */ 
+#undef HAVE_S_STUFF_H
+
 /* enable the use of the all-in-one video/movie objects */
 #undef NEW_VIDEOFILM
 
