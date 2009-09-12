@@ -1,12 +1,12 @@
-What is on the TODO-list for release 0.92
+What is on the TODO-list for release 0.93
 =========================================
 
 How to read this document
 : pending
-:+ will likely be resolved for gem-0.92
-:- will unlikely be resolved for gem-0.92
+:+ will likely be resolved for gem-0.93
+:- will unlikely be resolved for gem-0.93
 + resolved
-- will NOT be resolved for gem-0.92
+- will NOT be resolved for gem-0.93
 
 
 General Rendering Issues
