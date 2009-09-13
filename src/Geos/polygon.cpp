@@ -33,35 +33,31 @@ CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_DEFFLOAT)
 //
 /////////////////////////////////////////////////////////
 polygon :: polygon(t_floatarg numInputs)
-  : GemShape(), m_numInputs(0)
+  : GemShape(), 
+		m_numVertices(0),
+		m_vert(NULL), m_vertarray(NULL),
+		m_numInputs(0),
+		m_inlet(NULL)
 {
   int i;
   int realNum = (int)numInputs;
 
   // configure the inlets
-  if (realNum <= 0)   {
-    error("illegal number of points");
-    return;
-  }
-  m_numInputs = realNum;
-
-  m_vert = new float*[realNum];
-  m_vertarray = new float[realNum*3];
-
-  for (i = 0; i < realNum*3; i++)  {
-    m_vertarray[i]=0.0f;
-  }
-  for (i = 0; i < realNum; i++)  {
-    m_vert[i]=m_vertarray+3*i;
-  }
-
-
-  char tempVt[7];
-  // create the proper number of inputs
-  for (i = 0; i < realNum; i++) {
-    sprintf(tempVt, "%d", i+1);
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym(tempVt) );
-  }
+	if(realNum>0) {
+		createVertices(realNum);
+		
+		m_numInputs=realNum;
+		m_inlet=new t_inlet*[m_numInputs];
+		
+		char tempVt[7];
+		// create the proper number of inputs
+		for (i = 0; i < realNum; i++) {
+			sprintf(tempVt, "%d", i+1);
+			m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym(tempVt) );
+		}
+	} else {
+		verbose(1, "variable number of vertices");
+	}
 }
 
 /////////////////////////////////////////////////////////
@@ -70,9 +66,44 @@ polygon :: polygon(t_floatarg numInputs)
 /////////////////////////////////////////////////////////
 polygon :: ~polygon()
 {
-  delete[]m_vert;
-  delete[]m_vertarray;
- }
+  if(m_vert)
+		delete[]m_vert;
+  if(m_vertarray)
+		delete[]m_vertarray;
+	if(m_inlet) {
+		int i=0;
+		for(i=0; i<m_numInputs; i++) {
+			inlet_free(m_inlet[i]);
+			m_inlet[i]=NULL;
+		}
+		delete[]m_inlet;
+	}
+}
+
+
+void polygon :: createVertices(int num) {
+	if(m_vert)
+		delete[]m_vert;
+	if(m_vertarray)
+		delete[]m_vertarray;
+	m_numVertices=0;
+
+		
+	if(num>0) {
+		int i=0;
+
+		m_numVertices = num;
+		m_vert = new float*[num];
+		m_vertarray = new float[num*3];
+		
+		for (i = 0; i < num*3; i++)  {
+			m_vertarray[i]=0.0f;
+		}
+		for (i = 0; i < num; i++)  {
+			m_vert[i]=m_vertarray+3*i;
+		}
+	}
+}
 
 /////////////////////////////////////////////////////////
 // render
@@ -86,7 +117,7 @@ void polygon :: renderShape(GemState *state)
   if (state->texture && state->numTexCoords)
     {
       glBegin(m_drawType);
-      for (int i = 0; i < m_numInputs; i++)
+      for (int i = 0; i < m_numVertices; i++)
         {
           if (state->numTexCoords < i)
             glTexCoord2f(state->texCoords[state->numTexCoords - 1].s,
@@ -104,7 +135,7 @@ void polygon :: renderShape(GemState *state)
       maxVal[0] = maxVal[1] = 0;
       if (state->texture)
         {
-          for (int i = 0; i < m_numInputs; i++)
+          for (int i = 0; i < m_numVertices; i++)
             {
               for (int j = 0; j < 2; j++)
                 {
@@ -122,7 +153,7 @@ void polygon :: renderShape(GemState *state)
             }
         }
       glBegin(m_drawType);
-      for(int n=0; n < m_numInputs; n++)
+      for(int n=0; n < m_numVertices; n++)
         {
           if (state->texture)
             glTexCoord2f(m_vert[n][0] / maxVal[0],
@@ -133,16 +164,45 @@ void polygon :: renderShape(GemState *state)
     }
 }
 
+
+void polygon :: listMess(int argc, t_atom*argv) {
+	if(0==m_numInputs) {
+		if(argc%3) {
+			error("list must contain 3 elements for each vertex!");
+			return;
+		}
+		createVertices(argc/3);
+	}
+	
+	if(m_numVertices*3==argc) {
+		int i=0;
+		for(i=0; i<m_numVertices; i++) {
+			setVert(i, 
+							atom_getfloat(argv+0),
+							atom_getfloat(argv+1),
+							atom_getfloat(argv+2)
+							);
+			argv+=3;
+		}
+	} else {
+		error("vertex-list must have exactly %d numbers", m_numVertices*3);
+	}
+}
+
 /////////////////////////////////////////////////////////
 // setVert
 //
 /////////////////////////////////////////////////////////
 void polygon :: setVert(int whichOne, float x, float y, float z)
 {
+	if(whichOne>=0 && whichOne<m_numVertices) {
     m_vert[whichOne][0] = x;
     m_vert[whichOne][1] = y;
     m_vert[whichOne][2] = z;
     setModified();
+	} else {
+		error("cannot set vertex#%d of %d", whichOne, m_numVertices);
+	}
 }
 
 /////////////////////////////////////////////////////////
@@ -185,7 +245,19 @@ void polygon :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void polygon :: obj_setupCallback(t_class *classPtr)
 {
-    class_addanything(classPtr, (t_method)&polygon::vertCallback);
+	class_addlist(classPtr, (t_method)&polygon::listCallback);
+	class_addmethod(classPtr, (t_method)&polygon::vertexCallback, gensym("vertex"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+	class_addanything(classPtr, (t_method)&polygon::vertCallback);
+}
+
+void polygon :: listCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
+	GetMyClass(data)->listMess(argc, argv);
+}
+
+void polygon :: vertexCallback(void *data, t_floatarg id, t_floatarg x, t_floatarg y, t_floatarg z)
+{
+	GetMyClass(data)->setVert(id, x, y, z);
 }
 
 void polygon :: vertCallback(void *data, t_symbol*s, int argc, t_atom*argv)

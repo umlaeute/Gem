@@ -51,7 +51,7 @@ curve :: ~curve()
 /////////////////////////////////////////////////////////
 void curve :: render(GemState *state)
 {
-  if(m_numInputs<1)
+  if(m_numVertices<1)
     return;
 
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
@@ -74,9 +74,9 @@ void curve :: render(GemState *state)
     }
 
       glEnable(GL_MAP1_TEXTURE_COORD_2);
-      glMap1f(GL_MAP1_TEXTURE_COORD_2, 0,   1,   2, m_numInputs, &m_texCoords[0][0]);
+      glMap1f(GL_MAP1_TEXTURE_COORD_2, 0,   1,   2, m_numVertices, &m_texCoords[0][0]);
     }
-    glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, m_numInputs, &(m_vert[0][0]));
+    glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, m_numVertices, &(m_vert[0][0]));
     glEnable(GL_MAP1_VERTEX_3);
     glBegin(m_drawType);
 	    for (int n = 0; n <= m_resolution; n++)
