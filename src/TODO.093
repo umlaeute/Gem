@@ -18,6 +18,12 @@ Untested objects
 : vertex_* ?
 
 
+intial arguments:
+	pix_threshold
+	pix_crop: arguments/inlets differ!
+
+
+
 Object specific bugs
 : pix_freeframe not supported on x86_64 architectures (needs discussion on the freeframe list: people there are a bit reluctant to change the specs (like enforcing 32bit pointers)
 : incorporate new libparticle API
