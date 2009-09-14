@@ -361,6 +361,11 @@ else
   REFERENCEPATH=doc/5.reference/Gem
 fi
 
+dnl LATER check why this doesn't use the --with-pd includes
+dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include
+AC_CHECK_HEADER(s_stuff.h)
+
+
 # using pix_filmNEW rather than pix_filmOS
 if test "x$enable_filmnew" != "xno"; then
  AC_DEFINE_UNQUOTED(NEW_VIDEOFILM)

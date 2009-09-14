@@ -45,10 +45,8 @@ static const char GEM_OTHERAUTHORS[] =
   "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christop Steiner, et al.";
 
 extern "C" {
-#define GEM_ADDOWNPATH
-#ifdef GEM_ADDOWNPATH
+#ifdef HAVE_S_STUFF_H
 # include "s_stuff.h"
-# include <string.h>
 
   /* this is ripped from m_imp.h */
   struct _gemclass
