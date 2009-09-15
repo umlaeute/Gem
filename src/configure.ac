@@ -363,7 +363,10 @@ fi
 
 dnl LATER check why this doesn't use the --with-pd includes
 dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include
-AC_CHECK_HEADER(s_stuff.h)
+AC_CHECK_HEADER(s_stuff.h,,,[
+#define PD
+#include "m_pd.h" 
+])
 
 
 # using pix_filmNEW rather than pix_filmOS
