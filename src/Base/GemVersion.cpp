@@ -13,7 +13,7 @@
 
 #include "GemVersion.h"
 
-const char* const GemVersion :: versionString() {
+const char* GemVersion :: versionString() {
 return ( "" STRINGIFY(GEM_VERSION_MAJOR) "." STRINGIFY(GEM_VERSION_MINOR) "." STRINGIFY(GEM_VERSION_BUGFIX) \
                " " STRINGIFY(GEM_VERSION_CODENAME) );
 }
