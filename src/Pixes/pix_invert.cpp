@@ -58,18 +58,19 @@ void pix_invert :: processRGBAImage(imageStruct &image)
 #ifdef __MMX__
 void pix_invert :: processRGBAMMX(imageStruct &image)
 {
-  int i = image.xsize * image.ysize/2;
+  int i = (image.xsize * image.ysize) / 2; // 2 pixels at a time
   vector64i offset;
   vector64i *input = (vector64i*)image.data;
 
-  offset.c[0]=255;
-  offset.c[1]=255;
-  offset.c[2]=255;
-  offset.c[3]=0;
-  offset.c[4]=255;
-  offset.c[5]=255;
-  offset.c[6]=255;
-  offset.c[7]=0;
+  offset.c[0+chRed]=255;
+  offset.c[0+chGreen]=255;
+  offset.c[0+chBlue]=255;
+  offset.c[0+chAlpha]=0;
+
+  offset.c[4+chRed]=255;
+  offset.c[4+chGreen]=255;
+  offset.c[4+chBlue]=255;
+  offset.c[4+chAlpha]=0;
 
   while (i--) {
     //*((unsigned long *)base) = ~*((unsigned long *)base);
@@ -80,7 +81,7 @@ void pix_invert :: processRGBAMMX(imageStruct &image)
 }
 void pix_invert :: processGrayMMX(imageStruct &image)
 {
-  int i = image.xsize * image.ysize/4;
+  int i = (image.xsize * image.ysize) / 8; // 8 pixels at a time
   vector64i offset;
   vector64i *input = (vector64i*)image.data;
 
@@ -102,14 +103,16 @@ void pix_invert :: processGrayMMX(imageStruct &image)
 }
 void pix_invert :: processYUVMMX(imageStruct &image)
 {
-  int i = image.xsize * image.ysize/8;
+  int i = (image.xsize * image.ysize) / 4; // 4 pixels at a time
   vector64i offset;
   vector64i *input = (vector64i*)image.data;
 
+  // 1st 2 pixels
   offset.c[0]=255;
   offset.c[1]=255;
   offset.c[2]=255;
   offset.c[3]=255;
+  // 2nd 2 pixels
   offset.c[4]=255;
   offset.c[5]=255;
   offset.c[6]=255;
@@ -145,12 +148,6 @@ void pix_invert :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_invert :: processYUVImage(imageStruct &image)
 {
-
-#ifdef __VEC__
-    processYUVAltivec(image);
-    return;
-#else
-
   int h,w;
   long src;
 
@@ -167,7 +164,6 @@ void pix_invert :: processYUVImage(imageStruct &image)
       src+=4;
     }
   }
-#endif
 }
 
 /////////////////////////////////////////////////////////
