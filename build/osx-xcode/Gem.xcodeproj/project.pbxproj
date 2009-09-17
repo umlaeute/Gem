@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A220D1310623B3600E26C3A /* GEMglTexImage2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A220D1110623B3600E26C3A /* GEMglTexImage2D.cpp */; };
+		3A220D1410623B3600E26C3A /* GEMglTexImage2D.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A220D1210623B3600E26C3A /* GEMglTexImage2D.h */; };
+		3A220D1510623B3600E26C3A /* GEMglTexImage2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A220D1110623B3600E26C3A /* GEMglTexImage2D.cpp */; };
+		3A220D1610623B3600E26C3A /* GEMglTexImage2D.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A220D1210623B3600E26C3A /* GEMglTexImage2D.h */; };
 		3A2DCFC70E40974100767D22 /* accumrotate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DCF7C0E40974100767D22 /* accumrotate.cpp */; };
 		3A2DCFC80E40974100767D22 /* accumrotate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DCF7D0E40974100767D22 /* accumrotate.h */; };
 		3A2DCFC90E40974100767D22 /* alpha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DCF7E0E40974100767D22 /* alpha.cpp */; };
@@ -823,10 +827,6 @@
 		3A2DD6A90E4097D500767D22 /* pix_film.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5950E4097D400767D22 /* pix_film.h */; };
 		3A2DD6AA0E4097D500767D22 /* pix_filmDarwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5960E4097D400767D22 /* pix_filmDarwin.cpp */; };
 		3A2DD6AB0E4097D500767D22 /* pix_filmDarwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5970E4097D400767D22 /* pix_filmDarwin.h */; };
-		3A2DD6AE0E4097D500767D22 /* pix_filmNT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59A0E4097D400767D22 /* pix_filmNT.cpp */; };
-		3A2DD6AF0E4097D500767D22 /* pix_filmNT.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59B0E4097D400767D22 /* pix_filmNT.h */; };
-		3A2DD6B00E4097D500767D22 /* pix_filmQT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59C0E4097D400767D22 /* pix_filmQT.cpp */; };
-		3A2DD6B10E4097D500767D22 /* pix_filmQT.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59D0E4097D400767D22 /* pix_filmQT.h */; };
 		3A2DD6B20E4097D500767D22 /* pix_flip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59E0E4097D400767D22 /* pix_flip.cpp */; };
 		3A2DD6B30E4097D500767D22 /* pix_flip.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59F0E4097D400767D22 /* pix_flip.h */; };
 		3A2DD6B40E4097D500767D22 /* pix_freeframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5A00E4097D400767D22 /* pix_freeframe.cpp */; };
@@ -1637,8 +1637,6 @@
 		3ACEE10D0E40B9E800FC2E4B /* pix_fiducialtrack.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5930E4097D400767D22 /* pix_fiducialtrack.h */; };
 		3ACEE10E0E40B9E800FC2E4B /* pix_film.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5950E4097D400767D22 /* pix_film.h */; };
 		3ACEE10F0E40B9E800FC2E4B /* pix_filmDarwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5970E4097D400767D22 /* pix_filmDarwin.h */; };
-		3ACEE1110E40B9E800FC2E4B /* pix_filmNT.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59B0E4097D400767D22 /* pix_filmNT.h */; };
-		3ACEE1120E40B9E800FC2E4B /* pix_filmQT.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59D0E4097D400767D22 /* pix_filmQT.h */; };
 		3ACEE1130E40B9E800FC2E4B /* pix_flip.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD59F0E4097D400767D22 /* pix_flip.h */; };
 		3ACEE1140E40B9E800FC2E4B /* pix_freeframe.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5A10E4097D400767D22 /* pix_freeframe.h */; };
 		3ACEE1150E40B9E800FC2E4B /* pix_gain.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2DD5A30E4097D400767D22 /* pix_gain.h */; };
@@ -2203,8 +2201,6 @@
 		3ACEE3460E40B9E800FC2E4B /* pix_fiducialtrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5920E4097D400767D22 /* pix_fiducialtrack.cpp */; };
 		3ACEE3470E40B9E800FC2E4B /* pix_film.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5940E4097D400767D22 /* pix_film.cpp */; };
 		3ACEE3480E40B9E800FC2E4B /* pix_filmDarwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5960E4097D400767D22 /* pix_filmDarwin.cpp */; };
-		3ACEE34A0E40B9E800FC2E4B /* pix_filmNT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59A0E4097D400767D22 /* pix_filmNT.cpp */; };
-		3ACEE34B0E40B9E800FC2E4B /* pix_filmQT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59C0E4097D400767D22 /* pix_filmQT.cpp */; };
 		3ACEE34C0E40B9E800FC2E4B /* pix_flip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD59E0E4097D400767D22 /* pix_flip.cpp */; };
 		3ACEE34D0E40B9E800FC2E4B /* pix_freeframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5A00E4097D400767D22 /* pix_freeframe.cpp */; };
 		3ACEE34E0E40B9E800FC2E4B /* pix_gain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2DD5A20E4097D400767D22 /* pix_gain.cpp */; };
@@ -2392,6 +2388,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A220D1110623B3600E26C3A /* GEMglTexImage2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEMglTexImage2D.cpp; path = ../../src/openGL/GEMglTexImage2D.cpp; sourceTree = SOURCE_ROOT; };
+		3A220D1210623B3600E26C3A /* GEMglTexImage2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GEMglTexImage2D.h; path = ../../src/openGL/GEMglTexImage2D.h; sourceTree = SOURCE_ROOT; };
 		3A2DCF7C0E40974100767D22 /* accumrotate.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = accumrotate.cpp; sourceTree = "<group>"; };
 		3A2DCF7D0E40974100767D22 /* accumrotate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = accumrotate.h; sourceTree = "<group>"; };
 		3A2DCF7E0E40974100767D22 /* alpha.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = alpha.cpp; sourceTree = "<group>"; };
@@ -3208,10 +3206,6 @@
 		3A2DD5950E4097D400767D22 /* pix_film.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_film.h; sourceTree = "<group>"; };
 		3A2DD5960E4097D400767D22 /* pix_filmDarwin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_filmDarwin.cpp; sourceTree = "<group>"; };
 		3A2DD5970E4097D400767D22 /* pix_filmDarwin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_filmDarwin.h; sourceTree = "<group>"; };
-		3A2DD59A0E4097D400767D22 /* pix_filmNT.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_filmNT.cpp; sourceTree = "<group>"; };
-		3A2DD59B0E4097D400767D22 /* pix_filmNT.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_filmNT.h; sourceTree = "<group>"; };
-		3A2DD59C0E4097D400767D22 /* pix_filmQT.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_filmQT.cpp; sourceTree = "<group>"; };
-		3A2DD59D0E4097D400767D22 /* pix_filmQT.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_filmQT.h; sourceTree = "<group>"; };
 		3A2DD59E0E4097D400767D22 /* pix_flip.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_flip.cpp; sourceTree = "<group>"; };
 		3A2DD59F0E4097D400767D22 /* pix_flip.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pix_flip.h; sourceTree = "<group>"; };
 		3A2DD5A00E4097D400767D22 /* pix_freeframe.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pix_freeframe.cpp; sourceTree = "<group>"; };
@@ -4529,10 +4523,6 @@
 				3A2DD5950E4097D400767D22 /* pix_film.h */,
 				3A2DD5960E4097D400767D22 /* pix_filmDarwin.cpp */,
 				3A2DD5970E4097D400767D22 /* pix_filmDarwin.h */,
-				3A2DD59A0E4097D400767D22 /* pix_filmNT.cpp */,
-				3A2DD59B0E4097D400767D22 /* pix_filmNT.h */,
-				3A2DD59C0E4097D400767D22 /* pix_filmQT.cpp */,
-				3A2DD59D0E4097D400767D22 /* pix_filmQT.h */,
 				3A2DD59E0E4097D400767D22 /* pix_flip.cpp */,
 				3A2DD59F0E4097D400767D22 /* pix_flip.h */,
 				3A2DD5A00E4097D400767D22 /* pix_freeframe.cpp */,
@@ -4671,6 +4661,8 @@
 		F52F0E84039FEEA801A80164 /* openGL */ = {
 			isa = PBXGroup;
 			children = (
+				3A220D1110623B3600E26C3A /* GEMglTexImage2D.cpp */,
+				3A220D1210623B3600E26C3A /* GEMglTexImage2D.h */,
 				3A6DFE560FD528A30019C977 /* GemGLBase.h */,
 				3A6DFE500FD528920019C977 /* GEMgluLookAt.cpp */,
 				3A6DFE510FD528920019C977 /* GEMgluLookAt.h */,
@@ -6399,8 +6391,6 @@
 				3ACEE10D0E40B9E800FC2E4B /* pix_fiducialtrack.h in Headers */,
 				3ACEE10E0E40B9E800FC2E4B /* pix_film.h in Headers */,
 				3ACEE10F0E40B9E800FC2E4B /* pix_filmDarwin.h in Headers */,
-				3ACEE1110E40B9E800FC2E4B /* pix_filmNT.h in Headers */,
-				3ACEE1120E40B9E800FC2E4B /* pix_filmQT.h in Headers */,
 				3ACEE1130E40B9E800FC2E4B /* pix_flip.h in Headers */,
 				3ACEE1140E40B9E800FC2E4B /* pix_freeframe.h in Headers */,
 				3ACEE1150E40B9E800FC2E4B /* pix_gain.h in Headers */,
@@ -6491,6 +6481,7 @@
 				3A6DFE670FD528E80019C977 /* GemGLUtil_generated.h in Headers */,
 				3A6DFE6D0FD5294F0019C977 /* glsl_geometry.h in Headers */,
 				3A6DFE730FD529880019C977 /* pix_writer.h in Headers */,
+				3A220D1610623B3600E26C3A /* GEMglTexImage2D.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7017,8 +7008,6 @@
 				3A2DD6A70E4097D500767D22 /* pix_fiducialtrack.h in Headers */,
 				3A2DD6A90E4097D500767D22 /* pix_film.h in Headers */,
 				3A2DD6AB0E4097D500767D22 /* pix_filmDarwin.h in Headers */,
-				3A2DD6AF0E4097D500767D22 /* pix_filmNT.h in Headers */,
-				3A2DD6B10E4097D500767D22 /* pix_filmQT.h in Headers */,
 				3A2DD6B30E4097D500767D22 /* pix_flip.h in Headers */,
 				3A2DD6B50E4097D500767D22 /* pix_freeframe.h in Headers */,
 				3A2DD6B70E4097D500767D22 /* pix_gain.h in Headers */,
@@ -7109,6 +7098,7 @@
 				3A6DFE660FD528E80019C977 /* GemGLUtil_generated.h in Headers */,
 				3A6DFE6B0FD5294F0019C977 /* glsl_geometry.h in Headers */,
 				3A6DFE710FD529880019C977 /* pix_writer.h in Headers */,
+				3A220D1410623B3600E26C3A /* GEMglTexImage2D.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7680,8 +7670,6 @@
 				3ACEE3460E40B9E800FC2E4B /* pix_fiducialtrack.cpp in Sources */,
 				3ACEE3470E40B9E800FC2E4B /* pix_film.cpp in Sources */,
 				3ACEE3480E40B9E800FC2E4B /* pix_filmDarwin.cpp in Sources */,
-				3ACEE34A0E40B9E800FC2E4B /* pix_filmNT.cpp in Sources */,
-				3ACEE34B0E40B9E800FC2E4B /* pix_filmQT.cpp in Sources */,
 				3ACEE34C0E40B9E800FC2E4B /* pix_flip.cpp in Sources */,
 				3ACEE34D0E40B9E800FC2E4B /* pix_freeframe.cpp in Sources */,
 				3ACEE34E0E40B9E800FC2E4B /* pix_gain.cpp in Sources */,
@@ -7769,6 +7757,7 @@
 				3A6DFE630FD528CF0019C977 /* GemContextData.cpp in Sources */,
 				3A6DFE6C0FD5294F0019C977 /* glsl_geometry.cpp in Sources */,
 				3A6DFE720FD529880019C977 /* pix_writer.cpp in Sources */,
+				3A220D1510623B3600E26C3A /* GEMglTexImage2D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8261,8 +8250,6 @@
 				3A2DD6A60E4097D500767D22 /* pix_fiducialtrack.cpp in Sources */,
 				3A2DD6A80E4097D500767D22 /* pix_film.cpp in Sources */,
 				3A2DD6AA0E4097D500767D22 /* pix_filmDarwin.cpp in Sources */,
-				3A2DD6AE0E4097D500767D22 /* pix_filmNT.cpp in Sources */,
-				3A2DD6B00E4097D500767D22 /* pix_filmQT.cpp in Sources */,
 				3A2DD6B20E4097D500767D22 /* pix_flip.cpp in Sources */,
 				3A2DD6B40E4097D500767D22 /* pix_freeframe.cpp in Sources */,
 				3A2DD6B60E4097D500767D22 /* pix_gain.cpp in Sources */,
@@ -8350,6 +8337,7 @@
 				3A6DFE5F0FD528CF0019C977 /* GemContextData.cpp in Sources */,
 				3A6DFE6A0FD5294F0019C977 /* glsl_geometry.cpp in Sources */,
 				3A6DFE700FD529880019C977 /* pix_writer.cpp in Sources */,
+				3A220D1310623B3600E26C3A /* GEMglTexImage2D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
