@@ -4,8 +4,11 @@
 
 /* image loading / saving */
 #undef HAVE_LIBMAGICKPLUSPLUS
-
 #undef HAVE_LIBGMERLIN_AVDEC
+
+
+/* Pd header files */ 
+#undef HAVE_S_STUFF_H
 
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
