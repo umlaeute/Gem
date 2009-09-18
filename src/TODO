@@ -34,4 +34,11 @@ dreaming:
     - reflection/inspection
     - function-name demangling: http://publib.boulder.ibm.com/infocenter/comphelp/v8v101/index.jsp?topic=/com.ibm.xlcpp8a.doc/proguide/ref/rkcxxflt.htm
 
+ wrap the entire Pd thing into C++:
+	GemOutlet()->send(int val);
+
+BUGS:
+ look into flext conflict (i guess it's related to "new/delete")
+
+  single-object externals will run the setup-function twice; this gives nasty warnings in Pd-0.42
 
