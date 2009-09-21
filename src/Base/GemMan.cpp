@@ -579,6 +579,7 @@ void GemMan :: render(void *)
 
   // are we profiling?
   double starttime=sys_getrealtime();
+	double stoptime=0;
     
   s_hit = 0;
   resetValues();
@@ -851,8 +852,9 @@ void GemMan :: render(void *)
   swapBuffers();
 
   // are we profiling?
+	stoptime=sys_getrealtime();
   if (profiling>0) {
-    float seconds =  sys_getrealtime()-starttime;
+    double seconds =  stoptime-starttime;
     if(seconds>0.f) {
       GemMan::fps = (1 / (seconds * 1000.f)) * 1000.f;
     } else {
@@ -862,8 +864,24 @@ void GemMan :: render(void *)
 
   // only keep going if no one set the s_hit (could be hit if scheduler gets
   //	    ahold of a stopRendering command)
-  if (!s_hit && (0.0 != s_deltime))
-    clock_delay(s_clock, s_deltime);
+	double deltime=s_deltime;
+	if(profiling<0) {
+		float spent=(stoptime-starttime)*1000;
+		if(profiling<-1) {
+			deltime-=spent;
+		} else if(spent<deltime && spent>0.f) {
+			deltime-=spent;
+		} else {
+			post("unable to annhiliate %f ms", spent);
+		}
+		if(deltime<0.){
+			verbose(1, "negative delay time: %f", deltime);
+			deltime=1.f;
+		}
+
+	}
+  if (!s_hit && (0.0 != deltime))
+    clock_delay(s_clock, deltime);
 	
   glReportError();
 }
