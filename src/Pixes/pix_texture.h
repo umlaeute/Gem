@@ -119,8 +119,13 @@ class GEM_EXTERN pix_texture : public GemBase
   GLfloat     m_extWidth, m_extHeight;
   GLuint      m_extType;
   GLboolean   m_extUpsidedown;
-		
+  t_inlet         *m_inTexID;
 
+  /* send out our texture through the 2nd outlet to be used by others */
+  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown);
+  t_outlet	*m_outTexID;
+
+		
   ////////
   // the texture object we are creating and destroying
   // we use it as our texture
@@ -140,16 +145,18 @@ class GEM_EXTERN pix_texture : public GemBase
 	
   //////////
   // this is what we get from upstream
+  void pushTexCoords(GemState*);
+  void popTexCoords(GemState*);
   TexCoord       *m_oldTexCoords;
   int             m_oldNumCoords;
   int             m_oldTexture;
 
-  int             m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
-  bool            m_normalized;  // whether the image is power of 2
 
-  GLfloat         m_xRatio, m_yRatio; // x- and y-size if texture
+  int m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 
-  void            textureRectangle(int mode);
+  GLfloat m_xRatio, m_yRatio; // x- and y-size if texture
+
+  void    textureRectangle(int mode);
   int		m_rectangle; //rectangle or power of 2
 		
   //////////
@@ -158,17 +165,13 @@ class GEM_EXTERN pix_texture : public GemBase
   GLint		m_env; // GL_TEXTURE_ENV_MODE
 		
   int		m_clientStorage; //for Apple's client storage extension
-  GLenum		m_internalFormat;
-  int		m_yuv; // try to texture YUV-images directly when gxf-card says it is possible to do so
+  int		m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
 
-        
-  t_outlet	*m_outTexID;
-  t_inlet         *m_inTexID;
   GLint	m_texunit;
-
   GLint	m_numTexUnits;
 
 
+  /* using PBOs for (hopefully) optimized pixel transfers */
   void pboMess(int num_pbos);
   GLint m_numPbo;
   GLint m_curPbo;
@@ -181,6 +184,7 @@ class GEM_EXTERN pix_texture : public GemBase
 	static void 	floatMessCallback(void *data, float n);
 	static void 	textureMessCallback(void *data, t_floatarg n);
 	static void 	modeCallback(void *data, t_floatarg n);
+	static void 	rectangleCallback(void *data, t_floatarg n);
 	static void   envMessCallback(void *data, t_floatarg n);
 	static void 	repeatMessCallback(void *data, t_floatarg n);
 	static void 	clientStorageCallback(void *data, t_floatarg n);

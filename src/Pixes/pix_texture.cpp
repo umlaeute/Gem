@@ -178,26 +178,51 @@ bool pix_texture :: isRunnable(void) {
   return true;
 }
 
+void pix_texture :: pushTexCoords(GemState*state) {
+  m_oldTexCoords=state->texCoords;
+  m_oldNumCoords=state->numTexCoords;
+  m_oldTexture  =state->texture;
+}
+
+void pix_texture :: popTexCoords(GemState*state) {
+  state->texCoords   = m_oldTexCoords;
+  state->numTexCoords= m_oldNumCoords;
+  state->texture     = m_oldTexture;
+}
+
+
+void pix_texture :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown) {
+  // send textureID to outlet
+  if(texobj){
+    t_atom ap[5];
+    SETFLOAT(ap, (t_float)texobj);
+    SETFLOAT(ap+1, (t_float)xRatio);
+    SETFLOAT(ap+2, (t_float)yRatio);
+    SETFLOAT(ap+3, (t_float)texType);
+    SETFLOAT(ap+4, (t_float)upsidedown);
+    outlet_list(m_outTexID, &s_list, 5, ap);
+  }
+}
+
 ////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: render(GemState *state) {
   m_didTexture=0;
-
-  m_oldTexCoords=state->texCoords;
-  m_oldNumCoords=state->numTexCoords;
-  m_oldTexture  =state->texture;
+  pushTexCoords(state);
 
   if(!m_textureOnOff)return;
 
   GLboolean upsidedown=false;
   GLboolean normalized=true;
+
   int texType = m_textureType;
   int x_2, y_2;
   GLboolean useExternalTexture=false;
   int do_rectangle = (m_rectangle)?GemMan::texture_rectangle_supported:0;
   int newfilm = 0;
+
   if(state && state->image)
     newfilm = state->image->newfilm;
 
@@ -258,6 +283,9 @@ void pix_texture :: render(GemState *state) {
       normalized = 0;
       break;
     }
+
+    debug("normalized=%d", normalized);
+
   }
 
   if (m_textureType!=texType){
@@ -270,8 +298,6 @@ void pix_texture :: render(GemState *state) {
   }
   glEnable(m_textureType);
   glBindTexture(m_textureType, m_textureObj);
-
-  state->multiTexUnits = m_numTexUnits;
 
   if ((!useExternalTexture)&&newfilm ){
     //  tigital:  shouldn't we also allow TEXTURE_2D here?
@@ -301,6 +327,10 @@ void pix_texture :: render(GemState *state) {
     // GL_STORAGE_PRIVATE_APPLE - normal texture path
     if(m_clientStorage) glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
   }
+
+
+
+  /* here comes the work: a new image has to be transfered from main memory to GPU and attached to a texture object */
 
   if (m_rebuildList) {
     // if YUV is not supported on this platform, we have to convert it to RGB
@@ -353,6 +383,7 @@ void pix_texture :: render(GemState *state) {
         m_buffer.xsize = m_imagebuf.xsize;
         m_buffer.ysize = m_imagebuf.ysize;
       }
+
       m_buffer.csize  = m_imagebuf.csize;
       m_buffer.format = m_imagebuf.format;
       m_buffer.type   = m_imagebuf.type;
@@ -389,7 +420,6 @@ void pix_texture :: render(GemState *state) {
             glGenBuffersARB(m_numPbo, m_pbo);
             int i=0;
             for(i=0; i<m_numPbo; i++) {
-              post("generating PBO#%02d", i);
               glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, m_pbo[i]);
               glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, 
                               m_buffer.xsize*m_buffer.ysize*m_buffer.csize,
@@ -438,17 +468,27 @@ void pix_texture :: render(GemState *state) {
         int nextIndex=(m_curPbo+1)%m_numPbo;
 
         glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, m_pbo[index]);
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_imagebuf.xsize, m_imagebuf.ysize, m_imagebuf.format, m_imagebuf.type, NULL);
+        glTexSubImage2D(m_textureType, 0, 
+                        0, 0, 
+                        m_imagebuf.xsize, 
+                        m_imagebuf.ysize, 
+                        m_imagebuf.format, 
+                        m_imagebuf.type, 
+                        NULL); /* <-- that's the key */
+
+
         glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, m_pbo[nextIndex]);
         glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 0, GL_STREAM_DRAW_ARB);
 
         GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
         if(ptr)
           {
-            // update data directly on the mapped buffer
+            // update data off the mapped buffer
             memcpy(ptr, m_imagebuf.data,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize);
             glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
           }
+
+        /* unbind the current buffer */
         glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 
       } else {
@@ -463,8 +503,12 @@ void pix_texture :: render(GemState *state) {
     }
 
   }
-  m_rebuildList = 0;
 
+  /* cleanup */
+  m_rebuildList = 0;
+  m_didTexture=1;
+
+  state->multiTexUnits = m_numTexUnits;
   state->texture = 1;
 
   // if we are using rectangle textures, this is a way to inform the downstream objects
@@ -475,18 +519,7 @@ void pix_texture :: render(GemState *state) {
   // (this is important for things like [pix_coordinate]
   if(m_textureType==GL_TEXTURE_RECTANGLE_EXT)state->texture=2;
 
-  m_didTexture=1;
-
-  // send textureID to outlet
-  if(m_textureObj){
-    t_atom ap[5];
-    SETFLOAT(ap, (t_float)m_textureObj);
-    SETFLOAT(ap+1, (t_float)m_xRatio);
-    SETFLOAT(ap+2, (t_float)m_yRatio);
-    SETFLOAT(ap+3, (t_float)m_textureType);
-    SETFLOAT(ap+4, (t_float)upsidedown);
-    outlet_list(m_outTexID, &s_list, 5, ap);
-  }
+  sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType, upsidedown);
 }
 
 ////////////////////////////////////////////////////////
@@ -494,10 +527,7 @@ void pix_texture :: render(GemState *state) {
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: postrender(GemState *state){
-
-  state->texCoords   = m_oldTexCoords;
-  state->numTexCoords= m_oldNumCoords;
-  state->texture     = m_oldTexture;
+  popTexCoords(state);
 
   if (m_didTexture){
     if(GLEW_VERSION_1_3) {
@@ -676,6 +706,7 @@ void pix_texture :: pboMess(int num)
   }
 
   m_numPbo=num;
+  m_rebuildList=1;
 }
 
 
@@ -694,7 +725,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
                   gensym("env"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::modeCallback,
                   gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_texture::modeCallback,
+  class_addmethod(classPtr, (t_method)&pix_texture::rectangleCallback,
                   gensym("rectangle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::clientStorageCallback,
                   gensym("client_storage"), A_FLOAT, A_NULL);
@@ -729,6 +760,11 @@ void pix_texture :: envMessCallback(void *data, t_floatarg num )
   GetMyClass(data)->envMess((int) num);
 }
 void pix_texture :: modeCallback(void *data, t_floatarg rectangle)
+{
+  GetMyClass(data)->error("'mode' message is deprecated; please use 'rectangle' instead");
+  GetMyClass(data)->textureRectangle((int)rectangle);
+}
+void pix_texture :: rectangleCallback(void *data, t_floatarg rectangle)
 {
   GetMyClass(data)->textureRectangle((int)rectangle);
 }
