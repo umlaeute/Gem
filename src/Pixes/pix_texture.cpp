@@ -44,25 +44,26 @@ CPPEXTERN_NEW(pix_texture)
 //
 /////////////////////////////////////////////////////////
 pix_texture :: pix_texture()
-  : m_textureOnOff(1), 
+  : m_textureOnOff(1),
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
-    m_didTexture(false), m_rebuildList(0), 
-    m_textureObj(0), 
+    m_didTexture(false), m_rebuildList(0),
+    m_textureObj(0),
     m_extTextureObj(0), m_extWidth(1.), m_extHeight(1.), m_extType(GL_TEXTURE_2D),
     m_extUpsidedown(false),
     m_realTextureObj(0),
-    m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), 
+    m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
     m_textureType( GL_TEXTURE_2D ),
     m_rectangle(0), m_env(GL_MODULATE),
     m_clientStorage(0), //have to do this due to texture corruption issues
     m_yuv(1),
     m_texunit(0),
-    m_numTexUnits(0)
+    m_numTexUnits(0),
+    m_numPbo(0), m_curPbo(0), m_pbo(NULL)
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
   m_buffer.data = NULL;
-  
+
   //rectangle textures by default only for OSX since there are too many busted drivers in use on Windows and Linux
 #ifdef __APPLE__
   m_rectangle = 1;  //default to the fastest mode for systems that support it
@@ -118,7 +119,7 @@ void pix_texture :: setUpTextureState() {
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
       debug("not using client storage");
     }
-  } else   
+  } else
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
 
   glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
@@ -232,16 +233,14 @@ void pix_texture :: render(GemState *state) {
     m_imagebuf.format=state->image->image.format;
     m_imagebuf.type  =state->image->image.type;
     m_imagebuf.data  =state->image->image.data;
-    
+
     x_2 = powerOfTwo(m_imagebuf.xsize);
     y_2 = powerOfTwo(m_imagebuf.ysize);
 
     normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
 
     debug("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize, x_2, m_imagebuf.ysize, y_2);
-  }
 
-  if(!useExternalTexture){
     switch(do_rectangle) {
     case 2:
       m_textureType = GL_TEXTURE_RECTANGLE_ARB;
@@ -260,10 +259,11 @@ void pix_texture :: render(GemState *state) {
       break;
     }
   }
+
   if (m_textureType!=texType){
     debug("texType != m_textureType");
     stopRendering();startRendering();
-  }   
+  }
 
   if(GLEW_VERSION_1_3) {
     glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
@@ -278,8 +278,8 @@ void pix_texture :: render(GemState *state) {
     if(NULL!=glTextureRangeAPPLE) {
       if ( GLEW_APPLE_texture_range ){
         if(glTextureRangeAPPLE == NULL) {
-          glTextureRangeAPPLE( m_textureType, 
-                               m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 
+          glTextureRangeAPPLE( m_textureType,
+                               m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize,
                                m_imagebuf.data );
           debug("using glTextureRangeAPPLE()");
         }else{
@@ -299,8 +299,6 @@ void pix_texture :: render(GemState *state) {
     // GL_STORAGE_SHARED_APPLE -  AGP texture path
     // GL_STORAGE_CACHED_APPLE - VRAM texture path
     // GL_STORAGE_PRIVATE_APPLE - normal texture path
-
-
     if(m_clientStorage) glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
   }
 
@@ -335,14 +333,14 @@ void pix_texture :: render(GemState *state) {
 
       }
       //if the texture is a power of two in size then there is no need to subtexture
-      glTexImage2D(m_textureType, 0, 
+      glTexImage2D(m_textureType, 0,
                    m_imagebuf.csize,
                    m_imagebuf.xsize,
                    m_imagebuf.ysize, 0,
                    m_imagebuf.format,
                    m_imagebuf.type,
                    m_imagebuf.data);
-                     
+
     } else { // !normalized
       m_xRatio = (float)m_imagebuf.xsize;
       m_yRatio = (float)m_imagebuf.ysize;
@@ -366,24 +364,48 @@ void pix_texture :: render(GemState *state) {
       if (m_buffer.csize != m_dataSize[0] ||
           m_buffer.xsize != m_dataSize[1] ||
           m_buffer.ysize != m_dataSize[2]){
-        m_dataSize[0] = m_buffer.csize;
-        m_dataSize[1] = m_buffer.xsize;
-        m_dataSize[2] = m_buffer.ysize; 
-     
-            
-        if (m_buffer.format == GL_YUV422_GEM && !m_rectangle)m_buffer.setBlack();
-
         newfilm = 1;
-        
+
       } //end of loop if size has changed
-      
+
       // okay, load in the actual pixel data
-      
-      //when doing rectangle textures the buffer changes after every film is loaded this call makes sure the 
+
+      //when doing rectangle textures the buffer changes after every film is loaded this call makes sure the
       //texturing is updated as well to prevent crashes
       if(newfilm) {
+        m_dataSize[0] = m_buffer.csize;
+        m_dataSize[1] = m_buffer.xsize;
+        m_dataSize[2] = m_buffer.ysize;
+
+        if (m_buffer.format == GL_YUV422_GEM && !m_rectangle)m_buffer.setBlack();
+
+        if(m_numPbo>0) {
+          if(GLEW_ARB_pixel_buffer_object) {
+            if(m_pbo) {
+              delete[]m_pbo;
+              m_pbo=NULL;
+            }
+            m_pbo=new GLuint[m_numPbo];
+            glGenBuffersARB(m_numPbo, m_pbo);
+            int i=0;
+            for(i=0; i<m_numPbo; i++) {
+              post("generating PBO#%02d", i);
+              glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, m_pbo[i]);
+              glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, 
+                              m_buffer.xsize*m_buffer.ysize*m_buffer.csize,
+                              0, GL_STREAM_DRAW_ARB);
+            }
+            glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+ 
+          } else {
+            verbose(1, "PBOs not supported! disabling");
+            m_numPbo=0;
+
+          }
+        }
+
         //this is for dealing with power of 2 textures which need a buffer that's 2^n
-        if ( !do_rectangle ) {            
+        if ( !do_rectangle ) {
           glTexImage2D(	m_textureType, 0,
                         //m_buffer.csize,
                         GL_RGBA,
@@ -392,50 +414,69 @@ void pix_texture :: render(GemState *state) {
                         m_buffer.format,
                         m_buffer.type,
                         m_buffer.data);
-     
+
           debug("TexImage2D non rectangle");
+        } else {//this deals with rectangle textures that are h*w
+          glTexImage2D(m_textureType, 0,
+                       //  m_buffer.csize,
+                       GL_RGBA,
+                       m_imagebuf.xsize,
+                       m_imagebuf.ysize, 0,
+                       m_imagebuf.format,
+                       m_imagebuf.type,
+                       m_imagebuf.data);
+          debug("TexImage2D  rectangle");
         }
-        else //this deals with rectangle textures that are h*w
-          { 
-            glTexImage2D(m_textureType, 0,
-                         //  m_buffer.csize,
-                         GL_RGBA,
-                         m_imagebuf.xsize,
-                         m_imagebuf.ysize, 0,
-                         m_imagebuf.format,
-                         m_imagebuf.type,
-                         m_imagebuf.data); 
-            debug("TexImage2D  rectangle");
-          }
 
         // just to make sure...
         state->image->newfilm = 0;
       }
 
-      glTexSubImage2D(m_textureType, 0,
-                      0, 0,				// position
-                      m_imagebuf.xsize,
-                      m_imagebuf.ysize,
-                      m_imagebuf.format,
-                      m_imagebuf.type,
-                      m_imagebuf.data);
+      if(m_pbo) {
+        m_curPbo=(m_curPbo+1)%m_numPbo;
+        int index=m_curPbo;
+        int nextIndex=(m_curPbo+1)%m_numPbo;
+
+        glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, m_pbo[index]);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_imagebuf.xsize, m_imagebuf.ysize, m_imagebuf.format, m_imagebuf.type, NULL);
+        glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, m_pbo[nextIndex]);
+        glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 0, GL_STREAM_DRAW_ARB);
+
+        GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+        if(ptr)
+          {
+            // update data directly on the mapped buffer
+            memcpy(ptr, m_imagebuf.data,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize);
+            glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+          }
+        glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+
+      } else {
+        glTexSubImage2D(m_textureType, 0,
+                        0, 0,				// position
+                        m_imagebuf.xsize,
+                        m_imagebuf.ysize,
+                        m_imagebuf.format,
+                        m_imagebuf.type,
+                        m_imagebuf.data);
+      }
     }
-    
+
   }
   m_rebuildList = 0;
- 
+
   state->texture = 1;
 
-  // if we are using rectangle textures, this is a way to inform the downstream objects 
+  // if we are using rectangle textures, this is a way to inform the downstream objects
   // (this is important for things like [pix_coordinate]
   if(m_textureType==GL_TEXTURE_RECTANGLE_ARB)state->texture=2;
 
-  // if we are using rectangle textures, this is a way to inform the downstream objects 
+  // if we are using rectangle textures, this is a way to inform the downstream objects
   // (this is important for things like [pix_coordinate]
   if(m_textureType==GL_TEXTURE_RECTANGLE_EXT)state->texture=2;
 
   m_didTexture=1;
-  
+
   // send textureID to outlet
   if(m_textureObj){
     t_atom ap[5];
@@ -497,10 +538,17 @@ void pix_texture :: stopRendering()
 {
   if(m_realTextureObj) {
     glDeleteTextures(1, &m_realTextureObj);
-    
+
     m_realTextureObj = 0;
     m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   }
+
+  if(m_pbo) {
+    glDeleteBuffersARB(m_numPbo, m_pbo);
+    delete[]m_pbo;
+    m_pbo=NULL;
+  }
+
 }
 
 ////////////////////////////////////////////////////////
@@ -608,13 +656,36 @@ void pix_texture :: envMess(int num)
   setModified();
 }
 
+
+
+////////////////////////////////////////////////////////
+// Pixel Buffer Object message
+//
+/////////////////////////////////////////////////////////
+void pix_texture :: pboMess(int num)
+{
+  if(num<0) {
+    return;
+  }
+
+  if(m_pbo) {
+    glDeleteBuffersARB(m_numPbo, m_pbo);
+    delete[]m_pbo;
+    m_pbo=NULL;
+    m_numPbo=0;
+  }
+
+  m_numPbo=num;
+}
+
+
 ////////////////////////////////////////////////////////
 // static member functions
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: obj_setupCallback(t_class *classPtr)
 {
-  class_addfloat(classPtr, (t_method)&pix_texture::floatMessCallback);    
+  class_addfloat(classPtr, (t_method)&pix_texture::floatMessCallback);
   class_addmethod(classPtr, (t_method)&pix_texture::textureMessCallback,
                   gensym("quality"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::repeatMessCallback,
@@ -634,7 +705,12 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
                   gensym("extTexture"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_texture::texunitCallback,
                   gensym("texunit"), A_FLOAT, A_NULL);
-  class_addcreator((t_newmethod)create_pix_texture,gensym("pix_texture2"),A_NULL); 
+
+  class_addmethod(classPtr, (t_method)&pix_texture::pboCallback,
+                  gensym("pbo"), A_FLOAT, A_NULL);
+
+
+  class_addcreator((t_newmethod)create_pix_texture,gensym("pix_texture2"),A_NULL);
 }
 void pix_texture :: floatMessCallback(void *data, float n)
 {
@@ -703,4 +779,9 @@ void pix_texture :: extTextureCallback(void *data, t_symbol*s, int argc, t_atom*
 void pix_texture :: texunitCallback(void *data, t_floatarg unit)
 {
   GetMyClass(data)->m_texunit=(int)unit;
+}
+
+void pix_texture :: pboCallback(void *data, t_floatarg numpbo)
+{
+  GetMyClass(data)->pboMess((int)numpbo);
 }

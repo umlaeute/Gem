@@ -18,7 +18,16 @@ Particles:
 
 Pixes:
 	MMX, SSE2
-	windows movie loader (have a look at guliverkli)
+		pix_blur pix_tIIR pix_motionblur: these call explicitely the altivec-functions if compiled with alitvec, rather than relying on the SIMD-dispatcher; remove explicit calls!
+	windows movie loader (have a look at guliverkli?; use gmerlin?)
+
+	upsidedown: pix_rectangle does not respect the upside-down flag and thus sometimes the rectangle appears in the upper-left corner and sometimes in the lower-left corner
+	generally all images on all platforms should have the same (upsidedown!) orientation
+
+	pix_rtx: flickering on OSX/ppc in mode#0; 
+		how to prevent execessive memory usage?
+
+
 
 
 
