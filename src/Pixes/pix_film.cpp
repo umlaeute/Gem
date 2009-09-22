@@ -134,7 +134,6 @@ void *pix_film :: grabThread(void*you)
     if(reqFrame!=me->m_curFrame || reqTrack!=me->m_curTrack){
 
       pthread_mutex_lock(me->m_mutex);
-
       if (me->m_handle->changeImage(reqFrame, reqTrack)!=FILM_ERROR_FAILURE){
         me->m_frame=me->m_handle->getFrame();
       } else me->m_frame=0;
@@ -344,7 +343,9 @@ void pix_film :: render(GemState *state)
   } else
 #endif /* PTHREADS */
     state->image=m_handle->getFrame();
+
   m_handle->setAuto(m_auto);
+
   frame=(int)m_reqFrame;
   if (NULL==state->image){
     outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
@@ -354,10 +355,10 @@ void pix_film :: render(GemState *state)
       // so get the newly requested frame:
 
       if(m_thread_running){
-	/* if we are threaded (currently locked!), we change the frame# and grab the frame immediately
-	 * (if we are not threaded, the frame# is already changed and the grabbing is always immediately)
-	 */
-	m_handle->changeImage((int)m_reqFrame, m_reqTrack);
+        /* if we are threaded (currently locked!), we change the frame# and grab the frame immediately
+         * (if we are not threaded, the frame# is already changed and the grabbing is always immediately)
+         */
+        m_handle->changeImage((int)m_reqFrame, m_reqTrack);
       }
       
       state->image=m_handle->getFrame();
@@ -402,10 +403,12 @@ void pix_film :: changeImage(int imgNum, int trackNum)
     error("selection number must be > 0");
     imgNum=0;
   }
+#if 0
   if (trackNum < 0){
     error("track number must be > 0");
     trackNum=0;
   }
+#endif
   if (m_handle){
     if(!m_thread_running){
       if (m_handle->changeImage(imgNum, trackNum)==FILM_ERROR_FAILURE){

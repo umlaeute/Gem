@@ -268,7 +268,11 @@ pixBlock* filmGMERLIN :: getFrame(){
 //
 /////////////////////////////////////////////////////////
 int filmGMERLIN :: changeImage(int imgNum, int trackNum){
-
+  if(trackNum<0) {
+    /* just automatically proceed to the next frame: this might speed up things for linear decoding */
+    return FILM_ERROR_SUCCESS;
+  }
+      
   if(!m_file)return FILM_ERROR_FAILURE;
 
 #if 0
