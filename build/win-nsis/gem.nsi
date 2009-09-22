@@ -19,7 +19,7 @@
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Gem"
 !ifndef PRODUCT_VERSION
- !define PRODUCT_VERSION "0.91"
+ !define PRODUCT_VERSION "0.92"
 !endif
 !define PRODUCT_ARCH "-W32-i686"
 !define PRODUCT_PUBLISHER "iem et al."
