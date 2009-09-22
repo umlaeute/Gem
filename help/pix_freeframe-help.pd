@@ -30,8 +30,6 @@ parameters usually are in the range 0..1);
 #X text 22 393 Inlet 2..N: <type>: depending on the settable parameter
 ;
 #X msg 455 330 gemList;
-#X text 16 279 Plugins are searched in all the paths that pd searches
-for abstractions \, ...!;
 #X text 12 112 Currently \, you have to specify the plugin you want
 to load as object argument. You cannot change the loaded plugin \,
 once the object is instantiated. If the object fails to load (e.g.
@@ -98,25 +96,33 @@ object will fail to instantiate.;
 #X floatatom 567 270 5 0 0 0 - - -;
 #X obj 463 270 hsl 100 15 0 1 0 0 empty empty speed -2 -6 0 10 -262144
 -1 -1 0 1;
-#X text 442 431 This example relies on;
-#X text 442 446 finding the "WaveVFX" plugin;
-#X text 443 461 (which is part of PeteWarden's;
-#X text 445 477 plugins) in pd's search path;
+#X text 442 411 This example relies on;
+#X text 442 426 finding the "WaveVFX" plugin;
+#X text 443 441 (which is part of PeteWarden's;
+#X text 445 457 plugins) in pd's search path;
 #X obj 451 179 pix_rgba;
 #X text 513 176 FreeFrame plugins;
 #X text 515 190 need RGBA images!;
-#X connect 25 0 26 0;
-#X connect 26 0 25 0;
-#X connect 28 0 31 0;
-#X connect 30 0 29 0;
-#X connect 31 0 50 0;
-#X connect 31 2 32 0;
-#X connect 32 0 31 1;
-#X connect 33 0 34 0;
-#X connect 34 0 31 0;
-#X connect 41 0 43 1;
-#X connect 42 0 41 0;
-#X connect 43 0 30 0;
-#X connect 44 0 43 2;
-#X connect 45 0 44 0;
-#X connect 50 0 43 0;
+#X obj 354 506 pix_WaveVFX;
+#X text 18 502 you can omit the "freeframe" part ad craete the object
+directly:;
+#X text 441 475 a copy of WaveVFX should have come;
+#X text 442 506 examples/data/;
+#X text 442 491 with Gem. you can find it in:;
+#X text 16 279 Plugins are searched in all the paths that Pd searches
+for abstractions \, ...!;
+#X connect 24 0 25 0;
+#X connect 25 0 24 0;
+#X connect 27 0 30 0;
+#X connect 29 0 28 0;
+#X connect 30 0 49 0;
+#X connect 30 2 31 0;
+#X connect 31 0 30 1;
+#X connect 32 0 33 0;
+#X connect 33 0 30 0;
+#X connect 40 0 42 1;
+#X connect 41 0 40 0;
+#X connect 42 0 29 0;
+#X connect 43 0 42 2;
+#X connect 44 0 43 0;
+#X connect 49 0 42 0;
