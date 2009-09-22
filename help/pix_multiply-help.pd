@@ -1,4 +1,4 @@
-#N canvas 51 241 683 381 10;
+#N canvas 497 199 683 381 10;
 #X text 452 8 GEM object;
 #X obj 8 226 cnv 15 430 135 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -14,7 +14,7 @@
 #X text 453 60 Example:;
 #X obj 514 290 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -33,14 +33,14 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 519 329 pd gemwin;
-#X msg 519 310 create;
+#X msg 519 310 destroy;
 #X text 515 289 Create window:;
 #X obj 451 168 cnv 15 160 80 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 119 gemhead;
 #X obj 502 102 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;
-#N canvas 0 0 587 366 image 0;
+#N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
 #X obj 77 205 pix_image ../../doc/gem/examples/data/fractal.JPG;
@@ -60,7 +60,7 @@
 #X obj 451 285 square 3;
 #X text 503 88 (JPEG \, TIFF \, ..);
 #X obj 541 122 gemhead;
-#N canvas 0 0 587 366 image 0;
+#N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
 #X obj 77 205 pix_image ../../doc/gem/examples/data/dancer.JPG;
@@ -82,9 +82,9 @@
 #X text 50 12 Synopsis: [pix_multiply];
 #X text 29 67 Description: multiply 2 images;
 #X obj 451 198 pix_multiply;
-#X text 29 91 [pix_mutltply] simply multiply two pixes together. E.g:
-where either of the pixels is black \, the resulting image will be
-black too. This it is simple to get black images.;
+#X text 29 91 [pix_mutltiply] simply multiplies two pixes together.
+E.g: where either of the pixels is black \, the resulting image will
+be black too. Thus it is simple to get black images.;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 16 0;

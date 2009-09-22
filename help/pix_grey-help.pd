@@ -1,4 +1,4 @@
-#N canvas 0 0 654 432 10;
+#N canvas 637 82 654 432 10;
 #X text 452 8 GEM object;
 #X obj 8 245 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -14,7 +14,7 @@
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -33,7 +33,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 519 293 pd gemwin;
-#X msg 519 274 create;
+#X msg 519 274 destroy;
 #X text 515 253 Create window:;
 #X obj 450 158 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -41,7 +41,7 @@
 #X text 71 31 Class: pix object;
 #X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;
-#N canvas 0 0 587 366 image 0;
+#N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
 #X obj 77 205 pix_image ../../doc/gem/examples/data/fractal.JPG;
@@ -78,7 +78,6 @@ do nothing.;
 #X text 62 339 see also:;
 #X obj 155 338 pix_yuv;
 #X obj 248 338 pix_rgba;
-#X text 30 386;
 #X obj 24 390 pix_2grey;
 #X text 97 384 produces similar ("grey") results \, but does NO colourspace-conversion!!
 ;

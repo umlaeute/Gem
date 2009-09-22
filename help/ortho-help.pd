@@ -1,4 +1,4 @@
-#N canvas 29 453 710 345 10;
+#N canvas 486 140 710 345 10;
 #X obj 544 274 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
@@ -20,7 +20,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 549 313 pd gemwin;
-#X msg 549 294 create;
+#X msg 549 294 destroy;
 #X text 545 273 Create window:;
 #X text 485 29 Example:;
 #X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
@@ -44,7 +44,7 @@
 #X obj 553 186 ortho;
 #X obj 533 169 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
-#X obj 628 73 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+#X obj 628 73 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1 1
 ;
 #X obj 612 94 + 0;
 #X obj 553 115 rotateXYZ 45 45 0;
@@ -54,15 +54,15 @@ or OFF;
 #X text 33 14 Synopsis: [ortho];
 #X text 54 30 Class: manipulation object;
 #X text 7 69 Description: orthographic rendering;
-#X text 19 92 [ortho] changes the current viewing-mode from (evtl.)
-"perspective" (objects that are fare away appear smaller than objects
-thta are near) to "orthographic" (parallels appear parallel) for all
-subsequent shapes.;
 #X msg 584 166 compat \$1;
 #X obj 584 146 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
 #X text 27 274 Inlet 1: compat 0|1 : switch aspect ratio default: 1
 = 1 \, 0 = window width/height;
+#X text 19 92 [ortho] changes the current viewing-mode from (evtl.)
+"perspective" (objects that are fare away appear smaller than objects
+that are near) to "orthographic" (parallels appear parallel) for all
+subsequent shapes.;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 15 0 17 0;
@@ -77,5 +77,5 @@ subsequent shapes.;
 #X connect 21 0 22 1;
 #X connect 22 0 18 1;
 #X connect 23 0 19 0;
-#X connect 30 0 19 0;
-#X connect 31 0 30 0;
+#X connect 29 0 19 0;
+#X connect 30 0 29 0;

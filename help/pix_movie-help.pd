@@ -1,4 +1,4 @@
-#N canvas 94 22 707 633 10;
+#N canvas 468 94 707 633 10;
 #X text 452 -2 GEM object;
 #X obj 8 305 cnv 15 430 320 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -33,7 +33,7 @@
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
 #X restore 599 469 pd gemwin;
-#X msg 599 450 create;
+#X msg 599 450 destroy;
 #X text 595 429 Create window:;
 #X obj 451 78 cnv 15 155 200 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -107,15 +107,12 @@ one supplied by libaviplay).;
 #X text 459 575 see also:;
 #X obj 536 575 pix_film;
 #X text 50 2 Synopsis: [pix_movie];
-#X text 23 419 Inlet 1: mode 0|1 : use rectangle-texturing when available
-(default=1);
-#X obj 513 237 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 513 237 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
-#X msg 513 256 mode \$1;
 #X obj 505 290 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 0 1;
+-1 -1 2800 1;
 #X floatatom 502 310 5 0 0 1 frame_number - -;
-#N canvas 910 50 450 300 demo 0;
+#N canvas 830 50 450 300 demo 0;
 #X obj 23 26 inlet;
 #X text 126 127 win32:;
 #X text 116 190 linux \, os-X:;
@@ -148,6 +145,9 @@ movie <filename> and decodes it into the specified color-space.;
 is a combination of [pix_film] and [pix_texture];
 #X text 17 590 Outlet 4: list: the texture id \, same as Outlet 2 of
 [pix_texture];
+#X text 23 419 Inlet 1: rectangle 0|1 : use rectangle-texturing when
+available (default=1);
+#X msg 513 256 rectangle \$1;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 42 0;
@@ -163,8 +163,8 @@ is a combination of [pix_film] and [pix_texture];
 #X connect 42 0 29 0;
 #X connect 42 1 20 0;
 #X connect 42 2 24 0;
+#X connect 46 0 59 0;
 #X connect 47 0 48 0;
-#X connect 48 0 42 0;
-#X connect 49 0 50 0;
-#X connect 50 0 42 1;
-#X connect 51 0 42 0;
+#X connect 48 0 42 1;
+#X connect 49 0 42 0;
+#X connect 59 0 42 0;
