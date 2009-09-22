@@ -1,4 +1,4 @@
-#N canvas 0 281 654 456 10;
+#N canvas 362 268 654 456 10;
 #X text 452 8 GEM object;
 #X obj 8 325 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -14,7 +14,7 @@
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -33,7 +33,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 519 293 pd gemwin;
-#X msg 519 274 create;
+#X msg 519 274 destroy;
 #X text 515 253 Create window:;
 #X obj 450 114 cnv 15 160 100 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -68,6 +68,7 @@ R2 B2...) or (R1 B1 G1 R2 B2...) or (L1 L2 L3...);
 #X text 29 56 Description: set the pixel-data of an image;
 #X text 460 376 see also;
 #X obj 530 377 pix_dump;
+#X msg 536 233 quality 0;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 19 0;
@@ -77,3 +78,4 @@ R2 B2...) or (R1 B1 G1 R2 B2...) or (L1 L2 L3...);
 #X connect 23 0 19 0;
 #X connect 24 0 19 0;
 #X connect 25 0 19 1;
+#X connect 37 0 20 0;

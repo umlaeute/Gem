@@ -1,4 +1,4 @@
-#N canvas 47 378 690 473 10;
+#N canvas 361 216 690 473 10;
 #X text 452 8 GEM object;
 #X obj 9 265 cnv 15 430 145 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -14,7 +14,7 @@
 #X text 453 20 Example:;
 #X obj 450 339 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -33,7 +33,7 @@
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
 #X restore 455 378 pd gemwin;
-#X msg 455 359 create;
+#X msg 455 359 destroy;
 #X text 451 338 Create window:;
 #X obj 451 133 cnv 15 185 120 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -45,7 +45,7 @@
 #X obj 515 111 t f;
 #X obj 464 63 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#N canvas 0 0 450 300 open 0;
+#N canvas 0 22 450 300 open 0;
 #X obj 85 49 inlet;
 #X obj 85 237 outlet;
 #X obj 85 145 openpanel;
@@ -76,8 +76,8 @@ to be considered part of a blob. (default=0.04);
 #X text 24 325 Inlet 1: blobSize <float>: minimum relative size of
 a blob. (default=0.1);
 #X text 50 12 Synopsis: [pix_multiblob];
-#X text 29 57 Description: blob detector (for multiple blobs);
-#X text 17 73 [pix_multiblob] is able to detect multiple blobs within
+#X text 30 58 Description: blob detector (for multiple blobs);
+#X text 16 73 [pix_multiblob] is able to detect multiple blobs within
 an image.;
 #X text 17 103 a "blob" is a number of adjacent(!) pixels with a luminance
 that is bigger than the value defined by "treshold". you can set the
@@ -99,7 +99,7 @@ blob as follows: centerX(weighted) \, centerY(weighted) \, size(weighted)
 #X floatatom 566 366 5 0 0 1 maxX - -;
 #X floatatom 566 382 5 0 0 1 maxY - -;
 #X floatatom 567 398 5 0 0 1 area - -;
-#N canvas 0 0 687 354 showblob 0;
+#N canvas 0 22 687 354 showblob 0;
 #X obj 67 86 inlet blobinformation;
 #X msg 67 114 \$3 \$4 \$5 \$6 \$7 \$8 \$9 \$10;
 #X obj 67 138 unpack 0 0 0 0 0 0 0 0;
@@ -176,7 +176,6 @@ blob as follows: centerX(weighted) \, centerY(weighted) \, size(weighted)
 #X obj 604 114 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X obj 451 222 pix_multiblob 6;
-#X obj 225 109 +;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 18 0;

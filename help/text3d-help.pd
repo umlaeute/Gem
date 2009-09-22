@@ -4,7 +4,7 @@
 0;
 #X obj 544 364 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -50,11 +50,6 @@
 #X msg 555 179 1 2 3 4;
 #X text 7 69 Description: Renders a line of text;
 #X text 63 306 initial text (defaults to "gem");
-#X text 10 123 Any TrueType-font can be rendered. Per default a file
-"arial.ttf" is searched in the paths. If it is not found you will not
-see anything unless you load a valid font via the "font"-message. The
-font-loader uses pd's search-paths \, so you could specify your path
-aon the command-line and load fonts with just "font times.ttf".;
 #X text 7 208 Justification:;
 #X text 32 223 horizontal justification can be one of "left" \, "right"
 \, "center"(default) and "base"(none);
@@ -84,17 +79,22 @@ rendering ON before loading a font.;
 #X msg 561 201 string 48 49 32 51 52;
 #X text 27 416 Inlet 1: message: string [<blah>] : render the given
 text \, given as a list of unicode code points (similar to ASCII);
+#X text 10 123 Any TrueType-font can be rendered. Per default a file
+"vera.ttf" is searched in the paths. If it is not found you will not
+see anything unless you load a valid font via the "font"-message. The
+font-loader uses pd's search-paths \, so you could specify your path
+aon the command-line and load fonts with just "font times.ttf".;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
-#X connect 17 0 37 0;
-#X connect 18 0 38 1;
-#X connect 19 0 38 0;
+#X connect 17 0 36 0;
+#X connect 18 0 37 1;
+#X connect 19 0 37 0;
 #X connect 20 0 19 0;
 #X connect 21 0 20 0;
-#X connect 22 0 38 0;
-#X connect 23 0 38 0;
-#X connect 30 0 38 0;
-#X connect 31 0 37 3;
-#X connect 32 0 37 1;
-#X connect 37 0 38 0;
-#X connect 44 0 38 0;
+#X connect 22 0 37 0;
+#X connect 23 0 37 0;
+#X connect 29 0 37 0;
+#X connect 30 0 36 3;
+#X connect 31 0 36 1;
+#X connect 36 0 37 0;
+#X connect 43 0 37 0;
