@@ -228,8 +228,9 @@ fi
 GEM_CHECK_LIB(ieee1394,dv,main,,,,video input)
 
 
-
 # this is rather experimental...and magic...uähh
+# the problem is that with older verseion of FTGL we needed to link against libftgl_pic
+# and pkg-config/ftgl-config wouldn't tell us about this
 if test "x$with_ftgl" != "xno" && \
         test "x${PKG_FTGL_CFLAGS}x${PKG_FTGL_LIBS}x" = "xxx" && \
         which pkg-config > /dev/null && \
@@ -247,10 +248,26 @@ then
   ac_cv_env_PKG_FTGL_LIBS_set="set"
   ac_cv_env_PKG_FTGL_LIBS_value=${PKG_FTGL_LIBS}
  fi
-
 fi
+
 GEM_CHECK_LIB(ftgl,ftgl,main,
   [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetype], font support)
+
+# for this to work properly, the INCLUDES had to be set with PKG_FTGL_CFLAGS
+AC_CHECK_HEADERS([FTGL/ftgl.h])
+
+AC_ARG_WITH([default-font],
+            AC_HELP_STRING([--with-default-font=vera.ttf], [specify the default font for text-rendering])
+           )
+if test "x$with_default_font" != "x" && \
+   test "x$with_default_font" != "xno" &&
+   test "x$with_default_font" != "xyes"; then
+
+  AC_DEFINE_UNQUOTED(GEM_DEFAULT_FONT, "${with_default_font}")
+  AC_MSG_RESULT([using "${with_default_font}" as default font])
+fi
+
+
 
 
 GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)

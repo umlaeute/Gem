@@ -27,7 +27,11 @@
 # include <unistd.h>
 #endif
 
+#ifdef GEM_DEFAULT_FONT
+char *TextBase::DEFAULT_FONT = (char*) GEM_DEFAULT_FONT ;
+#else
 char *TextBase::DEFAULT_FONT = (char*)"vera.ttf";
+#endif
 
 /////////////////////////////////////////////////////////
 //

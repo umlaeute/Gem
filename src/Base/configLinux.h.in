@@ -4,6 +4,8 @@
 
 /* font rendering */
 #undef HAVE_LIBFTGL
+#undef HAVE_FTGL_FTGL_H
+#undef GEM_DEFAULT_FONT
 
 /* image loading / saving */
 #undef HAVE_LIBTIFF
