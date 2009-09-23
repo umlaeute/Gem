@@ -10,22 +10,19 @@ AC_LANG(C++)
 ARCH=$(uname -m)
 KERN=$(uname -s)
 
-GEM_CONFIGFILE=Base/config${KERN}.h
-AC_CHECK_FILES([${GEM_CONFIGFILE}.in],, [GEM_CONFIGFILE="Base/configGeneric.h" DEFINES="$DEFINES -DHAVE_CONFIG_GENERIC_H"])
-
-AC_CONFIG_HEADER([$GEM_CONFIGFILE])
+AC_CONFIG_HEADER([Base/config.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
 
 AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
 AC_SUBST(EXT)
-AC_SUBST(GEM_CONFIGFILE)
 AC_SUBST(INCLUDES)
 AC_SUBST(LIBS)
 AC_SUBST(X_LIBS)
 AC_SUBST(X_CFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CPPFLAGS)
+AC_SUBST(DEFS)
 AC_SUBST(DEFINES)
 AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
@@ -387,6 +384,14 @@ AC_CHECK_HEADER(s_stuff.h,,,[
 
 
 # using pix_filmNEW rather than pix_filmOS
+
+## on OSX we still default to the olde way
+if test "x$KERN" = "xDarwin"; then
+ if test "x$enable_filmnew" != "xyes"; then
+   enable_filmnew="no"
+ fi
+fi
+
 if test "x$enable_filmnew" != "xno"; then
  AC_DEFINE_UNQUOTED(NEW_VIDEOFILM)
 else

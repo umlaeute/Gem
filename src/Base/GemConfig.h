@@ -22,9 +22,9 @@
 
 
 
-#ifdef HAVE_CONFIG_GENERIC_H
+#ifdef HAVE_CONFIG_H
 
-# include "Base/configGeneric.h"
+# include "Base/config.h"
 
 #else /* includes system-specific files */
 
