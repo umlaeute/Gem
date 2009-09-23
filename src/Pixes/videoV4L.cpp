@@ -250,13 +250,13 @@ int videoV4L :: startTransfer(int format)
   last_frame = 0;
 
   if(m_devicename){
-    snprintf(buf,256,"%s\0", m_devicename);
+    snprintf(buf,256,"%s", m_devicename);
     buf[255]=0;
   } else {
     if (m_devicenum<0){
       sprintf(buf, "/dev/video");
     } else {
-      snprintf(buf, 256, "/dev/video%d\0", m_devicenum);
+      snprintf(buf, 256, "/dev/video%d", m_devicenum);
       buf[255]=0;
     }
   }

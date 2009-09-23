@@ -738,13 +738,13 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   case GL_LUMINANCE:
     while(pixelnum--){
 #ifdef __APPLE__
-      const char R=1;
-      const char G=2;
-      const char B=3;
+      const int R=1;
+      const int G=2;
+      const int B=3;
 #else
-      const char R=2;
-      const char G=1;
-      const char B=0;
+      const int R=2;
+      const int G=1;
+      const int B=0;
 #endif
       *pixels++=(bgradata[R]*RGB2GRAY_RED+bgradata[G]*RGB2GRAY_GREEN+bgradata[B]*RGB2GRAY_BLUE)>>8;
       bgradata+=4;

@@ -218,7 +218,7 @@ void pix_texture :: render(GemState *state) {
   GLboolean normalized=true;
 
   int texType = m_textureType;
-  int x_2, y_2;
+  int x_2=1, y_2=1;
   GLboolean useExternalTexture=false;
   int do_rectangle = (m_rectangle)?GemMan::texture_rectangle_supported:0;
   int newfilm = 0;

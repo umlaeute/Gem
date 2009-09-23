@@ -227,7 +227,6 @@ int recordQT4L :: putFrame(imageStruct*img)
   }
   unsigned char**rowpointers;
   int row, row_stride;
-  int err;
   float framerate = GemMan::getFramerate();
 
   if(m_width!=img->xsize || m_height!=img->ysize)m_restart=true;

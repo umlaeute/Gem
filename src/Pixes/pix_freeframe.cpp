@@ -270,7 +270,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char *p_name;
   post("parameters for '%s':", pluginname);
   for(unsigned int i=0;i<numparams; i++){
-    snprintf(tempVt, 5, "#%d\0", i);
+    snprintf(tempVt, 5, "#%d", i);
     tempVt[4]=0;
     // display
     //   ParameterName:

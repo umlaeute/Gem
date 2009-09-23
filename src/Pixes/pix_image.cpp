@@ -95,7 +95,6 @@ void pix_image :: threadMess(int onoff)
             /* ack! thread creation failed! fall back to unthreaded loading */
             //post("couldn't create thread! %d", err);
           } else {
-          int counter=0;
           // wait until the thread is up and running
           pthread_mutex_lock(m_mutex);
           pthread_mutex_unlock(m_mutex);

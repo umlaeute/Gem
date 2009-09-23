@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 #if 0
 # define debug error
 #else
@@ -111,8 +111,7 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height)
   try {
     int count;
     GLXFBConfig *config;
-		
-    const char *extensions = glXQueryExtensionsString(display,screen);
+
     if(GLXEW_SGIX_fbconfig && GLXEW_SGIX_pbuffer) {
       debug("using SGIX pbuffers\n");
       pattrib.push_back(0);
@@ -132,10 +131,10 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height)
         pattrib.push_back(GLX_PBUFFER_HEIGHT);
         pattrib.push_back(height);
         pattrib.push_back(0);
-     
+
         config = glXChooseFBConfig(display,screen,&attrib[0],&count);	
         if(!config) throw("glXChooseFBConfig() failed");
-        
+
         pbuffer = glXCreatePbuffer(display,config[0],&pattrib[0]);
         if(!pbuffer) throw("glXCreatePbuffer() failed");
 			
@@ -288,7 +287,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 /*
  */
 PBuffer::~PBuffer()
-{  
+{
   if(data->context) CGLDestroyContext( data->context );
   if(data->pbuffer) CGLDestroyPBuffer( data->pbuffer );
   if(data->pixfmt) CGLDestroyPixelFormat( data->pixfmt );
@@ -308,7 +307,7 @@ void PBuffer::enable()
   cglReportError( CGLSetPBuffer( data->context, data->pbuffer, 0, 0, vs) );
   debug ("enable Context (0x%X) Renderer: %s\n",CGLGetCurrentContext(), glGetString (GL_RENDERER));
   debug ("pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
-  
+
   return;
 }
 
@@ -464,5 +463,5 @@ void PBuffer::disable() {
   }
 }
 #else
-#error do Pbuffers on your OS !
+# error do Pbuffers on your OS !
 #endif /* OS */

@@ -315,7 +315,7 @@ void pix_movement :: processGrayMMX(imageStruct &image)
   __m64*wp = (__m64*)buffer.data;	// write pointer to the copy
   __m64*wp2= (__m64*)buffer2.data;      // write pointer to the diff-image
 
-  __m64 m0, m1, m2, grey;
+  __m64 m1, m2, grey;
   __m64 tresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
 			  thresh,thresh,thresh,thresh);
 

@@ -185,8 +185,7 @@ void *videoV4L2 :: capturing(void)
   t_v4l2_buffer*buffers=m_buffers;
 
   struct v4l2_buffer buf;
-  unsigned int i;
-    
+   
   fd_set fds;
   struct timeval tv;
   int r;

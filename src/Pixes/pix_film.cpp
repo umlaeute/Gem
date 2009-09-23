@@ -121,7 +121,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM)
 void *pix_film :: grabThread(void*you)
 {
   pix_film *me=(pix_film*)you;
-  pthread_mutex_t *mutex=me->m_mutex;
   struct timeval timout;
   me->m_thread_running=true;
   //me->post("using pthreads");

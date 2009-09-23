@@ -75,7 +75,7 @@ void pix_blob :: processRGBAImage(imageStruct &image)
   //t_float x_inv = 1./image.xsize;
   //t_float y_inv = 1./image.ysize;
 
-  char channel = -1;
+  int channel = -1;
   float gain_r = 0.3, gain_g = 0.3, gain_b = 0.3, gain_a = 0.1;
 
   float sum = 0.0, sum_x = 0.0, sum_y = 0.0;

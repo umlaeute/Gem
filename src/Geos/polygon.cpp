@@ -35,7 +35,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_DEFFLOAT)
 polygon :: polygon(t_floatarg numInputs)
   : GemShape(), 
 		m_numVertices(0),
-		m_vert(NULL), m_vertarray(NULL),
+    m_vertarray(NULL),
+		m_vert(NULL), 
 		m_numInputs(0),
 		m_inlet(NULL)
 {

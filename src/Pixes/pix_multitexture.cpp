@@ -54,7 +54,8 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   m_inlet=new t_inlet*[m_reqTexUnits]; 
   char tempVt[5];
   for(int i=0;i<m_reqTexUnits; i++){
-    snprintf(tempVt, 5, "#%d\0", i);
+    snprintf(tempVt, 5, "#%d", i);
+    tempVt[4]=0;
     m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym(tempVt));
   }
 }
