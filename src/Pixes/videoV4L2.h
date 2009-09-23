@@ -176,6 +176,8 @@ class GEM_EXTERN videoV4L2 : public video {
 
   /* use this in the capture-thread to cleanup */
   bool      m_stopTransfer;  
+
+  bool m_newfilm;
 #endif /* HAVE_VIDEO4LINUX2 */
 
 };

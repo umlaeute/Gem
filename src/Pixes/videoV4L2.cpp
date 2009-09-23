@@ -62,7 +62,8 @@ videoV4L2 :: videoV4L2(int format) : video(format)
                                      m_maxheight(650), m_minheight(32),
                                      m_thread_id(0), m_continue_thread(false), m_frame_ready(false),
                                      m_rendering(false),
-                                     m_stopTransfer(false)
+                                     m_stopTransfer(false),
+				     m_newfilm(false)
 {
   if (!m_width)m_width=320;
   if (!m_height)m_height=240;
@@ -288,7 +289,8 @@ pixBlock *videoV4L2 :: getFrame(){
     return NULL;
   }
   //debugPost("v4l2: getting frame %d", m_frame_ready);
-  m_image.newfilm=0;
+  m_image.newfilm=m_newfilm;
+  m_newfilm=false;
   if (!m_frame_ready) m_image.newimage = 0;
   else {
     unsigned char*data=(unsigned char*)m_currentBuffer;
@@ -394,9 +396,6 @@ int videoV4L2 :: startTransfer(int format)
     error("%s is no device", dev_name);
     goto closit;
   }
-
-
-
 
   // by now, we have an open file-descriptor
   // check whether this is really a v4l2-device
@@ -535,8 +534,6 @@ int videoV4L2 :: startTransfer(int format)
     /* we should really return here! */
   }
 
-
-
   verbose(1, "v4l2: got '%c%c%c%c'", 
 	    (char)(m_gotFormat),
 	    (char)(m_gotFormat>>8),
@@ -621,7 +618,7 @@ int videoV4L2 :: startTransfer(int format)
   }
   
   post("v4l2: GEM: pix_video: Opened video connection 0x%X", m_tvfd);
-  
+  m_newfilm=true;
   return(1);
   
  closit:
