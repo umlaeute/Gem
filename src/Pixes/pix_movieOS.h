@@ -16,17 +16,19 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_MOVIEOS_H_
 #define INCLUDE_PIX_MOVIEOS_H_
 
-#include "Base/config.h"
+#include "Base/GemConfig.h"
+
 #ifndef FILM_NEW
 
+
 #ifdef _WIN32
-#include "Pixes/pix_filmNT.h"
+# include "Pixes/pix_filmNT.h"
 #elif __linux__
-#include "Pixes/pix_filmLinux.h"
+# include "Pixes/pix_filmLinux.h"
 #elif __APPLE__
-#include "pix_filmDarwin.h"
+# include "pix_filmDarwin.h"
 #else
-#error Define pix_film for this OS
+# error Define pix_film for this OS
 #endif
 
 /*-----------------------------------------------------------------

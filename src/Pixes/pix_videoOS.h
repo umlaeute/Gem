@@ -16,7 +16,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
 
 #ifndef INCLUDE_PIX_VIDEOOS_H_
 #define INCLUDE_PIX_VIDEOOS_H_
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 
 #if defined VIDEO_NEW  || defined HAVE_DIRECTSHOW
 # ifndef DO_AUTO_REGISTER_CLASS

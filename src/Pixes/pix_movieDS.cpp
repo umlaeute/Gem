@@ -1,4 +1,4 @@
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 

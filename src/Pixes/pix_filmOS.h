@@ -17,7 +17,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_FILMOS_H_
 #define INCLUDE_PIX_FILMOS_H_
 
-#include "Base/config.h"
+#include "Base/GemConfig.h"
+
+#warning pix_filmOS ignores FILM_NEW
 //#ifndef FILM_NEW
 #if 1
 

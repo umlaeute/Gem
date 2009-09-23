@@ -18,6 +18,8 @@
 
 #include "GemMan.h"
 
+#include "Base/GemConfig.h"
+
 #include <stdlib.h>
 
 #ifdef __unix__
@@ -34,7 +36,6 @@
 
 #include "Controls/gemhead.h"
 
-#include "Base/config.h"
 #include "GemSIMD.h"
 
 #ifdef DEBUG

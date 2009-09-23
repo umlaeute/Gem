@@ -1,6 +1,6 @@
 /* configuration-file */
-#ifndef HAVE_BASE_CONFIG_H_
-#define HAVE_BASE_CONFIG_H_
+#ifndef HAVE_BASE_GEMCONFIG_H_
+#define HAVE_BASE_GEMCONFIG_H_
 
 #ifdef _MSC_VER
 # ifndef _WIN32
@@ -55,4 +55,4 @@
 #  define FTGL
 #endif
 
-#endif /* HAVE_BASE_CONFIG_H_ */
+#endif /* HAVE_BASE_GEMCONFIG_H_ */

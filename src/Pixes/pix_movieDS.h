@@ -6,7 +6,7 @@
 #include <dshow.h>
 #include <qedit.h>
 
-#include "Base/config.h"
+#include "Base/GemConfig.h"
  
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"

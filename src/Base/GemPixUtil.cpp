@@ -14,7 +14,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32

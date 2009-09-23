@@ -6,7 +6,7 @@
 //
 // Copyright (c) 1997-2001 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 
 #ifdef HAVE_DIRECTSHOW
 

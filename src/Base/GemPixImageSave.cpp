@@ -15,7 +15,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 
 #include "GemPixImageSave.h"
 #include "m_pd.h"

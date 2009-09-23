@@ -11,7 +11,7 @@
  *
  * + define some pre-processor defines that are missing in the GL-headers
  *
- * + try to exclude parts of the GL-headers based on config.h
+ * + try to exclude parts of the GL-headers based on GemConfig.h
  *
  */
 
@@ -19,7 +19,7 @@
 #ifndef INCLUDE_GEMGL_H_
 #define INCLUDE_GEMGL_H_
 
-#include "config.h"
+#include "Base/GemConfig.h"
 
 #include "Base/GemExportDef.h"
 

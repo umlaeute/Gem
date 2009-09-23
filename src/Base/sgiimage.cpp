@@ -19,7 +19,7 @@
  *				Mark Danks - 1998
  */
 
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 #include <stdlib.h>
 #include "Base/sgiimage.h"
 

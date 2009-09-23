@@ -13,7 +13,7 @@
 #ifndef INCLUDE_GEMCONTEXTDATA_H_
 #define INCLUDE_GEMCONTEXTDATA_H_
 
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 #include "Base/GemExportDef.h"
 #include <vector>
 

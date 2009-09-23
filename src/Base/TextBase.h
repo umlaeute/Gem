@@ -23,7 +23,6 @@
 #endif
 
 #include "Base/GemBase.h"
-#include "Base/config.h"
 
 #include <vector>
 #include <string>

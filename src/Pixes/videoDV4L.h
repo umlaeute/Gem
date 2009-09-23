@@ -17,7 +17,7 @@
 #ifndef INCLUDE_VIDEODV4L_H_
 #define INCLUDE_VIDEODV4L_H_
 
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 #ifdef HAVE_LIBDV
 #define HAVE_DV
 #endif

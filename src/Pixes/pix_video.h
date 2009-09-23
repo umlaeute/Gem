@@ -16,7 +16,7 @@ Linux version by Millier Puckette. msp@ucsd.edu
 
 #ifndef INCLUDE_PIX_VIDEO_H_
 #define INCLUDE_PIX_VIDEO_H_
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 
 #define MAX_VIDEO_HANDLES 4
 

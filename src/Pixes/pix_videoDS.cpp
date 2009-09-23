@@ -14,7 +14,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 
 #define DO_AUTO_REGISTER_CLASS
 // JMZ: disabled the helpsymbol for now, 

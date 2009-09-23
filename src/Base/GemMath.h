@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_GEMMATH_H_
 #define INCLUDE_GEMMATH_H_
 
-#include "Base/config.h"
+#include "Base/GemConfig.h"
 
 #include <math.h>
 
