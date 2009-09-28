@@ -52,7 +52,11 @@ class GEM_EXTERN sphere3d : public GemGluObj
 
         virtual void  	createSphere3d();
 
-        virtual void    setMess(int i, int j, GLfloat x, GLfloat y, GLfloat z);
+        virtual void    setCartesian(int i, int j, GLfloat x, GLfloat y, GLfloat z);
+        virtual void    setSpherical(int i, int j, GLfloat r, GLfloat azimuth, GLfloat elevation);
+
+        virtual void    print(int slice, int stack);
+        virtual void    print(void);
 
         GLfloat		*m_x;
         GLfloat		*m_y;
@@ -68,6 +72,6 @@ class GEM_EXTERN sphere3d : public GemGluObj
                                         t_floatarg x, t_floatarg y, t_floatarg z);
         static void setSphMessCallback(void*, t_floatarg  i, t_floatarg j,
                                        t_floatarg r, t_floatarg phi, t_floatarg theta);
+        static void printMessCallback(void*);
 };
-
 #endif	// for header file

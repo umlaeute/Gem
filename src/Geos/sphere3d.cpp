@@ -18,6 +18,8 @@
 
 CPPEXTERN_NEW_WITH_THREE_ARGS(sphere3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
+#define DEG2RAD(x) ((x)*M_PI/180)
+
 /////////////////////////////////////////////////////////
 //
 // sphere3d
@@ -32,6 +34,9 @@ sphere3d :: sphere3d(t_floatarg size, t_floatarg slize, t_floatarg stack)
     oldStacks(-1), oldSlices(-1), oldDrawType(0), oldTexture(-1),
     m_displayList(0)
 {
+  createSphere3d();
+  oldStacks=m_numStacks;
+  oldSlices=m_numSlices;
 }
 
 ////////////////////////////////////////////////////////
@@ -61,40 +66,61 @@ void sphere3d :: createSphere3d()
   delete[]m_y;m_y = new float[slices * (stacks-1) + 2];
   delete[]m_z;m_z = new float[slices * (stacks-1) + 2];
 
-  int src=0;
-
-  m_x[src] = 0.f;
-  m_y[src] = 0.f;
-  m_z[src] = 1.f;
-  src++;
+  setCartesian(0, 0, 0., 0., 1.);
   
   rho=90;
-  for(i=0; i<stacks-1; i++){
+  for(i=1; i<stacks; i++){
     rho-=drho;
     theta=0.f;
     for (j = 0; j < slices; j++) {
       theta+=dtheta;
-      
-      m_x[src] = cos(theta*M_PI/180) * cos(rho*M_PI/180);
-      m_y[src] = sin(theta*M_PI/180) * cos(rho*M_PI/180);
-      m_z[src] = sin(rho  *M_PI/180);
-
-      src++;
+      setSpherical(j, i, 1, theta, rho);
     }
   }
-
-  m_x[src] = 0.f;
-  m_y[src] = 0.f;
-  m_z[src] = -1.f;
-  src++;
+  setCartesian(0, stacks, 0., 0., -1.);
 
   setModified();
 }
+
+
+void sphere3d :: print(int i, int j) {
+  int index=0;
+  if(i<0||i>=m_numSlices){
+    error("slice-index must be within 0..%d", m_numSlices-1);
+    return;
+  }
+  if(j<0||j>m_numStacks){
+    error("stack-index must be within 0..%d", m_numStacks);
+    return;
+  }
+
+  if(j==0) index=0;
+  else if (j==m_numStacks) index=(m_numSlices*(m_numStacks-1)+1);
+  else index=(m_numSlices)*(j-1)+i+1;
+
+
+  post("[%3d|%3d]=%4d: %g %g %g", i, j, index, m_x[index], m_y[index], m_z[index]);
+}
+
+void sphere3d :: print() {
+  int i=0, j=0;
+
+  post("%d lines of longitude and %d lines of lattitude and %d poles", m_numSlices, m_numStacks-1, 2);
+
+  print(i, j);
+  for(j=1; j<m_numStacks; j++){
+    for (i = 0; i < m_numSlices; i++) {
+      print(i,j);
+    }
+  }
+  print(0,m_numStacks);
+}
+
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void sphere3d :: setMess(int i, int j,
+void sphere3d :: setCartesian(int i, int j,
                          GLfloat x, GLfloat y, GLfloat z)
 {
   int index=0;
@@ -111,12 +137,28 @@ void sphere3d :: setMess(int i, int j,
   else if (j==m_numStacks) index=(m_numSlices*(m_numStacks-1)+1);
   else index=(m_numSlices)*(j-1)+i+1;
 
+  //  post("setting [%03d|%03d]=%d: %f %f %f", i, j, index, x, y, z);
+
   m_x[index]=x;
   m_y[index]=y;
   m_z[index]=z;
 
   setModified();
 }
+
+void sphere3d :: setSpherical(int i, int j,
+                         GLfloat r, GLfloat azimuth, GLfloat elevation)
+{
+  GLfloat phi=DEG2RAD(azimuth);
+  GLfloat theta=DEG2RAD(elevation);
+
+  GLfloat x = r*cos(phi)*cos(theta);
+  GLfloat y = r*sin(phi)*cos(theta);
+  GLfloat z = r*sin(theta);
+
+  setCartesian(i, j, x, y, z);
+}
+
 /////////////////////////////////////////////////////////
 // render
 //
@@ -357,21 +399,24 @@ void sphere3d :: obj_setupCallback(t_class *classPtr)
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&sphere3d::setSphMessCallback, gensym("setSph"), 
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+
+  class_addmethod(classPtr, (t_method)&sphere3d::printMessCallback, gensym("print"), 
+                  A_NULL);
 }
 
 void sphere3d :: setCartMessCallback(void *data,
                                     t_floatarg i, t_floatarg j,
                                     t_floatarg x, t_floatarg y, t_floatarg z)
 {
-  GetMyClass(data)->setMess((int)i, (int)j, x, y, z);
+  GetMyClass(data)->setCartesian((int)i, (int)j, x, y, z);
 }
 void sphere3d :: setSphMessCallback(void *data,
                                     t_floatarg i, t_floatarg j,
                                     t_floatarg r, t_floatarg phi, t_floatarg theta)
 {
-  t_float x = r*cos(phi)*cos(theta);
-  t_float y = r*sin(phi)*cos(theta);
-  t_float z = r*sin(theta);
-
-  GetMyClass(data)->setMess((int)i, (int)j, x, y, z);
+  GetMyClass(data)->setSpherical((int)i, (int)j, r, phi, theta);
+}
+void sphere3d :: printMessCallback(void *data)
+{
+  GetMyClass(data)->print();
 }

@@ -1,4 +1,4 @@
-#N canvas 1363 272 825 465 10;
+#N canvas 67 280 825 465 10;
 #X text 54 30 Class: geometric object;
 #X obj 479 47 cnv 15 170 280 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -28,30 +28,27 @@
 #X text 485 29 Example:;
 #X obj 7 61 cnv 15 450 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 226 cnv 15 450 120 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 226 cnv 15 450 140 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 9 226 Inlets:;
 #X obj 8 186 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 185 Arguments:;
 #X text 27 252 Inlet 1: message: draw [line|fill|point];
-#X text 27 292 Inlet 2: float: size;
+#X text 27 307 Inlet 2: float: size;
 #X text 452 8 GEM object;
 #X text 27 238 Inlet 1: gemlist;
-#X text 9 319 Outlets:;
-#X text 21 332 Outlet 1: gemlist;
+#X text 9 334 Outlets:;
+#X text 21 347 Outlet 1: gemlist;
 #X obj 545 133 cnv 15 100 120 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X msg 483 56 draw line;
 #X msg 483 76 draw fill;
 #X msg 483 95 draw point;
 #X obj 553 54 gemhead;
-#X floatatom 571 194 5 0 0 0 - - -;
-#X text 609 193 size;
-#X floatatom 614 224 3 0 0 0 - - -;
-#X text 583 210 segments;
-#X text 27 303 Inlet 3: int: number of segments;
-#X obj 553 229 sphere3d;
+#X floatatom 571 194 5 0 0 1 size - -;
+#X floatatom 616 231 3 0 0 2 segments - -;
+#X text 27 318 Inlet 3: int: number of segments;
 #X text 33 14 Synopsis: [sphere3d];
 #X text 7 65 Description: Renders a sphere3d.;
 #X text 14 82 The sphere3d object renders a segemented sphere3d at
@@ -69,26 +66,31 @@ second inlet.;
 #X msg 535 151 setCartesian 2 3 \$1 1 0;
 #X obj 552 114 rotateXYZ;
 #X floatatom 578 93 5 0 0 0 - - -;
-#X msg 548 174 setSpherical 2 3 \$1 0.1 0.2;
+#X text 145 403 see also;
+#X obj 215 404 sphere;
+#X msg 548 174 setSpherical 2 3 \$1 45 45;
+#X obj 481 287 s \$0-s3d;
+#X msg 481 266 print;
+#X obj 553 229 sphere3d;
 #X text 14 139 Unlike [sphere] \, you can modify (dislocate) each point
 at the sphere via the setCartesian and setSpherical messages (for cartesian
-and spherical coordinates resp.);
-#X text 145 373 see also;
-#X obj 215 374 sphere;
+and spherical (in deg) coordinates resp.);
+#X text 27 292 Inlet 1: message: print;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
-#X connect 19 0 36 0;
-#X connect 20 0 36 0;
-#X connect 21 0 36 0;
-#X connect 22 0 40 0;
-#X connect 23 0 28 1;
-#X connect 25 0 28 2;
-#X connect 33 0 39 0;
-#X connect 34 0 42 0;
-#X connect 35 0 28 0;
-#X connect 39 0 28 0;
-#X connect 40 0 28 0;
-#X connect 41 0 40 1;
-#X connect 41 0 40 2;
-#X connect 41 0 40 3;
-#X connect 42 0 28 0;
+#X connect 19 0 33 0;
+#X connect 20 0 33 0;
+#X connect 21 0 33 0;
+#X connect 22 0 37 0;
+#X connect 23 0 44 1;
+#X connect 24 0 44 2;
+#X connect 30 0 36 0;
+#X connect 31 0 41 0;
+#X connect 32 0 44 0;
+#X connect 36 0 44 0;
+#X connect 37 0 44 0;
+#X connect 38 0 37 1;
+#X connect 38 0 37 2;
+#X connect 38 0 37 3;
+#X connect 41 0 44 0;
+#X connect 43 0 42 0;
