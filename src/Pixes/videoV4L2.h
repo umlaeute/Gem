@@ -14,7 +14,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_VIDEOV4L2_H_
 #define INCLUDE_VIDEOV4L2_H_
-
+#include "Base/GemConfig.h"
 #include "Pixes/video.h"
 
 #if defined HAVE_LIBV4L2 && !defined HAVE_VIDEO4LINUX2

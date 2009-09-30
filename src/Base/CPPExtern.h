@@ -13,7 +13,6 @@ LOG
 #ifndef INCLUDE_CPPEXTERN_H_
 #define INCLUDE_CPPEXTERN_H_
 
-#include "Base/GemConfig.h"
 #include "Base/GemExportDef.h"
 
 #include "m_pd.h"

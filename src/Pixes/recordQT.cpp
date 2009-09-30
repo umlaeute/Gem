@@ -3,7 +3,7 @@
  *  GEM_darwin
  *
  */
-
+#include "Base/GemConfig.h"
 #include "recordQT.h"
 
 #ifdef __APPLE__

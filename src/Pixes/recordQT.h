@@ -10,6 +10,7 @@
 //this will record QT movies
 #ifndef INCLUDE_PIXES_RECORDQT_H_
 #define INCLUDE_PIXES_RECORDQT_H_
+#include "Base/GemConfig.h"
 
 #define QT_MAX_FILENAMELENGTH 256
 

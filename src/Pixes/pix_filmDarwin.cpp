@@ -12,10 +12,11 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifdef __APPLE__
+#include "Base/GemConfig.h"
+
+#if defined GEM_FILMBACKEND && GEM_FILMBACKEND == GEM_FILMBACKEND_Darwin
 
 #define HELPSYMBOL "pix_film"
-
 #include "pix_filmDarwin.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmDarwin, t_symbol *, A_DEFSYM)
@@ -556,4 +557,4 @@ void pix_filmDarwin :: debugCallback(void *data)
 {
   GetMyClass(data)->doDebug();
 }
-#endif // __APPLE__
+#endif // GEM_FILMBACKEND_Darwin

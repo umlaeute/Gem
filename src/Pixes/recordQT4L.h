@@ -15,6 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
    
 #ifndef INCLUDE_PIXES_RECORDQT4L_H_
 #define INCLUDE_PIXES_RECORDQT4L_H_
+#include "Base/GemConfig.h"
    
 #include "Pixes/record.h"
    

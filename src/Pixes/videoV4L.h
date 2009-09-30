@@ -16,6 +16,7 @@
 
 #ifndef INCLUDE_VIDEOV4L_H_
 #define INCLUDE_VIDEOV4L_H_
+#include "Base/GemConfig.h"
 
 #include "Pixes/video.h"
 

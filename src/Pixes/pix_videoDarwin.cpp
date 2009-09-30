@@ -6,7 +6,8 @@
  *  Copyright (c) 2002-2005 James Tittle & Chris Clepper
  *
  */
-#ifdef __APPLE__
+#include "Base/GemConfig.h"
+#if defined GEM_VIDEOBACKEND && GEM_VIDEOBACKEND == GEM_VIDEOBACKEND_Darwin
 
 #define HELPSYMBOL "pix_video"
 

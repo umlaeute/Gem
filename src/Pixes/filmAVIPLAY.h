@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_FILMAVIPLAY_H_
 #define INCLUDE_FILMAVIPLAY_H_
-  
+#include "Base/GemConfig.h"  
 #include "Pixes/film.h"
 
 #if defined (_WIN32) & defined (HAVE_LIBAVIPLAY)

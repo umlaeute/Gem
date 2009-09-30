@@ -22,6 +22,8 @@
 # pragma warning( disable : 4788 )
 #endif
 
+#include "Base/GemConfig.h"
+
 #include "Base/GemBase.h"
 
 #include <vector>

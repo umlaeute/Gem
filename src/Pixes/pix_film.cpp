@@ -14,7 +14,8 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifndef __APPLE__
+#include "Base/GemConfig.h"
+#ifndef GEM_FILMBACKEND
 
 #include "pix_film.h"
 #include <ctype.h>
@@ -526,5 +527,5 @@ void pix_film :: threadCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->threadMess((int)state);
 }
-#endif /*__APPLE__*/
+#endif /*OS-specific GEM_FILMBACKEND */
 

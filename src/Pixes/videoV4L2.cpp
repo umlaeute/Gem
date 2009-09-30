@@ -13,6 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Base/GemConfig.h"
 
 #include "videoV4L2.h"
 

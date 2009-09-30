@@ -16,14 +16,14 @@
 /////////////////////////////////////////////////////////
 #include "Base/GemConfig.h"
 
-#define DO_AUTO_REGISTER_CLASS
+#if defined GEM_VIDEOBACKEND && GEM_VIDEOBACKEND == GEM_VIDEOBACKEND_DS && defined HAVE_DIRECTSHOW
+
 // JMZ: disabled the helpsymbol for now, 
 // since the help for pix_videoDS ha to be QUITE different...
 /*
 #define HELPSYMBOL "pix_video"
 */
 
-#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 
 #include "pix_videoDS.h"
 #include <memory>

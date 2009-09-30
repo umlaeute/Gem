@@ -39,7 +39,7 @@
   channel to 255.
 
 */
-
+#include "Base/GemConfig.h"
 #include "videoV4L.h"
 
 #ifndef HAVE_LIBV4L1

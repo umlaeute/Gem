@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#include "Base/GemConfig.h"
 #include "Pixes/recordQT4L.h"
 #include "Base/GemBase.h"
 #include "Base/GemMan.h"

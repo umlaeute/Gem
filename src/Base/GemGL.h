@@ -19,8 +19,6 @@
 #ifndef INCLUDE_GEMGL_H_
 #define INCLUDE_GEMGL_H_
 
-#include "Base/GemConfig.h"
-
 #include "Base/GemExportDef.h"
 
 // I hate Microsoft...I shouldn't have to do this!
@@ -28,11 +26,9 @@
 # include <windows.h>
 #endif
 
-
-
-#ifdef GEM_MULTICONTEXT
-# define GLEW_MX
-#endif /* GEM_MULTICONTEXT */
+#ifdef GLEW_MX
+# define GEM_MULTICONTEXT
+#endif
 
 #define GLEW_STATIC
 #include "Base/glew.h"
@@ -55,9 +51,6 @@ GEM_EXTERN GLXEWContext*glxewGetContext(void);
 # endif
 
 #endif /* GEM_MULTICONTEXT */
-
-
-
 
 #ifndef GL_YUV422_GEM
 # define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE

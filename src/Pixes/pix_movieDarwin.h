@@ -11,17 +11,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_pix_movieDarwin_H_
-#define INCLUDE_pix_movieDarwin_H_
+#ifndef INCLUDE_PIX_MOVIEDARWIN_H_
+#define INCLUDE_PIX_MOVIEDARWIN_H_
 
-#ifdef _WIN32
-#include "Pixes/pix_filmNT.h"
-#elif __linux__
-#include "Pixes/pix_filmLinux.h"
-#elif __APPLE__
+
+#ifdef __APPLE__
 #include "pix_filmDarwin.h"
 #else
-#error Define pix_film for this OS
+#error Define pix_movieDarwin for this OS
 #endif
 
 /*-----------------------------------------------------------------

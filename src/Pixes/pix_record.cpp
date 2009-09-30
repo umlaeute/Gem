@@ -3,7 +3,7 @@
  *  pix_record.cpp
  *
  */
-
+#include "Base/GemConfig.h"
 #include "pix_record.h"
 
 #include "Pixes/recordQT.h"

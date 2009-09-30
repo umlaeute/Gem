@@ -13,8 +13,10 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
- 
-#ifdef __APPLE__
+
+#include "Base/GemConfig.h"
+
+#if defined GEM_FILMBACKEND && GEM_FILMBACKEND == GEM_FILMBACKEND_Darwin
 
 // as long as there is no special help-file, fallback to the [pix_movie]
 #define HELPSYMBOL "pix_movie"

@@ -13,8 +13,11 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Base/GemConfig.h"
+#if defined GEM_VIDEOBACKEND && GEM_VIDEOBACKEND == GEM_VIDEOBACKEND_SGI
 
-#ifdef __sgi
+//#ifdef __sgi
+
 #include "pix_videoSGI.h"
 
 #include <unistd.h>

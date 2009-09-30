@@ -13,6 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Base/GemConfig.h"
 #include "Pixes/filmAVIPLAY.h"
 
 #ifdef HAVE_LIBAVIPLAY

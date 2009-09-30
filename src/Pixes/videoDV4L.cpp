@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-    
+#include "Base/GemConfig.h"    
 #include "videoDV4L.h"
 
 #define N_BUF 2 /*DV1394_MAX_FRAMES/4*/

@@ -13,7 +13,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 #ifndef INCLUDE_FILMQT_H_
 #define INCLUDE_FILMQT_H_
-
+#include "Base/GemConfig.h"
 #include "Pixes/film.h"
 
 #if defined __APPLE__ && !defined HAVE_QUICKTIME

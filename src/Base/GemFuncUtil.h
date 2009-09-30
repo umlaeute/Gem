@@ -26,10 +26,8 @@ LOG
 /* this should be included for ALL platforms:
  * should we define __MMX__ for windows in there ?
  */
-#include "Base/GemConfig.h"
 #include "GemSIMD.h"
 #include "GemMath.h"
-
 
 // for rand()
 #include <stdlib.h>

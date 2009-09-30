@@ -12,7 +12,7 @@
 
 #ifndef INCLUDE_PIX_ARTOOLKIT_H_
 #define INCLUDE_PIX_ARTOOLKIT_H_
-
+#include "Base/GemConfig.h"
 #include "Base/GemPixObj.h"
 
 #ifdef HAVE_ARTOOLKIT

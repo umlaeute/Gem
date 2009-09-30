@@ -13,6 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Base/GemConfig.h"
 #include "Pixes/filmMPEG3.h"
 
 /* take care of API changes */

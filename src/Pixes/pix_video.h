@@ -20,13 +20,6 @@ Linux version by Millier Puckette. msp@ucsd.edu
 
 #define MAX_VIDEO_HANDLES 4
 
-#ifdef VIDEO_NEW
-# define DO_AUTO_REGISTER_CLASS
-#else
-# define NO_AUTO_REGISTER_CLASS
-#endif
-
-
 #include "Base/GemBase.h"
 #include "Pixes/video.h"
 

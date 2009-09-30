@@ -13,8 +13,9 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
-#ifdef _WIN32
+#include "Base/GemConfig.h"
+#if defined GEM_VIDEOBACKEND && GEM_VIDEOBACKEND == GEM_VIDEOBACKEND_NT
+//#ifdef _WIN32
 
 #include "pix_videoNT.h"
 

@@ -6,7 +6,7 @@
  *  Copyright 2005 __MyCompanyName__. All rights reserved.
  *
  */
-
+#include "Base/GemConfig.h"
 //original pix_record for Mac/Windows - very well tested (at least 100,000 recorded clips)
 
 #if 0

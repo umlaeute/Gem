@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#include "Base/GemConfig.h"
 #include "Pixes/filmDS.h"
 
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)

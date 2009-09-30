@@ -18,9 +18,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "Base/GemConfig.h"
 
-#ifndef FILM_NEW
-
-
 #ifdef _WIN32
 # include "Pixes/pix_filmNT.h"
 #elif __linux__
@@ -126,7 +123,5 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
   static void autoCallback       (void *data, t_floatarg state);
 };
-
-#endif /* FILM_NEW */
 
 #endif	// for header file

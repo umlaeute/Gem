@@ -15,16 +15,11 @@
 //
 /////////////////////////////////////////////////////////
 
-#if defined _WIN32 || defined __APPLE__ || defined __linux__
-// on this OSs we surely have child-classes for the real function
-// so we don't want pix_filmOS.cpp to reserve [pix_filmOS]
-# define NO_AUTO_REGISTER_CLASS
-#endif
+#include "Base/GemConfig.h"
+
+#define NO_AUTO_REGISTER_CLASS
 
 #include "pix_filmOS.h"
-
-//#ifndef FILM_NEW
-#if 1
 
 #include <ctype.h>
 
@@ -322,5 +317,4 @@ void pix_filmOS :: colorspaceCallback(void *data, t_symbol *state)
 {
   GetMyClass(data)->csMess(getPixFormat(state->s_name));
 }
-#endif /* FILM_NEW */
 

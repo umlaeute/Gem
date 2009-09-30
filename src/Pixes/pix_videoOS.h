@@ -18,12 +18,6 @@ Linux version by Miller Puckette. msp@ucsd.edu
 #define INCLUDE_PIX_VIDEOOS_H_
 #include "Base/GemConfig.h"
 
-#if defined VIDEO_NEW  || defined HAVE_DIRECTSHOW
-# ifndef DO_AUTO_REGISTER_CLASS
-#  define NO_AUTO_REGISTER_CLASS
-# endif
-#endif
-
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 

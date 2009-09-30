@@ -14,7 +14,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 #ifndef INCLUDE_FILMGMERLIN_H_
 #define INCLUDE_FILMGMERLIN_H_
-
+#include "Base/GemConfig.h"
 #include "Pixes/film.h"
 #include <stdio.h>
 

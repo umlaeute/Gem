@@ -40,11 +40,8 @@
 
 */
 
-#if defined _WIN32 || defined __APPLE__ || defined __linux__
-// on this OSs we surely have child-classes for the real function
-// so we don't want pix_videoOS.cpp to reserve [pix_videoOS]
-# define NO_AUTO_REGISTER_CLASS
-#endif
+#include "Base/GemConfig.h"
+#define NO_AUTO_REGISTER_CLASS
 
 #include "pix_videoOS.h"
 #include "Base/GemCache.h"

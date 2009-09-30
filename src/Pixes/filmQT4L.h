@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_FILMQT4L_H_
 #define INCLUDE_FILMQT4L_H_
-
+#include "Base/GemConfig.h"
 #include "Pixes/film.h"
 #include <stdio.h>
 

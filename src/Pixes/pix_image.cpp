@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#include "Base/GemConfig.h"
 #include "pix_image.h"
 
 #ifdef _WIN32

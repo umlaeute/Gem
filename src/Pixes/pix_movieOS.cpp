@@ -16,11 +16,10 @@
 //
 /////////////////////////////////////////////////////////
 
-#if !defined __APPLE__ && !defined __linux__
+#include "Base/GemConfig.h"
+#if defined GEM_FILMBACKEND && GEM_FILMBACKEND != GEM_FILMBACKEND_Darwin
 
 #include "pix_movieOS.h"
-
-#ifndef FILM_NEW
 
 #include "Base/GemMan.h"
 
@@ -323,5 +322,4 @@ void pix_movieOS :: autoCallback(void *data, t_floatarg state)
   GetMyClass(data)->m_auto=!(!(int)state);
 }
 
-#endif /* FILM_NEW */
-#endif /*__APPLE__*/
+#endif /* GEM_FILMBACKEND defined */

@@ -94,7 +94,7 @@ class GEM_EXTERN GemContext : public CPPExtern
  public:
   static unsigned int getContextId(void);
 
-#ifdef GEM_MULTICONTEXT
+#ifdef GLEW_MX
   /* returns the last GemContext that called makeCurrent()
    * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
    */

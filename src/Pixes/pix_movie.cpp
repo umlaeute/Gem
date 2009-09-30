@@ -16,9 +16,11 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Base/GemConfig.h"
+#ifndef GEM_FILMBACKEND
+
 #include "pix_movie.h"
 
-#ifndef __APPLE__
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM)
 
@@ -163,4 +165,4 @@ void pix_movie :: modeCallback(void *data, t_floatarg quality)
 {
   GetMyClass(data)->modeMess((int)quality);
 }
-#endif /*__APPLE__*/
+#endif /* no OS-specific GEM_FILMBACKEND */

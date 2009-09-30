@@ -17,10 +17,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_PIX_FILM_H_
 #include "Base/GemConfig.h"
 
-#ifndef FILM_NEW
-# define NO_AUTO_REGISTER_CLASS
-#endif
-
 #define MAX_FILM_HANDLES 8
 
 #define GEM_MOVIE_NONE 0

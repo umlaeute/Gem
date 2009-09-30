@@ -14,6 +14,10 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Base/GemConfig.h"
+
+#ifndef GEM_VIDEOBACKEND
+
 #include "pix_video.h"
 #include "Pixes/videoV4L.h"
 #include "Pixes/videoV4L2.h"
@@ -393,3 +397,4 @@ void pix_video :: qualityMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->qualityMess((int)state);
 }
+#endif /* no OS-specific GEM_VIDEOBACKEND */
