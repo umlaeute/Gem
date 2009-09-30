@@ -3,7 +3,7 @@
 
 
 AC_PREREQ(2.57)
-AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
+AC_INIT([FULL-PACKAGE-NAME],[VERSION],[BUG-REPORT-ADDRESS])
 
 AC_LANG(C++)
 
@@ -45,7 +45,7 @@ AC_PROG_LN_S
 
 
 AC_ARG_WITH([ALL],
-             AC_HELP_STRING([--without-ALL], [en/disable ALL libraries by default]))
+             AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
 
 
 GEM_ARG_ENABLE([PIC],     [PositionIndependentCode (potentially slower)])
@@ -67,11 +67,11 @@ GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFr
 GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video], [force])
 
 AC_ARG_WITH([pd], 
-	        AC_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
+	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
 AC_ARG_WITH([pdversion], 
-		AC_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
+		AS_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
 AC_ARG_WITH([extension], 
-		AC_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
+		AS_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
 
 GEM_TARGETS=Base
 GEM_TARGET(Controls)
@@ -254,7 +254,7 @@ GEM_CHECK_LIB(ftgl,ftgl,main,
 AC_CHECK_HEADERS([FTGL/ftgl.h])
 
 AC_ARG_WITH([default-font],
-            AC_HELP_STRING([--with-default-font=vera.ttf], [specify the default font for text-rendering])
+            AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
            )
 if test "x$with_default_font" != "x" && \
    test "x$with_default_font" != "xno" &&
