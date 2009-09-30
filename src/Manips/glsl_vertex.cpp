@@ -197,8 +197,9 @@ void glsl_vertex :: openMess(t_symbol *filename)
     m_shaderString = new char[size + 1];
     memset(m_shaderString,0,size + 1);
     fseek(file,0,SEEK_SET);
-    fread(m_shaderString,1,size,file);
+    size_t count=fread(m_shaderString,1,size,file);
     fclose(file);
+    if(count<size){error("error reading file"); return;}
   } else {
     error("could not find shader-file: '%s'", buf);
     return;

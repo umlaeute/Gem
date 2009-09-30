@@ -144,8 +144,9 @@ void vertex_program :: openMess(t_symbol *filename)
     m_programString = new char[size + 1];
     memset(m_programString,0,size + 1);
     fseek(file,0,SEEK_SET);
-    fread(m_programString,1,size,file);
+    size_t count = fread(m_programString,1,size,file);
     fclose(file);
+    if(count<size){error("error reading file"); return;}
   } else {
     m_programString = new char[strlen(m_buf) + 1];
     strcpy(m_programString,m_buf);

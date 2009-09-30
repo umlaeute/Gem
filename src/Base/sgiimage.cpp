@@ -31,6 +31,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "m_pd.h"
+
 /*
  *	from image.h
  *
@@ -132,15 +134,17 @@ static unsigned short getshort(FILE *inf)
 {
   unsigned char buf[2];
 
-  fread(buf,2,1,inf);
+  size_t count=fread(buf,2,1,inf);
+
+  if(count<1){error("error reading file"); return 0;}
   return (buf[0]<<8)+(buf[1]<<0);
 }
 
 static unsigned int32 getlong(FILE *inf)
 {
   unsigned char buf[4];
-
-  fread(buf,4,1,inf);
+  size_t count = fread(buf,4,1,inf);
+  if(count<1){error("error reading file"); return 0;}
   return (buf[0]<<24)+(buf[1]<<16)+(buf[2]<<8)+(buf[3]<<0);
 }
 
@@ -335,7 +339,9 @@ unsigned int32 *longimagedata(char *name)
                       printf("longimagedata: rlebuf(%d) is too small - bad poop : %d\n",rlebuflen, lengthtab[y+z*ysize]);
                       return(NULL);
                     }
-                  fread(rledat,lengthtab[y+z*ysize],1,inf);
+                  size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
+                  if(count<1){error("error reading file"); return 0;}
+
                   cur += lengthtab[y+z*ysize];
 #ifdef IRISGL
                   expandrow((unsigned char *)lptr,(unsigned char *)rledat,3-z);
@@ -358,7 +364,9 @@ unsigned int32 *longimagedata(char *name)
                       fseek(inf,starttab[y+z*ysize],SEEK_SET);
                       cur = starttab[y+z*ysize];
                     }
-                  fread(rledat,lengthtab[y+z*ysize],1,inf);
+                  size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
+                  if(count<1){error("error reading file"); return 0;}
+
                   cur += lengthtab[y+z*ysize];
 #ifdef IRISGL
                   expandrow((unsigned char *)lptr,(unsigned char *)rledat,3-z);
@@ -392,7 +400,9 @@ unsigned int32 *longimagedata(char *name)
           lptr = base;
           for(y=0; y<ysize; y++)
             {
-              fread(verdat,xsize,1,inf);
+              size_t count = fread(verdat,xsize,1,inf);
+              if(count<1){error("error reading file"); return 0;}
+
 #ifdef IRISGL
               interleaverow((unsigned char *)lptr,verdat,3-z,xsize);
 #else
