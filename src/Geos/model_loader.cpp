@@ -386,7 +386,7 @@ _glmReadMTL(GLMmodel* model, char* name)
  * modelpath  - pathname of the model being written
  * mtllibname - name of the material library to be written
  */
-static GLint
+static GLboolean
 _glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
 {
   FILE* file;
@@ -405,7 +405,7 @@ _glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
   file = fopen(filename, "w");
   if (!file) {
     error("_glmWriteMTL() failed: can't open file \"%s\".",filename);
-    return -1;
+    return GL_FALSE;
   }
   free(filename);
 
@@ -431,7 +431,7 @@ _glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
     fprintf(file, "Ns %f\n", material->shininess / 128.0 * 1000.0);
     fprintf(file, "\n");
   }
-  return 0;
+  return GL_TRUE;
 }
 
 
@@ -441,7 +441,7 @@ _glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
  * model - properly initialized GLMmodel structure
  * file  - (fopen'd) file descriptor
  */
-static GLint
+static GLboolean
 _glmFirstPass(GLMmodel* model, FILE* file)
 {
   GLuint  numvertices;        /* number of vertices in model */
@@ -469,21 +469,21 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case '\0':          /* vertex */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading vertex"); return -1;
+          error("_glmFirstPass() failed reading vertex"); return GL_FALSE;
         }
         numvertices++;
         break;
       case 'n':           /* normal */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading normals"); return -1;
+          error("_glmFirstPass() failed reading normals"); return GL_FALSE;
         }
         numnormals++;
         break;
       case 't':           /* texcoord */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading texcoords"); return -1;
+          error("_glmFirstPass() failed reading texcoords"); return GL_FALSE;
         }
         numtexcoords++;
         break;
@@ -495,7 +495,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       break;
     case 'm':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass() failed reading material"); return -1;
+        error("_glmFirstPass() failed reading material"); return GL_FALSE;
       }
       sscanf(buf, "%s %s", buf, buf);
       model->mtllibname = strdup(buf);
@@ -510,7 +510,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass() failed reading groups"); return -1;      
+        error("_glmFirstPass() failed reading groups"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       sscanf(buf, "%s", buf);
@@ -589,7 +589,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     group->numtriangles = 0;
     group = group->next;
   }
-  return 0;
+  return GL_TRUE;
 }
 
 /* glmSecondPass: second pass at a Wavefront OBJ file that gets all
@@ -658,7 +658,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       break;
     case 'u':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmSecondPass() failed reading material"); return false;
+        error("_glmSecondPass() failed reading material"); return GL_FALSE;
       }
       sscanf(buf, "%s %s", buf, buf);
       group->material = material = _glmFindMaterial(model, buf);
@@ -666,7 +666,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmSecondPass() failed reading group"); return false;
+        error("_glmSecondPass() failed reading group"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       sscanf(buf, "%s", buf);
@@ -789,7 +789,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
           numtexcoords * 3*sizeof(GLfloat) * (numtexcoords ? 1 : 0) +
           numtriangles * sizeof(GLMtriangle));
 
-  return true;
+  return GL_TRUE;
 }
 
 
@@ -1425,7 +1425,7 @@ glmReadOBJ(char* filename)
 
   /* make a first pass through the file to get a count of the number
      of vertices, normals, texcoords & triangles */
-  if(_glmFirstPass(model, file)<0){
+  if(GL_FALSE==_glmFirstPass(model, file)){
     error("glmReadOBJ() failed: can't parse file \"%s\".", filename);
     goto readobj_failed;
   }
@@ -1447,7 +1447,7 @@ glmReadOBJ(char* filename)
   /* rewind to beginning of file and read in the data this pass */
   rewind(file);
 
-  if(_glmSecondPass(model, file)<0) {
+  if(GL_FALSE==_glmSecondPass(model, file)) {
     error("glmReadOBJ() failed: can't parse file \"%s\".", filename);
     goto readobj_failed;
   }
