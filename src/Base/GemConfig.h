@@ -54,15 +54,6 @@
 # undef GEM_FILMBACKEND
 #endif
 
-#ifdef NEW_VIDEOFILM
-# ifndef FILM_NEW
-#  define FILM_NEW
-# endif
-# ifndef VIDEO_NEW
-#  define VIDEO_NEW
-# endif
-#endif
-
 #ifdef HAVE_LIBFTGL
 #  define FTGL
 #endif

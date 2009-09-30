@@ -44,9 +44,6 @@
 /* Pd header files */ 
 #undef HAVE_S_STUFF_H
 
-/* enable the use of the all-in-one video/movie objects */
-#undef NEW_VIDEOFILM
-
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
 #undef SIZEOF_UNSIGNED_INT
