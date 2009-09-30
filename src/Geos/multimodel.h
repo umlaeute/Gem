@@ -54,8 +54,10 @@ class GEM_EXTERN multimodel : public GemBase
           { modelName = strdup(_modelName); }
         ~multiModelCache()
           { delete modelName;
-            for (int i = 0; i < numModels; i++)
+            for (int i = 0; i < numModels; i++) {
+              glmDelete(realmodels[i]);
               glDeleteLists(models[i], 1);
+            }
             delete [] models;
           }
         int                 refCount;

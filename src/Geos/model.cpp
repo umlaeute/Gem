@@ -60,6 +60,11 @@ void model :: cleanModel()
       glDeleteLists(m_dispList, 1);
       m_dispList = 0;
     }
+  if(m_model) {
+    glmDelete(m_model);
+    m_model=NULL;
+  }
+
 }
 
 /////////////////////////////////////////////////////////

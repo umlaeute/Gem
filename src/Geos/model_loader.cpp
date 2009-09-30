@@ -276,12 +276,10 @@ _glmReadMTL(GLMmodel* model, char* name)
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmReadMTL() failed reading new material"); return -1;
+        error("_glmReadMTL() failed reading new material"); goto mtlread_failed;
       }
       nummaterials++;
-      if(2!=sscanf(buf, "%s %s", buf, buf)) {
-        error("_glmReadMTL() failed reading new material parms"); return -1;
-      }
+      sscanf(buf, "%s %s", buf, buf);
       break;
     default:
       /* eat up rest of line */
@@ -328,18 +326,14 @@ _glmReadMTL(GLMmodel* model, char* name)
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmReadMTL() really failed reading new material"); return -1;
+        error("_glmReadMTL() really failed reading new material"); goto mtlread_failed;
       }
-      if(2!=sscanf(buf, "%s %s", buf, buf)) {
-        error("_glmReadMTL() really failed reading new material name"); return -1;
-      }
+      sscanf(buf, "%s %s", buf, buf);
       nummaterials++;
       model->materials[nummaterials].name = strdup(buf);
       break;
     case 'N':
-      if(1!=fscanf(file, "%f", &model->materials[nummaterials].shininess)) {
-        error("_glmReadMTL() really failed reading shininess for mat#%d", nummaterials); return -1;
-      }
+      fscanf(file, "%f", &model->materials[nummaterials].shininess);
       /* wavefront shininess is from [0, 1000], so scale for OpenGL */
       model->materials[nummaterials].shininess /= 1000.0;
       model->materials[nummaterials].shininess *= 128.0;
@@ -347,20 +341,16 @@ _glmReadMTL(GLMmodel* model, char* name)
     case 'K':
       switch(buf[1]) {
       case 'd':
-        if(3!=fscanf(file, "%f %f %f",
-                     &model->materials[nummaterials].diffuse[0],
-                     &model->materials[nummaterials].diffuse[1],
-                     &model->materials[nummaterials].diffuse[2])) {
-          error("_glmReadMTL() really failed reading new diffuse for mat#%d", nummaterials); return -1;
-        }
+        fscanf(file, "%f %f %f",
+               &model->materials[nummaterials].diffuse[0],
+               &model->materials[nummaterials].diffuse[1],
+               &model->materials[nummaterials].diffuse[2]);
         break;
       case 's':
-        if(3!=fscanf(file, "%f %f %f",
-                     &model->materials[nummaterials].specular[0],
-                     &model->materials[nummaterials].specular[1],
-                     &model->materials[nummaterials].specular[2])) {
-          error("_glmReadMTL() really failed reading specular for mat#%d", nummaterials); return -1;
-        }
+        fscanf(file, "%f %f %f",
+               &model->materials[nummaterials].specular[0],
+               &model->materials[nummaterials].specular[1],
+               &model->materials[nummaterials].specular[2]);
         break;
       case 'a':
         fscanf(file, "%f %f %f",
@@ -385,6 +375,9 @@ _glmReadMTL(GLMmodel* model, char* name)
     }
   }
   return 0;
+ mtlread_failed:
+  if(file)fclose(file);
+  return -1;
 }
 
 /* glmWriteMTL: write a wavefront material library file
@@ -1432,7 +1425,10 @@ glmReadOBJ(char* filename)
 
   /* make a first pass through the file to get a count of the number
      of vertices, normals, texcoords & triangles */
-  _glmFirstPass(model, file);
+  if(_glmFirstPass(model, file)<0){
+    error("glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    goto readobj_failed;
+  }
 
   /* allocate memory */
   model->vertices = (GLfloat*)malloc(sizeof(GLfloat) *
@@ -1451,7 +1447,10 @@ glmReadOBJ(char* filename)
   /* rewind to beginning of file and read in the data this pass */
   rewind(file);
 
-  _glmSecondPass(model, file);
+  if(_glmSecondPass(model, file)<0) {
+    error("glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    goto readobj_failed;
+  }
 
   /* close the file */
   fclose(file);
@@ -1459,6 +1458,11 @@ glmReadOBJ(char* filename)
   glmTexture(model, GLM_TEX_DEFAULT, 1.0, 1.0);
 
   return model;
+
+ readobj_failed:
+  glmDelete(model);
+  if(file)fclose(file);
+  return NULL;
 }
 
 /* glmWriteOBJ: Writes a model description in Wavefront .OBJ format to

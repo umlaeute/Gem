@@ -70,27 +70,27 @@ void multimodel :: cleanMultimodel()
   if (m_numModels) {
     // decrement the reference count
     m_loadedCache->refCount--;
-
+    
     // If the refCount == 0, then destroy the cache
     if (m_loadedCache->refCount == 0) {
       // find the cache
       multiModelCache *ptr = s_modelCache;
-            
+      
       // if the loaded cache is the first cache in the list
       if (m_loadedCache == s_modelCache) {
-	s_modelCache = m_loadedCache->next;
-	delete m_loadedCache;
+        s_modelCache = m_loadedCache->next;
+        delete m_loadedCache;
       }
       else {
-	while (ptr && ptr->next != m_loadedCache) ptr = ptr->next;
-	if (!ptr) error("unable to find model cache!");
-	else {
-	  ptr->next = m_loadedCache->next;
-	  delete m_loadedCache;
-	}
+        while (ptr && ptr->next != m_loadedCache) ptr = ptr->next;
+        if (!ptr) error("unable to find model cache!");
+        else {
+          ptr->next = m_loadedCache->next;
+          delete m_loadedCache;
+        }
       }
     }
-
+    
     m_loadedCache = NULL;
     m_numModels = 0;
   }
