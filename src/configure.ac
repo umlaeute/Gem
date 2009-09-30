@@ -28,7 +28,6 @@ AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
 AC_SUBST(REFERENCEPATH)
-AC_SUBST(NEW_VIDEOFILM)
 AC_SUBST(CONFIGUREFLAGS)
 
 ## store the flags passed to us
@@ -64,7 +63,6 @@ GEM_ARG_DISABLE([powerpc], [PowerPC specific optimizations])
 GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
 
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)], [force])
-GEM_ARG_ENABLE([filmnew], [all in one version of pix_film/pix_video], [force])
 
 AC_ARG_WITH([pd], 
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
@@ -216,8 +214,8 @@ if test "x$with_v4l" != "xno"; then
                   ],[have_v4l="no"])
 
 # these two are quite the same...
- GEM_CHECK_LIB(libv4l1, libv4l1, v4l1_open,,,,[video input])
- GEM_CHECK_LIB(libv4l2, libv4l2, v4l2_open,,,,[video input])
+ GEM_CHECK_LIB(libv4l1, v4l1, v4l1_open,,,,[video input])
+ GEM_CHECK_LIB(libv4l2, v4l2, v4l2_open,,,,[video input])
 fi
 
 
@@ -383,20 +381,45 @@ AC_CHECK_HEADER(s_stuff.h,,,[
 ])
 
 
-# using pix_filmNEW rather than pix_filmOS
+# using pix_videoOS rather than pix_video
+AC_ARG_WITH([video], AS_HELP_STRING([--with-video=Darwin|DS|NT],[use OS-specific "pix_video"]))
 
 ## on OSX we still default to the olde way
 if test "x$KERN" = "xDarwin"; then
- if test "x$enable_filmnew" != "xyes"; then
-   enable_filmnew="no"
+ if test "x$with_film" = "x"; then
+   with_film="Darwin"
+ fi
+ if test "x$with_video" = "x"; then
+   with_video="Darwin"
  fi
 fi
 
-if test "x$enable_filmnew" != "xno"; then
- AC_DEFINE_UNQUOTED(NEW_VIDEOFILM)
+if test "x$with_video" = "x"; then
+ :
+elif test "x$with_video" = "xyes"; then
+ :
+elif test "x$with_video" = "xno"; then
+ :
 else
- AC_MSG_RESULT([using deprecated video-loader])
+ AC_DEFINE_UNQUOTED([GEM_VIDEOBACKEND], [GEM_VIDEOBACKEND_$with_video])
+ AC_MSG_RESULT([using deprecated video-loader $with_video])
 fi
+
+# using pix_filmOS rather than pix_film
+AC_ARG_WITH([film], AS_HELP_STRING([--with-film=Darwin],[use OS-specific "pix_film"]))
+
+if test "x$with_film" = "x"; then
+ :
+elif test "x$with_film" = "xyes"; then
+ :
+elif test "x$with_film" = "xno"; then
+ :
+else
+ AC_DEFINE_UNQUOTED([GEM_FILMBACKEND], [GEM_FILMBACKEND_$with_film])
+ AC_MSG_RESULT([using deprecated film-loader $with_film])
+fi
+
+
 
 have_gl_headers="no"
 AC_CHECK_HEADER(GL/gl.h,have_gl_headers="yes")

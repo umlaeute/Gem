@@ -20,12 +20,19 @@
 #undef HAVE_LIBAVIPLAY
 #undef HAVE_LIBGMERLIN_AVDEC
 
+#undef HAVE_QUICKTIME
+
 /* video grabbing */
 #undef HAVE_VIDEO4LINUX
 #undef HAVE_VIDEO4LINUX2
 #undef HAVE_LIBDV
 #undef HAVE_LIBV4L1
 #undef HAVE_LIBV4L2
+
+
+/* deprecated system specific video/film objects */
+#undef GEM_VIDEOBACKEND
+#undef GEM_FILMBACKEND
 
 /* image analysis */
 #undef HAVE_ARTOOLKIT

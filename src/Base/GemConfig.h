@@ -20,7 +20,14 @@
 # endif
 #endif
 
+#define GEM_FILMBACKEND_undefined 0
+#define GEM_FILMBACKEND_Darwin 1
 
+#define GEM_VIDEOBACKEND_undefined 0
+#define GEM_VIDEOBACKEND_Darwin 1
+#define GEM_VIDEOBACKEND_DS 2
+#define GEM_VIDEOBACKEND_NT 3
+#define GEM_VIDEOBACKEND_SGI 4
 
 #ifdef HAVE_CONFIG_H
 
@@ -30,16 +37,21 @@
 
 # ifdef __linux__
 #  include "Base/configLinux.h"
-# endif
-
-# ifdef __APPLE__
+# elif define __APPLE__
 #  include "Base/configDarwin.h"
-#  define HAVE_QUICKTIME
-# endif
-
-# ifdef _WIN32
+# elif defined _WIN32
 #  include "Base/configNT.h"
 # endif
+#endif
+
+#if defined GEM_VIDEOBACKEND && GEM_VIDEOBACKEND == GEM_VIDEOBACKEND_undefined
+# warning ignoring unknown video backend
+# undef GEM_VIDEOBACKEND
+#endif
+
+#if defined GEM_FILMBACKEND && GEM_FILMBACKEND == GEM_FILMBACKEND_undefined
+# warning ignoring unknown film backend
+# undef GEM_FILMBACKEND
 #endif
 
 #ifdef NEW_VIDEOFILM

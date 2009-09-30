@@ -1119,9 +1119,7 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 
   AS_IF([test "x$ac_Lib" != "xno"],
    [
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1))
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1))
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$2))
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2))
 dnl    PKG_LIBS="$6 ${PKG_LIBS}"
     have_[]Name="yes"
@@ -1177,6 +1175,7 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
 
   if test "x$gem_check_ldflags_success" = "xyes"; then
     AC_MSG_RESULT([yes])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1))
     [$2]
   else
     AC_MSG_RESULT([no])
