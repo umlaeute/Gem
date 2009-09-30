@@ -1,4 +1,4 @@
-default: all
+default: Gem
 SRCDIR=.
 include Make.include
 
@@ -8,12 +8,14 @@ BUILDDIR = ..
 #OBJECTS = $(GEM_TARGETS:%=%/*.o)
 OBJECTS = $(OBJDIR)*.o
 
-.PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs installabs strip config
+.PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs installabs strip config Gem
 
 all: subdirs strip
 
 Gem.$(EXT): subdirs 
 	$(CXXLINK) $(GEM_EXTRA_LDFLAGS)  $(GEM_ARCH_LDFLAGS) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
+
+Gem: Gem.$(EXT)
 
 strip: Gem.$(EXT)
 	-$(STRIP) $(STRIP_UNNEEDED) Gem.$(EXT)
