@@ -1,12 +1,16 @@
-#ifndef INCLUDE_pix_movieDS_H_
-#define INCLUDE_pix_movieDS_H_
+#ifndef INCLUDE_PIX_MOVIEDS_H_
+#define INCLUDE_PIX_MOVIEDS_H_
+#include "Base/GemConfig.h"
+
+#ifndef HAVE_DIRECTSHOW
+# error pix_movieDS without DirectShow
+#endif
 
 #pragma warning (disable : 4251)
 
 #include <dshow.h>
 #include <qedit.h>
 
-#include "Base/GemConfig.h"
  
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"

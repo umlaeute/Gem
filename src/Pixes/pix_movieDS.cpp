@@ -1,6 +1,6 @@
 #include "Base/GemConfig.h"
 
-#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
+#if defined GEM_FILMBACKEND && GEM_FILMBACKEND == GEM_FILMBACKEND_DS
 
 #include <atlbase.h>
 #include <atlconv.h>
@@ -922,6 +922,5 @@ HRESULT movieConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFil
 	
 	return	RetVal;
 }
-
 
 #endif /* HAVE_DIRECTSHOW */
