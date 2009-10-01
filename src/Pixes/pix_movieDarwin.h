@@ -16,9 +16,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 
 #ifdef __APPLE__
-#include "pix_filmDarwin.h"
+# include "pix_filmDarwin.h"
 #else
-#error Define pix_movieDarwin for this OS
+# error Define pix_movieDarwin for this OS
 #endif
 
 /*-----------------------------------------------------------------
