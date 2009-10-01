@@ -1,0 +1,2 @@
+/* image analysis */
+#undef HAVE_ARTOOLKIT

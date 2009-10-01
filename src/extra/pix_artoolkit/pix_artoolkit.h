@@ -12,11 +12,21 @@
 
 #ifndef INCLUDE_PIX_ARTOOLKIT_H_
 #define INCLUDE_PIX_ARTOOLKIT_H_
-#include "Base/GemConfig.h"
+
+/* config stuff */
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if defined HAVE_AR_AR_H && defined HAVE_LIBAR
+# define HAVE_ARTOOLKIT
+#endif
+
+
+
 #include "Base/GemPixObj.h"
 
 #ifdef HAVE_ARTOOLKIT
-/* JMZ: i rather won't use gsub.h but only ar.h */
 # include "AR/param.h"
 # include "AR/ar.h"
 # include "AR/arMulti.h"
