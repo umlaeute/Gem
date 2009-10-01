@@ -26,6 +26,11 @@ else
  fi
 fi
 
+## LDFLAGS
+#check for "-shared -Wl,--export-dynamic"
+#LDFLAGS+="-shared -Wl,--export-dynamic"
+#check for "-bundle -undefined dynamic_lookup"
+
 
 AC_CHECK_HEADERS([AR/ar.h])
 AC_CHECK_LIB(AR, arInitCparam)
