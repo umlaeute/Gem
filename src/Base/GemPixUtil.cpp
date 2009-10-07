@@ -341,7 +341,7 @@ void pix_sub(unsigned char *leftPix, unsigned char *rightPix, size_t datasize)
 
 GEM_EXTERN void imageStruct::setBlack() {
   size_t i = datasize;
-  unsigned char* dummy=pdata;
+  unsigned char* dummy=data;
   switch (format){
   case GL_YCBCR_422_GEM:
     i/=4;
@@ -351,13 +351,13 @@ GEM_EXTERN void imageStruct::setBlack() {
     }
     break;
   default:
-    memset(pdata, 0, datasize);
+    memset(data, 0, datasize);
     break;
   }
 }
 GEM_EXTERN void imageStruct::setWhite() {
   size_t i = datasize;
-  unsigned char* dummy=pdata;
+  unsigned char* dummy=data;
   switch (format){
   case GL_YCBCR_422_GEM:
     i/=4;
@@ -367,7 +367,7 @@ GEM_EXTERN void imageStruct::setWhite() {
     }
     break;
   default:
-    memset(pdata, 1, datasize);
+    memset(data, 1, datasize);
     break;
   }
 }
@@ -811,7 +811,7 @@ GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
     }
     break;
   case GL_LUMINANCE:
-    memcpy(pdata, greydata, pixelnum);
+    memcpy(data, greydata, pixelnum);
     break;
   case GL_YUV422_GEM:
     pixelnum>>=1;
@@ -855,7 +855,7 @@ GEM_EXTERN void imageStruct::fromGray(short *greydata) {
     }
     break;
   case GL_LUMINANCE:
-    memcpy(pdata, greydata, pixelnum);
+    memcpy(data, greydata, pixelnum);
     break;
   case GL_YUV422_GEM:
     pixelnum>>=1;
@@ -889,7 +889,7 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
   reallocate();
   switch (format){
   case GL_LUMINANCE:
-    memcpy(pdata, Y, pixelnum);
+    memcpy(data, Y, pixelnum);
     break;
   case GL_RGB:  case GL_BGR_EXT: // of course this is stupid, RGB isn't BGR
     {
@@ -1051,7 +1051,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
   reallocate();
   switch (format){
   case GL_LUMINANCE:
-    memcpy(pdata, Y, pixelnum);
+    memcpy(data, Y, pixelnum);
     break;
   case GL_RGB:  case GL_BGR_EXT: // of course this is stupid, RGB isn't BGR
     {
@@ -1251,11 +1251,11 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
 GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
   // this is the yuv-format with Gem
   if(!yuvdata)return;
-  data=pdata;
+  data=data;
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=pdata;
+  unsigned char *pixels=data;
   switch (format){
   case GL_YUV422_GEM:
     memcpy(data, yuvdata, pixelnum*csize);
@@ -1363,11 +1363,11 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
 
 GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
   if(!yuvdata)return;
-  data=pdata;
+  data=data;
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=pdata;
+  unsigned char *pixels=data;
   switch (format){
   case GL_YUV422_GEM:
     pixelnum>>=1;
@@ -1459,11 +1459,11 @@ GEM_EXTERN void imageStruct::fromYUY2(unsigned char *yuvdata) { // YUYV
 GEM_EXTERN void imageStruct::fromYVYU(unsigned char *yuvdata) {
   // this is the yuv-format with Gem
   if(!yuvdata)return;
-  data=pdata;
+  data=data;
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=pdata;
+  unsigned char *pixels=data;
   switch (format){
   case GL_YUV422_GEM:
     pixelnum>>=1;
