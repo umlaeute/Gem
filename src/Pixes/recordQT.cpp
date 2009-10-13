@@ -15,6 +15,12 @@
 # define GetPortPixMap(x) (x)->portPixMap
 #endif
 
+#ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
+# define snprintf _snprintf
+# define vsnprintf _vsnprintf
+#endif
+
+
 #include <stdio.h>
 
 /* for post() and error() */
