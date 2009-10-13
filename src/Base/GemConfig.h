@@ -37,7 +37,7 @@
 
 # ifdef __linux__
 #  include "Base/configLinux.h"
-# elif define __APPLE__
+# elif defined __APPLE__
 #  include "Base/configDarwin.h"
 # elif defined _WIN32
 #  include "Base/configNT.h"
