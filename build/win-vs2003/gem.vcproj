@@ -154,9 +154,6 @@
 			Name="Base"
 			Filter="">
 			<File
-				RelativePath="..\..\src\Base\config.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Base\configNT.h">
 			</File>
 			<File
@@ -176,6 +173,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Base\GemCache.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemConfig.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Base\GemContext.cpp">
@@ -963,12 +963,6 @@
 				RelativePath="..\..\src\Pixes\pix_alpha.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Pixes\pix_artoolkit.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_artoolkit.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Pixes\pix_background.cpp">
 			</File>
 			<File
@@ -1177,18 +1171,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_filmDarwin.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_filmNT.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_filmNT.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_filmQT.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_filmQT.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_flip.cpp">
