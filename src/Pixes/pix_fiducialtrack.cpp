@@ -16,6 +16,10 @@
 #include "pix_fiducialtrack.h"
 
 #ifdef _WIN32
+# ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
+#  define snprintf _snprintf
+#  define vsnprintf _vsnprintf
+# endif
 # include <io.h>
 #else
 # include <unistd.h>
