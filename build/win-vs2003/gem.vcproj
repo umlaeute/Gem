@@ -59,8 +59,7 @@
 				TargetEnvironment="1"
 				TypeLibraryName=".\./gem.tlb"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="installerCVS.bat"/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
