@@ -88,6 +88,7 @@ SectionGroup "Documentation" SEC_documentation
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR"
   File /r /x .svn "..\..\help\*.pd"
+  File /r /x .svn "..\..\help\WaveVFX.dll"
  SectionEnd
 
  Section "examples" SEC_examples
