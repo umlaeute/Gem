@@ -36,14 +36,6 @@
  * probably you don't want to edit this
  * (but who knows)
  * ******************************************************************** */
-
-
 #ifdef FTGL
 # define FTGL_LIBRARY_STATIC
 #endif
-
-#ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
-# define snprintf _snprintf
-# define vsnprintf _vsnprintf
-#endif
-
