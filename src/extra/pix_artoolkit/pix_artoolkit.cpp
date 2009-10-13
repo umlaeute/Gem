@@ -15,6 +15,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+t_object*CPPExtern::m_holder;
+char*CPPExtern::m_holdname;
+
 CPPEXTERN_NEW(pix_artoolkit)
 
 /////////////////////////////////////////////////////////
