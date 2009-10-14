@@ -84,7 +84,6 @@
 static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba, bool loud=true)
 {
   const char*hookname="plugMain";
-
   if(pluginname==NULL)return NULL;
   
   void *plugin_handle = NULL;
@@ -116,17 +115,22 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
 #endif
 
   int fd=-1;
-  if ((fd=open_via_path(canvas_getdir(canvas)->s_name, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
+  if ((fd=canvas_open(canvas, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
 #if defined __APPLE__ && 0
     snprintf(buf, MAXPDSTRING, "%s", buf2);
 #else
     snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
-post("path: %s", buf);
 #endif
     buf[MAXPDSTRING-1]=0;
-  } else
-    canvas_makefilename(canvas, pluginname, buf, MAXPDSTRING);
+  } else {
+      if(canvas) {
+        canvas_makefilename(canvas, pluginname, buf, MAXPDSTRING);
+      } else {
+          if(loud)::error("pix_freeframe[%s]: unfindeable");
+          return NULL;
+      }
+  }
   char*name=buf;
   char*libname=name;
 
@@ -497,12 +501,12 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
 
 static int freeframe_loader(t_canvas *canvas, char *classname) {
   int dummy;
-
   if(strncmp("pix_", classname, offset_pix_))
     return 0;
   char*pluginname=classname+offset_pix_;
 
   T_FFPLUGMAIN plugin = ff_loadplugin(canvas, pluginname, &dummy, false);
+  
   if(plugin!=NULL) {
     plugin(FF_DEINITIALISE, NULL, 0);
     class_addcreator((t_newmethod)freeframe_loader_new, gensym(classname), A_GIMME, 0);
