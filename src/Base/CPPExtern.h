@@ -270,9 +270,10 @@ static void obj_setupCallback(t_class *classPtr);
 
 #define REAL_NEW__SETUP1(NEW_CLASS) \
   extern "C" {                                                  \
-    void NEW_CLASS ## _setup(void)                                  \
+    GEM_EXPORT void NEW_CLASS ## _setup(void)                                  \
     {                                                           \
-      NEW_CLASS ## _class = class_new(                          \
+    static int recalled=0; if(recalled)return; recalled=1;      \
+    NEW_CLASS ## _class = class_new(                          \
                                       gensym(#NEW_CLASS),               \
                                       (t_newmethod)create_ ## NEW_CLASS, \
                                       (t_method)&NEW_CLASS::obj_freeCallback, \
