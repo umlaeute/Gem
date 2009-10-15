@@ -17,37 +17,9 @@ LOG
 
 #include "m_pd.h"
 #include "Base/GemVersion.h"
+#include "Base/GemException.h"
 
 #include <new>
-
-
-/*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    GemException
-    
-    an exception class...
-
-DESCRIPTION
-    
-    this is a class, we can throw on creation, 
-    to make sure that the pd-object can not be created
-
-
-    
------------------------------------------------------------------*/
-class GEM_EXTERN GemException
-{
- public:
-  GemException() throw();
-  GemException(const char*error) throw();
-  virtual ~GemException() throw();
-  
-  virtual const char *what() const throw();
-  virtual void report(const char*origin=NULL) const throw();
- private:
-  const char*ErrorString;
-};
 
 class CPPExtern;
 
@@ -113,7 +85,7 @@ class GEM_EXTERN CPPExtern
 
         //////////
         // Constructor
-    	CPPExtern();
+    	CPPExtern(void);
 
         //////////
         // The Pd header
@@ -121,11 +93,11 @@ class GEM_EXTERN CPPExtern
 
     	//////////
     	// Destructor
-    	virtual ~CPPExtern() = 0;
+    	virtual ~CPPExtern(void) = 0;
     	
         //////////
         // Get the object's canvas
-        t_canvas            *getCanvas()        { return(m_canvas); }
+        t_canvas            *getCanvas(void)        { return(m_canvas); }
 
         //////////
         // This is a holder - don't touch it
@@ -188,39 +160,92 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // NO ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW(NEW_CLASS)    	    	    	    	\
-    REAL_NEW(NEW_CLASS)
+#define CPPEXTERN_NEW(NEW_CLASS)    	    	     \
+  REAL_NEW__CLASS(NEW_CLASS);                    \
+  static void* create_ ## NEW_CLASS (void)       \
+    REAL_NEW__CREATE1(NEW_CLASS)                 \
+    obj->data = new NEW_CLASS();                 \
+    REAL_NEW__CREATE2(NEW_CLASS)                 \
+    REAL_NEW__SETUP1(NEW_CLASS)                  \
+    REAL_NEW__SETUP2(NEW_CLASS)
+
 //
 // ONE ARGUMENT
 /////////////////////////////////////////////////
 #define CPPEXTERN_NEW_WITH_ONE_ARG(NEW_CLASS, TYPE, PD_TYPE)    \
-    REAL_NEW_WITH_ARG(NEW_CLASS, TYPE, PD_TYPE)
+  REAL_NEW__CLASS(NEW_CLASS);                    \
+  static void* create_ ## NEW_CLASS (TYPE arg)   \
+    REAL_NEW__CREATE1(NEW_CLASS)                 \
+    obj->data = new NEW_CLASS(arg);              \
+    REAL_NEW__CREATE2(NEW_CLASS)                 \
+    REAL_NEW__SETUP1(NEW_CLASS)                  \
+         PD_TYPE,                                \
+    REAL_NEW__SETUP2(NEW_CLASS)
+
 //
 // GIMME ARGUMENT
 /////////////////////////////////////////////////
 #define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS)  	    	    	\
-    REAL_NEW_WITH_GIMME(NEW_CLASS)
+  REAL_NEW__CLASS(NEW_CLASS);                    \
+  static void* create_ ## NEW_CLASS (t_symbol*s, int argc, t_atom*argv) \
+    REAL_NEW__CREATE1(NEW_CLASS)                 \
+       obj->data = new NEW_CLASS(argc,argv);     \
+    REAL_NEW__CREATE2(NEW_CLASS)                 \
+    REAL_NEW__SETUP1(NEW_CLASS)                  \
+         A_GIMME,              \
+    REAL_NEW__SETUP2(NEW_CLASS)
+
 //
 // TWO ARGUMENTS
 /////////////////////////////////////////////////
 #define CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO)	\
-    REAL_NEW_WITH_ARG_ARG(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO)
+  REAL_NEW__CLASS(NEW_CLASS);                     \
+  static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2) \
+    REAL_NEW__CREATE1(NEW_CLASS)           \
+    obj->data = new NEW_CLASS(arg, arg2);  \
+    REAL_NEW__CREATE2(NEW_CLASS)           \
+    REAL_NEW__SETUP1(NEW_CLASS)            \
+         PD_TYPE, PD_TWO,                  \
+    REAL_NEW__SETUP2(NEW_CLASS)
+
 //
 // THREE ARGUMENTS
 /////////////////////////////////////////////////
 #define CPPEXTERN_NEW_WITH_THREE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE)	\
-    REAL_NEW_WITH_ARG_ARG_ARG(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE)
+  REAL_NEW__CLASS(NEW_CLASS);                        \
+  static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2, TTHREE arg3)  \
+    REAL_NEW__CREATE1(NEW_CLASS)                    \
+       obj->data = new NEW_CLASS(arg, arg2, arg3);  \
+    REAL_NEW__CREATE2(NEW_CLASS)                    \
+    REAL_NEW__SETUP1(NEW_CLASS)                     \
+         PD_TYPE, PD_TWO, PD_THREE,                 \
+    REAL_NEW__SETUP2(NEW_CLASS)
+
 //
 // FOUR ARGUMENTS
 /////////////////////////////////////////////////
 #define CPPEXTERN_NEW_WITH_FOUR_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR) \
-    REAL_NEW_WITH_ARG_ARG_ARG_ARG(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR)
+  REAL_NEW__CLASS(NEW_CLASS);                             \
+  static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2, TTHREE arg3, TFOUR arg4) \
+    REAL_NEW__CREATE1(NEW_CLASS)                         \
+       obj->data = new NEW_CLASS(arg, arg2, arg3, arg4); \
+    REAL_NEW__CREATE2(NEW_CLASS)                         \
+    REAL_NEW__SETUP1(NEW_CLASS)                          \
+         PD_TYPE, PD_TWO, PD_THREE, PD_FOUR,             \
+    REAL_NEW__SETUP2(NEW_CLASS)
+
 //
 // FIVE ARGUMENTS
 /////////////////////////////////////////////////
 #define CPPEXTERN_NEW_WITH_FIVE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR, TFIVE, PD_FIVE) \
-    REAL_NEW_WITH_ARG_ARG_ARG_ARG_ARG(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR, TFIVE, PD_FIVE)
-	
+  REAL_NEW__CLASS(NEW_CLASS);                                   \
+  static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2, TTHREE arg3, TFOUR arg4, TFIVE arg5) \
+    REAL_NEW__CREATE1(NEW_CLASS)                               \
+       obj->data = new NEW_CLASS(arg, arg2, arg3, arg4, arg5); \
+    REAL_NEW__CREATE2(NEW_CLASS)                               \
+    REAL_NEW__SETUP1(NEW_CLASS)                                \
+         PD_TYPE, PD_TWO, PD_THREE, PD_FOUR, PD_FIVE           \
+    REAL_NEW__SETUP2(NEW_CLASS)
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -229,6 +254,38 @@ static void obj_setupCallback(t_class *classPtr);
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#define REAL_NEW__CLASS(NEW_CLASS)  STATIC_CLASS t_class * NEW_CLASS ## _class
+#define REAL_NEW__CREATE1(NEW_CLASS)  {                                          \
+   try{                                                                          \
+    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
+    CPPExtern::m_holder = &obj->pd_obj;                                            \
+    CPPExtern::m_holdname=(char*)#NEW_CLASS;
+
+#define REAL_NEW__CREATE2(NEW_CLASS) \
+  CPPExtern::m_holder = NULL;                                   \
+  CPPExtern::m_holdname=NULL;                                   \
+  return(obj);                                                  \
+  } catch (GemException e) {e.report(); return NULL;}           \
+  }
+
+#define REAL_NEW__SETUP1(NEW_CLASS) \
+  extern "C" {                                                  \
+    void NEW_CLASS ## _setup(void)                                  \
+    {                                                           \
+      NEW_CLASS ## _class = class_new(                          \
+                                      gensym(#NEW_CLASS),               \
+                                      (t_newmethod)create_ ## NEW_CLASS, \
+                                      (t_method)&NEW_CLASS::obj_freeCallback, \
+                                      sizeof(Obj_header), GEM_CLASSFLAGS,
+#define REAL_NEW__SETUP2(NEW_CLASS)                         \
+  A_NULL);                                                  \
+  SET_HELPSYMBOL(NEW_CLASS);                                \
+  NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);   \
+  }                                                         \
+  }                                                         \
+  AUTO_REGISTER_CLASS(NEW_CLASS);
+
+	
 ///////////////////////////////////////////////////////////////////////////////
 // static class:
 //   by default classes are declared static
@@ -260,9 +317,9 @@ static void obj_setupCallback(t_class *classPtr);
 # define AUTO_REGISTER_CLASS(NEW_CLASS)			\
   class NEW_CLASS ## _cppclass {					\
   public:								\
-  NEW_CLASS ## _cppclass() {POST_AUTOREGISTER(NEW_CLASS); NEW_CLASS ## _setup(); } \
+  NEW_CLASS ## _cppclass(void) {POST_AUTOREGISTER(NEW_CLASS); NEW_CLASS ## _setup(); } \
 };									\
-  static NEW_CLASS ## _cppclass NEW_CLASS ## _instance;
+  static NEW_CLASS ## _cppclass NEW_CLASS ## _instance
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -285,246 +342,13 @@ static void obj_setupCallback(t_class *classPtr);
 # define SET_HELPSYMBOL(NEW_CLASS)
 #endif /* HELPSYMBOL */
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // setting the class-flags
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef GEM_CLASSFLAGS
 # define GEM_CLASSFLAGS 0
 #endif
-///////////////////////////////////////////////////////////////////////////////
-// no args
-///////////////////////////////////////////////////////////////////////////////
-#define REAL_NEW(NEW_CLASS)        \
-STATIC_CLASS t_class * NEW_CLASS ## _class;    	    	    	\
-static void* create_ ## NEW_CLASS ()                              \
-{     	    	    	    	    	    	    	    	\
-  try{	    	    	    	    	    	    	    	\
-    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-    CPPExtern::m_holder = &obj->pd_obj;                         \
-    CPPExtern::m_holdname=(char*)#NEW_CLASS;                    \
-    obj->data = new NEW_CLASS;                                  \
-    CPPExtern::m_holder = NULL;                                 \
-    CPPExtern::m_holdname=NULL;                                 \
-    return(obj);                                                \
-  } catch (GemException e) {e.report(CPPExtern::m_holdname); return NULL;} \
-}                                                               \
-  extern "C" {                                                  \
-    void NEW_CLASS ## _setup()                          \
-    {                                                           \
-      static bool firsttime=true; if(!firsttime)return; firsttime=false; \
-      NEW_CLASS ## _class = class_new(                     \
-                                           gensym(#NEW_CLASS),  \
-                                           (t_newmethod)create_ ## NEW_CLASS, \
-                                           (t_method)&NEW_CLASS::obj_freeCallback, \
-                                           sizeof(Obj_header), GEM_CLASSFLAGS, \
-                                           A_NULL);                     \
-      SET_HELPSYMBOL(NEW_CLASS);                           \
-      NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);      \
-    }                                                                   \
-  }                                                                     \
-  AUTO_REGISTER_CLASS(NEW_CLASS);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// one arg
-///////////////////////////////////////////////////////////////////////////////
-#define REAL_NEW_WITH_ARG(NEW_CLASS, VAR_TYPE, PD_TYPE) \
-STATIC_CLASS t_class * NEW_CLASS ## _class;    	    	    	\
-static void* create_ ## NEW_CLASS (VAR_TYPE arg)                  \
-{     	    	    	    	    	    	    	    	\
-  try{	    	    	    	    	    	    	    	\
-    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-    CPPExtern::m_holder = &obj->pd_obj;                         \
-    CPPExtern::m_holdname=(char*)#NEW_CLASS;                    \
-    obj->data = new NEW_CLASS(arg);                             \
-    CPPExtern::m_holder = NULL;                                 \
-    CPPExtern::m_holdname=NULL;                                 \
-    return(obj);                                                \
-  } catch (GemException e) {e.report(); return NULL;}           \
-}   	    	    	    	    	    	    	    	\
-extern "C" {	    	    	    	    	    	    	\
-void NEW_CLASS ## _setup()    	    	    	    	\
-{   	    	    	    	    	    	    	    	\
-    NEW_CLASS ## _class = class_new(                       \
-    	     	gensym(#NEW_CLASS), 	    	    	    	\
-    	    	(t_newmethod)create_ ## NEW_CLASS,	    	\
-    	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
-    	     	PD_TYPE,                                        \
-    	     	A_NULL);      	    	    	    	    	\
-    SET_HELPSYMBOL(NEW_CLASS);				\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);	\
- }									\
-}									\
-  AUTO_REGISTER_CLASS(NEW_CLASS);
-
-///////////////////////////////////////////////////////////////////////////////
-// gimme arg
-///////////////////////////////////////////////////////////////////////////////
-#define REAL_NEW_WITH_GIMME(NEW_CLASS) \
-STATIC_CLASS t_class * NEW_CLASS ## _class;    	    	    	\
-static void* create_ ## NEW_CLASS (t_symbol *s, int argc, t_atom *argv) \
-{     	    	    	    	    	    	    	    	\
-  try{	    	    	    	    	    	    	    	\
-    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-    CPPExtern::m_holder = &obj->pd_obj;                         \
-    CPPExtern::m_holdname=(char*)s->s_name;                     \
-    obj->data = new NEW_CLASS(argc, argv);                      \
-    CPPExtern::m_holder=NULL;                                   \
-    CPPExtern::m_holdname=NULL;                                 \
-    return(obj);                                                \
-  } catch (GemException e) {e.report(); return NULL;}           \
-}   	    	    	    	    	    	    	    	\
-extern "C" {	    	    	    	    	    	    	\
-void NEW_CLASS ## _setup()    	    	    	    	\
-{   	    	    	    	    	    	    	    	\
-    NEW_CLASS ## _class = class_new(                       \
-    	     	gensym(#NEW_CLASS), 	    	    	    	\
-    	    	(t_newmethod)create_ ## NEW_CLASS,	    	\
-    	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
-    	     	A_GIMME,                                        \
-    	     	A_NULL);      	    	    	    	    	\
-    SET_HELPSYMBOL(NEW_CLASS);				\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);	\
- }									\
-}									\
-  AUTO_REGISTER_CLASS(NEW_CLASS);
-
-///////////////////////////////////////////////////////////////////////////////
-// two args
-///////////////////////////////////////////////////////////////////////////////
-#define REAL_NEW_WITH_ARG_ARG(NEW_CLASS, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE) \
-STATIC_CLASS t_class * NEW_CLASS ## _class;    	    	    	\
-static void* create_ ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo) \
-{     	    	    	    	    	    	    	    	\
-  try{	    	    	    	    	    	    	    	\
-    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-    CPPExtern::m_holder = &obj->pd_obj;                         \
-    CPPExtern::m_holdname=(char*)#NEW_CLASS;                    \
-    obj->data = new NEW_CLASS(arg, argtwo);                     \
-    CPPExtern::m_holder = NULL;                                 \
-    CPPExtern::m_holdname=NULL;                                 \
-    return(obj);                                                \
-  } catch (GemException e) {e.report(); return NULL;}           \
-}   	    	    	    	    	    	    	    	\
-extern "C" {	    	    	    	    	    	    	\
-void NEW_CLASS ## _setup()    	    	    	    	\
-{   	    	    	    	    	    	    	    	\
-    NEW_CLASS ## _class = class_new(                       \
-    	     	gensym(#NEW_CLASS), 	    	    	    	\
-    	    	(t_newmethod)create_ ## NEW_CLASS,	    	\
-    	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
-    	     	ONE_PD_TYPE, TWO_PD_TYPE,                       \
-    	     	A_NULL);      	    	    	    	    	\
-    SET_HELPSYMBOL(NEW_CLASS);				\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);	\
- }									\
-}									\
-  AUTO_REGISTER_CLASS(NEW_CLASS);
-
-///////////////////////////////////////////////////////////////////////////////
-// three args
-///////////////////////////////////////////////////////////////////////////////
-#define REAL_NEW_WITH_ARG_ARG_ARG(NEW_CLASS, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE, THREE_VAR_TYPE, THREE_PD_TYPE) \
-STATIC_CLASS t_class * NEW_CLASS ## _class;    	    	    	\
-static void* create_ ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree) \
-{     	    	    	    	    	    	    	    	\
-  try{	    	    	    	    	    	    	    	\
-    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-    CPPExtern::m_holder = &obj->pd_obj;                         \
-    CPPExtern::m_holdname=(char*)#NEW_CLASS;                    \
-    obj->data = new NEW_CLASS(arg, argtwo, argthree);           \
-    CPPExtern::m_holder = NULL;                                 \
-    CPPExtern::m_holdname=NULL;                                 \
-    return(obj);                                                \
-  } catch (GemException e) {e.report(); return NULL;}           \
-}   	    	    	    	    	    	    	    	\
-extern "C" {	    	    	    	    	    	    	\
-void NEW_CLASS ## _setup()    	    	    	    	\
-{   	    	    	    	    	    	    	    	\
-    NEW_CLASS ## _class = class_new(                       \
-    	     	gensym(#NEW_CLASS), 	    	    	    	\
-    	    	(t_newmethod)create_ ## NEW_CLASS,	    	\
-    	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
-    	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE,        \
-    	     	A_NULL);      	    	    	    	    	\
-    SET_HELPSYMBOL(NEW_CLASS);				\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);	\
- }									\
-}									\
-  AUTO_REGISTER_CLASS(NEW_CLASS);
-
-///////////////////////////////////////////////////////////////////////////////
-// four args
-///////////////////////////////////////////////////////////////////////////////
-#define REAL_NEW_WITH_ARG_ARG_ARG_ARG(NEW_CLASS, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE, THREE_VAR_TYPE, THREE_PD_TYPE, FOUR_VAR_TYPE, FOUR_PD_TYPE) \
-STATIC_CLASS t_class * NEW_CLASS ## _class;    	    	    	\
-static void* create_ ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree, FOUR_VAR_TYPE argfour) \
-{     	    	    	    	    	    	    	    	\
-  try{	    	    	    	    	    	    	    	\
-    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-    CPPExtern::m_holder = &obj->pd_obj;                         \
-    CPPExtern::m_holdname=(char*)#NEW_CLASS;                    \
-    obj->data = new NEW_CLASS(arg, argtwo, argthree, argfour);  \
-    CPPExtern::m_holder = NULL;                                 \
-    CPPExtern::m_holdname=NULL;                                 \
-    return(obj);                                                \
-  } catch (GemException e) {e.report(); return NULL;}           \
-}   	    	    	    	    	    	    	    	\
-extern "C" {	    	    	    	    	    	    	\
-void NEW_CLASS ## _setup()    	    	    	    	\
-{   	    	    	    	    	    	    	    	\
-    NEW_CLASS ## _class = class_new(                       \
-    	     	gensym(#NEW_CLASS), 	    	    	    	\
-    	    	(t_newmethod)create_ ## NEW_CLASS,	    	\
-    	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
-    	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE, FOUR_PD_TYPE,	\
-    	     	A_NULL);						\
-    SET_HELPSYMBOL(NEW_CLASS);				\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);	\
- }									\
-}									\
-  AUTO_REGISTER_CLASS(NEW_CLASS);
-
-///////////////////////////////////////////////////////////////////////////////
-// five args
-///////////////////////////////////////////////////////////////////////////////
-#define REAL_NEW_WITH_ARG_ARG_ARG_ARG_ARG(NEW_CLASS, ONE_VAR_TYPE, ONE_PD_TYPE, TWO_VAR_TYPE, TWO_PD_TYPE, THREE_VAR_TYPE, THREE_PD_TYPE, FOUR_VAR_TYPE, FOUR_PD_TYPE, FIVE_VAR_TYPE, FIVE_PD_TYPE) \
-STATIC_CLASS t_class * NEW_CLASS ## _class;    	    	    	\
-static void* create_ ## NEW_CLASS (ONE_VAR_TYPE arg, TWO_VAR_TYPE argtwo, THREE_VAR_TYPE argthree, FOUR_VAR_TYPE argfour, FIVE_VAR_TYPE argfive) \
-{     	    	    	    	    	    	    	    	\
-  try{	    	    	    	    	    	    	    	\
-    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-    CPPExtern::m_holder = &obj->pd_obj;                         \
-    CPPExtern::m_holdname=(char*)#NEW_CLASS;                            \
-    obj->data = new NEW_CLASS(arg, argtwo, argthree, argfour, argfive);  \
-    CPPExtern::m_holder = NULL;                                 \
-    CPPExtern::m_holdname=NULL;                                 \
-    return(obj);                                                \
-  } catch (GemException e) {e.report(); return NULL;}           \
-}   	    	    	    	    	    	    	    	\
-extern "C" {	    	    	    	    	    	    	\
-void NEW_CLASS ## _setup()    	    	    	    	\
-{   	    	    	    	    	    	    	    	\
-  if(!checkGemVersion(GEM_VERSION_MAJOR, GEM_VERSION_MINOR)) { \
-    ::error("[%s] will not be available", #NEW_CLASS);	       \
-    return;}						       \
-    NEW_CLASS ## _class = class_new(                       \
-    	     	gensym(#NEW_CLASS), 	    	    	    	\
-    	    	(t_newmethod)create_ ## NEW_CLASS,	    	\
-    	    	(t_method)&NEW_CLASS::obj_freeCallback,         \
-    	     	sizeof(Obj_header), GEM_CLASSFLAGS,             \
-    	     	ONE_PD_TYPE, TWO_PD_TYPE, THREE_PD_TYPE, FOUR_PD_TYPE, FIVE_PD_TYPE,	\
-    	     	A_NULL);						\
-    SET_HELPSYMBOL(NEW_CLASS);				\
-    NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);	\
- }									\
-}									\
-  AUTO_REGISTER_CLASS(NEW_CLASS);
 
 #endif	// for header file

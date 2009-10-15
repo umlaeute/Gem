@@ -25,30 +25,6 @@
 
 GEM_EXTERN void *operator new(size_t, void *location, void *) {return(location);}
 
-
-GemException::GemException(const char *error) throw()
-  : ErrorString(error)
-{}
-
-GemException::GemException() throw() 
-  : ErrorString(NULL) 
-{}
-GemException::~GemException() throw() 
-{}
-const char *GemException::what() const throw() {
-  return ErrorString;
-}
-
-void GemException::report(const char*origin) const throw() {
-  if(ErrorString!=NULL) {
-    if (NULL==origin)
-      error("GemException: %s", ErrorString);
-    else
-      error("[%s]: %s", origin, ErrorString);
-  }
-}
-
-
 t_object * CPPExtern::m_holder;
 char* CPPExtern::m_holdname;
 
