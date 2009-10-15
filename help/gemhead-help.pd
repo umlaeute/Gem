@@ -76,13 +76,13 @@ the render command. The default value is 50 The lower the value is
 of 1 is the lowest possible value (see below)). This value becomes
 important when you are doing alpha blending and for certain objects
 (such as light).;
-#X text 470 416 the rendering-order value can also be negative. Negative
-numbered [gemhead]s will be rendered AFTER all positive [gemhead]s.
-Note \, that Higher values (-3) will be rendered BEFORE higher values
-(-10). [gemhead]s with negative numbers will NOT be affected by view-point
-changes !!!;
 #X text 469 495 example: "1" before "50" before "-10" before "-23"
 ;
+#X text 470 416 the rendering-order value can also be negative. Negative
+numbered [gemhead]s will be rendered AFTER all positive [gemhead]s.
+Note \, that Higher values (-3) will be rendered BEFORE lower values
+(-10). [gemhead]s with negative numbers will NOT be affected by view-point
+changes !!!;
 #X connect 7 0 9 0;
 #X connect 9 0 7 0;
 #X connect 13 0 17 0;
