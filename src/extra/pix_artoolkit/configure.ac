@@ -36,6 +36,6 @@ AC_CHECK_HEADERS([AR/ar.h])
 AC_CHECK_LIB(AR, arInitCparam)
 
 
-dnl AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Make.config])
 AC_OUTPUT
