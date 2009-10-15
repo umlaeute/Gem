@@ -25,7 +25,7 @@ LOG
 */
 #ifndef DONT_WANT_FREEFRAME
 
-#if defined __WIN32__ && !defined WIN32
+#if defined _WIN32 && !defined WIN32
 # define WIN32
 #endif
 #include "FreeFrame.h"

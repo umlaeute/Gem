@@ -24,7 +24,7 @@
 #ifndef DONT_WANT_FREEFRAME
 
 #include <stdio.h>
-#ifdef __WIN32__
+#ifdef _WIN32
 # include <io.h>
 # include <windows.h>
 # define snprintf _snprintf
@@ -84,7 +84,6 @@
 static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba, bool loud=true)
 {
   const char*hookname="plugMain";
-
   if(pluginname==NULL)return NULL;
   
   void *plugin_handle = NULL;
@@ -95,7 +94,7 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
   char *bufptr=NULL;
 
   const char *extension=
-#ifdef __WIN32__
+#ifdef _WIN32
     ".dll";
 #elif defined __APPLE__
     "";
@@ -116,17 +115,22 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
 #endif
 
   int fd=-1;
-  if ((fd=open_via_path(canvas_getdir(canvas)->s_name, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
+  if ((fd=canvas_open(canvas, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
 #if defined __APPLE__ && 0
     snprintf(buf, MAXPDSTRING, "%s", buf2);
 #else
     snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
-post("path: %s", buf);
 #endif
     buf[MAXPDSTRING-1]=0;
-  } else
-    canvas_makefilename(canvas, pluginname, buf, MAXPDSTRING);
+  } else {
+      if(canvas) {
+        canvas_makefilename(canvas, pluginname, buf, MAXPDSTRING);
+      } else {
+          if(loud)::error("pix_freeframe[%s]: unfindeable");
+          return NULL;
+      }
+  }
   char*name=buf;
   char*libname=name;
 
@@ -165,7 +169,7 @@ post("path: %s", buf);
   if(bundleURL != NULL) CFRelease( bundleURL );
   if(theBundle != NULL) CFRelease( theBundle );
   if(plugin != NULL)    CFRelease( plugin );
-#elif defined __WIN32__
+#elif defined _WIN32
   HINSTANCE ntdll;
 
   sys_bashfilename(libname, libname);
@@ -270,7 +274,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char *p_name;
   post("parameters for '%s':", pluginname);
   for(unsigned int i=0;i<numparams; i++){
-    snprintf(tempVt, 5, "#%d\0", i);
+    snprintf(tempVt, 5, "#%d", i);
     tempVt[4]=0;
     // display
     //   ParameterName:
@@ -497,12 +501,12 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
 
 static int freeframe_loader(t_canvas *canvas, char *classname) {
   int dummy;
-
   if(strncmp("pix_", classname, offset_pix_))
     return 0;
   char*pluginname=classname+offset_pix_;
 
   T_FFPLUGMAIN plugin = ff_loadplugin(canvas, pluginname, &dummy, false);
+  
   if(plugin!=NULL) {
     plugin(FF_DEINITIALISE, NULL, 0);
     class_addcreator((t_newmethod)freeframe_loader_new, gensym(classname), A_GIMME, 0);
