@@ -195,6 +195,12 @@
 				RelativePath="..\..\src\Base\GemEvent.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GemException.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemException.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\GemExportDef.h">
 			</File>
 			<File
