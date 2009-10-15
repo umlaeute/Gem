@@ -18,8 +18,20 @@
 # include "config.h"
 #endif
 
+#if defined HAVE_AR_AR_H
+# warning AR/ar.h found
+#endif
+
+#if defined HAVE_LIBAR
+# warning libAR found
+#endif
+
+
 #if defined HAVE_AR_AR_H && defined HAVE_LIBAR
 # define HAVE_ARTOOLKIT
+# warning ARToolkit Support
+#else
+# warning compiling without artoolkit
 #endif
 
 
