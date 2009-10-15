@@ -64,7 +64,7 @@ typedef struct {
   "reset" - reset imported markers and camera parameters
    
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_artoolkit : public GemPixObj
+class GEM_EXPORT pix_artoolkit : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_artoolkit, GemPixObj)
 

@@ -26,7 +26,7 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;__SSE2__;__MMX__"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
