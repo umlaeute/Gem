@@ -11,12 +11,11 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Base/GemConfig.h"
+
 #include "pix_artoolkit.h"
 #include <stdlib.h>
 #include <string.h>
-
-t_object*CPPExtern::m_holder;
-char*CPPExtern::m_holdname;
 
 CPPEXTERN_NEW(pix_artoolkit)
 
@@ -404,6 +403,9 @@ void pix_artoolkit :: thresholdMessCallback(void *data, t_int threshold)
 #else
 void pix_artoolkit :: obj_setupCallback(t_class *classPtr)
 {
+#ifndef GEM_INTERNAL
+    ::post("pix_artoolkit: (c) 2005-2006 Shigeyuki Hirai");
+#endif
   class_addmethod(classPtr, (t_method)&pix_artoolkit::loadmarkerMessCallback, gensym("loadmarker"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::objectSizeMessCallback, gensym("objectsize"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::outputmodeMessCallback, gensym("outputmode"), A_FLOAT, A_NULL);
