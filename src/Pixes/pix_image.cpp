@@ -18,6 +18,7 @@
 
 #ifdef _WIN32
 # include <io.h>
+# define close _close
 #endif
 
 #if defined(__unix__) || defined(__APPLE__) 

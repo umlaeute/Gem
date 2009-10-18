@@ -149,14 +149,14 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
     err = ::FSPathMakeRef((UInt8*)filename, &ref,NULL );
 
     if (err == fnfErr) {
-        // if the file does not yet exist, then let's create the file
-        int fd;
-                fd = open(filename, O_CREAT | O_RDWR, 0600);
-                if (fd < 0)
-                    return 0;
-                        write(fd, " ", 1);
-                        close(fd);
-                                err = FSPathMakeRef((UInt8*)filename, &ref, NULL);
+      // if the file does not yet exist, then let's create the file
+      int fd;
+      fd = open(filename, O_CREAT | O_RDWR, 0600);
+      if (fd < 0)
+	return 0;
+      write(fd, " ", 1);
+      close(fd);
+      err = FSPathMakeRef((UInt8*)filename, &ref, NULL);
     }
     
     if (err != noErr)

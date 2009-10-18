@@ -22,6 +22,7 @@
 #include <stdio.h>
 #ifdef _WIN32
 # include <io.h>
+# define close _close
 #else
 # include <unistd.h>
 #endif

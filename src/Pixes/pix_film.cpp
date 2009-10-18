@@ -253,8 +253,7 @@ void pix_film :: closeMess(void){
 // openMess
 //
 /////////////////////////////////////////////////////////
-
-    void pix_film :: openMess(t_symbol *filename, int format, int codec)
+void pix_film :: openMess(t_symbol *filename, int format, int codec)
 {
   //  if (filename==x_filename)return;
   closeMess();

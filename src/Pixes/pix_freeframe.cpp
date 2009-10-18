@@ -28,13 +28,13 @@
 # include <io.h>
 # include <windows.h>
 # define snprintf _snprintf
+# define close _close
 
 /*
  * Apple used to use CFBundle's to load FF plugins
  * currently this only crashes (on OSX-10.4 and OSX-10.5)
  * we therefore use dlopen() on OSX as well
  */
-
 #elif defined __APPLE__ && 0
 # include <mach-o/dyld.h> 
 # include <unistd.h>
