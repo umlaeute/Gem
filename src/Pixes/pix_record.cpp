@@ -225,7 +225,7 @@ void pix_record :: fileMess(int argc, t_atom *argv)
 #endif
     switch(argc){
     case 1:
-      err=m_handle->open(atom_getsymbol(argv)->s_name);
+      err=m_handle->open((const char*)atom_getsymbol(argv)->s_name);
       break;
     }
   }
