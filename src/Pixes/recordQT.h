@@ -61,7 +61,7 @@ class GEM_EXTERN recordQT : public record
   
 #ifdef HAVE_QUICKTIME
   virtual void close();
-  virtual bool open(char*filename);
+  virtual bool open(const char*filename);
     	
   //////////
   // Do the rendering

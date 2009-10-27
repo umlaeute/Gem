@@ -76,7 +76,7 @@ class GEM_EXTERN recordQT4L : public record {
   // open a movie up
   // open the recordQT4L "filename" (think better about URIs ?)
   // returns TRUE if opening was successfull, FALSE otherwise 
-  virtual bool open(char *filename);
+  virtual bool open(const char *filename);
 
 
   

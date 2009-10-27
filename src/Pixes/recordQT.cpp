@@ -680,7 +680,7 @@ bool recordQT :: setCodec(char*codecName)
     return false;
 }
 
-bool recordQT :: open(char*filename)
+bool recordQT :: open(const char*filename)
 {
   // if recording is going, do not accept a new file name
   // on OSX changing the name while recording won't have any effect

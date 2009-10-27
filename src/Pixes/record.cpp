@@ -47,7 +47,7 @@ void record :: close(void)
 // open a file !
 //
 /////////////////////////////////////////////////////////
-bool record :: open(char *filename)
+bool record :: open(const char *filename)
 {
   return false;
 }

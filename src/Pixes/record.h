@@ -57,7 +57,7 @@ class GEM_EXTERN record
   /* open the record "filename" (think better about URIs ?)
    */
   /* returns TRUE if opening was successfull, FALSE otherwise */
-  virtual bool open(char *filename);
+  virtual bool open(const char *filename);
   //////////
   // close the movie file
   /* stop recording, close the file and clean up temporary things */

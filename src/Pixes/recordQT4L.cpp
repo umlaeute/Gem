@@ -94,7 +94,7 @@ static struct
 static lqt_file_type_t guess_qtformat(const char* filename)
 {
   char * extension = strrchr(filename, '.');
-  int i=0;
+  unsigned int i=0;
 
   if(!extension) {
     error("no extension given: encoding will be QuickTime");
@@ -114,7 +114,7 @@ static lqt_file_type_t guess_qtformat(const char* filename)
   return LQT_FILE_QT; /* should be save for now */
 }
 
-bool recordQT4L :: open(char *filename)
+bool recordQT4L :: open(const char *filename)
 {
   close();
 
@@ -159,7 +159,7 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
     if(NULL==codecname) {
       /* LATER figure out automatically which codec to use */ 
       lqt_file_type_t type = lqt_get_file_type(m_qtfile);
-      int i=0;
+      unsigned int i=0;
       for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
         if(type == qtformats[i].type)
           {
