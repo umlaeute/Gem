@@ -1529,7 +1529,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
   /* spit out the texture coordinates */
   if (mode & GLM_TEXTURE) {
     fprintf(file, "\n");
-    fprintf(file, "# %d texcoords\n", model->texcoords);
+    fprintf(file, "# %d texcoords\n", model->numtexcoords);
     for (i = 1; i <= model->numtexcoords; i++) {
       fprintf(file, "vt %f %f\n",
               model->texcoords[2 * i + 0],
