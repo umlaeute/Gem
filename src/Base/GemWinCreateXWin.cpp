@@ -465,6 +465,7 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
           triggerMotionEvent(eb->x, eb->y); 
           if(!win.have_border) {
             int err=XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime);
+            err=0;
           }
           break; 
         case KeyPress:

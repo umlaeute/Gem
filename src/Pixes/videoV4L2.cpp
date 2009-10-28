@@ -192,7 +192,7 @@ void *videoV4L2 :: capturing(void)
   struct timeval tv;
   int r;
 
-  int nbuf=m_nbuffers;
+  unsigned int nbuf=m_nbuffers;
   m_capturing=true;
 
   debugThread("V4L2: memset");
@@ -351,7 +351,7 @@ int videoV4L2 :: startTransfer(int format)
   //  verbose(1, "starting transfer");
   char buf[256];
   char*dev_name=m_devicename;
-  int i;
+  unsigned int i;
 
   struct stat st; 
   struct v4l2_capability cap;
@@ -636,7 +636,7 @@ int videoV4L2 :: startTransfer(int format)
 int videoV4L2 :: stopTransfer()
 {
   debugPost("v4l2: stoptransfer");
-  int i=0;
+  unsigned int i=0;
   /* close the v4l2 device and dealloc buffer */
   /* terminate thread if there is one */
   if(m_continue_thread){

@@ -50,10 +50,12 @@ pix_cubemap :: pix_cubemap()
   m_textureObj(0),
   m_realTextureObj(0),
   m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
+  m_textureType(GL_TEXTURE_CUBE_MAP),
+  m_xRatio(1.), m_yRatio(1.),
   m_env(GL_MODULATE),
-  m_texunit(0), m_map(0),
+  m_texunit(0), 
   m_numTexUnits(0),
-  m_textureType(GL_TEXTURE_CUBE_MAP)
+  m_map(0)
 {
   error("this object is likely to vanish! do not use!!");
 

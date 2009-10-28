@@ -257,7 +257,7 @@ void pix_share_write :: render(GemState *state)
 #ifndef _WIN32
   if(shm_id>0){
     imageStruct *pix = &state->image->image;
-    int size=pix->xsize*pix->ysize*pix->csize;
+    size_t size=pix->xsize*pix->ysize*pix->csize;
 	
     if (!shm_addr){
       error("no shmaddr");

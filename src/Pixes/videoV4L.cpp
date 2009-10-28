@@ -333,10 +333,10 @@ int videoV4L :: startTransfer(int format)
       goto closit;
     }
 
-  width = (m_width > vcap.minwidth) ? m_width :  vcap.minwidth;   
-  width = (width > vcap.maxwidth) ? vcap.maxwidth : width;
-  height = m_height > vcap.minheight ? m_height : vcap.minheight;
-  height = (height > vcap.maxheight) ? vcap.maxheight : height;
+  width = (m_width  > vcap.minwidth ) ? m_width        :  vcap.minwidth;   
+  width = (width    > vcap.maxwidth ) ? vcap.maxwidth  : width;
+  height =(m_height > vcap.minheight) ? m_height       : vcap.minheight;
+  height =(height   > vcap.maxheight) ? vcap.maxheight : height;
 
   //verbose(1, "wanted format is 0x%X", m_reqFormat);
   for (i = 0; i < V4L_NBUF; i++)    {

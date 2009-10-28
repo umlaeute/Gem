@@ -140,7 +140,7 @@ class GEM_EXTERN videoV4L2 : public video {
   int m_tvfd;
 
   struct t_v4l2_buffer*m_buffers;
-  int  m_nbuffers;
+  unsigned int  m_nbuffers;
   void*m_currentBuffer;
 
   int m_frame, m_last_frame;

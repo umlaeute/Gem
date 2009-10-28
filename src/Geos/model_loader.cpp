@@ -2060,7 +2060,7 @@ glmReadPPM(char* filename, int* width, int* height)
   image = (unsigned char*)malloc(sizeof(unsigned char)*w*h*3);
   size_t count = fread(image, sizeof(unsigned char), w*h*3, fp);
   fclose(fp);
-  if(count!=w*h*3) {
+  if(count!=(size_t)(w*h*3)) {
     error("_glmReadPPM failed to read all bytes");
     *width=*height=NULL;
     free(image);

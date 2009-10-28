@@ -91,8 +91,8 @@ class GEM_EXTERN video {
   bool m_haveVideo;
   pixBlock m_image;
   
-  int m_width;
-  int m_height;
+  unsigned int m_width;
+  unsigned int m_height;
   int m_channel;
   int m_norm;
   int m_reqFormat;
