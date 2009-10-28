@@ -57,7 +57,7 @@ void pix_draw :: render(GemState *state)
     if ( !state->image || !&state->image->image ) return;
     glRasterPos2i(0, 0);
     // hack to center image at 0,0
-    if(state->image->image.upsidedown=1)
+    if(state->image->image.upsidedown)
       orientation=-1;
 
     glPixelZoom(1,orientation);
