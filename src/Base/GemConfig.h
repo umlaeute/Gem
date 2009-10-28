@@ -33,6 +33,9 @@
 
 # include "Base/config.h"
 
+/* stupid hack to avoid duplicate inclusion of config.h e.g. in avifile.h */
+# undef HAVE_CONFIG_H
+
 #else /* includes system-specific files */
 
 # ifdef __linux__
