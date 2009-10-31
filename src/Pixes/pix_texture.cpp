@@ -126,8 +126,6 @@ void pix_texture :: setUpTextureState() {
   glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
-
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
 }
 
 ////////////////////////////////////////////////////////
@@ -504,6 +502,8 @@ void pix_texture :: render(GemState *state) {
 
   }
 
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
+
   /* cleanup */
   m_rebuildList = 0;
   m_didTexture=1;
@@ -534,6 +534,9 @@ void pix_texture :: postrender(GemState *state){
       glActiveTexture(GL_TEXTURE0_ARB + m_texunit);  //needed?
     }
     glDisable(m_textureType);
+
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
   }
 
 }
@@ -682,7 +685,6 @@ void pix_texture :: envMess(int num)
   default:
     m_env = GL_MODULATE;
   }
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
   setModified();
 }
 
