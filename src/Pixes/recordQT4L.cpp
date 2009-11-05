@@ -93,7 +93,7 @@ static struct
 /* guess the file-format by inspecting the extension */
 static lqt_file_type_t guess_qtformat(const char* filename)
 {
-  char * extension = strrchr(filename, '.');
+  const char * extension = strrchr(filename, '.');
   unsigned int i=0;
 
   if(!extension) {
