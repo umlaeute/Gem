@@ -71,4 +71,14 @@ GEM_EXTERN GLXEWContext*glxewGetContext(void);
 # define GL_DEFAULT_GEM 0xFFFF
 #endif
 
+
+
+#ifdef CGL_VERSION_1_0
+# ifdef CGL_VERSION_1_2
+#  define GemCGLint GLint
+# else
+#  define GemCGLint long
+# endif
+#endif
+
 #endif /* INCLUDE_GEMGL_H_ */

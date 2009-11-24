@@ -195,17 +195,6 @@ void PBuffer::disable() {
   Apple OSX pBuffer Setup
 */
 
-/* uäh: in OSX10.3 we only have CGL-1.1 and 
- * all the functions are using "long*" rather than "GLint*")
- * only CGL-1.2 got it right
- */
-#if defined CGL_VERSION_1_2 && CGL_VERSION_1_2
-# define CGLint GLint
-#else
-# define CGLint long
-#endif
-
-
 struct PBuffer_data {
   CGLPBufferObj		pbuffer;
   CGLContextObj		context;
@@ -245,8 +234,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 {
   OSStatus err = noErr;
   CGLPixelFormatAttribute		*att,attrib[64];
-  CGLint vs;
-  CGLint npf;
+  GemCGLint vs, npf;
 
   // setup offscreen context
   att=attrib;
@@ -312,7 +300,7 @@ PBuffer::~PBuffer()
  */
 void PBuffer::enable()
 {
-  CGLint vs;
+  GemCGLint vs;
 
   cglReportError (CGLSetCurrentContext (data->context));
   cglReportError (CGLGetVirtualScreen ( data->old_context, &vs ));
