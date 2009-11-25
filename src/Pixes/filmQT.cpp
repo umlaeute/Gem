@@ -79,11 +79,12 @@ filmQT :: filmQT(int format) : film(format)
 				m_bInit(false)
 {
   static bool first_time=true;
+  if(!filmQT_initQT())return;
+
   if (first_time) {
-    post("pix_film:: quicktime support");
+    post("pix_film:: QuickTime support");
     first_time = false;
   }
-  if(!filmQT_initQT())return;
 
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_bInit = true;
@@ -99,9 +100,9 @@ filmQT :: filmQT(int format) : film(format)
 filmQT :: ~filmQT()
 {
   close();
-  /* i'd rather have "#ifdef QTML" (jmz) */
-  /* but now, i don't know why anymore... (jmz) */
+
 #if defined HAVE_QUICKTIME
+  /* should we check whether "m_bInit" is true? */
   filmQT_deinitQT();
 #endif // HAVE_QT
 }
@@ -109,11 +110,15 @@ filmQT :: ~filmQT()
 #ifdef HAVE_QUICKTIME
 void filmQT :: close(void)
 {
+  if (!m_bInit){
+    return;
+  }
+
   DisposeMovie(m_movie);
+
   //in QT Bizzaro World GWorlds dispose themselves!  And leak about 4k per call
   //	::DisposeGWorld(m_srcGWorld);
   //	m_srcGWorld = NULL;
-
 }
 
 bool filmQT :: open(char*filename, int format) {
