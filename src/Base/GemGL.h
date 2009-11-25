@@ -73,6 +73,10 @@ GEM_EXTERN GLXEWContext*glxewGetContext(void);
 
 
 
+/* uäh: in OSX10.3 we only have CGL-1.1 and 
+ * all the functions are using "long*" rather than "GLint*")
+ * only CGL-1.2 got it right
+ */
 #ifdef CGL_VERSION_1_0
 # ifdef CGL_VERSION_1_2
 #  define GemCGLint GLint
