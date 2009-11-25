@@ -18,6 +18,7 @@
 /* -------------------------- setup function ------------------------------ */
 
 #include "GemMan.h"
+#include "GemRTConfig.h"
 #include "GemVersion.h"
 
 #include <stdio.h>
@@ -120,6 +121,7 @@ extern "C" {
     post("GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
 
     GemMan::initGem();
+    GemRTConfig::init();
   }
 
   GEM_EXTERN void gem_setup()
