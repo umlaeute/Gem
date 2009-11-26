@@ -67,9 +67,26 @@ class GemSettingsData {
       data.erase(name);
     }
   }
-  t_symbol*expandEnv(t_symbol*, bool bashfilename=false);
 
   void setEnv(t_symbol*name, const char*env);
+  void set(t_symbol*name, int i) {
+    t_atom a;
+    SETFLOAT(&a, i);
+    set(name, &a);
+  }
+  void set(t_symbol*name, t_float f) {
+    t_atom a;
+    SETFLOAT(&a, f);
+    set(name, &a);
+  }
+  void set(t_symbol*name, t_symbol*s) {
+    t_atom a;
+    SETSYMBOL(&a, s);
+    set(name, &a);
+  }
+
+  t_symbol*expandEnv(t_symbol*, bool bashfilename=false);
+
 
   bool open(const char*filename, const char*dirname=NULL) {
     t_binbuf*bb=binbuf_new();
@@ -144,6 +161,11 @@ class GemSettingsData {
 GemSettingsData::GemSettingsData(void)
 {
   int i=0;
+#ifdef GEM_DEFAULT_FONT
+  set(gensym("font.face"), gensym(GEM_DEFAULT_FONT));
+#endif
+
+
 
   setEnv(gensym("settings.file"), "GEM_SETTINGS");
   t_atom*a=get(gensym("settings.file"));
@@ -162,6 +184,7 @@ GemSettingsData::GemSettingsData(void)
   setEnv(gensym("texture.rectangle"), "GEM_RECTANGLE_TEXTURE");
   setEnv(gensym("singlecontext"), "GEM_SINGLE_CONTEXT");
   setEnv(gensym("font.face"), "GEM_DEFAULT_FONT");
+
 
 
   print();
@@ -258,4 +281,32 @@ void GemSettings::set(t_symbol*s, t_atom*v) {
 }
 void GemSettings::set(const char*s, t_atom*v) {
   set(gensym(s), v);
+}
+
+
+void GemSettings::get(const char*key, int&value) {
+  t_atom*a=get(key);
+  if(a && A_FLOAT==a->a_type) {
+    value=atom_getint(a);
+  }
+}
+void GemSettings::get(const char*key, t_float&value) {
+  t_atom*a=get(key);
+  if(a && A_FLOAT==a->a_type) {
+    value=atom_getfloat(a);
+  }
+}
+
+void GemSettings::get(const char*key, t_symbol*&value) {
+  t_atom*a=get(key);
+  if(a) {
+    value=atom_getsymbol(a);
+  }
+}
+
+void GemSettings::get(const char*key, char*&value) {
+  t_atom*a=get(key);
+  if(a) {
+    value=atom_getsymbol(a)->s_name;
+  }
 }

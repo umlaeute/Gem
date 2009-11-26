@@ -22,12 +22,19 @@ class GemSettings {
  public:
   static void init(void);
 
-  static t_atom*get(t_symbol*name);
-  static void set(t_symbol*name, t_atom*value=NULL);
+  static t_atom*get(t_symbol*key);
+  static void set(t_symbol*key, t_atom*value=NULL);
 
   /* shorthands without symbols */
-  static t_atom*get(const char*name);
-  static void set(const char*name, t_atom*value=NULL);
+  static t_atom*get(const char*key);
+  static void set(const char*key, t_atom*value=NULL);
+
+
+  static void get(const char*key, int&value);
+  static void get(const char*key, t_float&value);
+  static void get(const char*key, t_symbol*&value);
+  static void get(const char*key, char*&value);
+
 
  private:
   static GemSettingsData*settings;
