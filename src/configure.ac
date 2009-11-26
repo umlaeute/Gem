@@ -282,6 +282,8 @@ AC_PATH_X
 AC_HEADER_STDC
 AC_CHECK_HEADERS([fcntl.h float.h memory.h stddef.h stdlib.h string.h strings.h sys/ioctl.h sys/time.h termios.h unistd.h])
 
+AC_CHECK_HEADERS([wordexp.h])
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
 AC_C_CONST
@@ -292,7 +294,6 @@ AC_HEADER_TIME
 
 AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(void *)
-
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE

@@ -44,6 +44,9 @@
 /* Pd header files */ 
 #undef HAVE_S_STUFF_H
 
+/* other header files */
+#undef HAVE_WORDEXP_H
+
 /* types, structures, compiler characteristics, ... */
 #undef SIZEOF_VOID_P
 #undef SIZEOF_UNSIGNED_INT

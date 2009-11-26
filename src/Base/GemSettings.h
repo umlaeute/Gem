@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	- registers a loader with Pd
+	- Runtime Configuration of Gem
 
     Copyright (c) 2009 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -16,37 +16,20 @@ LOG
 
 #include "m_pd.h"
 
-class GemSettings_data;
+class GemSettingsData;
 
 class GemSettings {
  public:
-  static t_atom*getEnv(t_symbol*name);
+  static void init(void);
+
   static t_atom*get(t_symbol*name);
   static void set(t_symbol*name, t_atom*value);
 
-  static GemSettings*init(void);
-
- public:
-  GemSettings(void);
-  ~GemSettings(void);
-
- protected:
-  virtual t_atom*getValue(t_symbol*name);
-  virtual void setValue(t_symbol*name, t_atom*value);
-
-  // dictionary for setting values
-  // ??
+  /* shorthands without symbols */
+  static t_atom*get(const char*name);
+  static void set(const char*name, t_atom*value);
 
  private:
-  bool open(const char*filename, const char*dirname=NULL);
-  void print(void);
-
-  GemSettings_data*m_data;
-
-  static const char* s_configfile[];
-
-  static GemSettings*s_defaultconfig;
-
+  static GemSettingsData*settings;
 };
-
 #endif

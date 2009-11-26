@@ -18,7 +18,7 @@
 /* -------------------------- setup function ------------------------------ */
 
 #include "GemMan.h"
-#include "GemRTConfig.h"
+#include "GemSettings.h"
 #include "GemVersion.h"
 
 #include <stdio.h>
@@ -102,8 +102,6 @@ extern "C" {
 
   GEM_EXTERN void Gem_setup()
   {
-    Gem_addownpath("hsv2rgb.pd");
-    
     // startup GEM
 
     post("GEM: Graphics Environment for Multimedia");
@@ -120,8 +118,10 @@ extern "C" {
     post("GEM: \tbug-tracker http://sourceforge.net/projects/pd-gem/");
     post("GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
 
+
+    GemSettings::init();
+    Gem_addownpath("hsv2rgb.pd");
     GemMan::initGem();
-    GemRTConfig::init();
   }
 
   GEM_EXTERN void gem_setup()
