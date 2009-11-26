@@ -185,9 +185,7 @@ GemSettingsData::GemSettingsData(void)
   setEnv(gensym("singlecontext"), "GEM_SINGLE_CONTEXT");
   setEnv(gensym("font.face"), "GEM_DEFAULT_FONT");
 
-
-
-  print();
+  //  print();
 }
 
 GemSettingsData::~GemSettingsData(void) {
