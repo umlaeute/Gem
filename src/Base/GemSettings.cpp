@@ -59,12 +59,15 @@ class GemSettingsData {
   }
   virtual void set(t_symbol*name, t_atom*value) {
     // LATER: we should expand envvariables
-
-    t_atom*a=(t_atom*)getbytes(sizeof(t_atom));
-    memcpy(a, value, sizeof(t_atom));
-    data[name]=a;
+    if(value) {
+      t_atom*a=(t_atom*)getbytes(sizeof(t_atom));
+      memcpy(a, value, sizeof(t_atom));
+      data[name]=a;
+    } else {
+      data.erase(name);
+    }
   }
-  t_symbol*expandEnv(t_symbol*);
+  t_symbol*expandEnv(t_symbol*, bool bashfilename=false);
 
   void setEnv(t_symbol*name, const char*env);
 
@@ -76,7 +79,7 @@ class GemSettingsData {
 
 
     if(dirname) {
-      r=binbuf_read(bb, (char*)filename, expandEnv(gensym(dirname))->s_name, 1);
+      r=binbuf_read(bb, (char*)filename, expandEnv(gensym(dirname), true)->s_name, 1);
     } else {
       r=binbuf_read_via_path(bb, (char*)filename, (char*)".", 1);
     }
@@ -128,9 +131,11 @@ class GemSettingsData {
         it != data.end();
         it++)
       {
-        startpost("key ['%s']: ", it->first->s_name);
-        postatom(1, it->second);
-        endpost();
+        if(it->first && it->first->s_name && it->second) {
+          startpost("key ['%s']: ", it->first->s_name);
+          postatom(1, it->second);
+          endpost();
+        }
       }
   }
 };
@@ -139,17 +144,25 @@ class GemSettingsData {
 GemSettingsData::GemSettingsData(void)
 {
   int i=0;
-  while(s_configdir[i]) {
-    open(GEM_SETTINGS_FILE, s_configdir[i]);
-    i++;
-  }
-  open(GEM_SETTINGS_FILE);
 
+  setEnv(gensym("settings.file"), "GEM_SETTINGS");
+  t_atom*a=get(gensym("settings.file"));
+  if(a) {
+    t_symbol*s=atom_getsymbol(a);
+    open(expandEnv(s, true)->s_name);
+  } else {
+    while(s_configdir[i]) {
+      open(GEM_SETTINGS_FILE, s_configdir[i]);
+      i++;
+    }
+    open(GEM_SETTINGS_FILE);
+  }
 
   /* legacy settings via environmental variables */
   setEnv(gensym("texture.rectangle"), "GEM_RECTANGLE_TEXTURE");
   setEnv(gensym("singlecontext"), "GEM_SINGLE_CONTEXT");
   setEnv(gensym("font.face"), "GEM_DEFAULT_FONT");
+
 
   print();
 }
@@ -191,10 +204,16 @@ void GemSettingsData::setEnv(t_symbol*key, const char*env) {
   // we ignore lists and other complex things for now
 }
 
-t_symbol*GemSettingsData::expandEnv(t_symbol*value) {
+t_symbol*GemSettingsData::expandEnv(t_symbol*value, bool bashfilename) {
   if(NULL==value)
     return NULL;
   verbose(2, "expanding '%s'", value->s_name);
+
+  if(bashfilename) {
+    char bashBuffer[MAXPDSTRING];
+    sys_bashfilename(value->s_name, bashBuffer);
+    value=gensym(bashBuffer);
+  }
 
 #ifdef HAVE_WORDEXP_H
   wordexp_t pwordexp;
@@ -206,15 +225,8 @@ t_symbol*GemSettingsData::expandEnv(t_symbol*value) {
   wordfree(&pwordexp);
 #endif
 #ifdef _WIN32
-  char bashBuffer[MAX_PATH];
-# if 0
-  // should we actually bash '/' to '\'?
-  char envVarBuffer[MAX_PATH];
-  sys_bashfilename(value->s_name, bashBuffer);
+  char envVarBuffer[MAXPDSTRING];
 	ExpandEnvironmentStrings(bashBuffer, envVarBuffer, MAX_PATH - 2);
-# else
-	ExpandEnvironmentStrings(value->s_name, envVarBuffer, MAX_PATH - 2);
-# endif
   value=gensym(envVarBuffer);
 #endif
 
@@ -226,9 +238,9 @@ t_symbol*GemSettingsData::expandEnv(t_symbol*value) {
 
 GemSettingsData*GemSettings::settings=NULL;
 
-
 /* public static functions */
 void GemSettings::init() {
+  if(settings)return;
   settings=new GemSettingsData(); 
 }
 

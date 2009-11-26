@@ -23,11 +23,11 @@ class GemSettings {
   static void init(void);
 
   static t_atom*get(t_symbol*name);
-  static void set(t_symbol*name, t_atom*value);
+  static void set(t_symbol*name, t_atom*value=NULL);
 
   /* shorthands without symbols */
   static t_atom*get(const char*name);
-  static void set(const char*name, t_atom*value);
+  static void set(const char*name, t_atom*value=NULL);
 
  private:
   static GemSettingsData*settings;
