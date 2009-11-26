@@ -10,25 +10,25 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMRTCONFIG_H_
-#define INCLUDE_GEMRTCONFIG_H
+#ifndef INCLUDE_GEMSETTINGS_H_
+#define INCLUDE_GEMSETTINGS_H
 
 
 #include "m_pd.h"
 
-class GemRTConfig_data;
+class GemSettings_data;
 
-class GemRTConfig {
+class GemSettings {
  public:
   static t_atom*getEnv(t_symbol*name);
   static t_atom*get(t_symbol*name);
   static void set(t_symbol*name, t_atom*value);
 
-  static GemRTConfig*init(void);
+  static GemSettings*init(void);
 
  public:
-  GemRTConfig(void);
-  ~GemRTConfig(void);
+  GemSettings(void);
+  ~GemSettings(void);
 
  protected:
   virtual t_atom*getValue(t_symbol*name);
@@ -41,11 +41,11 @@ class GemRTConfig {
   bool open(const char*filename, const char*dirname=NULL);
   void print(void);
 
-  GemRTConfig_data*m_data;
+  GemSettings_data*m_data;
 
   static const char* s_configfile[];
 
-  static GemRTConfig*s_defaultconfig;
+  static GemSettings*s_defaultconfig;
 
 };
 

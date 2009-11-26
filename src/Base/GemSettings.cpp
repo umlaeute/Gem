@@ -14,23 +14,23 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemRTConfig.h"
+#include "GemSettings.h"
 
 #include <map>
 #include <stdlib.h>
 #include <errno.h>
 
-class GemRTConfig_data {
+class GemSettings_data {
 public:
   std::map <t_symbol*, t_atom*> data;
 };
 
 
-GemRTConfig*GemRTConfig::s_defaultconfig=NULL;
+GemSettings*GemSettings::s_defaultconfig=NULL;
 
 #define GEM_RTCONFIG_FILE "gem.conf"
 
-const char*GemRTConfig::s_configfile[] = { 
+const char*GemSettings::s_configfile[] = { 
 #ifdef __linux__
 /*
   $(pwd)/gem.conf
@@ -54,10 +54,10 @@ const char*GemRTConfig::s_configfile[] = {
 #endif
   0};
 
-GemRTConfig::GemRTConfig(void) :
+GemSettings::GemSettings(void) :
   m_data(NULL)
 {
-  m_data = new GemRTConfig_data;
+  m_data = new GemSettings_data;
 
   int i=0;
   while(s_configfile[i]) {
@@ -69,12 +69,12 @@ GemRTConfig::GemRTConfig(void) :
   print();
 }
 
-GemRTConfig::~GemRTConfig(void) {
+GemSettings::~GemSettings(void) {
   delete m_data;
   m_data=NULL;
 }
 
-bool GemRTConfig::open(const char*filename, const char*dirname) {
+bool GemSettings::open(const char*filename, const char*dirname) {
   t_binbuf*bb=binbuf_new();
   int r=0;
 
@@ -127,7 +127,7 @@ bool GemRTConfig::open(const char*filename, const char*dirname) {
   return false;
 }
 
-void GemRTConfig::print(void) {
+void GemSettings::print(void) {
   // std::map<parameters>::iterator iterator_name;
   std::map <t_symbol*, t_atom*>::iterator it;
 
@@ -142,23 +142,23 @@ void GemRTConfig::print(void) {
 }
 
 
-t_atom*GemRTConfig::getValue(t_symbol*s) {
+t_atom*GemSettings::getValue(t_symbol*s) {
   return m_data->data[s];
 }
 
-void GemRTConfig::setValue(t_symbol*s, t_atom*v) {
+void GemSettings::setValue(t_symbol*s, t_atom*v) {
   m_data->data[s]=v;
 }
 
 
 /* static members */
 
-GemRTConfig*GemRTConfig::init() {
-  GemRTConfig::s_defaultconfig=new GemRTConfig(); 
-  return GemRTConfig::s_defaultconfig;
+GemSettings*GemSettings::init() {
+  GemSettings::s_defaultconfig=new GemSettings(); 
+  return GemSettings::s_defaultconfig;
 }
 
-t_atom*GemRTConfig::getEnv(t_symbol*s) {
+t_atom*GemSettings::getEnv(t_symbol*s) {
   /* LATER prepend "GEM_" and uppercase everything */
 
   char*env=getenv(s->s_name);
@@ -181,16 +181,16 @@ t_atom*GemRTConfig::getEnv(t_symbol*s) {
 }
 
 
-t_atom*GemRTConfig::get(t_symbol*s) {
+t_atom*GemSettings::get(t_symbol*s) {
   t_atom*ap=getEnv(s);
   if(ap)
     return ap;
-  if(GemRTConfig::s_defaultconfig)
-    return GemRTConfig::s_defaultconfig->getValue(s);
+  if(GemSettings::s_defaultconfig)
+    return GemSettings::s_defaultconfig->getValue(s);
   return NULL;
 }
 
-void GemRTConfig::set(t_symbol*s, t_atom*v) {
-  if(GemRTConfig::s_defaultconfig)
-    GemRTConfig::s_defaultconfig->setValue(s, v);
+void GemSettings::set(t_symbol*s, t_atom*v) {
+  if(GemSettings::s_defaultconfig)
+    GemSettings::s_defaultconfig->setValue(s, v);
 }
