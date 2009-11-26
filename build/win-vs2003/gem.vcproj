@@ -309,6 +309,12 @@
 				RelativePath="..\..\src\Base\GemPixUtil.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GemSettings.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemSettings.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\GemSetup.cpp">
 			</File>
 			<File
@@ -1104,6 +1110,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_crop.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_cubemap.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_cubemap.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_curve.cpp">

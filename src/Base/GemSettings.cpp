@@ -185,7 +185,7 @@ GemSettingsData::GemSettingsData(void)
   setEnv(gensym("singlecontext"), "GEM_SINGLE_CONTEXT");
   setEnv(gensym("font.face"), "GEM_DEFAULT_FONT");
 
-  //  print();
+  print();
 }
 
 GemSettingsData::~GemSettingsData(void) {
@@ -247,7 +247,7 @@ t_symbol*GemSettingsData::expandEnv(t_symbol*value, bool bashfilename) {
 #endif
 #ifdef _WIN32
   char envVarBuffer[MAXPDSTRING];
-	ExpandEnvironmentStrings(bashBuffer, envVarBuffer, MAX_PATH - 2);
+  ExpandEnvironmentStrings(value->s_name, envVarBuffer, MAX_PATH - 2);
   value=gensym(envVarBuffer);
 #endif
 
@@ -267,7 +267,7 @@ void GemSettings::init() {
 
 t_atom*GemSettings::get(t_symbol*s) {
   if(NULL==settings) init();
-  settings->get(s);
+  return settings->get(s);
 }
 t_atom*GemSettings::get(const char*s) {
   return get(gensym(s));
