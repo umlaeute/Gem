@@ -19,6 +19,7 @@
 #include "GemMan.h"
 
 #include "Base/GemConfig.h"
+#include "Base/GemSettings.h"
 
 #include <stdlib.h>
 
@@ -215,26 +216,28 @@ void GemMan :: checkOpenGLExtensions(void)
   else if (GLEW_EXT_texture_rectangle)
     texture_rectangle_supported=1;
 
-  if (getenv("GEM_RECTANGLE_TEXTURE") &&
-      !strncmp("0", getenv("GEM_RECTANGLE_TEXTURE"),1))
-    {
+  t_atom*a=GemSettings::get("texture.rectangle");
+  if(a) {
+    int i=atom_getint(a);
+    if(0==i)
       texture_rectangle_supported = 0;
-    }
+  }
 }
 
 void GemMan :: createContext(char* disp)
 {
   // can we only have one context?
-  if (getenv("GEM_SINGLE_CONTEXT") &&
-      !strncmp("1", getenv("GEM_SINGLE_CONTEXT"),1))
-    {
-      post("GEM: using GEM_SINGLE_CONTEXT");
+
+  t_atom*a=GemSettings::get("singlecontext");
+  if(a) {
+    int i=atom_getint(a);
+    if(1==i)
       s_singleContext = 1;
       /*
       m_width = 640;
       m_height = 480;
       */
-    }
+  }
 
   s_windowClock = clock_new(NULL, (t_method)GemMan::dispatchWinmessCallback);
   if (!m_windowContext && !createConstWindow(disp))
@@ -513,12 +516,28 @@ void GemMan :: resetState()
   // window hints
   m_height = 500;
   m_width = 500;
+  GemSettings::get("window.width", m_width);
+  GemSettings::get("window.height", m_height);
+
   m_w=m_width;
   m_h=m_height;
   m_xoffset = 0;
   m_yoffset = 0;
+
+  GemSettings::get("window.x", m_xoffset);
+  GemSettings::get("window.y", m_yoffset);
+
   m_fullscreen = 0;
+  GemSettings::get("window.fullscreen", m_fullscreen);
+
+  m_border = 1;
+  GemSettings::get("window.border", m_border);
+
+  m_menuBar = 1;
+  GemSettings::get("window.menubar", m_menuBar);
+
   m_title = (char*)"GEM";
+  GemSettings::get("window.title", m_title);
 
   m_buffer = 2;
 

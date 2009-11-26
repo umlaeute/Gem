@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "TextBase.h"
+#include "GemSettings.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,11 +29,7 @@
 # include <unistd.h>
 #endif
 
-#ifdef GEM_DEFAULT_FONT
-char *TextBase::DEFAULT_FONT = (char*) GEM_DEFAULT_FONT ;
-#else
 char *TextBase::DEFAULT_FONT = (char*)"vera.ttf";
-#endif
 
 /////////////////////////////////////////////////////////
 //
@@ -48,15 +45,13 @@ TextBase :: TextBase(int argc, t_atom *argv)
     m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL), m_fontname(NULL)
 {
   // initial text
+  GemSettings::get("font.face", DEFAULT_FONT);
+  GemSettings::get("font.size", m_fontSize);
+
+
   m_theText.push_back(L"gem");
   makeLineDist();
   if(argc)textMess(argc, argv);
-  
-  if (getenv("GEM_DEFAULT_FONT"))
-    {
-      DEFAULT_FONT = getenv("GEM_DEFAULT_FONT");
-    }
-  
 
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
