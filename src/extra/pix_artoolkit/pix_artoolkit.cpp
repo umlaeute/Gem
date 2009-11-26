@@ -17,6 +17,14 @@
 
 CPPEXTERN_NEW(pix_artoolkit)
 
+#ifndef M_PI
+# ifdef PI
+#  define M_PI PI
+# else
+#  define M_PI 3.14159265
+# endif
+#endif
+
 /////////////////////////////////////////////////////////
 //
 // pix_artoolkit
@@ -29,17 +37,16 @@ pix_artoolkit :: pix_artoolkit()
 #ifdef HAVE_ARTOOLKIT
   :
 # ifdef GEM4MAX
-  GemPixObj(1), 
+GemPixObj(1), 
 # endif
-  m_xsize(320), m_ysize(240), m_thresh(100), 
-  m_count(0), m_outputMode(OUTPUT_QUATERNION), m_continuous(true), 
-  m_cparam_name(NULL)
+m_xsize(320), m_ysize(240), m_thresh(100), 
+m_count(0), m_outputMode(OUTPUT_QUATERNION), m_continuous(true), 
+m_cparam_name(NULL)
 #endif
 {
-  //	patt_center[0] = patt_center[1] = 0.0;
 #ifdef GEM4MAX
   m_outMarker = ::listout(this->x_obj);
-  m_out1 = ::outlet_new(this->x_obj, 0);
+  m_out1      = ::outlet_new(this->x_obj, 0);
 #else
   m_outMarker = outlet_new(this->x_obj, 0);
 #endif
@@ -101,91 +108,83 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
     //    ::argInit(&m_cparam, 1.0, 0, 0, 0, 0);
     post("ARToolKit: image size was changed (%d, %d)", m_xsize, m_ysize);
   }
-
+  
   if (::arDetectMarker(image.data, m_thresh, &marker_info, &marker_num) < 0) {
     error("ARToolKit: arDetectMarker() error");
     return;
   }
-
+  
   for (i=0; i<MAX_OBJECTS; i++) {
     if (m_object[i].patt_id == -1) continue;
     for (k = -1, j = 0; j < marker_num; j++) {
       if (m_object[i].patt_id == marker_info[j].id) {
-	if (k == -1) k = j;
-	else if (marker_info[k].cf < marker_info[j].cf) k = j;
+        if (k == -1) k = j;
+        else if (marker_info[k].cf < marker_info[j].cf) k = j;
       }
-#ifdef GEM4MAX
-      DEBUG3("ID: %d (%f, %f)", 
-	     marker_info[j].id, marker_info[j].pos[0], marker_info[j].pos[1]);
-#endif
+      verbose(3, "ID: %d (%f, %f)", 
+             marker_info[j].id, marker_info[j].pos[0], marker_info[j].pos[1]);
     }
     m_object[i].visible = k;
     if (k == -1) {
       m_object[i].contFlag = false;
     } else if (k >= 0) {
       // get the transformation between the marker and the real camera
-
+      
       if (m_continuous == 0 || m_object[i].contFlag == 0) {
-	::arGetTransMat(&marker_info[k], 
-			m_object[i].center, 
-			m_object[i].width, 
-			m_object[i].trans);
+        ::arGetTransMat(&marker_info[k], 
+                        m_object[i].center, 
+                        m_object[i].width, 
+                        m_object[i].trans);
       } else {
-	::arGetTransMatCont(&marker_info[k], 
-			    m_object[i].trans, 
-			    m_object[i].center, 
-			    m_object[i].width, 
-			    m_object[i].trans);
+        ::arGetTransMatCont(&marker_info[k], 
+                            m_object[i].trans, 
+                            m_object[i].center, 
+                            m_object[i].width, 
+                            m_object[i].trans);
       }
       m_object[i].contFlag = true;
-#ifdef GEM4MAX
-      DEBUG5("pix_artoolkit: ID(%d), pos(%f, %f), center(%f, %f)", 
-	     i + 1, 
-	     marker_info[k].pos[0], marker_info[k].pos[1],
-	     m_object[i].center[0], m_object[i].center[1]);
 
-#endif
+      verbose(3, "ID(%d), pos(%f, %f), center(%f, %f)", 
+             i + 1, 
+             marker_info[k].pos[0], marker_info[k].pos[1],
+             m_object[i].center[0], m_object[i].center[1]);
       double q[4], p[3], x, y, z, w;
       ::arUtilMat2QuatPos(m_object[i].trans, q, p);
 
 #define NUM_PARAM 8	//ID, positions[3], quaternion[4]
       t_atom ap[MAX_OBJECTS * NUM_PARAM];
-
+      
 #ifdef GEM4MAX
       SETLONG(&ap[NUM_PARAM * i + 0], i + 1);	//ID
 #else
       SETFLOAT(&ap[NUM_PARAM * i + 0], i + 1); //ID
 #endif
-
+      
       SETFLOAT(&ap[NUM_PARAM * i + 1], p[0]);	//positoin.x
       SETFLOAT(&ap[NUM_PARAM * i + 2], p[1]);	//position.y
       SETFLOAT(&ap[NUM_PARAM * i + 3], p[2]);	//position.z
       switch (m_outputMode) {
       case OUTPUT_QUATERNION:
-	SETFLOAT(&ap[NUM_PARAM * i + 4], q[0]);	//quaternion.s
-	SETFLOAT(&ap[NUM_PARAM * i + 5], q[1]);	//quaternion.t
-	SETFLOAT(&ap[NUM_PARAM * i + 6], q[2]);	//quaternion.u
-#ifdef GEM4MAX
-	w = acos(q[3]) * 360. / PI;	// 2 * acos(q[3]) * 360. / (2 * PI)
-#else
-	w = acos(q[3]) * 180. / M_PI;	// 2 * acos(q[3]) * 180. / PI
-#endif
-	SETFLOAT(&ap[NUM_PARAM * i + 7], w);	//
-	break;
+        SETFLOAT(&ap[NUM_PARAM * i + 4], q[0]);	//quaternion.s
+        SETFLOAT(&ap[NUM_PARAM * i + 5], q[1]);	//quaternion.t
+        SETFLOAT(&ap[NUM_PARAM * i + 6], q[2]);	//quaternion.u
+        w = acos(q[3]) * 180. / M_PI;	// 2 * acos(q[3]) * 180. / PI
+        SETFLOAT(&ap[NUM_PARAM * i + 7], w);	//
+        break;
       case OUTPUT_NORMAL:
-	x = m_object[i].trans[0][2];
-	y = m_object[i].trans[1][2];
-	z = m_object[i].trans[2][2];
-	SETFLOAT(&ap[NUM_PARAM * i + 4], x);	//normal.x
-	SETFLOAT(&ap[NUM_PARAM * i + 5], y);	//normal.y
-	SETFLOAT(&ap[NUM_PARAM * i + 6], z);	//normal.z
-	SETFLOAT(&ap[NUM_PARAM * i + 7], 1.0);	//
-	break;
+        x = m_object[i].trans[0][2];
+        y = m_object[i].trans[1][2];
+        z = m_object[i].trans[2][2];
+        SETFLOAT(&ap[NUM_PARAM * i + 4], x);	//normal.x
+        SETFLOAT(&ap[NUM_PARAM * i + 5], y);	//normal.y
+        SETFLOAT(&ap[NUM_PARAM * i + 6], z);	//normal.z
+        SETFLOAT(&ap[NUM_PARAM * i + 7], 1.0);	//
+        break;
       case OUTPUT_EULER:
-	break;
+        break;
       default:
-	//				error("pix_artoolkit: illegal output mode");
-	break;
+        //				error("pix_artoolkit: illegal output mode");
+        break;
       }
       ::outlet_list(this->m_outMarker, 0, NUM_PARAM, &ap[NUM_PARAM * i]);
     }
@@ -402,7 +401,7 @@ void pix_artoolkit :: thresholdMessCallback(void *data, t_int threshold)
 void pix_artoolkit :: obj_setupCallback(t_class *classPtr)
 {
 #ifndef GEM_INTERNAL
-    ::post("pix_artoolkit: (c) 2005-2006 Shigeyuki Hirai");
+  ::post("pix_artoolkit: (c) 2005-2006 Shigeyuki Hirai");
 #endif
   class_addmethod(classPtr, (t_method)&pix_artoolkit::loadmarkerMessCallback, gensym("loadmarker"), A_GIMME, A_NULL);
   class_addmethod(classPtr, (t_method)&pix_artoolkit::objectSizeMessCallback, gensym("objectsize"), A_FLOAT, A_FLOAT, A_NULL);
