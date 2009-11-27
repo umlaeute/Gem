@@ -256,13 +256,9 @@ void gemwin :: colorMess(float red, float green, float blue, float alpha)
   GemMan::m_clear_color[1] = green;
   GemMan::m_clear_color[2] = blue;
   GemMan::m_clear_color[3] = alpha;
-#ifdef __APPLE__
-  if ( !GemMan::windowExists() )  {
-    error("window does not exist yet!");
-    return;
+  if ( GemMan::windowExists() )  {
+    glClearColor(red, green, blue, alpha);
   }
-#endif
-  glClearColor(red, green, blue, alpha);
 }
 /////////////////////////////////////////////////////////
 // clearmaskMess
@@ -283,7 +279,6 @@ void gemwin :: ambientMess(float red, float green, float blue, float alpha)
   GemMan::m_mat_ambient[1] = green;
   GemMan::m_mat_ambient[2] = blue;
   GemMan::m_mat_ambient[3] = blue;
-
 }
 
 /////////////////////////////////////////////////////////
