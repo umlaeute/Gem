@@ -1411,6 +1411,7 @@ GLenum GemMan :: requestLight(int specific)
 /////////////////////////////////////////////////////////
 void GemMan :: freeLight(GLenum lightNum)
 {
+  /* LATER use maxlights and calculate i dynamically */
   int i = 0;
   switch(lightNum)
     {
