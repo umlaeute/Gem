@@ -10,31 +10,31 @@
  * ------------------------------------------------------------------
  */
 
-#ifndef INCLUDE_GEM_GLGETFLOATV_H_
-#define INCLUDE_GEM_GLGETFLOATV_H_
+#ifndef INCLUDE_GEM_GLGETINTEGERV_H_
+#define INCLUDE_GEM_GLGETINTEGERV_H_
 
 #include "GemGLBase.h"
 
 /*
   CLASS
-  GEMglGetFloatv
+  GEMglGetIntegerv
   KEYWORDS
   openGL	0
   DESCRIPTION
   wrapper for the openGL-function
-  "glGetFloatv( GLenum pname, GLfloat *params)"
+  "glGetIntegerv( GLenum pname, GLint *params)"
 */
 
-class GEM_EXTERN GEMglGetFloatv : public GemGLBase
+class GEM_EXTERN GEMglGetIntegerv : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglGetFloatv, GemGLBase)
+  CPPEXTERN_HEADER(GEMglGetIntegerv, GemGLBase)
 
     public:
   // Constructor
-  GEMglGetFloatv (int,t_atom*);	// CON
+  GEMglGetIntegerv (int,t_atom*);	// CON
  protected:
   // Destructor
-  virtual ~GEMglGetFloatv ();
+  virtual ~GEMglGetIntegerv ();
   // check extensions
   virtual bool isRunnable(void);
 

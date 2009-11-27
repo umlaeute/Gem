@@ -12,18 +12,18 @@
 //  this file has been generated...
 ////////////////////////////////////////////////////////
 
-#include "GEMglGetFloatv.h"
+#include "GEMglGetIntegerv.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglGetFloatv )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglGetIntegerv )
 
 /////////////////////////////////////////////////////////
 //
-// GEMglGetFloatv
+// GEMglGetIntegerv
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetFloatv :: GEMglGetFloatv	(int argc, t_atom*argv) {
+GEMglGetIntegerv :: GEMglGetIntegerv	(int argc, t_atom*argv) {
   if(1==argc)pnameMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
 
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
@@ -33,14 +33,14 @@ GEMglGetFloatv :: GEMglGetFloatv	(int argc, t_atom*argv) {
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglGetFloatv :: ~GEMglGetFloatv () {
+GEMglGetIntegerv :: ~GEMglGetIntegerv () {
   inlet_free(m_inlet);
   outlet_free(m_outlet);
 }
 
 //////////////////
 // extension check
-bool GEMglGetFloatv :: isRunnable(void) {
+bool GEMglGetIntegerv :: isRunnable(void) {
   if(GLEW_VERSION_1_1)return true;
   error("your system does not support OpenGL-1.1");
   return false;
@@ -49,10 +49,11 @@ bool GEMglGetFloatv :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglGetFloatv :: render(GemState *state) {
-  float mi[16]={0};
+void GEMglGetIntegerv :: render(GemState *state) {
+  GLint mi[16]={0};
 
-  glGetFloatv(pname,mi);
+  glGetIntegerv(pname,mi);
+  post("getInteger[%d] %d", pname, *mi);
 
   SETFLOAT(m_alist+0, mi[0]);
   SETFLOAT(m_alist+1, mi[1]);
@@ -77,7 +78,8 @@ void GEMglGetFloatv :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglGetFloatv :: pnameMess (t_atom arg) {	// FUN
+void GEMglGetIntegerv :: pnameMess (t_atom arg) {	// FUN
+  startpost("pname ");postatom(1, &arg);endpost();
   pname=(GLenum)getGLdefine(&arg);
   setModified();
 }
@@ -86,10 +88,11 @@ void GEMglGetFloatv :: pnameMess (t_atom arg) {	// FUN
 // static member functions
 //
 
-void GEMglGetFloatv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, (t_method)&GEMglGetFloatv::pnameMessCallback,  	gensym("pname"), A_GIMME, A_NULL);
+void GEMglGetIntegerv :: obj_setupCallback(t_class *classPtr) {
+  class_addmethod(classPtr, (t_method)&GEMglGetIntegerv::pnameMessCallback,  	gensym("pname"), A_GIMME, A_NULL);
 }
 
-void GEMglGetFloatv :: pnameMessCallback (void* data, t_symbol*s,int argc, t_atom*argv) {
-	if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
+void GEMglGetIntegerv :: pnameMessCallback (void* data, t_symbol*, int argc, t_atom*argv) {
+  ::post("pnammess: %d", argc);
+  if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
 }
