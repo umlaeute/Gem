@@ -57,9 +57,14 @@ world_light :: world_light(t_floatarg lightNum)
 ////////////////////////////////////////////////////////
 world_light :: ~world_light()
 {
-  stopRendering();
+  if(gem_amRendering) {
+    // this should be handled in ~GemBase
+    stopRendering();
+  }
+
   if (m_light)
     GemMan::freeLight(m_light);
+
 }
 
 ////////////////////////////////////////////////////////
@@ -118,8 +123,8 @@ void world_light :: startRendering()
 void world_light :: stopRendering()
 {
   if (m_thing)gluDeleteQuadric(m_thing);
-
   m_thing = NULL;
+  
   if (m_light)glDisable(m_light);
   m_change = 1;
 }
