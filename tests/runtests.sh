@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ## TODO:
 ##  find Gem (either in ../src or ../)
@@ -18,18 +18,18 @@ RUNTESTS_LOG=log-runtests.${SUFFIX}
 
 LIBFLAGS="-path ../src:../ -lib Gem -path ../abstractions/"
 
-function list_tests() {
+list_tests() {
 #  find . -mindepth 2  -name "*.pd" | sed 's|\.pd$|;|' 
  ls -1 */*.pd | sed 's|\.pd$|;|'
 }
 
-function debug() {
+debug() {
  :
 if [ "x${DEBUG}" = "xyes" ]; then echo $@; fi
 }
 
 
-function evaluate_tests() {
+evaluate_tests() {
  local logfile
  local testfile
  local numtests
@@ -60,7 +60,7 @@ function evaluate_tests() {
 }
 
 
-function run_nogui() {
+run_nogui() {
  debug "running test without gui"
  ${PD} ${LIBFLAGS} -nogui runtests_nogui.pd > ${RUNTESTS_LOG} 2>&1 
  debug "testing done"
@@ -68,7 +68,7 @@ function run_nogui() {
  debug "testing finished"
 }
 
-function run_withgui() {
+run_withgui() {
  debug "running test with gui"
  ${PD} ${LIBFLAGS} -stderr runtests.pd 2>&1 | tee ${RUNTESTS_LOG}
  echo "testing completed, no evaluation will be done; see ${RUNTESTS_LOG} for results"
