@@ -53,7 +53,6 @@ void GEMglGetIntegerv :: render(GemState *state) {
   GLint mi[16]={0};
 
   glGetIntegerv(pname,mi);
-  post("getInteger[%d] %d", pname, *mi);
 
   SETFLOAT(m_alist+0, mi[0]);
   SETFLOAT(m_alist+1, mi[1]);
@@ -79,7 +78,6 @@ void GEMglGetIntegerv :: render(GemState *state) {
 // variable
 //
 void GEMglGetIntegerv :: pnameMess (t_atom arg) {	// FUN
-  startpost("pname ");postatom(1, &arg);endpost();
   pname=(GLenum)getGLdefine(&arg);
   setModified();
 }
@@ -93,6 +91,5 @@ void GEMglGetIntegerv :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglGetIntegerv :: pnameMessCallback (void* data, t_symbol*, int argc, t_atom*argv) {
-  ::post("pnammess: %d", argc);
   if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
 }
