@@ -557,7 +557,7 @@ void glsl_program :: LinkProgram()
 
 #ifdef __APPLE__
   // call API to check if linked program is running on hardware or in software emulation
-  GLint vertexGPUProcessing, fragmentGPUProcessing;
+  GemCGLint vertexGPUProcessing, fragmentGPUProcessing;
   CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUVertexProcessing, &vertexGPUProcessing);
   CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUFragmentProcessing, &fragmentGPUProcessing);
   
