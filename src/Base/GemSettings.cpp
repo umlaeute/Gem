@@ -182,10 +182,10 @@ GemSettingsData::GemSettingsData(void)
 
   /* legacy settings via environmental variables */
   setEnv(gensym("texture.rectangle"), "GEM_RECTANGLE_TEXTURE");
-  setEnv(gensym("singlecontext"), "GEM_SINGLE_CONTEXT");
+  setEnv(gensym("singlecontext"), "GEM_SINGLE_CONTEXT"); // hmm, what's a better new name for this?
   setEnv(gensym("font.face"), "GEM_DEFAULT_FONT");
 
-  print();
+  //  print();
 }
 
 GemSettingsData::~GemSettingsData(void) {
