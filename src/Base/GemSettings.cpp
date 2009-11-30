@@ -238,12 +238,13 @@ t_symbol*GemSettingsData::expandEnv(t_symbol*value, bool bashfilename) {
 
 #ifdef HAVE_WORDEXP_H
   wordexp_t pwordexp;
-  wordexp(value->s_name, &pwordexp, 0);
-  if(pwordexp.we_wordc) {
-    // we only take the first match into account 
-    value=gensym(pwordexp.we_wordv[0]);
+  if(0==wordexp(value->s_name, &pwordexp, 0)) {
+    if(pwordexp.we_wordc) {
+      // we only take the first match into account 
+      value=gensym(pwordexp.we_wordv[0]);
+    }
+    wordfree(&pwordexp);
   }
-  wordfree(&pwordexp);
 #endif
 #ifdef _WIN32
   char envVarBuffer[MAXPDSTRING];
