@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_movement2, t_float,A_DEFFLOAT,t_float, A_DEFFLOA
   Constructor
   initializes the pixBlocks and pixBlobs
   ------------------------------------------------------------*/
-  pix_movement2 :: pix_movement2(t_float lotresh, t_float hitresh): 
+  pix_movement2 :: pix_movement2(t_float lothresh, t_float hithresh): 
     m_frameIndex(0),
-    m_storeBackground(true), m_resetTreshold(true)
+    m_storeBackground(true), m_resetThreshold(true)
 {
   int i=3;
   while(i--){
@@ -45,34 +45,34 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_movement2, t_float,A_DEFFLOAT,t_float, A_DEFFLOA
   m_background.setCsizeByFormat(GL_LUMINANCE);
   m_background.reallocate();
 
-  m_treshold.xsize=0;
-  m_treshold.ysize=0;
-  m_treshold.setCsizeByFormat(GL_LUMINANCE);
-  m_treshold.reallocate();
+  m_threshold.xsize=0;
+  m_threshold.ysize=0;
+  m_threshold.setCsizeByFormat(GL_LUMINANCE);
+  m_threshold.reallocate();
 
-  m_lowtresh=CLAMP(255.f*MIN(lotresh, hitresh));
-  m_tresh=CLAMP(255.f*MAX(lotresh, hitresh));
-  if(m_tresh==0)   m_tresh=150;
-  if(m_lowtresh==0)m_lowtresh=100;
+  m_lowthresh=CLAMP(255.f*MIN(lothresh, hithresh));
+  m_thresh=CLAMP(255.f*MAX(lothresh, hithresh));
+  if(m_thresh==0)   m_thresh=150;
+  if(m_lowthresh==0)m_lowthresh=100;
 
   /*
-    m_tresh = 150;
-    m_lowtresh = 100;
+    m_thresh = 150;
+    m_lowthresh = 100;
   */
 
-  m_lowtreshInlet=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("low_tresh"));
-  m_treshInlet=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("hi_tresh"));
+  m_lowthreshInlet=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("low_thresh"));
+  m_threshInlet=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("hi_thresh"));
 }
 
 pix_movement2 :: ~pix_movement2(){
-  if(m_treshInlet)inlet_free(m_treshInlet);
-  if(m_lowtreshInlet)inlet_free(m_lowtreshInlet);
+  if(m_threshInlet)inlet_free(m_threshInlet);
+  if(m_lowthreshInlet)inlet_free(m_lowthreshInlet);
 }
 
 /*------------------------------------------------------------
   processImage
   calculates the difference image between three frames
-  if the difference is greater than the treshhold, the concerning
+  if the difference is greater than the threshhold, the concerning
   pixel is set to 255
   ------------------------------------------------------------*/
 void pix_movement2 :: processImage(imageStruct &image){
@@ -82,7 +82,7 @@ void pix_movement2 :: processImage(imageStruct &image){
   bool firstTime = ((image.xsize!=m_frame[0].xsize) || (image.ysize!=m_frame[0].ysize));
   if (firstTime){
     m_storeBackground=true;
-    m_resetTreshold=true;
+    m_resetThreshold=true;
     m_output.xsize = image.xsize;
     m_output.ysize = image.ysize;
     m_output.reallocate();
@@ -91,9 +91,9 @@ void pix_movement2 :: processImage(imageStruct &image){
     m_background.ysize = image.ysize;
     m_background.reallocate();
     
-    m_treshold.xsize = image.xsize;
-    m_treshold.ysize = image.ysize;
-    m_treshold.reallocate();
+    m_threshold.xsize = image.xsize;
+    m_threshold.ysize = image.ysize;
+    m_threshold.reallocate();
 
     i = 3;
     while(i--){
@@ -103,10 +103,10 @@ void pix_movement2 :: processImage(imageStruct &image){
     }
     m_frameIndex=0;
   }
-  if(m_resetTreshold){
+  if(m_resetThreshold){
     // we can do this, because we are in Greyscale-mode
-    memset(m_treshold.data, m_tresh, m_treshold.xsize * m_treshold.ysize);
-    m_resetTreshold=false;
+    memset(m_threshold.data, m_thresh, m_threshold.xsize * m_threshold.ysize);
+    m_resetThreshold=false;
   }
 
   // 1. store the current frame as gray-image in the apropriate buffer
@@ -133,25 +133,25 @@ void pix_movement2 :: processImage(imageStruct &image){
   unsigned char* old2  = m_frame[(m_frameIndex+1)%3].data;
   unsigned char* old1  = m_frame[(m_frameIndex+2)%3].data;
   unsigned char* out   = m_output.data;
-  unsigned char* tresh = m_treshold.data;
+  unsigned char* thresh = m_threshold.data;
   unsigned char* back  = m_background.data;
 
   m_frameIndex++; m_frameIndex%=3;
 
   for(i=0; i<size; i++){
 
-    if ((abs(cur[i]-old1[i]) > tresh[i]) &&
-	(abs(cur[i]-old2[i]) > tresh[i])){
+    if ((abs(cur[i]-old1[i]) > thresh[i]) &&
+	(abs(cur[i]-old2[i]) > thresh[i])){
       out[i] = 255;
     } else {
       out[i] = 0;
-      if(abs(cur[i]-back[i])>tresh[i]){
+      if(abs(cur[i]-back[i])>thresh[i]){
 	out[i] = 255;
       }
 
-      if(tresh[i] < m_lowtresh)tresh[i] = m_lowtresh;
+      if(thresh[i] < m_lowthresh)thresh[i] = m_lowthresh;
 
-      tresh[i] = ((256-26)*tresh[i]+(26)*5*abs(cur[i]-back[i]))>>8;
+      thresh[i] = ((256-26)*thresh[i]+(26)*5*abs(cur[i]-back[i]))>>8;
       back [i] = (26*back [i]+(256-26)*cur[i])>>8;
     }
   }
@@ -160,26 +160,26 @@ void pix_movement2 :: processImage(imageStruct &image){
 }
 
 /*------------------------------------------------------------
-  treshMess
+  threshMess
   ------------------------------------------------------------*/
-void pix_movement2 :: treshMess(int tresh){
-  if(tresh < (int)m_lowtresh){
-    error("high treshold (%d) must not be less than low treshold(%d)", tresh, m_lowtresh);
+void pix_movement2 :: threshMess(int thresh){
+  if(thresh < (int)m_lowthresh){
+    error("high threshold (%d) must not be less than low threshold(%d)", thresh, m_lowthresh);
     return;
   }
-  m_tresh = CLAMP(tresh);
-  m_resetTreshold=true;
+  m_thresh = CLAMP(thresh);
+  m_resetThreshold=true;
 }
 
 /*------------------------------------------------------------
-  lowTreshMess
+  lowThreshMess
   ------------------------------------------------------------*/
-void pix_movement2 :: lowTreshMess(int tresh){
-  if(tresh > (int)m_tresh){
-    error("low treshold (%d) must not be be greater than high treshold(%d)", tresh, m_tresh);
+void pix_movement2 :: lowThreshMess(int thresh){
+  if(thresh > (int)m_thresh){
+    error("low threshold (%d) must not be be greater than high threshold(%d)", thresh, m_thresh);
     return;
   }
-  m_lowtresh = CLAMP(tresh);
+  m_lowthresh = CLAMP(thresh);
 }
 
 /*------------------------------------------------------------
@@ -195,26 +195,27 @@ static member functions
 
 ------------------------------------------------------------*/
 void pix_movement2 :: obj_setupCallback(t_class*classPtr){
-  class_addmethod(classPtr, (t_method)&pix_movement2::lowTreshMessCallback,
-		  gensym("low_tresh"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movement2::treshMessCallback,
-		  gensym("hi_tresh"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_movement2::lowThreshMessCallback,
+		  gensym("low_thresh"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_movement2::threshMessCallback,
+		  gensym("hi_thresh"), A_FLOAT, A_NULL);
   class_addbang(classPtr, (t_method)&pix_movement2::bangMessCallback);
 }
 
 /*------------------------------------------------------------
-  treshMessCallback
-  ------------------------------------------------------------*/
-void pix_movement2 :: treshMessCallback(void *data, t_floatarg tresh)
+  threshMessCallback
+  ------------------------------------------------------------
+*/
+void pix_movement2 :: threshMessCallback(void *data, t_floatarg thresh)
 {
-  GetMyClass(data)->treshMess((int)(255*tresh));
+  GetMyClass(data)->threshMess((int)(255*thresh));
 }
 /*------------------------------------------------------------
-  lowTreshMessCallback
+  lowThreshMessCallback
   ------------------------------------------------------------*/
-void pix_movement2 :: lowTreshMessCallback(void *data, t_floatarg tresh)
+void pix_movement2 :: lowThreshMessCallback(void *data, t_floatarg thresh)
 {
-  GetMyClass(data)->lowTreshMess((int)(255*tresh));
+  GetMyClass(data)->lowThreshMess((int)(255*thresh));
 }
 /*------------------------------------------------------------
   bangMessCallback

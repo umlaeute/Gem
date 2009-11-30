@@ -70,7 +70,7 @@
 #X text 29 57 Description: blob detector and tracker;
 #X obj 451 262 pix_blobtracker;
 #X obj 451 322 square 4;
-#X msg 463 228 treshold \$1;
+#X msg 463 228 threshold \$1;
 #X floatatom 553 190 3 0 100 2 blobsize - -;
 #X obj 553 207 / 100;
 #X msg 553 228 blobSize \$1;
@@ -397,7 +397,7 @@ need to have installed on your system!) to do the actual tracking.
 into account for blob-tracking;
 #X text 20 408 see also:;
 #X obj 104 405 pix_multiblob;
-#X text 24 296 Inlet 1: treshold <float>: minimum luminance of a pixel
+#X text 24 296 Inlet 1: threshold <float>: minimum luminance of a pixel
 to be considered part of a blob. (default=0.04);
 #X text 24 325 Inlet 1: blobSize <float>: minimum relative size of
 a blob. (default=0.1);

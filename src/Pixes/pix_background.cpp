@@ -213,7 +213,7 @@ void pix_background :: processRGBAMMX(imageStruct &image)
   __m64*data =(__m64*)image.data;
   __m64*saved=(__m64*)m_savedImage.data;
 
-  const __m64 tresh=_mm_set_pi8(m_Yrange, m_Urange, m_Vrange, m_Arange,
+  const __m64 thresh=_mm_set_pi8(m_Yrange, m_Urange, m_Vrange, m_Arange,
 				m_Yrange, m_Urange, m_Vrange, m_Arange);
   const __m64 offset=_mm_set_pi8(1, 1, 1, 1, 1, 1, 1, 1);
   __m64 newpix, oldpix, m1;
@@ -232,8 +232,8 @@ void pix_background :: processRGBAMMX(imageStruct &image)
     oldpix= _mm_subs_pu8     (oldpix, newpix);
     m1    = _mm_or_si64      (m1, oldpix); // |oldpix-newpix|
     m1    = _mm_adds_pu8     (m1, offset);
-    m1    = _mm_subs_pu8     (m1, tresh);
-    m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>tresh
+    m1    = _mm_subs_pu8     (m1, thresh);
+    m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>thresh
     m1    = _mm_andnot_si64(m1, newpix);
 
     *data++ = m1; 
@@ -266,7 +266,7 @@ void pix_background :: processYUVMMX(imageStruct &image)
   __m64*data =(__m64*)image.data;
   __m64*saved=(__m64*)m_savedImage.data;
 
-  const __m64 tresh=_mm_set_pi8(m_Urange, m_Yrange, m_Vrange, m_Yrange,
+  const __m64 thresh=_mm_set_pi8(m_Urange, m_Yrange, m_Vrange, m_Yrange,
 			  m_Urange, m_Yrange, m_Vrange, m_Yrange);
   const __m64 offset=_mm_set_pi8(1, 1, 1, 1, 1, 1, 1, 1);
   const __m64 black =_mm_set_pi8((unsigned char)0x00,
@@ -287,9 +287,9 @@ void pix_background :: processYUVMMX(imageStruct &image)
     m1    = _mm_subs_pu8     (m1, oldpix);
     oldpix= _mm_subs_pu8     (oldpix, newpix);
     m1    = _mm_or_si64      (m1, oldpix); // |oldpix-newpix|
-    m1    = _mm_adds_pu8     (m1, offset); // to make tresh=0 work correctly
-    m1    = _mm_subs_pu8     (m1, tresh);  // m1>tresh -> saturation -> 0
-    m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>tresh
+    m1    = _mm_adds_pu8     (m1, offset); // to make thresh=0 work correctly
+    m1    = _mm_subs_pu8     (m1, thresh);  // m1>thresh -> saturation -> 0
+    m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>thresh
 
     oldpix= black;
     oldpix= _mm_and_si64     (oldpix, m1);
@@ -327,7 +327,7 @@ void pix_background :: processGrayMMX(imageStruct &image){
   __m64 newpix, oldpix, m1;
 
   unsigned char thresh=m_Yrange-1;
-  __m64 tresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
+  __m64 thresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
 			  thresh,thresh,thresh,thresh);
 
   
@@ -339,8 +339,8 @@ void pix_background :: processGrayMMX(imageStruct &image){
     m1    = _mm_subs_pu8 (newpix, oldpix);
     oldpix= _mm_subs_pu8 (oldpix, newpix);
     m1    = _mm_or_si64  (m1, oldpix); // |oldpix-newpix|
-    m1    = _mm_subs_pu8 (m1, tresh);
-    m1    = _mm_cmpgt_pi8(m1, _mm_setzero_si64()); // |oldpix-newpix|>tresh
+    m1    = _mm_subs_pu8 (m1, thresh);
+    m1    = _mm_cmpgt_pi8(m1, _mm_setzero_si64()); // |oldpix-newpix|>thresh
     npixes[i] = _mm_and_si64(m1, newpix);
   }
   _mm_empty();

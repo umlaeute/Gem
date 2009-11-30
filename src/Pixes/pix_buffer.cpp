@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
 //
@@ -43,7 +43,7 @@ pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
     buffercounter++;
     sprintf(cbuf, "pix_buffer_%04d", buffercounter);
     cbuf[15]=0;
-    post("defaulting to namne '%s'", cbuf);
+    post("defaulting to name '%s'", cbuf);
     s=gensym(cbuf);
   }
 

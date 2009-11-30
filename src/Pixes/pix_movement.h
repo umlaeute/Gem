@@ -79,13 +79,13 @@ protected:
 	imageStruct    buffer2; // (the difference image for greyscales)
 	//////////
 	// the movement-mode
-	unsigned char  treshold;
+	unsigned char  threshold;
 
         int j,index, averageTime;
 	
 	//////////
 	// the methods
-	static void treshMessCallback(void *data, t_floatarg ftresh);
+	static void threshMessCallback(void *data, t_floatarg fthresh);
 	
 };
 

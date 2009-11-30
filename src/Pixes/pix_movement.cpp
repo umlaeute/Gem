@@ -56,8 +56,8 @@ pix_movement :: pix_movement(t_floatarg f)
 
   if(f<=0.)f=0.5;
   if(f>1.f)f=1.0;
-  treshold = (unsigned char)(255*f);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("tresh"));
+  threshold = (unsigned char)(255*f);
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("thresh"));
 
   index = 0;
   averageTime = 0;
@@ -92,9 +92,9 @@ void pix_movement :: processRGBAImage(imageStruct &image)
 
   while(pixsize--) {
     //    unsigned char grey = (unsigned char)(rp[chRed] * 0.3086f + rp[chGreen] * 0.6094f + rp[chBlue] * 0.0820f);
-    //   rp[chAlpha] = 255*(fabs((unsigned char)grey-*wp)>treshold);
+    //   rp[chAlpha] = 255*(fabs((unsigned char)grey-*wp)>threshold);
     unsigned char grey = (rp[chRed]*RGB2GRAY_RED+rp[chGreen]*RGB2GRAY_GREEN+rp[chBlue]*RGB2GRAY_BLUE)>>8;
-    rp[chAlpha] = 255*(abs(grey-*wp)>treshold);
+    rp[chAlpha] = 255*(abs(grey-*wp)>threshold);
     *wp++=(unsigned char)grey;
     rp+=4;
   } 
@@ -115,7 +115,7 @@ void pix_movement :: processYUVImage(imageStruct &image)
   //these get rid of the invariant loads of the global chY0 and chY1
   Y1 = chY1;
   Y0 = chY0;
-  thresh = treshold;
+  thresh = threshold;
   
   unsigned char *rp = image.data;			// read pointer
   unsigned char *wp=buffer.data;			// write pointer to the copy
@@ -162,7 +162,7 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
     vector signed short thresh;
     
 
-    shortBuffer.c[0] = treshold;
+    shortBuffer.c[0] = threshold;
     thresh = shortBuffer.v;
     thresh = (vector signed short)vec_splat(thresh,0);
 
@@ -288,7 +288,7 @@ void pix_movement :: processGrayImage(imageStruct &image)
 
   while(pixsize--) {
     unsigned char grey = *rp++;
-    *wp2++=255*(abs(grey-*wp)>treshold);
+    *wp2++=255*(abs(grey-*wp)>threshold);
     //*wp2++=(abs(grey-*wp));
     *wp++=grey;
   }
@@ -309,17 +309,17 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 
   int pixsize = image.ysize * image.xsize / sizeof(__m64);
 
-  unsigned char thresh=treshold;
+  unsigned char thresh=threshold;
 
   __m64*rp = (__m64*)image.data;	// read pointer
   __m64*wp = (__m64*)buffer.data;	// write pointer to the copy
   __m64*wp2= (__m64*)buffer2.data;      // write pointer to the diff-image
 
   __m64 m1, m2, grey;
-  __m64 tresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
+  __m64 thresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
 			  thresh,thresh,thresh,thresh);
 
-  // there is still one problem with the treshold: is the cmpgt only for signed ?
+  // there is still one problem with the threshold: is the cmpgt only for signed ?
   while(pixsize--) {
     grey = rp[pixsize]; // image.data
     m2   = wp[pixsize]; // buffer.data
@@ -339,7 +339,7 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 
     m2 = _mm_or_si64 (m2, m1); // |grey-m2|
 
-    m2 =_mm_subs_pu8 (m2, tresh);
+    m2 =_mm_subs_pu8 (m2, thresh);
     m2 =_mm_cmpgt_pi8(m2, _mm_setzero_si64());
 
     wp2[pixsize]=m2;  // output.data
@@ -354,13 +354,12 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_movement :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_movement::treshMessCallback,
+  class_addmethod(classPtr, (t_method)&pix_movement::threshMessCallback,
 		  gensym("threshold"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movement::treshMessCallback,
-		  gensym("tresh"), A_FLOAT, A_NULL);
-  // rather trash than threshold
+  class_addmethod(classPtr, (t_method)&pix_movement::threshMessCallback,
+		  gensym("thresh"), A_FLOAT, A_NULL);
 }
-void pix_movement :: treshMessCallback(void *data, t_floatarg newmode)
+void pix_movement :: threshMessCallback(void *data, t_floatarg newmode)
 {
-  GetMyClass(data)->treshold=CLAMP((float)255.*newmode);
+  GetMyClass(data)->threshold=CLAMP((float)255.*newmode);
 }

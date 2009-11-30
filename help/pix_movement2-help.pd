@@ -76,8 +76,8 @@
 ;
 #X text 14 130 since image-noise can disturb this processing \, changes
 between two corresponding pixels that are smaller than "threshold"
-are ignored. The "treshold" is initially set to <treshold> and adjusts
-itself dynamically downwards towards <lo_treshold> (which is the absolute
+are ignored. The "threshold" is initially set to <threshold> and adjusts
+itself dynamically downwards towards <lo_threshold> (which is the absolute
 minimum);
 #X text 15 78 [pix_movement] detects movement in a frame with respect
 to the 2 previous frames and a "background"-image and stores it as

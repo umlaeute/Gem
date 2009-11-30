@@ -87,7 +87,7 @@ Constructor
 initializes the pixBlocks and pixBlobs
 
 ------------------------------------------------------------*/
-  pix_multiblob :: pix_multiblob(t_floatarg f) : m_blobsize(0.001), m_treshold(10)
+  pix_multiblob :: pix_multiblob(t_floatarg f) : m_blobsize(0.001), m_threshold(10)
 {
   m_blobNumber = (int)f;
   if(m_blobNumber < 1)m_blobNumber = 6;
@@ -142,7 +142,7 @@ void pix_multiblob :: makeBlob(Blob *pb, int x, int y){
   if(pb->area > 10000){return;}
   for(int i = -1; i<= 1; i++){
     for(int j = -1; j <= 1; j++){
-      if (m_image.GetPixel(y+i, x+j, chGray) > m_treshold)
+      if (m_image.GetPixel(y+i, x+j, chGray) > m_threshold)
 	{
 	  makeBlob(pb, x+j, y+i);
 	}
@@ -282,14 +282,14 @@ void pix_multiblob :: blobSizeMess(t_float blobSize){
 }
 
 /*------------------------------------------------------------
-treshMess
+threshMess
 ------------------------------------------------------------*/
-void pix_multiblob :: treshMess(t_float tresh){
-  if((tresh < 0.0)||(tresh > 1.0))
+void pix_multiblob :: threshMess(t_float thresh){
+  if((thresh < 0.0)||(thresh > 1.0))
     {
-      error("treshold %f out of range (0..1)!", tresh);
+      error("threshold %f out of range (0..1)!", thresh);
     }
-  m_treshold = CLAMP(tresh*255);
+  m_threshold = CLAMP(thresh*255);
 }
 
 
@@ -301,10 +301,10 @@ void pix_multiblob :: treshMess(t_float tresh){
 void pix_multiblob :: obj_setupCallback(t_class *classPtr){
   class_addmethod(classPtr, (t_method)&pix_multiblob :: blobSizeMessCallback,
 		  gensym("blobSize"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_multiblob :: treshMessCallback,
-		  gensym("tresh"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_multiblob :: treshMessCallback,
-		  gensym("treshold"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_multiblob :: threshMessCallback,
+		  gensym("thresh"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, (t_method)&pix_multiblob :: threshMessCallback,
+		  gensym("threshold"), A_FLOAT, A_NULL);
 }
 
 /*------------------------------------------------------------
@@ -315,8 +315,8 @@ void pix_multiblob :: blobSizeMessCallback(void *data, t_floatarg blobSize){
 }
 
 /*------------------------------------------------------------
-treshMessCallback
+threshMessCallback
 ------------------------------------------------------------*/
-void pix_multiblob :: treshMessCallback(void *data, t_floatarg tresh){
-  GetMyClass(data)->treshMess((t_float) tresh);
+void pix_multiblob :: threshMessCallback(void *data, t_floatarg thresh){
+  GetMyClass(data)->threshMess((t_float) thresh);
 }

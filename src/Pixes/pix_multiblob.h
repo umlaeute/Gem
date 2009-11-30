@@ -101,12 +101,12 @@ class GEM_EXTERN pix_multiblob : public GemPixObj
   t_float m_blobsize;
 
   // the minimum value of a pixel to be within a blob
-  void treshMess(t_float tresh);
-  unsigned char m_treshold;
+  void threshMess(t_float thresh);
+  unsigned char m_threshold;
 
  private: 
   static void blobSizeMessCallback(void *data, t_floatarg blobSize);
-  static void treshMessCallback(void *data, t_floatarg tresh);
+  static void threshMessCallback(void *data, t_floatarg thresh);
 };
 
 

@@ -67,11 +67,11 @@
 #X obj 463 167 / 100;
 #X text 71 31 Class: pix object (analysis);
 #X obj 451 282 square 4;
-#X msg 463 188 treshold \$1;
+#X msg 463 188 threshold \$1;
 #X floatatom 553 150 3 0 100 2 blobsize - -;
 #X obj 553 167 / 100;
 #X msg 553 188 blobSize \$1;
-#X text 24 296 Inlet 1: treshold <float>: minimum luminance of a pixel
+#X text 24 296 Inlet 1: threshold <float>: minimum luminance of a pixel
 to be considered part of a blob. (default=0.04);
 #X text 24 325 Inlet 1: blobSize <float>: minimum relative size of
 a blob. (default=0.1);
@@ -80,7 +80,7 @@ a blob. (default=0.1);
 #X text 16 73 [pix_multiblob] is able to detect multiple blobs within
 an image.;
 #X text 17 103 a "blob" is a number of adjacent(!) pixels with a luminance
-that is bigger than the value defined by "treshold". you can set the
+that is bigger than the value defined by "threshold". you can set the
 minimum size of a blob that is needed to be detected.;
 #X text 17 156 the output is a matrix following the conventions of
 the mtx-objects from zexy/iemmatrix. each row describes one detected

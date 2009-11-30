@@ -24,7 +24,7 @@ CPPEXTERN_NEW(pix_hit)
 //
 /////////////////////////////////////////////////////////
 pix_hit :: pix_hit() :
-  minimum_treshold(DEF_TRESHOLD),
+  minimum_threshold(DEF_THRESHOLD),
   minimum_pixels(DEF_MINIMUM),
   min_distance(DEF_MIN_DISTANCE),
   show(false)
@@ -79,7 +79,7 @@ unsigned char pix_hit :: getGreyValue(GLenum format, unsigned char *data)
 void pix_hit :: processImage(imageStruct &image)
 {
   /* for each active rectangle test every pixel inside
-     and if the number of pixles with grey value is > minimum_treshold  
+     and if the number of pixles with grey value is > minimum_threshold  
      is > minimum_pixles send this rectangle id to the outlet 
      which means there has been a hit on that rectangle */
 	
@@ -118,7 +118,7 @@ void pix_hit :: processImage(imageStruct &image)
                 src[position+2]=~src[position+2];
               }
               // get grey val
-              if(getGreyValue(image.format, data) >= minimum_treshold) {
+              if(getGreyValue(image.format, data) >= minimum_threshold) {
                 pixels_found++;
                 if (pixels_found>=minimum_pixels) {
                   // hit!
@@ -160,7 +160,7 @@ void pix_hit :: processImage(imageStruct &image)
           // for each x bewteen x1 and x2
           // get y=f(x)
           // and do the hit test in x,y
-          // if grayValue > treshold
+          // if grayValue > threshold
           // HIT!
 
           /*
@@ -205,7 +205,7 @@ void pix_hit :: processImage(imageStruct &image)
                 src[position+1]=~src[position+1];
                 src[position+2]=~src[position+2];
               }
-              if(getGreyValue(image.format, data) >= minimum_treshold) {
+              if(getGreyValue(image.format, data) >= minimum_threshold) {
                 float where = (float) ((float)counter/(float)diffx);
                 // hit!
                 if (fabs(buffer[i] - where) > min_distance) {
@@ -242,7 +242,7 @@ void pix_hit :: processImage(imageStruct &image)
                 src[position+1]=~src[position+1];
                 src[position+2]=~src[position+2];
               }
-              if(getGreyValue(image.format, data) >= minimum_treshold) {
+              if(getGreyValue(image.format, data) >= minimum_threshold) {
                 float where = (float) ((float)counter/(float)diffy);
                 // hit!
                 if (fabs(buffer[i] - where) > min_distance) {
@@ -271,7 +271,7 @@ void pix_hit :: threshold(float thresh)
       error("threshold must be a float between 0 and 1");
       return;
     }
-  minimum_treshold = (unsigned char)(thresh*255);
+  minimum_threshold = (unsigned char)(thresh*255);
 }
 
 void pix_hit :: minimum(int min)
@@ -468,7 +468,6 @@ void pix_hit :: createCircleCallback(void *data, t_symbol *sl, int argc, t_atom 
   x = atom_getfloat(argv++);
   y = atom_getfloat(argv++);
   r = atom_getfloat(argv++);
-
 
   GetMyClass(data)->createCircle(n,x,y,r);
 }

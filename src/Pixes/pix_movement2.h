@@ -11,7 +11,7 @@ class GEM_EXTERN pix_movement2 : public GemPixObj
   
   //////////
   // Constructor
-  pix_movement2(t_float lotresh=0.392f, t_float hitresh=0.588f);
+  pix_movement2(t_float lothresh=0.392f, t_float hithresh=0.588f);
   
  protected:
   //Destructor
@@ -19,23 +19,23 @@ class GEM_EXTERN pix_movement2 : public GemPixObj
   void processImage(imageStruct &image);
 
   imageStruct m_frame[3];
-  imageStruct m_output, m_treshold, m_background;
+  imageStruct m_output, m_threshold, m_background;
   int m_frameIndex;
 
-  unsigned char m_tresh, m_lowtresh;
+  unsigned char m_thresh, m_lowthresh;
 
-  bool m_storeBackground, m_resetTreshold;
+  bool m_storeBackground, m_resetThreshold;
 
-  t_inlet*m_treshInlet, *m_lowtreshInlet;
+  t_inlet*m_threshInlet, *m_lowthreshInlet;
 
 
-  void treshMess(int tresh);
-  void lowTreshMess(int tresh);
+  void threshMess(int thresh);
+  void lowThreshMess(int thresh);
   void bangMess();
 
  private:
-  static void treshMessCallback(void *data, t_floatarg ftresh);
-  static void lowTreshMessCallback(void *data, t_floatarg ftresh);
+  static void threshMessCallback(void *data, t_floatarg fthresh);
+  static void lowThreshMessCallback(void *data, t_floatarg fthresh);
   static void bangMessCallback(void *data);
 };
 

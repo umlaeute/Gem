@@ -26,11 +26,11 @@
     
   DESCRIPTION
 
-  bangs if there is a minimum number of pixels over a given treshold in a given rectangle
+  bangs if there is a minimum number of pixels over a given threshold in a given rectangle
    
   -----------------------------------------------------------------*/
 #define NUM_hit_areas 256
-#define DEF_TRESHOLD 127
+#define DEF_THRESHOLD 127
 #define DEF_MINIMUM 1
 #define DEF_MIN_DISTANCE 0.01
 
@@ -88,7 +88,7 @@ class GEM_EXTERN pix_hit : public GemPixObj
   bool area_active[NUM_hit_areas];
   float buffer[NUM_hit_areas];
 
-  unsigned char minimum_treshold;
+  unsigned char minimum_threshold;
   short int minimum_pixels;
   float min_distance;
   bool show;
