@@ -316,7 +316,7 @@ void pix_movement :: processGrayMMX(imageStruct &image)
   __m64*wp2= (__m64*)buffer2.data;      // write pointer to the diff-image
 
   __m64 m1, m2, grey;
-  __m64 thresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
+  __m64 thresh8=_mm_set_pi8(thresh,thresh,thresh,thresh,
 			  thresh,thresh,thresh,thresh);
 
   // there is still one problem with the threshold: is the cmpgt only for signed ?
@@ -339,7 +339,7 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 
     m2 = _mm_or_si64 (m2, m1); // |grey-m2|
 
-    m2 =_mm_subs_pu8 (m2, thresh);
+    m2 =_mm_subs_pu8 (m2, thresh8);
     m2 =_mm_cmpgt_pi8(m2, _mm_setzero_si64());
 
     wp2[pixsize]=m2;  // output.data

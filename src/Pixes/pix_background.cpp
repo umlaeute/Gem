@@ -327,7 +327,7 @@ void pix_background :: processGrayMMX(imageStruct &image){
   __m64 newpix, oldpix, m1;
 
   unsigned char thresh=m_Yrange-1;
-  __m64 thresh=_mm_set_pi8(thresh,thresh,thresh,thresh,
+  __m64 thresh8=_mm_set_pi8(thresh,thresh,thresh,thresh,
 			  thresh,thresh,thresh,thresh);
 
   
@@ -339,8 +339,8 @@ void pix_background :: processGrayMMX(imageStruct &image){
     m1    = _mm_subs_pu8 (newpix, oldpix);
     oldpix= _mm_subs_pu8 (oldpix, newpix);
     m1    = _mm_or_si64  (m1, oldpix); // |oldpix-newpix|
-    m1    = _mm_subs_pu8 (m1, thresh);
-    m1    = _mm_cmpgt_pi8(m1, _mm_setzero_si64()); // |oldpix-newpix|>thresh
+    m1    = _mm_subs_pu8 (m1, thresh8);
+    m1    = _mm_cmpgt_pi8(m1, _mm_setzero_si64()); // |oldpix-newpix|>thresh8
     npixes[i] = _mm_and_si64(m1, newpix);
   }
   _mm_empty();
