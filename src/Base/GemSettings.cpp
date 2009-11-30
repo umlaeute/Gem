@@ -238,12 +238,18 @@ t_symbol*GemSettingsData::expandEnv(t_symbol*value, bool bashfilename) {
 
 #ifdef HAVE_WORDEXP_H
   wordexp_t pwordexp;
+
   if(0==wordexp(value->s_name, &pwordexp, 0)) {
     if(pwordexp.we_wordc) {
       // we only take the first match into account 
       value=gensym(pwordexp.we_wordv[0]);
     }
+# ifdef __APPLE__
+/* wordfree() broken on apple: keeps deallocating non-aligned memory */
+#  warning wordfree() not called
+# else
     wordfree(&pwordexp);
+# endif
   }
 #endif
 #ifdef _WIN32
