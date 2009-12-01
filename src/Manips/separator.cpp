@@ -48,7 +48,13 @@ separator :: ~separator()
 /////////////////////////////////////////////////////////
 void separator :: render(GemState *state)
 {
-    // push the current matrix stacks
+  // push the current matrix stacks
+
+  if(state->stackDepth[0]<GemMan::maxStackDepth[0]){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+  }
+  state->stackDepth[0]++;
 
   /* GL_COLOR is only accepted if GL_ARB_imaging is present */
   if(GLEW_ARB_imaging && state->stackDepth[1]<GemMan::maxStackDepth[1]){
@@ -63,29 +69,33 @@ void separator :: render(GemState *state)
   }
   state->stackDepth[2]++;
 
-  if(state->stackDepth[0]<GemMan::maxStackDepth[0]){
-    glMatrixMode(GL_MODELVIEW);
+
+  if(state->stackDepth[3]<GemMan::maxStackDepth[3]){
+    glMatrixMode(GL_PROJECTION);
     glPushMatrix();
   }
-  state->stackDepth[0]++;
+  state->stackDepth[3]++;
 
-    m_state.lighting 	 = state->lighting;
-    m_state.smooth   	 = state->smooth;
-    m_state.texture  	 = state->texture;
-    m_state.image   	 = state->image;
-    m_state.numTexCoords = state->numTexCoords;
+
+  m_state.lighting 	 = state->lighting;
+  m_state.smooth   	 = state->smooth;
+  m_state.texture  	 = state->texture;
+  m_state.image   	 = state->image;
+  m_state.numTexCoords = state->numTexCoords;
     
-    if(m_state.texCoords)delete [] m_state.texCoords;
-    if (state->texCoords)
+  if(m_state.texCoords)delete [] m_state.texCoords;
+  if (state->texCoords)
     {
     	m_state.texCoords = new TexCoord[m_state.numTexCoords];
     	for (int i = 0; i < m_state.numTexCoords; i++)
-    	{
+        {
     	    m_state.texCoords[i].s = state->texCoords[i].s;
     	    m_state.texCoords[i].t = state->texCoords[i].t;
-    	}
+        }
     }
-    else m_state.texCoords = NULL;
+  else m_state.texCoords = NULL;
+
+    glMatrixMode(GL_MODELVIEW);
 }
 
 /////////////////////////////////////////////////////////
@@ -94,15 +104,20 @@ void separator :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void separator :: postrender(GemState *state)
 {
-    // pop the current matrix stacks
-  state->stackDepth[1]--;
-  if(GLEW_ARB_imaging && state->stackDepth[1]<GemMan::maxStackDepth[1]){
-    glMatrixMode(GL_COLOR);
+  // pop the current matrix stacks
+  state->stackDepth[3]--;
+  if(state->stackDepth[3]<GemMan::maxStackDepth[3]){
+    glMatrixMode(GL_PROJECTION);
     glPopMatrix();
   }
   state->stackDepth[2]--;
   if(state->stackDepth[2]<GemMan::maxStackDepth[2]){
     glMatrixMode(GL_TEXTURE);
+    glPopMatrix();
+  }
+  state->stackDepth[1]--;
+  if(GLEW_ARB_imaging && state->stackDepth[1]<GemMan::maxStackDepth[1]){
+    glMatrixMode(GL_COLOR);
     glPopMatrix();
   }
   state->stackDepth[0]--;
