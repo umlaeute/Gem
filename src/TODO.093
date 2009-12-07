@@ -28,6 +28,8 @@ Object specific bugs
 : pix_freeframe not supported on x86_64 architectures (needs discussion on the freeframe list: people there are a bit reluctant to change the specs (like enforcing 32bit pointers)
 : incorporate new libparticle API
 : make [gemhead] an abstraction
+: make [gemwin] an abstraction
+. [gemwindow] object: [gemXwindow] [gemCocoaWindow] [gemw32indow]
 
 
 OS specific bugs
@@ -38,6 +40,8 @@ linux:
 
 
 osx:
+: pix_movie flickers
+: carbon not supported anymore on 10.6
 
 w32:
 : [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
