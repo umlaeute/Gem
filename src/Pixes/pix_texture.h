@@ -158,6 +158,7 @@ class GEM_EXTERN pix_texture : public GemBase
 
   void    textureRectangle(int mode);
   int		m_rectangle; //rectangle or power of 2
+  int m_canRectangle; // openGL caps and GemSettings
 		
   //////////
   // texture envirnoment mode
@@ -168,7 +169,7 @@ class GEM_EXTERN pix_texture : public GemBase
   int		m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
 
   GLint	m_texunit;
-  GLint	m_numTexUnits;
+  GLint m_numTexUnits;
 
 
   /* using PBOs for (hopefully) optimized pixel transfers */

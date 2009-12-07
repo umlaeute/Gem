@@ -17,7 +17,7 @@
 
 #include "pix_texture.h"
 
-#include "Base/GemMan.h"
+#include "Base/GemSettings.h"
 #include "Base/GemPixUtil.h"
 #include <string.h>
 
@@ -70,6 +70,10 @@ pix_texture :: pix_texture()
   m_textureType = GL_TEXTURE_RECTANGLE_ARB;
 #endif
 
+  GemSettings::get("texture.rectangle", m_rectangle);
+  GemSettings::get("texture.pbo", m_numPbo);
+
+
   // create an inlet to receive external texture IDs
   m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("extTexture"));
 
@@ -95,7 +99,7 @@ pix_texture :: ~pix_texture()
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState() {
-  if (m_rectangle && GemMan::texture_rectangle_supported){
+  if (m_rectangle && m_canRectangle){
     if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT)
       {
         glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
@@ -173,6 +177,17 @@ bool pix_texture :: isRunnable(void) {
   if(GLEW_ARB_multitexture)
     glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &m_numTexUnits );
 
+  int wantRectangle=1;
+  GemSettings::get("texture.rectangle", wantRectangle);
+
+  m_canRectangle=0;
+  if(wantRectangle) {
+    if(GLEW_ARB_texture_rectangle)
+      m_canRectangle=2;
+    else if (GLEW_EXT_texture_rectangle)
+      m_canRectangle=1;
+  }
+
   return true;
 }
 
@@ -218,7 +233,7 @@ void pix_texture :: render(GemState *state) {
   int texType = m_textureType;
   int x_2=1, y_2=1;
   GLboolean useExternalTexture=false;
-  int do_rectangle = (m_rectangle)?GemMan::texture_rectangle_supported:0;
+  int do_rectangle = (m_rectangle)?m_canRectangle:0;
   int newfilm = 0;
 
   if(state && state->image)
@@ -544,7 +559,7 @@ void pix_texture :: postrender(GemState *state){
 ////////////////////////////////////////////////////////
 // startRendering
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 void pix_texture :: startRendering()
 {
   glGenTextures(1, &m_realTextureObj); // this crashes sometimes!!!! (jmz)
