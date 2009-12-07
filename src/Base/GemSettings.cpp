@@ -271,6 +271,16 @@ void GemSettings::init() {
   if(settings)return;
   settings=new GemSettingsData(); 
 }
+void GemSettings::print() {
+  if(!settings)return;
+  settings->print();
+}
+void GemSettings::save() {
+  if(!settings)return;
+  post("GemSettings: save not yet implemented!");
+}
+
+
 
 t_atom*GemSettings::get(t_symbol*s) {
   if(NULL==settings) init();

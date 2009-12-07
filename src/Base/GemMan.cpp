@@ -175,36 +175,6 @@ void GemMan::resizeCallback(int xSize, int ySize, void *)
   //    shouldn't this be called here?
   //  glLoadIdentity();
 }
-/*
-  This is SGI sample code taken directly from OpenGL.org:
-  http://www.opengl.org/developers/code/features/OGLextensions/OGLextensions.html
-*/
-int OpenGLExtensionIsSupported(const char* extension) {
-  const GLubyte *extensions = NULL;
-  const GLubyte *start;
-  GLubyte *where, *terminator;
-
-  /* Extension names should not have spaces. */
-  where = (GLubyte *) strchr(extension, ' ');
-  if (where || *extension == '\0')
-    return 0;
-  extensions = glGetString(GL_EXTENSIONS);
-  /* It takes a bit of care to be fool-proof about parsing the
-     OpenGL extensions string. Don't be fooled by sub-strings,
-     etc. */
-  start = extensions;
-  for (;;) {
-    where = (GLubyte *) strstr((const char *) start, extension);
-    if (!where)
-      break;
-    terminator = where + strlen(extension);
-    if (where == start || *(where - 1) == ' ')
-      if (*terminator == ' ' || *terminator == '\0')
-        return 1;
-    start = terminator;
-  }
-  return 0;
-}
 
 void GemMan :: checkOpenGLExtensions(void)
 {
@@ -228,7 +198,7 @@ void GemMan :: createContext(char* disp)
 {
   // can we only have one context?
 
-  t_atom*a=GemSettings::get("singlecontext");
+  t_atom*a=GemSettings::get("window.singlecontext"); // find a better name!
   if(a) {
     int i=atom_getint(a);
     if(1==i)
@@ -577,6 +547,10 @@ void GemMan :: resetState()
   fps = 0;
   m_topmost = 0;
 
+  t_float rate=getFramerate();
+  GemSettings::get("window.fps", rate);
+  frameRate(rate);
+
 }
 
 /////////////////////////////////////////////////////////
@@ -892,14 +866,14 @@ void GemMan :: render(void *)
 		} else if(spent<deltime && spent>0.f) {
 			deltime-=spent;
 		} else {
-			post("unable to annhiliate %f ms", spent);
+			post("unable to annihiliate %f ms", spent);
 		}
 		if(deltime<0.){
 			verbose(1, "negative delay time: %f", deltime);
 			deltime=1.f;
 		}
-
 	}
+
   if (!s_hit && (0.0 != deltime))
     clock_delay(s_clock, deltime);
 	
@@ -1514,6 +1488,10 @@ void GemMan :: printInfo()
   post("direct yuv texturing: %d", GLEW_APPLE_ycbcr_422);
 
   post("");
+
+  post("GemSettings");
+  post("-----------");
+  GemSettings::print();
 }
 
 /////////////////////////////////////////////////////////

@@ -21,6 +21,8 @@ class GemSettingsData;
 class GemSettings {
  public:
   static void init(void);
+  static void print(void);
+  static void save(void);
 
   static t_atom*get(t_symbol*key);
   static void set(t_symbol*key, t_atom*value=NULL);
