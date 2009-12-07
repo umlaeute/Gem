@@ -55,9 +55,8 @@ gemwin :: gemwin(t_floatarg framespersecond)
   if(!StillHaveGemWin(true)) {
     /* this is the only [gemwin] */
     GemMan::resetState();
-    if (framespersecond <= 0.)
-      framespersecond = 20.;
-    GemMan::frameRate((float)framespersecond);
+    if (framespersecond > 0.)
+      GemMan::frameRate((float)framespersecond);
   } else {
     if(framespersecond>0.)
       GemMan::frameRate((float)framespersecond);

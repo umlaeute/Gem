@@ -547,7 +547,7 @@ void GemMan :: resetState()
   fps = 0;
   m_topmost = 0;
 
-  t_float rate=getFramerate();
+  t_float rate=20.;
   GemSettings::get("window.fps", rate);
   frameRate(rate);
 
