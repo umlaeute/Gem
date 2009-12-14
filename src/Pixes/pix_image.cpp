@@ -160,10 +160,14 @@ void *pix_image :: openThread(void*you)
 
       //post("loading in thread %s", orgfilename);
       
-      if(loadedImage)delete loadedImage; loadedImage=NULL;
-      loadedImage = image2mem(orgfilename);
+      imageStruct*newloadedImage = image2mem(orgfilename);
       
       pthread_mutex_lock(mutex);
+      if(newloadedImage) {
+	if(loadedImage)delete loadedImage;
+	loadedImage=newloadedImage;
+      }
+
       if(!strcmp(orgfilename, me->m_filename))
         {
           /* ok, we got what we wanted!  */
