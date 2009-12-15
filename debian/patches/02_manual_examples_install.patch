@@ -1,0 +1,10 @@
+diff -Nur -x '*.orig' -x '*~' gem-0.92.1.0/build-tree/gem-0.92-1/src/Makefile gem-0.92.1.0.new/build-tree/gem-0.92-1/src/Makefile
+--- gem-0.92-1/src/Makefile	2009-04-23 14:19:28.000000000 +0200
++++ gem-0.92-1/src/Makefile	2009-09-23 10:41:16.000000000 +0200
+@@ -53,6 +53,4 @@
+ installdocs:
+ 	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
+ 	$(INSTALL_DATA) ./../help/*.* $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
+-	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
+-	cp -r ./../examples $(DESTDIR)/$(PDLIBDIR)/doc/gem
+ 

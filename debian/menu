@@ -1,0 +1,6 @@
+?package(gem):needs="x11" section="Applications/Graphics" \
+  title="GEM" \
+  command="/usr/bin/pd-gem" \
+  icon="/usr/share/pixmaps/gem.xpm" \
+  longtitle="Graphics Environment for Multimedia (Pd extension)"
+  

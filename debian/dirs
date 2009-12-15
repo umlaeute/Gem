@@ -1,2 +1,4 @@
-usr/lib/pd/extra
-usr/lib/pd/doc/5.reference/Gem
+usr/bin
+usr/share/doc/gem
+usr/lib/pd/extra/Gem
+usr/lib/pd/doc/gem

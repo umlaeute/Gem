@@ -1,4 +1,2 @@
-GEM.README
-examples/
-doc/
-
+build-tree/*/GEM.README
+build-tree/*/manual

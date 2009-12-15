@@ -1,18 +1,448 @@
-gem (0.91) unstable; urgency=low
+gem (1:0.92.1-1) unstable; urgency=low
+
+  * New upstream (Closes: #485972)
+  * New upstream version fixes bugs by itself (Closes: #549720)
+  * new upstream version might fix #454731 on various driver/hardware
+    combinations (and provides mechanisms for workarounds)
+  * added myself as Maintainer, since gem is officially orphaned 
+    (Closes: #546956)
+  * bumped debhelper version
+  * fixes most lintian warnings
+  * added "pd-gem" script that properly calls Pd with Gem enabled
+
+ -- IOhannes m zmoelnig (gpg-key at iem) <zmoelnig@iem.at>  Thu, 05 Nov 2009 19:47:48 +0100
+
+gem (1:0.90.0.1-2.3) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Update ttf-bitstream-vera dep to ttf-dejavu. (Closes: #461282).
+    + 05_change_defaultfont.patch - Change to DejaVu.
+
+ -- Barry deFreese <bdefreese@debian.org>  Mon, 11 May 2009 13:17:39 -0400
+
+gem (1:0.90.0.1-2.2) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Upload to unstable; sorry.
+
+ -- Alexander Reichle-Schmehl <tolimar@debian.org>  Mon, 08 Sep 2008 19:28:44 +0200
+
+gem (1:0.90.0.1-2.1) experimental; urgency=low
+
+  * Non-maintainer upload.
+
+  [ Sam Hocevar ]
+  * Build-depend on libftgl-dev in order to use the shared version of the
+    library. (Closes: #485798)
+
+  [ Peter Green ]
+  * Spurious build-dependency xlibs-static-dev can simply be removed.
+    (Closes: #484190, #421560)
+
+  [ Andreas Henriksson ]
+  * Add debian/patches/06_ftgl.patch to link ftgl instead of ftgl_pic.
+
+  [Alexander Reichle-Schmehl]
+  * Replacing xlibmesa-gl-dev with libgl1-mesa-dev in build depends
+  * Replacing "Apps/Graphics with "Applications/Graphics" in debian/menu
+
+ -- Alexander Reichle-Schmehl <tolimar@debian.org>  Sun, 07 Sep 2008 17:08:52 +0200
+
+gem (1:0.90.0.1-2) unstable; urgency=low
+
+  * Dropped kernel-headers build dependency (closes: 432546) (closes: 433276)
+  * removed build dep on xlibs-static-dev (closes: 421560)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon, 16 Jul 2007 12:37:11 +0200
+
+gem (1:0.90.0.1-1) unstable; urgency=low
+
+  * removed truetype fonts (closes: #372784)
+  * Made /usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf the
+    default font (patch)
+  * depends on ttf-bitstream-vera
+  * suggests pd-zexy
+  * removed dependency on xlibmesa-glu-dev (closes: #374595) (closes: #374266)
+  * bumped standards version to 3.7.2
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Thu, 22 Jun 2006 20:36:06 +0200
+
+gem (1:0.90.0-18) unstable; urgency=low
+
+  * Removed FFMPEG support (doesnt compile with newer FFMPEG)
+  * applied patch for libquicktime header location change (quicktime ->
+    lqt)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Thu,  6 Oct 2005 11:09:26 +0200
+
+gem (1:0.90.0-17) unstable; urgency=low
+
+  * added libvorbis, libvorbisenc and libdc1394_control
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Fri, 19 Aug 2005 12:12:01 +0200
+
+gem (1:0.90.0-16) unstable; urgency=low
+
+  * Added build dependency on libxxf86vm-dev (closes: #323521)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Fri, 19 Aug 2005 10:29:40 +0200
+
+gem (1:0.90.0-15) unstable; urgency=low
+
+  * reordered avcodec and avformat, added libdts
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Fri, 24 Jun 2005 16:08:50 +0200
+
+gem (1:0.90.0-14) unstable; urgency=low
+
+  * Linking with _pic version of avformat and avcodec (closes: #313066)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Sun, 12 Jun 2005 16:22:56 +0200
+
+gem (1:0.90.0-13) unstable; urgency=low
+
+  * Added libdv and ffmpeg
+  * Pulled dv1394.h file in
+  * added ffmpeg build depends
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon,  6 Jun 2005 22:11:27 +0200
+
+gem (1:0.90.0-12) unstable; urgency=low
+
+  * Added icon (closes: #299417)
+  * Added puredata in description so that people find it (closes: #287738)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon, 21 Mar 2005 16:09:53 +0100
+
+gem (1:0.90.0-11) unstable; urgency=low
+
+  * Removed truetype fonts, suggests ttf-bitstream-vera  (closes: 298957)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon, 14 Mar 2005 13:00:50 +0100
+
+gem (1:0.90.0-10) unstable; urgency=low
+
+  * Fixed help path problem (closes: 284106)
+  * Added test-package.pd in order to check for movie and font rendering
+    support
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue,  7 Dec 2004 11:07:05 +0100
+
+gem (1:0.90.0-9) unstable; urgency=low
+
+  * Defined the __NEW__ stuff in config.h
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue, 12 Oct 2004 13:21:13 +0200
+
+gem (1:0.90.0-8) unstable; urgency=low
+
+  * Removed support for libdv, because it uses deprecated API
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue, 12 Oct 2004 11:59:53 +0200
+
+gem (1:0.90.0-7) unstable; urgency=low
+
+  * Rebuild configure script with autoconf, added autoconf build
+    dependency (closes: #275963)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon, 11 Oct 2004 12:55:48 +0200
+
+gem (1:0.90.0-6) unstable; urgency=low
+
+  * Fixed HAVE_LIBFTGL and HAVE_LIBAVIPLAY definition
+  * Added libdv-dev build dependency
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon,  4 Oct 2004 17:00:14 +0200
+
+gem (1:0.90.0-5) unstable; urgency=low
+
+  * Changed libtiff3g-dev build-dep to libtiff4-dev
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Fri, 30 Jul 2004 17:00:59 +0200
+
+gem (1:0.90.0-4) unstable; urgency=low
+
+  * Added check for libaviplay to configure script
+  * Fixed problems with documentation
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Wed, 28 Jul 2004 16:26:39 +0200
+
+gem (1:0.90.0-3) unstable; urgency=low
+
+  * Changed libpng3-dev build dependency (its called libpng12-dev now)
+  * Added missing authors in copyright file
+  * Fixed download address
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Fri, 23 Jul 2004 14:32:01 +0200
+
+gem (1:0.90.0-2) unstable; urgency=low
+
+  * Added xlibmesa-glu-dev build dependency
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Fri, 16 Jul 2004 11:09:08 +0200
+
+gem (1:0.90.0-1) unstable; urgency=low
+
+  * New upstream
+  * Added epoch 1, because upstream jumped from 0.87 to 0.888 to 0.90.0
+  * Changed xlibmesa-dev to xlibmesa-gl-dev (closes: #252321)
+  * Listed upstream authors (closes: #187805)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Thu, 15 Jul 2004 18:00:00 +0200
+
+gem (0.888-2) unstable; urgency=low
+
+  * Remove libavifile support (is not cross platform)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue, 25 May 2004 20:33:38 +0200
+
+gem (0.888-1) unstable; urgency=low
+
+  * New upstream version
+  * converted to CDBS
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue, 20 Apr 2004 11:25:21 +0200
+
+gem (0.87cvs20031031-3) unstable; urgency=low
+
+  * added build depend on xlibs-static-dev (for
+    X11/extensions/xf86vmode.h)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue, 16 Mar 2004 13:23:25 +0100
+
+gem (0.87cvs20031031-2) unstable; urgency=low
+
+  * recompile with new ftgl-dev
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon,  8 Mar 2004 19:54:35 +0100
+
+gem (0.87cvs20031031-1.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Versioned depends on linux-kernel-headers, to pull in the working
+    version of linux/videodev.h that we need (closes: #220399).
+  * Remove duplicate build-depends on ftgl-dev.
+
+ -- Steve Langasek <vorlon@debian.org>  Sun,  4 Jan 2004 11:07:25 -0600
+
+gem (0.87cvs20031031-1) unstable; urgency=low
+
+  * New CVS snapshot
+  * link with -shared (closes: #212003)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Fri, 31 Oct 2003 10:42:09 +0100
+
+gem (0.87cvs20030708-5) unstable; urgency=low
+
+  * switched to ftgl
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Thu, 21 Aug 2003 17:21:47 +0200
+
+gem (0.87cvs20030708-4) unstable; urgency=low
+
+  * fixed menu entry
+  * removed ffmpeg
+  * incorporated pix_texture alpha blending bugfix
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue,  5 Aug 2003 12:12:43 +0200
+
+gem (0.87cvs20030708-3) unstable; urgency=low
+
+  * added quicktime and mpeg3 support
+  * added -fPIC flag (closes: #203455)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Wed, 30 Jul 2003 12:25:34 +0200
+
+gem (0.87cvs20030708-2) unstable; urgency=low
+
+  * new snapshot
+
+ -- Guenter Geiger <geiger@iua.upf.es>  Tue, 22 Jul 2003 23:34:27 +0200
+
+gem (0.87cvs20030708-1) unstable; urgency=low
+
+  * New cvs snapshot
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue, 08 Jul 2003 18:32:42 +0200
+ 
+gem (0.87-5.2) unstable; urgency=low
+
+  * NMU
+  * Update config.guess, config.sys, fix shared lib linking.  config.guess
+    and config.sub are from autotools-dev 20030519.1, diff with the rest
+    sent to the bts. Closes: #152826
+
+ -- LaMont Jones <lamont@debian.org>  Sun, 25 May 2003 20:22:55 -0600
+
+gem (0.87-5.1) unstable; urgency=low
+
+  * NMU
+  * Fix configure test order (closes: #187804)
+  * Prevent use of an outdated config.cache (closes: #151071)
+  * Fix gcc 3.x compile problem (closes: #187803)
+  * Remove dh_make template in copyright and add make a reference
+    /usr/share/common-licenses/GPL-2.
+
+ -- Remi Perrot <rperrot@debian.org>  Sat, 24 May 2003 19:49:17 +0200
+
+gem (0.87-5) unstable; urgency=low
+
+  * fight against compilation problems. config.cache removed 
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Wed, 26 Jun 2002 10:09:19 +0200
+ 
+gem (0.87-4) unstable; urgency=low
+
+  * teapot conditionally compiled if glut is installed (closes: #149334)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon, 10 Jun 2002 17:16:59 +0200
+ 
+gem (0.87-3) unstable; urgency=low
+
+  * pix_texture2 removed
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Fri,  7 Jun 2002 12:20:53 +0200
+
+gem (0.87-2) unstable; urgency=low
+
+  * fixed build depend on pd, (closes: #149110)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Wed,  5 Jun 2002 16:53:35 +0200
+
+gem (0.87-1) unstable; urgency=low
+
+  * new upstream version
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue,  4 Jun 2002 11:21:53 +0200
+ 
+gem (0.84-2) unstable; urgency=low
+
+  * updated config.{sub,guess} (Closes: #133805)
+  * checked description (Closes: #109641) (Closes: #117366)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Mon, 25 Feb 2002 09:57:27 +0100
+
+gem (0.84-1.2) unstable; urgency=low
+
+  * NMU
+  * debian/control:
+    - don't Build-Depend on pure virtual packages ("libgl-dev" ->
+       "xlibmesa-dev | libgl-dev") (fixes build-failure on mips)
+    - reflowed extended description
+
+ -- Branden Robinson <branden@debian.org>  Wed, 17 Oct 2001 10:45:58 -0500
+
+gem (0.84-1.1) unstable; urgency=low
+
+  * NMU
+  * src/Base/GemGluObj.cpp: add #include <string.h>
+  * src/Base/GemPixImageLoad.cpp: add #include <string.h>
+  * src/Geos/circle.cpp: add #include <string.h>
+  * src/Geos/colorSquare.cpp: add #include <string.h>
+  * src/Geos/cube.cpp: add #include <string.h>
+  * src/Geos/primTri.cpp: add #include <string.h>
+  * src/Geos/rectangle.cpp: add #include <string.h>
+  * src/Geos/square.cpp: add #include <string.h>
+  * src/Geos/triangle.cpp: add #include <string.h>
+  * debian/control: add Build-Depends on debhelper, flex, libgl-dev,
+    zlib1g-dev (>= 1:1.1.3) (Closes: #109778)
+
+ -- Branden Robinson <branden@debian.org>  Wed, 10 Oct 2001 16:39:53 -0500
+
+gem (0.84-1) unstable; urgency=low
+
+  * new upstream, added build dependencies, new config.guess (closes: #108247)
+
+ -- Guenter Geiger (Debian/GNU) <geiger@debian.org>  Tue, 14 Aug 2001 15:04:52 +0200 
+
+gem (0.83-2) unstable; urgency=low
+
+  * added pix_video object
+
+ -- Guenter Geiger <geiger@debian.org>  Sat, 22 Jul 2000 14:45:00 +0200
+
+gem (0.83-1) unstable; urgency=low
 
   * new upstream
 
- -- IOhannes m zmoelnig <zmoelnig@iem.at>  Thu, 22 May 2008 17:35:51 +0200
+ -- Guenter Geiger <geiger@debian.org>  Thu, 28 Mar 2000 20:30:07 +0200
 
-gem (0.90.cvs14122005-1) unstable; urgency=low
+gem (0.82-1) unstable; urgency=low
 
-  * new upstream release
+  * new upstream version
 
- -- IOhannes M zmoelnig <zmoelnig@iem.at>  Wed, 14 Dec 2005 18:50:09 +0100
+ -- Guenter Geiger <geiger@debian.org>  Thu, 3 Feb 2000 20:45:02 +0100
 
-gem (0.87.cvs14042003-1) unstable; urgency=low
+gem (0.81-7) frozen unstable; urgency=low
+
+  * fixed sgi image load 
+
+ -- Guenter Geiger <geiger@debian.org>  Fri, 28 Jan 2000 13:32:12 +0100
+
+gem (0.81-6) unstable; urgency=low
+
+  * recompilation to fix dependencies, change in description
+
+ -- Guenter Geiger <geiger@debian.org>  Sat, 8 Oct 1999 19:00:00 +0100
+
+gem (0.81-5) unstable; urgency=low
+
+  * Cleanups in documentation , added menu support (dependency on rxvt),
+    fixed Bug #46668: build errors
+
+ -- Guenter Geiger <geiger@debian.org>  Mon, 3 Oct 1999 18:23:05 +0200
+
+gem (0.81-4) unstable; urgency=low
+
+  * removed change.pd which is now in package pd
+
+ -- Guenter Geiger <geiger@debian.org>  Sat, 2 Oct 1999 15:56:00 +0200
+
+gem (0.81-3) unstable; urgency=low
+
+  * replaced buggy venus.obj file in examples, fixed bug#45562 build problem
+
+ -- Guenter Geiger <geiger@debian.org>  Mon, 14 Sep 1999 15:46:00 +0200
+
+gem (0.81-2) unstable; urgency=low
+
+  * removed the "change" help patch, which is part of pd now
+
+ -- Guenter Geiger <geiger@debian.org>  Mon, 14 Sep 1999 11:30:00 +0200
+
+gem (0.81-1) unstable; urgency=low
+
+  * new upstream version
+
+ -- Guenter Geiger <geiger@debian.org>  Mon, 6 Sep 1999 14:34:00 +0200
+
+gem (0.77-3) frozen unstable; urgency=low
+
+  * Recompilation for new mesag3 library
+
+ -- Guenter Geiger <geiger@debian.org>  Fri, 18 Dec 1998 22:00:00 +0100
+
+gem (0.77-2) frozen unstable; urgency=low
+
+  * Recompilation using libraries which depend on libstdc++2.9 instead 2.8
+
+ -- Guenter Geiger <geiger@debian.org>  Mon, 9 Nov 1998 23:35:45 +0100
+
+gem (0.77-1) unstable; urgency=low
+
+  * New upstream version
+
+ -- Guenter Geiger <geiger@debian.org>  Mon, 5 Oct 1998 23:00:00 +0200
+
+gem (0.75-2) unstable; urgency=low
+
+  * Bug fixes in the build process.
+
+ -- Geiger Guenter <geiger@iem.mhsg.ac.at>  Tue,  9 Jun 1998 20:09:30 +0100
+
+
+gem (0.75-1) unstable; urgency=low
 
   * Initial Release.
 
- -- IOhannes m zmoelnig <zmoelnig@iem.at>  Tue, 15 Apr 2003 22:43:09 +0200
-
+ -- Geiger Guenter <geiger@iem.mhsg.ac.at>  Tue,  3 Mar 1998 20:09:30 +0100
