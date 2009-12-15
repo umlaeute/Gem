@@ -10,5 +10,5 @@ include /usr/share/cdbs/1/rules/simple-patchsys.mk
 
 DEB_CONFIGURE_EXTRA_FLAGS = --without-ALL --with-ftgl --with-ImageMagick --with-lqt --with-libquicktime --with-libmpeg3 --with-v4l --with-libv4l1 --with-libv4l2 --with-default-font=/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf
 
-DEB_INSTALL_CHANGELOGS_ALL = build-tree/gem-0.92-1/ChangeLog
+DEB_INSTALL_CHANGELOGS_ALL = ChangeLog
 DEB_FIXPERMS_EXCLUDE = /usr/share/gem/pd-gem
