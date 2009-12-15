@@ -18,7 +18,7 @@
 #X obj 196 34 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
 #X text 35 269 Font rendering:;
-#X msg 100 131 open ../build-tree/gem-0.92-1/examples/data/anim-1.mov
+#X msg 100 131 open ../examples/data/anim-1.mov
 \, auto 1;
 #X obj 37 196 pix_texture;
 #X obj 37 219 square;
@@ -30,7 +30,7 @@
 #X obj 36 317 == 1;
 #X obj 198 313 == 2;
 #X obj 36 377 text3d default font;
-#X msg 259 332 font ../build-tree/gem-0.92.1/examples/data/vera.ttf
+#X msg 259 332 font ../examples/data/vera.ttf
 \, text vera.ttf;
 #X obj 198 373 text2d;
 #X connect 1 0 2 0;
