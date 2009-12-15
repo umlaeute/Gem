@@ -1,0 +1,12 @@
+diff -ruN gem-0.92-1-old/src/Base/TextBase.cpp gem-0.92-1/src/Base/TextBase.cpp
+--- gem-0.92-1-old/src/Base/TextBase.cpp        2009-09-22 20:02:22.000000000 +0200
++++ gem-0.92-1/src/Base/TextBase.cpp    2009-09-22 20:02:29.000000000 +0200
+@@ -27,7 +27,7 @@
+ # include <unistd.h>
+ #endif
+
+-char *TextBase::DEFAULT_FONT = (char*)"vera.ttf";
++char *TextBase::DEFAULT_FONT = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf";
+
+ /////////////////////////////////////////////////////////
+ //

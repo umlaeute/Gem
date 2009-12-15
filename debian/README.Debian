@@ -1,0 +1,46 @@
+gem for Debian
+----------------------
+
+Usage:
+
+to start Pd with Gem support, issue the command (without the '%' sign)
+
+% pd -path /usr/lib/pd/extra/Gem -lib Gem
+
+OR
+
+use the provided script instead of directly starting Pd:
+
+% /usr/bin/pd-gem
+
+OR
+
+start Pd
+- navigate to "File->Path..." and add "/usr/lib/pd/extra/Gem" to the list of search-paths
+- click OK
+- navigate to "File->Startup..." and add "Gem" to the list of binaries to be loaded
+- click "Apply" and "Save all settings"
+
+OR 
+add the following lines to your ~/.pdrc file (deprecated)
+
+-path /usr/lib/pd/extra/Gem
+-lib Gem
+
+
+KNOWN PROBLEMS
+==============
+
+1. crashes when creating/destroying a window:
+Gem relies on being able to establish one or more openGL contexts.
+By default it creates 2 contexts on startup, which might lead to 
+unexpected behaviour (e.g. crashes when closing the Gem-window) on
+some systems (depending on gfx-card/driver).
+if this happens to you, please try setting the environment variable
+"GEM_SINGLE_CONTEXT" to "1" before starting Pd/Gem.
+e.g. start Pd/Gem with:
+% GEM_SINGLE_CONTEXT=1 pd -path /usr/lib/pd/extra/Gem -lib Gem
+
+
+
+ -- IOhannes m zmölnig <zmoelnig@iem.at>, Wed, 23 Sep 2009 11:56:51 +0200
