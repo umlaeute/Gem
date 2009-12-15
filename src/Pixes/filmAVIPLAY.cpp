@@ -93,10 +93,10 @@ bool filmAVIPLAY :: open(char *filename, int format)
   if (1){
     //int format = (*m_avistream).GetVideoFormat();
     //m_image.image.csize = (*m_avistream).GetFrameSize()/(m_image.image.xsize*m_image.image.ysize);
-    StreamInfo *m_info = (*m_avistream).GetStreamInfo();
-    m_image.image.xsize = (*m_info).GetVideoWidth();
-    m_image.image.ysize = (*m_info).GetVideoHeight();
-    m_fps= (*m_info).GetFps();
+    avm::StreamInfo *l_info = (*m_avistream).GetStreamInfo();
+    m_image.image.xsize = (*l_info).GetVideoWidth();
+    m_image.image.ysize = (*l_info).GetVideoHeight();
+    m_fps= (*l_info).GetFps();
   }
   m_image.image.setCsizeByFormat(m_wantedFormat);
   if (!(m_image.image.xsize*m_image.image.ysize*m_image.image.csize))goto unsupported;
