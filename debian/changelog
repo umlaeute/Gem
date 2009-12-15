@@ -1,3 +1,10 @@
+gem (1:0.92.2-1) unstable; urgency=low
+
+  * New upstream bugfix release(closes various NULL-initialization bugs)
+  * upstream now has updated debian-rules
+
+ -- IOhannes m zmoelnig (gpg-key at iem) <zmoelnig@iem.at>  Tue, 15 Dec 2009 15:11:04 +0100
+
 gem (1:0.92.1-1) unstable; urgency=low
 
   * New upstream (Closes: #485972)
