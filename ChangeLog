@@ -1,3 +1,84 @@
+2009-12-15 14:43  zmoelnig
+
+	* build/win-vs2003/installerCVS.bat: bumped to version 0.92.2
+
+2009-12-15 14:13  zmoelnig
+
+	* debian/changelog, src/Base/GemVersion.h: bumped to 0.92-2
+
+2009-12-15 13:59  zmoelnig
+
+	* src/config.guess, src/config.sub: updated config.{guess,sub}
+
+2009-12-15 13:54  zmoelnig
+
+	* debian/README.Debian, debian/changelog, debian/compat, debian/control, 
+	  debian/copyright, debian/dirs, debian/doc-base,
+	  debian/docs, debian/files, debian/gem.links, debian/gem.xpm,
+	  debian/install, debian/manpages, debian/menu, debian/patches,
+	  debian/patches/00_make_config_ldflags.patch,
+	  debian/patches/01_change_defaultfont.patch,
+	  debian/patches/02_manual_examples_install.patch, debian/pd-gem,
+	  debian/pd-gem.1, debian/rules, debian/test-package.pd, debian/watch:
+	  backported /debian
+
+2009-12-15 11:22  zmoelnig
+
+	* src/Pixes/filmAVIPLAY.cpp, src/Pixes/filmAVIPLAY.h: backport
+	  of fix for compilation issues with newer avifile versions
+
+2009-12-15 11:21  zmoelnig
+
+	* src/Pixes/pix_image.cpp: backport of fix for problems with
+	  threaded deletion
+
+2009-11-30 11:38  zmoelnig
+
+	* src/Pixes/filmQT.cpp: wrongly included GemConfig.h (not
+	  present in 0.92)
+
+2009-11-28 15:57  zmoelnig
+
+	* src/Base/GemGL.h, src/Base/GemPBuffer.cpp,
+	  src/Manips/glsl_program.cpp: backported the GemCGLint fixes
+	  from trunk
+
+2009-11-28 15:49  zmoelnig
+
+	* src/Pixes/filmQT.cpp: merged in TRUNK-changes for close()
+	  without proper intialization
+
+2009-11-27 21:37  zmoelnig
+
+	* src/Controls/gemwin.cpp, src/Nongeos/world_light.cpp:
+	  backported to potential crasher bugs (calling openGL
+	  functions out of context)
+
+2009-11-05 17:37  zmoelnig
+
+	* src/Pixes/recordQT4L.cpp: strrchr() returns "const char*" on
+	  C++
+
+2009-10-28 10:42  zmoelnig
+
+	* src/Geos/model_loader.cpp: fixed bug when %d-printing of
+	  GLfloat* in unused code
+
+2009-10-28 10:42  zmoelnig
+
+	* src/Pixes/pix_draw.cpp: fixed bug when detecting the
+	  upsidedown-flag of an image
+
+2009-10-15 16:40  zmoelnig
+
+	* src/Pixes/pix_freeframe.cpp, src/Pixes/pix_freeframe.h:
+	  protected freeframe-loader against NULL-canvas (merged from
+	  branch)
+
+2009-10-13 15:09  zmoelnig
+
+	* build/win-nsis/gem.nsi: added WaveVFX to the installer
+
 2009-09-22 10:21  zmoelnig
 
 	* help/pix_freeframe-help.pd: example on how to directly invoke
