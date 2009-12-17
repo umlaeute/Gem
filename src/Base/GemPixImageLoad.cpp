@@ -153,6 +153,8 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
    imageStruct *image_block = NULL;
    char newName[256];
 
+   ::verbose(2, "image2mem(%s)", filename);
+
    // does the file even exist?
    if (filename[0] == '/' || filename[0] == '\\')
    {
@@ -212,6 +214,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 #ifdef __APPLE__
 imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 {
+  ::verbose(2, "reading '%s' with QuickTime", filename);
    Rect      r;
    if (::GraphicsImportGetNaturalBounds(inImporter, &r)) return NULL;   //get an image size
    ::OffsetRect(&r, -r.left, -r.top);                           
@@ -278,6 +281,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
  ***************************************************************************/
 imageStruct *tiffImage2mem(const char *filename)
 {
+    ::verbose(2, "reading '%s' with libTIFF", filename);
     TIFF *tif = TIFFOpen(filename, "r");
     if (tif == NULL)
     {
@@ -286,8 +290,8 @@ imageStruct *tiffImage2mem(const char *filename)
 
    uint32 width, height;
    short bits, samps;
-    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
-    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
+   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
+   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
    TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bits);
    TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samps);
     
@@ -298,6 +302,7 @@ imageStruct *tiffImage2mem(const char *filename)
    image_block->xsize = width;
    image_block->ysize = height;
    image_block->type  = GL_UNSIGNED_BYTE;
+   image_block->upsidedown = true;
 
    int knownFormat = 0;
    // Is it a gray8 image?
@@ -335,10 +340,9 @@ imageStruct *tiffImage2mem(const char *filename)
       }
     
       image_block->allocate(npixels * image_block->csize);
-      unsigned char *dstLine = &(image_block->data[npixels * image_block->csize]);
-        int yStride = image_block->xsize * image_block->csize;
-        dstLine -= yStride;
-       for (uint32 row = 0; row < height; row++)
+      unsigned char *dstLine = image_block->data;
+      int yStride = image_block->xsize * image_block->csize;
+      for (uint32 row = 0; row < height; row++)
       {
           unsigned char *pixels = dstLine;
          if (TIFFReadScanline(tif, buf, row, 0) < 0)
@@ -365,8 +369,8 @@ imageStruct *tiffImage2mem(const char *filename)
                 pixels[chGreen] = inp[1];   // Green
                 pixels[chBlue]  = inp[2];   // Blue
                 pixels[chAlpha] = 255;      // Alpha
-               pixels += 4;
-               inp += 3;
+                pixels += 4;
+                inp += 3;
             }
          }
          else
@@ -381,7 +385,7 @@ imageStruct *tiffImage2mem(const char *filename)
                inp += 4;
             }
          }
-            dstLine -= yStride;
+         dstLine += yStride;
       }
       delete [] buf;
    }
@@ -421,9 +425,8 @@ imageStruct *tiffImage2mem(const char *filename)
       image_block->csize = 4;
       image_block->format = GL_RGBA;
       image_block->allocate(npixels * image_block->csize);
-      unsigned char *dstLine = &(image_block->data[npixels * image_block->csize]);
-        int yStride = image_block->xsize * image_block->csize;
-        dstLine -= yStride;
+      unsigned char *dstLine = image_block->data;
+      int yStride = image_block->xsize * image_block->csize;
       // transfer everything over
         int k = 0;
         for (uint32 i = 0; i < height; i++)
@@ -438,7 +441,7 @@ imageStruct *tiffImage2mem(const char *filename)
                 k++;
                 pixels += 4;
             }
-            dstLine -= yStride;
+            dstLine += yStride;
       }
         _TIFFfree(raster);
    }
@@ -494,6 +497,7 @@ imageStruct *jpegImage2mem(const char *filename)
 {
    // open up the file
    FILE * infile;
+   ::verbose(2, "reading '%s' with libJPEG", filename);
    if ((infile = fopen(filename, "rb")) == NULL)
    {
        //error("GemImageLoad(JPEG): Unable to open image file: %s", filename);
@@ -555,15 +559,15 @@ imageStruct *jpegImage2mem(const char *filename)
    int xSize = cinfo.output_width;
    int ySize = cinfo.output_height;
    int cSize = image_block->csize;
+   image_block->upsidedown = true;
    image_block->xsize = xSize;
    image_block->ysize = ySize;
    image_block->allocate(xSize * ySize * cSize);
    
    // cycle through the scan lines
    unsigned char *srcLine = new unsigned char[xSize * cSize];
-   unsigned char *dstLine = &(image_block->data[xSize * ySize * cSize]);
+   unsigned char *dstLine = image_block->data;
    int yStride = xSize * cSize;
-    dstLine -= yStride;
    int lines = ySize;
    int pixes = xSize;
 
@@ -585,7 +589,7 @@ imageStruct *jpegImage2mem(const char *filename)
             dst += 4;
             src += 3;
          }
-         dstLine -= yStride;
+         dstLine += yStride;
       }
    }
    // do grayscale data
@@ -601,7 +605,7 @@ imageStruct *jpegImage2mem(const char *filename)
          {
             *dst++ = *src++;
          }
-         dstLine -= yStride;
+         dstLine += yStride;
       }
    }
 
@@ -624,9 +628,10 @@ imageStruct *jpegImage2mem(const char *filename)
 imageStruct *sgiImage2mem(const char *filename)
 {
    int32 xsize, ysize, csize;
-
    if (!sizeofimage((char *)filename, &xsize, &ysize, &csize) )
       return(NULL);
+
+   ::verbose(2, "reading '%s' with SGI", filename);
 
    imageStruct *image_block = new imageStruct;
    image_block->type  = GL_UNSIGNED_BYTE;
@@ -729,19 +734,21 @@ imageStruct *magickImage2mem(const char *filename){
   imageStruct *image_block = new imageStruct;
   Magick::Image image;
   try {
+    ::verbose(2, "reading '%s' with ImageMagick", filename);
     // Read a file into image object
     image.read( filename );
-    image.flip();
 
     image_block->xsize=(GLint)image.columns();
     image_block->ysize=(GLint)image.rows();
     image_block->setCsizeByFormat(GL_RGBA);
     image_block->reallocate();
 
-    image.write(0,0,image_block->xsize,image_block->ysize,
-      "RGBA",
-      Magick::CharPixel,
-      (void*)(image_block->data));
+    image_block->upsidedown=true;
+
+    image.write(0,0,image_block->xsize,image_block->ysize, 
+                "RGBA",
+                Magick::CharPixel,
+                (void*)(image_block->data));
   }catch( Magick::Exception e )  {
     return NULL;
   }
