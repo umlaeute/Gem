@@ -30,6 +30,7 @@ Object specific bugs
 : make [gemhead] an abstraction
 : make [gemwin] an abstraction
 . [gemwindow] object: [gemXwindow] [gemCocoaWindow] [gemw32indow]
+: upside-down orientation of images:  see http://stackoverflow.com/questions/443086/opengl-topdown-bottomup-textures
 
 
 OS specific bugs
