@@ -230,7 +230,7 @@ void multimodel :: buildList()
   i=0;
   while(i<m_numModels){
     m_loadedCache->models[i]=glmList( m_loadedCache->realmodels[i], GLM_SMOOTH | GLM_TEXTURE);
-    glmTexture(m_loadedCache->realmodels[i], m_textype, m_currentH, m_currentW);
+    glmTexture(m_loadedCache->realmodels[i], m_textype, 1, 1);
 
     i++;
   }

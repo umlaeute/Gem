@@ -140,25 +140,25 @@ void pix_texture :: setUpTextureState() {
 //
 /////////////////////////////////////////////////////////
 inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean upsidedown=false){
-  if(!upsidedown){
-    coords[0].s = 0.f;
-    coords[0].t = 0.f;
-    coords[1].s = xRatio;
-    coords[1].t = 0.f;
-    coords[2].s = xRatio;
-    coords[2].t = yRatio;
-    coords[3].s = 0.f;
-    coords[3].t = yRatio;
-  } else {
-    coords[3].s = 0.f;
-    coords[3].t = 0.f;
-    coords[2].s = xRatio;
-    coords[2].t = 0.f;
-    coords[1].s = xRatio;
-    coords[1].t = yRatio;
-    coords[0].s = 0.f;
-    coords[0].t = yRatio;
+  glMatrixMode(GL_TEXTURE);
+  glLoadIdentity();
+
+  glScalef    (xRatio, yRatio, 1.f);
+  if(upsidedown) {
+    glTranslatef(0.f,  1.f, 0.f);
+    glScalef    (1.f, -1.f, 1.f);
   }
+
+  glMatrixMode(GL_MODELVIEW);
+
+  coords[0].s = 0.f;
+  coords[0].t = 0.f;
+  coords[1].s = 1.f;
+  coords[1].t = 0.f;
+  coords[2].s = 1.f;
+  coords[2].t = 1.f;
+  coords[3].s = 0.f;
+  coords[3].t = 1.f;
 }
 
 

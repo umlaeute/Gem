@@ -56,25 +56,11 @@ void pix_coordinate :: render(GemState *state)
   m_oldTexCoords=state->texCoords;
   m_oldNumCoords=state->numTexCoords;
 
-    if (state->texture && m_numCoords){
-        state->numTexCoords = m_numCoords;
-
-	if(state->texture==2 && state->image!=NULL){ 
-	  // since we are using rectangle-textures (state->texture==2), 
-	  // we want to scale the coordinates by the image-dimensions if they are available
-	  t_float xsize = (t_float)state->image->image.xsize;
-	  t_float ysize = (t_float)state->image->image.ysize;
-
-	  for (int i = 0; i <  m_numCoords; i++)
-	    {
-	      m_rectcoords[i].s = xsize*m_coords[i].s;
-	      m_rectcoords[i].t = ysize*m_coords[i].t;
-	    }
-	  state->texCoords=m_rectcoords;
-
-	} else
-        state->texCoords = m_coords;
-    }
+  if (state->texture && m_numCoords){
+    state->numTexCoords = m_numCoords;
+    
+    state->texCoords = m_coords;
+  }
 }
 
 /////////////////////////////////////////////////////////
