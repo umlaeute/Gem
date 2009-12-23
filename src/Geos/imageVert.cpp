@@ -15,11 +15,16 @@
 //
 /////////////////////////////////////////////////////////
 
+#ifdef __GNUC__
+# warning LATER fix upsidedown
+// LATER think about textures without images (or not: use GLSL for that)
+#endif
+
 #include "imageVert.h"
 
 CPPEXTERN_NEW(imageVert)
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // imageVert
 //
@@ -107,7 +112,7 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
     while(yCount--) {
       int xCount = xSize;
       float xCurrent = -.5f;
-    	    
+
       glBegin(GL_QUAD_STRIP);
       while(xCount--) {
 	unsigned char *oneDown = data - yStride;
