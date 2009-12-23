@@ -96,6 +96,8 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
    imageStruct          *image_block = NULL;
    GraphicsImportComponent    importer = NULL;
 
+   ::verbose(2, "reading '%s' with QuickTime", filename);
+
    // does the file even exist?
    if (filename[0] != '\0') {
       FSSpec   spec;
@@ -214,7 +216,6 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 #ifdef __APPLE__
 imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
 {
-  ::verbose(2, "reading '%s' with QuickTime", filename);
    Rect      r;
    if (::GraphicsImportGetNaturalBounds(inImporter, &r)) return NULL;   //get an image size
    ::OffsetRect(&r, -r.left, -r.top);                           
