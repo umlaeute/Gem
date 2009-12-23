@@ -28,19 +28,19 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
     m_height(1.0), 
     m_alreadyInit(false),
     m_xsize(0.), m_ysize(0.), m_ysize0(0.),
-    m_ripple_max(0.f)
+    m_rippleMax(0.f)
 {
-  m_grid_sizeX=(gridX>0.&&gridX<GRID_MAX_X)?(int)gridX:GRID_SIZE_X;
-  m_grid_sizeY=(gridY>0.&&gridX<GRID_MAX_Y)?(int)gridY:GRID_SIZE_Y;
+  m_gridX=(gridX>0.&&gridX<GRID_MAX_X)?(int)gridX:GRID_SIZE_X;
+  m_gridY=(gridY>0.&&gridX<GRID_MAX_Y)?(int)gridY:GRID_SIZE_Y;
 
   // the height inlet
   m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
-  inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cX"));
-  inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
+  m_inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cX"));
+  m_inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
 
   m_drawType = GL_POLYGON;
-  ctrX = 0;
-  ctrY = 0;
+  m_ctrX = 0;
+  m_ctrY = 0;
   precalc_ripple_amp();
 }
 
@@ -51,8 +51,8 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
 ripple :: ~ripple()
 {
   inlet_free(m_inletH);
-  inlet_free(inletcX);
-  inlet_free(inletcY);
+  inlet_free(m_inletcX);
+  inlet_free(m_inletcY);
   m_alreadyInit = false;
 }
 ////////////////////////////////////////////////////////
@@ -83,17 +83,17 @@ void ripple :: renderShape(GemState *state)
 	precalc_ripple_vector();
 	m_alreadyInit = true;
       }
-    for (i = 0; i < m_grid_sizeX - 1; i++)  {
-      for (j = 0; j < m_grid_sizeY - 1; j++)  {
+    for (i = 0; i < m_gridX - 1; i++)  {
+      for (j = 0; j < m_gridY - 1; j++)  {
 	glBegin(m_drawType);
-	glTexCoord2fv(ripple_vertex[i][j].t);
-	glVertex2fv(ripple_vertex[i][j].x);
-	glTexCoord2fv(ripple_vertex[i][j + 1].t);
-	glVertex2fv(ripple_vertex[i][j + 1].x);
-	glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
-	glVertex2fv(ripple_vertex[i + 1][j + 1].x);
-	glTexCoord2fv(ripple_vertex[i + 1][j].t);
-	glVertex2fv(ripple_vertex[i + 1][j].x);
+	glTexCoord2fv(m_rippleVertex[i][j].t);
+	glVertex2fv(m_rippleVertex[i][j].x);
+	glTexCoord2fv(m_rippleVertex[i][j + 1].t);
+	glVertex2fv(m_rippleVertex[i][j + 1].x);
+	glTexCoord2fv(m_rippleVertex[i + 1][j + 1].t);
+	glVertex2fv(m_rippleVertex[i + 1][j + 1].x);
+	glTexCoord2fv(m_rippleVertex[i + 1][j].t);
+	glVertex2fv(m_rippleVertex[i + 1][j].x);
 	glEnd();
       }
     }
@@ -110,17 +110,17 @@ void ripple :: renderShape(GemState *state)
       m_alreadyInit = true;
     }
     glTranslatef(-.5, -.5, 0.0);
-    for (i = 0; i < m_grid_sizeX - 1; i++)  {
-      for (j = 0; j < m_grid_sizeY - 1; j++) {
+    for (i = 0; i < m_gridX - 1; i++)  {
+      for (j = 0; j < m_gridY - 1; j++) {
 	glBegin(m_drawType);
-	glTexCoord2fv(ripple_vertex[i][j].t);
-	glVertex2fv(ripple_vertex[i][j].t);
-	glTexCoord2fv(ripple_vertex[i][j + 1].t);
-	glVertex2fv(ripple_vertex[i][j + 1].t);
-	glTexCoord2fv(ripple_vertex[i + 1][j + 1].t);
-	glVertex2fv(ripple_vertex[i + 1][j + 1].t);
-	glTexCoord2fv(ripple_vertex[i + 1][j].t);
-	glVertex2fv(ripple_vertex[i + 1][j].t);
+	glTexCoord2fv(m_rippleVertex[i][j].t);
+	glVertex2fv(m_rippleVertex[i][j].t);
+	glTexCoord2fv(m_rippleVertex[i][j + 1].t);
+	glVertex2fv(m_rippleVertex[i][j + 1].t);
+	glTexCoord2fv(m_rippleVertex[i + 1][j + 1].t);
+	glVertex2fv(m_rippleVertex[i + 1][j + 1].t);
+	glTexCoord2fv(m_rippleVertex[i + 1][j].t);
+	glVertex2fv(m_rippleVertex[i + 1][j].t);
 	glEnd();
       }
     }
@@ -143,22 +143,22 @@ void ripple :: ripple_init()
   int i, j;
   glDisable(GL_DEPTH_TEST);
 
-  m_ripple_max = (int)sqrt(m_xsize * (m_ysize+m_ysize0) + m_xsize * m_xsize);
+  m_rippleMax = (int)sqrt(m_xsize * (m_ysize+m_ysize0) + m_xsize * m_xsize);
   for (i = 0; i < RIPPLE_COUNT; i++)
     {
-      t[i] = m_ripple_max + RIPPLE_LENGTH;
-      cx[i] = 0;
-      cy[i] = 0;
-      max[i] = 0;
+      m_t[i] = m_rippleMax + RIPPLE_LENGTH;
+      m_cx[i] = 0;
+      m_cy[i] = 0;
+      m_max[i] = 0;
     }
 
-  for (i = 0; i < m_grid_sizeX; i++)
-    for (j = 0; j < m_grid_sizeY; j++)
+  for (i = 0; i < m_gridX; i++)
+    for (j = 0; j < m_gridY; j++)
       {
-	ripple_vertex[i][j].x[0] = (i/(m_grid_sizeX - 1.0 ))-0.5;
-	ripple_vertex[i][j].x[1] = (j/(m_grid_sizeY - 1.0 ))-0.5;
-	ripple_vertex[i][j].dt[0] = m_xsize*(i/(m_grid_sizeX - 1.0 ));
-	ripple_vertex[i][j].dt[1] = (m_ysize0-m_ysize)*(j/(m_grid_sizeY - 1.0 ))+m_ysize;
+	m_rippleVertex[i][j].x[0] = (i/(m_gridX - 1.0 ))-0.5;
+	m_rippleVertex[i][j].x[1] = (j/(m_gridY - 1.0 ))-0.5;
+	m_rippleVertex[i][j].dt[0] = m_xsize*(i/(m_gridX - 1.0 ));
+	m_rippleVertex[i][j].dt[1] = (m_ysize0-m_ysize)*(j/(m_gridY - 1.0 ))+m_ysize;
       }
 }
 
@@ -170,12 +170,12 @@ void ripple :: precalc_ripple_vector()
   int i, j, z;
   float x, y, l;
 
-  for (i = 0; i < m_grid_sizeX; i++)
+  for (i = 0; i < m_gridX; i++)
     {
-      for (j = 0; j < m_grid_sizeY; j++)
+      for (j = 0; j < m_gridY; j++)
 	{
-	  x = (float) i/(m_grid_sizeX - 1);
-	  y = (float) j/(m_grid_sizeY - 1);
+	  x = (float) i/(m_gridX - 1);
+	  y = (float) j/(m_gridY - 1);
 	  l = (float) sqrt(x*x + y*y);
 	  if (l == 0.0)
 	    {
@@ -188,9 +188,9 @@ void ripple :: precalc_ripple_vector()
 	      y /= l;
 	    }
 	  z = (int)(l*m_xsize*2);
-	  ripple_vector[i][j].dx[0] = x*m_xsize;
-	  ripple_vector[i][j].dx[1] = y*(m_ysize+m_ysize0);
-	  ripple_vector[i][j].r = z;
+	  m_rippleVector[i][j].dx[0] = x*m_xsize;
+	  m_rippleVector[i][j].dx[1] = y*(m_ysize+m_ysize0);
+	  m_rippleVector[i][j].r = z;
 	}
     }
 }
@@ -210,7 +210,7 @@ void ripple :: precalc_ripple_amp()
 	*RIPPLE_AMPLITUDE*t*t*t*t*t*t*t*t;
       if (i == 0)
 	a = 0.0;
-      ripple_amp[i].amplitude = a;
+      m_rippleAmp[i].amplitude = a;
     }
 }
 
@@ -229,15 +229,15 @@ void ripple :: ripple_dynamics()
   float sx, sy;
   float amp;
 
-  for (i = 0; i < RIPPLE_COUNT; i++) t[i] += RIPPLE_STEP;
+  for (i = 0; i < RIPPLE_COUNT; i++) m_t[i] += RIPPLE_STEP;
 
-  for (i = 0; i < m_grid_sizeX; i++)
-    for (j = 0; j < m_grid_sizeY; j++)    {
-      ripple_vertex[i][j].t[0] = ripple_vertex[i][j].dt[0];
-      ripple_vertex[i][j].t[1] = ripple_vertex[i][j].dt[1];
+  for (i = 0; i < m_gridX; i++)
+    for (j = 0; j < m_gridY; j++)    {
+      m_rippleVertex[i][j].t[0] = m_rippleVertex[i][j].dt[0];
+      m_rippleVertex[i][j].t[1] = m_rippleVertex[i][j].dt[1];
       for (k = 0; k < RIPPLE_COUNT; k++)      {
-	x = i - cx[k];
-	y = j - cy[k];
+	x = i - m_cx[k];
+	y = j - m_cy[k];
 	if (x < 0){
 	  x *= -1;
 	  sx = -1.0;
@@ -250,21 +250,21 @@ void ripple :: ripple_dynamics()
 	  sy = 1.0;
 	mi = x;
 	mj = y;
-	if(mi<0)mi=0;if(mi>=m_grid_sizeX)mi=m_grid_sizeX-1;
-	if(mj<0)mj=0;if(mj>=m_grid_sizeY)mj=m_grid_sizeY-1;
+	if(mi<0)mi=0;if(mi>=m_gridX)mi=m_gridX-1;
+	if(mj<0)mj=0;if(mj>=m_gridY)mj=m_gridY-1;
 
-	r = t[k] - ripple_vector[mi][mj].r;
+	r = m_t[k] - m_rippleVector[mi][mj].r;
 	if (r < 0)  r = 0;
 	if (r > RIPPLE_LENGTH - 1)  r = RIPPLE_LENGTH - 1;
 
-	amp = 1.0 - 1.0*t[k]/RIPPLE_LENGTH;
+	amp = 1.0 - 1.0*m_t[k]/RIPPLE_LENGTH;
 	amp *= amp;
 	if (amp < 0.0)  amp = 0.0;
 	/* jmz: added m_height */
-	ripple_vertex[i][j].t[0]
-	  += ripple_vector[mi][mj].dx[0]*sx*ripple_amp[r].amplitude*amp*m_height;
-	ripple_vertex[i][j].t[1]
-	  += ripple_vector[mi][mj].dx[1]*sy*ripple_amp[r].amplitude*amp*m_height;
+	m_rippleVertex[i][j].t[0]
+	  += m_rippleVector[mi][mj].dx[0]*sx*m_rippleAmp[r].amplitude*amp*m_height;
+	m_rippleVertex[i][j].t[1]
+	  += m_rippleVector[mi][mj].dx[1]*sy*m_rippleAmp[r].amplitude*amp*m_height;
       }
     }
 }
@@ -293,17 +293,17 @@ int ripple :: ripple_max_distance(int gx, int gy)
   float temp_d;
 
   d = ripple_distance(gx, gy, 0, 0);
-  temp_d = ripple_distance(gx, gy, m_grid_sizeX, 0);
+  temp_d = ripple_distance(gx, gy, m_gridX, 0);
   if (temp_d > d)
     d = temp_d;
-  temp_d = ripple_distance(gx, gy, m_grid_sizeX, m_grid_sizeY);
+  temp_d = ripple_distance(gx, gy, m_gridX, m_gridY);
   if (temp_d > d)
     d = temp_d;
-  temp_d = ripple_distance(gx, gy, 0, m_grid_sizeY);
+  temp_d = ripple_distance(gx, gy, 0, m_gridY);
   if (temp_d > d)
     d = temp_d;
 
-  return (int)((d/m_grid_sizeX)*m_xsize + RIPPLE_LENGTH/6);
+  return (int)((d/m_gridX)*m_xsize + RIPPLE_LENGTH/6);
 }
 /////////////////////////////////////////////////////////
 //	ripple_grab
@@ -316,13 +316,13 @@ void ripple :: ripple_grab()
 {
   int index = 0;
     
-  while (t[index] < max[index] && index < RIPPLE_COUNT)    index++;
+  while (m_t[index] < m_max[index] && index < RIPPLE_COUNT)    index++;
     
   if (index < RIPPLE_COUNT)    {
-    cx[index] = (int)(1.0*ctrX/m_xsize*m_grid_sizeX);
-    cy[index] = (int)(1.0*ctrY/(m_ysize+m_ysize0)*m_grid_sizeY);
-    t[index] = 4*RIPPLE_STEP;
-    max[index] = ripple_max_distance(cx[index], cy[index]);
+    m_cx[index] = (int)(1.0*m_ctrX/m_xsize*m_gridX);
+    m_cy[index] = (int)(1.0*m_ctrY/(m_ysize+m_ysize0)*m_gridY);
+    m_t[index] = 4*RIPPLE_STEP;
+    m_max[index] = ripple_max_distance(m_cx[index], m_cy[index]);
   }
 }
 
@@ -341,7 +341,7 @@ void ripple :: heightMess(float height)
 /////////////////////////////////////////////////////////
 void ripple :: ctrXMess(float center)
 {
-  ctrX = (short)center;
+  m_ctrX = (short)center;
   setModified();
 }
 /////////////////////////////////////////////////////////
@@ -350,7 +350,7 @@ void ripple :: ctrXMess(float center)
 /////////////////////////////////////////////////////////
 void ripple :: ctrYMess(float center)
 {
-  ctrY = (short)center;
+  m_ctrY = (short)center;
   setModified();
 }
 

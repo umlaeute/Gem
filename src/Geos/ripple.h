@@ -86,7 +86,7 @@ class GEM_EXTERN ripple : public GemShape
 
   //////////
   // The height of the object
-  short		size, ctrX, ctrY;
+  short		m_size, m_ctrX, m_ctrY;
   void	    	heightMess(float height);
   void		ctrXMess(float center);
   void		ctrYMess(float center);
@@ -111,26 +111,26 @@ class GEM_EXTERN ripple : public GemShape
 
   //////////
   // The height inlet
-  t_inlet         *m_inletH;
-  t_inlet		*inletcX;
-  t_inlet		*inletcY;
+  t_inlet       *m_inletH;
+  t_inlet	*m_inletcX;
+  t_inlet	*m_inletcY;
   
   //////////
   // getStuff
-  int m_grid_sizeX, m_grid_sizeY;
+  int m_gridX, m_gridY;
   
   bool		m_alreadyInit;
   float		m_xsize, m_ysize, m_ysize0;
-  RIPPLE_VECTOR ripple_vector[GRID_MAX_X][GRID_MAX_Y];
-  RIPPLE_AMP ripple_amp[RIPPLE_LENGTH];
-  RIPPLE_VERTEX ripple_vertex[GRID_MAX_X][GRID_MAX_Y];
+  RIPPLE_VECTOR m_rippleVector[GRID_MAX_X][GRID_MAX_Y];
+  RIPPLE_AMP    m_rippleAmp[RIPPLE_LENGTH];
+  RIPPLE_VERTEX m_rippleVertex[GRID_MAX_X][GRID_MAX_Y];
 
-  int cx[RIPPLE_COUNT];
-  int cy[RIPPLE_COUNT];
-  int t[RIPPLE_COUNT];
-  int max[RIPPLE_COUNT];
+  int m_cx[RIPPLE_COUNT];
+  int m_cy[RIPPLE_COUNT];
+  int m_t[RIPPLE_COUNT];
+  int m_max[RIPPLE_COUNT];
 
-  int m_ripple_max;
+  int m_rippleMax;
 
  private:
 
