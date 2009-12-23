@@ -56,18 +56,18 @@ typedef struct {
 } RIPPLE_VERTEX;
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    ripple
+  -------------------------------------------------------------------
+  CLASS
+  ripple
     
-    based on the SGI demo distort
+  based on the SGI demo distort
 
-KEYWORDS
-    geo
+  KEYWORDS
+  geo
     
-DESCRIPTION
+  DESCRIPTION
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 class GEM_EXTERN ripple : public GemShape
 {
   CPPEXTERN_HEADER(ripple, GemShape)
@@ -87,39 +87,39 @@ class GEM_EXTERN ripple : public GemShape
   //////////
   // The height of the object
   short		m_ctrX, m_ctrY;
-  void	    	heightMess(float height);
+  void	 	heightMess(float height);
   void		ctrXMess(float center);
   void		ctrYMess(float center);
   //////////
   // Do the rendering
   virtual void 	renderShape(GemState *state);
   
-    	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-        void	ripple_dynamics();
-        void	ripple_init();
-        float	ripple_distance( int gx, int gy, int cx, int cy);
-        int	ripple_max_distance( int gx, int gy );
-        void	ripple_bang();
-        void	precalc_ripple_vector();
-        void	precalc_ripple_amp();
+  //////////
+  // How the object should be drawn
+  virtual void	typeMess(t_symbol *type);
+  void	ripple_dynamics();
+  void	ripple_init();
+  float	ripple_distance( int gx, int gy, int cx, int cy);
+  int	ripple_max_distance( int gx, int gy );
+  void	ripple_bang();
+  void	precalc_ripple_vector();
+  void	precalc_ripple_amp();
 		
-    	//////////
-    	// The height of the object
-        GLfloat	    	m_height;
+  //////////
+  // The height of the object
+  GLfloat	    	m_height;
 
-        //////////
-        // The height inlet
-        t_inlet         *m_inletH;
-        t_inlet		*m_inletcX;
-        t_inlet		*m_inletcY;
+  //////////
+  // The height inlet
+  t_inlet   *m_inletH;
+  t_inlet		*m_inletcX;
+  t_inlet		*m_inletcY;
   
   //////////
   // getStuff
   int m_gridX, m_gridY;
   
-  int		m_alreadyInit;
+  bool		m_alreadyInit;
   float		m_sizeX, m_sizeY, m_sizeY0;
   RIPPLE_VECTOR m_rippleVector[GRID_MAX_X][GRID_MAX_Y];
   RIPPLE_AMP m_rippleAmp[RIPPLE_LENGTH];
