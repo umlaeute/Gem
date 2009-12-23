@@ -56,18 +56,18 @@ typedef struct {
 } RIPPLE_VERTEX;
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    ripple
+  -------------------------------------------------------------------
+  CLASS
+  ripple
     
-    based on the SGI demo distort
+  based on the SGI demo distort
 
-KEYWORDS
-    geo
+  KEYWORDS
+  geo
     
-DESCRIPTION
+  DESCRIPTION
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 class GEM_EXTERN ripple : public GemShape
 {
   CPPEXTERN_HEADER(ripple, GemShape)
@@ -94,34 +94,33 @@ class GEM_EXTERN ripple : public GemShape
   // Do the rendering
   virtual void 	renderShape(GemState *state);
   
-    	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-        void	ripple_dynamics();
-        void	ripple_init();
-        float	ripple_distance( int gx, int gy, int cx, int cy);
-        int	ripple_max_distance( int gx, int gy );
-        void	ripple_grab();
-        void	ripple_bang();
-        void	precalc_ripple_vector();
-        void	precalc_ripple_amp();
+  //////////
+  // How the object should be drawn
+  virtual void	typeMess(t_symbol *type);
+  void	ripple_dynamics();
+  void	ripple_init();
+  float	ripple_distance( int gx, int gy, int cx, int cy);
+  int	ripple_max_distance( int gx, int gy );
+  void	ripple_grab();
+  void	precalc_ripple_vector();
+  void	precalc_ripple_amp();
 		
-    	//////////
-    	// The height of the object
-        GLfloat	    	m_height;
+  //////////
+  // The height of the object
+  GLfloat	    	m_height;
 
-        //////////
-        // The height inlet
-        t_inlet         *m_inletH;
-        t_inlet		*inletcX;
-        t_inlet		*inletcY;
+  //////////
+  // The height inlet
+  t_inlet         *m_inletH;
+  t_inlet		*inletcX;
+  t_inlet		*inletcY;
   
   //////////
   // getStuff
   int m_grid_sizeX, m_grid_sizeY;
   
-  int		alreadyInit;
-  float		xsize, ysize, ysize0;
+  bool		m_alreadyInit;
+  float		m_xsize, m_ysize, m_ysize0;
   RIPPLE_VECTOR ripple_vector[GRID_MAX_X][GRID_MAX_Y];
   RIPPLE_AMP ripple_amp[RIPPLE_LENGTH];
   RIPPLE_VERTEX ripple_vertex[GRID_MAX_X][GRID_MAX_Y];
@@ -131,8 +130,7 @@ class GEM_EXTERN ripple : public GemShape
   int t[RIPPLE_COUNT];
   int max[RIPPLE_COUNT];
 
-  int ripple_max;
-  int grab;	/* index of grabbed mass point */
+  int m_ripple_max;
 
  private:
 
