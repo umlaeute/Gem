@@ -83,7 +83,7 @@ _glmNormalize(GLfloat* v)
 
   if (!(v))return;
 
-  l = (GLfloat)sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+  l = static_cast<GLfloat>(sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]));
   v[0] /= l;
   v[1] /= l;
   v[2] /= l;
@@ -144,7 +144,7 @@ _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
   duplicate:
     /* set the first component of this vector to point at the correct
        index into the new copies array */
-    vectors[3 * i + 0] = (GLfloat)j;
+    vectors[3 * i + 0] = static_cast<GLfloat>(j);
   }
 
   *numvectors = copied-1;
@@ -1965,9 +1965,9 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
   verbose(1, "glmWeld(): %d redundant vertices.", model->numvertices - numvectors - 1);
 
   for (i = 0; i < model->numtriangles; i++) {
-    T(i).vindices[0] = (GLuint)vectors[3 * T(i).vindices[0] + 0];
-    T(i).vindices[1] = (GLuint)vectors[3 * T(i).vindices[1] + 0];
-    T(i).vindices[2] = (GLuint)vectors[3 * T(i).vindices[2] + 0];
+    T(i).vindices[0] = static_cast<GLuint>(vectors[3 * T(i).vindices[0] + 0]);
+    T(i).vindices[1] = static_cast<GLuint>(vectors[3 * T(i).vindices[1] + 0]);
+    T(i).vindices[2] = static_cast<GLuint>(vectors[3 * T(i).vindices[2] + 0]);
   }
 
   /* free space for old vertices */
@@ -2060,7 +2060,7 @@ glmReadPPM(char* filename, int* width, int* height)
   image = (unsigned char*)malloc(sizeof(unsigned char)*w*h*3);
   size_t count = fread(image, sizeof(unsigned char), w*h*3, fp);
   fclose(fp);
-  if(count!=(size_t)(w*h*3)) {
+  if(count!=static_cast<size_t>(w*h*3)) {
     error("_glmReadPPM failed to read all bytes");
     *width=*height=NULL;
     free(image);

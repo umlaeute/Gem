@@ -8,17 +8,16 @@
 //
 // object by cyrille.henry@la-kitchen.fr
 // This primitive create a kind of cilender with paramettre :
-//		Diametter of the 1st circle (1st base of the object)
-//		Diametter of the 2nd circle
+//		Diameter of the 1st circle (1st base of the object)
+//		Diameter of the 2nd circle
 //		X, Y, Z displacement between the 2 circle 
 //		X, Y rotation of the 1st circle
 //		X, Y rotation of the 2nd circle
 //
 // Implementation file
 //
-//    Copyright (c) 1997-1998 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2003 Cyrille Henry. La Kitchen, Paris
+//    Copyright (c) 2003-2009 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -31,7 +30,7 @@
 
 #include "Base/GemState.h"
 
-const float tube::TWO_PI = 8.f * (float)atan(1.f);
+const float tube::TWO_PI = 8.f * atan(1.);
 
 /* only gcc allows to allocate arrays of non-constant length, like:
  *   int i;
@@ -69,8 +68,8 @@ tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg or
   if (m_size == 0.f)  m_size = 1.f;
 
   if(order_in<1.f)order_in=80.f;
-  order=(int)order_in-1; // make sure they are different
-  slicesMess((int)order_in);
+  order=static_cast<int>(order_in)-1; // make sure they are different
+  slicesMess(static_cast<int>(order_in));
 
   // the 8 inlets
   m_inlet2     = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("size2"));
@@ -192,12 +191,12 @@ void tube :: renderShape(GemState *state){
     for (n = 1; n < order + 2 ; n++)	{
       Matrix::generateNormal(vectors1[n-1], vectors2[n], vectors1[n+1], normal);
       glNormal3fv(normal);
-      glTexCoord2f( xsize*(float)(n-1)/order, ysize0 );
+      glTexCoord2f( 1.*xsize*(n-1)/order, ysize0 );
       glVertex3fv(vectors1[n]);
 
       Matrix::generateNormal(vectors2[n+1], vectors1[n], vectors2[n-1], normal);
       glNormal3fv(normal);
-      glTexCoord2f( xsize*(float)(n-1)/order, ysize1);
+      glTexCoord2f( 1.*xsize*(n-1)/order, ysize1);
       glVertex3fv(vectors2[n]);
     }
   }  else  {
@@ -322,8 +321,8 @@ void tube :: slicesMess(int slices){
 
   for(int i=0; i<order; i++)
     {
-      m_cos[i] = (float)cos(TWO_PI * (double)i / (double)order);
-      m_sin[i] = (float)sin(TWO_PI * (double)i / (double)order);
+      m_cos[i] = cos(TWO_PI * 1. * i / order);
+      m_sin[i] = sin(TWO_PI * 1. * i / order);
     }
 
   setModified();
@@ -355,68 +354,68 @@ void tube :: obj_setupCallback(t_class *classPtr){
 
   // compute sin/cos lookup table
 
-  class_addmethod(classPtr, (t_method)&tube::sizeMessCallback2,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::sizeMessCallback2),
 		  gensym("size2"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&tube::highMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::highMessCallback),
 		  gensym("high"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&tube::TXMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::TXMessCallback),
 		  gensym("TX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&tube::TYMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::TYMessCallback),
 		  gensym("TY"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&tube::rotX1MessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::rotX1MessCallback),
 		  gensym("rotX1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&tube::rotX2MessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::rotX2MessCallback),
 		  gensym("rotX2"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&tube::rotY1MessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::rotY1MessCallback),
 		  gensym("rotY1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&tube::rotY2MessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::rotY2MessCallback),
 		  gensym("rotY2"), A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&tube::slicesMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::slicesMessCallback),
 		  gensym("numslices"), A_FLOAT, A_NULL);
 }
 
 void tube :: sizeMessCallback2(void *data, t_floatarg size2)
 {
-  GetMyClass(data)->sizeMess2((float)size2);
+  GetMyClass(data)->sizeMess2(size2);
 }
 
 void tube :: highMessCallback(void *data, t_floatarg high)
 {
-  GetMyClass(data)->highMess((float)high);
+  GetMyClass(data)->highMess(high);
 }
 
 void tube :: TXMessCallback(void *data, t_floatarg TX)
 {
-  GetMyClass(data)->TXMess((float)TX);
+  GetMyClass(data)->TXMess(TX);
 }
 
 void tube :: TYMessCallback(void *data, t_floatarg TY)
 {
-  GetMyClass(data)->TYMess((float)TY);
+  GetMyClass(data)->TYMess(TY);
 }
 
 void tube :: rotX1MessCallback(void *data, t_floatarg rotX1)
 {
-  GetMyClass(data)->rotX1Mess((float)rotX1);
+  GetMyClass(data)->rotX1Mess(rotX1);
 }
 
 void tube :: rotX2MessCallback(void *data, t_floatarg rotX2)
 {
-  GetMyClass(data)->rotX2Mess((float)rotX2);
+  GetMyClass(data)->rotX2Mess(rotX2);
 }
 
 void tube :: rotY1MessCallback(void *data, t_floatarg rotY1)
 {
-  GetMyClass(data)->rotY1Mess((float)rotY1);
+  GetMyClass(data)->rotY1Mess(rotY1);
 }
 
 void tube :: rotY2MessCallback(void *data, t_floatarg rotY2)
 {
-  GetMyClass(data)->rotY2Mess((float)rotY2);
+  GetMyClass(data)->rotY2Mess(rotY2);
 }
 
 void tube :: slicesMessCallback(void *data, t_floatarg slices)
 {
-  GetMyClass(data)->slicesMess((int)slices);
+  GetMyClass(data)->slicesMess(static_cast<int>(slices));
 }

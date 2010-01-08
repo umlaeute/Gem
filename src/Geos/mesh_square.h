@@ -64,6 +64,8 @@ class GEM_EXTERN mesh_square : public GemShape
 		float		xsize, xsize0, ysize, ysize0;
 		int 		alreadyInit;
 		void		setSize( int valueX, int valueY );
+		void            setGridX(int valX);
+		void            setGridY(int valX);
 		void		getTexCoords(void);
 		float 		texCoords[MAXGRID][MAXGRID][2];
 };

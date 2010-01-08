@@ -65,11 +65,11 @@ newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY
   }
 
 
-    gridX = MIN((int)widthX, MAXGRID );
-    gridX = MAX ( 3, gridX);
+    gridX = MIN(widthX, MAXGRID );
+    gridX = MAX( 3,     gridX);
 
-    gridY = MIN((int)widthY, MAXGRID );
-    gridY = MAX ( 3, gridY);
+    gridY = MIN(widthY, MAXGRID );
+    gridY = MAX( 3,     gridY);
 
 
     alreadyInit = 0;
@@ -97,19 +97,19 @@ newWave :: ~newWave()
 
 void newWave :: modeMess(float mode)
 {
-    reset((int)mode);
-    setModified();
+  reset(static_cast<int>(mode));
+  setModified();
 }
 
 void newWave :: positionMess(float posX, float posY, float posZ)
 {
-    position((float) posX, (float) posY, (float) posZ);
+    position(posX, posY, posZ);
     setModified();
 
 }
 void newWave :: forceMess(float posX, float posY, float valforce)
 {
-    setforce((float) posX, (float) posY, (float) valforce);
+    setforce(posX, posY, valforce);
     setModified();
     
 }
@@ -135,8 +135,8 @@ void newWave :: renderShape(GemState *state)
     int i, j;
     if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
 
-    GLfloat sizeX = 2.*m_size / (GLfloat)(gridX-1);
-    GLfloat sizeY = 2.*m_size / (GLfloat)(gridY-1);
+    GLfloat sizeX = 2.*m_size / (gridX-1);
+    GLfloat sizeY = 2.*m_size / (gridY-1);
 
     glNormal3f( 0.0f, 0.0f, 1.0f);
 
@@ -382,8 +382,10 @@ void newWave :: getdamp()
 /////////////////////////////////////////////////////////
 void newWave :: setforce(float posX, float posY, float valforce)
 {
-    if ( ((int)posX > 0) & ((int)posX < gridX - 1) & ((int)posY > 0) & ((int)posY < gridY - 1) )
-      force[(int)posX][(int)posY] += valforce;   
+  int posXi=static_cast<int>(posX);
+  int posYi=static_cast<int>(posY);
+  if ( (posXi > 0) & (posXi < gridX - 1) & (posYi > 0) & (posYi < gridY - 1) )
+    force[posXi][posYi] += valforce;   
 }
 
 /////////////////////////////////////////////////////////
@@ -392,8 +394,10 @@ void newWave :: setforce(float posX, float posY, float valforce)
 /////////////////////////////////////////////////////////
 void newWave :: position(float posX, float posY, float posZ)
 {
-    if ( ((int)posX > 0) & ((int)posX < gridX - 1) & ((int)posY > 0) & ((int)posY < gridY - 1) )
-      posit[(int)posX][(int)posY] = posZ;                        
+  int posXi=static_cast<int>(posX);
+  int posYi=static_cast<int>(posY);
+  if ( (posXi > 0) & (posXi < gridX - 1) & (posYi > 0) & (posYi < gridY - 1) )
+    posit[posXi][posYi] = posZ;                        
 }
 
 
@@ -446,8 +450,8 @@ void newWave :: getTexCoords(void)
     {
         for ( int j = 0; j < gridY; ++j)
         {
-            texCoords[i][j][0] = ((xsize*(float)i/(float)(gridX-1)) + xsize0 );
-	    texCoords[i][j][1] = ((ysize*(float)j/(float)(gridY-1)) + ysize0 );
+	  texCoords[i][j][0] = (((xsize*1.*i)/(gridX-1)) + xsize0 );
+	  texCoords[i][j][1] = (((ysize*1.*j)/(gridY-1)) + ysize0 );
         }
     }
 }
@@ -693,13 +697,13 @@ void newWave :: reset(int value)
                 break;
             case HILL:
                 posit[i][j]= 
-                    (sin(M_PI * ((float)i/(float)gridX)) +
-                     sin(M_PI * ((float)j/(float)gridY)))* gridX/6.0;
+		  (sin(M_PI * ((1.*i)/gridX)) +
+		   sin(M_PI * ((1.*j)/gridY)))* gridX/6.0;
 				break;
             case HILLFOUR:
                 posit[i][j]= 
-                    (sin(M_PI*2 * ((float)i/(float)gridX)) +
-                     sin(M_PI*2 * ((float)j/(float)gridY)))* gridX/6.0;
+		  (sin(M_PI*2.* ((1.*i)/gridX)) +
+		   sin(M_PI*2.* ((1.*j)/gridY)))* gridX/6.0;
 				break;        
             }
             if (i==0||j==0||i==gridX-1||j==gridY-1) posit[i][j]=0.0;
@@ -728,30 +732,30 @@ void newWave :: setOther(int value)
 /////////////////////////////////////////////////////////
 void newWave :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&newWave::heightMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::heightMessCallback),
     	    gensym("height"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&newWave::modeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::modeMessCallback),
     	    gensym("mode"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&newWave::textureMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::textureMessCallback),
     	    gensym("texture"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&newWave::setK1MessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK1MessCallback),
 	   	    gensym("K1"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&newWave::setD1MessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD1MessCallback),
 		    gensym("D1"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&newWave::setK2MessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK2MessCallback),
 	   	    gensym("K2"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&newWave::setD2MessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD2MessCallback),
 		    gensym("D2"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&newWave::setK3MessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK3MessCallback),
 	   	    gensym("K3"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&newWave::setD3MessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD3MessCallback),
 		    gensym("D3"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&newWave::forceMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::forceMessCallback),
 		    gensym("force"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&newWave::positionMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::positionMessCallback),
 		    gensym("position"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 	class_addbang(classPtr, (t_method)&newWave::bangMessCallback);
-	class_addmethod(classPtr, (t_method)&newWave::noiseMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::noiseMessCallback),
 		    gensym("noise"), A_FLOAT, A_NULL);
 }
 
@@ -762,51 +766,51 @@ void newWave :: bangMessCallback(void *data)
 }
 void newWave :: heightMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->heightMess((float)size);
+    GetMyClass(data)->heightMess(size);
 }
 void newWave :: forceMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce )
 {
-    GetMyClass(data)->forceMess((float)posX, (float)posY, (float)valforce);
+    GetMyClass(data)->forceMess(posX, posY, valforce);
 }
 void newWave :: positionMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg posZ)
 {
-    GetMyClass(data)->positionMess((float)posX, (float)posY, (float)posZ);
+    GetMyClass(data)->positionMess(posX, posY, posZ);
 }
 void newWave :: modeMessCallback(void *data, t_floatarg mode)
 {
-    GetMyClass(data)->modeMess((float)mode);
+    GetMyClass(data)->modeMess(mode);
 }
 
 void newWave :: setK1MessCallback(void *data, t_floatarg K)
 {
-    GetMyClass(data)->K1=((float)K);
+    GetMyClass(data)->K1=(K);
 }
 void newWave :: setK2MessCallback(void *data, t_floatarg K)
 {
-    GetMyClass(data)->K2=((float)K);
+    GetMyClass(data)->K2=(K);
 }
 void newWave :: setK3MessCallback(void *data, t_floatarg K)
 {
-    GetMyClass(data)->K3=((float)K);
+    GetMyClass(data)->K3=(K);
 }
 
 
 void newWave :: setD1MessCallback(void *data, t_floatarg D)
 {
-    GetMyClass(data)->D1=((float)D);
+    GetMyClass(data)->D1=(D);
 }
 void newWave :: setD2MessCallback(void *data, t_floatarg D)
 {
-    GetMyClass(data)->D2=((float)D);
+    GetMyClass(data)->D2=(D);
 }
 void newWave :: setD3MessCallback(void *data, t_floatarg D)
 {
-    GetMyClass(data)->D3=((float)D);
+    GetMyClass(data)->D3=(D);
 }
 
 void newWave :: textureMessCallback(void *data, t_floatarg D)
 {
-    GetMyClass(data)->textureMess((int)D);
+  GetMyClass(data)->textureMess(static_cast<int>(D));
 }
 
 

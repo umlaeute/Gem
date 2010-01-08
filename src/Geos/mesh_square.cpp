@@ -31,7 +31,9 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(mesh_square, t_floatarg, A_DEFFLOAT, t_floatarg, A_D
 mesh_square :: mesh_square(t_floatarg sizeX, t_floatarg sizeY)
         : GemShape(1)
 {
-	setSize((int)sizeX,(int)sizeY);
+  int sizeXi=static_cast<int>(sizeX);
+  int sizeYi=static_cast<int>(sizeY);
+  setSize(sizeXi,sizeYi);
 }
 
 /////////////////////////////////////////////////////////
@@ -51,8 +53,8 @@ void mesh_square :: getTexCoords(void)
     {
         for ( int j = 0; j < gridY; ++j)
         {
-            texCoords[i][j][0] = ((xsize*(float)i/(float)(gridX-1)) + xsize0 );
-			texCoords[i][j][1] = ((ysize*(float)j/(float)(gridY-1)) + ysize0 );
+	  texCoords[i][j][0] = ((xsize*(1.*i)/(gridX-1.)) + xsize0 );
+	  texCoords[i][j][1] = ((ysize*(1.*j)/(gridY-1.)) + ysize0 );
             //post("texCoords[%d][%d] = %f\t%f",i,j,texCoords[i][j][0],texCoords[i][j][1]);
         }
     }
@@ -73,7 +75,14 @@ void mesh_square :: setSize( int valueX, int valueY )
     getTexCoords();
 }
 
-
+void mesh_square :: setGridX( int valueX )
+{
+  setSize(valueX, gridY);
+}
+void mesh_square :: setGridY( int valueY )
+{
+  setSize(gridX, valueY);
+}
 
 /////////////////////////////////////////////////////////
 // renderShape
@@ -82,8 +91,8 @@ void mesh_square :: setSize( int valueX, int valueY )
 void mesh_square :: renderShape(GemState *state)
 {
 	int i,j;
-    GLfloat sizeX = 2. / (GLfloat)(gridX-1);
-    GLfloat sizeY = 2. / (GLfloat)(gridY-1);
+    GLfloat sizeX = 2. / (gridX-1.);
+    GLfloat sizeY = 2. / (gridY-1.);
 
    if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
 
@@ -176,21 +185,20 @@ void mesh_square :: obj_setupCallback(t_class *classPtr)
 
 void mesh_square :: gridMessCallback(void *data, t_floatarg grid)
 {
-    GetMyClass(data)->gridX=(int)grid;
-    GetMyClass(data)->gridY=(int)grid;
-    GetMyClass(data)->setSize(GetMyClass(data)->gridX,GetMyClass(data)->gridY);
+  int gridi=static_cast<int>(grid);
+  GetMyClass(data)->setSize(gridi,gridi);
 }
 
 void mesh_square :: gridXMessCallback(void *data, t_floatarg grid)
 {
-    GetMyClass(data)->gridX=(int)grid;
-    GetMyClass(data)->setSize(GetMyClass(data)->gridX,GetMyClass(data)->gridY);
+  int gridi=static_cast<int>(grid);
+  GetMyClass(data)->setGridX(gridi);
 }
 
 void mesh_square :: gridYMessCallback(void *data, t_floatarg grid)
 {
-    GetMyClass(data)->gridY=(int)grid;
-    GetMyClass(data)->setSize(GetMyClass(data)->gridX,GetMyClass(data)->gridY);
+  int gridi=static_cast<int>(grid);
+  GetMyClass(data)->setGridY(gridi);
 }
 
 

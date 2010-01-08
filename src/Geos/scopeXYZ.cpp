@@ -38,7 +38,7 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
     m_length(0), m_position(0),
     m_vertarray(NULL), m_vert(NULL)
 {
-  lengthMess((int)len);
+  lengthMess(static_cast<int>(len));
 
   /* channels inlet */
   int i;
@@ -238,24 +238,25 @@ void scopeXYZ :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)create_scopeXYZ, gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_scopeXYZ), 
+		   gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
 
-    class_addmethod(classPtr, (t_method)&scopeXYZ::linewidthMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::linewidthMessCallback),
     	    gensym("linewidth"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&scopeXYZ::lengthMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::lengthMessCallback),
     	    gensym("length"), A_FLOAT, A_NULL);
 
-    class_addmethod(classPtr, (t_method)&scopeXYZ::dspCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::dspCallback), 
 		    gensym("dsp"), A_NULL);
-    class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
+  class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
 }
 void scopeXYZ :: linewidthMessCallback(void *data, t_floatarg linewidth)
 {
-    GetMyClass(data)->linewidthMess((float)linewidth);
+  GetMyClass(data)->linewidthMess(linewidth);
 }
 void scopeXYZ :: lengthMessCallback(void *data, t_floatarg l)
 {
-    GetMyClass(data)->lengthMess((int)l);
+  GetMyClass(data)->lengthMess(static_cast<int>(l));
 }
 void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 {
@@ -266,12 +267,12 @@ void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 t_int* scopeXYZ :: perform(t_int* w)
 {
   int index=1;
-  scopeXYZ *x = GetMyClass((void*)w[index++]);
-  t_float* in_X = (t_float*)(w[index++]);
-  t_float* in_Y = (t_float*)(w[index++]);
-  t_float* in_Z = (t_float*)(w[index++]);
+  scopeXYZ *x = GetMyClass(reinterpret_cast<void*>(w[index++]));
+  t_float* in_X = reinterpret_cast<t_float*>(w[index++]);
+  t_float* in_Y = reinterpret_cast<t_float*>(w[index++]);
+  t_float* in_Z = reinterpret_cast<t_float*>(w[index++]);
 
-  t_int n = (t_int)(w[index++]);
+  t_int n = (w[index++]);
 
   int length=x->m_length;
   int position=0;
