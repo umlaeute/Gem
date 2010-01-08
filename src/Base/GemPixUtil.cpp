@@ -1043,7 +1043,7 @@ GEM_EXTERN void imageStruct::fromYV12(short*yuvdata) {
 }
 GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
   // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
-  if(!U && !V)fromGray(reintpret_cast<unsigned char*>(*Y>>7));
+  if(!U && !V)fromGray(reinterpret_cast<unsigned char*>(*Y>>7));
   if(!Y || !U || !V)return;
 
   size_t pixelnum=xsize*ysize;
