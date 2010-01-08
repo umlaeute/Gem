@@ -91,7 +91,7 @@ void GEMglProgramStringARB :: lenMess (t_float arg1) {	// FUN
 }
 
 void GEMglProgramStringARB :: stringMess (t_symbol* arg1) {	// FUN
-	string = (GLvoid*)arg1->s_name;
+        string = reinterpret_cast<GLvoid*>(arg1->s_name);
 	setModified();
 }
 
@@ -112,14 +112,14 @@ void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglProgramStringARB :: targetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
+	GetMyClass(data)->targetMess ( arg0 );
 }
 void GEMglProgramStringARB :: formatMessCallback (void* data, t_floatarg arg1){
-	GetMyClass(data)->formatMess ( static_cast<t_float>(arg1));
+	GetMyClass(data)->formatMess ( arg1 );
 }
 void GEMglProgramStringARB :: lenMessCallback (void* data, t_floatarg arg2){
-	GetMyClass(data)->lenMess ( static_cast<t_float>(arg2));
+	GetMyClass(data)->lenMess ( arg2 );
 }
 void GEMglProgramStringARB :: stringMessCallback (void* data, t_symbol* arg3){
-	GetMyClass(data)->stringMess ( (t_symbol*)    arg3);
+	GetMyClass(data)->stringMess ( arg3 );
 }

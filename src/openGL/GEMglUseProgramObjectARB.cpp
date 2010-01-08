@@ -60,7 +60,7 @@ void GEMglUseProgramObjectARB :: postrender(GemState *state) {
 // Variables
 //
 void GEMglUseProgramObjectARB :: programMess (int program) {	// FUN
-	m_program = (GLhandleARB)program;
+	m_program = static_cast<GLhandleARB>(program);
 	setModified();
 }
 

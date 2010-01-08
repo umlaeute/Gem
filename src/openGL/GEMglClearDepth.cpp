@@ -49,7 +49,7 @@ void GEMglClearDepth :: render(GemState *state) {
 //
 void GEMglClearDepth :: depthMess (float arg1) {	// FUN
 
-	depth = (float)arg1;
+	depth = arg1;
 	setModified();
 }
 
@@ -63,5 +63,5 @@ void GEMglClearDepth :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglClearDepth :: depthMessCallback (void* data, float arg0){
-	GetMyClass(data)->depthMess ( (float)    arg0);
+	GetMyClass(data)->depthMess ( arg0);
 }

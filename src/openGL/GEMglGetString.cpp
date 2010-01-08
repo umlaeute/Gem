@@ -40,8 +40,8 @@ GEMglGetString :: ~GEMglGetString () {
 // Render
 //
 void GEMglGetString :: render(GemState *state) {
-  const GLubyte* test=glGetString (name);
-  if(test!=NULL)outlet_symbol(m_outlet, gensym((char*)test));
+  const char* test=reinterpret_cast<const char*>(glGetString (name));
+  if(test!=NULL)outlet_symbol(m_outlet, gensym(test));
 }
 
 /////////////////////////////////////////////////////////
