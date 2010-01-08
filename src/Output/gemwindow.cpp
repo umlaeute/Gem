@@ -296,38 +296,38 @@ void gemwindow :: createMessCallback(void *data, t_symbol* disp)
 }
 void gemwindow :: bufferMessCallback(void *data, t_floatarg buf)
 {
-  GetMyClass(data)->bufferMess((int)buf);
+  GetMyClass(data)->bufferMess(static_cast<int>(buf));
 }
 void gemwindow :: fullscreenMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->fullscreenMess((int)on);
+  GetMyClass(data)->fullscreenMess(static_cast<int>(on));
 }
 void gemwindow :: menuBarMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->menuBarMess((int)on);
+  GetMyClass(data)->menuBarMess(static_cast<int>(on));
 }
 void gemwindow :: secondscreenMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->secondscreenMess((int)on);
+  GetMyClass(data)->secondscreenMess(static_cast<int>(on));
 }
 void gemwindow :: dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->dimensionsMess((int)width, (int)height);
+  GetMyClass(data)->dimensionsMess(static_cast<int>(width), static_cast<int>(height));
 }
 void gemwindow :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-  GetMyClass(data)->offsetMess((int)x, (int)y);
+  GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
 }
 void gemwindow :: cursorMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->cursorMess((float)val);
+  GetMyClass(data)->cursorMess(val);
 }
 void gemwindow :: topmostMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->topmostMess((float)val);
+  GetMyClass(data)->topmostMess(val);
 }
 void gemwindow :: fsaaMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->fsaaMess((int) val);
+  GetMyClass(data)->fsaaMess(static_cast<int>(val));
 }
 

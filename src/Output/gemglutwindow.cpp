@@ -377,7 +377,7 @@ void gemglutwindow :: printMessCallback(void *)
 }
 void gemglutwindow :: borderMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->borderMess((int)state);
+  GetMyClass(data)->borderMess(static_cast<int>(state));
 }
 void gemglutwindow :: destroyMessCallback(void *data)
 {
@@ -397,27 +397,27 @@ void gemglutwindow :: createMessCallback(void *data)
 }
 void gemglutwindow :: bufferMessCallback(void *data, t_floatarg buf)
 {
-  GetMyClass(data)->bufferMess((int)buf);
+  GetMyClass(data)->bufferMess(static_cast<int>(buf));
 }
 void gemglutwindow :: fullscreenMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->fullscreenMess((int)on);
+  GetMyClass(data)->fullscreenMess(static_cast<int>(on));
 }
 void gemglutwindow :: dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->dimensionsMess((int)width, (int)height);
+  GetMyClass(data)->dimensionsMess(static_cast<int>(width), static_cast<int>(height));
 }
 void gemglutwindow :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-  GetMyClass(data)->offsetMess((int)x, (int)y);
+  GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
 }
 void gemglutwindow :: cursorMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->cursorMess((float)val);
+  GetMyClass(data)->cursorMess(val);
 }
 void gemglutwindow :: fsaaMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->fsaaMess((int) val);
+  GetMyClass(data)->fsaaMess(static_cast<int>(val));
 }
 
 /////////////////////////////////////////////////////////
@@ -465,7 +465,8 @@ static t_symbol*key2symbol(unsigned char c) {
   char s[2];
   switch(c) {
   default:
-    sprintf(s, "%c\0", c);
+    sprintf(s, "%c", c);
+    s[1]=0;
     sym=gensym(s);
   }
   return sym;
