@@ -198,7 +198,9 @@ void pix_buffer_read :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_buffer_read :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)create_pix_buffer_read,gensym("pix_get"),A_DEFSYM,A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buffer_read),
+                   gensym("pix_get"),
+                   A_DEFSYM, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::setMessCallback),
   		  gensym("set"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::frameMessCallback),

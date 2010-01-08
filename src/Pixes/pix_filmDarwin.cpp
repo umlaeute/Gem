@@ -510,7 +510,7 @@ void pix_filmDarwin :: doDebug()
 /////////////////////////////////////////////////////////
 void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)create_pix_filmDarwin, gensym("pix_film"), A_DEFSYM, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_filmDarwin), gensym("pix_film"), A_DEFSYM, A_NULL);
   pix_filmOS::real_obj_setupCallback(classPtr);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::openMessCallback),

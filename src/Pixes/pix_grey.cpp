@@ -40,6 +40,6 @@ pix_grey :: pix_grey()
 /////////////////////////////////////////////////////////
 void pix_grey :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)create_pix_grey, 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_grey), 
 		   gensym("pix_gray"), A_NULL);
 }

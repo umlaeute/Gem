@@ -782,7 +782,7 @@ void pix_movieDS::changeImage(int imgNum, int trackNum)
 /////////////////////////////////////////////////////////
 void pix_movieDS::obj_setupCallback(t_class *classPtr)
 {
-	class_addcreator((t_newmethod)create_pix_movieDS,gensym("pix_movieDS"),A_DEFSYM,A_NULL);
+	class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieDS,gensym("pix_movieDS"),A_DEFSYM,A_NULL));
 	
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::openMessCallback),
 		gensym("open"), A_SYMBOL, A_NULL);

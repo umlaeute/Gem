@@ -1044,10 +1044,10 @@ void pix_videoDS :: copyBuffer()
 /////////////////////////////////////////////////////////
 void pix_videoDS :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)create_pix_videoDS, gensym("pix_video"), A_DEFFLOAT, A_NULL);
-  class_addcreator((t_newmethod)create_pix_videoDS, gensym("pix_videoDS"), A_DEFFLOAT, A_NULL);
-  class_addcreator((t_newmethod)create_pix_videoDS, gensym("pix_video_ds"), A_DEFFLOAT, A_NULL);  // alias to old external
-  class_addcreator((t_newmethod)create_pix_videoDS, gensym("pix_dv"), A_DEFFLOAT, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_videoDS), gensym("pix_video"), A_DEFFLOAT, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_videoDS), gensym("pix_videoDS"), A_DEFFLOAT, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_videoDS), gensym("pix_video_ds"), A_DEFFLOAT, A_NULL);  // alias to old external
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_videoDS), gensym("pix_dv"), A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDS::openMessCallback),
 		  gensym("device"), A_DEFFLOAT, A_NULL);

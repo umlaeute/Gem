@@ -297,7 +297,7 @@ void pix_movieOS :: setUpTextureState()
 /////////////////////////////////////////////////////////
 void pix_movieOS :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)create_pix_movieOS, gensym("pix_movie"), A_DEFSYM, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieOS), gensym("pix_movie"), A_DEFSYM, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieOS::openMessCallback),
 		  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieOS::changeImageCallback),

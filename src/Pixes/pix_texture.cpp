@@ -757,8 +757,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::pboCallback),
                   gensym("pbo"), A_FLOAT, A_NULL);
 
-
-  class_addcreator((t_newmethod)create_pix_texture,gensym("pix_texture2"),A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_texture), gensym("pix_texture2"), A_NULL);
 }
 void pix_texture :: floatMessCallback(void *data, float n)
 {

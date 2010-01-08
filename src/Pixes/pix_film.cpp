@@ -466,7 +466,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
    * if a selector is bound to the same method of a class a 2nd time
    */
 #endif
-  class_addcreator((t_newmethod)create_pix_film, gensym("pix_filmQT"), A_DEFSYM, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_film), gensym("pix_filmQT"), A_DEFSYM, A_NULL);
  
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::openMessCallback),
 		  gensym("open"), A_GIMME, A_NULL);

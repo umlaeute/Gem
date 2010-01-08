@@ -114,7 +114,7 @@ void pix_colormatrix :: matrixMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_colormatrix :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)create_pix_colormatrix, 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colormatrix), 
 		   gensym("pix_colourmatrix"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colormatrix::matrixMessCallback),
     	    gensym("matrix"), A_GIMME, A_NULL);

@@ -509,7 +509,7 @@ static int freeframe_loader(t_canvas *canvas, char *classname) {
   
   if(plugin!=NULL) {
     plugin(FF_DEINITIALISE, NULL, 0);
-    class_addcreator((t_newmethod)freeframe_loader_new, gensym(classname), A_GIMME, 0);
+    class_addcreator(reinterpret_cast<t_newmethod>(freeframe_loader_new), gensym(classname), A_GIMME, 0);
     return 1;
   }
   return 0;
