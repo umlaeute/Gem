@@ -31,7 +31,7 @@ alpha :: alpha(t_floatarg fun=0)
 	 m_alphaTest(1),
 	 m_depthtest(1)
 {
-  funMess((int)fun);
+  funMess(static_cast<int>(fun));
   m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("function"));
 }
 
@@ -139,19 +139,19 @@ void alpha :: obj_setupCallback(t_class *classPtr)
 }
 void alpha :: alphaMessCallback(void *data, t_floatarg alphaState)
 {
-    GetMyClass(data)->alphaMess((int)alphaState);
+    GetMyClass(data)->alphaMess(static_cast<int>(alphaState));
 }
 void alpha :: testMessCallback(void *data, t_floatarg alphaTest)
 {
-    GetMyClass(data)->testMess((int)alphaTest);
+    GetMyClass(data)->testMess(static_cast<int>(alphaTest));
 }
 
 void alpha :: depthtestMessCallback(void *data, t_floatarg f)
 {
-    GetMyClass(data)->depthtestMess(!(int)f);
+    GetMyClass(data)->depthtestMess(!static_cast<int>(f));
 }
 
 void alpha :: funMessCallback(void *data, t_floatarg alphaFun)
 {
-    GetMyClass(data)->funMess((int)alphaFun);
+    GetMyClass(data)->funMess(static_cast<int>(alphaFun));
 }

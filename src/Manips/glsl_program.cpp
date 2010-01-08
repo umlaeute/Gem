@@ -130,63 +130,63 @@ void glsl_program :: renderGL2()
               {
 		/* float vectors */
               case GL_FLOAT:
-                glUniform1f( m_loc[i], (GLfloat)m_param[i][0] );
+                glUniform1f( m_loc[i], static_cast<GLfloat>(m_param[i][0]) );
 		break;
               case GL_FLOAT_VEC2:
-                glUniform2f( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1] );
+                glUniform2f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
 		break;
               case GL_FLOAT_VEC3:
-                glUniform3f( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
-                                (GLfloat)m_param[i][2] );
+                glUniform3f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                                static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_FLOAT_VEC4:
-                glUniform4f( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
-                                (GLfloat)m_param[i][2], (GLfloat)m_param[i][3] );
+                glUniform4f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                                static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
 		/* int vectors */
               case GL_INT:
-                glUniform1i( m_loc[i], (GLint)m_param[i][0] );
+                glUniform1i( m_loc[i], static_cast<GLint>(m_param[i][0]) );
 		break;
               case GL_INT_VEC2:
-                glUniform2i( m_loc[i], (GLint)m_param[i][0], (GLint)m_param[i][1] );
+                glUniform2i( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]) );
 		break;
               case GL_INT_VEC3:
                 glUniform3i(m_loc[i], 
-			    (GLint)m_param[i][0], (GLint)m_param[i][1], (GLint)m_param[i][2] );
+			    static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), static_cast<GLint>(m_param[i][2]) );
 		break;
               case GL_INT_VEC4:
                 glUniform4i(m_loc[i], 
-			    (GLint)m_param[i][0], (GLint)m_param[i][1], 
-			    (GLint)m_param[i][2], (GLint)m_param[i][3] );
+			    static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), 
+			    static_cast<GLint>(m_param[i][2]), static_cast<GLint>(m_param[i][3]) );
 		break;
 		/* bool vectors */
               case GL_BOOL:
-                glUniform1f( m_loc[i], (GLfloat)m_param[i][0] );
+                glUniform1f( m_loc[i], static_cast<GLfloat>(m_param[i][0]) );
 		break;
               case GL_BOOL_VEC2:
-                glUniform2f( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1] );
+                glUniform2f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
 		break;
               case GL_BOOL_VEC3:
                 glUniform3f( m_loc[i], 
-			     (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
-			     (GLfloat)m_param[i][2] );
+			     static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+			     static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_BOOL_VEC4:
                 glUniform4f( m_loc[i], 
-			     (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
-			     (GLfloat)m_param[i][2], (GLfloat)m_param[i][3] );
+			     static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+			     static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
 
 		/* float matrices */
               case GL_FLOAT_MAT2:
                 // GL_TRUE = row major order, GL_FALSE = column major
-                glUniformMatrix2fv( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix2fv( m_loc[i], 1, GL_FALSE, m_param[i] );
 		break;
               case GL_FLOAT_MAT3:
-                glUniformMatrix3fv( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix3fv( m_loc[i], 1, GL_FALSE, m_param[i] );
 		break;
               case GL_FLOAT_MAT4:
-                glUniformMatrix4fv( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix4fv( m_loc[i], 1, GL_FALSE, m_param[i] );
 		break;
 
 		/* textures */
@@ -199,7 +199,7 @@ void glsl_program :: renderGL2()
 	      case GL_SAMPLER_1D_SHADOW: break;
 	      case GL_SAMPLER_2D_SHADOW: break;
 	      case GL_SAMPLER_2D_RECT_ARB:
-		glUniform1i(m_loc[i], (GLint)m_param[i][0]);
+		glUniform1i(m_loc[i], static_cast<GLint>(m_param[i][0]));
 		break;
               default:
 		;
@@ -228,63 +228,62 @@ void glsl_program :: renderARB()
               {
 		/* float vectors */
               case GL_FLOAT:
-                glUniform1fARB( m_loc[i], (GLfloat)m_param[i][0] );
+                glUniform1fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]) );
 		break;
               case GL_FLOAT_VEC2_ARB:
-                glUniform2fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1] );
+                glUniform2fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
 		break;
               case GL_FLOAT_VEC3_ARB:
-                glUniform3fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
-                                (GLfloat)m_param[i][2] );
+                glUniform3fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                                static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_FLOAT_VEC4_ARB:
-                glUniform4fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
-                                (GLfloat)m_param[i][2], (GLfloat)m_param[i][3] );
+                glUniform4fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                                static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
 
 		/* int vectors */
               case GL_INT:
-                glUniform1iARB( m_loc[i], (GLint)m_param[i][0] );
+                glUniform1iARB( m_loc[i], static_cast<GLint>(m_param[i][0]) );
 		break;
               case GL_INT_VEC2_ARB:
-                glUniform2iARB( m_loc[i], (GLint)m_param[i][0], (GLint)m_param[i][1] );
+                glUniform2iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]) );
 		break;
               case GL_INT_VEC3_ARB:
-                glUniform3iARB( m_loc[i], (GLint)m_param[i][0], (GLint)m_param[i][1], 
-                                (GLint)m_param[i][2] );
+                glUniform3iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), 
+                                static_cast<GLint>(m_param[i][2]) );
 		break;
               case GL_INT_VEC4_ARB:
-                glUniform4iARB( m_loc[i], (GLint)m_param[i][0], (GLint)m_param[i][1], 
-                                (GLint)m_param[i][2], (GLint)m_param[i][3] );
+                glUniform4iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), 
+                                static_cast<GLint>(m_param[i][2]), static_cast<GLint>(m_param[i][3]) );
 		break;
 
 		/* bool vectors */
 	      case GL_BOOL_ARB:
-                glUniform1fARB( m_loc[i], (GLfloat)m_param[i][0] );
+                glUniform1fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]) );
 		break;
               case GL_BOOL_VEC2_ARB:
-                glUniform2fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1] );
+                glUniform2fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
 		break;
               case GL_BOOL_VEC3_ARB:
-                glUniform3fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
-                                (GLfloat)m_param[i][2] );
+                glUniform3fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                                static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_BOOL_VEC4_ARB:
-                glUniform4fARB( m_loc[i], (GLfloat)m_param[i][0], (GLfloat)m_param[i][1], 
-                                (GLfloat)m_param[i][2], (GLfloat)m_param[i][3] );
+                glUniform4fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                                static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
-
 
 		/* float matrices */
               case GL_FLOAT_MAT2_ARB:
                 // GL_TRUE = row major order, GL_FALSE = column major
-                glUniformMatrix2fvARB( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix2fvARB( m_loc[i], 1, GL_FALSE, m_param[i] );
 		break;
               case GL_FLOAT_MAT3_ARB:
-                glUniformMatrix3fvARB( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix3fvARB( m_loc[i], 1, GL_FALSE, m_param[i] );
 		break;
               case GL_FLOAT_MAT4_ARB:
-                glUniformMatrix4fvARB( m_loc[i], 1, GL_FALSE, (GLfloat*)&m_param[i] );
+                glUniformMatrix4fvARB( m_loc[i], 1, GL_FALSE, m_param[i] );
 		break;
 
 		/* textures */
@@ -404,8 +403,8 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     {
       t_floatuint fi;
       fi.f=atom_getfloat(&argv[i]);
-      m_shaderObj[i] = (GLuint)(fi.i);
-      m_shaderObjARB[i] = (GLhandleARB)(fi.i);
+      m_shaderObj[i] = static_cast<GLuint>(fi.i);
+      m_shaderObjARB[i] = static_cast<GLhandleARB>(fi.i);
     }
   
   //  not sure what to do here:  we don't want to link & re-link every render cycle,
@@ -778,7 +777,7 @@ void glsl_program :: paramMessCallback(void *data, t_symbol *s, int argc, t_atom
 void glsl_program :: intypeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   if(argc==1) {
-    GetMyClass(data)->intypeMess((GLenum)getGLdefine(argv));
+    GetMyClass(data)->intypeMess(static_cast<GLenum>(getGLdefine(argv)));
   } else {
     GetMyClass(data)->error("input-type must be exactly one parameter");
   }
@@ -787,7 +786,7 @@ void glsl_program :: intypeMessCallback(void *data, t_symbol *s, int argc, t_ato
 void glsl_program :: outtypeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   if(argc==1) {
-    GetMyClass(data)->outtypeMess((GLenum)getGLdefine(argv));
+    GetMyClass(data)->outtypeMess(static_cast<GLenum>(getGLdefine(argv)));
   } else {
     GetMyClass(data)->error("output type must be exactly one parameter");
   }
@@ -796,8 +795,8 @@ void glsl_program :: outtypeMessCallback(void *data, t_symbol *s, int argc, t_at
 void glsl_program :: typeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   if(argc==2) {
-    GetMyClass(data)->intypeMess ((GLenum)getGLdefine(argv+0));
-    GetMyClass(data)->outtypeMess((GLenum)getGLdefine(argv+1));
+    GetMyClass(data)->intypeMess (static_cast<GLenum>(getGLdefine(argv+0)));
+    GetMyClass(data)->outtypeMess(static_cast<GLenum>(getGLdefine(argv+1)));
   } else {
     GetMyClass(data)->error("type must have exactly two parameters (input-type & output-type)");
   }

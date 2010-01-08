@@ -112,8 +112,8 @@ class GEM_EXTERN glsl_program : public GemBase
   GLint			*m_size;
   GLenum		*m_type;
   GLint       *m_loc;
-  float			 **m_param;
-  int			 *m_flag;
+  GLfloat    **m_param;
+  int         *m_flag;
   
   GLint		m_linked;
   bool        m_wantLink;

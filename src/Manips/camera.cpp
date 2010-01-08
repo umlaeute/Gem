@@ -358,43 +358,43 @@ void camera :: vAngleMessCallback(void *data, t_floatarg val)
 }
 void camera :: distanceMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->distanceMess((float)val);
+  GetMyClass(data)->distanceMess(val);
 }
 void camera :: speedMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->m_speed=((float)val);
+  GetMyClass(data)->m_speed=(val);
 }
 void camera :: forwardMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->forward=(int)val;
+  GetMyClass(data)->forward=static_cast<int>(val);
 }
 void camera :: reverseMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->reverse=(int)val;
+  GetMyClass(data)->reverse=static_cast<int>(val);
 }
 void camera :: leftMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->left=(int)val;
+  GetMyClass(data)->left=static_cast<int>(val);
 }
 void camera :: rightMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->right=(int)val;
+  GetMyClass(data)->right=static_cast<int>(val);
 }
 void camera :: slideLeftMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->slideLeft=(int)val;
+  GetMyClass(data)->slideLeft=static_cast<int>(val);
 }
 void camera :: slideRightMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->slideRight=(int)val;
+  GetMyClass(data)->slideRight=static_cast<int>(val);
 }
 void camera :: upMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->up=(int)val;
+  GetMyClass(data)->up=static_cast<int>(val);
 }
 void camera :: downMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->down=(int)val;
+  GetMyClass(data)->down=static_cast<int>(val);
 }
 void camera :: resetMessCallback(void *data)
 {
@@ -402,7 +402,7 @@ void camera :: resetMessCallback(void *data)
 }
 void camera :: modeMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->m_mode=(int)val;
+  GetMyClass(data)->m_mode=static_cast<int>(val);
 }
 void camera :: lookXMessCallback(void *data, t_floatarg val)
 {

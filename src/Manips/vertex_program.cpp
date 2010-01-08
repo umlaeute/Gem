@@ -431,5 +431,5 @@ void vertex_program :: printMessCallback(void *data)
 
 void vertex_program :: paramMessCallback(void *data, t_float envNum, t_float param1, t_float param2, t_float param3, t_float param4)
 {
-  GetMyClass(data)->paramMess((int)envNum, param1, param2, param3, param4);
+  GetMyClass(data)->paramMess(static_cast<int>(envNum), param1, param2, param3, param4);
 }

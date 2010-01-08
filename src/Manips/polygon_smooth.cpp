@@ -82,5 +82,5 @@ void polygon_smooth :: obj_setupCallback(t_class *classPtr)
 }
 void polygon_smooth :: polygon_smoothMessCallback(void *data, t_floatarg polygon_smoothState)
 {
-    GetMyClass(data)->polygon_smoothMess((int)polygon_smoothState);
+    GetMyClass(data)->polygon_smoothMess(static_cast<int>(polygon_smoothState));
 }

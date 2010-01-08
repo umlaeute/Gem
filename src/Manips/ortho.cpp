@@ -50,7 +50,7 @@ void ortho :: render(GemState *)
       int width=1, height=1;
       GemMan::getDimen(&width, &height);
 
-      aspect = (m_compat)?1.f:(GLfloat)width / (GLfloat)height;
+      aspect = (m_compat)?1.f:static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
       glPushAttrib(GL_VIEWPORT_BIT);
       glViewport(0, 0, width, height);
       glMatrixMode(GL_PROJECTION);
@@ -107,9 +107,9 @@ void ortho :: obj_setupCallback(t_class *classPtr)
 		  gensym("compat"), A_FLOAT, A_NULL);}
 void ortho :: orthoMessCallback(void *data, t_floatarg state)
 {
-    GetMyClass(data)->orthoMess((int)state);
+    GetMyClass(data)->orthoMess(static_cast<int>(state));
 }
 void ortho :: compatMessCallback(void *data, t_floatarg state)
 {
-    GetMyClass(data)->compatMess((int)state);
+    GetMyClass(data)->compatMess(static_cast<int>(state));
 }
