@@ -373,15 +373,15 @@ void rubber :: bangMessCallback(void *data)
 }
 void rubber :: heightMessCallback(void *data, t_floatarg height)
 {
-  GetMyClass(data)->heightMess((float)height);
+  GetMyClass(data)->heightMess(height);
 }
 void rubber :: ctrXMessCallback(void *data, t_floatarg center)
 {
-  GetMyClass(data)->ctrXMess((float)center);
+  GetMyClass(data)->ctrXMess(center);
 }
 void rubber :: ctrYMessCallback(void *data, t_floatarg center)
 {
-  GetMyClass(data)->ctrYMess((float)center);
+  GetMyClass(data)->ctrYMess(center);
 }
 void rubber :: dragMessCallback(void *data, t_floatarg drag)
 {

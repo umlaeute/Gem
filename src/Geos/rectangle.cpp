@@ -128,5 +128,5 @@ void rectangle :: obj_setupCallback(t_class *classPtr)
 
 void rectangle :: heightMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->heightMess((float)size);
+    GetMyClass(data)->heightMess(size);
 }

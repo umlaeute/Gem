@@ -80,7 +80,7 @@ void curve :: render(GemState *state)
     glEnable(GL_MAP1_VERTEX_3);
     glBegin(m_drawType);
 	    for (int n = 0; n <= m_resolution; n++)
-	        glEvalCoord1f((GLfloat)n/(float)m_resolution);
+	        glEvalCoord1f(static_cast<GLfloat>(n)/static_cast<GLfloat>(m_resolution));
     glEnd();
     glLineWidth(1.0);
 }

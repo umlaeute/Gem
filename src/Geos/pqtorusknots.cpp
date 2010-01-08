@@ -115,18 +115,18 @@ void pqtorusknots :: genVert(){
       float centerpoint[3];
       float Pp = m_P * i * PI2 / m_steps;
       float Qp = m_Q * i * PI2 / m_steps;
-      float r = (.5f * (2 + (float)sin(Qp))) * m_scale;
-      centerpoint[0] = r * (float)cos(Pp);
-      centerpoint[1] = r * (float)cos(Qp);
-      centerpoint[2] = r * (float)sin(Pp);
+      float r = (.5f * (2 + sin(Qp))) * m_scale;
+      centerpoint[0] = r * cos(Pp);
+      centerpoint[1] = r * cos(Qp);
+      centerpoint[2] = r * sin(Pp);
         
       float nextpoint[3];
       Pp = m_P * (i + 1) * PI2 / m_steps;
       Qp = m_Q * (i + 1) * PI2 / m_steps;
-      r = (.5f * (2 + (float)sin(Qp))) * m_scale;
-      nextpoint[0] = r * (float)cos(Pp);
-      nextpoint[1] = r * (float)cos(Qp);
-      nextpoint[2] = r * (float)sin(Pp);
+      r = (.5f * (2 + sin(Qp))) * m_scale;
+      nextpoint[0] = r * cos(Pp);
+      nextpoint[1] = r * cos(Qp);
+      nextpoint[2] = r * sin(Pp);
         
       float T[3];
       T[0] = nextpoint[0] - centerpoint[0];
@@ -149,20 +149,20 @@ void pqtorusknots :: genVert(){
       N[2] = B[0]*T[1] - B[1]*T[0];
 
       float length;
-      length = (float)sqrt(B[0] * B[0] + B[1] * B[1] + B[2] * B[2]);
+      length = sqrt(B[0] * B[0] + B[1] * B[1] + B[2] * B[2]);
       B[0] /= length;
       B[1] /= length;
       B[2] /= length;
 
-      length = (float)sqrt(N[0] * N[0] + N[1] * N[1] + N[2] * N[2]);
+      length = sqrt(N[0] * N[0] + N[1] * N[1] + N[2] * N[2]);
       N[0] /= length;
       N[1] /= length;
       N[2] /= length;
 
       for (j = 0; j < m_facets; j++)
         {
-          float pointx = (float)sin(j * PI2 / m_facets) * thickness * (((float)sin(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
-          float pointy = (float)cos(j * PI2 / m_facets) * thickness * (((float)cos(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
+          float pointx = sin(j * PI2 / m_facets) * thickness * ((sin(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
+          float pointy = cos(j * PI2 / m_facets) * thickness * ((cos(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
           int offset3j= 3 * (i * (m_facets + 1) + j);
           int offset2j= 2 * (i * (m_facets + 1) + j);
 
@@ -175,7 +175,7 @@ void pqtorusknots :: genVert(){
           m_Normal[offset3j + 2] = m_Vertex[offset3j + 2] - centerpoint[2];
 
           float length;
-          length = (float)sqrt(m_Normal[offset3j + 0] * m_Normal[offset3j + 0] +
+          length = sqrt(m_Normal[offset3j + 0] * m_Normal[offset3j + 0] +
                                m_Normal[offset3j + 1] * m_Normal[offset3j + 1] +
                                m_Normal[offset3j + 2] * m_Normal[offset3j + 2]);
             
@@ -183,8 +183,8 @@ void pqtorusknots :: genVert(){
           m_Normal[offset3j + 1] /= length;
           m_Normal[offset3j + 2] /= length;
 
-          m_texcoords[offset2j + 0] = ((float)j / m_facets) * m_uScale;
-          m_texcoords[offset2j + 1] = ((float)i / m_steps ) * m_vScale;
+          m_texcoords[offset2j + 0] = (static_cast<float>(j) / m_facets) * m_uScale;
+          m_texcoords[offset2j + 1] = (static_cast<float>(i) / m_steps ) * m_vScale;
         }
       // create duplicate vertex for sideways wrapping
       // otherwise identical to first vertex in the 'ring' except for the U coordinate
@@ -391,32 +391,32 @@ void pqtorusknots :: obj_setupCallback(t_class *classPtr)
 
 void pqtorusknots :: scaleMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->scaleMess((float)size);  
+  GetMyClass(data)->scaleMess(size);  
 }
 
 void pqtorusknots :: stepsMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->stepsMess((float)size);  
+  GetMyClass(data)->stepsMess(size);  
 }
 void pqtorusknots :: facetsMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->facetsMess((float)size);  
+  GetMyClass(data)->facetsMess(size);  
 }
 void pqtorusknots :: thickMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->thickMess((float)size);  
+  GetMyClass(data)->thickMess(size);  
 }
 void pqtorusknots :: clumpMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce )
 {
-  GetMyClass(data)->clumpMess((float)posX, (float)posY, (float)valforce);
+  GetMyClass(data)->clumpMess(posX, posY, valforce);
 }
 void pqtorusknots :: uvScaleMessCallback(void *data, t_floatarg posX, t_floatarg posY)
 {
-  GetMyClass(data)->uvScaleMess((float)posX, (float)posY);
+  GetMyClass(data)->uvScaleMess(posX, posY);
 }
 void pqtorusknots :: pqMessCallback(void *data, t_floatarg posX, t_floatarg posY)
 {
-  GetMyClass(data)->pqMess((float)posX, (float)posY);
+  GetMyClass(data)->pqMess(posX, posY);
 }
 void pqtorusknots :: typeMessCallback(void *data, t_symbol*s)
 {

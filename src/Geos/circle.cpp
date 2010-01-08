@@ -94,12 +94,12 @@ void circle :: obj_setupCallback(t_class *)
 {
     m_cos = new GLfloat [NUM_PNTS];
     m_sin = new GLfloat [NUM_PNTS];
-    float TWO_PI = 8.f * (float)atan(1.f);
+    double TWO_PI = 8. * atan(1.f);
     // compute sin/cos lookup table
     for(int i = 0; i < NUM_PNTS; i++)
     {
-	    m_cos[i] = (float)cos(TWO_PI * (double)i / (double)NUM_PNTS);
-	    m_sin[i] = (float)sin(TWO_PI * (double)i / (double)NUM_PNTS);
+	    m_cos[i] = cos(TWO_PI * i / NUM_PNTS);
+	    m_sin[i] = sin(TWO_PI * i / NUM_PNTS);
     }
 }
 

@@ -213,6 +213,6 @@ void slideSquares :: obj_setupCallback(t_class *classPtr)
 
 void slideSquares :: heightMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->heightMess((float)size);
+    GetMyClass(data)->heightMess(size);
 }
 

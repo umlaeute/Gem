@@ -174,10 +174,10 @@ void cuboid :: obj_setupCallback(t_class *classPtr)
 
 void cuboid :: heightMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->heightMess((float)size);  
+    GetMyClass(data)->heightMess(size);  
 }
 
 void cuboid :: widthMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->widthMess((float)size);  
+    GetMyClass(data)->widthMess(size);  
 }

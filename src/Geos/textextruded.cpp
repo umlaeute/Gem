@@ -95,5 +95,5 @@ void textextruded :: obj_setupCallback(t_class *classPtr)
 }
 void textextruded :: depthMessCallback(void *data, t_floatarg depth)
 {
-  GetMyClass(data)->setDepth((float)depth);
+  GetMyClass(data)->setDepth(depth);
 }

@@ -162,15 +162,15 @@ void primTri :: obj_setupCallback(t_class *classPtr)
 
 void primTri :: vect1MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
 {
-    GetMyClass(data)->vectMess(0, (float)x, (float)y, (float)z);
+    GetMyClass(data)->vectMess(0, x, y, z);
 }
 void primTri :: vect2MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
 {
-    GetMyClass(data)->vectMess(1, (float)x, (float)y, (float)z);
+    GetMyClass(data)->vectMess(1, x, y, z);
 }
 void primTri :: vect3MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
 {
-    GetMyClass(data)->vectMess(2, (float)x, (float)y, (float)z);
+    GetMyClass(data)->vectMess(2, x, y, z);
 }
 
 void primTri :: col1MessCallback(void *data, t_symbol *, int argc, t_atom *argv)

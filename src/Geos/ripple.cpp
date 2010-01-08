@@ -404,13 +404,13 @@ void ripple :: bangMessCallback(void *data)
 }
 void ripple :: heightMessCallback(void *data, t_floatarg height)
 {
-  GetMyClass(data)->heightMess((float)height);
+  GetMyClass(data)->heightMess(height);
 }
 void ripple :: ctrXMessCallback(void *data, t_floatarg center)
 {
-  GetMyClass(data)->ctrXMess((float)center);
+  GetMyClass(data)->ctrXMess(center);
 }
 void ripple :: ctrYMessCallback(void *data, t_floatarg center)
 {
-  GetMyClass(data)->ctrYMess((float)center);
+  GetMyClass(data)->ctrYMess(center);
 }
