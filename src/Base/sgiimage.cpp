@@ -164,10 +164,10 @@ static int putlong(FILE *outf, unsigned int32 val)
 {
   unsigned char buf[4];
 
-  buf[0] = (unsigned char)(val>>24);
-  buf[1] = (unsigned char)(val>>16);
-  buf[2] = (unsigned char)(val>>8);
-  buf[3] = (unsigned char)(val>>0);
+  buf[0] = static_cast<unsigned char>(val>>24);
+  buf[1] = static_cast<unsigned char>(val>>16);
+  buf[2] = static_cast<unsigned char>(val>>8);
+  buf[3] = static_cast<unsigned char>(val>>0);
   return fwrite(buf,4,1,outf);
 }
 
@@ -572,9 +572,9 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
     image->dim = 3;
   else
     image->dim = 2;
-  image->xsize = (unsigned short)xsize;
-  image->ysize = (unsigned short)ysize;
-  image->zsize = (unsigned short)zsize;
+  image->xsize = static_cast<unsigned short>(xsize);
+  image->ysize = static_cast<unsigned short>(ysize);
+  image->zsize = static_cast<unsigned short>(zsize);
   image->min = 0;
   image->max = 255;
   goodwrite *= writeheader(outf,image);
