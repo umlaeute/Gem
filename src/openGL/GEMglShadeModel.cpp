@@ -58,7 +58,7 @@ void GEMglShadeModel :: modeMess (t_atom arg) {	// FUN
 //
 
 void GEMglShadeModel :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglShadeModel::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglShadeModel::modeMessCallback),  	gensym("mode"), A_GIMME, A_NULL);
 };
 
 void GEMglShadeModel :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

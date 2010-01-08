@@ -346,8 +346,8 @@ void pix_deinterlace :: processYUVAltivec(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_deinterlace :: obj_setupCallback(t_class *classPtr)
 { 
-	class_addmethod(classPtr, (t_method)&pix_deinterlace::modeMessCallback, gensym("mode"),A_FLOAT,A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_deinterlace::adaptiveMessCallback, gensym("adaptive"),A_FLOAT,A_NULL);
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_deinterlace::modeMessCallback), gensym("mode"),A_FLOAT,A_NULL);
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_deinterlace::adaptiveMessCallback), gensym("adaptive"),A_FLOAT,A_NULL);
 }
 
 void pix_deinterlace :: modeMessCallback(void *data,t_floatarg mode)

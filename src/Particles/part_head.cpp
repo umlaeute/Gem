@@ -76,7 +76,7 @@ void part_head :: speedMess(float speed)
 /////////////////////////////////////////////////////////
 void part_head :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_head::speedMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_head::speedMessCallback),
     	    gensym("speed"), A_FLOAT, A_NULL);
 }
 void part_head :: speedMessCallback(void *data, t_floatarg speed)

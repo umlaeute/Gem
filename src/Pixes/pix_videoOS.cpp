@@ -174,17 +174,17 @@ void pix_videoOS :: dialogMess(int argc, t_atom*argv)
 /////////////////////////////////////////////////////////
 void pix_videoOS :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_videoOS::dimenMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::dimenMessCallback),
     	    gensym("dimen"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoOS::offsetMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::offsetMessCallback),
     	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoOS::swapMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::swapMessCallback),
     	    gensym("swap"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoOS::enumerateMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::enumerateMessCallback),
     	    gensym("enumerate"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoOS::csMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::csMessCallback),
     	    gensym("colorspace"), A_DEFSYMBOL, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoOS::dialogMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::dialogMessCallback),
     	    gensym("dialog"), A_GIMME, A_NULL);
 }
 void pix_videoOS :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)

@@ -240,7 +240,7 @@ void disk :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void disk :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&disk::innerRadiusCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&disk::innerRadiusCallback),
     	    gensym("inner"), A_FLOAT, A_NULL); 
 }
 void disk :: innerRadiusCallback(void *data, t_floatarg radius)

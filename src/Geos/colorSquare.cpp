@@ -134,13 +134,13 @@ void colorSquare :: vertColorMess(int whichVert, float r, float g, float b)
 /////////////////////////////////////////////////////////
 void colorSquare :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&colorSquare::vert0MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert0MessCallback),
     	    gensym("vert0"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&colorSquare::vert1MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert1MessCallback),
     	    gensym("vert1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&colorSquare::vert2MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert2MessCallback),
     	    gensym("vert2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&colorSquare::vert3MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert3MessCallback),
     	    gensym("vert3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void colorSquare :: vert0MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b)

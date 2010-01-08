@@ -98,12 +98,12 @@ void GEMglOrtho :: zFarMess (t_float arg1) {	// FUN
 //
 
 void GEMglOrtho :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglOrtho::leftMessCallback,  	gensym("left"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglOrtho::rightMessCallback,  	gensym("right"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglOrtho::bottomMessCallback,  	gensym("bottom"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglOrtho::topMessCallback,  	gensym("top"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglOrtho::zNearMessCallback,  	gensym("zNear"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglOrtho::zFarMessCallback,  	gensym("zFar"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::leftMessCallback),  	gensym("left"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::rightMessCallback),  	gensym("right"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::bottomMessCallback),  	gensym("bottom"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::topMessCallback),  	gensym("top"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::zNearMessCallback),  	gensym("zNear"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::zFarMessCallback),  	gensym("zFar"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglOrtho :: leftMessCallback (void* data, t_floatarg arg0){

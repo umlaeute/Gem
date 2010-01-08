@@ -145,11 +145,11 @@ void pix_duotone :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_duotone :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_duotone::color1MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::color1MessCallback),
     	    gensym("color1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_duotone::color2MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::color2MessCallback),
     	    gensym("color2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_duotone::threshMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::threshMessCallback),
     	    gensym("thresh"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_duotone :: color1MessCallback(void *data, t_floatarg value1, t_floatarg value2, t_floatarg value3)

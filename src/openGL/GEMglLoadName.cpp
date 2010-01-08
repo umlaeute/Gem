@@ -64,7 +64,7 @@ void GEMglLoadName :: nameMess (t_float arg1) {	// FUN
 //
 
 void GEMglLoadName :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglLoadName::nameMessCallback,  	gensym("name"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLoadName::nameMessCallback),  	gensym("name"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglLoadName :: nameMessCallback (void* data, t_floatarg arg0){

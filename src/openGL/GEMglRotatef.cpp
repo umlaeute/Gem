@@ -80,10 +80,10 @@ void GEMglRotatef :: zMess (t_float arg1) {	// FUN
 //
 
 void GEMglRotatef :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglRotatef::angleMessCallback,  	gensym("angle"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRotatef::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRotatef::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRotatef::zMessCallback,  	gensym("z"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRotatef::angleMessCallback),  	gensym("angle"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRotatef::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRotatef::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRotatef::zMessCallback),  	gensym("z"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglRotatef :: angleMessCallback (void* data, t_floatarg arg0){

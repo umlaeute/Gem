@@ -610,9 +610,9 @@ unsigned char* pix_dot :: sharedbuffer_alloc(int size)
 /////////////////////////////////////////////////////////
 void pix_dot :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_dot::sizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dot::sizeMessCallback),
   		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_dot::scaleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dot::scaleMessCallback),
                     gensym("scale"), A_FLOAT, A_NULL);
 }
 

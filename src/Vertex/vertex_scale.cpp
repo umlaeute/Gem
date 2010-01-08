@@ -157,14 +157,14 @@ void vertex_scale :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_scale :: obj_setupCallback(t_class *classPtr)
 { 
-  class_addmethod(classPtr, (t_method)&vertex_scale::modeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::modeMessCallback),
 		  gensym("mode"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&vertex_scale::vertexMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::vertexMessCallback),
 		  gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&vertex_scale::paramMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::paramMessCallback),
 		  gensym("param"), A_GIMME, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&vertex_scale::paramMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::paramMessCallback),
 		  gensym("scale"), A_GIMME, A_NULL);
 }
 

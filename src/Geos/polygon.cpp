@@ -246,9 +246,9 @@ void polygon :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void polygon :: obj_setupCallback(t_class *classPtr)
 {
-	class_addlist(classPtr, (t_method)&polygon::listCallback);
-	class_addmethod(classPtr, (t_method)&polygon::vertexCallback, gensym("vertex"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-	class_addanything(classPtr, (t_method)&polygon::vertCallback);
+	class_addlist(classPtr, reinterpret_cast<t_method>(&polygon::listCallback));
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&polygon::vertexCallback), gensym("vertex"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+	class_addanything(classPtr, reinterpret_cast<t_method>(&polygon::vertCallback));
 }
 
 void polygon :: listCallback(void *data, t_symbol*s, int argc, t_atom*argv)

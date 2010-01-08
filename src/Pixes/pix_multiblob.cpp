@@ -299,11 +299,11 @@ void pix_multiblob :: threshMess(t_float thresh){
 //
 /////////////////////////////////////////////////////////
 void pix_multiblob :: obj_setupCallback(t_class *classPtr){
-  class_addmethod(classPtr, (t_method)&pix_multiblob :: blobSizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiblob::blobSizeMessCallback),
 		  gensym("blobSize"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_multiblob :: threshMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiblob::threshMessCallback),
 		  gensym("thresh"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_multiblob :: threshMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiblob::threshMessCallback),
 		  gensym("threshold"), A_FLOAT, A_NULL);
 }
 

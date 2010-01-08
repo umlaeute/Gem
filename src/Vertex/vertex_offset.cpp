@@ -98,8 +98,8 @@ void vertex_offset :: vertexProcess(int size, GLfloat*array){
 /////////////////////////////////////////////////////////
 void vertex_offset :: obj_setupCallback(t_class *classPtr)
 { 
-  class_addmethod(classPtr, (t_method)&vertex_offset::paramMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_offset::paramMessCallback),
 		  gensym("offset"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&vertex_offset::paramMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_offset::paramMessCallback),
 		  gensym("param"), A_GIMME, A_NULL);
 }

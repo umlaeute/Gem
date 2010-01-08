@@ -487,24 +487,24 @@ void gemframebuffer :: typeMess(const char* type)
 ////////////////////////////////////////////////////////
 void gemframebuffer :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&gemframebuffer::bangMessCallback);
-  class_addmethod(classPtr, (t_method)&gemframebuffer::modeCallback,
+  class_addbang(classPtr, reinterpret_cast<t_method>(&gemframebuffer::bangMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
                   gensym("mode"), A_FLOAT, A_NULL);
- class_addmethod(classPtr, (t_method)&gemframebuffer::modeCallback,
+ class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
                   gensym("rectangle"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemframebuffer::dimMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::dimMessCallback),
                   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemframebuffer::dimMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::dimMessCallback),
                   gensym("dim"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemframebuffer::formatMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::formatMessCallback),
                   gensym("format"), A_DEFSYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemframebuffer::typeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::typeMessCallback),
                   gensym("type"), A_DEFSYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemframebuffer::colorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::colorMessCallback),
                   gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemframebuffer::texunitCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::texunitCallback),
                   gensym("texunit"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemframebuffer::perspectiveMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::perspectiveMessCallback),
   				 gensym("perspec"), A_GIMME, A_NULL);
 }
 void gemframebuffer :: bangMessCallback(void *data)

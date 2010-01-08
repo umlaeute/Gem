@@ -134,15 +134,15 @@ void pix_indycam :: satMess(int val)
 /////////////////////////////////////////////////////////
 void pix_indycam :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_indycam::zoomMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_indycam::zoomMessCallback),
     	    gensym("zoom"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_indycam::brightMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_indycam::brightMessCallback),
     	    gensym("bright"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_indycam::contrastMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_indycam::contrastMessCallback),
     	    gensym("contrast"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_indycam::hueMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_indycam::hueMessCallback),
     	    gensym("hue"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_indycam::satMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_indycam::satMessCallback),
     	    gensym("sat"), A_FLOAT, A_NULL);
 }
 void pix_indycam :: zoomMessCallback(void *data, t_floatarg num, t_floatarg denom)

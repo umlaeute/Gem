@@ -87,7 +87,7 @@ void GEMglGetFloatv :: pnameMess (t_atom arg) {	// FUN
 //
 
 void GEMglGetFloatv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, (t_method)&GEMglGetFloatv::pnameMessCallback,  	gensym("pname"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetFloatv::pnameMessCallback),  	gensym("pname"), A_GIMME, A_NULL);
 }
 
 void GEMglGetFloatv :: pnameMessCallback (void* data, t_symbol*s,int argc, t_atom*argv) {

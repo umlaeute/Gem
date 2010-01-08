@@ -215,9 +215,9 @@ void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_rectangle :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_rectangle::vecCoordMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecCoordMessCallback),
     	    gensym("coord"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_rectangle::vecColorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecColorMessCallback),
     	    gensym("color"), A_GIMME, A_NULL);
 
 }

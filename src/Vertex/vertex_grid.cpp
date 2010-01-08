@@ -167,9 +167,9 @@ void vertex_grid :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 void vertex_grid :: obj_setupCallback(t_class *classPtr)
-{     class_addmethod(classPtr, (t_method)&vertex_grid::sizeMessCallback,
+{     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_grid::sizeMessCallback),
     	    gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&vertex_grid::spacingMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_grid::spacingMessCallback),
     	    gensym("spacing"), A_FLOAT, A_FLOAT, A_NULL);
 }
 

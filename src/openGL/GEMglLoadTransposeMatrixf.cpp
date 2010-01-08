@@ -67,7 +67,7 @@ void GEMglLoadTransposeMatrixf :: matrixMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglLoadTransposeMatrixf :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglLoadTransposeMatrixf::matrixMessCallback,  	gensym("list"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLoadTransposeMatrixf::matrixMessCallback),  	gensym("list"), A_GIMME, A_NULL);
 }
 
 void GEMglLoadTransposeMatrixf :: matrixMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

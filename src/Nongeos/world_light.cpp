@@ -179,11 +179,11 @@ void world_light :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void world_light :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&world_light::lightColorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&world_light::lightColorMessCallback),
                   gensym("clrlist"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&world_light::debugMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&world_light::debugMessCallback),
                   gensym("debug"), A_FLOAT, A_NULL);
-  class_addfloat(classPtr, (t_method)&world_light::lightOnOffMessCallback);
+  class_addfloat(classPtr, reinterpret_cast<t_method>(&world_light::lightOnOffMessCallback));
 }
 void world_light :: lightColorMessCallback(void *data, t_symbol*,int argc, t_atom*argv)
 {

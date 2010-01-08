@@ -72,9 +72,9 @@ void GEMglStencilFunc :: maskMess (t_float arg1) {	// FUN
 //
 
 void GEMglStencilFunc :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglStencilFunc::funcMessCallback,  	gensym("func"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglStencilFunc::refMessCallback,  	gensym("ref"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglStencilFunc::maskMessCallback,  	gensym("mask"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglStencilFunc::funcMessCallback),  	gensym("func"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglStencilFunc::refMessCallback),  	gensym("ref"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglStencilFunc::maskMessCallback),  	gensym("mask"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglStencilFunc :: funcMessCallback (void* data, t_floatarg arg0){

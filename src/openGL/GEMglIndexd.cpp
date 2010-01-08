@@ -56,7 +56,7 @@ void GEMglIndexd :: cMess (t_float arg1) {	// FUN
 //
 
 void GEMglIndexd :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglIndexd::cMessCallback,  	gensym("c"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIndexd::cMessCallback),  	gensym("c"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglIndexd :: cMessCallback (void* data, t_floatarg arg0){

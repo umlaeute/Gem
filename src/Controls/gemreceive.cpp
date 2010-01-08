@@ -260,15 +260,15 @@ void gemreceive :: priorityMess(t_float f) {
 /////////////////////////////////////////////////////////
 void gemreceive :: obj_setupCallback(t_class *classPtr)
 { 
-  class_addsymbol(classPtr, (t_method)gemreceive::nameCallback);
-  class_addmethod(classPtr, (t_method)gemreceive::priorityCallback, gensym(""), A_FLOAT, 0);
+  class_addsymbol(classPtr, reinterpret_cast<t_method>(gemreceive::nameCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(gemreceive::priorityCallback), gensym(""), A_FLOAT, 0);
 
 
   gemreceive_proxy_class = class_new(0, 0, 0, 
                                      sizeof(t_gemreceive_proxy), 
                                      CLASS_NOINLET | CLASS_PD, 
                                      A_NULL);
-  class_addanything(gemreceive_proxy_class, (t_method)gemreceive::proxyCallback);
+  class_addanything(gemreceive_proxy_class, reinterpret_cast<t_method>(gemreceive::proxyCallback));
 }
 
 void gemreceive :: proxyCallback(t_gemreceive_proxy*p, t_symbol*s, int argc, t_atom*argv)

@@ -57,7 +57,7 @@ void GEMglFrontFace :: modeMess (t_atom arg) {	// FUN
 //
 
 void GEMglFrontFace :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglFrontFace::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrontFace::modeMessCallback),  	gensym("mode"), A_GIMME, A_NULL);
 };
 
 void GEMglFrontFace :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

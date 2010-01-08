@@ -54,7 +54,7 @@ void GEMglTexCoord1sv :: vMess (t_float arg0) {	// FUN
 //
 
 void GEMglTexCoord1sv :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglTexCoord1sv::vMessCallback,  	gensym("v"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord1sv::vMessCallback),  	gensym("v"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglTexCoord1sv :: vMessCallback (void* data, t_floatarg arg0) {

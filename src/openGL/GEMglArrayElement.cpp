@@ -62,7 +62,7 @@ void GEMglArrayElement :: iMess (t_float arg1) {	// FUN
 //
 
 void GEMglArrayElement :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglArrayElement::iMessCallback,  	gensym("i"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglArrayElement::iMessCallback),  	gensym("i"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglArrayElement :: iMessCallback (void* data, t_floatarg arg0){

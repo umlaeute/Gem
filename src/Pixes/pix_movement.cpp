@@ -354,9 +354,9 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_movement :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_movement::threshMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
 		  gensym("threshold"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movement::threshMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
 		  gensym("thresh"), A_FLOAT, A_NULL);
 }
 void pix_movement :: threshMessCallback(void *data, t_floatarg newmode)

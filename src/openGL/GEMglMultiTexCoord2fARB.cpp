@@ -79,11 +79,11 @@ void GEMglMultiTexCoord2fARB :: tMess (t_float arg1) {	// FUN
 //
 
 void GEMglMultiTexCoord2fARB :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglMultiTexCoord2fARB::texUnitMessCallback,  	
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMultiTexCoord2fARB::texUnitMessCallback),  	
 					gensym("texUnit"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMultiTexCoord2fARB::sMessCallback,  	
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMultiTexCoord2fARB::sMessCallback),  	
 					gensym("s"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMultiTexCoord2fARB::tMessCallback,  	
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMultiTexCoord2fARB::tMessCallback),  	
 					gensym("t"), A_DEFFLOAT, A_NULL);
 };
 

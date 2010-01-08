@@ -411,13 +411,13 @@ void vertex_program :: printInfo()
 /////////////////////////////////////////////////////////
 void vertex_program :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&vertex_program::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_program::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&vertex_program::printMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_program::printMessCallback),
                   gensym("print"), A_NULL);
-  class_addmethod(classPtr, (t_method)&vertex_program::paramMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_program::paramMessCallback),
                   gensym("parameter"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
-  class_addmethod(classPtr, (t_method)&vertex_program::paramMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_program::paramMessCallback),
                   gensym("param"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
 }
 void vertex_program :: openMessCallback(void *data, t_symbol *filename)

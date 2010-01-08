@@ -159,9 +159,9 @@ void pix_fiducialtrack :: addMess(t_symbol*s)
 /////////////////////////////////////////////////////////
 void pix_fiducialtrack :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_fiducialtrack::treeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_fiducialtrack::treeMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_fiducialtrack::addMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_fiducialtrack::addMessCallback),
                   gensym("add"), A_SYMBOL, A_NULL);
 }
 void pix_fiducialtrack :: treeMessCallback(void *data, t_symbol* filename)

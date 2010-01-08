@@ -66,8 +66,8 @@ void GEMglBlendFunc :: dfactorMess (t_atom arg) {	// FUN
 //
 
 void GEMglBlendFunc :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglBlendFunc::sfactorMessCallback,  	gensym("sfactor"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglBlendFunc::dfactorMessCallback,  	gensym("dfactor"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBlendFunc::sfactorMessCallback),  	gensym("sfactor"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBlendFunc::dfactorMessCallback),  	gensym("dfactor"), A_GIMME, A_NULL);
 };
 
 void GEMglBlendFunc :: sfactorMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

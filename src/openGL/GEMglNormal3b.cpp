@@ -72,9 +72,9 @@ void GEMglNormal3b :: nzMess (t_float arg1) {	// FUN
 //
 
 void GEMglNormal3b :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglNormal3b::nxMessCallback,  	gensym("nx"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglNormal3b::nyMessCallback,  	gensym("ny"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglNormal3b::nzMessCallback,  	gensym("nz"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3b::nxMessCallback),  	gensym("nx"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3b::nyMessCallback),  	gensym("ny"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3b::nzMessCallback),  	gensym("nz"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglNormal3b :: nxMessCallback (void* data, t_floatarg arg0){

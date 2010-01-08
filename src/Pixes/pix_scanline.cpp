@@ -165,9 +165,9 @@ if (m_mode == 0){
 void pix_scanline :: obj_setupCallback(t_class *classPtr)
 {
 
-    class_addmethod(classPtr, (t_method)&pix_scanline::rollCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_scanline::rollCallback),
 		  gensym("interlace"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_scanline::modeCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_scanline::modeCallback),
 		  gensym("mode"), A_DEFFLOAT, A_NULL);
 }
 

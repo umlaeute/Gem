@@ -317,35 +317,35 @@ void camera :: SlideCamera(float speed)
 /////////////////////////////////////////////////////////
 void camera :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&camera::hAngleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::hAngleMessCallback),
 		  gensym("hAngle"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&camera::vAngleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::vAngleMessCallback),
 		  gensym("vAngle"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::distanceMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::distanceMessCallback),
 		  gensym("distance"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::speedMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::speedMessCallback),
 		  gensym("speed"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&camera::forwardMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::forwardMessCallback),
 		  gensym("forward"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::reverseMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::reverseMessCallback),
 		  gensym("reverse"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::leftMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::leftMessCallback),
 		  gensym("left"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::rightMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::rightMessCallback),
 		  gensym("right"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::upMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::upMessCallback),
 		  gensym("up"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::downMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::downMessCallback),
 		  gensym("down"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::resetMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::resetMessCallback),
 		  gensym("reset"), A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::modeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::modeMessCallback),
 		  gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::lookXMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookXMessCallback),
 		  gensym("lookX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::lookYMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookYMessCallback),
 		  gensym("lookY"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&camera::lookZMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookZMessCallback),
 		  gensym("lookZ"), A_FLOAT, A_NULL);
 }
 void camera :: hAngleMessCallback(void *data, t_floatarg val)

@@ -349,12 +349,12 @@ void pix_rds :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rds :: obj_setupCallback(t_class *classPtr)
 {
-  //  class_addfloat(classPtr, (t_method)&pix_rds::methMessCallback);
-  class_addmethod(classPtr, (t_method)&pix_rds::methMessCallback,
+  //  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_rds::methMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rds::methMessCallback),
 		  gensym("method"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_rds::strideMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rds::strideMessCallback),
 		  gensym("stride"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_rds::seedMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rds::seedMessCallback),
 		  gensym("seed"), A_FLOAT, A_NULL);
 }
 

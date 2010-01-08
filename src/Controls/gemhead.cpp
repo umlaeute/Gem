@@ -195,9 +195,9 @@ void gemhead :: stopRendering()
 /////////////////////////////////////////////////////////
 void gemhead :: obj_setupCallback(t_class *classPtr)
 {
-    class_addbang(classPtr, (t_method)&gemhead::bangMessCallback);
-    class_addfloat(classPtr, (t_method)&gemhead::intMessCallback);
-    class_addmethod(classPtr, (t_method)&gemhead::setMessCallback,
+    class_addbang(classPtr, reinterpret_cast<t_method>(&gemhead::bangMessCallback));
+    class_addfloat(classPtr, reinterpret_cast<t_method>(&gemhead::intMessCallback));
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&gemhead::setMessCallback),
 		    gensym("set"), A_FLOAT, A_NULL);
 }
 void gemhead :: bangMessCallback(void *data)

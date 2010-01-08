@@ -78,10 +78,10 @@ void GEMgluPerspective :: farMess (t_float arg1) {	// FUN
 //
 
 void GEMgluPerspective :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMgluPerspective::fovyMessCallback,  	gensym("fovy"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluPerspective::aspectMessCallback,  	gensym("aspect"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluPerspective::nearMessCallback,  	gensym("near"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluPerspective::farMessCallback,  	gensym("far"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluPerspective::fovyMessCallback),  	gensym("fovy"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluPerspective::aspectMessCallback),  	gensym("aspect"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluPerspective::nearMessCallback),  	gensym("near"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluPerspective::farMessCallback),  	gensym("far"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMgluPerspective :: fovyMessCallback (void* data, t_floatarg arg0){

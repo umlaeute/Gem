@@ -56,7 +56,7 @@ void GEMglGetString :: nameMess (t_atom arg) {	// FUN
 // static member functions
 //
 void GEMglGetString :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, (t_method)&GEMglGetString::nameMessCallback, gensym("name"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetString::nameMessCallback), gensym("name"), A_GIMME, A_NULL);
 }
 
 void GEMglGetString :: nameMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

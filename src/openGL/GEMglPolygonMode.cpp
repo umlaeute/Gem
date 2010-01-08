@@ -66,8 +66,8 @@ void GEMglPolygonMode :: modeMess (t_atom arg) {	// FUN
 //
 
 void GEMglPolygonMode :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglPolygonMode::faceMessCallback,  	gensym("face"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglPolygonMode::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonMode::faceMessCallback),  	gensym("face"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonMode::modeMessCallback),  	gensym("mode"), A_GIMME, A_NULL);
 };
 
 void GEMglPolygonMode :: faceMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

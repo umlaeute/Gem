@@ -221,13 +221,13 @@ void pix_aging :: scratchMess(int scratchlines)
 /////////////////////////////////////////////////////////
 void pix_aging :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_aging::colorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_aging::colorMessCallback),
 		   gensym("coloraging"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_aging::scratchMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_aging::scratchMessCallback),
 		  gensym("scratch"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_aging::dustMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_aging::dustMessCallback),
 		   gensym("dust"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_aging::pitsMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_aging::pitsMessCallback),
 		  gensym("pits"), A_FLOAT, A_NULL);
 }
 

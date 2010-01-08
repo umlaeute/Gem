@@ -1095,34 +1095,34 @@ void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 	class_addcreator((t_newmethod)create_pix_videoDarwin,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
 	pix_videoOS::real_obj_setupCallback(classPtr);
 
-    class_addmethod(classPtr, (t_method)&pix_videoDarwin::qualityCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::qualityCallback),
 		  gensym("quality"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoDarwin::resetCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::resetCallback),
 		  gensym("reset"), A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::autoCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::autoCallback),
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_videoDarwin::deviceCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::deviceCallback),
                     		  gensym("device"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::brightnessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::brightnessCallback),
                     		  gensym("brightness"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::saturationCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::saturationCallback),
                     		  gensym("saturation"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::contrastCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::contrastCallback),
                     		  gensym("contrast"), A_DEFFLOAT, A_NULL);						  
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::exposureCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::exposureCallback),
                     		  gensym("exposure"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::gainCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::gainCallback),
                     		  gensym("gain"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::whiteBalanceCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::whiteBalanceCallback),
                     		  gensym("whitebalance"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::fileMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::fileMessCallback),
 		  gensym("file"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::recordCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::recordCallback),
 		  gensym("record"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_videoDarwin::inputCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::inputCallback),
 		  gensym("input"), A_DEFFLOAT, A_NULL);
 							  
-	class_addbang(classPtr,(t_method)&pix_videoDarwin::bangMessCallback);
+	class_addbang(classPtr,reinterpret_cast<t_method>(&pix_videoDarwin::bangMessCallback));
 }
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)

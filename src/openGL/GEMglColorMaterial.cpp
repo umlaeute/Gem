@@ -66,8 +66,8 @@ void GEMglColorMaterial :: modeMess (t_atom arg) {	// FUN
 //
 
 void GEMglColorMaterial :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglColorMaterial::faceMessCallback,  	gensym("face"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglColorMaterial::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMaterial::faceMessCallback),  	gensym("face"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMaterial::modeMessCallback),  	gensym("mode"), A_GIMME, A_NULL);
 };
 
 void GEMglColorMaterial :: faceMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

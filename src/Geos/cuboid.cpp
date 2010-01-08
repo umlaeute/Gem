@@ -166,9 +166,9 @@ void cuboid :: widthMess(float sizez)
 /////////////////////////////////////////////////////////
 void cuboid :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&cuboid::heightMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&cuboid::heightMessCallback),
     	    gensym("ft2"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&cuboid::widthMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&cuboid::widthMessCallback),
 	    gensym("ft3"), A_FLOAT, A_NULL);
 }
 

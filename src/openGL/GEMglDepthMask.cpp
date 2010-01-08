@@ -56,7 +56,7 @@ void GEMglDepthMask :: flagMess (t_float arg1) {	// FUN
 //
 
 void GEMglDepthMask :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglDepthMask::flagMessCallback,  	gensym("flag"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthMask::flagMessCallback),  	gensym("flag"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglDepthMask :: flagMessCallback (void* data, t_floatarg arg0){

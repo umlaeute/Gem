@@ -88,10 +88,10 @@ void pix_data :: trigger()
 /////////////////////////////////////////////////////////
 void pix_data :: obj_setupCallback(t_class *classPtr)
 {
-    class_addbang(classPtr, (t_method)&pix_data::triggerMessCallback);
-    class_addmethod(classPtr, (t_method)&pix_data::xPosCallback,
+    class_addbang(classPtr, reinterpret_cast<t_method>(&pix_data::triggerMessCallback));
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_data::xPosCallback),
     	    gensym("xPos"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&pix_data::yPosCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_data::yPosCallback),
     	    gensym("yPos"), A_FLOAT, A_NULL); 
 }
 void pix_data :: triggerMessCallback(void *data)

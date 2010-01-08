@@ -129,12 +129,12 @@ void alpha :: depthtestMess(int i)
 /////////////////////////////////////////////////////////
 void alpha :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, (t_method)&alpha::alphaMessCallback);
-    class_addmethod(classPtr, (t_method)&alpha::testMessCallback,
+    class_addfloat(classPtr, reinterpret_cast<t_method>(&alpha::alphaMessCallback));
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&alpha::testMessCallback),
     	gensym("test"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&alpha::funMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&alpha::funMessCallback),
     	gensym("function"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&alpha::depthtestMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&alpha::depthtestMessCallback),
     	gensym("auto"), A_FLOAT, A_NULL);
 }
 void alpha :: alphaMessCallback(void *data, t_floatarg alphaState)

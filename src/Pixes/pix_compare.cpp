@@ -345,7 +345,7 @@ register int h,w,i,j,width;
 /////////////////////////////////////////////////////////
 void pix_compare :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_compare::directionCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_compare::directionCallback),
 		  gensym("direction"), A_DEFFLOAT, A_NULL);
 }
 

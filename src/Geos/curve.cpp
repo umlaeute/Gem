@@ -101,7 +101,7 @@ void curve :: resolutionMess(int resolution)
 /////////////////////////////////////////////////////////
 void curve :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&curve::resolutionMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&curve::resolutionMessCallback),
     	    gensym("res"), A_FLOAT, A_NULL);
 }
 void curve :: resolutionMessCallback(void *data, t_floatarg res)

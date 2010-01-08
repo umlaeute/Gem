@@ -209,30 +209,30 @@ void pix_set :: cleanPixBlock()
 /////////////////////////////////////////////////////////
 void pix_set :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_set::RGBAMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::RGBAMessCallback),
 		gensym("RGBA"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::RGBMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::RGBMessCallback),
 		gensym("RGB"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::GREYMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::GREYMessCallback),
 		gensym("GREY"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::GREYMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::GREYMessCallback),
 		gensym("GRAY"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::YUVMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::YUVMessCallback),
 		gensym("YUV"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::RGBAMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::RGBAMessCallback),
 		gensym("rgba"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::RGBMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::RGBMessCallback),
 		gensym("rgb"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::GREYMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::GREYMessCallback),
 		gensym("grey"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::GREYMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::GREYMessCallback),
 		gensym("gray"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_set::YUVMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::YUVMessCallback),
 		gensym("yuv"), A_NULL);
-     class_addmethod(classPtr, (t_method)&pix_set::SETMessCallback,
+     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::SETMessCallback),
 		gensym("set"), A_FLOAT, A_FLOAT, A_NULL);
 	
-    class_addmethod(classPtr, (t_method)&pix_set::DATAMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::DATAMessCallback),
 		gensym("data"), A_GIMME, A_NULL);
 }
 

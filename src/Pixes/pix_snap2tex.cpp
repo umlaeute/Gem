@@ -380,21 +380,21 @@ void pix_snap2tex :: repeatMess(int type)
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_snap2tex::snapMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::snapMessCallback),
 		  gensym("snap"), A_NULL);
-  class_addbang(classPtr, (t_method)&pix_snap2tex::snapMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::snapMessCallback));
 
-  class_addmethod(classPtr, (t_method)&pix_snap2tex::sizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::sizeMessCallback),
 		  gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_snap2tex::posMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::posMessCallback),
 		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
 
-  class_addfloat(classPtr, (t_method)&pix_snap2tex::floatMessCallback);    
-  class_addmethod(classPtr, (t_method)&pix_snap2tex::textureMessCallback,
+  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::floatMessCallback));    
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::textureMessCallback),
 		  gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_snap2tex::repeatMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::repeatMessCallback),
 		  gensym("repeat"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_snap2tex::modeCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::modeCallback),
 		  gensym("mode"), A_FLOAT, A_NULL);
 }
 void pix_snap2tex :: snapMessCallback(void *data)

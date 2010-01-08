@@ -710,11 +710,11 @@ void pix_backlight :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_backlight :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_backlight::scaleCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_backlight::scaleCallback),
 		  gensym("scale"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_backlight::floorCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_backlight::floorCallback),
 		  gensym("floor"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_backlight::ceilingCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_backlight::ceilingCallback),
 		  gensym("ceiling"), A_DEFFLOAT, A_NULL);
 }
 void pix_backlight :: scaleCallback(void *data, t_floatarg m_SpikeScale)

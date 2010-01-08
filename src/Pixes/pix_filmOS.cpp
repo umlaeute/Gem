@@ -278,15 +278,15 @@ void pix_filmOS :: csMess(int format){
 /////////////////////////////////////////////////////////
 void pix_filmOS :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_filmOS::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::openMessCallback),
 		  gensym("open"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmOS::changeImageCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::changeImageCallback),
 		  gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmOS::autoCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::autoCallback),
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmOS::colorspaceCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
 		  gensym("colorspace"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmOS::colorspaceCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
 		  gensym("colourspace"), A_SYMBOL, A_NULL);
 }
 void pix_filmOS :: openMessCallback(void *data, t_symbol*, int argc, t_atom*argv)

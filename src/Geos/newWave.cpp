@@ -754,7 +754,7 @@ void newWave :: obj_setupCallback(t_class *classPtr)
 		    gensym("force"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::positionMessCallback),
 		    gensym("position"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-	class_addbang(classPtr, (t_method)&newWave::bangMessCallback);
+	class_addbang(classPtr, reinterpret_cast<t_method>(&newWave::bangMessCallback));
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::noiseMessCallback),
 		    gensym("noise"), A_FLOAT, A_NULL);
 }

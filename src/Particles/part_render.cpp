@@ -115,9 +115,9 @@ void part_render :: sizeMess(int state)
 /////////////////////////////////////////////////////////
 void part_render :: obj_setupCallback(t_class *classPtr)
 {
-   class_addmethod(classPtr, (t_method)&part_render::colorMessCallback,
+   class_addmethod(classPtr, reinterpret_cast<t_method>(&part_render::colorMessCallback),
     	    gensym("colorize"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&part_render::sizeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_render::sizeMessCallback),
     	    gensym("size"), A_FLOAT, A_NULL);
 }
 void part_render :: colorMessCallback(void *data,  t_floatarg f)

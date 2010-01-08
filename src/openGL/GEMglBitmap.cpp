@@ -87,10 +87,10 @@ void GEMglBitmap :: ymoveMess (t_float arg1) {	// FUN
 //
 
 void GEMglBitmap :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglBitmap::xorigMessCallback,  	gensym("xorig"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglBitmap::yorigMessCallback,  	gensym("yorig"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglBitmap::xmoveMessCallback,  	gensym("xmove"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglBitmap::ymoveMessCallback,  	gensym("ymove"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::xorigMessCallback),  	gensym("xorig"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::yorigMessCallback),  	gensym("yorig"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::xmoveMessCallback),  	gensym("xmove"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::ymoveMessCallback),  	gensym("ymove"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglBitmap :: xorigMessCallback (void* data, t_floatarg arg0){

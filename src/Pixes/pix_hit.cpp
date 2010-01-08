@@ -396,23 +396,23 @@ void pix_hit :: del(int n)
 /////////////////////////////////////////////////////////
 void pix_hit :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_hit::thresholdCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::thresholdCallback),
                   gensym("threshold"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&pix_hit::minimumCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::minimumCallback),
                   gensym("min"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&pix_hit::min_distanceCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::min_distanceCallback),
                   gensym("min_distance"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&pix_hit::createRectangleCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::createRectangleCallback),
                   gensym("rectangle"), A_GIMME, A_NULL); 
-  class_addmethod(classPtr, (t_method)&pix_hit::createCircleCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::createCircleCallback),
                   gensym("circle"), A_GIMME, A_NULL); 
-  class_addmethod(classPtr, (t_method)&pix_hit::createLineCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::createLineCallback),
                   gensym("line"), A_GIMME, A_NULL); 
-  class_addmethod(classPtr, (t_method)&pix_hit::moveCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::moveCallback),
                   gensym("move"), A_GIMME, A_NULL); 
-  class_addmethod(classPtr, (t_method)&pix_hit::deleteCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::deleteCallback),
                   gensym("delete"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&pix_hit::showCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::showCallback),
                   gensym("show"), A_FLOAT, A_NULL); }
 
 void pix_hit :: thresholdCallback(void *data, t_floatarg val)

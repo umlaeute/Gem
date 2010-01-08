@@ -237,33 +237,33 @@ void pix_record :: fileMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_record :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_record::fileMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::fileMessCallback),
 		  gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_record::autoMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::autoMessCallback),
 		  gensym("auto"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, (t_method)&pix_record::bangMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_record::bangMessCallback));
 
-  class_addmethod(classPtr, (t_method)&pix_record::recordMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::recordMessCallback),
 		  gensym("record"), A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_record::sizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::sizeMessCallback),
 		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_record::sizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::sizeMessCallback),
 		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_record::posMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::posMessCallback),
 		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_record::posMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::posMessCallback),
 		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_record::dialogMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::dialogMessCallback),
 		  gensym("dialog"),  A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_record::codeclistMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::codeclistMessCallback),
 		  gensym("codeclist"),  A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_record::codecMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::codecMessCallback),
 		  gensym("codec"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_record::minMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::minMessCallback),
 		  gensym("min_frames"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_record::maxMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::maxMessCallback),
 		  gensym("max_frames"), A_FLOAT, A_NULL);
 }
 

@@ -80,10 +80,10 @@ void GEMglRasterPos4d :: wMess (t_float arg1) {	// FUN
 //
 
 void GEMglRasterPos4d :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglRasterPos4d::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRasterPos4d::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRasterPos4d::zMessCallback,  	gensym("z"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRasterPos4d::wMessCallback,  	gensym("w"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::zMessCallback),  	gensym("z"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::wMessCallback),  	gensym("w"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglRasterPos4d :: xMessCallback (void* data, t_floatarg arg0){

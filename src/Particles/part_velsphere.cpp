@@ -64,9 +64,9 @@ void part_velsphere :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_velsphere :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&part_velsphere::vectorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velsphere::vectorMessCallback),
 		  gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&part_velsphere::numberMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velsphere::numberMessCallback),
 		  gensym("vel"), A_FLOAT, A_NULL);
 }
 void part_velsphere :: numberMessCallback(void *data, t_floatarg num)

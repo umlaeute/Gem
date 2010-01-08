@@ -59,7 +59,7 @@ void part_killslow :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_killslow :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_killslow::numberMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_killslow::numberMessCallback),
     	    gensym("speed"), A_FLOAT, A_NULL);
 }
 void part_killslow :: numberMessCallback(void *data, t_floatarg num)

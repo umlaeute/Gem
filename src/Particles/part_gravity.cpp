@@ -71,7 +71,7 @@ void part_gravity :: vectorMess(float x, float y, float z)
 /////////////////////////////////////////////////////////
 void part_gravity :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&part_gravity::vectorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_gravity::vectorMessCallback),
 		  gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
 }
 void part_gravity :: vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)

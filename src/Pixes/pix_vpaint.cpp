@@ -345,8 +345,8 @@ void pix_vpaint :: sizeMess(int width, int height)
 /////////////////////////////////////////////////////////
 void pix_vpaint :: obj_setupCallback(t_class *classPtr)
 {
-    class_addbang(classPtr, (t_method)&pix_vpaint::bangMessCallback);
-    class_addmethod(classPtr, (t_method)&pix_vpaint::sizeMessCallback,
+    class_addbang(classPtr, reinterpret_cast<t_method>(&pix_vpaint::bangMessCallback));
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_vpaint::sizeMessCallback),
     	    gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_vpaint :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)

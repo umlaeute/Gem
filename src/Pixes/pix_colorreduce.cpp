@@ -501,11 +501,11 @@ void pix_colorreduce :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)create_pix_colorreduce, 
 		   gensym("pix_colourreduce"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_colorreduce::countCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colorreduce::countCallback),
 		  gensym("count"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_colorreduce::persistCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colorreduce::persistCallback),
 		  gensym("persist"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_colorreduce::smoothCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colorreduce::smoothCallback),
 		  gensym("smooth"), A_DEFFLOAT, A_NULL);
 }
 void pix_colorreduce :: countCallback(void *data, t_floatarg m_TargetColorCount)

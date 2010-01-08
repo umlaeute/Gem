@@ -80,10 +80,10 @@ void GEMglColor4ui :: alphaMess (t_float arg1) {	// FUN
 //
 
 void GEMglColor4ui :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglColor4ui::redMessCallback,  	gensym("red"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglColor4ui::greenMessCallback,  	gensym("green"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglColor4ui::blueMessCallback,  	gensym("blue"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglColor4ui::alphaMessCallback,  	gensym("alpha"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4ui::redMessCallback),  	gensym("red"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4ui::greenMessCallback),  	gensym("green"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4ui::blueMessCallback),  	gensym("blue"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4ui::alphaMessCallback),  	gensym("alpha"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglColor4ui :: redMessCallback (void* data, t_floatarg arg0){

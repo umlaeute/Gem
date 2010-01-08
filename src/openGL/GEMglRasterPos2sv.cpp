@@ -55,7 +55,7 @@ void GEMglRasterPos2sv :: vMess (t_float arg0, t_float arg1) {	// FUN
 //
 
 void GEMglRasterPos2sv :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglRasterPos2sv::vMessCallback,  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2sv::vMessCallback),  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
 void GEMglRasterPos2sv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1) {

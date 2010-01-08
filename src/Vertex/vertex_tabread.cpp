@@ -180,9 +180,9 @@ void vertex_tabread :: bangMess()
 /////////////////////////////////////////////////////////
 void vertex_tabread :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&vertex_tabread::tableMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_tabread::tableMessCallback),
 		  gensym("table"), A_GIMME, A_NULL);
-  class_addbang(classPtr, (t_method)&vertex_tabread::bangMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&vertex_tabread::bangMessCallback));
 }
 
 void vertex_tabread :: tableMessCallback(void *data, t_symbol*, int argc, t_atom*argv)

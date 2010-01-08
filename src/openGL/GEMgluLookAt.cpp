@@ -137,15 +137,15 @@ void GEMgluLookAt :: upZMess(t_float arg1) {
 //
 
 void GEMgluLookAt :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::eyeXMessCallback,  	gensym("eyeX"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::eyeYMessCallback,  	gensym("eyeY"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::eyeZMessCallback,  	gensym("eyeZ"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::centerXMessCallback,  	gensym("centerX"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::centerYMessCallback,  	gensym("centerY"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::centerZMessCallback,  	gensym("centerZ"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::upXMessCallback,  	gensym("upX"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::upYMessCallback,  	gensym("upY"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMgluLookAt::upZMessCallback,  	gensym("upZ"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::eyeXMessCallback),  	gensym("eyeX"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::eyeYMessCallback),  	gensym("eyeY"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::eyeZMessCallback),  	gensym("eyeZ"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::centerXMessCallback),  	gensym("centerX"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::centerYMessCallback),  	gensym("centerY"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::centerZMessCallback),  	gensym("centerZ"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::upXMessCallback),  	gensym("upX"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::upYMessCallback),  	gensym("upY"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::upZMessCallback),  	gensym("upZ"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMgluLookAt :: eyeXMessCallback (void*data, t_floatarg arg0) {

@@ -1094,11 +1094,11 @@ U8 pix_metaimage :: ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float Su
 /////////////////////////////////////////////////////////
 void pix_metaimage :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_metaimage::sizeCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::sizeCallback),
 		  gensym("size"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_metaimage::distanceCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::distanceCallback),
 		  gensym("distance"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_metaimage::cheapCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::cheapCallback),
 		  gensym("cheap"), A_DEFFLOAT, A_NULL);
 }
 void pix_metaimage :: sizeCallback(void *data, t_floatarg sz)

@@ -511,7 +511,7 @@ void pix_motionblur :: motionblurMessage(int argc, t_atom*argv){
 void pix_motionblur :: obj_setupCallback(t_class *classPtr)
 {
 
-  class_addmethod(classPtr, (t_method)&pix_motionblur::motionblurCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_motionblur::motionblurCallback),
 		  gensym("motionblur"), A_GIMME, A_NULL);
 }
 

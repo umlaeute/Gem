@@ -275,33 +275,33 @@ void pix_video :: qualityMess(int dev) {
 /////////////////////////////////////////////////////////
 void pix_video :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_video::dimenMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dimenMessCallback),
     	    gensym("dimen"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::offsetMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::offsetMessCallback),
     	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::swapMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::swapMessCallback),
     	    gensym("swap"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::normMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::normMessCallback),
     	    gensym("norm"), A_SYMBOL, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::channelMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::channelMessCallback),
     	    gensym("channel"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::modeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::modeMessCallback),
     	    gensym("mode"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::colorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
     	    gensym("color"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::colorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
     	    gensym("colorspace"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::deviceMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::deviceMessCallback),
     	    gensym("device"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::driverMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::driverMessCallback),
     	    gensym("driver"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::driverMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::driverMessCallback),
     	    gensym("open"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::enumerateMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::enumerateMessCallback),
     	    gensym("enumerate"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::dialogMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dialogMessCallback),
     	    gensym("dialog"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::qualityMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::qualityMessCallback),
 	    gensym("quality"), A_FLOAT, A_NULL);
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)

@@ -99,7 +99,7 @@ gemglutwindow :: gemglutwindow(void) :
   m_width =500;
   m_height=500;
 
-  m_clock=clock_new(this, (t_method)gemglutwindow::clockCallback);
+  m_clock=clock_new(this, reinterpret_cast<t_method>(gemglutwindow::clockCallback));
 }
 
 /////////////////////////////////////////////////////////
@@ -357,19 +357,19 @@ void gemglutwindow :: obj_setupCallback(t_class *classPtr)
   }
   firsttime=false;
 
-  class_addbang(classPtr, (t_method)&gemglutwindow::renderMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&gemglutwindow::renderMessCallback));
   
-  class_addmethod(classPtr, (t_method)&gemglutwindow::titleMessCallback,        gensym("title"), A_DEFSYM ,A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::createMessCallback,       gensym("create") ,A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::bufferMessCallback,       gensym("buffer"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::fullscreenMessCallback,   gensym("fullscreen"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::dimensionsMessCallback,   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::offsetMessCallback,       gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::cursorMessCallback,       gensym("cursor"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::destroyMessCallback,      gensym("destroy"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::printMessCallback,        gensym("print"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::borderMessCallback,       gensym("border"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemglutwindow::fsaaMessCallback,         gensym("FSAA"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::titleMessCallback),        gensym("title"), A_DEFSYM ,A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::createMessCallback),       gensym("create") ,A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::bufferMessCallback),       gensym("buffer"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::fullscreenMessCallback),   gensym("fullscreen"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::dimensionsMessCallback),   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::offsetMessCallback),       gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::cursorMessCallback),       gensym("cursor"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::destroyMessCallback),      gensym("destroy"), A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::printMessCallback),        gensym("print"), A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::borderMessCallback),       gensym("border"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::fsaaMessCallback),         gensym("FSAA"), A_FLOAT, A_NULL);
 }
 void gemglutwindow :: printMessCallback(void *)
 {

@@ -99,9 +99,9 @@ void scale :: vectorMess(float x, float y, float z)
 /////////////////////////////////////////////////////////
 void scale :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&scale::distanceMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&scale::distanceMessCallback),
     	    gensym("ft1"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&scale::vectorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&scale::vectorMessCallback),
     	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
 }
 void scale :: distanceMessCallback(void *data, t_floatarg distance)

@@ -64,8 +64,8 @@ void GEMglDepthRange :: far_valMess (GLclampd arg1) {	// FUN
 //
 
 void GEMglDepthRange :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglDepthRange::near_valMessCallback,  	gensym("near_val"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglDepthRange::far_valMessCallback,  	gensym("far_val"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthRange::near_valMessCallback),  	gensym("near_val"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthRange::far_valMessCallback),  	gensym("far_val"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglDepthRange :: near_valMessCallback (void* data, GLclampd arg0){

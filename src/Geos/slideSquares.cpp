@@ -207,7 +207,7 @@ void slideSquares :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void slideSquares :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&slideSquares::heightMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&slideSquares::heightMessCallback),
     	    gensym("Ht"), A_FLOAT, A_NULL);
 }
 

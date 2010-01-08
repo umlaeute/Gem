@@ -80,10 +80,10 @@ void GEMglVertex4i :: wMess (t_float arg1) {	// FUN
 //
 
 void GEMglVertex4i :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglVertex4i::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglVertex4i::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglVertex4i::zMessCallback,  	gensym("z"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglVertex4i::wMessCallback,  	gensym("w"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4i::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4i::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4i::zMessCallback),  	gensym("z"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4i::wMessCallback),  	gensym("w"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglVertex4i :: xMessCallback (void* data, t_floatarg arg0){

@@ -106,12 +106,12 @@ void GEMglMapGrid2f :: v2Mess (t_float arg1) {	// FUN
 //
 
 void GEMglMapGrid2f :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglMapGrid2f::unMessCallback,  	gensym("un"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMapGrid2f::u1MessCallback,  	gensym("u1"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMapGrid2f::u2MessCallback,  	gensym("u2"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMapGrid2f::vnMessCallback,  	gensym("vn"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMapGrid2f::v1MessCallback,  	gensym("v1"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMapGrid2f::v2MessCallback,  	gensym("v2"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid2f::unMessCallback),  	gensym("un"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid2f::u1MessCallback),  	gensym("u1"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid2f::u2MessCallback),  	gensym("u2"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid2f::vnMessCallback),  	gensym("vn"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid2f::v1MessCallback),  	gensym("v1"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid2f::v2MessCallback),  	gensym("v2"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglMapGrid2f :: unMessCallback (void* data, t_floatarg arg0){

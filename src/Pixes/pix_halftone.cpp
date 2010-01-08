@@ -1215,17 +1215,17 @@ unsigned char pix_halftone :: Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,
 /////////////////////////////////////////////////////////
 void pix_halftone :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_halftone::sizeCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::sizeCallback),
 		  gensym("size"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_halftone::styleCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::styleCallback),
 		  gensym("style"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_halftone::smoothCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::smoothCallback),
 		  gensym("smooth"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_halftone::smoothNCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::smoothNCallback),
 		  gensym("smoothN"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_halftone::angleCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::angleCallback),
 		  gensym("angle"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_halftone::angleDEGCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::angleDEGCallback),
 		  gensym("angleDEG"), A_DEFFLOAT, A_NULL);
 }
 

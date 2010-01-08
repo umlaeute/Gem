@@ -733,28 +733,28 @@ void pix_texture :: pboMess(int num)
 /////////////////////////////////////////////////////////
 void pix_texture :: obj_setupCallback(t_class *classPtr)
 {
-  class_addfloat(classPtr, (t_method)&pix_texture::floatMessCallback);
-  class_addmethod(classPtr, (t_method)&pix_texture::textureMessCallback,
+  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_texture::floatMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::textureMessCallback),
                   gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_texture::repeatMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::repeatMessCallback),
                   gensym("repeat"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_texture::envMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::envMessCallback),
                   gensym("env"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_texture::modeCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::modeCallback),
                   gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_texture::rectangleCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::rectangleCallback),
                   gensym("rectangle"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_texture::clientStorageCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::clientStorageCallback),
                   gensym("client_storage"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_texture::yuvCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::yuvCallback),
                   gensym("yuv"), A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_texture::extTextureCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::extTextureCallback),
                   gensym("extTexture"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_texture::texunitCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::texunitCallback),
                   gensym("texunit"), A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_texture::pboCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::pboCallback),
                   gensym("pbo"), A_FLOAT, A_NULL);
 
 

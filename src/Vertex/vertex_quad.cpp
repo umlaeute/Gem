@@ -122,7 +122,7 @@ void vertex_quad :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 void vertex_quad :: obj_setupCallback(t_class *classPtr)
-{     class_addmethod(classPtr, (t_method)&vertex_quad::blendMessCallback,
+{     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_quad::blendMessCallback),
     	    gensym("blend"), A_FLOAT, A_NULL);
 }
 

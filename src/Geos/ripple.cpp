@@ -387,12 +387,12 @@ void ripple :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void ripple :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&ripple::bangMessCallback);
-  class_addmethod(classPtr, (t_method)&ripple::heightMessCallback,
+  class_addbang(classPtr, reinterpret_cast<t_method>(&ripple::bangMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&ripple::heightMessCallback),
                   gensym("Ht"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&ripple::ctrXMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&ripple::ctrXMessCallback),
                   gensym("cX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&ripple::ctrYMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&ripple::ctrYMessCallback),
                   gensym("cY"), A_FLOAT, A_NULL);
 }
 

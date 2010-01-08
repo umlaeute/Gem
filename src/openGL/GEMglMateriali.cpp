@@ -72,9 +72,9 @@ void GEMglMateriali :: paramMess (t_float arg1) {	// FUN
 //
 
 void GEMglMateriali :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglMateriali::faceMessCallback,  	gensym("face"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMateriali::pnameMessCallback,  	gensym("pname"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMateriali::paramMessCallback,  	gensym("param"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMateriali::faceMessCallback),  	gensym("face"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMateriali::pnameMessCallback),  	gensym("pname"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMateriali::paramMessCallback),  	gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglMateriali :: faceMessCallback (void* data, t_floatarg arg0){

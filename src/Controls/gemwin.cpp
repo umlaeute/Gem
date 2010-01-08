@@ -431,91 +431,91 @@ void gemwin :: fsaaMess(int value)
 /////////////////////////////////////////////////////////
 void gemwin :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&gemwin::bangMessCallback);
-  class_addfloat(classPtr, (t_method)&gemwin::floatMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&gemwin::bangMessCallback));
+  class_addfloat(classPtr, reinterpret_cast<t_method>(&gemwin::floatMessCallback));
 
-  class_addmethod(classPtr, (t_method)&gemwin::renderMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::renderMessCallback),
 		  gensym("render"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::titleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::titleMessCallback),
 		  gensym("title"), A_DEFSYM ,A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::createMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createMessCallback),
 		  gensym("create"), A_DEFSYM ,A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::createStereoMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
 		  gensym("createStereo"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::createStereoMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
 		  gensym("createstereo"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::bufferMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::bufferMessCallback),
 		  gensym("buffer"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::fullscreenMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fullscreenMessCallback),
 		  gensym("fullscreen"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::menuBarMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::menuBarMessCallback),
 		  gensym("menubar"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::secondscreenMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::secondscreenMessCallback),
 		  gensym("secondscreen"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::dimensionsMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::dimensionsMessCallback),
 		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::offsetMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::offsetMessCallback),
 		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::colorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::colorMessCallback),
 		  gensym("color"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::clearmaskMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::clearmaskMessCallback),
 		  gensym("clearmask"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::perspectiveMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::perspectiveMessCallback),
 		  gensym("perspec"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::viewMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::viewMessCallback),
 		  gensym("view"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::fogMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fogMessCallback),
 		  gensym("fog"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::fogColorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fogColorMessCallback),
 		  gensym("fogcolor"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::fogModeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fogModeMessCallback),
 		  gensym("fogmode"), A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&gemwin::ambientMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::ambientMessCallback),
 		  gensym("ambient"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::specularMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::specularMessCallback),
 		  gensym("specular"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::shininessMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::shininessMessCallback),
 		  gensym("shininess"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::cursorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::cursorMessCallback),
 		  gensym("cursor"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::blurMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::blurMessCallback),
 		  gensym("blur"), A_FLOAT, A_NULL);
 
   // just call GemMan directly
-  class_addmethod(classPtr, (t_method)&gemwin::resetMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::resetMessCallback),
 		  gensym("reset"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::destroyMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::destroyMessCallback),
 		  gensym("destroy"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::printMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::printMessCallback),
 		  gensym("print"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::profileMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::profileMessCallback), 
 		  gensym("profile"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::lightingMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::lightingMessCallback), 
 		  gensym("lighting"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::stereoMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoMessCallback), 
 		  gensym("stereo"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::stereoSepMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback), 
 		  gensym("stereoSep"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::stereoFocMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback), 
 		  gensym("stereoFoc"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::stereoSepMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback), 
 		  gensym("stereosep"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::stereoFocMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback), 
 		  gensym("stereofoc"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::stereoLineMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback), 
 		  gensym("stereoLine"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::stereoLineMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback), 
 		  gensym("stereoline"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::borderMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::borderMessCallback), 
 		  gensym("border"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::frameMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::frameMessCallback),
 		  gensym("frame"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::fpsMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fpsMessCallback),
 		  gensym("fps"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::topmostMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::topmostMessCallback),
 		  gensym("topmost"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwin::fsaaMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fsaaMessCallback),
 		  gensym("FSAA"), A_FLOAT, A_NULL);
 }
 void gemwin :: printMessCallback(void *)

@@ -65,8 +65,8 @@ void GEMglHint :: modeMess (t_atom arg) {	// FUN
 //
 
 void GEMglHint :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglHint::targetMessCallback,  	gensym("target"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglHint::modeMessCallback,  	gensym("mode"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglHint::targetMessCallback),  	gensym("target"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglHint::modeMessCallback),  	gensym("mode"), A_GIMME, A_NULL);
 };
 
 void GEMglHint :: targetMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

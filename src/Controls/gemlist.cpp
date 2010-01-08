@@ -181,13 +181,13 @@ void gemlist :: rightRender(GemState *state)
 /////////////////////////////////////////////////////////
 void gemlist :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&gemlist::triggerMessCallback);
-	class_addmethod(classPtr, (t_method)&gemlist::gem_rightMessCallback, gensym("gem_right"), A_GIMME, A_NULL);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&gemlist::triggerMessCallback));
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::gem_rightMessCallback), gensym("gem_right"), A_GIMME, A_NULL);
 
 
-  class_addmethod(classPtr, (t_method)&gemlist::ticktimeMessCallback, gensym("ticktime"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemlist::lightingMessCallback, gensym("lighting"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemlist::drawMessCallback, gensym("draw"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::ticktimeMessCallback), gensym("ticktime"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::lightingMessCallback), gensym("lighting"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::drawMessCallback), gensym("draw"), A_GIMME, A_NULL);
 }
 
 void gemlist::triggerMessCallback(void *data)

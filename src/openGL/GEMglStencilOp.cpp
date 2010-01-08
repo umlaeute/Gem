@@ -74,9 +74,9 @@ void GEMglStencilOp :: zpassMess (t_atom arg) {	// FUN
 //
 
 void GEMglStencilOp :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::failMessCallback,  	gensym("fail"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::zfailMessCallback,  	gensym("zfail"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglStencilOp::zpassMessCallback,  	gensym("zpass"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglStencilOp::failMessCallback),  	gensym("fail"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglStencilOp::zfailMessCallback),  	gensym("zfail"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglStencilOp::zpassMessCallback),  	gensym("zpass"), A_GIMME, A_NULL);
 };
 
 void GEMglStencilOp :: failMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

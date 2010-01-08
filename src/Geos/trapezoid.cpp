@@ -118,9 +118,9 @@ void trapezoid :: texscaleMess(float scale)
 /////////////////////////////////////////////////////////
 void trapezoid :: obj_setupCallback(t_class *classPtr)
 {     
-  class_addmethod(classPtr, (t_method)&trapezoid::topMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&trapezoid::topMessCallback),
                   gensym("top"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&trapezoid::scaleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&trapezoid::scaleMessCallback),
                   gensym("texscale"), A_FLOAT, A_NULL);
 }
 

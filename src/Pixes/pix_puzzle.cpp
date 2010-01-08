@@ -330,11 +330,11 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_puzzle :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&pix_puzzle::bangMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_puzzle::bangMessCallback));
 
-  class_addmethod(classPtr, (t_method)&pix_puzzle::sizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_puzzle::sizeMessCallback),
   		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_puzzle::moveMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_puzzle::moveMessCallback),
   		  gensym("move"), A_FLOAT, A_NULL);
 }
 

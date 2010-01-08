@@ -101,13 +101,13 @@ void GEMglProgramStringARB :: stringMess (t_symbol* arg1) {	// FUN
 //
 
 void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglProgramStringARB::targetMessCallback,
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::targetMessCallback),
 									gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramStringARB::formatMessCallback, 
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::formatMessCallback), 
 									gensym("format"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramStringARB::lenMessCallback, 
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::lenMessCallback), 
 									gensym("len"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramStringARB::stringMessCallback, 
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::stringMessCallback), 
 									gensym("string"), A_DEFSYMBOL, A_NULL);
 };
 

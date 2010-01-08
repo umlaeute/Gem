@@ -85,7 +85,7 @@ void shearYX :: shearMess(float val)
 /////////////////////////////////////////////////////////
 void shearYX :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&shearYX::shearMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&shearYX::shearMessCallback),
     	    gensym("shearVal"), A_FLOAT, A_NULL); 
 }
 void shearYX :: shearMessCallback(void *data, t_floatarg val)

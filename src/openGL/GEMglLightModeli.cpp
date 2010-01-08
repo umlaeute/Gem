@@ -64,8 +64,8 @@ void GEMglLightModeli :: paramMess (t_float arg1) {	// FUN
 //
 
 void GEMglLightModeli :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglLightModeli::pnameMessCallback,  	gensym("pname"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglLightModeli::paramMessCallback,  	gensym("param"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLightModeli::pnameMessCallback),  	gensym("pname"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLightModeli::paramMessCallback),  	gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglLightModeli :: pnameMessCallback (void* data, t_floatarg arg0){

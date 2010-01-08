@@ -178,7 +178,7 @@ void torus :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void torus :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&torus::innerRadiusCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&torus::innerRadiusCallback),
     	    gensym("inner"), A_FLOAT, A_NULL); 
 }
 void torus :: innerRadiusCallback(void *data, t_floatarg radius)

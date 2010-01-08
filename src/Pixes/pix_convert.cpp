@@ -81,7 +81,7 @@ void pix_convert :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_convert :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_convert::colorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convert::colorMessCallback),
 		  gensym("color"), A_SYMBOL, A_NULL);
 }
 void pix_convert :: colorMessCallback(void *data, t_symbol*s)

@@ -175,10 +175,10 @@ if (state->VertexArray == NULL || state->VertexArraySize <= 0){
 /////////////////////////////////////////////////////////
 void vertex_combine :: obj_setupCallback(t_class *classPtr)
 {        
-    class_addmethod(classPtr, (t_method)&vertex_combine::gem_rightMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_combine::gem_rightMessCallback),
     	    gensym("gem_right"), A_GIMME, A_NULL);
             
-    class_addmethod(classPtr, (t_method)&vertex_combine::blendCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_combine::blendCallback),
     	    gensym("blend"), A_FLOAT, A_NULL);
 }
 void vertex_combine :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)

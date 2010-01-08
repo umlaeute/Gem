@@ -701,13 +701,13 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_lumaoffset :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_lumaoffset::offsetCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::offsetCallback),
 		  gensym("offset"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_lumaoffset::gapCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::gapCallback),
 		  gensym("gap"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_lumaoffset::fillCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::fillCallback),
 		  gensym("fill"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_lumaoffset::smoothCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::smoothCallback),
 		  gensym("smooth"), A_DEFFLOAT, A_NULL);
 }
 void pix_lumaoffset :: offsetCallback(void *data, t_floatarg m_OffsetScale)

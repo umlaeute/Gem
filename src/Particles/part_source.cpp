@@ -88,11 +88,11 @@ void part_source :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_source :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&part_source::numberMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_source::numberMessCallback),
 		  gensym("numToAdd"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&part_source::domainMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_source::domainMessCallback),
 		  gensym("domain"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&part_source::vectorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_source::vectorMessCallback),
 		  gensym("vector"), A_GIMME, A_NULL);
 }
 void part_source :: numberMessCallback(void *data, t_floatarg num)

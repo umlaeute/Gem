@@ -57,7 +57,7 @@ void GEMglDepthFunc :: funcMess (t_atom arg) {	// FUN
 //
 
 void GEMglDepthFunc :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglDepthFunc::funcMessCallback,  	gensym("func"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthFunc::funcMessCallback),  	gensym("func"), A_GIMME, A_NULL);
 };
 
 void GEMglDepthFunc :: funcMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

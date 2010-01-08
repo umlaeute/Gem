@@ -198,13 +198,13 @@ void pix_snap :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_snap :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_snap::snapMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap::snapMessCallback),
     	    gensym("snap"), A_NULL);
-    class_addbang(classPtr, (t_method)&pix_snap::snapMessCallback);
+    class_addbang(classPtr, reinterpret_cast<t_method>(&pix_snap::snapMessCallback));
 
-    class_addmethod(classPtr, (t_method)&pix_snap::sizeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap::sizeMessCallback),
     	    gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_snap::posMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap::posMessCallback),
     	    gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_snap :: snapMessCallback(void *data)

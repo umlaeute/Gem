@@ -100,7 +100,7 @@ void pix_color :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)create_pix_color, 
 		   gensym("pix_colour"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_color::vecGainMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_color::vecGainMessCallback),
     	    gensym("vec_gain"), A_GIMME, A_NULL);
 }
 void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc, t_atom*argv)

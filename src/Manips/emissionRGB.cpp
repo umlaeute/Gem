@@ -135,13 +135,13 @@ void emissionRGB :: aMess(float val)
 /////////////////////////////////////////////////////////
 void emissionRGB :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&emissionRGB::rMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&emissionRGB::rMessCallback),
     	    gensym("rVal"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&emissionRGB::gMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&emissionRGB::gMessCallback),
     	    gensym("gVal"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&emissionRGB::bMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&emissionRGB::bMessCallback),
     	    gensym("bVal"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&emissionRGB::aMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&emissionRGB::aMessCallback),
     	    gensym("aVal"), A_FLOAT, A_NULL); 
 }
 void emissionRGB :: rMessCallback(void *data, t_floatarg val)

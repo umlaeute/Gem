@@ -64,9 +64,9 @@ void part_orbitpoint :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_orbitpoint :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_orbitpoint::vectorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_orbitpoint::vectorMessCallback),
     	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&part_orbitpoint::numberMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_orbitpoint::numberMessCallback),
     	    gensym("grav"), A_FLOAT, A_NULL);
 }
 void part_orbitpoint :: numberMessCallback(void *data, t_floatarg num)

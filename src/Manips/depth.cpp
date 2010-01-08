@@ -85,7 +85,7 @@ void depth :: depthMess(int state)
 /////////////////////////////////////////////////////////
 void depth :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, (t_method)&depth::depthMessCallback);
+    class_addfloat(classPtr, reinterpret_cast<t_method>(&depth::depthMessCallback));
 }
 void depth :: depthMessCallback(void *data, t_floatarg state)
 {

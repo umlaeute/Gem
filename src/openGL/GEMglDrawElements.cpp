@@ -114,10 +114,10 @@ void GEMglDrawElements :: indicesMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglDrawElements :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglDrawElements::modeMessCallback,  	gensym("mode"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglDrawElements::countMessCallback,  	gensym("count"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglDrawElements::typeMessCallback,  	gensym("type"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglDrawElements::indicesMessCallback,  	gensym("indices"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::modeMessCallback),  	gensym("mode"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::countMessCallback),  	gensym("count"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::typeMessCallback),  	gensym("type"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::indicesMessCallback),  	gensym("indices"), A_GIMME, A_NULL);
 }
 
 void GEMglDrawElements :: modeMessCallback (void* data, t_floatarg arg0){

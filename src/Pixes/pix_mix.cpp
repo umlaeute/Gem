@@ -433,7 +433,7 @@ void pix_mix :: gainMess (float X, float Y)
 /////////////////////////////////////////////////////////
 void pix_mix :: obj_setupCallback(t_class *classPtr)
 { 
-  class_addmethod(classPtr, (t_method)&pix_mix::gainCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_mix::gainCallback),
 		  gensym("gain"), A_GIMME, A_NULL);//A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 

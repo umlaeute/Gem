@@ -112,12 +112,12 @@ void GEMglMap1d :: pointsMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglMap1d :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglMap1d::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap1d::u1MessCallback,  	gensym("u1"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap1d::u2MessCallback,  	gensym("u2"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap1d::strideMessCallback,  	gensym("stride"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap1d::orderMessCallback,  	gensym("order"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap1d::pointsMessCallback,  	gensym("points"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::targetMessCallback),  	gensym("target"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::u1MessCallback),  	gensym("u1"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::u2MessCallback),  	gensym("u2"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::strideMessCallback),  	gensym("stride"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::orderMessCallback),  	gensym("order"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::pointsMessCallback),  	gensym("points"), A_GIMME, A_NULL);
 }
 
 void GEMglMap1d :: targetMessCallback (void* data, t_floatarg arg0){

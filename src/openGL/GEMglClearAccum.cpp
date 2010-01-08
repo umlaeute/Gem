@@ -80,10 +80,10 @@ void GEMglClearAccum :: alphaMess (t_float arg1) {	// FUN
 //
 
 void GEMglClearAccum :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglClearAccum::redMessCallback,  	gensym("red"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglClearAccum::greenMessCallback,  	gensym("green"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglClearAccum::blueMessCallback,  	gensym("blue"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglClearAccum::alphaMessCallback,  	gensym("alpha"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearAccum::redMessCallback),  	gensym("red"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearAccum::greenMessCallback),  	gensym("green"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearAccum::blueMessCallback),  	gensym("blue"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearAccum::alphaMessCallback),  	gensym("alpha"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglClearAccum :: redMessCallback (void* data, t_floatarg arg0){

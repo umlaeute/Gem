@@ -72,9 +72,9 @@ void GEMglTexGenf :: paramMess (t_float arg1) {	// FUN
 //
 
 void GEMglTexGenf :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglTexGenf::coordMessCallback,  	gensym("coord"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexGenf::pnameMessCallback,  	gensym("pname"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexGenf::paramMessCallback,  	gensym("param"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexGenf::coordMessCallback),  	gensym("coord"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexGenf::pnameMessCallback),  	gensym("pname"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexGenf::paramMessCallback),  	gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglTexGenf :: coordMessCallback (void* data, t_floatarg arg0){

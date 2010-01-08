@@ -218,7 +218,7 @@ void pix_dump :: trigger()
 /////////////////////////////////////////////////////////
 void pix_dump :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&pix_dump::triggerMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_dump::triggerMessCallback));
 }
 
 void pix_dump :: triggerMessCallback(void *data)

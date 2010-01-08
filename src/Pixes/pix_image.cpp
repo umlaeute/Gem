@@ -313,9 +313,9 @@ void pix_image :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_image :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_image::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_image::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_image::threadMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_image::threadMessCallback),
                   gensym("thread"), A_FLOAT, A_NULL);
 }
 void pix_image :: openMessCallback(void *data, t_symbol *filename)

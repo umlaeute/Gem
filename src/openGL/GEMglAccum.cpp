@@ -64,8 +64,8 @@ void GEMglAccum :: valueMess (t_float arg1) {	// FUN
 //
 
 void GEMglAccum :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglAccum::opMessCallback,  	gensym("op"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglAccum::valueMessCallback,  	gensym("value"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAccum::opMessCallback),  	gensym("op"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAccum::valueMessCallback),  	gensym("value"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglAccum :: opMessCallback (void* data, t_floatarg arg0){

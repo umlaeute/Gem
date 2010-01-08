@@ -96,9 +96,9 @@ void pix_a_2grey :: obj_setupCallback(t_class *classPtr)
 {
    class_addcreator((t_newmethod)create_pix_a_2grey, 
 		   gensym("pix_a_2gray"), A_NULL);
-   class_addmethod(classPtr, (t_method)&pix_a_2grey::alphaMessCallback,
+   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_a_2grey::alphaMessCallback),
     	    gensym("ft1"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_a_2grey::alphaMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_a_2grey::alphaMessCallback),
     	    gensym("alpha"), A_FLOAT, A_NULL);
 }
 

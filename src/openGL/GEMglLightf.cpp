@@ -72,9 +72,9 @@ void GEMglLightf :: paramMess (t_float arg1) {	// FUN
 //
 
 void GEMglLightf :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglLightf::lightMessCallback,  	gensym("light"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglLightf::pnameMessCallback,  	gensym("pname"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglLightf::paramMessCallback,  	gensym("param"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLightf::lightMessCallback),  	gensym("light"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLightf::pnameMessCallback),  	gensym("pname"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLightf::paramMessCallback),  	gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglLightf :: lightMessCallback (void* data, t_floatarg arg0){

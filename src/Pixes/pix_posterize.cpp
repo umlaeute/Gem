@@ -129,10 +129,10 @@ void pix_posterize :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_posterize :: obj_setupCallback(t_class *classPtr)
 {
-class_addmethod(classPtr, (t_method)&pix_posterize::factorMessCallback,
+class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_posterize::factorMessCallback),
     	    gensym("factor"), A_FLOAT, A_NULL);
             
-class_addmethod(classPtr, (t_method)&pix_posterize::limitMessCallback,
+class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_posterize::limitMessCallback),
     	    gensym("limit"), A_FLOAT, A_NULL);
 
 }

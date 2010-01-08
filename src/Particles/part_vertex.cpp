@@ -56,7 +56,7 @@ void part_vertex :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_vertex :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&part_vertex::posMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_vertex::posMessCallback),
 		  gensym(""), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void part_vertex :: posMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)

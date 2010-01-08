@@ -195,11 +195,11 @@ static member functions
 
 ------------------------------------------------------------*/
 void pix_movement2 :: obj_setupCallback(t_class*classPtr){
-  class_addmethod(classPtr, (t_method)&pix_movement2::lowThreshMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement2::lowThreshMessCallback),
 		  gensym("low_thresh"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movement2::threshMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement2::threshMessCallback),
 		  gensym("hi_thresh"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, (t_method)&pix_movement2::bangMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_movement2::bangMessCallback));
 }
 
 /*------------------------------------------------------------

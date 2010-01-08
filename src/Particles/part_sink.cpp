@@ -97,11 +97,11 @@ void part_sink :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_sink :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&part_sink::killMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_sink::killMessCallback),
 		  gensym("kill"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&part_sink::domainMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_sink::domainMessCallback),
 		  gensym("domain"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&part_sink::vectorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_sink::vectorMessCallback),
 		  gensym("vector"), A_GIMME, A_NULL);
 }
 void part_sink :: killMessCallback(void *data, t_floatarg num)

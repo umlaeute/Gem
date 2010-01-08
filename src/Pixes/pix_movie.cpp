@@ -144,11 +144,11 @@ void pix_movie :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_movie :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_movie::textureMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::textureMessCallback),
 		  gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movie::repeatMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::repeatMessCallback),
 		  gensym("repeat"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_movie::modeCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::modeCallback),
 		  gensym("mode"), A_FLOAT, A_NULL);
 }
 

@@ -100,11 +100,11 @@ void pix_writer :: fileMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_writer :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&pix_writer::bangMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_writer::bangMessCallback));
 
-  class_addmethod(classPtr, (t_method)&pix_writer::fileMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_writer::fileMessCallback),
 		  gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_writer::autoMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_writer::autoMessCallback),
 		  gensym("auto"), A_FLOAT, A_NULL);
 }
 

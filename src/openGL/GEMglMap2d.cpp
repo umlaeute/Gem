@@ -143,16 +143,16 @@ void GEMglMap2d :: pointsMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglMap2d :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::u1MessCallback,  	gensym("u1"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::u2MessCallback,  	gensym("u2"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::ustrideMessCallback,  	gensym("ustride"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::uorderMessCallback,  	gensym("uorder"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::v1MessCallback,  	gensym("v1"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::v2MessCallback,  	gensym("v2"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::vstrideMessCallback,  	gensym("vstride"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::vorderMessCallback,  	gensym("vorder"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMap2d::pointsMessCallback,  	gensym("points"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::targetMessCallback),  	gensym("target"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::u1MessCallback),  	gensym("u1"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::u2MessCallback),  	gensym("u2"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::ustrideMessCallback),  	gensym("ustride"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::uorderMessCallback),  	gensym("uorder"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::v1MessCallback),  	gensym("v1"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::v2MessCallback),  	gensym("v2"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::vstrideMessCallback),  	gensym("vstride"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::vorderMessCallback),  	gensym("vorder"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2d::pointsMessCallback),  	gensym("points"), A_GIMME, A_NULL);
 }
 
 void GEMglMap2d :: targetMessCallback (void* data, t_floatarg arg0){

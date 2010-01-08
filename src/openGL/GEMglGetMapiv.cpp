@@ -71,8 +71,8 @@ void GEMglGetMapiv :: queryMess (t_float arg0) {	// FUN
 //
 
 void GEMglGetMapiv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, (t_method)&GEMglGetMapiv::targetMessCallback, gensym("target"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&GEMglGetMapiv::queryMessCallback, gensym("query"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetMapiv::targetMessCallback), gensym("target"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetMapiv::queryMessCallback), gensym("query"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglGetMapiv :: targetMessCallback (void* data, t_floatarg arg0) {

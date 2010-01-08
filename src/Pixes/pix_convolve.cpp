@@ -728,11 +728,11 @@ void pix_convolve :: matrixMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_convolve :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_convolve::matrixMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::matrixMessCallback),
     	    gensym("matrix"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_convolve::rangeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::rangeMessCallback),
     	    gensym("ft1"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_convolve::chromaMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::chromaMessCallback),
     	    gensym("chroma"), A_FLOAT, A_NULL);
 }
 void pix_convolve :: matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

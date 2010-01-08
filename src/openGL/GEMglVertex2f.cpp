@@ -64,8 +64,8 @@ void GEMglVertex2f :: yMess (t_float arg1) {	// FUN
 //
 
 void GEMglVertex2f :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglVertex2f::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglVertex2f::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex2f::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex2f::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglVertex2f :: xMessCallback (void* data, t_floatarg arg0){

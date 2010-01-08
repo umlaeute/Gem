@@ -71,7 +71,7 @@ void part_damp :: vectorMess(float x, float y, float z)
 /////////////////////////////////////////////////////////
 void part_damp :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_damp::vectorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_damp::vectorMessCallback),
     	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
 }
 void part_damp :: vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)

@@ -211,11 +211,11 @@ void pix_rtx :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rtx :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_rtx::modeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rtx::modeMessCallback),
 		  gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_rtx::clearMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rtx::clearMessCallback),
 		  gensym("clear"), A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_rtx::setMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rtx::setMessCallback),
 		  gensym("set"), A_NULL);
 }
 void pix_rtx :: modeMessCallback(void *data, t_floatarg newmode)

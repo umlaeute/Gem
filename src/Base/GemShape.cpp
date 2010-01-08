@@ -191,13 +191,13 @@ void GemShape :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void GemShape :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&GemShape::linewidthMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemShape::linewidthMessCallback),
     	    gensym("width"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&GemShape::typeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemShape::typeMessCallback),
     	    gensym("draw"), A_SYMBOL, A_NULL);
-    class_addmethod(classPtr, (t_method)&GemShape::blendMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemShape::blendMessCallback),
     	    gensym("blend"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&GemShape::sizeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemShape::sizeMessCallback),
     	    gensym("ft1"), A_FLOAT, A_NULL);
 }
 void GemShape :: linewidthMessCallback(void *data, t_floatarg linewidth)

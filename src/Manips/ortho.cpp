@@ -102,8 +102,8 @@ void ortho :: compatMess(int state)
 /////////////////////////////////////////////////////////
 void ortho :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat (classPtr, (t_method)&ortho::orthoMessCallback);
-    class_addmethod(classPtr, (t_method)&ortho::compatMessCallback,
+    class_addfloat (classPtr, reinterpret_cast<t_method>(&ortho::orthoMessCallback));
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&ortho::compatMessCallback),
 		  gensym("compat"), A_FLOAT, A_NULL);}
 void ortho :: orthoMessCallback(void *data, t_floatarg state)
 {

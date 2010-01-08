@@ -64,8 +64,8 @@ void GEMglAlphaFunc :: refMess (t_float arg1) {	// FUN
 //
 
 void GEMglAlphaFunc :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglAlphaFunc::funcMessCallback,  	gensym("func"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglAlphaFunc::refMessCallback,  	gensym("ref"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAlphaFunc::funcMessCallback),  	gensym("func"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAlphaFunc::refMessCallback),  	gensym("ref"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglAlphaFunc :: funcMessCallback (void* data, t_floatarg arg0){

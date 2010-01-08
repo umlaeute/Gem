@@ -677,16 +677,16 @@ register int h,w,i,j,width;
 /////////////////////////////////////////////////////////
 void pix_chroma_key :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_chroma_key::directionCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::directionCallback),
 		  gensym("direction"), A_DEFFLOAT, A_NULL);
                   
-  class_addmethod(classPtr, (t_method)&pix_chroma_key::modeCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::modeCallback),
 		  gensym("mode"), A_DEFFLOAT, A_NULL);
                   
-    class_addmethod(classPtr, (t_method)&pix_chroma_key::rangeCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::rangeCallback),
 		  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
                   
-    class_addmethod(classPtr, (t_method)&pix_chroma_key::valueCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::valueCallback),
 		  gensym("value"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 

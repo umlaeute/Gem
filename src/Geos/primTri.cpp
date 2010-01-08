@@ -146,17 +146,17 @@ void primTri :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void primTri :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&primTri::vect1MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect1MessCallback),
     	    gensym("vect1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&primTri::vect2MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect2MessCallback),
     	    gensym("vect2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&primTri::vect3MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect3MessCallback),
     	    gensym("vect3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&primTri::col1MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col1MessCallback),
     	    gensym("col1"), A_GIMME, A_NULL); 
-    class_addmethod(classPtr, (t_method)&primTri::col2MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col2MessCallback),
     	    gensym("col2"), A_GIMME, A_NULL); 
-    class_addmethod(classPtr, (t_method)&primTri::col3MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col3MessCallback),
     	    gensym("col3"), A_GIMME, A_NULL); 
 }
 

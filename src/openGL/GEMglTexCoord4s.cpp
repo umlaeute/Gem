@@ -80,10 +80,10 @@ void GEMglTexCoord4s :: qMess (t_float arg1) {	// FUN
 //
 
 void GEMglTexCoord4s :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglTexCoord4s::sMessCallback,  	gensym("s"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexCoord4s::tMessCallback,  	gensym("t"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexCoord4s::rMessCallback,  	gensym("r"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexCoord4s::qMessCallback,  	gensym("q"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord4s::sMessCallback),  	gensym("s"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord4s::tMessCallback),  	gensym("t"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord4s::rMessCallback),  	gensym("r"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord4s::qMessCallback),  	gensym("q"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglTexCoord4s :: sMessCallback (void* data, t_floatarg arg0){

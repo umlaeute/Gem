@@ -396,11 +396,11 @@ void pix_gain :: saturateMess(int sat)
 /////////////////////////////////////////////////////////
 void pix_gain :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_gain::vecGainMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::vecGainMessCallback),
 		  gensym("vec_gain"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_gain::floatGainMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::floatGainMessCallback),
 		  gensym("ft1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_gain::saturateMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::saturateMessCallback),
 		  gensym("saturate"), A_FLOAT, A_NULL);
 }
 void pix_gain :: vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

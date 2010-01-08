@@ -256,7 +256,7 @@ void pix_curve :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_curve :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_curve::setMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_curve::setMessCallback),
 		  gensym("set"), A_GIMME,0);
 }
 

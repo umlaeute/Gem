@@ -260,18 +260,18 @@ void pix_buffer :: copyMess(int src, int dst)
 void pix_buffer :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)create_pix_buffer,gensym("pix_depot"),A_DEFSYM,A_DEFFLOAT,A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer::allocateMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::allocateMessCallback),
   		  gensym("allocate"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer::resizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::resizeMessCallback),
   		  gensym("resize"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, (t_method)&pix_buffer::bangMessCallback);
-  class_addmethod(classPtr, (t_method)&pix_buffer::openMessCallback,
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_buffer::bangMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::openMessCallback),
   		  gensym("open"), A_SYMBOL, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::openMessCallback),
   		  gensym("load"), A_SYMBOL, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer::saveMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::saveMessCallback),
   		  gensym("save"), A_SYMBOL, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_buffer::copyMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::copyMessCallback),
   		  gensym("copy"), A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_buffer :: allocateMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)

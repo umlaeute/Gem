@@ -90,8 +90,8 @@ void pix_test :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_test :: obj_setupCallback(t_class *classPtr)
 {
-   class_addfloat(classPtr, (t_method)&pix_test::floatMessCallback);    
-   class_addmethod(classPtr, (t_method)&pix_test::csizeMessCallback,
+   class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_test::floatMessCallback));    
+   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_test::csizeMessCallback),
 		  gensym("csize"), A_FLOAT, A_NULL);
 }
 void pix_test :: csizeMessCallback(void *data, float n)

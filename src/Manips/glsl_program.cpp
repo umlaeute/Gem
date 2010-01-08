@@ -737,23 +737,23 @@ void glsl_program:: outverticesMess(GLint vertices) {
 /////////////////////////////////////////////////////////
 void glsl_program :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&glsl_program::shaderMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::shaderMessCallback),
                   gensym("shader"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&glsl_program::linkCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::linkCallback),
                   gensym("link"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&glsl_program::printMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::printMessCallback),
                   gensym("print"), A_NULL);
 
-  class_addmethod(classPtr, (t_method)&glsl_program::intypeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::intypeMessCallback),
                   gensym("geometry_intype"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&glsl_program::outtypeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::outtypeMessCallback),
                   gensym("geometry_outtype"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&glsl_program::typeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::typeMessCallback),
                   gensym("geometry_type"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&glsl_program::outverticesMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::outverticesMessCallback),
                   gensym("geometry_outvertices"), A_FLOAT, A_NULL);
 
-  class_addanything(classPtr, (t_method)&glsl_program::paramMessCallback);
+  class_addanything(classPtr, reinterpret_cast<t_method>(&glsl_program::paramMessCallback));
 }
 void glsl_program :: shaderMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

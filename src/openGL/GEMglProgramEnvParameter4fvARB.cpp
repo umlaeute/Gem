@@ -87,9 +87,9 @@ void GEMglProgramEnvParameter4fvARB :: paramsMess (int argc, t_atom*argv) {	// F
 //
 
 void GEMglProgramEnvParameter4fvARB :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4fvARB::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4fvARB::indexMessCallback,  	gensym("index"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4fvARB::paramsMessCallback,  	gensym("params"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4fvARB::targetMessCallback),  	gensym("target"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4fvARB::indexMessCallback),  	gensym("index"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4fvARB::paramsMessCallback),  	gensym("params"), A_GIMME, A_NULL);
 };
 
 void GEMglProgramEnvParameter4fvARB :: targetMessCallback (void* data, t_floatarg arg0){

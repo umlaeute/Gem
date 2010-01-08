@@ -90,9 +90,9 @@ void part_color :: color2Mess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void part_color :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_color::color1MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_color::color1MessCallback),
     	    gensym("color1"), A_GIMME, A_NULL); 
-    class_addmethod(classPtr, (t_method)&part_color::color2MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_color::color2MessCallback),
     	    gensym("color2"), A_GIMME, A_NULL); 
 }
 void part_color :: color1MessCallback(void *data, t_symbol*s, int argc, t_atom*argv)

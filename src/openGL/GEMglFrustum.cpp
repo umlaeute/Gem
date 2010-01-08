@@ -98,12 +98,12 @@ void GEMglFrustum :: zFarMess (t_float arg1) {	// FUN
 //
 
 void GEMglFrustum :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglFrustum::leftMessCallback,  	gensym("left"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglFrustum::rightMessCallback,  	gensym("right"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglFrustum::bottomMessCallback,  	gensym("bottom"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglFrustum::topMessCallback,  	gensym("top"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglFrustum::zNearMessCallback,  	gensym("zNear"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglFrustum::zFarMessCallback,  	gensym("zFar"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::leftMessCallback),  	gensym("left"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::rightMessCallback),  	gensym("right"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::bottomMessCallback),  	gensym("bottom"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::topMessCallback),  	gensym("top"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::zNearMessCallback),  	gensym("zNear"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::zFarMessCallback),  	gensym("zFar"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglFrustum :: leftMessCallback (void* data, t_floatarg arg0){

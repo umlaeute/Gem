@@ -64,8 +64,8 @@ void GEMglClipPlane :: planeMess (t_float arg0) {	// FUN
 //
 
 void GEMglClipPlane :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, (t_method)&GEMglClipPlane::vMessCallback,  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&GEMglClipPlane::planeMessCallback,  	gensym("plane"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClipPlane::vMessCallback),  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClipPlane::planeMessCallback),  	gensym("plane"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglClipPlane :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) {

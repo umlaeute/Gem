@@ -311,13 +311,13 @@ void vertex_draw :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void vertex_draw :: obj_setupCallback(t_class *classPtr)
 {
-	class_addmethod(classPtr, (t_method)&vertex_draw::defaultMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::defaultMessCallback),
     	    gensym("default"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&vertex_draw::colorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::colorMessCallback),
     	    gensym("color"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&vertex_draw::texcoordMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::texcoordMessCallback),
     	    gensym("texcoord"), A_FLOAT, A_NULL);        
-    class_addmethod(classPtr, (t_method)&vertex_draw::typeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::typeMessCallback),
     	    gensym("draw"), A_SYMBOL, A_NULL);  
 }
 

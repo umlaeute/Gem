@@ -54,7 +54,7 @@ void GEMglCallList :: listMess (t_float arg1) {	// FUN
 //
 
 void GEMglCallList :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglCallList::listMessCallback,  	gensym("gllist"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCallList::listMessCallback),  	gensym("gllist"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglCallList :: listMessCallback (void* data, t_floatarg arg0){

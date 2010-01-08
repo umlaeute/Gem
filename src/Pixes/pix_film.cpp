@@ -468,15 +468,15 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
 #endif
   class_addcreator((t_newmethod)create_pix_film, gensym("pix_filmQT"), A_DEFSYM, A_NULL);
  
-  class_addmethod(classPtr, (t_method)&pix_film::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::openMessCallback),
 		  gensym("open"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_film::changeImageCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::changeImageCallback),
 		  gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_film::autoCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::autoCallback),
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_film::csCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::csCallback),
 		  gensym("colorspace"), A_DEFSYM, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_film::threadCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::threadCallback),
 		  gensym("thread"), A_FLOAT, A_NULL);
 }
 void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)

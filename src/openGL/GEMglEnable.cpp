@@ -57,7 +57,7 @@ void GEMglEnable :: capMess (t_atom arg) {	// FUN
 //
 
 void GEMglEnable :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglEnable::capMessCallback,  	gensym("cap"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEnable::capMessCallback),  	gensym("cap"), A_GIMME, A_NULL);
 };
 
 void GEMglEnable :: capMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

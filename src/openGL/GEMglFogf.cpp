@@ -72,8 +72,8 @@ void GEMglFogf :: paramMess (t_float arg1) {	// FUN
 //
 
 void GEMglFogf :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglFogf::pnameMessCallback,  	gensym("pname"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglFogf::paramMessCallback,  	gensym("param"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogf::pnameMessCallback),  	gensym("pname"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogf::paramMessCallback),  	gensym("param"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglFogf :: pnameMessCallback (void* data, t_floatarg arg0){

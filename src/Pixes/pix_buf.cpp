@@ -92,7 +92,7 @@ void pix_buf :: obj_setupCallback(t_class *classPtr)
   class_addcreator((t_newmethod)create_pix_buf, 
 		   gensym("pix_separator"), A_DEFFLOAT, A_NULL);
   class_addbang(classPtr, &pix_buf::bangMessCallback);
-  class_addmethod(classPtr, (t_method)&pix_buf::autoMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buf::autoMessCallback),
 		  gensym("auto"), A_FLOAT, A_NULL);
 
 }

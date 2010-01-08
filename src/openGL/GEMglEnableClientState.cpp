@@ -63,7 +63,7 @@ void GEMglEnableClientState :: arrayMess (t_atom arg) {	// FUN
 //
 
 void GEMglEnableClientState :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglEnableClientState::arrayMessCallback,  	gensym("array"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEnableClientState::arrayMessCallback),  	gensym("array"), A_GIMME, A_NULL);
 }
 
 void GEMglEnableClientState :: arrayMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

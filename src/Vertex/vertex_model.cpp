@@ -314,7 +314,7 @@ void vertex_model :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 void vertex_model :: obj_setupCallback(t_class *classPtr)
-{       class_addmethod(classPtr, (t_method)&vertex_model::openMessCallback,
+{       class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_model::openMessCallback),
 		  gensym("open"), A_SYMBOL, A_NULL);
 }
 

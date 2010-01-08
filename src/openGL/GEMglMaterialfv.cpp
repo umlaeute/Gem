@@ -91,9 +91,9 @@ void GEMglMaterialfv :: paramMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglMaterialfv :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglMaterialfv::faceMessCallback,  	gensym("face"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMaterialfv::pnameMessCallback,  	gensym("pname"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglMaterialfv::paramMessCallback,  	gensym("param"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialfv::faceMessCallback),  	gensym("face"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialfv::pnameMessCallback),  	gensym("pname"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialfv::paramMessCallback),  	gensym("param"), A_GIMME, A_NULL);
 };
 
 void GEMglMaterialfv :: faceMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

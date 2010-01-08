@@ -230,15 +230,15 @@ void pix_write :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_write :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_write::fileMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::fileMessCallback),
 		  gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_write::autoMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::autoMessCallback),
 		  gensym("auto"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, (t_method)&pix_write::bangMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_write::bangMessCallback));
 
-  class_addmethod(classPtr, (t_method)&pix_write::sizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::sizeMessCallback),
 		  gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_write::posMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::posMessCallback),
 		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
 }
 

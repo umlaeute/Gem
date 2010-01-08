@@ -784,16 +784,16 @@ void pix_movieDS::obj_setupCallback(t_class *classPtr)
 {
 	class_addcreator((t_newmethod)create_pix_movieDS,gensym("pix_movieDS"),A_DEFSYM,A_NULL);
 	
-	class_addmethod(classPtr, (t_method)&pix_movieDS::openMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::openMessCallback),
 		gensym("open"), A_SYMBOL, A_NULL);
 	
-	class_addmethod(classPtr, (t_method)&pix_movieDS::changeImageCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::changeImageCallback),
 		gensym("img_num"), A_GIMME, A_NULL);
 	
-	class_addmethod(classPtr, (t_method)&pix_movieDS::autoCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::autoCallback),
 		gensym("auto"), A_DEFFLOAT, A_NULL);
 	
-	class_addmethod(classPtr, (t_method)&pix_movieDS::rateCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::rateCallback),
 		gensym("rate"), A_DEFFLOAT, A_NULL);
 }
 

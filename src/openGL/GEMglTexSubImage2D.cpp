@@ -109,12 +109,12 @@ void GEMglTexSubImage2D :: heightMess (t_float arg1) {	// FUN
 //
 
 void GEMglTexSubImage2D :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::levelMessCallback,  	gensym("level"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::xoffsetMessCallback,  	gensym("xoffset"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::yoffsetMessCallback,  	gensym("yoffset"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::widthMessCallback,  	gensym("width"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglTexSubImage2D::heightMessCallback,  	gensym("height"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage2D::targetMessCallback),  	gensym("target"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage2D::levelMessCallback),  	gensym("level"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage2D::xoffsetMessCallback),  	gensym("xoffset"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage2D::yoffsetMessCallback),  	gensym("yoffset"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage2D::widthMessCallback),  	gensym("width"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage2D::heightMessCallback),  	gensym("height"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglTexSubImage2D :: targetMessCallback (void* data, t_floatarg arg0){

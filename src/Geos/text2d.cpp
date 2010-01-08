@@ -173,7 +173,7 @@ void text2d :: render(GemState*){}
 /////////////////////////////////////////////////////////
 void text2d :: obj_setupCallback(t_class *classPtr )
 { 
-  class_addmethod(classPtr, (t_method)&text2d::aliasMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&text2d::aliasMessCallback),
 		  gensym("alias"), A_FLOAT, A_NULL);
 }
 

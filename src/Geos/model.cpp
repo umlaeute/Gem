@@ -240,19 +240,19 @@ void model :: startRendering()
 /////////////////////////////////////////////////////////
 void model :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&model::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::openMessCallback),
 		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&model::rescaleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::rescaleMessCallback),
 		  gensym("rescale"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&model::smoothMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::smoothMessCallback),
 		  gensym("smooth"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&model::reverseMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::reverseMessCallback),
 		  gensym("revert"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&model::materialMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::materialMessCallback),
 		  gensym("material"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&model::textureMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::textureMessCallback),
 		  gensym("texture"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&model::groupMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::groupMessCallback),
 		  gensym("group"), A_FLOAT, A_NULL);
 
 }

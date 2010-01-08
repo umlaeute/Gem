@@ -257,9 +257,9 @@ void pix_roll :: processYUVImage(imageStruct &image)
 void pix_roll :: obj_setupCallback(t_class *classPtr)
 {
 
-  class_addmethod(classPtr, (t_method)&pix_roll::rollCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_roll::rollCallback),
                   gensym("roll"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_roll::axisCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_roll::axisCallback),
                   gensym("axis"), A_DEFFLOAT, A_NULL);
 }
 

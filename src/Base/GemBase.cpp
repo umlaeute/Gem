@@ -228,7 +228,7 @@ bool GemBase :: isRunnable()
 /////////////////////////////////////////////////////////
 void GemBase :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&GemBase::gem_MessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemBase::gem_MessCallback),
     	    gensym("gem_state"), A_GIMME, A_NULL);
 }
 void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc, t_atom *argv)

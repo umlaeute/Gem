@@ -122,7 +122,7 @@ void rectangle :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void rectangle :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&rectangle::heightMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&rectangle::heightMessCallback),
     	    gensym("ft2"), A_FLOAT, A_NULL);
 }
 

@@ -546,11 +546,11 @@ void curve3d :: renderShape(GemState *state){
 //
 /////////////////////////////////////////////////////////
 void curve3d :: obj_setupCallback(t_class *classPtr){
-  class_addmethod(classPtr, (t_method)&curve3d::resolutionMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::resolutionMessCallback),
 		  gensym("res"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&curve3d::gridMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::gridMessCallback),
 		  gensym("grid"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&curve3d::setMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::setMessCallback),
 		  gensym("set"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 

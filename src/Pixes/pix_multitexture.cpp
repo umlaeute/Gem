@@ -189,14 +189,14 @@ void pix_multitexture :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_multitexture :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_multitexture::texUnitMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multitexture::texUnitMessCallback),
                   gensym("texUnit"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_multitexture::dimenMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multitexture::dimenMessCallback),
                   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_multitexture::modeCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multitexture::modeCallback),
 		gensym("mode"), A_FLOAT, A_NULL);
   // generic inlets for texUnit
-  class_addanything(classPtr, (t_method)&pix_multitexture::parmCallback);
+  class_addanything(classPtr, reinterpret_cast<t_method>(&pix_multitexture::parmCallback));
 }
 void pix_multitexture :: texUnitMessCallback(void *data, float n, float texID)
 {

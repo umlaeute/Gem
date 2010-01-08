@@ -248,23 +248,23 @@ void gemwindow :: menuBarMess(int on)
 /////////////////////////////////////////////////////////
 void gemwindow :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&gemwindow::bangMessCallback);
-  class_addmethod(classPtr, (t_method)&gemwindow::renderMessCallback, gensym("render"), A_NULL);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&gemwindow::bangMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::renderMessCallback), gensym("render"), A_NULL);
 
-  class_addmethod(classPtr, (t_method)&gemwindow::titleMessCallback,        gensym("title"), A_DEFSYM ,A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::createMessCallback,       gensym("create"), A_DEFSYM ,A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::bufferMessCallback,       gensym("buffer"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::fullscreenMessCallback,   gensym("fullscreen"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::menuBarMessCallback,      gensym("menubar"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::secondscreenMessCallback, gensym("secondscreen"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::dimensionsMessCallback,   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::offsetMessCallback,       gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::cursorMessCallback,       gensym("cursor"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::destroyMessCallback,      gensym("destroy"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::printMessCallback,        gensym("print"), A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::borderMessCallback,       gensym("border"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::topmostMessCallback,      gensym("topmost"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&gemwindow::fsaaMessCallback,         gensym("FSAA"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::titleMessCallback),        gensym("title"), A_DEFSYM ,A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::createMessCallback),       gensym("create"), A_DEFSYM ,A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::bufferMessCallback),       gensym("buffer"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::fullscreenMessCallback),   gensym("fullscreen"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::menuBarMessCallback),      gensym("menubar"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::secondscreenMessCallback), gensym("secondscreen"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::dimensionsMessCallback),   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::offsetMessCallback),       gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::cursorMessCallback),       gensym("cursor"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::destroyMessCallback),      gensym("destroy"), A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::printMessCallback),        gensym("print"), A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::borderMessCallback),       gensym("border"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::topmostMessCallback),      gensym("topmost"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwindow::fsaaMessCallback),         gensym("FSAA"), A_FLOAT, A_NULL);
 }
 void gemwindow :: printMessCallback(void *)
 {

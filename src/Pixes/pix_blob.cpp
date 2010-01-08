@@ -233,10 +233,10 @@ void pix_blob :: GainMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_blob :: obj_setupCallback(t_class *classPtr)
 {
-  //  class_addbang(classPtr, (t_method)&pix_blob::triggerMessCallback);
-  class_addmethod(classPtr, (t_method)&pix_blob::channelMessCallback,
+  //  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_blob::triggerMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_blob::channelMessCallback),
 		  gensym("channel"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_blob::gainMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_blob::gainMessCallback),
 		  gensym("gain"), A_GIMME, A_NULL);
 }
 

@@ -115,13 +115,13 @@ void GEMglCopyTexImage1D :: borderMess (t_float arg1) {	// FUN
 //
 
 void GEMglCopyTexImage1D :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexImage1D::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexImage1D::levelMessCallback,  	gensym("level"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexImage1D::internalFormatMessCallback,  	gensym("internalFormat"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexImage1D::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexImage1D::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexImage1D::widthMessCallback,  	gensym("width"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexImage1D::borderMessCallback,  	gensym("border"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage1D::targetMessCallback),  	gensym("target"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage1D::levelMessCallback),  	gensym("level"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage1D::internalFormatMessCallback),  	gensym("internalFormat"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage1D::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage1D::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage1D::widthMessCallback),  	gensym("width"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage1D::borderMessCallback),  	gensym("border"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglCopyTexImage1D :: targetMessCallback (void* data, t_floatarg arg0){

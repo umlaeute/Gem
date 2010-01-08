@@ -396,7 +396,7 @@ unsigned short rightGain,imageGain;
 void pix_blur :: obj_setupCallback(t_class *classPtr)
 {
 
-    class_addmethod(classPtr, (t_method)&pix_blur::blurCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_blur::blurCallback),
 		  gensym("blur"), A_DEFFLOAT, A_NULL);
 }
 

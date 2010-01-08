@@ -87,7 +87,7 @@ void GEMglGetIntegerv :: pnameMess (t_atom arg) {	// FUN
 //
 
 void GEMglGetIntegerv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, (t_method)&GEMglGetIntegerv::pnameMessCallback,  	gensym("pname"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetIntegerv::pnameMessCallback),  	gensym("pname"), A_GIMME, A_NULL);
 }
 
 void GEMglGetIntegerv :: pnameMessCallback (void* data, t_symbol*, int argc, t_atom*argv) {

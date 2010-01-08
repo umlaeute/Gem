@@ -109,11 +109,11 @@ void scaleXYZ :: zMess(float val)
 /////////////////////////////////////////////////////////
 void scaleXYZ :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&scaleXYZ::xMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&scaleXYZ::xMessCallback),
     	    gensym("xVal"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&scaleXYZ::yMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&scaleXYZ::yMessCallback),
     	    gensym("yVal"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&scaleXYZ::zMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&scaleXYZ::zMessCallback),
     	    gensym("zVal"), A_FLOAT, A_NULL); 
 }
 void scaleXYZ :: xMessCallback(void *data, t_floatarg val)

@@ -111,13 +111,13 @@ void accumrotate :: reset()
 /////////////////////////////////////////////////////////
 void accumrotate :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&accumrotate::xMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&accumrotate::xMessCallback),
 		  gensym("xVal"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&accumrotate::yMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&accumrotate::yMessCallback),
 		  gensym("yVal"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&accumrotate::zMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&accumrotate::zMessCallback),
 		  gensym("zVal"), A_FLOAT, A_NULL); 
-  class_addmethod(classPtr, (t_method)&accumrotate::resetCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&accumrotate::resetCallback),
 		  gensym("reset"), A_NULL); 
 }
 void accumrotate :: xMessCallback(void *data, t_floatarg val)

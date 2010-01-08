@@ -56,7 +56,7 @@ void GEMglPushAttrib :: maskMess (t_float arg1) {	// FUN
 //
 
 void GEMglPushAttrib :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglPushAttrib::maskMessCallback,  	gensym("mask"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPushAttrib::maskMessCallback),  	gensym("mask"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglPushAttrib :: maskMessCallback (void* data, t_floatarg arg0){

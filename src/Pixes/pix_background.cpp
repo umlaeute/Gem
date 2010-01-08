@@ -555,12 +555,12 @@ void pix_background :: rangeNMess(int argc, t_atom*argv){
 /////////////////////////////////////////////////////////
 void pix_background :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&pix_background::resetCallback);
-  class_addmethod(classPtr, (t_method)&pix_background::rangeNCallback,
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_background::resetCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::rangeNCallback),
 		  gensym("range_n"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_background::rangeCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::rangeCallback),
 		  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_background::resetCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::resetCallback),
 		  gensym("reset"), A_NULL);
 }
 

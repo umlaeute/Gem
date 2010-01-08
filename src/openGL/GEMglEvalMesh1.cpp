@@ -78,9 +78,9 @@ void GEMglEvalMesh1 :: i2Mess (t_float arg1) {	// FUN
 //
 
 void GEMglEvalMesh1 :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglEvalMesh1::modeMessCallback,  	gensym("mode"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglEvalMesh1::i1MessCallback,  	gensym("i1"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglEvalMesh1::i2MessCallback,  	gensym("i2"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::modeMessCallback),  	gensym("mode"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::i1MessCallback),  	gensym("i1"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::i2MessCallback),  	gensym("i2"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglEvalMesh1 :: modeMessCallback (void* data, t_floatarg arg0){

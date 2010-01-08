@@ -580,23 +580,23 @@ void pix_levels :: Pete_ChannelFunction_RenderYUV() {
 /////////////////////////////////////////////////////////
 void pix_levels :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_levels::autoCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::autoCallback),
 		  gensym("auto"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::uniCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::uniCallback),
 		  gensym("uni"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::invCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::invCallback),
 		  gensym("inv"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::uniformCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::uniformCallback),
 		  gensym("uniform"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::redCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::redCallback),
 		  gensym("red"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::greenCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::greenCallback),
 		  gensym("green"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::blueCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::blueCallback),
 		  gensym("blue"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::lowPCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::lowPCallback),
 		  gensym("lowP"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_levels::hiPCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::hiPCallback),
 		  gensym("hiP"), A_DEFFLOAT, A_NULL);
 }
 

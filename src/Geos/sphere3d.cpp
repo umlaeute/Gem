@@ -391,16 +391,16 @@ void sphere3d :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void sphere3d :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&sphere3d::setCartMessCallback, gensym("set"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setCartMessCallback), gensym("set"), 
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&sphere3d::setCartMessCallback, gensym("setCartesian"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setCartMessCallback), gensym("setCartesian"), 
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&sphere3d::setSphMessCallback, gensym("setSpherical"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setSphMessCallback), gensym("setSpherical"), 
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&sphere3d::setSphMessCallback, gensym("setSph"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setSphMessCallback), gensym("setSph"), 
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&sphere3d::printMessCallback, gensym("print"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::printMessCallback), gensym("print"), 
                   A_NULL);
 }
 

@@ -87,9 +87,9 @@ void part_velocity :: vectorMess(int argc, t_atom*argv){
 /////////////////////////////////////////////////////////
 void part_velocity :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&part_velocity::vectorMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velocity::vectorMessCallback),
 		  gensym("vector"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&part_velocity::domainMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velocity::domainMessCallback),
 		  gensym("domain"), A_SYMBOL, A_NULL);
 }
 void part_velocity :: domainMessCallback(void *data, t_symbol*s)

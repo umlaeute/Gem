@@ -326,9 +326,9 @@ void glsl_geometry :: printInfo()
 /////////////////////////////////////////////////////////
 void glsl_geometry :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&glsl_geometry::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_geometry::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&glsl_geometry::printMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_geometry::printMessCallback),
                   gensym("print"), A_NULL);
 }
 void glsl_geometry :: openMessCallback(void *data, t_symbol *filename)

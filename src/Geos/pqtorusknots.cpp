@@ -371,21 +371,21 @@ void pqtorusknots :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void pqtorusknots :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pqtorusknots::scaleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::scaleMessCallback),
                   gensym("scale"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pqtorusknots::stepsMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::stepsMessCallback),
                   gensym("steps"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pqtorusknots::facetsMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::facetsMessCallback),
                   gensym("facets"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pqtorusknots::thickMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::thickMessCallback),
                   gensym("thick"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pqtorusknots::clumpMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::clumpMessCallback),
                   gensym("clump"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pqtorusknots::uvScaleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::uvScaleMessCallback),
                   gensym("uvScale"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pqtorusknots::pqMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::pqMessCallback),
                   gensym("pq"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pqtorusknots::typeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::typeMessCallback),
                   gensym("type"), A_SYMBOL, A_NULL);
 }
 

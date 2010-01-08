@@ -875,25 +875,25 @@ void pix_recordQT :: cleanImage()
 void pix_recordQT :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)create_pix_recordQT,gensym("pix_record"),A_DEFSYM,A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_recordQT::fileMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::fileMessCallback),
 		  gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_recordQT::autoMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::autoMessCallback),
 		  gensym("auto"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, (t_method)&pix_recordQT::bangMessCallback);
+  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_recordQT::bangMessCallback));
 
-  class_addmethod(classPtr, (t_method)&pix_recordQT::sizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::sizeMessCallback),
 		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_recordQT::posMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::posMessCallback),
 		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_recordQT::recordMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::recordMessCallback),
 		  gensym("record"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_recordQT::dialogMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::dialogMessCallback),
 		  gensym("dialog"),  A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_recordQT::codeclistMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::codeclistMessCallback),
 		  gensym("codeclist"),  A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_recordQT::codecMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::codecMessCallback),
 		  gensym("codec"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_recordQT::colorspaceCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::colorspaceCallback),
 		  gensym("colorspace"), A_SYMBOL, A_NULL);
 }
 

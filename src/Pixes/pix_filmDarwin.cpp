@@ -513,17 +513,17 @@ void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
   class_addcreator((t_newmethod)create_pix_filmDarwin, gensym("pix_film"), A_DEFSYM, A_NULL);
   pix_filmOS::real_obj_setupCallback(classPtr);
 
-  class_addmethod(classPtr, (t_method)&pix_filmDarwin::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmDarwin::ramCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::ramCallback),
                   gensym("ram"),  A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmDarwin::hiqualityCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::hiqualityCallback),
                   gensym("hiquality"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmDarwin::rateCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::rateCallback),
                   gensym("rate"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_filmDarwin::debugCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::debugCallback),
                   gensym("debug"),  A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_filmDarwin::volumeCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::volumeCallback),
                   gensym("volume"), A_DEFFLOAT, A_NULL);
 
 }

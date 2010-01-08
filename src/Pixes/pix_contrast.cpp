@@ -315,8 +315,8 @@ void pix_contrast :: saturationMess(float saturation)
 void pix_contrast :: obj_setupCallback(t_class *classPtr)
 {
 
-	class_addmethod(classPtr, (t_method)&pix_contrast::contrastMessCallback, gensym("contrast"),A_FLOAT,A_NULL);
-	class_addmethod(classPtr, (t_method)&pix_contrast::saturationMessCallback, gensym("saturation"),A_FLOAT,A_NULL);
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_contrast::contrastMessCallback), gensym("contrast"),A_FLOAT,A_NULL);
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_contrast::saturationMessCallback), gensym("saturation"),A_FLOAT,A_NULL);
 
 }
 

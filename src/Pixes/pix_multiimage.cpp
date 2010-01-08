@@ -297,9 +297,9 @@ void pix_multiimage :: cleanImages()
 /////////////////////////////////////////////////////////
 void pix_multiimage :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_multiimage::openMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiimage::openMessCallback),
     	    gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_multiimage::changeImageCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiimage::changeImageCallback),
     	    gensym("img_num"), A_FLOAT, A_NULL);
 }
 void pix_multiimage :: openMessCallback(void *data, t_symbol *filename, t_floatarg baseImage,

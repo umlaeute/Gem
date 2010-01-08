@@ -177,9 +177,9 @@ void pix_bitmask :: intMaskMess(int mask)
 /////////////////////////////////////////////////////////
 void pix_bitmask :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_bitmask::vecMaskMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::vecMaskMessCallback),
     	    gensym("vec_mask"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_bitmask::floatMaskMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::floatMaskMessCallback),
     	    gensym("ft1"), A_FLOAT, A_NULL);
 }
 void pix_bitmask :: vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

@@ -193,9 +193,9 @@ void pix_threshold :: floatThreshMess(float thresh)
 /////////////////////////////////////////////////////////
 void pix_threshold :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_threshold::vecThreshMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_threshold::vecThreshMessCallback),
     	    gensym("vec_thresh"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_threshold::floatThreshMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_threshold::floatThreshMessCallback),
     	    gensym("ft1"), A_FLOAT, A_NULL);
 }
 void pix_threshold :: vecThreshMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

@@ -56,7 +56,7 @@ void GEMglEdgeFlag :: flagMess (t_float arg1) {	// FUN
 //
 
 void GEMglEdgeFlag :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglEdgeFlag::flagMessCallback,  	gensym("flag"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEdgeFlag::flagMessCallback),  	gensym("flag"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglEdgeFlag :: flagMessCallback (void* data, t_floatarg arg0){

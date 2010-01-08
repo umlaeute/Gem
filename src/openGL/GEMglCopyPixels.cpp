@@ -91,11 +91,11 @@ void GEMglCopyPixels :: typeMess (t_float arg1) {	// FUN
 //
 
 void GEMglCopyPixels :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglCopyPixels::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyPixels::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyPixels::widthMessCallback,  	gensym("width"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyPixels::heightMessCallback,  	gensym("height"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyPixels::typeMessCallback,  	gensym("type"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyPixels::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyPixels::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyPixels::widthMessCallback),  	gensym("width"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyPixels::heightMessCallback),  	gensym("height"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyPixels::typeMessCallback),  	gensym("type"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglCopyPixels :: xMessCallback (void* data, t_floatarg arg0){

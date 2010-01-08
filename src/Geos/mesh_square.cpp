@@ -170,11 +170,11 @@ void mesh_square :: renderShape(GemState *state)
 /////////////////////////////////////////////////////////
 void mesh_square :: obj_setupCallback(t_class *classPtr)
 {
-	class_addmethod(classPtr, (t_method)&mesh_square::gridMessCallback,
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&mesh_square::gridMessCallback),
                   gensym("grid"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&mesh_square::gridXMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&mesh_square::gridXMessCallback),
                   gensym("gridX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&mesh_square::gridYMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&mesh_square::gridYMessCallback),
                   gensym("gridY"), A_FLOAT, A_NULL);
 }
 

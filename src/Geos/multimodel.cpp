@@ -322,13 +322,13 @@ void multimodel :: changeModel(int modelNum)
 /////////////////////////////////////////////////////////
 void multimodel :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&multimodel::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::openMessCallback),
 		  gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&multimodel::changeModelCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::changeModelCallback),
 		  gensym("mdl_num"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&multimodel::rescaleMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::rescaleMessCallback),
 		  gensym("rescale"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&multimodel::textureMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::textureMessCallback),
 		  gensym("texture"), A_FLOAT, A_NULL);
 }
 void multimodel :: openMessCallback(void *data, t_symbol *filename, t_floatarg baseModel,

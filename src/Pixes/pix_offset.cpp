@@ -357,11 +357,11 @@ void pix_offset :: saturateMess(int sat)
 /////////////////////////////////////////////////////////
 void pix_offset :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_offset::vecOffsetMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_offset::vecOffsetMessCallback),
                   gensym("vec_offset"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_offset::floatOffsetMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_offset::floatOffsetMessCallback),
                   gensym("ft1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_offset::saturateMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_offset::saturateMessCallback),
                   gensym("saturate"), A_FLOAT, A_NULL);
 }
 void pix_offset :: vecOffsetMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

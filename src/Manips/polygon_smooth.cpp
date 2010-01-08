@@ -78,7 +78,7 @@ void polygon_smooth :: polygon_smoothMess(int polygon_smoothState)
 /////////////////////////////////////////////////////////
 void polygon_smooth :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, (t_method)&polygon_smooth::polygon_smoothMessCallback);
+    class_addfloat(classPtr, reinterpret_cast<t_method>(&polygon_smooth::polygon_smoothMessCallback));
 }
 void polygon_smooth :: polygon_smoothMessCallback(void *data, t_floatarg polygon_smoothState)
 {

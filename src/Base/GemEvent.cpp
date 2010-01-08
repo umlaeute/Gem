@@ -352,7 +352,7 @@ static void addEvent(gem_event_t type, char*string, int x, int y, int state, int
     event_queue=new gem_event_queue_t;
     event_queue->first=NULL;
     event_queue->last =NULL;
-    event_queue->clock=clock_new(NULL, (t_method)eventClock);
+    event_queue->clock=clock_new(NULL, reinterpret_cast<t_method>(eventClock));
   }
   gem_event_queue_item_t*item=createEvent(type, string, x, y, state, axis, value, which);
   if(NULL==event_queue->first) {

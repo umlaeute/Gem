@@ -59,7 +59,7 @@ void part_killold :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_killold :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_killold::numberMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_killold::numberMessCallback),
     	    gensym("age"), A_FLOAT, A_NULL);
 }
 void part_killold :: numberMessCallback(void *data, t_floatarg num)

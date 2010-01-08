@@ -95,12 +95,12 @@ void GEMglProgramEnvParameter4dARB :: wMess (t_float arg5) {	// FUN
 //
 
 void GEMglProgramEnvParameter4dARB :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4dARB::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4dARB::indexMessCallback,  	gensym("index"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4dARB::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4dARB::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4dARB::zMessCallback,  	gensym("z"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglProgramEnvParameter4dARB::wMessCallback,  	gensym("w"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4dARB::targetMessCallback),  	gensym("target"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4dARB::indexMessCallback),  	gensym("index"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4dARB::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4dARB::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4dARB::zMessCallback),  	gensym("z"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4dARB::wMessCallback),  	gensym("w"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglProgramEnvParameter4dARB :: targetMessCallback (void* data, t_floatarg arg0){

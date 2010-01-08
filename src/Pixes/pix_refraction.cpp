@@ -220,13 +220,13 @@ void pix_refraction :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_refraction :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_refraction::refractCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::refractCallback),
 		  gensym("refract"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_refraction::widthCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::widthCallback),
 		  gensym("width"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_refraction::heightCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::heightCallback),
 		  gensym("height"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_refraction::magCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::magCallback),
 		  gensym("mag"), A_DEFFLOAT, A_NULL);
 }
 void pix_refraction :: refractCallback(void *data, t_floatarg m_Refraction)

@@ -83,7 +83,7 @@ void GEMglAreTexturesResident :: texturesMess (int argc, t_atom*argv) {
 //
 
 void GEMglAreTexturesResident :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglAreTexturesResident::texturesMessCallback,  	gensym("textures"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAreTexturesResident::texturesMessCallback),  	gensym("textures"), A_GIMME, A_NULL);
 }
 void GEMglAreTexturesResident :: texturesMessCallback (void* data, t_symbol*,int argc, t_atom*argv){
 	GetMyClass(data)->texturesMess (argc,argv);

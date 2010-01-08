@@ -94,7 +94,7 @@ void pix_resize :: dimenMess(int width, int height) {
 /////////////////////////////////////////////////////////
 void pix_resize :: obj_setupCallback(t_class *classPtr)
 { 
-  class_addmethod(classPtr, (t_method)pix_resize::dimenMessCallback, 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_resize::dimenMessCallback), 
 		  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
 }
 

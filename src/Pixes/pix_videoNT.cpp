@@ -343,9 +343,9 @@ void pix_videoNT :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator((t_newmethod)create_pix_videoNT, gensym("pix_video"), A_DEFFLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_videoNT::dimenMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoNT::dimenMessCallback),
 		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoNT::csMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoNT::csMessCallback),
 		  gensym("colorspace"), A_FLOAT, A_NULL);
 }
 void pix_videoNT :: dimenMessCallback(void *data, t_floatarg x, t_floatarg y)

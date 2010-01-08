@@ -209,7 +209,7 @@ void GemMan :: createContext(char* disp)
       */
   }
 
-  s_windowClock = clock_new(NULL, (t_method)GemMan::dispatchWinmessCallback);
+  s_windowClock = clock_new(NULL, reinterpret_cast<t_method>(GemMan::dispatchWinmessCallback));
   if (!m_windowContext && !createConstWindow(disp))
     {
       error("GEM: A serious error occured creating const Context");
@@ -257,7 +257,7 @@ void GemMan :: initGem()
   m_mat_specular[3] = 1.0;
   m_mat_shininess = 100.0;
 
-  s_clock = clock_new(NULL, (t_method)&GemMan::render);
+  s_clock = clock_new(NULL, reinterpret_cast<t_method>(&GemMan::render));
 
   GemSIMD simd_init;
 

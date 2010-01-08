@@ -71,9 +71,9 @@ void GEMglUniform1fARB :: valMess (t_float arg1) {	// FUN
 //
 
 void GEMglUniform1fARB :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglUniform1fARB::locMessCallback,
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUniform1fARB::locMessCallback),
 		gensym("location"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglUniform1fARB::valMessCallback,
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUniform1fARB::valMessCallback),
 		gensym("val"), A_DEFFLOAT, A_NULL);
 };
 

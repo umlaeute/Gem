@@ -64,8 +64,8 @@ void GEMglRasterPos2s :: yMess (t_float arg1) {	// FUN
 //
 
 void GEMglRasterPos2s :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglRasterPos2s::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRasterPos2s::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2s::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2s::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglRasterPos2s :: xMessCallback (void* data, t_floatarg arg0){

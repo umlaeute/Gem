@@ -353,16 +353,16 @@ void rubber :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void rubber :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, (t_method)&rubber::bangMessCallback);
-  class_addmethod(classPtr, (t_method)&rubber::heightMessCallback,
+  class_addbang(classPtr, reinterpret_cast<t_method>(&rubber::bangMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::heightMessCallback),
                   gensym("Ht"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&rubber::ctrXMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::ctrXMessCallback),
                   gensym("cX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&rubber::ctrYMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::ctrYMessCallback),
                   gensym("cY"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&rubber::dragMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::dragMessCallback),
                   gensym("drag"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&rubber::springMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::springMessCallback),
                   gensym("spring"), A_FLOAT, A_NULL);
 }
 void rubber :: bangMessCallback(void *data)

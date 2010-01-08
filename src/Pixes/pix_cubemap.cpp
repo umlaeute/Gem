@@ -408,26 +408,26 @@ void pix_cubemap :: envMess(int num)
 /////////////////////////////////////////////////////////
 void pix_cubemap :: obj_setupCallback(t_class *classPtr)
 {
-  //  class_addmethod(classPtr, (t_method)&pix_cubemap::imageRight_callback, gensym("gem_imageX+"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_cubemap::rightImage_callback, gensym("gem_imageX-"), A_GIMME, A_NULL);
+  //  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::imageRight_callback), gensym("gem_imageX+"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageX-"), A_GIMME, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_cubemap::rightImage_callback, gensym("gem_imageY+"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_cubemap::rightImage_callback, gensym("gem_imageY-"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageY+"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageY-"), A_GIMME, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_cubemap::rightImage_callback, gensym("gem_imageZ+"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_cubemap::rightImage_callback, gensym("gem_imageZ-"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageZ+"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageZ-"), A_GIMME, A_NULL);
 
-  class_addfloat(classPtr, (t_method)&pix_cubemap::floatMessCallback);
-  class_addmethod(classPtr, (t_method)&pix_cubemap::textureMessCallback,
+  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_cubemap::floatMessCallback));
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::textureMessCallback),
                   gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_cubemap::repeatMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::repeatMessCallback),
                   gensym("repeat"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_cubemap::envMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::envMessCallback),
                   gensym("env"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_cubemap::texunitCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::texunitCallback),
                   gensym("texunit"), A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_cubemap::mapCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::mapCallback),
                   gensym("map"), A_FLOAT, A_NULL);
 }
 void pix_cubemap :: floatMessCallback(void *data, float n)

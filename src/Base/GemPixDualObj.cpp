@@ -215,7 +215,7 @@ void GemPixDualObj :: rightRender(GemState *statePtr)
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&GemPixDualObj::gem_rightMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemPixDualObj::gem_rightMessCallback),
     	    gensym("gem_right"), A_GIMME, A_NULL);
 }
 void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)

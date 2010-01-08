@@ -623,12 +623,12 @@ void pix_biquad :: faktorMess(int argc, t_atom*argv){
 /////////////////////////////////////////////////////////
 void pix_biquad :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_biquad::setMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_biquad::setMessCallback),
 		  gensym("set"), A_NULL);
                   
-  class_addmethod(classPtr, (t_method)&pix_biquad::modeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_biquad::modeMessCallback),
 		  gensym("mode"), A_DEFFLOAT, A_NULL);
-  class_addlist(classPtr, (t_method)&pix_biquad::faktorMessCallback);
+  class_addlist(classPtr, reinterpret_cast<t_method>(&pix_biquad::faktorMessCallback));
 }
 
 void pix_biquad :: faktorMessCallback(void *data, t_symbol *s, int argc, t_atom* argv)

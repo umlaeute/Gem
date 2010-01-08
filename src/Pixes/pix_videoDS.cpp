@@ -1049,22 +1049,22 @@ void pix_videoDS :: obj_setupCallback(t_class *classPtr)
   class_addcreator((t_newmethod)create_pix_videoDS, gensym("pix_video_ds"), A_DEFFLOAT, A_NULL);  // alias to old external
   class_addcreator((t_newmethod)create_pix_videoDS, gensym("pix_dv"), A_DEFFLOAT, A_NULL);
 
-  class_addmethod(classPtr, (t_method)&pix_videoDS::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDS::openMessCallback),
 		  gensym("device"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoDS::openMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDS::openMessCallback),
 		  gensym("open"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoDS::closeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDS::closeMessCallback),
 		  gensym("close"), A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoDS::setupMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDS::setupMessCallback),
 		  gensym("setup"), A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_videoDS::dvMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDS::dvMessCallback),
 		  gensym("dv"), A_GIMME, A_NULL);
-  class_addfloat(classPtr, (t_method)&pix_videoDS::floatMessCallback);
+  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_videoDS::floatMessCallback));
   
-  class_addmethod(classPtr, (t_method)&pix_videoDS::recordMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDS::recordMessCallback),
 		  gensym("record"), A_DEFFLOAT, A_NULL);
 		  
-   class_addmethod(classPtr, (t_method)&pix_videoDS::fileMessCallback,
+   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDS::fileMessCallback),
 		  gensym("file"), A_SYMBOL, A_NULL);
 
   //  pix_videoOS::real_obj_setupCallback(classPtr);

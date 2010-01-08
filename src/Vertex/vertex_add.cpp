@@ -177,9 +177,9 @@ void vertex_add :: rightRender(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_add :: obj_setupCallback(t_class *classPtr)
 {        
-  class_addmethod(classPtr, (t_method)&vertex_add::gem_rightMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_add::gem_rightMessCallback),
 		  gensym("gem_right"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&vertex_add::typeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_add::typeMessCallback),
 		  gensym("type"), A_GIMME, A_NULL);
 }
 void vertex_add :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)

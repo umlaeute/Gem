@@ -57,7 +57,7 @@ void GEMglLogicOp :: opcodeMess (t_atom arg) {	// FUN
 //
 
 void GEMglLogicOp :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglLogicOp::opcodeMessCallback,  	gensym("opcode"), A_GIMME, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLogicOp::opcodeMessCallback),  	gensym("opcode"), A_GIMME, A_NULL);
 };
 
 void GEMglLogicOp :: opcodeMessCallback (void* data, t_symbol*,int argc, t_atom*argv){

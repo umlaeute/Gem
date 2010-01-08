@@ -207,8 +207,8 @@ void GemPixObj :: processOnOff(int on)
 /////////////////////////////////////////////////////////
 void GemPixObj :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, (t_method)&GemPixObj::floatMessCallback);    
-    class_addmethod(classPtr, (t_method)&GemPixObj::simdMessCallback,
+    class_addfloat(classPtr, reinterpret_cast<t_method>(&GemPixObj::floatMessCallback));    
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemPixObj::simdMessCallback),
 		  gensym("simd"), A_DEFFLOAT, A_NULL);
 }
 void GemPixObj :: floatMessCallback(void *data, float n)

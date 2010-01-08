@@ -59,7 +59,7 @@ void part_follow :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_follow :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&part_follow::numberMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_follow::numberMessCallback),
 		  gensym("accel"), A_FLOAT, A_NULL);
 }
 void part_follow :: numberMessCallback(void *data, t_floatarg num)

@@ -93,9 +93,9 @@ void part_targetsize :: scaleMess(float scaleX,float scaleY,float scaleZ)
 /////////////////////////////////////////////////////////
 void part_targetsize :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_targetsize::sizeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetsize::sizeMessCallback),
 		    gensym("ft1"), A_GIMME, A_NULL); 
-    class_addmethod(classPtr, (t_method)&part_targetsize::scaleMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetsize::scaleMessCallback),
 		    gensym("ft2"), A_GIMME, A_NULL); 
 }
 void part_targetsize :: sizeMessCallback(void *data, t_symbol*s, int argc, t_atom *argv)

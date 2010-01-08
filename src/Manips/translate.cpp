@@ -92,9 +92,9 @@ void translate :: vectorMess(float x, float y, float z)
 /////////////////////////////////////////////////////////
 void translate :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&translate::distanceMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&translate::distanceMessCallback),
     	    gensym("ft1"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, (t_method)&translate::vectorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&translate::vectorMessCallback),
     	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
 }
 void translate :: distanceMessCallback(void *data, t_floatarg distance)

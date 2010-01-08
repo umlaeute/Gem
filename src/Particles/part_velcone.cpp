@@ -63,9 +63,9 @@ void part_velcone :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_velcone :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_velcone::vectorMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velcone::vectorMessCallback),
     	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&part_velcone::numberMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velcone::numberMessCallback),
     	    gensym("vel"), A_FLOAT, A_NULL);
 }
 void part_velcone :: numberMessCallback(void *data, t_floatarg num)

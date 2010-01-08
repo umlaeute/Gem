@@ -74,7 +74,7 @@ void part_size :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void part_size :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&part_size::sizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_size::sizeMessCallback),
 		  gensym("size"), A_GIMME, A_NULL);
 }
 void part_size :: sizeMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)

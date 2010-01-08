@@ -88,7 +88,7 @@ void part_draw :: typeMess(int ac,t_atom* av)
 /////////////////////////////////////////////////////////
 void part_draw :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&part_draw::typeMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_draw::typeMessCallback),
     	    gensym("draw"), A_GIMME, A_NULL);
 }
 void part_draw :: typeMessCallback(void *data,  t_symbol *s, int ac,t_atom* av)

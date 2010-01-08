@@ -89,7 +89,7 @@ void specular :: specularMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void specular :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&specular::specularMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&specular::specularMessCallback),
     	    gensym("specular"), A_GIMME, A_NULL); 
 }
 void specular :: specularMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

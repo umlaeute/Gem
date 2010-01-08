@@ -367,11 +367,11 @@ void pix_video :: swapMess(int state)
 /////////////////////////////////////////////////////////
 void pix_video :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_video::dimenMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dimenMessCallback),
     	    gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::offsetMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::offsetMessCallback),
     	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_video::swapMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::swapMessCallback),
     	    gensym("swap"), A_FLOAT, A_NULL);
 }
 void pix_video :: dimenMessCallback(void *data, t_floatarg x, t_floatarg y)

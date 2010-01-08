@@ -123,14 +123,14 @@ void GEMglCopyTexSubImage2D :: heightMess (t_float arg1) {	// FUN
 //
 
 void GEMglCopyTexSubImage2D :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexSubImage2D::targetMessCallback,  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexSubImage2D::levelMessCallback,  	gensym("level"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexSubImage2D::xoffsetMessCallback,  	gensym("xoffset"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexSubImage2D::yoffsetMessCallback,  	gensym("yoffset"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexSubImage2D::xMessCallback,  	gensym("x"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexSubImage2D::yMessCallback,  	gensym("y"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexSubImage2D::widthMessCallback,  	gensym("width"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglCopyTexSubImage2D::heightMessCallback,  	gensym("height"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage2D::targetMessCallback),  	gensym("target"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage2D::levelMessCallback),  	gensym("level"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage2D::xoffsetMessCallback),  	gensym("xoffset"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage2D::yoffsetMessCallback),  	gensym("yoffset"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage2D::xMessCallback),  	gensym("x"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage2D::yMessCallback),  	gensym("y"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage2D::widthMessCallback),  	gensym("width"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage2D::heightMessCallback),  	gensym("height"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglCopyTexSubImage2D :: targetMessCallback (void* data, t_floatarg arg0){

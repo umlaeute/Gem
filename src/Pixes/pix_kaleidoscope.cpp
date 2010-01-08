@@ -2031,23 +2031,23 @@ void pix_kaleidoscope :: Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector
 /////////////////////////////////////////////////////////
 void pix_kaleidoscope :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::sourceCtrCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceCtrCallback),
 		  gensym("sourceCtr"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::outputCtrCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputCtrCallback),
 		  gensym("outputCtr"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::outputAngCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngCallback),
 		  gensym("outputAng"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::sourceAngCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngCallback),
 		  gensym("sourceAng"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::outputAngleCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngleCallback),
 		  gensym("outputAngle"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::sourceAngleCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngleCallback),
 		  gensym("sourceAngle"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::divCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::divCallback),
 		  gensym("div"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::sapCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sapCallback),
 		  gensym("sap"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&pix_kaleidoscope::rlpCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::rlpCallback),
 		  gensym("rlp"), A_DEFFLOAT, A_NULL);
 }
 void pix_kaleidoscope :: divCallback(void *data, t_floatarg m_Divisions)

@@ -80,10 +80,10 @@ void GEMglRectd :: y2Mess (t_float arg1) {	// FUN
 //
 
 void GEMglRectd :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, (t_method)&GEMglRectd::x1MessCallback,  	gensym("x1"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRectd::y1MessCallback,  	gensym("y1"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRectd::x2MessCallback,  	gensym("x2"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, (t_method)&GEMglRectd::y2MessCallback,  	gensym("y2"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectd::x1MessCallback),  	gensym("x1"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectd::y1MessCallback),  	gensym("y1"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectd::x2MessCallback),  	gensym("x2"), A_DEFFLOAT, A_NULL);
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectd::y2MessCallback),  	gensym("y2"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglRectd :: x1MessCallback (void* data, t_floatarg arg0){

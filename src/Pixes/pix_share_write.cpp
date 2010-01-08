@@ -285,7 +285,7 @@ void pix_share_write :: render(GemState *state)
 
 void pix_share_write :: obj_setupCallback(t_class *classPtr)
 {
-   class_addmethod(classPtr, (t_method)&pix_share_write::setMessCallback,
+   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_share_write::setMessCallback),
 		  gensym("set"), A_GIMME, A_NULL);
 }
 
