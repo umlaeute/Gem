@@ -25,12 +25,12 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMap2d )
 //
 GEMglMap2d :: GEMglMap2d	(int argc, t_atom *argv){
 	if (argc>0)target =static_cast<GLenum>(atom_getint(argv+0));
-	if (argc>1)u1     =static_cast<GLdouble>(atom_getint(argv+1));
-	if (argc>2)u2     =static_cast<GLdouble>(atom_getint(argv+2));
+	if (argc>1)u1     =static_cast<GLdouble>(atom_getfloat(argv+1));
+	if (argc>2)u2     =static_cast<GLdouble>(atom_getfloat(argv+2));
 	if (argc>3)ustride=static_cast<GLint>(atom_getint(argv+3));
 	if (argc>4)uorder =static_cast<GLint>(atom_getint(argv+4));
-	if (argc>5)v1     =static_cast<GLdouble>(atom_getint(argv+5));
-	if (argc>6)v2     =static_cast<GLdouble>(atom_getint(argv+6));
+	if (argc>5)v1     =static_cast<GLdouble>(atom_getfloat(argv+5));
+	if (argc>6)v2     =static_cast<GLdouble>(atom_getfloat(argv+6));
 	if (argc>7)vstride=static_cast<GLint>(atom_getint(argv+7));
 	if (argc>8)vorder =static_cast<GLint>(atom_getint(argv+8));
 

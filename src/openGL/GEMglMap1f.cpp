@@ -25,8 +25,8 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMap1f )
 //
 GEMglMap1f :: GEMglMap1f	(int argc, t_atom*argv){
 	if (argc>0)target=static_cast<GLenum>(atom_getint(argv+0));
-	if (argc>1)u1    =static_cast<GLfloat>(atom_getint(argv+1));
-	if (argc>2)u2    =static_cast<GLfloat>(atom_getint(argv+2));
+	if (argc>1)u1    =static_cast<GLfloat>(atom_getfloat(argv+1));
+	if (argc>2)u2    =static_cast<GLfloat>(atom_getfloat(argv+2));
 	if (argc>3)stride=static_cast<GLint>(atom_getint(argv+3));
 	if (argc>4)order =static_cast<GLint>(atom_getint(argv+4));
 	

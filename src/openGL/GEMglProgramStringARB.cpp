@@ -30,7 +30,7 @@ GEMglProgramStringARB :: GEMglProgramStringARB	(int argc, t_atom*argv) :
         switch (argc) {
         default:
         case 4:
-          string = (GLvoid*)atom_getsymbol(argv+3)->s_name;
+          string = reinterpret_cast<GLvoid*>(atom_getsymbol(argv+3)->s_name);
         case 3:
           len=atom_getint(argv+2);
         case 2:
