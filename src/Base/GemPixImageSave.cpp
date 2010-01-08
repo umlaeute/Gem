@@ -86,9 +86,9 @@ void* MemAlloc(unsigned long memsize)
 unsigned char* CStringToPString(char *string)
 {
     unsigned char *newString = (unsigned char*)MemAlloc(strlen(string) + 1);
-    int i = 0;
+    size_t i = 0;
     
-    for(i = 0; i < (int)strlen(string); i++)
+    for(i = 0; i < strlen(string); i++)
 	newString[i+1] = string[i];
     
     newString[0] = i;
@@ -102,9 +102,11 @@ void InvertGLImage( unsigned char *imageData, unsigned char * outData, long imag
     long i, j;
     // This is not an optimized routine!
 
+    // FIXXME use a flip function in GemPixUtils for this
+
     // Copy rows into tmp buffer one at a time, reversing their order
     for (i = 0, j = imageSize - rowBytes; i < imageSize; i += rowBytes, j -= rowBytes) {
-        memcpy( &outData[j], &imageData[i], (size_t) rowBytes );
+      memcpy( &outData[j], &imageData[i], static_cast<size_t>(rowBytes) );
     }
 }
 
@@ -122,6 +124,8 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
     FSRef			ref;
 
     unsigned char *data = NULL;
+
+    const Uint8*filename8=static_cast<const Uint8*>(filename);
 
 
     if(!image->upsidedown) { // the image is openGL-oriented, not quicktime-oriented! flip it!
@@ -146,7 +150,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
             break;
     }
     
-    err = ::FSPathMakeRef((UInt8*)filename, &ref,NULL );
+    err = ::FSPathMakeRef(filename8, &ref, NULL );
 
     if (err == fnfErr) {
       // if the file does not yet exist, then let's create the file
@@ -156,7 +160,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 	return 0;
       write(fd, " ", 1);
       close(fd);
-      err = FSPathMakeRef((UInt8*)filename, &ref, NULL);
+      err = FSPathMakeRef(filename8, &ref, NULL);
     }
     
     if (err != noErr)
@@ -172,7 +176,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
     }
 
   //  err = FSMakeFSSpec(spec.vRefNum, 0, filename, &spec); //spits out -37 error but still works?
-    err = FSMakeFSSpec(spec.vRefNum, spec.parID, (UInt8*)filename, &spec);  //this always gives an error -37 ???
+    err = FSMakeFSSpec(spec.vRefNum, spec.parID, filename8, &spec);  //this always gives an error -37 ???
 
     if (err != noErr && err != -37)
     {
@@ -194,13 +198,13 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
    // ::OffsetRect(&r, -r.left, -r.top);
    //SetRect(&r,r.left,r.bottom,r.right,r.top);
      err = QTNewGWorldFromPtr(&img,  
-                                    //k32RGBAPixelFormat,
-                                    k32ARGBPixelFormat,
-                                    &r, NULL, NULL, 0,
-                                    // keepLocal,	
-                                    //useDistantHdwrMem, 
-                                    (data?data:image->data),
-                                    (long)(image->xsize * image->csize));
+			      //k32RGBAPixelFormat,
+			      k32ARGBPixelFormat,
+			      &r, NULL, NULL, 0,
+			      // keepLocal,	
+			      //useDistantHdwrMem, 
+			      (data?data:image->data),
+			      static_cast<long>(image->xsize * image->csize));
 
      // is this the right place to free the "data" buffer (if used)?
      // i don't know, whether quicktime still needs the buffer...
@@ -402,7 +406,7 @@ typedef struct my_error_mgr * my_error_ptr;
 METHODDEF(void) my_error_exit (j_common_ptr cinfo)
 {
   // cinfo->err really points to a my_error_mgr struct, so coerce pointer
-  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+  my_error_ptr myerr = reinterpret_cast<my_error_ptr> (cinfo->err);
 
   // Always display the message.
   // We could postpone this until after returning, if we chose.

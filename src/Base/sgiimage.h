@@ -15,9 +15,9 @@
 #define int32 int
 
 
-extern unsigned int32 *getLongImage(char *textureFile, int32 *xsize, int32 *ysize, int32 *csize);
-extern int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, char *name);
-extern unsigned int32 *longimagedata(char *name);
-extern int sizeofimage(char *name, int32 *xsize, int32 *ysize, int32 *csize);
+extern unsigned int32 *getLongImage(const char *textureFile, int32 *xsize, int32 *ysize, int32 *csize);
+extern int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, const char *name);
+extern unsigned int32 *longimagedata(const char *name);
+extern int sizeofimage(const char *name, int32 *xsize, int32 *ysize, int32 *csize);
 
 #endif  /* __SGIIMAGE_H__ */

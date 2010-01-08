@@ -34,17 +34,30 @@ GEM_EXTERN int smoothStep(int x, int a, int b)
 {
     if (x < a) return(0);
     if (x >= b) return(1);
+
+    float xf=static_cast<float>(x);
+    float bf=static_cast<float>(a);
+    float af=static_cast<float>(b);
+
     // normalize to [0:1]
-    float temp = ((float)x - (float)a)/((float)b - (float)a);
-    return((int)(temp*temp * (3.f - 2.f*temp)));
+    float temp = (xf - af)/(bf - af);
+    float result = temp*temp * (3.f - 2.f*temp);
+    return(static_cast<int>(result));
 }
 GEM_EXTERN unsigned char smoothStep(unsigned char x, unsigned char a, unsigned char b)
 {
     if (x < a) return(0);
     if (x >= b) return(1);
+
+    float xf=static_cast<float>(x);
+    float bf=static_cast<float>(a);
+    float af=static_cast<float>(b);
+
     // normalize to [0:1]
-    float temp = ((float)x - (float)a)/((float)b - (float)a);
-    return((unsigned char)(temp*temp * (3.f - 2.f*temp)));
+    float temp = (xf - af)/(bf - af);
+    float result = temp*temp * (3.f - 2.f*temp);
+
+    return(static_cast<unsigned char>(result));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,7 +66,8 @@ GEM_EXTERN unsigned char smoothStep(unsigned char x, unsigned char a, unsigned c
 ///////////////////////////////////////////////////////////////////////////////
 GEM_EXTERN float biasFunc(float x, float a)
 {
-    return((float)pow(x, log(a)/log(0.5f)));
+  float result = static_cast<float>(pow(x, log(a)/log(0.5f)));
+  return(result);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,7 +95,7 @@ GEM_EXTERN void linearFunc(float x, float *ret, int numDimen, int npnts, float *
         return;
 
     x = FLOAT_CLAMP(x) * nspans;
-    int span = (int)x;
+    int span = static_cast<int>(x);
 
     // find the correct 2-point span of the linear list
     if (span >= nspans)
@@ -125,7 +139,7 @@ GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, int nknots, float 
 
     // find the correct 4-point span of the spline
     x = FLOAT_CLAMP(x) * nspans;
-    int span = (int)x;
+    int span = static_cast<int>(x);
     x -= span;              // get decimal part of span
     knot += (span * numDimen);
 

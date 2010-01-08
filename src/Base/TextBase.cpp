@@ -29,7 +29,7 @@
 # include <unistd.h>
 #endif
 
-char *TextBase::DEFAULT_FONT = (char*)"vera.ttf";
+char *TextBase::DEFAULT_FONT = const_cast<char*>("vera.ttf");
 
 /////////////////////////////////////////////////////////
 //
@@ -70,7 +70,7 @@ void TextBase :: renderLine(const char*line, float dist) {
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
 #if 0
   startpost("renderline: "); {
-    char*c=(char*)line;
+    const char*c=line;
     while(c) {
       startpost("%c (%x)", c, c);
       c++;
@@ -115,7 +115,7 @@ void TextBase :: render(GemState *)
 void TextBase :: setFontSize(t_float size){
   m_fontSize = size;
   if (!m_font)return;
-  if (! m_font->FaceSize((int)m_fontSize) ) {
+  if (! m_font->FaceSize(static_cast<int>(m_fontSize)) ) {
     error("unable to set fontsize !");
   }
   setModified();
@@ -145,7 +145,11 @@ void TextBase :: fontNameMess(const char *filename){
     error("no font-file specified");
     return;
   }
-  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, (char*)filename, "", buf2, &bufptr, MAXPDSTRING, 1))>=0){
+  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, 
+			const_cast<char*>(filename), 
+			"", 
+			buf2, &bufptr, MAXPDSTRING, 
+			1))>=0){
     close(fd);
     sprintf(buf, "%s/%s", buf2, bufptr);
   } else
@@ -164,7 +168,7 @@ void TextBase :: fontNameMess(const char *filename){
     error("unable to open font '%s'", buf);
     return;
   }
-  m_fontname=gensym((char*)filename);
+  m_fontname=gensym(filename);
 
   setFontSize(m_fontSize);
   m_font->Depth(m_fontDepth);
@@ -423,9 +427,9 @@ void TextBase :: stringMess(int argc, t_atom *argv)
       verbose(1, "invalid character %d: using ' ' instead", v);
       v=32;
     }
-    line += (wchar_t)(v);
+    line += static_cast<wchar_t>(v);
   }
-  line += (wchar_t)'\0';
+  line += L'\0';
 
   breakLine(line);
 }
@@ -438,23 +442,23 @@ void TextBase :: stringMess(int argc, t_atom *argv)
 void TextBase :: obj_setupCallback(t_class *classPtr)
 {
 
-  class_addlist(classPtr, (t_method)&TextBase::textMessCallback);
+  class_addlist(classPtr, reinterpret_cast<t_method>(&TextBase::textMessCallback));
 
-  class_addmethod(classPtr, (t_method)&TextBase::textMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::textMessCallback),
 		  gensym("text"), A_GIMME, A_NULL);
   //-- moocow
-  class_addmethod(classPtr, (t_method)&TextBase::stringMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::stringMessCallback),
 		  gensym("string"), A_GIMME, A_NULL);
   //-- /moocow
-  class_addmethod(classPtr, (t_method)&TextBase::precisionMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::precisionMessCallback),
 		  gensym("precision"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&TextBase::fontNameMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::fontNameMessCallback),
 		  gensym("font"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, (t_method)&TextBase::justifyMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
 		  gensym("justify"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, (t_method)&TextBase::fontSizeMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::fontSizeMessCallback),
 		  gensym("ft1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, (t_method)&TextBase::linedistMessCallback,
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::linedistMessCallback),
 		  gensym("linedist"), A_FLOAT, A_NULL);
 }
 void TextBase :: textMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

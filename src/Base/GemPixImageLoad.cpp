@@ -102,7 +102,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
    if (filename[0] != '\0') {
       FSSpec   spec;
 
-      err = ::FSPathMakeFSSpec( (UInt8*)filename, &spec, NULL);
+      err = ::FSPathMakeFSSpec( reinterpret_cast<UInt8*>(filename), &spec, NULL);
       if (err) {
          error("GemImageLoad: Unable to find file: %#s", spec.name);
                         error("GemImageLoad: Unable to find filename:%s", filename);
@@ -246,7 +246,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
         pixelformat = k32ARGBPixelFormat;
 #endif
 
-   ::DisposeHandle((Handle)imageDescH);
+	::DisposeHandle(static_cast<Handle>(imageDescH));
    imageDescH = NULL;
   image_block->allocate();
 
@@ -262,7 +262,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
                                  // keepLocal,   
                                  //useDistantHdwrMem, 
                                  image_block->data, 
-                                 (long)(image_block->xsize * image_block->csize));
+                                 static_cast<long>(image_block->xsize * image_block->csize));
    if (image_block->data == NULL || err) {
       error("Can't allocate memory for an image.");
    }
@@ -403,7 +403,7 @@ imageStruct *tiffImage2mem(const char *filename)
            return(NULL);
       }
 
-      uint32 *raster = (uint32 *) _TIFFmalloc(npixels * sizeof(uint32));
+      tdata_t raster = _TIFFmalloc(npixels * sizeof(uint32));
       if (raster == NULL)
       {
          error("GemImageLoad(TIFF): Unable to allocate memory for image: %s", filename);
@@ -435,12 +435,12 @@ imageStruct *tiffImage2mem(const char *filename)
             unsigned char *pixels = dstLine;
             for (uint32 j = 0; j < width; j++)
             {
-             pixels[chRed]   = (unsigned char)TIFFGetR(raster[k]); // Red
-             pixels[chGreen] = (unsigned char)TIFFGetG(raster[k]); // Green
-             pixels[chBlue]  = (unsigned char)TIFFGetB(raster[k]); // Blue
-             pixels[chAlpha] = (unsigned char)TIFFGetA(raster[k]); // Alpha
-                k++;
-                pixels += 4;
+	      pixels[chRed]   = static_cast<unsigned char>(TIFFGetR(raster[k])); // Red
+	      pixels[chGreen] = static_cast<unsigned char>(TIFFGetG(raster[k])); // Green
+	      pixels[chBlue]  = static_cast<unsigned char>(TIFFGetB(raster[k])); // Blue
+	      pixels[chAlpha] = static_cast<unsigned char>(TIFFGetA(raster[k])); // Alpha
+	      k++;
+	      pixels += 4;
             }
             dstLine += yStride;
       }
@@ -481,7 +481,7 @@ typedef struct my_error_mgr * my_error_ptr;
 METHODDEF(void) my_error_exit (j_common_ptr cinfo)
 {
   // cinfo->err really points to a my_error_mgr struct, so coerce pointer
-  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+  my_error_ptr myerr = reinterpret_cast<my_error_ptr> (cinfo->err);
 
   // Always display the message.
   // We could postpone this until after returning, if we chose.
@@ -629,7 +629,7 @@ imageStruct *jpegImage2mem(const char *filename)
 imageStruct *sgiImage2mem(const char *filename)
 {
    int32 xsize, ysize, csize;
-   if (!sizeofimage((char *)filename, &xsize, &ysize, &csize) )
+   if (!sizeofimage(filename, &xsize, &ysize, &csize) )
       return(NULL);
 
    ::verbose(2, "reading '%s' with SGI", filename);
@@ -665,9 +665,9 @@ imageStruct *sgiImage2mem(const char *filename)
    }
 
    image_block->allocate();
-   unsigned char *src = (unsigned char *)readData;
+   unsigned char *src = reinterpret_cast<unsigned char*>(readData);
    unsigned char *dst = &(image_block->data[0]);
-    const int yStride = image_block->xsize * image_block->csize;
+   const int yStride = image_block->xsize * image_block->csize;
 
    // do RGBA data
    if (csize == 4)
@@ -693,7 +693,7 @@ imageStruct *sgiImage2mem(const char *filename)
    {
       while (ysize--)
       {
-            unsigned char *pixels = dst;
+	unsigned char *pixels = dst;
          int count = xsize;
          while(count--)
          {
@@ -712,7 +712,7 @@ imageStruct *sgiImage2mem(const char *filename)
    {
       while (ysize--)
       {
-            unsigned char *pixels = dst;
+	unsigned char *pixels = dst;
          int count = xsize;
          while(count--)
          {
@@ -739,8 +739,8 @@ imageStruct *magickImage2mem(const char *filename){
     // Read a file into image object
     image.read( filename );
 
-    image_block->xsize=(GLint)image.columns();
-    image_block->ysize=(GLint)image.rows();
+    image_block->xsize=static_cast<GLint>(image.columns());
+    image_block->ysize=static_cast<GLint>(image.rows());
     image_block->setCsizeByFormat(GL_RGBA);
     image_block->reallocate();
 
@@ -749,7 +749,7 @@ imageStruct *magickImage2mem(const char *filename){
     image.write(0,0,image_block->xsize,image_block->ysize, 
                 "RGBA",
                 Magick::CharPixel,
-                (void*)(image_block->data));
+		reinterpret_cast<void*>(image_block->data));
   }catch( Magick::Exception e )  {
     return NULL;
   }

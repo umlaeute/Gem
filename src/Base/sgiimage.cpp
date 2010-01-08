@@ -19,6 +19,9 @@
  *				Mark Danks - 1998
  */
 
+
+// FIXXME: use C++ memory allocators
+
 #include "Base/GemConfig.h"
 #include <stdlib.h>
 #include "Base/sgiimage.h"
@@ -86,7 +89,7 @@ typedef struct {
 #define GINTLUM (156)
 #define BINTLUM (21)
 
-#define ILUM(r,g,b)     ((int)(RINTLUM*(r)+GINTLUM*(g)+BINTLUM*(b))>>8)
+#define ILUM(r,g,b)     (static_cast<int>(RINTLUM*(r)+GINTLUM*(g)+BINTLUM*(b))>>8)
 
 #define OFFSET_R	3	/* this is byte order dependent */
 #define OFFSET_G	2
@@ -110,7 +113,7 @@ static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int
  *
  */
 unsigned int32 *
-getLongImage(char *textureFile, int32 *xsize, int32 *ysize, int32 *csize)
+getLongImage(const char *textureFile, int32 *xsize, int32 *ysize, int32 *csize)
 {
   sizeofimage(textureFile, xsize, ysize, csize);
   return longimagedata(textureFile);
@@ -222,7 +225,7 @@ static void readtab(FILE *inf, unsigned int32 *tab, int32 len)
  *		return the xsize and ysize of an iris image file.
  *
  */
-int sizeofimage(char *name, int32 *xsize, int32 *ysize, int32 *csize)
+int sizeofimage(const char *name, int32 *xsize, int32 *ysize, int32 *csize)
 {
   IMAGE image;
   FILE *inf;
@@ -251,7 +254,7 @@ int sizeofimage(char *name, int32 *xsize, int32 *ysize, int32 *csize)
  *	pointer to an array of longs.
  *
  */
-unsigned int32 *longimagedata(char *name)
+unsigned int32 *longimagedata(const char *name)
 {
   unsigned int32 *base, *lptr;
   unsigned char *rledat, *verdat;
@@ -292,7 +295,7 @@ unsigned int32 *longimagedata(char *name)
       tablen = ysize*zsize*sizeof(int32);
       starttab = (unsigned int32 *)malloc(tablen);
       lengthtab = (unsigned int32 *)malloc(tablen);
-      rlebuflen = (int32)(1.05*xsize+10);
+      rlebuflen = static_cast<int32>(1.05*xsize+10);
       rledat = (unsigned char *)malloc(rlebuflen);
       fseek(inf,512,SEEK_SET);
       readtab(inf,starttab,tablen);
@@ -537,7 +540,7 @@ static void expandrow(unsigned char *optr, unsigned char *iptr, int32 z)
  *	RGBA image file is saved.
  *
  */
-int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, char *name)
+int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, const char *name)
 {
   FILE *outf;
   IMAGE *image;
@@ -558,7 +561,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, ch
   image = (IMAGE *)malloc(sizeof(IMAGE));
   starttab = (int32 *)malloc(tablen);
   lengthtab = (int32 *)malloc(tablen);
-  rlebuflen = (int32)(1.05*xsize+10);
+  rlebuflen = static_cast<int32>(1.05*xsize+10);
   rlebuf = (unsigned char *)malloc(rlebuflen);
   lumbuf = (unsigned int32 *)malloc(xsize*sizeof(int32));
 
@@ -655,7 +658,7 @@ static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int3
     iptr -= 8;
     count = (iptr-sptr)/4;
     while(count) {
-	    todo = (short)((count > 126) ? 126 : count);
+	    todo = static_cast<short>((count > 126) ? 126 : count);
 	    count -= todo;
 	    *optr++ = 0x80|todo;
 	    while(todo>8) {
@@ -683,12 +686,12 @@ static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int3
 	    iptr += 4;
     count = (iptr-sptr)/4;
     while(count) {
-	    todo = (short)(count>126 ? 126:count);
+	    todo = static_cast<short>(count>126 ? 126:count);
 	    count -= todo;
-	    *optr++ = (unsigned char)todo;
-	    *optr++ = (unsigned char)cc;
+	    *optr++ = static_cast<unsigned char>(todo);
+	    *optr++ = static_cast<unsigned char>(cc);
     }
   }
   *optr++ = 0;
-  return optr - (unsigned char *)rlebuf;
+  return optr - rlebuf;
 }

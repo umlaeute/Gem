@@ -584,7 +584,7 @@ void GemMan :: render(void *)
   if (m_buffer == 1)
     currentState.tickTime = 50.f;
   else
-    currentState.tickTime = (float)(clock_gettimesince(m_lastRenderTime));
+    currentState.tickTime = static_cast<float>(clock_gettimesince(m_lastRenderTime));
   m_lastRenderTime = clock_getsystime();
 
   //test to see if stereo is supported
@@ -608,7 +608,7 @@ void GemMan :: render(void *)
     {
       int xSize = m_w / 2;
       int ySize = m_h;
-      float xDivy = (float)xSize / (float)ySize;
+      float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
 
       // setup the left viewpoint
       glViewport(0, 0, xSize, ySize);
@@ -664,7 +664,7 @@ void GemMan :: render(void *)
         glDisable(GL_LIGHTING);
 
         glViewport(0, 0, m_w, m_h);
-        xDivy = (float)m_w / (float)ySize;
+        xDivy = static_cast<float>(m_w) / static_cast<float>(ySize);
         // setup the matrices
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -687,7 +687,7 @@ void GemMan :: render(void *)
     {
       int xSize = m_w;
       int ySize = m_h;
-      float xDivy = (float)xSize / (float)ySize;
+      float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
 
       int left_color=0;  // RED
       int right_color=1; // GREEN
@@ -773,7 +773,7 @@ void GemMan :: render(void *)
     {
       int xSize = m_w;
       int ySize = m_h;
-      float xDivy = (float)xSize / (float)ySize;
+      float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
 
       // setup the left viewpoint
 
@@ -1197,7 +1197,7 @@ void GemMan :: swapBuffers()
     {
       glFlush();
       // setup the transformation matrices
-      float xDivy = (float)m_w / (float)m_h;
+      float xDivy = static_cast<float>(m_w) / static_cast<float>(m_h);
 
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
@@ -1340,7 +1340,7 @@ GLenum GemMan :: requestLight(int specific)
           if (i >= NUM_LIGHTS)
             {
               error("GEM: Unable to allocate light");
-              return((GLenum)0);
+              return(static_cast<GLenum>(0));
             }
         }
     }
@@ -1374,7 +1374,7 @@ GLenum GemMan :: requestLight(int specific)
       break;
     default :
       error("GEM: Unable to allocate world_light");
-      return((GLenum)0);
+      return(static_cast<GLenum>(0));
     }
   return(retLight);
 }

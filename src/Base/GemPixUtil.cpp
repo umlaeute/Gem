@@ -50,11 +50,11 @@
                          post("%s frame time = %f ms", x, mseconds)
 # elif defined __APPLE__
 #  define START_TIMING float mseconds=0.f; \
-                      UnsignedWide start, end;\
-	              Microseconds(&start)
-#  define STOP_TIMING(x) Microseconds(&end); \
-                         mseconds = (float)(end.lo - start.lo) / 1000.f; \
-                         post("%s frame time = %f ms", x, mseconds)
+  UnsignedWide start, end;		   \
+  Microseconds(&start)
+#  define STOP_TIMING(x) Microseconds(&end);				\
+  mseconds = static_cast<float>((end.lo - start.lo) / 1000.f);			\
+  post("%s frame time = %f ms", x, mseconds)
 # else
 #  define START_TIMING
 #  define STOP_TIMING(x)
@@ -134,7 +134,7 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
     return NULL;
   }
 
-  size_t alignment = ((size_t)pdata)&(GEM_VECTORALIGNMENT/8-1);
+  size_t alignment = (reinterpret_cast<size_t>(pdata))&(GEM_VECTORALIGNMENT/8-1);
   size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
   data = pdata+offset;
   datasize=array_size-offset;
@@ -154,7 +154,7 @@ GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
   if (size>datasize){
       return allocate(size);
   }
-  size_t alignment = ((size_t)pdata)&(GEM_VECTORALIGNMENT/8-1);
+  size_t alignment = (reinterpret_cast<size_t>(pdata))&(GEM_VECTORALIGNMENT/8-1);
   size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
   data=pdata+offset;
   return data;
@@ -324,7 +324,7 @@ void pix_addsat(unsigned char *leftPix, unsigned char *rightPix, size_t datasize
 {
   while(datasize--)
     {           
-      *leftPix = CLAMP_HIGH((int)*leftPix + (int)*rightPix);
+      *leftPix = CLAMP_HIGH(static_cast<int>(*leftPix) + static_cast<int>(*rightPix));
       leftPix++;
       rightPix++;
     }
@@ -334,7 +334,7 @@ void pix_addsat(unsigned char *leftPix, unsigned char *rightPix, size_t datasize
 void pix_sub(unsigned char *leftPix, unsigned char *rightPix, size_t datasize)
 {
   while(datasize--){
-    *leftPix = CLAMP_LOW((int)*leftPix - (int)*rightPix++);
+    *leftPix = CLAMP_LOW(static_cast<int>(*leftPix) - static_cast<int>(*rightPix++));
     leftPix++;
   }
 }
