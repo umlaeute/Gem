@@ -408,13 +408,15 @@ void sphere3d :: setCartMessCallback(void *data,
                                     t_floatarg i, t_floatarg j,
                                     t_floatarg x, t_floatarg y, t_floatarg z)
 {
-  GetMyClass(data)->setCartesian((int)i, (int)j, x, y, z);
+  GetMyClass(data)->setCartesian(static_cast<int>(i), static_cast<int>(j), 
+				 x, y, z);
 }
 void sphere3d :: setSphMessCallback(void *data,
                                     t_floatarg i, t_floatarg j,
                                     t_floatarg r, t_floatarg phi, t_floatarg theta)
 {
-  GetMyClass(data)->setSpherical((int)i, (int)j, r, phi, theta);
+  GetMyClass(data)->setSpherical(static_cast<int>(i), static_cast<int>(j), 
+                                 r, phi, theta);
 }
 void sphere3d :: printMessCallback(void *data)
 {

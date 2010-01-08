@@ -41,8 +41,8 @@ curve3d :: curve3d(t_floatarg sizeX,t_floatarg sizeY )
 {
   int i, j, a;
 
-  nb_pts_control_X = MAX(2, (int)sizeX);
-  nb_pts_control_Y = MAX(2, (int)sizeY);
+  nb_pts_control_X = MAX(2, static_cast<int>(sizeX));
+  nb_pts_control_Y = MAX(2, static_cast<int>(sizeY));
 
   m_posXYZ = new t_float3[nb_pts_control_X*nb_pts_control_Y];
 
@@ -556,14 +556,15 @@ void curve3d :: obj_setupCallback(t_class *classPtr){
 
 void curve3d :: resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY)
 {
-  GetMyClass(data)->resolutionMess((int)resX, (int)resY);
+  GetMyClass(data)->resolutionMess(static_cast<int>(resX), static_cast<int>(resY));
 }
 void curve3d :: gridMessCallback(void *data, t_floatarg gridX, t_floatarg gridY)
 {
-  GetMyClass(data)->gridMess((int)gridX, (int)gridY);
+  GetMyClass(data)->gridMess(static_cast<int>(gridX), static_cast<int>(gridY));
 }
 void curve3d :: setMessCallback(void *data, float X, float Y, float posX, float posY, float posZ)
 {
-  GetMyClass(data)->setMess((int)X, (int)Y, posX, posY, posZ);
+  GetMyClass(data)->setMess(static_cast<int>(X), static_cast<int>(Y), 
+			    posX, posY, posZ);
 }
 

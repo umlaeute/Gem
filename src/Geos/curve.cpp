@@ -106,5 +106,5 @@ void curve :: obj_setupCallback(t_class *classPtr)
 }
 void curve :: resolutionMessCallback(void *data, t_floatarg res)
 {
-    GetMyClass(data)->resolutionMess((int)res);
+    GetMyClass(data)->resolutionMess(static_cast<int>(res));
 }

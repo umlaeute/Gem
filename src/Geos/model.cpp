@@ -262,7 +262,7 @@ void model :: openMessCallback(void *data, t_symbol *filename)
 }
 void model :: rescaleMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->rescaleMess((int)state);
+  GetMyClass(data)->rescaleMess(static_cast<int>(state));
 }
 void model :: smoothMessCallback(void *data, t_floatarg smooth)
 {
@@ -270,18 +270,18 @@ void model :: smoothMessCallback(void *data, t_floatarg smooth)
 }
 void model :: reverseMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->reverseMess((int)state);
+  GetMyClass(data)->reverseMess(static_cast<int>(state));
 }
 void model :: textureMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->textureMess((int)state);
+  GetMyClass(data)->textureMess(static_cast<int>(state));
 }
 void model :: materialMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->materialMess((int)state);
+  GetMyClass(data)->materialMess(static_cast<int>(state));
 }
 
 void model :: groupMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->groupMess((int)state);
+  GetMyClass(data)->groupMess(static_cast<int>(state));
 }

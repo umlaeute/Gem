@@ -42,12 +42,12 @@ disk :: disk(int argc, t_atom *argv)
   switch(argc){
   case 3:
     size = atom_getfloat(&argv[0]);
-    numSlices = (int)atom_getfloat(&argv[1]);
+    numSlices = atom_getint(&argv[1]);
     m_innerRadius = atom_getfloat(&argv[2]);
     break;
   case 2:
     size = atom_getfloat(&argv[0]);
-    numSlices = (int)atom_getfloat(&argv[1]);
+    numSlices = atom_getint(&argv[1]);
     break;
   case 1:
     size = atom_getfloat(&argv[0]);

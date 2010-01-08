@@ -57,7 +57,7 @@ void textextruded :: setDepth(float prec)
 {
   m_fontDepth = prec;
   if(!m_font)return;
-  m_font->Depth((int)m_fontDepth);
+  m_font->Depth(m_fontDepth);
   setFontSize();
   setModified();
 }

@@ -28,13 +28,15 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
     m_ctrX(0.f), m_ctrY(0.f),
     m_height(1.0), 
     m_inletH(NULL), m_inletcX(NULL), m_inletcY(NULL),
-    m_gridX((int)gridX), m_gridY((int)gridY),
+    m_gridX(0), m_gridY(0),
     m_alreadyInit(false),
     m_sizeX(0.f), m_sizeY(0.f), m_sizeY0(0.f)
              
 {
-  m_gridX=(gridX>0.&&gridX<GRID_MAX_X)?(int)gridX:GRID_SIZE_X;
-  m_gridY=(gridY>0.&&gridX<GRID_MAX_Y)?(int)gridY:GRID_SIZE_Y;
+  int gridXi=static_cast<int>(gridX);
+  int gridYi=static_cast<int>(gridY);
+  m_gridX=(gridXi>0&&gridXi<GRID_MAX_X)?gridXi:GRID_SIZE_X;
+  m_gridY=(gridYi>0&&gridXi<GRID_MAX_Y)?gridYi:GRID_SIZE_Y;
 
   // the height inlet
   m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));

@@ -67,10 +67,11 @@ FTFont *text2d :: makeFont(const char*fontfile){
 /////////////////////////////////////////////////////////
 void text2d :: setFontSize(t_float size){
   m_fontSize = size;
-  if (m_font)if (! m_font->FaceSize((int)m_fontSize) ) {
+  int isize=static_cast<int>(m_fontSize);
+  if (m_font)if (! m_font->FaceSize(isize) ) {
     error("GEMtext: unable set fontsize !");
   }
-  if (m_afont)if (! m_afont->FaceSize((int)m_fontSize) ) {
+  if (m_afont)if (! m_afont->FaceSize(isize) ) {
     error("GEMtext: unable set fontsize !");
   }
   setModified();
@@ -183,5 +184,5 @@ void text2d :: aliasMess(int io)
 }
 void text2d :: aliasMessCallback(void *data, t_floatarg io)
 {
-  GetMyClass(data)->aliasMess((int)io);
+  GetMyClass(data)->aliasMess(static_cast<int>(io));
 }

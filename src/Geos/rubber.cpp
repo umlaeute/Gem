@@ -30,8 +30,10 @@ rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
   : GemShape(1.0), m_height(0.0), m_speed(0), m_grab(-1),
     m_alreadyInit(0), m_springKS(0.3), m_drag(0.5), m_mass(NULL), m_spring(NULL)
 {
-  m_grid_sizeX = (gridX>0.)?(int)gridX:GRID_SIZE_X;
-  m_grid_sizeY = (gridY>0.)?(int)gridY:GRID_SIZE_Y;
+  int gridXi=static_cast<int>(gridX);
+  int gridYi=static_cast<int>(gridY);
+  m_grid_sizeX = (gridXi>0)?gridXi:GRID_SIZE_X;
+  m_grid_sizeY = (gridYi>0)?gridYi:GRID_SIZE_Y;
 
   // the height inlet
   m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));

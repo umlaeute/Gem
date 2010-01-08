@@ -103,7 +103,7 @@ teapot :: teapot(t_floatarg size, t_floatarg slice)
       : GemGluObj(size)
 {
   m_drawType=GL_FILL;
-  m_numSlices=(int)slice;
+  m_numSlices=static_cast<int>(slice);
   if(m_numSlices<=0)m_numSlices=14;
 
   m_texCoords[0][0]=0;m_texCoords[0][1]=0;

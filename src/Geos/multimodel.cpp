@@ -36,19 +36,22 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
     m_rescaleModel(1),
     m_textype(GLM_TEX_DEFAULT),
     m_rebuild(true),
-	m_currentH(1.f), m_currentW(1.f)
+    m_currentH(1.f), m_currentW(1.f)
 {
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mdl_num"));
 
   // make sure that there are some characters
   if (filename->s_name[0]) { 
-    if (skipRate == 0) {
-      if (topModel == 0)
-        openMess(filename, 0, (int)baseModel, 1);
+    int skipRatei=static_cast<int>(skipRate);
+    int topModeli=static_cast<int>(topModel);
+    int baseModeli=static_cast<int>(baseModel);
+    if (skipRatei == 0) {
+      if (topModeli == 0)
+        openMess(filename, 0, baseModeli, 1);
       else
-        openMess(filename, (int)baseModel, (int)topModel, 1);
+        openMess(filename, baseModeli, topModeli, 1);
     }
-    else openMess(filename, (int)baseModel, (int)topModel, (int)skipRate);
+    else openMess(filename, baseModeli, topModeli, skipRatei);
   }
 }
 
@@ -334,25 +337,29 @@ void multimodel :: obj_setupCallback(t_class *classPtr)
 void multimodel :: openMessCallback(void *data, t_symbol *filename, t_floatarg baseModel,
 				    t_floatarg topModel, t_floatarg skipRate)
 {
-  if ((int)skipRate == 0)
+  int skipRatei=static_cast<int>(skipRate);
+  int topModeli=static_cast<int>(topModel);
+  int baseModeli=static_cast<int>(baseModel);
+
+  if (skipRatei == 0)
     {
-      if ((int)topModel == 0)
-	GetMyClass(data)->openMess(filename, 0, (int)topModel, 0);
+      if (topModeli == 0)
+	GetMyClass(data)->openMess(filename, 0, topModeli, 0);
       else
-	GetMyClass(data)->openMess(filename, (int)baseModel, (int)topModel, 0);
+	GetMyClass(data)->openMess(filename, baseModeli, topModeli, 0);
     }
   else
-    GetMyClass(data)->openMess(filename, (int)baseModel, (int)topModel, (int)skipRate);
+    GetMyClass(data)->openMess(filename, baseModeli, topModeli, skipRatei);
 }
 void multimodel :: changeModelCallback(void *data, t_floatarg modelNum)
 {
-  GetMyClass(data)->changeModel((int)modelNum);
+  GetMyClass(data)->changeModel(static_cast<int>(modelNum));
 }
 void multimodel :: rescaleMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->rescaleMess((int)state);
+  GetMyClass(data)->rescaleMess(static_cast<int>(state));
 }
 void multimodel :: textureMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->textureMess((int)state);
+  GetMyClass(data)->textureMess(static_cast<int>(state));
 }
