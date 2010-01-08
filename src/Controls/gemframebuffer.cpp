@@ -174,11 +174,11 @@ void gemframebuffer :: postrender(GemState *state)
   glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
 
   if(m_texTarget== GL_TEXTURE_2D) {
-    w=(t_float)1.f;
-    h=(t_float)1.f;
+    w=1.f;
+    h=1.f;
   } else {
-    w=(t_float)m_width;
-    h=(t_float)m_height;
+    w=static_cast<t_float>(m_width);
+    h=static_cast<t_float>(m_height);
   }
 
   // GPGPU CONCEPT 4: Viewport-Sized Quad = Data Stream Generator.
@@ -206,11 +206,11 @@ void gemframebuffer :: postrender(GemState *state)
 
   // send textureID, w, h, textureTarget to outlet
   t_atom ap[5];
-  SETFLOAT(ap+0, (t_float)m_offScreenID);
+  SETFLOAT(ap+0, static_cast<t_float>(m_offScreenID));
   SETFLOAT(ap+1, w);
   SETFLOAT(ap+2, h);
   SETFLOAT(ap+3, m_texTarget);
-  SETFLOAT(ap+4, (t_float)0);
+  SETFLOAT(ap+4, static_cast<t_float>(0.));
   outlet_list(m_outTexInfo, 0, 5, ap);
 }
 
@@ -402,7 +402,7 @@ void gemframebuffer :: perspectiveMess(float f_left, float f_right,
 
 }
 
-void gemframebuffer :: formatMess(char* format)
+void gemframebuffer :: formatMess(const char* format)
 {
   if (!strcmp(format, "YUV"))
     {
@@ -456,7 +456,7 @@ void gemframebuffer :: formatMess(char* format)
   m_wantinit=true;
 }
 
-void gemframebuffer :: typeMess(char* type)
+void gemframebuffer :: typeMess(const char* type)
 {
   if (!strcmp(type, "BYTE")){
     m_type = GL_UNSIGNED_BYTE;
@@ -513,21 +513,21 @@ void gemframebuffer :: bangMessCallback(void *data)
 }
 void gemframebuffer :: modeCallback(void *data, t_floatarg quality)
 {
-  GetMyClass(data)->m_mode=((int)quality);
+  GetMyClass(data)->m_mode=(static_cast<int>(quality));
   // changed mode, so we need to rebuild the FBO
   GetMyClass(data)->m_wantinit=true;
 }
 void gemframebuffer :: dimMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->dimMess((int)width, (int)height);
+  GetMyClass(data)->dimMess(static_cast<int>(width), static_cast<int>(height));
 }
 void gemframebuffer :: formatMessCallback (void *data, t_symbol *format)
 {
-  GetMyClass(data)->formatMess((char*)format->s_name);
+  GetMyClass(data)->formatMess(format->s_name);
 }
 void gemframebuffer :: typeMessCallback (void *data, t_symbol *type)
 {
-  GetMyClass(data)->typeMess((char*)type->s_name);
+  GetMyClass(data)->typeMess(type->s_name);
 }
 
 void gemframebuffer :: colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue, t_floatarg alpha)
@@ -537,7 +537,7 @@ void gemframebuffer :: colorMessCallback(void *data, t_floatarg red, t_floatarg 
 
 void gemframebuffer :: texunitCallback(void *data, t_floatarg unit)
 {
-  GetMyClass(data)->m_texunit=(GLuint)unit;
+  GetMyClass(data)->m_texunit=static_cast<GLuint>(unit);
 }
 
 void gemframebuffer :: perspectiveMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
@@ -551,8 +551,13 @@ void gemframebuffer :: perspectiveMessCallback(void *data, t_symbol*s,int argc, 
 			f_top=  atom_getfloat(argv+3);
 			f_near=atom_getfloat(argv+4);
 			f_far= atom_getfloat(argv+5);
-			GetMyClass(data)->perspectiveMess((float)f_left, (float)f_right, 
-                         (float)f_bottom, (float)f_top, (float)f_near, (float)f_far);
+			GetMyClass(data)->perspectiveMess(
+							  static_cast<float>(f_left), 
+							  static_cast<float>(f_right), 
+							  static_cast<float>(f_bottom), 
+							  static_cast<float>(f_top), 
+							  static_cast<float>(f_near),
+							  static_cast<float>(f_far));
 			break;
 		default:
 			GetMyClass(data)->error("\"perspec\" expects 6 values for frustum - left, right, bottom, top, near, far");

@@ -58,7 +58,7 @@ gemkeyname :: ~gemkeyname()
 void gemkeyname :: KeyNamePressed(char *string, int val, int state)
 {
   outlet_symbol(m_outKeyVal, gensym(string));
-  outlet_float(m_outKeyState, (t_float)state);
+  outlet_float(m_outKeyState, static_cast<t_float>(state));
 }
 
 /////////////////////////////////////////////////////////
@@ -69,5 +69,5 @@ void gemkeyname :: obj_setupCallback(t_class *)
 { }
 void gemkeyname :: keynameCallback(char *x, int y, int z, void *data)
 {
-    ((gemkeyname *)data)->KeyNamePressed(x,y, z);
+  (reinterpret_cast<gemkeyname*>(data))->KeyNamePressed(x,y, z);
 }

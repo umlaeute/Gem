@@ -70,8 +70,8 @@ class GEM_EXTERN gemframebuffer : public GemBase
       
   ////////// 
   // format-message
-  virtual void formatMess(char* format);
-  virtual void typeMess(char* type);
+  virtual void formatMess(const char* format);
+  virtual void typeMess(const char* type);
       
   virtual void colorMess(float red, float green, float blue, float alpha);
 virtual void perspectiveMess( float left, float right, float bottom, float top, float near, float far);

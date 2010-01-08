@@ -56,10 +56,10 @@ gemwin :: gemwin(t_floatarg framespersecond)
     /* this is the only [gemwin] */
     GemMan::resetState();
     if (framespersecond > 0.)
-      GemMan::frameRate((float)framespersecond);
+      GemMan::frameRate(framespersecond);
   } else {
     if(framespersecond>0.)
-      GemMan::frameRate((float)framespersecond);
+      GemMan::frameRate(framespersecond);
   }
 
   m_FrameRate       = outlet_new(this->x_obj, 0);
@@ -265,7 +265,7 @@ void gemwin :: colorMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void gemwin :: clearmaskMess(float bitmask)
 {
-  GemMan::m_clear_mask = (GLbitfield) bitmask;
+  GemMan::m_clear_mask = static_cast<GLbitfield>(bitmask);
 }
 
 /////////////////////////////////////////////////////////
@@ -378,7 +378,7 @@ void gemwin :: fogModeMess(int mode)
 /////////////////////////////////////////////////////////
 void gemwin :: cursorMess(float setting)
 {
-  GemMan :: cursorOnOff((int)setting);
+  GemMan :: cursorOnOff(static_cast<int>(setting));
 }
 
 /////////////////////////////////////////////////////////
@@ -387,7 +387,7 @@ void gemwin :: cursorMess(float setting)
 /////////////////////////////////////////////////////////
 void gemwin :: topmostMess(float topmost)
 {
-  GemMan::topmostOnOff((int) topmost);
+  GemMan::topmostOnOff(static_cast<int>(topmost));
 }
 
 
@@ -524,11 +524,11 @@ void gemwin :: printMessCallback(void *)
 }
 void gemwin :: profileMessCallback(void *, t_floatarg state)
 {
-  GemMan::m_profile = (int)state;
+  GemMan::m_profile = static_cast<int>(state);
 }
 void gemwin :: lightingMessCallback(void *, t_floatarg state)
 {
-  GemMan::lightingOnOff((int)state);
+  GemMan::lightingOnOff(static_cast<int>(state));
 }
 void gemwin :: fogMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
@@ -554,7 +554,7 @@ void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
     red=  atom_getfloat(argv);
     green=atom_getfloat(argv+1);
     blue= atom_getfloat(argv+2);
-    GetMyClass(data)->fogColorMess((float)red, (float)green, (float)blue, (float)alpha);
+    GetMyClass(data)->fogColorMess(static_cast<float>(red), static_cast<float>(green), static_cast<float>(blue), static_cast<float>(alpha));
     break;
   default:
     GetMyClass(data)->error("\"fogcolor\" expects 3 or 4 values");
@@ -562,11 +562,11 @@ void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
 }
 void gemwin :: fogModeMessCallback(void *data, t_float val)
 {
-  GetMyClass(data)->fogModeMess((int)val);
+  GetMyClass(data)->fogModeMess(static_cast<int>(val));
 }
 void gemwin :: stereoMessCallback(void *data, t_floatarg state)
 {
-  int mode = (int)state;
+  int mode = static_cast<int>(state);
   if (mode<0 || mode>3){
     GetMyClass(data)->error("possible stereo-modes are: 0, 1, 2, 3");
     return;
@@ -588,7 +588,7 @@ void gemwin :: stereoLineMessCallback(void *, t_floatarg state)
 }
 void gemwin :: borderMessCallback(void *, t_floatarg state)
 {
-  GemMan::m_border = (int)state;
+  GemMan::m_border = static_cast<int>(state);
 }
 void gemwin :: destroyMessCallback(void *)
 {
@@ -600,7 +600,7 @@ void gemwin :: resetMessCallback(void *)
 }
 void gemwin :: frameMessCallback(void *, t_floatarg rate)
 {
-  GemMan::frameRate((float)rate);
+  GemMan::frameRate(static_cast<float>(rate));
 }
 void gemwin :: perspectiveMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
@@ -644,17 +644,17 @@ void gemwin :: viewMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
       break;
 
     case 5 :
-      theta	= (float)DEG2RAD * atom_getfloat(&argv[4]);
+      theta	= static_cast<float>(DEG2RAD) * atom_getfloat(&argv[4]);
 		
     case 4 :
-      azimuth = (float)DEG2RAD * atom_getfloat(&argv[3]);
+      azimuth = static_cast<float>(DEG2RAD) * atom_getfloat(&argv[3]);
 		
       // just have position
     case 3 :
       {
-	const float dx =  (float)(cos(theta) * sinf(azimuth));
-	const float dy =  (float)(sin(theta));
-	const float dz = -(float)(cos(theta) * cosf(azimuth));
+	const float dx =  static_cast<float>(cos(theta) * sinf(azimuth));
+	const float dy =  static_cast<float>(sin(theta));
+	const float dz = -static_cast<float>(cos(theta) * cosf(azimuth));
 
 	GemMan::m_lookat[0] = atom_getfloat(&argv[0]);		// eyex
 	GemMan::m_lookat[1] = atom_getfloat(&argv[1]);		// eyey
@@ -681,7 +681,7 @@ void gemwin :: bangMessCallback(void *data)
 }
 void gemwin :: floatMessCallback(void *data, t_float state)
 {
-  GetMyClass(data)->intMess((int)state);
+  GetMyClass(data)->intMess(static_cast<int>(state));
 }
 void gemwin :: renderMessCallback(void *data)
 {
@@ -703,27 +703,27 @@ void gemwin :: createStereoMessCallback(void *data)
 }
 void gemwin :: bufferMessCallback(void *data, t_floatarg buf)
 {
-  GetMyClass(data)->bufferMess((int)buf);
+  GetMyClass(data)->bufferMess(static_cast<int>(buf));
 }
 void gemwin :: fullscreenMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->fullscreenMess((int)on);
+  GetMyClass(data)->fullscreenMess(static_cast<int>(on));
 }
 void gemwin :: menuBarMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->menuBarMess((int)on);
+  GetMyClass(data)->menuBarMess(static_cast<int>(on));
 }
 void gemwin :: secondscreenMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->secondscreenMess((int)on);
+  GetMyClass(data)->secondscreenMess(static_cast<int>(on));
 }
 void gemwin :: dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->dimensionsMess((int)width, (int)height);
+  GetMyClass(data)->dimensionsMess(static_cast<int>(width), static_cast<int>(height));
 }
 void gemwin :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-  GetMyClass(data)->offsetMess((int)x, (int)y);
+  GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
 }
 void gemwin :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
@@ -735,7 +735,7 @@ void gemwin :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
     red=  atom_getfloat(argv);
     green=atom_getfloat(argv+1);
     blue= atom_getfloat(argv+2);
-    GetMyClass(data)->colorMess((float)red, (float)green, (float)blue, (float)alpha);
+    GetMyClass(data)->colorMess(static_cast<float>(red), static_cast<float>(green), static_cast<float>(blue), static_cast<float>(alpha));
     break;
   default:
     GetMyClass(data)->error("\"color\" expects 3 or 4 values");
@@ -743,7 +743,7 @@ void gemwin :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 }
 void gemwin :: clearmaskMessCallback(void *data, t_floatarg bitmask)
 {
-  GetMyClass(data)->clearmaskMess((float)bitmask);
+  GetMyClass(data)->clearmaskMess(static_cast<float>(bitmask));
 }
 void gemwin :: ambientMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
@@ -755,7 +755,7 @@ void gemwin :: ambientMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
     red=  atom_getfloat(argv);
     green=atom_getfloat(argv+1);
     blue= atom_getfloat(argv+2);
-    GetMyClass(data)->ambientMess((float)red, (float)green, (float)blue, (float)alpha);
+    GetMyClass(data)->ambientMess(static_cast<float>(red), static_cast<float>(green), static_cast<float>(blue), static_cast<float>(alpha));
     break;
   default:
     GetMyClass(data)->error("\"ambient\" expects 3 or 4 values");
@@ -771,7 +771,7 @@ void gemwin :: specularMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
     red=  atom_getfloat(argv);
     green=atom_getfloat(argv+1);
     blue= atom_getfloat(argv+2);
-    GetMyClass(data)->specularMess((float)red, (float)green, (float)blue, (float)alpha);
+    GetMyClass(data)->specularMess(static_cast<float>(red), static_cast<float>(green), static_cast<float>(blue), static_cast<float>(alpha));
     break;
   default:
     GetMyClass(data)->error("\"specular\" expects 3 or 4 values");
@@ -779,19 +779,19 @@ void gemwin :: specularMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
 }
 void gemwin :: shininessMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->shininessMess((float)val);
+  GetMyClass(data)->shininessMess(static_cast<float>(val));
 }
 void gemwin :: cursorMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->cursorMess((float)val);
+  GetMyClass(data)->cursorMess(static_cast<float>(val));
 }
 void gemwin :: topmostMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->topmostMess((float)val);
+  GetMyClass(data)->topmostMess(static_cast<float>(val));
 }
 void gemwin :: blurMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->blurMess((float)val);
+  GetMyClass(data)->blurMess(static_cast<float>(val));
 }
 void gemwin :: fpsMessCallback(void *data)
 {
@@ -800,6 +800,6 @@ void gemwin :: fpsMessCallback(void *data)
 
 void gemwin :: fsaaMessCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->fsaaMess((int) val);
+  GetMyClass(data)->fsaaMess(static_cast<int>(val));
 }
 

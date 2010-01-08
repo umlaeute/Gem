@@ -39,9 +39,9 @@ gemhead :: gemhead(t_floatarg priority)
     	 : m_cache(NULL), m_renderOn(1)
 {
     // register with Gem
-    if (priority == 0)
-		priority = 50;
-    m_priority=(int)priority;
+    if (priority == 0.)
+      priority = 50.;
+    m_priority=priority;
     GemMan::addObj(this, m_priority);
 
     m_cache = new GemCache(this);
@@ -100,9 +100,9 @@ void gemhead :: renderGL(GemState *state)
 
   t_atom ap[2];
   ap->a_type=A_POINTER;
-  ap->a_w.w_gpointer=(t_gpointer *)m_cache;  // the cache ?
+  ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(m_cache);  // the cache ?
   (ap+1)->a_type=A_POINTER;
-  (ap+1)->a_w.w_gpointer=(t_gpointer *)state;
+  (ap+1)->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(state);
   outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
 
   m_cache->dirty = 0;
@@ -148,9 +148,9 @@ void gemhead :: renderOnOff(int state)
 /////////////////////////////////////////////////////////
 void gemhead :: setMess(int priority)
 {
-  if (priority == 0)priority=50;
+  if (priority == 0.)priority=50.;
   GemMan::removeObj(this, m_priority);
-  GemMan::addObj(this, (int)priority);
+  GemMan::addObj(this, priority);
   m_priority=priority;
 }
 
@@ -206,9 +206,9 @@ void gemhead :: bangMessCallback(void *data)
 }
 void gemhead :: intMessCallback(void *data, t_floatarg n)
 {
-    GetMyClass(data)->renderOnOff((int)n);
+  GetMyClass(data)->renderOnOff(static_cast<int>(n));
 }
 void gemhead :: setMessCallback(void *data, t_floatarg n)
 {
-    GetMyClass(data)->setMess((int)n);
+  GetMyClass(data)->setMess(static_cast<int>(n));
 }

@@ -86,9 +86,9 @@ void gemlist :: sendCacheState(GemCache *cache, GemState*state)
   if(cache && state) {
 		t_atom ap[2];
 		ap->a_type=A_POINTER;
-		ap->a_w.w_gpointer=(t_gpointer *)cache;
+		ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(cache);
 		(ap+1)->a_type=A_POINTER;
-		(ap+1)->a_w.w_gpointer=(t_gpointer *)state;
+		(ap+1)->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(state);
 		outlet_anything(m_out1, gensym("gem_state"), 2, ap);
   }
 }
@@ -156,7 +156,7 @@ void gemlist :: drawMess(t_atom arg)
       m_drawType = GL_POINT;
       break;
     default:
-      m_drawType = (GLenum)getGLdefine(&arg);
+      m_drawType = static_cast<GLenum>(getGLdefine(&arg));
     }
   } 
   else m_drawType=atom_getint(&arg);
@@ -215,7 +215,7 @@ void gemlist::gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *a
 {
   if (argc==1 && argv->a_type==A_FLOAT){
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    GetMyClass(data)->m_cache = (GemCache*)argv->a_w.w_gpointer;
-    GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
+    GetMyClass(data)->m_cache = reinterpret_cast<GemCache*>(argv->a_w.w_gpointer);
+    GetMyClass(data)->rightRender(reinterpret_cast<GemState*>((argv+1)->a_w.w_gpointer));
   } else GetMyClass(data)->error("wrong righthand arguments....");
 }

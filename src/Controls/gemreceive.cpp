@@ -57,7 +57,7 @@ t_gemreceive_proxy* gemreceive::find_key(t_symbol*key)
 t_gemreceive_proxy*gemreceive::add_key(t_symbol*key)
 {
   t_gemreceive_proxy*bind_list=0;
-  bind_list=(t_gemreceive_proxy*)pd_new(gemreceive_proxy_class);
+  bind_list=reinterpret_cast<t_gemreceive_proxy*>(pd_new(gemreceive_proxy_class));
   bind_list->key=key;
   bind_list->elements=0;
   bind_list->next=0;

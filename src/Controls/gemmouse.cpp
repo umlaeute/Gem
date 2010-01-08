@@ -107,8 +107,8 @@ void gemmouse :: mouseMotion(int x, int y)
     break;
   }
 
-  outlet_float(m_outYPos, (t_float)(y*scaley));
-  outlet_float(m_outXPos, (t_float)(x*scalex));
+  outlet_float(m_outYPos, static_cast<t_float>(y*scaley));
+  outlet_float(m_outXPos, static_cast<t_float>(x*scalex));
 }
 
 /////////////////////////////////////////////////////////
@@ -118,9 +118,9 @@ void gemmouse :: mouseMotion(int x, int y)
 void gemmouse :: mouseButton(int which, int state, int x, int y)
 {
   switch (which){
-  case 0: outlet_float(m_outLBut, (t_float)state); break;
-  case 1: outlet_float(m_outMBut, (t_float)state); break;
-  case 2: outlet_float(m_outRBut, (t_float)state); break;
+  case 0: outlet_float(m_outLBut, static_cast<t_float>(state)); break;
+  case 1: outlet_float(m_outMBut, static_cast<t_float>(state)); break;
+  case 2: outlet_float(m_outRBut, static_cast<t_float>(state)); break;
   }
 }
 
@@ -140,13 +140,13 @@ void gemmouse :: obj_setupCallback(t_class *)
 { }
 void gemmouse :: mouseMotionCallback(int x, int y, void *data)
 {
-    ((gemmouse *)data)->mouseMotion(x, y);
+    (reinterpret_cast<gemmouse*>(data))->mouseMotion(x, y);
 }
 void gemmouse :: mouseButtonCallback(int which, int state, int x, int y, void *data)
 {
-    ((gemmouse *)data)->mouseButton(which, state, x, y);
+    (reinterpret_cast<gemmouse*>(data))->mouseButton(which, state, x, y);
 }
 void gemmouse :: mouseWheelCallback(int axis, int value, void *data)
 {
-    ((gemmouse *)data)->mouseWheel(axis, value);
+    (reinterpret_cast<gemmouse*>(data))->mouseWheel(axis, value);
 }
