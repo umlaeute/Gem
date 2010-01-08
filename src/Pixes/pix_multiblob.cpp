@@ -89,7 +89,7 @@ initializes the pixBlocks and pixBlobs
 ------------------------------------------------------------*/
   pix_multiblob :: pix_multiblob(t_floatarg f) : m_blobsize(0.001), m_threshold(10)
 {
-  m_blobNumber = (int)f;
+  m_blobNumber = static_cast<int>(f);
   if(m_blobNumber < 1)m_blobNumber = 6;
 
   // initialize blob-structures
@@ -126,9 +126,9 @@ void pix_multiblob :: makeBlob(Blob *pb, int x, int y){
   if(x>m_image.xsize || y>m_image.xsize)return;
 
   pb->area++;
-  t_float grey=((t_float)m_image.GetPixel(y, x, chGray))/255;
-  pb->m_xaccum +=grey*(t_float)x;
-  pb->m_yaccum +=grey*(t_float)y;
+  t_float grey=(static_cast<t_float>(m_image.GetPixel(y, x, chGray))/255);
+  pb->m_xaccum +=grey*static_cast<t_float>(x);
+  pb->m_yaccum +=grey*static_cast<t_float>(y);
   pb->m_xyaccum+=grey;
 
 
@@ -178,7 +178,7 @@ render
 ------------------------------------------------------------*/
 void pix_multiblob :: doProcessing() {
   int blobNumber = 0;
-  int blobsize = (int)(m_blobsize * m_image.xsize * m_image.ysize);
+  int blobsize = static_cast<int>(m_blobsize * m_image.xsize * m_image.ysize);
 
   // reset the currentblobs array
 
@@ -214,7 +214,7 @@ void pix_multiblob :: doProcessing() {
   // no create a matrix of [blobNumber*3] elements
   // each row holds all information on our blob
   t_atom*ap = new t_atom[2+blobNumber*8];
-  SETFLOAT(ap, (t_float)blobNumber);
+  SETFLOAT(ap, static_cast<t_float>(blobNumber));
   SETFLOAT(ap+1, 8.0);
 
   int bn=blobNumber;
@@ -311,12 +311,12 @@ void pix_multiblob :: obj_setupCallback(t_class *classPtr){
 blobSizeMessCallback
 ------------------------------------------------------------*/
 void pix_multiblob :: blobSizeMessCallback(void *data, t_floatarg blobSize){
-  GetMyClass(data)->blobSizeMess((t_float) blobSize);
+  GetMyClass(data)->blobSizeMess(blobSize);
 }
 
 /*------------------------------------------------------------
 threshMessCallback
 ------------------------------------------------------------*/
 void pix_multiblob :: threshMessCallback(void *data, t_floatarg thresh){
-  GetMyClass(data)->threshMess((t_float) thresh);
+  GetMyClass(data)->threshMess(thresh);
 }

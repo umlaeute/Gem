@@ -56,13 +56,13 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
 	Pete_MetaImage_Init();
 	init = 1;
     }
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
     
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
 
     float SubWidth;
     float SubHeight;
@@ -82,7 +82,7 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
 		SubHeight=1+(m_Size*(nHeight-1));
     }
 
-    U32* pSubImageData=(U32*)Pete_LockHandle(hSubImage);
+    U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
     if (pSubImageData==NULL) {
 		return;
     } 
@@ -106,14 +106,14 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
 	Pete_MetaImage_Init();
 	init = 1;
     }
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
     
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     //    myImage.setBlack();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
 
     float SubWidth;
     float SubHeight;
@@ -133,7 +133,7 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
 		SubHeight=1+(m_Size*(nHeight-1));
     }
 
-    U32* pSubImageData=(U32*)Pete_LockHandle(hSubImage);
+    U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
     if (pSubImageData==NULL) {
 		return;
     } 
@@ -157,14 +157,14 @@ void pix_metaimage :: processGrayImage(imageStruct &image)
 	Pete_MetaImage_Init();
 	init = 1;
     }
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
     
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     //    myImage.setBlack();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
 
     float SubWidth;
     float SubHeight;
@@ -180,7 +180,7 @@ void pix_metaimage :: processGrayImage(imageStruct &image)
       SubHeight=1+(m_Size*(nHeight-1));
     }
 
-    U32* pSubImageData=(U32*)Pete_LockHandle(hSubImage);
+    U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
     if (pSubImageData==NULL)return;
 
     U8 AverageColour = CreateSubImageGray((U8*)pSource,(U8*)pSubImageData,SubWidth,SubHeight);
@@ -412,8 +412,8 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
 
 U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
   
-  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
-  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
+  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
+  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -481,8 +481,8 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
 
 U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
   
-  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
-  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
+  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
+  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -732,8 +732,8 @@ U32 pix_metaimage :: GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRig
 
 U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
  
-  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
-  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
+  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
+  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -799,8 +799,8 @@ U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubW
 
 U32 pix_metaimage :: ShrinkSourceImageFastYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight)
 {
-  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
-  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
+  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
+  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -1002,8 +1002,8 @@ U8 pix_metaimage :: GetAreaAverageGray(U8* pImage,int nLeftX,int nTopY,int nRigh
 
 U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight) {
  
-  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
-  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
+  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
+  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -1050,8 +1050,8 @@ U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWid
 
 U8 pix_metaimage :: ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight)
 {
-  if (SubWidth>(float)(nWidth))  SubWidth=(float)(nWidth);
-  if (SubHeight>(float)(nHeight))SubHeight=(float)(nHeight);
+  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
+  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);

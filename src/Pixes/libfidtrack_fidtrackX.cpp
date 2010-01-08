@@ -89,9 +89,9 @@ static void sum_leaf_centers( FidtrackerX *ft, FidSegRegion *r, int width, int h
         y = ((r->top + r->bottom) * .5f);
 
         if( ft->pixelwarp ){
-          int xx = (int)x;
+          int xx = static_cast<int>(x);
             float xf = x - xx;
-            int yy = (int)y;
+            int yy = static_cast<int>(y);
             float yf = y - yy;
 
             // bilinear interpolated pixel warp
@@ -142,8 +142,9 @@ static void sum_leaf_centers( FidtrackerX *ft, FidSegRegion *r, int width, int h
 
 int _USERENTRY depth_string_cmp(const void *a, const void *b)
 {
-    FidSegRegion **aa = (FidSegRegion**)a;
-    FidSegRegion **bb = (FidSegRegion**)b;
+  // FIXXME const_cast supidness
+  const FidSegRegion **aa = reinterpret_cast<const FidSegRegion**>(const_cast<void*>(a));
+  const FidSegRegion **bb = reinterpret_cast<const FidSegRegion**>(const_cast<void*>(b));
 
     if( !(*aa)->depth_string ){
         if( !(*bb)->depth_string )
@@ -168,7 +169,7 @@ static char *build_left_heavy_depth_string( FidtrackerX *ft, FidSegRegion *r )
     assert( ft->next_depth_string < ft->depth_string_count );
     result = &ft->depth_strings[ ft->depth_string_length * (ft->next_depth_string++) ];
 
-    result[0] = (char)('0' + r->depth);
+    result[0] = static_cast<char>('0' + r->depth);
     result[1] = '\0';
     p = &result[1];
 
@@ -247,15 +248,15 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
     
     sum_leaf_centers( ft, r, width, height );
 
-    all_x = (double)(ft->black_x_sum + ft->white_x_sum) / (double)(ft->black_leaf_count + ft->white_leaf_count);
-    all_y = (double)(ft->black_y_sum + ft->white_y_sum) / (double)(ft->black_leaf_count + ft->white_leaf_count);
+    all_x = static_cast<double>(ft->black_x_sum + ft->white_x_sum) / static_cast<double>(ft->black_leaf_count + ft->white_leaf_count);
+    all_y = static_cast<double>(ft->black_y_sum + ft->white_y_sum) / static_cast<double>(ft->black_leaf_count + ft->white_leaf_count);
 
-    black_x = (double)ft->black_x_sum / (double)ft->black_leaf_count;
-    black_y = (double)ft->black_y_sum / (double)ft->black_leaf_count;
+    black_x = static_cast<double>(ft->black_x_sum) / static_cast<double>(ft->black_leaf_count);
+    black_y = static_cast<double>(ft->black_y_sum) / static_cast<double>(ft->black_leaf_count);
 
-    f->x = (float)all_x;
-    f->y = (float)all_y;
-    f->angle = (float)((M_PI * 2) - calculate_angle( all_x - black_x, all_y - black_y ));
+    f->x = static_cast<float>(all_x);
+    f->y = static_cast<float>(all_y);
+    f->angle = static_cast<float>((M_PI * 2) - calculate_angle( all_x - black_x, all_y - black_y ));
 
 /*
     print_unordered_depth_string( r );
@@ -271,7 +272,7 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
         ft->next_depth_string = 0;
         depth_string = build_left_heavy_depth_string( ft, r );
 
-        ft->temp_coloured_depth_string[0] = (char)( r->colour ? 'w' : 'b' );
+        ft->temp_coloured_depth_string[0] = ( r->colour ? 'w' : 'b' );
         ft->temp_coloured_depth_string[1] = '\0';
         strcat( ft->temp_coloured_depth_string, depth_string );
 
@@ -294,7 +295,7 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
 static void set_depth( FidSegRegion *r, short depth )
 {
     int i;
-    short child_depth = (short)(depth + 1);
+    short child_depth = static_cast<short>(depth + 1);
 
     r->depth = depth;
     
@@ -355,8 +356,8 @@ static void propagate_descendent_count_and_max_depth_upwards(
         assert( r1_adjacent_contains_r2( adjacent, r ) );
         
         if( adjacent->level == TRAVERSED ){
-            r->descendent_count += (short)(adjacent->descendent_count + 1);
-            r->depth = (short)MAX( r->depth, (adjacent->depth + 1) );
+            r->descendent_count += static_cast<short>(adjacent->descendent_count + 1);
+            r->depth = static_cast<short>(MAX( r->depth, (adjacent->depth + 1) ));
         }else{
             assert( parent == 0 );
             parent = adjacent;

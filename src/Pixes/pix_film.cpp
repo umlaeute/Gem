@@ -121,13 +121,13 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM)
 /* the "capturing"-thread */
 void *pix_film :: grabThread(void*you)
 {
-  pix_film *me=(pix_film*)you;
+  pix_film *me=reinterpret_cast<pix_film*>(you);
   struct timeval timout;
   me->m_thread_running=true;
   //me->post("using pthreads");
   while(me->m_thread_continue){
-    int reqFrame=(int)me->m_reqFrame;
-    int reqTrack=(int)me->m_reqTrack;
+    int reqFrame=static_cast<int>(me->m_reqFrame);
+    int reqTrack=static_cast<int>(me->m_reqTrack);
     timout.tv_sec = 0;
     timout.tv_usec=100;
 
@@ -295,16 +295,17 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   }
 
   t_atom ap[4];
+  float fps=static_cast<t_float>(m_handle->getFPS());
   SETFLOAT(ap, m_handle->getFrameNum());
   SETFLOAT(ap+1, m_handle->getWidth());
   SETFLOAT(ap+2, m_handle->getHeight());
-  SETFLOAT(ap+3, (float)m_handle->getFPS());
+  SETFLOAT(ap+3, fps);
   m_numFrames=m_handle->getFrameNum();
   post("loaded file: %s with %d frames (%dx%d) at %f fps", 
        buf, 
        m_handle->getFrameNum(), 
        m_handle->getWidth(), 
-       m_handle->getHeight(), (float)m_handle->getFPS());
+       m_handle->getHeight(), fps);
   outlet_list(m_outNumFrames, 0, 4, ap);
 
 #ifdef HAVE_PTHREADS
@@ -345,11 +346,11 @@ void pix_film :: render(GemState *state)
 
   m_handle->setAuto(m_auto);
 
-  frame=(int)m_reqFrame;
+  frame=static_cast<int>(m_reqFrame);
   if (NULL==state->image){
-    outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
+    outlet_float(m_outEnd,(m_numFrames>0 && static_cast<int>(m_reqFrame)<0)?(m_numFrames-1):0);
 
-    if(frame!=(int)m_reqFrame){
+    if(frame!=static_cast<int>(m_reqFrame)){
       // someone responded immediately to the outlet_float and changed the requested frame
       // so get the newly requested frame:
 
@@ -357,7 +358,7 @@ void pix_film :: render(GemState *state)
         /* if we are threaded (currently locked!), we change the frame# and grab the frame immediately
          * (if we are not threaded, the frame# is already changed and the grabbing is always immediately)
          */
-        m_handle->changeImage((int)m_reqFrame, m_reqTrack);
+        m_handle->changeImage(static_cast<int>(m_reqFrame), m_reqTrack);
       }
       
       state->image=m_handle->getFrame();
@@ -385,7 +386,7 @@ void pix_film :: postrender(GemState *state)
     if(m_thread_running){
       m_reqFrame+=m_auto;
     } else
-      if (m_handle->changeImage((int)(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
+      if (m_handle->changeImage(static_cast<int>(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
         //      m_reqFrame = m_numFrames;
         outlet_bang(m_outEnd);
       }
@@ -524,7 +525,7 @@ void pix_film :: csCallback(void *data, t_symbol*s)
 
 void pix_film :: threadCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->threadMess((int)state);
+  GetMyClass(data)->threadMess(static_cast<int>(state));
 }
 #endif /*OS-specific GEM_FILMBACKEND */
 

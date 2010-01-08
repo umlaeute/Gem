@@ -70,8 +70,8 @@ static FidSegRegionReference* new_region( Segmenter *s, int x, int y, int colour
 
     r->colour = colour;
 
-    r->left = r->right = (short)x;
-    r->top = r->bottom = (short)y;
+    r->left = r->right = static_cast<short>(x);
+    r->top = r->bottom = static_cast<short>(y);
 
     r->flags = NO_REGION_FLAG;
     
@@ -371,11 +371,11 @@ static void build_regions( Segmenter *s, const unsigned char *source, int width,
             }else{ // source_image_[i] != source_image_[i-1]
 
                 if( current_row[x-1]->region->right < x - 1 )
-                    current_row[x-1]->region->right = (short)( x - 1 );
+                    current_row[x-1]->region->right = static_cast<short>( x - 1 );
 
                 if( source[i] == previous_row[x]->region->colour ){
                     current_row[x] = previous_row[x];
-                    current_row[x]->region->bottom = (short)y;
+                    current_row[x]->region->bottom = static_cast<short>(y);
 
                 }else{
                     current_row[x] = new_region( s, x, y, source[i] );

@@ -163,7 +163,7 @@ void pix_movement2 :: processImage(imageStruct &image){
   threshMess
   ------------------------------------------------------------*/
 void pix_movement2 :: threshMess(int thresh){
-  if(thresh < (int)m_lowthresh){
+  if(thresh < static_cast<int>(m_lowthresh)){
     error("high threshold (%d) must not be less than low threshold(%d)", thresh, m_lowthresh);
     return;
   }
@@ -175,7 +175,7 @@ void pix_movement2 :: threshMess(int thresh){
   lowThreshMess
   ------------------------------------------------------------*/
 void pix_movement2 :: lowThreshMess(int thresh){
-  if(thresh > (int)m_thresh){
+  if(thresh > static_cast<int>(m_thresh)){
     error("low threshold (%d) must not be be greater than high threshold(%d)", thresh, m_thresh);
     return;
   }
@@ -208,14 +208,14 @@ void pix_movement2 :: obj_setupCallback(t_class*classPtr){
 */
 void pix_movement2 :: threshMessCallback(void *data, t_floatarg thresh)
 {
-  GetMyClass(data)->threshMess((int)(255*thresh));
+  GetMyClass(data)->threshMess(static_cast<int>(255*thresh));
 }
 /*------------------------------------------------------------
   lowThreshMessCallback
   ------------------------------------------------------------*/
 void pix_movement2 :: lowThreshMessCallback(void *data, t_floatarg thresh)
 {
-  GetMyClass(data)->lowThreshMess((int)(255*thresh));
+  GetMyClass(data)->lowThreshMess(static_cast<int>(255*thresh));
 }
 /*------------------------------------------------------------
   bangMessCallback

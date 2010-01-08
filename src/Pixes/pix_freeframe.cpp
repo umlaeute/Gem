@@ -65,9 +65,9 @@
 #  define FF_PLUGMAIN_STR(x) (x).svalue
 #  define FF_PLUGMAIN_PIS(x) (x).PISvalue
 # else
-#  define FF_PLUGMAIN_INT(x) (int)(x)
-#  define FF_PLUGMAIN_STR(x) (char*)(x)
-#  define FF_PLUGMAIN_PIS(x) (PlugInfoStruct*)(x)
+#  define FF_PLUGMAIN_INT(x) reinterpret_cast<int>(x)
+#  define FF_PLUGMAIN_STR(x) reinterpret_cast<char*>(x)
+#  define FF_PLUGMAIN_PIS(x) reinterpret_cast<PlugInfoStruct*>(x)
 # endif
 
 
@@ -144,7 +144,7 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
   }
   dlerror();
 
-  plugmain = (T_FFPLUGMAIN)dlsym(plugin_handle, hookname);
+  plugmain = reinterpret_cast<T_FFPLUGMAIN>(dlsym(plugin_handle, hookname));
 
 #elif defined __APPLE__
   CFURLRef bundleURL = NULL;
@@ -160,8 +160,9 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
   
   // Get a pointer to the function.
   if (theBundle){
-	plugmain = (T_FFPLUGMAIN)CFBundleGetFunctionPointerForName(
-            theBundle, CFSTR("plugMain") );
+    plugmain = reinterpret_cast<T_FFPLUGMAIN>(CFBundleGetFunctionPointerForName(
+            theBundle, CFSTR("plugMain") )
+			      );
   }else{
     if(loud)::post("%s: couldn't load", libname);
     return 0;
@@ -178,7 +179,7 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
     if(loud)::post("%s: couldn't load", libname);
     return NULL;
   }
-  plugmain = (T_FFPLUGMAIN)GetProcAddress(ntdll, hookname);
+  plugmain = reinterpret_cast<T_FFPLUGMAIN>(GetProcAddress(ntdll, hookname));
 #else
 # error no way to load dynamic linked libraries on this OS
 #endif
@@ -207,11 +208,11 @@ static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba,
    * so we check whether the plugin knows how to do RGB32
    * if it doesn't, we try RGB24
    */
-  if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_32BITVIDEO, 0)) == FF_TRUE){
+  if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, reinterpret_cast<LPVOID>(FF_CAP_32BITVIDEO), 0)) == FF_TRUE){
     if(can_rgba)*can_rgba=1;
   } else {
     if(can_rgba)*can_rgba=0;
-    if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, (LPVOID)FF_CAP_24BITVIDEO, 0)) != FF_TRUE){
+    if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, reinterpret_cast<LPVOID>(FF_CAP_24BITVIDEO), 0)) != FF_TRUE){
       ::error("plugin %s: neither RGB32 nor RGB24 support!", name);
 
       plugmain(FF_DEINITIALISE, NULL, 0);
@@ -281,8 +282,8 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     //   ParameterDisplayValue:
     // use
     //   ParameterType
-    parmType=FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, (LPVOID)i, 0));
-    p_name=  FF_PLUGMAIN_STR(m_plugin(FF_GETPARAMETERNAME, (LPVOID)i, 0));
+    parmType=FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, reinterpret_cast<LPVOID>(i), 0));
+    p_name=  FF_PLUGMAIN_STR(m_plugin(FF_GETPARAMETERNAME, reinterpret_cast<LPVOID>(i), 0));
 
     post("\tparam%s: %s", tempVt, p_name);
 
@@ -459,7 +460,7 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
     SetParameterStruct sps;
     sps.index = param;
 
-    switch (FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, (LPVOID)param, 0))){
+    switch (FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, reinterpret_cast<LPVOID>(param), 0))){
     case FF_TYPE_EVENT:
       sps.value.fvalue=1.0;
       break;

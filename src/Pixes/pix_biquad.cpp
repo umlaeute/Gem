@@ -115,12 +115,12 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
     // fast, because calculations are done in int !
     int ifb0,ifb1,ifb2,iff1,iff2,iff3;
     int ioutput;
-    ifb0 = (int)(256. * fb0);
-    ifb1 = (int)(256. * fb1);
-    ifb2 = (int)(256. * fb2);
-    iff1 = (int)(256. * ff1);
-    iff2 = (int)(256. * ff2);
-    iff3 = (int)(256. * ff3);
+    ifb0 = static_cast<int>(256. * fb0);
+    ifb1 = static_cast<int>(256. * fb1);
+    ifb2 = static_cast<int>(256. * fb2);
+    iff1 = static_cast<int>(256. * ff1);
+    iff2 = static_cast<int>(256. * ff2);
+    iff3 = static_cast<int>(256. * ff3);
     
     int max=0;//JMZ
 
@@ -173,12 +173,12 @@ void pix_biquad :: processYUVImage(imageStruct &image)
         // fast, because calculations are done in int !
         int ifb0,ifb1,ifb2,iff1,iff2,iff3;
         int Youtput,UVoutput,Youtput1,UVoutput1;
-        ifb0 = (int)(256. * fb0);
-        ifb1 = (int)(256. * fb1);
-        ifb2 = (int)(256. * fb2);
-        iff1 = (int)(256. * ff1);
-        iff2 = (int)(256. * ff2);
-        iff3 = (int)(256. * ff3);
+        ifb0 = static_cast<int>(256. * fb0);
+        ifb1 = static_cast<int>(256. * fb1);
+        ifb2 = static_cast<int>(256. * fb2);
+        iff1 = static_cast<int>(256. * ff1);
+        iff2 = static_cast<int>(256. * ff2);
+        iff3 = static_cast<int>(256. * ff3);
 
         //it's unrolled but GCC still can't schedule this well at all
         //needs some manual scheduling...
@@ -643,5 +643,5 @@ void pix_biquad :: setMessCallback(void *data)
 
 void pix_biquad :: modeMessCallback(void *data, float value)
 {
-  GetMyClass(data)->m_mode = (int)value;
+  GetMyClass(data)->m_mode = static_cast<int>(value);
 }

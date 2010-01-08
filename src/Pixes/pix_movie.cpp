@@ -71,18 +71,18 @@ void pix_movie :: render(GemState *state)
 #endif /* PTHREADS */
     state->image=m_handle->getFrame();
 
-  frame=(int)m_reqFrame;
+  frame=static_cast<int>(m_reqFrame);
   if (state->image==0){
-    outlet_float(m_outEnd,(m_numFrames>0 && (int)m_reqFrame<0)?(m_numFrames-1):0);
+    outlet_float(m_outEnd,(m_numFrames>0 && static_cast<int>(m_reqFrame)<0)?(m_numFrames-1):0);
 
-    if(frame!=(int)m_reqFrame){
+    if(frame!=static_cast<int>(m_reqFrame)){
       // someone responded immediately to the outlet_float and changed the requested frame
       // so try to get the newly requested frame:
       if(m_thread_running){
 	/* the grabbing-thread is currently locked
 	 * we do the grabbing ourselfes
 	 */
-	m_handle->changeImage((int)m_reqFrame, m_reqTrack);
+	m_handle->changeImage(static_cast<int>(m_reqFrame), m_reqTrack);
       }
       state->image=m_handle->getFrame();
     }
@@ -154,15 +154,15 @@ void pix_movie :: obj_setupCallback(t_class *classPtr)
 
 void pix_movie :: textureMessCallback(void *data, t_floatarg quality)
 {
-  GetMyClass(data)->textureQuality((int)quality);
+  GetMyClass(data)->textureQuality(static_cast<int>(quality));
 }
 void pix_movie :: repeatMessCallback(void *data, t_floatarg quality)
 {
-  GetMyClass(data)->repeatMess((int)quality);
+  GetMyClass(data)->repeatMess(static_cast<int>(quality));
 }
 
 void pix_movie :: modeCallback(void *data, t_floatarg quality)
 {
-  GetMyClass(data)->modeMess((int)quality);
+  GetMyClass(data)->modeMess(static_cast<int>(quality));
 }
 #endif /* no OS-specific GEM_FILMBACKEND */

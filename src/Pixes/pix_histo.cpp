@@ -198,27 +198,27 @@ void pix_histo :: processRGBAImage(imageStruct &image)
       float grey = base[chRed] * 0.3086f + base[chGreen] * 0.6094f
 	+ base[chBlue] * 0.0820f;
 
-      //      *(tab_R+(int)(scale_R*(unsigned char)grey))
-      *(tab_R+(int)(scale_R*grey))+=f;
+      //      *(tab_R+static_cast<int>(scale_R*(unsigned char)grey))
+      *(tab_R+static_cast<int>(scale_R*grey))+=f;
 
       base+=4;
     }
     break;
   case 3: // RGB
     while (i--) {
-      *(tab_R+(int)(scale_R*base[chRed]))  +=f;
-      *(tab_G+(int)(scale_G*base[chGreen]))+=f;
-      *(tab_B+(int)(scale_B*base[chBlue])) +=f;
+      *(tab_R+static_cast<int>(scale_R*base[chRed]))  +=f;
+      *(tab_G+static_cast<int>(scale_G*base[chGreen]))+=f;
+      *(tab_B+static_cast<int>(scale_B*base[chBlue])) +=f;
 
       base+=4;
     }
     break;
   case 4: // RGBA
     while (i--) {
-      *(tab_R+(int)(scale_R*base[chRed]))  +=f;
-      *(tab_G+(int)(scale_G*base[chGreen]))+=f;
-      *(tab_B+(int)(scale_B*base[chBlue])) +=f;
-      *(tab_A+(int)(scale_B*base[chAlpha]))+=f;
+      *(tab_R+static_cast<int>(scale_R*base[chRed]))  +=f;
+      *(tab_G+static_cast<int>(scale_G*base[chGreen]))+=f;
+      *(tab_B+static_cast<int>(scale_B*base[chBlue])) +=f;
+      *(tab_A+static_cast<int>(scale_B*base[chAlpha]))+=f;
 
       base+=4;
     }

@@ -70,8 +70,8 @@ void pix_blur :: processRGBAImage(imageStruct &image)
     saved = new unsigned int [m_blurSize];
   }
 
-  rightGain = (int)(m_blurf * 255.);
-  imageGain = (int)(255. - (m_blurf * 255.));
+  rightGain = static_cast<int>(m_blurf * 255.);
+  imageGain = static_cast<int>(255. - (m_blurf * 255.));
   hlength = image.xsize;
 
   
@@ -109,8 +109,8 @@ void pix_blur :: processGrayImage(imageStruct &image)
     saved = new unsigned int [m_blurSize];
   }
 
-  rightGain = (int)(m_blurf * 255.);
-  imageGain = (int)(255. - (m_blurf * 255.));
+  rightGain = static_cast<int>(m_blurf * 255.);
+  imageGain = static_cast<int>(255. - (m_blurf * 255.));
   src=m_blurH*m_blurW;
   while(src--){
     Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
@@ -176,8 +176,8 @@ return;
     register int rightGain,imageGain;
     register int y1res,y2res;
 src = 0;
-rightGain = (int)(m_blurf * 255.);
-imageGain = (int)(255. - (m_blurf * 255.));
+rightGain = static_cast<int>(m_blurf * 255.);
+imageGain = static_cast<int>(255. - (m_blurf * 255.));
 hlength = image.xsize/2;
 
 //unroll this, add register temps and schedule the ops better to remove the data depedencies
@@ -193,14 +193,14 @@ for (h=0; h<image.ysize-1; h++){
         
        
          
-        image.data[src+1] =(unsigned char)CLAMP(y1res);
+      image.data[src+1] =static_cast<unsigned char>(CLAMP(y1res));
      
      
      saved[src+3] = y2res;
      y2res = y2res >> 8;
         
        
-        image.data[src+3] = (unsigned char)CLAMP(y2res);
+     image.data[src+3] = static_cast<unsigned char>(CLAMP(y2res));
         src+=4; 
    
     }
@@ -402,8 +402,6 @@ void pix_blur :: obj_setupCallback(t_class *classPtr)
 
 void pix_blur :: blurCallback(void *data, t_floatarg value)
 {
-//  GetMyClass(data)->m_blur=((long)value);
-GetMyClass(data)->m_blurf=(value);
-
+  GetMyClass(data)->m_blurf=(value);
 }
 

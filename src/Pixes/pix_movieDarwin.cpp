@@ -180,7 +180,7 @@ void pix_movieDarwin :: openMess(t_symbol *filename, int format)
   SETFLOAT(ap+2, m_ysize);
 
   m_newFilm = 1;
-  //outlet_float(m_outNumFrames, (float)m_numFrames);
+  //outlet_float(m_outNumFrames, ((float)) *([a-zA-Z0-9._]));
   post("Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
 }
@@ -207,7 +207,8 @@ void pix_movieDarwin :: realOpen(char *filename)
   if (!filename[0]) {
     error("no filename passed");
   } else {            
-    err = ::FSPathMakeRef((UInt8*)filename, &ref, NULL);
+    UInt8*filename8=static_cast<UInt8*>filename;
+    err = ::FSPathMakeRef(filename8, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
             
     if (err) {
@@ -230,7 +231,7 @@ void pix_movieDarwin :: realOpen(char *filename)
 
 	m_reqFrame = 0;
 	m_curFrame = -1;
-  m_numTracks = (int)GetMovieTrackCount(m_movie);
+	m_numTracks = static_cast<int>(GetMovieTrackCount(m_movie));
 
 	// Get the length of the movie
 	
@@ -246,8 +247,8 @@ void pix_movieDarwin :: realOpen(char *filename)
 	
 	SetTrackEnabled(audioTrack, FALSE);
         
-	movieDur = (long)GetMovieDuration(m_movie);
-	movieScale = (long)GetMovieTimeScale(m_movie);
+	movieDur = static_cast<long>(GetMovieDuration(m_movie));
+	movieScale = static_cast<long>(GetMovieTimeScale(m_movie));
         
   /*  //old method for getting length                                      
       OSType		whichMediaType = VisualMediaCharacteristic;
@@ -271,7 +272,7 @@ void pix_movieDarwin :: realOpen(char *filename)
       flags = nextTimeMediaSample;
       }
   */
-  durationf = (float)movieDur/(float)m_numFrames;
+  durationf = static_cast<float>(movieDur)/static_cast<float>(m_numFrames);
 
 	// Get the bounds for the movie
 	::GetMovieBox(m_movie, &m_srcRect);
@@ -543,7 +544,7 @@ void pix_movieDarwin :: getFrame()
       }
         
       //m_movieTime = m_reqFrame * duration;
-      m_movieTime = (long)((float)m_reqFrame * durationf);
+      m_movieTime = static_cast<long>(static_cast<float>(m_reqFrame) * durationf);
         
       m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
       ::GetMovieNextInterestingTime(	m_movie,
@@ -806,7 +807,7 @@ void pix_movieDarwin :: stopRendering()
 
 void pix_movieDarwin :: MovRate(float rate)
 {
-  m_rate = (float)rate;
+  m_rate = rate;
   if (m_auto && m_haveMovie) {
 		SetMovieRate(m_movie,X2Fix((double)m_rate));
   }
@@ -814,7 +815,7 @@ void pix_movieDarwin :: MovRate(float rate)
 
 void pix_movieDarwin :: MovVolume(float volume)
 {
-  m_volume = (float)volume;
+  m_volume = volume;
   if (m_auto && m_haveMovie) {
     SetMovieVolume(m_movie,(short)(m_volume * 255.f));
   }
@@ -895,13 +896,13 @@ void pix_movieDarwin :: openMessCallback(void *data, t_symbol *filename)
 
 void pix_movieDarwin :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
-  //  GetMyClass(data)->changeImage((int)imgNum);
+  //  GetMyClass(data)->changeImage(static_cast<int>imgNum);
   GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_movieDarwin :: autoCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->m_auto=!(!(int)state);
+  GetMyClass(data)->m_auto=!(!static_cast<int>(state));
 }
 
 void pix_movieDarwin :: rateCallback(void *data, t_floatarg state)
@@ -911,7 +912,7 @@ void pix_movieDarwin :: rateCallback(void *data, t_floatarg state)
 
 void pix_movieDarwin :: volumeCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->MovVolume((float)state);
+  GetMyClass(data)->MovVolume(state);
 }
 
 void pix_movieDarwin :: ramCallback(void *data)
@@ -921,12 +922,12 @@ void pix_movieDarwin :: ramCallback(void *data)
 
 void pix_movieDarwin :: hiqualityCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->m_hiquality=(int)state;
+  GetMyClass(data)->m_hiquality=static_cast<int>(state);
 }
 
 void pix_movieDarwin :: rectangleCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->m_rectangle=(int)state;
+  GetMyClass(data)->m_rectangle=static_cast<int>(state);
 }
 
 

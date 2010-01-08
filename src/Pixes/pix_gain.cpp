@@ -66,10 +66,10 @@ void pix_gain :: processRGBAImage(imageStruct &image)
   unsigned char *pixels = image.data;
   short R,G,B,A;
   int red,green,blue,alpha;
-  R = (int)(256 * m_gain[chRed]);
-  G = (int)(256 * m_gain[chGreen]);
-  B = (int)(256 * m_gain[chBlue]);
-  A = (int)(256 * m_gain[chAlpha]);
+  R = static_cast<int>(256 * m_gain[chRed]);
+  G = static_cast<int>(256 * m_gain[chGreen]);
+  B = static_cast<int>(256 * m_gain[chBlue]);
+  A = static_cast<int>(256 * m_gain[chAlpha]);
 
   if(m_saturate) {
     while(datasize--)
@@ -107,14 +107,14 @@ void pix_gain :: processGrayImage(imageStruct &image)
   if(m_saturate) {
     while (datasize--)
       {
-	int gray = (int)(pixels[chGray] * m_gain[chRed]);
+	int gray = static_cast<int>(pixels[chGray] * m_gain[chRed]);
 	pixels[chGray] = CLAMP(gray);
 	pixels++;
       }
   } else {
     while (datasize--)
       {
-	pixels[chGray] = (int)(pixels[chGray] * m_gain[chRed]);
+	pixels[chGray] = static_cast<int>(pixels[chGray] * m_gain[chRed]);
 	pixels++;
       }
   }
@@ -129,9 +129,9 @@ void pix_gain :: processYUVImage(imageStruct &image)
   long src;
   int y1,y2,u,v;
 
-  short Y=(short)(m_gain[1] * 255);
-  short U=(short)(m_gain[2] * 255);
-  short V=(short)(m_gain[3] * 255);
+  short Y=static_cast<short>(m_gain[1] * 255);
+  short U=static_cast<short>(m_gain[2] * 255);
+  short V=static_cast<short>(m_gain[3] * 255);
   src = 0;
   width = image.xsize/2;
   if(m_saturate) {
@@ -139,16 +139,16 @@ void pix_gain :: processYUVImage(imageStruct &image)
       for(w=0; w<width; w++){
 	  
 	u = (((image.data[src] - 128) * U)>>8)+128;
-	image.data[src] = (unsigned char)CLAMP(u);
+	image.data[src] = static_cast<unsigned char>(CLAMP(u));
 	  
 	y1 = (image.data[src+1] * Y)>>8;
-	image.data[src+1] = (unsigned char)CLAMP(y1);
+	image.data[src+1] = static_cast<unsigned char>(CLAMP(y1));
 	  
 	v = (((image.data[src+2] - 128) * V)>>8)+128;
-	image.data[src+2] = (unsigned char)CLAMP(v);
+	image.data[src+2] = static_cast<unsigned char>(CLAMP(v));
 	  
 	y2 = (image.data[src+3] * Y)>>8;
-	image.data[src+3] = (unsigned char)CLAMP(y2);
+	image.data[src+3] = static_cast<unsigned char>(CLAMP(y2));
 	  
 	src+=4;
       }
@@ -158,16 +158,16 @@ void pix_gain :: processYUVImage(imageStruct &image)
       for(w=0; w<width; w++){
 	  
 	u = (((image.data[src] - 128) * U)>>8)+128;
-	image.data[src] = (unsigned char)(u);
+	image.data[src] = static_cast<unsigned char>(u);
 	  
 	y1 = (image.data[src+1] * Y)>>8;
-	image.data[src+1] = (unsigned char)(y1);
+	image.data[src+1] = static_cast<unsigned char>(y1);
 	  
 	v = (((image.data[src+2] - 128) * V)>>8)+128;
-	image.data[src+2] = (unsigned char)(v);
+	image.data[src+2] = static_cast<unsigned char>(v);
 	  
 	y2 = (image.data[src+3] * Y)>>8;
-	image.data[src+3] = (unsigned char)(y2);
+	image.data[src+3] = static_cast<unsigned char>(y2);
 	  
 	src+=4;
       }
@@ -184,10 +184,10 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
 {
   _mm_empty();
 
-  short  R = (int)(256 * m_gain[chRed]);
-  short  G = (int)(256 * m_gain[chGreen]);
-  short  B = (int)(256 * m_gain[chBlue]);
-  short  A = (int)(256 * m_gain[chAlpha]);
+  short  R = static_cast<int>(256 * m_gain[chRed]);
+  short  G = static_cast<int>(256 * m_gain[chGreen]);
+  short  B = static_cast<int>(256 * m_gain[chBlue]);
+  short  A = static_cast<int>(256 * m_gain[chAlpha]);
 
   if((R==256)&&(G==256)&&(B==256)&&(B==256)){
     // nothing to do!
@@ -208,7 +208,7 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
 #else
   register __m64 gain_64 = _mm_setr_pi16(R, G, B, A);
 #endif
-  register __m64*data_p= (__m64*)image.data;
+  register __m64*data_p= reinterpret_cast<__m64*>(image.data);
   register __m64 null_64 = _mm_setzero_si64();
   register __m64 a0,a1;
 
@@ -272,7 +272,7 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
     
   c = shortBuffer.v;
     
-  shortBuffer.elements[0] =(short) (m_gain[1]*255);
+  shortBuffer.elements[0] =static_cast<short> (m_gain[1]*255);
   gain = shortBuffer.v; 
   gain =  vec_splat(gain, 0 );  
 
@@ -409,9 +409,9 @@ void pix_gain :: vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *a
 }
 void pix_gain :: floatGainMessCallback(void *data, t_floatarg gain)
 {
-  GetMyClass(data)->floatGainMess((float)gain);
+  GetMyClass(data)->floatGainMess(gain);
 }
 void pix_gain :: saturateMessCallback(void *data, t_floatarg sat)
 {
-  GetMyClass(data)->saturateMess((int)sat);
+  GetMyClass(data)->saturateMess(static_cast<int>(sat));
 }

@@ -172,7 +172,7 @@ void pix_offset :: processGrayMMX(imageStruct &image)
   register int pixsize = (image.ysize * image.xsize)>>3;
 
   register __m64 offset_64 = _mm_set1_pi8(m_grey);
-  register __m64*data_p= (__m64*)image.data;
+  register __m64*data_p= reinterpret_cast<__m64*>(image.data);
   _mm_empty();
 
   if(m_saturate) {
@@ -312,19 +312,19 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_offset :: vecOffsetMess(int argc, t_atom *argv)
 {
-  if (argc >= 4) m_offset[chAlpha] = (int)(255*atom_getfloat(&argv[3]));
+  if (argc >= 4) m_offset[chAlpha] = static_cast<int>(255.*atom_getfloat(&argv[3]));
   else if (argc == 3) m_offset[chAlpha] = 0;
   else
     {
       error("not enough offset values");
       return;
     }
-  m_offset[chRed]   = (int)(255*atom_getfloat(&argv[0]));
-  m_offset[chGreen] = (int)(255*atom_getfloat(&argv[1]));
-  m_offset[chBlue]  = (int)(255*atom_getfloat(&argv[2]));
-  Y = (short)(255*atom_getfloat(&argv[0]));
-  U = (short)(255*atom_getfloat(&argv[1]));
-  V = (short)(255*atom_getfloat(&argv[2]));
+  m_offset[chRed]   = static_cast<int>(255*atom_getfloat(&argv[0]));
+  m_offset[chGreen] = static_cast<int>(255*atom_getfloat(&argv[1]));
+  m_offset[chBlue]  = static_cast<int>(255*atom_getfloat(&argv[2]));
+  Y = static_cast<short>(255*atom_getfloat(&argv[0]));
+  U = static_cast<short>(255*atom_getfloat(&argv[1]));
+  V = static_cast<short>(255*atom_getfloat(&argv[2]));
   setPixModified();
 }
 
@@ -336,8 +336,8 @@ void pix_offset :: floatOffsetMess(float foffset)
 {
   // assumption that the alpha should be one
   m_offset[chAlpha] = 0;
-  m_offset[chRed] = m_offset[chGreen] = m_offset[chBlue] = (int)(255*foffset);
-  Y = U = V = (short)(255*foffset);
+  m_offset[chRed] = m_offset[chGreen] = m_offset[chBlue] = static_cast<int>(255*foffset);
+  Y = U = V = static_cast<short>(255*foffset);
   setPixModified();
 }
 /////////////////////////////////////////////////////////
@@ -370,9 +370,9 @@ void pix_offset :: vecOffsetMessCallback(void *data, t_symbol *, int argc, t_ato
 }
 void pix_offset :: floatOffsetMessCallback(void *data, t_floatarg offset)
 {
-  GetMyClass(data)->floatOffsetMess((float)offset);
+  GetMyClass(data)->floatOffsetMess(offset);
 }
 void pix_offset :: saturateMessCallback(void *data, t_floatarg sat)
 {
-  GetMyClass(data)->saturateMess((int)sat);
+  GetMyClass(data)->saturateMess(static_cast<int>(sat));
 }

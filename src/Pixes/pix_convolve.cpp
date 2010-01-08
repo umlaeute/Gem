@@ -30,8 +30,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_convolve, t_floatarg, A_DEFFLOAT, t_floatarg, A_
 pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol)
   : m_imatrix(NULL)
 {
-  int row = (int)fRow;
-  int col = (int)fCol;
+  int row = static_cast<int>(fRow);
+  int col = static_cast<int>(fCol);
 
     if (!row || !col )
     {
@@ -116,15 +116,16 @@ void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
     for (j=1;j<4;j++)
     #endif
     {
-      res = m_imatrix[0]*(int)((unsigned char*)val1)[j];
-      res += m_imatrix[1]*(int)((unsigned char*)val2)[j];
-      res += m_imatrix[2]*(int)((unsigned char*)val3)[j];
-      res += m_imatrix[3]*(int)((unsigned char*)val4)[j];
-      res += m_imatrix[4]*(int)((unsigned char*)val5)[j];
-      res += m_imatrix[5]*(int)((unsigned char*)val6)[j];
-      res += m_imatrix[6]*(int)((unsigned char*)val7)[j];
-      res += m_imatrix[7]*(int)((unsigned char*)val8)[j];
-      res += m_imatrix[8]*(int)((unsigned char*)val9)[j];
+      //      res =  m_imatrix[0]*(int)((unsigned char*)val1)[j];
+      res =  m_imatrix[0]*static_cast<int>(reinterpret_cast<unsigned char*>(val1)[j]);
+      res += m_imatrix[1]*static_cast<int>(reinterpret_cast<unsigned char*>(val2)[j]);
+      res += m_imatrix[2]*static_cast<int>(reinterpret_cast<unsigned char*>(val3)[j]);
+      res += m_imatrix[3]*static_cast<int>(reinterpret_cast<unsigned char*>(val4)[j]);
+      res += m_imatrix[4]*static_cast<int>(reinterpret_cast<unsigned char*>(val5)[j]);
+      res += m_imatrix[5]*static_cast<int>(reinterpret_cast<unsigned char*>(val6)[j]);
+      res += m_imatrix[6]*static_cast<int>(reinterpret_cast<unsigned char*>(val7)[j]);
+      res += m_imatrix[7]*static_cast<int>(reinterpret_cast<unsigned char*>(val8)[j]);
+      res += m_imatrix[8]*static_cast<int>(reinterpret_cast<unsigned char*>(val9)[j]);
       res*=m_irange;
       res>>=16;
       ((unsigned char*)dest)[i*csize+j] = CLAMP(res);
@@ -386,15 +387,15 @@ length = size /2;
             val6 = src[i+3];
     
             //unroll??
-            res1 = mat1*(int)((unsigned char)val1);
-            res2 = mat2*(int)((unsigned char)val2);
-            res3 = mat3*(int)((unsigned char)val3);
-            res4 = mat4*(int)((unsigned char)val4);
-            res5 = mat5*(int)((unsigned char)val5);
-            res6 = mat6*(int)((unsigned char)val6);
-            res7 = mat7*(int)((unsigned char)val7);
-            res8 = mat8*(int)((unsigned char)val8);
-            res9 = mat9*(int)((unsigned char)val9);
+            res1 = mat1*static_cast<int>(val1);
+            res2 = mat2*static_cast<int>(val2);
+            res3 = mat3*static_cast<int>(val3);
+            res4 = mat4*static_cast<int>(val4);
+            res5 = mat5*static_cast<int>(val5);
+            res6 = mat6*static_cast<int>(val6);
+            res7 = mat7*static_cast<int>(val7);
+            res8 = mat8*static_cast<int>(val8);
+            res9 = mat9*static_cast<int>(val9);
             
             
             res1 += res2 + res3;
@@ -456,15 +457,15 @@ length = size /2;
     #endif
     { */
     
-      res1 = mat1*(int)((unsigned char*)val1)[j];
-      res2 = mat2*(int)((unsigned char*)val2)[j];
-      res3 = mat3*(int)((unsigned char*)val3)[j];
-      res4 = mat4*(int)((unsigned char*)val4)[j];
-      res5 = mat5*(int)((unsigned char*)val5)[j];
-      res6 = mat6*(int)((unsigned char*)val6)[j];
-      res7 = mat7*(int)((unsigned char*)val7)[j];
-      res8 = mat8*(int)((unsigned char*)val8)[j];
-      res9 = mat9*(int)((unsigned char*)val9)[j];
+      res1 = mat1*static_cast<int>(reinterpret_cast<unsigned char*>(val1)[j]);
+      res2 = mat2*static_cast<int>(reinterpret_cast<unsigned char*>(val2)[j]);
+      res3 = mat3*static_cast<int>(reinterpret_cast<unsigned char*>(val3)[j]);
+      res4 = mat4*static_cast<int>(reinterpret_cast<unsigned char*>(val4)[j]);
+      res5 = mat5*static_cast<int>(reinterpret_cast<unsigned char*>(val5)[j]);
+      res6 = mat6*static_cast<int>(reinterpret_cast<unsigned char*>(val6)[j]);
+      res7 = mat7*static_cast<int>(reinterpret_cast<unsigned char*>(val7)[j]);
+      res8 = mat8*static_cast<int>(reinterpret_cast<unsigned char*>(val8)[j]);
+      res9 = mat9*static_cast<int>(reinterpret_cast<unsigned char*>(val9)[j]);
       res1 += res2 + res3;
       res4 += res5 + res6;
       res7 += res8 + res9;
@@ -741,10 +742,10 @@ void pix_convolve :: matrixMessCallback(void *data, t_symbol *, int argc, t_atom
 }
 void pix_convolve :: rangeMessCallback(void *data, t_floatarg range)
 {
-    GetMyClass(data)->rangeMess((float)range);
+    GetMyClass(data)->rangeMess(range);
 }
 
 void pix_convolve :: chromaMessCallback(void *data, t_floatarg value)
 {
-    GetMyClass(data)->m_chroma=(int)value;
+    GetMyClass(data)->m_chroma=static_cast<int>(value);
 }

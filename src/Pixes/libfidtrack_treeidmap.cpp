@@ -19,7 +19,7 @@
 static int find_maximum_tree_depth( const std::string& s )
 {
     int result = 0;
-    for( int i=1; i < (int)s.size(); ++i ){ // skip first character which is the black/white flag
+    for( std::string::size_type i=1; i < s.size(); ++i ){ // skip first character which is the black/white flag
 
         int d = s[i] - '0';
         if( d > result )
@@ -36,7 +36,7 @@ static int find_maximum_descendent_count( const std::string& s )
 
     std::vector<int> adjacenciesAtLevel( s.size(), 0 );
     int currentLevel = 0;
-    for( int i=1; i < (int)s.size(); ++i ){ // skip first character which is the black/white flag
+    for( std::string::size_type i=1; i < s.size(); ++i ){ // skip first character which is the black/white flag
 
         int d = s[i] - '0';
 
@@ -117,14 +117,14 @@ public:
                 if( s.empty() )
                     continue;
 
-                int depthSequenceLength;
+		int depthSequenceLength;
 
                 // ensure that the depth sequence has a root colour prefix
                 // of 'w' (white) or 'b' (black). if not, prepend one.
                 if( s[0] == 'w' || s[0] == 'b' ){
-                    depthSequenceLength = (int)( s.size() - 1 );
+                    depthSequenceLength = ( s.size() - 1 );
                 }else{
-                    depthSequenceLength = (int)( s.size() );
+                    depthSequenceLength = ( s.size() );
                     s = 'w' + s;
                 }
                 
@@ -168,7 +168,7 @@ public:
     ~TreeIdMapImplementation()
     {
         while( !strings_.empty() ){
-	  delete [] (char*)strings_.back();
+	  delete [] reinterpret_cast<const char*>(strings_.back());
             strings_.pop_back();
         }
     }
@@ -191,12 +191,12 @@ void initialize_treeidmap_from_file( TreeIdMap* treeidmap, const char *file_name
 
 void terminate_treeidmap( TreeIdMap* treeidmap )
 {
-    delete (TreeIdMapImplementation*)treeidmap->implementation_;
+  delete static_cast<TreeIdMapImplementation*>(treeidmap->implementation_);
     treeidmap->implementation_ = 0;
 }
 
 // returns -1 for unfound id
 int treestring_to_id( TreeIdMap* treeidmap, const char *treestring )
 {
-    return ((TreeIdMapImplementation*)treeidmap->implementation_)->treestring_to_id( treestring );
+  return (static_cast<TreeIdMapImplementation*>(treeidmap->implementation_))->treestring_to_id( treestring );
 }

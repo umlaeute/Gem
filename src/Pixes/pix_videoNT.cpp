@@ -118,9 +118,9 @@ pix_videoNT :: pix_videoNT(t_floatarg num)
       return;
     }
   post("Connected at x: %d, y: %d, c: %d",
-       (int)(videoFormat->bmiHeader.biWidth),
-       (int)(videoFormat->bmiHeader.biHeight),
-       (int)(videoFormat->bmiHeader.biBitCount));
+       static_cast<int>(videoFormat->bmiHeader.biWidth),
+       static_cast<int>(videoFormat->bmiHeader.biHeight),
+       static_cast<int>(videoFormat->bmiHeader.biBitCount));
   delete videoFormat;
 
   m_pixBlock.image.xsize = m_vidXSize;  // was defaulted to 128 ???
@@ -350,7 +350,7 @@ void pix_videoNT :: obj_setupCallback(t_class *classPtr)
 }
 void pix_videoNT :: dimenMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-  GetMyClass(data)->dimenMess((int)x, (int)y);
+  GetMyClass(data)->dimenMess(static_cast<int>(x), static_cast<int>(y));
 }
 void pix_videoNT :: csMessCallback(void *data, t_symbol *s)
 {
@@ -368,8 +368,8 @@ void pix_videoNT :: csMessCallback(void *data, t_symbol *s)
 
 void pix_videoNT :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr) 
 {
-  void *ptr = (void *)(capGetUserData(hWnd));
-  ((pix_videoNT *)ptr)->videoFrame(lpVHdr);
+  void *ptr = reinterpret_cast<pix_videoNT*>(capGetUserData(hWnd));
+  ptr->videoFrame(lpVHdr);
 }
 
 #endif

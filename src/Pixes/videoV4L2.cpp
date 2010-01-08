@@ -110,7 +110,7 @@ static int xioctl(int                    fd,
 int videoV4L2::init_mmap (void)
 {
   struct v4l2_requestbuffers req;
-  char*devname=(char*)((m_devicename)?m_devicename:"device");
+  const char*devname=((m_devicename)?m_devicename:"device");
 
   memset (&(req), 0, sizeof (req));
 
@@ -178,7 +178,7 @@ int videoV4L2::init_mmap (void)
 /////////////////////////////////////////////////////////
 void *videoV4L2::capturing_(void*you)
 {
-  videoV4L2 *me=(videoV4L2 *)you;
+  videoV4L2 *me=reinterpret_cast<videoV4L2*>(you);
   return me->capturing();
 }
 void *videoV4L2 :: capturing(void)
@@ -303,7 +303,7 @@ pixBlock *videoV4L2 :: getFrame(){
       case V4L2_PIX_FMT_RGB32: m_image.image.fromRGBA  (data); break;
       case V4L2_PIX_FMT_GREY : m_image.image.fromGray  (data); break;
       case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
-      case V4L2_PIX_FMT_YUV420:m_image.image.fromYU12(data); break;
+      case V4L2_PIX_FMT_YUV420:m_image.image.fromYU12  (data); break;
 
 
       default: // ? what should we do ?
@@ -350,7 +350,7 @@ int videoV4L2 :: startTransfer(int format)
   if (format>1)m_reqFormat=format;
   //  verbose(1, "starting transfer");
   char buf[256];
-  char*dev_name=m_devicename;
+  const char*dev_name=m_devicename;
   unsigned int i;
 
   struct stat st; 
@@ -477,10 +477,10 @@ int videoV4L2 :: startTransfer(int format)
   fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
   
   verbose(1, "v4l2: want %d == '%c%c%c%c' ", m_reqFormat, 
-	    (char)(fmt.fmt.pix.pixelformat),
-	    (char)(fmt.fmt.pix.pixelformat>>8),
-	    (char)(fmt.fmt.pix.pixelformat>>16),
-	    (char)(fmt.fmt.pix.pixelformat>>24));
+	    static_cast<char>(fmt.fmt.pix.pixelformat),
+	    static_cast<char>(fmt.fmt.pix.pixelformat>>8),
+	    static_cast<char>(fmt.fmt.pix.pixelformat>>16),
+	    static_cast<char>(fmt.fmt.pix.pixelformat>>24));
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
     perror("v4l2: VIDIOC_S_FMT");//exit
@@ -528,18 +528,18 @@ int videoV4L2 :: startTransfer(int format)
     break;
   default: 
     error("unknown format '%c%c%c%c'",
-          (char)(m_gotFormat),
-          (char)(m_gotFormat>>8),
-          (char)(m_gotFormat>>16),
-          (char)(m_gotFormat>>24));
+          static_cast<char>(m_gotFormat),
+          static_cast<char>(m_gotFormat>>8),
+          static_cast<char>(m_gotFormat>>16),
+          static_cast<char>(m_gotFormat>>24));
     /* we should really return here! */
   }
 
   verbose(1, "v4l2: got '%c%c%c%c'", 
-	    (char)(m_gotFormat),
-	    (char)(m_gotFormat>>8),
-	    (char)(m_gotFormat>>16),
-	    (char)(m_gotFormat>>24));
+	    static_cast<char>(m_gotFormat),
+	    static_cast<char>(m_gotFormat>>8),
+	    static_cast<char>(m_gotFormat>>16),
+	    static_cast<char>(m_gotFormat>>24));
 
   /* Note VIDIOC_S_FMT may change width and height. */
   if(m_width!=fmt.fmt.pix.width||m_height!=fmt.fmt.pix.height){
@@ -588,10 +588,10 @@ int videoV4L2 :: startTransfer(int format)
   m_image.image.reallocate();
   
   debugPost("v4l2: format: %c%c%c%c -> %d", 
-       (char)(m_gotFormat),
-       (char)(m_gotFormat>>8),
-       (char)(m_gotFormat>>16),
-       (char)(m_gotFormat>>24),
+       static_cast<char>(m_gotFormat),
+       static_cast<char>(m_gotFormat>>8),
+       static_cast<char>(m_gotFormat>>16),
+       static_cast<char>(m_gotFormat>>24),
        m_reqFormat);
   switch(m_gotFormat){
   case V4L2_PIX_FMT_GREY  : m_colorConvert=(m_reqFormat!=GL_LUMINANCE); break;
@@ -714,9 +714,9 @@ int videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
   return 0;
 }
 
-int videoV4L2 :: setNorm(char*norm)
+int videoV4L2 :: setNorm(const char*norm)
 {
-  char c=*norm;
+  const char c=*norm;
   int i_norm=-1;
 
   switch (c){
@@ -759,7 +759,7 @@ int videoV4L2 :: setDevice(int d)
   //  verbose(1, "new device set %d", m_devicenum);
   return 0;
 }
-int videoV4L2 :: setDevice(char*name)
+int videoV4L2 :: setDevice(const char*name)
 {
   m_devicenum=-1;
   m_devicename=name;

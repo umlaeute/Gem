@@ -82,7 +82,7 @@ void pix_levels :: processYUVImage(imageStruct &image)
     nWidth = image.xsize*image.csize/4;
     nHeight = image.ysize;
     
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
@@ -90,7 +90,7 @@ void pix_levels :: processYUVImage(imageStruct &image)
     myImage.type  = image.type;
     myImage.format=image.format;
     myImage.reallocate();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
 
     if(m_DoAuto)Pete_Levels_CalculateAutoLevels(GL_RGBA);
     Pete_Levels_SetupCFSettings();
@@ -108,7 +108,7 @@ void pix_levels :: processRGBAImage(imageStruct &image)
     nWidth = image.xsize*image.csize/4;
     nHeight = image.ysize;
 
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
@@ -116,7 +116,7 @@ void pix_levels :: processRGBAImage(imageStruct &image)
     myImage.type  = image.type;
     myImage.format=image.format;
     myImage.reallocate();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
 
     if(m_DoAuto)Pete_Levels_CalculateAutoLevels(GL_RGBA);
     Pete_Levels_SetupCFSettings();
@@ -430,40 +430,40 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour) {
 
 	const int nAlphaHigh=(nCurrentSlot+1);
 
-	m_RedInputFloor=(float)(nRedLow);
+	m_RedInputFloor=static_cast<float>(nRedLow);
 	if (nRedLow!=nRedHigh){
-		m_RedInputCeiling=(float)(nRedHigh);
+		m_RedInputCeiling=static_cast<float>(nRedHigh);
 	} else if (nRedHigh<255) {
-		m_RedInputCeiling=(float)(nRedHigh+1);
+		m_RedInputCeiling=static_cast<float>(nRedHigh+1);
 	} else {
-		m_RedInputCeiling=(float)(nRedHigh-1);
+		m_RedInputCeiling=static_cast<float>(nRedHigh-1);
 	}
 
-	m_GreenInputFloor=(float)(nGreenLow);
+	m_GreenInputFloor=static_cast<float>(nGreenLow);
 	if (nGreenLow!=nGreenHigh){
-		m_GreenInputCeiling=(float)(nGreenHigh);
+		m_GreenInputCeiling=static_cast<float>(nGreenHigh);
 	} else if (nGreenHigh<255) {
-		m_GreenInputCeiling=(float)(nGreenHigh+1);
+		m_GreenInputCeiling=static_cast<float>(nGreenHigh+1);
 	} else {
-		m_GreenInputCeiling=(float)(nGreenHigh-1);
+		m_GreenInputCeiling=static_cast<float>(nGreenHigh-1);
 	}
 
-	m_BlueInputFloor=(float)(nBlueLow);
+	m_BlueInputFloor=static_cast<float>(nBlueLow);
 	if (nBlueLow!=nBlueHigh){
-		m_BlueInputCeiling=(float)(nBlueHigh);
+		m_BlueInputCeiling=static_cast<float>(nBlueHigh);
 	} else if (nBlueHigh<255) {
-		m_BlueInputCeiling=(float)(nBlueHigh+1);
+		m_BlueInputCeiling=static_cast<float>(nBlueHigh+1);
 	} else {
-		m_BlueInputCeiling=(float)(nBlueHigh-1);
+		m_BlueInputCeiling=static_cast<float>(nBlueHigh-1);
 	}
 
-	m_AlphaInputFloor=(float)(nAlphaLow);
+	m_AlphaInputFloor=static_cast<float>(nAlphaLow);
 	if (nAlphaLow!=nAlphaHigh){
-		m_AlphaInputCeiling=(float)(nAlphaHigh);
+		m_AlphaInputCeiling=static_cast<float>(nAlphaHigh);
 	} else if (nAlphaHigh<255) {
-		m_AlphaInputCeiling=(float)(nAlphaHigh+1);
+		m_AlphaInputCeiling=static_cast<float>(nAlphaHigh+1);
 	} else {
-		m_AlphaInputCeiling=(float)(nAlphaHigh-1);
+		m_AlphaInputCeiling=static_cast<float>(nAlphaHigh-1);
 	}
 
 	int nLowLuminance = 
@@ -481,8 +481,8 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour) {
 			nLowLuminance=clampFunc(nHighLuminance-1,0,255);
 		}
 	}
-	m_UniformInputFloor=(float)(nLowLuminance);
-	m_UniformInputCeiling=(float)(nHighLuminance);
+	m_UniformInputFloor=static_cast<float>(nLowLuminance);
+	m_UniformInputCeiling=static_cast<float>(nHighLuminance);
 }
 
 void pix_levels :: Pete_ChannelFunction_Render() {

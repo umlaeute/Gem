@@ -4,15 +4,15 @@
 //
 // This object is an based on the DotTV effect from EffecTV
 // Originally written by Fukuchi Kentaro
-// Copyright (C) 2001 FUKUCHI Kentaro                              
+// Copyright (c) 2001 FUKUCHI Kentaro                              
 //
 // ported by tigital@mac.com
 //
 // Implementation file
 //
 //    Copyright (c) 1997-2000 Mark Danks.
-//    Copyleft  (l) 2001 IOhannes m zmölnig
-//    Copyleft (l) 2003 James Tittle
+//    Copyleft  (c) 2001 IOhannes m zmölnig
+//    Copyleft  (c) 2003 James Tittle
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -90,10 +90,10 @@ void pix_dot :: makePattern(int format)
 	    for(x=0; x<dot_hsize; x++) {
 	      c = 0;
 	      for(u=0; u<4; u++) {
-		p = (double)u/4.0 + y;
+		p = static_cast<double>(u)/4.0 + y;
 		p = p*p;
 		for(v=0; v<4; v++) {
-		  q = (double)v/4.0 + x;
+		  q = static_cast<double>(v)/4.0 + x;
 		  if(p+q*q<r) {
 		    c++;
 		  }
@@ -113,17 +113,17 @@ void pix_dot :: makePattern(int format)
       for (i=0; i<DOTMAX; i++)
 	{
 	  /* Generated pattern is a quadrant of a disk. */
-	  pat = ((unsigned char*)pattern) + (i+1) * dot_hsize * dot_hsize - 1;
+	  pat = (reinterpret_cast<unsigned char*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
 	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
 	  r = r*r;
 	  for(y=0; y<dot_hsize; y++) {
 	    for(x=0; x<dot_hsize; x++) {
 	      c = 0;
 	      for(u=0; u<4; u++) {
-		p = (double)u/4.0 + y;
+		p = static_cast<double>(u)/4.0 + y;
 		p = p*p;
 		for(v=0; v<4; v++) {
-		  q = (double)v/4.0 + x;
+		  q = static_cast<double>(v)/4.0 + x;
 		  if(p+q*q<r) {
 		    c++;
 		  }
@@ -145,17 +145,17 @@ void pix_dot :: makePattern(int format)
       for (i=0; i<DOTMAX; i++)
 	{
 	  /* Generated pattern is a quadrant of a disk. */
-	  pat = ((U16*)pattern) + (i+1) * dot_hsize * dot_hsize - 1;
+	  pat = (reinterpret_cast<U16*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
 	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
 	  r = r*r;
 	  for(y=0; y<dot_hsize; y++) {
 	    for(x=0; x<dot_hsize; x++) {
 	      c = 0;
 	      for(u=0; u<4; u++) {
-		p = (double)u/4.0 + y;
+		p = static_cast<double>(u)/4.0 + y;
 		p = p*p;
 		for(v=0; v<4; v++) {
-		  q = (double)v/4.0 + x;
+		  q = static_cast<double>(v)/4.0 + x;
 		  if(p+q*q<r) {
 		    c++;
 		  }
@@ -220,7 +220,7 @@ void pix_dot :: drawDotYUV(int xx, int yy, unsigned char c, U16 *dest)
   U16 *pat;
 
   c = (c>>(8-DOTDEPTH));
-  pat = ((U16*)pattern) + c * dot_hsize * dot_hsize;
+  pat = (reinterpret_cast<U16*>(pattern)) + c * dot_hsize * dot_hsize;
   dest = dest + yy * dot_size * m_xsize + xx * dot_size;
   for(y=0; y<dot_hsize; y++) {
     for(x=0; x<dot_hsize; x++) {
@@ -313,7 +313,7 @@ unsigned char pix_dot :: inline_RGB2Y(int rgb)
 /////////////////////////////////////////////////////////
 void pix_dot :: processRGBAImage(imageStruct &image)
 {
-  U32 *src = (U32*)image.data;
+  U32 *src = reinterpret_cast<U32*>(image.data);
   U32 *dest;
 
   int x, y, sx, sy;
@@ -326,7 +326,7 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 	m_csize = image.csize;
 
 	if(m_useScale){
-	  dot_size = (int)(8 * m_scale);
+	  dot_size = static_cast<int>(8 * m_scale);
 	  dot_size = dot_size & 0xfe;
 	  if(dot_size==0)dot_size=2;
 	  dots_width = m_xsize / dot_size;
@@ -367,7 +367,7 @@ void pix_dot :: processRGBAImage(imageStruct &image)
     alreadyInit = 1;
   }
 
-  dest = (U32*)myImage.data;
+  dest = reinterpret_cast<U32*>(myImage.data);
   for ( y=0; y<dots_height; y++) {
     sy = sampy[y];
     for ( x=0; x<dots_width; x++){
@@ -386,7 +386,7 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 void pix_dot :: processYUVImage(imageStruct &image)
 {
     U16 *dest;
-    U16 *src = (U16*)image.data;
+    U16 *src = reinterpret_cast<U16*>(image.data);
     int x, y, sx, sy;
     int luma = 0;
     int luma2 = 0;
@@ -400,7 +400,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
         m_ysize = image.ysize;
 	m_csize = image.csize;
 
-        dot_size = (int)(8 * m_scale);
+        dot_size = static_cast<int>(8 * m_scale);
         dot_size = dot_size & 0xfe;
         dot_hsize = dot_size / 2;
         dots_width = m_xsize / dot_size;
@@ -434,7 +434,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
     }
      
 
-    dest = (U16*)myImage.data;
+    dest = reinterpret_cast<U16*>(myImage.data);
 
     for ( y=0; y<dots_height; y++) {
         sy = sampy[y];
@@ -469,7 +469,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
         m_ysize = image.ysize;
 	m_csize = image.csize;
 
-        dot_size = (int)(8 * m_scale);
+        dot_size = static_cast<int>(8 * m_scale);
         dot_size = dot_size & 0xfe;
         dot_hsize = dot_size / 2;
         dots_width = m_xsize / dot_size;
@@ -556,9 +556,9 @@ void pix_dot :: yuv_init()
     int i;
     if(!initialized) {
         for(i=20; i<256; i++) {
-	  R2Y[i] =  (int)(0.257f*i);
-	  G2Y[i] =  (int)(0.504f*i);
-	  B2Y[i] =  (int)(0.098f*i);
+	  R2Y[i] =  static_cast<int>(0.257f*i);
+	  G2Y[i] =  static_cast<int>(0.504f*i);
+	  B2Y[i] =  static_cast<int>(0.098f*i);
         }
         initialized = 1;
     }
@@ -619,7 +619,7 @@ void pix_dot :: obj_setupCallback(t_class *classPtr)
 
 void pix_dot :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->sizeMess((int)width, (int)height);  
+  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));  
 }
 
 void pix_dot :: scaleMessCallback(void *data, t_floatarg state)

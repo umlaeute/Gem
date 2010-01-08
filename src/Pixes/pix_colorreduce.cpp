@@ -101,16 +101,16 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
 	Pete_ColorReduce_Init();
 	init = 1;
     }
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.csize = image.csize;
     myImage.type  = image.type;
     myImage.reallocate();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
 	
-    const int nColors=(int)m_TargetColorCount;
+    const int nColors=static_cast<int>(m_TargetColorCount);
     const float PalettePersistence=m_PalettePersistence;
     const float BoundarySmoothing=m_BoundarySmoothing;
 
@@ -278,15 +278,15 @@ inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_C
 
 		const float OneMinusLerpValue=(1.0f-WeightedLerpValue);
 
-		const int nSmoothedRed=(int)(
+		const int nSmoothedRed=static_cast<int>(
 			(nClosestRed*WeightedLerpValue)+
 			(nNextClosestRed*OneMinusLerpValue));
 
-		const int nSmoothedGreen=(int)(
+		const int nSmoothedGreen=static_cast<int>(
 			(nClosestGreen*WeightedLerpValue)+
 			(nNextClosestGreen*OneMinusLerpValue));
 
-		const int nSmoothedBlue=(int)(
+		const int nSmoothedBlue=static_cast<int>(
 			(nClosestBlue*WeightedLerpValue)+
 			(nNextClosestBlue*OneMinusLerpValue));
 
@@ -526,6 +526,6 @@ void pix_colorreduce :: persistCallback(void *data, t_floatarg m_PalettePersiste
 
 void pix_colorreduce :: smoothCallback(void *data, t_floatarg m_BoundarySmoothing)
 {
-  GetMyClass(data)->m_BoundarySmoothing=!(!(int)m_BoundarySmoothing);  
+  GetMyClass(data)->m_BoundarySmoothing=!(!static_cast<int>(m_BoundarySmoothing));  
   GetMyClass(data)->setPixModified();
 }

@@ -169,19 +169,21 @@ bool filmQT :: open(char*filename, int format) {
 
 
   m_curFrame = -1;
-  m_numTracks = (int)GetMovieTrackCount(m_movie);
+  m_numTracks = static_cast<int>(GetMovieTrackCount(m_movie));
 
   // Get the length of the movie
-  movieDur = (long)GetMovieDuration(m_movie);
-  movieScale = (long)GetMovieTimeScale(m_movie);
+  movieDur = static_cast<long>(GetMovieDuration(m_movie));
+  movieScale = static_cast<long>(GetMovieTimeScale(m_movie));
 
   whichMediaType = VisualMediaCharacteristic;
 
   // shouldn't the flags be OR'ed instead of ADDed ? (jmz)
   flags = nextTimeMediaSample | nextTimeEdgeOK;
 
-  GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0,
-			       (Fixed)1<<16, NULL, &duration);
+  GetMovieNextInterestingTime( m_movie, flags, 
+			       static_cast<TimeValue>(1), 
+			       &whichMediaType, 0,
+			       static_cast<Fixed>(1<<16), NULL, &duration);
   m_numFrames = movieDur/duration;
 
   // Get the bounds for the movie
@@ -281,7 +283,7 @@ int filmQT :: changeImage(int imgNum, int trackNum){
    * this is good because the decoder-class need not care about auto-play anylonger
    * this is bad, because we might do it more sophisticated in the decoder-class
    */
-  m_movieTime = (long)(m_curFrame * duration);
+  m_movieTime = static_cast<long>(m_curFrame * duration);
 
   return FILM_ERROR_SUCCESS;
 }

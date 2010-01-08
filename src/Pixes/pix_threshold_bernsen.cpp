@@ -211,9 +211,9 @@ void pix_threshold_bernsen :: obj_setupCallback(t_class *classPtr)
 }
 void pix_threshold_bernsen :: tilesMessCallback(void *data, t_float w, t_float h)
 {
-  GetMyClass(data)->tilesMess((int)w, int(h));
+  GetMyClass(data)->tilesMess(static_cast<int>(w), static_cast<int>(h));
 }
 void pix_threshold_bernsen :: contrastMessCallback(void *data, t_float c)
 {
-  GetMyClass(data)->contrastMess((int)(c*255.f));
+  GetMyClass(data)->contrastMess(static_cast<int>(c*255.));
 }

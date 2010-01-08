@@ -60,13 +60,13 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
     if (!init) {
 	init = 1;
     }
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
     
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
 
     const int nNumPixels=nWidth*nHeight;
 
@@ -106,12 +106,12 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 	    pCurrentOutput+=(nWidth*nLineGap);
 	}
     } else {
-      if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<(int)(nWidth*sizeof(U32*)) ){
+      if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ){
 	free(hPreviousLineHeights);
 	hPreviousLineHeights_size=nWidth*sizeof(U32*);
 	hPreviousLineHeights=malloc(hPreviousLineHeights_size);	
       }
-	U32** ppPreviousLineHeights=(U32**)Pete_LockHandle(hPreviousLineHeights);
+      U32** ppPreviousLineHeights=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights));
 	if (ppPreviousLineHeights==NULL)return;
 
 	Pete_ZeroMemory(ppPreviousLineHeights,(nWidth*sizeof(U32*)));
@@ -260,13 +260,13 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
     if (!init) {
 	init = 1;
     }
-    U8* pSource = (U8*)image.data;
+    U8* pSource = static_cast<U8*>(image.data);
     
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    U8* pOutput = (U8*)myImage.data;
+    U8* pOutput = static_cast<U8*>(myImage.data);
 
     const int nNumPixels=nWidth*nHeight;
 
@@ -305,12 +305,12 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
 	    pCurrentOutput+=(nWidth*nLineGap);
 	}
     } else {
-      if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<(int)(nWidth*sizeof(U8*)) ){
+      if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U8*)) ){
 	free(hPreviousLineHeights);
 	hPreviousLineHeights_size=nWidth*sizeof(U8*);
 	hPreviousLineHeights=malloc(hPreviousLineHeights_size);	
       }
-	U8** ppPreviousLineHeights=(U8**)Pete_LockHandle(hPreviousLineHeights);
+      U8** ppPreviousLineHeights=static_cast<U8**>(Pete_LockHandle(hPreviousLineHeights));
 	if (ppPreviousLineHeights==NULL)return;
 
 	Pete_ZeroMemory(ppPreviousLineHeights,(nWidth*sizeof(U8*)));
@@ -433,14 +433,14 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
     if (!init) {
 		init = 1;
     }
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
     
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     myImage.setBlack();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
 
     const int nNumPixels=nWidth*nHeight;
 
@@ -471,7 +471,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 				
 				U32* pOffsetOutput1=(pCurrentOutput+(nOffset1*nWidth));
 
-				if ((pOffsetOutput1<pOutputEnd) && (int)(pOffsetOutput1>=pOutput)) {
+				if ((pOffsetOutput1<pOutputEnd) && static_cast<int>(pOffsetOutput1>=pOutput)) {
 					if (!(abs(nOffset1)>>1)){
 						*pOffsetOutput1  = *pOffsetOutput1 & 0x000000ff;
 						*pOffsetOutput1 |= SourceColour & 0xffffff00;
@@ -483,7 +483,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 				
 				U32* pOffsetOutput2=(pCurrentOutput)+(nOffset2*nWidth);
 
-				if ((pOffsetOutput2<pOutputEnd) && (int)(pOffsetOutput2>=pOutput)) {
+				if ((pOffsetOutput2<pOutputEnd) && static_cast<int>(pOffsetOutput2>=pOutput)) {
 					if (!(abs(nOffset2)>>1)){
 						*pOffsetOutput2  = *pOffsetOutput2 & 0x00ff0000;
 						*pOffsetOutput2 |= SourceColour & 0xff00ffff;
@@ -500,22 +500,22 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 			pCurrentOutput+=(nWidth*nLineGap);
 		}
     } else {
-		if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<(int)(nWidth*sizeof(U32*)) ){
+		if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ){
 			free(hPreviousLineHeights);
 			hPreviousLineHeights_size=nWidth*sizeof(U32*);
 			hPreviousLineHeights=malloc(hPreviousLineHeights_size);	
 		}
-		U32** ppPreviousLineHeights=(U32**)Pete_LockHandle(hPreviousLineHeights);
+		U32** ppPreviousLineHeights=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights));
 		if (ppPreviousLineHeights==NULL)return;
 
 		Pete_ZeroMemory(ppPreviousLineHeights,(nWidth*sizeof(U32*)));
 		
-		if (hPreviousLineHeights2 ==NULL || hPreviousLineHeights_size<(int)(nWidth*sizeof(U32*)) ){
+		if (hPreviousLineHeights2 ==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ){
 			free(hPreviousLineHeights2);
 			hPreviousLineHeights_size=nWidth*sizeof(U32*);
 			hPreviousLineHeights2=malloc(hPreviousLineHeights_size);	
 		}
-		U32** ppPreviousLineHeights2=(U32**)Pete_LockHandle(hPreviousLineHeights2);
+		U32** ppPreviousLineHeights2=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights2));
 		if (ppPreviousLineHeights2 ==NULL)return;
 
 		Pete_ZeroMemory(ppPreviousLineHeights2,(nWidth*sizeof(U32*)));
@@ -674,7 +674,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 			const U32 SourceColour=*pPreviousOffsetOutput;
 			U32* pOffsetOutput1=pCurrentOutput;
 
-			if ((pOffsetOutput1<pOutputEnd) && (int)(pOffsetOutput1>=pOutput)&&
+			if ((pOffsetOutput1<pOutputEnd) && static_cast<int>(pOffsetOutput1>=pOutput)&&
 								(pOffsetOutput1>pPreviousOffsetOutput)) {
 						*pOffsetOutput1  = *pOffsetOutput1 & 0x000000ff;
 						*pOffsetOutput1 |= SourceColour & 0xffffff00;
@@ -682,7 +682,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 				
 			U32* pOffsetOutput2=(pCurrentOutput)+(nOffset2*nWidth);
 
-			if ((pOffsetOutput2<pOutputEnd) && (int)(pOffsetOutput2>=pOutput)) {
+			if ((pOffsetOutput2<pOutputEnd) && static_cast<int>(pOffsetOutput2>=pOutput)) {
 						*pOffsetOutput2  = *pOffsetOutput2 & 0x00ff0000;
 						*pOffsetOutput2 |= SourceColour & 0xff00ffff;
 				}

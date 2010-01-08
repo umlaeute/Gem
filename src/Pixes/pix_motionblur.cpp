@@ -206,15 +206,15 @@ void pix_motionblur :: processYUVImage(imageStruct &image)
       v *= imageGain;
       v1 *= rightGain;
 
-      loadU = (int)image.data[src]; 
-      loadU1 = (int)saved[src]; 
-      loadY1 = (int)image.data[src+1] ;
-      loadY1a = (int)saved[src+1];
+      loadU = static_cast<int>(image.data[src]); 
+      loadU1 = static_cast<int>(saved[src]); 
+      loadY1 = static_cast<int>(image.data[src+1]);
+      loadY1a = static_cast<int>(saved[src+1]);
 
-      loadV = (int)image.data[src+2];
-      loadV1 = (int)saved[src+2]; 
-      loadY2 = (int)image.data[src+3];
-      loadY2a = (int)saved[src+3] ;
+      loadV = static_cast<int>(image.data[src+2]);
+      loadV1 = static_cast<int>(saved[src+2]); 
+      loadY2 = static_cast<int>(image.data[src+3]);
+      loadY2a = static_cast<int>(saved[src+3]);
       
       y1a = y1a>>8;
       y2a = y2a>>8;
@@ -263,8 +263,8 @@ void pix_motionblur :: processMMX(imageStruct &image)
   __m64*pixels=(__m64*)image.data;
   __m64*old=(__m64*)m_savedImage.data;
 
-  __m64 newGain = _mm_set1_pi16((short)m_blur0);
-  __m64 oldGain = _mm_set1_pi16((short)m_blur1);
+  __m64 newGain = _mm_set1_pi16(static_cast<short>(m_blur0));
+  __m64 oldGain = _mm_set1_pi16(static_cast<short>(m_blur1));
   __m64 null64 = _mm_setzero_si64();
 
   __m64 newpix1, newpix2, oldpix1, oldpix2;
@@ -489,14 +489,14 @@ void pix_motionblur :: processYUVAltivec(imageStruct &image)
 void pix_motionblur :: motionblurMessage(int argc, t_atom*argv){
   switch(argc){
   case 1:
-    m_blur1=(int)(256.f*atom_getfloat(argv));
+    m_blur1=static_cast<int>(256.f*atom_getfloat(argv));
     if(m_blur1<0)m_blur1=0;if(m_blur1>256)m_blur1=256;
     m_blur0=256-m_blur1;
     break;
   case 2:
-    m_blur1=(int)(256.f*atom_getfloat(argv));
+    m_blur1=static_cast<int>(256.f*atom_getfloat(argv));
     if(m_blur1<0)m_blur1=0;if(m_blur1>256)m_blur1=256;
-    m_blur0=(int)(256.f*atom_getfloat(argv+1));
+    m_blur0=static_cast<int>(256.f*atom_getfloat(argv+1));
     if(m_blur0<0)m_blur0=0;if(m_blur0>256)m_blur0=256;
     break;
   default:

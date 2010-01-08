@@ -38,10 +38,10 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIR, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_tIIR :: pix_tIIR(t_floatarg fb_numf=1, t_floatarg ff_numf=1)
+pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf)
 { 
-  int fb_num = (fb_numf>0)?(int)fb_numf:0;
-  int ff_num = (ff_numf>0)?(int)ff_numf:0;
+  int fb_num = (fb_numf>0.)?static_cast<int>(fb_numf):0;
+  int ff_num = (ff_numf>0.)?static_cast<int>(ff_numf):0;
   ff_count=ff_num;fb_count=fb_num;
   fb_num++;ff_num++;
   m_inlet = new t_inlet*[fb_num+ff_num];
@@ -132,13 +132,13 @@ void pix_tIIR :: processImage(imageStruct &image)
   f=m_fb[0];
   source=image.data;
   dest=m_buffer.data+m_counter*imagesize;
-  int factor=(int)(f*256);
+  int factor=static_cast<int>(f*256.);
   i=imagesize;while(i--)    *dest++ = (unsigned char)((factor**source++)>>8);
   j=fb_count;while(j--){
     f=m_fb[j+1];
     source=m_buffer.data+imagesize*((m_bufnum+m_counter-j-1)%m_bufnum);
     dest=m_buffer.data+m_counter*imagesize;
-    factor=(int)(256*f);
+    factor=static_cast<int>(f*256.);
     if (factor!=0){
       i=imagesize;while(i--)*dest++ += (unsigned char)((factor**source++)>>8);
     }
@@ -148,13 +148,13 @@ void pix_tIIR :: processImage(imageStruct &image)
   f=m_ff[0];
   source=m_buffer.data+m_counter*imagesize;
   dest=image.data;
-  factor=(int)(f*256);
+  factor=static_cast<int>(f*256.);
   i=imagesize;while(i--)*dest++ = (unsigned char)((factor**source++)>>8);
   j=ff_count;while(j--){
     f=m_ff[j+1];
     dest=image.data;
     source=m_buffer.data+imagesize*((m_bufnum+m_counter-j-1)%m_bufnum);
-    factor=(int)(f*256);
+    factor=static_cast<int>(f*256.);
     if (factor!=0){
       i=imagesize;while(i--)*dest++ += (unsigned char)((factor**source++)>>8);
     }
@@ -173,10 +173,10 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   short *s_fb = new short[fb_count+1];
 
   i=ff_count+1;while(i--){
-    s_ff[i]=(short)(m_ff[i]*256.+0.5);
+    s_ff[i]=static_cast<short>(m_ff[i]*256.+0.5);
   }
   i=fb_count+1;while(i--){
-    s_fb[i]=(short)(m_fb[i]*256.+0.5);
+    s_fb[i]=static_cast<short>(m_fb[i]*256.+0.5);
   }
 
 

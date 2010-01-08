@@ -71,9 +71,9 @@ void pix_subtract :: processRGBA_Gray(imageStruct &image, imageStruct &right)
   
   while(datasize--)    {
     register int alpha = *rightPix++;
-    leftPix[chRed]   = CLAMP_LOW((int)leftPix[chRed]   - alpha);
-    leftPix[chGreen] = CLAMP_LOW((int)leftPix[chGreen] - alpha);
-    leftPix[chBlue]  = CLAMP_LOW((int)leftPix[chBlue]  - alpha);
+    leftPix[chRed]   = CLAMP_LOW(static_cast<int>(leftPix[chRed])   - alpha);
+    leftPix[chGreen] = CLAMP_LOW(static_cast<int>(leftPix[chGreen]) - alpha);
+    leftPix[chBlue]  = CLAMP_LOW(static_cast<int>(leftPix[chBlue])  - alpha);
     leftPix += 4;
     }
 }
@@ -318,7 +318,7 @@ void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right){
     leftPix+=8;rightPix+=8;
   }
   while(restsize--){
-    *leftPix = CLAMP_LOW((int)(*leftPix - *rightPix));
+    *leftPix = CLAMP_LOW(static_cast<int>(*leftPix - *rightPix));
     leftPix++; rightPix++;
   }
 }

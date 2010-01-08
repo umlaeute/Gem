@@ -57,13 +57,13 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
     nWidth = image.xsize;
     nHeight = image.ysize;
     
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
     
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
@@ -230,7 +230,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
     nHeight = image.ysize;
 	
     const unsigned char chroma = 128;
-    pSource = (U32*)image.data;
+    pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
@@ -239,7 +239,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
     myImage.type = image.type;
   //  myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = (U32*)myImage.data;
+    pOutput = reinterpret_cast<U32*>(myImage.data);
     
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
@@ -678,7 +678,7 @@ void pix_halftone :: Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTable
       }break;
       default: {
 	assert(false);
-	nDotFuncResult=(int)scale;
+	nDotFuncResult=static_cast<int>(scale);
       }break;
       }
       *pCurrentDotFunc=nDotFuncResult;
@@ -1205,7 +1205,7 @@ unsigned char pix_halftone :: Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,
   }
 
   const int nTotalSamples=(nDeltaX*nDeltaY);
-  const int nGreyAverage=(int)(nGreyTotal/nTotalSamples);
+  const int nGreyAverage=static_cast<int>(nGreyTotal/nTotalSamples);
   return nGreyAverage;
 }
 
@@ -1231,7 +1231,7 @@ void pix_halftone :: obj_setupCallback(t_class *classPtr)
 
 void pix_halftone :: sizeCallback(void *data, t_floatarg m_CellSize)
 {
-  int size=(int)m_CellSize;
+  int size=static_cast<int>(m_CellSize);
   if(size<1){
     GetMyClass(data)->error("size must not be < 0");
     size=1;
@@ -1246,7 +1246,7 @@ void pix_halftone :: sizeCallback(void *data, t_floatarg m_CellSize)
 
 void pix_halftone :: styleCallback(void *data, t_floatarg m_Style)
 {
-  int style=(int)m_Style;
+  int style=static_cast<int>(m_Style);
   if(style<0||style>4){
     GetMyClass(data)->error("style must be 0, 1, 2, 3 or 4");
     return;
@@ -1256,7 +1256,7 @@ void pix_halftone :: styleCallback(void *data, t_floatarg m_Style)
 }
 void pix_halftone :: smoothCallback(void *data, t_floatarg m_Smoothing)
 {
-  GetMyClass(data)->m_Smoothing=CLAMP((float)m_Smoothing);  
+  GetMyClass(data)->m_Smoothing=CLAMP(m_Smoothing);  
   GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: angleCallback(void *data, t_floatarg m_Angle)
@@ -1266,7 +1266,7 @@ void pix_halftone :: angleCallback(void *data, t_floatarg m_Angle)
 }
 void pix_halftone :: smoothNCallback(void *data, t_floatarg m_Smoothing)
 {
-  GetMyClass(data)->m_Smoothing=CLAMP((float)255.*m_Smoothing);  
+  GetMyClass(data)->m_Smoothing=CLAMP(255.f*m_Smoothing);  
   GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: angleDEGCallback(void *data, t_floatarg m_Angle)

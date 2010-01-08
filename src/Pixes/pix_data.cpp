@@ -56,30 +56,30 @@ pix_data :: ~pix_data()
 /////////////////////////////////////////////////////////
 void pix_data :: trigger()
 {
-	// if we don't have a "right hand" image, then just return
-	if (!m_pixRight || !m_pixRight->image.data)
-		return;
+  // if we don't have a "right hand" image, then just return
+  if (!m_pixRight || !m_pixRight->image.data)
+    return;
 
-	int xPos = (int)(m_position[0] * (float)m_pixRight->image.xsize);
-	int yPos = (int)(m_position[1] * (float)m_pixRight->image.ysize);
-  float red, green, blue, grey;
+  int xPos = static_cast<int>(m_position[0] * m_pixRight->image.xsize);
+  int yPos = static_cast<int>(m_position[1] * m_pixRight->image.ysize);
+  t_float red, green, blue, grey;
   unsigned char r, g, b, G;
 
   m_pixRight->image.getRGB(xPos, yPos, &r, &g, &b);
   m_pixRight->image.getGrey(xPos, yPos, &G);
 
-  red   = r / 255.f;
-  green = g / 255.f;
-  blue  = b / 255.f;
-  grey  = G / 255.f;
+  red   = r / 255.;
+  green = g / 255.;
+  blue  = b / 255.;
+  grey  = G / 255.;
   
-	t_atom atom[3];
-	// send out the color information
-	outlet_float(m_grayOut, (t_float)grey);
-	SETFLOAT(&atom[0], (t_float)red);
-	SETFLOAT(&atom[1], (t_float)green);
-	SETFLOAT(&atom[2], (t_float)blue);
-	outlet_list(m_colorOut, gensym("list"), 3, atom);	
+  t_atom atom[3];
+  // send out the color information
+  outlet_float(m_grayOut, grey);
+  SETFLOAT(&atom[0], red);
+  SETFLOAT(&atom[1], green);
+  SETFLOAT(&atom[2], blue);
+  outlet_list(m_colorOut, gensym("list"), 3, atom);	
 }
 
 /////////////////////////////////////////////////////////
@@ -100,9 +100,9 @@ void pix_data :: triggerMessCallback(void *data)
 }
 void pix_data :: xPosCallback(void *data, t_floatarg val)
 {
-    GetMyClass(data)->xPos(FLOAT_CLAMP((float)val));
+    GetMyClass(data)->xPos(FLOAT_CLAMP(val));
 }
 void pix_data :: yPosCallback(void *data, t_floatarg val)
 {
-    GetMyClass(data)->yPos(FLOAT_CLAMP((float)val));
+    GetMyClass(data)->yPos(FLOAT_CLAMP(val));
 }

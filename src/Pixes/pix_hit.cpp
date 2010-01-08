@@ -93,10 +93,10 @@ void pix_hit :: processImage(imageStruct &image)
       switch (hit_areas[i].type)  {
       case rectangle:
         {
-          int xPos = (int)(hit_areas[i].x * (float)image.xsize);
-          int yPos = (int)(hit_areas[i].y * (float)image.ysize);
-          int Width = (int)(hit_areas[i].width * (float)image.xsize);
-          int Height = (int)(hit_areas[i].height * (float)image.ysize);
+          int xPos = static_cast<int>(hit_areas[i].x * static_cast<float>(image.xsize));
+          int yPos = static_cast<int>(hit_areas[i].y * static_cast<float>(image.ysize));
+	  int Width = static_cast<int>(hit_areas[i].width * static_cast<float>(image.xsize));
+          int Height = static_cast<int>(hit_areas[i].height * static_cast<float>(image.ysize));
 					
           go_on=true;
           bool hit=false;
@@ -134,8 +134,8 @@ void pix_hit :: processImage(imageStruct &image)
               buffer[i]=1;
               // TODO: build list with |i 1(
               t_atom atom[2];
-              SETFLOAT(&atom[0], (t_int)i);
-              SETFLOAT(&atom[1], (t_int)1);
+              SETFLOAT(&atom[0], static_cast<t_float>(i));
+              SETFLOAT(&atom[1], static_cast<t_float>(1));
               outlet_list(m_hits, gensym("list"), 2, atom);
             }
           } else {
@@ -143,8 +143,8 @@ void pix_hit :: processImage(imageStruct &image)
               buffer[i]=0;
               // TODO: build list with |i 0(
               t_atom atom[2];
-              SETFLOAT(&atom[0], (t_int)i);
-              SETFLOAT(&atom[1], (t_int)0);
+              SETFLOAT(&atom[0], static_cast<t_float>(i));
+              SETFLOAT(&atom[1], static_cast<t_float>(0));
               outlet_list(m_hits, gensym("list"), 2, atom);
             }
           }
@@ -171,10 +171,10 @@ void pix_hit :: processImage(imageStruct &image)
             and 
             x = (y-y1(x2-x1))/(y2-y1) - x1
           */
-          int x1 = (int)(hit_areas[i].x * (float)image.xsize);
-          int y1 = (int)(hit_areas[i].y * (float)image.ysize);
-          int x2 = (int)(hit_areas[i].width * (float)image.xsize);
-          int y2 = (int)(hit_areas[i].height * (float)image.ysize);					
+          int x1 = static_cast<int>(hit_areas[i].x * static_cast<float>(image.xsize));
+          int y1 = static_cast<int>(hit_areas[i].y * static_cast<float>(image.ysize));
+          int x2 = static_cast<int>(hit_areas[i].width * static_cast<float>(image.xsize));
+          int y2 = static_cast<int>(hit_areas[i].height * static_cast<float>(image.ysize));					
 					
           int diffx = abs(x2-x1);
           int diffy = abs(y2-y1);
@@ -206,13 +206,13 @@ void pix_hit :: processImage(imageStruct &image)
                 src[position+2]=~src[position+2];
               }
               if(getGreyValue(image.format, data) >= minimum_threshold) {
-                float where = (float) ((float)counter/(float)diffx);
+                float where = (static_cast<float>(counter)/static_cast<float>(diffx));
                 // hit!
                 if (fabs(buffer[i] - where) > min_distance) {
 									
                   t_atom atom[2];
-                  SETFLOAT(&atom[0], (t_int)i);
-                  SETFLOAT(&atom[1], (t_float) where);
+                  SETFLOAT(&atom[0], static_cast<t_float>(i));
+                  SETFLOAT(&atom[1], static_cast<t_float>(where));
                   outlet_list(m_hits, gensym("list"), 2, atom);
                   buffer[i]=where;
                 }
@@ -243,12 +243,12 @@ void pix_hit :: processImage(imageStruct &image)
                 src[position+2]=~src[position+2];
               }
               if(getGreyValue(image.format, data) >= minimum_threshold) {
-                float where = (float) ((float)counter/(float)diffy);
+                float where = (static_cast<float>(counter)/static_cast<float>(diffy));
                 // hit!
                 if (fabs(buffer[i] - where) > min_distance) {
                   t_atom atom[2];
-                  SETFLOAT(&atom[0], (t_int)i);
-                  SETFLOAT(&atom[1], (t_float) where);
+                  SETFLOAT(&atom[0], static_cast<t_float>(i));
+                  SETFLOAT(&atom[1], static_cast<t_float>(where));
                   outlet_list(m_hits, gensym("list"), 2, atom);
                   buffer[i]=where;
                 }
@@ -417,18 +417,18 @@ void pix_hit :: obj_setupCallback(t_class *classPtr)
 
 void pix_hit :: thresholdCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->threshold(FLOAT_CLAMP((float)val));
+  GetMyClass(data)->threshold(FLOAT_CLAMP(val));
 }
 
 void pix_hit :: minimumCallback(void *data, t_floatarg val)
 {
-  int n = (int) FLOAT_CLAMP((float)val);
+  int n = static_cast<int>(FLOAT_CLAMP(val));
   GetMyClass(data)->minimum(n);
 }
 
 void pix_hit :: min_distanceCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->set_min_distance((float) FLOAT_CLAMP((float)val));
+  GetMyClass(data)->set_min_distance(FLOAT_CLAMP(val));
 }
 
 void pix_hit :: createLineCallback(void *data, t_symbol *sl, int argc, t_atom *argv)
@@ -488,11 +488,11 @@ void pix_hit :: moveCallback(void *data, t_symbol *sl, int argc, t_atom *argv)
 
 void pix_hit :: deleteCallback(void *data, t_floatarg id)
 {
-  GetMyClass(data)->del((int)id);
+  GetMyClass(data)->del(static_cast<int>(id));
 }
 
 void pix_hit :: showCallback(void *data, t_floatarg val)
 {
-  GetMyClass(data)->set_show((int)val);
+  GetMyClass(data)->set_show(static_cast<int>(val));
 }
 

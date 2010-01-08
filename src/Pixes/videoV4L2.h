@@ -120,9 +120,9 @@ class GEM_EXTERN videoV4L2 : public video {
   virtual int	    	setDimen(int x, int y, int leftmargin, int rightmargin,
                                  int topmargin, int bottommargin);
   virtual int	    	setChannel(int c, float f);
-  virtual int	    	setNorm(char*);
+  virtual int	    	setNorm(const char*);
   virtual int	    	setDevice(int);
-  virtual int	    	setDevice(char*);
+  virtual int	    	setDevice(const char*);
   virtual int	    	setColor(int);
 
     

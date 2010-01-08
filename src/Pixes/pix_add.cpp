@@ -71,9 +71,9 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
   
   while(datasize--)    {
     register int alpha = *rightPix++;
-    leftPix[chRed]   = CLAMP_HIGH((int)leftPix[chRed]   + alpha);
-    leftPix[chGreen] = CLAMP_HIGH((int)leftPix[chGreen] + alpha);
-    leftPix[chBlue]  = CLAMP_HIGH((int)leftPix[chBlue]  + alpha);
+    leftPix[chRed]   = CLAMP_HIGH(leftPix[chRed]   + alpha);
+    leftPix[chGreen] = CLAMP_HIGH(leftPix[chGreen] + alpha);
+    leftPix[chBlue]  = CLAMP_HIGH(leftPix[chBlue]  + alpha);
     leftPix += 4;
     }
 }
@@ -109,8 +109,8 @@ void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
 #ifdef __MMX__
 void pix_add :: processRGBA_MMX(imageStruct &image, imageStruct &right){
   int datasize =   image.xsize * image.ysize * image.csize;
-  __m64*leftPix =  (__m64*)image.data;
-  __m64*rightPix = (__m64*)right.data;
+  __m64*leftPix =  reinterpret_cast<__m64*>(image.data);
+  __m64*rightPix = reinterpret_cast<__m64*>(right.data);
 
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
 
@@ -124,8 +124,8 @@ void pix_add :: processRGBA_MMX(imageStruct &image, imageStruct &right){
 }
 void pix_add :: processYUV_MMX (imageStruct &image, imageStruct &right){
   int datasize =   image.xsize * image.ysize * image.csize;
-  __m64*leftPix =  (__m64*)image.data;
-  __m64*rightPix = (__m64*)right.data;
+  __m64*leftPix =  reinterpret_cast<__m64*>(image.data);
+  __m64*rightPix = reinterpret_cast<__m64*>(right.data);
 
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
   __m64 mask = _mm_setr_pi8(0x40, 0x00, 0x40, 0x00,
@@ -206,52 +206,51 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
    
     //Load it into the vector unit
     d = shortBuffer.v;
-    d = (vector signed short)vec_splat((vector signed short)d,0);
-        #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
-        #endif
+    d = static_cast<vector signed short>(vec_splat(static_cast<vector signed short>(d),0));
+#ifndef PPC970
+    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+    vec_dst( inData, prefetchSize, 0 );
+    vec_dst( rightData, prefetchSize, 1 );
+#endif
     for ( h=0; h<image.ysize; h++){
-        for (w=0; w<width; w++)
+      for (w=0; w<width; w++)
         {
-        #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
-        #endif
-            //interleaved U Y V Y chars
+#ifndef PPC970
+	  vec_dst( inData, prefetchSize, 0 );
+	  vec_dst( rightData, prefetchSize, 1 );
+#endif
+	  //interleaved U Y V Y chars
             
-            //vec_mule UV * 2 to short vector U V U V shorts
-            UVImage = (vector signed short)vec_mule(one,inData[0]);
-            UVRight = (vector signed short)vec_mule(c,rightData[0]);
+	  //vec_mule UV * 2 to short vector U V U V shorts
+	  UVImage = static_cast<vector signed short>(vec_mule(one,inData[0]));
+	  UVRight = static_cast<vector signed short>(vec_mule(c,rightData[0]));
             
-            //vec_mulo Y * 1 to short vector Y Y Y Y shorts
-            YImage = (vector signed short)vec_mulo(c,inData[0]);
-            YRight = (vector signed short)vec_mulo(c,rightData[0]);
+	  //vec_mulo Y * 1 to short vector Y Y Y Y shorts
+	  YImage = static_cast<vector signed short>(vec_mulo(c,inData[0]));
+	  YRight = static_cast<vector signed short>(vec_mulo(c,rightData[0]));
 
+	  //vel_subs UV - 255
+	  UVRight = static_cast<vector signed short>(vec_subs(UVRight, d));
             
-            //vel_subs UV - 255
-            UVRight = (vector signed short)vec_subs(UVRight, d);
+	  //vec_adds UV
+	  UVTemp = vec_adds(UVImage,UVRight);
             
-            //vec_adds UV
-            UVTemp = vec_adds(UVImage,UVRight);
+	  //vec_adds Y
+	  YTemp = vec_adds(YImage,YRight);
             
-            //vec_adds Y
-            YTemp = vec_adds(YImage,YRight);
+	  hiImage = vec_mergeh(UVTemp,YTemp);
+	  loImage = vec_mergel(UVTemp,YTemp);
             
-            hiImage = vec_mergeh(UVTemp,YTemp);
-            loImage = vec_mergel(UVTemp,YTemp);
-            
-            //vec_mergel + vec_mergeh Y and UV
-            inData[0] = vec_packsu(hiImage, loImage);
+	  //vec_mergel + vec_mergeh Y and UV
+	  inData[0] = vec_packsu(hiImage, loImage);
         
-            inData++;
-            rightData++;
+	  inData++;
+	  rightData++;
         }
-        #ifndef PPC970
+#ifndef PPC970
         vec_dss( 0 );
         vec_dss( 1 );
-        #endif
+#endif
     }  /*end of working altivec function */
 }
 void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
@@ -310,7 +309,7 @@ void pix_add :: processDualImage(imageStruct &image, imageStruct &right){
     leftPix+=8;rightPix+=8;
   }
   while(restsize--){
-    *leftPix = CLAMP_HIGH((int)(*leftPix + *rightPix));
+    *leftPix = CLAMP_HIGH(static_cast<int>(*leftPix + *rightPix));
     leftPix++; rightPix++;
   }
 }

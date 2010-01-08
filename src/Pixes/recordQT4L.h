@@ -98,12 +98,12 @@ class GEM_EXTERN recordQT4L : public record {
    */
   virtual int putFrame(imageStruct*);
 
-  virtual bool setCodec(char*name);
+  virtual bool setCodec(const char*name);
   virtual bool setCodec(int  num);
 
   virtual int getNumCodecs(void);
-  virtual char*getCodecName(int n);
-  virtual char*getCodecDescription(int n);
+  virtual const char*getCodecName(int n);
+  virtual const char*getCodecDescription(int n);
 
  private:
   quicktime_t *m_qtfile;
@@ -114,7 +114,7 @@ class GEM_EXTERN recordQT4L : public record {
   bool setCodec(lqt_codec_info_t**codec, int num);
   lqt_codec_info_t*m_codec;
   lqt_codec_info_t**m_codecs;
-  char*m_codecname;
+  const char*m_codecname;
   int m_codecnum;
 
 

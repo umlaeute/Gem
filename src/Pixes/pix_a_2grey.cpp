@@ -30,7 +30,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_a_2grey, t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 pix_a_2grey :: pix_a_2grey(t_floatarg alpha)
 {
-	m_mode = (int)(alpha * 255.f);
+	m_mode = static_cast<int>(alpha * 255.f);
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
 
@@ -52,7 +52,7 @@ void pix_a_2grey :: alphaMess(float alphaval)
 	if (alphaval < -1.f)
 		alphaval = -1.f;
 
-	m_mode = (int)(alphaval*255.f);
+	m_mode = static_cast<int>(alphaval*255.f);
 
 	setPixModified();
 }
@@ -104,5 +104,5 @@ void pix_a_2grey :: obj_setupCallback(t_class *classPtr)
 
 void pix_a_2grey :: alphaMessCallback(void *data, t_floatarg alphaval)
 {
-    GetMyClass(data)->alphaMess((float)alphaval);
+    GetMyClass(data)->alphaMess(alphaval);
 }

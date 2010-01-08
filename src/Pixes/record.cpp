@@ -83,11 +83,11 @@ int record :: getNumCodecs()
 {
   return 0;
 }
-char*record :: getCodecName(int i)
+const char*record :: getCodecName(int i)
 {
   return NULL;
 }
-char*record :: getCodecDescription(int i)
+const char*record :: getCodecDescription(int i)
 {
   return NULL;
 }
@@ -103,7 +103,7 @@ bool record :: setCodec(int num)
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool record :: setCodec(char*name)
+bool record :: setCodec(const char*name)
 {
   return false;
 }

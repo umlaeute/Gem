@@ -98,7 +98,8 @@ void pix_filmDarwin :: realOpen(char *filename)
   if (!filename[0]) {
     error("no filename passed");
   } else {
-    err = ::FSPathMakeRef((UInt8*)filename, &ref, NULL);
+    UInt8*filename8=static_cast<UInt8*>filename;
+    err = ::FSPathMakeRef(filename8, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
 
     if (err) {
@@ -123,27 +124,27 @@ void pix_filmDarwin :: realOpen(char *filename)
 
   m_reqFrame = 0;
   m_curFrame = -1;
-  m_numTracks = (int)GetMovieTrackCount(m_movie);
+  m_numTracks = static_cast<int>(GetMovieTrackCount(m_movie));
 	
-	movieTrack = GetMovieIndTrackType(m_movie,1,VideoMediaType,movieTrackMediaType);  //get first video track
+  movieTrack = GetMovieIndTrackType(m_movie,1,VideoMediaType,movieTrackMediaType);  //get first video track
 	
-	trackMedia = GetTrackMedia(movieTrack);
+  trackMedia = GetTrackMedia(movieTrack);
 	
-	sampleCount = GetMediaSampleCount(trackMedia);
+  sampleCount = GetMediaSampleCount(trackMedia);
 	
-	m_numFrames = sampleCount;
+  m_numFrames = sampleCount;
 	
-	audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,movieTrackMediaType);
+  audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,movieTrackMediaType);
 	
-	SetTrackEnabled(audioTrack, FALSE);
+  SetTrackEnabled(audioTrack, FALSE);
 	
   // Get the length of the movie
 
-  movieDur = (long)GetMovieDuration(m_movie);
-  movieScale = (long)GetMovieTimeScale(m_movie);
+  movieDur = static_cast<long>(GetMovieDuration(m_movie));
+  movieScale = static_cast<long>(GetMovieTimeScale(m_movie));
 
 	
-  durationf = (float)movieDur/(float)m_numFrames;
+  durationf = static_cast<float>(movieDur)/static_cast<float>(m_numFrames);
 
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
@@ -159,9 +160,9 @@ void pix_filmDarwin :: realOpen(char *filename)
 	
 	ImageDescriptionHandle desc = NULL;
 	
-	desc = (ImageDescriptionHandle)NewHandle(0);
+	desc = reinterpret_cast<ImageDescriptionHandle>(NewHandle(0));
 	
-	GetMediaSampleDescription(trackMedia,1,(SampleDescriptionHandle)desc);
+	GetMediaSampleDescription(trackMedia,1,reinterpret_cast<SampleDescriptionHandle>(desc));
 # ifdef kDVCPROHD720pCodecType
 	//DVCPRO720p
 	if ((*desc)->cType == kDVCPROHD720pCodecType){
@@ -417,7 +418,7 @@ void pix_filmDarwin :: getFrame()
       }else{
 
         m_movieTime = m_reqFrame * duration;
-        m_movieTime = (long)((float)m_reqFrame * durationf);
+        m_movieTime = static_cast<long>(static_cast<float>(m_reqFrame) * durationf);
 
         m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
         ::GetMovieNextInterestingTime(	m_movie,
@@ -446,7 +447,7 @@ void pix_filmDarwin :: postrender(GemState *state)
 void pix_filmDarwin :: startRendering()
 {
 	//bit of a hack related to stopRendering()
-	if (m_auto && m_haveMovie) SetMovieVolume(m_movie, (short)(m_volume * 255.f));
+	if (m_auto && m_haveMovie) SetMovieVolume(m_movie, static_cast<short>(m_volume * 255.f));
 }
 
 void pix_filmDarwin :: stopRendering()
@@ -474,17 +475,17 @@ void pix_filmDarwin :: LoadRam()
 
 void pix_filmDarwin :: MovRate(float rate)
 {
-  m_rate = (float)rate;
+  m_rate = static_cast<float>(rate);
   if (m_auto && m_haveMovie) {
-    SetMovieRate(m_movie,X2Fix((double)m_rate));
+    SetMovieRate(m_movie,X2Fix(static_cast<double>(m_rate)));
   }
 }
 
 void pix_filmDarwin :: MovVolume(float volume)
 {
-  m_volume = (float)volume;
+  m_volume = static_cast<float>(volume);
   if (m_auto && m_haveMovie) {
-    SetMovieVolume(m_movie,(short)(m_volume * 255.f));
+    SetMovieVolume(m_movie,static_cast<short>(m_volume * 255.f));
   }
 }
 
@@ -493,13 +494,13 @@ void pix_filmDarwin :: doDebug()
 {
   post("---------- pix_filmDarwin doDebug start----------");
   post("m_numTracks = %d",m_numTracks);
-  post("Movie duration = %d timescale = %d timebase = %d", movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
+  post("Movie duration = %d timescale = %d timebase = %d", movieDur, movieScale, static_cast<long>(GetMovieTimeBase(m_movie)));
   post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
   post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
   post("movie size x:%d y:%d", m_xsize, m_ysize);
   if (m_colorspace == GL_BGRA_EXT) post("color space ARGB");
   else  post("color space YUV");
-  post("Preferred rate fixed: %d int: %d float %f", playRate, Fix2Long(playRate),(float) Fix2X(playRate));
+  post("Preferred rate fixed: %d int: %d float %f", playRate, Fix2Long(playRate),static_cast<float>(Fix2X(playRate)));
 
   post("---------- pix_filmDarwin doDebug end----------");
 }
@@ -540,17 +541,17 @@ void pix_filmDarwin :: ramCallback(void *data)
 
 void pix_filmDarwin :: hiqualityCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->m_hiquality=(int)state;
+  GetMyClass(data)->m_hiquality=static_cast<int>(state);
 }
 
 void pix_filmDarwin :: rateCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->MovRate((float)state);
+  GetMyClass(data)->MovRate(state);
 }
 
 void pix_filmDarwin :: volumeCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->MovVolume((float)state);
+  GetMyClass(data)->MovVolume(state);
 }
 
 void pix_filmDarwin :: debugCallback(void *data)

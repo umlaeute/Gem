@@ -50,15 +50,15 @@ void pix_hsv2rgb :: processRGBAImage(imageStruct &image)
       unsigned char h = pixels[chRed], s=pixels[chGreen], v=pixels[chBlue];
 
       if (s) {
-	int   i = (int)(h/42.5);
-	float f = ((float)h/42.5)-i;
+	int   i = static_cast<int>(h/42.5);
+	float f = (static_cast<float>(h)/42.5)-i;
 
-	float vf = (float)v/255.;
+	float vf = static_cast<float>(v)/255.;
 	float vs = vf*s;
 	float vsf= vs*f;
-	unsigned char p = (unsigned char)(v - vs);
-	unsigned char q = (unsigned char)(v - vsf);
-	unsigned char t = (unsigned char)(p + vsf);
+	unsigned char p = static_cast<unsigned char>(v - vs);
+	unsigned char q = static_cast<unsigned char>(v - vsf);
+	unsigned char t = static_cast<unsigned char>(p + vsf);
 	
 	switch (i)
 	  {

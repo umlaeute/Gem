@@ -150,9 +150,9 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   switch (m_mode) {
   case 3: // only RGB
     while (i--) {
-      r = (int)*(tab_R+((n_R*base[chRed])>>8));
-      g = (int)*(tab_G+((n_G*base[chGreen])>>8));
-      b = (int)*(tab_B+((n_B*base[chBlue])>>8));
+      r = static_cast<int>(*(tab_R+((n_R*base[chRed  ])>>8)));
+      g = static_cast<int>(*(tab_G+((n_G*base[chGreen])>>8)));
+      b = static_cast<int>(*(tab_B+((n_B*base[chBlue ])>>8)));
    
       base[chRed]   = CLAMP(r);
       base[chGreen] = CLAMP(g);
@@ -166,10 +166,10 @@ void pix_curve :: processRGBAImage(imageStruct &image)
     if (!(tab_A=checkarray(name_A, &n_A))) return;
     
     while (i--) {
-      r = (int)*(tab_R+((n_R*base[chRed])>>8));
-      g = (int)*(tab_G+((n_G*base[chGreen])>>8));
-      b = (int)*(tab_B+((n_B*base[chBlue])>>8));
-      a = (int)*(tab_A+((n_A*base[chAlpha])>>8));
+      r = static_cast<int>(*(tab_R+((n_R*base[chRed])>>8)));
+      g = static_cast<int>(*(tab_G+((n_G*base[chGreen])>>8)));
+      b = static_cast<int>(*(tab_B+((n_B*base[chBlue])>>8)));
+      a = static_cast<int>(*(tab_A+((n_A*base[chAlpha])>>8)));
    
       base[chRed]   = CLAMP(r);
       base[chGreen] = CLAMP(g);
@@ -197,7 +197,7 @@ void pix_curve :: processGrayImage(imageStruct &image)
 
   if (!(tab=checkarray(name_R, &n))) return;
   while (i--) {
-    val = (int)*(tab+(int)((n*base[chGray])>>8));
+    val = static_cast<int>(*(tab+static_cast<int>((n*base[chGray])>>8)));
     *base++   = CLAMP(val);
   }
 }
@@ -220,10 +220,10 @@ void pix_curve :: processYUVImage(imageStruct &image)
   switch (m_mode) {
   case 3: // YUV
     while (i--) {
-      u  = (int)*(tab_U+((n_U*base[chU])>>8));
-      y0 = (int)*(tab_Y+((n_Y*base[chY0])>>8));
-      v  = (int)*(tab_V+((n_V*base[chV])>>8));
-      y1 = (int)*(tab_Y+((n_Y*base[chY1])>>8));
+      u  = static_cast<int>(*(tab_U+((n_U*base[chU])>>8)));
+      y0 = static_cast<int>(*(tab_Y+((n_Y*base[chY0])>>8)));
+      v  = static_cast<int>(*(tab_V+((n_V*base[chV])>>8)));
+      y1 = static_cast<int>(*(tab_Y+((n_Y*base[chY1])>>8)));
 
       base[chU]  = CLAMP(u);
       base[chY0] = CLAMP(y0);
@@ -237,8 +237,8 @@ void pix_curve :: processYUVImage(imageStruct &image)
     if (!(tab_Y=checkarray(name_A, &n_Y))) return;
     
     while (i--) {
-      y0 = (int)*(tab_Y+((n_Y*base[chY0])>>8));
-      y1 = (int)*(tab_Y+((n_Y*base[chY1])>>8));
+      y0 = static_cast<int>(*(tab_Y+((n_Y*base[chY0])>>8)));
+      y1 = static_cast<int>(*(tab_Y+((n_Y*base[chY1])>>8)));
    
       base[chY0] = CLAMP(y0);
       base[chY1] = CLAMP(y1);

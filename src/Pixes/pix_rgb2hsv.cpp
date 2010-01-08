@@ -57,12 +57,12 @@ void pix_rgb2hsv :: processRGBAImage(imageStruct &image)
 
       if (max==min) h = s = 0;
       else {
-	float delta_inv = 255./(float)(max - min);
-	delta_inv = 42.5/(float)(max - min);
+	float delta_inv = 255./static_cast<float>(max - min);
+	delta_inv = 42.5/static_cast<float>(max - min);
 	s = (max - min) * 255 / max;
-	if      (r==max)h=    (unsigned char)((g - b) * delta_inv);// between magenta and cyan
-	else if (g==max)h= 85+(unsigned char)((b - r) * delta_inv);// between yellow and magenta
-	else if (b==max)h=170+(unsigned char)((r - g) * delta_inv);// between cyan and yellow
+	if      (r==max)h=    static_cast<unsigned char>((g - b) * delta_inv);// between magenta and cyan
+	else if (g==max)h= 85+static_cast<unsigned char>((b - r) * delta_inv);// between yellow and magenta
+	else if (b==max)h=170+static_cast<unsigned char>((r - g) * delta_inv);// between cyan and yellow
 
       }
 

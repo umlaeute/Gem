@@ -181,11 +181,11 @@ void pix_record :: getCodecList()
     int count=m_handle->getNumCodecs();
     for(i=0; i<count; i++){
       t_atom ap[2];
-	  char*codecname=m_handle->getCodecName(i);
-	  char*descr=m_handle->getCodecDescription(i);
+	  const char*codecname=m_handle->getCodecName(i);
+	  const char*descr=m_handle->getCodecDescription(i);
 	  if(codecname) {
 		  post("codec%d: '%s': %s", i, codecname, (descr?descr:""));
-       SETFLOAT (ap+0, (t_float)i);
+       SETFLOAT (ap+0, static_cast<t_float>(i));
        SETSYMBOL(ap+1, gensym(codecname));
        outlet_anything(m_outInfo, gensym("codec"), 2, ap);
 	  }

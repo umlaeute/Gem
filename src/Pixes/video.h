@@ -98,7 +98,7 @@ class GEM_EXTERN video {
   int m_reqFormat;
 
   /* specify either devicename XOR devicenum */  
-  char*m_devicename;
+  const char*m_devicename;
   int m_devicenum;
 
   int m_quality;

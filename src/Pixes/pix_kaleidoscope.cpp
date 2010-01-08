@@ -99,13 +99,13 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
     Pete_Kaleidoscope_Init();
     init = 1;
   }
-  pSource = (U32*)image.data;
+  pSource = reinterpret_cast<U32*>(image.data);
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
   myImage.setCsizeByFormat(image.format);
   myImage.reallocate();
-  pOutput = (U32*)myImage.data;
+  pOutput = reinterpret_cast<U32*>(myImage.data);
 
   if (m_Divisions<1.0f) {
 
@@ -130,12 +130,12 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=(SPete_Kaleidoscope_Line*)Pete_LockHandle(hLines);
+  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL)return;
 
-  const float Width=(float)(nWidth);
+  const float Width=static_cast<float>(nWidth);
   //const float HalfWidth=(Width/2.0f);
-  const float Height=(float)(nHeight);
+  const float Height=static_cast<float>(nHeight);
   //const float HalfHeight=(Height/2.0f);
 
   const float SourceStartAngle=m_SourceAnglePreIncrement;
@@ -524,7 +524,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
     Pete_Kaleidoscope_Init();
     init = 1;
   }
-  pSource = (U32*)image.data;
+  pSource = reinterpret_cast<U32*>(image.data);
   /*  works
   if ( myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize ){
     int dataSize = image.xsize * image.ysize * image.csize;
@@ -543,7 +543,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
   //myImage.setCsizeByFormat(image.format);
   myImage.reallocate();
 
-  pOutput = (U32*)myImage.data;
+  pOutput = reinterpret_cast<U32*>(myImage.data);
 
   if (m_Divisions<1.0f) {
     const int nByteCount=(nWidth*nHeight*sizeof(U32));
@@ -566,12 +566,12 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=(SPete_Kaleidoscope_Line*)Pete_LockHandle(hLines);
+  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL)return;
 
-  const float Width=(float)(nWidth);
+  const float Width=static_cast<float>(nWidth);
   //const float HalfWidth=(Width/2.0f);
-  const float Height=(float)(nHeight);
+  const float Height=static_cast<float>(nHeight);
   //const float HalfHeight=(Height/2.0f);
 
   const float SourceStartAngle = m_SourceAnglePreIncrement;
@@ -1019,14 +1019,14 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=(SPete_Kaleidoscope_Line*)Pete_LockHandle(hLines);
+  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL) {
     return;
   }
 
-  const float Width=(float)(nWidth);
+  const float Width=static_cast<float>(nWidth);
   //const float HalfWidth=(Width/2.0f);
-  const float Height=(float)(nHeight);
+  const float Height=static_cast<float>(nHeight);
   //const float HalfHeight=(Height/2.0f);
 
   const float SourceStartAngle = m_SourceAnglePreIncrement;
@@ -1503,14 +1503,14 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_DeInit() {
 
 void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable() {
 
-  SPete_AngleTable_Entry* pTableStart=(SPete_AngleTable_Entry*)Pete_LockHandle(hAngleTable);
+  SPete_AngleTable_Entry* pTableStart=reinterpret_cast<SPete_AngleTable_Entry*>(Pete_LockHandle(hAngleTable));
   if (pTableStart==NULL) {
     return;
   }
 
-  const float Width=(float)(nWidth);
+  const float Width=static_cast<float>(nWidth);
   const float HalfWidth=(Width/2.0f);
-  const float Height=(float)(nHeight);
+  const float Height=static_cast<float>(nHeight);
   const float HalfHeight=(Height/2.0f);
   const int nNumPixels=(nWidth*nHeight);
 
@@ -1547,7 +1547,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable() {
 
 void pix_kaleidoscope :: Pete_Kaleidoscope_SetupCosTable() {
 
-  int* pTableStart=(int*)Pete_LockHandle(hCosTable);
+  int* pTableStart=reinterpret_cast<int*>(Pete_LockHandle(hCosTable));
   if (pTableStart==NULL) {
     return;
   }
@@ -1555,7 +1555,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupCosTable() {
   int nCount;
   for (nCount=0; nCount<nCosTableSize; nCount+=1) {
 
-    float Angle=(nCount/(float)(nCosTableSize))*Pete_TwoPi;
+    float Angle=(nCount/static_cast<float>(nCosTableSize))*Pete_TwoPi;
 
     float Result=cos(Angle);
 
@@ -1585,7 +1585,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount) {
 
   const int nLinesCount=(nDivisionsInt*2);
 
-  SPete_Kaleidoscope_Line* pLinesStart=(SPete_Kaleidoscope_Line*)Pete_LockHandle(hLines);
+  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL) {
     return;
   }
@@ -1623,9 +1623,10 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount) {
 
 extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void* pElem2) {
 
-  SPete_Kaleidoscope_Line* pFirstLine;
-  pFirstLine = (SPete_Kaleidoscope_Line*)pElem1;
-  SPete_Kaleidoscope_Line* pSecondLine=(SPete_Kaleidoscope_Line*)pElem2;
+  const SPete_Kaleidoscope_Line* pFirstLine;
+  pFirstLine = reinterpret_cast<const SPete_Kaleidoscope_Line*>(pElem1);
+  const SPete_Kaleidoscope_Line* pSecondLine;
+  pSecondLine=reinterpret_cast<const SPete_Kaleidoscope_Line*>(pElem2);
 
   const float FirstYIsNeg=(pFirstLine->Y<0.0f);
   const float SecondYIsNeg=(pSecondLine->Y<0.0f);
@@ -1657,7 +1658,10 @@ extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void
 
 void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Line* pLinesStart,int nLinesCount,SPete_Kaleidoscope_PartitionData* poutPartitionData) {
 
-  qsort((void*)pLinesStart,nLinesCount,sizeof(SPete_Kaleidoscope_Line),&Pete_Kaleidoscope_LinesSortFunction);
+  qsort(reinterpret_cast<void*>(pLinesStart),
+	nLinesCount,
+	sizeof(SPete_Kaleidoscope_Line),
+	&Pete_Kaleidoscope_LinesSortFunction);
 
   SPete_Kaleidoscope_Line* pLinesEnd=pLinesStart+nLinesCount;
 
@@ -1677,7 +1681,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Lin
 
 void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* pTransforms) {
 
-  int nDivisionCount=(int)(m_Divisions);
+  int nDivisionCount=static_cast<int>(m_Divisions);
   nDivisionCount=clampFunc(nDivisionCount,1,(nMaxDivisions-1));
 
   const float DivisionAngle=(Pete_TwoPi/nDivisionCount);
@@ -1791,10 +1795,10 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_Dev() {
 
       Pete_2dVector_Add(&SourcePos,&Centre,&SourcePos);
 
-      int nSourceX = (int)SourcePos.x;
+      int nSourceX = static_cast<int>(SourcePos.x);
       nSourceX=GetMirrored(nSourceX,nWidth);
 
-      int nSourceY = (int)SourcePos.y;
+      int nSourceY = static_cast<int>(SourcePos.y);
       nSourceY=GetMirrored(nSourceY,nHeight);
 
       U32* pCurrentSource=

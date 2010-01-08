@@ -143,7 +143,7 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
     return false;
 
   /* do we have a codec specified? */
-  char*codecname = m_codecname;
+  const char*codecname = m_codecname;
   if(m_codecnum>=0) {
     lqt_codec_info_t**codecs = lqt_query_registry(0,1,1,0);
     if(!setCodec(codecs, m_codecnum)) {
@@ -163,7 +163,7 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
       for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
         if(type == qtformats[i].type)
           {
-            codecname = (char*)(qtformats[i].default_video_codec);
+            codecname = qtformats[i].default_video_codec;
           }
       }
       if(NULL==codecname) {
@@ -232,7 +232,7 @@ int recordQT4L :: putFrame(imageStruct*img)
   if(m_width!=img->xsize || m_height!=img->ysize)m_restart=true;
 
   if(m_restart){
-    if(!init(img, (int)framerate)) {
+    if(!init(img, static_cast<int>(framerate))) {
       /* something went wrong! */
       close();
       error("unable to initialize QT4L");
@@ -269,7 +269,7 @@ int recordQT4L :: putFrame(imageStruct*img)
     }
   }
 
-  lqt_encode_video(m_qtfile, rowpointers, 0, (int)framerate);
+  lqt_encode_video(m_qtfile, rowpointers, 0, static_cast<int>(framerate));
   delete[]rowpointers;
   m_currentFrame++;
   return m_currentFrame;
@@ -289,21 +289,21 @@ int recordQT4L :: getNumCodecs()
   lqt_destroy_codec_info(codecs);
   return (n);
 }
-char*recordQT4L :: getCodecName(int i)
+const char*recordQT4L :: getCodecName(int i)
 {
   lqt_codec_info_t**codec = lqt_query_registry(0,1,1,0);
   if(codec&&codec[i]){
-    char*name=gensym(codec[i]->name)->s_name;
+    const char*name=gensym(codec[i]->name)->s_name;
     lqt_destroy_codec_info(codec);
     return name;
   }
   return NULL;
 }
-char*recordQT4L :: getCodecDescription(int i)
+const char*recordQT4L :: getCodecDescription(int i)
 {
   lqt_codec_info_t**codec = lqt_query_registry(0,1,1,0);
   if(codec&&codec[i]){
-    char*name=gensym(codec[i]->long_name)->s_name;
+    const char*name=gensym(codec[i]->long_name)->s_name;
     lqt_destroy_codec_info(codec);
     return name;
   }
@@ -357,7 +357,7 @@ bool recordQT4L :: setCodec(int num)
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordQT4L :: setCodec(char*name)
+bool recordQT4L :: setCodec(const char*name)
 {
   m_codecname=name;
   m_codecnum=-1;

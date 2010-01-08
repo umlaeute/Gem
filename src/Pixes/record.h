@@ -99,12 +99,12 @@ class GEM_EXTERN record
   // popup a dialog to set the codec interactively (interesting on os-x and w32)
   virtual bool dialog();
 
-  virtual bool setCodec(char*name);
+  virtual bool setCodec(const char*name);
   virtual bool setCodec(int  num);
 
   virtual int getNumCodecs();
-  virtual char*getCodecName(int n);
-  virtual char*getCodecDescription(int n);
+  virtual const char*getCodecName(int n);
+  virtual const char*getCodecDescription(int n);
   
   
 };

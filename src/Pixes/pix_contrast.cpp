@@ -37,8 +37,8 @@ void pix_contrast :: processYUVAltivec(imageStruct &image)
     vector	signed short v;
   }shortBuffer;
 
-  short s_contrast=(short)(256.*m_contrast);
-  short s_saturation=(short)(256. * m_saturation);
+  short s_contrast=reinterpret_cast<short>(256.*m_contrast);
+  short s_saturation=reinterpret_cast<short>(256. * m_saturation);
 
   if(256==s_contrast && 256==s_saturation)return;
 
@@ -222,8 +222,8 @@ void pix_contrast :: processYUVImage(imageStruct &image)
 	
 	int y0, y1,u,v;
 	
-	c = (short)(256. * m_contrast);
-	s = (short)(256. * m_saturation);
+	c = static_cast<short>(256. * m_contrast);
+	s = static_cast<short>(256. * m_saturation);
         if(256==s && 256==c)return;
 
 	while(datasize--){
@@ -254,8 +254,8 @@ int datasize = (image.xsize) * image.ysize;
 	
 	int y,u,v;
 	
-	c = (short)(256. * m_contrast);
-	s = (short)(256. * m_saturation);
+	c = static_cast<short>(256. * m_contrast);
+	s = static_cast<short>(256. * m_saturation);
 
         if(256==s && 256==c)return;
 
@@ -289,7 +289,7 @@ void pix_contrast :: processGrayImage(imageStruct &image)
   int datasize = image.xsize * image.ysize;
   unsigned char *pixels = image.data;
   // we scale by 256, since "(x*256)>>8=x"
-  short c = (short)(256. * m_contrast);
+  short c = static_cast<short>(256. * m_contrast);
   int g;
 
   if(256==c)return; // the effect would produce the same result...
@@ -322,10 +322,10 @@ void pix_contrast :: obj_setupCallback(t_class *classPtr)
 
 void pix_contrast :: contrastMessCallback(void *data, t_floatarg contrast)
 {
-	GetMyClass(data)->contrastMess((float)contrast);
+	GetMyClass(data)->contrastMess(contrast);
 }
 
 void pix_contrast :: saturationMessCallback(void *data, t_floatarg saturation)
 {
-	GetMyClass(data)->saturationMess((float)saturation);
+	GetMyClass(data)->saturationMess(saturation);
 }

@@ -94,7 +94,7 @@ recordQT :: recordQT(int x, int y, int w, int h)
     if(codecName.typeName) {
 	  int namelength=*(codecName.typeName);
 	  char*name=new char[namelength+1];
-	  strncpy(name, ((char*)codecName.typeName)+1, namelength);
+	  strncpy(name, (static_cast<char*>codecName.typeName)+1, namelength);
 	  name[namelength]=0;
 	  t_symbol*s=gensym(name);
       codecContainer[i].name = s->s_name;
@@ -170,9 +170,11 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     return;
   }
 
+  UInt8*filename8=reinterpret_cast<UInt8*>m_filename;
+
 #ifdef __APPLE__
   else {
-    err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
+    err = ::FSPathMakeRef(filename8, &ref, NULL);
     if (err == fnfErr) {
       // if the file does not yet exist, then let's create the file
       int fd;
@@ -183,7 +185,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
       }
       ::write(fd, " ", 1);
       ::close(fd);
-      err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
+      err = FSPathMakeRef(filename8, &ref, NULL);
     }
     if (err) {
       error("GEM: recordQT: Unable to make file ref from filename %s", m_filename);
@@ -194,7 +196,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
       error("GEM: recordQT: error %d in FSGetCatalogInfo()", err);
       return ;
     }
-    err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);		
+    err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, filename8, &theFSSpec);		
     if (err != noErr && err != -37){ /* what is -37 */
       error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
       return;
@@ -204,6 +206,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   else {
       /* just create this file, in case it isn't there already...weird hack */
     char filename[QT_MAX_FILENAMELENGTH];
+    UInt8*filename8=reinterpret_cast<UInt8*>filename;
     FILE*fil=NULL;
     
     fil=fopen(m_filename, "a");
@@ -211,7 +214,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 
     snprintf(filename, QT_MAX_FILENAMELENGTH, m_filename);
     c2pstr(filename);
-    FSMakeFSSpec (0, 0L, (UInt8*)filename, &theFSSpec);
+    FSMakeFSSpec (0, 0L, filename8, &theFSSpec);
     if (err != noErr && err != -37){
       error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
       return;
@@ -390,8 +393,8 @@ void recordQT :: compressFrame()
 	}
 	::Microseconds(&endTime);
 
-	seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
-	m_ticks = (int)(600 * seconds);
+	seconds = static_cast<float>(endTime.lo - startTime.lo) / 1000000.f;
+	m_ticks = static_cast<int>(600 * seconds);
 	if (m_ticks < 20) m_ticks = 20;
 	
 #endif //timers
@@ -405,17 +408,17 @@ void recordQT :: compressFrame()
       if (!QueryPerformanceFrequency(&freq))
         countFreq = 0;
       else
-        countFreq = (float)(freq.QuadPart);
+        countFreq = static_cast<float>(freq.QuadPart);
       QueryPerformanceCounter(&startTime);//fakes the time of the first frame
       m_ticks = 20;
       m_firstRun = 0;
     }else{
 		QueryPerformanceCounter(&endTime);
-		float fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-		seconds = ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
-		// post("pix_recordQT: freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,(int)startTime.QuadPart,(int)endTime.QuadPart,fps,seconds);
+		float fps = 1000 / (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+		seconds = (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
+		// post("pix_recordQT: freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,static_cast<int>startTime.QuadPart,static_cast<int>endTime.QuadPart,fps,seconds);
 
-		m_ticks = (int)(600 * seconds);
+		m_ticks = static_cast<int>(600 * seconds);
 		if (m_ticks < 20) m_ticks = 20;
 	}
 #endif
@@ -435,7 +438,7 @@ void recordQT :: compressFrame()
                        0,
                        dataSize,
                        m_ticks, //this should not be a fixed value but vary with framerate
-                       (SampleDescriptionHandle)hImageDesc,
+                       static_cast<SampleDescriptionHandle>(hImageDesc),
                        1,
                        syncFlag,
                        NULL);
@@ -585,7 +588,7 @@ int recordQT :: getNumCodecs()
   //get list of codecs installed  -- useful later
   return(numCodecContainer);
 }
-char*recordQT :: getCodecName(int i)
+const char*recordQT :: getCodecName(int i)
 {
   if(i<0 || i>numCodecContainer)return NULL;
   return (codecContainer[i].name);
@@ -604,7 +607,7 @@ bool recordQT :: setCodec(int num)
   m_codec     = codecContainer[num].codec;
   return true;
 }
-bool recordQT :: setCodec(char*codecName)
+bool recordQT :: setCodec(const char*codecName)
 {
 	int	i;
   int requestedCodec=0;
@@ -628,7 +631,7 @@ bool recordQT :: setCodec(char*codecName)
       }
       break;
     case 2: /* AIC */
-      if ((int)codecContainer[i].ctype == 'icod') {
+      if (static_cast<int>(codecContainer[i].ctype) == 'icod') {
         post("recordQT found Apple Intermediate Codec");
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
