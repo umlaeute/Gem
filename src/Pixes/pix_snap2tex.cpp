@@ -42,16 +42,16 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
 {
   if (argc == 4)
     {
-      m_x = (int)atom_getfloat(&argv[0]);
-      m_y = (int)atom_getfloat(&argv[1]);
-      m_width = (int)atom_getfloat(&argv[2]);
-      m_height = (int)atom_getfloat(&argv[3]);
+      m_x = atom_getint(&argv[0]);
+      m_y = atom_getint(&argv[1]);
+      m_width = atom_getint(&argv[2]);
+      m_height = atom_getint(&argv[3]);
     }
   else if (argc == 2)
     {
       m_x = m_y = 0;
-      m_width = (int)atom_getfloat(&argv[0]);
-      m_height = (int)atom_getfloat(&argv[1]);
+      m_width = atom_getint(&argv[0]);
+      m_height = atom_getint(&argv[1]);
     }
   else if (argc == 0)
     {
@@ -403,25 +403,25 @@ void pix_snap2tex :: snapMessCallback(void *data)
 }
 void pix_snap2tex :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->sizeMess((int)width, (int)height);
+  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
 }
 void pix_snap2tex :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-  GetMyClass(data)->posMess((int)x, (int)y);
+  GetMyClass(data)->posMess(static_cast<int>(x), static_cast<int>(y));
 }
 void pix_snap2tex :: floatMessCallback(void *data, float n)
 {
-  GetMyClass(data)->textureOnOff((int)n);
+  GetMyClass(data)->textureOnOff(static_cast<int>(n));
 }
 void pix_snap2tex :: textureMessCallback(void *data, t_floatarg quality)
 {
-  GetMyClass(data)->textureQuality((int)quality);
+  GetMyClass(data)->textureQuality(static_cast<int>(quality));
 }
 void pix_snap2tex :: repeatMessCallback(void *data, t_floatarg quality)
 {
-  GetMyClass(data)->repeatMess((int)quality);
+  GetMyClass(data)->repeatMess(static_cast<int>(quality));
 }
 void pix_snap2tex :: modeCallback(void *data, t_floatarg quality)
 {
-  GetMyClass(data)->m_mode=((int)quality);
+  GetMyClass(data)->m_mode=(static_cast<int>(quality));
 }

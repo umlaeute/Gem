@@ -306,27 +306,27 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
-    GetMyClass(data)->dimenMess((int)atom_getfloatarg(0, ac, av),
-    	(int)atom_getfloatarg(1, ac, av),
-    	(int)atom_getfloatarg(2, ac, av),
-    	(int)atom_getfloatarg(3, ac, av),
-    	(int)atom_getfloatarg(4, ac, av),
-    	(int)atom_getfloatarg(5, ac, av) );
+  GetMyClass(data)->dimenMess(static_cast<int>(atom_getfloatarg(0, ac, av)),
+			      static_cast<int>(atom_getfloatarg(1, ac, av)),
+			      static_cast<int>(atom_getfloatarg(2, ac, av)),
+			      static_cast<int>(atom_getfloatarg(3, ac, av)),
+			      static_cast<int>(atom_getfloatarg(4, ac, av)),
+			      static_cast<int>(atom_getfloatarg(5, ac, av)) );
 }
 void pix_video :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-    GetMyClass(data)->offsetMess((int)x, (int)y);
+    GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
 }
 void pix_video :: swapMessCallback(void *data, t_floatarg state)
 {
-    GetMyClass(data)->swapMess((int)state);
+    GetMyClass(data)->swapMess(static_cast<int>(state));
 }
 void pix_video :: channelMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
   if (argc!=1&&argc!=2)return;
   int chan = atom_getint(argv);
   t_float freq = (argc==1)?0:atom_getfloat(argv+1);
-  GetMyClass(data)->channelMess((int)chan, freq);
+  GetMyClass(data)->channelMess(static_cast<int>(chan), freq);
 
 }
 void pix_video :: normMessCallback(void *data, t_symbol*s)
@@ -395,6 +395,6 @@ void pix_video :: dialogMessCallback(void *data, t_symbol*s, int argc, t_atom*ar
 }
 void pix_video :: qualityMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->qualityMess((int)state);
+  GetMyClass(data)->qualityMess(static_cast<int>(state));
 }
 #endif /* no OS-specific GEM_VIDEOBACKEND */

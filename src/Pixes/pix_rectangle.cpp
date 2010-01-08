@@ -168,10 +168,10 @@ void pix_rectangle :: vecColorMess(int argc, t_atom *argv)
   green = atom_getfloat(&argv[1]);
   blue  = atom_getfloat(&argv[2]);
 
-  m_color[chRed]   = (unsigned char)(255.*red);
-  m_color[chGreen] = (unsigned char)(255.*green);
-  m_color[chBlue]  = (unsigned char)(255.*blue);
-  m_color[chAlpha] = (unsigned char)(255.*alpha);
+  m_color[chRed]   = static_cast<unsigned char>(255.*red);
+  m_color[chGreen] = static_cast<unsigned char>(255.*green);
+  m_color[chBlue]  = static_cast<unsigned char>(255.*blue);
+  m_color[chAlpha] = static_cast<unsigned char>(255.*alpha);
 
   setPixModified();
 }
@@ -188,10 +188,10 @@ void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
     error("not enough coordinates");
     return;
   }
-  X1 = (int)atom_getfloat(&argv[0]);
-  Y1 = (int)atom_getfloat(&argv[1]);
-  X2 = (int)atom_getfloat(&argv[2]);
-  Y2 = (int)atom_getfloat(&argv[3]);
+  X1 = atom_getint(&argv[0]);
+  Y1 = atom_getint(&argv[1]);
+  X2 = atom_getint(&argv[2]);
+  Y2 = atom_getint(&argv[3]);
   
   // check if within range
   if (X1 < 0)X1 = 0;

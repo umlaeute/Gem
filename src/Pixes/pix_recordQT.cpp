@@ -41,13 +41,13 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   m_width = m_height = 0;
   m_prevHeight = m_prevWidth = 0;
   if (argc == 4) {
-    m_xoff = (int)atom_getfloat(&argv[0]);
-    m_yoff = (int)atom_getfloat(&argv[1]);
-    m_width = (int)atom_getfloat(&argv[2]);
-    m_height = (int)atom_getfloat(&argv[3]);
+    m_xoff = atom_getint(&argv[0]);
+    m_yoff = atom_getint(&argv[1]);
+    m_width = atom_getint(&argv[2]);
+    m_height = atom_getint(&argv[3]);
   } else if (argc == 2) {
-    m_width = (int)atom_getfloat(&argv[0]);
-    m_height = (int)atom_getfloat(&argv[1]);
+    m_width = atom_getint(&argv[0]);
+    m_height = atom_getint(&argv[1]);
   } else if (argc != 0){
     error("needs 0, 2, or 4 values");
     m_xoff = m_yoff = 0;
@@ -564,9 +564,9 @@ void pix_recordQT :: compressFrame()
 	}
 	::Microseconds(&endTime);
 	
-	seconds = (float)(endTime.lo - startTime.lo) / 1000000.f;
+	seconds = static_cast<float>(endTime.lo - startTime.lo) / 1000000.f;
 	
-	m_ticks = (int)(600 * seconds);
+	m_ticks = static_cast<int>(600 * seconds);
 	
 	if (m_ticks < 20) m_ticks = 20;
 	
@@ -582,18 +582,18 @@ void pix_recordQT :: compressFrame()
       if (!QueryPerformanceFrequency(&freq))
 	countFreq = 0;
       else
-	countFreq = (float)(freq.QuadPart);
+	countFreq = static_cast<float>(freq.QuadPart);
 	QueryPerformanceCounter(&startTime);//fakes the time of the first frame
 	m_ticks = 20;
       m_firstRun = 0;
 	}else{
 
   QueryPerformanceCounter(&endTime);
-	float fps = 1000 / ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-	seconds = ((float)(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
+	float fps = 1000 / (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+	seconds = (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
  // post("freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,(int)startTime.QuadPart,(int)endTime.QuadPart,fps,seconds);
 
-	m_ticks = (int)(600 * seconds);
+	m_ticks = static_cast<int>(600 * seconds);
 	
 	if (m_ticks < 20) m_ticks = 20;
 	}
@@ -912,16 +912,16 @@ void pix_recordQT :: bangMessCallback(void *data)
 
 void pix_recordQT :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->sizeMess((int)width, (int)height);
+  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
 }
 void pix_recordQT :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-  GetMyClass(data)->posMess((int)x, (int)y);
+  GetMyClass(data)->posMess(static_cast<int>(x), static_cast<int>(y));
 }
 
 void pix_recordQT :: recordMessCallback(void *data, t_floatarg on)
 {
-	if (!(!(int)on)) {
+	if (!(!static_cast<int>(on))) {
 		GetMyClass(data)->m_recordStart=1;
 		GetMyClass(data)->m_recordStop=0;
 		GetMyClass(data)->post("recording on!");

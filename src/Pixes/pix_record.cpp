@@ -30,13 +30,13 @@ pix_record :: pix_record(int argc, t_atom *argv):
   int xoff = 0, yoff = 0;
   int width = 0, height = 0;
   if (argc == 4) {
-    xoff = (int)atom_getfloat(&argv[0]);
-    yoff = (int)atom_getfloat(&argv[1]);
-    width = (int)atom_getfloat(&argv[2]);
-    height = (int)atom_getfloat(&argv[3]);
+    xoff = atom_getint(&argv[0]);
+    yoff = atom_getint(&argv[1]);
+    width = atom_getint(&argv[2]);
+    height = atom_getint(&argv[3]);
   } else if (argc == 2) {
-    width = (int)atom_getfloat(&argv[0]);
-    height = (int)atom_getfloat(&argv[1]);
+    width = atom_getint(&argv[0]);
+    height = atom_getint(&argv[1]);
   } else if (argc != 0){
     error("needs 0, 2, or 4 values");
     xoff = yoff = 0;
@@ -273,7 +273,8 @@ void pix_record :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *a
 }
 void pix_record :: autoMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->m_automatic=(on!=0);
+  bool onb=static_cast<bool>(on);
+  GetMyClass(data)->m_automatic=onb;
 }
 void pix_record :: bangMessCallback(void *data)
 {
@@ -282,16 +283,16 @@ void pix_record :: bangMessCallback(void *data)
 
 void pix_record :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->sizeMess((int)width, (int)height);
+  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
 }
 void pix_record :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-  GetMyClass(data)->posMess((int)x, (int)y);
+  GetMyClass(data)->posMess(static_cast<int>(x), static_cast<int>(y));
 }
 
 void pix_record :: recordMessCallback(void *data, t_floatarg on)
 {
-  GetMyClass(data)->recordMess(!(!(int)on));
+  GetMyClass(data)->recordMess(!(!static_cast<int>(on)));
 }
 
 void pix_record :: dialogMessCallback(void *data)
@@ -312,10 +313,10 @@ void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom *
 
 void pix_record :: minMessCallback(void *data, t_floatarg min)
 {
-  GetMyClass(data)->m_minFrames=((int)min);
+  GetMyClass(data)->m_minFrames=(static_cast<int>(min));
 }
 
 void pix_record :: maxMessCallback(void *data, t_floatarg max)
 {
-  GetMyClass(data)->m_maxFrames=((int)max);
+  GetMyClass(data)->m_maxFrames=(static_cast<int>(max));
 }
