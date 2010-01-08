@@ -55,10 +55,10 @@ class GEM_EXTERN GemMan
   static void 	    initGem(void);
 
   //////////
-  static void 	    addObj(gemhead *obj, int priority);
+  static void 	    addObj(gemhead *obj, float priority);
     	
   //////////
-  static void 	    removeObj(gemhead *obj, int priority);
+  static void 	    removeObj(gemhead *obj, float priority);
 
   //////////
   // Is there a window.

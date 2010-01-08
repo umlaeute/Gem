@@ -113,15 +113,15 @@ class gemheadLink
 public:
   gemheadLink(const gemheadLink &s)
     : base(s.base), next(s.next), priority(s.priority) {}
-  gemheadLink(gemhead *base_, int priority_)
+  gemheadLink(gemhead *base_, float priority_)
     : base(base_), next(NULL), priority(priority_) {}
-  gemheadLink(gemhead *base_, int priority_, gemheadLink *link)
+  gemheadLink(gemhead *base_, float priority_, gemheadLink *link)
     : base(base_), priority(priority_)
   { this->next = link->next; link->next = this; }
     	
   gemhead *base;
   gemheadLink *next;
-  const int priority;
+  const float priority;
 private:
   gemheadLink();
 };
@@ -299,11 +299,11 @@ void GemMan :: initGem()
 // addObj
 //
 /////////////////////////////////////////////////////////
-void GemMan :: addObj(gemhead *obj, int priority)
+void GemMan :: addObj(gemhead *obj, float priority)
 {
   gemheadLink *linkPtr = s_linkHead;
-  if (priority<0){
-    priority*=-1;
+  if (priority<0.){
+    priority*=-1.;
     linkPtr = s_linkHead_2;
     if (!linkPtr) {
       s_linkHead_2 = new gemheadLink(obj, priority);
@@ -339,17 +339,17 @@ void GemMan :: addObj(gemhead *obj, int priority)
 // removeObj
 //
 /////////////////////////////////////////////////////////
-void GemMan :: removeObj(gemhead *obj, int priority=50)
+void GemMan :: removeObj(gemhead *obj, float priority)
 {
   gemheadLink *linkPtr = s_linkHead;
-  if (priority<0)linkPtr = s_linkHead_2;
+  if (priority<0.)linkPtr = s_linkHead_2;
   if (!linkPtr) return;
     
   // unique case if the object is the s_linkHead
   if (linkPtr->base == obj)
     {
       gemheadLink *nextPtr = linkPtr->next;
-      if (priority<0){
+      if (priority<0.){
         delete s_linkHead_2;
         s_linkHead_2 = nextPtr;
       } else {
