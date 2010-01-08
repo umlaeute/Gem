@@ -101,7 +101,7 @@ void vertex_model :: openMess(t_symbol *filename)
   post("model->numnormals %d",m_model->numnormals);
   post("model->numtexcoords %d",m_model->numtexcoords);
  
-  numvertices = (int)(m_model->numtriangles * m_model->numgroups * 3);
+  numvertices = static_cast<int>(m_model->numtriangles * m_model->numgroups * 3);
   m_vertcount = numvertices;
 
   // would it be a bad idea to make all arrays equally sized ?

@@ -81,6 +81,6 @@ void vertex_info :: obj_setupCallback(t_class *classPtr)
 
 void vertex_info :: vertexMessCallback(void *data,  t_floatarg num, t_floatarg counter)
 {
-    GetMyClass(data)->m_vertNum=((int)num);
-    GetMyClass(data)->m_vertCount=((int)counter);
+  GetMyClass(data)->m_vertNum=(static_cast<int>(num));
+  GetMyClass(data)->m_vertCount=(static_cast<int>(counter));
 }

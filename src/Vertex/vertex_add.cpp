@@ -92,11 +92,11 @@ void vertex_add::typeMess(int argc, t_atom*argv){
 // checking is done in render()
 void vertex_add :: vertexProcess(int lsize, float*larray, int rsize, float*rarray){
   float indR=0.f; // the right-hand index
-  float incR=(float)rsize/(float)lsize; // the right-hand increment
+  float incR=static_cast<float>(rsize)/static_cast<float>(lsize); // the right-hand increment
 
   for(int i=0; i<lsize; i++){
     const int I=4*i;
-    const int J=4*(int)indR; // i know that this is expensive
+    const int J=4*static_cast<int>(indR); // i know that this is expensive
     larray[I+0]+=rarray[J+0];
     larray[I+1]+=rarray[J+1];
     larray[I+2]+=rarray[J+2];
@@ -186,7 +186,7 @@ void vertex_add :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_at
 {
   if (argc==1 && argv->a_type==A_FLOAT){
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
+    GetMyClass(data)->rightRender(reinterpret_cast<GemState*>((argv+1)->a_w.w_gpointer));
   } else GetMyClass(data)->error("wrong righthand arguments....");
 }
 void vertex_add :: typeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)

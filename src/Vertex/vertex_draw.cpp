@@ -159,13 +159,16 @@ void vertex_draw :: render(GemState *state)
   }
 
   glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(4,GL_FLOAT,0,(GLfloat *)state->VertexArray);
+  glVertexPointer(4,GL_FLOAT,0,
+		  reinterpret_cast<GLfloat *>(state->VertexArray));
 
 #if defined GL_VERTEX_ARRAY_RANGE_APPLE
   glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
-  glVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
+  glVertexArrayRangeAPPLE( size, 
+			   reinterpret_cast<GLvoid *>(state->VertexArray));
   glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
-  glFlushVertexArrayRangeAPPLE( size, (GLvoid *)state->VertexArray);
+  glFlushVertexArrayRangeAPPLE( size, 
+				reinterpret_cast<GLvoid *>(state->VertexArray));
 #endif
   
   glDrawArrays(m_drawType,0,size);
@@ -176,7 +179,7 @@ void vertex_draw :: render(GemState *state)
   glVertexArrayRangeAPPLE(0,0);
 # endif
 
-  if(color) glDisableClientState(GL_COLOR_ARRAY);
+  if(color)glDisableClientState(GL_COLOR_ARRAY);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_NORMAL_ARRAY);
   
@@ -195,10 +198,10 @@ void vertex_draw :: render(GemState *state)
 	  glBufferDataARB( GL_ARRAY_BUFFER_ARB, 
 						size * state->VertexArrayStride * sizeof(float),
 						state->VertexArray, GL_DYNAMIC_DRAW_ARB );
-	  glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, (char*) NULL);
+	  glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
 	}else{
 	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
-	  glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, (char*) NULL);
+	  glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
 	}
 	glEnableClientState( GL_VERTEX_ARRAY );
   }
@@ -214,10 +217,10 @@ void vertex_draw :: render(GemState *state)
 	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
       glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*4*sizeof(float),
 						state->ColorArray, GL_DYNAMIC_DRAW_ARB );
-	  glColorPointer(4,GL_FLOAT,0,(char*) NULL);
+	  glColorPointer(4,GL_FLOAT,0,reinterpret_cast<char*>(NULL));
 	}else{
 	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
-	  glColorPointer(4,GL_FLOAT,0,(char*) NULL);
+	  glColorPointer(4,GL_FLOAT,0,reinterpret_cast<char*>(NULL));
 	}
   }else{
 	glDisableClientState(GL_COLOR_ARRAY);
@@ -232,10 +235,10 @@ void vertex_draw :: render(GemState *state)
       glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
       glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*2*sizeof(float),
 						state->TexCoordArray, GL_DYNAMIC_DRAW_ARB );
-	  glTexCoordPointer(2, GL_FLOAT, 0, (char *) NULL);
+	  glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<char *>(NULL));
 	}else{
 	  glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
-	  glTexCoordPointer(2, GL_FLOAT, 0, (char *) NULL);
+	  glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<char *>(NULL));
 	}
   }
 
@@ -249,15 +252,15 @@ void vertex_draw :: render(GemState *state)
       glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
       glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*1*sizeof(float),
 						state->NormalArray, GL_DYNAMIC_DRAW_ARB );
-	  glNormalPointer(GL_FLOAT,0, (char *) NULL);
+	  glNormalPointer(GL_FLOAT,0, reinterpret_cast<char *>(NULL));
 	}else{
 	  glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
-	  glNormalPointer(GL_FLOAT,0, (char *) NULL);
+	  glNormalPointer(GL_FLOAT,0, reinterpret_cast<char *>(NULL));
 	}
   }
 
 //  glEnableClientState(GL_VERTEX_ARRAY);
-//  glVertexPointer( 4, GL_FLOAT,0, (char*) NULL);
+//  glVertexPointer( 4, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
  
   glDrawArrays(drawType,0,size);
   glDisableClientState(GL_VERTEX_ARRAY);
@@ -323,17 +326,17 @@ void vertex_draw :: obj_setupCallback(t_class *classPtr)
 
 void vertex_draw :: defaultMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->m_defaultDraw=((int)size);
+    GetMyClass(data)->m_defaultDraw=(static_cast<int>(size));
 }
 
 void vertex_draw :: colorMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->m_color=((int)size);
+    GetMyClass(data)->m_color=(static_cast<int>(size));
 }
 
 void vertex_draw :: texcoordMessCallback(void *data, t_floatarg t)
 {
-    GetMyClass(data)->m_texcoord=((int)t);
+    GetMyClass(data)->m_texcoord=(static_cast<int>(t));
 }
 void vertex_draw :: typeMessCallback(void *data, t_symbol *type)
 {

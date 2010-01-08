@@ -46,11 +46,12 @@ vertex_mul :: ~vertex_mul()
 // checking is done in render()
 void vertex_mul :: vertexProcess(int lsize, float*larray, int rsize, float*rarray){
   float indR=0.f; // the right-hand index
-  float incR=(float)rsize/(float)lsize; // the right-hand increment
+  float incR=static_cast<float>(rsize) / static_cast<float>(lsize); // the right-hand increment
 
   for(int i=0; i<lsize; i++){
     const int I=4*i;
-    const int J=4*(int)indR; // i know that this is expensive
+    const int J=static_cast<int>(4.*indR); // i know that this is expensive
+    //const int J=4*(int)indR; // i know that this is expensive
     larray[I+0]*=rarray[J+0];
     larray[I+1]*=rarray[J+1];
     larray[I+2]*=rarray[J+2];

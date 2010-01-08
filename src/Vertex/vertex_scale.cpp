@@ -175,7 +175,8 @@ void vertex_scale :: paramMessCallback(void *data, t_symbol*, int argc, t_atom*a
 
 void vertex_scale :: vertexMessCallback(void *data,  t_floatarg num, t_floatarg counter)
 {
-  GetMyClass(data)->vertexMess((int)num, (int)counter);
+  GetMyClass(data)->vertexMess(static_cast<int>(num), 
+			       static_cast<int>(counter));
 }
 void vertex_scale :: modeMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {

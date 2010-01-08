@@ -52,21 +52,21 @@ vertex_tabread :: ~vertex_tabread()
 // check if array exists and whether it is a floatarray
 //
 ///////////////
-static t_float* checkarray(t_symbol *s, int *length)
+static t_float* checkarray(t_symbol *s, int &length)
 {
   t_garray *a;
   t_float  *fp;
-  *length = 0;
+  length = 0;
 
-  if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))    {
+  if (!(a = reinterpret_cast<t_garray*>(pd_findbyclass(s, garray_class))))    {
     if (*s->s_name) error("vertex_tabread: %s: no such array", s->s_name);
     fp = 0;
-  } else if (!garray_getfloatarray(a, length, &fp))   {
+  } else if (!garray_getfloatarray(a, &length, &fp))   {
     error("%s: bad template for vertex_tabread", s->s_name);
     fp = 0;
   }
   
-  if (*length==0){
+  if (length==0){
     error("vertex_tabread: table %s is zero-lengthed", s->s_name);
     fp=0;
   }
@@ -85,7 +85,7 @@ void vertex_tabread :: render(GemState *state)
   state->TexCoordArray = NULL; state->HaveTexCoordArray = 0;
 
   if(m_Vtable){
-    dummy=checkarray(m_Vtable, &length);
+    dummy=checkarray(m_Vtable, length);
     size=length;
     if(dummy && length>0){
       state->VertexArray = dummy;
@@ -96,21 +96,21 @@ void vertex_tabread :: render(GemState *state)
   }
   if (size){
     if(m_Ctable){
-      dummy=checkarray(m_Ctable, &length);
+      dummy=checkarray(m_Ctable, length);
       if(dummy && length==size){
 	state->ColorArray = dummy;
 	state->HaveColorArray = 1;
       }
     }
     if(m_Ntable){
-      dummy=checkarray(m_Ntable, &length);
+      dummy=checkarray(m_Ntable, length);
       if(dummy && length==size){
 	state->NormalArray = dummy;
 	state->HaveNormalArray = 1;
       }
     }
     if(m_Ttable){
-      dummy=checkarray(m_Ttable, &length);
+      dummy=checkarray(m_Ttable, length);
       if(dummy && length==size){
 	state->TexCoordArray = dummy;
 	state->HaveTexCoordArray = 1;

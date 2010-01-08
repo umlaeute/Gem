@@ -73,7 +73,7 @@ void vertex_combine :: render(GemState *state)
    
     if (size > sizeR){
         //left is larger
-        ratiof = (float)size/sizeR;
+        ratiof = static_cast<float>(size)/sizeR;
         ratio = size / sizeR;
         remainder = size % sizeR;
        // post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,remainder);
@@ -96,7 +96,7 @@ void vertex_combine :: render(GemState *state)
         }
         state->VertexArraySize = size;
     }else{
-        ratiof = (float)sizeR/size;
+      ratiof = static_cast<float>(sizeR)/size;
         ratio = sizeR / size;
         remainder = sizeR % size;
         post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,remainder);
@@ -105,7 +105,7 @@ void vertex_combine :: render(GemState *state)
     /* -- this almost works - good for fast and dirty integer ratios
     if (size > sizeR){
         //left is larger
-        ratiof = (float)size/sizeR;
+        ratiof = static_cast<float>(size)/sizeR;
         ratio = size / sizeR;
         remainder = size % sizeR;
        // post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,remainder);
@@ -127,7 +127,7 @@ void vertex_combine :: render(GemState *state)
         }
         state->VertexArraySize = size;
     }else{
-        ratiof = (float)sizeR/size;
+        ratiof = static_cast<float>(sizeR)/size;
         ratio = sizeR / size;
         remainder = sizeR % size;
         post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,remainder);
@@ -185,12 +185,12 @@ void vertex_combine :: gem_rightMessCallback(void *data, t_symbol *s, int argc, 
 {
   if (argc==1 && argv->a_type==A_FLOAT){
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    GetMyClass(data)->m_cacheRight = (GemCache*)argv->a_w.w_gpointer;
-    GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
+    GetMyClass(data)->m_cacheRight = reinterpret_cast<GemCache*>(argv->a_w.w_gpointer);
+    GetMyClass(data)->rightRender(reinterpret_cast<GemState*>((argv+1)->a_w.w_gpointer));
   } else GetMyClass(data)->error("wrong righthand arguments....");
 }
 
 void vertex_combine :: blendCallback(void *data, t_floatarg x)
 {
-GetMyClass(data)->m_blend = (float)x;
+  GetMyClass(data)->m_blend = x;
 }

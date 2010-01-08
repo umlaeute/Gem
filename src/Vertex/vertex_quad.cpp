@@ -128,5 +128,5 @@ void vertex_quad :: obj_setupCallback(t_class *classPtr)
 
 void vertex_quad :: blendMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->m_blend=((int)size);
+  GetMyClass(data)->m_blend=static_cast<int>(size);
 }

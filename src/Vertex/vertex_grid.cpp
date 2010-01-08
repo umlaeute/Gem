@@ -33,8 +33,8 @@ vertex_grid :: vertex_grid(t_floatarg f1, t_floatarg f2)
     m_x = 4;
     m_y = 4;
 
-  if(f1>=1.0)m_x=(int)f1;
-  if(f2>=1.0)m_y=(int)f1;
+  if(f1>=1.0)m_x=static_cast<int>(f1);
+  if(f2>=1.0)m_y=static_cast<int>(f1);
 
 
     maxX = 0;
@@ -175,12 +175,12 @@ void vertex_grid :: obj_setupCallback(t_class *classPtr)
 
 void vertex_grid :: sizeMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-    GetMyClass(data)->m_x=((int)x);
-    GetMyClass(data)->m_y=((int)y);
+    GetMyClass(data)->m_x=(static_cast<int>(x));
+    GetMyClass(data)->m_y=(static_cast<int>(y));
 }
 
 void vertex_grid :: spacingMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
-    GetMyClass(data)->m_spacex=((float)x);
-    GetMyClass(data)->m_spacey=((float)y);
+  GetMyClass(data)->m_spacex=(static_cast<float>(x));
+  GetMyClass(data)->m_spacey=(static_cast<float>(y));
 }
