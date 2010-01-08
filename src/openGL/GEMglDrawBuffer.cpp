@@ -47,7 +47,7 @@ void GEMglDrawBuffer :: render(GemState *state) {
 // Variables
 //
 void GEMglDrawBuffer :: modeMess (t_atom arg) {	// FUN
-	mode = (GLenum)getGLdefine(&arg);
+	mode = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

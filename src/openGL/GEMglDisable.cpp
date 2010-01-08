@@ -47,7 +47,7 @@ void GEMglDisable :: render(GemState *state) {
 // Variables
 //
 void GEMglDisable :: capMess (t_atom arg) {	// FUN
-	cap = (GLenum)getGLdefine(&arg);
+	cap = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

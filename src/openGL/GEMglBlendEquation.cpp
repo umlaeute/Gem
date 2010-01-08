@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBlendEquation , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglBlendEquation :: GEMglBlendEquation	(t_floatarg arg0=0) :
-  mode((GLenum)arg0)
+  mode(static_cast<GLenum>(arg0))
 {
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
@@ -52,7 +52,7 @@ void GEMglBlendEquation :: render(GemState *state) {
 // Variables
 //
 void GEMglBlendEquation :: modeMess (t_float arg1) {	// FUN
-  mode = (GLenum)arg1;
+  mode = static_cast<GLenum>(arg1);
   setModified();
 }
 
@@ -66,5 +66,5 @@ void GEMglBlendEquation :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglBlendEquation :: modeMessCallback (void* data, t_floatarg arg0){
-  GetMyClass(data)->modeMess ( (t_float)    arg0);
+  GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }

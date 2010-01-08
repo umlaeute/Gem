@@ -44,14 +44,14 @@ GEMglRenderMode :: ~GEMglRenderMode () {
 //
 void GEMglRenderMode :: render(GemState *state) {
   GLint i = glRenderMode (mode);
-  outlet_float(m_outlet, (t_float)i);
+  outlet_float(m_outlet, static_cast<t_float>(i));
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglRenderMode :: modeMess (t_atom arg) {	// FUN
-  mode = (GLenum)getGLdefine(&arg);
+  mode = static_cast<GLenum>(getGLdefine(&arg));
   setModified();
 }
 

@@ -18,17 +18,17 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMap1f )
 
 /////////////////////////////////////////////////////////
 //
-// GEMglViewport
+// GEMglMap1f
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 GEMglMap1f :: GEMglMap1f	(int argc, t_atom*argv){
-	if (argc>0)target=(GLenum  )atom_getint(argv+0);
-	if (argc>1)u1    =(GLfloat)atom_getint(argv+1);
-	if (argc>2)u2    =(GLfloat)atom_getint(argv+2);
-	if (argc>3)stride=(GLint   )atom_getint(argv+3);
-	if (argc>4)order =(GLint   )atom_getint(argv+4);
+	if (argc>0)target=static_cast<GLenum>(atom_getint(argv+0));
+	if (argc>1)u1    =static_cast<GLfloat>(atom_getint(argv+1));
+	if (argc>2)u2    =static_cast<GLfloat>(atom_getint(argv+2));
+	if (argc>3)stride=static_cast<GLint>(atom_getint(argv+3));
+	if (argc>4)order =static_cast<GLint>(atom_getint(argv+4));
 	
 	len=128;
 	points = new GLfloat[len];
@@ -72,27 +72,27 @@ void GEMglMap1f :: render(GemState *state) {
 // Variables
 //
 void GEMglMap1f :: targetMess (t_float arg1) {	// FUN
-	target = (GLenum)arg1;
+	target = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglMap1f :: u1Mess (t_float arg1) {	// FUN
-	u1 = (GLfloat)arg1;
+	u1 = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglMap1f :: u2Mess (t_float arg1) {	// FUN
-	u2 = (GLfloat)arg1;
+	u2 = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglMap1f :: strideMess (t_float arg1) {	// FUN
-	stride = (GLint)arg1;
+	stride = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglMap1f :: orderMess (t_float arg1) {	// FUN
-	order = (GLint)arg1;
+	order = static_cast<GLint>(arg1);
 	setModified();
 }
 

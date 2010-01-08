@@ -54,17 +54,17 @@ void GEMglStencilOp :: render(GemState *state) {
 // Variables
 //
 void GEMglStencilOp :: failMess (t_atom arg) {	// FUN
-	fail = (GLenum)getGLdefine(&arg);
+	fail = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 
 void GEMglStencilOp :: zfailMess (t_atom arg) {	// FUN
-	zfail = (GLenum)getGLdefine(&arg);
+	zfail = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 
 void GEMglStencilOp :: zpassMess (t_atom arg) {	// FUN
-	zpass = (GLenum)getGLdefine(&arg);
+	zpass = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

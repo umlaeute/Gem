@@ -70,32 +70,32 @@ void GEMglMapGrid2d :: render(GemState *state) {
 // Variables
 //
 void GEMglMapGrid2d :: unMess (t_float arg1) {	// FUN
-	un = (GLint)arg1;
+	un = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglMapGrid2d :: u1Mess (t_float arg1) {	// FUN
-	u1 = (GLdouble)arg1;
+	u1 = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglMapGrid2d :: u2Mess (t_float arg1) {	// FUN
-	u2 = (GLdouble)arg1;
+	u2 = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglMapGrid2d :: vnMess (t_float arg1) {	// FUN
-	vn = (GLint)arg1;
+	vn = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglMapGrid2d :: v1Mess (t_float arg1) {	// FUN
-	v1 = (GLdouble)arg1;
+	v1 = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglMapGrid2d :: v2Mess (t_float arg1) {	// FUN
-	v2 = (GLdouble)arg1;
+	v2 = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
@@ -114,20 +114,20 @@ void GEMglMapGrid2d :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglMapGrid2d :: unMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->unMess ( (t_float)    arg0);
+	GetMyClass(data)->unMess ( static_cast<t_float>(arg0));
 }
 void GEMglMapGrid2d :: u1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->u1Mess ( (t_float)    arg0);
+	GetMyClass(data)->u1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglMapGrid2d :: u2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->u2Mess ( (t_float)    arg0);
+	GetMyClass(data)->u2Mess ( static_cast<t_float>(arg0));
 }
 void GEMglMapGrid2d :: vnMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->vnMess ( (t_float)    arg0);
+	GetMyClass(data)->vnMess ( static_cast<t_float>(arg0));
 }
 void GEMglMapGrid2d :: v1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->v1Mess ( (t_float)    arg0);
+	GetMyClass(data)->v1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglMapGrid2d :: v2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->v2Mess ( (t_float)    arg0);
+	GetMyClass(data)->v2Mess ( static_cast<t_float>(arg0));
 }

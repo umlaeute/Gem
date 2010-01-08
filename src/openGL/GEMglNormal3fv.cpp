@@ -45,9 +45,9 @@ void GEMglNormal3fv :: render(GemState *state) {
 // variable
 //
 void GEMglNormal3fv :: vMess (t_float arg0, t_float arg1, t_float arg2) {	// FUN
-	v[0]=(GLfloat)arg0;
-	v[1]=(GLfloat)arg1;
-	v[2]=(GLfloat)arg2;
+	v[0]=static_cast<GLfloat>(arg0);
+	v[1]=static_cast<GLfloat>(arg1);
+	v[2]=static_cast<GLfloat>(arg2);
 	setModified();
 }
 

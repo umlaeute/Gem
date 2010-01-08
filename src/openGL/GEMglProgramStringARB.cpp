@@ -22,9 +22,9 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglProgramStringARB )
 // Constructor
 //
 GEMglProgramStringARB :: GEMglProgramStringARB	(int argc, t_atom*argv) :
-		target((GLenum)0), 
-		format((GLenum)0), 
-		len((GLsizei)0),
+		target(static_cast<GLenum>(0)), 
+		format(static_cast<GLenum>(0)), 
+		len(static_cast<GLsizei>(0)),
                 string(NULL)
 {
         switch (argc) {
@@ -76,17 +76,17 @@ void GEMglProgramStringARB :: render(GemState *state)
 // Variables
 //
 void GEMglProgramStringARB :: targetMess (t_float arg1) {	// FUN
-	target = (GLenum)arg1;
+	target = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglProgramStringARB :: formatMess (t_float arg1) {	// FUN
-	format = (GLenum)arg1;
+	format = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglProgramStringARB :: lenMess (t_float arg1) {	// FUN
-	len = (GLsizei)arg1;
+	len = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
@@ -112,13 +112,13 @@ void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglProgramStringARB :: targetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->targetMess ( (t_float)    arg0);
+	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
 void GEMglProgramStringARB :: formatMessCallback (void* data, t_floatarg arg1){
-	GetMyClass(data)->formatMess ( (t_float)    arg1);
+	GetMyClass(data)->formatMess ( static_cast<t_float>(arg1));
 }
 void GEMglProgramStringARB :: lenMessCallback (void* data, t_floatarg arg2){
-	GetMyClass(data)->lenMess ( (t_float)    arg2);
+	GetMyClass(data)->lenMess ( static_cast<t_float>(arg2));
 }
 void GEMglProgramStringARB :: stringMessCallback (void* data, t_symbol* arg3){
 	GetMyClass(data)->stringMess ( (t_symbol*)    arg3);

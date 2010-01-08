@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglTexCoord2d , t_floatarg, A_DEFFLOAT, t_floata
 // Constructor
 //
 GEMglTexCoord2d :: GEMglTexCoord2d	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		s((GLdouble)arg0), 
-		t((GLdouble)arg1)
+		s(static_cast<GLdouble>(arg0)), 
+		t(static_cast<GLdouble>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("s"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("t"));
@@ -49,12 +49,12 @@ void GEMglTexCoord2d :: render(GemState *state) {
 // Variables
 //
 void GEMglTexCoord2d :: sMess (t_float arg1) {	// FUN
-	s = (GLdouble)arg1;
+	s = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglTexCoord2d :: tMess (t_float arg1) {	// FUN
-	t = (GLdouble)arg1;
+	t = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
@@ -69,8 +69,8 @@ void GEMglTexCoord2d :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglTexCoord2d :: sMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->sMess ( (t_float)    arg0);
+	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexCoord2d :: tMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->tMess ( (t_float)    arg0);
+	GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }

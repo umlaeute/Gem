@@ -63,31 +63,31 @@ void GEMglProgramEnvParameter4dARB :: render(GemState *state) {
 // Variables
 //
 void GEMglProgramEnvParameter4dARB :: targetMess (t_float arg1) {	// FUN
-	target = (GLenum)arg1;
+	target = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglProgramEnvParameter4dARB :: indexMess (t_float arg2) {	// FUN
-	index = (GLenum)arg2;
+	index = static_cast<GLenum>(arg2);
 	setModified();
 }
 
 void GEMglProgramEnvParameter4dARB :: xMess (t_float arg2) {	// FUN
-	m_x = (GLdouble)arg2;
+	m_x = static_cast<GLdouble>(arg2);
 	setModified();
 }
 
 void GEMglProgramEnvParameter4dARB :: yMess (t_float arg3) {	// FUN
-	m_y = (GLdouble)arg3;
+	m_y = static_cast<GLdouble>(arg3);
 	setModified();
 }
 
 void GEMglProgramEnvParameter4dARB :: zMess (t_float arg4) {	// FUN
-	m_z = (GLdouble)arg4;
+	m_z = static_cast<GLdouble>(arg4);
 	setModified();
 }
 void GEMglProgramEnvParameter4dARB :: wMess (t_float arg5) {	// FUN
-	m_w = (GLdouble)arg5;
+	m_w = static_cast<GLdouble>(arg5);
 	setModified();
 }
 /////////////////////////////////////////////////////////
@@ -104,20 +104,20 @@ void GEMglProgramEnvParameter4dARB :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglProgramEnvParameter4dARB :: targetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->targetMess ( (t_float)    arg0);
+	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
 void GEMglProgramEnvParameter4dARB :: indexMessCallback (void* data, t_floatarg arg1){
-	GetMyClass(data)->indexMess ( (t_float)    arg1);
+	GetMyClass(data)->indexMess ( static_cast<t_float>(arg1));
 }
 void GEMglProgramEnvParameter4dARB :: xMessCallback (void* data, t_floatarg arg2){
-	GetMyClass(data)->xMess ( (t_float)    arg2);
+	GetMyClass(data)->xMess ( static_cast<t_float>(arg2));
 }
 void GEMglProgramEnvParameter4dARB :: yMessCallback (void* data, t_floatarg arg3){
-	GetMyClass(data)->yMess ( (t_float)    arg3);
+	GetMyClass(data)->yMess ( static_cast<t_float>(arg3));
 }
 void GEMglProgramEnvParameter4dARB :: zMessCallback (void* data, t_floatarg arg4){
-	GetMyClass(data)->zMess ( (t_float)    arg4);
+	GetMyClass(data)->zMess ( static_cast<t_float>(arg4));
 }
 void GEMglProgramEnvParameter4dARB :: wMessCallback (void* data, t_floatarg arg5){
-	GetMyClass(data)->wMess ( (t_float)    arg5);
+	GetMyClass(data)->wMess ( static_cast<t_float>(arg5));
 }

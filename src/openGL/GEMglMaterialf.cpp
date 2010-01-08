@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMaterialf , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglMaterialf :: GEMglMaterialf	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		face((GLenum)arg0), 
-		pname((GLenum)arg1), 
-		param((GLfloat)arg2)
+		face(static_cast<GLenum>(arg0)), 
+		pname(static_cast<GLenum>(arg1)), 
+		param(static_cast<GLfloat>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("face"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
@@ -52,17 +52,17 @@ void GEMglMaterialf :: render(GemState *state) {
 // Variables
 //
 void GEMglMaterialf :: faceMess (t_float arg1) {	// FUN
-	face = (GLenum)arg1;
+	face = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglMaterialf :: pnameMess (t_float arg1) {	// FUN
-	pname = (GLenum)arg1;
+	pname = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglMaterialf :: paramMess (t_float arg1) {	// FUN
-	param = (GLfloat)arg1;
+	param = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -78,11 +78,11 @@ void GEMglMaterialf :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglMaterialf :: faceMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->faceMess ( (t_float)    arg0);
+	GetMyClass(data)->faceMess ( static_cast<t_float>(arg0));
 }
 void GEMglMaterialf :: pnameMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->pnameMess ( (t_float)    arg0);
+	GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
 void GEMglMaterialf :: paramMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->paramMess ( (t_float)    arg0);
+	GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

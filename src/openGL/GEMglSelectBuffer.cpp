@@ -57,7 +57,7 @@ void GEMglSelectBuffer :: postrender(GemState *state) {
   t_atom*ap=new t_atom[size];
   int i=0;
   for(i=0; i<size; i++) {
-    SETFLOAT(ap+i, (t_float)buffer[i]);
+    SETFLOAT(ap+i, static_cast<t_float>(buffer[i]));
   }
   outlet_list(m_bufout, gensym("list"), size, ap);
 }
@@ -68,7 +68,7 @@ void GEMglSelectBuffer :: postrender(GemState *state) {
 void GEMglSelectBuffer :: sizeMess (t_float arg1) {	// FUN
   int i;
   if (arg1<1)return;
-  size = (GLsizei)arg1;
+  size = static_cast<GLsizei>(arg1);
   if (len<size){
     len=size;
     delete[]buffer;

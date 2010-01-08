@@ -45,10 +45,10 @@ void GEMglColor4sv :: render(GemState *state) {
 // variable
 //
 void GEMglColor4sv :: vMess (t_float arg0, t_float arg1, t_float arg2, t_float arg3) {	// FUN
-	v[0]=(GLshort)arg0;
-	v[1]=(GLshort)arg1;
-	v[2]=(GLshort)arg2;
-	v[3]=(GLshort)arg3;
+	v[0]=static_cast<GLshort>(arg0);
+	v[1]=static_cast<GLshort>(arg1);
+	v[2]=static_cast<GLshort>(arg2);
+	v[3]=static_cast<GLshort>(arg3);
 	setModified();
 }
 

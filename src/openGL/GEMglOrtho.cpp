@@ -63,32 +63,32 @@ void GEMglOrtho :: render(GemState *state) {
 // Variables
 //
 void GEMglOrtho :: leftMess (t_float arg1) {	// FUN
-	left = (GLdouble)arg1;
+	left = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglOrtho :: rightMess (t_float arg1) {	// FUN
-	right = (GLdouble)arg1;
+	right = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglOrtho :: bottomMess (t_float arg1) {	// FUN
-	bottom = (GLdouble)arg1;
+	bottom = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglOrtho :: topMess (t_float arg1) {	// FUN
-	top = (GLdouble)arg1;
+	top = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglOrtho :: zNearMess (t_float arg1) {	// FUN
-	zNear = (GLdouble)arg1;
+	zNear = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglOrtho :: zFarMess (t_float arg1) {	// FUN
-	zFar = (GLdouble)arg1;
+	zFar = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
@@ -107,20 +107,20 @@ void GEMglOrtho :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglOrtho :: leftMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->leftMess ( (t_float)    arg0);
+	GetMyClass(data)->leftMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: rightMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->rightMess ( (t_float)    arg0);
+	GetMyClass(data)->rightMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: bottomMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->bottomMess ( (t_float)    arg0);
+	GetMyClass(data)->bottomMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: topMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->topMess ( (t_float)    arg0);
+	GetMyClass(data)->topMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: zNearMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->zNearMess ( (t_float)    arg0);
+	GetMyClass(data)->zNearMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: zFarMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->zFarMess ( (t_float)    arg0);
+	GetMyClass(data)->zFarMess ( static_cast<t_float>(arg0));
 }

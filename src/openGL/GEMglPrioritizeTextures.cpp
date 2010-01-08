@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPrioritizeTextures , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglPrioritizeTextures :: GEMglPrioritizeTextures	(t_floatarg arg0=16) :
-		n((GLsizei)arg0) {
+		n(static_cast<GLsizei>(arg0)) {
 	if (n>0) t_len=p_len=n;
 	else t_len=p_len=16;
 
@@ -66,7 +66,7 @@ void GEMglPrioritizeTextures :: render(GemState *state) {
 // Variables
 //
 void GEMglPrioritizeTextures :: nMess (t_float arg1) {	// FUN
-	n = (GLsizei)arg1;
+	n = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
@@ -76,7 +76,7 @@ void GEMglPrioritizeTextures :: texturesMess (int argc,t_atom*argv) {	// FUN
     delete [] textures;
     textures = new GLuint[t_len];
   }
-  while(argc--)textures[argc]=(GLuint)atom_getint(argv+argc);
+  while(argc--)textures[argc]=static_cast<GLuint>(atom_getint(argv+argc));
   setModified();
 }
 
@@ -86,7 +86,7 @@ void GEMglPrioritizeTextures :: prioritiesMess (int argc, t_atom*argv) {	// FUN
     delete [] priorities;
     priorities = new GLclampf[p_len];
   }
-  while(argc--)priorities[argc]=(GLclampf)atom_getfloat(argv+argc);
+  while(argc--)priorities[argc]=static_cast<GLclampf>(atom_getfloat(argv+argc));
   setModified();
 }
 

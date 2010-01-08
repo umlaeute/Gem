@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPassThrough , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglPassThrough :: GEMglPassThrough	(t_floatarg arg0=0) :
-		token((GLfloat)arg0)
+		token(static_cast<GLfloat>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("token"));
 }
@@ -55,7 +55,7 @@ void GEMglPassThrough :: render(GemState *state) {
 // Variables
 //
 void GEMglPassThrough :: tokenMess (t_float arg1) {	// FUN
-	token = (GLfloat)arg1;
+	token = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -69,5 +69,5 @@ void GEMglPassThrough :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglPassThrough :: tokenMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->tokenMess ( (t_float)    arg0);
+	GetMyClass(data)->tokenMess ( static_cast<t_float>(arg0));
 }

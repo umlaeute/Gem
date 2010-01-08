@@ -75,5 +75,5 @@ void GEMglUseProgramObjectARB :: obj_setupCallback(t_class *classPtr)
 }
 
 void GEMglUseProgramObjectARB :: programMessCallback (void* data, t_floatarg program){
-	GetMyClass(data)->programMess ( (int)program );
+	GetMyClass(data)->programMess (static_cast<int>(program));
 }

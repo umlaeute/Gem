@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearDepth , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglClearDepth :: GEMglClearDepth	(t_floatarg arg0=0) :
-		depth((GLclampd)arg0)
+		depth(static_cast<GLclampd>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("depth"));
 }
@@ -40,7 +40,7 @@ inlet_free(m_inlet[0]);
 //
 void GEMglClearDepth :: render(GemState *state) {
 
-	glClearDepth ((GLclampd)depth);
+	glClearDepth (static_cast<GLclampd>(depth));
 
 }
 

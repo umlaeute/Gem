@@ -24,10 +24,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRasterPos4f , t_floatarg, A_DEFFLOAT, t_floa
 // Constructor
 //
 GEMglRasterPos4f :: GEMglRasterPos4f	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		x((GLfloat)arg0), 
-		y((GLfloat)arg1), 
-		z((GLfloat)arg2), 
-		w((GLfloat)arg3)
+		x(static_cast<GLfloat>(arg0)), 
+		y(static_cast<GLfloat>(arg1)), 
+		z(static_cast<GLfloat>(arg2)), 
+		w(static_cast<GLfloat>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
@@ -55,22 +55,22 @@ void GEMglRasterPos4f :: render(GemState *state) {
 // Variables
 //
 void GEMglRasterPos4f :: xMess (t_float arg1) {	// FUN
-	x = (GLfloat)arg1;
+	x = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglRasterPos4f :: yMess (t_float arg1) {	// FUN
-	y = (GLfloat)arg1;
+	y = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglRasterPos4f :: zMess (t_float arg1) {	// FUN
-	z = (GLfloat)arg1;
+	z = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglRasterPos4f :: wMess (t_float arg1) {	// FUN
-	w = (GLfloat)arg1;
+	w = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -87,14 +87,14 @@ void GEMglRasterPos4f :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglRasterPos4f :: xMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xMess ( (t_float)    arg0);
+	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
 void GEMglRasterPos4f :: yMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yMess ( (t_float)    arg0);
+	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
 void GEMglRasterPos4f :: zMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->zMess ( (t_float)    arg0);
+	GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }
 void GEMglRasterPos4f :: wMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->wMess ( (t_float)    arg0);
+	GetMyClass(data)->wMess ( static_cast<t_float>(arg0));
 }

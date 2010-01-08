@@ -24,10 +24,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4s , t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 GEMglColor4s :: GEMglColor4s	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		red((GLshort)arg0), 
-		green((GLshort)arg1), 
-		blue((GLshort)arg2), 
-		alpha((GLshort)arg3)
+		red(static_cast<GLshort>(arg0)), 
+		green(static_cast<GLshort>(arg1)), 
+		blue(static_cast<GLshort>(arg2)), 
+		alpha(static_cast<GLshort>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("red"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("green"));
@@ -55,22 +55,22 @@ void GEMglColor4s :: render(GemState *state) {
 // Variables
 //
 void GEMglColor4s :: redMess (t_float arg1) {	// FUN
-	red = (GLshort)arg1;
+	red = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglColor4s :: greenMess (t_float arg1) {	// FUN
-	green = (GLshort)arg1;
+	green = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglColor4s :: blueMess (t_float arg1) {	// FUN
-	blue = (GLshort)arg1;
+	blue = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglColor4s :: alphaMess (t_float arg1) {	// FUN
-	alpha = (GLshort)arg1;
+	alpha = static_cast<GLshort>(arg1);
 	setModified();
 }
 
@@ -87,14 +87,14 @@ void GEMglColor4s :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglColor4s :: redMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->redMess ( (t_float)    arg0);
+	GetMyClass(data)->redMess ( static_cast<t_float>(arg0));
 }
 void GEMglColor4s :: greenMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->greenMess ( (t_float)    arg0);
+	GetMyClass(data)->greenMess ( static_cast<t_float>(arg0));
 }
 void GEMglColor4s :: blueMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->blueMess ( (t_float)    arg0);
+	GetMyClass(data)->blueMess ( static_cast<t_float>(arg0));
 }
 void GEMglColor4s :: alphaMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->alphaMess ( (t_float)    arg0);
+	GetMyClass(data)->alphaMess ( static_cast<t_float>(arg0));
 }

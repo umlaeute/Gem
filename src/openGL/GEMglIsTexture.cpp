@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIsTexture , t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglIsTexture :: GEMglIsTexture	(t_floatarg arg0=0) : texture((GLuint)arg0) {
+GEMglIsTexture :: GEMglIsTexture	(t_floatarg arg0=0) : texture(static_cast<GLuint>(arg0)) {
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("texture"));
   m_outlet=outlet_new(this->x_obj, 0);
 }
@@ -47,7 +47,7 @@ void GEMglIsTexture :: render(GemState *state) {
 // Variables
 //
 void GEMglIsTexture :: textureMess (t_float arg1) {	// FUN
-  texture = (GLuint)arg1;
+  texture = static_cast<GLuint>(arg1);
   setModified();
 }
 

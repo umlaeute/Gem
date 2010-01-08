@@ -66,27 +66,27 @@ void GEMglEvalMesh2 :: render(GemState *state) {
 // Variables
 //
 void GEMglEvalMesh2 :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+	mode = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglEvalMesh2 :: i1Mess (t_float arg1) {	// FUN
-	i1 = (GLint)arg1;
+	i1 = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglEvalMesh2 :: i2Mess (t_float arg1) {	// FUN
-	i2 = (GLint)arg1;
+	i2 = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglEvalMesh2 :: j1Mess (t_float arg1) {	// FUN
-	j1 = (GLint)arg1;
+	j1 = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglEvalMesh2 :: j2Mess (t_float arg1) {	// FUN
-	j2 = (GLint)arg1;
+	j2 = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -104,17 +104,17 @@ void GEMglEvalMesh2 :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglEvalMesh2 :: modeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->modeMess ( (t_float)    arg0);
+	GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalMesh2 :: i1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->i1Mess ( (t_float)    arg0);
+	GetMyClass(data)->i1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalMesh2 :: i2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->i2Mess ( (t_float)    arg0);
+	GetMyClass(data)->i2Mess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalMesh2 :: j1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->j1Mess ( (t_float)    arg0);
+	GetMyClass(data)->j1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalMesh2 :: j2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->j2Mess ( (t_float)    arg0);
+	GetMyClass(data)->j2Mess ( static_cast<t_float>(arg0));
 }

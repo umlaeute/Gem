@@ -51,12 +51,12 @@ void GEMglColorMaterial :: render(GemState *state) {
 // Variables
 //
 void GEMglColorMaterial :: faceMess (t_atom arg) {	// FUN
-	face = (GLenum)getGLdefine(&arg);
+	face = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 
 void GEMglColorMaterial :: modeMess (t_atom arg) {	// FUN
-	mode = (GLenum)getGLdefine(&arg);
+	mode = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

@@ -57,7 +57,7 @@ void GEMglGenProgramsARB :: programsMess (int argc, t_atom*argv) {	// FUN
   delete [] programs;
   programs = new GLuint[argc];
   while(argc--){
-    if(argv->a_type == A_FLOAT)programs[n++] = (GLuint)atom_getint(argv);
+    if(argv->a_type == A_FLOAT)programs[n++] = static_cast<GLuint>(atom_getint(argv));
     argv++;
   }
   setModified();

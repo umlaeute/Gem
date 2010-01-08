@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearIndex , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglClearIndex :: GEMglClearIndex	(t_floatarg arg0=0) :
-		c((GLfloat)arg0)
+		c(static_cast<GLfloat>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("c"));
 }
@@ -46,7 +46,7 @@ void GEMglClearIndex :: render(GemState *state) {
 // Variables
 //
 void GEMglClearIndex :: cMess (t_float arg1) {	// FUN
-	c = (GLfloat)arg1;
+	c = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -60,5 +60,5 @@ void GEMglClearIndex :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglClearIndex :: cMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->cMess ( (t_float)    arg0);
+	GetMyClass(data)->cMess ( static_cast<t_float>(arg0));
 }

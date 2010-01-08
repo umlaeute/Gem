@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelStoref , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglPixelStoref :: GEMglPixelStoref	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		pname((GLenum)arg0), 
-		param((GLfloat)arg1)
+		pname(static_cast<GLenum>(arg0)), 
+		param(static_cast<GLfloat>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
@@ -49,12 +49,12 @@ void GEMglPixelStoref :: render(GemState *state) {
 // Variables
 //
 void GEMglPixelStoref :: pnameMess (t_float arg1) {	// FUN
-	pname = (GLenum)arg1;
+	pname = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglPixelStoref :: paramMess (t_float arg1) {	// FUN
-	param = (GLfloat)arg1;
+	param = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -69,8 +69,8 @@ void GEMglPixelStoref :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglPixelStoref :: pnameMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->pnameMess ( (t_float)    arg0);
+	GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
 void GEMglPixelStoref :: paramMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->paramMess ( (t_float)    arg0);
+	GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

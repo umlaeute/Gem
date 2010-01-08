@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglStencilFunc , t_floatarg, A_DEFFLOAT, t_flo
 // Constructor
 //
 GEMglStencilFunc :: GEMglStencilFunc	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		func((GLenum)arg0), 
-		ref((GLint)arg1), 
-		mask((GLuint)arg2)
+		func(static_cast<GLenum>(arg0)), 
+		ref(static_cast<GLint>(arg1)), 
+		mask(static_cast<GLuint>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("func"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ref"));
@@ -52,17 +52,17 @@ void GEMglStencilFunc :: render(GemState *state) {
 // Variables
 //
 void GEMglStencilFunc :: funcMess (t_float arg1) {	// FUN
-	func = (GLenum)arg1;
+	func = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglStencilFunc :: refMess (t_float arg1) {	// FUN
-	ref = (GLint)arg1;
+	ref = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglStencilFunc :: maskMess (t_float arg1) {	// FUN
-	mask = (GLuint)arg1;
+	mask = static_cast<GLuint>(arg1);
 	setModified();
 }
 
@@ -78,11 +78,11 @@ void GEMglStencilFunc :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglStencilFunc :: funcMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->funcMess ( (t_float)    arg0);
+	GetMyClass(data)->funcMess ( static_cast<t_float>(arg0));
 }
 void GEMglStencilFunc :: refMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->refMess ( (t_float)    arg0);
+	GetMyClass(data)->refMess ( static_cast<t_float>(arg0));
 }
 void GEMglStencilFunc :: maskMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->maskMess ( (t_float)    arg0);
+	GetMyClass(data)->maskMess ( static_cast<t_float>(arg0));
 }

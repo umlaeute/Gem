@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3s , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglColor3s :: GEMglColor3s	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		red((GLshort)arg0), 
-		green((GLshort)arg1), 
-		blue((GLshort)arg2)
+		red(static_cast<GLshort>(arg0)), 
+		green(static_cast<GLshort>(arg1)), 
+		blue(static_cast<GLshort>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("red"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("green"));
@@ -52,17 +52,17 @@ void GEMglColor3s :: render(GemState *state) {
 // Variables
 //
 void GEMglColor3s :: redMess (t_float arg1) {	// FUN
-	red = (GLshort)arg1;
+	red = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglColor3s :: greenMess (t_float arg1) {	// FUN
-	green = (GLshort)arg1;
+	green = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglColor3s :: blueMess (t_float arg1) {	// FUN
-	blue = (GLshort)arg1;
+	blue = static_cast<GLshort>(arg1);
 	setModified();
 }
 
@@ -78,11 +78,11 @@ void GEMglColor3s :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglColor3s :: redMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->redMess ( (t_float)    arg0);
+	GetMyClass(data)->redMess ( static_cast<t_float>(arg0));
 }
 void GEMglColor3s :: greenMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->greenMess ( (t_float)    arg0);
+	GetMyClass(data)->greenMess ( static_cast<t_float>(arg0));
 }
 void GEMglColor3s :: blueMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->blueMess ( (t_float)    arg0);
+	GetMyClass(data)->blueMess ( static_cast<t_float>(arg0));
 }

@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2f , t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 GEMglVertex2f :: GEMglVertex2f	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		x((GLfloat)arg0), 
-		y((GLfloat)arg1)
+		x(static_cast<GLfloat>(arg0)), 
+		y(static_cast<GLfloat>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
@@ -49,12 +49,12 @@ void GEMglVertex2f :: render(GemState *state) {
 // Variables
 //
 void GEMglVertex2f :: xMess (t_float arg1) {	// FUN
-	x = (GLfloat)arg1;
+	x = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglVertex2f :: yMess (t_float arg1) {	// FUN
-	y = (GLfloat)arg1;
+	y = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -69,8 +69,8 @@ void GEMglVertex2f :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglVertex2f :: xMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xMess ( (t_float)    arg0);
+	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
 void GEMglVertex2f :: yMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yMess ( (t_float)    arg0);
+	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }

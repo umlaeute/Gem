@@ -24,10 +24,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglScissor , t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 GEMglScissor :: GEMglScissor	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		x((GLint)arg0), 
-		y((GLint)arg1), 
-		width((GLsizei)arg2), 
-		height((GLsizei)arg3)
+		x(static_cast<GLint>(arg0)), 
+		y(static_cast<GLint>(arg1)), 
+		width(static_cast<GLsizei>(arg2)), 
+		height(static_cast<GLsizei>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
@@ -55,22 +55,22 @@ void GEMglScissor :: render(GemState *state) {
 // Variables
 //
 void GEMglScissor :: xMess (t_float arg1) {	// FUN
-	x = (GLint)arg1;
+	x = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglScissor :: yMess (t_float arg1) {	// FUN
-	y = (GLint)arg1;
+	y = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglScissor :: widthMess (t_float arg1) {	// FUN
-	width = (GLsizei)arg1;
+	width = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
 void GEMglScissor :: heightMess (t_float arg1) {	// FUN
-	height = (GLsizei)arg1;
+	height = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
@@ -87,14 +87,14 @@ void GEMglScissor :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglScissor :: xMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xMess ( (t_float)    arg0);
+	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
 void GEMglScissor :: yMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yMess ( (t_float)    arg0);
+	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
 void GEMglScissor :: widthMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->widthMess ( (t_float)    arg0);
+	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }
 void GEMglScissor :: heightMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->heightMess ( (t_float)    arg0);
+	GetMyClass(data)->heightMess ( static_cast<t_float>(arg0));
 }

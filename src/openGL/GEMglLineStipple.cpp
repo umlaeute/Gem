@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglLineStipple , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglLineStipple :: GEMglLineStipple	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		factor((GLint)arg0), 
-		pattern((GLushort)arg1)
+		factor(static_cast<GLint>(arg0)), 
+		pattern(static_cast<GLushort>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("factor"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pattern"));
@@ -49,12 +49,12 @@ void GEMglLineStipple :: render(GemState *state) {
 // Variables
 //
 void GEMglLineStipple :: factorMess (t_float arg1) {	// FUN
-	factor = (GLint)arg1;
+	factor = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglLineStipple :: patternMess (t_float arg1) {	// FUN
-	pattern = (GLushort)arg1;
+	pattern = static_cast<GLushort>(arg1);
 	setModified();
 }
 
@@ -69,8 +69,8 @@ void GEMglLineStipple :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglLineStipple :: factorMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->factorMess ( (t_float)    arg0);
+	GetMyClass(data)->factorMess ( static_cast<t_float>(arg0));
 }
 void GEMglLineStipple :: patternMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->patternMess ( (t_float)    arg0);
+	GetMyClass(data)->patternMess ( static_cast<t_float>(arg0));
 }

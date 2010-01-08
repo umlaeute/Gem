@@ -58,7 +58,7 @@ void GEMglIsEnabled :: render(GemState *state) {
 // Variables
 //
 void GEMglIsEnabled :: capMess (t_atom arg) {	// FUN
-  cap = (GLenum)getGLdefine(&arg);
+  cap = static_cast<GLenum>(getGLdefine(&arg));
   setModified();
 }
 

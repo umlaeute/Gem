@@ -78,7 +78,7 @@ void GEMglGetFloatv :: render(GemState *state) {
 // variable
 //
 void GEMglGetFloatv :: pnameMess (t_atom arg) {	// FUN
-  pname=(GLenum)getGLdefine(&arg);
+  pname=static_cast<GLenum>(getGLdefine(&arg));
   setModified();
 }
 

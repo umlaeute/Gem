@@ -61,27 +61,27 @@ void GEMglCopyPixels :: render(GemState *state) {
 // Variables
 //
 void GEMglCopyPixels :: xMess (t_float arg1) {	// FUN
-	x = (GLint)arg1;
+	x = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglCopyPixels :: yMess (t_float arg1) {	// FUN
-	y = (GLint)arg1;
+	y = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglCopyPixels :: widthMess (t_float arg1) {	// FUN
-	width = (GLsizei)arg1;
+	width = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
 void GEMglCopyPixels :: heightMess (t_float arg1) {	// FUN
-	height = (GLsizei)arg1;
+	height = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
 void GEMglCopyPixels :: typeMess (t_float arg1) {	// FUN
-	type = (GLenum)arg1;
+	type = static_cast<GLenum>(arg1);
 	setModified();
 }
 
@@ -99,17 +99,17 @@ void GEMglCopyPixels :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglCopyPixels :: xMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xMess ( (t_float)    arg0);
+	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
 void GEMglCopyPixels :: yMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yMess ( (t_float)    arg0);
+	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
 void GEMglCopyPixels :: widthMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->widthMess ( (t_float)    arg0);
+	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }
 void GEMglCopyPixels :: heightMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->heightMess ( (t_float)    arg0);
+	GetMyClass(data)->heightMess ( static_cast<t_float>(arg0));
 }
 void GEMglCopyPixels :: typeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->typeMess ( (t_float)    arg0);
+	GetMyClass(data)->typeMess ( static_cast<t_float>(arg0));
 }

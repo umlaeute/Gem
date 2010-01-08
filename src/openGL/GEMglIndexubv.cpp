@@ -53,7 +53,7 @@ void GEMglIndexubv :: render(GemState *state) {
 // variable
 //
 void GEMglIndexubv :: cMess (t_float arg0) {	// FUN
-  c[0]=(GLubyte)arg0;
+  c[0]=static_cast<GLubyte>(arg0);
   setModified();
 }
 

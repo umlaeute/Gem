@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexMask , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglIndexMask :: GEMglIndexMask	(t_floatarg arg0=0) :
-		mask((GLuint)arg0)
+		mask(static_cast<GLuint>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mask"));
 }
@@ -46,7 +46,7 @@ void GEMglIndexMask :: render(GemState *state) {
 // Variables
 //
 void GEMglIndexMask :: maskMess (t_float arg1) {	// FUN
-	mask = (GLuint)arg1;
+	mask = static_cast<GLuint>(arg1);
 	setModified();
 }
 
@@ -60,5 +60,5 @@ void GEMglIndexMask :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglIndexMask :: maskMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->maskMess ( (t_float)    arg0);
+	GetMyClass(data)->maskMess ( static_cast<t_float>(arg0));
 }

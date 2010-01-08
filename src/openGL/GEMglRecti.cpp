@@ -24,10 +24,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRecti , t_floatarg, A_DEFFLOAT, t_floatarg, 
 // Constructor
 //
 GEMglRecti :: GEMglRecti	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		x1((GLint)arg0), 
-		y1((GLint)arg1), 
-		x2((GLint)arg2), 
-		y2((GLint)arg3)
+		x1(static_cast<GLint>(arg0)), 
+		y1(static_cast<GLint>(arg1)), 
+		x2(static_cast<GLint>(arg2)), 
+		y2(static_cast<GLint>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x1"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y1"));
@@ -55,22 +55,22 @@ void GEMglRecti :: render(GemState *state) {
 // Variables
 //
 void GEMglRecti :: x1Mess (t_float arg1) {	// FUN
-	x1 = (GLint)arg1;
+	x1 = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglRecti :: y1Mess (t_float arg1) {	// FUN
-	y1 = (GLint)arg1;
+	y1 = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglRecti :: x2Mess (t_float arg1) {	// FUN
-	x2 = (GLint)arg1;
+	x2 = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglRecti :: y2Mess (t_float arg1) {	// FUN
-	y2 = (GLint)arg1;
+	y2 = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -87,14 +87,14 @@ void GEMglRecti :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglRecti :: x1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->x1Mess ( (t_float)    arg0);
+	GetMyClass(data)->x1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglRecti :: y1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->y1Mess ( (t_float)    arg0);
+	GetMyClass(data)->y1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglRecti :: x2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->x2Mess ( (t_float)    arg0);
+	GetMyClass(data)->x2Mess ( static_cast<t_float>(arg0));
 }
 void GEMglRecti :: y2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->y2Mess ( (t_float)    arg0);
+	GetMyClass(data)->y2Mess ( static_cast<t_float>(arg0));
 }

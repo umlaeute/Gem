@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFeedbackBuffer , t_floatarg, A_DEFFLOAT, t_fl
 // Constructor
 //
 GEMglFeedbackBuffer :: GEMglFeedbackBuffer	(t_floatarg arg0=128, t_floatarg arg1=0) :
-		size((GLsizei)arg0), type((GLenum)arg1)
+		size(static_cast<GLsizei>(arg0)), type(static_cast<GLenum>(arg1))
 {
 	len=(size>0)?size:128;
 	buffer = new float[len];
@@ -58,7 +58,7 @@ void GEMglFeedbackBuffer :: render(GemState *state) {
 // Variables
 //
 void GEMglFeedbackBuffer :: sizeMess (t_float arg1) {	// FUN
-	size = (GLsizei)arg1;
+	size = static_cast<GLsizei>(arg1);
 	if (size>len){
 	  len=size;
 	  delete[]buffer;
@@ -68,7 +68,7 @@ void GEMglFeedbackBuffer :: sizeMess (t_float arg1) {	// FUN
 }
 
 void GEMglFeedbackBuffer :: typeMess (t_float arg1) {	// FUN
-	type = (GLenum)arg1;
+	type = static_cast<GLenum>(arg1);
 	setModified();
 }
 
@@ -82,8 +82,8 @@ void GEMglFeedbackBuffer :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglFeedbackBuffer :: sizeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->sizeMess ( (t_float)    arg0);
+	GetMyClass(data)->sizeMess ( static_cast<t_float>(arg0));
 }
 void GEMglFeedbackBuffer :: typeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->typeMess ( (t_float)    arg0);
+	GetMyClass(data)->typeMess ( static_cast<t_float>(arg0));
 }

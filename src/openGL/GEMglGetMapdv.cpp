@@ -57,11 +57,11 @@ void GEMglGetMapdv :: render(GemState *state) {
 // variable
 //
 void GEMglGetMapdv :: targetMess (t_float arg0) {	// FUN
-  target=(GLenum)arg0;
+  target=static_cast<GLenum>(arg0);
   setModified();
 }
 void GEMglGetMapdv :: queryMess (t_float arg0) {	// FUN
-  query=(GLenum)arg0;
+  query=static_cast<GLenum>(arg0);
   setModified();
 }
 /////////////////////////////////////////////////////////

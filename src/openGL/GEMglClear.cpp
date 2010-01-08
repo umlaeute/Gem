@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClear , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglClear :: GEMglClear	(t_floatarg arg0=0) :
-		mask((GLbitfield)arg0)
+		mask(static_cast<GLbitfield>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mask"));
 }
@@ -46,7 +46,7 @@ void GEMglClear :: render(GemState *state) {
 // Variables
 //
 void GEMglClear :: maskMess (t_float arg1) {	// FUN
-	mask = (GLbitfield)arg1;
+	mask = static_cast<GLbitfield>(arg1);
 	setModified();
 }
 
@@ -60,5 +60,5 @@ void GEMglClear :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglClear :: maskMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->maskMess ( (t_float)    arg0);
+	GetMyClass(data)->maskMess ( static_cast<t_float>(arg0));
 }

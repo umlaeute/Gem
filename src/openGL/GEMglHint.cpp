@@ -50,12 +50,12 @@ void GEMglHint :: render(GemState *state) {
 // Variables
 //
 void GEMglHint :: targetMess (t_atom arg) {	// FUN
-	target = (GLenum)getGLdefine(&arg);
+	target = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 
 void GEMglHint :: modeMess (t_atom arg) {	// FUN
-	mode = (GLenum)getGLdefine(&arg);
+	mode = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

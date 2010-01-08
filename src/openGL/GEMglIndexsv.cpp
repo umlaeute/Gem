@@ -45,7 +45,7 @@ void GEMglIndexsv :: render(GemState *state) {
 // variable
 //
 void GEMglIndexsv :: cMess (t_float arg0) {	// FUN
-  c[0]=(GLshort)arg0;
+  c[0]=static_cast<GLshort>(arg0);
   setModified();
 }
 

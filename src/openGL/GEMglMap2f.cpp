@@ -18,21 +18,21 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMap2f )
 
 /////////////////////////////////////////////////////////
 //
-// GEMglViewport
+// GEMglMap2f
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 GEMglMap2f :: GEMglMap2f	(int argc, t_atom *argv){
-	if (argc>0)target =(GLenum )atom_getint(argv+0);
-	if (argc>1)u1     =(GLfloat)atom_getint(argv+1);
-	if (argc>2)u2     =(GLfloat)atom_getint(argv+2);
-	if (argc>3)ustride=(GLint  )atom_getint(argv+3);
-	if (argc>4)uorder =(GLint  )atom_getint(argv+4);
-	if (argc>5)v1     =(GLfloat)atom_getint(argv+5);
-	if (argc>6)v2     =(GLfloat)atom_getint(argv+6);
-	if (argc>7)vstride=(GLint  )atom_getint(argv+7);
-	if (argc>8)vorder =(GLint  )atom_getint(argv+8);
+	if (argc>0)target =static_cast<GLenum>(atom_getint(argv+0));
+	if (argc>1)u1     =static_cast<GLfloat>(atom_getfloat(argv+1));
+	if (argc>2)u2     =static_cast<GLfloat>(atom_getfloat(argv+2));
+	if (argc>3)ustride=static_cast<GLint>(atom_getint(argv+3));
+	if (argc>4)uorder =static_cast<GLint>(atom_getint(argv+4));
+	if (argc>5)v1     =static_cast<GLfloat>(atom_getfloat(argv+5));
+	if (argc>6)v2     =static_cast<GLfloat>(atom_getfloat(argv+6));
+	if (argc>7)vstride=static_cast<GLint>(atom_getint(argv+7));
+	if (argc>8)vorder =static_cast<GLint>(atom_getint(argv+8));
 
 	len=128;
 	points = new GLfloat[len];
@@ -84,47 +84,47 @@ void GEMglMap2f :: render(GemState *state) {
 // Variables
 //
 void GEMglMap2f :: targetMess (t_float arg1) {	// FUN
-	target = (GLenum)arg1;
+	target = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglMap2f :: u1Mess (t_float arg1) {	// FUN
-	u1 = (GLfloat)arg1;
+	u1 = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglMap2f :: u2Mess (t_float arg1) {	// FUN
-	u2 = (GLfloat)arg1;
+	u2 = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglMap2f :: ustrideMess (t_float arg1) {	// FUN
-	ustride = (GLint)arg1;
+	ustride = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglMap2f :: uorderMess (t_float arg1) {	// FUN
-	uorder = (GLint)arg1;
+	uorder = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglMap2f :: v1Mess (t_float arg1) {	// FUN
-	v1 = (GLfloat)arg1;
+	v1 = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglMap2f :: v2Mess (t_float arg1) {	// FUN
-	v2 = (GLfloat)arg1;
+	v2 = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglMap2f :: vstrideMess (t_float arg1) {	// FUN
-	vstride = (GLint)arg1;
+	vstride = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglMap2f :: vorderMess (t_float arg1) {	// FUN
-	vorder = (GLint)arg1;
+	vorder = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -156,31 +156,31 @@ void GEMglMap2f :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglMap2f :: targetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->targetMess ( (t_float)    arg0);
+	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: u1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->u1Mess ( (t_float)    arg0);
+	GetMyClass(data)->u1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: u2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->u2Mess ( (t_float)    arg0);
+	GetMyClass(data)->u2Mess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: ustrideMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->ustrideMess ( (t_float)    arg0);
+	GetMyClass(data)->ustrideMess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: uorderMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->uorderMess ( (t_float)    arg0);
+	GetMyClass(data)->uorderMess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: v1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->v1Mess ( (t_float)    arg0);
+	GetMyClass(data)->v1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: v2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->v2Mess ( (t_float)    arg0);
+	GetMyClass(data)->v2Mess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: vstrideMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->vstrideMess ( (t_float)    arg0);
+	GetMyClass(data)->vstrideMess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: vorderMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->vorderMess ( (t_float)    arg0);
+	GetMyClass(data)->vorderMess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: pointsMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
 	GetMyClass(data)->pointsMess (argc, argv);

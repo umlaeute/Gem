@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushName , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglPushName :: GEMglPushName	(t_floatarg arg0=0) :
-		name((GLuint)arg0)
+		name(static_cast<GLuint>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("name"));
 }
@@ -55,7 +55,7 @@ void GEMglPushName :: render(GemState *state) {
 // Variables
 //
 void GEMglPushName :: nameMess (t_float arg1) {	// FUN
-	name = (GLuint)arg1;
+	name = static_cast<GLuint>(arg1);
 	setModified();
 }
 
@@ -69,5 +69,5 @@ void GEMglPushName :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglPushName :: nameMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->nameMess ( (t_float)    arg0);
+	GetMyClass(data)->nameMess ( static_cast<t_float>(arg0));
 }

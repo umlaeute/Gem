@@ -22,7 +22,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglLoadMatrixf , t_floatarg, A_DEFFLOAT )
 // Constructor
 //
 GEMglLoadMatrixf :: GEMglLoadMatrixf	(t_floatarg arg0=0) //:
-		//matrix((GLfloat)arg0)
+		//matrix(static_cast<GLfloat>(arg0))
 {
 	//m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("matrix"));
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("list"));
@@ -59,7 +59,7 @@ void GEMglLoadMatrixf :: matrixMess (int argc, t_atom*argv) {	// FUN
 		}
 	int i;
 	for (i=0;i<16;i++) {
-	  m_matrix[i]=(GLfloat)atom_getfloat(argv+i);
+	  m_matrix[i]=static_cast<GLfloat>(atom_getfloat(argv+i));
 	}
 	setModified();
 }

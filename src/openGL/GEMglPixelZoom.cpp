@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelZoom , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglPixelZoom :: GEMglPixelZoom	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		xfactor((GLfloat)arg0), 
-		yfactor((GLfloat)arg1)
+		xfactor(static_cast<GLfloat>(arg0)), 
+		yfactor(static_cast<GLfloat>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xfactor"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("yfactor"));
@@ -49,12 +49,12 @@ void GEMglPixelZoom :: render(GemState *state) {
 // Variables
 //
 void GEMglPixelZoom :: xfactorMess (t_float arg1) {	// FUN
-	xfactor = (GLfloat)arg1;
+	xfactor = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglPixelZoom :: yfactorMess (t_float arg1) {	// FUN
-	yfactor = (GLfloat)arg1;
+	yfactor = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -69,8 +69,8 @@ void GEMglPixelZoom :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglPixelZoom :: xfactorMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xfactorMess ( (t_float)    arg0);
+	GetMyClass(data)->xfactorMess ( static_cast<t_float>(arg0));
 }
 void GEMglPixelZoom :: yfactorMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yfactorMess ( (t_float)    arg0);
+	GetMyClass(data)->yfactorMess ( static_cast<t_float>(arg0));
 }

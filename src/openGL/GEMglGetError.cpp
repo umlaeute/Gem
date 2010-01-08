@@ -38,7 +38,7 @@ GEMglGetError :: ~GEMglGetError () {
 //
 void GEMglGetError :: render(GemState *state) {
   GLenum i=glGetError();
-  outlet_float(m_outlet, (t_float)i);
+  outlet_float(m_outlet, static_cast<t_float>(i));
 }
 
 /////////////////////////////////////////////////////////

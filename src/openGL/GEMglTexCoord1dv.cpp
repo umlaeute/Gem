@@ -45,7 +45,7 @@ void GEMglTexCoord1dv :: render(GemState *state) {
 // variable
 //
 void GEMglTexCoord1dv :: vMess (t_float arg0) {	// FUN
-	v[0]=(GLdouble)arg0;
+	v[0]=static_cast<GLdouble>(arg0);
 	setModified();
 }
 

@@ -22,9 +22,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMultiTexCoord2fARB , t_floatarg, A_DEFFLOAT
 // Constructor
 //
 GEMglMultiTexCoord2fARB :: GEMglMultiTexCoord2fARB	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		texUnit((GLenum)arg0), 
-		s((GLfloat)arg1), 
-		t((GLfloat)arg2)
+		texUnit(static_cast<GLenum>(arg0)), 
+		s(static_cast<GLfloat>(arg1)), 
+		t(static_cast<GLfloat>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("texUnit"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("s"));
@@ -59,17 +59,17 @@ void GEMglMultiTexCoord2fARB :: render(GemState *state) {
 // Variables
 //
 void GEMglMultiTexCoord2fARB :: texUnitMess (t_float arg1) {	// FUN
-	texUnit = (GLenum)arg1;
+	texUnit = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglMultiTexCoord2fARB :: sMess (t_float arg1) {	// FUN
-	s = (GLfloat)arg1;
+	s = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglMultiTexCoord2fARB :: tMess (t_float arg1) {	// FUN
-	t = (GLfloat)arg1;
+	t = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -88,11 +88,11 @@ void GEMglMultiTexCoord2fARB :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglMultiTexCoord2fARB :: texUnitMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->texUnitMess ( (t_float)    arg0);
+	GetMyClass(data)->texUnitMess ( static_cast<t_float>(arg0));
 }
 void GEMglMultiTexCoord2fARB :: sMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->sMess ( (t_float)    arg0);
+	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
 void GEMglMultiTexCoord2fARB :: tMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->tMess ( (t_float)    arg0);
+	GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }

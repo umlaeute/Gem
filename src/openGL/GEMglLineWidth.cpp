@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglLineWidth , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglLineWidth :: GEMglLineWidth	(t_floatarg arg0=0) :
-		width((GLfloat)arg0)
+		width(static_cast<GLfloat>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("width"));
 }
@@ -46,7 +46,7 @@ void GEMglLineWidth :: render(GemState *state) {
 // Variables
 //
 void GEMglLineWidth :: widthMess (t_float arg1) {	// FUN
-	width = (GLfloat)arg1;
+	width = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -60,5 +60,5 @@ void GEMglLineWidth :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglLineWidth :: widthMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->widthMess ( (t_float)    arg0);
+	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }

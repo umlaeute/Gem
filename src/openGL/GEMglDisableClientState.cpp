@@ -53,7 +53,7 @@ void GEMglDisableClientState :: render(GemState *state) {
 // Variables
 //
 void GEMglDisableClientState :: arrayMess (t_atom arg) {	// FUN
-	array = (GLenum)getGLdefine(&arg);
+	array = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

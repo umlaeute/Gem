@@ -45,8 +45,8 @@ void GEMglRasterPos2dv :: render(GemState *state) {
 // variable
 //
 void GEMglRasterPos2dv :: vMess (t_float arg0, t_float arg1) {	// FUN
-	v[0]=(GLdouble)arg0;
-	v[1]=(GLdouble)arg1;
+	v[0]=static_cast<GLdouble>(arg0);
+	v[1]=static_cast<GLdouble>(arg1);
 	setModified();
 }
 

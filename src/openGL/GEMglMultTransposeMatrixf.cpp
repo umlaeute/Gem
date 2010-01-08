@@ -58,7 +58,7 @@ void GEMglMultTransposeMatrixf :: matrixMess (int argc, t_atom* argv) {	// FUN
 		}
 	int i;
 	for (i=0;i<16;i++) {
-	  m_matrix[i]=(GLfloat)atom_getfloat(argv+i);
+	  m_matrix[i]=static_cast<GLfloat>(atom_getfloat(argv+i));
 	}
 	setModified();
 }

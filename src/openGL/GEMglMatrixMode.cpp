@@ -47,7 +47,7 @@ void GEMglMatrixMode :: render(GemState *state) {
 // Variables
 //
 void GEMglMatrixMode :: modeMess (t_atom arg) {	// FUN
-  mode = (GLenum)getGLdefine(&arg);
+  mode = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

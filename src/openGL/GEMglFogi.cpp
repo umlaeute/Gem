@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFogi , t_floatarg, A_DEFFLOAT, t_floatarg, A_
 // Constructor
 //
 GEMglFogi :: GEMglFogi	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		pname((GLenum)arg0), 
-		param((GLint)arg1)
+		pname(static_cast<GLenum>(arg0)), 
+		param(static_cast<GLint>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
@@ -57,12 +57,12 @@ void GEMglFogi :: render(GemState *state) {
 // Variables
 //
 void GEMglFogi :: pnameMess (t_float arg1) {	// FUN
-	pname = (GLenum)arg1;
+	pname = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglFogi :: paramMess (t_float arg1) {	// FUN
-	param = (GLint)arg1;
+	param = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -77,8 +77,8 @@ void GEMglFogi :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglFogi :: pnameMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->pnameMess ( (t_float)    arg0);
+	GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
 void GEMglFogi :: paramMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->paramMess ( (t_float)    arg0);
+	GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglCallList , t_floatarg, A_DEFFLOAT)
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglCallList :: GEMglCallList	(t_floatarg arg0=0) : list((GLuint)arg0) {
+GEMglCallList :: GEMglCallList	(t_floatarg arg0=0) : list(static_cast<GLuint>(arg0)) {
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gllist"));
 }
 /////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ void GEMglCallList :: render(GemState *state) {
 // Variables
 //
 void GEMglCallList :: listMess (t_float arg1) {	// FUN
-  list = (GLuint)arg1;
+  list = static_cast<GLuint>(arg1);
   setModified();
 }
 

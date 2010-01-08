@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1d , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglMapGrid1d :: GEMglMapGrid1d	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		un((GLint)arg0), 
-		u1((GLdouble)arg1), 
-		u2((GLdouble)arg2)
+		un(static_cast<GLint>(arg0)), 
+		u1(static_cast<GLdouble>(arg1)), 
+		u2(static_cast<GLdouble>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("un"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u1"));
@@ -61,17 +61,17 @@ void GEMglMapGrid1d :: render(GemState *state) {
 // Variables
 //
 void GEMglMapGrid1d :: unMess (t_float arg1) {	// FUN
-	un = (GLint)arg1;
+	un = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglMapGrid1d :: u1Mess (t_float arg1) {	// FUN
-	u1 = (GLdouble)arg1;
+	u1 = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglMapGrid1d :: u2Mess (t_float arg1) {	// FUN
-	u2 = (GLdouble)arg1;
+	u2 = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
@@ -87,11 +87,11 @@ void GEMglMapGrid1d :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglMapGrid1d :: unMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->unMess ( (t_float)    arg0);
+	GetMyClass(data)->unMess ( static_cast<t_float>(arg0));
 }
 void GEMglMapGrid1d :: u1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->u1Mess ( (t_float)    arg0);
+	GetMyClass(data)->u1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglMapGrid1d :: u2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->u2Mess ( (t_float)    arg0);
+	GetMyClass(data)->u2Mess ( static_cast<t_float>(arg0));
 }

@@ -23,8 +23,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglUniform1fARB , t_floatarg, A_DEFFLOAT, t_floa
 // Constructor
 //
 GEMglUniform1fARB :: GEMglUniform1fARB	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		location((GLint)arg0), 
-		val((GLfloat)arg1)
+		location(static_cast<GLint>(arg0)), 
+		val(static_cast<GLfloat>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("location"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("val"));
@@ -56,12 +56,12 @@ void GEMglUniform1fARB :: render(GemState *state) {
 // Variables
 //
 void GEMglUniform1fARB :: locMess (t_float arg1) {	// FUN
-	location = (GLint)arg1;
+	location = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglUniform1fARB :: valMess (t_float arg1) {	// FUN
-	val = (GLfloat)arg1;
+	val = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -78,8 +78,8 @@ void GEMglUniform1fARB :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglUniform1fARB :: locMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->locMess ( (t_float)    arg0);
+	GetMyClass(data)->locMess ( static_cast<t_float>(arg0));
 }
 void GEMglUniform1fARB :: valMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->valMess ( (t_float)    arg0);
+	GetMyClass(data)->valMess ( static_cast<t_float>(arg0));
 }

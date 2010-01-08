@@ -51,7 +51,7 @@ void GEMglEvalCoord1fv :: render(GemState *state) {
 // variable
 //
 void GEMglEvalCoord1fv :: vMess (t_float arg0) {	// FUN
-	v[0]=(GLfloat )arg0;
+	v[0]=static_cast<GLfloat>(arg0);
 	setModified();
 }
 

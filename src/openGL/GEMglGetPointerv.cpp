@@ -54,7 +54,7 @@ void GEMglGetPointerv :: render(GemState *state) {
 // variable
 //
 void GEMglGetPointerv :: pnameMess (t_float arg0) {	// FUN
-  pname=(GLenum)arg0;
+  pname=static_cast<GLenum>(arg0);
   setModified();
 }
 

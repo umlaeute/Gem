@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushClientAttrib , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglPushClientAttrib :: GEMglPushClientAttrib	(t_floatarg arg0=0) :
-		mask((GLbitfield)arg0)
+		mask(static_cast<GLbitfield>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mask"));
 }
@@ -55,7 +55,7 @@ void GEMglPushClientAttrib :: render(GemState *state) {
 // Variables
 //
 void GEMglPushClientAttrib :: maskMess (t_float arg1) {	// FUN
-	mask = (GLbitfield)arg1;
+	mask = static_cast<GLbitfield>(arg1);
 	setModified();
 }
 
@@ -69,5 +69,5 @@ void GEMglPushClientAttrib :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglPushClientAttrib :: maskMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->maskMess ( (t_float)    arg0);
+	GetMyClass(data)->maskMess ( static_cast<t_float>(arg0));
 }

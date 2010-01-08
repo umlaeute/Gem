@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalCoord2f , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglEvalCoord2f :: GEMglEvalCoord2f	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		u((GLfloat)arg0), 
-		v((GLfloat)arg1)
+		u(static_cast<GLfloat>(arg0)), 
+		v(static_cast<GLfloat>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
@@ -55,12 +55,12 @@ void GEMglEvalCoord2f :: render(GemState *state) {
 // Variables
 //
 void GEMglEvalCoord2f :: uMess (t_float arg1) {	// FUN
-	u = (GLfloat)arg1;
+	u = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglEvalCoord2f :: vMess (t_float arg1) {	// FUN
-	v = (GLfloat)arg1;
+	v = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -75,8 +75,8 @@ void GEMglEvalCoord2f :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglEvalCoord2f :: uMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->uMess ( (t_float)    arg0);
+	GetMyClass(data)->uMess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalCoord2f :: vMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->vMess ( (t_float)    arg0);
+	GetMyClass(data)->vMess ( static_cast<t_float>(arg0));
 }

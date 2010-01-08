@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexub , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglIndexub :: GEMglIndexub	(t_floatarg arg0=0) :
-		c((GLubyte)arg0)
+		c(static_cast<GLubyte>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("c"));
 }
@@ -54,7 +54,7 @@ void GEMglIndexub :: render(GemState *state) {
 // Variables
 //
 void GEMglIndexub :: cMess (t_float arg1) {	// FUN
-	c = (GLubyte)arg1;
+	c = static_cast<GLubyte>(arg1);
 	setModified();
 }
 
@@ -68,5 +68,5 @@ void GEMglIndexub :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglIndexub :: cMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->cMess ( (t_float)    arg0);
+	GetMyClass(data)->cMess ( static_cast<t_float>(arg0));
 }

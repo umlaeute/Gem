@@ -21,15 +21,15 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMgluLookAt )
 // Constructor
 //
   GEMgluLookAt :: GEMgluLookAt	(int argc, t_atom*argv) :
-	  m_eyeX((GLdouble)0),
-	  m_eyeY((GLdouble)0),
-	  m_eyeZ((GLdouble)0),
-	  m_centerX((GLdouble)0),
-	  m_centerY((GLdouble)0),
-	  m_centerZ((GLdouble)0),
-	  m_upX((GLdouble)0),
-	  m_upY((GLdouble)0),
-	  m_upZ((GLdouble)0)
+	  m_eyeX(static_cast<GLdouble>(0)),
+	  m_eyeY(static_cast<GLdouble>(0)),
+	  m_eyeZ(static_cast<GLdouble>(0)),
+	  m_centerX(static_cast<GLdouble>(0)),
+	  m_centerY(static_cast<GLdouble>(0)),
+	  m_centerZ(static_cast<GLdouble>(0)),
+	  m_upX(static_cast<GLdouble>(0)),
+	  m_upY(static_cast<GLdouble>(0)),
+	  m_upZ(static_cast<GLdouble>(0))
 {
   if(argc && argc!=9) {
     throw(GemException("invalid number of arguments"));
@@ -42,15 +42,15 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMgluLookAt )
     }
   }
 
-  m_eyeX=(GLdouble)atom_getfloat(argv+0);
-  m_eyeY=(GLdouble)atom_getfloat(argv+1);
-  m_eyeZ=(GLdouble)atom_getfloat(argv+2);
-  m_centerX=(GLdouble)atom_getfloat(argv+3);
-  m_centerY=(GLdouble)atom_getfloat(argv+4);
-  m_centerZ=(GLdouble)atom_getfloat(argv+5);
-  m_upX=(GLdouble)atom_getfloat(argv+6);
-  m_upY=(GLdouble)atom_getfloat(argv+7);
-  m_upZ=(GLdouble)atom_getfloat(argv+8);
+  m_eyeX=static_cast<GLdouble>(atom_getfloat(argv+0));
+  m_eyeY=static_cast<GLdouble>(atom_getfloat(argv+1));
+  m_eyeZ=static_cast<GLdouble>(atom_getfloat(argv+2));
+  m_centerX=static_cast<GLdouble>(atom_getfloat(argv+3));
+  m_centerY=static_cast<GLdouble>(atom_getfloat(argv+4));
+  m_centerZ=static_cast<GLdouble>(atom_getfloat(argv+5));
+  m_upX=static_cast<GLdouble>(atom_getfloat(argv+6));
+  m_upY=static_cast<GLdouble>(atom_getfloat(argv+7));
+  m_upZ=static_cast<GLdouble>(atom_getfloat(argv+8));
   
 
 	  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("eyeX"));
@@ -87,47 +87,47 @@ void GEMgluLookAt :: render(GemState *state) {
 }
 
 void GEMgluLookAt :: eyeXMess(t_float arg1) {
-	  m_eyeX=(GLdouble)arg1;
+	  m_eyeX=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
 void GEMgluLookAt :: eyeYMess(t_float arg1) {
-	  m_eyeY=(GLdouble)arg1;
+	  m_eyeY=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
 void GEMgluLookAt :: eyeZMess(t_float arg1) {
-	  m_eyeZ=(GLdouble)arg1;
+	  m_eyeZ=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
 void GEMgluLookAt :: centerXMess(t_float arg1) {
-	  m_centerX=(GLdouble)arg1;
+	  m_centerX=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
 void GEMgluLookAt :: centerYMess(t_float arg1) {
-	  m_centerY=(GLdouble)arg1;
+	  m_centerY=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
 void GEMgluLookAt :: centerZMess(t_float arg1) {
-	  m_centerZ=(GLdouble)arg1;
+	  m_centerZ=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
 void GEMgluLookAt :: upXMess(t_float arg1) {
-	  m_upX=(GLdouble)arg1;
+	  m_upX=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
 void GEMgluLookAt :: upYMess(t_float arg1) {
-	  m_upY=(GLdouble)arg1;
+	  m_upY=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
 void GEMgluLookAt :: upZMess(t_float arg1) {
-	  m_upZ=(GLdouble)arg1;
+	  m_upZ=static_cast<GLdouble>(arg1);
 	  setModified();
 }
 
@@ -149,30 +149,30 @@ void GEMgluLookAt :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMgluLookAt :: eyeXMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->eyeXMess( (t_float) arg0);
+	GetMyClass(data)->eyeXMess( static_cast<t_float>(arg0));
 }
 void GEMgluLookAt :: eyeYMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->eyeYMess( (t_float) arg0);
+	GetMyClass(data)->eyeYMess( static_cast<t_float>(arg0));
 }
 void GEMgluLookAt :: eyeZMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->eyeZMess( (t_float) arg0);
+	GetMyClass(data)->eyeZMess( static_cast<t_float>(arg0));
 }
 void GEMgluLookAt :: centerXMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->centerXMess( (t_float) arg0);
+	GetMyClass(data)->centerXMess( static_cast<t_float>(arg0));
 }
 void GEMgluLookAt :: centerYMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->centerYMess( (t_float) arg0);
+	GetMyClass(data)->centerYMess( static_cast<t_float>(arg0));
 }
 void GEMgluLookAt :: centerZMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->centerZMess( (t_float) arg0);
+	GetMyClass(data)->centerZMess( static_cast<t_float>(arg0));
 }
 void GEMgluLookAt :: upXMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->upXMess( (t_float) arg0);
+	GetMyClass(data)->upXMess( static_cast<t_float>(arg0));
 }
 void GEMgluLookAt :: upYMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->upYMess( (t_float) arg0);
+	GetMyClass(data)->upYMess( static_cast<t_float>(arg0));
 }
 void GEMgluLookAt :: upZMessCallback (void*data, t_floatarg arg0) {
-	GetMyClass(data)->upZMess( (t_float) arg0);
+	GetMyClass(data)->upZMess( static_cast<t_float>(arg0));
 }
 

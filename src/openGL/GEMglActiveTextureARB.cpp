@@ -22,7 +22,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglActiveTextureARB , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglActiveTextureARB :: GEMglActiveTextureARB	(t_floatarg arg0=0) :
-		texUnit((GLenum)arg0)
+		texUnit(static_cast<GLenum>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("texUnit"));
 }
@@ -50,7 +50,7 @@ void GEMglActiveTextureARB :: render(GemState *state) {
 // Variables
 //
 void GEMglActiveTextureARB :: texUnitMess (t_float arg1) {	// FUN
-	texUnit = (GLenum)arg1;
+	texUnit = static_cast<GLenum>(arg1);
 	setModified();
 }
 
@@ -64,5 +64,5 @@ void GEMglActiveTextureARB :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglActiveTextureARB :: texUnitMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->texUnitMess ( (t_float)    arg0);
+	GetMyClass(data)->texUnitMess ( static_cast<t_float>(arg0));
 }

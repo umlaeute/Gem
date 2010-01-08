@@ -47,7 +47,7 @@ void GEMglCullFace :: render(GemState *state) {
 // Variables
 //
 void GEMglCullFace :: modeMess (t_atom arg) {	// FUN
-	mode = (GLenum)getGLdefine(&arg);
+	mode = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

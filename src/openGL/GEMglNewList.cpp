@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglNewList , t_floatarg, A_DEFFLOAT, t_floatarg,
 // Constructor
 //
 GEMglNewList :: GEMglNewList	(t_floatarg arg0=0, t_floatarg arg1=GL_COMPILE_AND_EXECUTE) :
-  list((GLuint)arg0),
-		mode((GLenum)arg1)
+  list(static_cast<GLuint>(arg0)),
+		mode(static_cast<GLenum>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("displaylist"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
@@ -49,11 +49,11 @@ void GEMglNewList :: render(GemState *state) {
 // Variables
 //
 void GEMglNewList :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+	mode = static_cast<GLenum>(arg1);
 	setModified();
 }
 void GEMglNewList :: listMess (t_float arg1) {	// FUN
-	list = (GLuint)arg1;
+	list = static_cast<GLuint>(arg1);
 	setModified();
 }
 
@@ -68,8 +68,8 @@ void GEMglNewList :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglNewList :: modeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->modeMess ( (t_float)    arg0);
+	GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }
 void GEMglNewList :: listMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->listMess ( (t_float)    arg0);
+	GetMyClass(data)->listMess ( static_cast<t_float>(arg0));
 }

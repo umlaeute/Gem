@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglAlphaFunc :: GEMglAlphaFunc	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		func((GLenum)arg0), 
-		ref((GLclampf)arg1)
+		func(static_cast<GLenum>(arg0)), 
+		ref(static_cast<GLclampf>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("func"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ref"));
@@ -49,12 +49,12 @@ void GEMglAlphaFunc :: render(GemState *state) {
 // Variables
 //
 void GEMglAlphaFunc :: funcMess (t_float arg1) {	// FUN
-	func = (GLenum)arg1;
+	func = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglAlphaFunc :: refMess (t_float arg1) {	// FUN
-	ref = (GLclampf)arg1;
+	ref = static_cast<GLclampf>(arg1);
 	setModified();
 }
 
@@ -69,8 +69,8 @@ void GEMglAlphaFunc :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglAlphaFunc :: funcMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->funcMess ( (t_float)    arg0);
+	GetMyClass(data)->funcMess ( static_cast<t_float>(arg0));
 }
 void GEMglAlphaFunc :: refMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->refMess ( (t_float)    arg0);
+	GetMyClass(data)->refMess ( static_cast<t_float>(arg0));
 }

@@ -60,7 +60,7 @@ void GEMglFogfv :: render(GemState *state) {
 // variable
 //
 void GEMglFogfv :: pnameMess (t_float arg0) {	// FUN
-  pname=(GLenum)arg0;
+  pname=static_cast<GLenum>(arg0);
   setModified();
 }
 void GEMglFogfv :: paramsMess (int argc, t_atom*argv) {	// FUN

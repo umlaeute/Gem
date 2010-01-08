@@ -26,10 +26,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglBitmap , t_floatarg, A_DEFFLOAT, t_floatarg,
 //
 GEMglBitmap :: GEMglBitmap	(t_float arg0=0, t_float arg1=0,
 				 t_float arg2=1, t_float arg3=1) :
-		xorig((GLfloat)arg0), 
-		yorig((GLfloat)arg1), 
-		xmove((GLfloat)arg2), 
-		ymove((GLfloat)arg3)
+		xorig(static_cast<GLfloat>(arg0)), 
+		yorig(static_cast<GLfloat>(arg1)), 
+		xmove(static_cast<GLfloat>(arg2)), 
+		ymove(static_cast<GLfloat>(arg3))
 {
   // img info: width, height, bitmap
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xorig"));
@@ -63,22 +63,22 @@ void GEMglBitmap :: render(GemState *state) {
 // Variables
 //
 void GEMglBitmap :: xorigMess (t_float arg1) {	// FUN
-	xorig = (GLfloat)arg1;
+	xorig = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglBitmap :: yorigMess (t_float arg1) {	// FUN
-	yorig = (GLfloat)arg1;
+	yorig = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglBitmap :: xmoveMess (t_float arg1) {	// FUN
-	xmove = (GLfloat)arg1;
+	xmove = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
 void GEMglBitmap :: ymoveMess (t_float arg1) {	// FUN
-	ymove = (GLfloat)arg1;
+	ymove = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -94,14 +94,14 @@ void GEMglBitmap :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglBitmap :: xorigMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xorigMess ( (t_float)    arg0);
+	GetMyClass(data)->xorigMess ( static_cast<t_float>(arg0));
 }
 void GEMglBitmap :: yorigMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yorigMess ( (t_float)    arg0);
+	GetMyClass(data)->yorigMess ( static_cast<t_float>(arg0));
 }
 void GEMglBitmap :: xmoveMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xmoveMess ( (t_float)    arg0);
+	GetMyClass(data)->xmoveMess ( static_cast<t_float>(arg0));
 }
 void GEMglBitmap :: ymoveMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->ymoveMess ( (t_float)    arg0);
+	GetMyClass(data)->ymoveMess ( static_cast<t_float>(arg0));
 }

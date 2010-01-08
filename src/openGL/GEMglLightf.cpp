@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglLightf , t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 GEMglLightf :: GEMglLightf	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		light((GLenum)arg0), 
-		pname((GLenum)arg1), 
-		param((GLfloat)arg2)
+		light(static_cast<GLenum>(arg0)), 
+		pname(static_cast<GLenum>(arg1)), 
+		param(static_cast<GLfloat>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("light"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
@@ -52,17 +52,17 @@ void GEMglLightf :: render(GemState *state) {
 // Variables
 //
 void GEMglLightf :: lightMess (t_float arg1) {	// FUN
-	light = (GLenum)arg1;
+	light = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglLightf :: pnameMess (t_float arg1) {	// FUN
-	pname = (GLenum)arg1;
+	pname = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglLightf :: paramMess (t_float arg1) {	// FUN
-	param = (GLfloat)arg1;
+	param = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -78,11 +78,11 @@ void GEMglLightf :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglLightf :: lightMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->lightMess ( (t_float)    arg0);
+	GetMyClass(data)->lightMess ( static_cast<t_float>(arg0));
 }
 void GEMglLightf :: pnameMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->pnameMess ( (t_float)    arg0);
+	GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
 void GEMglLightf :: paramMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->paramMess ( (t_float)    arg0);
+	GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

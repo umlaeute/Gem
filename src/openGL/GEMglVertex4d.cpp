@@ -24,10 +24,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglVertex4d , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglVertex4d :: GEMglVertex4d	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		x((GLdouble)arg0), 
-		y((GLdouble)arg1), 
-		z((GLdouble)arg2), 
-		w((GLdouble)arg3)
+		x(static_cast<GLdouble>(arg0)), 
+		y(static_cast<GLdouble>(arg1)), 
+		z(static_cast<GLdouble>(arg2)), 
+		w(static_cast<GLdouble>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
@@ -55,22 +55,22 @@ void GEMglVertex4d :: render(GemState *state) {
 // Variables
 //
 void GEMglVertex4d :: xMess (t_float arg1) {	// FUN
-	x = (GLdouble)arg1;
+	x = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglVertex4d :: yMess (t_float arg1) {	// FUN
-	y = (GLdouble)arg1;
+	y = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglVertex4d :: zMess (t_float arg1) {	// FUN
-	z = (GLdouble)arg1;
+	z = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglVertex4d :: wMess (t_float arg1) {	// FUN
-	w = (GLdouble)arg1;
+	w = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
@@ -87,14 +87,14 @@ void GEMglVertex4d :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglVertex4d :: xMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xMess ( (t_float)    arg0);
+	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
 void GEMglVertex4d :: yMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yMess ( (t_float)    arg0);
+	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
 void GEMglVertex4d :: zMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->zMess ( (t_float)    arg0);
+	GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }
 void GEMglVertex4d :: wMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->wMess ( (t_float)    arg0);
+	GetMyClass(data)->wMess ( static_cast<t_float>(arg0));
 }

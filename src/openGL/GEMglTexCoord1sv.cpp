@@ -45,7 +45,7 @@ void GEMglTexCoord1sv :: render(GemState *state) {
 // variable
 //
 void GEMglTexCoord1sv :: vMess (t_float arg0) {	// FUN
-	v[0]=(GLshort)arg0;
+	v[0]=static_cast<GLshort>(arg0);
 	setModified();
 }
 

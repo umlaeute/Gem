@@ -68,19 +68,19 @@ void GEMglMaterialfv :: render(GemState *state) {
 // Variables
 //
 void GEMglMaterialfv :: faceMess (t_atom arg1) {	// FUN
-	face = (GLenum)getGLdefine(&arg1);
+	face = static_cast<GLenum>(getGLdefine(&arg1));
 	setModified();
 }
 
 void GEMglMaterialfv :: pnameMess (t_atom arg1) {	// FUN
-	pname = (GLenum)getGLdefine(&arg1);
+	pname = static_cast<GLenum>(getGLdefine(&arg1));
 	setModified();
 }
 
 void GEMglMaterialfv :: paramMess (int argc, t_atom*argv) {	// FUN
   int i=0;
   for(i=0; (i<argc) && (i<4); i++) {
-    param[i]=(GLfloat)atom_getfloat(argv+i);
+    param[i]=static_cast<GLfloat>(atom_getfloat(argv+i));
   }
 	setModified();
 }

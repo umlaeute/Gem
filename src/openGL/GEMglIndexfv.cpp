@@ -45,7 +45,7 @@ void GEMglIndexfv :: render(GemState *state) {
 // variable
 //
 void GEMglIndexfv :: cMess (t_float arg0) {	// FUN
-  c[0]=(GLfloat)arg0;
+  c[0]=static_cast<GLfloat>(arg0);
   setModified();
 }
 

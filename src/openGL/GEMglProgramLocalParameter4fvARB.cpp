@@ -22,9 +22,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglProgramLocalParameter4fvARB , t_floatarg, A
 // Constructor
 //
 GEMglProgramLocalParameter4fvARB :: GEMglProgramLocalParameter4fvARB	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		target((GLenum)arg0), 
-		index((GLenum)arg1)
-		//params((GLfloat)arg2)
+		target(static_cast<GLenum>(arg0)), 
+		index(static_cast<GLenum>(arg1))
+		//params(static_cast<GLfloat>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("index"));
@@ -59,12 +59,12 @@ void GEMglProgramLocalParameter4fvARB :: render(GemState *state) {
 // Variables
 //
 void GEMglProgramLocalParameter4fvARB :: targetMess (t_float arg1) {	// FUN
-	target = (GLenum)arg1;
+	target = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglProgramLocalParameter4fvARB :: indexMess (t_float arg1) {	// FUN
-	index = (GLenum)arg1;
+	index = static_cast<GLenum>(arg1);
 	setModified();
 }
 
@@ -75,7 +75,7 @@ void GEMglProgramLocalParameter4fvARB :: paramsMess (int argc, t_atom*argv) {	//
 	}
 	int i;
 	for (i=0;i<4;i++){
-		params[i] = (GLfloat)atom_getfloat(argv+i);
+		params[i] = static_cast<GLfloat>(atom_getfloat(argv+i));
 		//post("params[%i] = %f\n",i,params[i]);
 	}
 	setModified();
@@ -93,10 +93,10 @@ void GEMglProgramLocalParameter4fvARB :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglProgramLocalParameter4fvARB :: targetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->targetMess ( (t_float)    arg0);
+	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
 void GEMglProgramLocalParameter4fvARB :: indexMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->indexMess ( (t_float)    arg0);
+	GetMyClass(data)->indexMess ( static_cast<t_float>(arg0));
 }
 void GEMglProgramLocalParameter4fvARB :: paramsMessCallback (void* data, t_symbol*, int argc, t_atom* argv){
 	GetMyClass(data)->paramsMess ( argc, argv);

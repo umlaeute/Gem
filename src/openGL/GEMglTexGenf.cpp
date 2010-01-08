@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexGenf , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglTexGenf :: GEMglTexGenf	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		coord((GLenum)arg0), 
-		pname((GLenum)arg1), 
-		param((GLfloat)arg2)
+		coord(static_cast<GLenum>(arg0)), 
+		pname(static_cast<GLenum>(arg1)), 
+		param(static_cast<GLfloat>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("coord"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
@@ -52,17 +52,17 @@ void GEMglTexGenf :: render(GemState *state) {
 // Variables
 //
 void GEMglTexGenf :: coordMess (t_float arg1) {	// FUN
-	coord = (GLenum)arg1;
+	coord = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglTexGenf :: pnameMess (t_float arg1) {	// FUN
-	pname = (GLenum)arg1;
+	pname = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglTexGenf :: paramMess (t_float arg1) {	// FUN
-	param = (GLfloat)arg1;
+	param = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -78,11 +78,11 @@ void GEMglTexGenf :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglTexGenf :: coordMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->coordMess ( (t_float)    arg0);
+	GetMyClass(data)->coordMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexGenf :: pnameMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->pnameMess ( (t_float)    arg0);
+	GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexGenf :: paramMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->paramMess ( (t_float)    arg0);
+	GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

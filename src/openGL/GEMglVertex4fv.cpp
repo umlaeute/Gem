@@ -45,10 +45,10 @@ void GEMglVertex4fv :: render(GemState *state) {
 // variable
 //
 void GEMglVertex4fv :: vMess (t_float arg0, t_float arg1, t_float arg2, t_float arg3) {	// FUN
-	v[0]=(GLfloat)arg0;
-	v[1]=(GLfloat)arg1;
-	v[2]=(GLfloat)arg2;
-	v[3]=(GLfloat)arg3;
+	v[0]=static_cast<GLfloat>(arg0);
+	v[1]=static_cast<GLfloat>(arg1);
+	v[2]=static_cast<GLfloat>(arg2);
+	v[3]=static_cast<GLfloat>(arg3);
 	setModified();
 }
 

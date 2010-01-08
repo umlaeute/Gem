@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglDrawElements , t_floatarg, A_DEFFLOAT, t_fl
 // Constructor
 //
 GEMglDrawElements :: GEMglDrawElements	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-  mode((GLenum)arg0), // ub, us, ui
-  count((GLsizei)arg1), 
-  type((GLenum)arg2)
+  mode(static_cast<GLenum>(arg0)), // ub, us, ui
+  count(static_cast<GLsizei>(arg1)), 
+  type(static_cast<GLenum>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("count"));
@@ -78,17 +78,17 @@ void GEMglDrawElements :: render(GemState *state) {
 // Variables
 //
 void GEMglDrawElements :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+	mode = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglDrawElements :: countMess (t_float arg1) {	// FUN
-	count = (GLsizei)arg1;
+	count = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
 void GEMglDrawElements :: typeMess (t_float arg1) {	// FUN
-	type = (GLenum)arg1;
+	type = static_cast<GLenum>(arg1);
 	setModified();
 }
 
@@ -101,9 +101,9 @@ void GEMglDrawElements :: indicesMess (int argc, t_atom*argv) {	// FUN
   }
   while(argc--){
     t_float f=atom_getfloat(argv++);
-    indices_ui[argc]=(GLuint  )f;
-    indices_ub[argc]=(GLubyte )f;
-    indices_us[argc]=(GLushort)f;
+    indices_ui[argc]=static_cast<GLuint>(f);
+    indices_ub[argc]=static_cast<GLubyte>(f);
+    indices_us[argc]=static_cast<GLushort>(f);
   }
   setModified();
 }

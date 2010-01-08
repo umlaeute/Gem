@@ -47,7 +47,7 @@ void GEMglLogicOp :: render(GemState *state) {
 // Variables
 //
 void GEMglLogicOp :: opcodeMess (t_atom arg) {	// FUN
-	opcode = (GLenum)getGLdefine(&arg);
+	opcode = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

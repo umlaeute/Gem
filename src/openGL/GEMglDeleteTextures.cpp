@@ -57,7 +57,7 @@ void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv) {	// FUN
   delete [] textures;
   textures = new GLuint[argc];
   while(argc--){
-    if(argv->a_type == A_FLOAT)textures[n++] = (GLuint)atom_getint(argv);
+    if(argv->a_type == A_FLOAT)textures[n++] = static_cast<GLuint>(atom_getint(argv));
     argv++;
   }
   setModified();

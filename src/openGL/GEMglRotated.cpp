@@ -24,10 +24,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRotated , t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 GEMglRotated :: GEMglRotated	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		angle((GLdouble)arg0), 
-		x((GLdouble)arg1), 
-		y((GLdouble)arg2), 
-		z((GLdouble)arg3)
+		angle(static_cast<GLdouble>(arg0)), 
+		x(static_cast<GLdouble>(arg1)), 
+		y(static_cast<GLdouble>(arg2)), 
+		z(static_cast<GLdouble>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("angle"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
@@ -55,22 +55,22 @@ void GEMglRotated :: render(GemState *state) {
 // Variables
 //
 void GEMglRotated :: angleMess (t_float arg1) {	// FUN
-	angle = (GLdouble)arg1;
+	angle = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglRotated :: xMess (t_float arg1) {	// FUN
-	x = (GLdouble)arg1;
+	x = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglRotated :: yMess (t_float arg1) {	// FUN
-	y = (GLdouble)arg1;
+	y = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMglRotated :: zMess (t_float arg1) {	// FUN
-	z = (GLdouble)arg1;
+	z = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
@@ -87,14 +87,14 @@ void GEMglRotated :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglRotated :: angleMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->angleMess ( (t_float)    arg0);
+	GetMyClass(data)->angleMess ( static_cast<t_float>(arg0));
 }
 void GEMglRotated :: xMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xMess ( (t_float)    arg0);
+	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
 void GEMglRotated :: yMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yMess ( (t_float)    arg0);
+	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
 void GEMglRotated :: zMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->zMess ( (t_float)    arg0);
+	GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }

@@ -47,7 +47,7 @@ void GEMglDepthFunc :: render(GemState *state) {
 // Variables
 //
 void GEMglDepthFunc :: funcMess (t_atom arg) {	// FUN
-	func = (GLenum)getGLdefine(&arg);
+	func = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

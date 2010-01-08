@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglRasterPos3i , t_floatarg, A_DEFFLOAT, t_flo
 // Constructor
 //
 GEMglRasterPos3i :: GEMglRasterPos3i	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		x((GLint)arg0), 
-		y((GLint)arg1), 
-		z((GLint)arg2)
+		x(static_cast<GLint>(arg0)), 
+		y(static_cast<GLint>(arg1)), 
+		z(static_cast<GLint>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
@@ -52,17 +52,17 @@ void GEMglRasterPos3i :: render(GemState *state) {
 // Variables
 //
 void GEMglRasterPos3i :: xMess (t_float arg1) {	// FUN
-	x = (GLint)arg1;
+	x = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglRasterPos3i :: yMess (t_float arg1) {	// FUN
-	y = (GLint)arg1;
+	y = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglRasterPos3i :: zMess (t_float arg1) {	// FUN
-	z = (GLint)arg1;
+	z = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -78,11 +78,11 @@ void GEMglRasterPos3i :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglRasterPos3i :: xMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xMess ( (t_float)    arg0);
+	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
 void GEMglRasterPos3i :: yMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->yMess ( (t_float)    arg0);
+	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
 void GEMglRasterPos3i :: zMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->zMess ( (t_float)    arg0);
+	GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }

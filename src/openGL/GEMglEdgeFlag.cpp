@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEdgeFlag , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglEdgeFlag :: GEMglEdgeFlag	(t_floatarg arg0=0) :
-		flag((GLboolean)arg0)
+		flag(static_cast<GLboolean>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("flag"));
 }
@@ -46,7 +46,7 @@ void GEMglEdgeFlag :: render(GemState *state) {
 // Variables
 //
 void GEMglEdgeFlag :: flagMess (t_float arg1) {	// FUN
-	flag = (GLboolean)arg1;
+	flag = static_cast<GLboolean>(arg1);
 	setModified();
 }
 
@@ -60,5 +60,5 @@ void GEMglEdgeFlag :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglEdgeFlag :: flagMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->flagMess ( (t_float)    arg0);
+	GetMyClass(data)->flagMess ( static_cast<t_float>(arg0));
 }

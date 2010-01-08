@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3s , t_floatarg, A_DEFFLOAT, t_floata
 // Constructor
 //
 GEMglNormal3s :: GEMglNormal3s	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		nx((GLshort)arg0), 
-		ny((GLshort)arg1), 
-		nz((GLshort)arg2)
+		nx(static_cast<GLshort>(arg0)), 
+		ny(static_cast<GLshort>(arg1)), 
+		nz(static_cast<GLshort>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("nx"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ny"));
@@ -52,17 +52,17 @@ void GEMglNormal3s :: render(GemState *state) {
 // Variables
 //
 void GEMglNormal3s :: nxMess (t_float arg1) {	// FUN
-	nx = (GLshort)arg1;
+	nx = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglNormal3s :: nyMess (t_float arg1) {	// FUN
-	ny = (GLshort)arg1;
+	ny = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglNormal3s :: nzMess (t_float arg1) {	// FUN
-	nz = (GLshort)arg1;
+	nz = static_cast<GLshort>(arg1);
 	setModified();
 }
 
@@ -78,11 +78,11 @@ void GEMglNormal3s :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglNormal3s :: nxMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->nxMess ( (t_float)    arg0);
+	GetMyClass(data)->nxMess ( static_cast<t_float>(arg0));
 }
 void GEMglNormal3s :: nyMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->nyMess ( (t_float)    arg0);
+	GetMyClass(data)->nyMess ( static_cast<t_float>(arg0));
 }
 void GEMglNormal3s :: nzMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->nzMess ( (t_float)    arg0);
+	GetMyClass(data)->nzMess ( static_cast<t_float>(arg0));
 }

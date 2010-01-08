@@ -22,10 +22,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMgluPerspective , t_floatarg, A_DEFFLOAT, t_flo
 // Constructor
 //
 GEMgluPerspective :: GEMgluPerspective	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		fovy((GLdouble)arg0), 
-		aspect((GLdouble)arg1), 
-		m_near((GLdouble)arg2), 
-		m_far((GLdouble)arg3)
+		fovy(static_cast<GLdouble>(arg0)), 
+		aspect(static_cast<GLdouble>(arg1)), 
+		m_near(static_cast<GLdouble>(arg2)), 
+		m_far(static_cast<GLdouble>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("fovy"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("aspect"));
@@ -53,22 +53,22 @@ void GEMgluPerspective :: render(GemState *state) {
 // Variables
 //
 void GEMgluPerspective :: fovyMess (t_float arg1) {	// FUN
-	fovy = (GLdouble)arg1;
+	fovy = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMgluPerspective :: aspectMess (t_float arg1) {	// FUN
-	aspect = (GLdouble)arg1;
+	aspect = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMgluPerspective :: nearMess (t_float arg1) {	// FUN
-	m_near = (GLdouble)arg1;
+	m_near = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
 void GEMgluPerspective :: farMess (t_float arg1) {	// FUN
-	m_far = (GLdouble)arg1;
+	m_far = static_cast<GLdouble>(arg1);
 	setModified();
 }
 
@@ -85,14 +85,14 @@ void GEMgluPerspective :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMgluPerspective :: fovyMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->fovyMess ( (t_float)    arg0);
+	GetMyClass(data)->fovyMess ( static_cast<t_float>(arg0));
 }
 void GEMgluPerspective :: aspectMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->aspectMess ( (t_float)    arg0);
+	GetMyClass(data)->aspectMess ( static_cast<t_float>(arg0));
 }
 void GEMgluPerspective :: nearMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->nearMess ( (t_float)    arg0);
+	GetMyClass(data)->nearMess ( static_cast<t_float>(arg0));
 }
 void GEMgluPerspective :: farMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->farMess ( (t_float)    arg0);
+	GetMyClass(data)->farMess ( static_cast<t_float>(arg0));
 }

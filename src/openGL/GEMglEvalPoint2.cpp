@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalPoint2 , t_floatarg, A_DEFFLOAT, t_floata
 // Constructor
 //
 GEMglEvalPoint2 :: GEMglEvalPoint2	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		i((GLint)arg0), 
-		j((GLint)arg1)
+		i(static_cast<GLint>(arg0)), 
+		j(static_cast<GLint>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("j"));
@@ -55,12 +55,12 @@ void GEMglEvalPoint2 :: render(GemState *state) {
 // Variables
 //
 void GEMglEvalPoint2 :: iMess (t_float arg1) {	// FUN
-	i = (GLint)arg1;
+	i = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglEvalPoint2 :: jMess (t_float arg1) {	// FUN
-	j = (GLint)arg1;
+	j = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -75,8 +75,8 @@ void GEMglEvalPoint2 :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglEvalPoint2 :: iMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->iMess ( (t_float)    arg0);
+	GetMyClass(data)->iMess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalPoint2 :: jMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->jMess ( (t_float)    arg0);
+	GetMyClass(data)->jMess ( static_cast<t_float>(arg0));
 }

@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAccum , t_floatarg, A_DEFFLOAT, t_floatarg, A
 // Constructor
 //
 GEMglAccum :: GEMglAccum	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		op((GLenum)arg0), 
-		value((GLfloat)arg1)
+		op(static_cast<GLenum>(arg0)), 
+		value(static_cast<GLfloat>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("op"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("value"));
@@ -49,12 +49,12 @@ void GEMglAccum :: render(GemState *state) {
 // Variables
 //
 void GEMglAccum :: opMess (t_float arg1) {	// FUN
-	op = (GLenum)arg1;
+	op = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglAccum :: valueMess (t_float arg1) {	// FUN
-	value = (GLfloat)arg1;
+	value = static_cast<GLfloat>(arg1);
 	setModified();
 }
 
@@ -69,8 +69,8 @@ void GEMglAccum :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglAccum :: opMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->opMess ( (t_float)    arg0);
+	GetMyClass(data)->opMess ( static_cast<t_float>(arg0));
 }
 void GEMglAccum :: valueMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->valueMess ( (t_float)    arg0);
+	GetMyClass(data)->valueMess ( static_cast<t_float>(arg0));
 }

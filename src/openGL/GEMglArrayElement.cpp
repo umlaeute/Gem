@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglArrayElement , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglArrayElement :: GEMglArrayElement	(t_floatarg arg0=0) :
-		i((GLint)arg0)
+		i(static_cast<GLint>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));
 }
@@ -52,7 +52,7 @@ void GEMglArrayElement :: render(GemState *state) {
 // Variables
 //
 void GEMglArrayElement :: iMess (t_float arg1) {	// FUN
-	i = (GLint)arg1;
+	i = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -66,5 +66,5 @@ void GEMglArrayElement :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglArrayElement :: iMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->iMess ( (t_float)    arg0);
+	GetMyClass(data)->iMess ( static_cast<t_float>(arg0));
 }

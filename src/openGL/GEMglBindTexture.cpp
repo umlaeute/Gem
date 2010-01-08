@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindTexture , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglBindTexture :: GEMglBindTexture	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		target((GLenum)arg0), 
-		texture((GLuint)arg1)
+		target(static_cast<GLenum>(arg0)), 
+		texture(static_cast<GLuint>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("texture"));
@@ -55,12 +55,12 @@ void GEMglBindTexture :: render(GemState *state) {
 // Variables
 //
 void GEMglBindTexture :: targetMess (t_float arg1) {	// FUN
-	target = (GLenum)arg1;
+	target = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglBindTexture :: textureMess (t_float arg1) {	// FUN
-	texture = (GLuint)arg1;
+	texture = static_cast<GLuint>(arg1);
 	setModified();
 }
 
@@ -75,8 +75,8 @@ void GEMglBindTexture :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglBindTexture :: targetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->targetMess ( (t_float)    arg0);
+	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
 void GEMglBindTexture :: textureMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->textureMess ( (t_float)    arg0);
+	GetMyClass(data)->textureMess ( static_cast<t_float>(arg0));
 }

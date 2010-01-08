@@ -24,10 +24,10 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglTexCoord4s , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglTexCoord4s :: GEMglTexCoord4s	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		s((GLshort)arg0), 
-		t((GLshort)arg1), 
-		r((GLshort)arg2), 
-		q((GLshort)arg3)
+		s(static_cast<GLshort>(arg0)), 
+		t(static_cast<GLshort>(arg1)), 
+		r(static_cast<GLshort>(arg2)), 
+		q(static_cast<GLshort>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("s"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("t"));
@@ -55,22 +55,22 @@ void GEMglTexCoord4s :: render(GemState *state) {
 // Variables
 //
 void GEMglTexCoord4s :: sMess (t_float arg1) {	// FUN
-	s = (GLshort)arg1;
+	s = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglTexCoord4s :: tMess (t_float arg1) {	// FUN
-	t = (GLshort)arg1;
+	t = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglTexCoord4s :: rMess (t_float arg1) {	// FUN
-	r = (GLshort)arg1;
+	r = static_cast<GLshort>(arg1);
 	setModified();
 }
 
 void GEMglTexCoord4s :: qMess (t_float arg1) {	// FUN
-	q = (GLshort)arg1;
+	q = static_cast<GLshort>(arg1);
 	setModified();
 }
 
@@ -87,14 +87,14 @@ void GEMglTexCoord4s :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglTexCoord4s :: sMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->sMess ( (t_float)    arg0);
+	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexCoord4s :: tMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->tMess ( (t_float)    arg0);
+	GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexCoord4s :: rMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->rMess ( (t_float)    arg0);
+	GetMyClass(data)->rMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexCoord4s :: qMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->qMess ( (t_float)    arg0);
+	GetMyClass(data)->qMess ( static_cast<t_float>(arg0));
 }

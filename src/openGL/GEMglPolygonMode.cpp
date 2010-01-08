@@ -51,12 +51,12 @@ void GEMglPolygonMode :: render(GemState *state) {
 // Variables
 //
 void GEMglPolygonMode :: faceMess (t_atom arg) {	// FUN
-  face = (GLenum)getGLdefine(&arg);
+  face = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 
 void GEMglPolygonMode :: modeMess (t_atom arg) {	// FUN
-  mode = (GLenum)getGLdefine(&arg);
+  mode = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

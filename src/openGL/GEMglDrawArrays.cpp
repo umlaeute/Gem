@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglDrawArrays , t_floatarg, A_DEFFLOAT, t_floa
 // Constructor
 //
 GEMglDrawArrays :: GEMglDrawArrays	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		mode((GLenum)arg0), 
-		first((GLint)arg1), 
-		count((GLsizei)arg2)
+		mode(static_cast<GLenum>(arg0)), 
+		first(static_cast<GLint>(arg1)), 
+		count(static_cast<GLsizei>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("first"));
@@ -58,17 +58,17 @@ void GEMglDrawArrays :: render(GemState *state) {
 // Variables
 //
 void GEMglDrawArrays :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+	mode = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglDrawArrays :: firstMess (t_float arg1) {	// FUN
-	first = (GLint)arg1;
+	first = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglDrawArrays :: countMess (t_float arg1) {	// FUN
-	count = (GLsizei)arg1;
+	count = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
@@ -84,11 +84,11 @@ void GEMglDrawArrays :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglDrawArrays :: modeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->modeMess ( (t_float)    arg0);
+	GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }
 void GEMglDrawArrays :: firstMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->firstMess ( (t_float)    arg0);
+	GetMyClass(data)->firstMess ( static_cast<t_float>(arg0));
 }
 void GEMglDrawArrays :: countMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->countMess ( (t_float)    arg0);
+	GetMyClass(data)->countMess ( static_cast<t_float>(arg0));
 }

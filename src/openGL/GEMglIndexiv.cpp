@@ -45,7 +45,7 @@ void GEMglIndexiv :: render(GemState *state) {
 // variable
 //
 void GEMglIndexiv :: cMess (t_float arg0) {	// FUN
-  c[0]=(GLint)arg0;
+  c[0]=static_cast<GLint>(arg0);
   setModified();
 }
 

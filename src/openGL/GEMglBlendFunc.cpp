@@ -51,12 +51,12 @@ void GEMglBlendFunc :: render(GemState *state) {
 // Variables
 //
 void GEMglBlendFunc :: sfactorMess (t_atom arg) {	// FUN
-	sfactor = (GLenum)getGLdefine(&arg);
+	sfactor = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 
 void GEMglBlendFunc :: dfactorMess (t_atom arg) {	// FUN
-	dfactor = (GLenum)getGLdefine(&arg);
+	dfactor = static_cast<GLenum>(getGLdefine(&arg));
 	setModified();
 }
 

@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglEvalMesh1 , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglEvalMesh1 :: GEMglEvalMesh1	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		mode((GLenum)arg0), 
-		i1((GLint)arg1), 
-		i2((GLint)arg2)
+		mode(static_cast<GLenum>(arg0)), 
+		i1(static_cast<GLint>(arg1)), 
+		i2(static_cast<GLint>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i1"));
@@ -58,17 +58,17 @@ void GEMglEvalMesh1 :: render(GemState *state) {
 // Variables
 //
 void GEMglEvalMesh1 :: modeMess (t_float arg1) {	// FUN
-	mode = (GLenum)arg1;
+	mode = static_cast<GLenum>(arg1);
 	setModified();
 }
 
 void GEMglEvalMesh1 :: i1Mess (t_float arg1) {	// FUN
-	i1 = (GLint)arg1;
+	i1 = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglEvalMesh1 :: i2Mess (t_float arg1) {	// FUN
-	i2 = (GLint)arg1;
+	i2 = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -84,11 +84,11 @@ void GEMglEvalMesh1 :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglEvalMesh1 :: modeMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->modeMess ( (t_float)    arg0);
+	GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalMesh1 :: i1MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->i1Mess ( (t_float)    arg0);
+	GetMyClass(data)->i1Mess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalMesh1 :: i2MessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->i2Mess ( (t_float)    arg0);
+	GetMyClass(data)->i2Mess ( static_cast<t_float>(arg0));
 }

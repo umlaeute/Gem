@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearStencil , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglClearStencil :: GEMglClearStencil	(t_floatarg arg0=0) :
-		s((GLint)arg0)
+		s(static_cast<GLint>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("s"));
 }
@@ -46,7 +46,7 @@ void GEMglClearStencil :: render(GemState *state) {
 // Variables
 //
 void GEMglClearStencil :: sMess (t_float arg1) {	// FUN
-	s = (GLint)arg1;
+	s = static_cast<GLint>(arg1);
 	setModified();
 }
 
@@ -60,5 +60,5 @@ void GEMglClearStencil :: obj_setupCallback(t_class *classPtr) {
 };
 
 void GEMglClearStencil :: sMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->sMess ( (t_float)    arg0);
+	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }

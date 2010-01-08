@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGenLists , t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 GEMglGenLists :: GEMglGenLists	(t_floatarg arg0=0) :
-		range((GLsizei)arg0)
+		range(static_cast<GLsizei>(arg0))
 {
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range"));
 	m_outlet= outlet_new(this->x_obj, 0);
@@ -42,14 +42,14 @@ GEMglGenLists :: ~GEMglGenLists () {
 //
 void GEMglGenLists :: render(GemState *state) {
   GLuint i = glGenLists(range);
-  outlet_float(m_outlet, (t_float)i);
+  outlet_float(m_outlet, static_cast<t_float>(i));
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglGenLists :: rangeMess (t_float arg1) {	// FUN
-  range = (GLsizei)arg1;
+  range = static_cast<GLsizei>(arg1);
   setModified();
 }
 

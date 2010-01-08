@@ -27,9 +27,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexSubImage1D, t_floatarg, A_DEFFLOAT, t_fl
 GEMglTexSubImage1D :: GEMglTexSubImage1D(t_floatarg arg0=0,
 					 t_floatarg arg1=0,
 					 t_floatarg arg2=0) :
-  level((GLint)arg0), 
-  xoffset((GLint)arg1), 
-  width((GLsizei)arg2) 
+  level(static_cast<GLint>(arg0)), 
+  xoffset(static_cast<GLint>(arg1)), 
+  width(static_cast<GLsizei>(arg2)) 
 {
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("level"));
   m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xoffset"));
@@ -73,17 +73,17 @@ void GEMglTexSubImage1D :: targetMess (t_float arg1) {	// FUN
 }
 
 void GEMglTexSubImage1D :: levelMess (t_float arg1) {	// FUN
-	level = (GLint)arg1;
+	level = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglTexSubImage1D :: xoffsetMess (t_float arg1) {	// FUN
-	xoffset = (GLint)arg1;
+	xoffset = static_cast<GLint>(arg1);
 	setModified();
 }
 
 void GEMglTexSubImage1D :: widthMess (t_float arg1) {	// FUN
-	width = (GLsizei)arg1;
+	width = static_cast<GLsizei>(arg1);
 	setModified();
 }
 
@@ -99,14 +99,14 @@ void GEMglTexSubImage1D :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglTexSubImage1D :: targetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->targetMess ( (t_float)    arg0);
+	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexSubImage1D :: levelMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->levelMess ( (t_float)    arg0);
+	GetMyClass(data)->levelMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexSubImage1D :: xoffsetMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->xoffsetMess ( (t_float)    arg0);
+	GetMyClass(data)->xoffsetMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexSubImage1D :: widthMessCallback (void* data, t_floatarg arg0){
-	GetMyClass(data)->widthMess ( (t_float)    arg0);
+	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }
