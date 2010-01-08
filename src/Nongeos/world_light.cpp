@@ -42,7 +42,7 @@ world_light :: world_light(t_floatarg lightNum)
   if (lightNum < 1.f)
     num = 0;
   else
-    num = (int)lightNum;
+    num = static_cast<int>(lightNum);
   m_light = GemMan::requestLight(num);
   m_on = 1;
   m_change = 1;
@@ -112,7 +112,7 @@ void world_light :: startRendering()
   if (m_thing)stopRendering();
   m_thing = gluNewQuadric();
   gluQuadricTexture(m_thing, GL_FALSE);
-  gluQuadricDrawStyle(m_thing, (GLenum) GLU_FILL);
+  gluQuadricDrawStyle(m_thing, static_cast<GLenum>(GLU_FILL));
   m_change = 1;
 }
 
@@ -203,9 +203,9 @@ void world_light :: lightColorMessCallback(void *data, t_symbol*,int argc, t_ato
 }
 void world_light :: lightOnOffMessCallback(void *data, t_floatarg n)
 {
-  GetMyClass(data)->lightOnOffMess((int)n);
+  GetMyClass(data)->lightOnOffMess(static_cast<int>(n));
 }
 void world_light :: debugMessCallback(void *data, t_floatarg n)
 {
-  GetMyClass(data)->debugMess((int)n);
+  GetMyClass(data)->debugMess(static_cast<int>(n));
 }
