@@ -102,7 +102,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
    if (filename[0] != '\0') {
       FSSpec   spec;
 
-      err = ::FSPathMakeFSSpec( reinterpret_cast<UInt8*>(filename), &spec, NULL);
+      err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename), &spec, NULL);
       if (err) {
          error("GemImageLoad: Unable to find file: %#s", spec.name);
                         error("GemImageLoad: Unable to find filename:%s", filename);
@@ -246,7 +246,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
         pixelformat = k32ARGBPixelFormat;
 #endif
 
-	::DisposeHandle(static_cast<Handle>(imageDescH));
+	::DisposeHandle(reinterpret_cast<Handle>(imageDescH));
    imageDescH = NULL;
   image_block->allocate();
 

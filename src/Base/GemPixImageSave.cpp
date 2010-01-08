@@ -125,7 +125,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 
     unsigned char *data = NULL;
 
-    const Uint8*filename8=static_cast<const Uint8*>(filename);
+    const UInt8*filename8=reinterpret_cast<const UInt8*>(filename);
 
 
     if(!image->upsidedown) { // the image is openGL-oriented, not quicktime-oriented! flip it!

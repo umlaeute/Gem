@@ -670,7 +670,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructG
     }
 	
   // do agl
-  if (static_cast<Ptr>(kUnresolvedCFragSymbolAddress) == static_cast<Ptr>(aglChoosePixelFormat)) // check for existance of OpenGL
+  if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) == reinterpret_cast<Ptr>(aglChoosePixelFormat)) // check for existance of OpenGL
     {
 #ifdef DEBUG
       post("MAC: BuildGLonWindow: OpenGL not installed");
@@ -1163,7 +1163,7 @@ static Boolean CheckWindowExtents (GDHandle hGD, short width, short height)
   short windowWidthExtra, windowHeightExtra;
   // build window (not visible)
   // FIXXME weird cast to "\p"
-  WindowPtr pWindow = NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", true, kWindowType, static_cast<WindowPtr>(-1), 0, 0);
+  WindowPtr pWindow = NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", true, kWindowType, reinterpret_cast<WindowPtr>(-1), 0, 0);
 	
   GetWindowBounds (pWindow, kWindowStructureRgn, &strucRect);
 
@@ -1195,7 +1195,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext,
 {
   OSStatus err = noErr;
 
-  if (static_cast<Ptr>(kUnresolvedCFragSymbolAddress) == static_cast<Ptr>(aglChoosePixelFormat)) // check for existance of OpenGL
+  if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) == reinterpret_cast<Ptr>(aglChoosePixelFormat)) // check for existance of OpenGL
     {
       post("OpenGL not installed");
       return noErr;
@@ -1305,8 +1305,8 @@ short FindGDHandleFromWindow (WindowPtr pWindow, GDHandle * phgdOnThisDevice)
 
   GetWindowPortBounds (pWindow, &rectWind);
 
-  LocalToGlobal (static_cast<Point*>(& rectWind.top));	// convert to global coordinates
-  LocalToGlobal (static_cast<Point*>(& rectWind.bottom));
+  LocalToGlobal (reinterpret_cast<Point*>(& rectWind.top));	// convert to global coordinates
+  LocalToGlobal (reinterpret_cast<Point*>(& rectWind.bottom));
   hgdNthDevice = GetDeviceList ();
   greatestArea = 0;
   // check window against all gdRects in gDevice list and remember 
@@ -1370,9 +1370,9 @@ static OSStatus BuildDrawable (AGLDrawable* paglDraw, GDHandle hGD, pstructGLInf
 	
   if (pcontextInfo->fFullscreen)
     // FIXXME weird cast to "\p"
-    *paglDraw = GetWindowPort (NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", 0, plainDBox, static_cast<WindowPtr>(-1), 0, 0));
+    *paglDraw = GetWindowPort (NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", 0, plainDBox,   reinterpret_cast<WindowPtr>(-1), 0, 0));
   else
-    *paglDraw = GetWindowPort (NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", 0, kWindowType, static_cast<WindowPtr>(-1), 0, 0));
+    *paglDraw = GetWindowPort (NewCWindow (NULL, &rectWin, (const unsigned char*)"\p", 0, kWindowType, reinterpret_cast<WindowPtr>(-1), 0, 0));
   ShowWindow (GetWindowFromPort (*paglDraw));
 
   GetPort (&pGrafSave);
@@ -1561,7 +1561,7 @@ bool initGemWin(void) {
     }
   }
   // check existence of OpenGL libraries
-  if (static_cast<Ptr>(kUnresolvedCFragSymbolAddress) == static_cast<Ptr>(aglChoosePixelFormat)) {
+  if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) == reinterpret_cast<Ptr>(aglChoosePixelFormat)) {
     error("GEM: OpenGL is not installed");
     return 0;
   }
