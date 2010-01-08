@@ -86,8 +86,8 @@ void sphere :: createSphere(GemState *state)
         ysize  = state->texCoords[2].t-ysize0;
     }
 
-    drho = M_PI / (GLfloat) stacks;
-    dtheta = 2.0 * M_PI / (GLfloat) slices;
+    drho = M_PI / static_cast<GLfloat>(stacks);
+    dtheta = 2.0 * M_PI / static_cast<GLfloat>(slices);
 
     int src;
 
@@ -243,8 +243,8 @@ void sphere :: render(GemState *state)
       ysize  = state->texCoords[2].t-ysize0;
   }
     
-  drho = M_PI / (GLfloat) stacks;
-  dtheta = 2.0 * M_PI / (GLfloat) slices;
+  drho = M_PI / static_cast<GLfloat>(stacks);
+  dtheta = 2.0 * M_PI / static_cast<GLfloat>(slices);
 
   /* texturing: s goes from 0.0/0.25/0.5/0.75/1.0 at +y/+x/-y/-x/+y axis */
   /* t goes from -1.0/+1.0 at z = -radius/+radius (linear along longitudes) */

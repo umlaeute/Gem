@@ -112,7 +112,7 @@ void disk :: render(GemState *state)
   }
 
   da = 2.0 * M_PI / m_numSlices;
-  dr = (m_size - m_innerRadius) / (GLfloat) loops;
+  dr = (m_size - m_innerRadius) / static_cast<GLfloat>(loops);
 
   GLfloat dtc = 2.0f * m_size;
   GLfloat sa, ca;

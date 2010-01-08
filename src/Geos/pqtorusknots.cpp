@@ -291,7 +291,7 @@ void pqtorusknots :: stepsMess(float size)
 {
   if (size<0)
     size = 0;
-  m_steps = (GLint)size;
+  m_steps = static_cast<GLint>(size);
   setModified();
 }
 ////////////////////////////////////////////////////////
@@ -302,7 +302,7 @@ void pqtorusknots :: facetsMess(float size)
 {
   if(size<0)
     size=0;
-  m_facets = (GLint)size;
+  m_facets = static_cast<GLint>(size);
   setModified();
 }
 ////////////////////////////////////////////////////////

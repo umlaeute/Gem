@@ -59,8 +59,8 @@ void sphere3d :: createSphere3d()
 
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_FILL;
 
-  drho = 180 / (GLfloat) stacks;
-  dtheta = 360 / (GLfloat) slices;
+  drho = 180. / static_cast<GLfloat>(stacks);
+  dtheta = 360. / static_cast<GLfloat>(slices);
 
   delete[]m_x;m_x = new float[slices * (stacks-1) + 2];
   delete[]m_y;m_y = new float[slices * (stacks-1) + 2];

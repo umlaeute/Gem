@@ -169,7 +169,12 @@ void curve3d :: renderShape(GemState *state){
 
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
-  glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3, (GLint)nb_pts_control_X, 0,1,(GLint)(3*nb_pts_control_X),(GLint)nb_pts_control_Y, &(m_posXYZ[0].x));
+  glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3, 
+	  static_cast<GLint>(nb_pts_control_X), 
+	  0,1,
+	  static_cast<GLint>(3*nb_pts_control_X),
+	  static_cast<GLint>(nb_pts_control_Y), 
+	  &(m_posXYZ[0].x));
   glEnable(GL_MAP2_VERTEX_3);
 
   GLfloat xsize = 1.0f;
