@@ -333,7 +333,7 @@ void glsl_program :: render(GemState *state)
   else
     fi_id.i=m_programARB;
 
-  outlet_float(m_outProgramID, (t_float)fi_id.f);
+  outlet_float(m_outProgramID, static_cast<t_float>(fi_id.f));
 }
 
 /////////////////////////////////////////////////////////
