@@ -298,7 +298,6 @@ void pix_texture :: render(GemState *state) {
     }
 
     debug("normalized=%d", normalized);
-
   }
 
   if (m_textureType!=texType){
@@ -550,8 +549,12 @@ void pix_texture :: postrender(GemState *state){
     }
     glDisable(m_textureType);
 
-
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+    // to avoid matrix stack confusion, we reset the upstream texunit to 0
+    if(GLEW_VERSION_1_3) {
+      glActiveTexture(GL_TEXTURE0_ARB);
+    }
   }
 
 }
