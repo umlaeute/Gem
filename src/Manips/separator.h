@@ -42,7 +42,7 @@ class GEM_EXTERN separator : public GemBase
 
         //////////
         // Constructor
-    	separator();
+  separator(int, t_atom*);
     	
     protected:
     	
@@ -61,6 +61,9 @@ class GEM_EXTERN separator : public GemBase
     	//////////
     	// The current state
     	GemState    	m_state;
+
+	bool m_pushed[4];
+	bool m_active[4];
 };
 
 #endif	// for header file
