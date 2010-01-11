@@ -208,7 +208,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   else {
       /* just create this file, in case it isn't there already...weird hack */
     char filename[QT_MAX_FILENAMELENGTH];
-    UInt8*filename8=reinterpret_cast<UInt8*>filename;
+    UInt8*filename8=reinterpret_cast<UInt8*>(filename);
     FILE*fil=NULL;
     
     fil=fopen(m_filename, "a");

@@ -403,7 +403,7 @@ imageStruct *tiffImage2mem(const char *filename)
            return(NULL);
       }
 
-      tdata_t raster = _TIFFmalloc(npixels * sizeof(uint32));
+      uint32*raster = reinterpret_cast<uint32*>(_TIFFmalloc(npixels * sizeof(uint32)));
       if (raster == NULL)
       {
          error("GemImageLoad(TIFF): Unable to allocate memory for image: %s", filename);
