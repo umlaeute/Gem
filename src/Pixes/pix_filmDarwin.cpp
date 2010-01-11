@@ -98,7 +98,7 @@ void pix_filmDarwin :: realOpen(char *filename)
   if (!filename[0]) {
     error("no filename passed");
   } else {
-    UInt8*filename8=reinterpret_cast<UInt8*>filename;
+    UInt8*filename8=reinterpret_cast<UInt8*>(filename);
     err = ::FSPathMakeRef(filename8, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
 

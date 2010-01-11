@@ -37,8 +37,8 @@ void pix_contrast :: processYUVAltivec(imageStruct &image)
     vector	signed short v;
   }shortBuffer;
 
-  short s_contrast=reinterpret_cast<short>(256.*m_contrast);
-  short s_saturation=reinterpret_cast<short>(256. * m_saturation);
+  short s_contrast=static_cast<short>(256.*m_contrast);
+  short s_saturation=static_cast<short>(256. * m_saturation);
 
   if(256==s_contrast && 256==s_saturation)return;
 

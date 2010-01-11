@@ -94,7 +94,8 @@ recordQT :: recordQT(int x, int y, int w, int h)
     if(codecName.typeName) {
 	  int namelength=*(codecName.typeName);
 	  char*name=new char[namelength+1];
-	  strncpy(name, (static_cast<char*>codecName.typeName)+1, namelength);
+	  const char*orgname=reinterpret_cast<const char*>(codecName.typeName)+1;
+	  strncpy(name, orgname, namelength);
 	  name[namelength]=0;
 	  t_symbol*s=gensym(name);
       codecContainer[i].name = s->s_name;
@@ -165,13 +166,14 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     error("recordQT:  no filename passed");
     return;
   }
+#ifdef __APPLE__
+  UInt8*filename8=reinterpret_cast<UInt8*>(m_filename);
+#endif
+
   if (!m_compressImage) {
     error("recordQT:  no image to record");
     return;
   }
-
-  UInt8*filename8=reinterpret_cast<UInt8*>m_filename;
-
 #ifdef __APPLE__
   else {
     err = ::FSPathMakeRef(filename8, &ref, NULL);
@@ -438,7 +440,7 @@ void recordQT :: compressFrame()
                        0,
                        dataSize,
                        m_ticks, //this should not be a fixed value but vary with framerate
-                       static_cast<SampleDescriptionHandle>(hImageDesc),
+                       reinterpret_cast<SampleDescriptionHandle>(hImageDesc),
                        1,
                        syncFlag,
                        NULL);

@@ -20,15 +20,15 @@
 #include <fcntl.h> /* JMZ thinks that _this_ is needed for open() */
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
- 
-#define DEFAULT_WIDTH		320
-#define DEFAULT_HEIGHT		240
-#define DEFAULT_FRAMES		5		// 5 fps
-#define MAX_RECORDING_TIME	100 * 60	// n * 60 ticks  (n : seconds)
-#define DEFAULT_INTERVAL	5		// 5 milliseconds for calling SGIdle()
+
+#define DEFAULT_WIDTH        320
+#define DEFAULT_HEIGHT        240
+#define DEFAULT_FRAMES        5        // 5 fps
+#define MAX_RECORDING_TIME    100 * 60    // n * 60 ticks  (n : seconds)
+#define DEFAULT_INTERVAL    5        // 5 milliseconds for calling SGIdle()
 
 pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h ) :
-	m_srcGWorld(NULL)
+    m_srcGWorld(NULL)
 {
 
   if (w > 0 ){
@@ -41,16 +41,16 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h ) :
   }else{
     m_vidYSize = 240;
   }
-    
+
   m_haveVideo = 0;
-  post("height %d width %d",m_vidXSize,m_vidYSize);  
+  post("height %d width %d",m_vidXSize,m_vidYSize);
   m_pixBlock.image.xsize = m_vidXSize;
   m_pixBlock.image.ysize = m_vidYSize;
 
   m_pixBlock.image.csize = 4;
   m_pixBlock.image.format = GL_BGRA_EXT;
   /* shouldn't this be GL_UNSIGNED_INT_8_8_8_8 on macintel?
-   * LATER use setCsizeByFormat() instead 
+   * LATER use setCsizeByFormat() instead
    */
   m_pixBlock.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
 
@@ -58,7 +58,7 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h ) :
 
   m_quality = 0; //normal quality gives non-interlaced images from DV cams
   m_colorspace = GL_YCBCR_422_GEM; //default to YUV
-  
+
   //set to the first input device
   m_inputDevice = 0;
   m_auto = 1; //keeps previous default functionailty
@@ -66,7 +66,7 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h ) :
   InitSeqGrabber();
   m_record = 0;
   //startTransfer();
-  
+
 }
 
 /////////////////////////////////////////////////////////
@@ -76,22 +76,22 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h ) :
 pix_videoDarwin :: ~pix_videoDarwin()
 {
    if (m_vc) {
-		if (::SGDisposeChannel(m_sg, m_vc)) {
-			error ("Unable to dispose a video channel");
-		}
-		m_vc = NULL;
-	}
-	if (m_sg) {
-		if (::CloseComponent(m_sg)) {
-			error("Unable to dispose a sequence grabber component");
-		}
-		m_sg = NULL;
+        if (::SGDisposeChannel(m_sg, m_vc)) {
+            error ("Unable to dispose a video channel");
+        }
+        m_vc = NULL;
+    }
+    if (m_sg) {
+        if (::CloseComponent(m_sg)) {
+            error("Unable to dispose a sequence grabber component");
+        }
+        m_sg = NULL;
         if (m_srcGWorld) {
-		::DisposeGWorld(m_srcGWorld);
-		m_pixMap = NULL;
-		m_srcGWorld = NULL;
-		m_baseAddr = NULL;
-	}
+        ::DisposeGWorld(m_srcGWorld);
+        m_pixMap = NULL;
+        m_srcGWorld = NULL;
+        m_baseAddr = NULL;
+    }
     }
 }
 /////////////////////////////////////////////////////////
@@ -110,10 +110,10 @@ void pix_videoDarwin :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_videoDarwin :: stopRendering()
 {
-	//this should stop the recording process
-	m_record = 0;
-	setupCapture();
-	//stopTransfer();
+    //this should stop the recording process
+    m_record = 0;
+    setupCapture();
+    //stopTransfer();
 }
 /////////////////////////////////////////////////////////
 // render
@@ -121,45 +121,45 @@ void pix_videoDarwin :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_videoDarwin :: render(GemState *state)
 {
-    OSErr	err;
-//	short	frameCount = 0;
-//	Boolean	*done;
- 
-	if (m_auto || m_banged) {
- 
+    OSErr    err;
+//    short    frameCount = 0;
+//    Boolean    *done;
+
+    if (m_auto || m_banged) {
+
     err = SGIdle(m_sg);
 
     if (err != noErr){
             error("SGIdle failed with error %d",err);
             m_haveVideo = 0;
         } else {
-		//this doesn't do anything so far
-		//VDCompressDone(m_vdig,frameCount,data,size,similar,time);
-		//err = SGGrabFrameComplete(m_vc,frameCount,done);
-		//if (err != noErr) error("SGGrabCompressComplete failed with error %d",err);
-		//post("SGGrabFramecomplete done %d framecount = %d",done[0],frameCount);
-		
+        //this doesn't do anything so far
+        //VDCompressDone(m_vdig,frameCount,data,size,similar,time);
+        //err = SGGrabFrameComplete(m_vc,frameCount,done);
+        //if (err != noErr) error("SGGrabCompressComplete failed with error %d",err);
+        //post("SGGrabFramecomplete done %d framecount = %d",done[0],frameCount);
+
         m_haveVideo = 1;
         m_newFrame = 1;
-        } 
+        }
     if (!m_haveVideo)
     {
-		post("no video yet");
-		return;
+        post("no video yet");
+        return;
     }
-//	derSwizzler(m_pixBlock.image);
+//    derSwizzler(m_pixBlock.image);
     m_pixBlock.newimage = m_newFrame;
-	state->image = &m_pixBlock;
-	m_newFrame = 0;
-	
+    state->image = &m_pixBlock;
+    m_newFrame = 0;
+
   }else {
-  
-	m_newFrame = 0;
-	m_pixBlock.newimage = m_newFrame;
-	state->image = &m_pixBlock;
-  
+
+    m_newFrame = 0;
+    m_pixBlock.newimage = m_newFrame;
+    state->image = &m_pixBlock;
+
   }
-  
+
   m_banged = false;
 }
 
@@ -169,9 +169,9 @@ void pix_videoDarwin :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_videoDarwin :: postrender(GemState *state)
 {
-	m_pixBlock.newimage = 0;
-	state->image = NULL;
-  
+    m_pixBlock.newimage = 0;
+    state->image = NULL;
+
 }
 
 /////////////////////////////////////////////////////////
@@ -180,13 +180,13 @@ void pix_videoDarwin :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 int pix_videoDarwin :: startTransfer()
 {
-	OSErr	err = noErr;
+    OSErr    err = noErr;
 
-	if (m_record)	{
-		SGStartRecord(m_sg);
-		if (err != noErr)error("SGStartRecord failed with error %d",err);
-		}
-	else SGStartPreview(m_sg);
+    if (m_record)    {
+        SGStartRecord(m_sg);
+        if (err != noErr)error("SGStartRecord failed with error %d",err);
+        }
+    else SGStartPreview(m_sg);
      m_haveVideo = 1;
      m_pixBlock.newimage = 1;
      return 1;
@@ -198,19 +198,19 @@ int pix_videoDarwin :: startTransfer()
 /////////////////////////////////////////////////////////
 int pix_videoDarwin :: stopTransfer()
 {
-	OSErr	err = noErr;
+    OSErr    err = noErr;
 
-	//might need SGPause or SGStop here
-	err = SGStop(m_sg);
-	if (err != noErr)error("SGStop failed with error %d",err);
+    //might need SGPause or SGStop here
+    err = SGStop(m_sg);
+    if (err != noErr)error("SGStop failed with error %d",err);
      return 1;
 }
 
 void pix_videoDarwin :: DoVideoSettings()
 {
-    Rect	newActiveVideoRect;
-    Rect	curBounds, curVideoRect, newVideoRect;
-    ComponentResult	err;
+    Rect    newActiveVideoRect;
+    Rect    curBounds, curVideoRect, newVideoRect;
+    ComponentResult    err;
 
 
     // Get our current state - do i need this???
@@ -222,33 +222,33 @@ void pix_videoDarwin :: DoVideoSettings()
 
     // Do the dialog thang
 
-	err = SGSettingsDialog( m_sg, m_vc, 0, nil, 0, nil, 0);
-	
+    err = SGSettingsDialog( m_sg, m_vc, 0, nil, 0, nil, 0);
+
 
     // What happened?
     err = SGGetVideoRect (m_vc, &newVideoRect);
     err = SGGetSrcVideoBounds (m_vc, &newActiveVideoRect);
-	
-	/* //Attempt to save SG settings to disk
-	UserData	uD = NULL;
-	//NewUserData(uD);
-	SGGetSettings(m_sg,&uD,0);
-	//short uDCount;
-	//uDCount = CountUserDataType(*uD,sgClipType);
-	//post("UserDataType count %d",uDCount);
-	
-	Handle myHandle = NewHandle(0);
-	int length;
-	
-	PutUserDataIntoHandle(uD,myHandle);
-	length = GetHandleSize(myHandle);
-	
-	int myFile;
-	myFile = open("/Users/lincoln/Documents/temp",O_CREAT | O_RDWR, 0600);
-	write(myFile,myHandle,length);
-	close(myFile);
-	*/
-	
+
+    /* //Attempt to save SG settings to disk
+    UserData    uD = NULL;
+    //NewUserData(uD);
+    SGGetSettings(m_sg,&uD,0);
+    //short uDCount;
+    //uDCount = CountUserDataType(*uD,sgClipType);
+    //post("UserDataType count %d",uDCount);
+
+    Handle myHandle = NewHandle(0);
+    int length;
+
+    PutUserDataIntoHandle(uD,myHandle);
+    length = GetHandleSize(myHandle);
+
+    int myFile;
+    myFile = open("/Users/lincoln/Documents/temp",O_CREAT | O_RDWR, 0600);
+    write(myFile,myHandle,length);
+    close(myFile);
+    */
+
     err = SGPause (m_sg, false);
 }
 
@@ -257,26 +257,26 @@ void pix_videoDarwin :: InitSeqGrabber()
 {
     OSErr anErr;
     Rect m_srcRect = {0,0, m_vidYSize, m_vidXSize};
-	
-	SGDeviceList	devices;
-	short			deviceIndex,inputIndex;
-	short			deviceCount = 0;
-	SGDeviceInputList theSGInputList = NULL;
-	bool showInputsAsDevices;
-//	UserData 	*uD;
-	
-	
-	/*
+
+    SGDeviceList    devices;
+    short            deviceIndex,inputIndex;
+    short            deviceCount = 0;
+    SGDeviceInputList theSGInputList = NULL;
+    bool showInputsAsDevices;
+//    UserData     *uD;
+
+
+    /*
     int num_components = 0;
     Component c = 0;
-	ComponentDescription cd;
-     
+    ComponentDescription cd;
+
      cd.componentType = SeqGrabComponentType;
      cd.componentSubType = 0;
      cd.componentManufacturer = 0;
      cd.componentFlags = 0;
      cd.componentFlagsMask = 0;
-     
+
      while((c = FindNextComponent(c, &cd)) != 0) {
        num_components++;  }                 // add component c to the list.
   //   post("number of SGcomponents: %d",num_components);
@@ -285,107 +285,107 @@ void pix_videoDarwin :: InitSeqGrabber()
     if(m_sg==NULL){
         error("could not open default component");
         return;
-    }    
-	anErr = SGInitialize(m_sg);
+    }
+    anErr = SGInitialize(m_sg);
     if(anErr!=noErr){
         error("could not initialize SG error %d",anErr);
-		return;
+        return;
     }
-    
+
     anErr = SGSetDataRef(m_sg, 0, 0, seqGrabDontMakeMovie);
         if (anErr != noErr){
             error("dataref failed with error %d",anErr);
         }
-        
-    anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);		
+
+    anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);
     if(anErr!=noErr){
         error("could not make new SG channnel error %d",anErr);
-		return;
+        return;
     }
-	
-	 anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);		
+
+     anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
     if(anErr!=noErr){
         error("could not get SG channnel Device List");
     }else{
-		deviceCount = (*devices)->count;
-		deviceIndex = (*devices)->selectedIndex;
-		post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
-		int i;
-		for (i = 0; i < deviceCount; i++){
-			post("SG channnel Device List  %s",(*devices)->entry[i].name);
-			}
-		SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
-		
-		showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) & sgDeviceNameFlagShowInputsAsDevices;
-		
-		theSGInputList = ((SGDeviceName *)(&((*devices)->entry[deviceIndex])))->inputs; //fugly
-		
-		//we should have device names in big ass undocumented structs
-		
-		//walk through the list
-		//for (i = 0; i < deviceCount; i++){	
-		for (i = 0; i < inputIndex; i++){		 
-			post("SG channnel Input Device List %d %s",i,(*theSGInputList)->entry[i].name);
-		}
-		
-		
-	}
-	
-	//this call sets the input device
-	if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
-		//anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice); 
-		post("SGSetChannelDevice trying %s", (*devices)->entry[m_inputDevice].name);
-		anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
-		
-		if(anErr!=noErr) error("SGSetChannelDevice returned error %d",anErr);
-		
-		anErr = SGSetChannelDeviceInput(m_vc,m_inputDeviceChannel); 
-    
-		if(anErr!=noErr) error("SGSetChannelDeviceInput returned error %d",anErr);
-	
-	/*  //attempt to save SG settings to disk
-	NewUserData(uD);
-	SGGetSettings(m_sg,uD,0);
-	short uDCount;
-	uDCount = CountUserDataType(*uD,sgClipType);
-	post("UserDataType count %d",uDCount);
-	
-	Handle myHandle;
-	
-	PutUserDataIntoHandle(*uD,myHandle);
-	
-	int myFile;
-	myFile = open("/Users/lincoln/Documents/temp",O_CREAT | O_RDWR, 0600);
-	write(myFile,myHandle,4096);
-	close(myFile);
-	*/
-	
-	//grab the VDIG info from the SGChannel
-	m_vdig = SGGetVideoDigitizerComponent(m_vc);
-	vdigErr = VDGetDigitizerInfo(m_vdig,&m_vdigInfo); //not sure if this is useful
-	
-	Str255	vdigName;
-	memset(vdigName,0,255);
-	vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
-	post("vdigName is %s",vdigName);
-	
-	Rect vdRect;
-	vdigErr = VDGetDigitizerRect(m_vdig,&vdRect);
-	post("digitizer rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
-	
-	vdigErr = VDGetActiveSrcRect(m_vdig,0,&vdRect);
-	post("active src rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
-	
+        deviceCount = (*devices)->count;
+        deviceIndex = (*devices)->selectedIndex;
+        post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
+        int i;
+        for (i = 0; i < deviceCount; i++){
+            post("SG channnel Device List  %s",(*devices)->entry[i].name);
+            }
+        SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
+
+        showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) & sgDeviceNameFlagShowInputsAsDevices;
+
+        theSGInputList = ((SGDeviceName *)(&((*devices)->entry[deviceIndex])))->inputs; //fugly
+
+        //we should have device names in big ass undocumented structs
+
+        //walk through the list
+        //for (i = 0; i < deviceCount; i++){
+        for (i = 0; i < inputIndex; i++){
+            post("SG channnel Input Device List %d %s",i,(*theSGInputList)->entry[i].name);
+        }
+
+
+    }
+
+    //this call sets the input device
+    if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
+        //anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice);
+        post("SGSetChannelDevice trying %s", (*devices)->entry[m_inputDevice].name);
+        anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
+
+        if(anErr!=noErr) error("SGSetChannelDevice returned error %d",anErr);
+
+        anErr = SGSetChannelDeviceInput(m_vc,m_inputDeviceChannel);
+
+        if(anErr!=noErr) error("SGSetChannelDeviceInput returned error %d",anErr);
+
+    /*  //attempt to save SG settings to disk
+    NewUserData(uD);
+    SGGetSettings(m_sg,uD,0);
+    short uDCount;
+    uDCount = CountUserDataType(*uD,sgClipType);
+    post("UserDataType count %d",uDCount);
+
+    Handle myHandle;
+
+    PutUserDataIntoHandle(*uD,myHandle);
+
+    int myFile;
+    myFile = open("/Users/lincoln/Documents/temp",O_CREAT | O_RDWR, 0600);
+    write(myFile,myHandle,4096);
+    close(myFile);
+    */
+
+    //grab the VDIG info from the SGChannel
+    m_vdig = SGGetVideoDigitizerComponent(m_vc);
+    vdigErr = VDGetDigitizerInfo(m_vdig,&m_vdigInfo); //not sure if this is useful
+
+    Str255    vdigName;
+    memset(vdigName,0,255);
+    vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
+    post("vdigName is %s",vdigName);
+
+    Rect vdRect;
+    vdigErr = VDGetDigitizerRect(m_vdig,&vdRect);
+    post("digitizer rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
+
+    vdigErr = VDGetActiveSrcRect(m_vdig,0,&vdRect);
+    post("active src rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
+
     anErr = SGSetChannelBounds(m_vc, &m_srcRect);
     if(anErr!=noErr){
         error("could not set SG ChannelBounds ");
     }
-	
-	anErr = SGSetVideoRect(m_vc, &m_srcRect);
+
+    anErr = SGSetVideoRect(m_vc, &m_srcRect);
     if(anErr!=noErr){
         error("could not set SG Rect ");
     }
-        
+
     anErr = SGSetChannelUsage(m_vc, seqGrabPreview);
     if(anErr!=noErr){
         error("could not set SG ChannelUsage ");
@@ -417,14 +417,14 @@ void pix_videoDarwin :: InitSeqGrabber()
       m_rowBytes = m_vidXSize*4;
       anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                                   k32ARGBPixelFormat,
-                                  &m_srcRect, 
-                                  NULL, 
-                                  NULL, 
-                                  0, 
-                                  m_pixBlock.image.data, 
+                                  &m_srcRect,
+                                  NULL,
+                                  NULL,
+                                  0,
+                                  m_pixBlock.image.data,
                                   m_rowBytes);
-      
-      post ("using RGB");                         
+
+      post ("using RGB");
     }else{
       m_pixBlock.image.xsize = m_vidXSize;
       m_pixBlock.image.ysize = m_vidYSize;
@@ -435,30 +435,30 @@ void pix_videoDarwin :: InitSeqGrabber()
 #else
       m_pixBlock.image.type = GL_UNSIGNED_SHORT_8_8_APPLE;
 #endif
-      
+
       m_pixBlock.image.reallocate();
-      
+
       m_rowBytes = m_vidXSize*2;
       anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                                   //  k422YpCbCr8CodecType,
-                                  
+
                                   k422YpCbCr8PixelFormat,
                                   // '2vuy',
                                   // kComponentVideoUnsigned,
-                                  &m_srcRect, 
-                                  NULL, 
-                                  NULL, 
-                                  0, 
-                                  m_pixBlock.image.data, 
+                                  &m_srcRect,
+                                  NULL,
+                                  NULL,
+                                  0,
+                                  m_pixBlock.image.data,
                                   m_rowBytes);
       post ("using YUV");
     }
-    
+
     if (anErr!= noErr)
-  	{
+      {
       error("%d error at QTNewGWorldFromPtr", anErr);
       return;
-    }  
+    }
     if (NULL == m_srcGWorld)
       {
         error("could not allocate off screen");
@@ -471,57 +471,57 @@ void pix_videoDarwin :: InitSeqGrabber()
 
 void pix_videoDarwin :: setupCapture()
 {
-	stopTransfer();
-	SGSetChannelUsage(m_vc, 0);
-	
-	if (m_record) {
-		SGSetDataOutput(m_sg,&theFSSpec,seqGrabToDisk);
-		switch(m_record){
-		
-		case 1:
-			SGSetChannelPlayFlags(m_vc, channelPlayAllData);
-			SGSetChannelUsage(m_vc, seqGrabRecord | seqGrabPlayDuringRecord);
-			post("record full preview");
-			break;
-		case 2:
-			SGSetChannelUsage(m_vc, seqGrabRecord | seqGrabPlayDuringRecord);
-			post("record some preview");
-			break;
-		case 3:
-			SGSetChannelUsage(m_vc, seqGrabRecord);
-			post("record no preview");
-			break;
-		default:
-			SGSetChannelUsage(m_vc, seqGrabRecord);	
-		}
-	}
-	else {
-		SGSetChannelUsage(m_vc, seqGrabPreview);
-	}
-	SGUpdate(m_sg,0);
-	
-	startTransfer();
+    stopTransfer();
+    SGSetChannelUsage(m_vc, 0);
+
+    if (m_record) {
+        SGSetDataOutput(m_sg,&theFSSpec,seqGrabToDisk);
+        switch(m_record){
+
+        case 1:
+            SGSetChannelPlayFlags(m_vc, channelPlayAllData);
+            SGSetChannelUsage(m_vc, seqGrabRecord | seqGrabPlayDuringRecord);
+            post("record full preview");
+            break;
+        case 2:
+            SGSetChannelUsage(m_vc, seqGrabRecord | seqGrabPlayDuringRecord);
+            post("record some preview");
+            break;
+        case 3:
+            SGSetChannelUsage(m_vc, seqGrabRecord);
+            post("record no preview");
+            break;
+        default:
+            SGSetChannelUsage(m_vc, seqGrabRecord);
+        }
+    }
+    else {
+        SGSetChannelUsage(m_vc, seqGrabPreview);
+    }
+    SGUpdate(m_sg,0);
+
+    startTransfer();
 }
- 
+
 void pix_videoDarwin :: destroySeqGrabber()
 {
     if (m_vc) {
-		if (::SGDisposeChannel(m_sg, m_vc)) {
-			error ("Unable to dispose a video channel");
-		}
-		m_vc = NULL;
-	}
-	if (m_sg) {
-		if (::CloseComponent(m_sg)) {
-			error("Unable to dispose a sequence grabber component");
-		}
-		m_sg = NULL;
+        if (::SGDisposeChannel(m_sg, m_vc)) {
+            error ("Unable to dispose a video channel");
+        }
+        m_vc = NULL;
+    }
+    if (m_sg) {
+        if (::CloseComponent(m_sg)) {
+            error("Unable to dispose a sequence grabber component");
+        }
+        m_sg = NULL;
         if (m_srcGWorld) {
-		::DisposeGWorld(m_srcGWorld);
-		m_pixMap = NULL;
-		m_srcGWorld = NULL;
-		m_baseAddr = NULL;
-	}
+        ::DisposeGWorld(m_srcGWorld);
+        m_pixMap = NULL;
+        m_srcGWorld = NULL;
+        m_baseAddr = NULL;
+    }
     }
 }
 
@@ -550,18 +550,18 @@ void pix_videoDarwin :: resetSeqGrabber()
         anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
         post("set SG PlayAlldata");
         break;
-    
+
     }
-  */  
+  */
 }
 
 void pix_videoDarwin :: qualityMess(int X)
 {
     OSErr anErr;
-	
-	if (X < 0) X = 0;
-	if (X > 3) X = 3;
-	m_quality = X;
+
+    if (X < 0) X = 0;
+    if (X > 3) X = 3;
+    m_quality = X;
 
     switch (m_quality){
     case 0:
@@ -580,60 +580,60 @@ void pix_videoDarwin :: qualityMess(int X)
         anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
         post("set SG PlayAlldata");
         break;
-    
+
     }
-    
+
 }
 
 void pix_videoDarwin :: derSwizzler(imageStruct &image)
 {
 #ifdef __VEC__
 
-	vector unsigned char *data = (vector unsigned char*) image.data;
-	
-	vector unsigned char permuteBuffer;
-	
-	union{
-		unsigned char c[16];
-		vector unsigned char v;
-	}cBuf;
-	
-	cBuf.c[0] = 1;
-	cBuf.c[1] = 0;
-	cBuf.c[2] = 3;
-	cBuf.c[3] = 2;
-	
-	cBuf.c[4] = 5;
-	cBuf.c[5] = 4;
-	cBuf.c[6] = 7;
-	cBuf.c[7] = 6;
-	
-	cBuf.c[8] = 9;
-	cBuf.c[9] = 8;
-	cBuf.c[10] = 11;
-	cBuf.c[11] = 10;
-	
-	cBuf.c[12] = 13;
-	cBuf.c[13] = 12;
-	cBuf.c[14] = 15;
-	cBuf.c[15] = 14;
-	
-	permuteBuffer = cBuf.v;
-	
-	int height, width, i;
-	
-	width = image.xsize / 8;
-	height = image.ysize;
-	
-	i = height * width;
-	
-	while(i--){
-	
-		//vec_perm()
-		data[0] = vec_perm(data[0],data[0],permuteBuffer);
-		data++;
-	
-	}
+    vector unsigned char *data = (vector unsigned char*) image.data;
+
+    vector unsigned char permuteBuffer;
+
+    union{
+        unsigned char c[16];
+        vector unsigned char v;
+    }cBuf;
+
+    cBuf.c[0] = 1;
+    cBuf.c[1] = 0;
+    cBuf.c[2] = 3;
+    cBuf.c[3] = 2;
+
+    cBuf.c[4] = 5;
+    cBuf.c[5] = 4;
+    cBuf.c[6] = 7;
+    cBuf.c[7] = 6;
+
+    cBuf.c[8] = 9;
+    cBuf.c[9] = 8;
+    cBuf.c[10] = 11;
+    cBuf.c[11] = 10;
+
+    cBuf.c[12] = 13;
+    cBuf.c[13] = 12;
+    cBuf.c[14] = 15;
+    cBuf.c[15] = 14;
+
+    permuteBuffer = cBuf.v;
+
+    int height, width, i;
+
+    width = image.xsize / 8;
+    height = image.ysize;
+
+    i = height * width;
+
+    while(i--){
+
+        //vec_perm()
+        data[0] = vec_perm(data[0],data[0],permuteBuffer);
+        data++;
+
+    }
 
 
 #endif //__VEC__
@@ -656,13 +656,13 @@ void pix_videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
     }else{
         m_vidYSize = 240;
     }
-	stopTransfer();
+    stopTransfer();
     resetSeqGrabber();
-	startTransfer();
-	post("height %d width %d",m_vidYSize,m_vidXSize);  
+    startTransfer();
+    post("height %d width %d",m_vidYSize,m_vidXSize);
 //  m_pixBlock.image.xsize = m_vidXSize;
 //  m_pixBlock.image.ysize = m_vidYSize;
-    
+
 }
 
 /////////////////////////////////////////////////////////
@@ -684,11 +684,11 @@ void pix_videoDarwin :: csMess(int format)
     } else {
       error("colorspace is unknown %d", m_colorspace);
       return;
-	}
-    
-	stopTransfer();
-	resetSeqGrabber();
-	startTransfer();
+    }
+
+    stopTransfer();
+    resetSeqGrabber();
+    startTransfer();
 }
 void pix_videoDarwin :: csMess(t_symbol*s)
 {
@@ -708,11 +708,11 @@ void pix_videoDarwin :: csMess(t_symbol*s)
 
 void pix_videoDarwin :: fileMess(int argc, t_atom *argv)
 {
-    OSErr		err = noErr;
-    FSRef		ref;
+    OSErr        err = noErr;
+    FSRef        ref;
 
 //if recording is going do not accept a new file name
-//on OSX changing the name while recording won't have any effect 
+//on OSX changing the name while recording won't have any effect
 //but it will give the wrong message at the end if recording
 //if (m_recordStart) return;
 
@@ -728,61 +728,61 @@ void pix_videoDarwin :: fileMess(int argc, t_atom *argv)
   }
 
  // m_autocount = 0;
-	setModified();
+    setModified();
 
-	post("filename %s",m_filename);
-	
-	if (!m_filename[0]) {
+    post("filename %s",m_filename);
+
+    if (!m_filename[0]) {
         error("no filename passed");
-		return;
-		} else {            
-			err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
-			if (err == fnfErr) {
-				// if the file does not yet exist, then let's create the file
-				int fd;
+        return;
+        } else {
+            err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
+            if (err == fnfErr) {
+                // if the file does not yet exist, then let's create the file
+                int fd;
                 fd = open(m_filename, O_CREAT | O_RDWR, 0600);
                 if (fd < 0){
                     error("problem with fd");
-					return ;
-					}
+                    return ;
+                    }
                         write(fd, " ", 1);
                         close(fd);
-						err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
-						//post("made new file %s",m_filename);
-			}
+                        err = FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
+                        //post("made new file %s",m_filename);
+            }
 
-            
-			if (err) {
-				error("unable to make file ref from filename %s", m_filename);
-				return;
-			}
-			
-			//err = ::FSsetCatalogInfo(&ref, kFSCatInfoSettableInfo, NULL);
-			err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
 
-			if (err != noErr){
-					error("error %d in FSGetCatalogInfo()", err);
-					return;
-				}
-		
-		
-		//	err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
-			
-			if (err != noErr && err != -37){
-					error("error %d in FSMakeFSSpec()", err);
-					return;
-				}
+            if (err) {
+                error("unable to make file ref from filename %s", m_filename);
+                return;
+            }
 
-		}
+            //err = ::FSsetCatalogInfo(&ref, kFSCatInfoSettableInfo, NULL);
+            err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
 
-	CreateMovieFile(	&theFSSpec,
-							FOUR_CHAR_CODE('TVOD'),
-							smSystemScript,
-							createMovieFileDontOpenFile | 
-							createMovieFileDontCreateMovie | 
-							createMovieFileDontCreateResFile,
-							NULL,
-							NULL);
+            if (err != noErr){
+                    error("error %d in FSGetCatalogInfo()", err);
+                    return;
+                }
+
+
+        //    err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
+
+            if (err != noErr && err != -37){
+                    error("error %d in FSMakeFSSpec()", err);
+                    return;
+                }
+
+        }
+
+    CreateMovieFile(    &theFSSpec,
+                            FOUR_CHAR_CODE('TVOD'),
+                            smSystemScript,
+                            createMovieFileDontOpenFile |
+                            createMovieFileDontCreateMovie |
+                            createMovieFileDontCreateResFile,
+                            NULL,
+                            NULL);
 
 }
 
@@ -790,295 +790,295 @@ void pix_videoDarwin :: fileMess(int argc, t_atom *argv)
 void pix_videoDarwin :: brightnessMess(float X)
 {
 
-	QTAtomContainer         atomContainer;
+    QTAtomContainer         atomContainer;
     QTAtom                  featureAtom;
     VDIIDCFeatureSettings   settings;
     ComponentDescription    desc;
     ComponentResult         result = paramErr;
-	
-	//check if device is IIDC
-	GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+
+    //check if device is IIDC
+    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
     if (vdSubtypeIIDC != desc.componentSubType){
 
-		m_brightness = (unsigned short)(65536. * X);
-		VDSetBrightness(m_vdig,&m_brightness);
-	
-		VDGetBrightness(m_vdig,&m_brightness);
-		post("brightness is %d",m_brightness);
-	}
-	else
-	{
-	//IIDC stuff
-	//these things are as stubborn as they are stupid - find one that conforms to spec!
-	
-	//vdIIDCFeatureBrightness
-	result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureBrightness, &atomContainer);
-	if (noErr != result) {
-		error("VDIIDCGetFeaturesForSpecifier returned %d",result);
-	}
-	
-	featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
+        m_brightness = (unsigned short)(65536. * X);
+        VDSetBrightness(m_vdig,&m_brightness);
+
+        VDGetBrightness(m_vdig,&m_brightness);
+        post("brightness is %d",m_brightness);
+    }
+    else
+    {
+    //IIDC stuff
+    //these things are as stubborn as they are stupid - find one that conforms to spec!
+
+    //vdIIDCFeatureBrightness
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureBrightness, &atomContainer);
+    if (noErr != result) {
+        error("VDIIDCGetFeaturesForSpecifier returned %d",result);
+    }
+
+    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                          vdIIDCAtomTypeFeature, 1, NULL);
-	if (0 == featureAtom) error("featureAtom not found");
-	
-	result = QTCopyAtomDataToPtr(atomContainer,
+    if (0 == featureAtom) error("featureAtom not found");
+
+    result = QTCopyAtomDataToPtr(atomContainer,
                                      QTFindChildByID(atomContainer, featureAtom,
                                      vdIIDCAtomTypeFeatureSettings,
                                      vdIIDCAtomIDFeatureSettings, NULL),
                                      true, sizeof(settings), &settings, NULL);
-									 
-	settings.state.flags = (vdIIDCFeatureFlagOn |
+
+    settings.state.flags = (vdIIDCFeatureFlagOn |
                                         vdIIDCFeatureFlagManual |
                                         vdIIDCFeatureFlagRawControl);
 
-	settings.state.value = X;
-	
-	result = QTSetAtomData(atomContainer,
+    settings.state.value = X;
+
+    result = QTSetAtomData(atomContainer,
                                        QTFindChildByID(atomContainer, featureAtom,
                                        vdIIDCAtomTypeFeatureSettings,
                                        vdIIDCAtomIDFeatureSettings, NULL),
                                        sizeof(settings), &settings);
-									   
-	result = VDIIDCSetFeatures(m_vdig, atomContainer);
-	
-	}
+
+    result = VDIIDCSetFeatures(m_vdig, atomContainer);
+
+    }
 }
 
 void pix_videoDarwin :: saturationMess(float X)
 {
 
-	QTAtomContainer         atomContainer;
+    QTAtomContainer         atomContainer;
     QTAtom                  featureAtom;
     VDIIDCFeatureSettings   settings;
     ComponentDescription    desc;
     ComponentResult         result = paramErr;
-	
-	//check if device is IIDC
-	GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+
+    //check if device is IIDC
+    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
     if (vdSubtypeIIDC != desc.componentSubType){
 
-		m_saturation = (unsigned short)(65536. * X);
-		VDSetSaturation(m_vdig,&m_saturation);
-	
-		VDGetSaturation(m_vdig,&m_saturation);
-		post("saturation is %d",m_saturation);
-	}
-	else
-	{
-	//IIDC stuff
-	//vdIIDCFeatureSaturation
-	result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureSaturation, &atomContainer);
-	if (noErr != result) {
-		error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureSaturation returned %d",result);
-	}
-	
-	featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
+        m_saturation = (unsigned short)(65536. * X);
+        VDSetSaturation(m_vdig,&m_saturation);
+
+        VDGetSaturation(m_vdig,&m_saturation);
+        post("saturation is %d",m_saturation);
+    }
+    else
+    {
+    //IIDC stuff
+    //vdIIDCFeatureSaturation
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureSaturation, &atomContainer);
+    if (noErr != result) {
+        error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureSaturation returned %d",result);
+    }
+
+    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                          vdIIDCAtomTypeFeature, 1, NULL);
-	if (0 == featureAtom) error("featureAtom vdIIDCFeatureSaturation not found");
-	
-	result = QTCopyAtomDataToPtr(atomContainer,
+    if (0 == featureAtom) error("featureAtom vdIIDCFeatureSaturation not found");
+
+    result = QTCopyAtomDataToPtr(atomContainer,
                                      QTFindChildByID(atomContainer, featureAtom,
                                      vdIIDCAtomTypeFeatureSettings,
                                      vdIIDCAtomIDFeatureSettings, NULL),
                                      true, sizeof(settings), &settings, NULL);
-									 
-	settings.state.flags = (vdIIDCFeatureFlagOn |
+
+    settings.state.flags = (vdIIDCFeatureFlagOn |
                                         vdIIDCFeatureFlagManual |
                                         vdIIDCFeatureFlagRawControl);
 
-	settings.state.value = X;
-	
-	result = QTSetAtomData(atomContainer,
+    settings.state.value = X;
+
+    result = QTSetAtomData(atomContainer,
                                        QTFindChildByID(atomContainer, featureAtom,
                                        vdIIDCAtomTypeFeatureSettings,
                                        vdIIDCAtomIDFeatureSettings, NULL),
                                        sizeof(settings), &settings);
-									   
-	result = VDIIDCSetFeatures(m_vdig, atomContainer);
- 
-	}
+
+    result = VDIIDCSetFeatures(m_vdig, atomContainer);
+
+    }
 }
 
 void pix_videoDarwin :: contrastMess(float X)
 {
 
-		m_contrast = (unsigned short)(65536. * X);
-		VDSetContrast(m_vdig,&m_contrast);
-	
-		VDGetContrast(m_vdig,&m_contrast);
-		post("contrast is %d",m_contrast);
+        m_contrast = (unsigned short)(65536. * X);
+        VDSetContrast(m_vdig,&m_contrast);
+
+        VDGetContrast(m_vdig,&m_contrast);
+        post("contrast is %d",m_contrast);
 }
 
 void pix_videoDarwin :: exposureMess(float X)
 {
 
-	QTAtomContainer         atomContainer;
+    QTAtomContainer         atomContainer;
     QTAtom                  featureAtom;
     VDIIDCFeatureSettings   settings;
     ComponentDescription    desc;
     ComponentResult         result = paramErr;
-	
-	//check if device is IIDC
-	GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+
+    //check if device is IIDC
+    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
     if (vdSubtypeIIDC == desc.componentSubType){
 
-	//IIDC stuff
-	//vdIIDCFeatureExposure
-	result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureExposure, &atomContainer);
-	if (noErr != result) {
-		error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
-	}
-	
-	featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
+    //IIDC stuff
+    //vdIIDCFeatureExposure
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureExposure, &atomContainer);
+    if (noErr != result) {
+        error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
+    }
+
+    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                          vdIIDCAtomTypeFeature, 1, NULL);
-	if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
-	
-	result = QTCopyAtomDataToPtr(atomContainer,
+    if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
+
+    result = QTCopyAtomDataToPtr(atomContainer,
                                      QTFindChildByID(atomContainer, featureAtom,
                                      vdIIDCAtomTypeFeatureSettings,
                                      vdIIDCAtomIDFeatureSettings, NULL),
                                      true, sizeof(settings), &settings, NULL);
-									 
-	settings.state.flags = (vdIIDCFeatureFlagOn |
+
+    settings.state.flags = (vdIIDCFeatureFlagOn |
                                         vdIIDCFeatureFlagManual |
                                         vdIIDCFeatureFlagRawControl);
 
-	settings.state.value = X;
-	
-	result = QTSetAtomData(atomContainer,
+    settings.state.value = X;
+
+    result = QTSetAtomData(atomContainer,
                                        QTFindChildByID(atomContainer, featureAtom,
                                        vdIIDCAtomTypeFeatureSettings,
                                        vdIIDCAtomIDFeatureSettings, NULL),
                                        sizeof(settings), &settings);
-									   
-	result = VDIIDCSetFeatures(m_vdig, atomContainer);
- 
-	}
+
+    result = VDIIDCSetFeatures(m_vdig, atomContainer);
+
+    }
 }
 
 void pix_videoDarwin :: gainMess(float X)
 {
 
-	QTAtomContainer         atomContainer;
+    QTAtomContainer         atomContainer;
     QTAtom                  featureAtom;
     VDIIDCFeatureSettings   settings;
     ComponentDescription    desc;
     ComponentResult         result = paramErr;
-	
-	//check if device is IIDC
-	GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+
+    //check if device is IIDC
+    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
     if (vdSubtypeIIDC == desc.componentSubType){
 
-	//IIDC stuff
-	//vdIIDCFeatureGain
-	result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU, &atomContainer);
-	if (noErr != result) {
-		error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
-	}
-	
-	featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
+    //IIDC stuff
+    //vdIIDCFeatureGain
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU, &atomContainer);
+    if (noErr != result) {
+        error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
+    }
+
+    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                          vdIIDCAtomTypeFeature, 1, NULL);
-	if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
-	
-	result = QTCopyAtomDataToPtr(atomContainer,
+    if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
+
+    result = QTCopyAtomDataToPtr(atomContainer,
                                      QTFindChildByID(atomContainer, featureAtom,
                                      vdIIDCAtomTypeFeatureSettings,
                                      vdIIDCAtomIDFeatureSettings, NULL),
                                      true, sizeof(settings), &settings, NULL);
-									 
-	settings.state.flags = (vdIIDCFeatureFlagOn |
+
+    settings.state.flags = (vdIIDCFeatureFlagOn |
                                         vdIIDCFeatureFlagManual |
                                         vdIIDCFeatureFlagRawControl);
 
-	settings.state.value = X;
-	
-	result = QTSetAtomData(atomContainer,
+    settings.state.value = X;
+
+    result = QTSetAtomData(atomContainer,
                                        QTFindChildByID(atomContainer, featureAtom,
                                        vdIIDCAtomTypeFeatureSettings,
                                        vdIIDCAtomIDFeatureSettings, NULL),
                                        sizeof(settings), &settings);
-									   
-	result = VDIIDCSetFeatures(m_vdig, atomContainer);
- 
-	}
+
+    result = VDIIDCSetFeatures(m_vdig, atomContainer);
+
+    }
 }
 
 void pix_videoDarwin :: whiteBalanceMess(float U, float V)
 {
 
-	QTAtomContainer         atomContainer;
+    QTAtomContainer         atomContainer;
     QTAtom                  featureAtom;
     VDIIDCFeatureSettings   settings;
     ComponentDescription    desc;
     ComponentResult         result = paramErr;
-	
-	//check if device is IIDC
-	GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+
+    //check if device is IIDC
+    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
     if (vdSubtypeIIDC == desc.componentSubType){
 
-	//IIDC stuff
-	//vdIIDCFeatureWhiteBalanceU
-	result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU, &atomContainer);
-	if (noErr != result) {
-		error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
-	}
-	
-	featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
+    //IIDC stuff
+    //vdIIDCFeatureWhiteBalanceU
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU, &atomContainer);
+    if (noErr != result) {
+        error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
+    }
+
+    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                          vdIIDCAtomTypeFeature, 1, NULL);
-	if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
-	
-	result = QTCopyAtomDataToPtr(atomContainer,
+    if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
+
+    result = QTCopyAtomDataToPtr(atomContainer,
                                      QTFindChildByID(atomContainer, featureAtom,
                                      vdIIDCAtomTypeFeatureSettings,
                                      vdIIDCAtomIDFeatureSettings, NULL),
                                      true, sizeof(settings), &settings, NULL);
-									 
-	settings.state.flags = (vdIIDCFeatureFlagOn |
+
+    settings.state.flags = (vdIIDCFeatureFlagOn |
                                         vdIIDCFeatureFlagManual |
                                         vdIIDCFeatureFlagRawControl);
 
-	settings.state.value = U;
-	
-	result = QTSetAtomData(atomContainer,
+    settings.state.value = U;
+
+    result = QTSetAtomData(atomContainer,
                                        QTFindChildByID(atomContainer, featureAtom,
                                        vdIIDCAtomTypeFeatureSettings,
                                        vdIIDCAtomIDFeatureSettings, NULL),
                                        sizeof(settings), &settings);
-									   
-	result = VDIIDCSetFeatures(m_vdig, atomContainer);
- 
-	//vdIIDCFeatureWhiteBalanceV
-	result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceV, &atomContainer);
-	if (noErr != result) {
-		error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
-	}
-	
-	featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
+
+    result = VDIIDCSetFeatures(m_vdig, atomContainer);
+
+    //vdIIDCFeatureWhiteBalanceV
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceV, &atomContainer);
+    if (noErr != result) {
+        error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
+    }
+
+    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                          vdIIDCAtomTypeFeature, 1, NULL);
-	if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
-	
-	result = QTCopyAtomDataToPtr(atomContainer,
+    if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
+
+    result = QTCopyAtomDataToPtr(atomContainer,
                                      QTFindChildByID(atomContainer, featureAtom,
                                      vdIIDCAtomTypeFeatureSettings,
                                      vdIIDCAtomIDFeatureSettings, NULL),
                                      true, sizeof(settings), &settings, NULL);
-									 
-	settings.state.flags = (vdIIDCFeatureFlagOn |
+
+    settings.state.flags = (vdIIDCFeatureFlagOn |
                                         vdIIDCFeatureFlagManual |
                                         vdIIDCFeatureFlagRawControl);
 
-	settings.state.value = V;
-	
-	result = QTSetAtomData(atomContainer,
+    settings.state.value = V;
+
+    result = QTSetAtomData(atomContainer,
                                        QTFindChildByID(atomContainer, featureAtom,
                                        vdIIDCAtomTypeFeatureSettings,
                                        vdIIDCAtomIDFeatureSettings, NULL),
                                        sizeof(settings), &settings);
-									   
-	result = VDIIDCSetFeatures(m_vdig, atomContainer);
 
- 
-	}
+    result = VDIIDCSetFeatures(m_vdig, atomContainer);
+
+
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -1092,85 +1092,88 @@ void pix_videoDarwin :: dialogMess(int argc, t_atom*argv)
 
 void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 {
-	class_addcreator(reinterpret_cast<t_newmethod>(create_pix_videoDarwin,gensym("pix_video"),A_DEFFLOAT,A_DEFFLOAT,A_NULL));
-	pix_videoOS::real_obj_setupCallback(classPtr);
+    class_addcreator(reinterpret_cast<t_newmethod>(create_pix_videoDarwin),
+                      gensym("pix_video"),
+                      A_DEFFLOAT,A_DEFFLOAT,A_NULL);
+
+    pix_videoOS::real_obj_setupCallback(classPtr);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::qualityCallback),
-		  gensym("quality"), A_DEFFLOAT, A_NULL);
+          gensym("quality"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::resetCallback),
-		  gensym("reset"), A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::autoCallback),
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
+          gensym("reset"), A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::autoCallback),
+          gensym("auto"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::deviceCallback),
-                    		  gensym("device"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::brightnessCallback),
-                    		  gensym("brightness"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::saturationCallback),
-                    		  gensym("saturation"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::contrastCallback),
-                    		  gensym("contrast"), A_DEFFLOAT, A_NULL);						  
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::exposureCallback),
-                    		  gensym("exposure"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::gainCallback),
-                    		  gensym("gain"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::whiteBalanceCallback),
-                    		  gensym("whitebalance"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::fileMessCallback),
-		  gensym("file"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::recordCallback),
-		  gensym("record"), A_DEFFLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::inputCallback),
-		  gensym("input"), A_DEFFLOAT, A_NULL);
-							  
-	class_addbang(classPtr,reinterpret_cast<t_method>(&pix_videoDarwin::bangMessCallback));
+                              gensym("device"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::brightnessCallback),
+                              gensym("brightness"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::saturationCallback),
+                              gensym("saturation"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::contrastCallback),
+                              gensym("contrast"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::exposureCallback),
+                              gensym("exposure"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::gainCallback),
+                              gensym("gain"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::whiteBalanceCallback),
+                              gensym("whitebalance"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::fileMessCallback),
+          gensym("file"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::recordCallback),
+          gensym("record"), A_DEFFLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::inputCallback),
+          gensym("input"), A_DEFFLOAT, A_NULL);
+
+    class_addbang(classPtr,reinterpret_cast<t_method>(&pix_videoDarwin::bangMessCallback));
 }
 
 void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
 {
-	GetMyClass(data)->qualityMess((int)X);
-} 
+    GetMyClass(data)->qualityMess((int)X);
+}
 
 void pix_videoDarwin :: autoCallback(void *data, t_floatarg X)
 {
-	GetMyClass(data)->m_auto=((int)X);
-} 
+    GetMyClass(data)->m_auto=((int)X);
+}
 
 void pix_videoDarwin :: recordCallback(void *data, t_floatarg X)
 {
-	GetMyClass(data)->m_record=((int)X);
-	GetMyClass(data)->setupCapture();
-} 
+    GetMyClass(data)->m_record=((int)X);
+    GetMyClass(data)->setupCapture();
+}
 
 
 void pix_videoDarwin :: bangMessCallback(void *data)
 {
-	GetMyClass(data)->m_banged=true;
-} 
+    GetMyClass(data)->m_banged=true;
+}
 
 void pix_videoDarwin :: resetCallback(void *data)
 {
-	GetMyClass(data)->resetSeqGrabber();
+    GetMyClass(data)->resetSeqGrabber();
 }
 
 void pix_videoDarwin :: deviceCallback(void *data, t_floatarg X)
 {
-  GetMyClass(data)->m_inputDevice=((int)X);  
-} 
+  GetMyClass(data)->m_inputDevice=((int)X);
+}
 
 void pix_videoDarwin :: inputCallback(void *data, t_floatarg X)
 {
-  GetMyClass(data)->m_inputDeviceChannel=((int)X);  
-} 
+  GetMyClass(data)->m_inputDeviceChannel=((int)X);
+}
 
 void pix_videoDarwin :: brightnessCallback(void *data, t_floatarg X)
 {
-  GetMyClass(data)->brightnessMess(X);  
-} 
+  GetMyClass(data)->brightnessMess(X);
+}
 
 void pix_videoDarwin :: saturationCallback(void *data, t_floatarg X)
 {
   GetMyClass(data)->saturationMess(X);
-} 
+}
 
 void pix_videoDarwin :: contrastCallback(void *data, t_floatarg X)
 {
@@ -1180,7 +1183,7 @@ void pix_videoDarwin :: contrastCallback(void *data, t_floatarg X)
 void pix_videoDarwin :: exposureCallback(void *data, t_floatarg X)
 {
   GetMyClass(data)->exposureMess(X);
-} 
+}
 
 void pix_videoDarwin :: gainCallback(void *data, t_floatarg X)
 {

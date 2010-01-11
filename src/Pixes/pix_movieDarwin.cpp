@@ -207,7 +207,7 @@ void pix_movieDarwin :: realOpen(char *filename)
   if (!filename[0]) {
     error("no filename passed");
   } else {            
-    UInt8*filename8=static_cast<UInt8*>filename;
+    UInt8*filename8=reinterpret_cast<UInt8*>(filename);
     err = ::FSPathMakeRef(filename8, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
             
@@ -870,7 +870,9 @@ void pix_movieDarwin :: LoadRam()
 /////////////////////////////////////////////////////////
 void pix_movieDarwin :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieDarwin,gensym("pix_movie"),A_DEFSYM,A_NULL));
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieDarwin),
+                   gensym("pix_movie"),
+                   A_DEFSYM,A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::changeImageCallback),
