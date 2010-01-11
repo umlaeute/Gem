@@ -50,31 +50,32 @@ void separator :: render(GemState *state)
 {
   // push the current matrix stacks
 
-  if(state->stackDepth[0]<GemMan::maxStackDepth[0]){
+  if(state->stackDepth[GemMan::STACKMODELVIEW]<GemMan::maxStackDepth[GemMan::STACKMODELVIEW]){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
   }
-  state->stackDepth[0]++;
+  state->stackDepth[GemMan::STACKMODELVIEW]++;
 
   /* GL_COLOR is only accepted if GL_ARB_imaging is present */
-  if(GLEW_ARB_imaging && state->stackDepth[1]<GemMan::maxStackDepth[1]){
+  if(state->stackDepth[GemMan::STACKCOLOR]<GemMan::maxStackDepth[GemMan::STACKCOLOR]){
+    post("push color");
     glMatrixMode(GL_COLOR);
     glPushMatrix();
   }
-  state->stackDepth[1]++;
+  state->stackDepth[GemMan::STACKCOLOR]++;
 
-  if(state->stackDepth[2]<GemMan::maxStackDepth[2]){
+  if(state->stackDepth[GemMan::STACKTEXTURE]<GemMan::maxStackDepth[GemMan::STACKTEXTURE]){
     glMatrixMode(GL_TEXTURE);
     glPushMatrix();
   }
-  state->stackDepth[2]++;
+  state->stackDepth[GemMan::STACKTEXTURE]++;
 
 
-  if(state->stackDepth[3]<GemMan::maxStackDepth[3]){
+  if(state->stackDepth[GemMan::STACKPROJECTION]<GemMan::maxStackDepth[GemMan::STACKPROJECTION]){
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
   }
-  state->stackDepth[3]++;
+  state->stackDepth[GemMan::STACKPROJECTION]++;
 
 
   m_state.lighting 	 = state->lighting;
@@ -105,23 +106,23 @@ void separator :: render(GemState *state)
 void separator :: postrender(GemState *state)
 {
   // pop the current matrix stacks
-  state->stackDepth[3]--;
-  if(state->stackDepth[3]<GemMan::maxStackDepth[3]){
+  state->stackDepth[GemMan::STACKPROJECTION]--;
+  if(state->stackDepth[GemMan::STACKPROJECTION]<GemMan::maxStackDepth[GemMan::STACKPROJECTION]){
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
   }
-  state->stackDepth[2]--;
-  if(state->stackDepth[2]<GemMan::maxStackDepth[2]){
+  state->stackDepth[GemMan::STACKTEXTURE]--;
+  if(state->stackDepth[GemMan::STACKTEXTURE]<GemMan::maxStackDepth[GemMan::STACKTEXTURE]){
     glMatrixMode(GL_TEXTURE);
     glPopMatrix();
   }
-  state->stackDepth[1]--;
-  if(GLEW_ARB_imaging && state->stackDepth[1]<GemMan::maxStackDepth[1]){
+  state->stackDepth[GemMan::STACKCOLOR]--;
+  if(state->stackDepth[GemMan::STACKCOLOR]<GemMan::maxStackDepth[GemMan::STACKCOLOR]){
     glMatrixMode(GL_COLOR);
     glPopMatrix();
   }
-  state->stackDepth[0]--;
-  if(state->stackDepth[0]<GemMan::maxStackDepth[0]){
+  state->stackDepth[GemMan::STACKMODELVIEW]--;
+  if(state->stackDepth[GemMan::STACKMODELVIEW]<GemMan::maxStackDepth[GemMan::STACKMODELVIEW]){
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
   }

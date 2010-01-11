@@ -155,6 +155,8 @@ class GEM_EXTERN GemMan
   static void 	    fillGemState(GemState &);
 
   static int	   texture_rectangle_supported;
+  
+  enum GemStackId { STACKMODELVIEW, STACKCOLOR, STACKTEXTURE, STACKPROJECTION };
   static GLint     maxStackDepth[4]; // for push/pop of matrix-stacks
 
 

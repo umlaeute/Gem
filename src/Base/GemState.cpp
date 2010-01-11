@@ -18,6 +18,9 @@
 #include "GemState.h"
 #include "Base/GemGL.h"
 
+/* for GemMan::StackIDs */
+#include "GemMan.h"
+
 
 /////////////////////////////////////////////////////////
 //
@@ -36,7 +39,11 @@ GemState :: GemState()
                     NormalArray(0), HaveNormalArray(0),
                     TexCoordArray(0), HaveTexCoordArray(0)
 {
-  stackDepth[0]=stackDepth[1]=stackDepth[2]=stackDepth[3]=1; // 1 is the current matrix
+  stackDepth[GemMan::STACKMODELVIEW]=
+    stackDepth[GemMan::STACKCOLOR]=
+    stackDepth[GemMan::STACKTEXTURE]=
+    stackDepth[GemMan::STACKPROJECTION]=
+    1; // 1 is the current matrix
 }
 
 void GemState :: reset() {

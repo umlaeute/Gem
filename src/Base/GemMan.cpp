@@ -287,8 +287,10 @@ void GemMan :: initGem()
   m_fog		= 0.5f;
   m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
 
-  maxStackDepth[0] = 16; // model
-  maxStackDepth[1] = maxStackDepth[2] = maxStackDepth[3] = 2; // color/texture/projection
+  maxStackDepth[GemMan::STACKMODELVIEW] = 16; // model
+  maxStackDepth[GemMan::STACKCOLOR] = 0; // color (defaults to 0, in case GL_ARB_imaging is not supported
+  maxStackDepth[GemMan::STACKTEXTURE] = 2; // texture
+  maxStackDepth[GemMan::STACKPROJECTION] = 2; // projection
 
   m_motionBlur = 0.f;
 
@@ -1053,10 +1055,12 @@ int GemMan :: createWindow(char* disp)
   checkOpenGLExtensions();
 
   /* check the stack-sizes */
-  glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH, maxStackDepth+0);
-  glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+1);
-  glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH, maxStackDepth+2);
-  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, maxStackDepth+3);
+  glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH, maxStackDepth+STACKMODELVIEW);
+  if(GLEW_ARB_imaging) {
+    glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+STACKCOLOR);
+  }
+  glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH, maxStackDepth+STACKTEXTURE);
+  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, maxStackDepth+STACKPROJECTION);
 
   m_w=myHints.real_w;
   m_h=myHints.real_h;

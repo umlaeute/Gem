@@ -176,10 +176,10 @@ bool GemContext::create(void){
   }
 
   /* check the stack-sizes */
-  glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    m_maxStackDepth+0);
-  glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, m_maxStackDepth+1);
-  glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      m_maxStackDepth+2);
-  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   m_maxStackDepth+3);
+  glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    m_maxStackDepth+GemMan::STACKMODELVIEW);
+  glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, m_maxStackDepth+GemMan::STACKCOLOR);
+  glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      m_maxStackDepth+GemMan::STACKTEXTURE);
+  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   m_maxStackDepth+GemMan::STACKPROJECTION);
 
   firsttime=0;
 
@@ -211,10 +211,10 @@ void GemContext::destroy(void){
 }
 
 bool GemContext::makeCurrent(void){
-  GemMan::maxStackDepth[0]=m_maxStackDepth[0];
-  GemMan::maxStackDepth[1]=m_maxStackDepth[1];
-  GemMan::maxStackDepth[2]=m_maxStackDepth[2];
-  GemMan::maxStackDepth[3]=m_maxStackDepth[3];
+  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]=m_maxStackDepth[GemMan::STACKMODELVIEW];
+  GemMan::maxStackDepth[GemMan::STACKCOLOR]=m_maxStackDepth[GemMan::STACKCOLOR];
+  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=m_maxStackDepth[GemMan::STACKTEXTURE];
+  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_maxStackDepth[GemMan::STACKPROJECTION];
 
 #ifdef GEM_MULTICONTEXT
   if(!m_context) {
