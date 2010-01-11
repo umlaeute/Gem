@@ -93,9 +93,9 @@ void pix_bitmask :: processGrayImage(imageStruct &image)
 #ifdef __MMX__
 void pix_bitmask :: processRGBAMMX(imageStruct &image){
   int i = image.xsize * image.ysize/2;
-
-  __m64 mask = _mm_set_pi32(*(int*)m_mask, *(int*)m_mask);
-  __m64 *input = (__m64*)image.data;
+  const int*mask_ip=reinterpret_cast<const int*>(m_mask);
+  __m64 mask = _mm_set_pi32(*mask_ip, *mask_ip);
+  __m64 *input = reinterpret_cast<__m64*>(image.data);
 
   while(i--){
     input[0]= _mm_and_si64(input[0], mask);
