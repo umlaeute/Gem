@@ -32,16 +32,16 @@ void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size,
 
   /* Permutation vector is used to extract the interleaved RGB. */
   vector unsigned char vPerm1 =
-    static_cast<vector_unsigned_char>( 0,  3,  6,  9, 12, 15, 18, 21, /* R0..R7    */
+    static_cast<vector unsigned char>( 0,  3,  6,  9, 12, 15, 18, 21, /* R0..R7    */
                             1,  4,  7, 10, 13, 16, 19, 22  /* G0..G7    */);
   vector unsigned char vPerm2 =
-    static_cast<vector_unsigned_char>( 2,  5,  8, 11, 14, 17, 20, 23, /* B0..B7    */
+    static_cast<vector unsigned char>( 2,  5,  8, 11, 14, 17, 20, 23, /* B0..B7    */
                             0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
   vector unsigned char vPerm3 =
-    static_cast<vector_unsigned_char>( 8, 11, 14, 17, 20, 23, 26, 29, /* R8..R15   */
+    static_cast<vector unsigned char>( 8, 11, 14, 17, 20, 23, 26, 29, /* R8..R15   */
                             9, 12, 15, 18, 21, 24, 27, 30  /* G8..G15   */);
   vector unsigned char vPerm4 =
-    static_cast<vector_unsigned_char>(10, 13, 16, 19, 22, 25, 28, 31, /* B8..B15   */
+    static_cast<vector unsigned char>(10, 13, 16, 19, 22, 25, 28, 31, /* B8..B15   */
                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
 
   /* Load the equation constants. */
@@ -66,7 +66,7 @@ void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size,
   c16  = vec_splat( vConst2, 3 ); /*  16 */
   c128 = vec_splat( vConst2, 4 ); /* 128 */
   c0 = static_cast<vector signed short> (0); /*   0 */
-  z0 = static_cast<vector_unsigned_char> (0); /*  0 */
+  z0 = static_cast<vector unsigned char> (0); /*  0 */
 
   for ( i = 0; i < (RGB_size/sizeof(vector unsigned char)); i+=3 ) {
 
