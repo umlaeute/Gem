@@ -98,7 +98,7 @@ void pix_filmDarwin :: realOpen(char *filename)
   if (!filename[0]) {
     error("no filename passed");
   } else {
-    UInt8*filename8=static_cast<UInt8*>filename;
+    UInt8*filename8=reinterpret_cast<UInt8*>filename;
     err = ::FSPathMakeRef(filename8, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
 
@@ -144,7 +144,7 @@ void pix_filmDarwin :: realOpen(char *filename)
   movieScale = static_cast<long>(GetMovieTimeScale(m_movie));
 
 	
-  durationf = static_cast<float>(movieDur)/static_cast<float>(m_numFrames);
+  durationf = static_cast<double>(movieDur)/static_cast<double>(m_numFrames);
 
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
@@ -418,7 +418,7 @@ void pix_filmDarwin :: getFrame()
       }else{
 
         m_movieTime = m_reqFrame * duration;
-        m_movieTime = static_cast<long>(static_cast<float>(m_reqFrame) * durationf);
+        m_movieTime = static_cast<long>(static_cast<double>(m_reqFrame) * durationf);
 
         m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
         ::GetMovieNextInterestingTime(	m_movie,
@@ -494,7 +494,7 @@ void pix_filmDarwin :: doDebug()
 {
   post("---------- pix_filmDarwin doDebug start----------");
   post("m_numTracks = %d",m_numTracks);
-  post("Movie duration = %d timescale = %d timebase = %d", movieDur, movieScale, static_cast<long>(GetMovieTimeBase(m_movie)));
+  post("Movie duration = %d timescale = %d timebase = %d", movieDur, movieScale, reinterpret_cast<long>(GetMovieTimeBase(m_movie)));
   post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
   post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
   post("movie size x:%d y:%d", m_xsize, m_ysize);
