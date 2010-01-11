@@ -41,47 +41,53 @@ class GEM_EXTERN GemContextDataBase {
 };
 
 
-
-template<class T = int>
+template<class GemContextDataType = int>
   class GEM_EXTERN GemContextData : GemContextDataBase
   {
+    private:
     public:
    
     //////////
     // Constructor
-    GemContextData(void) {;}
+    GemContextData(void) : m_defaultValue(0) {;}
+
+    GemContextData(GemContextDataType v) : m_defaultValue(v) {;}
 
     ~GemContextData() {
       m_ContextDataVector.clear();
     }
     	
     /**
-     * Returns reference to user data for the current context.
+     * returns the context-specific value
+     *
+     * @usage GemContextData<GLenum>m_fun; m_fun=GL_FUNC_ADD;
      *
      * @pre We are in a draw process.
      * @note Should only be called from the draw function.
      *        Results are un-defined for other functions.
      */
-    T& operator*()
+    virtual operator GemContextDataType()
     {
       return (*getPtrToCur());
     }
 
     /**
-     * Returns reference to user data for the current context.
+     * assigns a value to the correct context
      *
      * @pre We are in a draw process.
      * @note Should only be called from the draw function.
      *       Results are un-defined for other functions.
      */
-    T* operator->()
+    virtual GemContextDataType&operator = (GemContextDataType value)
     {
-      return getPtrToCur();
+      return (*getPtrToCur()=value);
     }
 
     private:
 
-    std::vector<T*>  m_ContextDataVector;
+    GemContextDataType m_defaultValue;
+    std::vector<GemContextDataType*>  m_ContextDataVector;
+
 
     /* Makes sure that the vector is at least requiredSize large */
     void checkSize(unsigned int requiredSize)
@@ -91,7 +97,7 @@ template<class T = int>
           m_ContextDataVector.reserve(requiredSize);          // Resize smartly
           while(m_ContextDataVector.size() < requiredSize)    // Add any new items needed
             {
-              m_ContextDataVector.push_back(new T());
+              m_ContextDataVector.push_back(new GemContextDataType(m_defaultValue));
             }
         }
     }
@@ -103,7 +109,7 @@ template<class T = int>
      * @post Synchronized.
      * @note ASSERT: Same context is rendered by same thread each time.
      */
-    T* getPtrToCur(void)
+    GemContextDataType* getPtrToCur(void)
     {
       // Get current context
       int context_id = getCurContext();

@@ -134,22 +134,22 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   if(m_cache->m_magic!=GEMCACHE_MAGIC)
     m_cache=NULL;
 #ifdef GEM_MULTICONTEXT
-  if(RENDERSTATE_INIT==*m_state) {
+  if(RENDERSTATE_INIT==m_state) {
     if(isRunnable()) {
-      *m_state=RENDERSTATE_ENABLED;
+      m_state=RENDERSTATE_ENABLED;
     } else {
-      *m_state=RENDERSTATE_DISABLED;
+      m_state=RENDERSTATE_DISABLED;
     }
   }
-  if(RENDERSTATE_MODIFIED==*m_state) {
+  if(RENDERSTATE_MODIFIED==m_state) {
     stopRendering();
-    *m_state=RENDERSTATE_ENABLED;
+    m_state=RENDERSTATE_ENABLED;
   }
-  if(RENDERSTATE_ENABLED==*m_state) {
+  if(RENDERSTATE_ENABLED==m_state) {
     startRendering();
-    *m_state=RENDERSTATE_RENDERING;
+    m_state=RENDERSTATE_RENDERING;
   }
-  if(RENDERSTATE_RENDERING==*m_state) {
+  if(RENDERSTATE_RENDERING==m_state) {
     if(state)render(state);
     continueRender(state);
     if(state)postrender(state);
