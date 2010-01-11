@@ -56,7 +56,6 @@ void separator :: render(GemState *state)
   }
   state->stackDepth[GemMan::STACKMODELVIEW]++;
 
-  /* GL_COLOR is only accepted if GL_ARB_imaging is present */
   if(state->stackDepth[GemMan::STACKCOLOR]<GemMan::maxStackDepth[GemMan::STACKCOLOR]){
     post("push color");
     glMatrixMode(GL_COLOR);
@@ -64,6 +63,13 @@ void separator :: render(GemState *state)
   }
   state->stackDepth[GemMan::STACKCOLOR]++;
 
+#ifdef __GNUC__
+# warning push/pop texture matrix has to be done per texunit
+  // each texunit has it's own matrix to be pushed/popped
+  // changing the texunit (e.g. in [pix_texture]) makes the 
+  // local depthcounter a useless, and we get a lot of 
+  // stack under/overflows
+#endif  
   if(state->stackDepth[GemMan::STACKTEXTURE]<GemMan::maxStackDepth[GemMan::STACKTEXTURE]){
     glMatrixMode(GL_TEXTURE);
     glPushMatrix();
