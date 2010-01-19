@@ -49,7 +49,7 @@ template<class GemContextDataType = int>
    
     //////////
     // Constructor
-    GemContextData(void) : m_defaultValue(0) {;}
+    GemContextData(void) : m_defaultValue() {;}
 
     GemContextData(GemContextDataType v) : m_defaultValue(v) {;}
 

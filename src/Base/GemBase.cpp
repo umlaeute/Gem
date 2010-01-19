@@ -57,13 +57,6 @@
  * we need a mechanism to reset a context (e.g. because a context is destroyed and it's ID might be reused)
  */
 
-#define RENDERSTATE_DISABLED -1
-#define RENDERSTATE_INIT      0
-#define RENDERSTATE_ENABLED   1
-#define RENDERSTATE_RENDERING 2
-#define RENDERSTATE_MODIFIED  3
-
-
 #include "GemBase.h"
 #include "GemCache.h"
 
@@ -103,15 +96,19 @@ GemBase :: ~GemBase()
 /////////////////////////////////////////////////////////
 void GemBase :: gem_startstopMess(int state)
 {
+  // for now, this is important, as it is the only way to call the stopRendering
+#if 1
   if (state && !gem_amRendering){
     m_enabled = isRunnable();
     if(m_enabled) {
       startRendering();
+      m_state=RENDERING;
     }
   }
   else if (!state && gem_amRendering){
     if(m_enabled) {
       stopRendering();
+      m_state=ENABLED;
     }
   }
 
@@ -122,6 +119,9 @@ void GemBase :: gem_startstopMess(int state)
   t_atom ap[1];
   SETFLOAT(ap, state);
   outlet_anything(this->m_out1, gensym("gem_state"), 1, ap);
+#else
+  post("gem_startstopMess(%d) called...please report this to the upstream developers", state);
+#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -133,46 +133,28 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   m_cache=cache;
   if(m_cache->m_magic!=GEMCACHE_MAGIC)
     m_cache=NULL;
-#ifdef GEM_MULTICONTEXT
-  if(RENDERSTATE_INIT==m_state) {
+  if(INIT==m_state) {
     if(isRunnable()) {
-      m_state=RENDERSTATE_ENABLED;
+      m_state=ENABLED;
     } else {
-      m_state=RENDERSTATE_DISABLED;
+      m_state=DISABLED;
     }
   }
-  if(RENDERSTATE_MODIFIED==m_state) {
+  if(MODIFIED==m_state) {
     stopRendering();
-    m_state=RENDERSTATE_ENABLED;
+    m_state=ENABLED;
   }
-  if(RENDERSTATE_ENABLED==m_state) {
+  if(ENABLED==m_state) {
     startRendering();
-    m_state=RENDERSTATE_RENDERING;
+    m_state=RENDERING;
   }
-  if(RENDERSTATE_RENDERING==m_state) {
-    if(state)render(state);
-    continueRender(state);
-    if(state)postrender(state);
-  }
-#else
-  if (!gem_amRendering){ // init Rendering if not done yet
-    m_enabled=isRunnable();
-
-    if(m_enabled)
-      startRendering();
-
+  if(RENDERING==m_state) {
     gem_amRendering=true;
-  }
-  if(m_enabled) {
     if(state)render(state);
     continueRender(state);
     if(state)postrender(state);
-  } else {
-    continueRender(state);
   }
-
   m_modified=false;
-#endif
 }
 
 void GemBase :: continueRender(GemState*state){
@@ -196,6 +178,7 @@ void GemBase :: setModified()
     m_cache=NULL;
   if (m_cache) m_cache->dirty = 1;
   m_modified=true;
+  m_state=MODIFIED;
 }
 
 /////////////////////////////////////////////////////////
@@ -204,8 +187,11 @@ void GemBase :: setModified()
 /////////////////////////////////////////////////////////
 void GemBase :: realStopRendering()
 {
-    stopRendering();
-    m_cache = NULL;
+  /* no idea what this function is for; ask the user when it appears */
+  post("realStopRendering() called...please report this to the upstream developers");
+  stopRendering();
+  m_cache = NULL;
+  m_state=ENABLED;
 }
 
 
@@ -217,6 +203,10 @@ void GemBase :: realStopRendering()
 bool GemBase :: isRunnable()
 {
   return true;
+}
+
+enum GemBase::RenderState GemBase::getState(void) {
+  return m_state;
 }
 
 
@@ -233,12 +223,13 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
 }
 void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
-  if (argc==1 && argv->a_type==A_FLOAT){
-    GetMyClass(data)->gem_startstopMess(atom_getint(argv));  // start rendering (forget this !?)
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-
+  if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
     GetMyClass(data)->gem_renderMess((GemCache *)argv->a_w.w_gpointer, (GemState *)(argv+1)->a_w.w_gpointer);
+#if 1
+  } else if (argc==1 && argv->a_type==A_FLOAT){
+    GetMyClass(data)->gem_startstopMess(atom_getint(argv));  // start rendering (forget this !?)
+#endif
   } else {
-    GetMyClass(data)->error("wrong arguments...");
+    GetMyClass(data)->error("wrong arguments in GemTrigger...");
   }
 }

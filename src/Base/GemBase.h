@@ -75,6 +75,7 @@ class GEM_EXTERN GemBase : public CPPExtern
 
   //////////
   // has rendering started ?
+  // deprecated, use 'getState()==RENDERING' instead
   bool            gem_amRendering;
     	
   //////////
@@ -113,7 +114,7 @@ class GEM_EXTERN GemBase : public CPPExtern
   void	    	realStopRendering();
   void            gem_startstopMess(int state);
   void            gem_renderMess(GemCache* state, GemState* state2);
-  	    	
+
   static inline GemBase *GetMyClass(void *data) {return((GemBase *)((Obj_header *)data)->data);}
 
   friend class    gemhead;
@@ -128,8 +129,13 @@ class GEM_EXTERN GemBase : public CPPExtern
   /* whether the object is internally disabled or not 
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
    */
-  bool  m_enabled;
-  GemContextData<int>m_state;
+  GemContextData<bool>m_enabled;
+
+  enum RenderState {INIT, ENABLED, DISABLED, RENDERING, MODIFIED};
+  GemContextData<enum RenderState>m_state;
+
+ protected:
+  enum RenderState getState(void);
 
 };
 
