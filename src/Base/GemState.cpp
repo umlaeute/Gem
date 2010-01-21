@@ -21,6 +21,60 @@
 /* for GemMan::StackIDs */
 #include "GemMan.h"
 
+class GemStateData {
+  friend class GemState;
+ public:
+  GemStateData(void);
+  ~GemStateData(void);
+
+ protected:
+#if 0
+  // dictionary for setting values
+  std::map <char*, t_atom*> data;
+
+  virtual t_atom*get(char*name) {
+    return data[name];
+  }
+  virtual void set(char*name, t_atom*value) {
+    // LATER: we should expand envvariables
+    if(value) {
+      t_atom*a=(t_atom*)getbytes(sizeof(t_atom));
+      memcpy(a, value, sizeof(t_atom));
+      data[name]=a;
+    } else {
+      data.erase(name);
+    }
+  }
+  void set(char*name, int i) {
+    t_atom a;
+    SETFLOAT(&a, i);
+    set(name, &a);
+  }
+  void set(char*name, t_float f) {
+    t_atom a;
+    SETFLOAT(&a, f);
+    set(name, &a);
+  }
+  void set(char*name, char*s) {
+    t_atom a;
+    SETSYMBOL(&a, s);
+    set(name, &a);
+  }
+  void print(void) {
+    std::map <char*, t_atom*>::iterator it;
+    for(it = data.begin(); 
+        it != data.end();
+        it++)
+      {
+        if(it->first && it->first->s_name && it->second) {
+          startpost("key ['%s']: ", it->first->s_name);
+          postatom(1, it->second);
+          endpost();
+        }
+      }
+  }
+#endif
+};
 
 /////////////////////////////////////////////////////////
 //
@@ -61,4 +115,71 @@ void GemState :: reset() {
 
 GemState :: ~GemState() {
   reset();
+}
+
+bool GemState::get(const char*key, long&value) {
+  return false;
+}
+bool GemState::get(const char*key, double&value){
+  return false;
+}
+bool GemState::get(const char*key, char*&value) {
+  return false;
+}
+
+/* raw accessor: returns a pointer to shallow copy of an anonymous type
+ * all get's get the same copy
+ * the copy is controlled by GemState (e.g. freed, when GemState is destroyed)
+ * you have to know the type of value yourself
+ * use at your own risk
+ */
+bool GemState::get(const char*key, void*&value, size_t&length) {
+  return false;
+}
+/* raw accessor: returns an anonymous pointer
+ * the pointer is controlled by the setter
+ * you have to know the type of value yourself
+ * use at your own risk
+ */
+bool GemState::get(const char*key, void*&value) {
+  return false;
+}
+
+
+/* set a named property */
+bool GemState::set(const char*key, const long value) {
+  return false;
+}
+bool GemState::set(const char*key, const double value) {
+  return false;
+}
+bool GemState::set(const char*key, const char*value) {
+  return false;
+}
+bool GemState::set(const char*key, const void*value ) {
+  return false;
+}
+bool GemState::set(const char*key, const void*value, const size_t length) {
+  return false;
+}
+
+/* remove a named property */
+bool GemState::remove(const char*key) {
+  return false;
+}
+
+
+
+// --------------------------------------------------------------
+/* legacy functions */
+float GemState::texCoordX(int num) const {
+  if (texture && numTexCoords > num)
+    return texCoords[num].s;
+  else return 0.;
+}
+
+float GemState::texCoordY(int num) const {
+  if (texture && numTexCoords > num)
+    return texCoords[num].t;
+  else return 0.;
 }

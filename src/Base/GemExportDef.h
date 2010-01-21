@@ -25,6 +25,8 @@ LOG
 // "switch" without "case" (just "default")
 # pragma warning( disable : 4065 )
 
+# define GEM_DEPRECATED __attribute_deprecated__
+
 // Windows requires explicit import and exporting of functions and classes.
 // While this is a pain to do sometimes, in large software development
 //      projects, it is very usefull.
@@ -34,6 +36,8 @@ LOG
 #else                   // other OS's
 # define GEM_EXPORT
 # define GEM_IMPORT
+
+# define GEM_DEPRECATED __attribute_deprecated__
 #endif
 
 #ifdef GEM_INTERNAL

@@ -454,6 +454,7 @@ void GemMan :: resetValues()
 void GemMan :: fillGemState(GemState &state)
 {
   if (s_lightState) {
+    // GemState['lighting'] = 1;
     state.lighting = 1;
     state.smooth = 1;
   }
