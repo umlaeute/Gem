@@ -7,7 +7,7 @@ uniform float init;
 
 void main (void)
 {
-	vec2 coord = gl_TexCoord[0].st;
+	vec2 coord = (vec4(1256.) * gl_TexCoord[0]).st;
 	vec4 color = vec4(-2,-2,-2,1);
 
 	if ( (coord.x < 92.) && (coord.y <  64.) )

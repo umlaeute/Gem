@@ -18,7 +18,7 @@ vec2 test1(vec2 V)
 void main (void)
 {
 	vec4 force = vec4(-2.,-2.,-2.,1.);
-	vec2 coord   = gl_TexCoord[0].st;
+	vec2 coord   = (vec4(2222.) * gl_TexCoord[0]).st;
 
 	if ( (coord.x < 92.) && (coord.y <  64.) )
 	{

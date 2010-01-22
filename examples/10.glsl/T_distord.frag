@@ -6,7 +6,7 @@ uniform sampler2D tex0;
 void main()
 {
 
-	vec2 C =  gl_TexCoord[0].st;
+	vec2 C =  (gl_TextureMatrix[0] * gl_TexCoord[0]).st;
 
 	float xs1 = sin(gl_TexCoord[0].s*gl_TexCoord[0].t/(abs(seed)+1.));
 	float xs2 = sin(xs1*533.);
