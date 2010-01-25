@@ -1,4 +1,4 @@
-#N canvas 346 140 685 486 10;
+#N canvas 346 140 550 486 10;
 #X obj 27 399 hradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144 -1
 -1 0;
 #X floatatom 185 212 5 0 0 0 - - -;
@@ -328,7 +328,6 @@
 #X connect 16 0 41 0;
 #X connect 17 0 16 0;
 #X connect 17 1 28 0;
-#X connect 17 1 41 1;
 #X connect 18 0 17 0;
 #X connect 19 0 32 0;
 #X connect 20 0 17 0;
@@ -447,7 +446,6 @@
 #X msg 116 95 texture_image 4;
 #X msg 125 134 texunit 4;
 #X connect 0 0 2 0;
-#X connect 0 1 1 1;
 #X connect 0 1 11 0;
 #X connect 1 0 3 0;
 #X connect 2 0 1 0;
