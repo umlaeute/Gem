@@ -177,7 +177,7 @@ mixes 2 textures;
 #X connect 37 0 1 0;
 #X connect 38 0 10 0;
 #X connect 39 0 33 0;
-#X connect 39 0 37 0;
+#X connect 39 0 29 0;
 #X connect 40 0 51 0;
 #X connect 41 0 65 0;
 #X connect 42 0 55 0;
