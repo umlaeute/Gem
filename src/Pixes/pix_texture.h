@@ -178,6 +178,10 @@ class GEM_EXTERN pix_texture : public GemBase
   GLint m_curPbo;
   GLuint *m_pbo;                   // IDs of PBO
 
+
+  /* upside down texture? */
+  GLboolean m_upsidedown;
+
  private:
 
 	//////////
