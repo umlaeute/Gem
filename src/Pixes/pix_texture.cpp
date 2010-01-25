@@ -251,7 +251,6 @@ void pix_texture :: render(GemState *state) {
       m_xRatio=m_extWidth;
       m_yRatio=m_extHeight;
       m_upsidedown=upsidedown;
-      setTexCoords(m_coords, m_xRatio, m_yRatio, upsidedown);
 
       glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
       glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
@@ -366,7 +365,6 @@ void pix_texture :: render(GemState *state) {
       m_xRatio=1.0;
       m_yRatio=1.0;
       m_upsidedown=upsidedown;
-      setTexCoords(m_coords, 1.0, 1.0, upsidedown);
       state->texCoords = m_coords;
       state->numTexCoords = 4;
       if (m_buffer.csize != m_dataSize[0] ||
@@ -404,7 +402,6 @@ void pix_texture :: render(GemState *state) {
       m_buffer.type   = m_imagebuf.type;
       m_buffer.reallocate();
       m_upsidedown=upsidedown;
-      setTexCoords(m_coords, m_xRatio, m_yRatio, upsidedown);
       state->texCoords = m_coords;
       state->numTexCoords = 4;
 
@@ -517,10 +514,9 @@ void pix_texture :: render(GemState *state) {
                         m_imagebuf.data);
       }
     }
+  } // rebuildlist
 
-  } else {  // !rebuildlist
-    setTexCoords(m_coords, m_xRatio, m_yRatio, m_upsidedown);
-  }
+  setTexCoords(m_coords, m_xRatio, m_yRatio, m_upsidedown);
 
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
 
