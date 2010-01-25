@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_GEMEXPORTDEF_H_
 #define INCLUDE_GEMEXPORTDEF_H_
 
-#ifdef _MSC_VER
+#if defined _MSC_VER
 /* turn of some warnings on vc-compilers */
 # pragma warning( disable : 4244 )
 # pragma warning( disable : 4305 )
@@ -25,20 +25,28 @@ LOG
 // "switch" without "case" (just "default")
 # pragma warning( disable : 4065 )
 
-# define GEM_DEPRECATED __attribute_deprecated__
-
 // Windows requires explicit import and exporting of functions and classes.
 // While this is a pain to do sometimes, in large software development
 //      projects, it is very usefull.
 # define GEM_EXPORT __declspec(dllexport)
 # define GEM_IMPORT __declspec(dllimport)
 
-#else                   // other OS's
+
+# define GEM_DEPRECATED __declspec(deprecated)
+
+#elif defined __GNUC__
 # define GEM_EXPORT
 # define GEM_IMPORT
 
 # define GEM_DEPRECATED __attribute_deprecated__
+
+#else
+/* unknown compiler */
+# warning set up compiler specific defines
 #endif
+
+
+
 
 #ifdef GEM_INTERNAL
 # define GEM_EXTERN GEM_EXPORT
