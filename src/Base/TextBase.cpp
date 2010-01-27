@@ -136,36 +136,27 @@ void TextBase :: setPrecision(float prec)
 ////////////////////////////////////////////////////////
 void TextBase :: fontNameMess(const char *filename){
   m_valid = 0;
-  char buf[MAXPDSTRING];
-  char buf2[MAXPDSTRING];
-  char *bufptr=NULL;
+  const char *bufptr=NULL;
   int fd=-1;
 
   if(!filename){
     error("no font-file specified");
     return;
   }
-  if ((fd=open_via_path(canvas_getdir(const_cast<t_canvas*>(getCanvas()))->s_name, 
-			const_cast<char*>(filename), 
-			"", 
-			buf2, &bufptr, MAXPDSTRING, 
-			1))>=0){
-    close(fd);
-    sprintf(buf, "%s/%s", buf2, bufptr);
-  } else
-    canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char *>(filename), buf, MAXPDSTRING);
+  std::string fn = findFile(filename);
+  bufptr=fn.c_str();
 
   /* try to open the file */
-  FILE*file = fopen(buf, "r");
+  FILE*file = fopen(bufptr, "r");
   if (!file) {
-    error("cannot find font-file '%s'", buf);
+    error("cannot find font-file '%s'", bufptr);
     return;
   }
   fclose(file);
 
   /* now read font */
-  if (makeFont(buf)==NULL){
-    error("unable to open font '%s'", buf);
+  if (makeFont(bufptr)==NULL){
+    error("unable to open font '%s'", bufptr);
     return;
   }
   m_fontname=gensym(filename);

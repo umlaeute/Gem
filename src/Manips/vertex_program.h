@@ -102,7 +102,7 @@ class GEM_EXTERN vertex_program : public GemBase
   GLuint    m_programID;
   char*		m_programString;
   size_t	m_size;
-  char		m_buf[MAXPDSTRING];
+  const char		*m_buf;
   
   float		m_param[4];
   int	        m_envNum;

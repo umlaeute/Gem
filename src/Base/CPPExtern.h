@@ -20,6 +20,7 @@ LOG
 #include "Base/GemException.h"
 
 #include <new>
+#include <string>
 
 class CPPExtern;
 
@@ -97,16 +98,16 @@ class GEM_EXTERN CPPExtern
     	
         //////////
         // Get the object's canvas
-        t_canvas            *getCanvas(void)        { return(m_canvas); }
+        const t_canvas            *getCanvas(void) const       { return(m_canvas); }
 
         //////////
         // This is a holder - don't touch it
         static t_object     *m_holder;
 
-	//////////
-	// my name
-	static char          *m_holdname;
-	t_symbol             *m_objectname;
+        //////////
+        // my name
+        static char          *m_holdname;
+        t_symbol             *m_objectname;
 
     protected:
     	
@@ -116,21 +117,28 @@ class GEM_EXTERN CPPExtern
 
     private:
 
-        //////////
-        // The canvas that the object is in
-        t_canvas            *m_canvas;
+      //////////
+      // The canvas that the object is in
+      t_canvas            *m_canvas;
 
  public:
-        // these call pd's print-functions, and eventually prepend the object's name
-	void            startpost(const char*format, ...);
-	void            post(const char*format, ...);
-	void            endpost(void);
-	void            verbose(const int level, const char*format, ...);
-	void            error(const char*format, ...); /* internally uses pd_error() */
+      // these call pd's print-functions, and eventually prepend the object's name
+      void            startpost(const char*format, ...) const;
+      void            post(const char*format, ...) const;
+      void            endpost(void) const;
+      void            verbose(const int level, const char*format, ...) const;
+      void            error(const char*format, ...) const; /* internally uses pd_error() */
+
+      // searches for a file based on the parent abstraction's path
+      // wraps open_via_path() and canvas_makefilename()
+      // the full filename is returned
+      // if the file does not exist, it is constructed
+      std::string findFile(const std::string filename, const std::string ext) const;
+      std::string findFile(const std::string filename) const;
 
  private:
-	bool m_endpost; /* internal state for startpost/post/endpost */
-	static bool checkGemVersion(int major, int minor);
+	mutable bool m_endpost; /* internal state for startpost/post/endpost */
+	static bool checkGemVersion(const int major, const int minor);
 };
 
 // This has a dummy arg so that NT won't complain

@@ -174,20 +174,11 @@ void glsl_geometry :: openMess(t_symbol *filename)
     return;
   }
 
-  char buf[MAXPDSTRING];
-  char buf2[MAXPDSTRING];
-  char *bufptr=NULL;
-
   // Clean up any open files
   closeMess();
 
-  int fd=-1;
-  if ((fd=open_via_path(canvas_getdir(const_cast<t_canvas*>(getCanvas()))->s_name, filename->s_name, "", 
-                        buf2, &bufptr, MAXPDSTRING, 1))>=0){
-    close(fd);
-    sprintf(buf, "%s/%s", buf2, bufptr);
-  } else
-    canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
+  std::string fn = findFile(filename->s_name);
+  const char*buf=fn.c_str();
 
   FILE *file = fopen(buf,"r");
   if(file) {

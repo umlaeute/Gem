@@ -52,7 +52,7 @@ CPPExtern :: CPPExtern()
 /////////////////////////////////////////////////////////
 CPPExtern :: ~CPPExtern()
 { }
-void CPPExtern :: post(const char*fmt,...)
+void CPPExtern :: post(const char*fmt,...) const
 {
   char buf[MAXPDSTRING];
   va_list ap;
@@ -66,7 +66,7 @@ void CPPExtern :: post(const char*fmt,...)
   }
   m_endpost=true;
 }
-void CPPExtern :: startpost(const char*fmt,...)
+void CPPExtern :: startpost(const char*fmt,...) const
 {
   char buf[MAXPDSTRING];
   va_list ap;
@@ -80,12 +80,12 @@ void CPPExtern :: startpost(const char*fmt,...)
   }
   m_endpost=false;
 }
-void CPPExtern :: endpost(void)
+void CPPExtern :: endpost(void) const
 {
   ::endpost();
   m_endpost=true;
 }
-void CPPExtern :: verbose(const int level, const char*fmt,...)
+void CPPExtern :: verbose(const int level, const char*fmt,...) const
 {
   char buf[MAXPDSTRING];
   va_list ap;
@@ -108,7 +108,7 @@ void CPPExtern :: verbose(const int level, const char*fmt,...)
 #endif
 }
 
-void CPPExtern :: error(const char*fmt,...)
+void CPPExtern :: error(const char*fmt,...) const
 {
   char buf[MAXPDSTRING];
   va_list ap;
@@ -133,7 +133,36 @@ void CPPExtern :: error(const char*fmt,...)
   }
 }
 
-bool CPPExtern :: checkGemVersion(int major, int minor) {
+
+std::string CPPExtern::findFile(const std::string f, const std::string e) const {
+  char buf[MAXPDSTRING], buf2[MAXPDSTRING];
+  char*bufptr=0;
+  std::string result="";
+  int fd=-1;
+
+  t_canvas*canvas=const_cast<t_canvas*>(getCanvas());
+  char*filename=const_cast<char*>(f.c_str());
+  char*ext=const_cast<char*>(e.c_str());
+  
+  if ((fd=open_via_path(canvas_getdir(canvas)->s_name, filename, ext, 
+                        buf2, &bufptr, MAXPDSTRING, 1))>=0){
+    close(fd);
+    result=buf2;
+    result+="/";
+    result+=bufptr;
+  } else {
+    canvas_makefilename(canvas, filename, buf, MAXPDSTRING);
+    result=buf;
+  }
+  post("findfile: ... %d", 12);
+  return result;
+}
+
+std::string CPPExtern::findFile(const std::string file) const {
+  return findFile(file, "");
+
+}
+bool CPPExtern :: checkGemVersion(const int major, const int minor) {
   if(!GemVersion::versionCheck(major, minor)) {
     ::error("GEM version mismatch: compiled for %d.%d but we are running %s", 
 	    major, minor,

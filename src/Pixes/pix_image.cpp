@@ -193,15 +193,9 @@ void *pix_image :: openThread(void*you)
 void pix_image :: openMess(t_symbol *filename)
 {
   if(NULL==filename || NULL==filename->s_name || 0==*filename->s_name)return;
-  char buf[MAXPDSTRING];
-  char *bufptr=NULL;
-  int fd=-1;
-
-  if ((fd=open_via_path(canvas_getdir(const_cast<t_canvas*>(getCanvas()))->s_name, filename->s_name, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
-    close(fd);
-    sprintf(m_filename, "%s/%s", buf, bufptr);
-  } else
-    canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, m_filename, MAXPDSTRING);
+ 
+  std::string fn = findFile(filename->s_name);
+  snprintf(m_filename, MAXPDSTRING, "%s", fn.c_str());
 
   m_threadloaded=false;
 

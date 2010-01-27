@@ -43,6 +43,7 @@ vertex_program :: vertex_program() :
   m_programType(GEM_PROGRAM_none), 
   m_programID(0), 
   m_programString(NULL), m_size(0),
+  m_buf(NULL),
   m_envNum(-1)
 {
 }
@@ -122,21 +123,12 @@ GLint vertex_program :: queryProgramtype(char*program)
 
 void vertex_program :: openMess(t_symbol *filename)
 {
-  char buf2[MAXPDSTRING];
-  char *bufptr=NULL;
-
   if(NULL==filename || NULL==filename->s_name || &s_==filename || 0==*filename->s_name)return;
 
   // Clean up any open files
   closeMess();
-
-  int fd=-1;
-  if ((fd=open_via_path(canvas_getdir(const_cast<t_canvas*>(getCanvas()))->s_name, filename->s_name, "", 
-                        buf2, &bufptr, MAXPDSTRING, 1))>=0){
-    close(fd);
-    sprintf(m_buf, "%s/%s", buf2, bufptr);
-  } else
-    canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, m_buf, MAXPDSTRING);
+  std::string fn = findFile(filename->s_name);
+  m_buf=fn.c_str();
 
   FILE *file = fopen(m_buf,"r");
   if(file) {
