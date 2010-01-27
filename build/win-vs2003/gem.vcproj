@@ -189,6 +189,12 @@
 				RelativePath="..\..\src\Base\GemContextData.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GemDylib.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemDylib.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\GemEvent.cpp">
 			</File>
 			<File
