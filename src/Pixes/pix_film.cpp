@@ -20,6 +20,8 @@
 #include "pix_film.h"
 #include <ctype.h>
 
+#include "Pixes/film.h"
+
 #include "Pixes/filmGMERLIN.h"
 #include "Pixes/filmQT4L.h"
 #include "Pixes/filmAVI.h"
@@ -28,6 +30,9 @@
 #include "Pixes/filmMPEG1.h"
 #include "Pixes/filmMPEG3.h"
 #include "Pixes/filmQT.h"
+
+#include "Base/GemState.h"
+
 #include <stdio.h>
 
 /***************************************

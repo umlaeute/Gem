@@ -15,7 +15,6 @@
 #define INCLUDE_RUBBER_H_
 
 #include "Base/GemShape.h"
-#include "Base/GemState.h"
 #include "Base/GemMan.h"
 #include <stdlib.h>
 #include <stdio.h>

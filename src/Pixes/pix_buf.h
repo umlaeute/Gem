@@ -17,7 +17,6 @@ LOG
 
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
-#include "Base/GemState.h"
 
 class GemCache;
 

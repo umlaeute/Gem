@@ -5,8 +5,11 @@
 #include "Base/GemConfig.h"
 #include "pix_record.h"
 
+#include "Pixes/record.h"
 #include "Pixes/recordQT.h"
 #include "Pixes/recordQT4L.h"
+
+#include "Base/GemState.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_record)
 

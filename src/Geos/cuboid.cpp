@@ -19,9 +19,8 @@
 ////////////////////////////////////////////////////////
 
 #include "cuboid.h"
-#ifdef __APPLE__
+#include "Base/GemState.h"
 #include "string.h"
-#endif
 
 CPPEXTERN_NEW_WITH_THREE_ARGS(cuboid, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT )
 

@@ -13,6 +13,7 @@
  */
 
 #include "newWave.h"
+#include "Base/GemState.h"
 
 /* Grid */
 enum {WIREFRAME, HIDDENLINE, FLATSHADED, SMOOTHSHADED, TEXTURED};

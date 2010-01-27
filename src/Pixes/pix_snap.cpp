@@ -18,6 +18,7 @@
 
 #include "Base/GemMan.h"
 #include "Base/GemCache.h"
+#include "Base/GemState.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_snap)
 

@@ -14,7 +14,6 @@
 #define INCLUDE_RIPPLE_H_
 
 #include "Base/GemShape.h"
-#include "Base/GemState.h"
 #include "Base/GemMan.h"
 #include <string.h>
 #include <math.h>

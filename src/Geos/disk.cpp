@@ -21,6 +21,7 @@
 /////////////////////////////////////////////////////////
 
 #include "disk.h"
+#include "Base/GemState.h"
 
 CPPEXTERN_NEW_WITH_GIMME(disk)
 

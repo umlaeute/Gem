@@ -14,7 +14,6 @@
 #define INCLUDE_NEWWAVE_H_
 
 #include "Base/GemShape.h"
-#include "Base/GemState.h"
 #include "Base/GemFuncUtil.h"
 
 #ifdef __ppc__

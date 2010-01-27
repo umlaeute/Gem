@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_orbitpoint.h"
+#include "Base/GemState.h"
 
 #include "papi.h"
 

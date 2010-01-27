@@ -14,7 +14,7 @@
 
 #include "pix_buffer.h"
 #include "pix_buffer_write.h"
-
+#include "Base/GemState.h"
 
 /*
  * we export the "pix_buffer_class"

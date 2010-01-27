@@ -17,6 +17,7 @@
 
 #include "GemPixObj.h"
 #include "GemCache.h"
+#include "GemState.h"
 
 /////////////////////////////////////////////////////////
 //

@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_buf.h"
+#include "Base/GemState.h"
 
 #include "Base/GemCache.h"
 

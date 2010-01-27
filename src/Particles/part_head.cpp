@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_head.h"
+#include "Base/GemState.h"
 
 #include "papi.h"
 

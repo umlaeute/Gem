@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_color.h"
-
+#include "Base/GemState.h"
 #include "papi.h"
 
 CPPEXTERN_NEW(part_color)

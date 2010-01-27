@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_gravity.h"
+#include "Base/GemState.h"
 
 CPPEXTERN_NEW_WITH_THREE_ARGS(part_gravity, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 

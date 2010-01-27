@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_killold.h"
+#include "Base/GemState.h"
 
 #include "papi.h"
 

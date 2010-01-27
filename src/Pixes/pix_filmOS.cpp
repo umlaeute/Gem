@@ -20,6 +20,7 @@
 #define NO_AUTO_REGISTER_CLASS
 
 #include "pix_filmOS.h"
+#include "Base/GemState.h"
 
 #include <ctype.h>
 

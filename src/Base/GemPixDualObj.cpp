@@ -19,6 +19,7 @@
 #include "GemPixDualObj.h"
 
 #include "GemCache.h"
+#include "GemState.h"
 
 #include <string.h>
 #include <stdio.h>

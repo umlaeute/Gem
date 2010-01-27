@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 #include "Base/GemConfig.h"
 #include "pix_image.h"
+#include "Base/GemState.h"
 
 #ifdef _WIN32
 # include <io.h>

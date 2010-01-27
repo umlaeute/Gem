@@ -16,14 +16,12 @@
 #define INCLUDE_GEMBASE_H_
 
 #include "Base/GemGL.h"
-
-#include "Base/CPPExtern.h"
-#include "Base/GemState.h"
-
 #include "Base/GemContextData.h"
 
-class GemCache;
+#include "Base/CPPExtern.h"
 
+class GemCache;
+class GemState;
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS

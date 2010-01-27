@@ -19,9 +19,13 @@
 #ifndef GEM_VIDEOBACKEND
 
 #include "pix_video.h"
+#include "Pixes/video.h"
 #include "Pixes/videoV4L.h"
 #include "Pixes/videoV4L2.h"
 #include "Pixes/videoDV4L.h"
+
+
+#include "Base/GemState.h"
 CPPEXTERN_NEW(pix_video)
 
 /////////////////////////////////////////////////////////

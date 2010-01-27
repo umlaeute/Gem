@@ -9,6 +9,8 @@
 
 #include "pix_share_write.h"
 #include "Base/GemPixUtil.h"
+#include "Base/GemState.h"
+
 #include <errno.h>
 
 CPPEXTERN_NEW_WITH_GIMME(pix_share_write)

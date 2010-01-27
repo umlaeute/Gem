@@ -17,6 +17,8 @@
 #include "pix_clearblock.h"
 
 #include "Base/GemCache.h"
+#include "Base/GemState.h"
+
 
 CPPEXTERN_NEW(pix_clearblock)
 

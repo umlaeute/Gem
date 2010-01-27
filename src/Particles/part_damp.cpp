@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_damp.h"
+#include "Base/GemState.h"
 
 CPPEXTERN_NEW_WITH_THREE_ARGS(part_damp, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 

@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_source.h"
+#include "Base/GemState.h"
 
 #include <string.h>
 

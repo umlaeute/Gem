@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_velcone.h"
+#include "Base/GemState.h"
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(part_velcone, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 

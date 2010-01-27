@@ -29,6 +29,8 @@
 // this is to paint easily your own pictures by passing a package of floats that contain all necessary image data)
 
 #include "pix_set.h"
+#include "Base/GemState.h"
+
 #include <string.h>
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)

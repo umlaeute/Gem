@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_sink.h"
+#include "Base/GemState.h"
 
 #include <string.h>
 

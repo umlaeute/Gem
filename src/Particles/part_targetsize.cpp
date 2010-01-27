@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_targetsize.h"
+#include "Base/GemState.h"
 
 #include "papi.h"
 

@@ -15,7 +15,6 @@
 /////////////////////////////////////////////////////////
 
 #include "gemlist.h"
-#include "Base/GemState.h"
 
 #include "Base/GemCache.h"
 #include "Base/GemMan.h"

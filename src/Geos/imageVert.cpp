@@ -21,6 +21,7 @@
 #endif
 
 #include "imageVert.h"
+#include "Base/GemState.h"
 
 CPPEXTERN_NEW(imageVert)
 
