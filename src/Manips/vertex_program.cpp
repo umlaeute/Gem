@@ -131,12 +131,12 @@ void vertex_program :: openMess(t_symbol *filename)
   closeMess();
 
   int fd=-1;
-  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, filename->s_name, "", 
+  if ((fd=open_via_path(canvas_getdir(const_cast<t_canvas*>(getCanvas()))->s_name, filename->s_name, "", 
                         buf2, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
     sprintf(m_buf, "%s/%s", buf2, bufptr);
   } else
-    canvas_makefilename(getCanvas(), filename->s_name, m_buf, MAXPDSTRING);
+    canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, m_buf, MAXPDSTRING);
 
   FILE *file = fopen(m_buf,"r");
   if(file) {
