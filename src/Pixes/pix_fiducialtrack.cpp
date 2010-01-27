@@ -124,13 +124,13 @@ void pix_fiducialtrack :: treeMess(t_symbol*s)
   int fd=-1;
 
   /* look for the treeid-file in all the search paths */
-  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, 
+  if ((fd=open_via_path(canvas_getdir(const_cast<t_canvas*>(getCanvas()))->s_name, 
                         s->s_name, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
     snprintf(m_treefile, MAXPDSTRING-1, "%s/%s", buf, bufptr);
     m_treefile[MAXPDSTRING-1]=0;
   } else
-    canvas_makefilename(getCanvas(), s->s_name, m_treefile, MAXPDSTRING);
+    canvas_makefilename(const_cast<t_canvas*>(getCanvas()), s->s_name, m_treefile, MAXPDSTRING);
 
   terminate_fidtrackerX(&fidtrackerx);
   terminate_treeidmap  (&treeidmap);
@@ -146,7 +146,7 @@ void pix_fiducialtrack :: addMess(t_symbol*s)
 {
   error("on-the-fly adding of fiducials not yet implemented!");
 #if 0
-  canvas_makefilename(getCanvas(), s->s_name, m_treefile, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), s->s_name, m_treefile, MAXPDSTRING);
 
   initialize_treeidmap_from_file( &treeidmap, m_treefile );
   initialize_fidtrackerX( &fidtrackerx, &treeidmap, NULL);

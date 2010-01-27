@@ -197,11 +197,11 @@ void pix_image :: openMess(t_symbol *filename)
   char *bufptr=NULL;
   int fd=-1;
 
-  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, filename->s_name, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
+  if ((fd=open_via_path(canvas_getdir(const_cast<t_canvas*>(getCanvas()))->s_name, filename->s_name, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
     sprintf(m_filename, "%s/%s", buf, bufptr);
   } else
-    canvas_makefilename(getCanvas(), filename->s_name, m_filename, MAXPDSTRING);
+    canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, m_filename, MAXPDSTRING);
 
   m_threadloaded=false;
 

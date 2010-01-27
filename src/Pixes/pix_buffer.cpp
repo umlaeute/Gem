@@ -197,7 +197,7 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
     return;
   }
 
-  canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
   image = image2mem(buf);
   if(!image)
   {

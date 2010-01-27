@@ -121,7 +121,7 @@ void pix_filmOS :: openMess(t_symbol *filename, int format)
   if (format)m_colorspace=format;
 
   char buf[MAXPDSTRING];
-  canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
 
   // Clean up any open files
   closeMess();

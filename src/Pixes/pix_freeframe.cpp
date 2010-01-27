@@ -81,8 +81,9 @@
 // LATER check the other OS's
 //
 /////////////////////////////////////////////////////////
-static T_FFPLUGMAIN ff_loadplugin(t_glist*canvas, char*pluginname, int*can_rgba, bool loud=true)
+static T_FFPLUGMAIN ff_loadplugin(const t_glist*ccanvas, char*pluginname, int*can_rgba, bool loud=true)
 {
+  t_canvas*canvas=const_cast<t_canvas*>(ccanvas);
   const char*hookname="plugMain";
   if(pluginname==NULL)return NULL;
   

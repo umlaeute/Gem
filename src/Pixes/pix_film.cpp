@@ -262,7 +262,7 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   char*buf=buff;
   // we first try to find the file-to-open with canvas_makefilename
   // if this fails, we just pass the given filename (could be a stream)
-  canvas_makefilename(getCanvas(), filename->s_name, buff, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buff, MAXPDSTRING);
   if (FILE*fd=fopen(buff, "r"))fclose(fd);
   else buf=filename->s_name;
   m_handle=0;
