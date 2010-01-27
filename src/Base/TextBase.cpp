@@ -145,7 +145,7 @@ void TextBase :: fontNameMess(const char *filename){
     error("no font-file specified");
     return;
   }
-  if ((fd=open_via_path(canvas_getdir(getCanvas())->s_name, 
+  if ((fd=open_via_path(canvas_getdir(const_cast<t_canvas*>(getCanvas()))->s_name, 
 			const_cast<char*>(filename), 
 			"", 
 			buf2, &bufptr, MAXPDSTRING, 
@@ -153,7 +153,7 @@ void TextBase :: fontNameMess(const char *filename){
     close(fd);
     sprintf(buf, "%s/%s", buf2, bufptr);
   } else
-    canvas_makefilename(getCanvas(), (char *)filename, buf, MAXPDSTRING);
+    canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char *>(filename), buf, MAXPDSTRING);
 
   /* try to open the file */
   FILE*file = fopen(buf, "r");
