@@ -154,7 +154,6 @@ std::string CPPExtern::findFile(const std::string f, const std::string e) const 
     canvas_makefilename(canvas, filename, buf, MAXPDSTRING);
     result=buf;
   }
-  post("findfile: ... %d", 12);
   return result;
 }
 
