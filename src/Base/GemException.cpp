@@ -24,6 +24,10 @@ GemException::GemException(const char *error) throw()
   : ErrorString(error)
 {}
 
+GemException::GemException(const std::string error) throw()
+  : ErrorString(error.c_str())
+{}
+
 GemException::GemException() throw() 
   : ErrorString(NULL) 
 {}

@@ -32,16 +32,18 @@ DESCRIPTION
 #define INCLUDE_GEMEXCEPTION_H_
 
 #include "Base/GemExportDef.h"
+#include <string>
 
 class GEM_EXTERN GemException
 {
  public:
   GemException(void) throw();
   GemException(const char*error) throw();
+  GemException(const std::string error) throw();
   virtual ~GemException(void) throw();
   
   virtual const char *what(void) const throw();
-  virtual void report(const char*origin=NULL) const throw();
+  virtual void report(const char*origin=0) const throw();
  private:
   const char*ErrorString;
 };
