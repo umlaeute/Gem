@@ -173,7 +173,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
 
   int realNum = baseModel;
   char bufName[MAXPDSTRING];
-  canvas_makefilename(getCanvas(), preName, bufName, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), preName, bufName, MAXPDSTRING);
 
   for (i = 0; i < m_numModels; i++, realNum += skipRate) {
     char newName[256];
