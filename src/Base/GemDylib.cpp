@@ -23,14 +23,10 @@
 #include "CPPExtern.h"
 
 #include <string>
-using std::string;
-
-
 #include <stdio.h>
-#include <unistd.h>
-
 
 #if defined __linux__ || defined __APPLE__
+#include <unistd.h>
 # define DL_OPEN
 #endif
 
@@ -128,7 +124,7 @@ GemDylibHandle* GemDylib::open(const CPPExtern*obj, const char*filename, const c
   char buf[MAXPDSTRING];
   char*bufptr;
 
-  string fullname = "";
+  std::string fullname = "";
 
   const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
 
@@ -151,7 +147,7 @@ GemDylibHandle* GemDylib::open(const CPPExtern*obj, const char*filename, const c
         canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(filename), buf, MAXPDSTRING);
         fullname=buf;
       } else {
-        string error="couldn't find '";
+          std::string error="couldn't find '";
         error+=filename;
         error+="'.'";
         error+=ext;
