@@ -73,7 +73,11 @@ class GEM_EXTERN pix_texture : public GemBase
   //////////
   // Delete texture object
   virtual void	stopRendering();
-    	
+
+  //////////
+  // if we need to rebuild the list
+  virtual void   setModified();
+	
   //////////
   // Turn on/off texture mapping
   void          textureOnOff(int on);
@@ -102,7 +106,7 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // Do we need to rebuild the display List
-  int           m_rebuildList;
+  GemContextData<GLboolean>           m_rebuildList;
 
   //////////
   // The size of the texture (so we can use sub image)

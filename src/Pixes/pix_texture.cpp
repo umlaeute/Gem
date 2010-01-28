@@ -46,7 +46,7 @@ CPPEXTERN_NEW(pix_texture)
 pix_texture :: pix_texture()
   : m_textureOnOff(1),
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
-    m_didTexture(false), m_rebuildList(0),
+    m_didTexture(false), m_rebuildList(false),
     m_textureObj(0),
     m_extTextureObj(0), m_extWidth(1.), m_extHeight(1.), m_extType(GL_TEXTURE_2D),
     m_extUpsidedown(false),
@@ -223,7 +223,7 @@ void pix_texture :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: render(GemState *state) {
-  m_didTexture=0;
+  m_didTexture=false;
   pushTexCoords(state);
 
   if(!m_textureOnOff)return;
@@ -521,8 +521,8 @@ void pix_texture :: render(GemState *state) {
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
 
   /* cleanup */
-  m_rebuildList = 0;
-  m_didTexture=1;
+  m_rebuildList = false;
+  m_didTexture=true;
 
   state->multiTexUnits = m_numTexUnits;
   state->texture = 1;
@@ -604,6 +604,17 @@ void pix_texture :: stopRendering()
 
 }
 
+
+////////////////////////////////////////////////////////
+// textureQuality
+//
+/////////////////////////////////////////////////////////
+void pix_texture :: setModified()
+{
+  m_rebuildList=true;
+  GemBase::setModified();
+}
+
 ////////////////////////////////////////////////////////
 // textureOnOff
 //
@@ -648,7 +659,7 @@ void pix_texture :: textureRectangle(int rect)
   else
     post("using mode 0: TEXTURE_2D");
 
-  m_rebuildList=1;
+  setModified();
 }
 
 ////////////////////////////////////////////////////////
@@ -728,7 +739,7 @@ void pix_texture :: pboMess(int num)
   }
 
   m_numPbo=num;
-  m_rebuildList=1;
+  setModified();
 }
 
 
