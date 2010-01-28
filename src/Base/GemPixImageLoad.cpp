@@ -19,12 +19,15 @@
 #include "Base/GemGL.h"
 
 #include "GemPixImageLoad.h"
+#include "GemPixUtil.h"
+
 #include "m_pd.h"
 
-#ifdef __APPLE__
-# include <Carbon/Carbon.h>
-# include <QuickTime/QuickTime.h>
-#endif // __APPLE__
+#if defined __APPLE__ && !defined __x86_64__
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+# define HAVE_CARBONQUICKTIME
+#endif
 
 #ifdef _WIN32
 # include <io.h>
@@ -38,118 +41,47 @@
 #include <setjmp.h>
 #include <string.h>
 
-#ifndef __APPLE__
-extern "C"
-{
-#ifdef HAVE_LIBTIFF
-# include "tiffio.h"
-#endif
-
-#undef EXTERN
-
-#ifdef _WIN32
-# undef FAR
-#endif
-
-#ifdef HAVE_LIBJPEG
-# include "jpeglib.h"
-#endif
-}
-
-#include "sgiimage.h"
-#endif // __APPLE__
-
-#include "GemPixUtil.h"
-
 #ifdef HAVE_LIBMAGICKPLUSPLUS
 # include <Magick++.h>
 imageStruct *magickImage2mem(const char *filename);
 #endif
 
+#ifdef HAVE_CARBONQUICKTIME
+# include <Carbon/Carbon.h>
+# include <QuickTime/QuickTime.h>
+imageStruct *QTImage2mem(const char *filename);
+#endif
 
-#ifdef __APPLE__
-imageStruct *QTImage2mem(GraphicsImportComponent inImporter);
-OSStatus FSPathMakeFSSpec(
-   const UInt8 *path,
-   FSSpec *spec,
-   Boolean *isDirectory);
-#else
-# ifdef HAVE_LIBTIFF
+#ifdef HAVE_LIBTIFF
+extern "C"
+{
+# include "tiffio.h"
+}
 imageStruct *tiffImage2mem(const char *filename);
+#endif
+
+#ifdef HAVE_LIBJPEG
+extern "C"
+{
+# ifdef _WIN32
+#  undef FAR
 # endif
-# ifdef HAVE_LIBJPEG
+# undef EXTERN
+
+# include "jpeglib.h"
+}
 imageStruct *jpegImage2mem(const char *filename);
-# endif /* LIBJPEG */
+#endif /* LIBJPEG */
+
+#include "sgiimage.h"
 imageStruct *sgiImage2mem(const char *filename);
 
-#endif // __APPLE__
 
 /***************************************************************************
  *
  * image2mem - Read in an image in various file formats
  *
  ***************************************************************************/
-#ifdef __APPLE__
-GEM_EXTERN imageStruct *image2mem(const char *filename)
-{
-   OSErr            err;
-   imageStruct          *image_block = NULL;
-   GraphicsImportComponent    importer = NULL;
-
-   ::verbose(2, "reading '%s' with QuickTime", filename);
-
-   // does the file even exist?
-   if (filename[0] != '\0') {
-      FSSpec   spec;
-
-      err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename), &spec, NULL);
-      if (err) {
-         error("GemImageLoad: Unable to find file: %#s", spec.name);
-                        error("GemImageLoad: Unable to find filename:%s", filename);
-         error("parID : %d", spec.parID); 
-         return NULL;
-      }
-      err = ::GetGraphicsImporterForFile(&spec, &importer);
-      if (err) {
-         error("GemImageLoad: Unable to import an image: %#s", spec.name);
-         return NULL;
-      }
-   }
-   image_block = QTImage2mem(importer);
-   ::CloseComponent(importer);
-   if (image_block)   return image_block;
-   else         return NULL;
-}
-/*****************************************************************************/
-
-OSStatus
-FSPathMakeFSSpec(
-   const UInt8 *path,
-   FSSpec *spec,
-   Boolean *isDirectory)   /* can be NULL */
-{
-   OSStatus   result;
-   FSRef      ref;
-   
-   /* check parameters */
-   require_action(NULL != spec, BadParameter, result = paramErr);
-   
-   /* convert the POSIX path to an FSRef */
-   result = FSPathMakeRef(path, &ref, isDirectory);
-   require_noerr(result, FSPathMakeRef);
-   
-   /* and then convert the FSRef to an FSSpec */
-   result = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
-   require_noerr(result, FSGetCatalogInfo);
-   
-FSGetCatalogInfo:
-FSPathMakeRef:
-BadParameter:
-
-   return ( result );
-}
-
-#else
 GEM_EXTERN imageStruct *image2mem(const char *filename)
 {
    imageStruct *image_block = NULL;
@@ -185,6 +117,12 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
      sprintf(newName, "%s/%s", realName, realResult);
    }
 
+# ifdef HAVE_CARBONQUICKTIME
+   // try to load via ImageMagick
+   if ( (image_block = QTImage2mem(newName)) )
+         return(image_block);
+# endif
+
 # ifdef HAVE_LIBMAGICKPLUSPLUS
    // try to load via ImageMagick
    if ( (image_block = magickImage2mem(newName)) )
@@ -207,14 +145,16 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
    // unable to load image
    return(NULL);
 }
-#endif // __APPLE__
+
 /***************************************************************************
  *
  * Read in a image utilizing QuickTime GraphicsImporterComponent
  *
  ***************************************************************************/
-#ifdef __APPLE__
-imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
+#ifdef HAVE_CARBONQUICKTIME
+/*****************************************************************************/
+
+imageStruct *QuickTimeImage2mem(GraphicsImportComponent inImporter)
 {
    Rect      r;
    if (::GraphicsImportGetNaturalBounds(inImporter, &r)) return NULL;   //get an image size
@@ -251,7 +191,7 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
   image_block->allocate();
 
 #ifdef __DEBUG__
-   post("QTImage2mem() : allocate %d bytes", image_block->xsize*image_block->ysize*image_block->csize);
+   post("QuickTimeImage2mem() : allocate %d bytes", image_block->xsize*image_block->ysize*image_block->csize);
 #endif
         GWorldPtr   gw = NULL;
 
@@ -272,6 +212,65 @@ imageStruct *QTImage2mem(GraphicsImportComponent inImporter)
    gw = NULL;
 
    return image_block;
+}
+
+
+OSStatus
+FSPathMakeFSSpec(
+   const UInt8 *path,
+   FSSpec *spec,
+   Boolean *isDirectory)   /* can be NULL */
+{
+   OSStatus   result;
+   FSRef      ref;
+   
+   /* check parameters */
+   require_action(NULL != spec, BadParameter, result = paramErr);
+   
+   /* convert the POSIX path to an FSRef */
+   result = FSPathMakeRef(path, &ref, isDirectory);
+   require_noerr(result, FSPathMakeRef);
+   
+   /* and then convert the FSRef to an FSSpec */
+   result = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
+   require_noerr(result, FSGetCatalogInfo);
+   
+FSGetCatalogInfo:
+FSPathMakeRef:
+BadParameter:
+
+   return ( result );
+}
+
+imageStruct *QTImage2mem(const char *filename)
+{
+   OSErr            err;
+   imageStruct          *image_block = NULL;
+   GraphicsImportComponent    importer = NULL;
+
+   ::verbose(2, "reading '%s' with QuickTime", filename);
+
+   // does the file even exist?
+   if (filename[0] != '\0') {
+      FSSpec   spec;
+
+      err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename), &spec, NULL);
+      if (err) {
+         error("GemImageLoad: Unable to find file: %#s", spec.name);
+                        error("GemImageLoad: Unable to find filename:%s", filename);
+         error("parID : %d", spec.parID); 
+         return NULL;
+      }
+      err = ::GetGraphicsImporterForFile(&spec, &importer);
+      if (err) {
+         error("GemImageLoad: Unable to import an image: %#s", spec.name);
+         return NULL;
+      }
+   }
+   image_block = QuickTimeImage2mem(importer);
+   ::CloseComponent(importer);
+   if (image_block)   return image_block;
+   else         return NULL;
 }
 #else
 # ifdef HAVE_LIBTIFF
@@ -728,7 +727,7 @@ imageStruct *sgiImage2mem(const char *filename)
    
    return(image_block);
 }
-#endif //__APPLE__
+#endif //HAVE_CARBONQUICKTIME
 
 #ifdef HAVE_LIBMAGICKPLUSPLUS
 imageStruct *magickImage2mem(const char *filename){
