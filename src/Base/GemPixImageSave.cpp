@@ -24,7 +24,7 @@
 #include <io.h>
 #else
 #include <unistd.h>
-#endif
+#endif /* WIN32 */
 
 #include "Base/GemGL.h"
 
@@ -34,7 +34,7 @@
 #include <QuickTime/ImageCompression.h>
 #include <string.h>
 #include <fcntl.h> 
-#endif // __APPLE__
+#endif /* __APPLE__ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,9 +47,8 @@ extern "C"
 #  include "tiffio.h"
 # endif
 
-# undef EXTERN
-
 # ifdef _WIN32
+#  undef EXTERN
 #  undef FAR
 # endif
 # ifdef HAVE_LIBJPEG
@@ -110,7 +109,7 @@ void InvertGLImage( unsigned char *imageData, unsigned char * outData, long imag
     }
 }
 
-GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int type)
+GEM_EXTERN int mem2QuickTimeImage(imageStruct* image, const char *filename, const int type)
 {
     OSErr			err;
     ComponentResult		cErr 	= 0;
@@ -265,9 +264,9 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 
   return 1;
 }
+#endif /* APPLE */
 
-#else
-#include "sgiimage.h"
+//#include "sgiimage.h"
 
 #ifdef HAVE_LIBMAGICKPLUSPLUS
 # include <Magick++.h>
@@ -290,6 +289,9 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 
   switch (type) {
   case 0:
+#ifdef __APPLE__
+    if (mem2QuickTimeImage(image, filename), 0) return(1);else
+#endif
 #ifdef HAVE_LIBMAGICKPLUSPLUS
     if (mem2magickImage(image, filename)) return(1);else
 #endif
@@ -300,6 +302,9 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 #endif
     break;
   default:
+#ifdef __APPLE__
+    if (mem2QuickTimeImage(image, filename), (type==1)) return(1);else
+#endif
 #ifdef HAVE_LIBJPEG
     // write a JPEG file
      if (mem2jpegImage(image, filename, type))
@@ -481,7 +486,6 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
   return(1);
 }
 #endif /* HAVE_LIBJPEG */
-#endif //__APPLE__
 
 #ifdef HAVE_LIBMAGICKPLUSPLUS
 /***************************************************************************
@@ -529,4 +533,4 @@ int mem2magickImage(imageStruct *image, const char *filename)
   }
   return 1;
 }
-#endif
+#endif /*  HAVE_LIBMAGICKPLUSPLUS */
