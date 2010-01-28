@@ -15,8 +15,10 @@
 #include "CPPExtern.h"
 
 #ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
+# include <io.h>
 # define snprintf _snprintf
 # define vsnprintf _vsnprintf
+# define close _close
 #endif
 
 #include <stdio.h>
