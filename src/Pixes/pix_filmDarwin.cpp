@@ -14,6 +14,16 @@
 /////////////////////////////////////////////////////////
 #include "Base/GemConfig.h"
 
+#if defined __APPLE__ && !defined __x86_64__
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+# define HAVE_CARBONQUICKTIME
+#endif
+
+#if !defined HAVE_CARBONQUICKTIME  && defined GEM_FILMBACKEND && GEM_FILMBACKEND == GEM_FILMBACKEND_Darwin
+# undef GEM_FILMBACKEND
+#endif
+
 #if defined GEM_FILMBACKEND && GEM_FILMBACKEND == GEM_FILMBACKEND_Darwin
 
 #define HELPSYMBOL "pix_film"
