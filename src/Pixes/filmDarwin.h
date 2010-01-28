@@ -15,13 +15,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_FILMDARWIN_H_
 #define INCLUDE_FILMDARWIN_H_
-  
-#include "Pixes/film.h"
-   //#include "Pixes/pix_film.h"
-#ifdef __APPLE__
-#include <Carbon/carbon.h>
-#include <QuickTime/quicktime.h>
+
+
+#if defined __APPLE__ && !defined __x86_64__
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+# define HAVE_CARBONQUICKTIME
 #endif
+
+#include "Pixes/film.h"
+
+#ifdef HAVE_CARBONQUICKTIME
+# include <Carbon/carbon.h>
+# include <QuickTime/quicktime.h>
+#endif /* HAVE_CARBONQUICKTIME */
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -63,7 +70,7 @@ class GEM_EXTERN filmDarwin : public film {
   virtual int changeImage(int imgNum, int trackNum=-1);
 
  protected:
-#ifdef __APPLE__
+#ifdef HAVE_CARBONQUICKTIME
   Movie			m_movie; 
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
@@ -71,7 +78,7 @@ class GEM_EXTERN filmDarwin : public film {
   Media			m_movieMedia;
   TimeValue		m_timeScale;
   TimeValue		duration;
-#endif //__APPLE__
+#endif //HAVE_CARBONQUICKTIME
 
   //////////
   // frame data

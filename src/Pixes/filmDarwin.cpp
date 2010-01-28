@@ -15,6 +15,8 @@
 //
 /////////////////////////////////////////////////////////
 #include "Pixes/filmDarwin.h"
+
+
    
 /////////////////////////////////////////////////////////
 //
@@ -28,9 +30,9 @@
 filmDarwin :: filmDarwin(int format) : film(format) {
   static bool first_time=true;
   if (first_time) {
-#ifdef __APPLE__
+#ifdef HAVE_CARBONQUICKTIME
     post("pix_film:: Darwin support");
-#endif
+#endif /*  HAVE_CARBONQUICKTIME */
     first_time = false;
   }
 }
@@ -46,13 +48,13 @@ filmDarwin :: ~filmDarwin()
 
 void filmDarwin :: close(void)
 {
-#ifdef __APPLE__
+#ifdef HAVE_CARBONQUICKTIME
   if(m_srcGWorld){
     ::DisposeMovie(m_movie);
     ::DisposeGWorld(m_srcGWorld);
     m_srcGWorld = NULL;
   }
-#endif
+#endif /*  HAVE_CARBONQUICKTIME */
 }
 
 /////////////////////////////////////////////////////////
@@ -62,7 +64,7 @@ void filmDarwin :: close(void)
 bool filmDarwin :: open(char *filename, int format)
 {
   if (format>0)m_wantedFormat=format;
-#ifdef __APPLE__
+#ifdef HAVE_CARBONQUICKTIME
   FSSpec		theFSSpec;
   OSErr		err = noErr;
   FSRef		ref;
@@ -144,7 +146,7 @@ bool filmDarwin :: open(char *filename, int format)
   ::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
   ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
   return true;
-#endif
+#endif /*  HAVE_CARBONQUICKTIME */
   goto unsupported;
  unsupported:
   post("Darwin: unsupported!");
@@ -156,7 +158,7 @@ bool filmDarwin :: open(char *filename, int format)
 //
 /////////////////////////////////////////////////////////
 pixBlock* filmDarwin :: getFrame(){
-#ifdef __APPLE__
+#ifdef HAVE_CARBONQUICKTIME
   CGrafPtr	 	savedPort;
   GDHandle     	savedDevice;
   Rect		m_srcRect;
@@ -211,7 +213,7 @@ pixBlock* filmDarwin :: getFrame(){
     
   //  m_image.image.data = (unsigned char *)m_baseAddr;
   m_image.newimage=1;
-#endif
+#endif /*  HAVE_CARBONQUICKTIME */
   return &m_image;
 }
 
