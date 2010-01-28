@@ -19,10 +19,6 @@ LOG
 
 #include "Base/GemGL.h"
 
-#ifdef __APPLE__
-# include <QuickTime/QuickTime.h>
-#endif // __APPLE__
-
 #include <string.h>
 #include <stdlib.h>
 
