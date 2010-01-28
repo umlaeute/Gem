@@ -38,7 +38,7 @@ LOG
 # define GEM_EXPORT
 # define GEM_IMPORT
 
-# define GEM_DEPRECATED __attribute_deprecated__
+# define GEM_DEPRECATED __attribute__ ((deprecated))
 
 #else
 /* unknown compiler */
