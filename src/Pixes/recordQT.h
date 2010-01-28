@@ -11,16 +11,34 @@
 #ifndef INCLUDE_PIXES_RECORDQT_H_
 #define INCLUDE_PIXES_RECORDQT_H_
 #include "Base/GemConfig.h"
+#include "Pixes/record.h"
+
+
+
+#if defined __APPLE__ 
+# if !defined __x86_64__
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+#  define HAVE_CARBONQUICKTIME
+# elif defined HAVE_QUICKTIME
+#  undef HAVE_QUICKTIME
+# endif
+#endif
+
 
 #define QT_MAX_FILENAMELENGTH 256
 
-#include "Pixes/record.h"
-
-#if defined HAVE_QUICKTIME && defined _WIN32 
-# include <QTML.h>
-# include <Movies.h>
-# include <QuicktimeComponents.h>
+#if defined HAVE_QUICKTIME
+# if defined _WIN32 
+#  include <QTML.h>
+#  include <Movies.h>
+#  include <QuicktimeComponents.h>
+# endif
+# ifdef __APPLE__
+#  include <QuickTime/QuickTime.h>
+# endif // __APPLE__
 #endif
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
