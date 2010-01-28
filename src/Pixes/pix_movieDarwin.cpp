@@ -165,7 +165,11 @@ void pix_movieDarwin :: openMess(t_symbol *filename, int format)
   if (format)m_colorspace=format;
 
   char buf[MAXPDSTRING];
+#if 0
   canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
+#else
+  snprintf(buf, MAXPDSTRING, "%s", findFile(filename->s_name).c_str());
+#endif
 
   // Clean up any open files
   closeMess();

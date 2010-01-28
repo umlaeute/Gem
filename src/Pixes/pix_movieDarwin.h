@@ -21,6 +21,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # error Define pix_movieDarwin for this OS
 #endif
 
+#include "Base/GemState.h"
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS

@@ -13,6 +13,8 @@
 
 #include "pix_videoDarwin.h"
 #include "Base/GemCache.h"
+#include "Base/GemState.h"
+
 #include <Carbon/Carbon.h>
 
 #include <unistd.h> //needed for Unix file open() type functions
