@@ -37,6 +37,7 @@
 
 class GEM_EXTERN GemContextDataBase {
  protected:
+  static const int INVALID_CONTEXT;
   int getCurContext(void);
 };
 
@@ -80,6 +81,13 @@ template<class GemContextDataType = int>
      */
     virtual GemContextDataType&operator = (GemContextDataType value)
     {
+      /* simplistic approach to handle out-of-context assignments:
+       *  assign the value to all context instances
+       */
+      if(INVALID_CONTEXT==getCurContext()) {
+        doSetAll(value);
+      }
+
       return (*getPtrToCur()=value);
     }
 
@@ -121,6 +129,14 @@ template<class GemContextDataType = int>
       checkSize(context_id+1);     // Make sure we are large enough (+1 since we have index)
 
       return m_ContextDataVector[context_id];
+    }
+
+    GemContextDataType doSetAll(GemContextDataType v)
+    {
+      int i=0;
+      for(i=0; i< m_ContextDataVector.size(); i++) {
+        *m_ContextDataVector[i]=v;
+      }
     }
   };
 
