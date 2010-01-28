@@ -272,8 +272,8 @@ imageStruct *QTImage2mem(const char *filename)
    if (image_block)   return image_block;
    else         return NULL;
 }
-#else
-# ifdef HAVE_LIBTIFF
+#endif /* HAVE_CARBONQUICKTIME */
+#ifdef HAVE_LIBTIFF
 /***************************************************************************
  *
  * Read in a TIFF image.
@@ -450,8 +450,8 @@ imageStruct *tiffImage2mem(const char *filename)
 
     return(image_block);
 }
-# endif /* HAVE_LIBTIFF */
-# ifdef HAVE_LIBJPEG
+#endif /* HAVE_LIBTIFF */
+#ifdef HAVE_LIBJPEG
 /***************************************************************************
  *
  * Read in a JPEG image.
@@ -619,7 +619,7 @@ imageStruct *jpegImage2mem(const char *filename)
 
    return(image_block);
 }
-# endif /* HAVE_LIBJPEG */
+#endif /* HAVE_LIBJPEG */
 /***************************************************************************
  *
  * Read in an SGI image.
@@ -727,7 +727,6 @@ imageStruct *sgiImage2mem(const char *filename)
    
    return(image_block);
 }
-#endif //HAVE_CARBONQUICKTIME
 
 #ifdef HAVE_LIBMAGICKPLUSPLUS
 imageStruct *magickImage2mem(const char *filename){
@@ -755,4 +754,4 @@ imageStruct *magickImage2mem(const char *filename){
   return image_block;
 }
 
-#endif
+#endif /* HAVE_LIBMAGICKPLUSPLUS */
