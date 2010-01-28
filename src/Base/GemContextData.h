@@ -49,9 +49,9 @@ template<class GemContextDataType = int>
    
     //////////
     // Constructor
-    GemContextData(void) : m_defaultValue() {;}
+    GemContextData(void) : m_haveDefaultValue(false) {;}
 
-    GemContextData(GemContextDataType v) : m_defaultValue(v) {;}
+    GemContextData(GemContextDataType v) : m_haveDefaultValue(true), m_defaultValue(v) {;}
 
     ~GemContextData() {
       m_ContextDataVector.clear();
@@ -84,7 +84,7 @@ template<class GemContextDataType = int>
     }
 
     private:
-
+    bool m_haveDefaultValue;
     GemContextDataType m_defaultValue;
     std::vector<GemContextDataType*>  m_ContextDataVector;
 
@@ -97,7 +97,11 @@ template<class GemContextDataType = int>
           m_ContextDataVector.reserve(requiredSize);          // Resize smartly
           while(m_ContextDataVector.size() < requiredSize)    // Add any new items needed
             {
-              m_ContextDataVector.push_back(new GemContextDataType(m_defaultValue));
+                if(m_haveDefaultValue) {
+                    m_ContextDataVector.push_back(new GemContextDataType(m_defaultValue));
+                } else {
+                    m_ContextDataVector.push_back(new GemContextDataType);
+                }
             }
         }
     }
