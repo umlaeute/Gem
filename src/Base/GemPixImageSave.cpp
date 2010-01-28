@@ -109,7 +109,7 @@ void InvertGLImage( unsigned char *imageData, unsigned char * outData, long imag
     }
 }
 
-GEM_EXTERN int mem2QuickTimeImage(imageStruct* image, const char *filename, const int type)
+int mem2QuickTimeImage(imageStruct* image, const char *filename, const int type)
 {
     OSErr			err;
     ComponentResult		cErr 	= 0;
@@ -290,7 +290,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
   switch (type) {
   case 0:
 #ifdef __APPLE__
-    if (mem2QuickTimeImage(image, filename), 0) return(1);else
+    if (mem2QuickTimeImage(image, filename, 0)) return(1);else
 #endif
 #ifdef HAVE_LIBMAGICKPLUSPLUS
     if (mem2magickImage(image, filename)) return(1);else
@@ -303,7 +303,7 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
     break;
   default:
 #ifdef __APPLE__
-    if (mem2QuickTimeImage(image, filename), (type==1)) return(1);else
+    if (mem2QuickTimeImage(image, filename, (type==1))) return(1);else
 #endif
 #ifdef HAVE_LIBJPEG
     // write a JPEG file
