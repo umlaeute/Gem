@@ -26,6 +26,7 @@
 
 
 #include "pix_videoDS.h"
+#include "Base/GemState.h"
 #include <memory>
 #include <dshow.h>
 #include <qedit.h>
@@ -698,7 +699,11 @@ void pix_videoDS :: stopCapture()
 
 void pix_videoDS :: fileMess(t_symbol *filename)
 {
+#if 0
 	canvas_makefilename(getCanvas(), filename->s_name, m_filename, MAXPDSTRING);
+#else
+    _snprintf(m_filename, MAXPDSTRING, "%s", findFile(filename->s_name).c_str());
+#endif
 }
 
 void pix_videoDS :: recordMess(int state)
