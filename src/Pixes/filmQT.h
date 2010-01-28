@@ -16,12 +16,19 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Base/GemConfig.h"
 #include "Pixes/film.h"
 
-#if defined __APPLE__ && !defined HAVE_QUICKTIME
-# define HAVE_QUICKTIME
+
+#if defined __APPLE__ 
+# if !defined __x86_64__
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+#  define HAVE_CARBONQUICKTIME
+# elif defined HAVE_QUICKTIME
+#  undef HAVE_QUICKTIME
+# endif
 #endif
 
 #ifdef HAVE_QUICKTIME
-# ifdef __APPLE__
+# ifdef HAVE_CARBONQUICKTIME
 #  include <Carbon/Carbon.h>
 #  include <QuickTime/QuickTime.h>
 # elif defined _WIN32
