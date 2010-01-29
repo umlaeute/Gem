@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////
 GemBase :: GemBase()
   : gem_amRendering(false), m_cache(NULL), m_modified(true),
-    m_enabled(true)
+    m_enabled(true), m_state(INIT)
 {
   m_out1 = outlet_new(this->x_obj, 0);
 }
