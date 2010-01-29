@@ -1,4 +1,4 @@
-#N canvas 346 140 550 486 10;
+#N canvas 434 200 550 486 10;
 #X obj 27 399 hradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144 -1
 -1 0;
 #X floatatom 185 212 5 0 0 0 - - -;
@@ -57,7 +57,7 @@
 #X connect 15 0 5 0;
 #X restore 272 417 pd time_and_direction_Wind __;
 #X obj 272 171 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 0 1;
+-1 -1 4100 1;
 #X obj 365 172 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
 -1 -1 0 1;
 #N canvas 543 225 707 425 pos_wind 0;
@@ -78,7 +78,7 @@
 #X obj 270 382 s force_wind;
 #X obj 270 67 min 1;
 #X obj 270 88 max 0;
-#X obj 151 145 cnv 10 10 10 empty pos_wind_canvas empty 20 12 0 14
+#X obj 159 145 cnv 10 10 10 empty pos_wind_canvas empty 20 12 0 14
 -258113 -66577 0;
 #X obj 146 147 bng 8 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
@@ -111,7 +111,7 @@
 #X restore 272 308 pd pos_wind;
 #X text 269 152 force;
 #X text 362 152 direction;
-#N canvas 280 149 683 511 shaders_PM 0;
+#N canvas 419 141 683 511 shaders_PM 0;
 #X obj 24 367 translateXYZ 0 0 -4;
 #X obj 24 428 pix_texture;
 #X obj 24 449 square 4;
@@ -290,7 +290,6 @@
 #X obj 413 242 s init_shader_link;
 #X obj 180 76 delay 100;
 #X msg 209 119 0;
-#X obj 412 27 inlet;
 #X obj 412 55 delay 100;
 #X obj 428 85 delay 1000;
 #X msg 243 124 N 1;
@@ -302,6 +301,11 @@
 #X obj 329 101 t b;
 #X msg 329 142 N 0;
 #X obj 327 121 delay 30;
+#X obj 410 3 inlet;
+#X obj 412 27 t b;
+#X obj 539 19 gemhead;
+#X obj 539 42 route gem_state;
+#X obj 539 64 route 1 0;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X connect 3 0 0 0;
@@ -347,32 +351,36 @@
 #X connect 34 0 13 0;
 #X connect 35 0 7 2;
 #X connect 37 0 7 0;
-#X connect 38 0 55 0;
-#X connect 39 0 54 0;
+#X connect 38 0 54 0;
+#X connect 39 0 53 0;
 #X connect 40 0 38 0;
-#X connect 41 0 53 0;
+#X connect 41 0 52 0;
 #X connect 42 0 14 0;
 #X connect 43 0 20 2;
-#X connect 45 0 51 0;
+#X connect 45 0 50 0;
 #X connect 46 0 14 0;
-#X connect 47 0 8 0;
-#X connect 47 0 48 0;
-#X connect 47 0 21 0;
-#X connect 47 0 49 0;
-#X connect 48 0 29 0;
-#X connect 49 0 44 0;
-#X connect 50 0 20 2;
-#X connect 50 0 56 0;
-#X connect 51 0 50 0;
-#X connect 51 1 46 0;
-#X connect 52 0 55 0;
-#X connect 54 0 52 0;
-#X connect 55 0 34 0;
-#X connect 55 1 22 0;
-#X connect 55 2 37 0;
-#X connect 56 0 58 0;
-#X connect 57 0 20 2;
-#X connect 58 0 57 0;
+#X connect 47 0 29 0;
+#X connect 48 0 44 0;
+#X connect 49 0 20 2;
+#X connect 49 0 55 0;
+#X connect 50 0 49 0;
+#X connect 50 1 46 0;
+#X connect 51 0 54 0;
+#X connect 53 0 51 0;
+#X connect 54 0 34 0;
+#X connect 54 1 22 0;
+#X connect 54 2 37 0;
+#X connect 55 0 57 0;
+#X connect 56 0 20 2;
+#X connect 57 0 56 0;
+#X connect 58 0 59 0;
+#X connect 59 0 8 0;
+#X connect 59 0 47 0;
+#X connect 59 0 21 0;
+#X connect 59 0 48 0;
+#X connect 60 0 61 0;
+#X connect 61 0 62 0;
+#X connect 62 0 59 0;
 #X restore 27 323 pd shaders_PM _________________;
 #N canvas 694 201 301 383 shader_normal 0;
 #X obj 51 153 gemframebuffer;
