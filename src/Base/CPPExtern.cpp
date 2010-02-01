@@ -25,10 +25,12 @@
 #include <stdarg.h>
 
 
-GEM_EXTERN void *operator new(size_t, void *location, void *) {return(location);}
+void *Obj_header::operator new(size_t, void *location, void *) {
+  return(location);
+}
 
-t_object * CPPExtern::m_holder;
-char* CPPExtern::m_holdname;
+t_object * CPPExtern::m_holder=NULL;
+char* CPPExtern::m_holdname=NULL;
 
 /////////////////////////////////////////////////////////
 //

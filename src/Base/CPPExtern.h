@@ -48,6 +48,9 @@ struct GEM_EXTERN Obj_header
     	//////////
     	// Our data structure
         CPPExtern           *data;
+
+  // This has a dummy arg so that NT won't complain
+  void *operator new(size_t, void *location, void *dummy);
 };
 
 /*-----------------------------------------------------------------
@@ -140,9 +143,6 @@ class GEM_EXTERN CPPExtern
 	mutable bool m_endpost; /* internal state for startpost/post/endpost */
 	static bool checkGemVersion(const int major, const int minor);
 };
-
-// This has a dummy arg so that NT won't complain
-GEM_EXTERN void *operator new(size_t, void *location, void *dummy);
 
 ////////////////////////////////////////
 // This should be used in the header
