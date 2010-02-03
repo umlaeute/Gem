@@ -111,6 +111,19 @@ void GemState :: reset() {
   HaveNormalArray = 0;
   HaveTexCoordArray = 0;
   drawType = 0;
+
+  stackDepth[GemMan::STACKMODELVIEW]=
+    stackDepth[GemMan::STACKCOLOR]=
+    stackDepth[GemMan::STACKTEXTURE]=
+    stackDepth[GemMan::STACKPROJECTION]=
+    1; // 1 is the current matrix
+
+  if(GemMan::windowExists()) {
+    glGetIntegerv(GL_MODELVIEW_STACK_DEPTH, &stackDepth[GemMan::STACKMODELVIEW]);
+    glGetIntegerv(GL_PROJECTION_STACK_DEPTH, &stackDepth[GemMan::STACKPROJECTION]);
+    glGetIntegerv(GL_TEXTURE_STACK_DEPTH, &stackDepth[GemMan::STACKTEXTURE]);
+    glGetIntegerv(GL_COLOR_MATRIX_STACK_DEPTH, &stackDepth[GemMan::STACKCOLOR]);
+  }
 }
 
 GemState :: ~GemState() {
