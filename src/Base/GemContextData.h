@@ -131,9 +131,9 @@ template<class GemContextDataType = int>
       return m_ContextDataVector[context_id];
     }
 
-    GemContextDataType doSetAll(GemContextDataType v)
+    void doSetAll(GemContextDataType v)
     {
-      int i=0;
+      unsigned int i=0;
       for(i=0; i< m_ContextDataVector.size(); i++) {
         *m_ContextDataVector[i]=v;
       }
