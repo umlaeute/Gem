@@ -84,7 +84,18 @@ void gemhead :: renderGL(GemState *state)
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, s_color);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
+  glMatrixMode(GL_PROJECTION);
   glPushMatrix();
+
+  glMatrixMode(GL_TEXTURE);
+  glPushMatrix();
+
+  glMatrixMode(GL_COLOR);
+  glPushMatrix();
+
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+
   if(state)
   {
     state->reset();
@@ -108,6 +119,16 @@ void gemhead :: renderGL(GemState *state)
   m_cache->dirty = 0;
   m_cache->vertexDirty=0;
 
+  glMatrixMode(GL_COLOR);
+  glPopMatrix();
+
+  glMatrixMode(GL_TEXTURE);
+  glPopMatrix();
+
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+
+  glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
 }
 

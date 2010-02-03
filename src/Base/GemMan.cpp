@@ -406,6 +406,13 @@ void GemMan :: resetValues()
   // setup the transformation matrices
   float xDivy = (float)m_w / (float)m_h;
 
+
+  glMatrixMode(GL_COLOR);
+  glLoadIdentity();
+
+  glMatrixMode(GL_TEXTURE);
+  glLoadIdentity();
+
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
