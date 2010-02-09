@@ -180,7 +180,7 @@ void model :: openMess(t_symbol *filename)
   glmFacetNormals (m_model);
   glmVertexNormals(m_model, m_smooth);
 
-  glmTexture(m_model, m_textype, 1, 1);
+  glmTexture(m_model, m_textype, m_currentH, m_currentW);
   buildList();
   this->setModified();
 }
@@ -220,7 +220,7 @@ void model :: render(GemState *state)
   if(m_rebuild) {
     m_currentH = state->texCoordX(2);
     m_currentW = state->texCoordY(2);
-    glmTexture(m_model, m_textype, 1, 1);
+    glmTexture(m_model, m_textype, m_currentH, m_currentW);
     buildList();
     m_rebuild=false;
   }
