@@ -90,8 +90,10 @@ void gemhead :: renderGL(GemState *state)
   glMatrixMode(GL_TEXTURE);
   glPushMatrix();
 
-  glMatrixMode(GL_COLOR);
-  glPushMatrix();
+  if(GLEW_ARB_imaging) {
+    glMatrixMode(GL_COLOR);
+    glPushMatrix();
+  }
 
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
@@ -119,8 +121,10 @@ void gemhead :: renderGL(GemState *state)
   m_cache->dirty = 0;
   m_cache->vertexDirty=0;
 
-  glMatrixMode(GL_COLOR);
-  glPopMatrix();
+  if(GLEW_ARB_imaging) {
+    glMatrixMode(GL_COLOR);
+    glPopMatrix();
+  }
 
   glMatrixMode(GL_TEXTURE);
   glPopMatrix();
