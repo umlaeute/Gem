@@ -578,13 +578,8 @@ void GemMan :: resetState()
 //
 /////////////////////////////////////////////////////////
 void GemMan :: renderChain(gemheadLink *head, GemState *state){
-  gem::GLStack*stacks=NULL;
   while (head) {
-    if(state)state->get("gl.stacks", stacks);
-    stacks->push();
-      head->base->renderGL(state);
-    if(state)state->get("gl.stacks", stacks);
-    stacks->pop();
+    head->base->renderGL(state);
     head = head->next;
   }
 }

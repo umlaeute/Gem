@@ -86,13 +86,16 @@ void gemhead :: renderGL(GemState *state)
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, s_color);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
+  gem::GLStack*stacks=NULL;
   if(state)
   {
     state->reset();
-
     // set the state dirty flag
     state->dirty = m_cache->dirty;
     state->VertexDirty=m_cache->vertexDirty;
+
+    state->get("gl.stacks", stacks);
+    if(stacks)stacks->push();
   }
 
   // are we profiling and need to send new images?
@@ -108,6 +111,8 @@ void gemhead :: renderGL(GemState *state)
 
   m_cache->dirty = 0;
   m_cache->vertexDirty=0;
+  state->get("gl.stacks", stacks);
+  if(stacks)stacks->pop();
 }
 
 
