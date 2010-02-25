@@ -174,7 +174,7 @@ class GEM_EXTERN GemState
    * if the key does not exist (or the type is wrong) the value is not touched and <code>false</code> is returned instead
    */
   virtual bool get(t_symbol*key, gem::any&value);
-  virtual bool get(const char*key, gem::any value) {get(gensym(key), value);}
+  virtual bool get(const char*key, gem::any value) {return get(gensym(key), value);}
 
   template<class T>
     bool get(t_symbol*key, T&value) {
@@ -198,7 +198,7 @@ class GEM_EXTERN GemState
 
   /* set a named property */
   virtual bool set(t_symbol*key, gem::any value);
-  virtual bool set(const char*key, gem::any value) {set(gensym(key), value);}
+  virtual bool set(const char*key, gem::any value) {return set(gensym(key), value);}
 
   /* remove a named property */
   virtual bool remove(t_symbol*key);
