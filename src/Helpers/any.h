@@ -3,24 +3,28 @@
  * (C) Copyright Pablo Aguilar 2005
  * (C) Copyright Kevlin Henney 2001
  *
+ * (c) IOhannes m zmölnig 2010
+ *       downloaded this code from http://www.codeproject.com/KB/cpp/dynamic_typing.aspx
+ *         changed namespace/defines "cdiggins" to something "gem"
+ *
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  */
 
-#ifndef CDIGGINS_ANY_HPP
-#define CDIGGINS_ANY_HPP
+#ifndef GEM_ANY_HPP
+#define GEM_ANY_HPP
+
+#include "Base/GemExportDef.h"
 
 #include <stdexcept>
-
 #include <typeinfo>
-
 #include <algorithm>
 
 
-namespace cdiggins
+namespace gem
 {
-  struct bad_any_cast : std::bad_cast {
+  struct GEM_EXTERN bad_any_cast : std::bad_cast {
     bad_any_cast(const std::type_info& src, const std::type_info& dest)
       : from(src.name()), to(dest.name())
     { }
@@ -109,7 +113,7 @@ namespace cdiggins
   } // namespace any_detail
 
 
-  struct any
+  struct GEM_EXTERN any
   {
     // structors
 
@@ -258,7 +262,7 @@ namespace cdiggins
   // boost::any-like casting
 
   template<typename T>
-  T* any_cast(any* this_) {
+  GEM_EXTERN T* any_cast(any* this_) {
     if (this_->get_type() != typeid(T)) {
       throw bad_any_cast(this_->get_type(), typeid(T));
     }
@@ -271,14 +275,14 @@ namespace cdiggins
   }
 
   template<typename T>
-  T const* any_cast(any const* this_) {
+  GEM_EXTERN T const* any_cast(any const* this_) {
     return any_cast<T>(const_cast<any*>(this_));
   }
 
   template<typename T>
-  T const& any_cast(any const& this_){
+  GEM_EXTERN T const& any_cast(any const& this_){
     return *any_cast<T>(const_cast<any*>(&this_));
   }
 }
 
-#endif // CDIGGINS_ANY_HPP
+#endif // GEM_ANY_HPP
