@@ -3,6 +3,9 @@
 ; ripped from http://nsis.sourceforge.net/Uninstall_only_installed_files
 ;
 ; Part 2/2: THIS HAS TO GO DIRECTLY AFTER THE "SECTIONS"
+;
+; LATER: allow the user to proceed uninstallation even without an uninstall.log
+;  (e.g. by deleting the entire tree - at the users own risk!)
 
 
 
