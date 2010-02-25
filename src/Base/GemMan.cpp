@@ -21,6 +21,8 @@
 #include "Base/GemConfig.h"
 #include "Base/GemSettings.h"
 
+#include "GLStack.h"
+
 #include <stdlib.h>
 
 #ifdef __unix__
@@ -464,7 +466,15 @@ void GemMan :: fillGemState(GemState &state)
     // GemState['lighting'] = 1;
     state.lighting = 1;
     state.smooth = 1;
+
+    state.set(gensym("gl.lighting"), true);
+    state.set(gensym("gl.smooth"), true);   
   }
+
+  gem::GLStack*stacks=NULL;
+  state.get("gl.stacks", stacks);
+  if(stacks)stacks->reset();
+  
 }
 
 /////////////////////////////////////////////////////////
@@ -568,8 +578,13 @@ void GemMan :: resetState()
 //
 /////////////////////////////////////////////////////////
 void GemMan :: renderChain(gemheadLink *head, GemState *state){
+  gem::GLStack*stacks=NULL;
   while (head) {
-    head->base->renderGL(state);
+    if(state)state->get("gl.stacks", stacks);
+    stacks->push();
+      head->base->renderGL(state);
+    if(state)state->get("gl.stacks", stacks);
+    stacks->pop();
     head = head->next;
   }
 }

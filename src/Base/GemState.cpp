@@ -20,60 +20,26 @@
 
 /* for GemMan::StackIDs */
 #include "GemMan.h"
+#include "GLStack.h"
+
+#include <map>
+#include <memory>
+
+#include <iostream>
+
+using namespace gem;
 
 class GemStateData {
   friend class GemState;
  public:
-  GemStateData(void);
-  ~GemStateData(void);
+  GemStateData(void) : stacks(new GLStack()){}
+  ~GemStateData(void) {}
 
  protected:
-#if 0
   // dictionary for setting values
-  std::map <char*, t_atom*> data;
+  std::map <t_symbol*, any> data;
 
-  virtual t_atom*get(char*name) {
-    return data[name];
-  }
-  virtual void set(char*name, t_atom*value) {
-    // LATER: we should expand envvariables
-    if(value) {
-      t_atom*a=(t_atom*)getbytes(sizeof(t_atom));
-      memcpy(a, value, sizeof(t_atom));
-      data[name]=a;
-    } else {
-      data.erase(name);
-    }
-  }
-  void set(char*name, int i) {
-    t_atom a;
-    SETFLOAT(&a, i);
-    set(name, &a);
-  }
-  void set(char*name, t_float f) {
-    t_atom a;
-    SETFLOAT(&a, f);
-    set(name, &a);
-  }
-  void set(char*name, char*s) {
-    t_atom a;
-    SETSYMBOL(&a, s);
-    set(name, &a);
-  }
-  void print(void) {
-    std::map <char*, t_atom*>::iterator it;
-    for(it = data.begin(); 
-        it != data.end();
-        it++)
-      {
-        if(it->first && it->first->s_name && it->second) {
-          startpost("key ['%s']: ", it->first->s_name);
-          postatom(1, it->second);
-          endpost();
-        }
-      }
-  }
-#endif
+  std::auto_ptr<GLStack>stacks;
 };
 
 /////////////////////////////////////////////////////////
@@ -86,21 +52,48 @@ class GemStateData {
 /////////////////////////////////////////////////////////
 GemState :: GemState()
 		  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
-                    image(0), texCoords(0), numTexCoords(0), multiTexUnits(0),
-                    tickTime(50.f), drawType(0),
-                    VertexArray(0), VertexArraySize(0), VertexArrayStride(0),
-                    ColorArray(0), HaveColorArray(0),
-                    NormalArray(0), HaveNormalArray(0),
-                    TexCoordArray(0), HaveTexCoordArray(0)
+        image(0), texCoords(0), numTexCoords(0), multiTexUnits(0),
+        tickTime(50.f), drawType(0),
+        VertexArray(0), VertexArraySize(0), VertexArrayStride(0),
+        ColorArray(0), HaveColorArray(0),
+        NormalArray(0), HaveNormalArray(0),
+        TexCoordArray(0), HaveTexCoordArray(0),
+        data(new GemStateData())
 {
+
+  //  std::cout << "GemState" << std::endl;
+
   stackDepth[GemMan::STACKMODELVIEW]=
     stackDepth[GemMan::STACKCOLOR]=
     stackDepth[GemMan::STACKTEXTURE]=
     stackDepth[GemMan::STACKPROJECTION]=
     1; // 1 is the current matrix
+
+  set("dirty", false);
+  set("inDisplayList", false);
+
+  set("gl.lighting", false); 
+  set("gl.smooth", false); 
+  set("gl.tex.type", 0);
+  //  set("pix", 0);
+  set("gl.tex.coords", 0); 
+  set("gl.tex.units", 0);
+  set("timing.tick", 50.f); 
+  set("gl.drawtype", 0);
+
+  set("gl.stacks", data->stacks.get());
+
+  /*
+    set("vertex.array.vertex", 0); 
+    set("vertex.array.color", 0); 
+    set("vertex.array.normal", 0); 
+    set("vertex.array.texcoord", 0); 
+  */
 }
 
 void GemState :: reset() {
+  //  std::cout << "GemState:reset" << std::endl;
+
   image = 0;
   VertexArray = 0;
   VertexArraySize = 0;
@@ -112,6 +105,7 @@ void GemState :: reset() {
   HaveTexCoordArray = 0;
   drawType = 0;
 
+  /*
   stackDepth[GemMan::STACKMODELVIEW]=
     stackDepth[GemMan::STACKCOLOR]=
     stackDepth[GemMan::STACKTEXTURE]=
@@ -124,63 +118,19 @@ void GemState :: reset() {
     glGetIntegerv(GL_TEXTURE_STACK_DEPTH, &stackDepth[GemMan::STACKTEXTURE]);
     glGetIntegerv(GL_COLOR_MATRIX_STACK_DEPTH, &stackDepth[GemMan::STACKCOLOR]);
   }
+  */
+
+  if(GemMan::windowExists()) {
+    GLStack *stacks;
+    get("gl.stacks", stacks);
+    stacks->reset();
+  }
 }
 
-GemState :: ~GemState() {
-  reset();
+GemState :: ~GemState() {  
+  //  reset();
+  if(data)delete data;data=NULL;
 }
-
-bool GemState::get(const char*key, long&value) {
-  return false;
-}
-bool GemState::get(const char*key, double&value){
-  return false;
-}
-bool GemState::get(const char*key, char*&value) {
-  return false;
-}
-
-/* raw accessor: returns a pointer to shallow copy of an anonymous type
- * all get's get the same copy
- * the copy is controlled by GemState (e.g. freed, when GemState is destroyed)
- * you have to know the type of value yourself
- * use at your own risk
- */
-bool GemState::get(const char*key, void*&value, size_t&length) {
-  return false;
-}
-/* raw accessor: returns an anonymous pointer
- * the pointer is controlled by the setter
- * you have to know the type of value yourself
- * use at your own risk
- */
-bool GemState::get(const char*key, void*&value) {
-  return false;
-}
-
-
-/* set a named property */
-bool GemState::set(const char*key, const long value) {
-  return false;
-}
-bool GemState::set(const char*key, const double value) {
-  return false;
-}
-bool GemState::set(const char*key, const char*value) {
-  return false;
-}
-bool GemState::set(const char*key, const void*value ) {
-  return false;
-}
-bool GemState::set(const char*key, const void*value, const size_t length) {
-  return false;
-}
-
-/* remove a named property */
-bool GemState::remove(const char*key) {
-  return false;
-}
-
 
 
 // --------------------------------------------------------------
@@ -196,3 +146,39 @@ float GemState::texCoordY(int num) const {
     return texCoords[num].t;
   else return 0.;
 }
+
+
+/* real properties */
+
+
+/* get a named property */
+bool GemState::get(t_symbol*key, any&value) {
+  std::map<t_symbol*,any>::iterator it = data->data.find(key);
+
+  if(it==data->data.end()) {
+    return false;
+  }
+
+  value=it->second;
+  return true;
+}
+
+/* set a named property */
+bool GemState::set(t_symbol*key, any value) {
+  if(value.empty()) {
+    data->data.erase(key);
+    return false;
+  }
+
+  /* wrapper for DEPRECATED access to member variables */
+  // ...
+
+  data->data[key]=value;
+  return true;
+}
+
+/* remove a named property */
+bool GemState::remove(t_symbol*key) {
+  return (0!=data->data.erase(key));
+}
+

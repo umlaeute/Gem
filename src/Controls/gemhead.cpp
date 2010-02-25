@@ -25,6 +25,8 @@
 #include "Base/GemCache.h"
 #include "Base/GemBase.h"
 
+#include "Base/GLStack.h"
+
 CPPEXTERN_NEW_WITH_ONE_ARG(gemhead, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
@@ -84,20 +86,6 @@ void gemhead :: renderGL(GemState *state)
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, s_color);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-
-  glMatrixMode(GL_TEXTURE);
-  glPushMatrix();
-
-  if(GLEW_ARB_imaging) {
-    glMatrixMode(GL_COLOR);
-    glPushMatrix();
-  }
-
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-
   if(state)
   {
     state->reset();
@@ -120,20 +108,6 @@ void gemhead :: renderGL(GemState *state)
 
   m_cache->dirty = 0;
   m_cache->vertexDirty=0;
-
-  if(GLEW_ARB_imaging) {
-    glMatrixMode(GL_COLOR);
-    glPopMatrix();
-  }
-
-  glMatrixMode(GL_TEXTURE);
-  glPopMatrix();
-
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
 }
 
 
