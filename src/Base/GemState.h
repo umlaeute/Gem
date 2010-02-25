@@ -202,7 +202,7 @@ class GEM_EXTERN GemState
 
   /* remove a named property */
   virtual bool remove(t_symbol*key);
-  virtual bool remove(const char*key) { remove(gensym(key));}
+  virtual bool remove(const char*key) { return remove(gensym(key));}
 
  protected:
   GemStateData*data;
