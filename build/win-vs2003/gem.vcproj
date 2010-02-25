@@ -372,6 +372,12 @@
 				RelativePath="..\..\src\Base\glew.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GLStack.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GLStack.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\glxew.h">
 			</File>
 			<File
@@ -3727,6 +3733,16 @@
 		<Filter
 			Name="temp"
 			Filter="">
+		</Filter>
+		<Filter
+			Name="Helpers"
+			Filter="">
+			<File
+				RelativePath="..\..\src\Helpers\any.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Helpers\RTE.h">
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
