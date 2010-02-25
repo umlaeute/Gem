@@ -210,6 +210,7 @@ namespace gem
     any& swap(any& x) {
       std::swap(table, x.table);
       std::swap(object, x.object);
+      return *this;
     }
 
     const std::type_info& get_type() const {
