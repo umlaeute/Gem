@@ -115,6 +115,15 @@ GLStack:: GLStack(bool haveValidContext) : data(new Data()) {
 GLStack::~GLStack() {
 }
 
+#ifdef __GNUC__
+# warning push/pop texture matrix has to be done per texunit
+  // each texunit has it's own matrix to be pushed/popped
+  // changing the texunit (e.g. in [pix_texture]) makes the 
+  // local depthcounter a useless, and we get a lot of 
+  // stack under/overflows
+#endif  
+
+
 /** push the given matrix to the stack if the maximum has not been reached 
  *   returns true on success and false otherwise (stack overflow)
  * NOTE: needs valid openGL context
