@@ -234,6 +234,8 @@ void pix_multiblob :: doProcessing() {
   // i admit that it is naughty to use "matrix" from zexy/iemmatrix
   // but it is the best thing i can think of for 2-dimensional arrays
   outlet_anything(m_infoOut, gensym("matrix"), 2+8*blobNumber, ap);
+
+  if(ap)delete[]ap; ap=NULL;
 }
 
 void pix_multiblob :: processImage(imageStruct &image){
