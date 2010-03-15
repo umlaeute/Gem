@@ -329,8 +329,8 @@ else
 fi
 
 if test "x$with_pd" != "x"; then
-   INCLUDES="$INCLUDES -I${with_pd}/src"
-   LIBS="$LIBS -L${with_pd}/bin"
+   INCLUDES="$INCLUDES -I${with_pd}/src -I${with_pd}"
+   LIBS="$LIBS -L${with_pd}/bin -L${with_pd}"
 fi
 
 #pd version

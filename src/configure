@@ -10931,8 +10931,8 @@ else
 fi
 
 if test "x$with_pd" != "x"; then
-   INCLUDES="$INCLUDES -I${with_pd}/src"
-   LIBS="$LIBS -L${with_pd}/bin"
+   INCLUDES="$INCLUDES -I${with_pd}/src -I${with_pd}"
+   LIBS="$LIBS -L${with_pd}/bin -L${with_pd}"
 fi
 
 #pd version
@@ -10976,7 +10976,6 @@ else
   REFERENCEPATH=doc/5.reference/Gem
 fi
 
-#AC_CHECK_HEADER(s_stuff.h)
 for ac_header in s_stuff.h
 do :
   ac_fn_cxx_check_header_compile "$LINENO" "s_stuff.h" "ac_cv_header_s_stuff_h" "#ifdef HAVE_M_PD_H
