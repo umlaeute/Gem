@@ -2,6 +2,10 @@
 /* fullscreen: querying via libXxf86vm */
 #undef HAVE_LIBXXF86VM
 
+/* OpenGL Extension Wrangler - library version */
+#undef HAVE_LIBGLEW
+
+
 /* font rendering */
 #undef HAVE_LIBFTGL
 #undef HAVE_FTGL_FTGL_H
