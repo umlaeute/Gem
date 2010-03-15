@@ -44,7 +44,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_read, t_symbol*,A_DEFSYM)
 pix_buffer_read :: pix_buffer_read(t_symbol *s) : 
   m_frame(0.f), m_auto(0.f), m_loop(0),
   m_haveImage(false),
-  m_bindname(NULL)
+  m_bindname(NULL),
+  m_needsupdate(false)
 {
   if ((s)&&(&s_!=s)){
     setMess(s);
@@ -68,7 +69,7 @@ void pix_buffer_read :: setMess(t_symbol*s){
   if (s!=&s_){
     m_bindname = s;
   }
-  update_image();
+  m_needsupdate=true;
 }
 /////////////////////////////////////////////////////////
 // frameMess
@@ -79,7 +80,7 @@ void pix_buffer_read :: frameMess(t_float f){
     error("frame# must not be less than zero (%f)", f);
   }
   m_frame=f;
-  update_image();
+  m_needsupdate=true;
 }
 /////////////////////////////////////////////////////////
 // autoMess
@@ -140,6 +141,7 @@ void pix_buffer_read :: update_image()
       m_pixBlock.newimage = 1;
       m_haveImage=true;
     }
+  m_needsupdate=false;
 }
 
 /////////////////////////////////////////////////////////
@@ -148,6 +150,10 @@ void pix_buffer_read :: update_image()
 /////////////////////////////////////////////////////////
 void pix_buffer_read :: render(GemState*state)
 {
+  if(m_needsupdate)
+    update_image();
+
+
   // if we don't have an image, just return
   if (!m_haveImage) return;
 
