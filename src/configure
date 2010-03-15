@@ -10976,10 +10976,22 @@ else
   REFERENCEPATH=doc/5.reference/Gem
 fi
 
-ac_fn_cxx_check_header_mongrel "$LINENO" "s_stuff.h" "ac_cv_header_s_stuff_h" "$ac_includes_default"
+#AC_CHECK_HEADER(s_stuff.h)
+for ac_header in s_stuff.h
+do :
+  ac_fn_cxx_check_header_compile "$LINENO" "s_stuff.h" "ac_cv_header_s_stuff_h" "#ifdef HAVE_M_PD_H
+# include \"m_pd.h\"
+#endif
+
+"
 if test "x$ac_cv_header_s_stuff_h" = x""yes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_S_STUFF_H 1
+_ACEOF
 
 fi
+
+done
 
 
 
