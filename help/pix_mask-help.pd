@@ -81,7 +81,7 @@
 #X obj 451 198 pix_mask;
 #X text 29 57 Description: mask out a pix;
 #X text 16 75 [pix_mask] uses one pix as a mask against another. Where
-ever the mask has a colored pixel \, the alpha component of the other
+ever the mask has a black pixel \, the alpha component of the other
 image will be set to 0 (transparent).;
 #X text 19 115 Basically \, the luminance-value of the right pix will
 become the alpha-value of the left pix.;

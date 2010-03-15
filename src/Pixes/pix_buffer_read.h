@@ -87,11 +87,12 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   // the name of the buffer we bind to
   t_symbol *m_bindname;
 
- private:
   //////////
   // update pix_buffer & image
+  bool m_needsupdate;
   virtual void update_image();
   
+ private:
   //////////
   // static member functions
   static void setMessCallback  (void*data, t_symbol*s);

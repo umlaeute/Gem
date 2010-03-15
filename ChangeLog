@@ -1,3 +1,25 @@
+2010-03-15 14:06  zmoelnig
+
+	* help/gemframebuffer-help.pd, help/pix_image-help.pd,
+	  help/pix_mask-help.pd: backported documentation bugs from trunk
+	  
+	  fixes #2926260 & #2905446
+
+2010-03-15 13:58  zmoelnig
+
+	* src/Pixes/pix_buffer_read.cpp, src/Pixes/pix_buffer_read.h:
+	  backported bugfix#2963094 from trunk: PixDualObj crashing with
+	  resized images
+
+2010-03-15 12:12  zmoelnig
+
+	* ChangeLog: regenerated ChangeLog for 0.92.3
+
+2010-03-15 12:09  zmoelnig
+
+	* build/win-vs2003/installerCVS.bat, src/Base/GemVersion.h: bumped
+	  to 0.92.3
+
 2010-03-15 10:33  zmoelnig
 
 	* src/configure, src/configure.ac: "--with-pd" no also adds the
