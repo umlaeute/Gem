@@ -379,11 +379,12 @@ fi
 
 dnl LATER check why this doesn't use the --with-pd includes
 dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include
-AC_CHECK_HEADER(s_stuff.h,,,[
-#define PD
-#include "m_pd.h" 
+AC_CHECK_HEADERS([s_stuff.h], [], [],
+[#ifdef HAVE_M_PD_H
+# define PD
+# include "m_pd.h"
+#endif
 ])
-
 
 # using pix_videoOS rather than pix_video
 AC_ARG_WITH([video], AS_HELP_STRING([--with-video=Darwin|DS|NT],[use OS-specific "pix_video"]))
