@@ -25,6 +25,10 @@
 #undef HAVE_LIBV4L1
 #undef HAVE_LIBV4L2
 
+/* OpenGL Extension Wrangler - library version */
+#undef HAVE_LIBGLEW
+
+
 /* image analysis */
 #undef HAVE_ARTOOLKIT
 

@@ -137,6 +137,8 @@ if test "x$gem_check_ldflags_success" = "xyes"; then
   have_glu="yes"
 fi
 
+GEM_CHECK_LIB(glew, GLEW, glewInit,,,,[OpenGL Extension Wrangler library])
+
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
 AC_CHECK_LIB(stdc++,main)
 
