@@ -5,7 +5,7 @@
 
 #define GEM_VERSION_MAJOR 0
 #define GEM_VERSION_MINOR 92
-#define GEM_VERSION_BUGFIX 2
+#define GEM_VERSION_BUGFIX 3
 #define GEM_VERSION_CODENAME 
 
 class GEM_EXTERN GemVersion {
