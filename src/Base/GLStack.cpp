@@ -17,7 +17,7 @@
 /////////////////////////////////////////////////////////
 
 #include "GLStack.h"
-#include "Helpers/RTE.h"
+#include "Gem/RTE.h"
 
 using namespace gem;
 
