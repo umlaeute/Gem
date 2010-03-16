@@ -1,7 +1,3 @@
-#include "Base/config.h"
-#ifdef HAVE_LIBGLEW
-# include <GL/wglew.h>
-#else
 /*
 ** The OpenGL Extension Wrangler Library
 ** Copyright (C) 2002-2008, Milan Ikits <milan ikits[]ieee org>
@@ -1167,4 +1163,3 @@ GLEWAPI GLboolean wglewGetExtension (const char* name);
 #undef GLEWAPI
 
 #endif /* __wglew_h__ */
-#endif /* HAVE_LIBGLEW */

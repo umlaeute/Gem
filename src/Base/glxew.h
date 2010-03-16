@@ -1,7 +1,3 @@
-#include "Base/config.h"
-#ifdef HAVE_LIBGLEW
-# include <GL/glxew.h>
-#else
 /*
 ** The OpenGL Extension Wrangler Library
 ** Copyright (C) 2002-2008, Milan Ikits <milan ikits[]ieee org>
@@ -1400,4 +1396,3 @@ extern GLboolean glxewGetExtension (const char* name);
 #endif
 
 #endif /* __glxew_h__ */
-#endif /* HAVE_LIBGLEW */
