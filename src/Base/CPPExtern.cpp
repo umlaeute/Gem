@@ -47,7 +47,11 @@ CPPExtern :: CPPExtern()
     m_endpost(true)
 {
     m_canvas = canvas_getcurrent();
-    m_objectname=gensym(m_holdname);
+    if(m_holdname) {
+      m_objectname=gensym(m_holdname);
+    } else {
+      m_objectname=gensym("unknown Gem object");
+    }
 }
 
 /////////////////////////////////////////////////////////
