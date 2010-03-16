@@ -18,8 +18,8 @@
 #include "Base/GemExportDef.h"
 #include "Base/GemGL.h"
 
-#include "Helpers/RTE.h"
-#include "Helpers/any.h"
+#include "Gem/RTE.h"
+#include "Gem/any.h"
 
 struct pixBlock;
 class TexCoord;
