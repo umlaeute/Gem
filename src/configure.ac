@@ -162,7 +162,9 @@ if test "x$with_ImageMagick" = "x"; then
  with_ImageMagick="$with_imagemagick"
 fi
 
-GEM_CHECK_LIB(ImageMagick++, Magick++, main,AC_DEFINE(HAVE_LIBMAGICKPLUSPLUS),,,[image loader])
+GEM_CHECK_LIB(ImageMagick++, Magick++, main,
+	AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [], [image loading/saving with ImageMagick++]),
+	,,[image loader])
 if test "x${have_ImageMagick}" = "xyes"
 then
  with_tiff=no
@@ -212,7 +214,7 @@ GEM_ARG_WITH(v4l, [video input], [force])
 if test "x$with_v4l" != "xno"; then
   AC_CHECK_HEADER(linux/videodev.h,
                   [
-                    AC_DEFINE(HAVE_VIDEO4LINUX)
+                    AC_DEFINE([HAVE_VIDEO4LINUX], [], [video capturing using v4l])
                     have_v4l="yes"
                   ],[have_v4l="no"])
 
@@ -261,7 +263,7 @@ if test "x$with_default_font" != "x" && \
    test "x$with_default_font" != "xno" &&
    test "x$with_default_font" != "xyes"; then
 
-  AC_DEFINE_UNQUOTED(GEM_DEFAULT_FONT, "${with_default_font}")
+  AC_DEFINE_UNQUOTED([GEM_DEFAULT_FONT], "${with_default_font}", [default font for text rendering])
   AC_MSG_RESULT([using "${with_default_font}" as default font])
 fi
 
@@ -272,7 +274,7 @@ GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)
 
 dnl Checking for `pthread_create' function in -pthread
 AC_CHECK_LIB(pthread, pthread_create,[
-                                      AC_DEFINE(HAVE_PTHREADS)
+                                      AC_DEFINE([HAVE_PTHREADS], [], [multithreading using pthreads])
                                       LIBS="$LIBS -lpthread"],)
 
 
@@ -310,7 +312,7 @@ gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $PKG_LIBS"
 AC_MSG_CHECKING(for lqt_open_write)
 AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])], 
-        AC_DEFINE(HAVE_LQT_OPEN_WRITE)
+        AC_DEFINE([HAVE_LQT_OPEN_WRITE], [], [film recording using quicktime4linux])
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
@@ -406,7 +408,7 @@ elif test "x$with_video" = "xyes"; then
 elif test "x$with_video" = "xno"; then
  :
 else
- AC_DEFINE_UNQUOTED([GEM_VIDEOBACKEND], [GEM_VIDEOBACKEND_$with_video])
+ AC_DEFINE_UNQUOTED([GEM_VIDEOBACKEND], [GEM_VIDEOBACKEND_$with_video], [backend for deprecated video-capture objects])
  AC_MSG_RESULT([using deprecated video-loader $with_video])
 fi
 
@@ -420,7 +422,7 @@ elif test "x$with_film" = "xyes"; then
 elif test "x$with_film" = "xno"; then
  :
 else
- AC_DEFINE_UNQUOTED([GEM_FILMBACKEND], [GEM_FILMBACKEND_$with_film])
+ AC_DEFINE_UNQUOTED([GEM_FILMBACKEND], [GEM_FILMBACKEND_$with_film], [backend for deprecated film-decoding objects])
  AC_MSG_RESULT([using deprecated film-loader $with_film])
 fi
 
