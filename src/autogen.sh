@@ -44,4 +44,4 @@ else
 fi
 
 echo "if everything above succeeded, you can now run './configure'"
-echo "for options see './configure --help'"
+echo "for options see './configure --help=recursive'"
