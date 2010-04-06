@@ -1,7 +1,7 @@
-#N canvas 45 25 871 629 12;
+#N canvas 773 395 871 629 12;
 #X text 50 557 NOTE: not all messages might currently work on your
 operating-system.;
-#N canvas 54 138 989 623 Linux 0;
+#N canvas 90 123 1159 623 Linux 0;
 #X text 59 70 the udev system from kernel 2.6 allows special naming
 of devices.;
 #X text 60 105 Thus the standards in the source cannot be depended
@@ -10,35 +10,45 @@ upon.;
 #X text 56 150 If you know the device name \, then use the message
 ;
 #X text 57 205 Then use the following to turn on IEEE1394;
-#X msg 136 233 driver 1;
 #X text 52 292 If you do ls -l /dev/dv1394/0 then you will see something
 like;
-#X text 271 326 2007-08-22 18:48 /dev/dv1394/0;
-#X text 52 325 crw-rw---- 1 root video 171 \, 32;
-#X text 54 346 Which means that /dev/dv1394 is a character device (c
-at start) with major number 171 \, so it is an ieee1394 device.;
-#X text 53 380 This should help you find the device and make it work.
+#X text 351 346 2007-08-22 18:48 /dev/dv1394/0;
+#X text 52 345 crw-rw---- 1 root video 171 \, 32;
+#X text 53 410 This should help you find the device and make it work.
 ;
-#X text 55 435 Note that the major number may change in the future
+#X text 55 465 Note that the major number may change in the future
 (udev allows arbitrary major numbers) so this might get harder.;
-#X text 383 506 Added 22 August 2007;
+#X text 383 536 Added 22 August 2007;
 #X text 61 31 Getting DV camera (ieee1394) working on (debian) linux
 ;
-#X text 59 403 Note /dev/raw1394 is NOT a usable device here!;
-#X text 588 103 driver 0 is video4linux;
-#X text 588 117 driver 1 is ieee1394;
-#X text 587 147 device N should enumerate through various cameras;
-#X text 581 72 quality message only seems to have 1 and 2 as values
-;
-#X text 623 32 notes on messages under Linux;
-#X text 592 190 enumerate does not work;
-#X text 595 210 dialog does not work;
-#X text 593 229 dimen does not work;
+#X text 59 433 Note /dev/raw1394 is NOT a usable device here!;
+#X text 663 32 notes on messages under Linux;
 #X text 52 257 If you do not know the name of your camera device \,
 then the following might help you find it in the /dev heirarchy.;
-#X text 97 337 comment;
+#X text 628 103 "driver 0" is video4linux;
+#X text 627 147 "device N" should enumerate through various cameras
+;
+#X text 621 72 "quality" message only seems to have 1 and 2 as values
+;
+#X text 632 190 "enumerate" does not work;
+#X text 635 210 "dialog" does not work;
+#X text 633 229 "dimen" might not work;
+#X msg 136 233 driver dv;
+#X text 628 117 "driver 1" is ieee1394 \, (but better use "driver dv")
+;
+#X text 743 351 Note on the new JUJU stack;
+#X text 626 392 with kernels >=2.6.30 (or so) \, a new IEEE1394 stack
+named Juju is taking over. Gem has not been ported to the new stack
+yet. If you want to use your DV camera on a new system \, either downgrade
+your kernel OR make sure that the correct stack is loaded (you will
+probably have to recompile your kernel in order to get support for
+the old stack). The best option would be to implement support for Juju
+and submit it via http://sf.net/projects/pd-gem;
+#X text 54 376 Which means that /dev/dv1394/0 is a character device
+(c at start) with major number 171 \, so it is an ieee1394 device.
+;
 #X restore 533 564 pd Linux Notes;
-#N canvas 0 0 450 300 SGI 0;
+#N canvas 0 0 693 278 SGI 0;
 #X text 24 61 SGI only:;
 #X text 50 84 swap 1/0 : swap upside down;
 #X text 49 101 offset x y : set the x y offset of the captured frame
@@ -145,9 +155,6 @@ for the image (does not work on all capture devices);
 #X text 15 370 Inlet 1: quality <number>: compression quality;
 #X text 14 419 Inlet 1: enumerate: list all devices to the console
 ;
-#X text 13 66 [pix_video] opens a wide array of camera \, from USB
-to FireWire to capture cards \, as long as the camera is supported
-by your operating system.;
 #X text 17 245 Inlet 1: driver <number>: switch between different drivers
 \, e.g. v4l \, ieee1394 \, etc.;
 #X text 15 388 Inlet 1: dialog: open a dialog to configure the input
@@ -155,6 +162,11 @@ device (Mac OS X and Windows);
 #X text 16 276 Inlet 1: driver <symbol>: switch between different drivers
 \, e.g. v4l \, v4l2 \, dv...;
 #X msg 649 334 driver dv;
+#X text 13 66 [pix_video] opens a wide array of camera \, USB to FireWire
+to capture cards \, as long as the camera is supported by your operating
+system.;
+#X text 48 595 NOTE: usually you cannot use a camera more than once
+at the same time!;
 #X connect 20 0 21 0;
 #X connect 21 0 20 0;
 #X connect 24 0 32 0;
@@ -170,4 +182,4 @@ device (Mac OS X and Windows);
 #X connect 35 0 32 0;
 #X connect 40 0 32 0;
 #X connect 41 0 40 0;
-#X connect 49 0 32 0;
+#X connect 48 0 32 0;
