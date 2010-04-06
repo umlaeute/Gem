@@ -1,13 +1,14 @@
-default: all
+default: 
 
-TARGETS=pix_opencv
-.PHONY: $(TARGETS)
+TARGETS=pix_opencv pix_artoolkit
+.PHONY: $(TARGETS) default all
 
 GEM_DIR=$(shell pwd)/../..
 
 
-all: $(TARGETS)
+default: $(TARGETS)
 
 
-pix_opencv:
+$(TARGETS):
 	if test -d $@; then make -k -C $@ GEM_DIR=$(GEM_DIR); fi
+
