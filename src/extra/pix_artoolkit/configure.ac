@@ -32,8 +32,10 @@ fi
 #check for "-bundle -undefined dynamic_lookup"
 
 
+GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)
 AC_CHECK_HEADERS([AR/ar.h])
 AC_CHECK_LIB(AR, arInitCparam)
+
 
 
 AC_CONFIG_HEADER([config.h])
