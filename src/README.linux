@@ -4,7 +4,7 @@ Build instructions for GEM Linux
 VERY SHORT INSTRUCTION:
 -----------------------
 
-#> autoconf && ./configure && make
+#> ./autogen.sh && ./configure && make
 
 if you don't need any special flags for configure, you could even try just:
 #> make
@@ -87,7 +87,7 @@ Building Gem should work in 4 steps
 
 followed by a
 
-#.../Gem/src> autoconf
+#.../Gem/src> ./autogen.sh
 
 followed by a
 
@@ -140,7 +140,7 @@ Advanced:
 
 layout:
 
-src/acinclude.m4-(aclocal)->src/aclocal.m4-+
+src/m4/*.m4-(aclocal -I m4)->src/aclocal.m4-+
                                            |-(autoconf)-> src/configure
 src/configure.ac---------------------------+
 
@@ -149,6 +149,7 @@ src/Make.config.in ---------------(./configure)-->src/Make.config
 src/Base/config${KERN}.h.in --(./configure)-->src/Base/config${KERN}.h
 
 with ${KERN} being $(uname -s) (Linux, Darwin,...)
+autoconf and aclocal are called by autogen.sh
 
 
 src/Makefile
