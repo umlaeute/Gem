@@ -16,8 +16,8 @@ test -z "$AUTOCONF" && AUTOCONF=autoconf
 
 if test -n "$MY_ALDIRS"; then
  for d in $MY_ALDIRS ; do
-    echo "(cd $d ; $ACLOCAL)"
-    (cd $d ; $ACLOCAL)
+    echo "(cd $d ; $ACLOCAL -I m4)"
+    (cd $d ; $ACLOCAL -I m4)
  done
 fi
 

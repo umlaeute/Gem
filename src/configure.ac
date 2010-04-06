@@ -10,6 +10,8 @@ AC_LANG(C++)
 ARCH=$(uname -m)
 KERN=$(uname -s)
 
+AC_CONFIG_MACRO_DIR(m4)
+
 AC_CONFIG_HEADER([Base/config.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
 
