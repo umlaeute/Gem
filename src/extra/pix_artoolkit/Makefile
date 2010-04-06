@@ -23,8 +23,8 @@ clean:
 distro: clean all
 	rm *.o
 
-config.h: config.h.in aclocal.m4
-	./configure
+#config.h: config.h.in aclocal.m4
+#	./configure
 
-Make.config: Make.config.in aclocal.m4
-	./configure
+#Make.config: Make.config.in aclocal.m4
+#	./configure
