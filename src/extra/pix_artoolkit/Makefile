@@ -11,10 +11,10 @@ SOURCES = pix_artoolkit.cpp
 all: $(SOURCES:.cpp=.$(EXTENSION))
 
 %.$(EXTENSION): %.o
-	$(CXX) $(LDFLAGS) $(LIBS) -o $*.$(EXTENSION) $*.o $(LIBS)
+	$(CXX) $(LDFLAGS) $(LIBS) -o $@ $^ $(LIBS)
 
-.cpp.o:
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $(DEFS) -o $*.o -c $*.cpp
+%.o: %.cpp config.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $(DEFS) -o $@ -c $<
 
 clean:
 	rm -f pix_*.o
