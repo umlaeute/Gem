@@ -8,7 +8,8 @@ BUILDDIR = ..
 #OBJECTS = $(GEM_TARGETS:%=%/*.o)
 OBJECTS = $(OBJDIR)*.o
 
-.PHONY: default all subdirs $(GEM_TARGETS) clean distclean install installdocs installabs strip config Gem
+.PHONY: default all subdirs clean distclean install installdocs installabs strip config \
+	$(GEM_TARGETS) Gem extra 
 
 all: subdirs strip
 
@@ -28,6 +29,9 @@ subdirs: Objects $(GEM_TARGETS)
 
 $(GEM_TARGETS):
 	${MAKE} -C $@ 
+
+extra:
+	${MAKE} -k -C extra
 
 clean:
 	@for d in ${GEM_TARGETS}; do \
