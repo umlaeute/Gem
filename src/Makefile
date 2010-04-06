@@ -1,4 +1,4 @@
-default: Gem
+default: all
 SRCDIR=.
 include Make.include
 
@@ -11,7 +11,7 @@ OBJECTS = $(OBJDIR)*.o
 .PHONY: default all subdirs clean distclean install installdocs installabs strip config \
 	$(GEM_TARGETS) Gem extra 
 
-all: subdirs strip
+all: Gem.$(EXT) extra
 
 Gem.$(EXT): subdirs 
 	$(CXXLINK) $(GEM_EXTRA_LDFLAGS)  $(GEM_ARCH_LDFLAGS) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
