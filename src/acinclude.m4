@@ -1036,11 +1036,11 @@ AC_DEFUN([GEM_CHECK_LIB],
                               [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
 
 AC_ARG_WITH([Name],
-             AC_HELP_STRING([--without-[]Name], [disable []Name ($7)]))
+             AC_HELP_STRING([--without-[]Name], [disable Name ($7)]))
 AC_ARG_WITH([]Name-includes,
-             AC_HELP_STRING([--with-[]Name-includes=/path/to/[]Name/include/], [include path for []Name]))
+             AC_HELP_STRING([--with-[]Name-includes=/path/to/[]Name/include/], [include path for Name]))
 AC_ARG_WITH([]Name-libs,
-             AC_HELP_STRING([--with-[]Name-libs=/path/to/[]Name/lib/], [library path for []Name]))
+             AC_HELP_STRING([--with-[]Name-libs=/path/to/[]Name/lib/], [library path for Name]))
 
   if test "x$with_ALL" = "xyes" && test "x$with_[]Name" = "x"; then with_[]Name="yes"; fi 
   if test "x$with_ALL" = "xno"  && test "x$with_[]Name" = "x"; then with_[]Name="no"; fi
