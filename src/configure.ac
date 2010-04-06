@@ -3,7 +3,7 @@
 
 
 AC_PREREQ(2.57)
-AC_INIT([FULL-PACKAGE-NAME],[VERSION],[BUG-REPORT-ADDRESS])
+AC_INIT([Gem],[0.92],[zmoelnig@iem.at])
 
 AC_LANG(C++)
 
@@ -14,6 +14,7 @@ AC_CONFIG_MACRO_DIR(m4)
 
 AC_CONFIG_HEADER([Base/config.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
+AC_CONFIG_SUBDIRS([extra])
 
 AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
@@ -271,8 +272,6 @@ fi
 
 
 
-
-GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)
 
 dnl Checking for `pthread_create' function in -pthread
 AC_CHECK_LIB(pthread, pthread_create,[
