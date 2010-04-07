@@ -17,11 +17,4 @@ fi
 #  AC_CONFIG_SUBDIRS([pix_opencv])
 #fi
 
-## gemdeskotheque
-if test -d "$srcdir/gemdeskotheque"; then
-  AC_CONFIG_SUBDIRS([gemdeskotheque])
-fi
-
-
-
 AC_OUTPUT
