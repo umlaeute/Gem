@@ -20,8 +20,6 @@ namespace gem {
   private:
     class Pimpl;
     Pimpl*m_pimpl;
-
-    typedef int id_t;
   };
 
   template<class Class, class IdClass>
@@ -44,8 +42,7 @@ namespace gem {
 
 
   private:
-    typedef std::vector<ctor_t*> ctors_t;
-    typedef std::map<IdClass, ctors_t*> ctormap_t;
+    typedef std::map<IdClass, ctor_t*> ctormap_t;
     ctormap_t m_constructor;
 
     static PluginFactory<Class, IdClass>*s_factory;
@@ -63,7 +60,7 @@ namespace gem {
     template<class ChildClass, class BaseClass>
       static BaseClass* allocator(void);
 
-    template<class ChildClass, class BaseClass, class IdClass=int>
+    template<class ChildClass, class BaseClass, class IdClass>
       struct registrar {
         registrar(IdClass id);
       };

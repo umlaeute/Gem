@@ -37,46 +37,24 @@ template<class Class, class IdClass>
 
 template<class Class, class IdClass>
   void  PluginFactory<Class, IdClass>::doRegisterClass(IdClass id, PluginFactory<Class, IdClass>::ctor_t*c) {
-  typename std::map<IdClass, PluginFactory<Class, IdClass>::ctors_t*>::iterator it = m_constructor.find(id);
-  PluginFactory<Class, IdClass>::ctors_t*ctors=NULL;
+  typename std::map<IdClass, PluginFactory<Class, IdClass>::ctor_t*>::iterator it = m_constructor.find(id);
+  PluginFactory<Class, IdClass>::ctor_t*ctor=NULL;
   if(it != m_constructor.end()) {
     // we already have an entry for this id!
-    ctors=it->second;
-  } 
-  
-  if(NULL==ctors) {
-    // no ctors in the map-entry (or no entry at all)
-    ctors=new std::vector<ctor_t*>;
-    m_constructor[id]=ctors;
+    if(it->second == c)return;
+    if(NULL != it->second) {
+      std::cout << "refusing to register constructor " << (void*)c << " again for id " << id << std::endl;
+      return;
+    }
   }
-  
-  // find out whether the given ctor is in the ctors-list
-  typename std::vector<ctor_t*>::iterator vit=std::find(ctors->begin(), ctors->end(), c);
-  if(vit != ctors->end()) {
-    // found: this ctor has already been registered
-    std::cout << "refusing to register constructor " << (void*)c << " again for id " << id << std::endl;
-  } else {
-    // not found: save this ctor
-    ctors->push_back(c);
-  }
+  m_constructor[id]=c;
 }
 
 template<class Class, class IdClass>
   Class*PluginFactory<Class, IdClass>::doGetInstance(IdClass id) {
   std::cout << "getInstance("<<id<<")" << std::endl;
-  PluginFactory<Class, IdClass>::ctors_t*ctors=NULL;
-  if(ctors=m_constructor[id]) {
-    // iterate through all the ctors until on works
-    typename std::vector<PluginFactory<Class, IdClass>::ctor_t*>::iterator it;
-    int i=0;
-    for (it = ctors->begin(); it != ctors->end(); ++it) {
-      PluginFactory<Class, IdClass>::ctor_t*ctor=*it;
-      Class*c=NULL;
-      std::cout << "trying ctor#"<<i<<" for class:"<<id<<std::endl;
-      i++;
-      if(ctor)return ctor;
-    }
-  }
+  PluginFactory<Class, IdClass>::ctor_t*ctor=m_constructor[id];
+  if(ctor)return ctor();
   
   std::cout << " (no valid ctor)" << std::endl;
   return NULL;
