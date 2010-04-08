@@ -181,7 +181,10 @@ pix_film :: pix_film(t_symbol *filename) :
 #define DEBUG_HANDLE verbose(2, "handle %d\t%X", m_numHandles, m_handles[m_numHandles])
 
   m_handle=gem::PluginFactory<film, const char*>::getInstance("DS");      if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-  m_handle=gem::PluginFactory<film, const char*>::getInstance("AVI");     if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
+
+  if(NULL==m_handle)
+    m_handle=gem::PluginFactory<film, const char*>::getInstance("AVI");     if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
+
   m_handle=gem::PluginFactory<film, const char*>::getInstance("gmerlin"); if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
   m_handle=gem::PluginFactory<film, const char*>::getInstance("QT");      if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
   m_handle=gem::PluginFactory<film, const char*>::getInstance("QT4L");    if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
