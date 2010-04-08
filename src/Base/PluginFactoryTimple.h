@@ -43,7 +43,7 @@ template<class Class, class IdClass>
     // we already have an entry for this id!
     if(it->second == c)return;
     if(NULL != it->second) {
-      std::cout << "refusing to register constructor " << (void*)c << " again for id " << id << std::endl;
+      std::cerr << "refusing to register constructor " << (void*)c << " again for id " << id << std::endl;
       return;
     }
   }
@@ -52,11 +52,9 @@ template<class Class, class IdClass>
 
 template<class Class, class IdClass>
   Class*PluginFactory<Class, IdClass>::doGetInstance(IdClass id) {
-  std::cout << "getInstance("<<id<<")" << std::endl;
   PluginFactory<Class, IdClass>::ctor_t*ctor=m_constructor[id];
   if(ctor)return ctor();
-  
-  std::cout << " (no valid ctor)" << std::endl;
+    std::cerr << " (no valid ctor for '" << id << "')" << std::endl;
   return NULL;
 }
 
@@ -64,7 +62,7 @@ template<class Class, class IdClass>
 void PluginFactory<Class, IdClass>::registerClass(IdClass id, PluginFactory<Class, IdClass>::ctor_t*c) {
   PluginFactory<Class, IdClass>*fac=getPluginFactory();
   if(NULL==fac) {
-    std::cout << "unable to get a factory!" << std::endl;
+    std::cerr << "unable to get a factory!" << std::endl;
   }
   fac->doRegisterClass(id, c);
 }
@@ -99,3 +97,4 @@ namespace PluginFactoryRegistrar {
     PluginFactory<BaseClass, IdClass>::registerClass(id, allocator<ChildClass, BaseClass>);
   }
 };
+
