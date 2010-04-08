@@ -21,7 +21,7 @@ LOG
 
 namespace gem {
   
-  namespace file {
+  namespace files {
 
     std::vector<std::string>getFilenameListing(std::string pattern);
 
