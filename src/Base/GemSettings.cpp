@@ -113,8 +113,10 @@ class GemSettingsData {
 
     if(dirname) {
       r=binbuf_read(bb, (char*)filename, expandEnv(gensym(dirname), true)->s_name, 1);
+      if(0==r)verbose(1, "found Gem-settings '%s' in '%s'", filename, dirname);
     } else {
       r=binbuf_read_via_path(bb, (char*)filename, (char*)".", 1);
+      if(0==r)verbose(1, "found Gem-settings '%s'", filename);
     }
 
     if(r){
@@ -186,13 +188,13 @@ GemSettingsData::GemSettingsData(void)
   t_atom*a=get(gensym("settings.file"));
   if(a) {
     t_symbol*s=atom_getsymbol(a);
-    open(expandEnv(s, true)->s_name);
+    open(expandEnv(s, true)->s_name, ".");
   } else {
     while(s_configdir[i]) {
       open(GEM_SETTINGS_FILE, s_configdir[i]);
       i++;
     }
-    open(GEM_SETTINGS_FILE);
+    open(GEM_SETTINGS_FILE, ".");
   }
 
   /* legacy settings via environmental variables */
