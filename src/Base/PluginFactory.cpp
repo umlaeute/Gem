@@ -1,6 +1,6 @@
 #include "PluginFactory.h"
 
-class BasePluginFactory::Pimpl {
+class gem::BasePluginFactory::Pimpl {
   friend class BasePluginFactory;
   Pimpl(void) {
     
@@ -14,10 +14,10 @@ class BasePluginFactory::Pimpl {
 };
 
 
-BasePluginFactory::BasePluginFactory(void) : m_pimpl(new Pimpl) {
+gem::BasePluginFactory::BasePluginFactory(void) : m_pimpl(new Pimpl) {
 
 }
-BasePluginFactory::~BasePluginFactory(void) {
+gem::BasePluginFactory::~BasePluginFactory(void) {
   delete m_pimpl;  m_pimpl=NULL;
 }
 
