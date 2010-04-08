@@ -17,6 +17,9 @@
 #include <string.h>
 #include "Pixes/filmGMERLIN.h"
 
+#ifdef HAVE_GMERLIN
+REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
+#endif
 
 /////////////////////////////////////////////////////////
 //

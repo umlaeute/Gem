@@ -17,6 +17,7 @@
 #include "filmQT.h"
 
 #ifdef HAVE_QUICKTIME
+REGISTER_FILMFACTORY("QT", filmQT);
 # ifdef __APPLE__
 #  define FILMQT_DEFAULT_PIXELFORMAT k32ARGBPixelFormat
 

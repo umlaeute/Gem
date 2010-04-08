@@ -21,6 +21,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 
+#include "Base/PluginFactory.h"
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -172,5 +174,16 @@ class GEM_EXTERN film
 
   bool m_newfilm;
 };
+
+
+/**
+ * \fn REGISTER_FILMFACTORY(const char *id, Class filmClass)
+ * registers a new class "filmClass" with the film-factory
+ *
+ * \param id a symbolic (const char*) ID for the given class
+ * \param filmClass a class derived from "film"
+ */
+#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, film, const char*> fac_film_ ## TYP (id)
+
 
 #endif	// for header file

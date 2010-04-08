@@ -17,6 +17,7 @@
 #include "Pixes/filmAVIPLAY.h"
 
 #ifdef HAVE_LIBAVIPLAY
+REGISTER_FILMFACTORY("AVIPLAY", filmAVIPLAY);
 # include <unistd.h>
 # include <time.h>
 #endif

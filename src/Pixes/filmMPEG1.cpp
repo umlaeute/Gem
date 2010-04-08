@@ -17,6 +17,10 @@
 #include <string.h>
 #include "Pixes/filmMPEG1.h"
 
+#ifdef HAVE_LIBMPEG
+REGISTER_FILMFACTORY("mpeg1", filmMPEG1);
+#endif
+
 /////////////////////////////////////////////////////////
 //
 // filmMPEG1

@@ -17,6 +17,8 @@
 #include "Pixes/filmDS.h"
 
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
+REGISTER_FILMFACTORY("DS", filmDS);
+
 # include <atlbase.h>
 # include <atlconv.h>
 # include <streams.h>

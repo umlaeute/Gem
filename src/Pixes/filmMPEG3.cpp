@@ -16,6 +16,10 @@
 #include "Base/GemConfig.h"
 #include "Pixes/filmMPEG3.h"
 
+#ifdef HAVE_LIBMPEG3
+REGISTER_FILMFACTORY("mpeg3", filmMPEG3);
+#endif
+
 /* take care of API changes */
 #ifdef MPEG3_MAJOR
 # if MPEG3_MINOR > 6

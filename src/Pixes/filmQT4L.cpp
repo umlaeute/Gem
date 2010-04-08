@@ -19,6 +19,8 @@
 
 #ifdef HAVE_LIBQUICKTIME
 # include <colormodels.h>
+
+REGISTER_FILMFACTORY("QT4L", filmQT4L);
 #endif
 
 /////////////////////////////////////////////////////////

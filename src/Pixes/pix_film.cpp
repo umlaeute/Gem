@@ -22,15 +22,6 @@
 
 #include "Pixes/film.h"
 
-#include "Pixes/filmGMERLIN.h"
-#include "Pixes/filmQT4L.h"
-#include "Pixes/filmAVI.h"
-#include "Pixes/filmDS.h"
-#include "Pixes/filmAVIPLAY.h"
-#include "Pixes/filmMPEG1.h"
-#include "Pixes/filmMPEG3.h"
-#include "Pixes/filmQT.h"
-
 #include "Base/GemState.h"
 
 #include <stdio.h>
@@ -186,7 +177,10 @@ pix_film :: pix_film(t_symbol *filename) :
   while(i--)m_handles[i]=0;
   m_numHandles=0;
 
+
 #define DEBUG_HANDLE verbose(2, "handle %d\t%X", m_numHandles, m_handles[m_numHandles])
+
+#if 0
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 	m_handles[m_numHandles]=new filmDS();      DEBUG_HANDLE; m_numHandles++;
 #else
@@ -198,6 +192,21 @@ pix_film :: pix_film(t_symbol *filename) :
   m_handles[m_numHandles]=new filmMPEG3();    DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmAVIPLAY();  DEBUG_HANDLE; m_numHandles++;
   m_handles[m_numHandles]=new filmMPEG1();    DEBUG_HANDLE; m_numHandles++;
+
+#else
+
+  m_handles[m_numHandles]=gem::PluginFactory<film, const char*>::getInstance("DS"); DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=gem::PluginFactory<film, const char*>::getInstance("AVI"); DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=gem::PluginFactory<film, const char*>::getInstance("gmerlin"); DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=gem::PluginFactory<film, const char*>::getInstance("QT"); DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=gem::PluginFactory<film, const char*>::getInstance("QT4L"); DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=gem::PluginFactory<film, const char*>::getInstance("MPEG3"); DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=gem::PluginFactory<film, const char*>::getInstance("AVIPLAY"); DEBUG_HANDLE; m_numHandles++;
+  m_handles[m_numHandles]=gem::PluginFactory<film, const char*>::getInstance("MPEG1"); DEBUG_HANDLE; m_numHandles++;
+
+#endif
+
+
 
   //openMess(filename);
 }
