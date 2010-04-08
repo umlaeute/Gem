@@ -104,7 +104,7 @@
  ***************************************/
 
 
-#if 0
+#if 1
 # define debug
 #else
 # define debug post
@@ -172,30 +172,21 @@ pix_film :: pix_film(t_symbol *filename) :
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
   
-  m_handle=0;
-  int i=MAX_FILM_HANDLES;
-  while(i--)m_handles[i]=0;
-  m_numHandles=0;
-
-
-#define DEBUG_HANDLE verbose(2, "handle %d\t%X", m_numHandles, m_handles[m_numHandles])
-
-  m_handle=gem::PluginFactory<film, const char*>::getInstance("DS");      if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-
-  if(NULL==m_handle)
-    m_handle=gem::PluginFactory<film, const char*>::getInstance("AVI");     if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-
-  m_handle=gem::PluginFactory<film, const char*>::getInstance("gmerlin"); if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-  m_handle=gem::PluginFactory<film, const char*>::getInstance("QT");      if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-  m_handle=gem::PluginFactory<film, const char*>::getInstance("QT4L");    if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-  m_handle=gem::PluginFactory<film, const char*>::getInstance("MPEG3");   if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-  m_handle=gem::PluginFactory<film, const char*>::getInstance("AVIPLAY"); if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-  m_handle=gem::PluginFactory<film, const char*>::getInstance("MPEG1");   if(m_handle){ m_handles[m_numHandles]=m_handle; DEBUG_HANDLE; m_numHandles++; }
-
   m_handle=NULL;
 
+  std::vector<std::string>available_ids=gem::PluginFactory<film, std::string>::getIDs();
+  if(!addHandle(available_ids, "DS"))
+    addHandle(available_ids, "AVI");
 
+  addHandle(available_ids, "gmerlin");
+  addHandle(available_ids, "QT");
+  addHandle(available_ids, "QT4L");
+  addHandle(available_ids, "MPEG3");
+  addHandle(available_ids, "AVIPLAY");
+  addHandle(available_ids, "MPEG1");
 
+  // the rest
+  addHandle(available_ids);
   //openMess(filename);
 }
 
@@ -207,7 +198,55 @@ pix_film :: ~pix_film()
 {
   // Clean up the movie
   closeMess();
+
+  int i=0;
+  for(i=0; i<m_handles.size(); i++) {
+    delete m_handles[i];
+    m_handles[i]=NULL;
+  }
 }
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
+{
+  int i=0;
+  int count=0;
+
+
+  std::vector<std::string>id;
+  if(!ID.empty()) {
+    // if requested 'cid' is in 'available' add it to the list of 'id's
+    if(std::find(available.begin(), available.end(), ID)!=available.end()) {
+      id.push_back(ID);
+    } else {
+      // request for an unavailable ID
+      return false;
+    }
+  } else {
+    // no 'ID' given: add all available IDs
+    id=available;
+  }
+
+  for(i=0; i<id.size(); i++) {
+    std::string key=id[i];
+    if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
+      // not yet added, do so now!
+        film         *handle=gem::PluginFactory<film, std::string>::getInstance(key); 
+        if(NULL==handle)break;
+        m_ids.push_back(key);
+        m_handles.push_back(handle);
+        count++;
+        verbose(2, "%d :: handle#%d '%s' @ 0x%x", i, m_handles.size()-1, key.c_str(), handle);
+    }
+  }
+
+  return (count>0);
+}
+
+
 
 /////////////////////////////////////////////////////////
 // closeMess
@@ -238,7 +277,7 @@ void pix_film :: closeMess(void){
 #endif
 
   // Clean up any open files
-  int i=MAX_FILM_HANDLES;
+  int i=m_handles.size();
   debug("closing %d handles", i);
   while(i--){
     debug("close %d", i);
@@ -269,24 +308,25 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   else buf=filename->s_name;
   m_handle=0;
 
-  debug("opening %s with %x of %x[%d]", buf, m_handle, m_handles, m_numHandles);
-
   if (format==0)format=m_format;
   if(codec>=0){
-    codec=codec%m_numHandles;
+    codec=codec%m_handles.size();
     if (m_handles[codec] && m_handles[codec]->open(buf, format ))
       m_handle = m_handles[codec];
   }
-  if(!m_handle && m_handles){
-    int i=-1;
+  debug("handle=%x of %d", m_handle, m_handles.size());
+  if(!m_handle && m_handles.size()>0){
+    int i=0;
     post("opening %s with format %X", buf, format);
-    while(i++<m_numHandles){
-      debug("trying handle %d: %X", i, m_handles[i]);
+    while(i<m_handles.size()){
+      debug("trying handle %d: %x", i, m_handles[i]);
       if (m_handles[i] && m_handles[i]->open(buf, format ))      {
+        debug("success", i, m_handles[i]);
         m_handle = m_handles[i];
         break;
       }
       post(" ... ");
+      i++;
     }
   }
 

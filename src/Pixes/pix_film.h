@@ -17,13 +17,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_PIX_FILM_H_
 #include "Base/GemConfig.h"
 
-#define MAX_FILM_HANDLES 8
-
-#define GEM_MOVIE_NONE 0
-#define GEM_MOVIE_AVI  1
-#define GEM_MOVIE_MPG  2
-#define GEM_MOVIE_MOV  3
-
 #include <string.h>
 #include <stdio.h>
 
@@ -118,10 +111,10 @@ class GEM_EXTERN pix_film : public GemBase
   int           m_reqTrack;
   int           m_curTrack;
 
-
-  film         *m_handles[MAX_FILM_HANDLES];
+  std::vector<film*>m_handles;
+  std::vector<std::string>m_ids;
   film         *m_handle;
-  int           m_numHandles;
+  virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
 
   //////////
   // a outlet for information like #frames and "reached end"

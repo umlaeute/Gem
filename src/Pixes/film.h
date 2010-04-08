@@ -183,7 +183,7 @@ class GEM_EXTERN film
  * \param id a symbolic (const char*) ID for the given class
  * \param filmClass a class derived from "film"
  */
-#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, film, const char*> fac_film_ ## TYP (id)
+#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, film, std::string> fac_film_ ## TYP (id)
 
 
 #endif	// for header file
