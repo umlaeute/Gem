@@ -21,5 +21,9 @@ gem::BasePluginFactory::~BasePluginFactory(void) {
   delete m_pimpl;  m_pimpl=NULL;
 }
 
+int gem::BasePluginFactory::doLoadPlugins(const char*basename, const char*path) {
+  return 0;
+}
+
 
 

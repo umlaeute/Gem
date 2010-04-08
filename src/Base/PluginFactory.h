@@ -13,8 +13,10 @@
 namespace gem {
 
   class GEM_EXTERN BasePluginFactory {
+  public:
+    int doLoadPlugins(const char*basename, const char*path=NULL);
   protected:
-    BasePluginFactory(void);
+    BasePluginFactory();
     virtual ~BasePluginFactory(void);
 
   private:
@@ -40,16 +42,26 @@ namespace gem {
      */
     static Class*getInstance(IdClass id);
 
+    /**
+     * get a list of all IDs currently registered with this factory
+     */
+    static std::vector<IdClass>getIDs(void);
+
+    /**
+     * load more plugins
+     */
+    static int loadPlugins(const char*basename, const char*path=NULL);
 
   private:
     typedef std::map<IdClass, ctor_t*> ctormap_t;
     ctormap_t m_constructor;
 
     static PluginFactory<Class, IdClass>*s_factory;
-    static PluginFactory<Class, IdClass>*getPluginFactory(void);
+    static PluginFactory<Class, IdClass>*getPluginFactory();
 
     void doRegisterClass(IdClass id, ctor_t*c);
     Class*doGetInstance(IdClass id);
+    std::vector<IdClass>doGetIDs(void);
   };
 
 
@@ -57,12 +69,22 @@ namespace gem {
 
 
   namespace PluginFactoryRegistrar {
+    /**
+     * creates a new ChildClass and returns it as a (pointer to) an instance of BaseClass
+     */
     template<class ChildClass, class BaseClass>
       static BaseClass* allocator(void);
 
+    /**
+     * registers a ChildClass with a certain ID in the BaseClass factory
+     *
+     * example:
+     *  static gem::PluginFactoryRegistrar<Child, Base, const char*> basefac_childreg("childID"); // register Child as 'childID'
+     *  Base*instance=gem::PluginFactory<Base>::getInstance("childID"); // returns an instance of Child
+     */
     template<class ChildClass, class BaseClass, class IdClass>
       struct registrar {
-        registrar(IdClass id);
+        registrar(IdClass ID);
       };
   };
 

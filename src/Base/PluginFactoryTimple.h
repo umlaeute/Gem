@@ -53,9 +53,11 @@ template<class Class, class IdClass>
 template<class Class, class IdClass>
   Class*PluginFactory<Class, IdClass>::doGetInstance(IdClass id) {
   PluginFactory<Class, IdClass>::ctor_t*ctor=m_constructor[id];
-  if(ctor)return ctor();
-    std::cerr << " (no valid ctor for '" << id << "')" << std::endl;
-  return NULL;
+  //if(NULL==ctor)std::cerr << " (no valid ctor for '" << id << "')" << std::endl;
+  if(ctor)
+    return ctor();
+  else
+    return NULL;
 }
 
 template<class Class, class IdClass>
@@ -76,7 +78,30 @@ Class*PluginFactory<Class, IdClass>::getInstance(IdClass id) {
   return(fac->doGetInstance(id));
 }
 
+template<class Class, class IdClass>
+  int PluginFactory<Class, IdClass>::loadPlugins(const char*basename, const char*path) {
+  return doLoadPlugins(basename, path);
+}
 
+template<class Class, class IdClass>
+  std::vector<IdClass>PluginFactory<Class, IdClass>::doGetIDs() {
+  std::vector<IdClass>result;
+  for(typename std::map<IdClass, PluginFactory<Class, IdClass>::ctor_t*>::iterator iter = m_constructor.begin(); iter != m_constructor.end(); ++iter) {
+    if(NULL!=iter->second)
+      result.push_back(iter->first);
+  }
+  return result;
+}
+
+template<class Class, class IdClass>
+  std::vector<IdClass>PluginFactory<Class, IdClass>::getIDs() {
+  std::vector<IdClass>result;
+  PluginFactory<Class, IdClass>*fac=getPluginFactory();
+  if(fac) {
+    return fac->doGetIDs();
+  }
+  return result;
+}
 
 /* ********************************************************************* */
 /* Implementation of PluginFactoryRegistrar<ChildClass, BaseClass>       */
