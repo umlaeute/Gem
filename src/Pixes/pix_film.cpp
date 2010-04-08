@@ -174,7 +174,10 @@ pix_film :: pix_film(t_symbol *filename) :
   
   m_handle=NULL;
 
+
+  gem::PluginFactory<film, std::string>::loadPlugins("film");
   std::vector<std::string>available_ids=gem::PluginFactory<film, std::string>::getIDs();
+
   if(!addHandle(available_ids, "DS"))
     addHandle(available_ids, "AVI");
 
