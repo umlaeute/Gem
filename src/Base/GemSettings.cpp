@@ -44,6 +44,22 @@ static const char*s_configdir[] = {
   0 /* $(pwd)/gem.conf */
 };
 
+
+
+
+/* this is ripped from m_imp.h */
+struct _gemclass
+{
+  t_symbol *c_name;                   /* name (mostly for error reporting) */
+  t_symbol *c_helpname;               /* name of help file */
+  t_symbol *c_externdir;              /* directory extern was loaded from */
+  /* ... */ /* the real t_class continues here... */
+};
+# define t_gemclass struct _gemclass
+
+
+
+
 class GemSettingsData {
   friend class GemSettings;
  public:
@@ -155,6 +171,7 @@ class GemSettingsData {
         }
       }
   }
+
 };
 
 
@@ -164,8 +181,6 @@ GemSettingsData::GemSettingsData(void)
 #ifdef GEM_DEFAULT_FONT
   set(gensym("font.face"), gensym(GEM_DEFAULT_FONT));
 #endif
-
-
 
   setEnv(gensym("settings.file"), "GEM_SETTINGS");
   t_atom*a=get(gensym("settings.file"));
@@ -184,6 +199,11 @@ GemSettingsData::GemSettingsData(void)
   setEnv(gensym("texture.rectangle"), "GEM_RECTANGLE_TEXTURE");
   setEnv(gensym("singlecontext"), "GEM_SINGLE_CONTEXT"); // hmm, what's a better new name for this?
   setEnv(gensym("font.face"), "GEM_DEFAULT_FONT");
+
+
+  t_gemclass *c = (t_gemclass*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
+  set(gensym("gem.path"), c->c_externdir);
+
 
   //  print();
 }
