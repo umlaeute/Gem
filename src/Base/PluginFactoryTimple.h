@@ -79,8 +79,12 @@ Class*PluginFactory<Class, IdClass>::getInstance(IdClass id) {
 }
 
 template<class Class, class IdClass>
-  int PluginFactory<Class, IdClass>::loadPlugins(const char*basename, const char*path) {
-  return doLoadPlugins(basename, path);
+  int PluginFactory<Class, IdClass>::loadPlugins(std::string basename, std::string path) {
+  PluginFactory<Class, IdClass>*fac=getPluginFactory();
+  if(NULL==fac) {
+    return 0;
+  }
+  return fac->doLoadPlugins(basename, path);
 }
 
 template<class Class, class IdClass>

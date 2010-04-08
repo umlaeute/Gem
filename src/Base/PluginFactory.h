@@ -14,7 +14,7 @@ namespace gem {
 
   class GEM_EXTERN BasePluginFactory {
   public:
-    int doLoadPlugins(const char*basename, const char*path=NULL);
+    int doLoadPlugins(std::string basename, std::string path);
   protected:
     BasePluginFactory();
     virtual ~BasePluginFactory(void);
@@ -50,7 +50,7 @@ namespace gem {
     /**
      * load more plugins
      */
-    static int loadPlugins(const char*basename, const char*path=NULL);
+    static int loadPlugins(std::string basename, std::string path=std::string(""));
 
   private:
     typedef std::map<IdClass, ctor_t*> ctormap_t;
@@ -79,7 +79,7 @@ namespace gem {
      * registers a ChildClass with a certain ID in the BaseClass factory
      *
      * example:
-     *  static gem::PluginFactoryRegistrar<Child, Base, const char*> basefac_childreg("childID"); // register Child as 'childID'
+     *  static gem::PluginFactoryRegistrar<Child, Base, std::string > basefac_childreg("childID"); // register Child as 'childID'
      *  Base*instance=gem::PluginFactory<Base>::getInstance("childID"); // returns an instance of Child
      */
     template<class ChildClass, class BaseClass, class IdClass>
