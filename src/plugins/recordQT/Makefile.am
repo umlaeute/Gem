@@ -1,0 +1,9 @@
+
+ACLOCAL_AMFLAGS = -I ../../m4
+AM_CPPFLAGS = -I../..
+
+lib_LTLIBRARIES= recordQT.la
+recordQT_la_SOURCES= recordQT.cpp recordQT.h
+recordQT_la_CXXFLAGS = @GEM_RTE_CFLAGS@ @GEM_FRAMEWORK_QUICKTIME@
+recordQT_la_LDFLAGS = -module @GEM_RTE_LIBS@ @GEM_FRAMEWORK_QUICKTIME@
+

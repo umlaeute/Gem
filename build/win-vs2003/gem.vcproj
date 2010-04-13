@@ -13,8 +13,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\."
-			IntermediateDirectory=".\Objects"
+			OutputDirectory="$(ProjectDir)"
+			IntermediateDirectory="$(ProjectDir)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -29,28 +29,20 @@
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
-				EnableEnhancedInstructionSet="0"
-				DefaultCharIsUnsigned="FALSE"
-				PrecompiledHeaderFile=".\Objects/gem.pch"
-				AssemblerListingLocation=".\Objects/"
-				ObjectFile=".\Objects/"
-				ProgramDataBaseFileName=".\Objects/"
+				EnableEnhancedInstructionSet="2"
+				PrecompiledHeaderFile="$(IntDir)\$(ProjectName).pch"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
+				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mt.lib freetype214mt.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbase.lib atls.lib winmm.lib libcpmt.lib msvcrt.lib msvcprt.lib"
-				OutputFile="Gem.dll"
-				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Release&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
-				SubSystem="2"
-				ImportLibrary=".\gem.lib"/>
+				SubSystem="2"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -81,8 +73,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\."
-			IntermediateDirectory=".\Objects"
+			OutputDirectory="$(ProjectDir)"
+			IntermediateDirectory="$(ProjectDir)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -93,30 +85,22 @@
 				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\tiff\libtiff;..\..\..\GemLibs\FTGL\include;..\..\..\GemLibs\freetype2\include\;&quot;$(ProgramFiles)\QuickTime SDK\CIncludes&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;_DEBUG;DEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Objects/gem.pch"
-				AssemblerListingLocation=".\Objects/"
-				ObjectFile=".\Objects/"
-				ProgramDataBaseFileName=".\Objects/"
+				PrecompiledHeaderFile="$(IntDir)\$(ProjectName).pch"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
-				CompileAs="0"/>
+				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mtD.lib freetype214mt_D.lib QTMLClient.lib vfw32.lib strmiids.lib strmbasD.lib ddraw.lib atlsD.lib winmm.lib libcpmtD.lib msvcrtD.lib msvcprtD.lib"
-				OutputFile="Gem.dll"
-				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Debug&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\./gem.pdb"
-				SubSystem="2"
-				ImportLibrary=".\./gem.lib"/>
+				SubSystem="2"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
@@ -208,6 +192,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Base\GemExportDef.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemFiles.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemFiles.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Base\GemFuncUtil.cpp">
@@ -385,6 +375,15 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Base\Matrix.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\PluginFactory.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\PluginFactory.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\PluginFactoryTimple.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Base\sgiimage.cpp">
@@ -1196,12 +1195,6 @@
 				RelativePath="..\..\src\Pixes\pix_film.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Pixes\pix_filmDarwin.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_filmDarwin.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Pixes\pix_flip.cpp">
 			</File>
 			<File
@@ -1628,79 +1621,10 @@
 					RelativePath="..\..\src\Pixes\DSgrabber.h">
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\dv1394.h">
+					RelativePath="..\..\src\plugins\film.cpp">
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\film.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\film.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmAVI.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmAVI.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmAVIPLAY.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmAVIPLAY.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmDarwin.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmDarwin.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmDS.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmDS.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmGMERLIN.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmGMERLIN.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmMPEG1.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmMPEG1.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmMPEG3.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmMPEG3.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmQT.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmQT.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmQT4L.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\filmQT4L.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_filmOS.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_filmOS.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_movieOS.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_movieOS.h">
+					RelativePath="..\..\src\plugins\film.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_videoOS.cpp">
@@ -1709,46 +1633,16 @@
 					RelativePath="..\..\src\Pixes\pix_videoOS.h">
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\record.cpp">
+					RelativePath="..\..\src\plugins\record.cpp">
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\record.h">
+					RelativePath="..\..\src\plugins\record.h">
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\recordQT.cpp">
+					RelativePath="..\..\src\plugins\video.cpp">
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\recordQT.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\recordQT4L.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\recordQT4L.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\video.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\video.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\videoDV4L.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\videoDV4L.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\videoV4L.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\videoV4L.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\videoV4L2.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\videoV4L2.h">
+					RelativePath="..\..\src\plugins\video.h">
 				</File>
 			</Filter>
 			<Filter

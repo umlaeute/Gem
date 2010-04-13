@@ -25,20 +25,25 @@ class CPPExtern;
 class GemDylib {
  private:
   GemDylibHandle*m_handle;
-  static GemDylibHandle*open(const CPPExtern*obj, const char*filename, const char*extension);
+  static GemDylibHandle*open(const CPPExtern*obj, const std::string filename, const std::string extension);
 
  public:
-  GemDylib(const CPPExtern*obj, const char*libname, const char*extension=0) throw(GemException);
-  GemDylib(const char*libname, const char*extension=0) throw(GemException);
+  GemDylib(const CPPExtern*obj, 
+	   const std::string libname, 
+	   const std::string extension=std::string("")
+	   ) throw(GemException);
+  GemDylib(const std::string libname, 
+	   const std::string extension=std::string("")
+	   ) throw(GemException);
   ~GemDylib(void);
 
 
   // if void<procname>(void) exists in dylib, run it and return "true"
   // else return false;
-  bool run(const char*procname);
+  bool run(const std::string procname);
 
   // if <procname> exists in dylib, return it, else return NULL
-  void*proc(const char*procname);
+  void*proc(const std::string procname);
 
   public:
   /**
@@ -46,7 +51,9 @@ class GemDylib {
    * if "extension" is NULL, a plaform-specific default is used
    * on success "true" is returned, else "false
    */
-  static bool LoadLib(const char*procname, const char*baselibname, const char*fileext=0);
+  static bool LoadLib(const std::string procname, 
+		      const std::string baselibname, 
+		      const std::string fileext=std::string(""));
 };
 
 

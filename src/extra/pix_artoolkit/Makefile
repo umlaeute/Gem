@@ -3,8 +3,7 @@ default: all
 -include Make.config
 
 .SUFFIXES = $(EXTENSION)
-INCLUDES+=-I../../
-LDFLAGS+=-shared -Wl,--export-dynamic
+INCLUDES+= -I../../
 
 SOURCES = pix_artoolkit.cpp
 

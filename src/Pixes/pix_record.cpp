@@ -5,10 +5,6 @@
 #include "Base/GemConfig.h"
 #include "pix_record.h"
 
-#include "Pixes/record.h"
-#include "Pixes/recordQT.h"
-#include "Pixes/recordQT4L.h"
-
 #include "Base/GemState.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_record)
@@ -44,19 +40,30 @@ pix_record :: pix_record(int argc, t_atom *argv):
     error("needs 0, 2, or 4 values");
     xoff = yoff = 0;
     width = height = 128;
-	 
   }
+
+  gem::PluginFactory<gem::record, std::string>::loadPlugins("record");
 
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outInfo      = outlet_new(this->x_obj, 0);
 
-#ifdef HAVE_QUICKTIME
-  m_handle=new recordQT(xoff, yoff, width, height);
-#elif defined GEM_USE_RECORDQT4L
-  m_handle=new recordQT4L(xoff, yoff, width, height);
-#else
-  error("Gem has been compiled without pix-recording capabilities!");
-#endif
+  m_handle=gem::PluginFactory<gem::record, std::string>::getInstance("QT");
+
+  if(!m_handle)
+    m_handle=gem::PluginFactory<gem::record, std::string>::getInstance("QT4L");
+ 
+  if(NULL==m_handle) {
+    std::vector<std::string>ids=gem::PluginFactory<gem::record, std::string>::getIDs();
+    int i=0;
+    for(i=0; i<ids.size(); i++) {
+      m_handle=gem::PluginFactory<gem::record, std::string>::getInstance(ids[i]);
+      if(m_handle)break;
+    }
+  }
+
+  if(!m_handle) {
+    error("no recording backends found!");
+  }
 }
 
 /////////////////////////////////////////////////////////

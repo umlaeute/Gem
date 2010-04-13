@@ -15,6 +15,7 @@ AC_CONFIG_MACRO_DIR(m4)
 AC_CONFIG_HEADER([Base/config.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
 AC_CONFIG_SUBDIRS([extra])
+AC_CONFIG_SUBDIRS([plugins])
 
 AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
@@ -50,6 +51,9 @@ AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
 
 
+GEM_CHECK_RTE()
+REFERENCEPATH=$GEM_RTE_REFERENCEPATH
+
 GEM_ARG_ENABLE([PIC],     [PositionIndependentCode (potentially slower)])
 
 if test "x$enable_PIC" != "xno"; then
@@ -67,14 +71,7 @@ GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
 
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)], [force])
 
-AC_ARG_WITH([pd], 
-	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
-AC_ARG_WITH([pdversion], 
-		AS_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
-AC_ARG_WITH([extension], 
-		AS_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
 
-GEM_TARGETS=Base
 GEM_TARGET(Controls)
 GEM_TARGET(Geos)
 GEM_TARGET(Manips)
@@ -149,17 +146,6 @@ GEM_CHECK_FRAMEWORK(QuickTime,
                         [have_quicktime_framework="yes"], 
                         [have_quicktime_framework="no"])
 
-
-# when using QuickTime framework, we don't want/need libquicktime
-if test "x$have_quicktime_framework" = "xyes"; then
- if test "x$with_lqt" = "x"; then
-   with_lqt="no"
- fi
- if test "x$with_libquicktime" = "x"; then
-   with_libquicktime="no"
- fi
-fi
-
 #fallback to imagemagick if people are too lazy to type ImageMagick
 if test "x$with_ImageMagick" = "x"; then
  with_ImageMagick="$with_imagemagick"
@@ -175,60 +161,6 @@ then
 fi
 GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
 GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
-
-
-GEM_CHECK_LIB(gmerlin_avdec, gmerlin_avdec, gavl_start,,,,[movie loader])
-if test "x${have_gmerlin_avdec}" = "xyes"
-then
- AC_MSG_RESULT([gmerlin was found...disabling other video-decoders by default])
-
-## not disabling libquicktime, as this is needed for recording as well!
-# if test "x${with_libquicktime}" = "x"; then
-#   with_libquicktime="no"
-# fi
-# if test "x${with_lqt}" = "x"; then
-#   with_lqt="no"
-# fi
-
- if test "x${with_libmpeg3}" = "x"; then
-   with_libmpeg3="no"
- fi
- if test "x${with_mpeg}" = "x"; then
-   with_mpeg="no"
- fi
- if test "x${with_avifile}" = "x"; then
-   with_avifile="no"
- fi
-fi
-
-
-GEM_CHECK_LIB(libquicktime,quicktime, quicktime_init,,,,[movie loader])
-dnl lqt is the same as libquicktime
-dnl this is double because there exists "lqt-config" and "pkg-config libquicktime"
-dnl another option would have been to introduce aliases for packages
-GEM_CHECK_LIB(lqt,quicktime, quicktime_init,,,,[movie loader])
-
-GEM_CHECK_LIB(libmpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
-GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
-GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
-
-GEM_ARG_WITH(v4l, [video input], [force])
-
-if test "x$with_v4l" != "xno"; then
-  AC_CHECK_HEADER(linux/videodev.h,
-                  [
-                    AC_DEFINE([HAVE_VIDEO4LINUX], [], [video capturing using v4l])
-                    have_v4l="yes"
-                  ],[have_v4l="no"])
-
-# these two are quite the same...
- GEM_CHECK_LIB(libv4l1, v4l1, v4l1_open,,,,[video input])
- GEM_CHECK_LIB(libv4l2, v4l2, v4l2_open,,,,[video input])
-fi
-
-
-
-GEM_CHECK_LIB(ieee1394,dv,main,,,,video input)
 
 
 # this is rather experimental...and magic...uähh
@@ -324,70 +256,6 @@ if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
 else
     AC_SUBST(MAKEDEP_FLAGS, "-M")
 fi
-
-
-### weird configuration hacks
-# the extension
-if test "x$with_extension" != "x"; then
- EXT=$with_extension
-else
- EXT=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
-
- if test "x$KERN" != "xDarwin";
- then
-  if test "x$host_os" = "x"
-  then
- dnl just assuming that it is still linux (e.g. x86_64)
-   EXT="pd_linux"
-  fi
- else
-   EXT="pd_darwin"
- fi
-fi
-
-if test "x$with_pd" != "x"; then
-   INCLUDES="$INCLUDES -I${with_pd}/src -I${with_pd}"
-   LIBS="$LIBS -L${with_pd}/bin -L${with_pd}"
-fi
-
-#pd version
-AC_CHECK_HEADERS(m_pd.h)
-# this is mainly interesting for the documentation
-if test "x$with_pdversion" != "x"; then
-  PD_VERSION="$with_pdversion"
-else
-cat > conftest.c << EOF
-#include <stdio.h>
-#include "m_pd.h"
-int main(){
-  printf("%d.%d\n", PD_MAJOR_VERSION, PD_MINOR_VERSION);
-  return 0;
-}
-EOF
- if $CXX $INCLUDES -o conftest.o conftest.c > /dev/null 2>&1; then
-  PD_VERSION=`./conftest.o`
- else
-  PD_VERSION=""
- fi
-fi
-
-let PD_MAJORVERSION=`echo $PD_VERSION | cut -d"." -f1`+0
-let PD_MINORVERSION=`echo $PD_VERSION | cut -d"." -f2`+0
-
-if test "$PD_MAJORVERSION" -gt 0 -o "$PD_MINORVERSION" -ge 37; then
-  REFERENCEPATH=extra/Gem
-else
-  REFERENCEPATH=doc/5.reference/Gem
-fi
-
-dnl LATER check why this doesn't use the --with-pd includes
-dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include
-AC_CHECK_HEADERS([s_stuff.h], [], [],
-[#ifdef HAVE_M_PD_H
-# define PD
-# include "m_pd.h"
-#endif
-])
 
 # using pix_videoOS rather than pix_video
 AC_ARG_WITH([video], AS_HELP_STRING([--with-video=Darwin|DS|NT],[use OS-specific "pix_video"]))

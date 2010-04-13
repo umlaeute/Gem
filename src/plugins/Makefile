@@ -1,0 +1,22 @@
+default: o_objects 
+	@echo "in order to build external plugins, run 'make plugins'"
+
+include ../Makefile.subdir
+
+all:
+	make -C ..
+
+RECORDPLUGINS=recordQT recordQT4L
+VIDEOPLUGINS=videoDV4L videoV4L videoV4L2
+FILMPLUGINS=filmAVI filmAVIPLAY filmDarwin filmDS filmGMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
+
+PLUGINS=$(FILMPLUGINS) $(VIDEOPLUGINS) $(RECORDPLUGINS)
+
+.PHONY: all default $(PLUGINS) plugins
+
+plugins: $(PLUGINS)
+	-echo $(PLUGINS)
+
+$(PLUGINS):
+	if test -e $@/Makefile; then make -k -C $@; fi
+

@@ -18,12 +18,9 @@
 #ifndef GEM_FILMBACKEND
 
 #include "pix_film.h"
-#include <ctype.h>
-
-#include "Pixes/film.h"
-
 #include "Base/GemState.h"
 
+#include <ctype.h>
 #include <stdio.h>
 
 /***************************************
@@ -166,6 +163,8 @@ pix_film :: pix_film(t_symbol *filename) :
   m_thread_running(false), m_wantThread(false)
 #endif
 {
+  gem::PluginFactory<gem::film, std::string>::loadPlugins("film");
+
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
   // create an outlet to send out how many frames are in the movie + bang when we reached the end
@@ -174,8 +173,7 @@ pix_film :: pix_film(t_symbol *filename) :
   
   m_handle=NULL;
 
-  gem::PluginFactory<film, std::string>::loadPlugins("film");
-  std::vector<std::string>available_ids=gem::PluginFactory<film, std::string>::getIDs();
+  std::vector<std::string>available_ids=gem::PluginFactory<gem::film, std::string>::getIDs();
 
   if(!addHandle(available_ids, "DS"))
     addHandle(available_ids, "AVI");
@@ -190,6 +188,12 @@ pix_film :: pix_film(t_symbol *filename) :
   // the rest
   addHandle(available_ids);
   //openMess(filename);
+
+
+  if(m_handles.size()==0) {
+    error("no movie decoding backends found!");
+  }
+
 }
 
 /////////////////////////////////////////////////////////
@@ -209,7 +213,7 @@ pix_film :: ~pix_film()
 }
 
 /////////////////////////////////////////////////////////
-// Destructor
+// add backends
 //
 /////////////////////////////////////////////////////////
 bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
@@ -225,6 +229,7 @@ bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
       id.push_back(ID);
     } else {
       // request for an unavailable ID
+      verbose(2, "backend '%s' unavailable", ID.c_str());
       return false;
     }
   } else {
@@ -234,14 +239,15 @@ bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
 
   for(i=0; i<id.size(); i++) {
     std::string key=id[i];
+    verbose(2, "trying to add '%s' as backend", key.c_str());
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
-        film         *handle=gem::PluginFactory<film, std::string>::getInstance(key); 
+        gem::film         *handle=gem::PluginFactory<gem::film, std::string>::getInstance(key); 
         if(NULL==handle)break;
         m_ids.push_back(key);
         m_handles.push_back(handle);
         count++;
-        verbose(2, "%d :: handle#%d '%s' @ 0x%x", i, m_handles.size()-1, key.c_str(), handle);
+        verbose(2, "added backend#%d '%s' @ 0x%x", m_handles.size()-1, key.c_str(), handle);
     }
   }
 

@@ -16,12 +16,9 @@ Linux version by Millier Puckette. msp@ucsd.edu
 
 #ifndef INCLUDE_PIX_VIDEO_H_
 #define INCLUDE_PIX_VIDEO_H_
-#include "Base/GemConfig.h"
-
-#define MAX_VIDEO_HANDLES 4
 
 #include "Base/GemBase.h"
-#include "Pixes/video.h"
+#include "plugins/video.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -106,9 +103,11 @@ class GEM_EXTERN pix_video : public GemBase
   // GROUP:	Video data
   //-----------------------------------
     
-  video *m_videoHandle;
-  video *m_videoHandles[MAX_VIDEO_HANDLES];
-  int    m_numVideoHandles;
+  gem::video *m_videoHandle;
+  std::vector<std::string>m_ids;
+  std::vector<gem::video*>m_videoHandles;
+  
+  virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
 
   int    m_driver;
 

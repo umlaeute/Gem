@@ -9,9 +9,12 @@ BUILDDIR = ..
 OBJECTS = $(OBJDIR)*.o
 
 .PHONY: default all subdirs clean distclean install installdocs installabs strip config \
-	$(GEM_TARGETS) Gem extra 
+	$(GEM_TARGETS) Gem extra PLUGINS
 
-all: Gem.$(EXT) extra
+all: Gem.$(EXT) extra PLUGINS
+
+PLUGINS:
+	${MAKE} -C plugins plugins
 
 Gem.$(EXT): subdirs 
 	$(CXXLINK) $(GEM_EXTRA_LDFLAGS)  $(GEM_ARCH_LDFLAGS) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)

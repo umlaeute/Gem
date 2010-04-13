@@ -19,6 +19,7 @@ namespace gem {
       WIN32_FIND_DATA findData;
       DWORD errorNumber;
       HANDLE hFind;
+      LPVOID lpErrorMessage;
       
       hFind = FindFirstFile(basename.c_str(), &findData);
       if (hFind == INVALID_HANDLE_VALUE) 
@@ -43,7 +44,7 @@ namespace gem {
           return result;
         }
       do {
-        result.push_back(findData.cFileName());
+        result.push_back(findData.cFileName);
       } while (FindNextFile(hFind, &findData) != 0);
 
       FindClose(hFind);

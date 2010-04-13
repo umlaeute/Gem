@@ -1,11 +1,16 @@
-/*
- *  pix_record.h
- *  GEM_darwin
- *
- *  Created by chris clepper on 7/18/05.
- *  Copyright 2005. All rights reserved.
- *
- */
+/*-----------------------------------------------------------------
+
+GEM - Graphics Environment for Multimedia
+
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
+(OS independant parent-class)
+
+Copyright (c) 2005-2010 Chris Clepper
+Copyright (c) 2009-2010 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+
+-----------------------------------------------------------------*/
 
 #if 1
  //this will record QT movies
@@ -15,7 +20,7 @@
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
 
-#include "Pixes/record.h"
+#include "plugins/record.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -124,7 +129,7 @@ class GEM_EXTERN pix_record : public GemBase
 	int                     m_numCodecs;
 	//	codecListStorage	codecContainer[64];//anyone with more than 64 codecs can change this
 
-	record        *m_handle;
+	gem::record *m_handle;
 	
 	
     private:

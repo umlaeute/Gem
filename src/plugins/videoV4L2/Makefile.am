@@ -1,0 +1,9 @@
+
+ACLOCAL_AMFLAGS = -I ../../m4
+AM_CPPFLAGS = -I../..
+
+lib_LTLIBRARIES= videoV4L2.la
+videoV4L2_la_SOURCES= videoV4L2.cpp videoV4L2.h
+videoV4L2_la_CXXFLAGS = @GEM_RTE_CFLAGS@ @GEM_LIB_LIBV4L2_CFLAGS@ 
+videoV4L2_la_LDFLAGS = -module @GEM_RTE_LIBS@  @GEM_LIB_LIBV4L2_LIBS@
+

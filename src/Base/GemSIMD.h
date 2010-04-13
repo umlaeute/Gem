@@ -35,6 +35,12 @@ const int GEM_SIMD_SSE2=2;
 const int GEM_SIMD_ALTIVEC=3;
 
 
+#if defined __APPLE__ && defined __VEC__
+# ifndef __APPLE_ALTIVEC__
+#  undef __VEC__
+# endif
+#endif
+
 /* include for SIMD on PC's */
 #ifdef __SSE2__
 #include <emmintrin.h>

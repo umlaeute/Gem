@@ -42,17 +42,8 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* movie loader */
-#undef HAVE_LIBAVIFILE
-
-/* movie loader */
-#undef HAVE_LIBAVIPLAY
-
 /* Define to 1 if you have the `dl' library (-ldl). */
 #undef HAVE_LIBDL
-
-/* video input */
-#undef HAVE_LIBDV
 
 /* font support */
 #undef HAVE_LIBFTGL
@@ -66,32 +57,11 @@
 /* Define to 1 if you have the `GLU' library (-lGLU). */
 #undef HAVE_LIBGLU
 
-/* movie loader */
-#undef HAVE_LIBGMERLIN_AVDEC
-
-/* video input */
-#undef HAVE_LIBIEEE1394
-
 /* image loader */
 #undef HAVE_LIBIMAGEMAGICK__
 
 /* image loader */
 #undef HAVE_LIBJPEG
-
-/* movie loader */
-#undef HAVE_LIBLIBMPEG3
-
-/* movie loader */
-#undef HAVE_LIBLIBQUICKTIME
-
-/* video input */
-#undef HAVE_LIBLIBV4L1
-
-/* video input */
-#undef HAVE_LIBLIBV4L2
-
-/* movie loader */
-#undef HAVE_LIBLQT
 
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
@@ -102,26 +72,11 @@
 /* image loader */
 #undef HAVE_LIBMAGICK__
 
-/* movie loader */
-#undef HAVE_LIBMPEG
-
-/* movie loader */
-#undef HAVE_LIBMPEG3
-
-/* movie loader */
-#undef HAVE_LIBQUICKTIME
-
 /* Define to 1 if you have the `stdc++' library (-lstdc++). */
 #undef HAVE_LIBSTDC__
 
 /* image loader */
 #undef HAVE_LIBTIFF
-
-/* video input */
-#undef HAVE_LIBV4L1
-
-/* video input */
-#undef HAVE_LIBV4L2
 
 /* Define to 1 if you have the `X11' library (-lX11). */
 #undef HAVE_LIBX11
@@ -231,9 +186,6 @@
 
 /* Define to 1 if you have the <vfork.h> header file. */
 #undef HAVE_VFORK_H
-
-/* video capturing using v4l */
-#undef HAVE_VIDEO4LINUX
 
 /* Define to 1 if you have the <wordexp.h> header file. */
 #undef HAVE_WORDEXP_H

@@ -19,12 +19,6 @@
 #ifndef GEM_VIDEOBACKEND
 
 #include "pix_video.h"
-#include "Pixes/video.h"
-#include "Pixes/videoV4L.h"
-#include "Pixes/videoV4L2.h"
-#include "Pixes/videoDV4L.h"
-
-
 #include "Base/GemState.h"
 CPPEXTERN_NEW(pix_video)
 
@@ -39,31 +33,27 @@ CPPEXTERN_NEW(pix_video)
 pix_video :: pix_video() : 
   m_videoHandle(NULL), m_driver(-1)
 {
-  int i = MAX_VIDEO_HANDLES;
-  while(i--)m_videoHandles[i]=NULL;
-  i=0;
-  /* LATER: think whether v4l-1 and v4l-2 should be exclusive... */
-#ifdef HAVE_VIDEO4LINUX2
-  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L2(GL_RGBA);  i++; endpost();
-#endif /* V4L2 */
-#ifdef HAVE_VIDEO4LINUX
-  startpost("video driver %d: ", i); m_videoHandles[i]=new videoV4L(GL_RGBA);  i++; endpost();
-#endif /* V4L */
-#ifdef HAVE_LIBDV
-  startpost("video driver %d: ", i); m_videoHandles[i]=new videoDV4L(GL_RGBA);  i++; endpost();
-#endif /* DV4L */
+  gem::PluginFactory<gem::video, std::string>::loadPlugins("video");
 
-  m_numVideoHandles=i;
-#if 0
-  driverMess(0);
-#else
+  m_videoHandle=NULL;
+  std::vector<std::string>ids=gem::PluginFactory<gem::video, std::string>::getIDs();
+
+  addHandle(ids, "v4l2");
+  addHandle(ids, "v4l");
+  addHandle(ids, "dv4l");
+
+  addHandle(ids);
+
   /*
    * calling driverMess() would immediately startTransfer(); 
    * we probably don't want this in initialization phase
    */
-  m_driver=0;
-  m_videoHandle=m_videoHandles[m_driver];
-#endif
+  if(m_videoHandles.size()>0) {
+    m_driver=0;
+    m_videoHandle=m_videoHandles[m_driver];
+  } else {
+    error("no video backends found!");
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -74,12 +64,56 @@ pix_video :: ~pix_video(){
   /* clean up all video handles;
    * the video-handles have to stop the transfer themselves
    */
-  int i=MAX_VIDEO_HANDLES;
-  while(i--) {
-    if(m_videoHandles[i]!=NULL)
-      delete m_videoHandles[i];
+  int i=0;
+  for(i=0; i<m_videoHandles.size(); i++) {
+    delete m_videoHandles[i];
+    m_videoHandles[i]=NULL;
   }
 }
+
+/////////////////////////////////////////////////////////
+// add backends
+//
+/////////////////////////////////////////////////////////
+bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
+{
+  int i=0;
+  int count=0;
+
+  std::vector<std::string>id;
+  if(!ID.empty()) {
+    // if requested 'cid' is in 'available' add it to the list of 'id's
+    if(std::find(available.begin(), available.end(), ID)!=available.end()) {
+      id.push_back(ID);
+    } else {
+      // request for an unavailable ID
+      verbose(2, "backend '%s' unavailable", ID.c_str());
+      return false;
+    }
+  } else {
+    // no 'ID' given: add all available IDs
+    id=available;
+  }
+
+  for(i=0; i<id.size(); i++) {
+    std::string key=id[i];
+    verbose(2, "trying to add '%s' as backend", key.c_str());
+    if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
+      post("%d: '%s' ", m_videoHandles.size(), key.c_str());
+      // not yet added, do so now!
+      gem::video         *handle=gem::PluginFactory<gem::video, std::string>::getInstance(key); 
+      if(NULL==handle)break;
+      m_ids.push_back(key);
+      m_videoHandles.push_back(handle);
+      count++;
+      verbose(2, "added backend#%d '%s' @ 0x%x", m_videoHandles.size()-1, key.c_str(), handle);
+    }
+  }
+
+  return (count>0);
+}
+
+
 
 /////////////////////////////////////////////////////////
 // render
@@ -198,7 +232,7 @@ void pix_video :: colorMess(t_atom*a)
 void pix_video :: driverMess(t_symbol*s)
 {
   int dev;
-  for(dev=0; dev<m_numVideoHandles; dev++) {
+  for(dev=0; dev<m_videoHandles.size(); dev++) {
     if(m_videoHandles[dev]->provides(s->s_name)) {
       driverMess(dev);
       return;
@@ -209,8 +243,8 @@ void pix_video :: driverMess(t_symbol*s)
 void pix_video :: driverMess(int dev)
 {
   //  post("driver: %d", dev);
-  if(dev>=m_numVideoHandles){
-    error("driverID (%d) must not exceed %d", dev, m_numVideoHandles);
+  if(dev>=m_videoHandles.size()){
+    error("driverID (%d) must not exceed %d", dev, m_videoHandles.size());
     return;
   }
   //  if((dev!=m_driver) && (m_videoHandle!=m_videoHandles[dev]))
@@ -238,7 +272,7 @@ void pix_video :: deviceMess(t_symbol*s)
   if(!err){
     int d=0;
     if(m_videoHandle)m_videoHandle->stopTransfer();
-    for(d=0; d<m_numVideoHandles; d++){
+    for(d=0; d<m_videoHandles.size(); d++){
       if(m_videoHandles[d]->setDevice(s->s_name)){
         m_videoHandle=m_videoHandles[d];
         post("switched to driver #%d", d);

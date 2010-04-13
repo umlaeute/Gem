@@ -2,34 +2,23 @@ AC_PREREQ(2.57)
 AC_INIT([pix_artoolkit],[0.1],[zmoelnig@iem.at])
 AC_LANG(C++)
 
+GEM_CHECK_RTE
 
 
 AC_SUBST(EXTENSION)
-AC_ARG_WITH([extension], 
-		AS_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
-### weird configuration hacks
-# the extension
-if test "x$with_extension" != "x"; then
- EXTENSION=$with_extension
-else
- EXTENSION=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
+EXTENSION=$GEM_RTE_EXTENSION
 
- if test "x$KERN" != "xDarwin";
- then
-  if test "x$host_os" = "x"
-  then
- dnl just assuming that it is still linux (e.g. x86_64)
-   EXTENSION="pd_linux"
-  fi
- else
-   EXTENSION="pd_darwin"
- fi
-fi
+#linking on linux
+GEM_CHECK_LDFLAGS([-shared -Wl,--export-dynamic])
+# linking on os-X
+GEM_CHECK_LDFLAGS([-bundle -mmacosx-version-min=10.3 -undefined dynamic_lookup],
+  ,
+  GEM_CHECK_LDFLAGS([-dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup],
+    ,
+	  GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
+    )
+  )
 
-## LDFLAGS
-#check for "-shared -Wl,--export-dynamic"
-#LDFLAGS+="-shared -Wl,--export-dynamic"
-#check for "-bundle -undefined dynamic_lookup"
 
 
 GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)

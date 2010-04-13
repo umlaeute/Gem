@@ -87,6 +87,8 @@ AC_DEFUN([GEM_CHECK_LIB],
  define([Name],[translit([$1],[./-+], [____])])
  define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
                               [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
+AC_SUBST(GEM_LIB_[]NAME[]_CFLAGS)
+AC_SUBST(GEM_LIB_[]NAME[]_LIBS)
 
 AC_ARG_WITH([Name],
              AC_HELP_STRING([--without-[]Name], [disable Name ($7)]))
@@ -165,6 +167,7 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 ## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
    if test "x${PKG_[]NAME[]_LIBS}" = "x"; then
     AC_CHECK_LIB([$2],[$3],,,[$6])
+    PKG_[]NAME[]_LIBS="-l$2"
    else
      PKG_LIBS="${PKG_[]NAME[]_LIBS} ${PKG_LIBS}"
    fi
@@ -172,8 +175,10 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 
   AS_IF([test "x$ac_Lib" != "xno"],
    [
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[], [$7])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[], [$7])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[1], [$7])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[1], [$7])
+    GEM_LIB_[]NAME[]_CFLAGS=${PKG_[]NAME[]_CFLAGS}
+    GEM_LIB_[]NAME[]_LIBS=${PKG_[]NAME[]_LIBS}
 dnl    PKG_LIBS="$6 ${PKG_LIBS}"
     have_[]Name="yes"
 dnl turn of further checking for this package
@@ -219,6 +224,10 @@ fi
 #
 AC_DEFUN([GEM_CHECK_FRAMEWORK],
 [
+  define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
+                              [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
+  AC_SUBST(GEM_FRAMEWORK_[]NAME[])
+
   AC_MSG_CHECKING([for "$1"-framework])
 
   gem_check_ldflags_org="${LDFLAGS}"
@@ -228,13 +237,15 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
 
   if test "x$gem_check_ldflags_success" = "xyes"; then
     AC_MSG_RESULT([yes])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [], [framework $1])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [framework $1])
+    GEM_FRAMEWORK_[]NAME[]="-framework [$1]"
     [$2]
   else
     AC_MSG_RESULT([no])
     LDFLAGS="$gem_check_ldflags_org"
     [$3]
   fi
+undefine([NAME])
 ])# GEM_CHECK_FRAMEWORK
 
 # GEM_CHECK_LDFLAGS(ADDITIONAL-LDFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
@@ -312,3 +323,110 @@ if test "$fat_binary" != no; then
 fi
 ])# GEM_CHECK_FAT
 
+# GEM_CHECK_RTE()
+#
+# checks for RTE (currently: Pd)
+# if so, they are added to the LDFLAGS, CFLAGS and whatelse
+AC_DEFUN([GEM_CHECK_RTE],
+[
+ARCH=$(uname -m)
+KERN=$(uname -s)
+
+AC_SUBST(GEM_RTE_CFLAGS)
+AC_SUBST(GEM_RTE_LIBS)
+
+tmp_rte_cflags="$CFLAGS"
+tmp_rte_libs="$LDFLAGS"
+GEM_RTE_CFLAGS="-DPD"
+GEM_RTE_LIBS=""
+GEM_RTE="pd"
+
+AC_ARG_WITH([pd], 
+	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
+AC_ARG_WITH([pdversion], 
+		AS_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
+
+if test -d "$with_pd" ; then
+ if test -d "${with_pd}/src" ; then
+   GEM_RTE_CFLAGS+=" -I${with_pd}/src"
+ else
+   GEM_RTE_CFLAGS+=" -I${with_pd}"
+ fi
+ if test -d "${with_pd}/bin" ; then
+   GEM_RTE_LIBS+=" -L${with_pd}/bin"
+ else
+   GEM_RTE_LIBS+=" -L${with_pd}"
+ fi
+
+ CFLAGS="$CFLAGS ${GEM_RTE_CFLAGS}"
+ LIBS="$LIBS ${GEM_RTE_LIBS}"
+fi
+
+AC_CHECK_HEADERS(m_pd.h)
+
+if test "x$with_pdversion" != "x"; then
+  PD_VERSION="$with_pdversion"
+else
+AC_MSG_CHECKING([for Pd-version])
+cat > conftest.c << EOF
+#include <stdio.h>
+#include "m_pd.h"
+int main(){
+  printf("%d.%d\n", PD_MAJOR_VERSION, PD_MINOR_VERSION);
+  return 0;
+}
+EOF
+ if $CXX $CFLAGS -o conftest.o conftest.c > /dev/null 2>&1; then
+  PD_VERSION=`./conftest.o`
+ else
+  PD_VERSION=""
+ fi
+fi
+
+let PD_MAJORVERSION=`echo $PD_VERSION | cut -d"." -f1`+0
+let PD_MINORVERSION=`echo $PD_VERSION | cut -d"." -f2`+0
+
+if test "$PD_MAJORVERSION" -gt 0 -o "$PD_MINORVERSION" -ge 37; then
+  GEM_RTE_REFERENCEPATH=extra/Gem
+else
+  GEM_RTE_REFERENCEPATH=doc/5.reference/Gem
+fi
+
+AC_MSG_RESULT([${PD_MAJORVERSION}.${PD_MINORVERSION}])
+
+AC_SUBST(GEM_RTE_REFERENCEPATH)
+
+dnl LATER check why this doesn't use the --with-pd includes
+dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include
+AC_CHECK_HEADERS([s_stuff.h], [], [],
+[#ifdef HAVE_M_PD_H
+# define PD
+# include "m_pd.h"
+#endif
+])
+
+### this should only be set if Pd has been found
+# the extension
+AC_ARG_WITH([extension], 
+		AS_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
+if test "x$with_extension" != "x"; then
+ EXT=$with_extension
+else
+ EXT=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
+  if test "x$KERN" = "xDarwin"; then
+    EXT=pd_darwin
+  else
+   if test "x$host_os" = "x"
+   then
+    dnl just assuming that it is still linux (e.g. x86_64)
+    EXT="pd_linux"
+   fi
+  fi
+fi
+GEM_RTE_EXTENSION=$EXT
+AC_SUBST(GEM_RTE_EXTENSION)
+
+
+
+
+]) # GEM_CHECK_RTE
