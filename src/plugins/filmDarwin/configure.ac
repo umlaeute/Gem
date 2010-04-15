@@ -1,7 +1,7 @@
 AC_PREREQ(2.57)
 AC_INIT([filmDarwin],[0.1],[zmoelnig@iem.at], [], [http://gem.iem.at])
 
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_MACRO_DIR([../../m4])
 AC_CONFIG_SRCDIR([filmDarwin.cpp])
