@@ -25,7 +25,8 @@ else
 fi
 
 if test -n "$AUTORECONF"; then
- $AUTORECONF --force --verbose --install -I $MY_M4DIRS
+ echo $AUTORECONF --force --verbose --install 
+ $AUTORECONF --force --verbose --install 
 else
 
  if test -n "$MY_ALDIRS"; then
