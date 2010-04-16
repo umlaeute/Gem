@@ -431,7 +431,7 @@ dnl we want dos2unix...
 AC_CHECK_TOOL([DOS2UNIX], [dos2unix], [true])
 
 
-AC_CONFIG_FILES([Make.config])
+AC_CONFIG_FILES([Make.config AMakefile])
 AC_OUTPUT
 
 dnl GEM compilation options:
