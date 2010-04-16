@@ -5,6 +5,9 @@
 AC_PREREQ(2.57)
 AC_INIT([Gem],[0.92],[zmoelnig@iem.at])
 
+AM_INIT_AUTOMAKE([foreign])
+AC_CONFIG_FILES([Make.config AMakefile])
+
 AC_LANG(C++)
 
 ARCH=$(uname -m)
