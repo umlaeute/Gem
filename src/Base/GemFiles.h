@@ -23,9 +23,7 @@ namespace gem {
   
   namespace files {
 
-    std::vector<std::string>getFilenameListing(std::string pattern);
-
-
+    std::vector<std::string>getFilenameListing(const std::string pattern);
 
   };
 };

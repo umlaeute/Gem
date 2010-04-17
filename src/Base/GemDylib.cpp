@@ -59,7 +59,7 @@ public:
 GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::string extension) 
   throw (GemException) : 
   m_handle(0) {
-    m_handle=open(obj, filename.c_str(), extension.c_str());
+    m_handle=open(obj, filename, extension);
     if(NULL==m_handle) {
       std::string err="unable to open '";
       err+=filename;
@@ -73,7 +73,7 @@ GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::s
   }
 
 GemDylib::GemDylib(const std::string filename, const std::string extension) throw (GemException) : m_handle(0) {
-  m_handle=open(0,   filename.c_str(), extension.c_str());
+  m_handle=open(0,   filename, extension);
   if(NULL==m_handle) {
     std::string err="unable to open '";
     err+=filename;
@@ -120,6 +120,16 @@ bool GemDylib::run(const std::string procname) {
   return false;
 }
 
+static std::string defaultExtension = 
+#ifdef DL_OPEN
+  std::string(".so")
+#elif defined _WIN32
+  std::string(".dll")
+#else
+  std::string("")
+#endif
+  ;
+
 GemDylibHandle* GemDylib::open(const CPPExtern*obj, const std::string filename, const std::string extension) {
   GemDylibHandle*handle=new GemDylibHandle();
   char buf[MAXPDSTRING];
@@ -129,14 +139,10 @@ GemDylibHandle* GemDylib::open(const CPPExtern*obj, const std::string filename, 
 
   const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
 
+
   const char*ext=extension.c_str();
-#ifdef DL_OPEN
-  if(0==ext)
-    ext=".so";
-#elif defined _WIN32
-  if(0==ext)
-    ext=".dll";
-#endif
+  if(0==ext)ext=defaultExtension.c_str();
+
   int fd=0;
   if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename.c_str(), ext, buf, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
@@ -204,32 +210,7 @@ bool GemDylib::LoadLib(const std::string basefilename, const std::string extensi
   return false;
 }
 
-#if 0
 
-
-extern "C" {
-  typedef void (*loader_registrar_t)(gem_loader_t loader);
+const std::string GemDylib::getDefaultExtension(void) {
+  return defaultExtension;
 }
-static loader_registrar_t pd_register_loader = NULL;
-
-static int find_pd_loader(void) {
-  if(pd_register_loader)return 1;
-
-#ifdef DL_OPEN
-  pd_register_loader=(loader_registrar_t)dlsym(RTLD_DEFAULT, "sys_register_loader");
-#elif defined _WIN32
-  /* no idea whether this actually works... */
-  pd_register_loader = (loader_registrar_t)GetProcAddress( GetModuleHandle("pd.dll"), "sys_register_loader");  
-#else
-  // no loader for older Pd's....
-#endif
-
-  return(NULL!=pd_register_loader);
-}
-
-void gem_register_loader(gem_loader_t loader) {
-  if(find_pd_loader()) {
-    pd_register_loader(loader);
-  }
-}
-#endif

@@ -30,7 +30,7 @@ endif
 	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	 rm -f $@.$$$$
 
-clean:
+clean::
 	-rm -f $(O_OBJECTS:%=$(OBJDIR)%)
 	-rm -f $(O_OBJECTS)
 	-rm -f $(SOURCES:.cpp=.d) 

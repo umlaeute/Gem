@@ -13,7 +13,7 @@
 namespace gem {
   namespace files {
 
-    std::vector<std::string>getFilenameListing(std::string basename) {
+    std::vector<std::string>getFilenameListing(const std::string pattern) {
       std::vector<std::string>result;
 #ifdef _WIN32
       WIN32_FIND_DATA findData;
@@ -21,7 +21,7 @@ namespace gem {
       HANDLE hFind;
       LPVOID lpErrorMessage;
       
-      hFind = FindFirstFile(basename.c_str(), &findData);
+      hFind = FindFirstFile(pattern.c_str(), &findData);
       if (hFind == INVALID_HANDLE_VALUE) 
         {
           errorNumber = GetLastError();
@@ -52,18 +52,18 @@ namespace gem {
       /* use glob */
       glob_t glob_buffer;
       int i=0;
-      switch( glob( basename.c_str(), GLOB_TILDE, NULL, &glob_buffer ) ) {
+      switch( glob( pattern.c_str(), GLOB_TILDE, NULL, &glob_buffer ) ) {
       case GLOB_NOSPACE: 
-        //        error("out of memory for \"%s\"",basename.c_str()); 
+        //        error("out of memory for \"%s\"",pattern.c_str()); 
         return result;
 # ifdef GLOB_ABORTED
       case GLOB_ABORTED: 
-        //error("aborted \"%s\"",basename.c_str()); 
+        //error("aborted \"%s\"",pattern.c_str()); 
         return result;
 # endif
 # ifdef GLOB_NOMATCH
       case GLOB_NOMATCH: 
-        //error("nothing found for \"%s\"",basename.c_str()); 
+        //error("nothing found for \"%s\"",pattern.c_str()); 
         return result;
 # endif
       }

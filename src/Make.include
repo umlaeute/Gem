@@ -1,4 +1,4 @@
-SRCDIR?=..
+SRCDIR ?= ..
 
 OBJDIR ?= $(SRCDIR)/Objects/
 vpath %.cpp .
@@ -9,6 +9,7 @@ vpath %.o $(OBJDIR)
 
 vpath %.$(EXT) $(SRCDIR):$(OBJDIR):.
 
+INSTALLdir=pd/extra/Gem
 INSTALL ?= install
 INSTALL_PROGRAM = $(INSTALL)
 INSTALL_DATA = ${INSTALL} -m 644

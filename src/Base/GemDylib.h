@@ -54,6 +54,9 @@ class GemDylib {
   static bool LoadLib(const std::string procname, 
 		      const std::string baselibname, 
 		      const std::string fileext=std::string(""));
+
+
+  static const std::string getDefaultExtension(void);
 };
 
 
