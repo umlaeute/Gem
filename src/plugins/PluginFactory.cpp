@@ -42,7 +42,7 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
     path=path+std::string("/");
   }
 
-  std::string pattern = path+basename+std::string("*.*");
+  std::string pattern = path+basename+std::string("*")+GemDylib::getDefaultExtension();
   std::cerr << "pattern : " << pattern << std::endl;
 
   std::vector<std::string>files=gem::files::getFilenameListing(pattern);

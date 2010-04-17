@@ -20,3 +20,12 @@ plugins: $(PLUGINS)
 $(PLUGINS):
 	if test -e $@/Makefile; then make -k -C $@; fi
 
+%_install: %
+	if test -e $</Makefile; then make -k -C $< install; fi
+
+install:: $(PLUGINS:%=%_install)
+
+%_clean:
+	if test -e $</Makefile; then make -k -C $< clean; fi
+
+clean:: $(PLUGINS:%=%_clean)
