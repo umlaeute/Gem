@@ -8,7 +8,7 @@ BUILDDIR = ..
 #OBJECTS = $(GEM_TARGETS:%=%/*.o)
 OBJECTS = $(OBJDIR)*.o
 
-.PHONY: default all subdirs clean distclean install installdocs installabs strip config \
+.PHONY: default all subdirs clean distclean install installdocs installabs installplugins strip config \
 	$(GEM_TARGETS) Gem extra PLUGINS
 
 all: Gem.$(EXT) extra PLUGINS
@@ -52,8 +52,14 @@ distclean:
 	-rm -f Gem.$(EXT) *~
 	-rm -f config.cache config.log config.status Make.config
 
-install: installdocs installabs
+install: installdocs installabs installplugins installextra
 	$(INSTALL_DATA) -D Gem.$(EXT) $(DESTDIR)/$(PDLIBDIR)/extra/Gem/Gem.$(EXT)
+
+installplugins: PLUGINS
+	make -C plugins install
+
+installextra: extra
+	make -C extra install
 
 installabs:
 	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/extra/Gem

@@ -22,6 +22,9 @@ clean:
 distro: clean all
 	rm *.o
 
+install:
+	@echo "no 'make install' for $(SOURCES:.cpp=.$(EXTENSION)) yet"
+
 #config.h: config.h.in aclocal.m4
 #	./configure
 
