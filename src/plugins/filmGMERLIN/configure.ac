@@ -1,4 +1,4 @@
-AC_PREREQ(2.57)
+AC_PREREQ(2.60)
 AC_INIT([filmGMERLIN],[0.1],[zmoelnig@iem.at], [], [http://gem.iem.at])
 
 AM_INIT_AUTOMAKE([foreign])
