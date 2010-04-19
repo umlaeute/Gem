@@ -348,14 +348,14 @@ AC_ARG_WITH([pdversion],
 
 if test -d "$with_pd" ; then
  if test -d "${with_pd}/src" ; then
-   GEM_RTE_CFLAGS+=" -I${with_pd}/src"
+   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/src")
  else
-   GEM_RTE_CFLAGS+=" -I${with_pd}"
+   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}")
  fi
  if test -d "${with_pd}/bin" ; then
-   GEM_RTE_LIBS+=" -L${with_pd}/bin"
+   GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}/bin"
  else
-   GEM_RTE_LIBS+=" -L${with_pd}"
+   GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}"
  fi
 
  CFLAGS="$CFLAGS ${GEM_RTE_CFLAGS}"
