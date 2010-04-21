@@ -16,7 +16,7 @@ GEM_CHECK_RTE
 
 AC_LANG(C++)
 
-AC_MSG_WARN([no check for QuickTime yet (w32 & OSX])
+AC_MSG_WARN([no check for QuickTime yet (w32 & OSX)])
 
 dnl some checks for osX (is this enough?)
 GEM_CHECK_FRAMEWORK(Carbon, 
