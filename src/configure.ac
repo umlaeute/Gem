@@ -452,6 +452,18 @@ if test "x$have_libv4l1" = "xyes" || test "x$have_libv4l2" = "xyes"; then
   have_v4l="yes (libv4l)"
 fi
 
+if test "x$with_film" = "x"; then
+ use_film_plugins="yes (ignore missing support below)"
+else
+ use_film_plugins="no (using $with_film backend)"
+fi
+
+if test "x$with_video" = "x"; then
+ use_video_plugins="yes (ignore missing support below)"
+else
+ use_video_plugins="no (using $with_video backend)"
+fi
+
 
 AC_MSG_RESULT([
 Result:
@@ -487,12 +499,14 @@ Configuration:
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   video-support
+    use PLUGINS		 : ${use_film_plugins}
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
     use gmerlin          : ${have_gmerlin_avdec}
-  input-support
+  input-support 
+    use PLUGINS		 : ${use_video_plugins}
     use v4l              : ${have_v4l}
     use ieee1394         : ${have_ieee1394}
 ])
