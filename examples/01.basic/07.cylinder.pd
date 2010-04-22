@@ -8,8 +8,7 @@
 #X msg 384 269 5;
 #X obj 274 356 cylinder;
 #X obj 274 207 rotateXYZ 26 26 0;
-#X text 299 277 size;
-#X floatatom 299 303 0 0 0 0 - - -;
+#X floatatom 299 303 0 0 0 2 size - -;
 #X obj 31 53 cnv 15 220 70 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 454 304 gemwin 0;
@@ -56,8 +55,8 @@
 #X connect 5 0 7 2;
 #X connect 6 0 7 2;
 #X connect 8 0 7 0;
-#X connect 10 0 7 1;
-#X connect 12 0 13 0;
-#X connect 13 0 12 0;
-#X connect 16 0 17 0;
-#X connect 17 0 15 0;
+#X connect 9 0 7 1;
+#X connect 11 0 12 0;
+#X connect 12 0 11 0;
+#X connect 15 0 16 0;
+#X connect 16 0 14 0;

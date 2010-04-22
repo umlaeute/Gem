@@ -1,4 +1,4 @@
-#N canvas 28 218 601 392 10;
+#N canvas 28 208 601 392 10;
 #X obj 274 138 gemhead;
 #X floatatom 350 169 0 0 0 0 - - -;
 #X obj 22 325 world_light;
@@ -6,10 +6,8 @@
 #X text 369 251 change the number of slices;
 #X msg 421 269 15;
 #X obj 274 207 rotateXYZ 26 26 0;
-#X text 299 251 size;
-#X floatatom 299 277 0 1 4 0 - - -;
-#X text 383 309 set the inner radius;
-#X floatatom 410 336 0 0 0.9 0 - - -;
+#X floatatom 299 277 0 1 4 2 size - -;
+#X floatatom 400 330 0 0 0.9 2 inner_radius - -;
 #X obj 274 356 disk 2 5 1;
 #X msg 384 269 10;
 #X obj 30 59 cnv 15 220 70 empty empty empty 20 12 0 14 -195568 -66577
@@ -52,10 +50,10 @@
 #X connect 1 0 6 1;
 #X connect 1 0 6 2;
 #X connect 3 0 2 0;
-#X connect 5 0 11 2;
-#X connect 6 0 11 0;
-#X connect 8 0 11 1;
-#X connect 10 0 11 3;
-#X connect 12 0 11 2;
-#X connect 14 0 15 0;
-#X connect 15 0 14 0;
+#X connect 5 0 9 2;
+#X connect 6 0 9 0;
+#X connect 7 0 9 1;
+#X connect 8 0 9 3;
+#X connect 10 0 9 2;
+#X connect 12 0 13 0;
+#X connect 13 0 12 0;

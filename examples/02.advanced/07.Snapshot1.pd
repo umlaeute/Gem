@@ -1,4 +1,4 @@
-#N canvas 396 160 600 500 10;
+#N canvas 396 100 600 375 10;
 #X obj 210 252 gemhead;
 #X obj 210 312 model ../data/venus.obj;
 #X text 117 4 snap a portion of the graphics window into a texture

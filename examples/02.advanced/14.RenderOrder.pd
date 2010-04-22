@@ -1,6 +1,5 @@
-#N canvas 0 0 986 435 10;
-#X text 541 72 on;
-#X text 426 35 Blue Sphere;
+#N canvas 0 0 986 385 10;
+#X text 276 35 Blue Sphere;
 #N canvas 95 194 290 179 Gem.init 0;
 #X obj 118 18 loadbang;
 #X msg 201 78 reset;
@@ -10,12 +9,12 @@
 #X connect 1 0 2 0;
 #X connect 3 1 1 0;
 #X restore 72 145 pd Gem.init;
-#X obj 415 98 color 0 0 1 0.5;
-#X obj 415 229 pix_texture;
-#X obj 415 182 pix_image ../data/dancer.JPG;
-#X obj 415 251 alpha;
-#X obj 415 207 pix_alpha;
-#X obj 415 68 gemhead 50;
+#X obj 265 98 color 0 0 1 0.5;
+#X obj 265 229 pix_texture;
+#X obj 265 182 pix_image ../data/dancer.JPG;
+#X obj 265 251 alpha;
+#X obj 265 207 pix_alpha;
+#X obj 265 68 gemhead 50;
 #X obj 681 244 alpha;
 #X obj 681 173 gemhead 50;
 #X obj 681 197 color 0 1 0 0.5;
@@ -67,7 +66,7 @@
 #X connect 13 0 9 1;
 #X connect 13 1 5 0;
 #X restore 693 76 pd set-priority;
-#X obj 415 272 square 3;
+#X obj 265 272 square 3;
 #X obj 681 266 square 3;
 #X text 866 81 movement on/off;
 #X text 736 9 priority 40 (<50);
@@ -76,7 +75,7 @@
 #X text 218 299 the rendering order does matter \, when doing things
 like alpha-blending: alpha-blending only works if the semi-transparent
 (alpha<1) object is rendered AFTER the objects that shine through;
-#X text 456 350 this turns out to be a problem in dynamic scenes (eg:
+#X text 596 291 this turns out to be a problem in dynamic scenes (eg:
 with moving objects/viewpoint):: if a semi-transparent object used
 to be "in front" of another semi-transparent object \, but suddenly
 becomes "behind" \, the rendering order has to be changed. do this
@@ -121,30 +120,30 @@ becomes "behind" \, the rendering order has to be changed. do this
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 72 168 pd gemwin;
-#X connect 2 0 35 0;
+#X connect 1 0 34 0;
+#X connect 2 0 4 0;
 #X connect 3 0 5 0;
 #X connect 4 0 6 0;
-#X connect 5 0 7 0;
-#X connect 6 0 27 0;
-#X connect 7 0 4 0;
-#X connect 8 0 3 0;
-#X connect 9 0 28 0;
+#X connect 5 0 26 0;
+#X connect 6 0 3 0;
+#X connect 7 0 2 0;
+#X connect 8 0 27 0;
+#X connect 9 0 10 0;
 #X connect 10 0 11 0;
-#X connect 11 0 12 0;
-#X connect 12 0 9 0;
-#X connect 13 0 14 0;
-#X connect 13 0 18 0;
-#X connect 14 0 16 0;
-#X connect 15 0 13 0;
-#X connect 16 0 13 1;
-#X connect 17 0 15 0;
-#X connect 18 0 19 0;
-#X connect 19 0 24 0;
-#X connect 20 0 10 0;
-#X connect 21 0 20 0;
-#X connect 22 0 26 0;
-#X connect 23 0 26 0;
-#X connect 24 0 12 3;
-#X connect 24 1 26 1;
-#X connect 25 0 26 0;
-#X connect 26 0 21 0;
+#X connect 11 0 8 0;
+#X connect 12 0 13 0;
+#X connect 12 0 17 0;
+#X connect 13 0 15 0;
+#X connect 14 0 12 0;
+#X connect 15 0 12 1;
+#X connect 16 0 14 0;
+#X connect 17 0 18 0;
+#X connect 18 0 23 0;
+#X connect 19 0 9 0;
+#X connect 20 0 19 0;
+#X connect 21 0 25 0;
+#X connect 22 0 25 0;
+#X connect 23 0 11 3;
+#X connect 23 1 25 1;
+#X connect 24 0 25 0;
+#X connect 25 0 20 0;

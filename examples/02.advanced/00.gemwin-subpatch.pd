@@ -46,8 +46,6 @@
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 100 134 pd gemwin;
-#X text 249 114 for the sake of simplicity \, from now on the examples
-will use the right-hand subpatch to control the Gem-window.;
 #X text 247 146 just enable the toggle labeled "rendering" to create
 a window and start rendering \; switching the toggle off will destroy
 the window;
@@ -58,4 +56,6 @@ as [gemwin] itself \; e.g. you can send any message to it that [gemwin]
 understands.;
 #X text 249 204 thus you don't have to click on [create( and then [1(
 anymore...;
+#X text 249 113 for the sake of simplicity \, from now on the examples
+will use the subpatch on the left side to control the Gem-window.;
 #X connect 0 0 1 0;

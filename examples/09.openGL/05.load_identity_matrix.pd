@@ -1,4 +1,4 @@
-#N canvas 0 0 784 619 10;
+#N canvas 0 0 784 537 10;
 #X obj 64 47 gemhead;
 #X obj 96 94 gemlist_info;
 #X floatatom 177 138 5 0 0 0 - - -;
@@ -23,12 +23,8 @@
 #X obj 177 405 unpack f f f;
 #X text 185 387 position;
 #X obj 64 361 t a a;
-#X text 209 333 <- this object reset the gemlist send by the gemhead.
-;
 #X obj 64 532 circle;
 #X floatatom 105 179 5 0 0 0 - - -;
-#X text 272 198 <- this tranlation does not affect the circle \, because
-of the load identity object that reset the transformation;
 #X obj 391 101 gemwin;
 #X msg 400 78 create \, 1;
 #X obj 64 457 translateXYZ 0 0 -4;
@@ -39,8 +35,13 @@ of the load identity object that reset the transformation;
 #X obj 177 525 unpack f f f;
 #X text 185 507 position;
 #X obj 64 481 t a a;
-#X text 211 457 <- moove the object regarding the camera position (this
-is done inside the gemhead...);
+#X text 272 197 <- this translation does not affect the circle \, because
+of the "load identity" object that resets the transformation;
+#X text 209 333 <- this object reset the gemlist sent by the gemhead.
+;
+#X text 211 457 <- move the object regarding the camera position (this
+is normally done automatically by the gemwin \, but since we have reset
+the transformation matrix we have to do it ourselves...);
 #X connect 0 0 7 0;
 #X connect 1 4 5 0;
 #X connect 5 0 2 0;
@@ -60,14 +61,14 @@ is done inside the gemhead...);
 #X connect 21 0 18 0;
 #X connect 21 1 19 0;
 #X connect 21 2 20 0;
-#X connect 23 0 30 0;
+#X connect 23 0 28 0;
 #X connect 23 1 17 0;
-#X connect 26 0 9 1;
-#X connect 29 0 28 0;
-#X connect 30 0 37 0;
-#X connect 31 4 35 0;
-#X connect 35 0 32 0;
-#X connect 35 1 33 0;
-#X connect 35 2 34 0;
-#X connect 37 0 25 0;
-#X connect 37 1 31 0;
+#X connect 25 0 9 1;
+#X connect 27 0 26 0;
+#X connect 28 0 35 0;
+#X connect 29 4 33 0;
+#X connect 33 0 30 0;
+#X connect 33 1 31 0;
+#X connect 33 2 32 0;
+#X connect 35 0 24 0;
+#X connect 35 1 29 0;
