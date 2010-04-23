@@ -1,4 +1,4 @@
-#N canvas 434 200 550 486 10;
+#N canvas 434 114 550 486 10;
 #X obj 27 399 hradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144 -1
 -1 0;
 #X floatatom 185 212 5 0 0 0 - - -;
@@ -57,7 +57,7 @@
 #X connect 15 0 5 0;
 #X restore 272 417 pd time_and_direction_Wind __;
 #X obj 272 171 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 4100 1;
+-1 -1 0 1;
 #X obj 365 172 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
 -1 -1 0 1;
 #N canvas 543 225 707 425 pos_wind 0;
@@ -641,7 +641,7 @@
 #X connect 15 0 14 0;
 #X restore 27 417 pd render _____________________;
 #X text 288 6 Made by Cyrille Henry 2008 10 24;
-#N canvas 537 300 612 457 shader_render 0;
+#N canvas 412 143 612 457 shader_render 0;
 #X obj 255 329 pix_texture;
 #X obj 67 226 gemframebuffer;
 #X obj 67 343 pix_texture;
@@ -787,14 +787,13 @@
 #X obj 255 156 alpha;
 #X obj 255 286 scaleXYZ 15 15 15;
 #X obj 255 256 translateXYZ 0 0.55 -8;
-#X msg 94 323 quality 0;
 #X msg 267 309 quality 0;
 #X msg 461 258 draw line;
 #X msg 461 238 draw default;
 #X msg 462 279 draw point;
 #X floatatom 425 203 5 0 0 0 - - -;
 #X obj 433 28 inlet;
-#X msg 83 303 rectangle 0;
+#X msg 83 303 rectangle 0 \, quality 0;
 #X connect 0 0 23 0;
 #X connect 1 0 3 0;
 #X connect 1 1 0 1;
@@ -802,7 +801,8 @@
 #X connect 1 1 16 0;
 #X connect 2 0 4 0;
 #X connect 3 0 2 0;
-#X connect 5 0 34 0;
+#X connect 5 0 33 0;
+#X connect 5 0 27 0;
 #X connect 6 0 1 0;
 #X connect 7 0 1 0;
 #X connect 7 1 15 0;
@@ -826,16 +826,15 @@
 #X connect 24 0 11 0;
 #X connect 25 0 0 0;
 #X connect 26 0 25 0;
-#X connect 27 0 2 0;
-#X connect 28 0 0 0;
+#X connect 27 0 0 0;
+#X connect 28 0 23 0;
 #X connect 29 0 23 0;
 #X connect 30 0 23 0;
-#X connect 31 0 23 0;
-#X connect 32 0 25 1;
-#X connect 32 0 25 2;
-#X connect 32 0 25 3;
-#X connect 33 0 32 0;
-#X connect 34 0 2 0;
+#X connect 31 0 25 1;
+#X connect 31 0 25 2;
+#X connect 31 0 25 3;
+#X connect 32 0 31 0;
+#X connect 33 0 2 0;
 #X restore 27 304 pd shader_render ______________;
 #X text 12 6 "Potential Flag" \, by Samuel Bianchini;
 #X text 28 20 Simple version for Gem exemples;
