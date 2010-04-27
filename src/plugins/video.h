@@ -121,7 +121,7 @@ namespace gem { class GEM_EXTERN video {
  * \param id a symbolic (const char*) ID for the given class
  * \param videoClass a class derived from "video"
  */
-#define REGISTER_VIDEOFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::video, std::string> fac_video_ ## TYP (gensym(id)->s_name)
+#define REGISTER_VIDEOFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::video> fac_video_ ## TYP (gensym(id)->s_name)
 
 
 /**
@@ -130,8 +130,8 @@ namespace gem { class GEM_EXTERN video {
  * \note call this before any externals register themselves
  */
 #define INIT_VIDEOFACTORY() \
-  template<>gem::PluginFactory<gem::video, std::string>*gem::PluginFactory<gem::video, std::string>::s_factory=NULL; \
-  static gem::PluginFactoryRegistrar::dummy<gem::video, std::string> fac_videodummy
+  template<>gem::PluginFactory<gem::video>*gem::PluginFactory<gem::video>::s_factory=NULL; \
+  static gem::PluginFactoryRegistrar::dummy<gem::video> fac_videodummy
 
 
 #endif	// for header file

@@ -35,49 +35,35 @@ LOG
 /* ********************************************************************* */
 /* Implementation of PluginFactory<Class>                                */
 
-template<class Class, class IdClass>
-  PluginFactory<Class, IdClass>* PluginFactory<Class, IdClass>::s_factory=NULL;
+template<class Class>
+  PluginFactory<Class>* PluginFactory<Class>::s_factory=NULL;
 
-template<class Class, class IdClass>
-  PluginFactory<Class, IdClass>* PluginFactory<Class, IdClass>::getPluginFactory(void) {
+template<class Class>
+  PluginFactory<Class>* PluginFactory<Class>::getPluginFactory(void) {
   if(NULL==s_factory) {
-    s_factory=new PluginFactory<Class, IdClass>;
+    s_factory=new PluginFactory<Class>;
   }
   //std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(s_factory).name() << std::endl;
   return s_factory;
 }
 
-template<class Class, class IdClass>
-  void  PluginFactory<Class, IdClass>::doRegisterClass(IdClass id, ctor_t*c) {
-  typename std::map<IdClass, ctor_t*>::iterator it = m_constructor.find(id);
-  if(it != m_constructor.end()) {
-    // we already have an entry for this id!
-    if(it->second == c)return;
-    if(NULL != it->second) {
-        std::cerr << "refusing to register constructor " << (void*)c << " again for id " << id << std::endl;
-      return;
-    } else {
-        std::cerr << "overwriting empty ctor for " << id << std::endl;
-    }
-  }
-  m_constructor[id]=c;
-  // there's some stack corruption: on linux i get a segfault if the following line is not there...
-  std::cerr << "ctor["<<id<<"]="<<(void*)m_constructor[id] << std::endl;
+template<class Class>
+  void  PluginFactory<Class>::doRegisterClass(std::string id, ctor_t*c) {
+  set(id, (void*)c);
 }
 
-template<class Class, class IdClass>
-  Class*PluginFactory<Class, IdClass>::doGetInstance(IdClass id) {
-  ctor_t*ctor=m_constructor[id];
-  //if(NULL==ctor)std::cerr << " (no valid ctor for '" << id << "')" << std::endl;
+template<class Class>
+  Class*PluginFactory<Class>::doGetInstance(std::string id) {
+  ctor_t*ctor=(ctor_t*)get(id);
   if(ctor)
     return ctor();
   else
     return NULL;
 }
 
-template<class Class, class IdClass>
-void PluginFactory<Class, IdClass>::registerClass(IdClass id, ctor_t*c) {
-  PluginFactory<Class, IdClass>*fac=getPluginFactory();
+template<class Class>
+void PluginFactory<Class>::registerClass(std::string id, ctor_t*c) {
+  PluginFactory<Class>*fac=getPluginFactory();
   if(NULL==fac) {
     std::cerr << "unable to get a factory!" << std::endl;
   }
@@ -85,38 +71,33 @@ void PluginFactory<Class, IdClass>::registerClass(IdClass id, ctor_t*c) {
   fac->doRegisterClass(id, c);
 }
 
-template<class Class, class IdClass>
-Class*PluginFactory<Class, IdClass>::getInstance(IdClass id) {
-  PluginFactory<Class, IdClass>*fac=getPluginFactory();
+template<class Class>
+Class*PluginFactory<Class>::getInstance(std::string id) {
+  PluginFactory<Class>*fac=getPluginFactory();
   if(NULL==fac) {
     return NULL;
   }
   return(fac->doGetInstance(id));
 }
 
-template<class Class, class IdClass>
-  int PluginFactory<Class, IdClass>::loadPlugins(std::string basename, std::string path) {
-  PluginFactory<Class, IdClass>*fac=getPluginFactory();
+template<class Class>
+  int PluginFactory<Class>::loadPlugins(std::string basename, std::string path) {
+  PluginFactory<Class>*fac=getPluginFactory();
   if(NULL==fac) {
     return 0;
   }
   return fac->doLoadPlugins(basename, path);
 }
 
-template<class Class, class IdClass>
-  std::vector<IdClass>PluginFactory<Class, IdClass>::doGetIDs() {
-  std::vector<IdClass>result;
-  for(typename std::map<IdClass, ctor_t*>::iterator iter = m_constructor.begin(); iter != m_constructor.end(); ++iter) {
-    if(NULL!=iter->second)
-      result.push_back(iter->first);
-  }
-  return result;
+template<class Class>
+  std::vector<std::string>PluginFactory<Class>::doGetIDs() {
+  return get();
 }
 
-template<class Class, class IdClass>
-  std::vector<IdClass>PluginFactory<Class, IdClass>::getIDs() {
-  std::vector<IdClass>result;
-  PluginFactory<Class, IdClass>*fac=getPluginFactory();
+template<class Class>
+  std::vector<std::string>PluginFactory<Class>::getIDs() {
+  std::vector<std::string>result;
+  PluginFactory<Class>*fac=getPluginFactory();
   if(fac) {
     return fac->doGetIDs();
   }
@@ -139,14 +120,14 @@ namespace PluginFactoryRegistrar {
     return res1;
   }
 
-  template<class ChildClass, class BaseClass, class IdClass>
-    registrar<ChildClass, BaseClass, IdClass> :: registrar(IdClass id) {
-    PluginFactory<BaseClass, IdClass>::registerClass(id, allocator<ChildClass, BaseClass>);
+  template<class ChildClass, class BaseClass>
+    registrar<ChildClass, BaseClass> :: registrar(std::string id) {
+    PluginFactory<BaseClass>::registerClass(id, allocator<ChildClass, BaseClass>);
   }
-  template<class BaseClass, class IdClass>
-    dummy<BaseClass, IdClass> :: dummy() {
-    IdClass id; // default ID
-    PluginFactory<BaseClass, IdClass>::registerClass(id, NULL);
+  template<class BaseClass>
+    dummy<BaseClass> :: dummy() {
+    std::string id; // default ID
+    PluginFactory<BaseClass>::registerClass(id, NULL);
   }
 
 };

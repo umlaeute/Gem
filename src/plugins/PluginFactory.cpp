@@ -4,6 +4,8 @@
 #include "Base/GemDylib.h"
 #include "Gem/RTE.h"
 
+#include "sstream"
+
 using namespace gem;
 
 class gem::BasePluginFactory::Pimpl {
@@ -17,6 +19,8 @@ class gem::BasePluginFactory::Pimpl {
   }
 
   std::vector<std::string>p_loaded;
+
+  std::map<std::string, void*>p_ctors;
 };
 
 
@@ -74,4 +78,26 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
   return 0;
 }
 
+std::vector<std::string>gem::BasePluginFactory::get() {
+  std::vector<std::string>result;
+  std::map<std::string, void*>::iterator iter = m_pimpl->p_ctors.begin();
+  for(; iter != m_pimpl->p_ctors.end(); ++iter) {
+    if(NULL!=iter->second)
+      result.push_back(iter->first);
+  }
+#if 0
+  for(typename std::map<std::string, ctor_t*>::iterator iter = m_constructor.begin(); iter != m_constructor.end(); ++iter) {
+    if(NULL!=iter->second)
+      result.push_back(iter->first);
+  }
+#endif
+  return result;
+}
 
+void*gem::BasePluginFactory::get(std::string id) {
+  return m_pimpl->p_ctors[id];
+}
+
+void gem::BasePluginFactory::set(std::string id, void*ptr) {
+  m_pimpl->p_ctors[id]=ptr;
+}

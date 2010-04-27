@@ -185,7 +185,7 @@ class GEM_EXTERN film
  * \param id a symbolic (const char*) ID for the given class
  * \param filmClass a class derived from "film"
  */
-#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::film, std::string> fac_film_ ## TYP (gensym(id)->s_name)
+#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::film> fac_film_ ## TYP (gensym(id)->s_name)
 
 
 /**
@@ -194,8 +194,8 @@ class GEM_EXTERN film
  * \note call this before any externals register themselves
  */
 #define INIT_FILMFACTORY() \
-  template<>gem::PluginFactory<gem::film, std::string>*gem::PluginFactory<gem::film, std::string>::s_factory=NULL; \
-  static gem::PluginFactoryRegistrar::dummy<gem::film, std::string> fac_filmdummy
+  template<>gem::PluginFactory<gem::film>*gem::PluginFactory<gem::film>::s_factory=NULL; \
+  static gem::PluginFactoryRegistrar::dummy<gem::film> fac_filmdummy
 
 
 #endif	// for header file

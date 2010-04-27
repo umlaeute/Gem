@@ -120,7 +120,7 @@ namespace gem { class GEM_EXTERN record
  * \param id a symbolic (const char*) ID for the given class
  * \param recordClass a class derived from "record"
  */
-#define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::record, std::string> fac_record_ ## TYP (gensym(id)->s_name)
+#define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::record> fac_record_ ## TYP (gensym(id)->s_name)
 
 
 /**
@@ -129,8 +129,8 @@ namespace gem { class GEM_EXTERN record
  * \note call this before any externals register themselves
  */
 #define INIT_RECORDFACTORY() \
-  template<>gem::PluginFactory<gem::record, std::string>*gem::PluginFactory<gem::record, std::string>::s_factory=NULL; \
-  static gem::PluginFactoryRegistrar::dummy<gem::record, std::string> fac_recorddummy
+  template<>gem::PluginFactory<gem::record>*gem::PluginFactory<gem::record>::s_factory=NULL; \
+  static gem::PluginFactoryRegistrar::dummy<gem::record> fac_recorddummy
 
 
 

@@ -20,12 +20,16 @@ namespace gem {
     BasePluginFactory();
     virtual ~BasePluginFactory(void);
 
+    std::vector<std::string>get(void);
+    void*get(std::string);
+    void set(std::string, void*);
+
   private:
     class Pimpl;
     Pimpl*m_pimpl;
   };
 
-  template<class Class, class IdClass>
+  template<class Class>
     class GEM_EXPORT PluginFactory : public BasePluginFactory {
   public:
 
@@ -37,16 +41,16 @@ namespace gem {
     /**
      * register a a constructor associated with a given ID
      */
-    static void registerClass(IdClass id, ctor_t*c);
+    static void registerClass(std::string id, ctor_t*c);
     /**
      * get an instance of class constructed by the constructor associated with the given ID
      */
-    static Class*getInstance(IdClass id);
+    static Class*getInstance(std::string id);
 
     /**
      * get a list of all IDs currently registered with this factory
      */
-    static std::vector<IdClass>getIDs(void);
+    static std::vector<std::string>getIDs(void);
 
     /**
      * load more plugins
@@ -54,19 +58,13 @@ namespace gem {
     static int loadPlugins(std::string basename, std::string path=std::string(""));
 
   private:
-    typedef std::map<IdClass, ctor_t*> ctormap_t;
-    ctormap_t m_constructor;
+    static PluginFactory<Class>*s_factory;
+    static PluginFactory<Class>*getPluginFactory();
 
-    static PluginFactory<Class, IdClass>*s_factory;
-    static PluginFactory<Class, IdClass>*getPluginFactory();
-
-    void doRegisterClass(IdClass id, ctor_t*c);
-    Class*doGetInstance(IdClass id);
-    std::vector<IdClass>doGetIDs(void);
+    void doRegisterClass(std::string id, ctor_t*c);
+    Class*doGetInstance(std::string id);
+    std::vector<std::string>doGetIDs(void);
   };
-
-
-
 
 
   namespace PluginFactoryRegistrar {
@@ -83,15 +81,15 @@ namespace gem {
      *  static gem::PluginFactoryRegistrar<Child, Base, std::string > basefac_childreg("childID"); // register Child as 'childID'
      *  Base*instance=gem::PluginFactory<Base>::getInstance("childID"); // returns an instance of Child
      */
-    template<class ChildClass, class BaseClass, class IdClass>
+    template<class ChildClass, class BaseClass>
       struct registrar {
-        registrar(IdClass ID);
+        registrar(std::string ID);
       };
 
     /**
      * registers a dummy constructor with a default ID
      */
-    template<class BaseClass, class IdClass>
+    template<class BaseClass>
       struct dummy {
 	dummy(void);
       };

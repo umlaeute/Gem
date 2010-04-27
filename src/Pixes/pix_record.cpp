@@ -42,21 +42,21 @@ pix_record :: pix_record(int argc, t_atom *argv):
     width = height = 128;
   }
 
-  gem::PluginFactory<gem::record, std::string>::loadPlugins("record");
+  gem::PluginFactory<gem::record>::loadPlugins("record");
 
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outInfo      = outlet_new(this->x_obj, 0);
 
-  m_handle=gem::PluginFactory<gem::record, std::string>::getInstance("QT");
+  m_handle=gem::PluginFactory<gem::record>::getInstance("QT");
 
   if(!m_handle)
-    m_handle=gem::PluginFactory<gem::record, std::string>::getInstance("QT4L");
+    m_handle=gem::PluginFactory<gem::record>::getInstance("QT4L");
  
   if(NULL==m_handle) {
-    std::vector<std::string>ids=gem::PluginFactory<gem::record, std::string>::getIDs();
+    std::vector<std::string>ids=gem::PluginFactory<gem::record>::getIDs();
     int i=0;
     for(i=0; i<ids.size(); i++) {
-      m_handle=gem::PluginFactory<gem::record, std::string>::getInstance(ids[i]);
+      m_handle=gem::PluginFactory<gem::record>::getInstance(ids[i]);
       if(m_handle)break;
     }
   }

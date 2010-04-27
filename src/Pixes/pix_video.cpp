@@ -33,10 +33,10 @@ CPPEXTERN_NEW(pix_video)
 pix_video :: pix_video() : 
   m_videoHandle(NULL), m_driver(-1)
 {
-  gem::PluginFactory<gem::video, std::string>::loadPlugins("video");
+  gem::PluginFactory<gem::video>::loadPlugins("video");
 
   m_videoHandle=NULL;
-  std::vector<std::string>ids=gem::PluginFactory<gem::video, std::string>::getIDs();
+  std::vector<std::string>ids=gem::PluginFactory<gem::video>::getIDs();
 
   addHandle(ids, "v4l2");
   addHandle(ids, "v4l");
@@ -101,7 +101,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       post("%d: '%s' ", m_videoHandles.size(), key.c_str());
       // not yet added, do so now!
-      gem::video         *handle=gem::PluginFactory<gem::video, std::string>::getInstance(key); 
+      gem::video         *handle=gem::PluginFactory<gem::video>::getInstance(key); 
       if(NULL==handle)break;
       m_ids.push_back(key);
       m_videoHandles.push_back(handle);
