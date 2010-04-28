@@ -26,7 +26,7 @@ case "${KERN}" in
 esac
 
 
-function autoconf_getsubdirs {
+autoconf_getsubdirs () {
  if [ -e configure.ac ]; then
  cat configure.ac | sed -e 's|#.*$||' | grep AC_CONFIG_SUBDIRS | \
 	sed -e 's|^.*AC_CONFIG_SUBDIRS(\[\(.*\)\]).*$|\1|'
@@ -37,7 +37,7 @@ function autoconf_getsubdirs {
  fi
 }
 
-function manual_autoreconf_doit {
+manual_autoreconf_doit () {
  echo faking autoreconf for $1
  pushd $1
 
@@ -63,7 +63,7 @@ function manual_autoreconf_doit {
  popd
 }
 
-function manual_autoreconf {
+manual_autoreconf () {
  echo faking autoreconf..
  BASEDIR=${0%/*}
  pushd $BASEDIR
