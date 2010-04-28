@@ -26,6 +26,24 @@ case "${KERN}" in
 esac
 
 
+#check whether the system supports pushd/popd
+if pushd . > /dev/null 2>&1
+then
+ popd > /dev/null 2>&1
+else
+## some shells (namely dash) don't support pushd/popd
+## here we provide some dummies
+pushd () {
+ echo "ignoring pushd to $@"
+}
+
+popd () {
+ echo "ignoring popd ..."
+}
+fi
+
+
+
 autoconf_getsubdirs () {
  if [ -e configure.ac ]; then
  cat configure.ac | sed -e 's|#.*$||' | grep AC_CONFIG_SUBDIRS | \
