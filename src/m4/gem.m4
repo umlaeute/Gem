@@ -383,8 +383,8 @@ EOF
  fi
 fi
 
-let PD_MAJORVERSION=`echo $PD_VERSION | cut -d"." -f1`+0
-let PD_MINORVERSION=`echo $PD_VERSION | cut -d"." -f2`+0
+PD_MAJORVERSION=$(( $(echo $PD_VERSION | cut -d"." -f1) ))
+PD_MINORVERSION=$(( $(echo $PD_VERSION | cut -d"." -f2) ))
 
 if test "$PD_MAJORVERSION" -gt 0 -o "$PD_MINORVERSION" -ge 37; then
   GEM_RTE_REFERENCEPATH=extra/Gem
