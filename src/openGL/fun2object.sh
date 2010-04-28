@@ -2,19 +2,19 @@
 
 ## generates a wrapper object for a special (openGL) function
 
-function type2pd() {
+type2pd () {
     echo "t_float"
 }
 
-function type2pdarg() {
+type2pdarg () {
     echo "t_floatarg"
 }
 
-function type2PD() {
+type2PD () {
     echo "A_DEFFLOAT"
 }
 
-function make_header() {
+make_header () {
 echo "/* ------------------------------------------------------------------"
 echo " * GEM - Graphics Environment for Multimedia"
 echo " *"
@@ -49,11 +49,11 @@ echo "	public:"
 echo "	  // Constructor"
 echo -n "	  ${gem_name} ("
 
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo -n "$(type2pd ${fun_argtypes[${i}]})"
-  let i+=1
+  i=$((i+1))
   if [ ${i} -lt  ${fun_argcount} ]
   then
     echo -n ", "
@@ -71,14 +71,14 @@ echo "	  virtual void	render (GemState *state);"
 echo ""
 echo "    // variables"
 
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "	  ${fun_argtypes[${i}]} m_${fun_argnames[${i}]}; // VAR"
   echo "	  virtual void ${fun_argnames[${i}]}Mess( $(type2pd ${fun_argtypes[${i}]}) ); // VAR"
 
   echo ""
-  let i+=1
+  i=$((i+1))
 done
 echo ""
 echo "	private:"
@@ -88,18 +88,18 @@ echo "	  t_inlet *m_inlet[${fun_argcount}];"
 echo ""
 echo "    // static member functions"
 
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "	  static void ${fun_argnames[${i}]}MessCallback(void*, $(type2pdarg ${fun_argtypes[${i}]}) );"
-  let i+=1
+  i=$((i+1))
 done
 
 echo "};"
 echo "#endif /* for header file */"
 }
 
-function make_body() {
+make_body () {
 echo "////////////////////////////////////////////////////////"
 echo "//"
 echo "// GEM - Graphics Environment for Multimedia"
@@ -122,11 +122,11 @@ echo "/////////////////////////////////////////////////////////"
 echo "// Constructor"
 echo "//"
 echo -n "${gem_name} :: ${gem_name}	("
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo -n "$(type2pdarg ${fun_argtypes[${i}]}) arg${i}=0"
-  let i+=1
+  i=$((i+1))
   if [ ${i} -lt  ${fun_argcount} ]
   then
     echo -n ", "
@@ -134,11 +134,11 @@ do
   echo ""
 done
 echo ") :"
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo -n "	  m_${fun_argnames[${i}]}((${fun_argtypes[${i}]})arg${i})"
-  let i+=1
+  i=$((i+1))
   if [ ${i} -lt  ${fun_argcount} ]
   then
     echo -n ","
@@ -146,11 +146,11 @@ do
   echo ""
 done
 echo "{"
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "	  m_inlet[${i}] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym(\"${fun_argnames[${i}]}\"));"
-  let i+=1
+  i=$((i+1))
 done
 echo "}"
 echo ""
@@ -160,12 +160,12 @@ echo "/////////////////////////////////////////////////////////"
 echo "// Destructor"
 echo "//"
 echo "${gem_name} :: ~${gem_name} () {"
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "	  inlet_free(m_inlet[${i}]); m_inlet[${i}]=NULL;"
 
-  let i+=1
+  i=$((i+1))
 done
 echo "}"
 
@@ -175,11 +175,11 @@ echo "// Render"
 echo "//"
 echo "void ${gem_name} :: render(GemState *state) {"
 echo -n "	${fun_name} ("
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo -n "m_${fun_argnames[${i}]}"
-  let i+=1
+  i=$((i+1))
   if [ ${i} -lt  ${fun_argcount} ]
   then
     echo -n ", "
@@ -189,7 +189,7 @@ echo ");"
 echo "}"
 echo ""
 
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "void ${gem_name} :: ${fun_argnames[${i}]}Mess($(type2pd ${fun_argtypes[${i}]}) arg1) {"
@@ -197,7 +197,7 @@ do
   echo "	  setModified();"
   echo "}"
   echo ""
-  let i+=1
+  i=$((i+1))
 done
 
 
@@ -207,21 +207,21 @@ echo "// static member functions"
 echo "//"
 echo ""
 echo "void ${gem_name} :: obj_setupCallback(t_class *classPtr) {"
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "	 class_addmethod(classPtr, (t_method)&${gem_name}::${fun_argnames[${i}]}MessCallback,  	gensym(\"${fun_argnames[${i}]}\"), $(type2PD ${fun_argtypes[${i}]}), A_NULL);"
-  let i+=1
+  i=$((i+1))
 done
 echo "};"
 echo ""
-let i=0
+i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
   echo "void ${gem_name} :: ${fun_argnames[${i}]}MessCallback (void*data, $(type2pdarg ${fun_argtypes[${i}]}) arg0) {"
   echo "	GetMyClass(data)->${fun_argnames[${i}]}Mess( ($(type2pd ${fun_argtypes[${i}]})) arg0);"
   echo "}"
-  let i+=1
+  i=$((i+1))
 done
 
 
@@ -231,11 +231,14 @@ echo ""
 
 
 
-function parsedecl() {
+parsedecl () {
     local fun_return
     local fun_name
-    local -a fun_argnames
-    local -a fun_argtypes
+# array of argument names
+    local fun_argnames
+# array of argument types
+    local fun_argtypes
+#number of arguments
     local fun_argcount
     local dummy
     local line
@@ -248,7 +251,7 @@ function parsedecl() {
     fun_name=$2
     shift 2
 
-    let fun_argcount=0
+    fun_argcount=0
     while [ $# -gt 0 ]
     do
       dummy=$1
@@ -266,7 +269,7 @@ function parsedecl() {
 
       fun_argnames[${fun_argcount}]="${dummy}"
       shift 2
-      let fun_argcount+=1
+      fun_argcount=$((fun_argcount+1))
     done
 
     gem_name="GEM${fun_name}"

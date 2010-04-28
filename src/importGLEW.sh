@@ -3,12 +3,12 @@
 GLEW_DIR=$1
 OUTPUT_DIR=Base
 
-function usage() {
+usage () {
  echo "usage: $0 </path/to/glew/>"
  exit -1
 }
 
-function test_glew_path() {
+test_glew_path () {
  if test "x" = "x${GLEW_DIR}"; then
   usage
  fi
@@ -25,14 +25,14 @@ function test_glew_path() {
  fi
 }
 
-function remake_glew() {
+remake_glew () {
  # delete previously downloaded extensions
  make -C ${GLEW_DIR}/auto destroy
  # get extensions from http://oss.sgi.com/
  make -C ${GLEW_DIR}/auto
 }
 
-function gemify_glew() {
+gemify_glew () {
  if test -f "$1"; then
    sed -e "s/<GL\/\(.*gl.*ew.*\)>/\"${OUTPUT_DIR_ESC}\/\1\"/" $1
  fi
