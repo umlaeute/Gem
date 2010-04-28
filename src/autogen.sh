@@ -5,6 +5,7 @@ package=Gem
 
 AUTORECONF=autoreconf
 
+AUTOHEADER=autoheader
 AUTOMAKE=automake
 ACLOCAL=aclocal
 LIBTOOL=libtool
@@ -55,28 +56,32 @@ autoconf_getsubdirs () {
  fi
 }
 
+runit () {
+echo "  $@"
+$@
+}
+
 manual_autoreconf_doit () {
  echo faking autoreconf for $1
  pushd $1
 
   SUBDIRS=$(autoconf_getsubdirs)
 
-  echo "  $ACLOCAL -I $BASEDIR/m4"
-  $ACLOCAL -I $BASEDIR/m4 || exit -1
-  echo "  $AUTOHEADER"
-  $AUTOHEADER || exit -1
-  echo "  $LIBTOOLIZE --automake -c"
-  $LIBTOOLIZE --automake -c || exit -1
+  runit $ACLOCAL -I $BASEDIR/m4 || exit 1
+  runit $LIBTOOLIZE --automake -c || exit 1
   if [ -e Makefile.am ]; then
-   echo "  $AUTOMAKE --add-missing -c"
-   $AUTOMAKE --add-missing -c || exit -1
+   runit $AUTOMAKE --add-missing -c || exit 1
   fi
+  if test -e configure.ac && grep AC_CONFIG_HEADER configure.ac > /dev/null 2>&1; then
+   runit $AUTOHEADER --force || exit 1
+  fi
+
   for d in ${SUBDIRS}; do
     manual_autoreconf_doit ${d}
   done
 
   echo "  $AUTOCONF"
-  $AUTOCONF || exit -1
+  $AUTOCONF || exit 1
 
  popd
 }
