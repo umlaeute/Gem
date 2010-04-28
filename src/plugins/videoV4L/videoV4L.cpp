@@ -48,8 +48,7 @@ using namespace gem;
 
 #include "Gem/RTE.h"
 
-#ifdef HAVE_VIDE4LINUX
-#error bla
+#ifdef HAVE_VIDEO4LINUX
 REGISTER_VIDEOFACTORY("v4l", videoV4L);
 #endif
 
