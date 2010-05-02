@@ -71,6 +71,8 @@ manual_autoreconf_doit () {
 
   runit $LIBTOOLIZE --automake -c || exit 1
 
+  runit $AUTOCONF || exit 1
+
   if test -e configure.ac && grep AC_CONFIG_HEADER configure.ac > /dev/null 2>&1; then
    runit $AUTOHEADER --force || exit 1
   fi
@@ -83,9 +85,6 @@ manual_autoreconf_doit () {
   for d in ${SUBDIRS}; do
     manual_autoreconf_doit ${d}
   done
-
-  echo "  $AUTOCONF"
-  $AUTOCONF || exit 1
 
  popd
 }
