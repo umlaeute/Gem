@@ -5,5 +5,5 @@ AM_CPPFLAGS = -I../..
 lib_LTLIBRARIES= gem_filmAVIPLAY.la
 gem_filmAVIPLAY_la_SOURCES= filmAVIPLAY.cpp filmAVIPLAY.h
 gem_filmAVIPLAY_la_CXXFLAGS = @GEM_RTE_CFLAGS@ @GEM_LIB_AVIFILE_CFLAGS@
-gem_filmAVIPLAY_la_LDFLAGS = -module @GEM_RTE_LIBS@ @GEM_LIB_AVIFILE_LIBS@
+gem_filmAVIPLAY_la_LDFLAGS = -module -avoid-version -shared @GEM_RTE_LIBS@ @GEM_LIB_AVIFILE_LIBS@
 

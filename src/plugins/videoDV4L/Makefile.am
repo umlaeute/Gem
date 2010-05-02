@@ -5,5 +5,5 @@ AM_CPPFLAGS = -I../..
 lib_LTLIBRARIES= gem_videoDV4L.la
 gem_videoDV4L_la_SOURCES= videoDV4L.cpp videoDV4L.h
 gem_videoDV4L_la_CXXFLAGS = @GEM_RTE_CFLAGS@ @GEM_LIB_IEEE1394_CFLAGS@
-gem_videoDV4L_la_LDFLAGS = -module @GEM_RTE_LIBS@  @GEM_LIB_IEEE1394_LIBS@
+gem_videoDV4L_la_LDFLAGS = -module -avoid-version -shared @GEM_RTE_LIBS@  @GEM_LIB_IEEE1394_LIBS@
 
