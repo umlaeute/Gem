@@ -326,7 +326,9 @@ void pix_videoDarwin :: InitSeqGrabber()
         post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
         int i;
         for (i = 0; i < deviceCount; i++){
-            post("SG channnel Device List  %s",(*devices)->entry[i].name);
+	  post("SG channnel Device List  %.*s",
+	       (*devices)->entry[i].name[0],
+	       (*devices)->entry[i].name+1);
             }
         SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
 
@@ -339,7 +341,10 @@ void pix_videoDarwin :: InitSeqGrabber()
         //walk through the list
         //for (i = 0; i < deviceCount; i++){
         for (i = 0; i < inputIndex; i++){
-            post("SG channnel Input Device List %d %s",i,(*theSGInputList)->entry[i].name);
+            post("SG channnel Input Device List %d %.*s",
+		 i,
+		 (*theSGInputList)->entry[i].name[0],
+		 (*theSGInputList)->entry[i].name+1);
         }
 
 
@@ -348,7 +353,9 @@ void pix_videoDarwin :: InitSeqGrabber()
     //this call sets the input device
     if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
         //anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice);
-        post("SGSetChannelDevice trying %s", (*devices)->entry[m_inputDevice].name);
+        post("SGSetChannelDevice trying %s", 
+	     (*devices)->entry[m_inputDevice].name[0],
+	     (*devices)->entry[m_inputDevice].name+1);
         anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
 
         if(anErr!=noErr) error("SGSetChannelDevice returned error %d",anErr);
@@ -381,7 +388,7 @@ void pix_videoDarwin :: InitSeqGrabber()
     Str255    vdigName;
     memset(vdigName,0,255);
     vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
-    post("vdigName is %s",vdigName);
+    post("vdigName is %s",vdigName); // pascal string?
 
     Rect vdRect;
     vdigErr = VDGetDigitizerRect(m_vdig,&vdRect);
