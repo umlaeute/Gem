@@ -68,13 +68,17 @@ manual_autoreconf_doit () {
   SUBDIRS=$(autoconf_getsubdirs)
 
   runit $ACLOCAL -I $BASEDIR/m4 || exit 1
+
   runit $LIBTOOLIZE --automake -c || exit 1
-  if [ -e Makefile.am ]; then
-   runit $AUTOMAKE --add-missing -c || exit 1
-  fi
+
   if test -e configure.ac && grep AC_CONFIG_HEADER configure.ac > /dev/null 2>&1; then
    runit $AUTOHEADER --force || exit 1
   fi
+
+  if [ -e Makefile.am ]; then
+   runit $AUTOMAKE --add-missing -c || exit 1
+  fi
+
 
   for d in ${SUBDIRS}; do
     manual_autoreconf_doit ${d}
