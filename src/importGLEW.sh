@@ -5,7 +5,8 @@ OUTPUT_DIR=Base
 
 usage () {
  echo "usage: $0 </path/to/glew/>"
- exit -1
+ echo "get GLEW from http://sourceforge.net/projects/glew/files/glew"
+ exit 255
 }
 
 test_glew_path () {
@@ -21,7 +22,7 @@ test_glew_path () {
  OUTPUT_DIR_ESC=$(echo ${OUTPUT_DIR%/} | sed -e 's/\//\\\//g')
  if test -d "${OUTPUT_DIR}"; then :; else
    echo "$0: no valid output-directory: ${OUTPUT_DIR}"
-   exit -1
+   exit 255
  fi
 }
 
