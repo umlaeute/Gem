@@ -34,9 +34,9 @@ part_render :: part_render()
   m_colorize=true;
   m_sizing  =true;
   m_number=1000;
-  m_colors = new float[m_number * 4];
-  m_sizes  = new float[m_number];
-  m_pos    = new float[m_number*3];
+  m_colors = new GLfloat[m_number*4];
+  m_sizes  = new GLfloat[m_number*3];
+  m_pos    = new GLfloat[m_number*3];
 }
 
 /////////////////////////////////////////////////////////
@@ -60,16 +60,17 @@ void part_render :: render(GemState *state)
   if(cnt < 1)return;
   if (cnt>m_number){
     if(m_colors)delete[]m_colors;
-    if(m_sizes)delete[]m_sizes;
-    if(m_pos)delete[]m_pos;
+    if(m_sizes) delete[]m_sizes;
+    if(m_pos)   delete[]m_pos;
     m_number = cnt;
-    m_colors = new float[m_number * 4];
-    m_sizes  = new float[m_number * 3];
-    m_pos    = new float[m_number * 3];
+
+    m_colors = new GLfloat[m_number * 4];
+    m_sizes  = new GLfloat[m_number * 3];
+    m_pos    = new GLfloat[m_number * 3];
   }
-  float *position = m_pos;
-  float *color = m_colorize ?  m_colors : NULL;
-  float *size = m_sizing ? m_sizes : NULL;
+  GLfloat *position = m_pos;
+  GLfloat *color = m_colorize ?  m_colors : NULL;
+  GLfloat *size = m_sizing ? m_sizes : NULL;
   pGetParticles(0, cnt, position, color, NULL, size);
   for(int i = 0; i < cnt; i++)	{
     glMatrixMode(GL_MODELVIEW);

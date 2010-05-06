@@ -49,13 +49,13 @@ class GEM_EXTERN part_render : public GemBase
   virtual ~part_render();
 
   // How the object should be drawn
-  float        *m_pos;
+  GLfloat        *m_pos;
   void		colorMess(int state);
   bool		m_colorize;
-  float        *m_colors;
+  GLfloat        *m_colors;
   void		sizeMess(int state);
   bool		m_sizing;
-  float        *m_sizes;
+  GLfloat        *m_sizes;
 
   int           m_number;
 
