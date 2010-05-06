@@ -39,13 +39,29 @@ gemify_glew () {
  fi
 }
 
+gemify_glew_c () {
+ if test -f "$1"; then
+cat <<EOF
+#ifdef HAVE_CONFIG_H
+# include "Base/config.h"
+#endif
+#ifndef HAVE_LIBGLEW
+EOF
+
+ gemify_glew $1
+
+echo "#endif /* HAVE_LIBGLEW */"
+
+ fi
+}
+
 # test whether the user has provided enough information
 test_glew_path
 
 # rebuild glew
 remake_glew
 
-gemify_glew ${GLEW_DIR}/src/glew.c >> ${OUTPUT_DIR}/glew.cpp
+gemify_glew_c ${GLEW_DIR}/src/glew.c > ${OUTPUT_DIR}/glew.cpp
 
 for f in glew.h glxew.h wglew.h
 do
