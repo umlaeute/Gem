@@ -46,10 +46,21 @@ pix_buf :: ~pix_buf()
 /////////////////////////////////////////////////////////
 void pix_buf :: render(GemState *state)
 {
-  m_banged|=m_auto;
+  bool doit=m_banged;
+
   cachedPixBlock.newimage = 0;
   if (!state || !state->image || !&state->image->image) return;
-  if (state->image->newimage || m_banged){
+
+  doit|=m_auto;
+  doit|=state->image->newimage;
+
+  // 
+  if (m_cache&&m_cache->resendImage)
+    {
+      doit=true;
+    }
+
+  if (doit){
     orgPixBlock = state->image;
     state->image->image.copy2Image(&cachedPixBlock.image);
     cachedPixBlock.newimage = 1;

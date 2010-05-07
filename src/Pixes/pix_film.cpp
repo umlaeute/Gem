@@ -17,6 +17,8 @@
 #ifndef __APPLE__
 
 #include "pix_film.h"
+#include "Base/GemCache.h"
+
 #include <ctype.h>
 
 #include "Pixes/filmGMERLIN.h"
@@ -339,6 +341,14 @@ void pix_film :: render(GemState *state)
   } else
 #endif /* PTHREADS */
     state->image=m_handle->getFrame();
+  // someone wants to process the image downstream, so make sure they get it
+  if (m_cache&&m_cache->resendImage)
+    {
+      state->image->newimage=true;
+      m_cache->resendImage = 0;
+    }
+
+
   m_handle->setAuto(m_auto);
   frame=(int)m_reqFrame;
   if (NULL==state->image){
