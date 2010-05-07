@@ -48,17 +48,18 @@
 #X obj 593 54 gemhead;
 #X floatatom 624 114 5 0 0 0 - - -;
 #X text 624 98 size;
-#X text 7 69 Description: Renders an equilateral triangle;
-#X text 16 86 The [triangle] object renders a equilateral triangle
-at the current position with current color. The size of the triangle
-can be changed via the second inlet.;
 #X text 63 186 size of the triangle;
 #X text 33 14 Synopsis: [triangle];
 #X obj 593 158 triangle 2;
+#X text 7 69 Description: Renders an isosceles triangle;
+#X text 16 86 The [triangle] object renders an equal-sided (where the
+height equals the base) triangle at the current position with current
+color. The size of the triangle can be changed via the second inlet.
+;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
-#X connect 19 0 29 0;
-#X connect 20 0 29 0;
-#X connect 21 0 29 0;
-#X connect 22 0 29 0;
-#X connect 23 0 29 1;
+#X connect 19 0 27 0;
+#X connect 20 0 27 0;
+#X connect 21 0 27 0;
+#X connect 22 0 27 0;
+#X connect 23 0 27 1;
