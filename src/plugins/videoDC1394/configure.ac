@@ -19,6 +19,6 @@ GEM_CHECK_RTE
 AC_LANG(C++)
 
 
-GEM_CHECK_LIB(dc1394,dc1394,main,,,,video input)
+GEM_CHECK_LIB(libdc1394-2,dc1394,main,,,,video input)
 
 AC_OUTPUT

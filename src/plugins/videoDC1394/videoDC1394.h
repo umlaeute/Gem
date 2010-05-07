@@ -14,28 +14,17 @@
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEODV4L_H_
-#define INCLUDE_VIDEODV4L_H_
+#ifndef INCLUDE_VIDEODC1394_H_
+#define INCLUDE_VIDEODC1394_H_
 #include "plugins/video.h"
 
-#ifdef HAVE_LIBDV
-#define HAVE_DV
+
+#ifdef HAVE_LIBDC1394
+#include "dc1394/dc1394.h"
 #endif
 
-#ifdef HAVE_DV
-// you will have to add "/usr/src/linux/drivers" to your include-path
-#include "dv1394.h"
-#include <libdv/dv.h>
-
-
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#include <pthread.h>
+#ifdef HAVE_PTHREAD
+# include <pthread.h>
 #endif
 
 
@@ -59,16 +48,16 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoDV4L : public video {
+namespace gem { class GEM_EXTERN videoDC1394 : public video {
     public:
         //////////
         // Constructor
-    	videoDV4L(void);
+    	videoDC1394(void);
     	    	
     	//////////
     	// Destructor
-    	virtual ~videoDV4L();
-#ifdef HAVE_DV
+    	virtual ~videoDC1394();
+#ifdef HAVE_LIBDC1394
 	////////
 	// open the video-device
 	virtual int            openDevice(int format=0);
@@ -101,11 +90,6 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
   //-----------------------------------
   // GROUP:	Linux specific video data
   //-----------------------------------
-  int dvfd;
-  unsigned char *videobuf;
-  unsigned char *decodedbuf;
-  bool m_frame_ready;
-  int  m_frame, m_lastframe;
 
 
   //////////
@@ -114,15 +98,9 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
   bool m_continue_thread;
   pthread_t m_thread_id;
 
-  int m_framesize;
-  unsigned char *m_mmapbuf;
-
-  ////////
-  // the DV-decoder
-  dv_decoder_t *m_decoder;
 #else
   pixBlock    *getFrame(){return NULL;}
-#endif /* HAVE_DV */
+#endif /* HAVE_LIBDC1394 */
 }; };
 
 #endif	// for header file
