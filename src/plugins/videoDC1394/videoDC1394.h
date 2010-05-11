@@ -98,11 +98,14 @@ namespace gem { class GEM_EXTERN videoDC1394 : public video {
   static void*capturing(void*);
   bool m_continue_thread;
   pthread_t m_thread_id;
+  pthread_mutex_t*m_lock;
 
   dc1394camera_t * m_dccamera;
 
   dc1394video_frame_t * m_dcframe;
   dc1394_t * m_dc;
+
+  imageStruct m_frame;
 
 #else
   pixBlock    *getFrame(){return NULL;}

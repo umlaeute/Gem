@@ -41,14 +41,26 @@ videoDC1394 :: ~videoDC1394() {}
 #else
 videoDC1394 :: videoDC1394() : video(),
                                m_continue_thread(false),
+                               m_lock(NULL),
 
                                m_dccamera(NULL),
                                m_dcframe(NULL),
                                m_dc(NULL)
 {
   m_dc = dc1394_new(); /* Initialize libdc1394 */
-  if(m_dc) 
-    provide("dc1394");
+  if(!m_dc) return;
+
+  m_lock = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+  if ( pthread_mutex_init(m_lock, NULL) < 0 ) {
+    error("failed to initialize mutex");
+    return;
+  }
+  m_frame.xsize=1600;
+  m_frame.ysize=1200;
+  m_frame.setCsizeByFormat(GL_RGBA);
+  m_frame.allocate();
+
+  provide("dc1394");
 }
 
 /////////////////////////////////////////////////////////
@@ -58,6 +70,14 @@ videoDC1394 :: videoDC1394() : video(),
 videoDC1394 :: ~videoDC1394(){
   if(m_dccamera)dc1394_camera_free (m_dccamera);m_dccamera=NULL;
   if(m_dc)dc1394_free(m_dc);m_dc=NULL;
+
+  if ( m_lock )
+    {
+      pthread_mutex_destroy(m_lock);
+      free(m_lock);
+      m_lock=NULL;
+    }
+
 }
 /////////////////////////////////////////////////////////
 // render
@@ -73,7 +93,7 @@ void *videoDC1394 :: capturing(void*you)
 void videoDC1394 :: captureThread()
 {
   dc1394error_t err;
-  dc1394video_frame_t*frame;
+  dc1394video_frame_t*frame, *colframe;
 
   if(!m_dccamera) {
     m_haveVideo=false;
@@ -87,10 +107,26 @@ void videoDC1394 :: captureThread()
     return;
   }
 
+
   m_capturing=true;
   while(m_continue_thread){
     err=dc1394_capture_dequeue(m_dccamera, DC1394_CAPTURE_POLICY_WAIT, &frame);/* Capture */
 
+    /* do something with the frame */
+    dc1394video_frame_t *colframe=( dc1394video_frame_t*)calloc(1,sizeof(dc1394video_frame_t));
+    colframe->color_coding=DC1394_COLOR_CODING_RGB8;
+    dc1394_convert_frames(frame, colframe);
+
+    pthread_mutex_lock(m_lock);
+    m_frame.xsize=frame->size[0];
+    m_frame.ysize=frame->size[1];
+    m_frame.setCsizeByFormat(GL_RGBA);
+    m_frame.fromRGB(colframe->image);
+
+    pthread_mutex_unlock(m_lock);
+
+    free(colframe->image);
+    free(colframe);
     err=dc1394_capture_enqueue(m_dccamera, frame);                             /* Release the buffer */
   }
   m_capturing=false;
@@ -104,8 +140,15 @@ void videoDC1394 :: captureThread()
 
 
 pixBlock *videoDC1394 :: getFrame(){
-  return NULL;
-  //return &m_image;
+  if (!m_haveVideo)return NULL;
+  //  if (!m_frame_ready) m_image.newimage = 0;
+  if(false) m_image.newimage=0;
+  else {
+    pthread_mutex_lock(m_lock);
+    m_image.image.convertFrom(&m_frame, m_reqFormat); 
+    pthread_mutex_unlock(m_lock);
+  }
+  return &m_image;
 }
 
 /////////////////////////////////////////////////////////
