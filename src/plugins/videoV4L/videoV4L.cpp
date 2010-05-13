@@ -48,10 +48,6 @@ using namespace gem;
 
 #include "Gem/RTE.h"
 
-#ifdef HAVE_VIDEO4LINUX
-REGISTER_VIDEOFACTORY("v4l", videoV4L);
-#endif
-
 #ifndef HAVE_LIBV4L1
 # define v4l1_open open
 # define v4l1_close close
@@ -76,23 +72,22 @@ REGISTER_VIDEOFACTORY("v4l", videoV4L);
 // Constructor
 //
 /////////////////////////////////////////////////////////
+#ifdef HAVE_VIDEO4LINUX
+REGISTER_VIDEOFACTORY("v4l", videoV4L);
+
+
 videoV4L :: videoV4L() : video()
-#ifdef HAVE_VIDEO4LINUX
-                                 ,
-                                   tvfd(0),
-                                   frame(0),last_frame(0), 
-                                   videobuf(NULL), 
-                                   skipnext(0),
-                                   mytopmargin(0), mybottommargin(0), 
-                                   myleftmargin(0), myrightmargin(0),
-                                   m_gotFormat(0),m_colorConvert(false),
-                                   m_thread_id(0),
-                                   m_continue_thread(false), m_frame_ready(false),
-                                   m_rendering(false),
-                                   m_stopTransfer(false)
-#endif
+		       ,
+			 tvfd(0),
+			 frame(0),
+			 videobuf(NULL), 
+			 skipnext(0),
+			 mytopmargin(0), mybottommargin(0), 
+			 myleftmargin(0), myrightmargin(0),
+			 m_gotFormat(0),m_colorConvert(false),
+			 errorcount(0)
+			 
 {
-#ifdef HAVE_VIDEO4LINUX
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
 
@@ -103,7 +98,6 @@ videoV4L :: videoV4L() : video()
 
   provide("video4linux");
   provide("v4l");
-#endif /* HAVE_VIDEO4LINUX */
 }
 
 ////////////////////////////////////////////////////////
@@ -112,152 +106,88 @@ videoV4L :: videoV4L() : video()
 /////////////////////////////////////////////////////////
 videoV4L :: ~videoV4L()
 {
-#ifdef HAVE_VIDEO4LINUX
   if (m_haveVideo)stopTransfer();
-#endif /* HAVE_VIDEO4LINUX */
 }
-
-#ifdef HAVE_VIDEO4LINUX
-
-
-////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////
 // frame grabber
 //
 /////////////////////////////////////////////////////////
-void *videoV4L::capturing_(void*you)
-{
-  videoV4L *me=(videoV4L *)you;
-  return me->capturing();
-}
-void *videoV4L :: capturing()
-{
-  m_capturing=true;
-  int errorcount=0;
-  debug("v4l::thread starting");
-  while(m_continue_thread){
-    bool noerror=true;
+#if 1
+bool videoV4L :: grabFrame() {
+  bool noerror=true;
+
+  frame++;
+  frame%=V4L_NBUF;
+
+  vmmap[frame].width = m_image.image.xsize + myleftmargin + myrightmargin;
+  vmmap[frame].height = m_image.image.ysize + mytopmargin + mybottommargin;
   
-    //debug("thread %d\t%x %x", frame, tvfd, vmmap);
-
-    //  frame = !frame;
-    frame++;
-    frame%=V4L_NBUF;
-
-    vmmap[frame].width = m_image.image.xsize + 
-      myleftmargin + myrightmargin;
-    vmmap[frame].height = m_image.image.ysize + 
-      mytopmargin + mybottommargin;
-    
-    /* syncing */
-    if (v4l1_ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
-      {
-        perror("v4l: VIDIOCSYNC");
-        noerror=false;
-        //m_haveVideo = 0;stopTransfer();
-      }
-
-    /* capturing */
-    if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
-      {
-        if (errno == EAGAIN)
-          error("v4l: can't sync (no v4l source?)");
-        else 
-          perror("v4l: VIDIOCMCAPTURE1");
-
-        /* let's try again... */
-        if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0) {
-          perror("v4l: VIDIOCMCAPTURE2");
-          noerror=false;
-        }
-        /*
-          verbose(1, "frame %d %d, format %d, width %d, height %d\n",
-          frame, vmmap[frame].frame, vmmap[frame].format,
-          vmmap[frame].width, vmmap[frame].height);
-        */
-        //stopTransfer();m_haveVideo = 0;
-      }
-    if(noerror){
-      errorcount=0;
-    } else {
-      errorcount++;
-      if(errorcount>1000) {
-        error("v4L: %d capture errors in a row... I think I better stop now...", errorcount);
-        m_continue_thread=false;
-        m_stopTransfer=true;
-      }
+  /* syncing */
+  if (v4l1_ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
+    {
+      perror("v4l: VIDIOCSYNC");
+      noerror=false;
     }
 
-    m_frame_ready = 1;
-    last_frame=frame;
-  }
-  debug("v4l::thread exiting");
-  m_capturing=false;
-  return NULL;
-}
+  /* capturing */
+  if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
+    {
+      if (errno == EAGAIN)
+	error("v4l: can't sync (no v4l source?)");
+      else 
+	perror("v4l: VIDIOCMCAPTURE1");
 
-pixBlock *videoV4L :: getFrame(){
-  if(!m_haveVideo)return NULL;
-  if(m_stopTransfer) {
-    /* transfer has been stopped dues to errors in the thread
-     * it should be resumed whenever possible 
-     */
-    bool rendering=m_rendering;
-    stopTransfer();
-    m_rendering=rendering;
-    return NULL;
-  }
-  m_image.newfilm=0;
-  if (!m_frame_ready) m_image.newimage = 0;
-  else {
-    if (m_colorConvert){
-      m_image.image.notowned = false;
-      switch(m_gotFormat){
-      case VIDEO_PALETTE_YUV420P: m_image.image.fromYUV420P(videobuf + vmbuf.offsets[last_frame]); break;
-      case VIDEO_PALETTE_RGB24:   m_image.image.fromBGR    (videobuf + vmbuf.offsets[last_frame]); break;
-      case VIDEO_PALETTE_RGB32:   m_image.image.fromBGRA   (videobuf + vmbuf.offsets[last_frame]); break;
-      case VIDEO_PALETTE_GREY:    m_image.image.fromGray   (videobuf + vmbuf.offsets[last_frame]); break;
-      case VIDEO_PALETTE_YUV422:  m_image.image.fromYUV422 (videobuf + vmbuf.offsets[last_frame]); break;
-
-      default: // ? what should we do ?
-        m_image.image.data=videobuf + vmbuf.offsets[last_frame];
-        m_image.image.notowned = true;
+      /* let's try again... */
+      if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0) {
+	perror("v4l: VIDIOCMCAPTURE2");
+	noerror=false;
       }
-    } else {
-      m_image.image.data=videobuf + vmbuf.offsets[last_frame];
+    }
+  if(noerror){
+    errorcount=0;
+  } else {
+    errorcount++;
+    if(errorcount>1000) {
+      error("v4L: %d capture errors in a row... I think I better stop now...", errorcount);
+      return false;
+    }
+  }
+  
+  lock();
+  if (m_colorConvert){
+    m_image.image.notowned = false;
+    switch(m_gotFormat){
+    case VIDEO_PALETTE_YUV420P: m_image.image.fromYUV420P(videobuf + vmbuf.offsets[frame]); break;
+    case VIDEO_PALETTE_RGB24:   m_image.image.fromBGR    (videobuf + vmbuf.offsets[frame]); break;
+    case VIDEO_PALETTE_RGB32:   m_image.image.fromBGRA   (videobuf + vmbuf.offsets[frame]); break;
+    case VIDEO_PALETTE_GREY:    m_image.image.fromGray   (videobuf + vmbuf.offsets[frame]); break;
+    case VIDEO_PALETTE_YUV422:  m_image.image.fromYUV422 (videobuf + vmbuf.offsets[frame]); break;
+      
+    default: // ? what should we do ?
+      m_image.image.data=videobuf + vmbuf.offsets[frame];
       m_image.image.notowned = true;
     }
-    m_image.image.upsidedown=true;
-    
-    m_image.newimage = 1;
-    m_frame_ready = false;
+  } else {
+    m_image.image.data=videobuf + vmbuf.offsets[frame];
+    m_image.image.notowned = true;
   }
-  return &m_image;
+  m_image.image.upsidedown=true;
+  
+  m_image.newimage = 1;
+  unlock();
+  return true;
 }
+#endif
 
 /////////////////////////////////////////////////////////
-// startTransfer
+// openDevice
 //
 /////////////////////////////////////////////////////////
-int videoV4L :: startTransfer(int format)
+bool videoV4L :: openDevice()
 {
-  if(m_capturing)stopTransfer(); // just in case we are already running!
-  m_rendering=true;
-  m_stopTransfer=false;
-  if (format>1)m_reqFormat=format;
-  //  verbose(1, "starting transfer");
   char buf[256];
-  int i;
-  int width, height;
-
-  frame = 0;
-  skipnext = 0;
-  last_frame = 0;
 
   if(m_devicename){
     snprintf(buf,256,"%s", m_devicename);
@@ -282,65 +212,83 @@ int videoV4L :: startTransfer(int format)
       perror("v4l: get capabilities");
       goto closit;
     }
-  /*
-    verbose(1, "cap: name %s type %d channels %d maxw %d maxh %d minw %d minh %d\n",
-    vcap.name, vcap.type,  vcap.channels,  vcap.maxwidth,  vcap.maxheight,
-    vcap.minwidth,  vcap.minheight);
-  */
+
+  return true;
+
+ closit:
+  if (tvfd >= 0)
+    {
+      v4l1_close(tvfd);
+      tvfd = -1;
+    }
+  return false;
+}
+/////////////////////////////////////////////////////////
+// closeDevice
+//
+/////////////////////////////////////////////////////////
+void videoV4L :: closeDevice() {
+  if (tvfd>0) v4l1_close(tvfd);
+  tvfd = -1;
+}
+
+
+/////////////////////////////////////////////////////////
+// startTransfer
+//
+/////////////////////////////////////////////////////////
+bool videoV4L :: startTransfer()
+{
+  if(tvfd<0)return false;
+  int i;
+  int width, height;
+
+
+  errorcount=0;
+
+  frame = 0;
+  skipnext = 0;
+
   if (v4l1_ioctl(tvfd, VIDIOCGPICT, &vpicture) < 0)
     {
       perror("v4l: VIDIOCGPICT");
-      goto closit;
+      return false;
     }
-  /*
-    verbose(1, "picture: brightness %d depth %d palette %d\n",
-    vpicture.brightness, vpicture.depth, vpicture.palette);
-  */
   for (i = 0; i < vcap.channels; i++)
     {
       vchannel.channel = i;
       if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
         {
           perror("v4l: VDIOCGCHAN");
-          goto closit;
+          return false;
         }
-      /*
-        verbose(1, "channel %d name %s type %d flags %d\n",
-        vchannel.channel, vchannel.name, 
-        vchannel.type, vchannel.flags);
-      */
     }
   vchannel.channel = ((vcap.channels-1)<m_channel)?(vcap.channels-1):m_channel;
-  //verbose(1, "setting to channel %d", vchannel.channel);
   if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)
     {
       perror("v4l: VDIOCGCHAN");
-      goto closit;
+      return false;
     }
 
   vchannel.norm = m_norm;
   if (v4l1_ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0)
     {
       perror("v4l: VDIOCSCHAN");
-      goto closit;
+      return false;
     }
-
 
   /* get mmap numbers */
   if (v4l1_ioctl(tvfd, VIDIOCGMBUF, &vmbuf) < 0)
     {
       perror("v4l: VIDIOCGMBUF");
-      goto closit;
+      return false;
     }
-  /*
-    verbose(1, "buffer size %d, frames %d, offset %d %d\n", vmbuf.size,
-    vmbuf.frames, vmbuf.offsets[0], vmbuf.offsets[1]);
-  */
+
   if (!(videobuf = (unsigned char *)
         v4l1_mmap(0, vmbuf.size, PROT_READ|PROT_WRITE, MAP_SHARED, tvfd, 0)))
     {
       perror("v4l: mmap");
-      goto closit;
+      return false;
     }
 
   width = (m_width  > vcap.minwidth ) ? m_width        :  vcap.minwidth;   
@@ -348,7 +296,6 @@ int videoV4L :: startTransfer(int format)
   height =(m_height > vcap.minheight) ? m_height       : vcap.minheight;
   height =(height   > vcap.maxheight) ? vcap.maxheight : height;
 
-  //verbose(1, "wanted format is 0x%X", m_reqFormat);
   for (i = 0; i < V4L_NBUF; i++)    {
     switch(m_reqFormat){
     case GL_LUMINANCE:
@@ -359,26 +306,6 @@ int videoV4L :: startTransfer(int format)
     	vmmap[i].format = VIDEO_PALETTE_RGB24;
       break;
     case GL_YCBCR_422_GEM:
-#if 0
-      VIDEO_PALETTE_GREY	1	/* Linear greyscale */
-        VIDEO_PALETTE_HI240	2	/* High 240 cube (BT848) */
-        VIDEO_PALETTE_RGB565	3	/* 565 16 bit RGB */
-        VIDEO_PALETTE_RGB24	4	/* 24bit RGB */
-        VIDEO_PALETTE_RGB32	5	/* 32bit RGB */
-        /* note: all of my devices give BGR instead of RGB (jmz) */
-        /* note: RGB32 unfortunately sets the alpha-channel 0! */
-        VIDEO_PALETTE_RGB555	6	/* 555 15bit RGB */
-        VIDEO_PALETTE_YUV422	7	/* YUV422 capture */
-        VIDEO_PALETTE_YUYV	8
-        VIDEO_PALETTE_UYVY	9	/* The great thing about standards is ... */
-        VIDEO_PALETTE_YUV420	10
-        VIDEO_PALETTE_YUV411	11	/* YUV411 capture */
-        VIDEO_PALETTE_RAW	12	/* RAW capture (BT848) */
-        VIDEO_PALETTE_YUV422P	13	/* YUV 4:2:2 Planar */
-        VIDEO_PALETTE_YUV411P	14	/* YUV 4:1:1 Planar */
-        VIDEO_PALETTE_YUV420P	15	/* YUV 4:2:0 Planar */
-        VIDEO_PALETTE_YUV410P	16	/* YUV 4:1:0 Planar */
-#endif
         /* this is very unfortunate:
          * PALETTE_YUV422 obviously is something different than ours
          * although our yuv422 reads uyvy it is
@@ -397,25 +324,15 @@ int videoV4L :: startTransfer(int format)
     vmmap[i].frame  = i;
   }
 
-  //verbose(1, "setting cmcapture to %dx%d\t%d", vmmap[0].width,  vmmap[0].height, vmmap[0].format);
-
   if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
     for (i = 0; i < V4L_NBUF; i++)vmmap[i].format = vpicture.palette;
-    //verbose(1, "now trying standard palette %d", vmmap[0].format);
     if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
       if (errno == EAGAIN)
         error("v4l: can't sync (no video source?)");
       else 
         perror("v4l: VIDIOCMCAPTURE");
-      //goto closit;
     }
   }
-  /*
-    verbose(1, "frame %d %d, format %d, width %d, height %d\n",
-    frame, vmmap[frame].frame, vmmap[frame].format,
-    vmmap[frame].width, vmmap[frame].height);
-  */
-    
   /* fill in image specifics for Gem pixel object.  Could we have
      just used RGB, I wonder? */
   m_image.image.xsize = vmmap[frame].width;
@@ -439,50 +356,24 @@ int videoV4L :: startTransfer(int format)
   m_haveVideo = 1;
 
   /* create thread */
-  m_continue_thread = true;
-  m_frame_ready = 0;
-  pthread_create(&m_thread_id, 0, capturing_, this);
+  startThread();
 
   verbose(1, "v4l::startTransfer opened video connection %X", tvfd);
 
-  return(1);
-
- closit:
-  verbose(1, "v4l::startTransfer closing %d", tvfd);
-  if (tvfd >= 0)
-    {
-    	v4l1_close(tvfd);
-      tvfd = -1;
-    }
-  m_haveVideo = 0;
-  m_frame_ready=0;
-  return(0);
+  return true;
 }
 
 /////////////////////////////////////////////////////////
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-int videoV4L :: stopTransfer()
+bool videoV4L :: stopTransfer()
 {
-  if(m_haveVideo){ /* are we running ? */
-    /* close the v4l device and dealloc buffer */
-    /* terminate thread if there is one */
-    if(m_continue_thread){
-      void *dummy;
-      m_continue_thread = 0;
-      pthread_join (m_thread_id, &dummy);
-    }
-    while(m_capturing){verbose(1, "waiting for thread");}
-    v4l1_munmap(videobuf, vmbuf.size);
-  }
-  if (tvfd) v4l1_close(tvfd);
-  tvfd = 0;
-  m_haveVideo = 0;
-  m_frame_ready = 0;
-  m_rendering=false;
-  verbose(0, "v4l: stopped Transfer");
-  return(1);
+  stopThread();
+  if(!m_capturing)return false;
+  v4l1_munmap(videobuf, vmbuf.size);
+  m_capturing=false;
+  return true;
 }
 
 /////////////////////////////////////////////////////////
@@ -540,14 +431,8 @@ int videoV4L :: setNorm(char*norm)
     break;
   }
   //  if (i_norm==m_norm)return 0;
-  if(m_capturing){
-    debug("v4l: restarting transfer");
-    stopTransfer();
-    m_norm=i_norm;
-    startTransfer();
-
-  }  
   m_norm=i_norm;
+  restartTransfer();
   return 0;
 }
 
@@ -567,12 +452,8 @@ int videoV4L :: setChannel(int c, t_float f){
     }
   } else {
     if(c>-1 && m_channel!=c){
-      if (m_capturing){
-        stopTransfer();
-        m_channel=c;
-        startTransfer();
-      }
       m_channel=c;
+      restartTransfer();
     }
   }
   return 0;
@@ -583,31 +464,27 @@ int videoV4L :: setDevice(int d)
   m_devicename=NULL;
   if (d==m_devicenum)return 0;
   m_devicenum=d;
-  bool rendering=m_rendering;
-  if(m_capturing)stopTransfer();
-  if (rendering)startTransfer();
-  //  verbose(1, "new device set %d", m_devicenum);
+  restartTransfer();
   return 0;
 }
 int videoV4L :: setDevice(char*name)
 {
   m_devicenum=-1;
   m_devicename=name;
-  bool rendering=m_rendering;
-  if(m_capturing)stopTransfer();
-  if (rendering)startTransfer();
-  //  verbose(1, "new device set %d", m_devicenum);
+  restartTransfer();
   return 0;
 }
 
 int videoV4L :: setColor(int format)
 {
   if (format<=0 || format==m_reqFormat)return -1;
-  if(m_capturing){
-    stopTransfer();
-    startTransfer(format);
-  }
   m_reqFormat=format;
+  restartTransfer();
   return 0;
 }
+#else
+videoV4L :: videoV4L() : video()
+{ }
+videoV4L :: ~videoV4L()
+{ }
 #endif /* HAVE_VIDEO4LINUX */

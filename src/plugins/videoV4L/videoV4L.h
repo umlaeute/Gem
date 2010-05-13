@@ -82,22 +82,21 @@ namespace gem { class GEM_EXTERN videoV4L : public video {
 #ifdef HAVE_VIDEO4LINUX
 	////////
 	// open the video-device
-	virtual int            openDevice(int devnum, int format=0){return 1;}
-	virtual void          closeDevice(void){}
-	virtual int           resetDevice(void){return 1;}
+	virtual bool           openDevice(void);
+	virtual void          closeDevice(void);
     
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
-    	int	    	startTransfer(int format=0);
+    	bool	    	startTransfer();
 	//////////
     	// Stop the video device
     	// [out] int - returns 0 if bad
-    	int	   	stopTransfer();
+    	bool	   	stopTransfer();
 
 	//////////
 	// get the next frame
-	pixBlock    *getFrame();
+	bool grabFrame();
 
 	//////////
 	// Set the video dimensions
@@ -133,30 +132,12 @@ namespace gem { class GEM_EXTERN videoV4L : public video {
 
   int m_gotFormat; // the format returned by the v4l-device (not an openGL-format!)
   bool m_colorConvert; // do we have to convert the colour-space manually ?
+
+  unsigned int errorcount;
   
-  //////////
-  // the capturing thread
-  pthread_t m_thread_id;
-  bool      m_continue_thread;
-  bool      m_frame_ready;
-
-  /* capture frames (in a separate thread! */
-  void*capturing(void); 
-  /* static callback for pthread_create: calls capturing() */
-  static void*capturing_(void*);
-
-  // rendering might be needed when we are currently not capturing because we cannot (e.g: couldn't open device)
-  // although we should. when reopening another device, we might be able to render again...
-  // example: we have only 1 video-device /dev/video0;
-  // when we try to open /dev/video1 we fail, and m_capturing is set to 0
-  // now when rendering is turned on and we want to switch back to /dev/video0 we should reconnect to the good device
-  bool      m_rendering; // "true" when rendering is on, false otherwise
-
-
-  /* use this in the capture-thread to cleanup */
-  bool      m_stopTransfer;
 #endif /* HAVE_VIDEO4LINUX */
 
-}; };
+}; 
+};
 
 #endif	// for header file
