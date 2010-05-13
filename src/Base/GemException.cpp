@@ -21,28 +21,28 @@
 
 
 GemException::GemException(const char *error) throw()
-  : ErrorString((new std::string(error))->c_str())
+  : ErrorString(error)
 {}
 
 GemException::GemException(const std::string error) throw()
-  : ErrorString((new std::string(error))->c_str())
+  : ErrorString(error)
 {}
 
 GemException::GemException() throw() 
-  : ErrorString(NULL) 
+  : ErrorString(std::string("")) 
 {}
 GemException::~GemException() throw() 
 {}
 const char *GemException::what() const throw() {
-  return ErrorString;
+  return ErrorString.c_str();
 }
 
 void GemException::report(const char*origin) const throw() {
-  if(ErrorString!=NULL) {
+  if(!(ErrorString.empty())) {
     if (NULL==origin)
-      error("GemException: %s", ErrorString);
+      error("GemException: %s", ErrorString.c_str());
     else
-      error("[%s]: %s", origin, ErrorString);
+      error("[%s]: %s", origin, ErrorString.c_str());
   }
 }
 
