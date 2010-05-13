@@ -21,11 +21,11 @@
 
 
 GemException::GemException(const char *error) throw()
-  : ErrorString(error)
+  : ErrorString((new std::string(error))->c_str())
 {}
 
 GemException::GemException(const std::string error) throw()
-  : ErrorString(error.c_str())
+  : ErrorString((new std::string(error))->c_str())
 {}
 
 GemException::GemException() throw() 
