@@ -18,6 +18,46 @@
 #include "Gem/RTE.h"
 using namespace gem;
 
+class video :: PIMPL {
+  friend class video;
+public:
+  bool threading;
+  pthread_t thread;
+  pthread_mutex_t*lock;
+
+  bool cont;
+  bool running;
+
+  PIMPL(bool threading_=true) :
+    threading(threading_),
+    lock(NULL),
+    cont(true),
+    running(false)
+  {
+  }
+  ~PIMPL(void) {
+    cont=false;
+    if(lock)pthread_mutex_destroy(lock); delete lock; lock=NULL;
+  }
+
+
+  static void*threadfun(void*you) {
+    video*me=(video*)you;
+    pixBlock*pix=NULL;
+    me->m_pimpl->cont=true;
+    me->m_pimpl->running=true;
+
+    while(me->m_pimpl->cont) {
+      me->grabFrame();
+    }
+
+    me->m_pimpl->running=false;
+
+    return NULL;
+  }
+};
+
+
 /////////////////////////////////////////////////////////
 //
 // pix_videoLinux
@@ -26,13 +66,17 @@ using namespace gem;
 // Constructor
 //
 /////////////////////////////////////////////////////////
-video :: video() :
+video :: video(bool threaded) :
   m_capturing(false), m_haveVideo(false), 
   m_width(64), m_height(64),
   m_channel(0), m_norm(0),
   m_reqFormat(GL_RGBA),
-  m_devicename(NULL), m_devicenum(0), m_quality(0)
+  m_devicename(NULL), m_devicenum(0), m_quality(0),
+  m_pimpl(NULL)
 {
+  if(threaded) {
+    m_pimpl=new PIMPL(true);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -41,16 +85,17 @@ video :: video() :
 /////////////////////////////////////////////////////////
 video :: ~video()
 {
-  if (m_haveVideo)closeDevice();
+  if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
 
+  if(m_haveVideo)closeDevice();
 }
 /////////////////////////////////////////////////////////
 // openDevice
 //
 /////////////////////////////////////////////////////////
-int video :: openDevice(int i, int o)
+bool video :: openDevice()
 {
-  return 0;
+  return false;
 }
 
 /////////////////////////////////////////////////////////
@@ -65,29 +110,128 @@ void video :: closeDevice()
 // resetDevice
 //
 /////////////////////////////////////////////////////////
-int video :: resetDevice()
+bool video :: reset()
 {
-  return(0);
+  return(false);
 }
 /////////////////////////////////////////////////////////
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-int video :: startTransfer(int format)
+bool video :: startTransfer()
 {
-  if (format>0)m_reqFormat=format;
-  return 0;
+  return false;
 }
 
 /////////////////////////////////////////////////////////
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-int video :: stopTransfer()
+bool video :: stopTransfer()
 {
-  return(0);
+  return false;
 }
 
+/////////////////////////////////////////////////////////
+// startTransfer
+//
+/////////////////////////////////////////////////////////
+bool video :: restartTransfer()
+{
+  bool running=stopTransfer();
+  if(running)return startTransfer();
+
+  return false;
+}
+
+
+bool video::startThread() {
+  if(!m_pimpl)return false;
+  if(m_pimpl->lock){
+    stopThread();
+  }
+
+  if(m_pimpl->threading) {
+    m_pimpl->lock = new pthread_mutex_t;
+    if ( pthread_mutex_init(m_pimpl->lock, NULL) < 0 ) {
+      delete m_pimpl->lock;
+      return false;
+    }
+
+    pthread_create(&m_pimpl->thread, 
+                   0,
+                   m_pimpl->threadfun, 
+                   this);
+  }
+}
+bool video::stopThread(unsigned int timeout) {
+  if(!m_pimpl)return true;
+  int i=0;
+
+  m_pimpl->cont=false;
+  if(timeout>0) {
+    while(m_pimpl->running) {
+      struct timeval sleep;
+      sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+      select(0,0,0,0,&sleep);
+      i+=10;
+      if(i>timeout) {
+        return false;
+      }
+    }
+  } else {
+    while(m_pimpl->running) {
+      struct timeval sleep;
+      sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+      select(0,0,0,0,&sleep);
+      i+=10;
+      if(i>1000000) {
+        post("waiting for video grabbing thread to terminate...");
+        i=0;
+      }
+    }
+  }
+
+  if(m_pimpl->lock){
+    int i=0;
+    while(pthread_mutex_destroy(m_pimpl->lock)) {
+      struct timeval sleep;
+      pthread_mutex_unlock(m_pimpl->lock);
+      sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+      select(0,0,0,0,&sleep);
+      i++;
+    }
+    delete m_pimpl->lock;
+    m_pimpl->lock=NULL;
+  }
+
+  return true;
+}
+void video::lock() {
+  if(m_pimpl && m_pimpl->lock)
+    pthread_mutex_lock(m_pimpl->lock);
+}
+void video::unlock() {
+  if(m_pimpl && m_pimpl->lock)
+    pthread_mutex_unlock(m_pimpl->lock);
+}
+
+
+pixBlock* video::getFrame(void) {
+  if(m_pimpl && m_pimpl->running) {
+    // get from thread
+  } else {
+    // no thread, grab it directly
+    grabFrame();
+  }
+
+  return &m_image;
+}
+
+
+void video::releaseFrame(void) {
+  m_image.newimage=false;
+}
 
 /////////////////////////////////////////////////////////
 // set dimension
