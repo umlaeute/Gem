@@ -67,6 +67,13 @@ class GEM_EXTERN pix_video : public GemBase
   //////////
   // If you care about the stop of rendering
   virtual void	stopRendering();
+
+
+  //////////
+  // closes the currently running backend (if there was one)
+  // then starts a new backend, based on selected driver and/or device
+  // returns true, if a new backend could be found
+  virtual bool restart(void);
   
   //////////
   // Set the video dimensions

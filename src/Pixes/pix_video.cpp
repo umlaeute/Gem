@@ -49,8 +49,7 @@ pix_video :: pix_video() :
    * we probably don't want this in initialization phase
    */
   if(m_videoHandles.size()>0) {
-    m_driver=0;
-    m_videoHandle=m_videoHandles[m_driver];
+    m_driver=-1;
   } else {
     error("no video backends found!");
   }
@@ -70,6 +69,55 @@ pix_video :: ~pix_video(){
     m_videoHandles[i]=NULL;
   }
 }
+
+
+/////////////////////////////////////////////////////////
+// render
+//
+/////////////////////////////////////////////////////////
+void pix_video :: render(GemState *state){
+   if (m_videoHandle)state->image=m_videoHandle->getFrame();
+}
+
+/////////////////////////////////////////////////////////
+// startRendering
+//
+/////////////////////////////////////////////////////////
+void pix_video :: startRendering(){
+  if(m_videoHandles.size()<1) {
+    error("do video for this OS");
+    return;
+  }
+
+  if (!m_videoHandle) {
+    if(!restart()) {
+      error("no valid video backend found");
+      return;
+    }
+  }
+
+  verbose(1, "starting transfer");
+  m_videoHandle->startTransfer();
+}
+
+/////////////////////////////////////////////////////////
+// stopRendering
+//
+/////////////////////////////////////////////////////////
+void pix_video :: stopRendering(){
+  if (m_videoHandle)m_videoHandle->stopTransfer();
+}
+
+/////////////////////////////////////////////////////////
+// postrender
+//
+/////////////////////////////////////////////////////////
+void pix_video :: postrender(GemState *state){
+  state->image = NULL;
+
+  if (m_videoHandle)m_videoHandle->releaseFrame();
+}
+
 
 /////////////////////////////////////////////////////////
 // add backends
@@ -114,53 +162,109 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
 }
 
 
+bool pix_video::restart(void) {
+  bool running=false;
+  if(m_videoHandle) {
+    running=m_videoHandle->stopTransfer();
+    m_videoHandle->closeDevice();
+  }
 
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void pix_video :: render(GemState *state){
-   if (m_videoHandle)state->image=m_videoHandle->getFrame();
-#if 0
-   /* DEBUG for missed frames */
-   if(!state->image->newimage){
-     static int i=0;
-     post("video: missed frame %d", i);
-     i++;
-   }
-   else
-     post("video: got frame");
-#endif
+  if(m_driver<0) {
+    // auto mode
+    int i=0;
+    for(i=0; i<m_videoHandles.size(); i++) {
+      if(m_videoHandles[i]->openDevice()) {
+        m_videoHandle=m_videoHandles[i];
+        if(running) {
+          m_videoHandle->startTransfer();
+        }
+        return true;
+      }
+    }
+  } else {
+    // enforce selected driver
+    m_videoHandle=m_videoHandles[m_driver];
+    if(m_videoHandle->openDevice()) {
+      if(running)m_videoHandle->startTransfer();
+      return true;
+    }
+  }
+
+  m_videoHandle=NULL;
+  return false;
 }
 
+
+
+
+#define WITH_VIDEOHANDLES_DO(x) do {int _i=0; for(_i=0; _i<m_videoHandles.size(); _i++)m_videoHandles[_i]->x;} while(false)
+
 /////////////////////////////////////////////////////////
-// startRendering
+// driverMess
 //
 /////////////////////////////////////////////////////////
-void pix_video :: startRendering(){
-  if (!m_videoHandle) {
-    error("do video for this OS");
+void pix_video :: driverMess(t_symbol*s)
+{
+  if(gensym("auto")==s) {
+    driverMess(-1);
+    return;
+  } else {
+    int dev;
+    for(dev=0; dev<m_videoHandles.size(); dev++) {
+      if(m_videoHandles[dev]->provides(s->s_name)) {
+        driverMess(dev);
+        return;
+      }
+    }
+  }
+  error("could not find a backend for driver '%s'", s->s_name);
+}
+void pix_video :: driverMess(int dev)
+{
+  bool running=false;
+  if(dev>=m_videoHandles.size()){
+    error("driverID (%d) must not exceed %d", dev, m_videoHandles.size());
     return;
   }
-  verbose(1, "starting transfer");
-  m_videoHandle->startTransfer();
+  if(dev>=0) {
+    if(m_videoHandle){
+      running=m_videoHandle->stopTransfer();
+      m_videoHandle->closeDevice();
+    }
+    m_videoHandle=m_videoHandles[dev];
+    if(m_videoHandle){
+      if(m_videoHandle->openDevice()) {
+        if(running)m_videoHandle->startTransfer();
+      }
+    }
+  } else {
+    post("automatic driver selection");
+  }
+  m_driver=dev;
 }
 
-/////////////////////////////////////////////////////////
-// stopRendering
-//
-/////////////////////////////////////////////////////////
-void pix_video :: stopRendering(){
-  if (m_videoHandle)m_videoHandle->stopTransfer();
-}
 
 /////////////////////////////////////////////////////////
-// postrender
+// deviceMess
 //
 /////////////////////////////////////////////////////////
-void pix_video :: postrender(GemState *state){
-  state->image = NULL;
+void pix_video :: deviceMess(int dev)
+{
+  WITH_VIDEOHANDLES_DO(setDevice(dev));
+
+  restart();
 }
+void pix_video :: deviceMess(t_symbol*s)
+{
+  WITH_VIDEOHANDLES_DO(setDevice(s->s_name));
+
+  restart();
+}
+
+
+
+
+
 /////////////////////////////////////////////////////////
 // dimenMess
 //
@@ -168,7 +272,7 @@ void pix_video :: postrender(GemState *state){
 void pix_video :: dimenMess(int x, int y, int leftmargin, int rightmargin,
 			       int topmargin, int bottommargin)
 {
-  if (m_videoHandle)m_videoHandle->setDimen(x,y,leftmargin,rightmargin,topmargin,bottommargin);
+  WITH_VIDEOHANDLES_DO(setDimen(x,y,leftmargin,rightmargin,topmargin,bottommargin));
 }
 
 /////////////////////////////////////////////////////////
@@ -177,7 +281,7 @@ void pix_video :: dimenMess(int x, int y, int leftmargin, int rightmargin,
 /////////////////////////////////////////////////////////
 void pix_video :: offsetMess(int x, int y)
 {
-  if (m_videoHandle)m_videoHandle->setOffset(x,y);
+  WITH_VIDEOHANDLES_DO(setOffset(x,y));
 }
 /////////////////////////////////////////////////////////
 // swapMess
@@ -185,7 +289,7 @@ void pix_video :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 void pix_video :: swapMess(int state)
 {
-  if (m_videoHandle)m_videoHandle->setSwap(state);
+  WITH_VIDEOHANDLES_DO(setSwap(state));
 }
 /////////////////////////////////////////////////////////
 // channelMess
@@ -193,7 +297,7 @@ void pix_video :: swapMess(int state)
 /////////////////////////////////////////////////////////
 void pix_video :: channelMess(int channel, t_float freq)
 {
-  if(m_videoHandle)m_videoHandle->setChannel(channel, freq);
+  WITH_VIDEOHANDLES_DO(setChannel(channel, freq));
 }
 /////////////////////////////////////////////////////////
 // normMess
@@ -201,7 +305,7 @@ void pix_video :: channelMess(int channel, t_float freq)
 /////////////////////////////////////////////////////////
 void pix_video :: normMess(t_symbol *s)
 {
-  if(m_videoHandle)m_videoHandle->setNorm(s->s_name);
+  WITH_VIDEOHANDLES_DO(setNorm(s->s_name));
 }
 /////////////////////////////////////////////////////////
 // colorMess
@@ -223,65 +327,10 @@ void pix_video :: colorMess(t_atom*a)
       default: format=GL_RGBA;
       }
   } else format=atom_getint(a);
-  if(m_videoHandle)m_videoHandle->setColor(format);
+
+  WITH_VIDEOHANDLES_DO(setColor(format));
 }
-/////////////////////////////////////////////////////////
-// driverMess
-//
-/////////////////////////////////////////////////////////
-void pix_video :: driverMess(t_symbol*s)
-{
-  int dev;
-  for(dev=0; dev<m_videoHandles.size(); dev++) {
-    if(m_videoHandles[dev]->provides(s->s_name)) {
-      driverMess(dev);
-      return;
-    }
-  }
-  error("could not find a backend for driver '%s'", s->s_name);
-}
-void pix_video :: driverMess(int dev)
-{
-  //  post("driver: %d", dev);
-  if(dev>=m_videoHandles.size()){
-    error("driverID (%d) must not exceed %d", dev, m_videoHandles.size());
-    return;
-  }
-  //  if((dev!=m_driver) && (m_videoHandle!=m_videoHandles[dev]))
-    { 
-      if(m_videoHandle)m_videoHandle->stopTransfer();
-      m_videoHandle=m_videoHandles[dev];
-      if(m_videoHandle)m_videoHandle->startTransfer();
-      m_driver=dev;
-    }
-}
-/////////////////////////////////////////////////////////
-// deviceMess
-//
-/////////////////////////////////////////////////////////
-void pix_video :: deviceMess(int dev)
-{
-  if (m_videoHandle)m_videoHandle->setDevice(dev);
-}
-void pix_video :: deviceMess(t_symbol*s)
-{
-  int err=0;
-  if (m_videoHandle)err=m_videoHandle->setDevice(s->s_name);
-  
-  verbose(1, "device-err: %d", err);
-  if(!err){
-    int d=0;
-    if(m_videoHandle)m_videoHandle->stopTransfer();
-    for(d=0; d<m_videoHandles.size(); d++){
-      if(m_videoHandles[d]->setDevice(s->s_name)){
-        m_videoHandle=m_videoHandles[d];
-        post("switched to driver #%d", d);
-        break;
-      }
-    }
-  }
-  if(m_videoHandle)m_videoHandle->startTransfer();  
-}
+
 /////////////////////////////////////////////////////////
 // enumerate devices
 //
@@ -304,7 +353,7 @@ void pix_video :: dialogMess(int argc, t_atom*argv)
 //
 /////////////////////////////////////////////////////////
 void pix_video :: qualityMess(int dev) {
-  if (m_videoHandle)m_videoHandle->setQuality(dev);
+  WITH_VIDEOHANDLES_DO(setQuality(dev));
 }
 
 /////////////////////////////////////////////////////////
