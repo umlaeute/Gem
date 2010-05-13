@@ -72,7 +72,6 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
 	// open the video-device
 	virtual bool           openDevice();
 	virtual void          closeDevice(void);
-	virtual bool           reset(void);
     
   //////////
   // Start up the video device
