@@ -40,13 +40,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # include <asm/types.h>
 # include <linux/videodev2.h>
 # include <sys/mman.h>
-#ifdef HAVE_PTHREADS
-/* the bad thing is, that we currently don't have any alternative to using PTHREADS 
- * LATER: make threading optional
- *        (or at least disabled capturing when no pthreads are available)
- */
-# include <pthread.h>
-#endif
 # define V4L2_DEVICENO 0
 /* request 4 buffers (but if less are available, it's fine too... */
 # define V4L2_NBUF 4
@@ -92,27 +85,19 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
 #ifdef HAVE_VIDEO4LINUX2
   ////////
   // open the video-device
-  virtual int            openDevice(int devnum, int format=0){return 1;}
-  virtual void          closeDevice(void){}
-  virtual int           resetDevice(void){return 1;}
+  virtual bool   openDevice(void);
+  virtual void  closeDevice(void);
     
   //////////
   // Start up the video device
-  // [out] int - returns 0 if bad
-  int	    	startTransfer(int format=0);
+  bool	    	startTransfer(void);
   //////////
   // Stop the video device
-  // [out] int - returns 0 if bad
-  int	   	stopTransfer();
-
-  //////////////////
-  // restart the transfer if it is currently running
-  void          restartTransfer();
+  bool	   	stopTransfer(void);
 
   //////////
   // get the next frame
-  pixBlock    *getFrame();
-
+  bool grabFrame();
 
   //////////
   // Set the video dimensions
@@ -135,7 +120,6 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
   int m_gotFormat; // the format returned by the v4l2-device (not an openGL-format!)
   bool m_colorConvert; // do we have to convert the colour-space manually ?
 
-
   int m_tvfd;
 
   struct t_v4l2_buffer*m_buffers;
@@ -150,17 +134,11 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
   int m_minwidth;
   int m_maxheight;
   int m_minheight;
-  
+
   //////////
   // the capturing thread
-  pthread_t m_thread_id;
-  bool      m_continue_thread;
-  bool      m_frame_ready;
 
-  /* capture frames (in a separate thread! */
-  void*capturing(void); 
-  /* static callback for pthread_create: calls capturing() */
-  static void*capturing_(void*);
+  unsigned int m_errorcount;
 
   int       init_mmap(void);
 

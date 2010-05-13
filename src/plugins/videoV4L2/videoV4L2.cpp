@@ -36,7 +36,7 @@ REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 # define v4l2_munmap munmap
 #endif /* libv4l-2 */
 
-#if 0
+#if 1
 # define debugPost ::post
 # define debugThread ::post
 #else
@@ -69,7 +69,6 @@ videoV4L2 :: videoV4L2() : video()
                                      m_frame(0), m_last_frame(0),
                                      m_maxwidth(844), m_minwidth(32),
                                      m_maxheight(650), m_minheight(32),
-                                     m_thread_id(0), m_continue_thread(false), m_frame_ready(false),
                                      m_rendering(false),
                                      m_stopTransfer(false),
 				     m_newfilm(false)
@@ -179,204 +178,13 @@ int videoV4L2::init_mmap (void)
   return 1;
 }
 
-/////////////////////////////////////////////////////////
-// this is the work-horse
-// a thread that does the capturing
-//
-/////////////////////////////////////////////////////////
-void *videoV4L2::capturing_(void*you)
-{
-  videoV4L2 *me=reinterpret_cast<videoV4L2*>(you);
-  return me->capturing();
-}
-void *videoV4L2 :: capturing(void)
-{
-  int errorcount=0;
-  t_v4l2_buffer*buffers=m_buffers;
+bool videoV4L2 :: openDevice() {
+  struct stat st; 
 
-  struct v4l2_buffer buf;
-   
-  fd_set fds;
-  struct timeval tv;
-  int r;
-
-  unsigned int nbuf=m_nbuffers;
-  m_capturing=true;
-
-  debugThread("V4L2: memset");
-  memset(&(buf), 0, sizeof (buf));
-  
-  buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  buf.memory = V4L2_MEMORY_MMAP;
-
-  while(m_continue_thread){
-    bool captureerror=false;
-    FD_ZERO (&fds);
-    FD_SET (m_tvfd, &fds);
-
-    debugThread("V4L2: grab");
-
-    m_frame++;
-    m_frame%=nbuf;
-
-    
-    /* Timeout. */
-    tv.tv_sec = 0;
-    tv.tv_usec = 100;
-    r = select(0,0,0,0,&tv);
-    debugThread("V4L2: waited...");
-
-
-    if (-1 == r) {
-      if (EINTR == errno)
-        continue;
-      perror("v4l2: select");//exit
-    }
-
-    memset(&(buf), 0, sizeof (buf));
-    debugThread("V4L2: memset...");
-  
-    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    buf.memory = V4L2_MEMORY_MMAP;
-
-    if (-1 == xioctl (m_tvfd, VIDIOC_DQBUF, &buf)) {
-      switch (errno) {
-      case EAGAIN:
-        perror("v4l2: VIDIOC_DQBUF: stopping capture thread!");
-        m_stopTransfer=true;
-        m_continue_thread=false;
-      case EIO:
-        /* Could ignore EIO, see spec. */
-        /* fall through */
-      default:
-        captureerror=true;
-        perror("v4l2: VIDIOC_DQBUF");
-      }
-    }
-
-    debugThread("V4L2: grabbed %d", buf.index);
-
-    m_currentBuffer=buffers[buf.index].start;
-    //process_image (m_buffers[buf.index].start);
-
-    if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
-      perror("v4l2: VIDIOC_QBUF");
-      captureerror=true;
-    }
-
-    debugThread("V4L2: dequeueueeud");
-    
-    m_frame_ready = 1;
-    m_last_frame=m_frame;
-
-    if(captureerror) {
-      errorcount++;
-      if(errorcount>1000) {
-        error("v4L2: %d capture errors in a row... I think I better stop now...", errorcount);
-        m_continue_thread=false;
-        m_stopTransfer=true;
-      }
-    } else {
-      errorcount=0;
-    }
-  }
-
-  // stop capturing
-  m_capturing=false;
-  debugThread("V4L2: thread finished");
-  return NULL;
-}
-
-//////////////////
-// this reads the data that was captured by capturing() and returns it within a pixBlock
-pixBlock *videoV4L2 :: getFrame(){
-  if(!m_haveVideo)return NULL;
-  if(m_stopTransfer) {
-    bool rendering=m_rendering;
-    stopTransfer();
-    m_rendering=rendering;
-    return NULL;
-  }
-  //debugPost("v4l2: getting frame %d", m_frame_ready);
-  m_image.newfilm=m_newfilm;
-  m_newfilm=false;
-  if (!m_frame_ready) m_image.newimage = 0;
-  else {
-    unsigned char*data=(unsigned char*)m_currentBuffer;
-    if (m_colorConvert){
-      m_image.image.notowned = false;
-      switch(m_gotFormat){
-      case V4L2_PIX_FMT_RGB24: m_image.image.fromRGB   (data);break;
-#warning implement fromBGRA
-      case V4L2_PIX_FMT_RGB32: m_image.image.fromRGBA  (data); break;
-      case V4L2_PIX_FMT_GREY : m_image.image.fromGray  (data); break;
-      case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
-      case V4L2_PIX_FMT_YUV420:m_image.image.fromYU12  (data); break;
-
-
-      default: // ? what should we do ?
-        m_image.image.data=data;
-        m_image.image.notowned = true;
-      }
-    } else {
-      m_image.image.data=data;
-      m_image.image.notowned = true;
-    }
-    m_image.image.upsidedown=true;
-    
-    m_image.newimage = 1;
-    m_frame_ready = false;
-  }
-  return &m_image;
-}
-/////////////////////////////////////////////////////////
-// restartTransfer
-//
-/////////////////////////////////////////////////////////
-void videoV4L2 :: restartTransfer()
-{
-  bool rendering=m_rendering;
-  debugPost("v4l2: restart transfer");
-  if(m_capturing)stopTransfer();
-  debugPost("v4l2: restart stopped");
-  if (rendering)startTransfer();
-  debugPost("v4l2: restart started");
-}
-
-
-/////////////////////////////////////////////////////////
-// startTransfer
-//
-/////////////////////////////////////////////////////////
-int videoV4L2 :: startTransfer(int format)
-{
-  debugPost("v4l2: startTransfer: %d", m_capturing);
-  if(m_capturing)stopTransfer(); // just in case we are already running!
-  debugPost("v4l2: start transfer");
-  m_stopTransfer=false;
-  m_rendering=true;
-  if (format>1)m_reqFormat=format;
-  //  verbose(1, "starting transfer");
   char buf[256];
   const char*dev_name=m_devicename;
-  unsigned int i;
-
-  struct stat st; 
   struct v4l2_capability cap;
-  struct v4l2_cropcap cropcap;
-  struct v4l2_crop crop;
-  struct v4l2_format fmt;
-  unsigned int min;
 
-  enum v4l2_buf_type type;
-
-  m_frame = 0;
-  m_last_frame = 0;
-
-
-  /* check the device */
-
-  // if we don't have a devicename, create one
   if(!dev_name){
     if (m_devicenum<0){
       sprintf(buf, "/dev/video");
@@ -388,8 +196,9 @@ int videoV4L2 :: startTransfer(int format)
 
   // try to open the device
   debugPost("v4l2: device: %s", dev_name);
-  
+
   m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
+
 
   if (-1 == m_tvfd) {
     error("Cannot open '%s': %d, %s", dev_name, errno, strerror (errno));
@@ -428,6 +237,124 @@ int videoV4L2 :: startTransfer(int format)
     goto closit;
   }
 
+  m_haveVideo=true;
+  return true;
+
+ closit:
+  closeDevice();
+  return false;
+}
+
+void videoV4L2 :: closeDevice() {
+  stopTransfer();
+  if (m_tvfd>0) v4l2_close(m_tvfd);
+  m_tvfd=-1;
+
+  m_haveVideo=false;
+}
+
+bool videoV4L2 :: grabFrame(void) {
+  bool captureerror=false;
+  fd_set fds;
+  struct timeval tv;
+  debugThread("grabFrame");
+  struct v4l2_buffer buf;
+  memset(&(buf), 0, sizeof (buf));
+  buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  buf.memory = V4L2_MEMORY_MMAP;
+
+  FD_ZERO (&fds);
+  FD_SET (m_tvfd, &fds);
+
+  m_frame++;
+  m_frame%=m_nbuffers;
+
+   /* Timeout. */
+  tv.tv_sec = 0;
+  tv.tv_usec = 100;
+  int r = select(0,0,0,0,&tv);
+
+  if (-1 == xioctl (m_tvfd, VIDIOC_DQBUF, &buf)) {
+    switch (errno) {
+    case EAGAIN:
+      perror("v4l2: VIDIOC_DQBUF: stopping capture thread!");
+      return false;
+    case EIO:
+      /* Could ignore EIO, see spec. */
+      /* fall through */
+    default:
+      captureerror=true;
+      perror("v4l2: VIDIOC_DQBUF");
+    }
+  }
+
+  m_currentBuffer=m_buffers[buf.index].start;
+
+  if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
+    perror("v4l2: VIDIOC_QBUF");
+    captureerror=true;
+  }
+ 
+  if(captureerror) {
+    m_errorcount++;
+    if(m_errorcount>1000) {
+      error("v4L2: %d capture errors in a row... I think I better stop now...", m_errorcount);
+      return false;
+    }
+  } else {
+    m_errorcount=0;
+  }
+
+  unsigned char*data=(unsigned char*)m_buffers[buf.index].start;
+
+  lock();
+  if (m_colorConvert){
+    m_image.image.notowned = false;
+    switch(m_gotFormat){
+    case V4L2_PIX_FMT_RGB24: m_image.image.fromRGB   (data);break;
+#warning implement fromBGRA
+    case V4L2_PIX_FMT_RGB32: m_image.image.fromRGBA  (data); break;
+    case V4L2_PIX_FMT_GREY : m_image.image.fromGray  (data); break;
+    case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
+    case V4L2_PIX_FMT_YUV420:m_image.image.fromYU12  (data); break;
+    default: // ? what should we do ?
+      m_image.image.data=data;
+      m_image.image.notowned = true;
+    }
+  } else {
+    m_image.image.data=data;
+    m_image.image.notowned = true;
+  }
+  m_image.image.upsidedown=true;
+  m_image.newimage = 1;
+  unlock();
+
+  return true;
+
+}
+
+/////////////////////////////////////////////////////////
+// startTransfer
+//
+/////////////////////////////////////////////////////////
+bool videoV4L2 :: startTransfer()
+{
+  if(m_tvfd<0)return false;
+
+  unsigned int i;
+
+  struct v4l2_cropcap cropcap;
+  struct v4l2_crop crop;
+
+  struct v4l2_format fmt;
+  unsigned int min;
+  enum v4l2_buf_type type;
+
+
+  m_errorcount=0;
+  m_frame = 0;
+  m_last_frame = 0;
+
   /* Select video input, video standard and tune here. */
 
   cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -455,7 +382,6 @@ int videoV4L2 :: startTransfer(int format)
       }
     }
   }
-
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_INPUT, &m_channel)) {
     perror("v4l2: VIDIOC_S_INPUT"); /* exit */
@@ -612,23 +538,12 @@ int videoV4L2 :: startTransfer(int format)
   }
   
   debugPost("v4l2: colorconvert=%d", m_colorConvert);
-  
-  m_haveVideo = 1;
-  
-  /* create thread */
-  m_continue_thread = 1;
-  m_frame_ready = 0;
-  pthread_create(&m_thread_id, 0, capturing_, this);
-  while(!m_capturing){
-    struct timeval sleep;
-    sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
-    select(0,0,0,0,&sleep);
-    debugPost("v4l2: waiting for thread to come up");
-  }
-  
+
+  startThread();
   post("v4l2: GEM: pix_video: Opened video connection 0x%X", m_tvfd);
   m_newfilm=true;
-  return(1);
+  m_capturing=true;
+  return true;
   
  closit:
   debugPost("v4l2: closing it!");
@@ -641,23 +556,13 @@ int videoV4L2 :: startTransfer(int format)
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-int videoV4L2 :: stopTransfer()
+bool videoV4L2 :: stopTransfer()
 {
   debugPost("v4l2: stoptransfer");
   unsigned int i=0;
-  /* close the v4l2 device and dealloc buffer */
-  /* terminate thread if there is one */
-  if(m_continue_thread){
-    void *dummy;
-    m_continue_thread = 0;
-    pthread_join (m_thread_id, &dummy);
-  }
-  while(m_capturing){
-    struct timeval sleep;
-    sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
-    select(0,0,0,0,&sleep);
-    debugPost("v4l2: waiting for thread to finish");
-  }
+  stopThread();
+
+  if(!m_capturing)return false;
 
   // unmap the mmap
   debugPost("v4l2: unmapping %d buffers: %x", m_nbuffers, m_buffers);
@@ -681,16 +586,9 @@ int videoV4L2 :: stopTransfer()
     }
   }
 
-  // close the file-descriptor
-  debugPost("v4l2: closing %d", m_tvfd);
-  if (m_tvfd) v4l2_close(m_tvfd);
-
-  m_tvfd = 0;
-  m_haveVideo = 0;
-  m_frame_ready = 0;
-  m_rendering=false;
+  m_capturing=false;
   debugPost("v4l2: stoppedtransfer");
-  return(1);
+  return true;
 }
 
 /////////////////////////////////////////////////////////
@@ -719,7 +617,7 @@ int videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
 
   m_image.image.reallocate();
   restartTransfer();
-  return 0;
+  return 1;
 }
 
 int videoV4L2 :: setNorm(const char*norm)
