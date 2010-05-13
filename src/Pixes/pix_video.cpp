@@ -147,9 +147,10 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
     std::string key=id[i];
     verbose(2, "trying to add '%s' as backend", key.c_str());
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
-      post("%d: '%s' ", m_videoHandles.size(), key.c_str());
       // not yet added, do so now!
+      startpost("backend #%d='%s'\t: ", m_videoHandles.size(), key.c_str());
       gem::video         *handle=gem::PluginFactory<gem::video>::getInstance(key); 
+      endpost();
       if(NULL==handle)break;
       m_ids.push_back(key);
       m_videoHandles.push_back(handle);
