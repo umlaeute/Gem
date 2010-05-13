@@ -71,29 +71,29 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
 #ifdef HAVE_DV
 	////////
 	// open the video-device
-	virtual int            openDevice(int format=0);
+	virtual bool           openDevice();
 	virtual void          closeDevice(void);
-	virtual int           resetDevice(void);
+	virtual bool           reset(void);
     
-    	//////////
-    	// Start up the video device
-    	// [out] int - returns 0 if bad
-    	int	    	startTransfer(int format=0);
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  bool	    	startTransfer();
 	//////////
-    	// Stop the video device
-    	// [out] int - returns 0 if bad
-    	int	   	stopTransfer();
+  // Stop the video device
+  // returns TRUE is transfer was running, FALSE is otherwise
+  bool	   	stopTransfer();
 
 	//////////
 	// get the next frame
-	pixBlock    *getFrame();
+	bool grabFrame(void);
 
 	//////////
 	// Set the video dimensions
-	virtual int	    	setNorm(char*);
-	virtual int	    	setDevice(char*);
-	virtual int	    	setDevice(int);
-	virtual int	    	setColor(int);
+	virtual int	  setNorm(char*);
+	virtual int	  setDevice(char*);
+	virtual int	  setDevice(int);
+	virtual int	  setColor(int);
 	virtual int		setQuality(int);
     
  protected:
@@ -107,21 +107,12 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
   bool m_frame_ready;
   int  m_frame, m_lastframe;
 
-
-  //////////
-  // the capturing thread
-  static void*capturing(void*);
-  bool m_continue_thread;
-  pthread_t m_thread_id;
-
   int m_framesize;
   unsigned char *m_mmapbuf;
 
   ////////
   // the DV-decoder
   dv_decoder_t *m_decoder;
-#else
-  pixBlock    *getFrame(){return NULL;}
 #endif /* HAVE_DV */
 }; };
 
