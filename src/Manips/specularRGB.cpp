@@ -17,6 +17,7 @@
 // 1307:forum::für::umläute:20000
 
 #include "specularRGB.h"
+#include "Base/GemException.h"
 
 CPPEXTERN_NEW_WITH_GIMME(specularRGB)
 

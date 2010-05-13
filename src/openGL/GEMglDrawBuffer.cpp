@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////
 
 #include "GEMglDrawBuffer.h"
+#include "Base/GemException.h"
 
 CPPEXTERN_NEW_WITH_GIMME ( GEMglDrawBuffer )
 

@@ -17,12 +17,16 @@ LOG
 
 #include "m_pd.h"
 #include "Base/GemVersion.h"
-#include "Base/GemException.h"
 
 #include <new>
 #include <string>
 
 class CPPExtern;
+
+/* forward declaration of a generic exception handler for GemExceptions */
+namespace gem {
+  void catchGemException(void);
+};
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -273,7 +277,7 @@ static void obj_setupCallback(t_class *classPtr);
   CPPExtern::m_holder = NULL;                                   \
   CPPExtern::m_holdname=NULL;                                   \
   return(obj);                                                  \
-  } catch (GemException e) {e.report(); return NULL;}           \
+  } catch (...) {gem::catchGemException(); return NULL;}	\
   }
 
 #define REAL_NEW__SETUP1(NEW_CLASS) \

@@ -14,6 +14,7 @@
 
 #include "part_targetcolor.h"
 #include "Base/GemState.h"
+#include "Base/GemException.h"
 
 #include "papi.h"
 

@@ -46,3 +46,11 @@ void GemException::report(const char*origin) const throw() {
   }
 }
 
+
+void gem::catchGemException() {
+  try {
+    throw;
+  } catch (GemException &ex) {
+    ex.report();
+  }
+}

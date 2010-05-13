@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_gain.h"
+#include "Base/GemException.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_gain)
   

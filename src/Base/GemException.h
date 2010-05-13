@@ -48,6 +48,9 @@ class GEM_EXTERN GemException
   const char*ErrorString;
 };
 
+namespace gem {
+  GEM_EXTERN void catchGemException(void);
+};
 
 
 #endif /* INCLUDE_GEMEXCEPTION_H_ */

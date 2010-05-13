@@ -18,7 +18,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_freeframe.h"
-
+#include "Base/GemException.h"
 #include "Base/GemLoaders.h"
 
 #ifndef DONT_WANT_FREEFRAME

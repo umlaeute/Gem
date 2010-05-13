@@ -17,6 +17,7 @@
 // 1307:forum::für::umläute:2000
 
 #include "specular.h"
+#include "Base/GemException.h"
 
 CPPEXTERN_NEW_WITH_GIMME(specular)
 

@@ -17,6 +17,7 @@
 // 1307:forum::für::umläute:20000
 
 #include "emissionRGB.h"
+#include "Base/GemException.h"
 
 CPPEXTERN_NEW_WITH_GIMME(emissionRGB)
 
