@@ -36,7 +36,7 @@ REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 # define v4l2_munmap munmap
 #endif /* libv4l-2 */
 
-#if 1
+#if 0
 # define debugPost ::post
 # define debugThread ::post
 #else
