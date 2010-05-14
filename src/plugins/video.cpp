@@ -21,6 +21,12 @@ using namespace gem;
 class video :: PIMPL {
   friend class video;
 public:
+  /* interfaces */
+  // the list of provided device-classes
+  std::vector<const char*>m_providers;
+
+
+  /* threading */
   bool threading;
   pthread_t thread;
   pthread_mutex_t*lock;
@@ -28,7 +34,7 @@ public:
   bool cont;
   bool running;
 
-  PIMPL(bool threading_=true) :
+  PIMPL(bool threading_) :
     threading(threading_),
     lock(NULL),
     cont(true),
@@ -72,11 +78,8 @@ video :: video(bool threaded) :
   m_channel(0), m_norm(0),
   m_reqFormat(GL_RGBA),
   m_devicename(NULL), m_devicenum(0), m_quality(0),
-  m_pimpl(NULL)
+  m_pimpl(new PIMPL(threaded))
 {
-  if(threaded) {
-    m_pimpl=new PIMPL(true);
-  }
 }
 
 /////////////////////////////////////////////////////////
@@ -334,8 +337,9 @@ int video :: setQuality(int d){
 /////////////////////////////////////////////////////////
 // query whether this backend provides a certain type of video decoding, e.g. "dv"
 bool video :: provides(const char*name) {
+  if(!m_pimpl)return false;
   std::vector<const char*>::iterator it;
-  for ( it=m_providers.begin() ; it < m_providers.end(); it++ ) {
+  for ( it=m_pimpl->m_providers.begin() ; it < m_pimpl->m_providers.end(); it++ ) {
     if(!strcmp(name, *it))return true;
   }
 
@@ -345,8 +349,9 @@ bool video :: provides(const char*name) {
 /////////////////////////////////////////////////////////
 // remember that this backend provides a certain type of video decoding, e.g. "dv"
 void video :: provide(const char*name) {
+  if(!m_pimpl)return;
   if(!provides(name)) {
-    m_providers.push_back(name);
+    m_pimpl->m_providers.push_back(name);
     startpost("%s ", name);
   }
 }

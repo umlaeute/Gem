@@ -174,9 +174,6 @@ namespace gem { class GEM_EXTERN video {
   // for child-implementations: remember that we provide access to this class of devices
   void provide(const char*name);
  private:
-  // for ourself: the list of provided device-classes
-  std::vector<const char*>m_providers;
-
   class PIMPL;
   PIMPL*m_pimpl;
 };};
