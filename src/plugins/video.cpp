@@ -266,6 +266,7 @@ void video::unlock() {
 
 
 pixBlock* video::getFrame(void) {
+  if(!(m_haveVideo && m_capturing))return NULL;
   if(m_pimpl && m_pimpl->running) {
     // get from thread
   } else {
