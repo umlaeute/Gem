@@ -256,7 +256,7 @@ bool videoDV4L :: openDevice(){
   m_framesize=(m_norm==NTSC)?DV1394_NTSC_FRAME_SIZE:DV1394_PAL_FRAME_SIZE;
 
   if(m_devicename){
-    if ((fd = open(m_devicename, O_RDWR)) < 0) {
+    if ((fd = ::open(m_devicename, O_RDWR)) < 0) {
         perror(m_devicename);
         return -1;
     }
@@ -266,10 +266,10 @@ bool videoDV4L :: openDevice(){
     buf[255]=0;buf[32]=0;buf[33]=0;
     if (devnum<0)devnum=0;
     snprintf(buf, 32, "/dev/ieee1394/dv/host%d/%s/in", devnum, (m_norm==NTSC)?"NTSC":"PAL");
-    if ((fd = open(buf, O_RDWR)) < 0)    {
+    if ((fd = ::open(buf, O_RDWR)) < 0)    {
       snprintf(buf, 32, "/dev/dv1394/%d", devnum);
-      if ((fd = open(buf, O_RDWR)) < 0) {
-	if ((fd=open("/dev/dv1394", O_RDWR)) < 0)    {
+      if ((fd = ::open(buf, O_RDWR)) < 0) {
+	if ((fd=::open("/dev/dv1394", O_RDWR)) < 0)    {
 	  perror(buf);
 	  return -1;
 	}
@@ -278,7 +278,7 @@ bool videoDV4L :: openDevice(){
   }
   if (ioctl(fd, DV1394_INIT, &init) < 0)    {
     perror("initializing");
-    close(fd);
+    ::close(fd);
     return -1;
   }
   
@@ -286,13 +286,13 @@ bool videoDV4L :: openDevice(){
 				       PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
   if(m_mmapbuf == MAP_FAILED) {
     perror("mmap frame buffers");
-    close(fd);
+    ::close(fd);
     return -1;
   }
   
   if(ioctl(fd, DV1394_START_RECEIVE, NULL)) {
     perror("dv1394 START_RECEIVE ioctl");
-    close(fd);
+    ::close(fd);
     return -1;
   }
   /*Extra verbosity never hurt anyone...
@@ -313,7 +313,7 @@ void videoDV4L :: closeDevice(void){
     ioctl(dvfd, DV1394_SHUTDOWN);
   }
   if(m_mmapbuf!=NULL)munmap(m_mmapbuf, N_BUF*m_framesize);
-  if(dvfd>=0)close(dvfd);
+  if(dvfd>=0)::close(dvfd);
   m_haveVideo=false;
 }
 
