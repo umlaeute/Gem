@@ -18,6 +18,13 @@
 #include "Gem/RTE.h"
 using namespace gem;
 
+#if 1
+#define debugPost post
+#else
+#define debugPost
+#endif
+
+
 class video :: PIMPL {
   friend class video;
 public:
@@ -50,15 +57,17 @@ public:
   static void*threadfun(void*you) {
     video*me=(video*)you;
     pixBlock*pix=NULL;
+    post("starting capture thread");
     me->m_pimpl->cont=true;
     me->m_pimpl->running=true;
 
     while(me->m_pimpl->cont) {
-      me->grabFrame();
+      if(!me->grabFrame()) {
+	break;
+      }
     }
-
     me->m_pimpl->running=false;
-
+    post("exiting capture thread");
     return NULL;
   }
 };
@@ -98,14 +107,14 @@ video :: ~video()
 /////////////////////////////////////////////////////////
 bool video :: open()
 {
-  //  post("open: %d -> %d", m_haveVideo, m_capturing);
+  debugPost("open: %d -> %d", m_haveVideo, m_capturing);
   if(m_haveVideo)close();
   m_haveVideo=openDevice();
   return m_haveVideo;
 }
 void video :: close()
 {
-  //  post("close: %d -> %d", m_capturing, m_haveVideo);
+  debugPost("close: %d -> %d", m_capturing, m_haveVideo);
   if(m_capturing)stop();
   if(m_haveVideo)closeDevice();
   m_haveVideo=false;
@@ -116,21 +125,23 @@ void video :: close()
 /////////////////////////////////////////////////////////
 bool video :: start()
 {
-  //  post("start: %d -> %d", m_haveVideo, m_capturing);
+  debugPost("start: %d -> %d", m_haveVideo, m_capturing);
   if(!m_haveVideo)return false;
   if(m_capturing)stop();
   m_capturing=startTransfer();
-  startThread();
+  if(m_capturing)
+    startThread();
   return m_capturing;
 }
 bool video :: stop()
 {
-  //  post("stop: %d -> %d", m_capturing, m_haveVideo);
+  debugPost("stop: %d -> %d", m_capturing, m_haveVideo);
   bool running=m_capturing;
   if(!m_haveVideo)return false;
-  stopThread();
-  if(running)
+  if(running) {
+    stopThread();
     running=stopTransfer();
+  }
 
   m_capturing=false;
   return running;
@@ -186,14 +197,15 @@ bool video :: stopTransfer()
 /////////////////////////////////////////////////////////
 bool video :: restartTransfer()
 {
-  bool running=stopTransfer();
-  if(running)return startTransfer();
+  bool running=stop();
+  if(running)return start();
 
   return false;
 }
 
 
 bool video::startThread() {
+  post("startThread %x", m_pimpl);
   if(!m_pimpl)return false;
   if(m_pimpl->lock){
     stopThread();
@@ -213,9 +225,10 @@ bool video::startThread() {
   }
 }
 bool video::stopThread(unsigned int timeout) {
+  post("stopThread %x", m_pimpl);
   if(!m_pimpl)return true;
   int i=0;
-
+  post("stopThread: %d", timeout);
   m_pimpl->cont=false;
   if(timeout>0) {
     while(m_pimpl->running) {
@@ -238,6 +251,7 @@ bool video::stopThread(unsigned int timeout) {
         i=0;
       }
     }
+    //pthread_join(m_pimpl->thread, NULL);
   }
 
   if(m_pimpl->lock){
@@ -291,7 +305,7 @@ int video :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmarg
 /////////////////////////////////////////////////////////
 // set the displacment
 int video :: setOffset(int x, int y){
-  post("setting the channel is not supported by this OS/device");
+  post("setting the offset is not supported by this OS/device");
   return -1;
 }
 /////////////////////////////////////////////////////////
