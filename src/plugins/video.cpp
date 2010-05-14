@@ -90,6 +90,52 @@ video :: ~video()
   if(m_haveVideo)closeDevice();
 }
 /////////////////////////////////////////////////////////
+// open/close
+//
+/////////////////////////////////////////////////////////
+bool video :: open()
+{
+  //  post("open: %d -> %d", m_haveVideo, m_capturing);
+  if(m_haveVideo)close();
+  m_haveVideo=openDevice();
+  return m_haveVideo;
+}
+void video :: close()
+{
+  //  post("close: %d -> %d", m_capturing, m_haveVideo);
+  if(m_capturing)stop();
+  if(m_haveVideo)closeDevice();
+  m_haveVideo=false;
+}
+/////////////////////////////////////////////////////////
+// start/stop
+//
+/////////////////////////////////////////////////////////
+bool video :: start()
+{
+  //  post("start: %d -> %d", m_haveVideo, m_capturing);
+  if(!m_haveVideo)return false;
+  if(m_capturing)stop();
+  m_capturing=startTransfer();
+  startThread();
+  return m_capturing;
+}
+bool video :: stop()
+{
+  //  post("stop: %d -> %d", m_capturing, m_haveVideo);
+  bool running=m_capturing;
+  if(!m_haveVideo)return false;
+  stopThread();
+  if(running)
+    running=stopTransfer();
+
+  m_capturing=false;
+  return running;
+}
+
+
+
+/////////////////////////////////////////////////////////
 // openDevice
 //
 /////////////////////////////////////////////////////////
@@ -103,8 +149,7 @@ bool video :: openDevice()
 //
 /////////////////////////////////////////////////////////
 void video :: closeDevice()
-{
-}
+{}
 
 /////////////////////////////////////////////////////////
 // resetDevice

@@ -53,6 +53,15 @@ namespace gem { class GEM_EXTERN video {
   // Destructor
   virtual ~video(void);
 
+  //! open the device (calls openDevice())
+  bool open(void);
+  //! close the device (calls closeDevice())
+  void close(void);
+  //! start the transmission (calls startTransfer())
+  bool start(void);
+  //! stop the transmission (calls stopTransfer())
+  bool stop(void);
+
   //! reset the backend, possibly re-enumerating devices
   virtual bool          reset(void);
 
@@ -120,9 +129,6 @@ namespace gem { class GEM_EXTERN video {
   void unlock(void);
 
 
-
-
-
   //////////////////////
   // device settings
 
@@ -141,11 +147,9 @@ namespace gem { class GEM_EXTERN video {
   virtual int	    	setQuality(int);
 
  protected:
-  //! indicates valid transfer
-  /* set this to TRUE in a successfull startTransfer() and to FALSE at stopTransfer() */
+  //! indicates valid transfer (automatically set in start()/stop())
   bool m_capturing;
-  //! indicates valid device
-  /* set this to TRUE after a successfull openDevice(), and to FALSE at closeDevice */
+  //! indicates valid device (automatically set in open()/close())
   bool m_haveVideo;
   //! a place to store the image with grabFrame()
   pixBlock m_image;

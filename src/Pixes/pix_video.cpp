@@ -97,7 +97,7 @@ void pix_video :: startRendering(){
   }
 
   verbose(1, "starting transfer");
-  m_videoHandle->startTransfer();
+  m_videoHandle->start();
 }
 
 /////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ void pix_video :: startRendering(){
 //
 /////////////////////////////////////////////////////////
 void pix_video :: stopRendering(){
-  if (m_videoHandle)m_videoHandle->stopTransfer();
+  if (m_videoHandle)m_videoHandle->stop();
 }
 
 /////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
 bool pix_video::restart(void) {
   bool running=false;
   if(m_videoHandle) {
-    running=m_videoHandle->stopTransfer();
+    running=m_videoHandle->stop();
     m_videoHandle->closeDevice();
   }
 
@@ -174,10 +174,10 @@ bool pix_video::restart(void) {
     // auto mode
     int i=0;
     for(i=0; i<m_videoHandles.size(); i++) {
-      if(m_videoHandles[i]->openDevice()) {
+      if(m_videoHandles[i]->open()) {
         m_videoHandle=m_videoHandles[i];
         if(running) {
-          m_videoHandle->startTransfer();
+          m_videoHandle->start();
         }
         return true;
       }
@@ -185,8 +185,8 @@ bool pix_video::restart(void) {
   } else {
     // enforce selected driver
     m_videoHandle=m_videoHandles[m_driver];
-    if(m_videoHandle->openDevice()) {
-      if(running)m_videoHandle->startTransfer();
+    if(m_videoHandle->open()) {
+      if(running)m_videoHandle->start();
       return true;
     }
   }
@@ -229,13 +229,13 @@ void pix_video :: driverMess(int dev)
   }
   if(dev>=0) {
     if(m_videoHandle){
-      running=m_videoHandle->stopTransfer();
-      m_videoHandle->closeDevice();
+      running=m_videoHandle->stop();
+      m_videoHandle->close();
     }
     m_videoHandle=m_videoHandles[dev];
     if(m_videoHandle){
-      if(m_videoHandle->openDevice()) {
-        if(running)m_videoHandle->startTransfer();
+      if(m_videoHandle->open()) {
+        if(running)m_videoHandle->start();
       }
     }
   } else {
