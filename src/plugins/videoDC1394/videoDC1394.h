@@ -60,45 +60,31 @@ namespace gem { class GEM_EXTERN videoDC1394 : public video {
 #ifdef HAVE_LIBDC1394
 	////////
 	// open the video-device
-	virtual int            openDevice(int format=0);
+	virtual bool           openDevice(void);
 	virtual void          closeDevice(void);
-	virtual int           resetDevice(void);
     
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
-    	int	    	startTransfer(int format=0);
+    	bool	    	startTransfer(void);
 	//////////
     	// Stop the video device
     	// [out] int - returns 0 if bad
-    	int	   	stopTransfer();
+    	bool	   	stopTransfer(void);
 
 	//////////
 	// get the next frame
-	pixBlock    *getFrame();
+	bool    grabFrame();
 
 	//////////
 	// Set the video dimensions
-	virtual int	    	setNorm(char*);
-	virtual int	    	setDevice(char*);
-	virtual int	    	setDevice(int);
 	virtual int	    	setColor(int);
-	virtual int		setQuality(int);
     
  protected:
 
   //-----------------------------------
   // GROUP:	Linux specific video data
   //-----------------------------------
-
-
-  //////////
-  // the capturing thread
-  void captureThread(void);
-  static void*capturing(void*);
-  bool m_continue_thread;
-  pthread_t m_thread_id;
-  pthread_mutex_t*m_lock;
 
   dc1394camera_t * m_dccamera;
 
@@ -107,9 +93,8 @@ namespace gem { class GEM_EXTERN videoDC1394 : public video {
 
   imageStruct m_frame;
 
-#else
-  pixBlock    *getFrame(){return NULL;}
 #endif /* HAVE_LIBDC1394 */
-}; };
+};
+};
 
 #endif	// for header file
