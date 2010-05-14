@@ -114,7 +114,6 @@ videoV4L :: ~videoV4L()
 // frame grabber
 //
 /////////////////////////////////////////////////////////
-#if 1
 bool videoV4L :: grabFrame() {
   bool noerror=true;
 
@@ -179,7 +178,6 @@ bool videoV4L :: grabFrame() {
   unlock();
   return true;
 }
-#endif
 
 /////////////////////////////////////////////////////////
 // openDevice
@@ -355,11 +353,7 @@ bool videoV4L :: startTransfer()
     
   m_haveVideo = 1;
 
-  /* create thread */
-  startThread();
-
   verbose(1, "v4l::startTransfer opened video connection %X", tvfd);
-
   return true;
 }
 
@@ -369,7 +363,6 @@ bool videoV4L :: startTransfer()
 /////////////////////////////////////////////////////////
 bool videoV4L :: stopTransfer()
 {
-  stopThread();
   if(!m_capturing)return false;
   v4l1_munmap(videobuf, vmbuf.size);
   m_capturing=false;

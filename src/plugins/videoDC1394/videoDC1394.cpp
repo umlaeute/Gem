@@ -96,20 +96,6 @@ bool videoDC1394 :: grabFrame()
   return true;
 }
 
-#if 0
-pixBlock *videoDC1394 :: getFrame(){
-  if (!m_haveVideo)return NULL;
-  //  if (!m_frame_ready) m_image.newimage = 0;
-  if(false) m_image.newimage=0;
-  else {
-    pthread_mutex_lock(m_lock);
-    m_image.image.convertFrom(&m_frame, m_reqFormat); 
-    pthread_mutex_unlock(m_lock);
-  }
-  return &m_image;
-}
-#endif
-
 /////////////////////////////////////////////////////////
 // openDevice
 //
@@ -177,7 +163,6 @@ bool videoDC1394 :: startTransfer()
     return false;
   }
 
-  startThread();
   return true;
 }
 

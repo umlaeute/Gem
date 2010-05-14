@@ -66,113 +66,6 @@ videoDV4L :: ~videoDV4L(){
 // render
 //
 /////////////////////////////////////////////////////////
-#if 0
-void *videoDV4L :: capturing(void*you)
-{
-  videoDV4L *me=(videoDV4L *)you;
-  int fd=me->dvfd;
-  int framesize = me->m_framesize;
-  struct dv1394_status dvst;
-  int n_frames = N_BUF;
-  unsigned char* mmapbuf = me->m_mmapbuf;
-
-  /* this will hang if no ieee1394-device is present, what to do about it ??? */
-  me->m_haveVideo=false;
-  if(ioctl(fd, DV1394_WAIT_FRAMES, 1)) {
-    perror("error: ioctl WAIT_FRAMES");
-    me->m_capturing=false; return NULL;
-  }
-  if (ioctl(fd, DV1394_GET_STATUS, &dvst))   {
-    perror("ioctl GET_STATUS");
-    me->m_capturing=false; return NULL;
-  }
-  me->m_haveVideo=true;
-  me->m_capturing=true;
-
-  while(me->m_continue_thread){
-    if(ioctl(fd, DV1394_WAIT_FRAMES, n_frames - 1)) {
-      perror("error: ioctl WAIT_FRAMES");
-      me->m_capturing=false; return NULL;
-    }
-    if (ioctl(fd, DV1394_GET_STATUS, &dvst))   {
-      perror("ioctl GET_STATUS");
-      me->m_capturing=false; return NULL;
-    }
-    /*
-      dvst.init
-      dvst.active_frame
-      dvst.first_clear_frame
-      dvst.n_clear_frames
-      dvst.dropped_frames
-    */	
-    if (dvst.dropped_frames > 0) {
-      verbose(1,"dv1394: dropped at least %d frames", dvst.dropped_frames);
-    }
-    /*
-      memcpy( g_current_frame->data, 
-      (g_dv1394_map + (dvst.first_clear_frame * DV1394_PAL_FRAME_SIZE)),
-      DV1394_PAL_FRAME_SIZE );
-    */
-    me->videobuf = mmapbuf + (dvst.first_clear_frame * framesize);
-
-    //post("thread %d\t%x %x", me->frame, me->tvfd, me->vmmap);
-    if (ioctl(fd, DV1394_RECEIVE_FRAMES, 1) < 0)    {
-      perror("receiving...");
-    }
-    me->m_lastframe=me->m_frame;
-    me->m_frame++;
-    me->m_frame%=N_BUF;
-    me->m_frame_ready = true;
-  }
-  me->m_capturing=false;
-  return NULL;
-}
-
-pixBlock *videoDV4L :: getFrame(){
-  if (!m_decoder)return NULL;
-  if (!m_frame_ready) m_image.newimage = 0;
-  else {
-    dv_parse_header(m_decoder, videobuf);
-    //dv_parse_packs (m_decoder, videobuf);
-    if(dv_frame_changed(m_decoder)) {
-      int pitches[3] = {0,0,0};
-            //      pitches[0]=m_decoder->width*3; // rgb
-      //      pitches[0]=m_decoder->width*((m_reqFormat==GL_RGBA)?3:2);
-      pitches[0]=m_decoder->width*2;
-      m_image.image.ysize=m_decoder->height;
-      m_image.image.xsize=m_decoder->width;
-      m_image.image.setCsizeByFormat(m_reqFormat);
-      
-      /* decode the DV-data to something we can handle and that is similar to the wanted format */
-      //      dv_report_video_error(m_decoder, videobuf);  // do we need this ?
-      // gosh, this(e_dv_color_rgb) is expansive:: the decoding is done in software only...
-      //      dv_decode_full_frame(m_decoder, videobuf, ((m_reqFormat==GL_RGBA)?e_dv_color_rgb:e_dv_color_yuv), &decodedbuf, pitches);
-      dv_decode_full_frame(m_decoder, videobuf, e_dv_color_yuv, &decodedbuf, pitches);
-
-      //     post("sampling %d", m_decoder->sampling);
-
-      /* convert the colour-space to the one we want */
-      /*
-       * btw. shouldn't this be done in [pix_video] rather than here ?
-       * no because [pix_video] knows nothing about the possible colourspaces in here
-       */
-
-      // letting the library do the conversion to RGB and then doing the conversion to RGBA
-      // is really stupid.
-      // let's do it all ourselfes:
-      //      if (m_reqFormat==GL_RGBA)m_image.image.fromRGB(decodedbuf); else
-      m_image.image.fromYVYU(decodedbuf);
-    }
-
-    m_image.newimage=1;
-    m_image.image.upsidedown=true;
-  
-    m_frame_ready = false;
-  }
-  return &m_image;
-}
-
-#else
 bool videoDV4L :: grabFrame() {
   struct dv1394_status dvst;
   int n_frames = N_BUF;
@@ -219,7 +112,6 @@ bool videoDV4L :: grabFrame() {
 
   return true;
 }
-#endif
 
 /////////////////////////////////////////////////////////
 // openDevice
@@ -353,7 +245,6 @@ bool videoDV4L :: startTransfer()
   m_decoder->quality=m_quality;
   verbose(1, "DV4L: DV decoding quality %d ", m_decoder->quality);
 
-  startThread();
   return true;
 }
 
@@ -363,11 +254,7 @@ bool videoDV4L :: startTransfer()
 /////////////////////////////////////////////////////////
 bool videoDV4L :: stopTransfer()
 {
-  /* close the dv4l device and dealloc buffer */
-  /* terminate thread if there is one */
-  stopThread(100);
-
-  return(1);
+  return true;
 }
 
 /////////////////////////////////////////////////////////
