@@ -30,7 +30,7 @@ class video :: PIMPL {
 public:
   /* interfaces */
   // the list of provided device-classes
-  std::vector<const char*>m_providers;
+  std::vector<std::string>m_providers;
 
 
   /* threading */
@@ -351,23 +351,22 @@ int video :: setQuality(int d){
 
 /////////////////////////////////////////////////////////
 // query whether this backend provides a certain type of video decoding, e.g. "dv"
-bool video :: provides(const char*name) {
+bool video :: provides(const std::string name) {
   if(!m_pimpl)return false;
-  std::vector<const char*>::iterator it;
-  for ( it=m_pimpl->m_providers.begin() ; it < m_pimpl->m_providers.end(); it++ ) {
-    if(!strcmp(name, *it))return true;
-  }
+  int i;
+  for(i=0; i<m_pimpl->m_providers.size(); i++)
+    if(name == m_pimpl->m_providers[i])return true;
 
   return false;
 }
 
 /////////////////////////////////////////////////////////
 // remember that this backend provides a certain type of video decoding, e.g. "dv"
-void video :: provide(const char*name) {
+void video :: provide(const std::string name) {
   if(!m_pimpl)return;
   if(!provides(name)) {
     m_pimpl->m_providers.push_back(name);
-    startpost("%s ", name);
+    startpost("%s ", name.c_str());
   }
 }
 

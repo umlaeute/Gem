@@ -169,10 +169,10 @@ namespace gem { class GEM_EXTERN video {
  public:
   // for pix_video: query whether this backend provides access to this class of devices
   // (e.g. "dv"
-  bool provides(const char*name);
+  bool provides(const std::string);
  protected:
   // for child-implementations: remember that we provide access to this class of devices
-  void provide(const char*name);
+  void provide(const std::string);
  private:
   class PIMPL;
   PIMPL*m_pimpl;
