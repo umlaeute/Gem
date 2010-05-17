@@ -93,6 +93,10 @@ class GEM_EXTERN pix_video : public GemBase
   // Set the device
   virtual void	deviceMess(t_symbol*dev);
   virtual void	deviceMess(int dev);
+
+  virtual void	closeMess(void);
+
+
   // Set the driver architecture; (probably this makes only sense under linux right now: you can choose between video4linux(0) and video1394(1))
   virtual void	driverMess(int dev);
   virtual void	driverMess(t_symbol*s);
@@ -135,6 +139,9 @@ class GEM_EXTERN pix_video : public GemBase
   static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
   static void enumerateMessCallback(void *data);
   static void qualityMessCallback(void *data, t_floatarg dev);
+
+  static void closeMessCallback(void *data);
+  static void openMessCallback(void *data);
 
 };
 

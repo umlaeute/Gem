@@ -167,7 +167,7 @@ bool pix_video::restart(void) {
   bool running=false;
   if(m_videoHandle) {
     running=m_videoHandle->stop();
-    m_videoHandle->closeDevice();
+    m_videoHandle->close();
   }
 
   if(m_driver<0) {
@@ -262,9 +262,14 @@ void pix_video :: deviceMess(t_symbol*s)
   restart();
 }
 
-
-
-
+void pix_video :: closeMess()
+{
+  if(m_videoHandle) {
+    m_videoHandle->stop();
+    m_videoHandle->close();
+  }
+  m_videoHandle=NULL;
+}
 
 /////////////////////////////////////////////////////////
 // dimenMess
@@ -391,6 +396,11 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("dialog"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::qualityMessCallback),
 	    gensym("quality"), A_FLOAT, A_NULL);
+
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::closeMessCallback),
+	    gensym("close"), A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::openMessCallback),
+	    gensym("open"), A_NULL);
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -484,5 +494,13 @@ void pix_video :: dialogMessCallback(void *data, t_symbol*s, int argc, t_atom*ar
 void pix_video :: qualityMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->qualityMess(static_cast<int>(state));
+}
+void pix_video :: closeMessCallback(void *data)
+{
+  GetMyClass(data)->closeMess();
+}
+void pix_video :: openMessCallback(void *data)
+{
+  GetMyClass(data)->startRendering();
 }
 #endif /* no OS-specific GEM_VIDEOBACKEND */
