@@ -50,6 +50,8 @@ videoDV4L :: videoDV4L() : video(),
   m_channel = 0;//0x63;
   m_devicenum  = 0;
 
+  m_quality=DV_QUALITY_BEST;
+
   int i=0;
   for(i=0; i<3; i++) {
     m_frame  [i] = NULL;
@@ -189,6 +191,8 @@ bool videoDV4L :: startTransfer()
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
 
+  if(NULL==m_raw)return false;
+
   m_parsed=false;
 
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);m_decoder=NULL;
@@ -200,7 +204,6 @@ bool videoDV4L :: startTransfer()
 
   m_decoder->quality=m_quality;
   verbose(1, "DV4L: DV decoding quality %d ", m_decoder->quality);
-
 
   m_iec = iec61883_dv_fb_init(m_raw, iec_frame, this);
   if(NULL==m_iec) {
@@ -230,6 +233,16 @@ bool videoDV4L :: stopTransfer()
   /* close the dv4l device and dealloc buffer */
   /* terminate thread if there is one */
   //stopThread(100);
+
+  if(m_iec) {
+    iec61883_dv_fb_stop(m_iec);
+  }
+
+  if(m_decoder) {
+    dv_decoder_free(m_decoder);
+
+    m_decoder=NULL;
+  }
 
   int i=0;
   for(i=0; i<3; i++) {
@@ -262,10 +275,7 @@ int videoDV4L :: setDevice(char*name){
   m_devicenum=-1;
   m_devicename=name;
 
-  if(m_haveVideo){
-    stopTransfer();
-    startTransfer();
-  }
+  restartTransfer();
   return 0;
 }
 
@@ -281,14 +291,13 @@ int videoDV4L :: setColor(int format){
 //
 /////////////////////////////////////////
 int videoDV4L :: setQuality(int quality){
-  if (quality<0)return -1;
-  if (quality>5)return -1;
+  if (quality<DV_QUALITY_FASTEST)return -1;
+  if (quality>DV_QUALITY_BEST)return -1;
   m_quality=quality;
 
-  if(m_haveVideo){
-    stopTransfer();
-    startTransfer();
-  }  
+  if(m_decoder) {
+    dv_set_quality(m_decoder, m_quality);
+  }
   return 0;
 }
 
