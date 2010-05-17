@@ -63,7 +63,7 @@ REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 videoV4L2 :: videoV4L2() : video()
 #ifdef HAVE_VIDEO4LINUX2
                                    , m_gotFormat(0), m_colorConvert(0),
-                                     m_tvfd(0),
+                                     m_tvfd(-1),
                                      m_buffers(NULL), m_nbuffers(0), 
                                      m_currentBuffer(NULL),
                                      m_frame(0), m_last_frame(0),
@@ -389,9 +389,12 @@ bool videoV4L2 :: startTransfer()
 
   memset (&(fmt), 0, sizeof (fmt));
 
+  // query back what we have set
+  if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
+    perror("v4l2: VIDIOC_G_FMT");//exit
+  }
+
   fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  fmt.fmt.pix.width       = m_width;
-  fmt.fmt.pix.height      = m_height;
 
   switch(m_reqFormat){
   case GL_YCBCR_422_GEM: 
@@ -475,15 +478,6 @@ bool videoV4L2 :: startTransfer()
 	    static_cast<char>(m_gotFormat>>16),
 	    static_cast<char>(m_gotFormat>>24));
 
-  /* Note VIDIOC_S_FMT may change width and height. */
-  if(m_width!=fmt.fmt.pix.width||m_height!=fmt.fmt.pix.height){
-    post("v4l2: changed size from %dx%d to %dx%d", 
-	 m_width, m_height,
-	 fmt.fmt.pix.width,fmt.fmt.pix.height);
-  }
-  m_width =fmt.fmt.pix.width;
-  m_height=fmt.fmt.pix.height;
-
   /* Buggy driver paranoia. */
   min = fmt.fmt.pix.width * 2;
   if (fmt.fmt.pix.bytesperline < min)
@@ -514,13 +508,6 @@ bool videoV4L2 :: startTransfer()
     perror("v4l2: VIDIOC_STREAMON");//exit
   }
   
-  /* fill in image specifics for Gem pixel object.  Could we have
-     just used RGB, I wonder? */
-  m_image.image.xsize = m_width;
-  m_image.image.ysize = m_height;
-  m_image.image.setCsizeByFormat(m_reqFormat);
-  m_image.image.reallocate();
-  
   debugPost("v4l2: format: %c%c%c%c -> %d", 
        static_cast<char>(m_gotFormat),
        static_cast<char>(m_gotFormat>>8),
@@ -539,17 +526,22 @@ bool videoV4L2 :: startTransfer()
   
   debugPost("v4l2: colorconvert=%d", m_colorConvert);
 
-  startThread();
-  post("v4l2: GEM: pix_video: Opened video connection 0x%X", m_tvfd);
-  m_newfilm=true;
-  m_capturing=true;
-  return true;
+
+  /* fill in image specifics for Gem pixel object.  Could we have
+     just used RGB, I wonder? */
+  m_image.image.setCsizeByFormat(m_reqFormat);
   
+  setDimen((int)m_width, (int)m_height,  0, 0,  0, 0);
+  m_image.image.reallocate();
+
+  post("v4l2: GEM: pix_video: Opened video connection 0x%X", m_tvfd);
+  return true;
+
  closit:
   debugPost("v4l2: closing it!");
   stopTransfer();
   debugPost("v4l2: closed it");
-  return(0);
+  return false;
 }
 
 /////////////////////////////////////////////////////////
@@ -598,25 +590,51 @@ bool videoV4L2 :: stopTransfer()
 int videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
                           int topmargin, int bottommargin)
 {
-  int xtotal = x + leftmargin + rightmargin;
-  int ytotal = y + topmargin + bottommargin;
-  if (xtotal > m_maxwidth) /* 844 */
-    error("x dimensions too great");
-  else if (xtotal < m_minwidth || x < 1 || leftmargin < 0 || rightmargin < 0)
-    error("x dimensions too small");
-  if (ytotal > m_maxheight)
-    error("y dimensions too great");
-  else if (ytotal < m_minheight || y < 1 ||
-           topmargin < 0 || bottommargin < 0)
-    error("y dimensions too small");
+  if(m_tvfd>=0) {
+    struct v4l2_format fmt;
+    memset(&fmt, 0, sizeof(fmt));
+
+    if(m_maxwidth>0 && x>m_maxwidth)
+      error("width too great: %d > %d", x, m_maxwidth);
+    if(m_minwidth>0 && x<m_minwidth)
+      error("width too small: %d < %d", x, m_minwidth);
+    
+    if(m_maxheight>0 && y>m_maxheight)
+      error("height too great: %d > %d", y, m_maxheight);
+    if(m_minheight>0 && y<m_minheight)
+      error("height too small: %d < %d", y, m_minheight);
+
+    fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+
+    if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
+      perror("v4l2: VIDIOC_G_FMT");
+    }
+
+    fmt.fmt.pix.width       = x;
+    fmt.fmt.pix.height      = y;
+
+    if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
+      perror("v4l2: VIDIOC_S_FMT");//exit
+    }
+    
+    if(x!=fmt.fmt.pix.width || y!=fmt.fmt.pix.height){
+      post("v4l2: changed size from %dx%d to %dx%d", 
+           x, y,
+           fmt.fmt.pix.width,fmt.fmt.pix.height);
+    }
+    x=fmt.fmt.pix.width;
+    y=fmt.fmt.pix.height;
+  }
 
   m_width=x;
   m_height=y;
+
+  lock();
   m_image.image.xsize = x;
   m_image.image.ysize = y;
-
   m_image.image.reallocate();
-  restartTransfer();
+  unlock();
+  //  restartTransfer();
   return 1;
 }
 
