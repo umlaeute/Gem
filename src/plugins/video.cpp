@@ -36,23 +36,70 @@ public:
   /* threading */
   bool threading;
   pthread_t thread;
-  pthread_mutex_t*lock;
+  pthread_mutex_t**locks;
+  unsigned int numlocks;
+
+  unsigned int timeout;
 
   bool cont;
   bool running;
 
-  PIMPL(bool threading_) :
-    threading(threading_),
-    lock(NULL),
+  PIMPL(unsigned int locks_, unsigned int timeout_) :
+    threading(locks_>0),
+    locks(NULL),
+    numlocks(0),
+    timeout(timeout_),
     cont(true),
     running(false)
   {
+    if(locks_>0) {
+      numlocks=locks_;
+      locks=new pthread_mutex_t*[numlocks];
+      int i=0;
+      for(i=0; i<locks_; i++)
+        locks[i]=NULL;
+    }
   }
   ~PIMPL(void) {
     cont=false;
-    if(lock)pthread_mutex_destroy(lock); delete lock; lock=NULL;
+    lock_delete();
+    delete[]locks; 
+    locks=NULL;
   }
 
+  void lock(unsigned int i) {
+    if(i<numlocks && locks[i])
+      pthread_mutex_lock(locks[i]);
+  }
+  void unlock(unsigned int i) {
+    if(i<numlocks && locks[i])
+      pthread_mutex_unlock(locks[i]);
+  }
+  bool lock_new(void) {
+    if(locks) {
+      int i=0;
+      for(i=0; i<numlocks; i++) {
+        locks[i]=new pthread_mutex_t;
+        if ( pthread_mutex_init(locks[i], NULL) < 0 ) {
+          lock_delete();
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+  void lock_delete(void) {
+    if(locks) {
+      int i=0;
+      for(i=0; i<numlocks; i++) {
+        if(locks[i]) {
+          pthread_mutex_destroy(locks[i]); 
+          delete locks[i];
+          locks[i]=NULL;
+        }
+      }
+    }
+  }
 
   static void*threadfun(void*you) {
     video*me=(video*)you;
@@ -81,13 +128,13 @@ public:
 // Constructor
 //
 /////////////////////////////////////////////////////////
-video :: video(bool threaded) :
+video :: video(unsigned int locks, unsigned int timeout) :
   m_capturing(false), m_haveVideo(false), 
   m_width(64), m_height(64),
   m_channel(0), m_norm(0),
   m_reqFormat(GL_RGBA),
   m_devicename(NULL), m_devicenum(0), m_quality(0),
-  m_pimpl(new PIMPL(threaded))
+  m_pimpl(new PIMPL(locks, timeout))
 {
 }
 
@@ -206,30 +253,27 @@ bool video :: restartTransfer()
 
 bool video::startThread() {
   post("startThread %x", m_pimpl);
-  if(!m_pimpl)return false;
-  if(m_pimpl->lock){
+  if(m_pimpl->running) {
     stopThread();
   }
 
   if(m_pimpl->threading) {
-    m_pimpl->lock = new pthread_mutex_t;
-    if ( pthread_mutex_init(m_pimpl->lock, NULL) < 0 ) {
-      delete m_pimpl->lock;
-      return false;
-    }
+    if(!m_pimpl->lock_new())return false;
 
     pthread_create(&m_pimpl->thread, 
                    0,
                    m_pimpl->threadfun, 
                    this);
+    return true;
   }
+  return false;
 }
-bool video::stopThread(unsigned int timeout) {
+bool video::stopThread(int timeout) {
   post("stopThread %x", m_pimpl);
-  if(!m_pimpl)return true;
   int i=0;
   post("stopThread: %d", timeout);
   m_pimpl->cont=false;
+  if(timeout<0)timeout=m_pimpl->timeout;
   if(timeout>0) {
     while(m_pimpl->running) {
       struct timeval sleep;
@@ -254,30 +298,16 @@ bool video::stopThread(unsigned int timeout) {
     //pthread_join(m_pimpl->thread, NULL);
   }
 
-  if(m_pimpl->lock){
-    int i=0;
-    while(pthread_mutex_destroy(m_pimpl->lock)) {
-      struct timeval sleep;
-      pthread_mutex_unlock(m_pimpl->lock);
-      sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
-      select(0,0,0,0,&sleep);
-      i++;
-    }
-    delete m_pimpl->lock;
-    m_pimpl->lock=NULL;
-  }
+  m_pimpl->lock_delete();
 
   return true;
 }
-void video::lock() {
-  if(m_pimpl && m_pimpl->lock)
-    pthread_mutex_lock(m_pimpl->lock);
+void video::lock(unsigned int id) {
+  m_pimpl->lock(id);
 }
-void video::unlock() {
-  if(m_pimpl && m_pimpl->lock)
-    pthread_mutex_unlock(m_pimpl->lock);
+void video::unlock(unsigned int id) {
+  m_pimpl->unlock(id);
 }
-
 
 pixBlock* video::getFrame(void) {
   if(!(m_haveVideo && m_capturing))return NULL;
@@ -287,13 +317,14 @@ pixBlock* video::getFrame(void) {
     // no thread, grab it directly
     grabFrame();
   }
-
+  lock();
   return &m_image;
 }
 
 
 void video::releaseFrame(void) {
   m_image.newimage=false;
+  unlock();
 }
 
 /////////////////////////////////////////////////////////
