@@ -111,6 +111,8 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
   ////////
   // the DV-decoder
   dv_decoder_t *m_decoder;
+
+  bool m_parsed;
   uint8_t*m_frame[3];
   int m_pitches[3];
 #endif /* HAVE_DV */
