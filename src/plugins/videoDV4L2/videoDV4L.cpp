@@ -44,12 +44,11 @@ REGISTER_VIDEOFACTORY("dv4l2", videoDV4L);
 /////////////////////////////////////////////////////////
 
 videoDV4L :: videoDV4L() : video(),
+                           m_raw(NULL),
                            m_decoder(NULL),
                            m_parsed(false)
 {
-  m_channel = 0;//0x63;
-  m_devicenum  = 0;
-
+  m_devicenum  = -1;
   m_quality=DV_QUALITY_BEST;
 
   int i=0;
@@ -155,11 +154,49 @@ int videoDV4L::iec_frame(
 /////////////////////////////////////////////////////////
 bool videoDV4L :: openDevice(){
   DEBUG_WHERE;
-  m_raw = raw1394_new_handle_on_port(0);
-  post("raw got %x", m_raw);
-  if(NULL==m_raw)return false;
+  if(m_raw)closeDevice();
+
+  // LATER think about multithreading issues
+  // according to the manual: "it is not allowed to use the same handle in multiple threads"
+  // http://www.dennedy.org/libraw1394/API-raw1394-new-handle.html
+  m_raw=raw1394_new_handle();
+
+  int ports=0;
+
+#if 0
+  ports = raw1394_get_port_info(m_raw, NULL, 0);
+#else
+  int num_pinf=64;
+  struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
+  
+  ports = raw1394_get_port_info(m_raw, pinf, num_pinf);
+
+  int i=0;
+  for(i=0; i<ports; i++) {
+    verbose(1, "port#%02d: %.*s", i, 32, pinf[i].name);
+  }
+  delete[]pinf;
+#endif
+
+
+  int devnum=m_devicenum;
+  if(m_devicenum>=ports){
+    closeDevice();
+    return false;
+  }
+  if(devnum<0)devnum=0;
+  if(raw1394_set_port(m_raw, devnum)<0) {
+    perror("raw1394_set_port");
+    closeDevice();
+    return false;
+  }
+
+
+  if(NULL==m_raw)
+    return false;
+
+
   m_dvfd = raw1394_get_fd(m_raw);
-  post("dvfd got %x", m_dvfd);
   if(m_dvfd<0) {
     closeDevice();
     return false;
@@ -253,35 +290,30 @@ bool videoDV4L :: stopTransfer()
   return(1);
 }
 
-/////////////////////////////////////////////////////////
-// normMess
-//
-/////////////////////////////////////////////////////////
-int videoDV4L :: setNorm(char*norm){
-}
-
 int videoDV4L :: setDevice(int d){
   m_devicename=NULL;
-  if (d==m_devicenum)return 0;
+  if (d==m_devicenum)return 0; // same device as before
   m_devicenum=d;
 
-  if(m_haveVideo){
-    stopTransfer();
-    startTransfer();
-  }
+  bool running=false;
+
+  running=stop();
+  close();
+  open();
+  if(running)start();
   return 0;
 }
 int videoDV4L :: setDevice(char*name){
-  m_devicenum=-1;
-  m_devicename=name;
-
-  restartTransfer();
+  // setting device by name not yet supported
   return 0;
 }
 
 int videoDV4L :: setColor(int format){
   if (format<=0)return -1;
   m_reqFormat=format;
+  lock();
+  m_image.image.setCsizeByFormat(m_reqFormat);
+  unlock();
   return 0;
 }
 

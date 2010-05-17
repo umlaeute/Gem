@@ -92,7 +92,6 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
 
 	//////////
 	// Set the video dimensions
-	virtual int	  setNorm(char*);
 	virtual int	  setDevice(char*);
 	virtual int	  setDevice(int);
 	virtual int	  setColor(int);
