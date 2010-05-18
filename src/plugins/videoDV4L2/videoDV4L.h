@@ -92,10 +92,10 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
 
 	//////////
 	// Set the video dimensions
-	virtual int	  setDevice(char*);
-	virtual int	  setDevice(int);
-	virtual int	  setColor(int);
-	virtual int		setQuality(int);
+	virtual bool	  setDevice(const std::string);
+	virtual bool	  setDevice(int);
+	virtual bool	  setColor(int);
+	virtual bool		setQuality(int);
     
  protected:
 

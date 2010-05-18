@@ -187,8 +187,8 @@ bool videoV4L :: openDevice()
 {
   char buf[256];
 
-  if(m_devicename){
-    snprintf(buf,256,"%s", m_devicename);
+  if(!m_devicename.empty()){
+    snprintf(buf,256,"%s", m_devicename.c_str());
     buf[255]=0;
   } else {
     if (m_devicenum<0){
@@ -373,7 +373,7 @@ bool videoV4L :: stopTransfer()
 // dimenMess
 //
 /////////////////////////////////////////////////////////
-int videoV4L :: setDimen(int x, int y, int leftmargin, int rightmargin,
+bool videoV4L :: setDimen(int x, int y, int leftmargin, int rightmargin,
                          int topmargin, int bottommargin)
 {
 
@@ -404,9 +404,9 @@ int videoV4L :: setDimen(int x, int y, int leftmargin, int rightmargin,
   return 0;
 }
 
-int videoV4L :: setNorm(char*norm)
+bool videoV4L :: setNorm(const std::string norm)
 {
-  char c=*norm;
+  const char c=*norm.c_str();
   int i_norm=-1;
 
   switch (c){
@@ -429,7 +429,7 @@ int videoV4L :: setNorm(char*norm)
   return 0;
 }
 
-int videoV4L :: setChannel(int c, t_float f){
+bool videoV4L :: setChannel(int c, t_float f){
   int freq = (int) f;
   if (freq>0){
     if (c>-1)m_channel=c;
@@ -452,15 +452,15 @@ int videoV4L :: setChannel(int c, t_float f){
   return 0;
 }
 
-int videoV4L :: setDevice(int d)
+bool videoV4L :: setDevice(int d)
 {
-  m_devicename=NULL;
+  m_devicename.empty();
   if (d==m_devicenum)return 0;
   m_devicenum=d;
   restartTransfer();
   return 0;
 }
-int videoV4L :: setDevice(char*name)
+bool videoV4L :: setDevice(const std::string name)
 {
   m_devicenum=-1;
   m_devicename=name;
@@ -468,7 +468,7 @@ int videoV4L :: setDevice(char*name)
   return 0;
 }
 
-int videoV4L :: setColor(int format)
+bool videoV4L :: setColor(int format)
 {
   if (format<=0 || format==m_reqFormat)return -1;
   m_reqFormat=format;

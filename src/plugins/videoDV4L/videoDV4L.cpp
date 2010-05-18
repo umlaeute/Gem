@@ -147,10 +147,10 @@ bool videoDV4L :: openDevice(){
 
   m_framesize=(m_norm==NTSC)?DV1394_NTSC_FRAME_SIZE:DV1394_PAL_FRAME_SIZE;
 
-  if(m_devicename){
-    if ((fd = ::open(m_devicename, O_RDWR)) < 0) {
-        perror(m_devicename);
-        return -1;
+  if(!m_devicename.empty()){
+    if ((fd = ::open(m_devicename.c_str(), O_RDWR)) < 0) {
+      perror(m_devicename.c_str());
+      return -1;
     }
   } else {
     signed char devnum=(m_devicenum<0)?0:(signed char)m_devicenum;
@@ -261,9 +261,10 @@ bool videoDV4L :: stopTransfer()
 // normMess
 //
 /////////////////////////////////////////////////////////
-int videoDV4L :: setNorm(char*norm){
+bool videoDV4L :: setNorm(const std::string norm){
   int inorm = m_norm;
-  switch(norm[0]){
+  const char*c=norm.c_str();
+  switch(c[0]){
   case 'N': case 'n':
     inorm=NTSC;
     break;
@@ -273,11 +274,11 @@ int videoDV4L :: setNorm(char*norm){
   }
   if (inorm==m_norm)return 0;
   m_norm=inorm;
-  return 0;
+  return true;
 }
 
-int videoDV4L :: setDevice(int d){
-  m_devicename=NULL;
+bool videoDV4L :: setDevice(int d){
+  m_devicename.clear();
   if (d==m_devicenum)return 0;
   m_devicenum=d;
 
@@ -285,9 +286,9 @@ int videoDV4L :: setDevice(int d){
     stopTransfer();
     startTransfer();
   }
-  return 0;
+  return true;
 }
-int videoDV4L :: setDevice(char*name){
+bool videoDV4L :: setDevice(const std::string name){
   m_devicenum=-1;
   m_devicename=name;
 
@@ -295,13 +296,13 @@ int videoDV4L :: setDevice(char*name){
     stopTransfer();
     startTransfer();
   }
-  return 0;
+  return true;
 }
 
-int videoDV4L :: setColor(int format){
+bool videoDV4L :: setColor(int format){
   if (format<=0)return -1;
   m_reqFormat=format;
-  return 0;
+  return true;
 }
 
 /////////////////////////////////////////
@@ -309,7 +310,7 @@ int videoDV4L :: setColor(int format){
 // Set the quality for DV decoding
 //
 /////////////////////////////////////////
-int videoDV4L :: setQuality(int quality){
+bool videoDV4L :: setQuality(int quality){
   if (quality<0)return -1;
   if (quality>5)return -1;
   m_quality=quality;
@@ -318,7 +319,7 @@ int videoDV4L :: setQuality(int quality){
     stopTransfer();
     startTransfer();
   }  
-  return 0;
+  return true;
 }
 
 #else // ! HAVE_DV

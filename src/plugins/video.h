@@ -49,7 +49,7 @@ namespace gem { class GEM_EXTERN video {
     // Constructor
     // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
     // 
-    video(unsigned int numlocks=1, unsigned int timeout=100);
+    video(unsigned int numlocks=1, unsigned int timeout=0);
   
     //////////
     // Destructor
@@ -146,16 +146,16 @@ namespace gem { class GEM_EXTERN video {
 
     //////////
     // Set the video dimensions
-    virtual int	    	setDimen(int x, int y, int leftmargin=0, int rightmargin=0,
+    virtual bool	    	setDimen(int x, int y, int leftmargin=0, int rightmargin=0,
                                int topmargin=0, int bottommargin=0);
-    virtual int	    	setOffset(int x, int y);
-    virtual int	    	setSwap(int state);
-    virtual int	    	setChannel(int c, float f=0);
-    virtual int	    	setNorm(char*n);
-    virtual int	    	setDevice(int d);
-    virtual int	    	setDevice(char*name);
-    virtual int	    	setColor(int);
-    virtual int	    	setQuality(int);
+    virtual bool	    	setOffset(int x, int y);
+    virtual bool	    	setSwap(int state);
+    virtual bool	    	setChannel(int c, float f=0);
+    virtual bool	    	setNorm(const std::string);
+    virtual bool	    	setDevice(int d);
+    virtual bool	    	setDevice(const std::string);
+    virtual bool	    	setColor(int);
+    virtual bool	    	setQuality(int);
 
   protected:
     //! indicates valid transfer (automatically set in start()/stop())
@@ -172,7 +172,7 @@ namespace gem { class GEM_EXTERN video {
     int m_reqFormat;
 
     /* specify either devicename XOR devicenum */  
-    const char*m_devicename;
+    std::string m_devicename;
     int m_devicenum;
 
     int m_quality;

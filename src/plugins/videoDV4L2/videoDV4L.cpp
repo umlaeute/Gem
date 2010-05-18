@@ -163,9 +163,6 @@ bool videoDV4L :: openDevice(){
 
   int ports=0;
 
-#if 0
-  ports = raw1394_get_port_info(m_raw, NULL, 0);
-#else
   int num_pinf=64;
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
   
@@ -176,11 +173,16 @@ bool videoDV4L :: openDevice(){
     verbose(1, "port#%02d: %.*s", i, 32, pinf[i].name);
   }
   delete[]pinf;
-#endif
+
 
 
   int devnum=m_devicenum;
-  if(m_devicenum>=ports){
+
+  if(!m_devicename.empty()) {
+
+  }
+
+  if(devnum>=ports){
     closeDevice();
     return false;
   }
@@ -290,9 +292,9 @@ bool videoDV4L :: stopTransfer()
   return(1);
 }
 
-int videoDV4L :: setDevice(int d){
-  m_devicename=NULL;
-  if (d==m_devicenum)return 0; // same device as before
+bool videoDV4L :: setDevice(int d){
+  m_devicename.clear();
+  if (d==m_devicenum)return true; // same device as before
   m_devicenum=d;
 
   bool running=false;
@@ -301,20 +303,21 @@ int videoDV4L :: setDevice(int d){
   close();
   open();
   if(running)start();
-  return 0;
+  return true;
 }
-int videoDV4L :: setDevice(char*name){
+bool videoDV4L :: setDevice(const std::string name){
+  
   // setting device by name not yet supported
-  return 0;
+  return false;
 }
 
-int videoDV4L :: setColor(int format){
-  if (format<=0)return -1;
+bool videoDV4L :: setColor(int format){
+  if (format<=0)return false;
   m_reqFormat=format;
   lock();
   m_image.image.setCsizeByFormat(m_reqFormat);
   unlock();
-  return 0;
+  return true;
 }
 
 /////////////////////////////////////////
@@ -322,7 +325,7 @@ int videoDV4L :: setColor(int format){
 // Set the quality for DV decoding
 //
 /////////////////////////////////////////
-int videoDV4L :: setQuality(int quality){
+bool videoDV4L :: setQuality(int quality){
   if (quality<DV_QUALITY_FASTEST)return -1;
   if (quality>DV_QUALITY_BEST)return -1;
   m_quality=quality;
@@ -330,7 +333,7 @@ int videoDV4L :: setQuality(int quality){
   if(m_decoder) {
     dv_set_quality(m_decoder, m_quality);
   }
-  return 0;
+  return true;
 }
 
 #else // ! HAVE_DV

@@ -116,13 +116,13 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
 
   //////////
   // Set the video dimensions
-  virtual int	    	setDimen(int x, int y, int leftmargin, int rightmargin,
+  virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin,
                                  int topmargin, int bottommargin);
-  virtual int	    	setChannel(int c, float f);
-  virtual int	    	setNorm(char*);
-  virtual int	    	setDevice(int);
-  virtual int	    	setDevice(char*);
-  virtual int	    	setColor(int);
+  virtual bool	    	setChannel(int c, float f);
+  virtual bool	    	setNorm(char*);
+  virtual bool	    	setDevice(int);
+  virtual bool	    	setDevice(char*);
+  virtual bool	    	setColor(int);
 
  protected:
 

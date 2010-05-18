@@ -68,12 +68,18 @@ public:
   }
 
   void lock(unsigned int i) {
-    if(i<numlocks && locks[i])
+    post("lock %d?\t%d", i, numlocks);
+
+    if(i<numlocks && locks[i]) {
       pthread_mutex_lock(locks[i]);
+    }
   }
   void unlock(unsigned int i) {
-    if(i<numlocks && locks[i])
+      post("unlock %d? %d", i,numlocks);
+
+    if(i<numlocks && locks[i]) {
       pthread_mutex_unlock(locks[i]);
+    }
   }
   bool lock_new(void) {
     if(locks) {
@@ -133,7 +139,7 @@ video :: video(unsigned int locks, unsigned int timeout) :
   m_width(64), m_height(64),
   m_channel(0), m_norm(0),
   m_reqFormat(GL_RGBA),
-  m_devicename(NULL), m_devicenum(0), m_quality(0),
+  m_devicename(std::string("")), m_devicenum(0), m_quality(0),
   m_pimpl(new PIMPL(locks, timeout))
 {
 }
@@ -269,7 +275,6 @@ bool video::startThread() {
   return false;
 }
 bool video::stopThread(int timeout) {
-  post("stopThread %x", m_pimpl);
   int i=0;
   post("stopThread: %d", timeout);
   m_pimpl->cont=false;
@@ -317,67 +322,67 @@ pixBlock* video::getFrame(void) {
     // no thread, grab it directly
     grabFrame();
   }
-  lock();
+  //  lock();
   return &m_image;
 }
 
 
 void video::releaseFrame(void) {
   m_image.newimage=false;
-  unlock();
+  //  unlock();
 }
 
 /////////////////////////////////////////////////////////
 // set dimension
-int video :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
+bool video :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
   post("setting the dimension for video is not supported by this OS/device");
-  return -1;
+  return false;
 }
 /////////////////////////////////////////////////////////
 // set the displacment
-int video :: setOffset(int x, int y){
+bool video :: setOffset(int x, int y){
   post("setting the offset is not supported by this OS/device");
-  return -1;
+  return false;
 }
 /////////////////////////////////////////////////////////
 // should the image be swapped ?
-int video :: setSwap(int state){
+bool video :: setSwap(int state){
   post("swapping the image is not supported by this OS/device");
-  return -1;
+  return false;
 }
 /////////////////////////////////////////////////////////
 // set the tv-norm
-int video :: setNorm(char *n){
+bool video :: setNorm(const std::string norm){
   post("setting the video-norm is not supported by this OS/device");
-  return -1;
+  return false;
 }
 /////////////////////////////////////////////////////////
 // set the channel of the current device
-int video :: setChannel(int chan, t_float freq){
+bool video :: setChannel(int chan, t_float freq){
   post("setting the channel is not supported by this OS/device");
-  return -1;
+  return false;
 }
 /////////////////////////////////////////////////////////
 // set the device
-int video :: setDevice(int d){
+bool video :: setDevice(int d){
   post("setting the video-device is not supported by this OS/device");
-  return -1;
+  return false;
 }
-int video :: setDevice(char*name){
+bool video :: setDevice(const std::string name){
   post("setting the video-device is not supported by this OS/device");
-  return -1;
+  return false;
 }
 /////////////////////////////////////////////////////////
 // set the color-space
-int video :: setColor(int d){
+bool video :: setColor(int d){
   post("setting the color-space is not supported by this OS/device");
-  return -1;
+  return false;
 }
 /////////////////////////////////////////////////////////
 // set the quality for DV decoding
-int video :: setQuality(int d){
+bool video :: setQuality(int d){
   post("setting the quality is not supported by this OS/device");
-  return -1;
+  return false;
 }
 
 /////////////////////////////////////////////////////////

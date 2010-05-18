@@ -103,7 +103,7 @@ static int xioctl(int                    fd,
 int videoV4L2::init_mmap (void)
 {
   struct v4l2_requestbuffers req;
-  char*devname=(char*)((m_devicename)?m_devicename:"device");
+  const char *devname=(m_devicename.empty())?"device":m_devicename.c_str();
 
   memset (&(req), 0, sizeof (req));
 
@@ -317,19 +317,19 @@ pixBlock *videoV4L2 :: getFrame(){
 
 bool videoV4L2 :: openDevice() {
   /* check the device */
-
   // if we don't have a devicename, create one
-  const char*dev_name=m_devicename;
-  char buf[256];
+  std::string devname = m_devicename;
 
-  if(!dev_name){
-    if (m_devicenum<0){
-      sprintf(buf, "/dev/video");
-    } else {
-      sprintf(buf, "/dev/video%d", m_devicenum);
+  if(devname.empty()) {
+    devname="/dev/video";
+    if(m_devicenum>=0) {
+      char buf[255];
+      snprintf(buf, 255, "%d", m_devicenum);
+      buf[255]=0;
+      devname+=buf;
     }
-    dev_name=buf;
   }
+  const char*dev_name=devname.c_str();
 
   // try to open the device
   debugPost("v4l2: device: %s", dev_name);
@@ -413,7 +413,7 @@ bool videoV4L2 :: startTransfer()
   m_stopTransfer=false;
   m_rendering=true;
   //  verbose(1, "starting transfer");
-  const char*dev_name=m_devicename;
+  const char*dev_name=m_devicename.c_str();
   int i;
 
   struct v4l2_cropcap cropcap;
@@ -696,7 +696,7 @@ bool videoV4L2 :: stopTransfer()
 // dimenMess
 //
 /////////////////////////////////////////////////////////
-int videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
+bool videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
                           int topmargin, int bottommargin)
 {
   int xtotal = x + leftmargin + rightmargin;
@@ -718,10 +718,10 @@ int videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
 
   m_image.image.reallocate();
   restartTransfer();
-  return 0;
+  return true;
 }
 
-int videoV4L2 :: setNorm(char*norm)
+bool videoV4L2 :: setNorm(char*norm)
 {
   char c=*norm;
   int i_norm=-1;
@@ -744,43 +744,38 @@ int videoV4L2 :: setNorm(char*norm)
   //  if (i_norm==m_norm)return 0;
   m_norm=i_norm;
   restartTransfer();
-  return 0;
+  return true;
 }
 
-int videoV4L2 :: setChannel(int c, t_float f){
-  error("v4l2: oops, no channel selection! please report this as a bug!!!");
-  
-  m_channel=c;
-  
+bool videoV4L2 :: setChannel(int c, t_float f){
+  m_channel=c;  
   restartTransfer();
 
-  return 0;
+  return true;
 }
 
-int videoV4L2 :: setDevice(int d)
+bool videoV4L2 :: setDevice(int d)
 {
-  m_devicename=NULL;
+  m_devicename.clear();
   if (d==m_devicenum)return 0;
   m_devicenum=d;
   restartTransfer();
-  //  verbose(1, "new device set %d", m_devicenum);
-  return 0;
+  return true;
 }
-int videoV4L2 :: setDevice(char*name)
+bool videoV4L2 :: setDevice(char*name)
 {
   m_devicenum=-1;
   m_devicename=name;
   restartTransfer();
-  //  verbose(1, "new device set %d", m_devicenum);
-  return 0;
+  return true;
 }
 
-int videoV4L2 :: setColor(int format)
+bool videoV4L2 :: setColor(int format)
 {
   if (format<=0 || format==m_reqFormat)return -1;
   m_reqFormat=format;
   restartTransfer();
-  return 0;
+  return true;
 }
 #else
 videoV4L2 ::  videoV4L2() {}

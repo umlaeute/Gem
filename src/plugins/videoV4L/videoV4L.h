@@ -100,13 +100,12 @@ namespace gem { class GEM_EXTERN videoV4L : public video {
 
 	//////////
 	// Set the video dimensions
-  	virtual int	    	setDimen(int x, int y, int leftmargin, int rightmargin,
-					 int topmargin, int bottommargin);
-	virtual int	    	setChannel(int c, float f);
-	virtual int	    	setNorm(char*);
-	virtual int	    	setDevice(int);
-	virtual int	    	setDevice(char*);
-	virtual int	    	setColor(int);
+  virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
+	virtual bool	    	setChannel(int c, float f);
+	virtual bool	    	setNorm(const std::string);
+	virtual bool	    	setDevice(int);
+	virtual bool	    	setDevice(const std::string);
+	virtual bool	    	setColor(int);
 
     
  protected:
