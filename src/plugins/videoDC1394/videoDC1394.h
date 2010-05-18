@@ -78,7 +78,7 @@ namespace gem { class GEM_EXTERN videoDC1394 : public video {
 
 	//////////
 	// Set the video dimensions
-	virtual int	    	setColor(int);
+	virtual bool	    	setColor(int);
     
  protected:
 

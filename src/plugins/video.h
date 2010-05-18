@@ -140,6 +140,14 @@ namespace gem { class GEM_EXTERN video {
     void unlock(unsigned int id=0);
 
 
+
+    /* sleep a selected time in usec
+     * convenience wrapper around select()
+     */
+    void usleep(unsigned long usec);
+    
+
+
     //////////////////////
     // device settings
 

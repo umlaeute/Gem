@@ -620,9 +620,7 @@ bool videoV4L2 :: startTransfer()
   m_frame_ready = 0;
   pthread_create(&m_thread_id, 0, capturing_, this);
   while(!m_capturing){
-    struct timeval sleep;
-    sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
-    select(0,0,0,0,&sleep);
+    usleep(10);
     debugPost("v4l2: waiting for thread to come up");
   }
   
@@ -654,9 +652,7 @@ bool videoV4L2 :: stopTransfer()
     pthread_join (m_thread_id, &dummy);
   }
   while(m_capturing){
-    struct timeval sleep;
-    sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
-    select(0,0,0,0,&sleep);
+    usleep(10);
     debugPost("v4l2: waiting for thread to finish");
   }
 

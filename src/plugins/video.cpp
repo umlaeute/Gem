@@ -281,9 +281,7 @@ bool video::stopThread(int timeout) {
   if(timeout<0)timeout=m_pimpl->timeout;
   if(timeout>0) {
     while(m_pimpl->running) {
-      struct timeval sleep;
-      sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
-      select(0,0,0,0,&sleep);
+      usleep(10);
       i+=10;
       if(i>timeout) {
         return false;
@@ -291,9 +289,7 @@ bool video::stopThread(int timeout) {
     }
   } else {
     while(m_pimpl->running) {
-      struct timeval sleep;
-      sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
-      select(0,0,0,0,&sleep);
+      usleep(10);
       i+=10;
       if(i>1000000) {
         post("waiting for video grabbing thread to terminate...");
@@ -312,6 +308,13 @@ void video::lock(unsigned int id) {
 }
 void video::unlock(unsigned int id) {
   m_pimpl->unlock(id);
+}
+void video::usleep(unsigned long usec) {
+  struct timeval sleep;
+  long usec_ = usec%1000000;
+  long  sec_ = usec\1000000;
+  sleep.tv_sec=0;  sleep.tv_usec=usec; 
+  select(0,0,0,0,&sleep);
 }
 
 pixBlock* video::getFrame(void) {

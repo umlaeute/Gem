@@ -65,9 +65,10 @@ videoDC1394 :: ~videoDC1394(){
 bool videoDC1394 :: grabFrame()
 {
   dc1394video_frame_t*frame, *colframe;
-  dc1394error_t err=dc1394_capture_dequeue(m_dccamera, DC1394_CAPTURE_POLICY_WAIT, &frame);/* Capture */
+  dc1394error_t err=dc1394_capture_dequeue(m_dccamera, DC1394_CAPTURE_POLICY_POLL, &frame);/* Capture */
   if(DC1394_SUCCESS!=err) {
-    return false;
+    usleep(10);
+    return true;
   }
 
   /* do something with the frame */
@@ -181,10 +182,10 @@ bool videoDC1394 :: stopTransfer()
 }
 
 
-int videoDC1394 :: setColor(int format){
-  if (format<=0)return -1;
+bool videoDC1394 :: setColor(int format){
+  if (format<=0)return false;
   m_reqFormat=format;
-  return 0;
+  return true;
 }
 
 #else
