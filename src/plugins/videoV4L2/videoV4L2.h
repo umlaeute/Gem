@@ -14,6 +14,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_VIDEOV4L2_H_
 #define INCLUDE_VIDEOV4L2_H_
+
 #include "plugins/video.h"
 
 #if defined HAVE_LIBV4L2 && !defined HAVE_VIDEO4LINUX2
@@ -40,6 +41,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # include <asm/types.h>
 # include <linux/videodev2.h>
 # include <sys/mman.h>
+#ifdef HAVE_PTHREADS
+/* the bad thing is, that we currently don't have any alternative to using PTHREADS 
+ * LATER: make threading optional
+ *        (or at least disabled capturing when no pthreads are available)
+ */
+# include <pthread.h>
+#endif
 # define V4L2_DEVICENO 0
 /* request 4 buffers (but if less are available, it's fine too... */
 # define V4L2_NBUF 4
@@ -76,7 +84,7 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
  public:
   //////////
   // Constructor
-  videoV4L2(void);
+  videoV4L2(int format=0);
   
   //////////
   // Destructor
@@ -85,31 +93,37 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
 #ifdef HAVE_VIDEO4LINUX2
   ////////
   // open the video-device
-  virtual bool   openDevice(void);
-  virtual void  closeDevice(void);
+  virtual bool            openDevice(void);
+  virtual void          closeDevice(void);
     
   //////////
   // Start up the video device
-  bool	    	startTransfer(void);
+  // [out] int - returns 0 if bad
+  virtual bool	    	startTransfer(void);
   //////////
   // Stop the video device
-  bool	   	stopTransfer(void);
+  // [out] int - returns 0 if bad
+  virtual bool	   	stopTransfer(void);
+
+  //////////////////
+  // restart the transfer if it is currently running
+  virtual bool          restartTransfer(void);
 
   //////////
   // get the next frame
-  bool grabFrame();
+  virtual pixBlock    *getFrame();
+
 
   //////////
   // Set the video dimensions
   virtual int	    	setDimen(int x, int y, int leftmargin, int rightmargin,
                                  int topmargin, int bottommargin);
   virtual int	    	setChannel(int c, float f);
-  virtual int	    	setNorm(const char*);
+  virtual int	    	setNorm(char*);
   virtual int	    	setDevice(int);
-  virtual int	    	setDevice(const char*);
+  virtual int	    	setDevice(char*);
   virtual int	    	setColor(int);
 
-    
  protected:
 
   //-----------------------------------
@@ -120,10 +134,11 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
   int m_gotFormat; // the format returned by the v4l2-device (not an openGL-format!)
   bool m_colorConvert; // do we have to convert the colour-space manually ?
 
+
   int m_tvfd;
 
   struct t_v4l2_buffer*m_buffers;
-  unsigned int  m_nbuffers;
+  int  m_nbuffers;
   void*m_currentBuffer;
 
   int m_frame, m_last_frame;
@@ -134,11 +149,17 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
   int m_minwidth;
   int m_maxheight;
   int m_minheight;
-
+  
   //////////
   // the capturing thread
+  pthread_t m_thread_id;
+  bool      m_continue_thread;
+  bool      m_frame_ready;
 
-  unsigned int m_errorcount;
+  /* capture frames (in a separate thread! */
+  void*capturing(void); 
+  /* static callback for pthread_create: calls capturing() */
+  static void*capturing_(void*);
 
   int       init_mmap(void);
 
@@ -149,14 +170,10 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
   // now when rendering is turned on and we want to switch back to /dev/video0 we should reconnect to the good device
   bool      m_rendering; // "true" when rendering is on, false otherwise
 
-
-
   /* use this in the capture-thread to cleanup */
   bool      m_stopTransfer;  
-
-  bool m_newfilm;
 #endif /* HAVE_VIDEO4LINUX2 */
 
-}; };
+  }; };
 
 #endif	// for header file
