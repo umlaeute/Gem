@@ -66,7 +66,7 @@ bool videoDC1394 :: grabFrame()
 {
   dc1394video_frame_t*frame, *colframe;
   dc1394error_t err=dc1394_capture_dequeue(m_dccamera, DC1394_CAPTURE_POLICY_POLL, &frame);/* Capture */
-  if(DC1394_SUCCESS!=err) {
+  if((DC1394_SUCCESS!=err)||(NULL==frame)) {
     usleep(10);
     return true;
   }
@@ -81,8 +81,12 @@ bool videoDC1394 :: grabFrame()
   m_frame.setCsizeByFormat(GL_RGBA);
   m_frame.fromRGB(colframe->image);
 
+
+
   lock();
   m_image.image.convertFrom(&m_frame, m_reqFormat); 
+  m_image.newimage=true;
+  m_image.image.upsidedown=true;
   unlock();
 
   free(colframe->image);
@@ -130,6 +134,76 @@ bool videoDC1394 :: openDevice(){
     return false;
   }
   dc1394_camera_free_list (list);
+
+  verbose(1, "videoDC1394: using camera with GUID %x\n", m_dccamera->guid);
+
+
+  /* check supported video modes */
+  dc1394video_modes_t video_modes;
+  dc1394video_mode_t  video_mode;
+  dc1394color_coding_t coding;
+
+  err=dc1394_video_get_supported_modes(m_dccamera,&video_modes);
+  if(DC1394_SUCCESS!=err) {
+    error("can't get video modes");
+    closeDevice();
+    return false;
+  }
+  int i;
+  for (i=video_modes.num-1;i>=0;i--) {
+    unsigned int w=0, h=0;
+    if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_modes.modes[i], &w, &h)) {
+      verbose(1, "videomode[%02d/%d]=%dx%d", i, video_modes.num, w, h);
+    } else verbose(1, "videomode %d refused dimen: %d", i, video_modes.modes[i]);
+
+    dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
+    dc1394bool_t iscolor=DC1394_FALSE;
+    if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
+      verbose(1, "videomode[%02d/%d] %d is%scolor", i, video_modes.num, coding, (iscolor?" ":" NOT "));
+    }
+  }
+    
+  // select highest res mode:
+  for (i=video_modes.num-1;i>=0;i--) {
+     if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
+      dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
+
+#if 0
+      video_mode=video_modes.modes[i];
+      break;
+#else
+      if (coding==DC1394_COLOR_CODING_RGB8) {
+        video_mode=video_modes.modes[i];
+        break;
+      }
+#endif
+    }
+  }
+  if (i < 0) {
+    error("Could not get a valid MONO8 mode");
+    closeDevice();
+    return false;
+  }
+
+  dc1394speed_t speed=DC1394_ISO_SPEED_400;
+  err=dc1394_video_set_iso_speed(m_dccamera, speed);
+  if(DC1394_SUCCESS!=err) {
+    dc1394_video_get_iso_speed(m_dccamera, &speed);
+    verbose(1, "default to ISO speed 100*2^%d", speed);
+  }
+
+  // get highest framerate
+  dc1394framerates_t framerates;
+  dc1394framerate_t framerate;
+
+  err=dc1394_video_get_supported_framerates(m_dccamera,video_mode,&framerates);
+  if(DC1394_SUCCESS==err) {
+    framerate=framerates.framerates[framerates.num-1];
+    err=dc1394_video_set_framerate(m_dccamera, framerate);
+    float fr=0;
+    dc1394_framerate_as_float(framerate, &fr);
+    verbose(1, "DC1394: set framerate to %g", fr);
+  }
 
   err=dc1394_capture_setup(m_dccamera, 
                            4,  /* 4 DMA buffers */
