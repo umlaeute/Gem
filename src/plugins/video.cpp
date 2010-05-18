@@ -68,14 +68,14 @@ public:
   }
 
   void lock(unsigned int i) {
-    post("lock %d?\t%d", i, numlocks);
+    //    post("lock %d?\t%d", i, numlocks);
 
     if(i<numlocks && locks[i]) {
       pthread_mutex_lock(locks[i]);
     }
   }
   void unlock(unsigned int i) {
-      post("unlock %d? %d", i,numlocks);
+    //      post("unlock %d? %d", i,numlocks);
 
     if(i<numlocks && locks[i]) {
       pthread_mutex_unlock(locks[i]);
@@ -312,8 +312,10 @@ void video::unlock(unsigned int id) {
 void video::usleep(unsigned long usec) {
   struct timeval sleep;
   long usec_ = usec%1000000;
-  long  sec_ = usec\1000000;
-  sleep.tv_sec=0;  sleep.tv_usec=usec; 
+  long sec_=0;
+  //  long  sec_ = usec\1000000;
+  sleep.tv_sec=sec_;
+  sleep.tv_usec=usec_; 
   select(0,0,0,0,&sleep);
 }
 
@@ -325,14 +327,14 @@ pixBlock* video::getFrame(void) {
     // no thread, grab it directly
     grabFrame();
   }
-  //  lock();
+  lock();
   return &m_image;
 }
 
 
 void video::releaseFrame(void) {
   m_image.newimage=false;
-  //  unlock();
+  unlock();
 }
 
 /////////////////////////////////////////////////////////
