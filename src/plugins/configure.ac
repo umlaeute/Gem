@@ -79,6 +79,11 @@ if test -d "$srcdir/videoDV4L"; then
   AC_CONFIG_SUBDIRS([videoDV4L])
 fi
 
+### DC1394
+if test -d "$srcdir/videoDC1394"; then
+  AC_CONFIG_SUBDIRS([videoDC1394])
+fi
+
 
 AC_OUTPUT
 
