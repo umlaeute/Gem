@@ -52,17 +52,17 @@ videoDC1394 :: videoDC1394() : video(),
   provide("iidc");
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 videoDC1394 :: ~videoDC1394(){
   close();
 
   if(m_dccamera)dc1394_camera_free (m_dccamera);m_dccamera=NULL;
   if(m_dc)dc1394_free(m_dc);m_dc=NULL;
 }
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ bool videoDC1394 :: grabFrame()
   return true;
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // openDevice
 //
 /////////////////////////////////////////////////////////
@@ -131,25 +131,25 @@ bool videoDC1394 :: openDevice(){
       snprintf(buf, 64, "%x", list->ids[devicenum].guid);
       std::string name=buf;
       if(name==m_devicename){
-	devicenum=i;
-	break;
+        devicenum=i;
+        break;
       }
       snprintf(buf, 64, "%x:%d", 
-	       list->ids[devicenum].guid,
-	       list->ids[devicenum].unit);
+               list->ids[devicenum].guid,
+               list->ids[devicenum].unit);
       name=buf;
       if(name==m_devicename){
-	devicenum=i;
-	break;
+        devicenum=i;
+        break;
       }
     }
   }
 
   if (devicenum < list->num) {
-  /* Work with first camera */
+    /* Work with first camera */
     m_dccamera = dc1394_camera_new_unit(m_dc, 
-					list->ids[devicenum].guid,
-					list->ids[devicenum].unit);
+                                        list->ids[devicenum].guid,
+                                        list->ids[devicenum].unit);
   } else {
     m_dccamera=NULL;
     error("videoDC1394: only found %d cameras but requested #%d!", list->num, devicenum);
@@ -178,6 +178,7 @@ bool videoDC1394 :: openDevice(){
   int mode=m_channel;
   if(mode>=video_modes.num) {
     error("requested channel %d/%d out of bounds", mode, video_modes.num);
+    mode=-1;
   }
 
   int i;
@@ -195,9 +196,9 @@ bool videoDC1394 :: openDevice(){
 
     if(mode<0) {  // find a mode matching the user's needs
       if(m_width==w && m_height==h) {
-	// what about color?
-	mode=i;
-	break;
+        // what about color?
+        mode=i;
+        break;
       }
     }
   }
@@ -206,10 +207,10 @@ bool videoDC1394 :: openDevice(){
     // select highest res mode:
     for (i=video_modes.num-1;i>=0;i--) {
       if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
-	dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
+        dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
 	
-	video_mode=video_modes.modes[i];
-	break;
+        video_mode=video_modes.modes[i];
+        break;
       }
     }
     if (i < 0) {
@@ -219,6 +220,23 @@ bool videoDC1394 :: openDevice(){
     }
   } else {
     video_mode=video_modes.modes[mode];
+  }
+  
+  if(1) {
+    unsigned int w=0, h=0;
+    if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_mode, &w, &h)) {
+      verbose(1, "videomode[%d]=%dx%d", video_mode, w, h);
+    }  
+    dc1394_get_color_coding_from_video_mode(m_dccamera,video_mode, &coding);
+    dc1394bool_t iscolor=DC1394_FALSE;
+    if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
+      verbose(1, "videomode %d is%scolor", coding, (iscolor?" ":" NOT "));
+    }
+  }
+
+  err=dc1394_video_set_mode(m_dccamera, video_mode);
+  if(DC1394_SUCCESS!=err) {
+    error("unable to set specified mode, using default");
   }
 
   dc1394speed_t speed=DC1394_ISO_SPEED_400;
@@ -252,7 +270,7 @@ bool videoDC1394 :: openDevice(){
   verbose(1, "DC1394: Successfully opened...");
   return true;
 }
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // closeDevice
 //
 /////////////////////////////////////////////////////////
@@ -262,7 +280,7 @@ void videoDC1394 :: closeDevice(void){
   }
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // startTransfer
 //
 /////////////////////////////////////////////////////////
