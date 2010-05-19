@@ -340,7 +340,10 @@ void video::releaseFrame(void) {
 /////////////////////////////////////////////////////////
 // set dimension
 bool video :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
-  post("setting the dimension for video is not supported by this OS/device");
+  //  post("setting the dimension for video is not supported by this OS/device");
+
+  m_width=x;
+  m_height=y;
   return false;
 }
 
