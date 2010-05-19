@@ -400,6 +400,16 @@ bool video :: provides(const std::string name) {
 
   return false;
 }
+std::vector<std::string>video :: provides() {
+  std::vector<std::string>result;
+  if(m_pimpl) {
+    int i;
+    for(i=0; i<m_pimpl->m_providers.size(); i++)
+      result.push_back(m_pimpl->m_providers[i]);
+  }
+  return result;
+}
+
 
 /////////////////////////////////////////////////////////
 // remember that this backend provides a certain type of video decoding, e.g. "dv"
@@ -407,7 +417,6 @@ void video :: provide(const std::string name) {
   if(!m_pimpl)return;
   if(!provides(name)) {
     m_pimpl->m_providers.push_back(name);
-    startpost("%s ", name.c_str());
   }
 }
 

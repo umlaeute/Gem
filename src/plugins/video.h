@@ -189,6 +189,8 @@ namespace gem { class GEM_EXTERN video {
     // for pix_video: query whether this backend provides access to this class of devices
     // (e.g. "dv"
     bool provides(const std::string);
+    // get a list of all provided devices
+    std::vector<std::string>provides(void);
   protected:
     // for child-implementations: remember that we provide access to this class of devices
     void provide(const std::string);

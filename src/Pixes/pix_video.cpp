@@ -152,14 +152,25 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
       gem::video         *handle=NULL;
-      startpost("backend #%d='%s'\t: ", m_videoHandles.size(), key.c_str());
+      startpost("backend #%d='%s'\t", m_videoHandles.size(), key.c_str());
       try {
 	handle=gem::PluginFactory<gem::video>::getInstance(key); 
       } catch (GemException ex) {
-	startpost("<--- DISABLED");
+      }
+      if(NULL==handle) { 
+	post("<--- DISABLED");
+	break;
+      }
+      std::vector<std::string>devs=handle->provides();
+      if(devs.size()>0) {
+	startpost(": ");
+	int i=0;
+	for(i=0; i<devs.size(); i++) {
+	  startpost("%s ", devs[i].c_str());
+	}
       }
       endpost();
-      if(NULL==handle)break;
+
       m_ids.push_back(key);
       m_videoHandles.push_back(handle);
       count++;
