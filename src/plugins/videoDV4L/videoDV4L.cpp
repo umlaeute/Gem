@@ -22,11 +22,16 @@ using namespace gem;
 
 #include "Gem/RTE.h"
 
-#define N_BUF 2 /*DV1394_MAX_FRAMES/4*/
-#define PAL 0
-#define NTSC 1
-
 #ifdef HAVE_DV
+#define N_BUF 2 /*DV1394_MAX_FRAMES/4*/
+
+#if 0
+# define DEBUG_WHERE post("%s:%d\t%s", __FILE__, __LINE__, __FUNCTION__)
+#else
+# define DEBUG_WHERE 
+#endif
+
+
 REGISTER_VIDEOFACTORY("dv4l", videoDV4L);
 
 /////////////////////////////////////////////////////////
@@ -38,19 +43,26 @@ REGISTER_VIDEOFACTORY("dv4l", videoDV4L);
 //
 /////////////////////////////////////////////////////////
 
-videoDV4L :: videoDV4L() : video()
+videoDV4L :: videoDV4L() : video(),
+                           m_raw(NULL),
+                           m_decoder(NULL),
+                           m_parsed(false)
 {
-  m_channel = 0;//0x63;
-  m_devicenum  = 0;
-  m_norm = PAL;
-  m_decoder=NULL;
-  m_frame_ready=false;
-  m_quality = DV_QUALITY_BEST;
-  decodedbuf = new unsigned char[720*576*3];
+  m_devicenum  = -1;
+  m_quality=DV_QUALITY_BEST;
+
+  int i=0;
+  for(i=0; i<3; i++) {
+    m_frame  [i] = NULL;
+    m_pitches[i] = 0;
+  }
+
 
   provide("ieee1394");
   provide("dv4l");
   provide("dv");
+
+  dv_init(1, 1); // singleton?
 }
 
 /////////////////////////////////////////////////////////
@@ -59,58 +71,83 @@ videoDV4L :: videoDV4L() : video()
 /////////////////////////////////////////////////////////
 videoDV4L :: ~videoDV4L(){
   if(m_haveVideo)stopTransfer();
-  if(decodedbuf)delete[]decodedbuf;
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);
+
+  dv_cleanup();
 }
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-bool videoDV4L :: grabFrame() {
-  struct dv1394_status dvst;
-  int n_frames = N_BUF;
 
-  if(ioctl(dvfd, DV1394_WAIT_FRAMES, n_frames - 1)) {
-    perror("error: ioctl WAIT_FRAMES");
-    return false;
-  }
-  if (ioctl(dvfd, DV1394_GET_STATUS, &dvst))   {
-    perror("ioctl GET_STATUS");
-    return false;
-  }
-  if (dvst.dropped_frames > 0) {
-    verbose(1,"dv1394: dropped at least %d frames", dvst.dropped_frames);
-  }
 
-  videobuf = m_mmapbuf + (dvst.first_clear_frame * m_framesize);
-  if (ioctl(dvfd, DV1394_RECEIVE_FRAMES, 1) < 0)    {
-    perror("receiving...");
+bool videoDV4L :: grabFrame(){
+  /* this actually only transports the raw1394 stream
+   * libiec will issue a callback when a frame is ready
+   */
+  fd_set rfds;
+  if(m_dvfd<0)return false;
+  struct timeval sleep;
+  sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+
+  FD_ZERO(&rfds);
+  FD_SET(m_dvfd, &rfds);
+  int rv = select(m_dvfd + 1, &rfds, NULL, NULL, &sleep);
+  if(rv >= 0) {
+    DEBUG_WHERE;
+    if(FD_ISSET(m_dvfd, &rfds)) {
+      raw1394_loop_iterate(m_raw);
+    }
+  } else {
+    perror("select");
   }
-  dv_parse_header(m_decoder, videobuf);
-  if(dv_frame_changed(m_decoder)) {
-    int pitches[3] = {0,0,0};
-    //      pitches[0]=m_decoder->width*3; // rgb
-    //      pitches[0]=m_decoder->width*((m_reqFormat==GL_RGBA)?3:2);
-    pitches[0]=m_decoder->width*2;
+  return true;
+}
+
+int videoDV4L::decodeFrame(unsigned char*data, int len) {
+  DEBUG_WHERE;
+  if(!m_parsed) {
+    dv_parse_header(m_decoder, data);  
+    if(NULL==m_frame[0]) {
+      int w=m_decoder->width;
+      int h=m_decoder->height;
+
+      m_frame  [0]=new uint8_t[w*h*3];
+      m_pitches[0]=w*3;
+
+      lock();
+      m_image.image.xsize=w;
+      m_image.image.ysize=h;
+      m_image.image.reallocate();
+      unlock();
+    }
+    m_parsed=true;
+  } else {
+    dv_decode_full_frame(m_decoder, data,
+                         e_dv_color_rgb,
+                         m_frame,
+                         m_pitches);
     
-    /* decode the DV-data to something we can handle and that is similar to the wanted format */
-    //      dv_report_video_error(m_decoder, videobuf);  // do we need this ?
-    // gosh, this(e_dv_color_rgb) is expansive:: the decoding is done in software only...
-    //      dv_decode_full_frame(m_decoder, videobuf, ((m_reqFormat==GL_RGBA)?e_dv_color_rgb:e_dv_color_yuv), &decodedbuf, pitches);
-    dv_decode_full_frame(m_decoder, videobuf, e_dv_color_yuv, &decodedbuf, pitches);
-
     lock();
     m_image.newimage=true;
-
-    m_image.image.ysize=m_decoder->height;
-    m_image.image.xsize=m_decoder->width;
-    m_image.image.setCsizeByFormat(m_reqFormat);
-
-    m_image.image.fromYVYU(decodedbuf);
+    m_image.image.fromRGB(m_frame[0]);
+    m_image.image.upsidedown=true;
     unlock();
   }
 
-  return true;
+  return 0;
+}
+
+int videoDV4L::iec_frame(
+                          unsigned char *data,
+                          int len,
+                          int complete,
+                          void *arg
+                          )
+{
+  DEBUG_WHERE;
+  //  post("iec_frame: %x/%d\t%d\t%x", data, len, complete, arg);
+  if(complete) {
+    videoDV4L*dv4l=(videoDV4L*)arg;
+    return dv4l->decodeFrame(data, len);
+  }
+  return 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -118,81 +155,63 @@ bool videoDV4L :: grabFrame() {
 //
 /////////////////////////////////////////////////////////
 bool videoDV4L :: openDevice(){
-  /*
-  If video feed is already open and "device <something>" message is passed
-  this will segfault Pd. Hence, we need to check if the device is already open
-  before trying to open it again.
+  DEBUG_WHERE;
+  if(m_raw)closeDevice();
 
-  Ico Bukvic ico@vt.edu 2-18-07
-  */
-  if(m_haveVideo){
-    verbose(1, "Stream already going on. Doing some clean-up...");
-    stopTransfer();
+  // LATER think about multithreading issues
+  // according to the manual: "it is not allowed to use the same handle in multiple threads"
+  // http://www.dennedy.org/libraw1394/API-raw1394-new-handle.html
+  m_raw=raw1394_new_handle();
+  if(!m_raw) {
+    error("unable to get raw1394 handle");
+    return false;
   }
 
-  /*
-  All of the errors in this method return -1 anyhow, so fd should be 0 to allow
-  successful open if everything goes ok.
-
-  Ico Bukvic ico@vt.edu 2-18-07
-  */
-  int fd = 0; 
-  struct dv1394_init init = {
-    DV1394_API_VERSION, // api version 
-    0x63,              // isochronous transmission channel
-    N_BUF,             // number of frames in ringbuffer
-    (m_norm==NTSC)?DV1394_NTSC:DV1394_PAL,         // PAL or NTSC
-    0, 0 , 0                // default packet rate
-  };
-
-  m_framesize=(m_norm==NTSC)?DV1394_NTSC_FRAME_SIZE:DV1394_PAL_FRAME_SIZE;
-
-  if(!m_devicename.empty()){
-    if ((fd = ::open(m_devicename.c_str(), O_RDWR)) < 0) {
-      perror(m_devicename.c_str());
-      return -1;
-    }
-  } else {
-    signed char devnum=(m_devicenum<0)?0:(signed char)m_devicenum;
-    char buf[256];
-    buf[255]=0;buf[32]=0;buf[33]=0;
-    if (devnum<0)devnum=0;
-    snprintf(buf, 32, "/dev/ieee1394/dv/host%d/%s/in", devnum, (m_norm==NTSC)?"NTSC":"PAL");
-    if ((fd = ::open(buf, O_RDWR)) < 0)    {
-      snprintf(buf, 32, "/dev/dv1394/%d", devnum);
-      if ((fd = ::open(buf, O_RDWR)) < 0) {
-	if ((fd=::open("/dev/dv1394", O_RDWR)) < 0)    {
-	  perror(buf);
-	  return -1;
-	}
-      }
-    }
-  }
-  if (ioctl(fd, DV1394_INIT, &init) < 0)    {
-    perror("initializing");
-    ::close(fd);
-    return -1;
-  }
+  int num_pinf=64;
+  struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
   
-  m_mmapbuf = (unsigned char *) mmap( NULL, N_BUF*m_framesize,
-				       PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-  if(m_mmapbuf == MAP_FAILED) {
-    perror("mmap frame buffers");
-    ::close(fd);
-    return -1;
-  }
-  
-  if(ioctl(fd, DV1394_START_RECEIVE, NULL)) {
-    perror("dv1394 START_RECEIVE ioctl");
-    ::close(fd);
-    return -1;
-  }
-  /*Extra verbosity never hurt anyone...
+  int ports = raw1394_get_port_info(m_raw, pinf, num_pinf);
+  verbose(1, "DV4L: got %d ports", ports);
 
-  Ico Bukvic ico@vt.edu 2-18-07
-  */
-  verbose(1, "DV4L: Successfully opened...");
-  return(fd);
+  int i=0;
+  for(i=0; i<ports; i++) {
+    verbose(1, "port#%02d: %.*s", i, 32, pinf[i].name);
+  }
+  delete[]pinf;
+
+  int nodes=raw1394_get_nodecount(m_raw);
+  verbose(1, "DV4L: got %d nodes", nodes);
+
+
+
+  int devnum=m_devicenum;
+
+  if(!m_devicename.empty()) {
+
+  }
+
+  if(devnum>=ports){
+    closeDevice();
+    return false;
+  }
+  if(devnum<0)devnum=0;
+  if(raw1394_set_port(m_raw, devnum)<0) {
+    perror("raw1394_set_port");
+    closeDevice();
+    return false;
+  }
+
+
+  if(NULL==m_raw)
+    return false;
+
+
+  m_dvfd = raw1394_get_fd(m_raw);
+  if(m_dvfd<0) {
+    closeDevice();
+    return false;
+  }
+  return true;
 }
 
 /////////////////////////////////////////////////////////
@@ -200,13 +219,9 @@ bool videoDV4L :: openDevice(){
 //
 /////////////////////////////////////////////////////////
 void videoDV4L :: closeDevice(void){
-  if(dvfd) {
-    verbose(1, "DV4L: shutting down dv1394");
-    ioctl(dvfd, DV1394_SHUTDOWN);
-  }
-  if(m_mmapbuf!=NULL)munmap(m_mmapbuf, N_BUF*m_framesize);
-  if(dvfd>=0)::close(dvfd);
-  m_haveVideo=false;
+  DEBUG_WHERE;
+  if(m_dvfd>=0)      ::close(m_dvfd);m_dvfd=-1;
+  if(m_raw)          raw1394_destroy_handle(m_raw);m_raw=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -215,36 +230,43 @@ void videoDV4L :: closeDevice(void){
 /////////////////////////////////////////////////////////
 bool videoDV4L :: startTransfer()
 {
-  if(dvfd<0) {
-    // forgot to open?
-    dvfd=openDevice();
-  }
-  if (dvfd<0){
-    verbose(1, "DV4L: closed");
-    return false;
-  }
-      
+  DEBUG_WHERE;
   m_image.newimage=0;
   m_image.image.data=0;
   m_image.image.xsize=720;
   m_image.image.ysize=576;
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
-  videobuf=NULL;
 
-  m_frame_ready = false; 
+  if(NULL==m_raw)return false;
+
+  m_parsed=false;
 
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);m_decoder=NULL;
 
   if (!(m_decoder=dv_decoder_new(true, true, true))){
     error("DV4L: unable to create DV-decoder...closing");
-    closeDevice();
     return false;
   }
 
   m_decoder->quality=m_quality;
   verbose(1, "DV4L: DV decoding quality %d ", m_decoder->quality);
 
+  m_iec = iec61883_dv_fb_init(m_raw, iec_frame, this);
+  if(NULL==m_iec) {
+    error("DV4L: unable to initialize IEC grabber");
+    stopTransfer();
+    return false;
+  }
+
+  if(iec61883_dv_fb_start(m_iec, 63) < 0) {
+    error("DV4L: iec61883_dv_fb_start failed");
+    stopTransfer();
+    return false;
+  }
+
+
+  DEBUG_WHERE;
   return true;
 }
 
@@ -254,54 +276,55 @@ bool videoDV4L :: startTransfer()
 /////////////////////////////////////////////////////////
 bool videoDV4L :: stopTransfer()
 {
-  return true;
-}
+  DEBUG_WHERE;
+  /* close the dv4l device and dealloc buffer */
+  /* terminate thread if there is one */
+  //stopThread(100);
 
-/////////////////////////////////////////////////////////
-// normMess
-//
-/////////////////////////////////////////////////////////
-bool videoDV4L :: setNorm(const std::string norm){
-  int inorm = m_norm;
-  const char*c=norm.c_str();
-  switch(c[0]){
-  case 'N': case 'n':
-    inorm=NTSC;
-    break;
-  case 'P': case 'p':
-    inorm=PAL;
-    break;
+  if(m_iec) {
+    iec61883_dv_fb_stop(m_iec);
   }
-  if (inorm==m_norm)return 0;
-  m_norm=inorm;
-  return true;
+
+  if(m_decoder) {
+    dv_decoder_free(m_decoder);
+
+    m_decoder=NULL;
+  }
+
+  int i=0;
+  for(i=0; i<3; i++) {
+    if(m_frame[i]) delete[]m_frame[i]; m_frame[i] = NULL;
+    m_pitches[i] = 0;
+  }
+
+  return(1);
 }
 
 bool videoDV4L :: setDevice(int d){
   m_devicename.clear();
-  if (d==m_devicenum)return 0;
+  if (d==m_devicenum)return true; // same device as before
   m_devicenum=d;
 
-  if(m_haveVideo){
-    stopTransfer();
-    startTransfer();
-  }
+  bool running=false;
+
+  running=stop();
+  close();
+  open();
+  if(running)start();
   return true;
 }
 bool videoDV4L :: setDevice(const std::string name){
-  m_devicenum=-1;
-  m_devicename=name;
-
-  if(m_haveVideo){
-    stopTransfer();
-    startTransfer();
-  }
-  return true;
+  
+  // setting device by name not yet supported
+  return false;
 }
 
 bool videoDV4L :: setColor(int format){
-  if (format<=0)return -1;
+  if (format<=0)return false;
   m_reqFormat=format;
+  lock();
+  m_image.image.setCsizeByFormat(m_reqFormat);
+  unlock();
   return true;
 }
 
@@ -311,14 +334,13 @@ bool videoDV4L :: setColor(int format){
 //
 /////////////////////////////////////////
 bool videoDV4L :: setQuality(int quality){
-  if (quality<0)return -1;
-  if (quality>5)return -1;
+  if (quality<DV_QUALITY_FASTEST)return -1;
+  if (quality>DV_QUALITY_BEST)return -1;
   m_quality=quality;
 
-  if(m_haveVideo){
-    stopTransfer();
-    startTransfer();
-  }  
+  if(m_decoder) {
+    dv_set_quality(m_decoder, m_quality);
+  }
   return true;
 }
 

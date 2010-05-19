@@ -19,6 +19,8 @@ GEM_CHECK_RTE
 AC_LANG(C++)
 
 
-GEM_CHECK_LIB(ieee1394,dv,main,,,,video input)
+GEM_CHECK_LIB(libdv,dv,main,,,,video input)
+GEM_CHECK_LIB(libraw1394,raw1394,main,,,,video input)
+GEM_CHECK_LIB(libiec61883,iec61883,main,,,,video input)
 
 AC_OUTPUT

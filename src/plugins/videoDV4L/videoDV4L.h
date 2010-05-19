@@ -18,12 +18,13 @@
 #define INCLUDE_VIDEODV4L_H_
 #include "plugins/video.h"
 
-#ifdef HAVE_LIBDV
-#define HAVE_DV
+#if defined HAVE_LIBIEC61883 && defined HAVE_LIBRAW1394 && defined HAVE_LIBDV
+# define HAVE_DV
 #endif
 
 #ifdef HAVE_DV
-#include "dv1394.h"
+#include <libraw1394/raw1394.h>
+#include <libiec61883/iec61883.h>
 #include <libdv/dv.h>
 
 
@@ -86,9 +87,11 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
 	// get the next frame
 	bool grabFrame(void);
 
+  int decodeFrame(unsigned char*, int);
+  static int iec_frame(unsigned char *data,int len, int complete, void *arg);
+
 	//////////
 	// Set the video dimensions
-	virtual bool	  setNorm(const std::string);
 	virtual bool	  setDevice(const std::string);
 	virtual bool	  setDevice(int);
 	virtual bool	  setColor(int);
@@ -99,18 +102,18 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
   //-----------------------------------
   // GROUP:	Linux specific video data
   //-----------------------------------
-  int dvfd;
-  unsigned char *videobuf;
-  unsigned char *decodedbuf;
-  bool m_frame_ready;
-  int  m_frame, m_lastframe;
+  int m_dvfd;
 
-  int m_framesize;
-  unsigned char *m_mmapbuf;
+  raw1394handle_t m_raw;
+  iec61883_dv_fb_t m_iec;
 
   ////////
   // the DV-decoder
   dv_decoder_t *m_decoder;
+
+  bool m_parsed;
+  uint8_t*m_frame[3];
+  int m_pitches[3];
 #endif /* HAVE_DV */
 }; };
 
