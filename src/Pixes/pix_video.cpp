@@ -301,22 +301,6 @@ void pix_video :: dimenMess(int x, int y, int leftmargin, int rightmargin,
 }
 
 /////////////////////////////////////////////////////////
-// offsetMess
-//
-/////////////////////////////////////////////////////////
-void pix_video :: offsetMess(int x, int y)
-{
-  WITH_VIDEOHANDLES_DO(setOffset(x,y));
-}
-/////////////////////////////////////////////////////////
-// swapMess
-//
-/////////////////////////////////////////////////////////
-void pix_video :: swapMess(int state)
-{
-  WITH_VIDEOHANDLES_DO(setSwap(state));
-}
-/////////////////////////////////////////////////////////
 // channelMess
 //
 /////////////////////////////////////////////////////////
@@ -389,10 +373,6 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dimenMessCallback),
     	    gensym("dimen"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::offsetMessCallback),
-    	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::swapMessCallback),
-    	    gensym("swap"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::normMessCallback),
     	    gensym("norm"), A_SYMBOL, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::channelMessCallback),
@@ -429,14 +409,6 @@ void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 			      static_cast<int>(atom_getfloatarg(3, ac, av)),
 			      static_cast<int>(atom_getfloatarg(4, ac, av)),
 			      static_cast<int>(atom_getfloatarg(5, ac, av)) );
-}
-void pix_video :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-    GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
-}
-void pix_video :: swapMessCallback(void *data, t_floatarg state)
-{
-    GetMyClass(data)->swapMess(static_cast<int>(state));
 }
 void pix_video :: channelMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
