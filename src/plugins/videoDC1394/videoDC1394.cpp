@@ -41,8 +41,6 @@ videoDC1394 :: videoDC1394() : video(),
   m_dc = dc1394_new(); /* Initialize libdc1394 */
   if(!m_dc) throw(GemException("unable to initialize DC1394"));
 
-throw(GemException("blablabla"));
-
   m_channel=-1;
 
   m_frame.xsize=1600;
@@ -85,8 +83,6 @@ bool videoDC1394 :: grabFrame()
   m_frame.ysize=frame->size[1];
   m_frame.setCsizeByFormat(GL_RGBA);
   m_frame.fromRGB(colframe->image);
-
-
 
   lock();
   m_image.image.convertFrom(&m_frame, m_reqFormat); 
