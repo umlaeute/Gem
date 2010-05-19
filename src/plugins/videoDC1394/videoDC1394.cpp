@@ -21,6 +21,7 @@
 using namespace gem;
 
 #include "Gem/RTE.h"
+#include "Base/GemException.h"
 
 #ifdef HAVE_LIBDC1394
 REGISTER_VIDEOFACTORY("dc1394", videoDC1394);
@@ -38,7 +39,11 @@ videoDC1394 :: videoDC1394() : video(),
                                m_dc(NULL)
 {
   m_dc = dc1394_new(); /* Initialize libdc1394 */
-  if(!m_dc) return;
+  if(!m_dc) throw(GemException("unable to initialize DC1394"));
+
+throw(GemException("blablabla"));
+
+  m_channel=-1;
 
   m_frame.xsize=1600;
   m_frame.ysize=1200;
@@ -108,7 +113,7 @@ bool videoDC1394 :: grabFrame()
 bool videoDC1394 :: openDevice(){
   dc1394error_t err;
   dc1394camera_list_t *list=NULL;
-
+  
   err=dc1394_camera_enumerate (m_dc, &list); /* Find cameras */
   if(DC1394_SUCCESS!=err) {
     error("videoDC1394: %s: failed to enumerate", dc1394_error_get_string(err));
@@ -119,21 +124,45 @@ bool videoDC1394 :: openDevice(){
     dc1394_camera_free_list (list);
     return false;
   }
-  if (list->num < m_devicenum) {
-    error("videoDC1394: only found %d cameras but requested #%d!", list->num, m_devicenum);
-    dc1394_camera_free_list (list);
-    return false;
+  unsigned int devicenum=0;
+  if(m_devicenum>=0)devicenum=m_devicenum;
+  else if (!m_devicename.empty()) {
+    int i=0;
+    for(i=0; i<list->num; i++) {
+      // find camera based on its GUID
+      char buf[64];
+      snprintf(buf, 64, "%x", list->ids[devicenum].guid);
+      std::string name=buf;
+      if(name==m_devicename){
+	devicenum=i;
+	break;
+      }
+      snprintf(buf, 64, "%x:%d", 
+	       list->ids[devicenum].guid,
+	       list->ids[devicenum].unit);
+      name=buf;
+      if(name==m_devicename){
+	devicenum=i;
+	break;
+      }
+    }
   }
 
+  if (devicenum < list->num) {
   /* Work with first camera */
-#warning shouldnt this be channel ?
-  m_dccamera = dc1394_camera_new (m_dc, list->ids[m_devicenum].guid); 
-  if(!m_dccamera) {
-    error("videoDC1394: only found %d cameras but requested #%d!", list->num, m_devicenum);
-    dc1394_camera_free_list (list);
-    return false;
+    m_dccamera = dc1394_camera_new_unit(m_dc, 
+					list->ids[devicenum].guid,
+					list->ids[devicenum].unit);
+  } else {
+    m_dccamera=NULL;
+    error("videoDC1394: only found %d cameras but requested #%d!", list->num, devicenum);
   }
   dc1394_camera_free_list (list);
+
+  if(!m_dccamera) {
+    error("videoDC1394: could not access camera!");
+    return false;
+  }
 
   verbose(1, "videoDC1394: using camera with GUID %x\n", m_dccamera->guid);
 
@@ -149,6 +178,11 @@ bool videoDC1394 :: openDevice(){
     closeDevice();
     return false;
   }
+  int mode=m_channel;
+  if(mode>=video_modes.num) {
+    error("requested channel %d/%d out of bounds", mode, video_modes.num);
+  }
+
   int i;
   for (i=video_modes.num-1;i>=0;i--) {
     unsigned int w=0, h=0;
@@ -161,28 +195,33 @@ bool videoDC1394 :: openDevice(){
     if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
       verbose(1, "videomode[%02d/%d] %d is%scolor", i, video_modes.num, coding, (iscolor?" ":" NOT "));
     }
-  }
-    
-  // select highest res mode:
-  for (i=video_modes.num-1;i>=0;i--) {
-     if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
-      dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
 
-#if 0
-      video_mode=video_modes.modes[i];
-      break;
-#else
-      if (coding==DC1394_COLOR_CODING_RGB8) {
-        video_mode=video_modes.modes[i];
-        break;
+    if(mode<0) {  // find a mode matching the user's needs
+      if(m_width==w && m_height==h) {
+	// what about color?
+	mode=i;
+	break;
       }
-#endif
     }
   }
-  if (i < 0) {
-    error("Could not get a valid MONO8 mode");
-    closeDevice();
-    return false;
+
+  if(mode<0) {
+    // select highest res mode:
+    for (i=video_modes.num-1;i>=0;i--) {
+      if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
+	dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
+	
+	video_mode=video_modes.modes[i];
+	break;
+      }
+    }
+    if (i < 0) {
+      error("Could not get a valid mode");
+      closeDevice();
+      return false;
+    }
+  } else {
+    video_mode=video_modes.modes[mode];
   }
 
   dc1394speed_t speed=DC1394_ISO_SPEED_400;
