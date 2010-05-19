@@ -139,13 +139,11 @@ namespace gem { class GEM_EXTERN video {
      */
     void unlock(unsigned int id=0);
 
-
-
     /* sleep a selected time in usec
      * convenience wrapper around select()
      */
     void usleep(unsigned long usec);
-    
+
 
 
     //////////////////////
@@ -156,13 +154,15 @@ namespace gem { class GEM_EXTERN video {
     // Set the video dimensions
     virtual bool	    	setDimen(int x, int y, int leftmargin=0, int rightmargin=0,
                                int topmargin=0, int bottommargin=0);
-    virtual bool	    	setOffset(int x, int y);
-    virtual bool	    	setSwap(int state);
+
     virtual bool	    	setChannel(int c, float f=0);
     virtual bool	    	setNorm(const std::string);
+
     virtual bool	    	setDevice(int d);
     virtual bool	    	setDevice(const std::string);
+
     virtual bool	    	setColor(int);
+
     virtual bool	    	setQuality(int);
 
   protected:
@@ -176,6 +176,7 @@ namespace gem { class GEM_EXTERN video {
     unsigned int m_width;
     unsigned int m_height;
     int m_channel;
+    float m_frequency;
     int m_norm;
     int m_reqFormat;
 

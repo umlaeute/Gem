@@ -343,18 +343,7 @@ bool video :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmar
   post("setting the dimension for video is not supported by this OS/device");
   return false;
 }
-/////////////////////////////////////////////////////////
-// set the displacment
-bool video :: setOffset(int x, int y){
-  post("setting the offset is not supported by this OS/device");
-  return false;
-}
-/////////////////////////////////////////////////////////
-// should the image be swapped ?
-bool video :: setSwap(int state){
-  post("swapping the image is not supported by this OS/device");
-  return false;
-}
+
 /////////////////////////////////////////////////////////
 // set the tv-norm
 bool video :: setNorm(const std::string norm){
@@ -364,7 +353,8 @@ bool video :: setNorm(const std::string norm){
 /////////////////////////////////////////////////////////
 // set the channel of the current device
 bool video :: setChannel(int chan, t_float freq){
-  post("setting the channel is not supported by this OS/device");
+  m_channel=chan;
+  m_frequency=freq;
   return false;
 }
 /////////////////////////////////////////////////////////
