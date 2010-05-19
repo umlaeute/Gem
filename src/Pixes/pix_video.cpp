@@ -20,6 +20,9 @@
 
 #include "pix_video.h"
 #include "Base/GemState.h"
+#include "Base/GemException.h"
+
+
 CPPEXTERN_NEW(pix_video)
 
 /////////////////////////////////////////////////////////
@@ -148,8 +151,13 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
     verbose(2, "trying to add '%s' as backend", key.c_str());
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
+      gem::video         *handle=NULL;
       startpost("backend #%d='%s'\t: ", m_videoHandles.size(), key.c_str());
-      gem::video         *handle=gem::PluginFactory<gem::video>::getInstance(key); 
+      try {
+	handle=gem::PluginFactory<gem::video>::getInstance(key); 
+      } catch (GemException ex) {
+	startpost("<--- DISABLED");
+      }
       endpost();
       if(NULL==handle)break;
       m_ids.push_back(key);
