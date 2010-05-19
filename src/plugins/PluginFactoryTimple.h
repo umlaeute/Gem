@@ -67,7 +67,7 @@ void PluginFactory<Class>::registerClass(std::string id, ctor_t*c) {
   if(NULL==fac) {
     std::cerr << "unable to get a factory!" << std::endl;
   }
-  std::cerr << "factory @ " << (void*)fac << std::endl;
+  //  std::cerr << "factory @ " << (void*)fac << std::endl;
   fac->doRegisterClass(id, c);
 }
 
