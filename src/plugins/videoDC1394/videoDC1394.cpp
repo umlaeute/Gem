@@ -49,6 +49,7 @@ videoDC1394 :: videoDC1394() : video(),
   m_frame.allocate();
 
   provide("dc1394");
+  provide("iidc");
 }
 
 /////////////////////////////////////////////////////////
