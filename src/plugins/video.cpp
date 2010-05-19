@@ -44,13 +44,16 @@ public:
   bool cont;
   bool running;
 
+  bool shouldrun; /* we should be capturing */
+
   PIMPL(unsigned int locks_, unsigned int timeout_) :
     threading(locks_>0),
     locks(NULL),
     numlocks(0),
     timeout(timeout_),
     cont(true),
-    running(false)
+    running(false),
+    shouldrun(false)
   {
     if(locks_>0) {
       numlocks=locks_;
@@ -170,6 +173,7 @@ void video :: close()
   debugPost("close: %d -> %d", m_capturing, m_haveVideo);
   if(m_capturing)stop();
   if(m_haveVideo)closeDevice();
+  m_pimpl->shouldrun=false;
   m_haveVideo=false;
 }
 /////////////////////////////////////////////////////////
@@ -184,16 +188,19 @@ bool video :: start()
   m_capturing=startTransfer();
   if(m_capturing)
     startThread();
+
+  m_pimpl->shouldrun=true;
   return m_capturing;
 }
 bool video :: stop()
 {
   debugPost("stop: %d -> %d", m_capturing, m_haveVideo);
-  bool running=m_capturing;
+  bool running=m_pimpl->shouldrun;
+  m_pimpl->shouldrun=false;
   if(!m_haveVideo)return false;
-  if(running) {
+  if(m_capturing) {
     stopThread();
-    running=stopTransfer();
+    stopTransfer();
   }
 
   m_capturing=false;
