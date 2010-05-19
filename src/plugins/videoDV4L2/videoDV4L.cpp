@@ -91,6 +91,7 @@ bool videoDV4L :: grabFrame(){
   FD_SET(m_dvfd, &rfds);
   int rv = select(m_dvfd + 1, &rfds, NULL, NULL, &sleep);
   if(rv >= 0) {
+    DEBUG_WHERE;
     if(FD_ISSET(m_dvfd, &rfds)) {
       raw1394_loop_iterate(m_raw);
     }
@@ -101,6 +102,7 @@ bool videoDV4L :: grabFrame(){
 }
 
 int videoDV4L::decodeFrame(unsigned char*data, int len) {
+  DEBUG_WHERE;
   if(!m_parsed) {
     dv_parse_header(m_decoder, data);  
     if(NULL==m_frame[0]) {
@@ -140,6 +142,7 @@ int videoDV4L::iec_frame(
                           void *arg
                           )
 {
+  DEBUG_WHERE;
   //  post("iec_frame: %x/%d\t%d\t%x", data, len, complete, arg);
   if(complete) {
     videoDV4L*dv4l=(videoDV4L*)arg;
@@ -160,19 +163,25 @@ bool videoDV4L :: openDevice(){
   // according to the manual: "it is not allowed to use the same handle in multiple threads"
   // http://www.dennedy.org/libraw1394/API-raw1394-new-handle.html
   m_raw=raw1394_new_handle();
-
-  int ports=0;
+  if(!m_raw) {
+    error("unable to get raw1394 handle");
+    return false;
+  }
 
   int num_pinf=64;
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
   
-  ports = raw1394_get_port_info(m_raw, pinf, num_pinf);
+  int ports = raw1394_get_port_info(m_raw, pinf, num_pinf);
+  verbose(1, "DV4L: got %d ports", ports);
 
   int i=0;
   for(i=0; i<ports; i++) {
     verbose(1, "port#%02d: %.*s", i, 32, pinf[i].name);
   }
   delete[]pinf;
+
+  int nodes=raw1394_get_nodecount(m_raw);
+  verbose(1, "DV4L: got %d nodes", nodes);
 
 
 
