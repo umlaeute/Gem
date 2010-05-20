@@ -27,7 +27,7 @@ using namespace gem;
 #include <unistd.h>
 # include <dmedia/vl_vino.h>
 
-REGISTER_VIDEOFACTORY("sgi", videoV4L);
+REGISTER_VIDEOFACTORY("sgi", videoSGI);
 
 
 /////////////////////////////////////////////////////////
@@ -38,10 +38,12 @@ REGISTER_VIDEOFACTORY("sgi", videoV4L);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoSGI :: videoSGI()
-  : m_haveVideo(0), m_swap(1), m_colorSwap(0),
+videoSGI :: videoSGI() 
+  : video(0),
+    m_haveVideo(0), m_swap(1), m_colorSwap(0),
     m_svr(NULL), m_drn(NULL), m_src(NULL), m_path(NULL)
 {
+  provide("sgi");
 }
 
 ////////////////////////////////////////////////////////
