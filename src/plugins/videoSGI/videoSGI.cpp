@@ -13,19 +13,22 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
-#if defined GEM_VIDEOBACKEND && GEM_VIDEOBACKEND == GEM_VIDEOBACKEND_SGI
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-//#ifdef __sgi
 
-#include "pix_videoSGI.h"
+#include "videoSGI.h"
+using namespace gem;
 
+#include "Gem/RTE.h"
+
+#ifdef HAVE_VL_VL_H
 #include <unistd.h>
-#include <dmedia/vl_vino.h>
+# include <dmedia/vl_vino.h>
 
-#include "Base/GemCache.h"
+REGISTER_VIDEOFACTORY("sgi", videoV4L);
 
-CPPEXTERN_NEW(pix_video)
 
 /////////////////////////////////////////////////////////
 //
@@ -35,355 +38,267 @@ CPPEXTERN_NEW(pix_video)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_video :: pix_video()
-    	   : m_haveVideo(0), m_swap(1), m_colorSwap(0),
-    	     m_svr(NULL), m_drn(NULL), m_src(NULL), m_path(NULL)
+videoSGI :: videoSGI()
+  : m_haveVideo(0), m_swap(1), m_colorSwap(0),
+    m_svr(NULL), m_drn(NULL), m_src(NULL), m_path(NULL)
 {
-    m_pixBlock.image.data = NULL;
-    
-    // Connect to the daemon
-    if ( !(m_svr = vlOpenVideo("")) )
-    {
-    	error("GEM: pix_video: Unable to open video");
-    	return;
-    }
-    // Set up a drain node in memory
-    m_drn = vlGetNode(m_svr, VL_DRN, VL_MEM, VL_ANY);
-    
-    // Set up a source node on any video source
-    m_src = vlGetNode(m_svr, VL_SRC, VL_VIDEO, VL_ANY);
-
-    // Create a path using the first device that will support it
-    m_path = vlCreatePath(m_svr, VL_ANY, m_src, m_drn); 
-
-    // Set up the hardware for and define the usage of the path
-    if ( (vlSetupPaths(m_svr, (VLPathList)&m_path, 1, VL_SHARE, VL_SHARE)) < 0 )
-    {
-    	error("GEM: pix_video: Unable to setup video path");
-    	return;
-    }
-
-    // Set the packing to RGBA
-    VLControlValue val;
-
-    // first try to see if it can handle RGBA format
-
-    // according to vl.h, this is really RGBA (OpenGL format)
-    val.intVal = VL_PACKING_ABGR_8;
-    if ( vlSetControl(m_svr, m_path, m_drn, VL_PACKING, &val) )
-    {
-    	// nope, so try ABGR, and set the color swapping
-    	// according to vl.h, this is really ABGR (IrisGL format)
-        val.intVal = VL_PACKING_RGBA_8;
-        if ( vlSetControl(m_svr, m_path, m_drn, VL_PACKING, &val) )
-    	{
-    	    post("GEM: pix_video: Unable to set the video packing");
-    	    return;
-    	}
-    	post("GEM: pix_video: Video has to color swap (ABGR to RGBA)");
-    	m_colorSwap = 1;
-    }
-    
-    // Get the video size
-    vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &val);
-
-    m_pixBlock.image.xsize = val.xyVal.x;
-    m_pixBlock.image.ysize = val.xyVal.y;
-    m_pixBlock.image.csize = 4;
-    m_pixBlock.image.format = GL_RGBA;
-    m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-        
-    int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-    	    	     * 4 * sizeof(unsigned char);
-    m_pixBlock.image.allocate(dataSize);
-
-    m_haveVideo = 1;
-    if ( !startTransfer() )
-    {
-    	m_haveVideo = 0;
-    	return;
-    }
-    
-    post("GEM: pix_video: Opened video connection");
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_video :: ~pix_video()
+videoSGI :: ~videoSGI()
 {
-    stopTransfer();
+  stopTransfer();
 
-    // Clean up the video
-    if (m_haveVideo)
+  // Clean up the video
+  if (m_haveVideo)
     {
     	vlDestroyPath(m_svr, m_path);
     	vlCloseVideo(m_svr);
-    	post("GEM: pix_video: Closed video connection");
+    	post("GEM: videoSGI: Closed video connection");
     }
-    cleanPixBlock();
+  cleanPixBlock();
 }
 
-/////////////////////////////////////////////////////////
+bool videoSGI :: openDevice()
+{
+  // Connect to the daemon
+  if ( !(m_svr = vlOpenVideo("")) )
+    {
+    	error("GEM: videoSGI: Unable to open video");
+    	goto cleanup;
+    }
+  // Set up a drain node in memory
+  m_drn = vlGetNode(m_svr, VL_DRN, VL_MEM, VL_ANY);
+    
+  // Set up a source node on any video source
+  m_src = vlGetNode(m_svr, VL_SRC, VL_VIDEO, VL_ANY);
+
+  // Create a path using the first device that will support it
+  m_path = vlCreatePath(m_svr, VL_ANY, m_src, m_drn); 
+
+  // Set up the hardware for and define the usage of the path
+  if ( (vlSetupPaths(m_svr, (VLPathList)&m_path, 1, VL_SHARE, VL_SHARE)) < 0 )
+    {
+    	error("GEM: videoSGI: Unable to setup video path");
+    	goto cleanup;
+    }
+
+  // Set the packing to RGBA
+  VLControlValue val;
+
+  // first try to see if it can handle RGBA format
+
+  // according to vl.h, this is really RGBA (OpenGL format)
+  val.intVal = VL_PACKING_ABGR_8;
+  if ( vlSetControl(m_svr, m_path, m_drn, VL_PACKING, &val) )
+    {
+    	// nope, so try ABGR, and set the color swapping
+    	// according to vl.h, this is really ABGR (IrisGL format)
+      val.intVal = VL_PACKING_RGBA_8;
+      if ( vlSetControl(m_svr, m_path, m_drn, VL_PACKING, &val) )
+        {
+    	    post("GEM: videoSGI: Unable to set the video packing");
+          goto cleanup;
+        }
+    	post("GEM: videoSGI: Video has to color swap (ABGR to RGBA)");
+    	m_colorSwap = 1;
+    }
+    
+  // Get the video size
+
+  VLControlValue value;
+  if(m_width>0) {
+    value.xyVal.x = m_width;
+    value.xyVal.y = m_height;
+    if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) ) {
+      vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
+    
+      post("GEM: videoSGI: dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
+      m_width =value.xyVal.x;
+      m_height=value.xyVal.y;
+    }
+  }
+  vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
+  m_width =value.xyVal.x;
+  m_height=value.xyVal.y;
+
+  m_pixBlock.image.xsize = m_width;
+  m_pixBlock.image.ysize = m_height;
+  m_pixBlock.image.reallocate();
+
+  return true;
+ cleanup:
+
+  closeDevice();
+  return false;
+}
+
+void videoSGI :: closeDevice() {
+  m_src=NULL;
+  m_drn=NULL;
+  if(m_svr) {
+    if(m_path)
+      vlDestroyPath(m_svr, m_path);
+
+    vlCloseVideo(m_svr);
+  }
+
+  m_path=NULL;
+  m_svr=NULL;
+}
+
+
+
+////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_video :: render(GemState *state)
+pixBlock *videoSGI::getFrame(void) {
 {
-    if (!m_haveVideo)
+  if(!(m_haveVideo && m_capturing))return NULL;
+
+  VLInfoPtr info = vlGetLatestValid(m_svr, m_buffer);
+  while (!info)
     {
-		post("GEM: pix_video: do not have a video stream");
-		return;
+      sginap(1);
+      info = vlGetLatestValid(m_svr, m_buffer);
     }
 
-    VLInfoPtr info = vlGetLatestValid(m_svr, m_buffer);
-    while (!info)
-    {
-		sginap(1);
-		info = vlGetLatestValid(m_svr, m_buffer);
-    }
+  // Get a pointer to the frame
+  unsigned char *dataPtr = (unsigned char *)(vlGetActiveRegion(m_svr, m_buffer, info));
+  m_pixBlock.image.fromABGR(dataPtr);
 
-    // Get a pointer to the frame
-    unsigned char *dataPtr = (unsigned char *)(vlGetActiveRegion(m_svr, m_buffer, info));
-    int dataSize =
-    	m_pixBlock.image.xsize * m_pixBlock.image.ysize *
-    	m_pixBlock.image.csize * sizeof(unsigned char);
-    
-    int holdVal = dataSize - 4;
-    if (m_swap && m_colorSwap)
-    {
-		// copy the data over - the buffer is upside down though and ABGR...
-		for (int i = 0; i < dataSize; i += 4)
-		{
-    		m_pixBlock.image.data[i + 3] = dataPtr[holdVal - i];
-    		m_pixBlock.image.data[i + 2] = dataPtr[holdVal - i + 1];
-    		m_pixBlock.image.data[i + 1] = dataPtr[holdVal - i + 2];
-    		m_pixBlock.image.data[i + 0] = dataPtr[holdVal - i + 3];
-		}
-    }
-    else if (m_swap && !m_colorSwap)
-    {
-		// copy the data over - the buffer is upside down though...
-		for (int i = 0; i < dataSize; i += 4)
-		{
-    		memcpy(&(m_pixBlock.image.data[i]), &(dataPtr[holdVal - i]), 4);
-		}
-    }
-    else if (m_colorSwap && !m_swap)
-    {
-		// copy the data over - the buffer is ABGR though...
-		for (int i = 0; i < dataSize; i += 4)
-		{
-    		m_pixBlock.image.data[i + 3] = dataPtr[i];
-    		m_pixBlock.image.data[i + 2] = dataPtr[i + 1];
-    		m_pixBlock.image.data[i + 1] = dataPtr[i + 2];
-    		m_pixBlock.image.data[i + 0] = dataPtr[i + 3];
-		}
-    }
-    // don't do anything except copy it over
-    else memcpy(m_pixBlock.image.data, dataPtr, dataSize);
-    
-    // free the frame
-    vlPutFree(m_svr, m_buffer);
-    
-    m_pixBlock.newimage = 1;
-    state->image = &m_pixBlock;
+  // free the frame
+  vlPutFree(m_svr, m_buffer);
+
+  m_pixBlock.newimage = 1;
+  return &m_pixBlock;
+
 }
 
-/////////////////////////////////////////////////////////
-// startRendering
-//
-/////////////////////////////////////////////////////////
-void pix_video :: startRendering()
-{
-    m_pixBlock.newimage = 1;
-}
 
-/////////////////////////////////////////////////////////
-// stopRendering
-//
-/////////////////////////////////////////////////////////
-void pix_video :: stopRendering()
-{
-    // this is a no-op
-}
-
-/////////////////////////////////////////////////////////
-// postrender
-//
-/////////////////////////////////////////////////////////
-void pix_video :: postrender(GemState *state)
-{
-    m_pixBlock.newimage = 0;
-    state->image = NULL;
-}
-
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-int pix_video :: startTransfer()
+bool videoSGI :: startTransfer()
 {
-    if (!m_haveVideo) return(0);
+  if(NULL=m_svr || NULL=m_path || NULL==m_drn || NULL=m_src)return false;
     
-    // Create and register a buffer for 1 frame
-    m_buffer = vlCreateBuffer(m_svr, m_path, m_drn, 1);
-    if ( !m_buffer )
+  // Create and register a buffer for 1 frame
+  m_buffer = vlCreateBuffer(m_svr, m_path, m_drn, 1);
+  if ( !m_buffer )
     {
-    	error("GEM: pix_video: Unable to allocate buffer");	
-    	return(0);
+    	error("GEM: videoSGI: Unable to allocate buffer");	
+    	return false;
     }
-    vlRegisterBuffer(m_svr, m_path, m_drn, m_buffer);
+
+  vlRegisterBuffer(m_svr, m_path, m_drn, m_buffer);
     
-    // Begin the data transfer
-    if ( vlBeginTransfer(m_svr, m_path, 0, NULL) )
+  // Begin the data transfer
+  if ( vlBeginTransfer(m_svr, m_path, 0, NULL) )
     {
-    	error("GEM: pix_video: Unable to start video transfer");
-    	return(0);
+    	error("GEM: videoSGI: Unable to start video transfer");
+      vlDeregisterBuffer(m_svr, m_path, m_drn, m_buffer);
+      vlDestroyBuffer(m_svr, m_buffer);
+    	return false;
     }
-    return(1);
+  return true;
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-int pix_video :: stopTransfer()
+bool videoSGI :: stopTransfer()
 {
-    if ( !m_haveVideo ) return(0);
+  if ( !m_capturing ) return false;
+  if(NULL=m_svr || NULL=m_path || NULL==m_drn || NULL=m_src)return false;
 
-    // Clean up the buffer
-    vlEndTransfer(m_svr, m_path);
-    vlDeregisterBuffer(m_svr, m_path, m_drn, m_buffer);
-    vlDestroyBuffer(m_svr, m_buffer);
+  // Clean up the buffer
+  vlEndTransfer(m_svr, m_path);
+  vlDeregisterBuffer(m_svr, m_path, m_drn, m_buffer);
+  vlDestroyBuffer(m_svr, m_buffer);
+  m_buffer=NULL;
     
-    return(1);
+  return true;
 }
 
-/////////////////////////////////////////////////////////
+#if 0
+////////////////////////////////////////////////////////
 // offsetMess
 //
 /////////////////////////////////////////////////////////
-void pix_video :: offsetMess(int x, int y)
+void videoSGI :: offsetMess(int x, int y)
 {
-    if (!m_haveVideo)
+  if (!m_haveVideo)
     {
-    	post("GEM: pix_video: Connect to video first");
+    	post("GEM: videoSGI: Connect to video first");
     	return;
     }
     
-    // stop the transfer and destroy the buffer
-    if ( !stopTransfer() ) 
+  // stop the transfer and destroy the buffer
+  if ( !stopTransfer() ) 
     {
-    	post("GEM: pix_video: error stopping transfer");
+    	post("GEM: videoSGI: error stopping transfer");
     	return;
     }
 
-    VLControlValue value;
-    value.xyVal.x = x;
-    value.xyVal.y = y;
-    if ( vlSetControl(m_svr, m_path, m_drn, VL_OFFSET, &value) )
+  VLControlValue value;
+  value.xyVal.x = x;
+  value.xyVal.y = y;
+  if ( vlSetControl(m_svr, m_path, m_drn, VL_OFFSET, &value) )
     {
-    	post("GEM: pix_video: offset error");
+    	post("GEM: videoSGI: offset error");
     	startTransfer();
     	return;
     }
 
-    // start the transfer and rebuild the buffer
-    if ( !startTransfer() ) 
+  // start the transfer and rebuild the buffer
+  if ( !startTransfer() ) 
     {
-    	post("GEM: pix_video: error starting transfer");
+    	post("GEM: videoSGI: error starting transfer");
     	return;
     }
-}
-
-/////////////////////////////////////////////////////////
-// dimenMess
-//
-/////////////////////////////////////////////////////////
-void pix_video :: dimenMess(int x, int y)
-{
-    if (!m_haveVideo)
-    {
-    	post("GEM: pix_video: Connect to video first");
-    	return;
-    }
-    
-    // stop the transfer and destroy the buffer
-    if ( !stopTransfer() ) 
-    {
-    	post("GEM: pix_video: error stopping transfer");
-    	return;
-    }
-
-    VLControlValue value;
-    value.xyVal.x = x;
-    value.xyVal.y = y;
-    if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) )
-    {
-    	post("GEM: pix_video: dimen error");
-    	startTransfer();
-    	return;
-    }
-    m_pixBlock.image.xsize = x;
-    m_pixBlock.image.ysize = y;;
-
-    cleanPixBlock();
-    int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-    	    	    * 4 * sizeof(unsigned char);
-    m_pixBlock.image.allocate(dataSize);
-
-    // start the transfer and rebuild the buffer
-    if ( !startTransfer() ) 
-    {
-    	post("GEM: pix_video: error starting transfer");
-    	return;
-    }
-}
-
-/////////////////////////////////////////////////////////
-// cleanPixBlock
-//
-/////////////////////////////////////////////////////////
-void pix_video :: cleanPixBlock()
-{
-    m_pixBlock.image.clear();
-}
-
-/////////////////////////////////////////////////////////
-// swapMess
-//
-/////////////////////////////////////////////////////////
-void pix_video :: swapMess(int state)
-{
-    if (state) m_swap = 1;
-    else m_swap = 0;
-}
-
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
-void pix_video :: obj_setupCallback(t_class *classPtr)
-{
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dimenMessCallback),
-    	    gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::offsetMessCallback),
-    	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::swapMessCallback),
-    	    gensym("swap"), A_FLOAT, A_NULL);
-}
-void pix_video :: dimenMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-    GetMyClass(data)->dimenMess(x, y);
-}
-void pix_video :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-    GetMyClass(data)->offsetMess(x, y);
-}
-void pix_video :: swapMessCallback(void *data, t_floatarg state)
-{
-    GetMyClass(data)->swapMess(state);
 }
 #endif
+///////////////////////////////////////////////////////
+// dimenMess
+//
+////////////////////////////////////////////////////////
+bool videoSGI :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
+{
+  bool result=true;
+  m_width=x;
+  m_height=y
+
+  if(NULL=m_svr || NULL=m_path || NULL==m_drn || NULL=m_src)return false;
+  if(!m_capturing)return false;
+  
+  stopTransfer();
+
+  VLControlValue value;
+  value.xyVal.x = m_width;
+  value.xyVal.y = m_height;
+  if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) ) {
+    vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
+    
+    post("GEM: videoSGI: dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
+    m_width =value.xyVal.x;
+    m_height=value.xyVal.y;
+    result=false;
+  }
+  m_pixBlock.image.xsize = m_width;
+  m_pixBlock.image.ysize = m_height;
+  m_pixBlock.image.reallocate();
+  
+  start();
+  return result;
+}
+#else /* !HAVE_VL_VL_H */
+videoSGI ::  videoSGI() { }
+videoSGI :: ~videoSGI() { }
+#endif  /* !HAVE_VL_VL_H */
