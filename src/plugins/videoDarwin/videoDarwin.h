@@ -1,0 +1,119 @@
+/*-----------------------------------------------------------------
+
+GEM - Graphics Environment for Multimedia
+
+Copyright (c) 2002 James Tittle & Chris Clepper    
+Copyright (c) 2010 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.at
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+
+Linux version by Miller Puckette. msp@ucsd.edu
+	
+-----------------------------------------------------------------*/
+
+#ifndef INCLUDE_VIDEODARWIN_H_
+#define INCLUDE_VIDEODARWIN_H_
+
+#include "plugins/video.h"
+
+#ifdef HAVE_CARBON
+# include <Carbon/Carbon.h>
+#endif
+
+#ifdef HAVE_QUICKTIME
+# include <QuickTime/QuickTime.h>
+#endif
+
+/*-----------------------------------------------------------------
+  -------------------------------------------------------------------
+  CLASS
+	pix_video
+    
+  captures a video on Apple machines
+    
+  KEYWORDS
+  pix
+    
+  -----------------------------------------------------------------*/
+namespace gem { class GEM_EXTERN videoDarwin : public video {
+  public:
+    //////////
+    // Constructor
+    videoDarwin(void);
+    	    	
+    //////////
+    // Destructor
+    virtual ~videoDarwin();
+
+#ifdef HAVE_VIDEODARWIN
+    ////////
+    // open the video-device
+    virtual bool           openDevice(void);
+    virtual void          closeDevice(void);
+    
+    //////////
+    // Start up the video device
+    // [out] int - returns 0 if bad
+    bool	    	startTransfer();
+    //////////
+    // Stop the video device
+    // [out] int - returns 0 if bad
+    bool	   	stopTransfer();
+
+    //////////
+    // get the next frame
+    pixBlock *getFrame(void);
+
+    //////////
+    // Set the video dimensions
+    virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
+
+    
+  protected:
+    int		m_newFrame; 
+		bool	m_banged;
+		bool	m_auto;
+		char	m_filename[80];
+		int		m_record;
+    
+    SeqGrabComponent	m_sg;		// Sequence Grabber Component
+    SGChannel			m_vc;			// Video Channel
+		SGOutput			m_sgout; //output for writing to disk
+		Movie				m_movie;
+    short				m_pixelDepth;	//
+    int					m_vidXSize;		//
+    int					m_vidYSize;		//
+    Rect				m_srcRect;		// Capture Rectangle
+    GWorldPtr			m_srcGWorld;	// Capture Destination
+    PixMapHandle		m_pixMap;	// PixMap Handle for capture image
+    Ptr					m_baseAddr;		// Base address of pixel Data
+    long				m_rowBytes;		// Row bytes in a row
+    int					m_quality;
+    int					m_colorspace;
+		
+		int					m_inputDevice;
+		int					m_inputDeviceChannel;
+		VideoDigitizerComponent			m_vdig; //gotta have the vdig
+		VideoDigitizerError	vdigErr;
+		DigitizerInfo       m_vdigInfo; //the info about the VDIG
+		
+		FSSpec		theFSSpec;
+		short		nFileRefNum;
+		short		nResID;
+		
+		//functions and variables for controlling the vdig		
+		virtual void		brightnessMess(float X);
+		virtual void		saturationMess(float X);
+		virtual void		contrastMess(float X);
+		
+		//IIDC functions
+		virtual void		exposureMess(float X);
+		virtual void		gainMess(float X);
+		virtual void		whiteBalanceMess(float U,float V);
+
+
+#endif /*HAVE_VIDEODARWIN */
+  }; 
+};
+
+#endif	// for header file
