@@ -102,7 +102,7 @@ namespace gem { class GEM_EXTERN video {
      * makes the data accessible in the "m_image" struct!
      * access to m_image MUST be protected by lock() and unlock()
      */
-    virtual bool grabFrame(void){/* lock(); m_image.image.data=NULL; unlock(); */};
+    virtual bool grabFrame(void){/* lock(); m_image.image.data=NULL; unlock(); */ return false; };
   
 
     //! get the next frame (called when rendering)
@@ -164,6 +164,10 @@ namespace gem { class GEM_EXTERN video {
     virtual bool	    	setColor(int);
 
     virtual bool	    	setQuality(int);
+
+    virtual bool	    	dialog(void);
+
+    virtual std::vector<std::string>enumerate(void);
 
   protected:
     //! indicates valid transfer (automatically set in start()/stop())

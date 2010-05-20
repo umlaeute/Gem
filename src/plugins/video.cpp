@@ -389,6 +389,20 @@ bool video :: setQuality(int d){
   post("setting the quality is not supported by this OS/device");
   return false;
 }
+/////////////////////////////////////////////////////////
+// open a dialog for the settings
+bool video :: dialog(){
+  return false;
+}
+
+std::vector<std::string>video::enumerate(void) {
+  std::vector<std::string>result;
+  return result;
+}
+
+
+
+
 
 /////////////////////////////////////////////////////////
 // query whether this backend provides a certain type of video decoding, e.g. "dv"
