@@ -73,7 +73,7 @@ namespace gem { class GEM_EXTERN videoDarwin : public video {
 
     
   protected:
-        void InitSeqGrabber();
+        void initSeqGrabber();
         void resetSeqGrabber();
         void destroySeqGrabber();
         virtual void    setupCapture();

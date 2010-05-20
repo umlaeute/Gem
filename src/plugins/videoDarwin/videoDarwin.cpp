@@ -19,6 +19,8 @@
 using namespace gem;
 #include "Gem/RTE.h"
 
+
+
 #ifdef HAVE_VIDEODARWIN
 #include <unistd.h> // needed for Unix file open() type functions
 #include <stdio.h>
@@ -27,7 +29,9 @@ using namespace gem;
 #define DEFAULT_WIDTH        320
 #define DEFAULT_HEIGHT        240
   
-  videoDarwin :: videoDarwin() 
+REGISTER_VIDEOFACTORY("Darwin", videoDarwin);
+
+videoDarwin :: videoDarwin() 
     : video(0),
       m_srcGWorld(NULL)
 {
@@ -44,7 +48,9 @@ using namespace gem;
 
   //set to the first input device
   m_inputDevice = 0;
-  InitSeqGrabber();
+  initSeqGrabber();
+
+  provide("QT");
 }
 
 ////////////////////////////////////////////////////////
@@ -72,6 +78,14 @@ videoDarwin :: ~videoDarwin()
     }
   }
 }
+bool videoDarwin :: openDevice(void) {
+  initSeqGrabber();
+  return (NULL!=m_sg);
+}
+void videoDarwin :: closeDevice(void) {
+  destroySeqGrabber();
+}
+
 ////////////////////////////////////////////////////////
 // render
 //
@@ -145,7 +159,7 @@ void videoDarwin :: stopRendering()
 }
 #endif
 
-void videoDarwin :: InitSeqGrabber()
+void videoDarwin :: initSeqGrabber()
 {
   OSErr anErr;
   Rect m_srcRect = {0,0, m_height, m_width};
@@ -361,7 +375,7 @@ void videoDarwin :: resetSeqGrabber()
   post ("starting reset");
 
   destroySeqGrabber();
-  InitSeqGrabber();
+  initSeqGrabber();
 }
 
 bool videoDarwin :: setQuality(int X)
