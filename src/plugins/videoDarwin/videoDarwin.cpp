@@ -11,19 +11,19 @@
 # include "config.h"
 #endif
 
+#if defined HAVE_CARBON && defined HAVE_QUICKTIME
+# define HAVE_VIDEODARWIN
+#endif
+
 #include "videoDarwin.h"
 using namespace gem;
 #include "Gem/RTE.h"
 
-#if defined HAVE_CARBON && defined HAVE_QUICKTIME
-#include <Carbon/Carbon.h>
-
+#ifdef HAVE_VIDEODARWIN
 #include <unistd.h> // needed for Unix file open() type functions
 #include <stdio.h>
 #include <fcntl.h> /* JMZ thinks that _this_ is needed for open() */
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
-  
 #define DEFAULT_WIDTH        320
 #define DEFAULT_HEIGHT        240
   
@@ -36,7 +36,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_D
 
   m_image.image.xsize = 800;
   m_image.image.ysize = 600;
-  m_image.image.setCSizeByFormat(GL_BGRA_EXT);
+  m_image.image.setCsizeByFormat(GL_BGRA_EXT);
   m_image.image.allocate();
 
   m_quality = 0; //normal quality gives non-interlaced images from DV cams
@@ -73,28 +73,10 @@ videoDarwin :: ~videoDarwin()
   }
 }
 ////////////////////////////////////////////////////////
-// startrender
-//
-/////////////////////////////////////////////////////////
-void videoDarwin :: startRendering()
-{
-  m_haveVideo = 1;
-  m_image.newimage = 1;
-}
-
-////////////////////////////////////////////////////////
-// startrender
-//
-/////////////////////////////////////////////////////////
-void videoDarwin :: stopRendering()
-{
-  setupCapture();
-}
-////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void videoDarwin :: render(GemState *state)
+bool videoDarwin :: grabFrame()
 {
   OSErr    err;
 
@@ -103,6 +85,7 @@ void videoDarwin :: render(GemState *state)
   if (err != noErr){
     error("SGIdle failed with error %d",err);
     m_haveVideo = 0;
+//    return false;
   } else {
     //this doesn't do anything so far
     //VDCompressDone(m_vdig,frameCount,data,size,similar,time);
@@ -116,41 +99,51 @@ void videoDarwin :: render(GemState *state)
   if (!m_haveVideo)
     {
       post("no video yet");
-      return;
+      return true;
     }
   m_image.newimage = m_newFrame;
-  state->image = &m_image;
   m_newFrame = 0;
 
+ return true;
 }
 
 ////////////////////////////////////////////////////////
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-int videoDarwin :: startTransfer()
+bool videoDarwin :: startTransfer()
 {
   OSErr    err = noErr;
 
   SGStartPreview(m_sg);
   m_haveVideo = 1;
   m_image.newimage = 1;
-  return 1;
+  return true;
 }
 
 ////////////////////////////////////////////////////////
-// startTransfer
+// stopTransfer
 //
 /////////////////////////////////////////////////////////
-int videoDarwin :: stopTransfer()
+bool videoDarwin :: stopTransfer()
 {
   OSErr    err = noErr;
 
   //might need SGPause or SGStop here
   err = SGStop(m_sg);
   if (err != noErr)error("SGStop failed with error %d",err);
-  return 1;
+  return true;
 }
+#if 0
+////////////////////////////////////////////////////////
+// startrender
+//
+/////////////////////////////////////////////////////////
+void videoDarwin :: stopRendering()
+{
+  setupCapture();
+}
+#endif
 
 void videoDarwin :: InitSeqGrabber()
 {
@@ -296,7 +289,7 @@ void videoDarwin :: InitSeqGrabber()
   }else{
     m_image.image.xsize = m_width;
     m_image.image.ysize = m_height;
-    m_image.image.csize.setCSizeByFormat( GL_YCBCR_422_APPLE );
+    m_image.image.setCsizeByFormat( GL_YCBCR_422_APPLE );
 
     m_image.image.reallocate();
 
@@ -371,7 +364,7 @@ void videoDarwin :: resetSeqGrabber()
   InitSeqGrabber();
 }
 
-void videoDarwin :: qualityMess(int X)
+bool videoDarwin :: setQuality(int X)
 {
   OSErr anErr;
 
@@ -396,20 +389,20 @@ void videoDarwin :: qualityMess(int X)
     anErr = SGSetChannelPlayFlags(m_vc, channelPlayAllData);
     post("set SG PlayAlldata");
     break;
-
   }
+ return true;
 }
 
 /////////////////////////////////////////////////////////
 // dimenMess
 //
 /////////////////////////////////////////////////////////
-void videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
+bool videoDarwin :: setDimen(int x, int y, int leftmargin, int rightmargin,
                               int topmargin, int bottommargin)
 {
-  if (x > 0 ){
+  if (x > 0 )
     m_width = (int)x;
-  if (y > 0){
+  if (y > 0)
     m_height = (int)y;
 
   if(stop()) {
@@ -417,13 +410,14 @@ void videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
     start();
   }
   post("height %d width %d",m_height,m_width);
+  return true;
 }
 
 /////////////////////////////////////////////////////////
 // colorspaceMess
 //
 /////////////////////////////////////////////////////////
-void videoDarwin :: setColor(int format)
+bool videoDarwin :: setColor(int format)
 {
   m_colorspace = format;
   if(stop()) {
@@ -542,7 +536,7 @@ void videoDarwin :: saturationMess(float X)
 
 void videoDarwin :: contrastMess(float X)
 {
-  contrast = (unsigned short)(65536. * X);
+  unsigned short contrast = (unsigned short)(65536. * X);
   VDSetContrast(m_vdig,&contrast);
   
   VDGetContrast(m_vdig,&contrast);
@@ -722,7 +716,7 @@ void videoDarwin :: whiteBalanceMess(float U, float V)
 // dialog
 //
 /////////////////////////////////////////////////////////
-void videoDarwin :: dialogMess(int argc, t_atom*argv)
+bool videoDarwin :: dialog()
 {
   Rect    newActiveVideoRect;
   Rect    curBounds, curVideoRect, newVideoRect;
@@ -743,6 +737,8 @@ void videoDarwin :: dialogMess(int argc, t_atom*argv)
   err = SGGetSrcVideoBounds (m_vc, &newActiveVideoRect);
 
   err = SGPause (m_sg, false);
+
+  return true;
 }
 #else
 void videoDarwin ::  videoDarwin() {}

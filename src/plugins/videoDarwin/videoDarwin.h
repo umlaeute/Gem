@@ -62,14 +62,24 @@ namespace gem { class GEM_EXTERN videoDarwin : public video {
 
     //////////
     // get the next frame
-    pixBlock *getFrame(void);
+    virtual bool grabFrame(void);
 
     //////////
     // Set the video dimensions
-    virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
+    virtual bool setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
+    virtual bool setQuality(int d);
+    virtual bool setColor(int d);
+    virtual bool dialog(void);
 
     
   protected:
+        void InitSeqGrabber();
+        void resetSeqGrabber();
+        void destroySeqGrabber();
+        virtual void    setupCapture();
+
+
+
     int		m_newFrame; 
 		bool	m_banged;
 		bool	m_auto;
