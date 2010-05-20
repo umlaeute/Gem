@@ -741,6 +741,6 @@ bool videoDarwin :: dialog()
   return true;
 }
 #else
-void videoDarwin ::  videoDarwin() {}
-void videoDarwin :: ~videoDarwin() {}
+videoDarwin ::  videoDarwin() {}
+videoDarwin :: ~videoDarwin() {}
 #endif // __APPLE__
