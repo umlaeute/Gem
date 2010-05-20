@@ -4,6 +4,6 @@ AM_CPPFLAGS = -I../..
 
 lib_LTLIBRARIES= gem_videoNT.la
 gem_videoNT_la_SOURCES= videoNT.cpp videoNT.h
-gem_videoNT_la_CXXFLAGS = @GEM_RTE_CFLAGS@ 
-gem_videoNT_la_LDFLAGS = -module -avoid-version -shared @GEM_RTE_LIBS@ 
+gem_videoNT_la_CXXFLAGS = @GEM_RTE_CFLAGS@ @GEM_LIB_VFW32_CFLAGS@
+gem_videoNT_la_LDFLAGS = -module -avoid-version -shared @GEM_RTE_LIBS@ @GEM_LIB_VFW32_LIBS@
 

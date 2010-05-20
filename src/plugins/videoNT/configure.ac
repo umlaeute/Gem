@@ -19,6 +19,10 @@ GEM_CHECK_RTE
 AC_LANG(C++)
 
 
-dnl AC_MSG_WARN([no check for AVI (w32 only)])
+AC_CHECK_HEADERS([vfw.h])
+GEM_CHECK_LIB(vfw32,vfw32,AVIFileInit,,,,video input)
+
+# is this needed?
+dnl GEM_CHECK_LIB(avicap32,avicap32,main,,,,video input)
 
 AC_OUTPUT

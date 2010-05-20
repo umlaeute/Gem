@@ -13,66 +13,77 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
-#if defined GEM_VIDEOBACKEND && GEM_VIDEOBACKEND == GEM_VIDEOBACKEND_NT
-//#ifdef _WIN32
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "pix_videoNT.h"
+#include "videoNT.h"
+using namespace gem;
+#include "Gem/RTE.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_videoNT, t_floatarg, A_DEFFLOAT)
-
-  /////////////////////////////////////////////////////////
+#ifdef HAVE_VFW_H
+REGISTER_VIDEOFACTORY("NT", videoNT);
+/////////////////////////////////////////////////////////
 //
-// pix_videoNT
+// videoNT
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_videoNT :: pix_videoNT(t_floatarg num)
-  : m_hWndC(NULL), m_newFrame(0)
+videoNT :: videoNT()
+  : video(0), 
+    m_hWndC(NULL)
 {
-  char driverName[64];
-  char driverDesc[64];
-  if (capGetDriverDescription(0, driverName, 64, driverDesc, 0))
-    post("pix_video: driver '%s'", driverName);
-  else post("couldn't determine video-driver name");
-  
-  m_pixBlock.image.data = NULL;
-    
-  // set to half PAL
-  if (num)
-    {
-      m_vidXSize = 320;
-      m_vidYSize = 240;
-    }
-  // set to half NTSC
-  else
-    {
-      m_vidXSize = 320;
-      m_vidYSize = 240;
-    }
+  provide("vfw");
+}
 
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+videoNT :: ~videoNT()
+{
+  close();
+}
+
+
+/////////////////////////////////////////////////////////
+// openDevice
+//
+/////////////////////////////////////////////////////////
+bool videoNT :: openDevice()
+{
+  char driverName[256];
+  char driverDesc[256];
+  if (capGetDriverDescription(0, driverName, 256, driverDesc, 256))
+    post("videoNT: driver '%s'", driverName);
+
+  if(m_hWndC)closeDevice();
+  
   // Connect to the daemon
   m_hWndC = capCreateCaptureWindow ((LPSTR) "GEM video",	// window name if pop-up 
 				    0,				// window style (not visible)
-				    0, 0, m_vidXSize, m_vidYSize,// window position and dimensions
+				    0, 0, m_width, m_height,// window position and dimensions
 				    GetDesktopWindow(), 0);
   if (!m_hWndC) {
     error("Unable to create capture window");
-    return;
+    return false;
   } 
 
   if (!capDriverConnect(m_hWndC, 0)) {
     error("Unable to connect to video driver");
-    return;
+    closeDevice();
+    return false;
   }
 
   CAPTUREPARMS params;
   if (!capCaptureGetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS))) {
     error("Unable to get capture parameters");
-    return;
+    closeDevice();
+    return false;
   }
+
   params.fYield = TRUE;
   params.fCaptureAudio = FALSE;
   params.wPercentDropForError = 100;
@@ -84,292 +95,158 @@ pix_videoNT :: pix_videoNT(t_floatarg num)
   if (!capCaptureSetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS)))
     {
       error("Unable to set capture parameters");
-      return;
+      closeDevice();
+      return false;
     }
 
-  if (!capSetCallbackOnVideoStream(m_hWndC, pix_videoNT::videoFrameCallback))
+  if (!capSetCallbackOnVideoStream(m_hWndC, videoNT::videoFrameCallback))
     {
       error("Unable to set frame callback");
-      return;
+      closeDevice();
+      return false;
     }
   if (!capSetUserData(m_hWndC, this))
     {
       error("Unable to set user data");
-      return;
+      closeDevice();
+      return false;
     }
   DWORD formSize = capGetVideoFormat(m_hWndC, NULL, 0);
   BITMAPINFO *videoFormat = (BITMAPINFO *)(new char[formSize]);
   if (!capGetVideoFormat(m_hWndC, videoFormat, formSize))
     {
       error("Unable to get video format");
-      return;
+      closeDevice();
+      return false;
     }
 
-  videoFormat->bmiHeader.biWidth = m_vidXSize;
-  videoFormat->bmiHeader.biHeight = m_vidYSize;
+  videoFormat->bmiHeader.biWidth = m_width;
+  videoFormat->bmiHeader.biHeight = m_height;
   videoFormat->bmiHeader.biBitCount = 24;
   videoFormat->bmiHeader.biCompression = BI_RGB;
   videoFormat->bmiHeader.biClrUsed = 0;
   videoFormat->bmiHeader.biClrImportant = 0;
   videoFormat->bmiHeader.biSizeImage = 0;
-  if (!capSetVideoFormat(m_hWndC, videoFormat, formSize))
-    {
+  if (!capSetVideoFormat(m_hWndC, videoFormat, formSize)) {
       error("Unable to set video format");
-      return;
+      delete videoFormat;
+      closeDevice();
+      return false;
     }
-  post("Connected at x: %d, y: %d, c: %d",
-       static_cast<int>(videoFormat->bmiHeader.biWidth),
-       static_cast<int>(videoFormat->bmiHeader.biHeight),
-       static_cast<int>(videoFormat->bmiHeader.biBitCount));
+  if (!capGetVideoFormat(m_hWndC, videoFormat, formSize)) {
+    error("Unable to get video format");
+  }
+  m_width=static_cast<int>(videoFormat->bmiHeader.biWidth);
+  m_height=static_cast<int>(videoFormat->bmiHeader.biHeight);
+
+  verbose(1, "Connected with %dx%d @ %d",
+          m_width, m_height,
+          static_cast<int>(videoFormat->bmiHeader.biBitCount));
+
   delete videoFormat;
 
-  m_pixBlock.image.xsize = m_vidXSize;  // was defaulted to 128 ???
-  m_pixBlock.image.ysize = m_vidYSize;  // was defaulted to 128 ???
-  m_pixBlock.image.csize = 4;
-  m_pixBlock.image.format = GL_RGBA;
-  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-  const int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-    * m_pixBlock.image.csize * sizeof(unsigned char);
-  m_pixBlock.image.allocate(dataSize);
-  memset(m_pixBlock.image.data, 255, dataSize);
+  m_image.image.xsize = m_width;
+  m_image.image.ysize = m_height;
+  m_image.image.setCsizeByFormat(GL_RGBA);
 
-  m_haveVideo = 1;
+  m_image.image.reallocate();
+  m_image.image.setBlack();
+
+  return true;
 }
 
 /////////////////////////////////////////////////////////
-// Destructor
+// closeDevice
 //
 /////////////////////////////////////////////////////////
-pix_videoNT :: ~pix_videoNT()
+void videoNT :: closeDevice()
 {
-  if (!m_hWndC)
-    return;
-
-  stopTransfer();
-  capDriverDisconnect(m_hWndC);
-  DestroyWindow(m_hWndC);
-
-  // Clean up the video
-  if (m_haveVideo)
-    {
-      post("Closed video connection");
-    }
-  cleanPixBlock();
+  if (m_hWndC) {
+    capDriverDisconnect(m_hWndC);
+    DestroyWindow(m_hWndC);
+  }
+  m_hWndC=NULL;
 }
 
+
 /////////////////////////////////////////////////////////
-// videoFrame
+// videoFrame callback
 //
 /////////////////////////////////////////////////////////
-void pix_videoNT :: videoFrame(LPVIDEOHDR lpVHdr)
+void videoNT :: videoFrame(LPVIDEOHDR lpVHdr)
 {
   int count = lpVHdr->dwBytesUsed;
   // notice that it is times 3 for the color!
   // incoming data is BGR
-  const int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * 3;
-	
+  const int dataSize = m_image.image.xsize * m_image.image.ysize * 3;
+
   if (count < dataSize)
     {
-      error("not enough pixels captured");
       return;
     }
 
-  const unsigned char *srcLine = lpVHdr->lpData;
-  unsigned char *dstLine = m_pixBlock.image.data;
-  const int srcXSize = m_vidXSize * 3;
-  const int dstXSize = m_pixBlock.image.xsize * 4;
-  const int xSize = m_pixBlock.image.xsize;
-  const int ySize = m_pixBlock.image.ysize;
-#if 0
-  for (int i = 0; i < ySize; ++i)
-    {
-      const unsigned char *srcPix = srcLine;
-      unsigned char *dstPix = dstLine;
-      for (int j = 0; j < xSize; ++j)
-	{
-	  dstPix[chRed] = srcPix[2];
-	  dstPix[chGreen] = srcPix[1];
-	  dstPix[chBlue] = srcPix[0];
-	  // remember that we memset the data to 255
-	  //			dstPix[chAlpha] = 255;
-	  dstPix += 4;
-	  srcPix += 3;
-	}
-      srcLine += srcXSize;
-      dstLine += dstXSize;
-    }
-#else
-  m_pixBlock.image.fromBGR(lpVHdr->lpData);
-#endif
-  m_newFrame = 1;
+  lock();
+  m_image.image.fromBGR(lpVHdr->lpData);
+  m_image.newimage = true;
+  unlock();
 }
+void videoNT :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr)
+{
+  void *ptr = reinterpret_cast<pix_videoNT*>(capGetUserData(hWnd));
+  ptr->videoFrame(lpVHdr);
+}
+
 
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_videoNT :: render(GemState *state)
+bool videoNT :: grabFrame()
 {
-  if (!m_haveVideo)
-    {
-      error("Video not active");
-      return;
-    }
-
-  m_pixBlock.newimage = m_newFrame;
-  state->image = &m_pixBlock;
-  m_newFrame = 0;
-}
-
-/////////////////////////////////////////////////////////
-// startRendering
-//
-/////////////////////////////////////////////////////////
-void pix_videoNT :: startRendering()
-{
-  if (!capCaptureSequenceNoFile(m_hWndC))
-    {
-      error("Unable to start capture");
-      return;
-    }
-
-  m_pixBlock.newimage = 1;
-}
-
-/////////////////////////////////////////////////////////
-// stopRendering
-//
-/////////////////////////////////////////////////////////
-void pix_videoNT :: stopRendering()
-{
-  capCaptureStop(m_hWndC);
-}
-
-/////////////////////////////////////////////////////////
-// postrender
-//
-/////////////////////////////////////////////////////////
-void pix_videoNT :: postrender(GemState *state)
-{
-  m_pixBlock.newimage = 0;
-  state->image = NULL;
+  return true;
 }
 
 /////////////////////////////////////////////////////////
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-int pix_videoNT :: startTransfer()
+bool videoNT :: startTransfer()
 {
-  if (!m_haveVideo)
-    return(0);
-  return(1);
+  bool result= capCaptureSequenceNoFile(m_hWndC);
+  m_image.newfilm=result;
+
+  return result;
 }
 
 /////////////////////////////////////////////////////////
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-int pix_videoNT :: stopTransfer()
+bool videoNT :: stopTransfer()
 {
-  if ( !m_haveVideo )
-    return(0);
-
-  // Clean up the buffer
-    
-  return(1);
+  capCaptureStop(m_hWndC);
+  return true;
 }
-
 
 /////////////////////////////////////////////////////////
 // dimenMess
 //
 /////////////////////////////////////////////////////////
-void pix_videoNT :: dimenMess(int x, int y)
-{
-  if (!m_haveVideo)
-    {
-      error("Connect to video first");
-      return;
-    }
-    
-  // stop the transfer and destroy the buffer
-  if ( !stopTransfer() ) 
-    {
-      error("error stopping transfer");
-      return;
-    }
-
-  m_pixBlock.image.xsize = x;
-  m_pixBlock.image.ysize = y;
-
-  cleanPixBlock();
-  int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-    * 4 * sizeof(unsigned char);
-  m_pixBlock.image.allocate(dataSize);
-  memset(m_pixBlock.image.data, 255, dataSize);
-
-  // start the transfer and rebuild the buffer
-  if ( !startTransfer() ) 
-    {
-      error("error starting transfer");
-      return;
-    }
-}
-
-/////////////////////////////////////////////////////////
-// cleanPixBlock
-//
-/////////////////////////////////////////////////////////
-void pix_videoNT :: cleanPixBlock()
-{
-  m_pixBlock.image.clear();
+bool videoNT :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
+  video::setDImen(x, y, leftmargin, rightmargin, topmargin, bottommargin);
+  if (m_hWndC) resetDevice();
 }
 
 /////////////////////////////////////////////////////////
 // csMess
 //
 /////////////////////////////////////////////////////////
-void pix_videoNT :: csMess(int format)
+void videoNT :: setColor(int format)
 {
-  if(format)m_pixBlock.image.setCsizeByFormat(format);
+  if(format)m_image.image.setCsizeByFormat(format);
 }
 
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
-void pix_videoNT :: obj_setupCallback(t_class *classPtr)
-{
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_videoNT), gensym("pix_video"), A_DEFFLOAT, A_NULL);
-
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoNT::dimenMessCallback),
-		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoNT::csMessCallback),
-		  gensym("colorspace"), A_FLOAT, A_NULL);
-}
-void pix_videoNT :: dimenMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-  GetMyClass(data)->dimenMess(static_cast<int>(x), static_cast<int>(y));
-}
-void pix_videoNT :: csMessCallback(void *data, t_symbol *s)
-{
-  int format=0;
-  char c =*s->s_name;
-  switch (c){
-  case 'g': case 'G': format=GL_LUMINANCE; break;
-  case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
-  case 'r': case 'R': format=GL_RGBA; break;
-  default:
-    GetMyClass(data)->post("colorspace must be 'RGBA', 'YUV' or 'Gray'");
-  }
-  GetMyClass(data)->csMess(format);
-}
-
-void pix_videoNT :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr) 
-{
-  void *ptr = reinterpret_cast<pix_videoNT*>(capGetUserData(hWnd));
-  ptr->videoFrame(lpVHdr);
-}
-
+#else
+videoNT ::  videoNT() { }
+videoNT :: ~videoNT() { }
 #endif
