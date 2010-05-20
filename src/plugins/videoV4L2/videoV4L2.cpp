@@ -53,7 +53,7 @@ using namespace gem;
 
 REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 
-videoV4L2 :: videoV4L2(int format) : video(format)
+videoV4L2 :: videoV4L2() : video(0)
                                    , m_gotFormat(0), m_colorConvert(0),
                                      m_tvfd(0),
                                      m_buffers(NULL), m_nbuffers(0), 

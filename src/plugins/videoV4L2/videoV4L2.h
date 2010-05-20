@@ -84,7 +84,7 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
  public:
   //////////
   // Constructor
-  videoV4L2(int format=0);
+  videoV4L2(void);
   
   //////////
   // Destructor
