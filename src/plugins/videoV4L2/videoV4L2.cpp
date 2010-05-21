@@ -70,8 +70,8 @@ videoV4L2 :: videoV4L2() : video(0)
   m_capturing=false;
   m_devicenum=V4L2_DEVICENO;
 
-  provide("video4linux2");
   provide("v4l2");
+  provide("analog");
 }
   
 ////////////////////////////////////////////////////////

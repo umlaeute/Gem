@@ -44,6 +44,7 @@ videoSGI :: videoSGI()
     m_svr(NULL), m_drn(NULL), m_src(NULL), m_path(NULL)
 {
   provide("sgi");
+  provide("analog");
 }
 
 ////////////////////////////////////////////////////////

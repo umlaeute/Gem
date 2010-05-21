@@ -36,6 +36,9 @@ videoNT :: videoNT()
     m_hWndC(NULL)
 {
   provide("vfw");
+  provide("dv");
+  provide("iidc");
+  provide("analog");
 }
 
 /////////////////////////////////////////////////////////

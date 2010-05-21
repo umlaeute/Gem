@@ -50,7 +50,10 @@ videoDarwin :: videoDarwin()
   m_inputDevice = 0;
   initSeqGrabber();
 
-  provide("QT");
+  provide("darwin");
+  provide("dv");
+  provide("iidc");
+  provide("analog");
 }
 
 ////////////////////////////////////////////////////////

@@ -57,8 +57,6 @@ videoDV4L :: videoDV4L() : video(),
     m_pitches[i] = 0;
   }
 
-
-  provide("ieee1394");
   provide("dv4l");
   provide("dv");
 

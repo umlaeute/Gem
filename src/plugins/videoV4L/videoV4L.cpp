@@ -96,8 +96,8 @@ videoV4L :: videoV4L() : video()
   m_norm=VIDEO_MODE_AUTO; 
   m_devicenum=V4L_DEVICENO;
 
-  provide("video4linux");
   provide("v4l");
+  provide("analog");
 }
 
 ////////////////////////////////////////////////////////
