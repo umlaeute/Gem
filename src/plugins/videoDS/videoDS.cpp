@@ -3,13 +3,12 @@
 // videoDS - Graphics Environment for Multimedia
 //
 // daniel@bogusfront.org
+// zmoelnig@iem.at
 //
 // Implementation file 
 //
-//    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    Copyright (c) 2003 Daniel Heckenberg.
+//    Copyright (c) 2010 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -19,6 +18,8 @@
 #endif
 
 #include "videoDS.h"
+using namespace gem;
+#include "Gem/RTE.h"
 
 #ifdef HAVE_DIRECTSHOW
 
@@ -80,21 +81,20 @@ videoDS :: videoDS()
 #endif
     m_pCDbase(NULL),
     m_pCG(NULL),
-    m_GraphRegister(0),
-
+    m_GraphRegister(0)
 {
   // Initialize COM
   if(FAILED(CoInitialize(NULL))) {
     throw("could not initialise COM.");
   }
 
-  m_xsize=720;
-  m_ysize=576;
+  m_width=720;
+  m_height=576;
 
   // Initialize the input buffers
   for (int i = 0; i <= 2; i++) {
-    m_pixBlockBuf[i].image.xsize=m_xsize;
-    m_pixBlockBuf[i].image.ysize=m_ysize;
+    m_pixBlockBuf[i].image.xsize=m_width;
+    m_pixBlockBuf[i].image.ysize=m_height;
     m_pixBlockBuf[i].image.setCsizeByFormat(GL_RGBA);
     m_pixBlockBuf[i].image.reallocate();
 
@@ -105,8 +105,8 @@ videoDS :: videoDS()
       m_pixBlockBuf[i].image.csize;
   }
 
-  m_image.image.xsize=m_xsize;
-  m_image.image.ysize=m_ysize;
+  m_image.image.xsize=m_width;
+  m_image.image.ysize=m_height;
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_image.image.reallocate();
 
@@ -121,16 +121,11 @@ videoDS :: videoDS()
 /////////////////////////////////////////////////////////
 videoDS :: ~videoDS()
 {
-  stopTransfer();  
-
   // Clean up the movie
-  closeMess();
+  close();
 
   for (int i = 0; i <= 2; i++) {
-    if (m_pixBlockBuf[i].image.data) {
-      delete [] m_pixBlockBuf[i].image.data;
-      m_pixBlockBuf[i].image.data = NULL;
-    }
+    m_pixBlockBuf[i].image.allocate(0);
     m_pixBlockBuf[i].newimage = 0;
     m_nPixDataSize[i] = 0;
   }
@@ -307,7 +302,7 @@ bool videoDS :: openDevice()
     return true;
   } while (0);
 
-  closeMess();
+  closeDevice();
   return false;
 }
 
@@ -315,7 +310,7 @@ bool videoDS :: openDevice()
 // close message
 //
 /////////////////////////////////////////////////////////
-void videoDS :: closeMess()
+void videoDS :: closeDevice()
 {
 #ifdef DIRECTSHOW_LOGGING
   m_pGB->SetLogFile(NULL);
@@ -347,8 +342,10 @@ void videoDS :: closeMess()
 // enumerate message
 //
 /////////////////////////////////////////////////////////
-void videoDS :: enumerateMess()
+std::vector<std::string>videoDS :: enumerate()
 {
+  std::vector<std::string>result;
+
   HRESULT hr;
   IBaseFilter * pSrc = NULL;
 
@@ -394,7 +391,8 @@ void videoDS :: enumerateMess()
 	VariantInit(&varName);
 	hr = pPropBag->Read(L"FriendlyName", &varName, 0);
 	if (SUCCEEDED(hr)) {
-	  post("Dev %d: %S", devIndex, varName.bstrVal);
+	  result.push_back(varName.bstrVal);
+	  //post("Dev %d: %S", devIndex, varName.bstrVal);
 	}
 	VariantClear(&varName);
 
@@ -410,13 +408,15 @@ void videoDS :: enumerateMess()
   // by the calling function.
   COMRELEASE(pDevEnum);
   COMRELEASE(pClassEnum);
+
+  return result;
 }
 
 ////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-pixBuf* videoDS :: getFrame()
+pixBlock* videoDS :: getFrame()
 {
   // Copy the buffer from the camera buffer to the texture buffer
   copyBuffer();
@@ -458,21 +458,21 @@ void videoDS :: copyBuffer()
   // Check for a format change.
   if (NULL == SampleGrabber || FAILED(hr = SampleGrabber->GetConnectedMediaType(&pmt))) {
     error("could not get sample media type.");
-    closeMess();
+    close();
     return;
   }
 
   if (S_OK == hr) {
     BITMAPINFOHEADER* pbmih;
     GetBitmapInfoHdr(&pmt, &pbmih);
-    m_xsize = pbmih->biWidth;
-    m_ysize = pbmih->biHeight;
+    m_width = pbmih->biWidth;
+    m_height = pbmih->biHeight;
     m_format = GL_BGR_EXT;
     FreeMediaType(pmt);	// is this necessary?!	
   }
 
-  m_pixBlockBuf[m_writeIdx].image.xsize = m_xsize;
-  m_pixBlockBuf[m_writeIdx].image.ysize = m_ysize;
+  m_pixBlockBuf[m_writeIdx].image.xsize = m_width;
+  m_pixBlockBuf[m_writeIdx].image.ysize = m_height;
   m_pixBlockBuf[m_writeIdx].image.setCSizeByFormat(m_format);
   m_pixBlockBuf[m_writeIdx].image.reallocate();
   m_pixBlockBuf[m_writeIdx].image.reallocate(SampleSize);
@@ -523,8 +523,8 @@ bool videoDS :: startTransfer()
     return false;
   }
   GetBitmapInfoHdr(&mt, &pbmih);
-  m_xsize = pbmih->biWidth;
-  m_ysize = pbmih->biHeight;
+  m_width = pbmih->biWidth;
+  m_height = pbmih->biHeight;
   m_format = GL_BGR_EXT;
   
   //starts the graph rendering

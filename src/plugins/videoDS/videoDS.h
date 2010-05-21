@@ -38,7 +38,7 @@ namespace gem { class GEM_EXTERN videoDS : public video {
     	    	
     //////////
     // Destructor
-    virtual ~videoDS();
+    virtual ~videoDS(void);
 
 #ifdef HAVE_DIRECTSHOW
     ////////
@@ -49,23 +49,23 @@ namespace gem { class GEM_EXTERN videoDS : public video {
     //////////
     // Start up the video device
     // [out] int - returns 0 if bad
-    bool	    	startTransfer();
+    bool	    	startTransfer(void);
     //////////
     // Stop the video device
     // [out] int - returns 0 if bad
-    bool	   	stopTransfer();
+    bool	   	stopTransfer(void);
 
     //////////
     // get the next frame
-    virtual pixBuf* getFrame(void);
+    virtual pixBlock* getFrame(void);
     virtual void releaseFrame(void);
 
     //////////
     // Set the video dimensions
     virtual bool setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
     virtual bool setColor(int d);
-    virtual bool dialog(void);
-
+    virtual bool dialog(std::vector<std::string>);
+    virtual std::vector<std::string>videoDS :: enumerate(void);
     
   protected:
     //-----------------------------------
@@ -74,6 +74,7 @@ namespace gem { class GEM_EXTERN videoDS : public video {
 
     //////////
     // The pixBlocks for the captured and rendered image
+    void copyBuffer(void)
     pixBlock    m_pixBlockBuf[3];
     int		m_nPixDataSize[3];
 
@@ -108,7 +109,6 @@ namespace gem { class GEM_EXTERN videoDS : public video {
     ICaptureGraphBuilder2*m_pCG;
 
     unsigned long	  m_GraphRegister;
-
 #endif /*HAVE_DIRECTSHOW */
   }; 
 };
