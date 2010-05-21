@@ -22,6 +22,7 @@ using namespace gem;
 #include "Gem/RTE.h"
 
 #ifdef HAVE_DIRECTSHOW
+REGISTER_VIDEOFACTORY("DS", videoDS);
 
 # include <memory>
 # include <Dvdmedia.h>
@@ -113,6 +114,11 @@ videoDS :: videoDS()
 #ifdef USE_RECORDING
   memset(m_filename, 0, MAXPDSTRING);
 #endif
+
+  provide("directshow");
+  provide("dv");
+  provide("iidc");
+  provide("analog");
 }
 
 ////////////////////////////////////////////////////////
