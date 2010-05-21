@@ -165,7 +165,7 @@ namespace gem { class GEM_EXTERN video {
 
     virtual bool	    	setQuality(int);
 
-    virtual bool	    	dialog(void);
+    virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
 
     virtual std::vector<std::string>enumerate(void);
 

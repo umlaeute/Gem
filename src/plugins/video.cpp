@@ -391,7 +391,7 @@ bool video :: setQuality(int d){
 }
 /////////////////////////////////////////////////////////
 // open a dialog for the settings
-bool video :: dialog(){
+bool video :: dialog(std::vector<std::string>dialognames){
   return false;
 }
 
