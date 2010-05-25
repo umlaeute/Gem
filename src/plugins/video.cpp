@@ -194,7 +194,7 @@ bool video :: start()
 }
 bool video :: stop()
 {
-  debugPost("stop: %d -> %d", m_capturing, m_haveVideo);
+  debugPost("stop(%d): %d -> %d", m_pimpl->shouldrun, m_capturing, m_haveVideo);
   bool running=m_pimpl->shouldrun;
   m_pimpl->shouldrun=false;
   if(!m_haveVideo)return false;
@@ -283,7 +283,10 @@ bool video::startThread() {
 }
 bool video::stopThread(int timeout) {
   int i=0;
+  if(!m_pimpl->threading)return true;
+
   post("stopThread: %d", timeout);
+
   m_pimpl->cont=false;
   if(timeout<0)timeout=m_pimpl->timeout;
   if(timeout>0) {
