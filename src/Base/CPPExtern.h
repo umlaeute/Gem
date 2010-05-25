@@ -25,7 +25,7 @@ class CPPExtern;
 
 /* forward declaration of a generic exception handler for GemExceptions */
 namespace gem {
-  void catchGemException(void);
+  GEM_EXTERN void catchGemException(void);
 };
 
 /*-----------------------------------------------------------------
