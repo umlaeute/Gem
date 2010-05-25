@@ -24,6 +24,11 @@ using namespace gem;
 #define debugPost
 #endif
 
+#include <pthread.h>
+
+#ifdef _WIN32
+# include <winsock2.h>
+#endif
 
 class video :: PIMPL {
   friend class video;
@@ -31,7 +36,6 @@ public:
   /* interfaces */
   // the list of provided device-classes
   std::vector<std::string>m_providers;
-
 
   /* threading */
   bool threading;
@@ -58,7 +62,7 @@ public:
     if(locks_>0) {
       numlocks=locks_;
       locks=new pthread_mutex_t*[numlocks];
-      int i=0;
+      unsigned int i=0;
       for(i=0; i<locks_; i++)
         locks[i]=NULL;
     }
@@ -86,7 +90,7 @@ public:
   }
   bool lock_new(void) {
     if(locks) {
-      int i=0;
+      unsigned int i=0;
       for(i=0; i<numlocks; i++) {
         locks[i]=new pthread_mutex_t;
         if ( pthread_mutex_init(locks[i], NULL) < 0 ) {
@@ -96,10 +100,11 @@ public:
       }
       return true;
     }
+    return true;
   }
   void lock_delete(void) {
     if(locks) {
-      int i=0;
+      unsigned int i=0;
       for(i=0; i<numlocks; i++) {
         if(locks[i]) {
           pthread_mutex_destroy(locks[i]); 
@@ -411,7 +416,7 @@ std::vector<std::string>video::enumerate(void) {
 // query whether this backend provides a certain type of video decoding, e.g. "dv"
 bool video :: provides(const std::string name) {
   if(!m_pimpl)return false;
-  int i;
+  unsigned int i;
   for(i=0; i<m_pimpl->m_providers.size(); i++)
     if(name == m_pimpl->m_providers[i])return true;
 
@@ -420,7 +425,7 @@ bool video :: provides(const std::string name) {
 std::vector<std::string>video :: provides() {
   std::vector<std::string>result;
   if(m_pimpl) {
-    int i;
+    unsigned int i;
     for(i=0; i<m_pimpl->m_providers.size(); i++)
       result.push_back(m_pimpl->m_providers[i]);
   }
