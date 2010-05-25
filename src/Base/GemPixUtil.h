@@ -75,21 +75,21 @@ CLASS
 
 struct GEM_EXTERN imageStruct
 {
-  imageStruct();
-  ~imageStruct();
+  imageStruct(void);
+  ~imageStruct(void);
 
-  void info();
+  virtual void info();
   //////////
   // columns
-  unsigned char* allocate(size_t size);
-  unsigned char* allocate();
+  virtual unsigned char* allocate(size_t size);
+  virtual unsigned char* allocate(void);
 
   // if we have allocated some space already, only re-allocate when needed.
-  unsigned char* reallocate(size_t size);
-  unsigned char* reallocate();
+  virtual unsigned char* reallocate(size_t size);
+  virtual unsigned char* reallocate(void);
  
   // delete the buffer (if it is ours)
-  void clear();
+  virtual void clear(void);
 
 
   //////////
@@ -137,17 +137,17 @@ struct GEM_EXTERN imageStruct
 
   /////////
   // gets the color of a pixel
-  void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b) const;
-  void getGrey(int X, int Y, unsigned char*g) const;
-  void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const;
+  virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b) const;
+  virtual void getGrey(int X, int Y, unsigned char*g) const;
+  virtual void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const;
   
   /* following will set the whole image-data to either black or white
    * the size of the image-data is NOT xsize*ysize*csize but datasize
    * this is mostly slower
    * i have put the datasize into private (like pdata) (bad idea?)
    */
-  void setBlack();
-  void setWhite();
+  virtual void setBlack(void);
+  virtual void setWhite(void);
 
   /* certain formats are bound to certain csizes,
    * it's quite annoying to have to think again and again (ok, not much thinking)
@@ -156,8 +156,8 @@ struct GEM_EXTERN imageStruct
    * and set and return the correct csize (like 1)
    * if no format is given the current format is used
    */
-  int setCsizeByFormat(int format);
-  int setCsizeByFormat();
+  virtual int setCsizeByFormat(int format);
+  virtual int setCsizeByFormat(void);
 
   
   /* various copy functions
@@ -165,17 +165,16 @@ struct GEM_EXTERN imageStruct
    * but often it is enough to just copy the meta-data (without pixel-data)
    * into a new imageStruct
    */
-  void copy2Image(imageStruct *to) const;
-  void copy2ImageStruct(imageStruct *to) const; // copy the imageStruct (but not the actual data)
+  virtual void copy2Image(imageStruct *to) const;
+  virtual void copy2ImageStruct(imageStruct *to) const; // copy the imageStruct (but not the actual data)
   /* this is a sort of better copy2Image, 
    * which only copies the imageStruct-data if it is needed
    */
-  void refreshImage(imageStruct *to);
+  virtual void refreshImage(imageStruct *to);
 
 
   /* inplace swapping Red and Blue channel */
-  void swapRedBlue    ();
-
+  virtual void swapRedBlue(void);
 
   ///////////////////////////////////////////////////////////////////////////////
   // acquiring data including colour-transformations
@@ -191,33 +190,34 @@ struct GEM_EXTERN imageStruct
    *   this is maybe not really clean (the meta-data is stored in the destination, 
    *   while the source has no meta-data of its own)
    */
-  void convertTo  (imageStruct*to,   GLenum dest_format=0);
-  void convertFrom(imageStruct*from, GLenum dest_format=0);
+  virtual void convertTo  (imageStruct*to,   GLenum dest_format=0);
+  virtual void convertFrom(imageStruct*from, GLenum dest_format=0);
 
-  void fromRGB    (unsigned char* orgdata);
-  void fromRGBA   (unsigned char* orgdata);
-  void fromBGR    (unsigned char* orgdata);
-  void fromBGRA   (unsigned char* orgdata);
-  void fromRGB16  (unsigned char* orgdata);
-  void fromGray   (unsigned char* orgdata);
-  void fromGray   (short* orgdata);
-  void fromUYVY   (unsigned char* orgdata);
-  void fromYUY2   (unsigned char* orgdata); // YUYV
-  void fromYVYU   (unsigned char* orgdata);
+  virtual void fromRGB    (unsigned char* orgdata);
+  virtual void fromRGBA   (unsigned char* orgdata);
+  virtual void fromBGR    (unsigned char* orgdata);
+  virtual void fromBGRA   (unsigned char* orgdata);
+  virtual void fromRGB16  (unsigned char* orgdata);
+  virtual void fromABGR   (unsigned char* orgdata);
+  virtual void fromGray   (unsigned char* orgdata);
+  virtual void fromGray   (short* orgdata);
+  virtual void fromUYVY   (unsigned char* orgdata);
+  virtual void fromYUY2   (unsigned char* orgdata); // YUYV
+  virtual void fromYVYU   (unsigned char* orgdata);
   /* planar YUV420: this is rather generic and not really YV12 only */
-  void fromYV12   (unsigned char* Y, unsigned char*U, unsigned char*V);
+  virtual void fromYV12   (unsigned char* Y, unsigned char*U, unsigned char*V);
   /* assume that the planes are near each other: YVU */
-  void fromYV12   (unsigned char* orgdata);
+  virtual void fromYV12   (unsigned char* orgdata);
   /* assume that the planes are near each other: YVU */
-  void fromYU12   (unsigned char* orgdata);
+  virtual void fromYU12   (unsigned char* orgdata);
   /* overloading the above two in order to accept pdp YV12 packets */
-  void fromYV12   (short* Y, short*U, short*V);
-  void fromYV12   (short* orgdata);
+  virtual void fromYV12   (short* Y, short*U, short*V);
+  virtual void fromYV12   (short* orgdata);
   
   /* aliases */
-  void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
-  void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
-  void fromYUV420P(unsigned char*Y,unsigned char*U,unsigned char*V){fromYV12(Y,U,V);}
+  virtual void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
+  virtual void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
+  virtual void fromYUV420P(unsigned char*Y,unsigned char*U,unsigned char*V){fromYV12(Y,U,V);}
 
   // "data" points to the image.
   // the memory could(!) be reserved by this class or someone else
@@ -238,7 +238,7 @@ struct GEM_EXTERN imageStruct
   GLboolean       upsidedown;
 
   /* make the image orientation openGL-conformant */
-  void fixUpDown(void);
+  virtual void fixUpDown(void);
 
 };
 

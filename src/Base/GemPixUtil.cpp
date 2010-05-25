@@ -781,6 +781,94 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
   }
 }
 
+
+
+GEM_EXTERN void imageStruct::fromABGR(unsigned char *abgrdata) {
+  if(!abgrdata)return;
+  size_t pixelnum=xsize*ysize;
+  setCsizeByFormat();
+  reallocate();
+  unsigned char *pixels=data;
+  switch (format){
+  case GL_BGR_EXT:
+    while(pixelnum--){
+      abgrdata++;
+      *pixels++=*abgrdata++;
+      *pixels++=*abgrdata++;
+      *pixels++=*abgrdata++;
+    }
+    break;
+  case GL_RGB:
+    while(pixelnum--){
+      pixels[0]=abgrdata[3]; // R 
+      pixels[1]=abgrdata[2]; // G
+      pixels[2]=abgrdata[1]; // B
+      pixels+=3; abgrdata+=4;
+    }
+    break;
+  case GL_ABGR_EXT:
+    memcpy(data, abgrdata, pixelnum*csize);
+    break;
+  case GL_RGBA:
+    if(abgrdata==data){
+      // in place conversion
+      unsigned char dummy=0;
+      while(pixelnum--){
+        dummy    =pixels[3]; pixels[3]=pixels[0]; pixels[0]=dummy;
+        dummy    =pixels[1]; pixels[1]=pixels[2]; pixels[2]=dummy;
+        pixels+=4;
+      } 
+    } else {
+      while(pixelnum--){
+        pixels[0]=abgrdata[3]; // R
+        pixels[1]=abgrdata[2]; // G
+        pixels[2]=abgrdata[1]; // B
+        pixels[3]=abgrdata[0]; // A
+        pixels+=4;abgrdata+=4;
+      }
+    }
+    break;
+  case GL_LUMINANCE:
+    while(pixelnum--){
+#ifdef __APPLE__
+      const int R=2;
+      const int G=3;
+      const int B=0;
+#else
+      const int R=3;
+      const int G=2;
+      const int B=1;
+#endif
+      *pixels++=(abgrdata[R]*RGB2GRAY_RED+abgrdata[G]*RGB2GRAY_GREEN+abgrdata[B]*RGB2GRAY_BLUE)>>8;
+      abgrdata+=4;
+    }
+    break;
+  case GL_YUV422_GEM:
+    START_TIMING;
+    switch(m_simd){
+    case GEM_SIMD_NONE: default:
+      pixelnum>>=1;
+      while(pixelnum--){
+	*pixels++=((RGB2YUV_21*abgrdata[chAlpha]+
+		    RGB2YUV_22*abgrdata[chBlue]+
+		    RGB2YUV_23*abgrdata[chGreen])>>8)+UV_OFFSET; // U
+	*pixels++=((RGB2YUV_11*abgrdata[chAlpha]+
+		    RGB2YUV_12*abgrdata[chBlue]+
+		    RGB2YUV_13*abgrdata[chGreen])>>8)+ Y_OFFSET; // Y
+	*pixels++=((RGB2YUV_31*abgrdata[chAlpha]+
+		    RGB2YUV_32*abgrdata[chBlue]+
+		    RGB2YUV_33*abgrdata[chGreen])>>8)+UV_OFFSET; // V
+	*pixels++=((RGB2YUV_11*abgrdata[4+chAlpha]+
+		    RGB2YUV_12*abgrdata[4+chBlue]+
+		    RGB2YUV_13*abgrdata[4+chGreen])>>8)+ Y_OFFSET; // Y
+	abgrdata+=8;
+      }
+    }
+    STOP_TIMING("ABGR_to_YCbCr");
+    break;
+  }
+}
+
 GEM_EXTERN void imageStruct::fromGray(unsigned char *greydata) {
   if(!greydata)return;
   size_t pixelnum=xsize*ysize;
