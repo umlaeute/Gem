@@ -80,7 +80,7 @@ videoV4L2 :: videoV4L2() : video(0)
 ////////////////////////////////////////////////////////
 videoV4L2 :: ~videoV4L2()
 {
-  if (m_haveVideo)stopTransfer();
+  close();
 }
 
 static int xioctl(int                    fd,
@@ -276,7 +276,7 @@ void *videoV4L2 :: capturing(void)
 //////////////////
 // this reads the data that was captured by capturing() and returns it within a pixBlock
 pixBlock *videoV4L2 :: getFrame(){
-  if(!m_haveVideo)return NULL;
+  if(!(m_haveVideo && m_capturing))return NULL;
   if(m_stopTransfer) {
     bool rendering=m_rendering;
     stopTransfer();
@@ -317,9 +317,12 @@ pixBlock *videoV4L2 :: getFrame(){
 }
 
 bool videoV4L2 :: openDevice() {
+  close();
+
   /* check the device */
   // if we don't have a devicename, create one
   std::string devname = m_devicename;
+
 
   if(devname.empty()) {
     devname="/dev/video";
@@ -380,6 +383,7 @@ bool videoV4L2 :: openDevice() {
   return true;
 }
 void videoV4L2 :: closeDevice() {
+  verbose(1, "v4l: closing device %d", m_tvfd);
   if (m_tvfd>=0) v4l2_close(m_tvfd);
   m_tvfd=-1;
 }
@@ -613,8 +617,6 @@ bool videoV4L2 :: startTransfer()
   
   debugPost("v4l2: colorconvert=%d", m_colorConvert);
   
-  m_haveVideo = 1;
-  
   /* create thread */
   m_continue_thread = 1;
   m_frame_ready = 0;
@@ -681,7 +683,6 @@ bool videoV4L2 :: stopTransfer()
   // close the file-descriptor
   debugPost("v4l2: closing %d", m_tvfd);
 
-  m_haveVideo = 0;
   m_frame_ready = 0;
   m_rendering=false;
   debugPost("v4l2: stoppedtransfer");
