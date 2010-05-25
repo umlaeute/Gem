@@ -296,7 +296,8 @@ pixBlock *videoV4L2 :: getFrame(){
       case V4L2_PIX_FMT_RGB32: m_image.image.fromRGBA  (data); break;
       case V4L2_PIX_FMT_GREY : m_image.image.fromGray  (data); break;
       case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
-      case V4L2_PIX_FMT_YUV420:m_image.image.fromYU12(data); break;
+      case V4L2_PIX_FMT_YUYV : m_image.image.fromYUY2  (data); break;
+      case V4L2_PIX_FMT_YUV420:m_image.image.fromYU12  (data); break;
 
 
       default: // ? what should we do ?
@@ -413,7 +414,6 @@ bool videoV4L2 :: startTransfer()
   m_stopTransfer=false;
   m_rendering=true;
   //  verbose(1, "starting transfer");
-  const char*dev_name=m_devicename.c_str();
   int i;
 
   struct v4l2_cropcap cropcap;
@@ -529,7 +529,7 @@ bool videoV4L2 :: startTransfer()
 
   switch(m_gotFormat){
   case V4L2_PIX_FMT_RGB32: case V4L2_PIX_FMT_RGB24:
-  case V4L2_PIX_FMT_UYVY: case V4L2_PIX_FMT_YUV420:
+  case V4L2_PIX_FMT_UYVY: case V4L2_PIX_FMT_YUV420: case V4L2_PIX_FMT_YUYV: 
   case V4L2_PIX_FMT_GREY: 
     break;
   default: 
@@ -717,9 +717,9 @@ bool videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
   return true;
 }
 
-bool videoV4L2 :: setNorm(char*norm)
+bool videoV4L2 :: setNorm(const std::string norm)
 {
-  char c=*norm;
+  char c=*norm.c_str();
   int i_norm=-1;
 
   switch (c){
@@ -758,11 +758,12 @@ bool videoV4L2 :: setDevice(int d)
   restartTransfer();
   return true;
 }
-bool videoV4L2 :: setDevice(char*name)
+bool videoV4L2 :: setDevice(const std::string name)
 {
+  
   m_devicenum=-1;
   m_devicename=name;
-  restartTransfer();
+
   return true;
 }
 

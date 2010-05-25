@@ -119,9 +119,9 @@ namespace gem { class GEM_EXTERN videoV4L2 : public video {
   virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin,
                                  int topmargin, int bottommargin);
   virtual bool	    	setChannel(int c, float f);
-  virtual bool	    	setNorm(char*);
+  virtual bool	    	setNorm(const std::string);
   virtual bool	    	setDevice(int);
-  virtual bool	    	setDevice(char*);
+  virtual bool	    	setDevice(const std::string);
   virtual bool	    	setColor(int);
 
  protected:
