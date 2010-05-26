@@ -195,7 +195,7 @@ void videoVFW :: videoFrame(LPVIDEOHDR lpVHdr)
 }
 void videoVFW :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr)
 {
-  void *ptr = reinterpret_cast<pix_videoVFW*>(capGetUserData(hWnd));
+  videoVFW*ptr = reinterpret_cast<videoVFW*>(capGetUserData(hWnd));
   ptr->videoFrame(lpVHdr);
 }
 
@@ -236,17 +236,19 @@ bool videoVFW :: stopTransfer()
 //
 /////////////////////////////////////////////////////////
 bool videoVFW :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
-  video::setDImen(x, y, leftmargin, rightmargin, topmargin, bottommargin);
-  if (m_hWndC) resetDevice();
+  video::setDimen(x, y, leftmargin, rightmargin, topmargin, bottommargin);
+  if (m_hWndC) reset();
+  return true;
 }
 
 /////////////////////////////////////////////////////////
 // csMess
 //
 /////////////////////////////////////////////////////////
-void videoVFW :: setColor(int format)
+bool videoVFW :: setColor(int format)
 {
   if(format)m_image.image.setCsizeByFormat(format);
+  return true;
 }
 
 #else

@@ -74,7 +74,7 @@ namespace gem { class GEM_EXPORT videoDS : public video {
 
     //////////
     // The pixBlocks for the captured and rendered image
-    void copyBuffer(void)
+    void copyBuffer(void);
     pixBlock    m_pixBlockBuf[3];
     int		m_nPixDataSize[3];
 

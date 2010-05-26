@@ -37,7 +37,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib ddraw.lib atls.lib strmiids.lib strmbase.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib ddraw.lib atls.lib strmiids.lib strmbase.lib libcpmt.lib msvcrt.lib msvcprt.lib winmm.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Release&quot;"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
@@ -188,16 +188,16 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\videoDS.cpp">
-		</File>
-		<File
-			RelativePath=".\videoDS.h">
-		</File>
-		<File
 			RelativePath=".\DSgrabber.cpp">
 		</File>
 		<File
 			RelativePath=".\DSgrabber.h">
+		</File>
+		<File
+			RelativePath=".\videoDS.cpp">
+		</File>
+		<File
+			RelativePath=".\videoDS.h">
 		</File>
 	</Files>
 	<Globals>
