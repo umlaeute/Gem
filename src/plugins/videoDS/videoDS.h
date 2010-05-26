@@ -30,7 +30,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoDS : public video {
+namespace gem { class GEM_EXPORT videoDS : public video {
   public:
     //////////
     // Constructor
