@@ -126,7 +126,7 @@ void pix_video :: postrender(GemState *state){
 /////////////////////////////////////////////////////////
 bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
 {
-  int i=0;
+  unsigned int i=0;
   int count=0;
 
   std::vector<std::string>id;
@@ -162,7 +162,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       std::vector<std::string>devs=handle->provides();
       if(devs.size()>0) {
 	startpost(": ");
-	int i=0;
+	unsigned int i=0;
 	for(i=0; i<devs.size(); i++) {
 	  startpost("%s ", devs[i].c_str());
 	}
@@ -189,7 +189,7 @@ bool pix_video::restart(void) {
 
   if(m_driver<0) {
     // auto mode
-    int i=0;
+    unsigned int i=0;
     for(i=0; i<m_videoHandles.size(); i++) {
       if(m_videoHandles[i]->open()) {
         m_videoHandle=m_videoHandles[i];
@@ -227,7 +227,7 @@ void pix_video :: driverMess(t_symbol*s)
     driverMess(-1);
     return;
   } else {
-    int dev;
+    unsigned int dev;
     for(dev=0; dev<m_videoHandles.size(); dev++) {
       if(m_videoHandles[dev]->provides(s->s_name)) {
         driverMess(dev);
