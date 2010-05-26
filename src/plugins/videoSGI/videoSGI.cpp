@@ -24,10 +24,21 @@ using namespace gem;
 #include "Gem/RTE.h"
 
 #ifdef HAVE_VL_VL_H
-#include <unistd.h>
+# include <unistd.h>
 # include <dmedia/vl_vino.h>
 
 REGISTER_VIDEOFACTORY("sgi", videoSGI);
+
+
+/*
+  from pix_indycam:
+
+  "zoom" -> zoomMess
+  "bright" -> brightMess
+  "contrast" -> contrastMess
+  "hue" -> hueMess
+  "sat" -> satMess
+*/
 
 
 /////////////////////////////////////////////////////////
@@ -44,6 +55,7 @@ videoSGI :: videoSGI()
     m_svr(NULL), m_drn(NULL), m_src(NULL), m_path(NULL)
 {
   provide("sgi");
+  provide("indy");
   provide("analog");
 }
 
@@ -267,6 +279,95 @@ void videoSGI :: offsetMess(int x, int y)
     	return;
     }
 }
+
+
+/////////////////////////////////////////////////////////
+// zoomMess
+//
+/////////////////////////////////////////////////////////
+void videoINDY :: zoomMess(int num, int denom)
+{
+    if (!m_haveVideo)
+    {
+    	error("Connect to video first");
+    	return;
+    }
+    VLControlValue value;
+    value.fractVal.numerator = num;
+    value.fractVal.denominator = denom;
+    if ( vlSetControl(m_svr, m_path, m_drn, VL_ZOOM, &value) )
+    	error("zoom error");
+}
+
+/////////////////////////////////////////////////////////
+// brightMess
+//
+/////////////////////////////////////////////////////////
+void videoINDY :: brightMess(int val)
+{
+    if (!m_haveVideo)
+    {
+    	error("Connect to video first");
+    	return;
+    }
+    VLControlValue value;
+    value.intVal = val;
+    if ( vlSetControl(m_svr, m_path, m_drn, VL_BRIGHTNESS, &value) )
+    	error("problem setting brightness");
+}
+
+/////////////////////////////////////////////////////////
+// contrastMess
+//
+/////////////////////////////////////////////////////////
+void videoINDY :: contrastMess(int val)
+{
+    if (!m_haveVideo)
+    {
+    	error("Connect to video first");
+    	return;
+    }
+    VLControlValue value;
+    value.intVal = val;
+    if ( vlSetControl(m_svr, m_path, m_drn, VL_CONTRAST, &value) )
+    	error("problem setting contrast");
+}
+
+/////////////////////////////////////////////////////////
+// hueMess
+//
+/////////////////////////////////////////////////////////
+void videoINDY :: hueMess(int val)
+{
+    if (!m_haveVideo)
+    {
+    	error("Connect to video first");
+    	return;
+    }
+    VLControlValue value;
+    value.intVal = val;
+    if ( vlSetControl(m_svr, m_path, m_drn, VL_HUE, &value) )
+    	error("problem setting hue");
+}
+
+/////////////////////////////////////////////////////////
+// satMess
+//
+/////////////////////////////////////////////////////////
+void videoINDY :: satMess(int val)
+{
+    if (!m_haveVideo)
+    {
+    	error("Connect to video first");
+    	return;
+    }
+    VLControlValue value;
+    value.intVal = val;
+    if ( vlSetControl(m_svr, m_path, m_src, VL_VINO_INDYCAM_SATURATION, &value) )
+    	error("problem setting saturation");
+}
+
+
 #endif
 ///////////////////////////////////////////////////////
 // dimenMess
