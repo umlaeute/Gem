@@ -40,8 +40,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_dump, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
   /////////////////////////////////////////////////////////
   pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy)
 {
-  xsize = (int)fx;
-  ysize = (int)fy;
+  xsize = static_cast<int>(fx);
+  ysize = static_cast<int>(fy);
 
   m_csize = 3;
 
@@ -95,8 +95,8 @@ void pix_dump :: processImage(imageStruct &image)
     m_bufsize = m_xsize * m_ysize * m_csize;
     m_buffer = new t_atom[m_bufsize];
 
-    m_xstep = m_csize * ((float)image.xsize/(float)m_xsize);
-    m_ystep = m_csize * ((float)image.ysize/(float)m_ysize) * image.xsize;
+    m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>(m_xsize));
+    m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>(m_ysize)) * image.xsize;
   }
 
   m_data = image.data;
@@ -127,8 +127,8 @@ void pix_dump :: processYUVImage(imageStruct &image)
     m_bufsize = m_xsize * m_ysize * m_csize;
     m_buffer = new t_atom[m_bufsize];
 
-    m_xstep = m_csize * ((float)image.xsize/(float)m_xsize);
-    m_ystep = m_csize * ((float)image.ysize/(float)m_ysize) * image.xsize;
+    m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>(m_xsize));
+    m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>(m_ysize)) * image.xsize;
   }
 
   m_data = image.data;
@@ -152,62 +152,69 @@ void pix_dump :: trigger()
   case 4:
     while (n < m_ysize) {
       while (m < m_xsize) {
-	float r, g, b, a;
-	r = (float)data[chRed] / 255.f;
-	SETFLOAT(&m_buffer[i], r);
-	i++;
-	g = (float)data[chGreen] / 255.f;
-	SETFLOAT(&m_buffer[i], g);
-	i++;
-	b = (float)data[chBlue] / 255.f;
-	SETFLOAT(&m_buffer[i], b);
-	i++;
-	a = (float)data[chAlpha] / 255.f;
-	SETFLOAT(&m_buffer[i], a);
-	i++;
-	m++;
-	data = line + (int)(m_xstep * (float)m);
+        float r, g, b, a;
+        r = static_cast<float>(data[chRed]) / 255.f;
+        SETFLOAT(&m_buffer[i], r);
+        i++;
+        g = static_cast<float>(data[chGreen]) / 255.f;
+        SETFLOAT(&m_buffer[i], g);
+        i++;
+        b = static_cast<float>(data[chBlue]) / 255.f;
+        SETFLOAT(&m_buffer[i], b);
+        i++;
+        a = static_cast<float>(data[chAlpha]) / 255.f;
+        SETFLOAT(&m_buffer[i], a);
+        i++;
+        m++;
+        data = line + static_cast<int>(m_xstep * static_cast<float>(m));
       }
       m = 0;
       n++;
-      line = m_data + (int)(m_ystep*n);
+      line = m_data + static_cast<int>(m_ystep*n);
       data = line;
     }
     break;
   case 2:
     while (n < m_ysize) {
       while (m < m_xsize/2) {
-	float y,u,y1,v;
-	u = (float)data[0] / 255.f;
-	SETFLOAT(&m_buffer[i], u);
-	i++;
-	y = (float)data[1] / 255.f;
-	SETFLOAT(&m_buffer[i], y);
-	i++;
-	v = (float)data[2] / 255.f;
-	SETFLOAT(&m_buffer[i], v);
-	i++;
-	y1 = (float)data[3] / 255.f;
-	SETFLOAT(&m_buffer[i], y1);
-	i++;
-	m++;
-	data = line + (int)(m_xstep * (float)m);
+        float y,u,y1,v;
+        u = static_cast<float>(data[0]) / 255.f;
+        SETFLOAT(&m_buffer[i], u);
+        i++;
+        y = static_cast<float>(data[1]) / 255.f;
+        SETFLOAT(&m_buffer[i], y);
+        i++;
+        v = static_cast<float>(data[2]) / 255.f;
+        SETFLOAT(&m_buffer[i], v);
+        i++;
+        y1 = static_cast<float>(data[3]) / 255.f;
+        SETFLOAT(&m_buffer[i], y1);
+        i++;
+        m++;
+        data = line + static_cast<int>(m_xstep * static_cast<float>(m));
       }
       m = 0;
       n++;
-      line = m_data + (int)(m_ystep*n);
+      line = m_data + static_cast<int>(m_ystep*n);
       data = line;
     }
   case 1:  default:
     int datasize=m_xsize*m_ysize*m_csize/4;
-      while (datasize--) {
-	float v;
-	v = (float)(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
-	v = (float)(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+1], v);
-	v = (float)(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+2], v);
-	v = (float)(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+3], v);
-	i+=4;
-      }
+    int leftover=m_xsize*m_ysize*m_csize-datasize*4;
+    while (datasize--) {
+      float v;
+      v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
+      v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+1], v);
+      v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+2], v);
+      v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+3], v);
+      i+=4;
+    }
+    while (leftover--) {
+      float v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
+      i++;
+    }
+
+
   }
   outlet_list(m_dataOut, gensym("list"), i, m_buffer);
 }
