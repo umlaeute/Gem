@@ -60,6 +60,7 @@ void pix_resize :: processImage(imageStruct &image)
       m_image.ysize=hN;
       m_image.setCsizeByFormat(image.format);
       m_image.reallocate();
+      m_image.reallocate(wN*hN*4); // just for safety: it seems like gluScaleImage needs more memory then just the x*y*c
       
       gluError = gluScaleImage(image.format,
 			       image.xsize, image.ysize,
