@@ -215,7 +215,7 @@ bool pix_video::restart(void) {
 
 
 
-#define WITH_VIDEOHANDLES_DO(x) do {int _i=0; for(_i=0; _i<m_videoHandles.size(); _i++)m_videoHandles[_i]->x;} while(false)
+#define WITH_VIDEOHANDLES_DO(x) do {unsigned int _i=0; for(_i=0; _i<m_videoHandles.size(); _i++)m_videoHandles[_i]->x;} while(false)
 
 /////////////////////////////////////////////////////////
 // driverMess
@@ -344,7 +344,22 @@ void pix_video :: colorMess(t_atom*a)
 /////////////////////////////////////////////////////////
 void pix_video :: enumerateMess()
 {
-  error("enumerate not supported on this OS");
+  std::vector<std::string>data;
+  unsigned int i=0; 
+  for(i=0; i<m_videoHandles.size(); i++) {
+    //    a.insert(a.end(), b.begin(), b.end());
+    if(m_videoHandles[i]) {
+      std::vector<std::string>temp=m_videoHandles[i]->enumerate();
+      data.insert(data.end(), temp.begin(), temp.end());
+    }
+  }
+  if(data.size()<=0) {
+    error("no devices found");
+  }
+  
+  for(i=0; i<data.size(); i++) {
+    post("%d: %s", i, data[i].c_str());
+  }
 }
 /////////////////////////////////////////////////////////
 // dialog
@@ -352,7 +367,17 @@ void pix_video :: enumerateMess()
 /////////////////////////////////////////////////////////
 void pix_video :: dialogMess(int argc, t_atom*argv)
 {
-  error("dialog not supported on this OS");
+  if(m_videoHandle) {
+    std::vector<std::string>data;
+    while(argc>0) {
+      data.push_back(std::string(atom_getsymbol(argv)->s_name));
+      argv++;
+    }
+
+    if(!m_videoHandle->dialog(data)) {
+      post("no dialog for current backend");
+    }
+  }
 }
 
 /////////////////////////////////////////////////////////
