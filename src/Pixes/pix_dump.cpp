@@ -152,21 +152,21 @@ void pix_dump :: trigger()
   case 4:
     while (n < m_ysize) {
       while (m < m_xsize) {
-	float r, g, b, a;
-	r = static_cast<float>(data[chRed]) / 255.f;
-	SETFLOAT(&m_buffer[i], r);
-	i++;
-	g = static_cast<float>(data[chGreen]) / 255.f;
-	SETFLOAT(&m_buffer[i], g);
-	i++;
-	b = static_cast<float>(data[chBlue]) / 255.f;
-	SETFLOAT(&m_buffer[i], b);
-	i++;
-	a = static_cast<float>(data[chAlpha]) / 255.f;
-	SETFLOAT(&m_buffer[i], a);
-	i++;
-	m++;
-	data = line + static_cast<int>(m_xstep * static_cast<float>(m));
+        float r, g, b, a;
+        r = static_cast<float>(data[chRed]) / 255.f;
+        SETFLOAT(&m_buffer[i], r);
+        i++;
+        g = static_cast<float>(data[chGreen]) / 255.f;
+        SETFLOAT(&m_buffer[i], g);
+        i++;
+        b = static_cast<float>(data[chBlue]) / 255.f;
+        SETFLOAT(&m_buffer[i], b);
+        i++;
+        a = static_cast<float>(data[chAlpha]) / 255.f;
+        SETFLOAT(&m_buffer[i], a);
+        i++;
+        m++;
+        data = line + static_cast<int>(m_xstep * static_cast<float>(m));
       }
       m = 0;
       n++;
@@ -177,21 +177,21 @@ void pix_dump :: trigger()
   case 2:
     while (n < m_ysize) {
       while (m < m_xsize/2) {
-	float y,u,y1,v;
-	u = static_cast<float>(data[0]) / 255.f;
-	SETFLOAT(&m_buffer[i], u);
-	i++;
-	y = static_cast<float>(data[1]) / 255.f;
-	SETFLOAT(&m_buffer[i], y);
-	i++;
-	v = static_cast<float>(data[2]) / 255.f;
-	SETFLOAT(&m_buffer[i], v);
-	i++;
-	y1 = static_cast<float>(data[3]) / 255.f;
-	SETFLOAT(&m_buffer[i], y1);
-	i++;
-	m++;
-	data = line + static_cast<int>(m_xstep * static_cast<float>(m));
+        float y,u,y1,v;
+        u = static_cast<float>(data[0]) / 255.f;
+        SETFLOAT(&m_buffer[i], u);
+        i++;
+        y = static_cast<float>(data[1]) / 255.f;
+        SETFLOAT(&m_buffer[i], y);
+        i++;
+        v = static_cast<float>(data[2]) / 255.f;
+        SETFLOAT(&m_buffer[i], v);
+        i++;
+        y1 = static_cast<float>(data[3]) / 255.f;
+        SETFLOAT(&m_buffer[i], y1);
+        i++;
+        m++;
+        data = line + static_cast<int>(m_xstep * static_cast<float>(m));
       }
       m = 0;
       n++;
@@ -200,14 +200,21 @@ void pix_dump :: trigger()
     }
   case 1:  default:
     int datasize=m_xsize*m_ysize*m_csize/4;
-      while (datasize--) {
-	float v;
-	v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
-	v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+1], v);
-	v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+2], v);
-	v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+3], v);
-	i+=4;
-      }
+    int leftover=m_xsize*m_ysize*m_csize-datasize*4;
+    while (datasize--) {
+      float v;
+      v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
+      v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+1], v);
+      v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+2], v);
+      v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+3], v);
+      i+=4;
+    }
+    while (leftover--) {
+      float v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
+      i++;
+    }
+
+
   }
   outlet_list(m_dataOut, gensym("list"), i, m_buffer);
 }
