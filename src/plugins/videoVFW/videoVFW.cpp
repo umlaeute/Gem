@@ -17,21 +17,21 @@
 # include "config.h"
 #endif
 
-#include "videoNT.h"
+#include "videoVFW.h"
 using namespace gem;
 #include "Gem/RTE.h"
 
 #ifdef HAVE_VFW_H
-REGISTER_VIDEOFACTORY("NT", videoNT);
+REGISTER_VIDEOFACTORY("VFW", videoVFW);
 /////////////////////////////////////////////////////////
 //
-// videoNT
+// videoVFW
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoNT :: videoNT()
+videoVFW :: videoVFW()
   : video(0), 
     m_hWndC(NULL)
 {
@@ -45,7 +45,7 @@ videoNT :: videoNT()
 // Destructor
 //
 /////////////////////////////////////////////////////////
-videoNT :: ~videoNT()
+videoVFW :: ~videoVFW()
 {
   close();
 }
@@ -55,12 +55,12 @@ videoNT :: ~videoNT()
 // openDevice
 //
 /////////////////////////////////////////////////////////
-bool videoNT :: openDevice()
+bool videoVFW :: openDevice()
 {
   char driverName[256];
   char driverDesc[256];
   if (capGetDriverDescription(0, driverName, 256, driverDesc, 256))
-    post("videoNT: driver '%s'", driverName);
+    post("videoVFW: driver '%s'", driverName);
 
   if(m_hWndC)closeDevice();
   
@@ -102,7 +102,7 @@ bool videoNT :: openDevice()
       return false;
     }
 
-  if (!capSetCallbackOnVideoStream(m_hWndC, videoNT::videoFrameCallback))
+  if (!capSetCallbackOnVideoStream(m_hWndC, videoVFW::videoFrameCallback))
     {
       error("Unable to set frame callback");
       closeDevice();
@@ -162,7 +162,7 @@ bool videoNT :: openDevice()
 // closeDevice
 //
 /////////////////////////////////////////////////////////
-void videoNT :: closeDevice()
+void videoVFW :: closeDevice()
 {
   if (m_hWndC) {
     capDriverDisconnect(m_hWndC);
@@ -176,7 +176,7 @@ void videoNT :: closeDevice()
 // videoFrame callback
 //
 /////////////////////////////////////////////////////////
-void videoNT :: videoFrame(LPVIDEOHDR lpVHdr)
+void videoVFW :: videoFrame(LPVIDEOHDR lpVHdr)
 {
   int count = lpVHdr->dwBytesUsed;
   // notice that it is times 3 for the color!
@@ -193,9 +193,9 @@ void videoNT :: videoFrame(LPVIDEOHDR lpVHdr)
   m_image.newimage = true;
   unlock();
 }
-void videoNT :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr)
+void videoVFW :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr)
 {
-  void *ptr = reinterpret_cast<pix_videoNT*>(capGetUserData(hWnd));
+  void *ptr = reinterpret_cast<pix_videoVFW*>(capGetUserData(hWnd));
   ptr->videoFrame(lpVHdr);
 }
 
@@ -204,7 +204,7 @@ void videoNT :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr)
 // render
 //
 /////////////////////////////////////////////////////////
-bool videoNT :: grabFrame()
+bool videoVFW :: grabFrame()
 {
   return true;
 }
@@ -213,7 +213,7 @@ bool videoNT :: grabFrame()
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoNT :: startTransfer()
+bool videoVFW :: startTransfer()
 {
   bool result= capCaptureSequenceNoFile(m_hWndC);
   m_image.newfilm=result;
@@ -225,7 +225,7 @@ bool videoNT :: startTransfer()
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoNT :: stopTransfer()
+bool videoVFW :: stopTransfer()
 {
   capCaptureStop(m_hWndC);
   return true;
@@ -235,7 +235,7 @@ bool videoNT :: stopTransfer()
 // dimenMess
 //
 /////////////////////////////////////////////////////////
-bool videoNT :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
+bool videoVFW :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
   video::setDImen(x, y, leftmargin, rightmargin, topmargin, bottommargin);
   if (m_hWndC) resetDevice();
 }
@@ -244,12 +244,12 @@ bool videoNT :: setDimen(int x, int y, int leftmargin, int rightmargin, int topm
 // csMess
 //
 /////////////////////////////////////////////////////////
-void videoNT :: setColor(int format)
+void videoVFW :: setColor(int format)
 {
   if(format)m_image.image.setCsizeByFormat(format);
 }
 
 #else
-videoNT ::  videoNT() { }
-videoNT :: ~videoNT() { }
+videoVFW ::  videoVFW() { }
+videoVFW :: ~videoVFW() { }
 #endif

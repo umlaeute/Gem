@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoNT", "videoNT.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoVFW", "videoVFW.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

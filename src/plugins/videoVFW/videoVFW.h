@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an video into a pix block
+Load an video into a pix block: VideoForWindows backend
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -10,12 +10,10 @@ Copyright (c) 2001-2010 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
-Linux version by Miller Puckette. msp@ucsd.edu
-	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEONT_H_
-#define INCLUDE_VIDEONT_H_
+#ifndef INCLUDE_VIDEOVFW_H_
+#define INCLUDE_VIDEOVFW_H_
 
 #include "plugins/video.h"
 
@@ -34,15 +32,15 @@ Linux version by Miller Puckette. msp@ucsd.edu
   pix
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoNT : public video {
+namespace gem { class GEM_EXPORT videoVFW : public video {
   public:
     //////////
     // Constructor
-    videoNT(void);
+    videoVFW(void);
     	    	
     //////////
     // Destructor
-    virtual ~videoNT();
+    virtual ~videoVFW();
 
 #ifdef HAVE_VFW_H
     ////////

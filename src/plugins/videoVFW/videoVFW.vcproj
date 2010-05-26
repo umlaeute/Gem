@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="videoNT"
+	Name="videoVFW"
 	ProjectGUID="{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	RootNamespace="gem"
 	SccProjectName=""
@@ -188,10 +188,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\videoNT.cpp">
+			RelativePath=".\videoVFW.cpp">
 		</File>
 		<File
-			RelativePath=".\videoNT.h">
+			RelativePath=".\videoVFW.h">
 		</File>
 	</Files>
 	<Globals>
