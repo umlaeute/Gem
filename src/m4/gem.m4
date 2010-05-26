@@ -335,6 +335,10 @@ KERN=$(uname -s)
 AC_SUBST(GEM_RTE_CFLAGS)
 AC_SUBST(GEM_RTE_LIBS)
 
+if test "x${libdir}" = "x\${exec_prefix}/lib"; then
+ libdir='${exec_prefix}/lib/pd/extra/Gem'
+fi
+
 tmp_rte_cflags="$CFLAGS"
 tmp_rte_libs="$LDFLAGS"
 GEM_RTE_CFLAGS="-DPD"
