@@ -37,8 +37,6 @@ pix_video :: pix_video() :
   m_videoHandle(NULL), m_driver(-1)
 {
   gem::PluginFactory<gem::video>::loadPlugins("video");
-
-  m_videoHandle=NULL;
   std::vector<std::string>ids=gem::PluginFactory<gem::video>::getIDs();
 
   addHandle(ids, "v4l2");
