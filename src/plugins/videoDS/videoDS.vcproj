@@ -127,7 +127,7 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseDummy|Win32"
-			OutputDirectory=".\"
+			OutputDirectory="$(SolutionDir)"
 			IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
