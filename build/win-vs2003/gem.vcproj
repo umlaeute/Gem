@@ -38,7 +38,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mt.lib freetype214mt.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbase.lib atls.lib winmm.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mt.lib freetype214mt.lib QTMLClient.lib vfw32.lib ddraw.lib strmiids.lib strmbase.lib atls.lib winmm.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Release&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
@@ -1558,30 +1558,6 @@
 				RelativePath="..\..\src\Pixes\pix_video.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Pixes\pix_videoDarwin.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_videoDarwin.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_videoDS.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_videoDS.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_videoNT.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_videoNT.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_videoSGI.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_videoSGI.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Pixes\pix_vpaint.cpp">
 			</File>
 			<File
@@ -1615,22 +1591,10 @@
 				Name="filmvideo"
 				Filter="">
 				<File
-					RelativePath="..\..\src\Pixes\DSgrabber.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\DSgrabber.h">
-				</File>
-				<File
 					RelativePath="..\..\src\plugins\film.cpp">
 				</File>
 				<File
 					RelativePath="..\..\src\plugins\film.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_videoOS.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_videoOS.h">
 				</File>
 				<File
 					RelativePath="..\..\src\plugins\record.cpp">
@@ -3636,6 +3600,16 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Helpers\RTE.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Gem"
+			Filter="">
+			<File
+				RelativePath="..\..\src\Gem\any.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\RTE.h">
 			</File>
 		</Filter>
 	</Files>
