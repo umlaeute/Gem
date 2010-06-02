@@ -24,6 +24,8 @@ using namespace gem;
 #include "Base/GemException.h"
 
 #ifdef HAVE_LIBDC1394
+#include <inttypes.h>
+
 REGISTER_VIDEOFACTORY("dc1394", videoDC1394);
 /////////////////////////////////////////////////////////
 //
@@ -107,6 +109,29 @@ bool videoDC1394 :: grabFrame()
 // openDevice
 //
 /////////////////////////////////////////////////////////
+static std::string guid2string(uint64_t guid, int unit=-1) {
+  std::string result;
+  char buf[64];
+  uint32_t value[2];
+  
+  value[0]= guid & 0xffffffff;
+  value[1]= (guid >>32) & 0xffffffff;
+
+  snprintf(buf, 64, "0x%08x%08x", value[0], value[1]);
+  buf[63]=0;
+  result=buf;
+
+  if(unit>=0) {
+    snprintf(buf, 64, "%d", unit);
+    buf[63]=0;
+    result+=":";
+    result+=buf;
+  }
+
+  return result;
+}
+
+
 bool videoDC1394 :: openDevice(){
   dc1394error_t err;
   dc1394camera_list_t *list=NULL;
@@ -127,18 +152,12 @@ bool videoDC1394 :: openDevice(){
     int i=0;
     for(i=0; i<list->num; i++) {
       // find camera based on its GUID
-      char buf[64];
-      snprintf(buf, 64, "%x", list->ids[devicenum].guid);
-      std::string name=buf;
-      if(name==m_devicename){
+      std::string name=guid2string(list->ids[devicenum].guid);
+      if(guid2string(list->ids[devicenum].guid)==m_devicename){
         devicenum=i;
         break;
       }
-      snprintf(buf, 64, "%x:%d", 
-               list->ids[devicenum].guid,
-               list->ids[devicenum].unit);
-      name=buf;
-      if(name==m_devicename){
+      if(guid2string(list->ids[devicenum].guid, list->ids[devicenum].unit)==m_devicename){
         devicenum=i;
         break;
       }
@@ -161,8 +180,7 @@ bool videoDC1394 :: openDevice(){
     return false;
   }
 
-  verbose(1, "videoDC1394: using camera with GUID %x\n", m_dccamera->guid);
-
+  verbose(1, "videoDC1394: using camera with GUID %s", guid2string(m_dccamera->guid, m_dccamera->unit).c_str());
 
   /* check supported video modes */
   dc1394video_modes_t video_modes;
@@ -176,6 +194,8 @@ bool videoDC1394 :: openDevice(){
     return false;
   }
   int mode=m_channel;
+  verbose(1, "trying mode %d", mode);
+
   if(mode>=video_modes.num) {
     error("requested channel %d/%d out of bounds", mode, video_modes.num);
     mode=-1;
@@ -219,6 +239,7 @@ bool videoDC1394 :: openDevice(){
       return false;
     }
   } else {
+    verbose(1, "using mode %d", mode);
     video_mode=video_modes.modes[mode];
   }
   
@@ -309,13 +330,33 @@ bool videoDC1394 :: stopTransfer()
   return true;
 }
 
+std::vector<std::string>videoDC1394 :: enumerate(){
+  std::vector<std::string>result;
+
+  dc1394camera_list_t *list=NULL;
+  dc1394error_t err=dc1394_camera_enumerate (m_dc, &list); /* Find cameras */
+  if(DC1394_SUCCESS!=err) {
+    return result;
+  }
+
+  int i=0;
+  for(i=0; i<list->num; i++) {
+    //    post("IIDC#%02d: %"PRIx64"\t%x\t%s", i, list->ids[i].guid, list->ids[i].unit, buf);
+    result.push_back(guid2string(list->ids[i].guid, list->ids[i].unit));
+  }
+  return result;
+}
 
 bool videoDC1394 :: setColor(int format){
   if (format<=0)return false;
   m_reqFormat=format;
   return true;
 }
-
+bool videoDC1394 :: setChannel(int chan, float freq){
+  video::setChannel(chan, freq);
+  restartTransfer();
+  return true;
+}
 #else
 videoDC1394 :: videoDC1394() : video()
 {}

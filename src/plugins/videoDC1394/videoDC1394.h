@@ -79,7 +79,12 @@ namespace gem { class GEM_EXTERN videoDC1394 : public video {
 	//////////
 	// Set the video dimensions
 	virtual bool	    	setColor(int);
-    
+  virtual bool        setChannel(int chan, float freq);
+
+	//////////
+	// get available devices
+  virtual std::vector<std::string>enumerate(void);
+  
  protected:
 
   //-----------------------------------
