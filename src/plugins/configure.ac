@@ -1,90 +1,110 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-
 AC_PREREQ(2.60)
 AC_INIT(Gem-plugins,[],[zmoelnig@iem.at])
 
 AC_CONFIG_SRCDIR([Makefile])
-
-#### film decoding backends {
-## AVI
+### film: AVI
 if test -d "$srcdir/filmAVI"; then
   AC_CONFIG_SUBDIRS([filmAVI])
 fi
 
-## AVIPLAY
+### film: AVIPLAY
 if test -d "$srcdir/filmAVIPLAY"; then
   AC_CONFIG_SUBDIRS([filmAVIPLAY])
 fi
 
-## Darwin
+### film: Darwin
 if test -d "$srcdir/filmDarwin"; then
   AC_CONFIG_SUBDIRS([filmDarwin])
 fi
 
-## DS
+### film: DS
 if test -d "$srcdir/filmDS"; then
   AC_CONFIG_SUBDIRS([filmDS])
 fi
 
-## GMERLIN
+### film: GMERLIN
 if test -d "$srcdir/filmGMERLIN"; then
   AC_CONFIG_SUBDIRS([filmGMERLIN])
 fi
 
-## MPEG1
+### film: MPEG1
 if test -d "$srcdir/filmMPEG1"; then
   AC_CONFIG_SUBDIRS([filmMPEG1])
 fi
 
-## MPEG3
+### film: MPEG3
 if test -d "$srcdir/filmMPEG3"; then
   AC_CONFIG_SUBDIRS([filmMPEG3])
 fi
 
-## QT
+### film: QT
 if test -d "$srcdir/filmQT"; then
   AC_CONFIG_SUBDIRS([filmQT])
 fi
 
-## QT4L
+### film: QT4L
 if test -d "$srcdir/filmQT4L"; then
   AC_CONFIG_SUBDIRS([filmQT4L])
 fi
-#### } film decoding backends
 
-### QT
+### film: TEST
+if test -d "$srcdir/filmTEST"; then
+  AC_CONFIG_SUBDIRS([filmTEST])
+fi
+
+### record: QT
 if test -d "$srcdir/recordQT"; then
   AC_CONFIG_SUBDIRS([recordQT])
 fi
 
-### QT4L
+### record: QT4L
 if test -d "$srcdir/recordQT4L"; then
   AC_CONFIG_SUBDIRS([recordQT4L])
 fi
 
-### V4L
-if test -d "$srcdir/videoV4L"; then
-  AC_CONFIG_SUBDIRS([videoV4L])
+### video: Darwin
+if test -d "$srcdir/videoDarwin"; then
+  AC_CONFIG_SUBDIRS([videoDarwin])
 fi
 
-### V4L2
-if test -d "$srcdir/videoV4L2"; then
-  AC_CONFIG_SUBDIRS([videoV4L2])
-fi
-
-### DV4L
-if test -d "$srcdir/videoDV4L"; then
-  AC_CONFIG_SUBDIRS([videoDV4L])
-fi
-
-### DC1394
+### video: DC1394
 if test -d "$srcdir/videoDC1394"; then
   AC_CONFIG_SUBDIRS([videoDC1394])
 fi
 
+### video: DS
+if test -d "$srcdir/videoDS"; then
+  AC_CONFIG_SUBDIRS([videoDS])
+fi
+
+### video: DV4L
+if test -d "$srcdir/videoDV4L"; then
+  AC_CONFIG_SUBDIRS([videoDV4L])
+fi
+
+### video: SGI
+if test -d "$srcdir/videoSGI"; then
+  AC_CONFIG_SUBDIRS([videoSGI])
+fi
+
+### video: V4L
+if test -d "$srcdir/videoV4L"; then
+  AC_CONFIG_SUBDIRS([videoV4L])
+fi
+
+### video: V4L2
+if test -d "$srcdir/videoV4L2"; then
+  AC_CONFIG_SUBDIRS([videoV4L2])
+fi
+
+### video: VFW
+if test -d "$srcdir/videoVFW"; then
+  AC_CONFIG_SUBDIRS([videoVFW])
+fi
+
 
 AC_OUTPUT
-
 

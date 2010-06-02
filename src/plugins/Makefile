@@ -7,8 +7,9 @@ all:
 	make -C ..
 
 RECORDPLUGINS=recordQT recordQT4L
-VIDEOPLUGINS=videoDV4L videoV4L videoV4L2 videoDC1394
+VIDEOPLUGINS=videoDarwin videoDC1394 videoDS videoDV4L videoSGI videoV4L videoV4L2 videoVFW
 FILMPLUGINS=filmAVI filmAVIPLAY filmDarwin filmDS filmGMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
+
 
 PLUGINS=$(FILMPLUGINS) $(VIDEOPLUGINS) $(RECORDPLUGINS)
 
