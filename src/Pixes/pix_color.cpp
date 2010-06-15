@@ -68,7 +68,7 @@ void pix_color :: processGrayImage(imageStruct &image)
 void pix_color :: processYUVImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize / 2;
-  unsigned char y =(( RGB2YUV_11 * m_color[0] + RGB2YUV_12 * m_color[1] + RGB2YUV_13 * m_color[2])>>8) *  Y_OFFSET;
+  unsigned char y =(( RGB2YUV_11 * m_color[0] + RGB2YUV_12 * m_color[1] + RGB2YUV_13 * m_color[2])>>8) +  Y_OFFSET;
   unsigned char u =(( RGB2YUV_21 * m_color[0] + RGB2YUV_22 * m_color[1] + RGB2YUV_23 * m_color[2])>>8) + UV_OFFSET;
   unsigned char v =(( RGB2YUV_31 * m_color[0] + RGB2YUV_32 * m_color[1] + RGB2YUV_33 * m_color[2])>>8) + UV_OFFSET;
 
@@ -98,9 +98,9 @@ void pix_color :: vecGainMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void pix_color :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator((t_newmethod)create_pix_color, 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_color), 
 		   gensym("pix_colour"), A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_color::vecGainMessCallback,
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_color::vecGainMessCallback),
     	    gensym("vec_gain"), A_GIMME, A_NULL);
 }
 void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
