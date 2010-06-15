@@ -68,7 +68,7 @@ void pix_color :: processGrayImage(imageStruct &image)
 void pix_color :: processYUVImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize / 2;
-  unsigned char y =(( RGB2YUV_11 * m_color[0] + RGB2YUV_12 * m_color[1] + RGB2YUV_13 * m_color[2])>>8) *  Y_OFFSET;
+  unsigned char y =(( RGB2YUV_11 * m_color[0] + RGB2YUV_12 * m_color[1] + RGB2YUV_13 * m_color[2])>>8) +  Y_OFFSET;
   unsigned char u =(( RGB2YUV_21 * m_color[0] + RGB2YUV_22 * m_color[1] + RGB2YUV_23 * m_color[2])>>8) + UV_OFFSET;
   unsigned char v =(( RGB2YUV_31 * m_color[0] + RGB2YUV_32 * m_color[1] + RGB2YUV_33 * m_color[2])>>8) + UV_OFFSET;
 
