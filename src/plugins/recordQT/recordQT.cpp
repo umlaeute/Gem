@@ -256,7 +256,11 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 		post("recordQT: using YUV");
   }
 	if (m_compressImage->format == GL_BGRA){
+# ifdef __BIG_ENDIAN__
     colorspace = k32BGRAPixelFormat;// k32RGBAPixelFormat;
+#else
+    colorspace = k32ARGBPixelFormat;
+#endif
 		m_rowBytes = m_width * 4;
 		post("recordQT: using BGRA");
 	}
