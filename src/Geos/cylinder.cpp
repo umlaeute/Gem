@@ -29,18 +29,18 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(cylinder, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
 // Constructor
 //
 /////////////////////////////////////////////////////////
-cylinder :: cylinder(t_floatarg size,t_floatarg slize)
-  : GemGluObj(size,slize)
+  cylinder :: cylinder(t_floatarg size,t_floatarg slize)
+    : GemGluObj(size,slize)
 { }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
 cylinder :: ~cylinder()
 { }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ void cylinder :: render(GemState *state)
   GLdouble da, r, dr, dz;
   GLfloat x, y, z, nz;
   GLint i, j;
-  GLboolean orientation = true; /* INSIDE */
+  GLboolean orientation = false; /* true=INSIDE */
   GLfloat nsign = (orientation)?-1.0:1.0;
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
@@ -90,9 +90,9 @@ void cylinder :: render(GemState *state)
       z = 0.0;
       r = baseRadius;
       for (j = 0; j <= stacks; j++) {
-	glVertex3f(x * r, y * r, z);
-	z += dz;
-	r += dr;
+        glVertex3f(x * r, y * r, z);
+        z += dz;
+        r += dr;
       }
     }
     glEnd();
@@ -103,37 +103,37 @@ void cylinder :: render(GemState *state)
       z = 0.0;
       r = baseRadius;
       for (j = 0; j <= stacks; j++) {
-	glBegin(GL_LINE_LOOP);
-	for (i = 0; i < slices; i++) {
-	  x = cos(i * da);
-	  y = sin(i * da);
-	  normal3f(x * nsign, y * nsign, nz * nsign);
-	  glVertex3f(x * r, y * r, z);
-	}
-	glEnd();
-	z += dz;
-	r += dr;
+        glBegin(GL_LINE_LOOP);
+        for (i = 0; i < slices; i++) {
+          x = cos(i * da);
+          y = sin(i * da);
+          normal3f(x * nsign, y * nsign, nz * nsign);
+          glVertex3f(x * r, y * r, z);
+        }
+        glEnd();
+        z += dz;
+        r += dr;
       }
     }
     else {
       /* draw one ring at each end */
       if (baseRadius != 0.0) {
-	glBegin(GL_LINE_LOOP);
-	for (i = 0; i < slices; i++) {
-	  x = cos(i * da);
-	  y = sin(i * da);
-	  normal3f(x * nsign, y * nsign, nz * nsign);
-	  glVertex3f(x * baseRadius, y * baseRadius, 0.0);
-	}
-	glEnd();
-	glBegin(GL_LINE_LOOP);
-	for (i = 0; i < slices; i++) {
-	  x = cos(i * da);
-	  y = sin(i * da);
-	  normal3f(x * nsign, y * nsign, nz * nsign);
-	  glVertex3f(x * topRadius, y * topRadius, height);
-	}
-	glEnd();
+        glBegin(GL_LINE_LOOP);
+        for (i = 0; i < slices; i++) {
+          x = cos(i * da);
+          y = sin(i * da);
+          normal3f(x * nsign, y * nsign, nz * nsign);
+          glVertex3f(x * baseRadius, y * baseRadius, 0.0);
+        }
+        glEnd();
+        glBegin(GL_LINE_LOOP);
+        for (i = 0; i < slices; i++) {
+          x = cos(i * da);
+          y = sin(i * da);
+          normal3f(x * nsign, y * nsign, nz * nsign);
+          glVertex3f(x * topRadius, y * topRadius, height);
+        }
+        glEnd();
       }
     }
     /* draw length lines */
@@ -157,32 +157,32 @@ void cylinder :: render(GemState *state)
       GLfloat s = 0.0;
       glBegin(GL_QUAD_STRIP);
       for (i = 0; i <= slices; i++) {
-	GLfloat x, y;
-	if (i == slices) {
-	  x = sin(0.0);
-	  y = cos(0.0);
-	}
-	else {
-	  x = sin(i * da);
-	  y = cos(i * da);
-	}
-	if (nsign == 1.0) {
-	  normal3f(x * nsign, y * nsign, nz * nsign);
-	  if(state->texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-	  glVertex3f(x * r, y * r, z);
-	  normal3f(x * nsign, y * nsign, nz * nsign);
-	  if(state->texture)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
-	  glVertex3f(x * (r + dr), y * (r + dr), z + dz);
-	}
-	else {
-	  normal3f(x * nsign, y * nsign, nz * nsign);
-	  if(state->texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-	  glVertex3f(x * r, y * r, z);
-	  normal3f(x * nsign, y * nsign, nz * nsign);
-	  if(state->texture)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
-	  glVertex3f(x * (r + dr), y * (r + dr), z + dz);
-	}
-	s += ds;
+        GLfloat x, y;
+        if (i == slices) {
+          x = sin(0.0);
+          y = cos(0.0);
+        }
+        else {
+          x = sin(i * da);
+          y = cos(i * da);
+        }
+        if (nsign == 1.0) {
+          normal3f(x * nsign, y * nsign, nz * nsign);
+          if(state->texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+          glVertex3f(x * r, y * r, z);
+          normal3f(x * nsign, y * nsign, nz * nsign);
+          if(state->texture)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
+          glVertex3f(x * (r + dr), y * (r + dr), z + dz);
+        }
+        else {
+          normal3f(x * nsign, y * nsign, nz * nsign);
+          if(state->texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+          glVertex3f(x * r, y * r, z);
+          normal3f(x * nsign, y * nsign, nz * nsign);
+          if(state->texture)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
+          glVertex3f(x * (r + dr), y * (r + dr), z + dz);
+        }
+        s += ds;
       }			/* for slices */
       glEnd();
       r += dr;
