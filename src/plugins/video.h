@@ -150,24 +150,33 @@ namespace gem { class GEM_EXTERN video {
     // device settings
 
     //////////
-    // Set the video dimensions
-    virtual bool	    	setDimen(int x, int y, int leftmargin=0, int rightmargin=0,
-                               int topmargin=0, int bottommargin=0);
-
-    virtual bool	    	setChannel(int c, float f=0);
-    virtual bool	    	setNorm(const std::string);
-
+    // changes the device
+    // after the device has been set, the caller has to restart 
+    // (close() the current handle, try open() with the new settings)
+    // normally you shouldn't need to override these
     virtual bool	    	setDevice(int d);
     virtual bool	    	setDevice(const std::string);
 
-    virtual bool	    	setColor(int);
 
+    //////////
+    // Set the video dimensions and other stuff
+    // implement what's possible
+    virtual bool	    	setDimen(int x, int y, int leftmargin=0, int rightmargin=0,
+                                 int topmargin=0, int bottommargin=0);
+
+    virtual bool	    	setChannel(int c, float f=0);
+    virtual bool	    	setNorm(const std::string);
+    virtual bool	    	setColor(int);
     virtual bool	    	setQuality(int);
 
+    // set stuff via a system dialog (highly system specific)
+    // implement if the system provides an API for this
     virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
 
+    // provide a list of devices this backend can handle */
     virtual std::vector<std::string>enumerate(void);
 
+    // get's the name of the backend (e.g. "v4l")
     const std::string getName(void);
 
   protected:

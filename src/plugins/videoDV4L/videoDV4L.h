@@ -92,8 +92,6 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
 
 	//////////
 	// Set the video dimensions
-	virtual bool	  setDevice(const std::string);
-	virtual bool	  setDevice(int);
 	virtual bool	  setColor(int);
 	virtual bool		setQuality(int);
     

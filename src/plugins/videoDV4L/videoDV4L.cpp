@@ -296,25 +296,12 @@ bool videoDV4L :: stopTransfer()
 
   return(1);
 }
-
-bool videoDV4L :: setDevice(int d){
-  m_devicename.clear();
-  if (d==m_devicenum)return true; // same device as before
-  m_devicenum=d;
-
-  bool running=false;
-
-  running=stop();
-  close();
-  open();
-  if(running)start();
-  return true;
-}
+/*
 bool videoDV4L :: setDevice(const std::string name){
-  
   // setting device by name not yet supported
   return false;
 }
+*/
 
 bool videoDV4L :: setColor(int format){
   if (format<=0)return false;

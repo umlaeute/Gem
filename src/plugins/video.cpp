@@ -272,6 +272,7 @@ bool video :: stopTransfer()
 /////////////////////////////////////////////////////////
 bool video :: restartTransfer()
 {
+  debugPost("restartTransfer");
   bool running=stop();
   if(running)return start();
 
@@ -345,15 +346,22 @@ void video::usleep(unsigned long usec) {
 }
 
 pixBlock* video::getFrame(void) {
+  pixBlock*pix=&m_image;
   if(!(m_haveVideo && m_capturing))return NULL;
-  if(m_pimpl && m_pimpl->running) {
-    // get from thread
+  if(m_pimpl->threading) {
+     // get from thread
+    if(!m_pimpl->running){
+      pix=NULL;
+    }
   } else {
     // no thread, grab it directly
-    grabFrame();
+    if(!grabFrame()) {
+      m_capturing=false;
+      pix=NULL;
+    }
   }
   lock();
-  return &m_image;
+  return pix;
 }
 
 
@@ -386,16 +394,6 @@ bool video :: setChannel(int chan, t_float freq){
   return false;
 }
 /////////////////////////////////////////////////////////
-// set the device
-bool video :: setDevice(int d){
-  post("setting the video-device is not supported by this OS/device");
-  return false;
-}
-bool video :: setDevice(const std::string name){
-  post("setting the video-device is not supported by this OS/device");
-  return false;
-}
-/////////////////////////////////////////////////////////
 // set the color-space
 bool video :: setColor(int d){
   post("setting the color-space is not supported by this OS/device");
@@ -416,6 +414,22 @@ bool video :: dialog(std::vector<std::string>dialognames){
 std::vector<std::string>video::enumerate(void) {
   std::vector<std::string>result;
   return result;
+}
+
+////////////////////
+// set the video device
+bool video :: setDevice(int d)
+{
+  m_devicename.empty();
+  if (d==m_devicenum)return true;
+  m_devicenum=d;
+  return true;
+}
+bool video :: setDevice(const std::string name)
+{
+  m_devicenum=-1;
+  m_devicename=name;
+  return true;
 }
 
 const std::string video :: getName() {

@@ -451,22 +451,6 @@ bool videoV4L :: setChannel(int c, t_float f){
   return 0;
 }
 
-bool videoV4L :: setDevice(int d)
-{
-  m_devicename.empty();
-  if (d==m_devicenum)return 0;
-  m_devicenum=d;
-  restartTransfer();
-  return 0;
-}
-bool videoV4L :: setDevice(const std::string name)
-{
-  m_devicenum=-1;
-  m_devicename=name;
-  restartTransfer();
-  return 0;
-}
-
 bool videoV4L :: setColor(int format)
 {
   if (format<=0 || format==m_reqFormat)return -1;

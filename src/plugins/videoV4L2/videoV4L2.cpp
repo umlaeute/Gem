@@ -750,23 +750,6 @@ bool videoV4L2 :: setChannel(int c, t_float f){
   return true;
 }
 
-bool videoV4L2 :: setDevice(int d)
-{
-  m_devicename.clear();
-  if (d==m_devicenum)return 0;
-  m_devicenum=d;
-  restartTransfer();
-  return true;
-}
-bool videoV4L2 :: setDevice(const std::string name)
-{
-  
-  m_devicenum=-1;
-  m_devicename=name;
-
-  return true;
-}
-
 bool videoV4L2 :: setColor(int format)
 {
   if (format<=0 || format==m_reqFormat)return -1;
