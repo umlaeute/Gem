@@ -22,6 +22,7 @@
 using namespace gem;
 
 #include "Gem/RTE.h"
+#include "Base/GemFiles.h"
 
 #ifndef HAVE_LIBV4L2
 # define v4l2_open open
@@ -757,6 +758,30 @@ bool videoV4L2 :: setColor(int format)
   restartTransfer();
   return true;
 }
+
+std::vector<std::string> videoV4L2::enumerate() {
+  std::vector<std::string> result;
+  std::vector<std::string> glob, allglob;
+  int i=0;
+  glob=gem::files::getFilenameListing("/dev/video*");
+  for(i=0; i<glob.size(); i++)
+    allglob.push_back(glob[i]);
+
+  glob=gem::files::getFilenameListing("/dev/v4l/video*");
+  for(i=0; i<glob.size(); i++)
+    allglob.push_back(glob[i]);
+
+  for(i=0; i<allglob.size(); i++) {
+    std::string dev=allglob[i];
+    int fd=v4l2_open(dev.c_str(), O_RDWR);
+    if(fd<0)continue;
+    v4l2_close(fd);
+    result.push_back(dev);
+  }
+  
+  return result;
+}
+
 #else
 videoV4L2 ::  videoV4L2() : video("") {}
 videoV4L2 :: ~videoV4L2() {}
