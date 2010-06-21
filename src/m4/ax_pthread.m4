@@ -36,7 +36,7 @@
 #   ACTION-IF-FOUND is a list of shell commands to run if a threads library
 #   is found, and ACTION-IF-NOT-FOUND is a list of commands to run it if it
 #   is not found. If ACTION-IF-FOUND is not specified, the default action
-#   will define HAVE_PTHREAD.
+#   will define HAVE_PTHREADS.
 #
 #   Please let the authors know if this macro fails on any platform, or if
 #   you have any other suggestions or comments. This macro was based on work
@@ -276,7 +276,7 @@ AC_SUBST(PTHREAD_CC)
 
 # Finally, execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND:
 if test x"$ax_pthread_ok" = xyes; then
-        ifelse([$1],,AC_DEFINE(HAVE_PTHREAD,1,[Define if you have POSIX threads
+        ifelse([$1],,AC_DEFINE(HAVE_PTHREADS,1,[Define if you have POSIX threads
 libraries and header files.]),[$1])
         :
 else

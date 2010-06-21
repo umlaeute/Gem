@@ -118,7 +118,7 @@
 /* Define to 1 if you have the `pow' function. */
 #undef HAVE_POW
 
-/* multithreading using pthreads */
+/* Define if you have POSIX threads libraries and header files. */
 #undef HAVE_PTHREADS
 
 /* framework QuickTime */
@@ -219,6 +219,10 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* Define to necessary symbol if this constant uses a non-standard name on
+   your system. */
+#undef PTHREAD_CREATE_JOINABLE
 
 /* The size of `unsigned int', as computed by sizeof. */
 #undef SIZEOF_UNSIGNED_INT
