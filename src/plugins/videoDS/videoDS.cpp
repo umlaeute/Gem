@@ -60,7 +60,7 @@ void RemoveGraphFromRot(DWORD pdwRegister);
 //
 /////////////////////////////////////////////////////////
 videoDS :: videoDS()
-: video(0),
+  : video("directshow", 0),
 m_readIdx (0), m_lastreadIdx (0),
 m_writeIdx(0), m_lastwriteIdx(0),
 m_format(GL_BGR_EXT),
@@ -116,7 +116,6 @@ m_GraphRegister(0)
     memset(m_filename, 0, MAXPDSTRING);
 #endif
 
-    provide("directshow");
     provide("dv");
     provide("iidc");
     provide("analog");
@@ -1239,6 +1238,6 @@ void RemoveGraphFromRot(DWORD pdwRegister)
     }
 }
 #else /* !HAVE_DIRECTSHOW */
-videoDS ::  videoDS() {}
+videoDS ::  videoDS() : video("") {}
 videoDS :: ~videoDS() {}
 #endif

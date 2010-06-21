@@ -76,7 +76,7 @@ using namespace gem;
 REGISTER_VIDEOFACTORY("v4l", videoV4L);
 
 
-videoV4L :: videoV4L() : video()
+videoV4L :: videoV4L() : video("v4l")
 		       ,
 			 tvfd(0),
 			 frame(0),
@@ -96,7 +96,6 @@ videoV4L :: videoV4L() : video()
   m_norm=VIDEO_MODE_AUTO; 
   m_devicenum=V4L_DEVICENO;
 
-  provide("v4l");
   provide("analog");
 }
 
@@ -476,7 +475,7 @@ bool videoV4L :: setColor(int format)
   return 0;
 }
 #else
-videoV4L :: videoV4L() : video()
+videoV4L :: videoV4L() : video("")
 { }
 videoV4L :: ~videoV4L()
 { }

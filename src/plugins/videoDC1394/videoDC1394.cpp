@@ -35,7 +35,7 @@ REGISTER_VIDEOFACTORY("dc1394", videoDC1394);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoDC1394 :: videoDC1394() : video(),
+videoDC1394 :: videoDC1394() : video("dc1394"),
                                m_dccamera(NULL),
                                m_dcframe(NULL),
                                m_dc(NULL)
@@ -50,7 +50,6 @@ videoDC1394 :: videoDC1394() : video(),
   m_frame.setCsizeByFormat(GL_RGBA);
   m_frame.allocate();
 
-  provide("dc1394");
   provide("iidc");
 }
 
@@ -358,7 +357,7 @@ bool videoDC1394 :: setChannel(int chan, float freq){
   return true;
 }
 #else
-videoDC1394 :: videoDC1394() : video()
+videoDC1394 :: videoDC1394() : video("")
 {}
 videoDC1394 :: ~videoDC1394()
 {}

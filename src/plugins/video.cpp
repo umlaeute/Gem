@@ -30,6 +30,10 @@ using namespace gem;
 # include <winsock2.h>
 #endif
 
+#include <typeinfo>
+
+#include <iostream>
+
 class video :: PIMPL {
   friend class video;
 public:
@@ -50,14 +54,17 @@ public:
 
   bool shouldrun; /* we should be capturing */
 
-  PIMPL(unsigned int locks_, unsigned int timeout_) :
+  const std::string name;
+
+  PIMPL(const std::string name_, unsigned int locks_, unsigned int timeout_) :
     threading(locks_>0),
     locks(NULL),
     numlocks(0),
     timeout(timeout_),
     cont(true),
     running(false),
-    shouldrun(false)
+    shouldrun(false),
+    name(name_)
   {
     if(locks_>0) {
       numlocks=locks_;
@@ -121,10 +128,10 @@ public:
     post("starting capture thread");
     me->m_pimpl->cont=true;
     me->m_pimpl->running=true;
-
+    
     while(me->m_pimpl->cont) {
       if(!me->grabFrame()) {
-	break;
+        break;
       }
     }
     me->m_pimpl->running=false;
@@ -142,14 +149,17 @@ public:
 // Constructor
 //
 /////////////////////////////////////////////////////////
-video :: video(unsigned int locks, unsigned int timeout) :
+video :: video(const std::string name, unsigned int locks, unsigned int timeout) :
   m_capturing(false), m_haveVideo(false), 
   m_width(64), m_height(64),
   m_channel(0), m_norm(0),
   m_reqFormat(GL_RGBA),
   m_devicename(std::string("")), m_devicenum(0), m_quality(0),
-  m_pimpl(new PIMPL(locks, timeout))
+  m_pimpl(new PIMPL(name.empty()?std::string("<unknown>"):name, locks, timeout))
 {
+  if(!name.empty()) {
+    provide(name);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -408,6 +418,9 @@ std::vector<std::string>video::enumerate(void) {
   return result;
 }
 
+const std::string video :: getName() {
+  return m_pimpl->name;
+}
 
 
 

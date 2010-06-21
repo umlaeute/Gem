@@ -43,7 +43,7 @@ REGISTER_VIDEOFACTORY("dv4l", videoDV4L);
 //
 /////////////////////////////////////////////////////////
 
-videoDV4L :: videoDV4L() : video(),
+videoDV4L :: videoDV4L() : video("dv4l"),
                            m_raw(NULL),
                            m_decoder(NULL),
                            m_parsed(false)
@@ -57,7 +57,6 @@ videoDV4L :: videoDV4L() : video(),
     m_pitches[i] = 0;
   }
 
-  provide("dv4l");
   provide("dv");
 
   dv_init(1, 1); // singleton?
@@ -347,7 +346,7 @@ bool videoDV4L :: setQuality(int quality){
 //
 // videoDV4L without DV-support
 //
-videoDV4L :: videoDV4L() : video()
+videoDV4L :: videoDV4L() : video("")
 { }
 videoDV4L :: ~videoDV4L()
 { }

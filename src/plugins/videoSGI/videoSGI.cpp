@@ -50,11 +50,10 @@ REGISTER_VIDEOFACTORY("sgi", videoSGI);
 //
 /////////////////////////////////////////////////////////
 videoSGI :: videoSGI() 
-  : video(0),
+  : video("sgi", 0),
     m_haveVideo(0), m_swap(1), m_colorSwap(0),
     m_svr(NULL), m_drn(NULL), m_src(NULL), m_path(NULL)
 {
-  provide("sgi");
   provide("indy");
   provide("analog");
 }
@@ -403,6 +402,6 @@ bool videoSGI :: setDimen(int x, int y, int leftmargin, int rightmargin, int top
   return result;
 }
 #else /* !HAVE_VL_VL_H */
-videoSGI ::  videoSGI() { }
+videoSGI ::  videoSGI() : video("") { }
 videoSGI :: ~videoSGI() { }
 #endif  /* !HAVE_VL_VL_H */

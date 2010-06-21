@@ -95,6 +95,7 @@ class GEM_EXTERN pix_video : public GemBase
   // Set the driver architecture; (probably this makes only sense under linux right now: you can choose between video4linux(0) and video1394(1))
   virtual void	driverMess(int dev);
   virtual void	driverMess(t_symbol*s);
+  virtual void	driverMess(void);
 
   // List the available devices
   virtual void 	enumerateMess();

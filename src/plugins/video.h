@@ -49,7 +49,7 @@ namespace gem { class GEM_EXTERN video {
     // Constructor
     // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
     // 
-    video(unsigned int numlocks=1, unsigned int timeout=0);
+    video(const std::string name, unsigned int numlocks=1, unsigned int timeout=0);
   
     //////////
     // Destructor
@@ -149,7 +149,6 @@ namespace gem { class GEM_EXTERN video {
     //////////////////////
     // device settings
 
-
     //////////
     // Set the video dimensions
     virtual bool	    	setDimen(int x, int y, int leftmargin=0, int rightmargin=0,
@@ -168,6 +167,8 @@ namespace gem { class GEM_EXTERN video {
     virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
 
     virtual std::vector<std::string>enumerate(void);
+
+    const std::string getName(void);
 
   protected:
     //! indicates valid transfer (automatically set in start()/stop())

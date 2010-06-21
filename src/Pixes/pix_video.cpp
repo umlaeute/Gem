@@ -261,6 +261,19 @@ void pix_video :: driverMess(int dev)
   m_driver=dev;
 }
 
+void pix_video :: driverMess() {
+  if(m_videoHandle) {
+    startpost("current driver: '%s' provides ", m_videoHandle->getName().c_str());
+    std::vector<std::string>backends=m_videoHandle->provides();
+    int i=0;
+    for(i=0; i<backends.size(); i++) {
+      startpost("'%s' ", backends[i].c_str());
+    }
+    if(i==0)startpost("<nothing>");
+    endpost();
+  }
+
+}
 
 /////////////////////////////////////////////////////////
 // deviceMess
@@ -487,6 +500,10 @@ void pix_video :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*argv
 }
 void pix_video :: driverMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
+  if(!argc) {    
+    GetMyClass(data)->driverMess();
+    return;
+  }
   if(argc!=1) {
     GetMyClass(data)->error("'driver' takes a single numeric or symbolic driver ID");
   } else if (argv->a_type == A_FLOAT) {

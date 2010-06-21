@@ -53,7 +53,7 @@ using namespace gem;
 
 REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 
-videoV4L2 :: videoV4L2() : video(0)
+videoV4L2 :: videoV4L2() : video("v4l2", 0)
                                    , m_gotFormat(0), m_colorConvert(0),
                                      m_tvfd(0),
                                      m_buffers(NULL), m_nbuffers(0), 
@@ -70,7 +70,6 @@ videoV4L2 :: videoV4L2() : video(0)
   m_capturing=false;
   m_devicenum=V4L2_DEVICENO;
 
-  provide("v4l2");
   provide("analog");
 }
   
@@ -776,6 +775,6 @@ bool videoV4L2 :: setColor(int format)
   return true;
 }
 #else
-videoV4L2 ::  videoV4L2() {}
+videoV4L2 ::  videoV4L2() : video("") {}
 videoV4L2 :: ~videoV4L2() {}
 #endif /* HAVE_VIDEO4LINUX2 */

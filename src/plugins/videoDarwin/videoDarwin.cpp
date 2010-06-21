@@ -32,8 +32,8 @@ using namespace gem;
 REGISTER_VIDEOFACTORY("Darwin", videoDarwin);
 
 videoDarwin :: videoDarwin() 
-    : video(0),
-      m_srcGWorld(NULL)
+  : video("darwin", 0),
+    m_srcGWorld(NULL)
 {
   m_width= DEFAULT_WIDTH;
   m_height=DEFAULT_HEIGHT;
@@ -50,7 +50,6 @@ videoDarwin :: videoDarwin()
   m_inputDevice = 0;
   initSeqGrabber();
 
-  provide("darwin");
   provide("dv");
   provide("iidc");
   provide("analog");
@@ -758,6 +757,6 @@ bool videoDarwin :: dialog()
   return true;
 }
 #else
-videoDarwin ::  videoDarwin() {}
+videoDarwin ::  videoDarwin() : video("") {}
 videoDarwin :: ~videoDarwin() {}
 #endif // __APPLE__

@@ -32,10 +32,9 @@ REGISTER_VIDEOFACTORY("VFW", videoVFW);
 //
 /////////////////////////////////////////////////////////
 videoVFW :: videoVFW()
-  : video(0), 
+  : video(vfw, 0), 
     m_hWndC(NULL)
 {
-  provide("vfw");
   provide("dv");
   provide("iidc");
   provide("analog");
@@ -252,6 +251,6 @@ bool videoVFW :: setColor(int format)
 }
 
 #else
-videoVFW ::  videoVFW() { }
+videoVFW ::  videoVFW() : video("") { }
 videoVFW :: ~videoVFW() { }
 #endif
