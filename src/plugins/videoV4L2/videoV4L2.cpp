@@ -767,7 +767,7 @@ std::vector<std::string> videoV4L2::enumerate() {
   for(i=0; i<glob.size(); i++)
     allglob.push_back(glob[i]);
 
-  glob=gem::files::getFilenameListing("/dev/v4l/video*");
+  glob=gem::files::getFilenameListing("/dev/v4l/*");
   for(i=0; i<glob.size(); i++)
     allglob.push_back(glob[i]);
 
@@ -775,8 +775,15 @@ std::vector<std::string> videoV4L2::enumerate() {
     std::string dev=allglob[i];
     int fd=v4l2_open(dev.c_str(), O_RDWR);
     if(fd<0)continue;
+    struct v4l2_capability cap;
+    if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
+      if (cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) {
+        result.push_back(dev);      
+      } else verbose(1, "%s is v4l2 but cannot capture", dev.c_str());
+    } else {
+      verbose(1, "%s is no v4l2 device", dev.c_str());
+    }
     v4l2_close(fd);
-    result.push_back(dev);
   }
   
   return result;
