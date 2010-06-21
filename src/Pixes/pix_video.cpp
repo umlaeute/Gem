@@ -262,17 +262,26 @@ void pix_video :: driverMess(int dev)
 }
 
 void pix_video :: driverMess() {
+  // a little bit of info
   if(m_videoHandle) {
-    startpost("current driver: '%s' provides ", m_videoHandle->getName().c_str());
-    std::vector<std::string>backends=m_videoHandle->provides();
-    int i=0;
-    for(i=0; i<backends.size(); i++) {
-      startpost("'%s' ", backends[i].c_str());
-    }
-    if(i==0)startpost("<nothing>");
-    endpost();
+    post("current driver: '%s'", m_videoHandle->getName().c_str());
   }
-
+  if(m_videoHandles.size()>1) {
+    int i=0;
+    post("available drivers:");
+    for(i=0; i<m_videoHandles.size(); i++) {
+      gem::video*handle= m_videoHandles[i];
+      if(NULL==handle)continue;
+      startpost("\t'%s' provides ", handle->getName().c_str());
+      std::vector<std::string>backends=handle->provides();
+      int j=0;
+      for(j=0; j<backends.size(); j++) {
+        startpost("'%s' ", backends[j].c_str());
+      }
+      if(j==0)startpost("<nothing>");
+      endpost();
+    }
+  }
 }
 
 /////////////////////////////////////////////////////////
