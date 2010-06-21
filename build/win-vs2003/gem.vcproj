@@ -1255,12 +1255,6 @@
 				RelativePath="..\..\src\Pixes\pix_imageInPlace.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Pixes\pix_indycam.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Pixes\pix_indycam.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Pixes\pix_info.cpp">
 			</File>
 			<File
