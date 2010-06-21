@@ -194,7 +194,6 @@ class GEM_EXTERN film
  * \note call this before any externals register themselves
  */
 #define INIT_FILMFACTORY() \
-  template<>gem::PluginFactory<gem::film>*gem::PluginFactory<gem::film>::s_factory=NULL; \
   static gem::PluginFactoryRegistrar::dummy<gem::film> fac_filmdummy
 
 

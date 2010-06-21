@@ -220,7 +220,6 @@ namespace gem { class GEM_EXTERN video {
  * \note call this before any externals register themselves
  */
 #define INIT_VIDEOFACTORY()                                             \
-  template<>gem::PluginFactory<gem::video>*gem::PluginFactory<gem::video>::s_factory=NULL; \
   static gem::PluginFactoryRegistrar::dummy<gem::video> fac_videodummy
 
 

@@ -129,7 +129,6 @@ namespace gem { class GEM_EXTERN record
  * \note call this before any externals register themselves
  */
 #define INIT_RECORDFACTORY() \
-  template<>gem::PluginFactory<gem::record>*gem::PluginFactory<gem::record>::s_factory=NULL; \
   static gem::PluginFactoryRegistrar::dummy<gem::record> fac_recorddummy
 
 
