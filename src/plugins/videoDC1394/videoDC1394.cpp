@@ -145,22 +145,25 @@ bool videoDC1394 :: openDevice(){
     dc1394_camera_free_list (list);
     return false;
   }
-  unsigned int devicenum=0;
+  int devicenum=-1;
   if(m_devicenum>=0)devicenum=m_devicenum;
   else if (!m_devicename.empty()) {
     int i=0;
     for(i=0; i<list->num; i++) {
       // find camera based on its GUID
-      std::string name=guid2string(list->ids[devicenum].guid);
-      if(guid2string(list->ids[devicenum].guid)==m_devicename){
+      std::string name=guid2string(list->ids[i].guid);
+      if(guid2string(list->ids[i].guid)==m_devicename){
         devicenum=i;
         break;
       }
-      if(guid2string(list->ids[devicenum].guid, list->ids[devicenum].unit)==m_devicename){
+      if(guid2string(list->ids[i].guid, list->ids[i].unit)==m_devicename){
         devicenum=i;
         break;
       }
     }
+  }
+  if(devicenum<0) {
+    return false;
   }
 
   if (devicenum < list->num) {
@@ -193,11 +196,14 @@ bool videoDC1394 :: openDevice(){
     return false;
   }
   int mode=m_channel;
+
   verbose(1, "trying mode %d", mode);
 
-  if(mode>=video_modes.num) {
-    error("requested channel %d/%d out of bounds", mode, video_modes.num);
-    mode=-1;
+  if(mode>=0) {
+    if(mode>=video_modes.num) {
+      error("requested channel %d/%d out of bounds", mode, video_modes.num);
+      mode=-1;
+    }
   }
 
   int i;
