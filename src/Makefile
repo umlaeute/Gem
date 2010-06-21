@@ -53,7 +53,7 @@ distclean:
 	-rm -f config.cache config.log config.status Make.config
 
 install: installdocs installabs installplugins installextra
-	$(INSTALL_DATA) -D Gem.$(EXT) $(DESTDIR)/$(PDLIBDIR)/extra/Gem/Gem.$(EXT)
+	$(INSTALL_DATA) -D Gem.$(EXT) $(DESTDIR)/$(GEMLIBDIR)/Gem.$(EXT)
 
 installplugins: PLUGINS
 	make -C plugins install
@@ -62,12 +62,12 @@ installextra: extra
 	make -C extra install
 
 installabs:
-	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/extra/Gem
-	$(INSTALL_DATA) ./../abstractions/*.pd $(DESTDIR)/$(PDLIBDIR)/extra/Gem
+	$(INSTALL) -d $(DESTDIR)/$(GEMDLIBDIR)
+	$(INSTALL_DATA) ./../abstractions/*.pd $(DESTDIR)/$(GEMLIBDIR)
 
 installdocs:
-	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
-	$(INSTALL_DATA) ./../help/*.* $(DESTDIR)/$(PDLIBDIR)/$(PDREFPATH)
-	$(INSTALL) -d $(DESTDIR)/$(PDLIBDIR)/doc/gem
-	cp -r ./../examples $(DESTDIR)/$(PDLIBDIR)/doc/gem
+	$(INSTALL) -d $(DESTDIR)/$(GEMLIBDIR)
+	$(INSTALL_DATA) ./../help/*.* $(DESTDIR)/$(GEMLIBDIR)
+	$(INSTALL) -d $(DESTDIR)/$(GEMLIBDIR)
+	cp -r ./../examples $(DESTDIR)/$(GEMLIBDIR)
 

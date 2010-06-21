@@ -10,13 +10,22 @@ GEM_ARCH_LDFLAGS = @ARCH_FLAGS@
 
 MAKEDEP_FLAGS = @MAKEDEP_FLAGS@
 
-STRIP_UNNEEDED ?= @STRIP_UNNEEDED@
-STRIP ?= @STRIP@
-DOS2UNIX = @DOS2UNIX@
+CXXCPP=@CXXCPP@
+CXX=@CXX@
 
-PDLIBDIR = @prefix@/lib/pd
-PDREFPATH = @REFERENCEPATH@
+STRIP = @STRIP@
+DOS2UNIX = @DOS2UNIX@
 
 INSTALL = @INSTALL@
 
+STRIP_UNNEEDED ?= @STRIP_UNNEEDED@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = @libdir@
+datadir = @datarootdir@
+GEMLIBDIR = $(libdir)
+PDREFPATH = @REFERENCEPATH@
+
+
+## better run "./config.status --recheck"
 CONFIGUREFLAGS ?= @CONFIGUREFLAGS@

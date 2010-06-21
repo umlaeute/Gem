@@ -20,6 +20,7 @@ AC_CONFIG_SRCDIR([Base/GemBase.h])
 AC_CONFIG_SUBDIRS([extra])
 AC_CONFIG_SUBDIRS([plugins])
 
+AC_SUBST(CXXCPP)
 AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
 AC_SUBST(EXT)
@@ -205,13 +206,8 @@ if test "x$with_default_font" != "x" && \
   AC_MSG_RESULT([using "${with_default_font}" as default font])
 fi
 
-
-
-
-dnl Checking for `pthread_create' function in -pthread
-AC_CHECK_LIB(pthread, pthread_create,[
-                                      AC_DEFINE([HAVE_PTHREADS], [], [multithreading using pthreads])
-                                      LIBS="$LIBS -lpthread"],)
+# threading
+GEM_CHECK_THREADS
 
 
 # pkg-config checks
