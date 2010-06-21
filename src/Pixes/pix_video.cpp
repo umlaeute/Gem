@@ -182,6 +182,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
 
 bool pix_video::restart(void) {
   bool running=false;
+  verbose(1, "restart");
   if(m_videoHandle) {
     running=m_videoHandle->stop();
     m_videoHandle->close();
@@ -190,6 +191,7 @@ bool pix_video::restart(void) {
   if(m_driver<0) {
     // auto mode
     unsigned int i=0;
+    verbose(1, "trying to start driver automatically");
     for(i=0; i<m_videoHandles.size(); i++) {
       if(m_videoHandles[i]->open()) {
         m_videoHandle=m_videoHandles[i];
@@ -201,6 +203,7 @@ bool pix_video::restart(void) {
     }
   } else {
     // enforce selected driver
+    verbose(1, "trying to start driver#%d", m_driver);
     m_videoHandle=m_videoHandles[m_driver];
     if(m_videoHandle->open()) {
       if(running)m_videoHandle->start();
@@ -291,13 +294,11 @@ void pix_video :: driverMess() {
 void pix_video :: deviceMess(int dev)
 {
   WITH_VIDEOHANDLES_DO(setDevice(dev));
-
   restart();
 }
 void pix_video :: deviceMess(t_symbol*s)
 {
   WITH_VIDEOHANDLES_DO(setDevice(s->s_name));
-
   restart();
 }
 
@@ -382,6 +383,7 @@ void pix_video :: enumerateMess()
   for(i=0; i<data.size(); i++) {
     post("%d: %s", i, data[i].c_str());
   }
+  /* LATER: send this to the info-outlet */
 }
 /////////////////////////////////////////////////////////
 // dialog
