@@ -18,10 +18,10 @@
 #include "Gem/RTE.h"
 using namespace gem;
 
-#if 1
-#define debugPost post
+#if 0
+# define debugPost post
 #else
-#define debugPost
+# define debugPost
 #endif
 
 #include <pthread.h>
@@ -30,9 +30,16 @@ using namespace gem;
 # include <winsock2.h>
 #endif
 
-#include <typeinfo>
-
-#include <iostream>
+/**
+ * video capturing states
+ *
+ *  state                user-pov            system-pov
+ * ----------------------------------------------------
+ * is device open?       m_haveVideo         m_haveVideo
+ * is device streaming?  m_pimpl->shouldrun  m_capturing
+ * is thread running     (opaque)            m_pimpl->running
+ *
+ */
 
 class video :: PIMPL {
   friend class video;
@@ -281,7 +288,7 @@ bool video :: restartTransfer()
 
 
 bool video::startThread() {
-  post("startThread %x", m_pimpl);
+  debugPost("startThread %x", m_pimpl);
   if(m_pimpl->running) {
     stopThread();
   }
@@ -301,7 +308,7 @@ bool video::stopThread(int timeout) {
   int i=0;
   if(!m_pimpl->threading)return true;
 
-  post("stopThread: %d", timeout);
+  debugPost("stopThread: %d", timeout);
 
   m_pimpl->cont=false;
   if(timeout<0)timeout=m_pimpl->timeout;
@@ -420,7 +427,7 @@ std::vector<std::string>video::enumerate(void) {
 // set the video device
 bool video :: setDevice(int d)
 {
-  m_devicename.empty();
+  m_devicename.clear();
   if (d==m_devicenum)return true;
   m_devicenum=d;
   return true;
