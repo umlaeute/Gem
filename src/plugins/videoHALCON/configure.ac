@@ -46,7 +46,7 @@ if test "x$with_halcon" != "xno"; then
                   ],[have_halcon="no"])
 
  GEM_CHECK_LIB(libhalcon, halcon, grab_image,,,,[video input])
- GEM_CHECK_LIB(libhalconpp, halconcpp, grab_image,,,,[video input])
+ GEM_CHECK_LIB(libhalconcpp, halconcpp, grab_image,,,,[video input (C++)])
 fi
 
 
