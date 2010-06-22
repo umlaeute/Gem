@@ -34,7 +34,7 @@ CPPEXTERN_NEW(pix_video)
 //
 /////////////////////////////////////////////////////////
 pix_video :: pix_video() : 
-  m_videoHandle(NULL), m_driver(-1)
+  m_videoHandle(NULL), m_driver(-1), m_running(true)
 {
   gem::PluginFactory<gem::video>::loadPlugins("video");
   std::vector<std::string>ids=gem::PluginFactory<gem::video>::getIDs();
@@ -181,21 +181,20 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
 
 
 bool pix_video::restart(void) {
-  bool running=false;
   verbose(1, "restart");
   if(m_videoHandle) {
-    running=m_videoHandle->stop();
+    m_videoHandle->stop();
     m_videoHandle->close();
   }
 
   if(m_driver<0) {
     // auto mode
     unsigned int i=0;
-    verbose(1, "trying to start driver automatically");
+    verbose(1, "trying to start driver automatically (%d)", m_running);
     for(i=0; i<m_videoHandles.size(); i++) {
       if(m_videoHandles[i]->open()) {
         m_videoHandle=m_videoHandles[i];
-        if(running) {
+        if(m_running) {
           m_videoHandle->start();
         }
         return true;
@@ -203,10 +202,10 @@ bool pix_video::restart(void) {
     }
   } else {
     // enforce selected driver
-    verbose(1, "trying to start driver#%d", m_driver);
+    verbose(1, "trying to start driver#%d (%d)", m_driver, m_running);
     m_videoHandle=m_videoHandles[m_driver];
     if(m_videoHandle->open()) {
-      if(running)m_videoHandle->start();
+      if(m_running)m_videoHandle->start();
       return true;
     }
   }
@@ -242,20 +241,19 @@ void pix_video :: driverMess(t_symbol*s)
 }
 void pix_video :: driverMess(int dev)
 {
-  bool running=false;
   if(dev>=m_videoHandles.size()){
     error("driverID (%d) must not exceed %d", dev, m_videoHandles.size());
     return;
   }
   if(dev>=0) {
     if(m_videoHandle){
-      running=m_videoHandle->stop();
+      m_videoHandle->stop();
       m_videoHandle->close();
     }
     m_videoHandle=m_videoHandles[dev];
     if(m_videoHandle){
       if(m_videoHandle->open()) {
-        if(running)m_videoHandle->start();
+        if(m_running)m_videoHandle->start();
       }
     }
   } else {
@@ -412,6 +410,23 @@ void pix_video :: qualityMess(int dev) {
   WITH_VIDEOHANDLES_DO(setQuality(dev));
 }
 
+
+/////////////////////////////////////////////////////////
+// transferMess
+//
+/////////////////////////////////////////////////////////
+void pix_video :: runningMess(bool state) {
+  m_running=state;
+  if(m_videoHandle) {
+    if(m_running)
+      m_videoHandle->start();
+    else
+      m_videoHandle->stop();
+  }
+}
+
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -447,6 +462,8 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
 	    gensym("close"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::openMessCallback),
 	    gensym("open"), A_NULL);
+
+    class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_video::runningMessCallback));
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -544,5 +561,9 @@ void pix_video :: closeMessCallback(void *data)
 void pix_video :: openMessCallback(void *data)
 {
   GetMyClass(data)->startRendering();
+}
+void pix_video :: runningMessCallback(void *data, t_floatarg state)
+{
+  GetMyClass(data)->runningMess((bool)state);
 }
 #endif /* no OS-specific GEM_VIDEOBACKEND */

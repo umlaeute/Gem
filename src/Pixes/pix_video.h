@@ -118,6 +118,11 @@ class GEM_EXTERN pix_video : public GemBase
 
   int    m_driver;
 
+
+
+  bool m_running;
+  virtual void	runningMess(bool);
+
  private:
     	
   //////////
@@ -136,6 +141,7 @@ class GEM_EXTERN pix_video : public GemBase
 
   static void closeMessCallback(void *data);
   static void openMessCallback(void *data);
+  static void runningMessCallback(void *data, t_floatarg dev);
 
 };
 
