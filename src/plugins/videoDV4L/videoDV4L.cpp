@@ -23,7 +23,7 @@ using namespace gem;
 #include "Gem/RTE.h"
 
 #ifdef HAVE_DV
-#define N_BUF 2 /*DV1394_MAX_FRAMES/4*/
+#define MAX_PORTNUM 64
 
 #if 0
 # define DEBUG_WHERE post("%s:%d\t%s", __FILE__, __LINE__, __FUNCTION__)
@@ -164,50 +164,60 @@ bool videoDV4L :: openDevice(){
     return false;
   }
 
-  int num_pinf=64;
+  int num_pinf=MAX_PORTNUM;
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
   
   int ports = raw1394_get_port_info(m_raw, pinf, num_pinf);
   verbose(1, "DV4L: got %d ports", ports);
 
+  int devnum=m_devicenum;
+  if (!m_devicename.empty())
+    devnum=-1;
+
   int i=0;
   for(i=0; i<ports; i++) {
     verbose(1, "port#%02d: %.*s", i, 32, pinf[i].name);
+    if (devnum<0 && m_devicename==pinf[i].name) {
+      devnum=i;
+      /* we don't "break" for the nice verbose listing of ports */
+      // break;
+    }
   }
   delete[]pinf;
 
   int nodes=raw1394_get_nodecount(m_raw);
   verbose(1, "DV4L: got %d nodes", nodes);
 
-
-
-  int devnum=m_devicenum;
-
-  if(!m_devicename.empty()) {
-
-  }
-
   if(devnum>=ports){
     closeDevice();
     return false;
   }
-  if(devnum<0)devnum=0;
+
+  if(devnum<0) {
+    if (!m_devicename.empty()){
+      /* bad devicename given */
+      closeDevice();
+      return false;
+    }
+
+    /* default device (?) */
+    devnum=0;
+  }
+
   if(raw1394_set_port(m_raw, devnum)<0) {
     perror("raw1394_set_port");
     closeDevice();
     return false;
   }
 
-
-  if(NULL==m_raw)
-    return false;
-
-
   m_dvfd = raw1394_get_fd(m_raw);
   if(m_dvfd<0) {
+    verbose(1, "DV4L: illegal filedescriptor");
     closeDevice();
     return false;
   }
+
+  verbose(1, "DV4L: successfully opened device %d", devnum);
   return true;
 }
 
@@ -326,6 +336,33 @@ bool videoDV4L :: setQuality(int quality){
     dv_set_quality(m_decoder, m_quality);
   }
   return true;
+}
+
+std::vector<std::string> videoDV4L::enumerate() {
+  std::vector<std::string> result;
+
+  raw1394handle_t handle=m_raw;
+  if(NULL==m_raw) {
+    handle=raw1394_new_handle();
+  }
+
+  if(NULL==handle)return result;
+
+  int num_pinf=MAX_PORTNUM;
+  struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
+  
+  int ports = raw1394_get_port_info(handle, pinf, num_pinf);
+  int i=0;
+  for(i=0; i<ports; i++) {
+    result.push_back(pinf[i].name);
+  }
+  delete[]pinf;
+  
+  if(NULL==m_raw) {
+    raw1394_destroy_handle(handle);
+  }
+
+  return result;
 }
 
 #else // ! HAVE_DV

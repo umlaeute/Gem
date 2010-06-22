@@ -94,6 +94,8 @@ namespace gem { class GEM_EXTERN videoDV4L : public video {
 	// Set the video dimensions
 	virtual bool	  setColor(int);
 	virtual bool		setQuality(int);
+
+  virtual std::vector<std::string>enumerate(void);
     
  protected:
 
