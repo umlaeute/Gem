@@ -773,7 +773,9 @@ std::vector<std::string> videoV4L2::enumerate() {
 
   for(i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
+    verbose(2, "V4L2: found possible device %s", dev.c_str());
     int fd=v4l2_open(dev.c_str(), O_RDWR);
+    verbose(2, "V4L2: v4l2_open returned %d", fd);
     if(fd<0)continue;
     struct v4l2_capability cap;
     if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
