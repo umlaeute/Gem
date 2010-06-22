@@ -474,10 +474,22 @@ std::vector<std::string> videoV4L::enumerate() {
 
   for(i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
-    int fd=v4l1_open(dev.c_str(), O_RDWR);
+    verbose(2, "V4L: found possible device %s", dev.c_str());
+    int fd=v4l1_open(dev.c_str(), O_RDONLY | O_NONBLOCK);
+    verbose(2, "V4L: v4l1_open returned %d", fd);
     if(fd<0)continue;
+    if (ioctl(fd, VIDIOCGCAP, &vcap) >= 0)
+    {
+      if (vcap.type & VID_TYPE_CAPTURE) {
+        result.push_back(dev);  
+      } else {
+        verbose(1, "%s is v4l1 but cannot capture", dev.c_str());
+      }
+    } else {
+      verbose(1, "%s is no v4l1 device", dev.c_str());
+    }
+
     v4l1_close(fd);
-    result.push_back(dev);
   }
   
   return result;
