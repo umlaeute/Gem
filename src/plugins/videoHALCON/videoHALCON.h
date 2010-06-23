@@ -24,7 +24,7 @@
 #endif
 
 #ifdef HAVE_HALCON
-#  include <libv4l1.h> 
+#include "HalconCpp.h"
 #endif
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -75,16 +75,10 @@ namespace gem { class GEM_EXTERN videoHALCON : public video {
 	// get the next frame
 	bool grabFrame();
 
-	//////////
-	// Set the video dimensions
-  virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
-	virtual bool	    	setChannel(int c, float f);
-	virtual bool	    	setNorm(const std::string);
-	virtual bool	    	setColor(int);
-
   virtual std::vector<std::string>enumerate(void);
    
  protected:
+  Halcon::HFramegrabber*m_grabber;
 
 #endif /* HAVE_HALCON */
 
