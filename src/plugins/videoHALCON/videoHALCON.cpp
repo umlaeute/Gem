@@ -60,6 +60,8 @@ videoHALCON :: videoHALCON() : video("halcon"),
   Halcon::HException::InstallHHandler(&MyHalconExceptionHandler);
 
   provide("iidc");
+  provide("gige");
+  provide("falcon");
 }
 
 ////////////////////////////////////////////////////////
@@ -81,7 +83,7 @@ bool videoHALCON :: grabFrame() {
   try {
     img=m_grabber->GrabImage();
   } catch (Halcon::HException& except) {
-    error("GrabImage exception: '%s'", except.message);
+    error("Halcon::GrabImage exception: '%s'", except.message);
     return false;
   }
 
@@ -91,7 +93,7 @@ bool videoHALCON :: grabFrame() {
   try {
     r = img.GetImagePointer3(&pG, &pB, &typ, &H, &W);
   } catch (Halcon::HException& except) {
-    error("GetImagePointer exception: '%s'", except.message);
+    error("Halcon::GetImagePointer exception: '%s'", except.message);
     return false;
   }
 
@@ -138,7 +140,7 @@ bool videoHALCON :: grabFrame() {
     unlock();
 
   } catch (Halcon::HException& except) { 
-    verbose(1, "HTuple exception @ %d: '%s'", __LINE__, except.message); 
+    verbose(1, "Halcon::HTuple exception: '%s'", except.message); 
   } 
 
 
@@ -162,6 +164,12 @@ bool videoHALCON :: openDevice()
    * originally i though about using ":" as s delimiter, 
    *  e.g. "GigEVision::001234567890" would use the GigE-device @ "00:12:34:56:78:90" with "default" cameratype
    * however, ":" is already internally used by e.g. the "1394IIDC" backend, that uses "format:mode:fps" as cameratype
+   *
+   * either use another delimiter, or find some escaping mechanism (e.g. '1394IIDC:"0:4:5":0x0814436102632378'
+   *
+   * another idea would be to get an idea about which <driver> was selected in [pix_video] and use that as the <backendid>
+   * for this to work, we would have to provide a list of valid backends (e.g. dynamically query what is installed) 
+   * i don't think this is currently possible with halcon
    *
    */
 
