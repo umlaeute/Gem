@@ -16,7 +16,7 @@
 #endif
 
 #include "videoHALCON.h"
-
+#include <sstream>
 using namespace gem;
 
 #include "Gem/RTE.h"
@@ -147,6 +147,45 @@ bool videoHALCON :: grabFrame() {
   return true;
 }
 
+
+/**
+ * device name parser
+ */
+static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while(std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+static std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    return split(s, delim, elems);
+}
+
+static std::string parsedevicename(std::string devicename, std::string&cameratype, std::string&device) {
+  std::string name;
+  if(devicename.empty())return name;
+
+  std::vector<std::string> parsed = split(devicename, ':');
+  switch(parsed.size()) {
+  default:
+    verbose(1, "could not parse '%s'", devicename.c_str());
+    return name;
+  case 3:
+    device=parsed[2];
+  case 2:
+    cameratype=parsed[1];
+  case 1:
+    name=parsed[0];
+  }
+  verbose(1, "HALCON: name  ='%s'", name.c_str());
+  verbose(1, "HALCON: camera='%s'", cameratype.c_str());
+  verbose(1, "HALCON: device='%s'", device.c_str());
+  return name;
+}
+
 /////////////////////////////////////////////////////////
 // openDevice
 //
@@ -154,7 +193,7 @@ bool videoHALCON :: grabFrame() {
 bool videoHALCON :: openDevice()
 {
   if(m_grabber)closeDevice();
-  if(m_devicename.empty())return false;
+  
 
   /* m_devicename has to provide:
    *    backendid
@@ -173,18 +212,21 @@ bool videoHALCON :: openDevice()
    *
    */
 
-  std::string m_hType="File";
 
-  const char*name=m_hType.c_str();
   const int width=(m_width>0) ?m_width:0;
   const int height=(m_height>0)?m_height:0;
-  const char*cameratype="../examples/data"; /* "default */
-  const char*device="default";
+  std::string cameratype="default";
+  std::string device="default";
   const int port=(m_channel>0)?m_channel:-1;
+
+  std::string name=parsedevicename(m_devicename, cameratype, device);
+  if(name.empty()) {
+    return false;
+  }
 
   try {
     m_grabber = new Halcon::HFramegrabber(
-                                          name, /* const HTuple &Name, */
+                                          name.c_str(), /* const HTuple &Name, */
                                           1, 1, /* const HTuple &HorizontalResolution = 1, const HTuple &VerticalResolution = 1, */
                                           width, height, /* const HTuple &ImageWidth = 0,           const HTuple &ImageHeight = 0, */
                                           0, 0, /* const HTuple &StartRow = 0,             const HTuple &StartColumn = 0, */
@@ -193,8 +235,8 @@ bool videoHALCON :: openDevice()
                                           "rgb", /* const HTuple &ColorSpace = "default", */
                                           -1, /* const HTuple &Gain = -1, */
                                           "default", /* const HTuple &ExternalTrigger = "default", */
-                                          cameratype, /* const HTuple &CameraType = "default", */
-                                          device, /* const HTuple &Device = "default", */
+                                          cameratype.c_str(), /* const HTuple &CameraType = "default", */
+                                          device.c_str(), /* const HTuple &Device = "default", */
                                           port /* const HTuple &Port = -1, */
                                           /* const HTuple &LineIn = -1 */
                                           );
