@@ -7,7 +7,7 @@ all:
 	make -C ..
 
 RECORDPLUGINS=recordQT recordQT4L
-VIDEOPLUGINS=videoDarwin videoDC1394 videoDS videoDV4L videoSGI videoV4L videoV4L2 videoVFW
+VIDEOPLUGINS=videoDarwin videoDC1394 videoDS videoDV4L videoHALCON videoSGI videoV4L videoV4L2 videoVFW
 FILMPLUGINS=filmAVI filmAVIPLAY filmDarwin filmDS filmGMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
 
 

@@ -85,6 +85,11 @@ if test -d "$srcdir/videoDV4L"; then
   AC_CONFIG_SUBDIRS([videoDV4L])
 fi
 
+### video: HALCON
+if test -d "$srcdir/videoHALCON"; then
+  AC_CONFIG_SUBDIRS([videoHALCON])
+fi
+
 ### video: SGI
 if test -d "$srcdir/videoSGI"; then
   AC_CONFIG_SUBDIRS([videoSGI])
