@@ -22,7 +22,7 @@
 
 #include "Base/GemState.h"
 
-#define MARK post("%s:%d:: %s", __FILE__, __LINE__, __FUNCTION__)
+#define MARK startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__); post
 
 CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT)
 
@@ -37,9 +37,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT)
 scopeXYZ :: scopeXYZ(t_floatarg len)
   : GemShape(), 
     m_drawType(GL_LINE_STRIP),
-    m_length(0), m_position(0),
-    m_vertarray(NULL), m_vert(NULL)
+    m_requestedLength(0), m_length(0), m_position(0),
+    m_vertices(NULL)
 {
+  doLengthMess(64);
   lengthMess(static_cast<int>(len));
 
   /* channels inlet */
@@ -54,44 +55,37 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
 /////////////////////////////////////////////////////////
 scopeXYZ :: ~scopeXYZ()
 {
-  if(m_vert)delete[]m_vert;
-  if(m_vertarray)delete[]m_vertarray;
+  if(m_vertices)delete[]m_vertices;
 }
 
 void scopeXYZ :: doLengthMess(int L) {
-  // this resizes to m_length if this is set, or to L otherwise
+  // this resizes to m_requestedLength if this is set, or to L otherwise
   // actually, resizing is done to the double-size!
 
   int length=0;
-  if(m_length>0)
-    length=m_length;
+  if(m_requestedLength>0)
+    length=m_requestedLength;
   else if (L>0)
     length=L;
 
   if(0==length)return; // oops
 
-  if(length*2==m_realLength) {
+  if(length*2==m_length) {
     // cool, no need to resize
     return;
   }
 
-  if(m_vert)delete[]m_vert;
-  if(m_vertarray)delete[]m_vertarray;
+  if(m_vertices)delete[]m_vertices;
 
+  m_length=length;
+  length=m_length*2;
 
-  m_realLength=length;
-  length=m_realLength*2;
-
-  m_vert = new t_sample*[length];
-  m_vertarray = new t_sample[length*3];
-  post("m_vertarray: %d*3 samples at %x", length, m_vertarray);
+  m_vertices = new t_sample[length*3];
+  //post("m_vertices: %d*3 samples at %x", length, m_vertices);
 
   int i;
   for (i = 0; i < length*3; i++)  {
-    m_vertarray[i]=0.0f;
-  }
-  for (i = 0; i < length; i++)  {
-    m_vert[i]=m_vertarray+3*i;
+    m_vertices[i]=0.0f;
   }
 
   m_position=0;
@@ -102,10 +96,11 @@ void scopeXYZ :: lengthMess(int l)
 {
   int i;
   if(l<=0){
+    m_requestedLength=0;
     return;
   }
 
-  m_length=l;
+  m_requestedLength=l;
   doLengthMess();
 }
 
@@ -115,20 +110,31 @@ void scopeXYZ :: lengthMess(int l)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: renderShape(GemState *state)
 {
+  t_sample*vertices=m_vertices+3*m_position;
+  int count=m_length/2;
+  GLenum typ=GL_FLOAT;
+  if(sizeof(t_sample)==sizeof(double))
+    typ=GL_DOUBLE;
+
   GLenum drawtype=m_drawType;
   if(drawtype==GL_DEFAULT_GEM)drawtype=GL_LINE_STRIP;
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
 
-
   // activate and specify pointer to vertex array
   glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, GL_FLOAT, 0, m_vertarray+3*m_position);
+  glVertexPointer(3, typ, 0, vertices);
 
   if(state->texture) {
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    MARK;
-    glTexCoordPointer(3, GL_FLOAT, 0, m_vertarray+3*m_position);
+    if(count==state->numTexCoords) {
+      // in the original code, we used whatever state->texCoords were present
+      // if we had more vertices, the remaining vs would just use the last texCoord available
+      glTexCoordPointer(2, GL_FLOAT, 0, state->texCoords);
+    } else {
+      // in the original code, the texcoords where normalized(!)
+      glTexCoordPointer(2, typ, sizeof(t_sample), vertices);
+    }
   }
 
   // draw a cube
@@ -141,72 +147,16 @@ void scopeXYZ :: renderShape(GemState *state)
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   }
 
-
-#if 0
-  if (state->texture && state->numTexCoords) {
-    // texture and texCoords present
-    glBegin(drawtype);
-    for (int i = 0; i < m_length; i++) {
-      if (state->numTexCoords < i)
-        glTexCoord2f(state->texCoords[state->numTexCoords - 1].s,
-                     state->texCoords[state->numTexCoords - 1].t);
-      else
-        glTexCoord2f(state->texCoords[i].s,
-                     state->texCoords[i].t);
-      glVertex3fv(m_vert[i]);
-    }
-    glEnd();
-  } else {
-    if (state->texture) {
-      // texture present (but no texcoords)
-      // generate texcoords automatically from x/y coords
-      float maxVal[2];
-      maxVal[0] = maxVal[1] = 0.f;
-
-      if(maxVal[0]<0)maxVal[0]*=-1.f;
-      if(maxVal[1]<0)maxVal[1]*=-1.f;
-
-      for (int i = 0; i < m_length; i++) {
-        for (int j = 0; j < 2; j++) {
-          if (m_vert[i][j] < 0) {
-            if (-m_vert[i][j] > maxVal[j])
-              maxVal[j] = -m_vert[i][j];
-          } else {
-            if (m_vert[i][j] > maxVal[j])
-              maxVal[j] = m_vert[i][j];
-          }
-        }
-      }
-      glBegin(drawtype);
-      for(int n=0; n < m_length; n++) {
-        glTexCoord2f(m_vert[n][0] / maxVal[0],
-                     m_vert[n][1] / maxVal[1]);
-        glVertex3fv(m_vert[n]);
-      }
-      glEnd();
-    } else {
-      // activate and specify pointer to vertex array
-      glEnableClientState(GL_VERTEX_ARRAY);
-      glVertexPointer(3, GL_FLOAT, 0, m_vertarray+3*m_position);
-
-      // draw a cube
-      glDrawArrays(drawtype, 0, m_length);
-
-      // deactivate vertex arrays after drawing
-      glDisableClientState(GL_VERTEX_ARRAY);
-    }
-  }
-#endif
   glLineWidth(1.0);
 }
 
 void scopeXYZ :: bangMess(void){
   int i;
-  t_float*vertL=m_vertarray;
-  t_float*vertR=m_vertarray+m_realLength;
+  t_float*vertL=m_vertices;
+  t_float*vertR=m_vertices+m_length;
 
   post("x\ty\tz\t\tx\ty\tz");
-  for(i=0; i<m_realLength; i++) {
+  for(i=0; i<m_length; i++) {
     post("%f\t%f\t%f\t\t%f\t%f\t%f",
          vertL[i*3+0],
          vertL[i*3+1],
@@ -217,7 +167,6 @@ void scopeXYZ :: bangMess(void){
          vertR[i*3+2]);
   }
 }
-
 
 
 /////////////////////////////////////////////////////////
@@ -240,6 +189,8 @@ void scopeXYZ :: typeMess(t_symbol *type)
   char c=*s;
   switch(c){
   case 'd': // default
+    m_drawType = GL_DEFAULT_GEM;
+    break;
   case 'f': // fill
     m_drawType = GL_POLYGON;
     break;
@@ -339,11 +290,14 @@ void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 
 void scopeXYZ :: perform(t_int count, t_sample*X, t_sample*Y, t_sample*Z)
 {
-  int length=m_length;
   int position=m_position;
 
-  t_float*vert=m_vertarray+3*position;
+  t_float*vert=m_vertices+3*position;
   int i=0;
+
+  // TODO: add some protection against segfaults when bufer is very small
+  if(m_length<count)
+    count=m_length;
   
   /* fill in the left-side of the double-array */
   for(i=0; i<count; i++) {
@@ -352,25 +306,25 @@ void scopeXYZ :: perform(t_int count, t_sample*X, t_sample*Y, t_sample*Z)
     *vert++=*Z++;
   }
   /* copy the data over to the right-side of the double-array */
-  if((m_position+count)>m_realLength) {
+  if((m_position+count)>m_length) {
     // wrap around!
     // 1st copy the lower half
-    memcpy(m_vertarray+3*(position+m_realLength),
-           m_vertarray+3*(position),
-           3*(m_realLength-m_position)*sizeof(t_sample));
+    memcpy(m_vertices+3*(position+m_length),
+           m_vertices+3*(position),
+           3*(m_length-m_position)*sizeof(t_sample));
     // then the upper half
-    memcpy(m_vertarray,
-           m_vertarray+3*(m_realLength),
-           3*(m_position+count-m_realLength)*sizeof(t_sample));
+    memcpy(m_vertices,
+           m_vertices+3*(m_length),
+           3*(m_position+count-m_length)*sizeof(t_sample));
 
   } else {
     // ordinary copy
   
-    memcpy(m_vertarray+3*(position+m_realLength),
-           m_vertarray+3*(position),
+    memcpy(m_vertices+3*(position+m_length),
+           m_vertices+3*(position),
            3*count*sizeof(t_sample));
   }
-  m_position=(m_position+count)%m_realLength;
+  m_position=(m_position+count)%m_length;
 
   setModified();
 }

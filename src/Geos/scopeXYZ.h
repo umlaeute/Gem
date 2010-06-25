@@ -22,7 +22,7 @@
   CLASS
   scopeXYZ
     
-  Creates a scopeXYZ
+  Creates a scopeXYZ~
 
   KEYWORDS
   geo
@@ -61,19 +61,19 @@ class GEM_EXTERN scopeXYZ : public GemShape
   //////////
   // How the object should be drawn
   virtual void	typeMess(t_symbol *type);
-
-	//-----------------------------------
-	// GROUP:	Member variables
-	//-----------------------------------
+  
+  //-----------------------------------
+  // GROUP:	Member variables
+  //-----------------------------------
         
   //////////
-  // The drawing style (GL_LINE, GL_SCOPEXYZ, etc)
+  // The drawing style (GL_LINE, GL_QUAD_STRIP, etc)
   GLenum	    	m_drawType;
 		
   //////////
   // the number of points
-  unsigned int 	    	m_length;
-  unsigned int        m_realLength;
+  unsigned int m_requestedLength;
+  unsigned int m_length;
   virtual void	doLengthMess(int length=0);
   virtual void	lengthMess(int length);
 
@@ -83,8 +83,7 @@ class GEM_EXTERN scopeXYZ : public GemShape
     	
   //////////
   // The vertices
-  float  *m_vertarray;
-  float **m_vert;
+  float  *m_vertices;
 
   t_inlet*m_inX, *m_inY, *m_inZ;
 
