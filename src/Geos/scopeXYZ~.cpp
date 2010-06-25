@@ -14,7 +14,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "scopeXYZ.h"
+#include "scopeXYZ~.h"
 
 #include <stdio.h>
 #include <stdlib.h>
