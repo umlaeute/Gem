@@ -115,13 +115,37 @@ void scopeXYZ :: lengthMess(int l)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: renderShape(GemState *state)
 {
-  MARK;
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
+  GLenum drawtype=m_drawType;
+  if(drawtype==GL_DEFAULT_GEM)drawtype=GL_LINE_STRIP;
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
+
+
+  // activate and specify pointer to vertex array
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glVertexPointer(3, GL_FLOAT, 0, m_vertarray+3*m_position);
+
+  if(state->texture) {
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    MARK;
+    glTexCoordPointer(3, GL_FLOAT, 0, m_vertarray+3*m_position);
+  }
+
+  // draw a cube
+  glDrawArrays(drawtype, 0, m_length);
+
+  // deactivate vertex arrays after drawing
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+  if(state->texture) {
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
+
+
+#if 0
   if (state->texture && state->numTexCoords) {
     // texture and texCoords present
-    glBegin(m_drawType);
+    glBegin(drawtype);
     for (int i = 0; i < m_length; i++) {
       if (state->numTexCoords < i)
         glTexCoord2f(state->texCoords[state->numTexCoords - 1].s,
@@ -153,7 +177,7 @@ void scopeXYZ :: renderShape(GemState *state)
           }
         }
       }
-      glBegin(m_drawType);
+      glBegin(drawtype);
       for(int n=0; n < m_length; n++) {
         glTexCoord2f(m_vert[n][0] / maxVal[0],
                      m_vert[n][1] / maxVal[1]);
@@ -166,12 +190,13 @@ void scopeXYZ :: renderShape(GemState *state)
       glVertexPointer(3, GL_FLOAT, 0, m_vertarray+3*m_position);
 
       // draw a cube
-      glDrawArrays(m_drawType, 0, m_length);
+      glDrawArrays(drawtype, 0, m_length);
 
       // deactivate vertex arrays after drawing
       glDisableClientState(GL_VERTEX_ARRAY);
     }
   }
+#endif
   glLineWidth(1.0);
 }
 
