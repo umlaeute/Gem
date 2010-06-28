@@ -151,7 +151,7 @@ void scopeXYZ :: renderShape(GemState *state)
 }
 
 void scopeXYZ :: bangMess(void){
-  int i;
+  unsigned int i;
   t_float*vertL=m_vertices;
   t_float*vertR=m_vertices+m_length;
 
