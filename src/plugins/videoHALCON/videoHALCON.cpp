@@ -87,11 +87,11 @@ bool videoHALCON :: grabFrame() {
     return false;
   }
 
-  Halcon::HTuple typ, H, W, pR, pG, pB;
+  Halcon::HTuple typ, W, H, pR, pG, pB;
   long r, g, b,  h, w;
 
   try {
-    r = img.GetImagePointer3(&pG, &pB, &typ, &H, &W);
+    r = img.GetImagePointer3(&pG, &pB, &typ, &W, &H);
   } catch (Halcon::HException& except) {
     error("Halcon::GetImagePointer exception: '%s'", except.message);
     return false;
@@ -116,7 +116,7 @@ bool videoHALCON :: grabFrame() {
     const unsigned char* ptrG=(const unsigned char*)g;
     const unsigned char* ptrB=(const unsigned char*)b;
 
-    //    post("image[%dx%d]: %x %x %x --> %x %x %x", w, h, r, g, b, ptrR, ptrG, ptrB);
+    //post("image[%dx%d]: %x %x %x --> %x %x %x", w, h, r, g, b, ptrR, ptrG, ptrB);
     lock();
     m_image.image.xsize=w;
     m_image.image.ysize=h;
