@@ -25,7 +25,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
+				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(HALCONROOT)\include&quot;;&quot;$(HALCONROOT)\include\cpp&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_HALCON"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -37,10 +37,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib halcon.lib halconcpp.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Release&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(HALCONROOT)\lib\$(HALCONARCH)&quot;"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
 				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
 			<Tool
@@ -82,7 +82,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
+				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(HALCONROOT)\include&quot;;&quot;$(HALCONROOT)\include\cpp&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;DEBUG;_DEBUG;HAVE_HALCON"
 				RuntimeLibrary="1"
 				DebugInformationFormat="3"/>
@@ -91,10 +91,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib halcon.lib halconcpp.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(HALCONROOT)\lib\$(HALCONARCH)&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
@@ -140,7 +140,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
+				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(HALCONROOT)\include&quot;;&quot;$(HALCONROOT)\include\cpp&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -152,10 +152,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib halcon.lib halconcpp.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(HALCONROOT)\lib\$(HALCONARCH)&quot;"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
 				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
 			<Tool

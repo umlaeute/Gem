@@ -46,7 +46,7 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoHALCON : public video {
+namespace gem { class GEM_EXPORT videoHALCON : public video {
     public:
         //////////
         // Constructor
