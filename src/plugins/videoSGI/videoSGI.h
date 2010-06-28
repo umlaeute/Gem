@@ -34,7 +34,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
   pix
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoSGI : public video {
+namespace gem { class GEM_EXPORT videoSGI : public video {
   public:
     //////////
     // Constructor

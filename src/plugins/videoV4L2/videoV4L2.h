@@ -80,7 +80,7 @@ struct t_v4l2_buffer {
   "sat" (int) - the saturation
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoV4L2 : public video {
+namespace gem { class GEM_EXPORT videoV4L2 : public video {
  public:
   //////////
   // Constructor

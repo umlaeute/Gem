@@ -69,7 +69,7 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoV4L : public video {
+namespace gem { class GEM_EXPORT videoV4L : public video {
     public:
         //////////
         // Constructor

@@ -42,7 +42,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN filmDarwin : public film {
+namespace gem { class GEM_EXPORT filmDarwin : public film {
  public:
   
   //////////

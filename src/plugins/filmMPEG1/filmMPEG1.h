@@ -35,7 +35,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN filmMPEG1 : public film {
+namespace gem { class GEM_EXPORT filmMPEG1 : public film {
  public:
 
   //////////

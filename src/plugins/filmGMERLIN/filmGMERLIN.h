@@ -44,7 +44,7 @@ extern "C" {
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN filmGMERLIN : public film {
+namespace gem { class GEM_EXPORT filmGMERLIN : public film {
  public:
 
   //////////
