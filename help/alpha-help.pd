@@ -1,4 +1,4 @@
-#N canvas 365 309 692 412 10;
+#N canvas 0 0 707 412 10;
 #X text 452 8 GEM object;
 #X obj 8 296 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -13,7 +13,7 @@
 #X obj 449 77 cnv 15 250 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
-#X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 584 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -33,11 +33,11 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 519 293 pd gemwin;
-#X msg 519 274 create;
-#X text 515 253 Create window:;
+#X restore 589 293 pd gemwin;
+#X msg 589 274 create;
+#X text 585 253 Create window:;
 #X text 71 31 Class: manipulation object;
-#X obj 450 158 cnv 15 80 60 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 451 197 cnv 15 80 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 579 186 color 1 0 0 0.5;
 #X text 60 319 Inlet 1: float: turn alpha blending on/off;
@@ -45,24 +45,24 @@
 ;
 #X text 50 12 Synopsis: [alpha];
 #X text 29 77 Description: enable alpha blending;
-#X obj 458 305 square;
-#X obj 458 194 alpha;
+#X obj 458 310 square;
+#X obj 458 233 alpha;
 #X obj 458 108 color 0 1 0 0.5;
 #X text 61 308 Inlet 1: gemlist;
 #X text 60 331 Inlet 1: message "auto 1" | "auto 0" turn on/off automatic
 depth detection;
-#X floatatom 573 123 5 0 0 0 - - -;
+#X floatatom 583 139 5 0 0 0 - - -;
 #X obj 458 86 gemhead 51;
 #X obj 579 211 sphere;
 #X obj 458 137 rotate 114 0 1 0;
-#X floatatom 481 174 1 0 1 0 - - -;
+#X floatatom 482 213 1 0 1 0 - - -;
 #X obj 579 162 gemhead 50;
-#X msg 459 247 auto \$1;
-#X obj 466 227 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X msg 474 176 auto \$1;
+#X obj 474 158 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 585 101 0 1 0 \$1;
-#X floatatom 585 81 5 0 0 0 - - -;
-#X obj 508 166 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X msg 583 108 0 1 0 \$1;
+#X floatatom 583 88 5 0 1 0 - - -;
+#X obj 509 205 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X text 22 91 [alpha] turns on and off alpha blending. [alpha] automatically
 uses the glBlendFunc(GL_SRC_ALPHA \, GL_ONE_MINUS_SRC_ALPHA) function
@@ -76,6 +76,8 @@ set the gemhead order number high so that the object is rendered after
 all of the non-alpha blended ones.;
 #X text 61 356 Inlet 2: float: blending function: 0=GL_ONE \, 1=GL_ONE_MINUS_SOURCE_ALPHA
 ;
+#X obj 628 88 hsl 64 15 0 1 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
 #X connect 11 0 12 0;
 #X connect 12 0 11 0;
 #X connect 16 0 28 0;
@@ -91,3 +93,4 @@ all of the non-alpha blended ones.;
 #X connect 34 0 23 1;
 #X connect 35 0 34 0;
 #X connect 36 0 22 1;
+#X connect 39 0 35 0;

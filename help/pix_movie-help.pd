@@ -57,9 +57,6 @@
 #X obj 451 472 rectangle 4 3;
 #X text 15 68 [pix_movie] loads in a preproduced digital-video to be
 used as a texture \, bitblit or something else.;
-#X text 13 94 You can open a specified film via the "open" message
-\, which takes an optional argument for the colorspace \, to which
-the movie should be decoded (RGBA \, YUV or Grey).;
 #X text 63 282 symbol: file to load initially;
 #X text 17 560 Outlet 3: bang: indicates that the last frame has been
 reached;
@@ -79,27 +76,13 @@ you have to change the frame accordingly \, OR use the "auto" message
 \, to automatically proceed to the next frame each rendering-cycle.
 In auto-mode \, the film is NOT looped. Instead you can reset the current-frame
 to zero when the end of the film is reached.;
-#N canvas 67 224 450 432 :: 0;
-#X text 24 16 the format [pix_movie] is able to decode depends on the
-system you are running Gem.;
-#X text 30 101 Win32: [pix_movie] should be able to decode AVIs (all
-installed codecs). If your version of Gem is compiled with Quicktime
-support and you have Quicktime installed on your machine \, you should
-be able to play Quicktime MOVs.;
-#X text 31 63 Mac OS X: [pix_movie] should be ablte to decode quicktime
-MOVs.;
-#X text 32 350 When GNU/Linux is properly setup \, you can play just
-about any format.;
-#X text 32 175 GNU/Linux: Since there is no "native" video format for
-linux it heavily depends on what you have installed on your machine
-and how Gem has been compiled. If your system supports it \, [pix_movie]
-is able to use quicktime4linux/libquicktime to decode Quicktime MOVs
-\, libmpeg1/libmpeg3 to decode MPEG2-videos and libaviplay which opens
-a wide range of supported formats (with the possibility to install
-additional codec-plugins) \, from AVI via MPEG2 to DivX \, although
-i have found MPEG support rather unstable. libaviplay does not support
-quicktime decoding. There is also some ffmpeg support (apart from the
-one supplied by libaviplay).;
+#N canvas 67 224 453 238 :: 0;
+#X text 38 33 [pix_movie] is mainly a wrapper around [pix_film] with
+automatic texturing.;
+#X text 43 65 Hence it is able to play all formats supported by [pix_film].
+;
+#X text 45 107 See the help-patch for [pix_film] for more information
+on available formats.;
 #X restore 601 533 pd :: FORMATS;
 #X obj 8 229 cnv 15 430 40 empty empty empty 20 12 0 14 -260818 -66577
 0;
@@ -107,10 +90,10 @@ one supplied by libaviplay).;
 #X text 459 575 see also:;
 #X obj 536 575 pix_film;
 #X text 50 2 Synopsis: [pix_movie];
-#X obj 513 237 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X obj 513 237 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X obj 505 290 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 2800 1;
+-1 -1 0 1;
 #X floatatom 502 310 5 0 0 1 frame_number - -;
 #N canvas 830 50 450 300 demo 0;
 #X obj 23 26 inlet;
@@ -150,21 +133,21 @@ available (default=1);
 #X msg 513 256 rectangle \$1;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
-#X connect 14 0 42 0;
+#X connect 14 0 41 0;
 #X connect 17 0 27 0;
 #X connect 20 0 21 0;
 #X connect 20 1 22 0;
 #X connect 20 2 23 0;
 #X connect 27 0 28 0;
-#X connect 28 0 42 0;
-#X connect 34 0 42 0;
-#X connect 35 0 34 0;
-#X connect 36 0 42 0;
-#X connect 42 0 29 0;
-#X connect 42 1 20 0;
-#X connect 42 2 24 0;
-#X connect 46 0 59 0;
-#X connect 47 0 48 0;
-#X connect 48 0 42 1;
-#X connect 49 0 42 0;
-#X connect 59 0 42 0;
+#X connect 28 0 41 0;
+#X connect 33 0 41 0;
+#X connect 34 0 33 0;
+#X connect 35 0 41 0;
+#X connect 41 0 29 0;
+#X connect 41 1 20 0;
+#X connect 41 2 24 0;
+#X connect 45 0 58 0;
+#X connect 46 0 47 0;
+#X connect 47 0 41 1;
+#X connect 48 0 41 0;
+#X connect 58 0 41 0;
