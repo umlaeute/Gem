@@ -12,7 +12,7 @@ subversion_version () {
     GEM_CODENAME="SVN"
     GEM_BUGFIX_VERSION="0"
     if which svnversion 2>&1 > /dev/null; then
-      GEM_BUGFIX_VERSION=$(svnversion .)
+      GEM_BUGFIX_VERSION="rev$(svnversion .)"
     fi
 }
 
@@ -38,6 +38,10 @@ case $1 in
 		echo ${GEM_CODENAME}
 	;;
 	*)
-		echo "${GEM_MAJOR_VERSION}.${GEM_MINOR_VERSION}.${GEM_BUGFIX_VERSION} ${GEM_CODENAME}"
+                if test "x${GEM_BUGFIX_VERSION}" = "x"; then
+		  echo "${GEM_MAJOR_VERSION}.${GEM_MINOR_VERSION} ${GEM_CODENAME}"
+		else
+		  echo "${GEM_MAJOR_VERSION}.${GEM_MINOR_VERSION}.${GEM_BUGFIX_VERSION} ${GEM_CODENAME}"
+		fi
 	;;
 esac
