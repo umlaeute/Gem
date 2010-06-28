@@ -63,7 +63,7 @@ void scopeXYZ :: doLengthMess(int L) {
   // this resizes to m_requestedLength if this is set, or to L otherwise
   // actually, resizing is done to the double-size!
 
-  int length=0;
+  unsigned int length=0;
   if(m_requestedLength>0)
     length=m_requestedLength;
   else if (L>m_requestedLength)
