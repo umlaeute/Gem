@@ -72,7 +72,7 @@ class GEM_EXTERN scopeXYZ : public GemShape
 		
   //////////
   // the number of points
-  unsigned int m_requestedLength;
+  unsigned int m_requestedLength, m_realLength;
   unsigned int m_length;
   virtual void	doLengthMess(int length=0);
   virtual void	lengthMess(int length);

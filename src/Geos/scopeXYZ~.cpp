@@ -37,7 +37,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT)
 scopeXYZ :: scopeXYZ(t_floatarg len)
   : GemShape(), 
     m_drawType(GL_LINE_STRIP),
-    m_requestedLength(0), m_length(0), m_position(0),
+    m_requestedLength(0), m_realLength(0), m_length(0), 
+    m_position(0),
     m_vertices(NULL)
 {
   doLengthMess(64);
@@ -65,30 +66,29 @@ void scopeXYZ :: doLengthMess(int L) {
   int length=0;
   if(m_requestedLength>0)
     length=m_requestedLength;
-  else if (L>0)
+  else if (L>m_requestedLength)
     length=L;
 
   if(0==length)return; // oops
 
-  if(length*2==m_length) {
-    // cool, no need to resize
-    return;
-  }
-
-  if(m_vertices)delete[]m_vertices;
-
   m_length=length;
-  length=m_length*2;
 
-  m_vertices = new t_sample[length*3];
-  //post("m_vertices: %d*3 samples at %x", length, m_vertices);
+  post("length=%d\treal=%d\treqested=%d", m_length, m_realLength, m_requestedLength);
 
-  int i;
-  for (i = 0; i < length*3; i++)  {
-    m_vertices[i]=0.0f;
+  if(m_realLength<length) {
+    if(m_vertices)delete[]m_vertices;
+    m_realLength=length;
+
+    m_vertices = new t_sample[3* length*2];
+    post("m_vertices: %d*3*2 samples at %x", length, m_vertices);
+
+    int i;
+    for (i = 0; i < 3*length*2; i++)  {
+      m_vertices[i]=0.0f;
+    }
   }
 
-  m_position=0;
+  m_position%=m_length;
 }
 
 
