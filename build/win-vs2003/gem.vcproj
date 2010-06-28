@@ -537,10 +537,10 @@
 				RelativePath="..\..\src\Geos\rubber.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Geos\scopeXYZ.cpp">
+				RelativePath="..\..\src\Geos\scopeXYZ~.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\Geos\scopeXYZ.h">
+				RelativePath="..\..\src\Geos\scopeXYZ~.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Geos\slideSquares.cpp">
