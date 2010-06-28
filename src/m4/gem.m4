@@ -454,13 +454,20 @@ AC_DEFUN([GEM_VERSION],
   AC_ARG_WITH([codename], AC_HELP_STRING([--with-codename=<codename>], [force release-codename (default: svn-revision)]))
 
   if test "x$with_bugfix_version" = "x"; then
-    with_bugfix_version="CVS"
+    with_bugfix_version=$(./gemversion.sh --bugfix)
   fi
 
   if test "x$with_codename" = "x"; then
-    with_codename=svnversion
+    with_codename=$(./gemversion.sh --codename)
   fi
 
   AC_DEFINE_UNQUOTED([GEM_VERSION_BUGFIX], "$with_bugfix_version", [micro-version of Gem (bugfix-version)])
   AC_DEFINE_UNQUOTED([GEM_VERSION_CODENAME], "$with_codename", [codename of Gem-release])
+
+
+  AC_MSG_CHECKING([for Gem's bugfix-version])
+  AC_MSG_RESULT([$with_bugfix_version])
+
+  AC_MSG_CHECKING([for Gem's codename])
+  AC_MSG_RESULT([$with_codename])
 ])
