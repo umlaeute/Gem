@@ -5,8 +5,6 @@
 
 #define GEM_VERSION_MAJOR 0
 #define GEM_VERSION_MINOR 93
-#define GEM_VERSION_BUGFIX CVS
-#define GEM_VERSION_CODENAME 
 
 class GEM_EXTERN GemVersion {
   public:

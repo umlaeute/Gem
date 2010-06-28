@@ -3,7 +3,7 @@
 
 
 AC_PREREQ(2.60)
-AC_INIT([Gem],[0.92],[zmoelnig@iem.at])
+AC_INIT([Gem],[0.93],[zmoelnig@iem.at])
 
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_FILES([Make.config AMakefile])
@@ -54,6 +54,8 @@ AC_PROG_LN_S
 AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
 
+
+GEM_VERSION()
 
 GEM_CHECK_RTE()
 REFERENCEPATH=$GEM_RTE_REFERENCEPATH

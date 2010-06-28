@@ -447,3 +447,20 @@ if test "x$enable_threads" != "xno"; then
  GEM_THREADS_LIBS="${GEM_THREADS_LIBS}${GEM_THREADS_LIBS:+ }${PTHREAD_LIBS}"
 fi
 ])
+AC_DEFUN([GEM_VERSION],
+[
+  define([svnversion], esyscmd([sh -c "LANG=C svnversion -n"]))dnl
+  AC_ARG_WITH([bugfix-version], AC_HELP_STRING([--with-bugfix-version=<version>], [force a micro-version (default: "CVS")]))
+  AC_ARG_WITH([codename], AC_HELP_STRING([--with-codename=<codename>], [force release-codename (default: svn-revision)]))
+
+  if test "x$with_bugfix_version" = "x"; then
+    with_bugfix_version="CVS"
+  fi
+
+  if test "x$with_codename" = "x"; then
+    with_codename=svnversion
+  fi
+
+  AC_DEFINE_UNQUOTED([GEM_VERSION_BUGFIX], "$with_bugfix_version", [micro-version of Gem (bugfix-version)])
+  AC_DEFINE_UNQUOTED([GEM_VERSION_CODENAME], "$with_codename", [codename of Gem-release])
+])

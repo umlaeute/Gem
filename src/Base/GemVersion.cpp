@@ -13,6 +13,15 @@
 
 #include "GemVersion.h"
 
+#ifndef GEM_VERSION_BUGFIX
+# define GEM_VERSION_BUGFIX CVS
+#endif
+
+#ifndef GEM_VERSION_CODENAME 
+# define GEM_VERSION_CODENAME 
+#endif
+
+
 const char* GemVersion :: versionString() {
 return ( "" STRINGIFY(GEM_VERSION_MAJOR) "." STRINGIFY(GEM_VERSION_MINOR) "." STRINGIFY(GEM_VERSION_BUGFIX) \
                " " STRINGIFY(GEM_VERSION_CODENAME) );
