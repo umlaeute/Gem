@@ -51,7 +51,7 @@
 #X text 7 69 Description: Renders a line of text;
 #X text 63 306 initial text (defaults to "gem");
 #X text 10 123 Any TrueType-font can be rendered. Per default a file
-"arial.ttf" is searched in the paths. If it is not found you will not
+"vera.ttf" is searched in the paths. If it is not found you will not
 see anything unless you load a valid font via the "font"-message. The
 font-loader uses pd's search-paths \, so you could specify your path
 aon the command-line and load fonts with just "font times.ttf".;
@@ -72,14 +72,14 @@ aon the command-line and load fonts with just "font times.ttf".;
 #X text 27 428 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
 justification;
 #X obj 533 71 rotateXYZ;
-#X text 33 14 Synopsis: [text3d];
+#X text 33 14 Synopsis: [textoutline];
 #X text 27 457 Inlet 2: float: size (in points). default: 20;
 #X obj 30 543 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
 0;
 #X text 43 547 Note: on some systems it might be necessary to turn
 rendering ON before loading a font.;
 #X obj 533 290 textoutline;
-#X text 10 94 [text3d] renders one line of a outlined text with the
+#X text 10 94 [textoutline] renders one line of a outlined text with the
 current color \, and all 3D-transformation;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;

@@ -60,9 +60,6 @@
 #X text 50 12 Synopsis: [pix_film];
 #X text 15 78 [pix_film] loads in a preproducecd digital-video to be
 used aas a texture \, bitblit or something else.;
-#X text 13 104 You can open a specified film via the "open" message
-\, which takes an optional argument for the colorspace \, to which
-the movie should be decoded (RGBA \, YUV or Grey).;
 #X obj 451 251 pix_film;
 #X text 64 249 symbol: file to load initially;
 #X text 24 303 Inlet 1: message: open <filename> [RGBA|YUV|Grey]: opens
@@ -112,22 +109,22 @@ to install additional codec-plugins) \, from AVI via MPEG2 to DivX
 not support quicktime decoding. There is also some ruddy ffmpeg support
 (apart from the one supplied by libaviplay).;
 #X text 36 351 although one wouldn't believe it \, but i have found
-that iunder linux i could play most formats...;
+that under linux i could play most formats...;
 #X restore 485 464 pd :: FORMATS;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
-#X connect 14 0 35 0;
+#X connect 14 0 34 0;
 #X connect 17 0 31 0;
 #X connect 18 0 29 0;
 #X connect 21 0 22 0;
 #X connect 21 1 23 0;
 #X connect 21 2 24 0;
-#X connect 26 0 35 1;
+#X connect 26 0 34 1;
 #X connect 29 0 30 0;
-#X connect 30 0 35 0;
-#X connect 35 0 17 0;
-#X connect 35 1 21 0;
-#X connect 35 2 25 0;
-#X connect 42 0 35 0;
-#X connect 43 0 42 0;
-#X connect 44 0 35 0;
+#X connect 30 0 34 0;
+#X connect 34 0 17 0;
+#X connect 34 1 21 0;
+#X connect 34 2 25 0;
+#X connect 41 0 34 0;
+#X connect 42 0 41 0;
+#X connect 43 0 34 0;

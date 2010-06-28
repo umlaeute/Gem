@@ -1,4 +1,4 @@
-#N canvas 131 3 893 526 10;
+#N canvas 131 3 893 604 10;
 #X obj 465 9 cnv 15 420 570 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 472 293 cnv 15 300 60 empty empty empty 20 12 0 14 -191407 -66577
@@ -67,12 +67,12 @@
 #X connect 12 0 8 0;
 #X restore 509 443 pd rotation;
 #X floatatom 531 167 5 0 0 0 - - -;
-#N canvas 0 22 450 300 rotation 0;
-#X obj 33 19 inlet;
-#X obj 32 105 % 360;
-#X obj 32 57 i;
-#X obj 32 131 outlet;
-#X obj 32 83 + 1;
+#N canvas 125 20 450 300 rotation 0;
+#X obj 112 29 inlet;
+#X obj 112 105 % 360;
+#X obj 112 57 i;
+#X obj 112 131 outlet;
+#X obj 112 83 + 1;
 #X connect 0 0 2 0;
 #X connect 1 0 2 1;
 #X connect 1 0 3 0;

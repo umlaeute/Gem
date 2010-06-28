@@ -70,7 +70,6 @@
 1;
 #X msg 533 187 smooth \$1;
 #X msg 465 186 fill \$1;
-#X msg 533 187 smooth \$1;
 #X obj 465 168 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X text 63 259 Inlet 1: message: smooth [0|1] : do smooth fill;
@@ -94,8 +93,6 @@ or left black \, if filled \, the transition can be smoothed.;
 #X connect 25 0 23 1;
 #X connect 26 0 23 2;
 #X connect 29 0 30 0;
-#X connect 29 0 32 0;
 #X connect 30 0 23 0;
 #X connect 31 0 23 0;
-#X connect 32 0 23 0;
-#X connect 33 0 31 0;
+#X connect 32 0 31 0;

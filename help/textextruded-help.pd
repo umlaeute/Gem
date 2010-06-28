@@ -51,7 +51,7 @@
 #X text 7 69 Description: Renders a line of text;
 #X text 63 306 initial text (defaults to "gem");
 #X text 10 123 Any TrueType-font can be rendered. Per default a file
-"arial.ttf" is searched in the paths. If it is not found you will not
+"vera.ttf" is searched in the paths. If it is not found you will not
 see anything unless you load a valid font via the "font"-message. The
 font-loader uses pd's search-paths \, so you could specify your path
 aon the command-line and load fonts with just "font times.ttf".;
