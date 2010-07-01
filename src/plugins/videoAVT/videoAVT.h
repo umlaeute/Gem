@@ -102,6 +102,8 @@ namespace gem { class GEM_EXPORT videoAVT : public video {
 #define AVT_FRAMESCOUNT 4
   tPvFrame  m_frames[AVT_FRAMESCOUNT];
 
+  pixBlock* getFrame(void);
+
   virtual void grabbedFrame(const tPvFrame&);
   static void grabCB(tPvFrame*);
   virtual void resizeFrames(unsigned long int);

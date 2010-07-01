@@ -166,6 +166,14 @@ void videoAVT::grabCB(tPvFrame*pFrame) {
     }
 }
 
+pixBlock* videoAVT::getFrame(void) {
+  if(!(m_haveVideo && m_capturing))return NULL;
+
+  lock();
+  return &m_image;
+}
+
+
 
 /////////////////////////////////////////////////////////
 // openDevice
