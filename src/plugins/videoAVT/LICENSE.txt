@@ -18,8 +18,8 @@ this program; if not, see <http://www.gnu.org/licenses>.
 Additional permission under GNU GPL version 3 section 7
 
     If you modify this Program, or any covered work, by linking or combining it
-with HALCON (or a modified version of that library), containing parts
+with AVT GiGE SDK (or a modified version of that library), containing parts
 covered by the terms of the MVTec Software GmbH - Software License Agreement for
-HALCON , the licensors of this Program grant you additional permission to convey 
-the resulting work.
+AVT GiGE SDK , the licensors of this Program grant you additional permission to 
+convey the resulting work.
 
