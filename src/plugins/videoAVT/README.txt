@@ -19,3 +19,16 @@ At the time of writing, the SDK runs on W32, linux, OSX and QNX
 
 
 
+
+TODO
+====
+
+testing
+ i don't have access to a GiGE-camera; so the entire code is currently untested
+
+colorspaces
+ currently only Mono8, Rgb24, Bgr24, Rgba32 & Bgra32 are supported
+
+
+
+
