@@ -206,7 +206,7 @@ bool videoAVT :: openDevice()
     const unsigned long uid=strtoul(m_devicename.c_str(), NULL, 0);
 
     if(NULL==m_grabber && 0==errno) {
-      verbose(1, "checking UniqueID: % 8lu", uid);
+      verbose(1, "checking UniqueID: 0x% 8x", uid);
       for(i=0; i<cameraNum; i++) {
         if(uid==cameraList[i].UniqueId && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
           break;
