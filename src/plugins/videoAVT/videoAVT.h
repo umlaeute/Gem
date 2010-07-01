@@ -17,12 +17,38 @@
 
 #include "plugins/video.h"
 
-#if defined HAVE_LIBAVT
+#if defined  HAVE_LIBPVAPI
 # define HAVE_AVT
 #endif
 
 #ifdef HAVE_AVT
-#include "PvApi.h"
+/* olala, Prosilica re-invents the wheel and uses non-standard defines for OSs */
+# ifdef __linux__
+#  define _LINUX
+# endif
+
+# ifdef __APPLE__
+#  define _OSX
+# endif
+
+// _QNX
+
+/* Prosilica's ARCH defines */
+# if !defined(_x86) && (defined(_X86_) || defined(__i386__) || defined(__i586__) || defined(__i686__))
+#  define _x86 1
+# endif
+
+# if !defined(_ppc) && ( defined(__ppc__))
+#  define _ppc 1
+# endif
+
+
+/* Prosilica decided to use "Status" as a field-name, but it gets defined to "int" in /usr/include/X11/Xlib.h */
+#ifdef Status
+# undef Status
+#endif
+
+# include "PvApi.h"
 #endif
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -71,6 +97,14 @@ namespace gem { class GEM_EXPORT videoAVT : public video {
   virtual std::vector<std::string>enumerate(void);
    
  protected:
+
+  tPvHandle m_grabber;
+#define AVT_FRAMESCOUNT 4
+  tPvFrame  m_frames[AVT_FRAMESCOUNT];
+
+  virtual void grabbedFrame(const tPvFrame&);
+  static void grabCB(tPvFrame*);
+  virtual void resizeFrames(unsigned long int);
 
 #endif /* HAVE_AVT */
 
