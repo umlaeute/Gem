@@ -25,7 +25,7 @@ Gem.$(EXT): version.h subdirs
 Gem: Gem.$(EXT)
 
 version.h: version.h.in FORCE
-	${SHELL} ./gemversion.sh version.h
+	${SHELL} ./pkgversion.sh version.h
 
 
 strip: Gem.$(EXT)
