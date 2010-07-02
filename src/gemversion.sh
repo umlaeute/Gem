@@ -1,5 +1,10 @@
 #!/bin/sh
 
+VERSIONFILE=gem.version
+if test -e "${VERSIONFILE}"; then
+ . "${VERSIONFILE}"
+fi
+
 if test "x${GEM_VERSION_MAJOR}" = "x"; then
  GEM_VERSION_MAJOR="0"
 fi
@@ -7,13 +12,27 @@ if test "x${GEM_VERSION_MINOR}" = "x"; then
  GEM_VERSION_MINOR="93"
 fi
 
-
 subversion_version () {
-    GEM_VERSION_CODENAME="SVN"
-    GEM_VERSION_BUGFIX="0"
+  if [ -d .svn ]; then
+    GEM_VERSION_BUGFIX="SVN"
     if which svnversion 2>&1 > /dev/null; then
-      GEM_VERSION_BUGFIX="rev$(svnversion .)"
+      GEM_VERSION_CODENAME="rev$(svnversion .)"
+    else
+      GEM_VERSION_CODENAME="unknown"
     fi
+  else
+    return 1
+  fi
+}
+
+git_version () {
+  local version
+  if version=$(git describe --always --abbrev=0 2>/dev/null); then
+    GEM_VERSION_BUGFIX="git"
+    GEM_VERSION_CODENAME="${version}"
+  else
+     return 1
+  fi
 }
 
 
@@ -38,16 +57,13 @@ substitute_file() {
 	-e "s|@GEM_VERSION_CODENAME@|${GEM_VERSION_CODENAME}|g" \
 	${INFILE} > ${OUTFILE}
  else
-  echo "${INFILE} not found!"
-
+  echo "${INFILE} not found!" 1>&2
  fi
-
 }
 
 if test "x${GEM_VERSION_BUGFIX}" = "x"; then
-  if [ -d .svn ]; then
-    subversion_version
-  fi
+## try to autodetect the current version
+  git_version || subversion_version
 fi
 
 if test "x$1" = "x"; then

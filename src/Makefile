@@ -9,7 +9,10 @@ BUILDDIR = ..
 OBJECTS = $(OBJDIR)*.o
 
 .PHONY: default all subdirs clean distclean install installdocs installabs installplugins strip config \
-	$(GEM_TARGETS) Gem extra PLUGINS 
+	$(GEM_TARGETS) Gem extra PLUGINS \
+	FORCE
+
+FORCE:
 
 all: Gem.$(EXT) extra PLUGINS
 
@@ -21,9 +24,9 @@ Gem.$(EXT): version.h subdirs
 
 Gem: Gem.$(EXT)
 
-version.h: version.h.in
+version.h: version.h.in FORCE
 	${SHELL} ./gemversion.sh version.h
-	
+
 
 strip: Gem.$(EXT)
 	-$(STRIP) $(STRIP_UNNEEDED) Gem.$(EXT)

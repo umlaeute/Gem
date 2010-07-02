@@ -6,12 +6,16 @@
  *  Copyright 2008 IEM @ KUG. All rights reserved.
  *
  */
- 
+#include "Base/GemConfig.h"
  
 #define STRINGIFY2(x) #x
 #define STRINGIFY(x) STRINGIFY2(x)
 
 #include "GemVersion.h"
+
+#ifdef HAVE_VERSION_H
+# include "version.h"
+#endif
 
 #ifndef GEM_VERSION_BUGFIX
 # define GEM_VERSION_BUGFIX CVS
