@@ -262,6 +262,7 @@ t_symbol*GemSettingsData::expandEnv(t_symbol*value, bool bashfilename) {
   wordexp_t pwordexp;
 
   if(0==wordexp(value->s_name, &pwordexp, 0)) {
+    pwordexp.we_offs=0;
     if(pwordexp.we_wordc) {
       // we only take the first match into account 
       value=gensym(pwordexp.we_wordv[0]);
