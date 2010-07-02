@@ -9,17 +9,21 @@ BUILDDIR = ..
 OBJECTS = $(OBJDIR)*.o
 
 .PHONY: default all subdirs clean distclean install installdocs installabs installplugins strip config \
-	$(GEM_TARGETS) Gem extra PLUGINS
+	$(GEM_TARGETS) Gem extra PLUGINS 
 
 all: Gem.$(EXT) extra PLUGINS
 
 PLUGINS:
 	${MAKE} -C plugins plugins
 
-Gem.$(EXT): subdirs 
+Gem.$(EXT): version.h subdirs 
 	$(CXXLINK) $(GEM_EXTRA_LDFLAGS)  $(GEM_ARCH_LDFLAGS) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
 
 Gem: Gem.$(EXT)
+
+version.h: version.h.in
+	${SHELL} ./gemversion.sh version.h
+	
 
 strip: Gem.$(EXT)
 	-$(STRIP) $(STRIP_UNNEEDED) Gem.$(EXT)
@@ -56,10 +60,10 @@ install: installdocs installabs installplugins installextra
 	$(INSTALL_DATA) -D Gem.$(EXT) $(DESTDIR)/$(GEMLIBDIR)/Gem.$(EXT)
 
 installplugins: PLUGINS
-	make -C plugins install
+	${MAKE} -C plugins install
 
 installextra: extra
-	make -C extra install
+	${MAKE} -C extra install
 
 installabs:
 	$(INSTALL) -d $(DESTDIR)/$(GEMDLIBDIR)

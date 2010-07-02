@@ -1,47 +1,73 @@
 #!/bin/sh
 
-if test "x${GEM_MAJOR_VERSION}" = "x"; then
- GEM_MAJOR_VERSION="0"
+if test "x${GEM_VERSION_MAJOR}" = "x"; then
+ GEM_VERSION_MAJOR="0"
 fi
-if test "x${GEM_MINOR_VERSION}" = "x"; then
- GEM_MINOR_VERSION="93"
+if test "x${GEM_VERSION_MINOR}" = "x"; then
+ GEM_VERSION_MINOR="93"
 fi
 
 
 subversion_version () {
-    GEM_CODENAME="SVN"
-    GEM_BUGFIX_VERSION="0"
+    GEM_VERSION_CODENAME="SVN"
+    GEM_VERSION_BUGFIX="0"
     if which svnversion 2>&1 > /dev/null; then
-      GEM_BUGFIX_VERSION="rev$(svnversion .)"
+      GEM_VERSION_BUGFIX="rev$(svnversion .)"
     fi
 }
 
 
+fullversion() {
+                if test "x${GEM_VERSION_BUGFIX}" = "x"; then
+		  echo "${GEM_VERSION_MAJOR}.${GEM_VERSION_MINOR} ${GEM_VERSION_CODENAME}"
+		else
+		  echo "${GEM_VERSION_MAJOR}.${GEM_VERSION_MINOR}.${GEM_VERSION_BUGFIX} ${GEM_VERSION_CODENAME}"
+		fi
+}
 
-if test "x${GEM_BUGFIX_VERSION}" = "x"; then
+substitute_file() {
+ local INFILE
+ local OUTFILE
+ OUTFILE=$1
+ INFILE=${OUTFILE}.in
+
+ if [ -e "${INFILE}" ]; then
+   sed  -e "s|@GEM_VERSION_MAJOR@|${GEM_VERSION_MAJOR}|g" \
+	-e "s|@GEM_VERSION_MINOR@|${GEM_VERSION_MINOR}|g" \
+	-e "s|@GEM_VERSION_BUGFIX@|${GEM_VERSION_BUGFIX}|g" \
+	-e "s|@GEM_VERSION_CODENAME@|${GEM_VERSION_CODENAME}|g" \
+	${INFILE} > ${OUTFILE}
+ else
+  echo "${INFILE} not found!"
+
+ fi
+
+}
+
+if test "x${GEM_VERSION_BUGFIX}" = "x"; then
   if [ -d .svn ]; then
     subversion_version
   fi
 fi
 
-case $1 in
+if test "x$1" = "x"; then
+  fullversion
+else
+ case $1 in
 	--major)
-		echo ${GEM_MAJOR_VERSION}
+		echo ${GEM_VERSION_MAJOR}
 	;;
 	--minor)
-		echo ${GEM_MINOR_VERSION}
+		echo ${GEM_VERSION_MINOR}
 	;;
 	--bugfix)
-		echo ${GEM_BUGFIX_VERSION}
+		echo ${GEM_VERSION_BUGFIX}
 	;;
 	--codename)
-		echo ${GEM_CODENAME}
+		echo ${GEM_VERSION_CODENAME}
 	;;
 	*)
-                if test "x${GEM_BUGFIX_VERSION}" = "x"; then
-		  echo "${GEM_MAJOR_VERSION}.${GEM_MINOR_VERSION} ${GEM_CODENAME}"
-		else
-		  echo "${GEM_MAJOR_VERSION}.${GEM_MINOR_VERSION}.${GEM_BUGFIX_VERSION} ${GEM_CODENAME}"
-		fi
+		substitute_file $1	
 	;;
-esac
+ esac
+fi
