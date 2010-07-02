@@ -73,14 +73,14 @@ void scopeXYZ :: doLengthMess(int L) {
 
   m_length=length;
 
-  post("length=%d\treal=%d\treqested=%d", m_length, m_realLength, m_requestedLength);
+  //post("length=%d\treal=%d\treqested=%d", m_length, m_realLength, m_requestedLength);
 
   if(m_realLength<length) {
     if(m_vertices)delete[]m_vertices;
     m_realLength=length;
 
     m_vertices = new t_sample[3* length*2];
-    post("m_vertices: %d*3*2 samples at %x", length, m_vertices);
+    //post("m_vertices: %d*3*2 samples at %x", length, m_vertices);
 
     int i;
     for (i = 0; i < 3*length*2; i++)  {
