@@ -141,6 +141,21 @@ void videoAVT::grabbedFrame(const tPvFrame&pFrame) {
   case(ePvFmtBgr24) : m_image.image.fromBGR ((unsigned char *)pFrame.ImageBuffer);break;
   case(ePvFmtRgba32): m_image.image.fromRGBA((unsigned char *)pFrame.ImageBuffer);break;
   case(ePvFmtBgra32): m_image.image.fromBGRA((unsigned char *)pFrame.ImageBuffer);break;
+  case(ePvFmtBayer8):  case(ePvFmtBayer16): do {
+    unsigned char*data=m_image.image.data;    
+    // PixelPadding is most likely plain wrong; need to test what it really means
+    PvUtilityColorInterpolate(&pFrame,
+                              &data[chRed],
+                              &data[chGreen],
+                              &data[chBlue],
+                              2, // PixelPadding (Alpha)
+                              0  // LinePadding
+                              );
+  } while(0);
+    break;
+  case (ePvFmtRgb48):  
+  case(ePvFmtMono12Packed): case(ePvFmtBayer12Packed):
+  case (ePvFmtYuv411):      case(ePvFmtYuv422):       case(ePvFmtYuv444): 
   default:
     // ouch
     success=false;
