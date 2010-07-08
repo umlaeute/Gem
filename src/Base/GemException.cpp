@@ -47,10 +47,21 @@ void GemException::report(const char*origin) const throw() {
 }
 
 
-void gem::catchGemException() {
+void gem::catchGemException(const char*name, const t_object*obj) {
   try {
     throw;
   } catch (GemException &ex) {
-    ex.report();
+    if(NULL==obj) {
+      ex.report(name);
+    } else {
+      t_object*o=(t_object*)obj;
+      char*str=(char*)ex.what();
+      if(NULL!=str) {
+        if (NULL==name)
+          pd_error(o, "GemException: %s", str);
+        else
+          pd_error(o, "[%s]: %s", name, str);
+      }
+    }
   }
 }

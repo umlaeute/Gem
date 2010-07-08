@@ -34,6 +34,8 @@ DESCRIPTION
 #include "Base/GemExportDef.h"
 #include <string>
 
+typedef struct _text t_object;
+
 class GEM_EXTERN GemException
 {
  public:
@@ -49,7 +51,7 @@ class GEM_EXTERN GemException
 };
 
 namespace gem {
-  GEM_EXTERN void catchGemException(void);
+  GEM_EXTERN void catchGemException(const char*name=NULL, const t_object*obj=NULL);
 };
 
 

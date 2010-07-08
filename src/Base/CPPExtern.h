@@ -25,7 +25,7 @@ class CPPExtern;
 
 /* forward declaration of a generic exception handler for GemExceptions */
 namespace gem {
-  GEM_EXTERN void catchGemException(void);
+  GEM_EXTERN void catchGemException(const char*objname, const t_object*obj);
 };
 
 /*-----------------------------------------------------------------
@@ -277,7 +277,7 @@ static void obj_setupCallback(t_class *classPtr);
   CPPExtern::m_holder = NULL;                                   \
   CPPExtern::m_holdname=NULL;                                   \
   return(obj);                                                  \
-  } catch (...) {gem::catchGemException(); return NULL;}	\
+  } catch (...) {gem::catchGemException(CPPExtern::m_holdname, CPPExtern::m_holder); return NULL;} \
   }
 
 #define REAL_NEW__SETUP1(NEW_CLASS) \
