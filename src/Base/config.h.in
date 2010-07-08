@@ -6,12 +6,6 @@
 /* backend for deprecated film-decoding objects */
 #undef GEM_FILMBACKEND
 
-/* micro-version of Gem (bugfix-version) */
-#undef GEM_VERSION_BUGFIX
-
-/* codename of Gem-release */
-#undef GEM_VERSION_CODENAME
-
 /* backend for deprecated video-capture objects */
 #undef GEM_VIDEOBACKEND
 

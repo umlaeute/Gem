@@ -55,8 +55,6 @@ AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
 
 
-GEM_VERSION()
-
 GEM_CHECK_RTE()
 REFERENCEPATH=$GEM_RTE_REFERENCEPATH
 
