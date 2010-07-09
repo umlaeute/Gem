@@ -140,7 +140,7 @@ class GEM_EXTERN pix_video : public GemBase
   static void qualityMessCallback(void *data, t_floatarg dev);
 
   static void closeMessCallback(void *data);
-  static void openMessCallback(void *data);
+  static void openMessCallback(void *data, t_symbol*, int, t_atom*);
   static void runningMessCallback(void *data, t_floatarg dev);
 
 };

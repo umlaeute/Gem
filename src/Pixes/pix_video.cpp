@@ -449,9 +449,7 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("device"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::driverMessCallback),
     	    gensym("driver"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::driverMessCallback),
-    	    gensym("open"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::enumerateMessCallback),
+     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::enumerateMessCallback),
     	    gensym("enumerate"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dialogMessCallback),
     	    gensym("dialog"), A_GIMME, A_NULL);
@@ -461,7 +459,7 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::closeMessCallback),
 	    gensym("close"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::openMessCallback),
-	    gensym("open"), A_NULL);
+	    gensym("open"), A_GIMME, A_NULL);
 
     class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_video::runningMessCallback));
 }
@@ -558,9 +556,11 @@ void pix_video :: closeMessCallback(void *data)
 {
   GetMyClass(data)->closeMess();
 }
-void pix_video :: openMessCallback(void *data)
+void pix_video :: openMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-  GetMyClass(data)->startRendering();
+  if(argc)driverMessCallback(data, s, argc, argv);
+  else
+    GetMyClass(data)->startRendering();
 }
 void pix_video :: runningMessCallback(void *data, t_floatarg state)
 {
