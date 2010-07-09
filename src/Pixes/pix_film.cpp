@@ -523,13 +523,14 @@ void pix_film :: threadMess(int state)
 /////////////////////////////////////////////////////////
 void pix_film :: obj_setupCallback(t_class *classPtr)
 {
-#ifdef __GNUC__
-# warning the class_addcreator gets called twice: once by pix_film, once by pix_movie
-  /* but really: Pd shouldn't bail out,
+  /* really: Pd shouldn't bail out,
    * if a selector is bound to the same method of a class a 2nd time
    */
-#endif
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_film), gensym("pix_filmQT"), A_DEFSYM, A_NULL);
+  if(pd_objectmaker && reinterpret_cast<t_gotfn>(create_pix_film)==zgetfn(&pd_objectmaker, gensym("pix_filmQT"))) {
+    ::verbose(2, "not registering [pix_filmQT] again...");
+  } else {
+    class_addcreator(reinterpret_cast<t_newmethod>(create_pix_film), gensym("pix_filmQT"), A_DEFSYM, A_NULL);
+  }
  
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::openMessCallback),
 		  gensym("open"), A_GIMME, A_NULL);
