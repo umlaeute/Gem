@@ -3,7 +3,7 @@
 
 
 AC_PREREQ(2.60)
-AC_INIT(Gem,0.92,zmoelnig@iem.at)
+AC_INIT(Gem-extras,[],zmoelnig@iem.at)
 
 AC_CONFIG_SRCDIR([Makefile])
 
@@ -18,3 +18,4 @@ fi
 #fi
 
 AC_OUTPUT
+
