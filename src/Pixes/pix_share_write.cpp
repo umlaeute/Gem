@@ -21,12 +21,13 @@ CPPEXTERN_NEW_WITH_GIMME(pix_share_write)
 //
 /////////////////////////////////////////////////////////
 pix_share_write :: pix_share_write(int argc, t_atom*argv)
-#ifndef _WIN32
+#ifdef _WIN32
+#else
   : shm_id(0), shm_addr(NULL)
 #endif
 {
   if(argc<1){
-    throw(GemException("pix_share_*: no ID given"));
+    throw(GemException("no ID given"));
   }
   int err  = getShm(argc, argv);
 
@@ -34,31 +35,31 @@ pix_share_write :: pix_share_write(int argc, t_atom*argv)
   case 0:
     break;
   case 1:
-    throw(GemException("pix_share_*: no valid size given"));
+    throw(GemException("no valid size given"));
     break;
   case 2:
-    throw(GemException("pix_share_*: given size < 0"));
+    throw(GemException("given size < 0"));
     break;
   case 3:
-    throw(GemException("pix_share_*: no valid dimensions given"));
+    throw(GemException("no valid dimensions given"));
     break;
   case 4:
-    throw(GemException("pix_share_*: <color> must be one of: 4,2,1,RGBA,YUV,Grey"));
+    throw(GemException("<color> must be one of: 4,2,1,RGBA,YUV,Grey"));
     break;
   case 5:
-    throw(GemException("pix_share_*: arguments: <id> <width> <height> <color>"));
+    throw(GemException("arguments: <id> <width> <height> <color>"));
     break;
   case 6:
-    throw(GemException("pix_share_*: couldn't get shared memory"));
+    throw(GemException("couldn't get shared memory"));
     break;
   case 7:
-    throw(GemException("pix_share_*: no ID given"));
+    throw(GemException("no ID given"));
     break;
   case 8:
-    throw(GemException("pix_share_*: invalid ID..."));
+    throw(GemException("invalid ID..."));
     break;
    default:
-    throw(GemException("pix_share_*: unknown error"));
+    throw(GemException("unknown error"));
     break;
   }
 }
@@ -71,7 +72,8 @@ pix_share_write :: ~pix_share_write()
 
 void pix_share_write :: freeShm()
 {
-#ifndef _WIN32
+#ifdef _WIN32
+#else
   if(shm_addr){
     if (shmdt(shm_addr) == -1) error("shmdt failed at %x", shm_addr);
   }
@@ -98,7 +100,8 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   GLenum color=GL_RGBA;
 
   if(argc<1)return 7;
-#ifndef _WIN32
+#ifdef _WIN32
+#else
   if(shm_id>0)freeShm();
 #endif
   if(A_FLOAT==argv->a_type){
@@ -184,8 +187,6 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
       break;
     default:
       return 5;
-      throw(GemException("pix_share_* arguments: <id> <width> <height> <color>"));
-      break;
     }
   
   if (xsize <= 0 || ysize <= 0){
@@ -197,7 +198,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
 
   m_size = (size)?(size):(xsize * ysize * dummy.csize);
 	
-  post("%dx%dx%d: %d",
+  verbose(1, "%dx%dx%d: %d",
        xsize,ysize,dummy.csize, m_size);
 
 #ifdef _WIN32
@@ -243,7 +244,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     t_pixshare_header *h=(t_pixshare_header *)shm_addr;
     h->size = (shm_desc.shm_segsz-sizeof(t_pixshare_header));
     
-    post("shm:: id(%d) segsz(%d) cpid (%d) mem(0x%X)",
+    verbose(1, "shm:: id(%d) segsz(%d) cpid (%d) mem(0x%X)",
          shm_id,shm_desc.shm_segsz,shm_desc.shm_cpid, shm_addr);
   } else {
     error("couldn't get shm_id: error %d", errno);
