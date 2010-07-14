@@ -133,6 +133,7 @@ void pix_imageInPlace :: downloadMess()
 {
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object){
     error("cannot download now: do you have a window?");
+    return;
   }
 
   if (!mInPreload)return;
