@@ -50,13 +50,13 @@ using namespace gem;
 #include "Base/GemFiles.h"
 
 #ifndef HAVE_LIBV4L1
-# define v4l1_open open
-# define v4l1_close close
-# define v4l1_dup dup
-# define v4l1_ioctl ioctl
-# define v4l1_read read
-# define v4l1_mmap mmap
-# define v4l1_munmap munmap
+# define v4l1_open ::open
+# define v4l1_close ::close
+# define v4l1_dup ::dup
+# define v4l1_ioctl ::ioctl
+# define v4l1_read ::read
+# define v4l1_mmap ::mmap
+# define v4l1_munmap ::munmap
 #endif /* libv4l-1 */
 
 #if 0
