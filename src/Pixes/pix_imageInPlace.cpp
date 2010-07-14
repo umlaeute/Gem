@@ -33,7 +33,9 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM, t_floatarg,
 /////////////////////////////////////////////////////////
 pix_imageInPlace :: pix_imageInPlace(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
   : pix_multiimage(filename, baseImage, topImage, skipRate),
-    mInPreload(0)
+    mInPreload(0),
+    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT)
+
 { }
 
 /////////////////////////////////////////////////////////
@@ -151,10 +153,10 @@ void pix_imageInPlace :: downloadMess()
 
 	  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_repeat);
+	  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_repeat);
+	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
 	  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	  glTexImage2D(GL_TEXTURE_2D, 0,
 		       m_loadedCache->images[i]->csize,
@@ -187,6 +189,37 @@ void pix_imageInPlace :: purgeMess()
 }
 
 /////////////////////////////////////////////////////////
+// textureQuality
+//
+/////////////////////////////////////////////////////////
+void pix_imageInPlace :: textureQuality(int type)
+{
+  if (type)
+    m_textureQuality = GL_LINEAR;
+  else
+    m_textureQuality = GL_NEAREST;
+}
+
+
+////////////////////////////////////////////////////////
+// texture repeat message
+//
+/////////////////////////////////////////////////////////
+void pix_imageInPlace :: repeatMess(int type)
+{
+  if (type)
+    m_repeat = GL_REPEAT;
+  else {
+    if(GLEW_EXT_texture_edge_clamp)
+      m_repeat = GL_CLAMP_TO_EDGE;
+    else
+      m_repeat = GL_CLAMP;
+  }
+
+}
+
+
+/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -198,6 +231,10 @@ void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
 		  gensym("download"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::purgeImageCallback),
 		  gensym("purge"), A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::textureMessCallback),
+          gensym("quality"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::repeatMessCallback),
+          gensym("repeat"), A_FLOAT, A_NULL);
 }
 
 void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_floatarg baseImage,
@@ -220,4 +257,12 @@ void pix_imageInPlace :: downloadImageCallback(void *data)
 void pix_imageInPlace :: purgeImageCallback(void *data)
 {
   GetMyClass(data)->purgeMess();
+}
+void pix_imageInPlace :: textureMessCallback(void *data, t_floatarg quality)
+{
+  GetMyClass(data)->textureQuality((int)quality);
+}
+void pix_imageInPlace :: repeatMessCallback(void *data, t_floatarg repeat)
+{
+  GetMyClass(data)->repeatMess((int)repeat);
 }

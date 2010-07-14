@@ -77,9 +77,18 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
     	//////////
     	// When a purge is received
     	virtual void	purgeMess();
+
+    	//////////
+    	// quality message
+    	virtual void	textureQuality(int type);
+
+    	//////////
+    	// repeat message
+    	virtual void	repeatMess(int type);
     	
 	//////////
 	int				mInPreload;
+    GLuint          m_textureQuality, m_repeat;
 
     private:
     	
@@ -88,6 +97,8 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
     	static void 	preloadMessCallback(void *data, t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate);
     	static void 	downloadImageCallback(void *data);
     	static void 	purgeImageCallback(void *data);
+    	static void 	textureMessCallback(void *data, t_floatarg type);
+    	static void 	repeatMessCallback(void *data, t_floatarg type);
 };
 
 #endif	// for header file
