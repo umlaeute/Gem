@@ -87,7 +87,10 @@ namespace gem { class GEM_EXPORT recordV4L : public record {
 
  private:
 
-
+  int m_fd;
+  imageStruct m_image;
+  bool m_init;
+  int m_palette;
 
 #endif /* V4L */
 }; };
