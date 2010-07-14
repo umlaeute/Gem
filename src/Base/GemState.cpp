@@ -33,7 +33,22 @@ class GemStateData {
   friend class GemState;
  public:
   GemStateData(void) : stacks(new GLStack()){}
-  ~GemStateData(void) {}
+
+  ~GemStateData(void) {
+    if (NULL==stacks.get()){
+      post("ouch");
+      //      const GLStack*dummy=new GLStack();
+      //stacks=dummy;
+      stacks.reset();
+      post("yaroooo!");
+    }
+  }
+
+  GemStateData& copyFrom(const GemStateData*org) {
+    data=org->data;
+    stacks->reset();
+
+  }
 
  protected:
   // dictionary for setting values
@@ -91,9 +106,34 @@ GemState :: GemState()
   */
 }
 
-void GemState :: reset() {
-  //  std::cout << "GemState:reset" << std::endl;
+GemState& GemState::operator=(const GemState&org) {
+  dirty=org.dirty;
+  inDisplayList=org.inDisplayList;
+  lighting=org.lighting;
+  smooth=org.smooth;
+  texture=org.texture;
+  image=org.image;
+  texCoords=org.texCoords;
+  numTexCoords=org.numTexCoords;
+  multiTexUnits=org.multiTexUnits;
+  tickTime=org.tickTime;
+  drawType=org.drawType;
+  VertexArray=org.VertexArray;
+  VertexArraySize=org.VertexArraySize;
+  VertexArrayStride=org.VertexArrayStride;
+  ColorArray=org.ColorArray;
+  HaveColorArray=org.HaveColorArray;
+  NormalArray=org.NormalArray;
+  HaveNormalArray=org.HaveNormalArray;
+  TexCoordArray=org.TexCoordArray;
+  HaveTexCoordArray=org.HaveTexCoordArray;
 
+  data->copyFrom(org.data);
+}
+
+
+
+void GemState :: reset() {
   image = 0;
   VertexArray = 0;
   VertexArraySize = 0;
@@ -105,21 +145,6 @@ void GemState :: reset() {
   HaveTexCoordArray = 0;
   drawType = 0;
 
-  /*
-  stackDepth[GemMan::STACKMODELVIEW]=
-    stackDepth[GemMan::STACKCOLOR]=
-    stackDepth[GemMan::STACKTEXTURE]=
-    stackDepth[GemMan::STACKPROJECTION]=
-    1; // 1 is the current matrix
-
-  if(GemMan::windowExists()) {
-    glGetIntegerv(GL_MODELVIEW_STACK_DEPTH, &stackDepth[GemMan::STACKMODELVIEW]);
-    glGetIntegerv(GL_PROJECTION_STACK_DEPTH, &stackDepth[GemMan::STACKPROJECTION]);
-    glGetIntegerv(GL_TEXTURE_STACK_DEPTH, &stackDepth[GemMan::STACKTEXTURE]);
-    glGetIntegerv(GL_COLOR_MATRIX_STACK_DEPTH, &stackDepth[GemMan::STACKCOLOR]);
-  }
-  */
-
   if(GemMan::windowExists()) {
     GLStack *stacks;
     get("gl.stacks", stacks);
@@ -128,7 +153,6 @@ void GemState :: reset() {
 }
 
 GemState :: ~GemState() {  
-  //  reset();
   if(data)delete data;data=NULL;
 }
 

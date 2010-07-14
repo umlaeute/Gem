@@ -158,7 +158,7 @@ class GEM_EXTERN GemState
 
   //////////
   // Destructor
-  ~GemState();
+  virtual ~GemState();
 
   float texCoordX(int num) const;
 
@@ -203,6 +203,9 @@ class GEM_EXTERN GemState
   /* remove a named property */
   virtual bool remove(t_symbol*key);
   virtual bool remove(const char*key) { return remove(gensym(key));}
+
+  // Copy assignment
+  GemState& operator=(const GemState&);
 
  protected:
   GemStateData*data;

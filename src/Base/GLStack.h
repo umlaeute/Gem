@@ -40,7 +40,7 @@ class GEM_EXTERN GLStack {
   void push(void);
 
   /** pop the given matrix from the stack if the maximum has not been reached 
-   *   returns true on success and false otherwise (stack underlow)
+   *   returns true on success and false otherwise (stack underflow)
    * NOTE: needs valid openGL context
    * NOTE: might change the current matrix mode; you have to manually reset it
    */
