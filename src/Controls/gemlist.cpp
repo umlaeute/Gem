@@ -36,8 +36,8 @@ gemlist :: gemlist(void)
     m_lightState(false),
     m_drawType(0)
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
 	// create the cold inlet
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
 }
 
 /////////////////////////////////////////////////////////
