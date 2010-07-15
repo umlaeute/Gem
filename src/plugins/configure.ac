@@ -65,6 +65,21 @@ if test -d "$srcdir/recordQT4L"; then
   AC_CONFIG_SUBDIRS([recordQT4L])
 fi
 
+### record: V4L
+if test -d "$srcdir/recordV4L"; then
+  AC_CONFIG_SUBDIRS([recordV4L])
+fi
+
+### record: V4L2
+if test -d "$srcdir/recordV4L2"; then
+  AC_CONFIG_SUBDIRS([recordV4L2])
+fi
+
+### video: AVT
+if test -d "$srcdir/videoAVT"; then
+  AC_CONFIG_SUBDIRS([videoAVT])
+fi
+
 ### video: Darwin
 if test -d "$srcdir/videoDarwin"; then
   AC_CONFIG_SUBDIRS([videoDarwin])
