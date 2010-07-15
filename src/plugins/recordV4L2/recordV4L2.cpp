@@ -51,15 +51,13 @@ recordV4L2 :: recordV4L2():
   m_image.xsize=720;
   m_image.xsize=576;
   m_image.setCsizeByFormat(GL_YUV422_GEM);
-  m_image.setCsizeByFormat(GL_RGBA);
+  // m_image.setCsizeByFormat(GL_RGBA);
   m_image.reallocate();
 
-
-
   switch(m_image.format) {
-  case GL_YUV422_GEM: m_palette = VIDEO_PALETTE_YUV422; break;
-  case GL_LUMINANCE:  m_palette = VIDEO_PALETTE_GREY; break;
-  case GL_RGBA:       m_palette = VIDEO_PALETTE_RGB32; break;
+  case GL_YUV422_GEM: m_palette = V4L2_PIX_FMT_UYVY; break;
+  case GL_LUMINANCE:  m_palette = V4L2_PIX_FMT_GREY; break;
+  case GL_RGBA:       m_palette = V4L2_PIX_FMT_RGB32; break;
   default: throw(new GemException("invalid colorspace"));
   }
   
@@ -77,6 +75,7 @@ recordV4L2 :: ~recordV4L2()
 
 void recordV4L2 :: close(void)
 {
+  post("v4l2: close");
   if(m_fd>=0)
     ::close(m_fd);
   m_fd=-1;
@@ -86,24 +85,21 @@ void recordV4L2 :: close(void)
 bool recordV4L2 :: open(const char *filename)
 {
   close();
+  post("v4l2: open");
 
   m_fd=::open(filename, O_RDWR);
   if(m_fd<0)return false;
 
-  struct video_picture vid_pic;
-  if (ioctl(m_fd, VIDIOCGPICT, &vid_pic) == -1) {
-    perror("VIDIOCGPICT");
-    close(); return false;
-  }
-  vid_pic.palette = m_palette;
-  if (ioctl(m_fd, VIDIOCSPICT, &vid_pic) == -1) {
-    perror("VIDIOCSPICT");
+	struct v4l2_capability vid_caps;
+
+
+  if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
+    perror("VIDIOC_QUERYCAP");
     close(); return false;
   }
 
-  struct video_window vid_win;
-  if (ioctl(m_fd, VIDIOCGWIN, &vid_win) == -1) {
-    perror("(VIDIOCGWIN)");
+  if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
+    post("device '%s' is not a video output device");
     close(); return false;
   }
 
@@ -118,36 +114,44 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
   unsigned int w=dummyImage->xsize;
   unsigned int h=dummyImage->ysize;
 
-  struct video_picture vid_pic;
-  struct video_window vid_win;
+  post("v4l2: init");
 
-  if (ioctl(m_fd, VIDIOCGPICT, &vid_pic) == -1) {
-    perror("VIDIOCGPICT");
+	struct v4l2_capability vid_caps;
+  if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
+    perror("VIDIOC_QUERYCAP");
+    close(); return false;
+  }
+	struct v4l2_format vid_format;
+
+	memset(&vid_format, 0, sizeof(vid_format));
+
+  vid_format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+	vid_format.fmt.pix.width = w;
+	vid_format.fmt.pix.height = h;
+	vid_format.fmt.pix.pixelformat = m_palette;
+	vid_format.fmt.pix.sizeimage = w * h * m_image.csize;
+	vid_format.fmt.pix.field = V4L2_FIELD_NONE;
+	vid_format.fmt.pix.bytesperline = w * m_image.csize;
+	//vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
+	vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
+  if(ioctl(m_fd, VIDIOC_S_FMT, &vid_format) == -1) {
+    perror("VIDIOC_S_FMT");
     close(); return false;
   }
 
-  vid_pic.palette = m_palette;
-  
-  if (ioctl(m_fd, VIDIOCSPICT, &vid_pic) == -1) {
-    perror("VIDIOCSPICT");
-    close(); return false;
-  }
+  post("post %dx%d", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height);
 
-  if (ioctl(m_fd, VIDIOCGWIN, &vid_win) == -1) {
-    perror("ioctl (VIDIOCGWIN)");
-    close(); return false;
-  }
-  
-  vid_win.width  = w;
-  vid_win.height = h;
-  if (ioctl(m_fd, VIDIOCSWIN, &vid_win) == -1) {
-    perror("ioctl (VIDIOCSWIN)");
-    close(); return false;
-  }
+#if 0
+  /* if the driver returns a format other than requested we should adjust! */
+	w=vid_format.fmt.pix.width;
+	h=vid_format.fmt.pix.height;
+#endif
 
   m_image.xsize=w;
   m_image.ysize=h;
   m_image.reallocate();
+
+	write(m_fd, m_image.data, m_image.xsize*m_image.ysize*m_image.csize);
 
   m_currentFrame=0;
   m_init=true;
@@ -164,7 +168,7 @@ int recordV4L2 :: putFrame(imageStruct*img)
 {
   if(!m_init){
     if(!init(img, 0))
-      return 0;
+      return -1;
   }
   m_image.convertFrom(img);
 
