@@ -75,7 +75,6 @@ recordV4L2 :: ~recordV4L2()
 
 void recordV4L2 :: close(void)
 {
-  post("v4l2: close");
   if(m_fd>=0)
     ::close(m_fd);
   m_fd=-1;
@@ -85,7 +84,6 @@ void recordV4L2 :: close(void)
 bool recordV4L2 :: open(const char *filename)
 {
   close();
-  post("v4l2: open");
 
   m_fd=::open(filename, O_RDWR);
   if(m_fd<0)return false;
@@ -99,7 +97,7 @@ bool recordV4L2 :: open(const char *filename)
   }
 
   if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
-    post("device '%s' is not a video output device");
+    verbose(1, "device '%s' is not a video4linux2 output device");
     close(); return false;
   }
 
@@ -113,8 +111,6 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
 
   unsigned int w=dummyImage->xsize;
   unsigned int h=dummyImage->ysize;
-
-  post("v4l2: init");
 
 	struct v4l2_capability vid_caps;
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
@@ -138,8 +134,6 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
     perror("VIDIOC_S_FMT");
     close(); return false;
   }
-
-  post("post %dx%d", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height);
 
 #if 0
   /* if the driver returns a format other than requested we should adjust! */
