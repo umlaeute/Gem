@@ -52,6 +52,8 @@ using namespace gem;
 /////////////////////////////////////////////////////////
 #ifdef HAVE_VIDEO4LINUX2
 
+#include <sys/stat.h>
+
 REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 
 videoV4L2 :: videoV4L2() : video("v4l2", 0)
