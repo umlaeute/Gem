@@ -51,7 +51,7 @@ recordV4L2 :: recordV4L2():
   m_image.xsize=720;
   m_image.xsize=576;
   m_image.setCsizeByFormat(GL_YUV422_GEM);
-  // m_image.setCsizeByFormat(GL_RGBA);
+  //m_image.setCsizeByFormat(GL_RGBA); /* RGBA works with Gem, but not with GStreamer and xawtv */
   m_image.reallocate();
 
   switch(m_image.format) {
@@ -130,22 +130,32 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
 	vid_format.fmt.pix.bytesperline = w * m_image.csize;
 	//vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
 	vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
+
+  int format= vid_format.fmt.pix.pixelformat;
+  verbose(1, "v4l2-output requested %dx%d @ '%c%c%c%c'", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height,
+          (char)(format),
+          (char)(format>>8),
+          (char)(format>>16),
+          (char)(format>>24));
   if(ioctl(m_fd, VIDIOC_S_FMT, &vid_format) == -1) {
     perror("VIDIOC_S_FMT");
     close(); return false;
   }
 
-#if 0
+  verbose(1, "v4l2-output returned %dx%d @ '%c%c%c%c'", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height,
+          (char)(format),
+          (char)(format>>8),
+          (char)(format>>16),
+          (char)(format>>24));
   /* if the driver returns a format other than requested we should adjust! */
 	w=vid_format.fmt.pix.width;
 	h=vid_format.fmt.pix.height;
-#endif
 
   m_image.xsize=w;
   m_image.ysize=h;
   m_image.reallocate();
 
-	write(m_fd, m_image.data, m_image.xsize*m_image.ysize*m_image.csize);
+	::write(m_fd, m_image.data, m_image.xsize*m_image.ysize*m_image.csize);
 
   m_currentFrame=0;
   m_init=true;
