@@ -199,6 +199,7 @@ struct GEM_EXTERN imageStruct
   virtual void fromBGRA   (unsigned char* orgdata);
   virtual void fromRGB16  (unsigned char* orgdata);
   virtual void fromABGR   (unsigned char* orgdata);
+  virtual void fromARGB   (unsigned char* orgdata);
   virtual void fromGray   (unsigned char* orgdata);
   virtual void fromGray   (short* orgdata);
   virtual void fromUYVY   (unsigned char* orgdata);

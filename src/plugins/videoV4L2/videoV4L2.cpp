@@ -295,7 +295,7 @@ pixBlock *videoV4L2 :: getFrame(){
       switch(m_gotFormat){
       case V4L2_PIX_FMT_RGB24: m_image.image.fromRGB   (data); break;
       case V4L2_PIX_FMT_BGR32: m_image.image.fromBGRA  (data); break;
-      case V4L2_PIX_FMT_RGB32: m_image.image.fromRGBA  (data); break;
+      case V4L2_PIX_FMT_RGB32: m_image.image.fromARGB  (data); break;
       case V4L2_PIX_FMT_GREY : m_image.image.fromGray  (data); break;
       case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
       case V4L2_PIX_FMT_YUYV : m_image.image.fromYUY2  (data); break;
@@ -610,8 +610,7 @@ bool videoV4L2 :: startTransfer()
   switch(m_gotFormat){
   case V4L2_PIX_FMT_GREY  : m_colorConvert=(m_reqFormat!=GL_LUMINANCE); break;
   case V4L2_PIX_FMT_RGB24 : m_colorConvert=(m_reqFormat!=GL_BGR); break;
-#warning RGB32 vs BGRA confusion
-  case V4L2_PIX_FMT_RGB32 : m_colorConvert=(m_reqFormat!=GL_BGRA); break;//RGB32!=RGBA; its ARGB
+  case V4L2_PIX_FMT_RGB32 : m_colorConvert=true; break;
   case V4L2_PIX_FMT_UYVY  : m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM); break;
   case V4L2_PIX_FMT_YUV420: m_colorConvert=1; break;
   default: m_colorConvert=true;

@@ -814,6 +814,7 @@ GEM_EXTERN void imageStruct::fromABGR(unsigned char *abgrdata) {
       // in place conversion
       unsigned char dummy=0;
       while(pixelnum--){
+
         dummy    =pixels[3]; pixels[3]=pixels[0]; pixels[0]=dummy;
         dummy    =pixels[1]; pixels[1]=pixels[2]; pixels[2]=dummy;
         pixels+=4;
@@ -865,6 +866,85 @@ GEM_EXTERN void imageStruct::fromABGR(unsigned char *abgrdata) {
       }
     }
     STOP_TIMING("ABGR_to_YCbCr");
+    break;
+  }
+}
+
+GEM_EXTERN void imageStruct::fromARGB(unsigned char *argbdata) {
+  if(!argbdata)return;
+  size_t pixelnum=xsize*ysize;
+  setCsizeByFormat();
+  reallocate();
+  unsigned char *pixels=data;
+  switch (format){
+  case GL_BGR_EXT:
+    while(pixelnum--){
+      pixels[0]=argbdata[3]; // B
+      pixels[1]=argbdata[2]; // G
+      pixels[2]=argbdata[1]; // R
+      pixels+=3; argbdata+=4;
+    }
+    break;
+  case GL_RGB:
+    while(pixelnum--){
+      argbdata++;
+      *pixels++=*argbdata++;
+      *pixels++=*argbdata++;
+      *pixels++=*argbdata++;
+    }
+    break;
+#if 0
+  case GL_ARGB_EXT:
+    memcpy(data, argbdata, pixelnum*csize);
+    break;
+#endif
+  case GL_RGBA:
+    while(pixelnum--){
+      pixels[0]=argbdata[1]; // R
+      pixels[1]=argbdata[2]; // G
+      pixels[2]=argbdata[3]; // B
+      pixels[3]=argbdata[0]; // A
+      pixels+=4;argbdata+=4;
+    }
+    break;
+  case GL_LUMINANCE:
+    while(pixelnum--){
+#ifdef __APPLE__
+      const int R=0;
+      const int G=3;
+      const int B=2;
+#else
+      const int R=1;
+      const int G=2;
+      const int B=3;
+#endif
+      *pixels++=(argbdata[R]*RGB2GRAY_RED+argbdata[G]*RGB2GRAY_GREEN+argbdata[B]*RGB2GRAY_BLUE)>>8;
+      argbdata+=4;
+    }
+    break;
+  case GL_YUV422_GEM:
+    START_TIMING;
+    switch(m_simd){
+    case GEM_SIMD_NONE: default:
+      pixelnum>>=1;
+      while(pixelnum--){
+	*pixels++=((RGB2YUV_21*argbdata[chGreen]+ // R 
+		    RGB2YUV_22*argbdata[chBlue]+  // G
+		    RGB2YUV_23*argbdata[chAlpha]  // B
+		    )>>8)+UV_OFFSET; // U
+	*pixels++=((RGB2YUV_11*argbdata[chGreen]+
+		    RGB2YUV_12*argbdata[chBlue]+
+		    RGB2YUV_13*argbdata[chAlpha])>>8)+ Y_OFFSET; // Y
+	*pixels++=((RGB2YUV_31*argbdata[chGreen]+
+		    RGB2YUV_32*argbdata[chBlue]+
+		    RGB2YUV_33*argbdata[chAlpha])>>8)+UV_OFFSET; // V
+	*pixels++=((RGB2YUV_11*argbdata[4+chGreen]+
+		    RGB2YUV_12*argbdata[4+chBlue]+
+		    RGB2YUV_13*argbdata[4+chAlpha])>>8)+ Y_OFFSET; // Y
+	argbdata+=8;
+      }
+    }
+    STOP_TIMING("ARGB_to_YCbCr");
     break;
   }
 }
