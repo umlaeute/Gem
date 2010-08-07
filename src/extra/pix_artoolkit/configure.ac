@@ -13,6 +13,8 @@ AC_SUBST(EXTENSION)
 EXTENSION=$GEM_RTE_EXTENSION
 
 #linking on linux
+GEM_CHECK_CXXFLAGS([-fPIC])
+GEM_CHECK_LDFLAGS([-fPIC])
 GEM_CHECK_LDFLAGS([-shared -Wl,--export-dynamic])
 # linking on os-X
 GEM_CHECK_LDFLAGS([-bundle -mmacosx-version-min=10.3 -undefined dynamic_lookup],
