@@ -44,6 +44,7 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format),
                                          m_finalframe(NULL),
                                          m_gconverter(NULL),
                                          m_fps_num(1), m_fps_denum(1),
+                                         m_next_timestamp(0),
 #endif /* GMERLIN */
                                          m_lastFrame(0),
                                          m_doConvert(false)
@@ -208,6 +209,7 @@ bool filmGMERLIN :: open(char *filename, int format)
     close();
     return false;
   }
+  m_next_timestamp=bgav_video_start_time(m_file, m_track);
 
   m_gformat = (gavl_video_format_t*)bgav_get_video_format (m_file, m_stream);
   m_gframe = gavl_video_frame_create_nopad(m_gformat);
@@ -255,7 +257,6 @@ bool filmGMERLIN :: open(char *filename, int format)
 /////////////////////////////////////////////////////////
 pixBlock* filmGMERLIN :: getFrame(){
   if(!m_file)return NULL;
-
   bgav_read_video(m_file, m_gframe, m_stream);
   if(m_doConvert) {
     gavl_video_convert (m_gconverter, m_gframe, m_finalframe);
@@ -265,6 +266,8 @@ pixBlock* filmGMERLIN :: getFrame(){
   }
   m_image.newimage=true;
   m_image.image.upsidedown=true;
+
+  m_next_timestamp=m_gframe->timestamp+m_gframe->duration;
   return &m_image;
 }
 
@@ -302,25 +305,25 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
   if(imgNum>m_numFrames || imgNum<0)return FILM_ERROR_FAILURE;
   if  (imgNum>0)m_curFrame=imgNum;
 
-#if 0
-  if(m_seekable) {
-    // i thought it should be like this
-    int64_t seekPos = gavl_frames_to_time(m_fps_num, m_fps_denum, imgNum);
-    // but it's really like this?
-    seekPos=imgNum * m_fps_denum;
-
-    bgav_seek_video(m_file, m_stream, seekPos);
-    return FILM_ERROR_SUCCESS;
-  }
-#endif
-
+  // return FILM_ERROR_SUCCESS;
 
   if(bgav_can_seek(m_file)) {
+#warning assuming fixed framerate
+    /*
+      Plaum: "Relying on a constant framerate is not good."
+      m_fps_denum and m_fps_num are set only once!
+     */
     int64_t seekposOrg = imgNum*m_fps_denum;
     int64_t seekpos = seekposOrg;
 
-    bgav_seek_scaled(m_file, &seekpos, m_fps_num);
+    int64_t diff=m_next_timestamp-seekpos;
+#define TIMESTAMP_OFFSET_MAX 5
+    if(diff<TIMESTAMP_OFFSET_MAX && diff>(TIMESTAMP_OFFSET_MAX * -1)) {
+      // hey we are already there...
+      return FILM_ERROR_SUCCESS;
+    }
 
+    bgav_seek_scaled(m_file, &seekpos, m_fps_num);
     if(seekposOrg == seekpos)
       return FILM_ERROR_SUCCESS;
     /* never mind: always return success... */
