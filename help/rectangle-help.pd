@@ -1,4 +1,4 @@
-#N canvas 34 432 710 345 10;
+#N canvas 35 433 710 345 10;
 #X text 54 30 Class: geometric object;
 #X obj 519 47 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -57,6 +57,9 @@
 position with current color. The width and height of the rectangle
 can be set by the arguments and changed via the second and third inlet.
 ;
+#X text 19 133 note for the nitpickers: the rectangle will span from
+(-width|-height) to (+width|+height) so the actual size is really double
+the specified size.;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 18 0 27 0;
