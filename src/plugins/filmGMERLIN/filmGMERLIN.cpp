@@ -45,6 +45,7 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format),
                                          m_gconverter(NULL),
                                          m_fps_num(1), m_fps_denum(1),
                                          m_next_timestamp(0),
+                                         m_frametable(NULL),
 #endif /* GMERLIN */
                                          m_lastFrame(0),
                                          m_doConvert(false)
@@ -79,6 +80,7 @@ filmGMERLIN :: ~filmGMERLIN()
 void filmGMERLIN :: close(void)
 {
   if(m_file)bgav_close(m_file);m_file=NULL;
+  if(m_frametable)gavl_frame_table_destroy(m_frametable); m_frametable=NULL;
 
   /* LATER: free frame buffers */
 
@@ -243,6 +245,9 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_fps_num=m_gformat->timescale;
   m_fps_denum=m_gformat->frame_duration;
 
+  m_frametable=bgav_get_frame_table(m_file, m_track);
+	gavl_frame_table_num_frames (m_frametable);
+
   gavl_time_t dur=bgav_get_duration (m_file, m_track);
   m_numFrames = gavl_time_to_frames(m_fps_num, 
                                     m_fps_denum, 
@@ -277,6 +282,7 @@ pixBlock* filmGMERLIN :: getFrame(){
 //
 /////////////////////////////////////////////////////////
 int filmGMERLIN :: changeImage(int imgNum, int trackNum){
+  post("changeImage: %d %d", imgNum, trackNum);
   if(trackNum<0) {
     /* just automatically proceed to the next frame: this might speed up things for linear decoding */
     return FILM_ERROR_SUCCESS;
@@ -295,6 +301,10 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
       post("track %d contains %d video streams", m_track, numvstreams);
       if(numvstreams) {
         bgav_select_track(m_file, m_track);
+        if(m_frametable) {
+          gavl_frame_table_destroy(m_frametable);
+          m_frametable=bgav_get_frame_table(m_file, m_track);
+        }
       } else {
         post("track %d does not contain a video-stream: skipping");
       }
@@ -305,29 +315,42 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
   if(imgNum>m_numFrames || imgNum<0)return FILM_ERROR_FAILURE;
   if  (imgNum>0)m_curFrame=imgNum;
 
-  // return FILM_ERROR_SUCCESS;
+
 
   if(bgav_can_seek(m_file)) {
+    if(m_frametable) {
+      int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum, NULL);
+      bgav_seek_video(m_file, m_track, seekpos);
+      return FILM_ERROR_SUCCESS;
+    } else {
 #warning assuming fixed framerate
     /*
       Plaum: "Relying on a constant framerate is not good."
       m_fps_denum and m_fps_num are set only once!
      */
-    int64_t seekposOrg = imgNum*m_fps_denum;
-    int64_t seekpos = seekposOrg;
+      int64_t seekposOrg = imgNum*m_fps_denum;
+      int64_t seekpos = seekposOrg;
 
-    int64_t diff=m_next_timestamp-seekpos;
+#if 0
+      // LATER: set a minimum frame offset
+      // keep in mind that m_fps_denum could be 1!
+      // so it's better to calculate the difference in milliseconds and compare
+      int64_t diff=m_next_timestamp-seekpos;
 #define TIMESTAMP_OFFSET_MAX 5
-    if(diff<TIMESTAMP_OFFSET_MAX && diff>(TIMESTAMP_OFFSET_MAX * -1)) {
-      // hey we are already there...
+      if(diff<TIMESTAMP_OFFSET_MAX && diff>(TIMESTAMP_OFFSET_MAX * -1)) {
+        // hey we are already there...
+        return FILM_ERROR_SUCCESS;
+      }
+#endif
+
+
+
+      bgav_seek_scaled(m_file, &seekpos, m_fps_num);
+      if(seekposOrg == seekpos)
+        return FILM_ERROR_SUCCESS;
+      /* never mind: always return success... */
       return FILM_ERROR_SUCCESS;
     }
-
-    bgav_seek_scaled(m_file, &seekpos, m_fps_num);
-    if(seekposOrg == seekpos)
-      return FILM_ERROR_SUCCESS;
-    /* never mind: always return success... */
-    return FILM_ERROR_SUCCESS;
   }
 
   return FILM_ERROR_FAILURE;

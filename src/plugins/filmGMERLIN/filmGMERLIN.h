@@ -86,6 +86,7 @@ namespace gem { class GEM_EXPORT filmGMERLIN : public film {
   int m_fps_num, m_fps_denum;
 
   int64_t m_next_timestamp;
+  gavl_frame_table_t *m_frametable;
 
 
   static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
