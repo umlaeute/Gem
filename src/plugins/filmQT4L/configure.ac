@@ -25,5 +25,13 @@ dnl this is double because there exists "lqt-config" and "pkg-config libquicktim
 dnl another option would have been to introduce aliases for packages
 GEM_CHECK_LIB(lqt,quicktime, quicktime_init,,,,[movie loader])
 
+old_cflags=${CFLAGS}
+old_ldflags=${LDFLAGS}
+CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
+LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
+AC_CHECK_FUNCS([lqt_seek_video])
+CFLAGS=${old_cflags}
+LDFLAGS=${old_ldflags}
+
 
 AC_OUTPUT

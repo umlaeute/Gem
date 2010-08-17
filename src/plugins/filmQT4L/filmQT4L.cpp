@@ -164,7 +164,11 @@ int filmQT4L :: changeImage(int imgNum, int trackNum){
   if(trackNum>0)m_curTrack=trackNum;
 
   int i=-1;
+#ifdef HAVE_QUICKTIME_SEEK_VIDEO
+  lqt_seek_video  	(m_quickfile, m_curTrack, m_curFrame, m_curTrack);
+#else
   if ((i=quicktime_set_video_position(m_quickfile, m_curFrame, m_curTrack))){  }
+#endif
   return FILM_ERROR_SUCCESS;
 }
 #endif // QT4L
