@@ -177,6 +177,7 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
    [
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[1], [$7])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[1], [$7])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$3),[1], [Define to 1 if you have the `$3' function.])
     GEM_LIB_[]NAME[]_CFLAGS=${PKG_[]NAME[]_CFLAGS}
     GEM_LIB_[]NAME[]_LIBS=${PKG_[]NAME[]_LIBS}
 dnl    PKG_LIBS="$6 ${PKG_LIBS}"
