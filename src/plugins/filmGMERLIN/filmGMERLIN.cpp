@@ -319,15 +319,16 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
 
   if(bgav_can_seek(m_file)) {
     if(m_frametable) {
+      //  no assumptions about fixed framerate
       int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum, NULL);
       bgav_seek_video(m_file, m_track, seekpos);
       return FILM_ERROR_SUCCESS;
     } else {
-#warning assuming fixed framerate
-    /*
-      Plaum: "Relying on a constant framerate is not good."
-      m_fps_denum and m_fps_num are set only once!
-     */
+      //  assuming fixed framerate
+      /*
+        Plaum: "Relying on a constant framerate is not good."
+        m_fps_denum and m_fps_num are set only once!
+      */
       int64_t seekposOrg = imgNum*m_fps_denum;
       int64_t seekpos = seekposOrg;
 
