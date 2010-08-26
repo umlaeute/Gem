@@ -35,7 +35,9 @@
 # define debugThread
 #endif
 
-
+#ifdef HAVE_VIDEO4LINUX2
+# include <sys/stat.h>
+#endif
 /*
   V4L2_PIX_FMT_BGR24	--> BGR
   V4L2_PIX_FMT_RGB24	--> RGB
