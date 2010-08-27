@@ -1,4 +1,4 @@
-#N canvas 513 83 666 689 12;
+#N canvas 511 83 666 689 12;
 #X obj 18 14 inlet;
 #X obj 18 35 t a a;
 #X obj 50 98 spigot 0;
@@ -88,7 +88,7 @@
 #X connect 11 1 13 0;
 #X connect 12 0 13 0;
 #X connect 13 0 16 0;
-#X connect 17 0 11 0;
+#X connect 17 0 13 0;
 #X connect 19 0 20 1;
 #X connect 19 0 20 2;
 #X connect 19 0 20 3;
