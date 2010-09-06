@@ -592,6 +592,25 @@ _glmFirstPass(GLMmodel* model, FILE* file)
   return GL_TRUE;
 }
 
+static GLuint fixIndex(GLint current, GLuint baseindex) {
+  GLint idx=baseindex;
+
+  /* i'm not sure whether >=0 or >0 is valid...
+   * for now, i assume >0 (so if current==0 it resolves to baseindex)
+   */
+
+  if(current>0)
+    return (GLuint)(current);
+ 
+  idx=(baseindex+current);
+  if(idx>0)
+    return (GLuint)idx;
+  else {
+    verbose(1, "unable to fix negative index %d @ %d", current, baseindex);
+    return baseindex;
+  }
+}
+
 /* glmSecondPass: second pass at a Wavefront OBJ file that gets all
  * the data.
  *
@@ -610,7 +629,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
   GLfloat*    texcoords;          /* array of texture coordinates */
   GLMgroup* group;            /* current group pointer */
   GLuint  material;           /* current material */
-  GLuint  v, n, t;
+  int  v, n, t;
   char        buf[128];
 
   /* set the pointer shortcuts */
@@ -683,90 +702,90 @@ _glmSecondPass(GLMmodel* model, FILE* file)
          if (strstr(buf, "//")) {
            /* v//n */
              sscanf(buf, "%d//%d", &v, &n);
-           T(numtriangles).vindices[0] = v;
-           T(numtriangles).nindices[0] = n;
-           fscanf(file, "%d//%d", (int*)&v, (int*)&n);
-           T(numtriangles).vindices[1] = v;
-           T(numtriangles).nindices[1] = n;
-           fscanf(file, "%d//%d", (int*)&v, (int*)&n);
-           T(numtriangles).vindices[2] = v;
-           T(numtriangles).nindices[2] = n;
+           T(numtriangles).vindices[0] = fixIndex(v,numvertices);
+           T(numtriangles).nindices[0] = fixIndex(n,numnormals);
+           fscanf(file, "%d//%d", &v, &n);
+           T(numtriangles).vindices[1] = fixIndex(v,numvertices);
+           T(numtriangles).nindices[1] = fixIndex(n, numnormals);
+           fscanf(file, "%d//%d", &v, &n);
+           T(numtriangles).vindices[2] = fixIndex(v,numvertices);
+           T(numtriangles).nindices[2] = fixIndex(n, numnormals);
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
-           while(fscanf(file, "%d//%d", (int*)&v, (int*)&n) > 0) {
+           while(fscanf(file, "%d//%d", &v, &n) > 0) {
              T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
              T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
              T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
              T(numtriangles).nindices[1] = T(numtriangles-1).nindices[2];
-             T(numtriangles).vindices[2] = v;
-             T(numtriangles).nindices[2] = n;
+             T(numtriangles).vindices[2] = fixIndex(v,numvertices);
+             T(numtriangles).nindices[2] = fixIndex(n, numnormals);
              group->triangles[group->numtriangles++] = numtriangles;
              numtriangles++;
            }
          } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
            /* v/t/n */
-           T(numtriangles).vindices[0] = v;
-           T(numtriangles).uvtindices[0] = t;
-           T(numtriangles).nindices[0] = n;
-           fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n);
-           T(numtriangles).vindices[1] = v;
-           T(numtriangles).uvtindices[1] = t;
-           T(numtriangles).nindices[1] = n;
-           fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n);
-           T(numtriangles).vindices[2] = v;
-           T(numtriangles).uvtindices[2] = t;
-           T(numtriangles).nindices[2] = n;
+           T(numtriangles).vindices[0] = fixIndex(v,numvertices);
+           T(numtriangles).uvtindices[0] = fixIndex(t, numtexcoords);
+           T(numtriangles).nindices[0] = fixIndex(n, numnormals);
+           fscanf(file, "%d/%d/%d", &v, &t, &n);
+           T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+           T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
+           T(numtriangles).nindices[1] = fixIndex(n, numnormals);
+           fscanf(file, "%d/%d/%d", &v, &t, &n);
+           T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+           T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+           T(numtriangles).nindices[2] = fixIndex(n, numnormals);
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
-           while(fscanf(file, "%d/%d/%d", (int*)&v, (int*)&t, (int*)&n) > 0) {
+           while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
              T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
              T(numtriangles).uvtindices[0] = T(numtriangles-1).uvtindices[0];
              T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
              T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
              T(numtriangles).uvtindices[1] = T(numtriangles-1).uvtindices[2];
              T(numtriangles).nindices[1] = T(numtriangles-1).nindices[2];
-             T(numtriangles).vindices[2] = v;
-             T(numtriangles).uvtindices[2] = t;
-             T(numtriangles).nindices[2] = n;
+             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+             T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+             T(numtriangles).nindices[2] = fixIndex(n, numnormals);
              group->triangles[group->numtriangles++] = numtriangles;
              numtriangles++;
            }
          } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
            /* v/t */
-           T(numtriangles).vindices[0] = v;
-           T(numtriangles).uvtindices[0] = t;
-           fscanf(file, "%d/%d", (int*)&v, (int*)&t);
-           T(numtriangles).vindices[1] = v;
-           T(numtriangles).uvtindices[1] = t;
-           fscanf(file, "%d/%d", (int*)&v, (int*)&t);
-           T(numtriangles).vindices[2] = v;
-           T(numtriangles).uvtindices[2] = t;
+           T(numtriangles).vindices[0] = fixIndex(v, numvertices);
+           T(numtriangles).uvtindices[0] = fixIndex(t, numtexcoords);
+           fscanf(file, "%d/%d", &v, &t);
+           T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+           T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
+           fscanf(file, "%d/%d", &v, &t);
+           T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+           T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
-           while(fscanf(file, "%d/%d", (int*)&v, (int*)&t) > 0) {
+           while(fscanf(file, "%d/%d", &v, &t) > 0) {
              T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
              T(numtriangles).uvtindices[0] = T(numtriangles-1).uvtindices[0];
              T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
              T(numtriangles).uvtindices[1] = T(numtriangles-1).uvtindices[2];
-             T(numtriangles).vindices[2] = v;
-             T(numtriangles).uvtindices[2] = t;
+             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+             T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
              group->triangles[group->numtriangles++] = numtriangles;
              numtriangles++;
            }
          } else {
            /* v */
            sscanf(buf, "%d", &v);
-           T(numtriangles).vindices[0] = v;
-           fscanf(file, "%d", (int*)&v);
-           T(numtriangles).vindices[1] = v;
-           fscanf(file, "%d", (int*)&v);
-           T(numtriangles).vindices[2] = v;
+           T(numtriangles).vindices[0] = fixIndex(v, numvertices);
+           fscanf(file, "%d", &v);
+           T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+           fscanf(file, "%d", &v);
+           T(numtriangles).vindices[2] = fixIndex(v, numvertices);
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
-           while(fscanf(file, "%d", (int*)&v) > 0) {
+           while(fscanf(file, "%d", &v) > 0) {
              T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
              T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
-             T(numtriangles).vindices[2] = v;
+             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
              group->triangles[group->numtriangles++] = numtriangles;
              numtriangles++;
            }
