@@ -13,8 +13,42 @@
 #include "Base/GemException.h"
 
 #include <errno.h>
+#include <stdio.h>
 
 CPPEXTERN_NEW_WITH_GIMME(pix_share_write)
+#if 0
+  ;
+#endif
+
+
+int hash_str2us(std::string s) {
+  /*
+  def self.rs( str, len=str.length )
+    a,b = 63689,378551
+    hash = 0
+    len.times{ |i|
+      hash = hash*a + str[i]
+      a *= b
+    }
+    hash & SIGNEDSHORT
+  end
+  */
+
+  int result=0;
+  int a=63689;
+  int b=378551;
+
+  int i=0;
+
+  if(s.length()<1)return -1;
+
+  for(i=0; i<s.length(); i++) {
+    result=result*a+s[i];
+    a *= b;
+  }
+
+  return ((unsigned short)(result) & 0x7FFFFFFF);
+}
 
 /////////////////////////////////////////////////////////
 // Constructor
@@ -105,22 +139,12 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   if(shm_id>0)freeShm();
 #endif
   if(A_FLOAT==argv->a_type){
-    fake=atom_getint(argv);
+    char buf[MAXPDSTRING];
+    snprintf(buf, MAXPDSTRING-1, "%g", atom_getfloat(argv));
+    buf[MAXPDSTRING-1]=0;
+    fake = hash_str2us(buf);
   } else if(A_SYMBOL==argv->a_type){
-    char*s=atom_getsymbol(argv)->s_name;
-    char c=0;
-    while((c=*s++))
-      {
-        int x=0;
-        if(c>96)x=c-96;
-        else if(c>64)x=c-64;
-        else if(c>48)x=c-48;
-        if(x<0)x=0;
-        if(x>26)x=26;
-        
-        fake*=26;
-        fake+=x;
-      }
+    fake = hash_str2us(atom_getsymbol(argv)->s_name);
   }
   if(fake<=0)return 8;
 
