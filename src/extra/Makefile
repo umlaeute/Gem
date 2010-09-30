@@ -1,6 +1,6 @@
 default: 
 
-TARGETS=pix_opencv pix_artoolkit pdgst pix_drum pix_mano
+TARGETS=pix_opencv pix_artoolkit pdgst
 .PHONY: $(TARGETS) default all
 
 GEM_DIR=$(shell pwd)/../..
