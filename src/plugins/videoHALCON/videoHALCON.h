@@ -23,8 +23,15 @@
 # define HAVE_HALCON
 #endif
 
+#ifdef Status
+/* ouch: Xlib.h defines "Status" as "int", but Halcon uses "Status" as a
+ * variable name
+ */
+# undef Status
+#endif
+
 #ifdef HAVE_HALCON
-#include "HalconCpp.h"
+# include "HalconCpp.h"
 #endif
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
