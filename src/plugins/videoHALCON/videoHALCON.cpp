@@ -80,6 +80,10 @@ videoHALCON :: ~videoHALCON()
 /////////////////////////////////////////////////////////
 bool videoHALCON :: grabFrame() {
   Halcon::HImage img;
+
+  if(NULL==m_grabber)
+    return false;
+
   try {
     img=m_grabber->GrabImage();
   } catch (Halcon::HException& except) {
@@ -174,9 +178,11 @@ static std::string parsedevicename(std::string devicename, std::string&cameratyp
     verbose(1, "could not parse '%s'", devicename.c_str());
     return name;
   case 3:
-    device=parsed[2];
+    if(parsed[2].size()>0)
+      device=parsed[2];
   case 2:
-    cameratype=parsed[1];
+    if(parsed[1].size()>0)
+      cameratype=parsed[1];
   case 1:
     name=parsed[0];
   }
@@ -194,7 +200,6 @@ bool videoHALCON :: openDevice()
 {
   if(m_grabber)closeDevice();
   
-
   /* m_devicename has to provide:
    *    backendid
    *    cameratype
@@ -211,7 +216,6 @@ bool videoHALCON :: openDevice()
    * i don't think this is currently possible with halcon
    *
    */
-
 
   const int width=(m_width>0) ?m_width:0;
   const int height=(m_height>0)?m_height:0;
@@ -242,6 +246,7 @@ bool videoHALCON :: openDevice()
                                           );
   } catch (Halcon::HException &except) {
     error("caught exception: '%s'", except.message);
+    m_grabber=NULL;
     return false;
   }
                               
