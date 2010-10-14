@@ -191,6 +191,60 @@ static std::string parsedevicename(std::string devicename, std::string&cameratyp
 // openDevice
 //
 /////////////////////////////////////////////////////////
+
+static void printtuple(Halcon::HTuple t) {
+  int i=0;
+  for(i=0; i< t.Num(); i++) {
+  
+    Halcon::HCtrlVal v=t[i];
+    std::cerr<<"["<<i<<"]: ";
+    switch(v.ValType()) {
+    case Halcon::LongVal:
+      std::cerr << v.L();
+      break;
+    case Halcon::DoubleVal:
+      std::cerr << v.D();
+      break;
+    case Halcon::StringVal:
+      std::cerr << v.S();
+      break;
+    case Halcon::UndefVal:
+      std::cerr << "<undef>";
+    }
+    std::cerr << std::endl;
+  }
+}
+
+static void printinfo(std::string name, std::string value) {
+  try {
+    Halcon::HTuple Information;
+    Halcon::HTuple ValueList;
+    Herror err=info_framegrabber(name.c_str(), 
+                                 value.c_str(),
+                                 &Information,
+                                 &ValueList);
+
+    std::cerr << "got info for "<<name<<"."<<value<<":"<<std::endl; 
+    printtuple(Information);
+    std::cerr << "got values: " << std::endl; 
+    printtuple(ValueList); 
+    std::cerr << std::endl;
+  }  catch (Halcon::HException &except) {
+    error("info caught exception: '%s'", except.message);
+  }
+}
+
+
+static void getparam(Halcon::HFramegrabber*grabber, std::string name) {
+  try {
+    Halcon::HTuple result=grabber->GetFramegrabberParam(name.c_str());
+    std::cerr << "got parm for "<<name<<std::endl; 
+    printtuple(result); 
+  }  catch (Halcon::HException &except) {
+    error("getparam caught exception: '%s'", except.message);
+  }
+}
+
 bool videoHALCON :: openDevice()
 {
   if(m_grabber)closeDevice();
@@ -244,7 +298,17 @@ bool videoHALCON :: openDevice()
     m_grabber=NULL;
     return false;
   }
-                              
+
+#if 0
+  printinfo(name, "parameters");
+  printinfo(name, "parameters_readonly");
+  printinfo(name, "parameters_writeonly");
+
+  printinfo(name, "port");
+
+  getparam(m_grabber, "color_space_values");
+  getparam(m_grabber, "revision");
+#endif                              
                               
   return true;
 }
