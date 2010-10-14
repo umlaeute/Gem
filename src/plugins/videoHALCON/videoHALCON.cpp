@@ -43,13 +43,10 @@ REGISTER_VIDEOFACTORY("halcon", videoHALCON);
 // exception handler
 static void MyHalconExceptionHandler(const Halcon::HException& except)
 {
-  // the exception handler is needed in orer to prevent halcon from crashing
+  // the exception handler is needed in order to prevent halcon from crashing
   // we just pass on the exception to upstream...
   throw except;	
 }
-
-
-
 
 videoHALCON :: videoHALCON() : video("halcon"),
                                m_grabber(NULL)
@@ -85,12 +82,11 @@ bool videoHALCON :: grabFrame() {
     return false;
 
   try {
-    img=m_grabber->GrabImage();
+    img=m_grabber->GrabImageAsync(-1);
   } catch (Halcon::HException& except) {
     error("Halcon::GrabImage exception: '%s'", except.message);
     return false;
   }
-
   Halcon::HTuple typ, W, H, pR, pG, pB;
   long r, g, b,  h, w;
 
@@ -119,14 +115,12 @@ bool videoHALCON :: grabFrame() {
     const unsigned char* ptrR=(const unsigned char*)r;
     const unsigned char* ptrG=(const unsigned char*)g;
     const unsigned char* ptrB=(const unsigned char*)b;
-
     //post("image[%dx%d]: %x %x %x --> %x %x %x", w, h, r, g, b, ptrR, ptrG, ptrB);
     lock();
     m_image.image.xsize=w;
     m_image.image.ysize=h;
     m_image.image.setCsizeByFormat(GL_RGBA);
     m_image.image.reallocate();
-
     long row, col;
     unsigned char*data=m_image.image.data;
     for(row=0; row<h; row++) {
@@ -139,6 +133,7 @@ bool videoHALCON :: grabFrame() {
         data+=4;
       }
     }
+
     m_image.newimage=true;
     m_image.image.upsidedown=true;
     unlock();
@@ -269,6 +264,8 @@ void videoHALCON :: closeDevice() {
 /////////////////////////////////////////////////////////
 bool videoHALCON :: startTransfer()
 {
+  if(NULL!=m_grabber)
+    m_grabber->GrabImageStart(-1);
   return true;
 }
 
