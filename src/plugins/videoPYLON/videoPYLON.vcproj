@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="videoHALCON"
+	Name="videoPYLON"
 	ProjectGUID="{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	RootNamespace="gem"
 	SccProjectName=""
@@ -25,8 +25,8 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(HALCONROOT)\include&quot;;&quot;$(HALCONROOT)\include\cpp&quot;"
-				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_HALCON"
+				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(PYLONROOT)\include&quot;;&quot;$(PYLONROOT)\include\cpp&quot;"
+				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_PYLON"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
@@ -37,10 +37,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib halcon.lib halconcpp.lib"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib pylonbase.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(HALCONROOT)\lib\$(HALCONARCH)&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(PYLONROOT)\lib\$(PYLONARCH)&quot;"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
 				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
 			<Tool
@@ -82,8 +82,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(HALCONROOT)\include&quot;;&quot;$(HALCONROOT)\include\cpp&quot;"
-				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;DEBUG;_DEBUG;HAVE_HALCON"
+				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(PYLONROOT)\include&quot;;&quot;$(PYLONROOT)\include\cpp&quot;"
+				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;DEBUG;_DEBUG;HAVE_PYLON"
 				RuntimeLibrary="1"
 				DebugInformationFormat="3"/>
 			<Tool
@@ -91,10 +91,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib halcon.lib halconcpp.lib"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib pylongbase.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(HALCONROOT)\lib\$(HALCONARCH)&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(PYLONROOT)\lib\$(PYLONARCH)&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
@@ -140,7 +140,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(HALCONROOT)\include&quot;;&quot;$(HALCONROOT)\include\cpp&quot;"
+				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(PYLONROOT)\include&quot;;&quot;$(PYLONROOT)\include\cpp&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -152,10 +152,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib halcon.lib halconcpp.lib"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib pylonbase.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(HALCONROOT)\lib\$(HALCONARCH)&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(PYLONROOT)\lib\$(PYLONARCH)&quot;"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
 				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
 			<Tool
@@ -191,10 +191,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\videoHALCON.cpp">
+			RelativePath=".\videoPYLON.cpp">
 		</File>
 		<File
-			RelativePath=".\videoHALCON.h">
+			RelativePath=".\videoPYLON.h">
 		</File>
 	</Files>
 	<Globals>
