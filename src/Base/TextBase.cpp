@@ -15,6 +15,10 @@
 //
 /////////////////////////////////////////////////////////
 
+/*
+ * FIXXME: check how font handling behaves with multiple contexts 
+ */
+
 #include "TextBase.h"
 #include "GemSettings.h"
 
@@ -57,8 +61,10 @@ TextBase :: TextBase(int argc, t_atom *argv)
 }
 
 void TextBase :: startRendering(void) {
-  if(m_fontname)
-    fontNameMess(m_fontname->s_name);
+  if(NULL==m_font) {
+    if(m_fontname)
+      fontNameMess(m_fontname->s_name);
+  }
 }
 
 
@@ -155,6 +161,7 @@ void TextBase :: fontNameMess(const char *filename){
   fclose(file);
 
   /* now read font */
+  if(m_font)delete m_font; m_font=NULL;
   if (makeFont(bufptr)==NULL){
     error("unable to open font '%s'", bufptr);
     return;
