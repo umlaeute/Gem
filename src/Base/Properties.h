@@ -1,11 +1,11 @@
 /*
  * (c) IOhannes m zmölnig 2010
  *
- * map that stores anything
+ * map that stores "any"thing
  * 
  * USAGE:
  * 
- *   Properties am;                                                         // create a new Properties
+ *   Properties am;                                                     // create a new Properties
  *   am["a"] = 42;                                                      // assign value "42" to key "a"
  *   int i=0;
  *   try { i=any_cast<int>am["a"]; } catch(bad_any_cast ex) { ; }       // retrieve value from key "a"; might throw a bad_any_cast exception
@@ -49,8 +49,8 @@ namespace gem
       return true;
     };
 
+    /* get all keys */
     virtual std::vector<std::string>keys(void);
-
   };
 };
 #endif /* GEM_PROPERTIES_H */
