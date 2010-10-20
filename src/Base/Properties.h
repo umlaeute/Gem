@@ -30,27 +30,70 @@ namespace gem
   private:
     class PIMPL;
     PIMPL*pimpl;
+
   public:
+    enum PropertyType {
+      UNSET=-1, /* not set, in-existant */
+      NONE,   /* "bang" */
+      DOUBLE, /* double */
+      STRING, /* std::string */
+      UNKNOWN /* all the rest */
+    };
+
     Properties(void);
     virtual ~Properties(void);
 
+#if 0
+    /* array/hashmap like access:
+     * e.g.: prop["width"]=640;
+     */
     virtual gem::any&operator[](const std::string&key);
-    virtual gem::any at(const std::string&key);
-    
+#endif
+
+    /* get the value of a property
+     *  e.g.: double w=any_cast<double>prop.at("width")
+     */
+    virtual gem::any get(const std::string&key);
+
+    /* check whether the given key exists
+     * if the key was in the property-map, return the type of the property
+     * if no key of the given value exists, return <code>PropertyType::UNSET</code>
+     */
+    virtual enum PropertyType type(const std::string);
+
+    /* set a property
+     *  e.g.: double w=640; prop.set("width", w);
+     */
     virtual void set(const std::string&key, gem::any value);
 
+    /* get a property
+     *  e.g.: double w=320; prop.get("width", w);
+     * NOTE: if no property of the given name exists or the existing property 
+     *       is of a different (incompatible) type, "value" will not be changed
+     */
     template<class Class>
-    bool get(const std::string&key, Class&value) { 
+      bool get(const std::string&key, Class&value) { 
        try {
-	value=at(key);
+	 value=gem::any_cast<Class>(get(key));
       } catch (gem::bad_any_cast e) {
 	return false;
       }
       return true;
     };
 
-    /* get all keys */
+    /* get all keys
+     */
     virtual std::vector<std::string>keys(void);
+
+    /* 
+     * delete a given key from the Properties
+     */
+    virtual void erase(const std::string);
+    /* 
+     * delete all keys from the Properties
+     */
+    virtual void clear(void);
+
   };
 };
 #endif /* GEM_PROPERTIES_H */
