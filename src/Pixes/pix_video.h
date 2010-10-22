@@ -20,6 +20,8 @@ Linux version by Millier Puckette. msp@ucsd.edu
 #include "Base/GemBase.h"
 #include "plugins/video.h"
 
+#include "Base/Properties.h"
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -75,17 +77,6 @@ class GEM_EXTERN pix_video : public GemBase
   // returns true, if a new backend could be found
   virtual bool restart(void);
   
-  //////////
-  // Set the video dimensions
-  virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
-                          int topmargin = 0 , int bottommargin = 0);
-  // Set the channel of the capturing device 
-  virtual void	channelMess(int channel, t_float freq=0);
-  // Set the channel of the capturing device 
-  virtual void	normMess(t_symbol *s);
-  // Set the color-space
-  virtual void	colorMess(t_atom*);
-  // Set the device
   virtual void	deviceMess(t_symbol*dev);
   virtual void	deviceMess(int dev);
 
@@ -103,8 +94,26 @@ class GEM_EXTERN pix_video : public GemBase
   // fire the format dialogs
   virtual void	dialogMess(int,t_atom*);
 
+  virtual void	colorMess(t_atom*);
+  // Set the device
+
+  //////////
+  // Set the video dimensions
+  virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
+                          int topmargin = 0 , int bottommargin = 0);
+  // Set the channel of the capturing device 
+  virtual void	channelMess(int channel, t_float freq=0);
+  // Set the channel of the capturing device 
+  virtual void	normMess(t_symbol *s);
+  // Set the color-space
+
   // Set the quality for DV decoding
   virtual void	qualityMess(int dev);
+
+  gem::Properties m_readprops, m_writeprops;
+  virtual void	setPropertyMess(int argc, t_atom*argv);
+  virtual void	getPropertyMess(int argc, t_atom*argv);
+  virtual void	enumPropertyMess(void);
         
   //-----------------------------------
   // GROUP:	Video data
@@ -118,8 +127,6 @@ class GEM_EXTERN pix_video : public GemBase
 
   int    m_driver;
 
-
-
   bool m_running;
   virtual void	runningMess(bool);
 
@@ -128,21 +135,27 @@ class GEM_EXTERN pix_video : public GemBase
   //////////
   // static member functions
 
-  static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
-  static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void normMessCallback(void *data, t_symbol*format);
-  static void modeMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void colorMessCallback(void *data, t_symbol*,int,t_atom*);
   static void deviceMessCallback(void *data, t_symbol*,int,t_atom*);
   static void driverMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
+
   static void enumerateMessCallback(void *data);
-  static void qualityMessCallback(void *data, t_floatarg dev);
 
   static void closeMessCallback(void *data);
   static void openMessCallback(void *data, t_symbol*, int, t_atom*);
   static void runningMessCallback(void *data, t_floatarg dev);
 
+
+  static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void setPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
+  static void getPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
+  static void enumPropertyMessCallback(void *data);
+
+  static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
+  static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void normMessCallback(void *data, t_symbol*format);
+  static void modeMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void colorMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void qualityMessCallback(void *data, t_floatarg dev);
 };
 
 #endif	// for header file

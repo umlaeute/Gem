@@ -22,7 +22,6 @@
 #include "Base/GemState.h"
 #include "Base/GemException.h"
 
-
 CPPEXTERN_NEW(pix_video)
 
 /////////////////////////////////////////////////////////
@@ -403,6 +402,114 @@ void pix_video :: dialogMess(int argc, t_atom*argv)
 }
 
 /////////////////////////////////////////////////////////
+// set properties
+//
+// example: "set width 640, set name foo, set"
+//   will first set the properties "width" to 640 annd "name" to "foo"
+//   and then will apply these properties to the currently opened device
+//
+/////////////////////////////////////////////////////////
+
+static gem::any atom2any(t_atom*ap) {
+  gem::any result;
+  if(ap) {
+    switch(ap->a_type) {
+    case A_FLOAT:
+      result=atom_getfloat(ap);
+      break;
+    case A_SYMBOL:
+      result=atom_getsymbol(ap)->s_name;
+      break;
+    default:
+      result=ap->a_w.w_gpointer;
+    }
+  }
+  return result;
+}
+static void addProperties(gem::Properties&props, int argc, t_atom*argv)
+{
+  if(!argc)return;
+
+    if(argv->a_type != A_SYMBOL) {
+      post("no key given...");
+      return;
+    }
+    std::string key=std::string(atom_getsymbol(argv)->s_name);
+    std::vector<gem::any> values;
+    argc--; argv++;
+    while(argc-->0) {
+      values.push_back(atom2any(argv++));
+    }
+    switch(values.size()) {
+    default:
+      post("+ arg");
+      props.set(key, values);
+      break;
+    case 1:
+      post("1 arg");
+      props.set(key, values[0]);
+      break;
+    case 0: 
+      {
+	gem::any dummy;
+	post("O arg");
+	props.set(key, dummy);
+      }
+      break;
+    }
+}
+
+void pix_video :: setPropertyMess(int argc, t_atom*argv)
+{
+  if(argc) {
+    addProperties(m_writeprops, argc, argv);
+  } else {
+    if(m_videoHandle) {
+      m_videoHandle->setProperties(m_writeprops);
+    } else {
+      verbose(1, "no open videodevice...remembering properties...");
+    }
+  }
+}
+
+void pix_video :: getPropertyMess(int argc, t_atom*argv)
+{
+  if(argc) {
+    addProperties(m_readprops, argc, argv);
+  } else {
+    if(m_videoHandle) {
+      m_videoHandle->getProperties(m_readprops);
+      std::vector<std::string>keys=m_readprops.keys();
+      int i=0;
+      for(i=0; i<keys.size(); i++) {
+	post("got property: ['%s']", keys[i].c_str());
+      }
+    } else {
+      verbose(1, "no open videodevice...remembering properties...");
+    }
+  }
+}
+
+void pix_video :: enumPropertyMess()
+{
+  if(m_videoHandle) {
+    std::vector<std::string>readable, writeable;
+    int i=0;
+
+    m_videoHandle->enumProperties(readable, writeable);
+
+    for(i=0; i<readable.size(); i++) {
+      post("readable property: '%s'", readable[i].c_str());
+    }
+    for(i=0; i<writeable.size(); i++) {
+      post("writeable property: '%s'", writeable[i].c_str());
+    }
+  } else {
+    error("cannot enumerate properties without a valid videodevice");
+  }
+}
+
+/////////////////////////////////////////////////////////
 // qualityMess
 //
 /////////////////////////////////////////////////////////
@@ -433,6 +540,35 @@ void pix_video :: runningMess(bool state) {
 /////////////////////////////////////////////////////////
 void pix_video :: obj_setupCallback(t_class *classPtr)
 {
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::enumerateMessCallback),
+    	    gensym("enumerate"), A_NULL);
+
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::driverMessCallback),
+    	    gensym("driver"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::deviceMessCallback),
+    	    gensym("device"), A_GIMME, A_NULL);
+
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::closeMessCallback),
+	    gensym("close"), A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::openMessCallback),
+	    gensym("open"), A_GIMME, A_NULL);
+
+    class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_video::runningMessCallback));
+
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dialogMessCallback),
+    	    gensym("dialog"), A_GIMME, A_NULL);
+
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::setPropertyMessCallback),
+    	    gensym("set"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::getPropertyMessCallback),
+    	    gensym("get"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::enumPropertyMessCallback),
+    	    gensym("enumproperties"), A_NULL);
+
+
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
+    	    gensym("colorspace"), A_GIMME, A_NULL);
+
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dimenMessCallback),
     	    gensym("dimen"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::normMessCallback),
@@ -443,25 +579,8 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("mode"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
     	    gensym("color"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
-    	    gensym("colorspace"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::deviceMessCallback),
-    	    gensym("device"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::driverMessCallback),
-    	    gensym("driver"), A_GIMME, A_NULL);
-     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::enumerateMessCallback),
-    	    gensym("enumerate"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dialogMessCallback),
-    	    gensym("dialog"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::qualityMessCallback),
 	    gensym("quality"), A_FLOAT, A_NULL);
-
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::closeMessCallback),
-	    gensym("close"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::openMessCallback),
-	    gensym("open"), A_GIMME, A_NULL);
-
-    class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_video::runningMessCallback));
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
@@ -548,6 +667,19 @@ void pix_video :: dialogMessCallback(void *data, t_symbol*s, int argc, t_atom*ar
 {
   GetMyClass(data)->dialogMess(argc, argv);
 }
+void pix_video :: setPropertyMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
+  GetMyClass(data)->setPropertyMess(argc, argv);
+}
+void pix_video :: getPropertyMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
+  GetMyClass(data)->getPropertyMess(argc, argv);
+}
+void pix_video :: enumPropertyMessCallback(void *data)
+{
+  GetMyClass(data)->enumPropertyMess();
+}
+
 void pix_video :: qualityMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->qualityMess(static_cast<int>(state));
