@@ -124,6 +124,10 @@ namespace gem { class GEM_EXPORT videoV4L2 : public video {
 
   virtual std::vector<std::string>enumerate(void);
 
+  virtual bool enumProperties(std::vector<std::string>&readable,std::vector<std::string>&writeable);
+  virtual void setProperties(gem::Properties&props);
+  virtual void getProperties(gem::Properties&props);
+
  protected:
 
   //-----------------------------------

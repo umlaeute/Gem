@@ -792,6 +792,73 @@ std::vector<std::string> videoV4L2::enumerate() {
   return result;
 }
 
+static void addProperties(struct v4l2_queryctrl queryctrl,
+				 std::vector<std::string>&readable,
+				 std::vector<std::string>&writeable) {
+  const char* name=NULL;
+
+  if (queryctrl.flags & V4L2_CTRL_FLAG_DISABLED)
+    return;
+  
+  name=(const char*)(queryctrl.name);
+
+  if (queryctrl.flags & V4L2_CTRL_FLAG_READ_ONLY) {
+    readable.push_back(name);
+  } else {
+    readable.push_back(name);
+    writeable.push_back(name);
+  }
+}
+
+
+bool videoV4L2 :: enumProperties(std::vector<std::string>&readable,
+			     std::vector<std::string>&writeable) {
+  struct v4l2_queryctrl queryctrl;
+
+  if(m_tvfd<0)
+    return false;
+
+  memset (&queryctrl, 0, sizeof (queryctrl));
+
+  for (queryctrl.id = V4L2_CID_BASE;
+       queryctrl.id < V4L2_CID_LASTP1;
+       queryctrl.id++) {
+    if (0 == v4l2_ioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
+      addProperties(queryctrl, readable, writeable);
+    } else {
+      if (errno == EINVAL)
+	continue;
+#if 0 
+      perror ("VIDIOC_QUERYCTRL");
+      exit (EXIT_FAILURE);
+#endif
+    }
+  }
+
+  for (queryctrl.id = V4L2_CID_PRIVATE_BASE;;
+       queryctrl.id++) {
+    if (0 == v4l2_ioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
+      addProperties(queryctrl, readable, writeable);
+    } else {
+      if (errno == EINVAL)
+	break;
+#if 0
+      perror ("VIDIOC_QUERYCTRL");
+      exit (EXIT_FAILURE);
+#endif
+    }
+  }
+
+  return true;
+}
+void videoV4L2 :: getProperties(gem::Properties&props) {
+
+}
+void videoV4L2 :: setProperties(gem::Properties&props) {
+
+}
+
+
 #else
 videoV4L2 ::  videoV4L2() : video("") {}
 videoV4L2 :: ~videoV4L2() {}
