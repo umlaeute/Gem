@@ -476,5 +476,49 @@ void video :: provide(const std::string name) {
   }
 }
 
+bool video :: enumProperties(std::vector<std::string>&readable,
+			     std::vector<std::string>&writeable) {
+  readable.clear();
+  writeable.clear();
+  return false;
+}
+
+void video :: setProperties(gem::Properties&props) {
+  // nada
+
+  std::vector<std::string> keys=props.keys();
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+    enum gem::Properties::PropertyType typ=props.type(keys[i]);
+    std::cerr  << "key["<<keys[i]<<"]: "<<typ<<" :: ";
+    switch(typ) {
+    case (gem::Properties::NONE):
+      props.erase(keys[i]);
+      break;
+    case (gem::Properties::DOUBLE):
+      std::cerr << gem::any_cast<double>(props.get(keys[i]));
+      break;
+    case (gem::Properties::STRING):
+      std::cerr << "'" << gem::any_cast<std::string>(props.get(keys[i])) << "'";
+      break;
+    default:
+      std::cerr << "<unkown:" << props.get(keys[i]).get_type().name() << ">";
+      break;
+    }
+  }
+  std::cerr << std::endl;
+}
+
+void video :: getProperties(gem::Properties&props) {
+  // nada
+  std::vector<std::string>keys=props.keys();
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+    gem::any unset;
+    props.set(keys[i], unset);
+  }
+}
+
+
 
 INIT_VIDEOFACTORY();

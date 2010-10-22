@@ -2,11 +2,9 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an video into a pix block
+Base Class for Video Capture Plugins
 
-Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2003 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+Copyright (c) 2010 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -19,6 +17,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include <string>
 #include "plugins/PluginFactory.h"
+
+#include "Base/Properties.h"
 
 #include <vector>
 
@@ -144,8 +144,6 @@ namespace gem { class GEM_EXTERN video {
      */
     void usleep(unsigned long usec);
 
-
-
     //////////////////////
     // device settings
 
@@ -206,6 +204,30 @@ namespace gem { class GEM_EXTERN video {
     bool provides(const std::string);
     // get a list of all provided devices
     std::vector<std::string>provides(void);
+
+    /**
+     * list all properties the currently opened device supports
+     * after calling, "readable" will hold a list of all properties that can be read
+     * and "writeable" will hold a list of all properties that can be set
+     * if the enumeration fails, this returns <code>false</code>
+     */
+    virtual bool enumProperties(std::vector<std::string>&readable,std::vector<std::string>&writeable);
+
+    /**
+     * set a number of properties (as defined by "props")
+     * the "props" may hold properties not supported by the currently opened device,
+     *  which is legal; in this case the superfluous properties are simply ignored
+     * this function MAY modify the props; 
+     * namely one-shot properties (e.g. "do-white-balance-now") should be removed from the props
+     */
+    virtual void setProperties(gem::Properties&props);
+
+    /**
+     * get the current value of the given properties from the device
+     * if props holds properties that can not be read from the device, they are set to UNSET 
+     */
+    virtual void getProperties(gem::Properties&props);
+
   protected:
     // for child-implementations: remember that we provide access to this class of devices
     void provide(const std::string);
