@@ -34,13 +34,14 @@ using namespace gem;
 # define v4l2_munmap munmap
 #endif /* libv4l-2 */
 
-#if 1
+#if 0
 # define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
-# define debugThread
-// ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+# define debugThread ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+# define debugIOCTL ::post
 #else
 # define debugPost
 # define debugThread
+# define debugIOCTL 
 #endif
 
 
@@ -95,14 +96,15 @@ static int xioctl(int                    fd,
                   void *                 arg)
 {
   int r;
-     
+  debugIOCTL("V4L2: xioctl %d\n", request);
   do {
     r = v4l2_ioctl (fd, request, arg);
-    debugThread("V4L2: xioctl %d->%d\n", r, errno);
+    debugIOCTL("V4L2: xioctl %d->%d\n", r, errno);
   }
   while (-1 == r && EINTR == errno);
 
-  debugThread("V4L2: xioctl done %d\n", r);
+  debugIOCTL("V4L2: xioctl done %d\n", r);
+  if(r!=0)perror("xioctl: ");
    
   return r;
 }
@@ -257,7 +259,7 @@ void *videoV4L2 :: capturing(void)
       captureerror=true;
     }
 
-    debugThread("V4L2: dequeueueeud");
+    debugThread("V4L2: dequeueued");
     
     m_frame_ready = 1;
     m_last_frame=m_frame;
@@ -483,9 +485,9 @@ bool videoV4L2 :: startTransfer()
   switch(m_gotFormat){
   case V4L2_PIX_FMT_RGB32: debugPost("v4l2: ARGB");break;
   case V4L2_PIX_FMT_RGB24: debugPost("v4l2: RGB");break;
-  case V4L2_PIX_FMT_UYVY: debugPost("v4l2: YUV ");break;
-  case V4L2_PIX_FMT_GREY: debugPost("v4l2: gray");break;
-  case V4L2_PIX_FMT_YUV420: debugPost("v4l2: YUV 4:2:0");break;
+  case V4L2_PIX_FMT_UYVY:  debugPost("v4l2: YUV ");break;
+  case V4L2_PIX_FMT_GREY:  debugPost("v4l2: gray");break;
+  case V4L2_PIX_FMT_YUV420:debugPost("v4l2: YUV 4:2:0");break;
   default: 
     /* hmm, we don't know how to handle this 
      * let's try formats that should be always supported by libv4l2
@@ -647,12 +649,9 @@ bool videoV4L2 :: stopTransfer()
     }
   }
 
-  // close the file-descriptor
-  debugPost("v4l2: closing %d", m_tvfd);
-
   m_frame_ready = 0;
   m_rendering=false;
-  debugPost("v4l2: stoppedtransfer");
+  debugPost("v4l2: stoppedTransfer");
   return true;
 }
 
@@ -1098,17 +1097,14 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
       std::cerr << "getting current format" << std::endl;
       if (0 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)) {
 	double d;
-	std::cerr << "current format is "<<fmt.fmt.pix.width<<"x"<<fmt.fmt.pix.height<<std::endl;
 	if(props.get("width", d))
 	  fmt.fmt.pix.width=d;
 	if(props.get("height", d))
 	  fmt.fmt.pix.height=d;
 
-	std::cerr << "new format should be "<<fmt.fmt.pix.width<<"x"<<fmt.fmt.pix.height<<std::endl;
 	if(0 != xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)) {
 	  perror("VIDIOC_S_FMT");
 	}
-	std::cerr << "new format is "<<fmt.fmt.pix.width<<"x"<<fmt.fmt.pix.height<<std::endl;
       }
     } // format
 
