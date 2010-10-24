@@ -444,10 +444,7 @@ bool videoV4L2 :: startTransfer()
 
   /* Select video format */
   memset (&(fmt), 0, sizeof (fmt));
-
   fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  fmt.fmt.pix.width       = m_width;
-  fmt.fmt.pix.height      = m_height;
 
   switch(m_reqFormat){
   case GL_YCBCR_422_GEM: 
@@ -464,7 +461,6 @@ bool videoV4L2 :: startTransfer()
     m_reqFormat=GL_RGBA;
     break;
   }
-  fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
   
   verbose(1, "v4l2: want 0x%X == '%c%c%c%c' ", m_reqFormat, 
           (char)(fmt.fmt.pix.pixelformat),
@@ -531,15 +527,6 @@ bool videoV4L2 :: startTransfer()
           (char)(m_gotFormat>>16),
           (char)(m_gotFormat>>24));
 
-  /* Note VIDIOC_S_FMT may change width and height. */
-  if(m_width!=fmt.fmt.pix.width||m_height!=fmt.fmt.pix.height){
-    post("v4l2: changed size from %dx%d to %dx%d", 
-         m_width, m_height,
-         fmt.fmt.pix.width,fmt.fmt.pix.height);
-  }
-  m_width =fmt.fmt.pix.width;
-  m_height=fmt.fmt.pix.height;
-
   if(!init_mmap ())goto closit;
 
   for (i = 0; i < m_nbuffers; ++i) {
@@ -557,15 +544,14 @@ bool videoV4L2 :: startTransfer()
   }
 
   type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-
   if (-1 == xioctl (m_tvfd, VIDIOC_STREAMON, &type)){
     perror("v4l2: VIDIOC_STREAMON");//exit
   }
   
   /* fill in image specifics for Gem pixel object.  Could we have
      just used RGB, I wonder? */
-  m_image.image.xsize = m_width;
-  m_image.image.ysize = m_height;
+  m_image.image.xsize = fmt.fmt.pix.width;
+  m_image.image.ysize = fmt.fmt.pix.height;
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
   
@@ -1039,9 +1025,21 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	}
       } else if("frequency" == key) {
       } else if("width" == key) {
-	setformat=true;
+	double d;
+	int i;
+	props.get("width", d);
+	i=d;
+	if(m_width != i)
+	  setformat=true;
+	m_width = i;
       } else if("height" == key) {
-	setformat=true;
+	double d;
+	int i;
+	props.get("height", d);
+	i=d;
+	if(m_height != i)
+	  setformat=true;
+	m_height = i;
       } else {
       }
     }
