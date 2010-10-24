@@ -545,14 +545,6 @@ bool videoV4L2 :: startTransfer()
   m_width =fmt.fmt.pix.width;
   m_height=fmt.fmt.pix.height;
 
-  /* Buggy driver paranoia. */
-  min = fmt.fmt.pix.width * 2;
-  if (fmt.fmt.pix.bytesperline < min)
-    fmt.fmt.pix.bytesperline = min;
-  min = fmt.fmt.pix.bytesperline * fmt.fmt.pix.height;
-  if (fmt.fmt.pix.sizeimage < min)
-    fmt.fmt.pix.sizeimage = min;
-
   if(!init_mmap ())goto closit;
 
   for (i = 0; i < m_nbuffers; ++i) {
