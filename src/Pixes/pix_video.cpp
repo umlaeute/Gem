@@ -33,7 +33,7 @@ CPPEXTERN_NEW(pix_video)
 //
 /////////////////////////////////////////////////////////
 pix_video :: pix_video() : 
-  m_videoHandle(NULL), m_driver(-1), m_running(true)
+  m_videoHandle(NULL), m_driver(-1), m_running(true), m_infoOut(NULL)
 {
   gem::PluginFactory<gem::video>::loadPlugins("video");
   std::vector<std::string>ids=gem::PluginFactory<gem::video>::getIDs();
@@ -43,6 +43,8 @@ pix_video :: pix_video() :
   addHandle(ids, "dv4l");
 
   addHandle(ids);
+
+  m_infoOut = outlet_new(this->x_obj, 0);
 
   /*
    * calling driverMess() would immediately startTransfer(); 
@@ -68,6 +70,8 @@ pix_video :: ~pix_video(){
     delete m_videoHandles[i];
     m_videoHandles[i]=NULL;
   }
+
+  outlet_free(m_infoOut); m_infoOut=NULL;
 }
 
 
@@ -193,6 +197,10 @@ bool pix_video::restart(void) {
     for(i=0; i<m_videoHandles.size(); i++) {
       if(m_videoHandles[i]->open()) {
         m_videoHandle=m_videoHandles[i];
+
+	enumPropertyMess();
+	m_videoHandle->setProperties(m_writeprops);
+
         if(m_running) {
           m_videoHandle->start();
         }
@@ -431,7 +439,7 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
   if(!argc)return;
 
     if(argv->a_type != A_SYMBOL) {
-      post("no key given...");
+      error("no key given...");
       return;
     }
     std::string key=std::string(atom_getsymbol(argv)->s_name);
@@ -442,17 +450,14 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
     }
     switch(values.size()) {
     default:
-      post("+ arg");
       props.set(key, values);
       break;
     case 1:
-      post("1 arg");
       props.set(key, values[0]);
       break;
     case 0: 
       {
 	gem::any dummy;
-	post("O arg");
 	props.set(key, dummy);
       }
       break;
@@ -475,37 +480,160 @@ void pix_video :: setPropertyMess(int argc, t_atom*argv)
 void pix_video :: getPropertyMess(int argc, t_atom*argv)
 {
   if(argc) {
-    addProperties(m_readprops, argc, argv);
-  } else {
-    if(m_videoHandle) {
-      m_videoHandle->getProperties(m_readprops);
-      std::vector<std::string>keys=m_readprops.keys();
-      int i=0;
-      for(i=0; i<keys.size(); i++) {
-	post("got property: ['%s']", keys[i].c_str());
-      }
-    } else {
-      verbose(1, "no open videodevice...remembering properties...");
+    int i=0;
+    m_readprops.clear();
+
+    
+
+    for(i=0; i<argc; i++) {
+      addProperties(m_readprops, 1, argv+i);
     }
+  } else {
+    /* LATER: read all properties */
+  }
+
+  t_atom ap[4];
+  if(m_videoHandle) {
+    m_videoHandle->getProperties(m_readprops);
+    std::vector<std::string>keys=m_readprops.keys();
+    int i=0;
+    for(i=0; i<keys.size(); i++) {
+      std::string key=keys[i];
+      SETSYMBOL(ap+0, gensym(key.c_str()));
+      int ac=1;
+      switch(m_readprops.type(key)) {
+      default:
+      case gem::Properties::UNSET: 
+      case gem::Properties::NONE:  
+	ac=0; 
+	break;
+#if 0
+	ac=1; 
+	break;
+#endif
+      case gem::Properties::DOUBLE:
+	do {
+	  double d=0;
+	  if(m_readprops.get(key, d)) {
+	    ac=2;
+	    SETFLOAT(ap+1, d);
+	  }
+	} while(0);
+	break;
+      case gem::Properties::STRING:
+	do {
+	  std::string s;
+	  if(m_readprops.get(key, s)) {
+	    ac=2;
+	    SETSYMBOL(ap+1, gensym(s.c_str()));
+	  }
+	} while(0);
+	break;
+      }	    
+      if(ac) {
+	outlet_anything(m_infoOut, gensym("parameter"), ac, ap);
+      } else {
+	post("oops: %s", key.c_str());
+      }
+    }
+  } else {
+    verbose(1, "no open videodevice...remembering properties...");
   }
 }
 
 void pix_video :: enumPropertyMess()
 {
   if(m_videoHandle) {
-    std::vector<std::string>readable, writeable;
+    gem::Properties readable, writeable;
+    std::vector<std::string>readkeys, writekeys;
+    t_atom ap[4];
+    int ac=3;
+
     int i=0;
 
     m_videoHandle->enumProperties(readable, writeable);
 
-    for(i=0; i<readable.size(); i++) {
-      post("readable property: '%s'", readable[i].c_str());
+    readkeys=readable.keys();
+
+    SETSYMBOL(ap+0, gensym("numread"));
+    SETFLOAT(ap+1, readkeys.size());
+    outlet_anything(m_infoOut, gensym("parameterlist"), 2, ap);
+
+    SETSYMBOL(ap+0, gensym("read"));
+    for(i=0; i<readkeys.size(); i++) {
+      ac=3;
+      std::string key=readkeys[i];
+      SETSYMBOL(ap+1, gensym(key.c_str()));
+      switch(readable.type(key)) {
+      case gem::Properties::NONE:
+	SETSYMBOL(ap+2, gensym("bang"));
+	break;
+      case gem::Properties::DOUBLE: {
+	double d=-1;
+	SETSYMBOL(ap+2, gensym("float"));
+	/* LATER: get and show ranges */
+	if(readable.get(key, d)) {
+	  ac=4;
+	  SETFLOAT(ap+3, d);
+	}
+      }
+	break;
+      case gem::Properties::STRING: {
+	SETSYMBOL(ap+2, gensym("symbol"));
+	std::string s;
+	if(readable.get(key, s)) {
+	  ac=4;
+	  SETSYMBOL(ap+3, gensym(s.c_str()));
+	}
+      }
+	break;
+      default:
+	SETSYMBOL(ap+2, gensym("unknown"));
+	break;
+      }
+      outlet_anything(m_infoOut, gensym("parameterlist"), ac, ap);
     }
-    for(i=0; i<writeable.size(); i++) {
-      post("writeable property: '%s'", writeable[i].c_str());
+
+
+    writekeys=writeable.keys();
+
+    SETSYMBOL(ap+0, gensym("numwrite"));
+    SETFLOAT(ap+1, writekeys.size());
+    outlet_anything(m_infoOut, gensym("parameterlist"), 2, ap);
+
+    SETSYMBOL(ap+0, gensym("write"));
+    for(i=0; i<writekeys.size(); i++) {
+      std::string key=writekeys[i];
+      SETSYMBOL(ap+1, gensym(key.c_str()));
+      switch(writeable.type(key)) {
+      case gem::Properties::NONE:
+	SETSYMBOL(ap+2, gensym("bang"));
+	break;
+      case gem::Properties::DOUBLE: {
+	double d=-1;
+	SETSYMBOL(ap+2, gensym("float"));
+	/* LATER: get and show ranges */
+	if(writeable.get(key, d)) {
+	  SETFLOAT(ap+3, d);
+	}
+      }
+	break;
+      case gem::Properties::STRING: {
+	SETSYMBOL(ap+2, gensym("symbol"));
+	std::string s;
+	if(writeable.get(key, s)) {
+	  SETSYMBOL(ap+3, gensym(s.c_str()));
+	}
+      }
+	break;
+      default:
+	SETSYMBOL(ap+2, gensym("unknown"));
+	break;
+      }
+      outlet_anything(m_infoOut, gensym("parameterlist"), ac, ap);
     }
   } else {
-    error("cannot enumerate properties without a valid videodevice");
+    error("cannot enumerate properties without a valid video-device");
   }
 }
 

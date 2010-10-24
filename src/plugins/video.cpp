@@ -380,8 +380,6 @@ void video::releaseFrame(void) {
 /////////////////////////////////////////////////////////
 // set dimension
 bool video :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
-  //  post("setting the dimension for video is not supported by this OS/device");
-
   m_width=x;
   m_height=y;
   return false;
@@ -476,8 +474,9 @@ void video :: provide(const std::string name) {
   }
 }
 
-bool video :: enumProperties(std::vector<std::string>&readable,
-			     std::vector<std::string>&writeable) {
+bool video :: enumProperties(gem::Properties&readable,
+			     gem::Properties&writeable) 
+{
   readable.clear();
   writeable.clear();
   return false;

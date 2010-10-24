@@ -130,6 +130,10 @@ class GEM_EXTERN pix_video : public GemBase
   bool m_running;
   virtual void	runningMess(bool);
 
+
+  /* an outlet for status messages */
+  t_outlet *m_infoOut;
+
  private:
     	
   //////////

@@ -210,15 +210,30 @@ namespace gem { class GEM_EXTERN video {
      * after calling, "readable" will hold a list of all properties that can be read
      * and "writeable" will hold a list of all properties that can be set
      * if the enumeration fails, this returns <code>false</code>
+     *
+     * the backend has to provide the names for the properties
+     *  these are defined by default, and need not be enumerated!
+     *    "width"            "dimen" message   (float)
+     *    "height"           "dimen" message   (float)
+     *       "leftmargin"   ("dimen" message)  (float)
+     *       "rightmargin"  ("dimen" message)  (float)
+     *       "toptmargin"   ("dimen" message)  (float)
+     *       "bottommargin" ("dimen" message)  (float)
+     *    "channel"          "channel" message (float)
+     *    "frequency"        "channel" message (float)
+     *    "norm"             "norm" message    (string)
+     *    "quality"          "quality" message (float)
      */
-    virtual bool enumProperties(std::vector<std::string>&readable,std::vector<std::string>&writeable);
+    virtual bool enumProperties(gem::Properties&readable,
+				gem::Properties&writeable);
 
     /**
      * set a number of properties (as defined by "props")
      * the "props" may hold properties not supported by the currently opened device,
      *  which is legal; in this case the superfluous properties are simply ignored
      * this function MAY modify the props; 
-     * namely one-shot properties (e.g. "do-white-balance-now") should be removed from the props
+     * namely one-shot properties (e.g. "do-white-balance-now") 
+     *     should be removed from the props
      */
     virtual void setProperties(gem::Properties&props);
 
