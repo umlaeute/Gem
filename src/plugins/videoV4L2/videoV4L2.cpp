@@ -814,7 +814,7 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
   for (queryctrl.id = V4L2_CID_BASE;
        queryctrl.id < V4L2_CID_LASTP1;
        queryctrl.id++) {
-    if (0 == v4l2_ioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
+    if (0 == xioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
       addProperties(queryctrl, readable, writeable);
 
     } else {
@@ -825,7 +825,7 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
 
   for (queryctrl.id = V4L2_CID_PRIVATE_BASE;;
        queryctrl.id++) {
-    if (0 == v4l2_ioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
+    if (0 == xioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
       addProperties(queryctrl, readable, writeable);
     } else {
       if (errno == EINVAL)
@@ -972,7 +972,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	vc.value=d;
       }
 
-      int err=v4l2_ioctl(m_tvfd, VIDIOC_S_CTRL, &vc);
+      int err=xioctl(m_tvfd, VIDIOC_S_CTRL, &vc);
 
       if(V4L2_CTRL_TYPE_BUTTON == qc.type) {
 	props.erase(key);
