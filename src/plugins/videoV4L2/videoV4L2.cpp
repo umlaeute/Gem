@@ -432,8 +432,6 @@ bool videoV4L2 :: startTransfer()
   //  verbose(1, "starting transfer");
   int i;
 
-  struct v4l2_cropcap cropcap;
-  struct v4l2_crop crop;
   struct v4l2_format fmt;
   unsigned int min;
 
@@ -443,33 +441,6 @@ bool videoV4L2 :: startTransfer()
   m_last_frame = 0;
 
   /* Select video input, video standard and tune here. */
-
-  cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-
-  if (-1 == xioctl (m_tvfd, VIDIOC_CROPCAP, &cropcap)) {
-    /* Errors ignored. */
-  }
-
-  memset(&(cropcap), 0, sizeof (cropcap));
-  cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-
-  if (0 == xioctl (m_tvfd, VIDIOC_CROPCAP, &cropcap)) {
-    crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    crop.c = cropcap.defrect; /* reset to default */
-
-    if (-1 == xioctl (m_tvfd, VIDIOC_S_CROP, &crop)) {
-      perror("v4l2: vidioc_s_crop");
-      switch (errno) {
-      case EINVAL:
-        /* Cropping not supported. */
-        break;
-      default:
-        /* Errors ignored. */
-        break;
-      }
-    }
-  }
-
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_INPUT, &m_channel)) {
     perror("v4l2: VIDIOC_S_INPUT"); /* exit */
@@ -1100,12 +1071,39 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
     bool rendering=m_rendering;
     if(m_capturing)stopTransfer();
 
+#if 0
     setcropping=true;
-
     if(setcropping) {
+      struct v4l2_cropcap cropcap;
+      cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
+      if (-1 == xioctl (m_tvfd, VIDIOC_CROPCAP, &cropcap)) {
+	/* Errors ignored. */
+      }
+
+      memset(&(cropcap), 0, sizeof (cropcap));
+      cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+
+      if (0 == xioctl (m_tvfd, VIDIOC_CROPCAP, &cropcap)) {
+	struct v4l2_crop crop;
+
+	crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	crop.c = cropcap.defrect; /* reset to default */
+
+	if (-1 == xioctl (m_tvfd, VIDIOC_S_CROP, &crop)) {
+	  perror("v4l2: vidioc_s_crop");
+	  switch (errno) {
+	  case EINVAL:
+	    /* Cropping not supported. */
+	    break;
+	  default:
+	    /* Errors ignored. */
+	    break;
+	  }
+	}
+      }
     } // cropping
-
+#endif
 
     if(setformat) {
       struct v4l2_format fmt;
