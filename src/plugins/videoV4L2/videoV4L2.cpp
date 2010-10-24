@@ -440,12 +440,7 @@ bool videoV4L2 :: startTransfer()
   m_frame = 0;
   m_last_frame = 0;
 
-  /* Select video input, video standard and tune here. */
-
-  if (-1 == xioctl (m_tvfd, VIDIOC_S_INPUT, &m_channel)) {
-    perror("v4l2: VIDIOC_S_INPUT"); /* exit */
-  }
-
+  /* Select video format */
   memset (&(fmt), 0, sizeof (fmt));
 
   fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -527,8 +522,6 @@ bool videoV4L2 :: startTransfer()
           (char)(m_gotFormat>>24));
     /* we should really return here! */
   }
-
-
 
   verbose(1, "v4l2: got '%c%c%c%c'", 
           (char)(m_gotFormat),
