@@ -473,6 +473,11 @@ bool videoV4L2 :: startTransfer()
   }
   
   // query back what we have set
+  /* in theory this should not be needed, 
+   * as S_FMT is supposed to return the actual data
+   * however, some buggy drivers seem to not do that, 
+   * so we have to make sure...
+   */
   if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
     perror("v4l2: VIDIOC_G_FMT");//exit
   }
