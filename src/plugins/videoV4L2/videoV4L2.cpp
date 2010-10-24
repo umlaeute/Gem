@@ -108,19 +108,28 @@ static int xioctl(int                    fd,
    
   return r;
 }
- 
-int videoV4L2::init_mmap (void)
-{
-  struct v4l2_requestbuffers req;
-  const char *devname=(m_devicename.empty())?"device":m_devicename.c_str();
 
+static int reqbufs(int fd, unsigned int numbufs) {
+  struct v4l2_requestbuffers req;
   memset (&(req), 0, sizeof (req));
 
-  req.count               = V4L2_NBUF;
+  req.count               = numbufs;
   req.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   req.memory              = V4L2_MEMORY_MMAP;
 
-  if (-1 == xioctl (m_tvfd, VIDIOC_REQBUFS, &req)) {
+  if (-1 == xioctl (fd, VIDIOC_REQBUFS, &req)) {
+    return -1;
+  }
+
+  return req.count;
+}
+
+int videoV4L2::init_mmap (void)
+{
+  const char *devname=(m_devicename.empty())?"device":m_devicename.c_str();
+  int count = reqbufs(m_tvfd, V4L2_NBUF);
+
+  if(count<0) {
     if (EINVAL == errno) {
       error("%s does not support memory mapping", devname);
       return 0;
@@ -130,19 +139,19 @@ int videoV4L2::init_mmap (void)
     }
   }
 
-  if (req.count < V4L2_NBUF) {
-    //error("Insufficient buffer memory on %s: %d", devname, req.count);
+  if (count < V4L2_NBUF) {
+    //error("Insufficient buffer memory on %s: %d", devname, count);
     //return(0);
   }
 
-  m_buffers = (t_v4l2_buffer*)calloc (req.count, sizeof (*m_buffers));
+  m_buffers = (t_v4l2_buffer*)calloc (count, sizeof (*m_buffers));
 
   if (!m_buffers) {
     perror("v4l2: out of memory");
     return(0);
   }
 
-  for (m_nbuffers = 0; m_nbuffers < req.count; ++m_nbuffers) {
+  for (m_nbuffers = 0; m_nbuffers < count; ++m_nbuffers) {
     struct v4l2_buffer buf;
 
     memset (&(buf), 0, sizeof (buf));
@@ -639,6 +648,9 @@ bool videoV4L2 :: stopTransfer()
       perror("v4l2: VIDIOC_STREAMOFF");
     }
   }
+  
+  debugPost("v4l2: de-requesting buffers");
+  reqbufs(m_tvfd, 0);
 
   m_frame_ready = 0;
   m_rendering=false;
