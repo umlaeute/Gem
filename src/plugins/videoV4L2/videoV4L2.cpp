@@ -34,9 +34,10 @@ using namespace gem;
 # define v4l2_munmap munmap
 #endif /* libv4l-2 */
 
-#if 0
-# define debugPost ::post
-# define debugThread ::post
+#if 1
+# define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+# define debugThread
+// ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
 #else
 # define debugPost
 # define debugThread
@@ -293,13 +294,18 @@ pixBlock *videoV4L2 :: getFrame(){
     if (m_colorConvert){
       m_image.image.notowned = false;
       switch(m_gotFormat){
-      case V4L2_PIX_FMT_RGB24: m_image.image.fromRGB   (data); break;
-      case V4L2_PIX_FMT_BGR32: m_image.image.fromBGRA  (data); break;
-      case V4L2_PIX_FMT_RGB32: m_image.image.fromARGB  (data); break;
-      case V4L2_PIX_FMT_GREY : m_image.image.fromGray  (data); break;
-      case V4L2_PIX_FMT_UYVY : m_image.image.fromYUV422(data); break;
-      case V4L2_PIX_FMT_YUYV : m_image.image.fromYUY2  (data); break;
-      case V4L2_PIX_FMT_YUV420:m_image.image.fromYU12  (data); break;
+#if 1
+# define CONVERT(type) m_image.image.from##type (data)
+#else
+# define CONVERT(type) post("from " #type "!");m_image.image.from##type (data)
+#endif
+      case V4L2_PIX_FMT_RGB24: CONVERT(RGB   ); break;
+      case V4L2_PIX_FMT_BGR32: CONVERT(BGRA  ); break;
+      case V4L2_PIX_FMT_RGB32: CONVERT(ARGB  ); break;
+      case V4L2_PIX_FMT_GREY : CONVERT(Gray  ); break;
+      case V4L2_PIX_FMT_UYVY : CONVERT(YUV422); break;
+      case V4L2_PIX_FMT_YUYV : CONVERT(YUY2  ); break;
+      case V4L2_PIX_FMT_YUV420:CONVERT(YU12  ); break;
 
 
       default: // ? what should we do ?
@@ -488,7 +494,7 @@ bool videoV4L2 :: startTransfer()
   }
   fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
   
-  verbose(1, "v4l2: want %d == '%c%c%c%c' ", m_reqFormat, 
+  verbose(1, "v4l2: want 0x%X == '%c%c%c%c' ", m_reqFormat, 
           (char)(fmt.fmt.pix.pixelformat),
           (char)(fmt.fmt.pix.pixelformat>>8),
           (char)(fmt.fmt.pix.pixelformat>>16),
@@ -601,7 +607,7 @@ bool videoV4L2 :: startTransfer()
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
   
-  debugPost("v4l2: format: %c%c%c%c -> %d", 
+  debugPost("v4l2: format: %c%c%c%c -> 0x%X", 
             (char)(m_gotFormat),
             (char)(m_gotFormat>>8),
             (char)(m_gotFormat>>16),
@@ -842,10 +848,6 @@ bool videoV4L2 :: enumProperties(std::vector<std::string>&readable,
     } else {
       if (errno == EINVAL)
 	break;
-#if 0
-      perror ("VIDIOC_QUERYCTRL");
-      exit (EXIT_FAILURE);
-#endif
     }
   }
 
