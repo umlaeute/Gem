@@ -96,7 +96,9 @@ static int xioctl(int                    fd,
                   void *                 arg)
 {
   int r;
-  debugIOCTL("V4L2: xioctl %d\n", request);
+  const unsigned char req=(request&0xFF);
+
+  debugIOCTL("V4L2: xioctl %d\n", req);
   do {
     r = v4l2_ioctl (fd, request, arg);
     debugIOCTL("V4L2: xioctl %d->%d\n", r, errno);
@@ -104,8 +106,14 @@ static int xioctl(int                    fd,
   while (-1 == r && EINTR == errno);
 
   debugIOCTL("V4L2: xioctl done %d\n", r);
-  if(r!=0)perror("xioctl: ");
-   
+#if 0
+  if(r!=0) {
+    char buf[13];
+    snprintf(buf, 13, "xioctl[%03d]:", req);
+    buf[12]=0;
+    perror(buf);
+  }
+#endif
   return r;
 }
 
@@ -478,7 +486,7 @@ bool videoV4L2 :: startTransfer()
           (char)(fmt.fmt.pix.pixelformat>>24));
 
   if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
-    perror("v4l2: VIDIOC_S_FMT");//exit
+    perror("v4l2: VIDIOC_S_FMT(fmt)");//exit
   }
   
   // query back what we have set
@@ -512,11 +520,11 @@ bool videoV4L2 :: startTransfer()
       break;
     }
     if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
-      perror("v4l2: VIDIOC_S_FMT2");
+      perror("v4l2: VIDIOC_S_FMT(fmt2)");
     }
     // query back what we have set
     if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
-      perror("v4l2: VIDIOC_G_FMT2");
+      perror("v4l2: VIDIOC_G_FMT(fmt2)");
     }
     m_gotFormat=fmt.fmt.pix.pixelformat;
   }
@@ -1118,7 +1126,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	  fmt.fmt.pix.height=d;
 
 	if(0 != xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)) {
-	  perror("VIDIOC_S_FMT");
+	  perror("VIDIOC_S_FMT(dim)");
 	}
       }
     } // format
