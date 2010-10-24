@@ -124,9 +124,10 @@ namespace gem { class GEM_EXPORT videoV4L2 : public video {
 
   virtual std::vector<std::string>enumerate(void);
 
-  virtual bool enumProperties(std::vector<std::string>&readable,std::vector<std::string>&writeable);
-  virtual void setProperties(gem::Properties&props);
-  virtual void getProperties(gem::Properties&props);
+  virtual bool enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&writeprops);
+  virtual void getProperties(gem::Properties&readprops);
 
  protected:
 
@@ -176,6 +177,13 @@ namespace gem { class GEM_EXPORT videoV4L2 : public video {
 
   /* use this in the capture-thread to cleanup */
   bool      m_stopTransfer;  
+
+  /* internal housekeeping of properties */
+  void addProperties(struct v4l2_queryctrl queryctrl,
+		     gem::Properties&readable,
+		     gem::Properties&writeable);
+  std::map<std::string, struct v4l2_queryctrl>m_readprops, m_writeprops;
+
 #endif /* HAVE_VIDEO4LINUX2 */
 
   }; };

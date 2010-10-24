@@ -43,6 +43,10 @@ using namespace gem;
 # define debugThread
 #endif
 
+
+#define WIDTH_FLAG 1
+#define HEIGHT_FLAG 2
+
 /////////////////////////////////////////////////////////
 //
 // videoV4L2
@@ -798,31 +802,57 @@ std::vector<std::string> videoV4L2::enumerate() {
   return result;
 }
 
-static void addProperties(struct v4l2_queryctrl queryctrl,
-				 std::vector<std::string>&readable,
-				 std::vector<std::string>&writeable) {
+void videoV4L2::addProperties(struct v4l2_queryctrl queryctrl,
+			  gem::Properties&readable,
+			  gem::Properties&writeable) {
   const char* name=NULL;
+  gem::any typ;
 
   if (queryctrl.flags & V4L2_CTRL_FLAG_DISABLED)
     return;
+
+  switch(queryctrl.type) {
+  case V4L2_CTRL_TYPE_BUTTON:
+    break;
+  case V4L2_CTRL_TYPE_BOOLEAN:
+    typ=1;
+    break;
+  case V4L2_CTRL_TYPE_MENU:
+    typ=queryctrl.maximum;
+    break;
+  case V4L2_CTRL_TYPE_INTEGER:
+    typ=queryctrl.maximum;
+    break;
+  case V4L2_CTRL_TYPE_INTEGER64:
+    typ=0;
+    break;
+  default:
+    return;
+  }
   
   name=(const char*)(queryctrl.name);
 
-  if (queryctrl.flags & V4L2_CTRL_FLAG_READ_ONLY) {
-    readable.push_back(name);
-  } else {
-    readable.push_back(name);
-    writeable.push_back(name);
+  m_readprops[name]=queryctrl;
+  readable.set(name, typ);
+
+  if (!(queryctrl.flags & V4L2_CTRL_FLAG_READ_ONLY)) {
+    m_writeprops[name]=queryctrl;
+    writeable.set(name, typ);
   }
 }
 
-
-bool videoV4L2 :: enumProperties(std::vector<std::string>&readable,
-			     std::vector<std::string>&writeable) {
+bool videoV4L2 :: enumProperties(gem::Properties&readable,
+				 gem::Properties&writeable) {
   struct v4l2_queryctrl queryctrl;
 
   if(m_tvfd<0)
     return false;
+
+  readable.clear();
+  writeable.clear();
+
+  m_readprops.clear();
+  m_writeprops.clear();
 
   memset (&queryctrl, 0, sizeof (queryctrl));
 
@@ -831,13 +861,10 @@ bool videoV4L2 :: enumProperties(std::vector<std::string>&readable,
        queryctrl.id++) {
     if (0 == v4l2_ioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
       addProperties(queryctrl, readable, writeable);
+
     } else {
       if (errno == EINVAL)
 	continue;
-#if 0 
-      perror ("VIDIOC_QUERYCTRL");
-      exit (EXIT_FAILURE);
-#endif
     }
   }
 
@@ -850,14 +877,260 @@ bool videoV4L2 :: enumProperties(std::vector<std::string>&readable,
 	break;
     }
   }
-
   return true;
 }
 void videoV4L2 :: getProperties(gem::Properties&props) {
+  int getformat=0;
 
+  if(m_tvfd<0) {
+    props.clear();
+    return;
+  }
+  std::vector<std::string>keys=props.keys();
+  int i=0; 
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    std::map<std::string,  struct v4l2_queryctrl>::iterator it = m_readprops.find(key);
+    if(it != m_readprops.end()) {
+      struct v4l2_queryctrl qc=it->second;
+      struct v4l2_control vc;
+      memset (&vc, 0, sizeof (vc));
+      vc.id=qc.id;
+      vc.value=0;
+
+      int err=xioctl(m_tvfd, VIDIOC_G_CTRL, &vc);
+      if(0==err) {
+	props.set(key, vc.value);
+      } else {
+	props.erase(key);
+      }
+    } else {
+      if("norm" == key) {
+	v4l2_std_id stdid = 0;
+	if(0==xioctl(m_tvfd, VIDIOC_G_STD, &stdid)) {
+	  std::string std;
+	  switch(stdid) {
+	  default:
+	  case V4L2_STD_UNKNOWN: std="UNKNOWN"; break; 
+	  case V4L2_STD_ALL: std="ALL"; break; 
+
+	  case V4L2_STD_ATSC: std="ATSC"; break; 
+	  case V4L2_STD_625_50: std="625_50"; break; 
+	  case V4L2_STD_525_60: std="525_60"; break; 
+	  case V4L2_STD_SECAM: std="SECAM"; break; 
+	  case V4L2_STD_SECAM_DK: std="SECAM_DK"; break; 
+	  case V4L2_STD_NTSC: std="NTSC"; break; 
+	  case V4L2_STD_PAL: std="PAL"; break; 
+	  case V4L2_STD_PAL_DK: std="PAL_DK"; break; 
+	  case V4L2_STD_PAL_BG: std="PAL_BG"; break; 
+	  case V4L2_STD_DK: std="DK"; break; 
+	  case V4L2_STD_GH: std="GH"; break; 
+	  case V4L2_STD_B: std="B"; break; 
+	  case V4L2_STD_MN: std="MN"; break; 
+	  case V4L2_STD_ATSC_16_VSB: std="ATSC_16_VSB"; break; 
+	  case V4L2_STD_ATSC_8_VSB: std="ATSC_8_VSB"; break; 
+	  case V4L2_STD_SECAM_LC: std="SECAM_LC"; break; 
+	  case V4L2_STD_SECAM_L: std="SECAM_L"; break; 
+	  case V4L2_STD_SECAM_K1: std="SECAM_K1"; break; 
+	  case V4L2_STD_SECAM_K: std="SECAM_K"; break; 
+	  case V4L2_STD_SECAM_H: std="SECAM_H"; break; 
+	  case V4L2_STD_SECAM_G: std="SECAM_G"; break; 
+	  case V4L2_STD_SECAM_D: std="SECAM_D"; break; 
+	  case V4L2_STD_SECAM_B: std="SECAM_B"; break; 
+	  case V4L2_STD_NTSC_M_KR: std="NTSC_M_KR"; break; 
+	  case V4L2_STD_NTSC_443: std="NTSC_443"; break; 
+	  case V4L2_STD_NTSC_M_JP: std="NTSC_M_JP"; break; 
+	  case V4L2_STD_NTSC_M: std="NTSC_M"; break; 
+	  case V4L2_STD_PAL_60: std="PAL_60"; break; 
+	  case V4L2_STD_PAL_Nc: std="PAL_Nc"; break; 
+	  case V4L2_STD_PAL_N: std="PAL_N"; break; 
+	  case V4L2_STD_PAL_M: std="PAL_M"; break; 
+	  case V4L2_STD_PAL_K: std="PAL_K"; break; 
+	  case V4L2_STD_PAL_D1: std="PAL_D1"; break; 
+	  case V4L2_STD_PAL_D: std="PAL_D"; break; 
+	  case V4L2_STD_PAL_I: std="PAL_I"; break; 
+	  case V4L2_STD_PAL_H: std="PAL_H"; break; 
+	  case V4L2_STD_PAL_G: std="PAL_G"; break; 
+	  case V4L2_STD_PAL_B1: std="PAL_B1"; break; 
+	  case V4L2_STD_PAL_B: std="PAL_B"; break; 
+	  }
+	  props.set("norm", std);
+	}
+      } else if("channel" == key) {
+	int channel=0;
+	if(0==xioctl(m_tvfd, VIDIOC_G_INPUT, &channel))
+	  props.set("channel", channel);
+      } else if("frequency" == key) {
+	struct v4l2_frequency freq;
+	memset (&(freq), 0, sizeof (freq));
+	freq.tuner=0; /* FIXXME: this should be a bit more intelligent... */
+
+	if(0==xioctl(m_tvfd, VIDIOC_G_FREQUENCY, &freq)) {
+	  props.set("frequency", freq.frequency);
+	}
+      } else if("width" == key) {
+	getformat|=WIDTH_FLAG;
+      } else if("height" == key) {
+	getformat|=HEIGHT_FLAG;
+      } else {
+	//	std::cerr << "not supported: " << key << std::endl;
+      }
+    }
+  }
+
+  if(getformat) {
+    struct v4l2_format fmt;
+    memset (&(fmt), 0, sizeof (fmt));
+    fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+
+    if (0 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)) {
+      if(getformat & WIDTH_FLAG)
+	props.set("width", fmt.fmt.pix.width);
+      if(getformat & HEIGHT_FLAG)
+	props.set("height", fmt.fmt.pix.height);
+    } else {
+      perror("VIDIOC_G_FMT");
+    }
+  }
 }
 void videoV4L2 :: setProperties(gem::Properties&props) {
+  if(m_tvfd<0) {
+    return;
+  }
+  bool restart=false;
 
+  bool setformat=false, setcropping=false;
+
+
+  std::vector<std::string>keys=props.keys();
+  int i=0; 
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    std::map<std::string,  struct v4l2_queryctrl>::iterator it = m_writeprops.find(key);
+    if(it != m_writeprops.end()) {
+      double d=0;
+      struct v4l2_queryctrl qc=it->second;
+      struct v4l2_control vc;
+      memset (&vc, 0, sizeof (vc));
+      vc.id=qc.id;
+      if(props.get(key, d)) {
+	vc.value=d;
+      }
+
+      int err=v4l2_ioctl(m_tvfd, VIDIOC_S_CTRL, &vc);
+
+      if(V4L2_CTRL_TYPE_BUTTON == qc.type) {
+	props.erase(key);
+      }
+    } else {
+      if("norm" == key) {
+	v4l2_std_id stdid = V4L2_STD_UNKNOWN;
+	std::string std;
+	switch(props.type(key)) {
+	  case gem::Properties::STRING:
+	    if(props.get(key, std)) {
+	      if("ALL" == std)  stdid=V4L2_STD_ALL;
+	      else if("PAL_B" == std)  stdid=V4L2_STD_PAL_B;
+	      else if("PAL_B1" == std)  stdid=V4L2_STD_PAL_B1;
+	      else if("PAL_G" == std)  stdid=V4L2_STD_PAL_G;
+	      else if("PAL_H" == std)  stdid=V4L2_STD_PAL_H;
+	      else if("PAL_I" == std)  stdid=V4L2_STD_PAL_I;
+	      else if("PAL_D" == std)  stdid=V4L2_STD_PAL_D;
+	      else if("PAL_D1" == std)  stdid=V4L2_STD_PAL_D1;
+	      else if("PAL_K" == std)  stdid=V4L2_STD_PAL_K;
+	      else if("PAL_M" == std)  stdid=V4L2_STD_PAL_M;
+	      else if("PAL_N" == std)  stdid=V4L2_STD_PAL_N;
+	      else if("PAL_Nc" == std)  stdid=V4L2_STD_PAL_Nc;
+	      else if("PAL_60" == std)  stdid=V4L2_STD_PAL_60;
+	      else if("NTSC_M" == std)  stdid=V4L2_STD_NTSC_M;
+	      else if("NTSC_M_JP" == std)  stdid=V4L2_STD_NTSC_M_JP;
+	      else if("NTSC_443" == std)  stdid=V4L2_STD_NTSC_443;
+	      else if("NTSC_M_KR" == std)  stdid=V4L2_STD_NTSC_M_KR;
+	      else if("SECAM_B" == std)  stdid=V4L2_STD_SECAM_B;
+	      else if("SECAM_D" == std)  stdid=V4L2_STD_SECAM_D;
+	      else if("SECAM_G" == std)  stdid=V4L2_STD_SECAM_G;
+	      else if("SECAM_H" == std)  stdid=V4L2_STD_SECAM_H;
+	      else if("SECAM_K" == std)  stdid=V4L2_STD_SECAM_K;
+	      else if("SECAM_K1" == std)  stdid=V4L2_STD_SECAM_K1;
+	      else if("SECAM_L" == std)  stdid=V4L2_STD_SECAM_L;
+	      else if("SECAM_LC" == std)  stdid=V4L2_STD_SECAM_LC;
+	      else if("ATSC_8_VSB" == std)  stdid=V4L2_STD_ATSC_8_VSB;
+	      else if("ATSC_16_VSB" == std)  stdid=V4L2_STD_ATSC_16_VSB;
+	      else if("MN" == std)  stdid=V4L2_STD_MN;
+	      else if("B" == std)  stdid=V4L2_STD_B;
+	      else if("GH" == std)  stdid=V4L2_STD_GH;
+	      else if("DK" == std)  stdid=V4L2_STD_DK;
+	      else if("PAL_BG" == std)  stdid=V4L2_STD_PAL_BG;
+	      else if("PAL_DK" == std)  stdid=V4L2_STD_PAL_DK;
+	      else if("PAL" == std)  stdid=V4L2_STD_PAL;
+	      else if("NTSC" == std)  stdid=V4L2_STD_NTSC;
+	      else if("SECAM_DK" == std)  stdid=V4L2_STD_SECAM_DK;
+	      else if("SECAM" == std)  stdid=V4L2_STD_SECAM;
+	      else if("525_60" == std)  stdid=V4L2_STD_525_60;
+	      else if("625_50" == std)  stdid=V4L2_STD_625_50;
+	      else if("ATSC" == std)  stdid=V4L2_STD_ATSC;
+	    }
+	    break;
+	default:
+	  continue;
+	}
+	xioctl(m_tvfd, VIDIOC_S_STD, &stdid);
+
+      } else if("channel" == key) {
+	double ch;
+	if(props.get("channel", ch)) {
+	  int channel=ch;
+	  xioctl(m_tvfd, VIDIOC_S_INPUT, &channel);
+	}
+      } else if("frequency" == key) {
+      } else if("width" == key) {
+	setformat=true;
+      } else if("height" == key) {
+	setformat=true;
+      } else {
+      }
+    }
+  }
+
+
+  if(setformat || setcropping)
+    restart=true;
+
+  if(restart) {
+    bool rendering=m_rendering;
+    if(m_capturing)stopTransfer();
+
+    setcropping=true;
+
+    if(setcropping) {
+
+    } // cropping
+
+
+    if(setformat) {
+      struct v4l2_format fmt;
+      memset (&(fmt), 0, sizeof (fmt));
+      fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+      
+      std::cerr << "getting current format" << std::endl;
+      if (0 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)) {
+	double d;
+	std::cerr << "current format is "<<fmt.fmt.pix.width<<"x"<<fmt.fmt.pix.height<<std::endl;
+	if(props.get("width", d))
+	  fmt.fmt.pix.width=d;
+	if(props.get("height", d))
+	  fmt.fmt.pix.height=d;
+
+	std::cerr << "new format should be "<<fmt.fmt.pix.width<<"x"<<fmt.fmt.pix.height<<std::endl;
+	if(0 != xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)) {
+	  perror("VIDIOC_S_FMT");
+	}
+	std::cerr << "new format is "<<fmt.fmt.pix.width<<"x"<<fmt.fmt.pix.height<<std::endl;
+      }
+    } // format
+
+    if (rendering)startTransfer();
+  }
 }
 
 
