@@ -56,7 +56,7 @@ namespace gem { class GEM_EXTERN video {
     virtual ~video(void);
 
     //! open the device (calls openDevice())
-    bool open(void);
+    bool open(gem::Properties&props);
     //! close the device (calls closeDevice())
     void close(void);
     //! start the transmission (calls startTransfer())
@@ -73,7 +73,7 @@ namespace gem { class GEM_EXTERN video {
      * this comes in handy when determining the correct backend for a certain device
      * \return TRUE when we successfully opened the device and can startTransfer immediately
      */
-    virtual bool           openDevice(void);
+    virtual bool           openDevice(gem::Properties&props);
 
     //! close the video device, freeing all ressources
     /* once the device has been closed it should be useable by other applications,...

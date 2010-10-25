@@ -183,11 +183,11 @@ video :: ~video()
 // open/close
 //
 /////////////////////////////////////////////////////////
-bool video :: open()
+bool video :: open(gem::Properties&props)
 {
   debugPost("open: %d -> %d", m_haveVideo, m_capturing);
   if(m_haveVideo)close();
-  m_haveVideo=openDevice();
+  m_haveVideo=openDevice(props);
   return m_haveVideo;
 }
 void video :: close()
@@ -235,7 +235,7 @@ bool video :: stop()
 // openDevice
 //
 /////////////////////////////////////////////////////////
-bool video :: openDevice()
+bool video :: openDevice(gem::Properties&props)
 {
   return false;
 }

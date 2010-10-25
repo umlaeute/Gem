@@ -195,11 +195,10 @@ bool pix_video::restart(void) {
     unsigned int i=0;
     verbose(1, "trying to start driver automatically (%d)", m_running);
     for(i=0; i<m_videoHandles.size(); i++) {
-      if(m_videoHandles[i]->open()) {
+      if(m_videoHandles[i]->open(m_writeprops)) {
         m_videoHandle=m_videoHandles[i];
 
-	enumPropertyMess();
-	m_videoHandle->setProperties(m_writeprops);
+        enumPropertyMess();
 
         if(m_running) {
           m_videoHandle->start();
@@ -211,7 +210,8 @@ bool pix_video::restart(void) {
     // enforce selected driver
     verbose(1, "trying to start driver#%d (%d)", m_driver, m_running);
     m_videoHandle=m_videoHandles[m_driver];
-    if(m_videoHandle->open()) {
+    if(m_videoHandle->open(m_writeprops)) {
+      enumPropertyMess();
       if(m_running)m_videoHandle->start();
       return true;
     }
@@ -259,7 +259,8 @@ void pix_video :: driverMess(int dev)
     }
     m_videoHandle=m_videoHandles[dev];
     if(m_videoHandle){
-      if(m_videoHandle->open()) {
+      if(m_videoHandle->open(m_writeprops)) {
+        enumPropertyMess();
         if(m_running)m_videoHandle->start();
       }
     }
