@@ -821,6 +821,7 @@ void videoV4L2::addProperties(struct v4l2_queryctrl queryctrl,
 bool videoV4L2 :: enumProperties(gem::Properties&readable,
 				 gem::Properties&writeable) {
   struct v4l2_queryctrl queryctrl;
+  __u32 id=0;
 
   if(m_tvfd<0)
     return false;
@@ -833,9 +834,10 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
 
   memset (&queryctrl, 0, sizeof (queryctrl));
 
-  for (queryctrl.id = V4L2_CID_BASE;
-       queryctrl.id < V4L2_CID_LASTP1;
-       queryctrl.id++) {
+  for (id = V4L2_CID_BASE;
+       id < V4L2_CID_LASTP1;
+       id++) {
+    queryctrl.id = id;
     if (0 == xioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
       addProperties(queryctrl, readable, writeable);
 
@@ -845,8 +847,9 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
     }
   }
 
-  for (queryctrl.id = V4L2_CID_PRIVATE_BASE;;
-       queryctrl.id++) {
+  for (id = V4L2_CID_PRIVATE_BASE;;
+       id++) {
+    queryctrl.id = id;
     if (0 == xioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
       addProperties(queryctrl, readable, writeable);
     } else {
