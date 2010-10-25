@@ -93,6 +93,8 @@ namespace gem { class GEM_EXPORT videoHALCON : public video {
   Halcon::HFramegrabber*m_grabber;
   std::string m_backendname;
 
+  std::map<std::string, Halcon::HTuple>m_readable, m_writeable;
+
 #endif /* HAVE_HALCON */
 
 }; 

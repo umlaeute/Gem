@@ -363,10 +363,13 @@ std::vector<std::string> videoHALCON::enumerate() {
 bool videoHALCON::enumProperties(gem::Properties&readable,
                                  gem::Properties&writeable) {
   int i=0;
-  gem::any typeval = 0;//(void*)0;
+  gem::any typeval;(void*)0;
 
   readable.clear();
+  m_readable.clear();
+
   writeable.clear();
+  m_writeable.clear();
 
   try {
     Halcon::HTuple Information;
@@ -378,9 +381,13 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
      if(ValueList.Num()>0) {
       for(i=0; i< ValueList.Num(); i++) {
         Halcon::HCtrlVal v=ValueList[i];
-        if(v.ValType() == Halcon::StringVal)
+        if(v.ValType() == Halcon::StringVal) {
           readable.set(v.S(), typeval);
+          m_readable[v.S()]=ValueList;
+
           writeable.set(v.S(), typeval);
+          m_writeable[v.S()]=ValueList;
+        }
       }
     }
   }  catch (Halcon::HException &except) {
@@ -399,7 +406,10 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
         Halcon::HCtrlVal v=ValueList[i];
         if(v.ValType() == Halcon::StringVal) {
           readable.set(v.S(), typeval);
+          m_readable[v.S()]=ValueList;
+
           writeable.erase(v.S());
+          m_writeable.erase(v.S());
         } else {
           std::cerr << "unknown ro" <<std::endl;
         }
@@ -421,7 +431,10 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
         Halcon::HCtrlVal v=ValueList[i];
         if(v.ValType() == Halcon::StringVal) {
           writeable.set(v.S(), typeval);
+          m_writeable[v.S()]=ValueList;
+
           readable.erase(v.S());
+          m_readable.erase(v.S());
         } else {
           std::cerr << "unknown wo" <<std::endl;
         }
@@ -437,42 +450,85 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
 void videoHALCON::setProperties(gem::Properties&props) {
   if(NULL==m_grabber)return;
 
+  std::vector<std::string>keys=props.keys();
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+      std::string key=keys[i];
+      std::string s;
+      double d;
+
+      if(m_writeable.find(key) != m_writeable.end()) {
+        try {
+          const Halcon::HTuple Param=key.c_str();
+          Halcon::HTuple Value;
+          switch(props.type(key)) {
+          case gem::Properties::STRING:
+            if(props.get(key, s)) {
+              try {
+                m_grabber->SetFramegrabberParam(Param, s.c_str());
+              } catch (Halcon::HException& except) {
+                error("Halcon::SetFramegrabberParam(%s) exception: '%s'", key.c_str(), except.message);
+              }
+            }
+            break;
+          case gem::Properties::DOUBLE:
+            if(props.get(key, d)) {
+              try {
+                m_grabber->SetFramegrabberParam(Param, d);
+              } catch (Halcon::HException& except) {
+                try {
+                  long l=d;
+                  m_grabber->SetFramegrabberParam(Param, l);
+                } catch (Halcon::HException& except) {
+                  error("Halcon::SetFramegrabberParam(%s) exception: '%s'", key.c_str(), except.message);
+                }
+              }
+            }
+            break;
+          default:
+            error("Halcon::SetFramegrabberParam(%s): invalid type", key.c_str());
+            break;
+          }
+        } catch (Halcon::HException& except) {
+          error("Halcon::SetFramegrabberParam(%s) exception: '%s'", key.c_str(), except.message);
+        }
+      }
+  }
 }
+
 void videoHALCON::getProperties(gem::Properties&props) {
   if(NULL==m_grabber)return;
   std::vector<std::string>keys=props.keys();
   int i=0;
   for(i=0; i<keys.size(); i++) {
-    try {
-      std::string key=keys[i];
-      Halcon::HTuple hresult=m_grabber->GetFramegrabberParam(key.c_str());
-      gem::any nonetype;
-      int j=0;
-      for(j=0; j< hresult.Num(); j++) {
-        Halcon::HCtrlVal v=hresult[j];
-        switch(v.ValType()) {
-        case Halcon::LongVal:
-          props.set(key, v.L());
-          break;
-        case Halcon::DoubleVal:
-          props.set(key, v.D());
-          break;
-        case Halcon::StringVal:
-          props.set(key, std::string(v.S()));
-          break;
-        case Halcon::UndefVal:
-          props.set(key, nonetype);
-        default:
-          break;
+    std::string key=keys[i];
+      if(m_readable.find(key) != m_readable.end()) {
+        try {
+          Halcon::HTuple hresult=m_grabber->GetFramegrabberParam(key.c_str());
+          gem::any nonetype;
+          int j=0;
+          for(j=0; j< hresult.Num(); j++) {
+            Halcon::HCtrlVal v=hresult[j];
+            switch(v.ValType()) {
+            case Halcon::LongVal:
+              props.set(key, static_cast<double>(v.L()));
+              break;
+            case Halcon::DoubleVal:
+              break;
+            case Halcon::StringVal:
+              props.set(key, std::string(v.S()));
+              break;
+            case Halcon::UndefVal:
+              props.set(key, nonetype);
+            default:
+              break;
+            }
+          }      
+        } catch (Halcon::HException& except) {
+          error("Halcon::GetFramegrabberParam exception: '%s'", except.message);
         }
-      }      
-    }catch (Halcon::HException& except) {
-      error("Halcon::GetFrameParam exception: '%s'", except.message);
-    }
-
+      }
   }
-
-
 }
 #else
 videoHALCON :: videoHALCON() : video("")
