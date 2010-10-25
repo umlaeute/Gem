@@ -462,9 +462,8 @@ bool videoV4L2 :: startTransfer()
   //  verbose(1, "starting transfer");
   int i;
 
-  __u32 pixelformat;
+  __u32 pixelformat=0;
   struct v4l2_format fmt;
-  unsigned int min;
 
   enum v4l2_buf_type type;
 
