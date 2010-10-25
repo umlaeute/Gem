@@ -66,8 +66,8 @@ namespace gem { class GEM_EXPORT videoHALCON : public video {
 #ifdef HAVE_HALCON
 	////////
 	// open the video-device
-	virtual bool           openDevice(void);
-	virtual void          closeDevice(void);
+      virtual bool           openDevice(gem::Properties&);
+      virtual void          closeDevice(void);
     
     	//////////
     	// Start up the video device
@@ -83,9 +83,15 @@ namespace gem { class GEM_EXPORT videoHALCON : public video {
 	bool grabFrame();
 
   virtual std::vector<std::string>enumerate(void);
-   
+
+  virtual bool enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&writeprops);
+  virtual void getProperties(gem::Properties&readprops);
+
  protected:
   Halcon::HFramegrabber*m_grabber;
+  std::string m_backendname;
 
 #endif /* HAVE_HALCON */
 

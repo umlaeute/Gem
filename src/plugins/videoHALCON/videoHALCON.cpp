@@ -245,8 +245,9 @@ static void getparam(Halcon::HFramegrabber*grabber, std::string name) {
   }
 }
 
-bool videoHALCON :: openDevice()
+bool videoHALCON :: openDevice(gem::Properties&props)
 {
+  m_backendname.clear();
   if(m_grabber)closeDevice();
   
   /* m_devicename has to provide:
@@ -266,8 +267,16 @@ bool videoHALCON :: openDevice()
    *
    */
 
-  const int width=(m_width>0) ?m_width:0;
-  const int height=(m_height>0)?m_height:0;
+  double d=0;
+  int w=0, h=0;
+
+  if(props.get("width", d))
+    w=d;
+  if(props.get("height", d))
+    h=d;
+
+  const int width=(w>0) ?w:0;
+  const int height=(h>0)?h:0;
   std::string cameratype="default";
   std::string device="default";
   const int port=(m_channel>0)?m_channel:-1;
@@ -309,7 +318,9 @@ bool videoHALCON :: openDevice()
   getparam(m_grabber, "color_space_values");
   getparam(m_grabber, "revision");
 #endif                              
-                              
+   
+  m_backendname = name;
+                           
   return true;
 }
 /////////////////////////////////////////////////////////
@@ -349,7 +360,120 @@ std::vector<std::string> videoHALCON::enumerate() {
 
 
 
+bool videoHALCON::enumProperties(gem::Properties&readable,
+                                 gem::Properties&writeable) {
+  int i=0;
+  gem::any typeval = 0;//(void*)0;
 
+  readable.clear();
+  writeable.clear();
+
+  try {
+    Halcon::HTuple Information;
+    Halcon::HTuple ValueList;
+    Herror err=info_framegrabber(m_backendname.c_str(), 
+                                 "parameters",
+                                 &Information,
+                                 &ValueList);
+     if(ValueList.Num()>0) {
+      for(i=0; i< ValueList.Num(); i++) {
+        Halcon::HCtrlVal v=ValueList[i];
+        if(v.ValType() == Halcon::StringVal)
+          readable.set(v.S(), typeval);
+          writeable.set(v.S(), typeval);
+      }
+    }
+  }  catch (Halcon::HException &except) {
+    error("info caught exception: '%s'", except.message);
+  }
+
+  try {
+    Halcon::HTuple Information;
+    Halcon::HTuple ValueList;
+    Herror err=info_framegrabber(m_backendname.c_str(), 
+                                 "parameters_readonly",
+                                 &Information,
+                                 &ValueList);
+    if(ValueList.Num()>0) {
+      for(i=0; i< ValueList.Num(); i++) {
+        Halcon::HCtrlVal v=ValueList[i];
+        if(v.ValType() == Halcon::StringVal) {
+          readable.set(v.S(), typeval);
+          writeable.erase(v.S());
+        } else {
+          std::cerr << "unknown ro" <<std::endl;
+        }
+      }
+    }
+  }  catch (Halcon::HException &except) {
+    error("info caught exception: '%s'", except.message);
+  }
+
+  try {
+    Halcon::HTuple Information;
+    Halcon::HTuple ValueList;
+    Herror err=info_framegrabber(m_backendname.c_str(), 
+                                 "parameters_writeonly",
+                                 &Information,
+                                 &ValueList);
+    if(ValueList.Num()>0) {
+      for(i=0; i< ValueList.Num(); i++) {
+        Halcon::HCtrlVal v=ValueList[i];
+        if(v.ValType() == Halcon::StringVal) {
+          writeable.set(v.S(), typeval);
+          readable.erase(v.S());
+        } else {
+          std::cerr << "unknown wo" <<std::endl;
+        }
+      }
+    }
+  }  catch (Halcon::HException &except) {
+    error("info caught exception: '%s'", except.message);
+  }
+
+  return true;
+}
+
+void videoHALCON::setProperties(gem::Properties&props) {
+  if(NULL==m_grabber)return;
+
+}
+void videoHALCON::getProperties(gem::Properties&props) {
+  if(NULL==m_grabber)return;
+  std::vector<std::string>keys=props.keys();
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+    try {
+      std::string key=keys[i];
+      Halcon::HTuple hresult=m_grabber->GetFramegrabberParam(key.c_str());
+      gem::any nonetype;
+      int j=0;
+      for(j=0; j< hresult.Num(); j++) {
+        Halcon::HCtrlVal v=hresult[j];
+        switch(v.ValType()) {
+        case Halcon::LongVal:
+          props.set(key, v.L());
+          break;
+        case Halcon::DoubleVal:
+          props.set(key, v.D());
+          break;
+        case Halcon::StringVal:
+          props.set(key, std::string(v.S()));
+          break;
+        case Halcon::UndefVal:
+          props.set(key, nonetype);
+        default:
+          break;
+        }
+      }      
+    }catch (Halcon::HException& except) {
+      error("Halcon::GetFrameParam exception: '%s'", except.message);
+    }
+
+  }
+
+
+}
 #else
 videoHALCON :: videoHALCON() : video("")
 { }
