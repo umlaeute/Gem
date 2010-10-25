@@ -462,6 +462,7 @@ bool videoV4L2 :: startTransfer()
   //  verbose(1, "starting transfer");
   int i;
 
+  __u32 pixelformat;
   struct v4l2_format fmt;
   unsigned int min;
 
@@ -474,40 +475,49 @@ bool videoV4L2 :: startTransfer()
   memset (&(fmt), 0, sizeof (fmt));
   fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
+  /* initialize the format struct to what we currently have */
+  if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
+    perror("v4l2: VIDIOC_G_FMT");//exit
+  }
+
   switch(m_reqFormat){
   case GL_YCBCR_422_GEM: 
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_UYVY; 
+    pixelformat = V4L2_PIX_FMT_UYVY; 
     break;
   case GL_LUMINANCE: 
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_GREY; 
+    pixelformat = V4L2_PIX_FMT_GREY; 
     break;
   case GL_RGB: 
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB24; 
+    pixelformat = V4L2_PIX_FMT_RGB24; 
     break;
   default: 
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB32; 
+    pixelformat = V4L2_PIX_FMT_RGB32; 
     m_reqFormat=GL_RGBA;
     break;
   }
-  
-  verbose(1, "v4l2: want 0x%X == '%c%c%c%c' ", m_reqFormat, 
-          (char)(fmt.fmt.pix.pixelformat),
-          (char)(fmt.fmt.pix.pixelformat>>8),
-          (char)(fmt.fmt.pix.pixelformat>>16),
-          (char)(fmt.fmt.pix.pixelformat>>24));
 
-  if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
-    perror("v4l2: VIDIOC_S_FMT(fmt)");//exit
-  }
+  if(fmt.fmt.pix.pixelformat != pixelformat) {
+    fmt.fmt.pix.pixelformat = pixelformat;
   
-  // query back what we have set
-  /* in theory this should not be needed, 
-   * as S_FMT is supposed to return the actual data
-   * however, some buggy drivers seem to not do that, 
-   * so we have to make sure...
-   */
-  if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
-    perror("v4l2: VIDIOC_G_FMT");//exit
+    verbose(1, "v4l2: want 0x%X == '%c%c%c%c' ", m_reqFormat, 
+            (char)(fmt.fmt.pix.pixelformat),
+            (char)(fmt.fmt.pix.pixelformat>>8),
+            (char)(fmt.fmt.pix.pixelformat>>16),
+            (char)(fmt.fmt.pix.pixelformat>>24));
+
+    if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
+      perror("v4l2: VIDIOC_S_FMT(fmt)");//exit
+    }
+  
+    // query back what we have set
+    /* in theory this should not be needed, 
+     * as S_FMT is supposed to return the actual data
+     * however, some buggy drivers seem to not do that, 
+     * so we have to make sure...
+     */
+    if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
+      perror("v4l2: VIDIOC_G_FMT");//exit
+    }
   }
 
   m_gotFormat=fmt.fmt.pix.pixelformat;
@@ -524,12 +534,14 @@ bool videoV4L2 :: startTransfer()
     switch(m_reqFormat){
     case GL_YCBCR_422_GEM: 
     case GL_LUMINANCE: 
-      fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUV420; 
+      pixelformat = V4L2_PIX_FMT_YUV420; 
       break;
     default: 
-      fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB24; 
+      pixelformat = V4L2_PIX_FMT_RGB24; 
       break;
     }
+    fmt.fmt.pix.pixelformat = pixelformat;
+
     if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
       perror("v4l2: VIDIOC_S_FMT(fmt2)");
     }
