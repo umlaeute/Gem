@@ -34,14 +34,25 @@ using namespace gem;
 # define v4l2_munmap munmap
 #endif /* libv4l-2 */
 
+
+/* debugging helpers  */
+#define debugPost
+#define debugThread
+#define debugIOCTL 
+
 #if 0
+# undef debugPost
 # define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+#endif
+
+#if 0
+# undef debugThread
 # define debugThread ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+#endif
+
+#if 0
+# undef debugIOCTL 
 # define debugIOCTL ::post
-#else
-# define debugPost
-# define debugThread
-# define debugIOCTL 
 #endif
 
 
@@ -939,7 +950,6 @@ void videoV4L2 :: getProperties(gem::Properties&props) {
       } else if("height" == key) {
 	getformat|=HEIGHT_FLAG;
       } else {
-	//	std::cerr << "not supported: " << key << std::endl;
       }
     }
   }
@@ -1117,17 +1127,20 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
       memset (&(fmt), 0, sizeof (fmt));
       fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
       
-      std::cerr << "getting current format" << std::endl;
       if (0 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)) {
 	double d;
+        debugPost("current format %dx%d", fmt.fmt.pix.width, fmt.fmt.pix.height);
+
 	if(props.get("width", d))
 	  fmt.fmt.pix.width=d;
 	if(props.get("height", d))
 	  fmt.fmt.pix.height=d;
 
+        debugPost("want format %dx%d", fmt.fmt.pix.width, fmt.fmt.pix.height);
 	if(0 != xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)) {
 	  perror("VIDIOC_S_FMT(dim)");
 	}
+        debugPost("new format %dx%d", fmt.fmt.pix.width, fmt.fmt.pix.height);
       }
     } // format
 
