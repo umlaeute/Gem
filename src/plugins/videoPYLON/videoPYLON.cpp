@@ -19,7 +19,10 @@
 #include <sstream>
 using namespace gem;
 
+#define NUM_BUFFERS 8
+
 #include "Gem/RTE.h"
+#include "Base/GemException.h"
 
 #if 0
 # define debug ::post
@@ -27,6 +30,43 @@ using namespace gem;
 # define debug
 #endif
 
+using namespace Basler_GigECameraParams;
+using namespace Basler_GigEStreamParams;
+
+// Constructor allocates the image buffer
+
+class videoPYLON::CGrabBuffer {
+  static int buffercount;
+  public:
+
+  CGrabBuffer(const size_t ImageSize)
+    : m_pBuffer(NULL)  {
+    buffercount++;
+    m_pBuffer = new uint8_t[ ImageSize ];
+    if (NULL == m_pBuffer)
+      {
+        GenICam::GenericException e("Not enough memory to allocate image buffer", __FILE__, __LINE__);
+        throw e;
+      }
+  }
+
+  // Freeing the memory
+  ~CGrabBuffer() {
+    if (NULL != m_pBuffer)
+      delete[] m_pBuffer;
+    buffercount--;
+  }
+  uint8_t* GetBufferPointer(void) { return m_pBuffer; }
+  Pylon::StreamBufferHandle GetBufferHandle(void) { return m_hBuffer; }
+  void SetBufferHandle(Pylon::StreamBufferHandle hBuffer) { m_hBuffer = hBuffer; };
+  
+protected:
+  uint8_t *m_pBuffer;
+  Pylon::StreamBufferHandle m_hBuffer;
+
+};
+
+int videoPYLON::CGrabBuffer::buffercount=0;
 /////////////////////////////////////////////////////////
 //
 // videoPYLON
@@ -39,25 +79,32 @@ using namespace gem;
 
 REGISTER_VIDEOFACTORY("pylon", videoPYLON);
 
-
-// exception handler
-static void MyPylonExceptionHandler(const Pylon::HException& except)
-{
-  // the exception handler is needed in order to prevent pylon from crashing
-  // we just pass on the exception to upstream...
-  throw except;	
-}
-
-videoPYLON :: videoPYLON() : video("pylon"),
-                               m_grabber(NULL)
+videoPYLON :: videoPYLON() : video("pylon")
+                           , m_factory(NULL)
+                           , m_camera(NULL)
+                           , m_grabber(NULL)
+                           , m_numBuffers(NUM_BUFFERS)
 {
   m_width=0;
   m_height=0;
 
-  Pylon::HException::InstallHHandler(&MyPylonExceptionHandler);
+  try {
+    m_factory = &Pylon::CTlFactory::GetInstance();
+    Pylon::TlInfoList_t tli;
+    int count= m_factory->EnumerateTls (tli);
+    int i=0;
+    for(i=0; i<count; i++) {
+      std::string s=tli[i].GetFriendlyName().c_str();
+      if("GigE"==s)
+        provide("gige");
+      provide(s);
+    }      
 
-  provide("iidc");
-  provide("gige");
+  } catch (GenICam::GenericException &e) {
+    // Error handling
+    throw(GemException(e.GetDescription()));
+    return;
+  }
 }
 
 ////////////////////////////////////////////////////////
@@ -75,240 +122,106 @@ videoPYLON :: ~videoPYLON()
 //
 /////////////////////////////////////////////////////////
 bool videoPYLON :: grabFrame() {
-  Pylon::HImage img;
-
-  if(NULL==m_grabber)
+  if(NULL==m_camera || NULL==m_grabber)
     return false;
 
-  try {
-    img=m_grabber->GrabImageAsync(-1);
-  } catch (Pylon::HException& except) {
-    error("Pylon::GrabImage exception: '%s'", except.message);
-    return false;
-  }
-  Pylon::HTuple typ, W, H, pR, pG, pB;
-  long r, g, b,  h, w;
+  struct Pylon::SImageFormat imageFormat;
+  struct Pylon::SOutputImageFormat outImageFormat;
 
-  try {
-    r = img.GetImagePointer3(&pG, &pB, &typ, &W, &H);
-  } catch (Pylon::HException& except) {
-    error("Pylon::GetImagePointer exception: '%s'", except.message);
-    return false;
-  }
+  if(m_grabber->GetWaitObject().Wait(3000)) {
+    Pylon::GrabResult Result;
+    m_grabber->RetrieveResult(Result);
+    switch(Result.Status()) {
+    case Pylon::Grabbed: {
+      lock();
+      m_image.image.xsize=Result.GetSizeX();
+      m_image.image.ysize=Result.GetSizeY();
+      m_image.image.setCsizeByFormat(GL_RGBA);
+      m_image.image.reallocate();
 
-  try {
+      m_image.image.fromGray((unsigned char*)Result.Buffer());
 #if 0
-#define GETTUPLE(x, y) { try {x=y[0]; } catch (Pylon::HException& except) { error("HTuple exception @ %d: '%s'", __LINE__, except.message); } } while(0)
-    GETTUPLE(g, pG);
-    GETTUPLE(b, pB);
-    GETTUPLE(w, W);
-    GETTUPLE(h, H);
-#else
-    g=pG[0];
-    b=pB[0];
+      if(m_converter) {
+        outImageFormat.LinePitch=m_image.image.xsize*m_image.image.csize;
+        outImageFormat.PixelFormat=PixelType_RGBA8packed;
 
-    w=W[0];
-    h=H[0];
-#endif
-
-    const unsigned char* ptrR=(const unsigned char*)r;
-    const unsigned char* ptrG=(const unsigned char*)g;
-    const unsigned char* ptrB=(const unsigned char*)b;
-    //post("image[%dx%d]: %x %x %x --> %x %x %x", w, h, r, g, b, ptrR, ptrG, ptrB);
-    lock();
-    m_image.image.xsize=w;
-    m_image.image.ysize=h;
-    m_image.image.setCsizeByFormat(GL_RGBA);
-    m_image.image.reallocate();
-    long row, col;
-    unsigned char*data=m_image.image.data;
-    for(row=0; row<h; row++) {
-      for(col=0; col<w; col++) {
-        //        post("[%d,%d]", row, col);
-        data[chRed  ]=*ptrR++;
-        data[chGreen]=*ptrG++;
-        data[chBlue ]=*ptrB++;
-        data[chAlpha]=255;
-        data+=4;
+        m_converter->convert(m_image.image.data, 
+                             m_image.image.xsize*m_image.image.ysize*m_image.image.xcsize,
+                             Result.Buffer(),
+                             imageFormat,
+                             outImageFormat);
       }
+#endif
+      m_image.image.upsidedown=true;
+      m_image.newimage=true;
+      unlock();
+      m_grabber->QueueBuffer(Result.Handle(), NULL);
+
     }
-
-    m_image.newimage=true;
-    m_image.image.upsidedown=true;
-    unlock();
-
-  } catch (Pylon::HException& except) { 
-    verbose(1, "Pylon::HTuple exception: '%s'", except.message); 
-  } 
+      break;
+   case Pylon::Failed: {
+   }
+     break;
+    default:
+      break;
+    }
+  } else {
+    // timeout
+    m_grabber->CancelGrab();
+    return false;
+  }
 
 
   return true;
 }
 
 
-/**
- * device name parser
- */
-static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while(std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
-}
-static std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    return split(s, delim, elems);
-}
-
-static std::string parsedevicename(std::string devicename, std::string&cameratype, std::string&device) {
-  std::string name;
-  if(devicename.empty())return name;
-
-  std::vector<std::string> parsed = split(devicename, ':');
-  switch(parsed.size()) {
-  default:
-    verbose(1, "could not parse '%s'", devicename.c_str());
-    return name;
-  case 3:
-    if(parsed[2].size()>0)
-      device=parsed[2];
-  case 2:
-    if(parsed[1].size()>0)
-      cameratype=parsed[1];
-  case 1:
-    name=parsed[0];
-  }
-  verbose(1, "PYLON: name  ='%s'", name.c_str());
-  verbose(1, "PYLON: camera='%s'", cameratype.c_str());
-  verbose(1, "PYLON: device='%s'", device.c_str());
-  return name;
-}
-
 /////////////////////////////////////////////////////////
 // openDevice
 //
 /////////////////////////////////////////////////////////
 
-static void printtuple(Pylon::HTuple t) {
-  int i=0;
-  for(i=0; i< t.Num(); i++) {
-  
-    Pylon::HCtrlVal v=t[i];
-    std::cerr<<"["<<i<<"]: ";
-    switch(v.ValType()) {
-    case Pylon::LongVal:
-      std::cerr << v.L();
-      break;
-    case Pylon::DoubleVal:
-      std::cerr << v.D();
-      break;
-    case Pylon::StringVal:
-      std::cerr << v.S();
-      break;
-    case Pylon::UndefVal:
-      std::cerr << "<undef>";
-    }
-    std::cerr << std::endl;
-  }
-}
-
-static void printinfo(std::string name, std::string value) {
-  try {
-    Pylon::HTuple Information;
-    Pylon::HTuple ValueList;
-    Herror err=info_framegrabber(name.c_str(), 
-                                 value.c_str(),
-                                 &Information,
-                                 &ValueList);
-
-    std::cerr << "got info for "<<name<<"."<<value<<":"<<std::endl; 
-    printtuple(Information);
-    std::cerr << "got values: " << std::endl; 
-    printtuple(ValueList); 
-    std::cerr << std::endl;
-  }  catch (Pylon::HException &except) {
-    error("info caught exception: '%s'", except.message);
-  }
-}
-
-
-static void getparam(Pylon::HFramegrabber*grabber, std::string name) {
-  try {
-    Pylon::HTuple result=grabber->GetFramegrabberParam(name.c_str());
-    std::cerr << "got parm for "<<name<<std::endl; 
-    printtuple(result); 
-  }  catch (Pylon::HException &except) {
-    error("getparam caught exception: '%s'", except.message);
-  }
-}
-
-bool videoPYLON :: openDevice()
+bool videoPYLON :: openDevice(gem::Properties&props)
 {
-  if(m_grabber)closeDevice();
-  
-  /* m_devicename has to provide:
-   *    backendid
-   *    cameratype
-   *    device
-   *
-   * originally i though about using ":" as s delimiter, 
-   *  e.g. "GigEVision::001234567890" would use the GigE-device @ "00:12:34:56:78:90" with "default" cameratype
-   * however, ":" is already internally used by e.g. the "1394IIDC" backend, that uses "format:mode:fps" as cameratype
-   *
-   * either use another delimiter, or find some escaping mechanism (e.g. '1394IIDC:"0:4:5":0x0814436102632378'
-   *
-   * another idea would be to get an idea about which <driver> was selected in [pix_video] and use that as the <backendid>
-   * for this to work, we would have to provide a list of valid backends (e.g. dynamically query what is installed) 
-   * i don't think this is currently possible with pylon
-   *
-   */
+  double d;
+  uint32_t channel=0;
+  if(props.get("channel", d))
+    channel=d;
 
-  const int width=(m_width>0) ?m_width:0;
-  const int height=(m_height>0)?m_height:0;
-  std::string cameratype="default";
-  std::string device="default";
-  const int port=(m_channel>0)?m_channel:-1;
+  std::cout << "open device: " << m_devicename << std::endl;
+  if(m_camera)closeDevice();
+  if(NULL==m_factory)return false;
 
-  std::string name=parsedevicename(m_devicename, cameratype, device);
-  if(name.empty()) {
+  Pylon::IPylonDevice *device = NULL;
+  try {
+    std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.find(m_devicename);
+    if(it!=m_id2device.end())
+      device = m_factory->CreateDevice(it->second);
+    else
+      device = m_factory->CreateDevice(Pylon::String_t(m_devicename.c_str()));
+  } catch (GenICam::GenericException &e) {
+    std::cerr << e.GetDescription() << std::endl;
     return false;
   }
+  std::cout << "opened device " << (void*)device << std::endl;
+
+  if(device==NULL)
+    return false;
 
   try {
-    m_grabber = new Pylon::HFramegrabber(
-                                          name.c_str(), /* const HTuple &Name, */
-                                          1, 1, /* const HTuple &HorizontalResolution = 1, const HTuple &VerticalResolution = 1, */
-                                          width, height, /* const HTuple &ImageWidth = 0,           const HTuple &ImageHeight = 0, */
-                                          0, 0, /* const HTuple &StartRow = 0,             const HTuple &StartColumn = 0, */
-                                          "default", /* const HTuple &Field = "default", */
-                                          8, /* const HTuple &BitsPerChannel = -1,  */
-                                          "rgb", /* const HTuple &ColorSpace = "default", */
-                                          -1, /* const HTuple &Gain = -1, */
-                                          "default", /* const HTuple &ExternalTrigger = "default", */
-                                          cameratype.c_str(), /* const HTuple &CameraType = "default", */
-                                          device.c_str(), /* const HTuple &Device = "default", */
-                                          port /* const HTuple &Port = -1, */
-                                          /* const HTuple &LineIn = -1 */
-                                          );
-  } catch (Pylon::HException &except) {
-    error("caught exception: '%s'", except.message);
-    m_grabber=NULL;
+    m_camera=new Pylon::CBaslerGigECamera::CBaslerGigECamera (device);
+    m_camera->Open();
+    uint32_t maxchannel=m_camera->GetNumStreamGrabberChannels();
+    if(channel>maxchannel)channel=maxchannel;
+
+    m_grabber=new Pylon::CBaslerGigEStreamGrabber(m_camera->GetStreamGrabber(channel));
+  } catch (GenICam::GenericException &e) {
+    std::cerr << e.GetDescription() << std::endl;
+    close();
     return false;
   }
 
-#if 0
-  printinfo(name, "parameters");
-  printinfo(name, "parameters_readonly");
-  printinfo(name, "parameters_writeonly");
-
-  printinfo(name, "port");
-
-  getparam(m_grabber, "color_space_values");
-  getparam(m_grabber, "revision");
-#endif                              
-                              
+  std::cout << "opened device: " << m_devicename << std::endl;
   return true;
 }
 /////////////////////////////////////////////////////////
@@ -316,6 +229,12 @@ bool videoPYLON :: openDevice()
 //
 /////////////////////////////////////////////////////////
 void videoPYLON :: closeDevice() {
+  if(m_camera){
+    m_camera->Close();
+    delete m_camera;
+  }
+  m_camera=NULL;
+
   if(m_grabber)delete m_grabber;
   m_grabber=NULL;
 }
@@ -327,8 +246,57 @@ void videoPYLON :: closeDevice() {
 /////////////////////////////////////////////////////////
 bool videoPYLON :: startTransfer()
 {
-  if(NULL!=m_grabber)
-    m_grabber->GrabImageStart(-1);
+  if(NULL==m_camera)
+    return false;
+
+  if(NULL==m_grabber)
+    return false;
+
+  try {
+    m_grabber->Open();
+
+    // Set the image format and AOI
+    //    m_camera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8Signed);
+    m_camera->OffsetX.SetValue(0);
+    m_camera->OffsetY.SetValue(0);
+    m_camera->Width.SetValue(m_camera->Width.GetMax());
+    m_camera->Height.SetValue(m_camera->Height.GetMax());
+
+    // Set the camera to continuous frame mode
+    m_camera->TriggerSelector.SetValue(TriggerSelector_AcquisitionStart);
+    m_camera->TriggerMode.SetValue(TriggerMode_Off);
+    m_camera->AcquisitionMode.SetValue(AcquisitionMode_Continuous);
+    m_camera->ExposureMode.SetValue(ExposureMode_Timed);
+    m_camera->ExposureTimeRaw.SetValue(100);
+
+
+    const size_t ImageSize = (size_t)(m_camera->PayloadSize.GetValue());
+    m_grabber->MaxBufferSize.SetValue(ImageSize);
+    m_grabber->MaxNumBuffer.SetValue(m_numBuffers);
+    m_grabber->PrepareGrab();
+
+    uint32_t i;
+    for (i = 0; i < m_numBuffers; ++i) {
+      CGrabBuffer *pGrabBuffer = new CGrabBuffer(ImageSize);
+      pGrabBuffer->SetBufferHandle(m_grabber->RegisterBuffer(
+                                                             pGrabBuffer->GetBufferPointer(), 
+                                                             ImageSize));
+      
+      // Put the grab buffer object into the buffer list
+      m_buffers.push_back(pGrabBuffer);
+    }
+    std::vector<CGrabBuffer*>::const_iterator x;
+    for (x=m_buffers.begin(); x != m_buffers.end(); ++x) {
+      // Put buffer into the grab queue for grabbing
+      m_grabber->QueueBuffer((*x)->GetBufferHandle(), NULL);
+    }
+
+    m_camera->AcquisitionStart.Execute();
+  } catch (GenICam::GenericException &e) {
+    std::cerr << e.GetDescription() << std::endl;
+    return false;
+  }
+
   return true;
 }
 
@@ -338,15 +306,85 @@ bool videoPYLON :: startTransfer()
 /////////////////////////////////////////////////////////
 bool videoPYLON :: stopTransfer()
 {
+  std::cerr << "stopTransfer @" << __FILE__<<__LINE__<<std::endl;
+  if(m_camera) {
+    // Stop acquisition
+    try {
+      m_camera->AcquisitionStop.Execute();
+    } catch (GenICam::GenericException &e) {
+      std::cerr << e.GetDescription() << std::endl;  
+    }
+  }
+  std::cerr << "stopTransfer @" << __FILE__<<__LINE__<<std::endl;
+  if(m_grabber) {
+    try {
+      m_grabber->CancelGrab();
+      // Get all buffers back
+      Pylon::GrabResult r;
+      while(m_grabber->RetrieveResult(r)){;}
+
+      std::vector<CGrabBuffer*>::iterator it;
+      for (it = m_buffers.begin(); it != m_buffers.end(); it++) {
+        std::cerr << "stopTransfer @" << __FILE__<<__LINE__<<std::endl;
+        m_grabber->DeregisterBuffer((*it)->GetBufferHandle());
+        delete *it;
+        *it = NULL;
+      }
+      m_buffers.clear();
+
+      m_grabber->FinishGrab();
+      m_grabber->Close();
+    } catch (GenICam::GenericException &e) {
+      std::cerr << e.GetDescription() << std::endl;  
+    }
+  }
+  
   return true;
 }
 
 std::vector<std::string> videoPYLON::enumerate() {
+  m_id2device.clear();
   std::vector<std::string> result;
+  if(NULL==m_factory)return result;
+
+  Pylon::DeviceInfoList_t devices;
+  if (0 == m_factory->EnumerateDevices(devices))  {
+      std::cout << "could not enumerate" << std::endl;
+      return result;
+    }
+  if(devices.empty() ) 
+    return result;
+
+  int i=0;
+  for(i=0; i<devices.size(); i++) {
+    std::string name;
+
+    name=devices[i].GetFullName();
+    m_id2device[name]=devices[i];
+
+    result.push_back(name);
+
+    name=devices[i].GetSerialNumber();
+    m_id2device[name]=devices[i];
+
+    name=devices[i].GetFriendlyName();
+    m_id2device[name]=devices[i];
+  }
+
   return result;
 }
 
 
+bool videoPYLON::enumProperties(gem::Properties&readable,
+                                gem::Properties&writeable) {
+  return false;
+}
+void videoPYLON::setProperties(gem::Properties&writeprops) {
+
+}
+void videoPYLON::getProperties(gem::Properties&readprops) {
+
+}
 
 
 #else

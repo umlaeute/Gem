@@ -29,9 +29,14 @@
  */
 # undef Status
 #endif
+#ifdef None
+# undef None
+#endif
 
 #ifdef HAVE_PYLON
-# include "PylonCpp.h"
+# include "pylon/PylonIncludes.h"
+# include <pylon/gige/BaslerGigECamera.h>
+typedef Pylon::CBaslerGigECamera Camera_t;
 #endif
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -55,38 +60,55 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 namespace gem { class GEM_EXPORT videoPYLON : public video {
     public:
-        //////////
-        // Constructor
-    	videoPYLON(void);
+    //////////
+    // Constructor
+    videoPYLON(void);
     	    	
-    	//////////
-    	// Destructor
-    	virtual ~videoPYLON();
+    //////////
+    // Destructor
+    virtual ~videoPYLON();
 
 #ifdef HAVE_PYLON
-	////////
-	// open the video-device
-	virtual bool           openDevice(void);
-	virtual void          closeDevice(void);
+    ////////
+    // open the video-device
+    virtual bool           openDevice(gem::Properties&writeprops);
+    virtual void          closeDevice(void);
     
-    	//////////
-    	// Start up the video device
-    	// [out] int - returns 0 if bad
-    	bool	    	startTransfer();
-	//////////
-    	// Stop the video device
-    	// [out] int - returns 0 if bad
-    	bool	   	stopTransfer();
+    //////////
+    // Start up the video device
+    // [out] int - returns 0 if bad
+    bool	    	startTransfer();
+    //////////
+    // Stop the video device
+    // [out] int - returns 0 if bad
+    bool	   	stopTransfer();
+    
+    //////////
+    // get the next frame
+    bool grabFrame();
 
-	//////////
-	// get the next frame
-	bool grabFrame();
+    virtual std::vector<std::string>enumerate(void);
 
-  virtual std::vector<std::string>enumerate(void);
+
+
+  virtual bool enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&writeprops);
+  virtual void getProperties(gem::Properties&readprops);
+
    
- protected:
-  // Pylon::CBaslerGigECamera*m_grabber;
+  protected:
+  class CGrabBuffer;
 
+  Pylon::PylonAutoInitTerm autoInitTerm;
+  Pylon::CTlFactory*m_factory;
+    
+  Pylon::CBaslerGigECamera*m_camera;
+  Pylon::CBaslerGigEStreamGrabber*m_grabber;
+
+  uint32_t m_numBuffers;
+  std::vector<CGrabBuffer*> m_buffers;
+  std::map<std::string, Pylon::CDeviceInfo>m_id2device;
 #endif /* HAVE_PYLON */
 
 }; 
