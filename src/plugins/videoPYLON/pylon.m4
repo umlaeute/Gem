@@ -71,7 +71,7 @@ if test "x$with_pylon" != "xno"; then
   if test "x$have_pylon" = "xyes"; then
     AC_DEFINE([HAVE_PYLON], [1], [video capturing using Basler's PYLON])
     GEM_PYLON_CXXFLAGS="${tmp_pylon_includes}"
-    GEM_PYLON_LIBS="-lpyloncpp ${tmp_pylon_ldflags}"
+    GEM_PYLON_LIBS="${tmp_pylon_ldflags}"
   fi
 
   AC_MSG_CHECKING([for PYLON])
