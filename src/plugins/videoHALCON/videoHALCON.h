@@ -92,8 +92,14 @@ namespace gem { class GEM_EXPORT videoHALCON : public video {
  protected:
   Halcon::HFramegrabber*m_grabber;
   std::string m_backendname;
+  std::vector<std::string> m_backends;
 
   std::map<std::string, Halcon::HTuple>m_readable, m_writeable;
+
+  /* short-cut device-name as found by "enumerate"
+   * this maps the devicename to the backend that provides the device
+   */
+  std::map<std::string, std::string>m_device2backend;
 
 #endif /* HAVE_HALCON */
 

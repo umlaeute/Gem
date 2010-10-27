@@ -21,6 +21,10 @@ using namespace gem;
 
 #include "Gem/RTE.h"
 
+
+#include "Base/GemFiles.h"
+#include "Base/GemDylib.h"
+
 #if 0
 # define debug ::post
 #else
@@ -39,6 +43,41 @@ using namespace gem;
 
 REGISTER_VIDEOFACTORY("halcon", videoHALCON);
 
+static std::vector<std::string>s_backends;
+static std::vector<std::string>getBackends(void) {
+  if(s_backends.size()>0)return s_backends;
+
+  std::string path = gem::files::expandEnv("$HALCONROOT/lib/$HALCONARCH/hAcq", true);
+  std::string pattern = path+std::string("*") +GemDylib::getDefaultExtension();
+
+  std::vector<std::string>listing=gem::files::getFilenameListing(pattern);
+
+  int i=0;
+  for(i=0; i<listing.size(); i++) {
+    const size_t found = listing[i].find(path);
+    if(std::string::npos != found) {
+      const size_t start=found+path.length();
+      const size_t stop =listing[i].rfind(GemDylib::getDefaultExtension()) - path.length(); 
+      std::string backend=listing[i].substr(start, stop);
+
+      try {
+        Halcon::HTuple Information;
+        Halcon::HTuple ValueList;
+        if(H_MSG_TRUE==info_framegrabber(backend.c_str(), 
+                                         "revision",
+                                         &Information,
+                                         &ValueList)) {
+          s_backends.push_back(backend);
+        }
+      } catch (Halcon::HException &except) {
+        //error("info caught exception: '%s'", except.message);
+      }
+    }
+  }
+  return s_backends;
+}
+
+
 
 // exception handler
 static void MyHalconExceptionHandler(const Halcon::HException& except)
@@ -55,10 +94,16 @@ videoHALCON :: videoHALCON() : video("halcon"),
   m_height=0;
 
   Halcon::HException::InstallHHandler(&MyHalconExceptionHandler);
+  m_backends=getBackends();
+  if(m_backends.size()>0) {
+    int i=0;
+    provide("iidc");
+    provide("gige");
 
-  provide("iidc");
-  provide("gige");
-  provide("falcon");
+    for(i=0; i<m_backends.size(); i++) {
+      provide(m_backends[i]);
+    }
+  }
 }
 
 ////////////////////////////////////////////////////////
@@ -219,6 +264,9 @@ static void printinfo(std::string name, std::string value) {
   try {
     Halcon::HTuple Information;
     Halcon::HTuple ValueList;
+
+    std::cerr << "getting info for "<<name<<"."<<value<<std::endl; 
+
     Herror err=info_framegrabber(name.c_str(), 
                                  value.c_str(),
                                  &Information,
@@ -249,6 +297,20 @@ bool videoHALCON :: openDevice(gem::Properties&props)
 {
   m_backendname.clear();
   if(m_grabber)closeDevice();
+
+  double d=0;
+  int w=0, h=0;
+
+  if(props.get("width", d))
+    w=d;
+  if(props.get("height", d))
+    h=d;
+
+  const int width=(w>0) ?w:0;
+  const int height=(h>0)?h:0;
+  m_width=width;
+  m_height=height;
+
   
   /* m_devicename has to provide:
    *    backendid
@@ -266,22 +328,19 @@ bool videoHALCON :: openDevice(gem::Properties&props)
    * i don't think this is currently possible with halcon
    *
    */
-
-  double d=0;
-  int w=0, h=0;
-
-  if(props.get("width", d))
-    w=d;
-  if(props.get("height", d))
-    h=d;
-
-  const int width=(w>0) ?w:0;
-  const int height=(h>0)?h:0;
   std::string cameratype="default";
   std::string device="default";
   const int port=(m_channel>0)?m_channel:-1;
 
-  std::string name=parsedevicename(m_devicename, cameratype, device);
+  std::string name;
+  std::map<std::string,  std::string>::iterator it = m_device2backend.find(m_devicename);
+  if(it != m_device2backend.end()) {
+    device=it->first;
+    name=it->second;
+  } else {
+    name=parsedevicename(m_devicename, cameratype, device);
+  }
+
   if(name.empty()) {
     return false;
   }
@@ -330,6 +389,7 @@ bool videoHALCON :: openDevice(gem::Properties&props)
 void videoHALCON :: closeDevice() {
   if(m_grabber)delete m_grabber;
   m_grabber=NULL;
+  m_backendname.clear();
 }
 
 
@@ -355,10 +415,56 @@ bool videoHALCON :: stopTransfer()
 
 std::vector<std::string> videoHALCON::enumerate() {
   std::vector<std::string> result;
+
+  std::vector<std::string> backends;
+  m_device2backend.clear();
+
+  if(m_backendname.empty()) {
+    backends=m_backends;
+  } else {
+    backends.push_back(m_backendname);
+  }
+
+  int i=0;
+
+  for(i=0; i<backends.size(); i++) {
+    try {
+      Halcon::HTuple Information;
+      Halcon::HTuple ValueList;
+      
+      if(H_MSG_TRUE != info_framegrabber(backends[i].c_str(), 
+                                         "device",
+                                         &Information,
+                                         &ValueList))
+        continue;
+
+      int j=0;
+      for(j=0; j<ValueList.Num(); j++) {
+        Halcon::HCtrlVal v=ValueList[j];
+        std::string device;
+        switch(v.ValType()) {
+        case Halcon::StringVal:
+          device=v.S();
+
+          // some backends seem to be a bit buggy and report instructions what you should give rather than enumerate devices
+          if("LPS36"==backends[i] && "<ip_address>"==device) {
+            // e.g. LPS-36 gives us "<ip_address>" (probably it does return a valid IP-address if we had such a device, dunno)
+          } else {
+            m_device2backend[device]=backends[i];
+            result.push_back(device);
+          }
+          break;
+        default:
+          break;
+        }
+      }
+    }  catch (Halcon::HException &except) {
+        // ...
+    }
+  }
+
   return result;
 }
-
-
 
 bool videoHALCON::enumProperties(gem::Properties&readable,
                                  gem::Properties&writeable) {
@@ -449,7 +555,6 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
 
 void videoHALCON::setProperties(gem::Properties&props) {
   if(NULL==m_grabber)return;
-
   std::vector<std::string>keys=props.keys();
   int i=0;
   for(i=0; i<keys.size(); i++) {
@@ -492,6 +597,39 @@ void videoHALCON::setProperties(gem::Properties&props) {
         } catch (Halcon::HException& except) {
           error("Halcon::SetFramegrabberParam(%s) exception: '%s'", key.c_str(), except.message);
         }
+      } else {
+        if("width" == key) {
+          double d=0;
+          if(props.get(key, d)) {
+            try {
+              m_grabber->SetFramegrabberParam("image_width", d);
+            } catch (Halcon::HException& except) {
+              try {
+                long l=d;
+                m_grabber->SetFramegrabberParam("image_width", l);
+              } catch (Halcon::HException& except) {
+                error("Halcon::SetFramegrabberParam(width) exception: '%s'", except.message);
+              }            
+            }
+            m_width=d;
+          }
+        } else if ("height" == key) {
+          double d=0;
+          if(props.get(key, d)) {
+            try {
+              m_grabber->SetFramegrabberParam("image_height", d);
+            } catch (Halcon::HException& except) {
+              try {
+                long l=d;
+                m_grabber->SetFramegrabberParam("image_height", l);
+              } catch (Halcon::HException& except) {
+                error("Halcon::SetFramegrabberParam(height) exception: '%s'", except.message);
+              }            
+            }
+            m_height=d;
+          }
+        }
+
       }
   }
 }
