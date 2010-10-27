@@ -358,7 +358,7 @@ pixBlock *videoV4L2 :: getFrame(){
   return &m_image;
 }
 
-bool videoV4L2 :: openDevice() {
+bool videoV4L2 :: openDevice(gem::Properties&props) {
   close();
 
   /* check the device */
@@ -422,6 +422,9 @@ bool videoV4L2 :: openDevice() {
   }
 
   verbose(1, "v4l2: successfully opened %s", dev_name);
+
+  setProperties(props);
+
   return true;
 }
 void videoV4L2 :: closeDevice() {

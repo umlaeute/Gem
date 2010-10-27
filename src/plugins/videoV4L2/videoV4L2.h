@@ -93,7 +93,7 @@ namespace gem { class GEM_EXPORT videoV4L2 : public video {
 #ifdef HAVE_VIDEO4LINUX2
   ////////
   // open the video-device
-  virtual bool            openDevice(void);
+  virtual bool           openDevice(gem::Properties&writeprops);
   virtual void          closeDevice(void);
     
   //////////
