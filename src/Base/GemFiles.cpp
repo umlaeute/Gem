@@ -9,6 +9,11 @@
 
 #include "Base/GemFiles.h"
 
+#ifdef HAVE_WORDEXP_H
+# include <wordexp.h>
+#endif
+
+#include "Gem/RTE.h"
 
 namespace gem {
   namespace files {
@@ -75,5 +80,52 @@ namespace gem {
 
       return result;
     }
+
+
+    std::string expandEnv(std::string value, bool bashfilename) {
+      std::string ret;
+      /* FIXXME: 
+       *  ouch, on linux value has to include "$VARIABLENAME", check whether we need "%VARIABLENAME%" on w32
+       */
+
+      if(value.empty())
+        return value;
+
+      if(bashfilename) {
+        char bashBuffer[MAXPDSTRING];
+        sys_bashfilename(value.c_str(), bashBuffer);
+        ret=bashBuffer;
+      } else {
+        ret=value;
+      }
+
+#ifdef HAVE_WORDEXP_H
+      wordexp_t pwordexp;
+      
+      if(0==wordexp(ret.c_str(), &pwordexp, 0)) {
+        pwordexp.we_offs=0;
+        if(pwordexp.we_wordc) {
+          // we only take the first match into account 
+          ret=pwordexp.we_wordv[0];
+        }
+# ifdef __APPLE__
+        /* wordfree() broken on apple: keeps deallocating non-aligned memory */
+#  warning wordfree() not called
+# else
+        wordfree(&pwordexp);
+# endif
+      }
+#endif
+#ifdef _WIN32
+      char envVarBuffer[MAXPDSTRING];
+      ExpandEnvironmentStrings(ret.c_str(), envVarBuffer, MAX_PATH - 2);
+      ret=envVarBuffer;
+#endif
+      return ret;
+    }
+
+
+
+
   };
 };

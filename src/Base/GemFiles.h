@@ -24,6 +24,7 @@ namespace gem {
   namespace files {
 
     std::vector<std::string>getFilenameListing(const std::string pattern);
+    std::string expandEnv(std::string, bool bashfilename=false);
 
   };
 };

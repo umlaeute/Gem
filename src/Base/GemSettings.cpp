@@ -16,6 +16,7 @@
 
 #include "Base/GemConfig.h"
 #include "GemSettings.h"
+#include "GemFiles.h"
 
 #include <map>
 #include <string.h>
@@ -101,7 +102,7 @@ class GemSettingsData {
     set(name, &a);
   }
 
-  t_symbol*expandEnv(t_symbol*, bool bashfilename=false);
+  //  t_symbol*expandEnv(t_symbol*, bool bashfilename=false);
 
 
   bool open(const char*filename, const char*dirname=NULL) {
@@ -112,7 +113,7 @@ class GemSettingsData {
 
 
     if(dirname) {
-      r=binbuf_read(bb, (char*)filename, expandEnv(gensym(dirname), true)->s_name, 1);
+      r=binbuf_read(bb, (char*)filename, const_cast<char*>(gem::files::expandEnv(dirname, true).c_str()), 1);
       if(0==r)verbose(1, "found Gem-settings '%s' in '%s'", filename, dirname);
     } else {
       r=binbuf_read_via_path(bb, (char*)filename, (char*)".", 1);
@@ -188,7 +189,7 @@ GemSettingsData::GemSettingsData(void)
   t_atom*a=get(gensym("settings.file"));
   if(a) {
     t_symbol*s=atom_getsymbol(a);
-    open(expandEnv(s, true)->s_name, ".");
+    open(gem::files::expandEnv(s->s_name, true).c_str(), ".");
   } else {
     while(s_configdir[i]) {
       open(GEM_SETTINGS_FILE, s_configdir[i]);
@@ -246,7 +247,7 @@ void GemSettingsData::setEnv(t_symbol*key, const char*env) {
 
   // we ignore lists and other complex things for now
 }
-
+#if 0
 t_symbol*GemSettingsData::expandEnv(t_symbol*value, bool bashfilename) {
   if(NULL==value)
     return NULL;
@@ -284,6 +285,7 @@ t_symbol*GemSettingsData::expandEnv(t_symbol*value, bool bashfilename) {
   verbose(2, "expanded '%s'", value->s_name);
   return value;
 }
+#endif
 
 /* GemSettings: the public API */
 
