@@ -33,6 +33,10 @@ using namespace gem;
 using namespace Basler_GigECameraParams;
 using namespace Basler_GigEStreamParams;
 
+
+#include "CameraPropertiesGet.h"
+#include "StreamGrabberPropertiesGet.h"
+
 // Constructor allocates the image buffer
 
 class videoPYLON::CGrabBuffer {
@@ -188,7 +192,6 @@ bool videoPYLON :: openDevice(gem::Properties&props)
   if(props.get("channel", d))
     channel=d;
 
-  std::cout << "open device: " << m_devicename << std::endl;
   if(m_camera)closeDevice();
   if(NULL==m_factory)return false;
 
@@ -203,7 +206,6 @@ bool videoPYLON :: openDevice(gem::Properties&props)
     std::cerr << e.GetDescription() << std::endl;
     return false;
   }
-  std::cout << "opened device " << (void*)device << std::endl;
 
   if(device==NULL)
     return false;
@@ -221,7 +223,6 @@ bool videoPYLON :: openDevice(gem::Properties&props)
     return false;
   }
 
-  std::cout << "opened device: " << m_devicename << std::endl;
   return true;
 }
 /////////////////////////////////////////////////////////
@@ -269,7 +270,6 @@ bool videoPYLON :: startTransfer()
     m_camera->ExposureMode.SetValue(ExposureMode_Timed);
     m_camera->ExposureTimeRaw.SetValue(100);
 
-
     const size_t ImageSize = (size_t)(m_camera->PayloadSize.GetValue());
     m_grabber->MaxBufferSize.SetValue(ImageSize);
     m_grabber->MaxNumBuffer.SetValue(m_numBuffers);
@@ -306,7 +306,6 @@ bool videoPYLON :: startTransfer()
 /////////////////////////////////////////////////////////
 bool videoPYLON :: stopTransfer()
 {
-  std::cerr << "stopTransfer @" << __FILE__<<__LINE__<<std::endl;
   if(m_camera) {
     // Stop acquisition
     try {
@@ -315,7 +314,6 @@ bool videoPYLON :: stopTransfer()
       std::cerr << e.GetDescription() << std::endl;  
     }
   }
-  std::cerr << "stopTransfer @" << __FILE__<<__LINE__<<std::endl;
   if(m_grabber) {
     try {
       m_grabber->CancelGrab();
@@ -325,7 +323,6 @@ bool videoPYLON :: stopTransfer()
 
       std::vector<CGrabBuffer*>::iterator it;
       for (it = m_buffers.begin(); it != m_buffers.end(); it++) {
-        std::cerr << "stopTransfer @" << __FILE__<<__LINE__<<std::endl;
         m_grabber->DeregisterBuffer((*it)->GetBufferHandle());
         delete *it;
         *it = NULL;
@@ -377,13 +374,54 @@ std::vector<std::string> videoPYLON::enumerate() {
 
 bool videoPYLON::enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable) {
+
+  if(m_camera) {
+    try {
+      const Pylon::CDeviceInfo & di=m_camera->GetDeviceInfo();
+      Pylon::StringList_t names;
+      di.GetPropertyNames (names);
+
+      int i=0;
+      for(i=0; i<names.size(); i++) {
+        std::cerr << "property#"<<i<<": "<<names[i]<<std::endl;
+      }
+    } catch (GenICam::GenericException &e) {
+      std::cerr << e.GetDescription() << std::endl;
+      return false;
+    }
+  }
+
+
   return false;
 }
-void videoPYLON::setProperties(gem::Properties&writeprops) {
+void videoPYLON::setProperties(gem::Properties&props) {
 
 }
-void videoPYLON::getProperties(gem::Properties&readprops) {
 
+void videoPYLON::getProperties(gem::Properties&props) {
+  if(NULL==m_grabber) {
+    return;
+  }
+  std::vector<std::string>keys=props.keys();
+  int i=0; 
+  for(i=0; i<keys.size(); i++) {
+    const std::string key=keys[i];
+    gem::any result;
+    if(m_grabber) {
+      try {
+        StreamGrabberPropertiesGet(m_grabber, key, result);
+      } catch (GenICam::GenericException &e) {result.reset(); }
+    }
+
+    if(result.empty() && m_camera)
+      try {
+        CameraPropertiesGet(m_camera, key, result);
+      } catch (GenICam::GenericException &e) {result.reset(); }
+
+    if(result.empty())
+      continue;
+    props.set(key, result);    
+  }
 }
 
 
