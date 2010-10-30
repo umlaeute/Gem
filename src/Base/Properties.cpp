@@ -143,8 +143,7 @@ namespace gem {
   Properties& Properties::assign(const Properties&org) {
     pimpl->valuemap=org.pimpl->valuemap;
     pimpl->typemap =org.pimpl->typemap;
+
+    return(*this);
   }
-
-
-
 };
