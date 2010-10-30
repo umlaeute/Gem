@@ -45,7 +45,7 @@ namespace gem { class GEM_EXPORT videoVFW : public video {
 #ifdef HAVE_VFW_H
     ////////
     // open the video-device
-    virtual bool           openDevice(void);
+    virtual bool           openDevice(gem::Properties&);
     virtual void          closeDevice(void);
     
     //////////
@@ -63,8 +63,11 @@ namespace gem { class GEM_EXPORT videoVFW : public video {
 
     //////////
     // Set the video dimensions
-    virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
     virtual bool	    	setColor(int);
+
+    virtual bool enumProperties(gem::Properties&readable, gem::Properties&writeable);
+    virtual void setProperties(gem::Properties&);
+    virtual void getProperties(gem::Properties&);
 
   protected:
     HWND		m_hWndC;

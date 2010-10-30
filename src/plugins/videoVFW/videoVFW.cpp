@@ -54,12 +54,20 @@ videoVFW :: ~videoVFW()
 // openDevice
 //
 /////////////////////////////////////////////////////////
-bool videoVFW :: openDevice()
+bool videoVFW :: openDevice(gem::Properties&props)
 {
   char driverName[256];
   char driverDesc[256];
   if (capGetDriverDescription(0, driverName, 256, driverDesc, 256))
     post("videoVFW: driver '%s'", driverName);
+
+
+  double d;
+  if (props.get("width", d))
+    m_width=d;
+
+  if (props.get("height", d))
+    m_height=d;
 
   if(m_hWndC)closeDevice();
   
@@ -231,16 +239,6 @@ bool videoVFW :: stopTransfer()
 }
 
 /////////////////////////////////////////////////////////
-// dimenMess
-//
-/////////////////////////////////////////////////////////
-bool videoVFW :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
-  video::setDimen(x, y, leftmargin, rightmargin, topmargin, bottommargin);
-  if (m_hWndC) reset();
-  return true;
-}
-
-/////////////////////////////////////////////////////////
 // csMess
 //
 /////////////////////////////////////////////////////////
@@ -248,6 +246,41 @@ bool videoVFW :: setColor(int format)
 {
   if(format)m_image.image.setCsizeByFormat(format);
   return true;
+}
+
+
+
+bool videoVFW :: enumProperties(gem::Properties&readable, gem::Properties&writeable) {
+  readbale.clear();
+  writeable.clear();
+
+  gem::any type=0;
+
+  writeable.set("width", type);
+  writeable.set("height", type);
+
+
+  return true;
+}
+
+void videoVFW :: setProperties(gem::Properties&props) {
+  double d;
+  bool dorestart=false;
+
+  if (props.get("width", d)) {
+    m_width=d;
+    dorestart=true;
+  }
+
+  if (props.get("height", d)) {
+    m_height=d;
+    dorestart=true;
+  }
+
+  if(dorestart && m_hWndC)
+    reset();
+}
+void videoVFW :: getProperties(gem::Properties&props) {
 }
 
 #else
