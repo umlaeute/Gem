@@ -2,16 +2,20 @@
 
     GEM - Graphics Environment for Multimedia
 
-    Load an video into a pix block
+    grab images using HALCON
 
-    Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyright (c) Günther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+    HALCON is a proprietary machine vision library by MVtec, that supports a wide range
+    of image acquisition devices (most noteable: GigE-cameras)
+
+    see http://halcon.de/
+
+    you will need to get a license key from your vendor
+
+
+    Copyright (c) 2010 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+    WARRANTIES, see the file, "LICENSE.txt" in this distribution.
 
-    Linux version by Miller Puckette. msp@ucsd.edu
-	
 -----------------------------------------------------------------*/
 
 #ifndef INCLUDE_VIDEOHALCON_H_
@@ -37,21 +41,14 @@
 -------------------------------------------------------------------
 CLASS
 	pix_video
-    
+
     Loads in a video
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
-    "dimen" (int, int) - set the x,y dimensions
-    "zoom" (int, int) - the zoom factor (1.0 is nominal) (num / denom)
-    "bright" (int) - the brightnes
-    "contrast" (int) - the contrast
-    "hue" (int) - the hue
-    "sat" (int) - the saturation
-    
 -----------------------------------------------------------------*/
 namespace gem { class GEM_EXPORT videoHALCON : public video {
     public:
@@ -68,7 +65,7 @@ namespace gem { class GEM_EXPORT videoHALCON : public video {
 	// open the video-device
       virtual bool           openDevice(gem::Properties&);
       virtual void          closeDevice(void);
-    
+
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
@@ -103,7 +100,7 @@ namespace gem { class GEM_EXPORT videoHALCON : public video {
 
 #endif /* HAVE_HALCON */
 
-}; 
+};
 };
 
 #endif	// for header file
