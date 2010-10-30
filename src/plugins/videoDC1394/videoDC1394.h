@@ -40,13 +40,6 @@ KEYWORDS
     
 DESCRIPTION
 
-    "dimen" (int, int) - set the x,y dimensions
-    "zoom" (int, int) - the zoom factor (1.0 is nominal) (num / denom)
-    "bright" (int) - the brightnes
-    "contrast" (int) - the contrast
-    "hue" (int) - the hue
-    "sat" (int) - the saturation
-    
 -----------------------------------------------------------------*/
 namespace gem { class GEM_EXPORT videoDC1394 : public video {
     public:
@@ -60,7 +53,7 @@ namespace gem { class GEM_EXPORT videoDC1394 : public video {
 #ifdef HAVE_LIBDC1394
 	////////
 	// open the video-device
-	virtual bool           openDevice(void);
+	virtual bool           openDevice(gem::Properties&);
 	virtual void          closeDevice(void);
     
     	//////////
@@ -79,11 +72,13 @@ namespace gem { class GEM_EXPORT videoDC1394 : public video {
 	//////////
 	// Set the video dimensions
 	virtual bool	    	setColor(int);
-  virtual bool        setChannel(int chan, float freq);
+	virtual bool       enumProperties(gem::Properties&, gem::Properties&);
+	virtual void        getProperties(gem::Properties&);
+	virtual void        setProperties(gem::Properties&);
 
 	//////////
 	// get available devices
-  virtual std::vector<std::string>enumerate(void);
+	virtual std::vector<std::string>enumerate(void);
   
  protected:
 

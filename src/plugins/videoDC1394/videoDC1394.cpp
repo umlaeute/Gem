@@ -43,8 +43,6 @@ videoDC1394 :: videoDC1394() : video("dc1394"),
   m_dc = dc1394_new(); /* Initialize libdc1394 */
   if(!m_dc) throw(GemException("unable to initialize DC1394"));
 
-  m_channel=-1;
-
   m_frame.xsize=1600;
   m_frame.ysize=1200;
   m_frame.setCsizeByFormat(GL_RGBA);
@@ -131,7 +129,7 @@ static std::string guid2string(uint64_t guid, int unit=-1) {
 }
 
 
-bool videoDC1394 :: openDevice(){
+bool videoDC1394 :: openDevice(gem::Properties&props){
   dc1394error_t err;
   dc1394camera_list_t *list=NULL;
   
@@ -195,7 +193,10 @@ bool videoDC1394 :: openDevice(){
     closeDevice();
     return false;
   }
-  int mode=m_channel;
+  int mode=-1;
+  double d;
+  if(props.get("channel", d))
+    mode=d;
 
   verbose(1, "trying mode %d", mode);
 
@@ -357,11 +358,17 @@ bool videoDC1394 :: setColor(int format){
   m_reqFormat=format;
   return true;
 }
-bool videoDC1394 :: setChannel(int chan, float freq){
-  video::setChannel(chan, freq);
-  restartTransfer();
-  return true;
+
+bool videoDC1394::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  return false;
 }
+void videoDC1394::getProperties(gem::Properties&props) {
+}
+void videoDC1394::setProperties(gem::Properties&props) {
+}
+
+
 #else
 videoDC1394 :: videoDC1394() : video("")
 {}
