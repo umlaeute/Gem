@@ -324,7 +324,16 @@ void pix_video :: closeMess()
 void pix_video :: dimenMess(int x, int y, int leftmargin, int rightmargin,
 			       int topmargin, int bottommargin)
 {
-  WITH_VIDEOHANDLES_DO(setDimen(x,y,leftmargin,rightmargin,topmargin,bottommargin));
+  m_writeprops.set("width", x);
+  m_writeprops.set("height", y);
+
+  m_writeprops.set("leftmargin", leftmargin);
+  m_writeprops.set("rightmargin", rightmargin);
+  m_writeprops.set("topmargin", topmargin);
+  m_writeprops.set("bottommargin", bottommargin);
+
+  if(m_videoHandle)
+    m_videoHandle->setProperties(m_writeprops);
 }
 
 /////////////////////////////////////////////////////////
@@ -333,7 +342,11 @@ void pix_video :: dimenMess(int x, int y, int leftmargin, int rightmargin,
 /////////////////////////////////////////////////////////
 void pix_video :: channelMess(int channel, t_float freq)
 {
-  WITH_VIDEOHANDLES_DO(setChannel(channel, freq));
+  m_writeprops.set("channel", channel);
+  m_writeprops.set("frequency", freq);
+
+  if(m_videoHandle)
+    m_videoHandle->setProperties(m_writeprops);
 }
 /////////////////////////////////////////////////////////
 // normMess
@@ -341,7 +354,10 @@ void pix_video :: channelMess(int channel, t_float freq)
 /////////////////////////////////////////////////////////
 void pix_video :: normMess(t_symbol *s)
 {
-  WITH_VIDEOHANDLES_DO(setNorm(s->s_name));
+  m_writeprops.set("norm", std::string(s->s_name));
+
+  if(m_videoHandle)
+    m_videoHandle->setProperties(m_writeprops);
 }
 /////////////////////////////////////////////////////////
 // colorMess
@@ -651,8 +667,11 @@ void pix_video :: enumPropertyMess()
 // qualityMess
 //
 /////////////////////////////////////////////////////////
-void pix_video :: qualityMess(int dev) {
-  WITH_VIDEOHANDLES_DO(setQuality(dev));
+void pix_video :: qualityMess(int q) {
+  m_writeprops.set("quality", q);
+
+  if(m_videoHandle)
+    m_videoHandle->setProperties(m_writeprops);
 }
 
 

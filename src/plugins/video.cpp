@@ -378,38 +378,12 @@ void video::releaseFrame(void) {
 }
 
 /////////////////////////////////////////////////////////
-// set dimension
-bool video :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin){
-  m_width=x;
-  m_height=y;
-  return false;
-}
-
-/////////////////////////////////////////////////////////
-// set the tv-norm
-bool video :: setNorm(const std::string norm){
-  post("setting the video-norm is not supported by this OS/device");
-  return false;
-}
-/////////////////////////////////////////////////////////
-// set the channel of the current device
-bool video :: setChannel(int chan, t_float freq){
-  m_channel=chan;
-  m_frequency=freq;
-  return false;
-}
-/////////////////////////////////////////////////////////
 // set the color-space
 bool video :: setColor(int d){
   post("setting the color-space is not supported by this OS/device");
   return false;
 }
-/////////////////////////////////////////////////////////
-// set the quality for DV decoding
-bool video :: setQuality(int d){
-  post("setting the quality is not supported by this OS/device");
-  return false;
-}
+
 /////////////////////////////////////////////////////////
 // open a dialog for the settings
 bool video :: dialog(std::vector<std::string>dialognames){

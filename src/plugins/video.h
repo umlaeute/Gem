@@ -156,21 +156,6 @@ namespace gem { class GEM_EXTERN video {
     virtual bool	    	setDevice(const std::string);
 
 
-    //////////
-    // Set the video dimensions and other stuff
-    // implement what's possible
-    virtual bool	    	setDimen(int x, int y, int leftmargin=0, int rightmargin=0,
-                                 int topmargin=0, int bottommargin=0);
-
-    virtual bool	    	setChannel(int c, float f=0);
-    virtual bool	    	setNorm(const std::string);
-    virtual bool	    	setColor(int);
-    virtual bool	    	setQuality(int);
-
-    // set stuff via a system dialog (highly system specific)
-    // implement if the system provides an API for this
-    virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
-
     // provide a list of devices this backend can handle */
     virtual std::vector<std::string>enumerate(void);
 
@@ -204,6 +189,17 @@ namespace gem { class GEM_EXTERN video {
     bool provides(const std::string);
     // get a list of all provided devices
     std::vector<std::string>provides(void);
+
+
+    //////////
+    // Set the video dimensions and other stuff
+    // implement what's possible
+    virtual bool	    	setColor(int);
+
+    // set stuff via a system dialog (highly system specific)
+    // implement if the system provides an API for this
+    virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
+
 
     /**
      * list all properties the currently opened device supports
