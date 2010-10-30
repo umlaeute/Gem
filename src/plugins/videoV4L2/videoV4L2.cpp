@@ -691,68 +691,6 @@ bool videoV4L2 :: stopTransfer()
   return true;
 }
 
-/////////////////////////////////////////////////////////
-// dimenMess
-//
-/////////////////////////////////////////////////////////
-bool videoV4L2 :: setDimen(int x, int y, int leftmargin, int rightmargin,
-                          int topmargin, int bottommargin)
-{
-  int xtotal = x + leftmargin + rightmargin;
-  int ytotal = y + topmargin + bottommargin;
-  if (xtotal > m_maxwidth) /* 844 */
-    error("x dimensions too great");
-  else if (xtotal < m_minwidth || x < 1 || leftmargin < 0 || rightmargin < 0)
-    error("x dimensions too small");
-  if (ytotal > m_maxheight)
-    error("y dimensions too great");
-  else if (ytotal < m_minheight || y < 1 ||
-           topmargin < 0 || bottommargin < 0)
-    error("y dimensions too small");
-
-  m_width=x;
-  m_height=y;
-  m_image.image.xsize = x;
-  m_image.image.ysize = y;
-
-  m_image.image.reallocate();
-  restartTransfer();
-  return true;
-}
-
-bool videoV4L2 :: setNorm(const std::string norm)
-{
-  char c=*norm.c_str();
-  int i_norm=-1;
-
-  switch (c){
-  case 'p': case 'P':
-    i_norm = V4L2_STD_PAL;
-    break;
-  case 'n': case 'N':
-    i_norm = V4L2_STD_NTSC;
-    break;
-  case 's': case 'S':
-    i_norm = V4L2_STD_SECAM;
-    break;
-  default:
-    error("pix_video: unknown norm");
-    return -1;
-    break;
-  }
-  //  if (i_norm==m_norm)return 0;
-  m_norm=i_norm;
-  restartTransfer();
-  return true;
-}
-
-bool videoV4L2 :: setChannel(int c, t_float f){
-  m_channel=c;  
-  restartTransfer();
-
-  return true;
-}
-
 bool videoV4L2 :: setColor(int format)
 {
   if (format<=0 || format==m_reqFormat)return -1;

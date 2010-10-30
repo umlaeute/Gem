@@ -115,11 +115,7 @@ namespace gem { class GEM_EXPORT videoV4L2 : public video {
 
 
   //////////
-  // Set the video dimensions
-  virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin,
-                                 int topmargin, int bottommargin);
-  virtual bool	    	setChannel(int c, float f);
-  virtual bool	    	setNorm(const std::string);
+  // Set the video properties
   virtual bool	    	setColor(int);
 
   virtual std::vector<std::string>enumerate(void);
