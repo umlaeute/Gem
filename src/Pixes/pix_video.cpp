@@ -374,22 +374,34 @@ void pix_video :: colorMess(t_atom*a)
 void pix_video :: enumerateMess()
 {
   std::vector<std::string>data;
+  std::vector<std::string>backends;
   unsigned int i=0; 
   for(i=0; i<m_videoHandles.size(); i++) {
     //    a.insert(a.end(), b.begin(), b.end());
     if(m_videoHandles[i]) {
+      std::string name=m_videoHandles[i]->getName();
+
       std::vector<std::string>temp=m_videoHandles[i]->enumerate();
-      data.insert(data.end(), temp.begin(), temp.end());
+      int i=0;
+      for(i=0; i<temp.size(); i++) {
+	backends.push_back(name);
+	data.push_back(temp[i]);
+      }
     }
   }
   if(data.size()<=0) {
     error("no devices found");
   }
-  
+
+  t_atom ap[2];
+  SETFLOAT(ap, data.size());
+  outlet_anything(m_infoOut, gensym("devices"), 1, ap);
   for(i=0; i<data.size(); i++) {
-    post("%d: %s", i, data[i].c_str());
+    SETSYMBOL(ap+0, gensym(data[i].c_str()));
+    SETSYMBOL(ap+1, gensym(backends[i].c_str()));
+    outlet_anything(m_infoOut, gensym("device"), 2, ap);
+    //    post("%d: %s", i, data[i].c_str());
   }
-  /* LATER: send this to the info-outlet */
 }
 /////////////////////////////////////////////////////////
 // dialog
@@ -484,11 +496,10 @@ void pix_video :: getPropertyMess(int argc, t_atom*argv)
     int i=0;
     m_readprops.clear();
 
-    
-
     for(i=0; i<argc; i++) {
       addProperties(m_readprops, 1, argv+i);
     }
+
   } else {
     /* LATER: read all properties */
   }
