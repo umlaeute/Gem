@@ -82,7 +82,7 @@ namespace gem { class GEM_EXPORT videoV4L : public video {
 #ifdef HAVE_VIDEO4LINUX
 	////////
 	// open the video-device
-	virtual bool           openDevice(void);
+	virtual bool           openDevice(gem::Properties&props);
 	virtual void          closeDevice(void);
     
     	//////////
@@ -100,12 +100,15 @@ namespace gem { class GEM_EXPORT videoV4L : public video {
 
 	//////////
 	// Set the video dimensions
-  virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
-	virtual bool	    	setChannel(int c, float f);
-	virtual bool	    	setNorm(const std::string);
+
+	virtual bool enumProperties(gem::Properties&readable,
+				    gem::Properties&writeable);
+	virtual void setProperties(gem::Properties&props);
+	virtual void getProperties(gem::Properties&props);
+
 	virtual bool	    	setColor(int);
 
-  virtual std::vector<std::string>enumerate(void);
+	virtual std::vector<std::string>enumerate(void);
    
  protected:
 
