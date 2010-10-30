@@ -44,7 +44,7 @@ static const char *GEM_AUTHORS[] = {
 };
 
 static const char GEM_OTHERAUTHORS[] =
-  "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christop Steiner, et al.";
+  "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christoph Steiner, et al.";
 
 extern "C" {
 #ifdef HAVE_S_STUFF_H
