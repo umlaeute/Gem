@@ -512,17 +512,15 @@ void pix_video :: getPropertyMess(int argc, t_atom*argv)
     for(i=0; i<keys.size(); i++) {
       std::string key=keys[i];
       SETSYMBOL(ap+0, gensym(key.c_str()));
-      int ac=1;
+      int ac=0;
       switch(m_readprops.type(key)) {
       default:
       case gem::Properties::UNSET: 
-      case gem::Properties::NONE:  
 	ac=0; 
 	break;
-#if 0
+      case gem::Properties::NONE:  
 	ac=1; 
 	break;
-#endif
       case gem::Properties::DOUBLE:
 	do {
 	  double d=0;
