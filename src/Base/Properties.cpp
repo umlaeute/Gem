@@ -17,6 +17,14 @@ namespace gem {
   Properties::Properties() :
     pimpl(new PIMPL())
   { }
+
+  Properties::Properties(const gem::Properties&org) :
+    pimpl(new PIMPL())
+  { 
+    assign(org);
+  }
+
+
   Properties::~Properties() {
     delete pimpl;
   }
@@ -131,5 +139,12 @@ namespace gem {
     pimpl->typemap.clear();
     pimpl->valuemap.clear();
   }
+
+  Properties& Properties::assign(const Properties&org) {
+    pimpl->valuemap=org.pimpl->valuemap;
+    pimpl->typemap =org.pimpl->typemap;
+  }
+
+
 
 };

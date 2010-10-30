@@ -41,6 +41,8 @@ namespace gem
     };
 
     Properties(void);
+    Properties(const gem::Properties&); /* copy constructor */
+
     virtual ~Properties(void);
 
 #if 0
@@ -93,6 +95,13 @@ namespace gem
      * delete all keys from the Properties
      */
     virtual void clear(void);
+
+
+    /* 
+     * assign Properties from another set
+     */
+    virtual gem::Properties& assign(const gem::Properties&);
+    gem::Properties& operator= (const gem::Properties&org) { return assign(org); }
 
   };
 };
