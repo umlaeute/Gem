@@ -46,20 +46,27 @@ REGISTER_VIDEOFACTORY("halcon", videoHALCON);
 static std::vector<std::string>s_backends;
 static std::vector<std::string>getBackends(void) {
   if(s_backends.size()>0)return s_backends;
-
+#ifdef _WIN32
+  std::string path = gem::files::expandEnv("%HALCONROOT%/bin/%HALCONARCH%/hAcq", true);
+#else
   std::string path = gem::files::expandEnv("$HALCONROOT/lib/$HALCONARCH/hAcq", true);
+#endif
   std::string pattern = path+std::string("*") +GemDylib::getDefaultExtension();
 
   std::vector<std::string>listing=gem::files::getFilenameListing(pattern);
-
+  //std::cerr << "pattern: '"<<pattern<<"' got "<<listing.size()<<" results " << std::endl;
   int i=0;
   for(i=0; i<listing.size(); i++) {
     std::string needle="hAcq";
     const size_t found = listing[i].rfind(needle);
+    //std::cerr << "checking: '"<<listing[i]<<"' found " << found << std::endl;
+
     if(std::string::npos != found) {
       const size_t start=found+needle.length();
       const size_t stop =listing[i].rfind(GemDylib::getDefaultExtension()) - start;
       std::string backend=listing[i].substr(start, stop);
+
+	  //std::cerr << "checking: '"<<listing[i]<<"' -> " << backend << std::endl;
 
       try {
         Halcon::HTuple Information;
