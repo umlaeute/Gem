@@ -263,7 +263,7 @@ namespace gem
   // boost::any-like casting
 
   template<typename T>
-  GEM_EXTERN T* any_cast(any* this_) {
+  T* any_cast(any* this_) {
     if (this_->get_type() != typeid(T)) {
       throw bad_any_cast(this_->get_type(), typeid(T));
     }
@@ -276,12 +276,12 @@ namespace gem
   }
 
   template<typename T>
-  GEM_EXTERN T const* any_cast(any const* this_) {
+  T const* any_cast(any const* this_) {
     return any_cast<T>(const_cast<any*>(this_));
   }
 
   template<typename T>
-  GEM_EXTERN T const& any_cast(any const& this_){
+  T const& any_cast(any const& this_){
     return *any_cast<T>(const_cast<any*>(&this_));
   }
 }
