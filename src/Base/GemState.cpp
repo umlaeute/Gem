@@ -47,7 +47,7 @@ class GemStateData {
   GemStateData& copyFrom(const GemStateData*org) {
     data=org->data;
     stacks->reset();
-
+    return (*this);
   }
 
  protected:
@@ -129,6 +129,7 @@ GemState& GemState::operator=(const GemState&org) {
   HaveTexCoordArray=org.HaveTexCoordArray;
 
   data->copyFrom(org.data);
+  return (*this);
 }
 
 
