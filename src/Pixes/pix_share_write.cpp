@@ -15,6 +15,11 @@
 #include <errno.h>
 #include <stdio.h>
 
+#ifdef _MSC_VER
+# define snprintf _snprintf
+#endif
+
+
 CPPEXTERN_NEW_WITH_GIMME(pix_share_write)
 #if 0
   ;
