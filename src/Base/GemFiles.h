@@ -17,14 +17,14 @@ LOG
 
 #include <string>
 #include <vector>
-
+#include "Base/GemExportDef.h"
 
 namespace gem {
   
   namespace files {
 
-    std::vector<std::string>getFilenameListing(const std::string pattern);
-    std::string expandEnv(std::string, bool bashfilename=false);
+    GEM_EXTERN std::vector<std::string>getFilenameListing(const std::string pattern);
+    GEM_EXTERN std::string expandEnv(std::string, bool bashfilename=false);
 
   };
 };

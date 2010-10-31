@@ -22,7 +22,7 @@ LOG
 class GemDylibHandle;
 class CPPExtern;
 
-class GemDylib {
+class GEM_EXTERN GemDylib {
  private:
   GemDylibHandle*m_handle;
   static GemDylibHandle*open(const CPPExtern*obj, const std::string filename, const std::string extension);
