@@ -32,7 +32,7 @@ REGISTER_VIDEOFACTORY("VFW", videoVFW);
 //
 /////////////////////////////////////////////////////////
 videoVFW :: videoVFW()
-  : video(vfw, 0), 
+  : video("vfw", 0), 
     m_hWndC(NULL)
 {
   provide("dv");
@@ -251,7 +251,7 @@ bool videoVFW :: setColor(int format)
 
 
 bool videoVFW :: enumProperties(gem::Properties&readable, gem::Properties&writeable) {
-  readbale.clear();
+  readable.clear();
   writeable.clear();
 
   gem::any type=0;
