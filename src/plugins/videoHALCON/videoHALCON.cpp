@@ -54,10 +54,11 @@ static std::vector<std::string>getBackends(void) {
 
   int i=0;
   for(i=0; i<listing.size(); i++) {
-    const size_t found = listing[i].find(path);
+    std::string needle="hAcq";
+    const size_t found = listing[i].rfind(needle);
     if(std::string::npos != found) {
-      const size_t start=found+path.length();
-      const size_t stop =listing[i].rfind(GemDylib::getDefaultExtension()) - path.length();
+      const size_t start=found+needle.length();
+      const size_t stop =listing[i].rfind(GemDylib::getDefaultExtension()) - start;
       std::string backend=listing[i].substr(start, stop);
 
       try {
