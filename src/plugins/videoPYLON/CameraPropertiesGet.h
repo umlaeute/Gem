@@ -1,8 +1,8 @@
 // get GigE-Camera attributes
 
 static void CameraPropertiesGet(Pylon::CBaslerGigECamera*device, 
-                                    std::string key,
-                                    gem::any&result)
+                                std::string key,
+                                gem::any&result)
 {
   if(0) {;
   } else if (key=="GainAuto") {
@@ -101,11 +101,11 @@ static void CameraPropertiesGet(Pylon::CBaslerGigECamera*device,
     result=static_cast<double>(device->TestImageSelector.GetValue()) /* enumeration */;
     return;
 
-  } else if (key=="Width") {
+  } else if (key=="width") { /* for compat with other backends */
     result=static_cast<double>(device->Width.GetValue());
     return;
 
-  } else if (key=="Height") {
+  } else if (key=="height") { /* for compat with other backends */
     result=static_cast<double>(device->Height.GetValue());
     return;
 

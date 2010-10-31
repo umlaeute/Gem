@@ -35,7 +35,9 @@ using namespace Basler_GigEStreamParams;
 
 
 #include "CameraPropertiesGet.h"
+#include "CameraPropertiesSet.h"
 #include "StreamGrabberPropertiesGet.h"
+#include "StreamGrabberPropertiesSet.h"
 
 // Constructor allocates the image buffer
 
@@ -260,6 +262,7 @@ bool videoPYLON :: startTransfer()
     //    m_camera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8Signed);
     m_camera->OffsetX.SetValue(0);
     m_camera->OffsetY.SetValue(0);
+
     m_camera->Width.SetValue(m_camera->Width.GetMax());
     m_camera->Height.SetValue(m_camera->Height.GetMax());
 
@@ -395,13 +398,33 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
   return false;
 }
 void videoPYLON::setProperties(gem::Properties&props) {
+  std::vector<std::string>keys=props.keys();
+  int i=0; 
+  for(i=0; i<keys.size(); i++) {
+    const std::string key=keys[i];
+    bool didit=false;
+    if(m_grabber) {
+      try {
+        didit=StreamGrabberPropertiesSet(m_grabber, key, props);
+      } catch (GenICam::GenericException &e) {
+        std::cerr << e.GetDescription() << std::endl;
+        didit=false;
+      }
+    }
 
+    if(!didit && m_camera)
+      try {
+        didit=CameraPropertiesSet(m_camera, key, props);
+      } catch (GenICam::GenericException &e) {
+        std::cerr << e.GetDescription() << std::endl;
+        didit=false;
+      }
+
+    std::cerr << "setting "<<key<<" success: "<<didit<<std::endl;
+  }
 }
 
 void videoPYLON::getProperties(gem::Properties&props) {
-  if(NULL==m_grabber) {
-    return;
-  }
   std::vector<std::string>keys=props.keys();
   int i=0; 
   for(i=0; i<keys.size(); i++) {
