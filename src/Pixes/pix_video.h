@@ -94,6 +94,9 @@ class GEM_EXTERN pix_video : public GemBase
   // fire the format dialogs
   virtual void	dialogMess(int,t_atom*);
 
+
+  virtual void	continuousMess(bool);
+
   virtual void	colorMess(t_atom*);
   // Set the device
 
@@ -153,6 +156,8 @@ class GEM_EXTERN pix_video : public GemBase
   static void setPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
   static void getPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
   static void enumPropertyMessCallback(void *data);
+
+  static void continuousMessCallback(void *data, t_floatarg);
 
   static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
   static void channelMessCallback(void *data, t_symbol*,int,t_atom*);

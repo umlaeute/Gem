@@ -54,6 +54,7 @@ public:
   pthread_mutex_t**locks;
   unsigned int numlocks;
 
+  bool continous;
   pthread_cond_t*condition_cond;
   pthread_mutex_t*condition_mutex;
 
@@ -70,7 +71,7 @@ public:
     threading(locks_>0),
     locks(NULL),
     numlocks(0),
-    condition_cond(NULL), condition_mutex(NULL),
+    continous(true), condition_cond(NULL), condition_mutex(NULL),
     timeout(timeout_),
     cont(true),
     running(false),
@@ -151,6 +152,7 @@ public:
   }
 
   void freeze(void) {
+    if(!continous)return;
     if(condition_mutex && condition_cond) {
       pthread_mutex_lock  ( condition_mutex );
        pthread_cond_wait  ( condition_cond, condition_mutex );
@@ -158,6 +160,7 @@ public:
     }
   }
   void thaw(void) {
+    if(!continous)return;
     if(condition_mutex && condition_cond) {
       pthread_mutex_lock  (condition_mutex);
        pthread_cond_signal(condition_cond );
@@ -537,5 +540,10 @@ void video :: getProperties(gem::Properties&props) {
 }
 
 
+bool video :: grabContinuous(bool fast) {
+  bool old=m_pimpl->continous;
+  m_pimpl->continous=fast;
+  return old;
+}
 
 INIT_VIDEOFACTORY();

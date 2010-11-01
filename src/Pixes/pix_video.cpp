@@ -663,6 +663,12 @@ void pix_video :: enumPropertyMess()
   }
 }
 
+void pix_video :: continuousMess(bool state)
+{
+  if(m_videoHandle)
+    m_videoHandle->grabContinuous(state);
+}
+
 /////////////////////////////////////////////////////////
 // qualityMess
 //
@@ -721,6 +727,10 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("get"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::enumPropertyMessCallback),
     	    gensym("enumproperties"), A_NULL);
+
+
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::continuousMessCallback),
+    	    gensym("continuous"), A_FLOAT, A_NULL);
 
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
@@ -782,6 +792,10 @@ void pix_video :: modeMessCallback(void *data, t_symbol* nop, int argc, t_atom *
 void pix_video :: colorMessCallback(void *data, t_symbol* nop, int argc, t_atom *argv){
   if (argc==1)GetMyClass(data)->colorMess(argv);
   else GetMyClass(data)->error("invalid number of arguments (must be 1)");
+}
+
+void pix_video :: continuousMessCallback(void *data, t_floatarg state){
+      GetMyClass(data)->continuousMess(state);
 }
 void pix_video :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*argv)
 {
