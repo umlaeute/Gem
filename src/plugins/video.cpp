@@ -18,7 +18,7 @@
 #include "Gem/RTE.h"
 using namespace gem;
 
-#if 0
+#if 1
 # define debugPost post
 #else
 # define debugPost
@@ -151,14 +151,18 @@ public:
   }
 
   void freeze(void) {
-    //    pthread_mutex_lock  ( condition_mutex );
-     pthread_cond_wait  ( condition_cond, condition_mutex );
-     //    pthread_mutex_unlock( condition_mutex );
+    if(condition_mutex && condition_cond) {
+      pthread_mutex_lock  ( condition_mutex );
+       pthread_cond_wait  ( condition_cond, condition_mutex );
+      pthread_mutex_unlock( condition_mutex );
+    }
   }
   void thaw(void) {
-    //    pthread_mutex_lock  (condition_mutex);
-     pthread_cond_signal(condition_cond );
-     //    pthread_mutex_unlock(condition_mutex);
+    if(condition_mutex && condition_cond) {
+      pthread_mutex_lock  (condition_mutex);
+       pthread_cond_signal(condition_cond );
+      pthread_mutex_unlock(condition_mutex);
+    }
   }
 
   static void*threadfun(void*you) {
@@ -175,7 +179,7 @@ public:
       me->m_pimpl->freeze();
     }
     me->m_pimpl->running=false;
-    post("exiting capture thread");
+
     return NULL;
   }
 };
@@ -321,7 +325,7 @@ bool video :: restartTransfer()
 
 
 bool video::startThread() {
-  debugPost("startThread %x", m_pimpl);
+  debugPost("startThread %d", m_pimpl->running);
   if(m_pimpl->running) {
     stopThread();
   }
@@ -333,6 +337,9 @@ bool video::startThread() {
                    0,
                    m_pimpl->threadfun, 
                    this);
+    while(!m_pimpl->running)
+      usleep(10);
+
     return true;
   }
   return false;
@@ -340,12 +347,14 @@ bool video::startThread() {
 bool video::stopThread(int timeout) {
   int i=0;
   if(!m_pimpl->threading)return true;
-
+  
   debugPost("stopThread: %d", timeout);
 
   m_pimpl->cont=false;
+
   m_pimpl->thaw();
   if(timeout<0)timeout=m_pimpl->timeout;
+
   if(timeout>0) {
     while(m_pimpl->running) {
       usleep(10);
@@ -362,12 +371,12 @@ bool video::stopThread(int timeout) {
         post("waiting for video grabbing thread to terminate...");
         i=0;
       }
+      m_pimpl->thaw();
     }
     //pthread_join(m_pimpl->thread, NULL);
   }
 
   m_pimpl->lock_delete();
-
   return true;
 }
 void video::lock(unsigned int id) {
