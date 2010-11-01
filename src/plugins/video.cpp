@@ -151,14 +151,14 @@ public:
   }
 
   void freeze(void) {
-    pthread_mutex_lock  ( condition_mutex );
+    //    pthread_mutex_lock  ( condition_mutex );
      pthread_cond_wait  ( condition_cond, condition_mutex );
-    pthread_mutex_unlock( condition_mutex );
+     //    pthread_mutex_unlock( condition_mutex );
   }
   void thaw(void) {
-    pthread_mutex_lock  (condition_mutex);
+    //    pthread_mutex_lock  (condition_mutex);
      pthread_cond_signal(condition_cond );
-    pthread_mutex_unlock(condition_mutex);
+     //    pthread_mutex_unlock(condition_mutex);
   }
 
   static void*threadfun(void*you) {
@@ -172,8 +172,8 @@ public:
       if(!me->grabFrame()) {
         break;
       }
+      me->m_pimpl->freeze();
     }
-    me->m_pimpl->freeze();
     me->m_pimpl->running=false;
     post("exiting capture thread");
     return NULL;
@@ -344,6 +344,7 @@ bool video::stopThread(int timeout) {
   debugPost("stopThread: %d", timeout);
 
   m_pimpl->cont=false;
+  m_pimpl->thaw();
   if(timeout<0)timeout=m_pimpl->timeout;
   if(timeout>0) {
     while(m_pimpl->running) {
