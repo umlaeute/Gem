@@ -393,7 +393,6 @@ pixBlock* video::getFrame(void) {
     if(!m_pimpl->running){
       pix=NULL;
     }
-    m_pimpl->thaw();
   } else {
     // no thread, grab it directly
     if(!grabFrame()) {
@@ -409,6 +408,7 @@ pixBlock* video::getFrame(void) {
 void video::releaseFrame(void) {
   m_image.newimage=false;
   unlock();
+  m_pimpl->thaw();
 }
 
 /////////////////////////////////////////////////////////
