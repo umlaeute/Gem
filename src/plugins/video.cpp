@@ -54,6 +54,9 @@ public:
   pthread_mutex_t**locks;
   unsigned int numlocks;
 
+  pthread_cond_t*condition_cond;
+  pthread_mutex_t*condition_mutex;
+
   unsigned int timeout;
 
   bool cont;
@@ -67,6 +70,7 @@ public:
     threading(locks_>0),
     locks(NULL),
     numlocks(0),
+    condition_cond(NULL), condition_mutex(NULL),
     timeout(timeout_),
     cont(true),
     running(false),
@@ -79,6 +83,12 @@ public:
       unsigned int i=0;
       for(i=0; i<locks_; i++)
         locks[i]=NULL;
+
+      condition_mutex=new pthread_mutex_t;
+      condition_cond =new pthread_cond_t;
+
+      pthread_mutex_init(condition_mutex, NULL);
+      pthread_cond_init(condition_cond, NULL);
     }
   }
   ~PIMPL(void) {
@@ -86,6 +96,17 @@ public:
     lock_delete();
     delete[]locks; 
     locks=NULL;
+
+    thaw();
+
+    if(condition_mutex) {
+      pthread_mutex_destroy(condition_mutex); 
+      delete condition_mutex;
+    }
+    if(condition_cond) {
+      pthread_cond_destroy(condition_cond); 
+      delete condition_cond;
+    }
   }
 
   void lock(unsigned int i) {
@@ -129,6 +150,17 @@ public:
     }
   }
 
+  void freeze(void) {
+    pthread_mutex_lock  ( condition_mutex );
+     pthread_cond_wait  ( condition_cond, condition_mutex );
+    pthread_mutex_unlock( condition_mutex );
+  }
+  void thaw(void) {
+    pthread_mutex_lock  (condition_mutex);
+     pthread_cond_signal(condition_cond );
+    pthread_mutex_unlock(condition_mutex);
+  }
+
   static void*threadfun(void*you) {
     video*me=(video*)you;
     pixBlock*pix=NULL;
@@ -141,6 +173,7 @@ public:
         break;
       }
     }
+    me->m_pimpl->freeze();
     me->m_pimpl->running=false;
     post("exiting capture thread");
     return NULL;
@@ -360,6 +393,7 @@ pixBlock* video::getFrame(void) {
     if(!m_pimpl->running){
       pix=NULL;
     }
+    m_pimpl->thaw();
   } else {
     // no thread, grab it directly
     if(!grabFrame()) {
