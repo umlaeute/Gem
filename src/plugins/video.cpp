@@ -152,7 +152,7 @@ public:
   }
 
   void freeze(void) {
-    if(!continous)return;
+    if(continous)return;
     if(condition_mutex && condition_cond) {
       pthread_mutex_lock  ( condition_mutex );
        pthread_cond_wait  ( condition_cond, condition_mutex );
@@ -160,7 +160,7 @@ public:
     }
   }
   void thaw(void) {
-    if(!continous)return;
+    if(continous)return;
     if(condition_mutex && condition_cond) {
       pthread_mutex_lock  (condition_mutex);
        pthread_cond_signal(condition_cond );

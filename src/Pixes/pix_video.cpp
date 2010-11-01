@@ -665,8 +665,11 @@ void pix_video :: enumPropertyMess()
 
 void pix_video :: continuousMess(bool state)
 {
-  if(m_videoHandle)
-    m_videoHandle->grabContinuous(state);
+  int i;
+  for(i=0; i<m_videoHandles.size(); i++) {
+    if(m_videoHandles[i])
+      m_videoHandles[i]->grabContinuous(state);
+  }
 }
 
 /////////////////////////////////////////////////////////
