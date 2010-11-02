@@ -18,7 +18,7 @@
 #include "Gem/RTE.h"
 using namespace gem;
 
-#if 1
+#if 0
 # define debugPost post
 #else
 # define debugPost
