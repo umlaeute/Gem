@@ -10,6 +10,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::GainAutoEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::GainAutoEnums >(d);
       device->GainAuto.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -22,6 +23,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::GainSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::GainSelectorEnums >(d);
       device->GainSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -46,6 +48,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::BlackLevelSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::BlackLevelSelectorEnums >(d);
       device->BlackLevelSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -70,6 +73,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::BalanceWhiteAutoEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::BalanceWhiteAutoEnums >(d);
       device->BalanceWhiteAuto.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -82,6 +86,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::BalanceRatioSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::BalanceRatioSelectorEnums >(d);
       device->BalanceRatioSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -124,6 +129,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::PixelFormatEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::PixelFormatEnums >(d);
       device->PixelFormat.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -136,6 +142,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::PixelCodingEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::PixelCodingEnums >(d);
       device->PixelCoding.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -148,6 +155,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::PixelSizeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::PixelSizeEnums >(d);
       device->PixelSize.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -160,6 +168,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::PixelColorFilterEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::PixelColorFilterEnums >(d);
       device->PixelColorFilter.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -196,6 +205,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::SpatialCorrectionStartingLineEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::SpatialCorrectionStartingLineEnums >(d);
       device->SpatialCorrectionStartingLine.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -208,6 +218,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TestImageSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TestImageSelectorEnums >(d);
       device->TestImageSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -246,6 +257,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::LegacyBinningVerticalEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::LegacyBinningVerticalEnums >(d);
       device->LegacyBinningVertical.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -270,6 +282,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::AcquisitionModeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::AcquisitionModeEnums >(d);
       device->AcquisitionMode.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -282,6 +295,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TriggerSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TriggerSelectorEnums >(d);
       device->TriggerSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -294,6 +308,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TriggerModeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TriggerModeEnums >(d);
       device->TriggerMode.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -306,6 +321,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TriggerSourceEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TriggerSourceEnums >(d);
       device->TriggerSource.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -318,6 +334,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TriggerActivationEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TriggerActivationEnums >(d);
       device->TriggerActivation.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -330,6 +347,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ExposureModeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ExposureModeEnums >(d);
       device->ExposureMode.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -342,6 +360,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ExposureAutoEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ExposureAutoEnums >(d);
       device->ExposureAuto.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -414,6 +433,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::LineSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::LineSelectorEnums >(d);
       device->LineSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -426,6 +446,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::LineModeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::LineModeEnums >(d);
       device->LineMode.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -438,6 +459,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::LineFormatEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::LineFormatEnums >(d);
       device->LineFormat.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -450,6 +472,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::LineSourceEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::LineSourceEnums >(d);
       device->LineSource.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -498,6 +521,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::UserOutputSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::UserOutputSelectorEnums >(d);
       device->UserOutputSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -528,6 +552,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ShaftEncoderModuleLineSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ShaftEncoderModuleLineSelectorEnums >(d);
       device->ShaftEncoderModuleLineSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -540,6 +565,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ShaftEncoderModuleLineSourceEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ShaftEncoderModuleLineSourceEnums >(d);
       device->ShaftEncoderModuleLineSource.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -552,6 +578,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ShaftEncoderModuleModeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ShaftEncoderModuleModeEnums >(d);
       device->ShaftEncoderModuleMode.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -564,6 +591,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ShaftEncoderModuleCounterModeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ShaftEncoderModuleCounterModeEnums >(d);
       device->ShaftEncoderModuleCounterMode.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -606,6 +634,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TimerSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TimerSelectorEnums >(d);
       device->TimerSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -642,6 +671,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TimerTriggerSourceEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TimerTriggerSourceEnums >(d);
       device->TimerTriggerSource.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -654,6 +684,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TimerTriggerActivationEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TimerTriggerActivationEnums >(d);
       device->TimerTriggerActivation.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -684,6 +715,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TimerSequenceEntrySelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TimerSequenceEntrySelectorEnums >(d);
       device->TimerSequenceEntrySelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -696,6 +728,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TimerSequenceTimerSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TimerSequenceTimerSelectorEnums >(d);
       device->TimerSequenceTimerSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -732,6 +765,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::LUTSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::LUTSelectorEnums >(d);
       device->LUTSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -762,6 +796,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::UserSetSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::UserSetSelectorEnums >(d);
       device->UserSetSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -774,6 +809,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::UserSetDefaultSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::UserSetDefaultSelectorEnums >(d);
       device->UserSetDefaultSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -816,6 +852,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::AutoFunctionAOISelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::AutoFunctionAOISelectorEnums >(d);
       device->AutoFunctionAOISelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -852,6 +889,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ShadingSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ShadingSelectorEnums >(d);
       device->ShadingSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -870,6 +908,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ShadingStatusEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ShadingStatusEnums >(d);
       device->ShadingStatus.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -882,6 +921,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ShadingSetDefaultSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ShadingSetDefaultSelectorEnums >(d);
       device->ShadingSetDefaultSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -894,6 +934,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ShadingSetSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ShadingSetSelectorEnums >(d);
       device->ShadingSetSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -906,6 +947,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::UserDefinedValueSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::UserDefinedValueSelectorEnums >(d);
       device->UserDefinedValueSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -966,6 +1008,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::DeviceScanTypeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::DeviceScanTypeEnums >(d);
       device->DeviceScanType.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1002,6 +1045,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::TemperatureSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::TemperatureSelectorEnums >(d);
       device->TemperatureSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1020,6 +1064,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ParameterSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ParameterSelectorEnums >(d);
       device->ParameterSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1038,6 +1083,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ExpertFeatureAccessSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ExpertFeatureAccessSelectorEnums >(d);
       device->ExpertFeatureAccessSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1068,6 +1114,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::PixelStepCorrectionSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::PixelStepCorrectionSelectorEnums >(d);
       device->PixelStepCorrectionSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1104,6 +1151,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ChunkSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ChunkSelectorEnums >(d);
       device->ChunkSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1164,6 +1212,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::ChunkPixelFormatEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::ChunkPixelFormatEnums >(d);
       device->ChunkPixelFormat.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1236,6 +1285,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::EventSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::EventSelectorEnums >(d);
       device->EventSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1248,6 +1298,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::EventNotificationEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::EventNotificationEnums >(d);
       device->EventNotification.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1320,6 +1371,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::FileSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::FileSelectorEnums >(d);
       device->FileSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1332,6 +1384,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::FileOperationSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::FileOperationSelectorEnums >(d);
       device->FileOperationSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1344,6 +1397,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::FileOpenModeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::FileOpenModeEnums >(d);
       device->FileOpenMode.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1368,6 +1422,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::FileOperationStatusEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::FileOperationStatusEnums >(d);
       device->FileOperationStatus.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1422,6 +1477,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::GevInterfaceSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::GevInterfaceSelectorEnums >(d);
       device->GevInterfaceSelector.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1584,6 +1640,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::GevCCPEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::GevCCPEnums >(d);
       device->GevCCP.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -1596,6 +1653,7 @@ static bool CameraPropertiesSet(Pylon::CBaslerGigECamera*device,
     std::string s; 
     Basler_GigECameraParams::GevStreamChannelSelectorEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigECameraParams::GevStreamChannelSelectorEnums >(d);
       device->GevStreamChannelSelector.SetValue(e); 
     } else if(props.get(key, s)) { 

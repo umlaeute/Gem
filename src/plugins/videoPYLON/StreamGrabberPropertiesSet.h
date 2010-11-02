@@ -94,6 +94,7 @@ static bool StreamGrabberPropertiesSet(Pylon::CBaslerGigEStreamGrabber*device,
     std::string s; 
     Basler_GigEStreamParams::StatusEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigEStreamParams::StatusEnums >(d);
       device->Status.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -106,6 +107,7 @@ static bool StreamGrabberPropertiesSet(Pylon::CBaslerGigEStreamGrabber*device,
     std::string s; 
     Basler_GigEStreamParams::AccessModeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigEStreamParams::AccessModeEnums >(d);
       device->AccessMode.SetValue(e); 
     } else if(props.get(key, s)) { 
@@ -178,6 +180,7 @@ static bool StreamGrabberPropertiesSet(Pylon::CBaslerGigEStreamGrabber*device,
     std::string s; 
     Basler_GigEStreamParams::TransmissionTypeEnums  e;
     if(props.get(key, d)) { 
+      if(d<0)return true;
       e=static_cast< Basler_GigEStreamParams::TransmissionTypeEnums >(d);
       device->TransmissionType.SetValue(e); 
     } else if(props.get(key, s)) { 
