@@ -396,12 +396,12 @@ void pix_video :: enumerateMess()
     //    a.insert(a.end(), b.begin(), b.end());
     if(m_videoHandles[i]) {
       std::string name=m_videoHandles[i]->getName();
-
+      verbose(1, "enumerating: %s", name.c_str());
       std::vector<std::string>temp=m_videoHandles[i]->enumerate();
       int i=0;
       for(i=0; i<temp.size(); i++) {
-	backends.push_back(name);
-	data.push_back(temp[i]);
+        backends.push_back(name);
+        data.push_back(temp[i]);
       }
     }
   }
