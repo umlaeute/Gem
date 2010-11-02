@@ -403,6 +403,7 @@ void videoPYLON::setProperties(gem::Properties&props) {
   for(i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
     bool didit=false;
+    props.erase(key);
     if(m_grabber) {
       try {
         didit=StreamGrabberPropertiesSet(m_grabber, key, props);
