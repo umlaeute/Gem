@@ -194,7 +194,7 @@ pixBlock* videoAVT::getFrame(void) {
 // openDevice
 //
 /////////////////////////////////////////////////////////
-bool videoAVT :: openDevice()
+bool videoAVT :: openDevice(gem::Properties&props)
 {
   if(m_grabber)closeDevice();
 
@@ -276,7 +276,6 @@ bool videoAVT :: openDevice()
     
   }
 
-
   delete[]cameraList;
 
   if(m_grabber) {
@@ -349,6 +348,210 @@ std::vector<std::string> videoAVT::enumerate() {
   return result;
 }
 
+
+bool videoAVT::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+
+  tPvAttrListPtr    listPtr;
+  unsigned long     listLength;
+  if (PvAttrList(m_grabber, &listPtr, &listLength) == ePvErrSuccess) {
+    for (int i = 0; i < listLength; i++) {
+      const char* attributeName = listPtr[i];
+      std::cerr  <<"Attribute["<<i<<"]: " << attributeName << std::endl;
+
+      tPvAttributeInfo pInfo;
+      if(ePvErrSuccess==PvAttrInfo(m_grabber, attributeName, &pInfo)) {
+	std::string name=attributeName;
+	gem::any type;
+	switch (pInfo.Datatype) {
+	case ePvDatatypeUnknown:
+	case ePvDatatypeRaw:
+	  continue;
+
+	case ePvDatatypeCommand:
+	  // type=notype;
+	  break;
+	case ePvDatatypeString:
+	  type=std::string("string");
+	  break;
+	case ePvDatatypeEnum:
+	  //PvAttrRangeEnum
+	  type=0;
+	  break;
+	case ePvDatatypeUint32:
+	  //PvAttrRangeUint32
+	  type=0;
+	  break;
+	case ePvDatatypeFloat32:
+	  //PvAttrRangeFloat32
+	  type=0;
+	  break;
+	case ePvDatatypeInt64:
+	  //PvAttrRangeInt64
+	  type=0;
+	  break;
+	case ePvDatatypeBoolean:
+	  type=1;
+	  break;
+	}
+
+	if((pInfo.Flags & ePvFlagRead) || (pInfo.Flags & ePvFlagConst))  {
+	  readable.set(name, type);
+	}
+	
+	if(pInfo.Flags & ePvFlagWrite) {
+	  writeable.set(name, type);
+	}
+      }
+    }
+  }
+
+  return true;
+}
+void videoAVT::setProperties(gem::Properties&props){
+  int i;
+  std::vector<std::string>keys=props.keys();
+  for(i=0; i<keys.size(); i++) {
+    tPvAttributeInfo pInfo;
+    std::string key=keys[i];
+    if(ePvErrSuccess!=PvAttrInfo(m_grabber, key.c_str(), &pInfo))
+      continue;
+
+    if(!(pInfo.Flags & ePvFlagWrite)) {
+      continue;
+    }
+
+    std::string s;
+    double d;
+
+    switch (pInfo.Datatype) {
+    default:
+      continue;
+    case ePvDatatypeCommand:
+      // type=notype;
+      break;
+    case ePvDatatypeString:
+      if(props.get(key, s)) {
+	PvAttrStringSet(m_grabber, key.c_str(), s.c_str());
+      }
+      break;
+    case ePvDatatypeEnum:
+      if(props.get(key, s)) {
+	PvAttrEnumSet(m_grabber, key.c_str(), s.c_str());
+      }
+#if 0 
+      else if(props.get(key, d)) {
+	std::vector<std::string>sv;
+	int index=d;
+	if(index<0)continue;
+
+	if (PvAttrRangeEnum(m_camera, "AcquisitionMode",
+			    enumSet, sizeof(enumSet), NULL) == ePvErrSuccess) {
+	  char* member = strtok(enumSet, ","); // strtok isn't always thread safe!
+	  while (member != NULL) {
+	    sv.push_back(member);
+	    member = strtok(NULL, ",");
+	  }
+	  if(index>=sv.size()) {
+	    continue;
+	  }
+	  PvAttrEnumSet(m_grabber, key.c_str(), sv[index].c_str());
+	}
+#endif
+      break;
+    case ePvDatatypeUint32:
+      if(props.get(key, d)) {
+	tPvUint32 v=d;
+	PvAttrUint32Set(m_grabber, key.c_str(), d);
+      }
+      break;
+    case ePvDatatypeFloat32:
+      if(props.get(key, d)) {
+	tPvFloat32 v=d;
+	PvAttrFloat32Set(m_grabber, key.c_str(), d);
+      }
+      break;
+    case ePvDatatypeInt64:
+      if(props.get(key, d)) {
+	tPvInt64 v=d;
+	PvAttrInt64Set(m_grabber, key.c_str(), d);
+      }
+      break;
+    case ePvDatatypeBoolean:
+      if(props.get(key, d)) {
+	tPvBoolean v=d;
+	PvAttrBooleanSet(m_grabber, key.c_str(), d);
+      }
+      break;
+    }
+  } // loop
+}
+void videoAVT::getProperties(gem::Properties&props) {
+  int i;
+  std::vector<std::string>keys=props.keys();
+  for(i=0; i<keys.size(); i++) {
+    tPvAttributeInfo pInfo;
+    std::string key=keys[i];
+    if(ePvErrSuccess!=PvAttrInfo(m_grabber, key.c_str(), &pInfo))
+      continue;
+
+    if(!(pInfo.Flags & ePvFlagRead)) {
+      continue;
+    }
+
+    std::string s;
+    double d;
+
+    char*svalue[MAXPDSTRING];
+    unsigned long size;
+
+    props.erase(key);
+    switch (pInfo.Datatype) {
+    default:
+      continue;
+    case ePvDatatypeString:
+      if (ePvErrSuccess==PvAttrStringGet(m_grabber, key.c_str(), svalue, MAXPDSTRING, &size)) {
+	s=svalue;
+	props.set(key, s);
+      }
+      break;
+    case ePvDatatypeEnum:
+      if (ePvErrSuccess==PvAttrEnumGet(m_grabber, key.c_str(), svalue, MAXPDSTRING, &size)) {
+	s=svalue;
+	props.set(key, s);
+      }
+      break;
+    case ePvDatatypeUint32: {
+      tPvUint32 value;
+      if (ePvErrSuccess==PvAttrUint32Get(m_grabber, key.c_str(), value)) {
+	props.set(key, static_cast<double>value);
+      }
+    }
+      break;
+    case ePvDatatypeFloat32: {
+      tPvFloat32 value;
+      if (ePvErrSuccess==PvAttrFloat32Get(m_grabber, key.c_str(), value)) {
+	props.set(key, static_cast<double>value);
+      }
+    }
+      break;
+    case ePvDatatypeInt64: {
+      tPvInt64 value;
+      if (ePvErrSuccess==PvAttrInt64Get(m_grabber, key.c_str(), value)) {
+	props.set(key, static_cast<double>value);
+      }
+    }
+      break;
+    case ePvDatatypeBoolean: {
+      tPvBoolean value;
+      if (ePvErrSuccess==PvAttrBooleanGet(m_grabber, key.c_str(), value)) {
+	props.set(key, static_cast<double>value);
+      }
+    }
+      break;
+    }
+  } // loop
+}
 
 
 

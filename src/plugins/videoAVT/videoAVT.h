@@ -78,23 +78,32 @@ namespace gem { class GEM_EXPORT videoAVT : public video {
 #ifdef HAVE_AVT
 	////////
 	// open the video-device
-	virtual bool           openDevice(void);
+	virtual bool           openDevice(gem::Properties&props);
 	virtual void          closeDevice(void);
     
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
-    	bool	    	startTransfer();
+    	virtual bool	    	startTransfer();
 	//////////
     	// Stop the video device
     	// [out] int - returns 0 if bad
-    	bool	   	stopTransfer();
+    	virtual bool	   	stopTransfer();
 
 	//////////
 	// get the next frame
-	bool grabFrame();
+	virtual bool grabFrame();
 
-  virtual std::vector<std::string>enumerate(void);
+	virtual std::vector<std::string>enumerate(void);
+
+	
+	//////////
+	// properties
+	virtual bool enumProperties(gem::Properties&readable,
+				    gem::Properties&writeable);
+	virtual void setProperties(gem::Properties&writeprops);
+	virtual void getProperties(gem::Properties&readprops);
+
    
  protected:
 
