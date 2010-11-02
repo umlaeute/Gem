@@ -502,7 +502,7 @@ void videoAVT::getProperties(gem::Properties&props) {
     std::string s;
     double d;
 
-    char*svalue[MAXPDSTRING];
+    char svalue[MAXPDSTRING];
     unsigned long size;
 
     props.erase(key);
@@ -523,29 +523,29 @@ void videoAVT::getProperties(gem::Properties&props) {
       break;
     case ePvDatatypeUint32: {
       tPvUint32 value;
-      if (ePvErrSuccess==PvAttrUint32Get(m_grabber, key.c_str(), value)) {
-	props.set(key, static_cast<double>value);
+      if (ePvErrSuccess==PvAttrUint32Get(m_grabber, key.c_str(), &value)) {
+	props.set(key, static_cast<double>(value));
       }
     }
       break;
     case ePvDatatypeFloat32: {
       tPvFloat32 value;
-      if (ePvErrSuccess==PvAttrFloat32Get(m_grabber, key.c_str(), value)) {
-	props.set(key, static_cast<double>value);
+      if (ePvErrSuccess==PvAttrFloat32Get(m_grabber, key.c_str(), &value)) {
+	props.set(key, static_cast<double>(value));
       }
     }
       break;
     case ePvDatatypeInt64: {
       tPvInt64 value;
-      if (ePvErrSuccess==PvAttrInt64Get(m_grabber, key.c_str(), value)) {
-	props.set(key, static_cast<double>value);
+      if (ePvErrSuccess==PvAttrInt64Get(m_grabber, key.c_str(), &value)) {
+	props.set(key, static_cast<double>(value));
       }
     }
       break;
     case ePvDatatypeBoolean: {
       tPvBoolean value;
-      if (ePvErrSuccess==PvAttrBooleanGet(m_grabber, key.c_str(), value)) {
-	props.set(key, static_cast<double>value);
+      if (ePvErrSuccess==PvAttrBooleanGet(m_grabber, key.c_str(), &value)) {
+	props.set(key, static_cast<double>(value));
       }
     }
       break;
