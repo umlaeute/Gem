@@ -407,7 +407,8 @@ void videoPYLON::setProperties(gem::Properties&props) {
       try {
         didit=StreamGrabberPropertiesSet(m_grabber, key, props);
       } catch (GenICam::GenericException &e) {
-        std::cerr << e.GetDescription() << std::endl;
+        error("videoPYLON: [%s] %s", key.c_str(), e.GetDescription());
+        //std::cerr << e.GetDescription() << std::endl;
         didit=false;
       }
     }
@@ -416,11 +417,12 @@ void videoPYLON::setProperties(gem::Properties&props) {
       try {
         didit=CameraPropertiesSet(m_camera, key, props);
       } catch (GenICam::GenericException &e) {
-        std::cerr << e.GetDescription() << std::endl;
+        error("videoPYLON: [%s] %s", key.c_str(), e.GetDescription());
+        //std::cerr << e.GetDescription() << std::endl;
         didit=false;
       }
 
-    std::cerr << "setting "<<key<<" success: "<<didit<<std::endl;
+    //    std::cerr << "setting "<<key<<" success: "<<didit<<std::endl;
   }
 }
 
