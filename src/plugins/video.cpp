@@ -54,7 +54,7 @@ public:
   pthread_mutex_t**locks;
   unsigned int numlocks;
 
-  bool continous;
+  bool continuous;
   pthread_cond_t*condition_cond;
   pthread_mutex_t*condition_mutex;
 
@@ -71,7 +71,7 @@ public:
     threading(locks_>0),
     locks(NULL),
     numlocks(0),
-    continous(true), condition_cond(NULL), condition_mutex(NULL),
+    continuous(true), condition_cond(NULL), condition_mutex(NULL),
     timeout(timeout_),
     cont(true),
     running(false),
@@ -151,21 +151,30 @@ public:
     }
   }
 
-  void freeze(void) {
-    if(continous)return;
+  void doFreeze(void) {
     if(condition_mutex && condition_cond) {
       pthread_mutex_lock  ( condition_mutex );
        pthread_cond_wait  ( condition_cond, condition_mutex );
       pthread_mutex_unlock( condition_mutex );
     }
   }
-  void thaw(void) {
-    if(continous)return;
+
+  void freeze(void) {
+    if(continuous)return;
+    doFreeze();
+  }
+
+  void doThaw(void) {
     if(condition_mutex && condition_cond) {
       pthread_mutex_lock  (condition_mutex);
-       pthread_cond_signal(condition_cond );
+      pthread_cond_signal(condition_cond );
       pthread_mutex_unlock(condition_mutex);
     }
+  }
+
+  void thaw(void) {
+    if(continuous)return;
+    doThaw();
   }
 
   static void*threadfun(void*you) {
@@ -184,6 +193,15 @@ public:
     me->m_pimpl->running=false;
 
     return NULL;
+  }
+
+  bool setContinuous(bool cont) {
+    bool old=continuous;
+    continuous=cont;
+    if(continuous){
+      doThaw();
+    }
+    return old;
   }
 };
 
@@ -541,9 +559,7 @@ void video :: getProperties(gem::Properties&props) {
 
 
 bool video :: grabContinuous(bool fast) {
-  bool old=m_pimpl->continous;
-  m_pimpl->continous=fast;
-  return old;
+  return m_pimpl->setContinuous(fast);
 }
 
 INIT_VIDEOFACTORY();
