@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 2010 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "LICENSE.txt" 
+//    WARRANTIES, see the file, "LICENSE.txt"
 //
 /////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
@@ -43,7 +43,7 @@ using namespace Basler_GigEStreamParams;
 
 class videoPYLON::CGrabBuffer {
   static int buffercount;
-  public:
+public:
 
   CGrabBuffer(const size_t ImageSize)
     : m_pBuffer(NULL)  {
@@ -65,7 +65,7 @@ class videoPYLON::CGrabBuffer {
   uint8_t* GetBufferPointer(void) { return m_pBuffer; }
   Pylon::StreamBufferHandle GetBufferHandle(void) { return m_hBuffer; }
   void SetBufferHandle(Pylon::StreamBufferHandle hBuffer) { m_hBuffer = hBuffer; };
-  
+
 protected:
   uint8_t *m_pBuffer;
   Pylon::StreamBufferHandle m_hBuffer;
@@ -104,7 +104,7 @@ videoPYLON :: videoPYLON() : video("pylon")
       if("GigE"==s)
         provide("gige");
       provide(s);
-    }      
+    }
 
   } catch (GenICam::GenericException &e) {
     // Error handling
@@ -145,19 +145,21 @@ bool videoPYLON :: grabFrame() {
       m_image.image.setCsizeByFormat(GL_RGBA);
       m_image.image.reallocate();
 
-      m_image.image.fromGray((unsigned char*)Result.Buffer());
 #if 0
       if(m_converter) {
         outImageFormat.LinePitch=m_image.image.xsize*m_image.image.csize;
         outImageFormat.PixelFormat=PixelType_RGBA8packed;
 
-        m_converter->convert(m_image.image.data, 
+        m_converter->convert(m_image.image.data,
                              m_image.image.xsize*m_image.image.ysize*m_image.image.xcsize,
                              Result.Buffer(),
                              imageFormat,
                              outImageFormat);
       }
+#else
+      m_image.image.fromGray((unsigned char*)Result.Buffer());
 #endif
+
       m_image.image.upsidedown=true;
       m_image.newimage=true;
       unlock();
@@ -165,14 +167,15 @@ bool videoPYLON :: grabFrame() {
 
     }
       break;
-   case Pylon::Failed: {
-   }
-     break;
+    case Pylon::Failed:
+      std::cerr << "PYLON: grab failed and ";
     default:
+      std::cerr << "PYLON: grab returned "<<Result.Status()<<std::endl;
       break;
     }
   } else {
     // timeout
+    std::cerr << "PYLON: grab timed out"<<std::endl;
     m_grabber->CancelGrab();
     return false;
   }
@@ -282,9 +285,9 @@ bool videoPYLON :: startTransfer()
     for (i = 0; i < m_numBuffers; ++i) {
       CGrabBuffer *pGrabBuffer = new CGrabBuffer(ImageSize);
       pGrabBuffer->SetBufferHandle(m_grabber->RegisterBuffer(
-                                                             pGrabBuffer->GetBufferPointer(), 
+                                                             pGrabBuffer->GetBufferPointer(),
                                                              ImageSize));
-      
+
       // Put the grab buffer object into the buffer list
       m_buffers.push_back(pGrabBuffer);
     }
@@ -314,7 +317,7 @@ bool videoPYLON :: stopTransfer()
     try {
       m_camera->AcquisitionStop.Execute();
     } catch (GenICam::GenericException &e) {
-      std::cerr << e.GetDescription() << std::endl;  
+      std::cerr << e.GetDescription() << std::endl;
     }
   }
   if(m_grabber) {
@@ -335,10 +338,10 @@ bool videoPYLON :: stopTransfer()
       m_grabber->FinishGrab();
       m_grabber->Close();
     } catch (GenICam::GenericException &e) {
-      std::cerr << e.GetDescription() << std::endl;  
+      std::cerr << e.GetDescription() << std::endl;
     }
   }
-  
+
   return true;
 }
 
@@ -349,10 +352,10 @@ std::vector<std::string> videoPYLON::enumerate() {
 
   Pylon::DeviceInfoList_t devices;
   if (0 == m_factory->EnumerateDevices(devices))  {
-      std::cout << "could not enumerate" << std::endl;
-      return result;
-    }
-  if(devices.empty() ) 
+    std::cout << "could not enumerate" << std::endl;
+    return result;
+  }
+  if(devices.empty() )
     return result;
 
   int i=0;
@@ -399,7 +402,7 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
 }
 void videoPYLON::setProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
-  int i=0; 
+  int i=0;
   for(i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
     bool didit=false;
@@ -428,7 +431,7 @@ void videoPYLON::setProperties(gem::Properties&props) {
 
 void videoPYLON::getProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
-  int i=0; 
+  int i=0;
   for(i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
     props.erase(key);
@@ -446,7 +449,7 @@ void videoPYLON::getProperties(gem::Properties&props) {
 
     if(result.empty())
       continue;
-    props.set(key, result);    
+    props.set(key, result);
   }
 }
 
