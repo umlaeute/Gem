@@ -34,10 +34,8 @@ using namespace Basler_GigECameraParams;
 using namespace Basler_GigEStreamParams;
 
 
-#include "CameraPropertiesGet.h"
-#include "CameraPropertiesSet.h"
-#include "StreamGrabberPropertiesGet.h"
-#include "StreamGrabberPropertiesSet.h"
+#include "CameraProperties.h"
+#include "StreamGrabberProperties.h"
 
 // Constructor allocates the image buffer
 
@@ -381,6 +379,30 @@ std::vector<std::string> videoPYLON::enumerate() {
 bool videoPYLON::enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable) {
 
+  int i=0;
+  std::vector<std::string>keys;
+  gem::any type;
+
+  readable.clear();
+  writeable.clear();
+
+  keys=gem::pylon::streamgrabberproperties::getKeys();
+  for(i=0; i<keys.size(); i++)
+    readable.set(keys[i], type);
+
+  keys=gem::pylon::streamgrabberproperties::setKeys();
+  for(i=0; i<keys.size(); i++)
+    writeable.set(keys[i], type);
+
+
+  keys=gem::pylon::cameraproperties::getKeys();
+  for(i=0; i<keys.size(); i++)
+    readable.set(keys[i], type);
+
+  keys=gem::pylon::cameraproperties::setKeys();
+  for(i=0; i<keys.size(); i++)
+    writeable.set(keys[i], type);
+
   if(m_camera) {
     try {
       const Pylon::CDeviceInfo & di=m_camera->GetDeviceInfo();
@@ -389,14 +411,16 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
 
       int i=0;
       for(i=0; i<names.size(); i++) {
-        std::cerr << "property#"<<i<<": "<<names[i]<<std::endl;
+        std::string key=names[i].c_str();
+        //        std::cerr << "property#"<<i<<": "<<names[i]<<std::endl;
+        writeable.set(key, type);
+        readable.set (key, type);
       }
     } catch (GenICam::GenericException &e) {
       std::cerr << e.GetDescription() << std::endl;
       return false;
     }
   }
-
 
   return false;
 }
@@ -408,7 +432,7 @@ void videoPYLON::setProperties(gem::Properties&props) {
     bool didit=false;
     if(m_grabber) {
       try {
-        didit=StreamGrabberPropertiesSet(m_grabber, key, props);
+        didit=gem::pylon::streamgrabberproperties::set(m_grabber, key, props);
       } catch (GenICam::GenericException &e) {
         error("videoPYLON: [%s] %s", key.c_str(), e.GetDescription());
         //std::cerr << e.GetDescription() << std::endl;
@@ -418,7 +442,7 @@ void videoPYLON::setProperties(gem::Properties&props) {
 
     if(!didit && m_camera)
       try {
-        didit=CameraPropertiesSet(m_camera, key, props);
+        didit=gem::pylon::cameraproperties::set(m_camera, key, props);
       } catch (GenICam::GenericException &e) {
         error("videoPYLON: [%s] %s", key.c_str(), e.GetDescription());
         //std::cerr << e.GetDescription() << std::endl;
@@ -438,13 +462,13 @@ void videoPYLON::getProperties(gem::Properties&props) {
     gem::any result;
     if(m_grabber) {
       try {
-        StreamGrabberPropertiesGet(m_grabber, key, result);
+        gem::pylon::streamgrabberproperties::get(m_grabber, key, result);
       } catch (GenICam::GenericException &e) {result.reset(); }
     }
 
     if(result.empty() && m_camera)
       try {
-        CameraPropertiesGet(m_camera, key, result);
+        gem::pylon::cameraproperties::get(m_camera, key, result);
       } catch (GenICam::GenericException &e) {result.reset(); }
 
     if(result.empty())
