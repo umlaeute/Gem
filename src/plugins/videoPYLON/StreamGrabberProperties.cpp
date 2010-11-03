@@ -8,20 +8,28 @@
 
 using namespace gem::pylon::streamgrabberproperties;
 
-void init() {}
-std::vector<std::string>getKeys(void) {
+void gem::pylon::streamgrabberproperties::init() {
+  static bool initialized=false;
+  if(initialized)return;
+  initialized=true;
+
+}
+std::vector<std::string>gem::pylon::streamgrabberproperties::getKeys(void) {
+  gem::pylon::streamgrabberproperties::init();
   std::vector<std::string>result;
   return result;
 }
-std::vector<std::string>setKeys(void) {
+std::vector<std::string>gem::pylon::streamgrabberproperties::setKeys(void) {
+  gem::pylon::streamgrabberproperties::init();
   std::vector<std::string>result;
   return result;
 }
 
-static void get(Pylon::CBaslerGigEStreamGrabber*device, 
+void gem::pylon::streamgrabberproperties::get(Pylon::CBaslerGigEStreamGrabber*device, 
                 std::string key,
                 gem::any&result)
 {
+  gem::pylon::streamgrabberproperties::init();
   if(0) {;
 
   } else if (key=="MaxNumBuffer") {
@@ -144,10 +152,11 @@ static void get(Pylon::CBaslerGigEStreamGrabber*device,
 }
 // set StreamGrabber attributes
 
-static bool set(Pylon::CBaslerGigEStreamGrabber*device, 
+bool gem::pylon::streamgrabberproperties::set(Pylon::CBaslerGigEStreamGrabber*device, 
                 std::string key,
                 gem::Properties&props)
 {
+  gem::pylon::streamgrabberproperties::init();
   if(0) {;
   } else if (key=="MaxNumBuffer") {
     double v; 
@@ -347,3 +356,6 @@ static bool set(Pylon::CBaslerGigEStreamGrabber*device,
   }
   return false;
 }
+
+
+#endif /* HAVE_PYLON */
