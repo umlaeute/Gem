@@ -63,6 +63,7 @@ if test "x$with_pylon" != "xno"; then
                   ])  
   if test "x$have_pylon" = "xyes"; then
    AC_CHECK_LIB(pylonbase, main, , [have_pylon="no"], ["${tmp_pylon_ldflags}"])
+   AC_CHECK_LIB(pylonutility, main, , [have_pylon="no"], ["${tmp_pylon_ldflags}"])
   fi
 
   CPPFLAGS="$tmp_pylon_cppflags_org"
