@@ -105,6 +105,9 @@ namespace gem { class GEM_EXPORT videoPYLON : public video {
     
   Pylon::CBaslerGigECamera*m_camera;
   Pylon::CBaslerGigEStreamGrabber*m_grabber;
+#ifdef HAVE_LIBPYLONUTILITY
+  Pylon::CPixelFormatConverter*m_converter;
+#endif
 
   uint32_t m_numBuffers;
   std::vector<CGrabBuffer*> m_buffers;

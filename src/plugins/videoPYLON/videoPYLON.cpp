@@ -15,6 +15,11 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_LIBPYLONUTILITY
+//# undef HAVE_LIBPYLONUTILITY
+#endif
+
+
 #include "videoPYLON.h"
 #include <sstream>
 using namespace gem;
@@ -63,12 +68,48 @@ public:
   uint8_t* GetBufferPointer(void) { return m_pBuffer; }
   Pylon::StreamBufferHandle GetBufferHandle(void) { return m_hBuffer; }
   void SetBufferHandle(Pylon::StreamBufferHandle hBuffer) { m_hBuffer = hBuffer; };
-
+  
 protected:
   uint8_t *m_pBuffer;
   Pylon::StreamBufferHandle m_hBuffer;
 
 };
+
+
+static unsigned int pixelformat2pitch (enum Basler_GigECameraParams::PixelFormatEnums format) {
+  switch(format) {
+  default: return 0;
+  case Basler_GigECameraParams::PixelFormat_Mono8: return 1;
+  case Basler_GigECameraParams::PixelFormat_Mono8Signed: return 1;
+  case Basler_GigECameraParams::PixelFormat_Mono10: return 0;
+  case Basler_GigECameraParams::PixelFormat_Mono12: return 0;
+  case Basler_GigECameraParams::PixelFormat_Mono16: return 0;
+  case Basler_GigECameraParams::PixelFormat_Mono16Signed: return 2;
+  case Basler_GigECameraParams::PixelFormat_BayerGR8: return 1;
+  case Basler_GigECameraParams::PixelFormat_BayerRG8: return 1;
+  case Basler_GigECameraParams::PixelFormat_BayerGB8: return 1;
+  case Basler_GigECameraParams::PixelFormat_BayerBG8: return 1;
+  case Basler_GigECameraParams::PixelFormat_BayerGR10: return 0;
+  case Basler_GigECameraParams::PixelFormat_BayerRG10: return 0;
+  case Basler_GigECameraParams::PixelFormat_BayerGB10: return 0;
+  case Basler_GigECameraParams::PixelFormat_BayerBG10: return 0;
+  case Basler_GigECameraParams::PixelFormat_BayerGR12: return 0;
+  case Basler_GigECameraParams::PixelFormat_BayerRG12: return 0;
+  case Basler_GigECameraParams::PixelFormat_BayerGB12: return 0;
+  case Basler_GigECameraParams::PixelFormat_BayerBG12: return 0;
+  case Basler_GigECameraParams::PixelFormat_BayerGR16: return 2;
+  case Basler_GigECameraParams::PixelFormat_BayerRG16: return 2;
+  case Basler_GigECameraParams::PixelFormat_BayerGB16: return 2;
+  case Basler_GigECameraParams::PixelFormat_BayerBG16: return 2;
+  case Basler_GigECameraParams::PixelFormat_RGB8Planar: return 1;
+  case Basler_GigECameraParams::PixelFormat_RGB10Planar: return 0;
+  case Basler_GigECameraParams::PixelFormat_RGB12Planar: return 0;
+  case Basler_GigECameraParams::PixelFormat_RGB16Planar: return 2;
+  
+  }
+  return 0;
+}
+
 
 int videoPYLON::CGrabBuffer::buffercount=0;
 /////////////////////////////////////////////////////////
@@ -87,6 +128,9 @@ videoPYLON :: videoPYLON() : video("pylon")
                            , m_factory(NULL)
                            , m_camera(NULL)
                            , m_grabber(NULL)
+#ifdef HAVE_LIBPYLONUTILITY
+                           , m_converter(NULL)
+#endif
                            , m_numBuffers(NUM_BUFFERS)
 {
   m_width=0;
@@ -120,7 +164,6 @@ videoPYLON :: ~videoPYLON()
   close();
 }
 
-
 ////////////////////////////////////////////////////////
 // frame grabber
 //
@@ -137,26 +180,46 @@ bool videoPYLON :: grabFrame() {
     m_grabber->RetrieveResult(Result);
     switch(Result.Status()) {
     case Pylon::Grabbed: {
+      unsigned int pitch = Pylon::IsPacked(Result.GetPixelType())?0:
+        (7+Result.GetSizeX()*Pylon::PixelSize(Result.GetPixelType())) >>3;
+
+      
+
       lock();
       m_image.image.xsize=Result.GetSizeX();
       m_image.image.ysize=Result.GetSizeY();
-      m_image.image.setCsizeByFormat(GL_RGBA);
+      //      m_image.image.setCsizeByFormat(GL_RGBA);
       m_image.image.reallocate();
-
-#if 0
+#ifdef HAVE_LIBPYLONUTILITY
       if(m_converter) {
-        outImageFormat.LinePitch=m_image.image.xsize*m_image.image.csize;
-        outImageFormat.PixelFormat=PixelType_RGBA8packed;
+        imageFormat.Width =Result.GetSizeX();
+        imageFormat.Height=Result.GetSizeY();
+        imageFormat.LinePitch=pitch;
+        imageFormat.PixelFormat=Result.GetPixelType();
 
-        m_converter->convert(m_image.image.data,
-                             m_image.image.xsize*m_image.image.ysize*m_image.image.xcsize,
+        if(GL_RGBA==m_image.image.format) {
+          outImageFormat.LinePitch=Result.GetSizeX()*m_image.image.csize;
+          outImageFormat.PixelFormat=Pylon::PixelType_RGBA8packed;
+        } else {
+          outImageFormat.LinePitch=Result.GetSizeX()*m_image.image.csize;
+          outImageFormat.PixelFormat=Pylon::PixelType_Mono8;
+        }
+
+        if(!m_converter->IsInitialized()) {
+          std::cerr << "initializing" << std::endl;
+          m_converter->Init(imageFormat);
+          std::cerr << "initialized" << std::endl;
+        }
+          
+        m_converter->Convert(m_image.image.data,
+                             m_image.image.xsize*m_image.image.ysize*m_image.image.csize,
                              Result.Buffer(),
+                             Result.GetPayloadSize(),
                              imageFormat,
                              outImageFormat);
-      }
-#else
-      m_image.image.fromGray((unsigned char*)Result.Buffer());
+      } else 
 #endif
+      m_image.image.fromGray((unsigned char*)Result.Buffer());
 
       m_image.image.upsidedown=true;
       m_image.newimage=true;
@@ -177,7 +240,6 @@ bool videoPYLON :: grabFrame() {
     m_grabber->CancelGrab();
     return false;
   }
-
 
   return true;
 }
@@ -261,18 +323,20 @@ bool videoPYLON :: startTransfer()
 
     // Set the image format and AOI
     //    m_camera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8Signed);
-    m_camera->OffsetX.SetValue(0);
-    m_camera->OffsetY.SetValue(0);
+    //    m_camera->OffsetX.SetValue(0);
+    //    m_camera->OffsetY.SetValue(0);
 
-    m_camera->Width.SetValue(m_camera->Width.GetMax());
-    m_camera->Height.SetValue(m_camera->Height.GetMax());
+    //    m_camera->Width.SetValue(m_camera->Width.GetMax());
+    //    m_camera->Height.SetValue(m_camera->Height.GetMax());
 
     // Set the camera to continuous frame mode
+    /*
     m_camera->TriggerSelector.SetValue(TriggerSelector_AcquisitionStart);
     m_camera->TriggerMode.SetValue(TriggerMode_Off);
     m_camera->AcquisitionMode.SetValue(AcquisitionMode_Continuous);
-    m_camera->ExposureMode.SetValue(ExposureMode_Timed);
-    m_camera->ExposureTimeRaw.SetValue(100);
+    */
+    //    m_camera->ExposureMode.SetValue(ExposureMode_Timed);
+    //    m_camera->ExposureTimeRaw.SetValue(100);
 
     const size_t ImageSize = (size_t)(m_camera->PayloadSize.GetValue());
     m_grabber->MaxBufferSize.SetValue(ImageSize);
@@ -301,6 +365,115 @@ bool videoPYLON :: startTransfer()
     return false;
   }
 
+#ifdef HAVE_LIBPYLONUTILITY
+  bool rgba_out=false;
+  bool need_converter=true;
+
+  if(m_converter) {
+    delete m_converter;
+    m_converter=NULL;
+  }
+ 
+  switch(m_camera->PixelFormat.GetValue()) {
+  case Basler_GigECameraParams::PixelFormat_Mono8:
+  case Basler_GigECameraParams::PixelFormat_Mono8Signed:
+    /* no converter needed */
+    need_converter=false;
+    rgba_out=false;
+    break;
+
+  case Basler_GigECameraParams::PixelFormat_RGBA8Packed:
+    /* no converter needed */
+    need_converter=false;
+    rgba_out=true;
+    break;
+
+  case Basler_GigECameraParams::PixelFormat_Mono10:
+  case Basler_GigECameraParams::PixelFormat_Mono12:
+  case Basler_GigECameraParams::PixelFormat_Mono16:
+  case Basler_GigECameraParams::PixelFormat_Mono16Signed:
+    m_converter= new	Pylon::CPixelFormatConverterGamma ();
+    // m_converter= new	Pylon::CPixelFormatConverterTruncate ();
+    rgba_out=false;
+    break;
+
+  case Basler_GigECameraParams::PixelFormat_Mono10Packed:
+  case Basler_GigECameraParams::PixelFormat_Mono12Packed:
+    m_converter= new	Pylon::CPixelFormatConverterGammaPacked ();
+    // m_converter= new	Pylon::CPixelFormatConverterTruncatePacked ();
+    rgba_out=false;
+    break;
+
+  case Basler_GigECameraParams::PixelFormat_BayerGR8:
+  case Basler_GigECameraParams::PixelFormat_BayerRG8:
+  case Basler_GigECameraParams::PixelFormat_BayerGB8:
+  case Basler_GigECameraParams::PixelFormat_BayerBG8:
+  case Basler_GigECameraParams::PixelFormat_BayerGR10:
+  case Basler_GigECameraParams::PixelFormat_BayerRG10:
+  case Basler_GigECameraParams::PixelFormat_BayerGB10:
+  case Basler_GigECameraParams::PixelFormat_BayerBG10:
+  case Basler_GigECameraParams::PixelFormat_BayerGR12:
+  case Basler_GigECameraParams::PixelFormat_BayerRG12:
+  case Basler_GigECameraParams::PixelFormat_BayerGB12:
+  case Basler_GigECameraParams::PixelFormat_BayerBG12:
+  case Basler_GigECameraParams::PixelFormat_BayerGB12Packed:
+  case Basler_GigECameraParams::PixelFormat_BayerGR12Packed:
+  case Basler_GigECameraParams::PixelFormat_BayerRG12Packed:
+  case Basler_GigECameraParams::PixelFormat_BayerBG12Packed:
+  case Basler_GigECameraParams::PixelFormat_BayerGR16:
+  case Basler_GigECameraParams::PixelFormat_BayerRG16:
+  case Basler_GigECameraParams::PixelFormat_BayerGB16:
+  case Basler_GigECameraParams::PixelFormat_BayerBG16:
+    m_converter= new	Pylon::CPixelFormatConverterBayer ();
+    rgba_out=true;
+    break;
+
+  case Basler_GigECameraParams::PixelFormat_RGB8Planar:
+  case Basler_GigECameraParams::PixelFormat_RGB10Planar:
+  case Basler_GigECameraParams::PixelFormat_RGB12Planar:
+  case Basler_GigECameraParams::PixelFormat_RGB16Planar:
+
+  case Basler_GigECameraParams::PixelFormat_RGB8Packed:
+  case Basler_GigECameraParams::PixelFormat_BGR8Packed:
+  case Basler_GigECameraParams::PixelFormat_BGRA8Packed:
+  case Basler_GigECameraParams::PixelFormat_RGB10Packed:
+  case Basler_GigECameraParams::PixelFormat_BGR10Packed:
+  case Basler_GigECameraParams::PixelFormat_RGB12Packed:
+  case Basler_GigECameraParams::PixelFormat_BGR12Packed:
+  case Basler_GigECameraParams::PixelFormat_RGB10V1Packed:
+  case Basler_GigECameraParams::PixelFormat_RGB10V2Packed:
+  case Basler_GigECameraParams::PixelFormat_RGB12V1Packed:
+    m_converter= new	Pylon::CPixelFormatConverterRGB ();
+    rgba_out=true;
+    break;
+
+
+  case Basler_GigECameraParams::PixelFormat_YUV411Packed:
+  case Basler_GigECameraParams::PixelFormat_YUV444Packed:
+    /* no converter ? */
+    break;
+
+  case Basler_GigECameraParams::PixelFormat_YUV422Packed:
+    m_converter= new	Pylon::CPixelFormatConverterYUV422();
+    rgba_out=true;
+    break;
+  case Basler_GigECameraParams::PixelFormat_YUV422_YUYV_Packed:
+    m_converter= new	Pylon::CPixelFormatConverterYUV422YUYV();
+    rgba_out=true;
+    break;
+
+  }
+
+  if(rgba_out) {
+    m_image.image.setCsizeByFormat(GL_RGBA);
+  } else {
+    m_image.image.setCsizeByFormat(GL_LUMINANCE);
+  }
+  
+  if(NULL==m_converter && need_converter) {
+    error("PYLON: could not find a converter for given colorspace");
+  }
+#endif
   return true;
 }
 
@@ -339,7 +512,12 @@ bool videoPYLON :: stopTransfer()
       std::cerr << e.GetDescription() << std::endl;
     }
   }
-
+#ifdef HAVE_LIBPYLONUTILITY
+  if(m_converter){
+    delete m_converter;
+    m_converter=NULL;
+  }
+#endif
   return true;
 }
 
@@ -359,17 +537,41 @@ std::vector<std::string> videoPYLON::enumerate() {
   int i=0;
   for(i=0; i<devices.size(); i++) {
     std::string name;
+    Pylon::CDeviceInfo&device=devices[i];
+    bool added=false;
+#if 1
+#define SHOWNAME(x) std::cerr << x<<"["<<i<<"]: "<<name<<std::endl;
+#else
+#define SHOWNAME(x)
+#endif
 
-    name=devices[i].GetFullName();
-    m_id2device[name]=devices[i];
+    name=device.GetUserDefinedName();
+    if(!name.empty()) { m_id2device[name]=device; SHOWNAME("user")}
+    if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
 
-    result.push_back(name);
+    try {
+      /* darn, this doesn't seem to work..., it would be great though */
+      Pylon::CBaslerGigEDeviceInfo&gdevice=dynamic_cast< Pylon::CBaslerGigEDeviceInfo&>(device);
 
-    name=devices[i].GetSerialNumber();
-    m_id2device[name]=devices[i];
+      name=gdevice.GetAddress ();
+      if(!name.empty()) { m_id2device[name]=device; SHOWNAME("addresse")}
+      if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
 
-    name=devices[i].GetFriendlyName();
-    m_id2device[name]=devices[i];
+    } catch (const std::bad_cast& e) {
+      //      std::cerr << i<<" not a GigE&device"<<std::endl;
+    }
+
+    name=device.GetFullName();
+    if(!name.empty()) { m_id2device[name]=device; SHOWNAME("full")}
+    if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
+
+    name=device.GetSerialNumber();
+    if(!name.empty()) { m_id2device[name]=device; SHOWNAME("serial")}
+    if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
+
+    name=device.GetFriendlyName();
+    if(!name.empty()) { m_id2device[name]=device; SHOWNAME("friendly")}
+    if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
   }
 
   return result;
@@ -380,26 +582,31 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable) {
 
   int i=0;
+  gem::Properties props;
   std::vector<std::string>keys;
   gem::any type;
 
   readable.clear();
   writeable.clear();
 
-  keys=gem::pylon::streamgrabberproperties::getKeys();
+  props=gem::pylon::streamgrabberproperties::getKeys();
+  keys=props.keys();
   for(i=0; i<keys.size(); i++)
     readable.set(keys[i], type);
 
-  keys=gem::pylon::streamgrabberproperties::setKeys();
+  props=gem::pylon::streamgrabberproperties::setKeys();
+  keys=props.keys();
   for(i=0; i<keys.size(); i++)
     writeable.set(keys[i], type);
 
 
-  keys=gem::pylon::cameraproperties::getKeys();
+  props=gem::pylon::cameraproperties::getKeys();
+  keys=props.keys();
   for(i=0; i<keys.size(); i++)
     readable.set(keys[i], type);
 
-  keys=gem::pylon::cameraproperties::setKeys();
+  props=gem::pylon::cameraproperties::setKeys();
+  keys=props.keys();
   for(i=0; i<keys.size(); i++)
     writeable.set(keys[i], type);
 
