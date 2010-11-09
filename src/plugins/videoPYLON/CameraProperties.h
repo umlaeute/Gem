@@ -10,8 +10,8 @@
 namespace gem { namespace pylon { namespace cameraproperties {
                     void init(void);
 
-                    std::vector<std::string>getKeys(void);
-                    std::vector<std::string>setKeys(void);
+                    gem::Properties&getKeys(void);
+                    gem::Properties&setKeys(void);
 
                     void get(Pylon::CBaslerGigECamera*device, 
                              std::string key,
