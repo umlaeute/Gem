@@ -47,7 +47,7 @@ if test "x$with_pylon" != "xno"; then
    tmp_pylon_ldflags="-L${GENICAM_ROOT_V1_1}/lib64"
   fi
 
-  tmp_pylon_ldflags="-lpylonbase ${tmp_pylon_ldflags}"
+  tmp_pylon_ldflags="-lpylonbase -lpylonutility ${tmp_pylon_ldflags}"
 
   tmp_pylon_cppflags_org="$CPPFLAGS"
   tmp_pylon_libs_org="$LIBS"
