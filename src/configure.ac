@@ -35,7 +35,6 @@ AC_SUBST(DEFINES)
 AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
-AC_SUBST(REFERENCEPATH)
 AC_SUBST(CONFIGUREFLAGS)
 
 ## store the flags passed to us
@@ -56,7 +55,6 @@ AC_ARG_WITH([ALL],
 
 
 GEM_CHECK_RTE()
-REFERENCEPATH=$GEM_RTE_REFERENCEPATH
 
 GEM_ARG_ENABLE([PIC],     [PositionIndependentCode (potentially slower)])
 
