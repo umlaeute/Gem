@@ -54,7 +54,7 @@ public:
   pthread_mutex_t**locks;
   unsigned int numlocks;
 
-  bool continuous;
+  bool asynchronous;
   pthread_cond_t*condition_cond;
   pthread_mutex_t*condition_mutex;
 
@@ -71,7 +71,7 @@ public:
     threading(locks_>0),
     locks(NULL),
     numlocks(0),
-    continuous(true), condition_cond(NULL), condition_mutex(NULL),
+    asynchronous(true), condition_cond(NULL), condition_mutex(NULL),
     timeout(timeout_),
     cont(true),
     running(false),
@@ -98,7 +98,7 @@ public:
     delete[]locks; 
     locks=NULL;
 
-    thaw();
+    doThaw();
 
     if(condition_mutex) {
       pthread_mutex_destroy(condition_mutex); 
@@ -160,7 +160,7 @@ public:
   }
 
   void freeze(void) {
-    if(continuous)return;
+    if(asynchronous)return;
     doFreeze();
   }
 
@@ -173,7 +173,7 @@ public:
   }
 
   void thaw(void) {
-    if(continuous)return;
+    if(asynchronous)return;
     doThaw();
   }
 
@@ -195,10 +195,10 @@ public:
     return NULL;
   }
 
-  bool setContinuous(bool cont) {
-    bool old=continuous;
-    continuous=cont;
-    if(continuous){
+  bool setAsynchronous(bool cont) {
+    bool old=asynchronous;
+    asynchronous=cont;
+    if(asynchronous){
       doThaw();
     }
     return old;
@@ -558,8 +558,8 @@ void video :: getProperties(gem::Properties&props) {
 }
 
 
-bool video :: grabContinuous(bool fast) {
-  return m_pimpl->setContinuous(fast);
+bool video :: grabAsynchronous(bool fast) {
+  return m_pimpl->setAsynchronous(fast);
 }
 
 INIT_VIDEOFACTORY();

@@ -162,14 +162,14 @@ namespace gem { class GEM_EXTERN video {
     // get's the name of the backend (e.g. "v4l")
     const std::string getName(void);
 
-    /** turn on/off "continuous"-grabbing
+    /** turn on/off "asynchronous"-grabbing
      * default is "true"
-     * "continuous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
+     * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
      * non-"continous" means, that the device will only issue a new grab when a frame has read
      *   (thus potentially reducing the CPU-load to what is needed, at the cost of slightly outdated images
      * returns: the old state
      */
-    bool grabContinuous(bool fast);
+    bool grabAsynchronous(bool);
 
   protected:
     //! indicates valid transfer (automatically set in start()/stop())
