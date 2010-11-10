@@ -1,3 +1,18 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// zmoelnig@iem.kug.ac.at
+//
+// Implementation file:
+//  handling of getting/setting pylon/baslergigestreamgrabber properties
+//
+//    Copyright (c) 2010 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
+//    WARRANTIES, see the file, "LICENSE.txt"
+//
+/////////////////////////////////////////////////////////
+
 // get StreamGrabber attributes
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -9,82 +24,117 @@
 
 namespace gem{namespace pylon{namespace streamgrabberproperties{
   static gem::Properties writeprops, readprops;
-  typedef bool (*t_getbool)(Pylon::CBaslerGigEStreamGrabber*device);
+
+  typedef Pylon::CBaslerGigEStreamGrabber DEVICE;
+
+#define GETSETBOOL(T)                                                   \
+  static bool get##T(DEVICE*device) { return device->T.GetValue(); }    \
+    static void set##T(DEVICE*device, const bool v) { device->T.SetValue(v); }
+
+#define GETSETINT(T)                                                    \
+  static int64_t get##T(DEVICE*device) { return device->T.GetValue(); } \
+    static void set##T(DEVICE*device, const int64_t v) { device->T.SetValue(v); }
+
+
+#define GETSETFLOAT(T)                                                  \
+  static double get##T(DEVICE*device) { return device->T.GetValue(); }  \
+    static void set##T(DEVICE*device, const double v) { device->T.SetValue(v); }
+
+#define GETSETSTRING(T)                                                 \
+  static void set##T(DEVICE*device, const GenICam::gcstring v) { device->T.SetValue(v); } \
+    static GenICam::gcstring get##T(DEVICE*device) { return device->T.GetValue(); }
+
+#define GETSETCOMMAND(T)                                      \
+  static void set##T(DEVICE*device) { device->T.Execute(); }
+
+#define GETSETENUM(T)                                                   \
+  std::map<std::string, enum T##Enums> enumap_##T;                      \
+    static std::string get##T (DEVICE*device) {                         \
+      const enum T##Enums v=device->T.GetValue();                       \
+      std::map<std::string, T##Enums>::iterator it;                     \
+      for (it=enumap_##T.begin(); it != enumap_##T.end(); ++it) {       \
+        if(v==it->second)                                               \
+          return (it->first);                                           \
+      }                                                                 \
+      return std::string("unknown");                                    \
+    }                                                                   \
+    static void setS_##T (DEVICE*device, const std::string s) {         \
+      std::map<std::string,  T##Enums>::iterator it=enumap_##T.find(s); \
+      if(it!=enumap_##T.end())                                          \
+        device->T.SetValue(it->second);                                 \
+      else throw OUT_OF_RANGE_EXCEPTION(s.c_str());                     \
+    }                                                                   \
+    static void setI_##T (DEVICE*device, const int i) {                 \
+      if(i<0 || i>=enumap_##T.size()) {                                 \
+        std::string e="Out of range: ";                                 \
+        e+=i; e+=" must be within [0.."; e+=enumap_##T.size(); e+="]";  \
+        throw OUT_OF_RANGE_EXCEPTION(e);                                \
+      }                                                                 \
+      else {                                                            \
+        const enum T##Enums v=static_cast<T##Enums>(i);                 \
+        device->T.SetValue(v);                                          \
+      }                                                                 \
+    }
+
+  typedef bool (*t_getbool)(DEVICE*device);
   std::map<std::string, t_getbool>map_getbool;
 
-  static bool getEnableResend(Pylon::CBaslerGigEStreamGrabber*device) { return device->EnableResend.GetValue(); }
-  static bool getReceiveThreadPriorityOverride(Pylon::CBaslerGigEStreamGrabber*device) { return device->ReceiveThreadPriorityOverride.GetValue(); }
-
-  typedef void (*t_setbool)(Pylon::CBaslerGigEStreamGrabber*device, const bool);
+  typedef void (*t_setbool)(DEVICE*device, const bool);
   std::map<std::string, t_setbool>map_setbool;
 
-  static void setEnableResend(Pylon::CBaslerGigEStreamGrabber*device, const bool v) { device->EnableResend.SetValue(v); }
-  static void setReceiveThreadPriorityOverride(Pylon::CBaslerGigEStreamGrabber*device, const bool v) { device->ReceiveThreadPriorityOverride.SetValue(v); }
+  GETSETBOOL(EnableResend);
+  GETSETBOOL(ReceiveThreadPriorityOverride);
 
 
-  typedef int64_t (*t_getint)(Pylon::CBaslerGigEStreamGrabber*device);
+  typedef int64_t (*t_getint)(DEVICE*device);
   std::map<std::string, t_getint>map_getint;
-
-  static int64_t getMaxNumBuffer(Pylon::CBaslerGigEStreamGrabber*device) { return device->MaxNumBuffer.GetValue(); }
-  static int64_t getMaxBufferSize(Pylon::CBaslerGigEStreamGrabber*device) { return device->MaxBufferSize.GetValue(); }
-  static int64_t getPacketTimeout(Pylon::CBaslerGigEStreamGrabber*device) { return device->PacketTimeout.GetValue(); }
-  static int64_t getReceiveWindowSize(Pylon::CBaslerGigEStreamGrabber*device) { return device->ReceiveWindowSize.GetValue(); }
-  static int64_t getResendRequestThreshold(Pylon::CBaslerGigEStreamGrabber*device) { return device->ResendRequestThreshold.GetValue(); }
-  static int64_t getResendRequestBatching(Pylon::CBaslerGigEStreamGrabber*device) { return device->ResendRequestBatching.GetValue(); }
-  static int64_t getResendTimeout(Pylon::CBaslerGigEStreamGrabber*device) { return device->ResendTimeout.GetValue(); }
-  static int64_t getResendRequestResponseTimeout(Pylon::CBaslerGigEStreamGrabber*device) { return device->ResendRequestResponseTimeout.GetValue(); }
-  static int64_t getMaximumNumberResendRequests(Pylon::CBaslerGigEStreamGrabber*device) { return device->MaximumNumberResendRequests.GetValue(); }
-  static int64_t getFrameRetention(Pylon::CBaslerGigEStreamGrabber*device) { return device->FrameRetention.GetValue(); }
-  static int64_t getReceiveThreadPriority(Pylon::CBaslerGigEStreamGrabber*device) { return device->ReceiveThreadPriority.GetValue(); }
-  static int64_t getSocketBufferSize(Pylon::CBaslerGigEStreamGrabber*device) { return device->SocketBufferSize.GetValue(); }
-  static int64_t getTypeIsWindowsIntelPerformanceDriverAvailable(Pylon::CBaslerGigEStreamGrabber*device) { return device->TypeIsWindowsIntelPerformanceDriverAvailable.GetValue(); }
-  static int64_t getTypeIsWindowsFilterDriverAvailable(Pylon::CBaslerGigEStreamGrabber*device) { return device->TypeIsWindowsFilterDriverAvailable.GetValue(); }
-  static int64_t getTypeIsSocketDriverAvailable(Pylon::CBaslerGigEStreamGrabber*device) { return device->TypeIsSocketDriverAvailable.GetValue(); }
-  static int64_t getStatistic_Total_Buffer_Count(Pylon::CBaslerGigEStreamGrabber*device) { return device->Statistic_Total_Buffer_Count.GetValue(); }
-  static int64_t getStatistic_Failed_Buffer_Count(Pylon::CBaslerGigEStreamGrabber*device) { return device->Statistic_Failed_Buffer_Count.GetValue(); }
-  static int64_t getStatistic_Buffer_Underrun_Count(Pylon::CBaslerGigEStreamGrabber*device) { return device->Statistic_Buffer_Underrun_Count.GetValue(); }
-  static int64_t getStatistic_Total_Packet_Count(Pylon::CBaslerGigEStreamGrabber*device) { return device->Statistic_Total_Packet_Count.GetValue(); }
-  static int64_t getStatistic_Failed_Packet_Count(Pylon::CBaslerGigEStreamGrabber*device) { return device->Statistic_Failed_Packet_Count.GetValue(); }
-  static int64_t getStatistic_Resend_Request_Count(Pylon::CBaslerGigEStreamGrabber*device) { return device->Statistic_Resend_Request_Count.GetValue(); }
-  static int64_t getStatistic_Resend_Packet_Count(Pylon::CBaslerGigEStreamGrabber*device) { return device->Statistic_Resend_Packet_Count.GetValue(); }
-  static int64_t getDestinationPort(Pylon::CBaslerGigEStreamGrabber*device) { return device->DestinationPort.GetValue(); }
-
-  typedef void (*t_setint)(Pylon::CBaslerGigEStreamGrabber*device, const int64_t);
+  typedef void (*t_setint)(DEVICE*device, const int64_t);
   std::map<std::string, t_setint>map_setint;
 
-  static void setMaxNumBuffer(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->MaxNumBuffer.SetValue(v); }
-  static void setMaxBufferSize(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->MaxBufferSize.SetValue(v); }
-  static void setPacketTimeout(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->PacketTimeout.SetValue(v); }
-  static void setReceiveWindowSize(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->ReceiveWindowSize.SetValue(v); }
-  static void setResendRequestThreshold(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->ResendRequestThreshold.SetValue(v); }
-  static void setResendRequestBatching(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->ResendRequestBatching.SetValue(v); }
-  static void setResendTimeout(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->ResendTimeout.SetValue(v); }
-  static void setResendRequestResponseTimeout(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->ResendRequestResponseTimeout.SetValue(v); }
-  static void setMaximumNumberResendRequests(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->MaximumNumberResendRequests.SetValue(v); }
-  static void setFrameRetention(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->FrameRetention.SetValue(v); }
-  static void setReceiveThreadPriority(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->ReceiveThreadPriority.SetValue(v); }
-  static void setSocketBufferSize(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->SocketBufferSize.SetValue(v); }
-  static void setTypeIsWindowsIntelPerformanceDriverAvailable(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->TypeIsWindowsIntelPerformanceDriverAvailable.SetValue(v); }
-  static void setTypeIsWindowsFilterDriverAvailable(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->TypeIsWindowsFilterDriverAvailable.SetValue(v); }
-  static void setTypeIsSocketDriverAvailable(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->TypeIsSocketDriverAvailable.SetValue(v); }
-  static void setStatistic_Total_Buffer_Count(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->Statistic_Total_Buffer_Count.SetValue(v); }
-  static void setStatistic_Failed_Buffer_Count(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->Statistic_Failed_Buffer_Count.SetValue(v); }
-  static void setStatistic_Buffer_Underrun_Count(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->Statistic_Buffer_Underrun_Count.SetValue(v); }
-  static void setStatistic_Total_Packet_Count(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->Statistic_Total_Packet_Count.SetValue(v); }
-  static void setStatistic_Failed_Packet_Count(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->Statistic_Failed_Packet_Count.SetValue(v); }
-  static void setStatistic_Resend_Request_Count(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->Statistic_Resend_Request_Count.SetValue(v); }
-  static void setStatistic_Resend_Packet_Count(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->Statistic_Resend_Packet_Count.SetValue(v); }
-  static void setDestinationPort(Pylon::CBaslerGigEStreamGrabber*device, const int64_t v) { device->DestinationPort.SetValue(v); }
+  GETSETINT(MaxNumBuffer);
+  GETSETINT(MaxBufferSize);
+  GETSETINT(PacketTimeout);
+  GETSETINT(ReceiveWindowSize);
+  GETSETINT(ResendRequestThreshold);
+  GETSETINT(ResendRequestBatching);
+  GETSETINT(ResendTimeout);
+  GETSETINT(ResendRequestResponseTimeout);
+  GETSETINT(MaximumNumberResendRequests);
+  GETSETINT(FrameRetention);
+  GETSETINT(ReceiveThreadPriority);
+  GETSETINT(SocketBufferSize);
+  GETSETINT(TypeIsWindowsIntelPerformanceDriverAvailable);
+  GETSETINT(TypeIsWindowsFilterDriverAvailable);
+  GETSETINT(TypeIsSocketDriverAvailable);
+  GETSETINT(Statistic_Total_Buffer_Count);
+  GETSETINT(Statistic_Failed_Buffer_Count);
+  GETSETINT(Statistic_Buffer_Underrun_Count);
+  GETSETINT(Statistic_Total_Packet_Count);
+  GETSETINT(Statistic_Failed_Packet_Count);
+  GETSETINT(Statistic_Resend_Request_Count);
+  GETSETINT(Statistic_Resend_Packet_Count);
+  GETSETINT(DestinationPort);
 
 
-  typedef GenICam::gcstring (*t_getstring)(Pylon::CBaslerGigEStreamGrabber*device);
+  typedef GenICam::gcstring (*t_getstring)(DEVICE*device);
   std::map<std::string, t_getstring>map_getstring;
-  static GenICam::gcstring getDestinationAddr(Pylon::CBaslerGigEStreamGrabber*device) { return device->DestinationAddr.GetValue(); }
-
-  typedef void (*t_setstring)(Pylon::CBaslerGigEStreamGrabber*device, GenICam::gcstring);
+  typedef void (*t_setstring)(DEVICE*device, GenICam::gcstring);
   std::map<std::string, t_setstring>map_setstring;
-  static void setDestinationAddr(Pylon::CBaslerGigEStreamGrabber*device, const GenICam::gcstring v) { device->DestinationAddr.SetValue(v); }
+  GETSETSTRING(DestinationAddr);
 
+
+  typedef std::string (*t_getenum)(DEVICE*device);
+  typedef void (*t_setenum)(DEVICE*device, const std::string);
+  typedef void (*t_setenumi)(DEVICE*device, const int);
+  std::map<std::string, t_getenum>map_getenum; 
+  std::map<std::string, t_setenum>map_setenum; 
+  std::map<std::string, t_setenumi>map_setenumi;
+
+  using namespace Basler_GigEStreamParams;
+
+  GETSETENUM(Status);
+  GETSETENUM(AccessMode);
+  GETSETENUM(TransmissionType);
 };};};
 
 
@@ -94,69 +144,99 @@ void gem::pylon::streamgrabberproperties::init() {
   if(initialized)return;
   initialized=true;
 
+
+#define MAP_GETSETBOOL(T)                       \
+  map_getbool[ #T ]=get##T;                     \
+  map_setbool[ #T ]=set##T
+
+#define MAP_GETSETINT(T)                        \
+  map_getint[ #T ]=get##T;                      \
+  map_setint[ #T ]=set##T
+
+#define MAP_GETSETFLOAT(T)                      \
+  map_getfloat[ #T ]=get##T;                    \
+  map_setfloat[ #T ]=set##T
+
+#define MAP_GETSETSTRING(T)                     \
+  map_getstring[ #T ]=get##T;                   \
+  map_setstring[ #T ]=set##T
+
+#define MAP_GETSETCOMMAND(T)                    \
+  map_setcommand[ #T ]=set##T
+
+#define MAP_GETSETENUM(T)                       \
+  map_getenum[ #T ]=get##T;                     \
+  map_setenum[ #T ]=setS_##T;                   \
+  map_setenumi[ #T ]=setI_##T
+
   map_getbool.clear();
-  map_getbool["EnableResend"]=getEnableResend;
-  map_getbool["ReceiveThreadPriorityOverride"]=getReceiveThreadPriorityOverride;
 
   map_setbool.clear();
-  map_setbool["EnableResend"]=setEnableResend;
-  map_setbool["ReceiveThreadPriorityOverride"]=setReceiveThreadPriorityOverride;
-
+  MAP_GETSETBOOL(EnableResend);
+  MAP_GETSETBOOL(ReceiveThreadPriorityOverride);
 
   map_getint.clear();
-  map_getint["MaxNumBuffer"]=getMaxNumBuffer;
-  map_getint["MaxBufferSize"]=getMaxBufferSize;
-  map_getint["PacketTimeout"]=getPacketTimeout;
-  map_getint["ReceiveWindowSize"]=getReceiveWindowSize;
-  map_getint["ResendRequestThreshold"]=getResendRequestThreshold;
-  map_getint["ResendRequestBatching"]=getResendRequestBatching;
-  map_getint["ResendTimeout"]=getResendTimeout;
-  map_getint["ResendRequestResponseTimeout"]=getResendRequestResponseTimeout;
-  map_getint["MaximumNumberResendRequests"]=getMaximumNumberResendRequests;
-  map_getint["FrameRetention"]=getFrameRetention;
-  map_getint["ReceiveThreadPriority"]=getReceiveThreadPriority;
-  map_getint["SocketBufferSize"]=getSocketBufferSize;
-  map_getint["TypeIsWindowsIntelPerformanceDriverAvailable"]=getTypeIsWindowsIntelPerformanceDriverAvailable;
-  map_getint["TypeIsWindowsFilterDriverAvailable"]=getTypeIsWindowsFilterDriverAvailable;
-  map_getint["TypeIsSocketDriverAvailable"]=getTypeIsSocketDriverAvailable;
-  map_getint["Statistic_Total_Buffer_Count"]=getStatistic_Total_Buffer_Count;
-  map_getint["Statistic_Failed_Buffer_Count"]=getStatistic_Failed_Buffer_Count;
-  map_getint["Statistic_Buffer_Underrun_Count"]=getStatistic_Buffer_Underrun_Count;
-  map_getint["Statistic_Total_Packet_Count"]=getStatistic_Total_Packet_Count;
-  map_getint["Statistic_Failed_Packet_Count"]=getStatistic_Failed_Packet_Count;
-  map_getint["Statistic_Resend_Request_Count"]=getStatistic_Resend_Request_Count;
-  map_getint["Statistic_Resend_Packet_Count"]=getStatistic_Resend_Packet_Count;
-  map_getint["DestinationPort"]=getDestinationPort;
+  map_setint.clear();  
+  MAP_GETSETINT(MaxNumBuffer);
+  MAP_GETSETINT(MaxBufferSize);
+  MAP_GETSETINT(PacketTimeout);
+  MAP_GETSETINT(ReceiveWindowSize);
+  MAP_GETSETINT(ResendRequestThreshold);
+  MAP_GETSETINT(ResendRequestBatching);
+  MAP_GETSETINT(ResendTimeout);
+  MAP_GETSETINT(ResendRequestResponseTimeout);
+  MAP_GETSETINT(MaximumNumberResendRequests);
+  MAP_GETSETINT(FrameRetention);
+  MAP_GETSETINT(ReceiveThreadPriority);
+  MAP_GETSETINT(SocketBufferSize);
+  MAP_GETSETINT(TypeIsWindowsIntelPerformanceDriverAvailable);
+  MAP_GETSETINT(TypeIsWindowsFilterDriverAvailable);
+  MAP_GETSETINT(TypeIsSocketDriverAvailable);
+  MAP_GETSETINT(Statistic_Total_Buffer_Count);
+  MAP_GETSETINT(Statistic_Failed_Buffer_Count);
+  MAP_GETSETINT(Statistic_Buffer_Underrun_Count);
+  MAP_GETSETINT(Statistic_Total_Packet_Count);
+  MAP_GETSETINT(Statistic_Failed_Packet_Count);
+  MAP_GETSETINT(Statistic_Resend_Request_Count);
+  MAP_GETSETINT(Statistic_Resend_Packet_Count);
+  MAP_GETSETINT(DestinationPort);
 
-  map_setint.clear();
-  map_setint["MaxNumBuffer"]=setMaxNumBuffer;
-  map_setint["MaxBufferSize"]=setMaxBufferSize;
-  map_setint["PacketTimeout"]=setPacketTimeout;
-  map_setint["ReceiveWindowSize"]=setReceiveWindowSize;
-  map_setint["ResendRequestThreshold"]=setResendRequestThreshold;
-  map_setint["ResendRequestBatching"]=setResendRequestBatching;
-  map_setint["ResendTimeout"]=setResendTimeout;
-  map_setint["ResendRequestResponseTimeout"]=setResendRequestResponseTimeout;
-  map_setint["MaximumNumberResendRequests"]=setMaximumNumberResendRequests;
-  map_setint["FrameRetention"]=setFrameRetention;
-  map_setint["ReceiveThreadPriority"]=setReceiveThreadPriority;
-  map_setint["SocketBufferSize"]=setSocketBufferSize;
-  map_setint["TypeIsWindowsIntelPerformanceDriverAvailable"]=setTypeIsWindowsIntelPerformanceDriverAvailable;
-  map_setint["TypeIsWindowsFilterDriverAvailable"]=setTypeIsWindowsFilterDriverAvailable;
-  map_setint["TypeIsSocketDriverAvailable"]=setTypeIsSocketDriverAvailable;
-  map_setint["Statistic_Total_Buffer_Count"]=setStatistic_Total_Buffer_Count;
-  map_setint["Statistic_Failed_Buffer_Count"]=setStatistic_Failed_Buffer_Count;
-  map_setint["Statistic_Buffer_Underrun_Count"]=setStatistic_Buffer_Underrun_Count;
-  map_setint["Statistic_Total_Packet_Count"]=setStatistic_Total_Packet_Count;
-  map_setint["Statistic_Failed_Packet_Count"]=setStatistic_Failed_Packet_Count;
-  map_setint["Statistic_Resend_Request_Count"]=setStatistic_Resend_Request_Count;
-  map_setint["Statistic_Resend_Packet_Count"]=setStatistic_Resend_Packet_Count;
-  map_setint["DestinationPort"]=setDestinationPort;
-  
+
+
   map_getstring.clear();
-  map_getstring["DestinationAddr"]=getDestinationAddr;
   map_setstring.clear();
-  map_setstring["DestinationAddr"]=setDestinationAddr;
+  MAP_GETSETSTRING(DestinationAddr);
+
+
+  map_getenum.clear();
+  map_setenum.clear();
+  map_setenumi.clear();
+  MAP_GETSETENUM(Status);
+  MAP_GETSETENUM(AccessMode);
+  MAP_GETSETENUM(TransmissionType);
+
+
+  enumap_Status.clear();
+  enumap_AccessMode.clear();
+  enumap_TransmissionType.clear();
+
+  enumap_Status["NotInitialized"]=Status_NotInitialized;
+  enumap_Status["Closed"]=Status_Closed;
+  enumap_Status["Open"]=Status_Open;
+  enumap_Status["Locked"]=Status_Locked;
+
+  enumap_AccessMode["NotInitialized"]=AccessMode_NotInitialized;
+  enumap_AccessMode["Monitor"]=AccessMode_Monitor;
+  enumap_AccessMode["Control"]=AccessMode_Control;
+  enumap_AccessMode["Exclusive"]=AccessMode_Exclusive;
+
+  enumap_TransmissionType["UseCameraConfig"]=TransmissionType_UseCameraConfig;
+  enumap_TransmissionType["Unicast"]=TransmissionType_Unicast;
+  enumap_TransmissionType["Multicast"]=TransmissionType_Multicast;
+  enumap_TransmissionType["LimitedBroadcast"]=TransmissionType_LimitedBroadcast;
+  enumap_TransmissionType["SubnetDirectedBroadcast"]=TransmissionType_SubnetDirectedBroadcast;
+
+
 }
 
 
@@ -190,10 +270,14 @@ gem::Properties&gem::pylon::streamgrabberproperties::getKeys(void) {
   } while(0);
   
   /* enumeration */
-  gem::any typevalue=0;
-  result.set("Status", typevalue);
-  result.set("AccessMode", typevalue);
-  result.set("TransmissionType", typevalue);
+  do {
+    gem::any typevalue=std::string("symbol");
+    std::map<std::string, t_setenum>::iterator it;
+    for(it=map_setenum.begin(); it!=map_setenum.end(); ++it) {
+      result.set(it->first, typevalue);
+    }
+  } while(0);
+
   return result;
 }
 gem::Properties&gem::pylon::streamgrabberproperties::setKeys(void) {
@@ -225,17 +309,20 @@ gem::Properties&gem::pylon::streamgrabberproperties::setKeys(void) {
   } while(0);
 
   /* enumeration */
-  gem::any typevalue=0;
-  result.set("Status", typevalue);
-  result.set("AccessMode", typevalue);
-  result.set("TransmissionType", typevalue);
+  do {
+    gem::any typevalue=std::string("symbol");
+    std::map<std::string, t_setenum>::iterator it;
+    for(it=map_setenum.begin(); it!=map_setenum.end(); ++it) {
+      result.set(it->first, typevalue);
+    }
+  } while(0);
 
   return result;
 }
 
-void gem::pylon::streamgrabberproperties::get(Pylon::CBaslerGigEStreamGrabber*device, 
-                std::string key,
-                gem::any&result)
+void gem::pylon::streamgrabberproperties::get(DEVICE*device, 
+                                              std::string key,
+                                              gem::any&result)
 {
   gem::pylon::streamgrabberproperties::init();
 
@@ -255,26 +342,16 @@ void gem::pylon::streamgrabberproperties::get(Pylon::CBaslerGigEStreamGrabber*de
     return;
   }
 
-  if (0) {
-  } else if (key=="Status") {
-    result=static_cast<double>(device->Status.GetValue()) /* enumeration */;
-    return;
-    
-  } else if (key=="AccessMode") {
-    result=static_cast<double>(device->AccessMode.GetValue()) /* enumeration */;
-    return;
-
-  } else if (key=="TransmissionType") {
-    result=static_cast<double>(device->TransmissionType.GetValue()) /* enumeration */;
-    return;
-
+  std::map<std::string, t_getenum>::iterator it=map_getenum.find(key);
+  if(it!=map_getenum.end()) {
+    result=it->second(device);
   }
 }
 // set StreamGrabber attributes
 
-bool gem::pylon::streamgrabberproperties::set(Pylon::CBaslerGigEStreamGrabber*device, 
-                std::string key,
-                gem::Properties&props)
+bool gem::pylon::streamgrabberproperties::set(DEVICE*device, 
+                                              std::string key,
+                                              gem::Properties&props)
 {
   double d;
   std::string s;
@@ -282,7 +359,7 @@ bool gem::pylon::streamgrabberproperties::set(Pylon::CBaslerGigEStreamGrabber*de
   gem::pylon::streamgrabberproperties::init();
 
 
- std::map<std::string, t_setbool>::iterator it_b=map_setbool.find(key);
+  std::map<std::string, t_setbool>::iterator it_b=map_setbool.find(key);
   if(it_b != map_setbool.end()) {
     if(props.get(key, d)) {
       it_b->second(device, static_cast<bool>(d));
@@ -311,53 +388,19 @@ bool gem::pylon::streamgrabberproperties::set(Pylon::CBaslerGigEStreamGrabber*de
     }
   }
 
-  if(0) {;
-  } else if (key=="Status") {
-    double d; 
-    std::string s; 
-    Basler_GigEStreamParams::StatusEnums  e;
-    if(props.get(key, d)) { 
-      if(d<0)return true;
-      e=static_cast< Basler_GigEStreamParams::StatusEnums >(d);
-      device->Status.SetValue(e); 
-    } else if(props.get(key, s)) { 
-      /* enumeration */ 
-      //device->Status.SetValue(e); 
-    }
-    return true;
-  } else if (key=="AccessMode") {
-    double d; 
-    std::string s; 
-    Basler_GigEStreamParams::AccessModeEnums  e;
-    if(props.get(key, d)) { 
-      if(d<0)return true;
-      e=static_cast< Basler_GigEStreamParams::AccessModeEnums >(d);
-      device->AccessMode.SetValue(e); 
-    } else if(props.get(key, s)) { 
-      /* enumeration */ 
-      //device->AccessMode.SetValue(e); 
-    }
-    return true;
-  } else if (key=="Statistic_Resend_Packet_Count") {
-    double v; 
-    if(props.get(key, v)) {
-      device->Statistic_Resend_Packet_Count.SetValue(v);
-    }
-    return true;
-  } else if (key=="TransmissionType") {
-    double d; 
-    std::string s; 
-    Basler_GigEStreamParams::TransmissionTypeEnums  e;
-    if(props.get(key, d)) { 
-      if(d<0)return true;
-      e=static_cast< Basler_GigEStreamParams::TransmissionTypeEnums >(d);
-      device->TransmissionType.SetValue(e); 
-    } else if(props.get(key, s)) { 
-      /* enumeration */ 
-      //device->TransmissionType.SetValue(e); 
+  std::map<std::string, t_setenum>::iterator it_e=map_setenum.find(key);
+  if(it_e != map_setenum.end()) {
+    if(props.get(key, s)) {
+      it_e->second(device, s);
+    } else if(props.get(key, d)) {
+      std::map<std::string, t_setenumi>::iterator it_ei=map_setenumi.find(key);
+      if(it_ei != map_setenumi.end()) {
+        it_ei->second(device, d);
+      }   
     }
     return true;
   }
+
   return false;
 }
 

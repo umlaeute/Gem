@@ -471,9 +471,9 @@ bool videoPYLON :: startTransfer()
 
     // Set the camera to continuous frame mode
     /*
-    m_camera->TriggerSelector.SetValue(TriggerSelector_AcquisitionStart);
-    m_camera->TriggerMode.SetValue(TriggerMode_Off);
-    m_camera->AcquisitionMode.SetValue(AcquisitionMode_Continuous);
+      m_camera->TriggerSelector.SetValue(TriggerSelector_AcquisitionStart);
+      m_camera->TriggerMode.SetValue(TriggerMode_Off);
+      m_camera->AcquisitionMode.SetValue(AcquisitionMode_Continuous);
     */
     //    m_camera->ExposureMode.SetValue(ExposureMode_Timed);
     //    m_camera->ExposureTimeRaw.SetValue(100);
@@ -708,7 +708,7 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
 #endif
   }
 
-
+#if 0
   if(m_camera) {
     try {
       const Pylon::CDeviceInfo & di=m_camera->GetDeviceInfo();
@@ -727,7 +727,7 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
       return false;
     }
   }
-
+#endif
   return false;
 }
 void videoPYLON::setProperties(gem::Properties&props) {
@@ -755,7 +755,6 @@ void videoPYLON::setProperties(gem::Properties&props) {
         didit=false;
       }
 
-    //    std::cerr << "setting "<<key<<" success: "<<didit<<std::endl;
   }
 }
 
