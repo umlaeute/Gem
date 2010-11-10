@@ -614,26 +614,100 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
   readable.clear();
   writeable.clear();
 
+
   props=gem::pylon::streamgrabberproperties::getKeys();
   keys=props.keys();
-  for(i=0; i<keys.size(); i++)
-    readable.set(keys[i], type);
+  if(m_grabber) {
+    GenApi::INodeMap*nodes=m_grabber->GetNodeMap();
+
+    for(i=0; i<keys.size(); i++) {
+      GenApi::INode *node=nodes->GetNode(keys[i].c_str());
+      if(node) {
+        switch(node->GetAccessMode()) {
+        case GenApi::RO: case GenApi::RW:
+          readable.set(keys[i], props.get(keys[i]));
+        default:
+          break;
+        }
+      }
+    }
+  } else {
+#if 0
+    for(i=0; i<keys.size(); i++)
+      readable.set(keys[i], type);
+#endif
+  }
 
   props=gem::pylon::streamgrabberproperties::setKeys();
   keys=props.keys();
-  for(i=0; i<keys.size(); i++)
-    writeable.set(keys[i], type);
+  if(m_grabber) {
+    GenApi::INodeMap*nodes=m_grabber->GetNodeMap();
 
+    for(i=0; i<keys.size(); i++) {
+      GenApi::INode *node=nodes->GetNode(keys[i].c_str());
+      if(node) {
+        switch(node->GetAccessMode()) {
+        case GenApi::WO: case GenApi::RW:
+          writeable.set(keys[i], props.get(keys[i]));
+        default:
+          break;
+        }
+      }
+    }
+  } else {
+#if 0
+    for(i=0; i<keys.size(); i++)
+      writeable.set(keys[i], type);
+#endif
+  }
 
   props=gem::pylon::cameraproperties::getKeys();
   keys=props.keys();
-  for(i=0; i<keys.size(); i++)
-    readable.set(keys[i], type);
+  if(m_camera) {
+    GenApi::INodeMap*nodes=m_camera->GetNodeMap();
+
+    for(i=0; i<keys.size(); i++) {
+      GenApi::INode *node=nodes->GetNode(keys[i].c_str());
+      if(node) {
+        switch(node->GetAccessMode()) {
+        case GenApi::RO: case GenApi::RW:
+          readable.set(keys[i], props.get(keys[i]));
+        default:
+          break;
+        }
+      }
+    }
+  } else {
+#if 0
+    for(i=0; i<keys.size(); i++)
+      readable.set(keys[i], type);
+#endif
+  }
 
   props=gem::pylon::cameraproperties::setKeys();
   keys=props.keys();
-  for(i=0; i<keys.size(); i++)
-    writeable.set(keys[i], type);
+
+  if(m_camera) {
+    GenApi::INodeMap*nodes=m_camera->GetNodeMap();
+
+    for(i=0; i<keys.size(); i++) {
+      GenApi::INode *node=nodes->GetNode(keys[i].c_str());
+      if(node) {
+        switch(node->GetAccessMode()) {
+        case GenApi::WO: case GenApi::RW:
+          writeable.set(keys[i], props.get(keys[i]));
+        default:
+          break;
+        }
+      }
+    }
+  } else {
+#if 0
+    for(i=0; i<keys.size(); i++)
+      writeable.set(keys[i], type);
+#endif
+  }
+
 
   if(m_camera) {
     try {
