@@ -500,6 +500,8 @@ void pix_video :: setPropertyMess(int argc, t_atom*argv)
   } else {
     if(m_videoHandle) {
       m_videoHandle->setProperties(m_writeprops);
+
+      m_writeprops.clear();
     } else {
       verbose(1, "no open videodevice...remembering properties...");
     }
@@ -592,30 +594,30 @@ void pix_video :: enumPropertyMess()
       SETSYMBOL(ap+1, gensym(key.c_str()));
       switch(readable.type(key)) {
       case gem::Properties::NONE:
-	SETSYMBOL(ap+2, gensym("bang"));
-	break;
+        SETSYMBOL(ap+2, gensym("bang"));
+        break;
       case gem::Properties::DOUBLE: {
-	double d=-1;
-	SETSYMBOL(ap+2, gensym("float"));
-	/* LATER: get and show ranges */
-	if(readable.get(key, d)) {
-	  ac=4;
-	  SETFLOAT(ap+3, d);
-	}
+        double d=-1;
+        SETSYMBOL(ap+2, gensym("float"));
+        /* LATER: get and show ranges */
+        if(readable.get(key, d)) {
+          ac=4;
+          SETFLOAT(ap+3, d);
+        }
       }
-	break;
+        break;
       case gem::Properties::STRING: {
-	SETSYMBOL(ap+2, gensym("symbol"));
-	std::string s;
-	if(readable.get(key, s)) {
-	  ac=4;
-	  SETSYMBOL(ap+3, gensym(s.c_str()));
-	}
+        SETSYMBOL(ap+2, gensym("symbol"));
+        std::string s;
+        if(readable.get(key, s)) {
+          ac=4;
+          SETSYMBOL(ap+3, gensym(s.c_str()));
+        }
       }
-	break;
+        break;
       default:
-	SETSYMBOL(ap+2, gensym("unknown"));
-	break;
+        SETSYMBOL(ap+2, gensym("unknown"));
+        break;
       }
       outlet_anything(m_infoOut, gensym("parameterlist"), ac, ap);
     }
@@ -629,32 +631,35 @@ void pix_video :: enumPropertyMess()
 
     SETSYMBOL(ap+0, gensym("write"));
     for(i=0; i<writekeys.size(); i++) {
+      ac=3;
       std::string key=writekeys[i];
       SETSYMBOL(ap+1, gensym(key.c_str()));
       switch(writeable.type(key)) {
       case gem::Properties::NONE:
-	SETSYMBOL(ap+2, gensym("bang"));
-	break;
+        SETSYMBOL(ap+2, gensym("bang"));
+        break;
       case gem::Properties::DOUBLE: {
-	double d=-1;
-	SETSYMBOL(ap+2, gensym("float"));
-	/* LATER: get and show ranges */
-	if(writeable.get(key, d)) {
-	  SETFLOAT(ap+3, d);
-	}
+        double d=-1;
+        SETSYMBOL(ap+2, gensym("float"));
+        /* LATER: get and show ranges */
+        ac=4;
+        if(writeable.get(key, d)) {
+          SETFLOAT(ap+3, d);
+        }
       }
-	break;
+        break;
       case gem::Properties::STRING: {
-	SETSYMBOL(ap+2, gensym("symbol"));
-	std::string s;
-	if(writeable.get(key, s)) {
-	  SETSYMBOL(ap+3, gensym(s.c_str()));
-	}
+        ac=4;
+        SETSYMBOL(ap+2, gensym("symbol"));
+        std::string s;
+        if(writeable.get(key, s)) {
+          SETSYMBOL(ap+3, gensym(s.c_str()));
+        }
       }
-	break;
+        break;
       default:
-	SETSYMBOL(ap+2, gensym("unknown"));
-	break;
+        SETSYMBOL(ap+2, gensym("unknown"));
+        break;
       }
       outlet_anything(m_infoOut, gensym("parameterlist"), ac, ap);
     }
@@ -663,12 +668,12 @@ void pix_video :: enumPropertyMess()
   }
 }
 
-void pix_video :: continuousMess(bool state)
+void pix_video :: asynchronousMess(bool state)
 {
   int i;
   for(i=0; i<m_videoHandles.size(); i++) {
     if(m_videoHandles[i])
-      m_videoHandles[i]->grabContinuous(state);
+      m_videoHandles[i]->grabAsynchronous(state);
   }
 }
 
@@ -732,8 +737,8 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("enumproperties"), A_NULL);
 
 
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::continuousMessCallback),
-    	    gensym("continuous"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::asynchronousMessCallback),
+    	    gensym("async"), A_FLOAT, A_NULL);
 
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
@@ -797,8 +802,8 @@ void pix_video :: colorMessCallback(void *data, t_symbol* nop, int argc, t_atom 
   else GetMyClass(data)->error("invalid number of arguments (must be 1)");
 }
 
-void pix_video :: continuousMessCallback(void *data, t_floatarg state){
-      GetMyClass(data)->continuousMess(state);
+void pix_video :: asynchronousMessCallback(void *data, t_floatarg state){
+      GetMyClass(data)->asynchronousMess(state);
 }
 void pix_video :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*argv)
 {

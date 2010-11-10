@@ -6,11 +6,9 @@ Load a video into a pix block
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+Copyright (c) 2001-2010 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-Linux version by Millier Puckette. msp@ucsd.edu
 
 -----------------------------------------------------------------*/
 
@@ -95,7 +93,7 @@ class GEM_EXTERN pix_video : public GemBase
   virtual void	dialogMess(int,t_atom*);
 
 
-  virtual void	continuousMess(bool);
+  virtual void	asynchronousMess(bool);
 
   virtual void	colorMess(t_atom*);
   // Set the device
@@ -157,7 +155,7 @@ class GEM_EXTERN pix_video : public GemBase
   static void getPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
   static void enumPropertyMessCallback(void *data);
 
-  static void continuousMessCallback(void *data, t_floatarg);
+  static void asynchronousMessCallback(void *data, t_floatarg);
 
   static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
   static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
