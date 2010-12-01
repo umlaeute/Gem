@@ -88,6 +88,9 @@ void glsl_vertex :: closeMess(void)
   if(m_shaderARB)
     glDeleteObjectARB( m_shaderARB );
 
+  gem::utils::glsl::delshader(m_shader);
+  gem::utils::glsl::delshader(m_shaderARB);
+
   m_shader=0;
   m_shaderARB = 0;
 
@@ -102,6 +105,7 @@ bool glsl_vertex :: openMessGL2(void)
 {
   if (m_shader) {
     glDeleteShader( m_shader );
+    gem::utils::glsl::delshader(m_shader);
   }
   m_shader = glCreateShader(m_shaderTarget);
 
@@ -131,8 +135,10 @@ bool glsl_vertex :: openMessGL2(void)
 
 bool glsl_vertex :: openMessARB(void)
 {
-  if(m_shaderARB)
+  if(m_shaderARB) {
     glDeleteObjectARB( m_shaderARB );
+    gem::utils::glsl::delshader(m_shaderARB);
+  }
   m_shaderARB = glCreateShaderObjectARB(m_shaderTarget);
 
   if (!m_shaderARB)
@@ -254,14 +260,14 @@ void glsl_vertex :: render(GemState *state)
 {
   if (m_shader || m_shaderARB)
     {
-      t_floatuint fi;   
-      // send textureID to outlet
+      t_atom a;
+      // send shaderID to outlet
       if(m_shader)
-        fi.i=m_shader;
+        gem::utils::glsl::atom_setshader(a, m_shader);
       else
-        fi.i=m_shaderARB;
+        gem::utils::glsl::atom_setshader(a, m_shaderARB);
 
-      outlet_float(m_outShaderID, fi.f);
+      outlet_list(m_outShaderID, gensym("list"), 1, &a);
     }
 }
 
@@ -281,8 +287,8 @@ void glsl_vertex :: printInfo()
 {
   if(GLEW_VERSION_2_0 || GLEW_ARB_vertex_shader) {
     GLint bitnum = 0;
-    post("Vertex_shader Hardware Info");
-    post("============================");
+    post("glsl_vertex Hardware Info");
+    post("=========================");
     if(GLEW_VERSION_2_0) {
       glGetIntegerv( GL_MAX_VERTEX_ATTRIBS, &bitnum );
       post("MAX_VERTEX_ATTRIBS: %d", bitnum);
@@ -298,6 +304,10 @@ void glsl_vertex :: printInfo()
       post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
       glGetIntegerv( GL_MAX_TEXTURE_COORDS, &bitnum );
       post("MAX_TEXTURE_COORDS: %d", bitnum);
+
+      if(m_shader) {
+        post("compiled last shader to ID: %d", m_shader);
+      }
     } else {
       glGetIntegerv( GL_MAX_VERTEX_ATTRIBS_ARB, &bitnum );
       post("MAX_VERTEX_ATTRIBS: %d", bitnum);
@@ -313,6 +323,9 @@ void glsl_vertex :: printInfo()
       post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
       glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
       post("MAX_TEXTURE_COORDS: %d", bitnum);
+      if(m_shaderARB) {
+        post("compiled last shaderARB to ID: %d", m_shaderARB);
+      }
     }
   } else post("no GLSL support");
 }

@@ -88,6 +88,10 @@ void glsl_geometry :: closeMess(void)
   if(m_shaderARB)
     glDeleteObjectARB( m_shaderARB );
 
+  gem::utils::glsl::delshader(m_shader);
+  gem::utils::glsl::delshader(m_shaderARB);
+
+
   m_shader=0;
   m_shaderARB = 0;
 
@@ -102,6 +106,7 @@ bool glsl_geometry :: openMessGL2(void)
 {
   if (m_shader) {
     glDeleteShader( m_shader );
+    gem::utils::glsl::delshader(m_shader);
   }
   m_shader = glCreateShader(m_shaderTarget);
 
@@ -131,8 +136,10 @@ bool glsl_geometry :: openMessGL2(void)
 
 bool glsl_geometry :: openMessARB(void)
 {
-  if(m_shaderARB)
+  if(m_shaderARB) {
     glDeleteObjectARB( m_shaderARB );
+    gem::utils::glsl::delshader(m_shaderARB);
+  }
   m_shaderARB = glCreateShaderObjectARB(m_shaderTarget);
 
   if (!m_shaderARB)
@@ -252,14 +259,11 @@ void glsl_geometry :: render(GemState *state)
 {
   if (m_shader || m_shaderARB)
     {
-      t_floatuint fi;   
-      // send textureID to outlet
-      if(m_shader)
-        fi.i=m_shader;
-      else
-        fi.i=m_shaderARB;
+      t_atom a;
+      // send shaderID to outlet
+      gem::utils::glsl::atom_setshader(a, m_shader?m_shader:m_shaderARB);
 
-      outlet_float(m_outShaderID, fi.f);
+      outlet_list(m_outShaderID, gensym("list"), 1, &a);
     }
 }
 
@@ -279,8 +283,8 @@ void glsl_geometry :: printInfo()
 {
   if(GLEW_EXT_geometry_shader4 || GLEW_ARB_geometry_shader4) {
     GLint bitnum = 0;
-    post("geometry_shader Hardware Info");
-    post("============================");
+    post("glsl_geometry Hardware Info");
+    post("===========================");
     if(GLEW_EXT_geometry_shader4) {
       glGetIntegerv( GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_EXT, &bitnum );
       post("MAX_GEOMETRY_UNIFORM_COMPONENTS_EXT: %d", bitnum);
@@ -294,6 +298,9 @@ void glsl_geometry :: printInfo()
       post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
       glGetIntegerv( GL_MAX_TEXTURE_COORDS, &bitnum );
       post("MAX_TEXTURE_COORDS: %d", bitnum);
+      if(m_shader) {
+        post("compiled last shader to ID: %d", m_shader);
+      }
     } else {
       glGetIntegerv( GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_ARB, &bitnum );
       post("MAX_GEOMETRY_UNIFORM_COMPONENTS_ARB: %d", bitnum);
@@ -307,6 +314,9 @@ void glsl_geometry :: printInfo()
       post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
       glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
       post("MAX_TEXTURE_COORDS: %d", bitnum);
+     if(m_shaderARB) {
+        post("compiled last shaderARB to ID: %d", m_shaderARB);
+      }
     }
   } else post("no GLSL support");
 }

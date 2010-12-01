@@ -18,6 +18,78 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <map>
+
+namespace gem {
+  namespace utils {
+    namespace glsl {
+#define SHADERFLOAT_MIN 1e-7
+      static std::map<t_float, GLuint>s_f2imap;
+
+      static t_float nextfloat(void) {
+        static int seed=308;
+        float result=((float)((seed & 0x7fffffff) - 0x40000000)) * (float)(1.0 / 0x40000000);
+        seed = seed * 435898247 + 382842987;
+        result=(1.+result)/2;
+        if(result<=SHADERFLOAT_MIN)result=nextfloat();
+
+        return result;
+      }
+
+      void delshader(GLuint id) {
+        std::map<t_float,GLuint>::iterator it = s_f2imap.find(id);
+        if(s_f2imap.end() != it) {
+          s_f2imap.erase(it);
+        }
+      }
+
+      static t_float getshader(GLuint id) {
+        if(0==id)return 0.f;
+
+        // check whether we already have this shader
+        std::map<t_float,GLuint>::iterator it = s_f2imap.begin();
+        while(s_f2imap.end() != it) {
+          if(it->second==id)
+            return it->first;
+          ++it;
+        }
+        // this shader doesn't exist, return ILLEGAL
+        return 0.;
+      }
+
+      static t_float genshader(GLuint id) {
+        if(0==id)return 0.;
+
+        // check whether we already have this shader
+        t_float f=getshader(id);
+        if(f>SHADERFLOAT_MIN) {
+          return f;
+        }
+
+        // find a free slot for this shader
+        do {
+          f=nextfloat();
+        } while(0!=s_f2imap[f]);
+
+        s_f2imap[f]=id;
+        return f;
+      }
+
+      GLuint atom_getshader (t_atom&ap) {
+        t_float f=atom_getfloat(&ap);
+        GLuint i=s_f2imap[f];
+        return i;
+      };
+
+      void atom_setshader(t_atom&ap, GLuint i) {
+        t_float f=genshader(i);
+        SETFLOAT(&ap, f);
+      };
+
+    }; };
+};
+
+
 CPPEXTERN_NEW(glsl_program)
 
 /////////////////////////////////////////////////////////
@@ -54,6 +126,9 @@ glsl_program :: glsl_program()  :
 /////////////////////////////////////////////////////////
 glsl_program :: ~glsl_program()
 {
+  gem::utils::glsl::delshader(m_program);
+  gem::utils::glsl::delshader(m_programARB);
+
   if(GLEW_VERSION_2_0 && m_program)
     glDeleteProgram( m_program ); m_program=0;
   if(GLEW_ARB_shader_objects && m_programARB)
@@ -315,7 +390,6 @@ void glsl_program :: renderARB()
 
 void glsl_program :: render(GemState *state)
 {
-  t_floatuint fi_id;
   if(m_wantLink){
     m_wantLink=0;
     LinkProgram();
@@ -328,12 +402,11 @@ void glsl_program :: render(GemState *state)
 
   // send program ID to outlet
   /* JMZ: shouldn't this be only done, when we have a linked program? */
-  if(GLEW_VERSION_2_0)
-    fi_id.i=m_program;
-  else
-    fi_id.i=m_programARB;
+  t_atom a;
 
-  outlet_float(m_outProgramID, static_cast<t_float>(fi_id.f));
+  gem::utils::glsl::atom_setshader(a, (GLEW_VERSION_2_0)?m_program:m_programARB);
+  
+  outlet_list(m_outProgramID, 0, 1, &a);
 }
 
 /////////////////////////////////////////////////////////
@@ -401,10 +474,9 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     }
   for (i = 0; i < argc; i++)
     {
-      t_floatuint fi;
-      fi.f=atom_getfloat(&argv[i]);
-      m_shaderObj[i] = static_cast<GLuint>(fi.i);
-      m_shaderObjARB[i] = static_cast<GLhandleARB>(fi.i);
+      GLuint ui=gem::utils::glsl::atom_getshader(argv[i]);
+      m_shaderObj[i]    = ui;
+      m_shaderObjARB[i] = ui;//static_cast<GLhandleARB>(fi.i);
     }
   
   //  not sure what to do here:  we don't want to link & re-link every render cycle,
@@ -425,6 +497,7 @@ bool glsl_program :: LinkGL2()
 
   if(m_program) {
     glDeleteProgram( m_program );
+    gem::utils::glsl::delshader(m_program);
     m_program = 0;
   }
   m_program = glCreateProgram();
@@ -486,6 +559,7 @@ bool glsl_program :: LinkARB()
 
   if(m_programARB) {
     glDeleteObjectARB( m_programARB );
+    gem::utils::glsl::delshader(m_programARB);
     m_programARB = 0;
   }
   m_programARB = glCreateProgramObjectARB();
@@ -632,9 +706,23 @@ void glsl_program :: printInfo()
       return;
     }
 
-  post("glsl_program info");
+  post("glsl_program Info");
   post("=================");
 	
+  if(GLEW_VERSION_2_0) {
+    startpost("linked shaders");
+    for (i = 0; i < m_num; i++)  {
+      startpost( " %d", m_shaderObj[i] );
+    } 
+    post(": %d", m_program);
+  } else {
+  startpost("linked ARB-shaders");
+   for (i = 0; i < m_num; i++)  {
+      startpost( " %d", m_shaderObjARB[i] );
+    } 
+    post(": %d", m_programARB);
+  }
+
   post("");
   for (i=0; i<m_uniformCount; i++)
     { 

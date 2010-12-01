@@ -22,11 +22,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #define MAX_NUM_SHADERS 32
 
-typedef union {
-  GLuint  i;
-  t_float f;
-} t_floatuint;
 
+namespace gem { namespace utils { namespace glsl {
+                    /* fill a Pd-atom so the shaderID <i> can be retrieved from that atom */
+                    GEM_EXTERN void atom_setshader(t_atom&ap, GLuint i);
+                    /* retrieve a shaderID from a Pd-atom filled with atom_setgluint() */
+                    GEM_EXTERN GLuint atom_getshader (t_atom&ap);
+                    /* once the shader is to be glDelete'd, call 
+                     *   gem::utils::glsl::delshader(shaderID);
+                     * so we can free any internal ressources
+                     * glDelete() must still be called explicitely!
+                     */
+                    GEM_EXTERN void delshader(GLuint i);
+                  }; };
+};
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
