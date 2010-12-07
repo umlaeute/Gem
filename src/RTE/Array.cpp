@@ -1,0 +1,128 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// zmoelnig@iem.at
+//
+// Implementation file
+//
+//    Copyright (c) 1997-2000 Mark Danks.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2002 James Tittle & Chris Clepper
+//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
+//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+//
+// a wrapper for accessing the RTE's arrays
+// currently only numeric arrays
+//
+/////////////////////////////////////////////////////////
+
+#include "Gem/RTE.h"
+#include "RTE/Array.h"
+
+
+struct gem::RTE::Array::PIMPL {
+  t_float f;
+  t_garray*A;
+  t_word*pointer;
+  size_t length;
+
+  std::string name;
+  
+  PIMPL(void) : 
+    f(0.),
+    pointer(NULL),
+    length(0)
+  {
+  }
+  ~PIMPL(void) {
+  }
+
+  bool check(void) {
+    pointer=NULL;
+    length=0;
+
+    int size=0;
+    t_word *words;
+
+    A=NULL;
+
+    A = (t_garray *)pd_findbyclass(gensym(name.c_str()), garray_class);
+    if(!A)return false;
+    if(!garray_getfloatwords(A, &size, &words))
+      return false;
+    length=size;
+    pointer=words;
+
+    return true;
+  }
+
+  bool setName(const std::string&s) {
+    name=s;
+    return check();
+  }
+
+  inline t_float&get(const unsigned int&index) {
+    if(pointer)
+      return pointer[index].w_float;
+
+    else
+      return f;
+  }
+};
+
+
+gem::RTE::Array :: Array(void)
+  : m_pimpl(new PIMPL)
+{
+
+
+}
+
+gem::RTE::Array :: Array(const gem::RTE::Array&a) 
+  : m_pimpl(new PIMPL)
+{
+  m_pimpl->setName(a.m_pimpl->name);
+}
+gem::RTE::Array :: Array(const std::string&name) 
+  : m_pimpl(new PIMPL)
+{
+  m_pimpl->setName(name);
+}
+
+gem::RTE::Array :: ~Array(void)
+{
+  delete m_pimpl;
+} 
+
+
+bool gem::RTE::Array :: isValid(void) {
+  return m_pimpl->check();
+}
+
+bool gem::RTE::Array :: name(const std::string&s) {
+  return m_pimpl->setName(s);
+}
+const std::string gem::RTE::Array :: name(void) {
+  return m_pimpl->name;
+}
+bool gem::RTE::Array :: resize(const size_t newsize) {
+  if(m_pimpl->A) {
+#if (defined PD_MAJOR_VERSION && defined PD_MINOR_VERSION) && (PD_MAJOR_VERSION > 0 || PD_MINOR_VERSION > 43)
+    garray_resize_long(m_pimpl->A, newsize);
+#else
+    garray_resize(m_pimpl->A, newsize);
+#endif
+    return (size()==newsize);
+  } 
+
+  return false;
+}
+size_t gem::RTE::Array :: size(void) {
+  m_pimpl->check();
+  return m_pimpl->length;
+}
+
+t_float&gem::RTE::Array :: operator[](const unsigned int&index) {
+  return m_pimpl->get(index);
+}
