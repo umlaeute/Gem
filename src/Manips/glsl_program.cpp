@@ -27,12 +27,18 @@ namespace gem {
       static std::map<t_float, GLuint>s_f2imap;
 
       static t_float nextfloat(void) {
+#if 1
+	static int seed=0;
+	t_float result=seed+0.5;
+	seed++;
+	seed%=16777216;
+#else
         static int seed=308;
         float result=((float)((seed & 0x7fffffff) - 0x40000000)) * (float)(1.0 / 0x40000000);
         seed = seed * 435898247 + 382842987;
         result=(1.+result)/2;
         if(result<=SHADERFLOAT_MIN)result=nextfloat();
-
+#endif
         return result;
       }
 
