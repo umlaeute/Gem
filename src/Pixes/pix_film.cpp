@@ -399,7 +399,7 @@ void pix_film :: render(GemState *state)
     state->image=m_handle->getFrame();
 
   // someone wants to process the image downstream, so make sure they get it
-  if (m_cache&&m_cache->resendImage)
+  if (m_cache&&m_cache->resendImage&&state->image)
     {
       state->image->newimage=true;
       m_cache->resendImage = 0;
