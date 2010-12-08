@@ -1,4 +1,4 @@
-#N canvas 0 0 634 679 12;
+#N canvas 0 0 634 679 10;
 #X msg 142 104 gemList;
 #X msg 142 307 gemList;
 #X text 169 16 part of GEM;

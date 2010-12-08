@@ -1,4 +1,4 @@
-#N canvas 309 237 664 366 12;
+#N canvas 309 237 664 366 10;
 #X msg 199 131 gemList;
 #X text 176 62 GEM object;
 #X obj 199 182 part_killold;

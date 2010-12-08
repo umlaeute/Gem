@@ -1,4 +1,4 @@
-#N canvas 69 65 686 503 12;
+#N canvas 69 65 686 503 10;
 #X msg 122 72 gemList;
 #X msg 122 213 gemList;
 #X text 83 44 get a video signal;

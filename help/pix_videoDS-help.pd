@@ -1,4 +1,4 @@
-#N canvas 306 199 651 488 12;
+#N canvas 306 199 651 488 10;
 #X obj 14 204 gemhead;
 #X msg 221 66 open 0;
 #X msg 221 41 enumerate;
