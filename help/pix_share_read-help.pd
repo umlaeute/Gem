@@ -1,17 +1,17 @@
-#N canvas 265 247 708 387 10;
+#N canvas 195 67 705 411 10;
 #X text 451 8 GEM object;
-#X obj 8 270 cnv 15 430 60 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 270 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 271 Inlets:;
-#X text 34 296 Outlets:;
+#X text 34 316 Outlets:;
 #X obj 8 231 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 230 Arguments:;
 #X obj 7 56 cnv 15 430 170 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 77 cnv 15 240 200 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 57 cnv 15 240 220 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X text 453 60 Example:;
+#X text 453 40 Example:;
 #X obj 484 204 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
@@ -35,15 +35,15 @@
 #X restore 489 243 pd gemwin;
 #X msg 489 224 create;
 #X text 485 203 Create window:;
-#X obj 450 110 cnv 15 230 40 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 450 84 cnv 15 230 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 451 84 gemhead;
+#X obj 451 64 gemhead;
 #X text 71 31 Class: pix object;
-#X text 56 311 Outlet 1: gemlist;
+#X text 56 331 Outlet 1: gemlist;
 #X text 63 283 Inlet 1: gemlist;
-#X obj 8 336 cnv 15 410 40 empty empty empty 20 12 0 14 -260818 -66577
+#X obj 8 356 cnv 15 410 40 empty empty empty 20 12 0 14 -260818 -66577
 0;
-#X text 11 337 WARNING: [pix_share_write] and [pix_share_read] are
+#X text 11 357 WARNING: [pix_share_write] and [pix_share_read] are
 only available on platforms that support shared memory (no w32 for
 now!);
 #X text 63 241 <i:ID> <i:width> <i:height> <colorspace>;
@@ -68,8 +68,11 @@ to the same ID).;
 #X text 446 347 in a different pd instance on your;
 #X text 447 361 machine to see the effect.;
 #X obj 519 285 pix_share_write 322 1 1 1;
+#X text 117 299 set <ID> <width> <height> <colorspace>;
+#X msg 510 94 set 323 256 256 RGBA;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 23 0;
 #X connect 23 0 24 0;
 #X connect 24 0 25 0;
+#X connect 35 0 23 0;

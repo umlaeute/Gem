@@ -1,9 +1,9 @@
-#N canvas 14 0 708 387 10;
+#N canvas 14 45 708 407 10;
 #X text 451 8 GEM object;
-#X obj 8 270 cnv 15 430 60 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 270 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 271 Inlets:;
-#X text 34 296 Outlets:;
+#X text 34 316 Outlets:;
 #X obj 8 231 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 230 Arguments:;
@@ -35,7 +35,7 @@
 #X restore 489 243 pd gemwin;
 #X msg 489 224 create;
 #X text 485 203 Create window:;
-#X obj 450 140 cnv 15 230 40 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 450 140 cnv 15 230 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
 #X text 71 31 Class: pix object;
@@ -58,19 +58,19 @@
 #X connect 6 0 7 0;
 #X connect 7 0 1 0;
 #X restore 451 113 pd image;
-#X text 56 311 Outlet 1: gemlist;
+#X text 56 331 Outlet 1: gemlist;
 #X text 63 283 Inlet 1: gemlist;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
-#X obj 8 336 cnv 15 410 40 empty empty empty 20 12 0 14 -260818 -66577
+#X obj 8 356 cnv 15 410 40 empty empty empty 20 12 0 14 -260818 -66577
 0;
 #X text 50 12 Synopsis: [pix_share_write];
 #X text 29 56 Description: write pixels to a shared memory region;
-#X text 11 337 WARNING: [pix_share_write] and [pix_share_read] are
+#X text 11 357 WARNING: [pix_share_write] and [pix_share_read] are
 only available on platforms that support shared memory (no w32 for
 now!);
 #X text 63 241 <i:ID> <i:width> <i:height> <colorspace>;
-#X obj 451 149 pix_share_write 321 256 256 RGBA;
+#X obj 451 176 pix_share_write 321 256 256 RGBA;
 #X text 446 284 see also:;
 #X text 15 181 [pix_share_write] needs to know the image-dimensions
 (and color-space) in advance. The color-space can be given as a symbol
@@ -86,8 +86,11 @@ the same memory (they probably need to run on the same computer);
 #X text 447 361 machine to see the effect.;
 #X text 446 333 Run the [pix_share_read] help-patch;
 #X obj 519 285 pix_share_read 322 1 1 1;
+#X text 117 299 set <ID> <width> <height> <colorspace>;
+#X msg 468 148 set 323 256 256 RGBA;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
 #X connect 16 0 17 1;
 #X connect 17 0 27 0;
+#X connect 37 0 27 0;
