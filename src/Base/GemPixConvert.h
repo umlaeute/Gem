@@ -101,9 +101,18 @@ LOG
 
 #endif /* POYNTON */
 
-#define RGB2GRAY_RED  RGB2YUV_11
-#define RGB2GRAY_GREEN  RGB2YUV_12
-#define RGB2GRAY_BLUE  RGB2YUV_13
+#if 0
+/* yuv-coefficients would also need an offset! */
+# define RGB2GRAY_RED  RGB2YUV_11
+# define RGB2GRAY_GREEN  RGB2YUV_12
+# define RGB2GRAY_BLUE  RGB2YUV_13
+# define RGB2GRAY_OFFSET Y_OFFSET
+#else
+# define RGB2GRAY_RED  77
+# define RGB2GRAY_GREEN  150
+# define RGB2GRAY_BLUE  29
+# define RGB2GRAY_OFFSET 0
+#endif
 
 /* AltiVec */
 #ifdef __VEC__
