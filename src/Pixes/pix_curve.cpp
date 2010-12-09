@@ -29,6 +29,7 @@
 #include "pix_curve.h"
 #include <string.h>
 #include <math.h>
+#include "RTE/Array.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_curve)
 
@@ -137,44 +138,40 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   unsigned char *base = image.data;
   
   int n_R, n_G, n_B, n_A;
-  t_float *tab_R, *tab_G, *tab_B, *tab_A;
-
-  int r, g, b, a;
 
   if (m_mode==0) return;
 
-  if (!(tab_R=checkarray(name_R, &n_R))) return;
-  if (!(tab_G=checkarray(name_G, &n_G))) return;
-  if (!(tab_B=checkarray(name_B, &n_B))) return;
+  gem::RTE::Array tabR=gem::RTE::Array(name_R->s_name);
+  gem::RTE::Array tabG=gem::RTE::Array(name_G->s_name);
+  gem::RTE::Array tabB=gem::RTE::Array(name_B->s_name);
+  gem::RTE::Array tabA=gem::RTE::Array(name_A->s_name);
+
+  n_R=tabR.size();
+  n_G=tabG.size();
+  n_B=tabB.size();
+  n_A=tabA.size();
 
   switch (m_mode) {
   case 3: // only RGB
+    if(! (tabR.isValid() && tabG.isValid() && tabB.isValid()))
+       return;
     while (i--) {
-      r = static_cast<int>(*(tab_R+((n_R*base[chRed  ])>>8)));
-      g = static_cast<int>(*(tab_G+((n_G*base[chGreen])>>8)));
-      b = static_cast<int>(*(tab_B+((n_B*base[chBlue ])>>8)));
-   
-      base[chRed]   = CLAMP(r);
-      base[chGreen] = CLAMP(g);
-      base[chBlue]  = CLAMP(b);
+      base[chRed  ]=CLAMP(static_cast<int>(tabR[ n_R*base[chRed  ]>>8 ]));
+      base[chGreen]=CLAMP(static_cast<int>(tabG[ n_G*base[chGreen]>>8 ]));
+      base[chBlue ]=CLAMP(static_cast<int>(tabB[ n_B*base[chBlue ]>>8 ]));
 
       base+=4;
     }
     break;
   case 4: // RGBA
   case 1: // one table for all
-    if (!(tab_A=checkarray(name_A, &n_A))) return;
-    
+    if(! (tabR.isValid() && tabG.isValid() && tabB.isValid() && tabA.isValid()))
+       return;    
     while (i--) {
-      r = static_cast<int>(*(tab_R+((n_R*base[chRed])>>8)));
-      g = static_cast<int>(*(tab_G+((n_G*base[chGreen])>>8)));
-      b = static_cast<int>(*(tab_B+((n_B*base[chBlue])>>8)));
-      a = static_cast<int>(*(tab_A+((n_A*base[chAlpha])>>8)));
-   
-      base[chRed]   = CLAMP(r);
-      base[chGreen] = CLAMP(g);
-      base[chBlue]  = CLAMP(b);
-      base[chAlpha] = CLAMP(a);
+      base[chRed   ]=CLAMP(static_cast<int>(tabR[ n_R*base[chRed   ]>>8 ]));
+      base[chGreen ]=CLAMP(static_cast<int>(tabG[ n_G*base[chGreen ]>>8 ]));
+      base[chBlue  ]=CLAMP(static_cast<int>(tabB[ n_B*base[chBlue  ]>>8 ]));
+      base[chAlpha ]=CLAMP(static_cast<int>(tabA[ n_A*base[chAlpha]>>8 ]));
 
       base+=4;
     }
@@ -191,14 +188,13 @@ void pix_curve :: processGrayImage(imageStruct &image)
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
   
-  int n;
-  t_float *tab;
-  int val;
+  gem::RTE::Array tab=gem::RTE::Array(name_R->s_name);
+  int n = tab.size();
 
-  if (!(tab=checkarray(name_R, &n))) return;
+  if(!tab.isValid())return;
   while (i--) {
-    val = static_cast<int>(*(tab+static_cast<int>((n*base[chGray])>>8)));
-    *base++   = CLAMP(val);
+    base[chGray]=CLAMP(static_cast<int>(tab[ n*base[chGray]>>8 ]));
+    base++;
   }
 }
 
@@ -208,40 +204,37 @@ void pix_curve :: processYUVImage(imageStruct &image)
   unsigned char *base = image.data;
   
   int n_Y, n_U, n_V;
-  t_float *tab_Y, *tab_U, *tab_V;
-
-  int y0, y1, u, v;
 
   if (m_mode==0) return;
 
-  if (!(tab_Y=checkarray(name_R, &n_Y))) return;
-  if (!(tab_U=checkarray(name_G, &n_U))) return;
-  if (!(tab_V=checkarray(name_B, &n_V))) return;
+  gem::RTE::Array tabY=gem::RTE::Array(name_R->s_name);
+  gem::RTE::Array tabU=gem::RTE::Array(name_G->s_name);
+  gem::RTE::Array tabV=gem::RTE::Array(name_B->s_name);
+
+  n_Y=tabY.size();
+  n_U=tabU.size();
+  n_V=tabV.size();
+
   switch (m_mode) {
   case 3: // YUV
+    if(! (tabY.isValid() && tabU.isValid() && tabV.isValid()))
+      return;
     while (i--) {
-      u  = static_cast<int>(*(tab_U+((n_U*base[chU])>>8)));
-      y0 = static_cast<int>(*(tab_Y+((n_Y*base[chY0])>>8)));
-      v  = static_cast<int>(*(tab_V+((n_V*base[chV])>>8)));
-      y1 = static_cast<int>(*(tab_Y+((n_Y*base[chY1])>>8)));
-
-      base[chU]  = CLAMP(u);
-      base[chY0] = CLAMP(y0);
-      base[chV]  = CLAMP(v);
-      base[chY1] = CLAMP(y1);
+      base[chU ]=CLAMP(static_cast<int>(tabY[ n_U*base[chU ]>>8 ]));
+      base[chY0]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY0]>>8 ]));
+      base[chV ]=CLAMP(static_cast<int>(tabY[ n_V*base[chV ]>>8 ]));
+      base[chY1]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY1]>>8 ]));
 
       base+=4;
     }
     break;
   case 1: // only Y
-    if (!(tab_Y=checkarray(name_A, &n_Y))) return;
-    
+    if(! (tabY.isValid()))
+      return;
+
     while (i--) {
-      y0 = static_cast<int>(*(tab_Y+((n_Y*base[chY0])>>8)));
-      y1 = static_cast<int>(*(tab_Y+((n_Y*base[chY1])>>8)));
-   
-      base[chY0] = CLAMP(y0);
-      base[chY1] = CLAMP(y1);
+      base[chY0]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY0]>>8 ]));
+      base[chY1]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY1]>>8 ]));
 
       base+=4;
     }

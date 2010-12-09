@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#include <iostream>
 
 /////////////////////////////////////////////////////////
 //
@@ -29,6 +29,9 @@
 #include "pix_histo.h"
 #include <string.h>
 #include <math.h>
+
+#include "RTE/Array.h"
+#include "Base/GemPixConvert.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_histo)
 
@@ -157,68 +160,78 @@ void pix_histo :: update_graphs(void)
 /////////////////////////////////////////////////////////
 void pix_histo :: processRGBAImage(imageStruct &image)
 {
-  int i=image.xsize*image.ysize;
+  int size=image.xsize*image.ysize;
   unsigned char *base = image.data;
   
-  int n_R, n_G, n_B, n_A;
-  t_float *tab_R=NULL, *tab_G=NULL, *tab_B=NULL, *tab_A=NULL;
-  t_float scale_R=0, scale_G=0, scale_B=0, scale_A=0;
+  int n_R=0, n_G=0, n_B=0, n_A=0;
 
-  t_float f;
+  t_float incr=0.;
 
-  int n;
-  t_float *tab;
+  gem::RTE::Array tabR=gem::RTE::Array(name_R->s_name);
+  gem::RTE::Array tabG=gem::RTE::Array(name_G->s_name);
+  gem::RTE::Array tabB=gem::RTE::Array(name_B->s_name);
+  gem::RTE::Array tabA=gem::RTE::Array(name_A->s_name);
 
   if (m_mode==0) return;
   switch (m_mode) {
   case 4:
-    if (!(tab_A=checkarray(name_A, &n_A))) return;
-    scale_A=n_A/256.;
-    n = n_A;    tab = tab_A;    while(n--)*tab++=0;
+    if(!tabA.isValid())return;
+    n_A=tabA.size();
+    tabA.set(0);
+
   case 3:
-    if (!(tab_G=checkarray(name_G, &n_G))) return;
-    scale_G=n_G/256.;
-    n = n_G;    tab = tab_G;    while(n--)*tab++=0;
-    if (!(tab_B=checkarray(name_B, &n_B))) return;
-    scale_B=n_B/256.;
-    n = n_B;    tab = tab_B;    while(n--)*tab++=0;
+    if(!tabB.isValid())return;
+    n_B=tabB.size();
+    tabB.set(0);
+
+    if(!tabG.isValid())return;
+    n_G=tabG.size();
+    tabG.set(0);
+
   case 1:
-    if (!(tab_R=checkarray(name_R, &n_R))) return;
-    scale_R=n_R/256.;
-    n = n_R;    tab = tab_R;    while(n--)*tab++=0;
+    if(!tabR.isValid())return;
+    n_R=tabR.size();
+    tabR.set(0);
+
   default:
     break;
   }
 
-  f = 1./i;
+  incr = 1./size;
 
   switch (m_mode) {
   case 1: // RGB->grey
-    while (i--) {
-      float grey = base[chRed] * 0.3086f + base[chGreen] * 0.6094f
-	+ base[chBlue] * 0.0820f;
-
-      //      *(tab_R+static_cast<int>(scale_R*(unsigned char)grey))
-      *(tab_R+static_cast<int>(scale_R*grey))+=f;
-
+    while (size--) {
+      
+#if 1
+      const unsigned int grey =((base[chRed]  *RGB2GRAY_RED+
+                                 base[chGreen]*RGB2GRAY_GREEN+
+                                 base[chBlue] *RGB2GRAY_BLUE)
+                                >>8)+RGB2GRAY_OFFSET;
+      const unsigned int index=(n_R*grey)>>8;
+      tabR[index]+=incr;
+#else
+      float grey = (base[chRed] * 0.3086f + base[chGreen] * 0.6094f + base[chBlue] * 0.0820f)/255.f;
+      tabR[static_cast<int>(n_R*grey)]+=incr;
+#endif
       base+=4;
     }
     break;
   case 3: // RGB
-    while (i--) {
-      *(tab_R+static_cast<int>(scale_R*base[chRed]))  +=f;
-      *(tab_G+static_cast<int>(scale_G*base[chGreen]))+=f;
-      *(tab_B+static_cast<int>(scale_B*base[chBlue])) +=f;
+    while (size--) {
+      tabR[(n_R*base[chRed  ])>>8]+=incr;
+      tabG[(n_G*base[chGreen])>>8]+=incr;
+      tabB[(n_B*base[chBlue ])>>8]+=incr;
 
       base+=4;
     }
     break;
   case 4: // RGBA
-    while (i--) {
-      *(tab_R+static_cast<int>(scale_R*base[chRed]))  +=f;
-      *(tab_G+static_cast<int>(scale_G*base[chGreen]))+=f;
-      *(tab_B+static_cast<int>(scale_B*base[chBlue])) +=f;
-      *(tab_A+static_cast<int>(scale_B*base[chAlpha]))+=f;
+    while (size--) {
+      tabR[(n_R*base[chRed  ])>>8]+=incr;
+      tabG[(n_G*base[chGreen])>>8]+=incr;
+      tabB[(n_B*base[chBlue ])>>8]+=incr;
+      tabA[(n_A*base[chAlpha])>>8]+=incr;
 
       base+=4;
     }
@@ -231,46 +244,55 @@ void pix_histo :: processRGBAImage(imageStruct &image)
 
 void pix_histo :: processYUVImage(imageStruct &image)
 {
-  int i=image.xsize*image.ysize;
+  int size=image.xsize*image.ysize;
   unsigned char *base = image.data;
   
   int n_Y, n_U, n_V;
-  t_float *tab_Y=NULL, *tab_U=NULL, *tab_V=NULL;
-  int n;
-  t_float *tab;
+
+  gem::RTE::Array tabY=gem::RTE::Array(name_R->s_name);
+  gem::RTE::Array tabU=gem::RTE::Array(name_G->s_name);
+  gem::RTE::Array tabV=gem::RTE::Array(name_B->s_name);
 
   if (m_mode==0) return;
   switch (m_mode) {
   case 3:
-    if (!(tab_V=checkarray(name_B, &n_V))) return;
-    n = n_V;    tab = tab_V;    while(n--)*tab++=0;
-    if (!(tab_U=checkarray(name_G, &n_U))) return;
-    n = n_U;    tab = tab_U;    while(n--)*tab++=0;
+    if(!tabU.isValid())return;
+    n_U=tabU.size();
+    tabU.set(0);
+
+    if(!tabV.isValid())return;
+    n_V=tabV.size();
+    tabV.set(0);
+
   case 1:
-    if (!(tab_Y=checkarray(name_R, &n_Y))) return;
-    n = n_Y;    tab = tab_Y;    while(n--)*tab++=0;
+    if(!tabY.isValid())return;
+    n_Y=tabY.size();
+    tabY.set(0);
   default:
     break;
   }
 
-  t_float f = 1./i;
-  t_float f2 = f*2.f;
+  t_float incrY = 1./size;
+  t_float incrUV = incrY *2.f;
 
-  i/=2;
+  size/=2;
   switch (m_mode) {
   case 1: // RGB->grey
-    while (i--) {
-      *(tab_Y+((n_Y*base[chY0])>>8))+=f;
-      *(tab_Y+((n_Y*base[chY1])>>8))+=f;
+    while (size--) {
+      tabY[(n_Y*base[chY0])>>8]+=incrY;
+      tabY[(n_Y*base[chY1])>>8]+=incrY;
+
+      //      *(tab_Y+((n_Y*base[chY0])>>8))+=incrY;
+      //      *(tab_Y+((n_Y*base[chY1])>>8))+=incrY;
       base+=4;
     }
     break;
   case 3: // RGB
-    while (i--) {
-      *(tab_Y+((n_Y*base[chY0])>>8))  +=f;
-      *(tab_Y+((n_Y*base[chY1])>>8))  +=f;
-      *(tab_U+((n_U*base[chU])>>8))   +=f2;
-      *(tab_V+((n_V*base[chV])>>8))   +=f2;
+    while (size--) {
+      tabU[(n_U*base[chU ])>>8]+=incrUV;
+      tabY[(n_Y*base[chY0])>>8]+=incrY;
+      tabV[(n_V*base[chV ])>>8]+=incrUV;
+      tabY[(n_Y*base[chY1])>>8]+=incrY;
       base+=4;
     }
     break;
@@ -282,24 +304,25 @@ void pix_histo :: processYUVImage(imageStruct &image)
 
 void pix_histo :: processGrayImage(imageStruct &image)
 {
-  int i=image.xsize*image.ysize;
-  unsigned char *base = image.data;
-  
-  int n_G;
-  t_float *tab_G=NULL;
-  t_float f;
+  int size=image.xsize*image.ysize;
+  t_float incr= 1./size;
 
-  int n;
-  t_float *tab;
+  unsigned char *base = image.data;
 
   if (m_mode==0) return;
-  
-  if (!(tab_G=checkarray(name_A, &n_G))) return;
-  n = n_G;    tab = tab_G;    while(n--)*tab++=0;
 
-  f = 1./i;
+  gem::RTE::Array tab=gem::RTE::Array(name_A->s_name);
+  int n=tab.size();
 
-  while (i--)*(tab_G+((n_G*(*base++))>>8))  +=f;
+  if(!tab.isValid())
+    return;
+
+  tab.set(0);
+
+  while (size--) {
+    tab[(n*base[chGray])>>8]+=incr;
+    base++;
+  }
 
   update_graphs();
 }
