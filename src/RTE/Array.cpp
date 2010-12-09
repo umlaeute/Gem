@@ -126,3 +126,16 @@ size_t gem::RTE::Array :: size(void) {
 t_float&gem::RTE::Array :: operator[](const unsigned int&index) {
   return m_pimpl->get(index);
 }
+
+void gem::RTE::Array :: set(const t_float f) {
+  int i;
+  if(!m_pimpl->check())
+    return;
+
+  t_word*wp=m_pimpl->pointer;
+  for(i=0; i<m_pimpl->length; i++) {
+    wp->w_float=f;
+    wp++;
+  }
+
+}

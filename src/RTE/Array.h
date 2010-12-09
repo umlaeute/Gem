@@ -41,6 +41,9 @@ namespace gem {
       virtual size_t size(void);
 
       virtual t_float&operator[](const unsigned int&index);
+
+
+      virtual void set(const t_float f);
     };
   };
 };
