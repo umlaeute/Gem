@@ -115,6 +115,11 @@ class GEM_EXTERN pix_video : public GemBase
   virtual void	setPropertyMess(int argc, t_atom*argv);
   virtual void	getPropertyMess(int argc, t_atom*argv);
   virtual void	enumPropertyMess(void);
+
+  virtual void	setPropertiesMess(int argc, t_atom*argv);
+  virtual void	applyPropertiesMess(void);
+  virtual void	clearPropertiesMess(void);
+
         
   //-----------------------------------
   // GROUP:	Video data
@@ -150,10 +155,16 @@ class GEM_EXTERN pix_video : public GemBase
   static void runningMessCallback(void *data, t_floatarg dev);
 
 
-  static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void setPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
-  static void getPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
+
   static void enumPropertyMessCallback(void *data);
+  static void getPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
+
+  static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
+
+  static void setPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
+  static void setPropertiesMessCallback(void *data, t_symbol*,int, t_atom*);
+  static void applyPropertiesMessCallback(void *data);
+  static void clearPropertiesMessCallback(void *data);
 
   static void asynchronousMessCallback(void *data, t_floatarg);
 

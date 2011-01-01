@@ -495,16 +495,14 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
 
 void pix_video :: setPropertyMess(int argc, t_atom*argv)
 {
-  if(argc) {
-    addProperties(m_writeprops, argc, argv);
-  } else {
-    if(m_videoHandle) {
-      m_videoHandle->setProperties(m_writeprops);
+  if(!argc) {
+    error("no property specified!");
+    return;
+  }
+  addProperties(m_writeprops, argc, argv);
 
-      m_writeprops.clear();
-    } else {
-      verbose(1, "no open videodevice...remembering properties...");
-    }
+  if(m_videoHandle) {
+    m_videoHandle->setProperties(m_writeprops);
   }
 }
 
@@ -559,7 +557,7 @@ void pix_video :: getPropertyMess(int argc, t_atom*argv)
         break;
       }	    
       if(ac) {
-        outlet_anything(m_infoOut, gensym("parameter"), ac, ap);
+        outlet_anything(m_infoOut, gensym("prop"), ac, ap);
       } else {
         post("oops: %s", key.c_str());
       }
@@ -585,7 +583,7 @@ void pix_video :: enumPropertyMess()
 
     SETSYMBOL(ap+0, gensym("numread"));
     SETFLOAT(ap+1, readkeys.size());
-    outlet_anything(m_infoOut, gensym("parameterlist"), 2, ap);
+    outlet_anything(m_infoOut, gensym("proplist"), 2, ap);
 
     SETSYMBOL(ap+0, gensym("read"));
     for(i=0; i<readkeys.size(); i++) {
@@ -619,7 +617,7 @@ void pix_video :: enumPropertyMess()
         SETSYMBOL(ap+2, gensym("unknown"));
         break;
       }
-      outlet_anything(m_infoOut, gensym("parameterlist"), ac, ap);
+      outlet_anything(m_infoOut, gensym("proplist"), ac, ap);
     }
 
 
@@ -627,7 +625,7 @@ void pix_video :: enumPropertyMess()
 
     SETSYMBOL(ap+0, gensym("numwrite"));
     SETFLOAT(ap+1, writekeys.size());
-    outlet_anything(m_infoOut, gensym("parameterlist"), 2, ap);
+    outlet_anything(m_infoOut, gensym("proplist"), 2, ap);
 
     SETSYMBOL(ap+0, gensym("write"));
     for(i=0; i<writekeys.size(); i++) {
@@ -661,12 +659,35 @@ void pix_video :: enumPropertyMess()
         SETSYMBOL(ap+2, gensym("unknown"));
         break;
       }
-      outlet_anything(m_infoOut, gensym("parameterlist"), ac, ap);
+      outlet_anything(m_infoOut, gensym("proplist"), ac, ap);
     }
   } else {
     error("cannot enumerate properties without a valid video-device");
   }
 }
+
+void pix_video :: setPropertiesMess(int argc, t_atom*argv)
+{
+  addProperties(m_writeprops, argc, argv);
+}
+
+void pix_video :: applyPropertiesMess()
+{
+  if(m_videoHandle) {
+    m_videoHandle->setProperties(m_writeprops);
+  } else {
+    verbose(1, "no open videodevice...remembering properties...");
+  }
+}
+
+void pix_video :: clearPropertiesMess()
+{
+  m_writeprops.clear();
+}
+
+
+
+
 
 void pix_video :: asynchronousMess(bool state)
 {
@@ -733,8 +754,20 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("set"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::getPropertyMessCallback),
     	    gensym("get"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::enumPropertyMessCallback),
-    	    gensym("enumproperties"), A_NULL);
+
+    class_addmethod(classPtr, 
+		    reinterpret_cast<t_method>(&pix_video::enumPropertyMessCallback),
+		    gensym("enumProps"), A_NULL);
+    class_addmethod(classPtr, 
+		    reinterpret_cast<t_method>(&pix_video::  setPropertiesMessCallback),
+		    gensym("setProps"), A_GIMME, A_NULL);
+    class_addmethod(classPtr, 
+		    reinterpret_cast<t_method>(&pix_video::applyPropertiesMessCallback),
+		    gensym("applyProps"), A_NULL);
+    class_addmethod(classPtr, 
+		    reinterpret_cast<t_method>(&pix_video::clearPropertiesMessCallback),
+		    gensym("clearProps"), A_NULL);
+
 
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::asynchronousMessCallback),
@@ -846,10 +879,6 @@ void pix_video :: dialogMessCallback(void *data, t_symbol*s, int argc, t_atom*ar
 {
   GetMyClass(data)->dialogMess(argc, argv);
 }
-void pix_video :: setPropertyMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
-{
-  GetMyClass(data)->setPropertyMess(argc, argv);
-}
 void pix_video :: getPropertyMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
   GetMyClass(data)->getPropertyMess(argc, argv);
@@ -858,6 +887,26 @@ void pix_video :: enumPropertyMessCallback(void *data)
 {
   GetMyClass(data)->enumPropertyMess();
 }
+
+void pix_video :: setPropertyMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
+  GetMyClass(data)->setPropertyMess(argc, argv);
+}
+
+void pix_video :: setPropertiesMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
+  GetMyClass(data)->setPropertiesMess(argc, argv);
+}
+void pix_video :: applyPropertiesMessCallback(void *data)
+{
+  GetMyClass(data)->applyPropertiesMess();
+}
+void pix_video :: clearPropertiesMessCallback(void *data)
+{
+  GetMyClass(data)->clearPropertiesMess();
+}
+
+
 
 void pix_video :: qualityMessCallback(void *data, t_floatarg state)
 {
