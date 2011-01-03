@@ -82,13 +82,6 @@ namespace gem { class GEM_EXPORT recordQT : public record
   // Do the rendering
   virtual int 	putFrame(imageStruct*img);
  
-  //////////
-  // When a size message is received
-  virtual bool	size(int width, int height);
-  //////////
-  // When a position message is received
-  virtual bool	position(int x, int y);
-		
   ////////
   // call up compression dialog
   virtual bool	dialog();
@@ -108,6 +101,10 @@ namespace gem { class GEM_EXPORT recordQT : public record
   //////
   // is recording setup and ready to go?
   bool			m_recordSetup;
+
+  bool		m_recordStart;
+  bool		m_recordStop;
+
     	
   //////////
   // current file to write to
@@ -117,6 +114,7 @@ namespace gem { class GEM_EXPORT recordQT : public record
   // previous dimensions to check
   int		m_prevHeight;
   int		m_prevWidth;
+
 
   imageStruct	*m_compressImage;
 

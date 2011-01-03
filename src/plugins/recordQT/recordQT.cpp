@@ -48,7 +48,10 @@ recordQT :: ~recordQT(){}
 recordQT :: recordQT()
   : record(),
     m_recordSetup(false),
-    m_prevHeight(0), m_prevWidth(0),
+    m_recordStart(false),
+    m_recordStop(false),
+    m_width(0), m_height(0), 
+    m_prevWidth(0), m_prevHeight(0), 
     m_compressImage(NULL),
     seconds(0.f),
     m_ticks(20),
@@ -117,8 +120,6 @@ recordQT :: recordQT()
   stdComponent = NULL;
   hImageDesc = NULL;
   nResID = movieInDataForkResID;
-  m_recordStart = 0;
-  m_recordStop = 0;
   m_codecType = kJPEGCodecType;
 
   for(i = 0; i < count; i++){
@@ -163,7 +164,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   OSType		colorspace;
   ComponentResult			compErr = noErr;
 
-  m_recordSetup = 0; //if it fails then there is no setup
+  m_recordSetup = false; //if it fails then there is no setup
 	
   //this mess should create and open a file for QT to use
   //probably should be a separate function
@@ -338,7 +339,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   }
 
   //this will show that everything is OK for recording
-  m_recordSetup = 1;
+  m_recordSetup = true;
 	
   //set the previous dimensions for the sanity check during compression
   m_prevWidth = m_width;
@@ -356,7 +357,7 @@ void recordQT :: close()
 {
   ComponentResult			compErr = noErr;
   OSErr					err;
-  m_recordStart = 0; //just to be sure
+  m_recordStart = false; //just to be sure
 	
   err = EndMediaEdits(media);
 
@@ -382,8 +383,8 @@ void recordQT :: close()
 	
   if (compErr != noErr) error("recordQT: SCCompressSequenceEnd failed with error %d",compErr);
 
-  m_recordStop = 0;
-  m_recordSetup = 0;
+  m_recordStop = false;
+  m_recordSetup = false;
   m_currentFrame = 0; //reset the frame counter?
   m_firstRun = 1;
 
@@ -487,7 +488,7 @@ int recordQT :: putFrame(imageStruct*img)
           setupQT();
           if(!m_recordSetup) {
             /* failed! */
-            m_recordStop = 1;
+            m_recordStop = true;
             return -1;
           }
       }
@@ -499,7 +500,7 @@ int recordQT :: putFrame(imageStruct*img)
         compressFrame();
     }else{
       error("recordQT: movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
-      m_recordStop = 1;
+      m_recordStop = true;
       m_prevWidth = m_width;
       m_prevHeight = m_height; //go ahead and change dimensions
     }
@@ -512,29 +513,6 @@ int recordQT :: putFrame(imageStruct*img)
     close();
   }
   return (m_currentFrame);
-}
-
-/////////////////////////////////////////////////////////
-// sizeMess
-//
-/////////////////////////////////////////////////////////
-bool recordQT :: size(int width, int height)
-{
-  m_width = width;
-  m_height = height;
-
-  return true;
-}
-
-/////////////////////////////////////////////////////////
-// posMess
-//
-/////////////////////////////////////////////////////////
-bool recordQT :: position(int x, int y)
-{
-  m_xoff = x;
-  m_yoff = y;
-  return true;
 }
 
 /////////////////////////////////////////////////////////
