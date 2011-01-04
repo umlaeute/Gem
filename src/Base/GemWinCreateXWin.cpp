@@ -471,7 +471,7 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
         case KeyPress:
           if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
             //modifier key:use keysym
-            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+            //triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
           }
           if ( (keysym_return & 0xff00)== 0xff00 ) {
             //non alphanumeric key: use keysym
