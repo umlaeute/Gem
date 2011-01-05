@@ -85,8 +85,6 @@ namespace gem { class GEM_EXTERN record
    */
   virtual bool putFrame(imageStruct*)=0;
 
-  virtual bool size    (int w, int h);
-
   bool		m_recordStart;
   bool		m_recordStop;
 
