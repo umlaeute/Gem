@@ -419,12 +419,13 @@ void pix_record :: getCodecList()
 
     const std::string codecname=m_pimpl->m_codechandle[id]->codec;
     const std::string descr=handle->getCodecDescription(codecname);
-    t_atom ap[2];
+    t_atom ap[3];
 
     //post("codec%d: '%s': %s", i, codecname.c_str(), (descr.empty()?"":descr.c_str()));
     SETFLOAT (ap+0, static_cast<t_float>(i));
     SETSYMBOL(ap+1, gensym(codecname.c_str()));
-    outlet_anything(m_outInfo, gensym("codec"), 2, ap);
+    SETSYMBOL(ap+2, gensym(descr.c_str()));
+    outlet_anything(m_outInfo, gensym("codec"), 3, ap);
   }
 }
 
