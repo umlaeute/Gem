@@ -5,9 +5,7 @@ GEM - Graphics Environment for Multimedia
 Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
 (OS independant parent-class)
 
-Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2003 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+Copyright (c) 2010-2011 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -17,9 +15,10 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_PLUGINS_RECORD_H_
 
 #include "Base/GemPixUtil.h"
+#include "Base/Properties.h"
+#include "plugins/PluginFactory.h"
 
 #include <string>
-#include "plugins/PluginFactory.h"
 
 
 /*-----------------------------------------------------------------
@@ -60,7 +59,9 @@ namespace gem { class GEM_EXTERN record
   /* open the record "filename" (think better about URIs ?)
    */
   /* returns TRUE if opening was successfull, FALSE otherwise */
-  virtual bool open(const char *filename);
+  virtual bool open(const std::string filename, gem::Properties&props);
+
+  virtual bool open(const std::string filename);
   //////////
   // close the movie file
   /* stop recording, close the file and clean up temporary things */
@@ -102,13 +103,33 @@ namespace gem { class GEM_EXTERN record
   // popup a dialog to set the codec interactively (interesting on os-x and w32)
   virtual bool dialog();
 
-  virtual bool setCodec(const char*name);
-  virtual bool setCodec(int  num);
 
-  virtual int getNumCodecs();
-  virtual const char*getCodecName(int n);
-  virtual const char*getCodecDescription(int n);
-  
+  /**
+   * get a list of supported codecs (short-form names, e.g. "mjpa")
+   */ 
+  virtual std::vector<std::string>getCodecs(void);
+  /**
+   * get a human readable description of the given codec (e.g. "Motion Jpeg A")
+   */
+  virtual const std::string getCodecDescription(const std::string codecname);
+  // map codec-names to codec-descriptions
+  std::map<std::string, std::string>m_codecdescriptions;
+  /**
+   * set the current codec
+   */
+  virtual bool setCodec(const std::string name);
+
+
+  /**
+   * list all properties the currently selected codec supports
+   * if the enumeration fails, this returns <code>false</code>
+   */
+  virtual bool enumProperties(gem::Properties&props);
+  gem::Properties m_props;
+
+
+ private:
+  bool m_running;
   
 }; };
 

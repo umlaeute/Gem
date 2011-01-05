@@ -50,7 +50,18 @@ void record :: close(void)
 // open a file !
 //
 /////////////////////////////////////////////////////////
-bool record :: open(const char *filename)
+bool record :: open(const std::string filename, gem::Properties&props)
+{
+  if(m_running)close();
+  m_running=false;
+  m_props=props;
+
+  m_running=open(filename);
+
+  return m_running;
+}
+
+bool record :: open(const std::string filename)
 {
   return false;
 }
@@ -82,34 +93,37 @@ bool record :: dialog()
 // get number of codecs
 //
 /////////////////////////////////////////////////////////
-int record :: getNumCodecs()
+std::vector<std::string>record :: getCodecs()
 {
-  return 0;
+  std::vector<std::string>result;
+  m_codecdescriptions.clear();
+  return result;
 }
-const char*record :: getCodecName(int i)
+const std::string record :: getCodecDescription(const std::string name)
 {
-  return NULL;
+  std::map<std::string,std::string>::iterator it = m_codecdescriptions.find(name);
+
+  if(it==m_codecdescriptions.end()) {
+    return name;
+  }
+
+  return it->second;
 }
-const char*record :: getCodecDescription(int i)
-{
-  return NULL;
-}
-/////////////////////////////////////////////////////////
-// set codec by number
-//
-/////////////////////////////////////////////////////////
-bool record :: setCodec(int num)
-{
-  return false;
-}
+
+
 /////////////////////////////////////////////////////////
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool record :: setCodec(const char*name)
+bool record :: setCodec(const std::string name)
 {
   return false;
 }
 
+bool record :: enumProperties(gem::Properties&props) 
+{
+  props.clear();
+  return false;
+}
 
 INIT_RECORDFACTORY();
