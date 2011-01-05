@@ -43,7 +43,7 @@ recordQT4L :: recordQT4L():
   ,
   m_qtfile(NULL),
   m_codec(NULL), m_codecs(NULL),
-  m_codecname(NULL), m_codecnum(-1),
+  m_codecname(std::string()), 
   m_qtbuffer(NULL),
   m_colormodel(0),
   m_restart(true)
@@ -150,20 +150,9 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
     return false;
 
   /* do we have a codec specified? */
-  const char*codecname = m_codecname;
-  if(m_codecnum>=0) {
-    lqt_codec_info_t**codecs = lqt_query_registry(0,1,1,0);
-    if(!setCodec(codecs, m_codecnum)) {
-      error("couldn't initialize codec#%d", m_codecnum);
-      return false;
-    }
+  std::string codecname = m_codecname;
 
-    codec=m_codec;
-    m_codec=NULL; /* next time we init, we want to get the default codec again */
-  }
-
-  if(NULL==codec){
-    if(NULL==codecname) {
+  if(codecname.empty()) {
       /* LATER figure out automatically which codec to use */ 
       lqt_file_type_t type = lqt_get_file_type(m_qtfile);
       unsigned int i=0;
@@ -173,24 +162,24 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
             codecname = qtformats[i].default_video_codec;
           }
       }
-      if(NULL==codecname) {
+      if(codecname.empty()) {
         error("couldn't find default codec for this format");
         return false;
       }
     }
   
-    lqt_codec_info_t**codecs = (lqt_codec_info_t**)lqt_find_video_codec_by_name(codecname);
+  lqt_codec_info_t**codecs = (lqt_codec_info_t**)lqt_find_video_codec_by_name(codecname.c_str());
   
     if(!setCodec(codecs, 0)){
-      error("couldn't initialize default codec: %s", codecname);
+      error("couldn't initialize default codec: %s", codecname.c_str());
       return false;
     }
     
-    verbose(1, "using codec: %s", codecname);
+    verbose(1, "using codec: %s", codecname.c_str());
   
     codec=m_codec;
     m_codec=NULL; /* next time we init, we want to get the default codec again */
-  }
+
 
   if(NULL==codec) {
     error("couldn't initialize codec");
@@ -344,23 +333,12 @@ bool recordQT4L :: setCodec(lqt_codec_info_t**codec, int num)
   return true;
 }
 /////////////////////////////////////////////////////////
-// set codec by number
-//
-/////////////////////////////////////////////////////////
-bool recordQT4L :: setCodec(int num)
-{
-  m_codecname=NULL;
-  m_codecnum=num;
-  return true;
-}
-/////////////////////////////////////////////////////////
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordQT4L :: setCodec(const char*name)
+bool recordQT4L :: setCodec(const std::string name)
 {
   m_codecname=name;
-  m_codecnum=-1;
   return true;
 }
 #endif

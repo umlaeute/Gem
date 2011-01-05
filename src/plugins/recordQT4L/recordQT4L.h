@@ -97,8 +97,7 @@ namespace gem { class GEM_EXPORT recordQT4L : public record {
    */
   virtual bool putFrame(imageStruct*);
 
-  virtual bool setCodec(const char*name);
-  virtual bool setCodec(int  num);
+  virtual bool setCodec(const std::string name);
 
 
   /**
@@ -115,8 +114,7 @@ namespace gem { class GEM_EXPORT recordQT4L : public record {
   bool setCodec(lqt_codec_info_t**codec, int num);
   lqt_codec_info_t*m_codec;
   lqt_codec_info_t**m_codecs;
-  const char*m_codecname;
-  int m_codecnum;
+  std::string m_codecname;
 
 
   /* a buffer for the quicktime encoder */
