@@ -301,11 +301,11 @@ void pix_record :: enumPropertiesMess()
       SETSYMBOL(ap+0, gensym(key.c_str()));
       switch(props.type(key)) {
       case gem::Properties::NONE:
-        SETSYMBOL(ap+1, gensym("bang"));
+        SETSYMBOL(ap+1, gensym("Bang"));
         break;
       case gem::Properties::DOUBLE: {
         double d=-1;
-        SETSYMBOL(ap+1, gensym("float"));
+        SETSYMBOL(ap+1, gensym("Float"));
         /* LATER: get and show ranges */
         if(props.get(key, d)) {
           ac=3;
@@ -314,7 +314,7 @@ void pix_record :: enumPropertiesMess()
       }
         break;
       case gem::Properties::STRING: {
-        SETSYMBOL(ap+1, gensym("symbol"));
+        SETSYMBOL(ap+1, gensym("Symbol"));
         std::string s;
         if(props.get(key, s)) {
           ac=3;
