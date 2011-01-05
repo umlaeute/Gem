@@ -130,8 +130,6 @@ recordQT :: recordQT()
     }
   }
 
-  m_currentFrame = 0;
-
   stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
   if (stdComponent == NULL){
     error("recordQT failed to open compressor component");
@@ -346,7 +344,6 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   m_prevHeight = m_height;
 	
   //reset frame counter for new movie file
-  m_currentFrame = 0;
   post("recordQT: setup done");
 }
 
@@ -385,7 +382,6 @@ void recordQT :: close()
 
   m_recordStop = false;
   m_recordSetup = false;
-  m_currentFrame = 0; //reset the frame counter?
   m_firstRun = 1;
 
   post("recordQT: movie written to %s",m_filename);
@@ -466,8 +462,6 @@ void recordQT :: compressFrame()
 #ifdef _WIN32
   QueryPerformanceCounter(&startTime);
 #endif
-
-  m_currentFrame++;
 }
 
 /////////////////////////////////////////////////////////

@@ -155,9 +155,8 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
   m_image.ysize=h;
   m_image.reallocate();
 
-	::write(m_fd, m_image.data, m_image.xsize*m_image.ysize*m_image.csize);
+  ::write(m_fd, m_image.data, m_image.xsize*m_image.ysize*m_image.csize);
 
-  m_currentFrame=0;
   m_init=true;
   return true;
 }

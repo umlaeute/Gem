@@ -149,7 +149,6 @@ bool recordV4L::init(const imageStruct* dummyImage, const int framedur) {
   m_image.ysize=h;
   m_image.reallocate();
 
-  m_currentFrame=0;
   m_init=true;
   return true;
 }

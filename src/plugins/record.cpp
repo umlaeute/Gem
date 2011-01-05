@@ -30,7 +30,6 @@ using namespace gem;
 /////////////////////////////////////////////////////////
 
 record :: record():
-  m_currentFrame(0),
   m_xoff(0), m_yoff(0), m_width(320), m_height(240)
 {}
 

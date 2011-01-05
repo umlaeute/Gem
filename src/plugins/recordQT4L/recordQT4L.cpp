@@ -133,7 +133,6 @@ bool recordQT4L :: open(const std::string filename)
     return false;
   }
 
-  m_currentFrame=0;
   m_restart=true;
   return (true);
 }

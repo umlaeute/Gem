@@ -89,10 +89,6 @@ namespace gem { class GEM_EXTERN record
   virtual bool position(int x, int y);
 
   //////////
-  // the current frame
-  int m_currentFrame;
-
-  //////////
   // The position
   int     	m_xoff;
   int     	m_yoff;
