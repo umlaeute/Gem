@@ -311,4 +311,37 @@ bool recordQT4L :: setCodec(const std::string name)
   post("setCodec('%s')=%p returns %d", name.c_str(), m_codec, result);
   return result;
 }
+
+bool recordQT4L :: enumProperties(gem::Properties&props) 
+{
+  props.clear();
+  post("enumprops %p", m_codec);
+  if(NULL==m_codec)
+    return false;
+
+  const int paramcount=m_codec->num_encoding_parameters;
+  post("codec has %d encoding params", paramcount);
+  lqt_parameter_info_t*params=m_codec->encoding_parameters;
+  int i=0;
+  for(i=0; i<paramcount; i++) {
+    gem::any typ;
+    switch(params[i].type) {
+    case(LQT_PARAMETER_INT):
+    case(LQT_PARAMETER_FLOAT):
+      typ=0;
+      break;
+    case(LQT_PARAMETER_STRING):
+      typ=params[i].val_default.val_string;
+      break;
+    default:
+      continue;
+    }
+
+    props.set(params[i].name, typ);
+  }
+
+  return true;
+}
+
+
 #endif

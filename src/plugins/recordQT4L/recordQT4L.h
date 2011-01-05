@@ -105,6 +105,12 @@ namespace gem { class GEM_EXPORT recordQT4L : public record {
    */ 
   virtual std::vector<std::string>getCodecs(void);
 
+  /**
+   * list all properties the currently selected codec supports
+   * if the enumeration fails, this returns <code>false</code>
+   */
+  virtual bool enumProperties(gem::Properties&props);
+
  private:
   quicktime_t *m_qtfile;
 
