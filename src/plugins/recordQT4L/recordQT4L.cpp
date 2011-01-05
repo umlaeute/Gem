@@ -149,39 +149,13 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
   if(!m_qtfile || !img || framedur < 0)
     return false;
 
+  post("%s:%d: %p", __FUNCTION__, __LINE__, m_codec); 
   /* do we have a codec specified? */
-  std::string codecname = m_codecname;
+  if(NULL==m_codec) {
+    setCodec(m_codecname);
+  }
 
-  if(codecname.empty()) {
-      /* LATER figure out automatically which codec to use */ 
-      lqt_file_type_t type = lqt_get_file_type(m_qtfile);
-      unsigned int i=0;
-      for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
-        if(type == qtformats[i].type)
-          {
-            codecname = qtformats[i].default_video_codec;
-          }
-      }
-      if(codecname.empty()) {
-        error("couldn't find default codec for this format");
-        return false;
-      }
-    }
-  
-  lqt_codec_info_t**codecs = (lqt_codec_info_t**)lqt_find_video_codec_by_name(codecname.c_str());
-  
-    if(!setCodec(codecs, 0)){
-      error("couldn't initialize default codec: %s", codecname.c_str());
-      return false;
-    }
-    
-    verbose(1, "using codec: %s", codecname.c_str());
-  
-    codec=m_codec;
-    m_codec=NULL; /* next time we init, we want to get the default codec again */
-
-
-  if(NULL==codec) {
+  if(NULL==m_codec) {
     error("couldn't initialize codec");
     return false;
   }
@@ -193,7 +167,7 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
                 img->ysize,
                 1,
                 framedur,
-                codec);
+                m_codec);
 
   /* set the colormodel */
   m_colormodel=BC_RGB888; /* LATER do this more dynamically */
@@ -218,6 +192,7 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
 /////////////////////////////////////////////////////////
 bool recordQT4L :: putFrame(imageStruct*img)
 {
+  post("%s:%d:: %p %p", __FUNCTION__, __LINE__, m_qtfile, img);
   if(!m_qtfile || !img){
     return false;
   }
@@ -299,46 +274,41 @@ std::vector<std::string>recordQT4L::getCodecs() {
   return result;
 }
 
-
-/////////////////////////////////////////////////////////
-// set qt-codec
-/////////////////////////////////////////////////////////
-bool recordQT4L :: setCodec(lqt_codec_info_t**codec, int num)
-{
-  int n=0;
-
-  if(!codec || num<0) /* somebody wants to trick us! */
-    return false;
-
-  /* check whether we have at least 'num' codecs to select from */
-  while(codec[n])n++;
-
-  if(num<0 || num>=n || !codec[num]) {
-    /* 'codec' does not hold the requested 'num' */
-    lqt_destroy_codec_info(codec);
-    return false;
-  }
-
-  /* OK, selection is valid: use the new codec information rather than the old one*/
-
-  /* clean up the old codecs */
-  if(m_codecs && m_codecs!=codec)
-    lqt_destroy_codec_info(m_codecs);
-
-  /* prepare to use the new codecs */
-  m_codecs=codec;
-  m_codec=codec[num];
-  m_width=m_height=-1;
-
-  return true;
-}
 /////////////////////////////////////////////////////////
 // set codec by name
 //
 /////////////////////////////////////////////////////////
 bool recordQT4L :: setCodec(const std::string name)
 {
-  m_codecname=name;
-  return true;
+  std::string codecname=name;
+  stop();
+
+  m_codec=NULL;
+
+  if(codecname.empty() && m_qtfile) {
+    /* LATER figure out automatically which codec to use */ 
+    lqt_file_type_t type = lqt_get_file_type(m_qtfile);
+    unsigned int i=0;
+    for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
+      if(type == qtformats[i].type){
+	codecname = qtformats[i].default_video_codec;
+      }
+    }
+    if(codecname.empty()) {
+      error("couldn't find default codec for this format");
+      return false;
+    }
+  }
+  lqt_destroy_codec_info(m_codecs);
+
+  m_codecs = lqt_find_video_codec_by_name(codecname.c_str());
+  if(m_codecs) {
+    m_codec=m_codecs[0];
+    m_codecname=codecname;
+  }
+
+  bool result=(NULL!=m_codec);
+  post("setCodec('%s')=%p returns %d", name.c_str(), m_codec, result);
+  return result;
 }
 #endif
