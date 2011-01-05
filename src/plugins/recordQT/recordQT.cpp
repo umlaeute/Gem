@@ -64,8 +64,6 @@ recordQT :: recordQT()
     nFileRefNum(0), nResID(0),
     codecContainer(NULL), numCodecContainer(0)
 {
-  post("using recordQT");
-
   m_filename[0] = 0;
 
 # ifdef _WIN32
@@ -73,16 +71,16 @@ recordQT :: recordQT()
   /* isn't this done in GemMan/GemWinCreateNT already? */
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {
-    post("recordQT: Could not initialize quicktime: error %d", err);
-    return;
+    //    error("recordQT: Could not initialize quicktime: error %d", err);
+    throw(GemException("unable to initialize QuickTime"));
   }
 	
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    error("recordQT: Could not initialize quicktime: error %d", err);
-    return;
+    //error("recordQT: Could not initialize quicktime-movies: error %d", err);
+    throw(GemException("unable to initialize QuickTime/Movies"));
   }
-  post("recordQT: QT init done");
+  verbose(1, "recordQT: QT init done");
 # endif // WINDOWS
 
   //get list of codecs installed  -- useful later
@@ -95,7 +93,7 @@ recordQT :: recordQT()
   count=codecList->count;
   codecContainer=new codecListStorage[count];
   numCodecContainer=count;
-  post("recordQT: %i codecs installed",codecList->count);
+  verbose(1, "recordQT: %i codecs installed",codecList->count);
   for (i = 0; i < count; i++){
     codecName = codecList->list[i];
     codecContainer[i].position = i;
@@ -125,15 +123,14 @@ recordQT :: recordQT()
   for(i = 0; i < count; i++){
     if (codecContainer[i].ctype == kJPEGCodecType) {
       m_codec = codecContainer[i].codec;
-      post("recordQT: found pjpeg codec %i %i %i ctype", i, m_codecType, m_codec);
+      verbose(1, "recordQT: found pjpeg codec %i %i %i ctype", i, m_codecType, m_codec);
       break;
     }
   }
 
   stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
   if (stdComponent == NULL){
-    error("recordQT failed to open compressor component");
-    return;
+    error("recordQT: failed to open compressor component");
   }
 }
 
