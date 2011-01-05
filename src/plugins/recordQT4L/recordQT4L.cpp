@@ -113,7 +113,7 @@ static lqt_file_type_t guess_qtformat(const std::string filename)
 
   for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
     if(!strcasecmp(extension, qtformats[i].extension)) {
-      post("encoding as %s", qtformats[i].description);
+      //      post("encoding as %s", qtformats[i].description);
       return qtformats[i].type;
     }
   }
@@ -164,7 +164,6 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
 
       double d;
       std::string s;
-      post("oops, forgot to set parameter '%s'", key.c_str());
       switch(proptypes[key]) {
       case LQT_PARAMETER_INT:
 	if(props.get(key, d)) {
@@ -202,7 +201,6 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
   if(!m_qtfile || !img || framedur < 0)
     return false;
 
-  post("%s:%d: %p", __FUNCTION__, __LINE__, m_codec); 
   /* do we have a codec specified? */
   if(NULL==m_codec) {
     setCodec(m_codecname);
@@ -250,7 +248,6 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
 /////////////////////////////////////////////////////////
 bool recordQT4L :: putFrame(imageStruct*img)
 {
-  post("%s:%d:: %p %p", __FUNCTION__, __LINE__, m_qtfile, img);
   if(!m_qtfile || !img){
     return false;
   }
@@ -366,19 +363,16 @@ bool recordQT4L :: setCodec(const std::string name)
   }
 
   bool result=(NULL!=m_codec);
-  post("setCodec('%s')=%p returns %d", name.c_str(), m_codec, result);
   return result;
 }
 
 bool recordQT4L :: enumProperties(gem::Properties&props) 
 {
   props.clear();
-  post("enumprops %p", m_codec);
   if(NULL==m_codec)
     return false;
 
   const int paramcount=m_codec->num_encoding_parameters;
-  post("codec has %d encoding params", paramcount);
   lqt_parameter_info_t*params=m_codec->encoding_parameters;
   int i=0;
   for(i=0; i<paramcount; i++) {
