@@ -228,10 +228,10 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
 // do the actual encoding and writing to file
 //
 /////////////////////////////////////////////////////////
-int recordQT4L :: putFrame(imageStruct*img)
+bool recordQT4L :: putFrame(imageStruct*img)
 {
   if(!m_qtfile || !img){
-    return (-1);
+    return false;
   }
   unsigned char**rowpointers;
   int row, row_stride;
@@ -244,7 +244,7 @@ int recordQT4L :: putFrame(imageStruct*img)
       /* something went wrong! */
       close();
       error("unable to initialize QT4L");
-      return -1;
+      return false;
     }
     m_restart=false;
   }
@@ -261,7 +261,7 @@ int recordQT4L :: putFrame(imageStruct*img)
     break;
   default:
     error("record: unsupported colormodel...");
-    return (-1);
+    return false;
   }
 
   row=m_image.ysize;
@@ -279,8 +279,7 @@ int recordQT4L :: putFrame(imageStruct*img)
 
   lqt_encode_video(m_qtfile, rowpointers, 0, static_cast<int>(framerate));
   delete[]rowpointers;
-  m_currentFrame++;
-  return m_currentFrame;
+  return true;
 }
 
 

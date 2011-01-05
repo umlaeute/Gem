@@ -168,11 +168,11 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
 // do the actual encoding and writing to file
 //
 /////////////////////////////////////////////////////////
-int recordV4L2 :: putFrame(imageStruct*img)
+bool recordV4L2 :: putFrame(imageStruct*img)
 {
   if(!m_init){
     if(!init(img, 0))
-      return -1;
+      return true;
   }
   m_image.convertFrom(img);
 
@@ -183,8 +183,7 @@ int recordV4L2 :: putFrame(imageStruct*img)
 
   ::write(m_fd, m_image.data, size);
 
-  m_currentFrame++;
-  return m_currentFrame;
+  return true;
 }
 
 

@@ -80,7 +80,7 @@ namespace gem { class GEM_EXPORT recordQT : public record
     	
   //////////
   // Do the rendering
-  virtual int 	putFrame(imageStruct*img);
+  virtual bool putFrame(imageStruct*img);
  
   ////////
   // call up compression dialog

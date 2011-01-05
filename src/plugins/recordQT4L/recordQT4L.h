@@ -95,7 +95,7 @@ namespace gem { class GEM_EXPORT recordQT4L : public record {
    * when called it returns something depending on success
    * (what? the framenumber and -1 (0?) on failure?)
    */
-  virtual int putFrame(imageStruct*);
+  virtual bool putFrame(imageStruct*);
 
   virtual bool setCodec(const char*name);
   virtual bool setCodec(int  num);

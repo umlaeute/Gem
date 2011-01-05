@@ -83,7 +83,7 @@ namespace gem { class GEM_EXTERN record
    * when called it returns something depending on success
    * (what? the framenumber and -1 (0?) on failure?)
    */
-  virtual int putFrame(imageStruct*)=0;
+  virtual bool putFrame(imageStruct*)=0;
 
   virtual bool size    (int w, int h);
   virtual bool position(int x, int y);

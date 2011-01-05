@@ -474,10 +474,10 @@ void recordQT :: compressFrame()
 // render
 //
 /////////////////////////////////////////////////////////
-int recordQT :: putFrame(imageStruct*img)
+bool recordQT :: putFrame(imageStruct*img)
 {
   //check if state exists
-  if(!img)return (-1);
+  if(!img)return false;
   m_compressImage = img;
   m_height = img->ysize;
   m_width = img->xsize;
@@ -489,7 +489,7 @@ int recordQT :: putFrame(imageStruct*img)
           if(!m_recordSetup) {
             /* failed! */
             m_recordStop = true;
-            return -1;
+            return false;
           }
       }
 		
@@ -509,10 +509,10 @@ int recordQT :: putFrame(imageStruct*img)
   //if recording is stopped and everything is setup then stop recording
   if (m_recordStop){
     //guard against someone not setting up QT beforehand
-    if (!m_recordSetup)	return(-1);
+    if (!m_recordSetup)	return false;
     close();
   }
-  return (m_currentFrame);
+  return true;
 }
 
 /////////////////////////////////////////////////////////
