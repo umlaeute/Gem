@@ -30,7 +30,7 @@ using namespace gem;
 /////////////////////////////////////////////////////////
 
 record :: record():
-  m_xoff(0), m_yoff(0), m_width(320), m_height(240)
+  m_width(320), m_height(240)
 {}
 
 /////////////////////////////////////////////////////////
@@ -83,14 +83,6 @@ bool record :: open(const std::string filename)
 bool record :: size(int w, int h) {
   return false;
 }
-
-///////////////////////////////
-// set the x/y-offset (do we need this?)
-bool record :: position(int w, int h) {
-  return false;
-}
-
-
 
 /////////////////////////////////////////////////////////
 // set the codec

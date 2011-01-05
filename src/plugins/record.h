@@ -86,12 +86,6 @@ namespace gem { class GEM_EXTERN record
   virtual bool putFrame(imageStruct*)=0;
 
   virtual bool size    (int w, int h);
-  virtual bool position(int x, int y);
-
-  //////////
-  // The position
-  int     	m_xoff;
-  int     	m_yoff;
 
   //////////
   // The dimensions
