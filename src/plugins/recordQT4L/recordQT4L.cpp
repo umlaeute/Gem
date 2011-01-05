@@ -99,9 +99,9 @@ static struct
   { "m4a",      LQT_FILE_M4A,       "m4a", "m4a (iTunes compatible)",      "yuv2"  }, /* ffmpeg_mpg4 */
 };
 /* guess the file-format by inspecting the extension */
-static lqt_file_type_t guess_qtformat(const char* filename)
+static lqt_file_type_t guess_qtformat(const std::string filename)
 {
-  const char * extension = strrchr(filename, '.');
+  const char * extension = strrchr(filename.c_str(), '.');
   unsigned int i=0;
 
   if(!extension) {
@@ -122,13 +122,13 @@ static lqt_file_type_t guess_qtformat(const char* filename)
   return LQT_FILE_QT; /* should be save for now */
 }
 
-bool recordQT4L :: open(const char *filename)
+bool recordQT4L :: open(const std::string filename)
 {
   close();
 
   lqt_file_type_t type =  guess_qtformat(filename);
 
-  m_qtfile = lqt_open_write(filename, type);
+  m_qtfile = lqt_open_write(filename.c_str(), type);
   if(m_qtfile==NULL){
     return false;
   }
@@ -286,36 +286,30 @@ int recordQT4L :: putFrame(imageStruct*img)
 
 
 /////////////////////////////////////////////////////////
-// get number of codecs
+// get codecs
 //
 /////////////////////////////////////////////////////////
-int recordQT4L :: getNumCodecs()
-{
-  lqt_codec_info_t**codecs = lqt_query_registry(0,1,1,0);
-  int n=0;
-  while(NULL!=codecs[n])n++;
-  lqt_destroy_codec_info(codecs);
-  return (n);
-}
-const char*recordQT4L :: getCodecName(int i)
-{
+std::vector<std::string>recordQT4L::getCodecs() {
+  std::vector<std::string>result;
+  m_codecdescriptions.clear();
+
   lqt_codec_info_t**codec = lqt_query_registry(0,1,1,0);
-  if(codec&&codec[i]){
-    const char*name=gensym(codec[i]->name)->s_name;
+
+  if(codec) {
+    int n=0;
+    while(NULL!=codec[n]){
+      std::string name=codec[n]->name;
+      std::string desc=codec[n]->long_name;
+      result.push_back(name);
+      m_codecdescriptions[name]=desc;
+
+      n++;
+    }
+
     lqt_destroy_codec_info(codec);
-    return name;
   }
-  return NULL;
-}
-const char*recordQT4L :: getCodecDescription(int i)
-{
-  lqt_codec_info_t**codec = lqt_query_registry(0,1,1,0);
-  if(codec&&codec[i]){
-    const char*name=gensym(codec[i]->long_name)->s_name;
-    lqt_destroy_codec_info(codec);
-    return name;
-  }
-  return NULL;
+
+  return result;
 }
 
 
