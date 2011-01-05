@@ -141,6 +141,59 @@ bool recordQT4L :: open(const std::string filename)
 // initialize the encoder
 //
 /////////////////////////////////////////////////////////
+
+static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec, 
+			    gem::Properties&props) {
+
+  if(NULL==file || NULL==codec)return;
+  std::vector<std::string>keys=props.keys();
+
+  std::map<std::string, lqt_parameter_type_t>proptypes;
+  int i=0;
+  for(i=0; i<codec->num_encoding_parameters; i++) {
+    proptypes[codec->encoding_parameters[i].name]=codec->encoding_parameters[i].type;
+  }
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    std::map<std::string,lqt_parameter_type_t>::iterator it = proptypes.find(key);
+    if(it!=proptypes.end()) {
+      void*value=NULL;
+      int v_i=0;
+      float v_f=0.f;
+      const char*v_s=NULL;
+
+      double d;
+      std::string s;
+      post("oops, forgot to set parameter '%s'", key.c_str());
+      switch(proptypes[key]) {
+      case LQT_PARAMETER_INT:
+	if(props.get(key, d)) {
+	  v_i=static_cast<int>(d);
+	  value=static_cast<void*>(&v_i);
+	}
+	break;
+      case LQT_PARAMETER_FLOAT:
+	if(props.get(key, d)) {
+	  v_f=static_cast<float>(d);
+	  value=static_cast<void*>(&v_f);
+	}
+	break;
+      case LQT_PARAMETER_STRING:
+	if(props.get(key, s)) {
+	  v_s=s.c_str();
+	  value=static_cast<void*>(const_cast<char*>(v_s));
+	}
+	break;
+      }
+      if(value)
+	lqt_set_video_parameter(file, track, key.c_str(), value);
+    }
+
+  }
+
+}
+
+
 bool recordQT4L :: init(const imageStruct*img, const int framedur)
 {
   int rowspan=0, rowspan_uv=0;
@@ -159,6 +212,9 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
     error("couldn't initialize codec");
     return false;
   }
+
+  
+
   
   /* fps = time_scale / frame_duration */
   lqt_set_video(m_qtfile,
@@ -168,6 +224,8 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
                 1,
                 framedur,
                 m_codec);
+
+  applyProperties(m_qtfile, 0, m_codec, m_props);
 
   /* set the colormodel */
   m_colormodel=BC_RGB888; /* LATER do this more dynamically */
@@ -327,8 +385,10 @@ bool recordQT4L :: enumProperties(gem::Properties&props)
     gem::any typ;
     switch(params[i].type) {
     case(LQT_PARAMETER_INT):
+      typ=params[i].val_max.val_int;
+      break;
     case(LQT_PARAMETER_FLOAT):
-      typ=0;
+      typ=params[i].val_max.val_float;
       break;
     case(LQT_PARAMETER_STRING):
       typ=params[i].val_default.val_string;
