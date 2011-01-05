@@ -217,9 +217,12 @@ void pix_record :: startRecording()
   const int count=m_handles.size();
   const std::string codec=m_codec;
 
+  m_currentFrame = 0;
+
   if(m_handle) {
     stopRecording();
   }
+
   if(m_filename.empty()) {
     error("start recording requested with no prior open");
     return;
@@ -268,7 +271,7 @@ void pix_record :: stopRecording()
 {
   if(m_recording) {
     m_handle->stop();
-    m_currentFrame = 0; //reset the frame counter?
+    m_currentFrame = 0;
     outlet_float(m_outNumFrames,m_currentFrame);
     verbose(1, "movie written");
   }
@@ -289,6 +292,7 @@ void pix_record :: render(GemState *state)
   
   if(m_banged||m_automatic){
 #if 0
+    // leftover, fix later!
     m_handle->m_recordStart=m_recordStart;
     m_handle->m_recordStop=m_recordStop;
 #endif  
