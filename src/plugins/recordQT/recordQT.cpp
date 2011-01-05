@@ -50,7 +50,7 @@ recordQT :: recordQT()
     m_recordSetup(false),
     m_recordStart(false),
     m_recordStop(false),
-    m_width(0), m_height(0), 
+    m_width(-1), m_height(-1), 
     m_prevWidth(0), m_prevHeight(0), 
     m_compressImage(NULL),
     seconds(0.f),

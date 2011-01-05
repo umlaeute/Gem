@@ -29,8 +29,7 @@ using namespace gem;
 //
 /////////////////////////////////////////////////////////
 
-record :: record():
-  m_width(320), m_height(240)
+record :: record()
 {}
 
 /////////////////////////////////////////////////////////
@@ -75,12 +74,6 @@ bool record::write(imageStruct*img) {
 
 bool record :: open(const std::string filename)
 {
-  return false;
-}
-
-///////////////////////////////
-// set the size (do we need this?)
-bool record :: size(int w, int h) {
   return false;
 }
 

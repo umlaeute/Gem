@@ -123,6 +123,9 @@ namespace gem { class GEM_EXPORT recordQT4L : public record {
   /* in which colormodel do we have to present the data to lqt? */
   int m_colormodel;
 
+  /* frame dimensions (on change we have to stop writing */
+  int m_width, m_height;
+
   /* re-initialize the recorder */
   bool m_restart;
 #endif /* QT */

@@ -87,11 +87,6 @@ namespace gem { class GEM_EXTERN record
 
   virtual bool size    (int w, int h);
 
-  //////////
-  // The dimensions
-  int     	m_width;
-  int     	m_height;
-
   bool		m_recordStart;
   bool		m_recordStop;
 

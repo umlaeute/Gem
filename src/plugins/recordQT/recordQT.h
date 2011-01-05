@@ -111,9 +111,9 @@ namespace gem { class GEM_EXPORT recordQT : public record
   char	    	m_filename[QT_MAX_FILENAMELENGTH];
 
   //////////
-  // previous dimensions to check
-  int		m_prevHeight;
-  int		m_prevWidth;
+  // (previous) dimensions to check
+  int m_width, m_height;
+  int		m_prevHeight,m_prevWidth;
 
 
   imageStruct	*m_compressImage;

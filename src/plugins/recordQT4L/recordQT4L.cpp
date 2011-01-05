@@ -46,9 +46,9 @@ recordQT4L :: recordQT4L():
   m_codecname(std::string()), 
   m_qtbuffer(NULL),
   m_colormodel(0),
+  m_width(-1), m_height(-1),
   m_restart(true)
 {
-  //  strcpy(m_compressor, QUICKTIME_DV);
   lqt_registry_init ();
 }
 #else
