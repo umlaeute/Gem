@@ -85,9 +85,6 @@ namespace gem { class GEM_EXTERN record
    */
   virtual bool putFrame(imageStruct*)=0;
 
-  bool		m_recordStart;
-  bool		m_recordStop;
-
   //////////
   // popup a dialog to set the codec interactively (interesting on os-x and w32)
   virtual bool dialog();
