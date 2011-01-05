@@ -232,7 +232,7 @@ void pix_record :: startRecording()
       handle=m_handles[i];
       if(!handle->setCodec(codec))
 	continue;
-      if(handle->open(m_filename, m_props)) {
+      if(handle->start(m_filename, m_props)) {
 	m_handle=handle;
 	post("open successfull...");
       } else {
@@ -246,7 +246,7 @@ void pix_record :: startRecording()
       error("requested driver cannot handle codec '%s'", codec.c_str());
       return;
     }
-    if(handle->open(m_filename, m_props)) {
+    if(handle->start(m_filename, m_props)) {
       m_handle=handle;
       post("open successfull...");
     } else {
@@ -267,7 +267,7 @@ void pix_record :: startRecording()
 void pix_record :: stopRecording()
 {
   if(m_recording) {
-    m_handle->close();
+    m_handle->stop();
     m_currentFrame = 0; //reset the frame counter?
     outlet_float(m_outNumFrames,m_currentFrame);
     verbose(1, "movie written");
@@ -294,7 +294,7 @@ void pix_record :: render(GemState *state)
 #endif  
 
     //      if(m_maxFrames != 0 && m_currentFrame >= m_maxFrames) m_recordStop = 1;
-    bool success=m_handle->putFrame(&state->image->image);
+    bool success=m_handle->write(&state->image->image);
     m_banged=false;
 
     if(success) {
@@ -438,7 +438,7 @@ void pix_record :: codecMess(t_atom *argv)
 {
 #warning allow setting of codec without handle
   if(m_handle){
-    m_handle->close();
+    m_handle->stop();
     m_handle=NULL;
   }
   

@@ -55,12 +55,21 @@ namespace gem { class GEM_EXTERN record
   virtual ~record();
 
   //////////
+  // start/stop recording
+  /* these are the handles for pix_record to open/close 
+   * returns TRUE if opening was successfull, FALSE otherwise */
+  bool start(const std::string filename, gem::Properties&props);
+  void stop (void);
+  //////////
+  // record a frame (wrapper around putFrame()
+  bool write(imageStruct*);
+
+
+  //////////
   // open a movie up
   /* open the record "filename" (think better about URIs ?)
    */
   /* returns TRUE if opening was successfull, FALSE otherwise */
-  virtual bool open(const std::string filename, gem::Properties&props);
-
   virtual bool open(const std::string filename);
   //////////
   // close the movie file

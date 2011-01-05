@@ -50,7 +50,7 @@ void record :: close(void)
 // open a file !
 //
 /////////////////////////////////////////////////////////
-bool record :: open(const std::string filename, gem::Properties&props)
+bool record :: start(const std::string filename, gem::Properties&props)
 {
   if(m_running)close();
   m_running=false;
@@ -58,6 +58,19 @@ bool record :: open(const std::string filename, gem::Properties&props)
 
   m_running=open(filename);
 
+  return m_running;
+}
+void record :: stop()
+{
+  if(m_running)
+    close();
+  m_running=false;
+}
+
+bool record::write(imageStruct*img) {
+  if(!m_running)
+    return false;
+  m_running=putFrame(img);
   return m_running;
 }
 
