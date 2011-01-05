@@ -282,7 +282,6 @@ void pix_record :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_record :: enumPropertiesMess()
 {
-  post("no property enumeration yet: %x", m_handle);
   if(m_handle) {
     gem::Properties props;
     if(!m_handle->enumProperties(props))
@@ -447,12 +446,10 @@ void pix_record :: codecMess(t_atom *argv)
     for(i=0; i<handles.size(); i++) {
       gem::record*handle=handles[i].handle;
       std::string codec=handles[i].codec;
-      startpost("trying to set codec '%s' at handle %p: ", codec.c_str(), handle);
       if(handle->setCodec(codec)) {
-	post("ok");
+	m_codec=codec;
 	m_handles.push_back(handle);
       } 
-      else post("ko");
     }
     if(m_handles.size()>0) {
       m_handle=m_handles[0];
