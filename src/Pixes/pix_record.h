@@ -123,6 +123,7 @@ class GEM_EXTERN pix_record : public GemBase
   gem::record *m_handle;
   std::vector<std::string>m_ids;
   std::vector<gem::record*>m_handles;
+  std::vector<gem::record*>m_allhandles;
   virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
   int m_driver;
 

@@ -16,30 +16,23 @@ struct pix_record :: PIMPL {
 
   struct codechandle {
     codechandle(gem::record*h, const std::string c):handle(h), codec(c) {}
-
+    
     gem::record*handle;
-    const std::string codec;
+    std::string codec;
   };
-  std::map<std::string, codechandle*>m_codechandle;
+  std::map<std::string, std::vector<codechandle> >m_codechandle;
   std::vector<std::string>m_codecs;
 
   void addCodecHandle(gem::record*handle, const std::string codec) {
-    codechandle*ch=new codechandle(handle, codec);
-    if(m_codechandle[codec]==NULL) {
-      m_codechandle[codec]=ch;
-    } else {
-#warning handle duplicate codecs
-    }
+#warning better handling of duplicate codecs
+    /* FIXME: we should generate a unique codec-ID, e.g. "<handlename>:<codec>" */
+    m_codechandle[codec].push_back(codechandle(handle, codec));
     m_codecs.push_back(codec);
   }
   void clearCodecHandle(void) {
-#warning memleak codechandle
-
     m_codecs.clear();
     m_codechandle.clear();
   }
-
-
 
   static gem::any atom2any(t_atom*ap) {
     gem::any result;
@@ -122,11 +115,13 @@ pix_record :: pix_record(int argc, t_atom *argv):
   addHandle(ids);
 
 
-  if(m_handles.size()>0) {
+  if(m_allhandles.size()>0) {
     m_driver=-1;
   } else {
     error("no video backends found!");
   }
+
+  m_handles=m_allhandles;
 
   getCodecList();
 }
@@ -175,7 +170,7 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
       gem::record         *handle=NULL;
-      startpost("backend #%d='%s'\t", m_handles.size(), key.c_str());
+      startpost("backend #%d='%s'\t", m_allhandles.size(), key.c_str());
       try {
 	handle=gem::PluginFactory<gem::record>::getInstance(key); 
       } catch (GemException ex) {
@@ -184,78 +179,49 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
 	post("<--- DISABLED");
 	break;
       }
-#if 0
-      std::vector<std::string>devs=handle->provides();
-      if(devs.size()>0) {
-	startpost(": ");
-	unsigned int i=0;
-	for(i=0; i<devs.size(); i++) {
-	  startpost("%s ", devs[i].c_str());
-	}
-      }
-#endif
       endpost();
 
       m_ids.push_back(key);
-      m_handles.push_back(handle);
+      m_allhandles.push_back(handle);
       count++;
-      verbose(2, "added backend#%d '%s' @ 0x%x", m_handles.size()-1, key.c_str(), handle);
+      verbose(2, "added backend#%d '%s' @ 0x%x", m_allhandles.size()-1, key.c_str(), handle);
     }
   }
 
   return (count>0);
 }
 
-
 //
 // stops recording into the movie
 //
 void pix_record :: startRecording()
 {
-  gem::record *handle=NULL;
-  // find a handle for the current settings (filename, codec, props)
-  const int count=m_handles.size();
-  const std::string codec=m_codec;
-
-  m_currentFrame = 0;
-
-  if(m_handle) {
-    stopRecording();
-  }
-
   if(m_filename.empty()) {
     error("start recording requested with no prior open");
     return;
   }
 
-  if(m_driver<0) {
-    int i=0;
-    for(i=0; i<count; i++) {
-      // check whether the handle supports the requested codec
-      handle=m_handles[i];
-      if(!handle->setCodec(codec))
-	continue;
-      if(handle->start(m_filename, m_props)) {
-	m_handle=handle;
-	post("open successfull...");
-      } else {
-	handle=NULL;
-      }
-      
-    }
-  } else if (m_driver<count) {
-    handle=m_handles[m_driver];
-    if(!handle->setCodec(codec)) {
-      error("requested driver cannot handle codec '%s'", codec.c_str());
-      return;
-    }
+  gem::record *handle=NULL;
+  // find a handle for the current settings (filename, codec, props)
+  const std::string codec=m_codec;
+
+  if(m_handle) {
+    stopRecording();
+  }
+  m_currentFrame = 0;
+
+  int i=0;
+  for(i=0; i<m_handles.size(); i++) {
+    // check whether the handle supports the requested codec
+    handle=m_handles[i];
+    if(!handle->setCodec(codec))
+      continue;
     if(handle->start(m_filename, m_props)) {
       m_handle=handle;
       post("open successfull...");
     } else {
-      error("requested driver could not open '%s' for writing..", m_filename.c_str());
       handle=NULL;
-    }
+    }  
   }
 
   if(m_handle) {
@@ -419,17 +385,21 @@ void pix_record :: getCodecList()
   }
   for(i=0; i<m_pimpl->m_codecs.size(); i++) {
     const std::string id=m_pimpl->m_codecs[i];
-    gem::record*handle=m_pimpl->m_codechandle[id]->handle;
+    std::vector<PIMPL::codechandle>handles=m_pimpl->m_codechandle[id];
+    int j=0;
+    for(j=0; j<handles.size(); j++) {
+      gem::record*handle=handles[j].handle;
 
-    const std::string codecname=m_pimpl->m_codechandle[id]->codec;
-    const std::string descr=handle->getCodecDescription(codecname);
-    t_atom ap[3];
+      const std::string codecname=handles[j].codec;
+      const std::string descr=handle->getCodecDescription(codecname);
+      t_atom ap[3];
 
-    //post("codec%d: '%s': %s", i, codecname.c_str(), (descr.empty()?"":descr.c_str()));
-    SETFLOAT (ap+0, static_cast<t_float>(i));
-    SETSYMBOL(ap+1, gensym(codecname.c_str()));
-    SETSYMBOL(ap+2, gensym(descr.c_str()));
-    outlet_anything(m_outInfo, gensym("codec"), 3, ap);
+      verbose(2, "codec%d: '%s': %s", i, codecname.c_str(), (descr.empty()?"":descr.c_str()));
+      SETFLOAT (ap+0, static_cast<t_float>(i));
+      SETSYMBOL(ap+1, gensym(codecname.c_str()));
+      SETSYMBOL(ap+2, gensym(descr.c_str()));
+      outlet_anything(m_outInfo, gensym("codec"), 3, ap);
+    }
   }
 }
 
@@ -440,7 +410,20 @@ void pix_record :: getCodecList()
 /////////////////////////////////////////////////////////
 void pix_record :: codecMess(t_atom *argv)
 {
-#warning allow setting of codec without handle
+#warning codecMess is a mess
+  /*
+   * allow setting of codec without handle
+   */
+
+  /*
+   * codecMess should do the following:
+   *  find "valid" handles (those that support the given codec)
+   *  copy all valid handles from m_allhandles to m_handles
+   *  query all valid handles for settable properties
+   *
+   * if a special codec is given (e.g. none at all), all handles are valid
+   */
+
   if(m_handle){
     m_handle->stop();
     m_handle=NULL;
@@ -457,21 +440,31 @@ void pix_record :: codecMess(t_atom *argv)
       sid=m_pimpl->m_codecs[id];
     }
   }
-
-  if(m_pimpl->m_codechandle[sid]) {
-    gem::record*handle=m_pimpl->m_codechandle[sid]->handle;
-    std::string codec =m_pimpl->m_codechandle[sid]->codec;
-    
-    if(handle->setCodec(codec)) {
-      m_handle=handle;
-      m_codec=codec;
-      enumPropertiesMess();
-    } else {
-      error("unable to set the codec");
+  std::vector<PIMPL::codechandle>handles=m_pimpl->m_codechandle[sid];
+  if(handles.size()>0) {
+    m_handles.clear();
+    int i=0;
+    for(i=0; i<handles.size(); i++) {
+      gem::record*handle=handles[i].handle;
+      std::string codec=handles[i].codec;
+      startpost("trying to set codec '%s' at handle %p: ", codec.c_str(), handle);
+      if(handle->setCodec(codec)) {
+	post("ok");
+	m_handles.push_back(handle);
+      } 
+      else post("ko");
     }
+    if(m_handles.size()>0) {
+      m_handle=m_handles[0];
+    } else {
+      error("couldn't find a valid backend for codec '%s'", sid.c_str());
+    }
+
   } else {
-    post("unknown codec '%s", sid.c_str());
+    error("unknown codec '%s", sid.c_str());
   }
+  if(m_handle)
+    enumPropertiesMess();
 }
 
 void pix_record :: fileMess(int argc, t_atom *argv)
@@ -517,8 +510,6 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, 
 		  reinterpret_cast<t_method>(&pix_record::clearPropertiesMessCallback),
 		  gensym("clearprops"), A_NULL);
-
-
 }
 
 void pix_record :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
