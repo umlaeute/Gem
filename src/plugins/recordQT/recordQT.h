@@ -76,7 +76,7 @@ namespace gem { class GEM_EXPORT recordQT : public record
   
 #ifdef HAVE_QUICKTIME
   virtual void close();
-  virtual bool open(const char*filename);
+  virtual bool open(const std::string filename);
     	
   //////////
   // Do the rendering
@@ -87,10 +87,8 @@ namespace gem { class GEM_EXPORT recordQT : public record
   virtual bool	dialog();
   virtual int	getNumCodecs();
   virtual const char* getCodecName(int n);
-  //virtual const char* getCodecDescription(int n);
-
   virtual bool	setCodec(int num);
-  virtual bool	setCodec(const char*name);
+  virtual bool	setCodec(const std::string name);
 
  private:
 		

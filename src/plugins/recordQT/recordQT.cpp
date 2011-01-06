@@ -100,15 +100,15 @@ recordQT :: recordQT()
     codecContainer[i].ctype = codecName.cType;
     codecContainer[i].codec = codecName.codec;
     if(codecName.typeName) {
-	  int namelength=*(codecName.typeName);
-	  char*name=new char[namelength+1];
-	  const char*orgname=reinterpret_cast<const char*>(codecName.typeName)+1;
-	  strncpy(name, orgname, namelength);
-	  name[namelength]=0;
-	  t_symbol*s=gensym(name);
+      int namelength=*(codecName.typeName);
+      char*name=new char[namelength+1];
+      const char*orgname=reinterpret_cast<const char*>(codecName.typeName)+1;
+      strncpy(name, orgname, namelength);
+      name[namelength]=0;
+      t_symbol*s=gensym(name);
       codecContainer[i].name = s->s_name;
-	  //post("codec: '%s' %d", name, namelength);
-	  free(name);
+      //post("codec: '%s' %d", name, namelength);
+      free(name);
     } else {
       codecContainer[i].name = NULL;
     }
@@ -589,19 +589,24 @@ bool recordQT :: setCodec(int num)
   m_codec     = codecContainer[num].codec;
   return true;
 }
-bool recordQT :: setCodec(const char*codecName)
+bool recordQT :: setCodec(const std::string codecName)
 {
 	int	i;
   int requestedCodec=0;
-  if (!(strncmp(codecName,"pjpeg",5)))       requestedCodec=1;
-  else if (!(strncmp(codecName,"aic",3)))    requestedCodec=2;
-  else if (!(strncmp(codecName,"anim",4)))   requestedCodec=3;
-  else if (!(strncmp(codecName,"dvntsc",6))) requestedCodec=4;
-  else if (!(strncmp(codecName,"dvpal",5)))  requestedCodec=5;
+  if(codecName=="pjpeg")
+    requestedCodec=1;
+  else if(codecName=="aic")
+    requestedCodec=2;
+  else if(codecName=="anim")
+    requestedCodec=3;
+  else if(codecName=="dvntsc")
+    requestedCodec=4;
+  else if(codecName=="dvpal")
+    requestedCodec=5;
 
-	post("recordQT set %s",codecName);
+  post("recordQT set %s",codecName.c_str());
 
-	for(i=0; i < numCodecContainer; i++)  {
+  for(i=0; i < numCodecContainer; i++)  {
     switch(requestedCodec) {
     case 1: /* PJPEG */
       if (codecContainer[i].ctype == kJPEGCodecType) {
@@ -661,21 +666,21 @@ bool recordQT :: setCodec(const char*codecName)
     }
   }
 	
-    //no codec found
-    return false;
+  //no codec found
+  return false;
 }
 
-bool recordQT :: open(const char*filename)
+bool recordQT :: open(const std::string filename)
 {
   // if recording is going, do not accept a new file name
   // on OSX changing the name while recording won't have any effect
   // but it will give the wrong message at the end if recording
-    if (m_recordStart) {
-        error("recordQT: cannot set filename while recording is running!");
-        return false;
-    }
+  if (m_recordStart) {
+    error("recordQT: cannot set filename while recording is running!");
+    return false;
+  }
 
-  snprintf(m_filename, QT_MAX_FILENAMELENGTH, "%s\0", filename);
+  snprintf(m_filename, QT_MAX_FILENAMELENGTH, "%s\0", filename.c_str());
   m_filename[QT_MAX_FILENAMELENGTH-1]=0;
   post("recordQT: filename '%s'", m_filename);
 
