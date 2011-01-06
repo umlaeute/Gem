@@ -178,7 +178,7 @@ bool recordV4L2 :: putFrame(imageStruct*img)
   }
   m_image.convertFrom(img);
 
-  m_image.upsidedown=!m_image.upsidedown;
+  //  m_image.upsidedown=!m_image.upsidedown;
   m_image.fixUpDown();
 
   int size=m_image.xsize*m_image.ysize*m_image.csize;
