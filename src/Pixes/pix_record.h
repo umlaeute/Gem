@@ -92,14 +92,6 @@ class GEM_EXTERN pix_record : public GemBase
   //////////
   // Automatic writing
   bool            m_automatic;
-
-  ////////
-  // recording start
-  bool			m_recordStart;
-  ////////
-  // recording start
-  bool			m_recordStop;
-	
 	
   //////////
   // a outlet for information like #frames
@@ -111,7 +103,7 @@ class GEM_EXTERN pix_record : public GemBase
   
   //////////
   //
-  int m_minFrames, m_maxFrames;
+  int m_maxFrames;
   
   gem::Properties m_props;
   virtual void	enumPropertiesMess(void);
@@ -125,8 +117,6 @@ class GEM_EXTERN pix_record : public GemBase
   std::vector<gem::record*>m_handles;
   std::vector<gem::record*>m_allhandles;
   virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
-  int m_driver;
-
   //////////
   // static member functions
   static void 	fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);

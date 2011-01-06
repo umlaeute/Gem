@@ -92,13 +92,11 @@ struct pix_record :: PIMPL {
 /////////////////////////////////////////////////////////
 pix_record :: pix_record(int argc, t_atom *argv):
   m_banged(false), m_automatic(true),
-  m_recordStart(0), m_recordStop(0), 
   m_outNumFrames(NULL), m_outInfo(NULL),
   m_currentFrame(-1),
-  m_minFrames(0), m_maxFrames(0),
+  m_maxFrames(0),
   m_recording(false),
   m_handle(NULL),
-  m_driver(-1),
   m_pimpl(new PIMPL())
 {
   if (argc != 0){
@@ -116,7 +114,6 @@ pix_record :: pix_record(int argc, t_atom *argv):
 
 
   if(m_allhandles.size()>0) {
-    m_driver=-1;
   } else {
     error("no video backends found!");
   }
@@ -264,12 +261,6 @@ void pix_record :: render(GemState *state)
   if(!m_handle)return;
   
   if(m_banged||m_automatic){
-#if 0
-    // leftover, fix later!
-    m_handle->m_recordStart=m_recordStart;
-    m_handle->m_recordStop=m_recordStop;
-#endif  
-
     //      if(m_maxFrames != 0 && m_currentFrame >= m_maxFrames) m_recordStop = 1;
     bool success=m_handle->write(&state->image->image);
     m_banged=false;
