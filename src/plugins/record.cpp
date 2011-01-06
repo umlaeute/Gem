@@ -68,6 +68,9 @@ void record :: stop()
 bool record::write(imageStruct*img) {
   if(!m_running)
     return false;
+  if(!img) {
+    return true;
+  }
   m_running=putFrame(img);
   return m_running;
 }
