@@ -221,12 +221,16 @@ void pix_record :: startRecording()
       post("open successfull...");
     } else {
       handle=NULL;
-    }  
+    }
   }
+
+
 
   if(m_handle) {
     m_filename=std::string("");
     m_recording=true;
+  } else {
+    post("unable to open '%s'", m_filename.c_str());
   }
 }
 
@@ -254,6 +258,9 @@ void pix_record :: render(GemState *state)
 {
   //check if state exists
   if(!state || !state->image)return;
+  if(!state->image->image.data){
+    return;
+  }
   if(!m_handle)return;
   
   if(m_banged||m_automatic){
@@ -460,6 +467,12 @@ void pix_record :: codecMess(t_atom *argv)
   } else {
     error("unknown codec '%s", sid.c_str());
   }
+
+  verbose(1, "successfully set codec '%s' and got %d handles: %p", 
+	  sid.c_str(),
+	  m_handles.size(),
+	  m_handle);
+
   if(m_handle)
     enumPropertiesMess();
 }
