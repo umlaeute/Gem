@@ -81,24 +81,27 @@ void recordV4L2 :: close(void)
 
 }
 
-bool recordV4L2 :: open(const char *filename)
+bool recordV4L2 :: open(const std::string filename)
 {
   close();
 
-  m_fd=::open(filename, O_RDWR);
-  if(m_fd<0)return false;
+  m_fd=::open(filename.c_str(), O_RDWR);
+  if(m_fd<0)
+    return false;
 
-	struct v4l2_capability vid_caps;
+  struct v4l2_capability vid_caps;
 
 
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
     perror("VIDIOC_QUERYCAP");
-    close(); return false;
+    close(); 
+    return false;
   }
 
   if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
     verbose(1, "device '%s' is not a video4linux2 output device");
-    close(); return false;
+    close(); 
+    return false;
   }
 
   m_init=false;
@@ -186,35 +189,35 @@ bool recordV4L2 :: putFrame(imageStruct*img)
 }
 
 
+static const std::string s_codec_name=std::string("v4l2");
+static const std::string s_codec_desc=std::string("v4l2 loopback device");
 
-/////////////////////////////////////////////////////////
-// get number of codecs
-//
-/////////////////////////////////////////////////////////
-int recordV4L2 :: getNumCodecs()
-{
-  return 1;
-}
-const char*recordV4L2 :: getCodecName(int i)
-{
-  if(i==0)
-    return gensym("v4l2")->s_name;
-  return NULL;
-}
-const char*recordV4L2 :: getCodecDescription(int i)
-{
-  if(i==0)
-    return gensym("v4l2 loopback")->s_name;
-  return NULL;
-}
+
 
 /////////////////////////////////////////////////////////
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordV4L2 :: setCodec(const char*name)
+bool recordV4L2 :: setCodec(const std::string name)
 {
-  return true;
+  if(name==s_codec_name)
+    return true;
+
+  return false;
+}
+
+/////////////////////////////////////////////////////////
+// get codecs
+//
+/////////////////////////////////////////////////////////
+std::vector<std::string>recordV4L2::getCodecs() {
+  std::vector<std::string>result;
+
+  m_codecdescriptions.clear();
+  result.push_back(s_codec_name);
+  m_codecdescriptions[s_codec_name]=s_codec_desc;
+
+  return result;
 }
 
 #if 0
@@ -402,21 +405,21 @@ static int v4l2_ioctlhandler(unsigned long int cmd, void *arg)
 
 static int signal_loop_init(void)
 {
-	outputfd = open(output_devname, O_RDWR);
-	if(outputfd < 0) {
-		fprintf(stderr, "vloopback: couldn't open output device file %s\n",output_devname);
-		return -1;
-	}
-	pixel_format = VIDEO_PALETTE_RGB32;
-	pixel_depth = 4;
-	converter = palette_get_supported_converter_fromRGB32(pixel_format);
-	vloopback_width = screen_width;
-	vloopback_height = screen_height;
-	max_framesize = vloopback_width * vloopback_height * sizeof(RGB32);
-	max_gbufsize = max_framesize * 2;
-	gbuf = vloopback_mmap(outputfd, max_gbufsize);
-	gbuf_clear();
-	return 0;
+  outputfd = open(output_devname, O_RDWR);
+  if(outputfd < 0) {
+    fprintf(stderr, "vloopback: couldn't open output device file %s\n",output_devname);
+    return -1;
+  }
+  pixel_format = VIDEO_PALETTE_RGB32;
+  pixel_depth = 4;
+  converter = palette_get_supported_converter_fromRGB32(pixel_format);
+  vloopback_width = screen_width;
+  vloopback_height = screen_height;
+  max_framesize = vloopback_width * vloopback_height * sizeof(RGB32);
+  max_gbufsize = max_framesize * 2;
+  gbuf = vloopback_mmap(outputfd, max_gbufsize);
+  gbuf_clear();
+  return 0;
 }
 
 static void *signal_loop(void *arg)

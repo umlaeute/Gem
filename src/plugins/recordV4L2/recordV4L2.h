@@ -60,7 +60,7 @@ namespace gem { class GEM_EXPORT recordV4L2 : public record {
   // open a movie up
   // open the recordV4L2 "filename" (think better about URIs ?)
   // returns TRUE if opening was successfull, FALSE otherwise 
-  virtual bool open(const char *filename);
+  virtual bool open(const std::string filename);
 
   
   //////////
@@ -80,11 +80,12 @@ namespace gem { class GEM_EXPORT recordV4L2 : public record {
    */
   virtual bool putFrame(imageStruct*);
 
-  virtual bool setCodec(const char*name);
+  virtual bool setCodec(const std::string name);
 
-  virtual int getNumCodecs(void);
-  virtual const char*getCodecName(int n);
-  virtual const char*getCodecDescription(int n);
+  /**
+   * get a list of supported codecs (short-form names, e.g. "mjpa")
+   */ 
+  virtual std::vector<std::string>getCodecs(void);
 
  private:
 
