@@ -83,11 +83,11 @@ void recordV4L :: close(void)
 
 }
 
-bool recordV4L :: open(const char *filename)
+bool recordV4L :: open(const std::string filename)
 {
   close();
 
-  m_fd=::open(filename, O_RDWR);
+  m_fd=::open(filename.c_str(), O_RDWR);
   if(m_fd<0)return false;
 
   struct video_picture vid_pic;
@@ -183,31 +183,36 @@ bool recordV4L :: putFrame(imageStruct*img)
 // get number of codecs
 //
 /////////////////////////////////////////////////////////
-int recordV4L :: getNumCodecs()
-{
-  return 1;
-}
-const char*recordV4L :: getCodecName(int i)
-{
-  if(i==0)
-    return gensym("v4l")->s_name;
-  return NULL;
-}
-const char*recordV4L :: getCodecDescription(int i)
-{
-  if(i==0)
-    return gensym("v4l loopback")->s_name;
-  return NULL;
-}
+
+static const std::string s_codec_name=std::string("v4l");
+static const std::string s_codec_desc=std::string("v4l(1) loopback device");
 
 /////////////////////////////////////////////////////////
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordV4L :: setCodec(const char*name)
+bool recordV4L :: setCodec(const std::string name)
 {
-  return true;
+  if(name==s_codec_name)
+    return true;
+
+  return false;
 }
+
+/////////////////////////////////////////////////////////
+// get codecs
+//
+/////////////////////////////////////////////////////////
+std::vector<std::string>recordV4L::getCodecs() {
+  std::vector<std::string>result;
+
+  m_codecdescriptions.clear();
+  result.push_back(s_codec_name);
+  m_codecdescriptions[s_codec_name]=s_codec_desc;
+
+  return result;
+}
+
 
 #if 0
 /* handler for ioctls from the client */
