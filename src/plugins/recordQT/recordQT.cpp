@@ -655,8 +655,8 @@ bool recordQT :: setCodec(const std::string codecName)
       break;
     default:
       /* hmmm... */
-      if(gensym(codecName)==gensym(codecContainer[i].name)) {
-        post("recordQT found '%s'", codecName);
+      if(gensym(codecName.c_str())==gensym(codecContainer[i].name)) {
+        post("recordQT found '%s'", codecName.c_str());
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
