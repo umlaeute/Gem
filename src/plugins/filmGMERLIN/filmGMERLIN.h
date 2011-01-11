@@ -26,6 +26,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 extern "C" {
 # endif
 # include <gmerlin/avdec.h>
+
+# include <gmerlin/bgav_version.h>
+# if BGAV_BUILD >= BGAV_MAKE_BUILD(1,0,2)
+#  define USE_FRAMETABLE
+# else
+#  undef USE_FRAMETABLE
+# endif
+
+
+
 # ifdef __cplusplus
 }
 # endif
@@ -86,8 +96,9 @@ namespace gem { class GEM_EXPORT filmGMERLIN : public film {
   int m_fps_num, m_fps_denum;
 
   int64_t m_next_timestamp;
+#ifdef USE_FRAMETABLE
   gavl_frame_table_t *m_frametable;
-
+#endif
 
   static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
   virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);

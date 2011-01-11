@@ -45,7 +45,9 @@ filmGMERLIN :: filmGMERLIN(int format) : film(format),
                                          m_gconverter(NULL),
                                          m_fps_num(1), m_fps_denum(1),
                                          m_next_timestamp(0),
+#ifdef USE_FRAMETABLE
                                          m_frametable(NULL),
+#endif
 #endif /* GMERLIN */
                                          m_lastFrame(0),
                                          m_doConvert(false)
@@ -80,8 +82,9 @@ filmGMERLIN :: ~filmGMERLIN()
 void filmGMERLIN :: close(void)
 {
   if(m_file)bgav_close(m_file);m_file=NULL;
+#ifdef USE_FRAMETABLE
   if(m_frametable)gavl_frame_table_destroy(m_frametable); m_frametable=NULL;
-
+#endif
   /* LATER: free frame buffers */
 
 }
@@ -245,8 +248,10 @@ bool filmGMERLIN :: open(char *filename, int format)
   m_fps_num=m_gformat->timescale;
   m_fps_denum=m_gformat->frame_duration;
 
+#ifdef USE_FRAMETABLE
   m_frametable=bgav_get_frame_table(m_file, m_track);
 	gavl_frame_table_num_frames (m_frametable);
+#endif
 
   gavl_time_t dur=bgav_get_duration (m_file, m_track);
   m_numFrames = gavl_time_to_frames(m_fps_num, 
@@ -300,10 +305,12 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
       post("track %d contains %d video streams", m_track, numvstreams);
       if(numvstreams) {
         bgav_select_track(m_file, m_track);
+#ifdef USE_FRAMETABLE
         if(m_frametable) {
           gavl_frame_table_destroy(m_frametable);
           m_frametable=bgav_get_frame_table(m_file, m_track);
         }
+#endif
       } else {
         post("track %d does not contain a video-stream: skipping");
       }
@@ -317,12 +324,19 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
 
 
   if(bgav_can_seek(m_file)) {
+#ifdef USE_FRAMETABLE
     if(m_frametable) {
       //  no assumptions about fixed framerate
       int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum, NULL);
       bgav_seek_video(m_file, m_track, seekpos);
       return FILM_ERROR_SUCCESS;
-    } else {
+    } 
+#else
+    if(0) {
+#warning no frametable with outdated version of gmerlin-avdecoder
+    }
+#endif
+    else {
       //  assuming fixed framerate
       /*
         Plaum: "Relying on a constant framerate is not good."
