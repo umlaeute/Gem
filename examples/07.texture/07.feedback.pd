@@ -27,7 +27,7 @@
 #N canvas 89 204 317 179 Gem.init 0;
 #X obj 118 46 loadbang;
 #X obj 118 113 outlet;
-#X msg 118 81 reset \, dimen 512 512;
+#X msg 118 81 reset \, dimen 512 512 \, lighting 1;
 #X connect 0 0 2 0;
 #X connect 2 0 1 0;
 #X restore 485 338 pd Gem.init;
