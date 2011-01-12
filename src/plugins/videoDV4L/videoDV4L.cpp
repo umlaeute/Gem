@@ -444,9 +444,10 @@ void videoDV4L::getProperties(gem::Properties&props) {
         //      int dv_get_timestamp (dv_decoder_t *dv, char *tstprt);
         //      int dv_get_timestamp_int (dv_decoder_t *dv, int *timestamp);
 
-        int ts;
-        if(dv_get_timestamp_int (m_decoder, &ts)>0) {
-          props.set(key, ts);
+        int ts[4];
+        if(dv_get_timestamp_int (m_decoder, ts)>0) {
+          double t=((ts[0]*60+ts[1])*60+ts[2])+ts[3]/100;
+          props.set(key, t);
         }
       } else     if("recording_datetime"==key) {
         //      int dv_get_recording_datetime (dv_decoder_t *dv, char *dtptr);
