@@ -218,6 +218,9 @@ bool videoDV4L :: openDevice(gem::Properties&props){
   }
 
   verbose(1, "DV4L: successfully opened device %d", devnum);
+
+  setProperties(props);
+
   return true;
 }
 
@@ -373,17 +376,107 @@ bool videoDV4L::enumProperties(gem::Properties&readable,
   readable.clear();
   writeable.clear();
 
-  typ=0;
+  typ=DV_QUALITY_BEST;
   writeable.set("quality", typ);
+
+  typ=1; // readables are all boolean 
+  readable.set("PAL", typ);
+  readable.set("is_color", typ);
+  readable.set("50_fields", typ);
+  readable.set("normal", typ);
+  readable.set("wide", typ);
+  readable.set("letterbox", typ);
+  readable.set("progressive", typ);
+
+  typ=0; // quality
+  readable.set("quality", typ);
+
+  typ=0; // timestamp is a big number
+  readable.set("timestamp", typ);
+
+  typ=std::string("YYYY-MM-DD hh:mm:ss");   // format of datetime string
+  readable.set("recording_datetime", typ);
+
   return true;
 }
 void videoDV4L::getProperties(gem::Properties&props) {
+  std::vector<std::string>keys=props.keys();
+  int i;
+
+#if 0
+  /* get properties without decoder */
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    if(0) {
+    }
+  }
+#endif
+
+
+  /* get properties that need decoder */
+  if(m_decoder) {
+
+    for(i=0; i<keys.size(); i++) {
+      std::string key=keys[i];
+      if (0) {
+      } else     if("quality"==key) {
+        props.set(key, m_decoder->quality);
+
+
+        // return value: <0 unknown, 0 no, >0 yes
+      } else     if("PAL"==key) {
+        props.set(key, dv_is_PAL(m_decoder));
+      } else     if("is_color"==key) {
+        props.set(key, dv_frame_is_color(m_decoder));
+      } else     if("50_fields"==key) {
+        props.set(key, dv_system_50_fields(m_decoder));
+      } else     if("normal"==key) {
+        props.set(key, dv_format_normal(m_decoder));
+      } else     if("wide"==key) {
+        props.set(key, dv_format_wide(m_decoder));
+      } else     if("letterbox"==key) {
+        props.set(key, dv_format_letterbox(m_decoder));
+      } else     if("progressive"==key) {
+        props.set(key, dv_is_progressive(m_decoder));
+
+        // return value: 0 not-present, >0 ok
+      } else     if("timestamp"==key) {
+        //      int dv_get_timestamp (dv_decoder_t *dv, char *tstprt);
+        //      int dv_get_timestamp_int (dv_decoder_t *dv, int *timestamp);
+
+        int ts;
+        if(dv_get_timestamp_int (m_decoder, &ts)>0) {
+          props.set(key, ts);
+        }
+      } else     if("recording_datetime"==key) {
+        //      int dv_get_recording_datetime (dv_decoder_t *dv, char *dtptr);
+        //      int dv_get_recording_datetime_tm (dv_decoder_t *dv, struct tm *rec_dt);
+
+        char dt_str[40];
+        char*dtptr=dt_str;
+        if(dv_get_recording_datetime (m_decoder, dtptr)>0) {
+          dt_str[39]=0; // just in case 
+          props.set(key, std::string(dt_str));
+        }
+      } 
+
+
+
+    }
+  }
+
 }
 void videoDV4L::setProperties(gem::Properties&props) {
   double d;
   if(props.get("quality", d)) {
-    int q=static_cast<int>(d);
-    setQuality(q);
+    int quality=static_cast<int>(d);
+    if (quality>=DV_QUALITY_FASTEST && quality<=DV_QUALITY_BEST) {
+      m_quality=quality;
+
+      if(m_decoder) {
+        dv_set_quality(m_decoder, m_quality);
+      }
+    }
   }
 }
 
