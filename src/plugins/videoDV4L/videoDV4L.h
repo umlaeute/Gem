@@ -71,7 +71,7 @@ namespace gem { class GEM_EXPORT videoDV4L : public video {
 #ifdef HAVE_DV
 	////////
 	// open the video-device
-	virtual bool           openDevice();
+	virtual bool           openDevice(gem::Properties&props);
 	virtual void          closeDevice(void);
     
   //////////
@@ -96,6 +96,12 @@ namespace gem { class GEM_EXPORT videoDV4L : public video {
 	virtual bool		setQuality(int);
 
   virtual std::vector<std::string>enumerate(void);
+
+
+  virtual bool enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&writeprops);
+  virtual void getProperties(gem::Properties&readprops);
     
  protected:
 

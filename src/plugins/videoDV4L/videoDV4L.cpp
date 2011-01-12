@@ -151,7 +151,7 @@ int videoDV4L::iec_frame(
 // openDevice
 //
 /////////////////////////////////////////////////////////
-bool videoDV4L :: openDevice(){
+bool videoDV4L :: openDevice(gem::Properties&props){
   DEBUG_WHERE;
   if(m_raw)closeDevice();
 
@@ -364,6 +364,29 @@ std::vector<std::string> videoDV4L::enumerate() {
 
   return result;
 }
+
+
+bool videoDV4L::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  gem::any typ;
+
+  readable.clear();
+  writeable.clear();
+
+  typ=0;
+  writeable.set("quality", typ);
+  return true;
+}
+void videoDV4L::getProperties(gem::Properties&props) {
+}
+void videoDV4L::setProperties(gem::Properties&props) {
+  double d;
+  if(props.get("quality", d)) {
+    int q=static_cast<int>(d);
+    setQuality(q);
+  }
+}
+
 
 #else // ! HAVE_DV
 /////////////////////////////////////////////////////////
