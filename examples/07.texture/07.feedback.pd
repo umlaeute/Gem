@@ -1,4 +1,4 @@
-#N canvas 146 125 630 424 10;
+#N canvas 4 50 630 424 10;
 #X msg 320 121 snap;
 #X obj 320 68 gemhead 15;
 #X obj 39 64 gemhead 10;
@@ -24,12 +24,12 @@
 -1 12700 1;
 #X obj 39 227 colorRGB 1 1 1;
 #X obj 320 92 trigger bang anything;
-#N canvas 87 154 247 179 Gem.init 0;
+#N canvas 89 204 317 179 Gem.init 0;
 #X obj 118 46 loadbang;
-#X msg 118 81 reset;
 #X obj 118 113 outlet;
-#X connect 0 0 1 0;
-#X connect 1 0 2 0;
+#X msg 118 81 reset \, dimen 512 512;
+#X connect 0 0 2 0;
+#X connect 2 0 1 0;
 #X restore 485 338 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
