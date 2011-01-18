@@ -1,4 +1,4 @@
-#N canvas 289 160 710 345 10;
+#N canvas 290 157 710 345 10;
 #X text 54 30 Class: geometric object;
 #X obj 479 47 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -26,45 +26,44 @@
 #X msg 549 244 create;
 #X text 545 223 Create window:;
 #X text 485 29 Example:;
-#X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 65 cnv 15 450 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 8 216 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 9 221 Inlets:;
-#X obj 8 176 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 8 146 cnv 15 450 50 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 175 Arguments:;
-#X text 27 247 Inlet 1: message: draw [line|fill|point];
+#X text 17 145 Arguments:;
 #X text 27 261 Inlet 2: float: size;
 #X text 452 8 GEM object;
 #X text 27 233 Inlet 1: gemlist;
 #X text 9 287 Outlets:;
 #X text 21 300 Outlet 1: gemlist;
 #X text 33 14 Synopsis: [cone];
-#X text 63 187 size of the cone;
 #X text 7 69 Description: Renders a cone.;
 #X text 14 86 The cone object renders a cone at the current position
 with current color. The look of the cone can be changed with the draw
 message \, its size can be changed via the second inlet.;
-#X obj 542 150 cnv 15 100 60 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 542 130 cnv 15 100 80 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X msg 485 55 draw line;
+#X msg 485 65 draw line;
 #X msg 485 86 draw fill;
-#X msg 485 118 draw point;
+#X msg 485 108 draw point;
 #X obj 553 54 gemhead;
-#X floatatom 571 154 5 0 0 0 - - -;
-#X text 609 153 size;
+#X floatatom 569 144 5 0 0 2 size - -;
 #X obj 553 79 rotateXYZ 90 0 0;
-#X floatatom 600 185 5 0 0 0 - - -;
-#X text 583 170 segments;
+#X floatatom 586 171 5 0 0 2 segments - -;
 #X text 27 272 Inlet 3: int: number of segments;
 #X obj 553 189 cone 1;
+#X text 64 180 defaults: 1 10;
+#X text 63 162 size of the cone \, number of segments;
+#X text 27 247 Inlet 1: message: draw [line|fill|point|default];
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
-#X connect 23 0 33 0;
-#X connect 24 0 33 0;
-#X connect 25 0 33 0;
+#X connect 21 0 29 0;
+#X connect 22 0 29 0;
+#X connect 23 0 29 0;
+#X connect 24 0 26 0;
+#X connect 25 0 29 1;
 #X connect 26 0 29 0;
-#X connect 27 0 33 1;
-#X connect 29 0 33 0;
-#X connect 30 0 33 2;
+#X connect 27 0 29 2;
