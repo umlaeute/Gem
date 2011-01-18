@@ -317,12 +317,67 @@ void TextBase :: breakLine(wstring line)
   setModified();
 }
 
+static const uint8_t utf8d[] = {
+  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+
+  070,070,070,070,070,070,070,070,070,070,070,070,070,070,070,070,
+  050,050,050,050,050,050,050,050,050,050,050,050,050,050,050,050,
+  030,030,030,030,030,030,030,030,030,030,030,030,030,030,030,030,
+  030,030,030,030,030,030,030,030,030,030,030,030,030,030,030,030,
+  204,204,188,188,188,188,188,188,188,188,188,188,188,188,188,188,
+  188,188,188,188,188,188,188,188,188,188,188,188,188,188,188,188,
+  174,158,158,158,158,158,158,158,158,158,158,158,158,142,126,126,
+  111, 95, 95, 95, 79,207,207,207,207,207,207,207,207,207,207,207,
+
+  0,1,1,1,8,7,6,4,5,4,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,4,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,4,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,8,7,6,4,5,4,3,2,1,1,1,1,
+
+};
+
+static std::wstring toWstring(const char*str) throw(int){
+  std::wstring result;
+
+  wchar_t unic;
+  uint8_t data, byte, stat = 9;
+
+  int len=0;
+
+  while((byte=*str++)) {
+    data = utf8d[ byte ];
+    stat = utf8d[ 256 + (stat << 4) + (data >> 4) ];
+    byte = (byte ^ (uint8_t)(data << 4));
+
+    unic = (unic << 6) | byte;
+
+    if (!stat) {
+      // unic is now a proper code point, we just print it out.
+      result+=unic;
+      unic = 0;
+    }
+
+    if (stat == 1) {
+      // the byte is not allowed here; the state would have to
+      // be reset to continue meaningful reading of the string
+
+      throw(len);
+    }
+
+    len++;
+  }
+
+  return result;
+}
+
 void TextBase :: textMess(int argc, t_atom *argv)
 {
   m_theText.clear();
   if ( argc < 1 ) {return; }
-
-  char tmp_char[MAXPDSTRING];
 
   wstring line = L"";
   int i=0;
@@ -333,15 +388,25 @@ void TextBase :: textMess(int argc, t_atom *argv)
       string newtext;
       unsigned int j;
       if (A_FLOAT == argv[i].a_type) {
-        atom_string(&argv[i], tmp_char, MAXPDSTRING);
-        newtext = tmp_char;
+        char str[MAXPDSTRING];
+        char*sp=str;
+
+        atom_string(&argv[i], str, MAXPDSTRING);
+        while(*sp) {
+          unsigned char c=*sp++;
+          line+=c;
+        }
       } else {
-        newtext = atom_getsymbol(&argv[i])->s_name;
-      }
-      //line += newtext;
-      for(j=0; j<newtext.length(); j++) {
-        unsigned char c=newtext[j];
-        line += c;
+        char*sp=atom_getsymbol(&argv[i])->s_name;
+        try {
+          std::wstring ws=toWstring(sp);
+          line+=ws;
+        } catch (int i) {
+          while(*sp) {
+            unsigned char c=*sp++;
+            line+=c;
+          }
+        }
       }
       if(argc-1>i)line += L' ';
     }
