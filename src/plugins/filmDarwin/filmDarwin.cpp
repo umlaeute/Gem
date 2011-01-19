@@ -140,16 +140,37 @@ bool filmDarwin :: open(char *filename, int format)
   post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
   post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
   post("movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
- 
+
+
+#if 1
+  switch(m_wantedFormat) {
+  case GL_YCBCR_422_APPLE:
+    m_image.image.format = m_wantedFormat;
+    hints |= hintsHighQuality | hintsDeinterlaceFields;
+    pixelformat=k422YpCbCr8CodecType;
+    break;
+  default:
+    m_image.image.format = GL_BGRA_EXT;
+    hints |= hintsHighQuality;
+    pixelformat=k32ARGBPixelFormat;
+    break;
+  }
+  m_image.image.setCsizeByFormat();
+#else
+#warning add YUV support
+
   m_image.image.csize = 4;
   m_image.image.format = GL_BGRA_EXT;
   m_image.image.type = GL_UNSIGNED_INT_8_8_8_8_REV;
+  hints |= hintsHighQuality;
+  pixelformat=k32ARGBPixelFormat;
+#endif
 
   m_image.image.data = new unsigned char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize]; 
   m_rowBytes = m_image.image.xsize * m_image.image.csize;
-  SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+  SetMoviePlayHints(m_movie, hints, hints);
   err = QTNewGWorldFromPtr(	&m_srcGWorld, 
-                            k32ARGBPixelFormat,
+                            pixelformat,
                             &m_srcRect, 
                             NULL, 
                             NULL, 
