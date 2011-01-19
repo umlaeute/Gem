@@ -82,22 +82,23 @@ bool filmDarwin :: open(char *filename, int format)
   long		m_rowBytes;
   OSType		whichMediaType = VisualMediaCharacteristic;
   short		flags = nextTimeMediaSample + nextTimeEdgeOK;
+  short	refnum = 0;
   
   if (!filename[0]) {
-    post("pix_film:  no filename passed");
+    //post("pix_film:  no filename passed");
+    goto unsupported;
   } else { 
     err = ::FSPathMakeRef((const UInt8*)filename, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
     if (err) {
-      error("GEM: pix_film: Unable to find file: %#s", theFSSpec.name);
-      //goto unsupported;
+      //error("GEM: pix_film: Unable to find file: %#s", theFSSpec.name);
+      goto unsupported;
     }
   }
   
-  short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    error("GEM: pix_film: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    //error("GEM: pix_film: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
@@ -156,7 +157,7 @@ bool filmDarwin :: open(char *filename, int format)
                             m_image.image.data, 
                             m_rowBytes);
   if (err) {
-    error("GEM: pix_film: Couldn't make QTNewGWorldFromPtr %d", err);
+    //error("GEM: pix_film: Couldn't make QTNewGWorldFromPtr %d", err);
     goto unsupported;
   }
   m_movieTime = 0;
@@ -167,7 +168,7 @@ bool filmDarwin :: open(char *filename, int format)
 #endif /*  HAVE_CARBONQUICKTIME */
   goto unsupported;
  unsupported:
-  post("Darwin: unsupported!");
+  //post("Darwin: unsupported!");
   return false;
 }
 
@@ -195,9 +196,15 @@ pixBlock* filmDarwin :: getFrame(){
   OSType	whichMediaType = VisualMediaCharacteristic;
   TimeValue	duration;
 
+  if (IsMovieDone(m_movie)) {
+    GoToBeginningOfMovie(m_movie);
+    return NULL;
+  }
+    
   
   //check for last frame to loop the clip
   if (m_curFrame >= m_numFrames){
+    return NULL;
     m_curFrame = 0;
     m_movieTime = 0;
   }
@@ -226,6 +233,7 @@ pixBlock* filmDarwin :: getFrame(){
     flags = 0;
     flags = nextTimeStep;
     // m_curFrame++;
+
   }else{
   }
 
@@ -233,14 +241,6 @@ pixBlock* filmDarwin :: getFrame(){
   SetMovieTimeValue(m_movie, m_movieTime); 
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
 
-  if (IsMovieDone(m_movie)) {
-    GoToBeginningOfMovie(m_movie);
-    flags |= nextTimeEdgeOK;
-    m_curFrame = 0;
-
-    return NULL;
-  }
-    
   //  m_image.image.data = (unsigned char *)m_baseAddr;
   m_image.newimage=1;
 #endif /*  HAVE_CARBONQUICKTIME */
