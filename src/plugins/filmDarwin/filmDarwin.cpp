@@ -195,16 +195,16 @@ pixBlock* filmDarwin :: getFrame(){
   OSType	whichMediaType = VisualMediaCharacteristic;
   TimeValue	duration;
 
-  m_movieTime = static_cast<long>(static_cast<double>(m_curFrame) * durationf);
-
-  m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
-
-    
+  
   //check for last frame to loop the clip
   if (m_curFrame >= m_numFrames){
     m_curFrame = 0;
     m_movieTime = 0;
   }
+
+  m_movieTime = static_cast<long>(static_cast<double>(m_curFrame) * durationf);
+
+  m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
     
   //check for -1
   if (m_movieTime < 0) m_movieTime = 0;
@@ -232,6 +232,14 @@ pixBlock* filmDarwin :: getFrame(){
   // set the time for the frame and give time to the movie toolbox	
   SetMovieTimeValue(m_movie, m_movieTime); 
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+
+  if (IsMovieDone(m_movie)) {
+    GoToBeginningOfMovie(m_movie);
+    flags |= nextTimeEdgeOK;
+    m_curFrame = 0;
+
+    return NULL;
+  }
     
   //  m_image.image.data = (unsigned char *)m_baseAddr;
   m_image.newimage=1;
