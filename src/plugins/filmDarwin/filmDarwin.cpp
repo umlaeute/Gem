@@ -83,6 +83,8 @@ bool filmDarwin :: open(char *filename, int format)
   OSType		whichMediaType = VisualMediaCharacteristic;
   short		flags = nextTimeMediaSample + nextTimeEdgeOK;
   short	refnum = 0;
+  OSType pixelformat=0;
+  long hints;
   
   if (!filename[0]) {
     //post("pix_film:  no filename passed");
@@ -141,8 +143,6 @@ bool filmDarwin :: open(char *filename, int format)
   post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
   post("movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
 
-  OSType pixelformats=0;
-  long hints;
 #if 1
   switch(m_wantedFormat) {
   case GL_YCBCR_422_APPLE:
