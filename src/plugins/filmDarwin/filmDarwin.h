@@ -78,31 +78,7 @@ namespace gem { class GEM_EXPORT filmDarwin : public film {
   TimeValue		m_timeScale;
   TimeValue		duration;
 #endif //HAVE_CARBONQUICKTIME
-
-  //////////
-  // frame data
-  unsigned char*m_frame;  /* this points to the main texture (might be black) */
-  unsigned char*m_data;   /* this points always to the real data */
-
-//  pixBlock    	m_pixBlock;
-  imageStruct   m_imageStruct;
-  
-
-  int		m_xsize;
-  int		m_ysize;
-  int           m_csize;
-
-  int           m_format;
-
-  bool          m_film; // are we in film- or in movie-mode
-
-  //////////
-  // a outlet for information like #frames and "reached end"
-  t_outlet     *m_outNumFrames;
-  t_outlet     *m_outEnd;
-  
-  int m_auto;
- // int m_reqFrame;
+  double		durationf;
 
 };};
 

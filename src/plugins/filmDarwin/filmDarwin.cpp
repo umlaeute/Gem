@@ -33,7 +33,11 @@ REGISTER_FILMFACTORY("Darwin", filmDarwin);
 //
 /////////////////////////////////////////////////////////
 
-filmDarwin :: filmDarwin(int format) : film(format) {
+filmDarwin :: filmDarwin(int format) : film(format),
+#ifdef HAVE_CARBONQUICKTIME
+#endif
+                                       durationf(0.)
+{
   static bool first_time=true;
   if (first_time) {
 #ifdef HAVE_CARBONQUICKTIME
@@ -113,11 +117,19 @@ bool filmDarwin :: open(char *filename, int format)
   post("Movie duration = %d timescale = %d timebase = %d",movieDur,
        movieScale,
        (long)GetMovieTimeBase(m_movie));
-  
+#if 1
+  Track movieTrack = GetMovieIndTrackType(m_movie,
+                                    1,
+                                    VideoMediaType,
+                                    movieTrackMediaType);  //get first video track
+  Media trackMedia = GetTrackMedia(movieTrack);
+  m_numFrames= GetMediaSampleCount(trackMedia);
+  durationf = static_cast<double>(movieDur)/static_cast<double>(m_numFrames);
+#else
    GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
                                fixed1, NULL, &duration);
   m_numFrames = movieDur/duration;
-
+#endif
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
   OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
@@ -182,6 +194,11 @@ pixBlock* filmDarwin :: getFrame(){
   short 	flags = nextTimeStep;
   OSType	whichMediaType = VisualMediaCharacteristic;
   TimeValue	duration;
+
+  m_movieTime = static_cast<long>(static_cast<double>(m_curFrame) * durationf);
+
+  m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
+
     
   //check for last frame to loop the clip
   if (m_curFrame >= m_numFrames){
