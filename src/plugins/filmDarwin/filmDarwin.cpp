@@ -229,7 +229,6 @@ pixBlock* filmDarwin :: getFrame(){
   }else{
   }
 
-  post("filmDarwin: curFrame %d",m_curFrame);
   // set the time for the frame and give time to the movie toolbox	
   SetMovieTimeValue(m_movie, m_movieTime); 
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
