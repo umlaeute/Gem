@@ -21,9 +21,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # define HAVE_UNICAP
 #endif
 
-
 #ifdef HAVE_UNICAP
 # include <unicap.h>
+# include "Base/ThreadMutex.h"
 #endif
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -63,8 +63,8 @@ namespace gem { class GEM_EXPORT videoUNICAP : public video {
 
   //////////
   // get the next frame
-  virtual pixBlock    *getFrame();
-
+  virtual pixBlock    *getFrame(void);
+  virtual void releaseFrame(void);
 
   //////////
   // Set the video properties
@@ -82,14 +82,15 @@ namespace gem { class GEM_EXPORT videoUNICAP : public video {
   std::map<std::string, std::vector<unsigned int> >m_name2devices;
   unicap_handle_t m_handle;
 
-  void gotFrame (unicap_event_t event, 
-	    unicap_handle_t handle, 
-	    unicap_data_buffer_t * buffer);
+  void newFrame (unicap_handle_t handle, 
+		 unicap_data_buffer_t * buffer);
 
-  unsigned int m_frameCount;
+
+  gem::thread::Mutex mutex;
+
 
   private:
-  static void gotFrameCB (unicap_event_t event, 
+  static void newFrameCB (unicap_event_t event, 
 			  unicap_handle_t handle, 
 			  unicap_data_buffer_t * buffer, 
 			  void *usr_data);
