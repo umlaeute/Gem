@@ -110,6 +110,11 @@ if test -d "$srcdir/videoSGI"; then
   AC_CONFIG_SUBDIRS([videoSGI])
 fi
 
+### video: UNICAP
+if test -d "$srcdir/videoUNICAP"; then
+  AC_CONFIG_SUBDIRS([videoUNICAP])
+fi
+
 ### video: V4L
 if test -d "$srcdir/videoV4L"; then
   AC_CONFIG_SUBDIRS([videoV4L])
