@@ -398,14 +398,28 @@ bool videoUNICAP :: enumProperties(gem::Properties&readable,
   return true;
 }
 void videoUNICAP :: getProperties(gem::Properties&props) {
+  if(!m_handle)return;
+  unicap_status_t status=0;
+
   std::vector<std::string> keys=props.keys();
+
+  bool getwidth=false, getheight=false;
   int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     unicap_property_t prop;
     strncpy(prop.identifier, key.c_str(), 128);
 
-    unicap_status_t status= unicap_get_property(m_handle, &prop );
+    if("width"==key) {
+      getwidth=true;
+      continue;
+    }
+    if("height"==key) {
+      getheight=true;
+      continue;
+    }
+
+    status= unicap_get_property(m_handle, &prop );
 
     if(SUCCESS(status)) {
       switch(prop.type) {
@@ -426,21 +440,53 @@ void videoUNICAP :: getProperties(gem::Properties&props) {
   }
 
 
+  if(getwidth||getheight) {
+    unicap_format_t fmt;
+    status=unicap_get_format(m_handle, &fmt);
+    if(SUCCESS(status)) {
+      if(getwidth )props.set("width" , fmt.size.width);
+      if(getheight)props.set("height", fmt.size.height);
+    }
+  }
+
 
 }
 void videoUNICAP :: setProperties(gem::Properties&props) {
+  if(!m_handle)
+    return;
+
+  unicap_status_t status = 0;
+  bool restart=false;
+
+  unsigned int width=0, height=0;
+
   std::vector<std::string> keys=props.keys();
   int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
+
+    double d=0;
+    std::string s;
+
+
+    if("width"==key) {
+      if(props.get(key, d)) {
+	width=d;
+      }
+      continue;
+    }
+    if ("height"==key) {
+      if(props.get(key, d)) {
+	height=d;
+      }
+      continue;
+    }
+
     unicap_property_t prop;
     strncpy(prop.identifier, key.c_str(), 128);
-    unicap_status_t status= unicap_get_property(m_handle, &prop );
+    status=unicap_get_property(m_handle, &prop );
 
     if(SUCCESS(status)) {
-      double d=0;
-      std::string s;
-
       switch(prop.type) {
       case UNICAP_PROPERTY_TYPE_VALUE_LIST: 
       case UNICAP_PROPERTY_TYPE_FLAGS: 
@@ -478,6 +524,28 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
       }
 
     }
+  }
+
+  if(width>0 || height>0)
+    restart=true;
+
+
+
+  while(restart) { restart=false;
+    unicap_format_t fmt;
+    status=unicap_get_format(m_handle, &fmt);
+    if(!SUCCESS(status))break;
+
+    bool running=stop();
+
+    if(width>0)
+      fmt.size.width=width;
+    if(height>0)
+      fmt.size.height=height;
+
+    status=unicap_set_format(m_handle, &fmt);
+
+    if (running)start();
   }
 }
 
