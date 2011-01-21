@@ -28,8 +28,8 @@ using namespace gem;
 #define debugPost
 #define debugThread
 
-#if 1
-# undef debugPost
+#if 0
+# undef debugPost 
 # define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
 #endif
 
@@ -253,9 +253,10 @@ bool videoUNICAP :: startTransfer()
   format.buffer_type = UNICAP_BUFFER_TYPE_SYSTEM; 
   if (!SUCCESS (unicap_set_format (m_handle, &format))) {
     verbose(1, "failed to set format (sysbuf)");
-
+    
     return false;
   }
+  
   status=unicap_register_callback (m_handle, 
 			   UNICAP_EVENT_NEW_FRAME, 
 			   (unicap_callback_t) newFrameCB,
@@ -393,6 +394,8 @@ bool videoUNICAP :: enumProperties(gem::Properties&readable,
       readable.set(prop.identifier, typ);
       if(!(prop.flags & UNICAP_FLAGS_READ_ONLY))
 	writeable.set(prop.identifier, typ);
+
+#warning check UNICAP_FLAGS_ON_OFF & UNICAP_FLAGS_ONE_PUSH
     }
   }
   return true;
