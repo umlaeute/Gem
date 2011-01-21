@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	- locks a thread
+	- locks a thread (wrapper around pthread_mutex)
 
     Copyright (c) 2011 IOhannes m zmoelnig. forum::f-bür::umläute. IEM. zmoelnig@iem.at-A
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -10,21 +10,21 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEM_THREADLOCK_H_
-#define INCLUDE_GEM_THREADLOCK_H_
+#ifndef INCLUDE_GEM_THREADMUTEX_H_
+#define INCLUDE_GEM_THREADMUTEX_H_
 
 
 #include "Base/GemExportDef.h"
 
 namespace gem { 
-  namespace threading {
-    GEM_EXTERN class Lock {
+  namespace thread {
+    GEM_EXTERN class Mutex {
     private:
       class PIMPL;
       PIMPL*m_pimpl;
     public:
-      Lock(void);
-      virtual ~Lock(void);
+      Mutex(void);
+      virtual ~Mutex(void);
       
       void lock   (void);
       void unlock (void);
@@ -32,4 +32,4 @@ namespace gem {
     };
   };
 };
-#endif /* INCLUDE_GEM_THREADLOCK_H_ */
+#endif /* INCLUDE_GEM_THREADMUTEX_H_ */
