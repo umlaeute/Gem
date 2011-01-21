@@ -61,10 +61,6 @@ namespace gem { class GEM_EXPORT videoUNICAP : public video {
   // [out] int - returns 0 if bad
   virtual bool	   	stopTransfer(void);
 
-  //////////////////
-  // restart the transfer if it is currently running
-  virtual bool          restartTransfer(void);
-
   //////////
   // get the next frame
   virtual pixBlock    *getFrame();
@@ -82,6 +78,21 @@ namespace gem { class GEM_EXPORT videoUNICAP : public video {
   virtual void getProperties(gem::Properties&readprops);
 
  protected:
+  std::vector<unicap_device_t>m_devices;
+  std::map<std::string, std::vector<unsigned int> >m_name2devices;
+  unicap_handle_t m_handle;
+
+  void gotFrame (unicap_event_t event, 
+	    unicap_handle_t handle, 
+	    unicap_data_buffer_t * buffer);
+
+  unsigned int m_frameCount;
+
+  private:
+  static void gotFrameCB (unicap_event_t event, 
+			  unicap_handle_t handle, 
+			  unicap_data_buffer_t * buffer, 
+			  void *usr_data);
 
 #endif /* HAVE_VIDEO4LINUX2 */
 
