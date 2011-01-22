@@ -98,6 +98,7 @@ void pix_video :: startRendering(){
       error("no valid video backend found");
       return;
     }
+    return;
   }
 
   verbose(1, "starting transfer");
