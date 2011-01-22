@@ -27,6 +27,12 @@ Pixes:
 	pix_rtx: flickering on OSX/ppc in mode#0; 
 		how to prevent execessive memory usage?
 
+	videopipes:
+		V4L
+		V4L2
+		AVIsynth/frameserver (http://www.debugmode.com/frameserver/)
+		Syphon (http://syphon.v002.info/)
+
 
 
 
