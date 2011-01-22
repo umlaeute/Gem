@@ -70,6 +70,8 @@ namespace gem { class GEM_EXPORT videoUNICAP : public video {
   // Set the video properties
   virtual bool	    	setColor(int);
 
+  virtual bool defaultFormat(void);
+
   virtual std::vector<std::string>enumerate(void);
 
   virtual bool enumProperties(gem::Properties&readable,
