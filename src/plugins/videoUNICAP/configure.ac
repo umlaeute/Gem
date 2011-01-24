@@ -21,14 +21,14 @@ AC_LANG(C++)
 GEM_ARG_WITH(unicap, [video input], [force])
 
 if test "x$with_unicap" != "xno"; then
-  AC_CHECK_HEADER(uni
+ GEM_CHECK_LIB(libunicap, unicap, unicap_check_version,,,,[video input])
+
+  AC_CHECK_HEADER([unicap/unicap.h],
                   [
                     AC_DEFINE([HAVE_UNICAP], [], [video capturing using UNICAP])
                     have_unicap="yes"
                   ],[have_unicap="no"])
 
-# these two are quite the same...
- GEM_CHECK_LIB(libunicap, unicap, unicap_check_version,,,,[video input])
 fi
 
 
