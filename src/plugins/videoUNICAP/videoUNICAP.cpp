@@ -53,6 +53,8 @@ using namespace gem;
 				  ((((unsigned char*)a)[3])<< 0))
 */
 
+#ifdef HAVE_UNICAP
+
 static void post_fmt(unicap_format_t*fmt) {
   if(!fmt)return;
   debugPost("format %dx%d+%d+%d '%s' -> %d (%d[%d]/%d)",
@@ -73,7 +75,6 @@ static void post_fmt(unicap_format_t*fmt) {
 // Constructor
 //
 /////////////////////////////////////////////////////////
-#ifdef HAVE_UNICAP
 
 #include <sys/stat.h>
 
