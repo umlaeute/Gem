@@ -80,9 +80,11 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     class FFPlugin;
     FFPlugin*m_plugin;
 
+    bool m_canopen;
     std::vector<t_inlet*>m_inlet;
 
     void parmMess(int param, t_atom*value);
+    void parmMess(std::string param, t_atom*value);
 
     void openMess(t_symbol*name);
     void closeMess(void);

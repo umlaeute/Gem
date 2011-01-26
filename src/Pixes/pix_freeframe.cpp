@@ -52,12 +52,13 @@
 
 class pix_freeframe::FFPlugin {
 public:
-  static std::string nchar2str(const char*str, unsigned int len) {
+  static std::string nchar2str(const char*str, const unsigned int len) {
     std::string result;
-    result.assign(str, len);
+    size_t l=strnlen(str, len);
+    result.assign(str, l);
     return result;
   }
-  static std::string nchar2str(void*str, unsigned int len) {
+  static std::string nchar2str(void*str, const unsigned int len) {
     return nchar2str(reinterpret_cast<const char*>(str), len);
   }
 
@@ -244,7 +245,6 @@ private:
   bool open(std::string name, const t_canvas*canvas) {
     bool loud=true;
     const char*hookname="plugMain";
-    std::cout << "opening : "<<name<<std::endl;
     if(name.empty())
       return false;
 
@@ -350,7 +350,6 @@ private:
 #else
 # error no way to load dynamic linked libraries on this OS
 #endif
-
 
     m_plugin=plugmain;
     return (NULL!=m_plugin);
@@ -538,6 +537,7 @@ private:
       default:
         val = def.FloatValue;
       }
+      std::cout << "param#"<<i<<": "<<name<<std::endl;
       m_parameterNames.push_back(name);
       m_parameter.set(name, val);
     }
@@ -545,25 +545,19 @@ private:
   }
 
   bool init_(void) {
-    std::cout << "initialize: "<<std::endl;
     if(!initialize_()) {
-      std::cout << "failed"<<std::endl;
       return false;
     }
 
-    std::cout << "caps: " << std::endl;
     bool rgb = (FF_SUPPORTED==getPluginCaps_( FF_CAP_24BITVIDEO ));
     bool rgba= (FF_SUPPORTED==getPluginCaps_( FF_CAP_32BITVIDEO ));
     if(rgb || rgba) {
       m_rgba=rgba;
     } else {
-      std::cout << "no 24 nor 32 bit" << std::endl;
-      //return false;
-      m_rgba=true;
+      return false;
     }
     m_cancopy =  (FF_SUPPORTED==getPluginCaps_( FF_CAP_PROCESSFRAMECOPY ));
 
-    std::cout << "getInfo: "<<std::endl;
     getInfo_();
     getExtendedInfo_();
     
@@ -581,7 +575,6 @@ public:
     , m_majorVersion(0)
     , m_minorVersion(0)              
   {
-    std::cout << "open: "<<name<<std::endl;
     if(!open(name, canvas))
       return;
 
@@ -726,12 +719,17 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_freeframe,  t_symbol *, A_DEFSYM)
 pix_freeframe :: pix_freeframe(t_symbol*s)
 #ifndef DONT_WANT_FREEFRAME
   : m_plugin(NULL)
+  , m_canopen(false)
 #endif /* DONT_WANT_FREEFRAME */
 {
 #ifdef DONT_WANT_FREEFRAME
   throw(GemException("Gem has been compiled without FreeFrame-support!"));
 #else
   int can_rgba=0;
+  if(!s || s==&s_) {
+    m_canopen=true;
+    return;
+  }
   char *pluginname = s->s_name;
 
   m_plugin = new FFPlugin(pluginname, getCanvas());
@@ -789,6 +787,12 @@ void pix_freeframe :: closeMess()
 
 void pix_freeframe :: openMess(t_symbol*s)
 {
+
+  if(!m_canopen) {
+    error("this instance cannot dynamically change the plugin");
+    return;
+  }
+
   std::string pluginname = s->s_name;
   if(m_plugin) {
     delete m_plugin;
@@ -871,15 +875,13 @@ void pix_freeframe :: processImage(imageStruct &image)
 }
 
 
-void pix_freeframe :: parmMess(int param, t_atom *value){
+void pix_freeframe :: parmMess(std::string key, t_atom *value){
   if(!m_plugin) {
     error("no instance of plugin available");
     return;
   }
-#if 1
-  std::string key=m_plugin->getParameterName(param);
   if(key.empty()) {
-    post("unkown key %d", param);
+    error("unkown key %d", key.c_str());
     return;
   }
   gem::Properties props;
@@ -898,27 +900,17 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
   }
   props.set(key, v);
   m_plugin->setParameters(props);
-
-
-#else
-  SetParameterStruct sps;
-  sps.ParameterNumber = param;
-  FFMixed invalue;
-  invalue.UIntValue = param;
-  switch (m_plugin(FF_GETPARAMETERTYPE, invalue, 0).UIntValue){
-  case FF_TYPE_EVENT:
-    sps.NewParameterValue.UIntValue=1;
-    break;
-  case FF_TYPE_TEXT:
-    sps.NewParameterValue.PointerValue=atom_getsymbol(value)->s_name;
-    break;
-  default:
-    sps.NewParameterValue.FloatValue==atom_getfloat(value);
-  }
-  invalue.PointerValue=&sps;
-  m_plugin(FF_SETPARAMETER, invalue, m_instance);
-  #endif
   setModified();
+}
+
+
+void pix_freeframe :: parmMess(int param, t_atom *value){
+  if(!m_plugin) {
+    error("no instance of plugin available");
+    return;
+  }
+  std::string key=m_plugin->getParameterName(param);
+  parmMess(key, value);
 }
 
 
@@ -970,13 +962,18 @@ static int freeframe_loader(t_canvas *canvas, char *classname) {
 void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 {
   class_addanything(classPtr, reinterpret_cast<t_method>(&pix_freeframe::parmCallback));
+  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_freeframe::openCallback), gensym("open"), A_SYMBOL, A_NULL);
   gem_register_loader(freeframe_loader);
 }
 
 void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
 #ifndef DONT_WANT_FREEFRAME
-  int i = atoi(s->s_name+1);
-  GetMyClass(data)->parmMess(i, (argc>0)?argv:NULL);
+  if('#'==s->s_name[0]) {
+    int i = atoi(s->s_name+1);
+    GetMyClass(data)->parmMess(i, (argc>0)?argv:NULL);
+  } else {
+    GetMyClass(data)->parmMess(std::string(s->s_name), (argc>0)?argv:NULL);
+  }
 #endif /* DONT_WANT_FREEFRAME */
 }
 
