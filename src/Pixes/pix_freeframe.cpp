@@ -17,9 +17,15 @@
 //
 /////////////////////////////////////////////////////////
 
+#define DEBUGX() ::post("%s:%d (%s)", __FILE__, __LINE__, __FUNCTION__)
+
+#include <iostream>
+
 #include "pix_freeframe.h"
 #include "Base/GemException.h"
 #include "Base/GemLoaders.h"
+
+#include "Base/Properties.h"
 
 #ifndef DONT_WANT_FREEFRAME
 
@@ -44,59 +50,221 @@
 # include <unistd.h>
 #endif /* __APPLE__ */
 
-/*
- * here comes some magic:
- *
- * on linux, "m_plugmain" is a pointer to the "plugMainType"-union, 
- *    so we can access the values via .-notation
- * on windows, "m_plugmain" is a pointer to "FF_Main_FuncPtr", which is "void*",
- *    so we have to cast
- * on osX i am not sure, but i guess it is the same as on windows
- *
- * the magic:
- *   "T_FFPLUGMAIN" is the type of m_plugmain (whatever it actually is)
- *   "FF_PLUGMAIN_...()" are some helper-functions, that do the actual union-access (or cast)
- *
- * this should keep the code fairly simple
- */
-
-# ifdef __linux__
-#  define FF_PLUGMAIN_INT(x) (x).ivalue
-#  define FF_PLUGMAIN_STR(x) (x).svalue
-#  define FF_PLUGMAIN_PIS(x) (x).PISvalue
-# else
-#  define FF_PLUGMAIN_INT(x) reinterpret_cast<int>(x)
-#  define FF_PLUGMAIN_STR(x) reinterpret_cast<char*>(x)
-#  define FF_PLUGMAIN_PIS(x) reinterpret_cast<PlugInfoStruct*>(x)
-# endif
+#warning check instance
+#define CHECKINSTANCE(x) (NULL!=x)
 
 
+class pix_freeframe::FFPlugin {
+public:
+  static std::string nchar2str(const char*str, unsigned int len) {
+    std::string result;
+    result.assign(str, len);
+    return result;
+  }
+  static std::string nchar2str(void*str, unsigned int len) {
+    return nchar2str(reinterpret_cast<const char*>(str), len);
+  }
 
-/////////////////////////////////////////////////////////
-// plugin-loader
-//
-// LATER: check whether we already have loaded THIS plugin
-//
-// note: on linux we can load the same dll multiple times, so we don't need this check
-// LATER check the other OS's
-//
-/////////////////////////////////////////////////////////
-static T_FFPLUGMAIN ff_loadplugin(const t_glist*ccanvas, char*pluginname, int*can_rgba, bool loud=true)
-{
-  t_canvas*canvas=const_cast<t_canvas*>(ccanvas);
-  const char*hookname="plugMain";
-  if(pluginname==NULL)return NULL;
+private:
+  class FFInstance {
+    FFInstanceID    m_instance;
+    FF_Main_FuncPtr m_plugin;
+
+    static inline FFUInt32 csize2depth(unsigned int csize) {
+      switch(csize) {
+      case(4):
+        return FF_CAP_32BITVIDEO;
+      case(3):
+        return FF_CAP_24BITVIDEO;
+      }
+      return 0;
+    }
+    static inline FFUInt32 updown2orientation(bool updown) {
+      return (updown?1:2);
+    }
+
+    unsigned int m_width, m_height, m_depth, m_orientation;
+
+    void create(VideoInfoStruct&vis) {
+      if(!m_plugin) {
+        throw(GemException("no plugin loaded"));
+      }
+      FFMixed input;
+      input.PointerValue = &vis;
+      FFMixed result = m_plugin(FF_INSTANTIATE, input, m_instance);
+      if(FF_FAIL==result.UIntValue)
+        throw(GemException("couldn't instaniate"));
+
+      m_instance = result.PointerValue;
+
+      if(NULL==m_instance)
+        throw(GemException("could not instaniate"));
+
+      m_width =vis.FrameWidth;
+      m_height=vis.FrameHeight;
+      m_orientation=vis.Orientation;
+      m_depth =vis.BitDepth;
+      
+    }
+
+  public:
+    FFInstance(FF_Main_FuncPtr plugin, VideoInfoStruct&vis) 
+      : m_instance(NULL)
+      , m_plugin(plugin) 
+    {
+      create(vis);
+    }
+    FFInstance(FF_Main_FuncPtr plugin, imageStruct&image) 
+      : m_instance(NULL)
+      , m_plugin(plugin) 
+    {
+
+      VideoInfoStruct vis;
+      vis.FrameWidth =image.xsize;
+      vis.FrameHeight=image.ysize;
+      vis.BitDepth   = csize2depth(image.csize);
+      if(0==vis.BitDepth) throw(GemException("unsupported colorspace"));
+      vis.Orientation=updown2orientation(image.upsidedown);
+      create(vis);
+    }
+    virtual ~FFInstance(void) {
+      call(FF_DEINSTANTIATE);
+    }
+
+    FFMixed call(FFUInt32 funcode, FFMixed value) {
+      FFMixed result;
+      result=m_plugin(funcode, value, m_instance);
+      return result;
+    }
+    FFMixed call(FFUInt32 funcode, FFUInt32 value) {
+      FFMixed mixed;
+      mixed.UIntValue=value;
+      return call(funcode, mixed);
+    }
+    FFMixed call(FFUInt32 funcode, FFFloat32 value) {
+      FFMixed mixed;
+      mixed.FloatValue=value;
+      return call(funcode, mixed);
+    }
+    FFMixed call(FFUInt32 funcode, void* value) {
+      FFMixed mixed;
+      mixed.PointerValue=value;
+      return call(funcode, mixed);
+    }
+    FFMixed call(FFUInt32 funcode) {
+      FFMixed mixed;
+      return call(funcode, mixed);
+    }
+
+    bool check(const imageStruct&img) {
+      return ( 
+              (img.xsize == m_width ) &&
+              (img.ysize == m_height) &&
+              (csize2depth       (img.csize     ) == m_depth ) &&
+              (updown2orientation(img.upsidedown) == m_orientation)
+              );
+    }
+    
+
+
+  };
+
+
+  FF_Main_FuncPtr m_plugin;
+  FFInstance     *m_instance;
+
+  std::string m_name;
+  std::string m_id;
+
+  std::string m_description;
+  std::string m_about;
+
+  gem::Properties m_parameter;
+  std::vector<std::string>m_parameterNames;
+  bool m_rgba;
+  unsigned int m_type;
+  unsigned int m_majorVersion, m_minorVersion;
+  bool m_cancopy;
+
+  FFMixed callInstance(FFUInt32 funcode, FFMixed value) {
+    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+    return m_instance->call(funcode, value);
+  }
+  FFMixed callInstance(FFUInt32 funcode, FFUInt32 value) {
+    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+    return m_instance->call(funcode, value);
+  }
+  FFMixed callInstance(FFUInt32 funcode, FFFloat32 value) {
+    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+    return m_instance->call(funcode, value);
+  }
+  FFMixed callInstance(FFUInt32 funcode, void* value) {
+    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+    return m_instance->call(funcode, value);
+  }
+  FFMixed callInstance(FFUInt32 funcode) {
+    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+    return m_instance->call(funcode);
+  }
+
+  FFMixed call(FFUInt32 funcode, FFMixed value, FFInstanceID id) {
+    return m_plugin(funcode, value, id);
+  }
+
+  FFMixed callGlobal(FFUInt32 funcode, FFMixed value) {
+    return call(funcode, value, NULL);
+  }
+  FFMixed callGlobal(FFUInt32 funcode, FFUInt32 value) {
+    FFMixed mixed;
+    mixed.UIntValue=value;
+    return callGlobal(funcode, mixed);
+  }
+  FFMixed callGlobal(FFUInt32 funcode, FFFloat32 value) {
+    FFMixed mixed;
+    mixed.FloatValue=value;
+    return callGlobal(funcode, mixed);
+  }
+  FFMixed callGlobal(FFUInt32 funcode, void* value) {
+    FFMixed mixed;
+    mixed.PointerValue=value;
+    return callGlobal(funcode, mixed);
+  }
+  FFMixed callGlobal(FFUInt32 funcode) {
+    FFMixed invalue;
+    return call(funcode, invalue, NULL);
+  }
+
+  void close(void) {
+    if(NULL==m_plugin)
+      return;
+
+    if(m_instance) {
+      deinstantiate_();
+    }
+
+    deinitialize_();
+  }
+
+  bool open(std::string name, const t_canvas*canvas) {
+    bool loud=true;
+    const char*hookname="plugMain";
+    std::cout << "opening : "<<name<<std::endl;
+    if(name.empty())
+      return false;
+
+    if(m_plugin)
+      close();
   
-  void *plugin_handle = NULL;
-  T_FFPLUGMAIN plugmain = NULL;
+    void *plugin_handle = NULL;
+    FF_Main_FuncPtr plugmain = NULL;
 
-  char buf[MAXPDSTRING];
-  char buf2[MAXPDSTRING];
-  char *bufptr=NULL;
+    char buf[MAXPDSTRING];
+    char buf2[MAXPDSTRING];
+    char *bufptr=NULL;
 
-  const char *extension=
+    const char *extension=
 #ifdef _WIN32
-    ".dll";
+      ".dll";
 #elif defined __APPLE__
     "";
 #else
@@ -104,125 +272,447 @@ static T_FFPLUGMAIN ff_loadplugin(const t_glist*ccanvas, char*pluginname, int*ca
 #endif
 
 #ifdef __APPLE__
-  char buf3[MAXPDSTRING];
+    char buf3[MAXPDSTRING];
 #ifdef DL_OPEN
-  snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", pluginname, pluginname);
+    snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", name.c_str(), name.c_str());
 #else
-  // this can never work...
-  snprintf(buf3, MAXPDSTRING, "%s.frf/%s", pluginname, pluginname);
+    // this can never work...
+    snprintf(buf3, MAXPDSTRING, "%s.frf/%s", name.c_str(), name.c_str());
 #endif
-  buf3[MAXPDSTRING-1]=0;
-  pluginname=buf3;
+    buf3[MAXPDSTRING-1]=0;
+    name=buf3;
 #endif
 
-  int fd=-1;
-  if ((fd=canvas_open(canvas, pluginname, extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
-    close(fd);
+    int fd=-1;
+    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), name.c_str(), extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
+      ::close(fd);
 #if defined __APPLE__ && 0
-    snprintf(buf, MAXPDSTRING, "%s", buf2);
+      snprintf(buf, MAXPDSTRING, "%s", buf2);
 #else
-    snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
+      snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
 #endif
-    buf[MAXPDSTRING-1]=0;
-  } else {
+      buf[MAXPDSTRING-1]=0;
+    } else {
       if(canvas) {
-        canvas_makefilename(canvas, pluginname, buf, MAXPDSTRING);
+        canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(name.c_str()), buf, MAXPDSTRING);
       } else {
-          if(loud)::error("pix_freeframe[%s]: unfindeable");
-          return NULL;
+        if(loud)::error("pix_freeframe[%s]: unfindeable");
+        return false;
       }
-  }
-  char*name=buf;
-  char*libname=name;
+    }
+    name=buf;
+    std::string libname = name;
 
-  if(loud)::post("trying to load %s", buf);
+    if(loud)::post("trying to load %s", buf);
   
 #ifdef DL_OPEN
-  plugin_handle=dlopen(libname, RTLD_NOW);
-  if(!plugin_handle){
-    if(loud)::error("pix_freeframe[%s]: %s", libname, dlerror());
-    return NULL;
-  }
-  dlerror();
+    if(loud)::post("dlopen %s", libname.c_str());
+    plugin_handle=dlopen(libname.c_str(), RTLD_NOW);
+    if(!plugin_handle){
+      DEBUGX();
+      if(loud)::error("pix_freeframe[%s]: %s", libname.c_str(), dlerror());
+      return NULL;
+    }
+    dlerror();
 
-  plugmain = reinterpret_cast<T_FFPLUGMAIN>(dlsym(plugin_handle, hookname));
+    plugmain = reinterpret_cast<FF_Main_FuncPtr>(dlsym(plugin_handle, hookname));
 
 #elif defined __APPLE__
-  CFURLRef bundleURL = NULL;
-  CFBundleRef theBundle = NULL;
-  CFStringRef plugin = CFStringCreateWithCString(NULL, 
-											 libname, kCFStringEncodingMacRoman);
+    CFURLRef bundleURL = NULL;
+    CFBundleRef theBundle = NULL;
+    CFStringRef plugin = CFStringCreateWithCString(NULL, 
+                                                   libname.c_str(), kCFStringEncodingMacRoman);
   
-  bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
-											 plugin,
-											 kCFURLPOSIXPathStyle,
-											 true );
-  theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
+    bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
+                                               plugin,
+                                               kCFURLPOSIXPathStyle,
+                                               true );
+    theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
   
-  // Get a pointer to the function.
-  if (theBundle){
-    plugmain = reinterpret_cast<T_FFPLUGMAIN>(CFBundleGetFunctionPointerForName(
-            theBundle, CFSTR("plugMain") )
-			      );
-  }else{
-    if(loud)::post("%s: couldn't load", libname);
-    return 0;
-  }
-  if(bundleURL != NULL) CFRelease( bundleURL );
-  if(theBundle != NULL) CFRelease( theBundle );
-  if(plugin != NULL)    CFRelease( plugin );
+    // Get a pointer to the function.
+    if (theBundle){
+      plugmain = reinterpret_cast<FF_Main_FuncPtr>(CFBundleGetFunctionPointerForName(
+                                                                                     theBundle, CFSTR("plugMain") )
+                                                   );
+    }else{
+      if(loud)::post("%s: couldn't load", libname.c_str());
+      return 0;
+    }
+    if(bundleURL != NULL) CFRelease( bundleURL );
+    if(theBundle != NULL) CFRelease( theBundle );
+    if(plugin != NULL)    CFRelease( plugin );
 #elif defined _WIN32
-  HINSTANCE ntdll;
+    HINSTANCE ntdll;
 
-  sys_bashfilename(libname, libname);
-  ntdll = LoadLibrary(libname);
-  if (!ntdll) {
-    if(loud)::post("%s: couldn't load", libname);
-    return NULL;
-  }
-  plugmain = reinterpret_cast<T_FFPLUGMAIN>(GetProcAddress(ntdll, hookname));
+    sys_bashfilename(libname.c_str(), libname.c_str());
+    ntdll = LoadLibrary(libname.c_str());
+    if (!ntdll) {
+      if(loud)::post("%s: couldn't load", libname.c_str());
+      return false;
+    }
+    plugmain = reinterpret_cast<FF_Main_FuncPtr>(GetProcAddress(ntdll, hookname));
 #else
 # error no way to load dynamic linked libraries on this OS
 #endif
-  if(plugmain == NULL){
-    return NULL;
+
+
+    m_plugin=plugmain;
+    return (NULL!=m_plugin);
   }
 
-  PlugInfoStruct *pis = FF_PLUGMAIN_PIS(plugmain(FF_GETINFO, NULL, 0));
-  if(pis){
-    if (pis->APIMajorVersion < 1){
-      ::error("plugin %s: old api version", name);
-      return NULL;
+
+ /* GLOBAL 
+     0 	getInfo 	none 	Pointer to a PluginInfoStruct
+     1 	initialise 	none 	Success/error code
+     2 	deInitialise 	none 	Success/error code
+     4 	getNumParameters 	none 	NumParameters
+     5 	getParameterName 	ParameterNumber 	Pointer to ParameterName
+     6 	getParameterDefault 	ParameterNumber 	ParameterDefaultValue
+     10 	getPluginCaps 	PluginCapsIndex 	Supported/unsupported/value
+     13 	getExtendedInfo 	none 	Pointer to PluginExtendedInfoStruct
+     15 	getParameterType 	ParameterNumber 	ParameterType
+  */
+
+  bool getInfo_(void) {
+    FFMixed result=callGlobal(FF_GETINFO);
+    if(FF_FAIL==result.UIntValue) {
+      std::cout << "getInfo failed" << std::endl;
+      return false;
+    }
+    PluginInfoStruct*pis=reinterpret_cast<PluginInfoStruct*>(result.PointerValue);
+#warning check whether the API is supported by us
+    m_name = nchar2str(pis->PluginName, 16);
+    m_id = nchar2str(pis->PluginUniqueID, 4);
+    m_type = pis->PluginType;
+
+    std::cout << "FF-API: "<<pis->APIMajorVersion<<"."<<pis->APIMinorVersion<<std::endl;
+
+    return true;
+  }
+  PluginExtendedInfoStruct*getExtendedInfo_(void) {
+    FFMixed result=callGlobal(FF_GETEXTENDEDINFO);
+    m_description=m_about="";
+    m_majorVersion = m_minorVersion = 0;
+    if(FF_FAIL==result.UIntValue)return NULL;
+    PluginExtendedInfoStruct*pis=reinterpret_cast<PluginExtendedInfoStruct*>(result.PointerValue);
+    m_description=pis->Description;
+    m_about = pis->About;
+    m_majorVersion = pis -> PluginMajorVersion;
+    m_minorVersion = pis -> PluginMinorVersion;
+    return pis;
+  }
+
+  bool initialize_(void) {
+    FFMixed result=callGlobal(FF_INITIALISE);
+    return (FF_SUCCESS==result.UIntValue);
+  }
+  bool deinitialize_(void) {
+    FFMixed result=callGlobal(FF_DEINITIALISE);
+    m_plugin=NULL;
+
+    m_name=m_id=m_description=m_about="";
+
+    return (FF_SUCCESS==result.UIntValue);
+  }
+  FFUInt32 getNumParameters_(void) {
+    FFMixed result=callGlobal(FF_GETNUMPARAMETERS);
+    if(FF_FAIL == result.UIntValue)
+      return 0;
+    return result.UIntValue;
+  }
+  std::string getParameterName_(FFUInt32 ParameterNumber) {
+    FFMixed result=callGlobal(FF_GETPARAMETERNAME, ParameterNumber);
+    std::string name = nchar2str(result.PointerValue, 16);
+    return name;
+  }
+  FFMixed getParameterDefault_(FFUInt32 ParameterNumber) {
+    FFMixed result=callGlobal(FF_GETPARAMETERDEFAULT, ParameterNumber);
+    return result;
+  }
+  FFUInt32 getParameterType_(FFUInt32 ParameterNumber) {
+    FFMixed result=callGlobal(FF_GETPARAMETERTYPE, ParameterNumber);
+    return result.UIntValue;
+  }
+
+
+  FFUInt32 getPluginCaps_(FFUInt32 PluginCapsIndex) {
+    FFMixed result=callGlobal(FF_GETPLUGINCAPS, PluginCapsIndex);
+    return result.UIntValue;
+  }
+
+  /* INSTANCE SPECIFIC
+    3  	processFrame  	Pointer to a frame of video  	Success/error code
+    7 	getParameterDisplay 	ParameterNumber 	Pointer to ParameterDisplayValue
+    8 	setParameter 	Pointer to SetParameterStruct 	Success/error code
+    9 	getParameter 	ParameterNumber 	ParameterValue
+    11 	instantiate 	Pointer to VideoInfoStruct 	InstanceIdentifier
+    12 	deInstantiate 	none 	Success/error code
+    14 	processFrameCopy 	Pointer to ProcessFrameCopyStruct 	Success/error code
+    16 	getInputStatus 	InputChannel 	InputStatus
+  */
+  bool processFrame_(imageStruct&img) {
+    // return true;
+    FFMixed input;
+    input.PointerValue = img.data;
+    FFMixed result = callInstance(FF_PROCESSFRAME, input);
+    return (FF_SUCCESS == result.UIntValue);
+  }
+  std::string getParameterDisplay_(FFUInt32 ParameterNumber) {
+    std::string name;
+    FFMixed result = callInstance(FF_GETPARAMETERDISPLAY, ParameterNumber);
+    if(result.UIntValue != FF_FAIL) {
+      name=nchar2str(result.PointerValue, 16);
+    }
+
+    return name;
+  }
+  bool setParameter_(FFUInt32 ParameterNumber, FFMixed ParameterValue) {
+    SetParameterStruct sps = { ParameterNumber, ParameterValue};
+    FFMixed input;
+    input.PointerValue = &sps;
+    FFMixed result = callInstance(FF_SETPARAMETER, input);
+
+    return (FF_SUCCESS == result.UIntValue);
+  }
+  FFMixed getParameter_(FFUInt32 ParameterNumber) {
+    FFMixed result = callInstance(FF_GETPARAMETER, ParameterNumber);
+    return result;
+  }
+  bool instantiate_(VideoInfoStruct&vis) {
+    if(m_instance)
+      deinstantiate_();
+
+    try {
+      m_instance = new FFInstance(m_plugin, vis);
+    } catch (GemException&x) {
+      x.report("pix_freeframe");
+      m_instance=NULL;
+      return false;
+    }
+
+    return true;
+  }
+  bool instantiate_(imageStruct&img) {
+    if(m_instance)
+      deinstantiate_();
+
+    try {
+      m_instance = new FFInstance(m_plugin, img);
+
+    } catch (GemException&x) {
+      x.report("pix_freeframe");
+      m_instance=NULL;
+      return false;
+    }
+
+    return true;
+  }
+  bool deinstantiate_(void) {
+    if(m_instance)
+      delete m_instance;
+    m_instance=NULL;
+    return true;
+  }
+  bool processFrameCopy_(ProcessFrameCopyStruct&pfcs) {
+    return false;
+  }
+  bool getInputStatus_(FFUInt32 InputChannel) {
+    FFMixed result = callInstance(FF_GETINPUTSTATUS, InputChannel);
+    return (0!=result.UIntValue);
+  }
+
+  bool initParameters_(void) {
+    m_parameterNames.clear();
+    m_parameter.clear();
+    unsigned int count=getNumParameters_();
+    unsigned int i;
+    for(i=0; i<count; i++) {
+      std::string name=getParameterName_(i);
+      FFUInt32 type = getParameterType_ (i);
+      FFMixed def = getParameterDefault_(i);
+
+      gem::any val;
+      switch(type) {
+      case FF_TYPE_EVENT:
+        //?
+        break;
+      case FF_TYPE_TEXT:
+        val = std::string(reinterpret_cast<const char*>(def.PointerValue));
+        break;
+      default:
+        val = def.FloatValue;
+      }
+      m_parameterNames.push_back(name);
+      m_parameter.set(name, val);
+    }
+
+  }
+
+  bool init_(void) {
+    std::cout << "initialize: "<<std::endl;
+    if(!initialize_()) {
+      std::cout << "failed"<<std::endl;
+      return false;
+    }
+
+    std::cout << "caps: " << std::endl;
+    bool rgb = (FF_SUPPORTED==getPluginCaps_( FF_CAP_24BITVIDEO ));
+    bool rgba= (FF_SUPPORTED==getPluginCaps_( FF_CAP_32BITVIDEO ));
+    if(rgb || rgba) {
+      m_rgba=rgba;
+    } else {
+      std::cout << "no 24 nor 32 bit" << std::endl;
+      //return false;
+      m_rgba=true;
+    }
+    m_cancopy =  (FF_SUPPORTED==getPluginCaps_( FF_CAP_PROCESSFRAMECOPY ));
+
+    std::cout << "getInfo: "<<std::endl;
+    getInfo_();
+    getExtendedInfo_();
+    
+    initParameters_();
+    std::cout << std::endl;
+  }
+
+  
+public:
+  FFPlugin(std::string name, const t_canvas*canvas=NULL)
+    : m_plugin(NULL)
+    , m_instance(NULL)
+    , m_rgba(false)
+    , m_type(FF_EFFECT)
+    , m_majorVersion(0)
+    , m_minorVersion(0)              
+  {
+    std::cout << "open: "<<name<<std::endl;
+    if(!open(name, canvas))
+      return;
+
+    if(!init_())
+      return;
+  }
+  virtual ~FFPlugin(void) {
+  }
+
+  GLenum GLformat() {
+    GLenum format = (m_rgba?GL_RGBA:GL_RGB);
+    return format;
+  }
+
+  FFUInt32 getNumParameters(void) {
+    //    return getNumParameters_();
+    return m_parameterNames.size();
+  }
+  std::string getParameterName(FFUInt32 ParameterNumber) {
+    if(ParameterNumber<m_parameterNames.size())
+      return m_parameterNames[ParameterNumber];
+    return std::string();
+    //    return getParameterName_(ParameterNumber);
+  }
+  FFMixed getParameterDefault(FFUInt32 ParameterNumber) {
+    return getParameterDefault_(ParameterNumber);
+  }
+  FFUInt32 getParameterType(FFUInt32 ParameterNumber) {
+    return getParameterType_(ParameterNumber);
+  }
+
+
+  FFUInt32 getPluginCaps(FFUInt32 PluginCapsIndex) {
+    return getPluginCaps_(PluginCapsIndex);
+  }
+  
+  bool processFrame(imageStruct&img) {
+    if(NULL==img.data)
+      return true;
+    if(!m_instance) {
+      instantiate_(img);
+    }
+    if(m_instance) {
+      if(!m_instance->check(img)) {
+        gem::Properties parms=m_parameter;
+        deinstantiate_();
+        initParameters_();
+        instantiate_(img);
+        setParameters(parms);
+      }
+      if(m_instance) {
+        return processFrame_(img);
+      }
+    }
+    return false;
+  }
+  std::string getParameterDisplay(FFUInt32 ParameterNumber) {
+    return getParameterDisplay_(ParameterNumber);
+  }
+  bool setParameter(FFUInt32 ParameterNumber, FFMixed ParameterValue) {
+    return setParameter_(ParameterNumber, ParameterValue);
+  }
+  FFMixed getParameter(FFUInt32 ParameterNumber) {
+    return getParameter_( ParameterNumber);
+  }
+
+  const gem::Properties&getParameters(void) {
+    return m_parameter;
+  }
+  bool setParameter(FFUInt32 ParameterNumber) {
+    FFMixed value;
+    return setParameter_(ParameterNumber, value);
+  }
+  bool setParameter(FFUInt32 ParameterNumber, double d) {
+    FFMixed value;
+    value.FloatValue=d;
+    return setParameter_(ParameterNumber, value);
+  }
+  bool setParameter(FFUInt32 ParameterNumber, std::string s) {
+    FFMixed value;
+    value.PointerValue=const_cast<char*>(s.c_str());
+    return setParameter_(ParameterNumber, value);
+  }
+
+  void setParameters(gem::Properties&parms) {
+    unsigned int i=0;
+    for(i=0; i<m_parameterNames.size(); i++) {
+      std::string key=m_parameterNames[i];
+      std::string s1, s2;
+      double d1, d2;
+      switch(m_parameter.type(key)) {
+      case gem::Properties::NONE:
+        if(gem::Properties::NONE==parms.type(key)) {
+          parms.erase(key);
+          setParameter(i);
+        }
+        break;
+      case gem::Properties::DOUBLE:
+        if(m_parameter.get(key, d1) && parms.get(key, d2)) {
+          if(d1!=d2) {
+            m_parameter.set(key, d2);
+            setParameter(i, d2);
+          }
+        }
+        break;
+      case gem::Properties::STRING:
+        if(m_parameter.get(key, s1) && parms.get(key, s2)) {
+          if(s1!=s2) {
+            m_parameter.set(key, s2);
+            setParameter(i, s2);
+          }
+        }
+        break;
+      default: break;     
+      }
     }
   }
 
-  if (FF_PLUGMAIN_INT(plugmain(FF_INITIALISE, NULL, 0)) == FF_FAIL){
-    ::error("plugin %s: init failed", name);
-    return NULL;
+  bool processFrameCopy(ProcessFrameCopyStruct&pfcs) {
+    return processFrameCopy_(pfcs);
   }
-
-  /*
-   * check which formats are supported:
-   * currently we cannot handle RGB16 as we don't have any conversion routines implemented
-   * the other options are RGB==RGB24 and RGBA=RGB32
-   * we prefer RGB32, as this is one of our native formats (and YUV2RGBA conversion is likely to be faster)
-   * so we check whether the plugin knows how to do RGB32
-   * if it doesn't, we try RGB24
-   */
-  if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, reinterpret_cast<LPVOID>(FF_CAP_32BITVIDEO), 0)) == FF_TRUE){
-    if(can_rgba)*can_rgba=1;
-  } else {
-    if(can_rgba)*can_rgba=0;
-    if (FF_PLUGMAIN_INT(plugmain(FF_GETPLUGINCAPS, reinterpret_cast<LPVOID>(FF_CAP_24BITVIDEO), 0)) != FF_TRUE){
-      ::error("plugin %s: neither RGB32 nor RGB24 support!", name);
-
-      plugmain(FF_DEINITIALISE, NULL, 0);
-      return NULL;
-    }
+  bool getInputStatus(FFUInt32 InputChannel) {
+    return getInputStatus_( InputChannel);
   }
+};
 
-  return plugmain;
-}
+
 #endif /* DONT_WANT_FREEFRAME */
 
 
@@ -239,9 +729,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_freeframe,  t_symbol *, A_DEFSYM)
 
 pix_freeframe :: pix_freeframe(t_symbol*s)
 #ifndef DONT_WANT_FREEFRAME
-  : m_plugin(NULL),m_instance(FF_FAIL),
-    m_numparameters(0),
-    m_inlet(NULL)
+  : m_plugin(NULL)
 #endif /* DONT_WANT_FREEFRAME */
 {
 #ifdef DONT_WANT_FREEFRAME
@@ -249,45 +737,20 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
 #else
   int can_rgba=0;
   char *pluginname = s->s_name;
-  m_plugin=ff_loadplugin(getCanvas(), pluginname, &can_rgba);
 
-  m_image.setCsizeByFormat(can_rgba?GL_RGBA_GEM:GL_RGB);
+  m_plugin = new FFPlugin(pluginname, getCanvas());
+  m_image.setCsizeByFormat(m_plugin->GLformat());
 
-  if(!m_plugin)throw(GemException("couldn't load FreeFrame-plugin"));
-
-  PlugInfoStruct *pis = FF_PLUGMAIN_PIS(m_plugin(FF_GETINFO, NULL, 0));
-
-  strncpy(m_pluginName, (char *)(pis->pluginName), 16);
-  strncpy(m_pluginId, (char *)(pis->uniqueID), 4);
-  m_pluginName[16] = 0;
-  m_pluginId[4] = 0;
-
-  unsigned int numparams = FF_PLUGMAIN_INT(m_plugin(FF_GETNUMPARAMETERS, NULL, 0));
-  if (numparams == FF_FAIL){
-    error("plugin %s: numparameters failed",  pluginname);
-    throw(GemException("reading numparameters failed"));
-  }
-  m_inlet=new t_inlet*[numparams];
-  m_numparameters=numparams;
-
-  int parmType=0;
+  unsigned int numparams = m_plugin->getNumParameters();
   char tempVt[5];
-  t_symbol *s_inletType=0;
-  char *p_name;
-  post("parameters for '%s':", pluginname);
-  for(unsigned int i=0;i<numparams; i++){
+
+  unsigned int i;
+  for(i=0; i<numparams; i++) {
     snprintf(tempVt, 5, "#%d", i);
     tempVt[4]=0;
-    // display
-    //   ParameterName:
-    //   ParameterDisplayValue:
-    // use
-    //   ParameterType
-    parmType=FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, reinterpret_cast<LPVOID>(i), 0));
-    p_name=  FF_PLUGMAIN_STR(m_plugin(FF_GETPARAMETERNAME, reinterpret_cast<LPVOID>(i), 0));
-
-    post("\tparam%s: %s", tempVt, p_name);
-
+    unsigned int parmType=0;
+    t_symbol*s_inletType;
+    parmType=m_plugin->getParameterType(i);
     switch(parmType){
     case FF_TYPE_EVENT:
       s_inletType=&s_bang;
@@ -298,7 +761,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     default:
       s_inletType=&s_float;    
     }
-    m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType, gensym(tempVt));
+    m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType, gensym(tempVt)));
   }
 #endif /* DONT_WANT_FREEFRAME */
 }
@@ -310,8 +773,10 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
 pix_freeframe :: ~pix_freeframe()
 {
 #ifndef DONT_WANT_FREEFRAME
-  if(m_inlet){
-    delete[]m_inlet;
+  while(!m_inlet.empty()) {
+    t_inlet*in=m_inlet.back();
+    if(in)inlet_free(in);
+    m_inlet.pop_back();
   }
   closeMess();
 #endif /* DONT_WANT_FREEFRAME */
@@ -321,39 +786,24 @@ pix_freeframe :: ~pix_freeframe()
 void pix_freeframe :: closeMess()
 {
   if(m_plugin){
-    if(m_instance!=FF_FAIL)m_plugin(FF_DEINSTANTIATE, NULL, m_instance);
-    m_plugin(FF_DEINITIALISE, NULL, 0);
-    m_plugin=NULL;
+    delete m_plugin;
   }
+  m_plugin=NULL;
 }
 
 void pix_freeframe :: openMess(t_symbol*s)
 {
-  int can_rgba=0;
-  char *pluginname = s->s_name;
-  T_FFPLUGMAIN plugin=ff_loadplugin(getCanvas(), pluginname, &can_rgba);
-  if(NULL==plugin) {
-    error("unable to open '%s'", pluginname);
-    return;
-  }
-  unsigned int numparams = FF_PLUGMAIN_INT(plugin(FF_GETNUMPARAMETERS, NULL, 0));
-  if (numparams == FF_FAIL) {
-    error("unable to query numparameters of '%s'", pluginname);
-    return;
+  std::string pluginname = s->s_name;
+  if(m_plugin) {
+    delete m_plugin;
   }
 
+  m_plugin = new FFPlugin(pluginname, getCanvas());
 
-  closeMess();
-  m_plugin=plugin;
-
-  PlugInfoStruct *pis = FF_PLUGMAIN_PIS(m_plugin(FF_GETINFO, NULL, 0));
-
-  strncpy(m_pluginName, (char *)(pis->pluginName), 16);
-  strncpy(m_pluginId, (char *)(pis->uniqueID), 4);
-  m_pluginName[16] = 0;
-  m_pluginId[4] = 0;
-
-  m_numparameters=numparams;
+  if(NULL==m_plugin) {
+    error("unable to open '%s'", pluginname.c_str());
+    return;
+  }
 }
 
 
@@ -368,33 +818,6 @@ void pix_freeframe :: processImage(imageStruct &image)
   unsigned char*data=image.data;
 
   if(m_plugin==NULL)return;
-
-  if(m_instance==FF_FAIL ||  m_image.xsize!=image.xsize || m_image.ysize!=image.ysize){
-    // either make the first instance of the plugin
-    // OR the input format has changed, so we have to re-instantiate
-
-    if(m_instance!=FF_FAIL)m_plugin(FF_DEINSTANTIATE, NULL, m_instance);
-    
-    VideoInfoStruct vidinfo;
-    m_image.xsize=image.xsize;
-    m_image.ysize=image.ysize;
-    
-    vidinfo.frameWidth = image.xsize;
-    vidinfo.frameHeight = image.ysize;
-    // the default openGL-orientation is (0,0)==lowerleft, which is 2 in FreeFrame
-    vidinfo.orientation = (image.upsidedown)?1:2;
-
-    // this needs a bit more intelligence:
-    // the plugin might support RGBA and/or RGB
-    // what is fastest ???
-    vidinfo.bitDepth = (format==GL_RGBA_GEM)?FF_CAP_32BITVIDEO:FF_CAP_32BITVIDEO;
-    
-    m_instance = FF_PLUGMAIN_INT(m_plugin(FF_INSTANTIATE, &vidinfo, 0));
-    
-    if(m_instance==FF_FAIL)return;
-    m_image.reallocate();
-    
-  }
 
   // convert the current image into a format that suits the FreeFrame-plugin
   if(image.format!=format){
@@ -412,20 +835,16 @@ void pix_freeframe :: processImage(imageStruct &image)
       m_image.fromYUV422(image.data);
       break;
     }
+    m_plugin->processFrame(m_image);
     data=m_image.data;
-  } else 
+  } else {
+    m_plugin->processFrame(image);
     data=image.data;
-  
-  // yeah, do it!
-  m_plugin(FF_PROCESSFRAME, data,  m_instance);
-  
-
-
+  }
 
   // check whether we have converted our image data
   if(image.data!=data)
     // it seems, like we did: convert it back
-
 
   // just copied the code from [pix_rgba]
     switch(format) {
@@ -457,25 +876,53 @@ void pix_freeframe :: processImage(imageStruct &image)
 
 
 void pix_freeframe :: parmMess(int param, t_atom *value){
-  if(m_instance!=FF_FAIL){
-    SetParameterStruct sps;
-    sps.index = param;
-
-    switch (FF_PLUGMAIN_INT(m_plugin(FF_GETPARAMETERTYPE, reinterpret_cast<LPVOID>(param), 0))){
-    case FF_TYPE_EVENT:
-      sps.value.fvalue=1.0;
+  if(!m_plugin) {
+    error("no instance of plugin available");
+    return;
+  }
+#if 1
+#warning parmMess
+  std::string key=m_plugin->getParameterName(param);
+  if(key.empty()) {
+    post("unkown key %d", param);
+    return;
+  }
+  gem::Properties props;
+  gem::any v;
+  if(value) {
+    switch(value->a_type) {
+    case(A_FLOAT):
+      v=atom_getfloat(value);
       break;
-    case FF_TYPE_TEXT:
-      sps.value.svalue=atom_getsymbol(value)->s_name;
+    case (A_SYMBOL):
+      v=atom_getsymbol(value)->s_name;
       break;
     default:
-      sps.value.fvalue=atom_getfloat(value);
+      return;
     }
-
-    m_plugin(FF_SETPARAMETER, &sps, m_instance);
-  } else {
-    error("pix_freeframe: no instance of plugin available");
   }
+  props.set(key, v);
+  m_plugin->setParameters(props);
+
+
+#else
+  SetParameterStruct sps;
+  sps.ParameterNumber = param;
+  FFMixed invalue;
+  invalue.UIntValue = param;
+  switch (m_plugin(FF_GETPARAMETERTYPE, invalue, 0).UIntValue){
+  case FF_TYPE_EVENT:
+    sps.NewParameterValue.UIntValue=1;
+    break;
+  case FF_TYPE_TEXT:
+    sps.NewParameterValue.PointerValue=atom_getsymbol(value)->s_name;
+    break;
+  default:
+    sps.NewParameterValue.FloatValue==atom_getfloat(value);
+  }
+  invalue.PointerValue=&sps;
+  m_plugin(FF_SETPARAMETER, invalue, m_instance);
+  #endif
   setModified();
 }
 
@@ -507,10 +954,12 @@ static int freeframe_loader(t_canvas *canvas, char *classname) {
     return 0;
   char*pluginname=classname+offset_pix_;
 
-  T_FFPLUGMAIN plugin = ff_loadplugin(canvas, pluginname, &dummy, false);
+  FF_Main_FuncPtr plugin = NULL; //ff_loadplugin(canvas, pluginname, &dummy, false);
   
   if(plugin!=NULL) {
-    plugin(FF_DEINITIALISE, NULL, 0);
+    FFMixed invalue;
+    invalue.UIntValue = 0;
+    plugin(FF_DEINITIALISE, invalue, 0);
     class_addcreator(reinterpret_cast<t_newmethod>(freeframe_loader_new), gensym(classname), A_GIMME, 0);
     return 1;
   }

@@ -77,14 +77,10 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     void 	processImage(imageStruct &image);
 
     imageStruct m_image;
-    T_FFPLUGMAIN m_plugin;
-    unsigned int m_instance;
+    class FFPlugin;
+    FFPlugin*m_plugin;
 
-    char	 m_pluginName[17];
-    char	 m_pluginId[5];
-    unsigned int m_numparameters;
-
-    t_inlet**m_inlet;
+    std::vector<t_inlet*>m_inlet;
 
     void parmMess(int param, t_atom*value);
 
