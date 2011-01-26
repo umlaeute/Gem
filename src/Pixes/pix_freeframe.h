@@ -93,6 +93,9 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
  private:
     static void parmCallback(void *data, t_symbol*s, int argc, t_atom*argv);
     static void openCallback(void *data, t_symbol*s);
+
+ public:
+    static bool loader(t_canvas *canvas, const std::string classname);
 };
 
 #endif	// for header file

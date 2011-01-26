@@ -17,8 +17,6 @@
 //
 /////////////////////////////////////////////////////////
 
-#define DEBUGX() ::post("%s:%d (%s)", __FILE__, __LINE__, __FUNCTION__)
-
 #include <iostream>
 
 #include "pix_freeframe.h"
@@ -49,7 +47,6 @@
 # include <dlfcn.h>
 # include <unistd.h>
 #endif /* __APPLE__ */
-
 class pix_freeframe::FFPlugin {
 public:
   static std::string nchar2str(const char*str, const unsigned int len) {
@@ -243,7 +240,7 @@ private:
   }
 
   bool open(std::string name, const t_canvas*canvas) {
-    bool loud=true;
+    bool loud=false;
     const char*hookname="plugMain";
     if(name.empty())
       return false;
@@ -305,7 +302,6 @@ private:
     if(loud)::post("dlopen %s", libname.c_str());
     plugin_handle=dlopen(libname.c_str(), RTLD_NOW);
     if(!plugin_handle){
-      DEBUGX();
       if(loud)::error("pix_freeframe[%s]: %s", libname.c_str(), dlerror());
       return NULL;
     }
@@ -934,23 +930,23 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
   }
   return 0;
 }
+bool pix_freeframe :: loader(t_canvas*canvas, std::string classname) {
+  if(strncmp("pix_", classname.c_str(), offset_pix_))
+    return false;
+  std::string pluginname = classname.substr(offset_pix_);
 
-static int freeframe_loader(t_canvas *canvas, char *classname) {
-  int dummy;
-  if(strncmp("pix_", classname, offset_pix_))
-    return 0;
-  char*pluginname=classname+offset_pix_;
-
-  FF_Main_FuncPtr plugin = NULL; //ff_loadplugin(canvas, pluginname, &dummy, false);
+  pix_freeframe::FFPlugin*plugin=new FFPlugin(pluginname, canvas);
   
   if(plugin!=NULL) {
-    FFMixed invalue;
-    invalue.UIntValue = 0;
-    plugin(FF_DEINITIALISE, invalue, 0);
-    class_addcreator(reinterpret_cast<t_newmethod>(freeframe_loader_new), gensym(classname), A_GIMME, 0);
-    return 1;
+    delete plugin;
+    class_addcreator(reinterpret_cast<t_newmethod>(freeframe_loader_new), gensym(classname.c_str()), A_GIMME, 0);
+    return true;
   }
-  return 0;
+  return false;
+}
+
+static int freeframe_loader(t_canvas *canvas, char *classname) {
+  return pix_freeframe::loader(canvas, classname);
 }  
 
 /////////////////////////////////////////////////////////
