@@ -50,10 +50,6 @@
 # include <unistd.h>
 #endif /* __APPLE__ */
 
-#warning check instance
-#define CHECKINSTANCE(x) (NULL!=x)
-
-
 class pix_freeframe::FFPlugin {
 public:
   static std::string nchar2str(const char*str, unsigned int len) {
@@ -156,7 +152,7 @@ private:
       return call(funcode, mixed);
     }
 
-    bool check(const imageStruct&img) {
+    bool checkDimen(const imageStruct&img) {
       return ( 
               (img.xsize == m_width ) &&
               (img.ysize == m_height) &&
@@ -629,7 +625,7 @@ public:
       instantiate_(img);
     }
     if(m_instance) {
-      if(!m_instance->check(img)) {
+      if(!m_instance->checkDimen(img)) {
         gem::Properties parms=m_parameter;
         deinstantiate_();
         initParameters_();
@@ -881,7 +877,6 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
     return;
   }
 #if 1
-#warning parmMess
   std::string key=m_plugin->getParameterName(param);
   if(key.empty()) {
     post("unkown key %d", param);
