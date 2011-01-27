@@ -47,6 +47,10 @@
 # include <dlfcn.h>
 # include <unistd.h>
 #endif /* __APPLE__ */
+
+#include <string.h>
+
+
 class pix_freeframe::FFPlugin {
 public:
   static std::string nchar2str(const char*str, const unsigned int len) {
