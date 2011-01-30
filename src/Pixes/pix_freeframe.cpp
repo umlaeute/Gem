@@ -51,6 +51,20 @@
 #include <string.h>
 
 
+#infdef HAVE_STRNLEN
+#define strnlen ff_strnlen
+static size_t ff_strnlen(const char* str, size_t maxlen) {
+  size_t len=0;
+  if(NULL==str)return len;
+  while(*str++ && len<maxlen)len++;
+
+  return len;
+}
+
+
+#endif
+
+
 class pix_freeframe::FFPlugin {
 public:
   static std::string nchar2str(const char*str, const unsigned int len) {
