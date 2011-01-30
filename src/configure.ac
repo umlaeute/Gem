@@ -235,7 +235,7 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
-AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr])
+AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
 
 # enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
