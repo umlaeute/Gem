@@ -172,7 +172,16 @@ void sphere3d :: render(GemState *state)
   GLfloat s, t, ds, dt;
   GLint i, j;
   int src=0;
-  
+
+  TexCoord*texCoords=NULL;
+  int texType=0;
+  int texNum=0;
+  bool lighting=false;
+  state->get("gl.tex.coords", texCoords);
+  state->get("gl.tex.type", texType);
+  state->get("gl.tex.numcoords", texNum);
+  state->get("gl.lighting", lighting);
+
   glPushMatrix();
   glScalef(m_size, m_size, m_size);
 
@@ -180,19 +189,18 @@ void sphere3d :: render(GemState *state)
    * if lighting is off, they just won't be used
    * i guess the original reason was somehow related to performance 
    *
-   * GLboolean normals = (GemShape::m_lighting)?GL_TRUE:GL_FALSE;
+   * GLboolean normals = (lighting)?GL_TRUE:GL_FALSE;
    */
-  GLboolean normals = GL_TRUE;
-  GLint texture = (GemShape::m_texType);
-
+  bool normals = GL_TRUE;
+  
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
 
-  if(texture && GemShape::m_texNum>=3){
-    xsize0 = GemShape::m_texCoords[0].s;
-    xsize  = GemShape::m_texCoords[1].s-xsize0;
-    ysize0 = GemShape::m_texCoords[1].t;
-    ysize  = GemShape::m_texCoords[2].t-ysize0;
+  if(texType && texNum>=3){
+    xsize0 = texCoords[0].s;
+    xsize  = texCoords[1].s-xsize0;
+    ysize0 = texCoords[1].t;
+    ysize  = texCoords[2].t-ysize0;
   }
     
   /* texturing: s goes from 0.0/0.25/0.5/0.75/1.0 at +y/+x/-y/-x/+y axis */
@@ -207,9 +215,9 @@ void sphere3d :: render(GemState *state)
     oldStacks = stacks;
     oldSlices = slices;
   }
-  if (m_drawType != oldDrawType || texture!=oldTexture)m_modified=true;
+  if (m_drawType != oldDrawType || texType!=oldTexture)m_modified=true;
   oldDrawType = m_drawType;
-  oldTexture = texture;
+  oldTexture = texType;
   
   if(!m_displayList)m_modified=true;
   
@@ -232,11 +240,11 @@ void sphere3d :: render(GemState *state)
       src=1;
       for (j = 0; j < slices; j++) {
         if(normals)glNormal3f(m_x[0], m_y[0], m_z[0]);
-        if(texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
         glVertex3f(m_x[0], m_y[0], m_z[0]);
     
         if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
-        if(texture)glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
+        if(texType)glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
         glVertex3f(m_x[src], m_y[src], m_z[src]);
 
         src++;
@@ -244,11 +252,11 @@ void sphere3d :: render(GemState *state)
       }
       src=1;
       if(normals)glNormal3f(m_x[0], m_y[0], m_z[0]);
-      if(texture)glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
+      if(texType)glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
       glVertex3f(m_x[0], m_y[0], m_z[0]);
     
       if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
-      if(texture)glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
+      if(texType)glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
       glVertex3f(m_x[src], m_y[src], m_z[src]);
 
       glEnd();
@@ -264,12 +272,12 @@ void sphere3d :: render(GemState *state)
           src2=src+slices;
 
           if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
-          if(texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+          if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
           glVertex3f(m_x[src], m_y[src], m_z[src]);
           src++;
 
           if(normals)glNormal3f(m_x[src2], m_y[src2], m_z[src2]);
-          if(texture)glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+          if(texType)glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
           glVertex3f(m_x[src2], m_y[src2], m_z[src2]);
           src2++;
 
@@ -277,11 +285,11 @@ void sphere3d :: render(GemState *state)
         }
 
         if(normals)glNormal3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
-        if(texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
         glVertex3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
 
         if(normals)glNormal3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
-        if(texture)glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+        if(texType)glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
         glVertex3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
 
         glEnd();
@@ -296,23 +304,23 @@ void sphere3d :: render(GemState *state)
       s=0.0;
       for (j = 0; j < slices; j++) {
         if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
-        if(texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
         glVertex3f(m_x[src], m_y[src], m_z[src]);
         src++;
 
         if(normals)glNormal3f(m_x[last], m_y[last], m_z[last]);
-        if(texture)glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
+        if(texType)glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
         glVertex3f(m_x[last], m_y[last], m_z[last]);
 
         s+=ds;
       }
       src=(slices*(stacks-2)+1);
       if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
-      if(texture)glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
+      if(texType)glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
       glVertex3f(m_x[src], m_y[src], m_z[src]);
 
       if(normals)glNormal3f(m_x[last], m_y[last], m_z[last]);
-      if(texture)glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
+      if(texType)glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
       glVertex3f(m_x[last], m_y[last], m_z[last]);
 
       glEnd();

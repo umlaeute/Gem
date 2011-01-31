@@ -54,16 +54,24 @@ void curve :: render(GemState *state)
   if(m_numVertices<1)
     return;
 
+  TexCoord*texCoords=NULL;
+  int texType=0;
+  int texNum=0;
+  bool lighting=false;
+  state->get("gl.tex.coords", texCoords);
+  state->get("gl.tex.type", texType);
+  state->get("gl.tex.numcoords", texNum);
+
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
     glNormal3f(0.0f, 0.0f, 1.0f);
     glLineWidth(m_linewidth);
-    if(GemShape::m_texType){
-      switch(GemShape::m_texNum){
+    if(texType){
+      switch(texNum){
       default:
-        m_texCoords[0][0]=GemShape::m_texCoords[0].s;m_texCoords[0][1]=GemShape::m_texCoords[0].t;
-        m_texCoords[1][0]=GemShape::m_texCoords[1].s;m_texCoords[1][1]=GemShape::m_texCoords[1].t;
-        m_texCoords[2][0]=GemShape::m_texCoords[2].s;m_texCoords[2][1]=GemShape::m_texCoords[2].t;
-        m_texCoords[3][0]=GemShape::m_texCoords[3].s;m_texCoords[3][1]=GemShape::m_texCoords[3].t;
+        m_texCoords[0][0]=texCoords[0].s;m_texCoords[0][1]=texCoords[0].t;
+        m_texCoords[1][0]=texCoords[1].s;m_texCoords[1][1]=texCoords[1].t;
+        m_texCoords[2][0]=texCoords[2].s;m_texCoords[2][1]=texCoords[2].t;
+        m_texCoords[3][0]=texCoords[3].s;m_texCoords[3][1]=texCoords[3].t;
         break;
       case 0: case 1: case 2: case 3:
         m_texCoords[0][0]=0.f;m_texCoords[0][1]=0.f;

@@ -87,8 +87,14 @@ void torus :: innerRadius(float radius)
 /////////////////////////////////////////////////////////
 void torus :: render(GemState *state)
 {
-  GLboolean normals = (GemShape::m_lighting);
-  GLboolean texture = (GemShape::m_texType);
+  TexCoord*texCoords=NULL;
+  bool lighting = false;
+  int texNum=0;
+  int texType=0;
+  state->get("gl.tex.coords", texCoords);
+  state->get("gl.tex.type", texType);
+  state->get("gl.tex.numcoords", texNum);
+  state->get("gl.lighting", lighting);
 
   GLenum type = m_drawType;
   switch(m_drawType){
@@ -107,11 +113,11 @@ void torus :: render(GemState *state)
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(GemShape::m_texType && GemShape::m_texNum>=3){
-    xsize0 = GemShape::m_texCoords[0].s;
-    xsize  = GemShape::m_texCoords[1].s-xsize0;
-    ysize0 = GemShape::m_texCoords[1].t;
-    ysize  = GemShape::m_texCoords[2].t-ysize0;
+  if(texType && texNum>=3){
+    xsize0 = texCoords[0].s;
+    xsize  = texCoords[1].s-xsize0;
+    ysize0 = texCoords[1].t;
+    ysize  = texCoords[2].t-ysize0;
   }
 
   //gluTorus(m_thing, m_innerRadius, m_size, m_numSlices, m_numSlices);
@@ -155,12 +161,12 @@ void torus :: render(GemState *state)
       sinPhi = sin(phi);
       dist = R + r * cosPhi;
 
-      if(normals)glNormal3f(cosTheta1 * cosPhi, -sinTheta1 * cosPhi, sinPhi);
-      if(texture)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+      if(lighting)glNormal3f(cosTheta1 * cosPhi, -sinTheta1 * cosPhi, sinPhi);
+      if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       glVertex3f(cosTheta1 * dist, -sinTheta1 * dist, r * sinPhi);
 
-      if(normals)glNormal3f(cosTheta * cosPhi, -sinTheta * cosPhi, sinPhi);
-      if(texture)glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+      if(lighting)glNormal3f(cosTheta * cosPhi, -sinTheta * cosPhi, sinPhi);
+      if(texType)glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
       glVertex3f(cosTheta * dist, -sinTheta * dist,  r * sinPhi);
 
       s+=ds;

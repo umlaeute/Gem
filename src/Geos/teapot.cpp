@@ -143,11 +143,20 @@ void teapot :: render(GemState *state)
   float p[4][4][3], q[4][4][3], r[4][4][3], s[4][4][3];
   long i, j, k, l;
 
-  if (GemShape::m_texType && GemShape::m_texNum>=4) {
-    m_texCoords[0][0]=GemShape::m_texCoords[0].s;m_texCoords[0][1]=GemShape::m_texCoords[0].t;
-    m_texCoords[1][0]=GemShape::m_texCoords[1].s;m_texCoords[1][1]=GemShape::m_texCoords[1].t;
-    m_texCoords[2][0]=GemShape::m_texCoords[2].s;m_texCoords[2][1]=GemShape::m_texCoords[2].t;
-    m_texCoords[3][0]=GemShape::m_texCoords[3].s;m_texCoords[3][1]=GemShape::m_texCoords[3].t;  
+  TexCoord*texCoords=NULL;
+  int texType=0;
+  int texNum=0;
+  bool lighting=false;
+  state->get("gl.tex.coords", texCoords);
+  state->get("gl.tex.type", texType);
+  state->get("gl.tex.numcoords", texNum);
+  state->get("gl.lighting", lighting);
+
+  if (texType && texNum>=4) {
+    m_texCoords[0][0]=texCoords[0].s;m_texCoords[0][1]=texCoords[0].t;
+    m_texCoords[1][0]=texCoords[1].s;m_texCoords[1][1]=texCoords[1].t;
+    m_texCoords[2][0]=texCoords[2].s;m_texCoords[2][1]=texCoords[2].t;
+    m_texCoords[3][0]=texCoords[3].s;m_texCoords[3][1]=texCoords[3].t;  
   }
 
   glPushAttrib(GL_ENABLE_BIT | GL_EVAL_BIT);
