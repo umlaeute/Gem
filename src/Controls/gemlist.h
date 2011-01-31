@@ -74,7 +74,7 @@ class GEM_EXTERN gemlist : public GemBase
 
 
   virtual void ticktimeMess(t_float ticktime);
-  t_float m_tickTime;
+  float m_tickTime;
 
   virtual void lightingMess(bool state);
   bool m_lightState;
