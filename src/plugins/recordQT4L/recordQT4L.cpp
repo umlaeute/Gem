@@ -60,7 +60,7 @@ recordQT4L :: recordQT4L():
   std::vector<std::string>codecs=getCodecs();
   if(codecs.size()>0) {
     setCodec(codecs[0]);
-    post("QT4L: default codec is: '%s'", m_codecname.c_str());
+    verbose(1, "QT4L: default codec is: '%s'", m_codecname.c_str());
   }
 }
 #else
@@ -209,12 +209,35 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
 
 }
 
+static int try_colormodel(quicktime_t *   	 file,
+			  int  	track,
+			  int  	colormodel) {
+  if(quicktime_writes_cmodel(file, colormodel, track)) {
+    lqt_set_cmodel(file, track, colormodel);
+    return colormodel;
+  }
+  return 0;  
+}
+static int try_colormodel(quicktime_t *   	 file,
+			  int  	track,
+			  std::vector<int>  	colormodel) {
+  int i=0;
+  for(i=0; i<colormodel.size(); i++) {
+    int result=try_colormodel(file, track, colormodel[i]);
+    if(result)
+      return result;
+  }
+  return 0;
+}
+
 
 bool recordQT4L :: init(const imageStruct*img, double fps)
 {
   int rowspan=0, rowspan_uv=0;
   lqt_codec_info_t*codec=NULL;
   int err=0;
+  int track=0;
+
 
   if(!m_qtfile || !img || fps < 0.)
     return false;
@@ -242,9 +265,6 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
   m_curFrame=0;
   m_timeTick=TIMEBASE/fps;
 
-
-
-
   err=lqt_add_video_track(m_qtfile,
 		      img->xsize,
 		      img->ysize,
@@ -255,17 +275,23 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
     return false;
   }
 
-  applyProperties(m_qtfile, 0, m_codec, m_props);
+  applyProperties(m_qtfile, track, m_codec, m_props);
 
   /* set the colormodel */
-  m_colormodel=BC_RGB888; /* LATER do this more dynamically */
+  std::vector<int>trycolormodels;
+  trycolormodels.push_back(BC_RGBA8888);
+  trycolormodels.push_back(BC_RGB888);
+  trycolormodels.push_back(BC_YUV422);
+
+  m_colormodel=try_colormodel(m_qtfile, track, trycolormodels);
+  if(!m_colormodel)
+    return false;
 
   /* make sure to allocate enough buffer; it sometimes crashes when i allocate the "right" size, 
      so we just grab a multiple of what we actually want... 
   */
   /* but isn't this a memleak? it sure crashes if i try to lqt_rows_free() the qtbuffer */
   m_qtbuffer = lqt_rows_alloc(2*img->xsize, 2*img->ysize, m_colormodel, &rowspan, &rowspan_uv);
-  quicktime_set_cmodel(m_qtfile, m_colormodel);
 
   m_width =img->xsize;
   m_height=img->ysize;
