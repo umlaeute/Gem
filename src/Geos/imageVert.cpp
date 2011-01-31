@@ -320,10 +320,18 @@ void imageVert :: processYUVPix(imageStruct &image, int texture)
 /////////////////////////////////////////////////////////
 void imageVert :: render(GemState *state)
 {
-  // always want to render
-  if (!state->image) return;
+  pixBlock*img=NULL;
+  int texType=0;
+  bool dl = false;
 
-  if (state->image->newimage) m_rebuildList = 1;
+  state->get("pix", img);
+  state->get("gl.tex.type", texType);
+  state->get("gl.displaylist", dl);
+
+  // always want to render
+  if (!img) return;
+
+  if (img->newimage) m_rebuildList = 1;
 
   if (!m_dispList){
     m_dispList=glGenLists(1);
@@ -331,22 +339,22 @@ void imageVert :: render(GemState *state)
   }
 
   // can we build a display list?
-  if (!state->inDisplayList && m_rebuildList)
+  if (!dl && m_rebuildList)
     {
       glNewList(m_dispList, GL_COMPILE_AND_EXECUTE);
-      if (state->image->image.format == GL_RGBA || state->image->image.format == GL_BGRA_EXT)	//tigital
-	processRGBAPix(state->image->image, state->texture);
+      if (img->image.format == GL_RGBA || img->image.format == GL_BGRA_EXT)	//tigital
+	processRGBAPix(img->image, texType);
       else
-	processGrayPix(state->image->image, state->texture);
+	processGrayPix(img->image, texType);
       glEndList();
       m_rebuildList = 0;
     }
   // nope, but our current one isn't valid
   else if (m_rebuildList) {
-    if (state->image->image.format == GL_RGBA || state->image->image.format == GL_BGRA_EXT)	//tigital
-      processRGBAPix(state->image->image, state->texture);
+    if (img->image.format == GL_RGBA || img->image.format == GL_BGRA_EXT)	//tigital
+      processRGBAPix(img->image, texType);
     else
-      processGrayPix(state->image->image, state->texture);
+      processGrayPix(img->image, texType);
   }
   // the display list has already been built
   else glCallList(m_dispList);
