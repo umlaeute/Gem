@@ -24,6 +24,8 @@ using namespace gem;
 
 #include <stdlib.h>
 
+#define TIMEBASE 1000000
+
 
 #ifdef  GEM_USE_RECORDQT4L
 #include <lqt_version.h>
@@ -48,9 +50,18 @@ recordQT4L :: recordQT4L():
   m_qtbuffer(NULL),
   m_colormodel(0),
   m_width(-1), m_height(-1),
-  m_restart(true)
+  m_restart(true),
+  m_useTimeStamp(true),
+  m_startTime(0.),
+  m_timeTick(1.),
+  m_curFrame(0)
 {
   lqt_registry_init ();
+  std::vector<std::string>codecs=getCodecs();
+  if(codecs.size()>0) {
+    setCodec(codecs[0]);
+    post("QT4L: default codec is: '%s'", m_codecname.c_str());
+  }
 }
 #else
 {}
@@ -168,7 +179,6 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
       char* q_key=const_cast<char*>(key.c_str());
 #endif
         
-
       double d;
       std::string s;
       switch(proptypes[key]) {
@@ -200,35 +210,50 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
 }
 
 
-bool recordQT4L :: init(const imageStruct*img, const int framedur)
+bool recordQT4L :: init(const imageStruct*img, double fps)
 {
   int rowspan=0, rowspan_uv=0;
   lqt_codec_info_t*codec=NULL;
+  int err=0;
 
-  if(!m_qtfile || !img || framedur < 0)
+  if(!m_qtfile || !img || fps < 0.)
     return false;
 
   /* do we have a codec specified? */
   if(NULL==m_codec) {
     setCodec(m_codecname);
   }
-
   if(NULL==m_codec) {
     error("couldn't initialize codec");
     return false;
   }
 
-  
+  m_useTimeStamp=true;
 
-  
-  /* fps = time_scale / frame_duration */
-  lqt_set_video(m_qtfile,
-                1, 
-                img->xsize, 
-                img->ysize,
-                1,
-                framedur,
-                m_codec);
+  double d;
+  if(m_props.get(std::string("framerate"), d)) {
+    if(d>0) {
+      m_useTimeStamp=false;
+      fps=d;
+    }
+  }
+
+  m_startTime=clock_getlogicaltime();
+  m_curFrame=0;
+  m_timeTick=TIMEBASE/fps;
+
+
+
+
+  err=lqt_add_video_track(m_qtfile,
+		      img->xsize,
+		      img->ysize,
+		      m_timeTick,
+		      TIMEBASE,
+		      m_codec);
+  if(err!=0) {
+    return false;
+  }
 
   applyProperties(m_qtfile, 0, m_codec, m_props);
 
@@ -240,7 +265,6 @@ bool recordQT4L :: init(const imageStruct*img, const int framedur)
   */
   /* but isn't this a memleak? it sure crashes if i try to lqt_rows_free() the qtbuffer */
   m_qtbuffer = lqt_rows_alloc(2*img->xsize, 2*img->ysize, m_colormodel, &rowspan, &rowspan_uv);
-
   quicktime_set_cmodel(m_qtfile, m_colormodel);
 
   m_width =img->xsize;
@@ -265,7 +289,7 @@ bool recordQT4L :: putFrame(imageStruct*img)
   if(m_width!=img->xsize || m_height!=img->ysize)m_restart=true;
 
   if(m_restart){
-    if(!init(img, static_cast<int>(framerate))) {
+    if(!init(img, framerate)) {
       /* something went wrong! */
       close();
       error("unable to initialize QT4L");
@@ -273,6 +297,14 @@ bool recordQT4L :: putFrame(imageStruct*img)
     }
     m_restart=false;
   }
+
+  double timestamp_d=(m_useTimeStamp
+		      ?(clock_gettimesince(m_startTime)*TIMEBASE/1000.)
+		      :m_curFrame*m_timeTick);
+
+  int64_t timestamp=timestamp_d;
+
+  m_curFrame++;
 
   switch(m_colormodel){
   case BC_RGBA8888:
@@ -302,7 +334,7 @@ bool recordQT4L :: putFrame(imageStruct*img)
     }
   }
 
-  lqt_encode_video(m_qtfile, rowpointers, 0, static_cast<int>(framerate));
+  lqt_encode_video(m_qtfile, rowpointers, 0, timestamp);
   delete[]rowpointers;
   return true;
 }
@@ -343,7 +375,7 @@ std::vector<std::string>recordQT4L::getCodecs() {
 bool recordQT4L :: setCodec(const std::string name)
 {
   std::string codecname=name;
-  stop();
+  // stop();
 
   m_codec=NULL;
 
@@ -378,6 +410,8 @@ bool recordQT4L :: enumProperties(gem::Properties&props)
   props.clear();
   if(NULL==m_codec)
     return false;
+
+  props.set("framerate", 0.f);
 
   const int paramcount=m_codec->num_encoding_parameters;
   lqt_parameter_info_t*params=m_codec->encoding_parameters;

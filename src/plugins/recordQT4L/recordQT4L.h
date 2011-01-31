@@ -83,10 +83,10 @@ namespace gem { class GEM_EXPORT recordQT4L : public record {
   // initialize the encoder
   // dummyImage provides meta-information (e.g. size) that must not change during the encoding cycle
   // (if it does, abort the recording session)
-  // framedur is the duration of one frame in [ms]
+  // fps is the number of frames per second
   //   
   // returns TRUE if init was successfull, FALSE otherwise 
-  virtual bool init(const imageStruct* dummyImage, const int framedur);
+  virtual bool init(const imageStruct* dummyImage, const double fps);
 
 
   //////////
@@ -133,6 +133,15 @@ namespace gem { class GEM_EXPORT recordQT4L : public record {
 
   /* re-initialize the recorder */
   bool m_restart;
+
+  /* wheter we real timestamps or fake (const) them */
+  bool m_useTimeStamp;
+  /* time when recording started (to calculate current timestamp) */
+  double m_startTime;
+  /* unit of the time returned by Pd */
+  double m_timeTick;
+
+  size_t m_curFrame;
 #endif /* QT */
 }; };
 
