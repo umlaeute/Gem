@@ -48,7 +48,7 @@ namespace gem { class GEM_EXPORT videoDarwin : public video {
 #ifdef HAVE_VIDEODARWIN
     ////////
     // open the video-device
-    virtual bool           openDevice(void);
+    virtual bool           openDevice(gem::Properties&props);
     virtual void          closeDevice(void);
     
     //////////
@@ -70,6 +70,13 @@ namespace gem { class GEM_EXPORT videoDarwin : public video {
     virtual bool setQuality(int d);
     virtual bool setColor(int d);
     virtual bool dialog(void);
+
+	    virtual bool enumProperties(gem::Properties&readable,
+                                gem::Properties&writeable);
+    virtual void setProperties(gem::Properties&props);
+    virtual void getProperties(gem::Properties&props);
+
+
 
     
   protected:

@@ -80,7 +80,7 @@ videoDarwin :: ~videoDarwin()
     }
   }
 }
-bool videoDarwin :: openDevice(void) {
+bool videoDarwin :: openDevice(gem::Properties&props) {
   initSeqGrabber();
   return (NULL!=m_sg);
 }
@@ -756,6 +756,15 @@ bool videoDarwin :: dialog()
 
   return true;
 }
+
+bool videoDarwin::enumProperties(gem::Properties&readable,
+                                gem::Properties&writeable) {
+ return false;
+}
+void videoDarwin::setProperties(gem::Properties&props) {}
+void videoDarwin::getProperties(gem::Properties&props) {}
+
+
 #else
 videoDarwin ::  videoDarwin() : video("") {}
 videoDarwin :: ~videoDarwin() {}
