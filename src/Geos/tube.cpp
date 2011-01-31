@@ -177,15 +177,15 @@ void tube :: renderShape(GemState *state){
   glLineWidth(m_linewidth);
   glBegin(m_drawType);
 
-  if (state->texture)    {
+  if (GemShape::m_texType)    {
     GLfloat xsize = 1.0;
     GLfloat ysize0 = 0.0;
     GLfloat ysize1 = 1.0;
 
-    if (state->image  && state->numTexCoords>=3){
-      xsize =  state->texCoords[1].s;
-      ysize0 = state->texCoords[2].t;
-      ysize1 = state->texCoords[1].t;
+    if (GemShape::m_texNum>=3){
+      xsize =  GemShape::m_texCoords[1].s;
+      ysize0 = GemShape::m_texCoords[2].t;
+      ysize1 = GemShape::m_texCoords[1].t;
     }
  
     for (n = 1; n < order + 2 ; n++)	{

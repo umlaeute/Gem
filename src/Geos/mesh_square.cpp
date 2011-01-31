@@ -102,20 +102,20 @@ void mesh_square :: renderShape(GemState *state)
 
    glNormal3f( 0.0f, 0.0f, 1.0f);
 
-   if (state->texture && state->numTexCoords>=3)
+   if (GemShape::m_texType && GemShape::m_texNum>=3)
     {
-		if ((xsize0!= state->texCoords[0].s) ||
-		(xsize != state->texCoords[1].s-xsize0) ||
-		(ysize0!= state->texCoords[1].t) ||
-		(ysize != state->texCoords[2].t-ysize0))
+		if ((xsize0!= GemShape::m_texCoords[0].s) ||
+		(xsize != GemShape::m_texCoords[1].s-xsize0) ||
+		(ysize0!= GemShape::m_texCoords[1].t) ||
+		(ysize != GemShape::m_texCoords[2].t-ysize0))
 		alreadyInit = 0;
 
         if (!alreadyInit)
         {
-			xsize0 = state->texCoords[0].s;
-	    	xsize  = state->texCoords[1].s-xsize0;
-	    	ysize0 = state->texCoords[1].t;
-	    	ysize  = state->texCoords[2].t-ysize0;
+			xsize0 = GemShape::m_texCoords[0].s;
+	    	xsize  = GemShape::m_texCoords[1].s-xsize0;
+	    	ysize0 = GemShape::m_texCoords[1].t;
+	    	ysize  = GemShape::m_texCoords[2].t-ysize0;
 
             setSize( gridX, gridY );
             alreadyInit = 1;

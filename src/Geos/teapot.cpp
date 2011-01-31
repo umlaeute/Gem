@@ -143,11 +143,11 @@ void teapot :: render(GemState *state)
   float p[4][4][3], q[4][4][3], r[4][4][3], s[4][4][3];
   long i, j, k, l;
 
-  if (state->texture && state->numTexCoords>=4) {
-    m_texCoords[0][0]=state->texCoords[0].s;m_texCoords[0][1]=state->texCoords[0].t;
-    m_texCoords[1][0]=state->texCoords[1].s;m_texCoords[1][1]=state->texCoords[1].t;
-    m_texCoords[2][0]=state->texCoords[2].s;m_texCoords[2][1]=state->texCoords[2].t;
-    m_texCoords[3][0]=state->texCoords[3].s;m_texCoords[3][1]=state->texCoords[3].t;  
+  if (GemShape::m_texType && GemShape::m_texNum>=4) {
+    m_texCoords[0][0]=GemShape::m_texCoords[0].s;m_texCoords[0][1]=GemShape::m_texCoords[0].t;
+    m_texCoords[1][0]=GemShape::m_texCoords[1].s;m_texCoords[1][1]=GemShape::m_texCoords[1].t;
+    m_texCoords[2][0]=GemShape::m_texCoords[2].s;m_texCoords[2][1]=GemShape::m_texCoords[2].t;
+    m_texCoords[3][0]=GemShape::m_texCoords[3].s;m_texCoords[3][1]=GemShape::m_texCoords[3].t;  
   }
 
   glPushAttrib(GL_ENABLE_BIT | GL_EVAL_BIT);

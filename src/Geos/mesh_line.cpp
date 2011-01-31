@@ -84,16 +84,16 @@ void mesh_line :: renderShape(GemState *state)
 
    glNormal3f( 0.0f, 0.0f, 1.0f);
 
-   if (state->texture && state->numTexCoords>=3)
+   if (GemShape::m_texType && GemShape::m_texNum>=3)
     {
-		if ((xsize0!= state->texCoords[0].s) ||
-		(xsize != state->texCoords[1].s-xsize0))
+		if ((xsize0!= GemShape::m_texCoords[0].s) ||
+		(xsize != GemShape::m_texCoords[1].s-xsize0))
 		alreadyInit = 0;
 
         if (!alreadyInit)
         {
-			xsize0 = state->texCoords[0].s;
-	    	xsize  = state->texCoords[1].s-xsize0;
+			xsize0 = GemShape::m_texCoords[0].s;
+	    	xsize  = GemShape::m_texCoords[1].s-xsize0;
 
             setGrid(gridX);
             alreadyInit = 1;

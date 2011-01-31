@@ -125,12 +125,12 @@ void scopeXYZ :: renderShape(GemState *state)
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, typ, 0, vertices);
 
-  if(state->texture) {
+  if(GemShape::m_texType) {
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    if(count==state->numTexCoords) {
-      // in the original code, we used whatever state->texCoords were present
+    if(count==GemShape::m_texNum) {
+      // in the original code, we used whatever GemShape::m_texCoords were present
       // if we had more vertices, the remaining vs would just use the last texCoord available
-      glTexCoordPointer(2, GL_FLOAT, 0, state->texCoords);
+      glTexCoordPointer(2, GL_FLOAT, 0, GemShape::m_texCoords);
     } else {
       // in the original code, the texcoords where normalized(!)
       glTexCoordPointer(2, typ, sizeof(t_sample), vertices);
@@ -143,7 +143,7 @@ void scopeXYZ :: renderShape(GemState *state)
   // deactivate vertex arrays after drawing
   glDisableClientState(GL_VERTEX_ARRAY);
 
-  if(state->texture) {
+  if(GemShape::m_texType) {
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   }
 

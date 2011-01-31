@@ -141,17 +141,17 @@ void rubber :: renderShape(GemState *state)
 {
   int k, i, j;
      
-  if (state->texture && state->numTexCoords>=3) {
+  if (GemShape::m_texType && GemShape::m_texNum>=3) {
 
-    if ((xsize  != state->texCoords[1].s) ||
-        (ysize  != state->texCoords[1].t) ||
-        (ysize0 != state->texCoords[2].t))
+    if ((xsize  != GemShape::m_texCoords[1].s) ||
+        (ysize  != GemShape::m_texCoords[1].t) ||
+        (ysize0 != GemShape::m_texCoords[2].t))
       m_alreadyInit = 0;
     
     if (!m_alreadyInit)  {
-      xsize  = state->texCoords[1].s;
-      ysize0 = state->texCoords[2].t;
-      ysize  = state->texCoords[1].t;
+      xsize  = GemShape::m_texCoords[1].s;
+      ysize0 = GemShape::m_texCoords[2].t;
+      ysize  = GemShape::m_texCoords[1].t;
 
       rubber_init();
       m_alreadyInit = 1;

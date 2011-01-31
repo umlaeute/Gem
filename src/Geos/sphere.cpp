@@ -66,7 +66,7 @@ void sphere :: createSphere(GemState *state)
     GLfloat rho, drho, theta, dtheta;
     GLfloat s, t, ds, dt;
     GLint i, j, imin, imax;
-  //  GLboolean normals = (state->lighting)?GL_TRUE:GL_FALSE;
+  //  GLboolean normals = (GemShape::m_lighting)?GL_TRUE:GL_FALSE;
     GLenum orientation = true; /* GLU_INSIDE; */
     GLfloat nsign = (orientation)?-1.0:1.0;
 
@@ -79,11 +79,11 @@ void sphere :: createSphere(GemState *state)
     if(m_y)delete[]m_y;m_y=NULL;
     if(m_z)delete[]m_z;m_z=NULL;
 
-    if(state->texture){
-        xsize0 = state->texCoords[0].s;
-        xsize  = state->texCoords[1].s-xsize0;
-        ysize0 = state->texCoords[1].t;
-        ysize  = state->texCoords[2].t-ysize0;
+    if(GemShape::m_texType){
+        xsize0 = GemShape::m_texCoords[0].s;
+        xsize  = GemShape::m_texCoords[1].s-xsize0;
+        ysize0 = GemShape::m_texCoords[1].t;
+        ysize  = GemShape::m_texCoords[2].t-ysize0;
     }
 
     drho = M_PI / static_cast<GLfloat>(stacks);
@@ -99,7 +99,7 @@ void sphere :: createSphere(GemState *state)
 
         src = 0;
         
-        if (!state->texture) {
+        if (!GemShape::m_texType) {
             /* draw +Z end as a triangle fan */
             
             for (j = 0; j <= slices; j++) {
@@ -114,7 +114,7 @@ void sphere :: createSphere(GemState *state)
         ds = 1.0 / slices;
         dt = 1.0 / stacks;
         t = 1.0;			/* because loop now runs from 0 */
-        if (state->texture) {
+        if (GemShape::m_texType) {
             imin = 0;
             imax = stacks;
         }
@@ -141,7 +141,7 @@ void sphere :: createSphere(GemState *state)
             }
         }
 
-        if (!state->texture) {
+        if (!GemShape::m_texType) {
             /* draw -Z end as a triangle fan */
             
             rho = M_PI - drho;
@@ -227,7 +227,7 @@ void sphere :: render(GemState *state)
   GLfloat rho, drho, dtheta;
   GLfloat s, t, ds, dt;
   GLint i, j, imin, imax;
-  GLboolean normals = (state->lighting)?GL_TRUE:GL_FALSE;
+  GLboolean normals = (GemShape::m_lighting)?GL_TRUE:GL_FALSE;
   GLenum orientation = true; /* GLU_INSIDE; */
   GLfloat nsign = (orientation)?-1.0:1.0;
 
@@ -236,11 +236,11 @@ void sphere :: render(GemState *state)
 
     GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(state->texture && state->numTexCoords>=3){
-      xsize0 = state->texCoords[0].s;
-      xsize  = state->texCoords[1].s-xsize0;
-      ysize0 = state->texCoords[1].t;
-      ysize  = state->texCoords[2].t-ysize0;
+  if(GemShape::m_texType && GemShape::m_texNum>=3){
+      xsize0 = GemShape::m_texCoords[0].s;
+      xsize  = GemShape::m_texCoords[1].s-xsize0;
+      ysize0 = GemShape::m_texCoords[1].t;
+      ysize  = GemShape::m_texCoords[2].t-ysize0;
   }
     
   drho = M_PI / static_cast<GLfloat>(stacks);
@@ -252,7 +252,7 @@ void sphere :: render(GemState *state)
 
   //if anything changed then the geometry is rebuilt
   if (stacks != oldStacks || slices != oldSlices || 
-      m_drawType != oldDrawType || state->texture!=oldTexture){
+      m_drawType != oldDrawType || GemShape::m_texType!=oldTexture){
 
       //call the sphere creation function to fill the array
       createSphere(state);
@@ -260,12 +260,12 @@ void sphere :: render(GemState *state)
       oldStacks = stacks;
       oldSlices = slices;
       oldDrawType = m_drawType;
-      oldTexture = state->texture;
+      oldTexture = GemShape::m_texType;
   }
  
   if (m_drawType == GL_FILL) {
     src = 0;
-    if (!state->texture) {
+    if (!GemShape::m_texType) {
       /* draw +Z end as a triangle fan */
       glBegin(GL_TRIANGLE_FAN);
       glNormal3f(0.0, 0.0, 1.0);
@@ -282,7 +282,7 @@ void sphere :: render(GemState *state)
     ds = 1.0 / slices;
     dt = 1.0 / stacks;
     t = 1.0;			/* because loop now runs from 0 */
-    if (state->texture) {
+    if (GemShape::m_texType) {
       imin = 0;
       imax = stacks;
     }
@@ -299,13 +299,13 @@ void sphere :: render(GemState *state)
 
 		if (normals)
 			glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-		if(state->texture)
+		if(GemShape::m_texType)
 			glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
 		glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
 		src++;
 		if (normals)
 			glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-		if(state->texture)
+		if(GemShape::m_texType)
 			glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
 		s += ds;
 		glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
@@ -315,7 +315,7 @@ void sphere :: render(GemState *state)
       t -= dt;
     }
 
-    if (!state->texture) {
+    if (!GemShape::m_texType) {
       /* draw -Z end as a triangle fan */
       glBegin(GL_TRIANGLE_FAN);
       glNormal3f(0.0, 0.0, -1.0);

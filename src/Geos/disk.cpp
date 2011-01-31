@@ -92,15 +92,15 @@ void disk :: render(GemState *state)
   GLfloat da, dr;
 
   GLenum orientation = true; /* GLU_INSIDE; */
-  GLboolean normals = (state->lighting);
+  GLboolean normals = (GemShape::m_lighting);
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(state->texture && state->numTexCoords>=3){
-      xsize0 = state->texCoords[0].s;
-      xsize  = state->texCoords[1].s-xsize0;
-      ysize0 = state->texCoords[1].t;
-      ysize  = state->texCoords[2].t-ysize0;
+  if(GemShape::m_texType && GemShape::m_texNum>=3){
+      xsize0 = GemShape::m_texCoords[0].s;
+      xsize  = GemShape::m_texCoords[1].s-xsize0;
+      ysize0 = GemShape::m_texCoords[1].t;
+      ysize  = GemShape::m_texCoords[2].t-ysize0;
   }
 
   //gluDisk(m_thing, m_innerRadius, m_size, m_numSlices, m_numSlices);
@@ -138,9 +138,9 @@ void disk :: render(GemState *state)
 	    GLfloat a=(s == m_numSlices)?0.0:(s * da);
 	    sa = sin(a);
 	    ca = cos(a);
-	    if(state->texture)glTexCoord2f((0.5 + sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
+	    if(GemShape::m_texType)glTexCoord2f((0.5 + sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
 	    glVertex2f(r2 * sa, r2 * ca);
-	    if(state->texture)glTexCoord2f((0.5 + sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
+	    if(GemShape::m_texType)glTexCoord2f((0.5 + sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
 	    glVertex2f(r1 * sa, r1 * ca);
 	  }
 	  glEnd();
@@ -151,9 +151,9 @@ void disk :: render(GemState *state)
 	    GLfloat a=(s==m_numSlices)?0.0:s * da;
 	    sa = sin(a);
 	    ca = cos(a);
-	    if(state->texture)glTexCoord2f((0.5 - sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
+	    if(GemShape::m_texType)glTexCoord2f((0.5 - sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
 	    glVertex2f(r2 * sa, r2 * ca);
-	    if(state->texture)glTexCoord2f((0.5 - sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
+	    if(GemShape::m_texType)glTexCoord2f((0.5 - sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
 	    glVertex2f(r1 * sa, r1 * ca);
 	  }
 	  glEnd();
@@ -171,7 +171,7 @@ void disk :: render(GemState *state)
 	glBegin(GL_LINE_LOOP);
 	for (s = 0; s < m_numSlices; s++) {
 	  GLfloat a = s * da;
-	  if(state->texture)glTexCoord2f((0.5+r*sin(a)/dtc)*xsize+xsize0, (0.5+r*cos(a)/dtc)*ysize+ysize0);
+	  if(GemShape::m_texType)glTexCoord2f((0.5+r*sin(a)/dtc)*xsize+xsize0, (0.5+r*cos(a)/dtc)*ysize+ysize0);
 	  glVertex2f(r * sin(a), r * cos(a));
 	}
 	glEnd();
@@ -184,7 +184,7 @@ void disk :: render(GemState *state)
 	glBegin(GL_LINE_STRIP);
 	for (l = 0; l <= loops; l++) {
 	  GLfloat r = m_innerRadius + l * dr;
-	  if(state->texture)glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
+	  if(GemShape::m_texType)glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
 	  glVertex2f(r * x, r * y);
 	}
 	glEnd();
@@ -203,7 +203,7 @@ void disk :: render(GemState *state)
 	for (l = 0; l <= loops; l++) {
 	  GLfloat r = m_innerRadius * l * dr;
 	  glVertex2f(r * x, r * y);
-	  if(state->texture)glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
+	  if(GemShape::m_texType)glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
 	}
       }
       glEnd();

@@ -181,11 +181,11 @@ void curve3d :: renderShape(GemState *state){
   GLfloat ysize = 1.0f;
   GLfloat ysize0= 0.0f;
 
-  if (state->texture && state->numTexCoords>=3)
+  if (GemShape::m_texType && GemShape::m_texNum>=3)
     {
-      xsize  = state->texCoords[1].s;
-      ysize0 = state->texCoords[2].t;
-      ysize  = state->texCoords[1].t;
+      xsize  = GemShape::m_texCoords[1].s;
+      ysize0 = GemShape::m_texCoords[2].t;
+      ysize  = GemShape::m_texCoords[1].t;
     }
   GLfloat ysizediff = ysize0 - ysize;
 
@@ -197,7 +197,7 @@ void curve3d :: renderShape(GemState *state){
 
   switch (m_drawType){
   case LINE:    { 
-    if (state->texture)	{
+    if (GemShape::m_texType)	{
       for (n = 0; n < nb_pts_affich_X+1; n++)   {
 	glBegin(GL_LINE_STRIP);
 	for (m = 0; m  < nb_pts_affich_Y+1; m++){	
@@ -234,7 +234,7 @@ void curve3d :: renderShape(GemState *state){
     break;
   case FILL:
     {
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_TRIANGLE_STRIP);
 	  for(m = 0; m  < nb_pts_affich_Y+1; m++)   {	
@@ -259,7 +259,7 @@ void curve3d :: renderShape(GemState *state){
   case POINT:
     {
       glBegin(GL_POINTS);
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(n = 0; n < nb_pts_affich_X+1; n++) {
 	  for(m = 0; m  < nb_pts_affich_Y+1; m++) {
 	    glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
@@ -277,7 +277,7 @@ void curve3d :: renderShape(GemState *state){
 
   case LINE1:
     {
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_LINE_STRIP);
 	  for(m = 0; m  < nb_pts_affich_Y; m++)  {	
@@ -299,7 +299,7 @@ void curve3d :: renderShape(GemState *state){
 
   case LINE2:
     {
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(m = 0; m < nb_pts_affich_Y+1; m++) {
 	  glBegin(GL_LINE_STRIP);
 	  for(n = 0; n  < nb_pts_affich_X+1; n++)  {	
@@ -322,7 +322,7 @@ void curve3d :: renderShape(GemState *state){
 
   case LINE3:
     {
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_LINES);
 	  for(m = 0; m  < nb_pts_affich_Y; m++)
@@ -345,7 +345,7 @@ void curve3d :: renderShape(GemState *state){
 
   case LINE4:
     {
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(m = 0; m < nb_pts_affich_Y; m++)
 	  {
 	    glBegin(GL_LINES);
@@ -368,7 +368,7 @@ void curve3d :: renderShape(GemState *state){
 
   case CONTROL_FILL:
     {	
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(n = 0; n < nb_pts_control_X-1; n++)
 	  for(m = 0; m  < nb_pts_control_Y-1; m++)   {
 	    Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
@@ -436,7 +436,7 @@ void curve3d :: renderShape(GemState *state){
 
   case CONTROL_POINT:
     {
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(n = 0; n < nb_pts_control_X; n++)
 	  for(m = 0; m  < nb_pts_control_Y; m++)   {	
 	    glBegin(GL_POINTS);
@@ -457,7 +457,7 @@ void curve3d :: renderShape(GemState *state){
 
   case CONTROL_LINE:
     {
-      if (state->texture){
+      if (GemShape::m_texType){
 	for(n = 0; n < nb_pts_control_X; n++)   {
 	  glBegin(GL_LINE_STRIP);
 	  for(m = 0; m  < nb_pts_control_Y; m++){	
@@ -496,7 +496,7 @@ void curve3d :: renderShape(GemState *state){
 
   case CONTROL_LINE2:
     {
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(m = 0; m < nb_pts_control_Y; m++) {
 	  glBegin(GL_LINE_STRIP);
 	  for(n = 0; n  < nb_pts_control_X; n++) {
@@ -518,7 +518,7 @@ void curve3d :: renderShape(GemState *state){
 
   case CONTROL_LINE1:
     {
-      if (state->texture)
+      if (GemShape::m_texType)
 	for(n = 0; n < nb_pts_control_X; n++) {
 	  glBegin(GL_LINE_STRIP);
 	  for(m = 0; m  < nb_pts_control_Y; m++)  {	

@@ -250,7 +250,7 @@ void pqtorusknots :: renderShape(GemState *state)
   glVertexPointer(3, GL_FLOAT, 0, m_Vertex);            
   glNormalPointer(GL_FLOAT, 0, m_Normal);
 
-  if (state->texture && state->numTexCoords)
+  if (GemShape::m_texType && GemShape::m_texNum)
     {
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
       for (int i = 0; i < 4; i++)

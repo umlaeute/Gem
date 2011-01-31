@@ -115,17 +115,17 @@ void polygon :: renderShape(GemState *state)
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_POLYGON;
 
   glNormal3f(0.0f, 0.0f, 1.0f);
-  if (state->texture && state->numTexCoords)
+  if (GemShape::m_texType && GemShape::m_texNum)
     {
       glBegin(m_drawType);
       for (int i = 0; i < m_numVertices; i++)
         {
-          if (state->numTexCoords < i)
-            glTexCoord2f(state->texCoords[state->numTexCoords - 1].s,
-                         state->texCoords[state->numTexCoords - 1].t);
+          if (GemShape::m_texNum < i)
+            glTexCoord2f(GemShape::m_texCoords[GemShape::m_texNum - 1].s,
+                         GemShape::m_texCoords[GemShape::m_texNum - 1].t);
           else
-            glTexCoord2f(state->texCoords[i].s,
-                         state->texCoords[i].t);
+            glTexCoord2f(GemShape::m_texCoords[i].s,
+                         GemShape::m_texCoords[i].t);
           glVertex3fv(m_vert[i]);
         }
       glEnd();
@@ -134,7 +134,7 @@ void polygon :: renderShape(GemState *state)
     {
       float maxVal[2];
       maxVal[0] = maxVal[1] = 0;
-      if (state->texture)
+      if (GemShape::m_texType)
         {
           for (int i = 0; i < m_numVertices; i++)
             {
@@ -156,7 +156,7 @@ void polygon :: renderShape(GemState *state)
       glBegin(m_drawType);
       for(int n=0; n < m_numVertices; n++)
         {
-          if (state->texture)
+          if (GemShape::m_texType)
             glTexCoord2f(m_vert[n][0] / maxVal[0],
                          m_vert[n][1] / maxVal[1]);
           glVertex3fv(m_vert[n]);

@@ -87,8 +87,8 @@ void torus :: innerRadius(float radius)
 /////////////////////////////////////////////////////////
 void torus :: render(GemState *state)
 {
-  GLboolean normals = (state->lighting);
-  GLboolean texture = (state->texture);
+  GLboolean normals = (GemShape::m_lighting);
+  GLboolean texture = (GemShape::m_texType);
 
   GLenum type = m_drawType;
   switch(m_drawType){
@@ -107,11 +107,11 @@ void torus :: render(GemState *state)
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(state->texture && state->numTexCoords>=3){
-    xsize0 = state->texCoords[0].s;
-    xsize  = state->texCoords[1].s-xsize0;
-    ysize0 = state->texCoords[1].t;
-    ysize  = state->texCoords[2].t-ysize0;
+  if(GemShape::m_texType && GemShape::m_texNum>=3){
+    xsize0 = GemShape::m_texCoords[0].s;
+    xsize  = GemShape::m_texCoords[1].s-xsize0;
+    ysize0 = GemShape::m_texCoords[1].t;
+    ysize  = GemShape::m_texCoords[2].t-ysize0;
   }
 
   //gluTorus(m_thing, m_innerRadius, m_size, m_numSlices, m_numSlices);

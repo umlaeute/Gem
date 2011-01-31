@@ -70,18 +70,18 @@ void ripple :: renderShape(GemState *state)
 
   glScalef(2.*m_size, 2.*m_size, 2.*m_size);
     
-  if (state->texture && state->numTexCoords>=3)
+  if (GemShape::m_texType && GemShape::m_texNum>=3)
     {
-      if ((m_sizeX  != state->texCoords[1].s) ||
-          (m_sizeY  != state->texCoords[1].t) ||
-          (m_sizeY0 != state->texCoords[2].t))
+      if ((m_sizeX  != GemShape::m_texCoords[1].s) ||
+          (m_sizeY  != GemShape::m_texCoords[1].t) ||
+          (m_sizeY0 != GemShape::m_texCoords[2].t))
         m_alreadyInit = false;
     
       if (!m_alreadyInit)
         {
-          m_sizeX  = state->texCoords[1].s;
-          m_sizeY0 = state->texCoords[2].t;
-          m_sizeY  = state->texCoords[1].t;
+          m_sizeX  = GemShape::m_texCoords[1].s;
+          m_sizeY0 = GemShape::m_texCoords[2].t;
+          m_sizeY  = GemShape::m_texCoords[1].t;
 
           ripple_init();
           precalc_ripple_vector();

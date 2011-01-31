@@ -62,7 +62,7 @@ void rectangle :: renderShape(GemState *state)
 
   glNormal3f(0.0f, 0.0f, 1.0f);
 
-  if (state->texture && state->numTexCoords)
+  if (GemShape::m_texType && GemShape::m_texNum)
 		{
 			glBegin(m_drawType);
 			SetVertex(state, -m_size,  -m_height, 0.0f,0.,0.,0);

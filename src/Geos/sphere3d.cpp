@@ -180,19 +180,19 @@ void sphere3d :: render(GemState *state)
    * if lighting is off, they just won't be used
    * i guess the original reason was somehow related to performance 
    *
-   * GLboolean normals = (state->lighting)?GL_TRUE:GL_FALSE;
+   * GLboolean normals = (GemShape::m_lighting)?GL_TRUE:GL_FALSE;
    */
   GLboolean normals = GL_TRUE;
-  GLint texture = (state->texture);
+  GLint texture = (GemShape::m_texType);
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
 
-  if(texture && state->numTexCoords>=3){
-    xsize0 = state->texCoords[0].s;
-    xsize  = state->texCoords[1].s-xsize0;
-    ysize0 = state->texCoords[1].t;
-    ysize  = state->texCoords[2].t-ysize0;
+  if(texture && GemShape::m_texNum>=3){
+    xsize0 = GemShape::m_texCoords[0].s;
+    xsize  = GemShape::m_texCoords[1].s-xsize0;
+    ysize0 = GemShape::m_texCoords[1].t;
+    ysize  = GemShape::m_texCoords[2].t-ysize0;
   }
     
   /* texturing: s goes from 0.0/0.25/0.5/0.75/1.0 at +y/+x/-y/-x/+y axis */

@@ -61,30 +61,30 @@ void colorSquare :: renderShape(GemState *state)
 {
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
 
-  if (!state->lighting) glShadeModel(GL_SMOOTH);
+  if (!GemShape::m_lighting) glShadeModel(GL_SMOOTH);
 
   glNormal3f(0.0f, 0.0f, 1.0f);
-    if (state->texture && state->numTexCoords)
+    if (GemShape::m_texType && GemShape::m_texNum)
     {
         int curCoord = 0;
 
 	    glBegin(m_drawType);
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
             glColor3fv(m_color[0]);
                 glVertex3f(-m_size, -m_size, 0.0f);
 
-	        if (state->numTexCoords > 1) curCoord = 1;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	        if (GemShape::m_texNum > 1) curCoord = 1;
+	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
             glColor3fv(m_color[1]);
                 glVertex3f( m_size, -m_size, 0.0f);
 
-	        if (state->numTexCoords > 2) curCoord = 2;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	        if (GemShape::m_texNum > 2) curCoord = 2;
+	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
             glColor3fv(m_color[2]);
                 glVertex3f( m_size,  m_size, 0.0f);
 
-	        if (state->numTexCoords > 3) curCoord = 3;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	        if (GemShape::m_texNum > 3) curCoord = 3;
+	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
             glColor3fv(m_color[3]);
                 glVertex3f(-m_size,  m_size, 0.0f);
 	    glEnd();
@@ -114,7 +114,7 @@ void colorSquare :: renderShape(GemState *state)
 /////////////////////////////////////////////////////////
 void colorSquare :: postrenderShape(GemState *state)
 {
-    if (!state->lighting) glShadeModel(GL_FLAT);
+    if (!GemShape::m_lighting) glShadeModel(GL_FLAT);
 }
 
 /////////////////////////////////////////////////////////

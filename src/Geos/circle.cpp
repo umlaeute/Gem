@@ -57,15 +57,15 @@ void circle :: renderShape(GemState *state)
     glNormal3f(0.0f, 0.0f, 1.0f);
     glLineWidth(m_linewidth);
     glBegin(m_drawType);
-	    if (state->texture)
+	    if (GemShape::m_texType)
 	    {
 	      GLfloat xsize  = 1.f;
 	      GLfloat ysize0 = 0.f;
 	      GLfloat ysize  = 1.f;
-	      if(state->numTexCoords>=3){
-		xsize  = state->texCoords[1].s;
-		ysize0 = state->texCoords[2].t;
-		ysize  = state->texCoords[1].t;
+	      if(GemShape::m_texNum>=3){
+		xsize  = GemShape::m_texCoords[1].s;
+		ysize0 = GemShape::m_texCoords[2].t;
+		ysize  = GemShape::m_texCoords[1].t;
 	      }
 	        for (int n = 0; n < NUM_PNTS; n++)
 	        {

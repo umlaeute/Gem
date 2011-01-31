@@ -75,26 +75,26 @@ void primTri :: renderShape(GemState *state)
 	float norm[3];
 	Matrix::generateNormal(mVectors[0], mVectors[1], mVectors[2], norm);
     glNormal3fv(norm);
-	if (!state->lighting)
+	if (!GemShape::m_lighting)
 		glShadeModel(GL_SMOOTH);
 
-    if (state->texture && state->numTexCoords)
+    if (GemShape::m_texType && GemShape::m_texNum)
     {
         int curCoord = 0;
 	    glBegin(m_drawType);
-	        glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	        glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
 			glColor4fv(mColors[0]);
    	        glVertex3fv(mVectors[0]);
 
-	        if (state->numTexCoords > 1)
+	        if (GemShape::m_texNum > 1)
 				curCoord = 1;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
 			glColor4fv(mColors[1]);
    	        glVertex3fv(mVectors[1]);
 
-	        if (state->numTexCoords > 2)
+	        if (GemShape::m_texNum > 2)
 				curCoord = 2;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
 			glColor4fv(mColors[2]);
    	        glVertex3fv(mVectors[2]);
 	    glEnd();
@@ -116,7 +116,7 @@ void primTri :: renderShape(GemState *state)
 	    glEnd();
     }
 
-	if (!state->lighting)
+	if (!GemShape::m_lighting)
 		glShadeModel(GL_FLAT);
 }
 

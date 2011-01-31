@@ -53,19 +53,19 @@ void triangle :: renderShape(GemState *state)
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(m_linewidth);
 
-    if (state->texture && state->numTexCoords)
+    if (GemShape::m_texType && GemShape::m_texNum)
     {
         int curCoord = 0;
 	    glBegin(m_drawType);
-	        glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	        glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
    	        glVertex3f(-m_size, -m_size, 0.f);
 
-	        if (state->numTexCoords > 1) curCoord = 1;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	        if (GemShape::m_texNum > 1) curCoord = 1;
+	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
    	        glVertex3f(m_size, -m_size, 0.f);
 
-	        if (state->numTexCoords > 2) curCoord = 2;
-	    	glTexCoord2f(state->texCoords[curCoord].s, state->texCoords[curCoord].t);
+	        if (GemShape::m_texNum > 2) curCoord = 2;
+	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
    	        glVertex3f(0.f,	m_size, 0.f);
 	    glEnd();
     }
