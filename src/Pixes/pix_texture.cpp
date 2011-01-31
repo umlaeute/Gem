@@ -162,6 +162,11 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
   }
 }
 
+static inline void tex2state(GemState*state, TexCoord*coords, int size) {
+  state->set("gl.tex.coords", coords);
+  state->set("gl.tex.numcoords", size);
+}
+
 
 ////////////////////////////////////////////////////////
 // extension check
@@ -193,15 +198,14 @@ bool pix_texture :: isRunnable(void) {
 }
 
 void pix_texture :: pushTexCoords(GemState*state) {
-  m_oldTexCoords=state->texCoords;
-  m_oldNumCoords=state->numTexCoords;
-  m_oldTexture  =state->texture;
+  state->get("gl.tex.coords", m_oldTexCoords);
+  state->get("gl.tex.numcoords", m_oldNumCoords);
+  state->get("gl.tex.type", m_oldTexture);
 }
 
 void pix_texture :: popTexCoords(GemState*state) {
-  state->texCoords   = m_oldTexCoords;
-  state->numTexCoords= m_oldNumCoords;
-  state->texture     = m_oldTexture;
+  tex2state(state, m_oldTexCoords, m_oldNumCoords);
+  state->set("gl.tex.type", m_oldTexture);
 }
 
 
@@ -227,6 +231,7 @@ void pix_texture :: render(GemState *state) {
   pushTexCoords(state);
 
   if(!m_textureOnOff)return;
+  if(!state)return;
 
   GLboolean upsidedown=false;
   GLboolean normalized=true;
@@ -236,11 +241,14 @@ void pix_texture :: render(GemState *state) {
   GLboolean useExternalTexture=false;
   int do_rectangle = (m_rectangle)?m_canRectangle:0;
   int newfilm = 0;
+  pixBlock*img=NULL;
 
-  if(state && state->image)
-    newfilm = state->image->newfilm;
 
-  if (!state->image || !state->image->image.data){
+  state->get("pix", img);
+  if(img)
+    newfilm = img->newfilm;
+
+  if (!img || !img->image.data){
     if(m_extTextureObj>0) {
       useExternalTexture= true;
       m_rebuildList     = false;
@@ -258,20 +266,18 @@ void pix_texture :: render(GemState *state) {
       /* neither do we have an image nor an external texture */
       return;
   }
-
-  state->texCoords = m_coords;
-  state->numTexCoords = 4;
+  tex2state(state, m_coords, 4);
 
   if(!useExternalTexture){
-    upsidedown = state->image->image.upsidedown;
-    if (state->image->newimage) m_rebuildList = true;
+    upsidedown = img->image.upsidedown;
+    if (img->newimage) m_rebuildList = true;
 
-    m_imagebuf.xsize =state->image->image.xsize;
-    m_imagebuf.ysize =state->image->image.ysize;
-    m_imagebuf.csize =state->image->image.csize;
-    m_imagebuf.format=state->image->image.format;
-    m_imagebuf.type  =state->image->image.type;
-    m_imagebuf.data  =state->image->image.data;
+    m_imagebuf.xsize =img->image.xsize;
+    m_imagebuf.ysize =img->image.ysize;
+    m_imagebuf.csize =img->image.csize;
+    m_imagebuf.format=img->image.format;
+    m_imagebuf.type  =img->image.type;
+    m_imagebuf.data  =img->image.data;
 
     x_2 = powerOfTwo(m_imagebuf.xsize);
     y_2 = powerOfTwo(m_imagebuf.ysize);
@@ -353,7 +359,7 @@ void pix_texture :: render(GemState *state) {
       m_imagebuf.format=GL_RGB;
       m_imagebuf.csize=3;
       m_imagebuf.reallocate();
-      m_imagebuf.fromYUV422(state->image->image.data);
+      m_imagebuf.fromYUV422(img->image.data);
     }
     if (normalized) {
       m_buffer.xsize = m_imagebuf.xsize;
@@ -365,8 +371,8 @@ void pix_texture :: render(GemState *state) {
       m_xRatio=1.0;
       m_yRatio=1.0;
       m_upsidedown=upsidedown;
-      state->texCoords = m_coords;
-      state->numTexCoords = 4;
+
+      tex2state(state, m_coords, 4);
       if (m_buffer.csize != m_dataSize[0] ||
           m_buffer.xsize != m_dataSize[1] ||
           m_buffer.ysize != m_dataSize[2]){
@@ -402,8 +408,7 @@ void pix_texture :: render(GemState *state) {
       m_buffer.type   = m_imagebuf.type;
       m_buffer.reallocate();
       m_upsidedown=upsidedown;
-      state->texCoords = m_coords;
-      state->numTexCoords = 4;
+      tex2state(state, m_coords, 4);
 
       if (m_buffer.csize != m_dataSize[0] ||
           m_buffer.xsize != m_dataSize[1] ||
@@ -472,7 +477,7 @@ void pix_texture :: render(GemState *state) {
         }
 
         // just to make sure...
-        state->image->newfilm = 0;
+        img->newfilm = 0;
       }
 
       if(m_pbo) {
@@ -524,16 +529,17 @@ void pix_texture :: render(GemState *state) {
   m_rebuildList = false;
   m_didTexture=true;
 
-  state->multiTexUnits = m_numTexUnits;
-  state->texture = 1;
+  state->set("gl.tex.units", m_numTexUnits);
 
   // if we are using rectangle textures, this is a way to inform the downstream objects
   // (this is important for things like [pix_coordinate]
-  if(m_textureType==GL_TEXTURE_RECTANGLE_ARB)state->texture=2;
 
-  // if we are using rectangle textures, this is a way to inform the downstream objects
-  // (this is important for things like [pix_coordinate]
-  if(m_textureType==GL_TEXTURE_RECTANGLE_EXT)state->texture=2;
+  // we don't use switch/case as _ARB and _EXT might be the same...
+  if(m_textureType==GL_TEXTURE_RECTANGLE_ARB || m_textureType==GL_TEXTURE_RECTANGLE_EXT) {
+    state->set("gl.tex.type", 2);
+  } else {
+    state->set("gl.tex.type", 1);
+  }
 
   sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType, upsidedown);
 }
