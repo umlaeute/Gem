@@ -51,7 +51,7 @@
 #include <string.h>
 
 
-#infdef HAVE_STRNLEN
+#ifndef HAVE_STRNLEN
 #define strnlen ff_strnlen
 static size_t ff_strnlen(const char* str, size_t maxlen) {
   size_t len=0;
