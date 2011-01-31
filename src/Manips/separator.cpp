@@ -67,7 +67,7 @@ separator :: separator(int argc, t_atom*argv)
     m_active[GLStack::TEXTURE   ]=true;
     m_active[GLStack::PROJECTION]=true;
   }
-  m_state.texCoords = NULL;
+  m_state.set("gl.tex.coords", static_cast<TexCoord*>(NULL));
 }
 
 /////////////////////////////////////////////////////////
@@ -76,13 +76,18 @@ separator :: separator(int argc, t_atom*argv)
 /////////////////////////////////////////////////////////
 separator :: ~separator()
 {
-    delete [] m_state.texCoords;
+  TexCoord*tc=NULL;
+  m_state.get("gl.tex.coords", tc);
+  if(tc)
+    delete [] tc;
 }
 
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
+#define SEPARATOR_STATEASSIGN(src, dst, T, key) do { T value; if ((src)->get((key), value)){ (dst)->set(key, value); } } while(0)
+
 void separator :: render(GemState *state)
 {
   using namespace gem;
@@ -99,23 +104,41 @@ void separator :: render(GemState *state)
     PUSHGLSTACK(GLStack::MODELVIEW);
   }
 
-  m_state.lighting 	 = state->lighting;
-  m_state.smooth   	 = state->smooth;
-  m_state.texture  	 = state->texture;
-  m_state.image   	 = state->image;
-  m_state.numTexCoords = state->numTexCoords;
-    
-  if(m_state.texCoords)delete [] m_state.texCoords;
-  if (state->texCoords)
-    {
-    	m_state.texCoords = new TexCoord[m_state.numTexCoords];
-    	for (int i = 0; i < m_state.numTexCoords; i++)
-        {
-    	    m_state.texCoords[i].s = state->texCoords[i].s;
-    	    m_state.texCoords[i].t = state->texCoords[i].t;
-        }
+#warning use GemState copy!
+
+  SEPARATOR_STATEASSIGN(state, &m_state, bool, "gl.lighting");
+  SEPARATOR_STATEASSIGN(state, &m_state, bool, "gl.smooth");
+  SEPARATOR_STATEASSIGN(state, &m_state, int, "gl.tex.type");
+  SEPARATOR_STATEASSIGN(state, &m_state, int, "gl.tex.numcoords");
+  SEPARATOR_STATEASSIGN(state, &m_state, pixBlock*, "pix");
+
+  TexCoord *myCoords=NULL, *coords=NULL;
+  int mynum=0, num=0;
+
+  m_state.get("gl.tex.coords", myCoords);
+  state->get ("gl.tex.coords", coords);
+
+  m_state.get("gl.tex.numcoords", mynum);
+  state->get ("gl.tex.numcoords", num);
+
+
+  if(mynum != num) {
+    if(myCoords)delete [] myCoords; myCoords=NULL;
+    if(coords) {
+      myCoords = new TexCoord[num];
     }
-  else m_state.texCoords = NULL;
+  }
+
+  if (myCoords && coords) {
+    state->get("gl.tex.numcoords", num);
+    for (int i = 0; i < num; i++)  {
+      myCoords[i].s = coords[i].s;
+      myCoords[i].t = coords[i].t;
+    }
+  } 
+
+  m_state.set("gl.tex.coords", myCoords);
+  m_state.set("gl.tex.numcoords", num);
 
   glMatrixMode(GL_MODELVIEW);
 }
@@ -139,11 +162,10 @@ void separator :: postrender(GemState *state)
     POPGLSTACK(GLStack::PROJECTION);
     POPGLSTACK(GLStack::MODELVIEW); 
   }
-
-  state->lighting 	= m_state.lighting;
-  state->smooth   	= m_state.smooth;
-  state->texture  	= m_state.texture;
-  state->image    	= m_state.image;
+  SEPARATOR_STATEASSIGN(&m_state, state, bool, "gl.lighting");
+  SEPARATOR_STATEASSIGN(&m_state, state, bool, "gl.smooth");
+  SEPARATOR_STATEASSIGN(&m_state, state, int, "gl.tex.type");
+  SEPARATOR_STATEASSIGN(&m_state, state, pixBlock*, "pix");
 	
 //this is a partial fix for the separator memory leak
 //
@@ -151,25 +173,35 @@ void separator :: postrender(GemState *state)
 //then just copy them in a loop without delete and new being done
 //
 //when texcoords are not equal the memory leak happens as usual
-   
-   if (state->numTexCoords != m_state.numTexCoords){
-		if (state->texCoords) state->texCoords = NULL;
-		state->texCoords = new TexCoord[m_state.numTexCoords];
-		post("state->numTexCoords %d != m_state.numTexCoords %d",state->numTexCoords,m_state.numTexCoords);
-		state->numTexCoords = m_state.numTexCoords;
-   }
-   
+  TexCoord *myCoords=NULL, *stateCoords=NULL;
+  int mynum=0, num=0;
 
-    if (m_state.texCoords) 
-    {
-    //	state->texCoords = new TexCoord[m_state.numTexCoords];
-    	for (int i = 0; i < m_state.numTexCoords; i++)
-    	{
-    	    state->texCoords[i].s = m_state.texCoords[i].s;
-    	    state->texCoords[i].t = m_state.texCoords[i].t;
-    	}
+  m_state.get("gl.tex.coords", myCoords);
+  state->get ("gl.tex.coords", stateCoords);
+
+  m_state.get("gl.tex.numcoords", mynum);
+  state->get ("gl.tex.numcoords", num);
+
+
+  if(mynum != num) {
+    //if(stateCoords)delete [] stateCoords;
+    stateCoords=NULL;
+    if(myCoords) {
+      stateCoords = new TexCoord[mynum];
+      num=mynum;
+      post("state->numTexCoords %d != m_state.numTexCoords %d",mynum,num);
     }
-    else state->texCoords = NULL;
+  }
+
+  if (myCoords && stateCoords) {
+    for (int i = 0; i < mynum; i++)  {
+      stateCoords[i].s = myCoords[i].s;
+      stateCoords[i].t = myCoords[i].t;
+    }
+  } 
+
+  state->set("gl.tex.coords", stateCoords);
+  state->set("gl.tex.numcoords", num);
 }
 
 /////////////////////////////////////////////////////////
