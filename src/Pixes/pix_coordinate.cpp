@@ -53,28 +53,32 @@ pix_coordinate :: ~pix_coordinate()
 /////////////////////////////////////////////////////////
 void pix_coordinate :: render(GemState *state)
 {
-  m_oldTexCoords=state->texCoords;
-  m_oldNumCoords=state->numTexCoords;
+  pixBlock*img=NULL;
+  state->get("pix", img);
 
-    if (state->texture && m_numCoords){
-        state->numTexCoords = m_numCoords;
+  state->get("gl.tex.coords", m_oldTexCoords);
+  state->get("gl.tex.numcoords", m_oldNumCoords);
+  state->set("gl.tex.type", m_oldTexType);
 
-	if(state->texture==2 && state->image!=NULL){ 
+  if (m_oldTexType && m_numCoords){
+    state->set("gl.tex.numcoords", m_numCoords);
+
+	if(m_oldTexType==2 && img!=NULL){ 
 	  // since we are using rectangle-textures (state->texture==2), 
 	  // we want to scale the coordinates by the image-dimensions if they are available
-	  t_float xsize = (t_float)state->image->image.xsize;
-	  t_float ysize = (t_float)state->image->image.ysize;
+	  t_float xsize = (t_float)img->image.xsize;
+	  t_float ysize = (t_float)img->image.ysize;
 
 	  for (int i = 0; i <  m_numCoords; i++)
 	    {
 	      m_rectcoords[i].s = xsize*m_coords[i].s;
 	      m_rectcoords[i].t = ysize*m_coords[i].t;
 	    }
-	  state->texCoords=m_rectcoords;
+    state->set("gl.tex.coords", m_rectcoords);
 
 	} else
-        state->texCoords = m_coords;
-    }
+    state->set("gl.tex.coords", m_coords);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -83,8 +87,9 @@ void pix_coordinate :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_coordinate :: postrender(GemState *state)
 {
-  state->texCoords= m_oldTexCoords;
-  state->numTexCoords=  m_oldNumCoords;
+  state->set("gl.tex.coords", m_oldTexCoords);
+  state->set("gl.tex.numcoords", m_oldNumCoords);
+  state->set("gl.tex.type", m_oldTexType);
 }
 
 /////////////////////////////////////////////////////////

@@ -193,16 +193,15 @@ void pix_snap2tex :: snapMess()
 void pix_snap2tex :: render(GemState *state)
 {
   m_didTexture=false;
-
-  m_oldTexCoords=state->texCoords;
-  m_oldNumCoords=state->numTexCoords;
-  m_oldTexture  =state->texture;
+  state->get("gl.tex.coords", m_oldTexCoords);
+  state->get("gl.tex.numcoords", m_oldNumCoords);
+  state->get("gl.tex.type", m_oldTexture);
 
   if (!m_textureOnOff) return;
 
-  state->texture = 1;
-  state->texCoords = m_coords;
-  state->numTexCoords = 4;
+  state->set("gl.tex.coords", static_cast<TexCoord*>(m_coords));
+  state->set("gl.tex.numcoords", 4);
+  state->set("gl.tex.type", 1);
 
   glEnable(m_textureType);
 
@@ -230,9 +229,9 @@ void pix_snap2tex :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: postrender(GemState *state)
 {
-  state->texCoords= m_oldTexCoords;
-  state->numTexCoords=  m_oldNumCoords;
-  state->texture     = m_oldTexture;
+  state->set("gl.tex.coords", m_oldTexCoords);
+  state->set("gl.tex.numcoords", m_oldNumCoords);
+  state->set("gl.tex.type", m_oldTexture);
 
   if (m_didTexture){
     glDisable(m_textureType);

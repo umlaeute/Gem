@@ -43,8 +43,8 @@ void pix_share_read :: render(GemState *state)
         
         memcpy(pix.image.data,data,imgsize);
 
-        state->image = &pix;
-        state->image->newimage = 1;
+        pix.newimage = true;
+        state->set("pix", &pix);
       }
     }
     else{

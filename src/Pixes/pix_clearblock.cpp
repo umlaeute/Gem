@@ -55,7 +55,7 @@ void pix_clearblock :: render(GemState *state)
     startRendering(); // i'm not sure, whether this breaks the default behaviour
     return;
   }
-  state->image = NULL;
+  state->set("pix", static_cast<pixBlock*>(NULL));
 }
 
 /////////////////////////////////////////////////////////
@@ -64,7 +64,8 @@ void pix_clearblock :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_clearblock :: postrender(GemState *state)
 {
-    state->image = NULL;
+#warning shant we reset to the original image?
+  state->set("pix", static_cast<pixBlock*>(NULL)); 
 }
 
 /////////////////////////////////////////////////////////

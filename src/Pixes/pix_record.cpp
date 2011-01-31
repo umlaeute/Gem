@@ -247,15 +247,18 @@ void pix_record :: stopRecording()
 void pix_record :: render(GemState *state)
 {
   //check if state exists
-  if(!state || !state->image)return;
-  if(!state->image->image.data){
+  if(!state)return;
+  pixBlock*img=NULL;
+  state->get("pix", img);
+
+  if(!img || !img->image.data){
     return;
   }
   if(!m_handle)return;
   
   if(m_banged||m_automatic){
     //      if(m_maxFrames != 0 && m_currentFrame >= m_maxFrames) m_recordStop = 1;
-    bool success=m_handle->write(&state->image->image);
+    bool success=m_handle->write(&img->image);
     m_banged=false;
 
     if(success) {

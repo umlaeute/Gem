@@ -69,6 +69,7 @@ class GEM_EXTERN pix_coordinate : public GemBase
     	// The number
     	int 	    	m_numCoords;
 
+    	int 	    	m_oldTexType;
 
 	//////////
 	// this is what we get from upstream

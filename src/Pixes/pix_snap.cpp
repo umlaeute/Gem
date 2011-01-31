@@ -144,7 +144,7 @@ void pix_snap :: render(GemState *state)
     	m_cache->resendImage = 0;
     }
     
-    state->image = &m_pixBlock;
+    state->set("pix", &m_pixBlock);
 }
 
 /////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ void pix_snap :: render(GemState *state)
 void pix_snap :: postrender(GemState *state)
 {
     m_pixBlock.newimage = 0;
-    state->image = NULL;
+    state->set("pix", static_cast<pixBlock*>(NULL));
 }
 
 /////////////////////////////////////////////////////////

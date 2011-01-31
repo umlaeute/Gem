@@ -285,11 +285,14 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
 
 void pix_share_write :: render(GemState *state)
 {
-  if (!state || !state->image) return;
+  if (!state)return;
+  pixBlock*img=NULL;
+  state->get("pix", img);
+  if(!img) return;
 
 #ifndef _WIN32
   if(shm_id>0){
-    imageStruct *pix = &state->image->image;
+    imageStruct *pix = &img->image;
     size_t size=pix->xsize*pix->ysize*pix->csize;
 	
     if (!shm_addr){

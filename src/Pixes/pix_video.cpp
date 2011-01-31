@@ -80,7 +80,7 @@ pix_video :: ~pix_video(){
 //
 /////////////////////////////////////////////////////////
 void pix_video :: render(GemState *state){
-   if (m_videoHandle)state->image=m_videoHandle->getFrame();
+  if (m_videoHandle)state->set("pix", m_videoHandle->getFrame());
 }
 
 /////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ void pix_video :: stopRendering(){
 //
 /////////////////////////////////////////////////////////
 void pix_video :: postrender(GemState *state){
-  state->image = NULL;
+  state->set("pix", static_cast<pixBlock*>(NULL));
 
   if (m_videoHandle)m_videoHandle->releaseFrame();
 }

@@ -136,15 +136,15 @@ bool pix_cubemap :: isRunnable(void) {
 }
 
 void pix_cubemap :: pushTexCoords(GemState*state) {
-  m_oldTexCoords=state->texCoords;
-  m_oldNumCoords=state->numTexCoords;
-  m_oldTexture  =state->texture;
+  state->get("gl.tex.coords", m_oldTexCoords);
+  state->get("gl.tex.numcoords", m_oldNumCoords);
+  state->get("gl.tex.type", m_oldTexture);
 }
 
 void pix_cubemap :: popTexCoords(GemState*state) {
-  state->texCoords   = m_oldTexCoords;
-  state->numTexCoords= m_oldNumCoords;
-  state->texture     = m_oldTexture;
+  state->set("gl.tex.coords", m_oldTexCoords);
+  state->set("gl.tex.numcoords", m_oldNumCoords);
+  state->set("gl.tex.type", m_oldTexture);
 }
 
 
@@ -194,9 +194,13 @@ void pix_cubemap :: render(GemState *state) {
   if(!m_textureOnOff)return;
 
   /* here comes the work: a new image has to be transfered from main memory to GPU and attached to a texture object */
-  if(state&&state->image) {
-    if(state->image->newimage)
-      m_img[0]=&state->image->image;
+  if(state) {
+    pixBlock*img=NULL;
+    state->get("pix", img);
+    if(img) {
+      if(img->newimage)
+        m_img[0]=&img->image;
+    }
   }
 
 
@@ -232,21 +236,23 @@ void pix_cubemap :: render(GemState *state) {
   m_rebuildList = 0;
   m_didTexture=true;
 
-  state->multiTexUnits = m_numTexUnits;
-  state->texture = 1;
-
-  state->texture=0;
+  state->set("gl.tex.units", m_numTexUnits);
+  state->set("gl.tex.type", 0); // ?
 
   //  sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType, upsidedown);
 }
 
 void pix_cubemap :: rightImage(int id, GemState *state) {
+  if(!state)return;
   if(id<0 || id>=6) {
     error("not a valid image-slot %d", id);
   }
-  if(state && state->image) {
-    if(state->image->newimage) {
-      m_img[id]=&state->image->image;
+  pixBlock*img=NULL;
+  state->get("pix", img);
+
+  if(img) {
+    if(img->newimage) {
+      m_img[id]=&img->image;
     } else {
       // m_img[id]=NULL;
     }

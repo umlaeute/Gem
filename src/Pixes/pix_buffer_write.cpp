@@ -79,8 +79,11 @@ void pix_buffer_write :: frameMess(int f){
 /////////////////////////////////////////////////////////
 void pix_buffer_write :: render(GemState*state){
   if (m_frame<0)return;
-  if (state && state->image && &state->image->image){
-    if (state->image->newimage || m_frame!=m_lastframe){
+  if(!state)return;
+  pixBlock*img=NULL;
+  state->get("pix", img);
+  if (state && img && &img->image){
+    if (img->newimage || m_frame!=m_lastframe){
       if(m_bindname==NULL || m_bindname->s_name==NULL){
 	error("cowardly refusing to write to no pix_buffer");
 	m_frame=-1; return;
@@ -92,7 +95,7 @@ void pix_buffer_write :: render(GemState*state){
       }
       pix_buffer *buffer=(pix_buffer *)(ohead)->data;
       if (buffer){
-	buffer->putMess(&state->image->image,m_lastframe=m_frame);
+	buffer->putMess(&img->image,m_lastframe=m_frame);
 	m_frame=-1;
       }
     }

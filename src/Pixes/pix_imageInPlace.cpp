@@ -72,7 +72,7 @@ void pix_imageInPlace :: render(GemState *state)
   if (!m_loadedCache->textBind[m_curImage])
     return;
 
-  state->texture = 1;
+  state->set("gl.tex.type", 1);
     
   glEnable(GL_TEXTURE_2D);
 
@@ -89,7 +89,7 @@ void pix_imageInPlace :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: postrender(GemState *state)
 {
-  state->texture = 0;
+  state->set("gl.tex.type", 0);
 
   glDisable(GL_TEXTURE_2D);
 }

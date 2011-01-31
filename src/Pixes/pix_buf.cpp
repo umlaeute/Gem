@@ -47,13 +47,16 @@ pix_buf :: ~pix_buf()
 /////////////////////////////////////////////////////////
 void pix_buf :: render(GemState *state)
 {
+  if(!state)return;
   bool doit=m_banged;
+  pixBlock*img=NULL;
+  state->get("pix", img);
 
   cachedPixBlock.newimage = 0;
-  if (!state || !state->image || !&state->image->image) return;
+  if (!img || !&img->image) return;
 
   doit|=m_auto;
-  doit|=state->image->newimage;
+  doit|=img->newimage;
 
   // 
   if (m_cache&&m_cache->resendImage)
@@ -62,11 +65,11 @@ void pix_buf :: render(GemState *state)
     }
 
   if (doit){
-    orgPixBlock = state->image;
-    state->image->image.copy2Image(&cachedPixBlock.image);
+    orgPixBlock = img;
+    img->image.copy2Image(&cachedPixBlock.image);
     cachedPixBlock.newimage = 1;
   }
-  state->image = &cachedPixBlock;
+  img = &cachedPixBlock;
   m_banged = false;
 }
 
@@ -76,7 +79,7 @@ void pix_buf :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_buf :: postrender(GemState *state)
 {
-  state->image = orgPixBlock;
+  state->set("pix", orgPixBlock);
 }
 
 /////////////////////////////////////////////////////////

@@ -120,25 +120,32 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
 /////////////////////////////////////////////////////////
 void pix_multitexture :: render(GemState *state)
 {
-	m_oldTexCoords=state->texCoords;
-	m_oldNumCoords=state->numTexCoords;
-	m_oldTexture  =state->texture;
+  int textype=0;
+  state->get("gl.tex.coords", m_oldTexCoords);
+  state->get("gl.tex.numcoords", m_oldNumCoords);
+  state->get("gl.tex.type", m_oldTexture);
+
+  state->get("gl.tex.units", m_reqTexUnits);
 	
-	state->multiTexUnits = m_reqTexUnits;
 	if (m_textureType == GL_TEXTURE_2D)
 	{
 	  m_xRatio = 1.0;
 	  m_yRatio = 1.0;
-	  state->texture = 1;
+	  textype = 1;
 	}else{
 	  m_xRatio = m_texSizeX;
 	  m_yRatio = m_texSizeY;
-	  state->texture = 2;
+	  textype = 2;
 	}
+
 	setTexCoords(m_coords, m_xRatio, m_yRatio, true);
-	state->texCoords = m_coords;
-	state->numTexCoords = 4;
-	
+
+  TexCoord*tc=m_coords;
+  state->set("gl.tex.coords", tc);
+  state->set("gl.tex.numcoords", 4);
+  state->set("gl.tex.type", textype);
+
+
 	for ( int i=0; i< m_reqTexUnits; i++ )
 	{
     if(GLEW_VERSION_1_3) {
@@ -162,10 +169,9 @@ void pix_multitexture :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_multitexture :: postrender(GemState *state)
 {
-  state->texCoords   = m_oldTexCoords;
-  state->numTexCoords= m_oldNumCoords;
-  state->texture     = m_oldTexture;
-  
+  state->set("gl.tex.coords", m_oldTexCoords);
+  state->set("gl.tex.numcoords", m_oldNumCoords);
+  state->set("gl.tex.type", m_oldTexture);
 
   if(GLEW_VERSION_1_3) {
     for ( int i = m_reqTexUnits; i>0; i--)

@@ -393,15 +393,18 @@ void pix_film :: render(GemState *state)
 #ifdef HAVE_PTHREADS
   if(m_thread_running) {
     pthread_mutex_lock(m_mutex);
-    state->image=m_frame;
+    state->set("pix", m_frame);
   } else
 #endif /* PTHREADS */
-    state->image=m_handle->getFrame();
+    state->set("pix", m_handle->getFrame());
+
+  pixBlock*img=NULL;
+  state->get("pix", img);
 
   // someone wants to process the image downstream, so make sure they get it
-  if (m_cache&&m_cache->resendImage&&state->image)
+  if (m_cache&&m_cache->resendImage&&img)
     {
-      state->image->newimage=true;
+      img->newimage=true;
       m_cache->resendImage = 0;
     }
 
@@ -409,7 +412,7 @@ void pix_film :: render(GemState *state)
   m_handle->setAuto(m_auto);
 
   frame=static_cast<int>(m_reqFrame);
-  if (NULL==state->image){
+  if (NULL==img){
     outlet_float(m_outEnd,(m_numFrames>0 && static_cast<int>(m_reqFrame)<0)?(m_numFrames-1):0);
 
     if(frame!=static_cast<int>(m_reqFrame)){
@@ -422,8 +425,8 @@ void pix_film :: render(GemState *state)
          */
         m_handle->changeImage(static_cast<int>(m_reqFrame), m_reqTrack);
       }
-      
-      state->image=m_handle->getFrame();
+      state->set("pix", m_handle->getFrame());
+
     }
   }
 }
@@ -435,7 +438,12 @@ void pix_film :: render(GemState *state)
 void pix_film :: postrender(GemState *state)
 {
   if(!m_handle)return;
-  if (state && state->image)state->image->newimage = 0;
+  if (state) {
+    pixBlock*img=NULL;
+    state->get("pix", img);
+    if(img)
+      img->newimage = false;
+  }
 
 #ifdef HAVE_PTHREADS
   if(m_thread_running){

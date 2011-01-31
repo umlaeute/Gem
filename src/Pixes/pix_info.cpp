@@ -60,9 +60,12 @@ pix_info :: ~pix_info()
 /////////////////////////////////////////////////////////
 void pix_info :: render(GemState *state)
 {
+  
   // 0 0 0  6408  5121 1 1 0  0 9.59521e+08
   t_atom abuf[3];
-  if (!state || !state->image){ //no pixblock (or even no image!)!
+  pixBlock*img=NULL;
+  if(state)state->get("pix", img);
+  if (!state || !img){ //no pixblock (or even no image!)!
     outlet_float(m_pixblock, (t_float)-1);
     outlet_float(m_misc,     (t_float)-1);
     outlet_float(m_format,   (t_float)-1);
@@ -71,9 +74,9 @@ void pix_info :: render(GemState *state)
     outlet_float(m_x,        (t_float)-1);
     return;
   }
-  SETFLOAT(  &abuf[0], (t_float)state->image->newimage);
-  SETFLOAT(  &abuf[1], (t_float)state->image->newfilm);
-  if (!&state->image->image){ // we have a pixblock, but no image!
+  SETFLOAT(  &abuf[0], (t_float)img->newimage);
+  SETFLOAT(  &abuf[1], (t_float)img->newfilm);
+  if (!&img->image){ // we have a pixblock, but no image!
     outlet_list(m_pixblock, gensym("list"), 2, abuf);
 
     outlet_float(m_misc,   (t_float)-1);
@@ -83,22 +86,22 @@ void pix_info :: render(GemState *state)
     outlet_float(m_x,      (t_float)-1);
     return;
   }
-  if(state->image->image.data){
-    t_gpointer*gp=(t_gpointer*)state->image->image.data;
+  if(img->image.data){
+    t_gpointer*gp=(t_gpointer*)img->image.data;
     SETPOINTER(&abuf[2], gp);
     outlet_anything(m_data, gensym("data"), 1, abuf+2);
   }
   outlet_list(m_pixblock, gensym("list"), 2, abuf);
-  SETFLOAT  (&abuf[0], (t_float)state->image->image.type);
-  SETFLOAT  (&abuf[1], (t_float)state->image->image.upsidedown);
-  SETFLOAT  (&abuf[2], (t_float)state->image->image.notowned);
+  SETFLOAT  (&abuf[0], (t_float)img->image.type);
+  SETFLOAT  (&abuf[1], (t_float)img->image.upsidedown);
+  SETFLOAT  (&abuf[2], (t_float)img->image.notowned);
   outlet_list(m_misc, gensym("list"), 3, abuf);
   // send out the colorspace (as integer!)
-  outlet_float(m_format, (t_float)state->image->image.format);
+  outlet_float(m_format, (t_float)img->image.format);
   // send out the width/height/csize information
-  outlet_float(m_c, (t_float)state->image->image.csize);
-  outlet_float(m_y, (t_float)state->image->image.ysize);
-  outlet_float(m_x, (t_float)state->image->image.xsize);
+  outlet_float(m_c, (t_float)img->image.csize);
+  outlet_float(m_y, (t_float)img->image.ysize);
+  outlet_float(m_x, (t_float)img->image.xsize);
 }
 void pix_info :: obj_setupCallback(t_class *classPtr){
 }
