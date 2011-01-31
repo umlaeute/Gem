@@ -53,11 +53,14 @@ inlet_free(m_inlet[3]);
 // Render
 //
 void GEMglBitmap :: render(GemState *state) {
-  if (!state || !state->image || !&state->image->image)return;
+  if (!state)return;
+  pixBlock*img=NULL;
+  state->get("pix", img);
+  if(!img || !&img->image)return;
   
-  glBitmap (state->image->image.xsize, state->image->image.ysize,
+  glBitmap (img->image.xsize, img->image.ysize,
 	    xorig, yorig, xmove, ymove, 
-	    state->image->image.data);
+	    img->image.data);
 }
 
 /////////////////////////////////////////////////////////

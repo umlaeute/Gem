@@ -58,12 +58,13 @@ bool GEMglTexSubImage1D :: isRunnable(void) {
 // Render
 //
 void GEMglTexSubImage1D :: render(GemState *state) {
-  if(!state||!state->image||!&state->image->image)return;
+  if (!state)return;
+  pixBlock*img=NULL;  state->get("pix", img);  if(!img || !&img->image)return;
   target=GL_TEXTURE_1D;
   glTexSubImage1D (target, level, xoffset, width,
-		   state->image->image.format, 
-		   state->image->image.type, 
-		   state->image->image.data);
+		   img->image.format, 
+		   img->image.type, 
+		   img->image.data);
 }
 
 /////////////////////////////////////////////////////////
