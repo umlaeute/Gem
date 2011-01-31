@@ -464,9 +464,6 @@ void GemMan :: fillGemState(GemState &state)
 {
   if (s_lightState) {
     // GemState['lighting'] = 1;
-    state.lighting = 1;
-    state.smooth = 1;
-
     state.set(gensym("gl.lighting"), true);
     state.set(gensym("gl.smooth"), true);   
   }
@@ -599,12 +596,16 @@ void GemMan :: render(void *)
   resetValues();
 
   GemState currentState;
+  float tickTime;
 
   // fill in the elapsed time
   if (m_buffer == 1)
-    currentState.tickTime = 50.f;
+    tickTime = 50.f;
   else
-    currentState.tickTime = static_cast<float>(clock_gettimesince(m_lastRenderTime));
+    tickTime = static_cast<float>(clock_gettimesince(m_lastRenderTime));
+
+  currentState.set("timing.tick", tickTime);
+
   m_lastRenderTime = clock_getsystime();
 
   //test to see if stereo is supported
@@ -670,7 +671,8 @@ void GemMan :: render(void *)
 
       // render right view
       fillGemState(currentState);
-      currentState.tickTime=0.f;
+      tickTime=0;
+      currentState.set("timing.tick", tickTime);
       renderChain(s_linkHead, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
@@ -778,7 +780,8 @@ void GemMan :: render(void *)
 
       // render right view
       fillGemState(currentState);
-      currentState.tickTime=0.f;
+      tickTime=0;
+      currentState.set("timing.tick", tickTime);
       renderChain(s_linkHead, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
@@ -840,7 +843,8 @@ void GemMan :: render(void *)
 
       // render right view
       fillGemState(currentState);
-      currentState.tickTime=0.f;
+      tickTime=0;
+      currentState.set("timing.tick", tickTime);
       renderChain(s_linkHead, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
