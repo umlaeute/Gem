@@ -15,7 +15,7 @@
 #include "part_info.h"
 
 #include <string.h>
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -66,12 +66,12 @@ part_info :: ~part_info()
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_info :: render(GemState *state)
+void part_info :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)    {
+  if (m_tickTime > 0.f)    {
     pMove();
   }
   //	pDrawGroupp();

@@ -17,7 +17,7 @@
 
 #include "papi.h"
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -30,9 +30,9 @@
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN part_velocity : public GemBase
+class GEM_EXTERN part_velocity : public partlib_base
 {
-  CPPEXTERN_HEADER(part_velocity, GemBase)
+  CPPEXTERN_HEADER(part_velocity, partlib_base)
 
     public:
 
@@ -41,7 +41,7 @@ class GEM_EXTERN part_velocity : public GemBase
   part_velocity(int,t_atom*);
     	
   //////////
-  virtual void 	render(GemState *state);
+  virtual void 	renderParticles(GemState *state);
 
  protected:
     	

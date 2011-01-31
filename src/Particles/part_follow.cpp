@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_follow.h"
-#include "Base/GemState.h"
+
 #include "papi.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(part_follow, t_floatarg, A_DEFFLOAT)
@@ -42,12 +42,12 @@ part_follow :: ~part_follow()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_follow :: render(GemState *state)
+void part_follow :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)
+  if (m_tickTime > 0.f)
     {
       pFollow(m_accel);
     }

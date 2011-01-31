@@ -41,21 +41,23 @@ part_draw :: ~part_draw()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_draw :: render(GemState *state)
+void part_draw :: renderParticles(GemState *state)
 {
-	if (state->lighting)
+  bool lighting=false;
+  state->get("gl.lighting", lighting);
+	if (lighting)
 	{
 		glDisable(GL_LIGHTING);
 	}
-	if (state->tickTime > 0.f)
+	if (m_tickTime > 0.f)
 	{
 		pMove();
 	}
 	pDrawGroupp(m_drawType);
-	if (state->lighting)
+	if (lighting)
 	{
 		glEnable(GL_LIGHTING);
 	}

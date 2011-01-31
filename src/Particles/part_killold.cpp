@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_killold.h"
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -43,12 +43,12 @@ part_killold :: ~part_killold()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_killold :: render(GemState *state)
+void part_killold :: renderParticles(GemState *state)
 {
-	if (state->tickTime > 0.f)
+	if (m_tickTime > 0.f)
 	{
 		pKillOld(m_killAge);
 	}

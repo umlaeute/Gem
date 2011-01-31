@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_orbitpoint.h"
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -48,12 +48,12 @@ part_orbitpoint :: ~part_orbitpoint()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_orbitpoint :: render(GemState *state)
+void part_orbitpoint :: renderParticles(GemState *state)
 {
-	if (state->tickTime > 0.f)
+	if (m_tickTime > 0.f)
 	{
 		pOrbitPoint(m_pos[0], m_pos[1], m_pos[2], m_grav);
 	}

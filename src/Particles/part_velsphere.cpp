@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_velsphere.h"
-#include "Base/GemState.h"
+
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(part_velsphere, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
@@ -48,12 +48,12 @@ part_velsphere :: ~part_velsphere()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_velsphere :: render(GemState *state)
+void part_velsphere :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)
+  if (m_tickTime > 0.f)
     {
       pVelocityD(PDSphere, m_pos[0], m_pos[1], m_pos[2], m_radius);
     }

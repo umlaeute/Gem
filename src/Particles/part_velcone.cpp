@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_velcone.h"
-#include "Base/GemState.h"
+
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(part_velcone, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
@@ -47,12 +47,12 @@ part_velcone :: ~part_velcone()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_velcone :: render(GemState *state)
+void part_velcone :: renderParticles(GemState *state)
 {
-	if (state->tickTime > 0.f)
+	if (m_tickTime > 0.f)
 	{
 		pVelocityD(PDCone, 0.f, 0.f, 0.f, m_pos[0], m_pos[1], m_pos[2], m_radius);
 	}

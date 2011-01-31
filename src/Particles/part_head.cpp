@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_head.h"
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -48,16 +48,16 @@ part_head :: ~part_head()
 }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_head :: render(GemState *state)
+void part_head :: renderParticles(GemState *state)
 {
 	if (m_particleGroup < 0)
 		return;
 	
 	// The original default was 50.f milliseconds (20 fps)
-	pTimeStep((state->tickTime / 50.f) * m_speed);
+	pTimeStep((m_tickTime / 50.f) * m_speed);
 
 	pCurrentGroup(m_particleGroup);
 }

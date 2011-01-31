@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_killslow.h"
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -43,12 +43,12 @@ part_killslow :: ~part_killslow()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_killslow :: render(GemState *state)
+void part_killslow :: renderParticles(GemState *state)
 {
-	if (state->tickTime > 0.f)
+	if (m_tickTime > 0.f)
 	{
 		pKillSlow(m_killSpeed);
 	}

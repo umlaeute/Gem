@@ -15,7 +15,7 @@
 #ifndef INCLUDE_PART_SOURCE_H_
 #define INCLUDE_PART_SOURCE_H_
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 #include "papi.h"
 
 /*-----------------------------------------------------------------
@@ -29,9 +29,9 @@
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN part_source : public GemBase
+class GEM_EXTERN part_source : public partlib_base
 {
-  CPPEXTERN_HEADER(part_source, GemBase)
+  CPPEXTERN_HEADER(part_source, partlib_base)
 
     public:
 
@@ -40,7 +40,7 @@ class GEM_EXTERN part_source : public GemBase
   part_source(t_floatarg num);
     	
   //////////
-  virtual void 	render(GemState *state);
+  virtual void 	renderParticles(GemState *state);
 
  protected:
     	

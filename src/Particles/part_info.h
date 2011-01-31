@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_PART_INFO_H_
 #define INCLUDE_PART_INFO_H_
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -28,9 +28,9 @@ CLASS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN part_info : public GemBase
+class GEM_EXTERN part_info : public partlib_base
 {
-  CPPEXTERN_HEADER(part_info, GemBase)
+  CPPEXTERN_HEADER(part_info, partlib_base)
 
     public:
 
@@ -39,7 +39,7 @@ class GEM_EXTERN part_info : public GemBase
   part_info();
     	
   //////////
-  virtual void 	render(GemState *state);
+  virtual void 	renderParticles(GemState *state);
 
  protected:
     	

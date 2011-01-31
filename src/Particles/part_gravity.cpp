@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_gravity.h"
-#include "Base/GemState.h"
+
 
 CPPEXTERN_NEW_WITH_THREE_ARGS(part_gravity, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
 
@@ -44,12 +44,12 @@ part_gravity :: ~part_gravity()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_gravity :: render(GemState *state)
+void part_gravity :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)
+  if (m_tickTime > 0.f)
     {
       pGravity(m_vector[0], m_vector[1], m_vector[2]);
     }

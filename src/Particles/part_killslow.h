@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_PART_KILLSLOW_H_
 #define INCLUDE_PART_KILLSLOW_H_
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -28,9 +28,9 @@ CLASS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN part_killslow : public GemBase
+class GEM_EXTERN part_killslow : public partlib_base
 {
-    CPPEXTERN_HEADER(part_killslow, GemBase)
+    CPPEXTERN_HEADER(part_killslow, partlib_base)
 
     public:
 
@@ -39,7 +39,7 @@ class GEM_EXTERN part_killslow : public GemBase
     	part_killslow(t_floatarg num);
     	
     	//////////
-    	virtual void 	render(GemState *state);
+    	virtual void 	renderParticles(GemState *state);
 
     protected:
     	

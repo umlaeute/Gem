@@ -15,7 +15,7 @@
 #ifndef INCLUDE_PART_SINK_H_
 #define INCLUDE_PART_SINK_H_
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 #include "papi.h"
 
 /*-----------------------------------------------------------------
@@ -29,9 +29,9 @@
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN part_sink : public GemBase
+class GEM_EXTERN part_sink : public partlib_base
 {
-  CPPEXTERN_HEADER(part_sink, GemBase)
+  CPPEXTERN_HEADER(part_sink, partlib_base)
 
     public:
 
@@ -40,7 +40,7 @@ class GEM_EXTERN part_sink : public GemBase
   part_sink(int argc, t_atom*argv);
     	
   //////////
-  virtual void 	render(GemState *state);
+  virtual void 	renderParticles(GemState *state);
 
  protected:
     	

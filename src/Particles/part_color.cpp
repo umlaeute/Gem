@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_color.h"
-#include "Base/GemState.h"
+
 #include "papi.h"
 
 CPPEXTERN_NEW(part_color)
@@ -46,12 +46,12 @@ part_color :: ~part_color()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_color :: render(GemState *state)
+void part_color :: renderParticles(GemState *state)
 {
-	if (state->tickTime > 0.f)
+	if (m_tickTime > 0.f)
 	{
 		pColorD(1.0f, PDLine, m_color1[0], m_color1[1], m_color1[2],
 							  m_color2[0], m_color2[1], m_color2[2]);

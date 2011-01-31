@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_PART_TARGETSIZE_H_
 #define INCLUDE_PART_TARGETSIZE_H_
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -28,9 +28,9 @@ CLASS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN part_targetsize : public GemBase
+class GEM_EXTERN part_targetsize : public partlib_base
 {
-    CPPEXTERN_HEADER(part_targetsize, GemBase)
+    CPPEXTERN_HEADER(part_targetsize, partlib_base)
 
     public:
 
@@ -39,7 +39,7 @@ class GEM_EXTERN part_targetsize : public GemBase
     	part_targetsize(t_floatarg size, t_floatarg scale);
     	
     	//////////
-    	virtual void 	render(GemState *state);
+    	virtual void 	renderParticles(GemState *state);
 
     protected:
     	

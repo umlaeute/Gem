@@ -15,7 +15,7 @@
 #include "part_render.h"
 
 #include <string.h>
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -47,12 +47,12 @@ part_render :: ~part_render()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_render :: render(GemState *state)
+void part_render :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)    {
+  if (m_tickTime > 0.f)    {
     pMove();
   }
   //	pDrawGroupp();

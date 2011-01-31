@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_targetsize.h"
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -52,12 +52,12 @@ part_targetsize :: ~part_targetsize()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_targetsize :: render(GemState *state)
+void part_targetsize :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)
+  if (m_tickTime > 0.f)
 	{
 		pTargetSize(m_size[0], m_size[1], m_size[2],
 			    m_scale[0], m_scale[1], m_scale[2]);

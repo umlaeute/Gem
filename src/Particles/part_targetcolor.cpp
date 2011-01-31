@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_targetcolor.h"
-#include "Base/GemState.h"
+
 #include "Base/GemException.h"
 
 #include "papi.h"
@@ -61,12 +61,12 @@ part_targetcolor :: ~part_targetcolor()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_targetcolor :: render(GemState *state)
+void part_targetcolor :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)
+  if (m_tickTime > 0.f)
 	{
 		pTargetColor(m_color[0], m_color[1], m_color[2], m_color[3], m_scale);
 	}

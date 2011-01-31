@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_PART_VERTEX_H_
 #define INCLUDE_PART_VERTEX_H_
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -28,9 +28,9 @@ CLASS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN part_vertex : public GemBase
+class GEM_EXTERN part_vertex : public partlib_base
 {
-  CPPEXTERN_HEADER(part_vertex, GemBase)
+  CPPEXTERN_HEADER(part_vertex, partlib_base)
 
     public:
 
@@ -39,7 +39,7 @@ class GEM_EXTERN part_vertex : public GemBase
   part_vertex(t_floatarg x=0, t_floatarg y=0, t_floatarg z=0);
     	
   //////////
-  virtual void 	render(GemState *state);
+  virtual void 	renderParticles(GemState *state);
 
  protected:
     	

@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_velocity.h"
-#include "Base/GemState.h"
+
 
 #include <string.h>
 
@@ -53,12 +53,12 @@ part_velocity :: ~part_velocity()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_velocity :: render(GemState *state)
+void part_velocity :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)
+  if (m_tickTime > 0.f)
     pVelocityD(m_domain,
 	       m_arg[0],m_arg[1],m_arg[2],m_arg[3],m_arg[4],m_arg[5],m_arg[6],m_arg[7],m_arg[8]);
 }

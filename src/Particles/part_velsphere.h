@@ -17,7 +17,7 @@
 
 #include "papi.h"
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -30,9 +30,9 @@
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN part_velsphere : public GemBase
+class GEM_EXTERN part_velsphere : public partlib_base
 {
-  CPPEXTERN_HEADER(part_velsphere, GemBase)
+  CPPEXTERN_HEADER(part_velsphere, partlib_base)
 
     public:
 
@@ -41,7 +41,7 @@ class GEM_EXTERN part_velsphere : public GemBase
   part_velsphere(t_floatarg val1, t_floatarg val2, t_floatarg val, t_floatarg radius);
     	
   //////////
-  virtual void 	render(GemState *state);
+  virtual void 	renderParticles(GemState *state);
 
  protected:
     	

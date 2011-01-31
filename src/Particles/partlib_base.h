@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Have the particles follow each other
+	Draw a partlib_base group
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -12,52 +12,42 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PART_FOLLOW_H_
-#define INCLUDE_PART_FOLLOW_H_
+#ifndef INCLUDE_PARTLIB_BASE_H_
+#define INCLUDE_PARTLIB_BASE_H_
 
-#include "Particles/partlib_base.h"
+#include "Base/GemBase.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
 
-	part_follow
+	partlib_base
     
-	Have the particles follow each other
+	Base class of all the part_* objects
 
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN part_follow : public partlib_base
+class GEM_EXTERN partlib_base : public GemBase
 {
-    CPPEXTERN_HEADER(part_follow, partlib_base)
+ public:
 
-    public:
-
-	    //////////
-	    // Constructor
-    	part_follow(t_floatarg num);
+  //////////
+  // Constructor
+  partlib_base(void);
+ 	
+  //////////
+  // Destructor
+  virtual ~partlib_base();
     	
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
+  //////////
+  virtual void 	render(GemState *);
+   
+  virtual void renderParticles(GemState*)=0;
 
-    protected:
-    	
-    	//////////
-    	// Destructor
-    	virtual ~part_follow();
-		
-		//////////
-		void			numberMess(float num)	{ m_accel = num; }
+ protected:
+  float m_tickTime;
 
-		//////////
-		float			m_accel;
-	
-	private:
-
-		//////////
-		// static member functions
-		static void		numberMessCallback(void *data, t_floatarg num);
 };
 
 #endif	// for header file

@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_vertex.h"
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -41,12 +41,12 @@ part_vertex :: ~part_vertex()
 { }
 
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_vertex :: render(GemState *state)
+void part_vertex :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f) {
+  if (m_tickTime > 0.f) {
     pVertex(m_x, m_y, m_z);
   }
 }

@@ -17,7 +17,7 @@ LOG
 
 #include "papi.h"
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -30,9 +30,9 @@ CLASS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN part_damp : public GemBase
+class GEM_EXTERN part_damp : public partlib_base
 {
-    CPPEXTERN_HEADER(part_damp, GemBase)
+    CPPEXTERN_HEADER(part_damp, partlib_base)
 
     public:
 
@@ -41,7 +41,7 @@ class GEM_EXTERN part_damp : public GemBase
     	part_damp(t_floatarg val1, t_floatarg val2, t_floatarg val3);
     	
     	//////////
-    	virtual void 	render(GemState *state);
+    	virtual void 	renderParticles(GemState *state);
 
     protected:
     	

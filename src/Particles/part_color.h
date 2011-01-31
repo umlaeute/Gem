@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_PART_COLOR_H_
 #define INCLUDE_PART_COLOR_H_
 
-#include "Base/GemBase.h"
+#include "Particles/partlib_base.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -28,9 +28,9 @@ CLASS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN part_color : public GemBase
+class GEM_EXTERN part_color : public partlib_base
 {
-    CPPEXTERN_HEADER(part_color, GemBase)
+    CPPEXTERN_HEADER(part_color, partlib_base)
 
     public:
 
@@ -39,7 +39,7 @@ class GEM_EXTERN part_color : public GemBase
     	part_color();
     	
     	//////////
-    	virtual void 	render(GemState *state);
+    	virtual void 	renderParticles(GemState *state);
 
     protected:
     	

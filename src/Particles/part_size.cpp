@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "part_size.h"
-#include "Base/GemState.h"
+
 
 #include "papi.h"
 
@@ -59,12 +59,12 @@ void part_size :: sizeMess(int argc, t_atom*argv)
   }
 }
 /////////////////////////////////////////////////////////
-// render
+// renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_size :: render(GemState *state)
+void part_size :: renderParticles(GemState *state)
 {
-  if (state->tickTime > 0.f)    {
+  if (m_tickTime > 0.f)    {
       pSize(m_size[0], m_size[1], m_size[2]);
     }
 }
