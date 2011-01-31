@@ -199,15 +199,14 @@ void GemPixDualObj :: stopRendering()
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: rightRender(GemState *statePtr)
 {
-  if (!statePtr || !statePtr->image) {
+  if (!statePtr || !statePtr->get("pix", m_pixRight)) {
     m_pixRightValid = 0;
     m_pixRight = 0;
     return;
   }
   
   m_pixRightValid = 1;
-  m_pixRight = statePtr->image;
-  if (statePtr->image->newimage)setPixModified(); // force the left arm to create a new image
+  if (m_pixRight->newimage)setPixModified(); // force the left arm to create a new image
 }
 
 /////////////////////////////////////////////////////////

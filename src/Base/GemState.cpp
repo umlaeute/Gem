@@ -27,6 +27,10 @@
 
 #include <iostream>
 
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 using namespace gem;
 
 class GemStateData {
@@ -52,7 +56,7 @@ class GemStateData {
 
  protected:
   // dictionary for setting values
-  std::map <t_symbol*, any> data;
+  std::map <std::string, any> data;
 
   std::auto_ptr<GLStack>stacks;
 };
@@ -177,10 +181,37 @@ float GemState::texCoordY(int num) const {
 
 
 /* get a named property */
-bool GemState::get(t_symbol*key, any&value) {
-  std::map<t_symbol*,any>::iterator it = data->data.find(key);
-
+bool GemState::get(const std::string key, any&value) {
+  std::map<std::string,any>::iterator it = data->data.find(key);
   if(it==data->data.end()) {
+    if(key=="dirty") { value=dirty; return true; }
+    if(key=="gl.displaylist") { value=inDisplayList; return true; }
+
+    if(key=="gllighting") { value=lighting; return true; }
+    if(key=="gl.smooth") { value=smooth; return true; }
+    if(key=="gl.tex.type") { value=texture; return true; }
+    if(key=="pix") { value=image; return true; }
+    if(key=="gl.tex.coords") { if(!texCoords)return false; value=texCoords; return true; }
+    if(key=="gl.tex.numcoords") { value=numTexCoords; return true; }
+    if(key=="gl.tex.units") { value=multiTexUnits; return true; }
+    if(key=="timing.tick") { value=tickTime; return true; }
+    if(key=="gl.drawtype") { value=drawType; return true; }
+
+#if 0
+    //if(key=="gl.stacks") { value=stackDepth[4]; return true; }
+
+    if(key=="vertex.dirty") { value=VertexDirty; return true; }
+    if(key=="*VertexArray") { value=*VertexArray; return true; }
+    if(key=="VertexArraySize") { value=VertexArraySize; return true; }
+    if(key=="VertexArrayStride") { value=VertexArrayStride; return true; }
+    if(key=="*ColorArray") { value=*ColorArray; return true; }
+    if(key=="HaveColorArray") { value=HaveColorArray; return true; }
+    if(key=="*NormalArray") { value=*NormalArray; return true; }
+    if(key=="HaveNormalArray") { value=HaveNormalArray; return true; }
+    if(key=="*TexCoordArray") { value=*TexCoordArray; return true; }
+    if(key=="HaveTexCoordArray") { value=HaveTexCoordArray; return true; }
+#endif
+
     return false;
   }
 
@@ -189,21 +220,32 @@ bool GemState::get(t_symbol*key, any&value) {
 }
 
 /* set a named property */
-bool GemState::set(t_symbol*key, any value) {
+bool GemState::set(const std::string key, any value) {
   if(value.empty()) {
     data->data.erase(key);
     return false;
   }
 
   /* wrapper for DEPRECATED access to member variables */
-  // ...
+  if(key=="dirty") { try { dirty=gem::any_cast<bool>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="gl.displaylist") { try { inDisplayList=gem::any_cast<bool>(value); } catch (gem::bad_any_cast) {} }
+
+  if(key=="gllighting") { try { lighting=gem::any_cast<bool>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="gl.smooth") { try { smooth=gem::any_cast<bool>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="gl.tex.type") { try { texture=gem::any_cast<int>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="pix") { try { image=gem::any_cast<pixBlock*>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="gl.tex.coords") { try { texCoords=gem::any_cast<TexCoord*>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="gl.tex.numcoords") { try { numTexCoords=gem::any_cast<int>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="gl.tex.units") { try { multiTexUnits=gem::any_cast<int>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="timing.tick") { try { tickTime=gem::any_cast<float>(value); } catch (gem::bad_any_cast) {} }
+  if(key=="gl.drawtype") { try { drawType=gem::any_cast<GLenum>(value); } catch (gem::bad_any_cast) {} }
 
   data->data[key]=value;
   return true;
 }
 
 /* remove a named property */
-bool GemState::remove(t_symbol*key) {
+bool GemState::remove(const std::string key) {
   return (0!=data->data.erase(key));
 }
 

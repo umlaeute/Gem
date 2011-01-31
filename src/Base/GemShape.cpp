@@ -58,15 +58,24 @@ GemShape :: ~GemShape()
 void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, float ty,int curCoord)
 {
 	int i;
-     if (state->numTexCoords) {
+
+  TexCoord*texcoords=NULL;
+  int numCoords = 0;
+  int numUnits = 0;
+
+  state->get("gl.tex.numcoords", numCoords);
+  state->get("gl.tex.units", numUnits);
+
+
+  if (numCoords) {
     tx=state->texCoordX(curCoord);
     ty=state->texCoordY(curCoord);
   }
-
-  if (state->multiTexUnits) {
-      for( i=0; i<state->multiTexUnits; i++) {
+  
+  if (numUnits) {
+    for( i=0; i<numUnits; i++) {
       glMultiTexCoord2fARB(GL_TEXTURE0+i, tx, ty);
-      }
+    }
   } else { // no multitexturing!
     glTexCoord2f(tx, ty);
 	}
@@ -78,13 +87,21 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
                            int curCoord)
 {
 	int i;
-  if (state->numTexCoords) {
+  int numCoords = 0;
+  int numUnits = 0;
+
+  state->get("gl.tex.numcoords", numCoords);
+  state->get("gl.tex.units", numUnits);
+
+
+
+  if (numCoords) {
     s*=state->texCoordX(curCoord);
     t*=state->texCoordY(curCoord);
   }
 
-  if (state->multiTexUnits) {
-    for( i=0; i<state->multiTexUnits; i++)
+  if (numUnits) {
+    for( i=0; i<numUnits; i++)
       glMultiTexCoord4fARB(GL_TEXTURE0+i, s, t, r, q);
   } else { // no multitexturing!
     glTexCoord4f(s, t, r, q);
@@ -173,6 +190,16 @@ void GemShape :: render(GemState *state)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
     glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE); 
   }
+
+  m_texType=0;
+  m_texNum =0;
+  m_texCoords=NULL;
+  m_lighting=false;
+
+  state->get("gl.tex.coords", m_texCoords);
+  state->get("gl.tex.type", m_texType);
+  state->get("gl.tex.numcoords", m_texNum);
+  state->get("gl.lighting", m_lighting);
 
   renderShape(state);
 

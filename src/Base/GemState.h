@@ -100,7 +100,7 @@ class GEM_EXTERN GemState
     	
   //////////
   // The number of TexCoords
-  // deprecated: use property 'gl.tex.coords' instead
+  // deprecated: use property 'gl.tex.numcoords' instead
   GEM_DEPRECATED  int 	    	    numTexCoords;
   
   //////////
@@ -173,11 +173,11 @@ class GEM_EXTERN GemState
    * the value of the 2nd argument is set accordingly and <code>true</code> is returned
    * if the key does not exist (or the type is wrong) the value is not touched and <code>false</code> is returned instead
    */
-  virtual bool get(t_symbol*key, gem::any&value);
-  virtual bool get(const char*key, gem::any value) {return get(gensym(key), value);}
+  virtual bool get(const std::string key, gem::any&value);
+  virtual bool get(const t_symbol*key, gem::any&value) { return get(key->s_name, value); }
 
   template<class T>
-    bool get(t_symbol*key, T&value) {
+    bool get(const std::string key, T&value) {
     try {
       gem::any val;
       if(!get(key,val)) {
@@ -192,17 +192,16 @@ class GEM_EXTERN GemState
     return false;
   };
   template<class T>
-    bool get(const char*key, T&value) {
-    return get(gensym(key), value);
+    bool get(const t_symbol*key, T&value) {
+    return get(key->s_name, value);
   }
 
   /* set a named property */
-  virtual bool set(t_symbol*key, gem::any value);
-  virtual bool set(const char*key, gem::any value) {return set(gensym(key), value);}
-
+  virtual bool set(const std::string key, gem::any value);
+  virtual bool set(const t_symbol*key, gem::any value) { return set(key->s_name, value); }
   /* remove a named property */
-  virtual bool remove(t_symbol*key);
-  virtual bool remove(const char*key) { return remove(gensym(key));}
+  virtual bool remove(const std::string key);
+  virtual bool remove(const t_symbol*key)  { return remove(key->s_name);}
 
   // Copy assignment
   GemState& operator=(const GemState&);

@@ -33,6 +33,7 @@ DESCRIPTION
     "width" - the line width when drawing with lines
     
 -----------------------------------------------------------------*/
+class TexCoord;
 class GEM_EXTERN GemShape : public GemBase
 {
     public:
@@ -132,6 +133,12 @@ class GEM_EXTERN GemShape : public GemBase
     	static void 	typeMessCallback(void *data, t_symbol *type);
     	static void 	sizeMessCallback(void *data, t_floatarg size);
     	static void 	blendMessCallback(void *data, t_floatarg size);
+
+
+ protected:
+      int m_texType, m_texNum;
+      TexCoord*m_texCoords;
+      bool m_lighting;
 };
 
 #endif	// for header file

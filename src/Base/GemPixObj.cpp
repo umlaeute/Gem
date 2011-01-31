@@ -54,70 +54,73 @@ void GemPixObj :: render(GemState *state){
   //   change formats, sizes, databuffer, whatever
   // the data is restored in the <postrender> call,
   // so that the objects can rely on their (buffered) images
-  if (!state || !state->image || !&state->image->image)return;
-  cachedPixBlock.newimage=state->image->newimage;
-  if (!state->image->newimage) {
-    state->image = &cachedPixBlock;
+  pixBlock*image=NULL;
+  if (!state || !state->get("pix", image))return;
+  if(!image || 
+     !&image->image)  return;
+  cachedPixBlock.newimage=image->newimage;
+  if (!image->newimage) {
+    image = &cachedPixBlock;
   } else {
-    orgPixBlock = state->image;
-    cachedPixBlock.newimage = state->image->newimage;
-    cachedPixBlock.newfilm = state->image->newfilm; //added for newfilm copy from cache cgc 6-21-03
-    state->image->image.copy2ImageStruct(&cachedPixBlock.image);
-    state->image = &cachedPixBlock;
+    orgPixBlock = image;
+    cachedPixBlock.newimage = image->newimage;
+    cachedPixBlock.newfilm = image->newfilm; //added for newfilm copy from cache cgc 6-21-03
+    image->image.copy2ImageStruct(&cachedPixBlock.image);
+    image = &cachedPixBlock;
     if (m_processOnOff){
-      switch(state->image->image.format){
+      switch(image->image.format){
       case GL_RGBA:
       case GL_BGRA_EXT:
 	switch(m_simd){
 	case(GEM_SIMD_MMX):
-	  processRGBAMMX(state->image->image);
+	  processRGBAMMX(image->image);
 	  break;
 	case(GEM_SIMD_SSE2):
-	  processRGBASSE2(state->image->image);
+	  processRGBASSE2(image->image);
 	  break;
 	case(GEM_SIMD_ALTIVEC):
-	  processRGBAAltivec(state->image->image);
+	  processRGBAAltivec(image->image);
 	  break;
 	default:
-	  processRGBAImage(state->image->image);
+	  processRGBAImage(image->image);
 	}
 	break;
       case GL_RGB:
       case GL_BGR_EXT:
-	processRGBImage(state->image->image);
+	processRGBImage(image->image);
 	break;
       case GL_LUMINANCE:
 	switch(m_simd){
 	case(GEM_SIMD_MMX):
-	  processGrayMMX(state->image->image);
+	  processGrayMMX(image->image);
 	  break;
 	case(GEM_SIMD_SSE2):
-	  processGraySSE2(state->image->image);
+	  processGraySSE2(image->image);
 	  break;
 	case(GEM_SIMD_ALTIVEC):
-	  processGrayAltivec(state->image->image);
+	  processGrayAltivec(image->image);
 	  break;
 	default:
-	  processGrayImage(state->image->image);
+	  processGrayImage(image->image);
 	}
 	break;
       case GL_YCBCR_422_GEM:
 	switch(m_simd){
 	case(GEM_SIMD_MMX):
-	  processYUVMMX(state->image->image);
+	  processYUVMMX(image->image);
 	  break;
 	case(GEM_SIMD_SSE2):
-	  processYUVSSE2(state->image->image);
+	  processYUVSSE2(image->image);
 	  break;
 	case(GEM_SIMD_ALTIVEC):
-	  processYUVAltivec(state->image->image);
+	  processYUVAltivec(image->image);
 	  break;
 	default:
-	  processYUVImage(state->image->image);
+	  processYUVImage(image->image);
 	}
   break;
       default:
-        processImage(state->image->image);
+        processImage(image->image);
       }
     }
   }
