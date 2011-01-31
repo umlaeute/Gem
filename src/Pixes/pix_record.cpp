@@ -201,17 +201,15 @@ void pix_record :: startRecording()
   gem::record *handle=NULL;
   // find a handle for the current settings (filename, codec, props)
   const std::string codec=m_codec;
-
   if(m_handle) {
     stopRecording();
   }
   m_currentFrame = 0;
-
   int i=0;
   for(i=0; i<m_handles.size(); i++) {
     // check whether the handle supports the requested codec
     handle=m_handles[i];
-    if(!handle->setCodec(codec))
+    if(!codec.empty() && !handle->setCodec(codec))
       continue;
     if(handle->start(m_filename, m_props)) {
       m_handle=handle;
@@ -220,9 +218,6 @@ void pix_record :: startRecording()
       handle=NULL;
     }
   }
-
-
-
   if(m_handle) {
     m_filename=std::string("");
     m_recording=true;
