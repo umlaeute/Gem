@@ -129,7 +129,7 @@ void GemPixObj :: render(GemState *state){
 //////////
 // get the original state back
 void GemPixObj :: postrender(GemState *state){
-  state->image = orgPixBlock;
+  state->set("pix", orgPixBlock);
 }
 
 /////////////////////////////////////////////////////////
