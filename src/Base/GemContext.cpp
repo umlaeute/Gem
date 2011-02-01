@@ -12,16 +12,15 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
 #include "GemContext.h"
 #include "GemMan.h"
 
 #ifdef GEM_MULTICONTEXT
 # warning multicontext rendering currently under development
+#endif /* GEM_MULTICONTEXT */
 
 static GLEWContext*s_glewcontext=NULL;
 static GemGlewXContext*s_glewxcontext=NULL;
-#endif /* GEM_MULTICONTEXT */
 static unsigned int s_contextid;
 
 
@@ -48,6 +47,17 @@ static void GemContext_freeid(unsigned int id)
 }
 
 
+class GemContext::PIMPL {
+public:
+  PIMPL(void) {
+  }
+  ~PIMPL(void) {
+  }
+  GLEWContext    *context;
+  GemGlewXContext*xcontext;
+};
+
+
 /////////////////////////////////////////////////////////
 //
 // GemContext
@@ -59,10 +69,8 @@ static void GemContext_freeid(unsigned int id)
 GemContext :: GemContext()
   : m_width(0), m_height(0),
     m_infoOut(NULL),
-#ifdef GEM_MULTICONTEXT
-    m_context(NULL), m_xcontext(NULL),
-#endif /* GEM_MULTICONTEXT */
-    m_contextid(0)
+    m_contextid(0),
+    m_pimpl(new PIMPL)
 {
   m_infoOut = outlet_new(this->x_obj, 0);
 }
@@ -74,6 +82,8 @@ GemContext :: ~GemContext()
 {
   outlet_free(m_infoOut); m_infoOut=NULL;
   destroy();
+  delete m_pimpl;
+  m_pimpl=NULL;
 }
 
 void GemContext::info(t_symbol*s, int argc, t_atom*argv) {
@@ -143,17 +153,20 @@ void GemContext::key(t_symbol*id, int state) {
 bool GemContext::create(void){
   bool ret=true;
   static int firsttime=1;
-#ifdef GEM_MULTICONTEXT
   unsigned int oldcontextid=s_contextid;
   GLEWContext*oldcontext=s_glewcontext;
   GemGlewXContext*oldcontextx=s_glewxcontext;
-  m_context = new GLEWContext;
-  m_xcontext = new GemGlewXContext;
-  s_glewcontext=m_context;
-  s_glewxcontext=m_xcontext;
-  
-  firsttime=1;
+
+#ifdef GEM_MULTICONTEXT
+  firsttime=1; /* always the first time with multicontexts */
+
+  m_pimpl->context = new GLEWContext;
+  m_pimpl->xcontext = new GemGlewXContext;
 #endif /* GEM_MULTICONTEXT */
+
+  s_glewcontext=m_pimpl->context;
+  s_glewxcontext=m_pimpl->xcontext;
+  
 
   m_contextid=GemContext_newid();
   s_contextid=m_contextid;
@@ -192,22 +205,24 @@ bool GemContext::create(void){
 # endif
 #endif /* GEM_MULTICONTEXT */
 
+  GemMan::m_windowState++;
   return true;
 }
 
 
 void GemContext::destroy(void){
 #ifdef GEM_MULTICONTEXT
-  if(m_context) {
-    if(m_context==s_glewcontext) {
+  if(m_pimpl->context) {
+    if(m_pimpl->context==s_glewcontext) {
       s_glewcontext=NULL;
     }
-    delete m_context;
+    delete m_pimpl->context;
   }
-  m_context=NULL;
+  m_pimpl->context=NULL;
 #endif /* GEM_MULTICONTEXT */
   GemContext_freeid(m_contextid);
   m_contextid=0;
+  GemMan::m_windowState--;
 }
 
 bool GemContext::makeCurrent(void){
@@ -217,15 +232,14 @@ bool GemContext::makeCurrent(void){
   GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_maxStackDepth[GemMan::STACKPROJECTION];
 
 #ifdef GEM_MULTICONTEXT
-  if(!m_context) {
+  if(!m_pimpl->context) {
     return false;
     /* alternatively we could create a context on the fly... */
   }
-  s_glewcontext=m_context;
+  s_glewcontext=m_pimpl->context;
 #endif /* GEM_MULTICONTEXT */
   s_contextid=m_contextid;
   return true;
-
 }
 
 

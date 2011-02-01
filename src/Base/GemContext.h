@@ -26,6 +26,21 @@ CLASS
 DESCRIPTION
     
 -----------------------------------------------------------------*/
+
+
+
+# ifdef __APPLE__
+#  define GemGlewXContext void
+# elif defined _WIN32
+typedef struct WGLEWContextStruct WGLEWContext;
+#  define GemGlewXContext WGLEWContext
+# elif defined __linux__
+typedef struct GLXEWContextStruct GLXEWContext;
+#  define GemGlewXContext GLXEWContext
+# endif
+
+typedef struct GLEWContextStruct GLEWContext;
+
 class GEM_EXTERN GemContext : public CPPExtern
 {
  public:
@@ -41,7 +56,7 @@ class GEM_EXTERN GemContext : public CPPExtern
 
  protected:
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
-  /* LATER think about detaching theoutput from the stack, so we can e.g. destroy a window from a mouse-callback */
+  /* LATER think about detaching the output from the stack, so we can e.g. destroy a window from a mouse-callback */
   void info(t_symbol*s, int, t_atom*);  
   void info(t_symbol*s);
   void info(t_symbol*s, t_float);
@@ -94,24 +109,16 @@ class GEM_EXTERN GemContext : public CPPExtern
  public:
   static unsigned int getContextId(void);
 
-#ifdef GLEW_MX
   /* returns the last GemContext that called makeCurrent()
    * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
    */
   static GLEWContext*getGlewContext(void);
-# ifdef __APPLE__
-#  define GemGlewXContext void
-# elif defined _WIN32
-#  define GemGlewXContext WGLEWContext
-# elif defined __linux__
-#  define GemGlewXContext GLXEWContext
-# endif 
   static GemGlewXContext*getGlewXContext(void);
 
  private:
-  GLEWContext    *m_context;
-  GemGlewXContext*m_xcontext;
-#endif /* GEM_MULTICONTEXT */
+
+  class PIMPL;
+  PIMPL*m_pimpl;
 
   unsigned int m_contextid;
 };
