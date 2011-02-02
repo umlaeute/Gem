@@ -10,15 +10,15 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMXWINDOW_H_
-#define INCLUDE_GEMXWINDOW_H_
+#ifndef INCLUDE_GEMGLXWINDOW_H_
+#define INCLUDE_GEMGLXWINDOW_H_
 
 #include "Base/GemContext.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  gemXwindow
+  gemglxwindow
 
   The window manager
 
@@ -51,21 +51,21 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemXwindow : public GemContext
+class GEM_EXTERN gemglxwindow : public GemContext
 {
-  CPPEXTERN_HEADER(gemXwindow, GemContext)
+  CPPEXTERN_HEADER(gemglxwindow, GemContext)
 
     public:
 
   //////////
   // Constructor
-  gemXwindow(void);
+  gemglxwindow(void);
 
  private:
 
   //////////
   // Destructor
-  virtual ~gemXwindow(void);
+  virtual ~gemglxwindow(void);
 
 
   // create window

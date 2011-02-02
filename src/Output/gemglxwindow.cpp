@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 #include "Base/GemConfig.h"
 
-#include "gemXwindow.h"
+#include "gemglxwindow.h"
 #include "Base/GemGL.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +26,7 @@
 #endif
 #include <X11/cursorfont.h>
 
-CPPEXTERN_NEW(gemXwindow);
+CPPEXTERN_NEW(gemglxwindow);
 
 #define EVENT_MASK							\
   ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
@@ -108,7 +108,7 @@ static int dblBuf8Stereo[] =   {GLX_RGBA,
 				None};
 
 static int xerr;
-int ErrorHandler (Display *dpy, XErrorEvent *event)
+static int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
   // we don't really care about the error
   // let's hope for the best
@@ -124,7 +124,7 @@ int ErrorHandler (Display *dpy, XErrorEvent *event)
   return (0);
 }
 
-Bool WaitForNotify(Display *, XEvent *e, char *arg)
+static Bool WaitForNotify(Display *, XEvent *e, char *arg)
 {
   return (e->type == MapNotify) && (e->xmap.window == (Window)arg);
 }
@@ -132,7 +132,7 @@ Bool WaitForNotify(Display *, XEvent *e, char *arg)
 
  
 
-struct gemXwindow::Info {
+struct gemglxwindow::Info {
   int         fs;                 // FullScreen
   bool        have_constContext;  // 1 if we have a constant context
 
@@ -177,13 +177,13 @@ struct gemXwindow::Info {
 
 /////////////////////////////////////////////////////////
 //
-// gemXwindow
+// gemglxwindow
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemXwindow :: gemXwindow(void) :
+gemglxwindow :: gemglxwindow(void) :
   m_buffer(2),
   m_fsaa(0),
   m_title(std::string("GEM")),
@@ -203,13 +203,13 @@ gemXwindow :: gemXwindow(void) :
 // Destructor
 //
 /////////////////////////////////////////////////////////
-gemXwindow :: ~gemXwindow()
+gemglxwindow :: ~gemglxwindow()
 {
   destroyMess();
 }
 
 
-bool gemXwindow :: makeCurrent(void){
+bool gemglxwindow :: makeCurrent(void){
   if(!m_info->dpy || !m_info->win || !m_info->context)
     return false;
 
@@ -225,7 +225,7 @@ bool gemXwindow :: makeCurrent(void){
 // renderMess
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: renderMess()
+void gemglxwindow :: renderMess()
 {
   if(!makeCurrent()){ 
     error("no window made, cannot render!");
@@ -237,7 +237,7 @@ void gemXwindow :: renderMess()
   }
 }
 
-void gemXwindow::dispatch(void) {
+void gemglxwindow::dispatch(void) {
   if(!m_info->doDispatch)return;
   XEvent event; 
   XButtonEvent* eb = (XButtonEvent*)&event; 
@@ -317,7 +317,7 @@ void gemXwindow::dispatch(void) {
 // bufferMess
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: bufferMess(int buf)
+void gemglxwindow :: bufferMess(int buf)
 {
   switch(buf) {
   case 1: case 2:
@@ -333,7 +333,7 @@ void gemXwindow :: bufferMess(int buf)
 // fsaaMess
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: fsaaMess(int value)
+void gemglxwindow :: fsaaMess(int value)
 {
   m_fsaa=value;
 }
@@ -342,7 +342,7 @@ void gemXwindow :: fsaaMess(int value)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: titleMess(t_symbol* s)
+void gemglxwindow :: titleMess(t_symbol* s)
 {
   m_title=s->s_name;
 }
@@ -350,7 +350,7 @@ void gemXwindow :: titleMess(t_symbol* s)
 // border
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: borderMess(bool setting)
+void gemglxwindow :: borderMess(bool setting)
 {
   m_border=setting;
 }
@@ -358,7 +358,7 @@ void gemXwindow :: borderMess(bool setting)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: dimensionsMess(int width, int height)
+void gemglxwindow :: dimensionsMess(int width, int height)
 {
   if (width <= 0) {
     error("width must be greater than 0");
@@ -377,7 +377,7 @@ void gemXwindow :: dimensionsMess(int width, int height)
 // fullscreenMess
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: fullscreenMess(bool on)
+void gemglxwindow :: fullscreenMess(bool on)
 {
   m_fullscreen = on;
 }
@@ -386,7 +386,7 @@ void gemXwindow :: fullscreenMess(bool on)
 // offsetMess
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: offsetMess(int x, int y)
+void gemglxwindow :: offsetMess(int x, int y)
 {
   m_xoffset=x;
   m_yoffset=y;
@@ -396,7 +396,7 @@ void gemXwindow :: offsetMess(int x, int y)
 // createMess
 //
 /////////////////////////////////////////////////////////
-bool gemXwindow :: create(void)
+bool gemglxwindow :: create(void)
 {
   int modeNum=4;
   int bestMode=0;
@@ -595,7 +595,7 @@ bool gemXwindow :: create(void)
   }
   return GemContext::create();
 }
-void gemXwindow :: createMess(void)
+void gemglxwindow :: createMess(void)
 {
   if(!create()) {
     destroyMess();
@@ -607,7 +607,7 @@ void gemXwindow :: createMess(void)
 // destroy window
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: destroy(void)
+void gemglxwindow :: destroy(void)
 {
   /* both glXMakeCurrent() and XCloseDisplay() will crash the application
    * if the handler of the display (m_info->dpy) is invalid, e.g. because
@@ -645,7 +645,7 @@ void gemXwindow :: destroy(void)
   
   GemContext::destroy();
 }
-void gemXwindow :: destroyMess(void)
+void gemglxwindow :: destroyMess(void)
 {
   m_info->doDispatch=false;
   if(makeCurrent()) {
@@ -660,7 +660,7 @@ void gemXwindow :: destroyMess(void)
 // cursorMess
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: cursorMess(bool setting)
+void gemglxwindow :: cursorMess(bool setting)
 {
 
 }
@@ -668,67 +668,67 @@ void gemXwindow :: cursorMess(bool setting)
 // static member function
 //
 /////////////////////////////////////////////////////////
-void gemXwindow :: obj_setupCallback(t_class *classPtr)
+void gemglxwindow :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&gemXwindow::renderMessCallback));
+  class_addbang(classPtr, reinterpret_cast<t_method>(&gemglxwindow::renderMessCallback));
   
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::titleMessCallback),        gensym("title"), A_DEFSYM ,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::createMessCallback),       gensym("create") ,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::bufferMessCallback),       gensym("buffer"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::fullscreenMessCallback),   gensym("fullscreen"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::dimensionsMessCallback),   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::offsetMessCallback),       gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::cursorMessCallback),       gensym("cursor"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::destroyMessCallback),      gensym("destroy"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::printMessCallback),        gensym("print"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::borderMessCallback),       gensym("border"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemXwindow::fsaaMessCallback),         gensym("FSAA"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::titleMessCallback),        gensym("title"), A_DEFSYM ,A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::createMessCallback),       gensym("create") ,A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::bufferMessCallback),       gensym("buffer"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::fullscreenMessCallback),   gensym("fullscreen"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::dimensionsMessCallback),   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::offsetMessCallback),       gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::cursorMessCallback),       gensym("cursor"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::destroyMessCallback),      gensym("destroy"), A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::printMessCallback),        gensym("print"), A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::borderMessCallback),       gensym("border"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::fsaaMessCallback),         gensym("FSAA"), A_FLOAT, A_NULL);
 }
-void gemXwindow :: printMessCallback(void *)
+void gemglxwindow :: printMessCallback(void *)
 {
   //  GemMan::printInfo();
 }
-void gemXwindow :: borderMessCallback(void *data, t_floatarg state)
+void gemglxwindow :: borderMessCallback(void *data, t_floatarg state)
 {
   GetMyClass(data)->borderMess(static_cast<int>(state));
 }
-void gemXwindow :: destroyMessCallback(void *data)
+void gemglxwindow :: destroyMessCallback(void *data)
 {
   GetMyClass(data)->destroyMess();
 }
-void gemXwindow :: renderMessCallback(void *data)
+void gemglxwindow :: renderMessCallback(void *data)
 {
   GetMyClass(data)->renderMess();
 }
-void gemXwindow :: titleMessCallback(void *data, t_symbol* disp)
+void gemglxwindow :: titleMessCallback(void *data, t_symbol* disp)
 {
   GetMyClass(data)->titleMess(disp);
 }
-void gemXwindow :: createMessCallback(void *data)
+void gemglxwindow :: createMessCallback(void *data)
 {
   GetMyClass(data)->createMess();
 }
-void gemXwindow :: bufferMessCallback(void *data, t_floatarg buf)
+void gemglxwindow :: bufferMessCallback(void *data, t_floatarg buf)
 {
   GetMyClass(data)->bufferMess(static_cast<int>(buf));
 }
-void gemXwindow :: fullscreenMessCallback(void *data, t_floatarg on)
+void gemglxwindow :: fullscreenMessCallback(void *data, t_floatarg on)
 {
   GetMyClass(data)->fullscreenMess(static_cast<int>(on));
 }
-void gemXwindow :: dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height)
+void gemglxwindow :: dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
   GetMyClass(data)->dimensionsMess(static_cast<int>(width), static_cast<int>(height));
 }
-void gemXwindow :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
+void gemglxwindow :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
 {
   GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
 }
-void gemXwindow :: cursorMessCallback(void *data, t_floatarg val)
+void gemglxwindow :: cursorMessCallback(void *data, t_floatarg val)
 {
   GetMyClass(data)->cursorMess(val);
 }
-void gemXwindow :: fsaaMessCallback(void *data, t_floatarg val)
+void gemglxwindow :: fsaaMessCallback(void *data, t_floatarg val)
 {
   GetMyClass(data)->fsaaMess(static_cast<int>(val));
 }
