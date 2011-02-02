@@ -13,7 +13,8 @@
 #ifndef INCLUDE_GEMCOCOAWINDOW_H_
 #define INCLUDE_GEMCOCOAWINDOW_H_
 
-#include "Base/CPPExtern.h"
+#include "Base/GemContext.h"
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -49,58 +50,23 @@
   "topmost" - set the window to stay on top
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN gemcocoawindow : public CPPExtern
+
+class GEM_EXTERN gemcocoawindow : public GemContext
 {
-  CPPEXTERN_HEADER(gemcocoawindow, CPPExtern)
+  CPPEXTERN_HEADER(gemcocoawindow, GemContext)
 
     public:
 
   //////////
   // Constructor
-  gemcocoawindow(t_floatarg framespersecond);
-
- private:
+  gemcocoawindow();
 
   //////////
   // Destructor
   virtual         ~gemcocoawindow();
 
-  /* rendering */
-  void   bangMess();
+  virtual void bang(void);
 
-  /* render context (pre creation) */
-  void  bufferMess(int buf);
-  int         m_buffer;
-  void    fsaaMess(int value);
-  int         m_fsaa;
-
-  /* window decoration (pre creation) */
-  void titleMess(t_symbol* s);
-  char*     m_title;
-  void borderMess(bool on);
-  bool       m_border;
-
-  /* window position/dimension (pre creation) */
-  void    dimensionsMess(int width, int height);
-  unsigned int      m_width, m_height;
-  void    fullscreenMess(bool on);
-  bool              m_fullscreen;
-  void        offsetMess(int x, int y);
-  unsigned int      m_xoffset, m_yoffset;
-  void  secondscreenMess(bool on);
-  bool              m_secondscreen;
-
-  /* creation/destruction */
-  void        createMess(t_symbol* s);
-  void       destroyMess(void);
-
-  /* post creation */
-  void        cursorMess(bool on);
-  void       topmostMess(bool on);
-  void       menuBarMess(int on);
-
-  /* an outlet to send info to the patch */
-  t_outlet    *m_infoOut;
  private:
 
   //////////
