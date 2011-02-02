@@ -38,7 +38,7 @@
 class GEM_EXTERN GemContextDataBase {
  protected:
   static const int INVALID_CONTEXT;
-  int getCurContext(void);
+  virtual int getCurContext(void);
 };
 
 
@@ -54,7 +54,7 @@ template<class GemContextDataType = int>
 
     GemContextData(GemContextDataType v) : m_haveDefaultValue(true), m_defaultValue(v) {;}
 
-    ~GemContextData() {
+    virtual ~GemContextData() {
       m_ContextDataVector.clear();
     }
     	
