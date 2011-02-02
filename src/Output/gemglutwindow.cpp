@@ -17,7 +17,12 @@
 #include "gemglutwindow.h"
 
 #include "Base/GemGL.h"
-#include "GL/freeglut.h"
+
+#ifdef __linux__
+# include "GL/freeglut.h"
+#elif defined __APPLE__
+# include "GLUT/glut.h"
+#endif
 
 #include <stdio.h>
 
