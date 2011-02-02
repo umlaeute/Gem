@@ -118,7 +118,7 @@ class GEM_EXTERN gemglxwindow : public GemContext
   // the real width/height of the window (set by createGemWindow())
   unsigned int real_w, real_h, real_x, real_y;
 
-  //// if we can use a different display , this has its meaning under X
+  //// X display specification (e.g. "remote:0.1")
   std::string m_display;
 
   //////////

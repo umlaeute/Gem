@@ -150,10 +150,14 @@ struct gemglxwindow::Info {
 #ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
 #endif
+
+  XIM inputMethod;
+  XIC inputContext;
+
+
   bool        have_border;
 
   bool doDispatch;
-
 
   Info(void) : 
     fs(0),
@@ -167,11 +171,44 @@ struct gemglxwindow::Info {
 #ifdef HAVE_LIBXXF86VM
     //    deskMode(0),
 #endif
+    inputMethod(NULL),
+    inputContext(NULL),
+
     have_border(false),
     doDispatch(false)
   {
   }
   ~Info(void) {
+  }
+
+  std::string key2string(XKeyEvent* kb) {
+#define KEYSTRING_SIZE 10
+    char keystring[KEYSTRING_SIZE];
+    KeySym keysym_return;
+    int len=0;
+
+    if(inputContext) {
+      len=Xutf8LookupString(inputContext, kb,keystring,KEYSTRING_SIZE,&keysym_return,NULL);
+    }
+    if(len<1) {
+      len=XLookupString(kb,keystring,2,&keysym_return,NULL);
+    }
+
+    if ( (keysym_return & 0xff00)== 0xff00 ) {
+      //non alphanumeric key: use keysym
+      return std::string(XKeysymToString(keysym_return));
+    }
+    
+    if (len==0) {
+      //modifier key:use keysym
+      //triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+    } else if(len<KEYSTRING_SIZE) {
+      keystring[len]=0;
+    } else {
+      keystring[KEYSTRING_SIZE-1]=0;
+    }
+
+    return std::string(keystring);
   }
 };
 
@@ -273,28 +310,10 @@ void gemglxwindow::dispatch(void) {
           }
           break; 
         case KeyPress:
-          if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
-            //modifier key:use keysym
-            //triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
-          }
-          if ( (keysym_return & 0xff00)== 0xff00 ) {
-            //non alphanumeric key: use keysym
-            key(XKeysymToString(keysym_return), kb->keycode, 1);
-          } else {
-            key(keystring                     , kb->keycode, 1);
-          }
+          key(m_info->key2string(kb), kb->keycode, 1);
           break;
         case KeyRelease:
-          if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
-            //modifier key:use keysym
-            //triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
-          }
-          if ( (keysym_return & 0xff00)== 0xff00 ) {
-            //non alphanumeric key: use keysym
-            key(XKeysymToString(keysym_return), kb->keycode, 0);
-          } else {
-            key(keystring                     , kb->keycode, 0);
-          }
+          key(m_info->key2string(kb), kb->keycode, 0);
           break;
 
         case ResizeRequest:
@@ -553,6 +572,57 @@ bool gemglxwindow :: create(void)
   m_info->have_border=(True==swa.override_redirect);
 
   XSelectInput(m_info->dpy, m_info->win, EVENT_MASK);
+
+  m_info->inputMethod = XOpenIM(m_info->dpy, NULL, NULL, NULL);
+  if(m_info->inputMethod) {
+    XIMStyle style=NULL;
+    XIMStyles *stylePtr=NULL;
+    const char *preedit_attname = NULL;
+    XVaNestedList preedit_attlist = NULL;
+
+    if ((XGetIMValues(m_info->inputMethod, XNQueryInputStyle, &stylePtr, NULL) != NULL)) {
+      stylePtr=NULL;
+    }
+
+
+    /*
+     * Select the best input style supported by both the IM and Tk.
+     */
+    int i=0;
+    if(stylePtr) {
+      for (i = 0; i < stylePtr->count_styles; i++) {
+        XIMStyle thisStyle = stylePtr->supported_styles[i];
+        if (thisStyle == (XIMPreeditPosition | XIMStatusNothing)) {
+          style = thisStyle;
+          break;
+        } else if (thisStyle == (XIMPreeditNothing | XIMStatusNothing)) {
+          style = thisStyle;
+        }
+      }
+      XFree(stylePtr);
+    }
+
+
+    if (style & XIMPreeditPosition) {
+      XPoint spot = {0, 0};
+      XFontSet inputXfs;
+      preedit_attname = XNPreeditAttributes;
+      preedit_attlist = XVaCreateNestedList(0,
+                                            XNSpotLocation, &spot,
+                                            XNFontSet, inputXfs,
+                                            NULL);
+    }
+
+
+    m_info->inputContext=XCreateIC(m_info->inputMethod,
+                                   XNInputStyle, style,
+                                   XNClientWindow, m_info->win,
+                                   XNFocusWindow, m_info->win,
+                                   preedit_attname, preedit_attlist,
+                                   NULL);
+  }
+
+
 
   /* found a bit at
    * http://biology.ncsa.uiuc.edu/library/SGI_bookshelves/SGI_Developer/books/OpenGL_Porting/sgi_html/apf.html
