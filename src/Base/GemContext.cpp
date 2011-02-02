@@ -49,12 +49,65 @@ static void GemContext_freeid(unsigned int id)
 
 class GemContext::PIMPL {
 public:
-  PIMPL(void) {
+  PIMPL(void) : context(NULL), xcontext(NULL), contextid(0),
+		infoOut(NULL),
+		qClock(NULL)
+  {
+    qClock=clock_new(this, reinterpret_cast<t_method>(qCallBack));
   }
   ~PIMPL(void) {
+    if(qClock) clock_free (qClock);  qClock=NULL;
+    if(infoOut)outlet_free(infoOut); infoOut=NULL;
   }
   GLEWContext    *context;
   GemGlewXContext*xcontext;
+
+  unsigned int contextid;
+
+  t_outlet*infoOut;
+
+  // TODO: a queue for detaching messages sent through the info-output from the actual window events
+  std::vector<std::vector<t_atom> >qQueue;
+  t_clock*qClock;
+
+  void queue(t_symbol*s,int argc, t_atom*argv) {
+    std::vector<t_atom>alist;
+    t_atom at[1];
+    SETSYMBOL(at, s);
+    alist.push_back(at[0]);
+    while(argc-->0) {
+      alist.push_back(*argv++);
+    }
+    if(alist.size()>0)
+      qQueue.push_back(alist);
+
+    requeue();
+  }
+
+  void sendInfo(std::vector<t_atom>alist) {
+    int argc=alist.size();
+    t_atom*argv=alist.data();
+    outlet_anything(infoOut, atom_getsymbol(argv), argc-1, argv+1); 
+  }
+  void dequeue(void) {
+    int i=0;
+    for(i=0; i<qQueue.size(); i++) {
+      sendInfo(qQueue[i]);
+    }
+    qQueue.clear();
+  }
+
+  /* qClock callback for dequeueing */
+  static void qCallBack(PIMPL*x) {
+    x->dequeue();
+  }
+
+  /* start the clock again */
+  void requeue(void) {
+    clock_delay(qClock, 0);
+  }
+
+
 };
 
 
@@ -68,11 +121,9 @@ public:
 /////////////////////////////////////////////////////////
 GemContext :: GemContext()
   : m_width(0), m_height(0),
-    m_infoOut(NULL),
-    m_contextid(0),
     m_pimpl(new PIMPL)
 {
-  m_infoOut = outlet_new(this->x_obj, 0);
+  m_pimpl->infoOut = outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -80,40 +131,37 @@ GemContext :: GemContext()
 /////////////////////////////////////////////////////////
 GemContext :: ~GemContext()
 {
-  outlet_free(m_infoOut); m_infoOut=NULL;
   destroy();
   delete m_pimpl;
   m_pimpl=NULL;
 }
 
 void GemContext::info(t_symbol*s, int argc, t_atom*argv) {
-  if(m_infoOut) {
-    outlet_anything(m_infoOut, s, argc, argv); 
-  }
+  m_pimpl->queue(s, argc, argv);
 }
-void GemContext::info(t_symbol*s) { 
-  info(s, 0, NULL); 
+void GemContext::info(std::string s) { 
+  info(gensym(s.c_str()), 0, NULL); 
 }
-void GemContext::info(t_symbol*s, int i) {
+void GemContext::info(std::string s, int i) {
   info(s, (t_float)i);
 }
 
-void GemContext :: info(t_symbol*s, t_float value)
+void GemContext :: info(std::string s, t_float value)
 {
   t_atom atom;
   SETFLOAT(&atom, value);
-  info(s, 1, &atom); 
+  info(gensym(s.c_str()), 1, &atom); 
 }
-void GemContext :: info(t_symbol*s, t_symbol*value)
+void GemContext :: info(std::string s, std::string value)
 {
   t_atom atom;
-  SETSYMBOL(&atom, value);
-  info(s, 1, &atom); 
+  SETSYMBOL(&atom, gensym(value.c_str()));
+  info(gensym(s.c_str()), 1, &atom); 
 }
 
 void GemContext :: bang(void)
 {
-  outlet_bang(m_infoOut);
+  outlet_bang(m_pimpl->infoOut);
 }
 
 
@@ -141,13 +189,39 @@ void GemContext::button(int id, int state)
 }
 
 /* keyboard buttons */
-void GemContext::key(t_symbol*id, int state) {
+void GemContext::key(std::string sid, int iid, int state) {
   t_atom ap[3];
   SETSYMBOL(ap+0, gensym("key"));
-  SETSYMBOL(ap+1, id);
+  SETFLOAT (ap+1, iid);
   SETFLOAT (ap+2, state);
 
   info(gensym("keyboard"), 3, ap);
+
+  SETSYMBOL(ap+0, gensym("keyname"));
+  SETSYMBOL(ap+1, gensym(sid.c_str()));
+  //  SETFLOAT (ap+2, state);
+
+  info(gensym("keyboard"), 3, ap);
+}
+
+void GemContext::dimension(unsigned int w, unsigned int h) {
+  t_atom ap[2];
+  SETFLOAT (ap+0, w);
+  SETFLOAT (ap+1, h);
+
+  info(gensym("dimen"), 2, ap);
+}
+
+void GemContext::position(int x, int y) {
+  t_atom ap[2];
+  SETFLOAT (ap+0, x);
+  SETFLOAT (ap+1, y);
+
+  info(gensym("offset"), 2, ap);
+}
+
+void GemContext::dispatch() {
+  // LATER setup a clock that calls dispatch() every so often
 }
 
 bool GemContext::create(void){
@@ -168,8 +242,8 @@ bool GemContext::create(void){
   s_glewxcontext=m_pimpl->xcontext;
   
 
-  m_contextid=GemContext_newid();
-  s_contextid=m_contextid;
+  m_pimpl->contextid=GemContext_newid();
+  s_contextid=m_pimpl->contextid;
 
   if(firsttime) {
     GLenum err = glewInit();
@@ -220,8 +294,8 @@ void GemContext::destroy(void){
   }
   m_pimpl->context=NULL;
 #endif /* GEM_MULTICONTEXT */
-  GemContext_freeid(m_contextid);
-  m_contextid=0;
+  GemContext_freeid(m_pimpl->contextid);
+  m_pimpl->contextid=0;
   GemMan::m_windowState--;
 }
 
@@ -238,7 +312,9 @@ bool GemContext::makeCurrent(void){
   }
   s_glewcontext=m_pimpl->context;
 #endif /* GEM_MULTICONTEXT */
-  s_contextid=m_contextid;
+  s_contextid=m_pimpl->contextid;
+
+  dispatch();
   return true;
 }
 

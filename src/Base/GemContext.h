@@ -58,11 +58,12 @@ class GEM_EXTERN GemContext : public CPPExtern
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
   /* LATER think about detaching the output from the stack, so we can e.g. destroy a window from a mouse-callback */
   void info(t_symbol*s, int, t_atom*);  
-  void info(t_symbol*s);
-  void info(t_symbol*s, t_float);
-  void info(t_symbol*s, int i);
-  void info(t_symbol*s, t_symbol*);  
+  void info(std::string);
+  void info(std::string, t_float);
+  void info(std::string, int i);
+  void info(std::string, std::string);  
 
+  /* tell objects to render */
   void bang(void);
 
   /* mouse movement */
@@ -70,8 +71,13 @@ class GEM_EXTERN GemContext : public CPPExtern
   /* mouse buttons */
   void button(int id, int state);
   /* keyboard buttons */
-  void key(t_symbol*id, int state);
+  //  void key(std::string id, int state);
+  //void key(int id, int state);
+  void key(std::string, int, int state);
 
+  /* window resize/move */
+  void dimension(unsigned int, unsigned int);
+  void position (int, int);
 
   /* create a new context
    * make sure that this is called by the children's override functions as well,
@@ -91,6 +97,13 @@ class GEM_EXTERN GemContext : public CPPExtern
    */
   virtual bool makeCurrent(void);
 
+  /* dispatch messages from the window
+   * this might get called more often than the render-cycle
+   * it might also be called automatically as soon as the window
+   * is create()ed (and until the window is destroy()ed
+   */
+  virtual void dispatch(void);
+
 
   /* set/get the dimension of the context
    * setting is done by supplying arguments to the method;
@@ -102,8 +115,6 @@ class GEM_EXTERN GemContext : public CPPExtern
   int m_width, m_height;
 
  private:
-  t_outlet*m_infoOut;
-
   GLint m_maxStackDepth[4];
 
  public:
@@ -119,8 +130,6 @@ class GEM_EXTERN GemContext : public CPPExtern
 
   class PIMPL;
   PIMPL*m_pimpl;
-
-  unsigned int m_contextid;
 };
 
 
