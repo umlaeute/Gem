@@ -133,6 +133,9 @@ gemcocoawindow :: gemcocoawindow(void) :
 gemcocoawindow :: ~gemcocoawindow()
 {
   destroyMess();
+  if(m_win)
+    [m_win dealloc];
+  m_win=NULL;
 }
 
 
@@ -240,8 +243,19 @@ void gemcocoawindow :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: createMess(void)
 {
+  if(m_win) {
+    error("window already made!");
+    return;
+  }
+  NSRect contentRect = NSMakeRect(0.0, 0.0, m_width, m_height);
+  window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
 
+  NSView *contentView = [window contentView];
+  [m_win = [[[GemCocoaWindow alloc] initWithFrame:[contentView bounds]] parent:this];
+  [contentView addSubview:view];
 
+  [window center];
+  [window makeKeyAndOrderFront:nil];
 }
 /////////////////////////////////////////////////////////
 // destroy window
