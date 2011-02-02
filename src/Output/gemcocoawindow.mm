@@ -112,6 +112,7 @@ CPPEXTERN_NEW(gemcocoawindow)
 // Constructor
 //
 /////////////////////////////////////////////////////////
+static NSAutoreleasePool*arp=NULL;
 gemcocoawindow :: gemcocoawindow(void) :
   m_buffer(2),
   m_fsaa(0),
@@ -119,10 +120,14 @@ gemcocoawindow :: gemcocoawindow(void) :
   m_border(false),
   m_fullscreen(false),
   m_xoffset(-1), m_yoffset(-1),
-  m_cursor(false)
+  m_cursor(false),
+  m_win(NULL)
 {
   m_width =500;
   m_height=500;
+
+  if(NULL==arp)
+	arp=[[NSAutoreleasePool alloc] init];
 
 }
 
