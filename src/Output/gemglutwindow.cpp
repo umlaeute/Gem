@@ -22,6 +22,8 @@
 # include "GL/freeglut.h"
 #elif defined __APPLE__
 # include "GLUT/glut.h"
+# define glutCloseFunc glutWMCloseFunc
+# define glutMainLoopEvent glutCheckLoop
 #endif
 
 #include <stdio.h>
@@ -275,9 +277,10 @@ void gemglutwindow :: createMess(void)
   glutDisplayFunc   (&gemglutwindow::displayCb);
   glutVisibilityFunc(&gemglutwindow::visibleCb);
 
-  glutCloseFunc     (&gemglutwindow::closeCb);
+  glutWMCloseFunc     (&gemglutwindow::closeCb);
+#ifndef __APPLE__
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-
+#endif
 
   glutKeyboardFunc(&gemglutwindow::keyboardCb);
   glutSpecialFunc(&gemglutwindow::specialCb);
