@@ -11,14 +11,14 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#include "Base/GemGL.h"
 #include "gemcocoawindow.h"
 
-#include "Base/GemGL.h"
+#include <vector>
 #include <stdio.h>
 
 
-@implementation GemView 
+@implementation GemCocoaWindow
 - (id)initWithFrame:(NSRect)frameRect parent:(gemcocoawindow*)gw
 {
   if(NULL==gw)return NULL;
@@ -109,7 +109,7 @@ gemcocoawindow :: gemcocoawindow(void) :
   m_border(false),
   m_fullscreen(false),
   m_xoffset(-1), m_yoffset(-1),
-  m_cursor(false),
+  m_cursor(false)
 {
   m_width =500;
   m_height=500;
@@ -154,9 +154,6 @@ void gemcocoawindow :: bufferMess(int buf)
   switch(buf) {
   case 1: case 2:
     m_buffer=buf;
-    if(m_window) {
-      post("changing buffer type will only effect newly created windows");
-    }
     break;
   default:
     error("buffer can only be '1' (single) or '2' (double) buffered");

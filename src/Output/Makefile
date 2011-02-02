@@ -8,7 +8,7 @@ all:
 	make -C ..
 
 
-GLUT=-lglut
+GLUT=-framework GLUT
 
 %.$(EXT): %.o
 	$(CXXLINK) $(GEM_EXTRA_LDFLAGS)  $(GEM_ARCH_LDFLAGS) $(GEM_LDFLAGS) $(GEM_LIBS) $(X_LIBS) $<
