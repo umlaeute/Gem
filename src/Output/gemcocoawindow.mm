@@ -19,10 +19,10 @@
 
 
 @implementation GemCocoaWindow
-- (id)initWithFrame:(NSRect)frameRect parent:(gemcocoawindow*)gw
+- (id)initWithFrame: (NSRect)frameRect parent: (gemcocoawindow*) gcw
 {
-  if(NULL==gw)return NULL;
-  gemwin=gw;
+  gemwin=gcw;
+  if(NULL==gemwin)return NULL;
 
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 #if 0
@@ -55,7 +55,7 @@
     attr[i]=attrvec[i];
   }
 
-  NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr.data()] autorelease];
+  NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr] autorelease];
 
   delete[]attr;
   
@@ -248,11 +248,12 @@ void gemcocoawindow :: createMess(void)
     return;
   }
   NSRect contentRect = NSMakeRect(0.0, 0.0, m_width, m_height);
-  window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
+  NSWindow*window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
 
   NSView *contentView = [window contentView];
-  [m_win = [[[GemCocoaWindow alloc] initWithFrame:[contentView bounds]] parent:this];
-  [contentView addSubview:view];
+  m_win = [[GemCocoaWindow alloc] 
+	initWithFrame:[contentView bounds] parent: this];
+  [contentView addSubview:m_win];
 
   [window center];
   [window makeKeyAndOrderFront:nil];
