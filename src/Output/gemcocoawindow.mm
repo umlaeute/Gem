@@ -24,7 +24,7 @@
   if(NULL==gw)return NULL;
   gemwin=gw;
 
-  std::vector<NSOpenGLPixelFormatAttribute>attr;
+  std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 #if 0
   NSOpenGLPixelFormatAttribute attr[] = 
     {
@@ -37,17 +37,27 @@
 #endif
 
   if(gemwin->m_buffer==2)
-    attr.push_back(NSOpenGLPFADoubleBuffer);
+    attrvec.push_back(NSOpenGLPFADoubleBuffer);
 
-  attr.push_back(NSOpenGLPFAAccelerated);
+  attrvec.push_back(NSOpenGLPFAAccelerated);
 
-  attr.push_back(NSOpenGLPFAColorSize);
-  attr.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
+  attrvec.push_back(NSOpenGLPFAColorSize);
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
 
-  attr.push_back(NSOpenGLPFADepthSize);
-  attr.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
+  attrvec.push_back(NSOpenGLPFADepthSize);
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
+
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
+
+  NSOpenGLPixelFormatAttribute*attr = new NSOpenGLPixelFormatAttribute[attrvec.size()];
+  int i=0;
+  for(i=0; i<attrvec.size(); i++) {
+    attr[i]=attrvec[i];
+  }
 
   NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr.data()] autorelease];
+
+  delete[]attr;
   
   self = [super initWithFrame:frameRect pixelFormat:nsglFormat];
   return self;
