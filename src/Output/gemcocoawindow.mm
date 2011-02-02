@@ -266,18 +266,6 @@ void gemcocoawindow :: cursorMess(bool setting)
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 {
-  int argc=0;
-  char*argv=NULL;
-
-  static bool firsttime=true;
-
-  if(firsttime) {
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(500,500);
-    glutInit(&argc,&argv);
-  }
-  firsttime=false;
-
   class_addbang(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::renderMessCallback));
   
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::titleMessCallback),        gensym("title"), A_DEFSYM ,A_NULL);

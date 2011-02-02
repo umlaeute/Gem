@@ -51,6 +51,7 @@
 
   -----------------------------------------------------------------*/
 
+class gemcocoawindow;
 @interface GemCocoaWindow : NSOpenGLView
 {
   gemcocoawindow*gemwin;
