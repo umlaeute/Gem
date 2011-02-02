@@ -28,7 +28,7 @@
 
 CPPEXTERN_NEW(gemglxwindow);
 
-#define EVENT_MASK							\
+#define EVENT_MASK                                                      \
   ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
   ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | ResizeRedirectMask | DestroyNotify
 
@@ -44,16 +44,16 @@ static int snglBuf24[] = {GLX_RGBA,
                           GLX_ACCUM_BLUE_SIZE, 8,
                           None};
 static int snglBuf24Stereo[] = {GLX_RGBA, 
-				GLX_RED_SIZE, 8, 
-				GLX_GREEN_SIZE, 8, 
-				GLX_BLUE_SIZE, 8, 
-				GLX_DEPTH_SIZE, 16, 
-				GLX_STENCIL_SIZE, 8, 
-				GLX_ACCUM_RED_SIZE, 8,
-				GLX_ACCUM_GREEN_SIZE, 8,
-				GLX_ACCUM_BLUE_SIZE, 8,
-				GLX_STEREO,
-				None};
+                                GLX_RED_SIZE, 8, 
+                                GLX_GREEN_SIZE, 8, 
+                                GLX_BLUE_SIZE, 8, 
+                                GLX_DEPTH_SIZE, 16, 
+                                GLX_STENCIL_SIZE, 8, 
+                                GLX_ACCUM_RED_SIZE, 8,
+                                GLX_ACCUM_GREEN_SIZE, 8,
+                                GLX_ACCUM_BLUE_SIZE, 8,
+                                GLX_STEREO,
+                                None};
 static int dblBuf24[] =  {GLX_RGBA, 
                           GLX_RED_SIZE, 4, 
                           GLX_GREEN_SIZE, 4, 
@@ -66,17 +66,17 @@ static int dblBuf24[] =  {GLX_RGBA,
                           GLX_DOUBLEBUFFER, 
                           None};
 static int dblBuf24Stereo[] =  {GLX_RGBA, 
-				GLX_RED_SIZE, 4, 
-				GLX_GREEN_SIZE, 4, 
-				GLX_BLUE_SIZE, 4, 
-				GLX_DEPTH_SIZE, 16, 
-				GLX_STENCIL_SIZE, 8, 
-				GLX_ACCUM_RED_SIZE, 8,
-				GLX_ACCUM_GREEN_SIZE, 8,
-				GLX_ACCUM_BLUE_SIZE, 8,
-				GLX_DOUBLEBUFFER, 
-				GLX_STEREO,
-				None};
+                                GLX_RED_SIZE, 4, 
+                                GLX_GREEN_SIZE, 4, 
+                                GLX_BLUE_SIZE, 4, 
+                                GLX_DEPTH_SIZE, 16, 
+                                GLX_STENCIL_SIZE, 8, 
+                                GLX_ACCUM_RED_SIZE, 8,
+                                GLX_ACCUM_GREEN_SIZE, 8,
+                                GLX_ACCUM_BLUE_SIZE, 8,
+                                GLX_DOUBLEBUFFER, 
+                                GLX_STEREO,
+                                None};
 static int snglBuf8[] =  {GLX_RGBA, 
                           GLX_RED_SIZE, 3, 
                           GLX_GREEN_SIZE, 3, 
@@ -84,12 +84,12 @@ static int snglBuf8[] =  {GLX_RGBA,
                           GLX_DEPTH_SIZE, 16, 
                           None};
 static int snglBuf8Stereo[] =  {GLX_RGBA, 
-				GLX_RED_SIZE, 3, 
-				GLX_GREEN_SIZE, 3, 
-				GLX_BLUE_SIZE, 2, 
-				GLX_DEPTH_SIZE, 16, 
-				GLX_STEREO,
-				None};
+                                GLX_RED_SIZE, 3, 
+                                GLX_GREEN_SIZE, 3, 
+                                GLX_BLUE_SIZE, 2, 
+                                GLX_DEPTH_SIZE, 16, 
+                                GLX_STEREO,
+                                None};
 static int dblBuf8[] =   {GLX_RGBA, 
                           GLX_RED_SIZE, 1, 
                           GLX_GREEN_SIZE, 2, 
@@ -99,13 +99,13 @@ static int dblBuf8[] =   {GLX_RGBA,
                           None};
 
 static int dblBuf8Stereo[] =   {GLX_RGBA, 
-				GLX_RED_SIZE, 1, 
-				GLX_GREEN_SIZE, 2, 
-				GLX_BLUE_SIZE, 1, 
-				GLX_DEPTH_SIZE, 16, 
-				GLX_DOUBLEBUFFER, 
-				GLX_STEREO,
-				None};
+                                GLX_RED_SIZE, 1, 
+                                GLX_GREEN_SIZE, 2, 
+                                GLX_BLUE_SIZE, 1, 
+                                GLX_DEPTH_SIZE, 16, 
+                                GLX_DOUBLEBUFFER, 
+                                GLX_STEREO,
+                                None};
 
 static int xerr;
 static int ErrorHandler (Display *dpy, XErrorEvent *event)
@@ -258,15 +258,15 @@ void gemglxwindow::dispatch(void) {
       switch (event.type)
         {
         case ButtonPress: 
-	  button(eb->button-1, 1);
-	  motion(eb->x, eb->y);
+          button(eb->button-1, 1);
+          motion(eb->x, eb->y);
           break; 
         case ButtonRelease: 
-	  button(eb->button-1, 0);
-	  motion(eb->x, eb->y);
+          button(eb->button-1, 0);
+          motion(eb->x, eb->y);
           break; 
         case MotionNotify: 
-	  motion(eb->x, eb->y);
+          motion(eb->x, eb->y);
           if(!m_info->have_border) {
             int err=XSetInputFocus(m_info->dpy, m_info->win, RevertToParent, CurrentTime);
             err=0;
@@ -279,7 +279,7 @@ void gemglxwindow::dispatch(void) {
           }
           if ( (keysym_return & 0xff00)== 0xff00 ) {
             //non alphanumeric key: use keysym
-	    key(XKeysymToString(keysym_return), kb->keycode, 1);
+            key(XKeysymToString(keysym_return), kb->keycode, 1);
           } else {
             key(keystring                     , kb->keycode, 1);
           }
@@ -291,7 +291,7 @@ void gemglxwindow::dispatch(void) {
           }
           if ( (keysym_return & 0xff00)== 0xff00 ) {
             //non alphanumeric key: use keysym
-	    key(XKeysymToString(keysym_return), kb->keycode, 0);
+            key(XKeysymToString(keysym_return), kb->keycode, 0);
           } else {
             key(keystring                     , kb->keycode, 0);
           }
@@ -299,7 +299,7 @@ void gemglxwindow::dispatch(void) {
 
         case ResizeRequest:
           XResizeWindow(m_info->dpy, m_info->win, res->width, res->height);
-	  dimension(res->width, res->height);
+          dimension(res->width, res->height);
           break;
         default:
           break; 
@@ -441,16 +441,16 @@ bool gemglxwindow :: create(void)
   if (m_buffer == 2) {
     // try for a double-buffered on 24bit machine (try stereo first)
     vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf24Stereo);
-	 if (vi == NULL)
-		 vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf24);
+    if (vi == NULL)
+      vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf24);
     if (vi == NULL) {
       // try for a double buffered on a 8bit machine (try stereo first)
       vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf8Stereo);
-		if(vi == NULL)
-			vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf8);
+      if(vi == NULL)
+        vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf8);
       if (vi == NULL) {
-	error("Unable to create double buffer window");
-	return false;
+        error("Unable to create double buffer window");
+        return false;
       }
       post("Only using 8 color bits");
     }
@@ -465,10 +465,10 @@ bool gemglxwindow :: create(void)
       // try for a single buffered on a 8bit machine (try stereo first)
       vi = glXChooseVisual(m_info->dpy, m_info->screen, snglBuf8Stereo);
       if (vi == NULL)
-	vi = glXChooseVisual(m_info->dpy, m_info->screen, snglBuf8);
+        vi = glXChooseVisual(m_info->dpy, m_info->screen, snglBuf8);
       if (vi == NULL) {
-	error("Unable to create single buffer window");
-	return false;
+        error("Unable to create single buffer window");
+        return false;
       }
       post("Only using 8 color bits");
     }
@@ -491,7 +491,7 @@ bool gemglxwindow :: create(void)
   }
   // create the X color map
   m_info->cmap = XCreateColormap(m_info->dpy, RootWindow(m_info->dpy, vi->screen), 
-			      vi->visual, AllocNone);
+                                 vi->visual, AllocNone);
   if (!m_info->cmap) {
     error("Could not create X colormap");
     return false;
@@ -515,7 +515,7 @@ bool gemglxwindow :: create(void)
     /* look for mode with requested resolution */
     for (int i = 0; i < modeNum; i++) {
       if ((modes[i]->hdisplay == m_width) && (modes[i]->vdisplay == m_height)) {
-	bestMode = i;
+        bestMode = i;
       }
     }
     
@@ -530,21 +530,21 @@ bool gemglxwindow :: create(void)
     flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
   } else
 #endif
-  { // !fullscren
-    if (m_border){
-      swa.override_redirect = False;
-      flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
-    } else {
-      swa.override_redirect = True;
-      flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
+    { // !fullscren
+      if (m_border){
+        swa.override_redirect = False;
+        flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
+      } else {
+        swa.override_redirect = True;
+        flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
+      }
     }
-  }
   m_info->fs = fullscreen;
 
   m_info->win = XCreateWindow(m_info->dpy, RootWindow(m_info->dpy, vi->screen),
-			      m_xoffset, m_yoffset, real_w, real_h,
-			      0, vi->depth, InputOutput, 
-			      vi->visual, flags, &swa);
+                              m_xoffset, m_yoffset, real_w, real_h,
+                              0, vi->depth, InputOutput, 
+                              vi->visual, flags, &swa);
   if (!m_info->win) {
     error("Could not create X window");
     return false;
@@ -563,18 +563,18 @@ bool gemglxwindow :: create(void)
     XSetWMProtocols(m_info->dpy, m_info->win, &m_info->delete_atom,1);
 
   XSetStandardProperties(m_info->dpy, m_info->win,
-			 m_title.c_str(), "gem", 
-			 None, 0, 0, NULL);
+                         m_title.c_str(), "gem", 
+                         None, 0, 0, NULL);
 
   try{
     xerr=0;
     glXMakeCurrent(m_info->dpy, m_info->win, m_info->context);
 
     if(xerr!=0) {
-    /* seems like the error-handler was called; so something did not work the way it should
-     * should we really prevent window-creation in this case?
-     * LATER re-think the entire dual-context thing
-     */
+      /* seems like the error-handler was called; so something did not work the way it should
+       * should we really prevent window-creation in this case?
+       * LATER re-think the entire dual-context thing
+       */
 
       error("problems making glX-context current: refusing to continue");
       error("try setting the environment variable GEM_SINGLE_CONTEXT=1");
