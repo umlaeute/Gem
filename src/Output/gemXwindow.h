@@ -63,25 +63,27 @@ class GEM_EXTERN gemXwindow : public GemContext
 
  private:
 
-  typedef struct _list {
-    gemXwindow*object;
-    int window;
-    struct _list*next;
-  } t_list;
-  
-  static t_list *ggw_list;
-  static gemXwindow* list_find(int win);
-  static void list_add(gemXwindow*obj,int win);
-  static void list_del(int win);
-
   //////////
   // Destructor
   virtual ~gemXwindow(void);
+
+
+  // create window
+  virtual bool create(void);
+
+  // destroy window
+  virtual void destroy(void);
+
+  // check whether we have a window and if so, make it current
+  virtual bool makeCurrent(void);
 
   void doRender(void);
 
   /* rendering */
   void renderMess(void);
+
+  /* dispatch window events */
+  void dispatch(void);
 
   /* render context (pre creation) */
   void  bufferMess(int buf);
@@ -91,12 +93,14 @@ class GEM_EXTERN gemXwindow : public GemContext
 
   /* window decoration (pre creation) */
   void titleMess(t_symbol* s);
-  char*     m_title;
+  std::string     m_title;
   void borderMess(bool on);
   bool       m_border;
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(int width, int height);
+  unsigned int         m_width, m_height;
+
   void    fullscreenMess(bool on);
   bool              m_fullscreen;
   void        offsetMess(int x, int y);
@@ -104,21 +108,28 @@ class GEM_EXTERN gemXwindow : public GemContext
 
   /* creation/destruction */
   void        createMess(void);
-  virtual void destroy(void);
   void       destroyMess(void);
 
   /* post creation */
   void        cursorMess(bool on);
   bool              m_cursor;
 
+  //////////
+  // the real width/height of the window (set by createGemWindow())
+  unsigned int real_w, real_h, real_x, real_y;
 
-  // check whether we have a window and if so, make it current
-  virtual bool makeCurrent(void);
+  //// if we can use a different display , this has its meaning under X
+  std::string m_display;
+
+  //////////
+  // Should the window be realized
+#warning actuallyDisplay
+  bool         m_actuallyDisplay;
 
  private:
 
-  /* the GLUT window id */
-  int m_window;
+  class Info;
+  Info*m_info;
 
   //////////
   // Static member functions (rendering)
@@ -149,26 +160,6 @@ class GEM_EXTERN gemXwindow : public GemContext
   //////////
   // Static member functions (misc)
   static void     printMessCallback(void *);
-
-
-  //////////
-  // glut callbacks 
-  static void displayCb(void);
-  static void visibleCb(int);
-  static void closeCb(void);
-  static void keyboardCb(unsigned char, int, int);
-  static void specialCb(int, int, int);
-  static void reshapeCb(int, int);
-  static void mouseCb(int,int,int,int);
-  static void motionCb(int,int);
-  static void passivemotionCb(int, int);
-  static void entryCb(int);
-  static void keyboardupCb(unsigned char, int, int);
-  static void specialupCb(int, int, int);
-  static void joystickCb(unsigned int, int, int, int);
-  static void menustateCb(int);
-  static void menustatusCb(int, int, int);
-  static void windowstatusCb(int);
 
   t_clock*m_clock;
   int m_polltime;
