@@ -451,75 +451,67 @@ void gemglutwindow::displayCb(void) {
 }
 
 void gemglutwindow::visibleCb(int state) {
-  CALLBACK4WIN->info(gensym("visible"), state);
+  CALLBACK4WIN->info("visible", state);
 }
 
 void gemglutwindow::closeCb(void) {
   CALLBACK4WIN ->destroy();
-  ggw->info(gensym("window"), gensym("closed"));
+  ggw->info("window", "closed");
 }
 
 
-static t_symbol*key2symbol(unsigned char c) {
-  t_symbol*sym=NULL;
-  char s[2];
-  switch(c) {
-  default:
-    sprintf(s, "%c", c);
-    s[1]=0;
-    sym=gensym(s);
-  }
+static std::string key2symbol(unsigned char c) {
+  std::string sym;
+  sym+=c;
   return sym;
 }
 
-static t_symbol*key2symbol(int c) {
-  t_symbol*s=NULL;
-
+static std::string key2symbol(int c) {
   switch(c) {
-  case GLUT_KEY_F1: s=gensym("F1"); break;
-  case GLUT_KEY_F2: s=gensym("F2"); break;
-  case GLUT_KEY_F3: s=gensym("F3"); break;
-  case GLUT_KEY_F4: s=gensym("F4"); break;
-  case GLUT_KEY_F5: s=gensym("F5"); break;
-  case GLUT_KEY_F6: s=gensym("F6"); break;
-  case GLUT_KEY_F7: s=gensym("F7"); break;
-  case GLUT_KEY_F8: s=gensym("F8"); break;
-  case GLUT_KEY_F9: s=gensym("F9"); break;
-  case GLUT_KEY_F10: s=gensym("F10"); break;
-  case GLUT_KEY_F11: s=gensym("F11"); break;
-  case GLUT_KEY_F12: s=gensym("F12"); break;
-  case GLUT_KEY_LEFT: s=gensym("Left"); break;
-  case GLUT_KEY_UP: s=gensym("Up"); break;
-  case GLUT_KEY_RIGHT: s=gensym("Right"); break;
-  case GLUT_KEY_DOWN: s=gensym("Down"); break;
-  case GLUT_KEY_PAGE_UP: s=gensym("PageUp"); break;
-  case GLUT_KEY_PAGE_DOWN: s=gensym("PageDown"); break;
-  case GLUT_KEY_HOME: s=gensym("Home"); break;
-  case GLUT_KEY_END: s=gensym("End"); break;
-  case GLUT_KEY_INSERT: s=gensym("Insert"); break;
+  case GLUT_KEY_F1: return std::string("F1");
+  case GLUT_KEY_F2: return std::string("F2");
+  case GLUT_KEY_F3: return std::string("F3");
+  case GLUT_KEY_F4: return std::string("F4");
+  case GLUT_KEY_F5: return std::string("F5");
+  case GLUT_KEY_F6: return std::string("F6");
+  case GLUT_KEY_F7: return std::string("F7");
+  case GLUT_KEY_F8: return std::string("F8");
+  case GLUT_KEY_F9: return std::string("F9");
+  case GLUT_KEY_F10: return std::string("F10");
+  case GLUT_KEY_F11: return std::string("F11");
+  case GLUT_KEY_F12: return std::string("F12");
+  case GLUT_KEY_LEFT: return std::string("Left");
+  case GLUT_KEY_UP: return std::string("Up");
+  case GLUT_KEY_RIGHT: return std::string("Right");
+  case GLUT_KEY_DOWN: return std::string("Down");
+  case GLUT_KEY_PAGE_UP: return std::string("PageUp");
+  case GLUT_KEY_PAGE_DOWN: return std::string("PageDown");
+  case GLUT_KEY_HOME: return std::string("Home");
+  case GLUT_KEY_END: return std::string("End");
+  case GLUT_KEY_INSERT: return std::string("Insert");
   default:
-    s=gensym("unknown");
+    break;
   }
 
-  return s;
+  return std::string("<unknown>");
 }
 void gemglutwindow::keyboardCb(unsigned char c, int x, int y) {
   CALLBACK4WIN->motion(x,y);
-  ggw->key(key2symbol(c), 1);
+  ggw->key(key2symbol(c), c, 1);
 }
 void gemglutwindow::keyboardupCb(unsigned char c, int x, int y) {
   CALLBACK4WIN->motion(x,y);
-  ggw->key(key2symbol(c), 0);
+  ggw->key(key2symbol(c), c, 0);
 }
 
 void gemglutwindow::specialCb(int c, int x, int y) {
   CALLBACK4WIN->motion(x,y);
-  ggw->key(key2symbol(c), 1);
+  ggw->key(key2symbol(c), c, 1);
 }
 
 void gemglutwindow::specialupCb(int c, int x, int y) {
   CALLBACK4WIN->motion(x,y);
-  ggw->key(key2symbol(c), 0);
+  ggw->key(key2symbol(c), c, 0);
 }
 
 void gemglutwindow::reshapeCb(int x, int y) {
@@ -541,7 +533,7 @@ void gemglutwindow::passivemotionCb(int x, int y) {
 }
 
 void gemglutwindow::entryCb(int state) {
-  CALLBACK4WIN->info(gensym("entry"), state);
+  CALLBACK4WIN->info("entry", state);
 }
 void gemglutwindow::joystickCb(unsigned int a, int x, int y, int z) {
 }
@@ -550,16 +542,16 @@ void gemglutwindow::menustateCb(int value) {
 void gemglutwindow::menustatusCb(int x, int y, int z) {
 }
 void gemglutwindow::windowstatusCb(int value) {
-  t_symbol*s=NULL;
+  std::string s;
 
   switch(value) {
-  case GLUT_HIDDEN: s=gensym("hidden"); break;
-  case GLUT_FULLY_RETAINED: s=gensym("full"); break;
-  case GLUT_PARTIALLY_RETAINED: s=gensym("partial"); break;
-  case GLUT_FULLY_COVERED: s=gensym("covered"); break;
+  case GLUT_HIDDEN: s=std::string("hidden"); break;
+  case GLUT_FULLY_RETAINED: s=std::string("full"); break;
+  case GLUT_PARTIALLY_RETAINED: s=std::string("partial"); break;
+  case GLUT_FULLY_COVERED: s=std::string("covered"); break;
   default:
-    s=gensym("unknown");
+    s=std::string("unknown");
   }
 
-  CALLBACK4WIN->info(gensym("window"), s);
+  CALLBACK4WIN->info("window", s);
 }
