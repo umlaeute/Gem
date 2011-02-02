@@ -86,8 +86,21 @@ public:
 
   void sendInfo(std::vector<t_atom>alist) {
     int argc=alist.size();
-    t_atom*argv=alist.data();
+    t_atom*ap=NULL;
+    t_atom*argv=NULL;
+#if 0
+    argv=alist.data();
+#else
+    int i=0;
+    ap=new t_atom[argc];
+    argv=ap;
+    for(i=0; i<argc; i++) {
+      argv[i]=alist[i];
+    }
+#endif
     outlet_anything(infoOut, atom_getsymbol(argv), argc-1, argv+1); 
+    if(ap)
+      delete[]ap;
   }
   void dequeue(void) {
     int i=0;
