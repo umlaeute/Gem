@@ -149,6 +149,9 @@ bool gemcocoawindow :: makeCurrent(void){
 // renderMess
 //
 /////////////////////////////////////////////////////////
+void gemcocoawindow :: dispatch()
+{
+}
 void gemcocoawindow :: doRender()
 {
   bang();
@@ -241,11 +244,11 @@ void gemcocoawindow :: offsetMess(int x, int y)
 // createMess
 //
 /////////////////////////////////////////////////////////
-void gemcocoawindow :: createMess(void)
+bool gemcocoawindow :: create(void)
 {
   if(m_win) {
     error("window already made!");
-    return;
+    return false;
   }
   NSRect contentRect = NSMakeRect(0.0, 0.0, m_width, m_height);
   NSWindow*window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
@@ -257,6 +260,11 @@ void gemcocoawindow :: createMess(void)
 
   [window center];
   [window makeKeyAndOrderFront:nil];
+}
+void gemcocoawindow :: createMess(void) {
+ if (!create()) {
+	destroyMess();
+ }
 }
 /////////////////////////////////////////////////////////
 // destroy window
