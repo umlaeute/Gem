@@ -93,7 +93,7 @@ CPPEXTERN_NEW(gemglutwindow)
 gemglutwindow :: gemglutwindow(void) :
   m_buffer(2),
   m_fsaa(0),
-  m_title((char*)"GEM"),
+  m_title("GEM"),
   m_border(false),
   //  m_width(500), m_height(500),
   m_fullscreen(false),
@@ -188,8 +188,8 @@ void gemglutwindow :: titleMess(t_symbol* s)
 {
   m_title = s->s_name;
   if(makeCurrent()){
-    glutSetWindowTitle(m_title);
-    glutSetIconTitle(m_title);
+    glutSetWindowTitle(m_title.c_str());
+    glutSetIconTitle(m_title.c_str());
   }
 }
 /////////////////////////////////////////////////////////
@@ -271,7 +271,7 @@ void gemglutwindow :: createMess(void)
 
   glutInitDisplayMode(mode);
 
-  m_window=glutCreateWindow(m_title);
+  m_window=glutCreateWindow(m_title.c_str());
   list_add(this, m_window);
 
   glutDisplayFunc   (&gemglutwindow::displayCb);
@@ -305,7 +305,7 @@ void gemglutwindow :: createMess(void)
     return;
   }
 
-  titleMess(gensym(m_title));
+  titleMess(gensym(m_title.c_str()));
   fullscreenMess(m_fullscreen);
 
   glutPostRedisplay();

@@ -91,7 +91,7 @@ class GEM_EXTERN gemglutwindow : public GemContext
 
   /* window decoration (pre creation) */
   void titleMess(t_symbol* s);
-  char*     m_title;
+  std::string     m_title;
   void borderMess(bool on);
   bool       m_border;
 
