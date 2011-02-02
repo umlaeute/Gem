@@ -150,11 +150,6 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   //////////
   // Static member functions (misc)
   static void     printMessCallback(void *);
-
-  t_clock*m_clock;
-  int m_polltime;
-  static void clockCallback(void*);
-  void clock(void);
 };
 
 #endif    // for header file
