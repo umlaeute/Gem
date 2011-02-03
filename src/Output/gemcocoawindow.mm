@@ -242,31 +242,31 @@ void gemcocoawindow :: cursorMess(bool setting) {
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 {
-  CLASS_ADDMETHOD(gemcocoawindow, render, render);
-  CLASS_ADDMETHOD(gemcocoawindow, create, create);
-  CLASS_ADDMETHOD(gemcocoawindow, destroy, destroy);
+  CPPEXTERN_ADDMETHOD(gemcocoawindow, render, render);
+  CPPEXTERN_ADDMETHOD(gemcocoawindow, create, create);
+  CPPEXTERN_ADDMETHOD(gemcocoawindow, destroy, destroy);
 
-  CLASS_ADDMETHOD_F(gemcocoawindow, buffer, buffer);
-  CLASS_ADDMETHOD_S(gemcocoawindow, title, title);
-  CLASS_ADDMETHOD_FF(gemcocoawindow, dimensions, dimen);
-  CLASS_ADDMETHOD_FF(gemcocoawindow, offset, offset);
-  CLASS_ADDMETHOD_F(gemcocoawindow, border, border);
-  CLASS_ADDMETHOD_F(gemcocoawindow, fullscreen, fullscreen);
-  CLASS_ADDMETHOD_F(gemcocoawindow, fsaa, FSAA);
-  CLASS_ADDMETHOD_F(gemcocoawindow, cursor, cursor);
+  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, buffer, buffer);
+  CPPEXTERN_ADDMETHOD_S(gemcocoawindow, title, title);
+  CPPEXTERN_ADDMETHOD_FF(gemcocoawindow, dimensions, dimen);
+  CPPEXTERN_ADDMETHOD_FF(gemcocoawindow, offset, offset);
+  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, border, border);
+  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, fullscreen, fullscreen);
+  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, fsaa, FSAA);
+  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, cursor, cursor);
 }
 
-GEMCLASS_CALLBACK(gemcocoawindow, render);
-GEMCLASS_CALLBACK(gemcocoawindow, create);
-GEMCLASS_CALLBACK(gemcocoawindow, destroy);
-GEMCLASS_CALLBACK_F(gemcocoawindow, buffer, int);
+CPPEXTERN_CALLBACK(gemcocoawindow, render);
+CPPEXTERN_CALLBACK(gemcocoawindow, create);
+CPPEXTERN_CALLBACK(gemcocoawindow, destroy);
+CPPEXTERN_CALLBACK_F(gemcocoawindow, buffer, int);
 void gemcocoawindow :: titleMessCallback(void *data, t_symbol* disp)
 {
   GetMyClass(data)->titleMess(disp);
 }
-GEMCLASS_CALLBACK_FF(gemcocoawindow, dimensions, int);
-GEMCLASS_CALLBACK_FF(gemcocoawindow, offset, int);
-GEMCLASS_CALLBACK_F(gemcocoawindow, border, bool);
-GEMCLASS_CALLBACK_F(gemcocoawindow, fullscreen, int);
-GEMCLASS_CALLBACK_F(gemcocoawindow, fsaa, int);
-GEMCLASS_CALLBACK_F(gemcocoawindow, cursor, bool);
+CPPEXTERN_CALLBACK_FF(gemcocoawindow, dimensions, int);
+CPPEXTERN_CALLBACK_FF(gemcocoawindow, offset, int);
+CPPEXTERN_CALLBACK_F(gemcocoawindow, border, bool);
+CPPEXTERN_CALLBACK_F(gemcocoawindow, fullscreen, int);
+CPPEXTERN_CALLBACK_F(gemcocoawindow, fsaa, int);
+CPPEXTERN_CALLBACK_F(gemcocoawindow, cursor, bool);
