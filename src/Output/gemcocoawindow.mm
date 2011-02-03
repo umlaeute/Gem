@@ -118,14 +118,12 @@ gemcocoawindow :: gemcocoawindow(void) :
   m_fsaa(0),
   m_title("GEM"),
   m_border(false),
+  m_width(500), m_height(500),
+  m_xoffset(0), m_yoffset(0),
   m_fullscreen(false),
-  m_xoffset(-1), m_yoffset(-1),
   m_cursor(false),
   m_win(NULL)
 {
-  m_width =500;
-  m_height=500;
-
   if(NULL==arp)
 	arp=[[NSAutoreleasePool alloc] init];
 
@@ -143,107 +141,15 @@ gemcocoawindow :: ~gemcocoawindow()
   m_win=NULL;
 }
 
-
-bool gemcocoawindow :: makeCurrent(void){
-
-
+bool gemcocoawindow :: makeCurrent(){
   return(false);
 }
-
-/////////////////////////////////////////////////////////
-// renderMess
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: dispatch()
-{
+void gemcocoawindow :: dispatch() {
 }
-void gemcocoawindow :: doRender()
-{
-  bang();
-}
-void gemcocoawindow :: renderMess()
-{
+void gemcocoawindow :: renderMess() {
   bang();
 }
 
-/////////////////////////////////////////////////////////
-// bufferMess
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: bufferMess(int buf)
-{
-  switch(buf) {
-  case 1: case 2:
-    m_buffer=buf;
-    break;
-  default:
-    error("buffer can only be '1' (single) or '2' (double) buffered");
-    break;
-  }
-}
-
-/////////////////////////////////////////////////////////
-// fsaaMess
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: fsaaMess(int value)
-{
-}
-
-/////////////////////////////////////////////////////////
-// titleMess
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: titleMess(t_symbol* s)
-{
-  m_title = s->s_name;
-
-}
-/////////////////////////////////////////////////////////
-// border
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: borderMess(bool setting)
-{
-  m_border=setting;
-}
-/////////////////////////////////////////////////////////
-// dimensionsMess
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: dimensionsMess(int width, int height)
-{
-  if (width <= 0) {
-    error("width must be greater than 0");
-    return;
-  }
-    
-  if (height <= 0 ) {
-    error ("height must be greater than 0");
-    return;
-  }
-  m_width = width;
-  m_height = height;
-}
-/////////////////////////////////////////////////////////
-// fullscreenMess
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: fullscreenMess(bool on)
-{
-  m_fullscreen = on;
-}
-
-/////////////////////////////////////////////////////////
-// offsetMess
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: offsetMess(int x, int y)
-{
-  m_xoffset = x;
-  m_yoffset = y;
-
-}
 
 /////////////////////////////////////////////////////////
 // createMess
@@ -285,81 +191,82 @@ void gemcocoawindow :: destroyMess(void)
   destroy();
 }
 
-
 /////////////////////////////////////////////////////////
-// cursorMess
-//
-/////////////////////////////////////////////////////////
-void gemcocoawindow :: cursorMess(bool setting)
-{
-  m_cursor=setting;
-
+// messages
+void gemcocoawindow :: bufferMess(int buf) {
+  switch(buf) {
+  case 1: case 2:
+    m_buffer=buf;
+    break;
+  default:
+    error("buffer can only be '1' (single) or '2' (double) buffered");
+    break;
+  }
 }
+void gemcocoawindow :: titleMess(t_symbol* s) {
+  m_title = s->s_name;
+}
+void gemcocoawindow :: dimensionsMess(int width, int height) {
+  if (width <= 0) {
+    error("width must be greater than 0");
+    return;
+  }
+    
+  if (height <= 0 ) {
+    error ("height must be greater than 0");
+    return;
+  }
+  m_width = width;
+  m_height = height;
+}
+void gemcocoawindow :: offsetMess(int x, int y) {
+  m_xoffset = x;
+  m_yoffset = y;
+}
+void gemcocoawindow :: borderMess(bool setting) {
+  m_border=setting;
+}
+void gemcocoawindow :: fullscreenMess(bool on) {
+  m_fullscreen = on;
+}
+void gemcocoawindow :: fsaaMess(int value) {
+}
+void gemcocoawindow :: cursorMess(bool setting) {
+  m_cursor=setting;
+}
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::renderMessCallback));
-  
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::titleMessCallback),        gensym("title"), A_DEFSYM ,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::createMessCallback),       gensym("create") ,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::bufferMessCallback),       gensym("buffer"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::fullscreenMessCallback),   gensym("fullscreen"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::dimensionsMessCallback),   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::offsetMessCallback),       gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::cursorMessCallback),       gensym("cursor"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::destroyMessCallback),      gensym("destroy"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::printMessCallback),        gensym("print"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::borderMessCallback),       gensym("border"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemcocoawindow::fsaaMessCallback),         gensym("FSAA"), A_FLOAT, A_NULL);
+  CLASS_ADDMETHOD(gemcocoawindow, render, render);
+  CLASS_ADDMETHOD(gemcocoawindow, create, create);
+  CLASS_ADDMETHOD(gemcocoawindow, destroy, destroy);
+
+  CLASS_ADDMETHOD_F(gemcocoawindow, buffer, buffer);
+  CLASS_ADDMETHOD_S(gemcocoawindow, title, title);
+  CLASS_ADDMETHOD_FF(gemcocoawindow, dimensions, dimen);
+  CLASS_ADDMETHOD_FF(gemcocoawindow, offset, offset);
+  CLASS_ADDMETHOD_F(gemcocoawindow, border, border);
+  CLASS_ADDMETHOD_F(gemcocoawindow, fullscreen, fullscreen);
+  CLASS_ADDMETHOD_F(gemcocoawindow, fsaa, FSAA);
+  CLASS_ADDMETHOD_F(gemcocoawindow, cursor, cursor);
 }
-void gemcocoawindow :: printMessCallback(void *)
-{
-  //  GemMan::printInfo();
-}
-void gemcocoawindow :: borderMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->borderMess(static_cast<int>(state));
-}
-void gemcocoawindow :: destroyMessCallback(void *data)
-{
-  GetMyClass(data)->destroyMess();
-}
-void gemcocoawindow :: renderMessCallback(void *data)
-{
-  GetMyClass(data)->renderMess();
-}
+
+GEMCLASS_CALLBACK(gemcocoawindow, render);
+GEMCLASS_CALLBACK(gemcocoawindow, create);
+GEMCLASS_CALLBACK(gemcocoawindow, destroy);
+GEMCLASS_CALLBACK_F(gemcocoawindow, buffer, int);
 void gemcocoawindow :: titleMessCallback(void *data, t_symbol* disp)
 {
   GetMyClass(data)->titleMess(disp);
 }
-void gemcocoawindow :: createMessCallback(void *data)
-{
-  GetMyClass(data)->createMess();
-}
-void gemcocoawindow :: bufferMessCallback(void *data, t_floatarg buf)
-{
-  GetMyClass(data)->bufferMess(static_cast<int>(buf));
-}
-void gemcocoawindow :: fullscreenMessCallback(void *data, t_floatarg on)
-{
-  GetMyClass(data)->fullscreenMess(static_cast<int>(on));
-}
-void gemcocoawindow :: dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height)
-{
-  GetMyClass(data)->dimensionsMess(static_cast<int>(width), static_cast<int>(height));
-}
-void gemcocoawindow :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-  GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
-}
-void gemcocoawindow :: cursorMessCallback(void *data, t_floatarg val)
-{
-  GetMyClass(data)->cursorMess(val);
-}
-void gemcocoawindow :: fsaaMessCallback(void *data, t_floatarg val)
-{
-  GetMyClass(data)->fsaaMess(static_cast<int>(val));
-}
+GEMCLASS_CALLBACK_FF(gemcocoawindow, dimensions, int);
+GEMCLASS_CALLBACK_FF(gemcocoawindow, offset, int);
+GEMCLASS_CALLBACK_F(gemcocoawindow, border, bool);
+GEMCLASS_CALLBACK_F(gemcocoawindow, fullscreen, int);
+GEMCLASS_CALLBACK_F(gemcocoawindow, fsaa, int);
+GEMCLASS_CALLBACK_F(gemcocoawindow, cursor, bool);

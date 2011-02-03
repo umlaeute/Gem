@@ -16,40 +16,6 @@
 #import <Cocoa/Cocoa.h>
 #include "Base/GemContext.h"
 
-/*-----------------------------------------------------------------
-  -------------------------------------------------------------------
-  CLASS
-  gemcocoawindow
-
-  The window manager
-
-  DESCRIPTION
-
-  Access to GemMan.
-
-  "bang"  - swap the buffers
-  "render" - render a frame now
-
-  "create" - create a graphics window
-  "destroy" - destroy the graphics window
-
-
-  "buffer" - single or double buffered
-  "fsaa" - full screen anti-aliasing
-
-  "title" - set a title for the graphics window
-  "border" - whether we want a border as decoration or not
-
-  "dimen" - the window dimensions
-  "fullscreen" - fullscreen mode
-  "offset" - the window offset
-  "secondscreen" - render to the secondscreen (auto-offset)
-
-  "cursor" - whether we want a cursor or not
-  "menubar" - hide notorious menubars
-  "topmost" - set the window to stay on top
-
-  -----------------------------------------------------------------*/
 
 class gemcocoawindow;
 @interface GemCocoaWindow : NSOpenGLView
@@ -68,88 +34,63 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   //////////
   // Constructor
   gemcocoawindow(void);
-
-  //////////
-  // Destructor
   virtual ~gemcocoawindow(void);
 
-
-  // create window
   virtual bool create(void);
-
-  // destroy window
   virtual void destroy(void);
+  void        createMess(void);
+  void       destroyMess(void);
 
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
 
-  void doRender(void);
-
-  /* rendering */
   void renderMess(void);
-
-  /* dispatch window events */
   void dispatch(void);
 
-  /* render context (pre creation) */
-  void  bufferMess(int buf);
-  int         m_buffer;
-  void    fsaaMess(int value);
-  int         m_fsaa;
+  void             bufferMess(int buf);
+  void              titleMess(t_symbol* s);
+  virtual void dimensionsMess(int width, int height);
+  void             offsetMess(int x, int y);
+  void             borderMess(bool on);
+  void         fullscreenMess(bool on);
+  void               fsaaMess(int value);
+  void             cursorMess(bool on);
 
-  /* window decoration (pre creation) */
-  void titleMess(t_symbol* s);
-  std::string     m_title;
-  void borderMess(bool on);
-  bool       m_border;
+  // window<->GemContext
+  void dimension(unsigned int, unsigned int);
+  void position (int, int);
+  void motion(int x, int y);
+  void button(int id, int state);
+  void key(std::string, int, int state);
 
-  /* window position/dimension (pre creation) */
-  virtual void    dimensionsMess(int width, int height);
-  unsigned int         m_width, m_height;
-
-  void    fullscreenMess(bool on);
-  bool              m_fullscreen;
-  void        offsetMess(int x, int y);
-  unsigned int      m_xoffset, m_yoffset;
-
-  /* creation/destruction */
-  void        createMess(void);
-  void       destroyMess(void);
-
-  /* post creation */
-  void        cursorMess(bool on);
-  bool              m_cursor;
+ protected:
+  int          m_buffer;
+  int          m_fsaa;
+  std::string  m_title;
+  bool         m_border;
+  unsigned int m_width, m_height;
+  unsigned int m_xoffset, m_yoffset;
+  bool         m_fullscreen;
+  bool         m_cursor;
 
  private:
 
   GemCocoaWindow*m_win;
 
   //////////
-  // Static member functions (rendering)
-  static void     renderMessCallback(void *data);
-
-  //////////
-  // Static member functions (window pre-creation)
-  static void     bufferMessCallback(void *data, t_floatarg buf);
-  static void     fsaaMessCallback(void *data,t_floatarg val);
-  static void     titleMessCallback(void *data, t_symbol* s);
-  static void     dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void     offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
-  static void     fullscreenMessCallback(void *data, t_floatarg on);
-  static void     borderMessCallback(void *, t_floatarg state);
-
-  //////////
   // Static member functions (window creation)
   static void     createMessCallback(void *);
   static void     destroyMessCallback(void *);
+  // Static member functions (window pre-creation)
+  static void     bufferMessCallback(void *data, t_floatarg buf);
+  static void     titleMessCallback(void *data, t_symbol* s);
+  static void     dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
+  static void     offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
+  static void     borderMessCallback(void *, t_floatarg state);
+  static void     fullscreenMessCallback(void *data, t_floatarg on);
+  static void     fsaaMessCallback(void *data,t_floatarg val);
 
-  //////////
-  // Static member functions (window post-creation)
-  static void     cursorMessCallback(void *, t_floatarg);
-
-  //////////
-  // Static member functions (misc)
-  static void     printMessCallback(void *);
+  static void     cursorMessCallback(void *data, t_floatarg on);
 };
 
 #endif    // for header file
