@@ -76,7 +76,7 @@
 
 - (void)drawRect:(NSRect)rect
 {
-  gemwin->doRender();
+  gemwin->renderMess();
 }
 
 

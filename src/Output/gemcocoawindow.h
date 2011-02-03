@@ -63,7 +63,6 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   void button(int id, int state);
   void key(std::string, int, int state);
 
- protected:
   int          m_buffer;
   int          m_fsaa;
   std::string  m_title;
@@ -81,6 +80,7 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   // Static member functions (window creation)
   static void     createMessCallback(void *);
   static void     destroyMessCallback(void *);
+  static void     renderMessCallback(void *);
   // Static member functions (window pre-creation)
   static void     bufferMessCallback(void *data, t_floatarg buf);
   static void     titleMessCallback(void *data, t_symbol* s);
