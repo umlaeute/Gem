@@ -71,59 +71,60 @@ void GemPixObj :: render(GemState *state){
       switch(image->image.format){
       case GL_RGBA:
       case GL_BGRA_EXT:
-	switch(m_simd){
-	case(GEM_SIMD_MMX):
-	  processRGBAMMX(image->image);
-	  break;
-	case(GEM_SIMD_SSE2):
-	  processRGBASSE2(image->image);
-	  break;
-	case(GEM_SIMD_ALTIVEC):
-	  processRGBAAltivec(image->image);
-	  break;
-	default:
-	  processRGBAImage(image->image);
-	}
-	break;
+        switch(m_simd){
+        case(GEM_SIMD_MMX):
+          processRGBAMMX(image->image);
+          break;
+        case(GEM_SIMD_SSE2):
+          processRGBASSE2(image->image);
+          break;
+        case(GEM_SIMD_ALTIVEC):
+          processRGBAAltivec(image->image);
+          break;
+        default:
+          processRGBAImage(image->image);
+        }
+        break;
       case GL_RGB:
       case GL_BGR_EXT:
-	processRGBImage(image->image);
-	break;
+        processRGBImage(image->image);
+        break;
       case GL_LUMINANCE:
-	switch(m_simd){
-	case(GEM_SIMD_MMX):
-	  processGrayMMX(image->image);
-	  break;
-	case(GEM_SIMD_SSE2):
-	  processGraySSE2(image->image);
-	  break;
-	case(GEM_SIMD_ALTIVEC):
-	  processGrayAltivec(image->image);
-	  break;
-	default:
-	  processGrayImage(image->image);
-	}
-	break;
+        switch(m_simd){
+        case(GEM_SIMD_MMX):
+          processGrayMMX(image->image);
+          break;
+        case(GEM_SIMD_SSE2):
+          processGraySSE2(image->image);
+          break;
+        case(GEM_SIMD_ALTIVEC):
+          processGrayAltivec(image->image);
+          break;
+        default:
+          processGrayImage(image->image);
+        }
+        break;
       case GL_YCBCR_422_GEM:
-	switch(m_simd){
-	case(GEM_SIMD_MMX):
-	  processYUVMMX(image->image);
-	  break;
-	case(GEM_SIMD_SSE2):
-	  processYUVSSE2(image->image);
-	  break;
-	case(GEM_SIMD_ALTIVEC):
-	  processYUVAltivec(image->image);
-	  break;
-	default:
-	  processYUVImage(image->image);
-	}
-  break;
+        switch(m_simd){
+        case(GEM_SIMD_MMX):
+          processYUVMMX(image->image);
+          break;
+        case(GEM_SIMD_SSE2):
+          processYUVSSE2(image->image);
+          break;
+        case(GEM_SIMD_ALTIVEC):
+          processYUVAltivec(image->image);
+          break;
+        default:
+          processYUVImage(image->image);
+        }
+        break;
       default:
         processImage(image->image);
       }
     }
   }
+  state->set("pix", image);
 }
 
 //////////
