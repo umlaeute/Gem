@@ -18,6 +18,8 @@
 
 #include "Base/GemGL.h"
 
+#define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
+
 #ifdef __linux__
 # include "GL/freeglut.h"
 #elif defined __APPLE__
@@ -101,12 +103,14 @@ gemglutwindow :: gemglutwindow(void) :
   m_cursor(false),
   m_window(0),
   m_clock(NULL),
+  m_destroyClock(NULL),
   m_polltime(5)
 {
   m_width =500;
   m_height=500;
 
   m_clock=clock_new(this, reinterpret_cast<t_method>(gemglutwindow::clockCallback));
+  m_destroyClock=clock_new(this, reinterpret_cast<t_method>(gemglutwindow::clockDestroy));
 }
 
 /////////////////////////////////////////////////////////
@@ -117,6 +121,7 @@ gemglutwindow :: ~gemglutwindow()
 {
   destroyMess();
   clock_free(m_clock);
+  clock_free(m_destroyClock);
 }
 
 
@@ -277,7 +282,7 @@ void gemglutwindow :: createMess(void)
   glutDisplayFunc   (&gemglutwindow::displayCb);
   glutVisibilityFunc(&gemglutwindow::visibleCb);
 
-  glutWMCloseFunc     (&gemglutwindow::closeCb);
+  glutCloseFunc     (&gemglutwindow::closeCb);
 #ifndef __APPLE__
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 #endif
@@ -323,18 +328,23 @@ void gemglutwindow :: destroy(void)
 {
   GemContext::destroy();
   clock_unset(m_clock);
+  clock_unset(m_destroyClock);
   m_window=0;
+  info("window", "closed");
 }
 void gemglutwindow :: destroyMess(void)
 {
   if(makeCurrent()) {
-    glutDestroyWindow(m_window);
+    int window=m_window;
+    m_window=0;
+    glutWMCloseFunc     (NULL);
+    glutDestroyWindow(window);
     glutMainLoopEvent();
-    list_del(m_window);
+    glutMainLoopEvent();
+    list_del(window);
   }
   destroy();
 }
-
 
 /////////////////////////////////////////////////////////
 // cursorMess
@@ -450,6 +460,12 @@ void gemglutwindow :: clockCallback(void *data)
   gemglutwindow*instance=(gemglutwindow*)data;
   instance->clock();
 }
+void gemglutwindow :: clockDestroy(void *data)
+{
+  gemglutwindow*instance=(gemglutwindow*)data;
+  instance->destroyMess();
+}
+
 
 #define CALLBACK4WIN gemglutwindow*ggw=list_find(glutGetWindow()); if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
 
@@ -463,8 +479,13 @@ void gemglutwindow::visibleCb(int state) {
 }
 
 void gemglutwindow::closeCb(void) {
-  CALLBACK4WIN ->destroy();
-  ggw->info("window", "closed");
+
+  gemglutwindow*ggw=list_find(glutGetWindow()); 
+  if(!ggw){
+    ::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); 
+    return;
+  }
+  clock_delay(ggw->m_destroyClock, 0);
 }
 
 

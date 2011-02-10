@@ -174,6 +174,9 @@ class GEM_EXTERN gemglutwindow : public GemContext
   int m_polltime;
   static void clockCallback(void*);
   void clock(void);
+
+  t_clock*m_destroyClock;
+  static void clockDestroy(void*);
 };
 
 #endif    // for header file
