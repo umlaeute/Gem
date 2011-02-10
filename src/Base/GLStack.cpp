@@ -193,7 +193,7 @@ int GLStack::reset(enum GemStackId id) {
   GLenum mode=id2depth(id);
 
   if(maxmode && mode) {
-    if(GL_COLOR != mode || GLEW_ARB_imaging) {
+    if(COLOR != id || GLEW_ARB_imaging) {
       glGetIntegerv(maxmode, data->maxDepth+id);
       glGetIntegerv(mode, data->stackDepth+id);
     }

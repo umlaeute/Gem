@@ -408,9 +408,10 @@ void GemMan :: resetValues()
   // setup the transformation matrices
   float xDivy = (float)m_w / (float)m_h;
 
-
-  glMatrixMode(GL_COLOR);
-  glLoadIdentity();
+  if(GLEW_ARB_imaging) {
+    glMatrixMode(GL_COLOR);
+    glLoadIdentity();
+  }
 
   glMatrixMode(GL_TEXTURE);
   glLoadIdentity();
@@ -471,7 +472,6 @@ void GemMan :: fillGemState(GemState &state)
   gem::GLStack*stacks=NULL;
   state.get("gl.stacks", stacks);
   if(stacks)stacks->reset();
-  
 }
 
 /////////////////////////////////////////////////////////
