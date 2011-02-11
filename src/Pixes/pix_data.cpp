@@ -62,24 +62,26 @@ void pix_data :: trigger()
 
   int xPos = static_cast<int>(m_position[0] * m_pixRight->image.xsize);
   int yPos = static_cast<int>(m_position[1] * m_pixRight->image.ysize);
-  t_float red, green, blue, grey;
-  unsigned char r, g, b, G;
+  t_float red, green, blue, alpha, grey;
+  unsigned char r, g, b, a, G;
 
-  m_pixRight->image.getRGB(xPos, yPos, &r, &g, &b);
+  m_pixRight->image.getRGB(xPos, yPos, &r, &g, &b, &a);
   m_pixRight->image.getGrey(xPos, yPos, &G);
 
   red   = r / 255.;
   green = g / 255.;
   blue  = b / 255.;
+  alpha = a / 255.;
   grey  = G / 255.;
   
-  t_atom atom[3];
+  t_atom atom[4];
   // send out the color information
   outlet_float(m_grayOut, grey);
   SETFLOAT(&atom[0], red);
   SETFLOAT(&atom[1], green);
   SETFLOAT(&atom[2], blue);
-  outlet_list(m_colorOut, gensym("list"), 3, atom);	
+  SETFLOAT(&atom[3], alpha);
+  outlet_list(m_colorOut, gensym("list"), 4, atom);	
 }
 
 /////////////////////////////////////////////////////////

@@ -1787,15 +1787,16 @@ GEM_EXTERN void imageStruct::swapRedBlue() {
 }
 
 
-GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b) const
+GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b, unsigned char*a) const
 {
-  unsigned char red=0, green=0, blue=0;
+  unsigned char red=0, green=0, blue=0, alpha=255;
   int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
   unsigned char*pixels=data+position*csize;
     
   switch(format) {
   case GL_LUMINANCE:
     red=green=blue=pixels[0];
+    alpha=255;
     break;
   case GL_RGB:
     red=pixels[0];
@@ -1811,16 +1812,19 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
     red=pixels[0];
     green=pixels[1];
     blue=pixels[2];
+    alpha=pixels[3];
     break;
   case GL_BGRA_EXT:
 #ifdef __APPLE__
     red=pixels[1];
     green=pixels[2];
     blue=pixels[3];
+    alpha=pixels[0];
 #else
     red=pixels[2];
     green=pixels[1];
     blue=pixels[0];
+    alpha=pixels[3];
 #endif
     break;
   case GL_YUV422_GEM:
@@ -1845,6 +1849,7 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
   if(r)*r=red;
   if(g)*g=green;
   if(b)*b=blue;
+  if(a)*a=alpha;
 }
 GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
 {

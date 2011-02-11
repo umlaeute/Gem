@@ -137,7 +137,7 @@ struct GEM_EXTERN imageStruct
 
   /////////
   // gets the color of a pixel
-  virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b) const;
+  virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b, unsigned char*a=NULL) const;
   virtual void getGrey(int X, int Y, unsigned char*g) const;
   virtual void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const;
   
