@@ -81,6 +81,16 @@ struct pix_frei0r::F0RPlugin {
     m_name = info.name;
     m_author = info.author;
     m_type = info.plugin_type;
+    switch(m_type) {
+    case (F0R_PLUGIN_TYPE_SOURCE):
+    case (F0R_PLUGIN_TYPE_FILTER):
+      break;
+    default:
+      ::error("[pix_frei0r] only supports sources/filters, no mixers!");
+      return false;
+    }
+
+
 #warning check color type
     m_color = info.color_model;
 #warning check compatibility
@@ -96,23 +106,27 @@ struct pix_frei0r::F0RPlugin {
     if(!f0r_update)return false;
     // if(!f0r_update2)return false;
 
-
-
-
     int numparameters = info.num_params;
     int i=0;
     m_parameterNames.clear();
+    m_parameterTypes.clear();
     m_parameter.clear();
 
     for(i=0; i<numparameters; i++) {
       f0r_param_info_t pinfo;
       f0r_get_param_info(&pinfo, i);
       m_parameterNames.push_back(pinfo.name);
+      m_parameterTypes.push_back(pinfo.type);
 
-      ::post("parm%02d: %s", i, pinfo.name);
+      ::post("parm%02d[%s]: %s", i, pinfo.name, pinfo.explanation);
     }
 
     return true;
+  }
+  void deinit(void) {
+    destruct();
+    if(f0r_deinit)
+      f0r_deinit();
   }
 
   unsigned int m_width, m_height;
@@ -143,6 +157,7 @@ struct pix_frei0r::F0RPlugin {
 
   gem::Properties m_parameter;
   std::vector<std::string>m_parameterNames;
+  std::vector<int>m_parameterTypes;
 
 typedef int (*t_f0r_init)(void);
 typedef void (*t_f0r_get_plugin_info)(f0r_plugin_info_t* pluginInfo);
@@ -196,8 +211,48 @@ typedef int (*t_f0r_deinit)(void);
     f0r_update2        =reinterpret_cast<t_f0r_update2        >(m_dylib.proc("f0r_update2"));
     f0r_deinit         =reinterpret_cast<t_f0r_deinit         >(m_dylib.proc("f0r_deinit"));
 
-    init();
+    if(!init()) {
+      deinit();
+      throw(GemException("couldn't instantiate frei0r plugin"));
+    }
   }
+
+  bool set(unsigned int key, bool value) {
+    if(!m_instance)return false;
+    f0r_param_bool v=value;
+    f0r_set_param_value(m_instance, &v, key);
+    return true;
+  }
+  bool set(unsigned int key, double value) {
+    if(!m_instance)return false;
+    f0r_param_double v=value;
+    f0r_set_param_value(m_instance, &v, key);
+    return true;
+  }
+  bool set(unsigned int key, double x, double y) {
+    if(!m_instance)return false;
+    f0r_param_position v;
+    v.x=x;
+    v.y=y;
+    f0r_set_param_value(m_instance, &v, key);
+    return true;
+  }
+  bool set(unsigned int key, double r, double g, double b) {
+    if(!m_instance)return false;
+    f0r_param_color v;
+    v.r=r;
+    v.g=g;
+    v.b=b;
+    f0r_set_param_value(m_instance, &v, key);
+    return true;
+  }
+  bool set(unsigned int key, std::string s) {
+    if(!m_instance)return false;
+    /* f0r_param_string */ const char* v=s.c_str();
+    f0r_set_param_value(m_instance, &v, key);
+    return true;
+  }
+
 
   bool process(double time, imageStruct&input, imageStruct&output) {
     if(!m_instance || m_width!=input.xsize || m_height!=input.ysize)
@@ -310,11 +365,91 @@ void pix_frei0r :: processRGBAImage(imageStruct &image)
 }
 
 
-void pix_frei0r :: parmMess(std::string key, t_atom *value){
+void pix_frei0r :: parmMess(const std::string key, int argc, t_atom *argv){
+  if(!m_plugin) {
+    error("no plugin present! forgetting parameter....");
+    return;
+  }
+  int i=0;
+  for(i=0; i<m_plugin->m_parameterNames.size(); i++) {
+    if(key==m_plugin->m_parameterNames[i]) {
+      parmMess(i, argc, argv);
+      return;
+    }
+  }
+  error("unknown parameter '%s'", key.c_str());
 }
 
 
-void pix_frei0r :: parmMess(int param, t_atom *value){
+void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
+  if(!m_plugin) {
+    error("no plugin present! forgetting parameter....");
+    return;
+  }
+  if(key<0) {
+    error("negative parameterIDs not allowed");
+    return;
+  }
+  if(key>=m_plugin->m_parameterNames.size()) {
+    error("parameterID out of bounds");
+    return;
+  }
+
+  int type=m_plugin->m_parameterTypes[key];
+
+  double r, g, b;
+  double x, y;
+  
+  const char*name=m_plugin->m_parameterNames[key].c_str();
+
+  switch(type) {
+  case(F0R_PARAM_BOOL):
+    if(argc!=1) {
+      error("param#%02d('%s') is of type BOOL: need exactly 1 argument", key, name);
+      return;
+    }
+    m_plugin->set(key, static_cast<bool>(atom_getint(argv)));
+    break;
+  case(F0R_PARAM_DOUBLE):
+    if(argc!=1) {
+      error("param#%02d('%s') is of type DOUBLE: need exactly 1 argument", key, name);
+      return;
+    }
+    m_plugin->set(key, static_cast<double>(atom_getfloat(argv)));
+    break;
+  case(F0R_PARAM_COLOR):
+    if(argc!=3) {
+      error("param#%02d('%s') is of type COLOR: need exactly 3 arguments", key, name);
+      return;
+    }
+    r=atom_getfloat(argv+0);
+    g=atom_getfloat(argv+1);
+    b=atom_getfloat(argv+2);
+    m_plugin->set(key, r, g, b);
+    break;
+  case(F0R_PARAM_POSITION):
+    if(argc!=2) {
+      error("param#%02d('%s') is of type POSITION: need exactly 2 arguments", key, name);
+      return;
+    }
+    x=atom_getfloat(argv+0);
+    y=atom_getfloat(argv+1);
+    m_plugin->set(key, x, y);
+    break;
+  case(F0R_PARAM_STRING):
+    if(argc!=1) {
+      error("param#%02d('%s') is of type STRING: need exactly 1 argument", key, name);
+      return;
+    }
+    m_plugin->set(key, atom_getsymbol(argv)->s_name);
+    break;
+  default:
+    error("param#%02d('%s') is of UNKNOWN type", key, name);
+    break;
+  }
+
+
+
 }
 
 
@@ -378,9 +513,9 @@ void pix_frei0r :: obj_setupCallback(t_class *classPtr)
 void pix_frei0r :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
   if('#'==s->s_name[0]) {
     int i = atoi(s->s_name+1);
-    GetMyClass(data)->parmMess(i, (argc>0)?argv:NULL);
+    GetMyClass(data)->parmMess(i, argc, argv);
   } else {
-    GetMyClass(data)->parmMess(std::string(s->s_name), (argc>0)?argv:NULL);
+    GetMyClass(data)->parmMess(std::string(s->s_name), argc, argv);
   }
 }
 

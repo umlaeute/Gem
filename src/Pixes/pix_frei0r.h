@@ -66,8 +66,8 @@ class GEM_EXTERN pix_frei0r : public GemPixObj
     bool m_canopen;
     std::vector<t_inlet*>m_inlet;
 
-    void parmMess(int param, t_atom*value);
-    void parmMess(std::string param, t_atom*value);
+    void parmMess(int param, int , t_atom*);
+    void parmMess(const std::string  param, int, t_atom*);
 
     void openMess(t_symbol*name);
     void closeMess(void);
