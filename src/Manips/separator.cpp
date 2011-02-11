@@ -104,7 +104,7 @@ void separator :: render(GemState *state)
     PUSHGLSTACK(GLStack::MODELVIEW);
   }
 
-#warning use GemState copy!
+#warning use GemState copy rather than manually copying each state!
 
   SEPARATOR_STATEASSIGN(state, &m_state, bool, "gl.lighting");
   SEPARATOR_STATEASSIGN(state, &m_state, bool, "gl.smooth");
