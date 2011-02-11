@@ -17,7 +17,8 @@
 
 #include "gemframebuffer.h"
 #include <string.h>
-
+#include "Base/GemState.h"
+#include "Base/GLStack.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL)
 
@@ -120,6 +121,11 @@ bool gemframebuffer :: isRunnable() {
 /////////////////////////////////////////////////////////
 void gemframebuffer :: render(GemState *state)
 {
+  gem::GLStack*stacks=NULL;
+  if(state) {
+    state->get("gl.stacks", stacks);
+  }
+
   if(!m_width || !m_height) {
     error("width and height must be present!");
   }
@@ -148,18 +154,19 @@ void gemframebuffer :: render(GemState *state)
   
   // Clear the buffers and reset the model view matrix.
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glPushMatrix();
+
   // We need a one-to-one mapping of pixels to texels in order to
   // ensure every element of our texture is processed. By setting our
   // viewport to the dimensions of our destination texture and drawing
   // a screen-sized quad (see below), we ensure that every pixel of our
   // texel is generated and processed in the fragment program.		
   glViewport(0,0, m_width, m_height);
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
+
+  if(stacks) stacks->push(gem::GLStack::PROJECTION);
   glLoadIdentity();
-	glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3], m_perspect[4], m_perspect[5]);
-	glMatrixMode(GL_MODELVIEW);
+  glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3], m_perspect[4], m_perspect[5]);
+
+  if(stacks) stacks->push(gem::GLStack::MODELVIEW);
   glLoadIdentity();
 }
 
@@ -170,6 +177,10 @@ void gemframebuffer :: render(GemState *state)
 void gemframebuffer :: postrender(GemState *state)
 {
   t_float w, h;
+  gem::GLStack*stacks=NULL;
+  if(state) {
+    state->get("gl.stacks", stacks);
+  }
 
   glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
 
@@ -194,10 +205,9 @@ void gemframebuffer :: postrender(GemState *state)
   glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
   glBindTexture( m_texTarget, m_offScreenID );
 
-  glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
+  if(stacks) stacks->pop(gem::GLStack::PROJECTION);
+  if(stacks) stacks->pop(gem::GLStack::MODELVIEW);
+
   // reset to visible window's clear color
   glClearColor( m_color[0], m_color[1], m_color[2], m_color[3] );
   // reset to original viewport dimensions
