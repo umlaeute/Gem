@@ -297,6 +297,34 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
   m_plugin = new F0RPlugin(pluginname, getCanvas());
   m_image.setCsizeByFormat(GL_RGBA);
 
+  unsigned int numparams = m_plugin->m_parameterNames.size();
+  char tempVt[5];
+
+  unsigned int i;
+  for(i=0; i<numparams; i++) {
+    snprintf(tempVt, 5, "#%d", i);
+    tempVt[4]=0;
+    unsigned int parmType=0;
+    t_symbol*s_inletType;
+    parmType=m_plugin->m_parameterTypes[i];
+
+    switch(parmType) {
+    case(F0R_PARAM_BOOL):
+    case(F0R_PARAM_DOUBLE):
+      s_inletType=gensym("float");
+    break;
+    case(F0R_PARAM_COLOR):
+    case(F0R_PARAM_POSITION):
+      s_inletType=gensym("list");
+    break;
+    case(F0R_PARAM_STRING):
+      s_inletType=gensym("symbol");
+      break;
+    default:
+      s_inletType=&s_;
+    }
+    m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType, gensym(tempVt)));
+  }
 }
 
 /////////////////////////////////////////////////////////
