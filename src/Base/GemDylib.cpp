@@ -130,38 +130,51 @@ static std::string defaultExtension =
 #endif
   ;
 
-GemDylibHandle* GemDylib::open(const CPPExtern*obj, const std::string filename, const std::string extension) {
-  GemDylibHandle*handle=new GemDylibHandle();
+static std::string getFullfilename(const t_canvas*canvas, const char*filename, const char*ext) {
+  std::string fullname;
+
   char buf[MAXPDSTRING];
   char*bufptr;
-
-  std::string fullname = "";
-
-  const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
-
-
-  const char*ext=extension.c_str();
-  if(0==ext)ext=defaultExtension.c_str();
-
   int fd=0;
-  if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename.c_str(), ext, buf, &bufptr, MAXPDSTRING, 1))>=0){
+  if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf, &bufptr, MAXPDSTRING, 1))>=0){
     close(fd);
     fullname=buf;
     fullname+="/";
     fullname+=bufptr;
   } else {
     if(canvas) {
-      canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(filename.c_str()), buf, MAXPDSTRING);
+      canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(filename), buf, MAXPDSTRING);
       fullname=buf;
     } else {
-          std::string error="couldn't find '";
-        error+=filename;
-        error+="'.'";
-        error+=ext;
-        error+="'";
-        throw(GemException(error));
-      }
+      return std::string("");
+    }
   }
+  return fullname;
+}
+
+GemDylibHandle* GemDylib::open(const CPPExtern*obj, const std::string filename, const std::string extension) {
+  GemDylibHandle*handle=new GemDylibHandle();
+  char buf[MAXPDSTRING];
+
+  std::string fullname = "";
+
+  const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
+  const char*ext=extension.c_str();
+
+  fullname=getFullfilename(canvas, filename.c_str(), ext);
+  if(fullname.empty()) {
+    fullname=getFullfilename(canvas, filename.c_str(), defaultExtension.c_str());
+  }
+
+  if(fullname.empty()) {
+    std::string error="couldn't find '";
+    error+=filename;
+    error+="'.'";
+    error+=ext;
+    error+="'";
+    throw(GemException(error));
+  }
+
   sys_bashfilename(fullname.c_str(), buf);
   
 #ifdef DL_OPEN
