@@ -501,7 +501,7 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::typeMessCallback),
                   gensym("type"), A_DEFSYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::colorMessCallback),
-                  gensym("color"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+                  gensym("color"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::texunitCallback),
                   gensym("texunit"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::perspectiveMessCallback),
@@ -530,8 +530,22 @@ void gemframebuffer :: typeMessCallback (void *data, t_symbol *type)
   GetMyClass(data)->typeMess(type->s_name);
 }
 
-void gemframebuffer :: colorMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue, t_floatarg alpha)
+void gemframebuffer :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
+  float red=1., green=1., blue=1., alpha=1.;
+  switch(argc) {
+  case (4):
+    alpha=atom_getfloat(argv+3);
+  case (3):
+    red =atom_getfloat(argv+0);
+    green=atom_getfloat(argv+1);
+    blue =atom_getfloat(argv+2);
+    break;
+  default:
+    GetMyClass(data)->error("'color' message takes 3 (RGB) or 4 (RGBA) values");
+    return;
+  }
+
   GetMyClass(data)->colorMess(red, green, blue, alpha);
 }
 

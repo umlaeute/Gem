@@ -107,7 +107,7 @@ virtual void perspectiveMess( float left, float right, float bottom, float top, 
   static void texTargetCallback (void *data, t_floatarg tt);
   static void formatMessCallback(void *data, t_symbol *format);
   static void typeMessCallback  (void *data, t_symbol *type);
-  static void colorMessCallback (void *data, t_floatarg red, t_floatarg green, t_floatarg blue, t_floatarg alpha);
+  static void colorMessCallback (void *data, t_symbol*, int, t_atom*);
   static void texunitCallback   (void *data, t_floatarg tu);
   static void perspectiveMessCallback(void *data, t_symbol*s,int argc, t_atom*argv);
 };
