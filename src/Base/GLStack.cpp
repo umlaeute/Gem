@@ -19,6 +19,10 @@
 #include "GLStack.h"
 #include "Gem/RTE.h"
 
+/* need GLUtil for glReportError */ 
+#include "Base/GemGLUtil.h"
+#define GLDEBUG if(glReportError())::startpost("glError @ %s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__), ::post
+
 using namespace gem;
 
 namespace gem {
@@ -189,13 +193,13 @@ void GLStack::reset() {
  * NOTE: needs valid openGL context
  */
 int GLStack::reset(enum GemStackId id) {
-  GLenum maxmode=id2maxdepth(id);
-  GLenum mode=id2depth(id);
+  GLenum maxdepth=id2maxdepth(id);
+  GLenum depth=id2depth(id);
 
-  if(maxmode && mode) {
+  if(maxdepth && depth) {
     if(COLOR != id || GLEW_ARB_imaging) {
-      glGetIntegerv(maxmode, data->maxDepth+id);
-      glGetIntegerv(mode, data->stackDepth+id);
+      glGetIntegerv(maxdepth, data->maxDepth+id);
+      glGetIntegerv(depth, data->stackDepth+id);
     }
     data->orgDepth[id]=data->stackDepth[id];
     return data->stackDepth[id];
