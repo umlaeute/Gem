@@ -176,7 +176,7 @@ void GemBase :: setModified()
 {
   if (m_cache&& (m_cache->m_magic!=GEMCACHE_MAGIC))
     m_cache=NULL;
-  if (m_cache) m_cache->dirty = 1;
+  if (m_cache) m_cache->dirty = true;
   m_modified=true;
   m_state=MODIFIED;
 }
