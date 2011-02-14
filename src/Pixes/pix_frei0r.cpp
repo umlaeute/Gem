@@ -35,7 +35,7 @@
  * we therefore use dlopen() on OSX as well
  */
 #elif defined __APPLE__ && 0
-# include <mach-o/dyld.h> 
+# include <mach-o/dyld.h>
 # include <unistd.h>
 #else
 # define DL_OPEN
@@ -61,7 +61,7 @@ static size_t f0r_strnlen(const char* str, size_t maxlen) {
 struct pix_frei0r::F0RPlugin {
   bool init(void) {
     if(!f0r_init)return false;
-    
+
     if(!f0r_get_plugin_info)return false;
     if(!f0r_get_param_info)return false;
     if(!f0r_construct)return false;
@@ -143,7 +143,7 @@ struct pix_frei0r::F0RPlugin {
       f0r_destruct(m_instance);
     m_instance=NULL;
   }
-  
+
   f0r_instance_t m_instance;
 
   std::string m_name;
@@ -189,14 +189,14 @@ typedef int (*t_f0r_deinit)(void);
     #warning what to do with that err?
   }
 
-  F0RPlugin(std::string name, const t_canvas*parent=NULL) : 
+  F0RPlugin(std::string name, const t_canvas*parent=NULL) :
     m_width(0), m_height(0),
     m_instance(NULL),
-    m_name(""), m_author(""), 
-    m_type(0), m_color(0), 
-    m_frei0rVersion(0), m_majorVersion(0), m_minorVersion(0), 
+    m_name(""), m_author(""),
+    m_type(0), m_color(0),
+    m_frei0rVersion(0), m_majorVersion(0), m_minorVersion(0),
     m_explanation(""),
-    m_dylib(name) 
+    m_dylib(name)
   {
     ::post("F0rPlugin loading %s", name.c_str());
 
@@ -248,7 +248,7 @@ typedef int (*t_f0r_deinit)(void);
   }
   bool set(unsigned int key, std::string s) {
     if(!m_instance)return false;
-    /* f0r_param_string */ const char* v=s.c_str();
+    f0r_param_string v=const_cast<f0r_param_string>(s.c_str());
     f0r_set_param_value(m_instance, &v, key);
     return true;
   }
@@ -260,8 +260,8 @@ typedef int (*t_f0r_deinit)(void);
 
     if(!m_instance)return false;
 
-    f0r_update(m_instance, time, 
-	       reinterpret_cast<const uint32_t*>(input.data), 
+    f0r_update(m_instance, time,
+	       reinterpret_cast<const uint32_t*>(input.data),
 	       reinterpret_cast<uint32_t*>(output.data));
 
     return true;
@@ -427,7 +427,7 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
 
   double r, g, b;
   double x, y;
-  
+
   const char*name=m_plugin->m_parameterNames[key].c_str();
 
   switch(type) {
@@ -496,7 +496,7 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
     return(obj);
   } catch (GemException e) {
     ::verbose(2, "frei0r_loader: failed!");
-    //e.report(); 
+    //e.report();
     return NULL;
   }
   return 0;
@@ -510,10 +510,10 @@ bool pix_frei0r :: loader(t_canvas*canvas, std::string classname) {
     plugin=new F0RPlugin(pluginname, canvas);
   } catch (GemException e) {
     ::verbose(2, "frei0r_loader: failed!!");
-    e.report(); 
+    e.report();
     return false;
   }
-  
+
   if(plugin!=NULL) {
     delete plugin;
     class_addcreator(reinterpret_cast<t_newmethod>(frei0r_loader_new), gensym(classname.c_str()), A_GIMME, 0);
@@ -524,7 +524,7 @@ bool pix_frei0r :: loader(t_canvas*canvas, std::string classname) {
 
 static int frei0r_loader(t_canvas *canvas, char *classname) {
   return pix_frei0r::loader(canvas, classname);
-}  
+}
 
 /////////////////////////////////////////////////////////
 // static member function
