@@ -198,8 +198,6 @@ typedef int (*t_f0r_deinit)(void);
     m_explanation(""),
     m_dylib(name)
   {
-    ::post("F0rPlugin loading %s", name.c_str());
-
     f0r_init           =reinterpret_cast<t_f0r_init           >(m_dylib.proc("f0r_init"));
     f0r_get_plugin_info=reinterpret_cast<t_f0r_get_plugin_info>(m_dylib.proc("f0r_get_plugin_info"));
     f0r_get_param_info =reinterpret_cast<t_f0r_get_param_info >(m_dylib.proc("f0r_get_param_info"));
@@ -510,7 +508,7 @@ bool pix_frei0r :: loader(t_canvas*canvas, std::string classname) {
     plugin=new F0RPlugin(pluginname, canvas);
   } catch (GemException e) {
     ::verbose(2, "frei0r_loader: failed!!");
-    e.report();
+    // e.report();
     return false;
   }
 
