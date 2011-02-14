@@ -27,15 +27,15 @@
 //
 /////////////////////////////////////////////////////////
 GemCache :: GemCache(gemhead *parent)
-  : dirty(1), resendImage(0), vertexDirty(0),
+  : dirty(true), resendImage(false), vertexDirty(false),
     m_parent(parent), m_magic(GEMCACHE_MAGIC)
 {
 }
 void GemCache :: reset(gemhead *parent)
 {
-  dirty      =1;
-  resendImage=0;
-  vertexDirty=0; 
+  dirty      =true;
+  resendImage=false;
+  vertexDirty=false; 
   m_parent   =parent; 
   m_magic    =GEMCACHE_MAGIC;
 }

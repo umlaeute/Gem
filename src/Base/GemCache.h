@@ -44,15 +44,15 @@ class GEM_EXTERN GemCache
 
     	//////////
     	// Was a modification made which will void a display list?
-    	int 	    	    dirty;
+    	bool 	    	    dirty;
     	
     	//////////
     	// Should the image be resent?
-    	int 	    	    resendImage;
+    	bool 	    	    resendImage;
 
     	//////////
     	// has the Vertex-Array changed?
-    	int 	    	    vertexDirty;
+    	bool 	    	    vertexDirty;
 
 		//////////
 		// re-set (like creation, but without instantiating
