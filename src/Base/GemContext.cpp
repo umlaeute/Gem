@@ -59,6 +59,8 @@ public:
     if(qClock) clock_free (qClock);  qClock=NULL;
     if(infoOut)outlet_free(infoOut); infoOut=NULL;
   }
+  GLint maxStackDepth[4];
+
   GLEWContext    *context;
   GemGlewXContext*xcontext;
 
@@ -144,7 +146,7 @@ GemContext :: GemContext()
 /////////////////////////////////////////////////////////
 GemContext :: ~GemContext()
 {
-  destroy();
+  destroyContext();
   delete m_pimpl;
   m_pimpl=NULL;
 }
@@ -237,7 +239,7 @@ void GemContext::dispatch() {
   // LATER setup a clock that calls dispatch() every so often
 }
 
-bool GemContext::create(void){
+bool GemContext::createContext(void){
   bool ret=true;
   static int firsttime=1;
   unsigned int oldcontextid=s_contextid;
@@ -276,10 +278,10 @@ bool GemContext::create(void){
   }
 
   /* check the stack-sizes */
-  glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    m_maxStackDepth+GemMan::STACKMODELVIEW);
-  glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, m_maxStackDepth+GemMan::STACKCOLOR);
-  glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      m_maxStackDepth+GemMan::STACKTEXTURE);
-  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   m_maxStackDepth+GemMan::STACKPROJECTION);
+  glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    m_pimpl->maxStackDepth+GemMan::STACKMODELVIEW);
+  glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, m_pimpl->maxStackDepth+GemMan::STACKCOLOR);
+  glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      m_pimpl->maxStackDepth+GemMan::STACKTEXTURE);
+  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   m_pimpl->maxStackDepth+GemMan::STACKPROJECTION);
 
   firsttime=0;
 
@@ -297,7 +299,7 @@ bool GemContext::create(void){
 }
 
 
-void GemContext::destroy(void){
+void GemContext::destroyContext(void){
 #ifdef GEM_MULTICONTEXT
   if(m_pimpl->context) {
     if(m_pimpl->context==s_glewcontext) {
@@ -313,10 +315,10 @@ void GemContext::destroy(void){
 }
 
 bool GemContext::makeCurrent(void){
-  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]=m_maxStackDepth[GemMan::STACKMODELVIEW];
-  GemMan::maxStackDepth[GemMan::STACKCOLOR]=m_maxStackDepth[GemMan::STACKCOLOR];
-  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=m_maxStackDepth[GemMan::STACKTEXTURE];
-  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_maxStackDepth[GemMan::STACKPROJECTION];
+  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]= m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
+  GemMan::maxStackDepth[GemMan::STACKCOLOR]=     m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
+  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=   m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
+  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
 
 #ifdef GEM_MULTICONTEXT
   if(!m_pimpl->context) {

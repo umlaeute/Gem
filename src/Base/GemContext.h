@@ -51,10 +51,11 @@ class GEM_EXTERN GemContext : public CPPExtern
     	
   //////////
   // Destructor
-  ~GemContext(void);
-
+  virtual ~GemContext(void);
 
  protected:
+  /* OUTPUT */
+
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
   /* LATER think about detaching the output from the stack, so we can e.g. destroy a window from a mouse-callback */
   void info(t_symbol*s, int, t_atom*);  
@@ -63,7 +64,7 @@ class GEM_EXTERN GemContext : public CPPExtern
   void info(std::string, int i);
   void info(std::string, std::string);  
 
-  /* tell objects to render */
+  /* tell downstream objects to render */
   void bang(void);
 
   /* mouse movement */
@@ -79,15 +80,25 @@ class GEM_EXTERN GemContext : public CPPExtern
   void dimension(unsigned int, unsigned int);
   void position (int, int);
 
+  /* INPUT */
+
   /* create a new context
-   * make sure that this is called by the children's override functions as well,
-   * a it will eventually establish a new glew-context
-   *  if <tt>false</tt> is returned, you should not continue!
+   * this MUST be called from the derived classes
+   * as it will eventually establish a new glew-context
+   * if <tt>false</tt> is returned, you should not continue
    */
-  virtual bool create(void);
+  bool createContext(void);
+  /* create a new window
+   * make sure that this calls the parent's createContext() method
+   */
+  virtual bool create(void) = 0;
 
   /* destroy an established context */
-  virtual void destroy(void);
+  void destroyContext();
+  /* create the current window
+   * make sure that this calls the parent's destroyContext() method
+   */
+  virtual void destroy(void) = 0;
 
   /* make the object's context (window,...) the current context
    * this is virtual, so objects can add their own code
@@ -100,10 +111,9 @@ class GEM_EXTERN GemContext : public CPPExtern
   /* dispatch messages from the window
    * this might get called more often than the render-cycle
    * it might also be called automatically as soon as the window
-   * is create()ed (and until the window is destroy()ed
+   * is create()ed (and until the window is destroy()ed)
    */
   virtual void dispatch(void);
-
 
   /* set/get the dimension of the context
    * setting is done by supplying arguments to the method;
@@ -113,9 +123,6 @@ class GEM_EXTERN GemContext : public CPPExtern
   virtual void dimensionsMess(int width, int height) = 0;
   virtual void dimensionsMess(void);
   int m_width, m_height;
-
- private:
-  GLint m_maxStackDepth[4];
 
  public:
   static unsigned int getContextId(void);
