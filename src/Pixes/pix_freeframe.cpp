@@ -576,7 +576,7 @@ private:
     getExtendedInfo_();
     
     initParameters_();
-    std::cout << std::endl;
+    return true;
   }
 
   
@@ -589,11 +589,15 @@ public:
     , m_majorVersion(0)
     , m_minorVersion(0)              
   {
-    if(!open(name, canvas))
+    if(!open(name, canvas)) {
+      throw(GemException(std::string("unable to open '"+name+"'")));
       return;
+    }
 
-    if(!init_())
+    if(!init_()) {
+      throw(GemException(std::string("unable to initialize '"+name+"'")));
       return;
+    }
   }
   virtual ~FFPlugin(void) {
   }
@@ -811,8 +815,12 @@ void pix_freeframe :: openMess(t_symbol*s)
   if(m_plugin) {
     delete m_plugin;
   }
-
-  m_plugin = new FFPlugin(pluginname, getCanvas());
+  m_plugin=NULL;
+  try {
+    m_plugin = new FFPlugin(pluginname, getCanvas());
+  } catch(GemException&x) {
+    m_plugin=NULL;
+  }
 
   if(NULL==m_plugin) {
     error("unable to open '%s'", pluginname.c_str());
@@ -953,8 +961,12 @@ bool pix_freeframe :: loader(t_canvas*canvas, std::string classname) {
     return false;
   std::string pluginname = classname.substr(offset_pix_);
 
-  pix_freeframe::FFPlugin*plugin=new FFPlugin(pluginname, canvas);
-  
+  pix_freeframe::FFPlugin*plugin=NULL;
+  try {
+    plugin=new FFPlugin(pluginname, canvas);
+  } catch (GemException&x) {
+    x.report();
+  }
   if(plugin!=NULL) {
     delete plugin;
     class_addcreator(reinterpret_cast<t_newmethod>(freeframe_loader_new), gensym(classname.c_str()), A_GIMME, 0);
