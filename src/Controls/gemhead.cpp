@@ -109,8 +109,8 @@ void gemhead :: renderGL(GemState *state)
   (ap+1)->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(state);
   outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
 
-  m_cache->dirty = 0;
-  m_cache->vertexDirty=0;
+  m_cache->dirty = false;
+  m_cache->vertexDirty=false;
   state->get("gl.stacks", stacks);
   if(stacks)stacks->pop();
 }
