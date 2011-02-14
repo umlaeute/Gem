@@ -28,8 +28,9 @@ namespace gem
     bad_any_cast(const std::type_info& src, const std::type_info& dest)
       : from(src.name()), to(dest.name())
     { }
-    virtual const char* what() {
-      return "bad cast";
+    virtual const std::string what() {
+      std::string result = std::string("bad cast(") + from + "->" + to+")";
+      return result;
     }
     const char* from;
     const char* to;
