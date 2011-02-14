@@ -1232,6 +1232,35 @@ GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
 }
 #endif
 
+
+struct gemmacwindow::Info {
+  Info(void) : 
+    pWind(NULL), 
+    context(NULL), 
+    offscreen(NULL), 
+    pixelSize(32),
+    r(0,0,0,0),
+    pixMap(NULL), 
+    rowBytes(0), 
+    baseAddr(NULL),
+    fontList(0)
+  {}
+  ~Info(void) {
+  }
+  WindowPtr		pWind;		// GEM window reference for gemwin
+  AGLContext		context;	// OpenGL context
+  GWorldPtr		offscreen;	// Macintosh offscreen buffer
+  long		pixelSize;	//
+  Rect		r;		//
+  PixMapHandle	pixMap;		// PixMap Handle
+  long		rowBytes;	// 
+  void 		*baseAddr;	// 
+  short		fontList;	// Font
+};
+
+
+
+
 gemmacwindow::gemmacwindow(void) :
     m_buffer(2),
     m_fsaa(0),
@@ -1354,7 +1383,7 @@ bool gemmacwindow::create(void) {
     displayRect = CGDisplayBounds (activeDspys[m_fullscreen-1]);
 
     //set a rect to cover the entire selected display
-    SetRect(&info.r,
+    SetRect(&m_info->r,
             static_cast<long>(displayRect.origin.x),
             static_cast<long>(displayRect.origin.y),
             (static_cast<long>(displayRect.size.width)  + static_cast<long>(displayRect.origin.x)),
@@ -1364,7 +1393,7 @@ bool gemmacwindow::create(void) {
     //this winodw has no attributes like a title bar etc
     err = CreateNewWindow ( kDocumentWindowClass,
                             kWindowNoAttributes,
-                            &info.r,
+                            &m_info->r,
                             &m_info->pWind );
     if (err) {
       error("GemWinCreateMac: Fullscreen CreateNewWindow err = %d",err);
@@ -1387,7 +1416,7 @@ bool gemmacwindow::create(void) {
       m_yoffset+=50; 
     }
         
-    SetRect(&info.r, 
+    SetRect(&m_info->r, 
             static_cast<short>(m_xoffset), 
             static_cast<short>(m_yoffset),
             static_cast<short>(m_width + m_xoffset),
@@ -1395,8 +1424,8 @@ bool gemmacwindow::create(void) {
 
     err = CreateNewWindow ( windowType,
                             windowFlags,
-                            &info.r,
-                            &info.pWind );
+                            &m_info->r,
+                            &m_info->pWind );
     if (err) {
       error("err = %d",err);
       return false;
@@ -1404,10 +1433,10 @@ bool gemmacwindow::create(void) {
 
     //this takes whatever input the user sets with the gemwin hints 'title' message
     CFStringRef tempTitle = CFStringCreateWithCString(NULL, m_title.c_str(), kCFStringEncodingASCII);		
-    SetWindowTitleWithCFString ( info.pWind, tempTitle );
+    SetWindowTitleWithCFString ( m_info->pWind, tempTitle );
     CFRelease( tempTitle );
 
-    gaglDraw = GetWindowPort( info.pWind );
+    gaglDraw = GetWindowPort( m_info->pWind );
         
   }//end of conditional for fullscreen vs windowed
     
@@ -1418,7 +1447,7 @@ bool gemmacwindow::create(void) {
   gEvtHandler = NewEventHandlerUPP( evtHandler );
   InstallEventHandler( GetApplicationEventTarget(), gEvtHandler,
                        GetEventTypeCount( list ), list,
-                       info.pWind, this );
+                       m_info->pWind, this );
 
   glWInfo.fAcceleratedMust = true; 		// must renderer be accelerated?
   glWInfo.VRAM = 0 * 1048576;			// minimum VRAM (if not zero this is always required)
@@ -1449,24 +1478,24 @@ bool gemmacwindow::create(void) {
   glWInfo.aglAttributes [i++] = AGL_ACCELERATED;
   glWInfo.aglAttributes [i++] = AGL_NO_RECOVERY; 	// should be used whenever packed pixels is used to 
   glWInfo.aglAttributes [i++] = AGL_NONE;
-  BuildGLFromWindow ( info.pWind, &info.context, &glWInfo, m_shared);
+  BuildGLFromWindow ( m_info->pWind, &m_info->context, &glWInfo, m_shared);
   //		AGL_MACRO_DECLARE_VARIABLES()
   // }// end of window creation on main device - this is the old fullscreen code
     
-  if (!info.context){
-    error("MAC:  no info.context");
+  if (!m_info->context){
+    error("MAC:  no m_info->context");
     return false;
   }
   m_real_w = m_width;
   m_real_h = m_height;
-  info.fs = 0;//m_fullscreen;
+  m_info->fs = 0;//m_fullscreen;
     
   SetFrontProcess( &psn );
     
-  ShowWindow ( info.pWind );
+  ShowWindow ( m_info->pWind );
   // um, this may be overkill?
-  SelectWindow( info.pWind );
-  err = ActivateWindow( info.pWind, true );
+  SelectWindow( m_info->pWind );
+  err = ActivateWindow( m_info->pWind, true );
   if(err)
     error("GemWindow Activate err = %d", err );
 
