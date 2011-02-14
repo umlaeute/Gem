@@ -31,6 +31,8 @@
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
+#define CATCH_ANY(y) catch(gem::bad_any_cast&x) { ::verbose(3, "%s:%d [%s] %s:: %s", __FILE__, __LINE__, __FUNCTION__, (y), x.what().c_str()); }
+
 using namespace gem;
 
 class GemStateData {
@@ -88,17 +90,18 @@ GemState :: GemState()
     stackDepth[GemMan::STACKPROJECTION]=
     1; // 1 is the current matrix
 
-  set("dirty", false);
-  set("inDisplayList", false);
+  set("dirty", (dirty=false));
+  set("gl.displaylist", (inDisplayList=false));
 
-  set("gl.lighting", false); 
-  set("gl.smooth", false); 
-  set("gl.tex.type", 0);
-  //  set("pix", 0);
-  set("gl.tex.coords", 0); 
-  set("gl.tex.units", 0);
-  set("timing.tick", 50.f); 
-  set("gl.drawtype", 0);
+  set("gl.lighting", (lighting=false)); 
+  set("gl.smooth", (smooth=false)); 
+  set("gl.tex.type", (texture=0));
+  //  set("pix", (image=0));
+  set("gl.tex.numcoords", (numTexCoords=0));  // LATER get rid of this
+  set("gl.tex.coords", (texCoords=0));  // LATER make this a std::vector
+  set("gl.tex.units", (multiTexUnits=0));
+  set("timing.tick", (tickTime=50.f)); 
+  set("gl.drawtype", (drawType=0));
 
   set("gl.stacks", data->stacks.get());
 
@@ -139,7 +142,6 @@ GemState& GemState::operator=(const GemState&org) {
 
 
 void GemState :: reset() {
-  image = 0;
   VertexArray = 0;
   VertexArraySize = 0;
   ColorArray = 0;
@@ -155,6 +157,10 @@ void GemState :: reset() {
     get("gl.stacks", stacks);
     stacks->reset();
   }
+
+  set("pix", (image=0));
+  set("gl.tex.numcoords", (numTexCoords=0));
+
 }
 
 GemState :: ~GemState() {  
@@ -184,15 +190,17 @@ float GemState::texCoordY(int num) const {
 bool GemState::get(const std::string key, any&value) {
   std::map<std::string,any>::iterator it = data->data.find(key);
   if(it==data->data.end()) {
+    if(key=="pix") { value=image; return true; }
+    if(key=="gl.tex.numcoords") { value=numTexCoords; return true; }
+    return false;
+
     if(key=="dirty") { value=dirty; return true; }
     if(key=="gl.displaylist") { value=inDisplayList; return true; }
 
-    if(key=="gllighting") { value=lighting; return true; }
+    if(key=="gl.lighting") { value=lighting; return true; }
     if(key=="gl.smooth") { value=smooth; return true; }
     if(key=="gl.tex.type") { value=texture; return true; }
-    if(key=="pix") { value=image; return true; }
     if(key=="gl.tex.coords") { if(!texCoords)return false; value=texCoords; return true; }
-    if(key=="gl.tex.numcoords") { value=numTexCoords; return true; }
     if(key=="gl.tex.units") { value=multiTexUnits; return true; }
     if(key=="timing.tick") { value=tickTime; return true; }
     if(key=="gl.drawtype") { value=drawType; return true; }
@@ -225,21 +233,21 @@ bool GemState::set(const std::string key, any value) {
     data->data.erase(key);
     return false;
   }
-
+ 
   /* wrapper for DEPRECATED access to member variables */
-  if(key=="dirty") { try { dirty=gem::any_cast<bool>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="gl.displaylist") { try { inDisplayList=gem::any_cast<bool>(value); } catch (gem::bad_any_cast) {} }
-
-  if(key=="gllighting") { try { lighting=gem::any_cast<bool>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="gl.smooth") { try { smooth=gem::any_cast<bool>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="gl.tex.type") { try { texture=gem::any_cast<int>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="pix") { try { image=gem::any_cast<pixBlock*>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="gl.tex.coords") { try { texCoords=gem::any_cast<TexCoord*>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="gl.tex.numcoords") { try { numTexCoords=gem::any_cast<int>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="gl.tex.units") { try { multiTexUnits=gem::any_cast<int>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="timing.tick") { try { tickTime=gem::any_cast<float>(value); } catch (gem::bad_any_cast) {} }
-  if(key=="gl.drawtype") { try { drawType=gem::any_cast<GLenum>(value); } catch (gem::bad_any_cast) {} }
-
+  if(1) {
+    if(key=="dirty") { try { dirty=gem::any_cast<bool>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="pix") { try { image=gem::any_cast<pixBlock*>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="gl.tex.numcoords") { try { numTexCoords=gem::any_cast<int>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="gl.tex.coords") { try { texCoords=gem::any_cast<TexCoord*>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="gl.lighting") { try { lighting=gem::any_cast<bool>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="gl.smooth") { try { smooth=gem::any_cast<bool>(value); } CATCH_ANY(key.c_str()); } 
+    else if(key=="gl.tex.type") { try { texture=gem::any_cast<int>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="gl.tex.units") { try { multiTexUnits=gem::any_cast<int>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="timing.tick") { try { tickTime=gem::any_cast<float>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="gl.drawtype") { try { drawType=gem::any_cast<GLenum>(value); } CATCH_ANY(key.c_str()); }
+    else if(key=="gl.displaylist") { try { inDisplayList=gem::any_cast<bool>(value); } CATCH_ANY(key.c_str()); } 
+      }
   data->data[key]=value;
   return true;
 }
