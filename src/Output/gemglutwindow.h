@@ -103,8 +103,10 @@ class GEM_EXTERN gemglutwindow : public GemContext
   unsigned int      m_xoffset, m_yoffset;
 
   /* creation/destruction */
-  void        createMess(void);
+  virtual bool        create(void);
   virtual void destroy(void);
+
+  void        createMess(void);
   void       destroyMess(void);
 
   /* post creation */

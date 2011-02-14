@@ -663,7 +663,7 @@ bool gemglxwindow :: create(void)
     if (glXIsDirect(m_info->dpy, m_info->context))
       post("Direct Rendering enabled!");
   }
-  return GemContext::create();
+  return createContext();
 }
 void gemglxwindow :: createMess(void)
 {
@@ -713,7 +713,7 @@ void gemglxwindow :: destroy(void)
   m_info->context = NULL;
   if(m_info->delete_atom)m_info->delete_atom=None; /* not very sophisticated destruction...*/
   
-  GemContext::destroy();
+  destroyContext();
 }
 void gemglxwindow :: destroyMess(void)
 {

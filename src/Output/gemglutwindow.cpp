@@ -262,11 +262,11 @@ void gemglutwindow :: offsetMess(int x, int y)
 // createMess
 //
 /////////////////////////////////////////////////////////
-void gemglutwindow :: createMess(void)
+bool gemglutwindow :: create(void)
 {
   if(m_window) {
     error("window already made!");
-    return;
+    return false;
   }
   unsigned int mode=GLUT_RGB | GLUT_DEPTH;
   if(2==m_buffer)
@@ -305,9 +305,9 @@ void gemglutwindow :: createMess(void)
 
   //  glutNameFunc(&gemglutwindow::nameCb);
 
-  if(!create()) {
+  if(!createContext()) {
     destroyMess();
-    return;
+    return false;
   }
 
   titleMess(gensym(m_title.c_str()));
@@ -319,14 +319,20 @@ void gemglutwindow :: createMess(void)
   if(m_polltime>0)
     clock_delay(m_clock, m_polltime);
 
+  return true;
 }
+void gemglutwindow :: createMess(void) {
+  create();
+}
+
+
 /////////////////////////////////////////////////////////
 // destroy window
 //
 /////////////////////////////////////////////////////////
 void gemglutwindow :: destroy(void)
 {
-  GemContext::destroy();
+  destroyContext();
   clock_unset(m_clock);
   clock_unset(m_destroyClock);
   m_window=0;
