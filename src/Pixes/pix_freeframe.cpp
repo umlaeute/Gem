@@ -965,7 +965,8 @@ bool pix_freeframe :: loader(t_canvas*canvas, std::string classname) {
   try {
     plugin=new FFPlugin(pluginname, canvas);
   } catch (GemException&x) {
-    x.report();
+    //x.report();
+    plugin=NULL;
   }
   if(plugin!=NULL) {
     delete plugin;
