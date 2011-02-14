@@ -15,12 +15,13 @@
 /////////////////////////////////////////////////////////
 
 #ifdef __APPLE__
-#include "gemmacwindow.h"
-
 #include "Base/GemGL.h"
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <AGL/agl.h>
+
+#include "gemmacwindow.h"
+#include "Base/GemException.h"
 
 
 #define PIXEL_SIZE	32		// 16 or 32
@@ -1058,7 +1059,7 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
   gemmacwindow*me=reinterpret_cast<gemmacwindow*>(userData);
   return me->eventHandler(event);
 }
-pascal OSStatus gemmacwindow::eventHandler (EventRef event)
+OSStatus gemmacwindow::eventHandler (EventRef event)
 {
   OSStatus result = eventNotHandledErr;
   UInt32 evtClass = GetEventClass (event);
@@ -1113,7 +1114,7 @@ pascal OSStatus gemmacwindow::eventHandler (EventRef event)
           }
         break;
       case kEventClassMouse:
-        winRef = static_cast<WindowRef>(userData);
+        winRef = m_info->pWind;
         switch (kind)
           {
           case kEventMouseMoved:
@@ -1184,17 +1185,17 @@ bool gemmacwindow::init(void) {
   // Check QuickTime installed
   long	QDfeature;
   if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
-    error("GEM: QuickTime is not installed : %d", err);
+    ::error("GEM: QuickTime is not installed : %d", err);
     return false;
   } else {
     if (OSErr err = ::EnterMovies()) {
-      error("GEM: Couldn't initialize QuickTime : %d", err);
+      ::error("GEM: Couldn't initialize QuickTime : %d", err);
       return false;
     }
   }
   // check existence of OpenGL libraries
   if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) == reinterpret_cast<Ptr>(aglChoosePixelFormat)) {
-    error("GEM: OpenGL is not installed");
+    ::error("GEM: OpenGL is not installed");
     return false;
   }
   // This is to create a "master context" on Gem initialization, with
@@ -1209,11 +1210,11 @@ bool gemmacwindow::init(void) {
   AGLPixelFormat aglPixFmt = aglChoosePixelFormat( NULL, 0, attrib );
   GLenum err = aglGetError();
   if (AGL_NO_ERROR != err)
-    error((char *)aglErrorString(err));
+    ::error((char *)aglErrorString(err));
   masterContext = aglCreateContext( aglPixFmt, NULL );
   err = aglGetError();
   if (AGL_NO_ERROR != err)
-    error((char *)aglErrorString(err));
+    ::error((char *)aglErrorString(err));
   aglSetCurrentContext( masterContext);
   
   //  AGL_MACRO_DECLARE_VARIABLES()
@@ -1239,7 +1240,6 @@ struct gemmacwindow::Info {
     context(NULL), 
     offscreen(NULL), 
     pixelSize(32),
-    r(0,0,0,0),
     pixMap(NULL), 
     rowBytes(0), 
     baseAddr(NULL),
@@ -1256,6 +1256,7 @@ struct gemmacwindow::Info {
   long		rowBytes;	// 
   void 		*baseAddr;	// 
   short		fontList;	// Font
+  EventHandlerRef ehr;
 };
 
 
@@ -1270,14 +1271,14 @@ gemmacwindow::gemmacwindow(void) :
     m_fullscreen(false),
     m_xoffset(0), m_yoffset(50),
     m_cursor(true),
-    m_real_w(0), m_real_y(0), m_real_x(0), m_real_y(0),
+    m_real_w(0), m_real_h(0), m_real_x(0), m_real_y(0),
     m_actuallyDisplay(true),
     m_info(NULL),
     m_clock(NULL),
     m_polltime(10)    
 {
   if(!init())
-    throw(GemException("could not initialize window infrastructure")):
+    throw(GemException("could not initialize window infrastructure"));
 
 }
 gemmacwindow::~gemmacwindow(void) {
@@ -1285,15 +1286,15 @@ gemmacwindow::~gemmacwindow(void) {
 }
 bool gemmacwindow::makeCurrent(void) {
   /* m_ was nfo. */
-  ::aglSetDrawable( m_context, GetWindowPort(m_pWind) );
-  ::aglSetCurrentContext(m_context);
+  ::aglSetDrawable( m_info->context, GetWindowPort(m_info->pWind) );
+  ::aglSetCurrentContext(m_info->context);
 
   return GemContext::makeCurrent();
 }
 
-void swap(void)
+void gemmacwindow::swap(void)
 {
-  ::aglSwapBuffers(m_context);
+  ::aglSwapBuffers(m_info->context);
 }
 
 
@@ -1447,7 +1448,7 @@ bool gemmacwindow::create(void) {
   gEvtHandler = NewEventHandlerUPP( evtHandler );
   InstallEventHandler( GetApplicationEventTarget(), gEvtHandler,
                        GetEventTypeCount( list ), list,
-                       m_info->pWind, this );
+                       this, &m_info->ehr );
 
   glWInfo.fAcceleratedMust = true; 		// must renderer be accelerated?
   glWInfo.VRAM = 0 * 1048576;			// minimum VRAM (if not zero this is always required)
@@ -1488,7 +1489,6 @@ bool gemmacwindow::create(void) {
   }
   m_real_w = m_width;
   m_real_h = m_height;
-  m_info->fs = 0;//m_fullscreen;
     
   SetFrontProcess( &psn );
     
@@ -1527,7 +1527,7 @@ void gemmacwindow::destroy(void) {
       ::aglDestroyContext(m_info->context);
       m_info->context  = NULL;
     }
-    RemoveEventHandler( this );
+    RemoveEventHandler( m_info->ehr );
     ::UnlockPixels(m_info->pixMap);
     ::DisposeGWorld(m_info->offscreen);
     m_info->offscreen = NULL;

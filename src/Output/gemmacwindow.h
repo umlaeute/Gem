@@ -118,12 +118,14 @@ class GEM_EXTERN gemmacwindow : public GemContext
 
   //////////
   // the real width/height of the window (set by createGemWindow())
-  unsigned int m_real_w, m_real_h, m_real_x, m_real_y;,,,,,,,,,,,,,,,,
+  unsigned int m_real_w, m_real_h, m_real_x, m_real_y;
 
   //////////
   // Should the window be realized
 #warning actuallyDisplay
   bool         m_actuallyDisplay;
+  
+  OSStatus eventHandler (EventRef event);
 
  private:
 
