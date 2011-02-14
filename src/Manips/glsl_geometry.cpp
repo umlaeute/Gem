@@ -216,6 +216,15 @@ void glsl_geometry :: openMess(t_symbol *filename)
 
   verbose(1, "Loaded file: %s", buf);
   m_shaderFilename=NULL;
+
+  if (m_shader || m_shaderARB)
+    {
+      t_atom a;
+      // send shaderID to outlet
+      gem::utils::glsl::atom_setshader(a, m_shader?m_shader:m_shaderARB);
+
+      outlet_list(m_outShaderID, gensym("list"), 1, &a);
+    }
 }
 
 ////////////////////////////////////////////////////////
@@ -257,14 +266,6 @@ void glsl_geometry :: startRendering()
 /////////////////////////////////////////////////////////
 void glsl_geometry :: render(GemState *state)
 {
-  if (m_shader || m_shaderARB)
-    {
-      t_atom a;
-      // send shaderID to outlet
-      gem::utils::glsl::atom_setshader(a, m_shader?m_shader:m_shaderARB);
-
-      outlet_list(m_outShaderID, gensym("list"), 1, &a);
-    }
 }
 
 ////////////////////////////////////////////////////////

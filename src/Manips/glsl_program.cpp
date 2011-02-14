@@ -405,14 +405,6 @@ void glsl_program :: render(GemState *state)
     renderGL2();
   else 
     renderARB();
-
-  // send program ID to outlet
-  /* JMZ: shouldn't this be only done, when we have a linked program? */
-  t_atom a;
-
-  gem::utils::glsl::atom_setshader(a, (GLEW_VERSION_2_0)?m_program:m_programARB);
-  
-  outlet_list(m_outProgramID, 0, 1, &a);
 }
 
 /////////////////////////////////////////////////////////
@@ -633,7 +625,6 @@ void glsl_program :: LinkProgram()
   getVariables();
 
 
-
 #ifdef __APPLE__
   // call API to check if linked program is running on hardware or in software emulation
   GemCGLint vertexGPUProcessing, fragmentGPUProcessing;
@@ -643,6 +634,14 @@ void glsl_program :: LinkProgram()
   post("vertex shader running in %sware", vertexGPUProcessing?"hard":"soft");
   post("fragment shader running in %sware", fragmentGPUProcessing?"hard":"soft");
 #endif //__APPLE__
+
+
+  // send program ID to outlet
+  /* JMZ: shouldn't this be only done, when we have a linked program? */
+  t_atom a;
+  gem::utils::glsl::atom_setshader(a, (GLEW_VERSION_2_0)?m_program:m_programARB);
+  outlet_list(m_outProgramID, 0, 1, &a);
+
 }
 
 /////////////////////////////////////////////////////////

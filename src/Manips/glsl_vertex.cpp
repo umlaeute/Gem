@@ -130,6 +130,11 @@ bool glsl_vertex :: openMessGL2(void)
     free(log);
     return false;
   }
+  if(m_shader) {
+    t_atom a;
+    gem::utils::glsl::atom_setshader(a, m_shader);
+    outlet_list(m_outShaderID, gensym("list"), 1, &a);
+  }
   return true;
 }
 
@@ -161,6 +166,11 @@ bool glsl_vertex :: openMessARB(void)
     error("shader not loaded");
     free(log);
     return false;
+  }
+  if(m_shaderARB) {
+    t_atom a;
+    gem::utils::glsl::atom_setshader(a, m_shaderARB);
+    outlet_list(m_outShaderID, gensym("list"), 1, &a);
   }
 
   return true;
@@ -258,17 +268,6 @@ void glsl_vertex :: startRendering()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: render(GemState *state)
 {
-  if (m_shader || m_shaderARB)
-    {
-      t_atom a;
-      // send shaderID to outlet
-      if(m_shader)
-        gem::utils::glsl::atom_setshader(a, m_shader);
-      else
-        gem::utils::glsl::atom_setshader(a, m_shaderARB);
-
-      outlet_list(m_outShaderID, gensym("list"), 1, &a);
-    }
 }
 
 ////////////////////////////////////////////////////////
