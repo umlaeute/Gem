@@ -76,6 +76,8 @@ class GEM_EXTERN gemmacwindow : public GemContext
 
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
+  
+  virtual void swap(void);
 
   void doRender(void);
 
@@ -116,10 +118,7 @@ class GEM_EXTERN gemmacwindow : public GemContext
 
   //////////
   // the real width/height of the window (set by createGemWindow())
-  unsigned int real_w, real_h, real_x, real_y;
-
-  //// X display specification (e.g. "remote:0.1")
-  std::string m_display;
+  unsigned int m_real_w, m_real_h, m_real_x, m_real_y;,,,,,,,,,,,,,,,,
 
   //////////
   // Should the window be realized
@@ -130,6 +129,8 @@ class GEM_EXTERN gemmacwindow : public GemContext
 
   class Info;
   Info*m_info;
+  
+  static bool     init(void);
 
   //////////
   // Static member functions (rendering)

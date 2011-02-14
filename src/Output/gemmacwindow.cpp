@@ -15,13 +15,13 @@
 /////////////////////////////////////////////////////////
 
 #ifdef __APPLE__
+#include "gemmacwindow.h"
+
 #include "Base/GemGL.h"
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
-#include "GemWinCreate.h"
-#include "Base/GemBase.h"
-#include "GemMan.h"
-#include "GemEvent.h"
+#include <AGL/agl.h>
+
 
 #define PIXEL_SIZE	32		// 16 or 32
 #define DEPTH_SIZE	16
@@ -1223,20 +1223,38 @@ bool gemmacwindow::init(void) {
   return true;
 }
 
+#if 0
 GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
 {
   //  myM_shared = constInfo.context;
-  info.context = masterContext;
+  m_info->context = masterContext;
   m_shared = masterContext;
 }
+#endif
 
-gemmmacwindow::gemmacwindow(void) {
-
+gemmacwindow::gemmacwindow(void) :
+    m_buffer(2),
+    m_fsaa(0),
+    m_title(std::string("Gem")),
+    m_border(true),
+    m_width(500), m_height(500),
+    m_fullscreen(false),
+    m_xoffset(0), m_yoffset(50),
+    m_cursor(true),
+    m_real_w(0), m_real_y(0), m_real_x(0), m_real_y(0),
+    m_actuallyDisplay(true),
+    m_info(NULL),
+    m_clock(NULL),
+    m_polltime(10)    
+{
+  if(!init())
+    throw(GemException("could not initialize window infrastructure")):
 
 }
-gemmmacwindow::~gemmacwindow(void) {
+gemmacwindow::~gemmacwindow(void) {
+    destroyMess();
 }
-bool gemmmacwindow::makeCurrent(void) {
+bool gemmacwindow::makeCurrent(void) {
   /* m_ was nfo. */
   ::aglSetDrawable( m_context, GetWindowPort(m_pWind) );
   ::aglSetCurrentContext(m_context);
@@ -1298,13 +1316,13 @@ bool gemmacwindow::create(void) {
     // a new CGL method of determining the number of attached displays and their coords
     CGDisplayCount maxDisplays = 32;
     CGDirectDisplayID activeDspys[32];
-    CGDisplayErr error;
+    CGDisplayErr disperror;
     CGDisplayCount newDspyCnt = 0;
     CGRect displayRect;
         
-    error = CGGetActiveDisplayList(maxDisplays, activeDspys, &newDspyCnt);
-    if (error) {
-      error("GemWinCreateMac: CGGetActiveDisplayList returned error %d", error);
+    disperror = CGGetActiveDisplayList(maxDisplays, activeDspys, &newDspyCnt);
+    if (disperror) {
+      error("GemWinCreateMac: CGGetActiveDisplayList returned error %d", disperror);
     }
     verbose(1, "GemWinCreateMac: newDspyCnt %d", newDspyCnt);
 
@@ -1347,7 +1365,7 @@ bool gemmacwindow::create(void) {
     err = CreateNewWindow ( kDocumentWindowClass,
                             kWindowNoAttributes,
                             &info.r,
-                            &info.pWind );
+                            &m_info->pWind );
     if (err) {
       error("GemWinCreateMac: Fullscreen CreateNewWindow err = %d",err);
       return false;
@@ -1365,15 +1383,15 @@ bool gemmacwindow::create(void) {
     // show and update main window
 
     // this should put the title bar below the menu bar
-    if (m_y_offset < 50){
-      m_y_offset+=50; 
+    if (m_yoffset < 50){
+      m_yoffset+=50; 
     }
         
     SetRect(&info.r, 
-            static_cast<short>(m_x_offset), 
-            static_cast<short>(m_y_offset),
-            static_cast<short>(m_width + m_x_offset),
-            static_cast<short>(m_height + m_y_offset));
+            static_cast<short>(m_xoffset), 
+            static_cast<short>(m_yoffset),
+            static_cast<short>(m_width + m_xoffset),
+            static_cast<short>(m_height + m_yoffset));
 
     err = CreateNewWindow ( windowType,
                             windowFlags,
@@ -1385,7 +1403,7 @@ bool gemmacwindow::create(void) {
     }
 
     //this takes whatever input the user sets with the gemwin hints 'title' message
-    CFStringRef tempTitle = CFStringCreateWithCString(NULL, m_title, kCFStringEncodingASCII);		
+    CFStringRef tempTitle = CFStringCreateWithCString(NULL, m_title.c_str(), kCFStringEncodingASCII);		
     SetWindowTitleWithCFString ( info.pWind, tempTitle );
     CFRelease( tempTitle );
 
@@ -1459,12 +1477,11 @@ bool gemmacwindow::create(void) {
   verbose(2,"hints: height = %d",m_height);
   verbose(2,"hints: real_w = %d",m_real_w);
   verbose(2,"hints: real_h = %d",m_real_h);
-  verbose(2,"hints: x_offset = %d",m_x_offset);
-  verbose(2,"hints: y_offset = %d", m_y_offset);
+  verbose(2,"hints: x_offset = %d",m_xoffset);
+  verbose(2,"hints: y_offset = %d", m_yoffset);
   verbose(2,"hints: fullscreen = %d", m_fullscreen);
   verbose(2,"hints: border = %d", m_border);
-  verbose(2,"hints: display = %s",m_display);
-  verbose(2,"hints: title = %s",m_title);
+  verbose(2,"hints: title = %s",m_title.c_str());
   verbose(2,"hints: shared = %d",m_shared);
   verbose(2,"hints: fsaa = %d",m_fsaa);
   hGD = NULL;
@@ -1474,34 +1491,34 @@ bool gemmacwindow::create(void) {
 
 void gemmacwindow::destroy(void) {
   verbose(2,"destroyGemWindow()");
-  if (info.offscreen) {
-    if (info.context) {
+  if (m_info->offscreen) {
+    if (m_info->context) {
       ::aglSetCurrentContext(NULL);
-      ::aglSetDrawable(info.context, NULL);
-      ::aglDestroyContext(info.context);
-      info.context  = NULL;
+      ::aglSetDrawable(m_info->context, NULL);
+      ::aglDestroyContext(m_info->context);
+      m_info->context  = NULL;
     }
     RemoveEventHandler( this );
-    ::UnlockPixels(info.pixMap);
-    ::DisposeGWorld(info.offscreen);
-    info.offscreen = NULL;
+    ::UnlockPixels(m_info->pixMap);
+    ::DisposeGWorld(m_info->offscreen);
+    m_info->offscreen = NULL;
     ::DisposeWindow( ::GetWindowFromPort(gaglDraw) );
     return;
   }
-  if (info.context)
+  if (m_info->context)
     {
       ::aglSetCurrentContext(NULL);
-      ::aglSetDrawable(info.context, NULL);
-      ::aglDestroyContext(info.context);
-      info.context  = NULL;
+      ::aglSetDrawable(m_info->context, NULL);
+      ::aglDestroyContext(m_info->context);
+      m_info->context  = NULL;
       verbose(2,"destroy context done");
     }
 
-  if (info.pWind){
+  if (m_info->pWind){
     verbose(1, "destroyGemWindow() DisposeWindow");  
-    ::DisposeWindow( info.pWind );
+    ::DisposeWindow( m_info->pWind );
     verbose(2,"destroyGemWindow() finished");
-  }else error("no info.pWind to destroy!!");
+  }else error("no m_info->pWind to destroy!!");
 
   return destroyContext();
 }
