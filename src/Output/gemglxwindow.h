@@ -107,7 +107,7 @@ class GEM_EXTERN gemglxwindow : public GemContext
   unsigned int      m_xoffset, m_yoffset;
 
   /* creation/destruction */
-  void        createMess(void);
+  void        createMess(std::string);
   void       destroyMess(void);
 
   /* post creation */
@@ -130,32 +130,6 @@ class GEM_EXTERN gemglxwindow : public GemContext
 
   class Info;
   Info*m_info;
-
-  //////////
-  // Static member functions (rendering)
-  static void     renderMessCallback(void *data);
-
-  //////////
-  // Static member functions (window pre-creation)
-  static void     bufferMessCallback(void *data, t_floatarg buf);
-  static void     fsaaMessCallback(void *data,t_floatarg val);
-
-  static void     titleMessCallback(void *data, t_symbol* s);
-
-  static void     dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void     offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
-  static void     fullscreenMessCallback(void *data, t_floatarg on);
-
-  static void     borderMessCallback(void *, t_floatarg state);
-
-  //////////
-  // Static member functions (window creation)
-  static void     createMessCallback(void *);
-  static void     destroyMessCallback(void *);
-
-  //////////
-  // Static member functions (window post-creation)
-  static void     cursorMessCallback(void *, t_floatarg);
 
   //////////
   // Static member functions (misc)
