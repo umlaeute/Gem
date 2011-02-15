@@ -1027,125 +1027,6 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
   gemmacwindow*me=reinterpret_cast<gemmacwindow*>(userData);
   return me->eventHandler(event);
 }
-OSStatus gemmacwindow::eventHandler (EventRef event)
-{
-  OSStatus result = eventNotHandledErr;
-  UInt32 evtClass = GetEventClass (event);
-  UInt32 kind = GetEventKind (event);
-  WindowRef			winRef;
-  UInt32				keyCode=0;
-  char				macKeyCode[2];
-  Point				location;
-  EventMouseButton	buttonid = 0;
-  //MouseWheelAxis	axis = 0;
-  UInt32				modifiers = 0;
-  long				wheelDelta = 0;
-
-  if (eventNotHandledErr == result)
-    {
-      switch (evtClass) {
-      case kEventClassApplication:
-        switch (kind)
-          {
-          case kEventAppActivated:
-            GetEventParameter( event, kEventParamWindowRef, typeWindowRef, NULL, sizeof(WindowRef), NULL, &winRef);
-            SelectWindow(winRef);
-            result = noErr;
-            break;
-          }
-        break;
-      case kEventClassWindow:
-        switch (kind)
-          {
-          case kEventWindowClosed:
-            info("window", "destroy");
-            break;
-          }
-        break;
-      case kEventClassKeyboard:
-        switch (kind)
-          {
-          case kEventRawKeyDown:
-          case kEventRawKeyUp:
-            GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
-            GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode[0]);
-            macKeyCode[1]='\0';
-            key((char *)&macKeyCode, keyCode, (kEventRawKeyDown==kind));
-            result = noErr;
-            break;
-          }
-        break;
-      case kEventClassMouse:
-        winRef = m_info->pWind;
-        switch (kind)
-          {
-          case kEventMouseMoved:
-            GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
-                              NULL, sizeof(Point), NULL, &location);
-            QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
-            motion(static_cast<int>(location.h), 
-                   static_cast<int>(location.v)
-                   );
-            result = noErr;
-            break;
-                        
-          case kEventMouseDragged:
-            GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
-                              NULL, sizeof(Point), NULL, &location);
-            QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
-            motion(static_cast<int>(location.h), 
-                   static_cast<int>(location.v)
-                   );
-            result = noErr;
-            break;
-
-          case kEventMouseDown:
-          case kEventMouseUp:
-            GetEventParameter(event, kEventParamMouseButton, typeMouseButton, 
-                              NULL, sizeof(EventMouseButton), NULL, &buttonid);
-            GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
-                              NULL, sizeof(Point), NULL, &location);
-            QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
-            // mac-button: 1-Left; 2-Right; 3-Middle
-            // gem-button: 0-Left; 2-Right; 1-Middle
-            switch(buttonid) {
-            case (2):  // right
-              buttonid=2; 
-              break;
-            case (3): // middle
-              buttonid=1;
-              break;
-            default:   // all others
-              buttonid-=1;
-              break;
-            }
-            button(buttonid, (kEventMouseDown==kind));
-            motion(static_cast<int>(location.h), 
-                   static_cast<int>(location.v) 
-                   );
-
-            if(kEventMouseDown==kind) {
-              /* FIXME: don't ignore modifier keys */
-              GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, 
-                                NULL, sizeof(UInt32), NULL, &modifiers);
-            }
-            result = noErr;
-            break;
-          case kEventMouseWheelMoved:
-            /* FIXME: how to handle scroll wheel? */
-            GetEventParameter(event, kEventParamMouseWheelDelta, typeLongInteger, 
-                              NULL, sizeof(long), NULL, &wheelDelta);
-            //GetEventParameter(event, kEventParamMouseWheelAxis, typeMouseWheelAxis, 
-            //                        NULL, sizeof(long), NULL, &axis);
-            //triggerWheelEvent( axis, wheelDelta );
-            result = noErr;
-            break;
-          }
-        break;
-      }
-    }
-  return result;
-}
 
 bool gemmacwindow::init(void) {
   // Check QuickTime installed
@@ -1443,7 +1324,8 @@ bool gemmacwindow::create(void) {
   glWInfo.aglAttributes [i++] = AGL_ACCELERATED;
   glWInfo.aglAttributes [i++] = AGL_NO_RECOVERY; 	// should be used whenever packed pixels is used to 
   glWInfo.aglAttributes [i++] = AGL_NONE;
-  BuildGLFromWindow ( m_info->pWind, &m_info->context, &glWInfo, m_shared);
+//  BuildGLFromWindow ( m_info->pWind, &m_info->context, &glWInfo, m_shared);
+  BuildGLFromWindow ( m_info->pWind, &m_info->context, &glWInfo, m_info->context);
   //		AGL_MACRO_DECLARE_VARIABLES()
   // }// end of window creation on main device - this is the old fullscreen code
     
@@ -1474,7 +1356,7 @@ bool gemmacwindow::create(void) {
   verbose(2,"hints: y_offset = %d", m_yoffset);
   verbose(2,"hints: fullscreen = %d", m_fullscreen);
   verbose(2,"hints: title = %s",m_title.c_str());
-  verbose(2,"hints: shared = %d",m_shared);
+  verbose(2,"hints: shared = %d",m_info->context);//m_shared);
   verbose(2,"hints: fsaa = %d",m_fsaa);
   hGD = NULL;
   return createContext();
@@ -1528,6 +1410,127 @@ void gemmacwindow::dispatch(void) {
   }
 }
 
+OSStatus gemmacwindow::eventHandler (EventRef event)
+{
+  OSStatus result = eventNotHandledErr;
+  UInt32 evtClass = GetEventClass (event);
+  UInt32 kind = GetEventKind (event);
+  WindowRef			winRef;
+  UInt32				keyCode=0;
+  char				macKeyCode[2];
+  Point				location;
+  EventMouseButton	buttonid = 0;
+  //MouseWheelAxis	axis = 0;
+  UInt32				modifiers = 0;
+  long				wheelDelta = 0;
+
+  if (eventNotHandledErr == result)
+    {
+      switch (evtClass) {
+      case kEventClassApplication:
+        switch (kind)
+          {
+          case kEventAppActivated:
+            GetEventParameter( event, kEventParamWindowRef, typeWindowRef, NULL, sizeof(WindowRef), NULL, &winRef);
+            SelectWindow(winRef);
+            result = noErr;
+            break;
+          }
+        break;
+      case kEventClassWindow:
+        switch (kind)
+          {
+          case kEventWindowClosed:
+            info("window", "destroy");
+            break;
+          }
+        break;
+      case kEventClassKeyboard:
+        switch (kind)
+          {
+          case kEventRawKeyDown:
+          case kEventRawKeyUp:
+            GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
+            GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode[0]);
+            macKeyCode[1]='\0';
+            key((char *)&macKeyCode, keyCode, (kEventRawKeyDown==kind));
+            result = noErr;
+            break;
+          }
+        break;
+      case kEventClassMouse:
+        winRef = m_info->pWind;
+        switch (kind)
+          {
+          case kEventMouseMoved:
+            GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
+                              NULL, sizeof(Point), NULL, &location);
+            QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
+            motion(static_cast<int>(location.h), 
+                   static_cast<int>(location.v)
+                   );
+            result = noErr;
+            break;
+                        
+          case kEventMouseDragged:
+            GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
+                              NULL, sizeof(Point), NULL, &location);
+            QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
+            motion(static_cast<int>(location.h), 
+                   static_cast<int>(location.v)
+                   );
+            result = noErr;
+            break;
+
+          case kEventMouseDown:
+          case kEventMouseUp:
+            GetEventParameter(event, kEventParamMouseButton, typeMouseButton, 
+                              NULL, sizeof(EventMouseButton), NULL, &buttonid);
+            GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
+                              NULL, sizeof(Point), NULL, &location);
+            QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
+            // mac-button: 1-Left; 2-Right; 3-Middle
+            // gem-button: 0-Left; 2-Right; 1-Middle
+            switch(buttonid) {
+            case (2):  // right
+              buttonid=2; 
+              break;
+            case (3): // middle
+              buttonid=1;
+              break;
+            default:   // all others
+              buttonid-=1;
+              break;
+            }
+            button(buttonid, (kEventMouseDown==kind));
+            motion(static_cast<int>(location.h), 
+                   static_cast<int>(location.v) 
+                   );
+
+            if(kEventMouseDown==kind) {
+              /* FIXME: don't ignore modifier keys */
+              GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, 
+                                NULL, sizeof(UInt32), NULL, &modifiers);
+            }
+            result = noErr;
+            break;
+          case kEventMouseWheelMoved:
+            /* FIXME: how to handle scroll wheel? */
+            GetEventParameter(event, kEventParamMouseWheelDelta, typeLongInteger, 
+                              NULL, sizeof(long), NULL, &wheelDelta);
+            //GetEventParameter(event, kEventParamMouseWheelAxis, typeMouseWheelAxis, 
+            //                        NULL, sizeof(long), NULL, &axis);
+            //triggerWheelEvent( axis, wheelDelta );
+            result = noErr;
+            break;
+          }
+        break;
+      }
+    }
+  return result;
+}
+
+
 
 /////////////////////////////////////////////////////////
 // Messages
@@ -1580,7 +1583,7 @@ void gemmacwindow :: offsetMess(int x, int y)
   m_xoffset=x;
   m_yoffset=y;
 }
-void gemmacwindow :: cursorMess(bool state
+void gemmacwindow :: cursorMess(bool state)
 {
   if (state)
     ShowCursor();

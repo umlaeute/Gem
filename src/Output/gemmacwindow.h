@@ -124,7 +124,7 @@ class GEM_EXTERN gemmacwindow : public GemContext
   // Should the window be realized
 #warning actuallyDisplay
   bool         m_actuallyDisplay;
-  
+  public:
   OSStatus eventHandler (EventRef event);
 
  private:
