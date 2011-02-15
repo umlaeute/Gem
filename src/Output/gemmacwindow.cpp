@@ -1101,14 +1101,14 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
             GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
             GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode[0]);
             macKeyCode[1]='\0';
-            triggerKeyboardEvent( (char *)&macKeyCode, keyCode, 1);
+	    key((char *)&macKeyCode, keyCode, 1);
             result = noErr;
             break;
           case kEventRawKeyUp:
             GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
             GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode[0]);
             macKeyCode[1]='\0';
-            triggerKeyboardEvent( (char *)&macKeyCode, keyCode, 0);
+	    key((char *)&macKeyCode, keyCode, 0);
             result = noErr;
             break;
           }
@@ -1121,9 +1121,9 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
             GetEventParameter(event, kEventParamMouseLocation, typeQDPoint, 
                               NULL, sizeof(Point), NULL, &location);
             QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
-            triggerMotionEvent( static_cast<int>(location.h), 
-                                static_cast<int>(location.v)
-                                );
+	    motion(static_cast<int>(location.h), 
+		   static_cast<int>(location.v)
+		   );
             result = noErr;
             break;
                         
@@ -1227,9 +1227,8 @@ bool gemmacwindow::init(void) {
 #if 0
 GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
 {
-  //  myM_shared = constInfo.context;
-  m_info->context = masterContext;
-  m_shared = masterContext;
+  m_info->context = masterContext; /* info */
+  m_shared = masterContext;        /* hints */
 }
 #endif
 
