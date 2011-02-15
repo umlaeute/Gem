@@ -22,6 +22,7 @@
 
 #include "gemmacwindow.h"
 #include "Base/GemException.h"
+#include "RTE/MessageCallbacks.h"
 
 
 #define PIXEL_SIZE	32		// 16 or 32
@@ -153,39 +154,6 @@ short FindGDHandleFromWindow (WindowPtr pWindow, GDHandle * phgdOnThisDevice);
 GEM_EXTERN void gemAbortRendering();
 
 #pragma mark -----functions-----
-/////////////////////////////////////////////////////////
-// createGemWindow
-//
-// this takes the parameters passed from the gemwin and decides which AGL paths to take
-//
-/////////////////////////////////////////////////////////
-GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
-{
-}
-
-/////////////////////////////////////////////////////////
-// destroyGemWindow
-//
-/////////////////////////////////////////////////////////
-GEM_EXTERN void destroyGemWindow(WindowInfo &info)
-{
-}
-int cursorGemWindow(WindowInfo &info, int state)
-{
-  if (state)
-    ShowCursor();
-  else
-    HideCursor();
-
-  return state;
-}
-
-
-int topmostGemWindow(WindowInfo &info, int state){
-  /* we don't give a warning to not be annoying */
-  return 1;
-}
-
 //-----------------------------------------------------------------------------------------------------------------------
 // SetupAGLFullScreen, for 2nd monitor
 //-----------------------------------------------------------------------------------------------------------------------
@@ -1294,7 +1262,6 @@ void gemmacwindow::swap(void)
   ::aglSwapBuffers(m_info->context);
 }
 
-
 bool gemmacwindow::create(void) {
   OSStatus	err;
   GDHandle hGD;
@@ -1506,7 +1473,6 @@ bool gemmacwindow::create(void) {
   verbose(2,"hints: x_offset = %d",m_xoffset);
   verbose(2,"hints: y_offset = %d", m_yoffset);
   verbose(2,"hints: fullscreen = %d", m_fullscreen);
-  verbose(2,"hints: border = %d", m_border);
   verbose(2,"hints: title = %s",m_title.c_str());
   verbose(2,"hints: shared = %d",m_shared);
   verbose(2,"hints: fsaa = %d",m_fsaa);
@@ -1563,9 +1529,89 @@ void gemmacwindow::dispatch(void) {
 }
 
 
+/////////////////////////////////////////////////////////
+// Messages
+//
+/////////////////////////////////////////////////////////
+void gemmacwindow :: bufferMess(int buf)
+{
+  switch(buf) {
+  case 1: case 2:
+    m_buffer=buf;
+    break;
+  default:
+    error("buffer can only be '1' (single) or '2' (double) buffered");
+    break;
+  }
+}
+void gemmacwindow :: fsaaMess(int value)
+{
+  m_fsaa=value;
+}
+void gemmacwindow :: titleMess(t_symbol* s)
+{
+  m_title=s->s_name;
+}
+void gemmacwindow :: borderMess(bool setting)
+{
+  m_border=setting;
+}
+void gemmacwindow :: dimensionsMess(int width, int height)
+{
+  if (width <= 0) {
+    error("width must be greater than 0");
+    return;
+  }
+    
+  if (height <= 0 ) {
+    error ("height must be greater than 0");
+    return;
+  }
+
+  m_width=width;
+  m_height=height;
+}
+void gemmacwindow :: fullscreenMess(bool on)
+{
+  m_fullscreen = on;
+}
+void gemmacwindow :: offsetMess(int x, int y)
+{
+  m_xoffset=x;
+  m_yoffset=y;
+}
+void gemmacwindow :: cursorMess(bool state
+{
+  if (state)
+    ShowCursor();
+  else
+    HideCursor();
+}
+
+/////////////////////////////////////////////////////////
+// static member function
+//
+/////////////////////////////////////////////////////////
+void gemmacwindow :: obj_setupCallback(t_class *classPtr)
+{
+
+  CPPEXTERN_MSG0(classPtr, "bang", renderMess);
+  CPPEXTERN_MSG0(classPtr, "create", createMess);
+  CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
 
 
+  CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
+  CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
+  CPPEXTERN_MSG1(classPtr, "title", titleMess, t_symbol*);
+  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
+  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
+  CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
+  CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
 
+  //  CPPEXTERN_MSG0(classPtr, "print", printMess);
+
+}
 
 
 
