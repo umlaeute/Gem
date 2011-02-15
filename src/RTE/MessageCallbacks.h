@@ -53,16 +53,24 @@ namespace gem {
         static t_atomtype id(void) { return A_FLOAT; }
       };
     template<>
+      struct TypeTemplate<int> : TypeTemplateCore<t_float, int> {
+        static t_atomtype id(void) { return A_FLOAT; }
+      };
+    template<>
+      struct TypeTemplate<unsigned int> : TypeTemplateCore<t_float, unsigned int> {
+        static t_atomtype id(void) { return A_FLOAT; }
+      };
+    template<>
       struct TypeTemplate<bool> : TypeTemplateCore<t_float, bool> {
         static t_atomtype id(void) { return A_FLOAT; }
       };
     template<>
       struct TypeTemplate<t_symbol*> : TypeTemplateCore<t_symbol*> {
-        static t_atomtype id(void) { return A_SYMBOL; }
+        static t_atomtype id(void) { return A_DEFSYMBOL; }
       };
     template<>
       struct TypeTemplate<std::string> : TypeTemplateCore<t_symbol*, std::string> {
-        static t_atomtype id(void) { return A_SYMBOL; }
+        static t_atomtype id(void) { return A_DEFSYMBOL; }
         static std::string cast(t_symbol*s) {return std::string(s->s_name); }
       };
   }; };
