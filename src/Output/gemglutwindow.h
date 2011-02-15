@@ -85,7 +85,6 @@ class GEM_EXTERN gemglutwindow : public GemContext
 
   /* render context (pre creation) */
   void  bufferMess(int buf);
-  int         m_buffer;
   void    fsaaMess(int value);
   int         m_fsaa;
 
@@ -93,7 +92,7 @@ class GEM_EXTERN gemglutwindow : public GemContext
   void titleMess(t_symbol* s);
   std::string     m_title;
   void borderMess(bool on);
-  bool       m_border;
+  bool m_border;
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(int width, int height);
@@ -116,6 +115,10 @@ class GEM_EXTERN gemglutwindow : public GemContext
 
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
+  // swap buffers 
+  virtual void swapBuffers(void);
+  // dispatch events
+  virtual void dispatch(void);
 
  private:
 
@@ -171,14 +174,6 @@ class GEM_EXTERN gemglutwindow : public GemContext
   static void menustateCb(int);
   static void menustatusCb(int, int, int);
   static void windowstatusCb(int);
-
-  t_clock*m_clock;
-  int m_polltime;
-  static void clockCallback(void*);
-  void clock(void);
-
-  t_clock*m_destroyClock;
-  static void clockDestroy(void*);
 };
 
 #endif    // for header file

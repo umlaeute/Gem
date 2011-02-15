@@ -93,25 +93,14 @@ CPPEXTERN_NEW(gemglutwindow)
 //
 /////////////////////////////////////////////////////////
 gemglutwindow :: gemglutwindow(void) :
-  m_buffer(2),
   m_fsaa(0),
   m_title("GEM"),
   m_border(false),
-  //  m_width(500), m_height(500),
   m_fullscreen(false),
   m_xoffset(-1), m_yoffset(-1),
   m_cursor(false),
-  m_window(0),
-  m_clock(NULL),
-  m_destroyClock(NULL),
-  m_polltime(5)
-{
-  m_width =500;
-  m_height=500;
-
-  m_clock=clock_new(this, reinterpret_cast<t_method>(gemglutwindow::clockCallback));
-  m_destroyClock=clock_new(this, reinterpret_cast<t_method>(gemglutwindow::clockDestroy));
-}
+  m_window(0)
+{ }
 
 /////////////////////////////////////////////////////////
 // Destructor
@@ -120,41 +109,35 @@ gemglutwindow :: gemglutwindow(void) :
 gemglutwindow :: ~gemglutwindow()
 {
   destroyMess();
-  clock_free(m_clock);
-  clock_free(m_destroyClock);
 }
 
 
 bool gemglutwindow :: makeCurrent(void){
-  if(m_window>0) {
+  if(!m_window)return false;
     glutSetWindow(m_window);
-    return GemContext::makeCurrent();
-  }
 
-  return(false);
+  return(true);
 }
 
-/////////////////////////////////////////////////////////
-// renderMess
-//
-/////////////////////////////////////////////////////////
-void gemglutwindow :: renderMess()
-{
-  if(!makeCurrent()){ 
-    error("no window made, cannot render!");
-    return;
-  }
-  // mark the render-buffer as dirty, so the displayCb() gets called
-  // other things that mark dirty are (e.g.) resizing, making (parts of) the window visible,...
-  glutPostRedisplay();
-
-  glutMainLoopEvent();
-  if(makeCurrent())
+void gemglutwindow :: swapBuffers(void) {
+  if(makeCurrent()) // FIXME: is this needed?
     glutSwapBuffers();
 }
+
 void gemglutwindow :: doRender()
 {
+  // FIXME: ?????
   bang();
+}
+void gemglutwindow :: dispatch()
+{
+  if(!m_window)return;
+
+  // mark the render-buffer as dirty, so the displayCb() gets called
+  // other things that mark dirty are (e.g.) resizing, making (parts of) the window visible,...
+  glutSetWindow(m_window);
+  glutPostRedisplay();
+  glutMainLoopEvent();
 }
 
 
@@ -313,12 +296,7 @@ bool gemglutwindow :: create(void)
   titleMess(gensym(m_title.c_str()));
   fullscreenMess(m_fullscreen);
 
-  glutPostRedisplay();
-  glutMainLoopEvent();
-
-  if(m_polltime>0)
-    clock_delay(m_clock, m_polltime);
-
+  dispatch();
   return true;
 }
 void gemglutwindow :: createMess(void) {
@@ -333,8 +311,6 @@ void gemglutwindow :: createMess(void) {
 void gemglutwindow :: destroy(void)
 {
   destroyContext();
-  clock_unset(m_clock);
-  clock_unset(m_destroyClock);
   m_window=0;
   info("window", "closed");
 }
@@ -409,7 +385,7 @@ void gemglutwindow :: destroyMessCallback(void *data)
 }
 void gemglutwindow :: renderMessCallback(void *data)
 {
-  GetMyClass(data)->renderMess();
+  GetMyClass(data)->render();
 }
 void gemglutwindow :: titleMessCallback(void *data, t_symbol* disp)
 {
@@ -444,35 +420,6 @@ void gemglutwindow :: fsaaMessCallback(void *data, t_floatarg val)
   GetMyClass(data)->fsaaMess(static_cast<int>(val));
 }
 
-/////////////////////////////////////////////////////////
-// renderMess
-//
-/////////////////////////////////////////////////////////
-void gemglutwindow :: clock(void)
-{
-  if(m_window<=0){ 
-    return;
-  }
-  glutSetWindow(m_window);
-  
-  glutMainLoopEvent();
-
-  if(m_polltime>0)
-    clock_delay(m_clock, m_polltime);
-}
-
-void gemglutwindow :: clockCallback(void *data)
-{
-  gemglutwindow*instance=(gemglutwindow*)data;
-  instance->clock();
-}
-void gemglutwindow :: clockDestroy(void *data)
-{
-  gemglutwindow*instance=(gemglutwindow*)data;
-  instance->destroyMess();
-}
-
-
 #define CALLBACK4WIN gemglutwindow*ggw=list_find(glutGetWindow()); if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
 
 
@@ -485,13 +432,7 @@ void gemglutwindow::visibleCb(int state) {
 }
 
 void gemglutwindow::closeCb(void) {
-
-  gemglutwindow*ggw=list_find(glutGetWindow()); 
-  if(!ggw){
-    ::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); 
-    return;
-  }
-  clock_delay(ggw->m_destroyClock, 0);
+  CALLBACK4WIN->info("window", "close");
 }
 
 

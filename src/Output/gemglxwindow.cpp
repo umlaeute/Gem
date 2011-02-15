@@ -223,12 +223,10 @@ struct gemglxwindow::Info {
 //
 /////////////////////////////////////////////////////////
 gemglxwindow :: gemglxwindow(void) :
-  m_buffer(2),
   m_fsaa(0),
   m_title(std::string("GEM")),
   m_border(true),
   m_fullscreen(false),
-  m_width(500), m_height(500),
   m_xoffset(0), m_yoffset(0),
   m_cursor(false),
   real_w(0), real_h(0), real_x(0), real_y(0),
@@ -257,23 +255,20 @@ bool gemglxwindow :: makeCurrent(void){
   if(xerr!=0) {
     return false;
   }
-  return GemContext::makeCurrent();
+  return true;
+}
+
+void gemglxwindow :: swapBuffers(void) {
+  glXSwapBuffers(m_info->dpy, m_info->win);
 }
 
 /////////////////////////////////////////////////////////
 // renderMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: renderMess()
+void gemglxwindow :: renderMess(void)
 {
-  if(!makeCurrent()){ 
-    error("no window made, cannot render!");
-    return;
-  }
-  bang();
-  if(m_buffer==2) {
-    glXSwapBuffers(m_info->dpy, m_info->win);
-  }
+  render();
 }
 
 void gemglxwindow::dispatch(void) {
