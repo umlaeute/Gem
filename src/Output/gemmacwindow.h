@@ -79,13 +79,8 @@ class GEM_EXTERN gemmacwindow : public GemContext
   
   virtual void swapBuffers(void);
 
-  void doRender(void);
-
-  /* rendering */
-  void renderMess(void);
-
   /* dispatch window events */
-  void dispatch(void);
+  virtual void dispatch(void);
 
   /* render context (pre creation) */
   void  bufferMess(int buf);

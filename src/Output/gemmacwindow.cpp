@@ -1540,6 +1540,7 @@ void gemmacwindow :: createMess(t_symbol*s) {
     destroyMess();
     return;
   }
+  dispatch();
 }
 void gemmacwindow :: destroyMess(void) {
   if(makeCurrent()) {
@@ -1548,10 +1549,6 @@ void gemmacwindow :: destroyMess(void) {
     error("unable to destroy current window");
   }
 }
-void gemmacwindow :: renderMess(void) {
-
-}
-
 
 void gemmacwindow :: bufferMess(int buf)
 {
@@ -1615,7 +1612,7 @@ void gemmacwindow :: cursorMess(bool state)
 void gemmacwindow :: obj_setupCallback(t_class *classPtr)
 {
 
-  CPPEXTERN_MSG0(classPtr, "bang", renderMess);
+  CPPEXTERN_MSG0(classPtr, "bang", render);
   CPPEXTERN_MSG1(classPtr, "create", createMess, t_symbol*);
   CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
 
