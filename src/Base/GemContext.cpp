@@ -135,7 +135,8 @@ public:
 //
 /////////////////////////////////////////////////////////
 GemContext :: GemContext()
-  : m_width(0), m_height(0),
+  : m_buffer(2),
+    m_width(500), m_height(500),
     m_pimpl(new PIMPL)
 {
   m_pimpl->infoOut = outlet_new(this->x_obj, 0);
@@ -314,7 +315,7 @@ void GemContext::destroyContext(void){
   GemMan::m_windowState--;
 }
 
-bool GemContext::makeCurrent(void){
+bool GemContext::makeGemContextCurrent(void){
   GemMan::maxStackDepth[GemMan::STACKMODELVIEW]= m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
   GemMan::maxStackDepth[GemMan::STACKCOLOR]=     m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
   GemMan::maxStackDepth[GemMan::STACKTEXTURE]=   m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
@@ -333,6 +334,21 @@ bool GemContext::makeCurrent(void){
   return true;
 }
 
+bool GemContext::assertCurrentContext(void) {
+  if(!makeCurrent())
+    return false;
+  return makeGemContextCurrent();
+}
+
+void GemContext::render(void){
+  if(assertCurrentContext()) {
+    bang();
+    if(m_buffer==2)
+      swapBuffers();
+  } else {
+    error("unable to switch to current window (do you have one?), cannot render!");
+  }
+}
 
 void GemContext::dimensionsMess(void){
    t_atom ap[2];

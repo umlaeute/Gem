@@ -103,10 +103,28 @@ class GEM_EXTERN GemContext : public CPPExtern
   /* make the object's context (window,...) the current context
    * this is virtual, so objects can add their own code
    * note however, that they should also call this (parent's) function within
+   * typically implementations look like this:
+   * bool <mywindow>::makeCurrent(void) {
+   *    // do your own stuff
    *
    * is <tt>false</tt> is returned, do not attempt to use it (e.g. draw into it)
    */
-  virtual bool makeCurrent(void);
+  virtual bool makeCurrent(void) = 0;
+
+  /* make the object's context (window,...) the current context
+   * then switch the GemContext;
+   * basically: { return (makeCurrent() && makeGemContextCurrent()); }
+   */
+  virtual bool assertCurrentContext(void);
+  /*
+   * make the GemContext current (reset stacks) 
+   */
+  bool makeGemContextCurrent(void);
+
+  /* swap back/front buffer
+   */
+  virtual void swapBuffers(void) = 0;
+  unsigned int m_buffer;
 
   /* dispatch messages from the window
    * this might get called more often than the render-cycle
@@ -114,6 +132,13 @@ class GEM_EXTERN GemContext : public CPPExtern
    * is create()ed (and until the window is destroy()ed)
    */
   virtual void dispatch(void);
+
+  /* render to this window
+   *  the default implementation calls:
+   *    if(makeCurrent()){ bang; if(m_buffer==2)swap(); }
+   * but you can override this, if you want to
+   */
+  virtual void render(void);
 
   /* set/get the dimension of the context
    * setting is done by supplying arguments to the method;
