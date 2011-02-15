@@ -24,6 +24,7 @@
 #include "Base/GemException.h"
 #include "RTE/MessageCallbacks.h"
 
+#define DEBUGPOST ::startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__ ), ::post
 
 #define PIXEL_SIZE	32		// 16 or 32
 #define DEPTH_SIZE	16
@@ -329,7 +330,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructG
          
   if (AGL_BAD_MATCH == aglGetError()){
     verbose(2,"MAC: BuildGLonWindow: AGL_BAD_MATCH");
-    *paglContext = aglCreateContext (pcontextInfo->fmt, 0); // unable to sahre context, create without sharing
+    *paglContext = aglCreateContext (pcontextInfo->fmt, 0); // unable to share context, create without sharing
   }
   aglReportError ();
   if (NULL == *paglContext) 
@@ -1108,17 +1109,15 @@ struct gemmacwindow::Info {
 
 CPPEXTERN_NEW(gemmacwindow);
 gemmacwindow::gemmacwindow(void) :
-    m_buffer(2),
     m_fsaa(0),
     m_title(std::string("Gem")),
     m_border(true),
-    m_width(500), m_height(500),
     m_fullscreen(false),
     m_xoffset(0), m_yoffset(50),
     m_cursor(true),
     m_real_w(0), m_real_h(0), m_real_x(0), m_real_y(0),
     m_actuallyDisplay(true),
-    m_info(NULL),
+    m_info(new gemmacwindow::Info()),
     m_clock(NULL),
     m_polltime(10)    
 {
@@ -1134,10 +1133,10 @@ bool gemmacwindow::makeCurrent(void) {
   ::aglSetDrawable( m_info->context, GetWindowPort(m_info->pWind) );
   ::aglSetCurrentContext(m_info->context);
 
-  return GemContext::makeCurrent();
+  return true;
 }
 
-void gemmacwindow::swap(void)
+void gemmacwindow::swapBuffers(void)
 {
   ::aglSwapBuffers(m_info->context);
 }
@@ -1202,7 +1201,7 @@ bool gemmacwindow::create(void) {
 
     for (i=0; i < static_cast<int>(newDspyCnt); i++){
       CGRect displayRect = CGDisplayBounds (activeDspys[i]);
-      verbose(1, "GemWinCreateMac: display %d width %d height %d origin.x %d origin.y %d", i, 
+      verbose(1, "GemWinCreateMac: display %d dimen %dx%d+%d+%d", i, 
            static_cast<long>(displayRect.size.width), 
            static_cast<long>(displayRect.size.height),
            static_cast<long>(displayRect.origin.x),
@@ -1234,12 +1233,13 @@ bool gemmacwindow::create(void) {
             (static_cast<long>(displayRect.size.width)  + static_cast<long>(displayRect.origin.x)),
             (static_cast<long>(displayRect.size.height) + static_cast<long>(displayRect.origin.y))
             );
-
+DEBUGPOST("");
     //this winodw has no attributes like a title bar etc
     err = CreateNewWindow ( kDocumentWindowClass,
                             kWindowNoAttributes,
                             &m_info->r,
                             &m_info->pWind );
+DEBUGPOST("");
     if (err) {
       error("GemWinCreateMac: Fullscreen CreateNewWindow err = %d",err);
       return false;
@@ -1252,10 +1252,9 @@ bool gemmacwindow::create(void) {
       numDevices++;
       hGD = DMGetNextScreenDevice (hGD, true);
     } while (hGD);
-    verbose(1, "GemwinMac: width - %d height - %d",m_width,m_height);
-
+    verbose(1, "GemwinMac: dimen %dx%d",m_width,m_height);
     // show and update main window
-
+DEBUGPOST("info=%x", m_info);
     // this should put the title bar below the menu bar
     if (m_yoffset < 50){
       m_yoffset+=50; 
@@ -1266,25 +1265,26 @@ bool gemmacwindow::create(void) {
             static_cast<short>(m_yoffset),
             static_cast<short>(m_width + m_xoffset),
             static_cast<short>(m_height + m_yoffset));
-
+DEBUGPOST("");
     err = CreateNewWindow ( windowType,
                             windowFlags,
                             &m_info->r,
                             &m_info->pWind );
+DEBUGPOST("");
     if (err) {
       error("err = %d",err);
       return false;
     }
-
+DEBUGPOST("");
     //this takes whatever input the user sets with the gemwin hints 'title' message
     CFStringRef tempTitle = CFStringCreateWithCString(NULL, m_title.c_str(), kCFStringEncodingASCII);		
     SetWindowTitleWithCFString ( m_info->pWind, tempTitle );
     CFRelease( tempTitle );
-
+DEBUGPOST("");
     gaglDraw = GetWindowPort( m_info->pWind );
         
   }//end of conditional for fullscreen vs windowed
-    
+    DEBUGPOST("");
   ProcessSerialNumber psn;
   GetCurrentProcess(&psn);
   TransformProcessType(&psn, kProcessTransformToForegroundApplication);

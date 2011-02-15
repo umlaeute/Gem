@@ -77,7 +77,7 @@ class GEM_EXTERN gemmacwindow : public GemContext
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
   
-  virtual void swap(void);
+  virtual void swapBuffers(void);
 
   void doRender(void);
 
@@ -89,7 +89,6 @@ class GEM_EXTERN gemmacwindow : public GemContext
 
   /* render context (pre creation) */
   void  bufferMess(int buf);
-  int         m_buffer;
   void    fsaaMess(int value);
   int         m_fsaa;
 
@@ -101,7 +100,6 @@ class GEM_EXTERN gemmacwindow : public GemContext
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(int width, int height);
-  unsigned int         m_width, m_height;
 
   void    fullscreenMess(bool on);
   bool              m_fullscreen;
