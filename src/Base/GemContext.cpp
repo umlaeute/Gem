@@ -49,16 +49,24 @@ static void GemContext_freeid(unsigned int id)
 
 class GemContext::PIMPL {
 public:
-  PIMPL(void) : context(NULL), xcontext(NULL), contextid(0),
-		infoOut(NULL),
-		qClock(NULL)
+  PIMPL(GemContext*gc) : parent(gc),
+                         context(NULL), xcontext(NULL), contextid(0),
+                         infoOut(NULL),
+                         dispatchClock(NULL),
+                         dispatchTime(10.),
+                         qClock(NULL)
   {
     qClock=clock_new(this, reinterpret_cast<t_method>(qCallBack));
+    dispatchClock=clock_new(this, reinterpret_cast<t_method>(dispatchCallBack));
   }
   ~PIMPL(void) {
     if(qClock) clock_free (qClock);  qClock=NULL;
+    if(dispatchClock) clock_free (dispatchClock);  dispatchClock=NULL;
     if(infoOut)outlet_free(infoOut); infoOut=NULL;
   }
+
+  GemContext*parent;
+
   GLint maxStackDepth[4];
 
   GLEWContext    *context;
@@ -68,7 +76,19 @@ public:
 
   t_outlet*infoOut;
 
-  // TODO: a queue for detaching messages sent through the info-output from the actual window events
+  t_clock*dispatchClock;
+  double dispatchTime;
+  void dispatch(void) {
+    parent->dispatch();
+    clock_delay(dispatchClock, dispatchTime);
+  }
+  static void dispatchCallBack(PIMPL*x) {
+    x->dispatch();
+  }
+  void undispatch(void) {
+    clock_unset(dispatchClock);
+  }
+
   std::vector<std::vector<t_atom> >qQueue;
   t_clock*qClock;
 
@@ -137,7 +157,7 @@ public:
 GemContext :: GemContext()
   : m_buffer(2),
     m_width(500), m_height(500),
-    m_pimpl(new PIMPL)
+    m_pimpl(new PIMPL(this))
 {
   m_pimpl->infoOut = outlet_new(this->x_obj, 0);
 }
@@ -296,6 +316,8 @@ bool GemContext::createContext(void){
 #endif /* GEM_MULTICONTEXT */
 
   GemMan::m_windowState++;
+  m_pimpl->dispatch();
+
   return true;
 }
 
@@ -313,6 +335,10 @@ void GemContext::destroyContext(void){
   GemContext_freeid(m_pimpl->contextid);
   m_pimpl->contextid=0;
   GemMan::m_windowState--;
+
+  m_pimpl->undispatch();
+
+
 }
 
 bool GemContext::makeGemContextCurrent(void){
