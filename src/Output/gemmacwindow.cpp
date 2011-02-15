@@ -1536,10 +1536,17 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
 //
 /////////////////////////////////////////////////////////
 void gemmacwindow :: createMess(t_symbol*s) {
-
+  if(!create()) {
+    destroyMess();
+    return;
+  }
 }
 void gemmacwindow :: destroyMess(void) {
-
+  if(makeCurrent()) {
+    destroy();
+  } else {
+    error("unable to destroy current window");
+  }
 }
 void gemmacwindow :: renderMess(void) {
 
