@@ -109,7 +109,7 @@ class GEM_EXTERN gemmacwindow : public GemContext
   unsigned int      m_xoffset, m_yoffset;
 
   /* creation/destruction */
-  void        createMess(void);
+  void        createMess(t_symbol*);
   void       destroyMess(void);
 
   /* post creation */

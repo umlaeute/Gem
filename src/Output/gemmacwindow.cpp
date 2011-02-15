@@ -1106,8 +1106,7 @@ struct gemmacwindow::Info {
 };
 
 
-
-
+CPPEXTERN_NEW(gemmacwindow);
 gemmacwindow::gemmacwindow(void) :
     m_buffer(2),
     m_fsaa(0),
@@ -1536,6 +1535,17 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
 // Messages
 //
 /////////////////////////////////////////////////////////
+void gemmacwindow :: createMess(t_symbol*s) {
+
+}
+void gemmacwindow :: destroyMess(void) {
+
+}
+void gemmacwindow :: renderMess(void) {
+
+}
+
+
 void gemmacwindow :: bufferMess(int buf)
 {
   switch(buf) {
@@ -1599,7 +1609,7 @@ void gemmacwindow :: obj_setupCallback(t_class *classPtr)
 {
 
   CPPEXTERN_MSG0(classPtr, "bang", renderMess);
-  CPPEXTERN_MSG0(classPtr, "create", createMess);
+  CPPEXTERN_MSG1(classPtr, "create", createMess, t_symbol*);
   CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
 
 
