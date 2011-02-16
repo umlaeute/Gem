@@ -43,9 +43,11 @@ class GEM_EXTERN gemcocoawindow : public GemContext
 
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
+  virtual void swapBuffers(void);
 
   void renderMess(void);
-  void dispatch(void);
+  virtual void dispatch(void);
+
 
   void             bufferMess(int buf);
   void              titleMess(t_symbol* s);
@@ -75,22 +77,6 @@ class GEM_EXTERN gemcocoawindow : public GemContext
  private:
 
   GemCocoaView*m_win;
-
-  //////////
-  // Static member functions (window creation)
-  static void     createMessCallback(void *);
-  static void     destroyMessCallback(void *);
-  static void     renderMessCallback(void *);
-  // Static member functions (window pre-creation)
-  static void     bufferMessCallback(void *data, t_floatarg buf);
-  static void     titleMessCallback(void *data, t_symbol* s);
-  static void     dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void     offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
-  static void     borderMessCallback(void *, t_floatarg state);
-  static void     fullscreenMessCallback(void *data, t_floatarg on);
-  static void     fsaaMessCallback(void *data,t_floatarg val);
-
-  static void     cursorMessCallback(void *data, t_floatarg on);
 };
 
 #endif    // for header file

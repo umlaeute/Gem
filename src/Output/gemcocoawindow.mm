@@ -17,6 +17,7 @@
 #include <vector>
 #include <iostream>
 #include <stdio.h>
+#include "RTE/MessageCallbacks.h"
 
 #define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
 
@@ -122,6 +123,8 @@ gemcocoawindow :: ~gemcocoawindow()
 
 bool gemcocoawindow :: makeCurrent(){
   return(false);
+}
+void gemcocoawindow :: swapBuffers() {
 }
 void gemcocoawindow :: dispatch() {
 }
@@ -261,18 +264,18 @@ void gemcocoawindow :: cursorMess(bool setting) {
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_ADDMETHOD(gemcocoawindow, render, render);
-  CPPEXTERN_ADDMETHOD(gemcocoawindow, create, create);
-  CPPEXTERN_ADDMETHOD(gemcocoawindow, destroy, destroy);
+  CPPEXTERN_MSG0(classPtr, "render", renderMess);
+  CPPEXTERN_MSG0(classPtr, "create", createMess);
+  CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
 
-  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, buffer, buffer);
-  CPPEXTERN_ADDMETHOD_S(gemcocoawindow, title, title);
-  CPPEXTERN_ADDMETHOD_FF(gemcocoawindow, dimensions, dimen);
-  CPPEXTERN_ADDMETHOD_FF(gemcocoawindow, offset, offset);
-  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, border, border);
-  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, fullscreen, fullscreen);
-  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, fsaa, FSAA);
-  CPPEXTERN_ADDMETHOD_F(gemcocoawindow, cursor, cursor);
+  CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, t_int);
+  CPPEXTERN_MSG1(classPtr, "title", titleMess, t_symbol*);
+  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, t_int, t_int);
+  CPPEXTERN_MSG2(classPtr, "offset", offsetMess, t_int, t_int);
+  CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
+  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, t_int);
+  CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, t_int);
+  CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
 
   DEBUGLINE;
 	[NSApplication sharedApplication];
@@ -288,18 +291,3 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 	arp=[[NSAutoreleasePool alloc] init];
   DEBUGLINE;
 }
-
-CPPEXTERN_CALLBACK(gemcocoawindow, render);
-CPPEXTERN_CALLBACK(gemcocoawindow, create);
-CPPEXTERN_CALLBACK(gemcocoawindow, destroy);
-CPPEXTERN_CALLBACK_F(gemcocoawindow, buffer, int);
-void gemcocoawindow :: titleMessCallback(void *data, t_symbol* disp)
-{
-  GetMyClass(data)->titleMess(disp);
-}
-CPPEXTERN_CALLBACK_FF(gemcocoawindow, dimensions, int);
-CPPEXTERN_CALLBACK_FF(gemcocoawindow, offset, int);
-CPPEXTERN_CALLBACK_F(gemcocoawindow, border, bool);
-CPPEXTERN_CALLBACK_F(gemcocoawindow, fullscreen, int);
-CPPEXTERN_CALLBACK_F(gemcocoawindow, fsaa, int);
-CPPEXTERN_CALLBACK_F(gemcocoawindow, cursor, bool);
