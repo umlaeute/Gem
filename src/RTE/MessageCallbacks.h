@@ -37,7 +37,7 @@ namespace gem {
     class NoneType {}; // just a dummy class
     template<class T=NoneType, class T1=T>
       struct TypeTemplateCore{
-        static t_atomtype id(void) { return A_NULL; }
+        static t_atomtype atomtype_id(void) { return A_NULL; }
         static T1 cast(T value) { return static_cast<T1>(value); }
         typedef T proxyType;
       };
@@ -46,31 +46,31 @@ namespace gem {
       };
     template<>
       struct TypeTemplate<t_float> : TypeTemplateCore<t_float> {
-        static t_atomtype id(void) { return A_FLOAT; }
+        static t_atomtype atomtype_id(void) { return A_FLOAT; }
       };
     template<>
       struct TypeTemplate<t_int> : TypeTemplateCore<t_float, t_int> {
-        static t_atomtype id(void) { return A_FLOAT; }
+        static t_atomtype atomtype_id(void) { return A_FLOAT; }
       };
     template<>
       struct TypeTemplate<int> : TypeTemplateCore<t_float, int> {
-        static t_atomtype id(void) { return A_FLOAT; }
+        static t_atomtype atomtype_id(void) { return A_FLOAT; }
       };
     template<>
       struct TypeTemplate<unsigned int> : TypeTemplateCore<t_float, unsigned int> {
-        static t_atomtype id(void) { return A_FLOAT; }
+        static t_atomtype atomtype_id(void) { return A_FLOAT; }
       };
     template<>
       struct TypeTemplate<bool> : TypeTemplateCore<t_float, bool> {
-        static t_atomtype id(void) { return A_FLOAT; }
+        static t_atomtype atomtype_id(void) { return A_FLOAT; }
       };
     template<>
       struct TypeTemplate<t_symbol*> : TypeTemplateCore<t_symbol*> {
-        static t_atomtype id(void) { return A_DEFSYMBOL; }
+        static t_atomtype atomtype_id(void) { return A_DEFSYMBOL; }
       };
     template<>
       struct TypeTemplate<std::string> : TypeTemplateCore<t_symbol*, std::string> {
-        static t_atomtype id(void) { return A_DEFSYMBOL; }
+        static t_atomtype atomtype_id(void) { return A_DEFSYMBOL; }
         static std::string cast(t_symbol*s) {return std::string(s->s_name); }
       };
   }; };
@@ -95,14 +95,14 @@ namespace gem {
   struct MSG_CONCAT3(CallbackClass, fun, line) {                \
     static void callback(void*data, gem::RteMess::TypeTemplate<typ0>::proxyType v0) \
       { GetMyClass(data)->fun(gem::RteMess::TypeTemplate<typ0>::cast(v0)); } \
-    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::id(),  A_NULL); } \
+    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::atomtype_id(),  A_NULL); } \
   };                                                                    \
   MSG_CONCAT3(CallbackClass, fun, line)  MSG_CONCAT3(CallbackClassInstance, fun, line) (cp, selector)
 #define CPPEXTERN_MSG2_(line, cp, selector, fun, typ0, typ1)    \
   struct MSG_CONCAT3(CallbackClass, fun, line) {                \
     static void callback(void*data, gem::RteMess::TypeTemplate<typ0>::proxyType v0, gem::RteMess::TypeTemplate<typ1>::proxyType v1) \
       { GetMyClass(data)->fun(gem::RteMess::TypeTemplate<typ0>::cast(v0),  gem::RteMess::TypeTemplate<typ1>::cast(v1)); } \
-    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::id(),  gem::RteMess::TypeTemplate<typ1>::id(),  A_NULL); } \
+    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::atomtype_id(),  gem::RteMess::TypeTemplate<typ1>::atomtype_id(),  A_NULL); } \
   };                                                                    \
   MSG_CONCAT3(CallbackClass, fun, line)  MSG_CONCAT3(CallbackClassInstance, fun, line) (cp, selector)
 
@@ -110,7 +110,7 @@ namespace gem {
   struct MSG_CONCAT3(CallbackClass, fun, line) {                \
     static void callback(void*data, gem::RteMess::TypeTemplate<typ0>::proxyType v0, gem::RteMess::TypeTemplate<typ1>::proxyType v1, gem::RteMess::TypeTemplate<typ2>::proxyType v2) \
       { GetMyClass(data)->fun(gem::RteMess::TypeTemplate<typ0>::cast(v0),  gem::RteMess::TypeTemplate<typ1>::cast(v1),  gem::RteMess::TypeTemplate<typ2>::cast(v2)); } \
-    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::id(),  gem::RteMess::TypeTemplate<typ1>::id(),  gem::RteMess::TypeTemplate<typ2>::id(), A_NULL); } \
+    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::atomtype_id(),  gem::RteMess::TypeTemplate<typ1>::atomtype_id(),  gem::RteMess::TypeTemplate<typ2>::atomtype_id(), A_NULL); } \
   };                                                                    \
   MSG_CONCAT3(CallbackClass, fun, line)  MSG_CONCAT3(CallbackClassInstance, fun, line) (cp, selector)
 
@@ -118,14 +118,14 @@ namespace gem {
   struct MSG_CONCAT3(CallbackClass, fun, line) {                \
     static void callback(void*data, gem::RteMess::TypeTemplate<typ0>::proxyType v0, gem::RteMess::TypeTemplate<typ1>::proxyType v1, gem::RteMess::TypeTemplate<typ2>::proxyType v2, gem::RteMess::TypeTemplate<typ3>::proxyType v3) \
       { GetMyClass(data)->fun(gem::RteMess::TypeTemplate<typ0>::cast(v0),  gem::RteMess::TypeTemplate<typ1>::cast(v1),  gem::RteMess::TypeTemplate<typ2>::cast(v2),  gem::RteMess::TypeTemplate<typ3>::cast(v3)); } \
-    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::id(),  gem::RteMess::TypeTemplate<typ1>::id(),  gem::RteMess::TypeTemplate<typ2>::id(),  gem::RteMess::TypeTemplate<typ3>::id(), A_NULL); } \
+    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::atomtype_id(),  gem::RteMess::TypeTemplate<typ1>::atomtype_id(),  gem::RteMess::TypeTemplate<typ2>::atomtype_id(),  gem::RteMess::TypeTemplate<typ3>::atomtype_id(), A_NULL); } \
   };                                                                    \
   MSG_CONCAT3(CallbackClass, fun, line)  MSG_CONCAT3(CallbackClassInstance, fun, line) (cp, selector)
 #define CPPEXTERN_MSG5_(line, cp, selector, fun, typ0, typ1, typ2, typ3, typ4) \
   struct MSG_CONCAT3(CallbackClass, fun, line) {                \
     static void callback(void*data, gem::RteMess::TypeTemplate<typ0>::proxyType v0, gem::RteMess::TypeTemplate<typ1>::proxyType v1, gem::RteMess::TypeTemplate<typ2>::proxyType v2, gem::RteMess::TypeTemplate<typ3>::proxyType v3, gem::RteMess::TypeTemplate<typ4>::proxyType v4) \
       { GetMyClass(data)->fun(gem::RteMess::TypeTemplate<typ0>::cast(v0),  gem::RteMess::TypeTemplate<typ1>::cast(v1),  gem::RteMess::TypeTemplate<typ2>::cast(v2),  gem::RteMess::TypeTemplate<typ3>::cast(v3),  gem::RteMess::TypeTemplate<typ4>::cast(v4)); } \
-    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::id(),  gem::RteMess::TypeTemplate<typ1>::id(),  gem::RteMess::TypeTemplate<typ2>::id(),  gem::RteMess::TypeTemplate<typ3>::id(),  gem::RteMess::TypeTemplate<typ4>::id(), A_NULL); } \
+    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::atomtype_id(),  gem::RteMess::TypeTemplate<typ1>::atomtype_id(),  gem::RteMess::TypeTemplate<typ2>::atomtype_id(),  gem::RteMess::TypeTemplate<typ3>::atomtype_id(),  gem::RteMess::TypeTemplate<typ4>::atomtype_id(), A_NULL); } \
   };                                                                    \
   MSG_CONCAT3(CallbackClass, fun, line)  MSG_CONCAT3(CallbackClassInstance, fun, line) (cp, selector)
 
