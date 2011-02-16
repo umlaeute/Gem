@@ -18,9 +18,9 @@
 
 
 class gemcocoawindow;
-@interface GemCocoaWindow : NSOpenGLView
+@interface GemCocoaView : NSOpenGLView
 {
-  gemcocoawindow*gemwin;
+  @public gemcocoawindow*parent;
 }
 @end
 
@@ -74,7 +74,7 @@ class GEM_EXTERN gemcocoawindow : public GemContext
 
  private:
 
-  GemCocoaWindow*m_win;
+  GemCocoaView*m_win;
 
   //////////
   // Static member functions (window creation)

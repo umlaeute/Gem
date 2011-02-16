@@ -15,45 +15,15 @@
 #include "gemcocoawindow.h"
 
 #include <vector>
+#include <iostream>
 #include <stdio.h>
 
+#define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
 
-@implementation GemCocoaWindow
+@implementation GemCocoaView
+#if 0
 - (id)initWithFrame: (NSRect)frameRect parent: (gemcocoawindow*) gcw
 {
-  gemwin=gcw;
-  if(NULL==gemwin)return NULL;
-
-  std::vector<NSOpenGLPixelFormatAttribute>attrvec;
-#if 0
-  NSOpenGLPixelFormatAttribute attr[] = 
-    {
-      NSOpenGLPFADoubleBuffer,
-      NSOpenGLPFAAccelerated,
-      NSOpenGLPFAColorSize, (NSOpenGLPixelFormatAttribute) 32,
-      NSOpenGLPFADepthSize, (NSOpenGLPixelFormatAttribute) 23,
-      (NSOpenGLPixelFormatAttribute) 0
-    };
-#endif
-
-  if(gemwin->m_buffer==2)
-    attrvec.push_back(NSOpenGLPFADoubleBuffer);
-
-  attrvec.push_back(NSOpenGLPFAAccelerated);
-
-  attrvec.push_back(NSOpenGLPFAColorSize);
-  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
-
-  attrvec.push_back(NSOpenGLPFADepthSize);
-  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
-
-  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
-
-  NSOpenGLPixelFormatAttribute*attr = new NSOpenGLPixelFormatAttribute[attrvec.size()];
-  int i=0;
-  for(i=0; i<attrvec.size(); i++) {
-    attr[i]=attrvec[i];
-  }
 
   NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr] autorelease];
 
@@ -65,7 +35,7 @@
 
 - (void)dealloc
 {
-  gemwin=NULL;
+  parent=NULL;
   [super dealloc];
 }
 
@@ -73,24 +43,36 @@
 {
 
 }
+#else
+- (id) initWithFrame: (NSRect)rect {
+  [super initWithFrame: rect];
+  return self;
+}
+
+#endif
+
 
 - (void)drawRect:(NSRect)rect
 {
-  gemwin->renderMess();
+  parent->renderMess();
 }
+- (BOOL) acceptsFirstResponder {return YES;}
+
+- (void)mouseDown:         (NSEvent*)e { std::cerr << "mouseDown" << std::endl; }
+- (void)mouseUp:           (NSEvent*)e { std::cerr << "mouseUp" << std::endl; }
+- (void)rightMouseDown:    (NSEvent*)e { std::cerr << "rightMouseDown" << std::endl; }
+- (void)rightMouseUp:      (NSEvent*)e { std::cerr << "rightMouseUp" << std::endl; }
+- (void)otherMouseDown:    (NSEvent*)e { std::cerr << "otherMouseDown" << std::endl; }
+- (void)otherMouseUp:      (NSEvent*)e { std::cerr << "otherMouseUp" << std::endl; }
+- (void)mouseMoved:        (NSEvent*)e { std::cerr << "mouseMoved" << std::endl; }
+- (void)mouseDragged:      (NSEvent*)e { std::cerr << "mouseDragged" << std::endl; }
+- (void)rightMouseDragged: (NSEvent*)e { std::cerr << "rightMouseDragged" << std::endl; }
+- (void)otherMouseDragged: (NSEvent*)e { std::cerr << "otherMouseDragged" << std::endl; }
+- (void)scrollWheel:       (NSEvent*)e { std::cerr << "scrollWheel" << std::endl; }
+- (void)keyDown:           (NSEvent*)e { std::cerr << "keyDown" << std::endl; }
+- (void)keyUp:             (NSEvent*)e { std::cerr << "keyUp" << std::endl; }
 
 
-- (BOOL)performKeyEquivalent:(NSEvent *)event
-{
-#if 0
-  if (([event modifierFlags] & NSCommandKeyMask) && ([[event charactersIgnoringModifiers] rangeOfString:@"q"].location != NSNotFound))
-    {
-      [NSApp terminate:nil];
-      return YES;
-    }
-#endif
-  return [super performKeyEquivalent:event];
-}
 @end
 
 
@@ -124,9 +106,6 @@ gemcocoawindow :: gemcocoawindow(void) :
   m_cursor(false),
   m_win(NULL)
 {
-  if(NULL==arp)
-	arp=[[NSAutoreleasePool alloc] init];
-
 }
 
 /////////////////////////////////////////////////////////
@@ -157,20 +136,60 @@ void gemcocoawindow :: renderMess() {
 /////////////////////////////////////////////////////////
 bool gemcocoawindow :: create(void)
 {
+  std::cerr << "create: %x" << (void*)m_win << std::endl;
   if(m_win) {
     error("window already made!");
     return false;
   }
-  NSRect contentRect = NSMakeRect(0.0, 0.0, m_width, m_height);
-  NSWindow*window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
 
+  DEBUGLINE;
+  NSRect contentRect = NSMakeRect(0, 0, m_width, m_height);
+  DEBUGLINE;
+  //  NSWindow*window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+
+  NSWindow*window = [NSWindow alloc];
+  DEBUGLINE;
+  [ window initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+
+  DEBUGLINE;
   NSView *contentView = [window contentView];
-  m_win = [[GemCocoaWindow alloc] 
-	initWithFrame:[contentView bounds] parent: this];
-  [contentView addSubview:m_win];
+  DEBUGLINE;
+  std::vector<NSOpenGLPixelFormatAttribute>attrvec;
+#if 0
+  NSOpenGLPixelFormatAttribute attr[] = 
+    {
+      NSOpenGLPFADoubleBuffer,
+      NSOpenGLPFAAccelerated,
+      NSOpenGLPFAColorSize, (NSOpenGLPixelFormatAttribute) 32,
+      NSOpenGLPFADepthSize, (NSOpenGLPixelFormatAttribute) 23,
+      (NSOpenGLPixelFormatAttribute) 0
+    };
+#endif
 
+  if(m_buffer==2)
+    attrvec.push_back(NSOpenGLPFADoubleBuffer);
+  attrvec.push_back(NSOpenGLPFAAccelerated);
+  attrvec.push_back(NSOpenGLPFAColorSize);
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
+  attrvec.push_back(NSOpenGLPFADepthSize);
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
+  NSOpenGLPixelFormatAttribute*attr = new NSOpenGLPixelFormatAttribute[attrvec.size()];
+  int i=0;
+  for(i=0; i<attrvec.size(); i++) {
+    attr[i]=attrvec[i];
+  }
+  NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr] autorelease];
+  DEBUGLINE;
+  m_win = [[GemCocoaView alloc] initWithFrame:[contentView bounds] pixelFormat:nsglFormat];
+  DEBUGLINE;
+  m_win->parent=this;
+  [contentView addSubview:m_win];
+  DEBUGLINE;
   [window center];
+  DEBUGLINE;
   [window makeKeyAndOrderFront:nil];
+  DEBUGLINE;
 }
 void gemcocoawindow :: createMess(void) {
  if (!create()) {
@@ -254,6 +273,20 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_ADDMETHOD_F(gemcocoawindow, fullscreen, fullscreen);
   CPPEXTERN_ADDMETHOD_F(gemcocoawindow, fsaa, FSAA);
   CPPEXTERN_ADDMETHOD_F(gemcocoawindow, cursor, cursor);
+
+  DEBUGLINE;
+	[NSApplication sharedApplication];
+  DEBUGLINE;
+
+	ProcessSerialNumber proc;
+  DEBUGLINE;
+	GetCurrentProcess(&proc);
+  DEBUGLINE;
+	TransformProcessType(&proc, kProcessTransformToForegroundApplication);
+  DEBUGLINE;
+  if(NULL==arp)
+	arp=[[NSAutoreleasePool alloc] init];
+  DEBUGLINE;
 }
 
 CPPEXTERN_CALLBACK(gemcocoawindow, render);
