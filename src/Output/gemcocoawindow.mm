@@ -19,6 +19,9 @@
 #include <stdio.h>
 #include "RTE/MessageCallbacks.h"
 
+static NSDate *distantFuture, *distantPast;
+
+
 #define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
 
 @implementation GemCocoaView
@@ -49,6 +52,11 @@
   [super initWithFrame: rect];
   return self;
 }
+- (void) prepareOpenGL
+{
+  GLint swapInt = 1;
+  [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
+}
 
 #endif
 
@@ -57,8 +65,9 @@
 {
   parent->renderMess();
 }
-- (BOOL) acceptsFirstResponder {return YES;}
 
+#if 0
+- (BOOL) acceptsFirstResponder {return YES;}
 - (void)mouseDown:         (NSEvent*)e { std::cerr << "mouseDown" << std::endl; }
 - (void)mouseUp:           (NSEvent*)e { std::cerr << "mouseUp" << std::endl; }
 - (void)rightMouseDown:    (NSEvent*)e { std::cerr << "rightMouseDown" << std::endl; }
@@ -72,15 +81,9 @@
 - (void)scrollWheel:       (NSEvent*)e { std::cerr << "scrollWheel" << std::endl; }
 - (void)keyDown:           (NSEvent*)e { std::cerr << "keyDown" << std::endl; }
 - (void)keyUp:             (NSEvent*)e { std::cerr << "keyUp" << std::endl; }
-
+#endif
 
 @end
-
-
-
-
-
-
 
 
 
@@ -97,14 +100,13 @@ CPPEXTERN_NEW(gemcocoawindow)
 /////////////////////////////////////////////////////////
 static NSAutoreleasePool*arp=NULL;
 gemcocoawindow :: gemcocoawindow(void) :
-  m_buffer(2),
   m_fsaa(0),
   m_title("GEM"),
-  m_border(false),
-  m_width(500), m_height(500),
+  m_border(true),
   m_xoffset(0), m_yoffset(0),
   m_fullscreen(false),
   m_cursor(false),
+  m_modifierFlags(0),
   m_win(NULL)
 {
 }
@@ -116,20 +118,120 @@ gemcocoawindow :: gemcocoawindow(void) :
 gemcocoawindow :: ~gemcocoawindow()
 {
   destroyMess();
-  if(m_win)
-    [m_win dealloc];
-  m_win=NULL;
 }
 
 bool gemcocoawindow :: makeCurrent(){
-  return(false);
+ if(!m_win)return false;
+ [[m_win openGLContext] makeCurrentContext];
+ return(true);
 }
 void gemcocoawindow :: swapBuffers() {
-}
-void gemcocoawindow :: dispatch() {
+  //aglSwapBuffers(ctx);
 }
 void gemcocoawindow :: renderMess() {
   bang();
+};
+
+void gemcocoawindow :: render() {
+post("render");
+ if(assertCurrentContext()) {
+  [ m_win setNeedsDisplay: YES ] ;
+ }
+}
+
+void gemcocoawindow :: dispatch() {
+  NSEvent *e = NULL;
+  if(!m_win)return;
+  while (( e = [NSApp nextEventMatchingMask: NSAnyEventMask
+         // untilDate: distantFuture // blocking
+         untilDate: distantPast      // nonblocking
+         inMode: NSDefaultRunLoopMode
+         dequeue: YES])) {
+    if ([e window] == m_win->window) dispatchEvent(e);
+    [NSApp sendEvent: e];
+  }
+  [NSApp updateWindows];
+  [m_win->window flushWindowIfNeeded];
+}
+void gemcocoawindow :: dispatchEvent(NSEvent*e) {
+ if(!e)return;
+ NSEventType type = [e type];
+ switch(type) {
+case(NSLeftMouseUp): 
+case(NSRightMouseUp):
+case(NSOtherMouseUp):
+button([e buttonNumber], false);
+break;
+case(NSLeftMouseDown): 
+case(NSRightMouseDown):
+case(NSOtherMouseDown):
+button([e buttonNumber], [e pressure]);
+break;
+case(NSMouseMoved):
+case(NSLeftMouseDragged):
+case(NSRightMouseDragged):
+case(NSOtherMouseDragged):
+{
+NSPoint p=[e locationInWindow];
+motion(static_cast<int>(p.x), static_cast<int>(p.y));
+}
+break;
+break;
+break;
+case(NSMouseEntered):
+info("mouse", "entered");
+break;
+case(NSMouseExited):
+info("mouse", "left");
+break;
+case(NSScrollWheel):
+break;
+
+case(NSKeyDown):
+if (![e isARepeat]) {
+// how to get names of special keys? e.g. PageUp
+ key(std::string([[e characters] UTF8String]), [e keyCode], true);
+}
+break;
+case(NSKeyUp):
+ key(std::string([[e characters] UTF8String]), [e keyCode], false);
+break;
+case(NSFlagsChanged):
+  if([e modifierFlags] != m_modifierFlags) {
+   NSUInteger modified = [e modifierFlags] ^ m_modifierFlags;
+   m_modifierFlags = [e modifierFlags];
+#define MODFLAGS2KEY(mask, name) if(modified & mask) key(name, [e keyCode], static_cast<bool>(mask & m_modifierFlags))
+   MODFLAGS2KEY(NSAlphaShiftKeyMask, "AlphaShift");
+   MODFLAGS2KEY(NSShiftKeyMask, "Shift");
+   MODFLAGS2KEY(NSControlKeyMask, "Control");
+   MODFLAGS2KEY(NSCommandKeyMask, "Command");
+   MODFLAGS2KEY(NSNumericPadKeyMask, "NumPad");
+   MODFLAGS2KEY(NSHelpKeyMask, "Help");
+   MODFLAGS2KEY(NSFunctionKeyMask, "Function");
+   MODFLAGS2KEY(NSAlternateKeyMask, "Alt");
+  }
+break;
+
+case(NSTabletPoint):
+break;
+case(NSTabletProximity):
+break;
+
+#if 0
+case(NSEventTypeGesture):
+break;
+case(NSEventTypeMagnify):
+break;
+case(NSEventTypeSwipe):
+break;
+case(NSEventTypeRotate):
+break;
+case(NSEventTypeBeginGesture):
+break;
+case(NSEventTypeEndGesture):
+break;
+#endif
+ }
 }
 
 
@@ -144,20 +246,16 @@ bool gemcocoawindow :: create(void)
     error("window already made!");
     return false;
   }
+  NSRect  screenRect = [[NSScreen mainScreen] frame];
+  int xoffset=m_xoffset;
+  // NSWindow is bottom/left, but our offset is top/left
+  int yoffset=screenRect.size.height-m_yoffset-m_height;
+
   NSWindow*window=NULL;
-  DEBUGLINE;
-  NSRect contentRect = NSMakeRect(0, 0, m_width, m_height);
-  DEBUGLINE;
-  // window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
-  DEBUGLINE;
-
-  window = [NSWindow alloc];
-  DEBUGLINE;
-  [ window initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
-
-  DEBUGLINE;
+  NSRect contentRect = NSMakeRect(xoffset, yoffset, m_width, m_height);
+  window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+ 
   NSView *contentView = [window contentView];
-  DEBUGLINE;
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 #if 0
   NSOpenGLPixelFormatAttribute attr[] = 
@@ -184,16 +282,17 @@ bool gemcocoawindow :: create(void)
     attr[i]=attrvec[i];
   }
   NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr] autorelease];
-  DEBUGLINE;
   m_win = [[GemCocoaView alloc] initWithFrame:[contentView bounds] pixelFormat:nsglFormat];
-  DEBUGLINE;
   m_win->parent=this;
+  m_win->window=window;
   [contentView addSubview:m_win];
-  DEBUGLINE;
-  [window center];
-  DEBUGLINE;
+
+  [window setAcceptsMouseMovedEvents:YES];
   [window makeKeyAndOrderFront:nil];
-  DEBUGLINE;
+
+  titleMess(m_title);
+
+  return createContext();
 }
 void gemcocoawindow :: createMess(void) {
  if (!create()) {
@@ -206,11 +305,18 @@ void gemcocoawindow :: createMess(void) {
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: destroy(void)
 {
+  if(m_win) {
+   [m_win->window autorelease];
+   [m_win->window setReleasedWhenClosed: YES];
+   [m_win->window close];
 
+   [m_win release]; 
+  }
+  m_win=NULL;
+  destroyContext();
 }
 void gemcocoawindow :: destroyMess(void)
 {
-
   destroy();
 }
 
@@ -226,8 +332,11 @@ void gemcocoawindow :: bufferMess(int buf) {
     break;
   }
 }
-void gemcocoawindow :: titleMess(t_symbol* s) {
-  m_title = s->s_name;
+void gemcocoawindow :: titleMess(std::string s) {
+  m_title = s;
+  if(m_win) {
+    [m_win->window setTitle:[NSString stringWithUTF8String:m_title.c_str()]];
+  }
 }
 void gemcocoawindow :: dimensionsMess(int width, int height) {
   if (width <= 0) {
@@ -241,21 +350,57 @@ void gemcocoawindow :: dimensionsMess(int width, int height) {
   }
   m_width = width;
   m_height = height;
+  move();
+}
+void gemcocoawindow :: move(void) {
+  if(m_win && m_win->window) {
+    NSRect  screenRect = [[NSScreen mainScreen] frame];
+    // NSWindow is bottom/left, but our offset is top/left
+    int xoffset=m_xoffset;
+    int yoffset=screenRect.size.height-m_yoffset-m_height;
+    NSRect frame = NSMakeRect(xoffset, yoffset, m_width, m_height);
+    [m_win->window setFrame: frame display: YES];
+  }
 }
 void gemcocoawindow :: offsetMess(int x, int y) {
   m_xoffset = x;
   m_yoffset = y;
+  move();
 }
 void gemcocoawindow :: borderMess(bool setting) {
   m_border=setting;
 }
 void gemcocoawindow :: fullscreenMess(bool on) {
+#warning fullscreen
   m_fullscreen = on;
 }
 void gemcocoawindow :: fsaaMess(int value) {
 }
 void gemcocoawindow :: cursorMess(bool setting) {
   m_cursor=setting;
+  if(m_cursor) {
+    [NSCursor unhide];
+  } else {
+    [NSCursor hide];
+  }
+}
+void gemcocoawindow :: menubarMess(int state) {
+#if 0
+        if (state == 0)
+                SetSystemUIMode( kUIModeAllHidden, kUIOptionDisableAppleMenu | kUIOptionDisableProcessSwitch |
+                                                   kUIOptionDisableSessionTerminate | kUIOptionDisableForceQuit );
+        else if (state > 0)
+                SetSystemUIMode( kUIModeNormal, 0 );
+        else
+                SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar );
+#else
+  switch(state) {
+     case 0: [NSMenu setMenuBarVisible:NO]; break;
+     default:
+     case 1: [NSMenu setMenuBarVisible:YES]; break;
+  }
+#endif
+
 }
 
 
@@ -265,37 +410,31 @@ void gemcocoawindow :: cursorMess(bool setting) {
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG0(classPtr, "render", renderMess);
+  CPPEXTERN_MSG0(classPtr, "bang", render);
   CPPEXTERN_MSG0(classPtr, "create", createMess);
   CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
 
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, t_int);
-  CPPEXTERN_MSG1(classPtr, "title", titleMess, t_symbol*);
+  CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
   CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, t_int, t_int);
   CPPEXTERN_MSG2(classPtr, "offset", offsetMess, t_int, t_int);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, t_int);
   CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, t_int);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
-
-DEBUGLINE;
+  CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
 
 	ProcessSerialNumber proc;
-  DEBUGLINE;
 	GetCurrentProcess(&proc);
-  DEBUGLINE;
 	TransformProcessType(&proc, kProcessTransformToForegroundApplication);
-  DEBUGLINE;
-    if(NULL==arp)
+    SetFrontProcess(&proc);
+
+    if(NULL==arp) {
 	arp=[[NSAutoreleasePool alloc] init];
+    }
 
-  DEBUGLINE;
-SetFrontProcess(&proc);
+        distantFuture = [NSDate distantFuture];
+        distantPast = [NSDate distantPast];
 
-
-  DEBUGLINE;
-	[NSApplication sharedApplication];
-  
-
-  DEBUGLINE;
+    [NSApplication sharedApplication];
 }

@@ -21,6 +21,7 @@ class gemcocoawindow;
 @interface GemCocoaView : NSOpenGLView
 {
   @public gemcocoawindow*parent;
+  @public NSWindow*window;
 }
 @end
 
@@ -44,37 +45,35 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
   virtual void swapBuffers(void);
-
+  virtual void render(void);
   void renderMess(void);
-  virtual void dispatch(void);
 
+  virtual void dispatch(void);
+  void dispatchEvent(NSEvent*);
 
   void             bufferMess(int buf);
-  void              titleMess(t_symbol* s);
+  void              titleMess(std::string s);
   virtual void dimensionsMess(int width, int height);
   void             offsetMess(int x, int y);
   void             borderMess(bool on);
   void         fullscreenMess(bool on);
   void               fsaaMess(int value);
   void             cursorMess(bool on);
+  void            menubarMess(int value);
+  void		         move(void);
 
   // window<->GemContext
   void dimension(unsigned int, unsigned int);
-  void position (int, int);
-  void motion(int x, int y);
-  void button(int id, int state);
-  void key(std::string, int, int state);
 
-  int          m_buffer;
   int          m_fsaa;
   std::string  m_title;
   bool         m_border;
-  unsigned int m_width, m_height;
   unsigned int m_xoffset, m_yoffset;
   bool         m_fullscreen;
   bool         m_cursor;
 
  private:
+  NSUInteger m_modifierFlags;
 
   GemCocoaView*m_win;
 };
