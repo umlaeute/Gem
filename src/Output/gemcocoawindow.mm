@@ -25,41 +25,15 @@ static NSDate *distantFuture, *distantPast;
 #define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
 
 @implementation GemCocoaView
-#if 0
-- (id)initWithFrame: (NSRect)frameRect parent: (gemcocoawindow*) gcw
-{
-
-  NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr] autorelease];
-
-  delete[]attr;
-  
-  self = [super initWithFrame:frameRect pixelFormat:nsglFormat];
-  return self;
-}
-
-- (void)dealloc
-{
-  parent=NULL;
-  [super dealloc];
-}
-
-- (void)prepareOpenGL
-{
-
-}
-#else
-- (id) initWithFrame: (NSRect)rect {
-  [super initWithFrame: rect];
-  return self;
-}
 - (void) prepareOpenGL
 {
-  GLint swapInt = 1;
+#if 0
+  GLint swapInt = 1; // 1==sync to vblank
   [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
-}
-
 #endif
-
+  GLint swapRect = 0;
+  [[self openGLContext] setValues:&swapRect forParameter:NSOpenGLCPSwapRectangleEnable];
+}
 
 - (void)drawRect:(NSRect)rect
 {
@@ -126,14 +100,14 @@ bool gemcocoawindow :: makeCurrent(){
  return(true);
 }
 void gemcocoawindow :: swapBuffers() {
-  //aglSwapBuffers(ctx);
+  [[ m_win openGLContext ] flushBuffer ];
 }
 void gemcocoawindow :: renderMess() {
   bang();
+  swapBuffers();
 };
 
 void gemcocoawindow :: render() {
-post("render");
  if(assertCurrentContext()) {
   [ m_win setNeedsDisplay: YES ] ;
  }
