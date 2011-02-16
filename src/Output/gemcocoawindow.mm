@@ -139,18 +139,19 @@ void gemcocoawindow :: renderMess() {
 /////////////////////////////////////////////////////////
 bool gemcocoawindow :: create(void)
 {
-  std::cerr << "create: %x" << (void*)m_win << std::endl;
+  std::cerr << "create: " << (void*)m_win << std::endl;
   if(m_win) {
     error("window already made!");
     return false;
   }
-
+  NSWindow*window=NULL;
   DEBUGLINE;
   NSRect contentRect = NSMakeRect(0, 0, m_width, m_height);
   DEBUGLINE;
-  //  NSWindow*window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+  // window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+  DEBUGLINE;
 
-  NSWindow*window = [NSWindow alloc];
+  window = [NSWindow alloc];
   DEBUGLINE;
   [ window initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
 
@@ -277,9 +278,7 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, t_int);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
 
-  DEBUGLINE;
-	[NSApplication sharedApplication];
-  DEBUGLINE;
+DEBUGLINE;
 
 	ProcessSerialNumber proc;
   DEBUGLINE;
@@ -287,7 +286,16 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
   DEBUGLINE;
 	TransformProcessType(&proc, kProcessTransformToForegroundApplication);
   DEBUGLINE;
-  if(NULL==arp)
+    if(NULL==arp)
 	arp=[[NSAutoreleasePool alloc] init];
+
+  DEBUGLINE;
+SetFrontProcess(&proc);
+
+
+  DEBUGLINE;
+	[NSApplication sharedApplication];
+  
+
   DEBUGLINE;
 }
