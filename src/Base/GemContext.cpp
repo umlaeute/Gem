@@ -262,13 +262,13 @@ void GemContext::dispatch() {
 
 bool GemContext::createContext(void){
   bool ret=true;
-  static int firsttime=1;
+  static bool firsttime=true;
   unsigned int oldcontextid=s_contextid;
   GLEWContext*oldcontext=s_glewcontext;
   GemGlewXContext*oldcontextx=s_glewxcontext;
 
 #ifdef GEM_MULTICONTEXT
-  firsttime=1; /* always the first time with multicontexts */
+  firsttime=true; /* always the first time with multicontexts */
 
   m_pimpl->context = new GLEWContext;
   m_pimpl->xcontext = new GemGlewXContext;
@@ -304,7 +304,7 @@ bool GemContext::createContext(void){
   glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      m_pimpl->maxStackDepth+GemMan::STACKTEXTURE);
   glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   m_pimpl->maxStackDepth+GemMan::STACKPROJECTION);
 
-  firsttime=0;
+  firsttime=false;
 
 #ifdef GEM_MULTICONTEXT
 # if 0
