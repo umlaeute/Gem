@@ -35,11 +35,7 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
   std::cerr << "load plugins '" << basename << "' in '" << path << "'" << std::endl;
 
   if(path.empty()){
-    t_symbol*s=NULL;
-    GemSettings::get("gem.path", s);
-    if(NULL!=s) {
-      path=s->s_name;
-    }
+    GemSettings::get("gem.path", path);
   }
 
   if(!path.empty()){

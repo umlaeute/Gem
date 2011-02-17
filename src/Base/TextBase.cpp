@@ -33,7 +33,7 @@
 # include <unistd.h>
 #endif
 
-char *TextBase::DEFAULT_FONT = const_cast<char*>("vera.ttf");
+std::string TextBase::DEFAULT_FONT = "vera.ttf";
 
 /////////////////////////////////////////////////////////
 //
@@ -140,12 +140,12 @@ void TextBase :: setPrecision(float prec)
 // fontNameMess
 //
 ////////////////////////////////////////////////////////
-void TextBase :: fontNameMess(const char *filename){
+void TextBase :: fontNameMess(const std::string filename){
   m_valid = 0;
   const char *bufptr=NULL;
   int fd=-1;
 
-  if(!filename){
+  if(filename.empty()){
     error("no font-file specified");
     return;
   }
@@ -166,7 +166,7 @@ void TextBase :: fontNameMess(const char *filename){
     error("unable to open font '%s'", bufptr);
     return;
   }
-  m_fontname=gensym(filename);
+  m_fontname=gensym(filename.c_str());
 
   setFontSize(m_fontSize);
   m_font->Depth(m_fontDepth);
