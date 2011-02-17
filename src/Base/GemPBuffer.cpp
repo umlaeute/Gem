@@ -213,7 +213,7 @@ void reportError (char * strError)
 
 // ---------------------------------
 
-// if error dump agl errors to debugger string, return error
+// if error dump cgl errors to debugger string, return error
 OSStatus cglReportError (CGLError err)
 {
   if (0 != err)
