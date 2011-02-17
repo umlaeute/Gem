@@ -43,7 +43,7 @@ static NSDate *distantFuture, *distantPast;
 }
 @end
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+#if defined MAC_OS_X_VERSION_10_5 && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 typedef GLint oglc_setvalue_t;
 #else
 typedef long int oglc_setvalue_t;
