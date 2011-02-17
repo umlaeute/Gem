@@ -247,6 +247,8 @@ void gemglutwindow :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 bool gemglutwindow :: create(void)
 {
+
+  // display list sharing: glutSetOption(GLUT_RENDERING_CONTEXT ,GLUT_USE_CURRENT_CONTEXT );
   if(m_window) {
     error("window already made!");
     return false;
