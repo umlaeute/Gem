@@ -33,12 +33,6 @@
 #include "Base/GemGL.h"
 #include "GemPBuffer.h"
 
-#ifdef __linux__
-# include <Base/glxew.h>
-#elif defined __APPLE__
-# include <AGL/agl.h>
-#endif
-
 #include "m_pd.h"
 
 #ifdef __linux__
