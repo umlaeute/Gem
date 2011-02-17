@@ -267,9 +267,9 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
   }
 
   // try to set highest possible operation mode
-  dc1394operation_mode_t operation_mode=DC1394_OPERATION_MODE_MAX;
+  int operation_mode=DC1394_OPERATION_MODE_MAX;
   while(operation_mode>=DC1394_OPERATION_MODE_MIN) {
-    err=dc1394_video_set_operation_mode(m_dcccamera, operation_mode);
+    err=dc1394_video_set_operation_mode(m_dccamera, (dc1394operation_mode_t)operation_mode);
     if(DC1394_SUCCESS==err)
       break;
     operation_mode--;
