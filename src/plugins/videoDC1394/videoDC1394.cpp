@@ -266,6 +266,19 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     error("unable to set specified mode, using default");
   }
 
+  // try to set highest possible operation mode
+  dc1394operation_mode_t operation_mode=DC1394_OPERATION_MODE_MAX;
+  while(operation_mode>=DC1394_OPERATION_MODE_MIN) {
+    err=dc1394_video_set_operation_mode(m_dcccamera, operation_mode);
+    if(DC1394_SUCCESS==err)
+      break;
+    operation_mode--;
+  }
+  if(DC1394_SUCCESS!=err) {
+    error("unable to set operation mode...continuing anyhow");
+  }
+  
+
   dc1394speed_t speed=DC1394_ISO_SPEED_400;
   err=dc1394_video_set_iso_speed(m_dccamera, speed);
   if(DC1394_SUCCESS!=err) {
