@@ -43,14 +43,19 @@ static NSDate *distantFuture, *distantPast;
 }
 @end
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+typedef GLint oglc_setvalue_t;
+#else
+typedef long int oglc_setvalue_t;
+#endif
 @implementation GemCocoaView
 - (void) prepareOpenGL
 {
 #if 0
-  GLint swapInt = 1; // 1==sync to vblank
+  oglc_setvalue_t swapInt = 1; // 1==sync to vblank
   [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
 #endif
-  GLint swapRect = 0;
+  oglc_setvalue_t swapRect = 0;
   [[self openGLContext] setValues:&swapRect forParameter:NSOpenGLCPSwapRectangleEnable];
 }
 
