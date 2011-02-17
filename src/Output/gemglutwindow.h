@@ -63,17 +63,6 @@ class GEM_EXTERN gemglutwindow : public GemContext
 
  private:
 
-  typedef struct _list {
-    gemglutwindow*object;
-    int window;
-    struct _list*next;
-  } t_list;
-  
-  static t_list *ggw_list;
-  static gemglutwindow* list_find(int win);
-  static void list_add(gemglutwindow*obj,int win);
-  static void list_del(int win);
-
   //////////
   // Destructor
   virtual ~gemglutwindow(void);

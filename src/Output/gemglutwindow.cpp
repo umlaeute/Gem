@@ -18,6 +18,9 @@
 
 #include "Base/GemGL.h"
 
+#include <map>
+
+
 #define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
 
 #ifdef __linux__
@@ -30,57 +33,7 @@
 
 #include <stdio.h>
 
-gemglutwindow::t_list *gemglutwindow::ggw_list = NULL;
-
-gemglutwindow* gemglutwindow::list_find(int win)
-{
-  t_list*mylist=0;
-
-  for(mylist=ggw_list; mylist; mylist=mylist->next) {
-    if(mylist->window == win)
-      return mylist->object;
-  }
-  /* not found */
-  return 0;
-}
-void gemglutwindow::list_add(gemglutwindow*obj, int win)
-{
-  t_list*last=ggw_list;
-  t_list*element=new t_list;
-  element->object=obj;
-  element->window=win;
-  element->next  =NULL;
- 
-  if(last) {
-    while(last->next) {
-      last=last->next;
-    }
-    last->next = element;
-  } else {
-    ggw_list = element;
-  }
-}
-
-void gemglutwindow::list_del(int win)
-{
-  t_list*mylist=NULL, *last=NULL;
-  
-  for(mylist=ggw_list; mylist; mylist=mylist->next) {
-    if(mylist->window == win) {
-      if(last) {
-	last->next=mylist->next;
-      } else {
-	ggw_list = NULL;
-      }
-      mylist->window=0;
-      mylist->object=NULL;
-      mylist->next=NULL;
-      delete mylist;
-      return;
-    }
-    last=mylist;
-  }
-}
+static std::map<int, gemglutwindow*>s_windowmap;
  
 CPPEXTERN_NEW(gemglutwindow)
 
@@ -262,7 +215,7 @@ bool gemglutwindow :: create(void)
   glutInitDisplayMode(mode);
 
   m_window=glutCreateWindow(m_title.c_str());
-  list_add(this, m_window);
+  s_windowmap[m_window]=this;
 
   glutDisplayFunc   (&gemglutwindow::displayCb);
   glutVisibilityFunc(&gemglutwindow::visibleCb);
@@ -294,7 +247,6 @@ bool gemglutwindow :: create(void)
     destroyMess();
     return false;
   }
-
   titleMess(gensym(m_title.c_str()));
   fullscreenMess(m_fullscreen);
 
@@ -325,7 +277,7 @@ void gemglutwindow :: destroyMess(void)
     glutDestroyWindow(window);
     glutMainLoopEvent();
     glutMainLoopEvent();
-    list_del(window);
+    s_windowmap.erase(m_window);
   }
   destroy();
 }
@@ -422,7 +374,7 @@ void gemglutwindow :: fsaaMessCallback(void *data, t_floatarg val)
   GetMyClass(data)->fsaaMess(static_cast<int>(val));
 }
 
-#define CALLBACK4WIN gemglutwindow*ggw=list_find(glutGetWindow()); if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
+#define CALLBACK4WIN gemglutwindow*ggw=s_windowmap[glutGetWindow()]; if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
 
 
 void gemglutwindow::displayCb(void) {
