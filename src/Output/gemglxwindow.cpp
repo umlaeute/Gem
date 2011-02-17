@@ -213,7 +213,11 @@ struct gemglxwindow::Info {
     
     return std::string(keystring);
   }
+
+  static GLXContext  masterShared;// The GLXcontext to share rendering with
 };
+GLXContext gemglxwindow::Info::masterShared=NULL;
+
 
 /////////////////////////////////////////////////////////
 //
@@ -515,7 +519,9 @@ bool gemglxwindow :: create(void)
   }
   // create the rendering context
   try {
-    m_info->context = glXCreateContext(m_info->dpy, vi, m_info->shared, GL_TRUE);
+    m_info->context = glXCreateContext(m_info->dpy, vi, m_info->masterShared, GL_TRUE);
+    if(!m_info->masterShared) // FIXME: this will make troubles when deleting the 1st context
+      m_info->masterShared=m_info->context;
   } catch(void*e){
     m_info->context=NULL;
   }
