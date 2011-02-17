@@ -33,7 +33,7 @@ CPPEXTERN_NEW(gemglxwindow);
 
 #define EVENT_MASK                                                      \
   ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
-  ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | StructureNotifyMask | /* ResizeRedirectMask | */ DestroyNotify
+  ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | DestroyNotify
 
 // window creation variables
 static int snglBuf24[] = {GLX_RGBA, 
@@ -277,12 +277,11 @@ void gemglxwindow::dispatch(void) {
   XEvent event; 
   XButtonEvent* eb = (XButtonEvent*)&event; 
   XKeyEvent* kb  = (XKeyEvent*)&event; 
-  XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
   char keystring[2];
   KeySym keysym_return;
 
   while (XCheckWindowEvent(m_info->dpy,m_info->win,
-                           StructureNotifyMask | //ResizeRedirectMask | 
+                           StructureNotifyMask |
                            KeyPressMask | KeyReleaseMask |
                            PointerMotionMask | 
                            ButtonMotionMask |
@@ -321,16 +320,13 @@ void gemglxwindow::dispatch(void) {
             XResizeWindow(m_info->dpy, m_info->win, real_w, real_h);
             dimension(real_w, real_h);
           }
-          if ((event.xconfigure.x != real_x) || 
-              (event.xconfigure.y != real_y)) {
+          if ((event.xconfigure.send_event) && 
+              ((event.xconfigure.x != real_x) || 
+               (event.xconfigure.y != real_y))) {
             real_x=event.xconfigure.x;
             real_y=event.xconfigure.y;
             position(real_x, real_y);
           }
-          break;
-        case ResizeRequest:
-          XResizeWindow(m_info->dpy, m_info->win, res->width, res->height);
-          dimension(res->width, res->height);
           break;
         default:
           // post("event %d", event.type);
@@ -695,11 +691,17 @@ bool gemglxwindow :: create(void)
 }
 void gemglxwindow :: createMess(std::string display)
 {
+  if(m_info->win) {
+    error("window already made");
+    return;
+  }
+
   m_display=display;
   if(!create()) {
     destroyMess();
     return;
   }
+  dimension(real_w, real_h);
   m_info->doDispatch=true;
 }
 /////////////////////////////////////////////////////////
