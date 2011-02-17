@@ -39,6 +39,11 @@ static NSDate *distantFuture, *distantPast;
 {
   parent->renderMess();
 }
+- (void)reshape
+{
+  parent->moved();
+  [super reshape];
+}
 
 #if 0
 - (BOOL) acceptsFirstResponder {return YES;}
@@ -227,6 +232,9 @@ bool gemcocoawindow :: create(void)
 
   NSWindow*window=NULL;
   NSRect contentRect = NSMakeRect(xoffset, yoffset, m_width, m_height);
+if(m_fullscreen) {
+  contentRect=screenRect;
+}
   window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
  
   NSView *contentView = [window contentView];
@@ -250,6 +258,10 @@ bool gemcocoawindow :: create(void)
   attrvec.push_back(NSOpenGLPFADepthSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
+  if(m_fullscreen) {
+    attrvec.push_back(NSOpenGLPFAFullScreen);
+  }
+
   NSOpenGLPixelFormatAttribute*attr = new NSOpenGLPixelFormatAttribute[attrvec.size()];
   int i=0;
   for(i=0; i<attrvec.size(); i++) {
@@ -336,6 +348,33 @@ void gemcocoawindow :: move(void) {
     [m_win->window setFrame: frame display: YES];
   }
 }
+void gemcocoawindow :: moved(void) {
+  if(!m_win || !m_win->window) return;
+
+  NSRect  screenRect = [[NSScreen mainScreen] frame];
+  NSRect            bounds = [m_win->window frame];
+  const unsigned width=bounds.size.width;
+  const unsigned height=bounds.size.height;
+  const int xoffset=bounds.origin.x;
+  const int yoffset=screenRect.size.height-bounds.origin.y-height;
+
+  startpost("%dx%d%+d%+d ",   width,   height,   xoffset,   yoffset);
+  startpost("%dx%d%+d%+d ", m_width, m_height, m_xoffset, m_yoffset);
+  endpost();
+
+  bool doDimen=(width!=m_width || height != m_height);
+  bool doOffset=(xoffset!=m_xoffset || yoffset != m_yoffset);
+
+  doDimen=true; doOffset=true;
+
+  m_width=width;
+  m_height=height;
+  m_xoffset=xoffset;
+  m_yoffset=yoffset;
+
+  if(doDimen)dimension(m_width, m_height);
+  if(doOffset)position(m_xoffset, m_yoffset);
+}
 void gemcocoawindow :: offsetMess(int x, int y) {
   m_xoffset = x;
   m_yoffset = y;
@@ -347,6 +386,13 @@ void gemcocoawindow :: borderMess(bool setting) {
 void gemcocoawindow :: fullscreenMess(bool on) {
 #warning fullscreen
   m_fullscreen = on;
+  if(m_win) {
+   if (m_fullscreen) {
+    [[m_win openGLContext] setFullScreen];
+   } else {
+    [[m_win openGLContext] clearDrawable];
+   }
+ }
 }
 void gemcocoawindow :: fsaaMess(int value) {
 }

@@ -60,10 +60,8 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   void               fsaaMess(int value);
   void             cursorMess(bool on);
   void            menubarMess(int value);
-  void		         move(void);
-
-  // window<->GemContext
-  void dimension(unsigned int, unsigned int);
+  void		         move(void); // apply dimen/offset to current window
+  void		        moved(void); // window dimen/offset changed
 
   int          m_fsaa;
   std::string  m_title;
