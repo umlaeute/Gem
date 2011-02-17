@@ -147,7 +147,7 @@ class GEM_EXTERN GemContext : public CPPExtern
    */
   virtual void dimensionsMess(int width, int height) = 0;
   virtual void dimensionsMess(void);
-  int m_width, m_height;
+  unsigned int m_width, m_height;
 
  public:
   static unsigned int getContextId(void);
