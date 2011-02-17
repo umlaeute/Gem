@@ -92,7 +92,7 @@ class GEM_EXTERN gemglxwindow : public GemContext
   int         m_fsaa;
 
   /* window decoration (pre creation) */
-  void titleMess(t_symbol* s);
+  void titleMess(std::string);
   std::string     m_title;
   void borderMess(bool on);
   bool       m_border;
@@ -103,7 +103,7 @@ class GEM_EXTERN gemglxwindow : public GemContext
   void    fullscreenMess(bool on);
   bool              m_fullscreen;
   void        offsetMess(int x, int y);
-  unsigned int      m_xoffset, m_yoffset;
+  int      m_xoffset, m_yoffset;
 
   /* creation/destruction */
   void        createMess(std::string);
@@ -128,8 +128,8 @@ class GEM_EXTERN gemglxwindow : public GemContext
   void       print(void);
  private:
 
-  class Info;
-  Info*m_info;
+  class PIMPL;
+  PIMPL*m_pimpl;
 };
 
 #endif    // for header file

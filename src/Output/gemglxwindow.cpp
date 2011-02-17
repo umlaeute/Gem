@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include "RTE/MessageCallbacks.h"
+#include "Base/GemException.h"
 
 
 #ifdef HAVE_LIBXXF86VM
@@ -135,7 +136,7 @@ static Bool WaitForNotify(Display *, XEvent *e, char *arg)
 
  
 
-struct gemglxwindow::Info {
+struct gemglxwindow::PIMPL {
   int         fs;                 // FullScreen
   bool        have_constContext;  // 1 if we have a constant context
 
@@ -144,9 +145,6 @@ struct gemglxwindow::Info {
   int         screen;             // X Screen
   Colormap    cmap;               // X color map
   GLXContext  context;            // OpenGL context
-
-#warning sharedContext in Info
-  GLXContext  shared;// The GLXcontext to share rendering with
 
   Atom        delete_atom;
   
@@ -162,14 +160,13 @@ struct gemglxwindow::Info {
 
   bool doDispatch;
 
-  Info(void) : 
+  PIMPL(void) : 
     fs(0),
     have_constContext(false),
     dpy(NULL), 
     win(0), 
     cmap(0), 
     context(NULL), 
-    shared(NULL),
     delete_atom(0),
 #ifdef HAVE_LIBXXF86VM
     //    deskMode(0),
@@ -181,7 +178,7 @@ struct gemglxwindow::Info {
     doDispatch(false)
   {
   }
-  ~Info(void) {
+  ~PIMPL(void) {
   }
 
   std::string key2string(XKeyEvent* kb) {
@@ -214,10 +211,244 @@ struct gemglxwindow::Info {
     return std::string(keystring);
   }
 
-  static GLXContext  masterShared;// The GLXcontext to share rendering with
-};
-GLXContext gemglxwindow::Info::masterShared=NULL;
+  bool create(std::string display, int buffer, bool fullscreen, bool border, int&x, int&y, unsigned int&w, unsigned int&h) {
+    int modeNum=4;
+    int bestMode=0;
+#ifdef HAVE_LIBXXF86VM
+    XF86VidModeModeInfo **modes;
+#endif
 
+    XSetErrorHandler (ErrorHandler);
+
+    if ( (dpy = XOpenDisplay(display.c_str())) == NULL) { 
+      ::error("Could not open display %s",display.c_str());
+      return false;
+    }
+    screen  = DefaultScreen(dpy);
+
+    if ( !glXQueryExtension(dpy, NULL, NULL) ) {
+      throw(GemException("X server has no OpenGL GLX extension"));
+      return false;
+    } 
+
+    if (fullscreen){
+      if (!display.empty()){
+        throw(GemException("fullscreen not available on remote display"));
+        fullscreen=false;
+      } else {
+#ifdef HAVE_LIBXXF86VM
+        XF86VidModeGetAllModeLines(dpy, screen, &modeNum, &modes);
+        deskMode = *modes[0];
+#else
+        throw(GemException("no xxf86vm-support: cannot switch to fullscreen"));
+#endif
+      }
+    }
+    XVisualInfo *vi;
+    // the user wants double buffer
+    if (buffer == 2) {
+      // try for a double-buffered on 24bit machine (try stereo first)
+      vi = glXChooseVisual(dpy, screen, dblBuf24Stereo);
+      if (vi == NULL)
+        vi = glXChooseVisual(dpy, screen, dblBuf24);
+      if (vi == NULL) {
+        // try for a double buffered on a 8bit machine (try stereo first)
+        vi = glXChooseVisual(dpy, screen, dblBuf8Stereo);
+        if(vi == NULL)
+          vi = glXChooseVisual(dpy, screen, dblBuf8);
+        if (vi == NULL) {
+          throw(GemException("Unable to create double buffer window"));
+          return false;
+        }
+        ::post("Only using 8 color bits");
+      }
+    }
+    // the user wants single buffer
+    else {
+      // try for a single buffered on a 24bit machine (try stereo first)
+      vi = glXChooseVisual(dpy, screen, snglBuf24Stereo);
+      if (vi == NULL)
+        vi = glXChooseVisual(dpy, screen, snglBuf24);
+      if (vi == NULL) {
+        // try for a single buffered on a 8bit machine (try stereo first)
+        vi = glXChooseVisual(dpy, screen, snglBuf8Stereo);
+        if (vi == NULL)
+          vi = glXChooseVisual(dpy, screen, snglBuf8);
+        if (vi == NULL) {
+          throw(GemException("Unable to create single buffer window"));
+          return false;
+        }
+        ::post("Only using 8 color bits");
+      }
+    }
+
+    if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
+      ::error("TrueColor visual required for this program (got %d)", vi->c_class);
+      return false;
+    }
+    // create the rendering context
+    try {
+      context = glXCreateContext(dpy, vi, masterContext, GL_TRUE);
+      if(!masterContext) // FIXME: this will make troubles when deleting the 1st context
+        masterContext=context;
+    } catch(void*e){
+      context=NULL;
+    }
+    if (context == NULL) {
+      throw(GemException("Could not create rendering context"));
+      return false;
+    }
+    // create the X color map
+    cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen), 
+                                    vi->visual, AllocNone);
+    if (!cmap) {
+      throw(GemException("Could not create X colormap"));
+      return false;
+    }
+
+    XSetWindowAttributes swa;
+    swa.colormap = cmap;
+    swa.border_pixel = 0;
+    // event_mask creates signal that window has been created
+    swa.event_mask = EVENT_MASK;
+
+    int flags;
+#ifdef HAVE_LIBXXF86VM
+    if (fullscreen){
+      /* look for mode with requested resolution */
+      for (int i = 0; i < modeNum; i++) {
+        if ((modes[i]->hdisplay == w) && (modes[i]->vdisplay == w)) {
+          bestMode = i;
+        }
+      }
+    
+      XF86VidModeSwitchToMode(dpy, screen, modes[bestMode]);
+      XF86VidModeSetViewPort(dpy, screen, 0, 0);
+      w = modes[bestMode]->hdisplay;
+      h = modes[bestMode]->vdisplay;
+      x=y=0;
+      XFree(modes);
+
+      swa.override_redirect = True;
+      flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
+    } else
+#endif
+      { // !fullscren
+        if (border){
+          swa.override_redirect = False;
+          flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
+        } else {
+          swa.override_redirect = True;
+          flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
+        }
+      }
+    fs = fullscreen;
+
+    win = XCreateWindow(dpy, RootWindow(dpy, vi->screen),
+                                 x, y, w, h,
+                                 0, vi->depth, InputOutput, 
+                                 vi->visual, flags, &swa);
+    if (!win) {
+      throw(GemException("Could not create X window"));
+      return false;
+    }
+
+    have_border=(True==swa.override_redirect);
+
+    XSelectInput(dpy, win, EVENT_MASK);
+
+    inputMethod = XOpenIM(dpy, NULL, NULL, NULL);
+    if(inputMethod) {
+      XIMStyle style=NULL;
+      XIMStyles *stylePtr=NULL;
+      const char *preedit_attname = NULL;
+      XVaNestedList preedit_attlist = NULL;
+
+      if ((XGetIMValues(inputMethod, XNQueryInputStyle, &stylePtr, NULL) != NULL)) {
+        stylePtr=NULL;
+      }
+
+
+      /*
+       * Select the best input style supported by both the IM and Tk.
+       */
+      int i=0;
+      if(stylePtr) {
+        for (i = 0; i < stylePtr->count_styles; i++) {
+          XIMStyle thisStyle = stylePtr->supported_styles[i];
+          if (thisStyle == (XIMPreeditPosition | XIMStatusNothing)) {
+            style = thisStyle;
+            break;
+          } else if (thisStyle == (XIMPreeditNothing | XIMStatusNothing)) {
+            style = thisStyle;
+          }
+        }
+        XFree(stylePtr);
+      }
+
+
+      if (style & XIMPreeditPosition) {
+        XPoint spot = {0, 0};
+        XFontSet inputXfs;
+        preedit_attname = XNPreeditAttributes;
+        preedit_attlist = XVaCreateNestedList(0,
+                                              XNSpotLocation, &spot,
+                                              XNFontSet, inputXfs,
+                                              NULL);
+      }
+
+
+      inputContext=XCreateIC(inputMethod,
+                                      XNInputStyle, style,
+                                      XNClientWindow, win,
+                                      XNFocusWindow, win,
+                                      preedit_attname, preedit_attlist,
+                                      NULL);
+    }
+
+
+
+    /* found a bit at
+     * http://biology.ncsa.uiuc.edu/library/SGI_bookshelves/SGI_Developer/books/OpenGL_Porting/sgi_html/apf.html
+     * LATER think about reacting on this event...
+     */
+    delete_atom = XInternAtom(dpy, "WM_DELETE_WINDOW", True);
+    if (delete_atom != None)
+      XSetWMProtocols(dpy, win, &delete_atom,1);
+
+    try{
+      xerr=0;
+      glXMakeCurrent(dpy, win, context);
+
+      if(xerr!=0) {
+        /* seems like the error-handler was called; so something did not work the way it should
+         * should we really prevent window-creation in this case?
+         * LATER re-think the entire dual-context thing
+         */
+
+        throw(GemException("problems making glX-context current: refusing to continue"));
+        throw(GemException("try setting the environment variable GEM_SINGLE_CONTEXT=1"));
+        return false;
+      }
+      Window winDummy;
+      unsigned int depthDummy;
+      unsigned int borderDummy;
+      int x, y;
+      XGetGeometry(dpy, win,
+                   &winDummy, 
+                   &x, &y,
+                   &w, &h,
+                   &borderDummy, &depthDummy);
+    }catch(void*e){
+      throw(GemException("Could not make glX-context current"));
+      return false;
+    }
+    return true;
+  }
+
+  static GLXContext  masterContext;// The GLXcontext to share rendering with
+};
+GLXContext gemglxwindow::PIMPL::masterContext=NULL;
 
 /////////////////////////////////////////////////////////
 //
@@ -237,7 +468,7 @@ gemglxwindow :: gemglxwindow(void) :
   real_w(0), real_h(0), real_x(0), real_y(0),
   m_display(std::string("")),
   m_actuallyDisplay(true),
-  m_info(new Info())
+  m_pimpl(new PIMPL())
 {
 }
 
@@ -252,11 +483,11 @@ gemglxwindow :: ~gemglxwindow()
 
 
 bool gemglxwindow :: makeCurrent(void){
-  if(!m_info->dpy || !m_info->win || !m_info->context)
+  if(!m_pimpl->dpy || !m_pimpl->win || !m_pimpl->context)
     return false;
 
   xerr=0;
-  glXMakeCurrent(m_info->dpy, m_info->win, m_info->context);
+  glXMakeCurrent(m_pimpl->dpy, m_pimpl->win, m_pimpl->context);
   if(xerr!=0) {
     return false;
   }
@@ -264,7 +495,7 @@ bool gemglxwindow :: makeCurrent(void){
 }
 
 void gemglxwindow :: swapBuffers(void) {
-  glXSwapBuffers(m_info->dpy, m_info->win);
+  glXSwapBuffers(m_pimpl->dpy, m_pimpl->win);
 }
 
 /////////////////////////////////////////////////////////
@@ -277,14 +508,14 @@ void gemglxwindow :: renderMess(void)
 }
 
 void gemglxwindow::dispatch(void) {
-  if(!m_info->doDispatch)return;
+  if(!m_pimpl->doDispatch)return;
   XEvent event; 
   XButtonEvent* eb = (XButtonEvent*)&event; 
   XKeyEvent* kb  = (XKeyEvent*)&event; 
   char keystring[2];
   KeySym keysym_return;
 
-  while (XCheckWindowEvent(m_info->dpy,m_info->win,
+  while (XCheckWindowEvent(m_pimpl->dpy,m_pimpl->win,
                            StructureNotifyMask |
                            KeyPressMask | KeyReleaseMask |
                            PointerMotionMask | 
@@ -305,23 +536,23 @@ void gemglxwindow::dispatch(void) {
           break; 
         case MotionNotify: 
           motion(eb->x, eb->y);
-          if(!m_info->have_border) {
-            int err=XSetInputFocus(m_info->dpy, m_info->win, RevertToParent, CurrentTime);
+          if(!m_pimpl->have_border) {
+            int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent, CurrentTime);
             err=0;
           }
           break; 
         case KeyPress:
-          key(m_info->key2string(kb), kb->keycode, 1);
+          key(m_pimpl->key2string(kb), kb->keycode, 1);
           break;
         case KeyRelease:
-          key(m_info->key2string(kb), kb->keycode, 0);
+          key(m_pimpl->key2string(kb), kb->keycode, 0);
           break;
         case ConfigureNotify:
           if ((event.xconfigure.width != real_w) || 
               (event.xconfigure.height != real_h)) {
             real_w=event.xconfigure.width;
             real_h=event.xconfigure.height;
-            XResizeWindow(m_info->dpy, m_info->win, real_w, real_h);
+            XResizeWindow(m_pimpl->dpy, m_pimpl->win, real_w, real_h);
             dimension(real_w, real_h);
           }
           if ((event.xconfigure.send_event) && 
@@ -338,7 +569,7 @@ void gemglxwindow::dispatch(void) {
         }
     }
   
-  if (XCheckTypedEvent(m_info->dpy,  ClientMessage, &event)) {
+  if (XCheckTypedEvent(m_pimpl->dpy,  ClientMessage, &event)) {
     info("window", "destroy");
     //    GemMan::destroyWindowSoon();
   }
@@ -374,11 +605,11 @@ void gemglxwindow :: fsaaMess(int value)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: titleMess(t_symbol* s)
+void gemglxwindow :: titleMess(std::string s)
 {
-  m_title=s->s_name;
-  if(m_info->dpy && m_info->win) {
-    XSetStandardProperties(m_info->dpy, m_info->win,
+  m_title=s;
+  if(m_pimpl->dpy && m_pimpl->win) {
+    XSetStandardProperties(m_pimpl->dpy, m_pimpl->win,
                            m_title.c_str(), "gem", 
                            None, 0, 0, NULL);
   }
@@ -436,6 +667,27 @@ void gemglxwindow :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 bool gemglxwindow :: create(void)
 {
+  bool success=true;
+
+  static gemglxwindow::PIMPL*constPimpl=NULL;
+  if(!constPimpl) {
+    constPimpl=new PIMPL();
+
+    try {
+      int x=0, y=0;
+      unsigned int w=1, h=1;
+      success=constPimpl->create("", 2, false, false, x, y, w, h);
+      constPimpl->masterContext=constPimpl->context;
+    } catch (GemException&x) {
+      x.report();
+      success=false;
+    }
+  }
+  if(!success) {
+    error("unable to create const context...continuing at your own risk!");
+  }
+
+
   int modeNum=4;
   int bestMode=0;
 #ifdef HAVE_LIBXXF86VM
@@ -448,256 +700,30 @@ bool gemglxwindow :: create(void)
   svalue[2]=0;
   if (m_fsaa!=0) setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
 
-  XSetErrorHandler (ErrorHandler);
-
-  if ( (m_info->dpy = XOpenDisplay(m_display.c_str())) == NULL) { 
-    error("Could not open display %s",m_display.c_str());
-    return false;
-  }
-  m_info->screen  = DefaultScreen(m_info->dpy);
-
-  if ( !glXQueryExtension(m_info->dpy, NULL, NULL) ) {
-    error("X server has no OpenGL GLX extension");
-    return false;
-  } 
-
-  if (fullscreen){
-    if (!m_display.empty()){
-      error("fullscreen not available on remote display");
-      fullscreen=false;
-    } else {
-#ifdef HAVE_LIBXXF86VM
-      XF86VidModeGetAllModeLines(m_info->dpy, m_info->screen, &modeNum, &modes);
-      m_info->deskMode = *modes[0];
-#else
-      error("no xxf86vm-support: cannot switch to fullscreen");
-#endif
-    }
-  }
-  XVisualInfo *vi;
-  // the user wants double buffer
-  if (m_buffer == 2) {
-    // try for a double-buffered on 24bit machine (try stereo first)
-    vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf24Stereo);
-    if (vi == NULL)
-      vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf24);
-    if (vi == NULL) {
-      // try for a double buffered on a 8bit machine (try stereo first)
-      vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf8Stereo);
-      if(vi == NULL)
-        vi = glXChooseVisual(m_info->dpy, m_info->screen, dblBuf8);
-      if (vi == NULL) {
-        error("Unable to create double buffer window");
-        return false;
-      }
-      post("Only using 8 color bits");
-    }
-  }
-  // the user wants single buffer
-  else {
-    // try for a single buffered on a 24bit machine (try stereo first)
-    vi = glXChooseVisual(m_info->dpy, m_info->screen, snglBuf24Stereo);
-    if (vi == NULL)
-      vi = glXChooseVisual(m_info->dpy, m_info->screen, snglBuf24);
-    if (vi == NULL) {
-      // try for a single buffered on a 8bit machine (try stereo first)
-      vi = glXChooseVisual(m_info->dpy, m_info->screen, snglBuf8Stereo);
-      if (vi == NULL)
-        vi = glXChooseVisual(m_info->dpy, m_info->screen, snglBuf8);
-      if (vi == NULL) {
-        error("Unable to create single buffer window");
-        return false;
-      }
-      post("Only using 8 color bits");
-    }
-    m_buffer = 1;
-  }
-
-  if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
-    error("TrueColor visual required for this program (got %d)", vi->c_class);
-    return false;
-  }
-  // create the rendering context
+ 
   try {
-    m_info->context = glXCreateContext(m_info->dpy, vi, m_info->masterShared, GL_TRUE);
-    if(!m_info->masterShared) // FIXME: this will make troubles when deleting the 1st context
-      m_info->masterShared=m_info->context;
-  } catch(void*e){
-    m_info->context=NULL;
+    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height);
+  } catch (GemException&x) {
+    x.report();
+    success=false;
   }
-  if (m_info->context == NULL) {
-    error("Could not create rendering context");
-    return false;
-  }
-  // create the X color map
-  m_info->cmap = XCreateColormap(m_info->dpy, RootWindow(m_info->dpy, vi->screen), 
-                                 vi->visual, AllocNone);
-  if (!m_info->cmap) {
-    error("Could not create X colormap");
-    return false;
-  }
-
-  XSetWindowAttributes swa;
-  swa.colormap = m_info->cmap;
-  swa.border_pixel = 0;
-  // event_mask creates signal that window has been created
-  swa.event_mask = EVENT_MASK;
-
-  real_w=m_width;
-  real_h=m_height;
-
-  real_x=m_xoffset;
-  real_y=m_yoffset;
-
-  int flags;
-#ifdef HAVE_LIBXXF86VM
-  if (fullscreen){
-    /* look for mode with requested resolution */
-    for (int i = 0; i < modeNum; i++) {
-      if ((modes[i]->hdisplay == m_width) && (modes[i]->vdisplay == m_height)) {
-        bestMode = i;
-      }
-    }
-    
-    XF86VidModeSwitchToMode(m_info->dpy, m_info->screen, modes[bestMode]);
-    XF86VidModeSetViewPort(m_info->dpy, m_info->screen, 0, 0);
-    real_w = modes[bestMode]->hdisplay;
-    real_h = modes[bestMode]->vdisplay;
-    real_x=real_y=0;
-    XFree(modes);
-
-    swa.override_redirect = True;
-    flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
-  } else
-#endif
-    { // !fullscren
-      if (m_border){
-        swa.override_redirect = False;
-        flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
-      } else {
-        swa.override_redirect = True;
-        flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
-      }
-    }
-  m_info->fs = fullscreen;
-
-  m_info->win = XCreateWindow(m_info->dpy, RootWindow(m_info->dpy, vi->screen),
-                              m_xoffset, m_yoffset, real_w, real_h,
-                              0, vi->depth, InputOutput, 
-                              vi->visual, flags, &swa);
-  if (!m_info->win) {
-    error("Could not create X window");
-    return false;
-  }
-
-  m_info->have_border=(True==swa.override_redirect);
-
-  XSelectInput(m_info->dpy, m_info->win, EVENT_MASK);
-
-  m_info->inputMethod = XOpenIM(m_info->dpy, NULL, NULL, NULL);
-  if(m_info->inputMethod) {
-    XIMStyle style=NULL;
-    XIMStyles *stylePtr=NULL;
-    const char *preedit_attname = NULL;
-    XVaNestedList preedit_attlist = NULL;
-
-    if ((XGetIMValues(m_info->inputMethod, XNQueryInputStyle, &stylePtr, NULL) != NULL)) {
-      stylePtr=NULL;
-    }
-
-
-    /*
-     * Select the best input style supported by both the IM and Tk.
-     */
-    int i=0;
-    if(stylePtr) {
-      for (i = 0; i < stylePtr->count_styles; i++) {
-        XIMStyle thisStyle = stylePtr->supported_styles[i];
-        if (thisStyle == (XIMPreeditPosition | XIMStatusNothing)) {
-          style = thisStyle;
-          break;
-        } else if (thisStyle == (XIMPreeditNothing | XIMStatusNothing)) {
-          style = thisStyle;
-        }
-      }
-      XFree(stylePtr);
-    }
-
-
-    if (style & XIMPreeditPosition) {
-      XPoint spot = {0, 0};
-      XFontSet inputXfs;
-      preedit_attname = XNPreeditAttributes;
-      preedit_attlist = XVaCreateNestedList(0,
-                                            XNSpotLocation, &spot,
-                                            XNFontSet, inputXfs,
-                                            NULL);
-    }
-
-
-    m_info->inputContext=XCreateIC(m_info->inputMethod,
-                                   XNInputStyle, style,
-                                   XNClientWindow, m_info->win,
-                                   XNFocusWindow, m_info->win,
-                                   preedit_attname, preedit_attlist,
-                                   NULL);
-  }
-
-
-
-  /* found a bit at
-   * http://biology.ncsa.uiuc.edu/library/SGI_bookshelves/SGI_Developer/books/OpenGL_Porting/sgi_html/apf.html
-   * LATER think about reacting on this event...
-   */
-  m_info->delete_atom = XInternAtom(m_info->dpy, "WM_DELETE_WINDOW", True);
-  if (m_info->delete_atom != None)
-    XSetWMProtocols(m_info->dpy, m_info->win, &m_info->delete_atom,1);
-
-  XSetStandardProperties(m_info->dpy, m_info->win,
-                         m_title.c_str(), "gem", 
-                         None, 0, 0, NULL);
-
-  try{
-    xerr=0;
-    glXMakeCurrent(m_info->dpy, m_info->win, m_info->context);
-
-    if(xerr!=0) {
-      /* seems like the error-handler was called; so something did not work the way it should
-       * should we really prevent window-creation in this case?
-       * LATER re-think the entire dual-context thing
-       */
-
-      error("problems making glX-context current: refusing to continue");
-      error("try setting the environment variable GEM_SINGLE_CONTEXT=1");
-      return false;
-    }
-    Window winDummy;
-    unsigned int depthDummy;
-    unsigned int borderDummy;
-    int x, y;
-    XGetGeometry(m_info->dpy, m_info->win,
-                 &winDummy, 
-                 &x, &y,
-                 &real_w, &real_h, &borderDummy, &depthDummy);
-  }catch(void*e){
-    error("Could not make glX-context current");
-    return false;
-  }
+  if(!success)return false;
 
   if (m_actuallyDisplay) {
-    XMapRaised(m_info->dpy, m_info->win);
-    //  XMapWindow(m_info->dpy, m_info->win);
+    XMapRaised(m_pimpl->dpy, m_pimpl->win);
+    //  XMapWindow(m_pimpl->dpy, m_pimpl->win);
     XEvent report;
-    XIfEvent(m_info->dpy, &report, WaitForNotify, (char*)m_info->win);
-    if (glXIsDirect(m_info->dpy, m_info->context))
+    XIfEvent(m_pimpl->dpy, &report, WaitForNotify, (char*)m_pimpl->win);
+    if (glXIsDirect(m_pimpl->dpy, m_pimpl->context))
       post("Direct Rendering enabled!");
   }
   cursorMess(m_cursor);
+  titleMess(m_title);
   return createContext();
 }
 void gemglxwindow :: createMess(std::string display)
 {
-  if(m_info->win) {
+  if(m_pimpl->win) {
     error("window already made");
     return;
   }
@@ -708,7 +734,7 @@ void gemglxwindow :: createMess(std::string display)
     return;
   }
   dimension(real_w, real_h);
-  m_info->doDispatch=true;
+  m_pimpl->doDispatch=true;
 }
 /////////////////////////////////////////////////////////
 // destroy window
@@ -717,44 +743,44 @@ void gemglxwindow :: createMess(std::string display)
 void gemglxwindow :: destroy(void)
 {
   /* both glXMakeCurrent() and XCloseDisplay() will crash the application
-   * if the handler of the display (m_info->dpy) is invalid, e.g. because
+   * if the handler of the display (m_pimpl->dpy) is invalid, e.g. because
    * somebody closed the Gem-window with xkill or by clicking on the "x" of the window
    */
-  if (m_info->dpy) {
+  if (m_pimpl->dpy) {
     int err=0;
     /* patch by cesare marilungo to prevent the crash "on my laptop" */
-    glXMakeCurrent(m_info->dpy, None, NULL); /* this crashes if no window is there! */
+    glXMakeCurrent(m_pimpl->dpy, None, NULL); /* this crashes if no window is there! */
     
-    if (m_info->win)
-      err=XDestroyWindow(m_info->dpy, m_info->win);
-    if (m_info->have_constContext && m_info->context) {
+    if (m_pimpl->win)
+      err=XDestroyWindow(m_pimpl->dpy, m_pimpl->win);
+    if (m_pimpl->have_constContext && m_pimpl->context) {
       // this crashes sometimes on my laptop:
-      glXDestroyContext(m_info->dpy, m_info->context);
+      glXDestroyContext(m_pimpl->dpy, m_pimpl->context);
     }
-    if (m_info->cmap)
-      err=XFreeColormap(m_info->dpy, m_info->cmap);
+    if (m_pimpl->cmap)
+      err=XFreeColormap(m_pimpl->dpy, m_pimpl->cmap);
     
 #ifdef HAVE_LIBXXF86VM
-    if (m_info->fs){
-      XF86VidModeSwitchToMode(m_info->dpy, m_info->screen, &m_info->deskMode);
-      XF86VidModeSetViewPort(m_info->dpy, m_info->screen, 0, 0);
-      m_info->fs=0;
+    if (m_pimpl->fs){
+      XF86VidModeSwitchToMode(m_pimpl->dpy, m_pimpl->screen, &m_pimpl->deskMode);
+      XF86VidModeSetViewPort(m_pimpl->dpy, m_pimpl->screen, 0, 0);
+      m_pimpl->fs=0;
     }
 #endif
     
-    err=XCloseDisplay(m_info->dpy); /* this crashes if no window is there */
+    err=XCloseDisplay(m_pimpl->dpy); /* this crashes if no window is there */
   }
-  m_info->dpy = NULL;
-  m_info->win = 0;
-  m_info->cmap = 0;
-  m_info->context = NULL;
-  if(m_info->delete_atom)m_info->delete_atom=None; /* not very sophisticated destruction...*/
+  m_pimpl->dpy = NULL;
+  m_pimpl->win = 0;
+  m_pimpl->cmap = 0;
+  m_pimpl->context = NULL;
+  if(m_pimpl->delete_atom)m_pimpl->delete_atom=None; /* not very sophisticated destruction...*/
   
   destroyContext();
 }
 void gemglxwindow :: destroyMess(void)
 {
-  m_info->doDispatch=false;
+  m_pimpl->doDispatch=false;
   if(makeCurrent()) {
     destroy();
   } else {
@@ -770,22 +796,22 @@ void gemglxwindow :: destroyMess(void)
 void gemglxwindow :: cursorMess(bool state)
 {
   m_cursor=state;
-  if(!m_info->dpy || !m_info->win)
+  if(!m_pimpl->dpy || !m_pimpl->win)
     return;
 
   if (!state) {
     static char data[1] = {0};
     XColor dummy;
 
-    Pixmap blank = XCreateBitmapFromData(m_info->dpy, m_info->win,
+    Pixmap blank = XCreateBitmapFromData(m_pimpl->dpy, m_pimpl->win,
 				  data, 1, 1);
-    Cursor cursor = XCreatePixmapCursor(m_info->dpy, blank, blank,
+    Cursor cursor = XCreatePixmapCursor(m_pimpl->dpy, blank, blank,
 				 &dummy, &dummy, 0, 0);
-    XFreePixmap(m_info->dpy, blank);
-    XDefineCursor(m_info->dpy, m_info->win, cursor);
+    XFreePixmap(m_pimpl->dpy, blank);
+    XDefineCursor(m_pimpl->dpy, m_pimpl->win, cursor);
   }
   else
-    XUndefineCursor(m_info->dpy, m_info->win);
+    XUndefineCursor(m_pimpl->dpy, m_pimpl->win);
 }
 
 
@@ -807,7 +833,7 @@ void gemglxwindow :: obj_setupCallback(t_class *classPtr)
   //  class_addbang(classPtr, reinterpret_cast<t_method>(&gemglxwindow::renderMessCallback));
   CPPEXTERN_MSG0(classPtr, "bang", renderMess);
 
-  CPPEXTERN_MSG1(classPtr, "title", titleMess, t_symbol*);
+  CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
   CPPEXTERN_MSG1(classPtr, "create", createMess, std::string);
   CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
