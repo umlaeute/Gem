@@ -39,7 +39,7 @@ static NSDate *distantFuture, *distantPast;
 
 @interface GemCocoaView : NSOpenGLView
 {
-  @public gemcocoawindow*parent;
+@public gemcocoawindow*parent;
 }
 @end
 
@@ -91,37 +91,37 @@ typedef long int oglc_setvalue_t;
 struct gemcocoawindow :: PIMPL {
   GemCocoaView*view;
   NSWindow*window;
-//  WindowResponder*delegate;
+  //  WindowResponder*delegate;
   float titleBarHeight, menuBarHeight;
   unsigned long modifierFlags;
 
   PIMPL(void) :
-	view(NULL),
-	window(NULL),
-//	delegate(NULL),
-	titleBarHeight(0.), menuBarHeight(22.),
-        modifierFlags(0)
+    view(NULL),
+    window(NULL),
+    //	delegate(NULL),
+    titleBarHeight(0.), menuBarHeight(22.),
+    modifierFlags(0)
   {}
 
   ~PIMPL(void) {
-   cleanup();
+    cleanup();
   }
   void cleanup(void) {
-  if(window) {
-   [window autorelease];
-   [window setReleasedWhenClosed: YES];
-   [window close];
-  }
-  window=NULL;
+    if(window) {
+      [window autorelease];
+      [window setReleasedWhenClosed: YES];
+      [window close];
+    }
+    window=NULL;
 
-  if(view) {
-   [view release]; 
-  }
+    if(view) {
+      [view release]; 
+    }
 #if 0
-  if(delegate) {
-   [window setDelegate: nil];
-   [delegate release];
-  }
+    if(delegate) {
+      [window setDelegate: nil];
+      [delegate release];
+    }
 #endif
   }
 };
@@ -150,10 +150,10 @@ gemcocoawindow :: gemcocoawindow(void) :
 }
 
 /////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-gemcocoawindow :: ~gemcocoawindow()
+                                // Destructor
+                                //
+                                /////////////////////////////////////////////////////////
+                                gemcocoawindow :: ~gemcocoawindow()
 {
   destroyMess();
   delete m_pimpl;
@@ -161,9 +161,9 @@ gemcocoawindow :: ~gemcocoawindow()
 }
 
 bool gemcocoawindow :: makeCurrent(){
- if(!m_pimpl->view)return false;
- [[m_pimpl->view openGLContext] makeCurrentContext];
- return(true);
+  if(!m_pimpl->view)return false;
+  [[m_pimpl->view openGLContext] makeCurrentContext];
+  return(true);
 }
 void gemcocoawindow :: swapBuffers() {
   [[ m_pimpl->view openGLContext ] flushBuffer ];
@@ -174,19 +174,19 @@ void gemcocoawindow :: renderMess() {
 };
 
 void gemcocoawindow :: render() {
- if(assertCurrentContext()) {
-  [ m_pimpl->view setNeedsDisplay: YES ] ;
- }
+  if(assertCurrentContext()) {
+    [ m_pimpl->view setNeedsDisplay: YES ] ;
+  }
 }
 
 void gemcocoawindow :: dispatch() {
   NSEvent *e = NULL;
   if(!m_pimpl->window)return;
   while (( e = [NSApp nextEventMatchingMask: NSAnyEventMask
-         // untilDate: distantFuture // blocking
-         untilDate: distantPast      // nonblocking
-         inMode: NSDefaultRunLoopMode
-         dequeue: YES])) {
+                      // untilDate: distantFuture // blocking
+                      untilDate: distantPast      // nonblocking
+                      inMode: NSDefaultRunLoopMode
+                      dequeue: YES])) {
     if ([e window] == m_pimpl->window) dispatchEvent(e);
     [NSApp sendEvent: e];
   }
@@ -197,138 +197,138 @@ void gemcocoawindow :: dispatch() {
 static std::string key2name(NSString*s, unsigned short keycode) {
   std::string keysym = std::string([s UTF8String]);
 	switch (keycode) {
-	  case 36:  keysym = "Return"; break;
-	  case 51:  keysym = "BackSpace"; break;
-	  case 53:  keysym = "Escape"; break;
-	  case 76:  keysym = "KP_Return"; break;
-	  case 18:  keysym = "D1"; break;
-	  case 19:  keysym = "D2"; break;
-	  case 20:  keysym = "D3"; break;
-	  case 21:  keysym = "D4"; break;
-	  case 23:  keysym = "D5"; break;
-	  case 22:  keysym = "D6"; break;
-	  case 26:  keysym = "D7"; break;
-	  case 28:  keysym = "D8"; break;
-	  case 25:  keysym = "D9"; break;
-	  case 29:  keysym = "D0"; break;
-	  case 123: keysym = "Left"; break;
-	  case 124: keysym = "Right"; break;
-	  case 126: keysym = "Up"; break;
-	  case 125: keysym = "Down"; break;
-	  case 116: keysym = "Prior"; break;
-	  case 121: keysym = "Next"; break;
-	  case 115: keysym = "Home"; break;
-	  case 119: keysym = "End"; break;
-	  case 122: keysym = "F1"; break;
-	  case 120: keysym = "F2"; break;
-	  case 99:  keysym = "F3"; break;
-	  case 118: keysym = "F4"; break;
-	  case 96:  keysym = "F5"; break;
-	  case 97:  keysym = "F6"; break;
-	  case 98:  keysym = "F7"; break;
-	  case 48:  keysym = "Tab"; break;
+  case 36:  keysym = "Return"; break;
+  case 51:  keysym = "BackSpace"; break;
+  case 53:  keysym = "Escape"; break;
+  case 76:  keysym = "KP_Return"; break;
+  case 18:  keysym = "D1"; break;
+  case 19:  keysym = "D2"; break;
+  case 20:  keysym = "D3"; break;
+  case 21:  keysym = "D4"; break;
+  case 23:  keysym = "D5"; break;
+  case 22:  keysym = "D6"; break;
+  case 26:  keysym = "D7"; break;
+  case 28:  keysym = "D8"; break;
+  case 25:  keysym = "D9"; break;
+  case 29:  keysym = "D0"; break;
+  case 123: keysym = "Left"; break;
+  case 124: keysym = "Right"; break;
+  case 126: keysym = "Up"; break;
+  case 125: keysym = "Down"; break;
+  case 116: keysym = "Prior"; break;
+  case 121: keysym = "Next"; break;
+  case 115: keysym = "Home"; break;
+  case 119: keysym = "End"; break;
+  case 122: keysym = "F1"; break;
+  case 120: keysym = "F2"; break;
+  case 99:  keysym = "F3"; break;
+  case 118: keysym = "F4"; break;
+  case 96:  keysym = "F5"; break;
+  case 97:  keysym = "F6"; break;
+  case 98:  keysym = "F7"; break;
+  case 48:  keysym = "Tab"; break;
 #if 0
-	  case 27:  keysym = "minus"; break;
-	  case 24:  keysym = "equal"; break;
-	  case 43:  keysym = "comma"; break;
-	  case 47:  keysym = "period"; break;
-	  case 44:  keysym = "slash"; break;
-	  case 41:  keysym = "semicolon"; break;
-	  case 39:  keysym = "apostrophe"; break;
-	  case 33:  keysym = "bracketleft"; break;
-	  case 30:  keysym = "bracketright"; break;
-	  case 42:  keysym = "backslash"; break;
-	  case 49:  keysym = "space"; break;
+  case 27:  keysym = "minus"; break;
+  case 24:  keysym = "equal"; break;
+  case 43:  keysym = "comma"; break;
+  case 47:  keysym = "period"; break;
+  case 44:  keysym = "slash"; break;
+  case 41:  keysym = "semicolon"; break;
+  case 39:  keysym = "apostrophe"; break;
+  case 33:  keysym = "bracketleft"; break;
+  case 30:  keysym = "bracketright"; break;
+  case 42:  keysym = "backslash"; break;
+  case 49:  keysym = "space"; break;
 #endif
-	  default: break;
+  default: break;
 	}
 
- return keysym;
+  return keysym;
 }
 
 void gemcocoawindow :: dispatchEvent(NSEvent*e) {
- if(!e)return;
- NSEventType type = [e type];
- switch(type) {
-case(NSLeftMouseUp): 
-case(NSRightMouseUp):
-case(NSOtherMouseUp):
-button([e buttonNumber], false);
-break;
-case(NSLeftMouseDown): 
-case(NSRightMouseDown):
-case(NSOtherMouseDown):
-button([e buttonNumber], [e pressure]);
-break;
-case(NSMouseMoved):
-case(NSLeftMouseDragged):
-case(NSRightMouseDragged):
-case(NSOtherMouseDragged):
-{
-NSPoint p=[e locationInWindow];
-motion(static_cast<int>(p.x), static_cast<int>(p.y));
-}
-break;
-break;
-break;
-case(NSMouseEntered):
-info("mouse", "entered");
-break;
-case(NSMouseExited):
-info("mouse", "left");
-break;
-case(NSScrollWheel):
-break;
+  if(!e)return;
+  NSEventType type = [e type];
+  switch(type) {
+  case(NSLeftMouseUp): 
+  case(NSRightMouseUp):
+  case(NSOtherMouseUp):
+    button([e buttonNumber], false);
+    break;
+  case(NSLeftMouseDown): 
+  case(NSRightMouseDown):
+  case(NSOtherMouseDown):
+    button([e buttonNumber], [e pressure]);
+    break;
+  case(NSMouseMoved):
+  case(NSLeftMouseDragged):
+  case(NSRightMouseDragged):
+  case(NSOtherMouseDragged):
+    {
+      NSPoint p=[e locationInWindow];
+      motion(static_cast<int>(p.x), static_cast<int>(p.y));
+    }
+    break;
+    break;
+    break;
+  case(NSMouseEntered):
+    info("mouse", "entered");
+    break;
+  case(NSMouseExited):
+    info("mouse", "left");
+    break;
+  case(NSScrollWheel):
+    break;
 
-case(NSKeyDown):
-if (![e isARepeat]) {
-// how to get names of special keys? e.g. PageUp
- key(key2name([e characters], [e keyCode]), [e keyCode], true);
-}
-break;
-case(NSKeyUp):
- key(key2name([e characters], [e keyCode]), [e keyCode], false);
-break;
-case(NSFlagsChanged):
-  do {
-   unsigned long newflags = [e modifierFlags];
-   unsigned long oldflags = m_pimpl->modifierFlags;
-  if(newflags != oldflags) {
-   unsigned long modified = newflags ^ oldflags;
-   m_pimpl->modifierFlags = newflags;
+  case(NSKeyDown):
+    if (![e isARepeat]) {
+      // how to get names of special keys? e.g. PageUp
+      key(key2name([e characters], [e keyCode]), [e keyCode], true);
+    }
+    break;
+  case(NSKeyUp):
+    key(key2name([e characters], [e keyCode]), [e keyCode], false);
+    break;
+  case(NSFlagsChanged):
+    do {
+      unsigned long newflags = [e modifierFlags];
+      unsigned long oldflags = m_pimpl->modifierFlags;
+      if(newflags != oldflags) {
+        unsigned long modified = newflags ^ oldflags;
+        m_pimpl->modifierFlags = newflags;
 #define MODFLAGS2KEY(mask, name) if(modified & mask) key(name, [e keyCode], static_cast<bool>(mask & newflags))
-   MODFLAGS2KEY(NSAlphaShiftKeyMask, "Caps_Lock"); // Caps_Lock
-   MODFLAGS2KEY(NSShiftKeyMask, "Shift_L");     // Shift_L
-   MODFLAGS2KEY(NSControlKeyMask, "Control_L"); // Control_L
-   MODFLAGS2KEY(NSCommandKeyMask, "Alt_L"); // Alt_L
-   MODFLAGS2KEY(NSNumericPadKeyMask, "NumPad");
-   MODFLAGS2KEY(NSHelpKeyMask, "Help");
-   MODFLAGS2KEY(NSFunctionKeyMask, "Function");
-   MODFLAGS2KEY(NSAlternateKeyMask, "Meta_L"); // Meta_L
-  }
-  } while(false);
-break;
+        MODFLAGS2KEY(NSAlphaShiftKeyMask, "Caps_Lock"); // Caps_Lock
+        MODFLAGS2KEY(NSShiftKeyMask, "Shift_L");     // Shift_L
+        MODFLAGS2KEY(NSControlKeyMask, "Control_L"); // Control_L
+        MODFLAGS2KEY(NSCommandKeyMask, "Alt_L"); // Alt_L
+        MODFLAGS2KEY(NSNumericPadKeyMask, "NumPad");
+        MODFLAGS2KEY(NSHelpKeyMask, "Help");
+        MODFLAGS2KEY(NSFunctionKeyMask, "Function");
+        MODFLAGS2KEY(NSAlternateKeyMask, "Meta_L"); // Meta_L
+      }
+    } while(false);
+    break;
 
-case(NSTabletPoint):
-break;
-case(NSTabletProximity):
-break;
+  case(NSTabletPoint):
+    break;
+  case(NSTabletProximity):
+    break;
 
 #if 0
-case(NSEventTypeGesture):
-break;
-case(NSEventTypeMagnify):
-break;
-case(NSEventTypeSwipe):
-break;
-case(NSEventTypeRotate):
-break;
-case(NSEventTypeBeginGesture):
-break;
-case(NSEventTypeEndGesture):
-break;
+  case(NSEventTypeGesture):
+    break;
+  case(NSEventTypeMagnify):
+    break;
+  case(NSEventTypeSwipe):
+    break;
+  case(NSEventTypeRotate):
+    break;
+  case(NSEventTypeBeginGesture):
+    break;
+  case(NSEventTypeEndGesture):
+    break;
 #endif
- }
+  }
 }
 
 
@@ -355,9 +355,9 @@ bool gemcocoawindow :: create(void)
 
   NSWindow*window=NULL;
   NSRect contentRect = NSMakeRect(xoffset, yoffset, m_width, m_height);
-if(m_fullscreen) {
-  contentRect=screenRect;
-}
+  if(m_fullscreen) {
+    contentRect=screenRect;
+  }
   window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
  
   NSView *contentView = [window contentView];
@@ -409,9 +409,9 @@ if(m_fullscreen) {
   return createContext();
 }
 void gemcocoawindow :: createMess(void) {
- if (!create()) {
-	destroyMess();
- }
+  if (!create()) {
+    destroyMess();
+  }
 }
 /////////////////////////////////////////////////////////
 // destroy window
@@ -508,12 +508,12 @@ void gemcocoawindow :: fullscreenMess(bool on) {
 #warning fullscreen
   m_fullscreen = on;
   if(m_pimpl->view) {
-   if (m_fullscreen) {
-    [[m_pimpl->view openGLContext] setFullScreen];
-   } else {
-    [[m_pimpl->view openGLContext] clearDrawable];
-   }
- }
+    if (m_fullscreen) {
+      [[m_pimpl->view openGLContext] setFullScreen];
+    } else {
+      [[m_pimpl->view openGLContext] clearDrawable];
+    }
+  }
 }
 void gemcocoawindow :: fsaaMess(int value) {
 }
@@ -527,18 +527,18 @@ void gemcocoawindow :: cursorMess(bool setting) {
 }
 void gemcocoawindow :: menubarMess(int state) {
 #if 0
-        if (state == 0)
-                SetSystemUIMode( kUIModeAllHidden, kUIOptionDisableAppleMenu | kUIOptionDisableProcessSwitch |
-                                                   kUIOptionDisableSessionTerminate | kUIOptionDisableForceQuit );
-        else if (state > 0)
-                SetSystemUIMode( kUIModeNormal, 0 );
-        else
-                SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar );
+  if (state == 0)
+    SetSystemUIMode( kUIModeAllHidden, kUIOptionDisableAppleMenu | kUIOptionDisableProcessSwitch |
+                     kUIOptionDisableSessionTerminate | kUIOptionDisableForceQuit );
+  else if (state > 0)
+    SetSystemUIMode( kUIModeNormal, 0 );
+  else
+    SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar );
 #else
   switch(state) {
-     case 0: [NSMenu setMenuBarVisible:NO]; break;
-     default:
-     case 1: [NSMenu setMenuBarVisible:YES]; break;
+  case 0: [NSMenu setMenuBarVisible:NO]; break;
+  default:
+  case 1: [NSMenu setMenuBarVisible:YES]; break;
   }
 #endif
 
@@ -568,14 +568,14 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 	ProcessSerialNumber proc;
 	GetCurrentProcess(&proc);
 	TransformProcessType(&proc, kProcessTransformToForegroundApplication);
-    SetFrontProcess(&proc);
+  SetFrontProcess(&proc);
 
-    if(NULL==arp) {
-	arp=[[NSAutoreleasePool alloc] init];
-    }
+  if(NULL==arp) {
+    arp=[[NSAutoreleasePool alloc] init];
+  }
 
-        distantFuture = [NSDate distantFuture];
-        distantPast = [NSDate distantPast];
+  distantFuture = [NSDate distantFuture];
+  distantPast = [NSDate distantPast];
 
-    [NSApplication sharedApplication];
+  [NSApplication sharedApplication];
 }
