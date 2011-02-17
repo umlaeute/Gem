@@ -54,7 +54,7 @@ static WindowInfo constInfo;
 static bool glewInitialized = false;
 
 // static member data
-char* GemMan::m_title = (char*)"GEM";
+std::string GemMan::m_title = "GEM";
 int GemMan::m_xoffset = 0;
 int GemMan::m_yoffset = 0;
 int GemMan::m_fullscreen = 0;
@@ -523,8 +523,9 @@ void GemMan :: resetState()
   m_menuBar = 1;
   GemSettings::get("window.menubar", m_menuBar);
 
-  m_title = (char*)"GEM";
+  m_title = "GEM";
   GemSettings::get("window.title", m_title);
+
 
   m_buffer = 2;
 
@@ -1037,7 +1038,7 @@ int GemMan :: createWindow(char* disp)
   myHints.shared = constInfo.context;
   myHints.actuallyDisplay = 1;
   myHints.display = disp;
-  myHints.title = m_title;
+  myHints.title = const_cast<char*>(GemMan::m_title.c_str());
   myHints.fsaa = fsaa;
   
   if (disp) post("GEM: creating gem-window on display %s",disp);
@@ -1157,7 +1158,7 @@ int GemMan::createConstWindow(char* disp)
     return(GemMan::createWindow(disp));		
 
   WindowHints myHints;
-  myHints.title = GemMan::m_title;
+  myHints.title = const_cast<char*>(GemMan::m_title.c_str());
   myHints.border = 1;
   myHints.buffer = 1;
   myHints.x_offset = 0;

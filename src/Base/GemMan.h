@@ -165,7 +165,7 @@ class GEM_EXTERN GemMan
     	
   //////////
   // computer and window information
-  static char     *m_title;             // title to be displayed
+  static std::string m_title;             // title to be displayed
   static int	   m_fullscreen;	// fullscreen (1) or not (0!)
   static int       m_menuBar;		// hide (0), show(1), hide but autoshow(-1)
   static int	   m_secondscreen;	// set the second screen
