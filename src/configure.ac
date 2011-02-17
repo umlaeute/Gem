@@ -98,6 +98,7 @@ if test "x$KERN" = "xDarwin"; then
  fi
 fi
 
+AC_PATH_X
 AC_PATH_XTRA
 LIBS="$LIBS $X_LIBS"
 
@@ -105,8 +106,6 @@ if test "x$with_x" != "xno"; then
  AC_CHECK_LIB(X11,main)
  AC_CHECK_LIB(Xext,main)
  AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
-
- AC_CHECK_LIB(Xext,main)
 fi
 
 have_gl="no"
@@ -135,18 +134,22 @@ if test "x$gem_check_ldflags_success" = "xyes"; then
 fi
 
 ## use system's libGLEW
-GEM_CHECK_LIB(glew, GLEW, glewInit,,,,[OpenGL Extension Wrangler library])
+GEM_CHECK_LIB(glew, GLEW, glewInit,,,,[OpenGL Extension Wrangler library], [no])
 
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
 AC_CHECK_LIB(stdc++,main)
 
 dnl some checks for osX
+GEM_CHECK_FRAMEWORK(Cocoa,
+                        [have_cocoa_framework="yes"], 
+                        [have_cocoa_framework="no"])
 GEM_CHECK_FRAMEWORK(Carbon, 
                         [have_carbon_framework="yes"], 
                         [have_carbon_framework="no"])
 GEM_CHECK_FRAMEWORK(QuickTime,
                         [have_quicktime_framework="yes"], 
                         [have_quicktime_framework="no"])
+
 
 #fallback to imagemagick if people are too lazy to type ImageMagick
 if test "x$with_ImageMagick" = "x"; then
@@ -213,7 +216,6 @@ GEM_CHECK_THREADS
 dnl PKG_CHECK_MODULES(PKG_FT2,freetype2)
 
 # Checks for header files.
-AC_PATH_X
 AC_HEADER_STDC
 AC_CHECK_HEADERS([fcntl.h float.h memory.h stddef.h stdlib.h string.h strings.h sys/ioctl.h sys/time.h termios.h unistd.h])
 
