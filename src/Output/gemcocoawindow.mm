@@ -18,13 +18,25 @@
 #include <iostream>
 #include <stdio.h>
 #include "RTE/MessageCallbacks.h"
+#define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
+
+
 
 static NSDate *distantFuture, *distantPast;
 
+#if 0
+@interface WindowResponder 
+@end
+@implementation WindowResponder
+- (void)windowDidMove:(NSNotification*)notification { 
+  ::post ("window moved");
+}
+- (void)windowDidResize:(NSNotification*)notification { 
+  ::post ("window resized");
+}
+@end
+#endif
 
-#define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
-
-class gemcocoawindow;
 @interface GemCocoaView : NSOpenGLView
 {
   @public gemcocoawindow*parent;
@@ -74,16 +86,22 @@ class gemcocoawindow;
 struct gemcocoawindow :: PIMPL {
   GemCocoaView*view;
   NSWindow*window;
+//  WindowResponder*delegate;
+  float titleBarHeight, menuBarHeight;
   NSUInteger modifierFlags;
 
   PIMPL(void) :
 	view(NULL),
 	window(NULL),
+//	delegate(NULL),
+	titleBarHeight(0.), menuBarHeight(22.),
         modifierFlags(0)
   {}
 
   ~PIMPL(void) {
-// FIXME: kill view/window
+   cleanup();
+  }
+  void cleanup(void) {
   if(window) {
    [window autorelease];
    [window setReleasedWhenClosed: YES];
@@ -94,7 +112,12 @@ struct gemcocoawindow :: PIMPL {
   if(view) {
    [view release]; 
   }
-
+#if 0
+  if(delegate) {
+   [window setDelegate: nil];
+   [delegate release];
+  }
+#endif
   }
 };
 
@@ -153,7 +176,7 @@ void gemcocoawindow :: render() {
 
 void gemcocoawindow :: dispatch() {
   NSEvent *e = NULL;
-  if(!m_pimpl->view)return;
+  if(!m_pimpl->window)return;
   while (( e = [NSApp nextEventMatchingMask: NSAnyEventMask
          // untilDate: distantFuture // blocking
          untilDate: distantPast      // nonblocking
@@ -257,12 +280,17 @@ break;
 /////////////////////////////////////////////////////////
 bool gemcocoawindow :: create(void)
 {
-  std::cerr << "create: " << (void*)m_pimpl->view << std::endl;
   if(m_pimpl->view) {
     error("window already made!");
     return false;
   }
   NSRect  screenRect = [[NSScreen mainScreen] frame];
+
+  NSRect titleframe = NSMakeRect (0, 0, 100, 100);
+  NSRect notitleframe = [NSWindow contentRectForFrameRect: titleframe styleMask: NSTitledWindowMask];
+  m_pimpl->titleBarHeight = (titleframe.size.height - notitleframe.size.height);
+
+
   int xoffset=m_xoffset;
   // NSWindow is bottom/left, but our offset is top/left
   int yoffset=screenRect.size.height-m_yoffset-m_height;
@@ -309,7 +337,12 @@ if(m_fullscreen) {
   m_pimpl->view->parent=this;
   m_pimpl->window=window;
   [contentView addSubview:m_pimpl->view];
+  m_pimpl->menuBarHeight = [[m_pimpl->view menu] menuBarHeight];
 
+#if 0
+  m_pimpl->delegate = [[WindowResponder alloc] init];
+  [window setDelegate: m_pimpl->delegate];
+#endif
   [window setAcceptsMouseMovedEvents:YES];
   [window makeKeyAndOrderFront:nil];
 
@@ -328,18 +361,7 @@ void gemcocoawindow :: createMess(void) {
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: destroy(void)
 {
-  if(m_pimpl->window) {
-   [m_pimpl->window autorelease];
-   [m_pimpl->window setReleasedWhenClosed: YES];
-   [m_pimpl->window close];
-  }
-  m_pimpl->window=NULL;
-
-  if(m_pimpl->view) {
-   [m_pimpl->view release]; 
-  }
-  m_pimpl->view=NULL;
-
+  m_pimpl->cleanup();
   destroyContext();
 }
 void gemcocoawindow :: destroyMess(void)
@@ -361,7 +383,7 @@ void gemcocoawindow :: bufferMess(int buf) {
 }
 void gemcocoawindow :: titleMess(std::string s) {
   m_title = s;
-  if(m_pimpl->view) {
+  if(m_pimpl->window) {
     [m_pimpl->window setTitle:[NSString stringWithUTF8String:m_title.c_str()]];
   }
 }
@@ -380,22 +402,22 @@ void gemcocoawindow :: dimensionsMess(int width, int height) {
   move();
 }
 void gemcocoawindow :: move(void) {
-  if(m_pimpl->view && m_pimpl->window) {
+  if(m_pimpl->window) {
     NSRect  screenRect = [[NSScreen mainScreen] frame];
     // NSWindow is bottom/left, but our offset is top/left
     int xoffset=m_xoffset;
-    int yoffset=screenRect.size.height-m_yoffset-m_height;
-    NSRect frame = NSMakeRect(xoffset, yoffset, m_width, m_height);
+    int yoffset=screenRect.size.height-m_yoffset-m_height+m_pimpl->titleBarHeight;
+    NSRect frame = NSMakeRect(xoffset, yoffset, m_width, m_height+m_pimpl->titleBarHeight);
     [m_pimpl->window setFrame: frame display: YES];
   }
 }
 void gemcocoawindow :: moved(void) {
-  if(!m_pimpl->view || !m_pimpl->window) return;
+  if(!m_pimpl->window) return;
 
   NSRect  screenRect = [[NSScreen mainScreen] frame];
   NSRect            bounds = [m_pimpl->window frame];
   const unsigned width=bounds.size.width;
-  const unsigned height=bounds.size.height;
+  const unsigned height=bounds.size.height-m_pimpl->titleBarHeight;
   const int xoffset=bounds.origin.x;
   const int yoffset=screenRect.size.height-bounds.origin.y-height;
 
