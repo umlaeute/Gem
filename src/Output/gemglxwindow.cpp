@@ -33,7 +33,7 @@ CPPEXTERN_NEW(gemglxwindow);
 
 #define EVENT_MASK                                                      \
   ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
-  ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | ResizeRedirectMask | DestroyNotify
+  ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | StructureNotifyMask | /* ResizeRedirectMask | */ DestroyNotify
 
 // window creation variables
 static int snglBuf24[] = {GLX_RGBA, 
@@ -210,7 +210,7 @@ struct gemglxwindow::Info {
     } else {
       keystring[KEYSTRING_SIZE-1]=0;
     }
-
+    
     return std::string(keystring);
   }
 };
@@ -229,7 +229,7 @@ gemglxwindow :: gemglxwindow(void) :
   m_border(true),
   m_fullscreen(false),
   m_xoffset(0), m_yoffset(0),
-  m_cursor(false),
+  m_cursor(true),
   real_w(0), real_h(0), real_x(0), real_y(0),
   m_display(std::string("")),
   m_actuallyDisplay(true),
@@ -282,7 +282,7 @@ void gemglxwindow::dispatch(void) {
   KeySym keysym_return;
 
   while (XCheckWindowEvent(m_info->dpy,m_info->win,
-                           ResizeRedirectMask | 
+                           StructureNotifyMask | //ResizeRedirectMask | 
                            KeyPressMask | KeyReleaseMask |
                            PointerMotionMask | 
                            ButtonMotionMask |
@@ -313,12 +313,27 @@ void gemglxwindow::dispatch(void) {
         case KeyRelease:
           key(m_info->key2string(kb), kb->keycode, 0);
           break;
-
+        case ConfigureNotify:
+          if ((event.xconfigure.width != real_w) || 
+              (event.xconfigure.height != real_h)) {
+            real_w=event.xconfigure.width;
+            real_h=event.xconfigure.height;
+            XResizeWindow(m_info->dpy, m_info->win, real_w, real_h);
+            dimension(real_w, real_h);
+          }
+          if ((event.xconfigure.x != real_x) || 
+              (event.xconfigure.y != real_y)) {
+            real_x=event.xconfigure.x;
+            real_y=event.xconfigure.y;
+            position(real_x, real_y);
+          }
+          break;
         case ResizeRequest:
           XResizeWindow(m_info->dpy, m_info->win, res->width, res->height);
           dimension(res->width, res->height);
           break;
         default:
+          // post("event %d", event.type);
           break; 
         }
     }
@@ -362,6 +377,12 @@ void gemglxwindow :: fsaaMess(int value)
 void gemglxwindow :: titleMess(t_symbol* s)
 {
   m_title=s->s_name;
+  if(m_info->dpy && m_info->win) {
+    XSetStandardProperties(m_info->dpy, m_info->win,
+                           m_title.c_str(), "gem", 
+                           None, 0, 0, NULL);
+  }
+
 }
 /////////////////////////////////////////////////////////
 // border
@@ -648,6 +669,14 @@ bool gemglxwindow :: create(void)
       error("try setting the environment variable GEM_SINGLE_CONTEXT=1");
       return false;
     }
+    Window winDummy;
+    unsigned int depthDummy;
+    unsigned int borderDummy;
+    int x, y;
+    XGetGeometry(m_info->dpy, m_info->win,
+                 &winDummy, 
+                 &x, &y,
+                 &real_w, &real_h, &borderDummy, &depthDummy);
   }catch(void*e){
     error("Could not make glX-context current");
     return false;
@@ -661,6 +690,7 @@ bool gemglxwindow :: create(void)
     if (glXIsDirect(m_info->dpy, m_info->context))
       post("Direct Rendering enabled!");
   }
+  cursorMess(m_cursor);
   return createContext();
 }
 void gemglxwindow :: createMess(std::string display)
@@ -729,9 +759,25 @@ void gemglxwindow :: destroyMess(void)
 // cursorMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: cursorMess(bool setting)
+void gemglxwindow :: cursorMess(bool state)
 {
+  m_cursor=state;
+  if(!m_info->dpy || !m_info->win)
+    return;
 
+  if (!state) {
+    static char data[1] = {0};
+    XColor dummy;
+
+    Pixmap blank = XCreateBitmapFromData(m_info->dpy, m_info->win,
+				  data, 1, 1);
+    Cursor cursor = XCreatePixmapCursor(m_info->dpy, blank, blank,
+				 &dummy, &dummy, 0, 0);
+    XFreePixmap(m_info->dpy, blank);
+    XDefineCursor(m_info->dpy, m_info->win, cursor);
+  }
+  else
+    XUndefineCursor(m_info->dpy, m_info->win);
 }
 
 
