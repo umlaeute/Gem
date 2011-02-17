@@ -273,6 +273,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     err=dc1394_video_set_operation_mode(m_dccamera, (dc1394operation_mode_t)operation_mode);
     if(DC1394_SUCCESS==err)
       break;
+    verbose(1, "failed to set operation mode to %d", operation_mode);
     operation_mode--;
   }
   if(DC1394_SUCCESS!=err) {
@@ -296,10 +297,12 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     err=dc1394_video_set_iso_speed(m_dccamera, (dc1394speed_t)mode);
     if(DC1394_SUCCESS==err)
       break;
+    verbose(1, "failed to set ISO speed to %d", 100*(1<<speed));
+
     operation_mode--;
   }
   if(DC1394_SUCCESS!=err) {
-    error("unable to set ISO speed...trying to set to original");
+    error("unable to set ISO speed...trying to set to original (%d)", 100*(1<<orgspeed));
     dc1394_video_get_iso_speed(m_dccamera, &orgspeed);
   }
 
