@@ -377,11 +377,7 @@ void GemContext::render(void){
 }
 
 void GemContext::dimensionsMess(void){
-   t_atom ap[2];
-  SETFLOAT (ap+0, m_width);
-  SETFLOAT (ap+1, m_height);
-
-  info(gensym("dimen"), 2, ap); 
+  dimension(m_width, m_height);
 }
 
 
