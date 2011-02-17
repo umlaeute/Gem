@@ -19,10 +19,6 @@
 #include "Base/GemState.h"
 #include "string.h"
 
-#ifdef __APPLE__
-# include <AGL/agl.h>
-#endif
-
 #define T(x) (m_model->triangles[(x)])
 
 CPPEXTERN_NEW(vertex_model)
