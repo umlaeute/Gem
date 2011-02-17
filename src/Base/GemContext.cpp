@@ -15,6 +15,8 @@
 #include "GemContext.h"
 #include "GemMan.h"
 
+#include "GemSettings.h"
+
 #ifdef GEM_MULTICONTEXT
 # warning multicontext rendering currently under development
 #endif /* GEM_MULTICONTEXT */
@@ -159,6 +161,10 @@ GemContext :: GemContext()
     m_width(500), m_height(500),
     m_pimpl(new PIMPL(this))
 {
+  int i;
+
+  i=m_width;  GemSettings::get("window.width" , i), m_width =i;
+  i=m_height; GemSettings::get("window.height", i), m_height=i;
   m_pimpl->infoOut = outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
