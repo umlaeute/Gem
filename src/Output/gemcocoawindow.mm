@@ -193,6 +193,59 @@ void gemcocoawindow :: dispatch() {
   [NSApp updateWindows];
   [m_pimpl->window flushWindowIfNeeded];
 }
+
+static std::string key2name(NSString*s, unsigned short keycode) {
+  std::string keysym = std::string([s UTF8String]);
+	switch (keycode) {
+	  case 36:  keysym = "Return"; break;
+	  case 51:  keysym = "BackSpace"; break;
+	  case 53:  keysym = "Escape"; break;
+	  case 76:  keysym = "KP_Return"; break;
+	  case 18:  keysym = "D1"; break;
+	  case 19:  keysym = "D2"; break;
+	  case 20:  keysym = "D3"; break;
+	  case 21:  keysym = "D4"; break;
+	  case 23:  keysym = "D5"; break;
+	  case 22:  keysym = "D6"; break;
+	  case 26:  keysym = "D7"; break;
+	  case 28:  keysym = "D8"; break;
+	  case 25:  keysym = "D9"; break;
+	  case 29:  keysym = "D0"; break;
+	  case 123: keysym = "Left"; break;
+	  case 124: keysym = "Right"; break;
+	  case 126: keysym = "Up"; break;
+	  case 125: keysym = "Down"; break;
+	  case 116: keysym = "Prior"; break;
+	  case 121: keysym = "Next"; break;
+	  case 115: keysym = "Home"; break;
+	  case 119: keysym = "End"; break;
+	  case 122: keysym = "F1"; break;
+	  case 120: keysym = "F2"; break;
+	  case 99:  keysym = "F3"; break;
+	  case 118: keysym = "F4"; break;
+	  case 96:  keysym = "F5"; break;
+	  case 97:  keysym = "F6"; break;
+	  case 98:  keysym = "F7"; break;
+	  case 48:  keysym = "Tab"; break;
+#if 0
+	  case 27:  keysym = "minus"; break;
+	  case 24:  keysym = "equal"; break;
+	  case 43:  keysym = "comma"; break;
+	  case 47:  keysym = "period"; break;
+	  case 44:  keysym = "slash"; break;
+	  case 41:  keysym = "semicolon"; break;
+	  case 39:  keysym = "apostrophe"; break;
+	  case 33:  keysym = "bracketleft"; break;
+	  case 30:  keysym = "bracketright"; break;
+	  case 42:  keysym = "backslash"; break;
+	  case 49:  keysym = "space"; break;
+#endif
+	  default: break;
+	}
+
+ return keysym;
+}
+
 void gemcocoawindow :: dispatchEvent(NSEvent*e) {
  if(!e)return;
  NSEventType type = [e type];
@@ -230,11 +283,11 @@ break;
 case(NSKeyDown):
 if (![e isARepeat]) {
 // how to get names of special keys? e.g. PageUp
- key(std::string([[e characters] UTF8String]), [e keyCode], true);
+ key(key2name([e characters], [e keyCode]), [e keyCode], true);
 }
 break;
 case(NSKeyUp):
- key(std::string([[e characters] UTF8String]), [e keyCode], false);
+ key(key2name([e characters], [e keyCode]), [e keyCode], false);
 break;
 case(NSFlagsChanged):
   do {
@@ -244,14 +297,14 @@ case(NSFlagsChanged):
    unsigned long modified = newflags ^ oldflags;
    m_pimpl->modifierFlags = newflags;
 #define MODFLAGS2KEY(mask, name) if(modified & mask) key(name, [e keyCode], static_cast<bool>(mask & newflags))
-   MODFLAGS2KEY(NSAlphaShiftKeyMask, "AlphaShift");
-   MODFLAGS2KEY(NSShiftKeyMask, "Shift");
-   MODFLAGS2KEY(NSControlKeyMask, "Control");
-   MODFLAGS2KEY(NSCommandKeyMask, "Command");
+   MODFLAGS2KEY(NSAlphaShiftKeyMask, "Caps_Lock"); // Caps_Lock
+   MODFLAGS2KEY(NSShiftKeyMask, "Shift_L");     // Shift_L
+   MODFLAGS2KEY(NSControlKeyMask, "Control_L"); // Control_L
+   MODFLAGS2KEY(NSCommandKeyMask, "Alt_L"); // Alt_L
    MODFLAGS2KEY(NSNumericPadKeyMask, "NumPad");
    MODFLAGS2KEY(NSHelpKeyMask, "Help");
    MODFLAGS2KEY(NSFunctionKeyMask, "Function");
-   MODFLAGS2KEY(NSAlternateKeyMask, "Alt");
+   MODFLAGS2KEY(NSAlternateKeyMask, "Meta_L"); // Meta_L
   }
   } while(false);
 break;
