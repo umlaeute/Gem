@@ -23,12 +23,15 @@
 
 #define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
 
-#ifdef __linux__
-# include "GL/freeglut.h"
-#elif defined __APPLE__
+#if defined __APPLE__
 # include "GLUT/glut.h"
 # define glutCloseFunc glutWMCloseFunc
 # define glutMainLoopEvent glutCheckLoop
+#else
+# include "GL/glut.h"
+# ifdef FREEGLUT
+#  include "GL/freeglut.h"
+# endif
 #endif
 
 #include <stdio.h>
@@ -219,7 +222,7 @@ bool gemglutwindow :: create(void)
   glutVisibilityFunc(&gemglutwindow::visibleCb);
 
   glutCloseFunc     (&gemglutwindow::closeCb);
-#ifndef __APPLE__
+#ifdef FREEGLUT
   glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 #endif
 
