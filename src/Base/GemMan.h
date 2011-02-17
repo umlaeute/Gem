@@ -19,11 +19,6 @@
 #include "Base/GemGL.h"
 #include "Base/GemGLUtil.h"
 
-#ifdef __APPLE__
-# include <Carbon/Carbon.h>
-# include <AGL/agl.h>
-#endif // __APPLE__
-
 #ifdef _WIN32
 # include <QTML.h>
 # include <Movies.h>
@@ -200,10 +195,7 @@ class GEM_EXTERN GemMan
   static float	   fps;
   static int	   fsaa;
   static bool      pleaseDestroy;
-#ifdef __APPLE__
-  static AGLContext masterContext;
-#endif
-	
+
   //////////
   // Changing these variables is likely to crash GEM
   // This is current rendering window information
