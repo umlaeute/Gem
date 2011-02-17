@@ -88,7 +88,7 @@ struct gemcocoawindow :: PIMPL {
   NSWindow*window;
 //  WindowResponder*delegate;
   float titleBarHeight, menuBarHeight;
-  NSUInteger modifierFlags;
+  unsigned long modifierFlags;
 
   PIMPL(void) :
 	view(NULL),
@@ -233,10 +233,10 @@ case(NSKeyUp):
 break;
 case(NSFlagsChanged):
   do {
-   NSUInteger newflags = [e modifierFlags];
-   NSUInteger oldflags = m_pimpl->modifierFlags;
+   unsigned long newflags = [e modifierFlags];
+   unsigned long oldflags = m_pimpl->modifierFlags;
   if(newflags != oldflags) {
-   NSUInteger modified = newflags ^ oldflags;
+   unsigned long modified = newflags ^ oldflags;
    m_pimpl->modifierFlags = newflags;
 #define MODFLAGS2KEY(mask, name) if(modified & mask) key(name, [e keyCode], static_cast<bool>(mask & newflags))
    MODFLAGS2KEY(NSAlphaShiftKeyMask, "AlphaShift");
