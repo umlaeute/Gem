@@ -201,12 +201,24 @@ void gemglutwindow :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 bool gemglutwindow :: create(void)
 {
-
-  // display list sharing: glutSetOption(GLUT_RENDERING_CONTEXT ,GLUT_USE_CURRENT_CONTEXT );
   if(m_window) {
     error("window already made!");
     return false;
   }
+
+
+#ifdef FREEGLUT
+  // display list sharing (with FreeGLUT)
+  if(s_windowmap.size()>0) {
+    std::map<int,gemglutwindow*>::iterator it = s_windowmap.begin();
+    gemglutwindow*other=NULL;
+    other=it->second;
+    if(other && other->makeCurrent()) {
+      glutSetOption(GLUT_RENDERING_CONTEXT, GLUT_USE_CURRENT_CONTEXT );
+    }
+  }
+#endif
+
   unsigned int mode=GLUT_RGB | GLUT_DEPTH;
   if(2==m_buffer)
     mode|=GLUT_DOUBLE;
