@@ -465,9 +465,7 @@ gemglxwindow :: gemglxwindow(void) :
   m_fullscreen(false),
   m_xoffset(0), m_yoffset(0),
   m_cursor(true),
-  real_w(0), real_h(0), real_x(0), real_y(0),
   m_display(std::string("")),
-  m_actuallyDisplay(true),
   m_pimpl(new PIMPL())
 {
 }
@@ -548,19 +546,19 @@ void gemglxwindow::dispatch(void) {
           key(m_pimpl->key2string(kb), kb->keycode, 0);
           break;
         case ConfigureNotify:
-          if ((event.xconfigure.width != real_w) || 
-              (event.xconfigure.height != real_h)) {
-            real_w=event.xconfigure.width;
-            real_h=event.xconfigure.height;
-            XResizeWindow(m_pimpl->dpy, m_pimpl->win, real_w, real_h);
-            dimension(real_w, real_h);
+          if ((event.xconfigure.width != m_width) || 
+              (event.xconfigure.height != m_height)) {
+            m_width=event.xconfigure.width;
+            m_height=event.xconfigure.height;
+            XResizeWindow(m_pimpl->dpy, m_pimpl->win, m_width, m_height);
+            dimension(m_width, m_height);
           }
           if ((event.xconfigure.send_event) && 
-              ((event.xconfigure.x != real_x) || 
-               (event.xconfigure.y != real_y))) {
-            real_x=event.xconfigure.x;
-            real_y=event.xconfigure.y;
-            position(real_x, real_y);
+              ((event.xconfigure.x != m_xoffset) || 
+               (event.xconfigure.y != m_yoffset))) {
+            m_xoffset=event.xconfigure.x;
+            m_yoffset=event.xconfigure.y;
+            position(m_xoffset, m_yoffset);
           }
           break;
         default:
@@ -709,14 +707,13 @@ bool gemglxwindow :: create(void)
   }
   if(!success)return false;
 
-  if (m_actuallyDisplay) {
-    XMapRaised(m_pimpl->dpy, m_pimpl->win);
-    //  XMapWindow(m_pimpl->dpy, m_pimpl->win);
-    XEvent report;
-    XIfEvent(m_pimpl->dpy, &report, WaitForNotify, (char*)m_pimpl->win);
-    if (glXIsDirect(m_pimpl->dpy, m_pimpl->context))
-      post("Direct Rendering enabled!");
-  }
+  XMapRaised(m_pimpl->dpy, m_pimpl->win);
+  //  XMapWindow(m_pimpl->dpy, m_pimpl->win);
+  XEvent report;
+  XIfEvent(m_pimpl->dpy, &report, WaitForNotify, (char*)m_pimpl->win);
+  if (glXIsDirect(m_pimpl->dpy, m_pimpl->context))
+    post("Direct Rendering enabled!");
+
   cursorMess(m_cursor);
   titleMess(m_title);
   return createContext();
@@ -733,7 +730,7 @@ void gemglxwindow :: createMess(std::string display)
     destroyMess();
     return;
   }
-  dimension(real_w, real_h);
+  dimension(m_width, m_height);
   m_pimpl->doDispatch=true;
 }
 /////////////////////////////////////////////////////////

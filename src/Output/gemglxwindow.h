@@ -113,17 +113,8 @@ class GEM_EXTERN gemglxwindow : public GemContext
   void        cursorMess(bool on);
   bool              m_cursor;
 
-  //////////
-  // the real width/height of the window (set by createGemWindow())
-  unsigned int real_w, real_h, real_x, real_y;
-
   //// X display specification (e.g. "remote:0.1")
   std::string m_display;
-
-  //////////
-  // Should the window be realized
-#warning actuallyDisplay
-  bool         m_actuallyDisplay;
 
   void       print(void);
  private:
