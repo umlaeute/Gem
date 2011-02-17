@@ -97,6 +97,8 @@ AC_ARG_WITH([]Name-includes,
 AC_ARG_WITH([]Name-libs,
              AC_HELP_STRING([--with-[]Name-libs=/path/to/[]Name/lib/], [library path for Name]))
 
+  if test "x$with_[]Name" = "x"; then with_[]Name="$8"; fi 
+
   if test "x$with_ALL" = "xyes" && test "x$with_[]Name" = "x"; then with_[]Name="yes"; fi 
   if test "x$with_ALL" = "xno"  && test "x$with_[]Name" = "x"; then with_[]Name="no"; fi
 
