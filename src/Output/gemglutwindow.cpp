@@ -50,7 +50,7 @@ gemglutwindow :: gemglutwindow(void) :
   m_title("GEM"),
   m_border(false),
   m_fullscreen(false),
-  m_xoffset(-1), m_yoffset(-1),
+  m_xoffset(0), m_yoffset(0),
   m_cursor(false),
   m_window(0)
 { }
@@ -173,10 +173,8 @@ void gemglutwindow :: fullscreenMess(bool on)
     if(m_fullscreen)
       glutFullScreen();
     else {
-      if(0<m_width&&0<m_height)
-        glutReshapeWindow(m_width, m_height);
-      if(0<m_xoffset&&0<m_yoffset)
-        glutPositionWindow(m_xoffset, m_yoffset);
+      glutReshapeWindow(m_width, m_height);
+      glutPositionWindow(m_xoffset, m_yoffset);
     }  
   }
 }
