@@ -17,15 +17,6 @@
 #include "Base/GemContext.h"
 
 
-class gemcocoawindow;
-@interface GemCocoaView : NSOpenGLView
-{
-  @public gemcocoawindow*parent;
-  @public NSWindow*window;
-}
-@end
-
-
 class GEM_EXTERN gemcocoawindow : public GemContext
 {
   CPPEXTERN_HEADER(gemcocoawindow, GemContext)
@@ -71,9 +62,9 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   bool         m_cursor;
 
  private:
-  NSUInteger m_modifierFlags;
-
-  GemCocoaView*m_win;
+  class PIMPL;
+  PIMPL*m_pimpl;
+  friend class PIMPL;
 };
 
 #endif    // for header file
