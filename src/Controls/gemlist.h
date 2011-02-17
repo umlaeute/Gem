@@ -69,7 +69,7 @@ class GEM_EXTERN gemlist : public GemBase
   //////////
   t_inlet         *m_inlet;
 
-  virtual void   	rightRender(GemState *state);
+  virtual void   	rightRender(GemCache*cache, GemState *state);
 
 
 
