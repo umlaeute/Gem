@@ -90,11 +90,10 @@ separator :: ~separator()
 
 void separator :: render(GemState *state)
 {
+  if(!state)return;
   using namespace gem;
   GLStack*stacks=NULL;
-  if(state) {
-    state->get("gl.stacks", stacks);
-  }
+  state->get("gl.stacks", stacks);
   // push the current matrix stacks
   if(stacks) {
 #define PUSHGLSTACK(type)     if(m_active[type])m_pushed[type]=stacks->push(type)
@@ -149,11 +148,10 @@ void separator :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void separator :: postrender(GemState *state)
 {
+  if(!state)return;
   using namespace gem;
   GLStack*stacks=NULL;
-  if(state) {
-    state->get("gl.stacks", stacks);
-  }
+  state->get("gl.stacks", stacks);
   // pop the current matrix stacks
   if(stacks) {
 #define POPGLSTACK(type)     if(m_pushed[type]){stacks->pop(type);}m_pushed[type]=false
