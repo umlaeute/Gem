@@ -125,19 +125,11 @@ class GEM_EXTERN gemglxwindow : public GemContext
 #warning actuallyDisplay
   bool         m_actuallyDisplay;
 
+  void       print(void);
  private:
 
   class Info;
   Info*m_info;
-
-  //////////
-  // Static member functions (misc)
-  static void     printMessCallback(void *);
-
-  t_clock*m_clock;
-  int m_polltime;
-  static void clockCallback(void*);
-  void clock(void);
 };
 
 #endif    // for header file

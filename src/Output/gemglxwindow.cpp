@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 #include "Base/GemConfig.h"
 
+#ifndef HAVE_GL_GLX_H
 #include "gemglxwindow.h"
 #include "Base/GemGL.h"
 #include <stdio.h>
@@ -732,6 +733,17 @@ void gemglxwindow :: cursorMess(bool setting)
 {
 
 }
+
+
+/////////////////////////////////////////////////////////
+// print info
+//
+/////////////////////////////////////////////////////////
+void gemglxwindow :: print(void)
+{
+  //  GemMan::printInfo();
+}
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -751,10 +763,9 @@ void gemglxwindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
+
+  CPPEXTERN_MSG0(classPtr, "print", print);
   
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglxwindow::printMessCallback),        gensym("print"), A_NULL);
 }
-void gemglxwindow :: printMessCallback(void *)
-{
-  //  GemMan::printInfo();
-}
+
+#endif /* HAVE_GL_GLX_H */
