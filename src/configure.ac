@@ -310,6 +310,9 @@ if test "x$have_glu_headers" != "xyes"; then
   have_glu="no"
 fi
 
+AC_CHECK_HEADERS(GL/glx.h)
+
+
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
 if test "x$enable_registerstruct" != "xno"; then
