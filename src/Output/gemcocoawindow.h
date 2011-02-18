@@ -44,7 +44,7 @@ class GEM_EXTERN gemcocoawindow : public GemContext
 
   void             bufferMess(int buf);
   void              titleMess(std::string s);
-  virtual void dimensionsMess(int width, int height);
+  virtual void dimensionsMess(unsigned int width, unsigned int height);
   void             offsetMess(int x, int y);
   void             borderMess(bool on);
   void         fullscreenMess(bool on);

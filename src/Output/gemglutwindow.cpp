@@ -147,7 +147,7 @@ void gemglutwindow :: borderMess(bool setting)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglutwindow :: dimensionsMess(int width, int height)
+void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
 {
   if (width <= 0) {
     error("width must be greater than 0");

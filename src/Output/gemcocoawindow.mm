@@ -431,7 +431,7 @@ void gemcocoawindow :: titleMess(std::string s) {
     [m_pimpl->window setTitle:[NSString stringWithUTF8String:m_title.c_str()]];
   }
 }
-void gemcocoawindow :: dimensionsMess(int width, int height) {
+void gemcocoawindow :: dimensionsMess(unsigned int width, unsigned int height) {
   if (width <= 0) {
     error("width must be greater than 0");
     return;

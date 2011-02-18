@@ -1573,7 +1573,7 @@ void gemmacwindow :: borderMess(bool setting)
 {
   m_border=setting;
 }
-void gemmacwindow :: dimensionsMess(int width, int height)
+void gemmacwindow :: dimensionsMess(unsigned int width, unsigned int height)
 {
   if (width <= 0) {
     error("width must be greater than 0");
@@ -1620,7 +1620,7 @@ void gemmacwindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
   CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
   CPPEXTERN_MSG1(classPtr, "title", titleMess, t_symbol*);
-  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
   CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
   CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);

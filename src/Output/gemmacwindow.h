@@ -94,7 +94,7 @@ class GEM_EXTERN gemmacwindow : public GemContext
   bool       m_border;
 
   /* window position/dimension (pre creation) */
-  virtual void    dimensionsMess(int width, int height);
+  virtual void    dimensionsMess(unsigned int width, unsigned int height);
 
   void    fullscreenMess(bool on);
   bool              m_fullscreen;

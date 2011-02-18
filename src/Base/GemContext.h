@@ -145,7 +145,7 @@ class GEM_EXTERN GemContext : public CPPExtern
    * querying is done by supplying NO arguments
    * this should be kept throughout 
    */
-  virtual void dimensionsMess(int width, int height) = 0;
+  virtual void dimensionsMess(unsigned int width, unsigned int height) = 0;
   virtual void dimensionsMess(void);
   unsigned int m_width, m_height;
 

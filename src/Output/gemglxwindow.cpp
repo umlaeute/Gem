@@ -625,7 +625,7 @@ void gemglxwindow :: borderMess(bool setting)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: dimensionsMess(int width, int height)
+void gemglxwindow :: dimensionsMess(unsigned int width, unsigned int height)
 {
   if (width <= 0) {
     error("width must be greater than 0");
@@ -835,7 +835,7 @@ void gemglxwindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
   CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, bool);
-  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
   CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
