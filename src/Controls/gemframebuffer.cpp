@@ -58,8 +58,10 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   m_perspect[5] = 20.f;	
 
   
-  formatMess(format->s_name);
-  typeMess(type->s_name);
+  if(format && format->s_name && format!=gensym(""))
+    formatMess(format->s_name);
+  if(type   && type->s_name   && type  !=gensym(""))
+    typeMess(type->s_name);
 }
 
 ////////////////////////////////////////////////////////
@@ -386,12 +388,12 @@ void gemframebuffer :: formatMess(const char* fmt)
 {
   std::string format=fmt;
   GLenum tmp_format=0;
-  if("YUV"==format) {
+         if("YUV"==format) {
     tmp_format = GL_YUV422_GEM;
   } else if ("RGB"==format) {
     tmp_format = GL_RGB;
   } else if ("RGBA"==format) {
-    tmp_format = GL_RGB;
+    tmp_format = GL_RGBA;
   } else if ("RGB32"==format) {
     tmp_format =  GL_RGB_FLOAT32_ATI;
   }
