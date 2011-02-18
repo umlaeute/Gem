@@ -78,13 +78,13 @@ class GEM_EXTERN gemglutwindow : public GemContext
   int         m_fsaa;
 
   /* window decoration (pre creation) */
-  void titleMess(t_symbol* s);
+  void titleMess(std::string s);
   std::string     m_title;
   void borderMess(bool on);
   bool m_border;
 
   /* window position/dimension (pre creation) */
-  virtual void    dimensionsMess(int width, int height);
+  virtual void    dimensionsMess(unsigned int width, unsigned int height);
   void    fullscreenMess(bool on);
   bool              m_fullscreen;
   void        offsetMess(int x, int y);
@@ -115,37 +115,6 @@ class GEM_EXTERN gemglutwindow : public GemContext
   int m_window;
 
   //////////
-  // Static member functions (rendering)
-  static void     renderMessCallback(void *data);
-
-  //////////
-  // Static member functions (window pre-creation)
-  static void     bufferMessCallback(void *data, t_floatarg buf);
-  static void     fsaaMessCallback(void *data,t_floatarg val);
-
-  static void     titleMessCallback(void *data, t_symbol* s);
-
-  static void     dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void     offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
-  static void     fullscreenMessCallback(void *data, t_floatarg on);
-
-  static void     borderMessCallback(void *, t_floatarg state);
-
-  //////////
-  // Static member functions (window creation)
-  static void     createMessCallback(void *);
-  static void     destroyMessCallback(void *);
-
-  //////////
-  // Static member functions (window post-creation)
-  static void     cursorMessCallback(void *, t_floatarg);
-
-  //////////
-  // Static member functions (misc)
-  static void     printMessCallback(void *);
-
-
-  //////////
   // glut callbacks 
   static void displayCb(void);
   static void visibleCb(int);
@@ -160,6 +129,7 @@ class GEM_EXTERN gemglutwindow : public GemContext
   static void keyboardupCb(unsigned char, int, int);
   static void specialupCb(int, int, int);
   static void joystickCb(unsigned int, int, int, int);
+  static void menuCb(int);
   static void menustateCb(int);
   static void menustatusCb(int, int, int);
   static void windowstatusCb(int);

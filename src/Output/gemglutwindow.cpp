@@ -13,16 +13,10 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Base/GemConfig.h"
 
 #include "gemglutwindow.h"
-
 #include "Base/GemGL.h"
-
-#include <map>
-
-
-#define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
-
 #if defined __APPLE__
 # include "GLUT/glut.h"
 # define glutCloseFunc glutWMCloseFunc
@@ -34,8 +28,13 @@
 # endif
 #endif
 
-#include <stdio.h>
 
+#include "RTE/MessageCallbacks.h"
+
+
+#define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
+
+#include <map>
 static std::map<int, gemglutwindow*>s_windowmap;
  
 CPPEXTERN_NEW(gemglutwindow)
@@ -128,9 +127,9 @@ void gemglutwindow :: fsaaMess(int value)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemglutwindow :: titleMess(t_symbol* s)
+void gemglutwindow :: titleMess(std::string s)
 {
-  m_title = s->s_name;
+  m_title = s;
   if(makeCurrent()){
     glutSetWindowTitle(m_title.c_str());
     glutSetIconTitle(m_title.c_str());
@@ -260,7 +259,7 @@ bool gemglutwindow :: create(void)
     destroyMess();
     return false;
   }
-  titleMess(gensym(m_title.c_str()));
+  titleMess(m_title);
   fullscreenMess(m_fullscreen);
 
   dispatch();
@@ -324,67 +323,22 @@ void gemglutwindow :: obj_setupCallback(t_class *classPtr)
   }
   firsttime=false;
 
-  class_addbang(classPtr, reinterpret_cast<t_method>(&gemglutwindow::renderMessCallback));
-  
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::titleMessCallback),        gensym("title"), A_DEFSYM ,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::createMessCallback),       gensym("create") ,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::bufferMessCallback),       gensym("buffer"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::fullscreenMessCallback),   gensym("fullscreen"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::dimensionsMessCallback),   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::offsetMessCallback),       gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::cursorMessCallback),       gensym("cursor"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::destroyMessCallback),      gensym("destroy"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::printMessCallback),        gensym("print"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::borderMessCallback),       gensym("border"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemglutwindow::fsaaMessCallback),         gensym("FSAA"), A_FLOAT, A_NULL);
-}
-void gemglutwindow :: printMessCallback(void *)
-{
-  //  GemMan::printInfo();
-}
-void gemglutwindow :: borderMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->borderMess(static_cast<int>(state));
-}
-void gemglutwindow :: destroyMessCallback(void *data)
-{
-  GetMyClass(data)->destroyMess();
-}
-void gemglutwindow :: renderMessCallback(void *data)
-{
-  GetMyClass(data)->render();
-}
-void gemglutwindow :: titleMessCallback(void *data, t_symbol* disp)
-{
-  GetMyClass(data)->titleMess(disp);
-}
-void gemglutwindow :: createMessCallback(void *data)
-{
-  GetMyClass(data)->createMess();
-}
-void gemglutwindow :: bufferMessCallback(void *data, t_floatarg buf)
-{
-  GetMyClass(data)->bufferMess(static_cast<int>(buf));
-}
-void gemglutwindow :: fullscreenMessCallback(void *data, t_floatarg on)
-{
-  GetMyClass(data)->fullscreenMess(static_cast<int>(on));
-}
-void gemglutwindow :: dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height)
-{
-  GetMyClass(data)->dimensionsMess(static_cast<int>(width), static_cast<int>(height));
-}
-void gemglutwindow :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-  GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
-}
-void gemglutwindow :: cursorMessCallback(void *data, t_floatarg val)
-{
-  GetMyClass(data)->cursorMess(val);
-}
-void gemglutwindow :: fsaaMessCallback(void *data, t_floatarg val)
-{
-  GetMyClass(data)->fsaaMess(static_cast<int>(val));
+
+  CPPEXTERN_MSG0(classPtr, "bang", render);
+  CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
+  CPPEXTERN_MSG0(classPtr, "create", createMess);
+  CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
+
+  CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
+  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
+  CPPEXTERN_MSG2(classPtr, "offset",offsetMess    , int, int);
+  CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
+  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, bool);
+
+  CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
+  CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
+
+  //  CPPEXTERN_MSG0(classPtr, "print", printMess);
 }
 
 #define CALLBACK4WIN gemglutwindow*ggw=s_windowmap[glutGetWindow()]; if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
@@ -479,6 +433,9 @@ void gemglutwindow::entryCb(int state) {
   CALLBACK4WIN->info("entry", state);
 }
 void gemglutwindow::joystickCb(unsigned int a, int x, int y, int z) {
+}
+void gemglutwindow::menuCb(int menu) {
+  CALLBACK4WIN->info("menu", menu);
 }
 void gemglutwindow::menustateCb(int value) {
 }
