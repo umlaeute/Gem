@@ -16,6 +16,7 @@ LOG
 #include "Base/GemGL.h"
 #include "Base/CPPExtern.h"
 
+#include <vector>
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -58,6 +59,7 @@ class GEM_EXTERN GemContext : public CPPExtern
 
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
   /* LATER think about detaching the output from the stack, so we can e.g. destroy a window from a mouse-callback */
+  void info(std::vector<t_atom>);  
   void info(t_symbol*s, int, t_atom*);  
   void info(std::string);
   void info(std::string, t_float);

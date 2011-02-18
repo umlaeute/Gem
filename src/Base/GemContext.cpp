@@ -94,6 +94,13 @@ public:
   std::vector<std::vector<t_atom> >qQueue;
   t_clock*qClock;
 
+  void queue(std::vector<t_atom>alist) {
+    if(alist.size()>0)
+      qQueue.push_back(alist);
+
+    requeue();
+  }
+
   void queue(t_symbol*s,int argc, t_atom*argv) {
     std::vector<t_atom>alist;
     t_atom at[1];
@@ -102,10 +109,7 @@ public:
     while(argc-->0) {
       alist.push_back(*argv++);
     }
-    if(alist.size()>0)
-      qQueue.push_back(alist);
-
-    requeue();
+    queue(alist);
   }
 
   void sendInfo(std::vector<t_atom>alist) {
@@ -176,6 +180,10 @@ GemContext :: ~GemContext()
   destroyContext();
   delete m_pimpl;
   m_pimpl=NULL;
+}
+
+void GemContext::info(std::vector<t_atom>l) {
+  m_pimpl->queue(l);
 }
 
 void GemContext::info(t_symbol*s, int argc, t_atom*argv) {
