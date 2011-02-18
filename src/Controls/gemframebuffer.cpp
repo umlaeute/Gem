@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2001-2011 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    Copyright (c) 2005-2006 James Tittle II, tigital At mac DoT com
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -30,59 +30,35 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemframebuffer :: gemframebuffer()
-  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
-    m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
-    m_width(256), m_height(256),
-m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
-	
-{
-  // create an outlet to send out texture info:
-  //  - ID
-  //  - width & height
-  //  - format/type (ie. GL_TEXTURE_RECTANGLE or GL_TEXTURE_2D)
-  //  - anything else?
-  m_outTexInfo = outlet_new(this->x_obj, 0);
-
-  m_FBOcolor[0] = 0.f;
-  m_FBOcolor[1] = 0.f;
-  m_FBOcolor[2] = 0.f;
-  m_FBOcolor[3] = 0.f;
-	
-	m_perspect[0] = -1.f;
- 	m_perspect[1] = 1.f;	
-	m_perspect[2] = -1.f;
-	m_perspect[3] = 1.f;	
-	m_perspect[4] = 1.f;
-	m_perspect[5] = 20.f;	
-}
-
 gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
     m_width(256), m_height(256),
-    m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE)
+    m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE),
+    m_outTexInfo(NULL)
 {
   // create an outlet to send out texture info:
   //  - ID
   //  - width & height
   //  - format/type (ie. GL_TEXTURE_RECTANGLE or GL_TEXTURE_2D)
   //  - anything else?
-  m_outTexInfo = outlet_new(this->x_obj, 0);
-  
+  if(!m_outTexInfo)
+    m_outTexInfo = outlet_new(this->x_obj, 0);
+
   m_FBOcolor[0] = 0.f;
   m_FBOcolor[1] = 0.f;
   m_FBOcolor[2] = 0.f;
   m_FBOcolor[3] = 0.f;
 
-	m_perspect[0] = -1.f;
- 	m_perspect[1] = 1.f;	
-	m_perspect[2] = -1.f;
-	m_perspect[3] = 1.f;	
-	m_perspect[4] = 1.f;
-	m_perspect[5] = 20.f;	
-	
-	formatMess(format->s_name);
+  m_perspect[0] = -1.f;
+  m_perspect[1] = 1.f;	
+  m_perspect[2] = -1.f;
+  m_perspect[3] = 1.f;	
+  m_perspect[4] = 1.f;
+  m_perspect[5] = 20.f;	
+
+  
+  formatMess(format->s_name);
   typeMess(type->s_name);
 }
 
@@ -113,7 +89,6 @@ bool gemframebuffer :: isRunnable() {
 
   return false;
 }
-
 
 ////////////////////////////////////////////////////////
 // renderGL
@@ -385,108 +360,98 @@ void gemframebuffer :: dimMess(int width, int height)
 
 void gemframebuffer :: colorMess(float red, float green, float blue, float alpha)
 {
-  
   m_FBOcolor[0] = red;
   m_FBOcolor[1] = green;
   m_FBOcolor[2] = blue;
   m_FBOcolor[3] = alpha;
     
   setModified();
-
-  
 }
 
 void gemframebuffer :: perspectiveMess(float f_left, float f_right, 
                                        float f_bottom, float f_top,
                                        float f_near, float f_far)
 {
-	
-	m_perspect[0] = f_left;
-	m_perspect[1] = f_right;
-	m_perspect[2] = f_bottom;
-	m_perspect[3] = f_top;
-	m_perspect[4] = f_near;
-	m_perspect[5] = f_far;
+  m_perspect[0] = f_left;
+  m_perspect[1] = f_right;
+  m_perspect[2] = f_bottom;
+  m_perspect[3] = f_top;
+  m_perspect[4] = f_near;
+  m_perspect[5] = f_far;
     
-	setModified();
-
+  setModified();
 }
 
-void gemframebuffer :: formatMess(const char* format)
+void gemframebuffer :: formatMess(const char* fmt)
 {
-  if (!strcmp(format, "YUV"))
-    {
-      m_format = GL_YUV422_GEM;
-#ifdef __APPLE__
-      m_type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-#else
-      m_type = GL_UNSIGNED_BYTE;
-#endif
-      post("format is GL_YUV, %d",m_format);
-      return;
-    } else
-    
-    if (!strcmp(format, "RGB")){
-      m_internalformat = GL_RGB;
-      m_format = GL_RGB;
-      post("format is GL_RGB, %d",m_format);
+  std::string format=fmt;
+  GLenum tmp_format=0;
+  if("YUV"==format) {
+    tmp_format = GL_YUV422_GEM;
+  } else if ("RGB"==format) {
+    tmp_format = GL_RGB;
+  } else if ("RGBA"==format) {
+    tmp_format = GL_RGB;
+  } else if ("RGB32"==format) {
+    tmp_format =  GL_RGB_FLOAT32_ATI;
+  }
 
-      return;
-    } else
-    
-      if (!strcmp(format, "RGBA")){
-        // colorspace will equal RGBA
-        post("format is GL_RGBA, %d",m_format);
-        m_internalformat = GL_RGBA;
+  m_type = GL_UNSIGNED_BYTE;
+  switch(tmp_format) {
+  default:
+    post("using default format");
+    format="RGB";
+  case GL_RGB:
+    m_internalformat=m_format=GL_RGB;
+    break;
+  case  GL_RGB_FLOAT32_ATI:
+  m_internalformat = GL_RGB_FLOAT32_ATI;
+  m_format = GL_RGB;
+  format="RGB_FLOAT32_ATI";
+  break;
+  case GL_RGBA:
+    m_internalformat = GL_RGBA;
+    m_format = GL_RGBA;
+    break;
+  case  GL_YUV422_GEM:
+    m_format=GL_YUV422_GEM;
+    m_internalformat=GL_RGB8;
+    break;
+  }
+
 #ifdef __APPLE__
-        m_format = GL_BGRA;
-#else 
-        m_format = GL_RGBA;
+  switch(tmp_format) {
+  case  GL_RGB_FLOAT32_ATI;
+  m_format = GL_BGR;
+  break;
+  case GL_RGBA:
+    m_format = GL_BGRA;
+    break;
+  case GL_YUV422_GEM:
+    m_type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+    break;
+  default:
+    break;
+  }
 #endif
-        return;
-      } else
-    
-      if (!strcmp(format, "RGB32")){
-        // colorspace will equal RGB32
-        post("format is GL_RGB_FLOAT32_ATI, %d",m_format);
-        m_internalformat = GL_RGB_FLOAT32_ATI;
-#ifdef __APPLE__
-        m_format = GL_BGR;
-#else 
-        m_format = GL_RGB;
-#endif
-        return;
-      } else {
-        //default
-        post("default format is GL_RGB, %d",m_format);
-        m_internalformat = GL_RGB;
-        m_format = GL_RGB;
-      }
+
+  post("format is '%s'(%d)", format.c_str(), m_format);
+
   // changed format, so we need to rebuild the FBO
   m_wantinit=true;
 }
 
-void gemframebuffer :: typeMess(const char* type)
+void gemframebuffer :: typeMess(const char* typ)
 {
-  if (!strcmp(type, "BYTE")){
-    m_type = GL_UNSIGNED_BYTE;
-    post("type is BYTE, %d",m_type);
-    return;
-  } 
-	else if (!strcmp(type, "INT")){
-	  m_type = GL_UNSIGNED_BYTE;
-    post("type is INT, %d",m_type);
-    return;
-  }
-	else if (!strcmp(type, "FLOAT")){
-	  post("type is GL_FLOAT, %d",m_type);
-	  m_type = GL_FLOAT;
-	  return;
+  std::string type=typ;
+  if("FLOAT"==type) {
+    m_type = GL_FLOAT;
   } else {
-    //default
-	  m_type = GL_UNSIGNED_BYTE;
-	  post("default type is BYTE, %d",m_type);
+    type="BYTE";
+    m_type=GL_UNSIGNED_BYTE;
   }
+  post("type is '%s'(%d)", type.c_str(), m_type);
+
   // changed type, so we need to rebuild the FBO
   m_wantinit=true;
 }
@@ -500,7 +465,7 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
   class_addbang(classPtr, reinterpret_cast<t_method>(&gemframebuffer::bangMessCallback));
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
                   gensym("mode"), A_FLOAT, A_NULL);
- class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
                   gensym("rectangle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::dimMessCallback),
                   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
@@ -515,7 +480,7 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::texunitCallback),
                   gensym("texunit"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::perspectiveMessCallback),
-  				 gensym("perspec"), A_GIMME, A_NULL);
+		  gensym("perspec"), A_GIMME, A_NULL);
 }
 void gemframebuffer :: bangMessCallback(void *data)
 {
@@ -566,24 +531,24 @@ void gemframebuffer :: texunitCallback(void *data, t_floatarg unit)
 
 void gemframebuffer :: perspectiveMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
-	t_float f_left, f_right, f_bottom, f_top, f_near, f_far;
-	switch(argc){
-		case 6:
-			f_left=  atom_getfloat(argv);
-			f_right=atom_getfloat(argv+1);
-			f_bottom= atom_getfloat(argv+2);
-			f_top=  atom_getfloat(argv+3);
-			f_near=atom_getfloat(argv+4);
-			f_far= atom_getfloat(argv+5);
-			GetMyClass(data)->perspectiveMess(
-							  static_cast<float>(f_left), 
-							  static_cast<float>(f_right), 
-							  static_cast<float>(f_bottom), 
-							  static_cast<float>(f_top), 
-							  static_cast<float>(f_near),
-							  static_cast<float>(f_far));
-			break;
-		default:
-			GetMyClass(data)->error("\"perspec\" expects 6 values for frustum - left, right, bottom, top, near, far");
-	}
+  t_float f_left, f_right, f_bottom, f_top, f_near, f_far;
+  switch(argc){
+  case 6:
+    f_left=  atom_getfloat(argv);
+    f_right=atom_getfloat(argv+1);
+    f_bottom= atom_getfloat(argv+2);
+    f_top=  atom_getfloat(argv+3);
+    f_near=atom_getfloat(argv+4);
+    f_far= atom_getfloat(argv+5);
+    GetMyClass(data)->perspectiveMess(
+				      static_cast<float>(f_left), 
+				      static_cast<float>(f_right), 
+				      static_cast<float>(f_bottom), 
+				      static_cast<float>(f_top), 
+				      static_cast<float>(f_near),
+				      static_cast<float>(f_far));
+    break;
+  default:
+    GetMyClass(data)->error("\"perspec\" expects 6 values for frustum - left, right, bottom, top, near, far");
+  }
 }

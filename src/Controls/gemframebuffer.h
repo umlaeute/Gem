@@ -38,7 +38,6 @@ class GEM_EXTERN gemframebuffer : public GemBase
 
   //////////
   // Constructor
-  gemframebuffer( void );
   gemframebuffer(t_symbol *format, t_symbol *type);
 
  protected:
@@ -79,7 +78,6 @@ virtual void perspectiveMess( float left, float right, float bottom, float top, 
   virtual void printInfo(void);
        
  private:
-
   GLboolean             m_haveinit, m_wantinit;
   GLuint      m_frameBufferIndex;
   GLuint      m_depthBufferIndex;
