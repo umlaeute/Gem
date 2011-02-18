@@ -166,7 +166,7 @@ void pix_snap2tex :: snapMess()
       m_texHeight = y_2;
 		
       glCopyTexImage2D(	m_textureType, 0,
-			GL_RGB,
+			GL_RGBA16,
 			m_x, m_y,
 			m_texWidth, m_texHeight, 
 			0);
