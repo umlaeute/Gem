@@ -101,6 +101,9 @@ class GEM_EXTERN gemglutwindow : public GemContext
   void        cursorMess(bool on);
   bool              m_cursor;
 
+  void menuMess(void);
+  void addMenuMess(t_symbol*, int, t_atom*);
+
 
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);

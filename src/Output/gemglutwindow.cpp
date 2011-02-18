@@ -305,6 +305,32 @@ void gemglutwindow :: cursorMess(bool setting)
     glutSetCursor(setting?GLUT_CURSOR_INHERIT:GLUT_CURSOR_NONE);
   }
 }
+
+
+void gemglutwindow :: menuMess(void) {
+  int id=glutCreateMenu(menuCb);
+
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+  std::vector<t_atom>alist;
+  t_atom a;
+  SETSYMBOL(&a, gensym("menu")); alist.push_back(a);
+  SETSYMBOL(&a, gensym("new") ); alist.push_back(a);
+  SETFLOAT (&a, id            ); alist.push_back(a);
+  info(alist);
+}
+void gemglutwindow :: addMenuMess(t_symbol*sym, int argc, t_atom*argv) {
+  if (argc!=3)return;
+  int menu=atom_getint(argv+0);
+  const char*s=atom_getsymbol(argv+1)->s_name;
+  int v=atom_getint(argv+2);
+
+  glutSetMenu(menu);
+  glutAddMenuEntry(s, v);
+}
+
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -337,6 +363,9 @@ void gemglutwindow :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
   CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
+
+  CPPEXTERN_MSG0(classPtr, "menu", menuMess);
+  CPPEXTERN_MSG(classPtr, "addMenu", addMenuMess);
 
   //  CPPEXTERN_MSG0(classPtr, "print", printMess);
 }
