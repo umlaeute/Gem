@@ -26,13 +26,6 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#ifdef HAVE_WORDEXP_H
-# include <wordexp.h>
-#endif
-#ifdef _WIN32
-# include <windows.h>
-#endif
-
 #define GEM_SETTINGS_FILE "gem.conf"
 static const char*s_configdir[] = { 
 #ifdef __linux__
@@ -244,45 +237,6 @@ struct GemSettings::PIMPL {
 
     // we ignore lists and other complex things for now
   }
-#if 0
-  std::string expandEnv(std::string value, bool bashfilename) {
-    if(NULL==value)
-      return NULL;
-    verbose(2, "expanding '%s'", value->s_name);
-
-    if(bashfilename) {
-      char bashBuffer[MAXPDSTRING];
-      sys_bashfilename(value->s_name, bashBuffer);
-      value=gensym(bashBuffer);
-    }
-
-#ifdef HAVE_WORDEXP_H
-    wordexp_t pwordexp;
-
-    if(0==wordexp(value->s_name, &pwordexp, 0)) {
-      pwordexp.we_offs=0;
-      if(pwordexp.we_wordc) {
-	// we only take the first match into account 
-	value=gensym(pwordexp.we_wordv[0]);
-      }
-# ifdef __APPLE__
-      /* wordfree() broken on apple: keeps deallocating non-aligned memory */
-#  warning wordfree() not called
-# else
-      wordfree(&pwordexp);
-# endif
-    }
-#endif
-#ifdef _WIN32
-    char envVarBuffer[MAXPDSTRING];
-    ExpandEnvironmentStrings(value->s_name, envVarBuffer, MAX_PATH - 2);
-    value=gensym(envVarBuffer);
-#endif
-
-    verbose(2, "expanded '%s'", value->s_name);
-    return value;
-  }
-#endif
 };
 
 
