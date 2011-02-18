@@ -21,10 +21,13 @@
 #define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
 
 
+#warning openGL context sharing
+
 
 static NSDate *distantFuture, *distantPast;
 
 #if 0
+// LATER figure out how ObjC's delegation works
 @interface WindowResponder 
 @end
 @implementation WindowResponder
@@ -44,6 +47,7 @@ static NSDate *distantFuture, *distantPast;
 @end
 
 #if defined MAC_OS_X_VERSION_10_5 && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+// argh! what do they think?
 typedef GLint oglc_setvalue_t;
 #else
 typedef long int oglc_setvalue_t;
@@ -70,6 +74,7 @@ typedef long int oglc_setvalue_t;
 }
 
 #if 0
+// since we do the event-scheduling ourselves, we don't really need these
 - (BOOL) acceptsFirstResponder {return YES;}
 - (void)mouseDown:         (NSEvent*)e { std::cerr << "mouseDown" << std::endl; }
 - (void)mouseUp:           (NSEvent*)e { std::cerr << "mouseUp" << std::endl; }
@@ -149,11 +154,11 @@ gemcocoawindow :: gemcocoawindow(void) :
 {
 }
 
+////////////////////////////////////////////////////////
+// Destructor
+//
 /////////////////////////////////////////////////////////
-                                // Destructor
-                                //
-                                /////////////////////////////////////////////////////////
-                                gemcocoawindow :: ~gemcocoawindow()
+gemcocoawindow :: ~gemcocoawindow()
 {
   destroyMess();
   delete m_pimpl;
@@ -196,7 +201,7 @@ void gemcocoawindow :: dispatch() {
 
 static std::string key2name(NSString*s, unsigned short keycode) {
   std::string keysym = std::string([s UTF8String]);
-	switch (keycode) {
+  switch (keycode) {
   case 36:  keysym = "Return"; break;
   case 51:  keysym = "BackSpace"; break;
   case 53:  keysym = "Escape"; break;
@@ -227,21 +232,8 @@ static std::string key2name(NSString*s, unsigned short keycode) {
   case 97:  keysym = "F6"; break;
   case 98:  keysym = "F7"; break;
   case 48:  keysym = "Tab"; break;
-#if 0
-  case 27:  keysym = "minus"; break;
-  case 24:  keysym = "equal"; break;
-  case 43:  keysym = "comma"; break;
-  case 47:  keysym = "period"; break;
-  case 44:  keysym = "slash"; break;
-  case 41:  keysym = "semicolon"; break;
-  case 39:  keysym = "apostrophe"; break;
-  case 33:  keysym = "bracketleft"; break;
-  case 30:  keysym = "bracketright"; break;
-  case 42:  keysym = "backslash"; break;
-  case 49:  keysym = "space"; break;
-#endif
   default: break;
-	}
+  }
 
   return keysym;
 }
@@ -278,6 +270,7 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
     info("mouse", "left");
     break;
   case(NSScrollWheel):
+    // TODO
     break;
 
   case(NSKeyDown):
@@ -310,11 +303,14 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
     break;
 
   case(NSTabletPoint):
+    // TODO (later)
     break;
   case(NSTabletProximity):
+    // TODO (later)
     break;
 
 #if 0
+    // these are only supported starting with OSX-10.6 (or .5?)
   case(NSEventTypeGesture):
     break;
   case(NSEventTypeMagnify):
@@ -362,16 +358,6 @@ bool gemcocoawindow :: create(void)
  
   NSView *contentView = [window contentView];
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
-#if 0
-  NSOpenGLPixelFormatAttribute attr[] = 
-    {
-      NSOpenGLPFADoubleBuffer,
-      NSOpenGLPFAAccelerated,
-      NSOpenGLPFAColorSize, (NSOpenGLPixelFormatAttribute) 32,
-      NSOpenGLPFADepthSize, (NSOpenGLPixelFormatAttribute) 23,
-      (NSOpenGLPixelFormatAttribute) 0
-    };
-#endif
 
   if(m_buffer==2)
     attrvec.push_back(NSOpenGLPFADoubleBuffer);
@@ -380,11 +366,11 @@ bool gemcocoawindow :: create(void)
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
   attrvec.push_back(NSOpenGLPFADepthSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
-  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
   if(m_fullscreen) {
     attrvec.push_back(NSOpenGLPFAFullScreen);
   }
 
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
   NSOpenGLPixelFormatAttribute*attr = new NSOpenGLPixelFormatAttribute[attrvec.size()];
   int i=0;
   for(i=0; i<attrvec.size(); i++) {
@@ -479,10 +465,6 @@ void gemcocoawindow :: moved(void) {
   const int xoffset=bounds.origin.x;
   const int yoffset=screenRect.size.height-bounds.origin.y-height;
 
-  startpost("%dx%d%+d%+d ",   width,   height,   xoffset,   yoffset);
-  startpost("%dx%d%+d%+d ", m_width, m_height, m_xoffset, m_yoffset);
-  endpost();
-
   bool doDimen=(width!=m_width || height != m_height);
   bool doOffset=(xoffset!=m_xoffset || yoffset != m_yoffset);
 
@@ -516,6 +498,7 @@ void gemcocoawindow :: fullscreenMess(bool on) {
   }
 }
 void gemcocoawindow :: fsaaMess(int value) {
+#warning FSAA
 }
 void gemcocoawindow :: cursorMess(bool setting) {
   m_cursor=setting;
@@ -527,6 +510,7 @@ void gemcocoawindow :: cursorMess(bool setting) {
 }
 void gemcocoawindow :: menubarMess(int state) {
 #if 0
+  // seems to not work anymore on recent OSX
   if (state == 0)
     SetSystemUIMode( kUIModeAllHidden, kUIOptionDisableAppleMenu | kUIOptionDisableProcessSwitch |
                      kUIOptionDisableSessionTerminate | kUIOptionDisableForceQuit );
@@ -535,6 +519,7 @@ void gemcocoawindow :: menubarMess(int state) {
   else
     SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar );
 #else
+  // plain Cocoa, but how to AutoHide?
   switch(state) {
   case 0: [NSMenu setMenuBarVisible:NO]; break;
   default:
@@ -565,15 +550,15 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
   CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
 
-	ProcessSerialNumber proc;
-	GetCurrentProcess(&proc);
-	TransformProcessType(&proc, kProcessTransformToForegroundApplication);
+  ProcessSerialNumber proc;
+  GetCurrentProcess(&proc);
+  TransformProcessType(&proc, kProcessTransformToForegroundApplication);
   SetFrontProcess(&proc);
 
   if(NULL==arp) {
     arp=[[NSAutoreleasePool alloc] init];
   }
-
+  
   distantFuture = [NSDate distantFuture];
   distantPast = [NSDate distantPast];
 
