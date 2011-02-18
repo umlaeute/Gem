@@ -205,7 +205,7 @@ struct GemSettings::PIMPL {
     t_gemclass *c = (t_gemclass*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
     set("gem.path", c->c_externdir->s_name);
 
-    print();
+    //    print();
   }
 
   ~PIMPL(void) {
