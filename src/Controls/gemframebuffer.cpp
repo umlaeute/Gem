@@ -388,14 +388,16 @@ void gemframebuffer :: formatMess(const char* fmt)
 {
   std::string format=fmt;
   GLenum tmp_format=0;
-         if("YUV"==format) {
+  if("YUV"==format) {
     tmp_format = GL_YUV422_GEM;
   } else if ("RGB"==format) {
     tmp_format = GL_RGB;
   } else if ("RGBA"==format) {
     tmp_format = GL_RGBA;
   } else if ("RGB32"==format) {
-    tmp_format =  GL_RGB_FLOAT32_ATI;
+    if(GLEW_ATI_texture_float) {
+      tmp_format =  GL_RGB_FLOAT32_ATI;
+    }
   }
 
   m_type = GL_UNSIGNED_BYTE;
