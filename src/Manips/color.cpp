@@ -86,8 +86,20 @@ void color :: obj_setupCallback(t_class *classPtr)
 void color :: colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
     float alpha = 1;
-    if (argc == 4) alpha = atom_getfloat(&argv[3]);
-    GetMyClass(data)->colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+    switch(argc) {
+    case(4):
+     alpha = atom_getfloat(&argv[3]);
+    case(3):
+     GetMyClass(data)->colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
     	    	    	       atom_getfloat(&argv[2]), alpha);
+     break;
+    case(1):
+     alpha = atom_getfloat(argv);
+     GetMyClass(data)->colorMess(alpha, alpha, alpha, 1.);
+     break;
+    default:
+      GetMyClass(data)->error("need 3 or 4 arguments");
+      break;
+    }
 }
 
