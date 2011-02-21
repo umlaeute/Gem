@@ -29,7 +29,11 @@ namespace gem
       : from(src.name()), to(dest.name())
     { }
     virtual const std::string what() {
-      std::string result = std::string("bad cast(") + from + "->" + to+")";
+      std::string result = std::string("bad cast(");
+      result += from;
+      result += "->";
+      result += to;
+      result += ")";
       return result;
     }
     const char* from;
