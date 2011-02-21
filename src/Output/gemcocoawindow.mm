@@ -144,12 +144,6 @@ CPPEXTERN_NEW(gemcocoawindow)
 /////////////////////////////////////////////////////////
 static NSAutoreleasePool*arp=NULL;
 gemcocoawindow :: gemcocoawindow(void) :
-  m_fsaa(0),
-  m_title("GEM"),
-  m_border(true),
-  m_xoffset(0), m_yoffset(0),
-  m_fullscreen(false),
-  m_cursor(false),
   m_pimpl(new PIMPL())
 {
 }
@@ -415,16 +409,6 @@ void gemcocoawindow :: destroyMess(void)
 
 /////////////////////////////////////////////////////////
 // messages
-void gemcocoawindow :: bufferMess(int buf) {
-  switch(buf) {
-  case 1: case 2:
-    m_buffer=buf;
-    break;
-  default:
-    error("buffer can only be '1' (single) or '2' (double) buffered");
-    break;
-  }
-}
 void gemcocoawindow :: titleMess(std::string s) {
   m_title = s;
   if(m_pimpl->window) {
@@ -482,9 +466,6 @@ void gemcocoawindow :: offsetMess(int x, int y) {
   m_xoffset = x;
   m_yoffset = y;
   move();
-}
-void gemcocoawindow :: borderMess(bool setting) {
-  m_border=setting;
 }
 void gemcocoawindow :: fullscreenMess(bool on) {
 #warning fullscreen

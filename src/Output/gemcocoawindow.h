@@ -42,24 +42,14 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   virtual void dispatch(void);
   void dispatchEvent(NSEvent*);
 
-  void             bufferMess(int buf);
   void              titleMess(std::string s);
   virtual void dimensionsMess(unsigned int width, unsigned int height);
   void             offsetMess(int x, int y);
-  void             borderMess(bool on);
   void         fullscreenMess(bool on);
-  void               fsaaMess(int value);
   void             cursorMess(bool on);
   void            menubarMess(int value);
   void		         move(void); // apply dimen/offset to current window
   void		        moved(void); // window dimen/offset changed
-
-  int          m_fsaa;
-  std::string  m_title;
-  bool         m_border;
-  unsigned int m_xoffset, m_yoffset;
-  bool         m_fullscreen;
-  bool         m_cursor;
 
  private:
   class PIMPL;
