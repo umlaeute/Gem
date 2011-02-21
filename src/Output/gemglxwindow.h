@@ -78,11 +78,6 @@ class GEM_EXTERN gemglxwindow : public GemContext
   virtual bool makeCurrent(void);
   virtual void swapBuffers(void);
 
-  void doRender(void);
-
-  /* rendering */
-  void renderMess(void);
-
   /* dispatch window events */
   void dispatch(void);
 

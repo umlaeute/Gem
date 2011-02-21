@@ -490,15 +490,6 @@ void gemglxwindow :: swapBuffers(void) {
   glXSwapBuffers(m_pimpl->dpy, m_pimpl->win);
 }
 
-/////////////////////////////////////////////////////////
-// renderMess
-//
-/////////////////////////////////////////////////////////
-void gemglxwindow :: renderMess(void)
-{
-  render();
-}
-
 void gemglxwindow::dispatch(void) {
   if(!m_pimpl->doDispatch)return;
   XEvent event; 
@@ -822,7 +813,7 @@ void gemglxwindow :: print(void)
 void gemglxwindow :: obj_setupCallback(t_class *classPtr)
 {
   //  class_addbang(classPtr, reinterpret_cast<t_method>(&gemglxwindow::renderMessCallback));
-  CPPEXTERN_MSG0(classPtr, "bang", renderMess);
+  CPPEXTERN_MSG0(classPtr, "bang", render);
 
   CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
   CPPEXTERN_MSG1(classPtr, "create", createMess, std::string);
