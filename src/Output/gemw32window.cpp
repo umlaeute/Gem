@@ -224,7 +224,6 @@ bool gemw32window:: create(void)
   newSize.bottom = h+y;
 
   AdjustWindowRectEx(&newSize, style, FALSE, dwExStyle); // no menu
-
   if (newSize.left<0 && x>=0){
 	  newSize.right-=newSize.left;
 	  newSize.left=0;
@@ -248,7 +247,6 @@ bool gemw32window:: create(void)
                           NULL,
                           hInstance,
                           NULL);
-
   if (!m_win)  {
     error("GEM: Unable to create window");
     return false;
@@ -291,22 +289,23 @@ bool gemw32window:: create(void)
   bool m_actuallyDisplay =true;
   if (m_actuallyDisplay) {
 
-  // show and update main window
-  if (fullscreen){
-    ShowWindow(m_win,SW_SHOW);				// Show The Window
-    SetForegroundWindow(m_win);				// Slightly Higher Priority
-    SetFocus(m_win);
-  } else  ShowWindow(m_win, SW_SHOWNORMAL);
-
-  UpdateWindow(m_win);
-
-  dimension(h, w);
+      // show and update main window
+    if (fullscreen){
+        ShowWindow(m_win,SW_SHOW);				// Show The Window
+        SetForegroundWindow(m_win);				// Slightly Higher Priority
+        SetFocus(m_win);
+    } else  {
+        ShowWindow(m_win, SW_SHOWNORMAL);
+    }
+    
+    UpdateWindow(m_win);
+    post("dimenstion: %d %d", w, h);
+    dimension(w, h);
   }
-
   return createContext();
 }
 void gemw32window:: createMess(std::string s) {
-    if(m_context) {
+    if(m_win) {
         error("window already made");
         return;
     }
@@ -444,7 +443,12 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
       dimension(LOWORD(lParam), HIWORD(lParam));
       GetClientRect(m_win, &rcClient);
       break;
-      
+    case WM_MOVE: // hmm, doesn't do anything
+      position(LOWORD(lParam), HIWORD(lParam));
+      //GetClientRect(m_win, &rcClient);
+      break;
+
+
       // we want to override these messages
       // and not do anything
     case WM_DESTROY:
