@@ -29,6 +29,7 @@
 #ifdef _WIN32
 # include <io.h>
 # define close _close
+typedef unsigned __int8 uint8_t;
 #else
 # include <unistd.h>
 #endif
