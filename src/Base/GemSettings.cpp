@@ -267,7 +267,7 @@ t_atom*GemSettings::get(const std::string s) {
   return settings->get(s.c_str());
 }
 void GemSettings::set(const std::string s, t_atom*v) {
-  set(s.c_str(), v);
+  settings->set(s.c_str(), v);
 }
 
 
