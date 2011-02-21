@@ -161,9 +161,14 @@ public:
 //
 /////////////////////////////////////////////////////////
 GemContext :: GemContext()
-  : m_buffer(2),
+  : m_pimpl(new PIMPL(this)),
     m_width(500), m_height(500),
-    m_pimpl(new PIMPL(this))
+    m_xoffset(0), m_yoffset(0),
+    m_border(true), m_fullscreen(false),
+    m_buffer(2),
+    m_title("Gem"), 
+    m_cursor(true),
+    m_fsaa(0)
 {
   int i;
 
