@@ -19,7 +19,7 @@
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Gem"
 !ifndef PRODUCT_VERSION
- !define PRODUCT_VERSION "0.91"
+ !define PRODUCT_VERSION "0.93"
 !endif
 !define PRODUCT_ARCH "-W32-i686"
 !define PRODUCT_PUBLISHER "iem et al."
@@ -81,6 +81,43 @@ SectionGroup "Gem" SEC_Gem
   SetOutPath "$INSTDIR"
   File "..\..\abstractions\*.pd"
  SectionEnd
+
+ SectionGroup "plugins"
+  Section "DirectShow movies" SEC_filmDS
+   SetOverwrite ifnewer
+#   SectionIn RO
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_filmDS.dll"
+  SectionEnd
+  Section "QuickTime movies" SEC_filmQT
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_filmQT.dll"
+  SectionEnd
+  Section /o "AVI movies" SEC_filmAVI
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_filmAVI.dll"
+  SectionEnd
+
+  Section "DirectShow capturing" SEC_videoDS
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_videoDS.dll"
+  SectionEnd
+  Section /o "VFW capturing" SEC_videoVFW
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_filmAVI.dll"
+  SectionEnd
+
+  Section "QuickTime recording" SEC_recordQT
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_recordQT.dll"
+  SectionEnd
+ SectionGroupEnd
+ 
 SectionGroupEnd
 
 SectionGroup "Documentation" SEC_documentation
@@ -205,4 +242,13 @@ SectionEnd
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_examples} "a large number of patches showing what to do with GEM"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_manual} "HTML-manual"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_doc} "Gem primer,..."
+
+#plugins
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_filmDS} "allows to read movies using DirectShow filters"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_filmQT} "allows to read movies using Apple's QuickTime library (if present)"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_filmAVI} "allows to read movies using Microsoft's old (and deprecated) AVI library"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_videoDS} "allows to capture live video sources using DirectShow filters"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_recordQT} "allows to output Gem-pixes into QuickTime MOVie files"
+
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
