@@ -26,5 +26,6 @@ GEM_CHECK_FRAMEWORK(QuickTime,
                         [have_quicktime_framework="no"])
 
 
+AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
 
 AC_OUTPUT
