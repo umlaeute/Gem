@@ -30,8 +30,8 @@ class GEM_EXTERN gemcocoawindow : public GemContext
 
   virtual bool create(void);
   virtual void destroy(void);
-  void        createMess(void);
-  void       destroyMess(void);
+  virtual void        createMess(void);
+  virtual void       destroyMess(void);
 
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
@@ -42,12 +42,12 @@ class GEM_EXTERN gemcocoawindow : public GemContext
   virtual void dispatch(void);
   void dispatchEvent(NSEvent*);
 
-  void              titleMess(std::string s);
+  virtual void              titleMess(std::string s);
   virtual void dimensionsMess(unsigned int width, unsigned int height);
-  void             offsetMess(int x, int y);
-  void         fullscreenMess(bool on);
-  void             cursorMess(bool on);
-  void            menubarMess(int value);
+  virtual void             offsetMess(int x, int y);
+  virtual void         fullscreenMess(bool on);
+  virtual void             cursorMess(bool on);
+  virtual void            menubarMess(int value);
   void		         move(void); // apply dimen/offset to current window
   void		        moved(void); // window dimen/offset changed
 

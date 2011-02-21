@@ -478,9 +478,6 @@ void gemcocoawindow :: fullscreenMess(bool on) {
     }
   }
 }
-void gemcocoawindow :: fsaaMess(int value) {
-#warning FSAA
-}
 void gemcocoawindow :: cursorMess(bool setting) {
   m_cursor=setting;
   if(m_cursor) {
