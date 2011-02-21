@@ -353,8 +353,9 @@ private:
     if(plugin != NULL)    CFRelease( plugin );
 #elif defined _WIN32
     HINSTANCE ntdll;
-
-    sys_bashfilename(libname.c_str(), libname.c_str());
+    char buffer[MAXPDSTRING];
+    sys_bashfilename(libname.c_str(), buffer);
+    libname=buffer;
     ntdll = LoadLibrary(libname.c_str());
     if (!ntdll) {
       if(loud)::post("%s: couldn't load", libname.c_str());
@@ -389,7 +390,9 @@ private:
       return false;
     }
     PluginInfoStruct*pis=reinterpret_cast<PluginInfoStruct*>(result.PointerValue);
-#warning check whether the API is supported by us
+#ifdef __GNUC__
+# warning check whether the API is supported by us
+#endif
     m_name = nchar2str(pis->PluginName, 16);
     m_id = nchar2str(pis->PluginUniqueID, 4);
     m_type = pis->PluginType;
@@ -555,7 +558,7 @@ private:
       m_parameterNames.push_back(name);
       m_parameter.set(name, val);
     }
-
+    return true;
   }
 
   bool init_(void) {
