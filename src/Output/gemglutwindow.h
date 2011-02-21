@@ -74,32 +74,25 @@ class GEM_EXTERN gemglutwindow : public GemContext
 
   /* render context (pre creation) */
   void  bufferMess(int buf);
-  void    fsaaMess(int value);
-  int         m_fsaa;
+  virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
-  void titleMess(std::string s);
-  std::string     m_title;
-  void borderMess(bool on);
-  bool m_border;
+  virtual void titleMess(std::string s);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
-  void    fullscreenMess(bool on);
-  bool              m_fullscreen;
-  void        offsetMess(int x, int y);
-  unsigned int      m_xoffset, m_yoffset;
+  virtual void    fullscreenMess(bool on);
+  virtual void        offsetMess(int x, int y);
 
   /* creation/destruction */
   virtual bool        create(void);
   virtual void destroy(void);
 
-  void        createMess(void);
-  void       destroyMess(void);
+  virtual void        createMess(std::string);
+  virtual void       destroyMess(void);
 
   /* post creation */
-  void        cursorMess(bool on);
-  bool              m_cursor;
+  virtual void        cursorMess(bool on);
 
   void menuMess(void);
   void addMenuMess(t_symbol*, int, t_atom*);

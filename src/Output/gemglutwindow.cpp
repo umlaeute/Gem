@@ -48,12 +48,6 @@ CPPEXTERN_NEW(gemglutwindow)
 //
 /////////////////////////////////////////////////////////
 gemglutwindow :: gemglutwindow(void) :
-  m_fsaa(0),
-  m_title("GEM"),
-  m_border(false),
-  m_fullscreen(false),
-  m_xoffset(0), m_yoffset(0),
-  m_cursor(false),
   m_window(0)
 { }
 
@@ -134,14 +128,6 @@ void gemglutwindow :: titleMess(std::string s)
     glutSetWindowTitle(m_title.c_str());
     glutSetIconTitle(m_title.c_str());
   }
-}
-/////////////////////////////////////////////////////////
-// border
-//
-/////////////////////////////////////////////////////////
-void gemglutwindow :: borderMess(bool setting)
-{
-  m_border=setting;
 }
 /////////////////////////////////////////////////////////
 // dimensionsMess
@@ -265,7 +251,7 @@ bool gemglutwindow :: create(void)
   dispatch();
   return true;
 }
-void gemglutwindow :: createMess(void) {
+void gemglutwindow :: createMess(std::string) {
   create();
 }
 
@@ -352,7 +338,7 @@ void gemglutwindow :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG0(classPtr, "bang", render);
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
-  CPPEXTERN_MSG0(classPtr, "create", createMess);
+  CPPEXTERN_MSG1(classPtr, "create", createMess, std::string);
   CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
 
   CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);

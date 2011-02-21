@@ -4,7 +4,7 @@
 
   Interface for the window manager
 
-  Copyright (c) 2009 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM. zmoelnig@iem.kug.ac.at
+  Copyright (c) 2009 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -87,31 +87,25 @@ class GEM_EXTERN gemglxwindow : public GemContext
   void dispatch(void);
 
   /* render context (pre creation) */
-  void  bufferMess(int buf);
-  void    fsaaMess(int value);
-  int         m_fsaa;
+  virtual void  bufferMess(int buf);
+  virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
-  void titleMess(std::string);
-  std::string     m_title;
-  void borderMess(bool on);
-  bool       m_border;
+  virtual void titleMess(std::string);
+  virtual void borderMess(bool on);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
 
-  void    fullscreenMess(bool on);
-  bool              m_fullscreen;
-  void        offsetMess(int x, int y);
-  int      m_xoffset, m_yoffset;
-
+  virtual void    fullscreenMess(bool on);
+  virtual void        offsetMess(int x, int y);
+ 
   /* creation/destruction */
-  void        createMess(std::string);
-  void       destroyMess(void);
+  virtual void        createMess(std::string);
+  virtual void       destroyMess(void);
 
   /* post creation */
-  void        cursorMess(bool on);
-  bool              m_cursor;
+  virtual void        cursorMess(bool on);
 
   //// X display specification (e.g. "remote:0.1")
   std::string m_display;
