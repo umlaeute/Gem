@@ -3618,12 +3618,21 @@
 		<Filter
 			Name="temp"
 			Filter="">
+			<File
+				RelativePath="..\..\src\Output\gemw32window.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Output\gemw32window.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="Helpers"
 			Filter="">
 			<File
 				RelativePath="..\..\src\Helpers\any.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\MessageCallbacks.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Helpers\RTE.h">
@@ -3640,9 +3649,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Rte\Array.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Rte\MessageCallbacks.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Base\Properties.cpp">

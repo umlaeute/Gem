@@ -26,7 +26,12 @@
 
 # include "Base/GemEvent.h"
 # include "Base/GemGL.h"
+# include "RTE/MessageCallbacks.h"
+# include "Base/GemException.h"
 
+# include <map>
+
+static std::map<HWND, gemw32window*>s_winmap;
 
 static bool initGemWin(void) {
 # ifdef HAVE_QUICKTIME
@@ -46,7 +51,7 @@ static bool initGemWin(void) {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);
       return false;
     }	
-	post("Gem Man: QT init OK");
+	verbose(1, "Gem Man: QT init OK");
 # endif /* HAVE_QUICKTIME */
   return true;
 }
@@ -56,7 +61,7 @@ static bool initGemWin(void) {
 // bSetupPixelFormat
 //
 /////////////////////////////////////////////////////////
-static BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
+bool gemw32window :: bSetupPixelFormat(HDC hdc)
 {
   PIXELFORMATDESCRIPTOR pfd;
 	
@@ -81,12 +86,12 @@ static BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
   int pixelformat;
   if ( (pixelformat = ChoosePixelFormat(hdc, &pfd)) == 0 )
     {
-      post("GEM: ChoosePixelFormat failed");
+      error("ChoosePixelFormat failed");
       return(FALSE);
     }
   if (SetPixelFormat(hdc, pixelformat, &pfd) == FALSE)
     {
-      post("GEM: SetPixelFormat failed");
+      error("SetPixelFormat failed");
       return(FALSE);
     }
   return(TRUE);
@@ -96,90 +101,13 @@ static BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
 // MainWndProc
 //
 /////////////////////////////////////////////////////////
-static LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LONG WINAPI gemw32window::MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static RECT rcClient;
-	static int ctrlKeyDown = 0;
+gemw32window*obj=s_winmap[hWnd];
+if(obj)
+    return obj->event(uMsg, wParam, lParam);
 
-	// assume that we handle the message
-  long lRet = 0;
-
-  switch (uMsg)
-    {
-      // mouse motion
-    case WM_MOUSEMOVE:
-      triggerMotionEvent(LOWORD(lParam), HIWORD(lParam));
-      break;
-
-      // left button up
-    case WM_LBUTTONUP:
-      triggerButtonEvent(0, 0, LOWORD(lParam), HIWORD(lParam));
-      break;
-
-      // left button down
-    case WM_LBUTTONDOWN:
-      triggerButtonEvent(0, 1, LOWORD(lParam), HIWORD(lParam));
-      break;
-
-      // middle button up
-    case WM_MBUTTONUP:
-      triggerButtonEvent(1, 0, LOWORD(lParam), HIWORD(lParam));
-      break;
-
-      // middle button down
-    case WM_MBUTTONDOWN:
-      triggerButtonEvent(1, 1, LOWORD(lParam), HIWORD(lParam));
-      break;
-
-      // right button up
-    case WM_RBUTTONUP:
-      triggerButtonEvent(2, 0, LOWORD(lParam), HIWORD(lParam));
-      break;
-
-      // right button down
-    case WM_RBUTTONDOWN:
-      triggerButtonEvent(2, 1, LOWORD(lParam), HIWORD(lParam));
-      break;
-      // keyboard action
-    case WM_KEYUP:
-			if ((int)wParam == VK_CONTROL)
-				ctrlKeyDown = 0;
-
-      triggerKeyboardEvent((char*)&wParam, (int)wParam, 1);
-      break;
-
-      // keyboard action
-    case WM_KEYDOWN:
-			if ((int)wParam == VK_CONTROL)
-				ctrlKeyDown = 1;
-			else if (ctrlKeyDown && (int)wParam == 'R')
-        gemAbortRendering();
-			else
-				triggerKeyboardEvent((char*)&wParam, (int)wParam, 0);
-      break;
-      
-      // resize event
-    case WM_SIZE:
-      triggerResizeEvent(LOWORD(lParam), HIWORD(lParam));
-      GetClientRect(hWnd, &rcClient);
-      break;
-      
-      // we want to override these messages
-      // and not do anything
-    case WM_DESTROY:
-    case WM_CLOSE:
-      break;
-    case WM_CREATE:
-      {
-      }
-      break;
-      
-      // pass all unhandled messages to DefWindowProc
-    default:
-      lRet = DefWindowProc (hWnd, uMsg, wParam, lParam);
-      break;
-    }
-  return(lRet);
+return(DefWindowProc (hWnd, uMsg, wParam, lParam));
 }
 
 HGLRC gemw32window::sharedContext=NULL;
@@ -310,7 +238,7 @@ bool gemw32window:: create(void)
   m_win = CreateWindowEx (
                           dwExStyle,
                           "GEM",
-                          m_title->c_str(),
+                          m_title.c_str(),
                           style,
                           newSize.left,
                           newSize.top,
@@ -325,19 +253,20 @@ bool gemw32window:: create(void)
     error("GEM: Unable to create window");
     return false;
   }
+  s_winmap[m_win]=this;
 
   // create the device context
   m_dc = GetDC(m_win);
   if (!m_dc)  {
     error("GEM: Unable to create device context");
-    destroyGemWindow(info);
+    destroy();
     return false;
   }
 
   // set the pixel format for the window
-  if (!bSetupPixelFormat(m_dc, hints))  {
+  if (!bSetupPixelFormat(m_dc))  {
     error("GEM: Unable to set window pixel format");
-    destroyGemWindow(info);
+    destroy();
     return false;
   }
 
@@ -345,21 +274,22 @@ bool gemw32window:: create(void)
   m_context = wglCreateContext(m_dc);
   if (!m_context)  {
     error("GEM: Unable to create OpenGL context");
-    destroyGemWindow(info);
+    destroy();
     return false;
   }
 
   // do we share display lists?
-  if (hints.shared) wglShareLists(hints.shared, m_context);
+  if (sharedContext) wglShareLists(sharedContext, m_context);
 
   // make the context the current rendering context
   if (!wglMakeCurrent(m_dc, m_context))   {
     error("GEM: Unable to make OpenGL context current");
-    destroyGemWindow(info);
+    destroy();
     return false;
   }
-
-  if (!m_actuallyDisplay) return true;
+  
+  bool m_actuallyDisplay =true;
+  if (m_actuallyDisplay) {
 
   // show and update main window
   if (fullscreen){
@@ -370,9 +300,20 @@ bool gemw32window:: create(void)
 
   UpdateWindow(m_win);
 
-  dimensions(h, w);
+  dimension(h, w);
+  }
 
-  return true;
+  return createContext();
+}
+void gemw32window:: createMess(std::string s) {
+    if(m_context) {
+        error("window already made");
+        return;
+    }
+    if(!create()) {
+        destroyMess();
+        return;
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -393,8 +334,11 @@ void gemw32window:: destroy(void)
     }
     DestroyWindow(m_win);
   }
+  s_winmap.erase(m_win);
   m_dc  = NULL;
   m_win = NULL;
+
+  destroyContext();
 }
 
 /////////////////////////////////////////////////////////
@@ -403,7 +347,7 @@ void gemw32window:: destroy(void)
 /////////////////////////////////////////////////////////
 void gemw32window::cursorMess(bool state)
 {
-  cursor_state=ShowCursor(state);
+    ShowCursor(state);
 }
 
 /////////////////////////////////////////////////////////
@@ -417,6 +361,25 @@ void gemw32window::topmostMess(bool state)
     SetWindowPos(m_win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
   else
     SetWindowPos(m_win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+}
+/////////////////////////////////////////////////////////
+// dimensionsMess
+//
+/////////////////////////////////////////////////////////
+void gemw32window :: dimensionsMess(unsigned int width, unsigned int height)
+{
+  if (width <= 0) {
+    error("width must be greater than 0");
+    return;
+  }
+    
+  if (height <= 0 ) {
+    error ("height must be greater than 0");
+    return;
+  }
+
+  m_width=width;
+  m_height=height;
 }
 
 
@@ -441,9 +404,72 @@ void gemw32window::dispatch(void)
       DispatchMessage(&msg);
     }
 }
+LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    
+	static RECT rcClient;
+	static int ctrlKeyDown = 0;
 
+	// assume that we handle the message
+  long lRet = 0;
 
+  switch (uMsg)
+    {
+      // mouse motion
+    case WM_MOUSEMOVE:
+      motion(LOWORD(lParam), HIWORD(lParam));
+      break;
 
+      // left button up/down
+    case WM_LBUTTONUP: case WM_LBUTTONDOWN:
+      button(0, (uMsg==WM_LBUTTONDOWN));
+      motion(LOWORD(lParam), HIWORD(lParam));
+      break;
+      // middle button up/down
+    case WM_MBUTTONUP: case WM_MBUTTONDOWN:
+      button(1, (uMsg==WM_MBUTTONDOWN));
+      motion(LOWORD(lParam), HIWORD(lParam));
+      break;
+      // middle button up/down
+    case WM_RBUTTONUP: case WM_RBUTTONDOWN:
+      button(2, (uMsg==WM_RBUTTONDOWN));
+      motion(LOWORD(lParam), HIWORD(lParam));
+      break;
+
+      // keyboard action
+    case WM_KEYUP: case WM_KEYDOWN:
+        key((char*)&wParam, (int)wParam, (uMsg==WM_KEYDOWN));
+      break;
+      // resize event
+    case WM_SIZE:
+      dimension(LOWORD(lParam), HIWORD(lParam));
+      GetClientRect(m_win, &rcClient);
+      break;
+      
+      // we want to override these messages
+      // and not do anything
+    case WM_DESTROY:
+    case WM_CLOSE: do {
+        std::vector<t_atom>al;
+        t_atom a;
+        SETSYMBOL(&a, gensym("window"));
+        al.push_back(a);
+        SETSYMBOL(&a, gensym("destroy"));
+        al.push_back(a);
+        info(al);
+      } while(0);
+      break;
+    case WM_CREATE:
+      {
+      }
+      break;
+      
+      // pass all unhandled messages to DefWindowProc
+    default:
+      lRet = DefWindowProc (m_win, uMsg, wParam, lParam);
+      break;
+    }
+  return(lRet);
+}
 
 
 
@@ -453,18 +479,17 @@ void gemw32window::dispatch(void)
 /////////////////////////////////////////////////////////
 void gemw32window :: obj_setupCallback(t_class *classPtr)
 {
-
   CPPEXTERN_MSG0(classPtr, "bang", render);
-  CPPEXTERN_MSG1(classPtr, "create", createMess, t_symbol*);
+  CPPEXTERN_MSG1(classPtr, "create", createMess,std::string);
   CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
 
 
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
   CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
-  CPPEXTERN_MSG1(classPtr, "title", titleMess, t_symbol*);
+  CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
   CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
   CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
-  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
+  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, bool);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
 

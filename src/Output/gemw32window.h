@@ -78,14 +78,13 @@ class GEM_EXTERN gemw32window : public GemContext
   virtual bool makeCurrent(void);
   virtual void swapBuffers(void);
 
-  void doRender(void);
-
-  /* rendering */
-  void renderMess(void);
-
   /* dispatch window events */
-  void dispatch(void);
+  virtual void dispatch(void);
 
+  LONG WINAPI event(UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+  virtual void createMess(std::string);
+  virtual void        dimensionsMess(unsigned int, unsigned int);
   virtual void        cursorMess(bool on);
   virtual void        topmostMess(bool on);
 
@@ -95,6 +94,9 @@ class GEM_EXTERN gemw32window : public GemContext
   HGLRC m_context;
 
   static HGLRC sharedContext;
+
+  bool bSetupPixelFormat(HDC);
+  static LONG WINAPI MainWndProc (HWND, UINT, WPARAM, LPARAM);
 };
 
 #endif    // for header file
