@@ -8,6 +8,8 @@
 #endif
 
 #include "recordQT.h"
+#include "Base/GemException.h"
+
 using namespace gem;
 
 #ifdef __APPLE__
