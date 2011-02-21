@@ -58,7 +58,8 @@ static size_t f0r_strnlen(const char* str, size_t maxlen) {
 #endif
 
 
-struct pix_frei0r::F0RPlugin {
+class pix_frei0r::F0RPlugin {
+public:
   bool init(void) {
     if(!f0r_init)return false;
 
@@ -73,7 +74,6 @@ struct pix_frei0r::F0RPlugin {
     int err=0;
 
     if(f0r_init)
-#warning what to do with err?
       err=f0r_init();
 
     f0r_plugin_info_t info;
@@ -90,10 +90,13 @@ struct pix_frei0r::F0RPlugin {
       return false;
     }
 
-
-#warning check color type
+#ifdef __GNUC__
+# warning check color type
+#endif
     m_color = info.color_model;
-#warning check compatibility
+#ifdef __GNUC__
+# warning check compatibility
+#endif
     m_frei0rVersion = info.frei0r_version;
     m_majorVersion = info.major_version;
     m_minorVersion = info.minor_version;
@@ -186,7 +189,9 @@ typedef int (*t_f0r_deinit)(void);
   void close(void) {
     destruct();
     int err=f0r_deinit();
-    #warning what to do with that err?
+#ifdef __GNUC__
+# warning what to do with that err?
+#endif
   }
 
   F0RPlugin(std::string name, const t_canvas*parent=NULL) :
@@ -367,8 +372,6 @@ void pix_frei0r :: openMess(t_symbol*s)
   }
 }
 
-
-
 /////////////////////////////////////////////////////////
 // processImage
 //
@@ -390,13 +393,12 @@ void pix_frei0r :: processRGBAImage(imageStruct &image)
   image.setCsizeByFormat(m_image.format);
 }
 
-
 void pix_frei0r :: parmMess(const std::string key, int argc, t_atom *argv){
   if(!m_plugin) {
     error("no plugin present! forgetting parameter....");
     return;
   }
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<m_plugin->m_parameterNames.size(); i++) {
     if(key==m_plugin->m_parameterNames[i]) {
       parmMess(i, argc, argv);
@@ -434,7 +436,7 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
       error("param#%02d('%s') is of type BOOL: need exactly 1 argument", key, name);
       return;
     }
-    m_plugin->set(key, static_cast<bool>(atom_getint(argv)));
+    m_plugin->set(key, (atom_getfloat(argv)>0.5));
     break;
   case(F0R_PARAM_DOUBLE):
     if(argc!=1) {
@@ -467,17 +469,14 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
       error("param#%02d('%s') is of type STRING: need exactly 1 argument", key, name);
       return;
     }
-    m_plugin->set(key, atom_getsymbol(argv)->s_name);
+    m_plugin->set(key, std::string(atom_getsymbol(argv)->s_name));
     break;
   default:
     error("param#%02d('%s') is of UNKNOWN type", key, name);
     break;
   }
 
-
-
 }
-
 
 static const int offset_pix_=strlen("pix_");
 
@@ -544,7 +543,6 @@ void pix_frei0r :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
     GetMyClass(data)->parmMess(std::string(s->s_name), argc, argv);
   }
 }
-
 
 void pix_frei0r :: openCallback(void *data, t_symbol*name){
   GetMyClass(data)->openMess(name);
