@@ -8,6 +8,8 @@
 #include "Base/GemState.h"
 #include "Base/GemException.h"
 
+#include "RTE/MessageCallbacks.h"
+
 CPPEXTERN_NEW_WITH_GIMME(pix_record)
 
 struct pix_record :: PIMPL {
@@ -24,7 +26,9 @@ struct pix_record :: PIMPL {
   std::vector<std::string>m_codecs;
 
   void addCodecHandle(gem::record*handle, const std::string codec) {
-#warning better handling of duplicate codecs
+#ifdef __GNUC__
+# warning better handling of duplicate codecs
+#endif
     /* FIXME: we should generate a unique codec-ID, e.g. "<handlename>:<codec>" */
     m_codechandle[codec].push_back(codechandle(handle, codec));
     m_codecs.push_back(codec);
@@ -205,7 +209,7 @@ void pix_record :: startRecording()
     m_handle=NULL;
   }
   m_currentFrame = 0;
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<m_handles.size(); i++) {
     // check whether the handle supports the requested codec
     gem::record *handle=m_handles[i];
@@ -288,7 +292,7 @@ void pix_record :: enumPropertiesMess()
     SETFLOAT(ap+0, keys.size());
     outlet_anything(m_outInfo, gensym("numprops"), 1, ap);
 
-    int i=0;
+    unsigned int i=0;
     for(i=0; i<keys.size(); i++) {
       ac=2;
       std::string key=keys[i];
@@ -368,10 +372,10 @@ void pix_record :: recordMess(bool on)
 void pix_record :: getCodecList()
 {
   m_pimpl->clearCodecHandle();
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<m_handles.size(); i++) {
     std::vector<std::string>c=m_handles[i]->getCodecs();
-    int j;
+    unsigned int j;
     for(j=0; j<c.size(); j++) {
       m_pimpl->addCodecHandle(m_handles[i], c[j]);
     }
@@ -379,7 +383,7 @@ void pix_record :: getCodecList()
   for(i=0; i<m_pimpl->m_codecs.size(); i++) {
     const std::string id=m_pimpl->m_codecs[i];
     std::vector<PIMPL::codechandle>handles=m_pimpl->m_codechandle[id];
-    int j=0;
+    unsigned int j=0;
     for(j=0; j<handles.size(); j++) {
       gem::record*handle=handles[j].handle;
 
@@ -403,7 +407,9 @@ void pix_record :: getCodecList()
 /////////////////////////////////////////////////////////
 void pix_record :: codecMess(t_atom *argv)
 {
+#ifdef __GNUC__
 #warning codecMess is a mess
+#endif
   /*
    * allow setting of codec without handle
    */
@@ -436,7 +442,7 @@ void pix_record :: codecMess(t_atom *argv)
   std::vector<PIMPL::codechandle>handles=m_pimpl->m_codechandle[sid];
   if(handles.size()>0) {
     m_handles.clear();
-    int i=0;
+    unsigned int i=0;
     for(i=0; i<handles.size(); i++) {
       gem::record*handle=handles[i].handle;
       std::string codec=handles[i].codec;
@@ -487,26 +493,18 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
 		  gensym("auto"), A_FLOAT, A_NULL);
   class_addbang(classPtr, reinterpret_cast<t_method>(&pix_record::bangMessCallback));
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::recordMessCallback),
-		  gensym("record"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "record", recordMess, bool);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::dialogMessCallback),
-		  gensym("dialog"),  A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::codeclistMessCallback),
-		  gensym("codeclist"),  A_NULL);
+  CPPEXTERN_MSG0(classPtr, "dialog", dialogMess);
+  CPPEXTERN_MSG0(classPtr, "codeclist", getCodecList);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::codecMessCallback),
 		  gensym("codec"), A_GIMME, A_NULL);
 
-
-  class_addmethod(classPtr, 
-		  reinterpret_cast<t_method>(&pix_record::enumPropertiesMessCallback),
-		  gensym("proplist"), A_NULL);
+  CPPEXTERN_MSG0(classPtr, "proplist", enumPropertiesMess);
   class_addmethod(classPtr, 
 		  reinterpret_cast<t_method>(&pix_record::setPropertiesMessCallback),
 		  gensym("set"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, 
-		  reinterpret_cast<t_method>(&pix_record::clearPropertiesMessCallback),
-		  gensym("clearprops"), A_NULL);
+  CPPEXTERN_MSG0(classPtr, "clearprops", clearPropertiesMess);
 }
 
 void pix_record :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
