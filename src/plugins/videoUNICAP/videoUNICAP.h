@@ -22,7 +22,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #endif
 
 #ifdef HAVE_UNICAP
-# include <unicap.h>
+# define private unicap_private
+#  include <unicap.h>
+# undef private
 # include "Base/ThreadMutex.h"
 #endif
 /*-----------------------------------------------------------------
