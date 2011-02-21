@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) GÃ¼nther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //    Copyright (c) 2005 Pierre-Olivier Charlebois McGill Electrical Engineering
 //
 //        For information on usage and redistribution, and for a DISCLAIMER OF ALL

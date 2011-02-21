@@ -4,7 +4,7 @@
 //
 // Implementation file
 //
-// Copyright (c) 2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+// Copyright (c) 2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //	zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
@@ -75,7 +75,7 @@ void gemlist_info :: render(GemState *state) {
 
   glGetFloatv(GL_MODELVIEW_MATRIX,mi);
 
-  // test de syngularité a effectuer
+  // test de syngularitÃ© a effectuer
 
   // normalisation
   //	for (i=0; i<16; i++) mi[i] /= mi[15];

@@ -5,7 +5,7 @@
 //
 // Include this file in all applications that use the Particle System API.
 //
-// (l) 3004:forum::für::umläute:2003 modified for Gem
+// (l) 3004:forum::fÃ¼r::umlÃ¤ute:2003 modified for Gem
 //                                   added KillSlow again (like in 1.11)
 
 #ifndef _particle_api_h

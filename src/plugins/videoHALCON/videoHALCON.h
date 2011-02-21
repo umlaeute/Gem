@@ -12,7 +12,7 @@
     you will need to get a license key from your vendor
 
 
-    Copyright (c) 2010 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.at
+    Copyright (c) 2010 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "LICENSE.txt" in this distribution.
 

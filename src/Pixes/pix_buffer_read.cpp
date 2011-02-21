@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    Copyleft  (l) 2002 IOhannes m zmölnig
+//    Copyleft  (l) 2002 IOhannes m zmÃ¶lnig
 //    Copyleft  (l) 2005 Georg Holzmann
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.

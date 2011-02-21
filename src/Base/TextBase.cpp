@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) GÃ¼nther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //    Copyright (c) 2005 Georg Holzmann <grh@mur.at>
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.

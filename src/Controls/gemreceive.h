@@ -4,7 +4,7 @@
 
   ordered receive
     
-  Copyright (c) 2008 IOhannes m zmoelnig. forum::für::umläute. IEM/KUG. zmoelnig@iem.at
+  Copyright (c) 2008 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM/KUG. zmoelnig@iem.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    Copyright (c) 2005 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2005 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //    based on reacTIVision by M.Kaltenbrunner and R.Bencina
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.

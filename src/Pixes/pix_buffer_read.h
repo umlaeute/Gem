@@ -5,7 +5,7 @@
 
 
   Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-  Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
+  Copyleft  (l) 2001 IOhannes m zmÃ¶lnig. zmoelnig@iem.kug.ac.at
   Copyleft  (l) 2002 James Tittle & Chris Clepper
   Copyleft  (l) 2005 Georg Holzmann <grh@mur.at>
   For information on usage and redistribution, and for a DISCLAIMER OF ALL

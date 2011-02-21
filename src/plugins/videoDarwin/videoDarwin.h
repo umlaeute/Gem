@@ -3,7 +3,7 @@
 GEM - Graphics Environment for Multimedia
 
 Copyright (c) 2002 James Tittle & Chris Clepper    
-Copyright (c) 2010 IOhannes m zmoelnig. forum::f�r::uml�ute. IEM. zmoelnig@iem.at
+Copyright (c) 2010 IOhannes m zmoelnig. forum::fÃŒr::umlÃ€ute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

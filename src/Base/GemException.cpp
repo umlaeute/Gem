@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    Copyright (c) 2009 IOhannes m zmölnig.
+//    Copyright (c) 2009 IOhannes m zmÃ¶lnig.
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //

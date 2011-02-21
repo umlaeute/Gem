@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1998 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) GÃ¼nther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -293,13 +293,13 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
   dc1394_video_get_iso_speed(m_dccamera, &orgspeed);
 
   int speed=DC1394_ISO_SPEED_MAX;
-  while(operation_mode>=DC1394_ISO_SPEED_MIN) {
+  while(speed>=DC1394_ISO_SPEED_MIN) {
     err=dc1394_video_set_iso_speed(m_dccamera, (dc1394speed_t)mode);
     if(DC1394_SUCCESS==err)
       break;
     verbose(1, "failed to set ISO speed to %d", 100*(1<<speed));
 
-    operation_mode--;
+    speed--;
   }
   if(DC1394_SUCCESS!=err) {
     error("unable to set ISO speed...trying to set to original (%d)", 100*(1<<orgspeed));

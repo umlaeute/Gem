@@ -4,7 +4,7 @@
 //
 // This file implements the API calls that draw particle groups in OpenGL.
 //
-// (l) 3004:forum::für::umläute:2003 modified for Gem
+// (l) 3004:forum::fÃ¼r::umlÃ¤ute:2003 modified for Gem
 
 #include "partlib_general.h"
 

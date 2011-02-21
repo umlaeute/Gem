@@ -5,7 +5,7 @@ LOG
     play puzzle with a sequence of pixBufs
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
+    Copyleft  (l) 2001 IOhannes m zmÃ¶lnig. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

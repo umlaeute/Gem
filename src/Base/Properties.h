@@ -1,5 +1,5 @@
 /*
- * (c) IOhannes m zmölnig 2010
+ * (c) IOhannes m zmÃ¶lnig 2010
  *
  * map that stores "any"thing
  * 

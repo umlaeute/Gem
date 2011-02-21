@@ -7,8 +7,8 @@
 // Implementation file 
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) GÃ¼nther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -86,11 +86,11 @@ bool filmMPEG3 :: open(char *filename, int format)
     mpeg_file= mpeg3_open(filename);
 #endif
     if(!mpeg_file) {
-      //post("GEM: pix_film: this file %s does not seem to hold any video data", filename);
+      //post("GEM:Â pix_film: this file %s does not seem to hold any video data", filename);
       goto unsupported;
     }
     if (!mpeg3_has_video(mpeg_file)){
-      post("GEM: pix_film: this file %s does not seem to hold any video data", filename);
+      post("GEM:Â pix_film: this file %s does not seem to hold any video data", filename);
       goto unsupported;
     }
     m_numTracks = mpeg3_total_vstreams(mpeg_file);

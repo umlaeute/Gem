@@ -4,8 +4,8 @@
 
   Convert 4 signals (R~, G~, B~, A~) into a pixBuf
 
-  Copyright (c) 2000 Günther Geiger. geiger@epy.co.at
-  Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+  Copyright (c) 2000 GÃ¼nther Geiger. geiger@epy.co.at
+  Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM. zmoelnig@iem.kug.ac.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute
+//    Copyright (c) GÃ¼nther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute
 //    Copyright (c) 2002-2003 james tittle/tigital
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL

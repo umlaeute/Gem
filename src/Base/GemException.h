@@ -5,7 +5,7 @@ LOG
 
     The base class for exceptions thrown by Gem
 
-    Copyright (c) 2009 IOhannes m zmölnig, zmoelnig@iem.at
+    Copyright (c) 2009 IOhannes m zmÃ¶lnig, zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

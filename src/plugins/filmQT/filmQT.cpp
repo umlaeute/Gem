@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) 2002 James Tittle & Chris Clepper
-//    Copyright (c) 2003 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2003 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //

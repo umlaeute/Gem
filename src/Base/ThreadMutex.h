@@ -4,7 +4,7 @@ LOG
 
 	- locks a thread (wrapper around pthread_mutex)
 
-    Copyright (c) 2011 IOhannes m zmoelnig. forum::f-bür::umläute. IEM. zmoelnig@iem.at-A
+    Copyright (c) 2011 IOhannes m zmoelnig. forum::f-bÃ¼r::umlÃ¤ute. IEM. zmoelnig@iem.at-A
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

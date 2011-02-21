@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1998 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) GÃ¼nther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -25,9 +25,9 @@
 // for more information, on how this works, look at
 // http://umlaeute.mur.at/rtx
 //
-//   2803:forum::für::umläute:2000
-//   0409:forum::für::umläute:2000
-//   1801:forum::für::umläute:2001  added the second mode
+//   2803:forum::fÃ¼r::umlÃ¤ute:2000
+//   0409:forum::fÃ¼r::umlÃ¤ute:2000
+//   1801:forum::fÃ¼r::umlÃ¤ute:2001  added the second mode
 //   IOhannes m zmoelnig
 //   mailto:zmoelnig@iem.kug.ac.at
 //

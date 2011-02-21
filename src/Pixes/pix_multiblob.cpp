@@ -7,7 +7,7 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1998 Mark Danks.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////
 //
 //  pix_multiblob
-// based on (c) 2004, Jakob Leiner & Theresa Rienmüller
+// based on (c) 2004, Jakob Leiner & Theresa RienmÃ¼ller
 //
 /////////////////////////////////////////////////////////
 

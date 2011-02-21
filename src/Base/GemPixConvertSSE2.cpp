@@ -8,7 +8,7 @@
 //
 // Implementation file for SSE2-optimized color-conversion routines
 //
-//    Copyright (c) 2006 IOhannes m zmoelnig. forum::für::umläute
+//    Copyright (c) 2006 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.

@@ -5,7 +5,7 @@
 // This file implements the action API calls by creating
 // action class instances, which are either executed or
 // added to an action list.
-// (l) 3004:forum::für::umläute:2003 modified for Gem
+// (l) 3004:forum::fÃ¼r::umlÃ¤ute:2003 modified for Gem
 //                                   added KillSlow again (like in 1.11)
 
 #include "partlib_general.h"

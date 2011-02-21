@@ -5,8 +5,8 @@ GEM - Graphics Environment for Multimedia
   Change rtx-transform a series of images (eg: a video or a film)
   
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyright (c) Günther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) GÃ¼nther Geiger. geiger@epy.co.at
+    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -15,9 +15,9 @@ pix_rtx
   rtx-transform a series of pictures (especially movies, videos,...)
   you have to use pix_film instead of pix_movie to make this work with prerecorded videos
   
-  2803:forum::für::umläute:2000
-  0409:forum::für::umläute:2000
-  1801:forum::für::umläute:2001  added the second mode
+  2803:forum::fÃ¼r::umlÃ¤ute:2000
+  0409:forum::fÃ¼r::umlÃ¤ute:2000
+  1801:forum::fÃ¼r::umlÃ¤ute:2001  added the second mode
   IOhannes m zmoelnig
   mailto:zmoelnig@iem.kug.ac.at
 	
