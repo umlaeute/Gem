@@ -4,7 +4,7 @@ LOG
 
     a rendering context
 
-    Copyright (c) 2009 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) 2009 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -44,6 +44,10 @@ typedef struct GLEWContextStruct GLEWContext;
 
 class GEM_EXTERN GemContext : public CPPExtern
 {
+ private:
+  class PIMPL;
+  PIMPL*m_pimpl;
+
  public:
     
   //////////
@@ -54,7 +58,7 @@ class GEM_EXTERN GemContext : public CPPExtern
   // Destructor
   virtual ~GemContext(void);
 
- protected:
+ public:
   /* OUTPUT */
 
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
@@ -126,7 +130,6 @@ class GEM_EXTERN GemContext : public CPPExtern
   /* swap back/front buffer
    */
   virtual void swapBuffers(void) = 0;
-  unsigned int m_buffer;
 
   /* dispatch messages from the window
    * this might get called more often than the render-cycle
@@ -148,8 +151,31 @@ class GEM_EXTERN GemContext : public CPPExtern
    * this should be kept throughout 
    */
   virtual void dimensionsMess(unsigned int width, unsigned int height) = 0;
-  virtual void dimensionsMess(void);
-  unsigned int m_width, m_height;
+
+
+  // common property setters
+  // by default they will simply set the corresponding values (below in the protected section)
+  // to whatever argument is given them
+  // so you can use these values when creating the window
+  // however, if you need to take immediate action (e.g. because you can), you ought to override these functions
+
+  /* render context (pre creation) */
+  virtual void  bufferMess(int buf);
+  virtual void    fsaaMess(int value);
+
+  /* window decoration (pre creation) */
+  virtual void titleMess(std::string);
+  virtual void borderMess(bool on);
+
+  virtual void    fullscreenMess(bool on);
+  virtual void        offsetMess(int x, int y);
+ 
+  /* creation/destruction */
+  virtual void        createMess(std::string);
+  virtual void       destroyMess(void);
+
+  /* post creation */
+  virtual void        cursorMess(bool on);
 
  public:
   static unsigned int getContextId(void);
@@ -160,10 +186,22 @@ class GEM_EXTERN GemContext : public CPPExtern
   static GLEWContext*getGlewContext(void);
   static GemGlewXContext*getGlewXContext(void);
 
- private:
 
-  class PIMPL;
-  PIMPL*m_pimpl;
+
+ protected:
+  unsigned int m_width, m_height;
+
+  // common properties of GemContext's
+  // you can safely ignore these, if they mean nothing to you
+  // however, if they do mean something to you, it would be good if you used these
+  int          m_xoffset, m_yoffset;
+  bool         m_border;
+  bool         m_fullscreen;
+
+  unsigned int m_buffer;
+  std::string  m_title;
+  bool         m_cursor;
+  int          m_fsaa;
 };
 
 

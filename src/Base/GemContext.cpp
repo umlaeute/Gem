@@ -390,9 +390,49 @@ void GemContext::render(void){
   }
 }
 
-void GemContext::dimensionsMess(void){
-  dimension(m_width, m_height);
+void GemContext:: bufferMess(int buf) {
+  switch(buf) {
+  case 1: case 2:
+    m_buffer=buf;
+    break;
+  default:
+    error("buffer can only be '1' (single) or '2' (double) buffered");
+    break;
+  }
 }
+void GemContext::   fsaaMess(int value) {
+  m_fsaa=value;
+}
+
+void GemContext::titleMess(std::string s) {
+  m_title=s;
+}
+void GemContext::borderMess(bool on) {
+  m_border=on;
+}
+
+void GemContext::   fullscreenMess(bool on) {
+  m_fullscreen=on;
+}
+void GemContext::       offsetMess(int x, int y) {
+  m_xoffset=x;
+  m_yoffset=y;
+}
+ 
+void GemContext::       createMess(std::string) {
+  create();
+}
+void GemContext::      destroyMess(void) {
+  destroy();
+}
+
+void GemContext::       cursorMess(bool on) {
+  m_cursor=on;
+}
+
+
+
+
 
 
 unsigned int GemContext::getContextId(void) {
@@ -425,4 +465,5 @@ GemGlewXContext*GemContext::getGlewXContext(void) {
 GLEWContext*glewGetContext(void){return  GemContext::getGlewContext();}
 GemGlewXContext*wglewGetContext(void){return  GemContext::getGlewXContext();}
 GemGlewXContext*glxewGetContext(void){return  GemContext::getGlewXContext();}
+
 #endif /* GEM_MULTICONTEXT */
